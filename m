@@ -1,135 +1,135 @@
-Return-Path: <linux-pm+bounces-23995-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23998-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D85AA6000E
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 19:50:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF32EA602BA
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 21:36:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 083503A9BCE
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 18:50:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C449420E30
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 20:36:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B9891F03C2;
-	Thu, 13 Mar 2025 18:50:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FC851F4E30;
+	Thu, 13 Mar 2025 20:35:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P/wG2510"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="cVJXQdAL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418E31531C5;
-	Thu, 13 Mar 2025 18:50:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9231F462E;
+	Thu, 13 Mar 2025 20:35:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741891851; cv=none; b=W/CxhHw/0N0E7E1Ji4hHP/O3FCKG2UtBsxz+XXVczqP5xGDxBbJzKgQvzWpLV184UZeoL760e1ksy87ac89QzlOHJhuLVg6m4vTPcTl5ffSstdOmSU+vZsROhc7LfJD+u+Xl4fUNeJHXt+Iq1nufKNZHLCc1Wc6QYBzT/Urpa3M=
+	t=1741898134; cv=none; b=utBtBTP7yWWhI05Rgv34Pfpha91ZYIAzyQBQS6+t7krgxCmcCCkLPzBJHskcgs4MrgFrkec/IAatC5BVTBEEZZqfzVoCxkewiiMhbCX1FXaiI8FC771z3mFT6pQwglDIMfuI1fY9OD2Oht4hfe3gzYo6iaDiWKoBXa9/ZuZojhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741891851; c=relaxed/simple;
-	bh=wOmk2LDYhQbCJnXD67llNF+qbQsOwKFG1CXJpP8kogQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s6UX13tf3e1/O786nA/ovKKfy0oPJ7p9cb7ot+MxYqNnKLo4Qo5qyu7BpIsigrSsq4xbaZLmQsJh3hTt7ifsrdYOdcU44rKo+jfm+5J5POVl7+LtxRrsbvk8CWfqWcCBNrn/l5ocI7UkFWMZW4oB+vJjaxAr7k0V/ggfZ32SamI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P/wG2510; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5CCBC4CEE3;
-	Thu, 13 Mar 2025 18:50:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741891850;
-	bh=wOmk2LDYhQbCJnXD67llNF+qbQsOwKFG1CXJpP8kogQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=P/wG2510pSGVe3vmk+Np22K3hJype6nlIRoPWA++SjfwMGXz+M7DB+23CdGUyQwaY
-	 TyzAWOl23Z/h3uNgWupzEstKMwdB14BgCitRsWaL0Gnz9hliZYE02rQO6jbVyROzCR
-	 CtQIzFDN5lg/6Eq2cizH4Y6EjyB8YVHBABWwlG6j3Wx3hDcg2R1v70X87mlfZ+zt4g
-	 5Y0gZef789uuW4NR0sFLY2zSORi7uHwMnX8HjZFj/byMqHfgKTHzTI1gBVqKUVU+5i
-	 fVsiBVdGBZDhKys27I1zswi6VdEAvi+gV4GaJEzdpnb+HvsyO2aXVaozTzDB8xa7DG
-	 MGWpgqRf0wuEQ==
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3f682a2c3c8so685609b6e.1;
-        Thu, 13 Mar 2025 11:50:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWp4R/GhQaGyQ7cC6ezSX1LbNmutLHjKl6m24KYpudAbTr+zNqGlBzNTsjCY7L0KJSaHsDOczu76G4=@vger.kernel.org, AJvYcCXiUyGpLt3Qn9yf72aQk0chLAykBTr2kfqNQ2xiSFd7UaL85veC7S87ERyiPCtj3dZUGwQfPV29Aa5Ye+M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzsPXKvK0CnI6VXP9y0RgLlItPTV7+WUbOBdz56Xa0NsQnbVCYQ
-	CdFkbGc+fXLlGh0TLocZadjAu8f9VUa8SLaNDaBMOkTafAaAlfJuKWpgD7CN/zSqsBIaIneVIhv
-	BuHc++4I7PAqhOzyMlPXEJmkbkcI=
-X-Google-Smtp-Source: AGHT+IGH7HtqwRS4eHXUymOx7wiwoh5XsHbMbmkNjEqwS7ZKOLQ5FH43VVXhEKixxxhGxJbuaKjDkS4IbwPBSmW1mzg=
-X-Received: by 2002:a05:6808:148d:b0:3f8:1df6:413 with SMTP id
- 5614622812f47-3fda15429f2mr491212b6e.1.1741891849972; Thu, 13 Mar 2025
- 11:50:49 -0700 (PDT)
+	s=arc-20240116; t=1741898134; c=relaxed/simple;
+	bh=n2GShKglS+Ia1CAmYp1RdUj7x9QJWvg9K2CEAXic+iE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Jat6voJXlZ0prr1BSVy0O6GKytBA+YpPINOqg3ySamkgni3h9aqLQb3k+1TWsqZfRZhjj/Xwk2xIsKfpB5bpJcq4l6jlxb39IVFNgF6mN/z64qePmR431Q5BSeJ8eFLjNc761FfVEP5zo8TnAL2zSP7xhu6WScRwfAGmUtKjq3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=cVJXQdAL; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.3.1)
+ id 3181bb750b2b3b3b; Thu, 13 Mar 2025 21:35:30 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id D68F98E4517;
+	Thu, 13 Mar 2025 21:35:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1741898130;
+	bh=n2GShKglS+Ia1CAmYp1RdUj7x9QJWvg9K2CEAXic+iE=;
+	h=From:Subject:Date;
+	b=cVJXQdALAXAqDFijkpIvw9bXjdoP8o9ncl/yoUnDJE5zz2mSGVDNrtSjnCGQu6oOt
+	 s/rqQWMCO3ryRw0cKa9tDQfCi4hpMfOyvLSt/EkQIxFtwBVxFj0k7foEFsfwIgpbgZ
+	 S2gyDFbf0rRqgooNI2b2q9X8yOKChIUyXiZZ2osF8PAdVfkODE2fkyZswaubVXivuP
+	 tChgTvEh/ssEIQVjQ43BeN5iDUsmmwSas8VLCaWG1hdBNPx5g4TvZDB9Y5edhVRP8k
+	 psonGHHKqFs6Rx7dGrifDeCJ9LVgSS30fqT6a548JYYHa5zjbMJMyODyb7ejrEDrIM
+	 aX1GDajjXj5fg==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Johan Hovold <johan@kernel.org>,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Jon Hunter <jonathanh@nvidia.com>, Saravana Kannan <saravanak@google.com>
+Subject:
+ [PATCH v2 0/3] PM: sleep: Improvements of async suspend and resume of devices
+Date: Thu, 13 Mar 2025 21:17:27 +0100
+Message-ID: <1915694.tdWV9SEqCh@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <22640172.EfDdHjke4D@rjwysocki.net> <2028801.yKVeVyVuyW@rjwysocki.net>
- <1411c47998e44f1509f91e83d0379775db3d4779.camel@linux.intel.com>
-In-Reply-To: <1411c47998e44f1509f91e83d0379775db3d4779.camel@linux.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 13 Mar 2025 19:50:38 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0ghVNKKWbLnwhbriotbgtujy6_G0yiFm1PiCK2KyCPR+A@mail.gmail.com>
-X-Gm-Features: AQ5f1JoJ-sAMGdDzTT2tNHTl5OTvg2Ur5mBrNphzDGgoFpqstqiSERAYNxXHiVI
-Message-ID: <CAJZ5v0ghVNKKWbLnwhbriotbgtujy6_G0yiFm1PiCK2KyCPR+A@mail.gmail.com>
-Subject: Re: [RFC][PATCH v0.3 6/6] cpufreq: intel_pstate: EAS support for
- hybrid platforms
-To: Tim Chen <tim.c.chen@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Peter Zijlstra <peterz@infradead.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Morten Rasmussen <morten.rasmussen@arm.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, 
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>, 
-	Pierre Gondois <pierre.gondois@arm.com>, Christian Loehle <christian.loehle@arm.com>
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvdekledvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeekpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhtvghrnhesrhhofihlrghnugdrhhgrrhhvrghrugdrvgguuhdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehjohh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
 
-On Thu, Mar 13, 2025 at 7:46=E2=80=AFPM Tim Chen <tim.c.chen@linux.intel.co=
-m> wrote:
->
-> On Fri, 2025-03-07 at 20:42 +0100, Rafael J. Wysocki wrote:
-> >
-> >
-> > --- a/drivers/cpufreq/intel_pstate.c
-> > +++ b/drivers/cpufreq/intel_pstate.c
-> > @@ -44,6 +44,8 @@
-> >  #define INTEL_CPUFREQ_TRANSITION_DELAY_HWP   5000
-> >  #define INTEL_CPUFREQ_TRANSITION_DELAY               500
-> >
-> > +#define INTEL_PSTATE_CORE_SCALING            100000
-> > +
->
-> Minor nits.
->
-> Suggest move the above define to
->
-> #define HYBRID_SCALING_FACTOR_ADL       78741
-> #define HYBRID_SCALING_FACTOR_MTL       80000
-> #define HYBRID_SCALING_FACTOR_LNL       86957
-> #define INTEL_PSTATE_CORE_SCALING       100000
->
-> to keep the scaling factors at the same place.
+Hi Everyone,
 
-It may be needed earlier, but I see your point.  Keeping them together
-will make sense.
+This is a new iteration of the async suspend/resume improvements work:
 
->
-> > @@ -3425,6 +3539,8 @@
-> >
-> >               cpufreq_unregister_driver(intel_pstate_driver);
-> >               intel_pstate_driver_cleanup();
-> > +             /* Trigger EAS support reconfiguration in case it was use=
-d. */
->
-> May be clearer to say
->
->                 /* Disable EAS support in case it was used */
+https://lore.kernel.org/linux-pm/13709135.uLZWGnKmhe@rjwysocki.net/
 
-Sure.
+which includes some rework and fixes of the last 3 patches in the series
+linked above.  The first 2 patches in that series have been applied
+already and are waiting for the 6.15 merge window.
 
-> My first read of the comment thought that we are enabling EAS support.
->
-> > +             rebuild_sched_domains_energy();
-> >               return 0;
-> >       }
-> >
->
-> Rest of patch looks good.
+This new iteration is based on linux-pm.git/linux-next and on the recent
+fix related to direct-complete:
 
-Thanks for the review!
+https://lore.kernel.org/linux-pm/12627587.O9o76ZdvQC@rjwysocki.net/
+
+The following part of the original cover letter is still applicable:
+
+"Overall, the idea is that instead of starting an async work item for every
+async device upfront, which is not very efficient because the majority of
+those devices will not be able to make progress due to dependencies anyway,
+the async handling is only started upfront for the devices that are likely
+to be able to make progress.  That is, devices without parents in the resume
+path and leaf devices (ie. devices without children or consumers) in the
+suspend path (the underlying observation here is that devices without parents
+are likely to have no suppliers too whereas devices without children that
+have consumers are not unheard of).  This allows to reduce the amount of
+processing that needs to be done to start with.
+
+Then, after processing every device ("async" or "sync"), "async" processing
+is started for some devices that have been "unblocked" by it, which are its
+children in the resume path or its parent and its suppliers in the suspend
+path.  This allows asynchronous handling to start as soon as it makes sense
+without delaying the "async" devices unnecessarily.
+
+Fortunately, the additional plumbing needed to implement this is not
+particularly complicated."
+
+Patch [1/3] deals with the resume path for all device resume phases.  Since
+v1 it's been modified to avoid using dpm_list_mtx for protecting the
+power.work_in_progress flag and a new lock is used specifically for that
+now which should reduce lock contention.
+
+Patch [2/3] optimizes the "suspend" phase which has the most visible effect (on
+the systems in my office the speedup is in the 100 ms range which is around 20%
+of the total device resume time).  Since v1 it's been adjusted to the changes
+in patch [1/3] and two issues in it have been fixed: dpm_async_suspend_superior()
+actually walks the device's suppliers and all devices are moved to the target
+list in dpm_suspend() even if there is an error so that they can be resumed
+properly in that case.
+
+Patch [3/3] extend this to the "suspend late" and "suspend noirq" phases.
+
+Thanks!
+
+
+
+
+
 
