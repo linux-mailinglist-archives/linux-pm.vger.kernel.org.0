@@ -1,196 +1,185 @@
-Return-Path: <linux-pm+bounces-23980-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23981-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B62A4A5F602
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 14:33:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C0D8A5F63E
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 14:46:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6DAE0188B459
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 13:33:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8AF61889AD3
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 13:46:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 463C2265610;
-	Thu, 13 Mar 2025 13:33:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA5B92676E1;
+	Thu, 13 Mar 2025 13:46:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I4LJjbsC"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="n2AgJNyB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC78DDDC;
-	Thu, 13 Mar 2025 13:33:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE011FBCBF
+	for <linux-pm@vger.kernel.org>; Thu, 13 Mar 2025 13:46:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741872786; cv=none; b=RJiXRLgxQpfcIKozt5HmKdXxQvPnAx+/Cjd8nFVcFGJvpXhndwylDi007lvJc5lPj8ge1utFJGwwlsfUUqXf/MDGbczhb8KcOULvQNBsxTgWiel2sccBXw/4YN5Qyj42nqbEjZ6s7PIS5iPoUncdg53vkXQBbtkIQALy3tI/ljA=
+	t=1741873599; cv=none; b=ZrrqgJMkqeyCWGSzFBnjvdf2RHJ1odevFj/kmG0vpY9MRqSa2ubcpAvp0UkQ6FccJZiJ2MirLp68Qn8Vou/LDjLJTCZyQn5lPLeYjG5n8mAdF8hOBKnzc0ABUdiIhj0WNYjx/ZCNiJbJwpFPWe+4Tg6LVPMv7MnNPf9kH7ysKLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741872786; c=relaxed/simple;
-	bh=XuNfwVZH74W5UU9BfBiDYpp8IqrD1Na93CcN16Z/tIM=;
+	s=arc-20240116; t=1741873599; c=relaxed/simple;
+	bh=ujEBQPB0scKMY7JC/wQHlyV+8N9T4tQgeMBzcI+87rE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Yq7VwXgIm+p/fCilYleDSFgOBwE4h+voyXFSY2e3hy97vJ4BvONKt48IecdKx6lMjDbp7t2+ZDUu3745UPJ5WhwMxJyzQElV9R7dbQK/MBjLTK4DrAXEemDHr9XwVnqBY6yLQi26KsWtU+0Xdr5pc3QitrzaGZnKvYZvVDL9/aA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I4LJjbsC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91333C4CEEF;
-	Thu, 13 Mar 2025 13:33:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741872785;
-	bh=XuNfwVZH74W5UU9BfBiDYpp8IqrD1Na93CcN16Z/tIM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=I4LJjbsCY9PGv7Jvw7YhXMc1fvi5lZ+b5uYPmwu1smKYPlPLICoO+nSwJ//+/Y10/
-	 5U1IeG1X2q+OhMpWOmfl2/+YpP583aHZqxduHUP/z+80UpFsBckB76iXxiVAbrFBVM
-	 8aA/L0uKKUe04NBIM+gbeAcEogjWf9CH99qqld6W+gCDGScuCfg8gXUeNOdhxwMBIV
-	 mYrqV82etsAubzhkxLxBt8yIe1CE1KEYCZv3F+M8g5CM5YdE4EbJb2KcY0qSbydgJD
-	 WtASrHvxzXB6566M98W7UyFl0lZgj4MUvm0tRXAyTXaWT3X+K/A8QDKvhHO4gjWYmJ
-	 xg99R2cnA6m9Q==
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-2bcc0c6c149so973768fac.1;
-        Thu, 13 Mar 2025 06:33:05 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVkoHlLKpR1zABNy6w+RC4fBYAWCZtrbtk6JiWpkZow/YYGrd3PuxP1kaFlrNMNry2Z4ZUAf7IzyVgdyr0=@vger.kernel.org, AJvYcCXyTaVdfOwlKwZqSoa9F5ObxsfZpil/dW6mmhKVaSuSBrgR5pbj0DPbkZDsmTgg3zI5GYXzG30VhO0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7V5Mf/bc6Xc99GLQAYNyjTLt4hWTWSGnkSNr9wCS275HgUdUe
-	EGf37I0oqQeoy9B8A23S3JVrSo8BPbhbErpuMShEYupXK5ztim/gQqdrDSvfMIqoKaA/+7YjfcM
-	wtIu6QZRywMzl7KHN8bW6zhAZplk=
-X-Google-Smtp-Source: AGHT+IGkPwuAC9RvVaAjV7Vla8jW9hy4OPGMSPR+shxk7LKgl53PqLOuTMaknbmPrrhzKzhepZMWcCWlXloQ9uFPw+8=
-X-Received: by 2002:a05:6871:109:b0:289:2126:6826 with SMTP id
- 586e51a60fabf-2c261304b27mr15019905fac.30.1741872784779; Thu, 13 Mar 2025
- 06:33:04 -0700 (PDT)
+	 To:Cc:Content-Type; b=PJFDw9c6QzOp2c3UXQUtycAK2JPIWQe1sDXb+j3Gb3ZZEi/3ZWk2lfwXevXj2aCWVw78C6qefgNGdYZblbkPhNfsxGFjFzRO7isx9gwMNRxg9N0i5iFM9VJKyWlWs4Ah1qD0bDH+nMwavck+jtPqeQA8Nlqa7vjBMh2GAHK1als=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=n2AgJNyB; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6f7031ea11cso9986717b3.2
+        for <linux-pm@vger.kernel.org>; Thu, 13 Mar 2025 06:46:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1741873597; x=1742478397; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3pruppk4STwGuRQ4gOsQ41gA9jN4GcpyPa2+9qAli4c=;
+        b=n2AgJNyBVwyOuZoofwzLpO4Vj+DoBCE6dhY4hwSivLC7kT5aEE5XhIFNZqh1ZI/OwK
+         FDoTQYtPq+OxQ730rr90Plyu+/7e6e6BPhlG9xjkT4kjjYr2BTYIACzppWrzwvODO6ig
+         qCgHKaHPbALQrjn6Pnp2nJBZA3+xq/p2vu/Bg0aOGtFVqQxIwyaBVWDcUFaAt0Qu/cqF
+         6KoOEqMW+NJ+GvehsUGCz0OKvDD8OK5V615TrlaYaMwKygRJupoCuZJVdNpkzTbH/O8+
+         yctT5UyhpHS+Dnb8egHP34q2kW8PvtfmuFppCmog3xXJk0IYE1fWHiYfRi8zem5CEP5E
+         cpQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741873597; x=1742478397;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3pruppk4STwGuRQ4gOsQ41gA9jN4GcpyPa2+9qAli4c=;
+        b=wt9wsO7zwTCm2YnURlsN66psnfMYsQbLol6WucQn0gADUYelkKP8zhQLvyPrLiL5T5
+         YAUNdJ+DnGSaYt4HtfpDpwvS3KxFepGSo46EO+vdIRzEu+6wEzkZ8L3wuIkuCjt8bERR
+         31NB16AJBtDK/R/Q/84mk4QbaivTXpc1ZGIPUN+cR8XgQVRKlu6Gz+IvoTUt7ZyUh7DB
+         KZDdCnF/cII9gCfn0KoAypOiYY/PfzE+L0E2M+RyyHDSHD14Nj8st+luj19mk7OP6iby
+         8VSWlqqsg55aorUtUkZr6g4dXlZ2I37+WScFyX6M8olKaOUk5khMe8+EGYw0L+kjylZA
+         IX9w==
+X-Forwarded-Encrypted: i=1; AJvYcCX6j4Mmq7Z6Mm3/EzBuR8Wm4kGKlR52nbjZJ+WUHeeAAA8nk5LK0LbnUUTDEzK0y3mndJX33kthUA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSWAUMNfb0GhZQhT7ux5/MqxwNzI4i601BLqcqK8w5OC90I3G3
+	l9aEJDk4Bfj7RWMpamKLNVoUs2SS1aGxywA4+jNp+HUse2hybsqVTOuL9I811uicxGg4LbjTv1C
+	XpuwBSrPSKcubYMt7+7XdMtJ2CnU2OORT4JP+qw==
+X-Gm-Gg: ASbGncv5jtaagggjQZVVs17VaNVZx2VUeofPoKODJPBl+twZ9pUQgDwH1TcIyw+HA27
+	TzqFq1QSp5FovacAMxz0QRrSjtsMTWN40xFvmAEvDVSyN1G80bepjOlQWomrJ/DnCGrn2fIiTSp
+	EZMSPCa7RYBydgaIyMrh9h6ytT870=
+X-Google-Smtp-Source: AGHT+IG7vBn4URXM8J2dFID1L7Pg4fVMsep6yAv6gvLGLKB/Q06ncJU71pTeAeJFVFPXcY3eqoO5qEZ7cJRZ/u07cAs=
+X-Received: by 2002:a81:fe0a:0:b0:6fe:bf9c:8e7a with SMTP id
+ 00721157ae682-6febf9c9506mr280796267b3.0.1741873596783; Thu, 13 Mar 2025
+ 06:46:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <13709135.uLZWGnKmhe@rjwysocki.net> <2016539.usQuhbGJ8B@rjwysocki.net>
- <CAGETcx8WOezY5-MePZ8X8f7_deys1eB-VvQLQwUPtd5MO8ApSA@mail.gmail.com>
-In-Reply-To: <CAGETcx8WOezY5-MePZ8X8f7_deys1eB-VvQLQwUPtd5MO8ApSA@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 13 Mar 2025 14:32:52 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hghyWwd_kZXS1+9pD+DkWiP_4MYORryvkhmFoqayQVaw@mail.gmail.com>
-X-Gm-Features: AQ5f1JpYFF509PP0Fu3AHxgL1jmkJIzqwRhd-FBPM-1QI89Z0k3rbdYuPNlRmY4
-Message-ID: <CAJZ5v0hghyWwd_kZXS1+9pD+DkWiP_4MYORryvkhmFoqayQVaw@mail.gmail.com>
-Subject: Re: [PATCH v1 5/5] PM: sleep: Make late and noirq suspend of devices
- more asynchronous
-To: Saravana Kannan <saravanak@google.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Johan Hovold <johan@kernel.org>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+References: <CGME20250311172030eucas1p12dda42760f751174e774b8d1a3d3f4cd@eucas1p1.samsung.com>
+ <20250311171900.1549916-1-m.wilczynski@samsung.com> <Z9KPvig0dPRO0cX1@x1>
+In-Reply-To: <Z9KPvig0dPRO0cX1@x1>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 13 Mar 2025 14:46:01 +0100
+X-Gm-Features: AQ5f1Jr2C0RzgSrdaklEVa_RV8h0CZizF651FuL4N37mJLMsiwagGMmTnahMvkg
+Message-ID: <CAPDyKFrCFURcTpwZnx4bs71Kw_JrRKLiuDh7954xD2k+rCDN_A@mail.gmail.com>
+Subject: Re: [PATCH v8 0/5] TH1520 SoC: Add AON firmware & power-domain support
+To: Michal Wilczynski <m.wilczynski@samsung.com>, Drew Fustini <drew@pdp7.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	guoren@kernel.org, wefu@redhat.com, paul.walmsley@sifive.com, 
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, jszhang@kernel.org, 
+	m.szyprowski@samsung.com, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 13, 2025 at 2:47=E2=80=AFAM Saravana Kannan <saravanak@google.c=
-om> wrote:
+On Thu, 13 Mar 2025 at 08:56, Drew Fustini <drew@pdp7.com> wrote:
 >
-> On Tue, Feb 25, 2025 at 8:46=E2=80=AFAM Rafael J. Wysocki <rjw@rjwysocki.=
-net> wrote:
+> On Tue, Mar 11, 2025 at 06:18:55PM +0100, Michal Wilczynski wrote:
+> > This patch series introduces and documents power management (PM) support and
+> > the AON firmware driver for the T-Head TH1520 SoC, as used on the LicheePi 4A
+> > board. While part of a larger effort to enable the Imagination BXM-4-64 GPU
+> > upstream, these patches can merge independently.
 > >
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Bigger series cover letter:
+> > https://lore.kernel.org/all/20250219140239.1378758-1-m.wilczynski@samsung.com/
 > >
-> > In analogy with previous changes, make device_suspend_late() and
-> > device_suspend_noirq() start the async suspend of the device's parent
-> > and suppliers after the device itself has been processed and make
-> > dpm_suspend_late() and dpm_noirq_suspend_devices() start processing
-> > "async" leaf devices (that is, devices without children or consumers)
-> > upfront because they don't need to wait for any other devices.
+> > This series is versioned to maintain continuity with the bigger patchset it is
+> > a subseries of. Please find below a changelog for the AON & power-domain:
 > >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/base/power/main.c |   60 +++++++++++++++++++++++++++++++++++++=
-++-------
-> >  1 file changed, 52 insertions(+), 8 deletions(-)
+> > v8:
+> > - add proper cleanup in the th1520_pd_probe()
+> > - add "suppress_bind_attrs = true", since there is no need to unbound the driver
+> >   during runtime. This simplifies the code by eliminating the remove function
 > >
-> > --- a/drivers/base/power/main.c
-> > +++ b/drivers/base/power/main.c
-> > @@ -1317,6 +1317,8 @@
-> >         device_links_read_unlock(idx);
-> >  }
+> > v7:
+> > - add '#include <linux/slab.h", due to kernel robot issue
 > >
-> > +static void async_suspend_noirq(void *data, async_cookie_t cookie);
-> > +
-> >  /**
-> >   * device_suspend_noirq - Execute a "noirq suspend" callback for given=
- device.
-> >   * @dev: Device to handle.
-> > @@ -1396,7 +1398,13 @@
-> >  Complete:
-> >         complete_all(&dev->power.completion);
-> >         TRACE_SUSPEND(error);
-> > -       return error;
-> > +
-> > +       if (error || async_error)
-> > +               return error;
-> > +
-> > +       dpm_async_suspend_superior(dev, async_suspend_noirq);
-> > +
-> > +       return 0;
-> >  }
+> > v6:
+> > - split the firmware & power-domain patches into a separate series
 > >
-> >  static void async_suspend_noirq(void *data, async_cookie_t cookie)
-> > @@ -1410,6 +1418,7 @@
-> >  static int dpm_noirq_suspend_devices(pm_message_t state)
-> >  {
-> >         ktime_t starttime =3D ktime_get();
-> > +       struct device *dev;
-> >         int error =3D 0;
+> > v5:
+> > - changed the AON driver to be a set of library functions rather than a
+> >   standalone driver
 > >
-> >         trace_suspend_resume(TPS("dpm_suspend_noirq"), state.event, tru=
-e);
-> > @@ -1419,15 +1428,28 @@
+> > v4:
+> > - added workaround to disable AUDIO power domain to prevent firmware crashes
 > >
-> >         mutex_lock(&dpm_list_mtx);
+> > v3:
+> >  - consolidated device tree representation by merging aon and power-domain nodes
+> >    while maintaining separate drivers internally
+> >  - power-domain driver is now instantiated from within the aon driver
+> >  - fixed optional module dependencies in Kconfig
+> >  - added kernel-doc comments for all exported functions
+> >  - implemented th1520_aon_remove() to properly clean up mailbox channel
+> >    resources
 > >
-> > +       /*
-> > +        * Start processing "async" leaf devices upfront because they d=
-on't need
-> > +        * to wait.
-> > +        */
-> > +       list_for_each_entry_reverse(dev, &dpm_late_early_list, power.en=
-try) {
-> > +               dpm_clear_async_state(dev);
-> > +               if (dpm_leaf_device(dev))
-> > +                       dpm_async_fn(dev, async_suspend_noirq);
-> > +       }
-> > +
-> >         while (!list_empty(&dpm_late_early_list)) {
-> > -               struct device *dev =3D to_device(dpm_late_early_list.pr=
-ev);
-> > +               dev =3D to_device(dpm_late_early_list.prev);
+> > v2:
+> >  - introduced a new firmware driver to manage power-related operations.
+> >  - rewrote the power-domain driver to function alongside the firmware driver.
+> >    These nodes in the device tree lack direct address spaces, despite
+> >    representing HW blocks. Control is achieved via firmware protocol messages
+> >    transmitted through a mailbox to the E902 core.
+> >  - added new dt-bindings for power and firmware nodes.
+> >  - ran dtbs_check and dt_binding_check to ensure compliance.
 > >
-> >                 list_move(&dev->power.entry, &dpm_noirq_list);
+> > Michal Wilczynski (5):
+> >   dt-bindings: firmware: thead,th1520: Add support for firmware node
+> >   firmware: thead: Add AON firmware protocol driver
+> >   dt-bindings: power: Add TH1520 SoC power domains
+> >   pmdomain: thead: Add power-domain driver for TH1520
+> >   riscv: Enable PM_GENERIC_DOMAINS for T-Head SoCs
+> >
+> >  .../bindings/firmware/thead,th1520-aon.yaml   |  53 ++++
+> >  MAINTAINERS                                   |   5 +
+> >  arch/riscv/Kconfig.socs                       |   1 +
+> >  drivers/firmware/Kconfig                      |   9 +
+> >  drivers/firmware/Makefile                     |   1 +
+> >  drivers/firmware/thead,th1520-aon.c           | 248 ++++++++++++++++++
+> >  drivers/pmdomain/Kconfig                      |   1 +
+> >  drivers/pmdomain/Makefile                     |   1 +
+> >  drivers/pmdomain/thead/Kconfig                |  12 +
+> >  drivers/pmdomain/thead/Makefile               |   2 +
+> >  drivers/pmdomain/thead/th1520-pm-domains.c    | 218 +++++++++++++++
+> >  .../dt-bindings/power/thead,th1520-power.h    |  19 ++
+> >  .../linux/firmware/thead/thead,th1520-aon.h   | 200 ++++++++++++++
+> >  13 files changed, 770 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
+> >  create mode 100644 drivers/firmware/thead,th1520-aon.c
+> >  create mode 100644 drivers/pmdomain/thead/Kconfig
+> >  create mode 100644 drivers/pmdomain/thead/Makefile
+> >  create mode 100644 drivers/pmdomain/thead/th1520-pm-domains.c
+> >  create mode 100644 include/dt-bindings/power/thead,th1520-power.h
+> >  create mode 100644 include/linux/firmware/thead/thead,th1520-aon.h
+> >
+> > --
+> > 2.34.1
 >
-> This issue is present in the previous patch too, but it's easier for
-> me to point it out here. Suspend abort will break now.
+> For the series:
 >
-> For example, say the devices are suspended in the order A -> B -> C ->
-> D -> E if everything was sync.
->
-> Case 1: Fully sync devices
-> If C aborts, only A and B will be in the dpm_noirq_list. When we try
-> to undo the suspend, we just resume devices in dpm_noirq_list and that
-> just resumes A and B.
->
-> Case 2: Only C is sync.
-> When C aborts, A, B, D and E could have finished suspending. But only
-> A and B will be in the dpm_noirq_list. When we try to undo the
-> suspend, we just resume devices in dpm_noirq_list and that just
-> resumes A and B. D and E never get resumed.
->
-> My fix for this is to move all devices to dpm_noirq_list if a suspend
-> aborts and then using the existing
-> is_suspended/is_noirq_suspended/is_late_suspended flags to skip over
-> devices that haven't been suspended. That works nicely except in
-> is_suspended and I tried to fix it in [2]. But you had an issue with
-> [2] that I didn't fully understand and I meant to dig deeper and fix.
-> But I didn't get around to it as I got swamped with other work.
->
-> [2] - https://lore.kernel.org/linux-pm/20241114220921.2529905-2-saravanak=
-@google.com/
+> Acked-by: Drew Fustini <drew@pdp7.com>
 
-I hope that my last message in this thread clarifies this a bit.
+Okay, patch 1 -> patch 4 applied for next, thanks!
 
-Anyway, yes, this is a bug and yes, it can be addressed by just
-continuing to move devices to the target list on errors until all of
-them get moved and then look at
-is_suspended/is_noirq_suspended/is_late_suspended.
+I am leaving patch5 for now.
 
-I'll post a fix for the direct-complete handling in device_suspend()
-and an update of the last three patches in this series with this issue
-addressed.
+Kind regards
+Uffe
 
