@@ -1,141 +1,182 @@
-Return-Path: <linux-pm+bounces-23960-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23961-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8C5FA5ED47
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 08:49:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E2EBA5ED6B
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 08:57:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C1A418955B6
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 07:49:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6E4317A6715
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 07:55:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73DD125F992;
-	Thu, 13 Mar 2025 07:49:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8607625FA37;
+	Thu, 13 Mar 2025 07:56:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pclCVUex"
+	dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b="SV5JAfNU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A5693A8D2;
-	Thu, 13 Mar 2025 07:49:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABDFC25F996
+	for <linux-pm@vger.kernel.org>; Thu, 13 Mar 2025 07:56:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741852183; cv=none; b=tTPgznD9L0pjvlTrpLVZPxqhPXQF/vNbFphLXx/FsZ+iGUjKJ2m0Kid6El6/WvseyDr368dnvA96zmD2hTOBk6OxZkwM6wNcNrwQJSqD7mIzx1+x3xlX/jmpSgDqgFlfSLHFwv6Aeqhfa/7XO5pgmQBEzIpKtV9kMzMY2yqAfqU=
+	t=1741852612; cv=none; b=NgD2iOxQXR7E06uKEXFPRublozA9QdKQ84i9YSXjaCqVYSQNUU5siT0UBQhB43QcZH+C6c1BzEICVYgiAhWuNOnc00QtV+FyFtXQFYZy1VruOChSiE3khEr8TZDR0JXprXJufsxRNrdT6Okw6wuZr/ZVv/okllJeDigxV/JNgBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741852183; c=relaxed/simple;
-	bh=o35p9Z9/CQVaHsgcveY0IeFK4hZ0kI/IIcoIsnG4WNA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nMa/rpsRAO/jvMVViyha5L6N5sgFvEZyleQTbG7FDF166UUp4F0V0IDsUPMDqqkDH0uyNpPCgEhutCNw1D678yd30Qj2B7QCLJ9TFOhvhQJyHyN3m4/zVlTcbuq4iOGvnRhpuGGlDplw9EBtlNoAUitJXpn/AsblhlzVpevIzUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pclCVUex; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AF2AC4CEDD;
-	Thu, 13 Mar 2025 07:49:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741852182;
-	bh=o35p9Z9/CQVaHsgcveY0IeFK4hZ0kI/IIcoIsnG4WNA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=pclCVUexl34Sf4d3JYaDM/8vCMr/osk+VJZQa2J0jsc0lJyOAKq+cTjqnO+9sjZrH
-	 dZ/yOleRG7/CB7WVKFaciJpVkpYw+27pMCq3G3St/+3hn+195RV5nStx5VteaYCQfH
-	 NFo9lqG8j9w5SyB+4P25d8q8Bi5GCmobTeM3iycVMVsGOoazer8RJcI/8kEjTrwNTo
-	 PYJI20UhNvWbJm0+jBqqVN8xxQ89yk3jsP7D9SqU9xExUJSQTUezFYq1ZeMQJwfpn+
-	 WcF4hAC4E6XKo7yt+cRUnOHFvYQZnjSu4S9H93lRQL2BZhaVHn0cNiMQz66RFXEwhH
-	 7JkuwdgMEiExw==
-Message-ID: <43506f83-13d7-46c5-b022-473ac78f0cab@kernel.org>
-Date: Thu, 13 Mar 2025 08:49:36 +0100
+	s=arc-20240116; t=1741852612; c=relaxed/simple;
+	bh=csSoVqhz5tUPJ7KgffmWDeAVmThuBZdB/krQumO/yU4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H2esIQvQB33VYKFJE/c6tumpaTbYtNGoOXD9IR8+uoWkr7DrSj+uBucNTaKwItKYhqYBLwQPuD85UsWefhtMygPB3Nc6y5tKkpwkI+7vbNa14GMaURp/4wukLU+fuUsx4hqkiAmBXGT88Lt7Yy5WQVTNz7MdwcIXidjX/PQVUfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com; spf=none smtp.mailfrom=pdp7.com; dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b=SV5JAfNU; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pdp7.com
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2ff65d88103so1166470a91.2
+        for <linux-pm@vger.kernel.org>; Thu, 13 Mar 2025 00:56:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pdp7-com.20230601.gappssmtp.com; s=20230601; t=1741852609; x=1742457409; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=38L2hz1chNfviXDy2tP0Lz340mHS97KT0hvfgoNEhj0=;
+        b=SV5JAfNU+Q4S6QpLU0AE6qVgWm7ZzU52+F0R1HG61LM2U2Gdg4U5+S/a8qLWGWBIjG
+         gRZ33vf5EXcrv8qz14hggCHavda+zo8TZL7yrncnQBxjaFiWOFYSllCu/0mGw903C0wZ
+         SScvXeEXzcRE5qjwVGG6UPeg3rHqYTAv5midv1Den0SoG/pV6cA4pHEXPtfBnUzja7fb
+         jTAqEl6J/NfOlDAKozcudab24QS4sR5Mw7e+Cyg73dufxRTyYB2NsA+JG/SNoEloQOsk
+         HczfjB/dtPuTB+OjEYvii9keiZaooxL6aJfLyE6Tk1pgMTa890qn0EC602/XfbUqkTqy
+         O1qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741852609; x=1742457409;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=38L2hz1chNfviXDy2tP0Lz340mHS97KT0hvfgoNEhj0=;
+        b=hRxJv44dbkLTmw6tAqRZwrTivoyvcNRSExoCLV7sXmKRSCMMNbkAgkd3rBAuSgILgq
+         fmiM+J1Pps72xHs4NAABX/53L/zszwRWJa9jO0kAcYMsjP6v9M3Xy9YRMw5sJeofwJTy
+         To0PrK2AHzX9uWbfjOkvv/8yHL5ulDr6lPrAW/UpPOtHnVT4rASG8RtfCd6KpQsT7d2o
+         PiFjJ04FN94fUR+mIv9r/FqPd+8etdKd9FvgIyFX59yDaLffA2E7EGr/FcHHAtU4/oxh
+         /IVrB4pDVYCvPH8paQYAuMUWBXj4AMXMLFmBX5E/6VpC1uMu20daWTb/NFArRblzvLbn
+         1J8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX76A2vrI5ozhMsYYs0X6j/swORWIvLCUl0bUrnHs/3t1Uo6O704Bj4SNDCs1f1Z/BTr0wMeHfFBg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqsqKC7flFlpXfyR7YZRZg6RuMAfncXLIM/w0GHPq3zOntV8fh
+	1/ZM7/pXiMMpA/4oponeWCuyKY95ir+PDoXicxqbzESfu/b5Z7fdym6PinmnZuc=
+X-Gm-Gg: ASbGnctTMciP9Uc7b2h12jVUVvXRasPun6UCxTdpshMuGDzmnNOr0TeTGzICK4VYvCB
+	PNDaFtlla20sl0xr+ulubQKjyrMrovNiLNw9FjEjbGxfb1BTeXPTlsrtLmCJyB537AupOq3Prvv
+	jZ5LYBNsr/YXEXUicE2IE2OxnMYKnob3gPjRd7iH8QJfnKVsb4nfB9tAgxamOllFRO48lno6qUP
+	twO0yvO7GSFOO64nkfBxISMU1nV4vq4W+zGOXQw5WgyLBqRJH1k2sZNl8j34GFfe2lPudxnP5Hr
+	pYqMyMkVWFz003vw8t8JHJc1Zg==
+X-Google-Smtp-Source: AGHT+IExdVBJ3/gcWBXodBlgc0t0CtGEm8NtDZGsZZGRgntPtjMcoKU8fMdl0fX1ZXY61aguSYRxkA==
+X-Received: by 2002:a17:90b:4f8d:b0:2f8:b2c:5ef3 with SMTP id 98e67ed59e1d1-2ff7ce8a02fmr39178985a91.14.1741852608708;
+        Thu, 13 Mar 2025 00:56:48 -0700 (PDT)
+Received: from x1 ([97.115.231.194])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30138f89db9sm796672a91.34.2025.03.13.00.56.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Mar 2025 00:56:48 -0700 (PDT)
+Date: Thu, 13 Mar 2025 00:56:46 -0700
+From: Drew Fustini <drew@pdp7.com>
+To: Michal Wilczynski <m.wilczynski@samsung.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	guoren@kernel.org, wefu@redhat.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	jszhang@kernel.org, ulf.hansson@linaro.org,
+	m.szyprowski@samsung.com, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v8 0/5] TH1520 SoC: Add AON firmware & power-domain
+ support
+Message-ID: <Z9KPvig0dPRO0cX1@x1>
+References: <CGME20250311172030eucas1p12dda42760f751174e774b8d1a3d3f4cd@eucas1p1.samsung.com>
+ <20250311171900.1549916-1-m.wilczynski@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 4/4] drivers/thermal/exymos: Use guard notation when
- acquiring mutex
-To: Anand Moon <linux.amoon@gmail.com>
-Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Alim Akhtar <alim.akhtar@samsung.com>,
- "open list:SAMSUNG THERMAL DRIVER" <linux-pm@vger.kernel.org>,
- "open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>,
- "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES"
- <linux-arm-kernel@lists.infradead.org>,
- open list <linux-kernel@vger.kernel.org>
-References: <20250310143450.8276-1-linux.amoon@gmail.com>
- <20250310143450.8276-5-linux.amoon@gmail.com>
- <25fa661b-98e4-468b-bb4d-4a2c95f32b71@kernel.org>
- <CANAwSgTeZ83oqatrsWQxT+4RYwEtEqma=R4XX_iGrP2N=phz9Q@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <CANAwSgTeZ83oqatrsWQxT+4RYwEtEqma=R4XX_iGrP2N=phz9Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250311171900.1549916-1-m.wilczynski@samsung.com>
 
-On 12/03/2025 15:59, Anand Moon wrote:
->>
->>> +          mutex_lock(&_T->lock), mutex_unlock(&_T->lock))
->>> +
->>>  /*
->>>   * TMU treats temperature as a mapped temperature code.
->>>   * The temperature is converted differently depending on the calibration type.
->>> @@ -256,7 +260,7 @@ static int exynos_tmu_initialize(struct platform_device *pdev)
->>>       unsigned int status;
->>>       int ret = 0;
->>>
->>> -     mutex_lock(&data->lock);
->>> +     guard(mutex)(&data->lock);
->>
->> Which you do not use... Please don't use cleanup.h if you do not know
->> it. It leads to bugs.
->>
-> Ok, I will drop this include of cleanup.h.
+On Tue, Mar 11, 2025 at 06:18:55PM +0100, Michal Wilczynski wrote:
+> This patch series introduces and documents power management (PM) support and
+> the AON firmware driver for the T-Head TH1520 SoC, as used on the LicheePi 4A
+> board. While part of a larger effort to enable the Imagination BXM-4-64 GPU
+> upstream, these patches can merge independently.
+> 
+> Bigger series cover letter:
+> https://lore.kernel.org/all/20250219140239.1378758-1-m.wilczynski@samsung.com/
+> 
+> This series is versioned to maintain continuity with the bigger patchset it is
+> a subseries of. Please find below a changelog for the AON & power-domain:
+> 
+> v8:
+> - add proper cleanup in the th1520_pd_probe()
+> - add "suppress_bind_attrs = true", since there is no need to unbound the driver
+>   during runtime. This simplifies the code by eliminating the remove function
+> 
+> v7:
+> - add '#include <linux/slab.h", due to kernel robot issue
+> 
+> v6:
+> - split the firmware & power-domain patches into a separate series
+> 
+> v5:
+> - changed the AON driver to be a set of library functions rather than a
+>   standalone driver
+> 
+> v4:
+> - added workaround to disable AUDIO power domain to prevent firmware crashes
+> 
+> v3:
+>  - consolidated device tree representation by merging aon and power-domain nodes
+>    while maintaining separate drivers internally
+>  - power-domain driver is now instantiated from within the aon driver
+>  - fixed optional module dependencies in Kconfig
+>  - added kernel-doc comments for all exported functions
+>  - implemented th1520_aon_remove() to properly clean up mailbox channel
+>    resources
+> 
+> v2:
+>  - introduced a new firmware driver to manage power-related operations.
+>  - rewrote the power-domain driver to function alongside the firmware driver.
+>    These nodes in the device tree lack direct address spaces, despite
+>    representing HW blocks. Control is achieved via firmware protocol messages
+>    transmitted through a mailbox to the E902 core.
+>  - added new dt-bindings for power and firmware nodes.
+>  - ran dtbs_check and dt_binding_check to ensure compliance.
+> 
+> Michal Wilczynski (5):
+>   dt-bindings: firmware: thead,th1520: Add support for firmware node
+>   firmware: thead: Add AON firmware protocol driver
+>   dt-bindings: power: Add TH1520 SoC power domains
+>   pmdomain: thead: Add power-domain driver for TH1520
+>   riscv: Enable PM_GENERIC_DOMAINS for T-Head SoCs
+> 
+>  .../bindings/firmware/thead,th1520-aon.yaml   |  53 ++++
+>  MAINTAINERS                                   |   5 +
+>  arch/riscv/Kconfig.socs                       |   1 +
+>  drivers/firmware/Kconfig                      |   9 +
+>  drivers/firmware/Makefile                     |   1 +
+>  drivers/firmware/thead,th1520-aon.c           | 248 ++++++++++++++++++
+>  drivers/pmdomain/Kconfig                      |   1 +
+>  drivers/pmdomain/Makefile                     |   1 +
+>  drivers/pmdomain/thead/Kconfig                |  12 +
+>  drivers/pmdomain/thead/Makefile               |   2 +
+>  drivers/pmdomain/thead/th1520-pm-domains.c    | 218 +++++++++++++++
+>  .../dt-bindings/power/thead,th1520-power.h    |  19 ++
+>  .../linux/firmware/thead/thead,th1520-aon.h   | 200 ++++++++++++++
+>  13 files changed, 770 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
+>  create mode 100644 drivers/firmware/thead,th1520-aon.c
+>  create mode 100644 drivers/pmdomain/thead/Kconfig
+>  create mode 100644 drivers/pmdomain/thead/Makefile
+>  create mode 100644 drivers/pmdomain/thead/th1520-pm-domains.c
+>  create mode 100644 include/dt-bindings/power/thead,th1520-power.h
+>  create mode 100644 include/linux/firmware/thead/thead,th1520-aon.h
+> 
+> -- 
+> 2.34.1
 
-So the guards as well...
+For the series:
 
-Best regards,
-Krzysztof
+Acked-by: Drew Fustini <drew@pdp7.com>
 
