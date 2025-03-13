@@ -1,303 +1,251 @@
-Return-Path: <linux-pm+bounces-23983-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23984-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62934A5F897
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 15:38:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C2DCA5F96A
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 16:17:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2FE3C3BB952
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 14:36:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1470B188E999
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 15:17:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FBC2269AF4;
-	Thu, 13 Mar 2025 14:32:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEC9726138E;
+	Thu, 13 Mar 2025 15:16:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TYbhLtFt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 817C3267738;
-	Thu, 13 Mar 2025 14:32:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A419CFC08;
+	Thu, 13 Mar 2025 15:16:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741876377; cv=none; b=r8IaWsq8X3U6JIwbIGqRsEcw6Ac883wVpCqgl3R+Ckr1/ecm7V0jA41Jdab+cZ7u1ggA75yqVFQWjVt9o5ZZH5vDEqITllvuaW8ZiLCjQrSjJA9kuUf6ThioGA1yoVHhgfOwxIFMaBoSXbZe9KDnfjNgjKAhYeDZf+rcRT0wx6Q=
+	t=1741879017; cv=none; b=SAiG8uRdwXFGOWQrsibMT2L5Ph++GMvd50Z0oTfn+7wdPaVmwbAoXHfR1nFqvoBshzGYIWTRblHsDtmYmIJiyBVNfezrAl6EELalFF5/15Ke1HFgm5gzbuPFdOueUAhyVBJzq0eOyemFLRZc2GXthqs0iR1HLOwt64D1mx0mH0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741876377; c=relaxed/simple;
-	bh=iX3cA2HK76pcwOvRpz8gubtaOjLb8n2WVMacaAiM/9U=;
+	s=arc-20240116; t=1741879017; c=relaxed/simple;
+	bh=DyKj9OAa2ndB89I7PHXBVdazlTpuCK87qB36+y9pYA0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SNjvzo5qU5IzWpJXADCqQPr7mlhFi7mbKbDcTwKtjTw8VsN3e4OLSyKiVeJ0hdvAl8FjBlK9CPl5QlkAIQ1mHPpCe7Wgcwmn1/A5S/8JeXQVdTvOgWiSl++ZiXwbm2ATZoCYzwIAlolctdxTbE606uLA5MhK4x3TmjCKsPUvD6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6e6c082eac0so10373626d6.0;
-        Thu, 13 Mar 2025 07:32:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741876373; x=1742481173;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/BH4etTF8KwRmanIMJ5g8gQ5kEM3Izri0CoFiYQLuMU=;
-        b=oUpzPPvQpuj5CD/Po3w1Wha49Vr3BamHWm9Da5vUNaBNveNBXWmhdumZK988KlvbH8
-         qM/b6fq4j6cl0di8NY3pbH+nZzAp63+buu7JqjYUL+og7OD1ZmfKKwx527mgxPouiy9r
-         d1CAkWBIHMMvZxuOTedHzIOhyH1hItBLICTg8jPrUN2nF7X3XZq7l7atIwn1uypz/Dif
-         26oiXer+IkG1ZmgVM/xgl5kO229Hgl14HKb99MuJdT2kSAXaJXB6H/uRYTZVze9+jocy
-         dn5xgAyOvFTSsyHOZXpNe5z2okr4G/KCpIVGeVPo7QquZV88CzQ3zM2v6kDKRx54qt46
-         t/yQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVFoIdc3HTl4yuUgFCortND/WwoFez6/J8Drem8apppDHsxdUV3FsptM67ZbiBs8zSGVzCE82tE4/P91MDZvXTg/w0=@vger.kernel.org, AJvYcCW7dV2yzBz62Uy2+Wq2QPRZKpodMOBxmXwOWLQhAWv60f0itB1RD0C+wlEtPzV6HPzjNxf2NfITww==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDh4U2z/4o6JM9mLZb/qPYVwIU8CpzJeSr3wr+/rgSZFEKjwTr
-	yl5vyjIlojDFD1ZOuMTRv7WunDrpGS690l+nitN4XrJa0HUrKYMDwoopW+QZ
-X-Gm-Gg: ASbGncu93E+bzZUHoXZzdB4kt74BowPdx4js1yjKp1PgJaVCnm2sQICtM0wsssrn4PK
-	TNlorto52FdDKiRVxnm5e+yVemn61rWaARxUWb179ipZaVsQWtp35JV0fGWyfpUupR50PB+u0ZO
-	f6Q/OwxWCmRJrM7PsWnNC3Guq7vtUuZC8H5MmL0g+RsyLaXh1TNHpb11o8D8wUL+mOYfPNm6bQs
-	SWuFa5JP+QN4FkfkknU9WokmFsy1JMHFVOVQzQg2M0o2UDD6GWj+YFUNft6+CR62Lr9wHIXVjax
-	dguFzvo6raKx28Jqsqd2xNN8UVM2rGLsZcNbRd3tx6pzNirrKbiapvUVzxeXrjbgyooM3MR7DFJ
-	lvx3rAms=
-X-Google-Smtp-Source: AGHT+IGXUDZGLO18qnFS8eLFX3OxpujVPl/gkaZNhJDUtyc9xGs8Lnw9ZCeDCqW3yBxrvT3FfBOm2A==
-X-Received: by 2002:a05:6214:1bcc:b0:6ea:d629:f47d with SMTP id 6a1803df08f44-6ead629f57dmr73323506d6.44.1741876372546;
-        Thu, 13 Mar 2025 07:32:52 -0700 (PDT)
-Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com. [209.85.222.50])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-86d90d68eb2sm211401241.7.2025.03.13.07.32.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Mar 2025 07:32:51 -0700 (PDT)
-Received: by mail-ua1-f50.google.com with SMTP id a1e0cc1a2514c-868da0af0fcso448171241.2;
-        Thu, 13 Mar 2025 07:32:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW2IUm/DrRYI4Etgw1aQ5bXGQLH4WD1UNseZcvqLeRMsW5leGvrvz9OOWhm+f9boQtQSENNRXKTGD5MuX6d9imSxM8=@vger.kernel.org, AJvYcCX5UTqpWpRXB4wWh9AYQLhoKDtBK3sa/tGXKcjECZKc+6iK/V6s92uYLffyFL1EovsNRZTWC2HQHw==@vger.kernel.org
-X-Received: by 2002:a05:6102:d8f:b0:4bb:e6bc:e16d with SMTP id
- ada2fe7eead31-4c30a6b1f28mr19722590137.20.1741876371022; Thu, 13 Mar 2025
- 07:32:51 -0700 (PDT)
+	 To:Cc:Content-Type; b=EAplMSkqZB0Vh3eyfmPx+3t5nDV3U5vi6O+sMOFkjtelQbh7ifxtpjgdskTfLdSOppb2A4XctQeS9qa2/se9Dmm5BedXMWqCpymdbjTCR/9HClK9hxcJL3BJPT1w5TN03dZhHemtpL+tA/CI9KMFi2N5/92FPTlKl6XPkFd6tIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TYbhLtFt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22346C4CEEF;
+	Thu, 13 Mar 2025 15:16:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741879017;
+	bh=DyKj9OAa2ndB89I7PHXBVdazlTpuCK87qB36+y9pYA0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=TYbhLtFtYEXK+uv1q24tILG+lYtNYIrd4pQNa/9SmlklHialPyIYiXsFTDJBNg4sc
+	 xrA6Xv/yfEopEB+Wlg/lbKykvoNr5jDhLXWxMuovb3HCZ2NZUFiIx2ltDfJFgvbWw3
+	 KLimv7QyOmx09xrVrb9nDdFh4wt64xW/tPEkhIwmC55J6G/ONqXIC41crJOGADT90x
+	 sRwEYyo0KwkXXtu1XanD2FZ4pM5zAnBmic1HriWUONdNdMZ+2ZwOBR8OCoGZYGBRtI
+	 wXPVpl1QLDqvZHh68wJQ1R7rzdPbtbjok2SxtO7G+YYLGQbpwnqlzKJV+10GXnvKHc
+	 nVkjwV7dZCHRw==
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-2bcf9d9b60aso375602fac.3;
+        Thu, 13 Mar 2025 08:16:57 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUDMebEWuT9H7Numxqn40i7t86W+zCiKtveIrZwPp6fvxNMsD/UuRayUdy3meNcMEpUtB4FMunj0xP8ACE=@vger.kernel.org, AJvYcCVNSilFGpBnfemmE3IaAvFU/N/Kfz7x8/L4baWSJPT2yYF1lhR9FgZ05Y2zFk/QkQi/azjefrfIYCY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxyZN1mOskWgJX8NTQpPevW/HeNM15TudO1H4RQ71XS4J3DDBbL
+	XlTkBL/vT+3idsFei2ob/d0W+Pw8RSnrL/cv+gcK1NMJWBXI90rr8RrjwDK4rkupPeDenOiZ7ZI
+	lJa0Xxswk2oLXWa0EpeFQHXIAnHI=
+X-Google-Smtp-Source: AGHT+IGDbZclqQ1GbUjtmZyTVw+IYyTYwSB+gf+fjqifHQkYzUUn3GyZrK/a0wZ8fqz076tKmAztOClVvit2aC01ztw=
+X-Received: by 2002:a05:6870:9a1a:b0:29e:2caf:8cc with SMTP id
+ 586e51a60fabf-2c2e89c517fmr6263469fac.37.1741879016219; Thu, 13 Mar 2025
+ 08:16:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAMuHMdXN9A-1P_qe=BwKjLaoqxU8iJUQK6h8=s-apR4Y0em_0Q@mail.gmail.com>
- <CAMuHMdXXWH0Do5zXWJ1Uc6dyEb9o1chGSyeyzgDrX+v1wZ7e_A@mail.gmail.com>
- <CAGETcx_wA9RB9QhMPqsLHDFZ4cwOFgE8dBL9ssFkT=J6DEgjGg@mail.gmail.com> <CAMuHMdUCXJkg3rkngXf7cqa50u-TEAOntV6O=Nvg33Q9diPJPw@mail.gmail.com>
-In-Reply-To: <CAMuHMdUCXJkg3rkngXf7cqa50u-TEAOntV6O=Nvg33Q9diPJPw@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 13 Mar 2025 15:32:39 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWLEHwjaNnysDZ_Unqj-SwmUdwRao_oJvYvVsQ9SCn06A@mail.gmail.com>
-X-Gm-Features: AQ5f1JpJVmaxOlX9uCCFjKjL22U0WLUrpcwd4rJdfdEnxO1oQRAp4pCBKMVxjFU
-Message-ID: <CAMuHMdWLEHwjaNnysDZ_Unqj-SwmUdwRao_oJvYvVsQ9SCn06A@mail.gmail.com>
-Subject: Re: s2idle blocked on dev->power.completion
+References: <13709135.uLZWGnKmhe@rjwysocki.net> <1819312.VLH7GnMWUR@rjwysocki.net>
+ <CAGETcx86f+8cGBxMixgoOy2fwgtEO_ysN1q-h9PACxdRjRiFPw@mail.gmail.com>
+In-Reply-To: <CAGETcx86f+8cGBxMixgoOy2fwgtEO_ysN1q-h9PACxdRjRiFPw@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 13 Mar 2025 16:16:45 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jWEVU=68hnSiFRSmmF=5cne0ev1U8ebftvYN2NkhJ=UA@mail.gmail.com>
+X-Gm-Features: AQ5f1JoKYOrAq2WDF2VauXThtL-C_IrV9ksQwFiE2m5IInRPHNvIiDGbh-Vh_fs
+Message-ID: <CAJZ5v0jWEVU=68hnSiFRSmmF=5cne0ev1U8ebftvYN2NkhJ=UA@mail.gmail.com>
+Subject: Re: [PATCH v1 3/5] PM: sleep: Resume children right after resuming
+ the parent
 To: Saravana Kannan <saravanak@google.com>
-Cc: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>, 
-	Linux PM list <linux-pm@vger.kernel.org>, 
-	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Johan Hovold <johan@kernel.org>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Saravana,
-
-On Thu, 13 Feb 2025 at 11:26, Geert Uytterhoeven <geert@linux-m68k.org> wro=
-te:
-> On Thu, 13 Feb 2025 at 09:31, Saravana Kannan <saravanak@google.com> wrot=
-e:
-> > On Mon, Feb 10, 2025 at 2:24=E2=80=AFAM Geert Uytterhoeven <geert@linux=
--m68k.org> wrote:
-> > > On Fri, 7 Feb 2025 at 16:08, Geert Uytterhoeven <geert@linux-m68k.org=
-> wrote:
-> > > > Instrumenting all dev->power.completion accesses in
-> > > > drivers/base/power/main.c reveals that resume is blocked in dpm_wai=
-t()
-> > > > in the call to wait_for_completion() for regulator-1p2v, which is
-> > > > indeed a dependency for the SN65DSI86 DSI-DP bridge.  Comparing
-> > >
-> > > [...]
-> > >
-> > > > Looking at /sys/devices/virtual/devlink, the non-working case has t=
-he
-> > > > following extra entries:
-> > >
-> > > Note that the SN65DSI86 DSI-DP bridge driver uses the auxiliary bus
-> > > to create four subdevices:
-> > >   - ti_sn65dsi86.aux.0,
-> > >   - ti_sn65dsi86.bridge.0,
-> > >   - ti_sn65dsi86.gpio.0,
-> > >   - ti_sn65dsi86.pwm.0.
-> > > None of them have supplier:* symlinks in sysfs, so perhaps that is
-> > > the root cause of the issue?
+On Thu, Mar 13, 2025 at 2:47=E2=80=AFAM Saravana Kannan <saravanak@google.c=
+om> wrote:
+>
+> Sorry for the delay, I wanted to double, triple, multiple check my
+> replies to make sure I didn't get it wrong. I hope I didn't.
+>
+> On Tue, Feb 25, 2025 at 8:46=E2=80=AFAM Rafael J. Wysocki <rjw@rjwysocki.=
+net> wrote:
 > >
-> > Sorry, I haven't had time to look into this closely. Couple of
-> > questions/suggestions that might give you some answers.
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > >
-> > Is this an issue only happening for s2idle or for s2ram too? I'd guess
-> > both, but if not, that might tell you something?
+> > According to [1], the handling of device suspend and resume, and
+> > particularly the latter, involves unnecessary overhead related to
+> > starting new async work items for devices that cannot make progress
+> > right away because they have to wait for other devices.
+> >
+> > To reduce this problem in the resume path, use the observation that
+> > starting the async resume of the children of a device after resuming
+> > the parent is likely to produce less scheduling and memory management
+> > noise than starting it upfront while at the same time it should not
+> > increase the resume duration substantially.
+> >
+> > Accordingly, modify the code to start the async resume of the device's
+> > children when the processing of the parent has been completed in each
+> > stage of device resume and only start async resume upfront for devices
+> > without parents.
+> >
+> > Also make it check if a given device can be resumed asynchronously
+> > before starting the synchronous resume of it in case it will have to
+> > wait for another that is already resuming asynchronously.
+> >
+> > In addition to making the async resume of devices more friendly to
+> > systems with relatively less computing resources, this change is also
+> > preliminary for analogous changes in the suspend path.
+> >
+> > On the systems where it has been tested, this change by itself does
+> > not affect the overall system resume duration in a measurable way.
+> >
+> > Link: https://lore.kernel.org/linux-pm/20241114220921.2529905-1-saravan=
+ak@google.com/ [1]
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  drivers/base/power/main.c |   72 +++++++++++++++++++++++++++++++++++++=
++++------
+> >  1 file changed, 63 insertions(+), 9 deletions(-)
+> >
+> > --- a/drivers/base/power/main.c
+> > +++ b/drivers/base/power/main.c
+> > @@ -621,12 +621,41 @@
+> >         return false;
+> >  }
+> >
+> > +static int dpm_async_unless_in_progress(struct device *dev, void *fn)
+> > +{
+> > +       async_func_t func =3D fn;
+> > +
+> > +       if (!dev->power.work_in_progress)
+> > +               dpm_async_fn(dev, func);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static void dpm_async_resume_children(struct device *dev, async_func_t=
+ func)
+> > +{
+> > +       mutex_lock(&dpm_list_mtx);
+> > +
+> > +       /*
+> > +        * Start processing "async" children of the device unless it's =
+been
+> > +        * started already for them.
+> > +        *
+> > +        * This could have been done for the device's "async" consumers=
+ too, but
+> > +        * they either need to wait for their parents or the processing=
+ has
+> > +        * already started for them after their parents were processed.
+> > +        */
+> > +       device_for_each_child(dev, func, dpm_async_unless_in_progress);
 >
-> The two (very similar) boards I could reproduce the issue on do not
-> support s2ram yet.
+> Is there a reason you aren't resuming the consumers? Or checking that
+> the children won't block on any suppliers?
+
+This is deliberate and the above comment is about it.
+
+At this point, all of the consumers either still need to wait for
+their parents, in which case it is not useful to queue them up, or
+their parent's have already completed the resume and started their
+processing, if they are async.
+
+Checking if children won't block can be added here, but then (a) the
+code will need to track their dependencies and (b) walking the
+consumers would become necessary which is extra overhead.
+
+Arguably, there are no devices with tons of children, so adding
+several async work items that will just wait until they get unblocked
+here should not add too much overhead.
+
+> Not dealing with device links might be ok for systems where there
+> aren't a lot of device links, but in DT based systems with fw_devlink
+> this patch will not make much of a difference. There'll still be a ton
+> of "sleep and try again" issues because of the supplier/consumer
+> dependencies.
+
+That IMO really needs to be evaluated because it all depends on how
+much it takes to resume individual devices.
+
+> And when you include device links, it's a dependency graph and no longer
+> a dependency tree. So things become a bit more complicated.
+
+They are, but all I said above still holds I believe.
+
+> Also, not taking device links isn't consideration when kicking off
+> async work is not just about additional sleep/wake cycles, but it'll
+> also cause more thread creation because blocked "async" worker threads
+> will quickly use up the worker thread pool and more threads need to be
+> created.
+
+Again, this needs to be evaluated and an actual system.  It would have
+been the case if devices had taken no time to actually resume, but it
+is far from reality AFAICS.
+
+[skip]
+
+> >  }
+> >
+> >  static void async_resume_early(void *data, async_cookie_t cookie)
+> > @@ -875,19 +915,24 @@
+> >         mutex_lock(&dpm_list_mtx);
+> >
+> >         /*
+> > -        * Trigger the resume of "async" devices upfront so they don't =
+have to
+> > -        * wait for the "non-async" ones they don't depend on.
+> > +        * Start processing "async" devices without parents upfront so =
+they
+> > +        * don't wait for the "sync" devices they don't depend on.
+> >          */
+> >         list_for_each_entry(dev, &dpm_late_early_list, power.entry) {
+> >                 dpm_clear_async_state(dev);
 >
-> > The only reason the wait_for_completion() wouldn't work is because the
-> > supplier is not "completing"?
+> I initially thought that there could be a race here, but it's not the
+> case because you are using the dpm_list_mtx here. However, since you
+> are grabbing the dpm_list_mtx lock before you loop through and kick
+> off the async threads for child devices it'll cause a lot of
+> unnecessary lock contention/waiting.
+
+I don't think this is what happens here.  It is only processing the
+devices without parents which are not too many.
+
+> Which is what this series is trying to avoid in the first place.
 >
-> Yes, the diff shows ca. 70 additional calls to "complete_all()" in the
-> good case.
->
-> > There's some weird direct_complete logic
-> > that I haven't fully understood. You can look at that to see if some
-> > of the devices are skipping their resumes and hence the "completes"
-> > too? Also, runtime PM and some flag can cause some lazy resume or
-> > avoid suspending already suspended devices behavior. Check that too.
->
-> Thanks, will give it a try...
+> If you take device links into consideration (which we need to do for
+> this patch series to improve suspend/resume for DT based systems),
+> there is an even higher chance of racing (or more lock contention)
+> because multiple threads might attempt to resume the same device.
+> Which is why in my patch series, I try to use the device links read
+> lock than using the single dpm_list_mtx mutex.
 
-More findings:
+I think that you are talking about acquiring dpm_list_mtx in
+dpm_async_resume_children().
 
-1. The issue does not happen with "fw_devlink=3Doff".
-   It does happen with all of "fw_devlink=3D(permissive|on|rpm)".
+The reason for acquiring it there is dpm_async_unless_in_progress()
+and particularly the power.work_in_progress check in it and the
+invocation of dpm_async_fn() which manipulates power.work_in_progress.
 
-2. Looking at differences in direct_complete state didn't help.
+If dpm_list_mtx is too contentious for this, the device's power.lock
+can be used for protecting the power.work_in_progress accesses in
+principle, but that would mean more complexity in the code.
 
-3. When the issue happens, two more dependency cycle fixes are printed:
-
-       /soc/dsi-encoder@fed80000: Fixed dependency cycle(s) with
-/soc/i2c@e6508000/bridge@2c
-       /soc/i2c@e6508000/bridge@2c: Fixed dependency cycle(s) with
-/soc/dsi-encoder@fed80000
-
-     These are not new: the first one is printed 4 instead of 3 times,
-     the second one is printed 3 instead of 2 times.
-
-  4. When the issue happens, /sys/devices/virtual/devlink shows 3
-     more links:
-       A. platform:feb00000.display is a supplier of
-platform:fed80000.dsi-encoder
-       B. platform:fed80000.dsi-encoder is a supplier of
-platform:feb00000.display
-       C. i2c:1-002c is a supplier of platform:fed80000.dsi-encoder
-
-     A and B are due to endpoint links between ports of the display
-     and dsi-encoder nodes.
-     C is due to the endpoint links between ports1 of the bridge and
-     dsi-encoder nodes. However, I'd expect platform:fed80000.dsi-encoder
-     being a supplier of i2c:1-002c, too?
-
-     Note that feb00000.display is one of the devices that
-     were probe deferred, due no driver for fed80000.dsi-encoder
-     being available.
-     The other device that was probe-deferred is
-     ti_sn65dsi86.bridge.1068, which is an auxiliary-bus subdevice of
-     i2c:1-002c.
-
-  5. What happens in dpm_noirq_resume_devices()?
-
-       /*
-        * Trigger the resume of "async" devices upfront so they don't have =
-to
-        * wait for the "non-async" ones they don't depend on.
-        */
-        i2c-1 (i2c bus) and 1-002c (bridge device) are async,
-        thus triggered first.
-        After that, the remaining devices are resumed.
-
-     In the bad case:
-
-       device_resume_noirq(fed80000.dsi-encoder, async=3Dfalse)
-         dpm_wait_for_superior()
-           parent soc: skipping wait_for_completion()
-           dpm_wait_for_suppliers()
-             supplier feb00000.display: skipped, DL_STATE_DORMANT
-             ^^^^^^^^^^^^^^^^^^^^^^^^^
-Cfr. extra link A above (harmless)
-
-             supplier e6150000.clock-controller: skipping wait_for_completi=
-on()
-             supplier 1-002c: wait_for_completion() =3D> BLOCKED
-             ^^^^^^^^^^^^^^^
-Cfr. extra link C above, but the bridge device hasn't been resumed yet.
-
-Then it continues resuming async devices:
-
-       device_resume_noirq(i2c-1, async=3Dtrue)
-         dpm_wait_for_superior()
-           parent e6508000.i2c: wait_for_completion(), completed
-           dpm_wait_for_suppliers()
-             (none)
-         complete_all()
-
-       device_resume_noirq(1-002c, async=3Dtrue)
-         dpm_wait_for_superior()
-           parent i2c-1: wait_for_completion(), completed
-           dpm_wait_for_suppliers
-             supplier e6050000.pinctrl: wait_for_completion(), completed
-             supplier regulator-1p2v: wait_for_completion() =3D> BLOCKED
-             ^^^^^^^^^^^^^^^^^^^^^^^
-The regulator hasn't been resumed yet.
-
-     In the good case:
-
-       device_resume_noirq(fed80000.dsi-encoder, async=3Dfalse)
-         dpm_wait_for_superior()
-           parent soc: skipping wait_for_completion()
-           dpm_wait_for_suppliers()
-             supplier e6150000.clock-controller: skipping wait_for_completi=
-on()
-         complete_all()
-         ^^^^^^^^^^^^
-As feb00000.display and 1-002c are not suppliers, fed80000.dsi-encoder
-does not have to wait for them.
-
-       [...]
-
-       device_resume_noirq(regulator-1p2v, async=3Dfalse)
-                           ^^^^^^^^^^^^^^^
-After a while, the regulator is resumed...
-
-         dpm_wait_for_superior()
-           parent platform: wait_for_completion()
-           dpm_wait_for_suppliers()
-             (none)
-         complete_all()
-
-       [...]
-
-       device_resume_noirq(regulator.1, async=3Dfalse)
-                           ^^^^^^^^^^^^^^^
-followed by the virtual counterpart.
-         dpm_wait_for_superior()
-           parent regulator-1p2v: skipping wait_for_completion()
-           dpm_wait_for_suppliers ()
-             (none)
-         complete_all()
-
-       [...]
-
-       device_resume_noirq(1-002c, async=3Dtrue)
-                           ^^^^^^
-The bridge is resumed much later...
-
-         dpm_wait_for_superior()
-           parent i2c-1: wait_for_completion(), completed
-           dpm_wait_for_suppliers
-             supplier e6050000.pinctrl: wait_for_completion(), completed
-             supplier regulator-1p2v: wait_for_completion(), completed
-             ^^^^^^^^^^^^^^^^^^^^^^^
-             supplier regulator-1p8v: wait_for_completion(), completed
-             supplier e6050980.gpio: wait_for_completion(), completed
-             supplier e61c0000.interrupt-controller:
-wait_for_completion(), completed
-             supplier regulator.1: wait_for_completion(), completed
-             ^^^^^^^^^^^^^^^^^^^^
-... after the regulators were resumed
-             supplier regulator.2: wait_for_completion(), completed
-         complete_all()
-
-So the issue seems to be the creation of link C
-(i2c:1-002c is a supplier of platform:fed80000.dsi-encoder).
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+This is unrelated to whether or not device links are walked in
+dpm_async_resume_children() (well, if they were, it would need to be
+renamed), though.
 
