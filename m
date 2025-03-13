@@ -1,202 +1,210 @@
-Return-Path: <linux-pm+bounces-23992-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23993-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E54B6A5FDDE
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 18:35:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F1A1A5FF3D
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 19:30:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D3A53B3719
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 17:35:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A9F21881D6E
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 18:30:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57E2D18A6CE;
-	Thu, 13 Mar 2025 17:35:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6865118FC6B;
+	Thu, 13 Mar 2025 18:30:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X2PumhKT"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="T22dHYpG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD5A172767;
-	Thu, 13 Mar 2025 17:35:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB69C18952C
+	for <linux-pm@vger.kernel.org>; Thu, 13 Mar 2025 18:30:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741887301; cv=none; b=uLSUFT2ZuiOWOkI9mzl/VKqP9il2/8vX4vGAWM5rzo8CwtZhAUjMm9BZKXK7tj4ndVt1oIdVq/myR5KQsJxhLFLGrim3C+1n4fPhRXHQBmVSWXybrJPzg46czmkOJEFw8KoaA6az92KejLbd1Io26JGj95un9Fr/jdYMuC+FNeg=
+	t=1741890624; cv=none; b=JO6X9ZrWbnFyzEZe5cGZISwWVCOTnkDyuFbg/oJiZ4KdVgVvpsn+GYFMf/xSNhEjGDYKa0wJFf0e/RdkUupf5McOJejMoLVxg1bgDqqVkqbcbjgc99tSrd5bqB2LIBgKVnjeYc+EHHl/r5UyveV2geaQ8y8RXSDAYR/kfdDtnpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741887301; c=relaxed/simple;
-	bh=J2z8NcjRoOgH8VIXKNgR5zahQp8ngHOxIFhmvl2oblc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P/db2EpyqluCQzOxstWFkSLaYec7LCQEqS4Cmw0L34Z1b20wysdMxSdVzdRyKWeGOkcAv9Oycrg0NBH2246duyPwI+gamXQ8cFxsFHSU1QmhfMe8ftYnaKNYBoFnEQXtiD3logkf5p+cwDgiO209LoujM6M/tgM4MpKvxyWxQkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X2PumhKT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96212C4CEEE;
-	Thu, 13 Mar 2025 17:35:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741887300;
-	bh=J2z8NcjRoOgH8VIXKNgR5zahQp8ngHOxIFhmvl2oblc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=X2PumhKTwbNsNJdK+ya8mgw+MrwaBuVrOhW3DHMq48RcUBzTw6qHZqg4yi1AA62Xf
-	 EyP6WlrdtAG+R7L3EyWye/XFZIft4jO7ancUXgF2g41dX25xcC2K0G5/+x8i7clFhe
-	 MUcsA1PYGCXjfaz5iiXGfj6kgWfGMAfLDosEZYceylZyiG6eZg70dyMlDLG9zWMs+/
-	 cwK9M2YJ5rwVgJAKMWRfn2sOcjs79fem+o6SXKbZjs0o6va9j04syHqrOSSLALASbX
-	 QxaPRwMehB4n2QVXP+DMsZSkRyzp/iCdkG/918VzoTzQkjepJq+0Q//kNooF911l9V
-	 CRfmVJTJIAFuQ==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-2c186270230so430233fac.0;
-        Thu, 13 Mar 2025 10:35:00 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUGnnyu/SqTi4fs/4PUIUrbOUI3Ik2fQ9EbXhFehDUkgwnzRDJkwLNrwzHpGfkqfhLqfHcw6OOT66gJeJQVQuazNGE=@vger.kernel.org, AJvYcCUZ8MLFx4g4KViLSgpDcomKTpFOcTDFBGYx63SHFlNjVzenc4DZdoi32TBNVSUwD70/g6JKBzdzbw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBYeC0Wc3RuHiDZ/G0EjaoVNN/rb4DhxhuDCJzAxpRYuFk5Toy
-	OEQjgT34S51RfAMoIUcVZozN4L2iIlHLyBuj+1oscHiO8NYtHxNtw8gmM0IQvducsdHHkUgtlL3
-	r/v9f3uNqQCt+oxRH0izWDOPB+dE=
-X-Google-Smtp-Source: AGHT+IGdRRu31wT7cGzromNnacu6XOMN7ZeMhxmjoohMDhJ24RU+xVzR1A+jnvmEyhoFHXC6lCWG1Fk16dtC7NZki6A=
-X-Received: by 2002:a05:6871:714:b0:2c1:62e9:584b with SMTP id
- 586e51a60fabf-2c2e89df055mr6545781fac.39.1741887299835; Thu, 13 Mar 2025
- 10:34:59 -0700 (PDT)
+	s=arc-20240116; t=1741890624; c=relaxed/simple;
+	bh=huvOP2bgSwC/RqVOZlu8vXw8IzpufJ3/MNiOuVsntnU=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=UsDSob55a+jNYLtsi2wnuKsgvUclEgZU9cozHTXivpJFYZ4EArhmBTLsGKhGOtReH+mD0BNhZL4bcShSFo1q9uvsjkivy1Jm8E89vhhZQfEmTrhwbntACB6Z9dbgvux4cpkwXx0pLZef/614ZelN1fp0ipAsqJyFZuN1kZv/ksA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=T22dHYpG; arc=none smtp.client-ip=209.85.222.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7c5675dec99so147512785a.0
+        for <linux-pm@vger.kernel.org>; Thu, 13 Mar 2025 11:30:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1741890618; x=1742495418; darn=vger.kernel.org;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AoTnsd8iHVdgBepKxF/OkxysUaYLk1//1WxCqfRtAH0=;
+        b=T22dHYpG1l+GB5dEEtz48WP58iGaExplTHWGo7YYCbpjtboHgd3F4Mc0uAYelsc+5m
+         D4POQKV7riai+KBW/ZFWIORYnoIkFEDGj6Kqemq95iJ1XTwDXWjaJpZuSTob7VArRr9r
+         V/cKKqp+1h0wcQNnBJ2E5HE5fa5ogkuImMjuQl2fR7lNflC/mFY26Jcl5lGSY1XB26dZ
+         59UsgrxNB6eVWitlV+Xlab0p71Cwwzcn2f/ycqAx/+c1dJTJuHPKbCeVt1W6xnP83XaJ
+         jWLbchIEMjImdmvYfRUY3YefPjOL+zFo/a8gpDn6vVsBowaizIIGyeT+yYI517d8rduR
+         rkrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741890618; x=1742495418;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AoTnsd8iHVdgBepKxF/OkxysUaYLk1//1WxCqfRtAH0=;
+        b=TO+1hJZFdwjBgq3rjbUL53zOEv7TfLw1NB7m0n3FGkD7YbT+bTHh3jpxU4domcIVQV
+         K+XsGkOpyQL+QmaC42p9NWoWzS4vLEnrUdPp39f1PuYOm5r6Gnt1P36mgl+bsiZNAK5j
+         mqtCfFedvvsE6j/TvE5XzoBTClRf4QsF15whCHpGt1jlLUUrGUuAgxlCHqStfJNsj6Ao
+         oX+1EZq73LD19vYa1ci2KiFdOzSqlLhkLAQRgHV2Gl7/dpkwnf91PnZXZLmarWCIOU0h
+         1m7dtk4yGUcO11G7cq3kJyhQdwnDaTryoBfvE1/JNI5LKiZ/x/WIOfolNf096t2PZyN4
+         Mdbg==
+X-Forwarded-Encrypted: i=1; AJvYcCUxhkH9ocxvP4rKZdv6GVDX1QTkIvPYi6EP4uhNRwb6HbAP+Tk9xtovcPR+pssAqFgBjjdzfIk73g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywf9t4jGGeujWyQBrTzlmYkrOeJ4VAG4KamhaM84HgNx1Nvgi1n
+	NM3T/b4AVexQWTetLiv8mhMLUMdcbMhb56fCe3NU/0oscfcwF+dSim15hDYjCbNRyvkdnPZDE23
+	D
+X-Gm-Gg: ASbGncuGJFvGpZAL/cE+vfXP6XYpMiRAJ11gIR0Be2mQfXRmSxAWPSa4H/7QbWZBQdS
+	vjZ0JdtIU1u8CMGwMxxCZwBvKkaFxBtXHDCklor5Pts7xD/OnYpiCbkCPTZZ1ywnCLgM7lNWVvn
+	Vobh2+kK9XbOh7TGaZ82yUtM5j46wZnRVxyXswNlWmF7vVuHhSvJBhDjkPabZawHhXgHopNeMrv
+	df+kdTLgZTdBtRtOUsMEDepiOMmXKjE8HauliIXc2y49m9qXkCF4G51hvSPy1mQ2I0dw1vxj+3h
+	W7TW3a4F/xBijb3LhnVOQhna+a/rHLxR/sU0Y7EGsAFpRwz0xkAhXQW7NnAsR+YQHBo+Lq884gG
+	dKpq9ODg=
+X-Google-Smtp-Source: AGHT+IEi+OIJZ2CCHX/QDN3TCc9Ssw9n2ip3mNRDZzcn/kMPCoNhGIFe17eJ+clCONEScKD+6PgNAQ==
+X-Received: by 2002:a05:620a:8083:b0:7c0:6419:8bd3 with SMTP id af79cd13be357-7c579f46d76mr116800685a.22.1741890618305;
+        Thu, 13 Mar 2025 11:30:18 -0700 (PDT)
+Received: from xanadu (modemcable179.17-162-184.mc.videotron.ca. [184.162.17.179])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c573c4f53csm128517685a.22.2025.03.13.11.30.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Mar 2025 11:30:17 -0700 (PDT)
+Date: Thu, 13 Mar 2025 14:30:16 -0400 (EDT)
+From: Nicolas Pitre <npitre@baylibre.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+cc: Matthias Brugger <matthias.bgg@gmail.com>, 
+    Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
+    linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] dts: arm64: mediatek: mt8188: add more thermal trip
+ points
+In-Reply-To: <dcc62684-0579-4d03-a430-d4a276153ca1@collabora.com>
+Message-ID: <85710oso-p1pp-647q-498p-23583s7nnn45@onlyvoer.pbz>
+References: <s2sp5o57-o534-qso0-2733-o0prs6028por@onlyvoer.pbz> <dcc62684-0579-4d03-a430-d4a276153ca1@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAMuHMdXN9A-1P_qe=BwKjLaoqxU8iJUQK6h8=s-apR4Y0em_0Q@mail.gmail.com>
- <CAMuHMdXXWH0Do5zXWJ1Uc6dyEb9o1chGSyeyzgDrX+v1wZ7e_A@mail.gmail.com>
- <CAGETcx_wA9RB9QhMPqsLHDFZ4cwOFgE8dBL9ssFkT=J6DEgjGg@mail.gmail.com>
- <CAMuHMdUCXJkg3rkngXf7cqa50u-TEAOntV6O=Nvg33Q9diPJPw@mail.gmail.com>
- <CAMuHMdWLEHwjaNnysDZ_Unqj-SwmUdwRao_oJvYvVsQ9SCn06A@mail.gmail.com>
- <CAMuHMdXcJN5M7PqJ1eABOOCfeMjvs51rMRzMxU=d2L=3LVgh_w@mail.gmail.com> <CAJZ5v0jKOeZxzUXu9bHA4=SDio1FT3ZmfoOGqNNZO2+DN+U21Q@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jKOeZxzUXu9bHA4=SDio1FT3ZmfoOGqNNZO2+DN+U21Q@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 13 Mar 2025 18:34:48 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0iJqUGX8cL2ZEm3420VMP0nWY2rPwCNsLLCs+sCaDDtbQ@mail.gmail.com>
-X-Gm-Features: AQ5f1Jo4DwIGZ5MbS8se1x-el_NOl_6RZN4URqJSPcs5HUxdRGrYR1iZwI2wtak
-Message-ID: <CAJZ5v0iJqUGX8cL2ZEm3420VMP0nWY2rPwCNsLLCs+sCaDDtbQ@mail.gmail.com>
-Subject: Re: s2idle blocked on dev->power.completion
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Saravana Kannan <saravanak@google.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>, 
-	Linux PM list <linux-pm@vger.kernel.org>, 
-	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
 
-On Thu, Mar 13, 2025 at 6:27=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
->
-> Hi Geert,
->
-> On Thu, Mar 13, 2025 at 5:48=E2=80=AFPM Geert Uytterhoeven <geert@linux-m=
-68k.org> wrote:
-> >
-> > Hi Saravana,
-> >
-> > On Thu, 13 Mar 2025 at 15:32, Geert Uytterhoeven <geert@linux-m68k.org>=
- wrote:
-> > > On Thu, 13 Feb 2025 at 11:26, Geert Uytterhoeven <geert@linux-m68k.or=
-g> wrote:
-> > > > On Thu, 13 Feb 2025 at 09:31, Saravana Kannan <saravanak@google.com=
-> wrote:
-> > > > > On Mon, Feb 10, 2025 at 2:24=E2=80=AFAM Geert Uytterhoeven <geert=
-@linux-m68k.org> wrote:
-> > > > > > On Fri, 7 Feb 2025 at 16:08, Geert Uytterhoeven <geert@linux-m6=
-8k.org> wrote:
-> > > > > > > Instrumenting all dev->power.completion accesses in
-> > > > > > > drivers/base/power/main.c reveals that resume is blocked in d=
-pm_wait()
-> > > > > > > in the call to wait_for_completion() for regulator-1p2v, whic=
-h is
-> > > > > > > indeed a dependency for the SN65DSI86 DSI-DP bridge.  Compari=
-ng
-> > > > > >
-> > > > > > [...]
-> > > > > >
-> > > > > > > Looking at /sys/devices/virtual/devlink, the non-working case=
- has the
-> > > > > > > following extra entries:
-> > > > > >
-> > > > > > Note that the SN65DSI86 DSI-DP bridge driver uses the auxiliary=
- bus
-> > > > > > to create four subdevices:
-> > > > > >   - ti_sn65dsi86.aux.0,
-> > > > > >   - ti_sn65dsi86.bridge.0,
-> > > > > >   - ti_sn65dsi86.gpio.0,
-> > > > > >   - ti_sn65dsi86.pwm.0.
-> > > > > > None of them have supplier:* symlinks in sysfs, so perhaps that=
- is
-> > > > > > the root cause of the issue?
-> > > > >
-> > > > > Sorry, I haven't had time to look into this closely. Couple of
-> > > > > questions/suggestions that might give you some answers.
-> > > > >
-> > > > > Is this an issue only happening for s2idle or for s2ram too? I'd =
-guess
-> > > > > both, but if not, that might tell you something?
-> > > >
-> > > > The two (very similar) boards I could reproduce the issue on do not
-> > > > support s2ram yet.
-> > > >
-> > > > > The only reason the wait_for_completion() wouldn't work is becaus=
-e the
-> > > > > supplier is not "completing"?
-> > > >
-> > > > Yes, the diff shows ca. 70 additional calls to "complete_all()" in =
-the
-> > > > good case.
-> >
-> > >   4. When the issue happens, /sys/devices/virtual/devlink shows 3
-> > >      more links:
-> > >        A. platform:feb00000.display is a supplier of platform:fed8000=
-0.dsi-encoder
-> > >        B. platform:fed80000.dsi-encoder is a supplier of platform:feb=
-00000.display
-> >
-> > Their status file report "dormant".
-> >
-> > >        C. i2c:1-002c is a supplier of platform:fed80000.dsi-encoder
-> >
-> > Its status file reports "available".
-> >
-> > >   5. What happens in dpm_noirq_resume_devices()?
-> > >
-> > >        /*
-> > >         * Trigger the resume of "async" devices upfront so they don't=
- have to
-> > >         * wait for the "non-async" ones they don't depend on.
-> > >         */
-> > >         i2c-1 (i2c bus) and 1-002c (bridge device) are async,
-> > >         thus triggered first.
-> > >         After that, the remaining devices are resumed.
-> > >
-> > >      In the bad case:
-> > >
-> > >        device_resume_noirq(fed80000.dsi-encoder, async=3Dfalse)
-> > >          dpm_wait_for_superior()
-> > >            parent soc: skipping wait_for_completion()
-> > >            dpm_wait_for_suppliers()
-> > >              supplier feb00000.display: skipped, DL_STATE_DORMANT
-> > >              ^^^^^^^^^^^^^^^^^^^^^^^^^
-> > > Cfr. extra link A above (harmless)
-> > >
-> > >              supplier e6150000.clock-controller: skipping wait_for_co=
-mpletion()
-> > >              supplier 1-002c: wait_for_completion() =3D> BLOCKED
-> > >              ^^^^^^^^^^^^^^^
-> > > Cfr. extra link C above, but the bridge device hasn't been resumed ye=
-t.
-> >
-> > Changing the test for "DL_STATE_DORMANT"[1] in dpm_wait_for_suppliers()
-> > to also include "DL_STATE_AVAILABLE" makes it skip supplier 1-002c,
-> > and fixes the issue.  Does that make sense?
->
-> Good question.
->
-> DL_STATE_AVAILABLE essentially means that the consumer hasn't been
-> probed yet, but it doesn't mean that it can be suspended before its
-> supplier.
+On Thu, 13 Mar 2025, AngeloGioacchino Del Regno wrote:
 
-I really meant "resumed before its supplier", sorry for the confusion.
+> Il 13/03/25 16:43, Nicolas Pitre ha scritto:
+> > Provide the "switch on" thermal trip point to be used by the power
+> > allocator governor.
+> > 
+> 
+> As far as I know, the power allocation is not supposed to be 
+> SoC-global, as that does play with sustainable power values...
+> 
+> Sustainable power depends on multiple factors - besides the power that 
+> is actually sustainable by intrinsic properties of the silicon, this 
+> mostly depends on the PCB that it is soldered to.
+> 
+> Translated, this depends on the heat capacity of the copper layer(s) 
+> and of the eventual additional passive heatsink, which is a physical 
+> property relative to a board and not to the SoC by itself.
+> 
+> ....which means.... that those nodes shall go to board specific devicetrees
+> and
+> not to the SoC devicetree :-)
+> 
+> Unless I'm wrong - but if I am, please explain why :-)
 
-Generally speaking, suppliers need to be resumed first regardless of
-the status of the consumers.
+I agree with everything you wrote above.
 
-Also, adding a device link between two devices by itself cannot create
-a deadlock unless it goes against some other dependency.
+But this patch isn't about power allocation. This is about temperature 
+thresholds. And temperature tolerance is rather SOC specific, no?
+
+
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8188.dtsi
+> > b/arch/arm64/boot/dts/mediatek/mt8188.dtsi
+> > index 338120930b..262eab8fd3 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8188.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8188.dtsi
+> > @@ -472,6 +472,12 @@ cpu-little0-thermal {
+> >      thermal-sensors = <&lvts_mcu MT8188_MCU_LITTLE_CPU0>;
+> >   
+> >   			trips {
+> > +				cpu_little0_switch_on: trip-switch-on {
+> > +					temperature = <68000>;
+> > +					hysteresis = <2000>;
+> > +					type = "passive";
+> > +				};
+> > +
+> >       cpu_little0_alert0: trip-alert0 {
+> >        temperature = <85000>;
+> >        hysteresis = <2000>;
+> > @@ -510,6 +516,12 @@ cpu-little1-thermal {
+> >      thermal-sensors = <&lvts_mcu MT8188_MCU_LITTLE_CPU1>;
+> >   
+> >   			trips {
+> > +				cpu_little1_switch_on: trip-switch-on {
+> > +					temperature = <68000>;
+> > +					hysteresis = <2000>;
+> > +					type = "passive";
+> > +				};
+> > +
+> >       cpu_little1_alert0: trip-alert0 {
+> >        temperature = <85000>;
+> >        hysteresis = <2000>;
+> > @@ -548,6 +560,12 @@ cpu-little2-thermal {
+> >      thermal-sensors = <&lvts_mcu MT8188_MCU_LITTLE_CPU2>;
+> >   
+> >   			trips {
+> > +				cpu_little2_switch_on: trip-switch-on {
+> > +					temperature = <68000>;
+> > +					hysteresis = <2000>;
+> > +					type = "passive";
+> > +				};
+> > +
+> >       cpu_little2_alert0: trip-alert0 {
+> >        temperature = <85000>;
+> >        hysteresis = <2000>;
+> > @@ -586,6 +604,12 @@ cpu-little3-thermal {
+> >      thermal-sensors = <&lvts_mcu MT8188_MCU_LITTLE_CPU3>;
+> >   
+> >   			trips {
+> > +				cpu_little3_switch_on: trip-switch-on {
+> > +					temperature = <68000>;
+> > +					hysteresis = <2000>;
+> > +					type = "passive";
+> > +				};
+> > +
+> >       cpu_little3_alert0: trip-alert0 {
+> >        temperature = <85000>;
+> >        hysteresis = <2000>;
+> > @@ -624,6 +648,12 @@ cpu-big0-thermal {
+> >      thermal-sensors = <&lvts_mcu MT8188_MCU_BIG_CPU0>;
+> >   
+> >   			trips {
+> > +				cpu_big0_switch_on: trip-switch-on {
+> > +					temperature = <68000>;
+> > +					hysteresis = <2000>;
+> > +					type = "passive";
+> > +				};
+> > +
+> >       cpu_big0_alert0: trip-alert0 {
+> >        temperature = <85000>;
+> >        hysteresis = <2000>;
+> > @@ -658,6 +688,12 @@ cpu-big1-thermal {
+> >      thermal-sensors = <&lvts_mcu MT8188_MCU_BIG_CPU1>;
+> >   
+> >   			trips {
+> > +				cpu_big1_switch_on: trip-switch-on {
+> > +					temperature = <68000>;
+> > +					hysteresis = <2000>;
+> > +					type = "passive";
+> > +				};
+> > +
+> >       cpu_big1_alert0: trip-alert0 {
+> >        temperature = <85000>;
+> >        hysteresis = <2000>;
+> 
+> 
+> 
 
