@@ -1,178 +1,109 @@
-Return-Path: <linux-pm+bounces-23978-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23979-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05498A5F1A8
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 11:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5107BA5F539
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 14:05:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C14B17C550
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 10:58:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2731F17E721
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 13:04:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 867D326560B;
-	Thu, 13 Mar 2025 10:58:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07529267B66;
+	Thu, 13 Mar 2025 13:03:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W0DAQ8s/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W3n7WI2+"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E41D260382;
-	Thu, 13 Mar 2025 10:58:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920BA267B13;
+	Thu, 13 Mar 2025 13:03:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741863505; cv=none; b=OEm6kBqmhzW1vUEjnVmRvrf+w9AmE1TPRL1BvdgeWk7zfJmNGGtZwtKvCj0KItWsaYyHv3v2PW3kYt3lLLC75QAALQKkvCvBqYbwrydiSb5BdRxdWMDaVCcoVAUVtmQ+5xXVy2cgpTxw16OStoayLuFL+QxUViXq+12DGA0WXAw=
+	t=1741871024; cv=none; b=Xa2vtqLJL5L+pnMi7JHf0IOiLX2IiVTj/mgyh+ANN2sFRaCMn3Hfoi17oAfhPR4B2JpM3iEpERUUBEYyh8XCwigfw8gjjNxLxqI21UZkMh3Uo6caTwO1XXMMR4W+Gq/tYZC8OKyzfZXZXmFme6JlXQGbnXb4plDmTNmO4Tpbg/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741863505; c=relaxed/simple;
-	bh=jeW+psbkp0X5CYfJk63izerCs5l1XzDNrmU1BWAE47w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hmwEbDY8ygJaIjpSvNvToZj2RIckxJgg0TIXna6pYp2Jb6uZLxGzOd483HSZiE14zL8vTXW6+xjEVvJq4/l11J6BsHoxG9E+0jRFat/6AGWuUAsCr+paVW/hdXdXfF27fud/u3p3nBTU6AM6IZjBVuH5n2fnAv9diJkTcugQbvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W0DAQ8s/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB9B0C4CEF2;
-	Thu, 13 Mar 2025 10:58:24 +0000 (UTC)
+	s=arc-20240116; t=1741871024; c=relaxed/simple;
+	bh=cSyffy+PWmVQesGeNOfjRD3854cMxOy2XIo3+guxtEk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=nSpF6ydcVzqrFewG8iJvKy9K8bXE5fSTuSU9I7GhLr1wVttOh9vJaA/UASPTIrXtWw7sGDB6+K00BVcMisNgVbooyyuVjwEj2ObwvlhsVOZLDVg6Wi0IBJpcVzWLYhYzshzmjypd4aMwBlI86rEX5kLgJSx41Bzxgjr3CrFXRMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W3n7WI2+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D6E8C4CEDD;
+	Thu, 13 Mar 2025 13:03:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741863504;
-	bh=jeW+psbkp0X5CYfJk63izerCs5l1XzDNrmU1BWAE47w=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=W0DAQ8s/qeQp0UHPaFpP3z278kkdcDbMqQJ4Wbrj5/mV4rf0UcGvMzdCfTbRDFq0r
-	 g/ZGQLIwm8MV+BXRoGIHerRcBm7vi5C2Qe7NoX8OG5QaVCa2bgrzrsXyvhwKuDpLPN
-	 ExnQiMYYgXH38t/wHLq/8WAyRysQ47roQIX/svjHEJGnXqIqCuyB6ERA9CxSEMYF7O
-	 dg5wWe38Q7dFjM5c4Y2yKXu0sWuqe+V4Jtj9PGVTuHSc9nM7Uu08khfZmcpxkKZubs
-	 T0xvaKL/tOVT3ZvmUp6ZURHSSXYEjieKfVBheDJ8pPyqPfeZNFFoscvnrgT8/v25D1
-	 Dl0OWgAPiy6WQ==
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-2bcf9d9b60aso277451fac.3;
-        Thu, 13 Mar 2025 03:58:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW0Vp/GtDjPiJERBLxMNAe7pc8XNcDAttcwzaHjYJD0s2eknLSJpopZTjQW23reQ+bAL1GDVVoMZLY=@vger.kernel.org, AJvYcCWHXTI9shWsMZybbXR6E4HCiPRwowFjq+nspwfSSlyRtzL6nPXH3tBB9iPYfmErlnAs9SnbYFZerAel+1E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWyXNU0Qirk/Ym1iWJModE+W4vkRwO3z0JiO7m6wxav9hqSIiQ
-	9tRR10rtwv/To59+nwkCFxzduCeYMcj85Y7BD67FqZf7gYdfNzOETP5KwlwhWlp04dVokTwOuuz
-	UaSTgDK4HVU+Pd3wOYENiimBgyLs=
-X-Google-Smtp-Source: AGHT+IH5VgwEr030Ww2EchojMfp/Pq2TbnAhHwlAI1RwUOaNtv+tV6cUuAViSi47ZQQyjH0yHIlOxWnvWXBmD04NdrU=
-X-Received: by 2002:a05:6870:498a:b0:29e:3bea:7e67 with SMTP id
- 586e51a60fabf-2c2e89c8b02mr6030659fac.38.1741863503990; Thu, 13 Mar 2025
- 03:58:23 -0700 (PDT)
+	s=k20201202; t=1741871024;
+	bh=cSyffy+PWmVQesGeNOfjRD3854cMxOy2XIo3+guxtEk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=W3n7WI2+kNBRhRstzjeL3M06/rCnf1LzWx2YyBLD01j8VmFJANn56CrImwA8yW2+T
+	 S0sch8ELktEv1lgKKdJE8batVk23w+yl7Go8YUO4NPYFP3oR+x6ZlO7uJb/jlanFvX
+	 S7ZjZTXv/idYIrZSik396jx+G+Yrzt4aKXk/agPeTHfga4jUvCgUIBaYVPj9qEB7u9
+	 zFE7QK8bZEplyvWlCoOpYD10A3xrxtVXiRkIZRvB6lxI7GnFZqr67QFT9R/jWP/dS4
+	 BRO2/qxom67N+cLtVTodyDfZllKLzMgiaZThXp0n9imUIQcuY7xDNHmMOvwHFRcqNF
+	 SCzy9gFfTB/iA==
+From: Lee Jones <lee@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, Nick Piggin <npiggin@gmail.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Thomas Gleixner <tglx@linutronix.de>, 
+ Herbert Xu <herbert@gondor.apana.org.au>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Johannes Berg <johannes@sipsolutions.net>, 
+ Jamal Hadi Salim <jhs@mojatatu.com>, Cong Wang <xiyou.wangcong@gmail.com>, 
+ Jiri Pirko <jiri@resnulli.us>, Jason Gunthorpe <jgg@ziepe.ca>, 
+ Leon Romanovsky <leon@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>, 
+ Thomas Graf <tgraf@suug.ch>, Christoph Hellwig <hch@lst.de>, 
+ Marek Szyprowski <m.szyprowski@samsung.com>, 
+ Robin Murphy <robin.murphy@arm.com>, 
+ Miquel Raynal <miquel.raynal@bootlin.com>, 
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
+ Zijun Hu <quic_zijuhu@quicinc.com>
+Cc: Zijun Hu <zijun_hu@icloud.com>, linux-arch@vger.kernel.org, 
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+ linux-crypto@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-wireless@vger.kernel.org, linux-rdma@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
+ linux-mtd@lists.infradead.org
+In-Reply-To: <20250221-rmv_return-v1-15-cc8dff275827@quicinc.com>
+References: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
+ <20250221-rmv_return-v1-15-cc8dff275827@quicinc.com>
+Subject: Re: (subset) [PATCH *-next 15/18] mfd: db8500-prcmu: Remove
+ needless return in three void APIs
+Message-Id: <174187101580.3629935.6842247156301298100.b4-ty@kernel.org>
+Date: Thu, 13 Mar 2025 13:03:35 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241114220921.2529905-1-saravanak@google.com>
- <20241114220921.2529905-2-saravanak@google.com> <CAJZ5v0grG7eSJ7_c73i9-bXaFhm5rfE2WmxtR6yLB-MGkd7sVg@mail.gmail.com>
- <CAJZ5v0i42ZczVpDWQD4_OuduuHb3LDMmn0FJ9_XoqL8Frx9MEw@mail.gmail.com> <CAGETcx83c2bDROcNWOiL9Dry4k2BWVzftncObCAzdftHY0u_NQ@mail.gmail.com>
-In-Reply-To: <CAGETcx83c2bDROcNWOiL9Dry4k2BWVzftncObCAzdftHY0u_NQ@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 13 Mar 2025 11:58:12 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hhiO24_pSqshzfycP=kwJPOC4mjFstrPreO6uMCR9ACQ@mail.gmail.com>
-X-Gm-Features: AQ5f1JrfgqAeo2LHBR9yLWu0b4lESl4svGygXKADzhyOu3Ey2E_L_awDQTV92dg
-Message-ID: <CAJZ5v0hhiO24_pSqshzfycP=kwJPOC4mjFstrPreO6uMCR9ACQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/5] PM: sleep: Fix runtime PM issue in dpm_resume()
-To: Saravana Kannan <saravanak@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ben Segall <bsegall@google.com>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@android.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.15-dev-510f9
 
-On Thu, Mar 13, 2025 at 2:50=E2=80=AFAM Saravana Kannan <saravanak@google.c=
-om> wrote:
->
-> On Tue, Mar 11, 2025 at 3:47=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.=
-org> wrote:
-> >
-> > On Wed, Dec 4, 2024 at 1:53=E2=80=AFPM Rafael J. Wysocki <rafael@kernel=
-.org> wrote:
-> > >
-> > > Trim CC list.
-> > >
-> > > On Thu, Nov 14, 2024 at 11:09=E2=80=AFPM Saravana Kannan <saravanak@g=
-oogle.com> wrote:
-> > > >
-> > > > Some devices might have their is_suspended flag set to false. In th=
-ese
-> > > > cases, dpm_resume() should skip doing anything for those devices.
-> > >
-> > > Not really.  This is particularly untrue for devices with
-> > > power.direct_complete set that have power.is_suspended clear.
-> > >
-> > > > However, runtime PM enable and a few others steps are done before
-> > > > checking for this flag. Fix it so that we do things in the right or=
-der.
-> > >
-> > > I don't see the bug this is fixing, but I can see bugs introduced by =
-it.
-> >
-> > So AFAICS the bug is in the error path when dpm_suspend() fails in
-> > which case some devices with direct_complete set may not have been
-> > handled by device_suspend().  Since runtime PM has not been disabled
-> > for those devices yet, it doesn't make sense to re-enable runtime PM
-> > for them (and if they had runtime PM disabled to start with, this will
-> > inadvertently enable runtime PM for them).
-> >
-> > However, two changes are needed to fix this issue:
-> > (1) power.is_suspended needs to be set for the devices with
-> > direct_complete set in device_suspend().
-> > (2) The power.is_suspended check needs to be moved after the
-> > power.syscore one in device_resume().
-> >
-> > The patch below only does (2) which is insufficient and it introduces
-> > a functional issue for the direct_complete devices with runtime PM
-> > disabled because it will cause runtime PM to remain disabled for them
-> > permanently.
-> >
-> > > I think that you want power.is_suspended to be checked before waiting
-> > > for the superiors.  Fair enough, since for devices with
-> > > power.is_suspended clear, there should be no superiors to wait for, s=
-o
-> > > the two checks can be done in any order and checking
-> > > power.is_suspended first would be less overhead.  And that's it
-> > > AFAICS.
-> > >
-> > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > > > ---
-> > > >  drivers/base/power/main.c | 6 +++---
-> > > >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > > >
-> > > > diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> > > > index 4a67e83300e1..86e51b9fefab 100644
-> > > > --- a/drivers/base/power/main.c
-> > > > +++ b/drivers/base/power/main.c
-> > > > @@ -913,6 +913,9 @@ static void device_resume(struct device *dev, p=
-m_message_t state, bool async)
-> > > >         if (dev->power.syscore)
-> > > >                 goto Complete;
-> > > >
-> > > > +       if (!dev->power.is_suspended)
-> > > > +               goto Unlock;
-> >
-> > And this should be "goto Complete" because jumping to Unlock
-> > introduces a device locking imbalance.
-> >
-> > > > +
-> > > >         if (dev->power.direct_complete) {
-> > > >                 /* Match the pm_runtime_disable() in __device_suspe=
-nd(). */
-> > > >                 pm_runtime_enable(dev);
-> > > > @@ -931,9 +934,6 @@ static void device_resume(struct device *dev, p=
-m_message_t state, bool async)
-> > > >          */
-> > > >         dev->power.is_prepared =3D false;
-> > > >
-> > > > -       if (!dev->power.is_suspended)
-> > > > -               goto Unlock;
-> > > > -
-> > > >         if (dev->pm_domain) {
-> > > >                 info =3D "power domain ";
-> > > >                 callback =3D pm_op(&dev->pm_domain->ops, state);
-> > > > --
-> >
-> > If you want to submit a new version of this patch, please do so by the
-> > end of the week or I will send my fix because I want this issue to be
-> > addressed in 6.15.
->
-> Please do ahead with the fix for this. I'm not too comfortable with
-> the direct_complete logic yet.
+On Fri, 21 Feb 2025 05:02:20 -0800, Zijun Hu wrote:
+> Remove needless 'return' in the following void APIs:
+> 
+>  prcmu_early_init()
+>  prcmu_system_reset()
+>  prcmu_modem_reset()
+> 
+> Since both the API and callee involved are void functions.
+> 
+> [...]
 
-OK, I will, thank you!
+Applied, thanks!
+
+[15/18] mfd: db8500-prcmu: Remove needless return in three void APIs
+        commit: ccf5c7a8e5b9fe7c36d8c384f8f7c495f45c63a0
+
+--
+Lee Jones [李琼斯]
+
 
