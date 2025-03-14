@@ -1,31 +1,31 @@
-Return-Path: <linux-pm+bounces-24063-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24064-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C6CDA61338
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 14:58:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B234A6135E
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 15:10:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42F523B0B20
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 13:58:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A73119C14CD
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 14:11:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A163420013A;
-	Fri, 14 Mar 2025 13:58:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67311200B99;
+	Fri, 14 Mar 2025 14:10:43 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB01200130
-	for <linux-pm@vger.kernel.org>; Fri, 14 Mar 2025 13:58:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D6E1EB3E
+	for <linux-pm@vger.kernel.org>; Fri, 14 Mar 2025 14:10:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741960711; cv=none; b=MMCJzo4kIlPq7sk6iKaRrKuZuj5t9qe/YaQXubP/9vjfk/QkjSckzSR2M28sWh8EUF/K7PucB9xtgQQIE/s4lxhPMFqlvZqJX8BpUu41vce6I/kO3FfS1jqbNyuC2FmcVB6PADZnCZ5BuDIxbu+outyipgQRo/3Ln7OM7thcayA=
+	t=1741961443; cv=none; b=F7b3Z3azOPIkkfCK2h4obcTK+9vzNTLXPVtaarehixAAT7qwNF+QTTK8JVBXQf/iqldvOBo8CVvFrMsN+cOVotBjpQsHzzop2CkSgkB+HmgvlbpXTgTNzaF+XCcTbvWocC8SVjDZ/PJrYcrNlEVyI8wf3wt3eGFDKWlQfrjE9wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741960711; c=relaxed/simple;
-	bh=KbSfhs000aWL/fVzPlgvuOymFrW/+1ewrl9D2gJNWaM=;
+	s=arc-20240116; t=1741961443; c=relaxed/simple;
+	bh=C5toxvwiwwhMhsd9e2XE4L4Jrk1EIjC5qUAeyoJngFo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b+AZ3s5AGdySOU1p3LRYjyN1bwH4QaRiNLb1UEYU+6QNpHcbeXNOsqUHfquwTxUbqKdF0gshgwfCI7H4SQlH6Sv3pk3RZsbqcu18J4uWK2RDvaj5aF6sqcwRvErFWzGrJMQUpjCKWkfGQ6MLaAo4KtGnY8pGK0r2L+LqelQNJA0=
+	 Content-Type:Content-Disposition:In-Reply-To; b=ptF3kr44bA3u1GdUopsfp6faAoyTu+W0ptW2JwNhmr9q7UoWEH0chDH0bqPIRS4jpwspgP0ff3B6wl5aH7nJ42SuT7XCve8bMmQ6KhwDQTJQA+2EfJVg1nG4H6If8AwhsbFBYce5hG6sEI4S2R8OV2z2dKHFgG9k6F99zsyhSr4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,18 +33,18 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ore@pengutronix.de>)
-	id 1tt5YB-0007Oz-W5; Fri, 14 Mar 2025 14:58:12 +0100
+	id 1tt5k1-0000lP-74; Fri, 14 Mar 2025 15:10:25 +0100
 Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <ore@pengutronix.de>)
-	id 1tt5YB-005iFQ-0G;
-	Fri, 14 Mar 2025 14:58:11 +0100
+	id 1tt5jz-005iXB-2e;
+	Fri, 14 Mar 2025 15:10:23 +0100
 Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
 	(envelope-from <ore@pengutronix.de>)
-	id 1tt5YA-00DAzU-35;
-	Fri, 14 Mar 2025 14:58:10 +0100
-Date: Fri, 14 Mar 2025 14:58:10 +0100
+	id 1tt5jz-00DBIm-2G;
+	Fri, 14 Mar 2025 15:10:23 +0100
+Date: Fri, 14 Mar 2025 15:10:23 +0100
 From: Oleksij Rempel <o.rempel@pengutronix.de>
 To: Matti Vaittinen <mazziesaccount@gmail.com>
 Cc: Sebastian Reichel <sre@kernel.org>,
@@ -62,12 +62,12 @@ Cc: Sebastian Reichel <sre@kernel.org>,
 	Ahmad Fatoum <a.fatoum@pengutronix.de>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	chrome-platform@lists.linux.dev
-Subject: Re: [PATCH v6 3/7] power: reset: Introduce PSCR Recording Framework
- for Non-Volatile Storage
-Message-ID: <Z9Q18k_wu1JQxrtJ@pengutronix.de>
+Subject: Re: [PATCH v6 7/7] Documentation: Add sysfs documentation for PSCRR
+ reboot reason tracking
+Message-ID: <Z9Q4z2dPdpqVcu6u@pengutronix.de>
 References: <20250314113604.1776201-1-o.rempel@pengutronix.de>
- <20250314113604.1776201-4-o.rempel@pengutronix.de>
- <58e19481-530c-4465-aec5-1f44462eaf5f@gmail.com>
+ <20250314113604.1776201-8-o.rempel@pengutronix.de>
+ <a8f76dd0-56be-46a5-9cc1-2d17d013127d@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,8 +76,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <58e19481-530c-4465-aec5-1f44462eaf5f@gmail.com>
+In-Reply-To: <a8f76dd0-56be-46a5-9cc1-2d17d013127d@gmail.com>
 X-Sent-From: Pengutronix Hildesheim
 X-URL: http://www.pengutronix.de/
 X-Accept-Language: de,en
@@ -87,111 +86,67 @@ X-SA-Exim-Mail-From: ore@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-Hi Matti,
-
-Thanks for your feedback and for taking the time to review this patch series! 
-
-On Fri, Mar 14, 2025 at 02:22:40PM +0200, Matti Vaittinen wrote:
-> Hi deee Ho Oleksij,
-> 
+On Fri, Mar 14, 2025 at 03:38:55PM +0200, Matti Vaittinen wrote:
 > On 14/03/2025 13:36, Oleksij Rempel wrote:
-> > This commit introduces the Power State Change Reasons Recording (PSCRR)
-> > framework into the kernel. The framework is vital for systems where
-> > PMICs or watchdogs cannot provide information on power state changes. It
-> > stores reasons for system shutdowns and reboots, like under-voltage or
-> > software-triggered events, in non-volatile hardware storage. This
-> > approach is essential for postmortem analysis in scenarios where
-> > traditional storage methods (block devices, RAM) are not feasible. The
-> > framework aids bootloaders and early-stage system components in recovery
-> > decision-making, although it does not cover resets caused by hardware
-> > issues like system freezes or watchdog timeouts.
+> > Add documentation for the Power State Change Reason Recorder (PSCRR)
+> > sysfs interface, which allows tracking of system shutdown and reboot
+> > reasons. The documentation provides details on available sysfs entries
+> > under `/sys/kernel/pscrr/`, explaining their functionality, example usage,
+> > and how they interact with different backend storage options (e.g., NVMEM).
 > > 
 > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> 
-> I see you're already at v6, so I am probably slightly late... I think I
-> hadn't noticed this before. Thus, feel free to treat my comments as mere
-> suggestions.
-> 
-> All in all, I do like this series. Looks mostly very good to me :) Just
-> wondering if we could utilize this same for standardizing reading the reset
-> reason registers which are included in many PMICs?
-> 
 > > ---
-> 
-> ...
-> 
-> > +int pscrr_core_init(const struct pscrr_backend_ops *ops)
-> > +{
-> > +	enum psc_reason stored_val = PSCR_UNKNOWN;
-> > +	int ret;
+> >   .../ABI/testing/sysfs-kernel-reboot-pscrr     | 46 +++++++++++++++++++
+> >   1 file changed, 46 insertions(+)
+> >   create mode 100644 Documentation/ABI/testing/sysfs-kernel-reboot-pscrr
+> > 
+> > diff --git a/Documentation/ABI/testing/sysfs-kernel-reboot-pscrr b/Documentation/ABI/testing/sysfs-kernel-reboot-pscrr
+> > new file mode 100644
+> > index 000000000000..7cc643f89675
+> > --- /dev/null
+> > +++ b/Documentation/ABI/testing/sysfs-kernel-reboot-pscrr
+> > @@ -0,0 +1,46 @@
+> > +What:		/sys/kernel/pscrr/reason
+> > +Date:		April 2025
+> > +KernelVersion:  6.15
+> > +Contact:	Oleksij Rempel <o.rempel@pengutronix.de>
+> > +Description:
+> > +		This file provides access to the last recorded power state
+> > +		change reason. The storage backend is configurable and, if
+> > +		supported, the reason may be stored persistently in an
+> > +		NVMEM cell or another backend.
 > > +
-> > +	mutex_lock(&pscrr_lock);
+> > +		Reading this file returns an integer representing the last
+> > +		recorded shutdown or reboot cause.
 > > +
-> > +	if (g_pscrr) {
-> > +		pr_err("PSCRR: Core is already initialized!\n");
-> > +		ret = -EBUSY;
-> > +		goto err_unlock;
-> > +	}
+> > +		Writing an integer value to this file sets the reason to be
+> > +		stored and recorded for system analysis.
 > > +
-> > +	if (!ops->read_reason || !ops->write_reason) {
-> > +		pr_err("PSCRR: Backend must provide read and write callbacks\n");
+> > +		Example usage (values are for illustration and may not reflect
+> > +		actual reasons used in a given system):
+> > +		  Read:
+> > +			$ cat /sys/kernel/pscrr/reason
+> > +			3   # (Example: Power loss event, may differ per system)
+> > +
+> > +		  Write:
+> > +			$ echo 5 > /sys/kernel/pscrr/reason
+> > +			# Sets the reason to 5 (Example: User-triggered reboot,
+> > +			# this may not be a real value in your system)
+> > +
+> > +		Values are defined in:
+> > +		  - `include/linux/reboot.h` (enum psc_reason)
 > 
-> Why both are required?
+> Is it possible to provide the reason (also) as string?
 > 
-> I can easily envision integrating the some PMIC's 'boot reason' register
-> reading to the PSCRR. Benefit would be that user-space could use this same
-> interface when reading the reset reason on a system where reason is stored
-> using mechanisms provided by this series - and when reset reason is
-> automatically stored by the HW (for example to a PMIC).
+> I believe we should fix the meaning of the numbers so the ABI is not
+> changing for the users. Hence we could as well document the meaning of the
+> values(?) If I read the suggestion right, we will in any case have
+> predefined set of reasons in the kernel side.
 > 
-> In a PMIC case the write_reason might not be needed, right?
- 
-I agree that PMICs could be valuable sources of reset reasons, and integrating 
-them into PSCRR makes sense. However, this introduces new challenges when 
-multiple providers exist on the same system, each reporting different power 
-state change reasons.
+> Or, am I missing something?
 
-Handling Multiple Read-Only Providers (PMIC, Firmware, etc.):
-- If we have multiple sources (e.g., PMIC, firmware logs, NVMEM-based storage), 
-  we need to define how to handle conflicting or differing reset reasons.
-- Using priorities may work in simple cases but is unlikely to scale well
-  across different platforms.
-- A more flexible solution would be to expose all read-only providers
-  separately, rather than forcing one to override others.
-
-Potential UAPI and Sysfs Structure
-- The current sysfs API exposes:
-  - `/sys/kernel/pscrr/reason` → Default recorder
-  - `/sys/kernel/pscrr/reason_boot` → Last stored reason on default recorder
-     from before boot
-- If we introduce read-only providers (like PMICs), we may need a dedicated 
-  subdirectory to keep them separate.
-- A possible structure:
-  ```
-  /sys/kernel/pscrr/
-  ├── reason         # Default recorder
-  ├── reason_boot    # Default recorder (before boot)
-  ├── providers/
-  │   ├── pmic0      # Read-only reset reason from PMIC
-  │   ├── firmware   # Reset reason from firmware logs
-  │   ├── another_provider
-  ```
-- This would allow user-space tools to query all available sources while keeping 
-  the default recorder behavior intact.
-
-Next Steps
-- I propose keeping this patch series focused on the default PSCRR recorder.
-- Support for multiple read-only providers should be designed as a future 
-  extension, possibly with an expanded sysfs API.
-
-Would you agree that this approach keeps things maintainable while allowing 
-for future extensibility? Also, do you have a preference for naming the 
-subdirectory (`providers/`, `sources/`, etc.)?
-
-Thanks again for your feedback!
-
-Best regards,
-Oleksij
+Yes, it is correct, the values should be fixed for user space. Should
+they be documented in this documentation too?
 -- 
 Pengutronix e.K.                           |                             |
 Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
