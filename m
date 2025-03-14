@@ -1,78 +1,78 @@
-Return-Path: <linux-pm+bounces-24014-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24015-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B77AA60E1A
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 11:01:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 203AEA60E1C
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 11:02:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6309C1B606F8
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 10:02:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67F3E3B203D
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 10:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 566C31F4191;
-	Fri, 14 Mar 2025 10:01:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94FC91F4610;
+	Fri, 14 Mar 2025 10:01:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DcE4pEPm"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DcTMC4z0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE861EE03D
-	for <linux-pm@vger.kernel.org>; Fri, 14 Mar 2025 10:01:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81EE01F417C
+	for <linux-pm@vger.kernel.org>; Fri, 14 Mar 2025 10:01:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741946486; cv=none; b=WeF2eYymrwRFF1J3QH8Ge7kIR1G+j/jeZYnwP5+qbiAG+CaOZ0+MlGFNRdc9TcNdLlwloB5VYLq2kO3yfA5YErrIcAFuXz5PsodR/uSzyHa0xFlG2TU+K44ucyJmyR6UCk48oRjTdJ8Ld1NcAuvNSaSt28Gq//aoDQUBwS1HpKo=
+	t=1741946487; cv=none; b=Ys9GJHNUlhR/t4XhQbZ831jGunap/MnW97/OzzkElXU5z191svRGWhwKmf3yoKOeSaLveEdOcluo4ZtZPQQktQ5zHlDHwL+Vz8CqzBX2Gz7oNRYPYwFqew0SdiRrrifNEjWbu6/DrcMZOzLljNahkJrs7lUr7PDY0hol9mXGROs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741946486; c=relaxed/simple;
-	bh=kmzppo3sBM/QV1rz6m712RRfo3KqArFiDhfB5PEpOUY=;
+	s=arc-20240116; t=1741946487; c=relaxed/simple;
+	bh=ku7eBoH8HGNNqu6WgR7epnSx7DurvY3KB0R4PNQ8EGM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DvncVnIyusx+urD6ybzoRYil5ByIR3dEZYQ0szfzHRBxETWQTQWms/Vq69HQC8mJqPeiyO5dFO5oX1Ci0nt6J1Cpi46gu2FXNSB8OdR9h6N+z/3YREjv9paqWMzkecgFc+0MOtRBXNphYRduOh5RW61WVW7fedK5EWE2mohCGr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DcE4pEPm; arc=none smtp.client-ip=209.85.208.178
+	 MIME-Version; b=Qk3qsOQ/pVGJpKSw16TfmrNL3weiMVadAjw9o0lhrT7elO7OHMUYBa9ODjxZfw2XDhZMW1Tjsocs/6NxIlnFzNcIXnr5MsQKh9uMHfqBsGbLGvdEi8crgOsNbGE8m7oFpzPpE2/SnMruRbKRyslmUDj6APV/6WN9W9GmaNFNPZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DcTMC4z0; arc=none smtp.client-ip=209.85.208.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-30613802a04so20769671fa.2
-        for <linux-pm@vger.kernel.org>; Fri, 14 Mar 2025 03:01:24 -0700 (PDT)
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-30bfc8faef9so19014781fa.1
+        for <linux-pm@vger.kernel.org>; Fri, 14 Mar 2025 03:01:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741946482; x=1742551282; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1741946483; x=1742551283; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Suz7cKLNuXGtB0nBu0oVhma/Td/1dTahkXdO6vQ+7gU=;
-        b=DcE4pEPm/EGg3J7fiN1SHZM6XiO9zO0YcIUR9hy8zZfp1Co/oZjb4mKjHZUgYqrYqK
-         465tqUBoHmtP03c/FSt3hXRZmxPSGRip62zUhY81O3gV2OCDNf0F1MGMOziDSY11Uyz0
-         WqyCW6EUb2wI+PF1pF9DgPyhFOKenxQly0fbrbF5cHUiA8QhssQ4mHKNraPJJZJo76/v
-         28u8RE+MCIgscgoAdCV2lMbmzzSuWXi6Vbdf71GQmPM7NRho4zAo864EIPdPOqe50No2
-         kBBmgGtMvmDu5/Q4njC3GNvw1/M1c5OVjet+fFFpRClnu5rsKduNt8O8N6h2l9XcTlV8
-         /IhA==
+        bh=/QggTlpxLWEC50ONNabSeYB6RhPieGr2Z8I7fdFvhr8=;
+        b=DcTMC4z0e7embT0ZS37lE5r2pp3Acr3idH6UThu+6J9MYC5jxkC+ylaSX+VaVCmby3
+         oInTXj7WoA3QOj60xf55SPz/S7igMRwRQefqab0Zhqr4ZNRutVJcgWCH/haDona/Nw1c
+         uQV7km+wUOYntCNMJnOvxRQJLEgNIdYgH4CW7tiuHyuDF7m9Q5TgOM8KrXQwqAu4RKcj
+         h2ysZ4TBe6lP1OUd2X+CyWQ1t8cE63gs3sWdjEThR7Z6JpIfzwqISSmlZ9cCqXDDSKm8
+         I4FBvbd24jJW9BY5IxVQR9juwTmB1cPGitGTJ0fnIq+ib07NaKy+x9b8u6UKMl9vttLv
+         GSqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741946482; x=1742551282;
+        d=1e100.net; s=20230601; t=1741946483; x=1742551283;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Suz7cKLNuXGtB0nBu0oVhma/Td/1dTahkXdO6vQ+7gU=;
-        b=GngtMiXJX11sAMsN1vZeW56R1Z1Qyb90oCeZsuNQTqH5Yxyxr2lIant5wXr0QBuVvS
-         VjCYuN0RGsdwXlws2JS4Uk/WgaeI2KDQIfqIvfjsprF9tuU/C/iaKZKk3KGLFVsK+rBr
-         IJUD2IHqp8Bg85ifxLAWriQ8hLqwqJtzOr31B5xC2foqY6uAhO0BnL2QyF9Ac4S0A1zq
-         mOk64QT7fbTL6QbNBnuYrcUoEK9+l3h2D+jYGkz0l5b5zADA6YLGcvN9e2abgi106zxs
-         4t7uqqJVLOaDsWbgDQI9VGP0tdUgjIetxyiDLtG4dFj6ugrEbW82qaX3KYkDuu5inyCf
-         gY4w==
-X-Forwarded-Encrypted: i=1; AJvYcCVxVowI1h9TIgOKOEVmx5E+/cgNAn93JjdMcOGVnTRo+G0+dYYaSzGn+eLnUupVrLY2TmgToDak8w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBGLCrlDJgLxIvavn38pMRwVPTa+ASFsZ5a8qctz2k7KX6JmAf
-	J5tT4MYdh6BE24cP4ZTqyUfbVmbb0MjLtBeFGWuW3gln8xOWdBpze4RlF7tUiy4=
-X-Gm-Gg: ASbGncvzKKSMp4Ry78oM9v7eqM6cgictIZUIXWd7vH4Z3wOpiac3tm2RX7wHjlYuDaO
-	fTb4cSA0CLCxJeqvcBzOGmV8kJuDZGyBeKvfk7zVIy/7ttVgysStRgTONA0MLeadJwEX8hrYrIr
-	qDwxd4OZZ8XaRiVDQ8UKMtMYEWUUBCbS3Rd+204SN1I773vJ6dIv2+7fLRKj1syHwIXlFc+RAiY
-	xUmMOEEXeXGIB6Kq9bW/02pIDwRgTsDunprLF+KKRyEK1A53fhF5PzhbrUM6B9Hho+iEibKaARv
-	xSKwW0BWsY2iwvxvQ3ACJimXy9X23/+RSwMCyfWp83SBC6faY+3PHooMlctRh/PPudVtXwFI8QH
-	/G19VyrjYBCDKJgL4yZMZpwcFej32Wg==
-X-Google-Smtp-Source: AGHT+IEY83oFunB8w4RCdXC7/PTR7yqMmBEg98GVtkrv9yV920cpuM7Rd10omcbDGDOuiGclAjQbOw==
-X-Received: by 2002:a05:651c:2101:b0:309:26e8:cb1a with SMTP id 38308e7fff4ca-30c4a8dcaaemr6886561fa.30.1741946482339;
-        Fri, 14 Mar 2025 03:01:22 -0700 (PDT)
+        bh=/QggTlpxLWEC50ONNabSeYB6RhPieGr2Z8I7fdFvhr8=;
+        b=Q/2zczjdD1x4pCK8mH2ajuqOI8WHHITMQhicnXRs8y6mevh8cGwqKfDBsw3Re2hldL
+         0dW/B7gx9JJeVyusFUNSEoOCGLznKgKzMG0y++O6syJ+HuXXl1sFA0n8GWvvMllzfiZY
+         127Sy7qRTwkvAfd+YgWyj2yfhXSYA8G9K4b+iw2to6rtdS/37NVkGfqSmj5z/N8v6w5x
+         1GwKWVSoc9/A9RrnbvW9JYzk6cJRG+usddsXq642GbJfQNWRKP2dg7atszpxYHV4GkTy
+         0BN/ULClSPg2WUWkVcZX/k3VFLcliT0M3ZfFZcN1YXgCHK0bnLvsMdGLNXII/Lo085hc
+         lMyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWEpcqGlSn1qRIh4WBowNUXdO4nldTRwcuBenLi4YA4+1PtHM88WWpU3TtL+RhUALoZyJZZjyn6Yg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4BNMuvZzhW5kvFs5BrAuU3V8ycfnfvrBN1pI87ptBUTx2qNti
+	XDuBoafv+F1Bw43nf7VdqHVZU8Ff7zNX98UsnJnykOxizLq6IvWsficsI2mlXMI=
+X-Gm-Gg: ASbGncuEioSSYWR4atj8pb3bxalrGiEcCG1UqMJcupkEzYBrb5nP1jtKo4YLwusWqgb
+	88gUVf1/IRpFlPDjJMYYTJtKzTwn4l97YkzE9+CX3MCGC5Fe4DSNxjK9A9VXDxdS30yiN6DUmY0
+	VLlJas56I5NQwZ/AL5GIOfl/+6Hz9cpgiBPvVcVSeYgxg+zDXxGfcFHzbYN7tu2J8XdBWQ7ilpw
+	KXHmD+MWcoEc1jC9g5Mr0Zsp0LxH8hND+tCeiB7wDMS/TQ1kk6enohVmpIfx69CfSNbS7Ne7o7i
+	NAfBzosEU8iscvMIG0026RRIQIVjd33LPQz1apIWmzTUYfA4/z1YFm9DvwZtmqNqECetDarQxA/
+	lqVF2o+ub73un23dmY+8=
+X-Google-Smtp-Source: AGHT+IF3JWP6a57uvsfs3rKVvgBqgJHjNxLdTktMEECCgzMKQtOboYvvcrBZ2wGvWzv5dk6aRgujQw==
+X-Received: by 2002:a2e:88c9:0:b0:30b:8e06:86a3 with SMTP id 38308e7fff4ca-30c4a8665c1mr5313131fa.16.1741946483423;
+        Fri, 14 Mar 2025 03:01:23 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30c3f0ea468sm5168221fa.41.2025.03.14.03.01.20
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30c3f0ea468sm5168221fa.41.2025.03.14.03.01.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Mar 2025 03:01:21 -0700 (PDT)
+        Fri, 14 Mar 2025 03:01:22 -0700 (PDT)
 From: Ulf Hansson <ulf.hansson@linaro.org>
 To: "Rafael J . Wysocki" <rafael@kernel.org>,
 	Sudeep Holla <sudeep.holla@arm.com>,
@@ -83,9 +83,9 @@ Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>,
 	Ulf Hansson <ulf.hansson@linaro.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] cpuidle: psci: Correct the domain-idlestate statistics in debugfs
-Date: Fri, 14 Mar 2025 11:00:57 +0100
-Message-ID: <20250314100103.1294715-4-ulf.hansson@linaro.org>
+Subject: [PATCH 4/4] pmdomain: core: Add residency reflection for domain-idlestates to debugfs
+Date: Fri, 14 Mar 2025 11:00:58 +0100
+Message-ID: <20250314100103.1294715-5-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250314100103.1294715-1-ulf.hansson@linaro.org>
 References: <20250314100103.1294715-1-ulf.hansson@linaro.org>
@@ -97,121 +97,134 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When trying to enter a domain-idlestate, we may occasionally fail to enter
-the state, which is informed to us by psci_cpu_suspend_enter() returning an
-error-code. In these cases, our corresponding genpd->power_off() callback
-has already returned zero to indicate success, leading to getting
-in-correct domain-idlestate statistics in debugfs for the genpd in
-question.
+For regular cpuidle states we are reflecting over the selected/entered
+state to see if the sleep-duration meets the residency for the state. The
+output from the reflection is an "above" value to indicate the number of
+times the state was too deep and a "below" value for the number of times it
+was too shallow.
 
-Let's fix this by making use of the new pm_genpd_inc_rejected() helper, as
-it allows us to correct the domain-idlestate statistics for this type of
-scenario.
+Let's implement the similar thing for genpd's domain-idlestates along with
+genpd's governor and put the information in the genpd's debugfs.
 
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/cpuidle/cpuidle-psci-domain.c |  2 +-
- drivers/cpuidle/cpuidle-psci.c        | 27 +++++++++++++++++----------
- drivers/cpuidle/cpuidle-psci.h        |  4 +++-
- 3 files changed, 21 insertions(+), 12 deletions(-)
+ drivers/pmdomain/core.c     | 40 ++++++++++++++++++++++++++++++++++---
+ drivers/pmdomain/governor.c |  2 ++
+ include/linux/pm_domain.h   |  4 ++++
+ 3 files changed, 43 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-index 5fb5228f6bf1..2041f59116ce 100644
---- a/drivers/cpuidle/cpuidle-psci-domain.c
-+++ b/drivers/cpuidle/cpuidle-psci-domain.c
-@@ -43,7 +43,7 @@ static int psci_pd_power_off(struct generic_pm_domain *pd)
+diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+index c79ef6e3ab85..3327de2f9ed2 100644
+--- a/drivers/pmdomain/core.c
++++ b/drivers/pmdomain/core.c
+@@ -304,10 +304,40 @@ static void genpd_update_accounting(struct generic_pm_domain *genpd)
  
- 	/* OSI mode is enabled, set the corresponding domain state. */
- 	pd_state = state->data;
--	psci_set_domain_state(*pd_state);
-+	psci_set_domain_state(pd, pd->state_idx, *pd_state);
- 
- 	return 0;
+ 	genpd->accounting_time = now;
  }
-diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-index 1aff1ec555d5..26a0885444c4 100644
---- a/drivers/cpuidle/cpuidle-psci.c
-+++ b/drivers/cpuidle/cpuidle-psci.c
-@@ -37,6 +37,8 @@ struct psci_cpuidle_data {
- };
- 
- struct psci_cpuidle_domain_state {
-+	struct generic_pm_domain *pd;
-+	unsigned int state_idx;
- 	u32 state;
- };
- 
-@@ -45,14 +47,14 @@ static DEFINE_PER_CPU(struct psci_cpuidle_domain_state, psci_domain_state);
- static bool psci_cpuidle_use_syscore;
- static bool psci_cpuidle_use_cpuhp;
- 
--void psci_set_domain_state(u32 state)
-+void psci_set_domain_state(struct generic_pm_domain *pd, unsigned int state_idx,
-+			   u32 state)
- {
--	__this_cpu_write(psci_domain_state.state, state);
--}
-+	struct psci_cpuidle_domain_state *ds = this_cpu_ptr(&psci_domain_state);
- 
--static inline u32 psci_get_domain_state(void)
--{
--	return __this_cpu_read(psci_domain_state.state);
-+	ds->pd = pd;
-+	ds->state_idx = state_idx;
-+	ds->state = state;
- }
- 
- static inline void psci_clear_domain_state(void)
-@@ -67,7 +69,8 @@ static __cpuidle int __psci_enter_domain_idle_state(struct cpuidle_device *dev,
- 	struct psci_cpuidle_data *data = this_cpu_ptr(&psci_cpuidle_data);
- 	u32 *states = data->psci_states;
- 	struct device *pd_dev = data->dev;
--	u32 state;
-+	struct psci_cpuidle_domain_state *ds;
-+	u32 state = states[idx];
- 	int ret;
- 
- 	ret = cpu_pm_enter();
-@@ -80,9 +83,9 @@ static __cpuidle int __psci_enter_domain_idle_state(struct cpuidle_device *dev,
- 	else
- 		pm_runtime_put_sync_suspend(pd_dev);
- 
--	state = psci_get_domain_state();
--	if (!state)
--		state = states[idx];
-+	ds = this_cpu_ptr(&psci_domain_state);
-+	if (ds->state)
-+		state = ds->state;
- 
- 	trace_psci_domain_idle_enter(dev->cpu, state, s2idle);
- 	ret = psci_cpu_suspend_enter(state) ? -1 : idx;
-@@ -95,6 +98,10 @@ static __cpuidle int __psci_enter_domain_idle_state(struct cpuidle_device *dev,
- 
- 	cpu_pm_exit();
- 
-+	/* Correct domain-idlestate statistics if we failed to enter. */
-+	if (ret == -1 && ds->state)
-+		pm_genpd_inc_rejected(ds->pd, ds->state_idx);
 +
- 	/* Clear the domain state to start fresh when back from idle. */
- 	psci_clear_domain_state();
- 	return ret;
-diff --git a/drivers/cpuidle/cpuidle-psci.h b/drivers/cpuidle/cpuidle-psci.h
-index ef004ec7a7c5..d29cbd796cd5 100644
---- a/drivers/cpuidle/cpuidle-psci.h
-+++ b/drivers/cpuidle/cpuidle-psci.h
-@@ -4,8 +4,10 @@
- #define __CPUIDLE_PSCI_H
++static void genpd_reflect_residency(struct generic_pm_domain *genpd)
++{
++	struct genpd_governor_data *gd = genpd->gd;
++	struct genpd_power_state *state, *next_state;
++	unsigned int state_idx;
++	s64 sleep_ns, target_ns;
++
++	if (!gd || !gd->reflect_residency)
++		return;
++
++	sleep_ns = ktime_to_ns(ktime_sub(ktime_get(), gd->last_enter));
++	state_idx = genpd->state_idx;
++	state = &genpd->states[state_idx];
++	target_ns = state->power_off_latency_ns + state->residency_ns;
++
++	if (sleep_ns < target_ns) {
++		state->above++;
++	} else if (state_idx < (genpd->state_count -1)) {
++		next_state = &genpd->states[state_idx + 1];
++		target_ns = next_state->power_off_latency_ns +
++			next_state->residency_ns;
++
++		if (sleep_ns >= target_ns)
++			state->below++;
++	}
++
++	gd->reflect_residency = false;
++}
+ #else
+ static inline void genpd_debug_add(struct generic_pm_domain *genpd) {}
+ static inline void genpd_debug_remove(struct generic_pm_domain *genpd) {}
+ static inline void genpd_update_accounting(struct generic_pm_domain *genpd) {}
++static inline void genpd_reflect_residency(struct generic_pm_domain *genpd) {}
+ #endif
  
- struct device_node;
-+struct generic_pm_domain;
+ static int _genpd_reeval_performance_state(struct generic_pm_domain *genpd,
+@@ -982,6 +1012,9 @@ static int genpd_power_on(struct generic_pm_domain *genpd, unsigned int depth)
+ 	if (genpd_status_on(genpd))
+ 		return 0;
  
--void psci_set_domain_state(u32 state);
-+void psci_set_domain_state(struct generic_pm_domain *pd, unsigned int state_idx,
-+			   u32 state);
- int psci_dt_parse_state_node(struct device_node *np, u32 *state);
++	/* Reflect over the entered idle-states residency for debugfs. */
++	genpd_reflect_residency(genpd);
++
+ 	/*
+ 	 * The list is guaranteed not to change while the loop below is being
+ 	 * executed, unless one of the parents' .power_on() callbacks fiddles
+@@ -3517,7 +3550,7 @@ static int idle_states_show(struct seq_file *s, void *data)
+ 	if (ret)
+ 		return -ERESTARTSYS;
  
- #endif /* __CPUIDLE_PSCI_H */
+-	seq_puts(s, "State          Time Spent(ms) Usage          Rejected\n");
++	seq_puts(s, "State          Time Spent(ms) Usage      Rejected   Above      Below\n");
+ 
+ 	for (i = 0; i < genpd->state_count; i++) {
+ 		struct genpd_power_state *state = &genpd->states[i];
+@@ -3537,9 +3570,10 @@ static int idle_states_show(struct seq_file *s, void *data)
+ 			snprintf(state_name, ARRAY_SIZE(state_name), "S%-13d", i);
+ 
+ 		do_div(idle_time, NSEC_PER_MSEC);
+-		seq_printf(s, "%-14s %-14llu %-14llu %llu\n",
++		seq_printf(s, "%-14s %-14llu %-10llu %-10llu %-10llu %llu\n",
+ 			   state->name ?: state_name, idle_time,
+-			   state->usage, state->rejected);
++			   state->usage, state->rejected, state->above,
++			   state->below);
+ 	}
+ 
+ 	genpd_unlock(genpd);
+diff --git a/drivers/pmdomain/governor.c b/drivers/pmdomain/governor.c
+index d1a10eeebd16..c1e148657c87 100644
+--- a/drivers/pmdomain/governor.c
++++ b/drivers/pmdomain/governor.c
+@@ -392,6 +392,8 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
+ 		if (idle_duration_ns >= (genpd->states[i].residency_ns +
+ 		    genpd->states[i].power_off_latency_ns)) {
+ 			genpd->state_idx = i;
++			genpd->gd->last_enter = now;
++			genpd->gd->reflect_residency = true;
+ 			return true;
+ 		}
+ 	} while (--i >= 0);
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index 6e808aeecbcb..0b18160901a2 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -142,6 +142,8 @@ struct genpd_governor_data {
+ 	bool max_off_time_changed;
+ 	ktime_t next_wakeup;
+ 	ktime_t next_hrtimer;
++	ktime_t last_enter;
++	bool reflect_residency;
+ 	bool cached_power_down_ok;
+ 	bool cached_power_down_state_idx;
+ };
+@@ -153,6 +155,8 @@ struct genpd_power_state {
+ 	s64 residency_ns;
+ 	u64 usage;
+ 	u64 rejected;
++	u64 above;
++	u64 below;
+ 	struct fwnode_handle *fwnode;
+ 	u64 idle_time;
+ 	void *data;
 -- 
 2.43.0
 
