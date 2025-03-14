@@ -1,194 +1,178 @@
-Return-Path: <linux-pm+bounces-24020-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24021-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FEB8A60EDD
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 11:29:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30A66A60F02
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 11:34:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC0213B2F0E
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 10:28:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCDED88382F
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 10:33:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B18791F4261;
-	Fri, 14 Mar 2025 10:29:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 264A81F5608;
+	Fri, 14 Mar 2025 10:32:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="SRH5sI0v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j3+19/Bi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2072.outbound.protection.outlook.com [40.107.22.72])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C1FD1F2B8E;
-	Fri, 14 Mar 2025 10:29:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.72
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741948146; cv=fail; b=QZi8MqV2eR9lXZSimNf5i/ngZRmkNOUi7k5J0Hju00faQEgmj/LFD1GC5GWxYfzC5XgZqPklozenbVY/yobTFkRsGTqyoGwVEhQPipsw3io7f/8HDkZbrMXy+BJSOxaL/c9Jm58KnrH2+N7EypspvHNK0CKl2H6+Tcb0sLcV5C8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741948146; c=relaxed/simple;
-	bh=nWgj1Djh5oVGiHM2nT92zyKoliBiU3ZIlinZxdLWGNw=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=rwa+R5cB0GokTiUCf6EFXCch4fzaV8qEFYpSJV2HLROUrAI188+SHphqHLw2hMoIEoi58cuoMSVKquBU71CxklCxlVkbGRpClHA53gs0aHUV1CWB9kdnV6F2BPIu+QavI+TJNnSB4NMwGXIjUWA8UC8SUMff134RbUBf8G2zQQg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=SRH5sI0v; arc=fail smtp.client-ip=40.107.22.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=F1utDJJgOsF64FKnwrJbzFsN8Yak2QxbRvCuiNk1SMgpVZjFDtk9g+sQ+W6RjYxM1StPV21kxStsEbNLwFzYlUidAUBoTpZdLn0IiWb1XSy6zx1D+iOuzfOTE/8XxPIQbEiQ1zozd27N8c2mKR8569yAEqZIhAoVt0LYWo/0h8PFlUPAhOyltXOBiSUnHtThiUdll80923w9RVfmglgTVcAFNsitrYbA/9gwbhfAa03lB/70hRyQ/1XRAGjZfm4NM8uxmr2P/ROyHIsPzA35h7LC+dOUyVEDYRvF8wAuKTtoIVQG78UrS7BeDFsgjZnP3snSDIWdziAO1BZHA7GX9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nWgj1Djh5oVGiHM2nT92zyKoliBiU3ZIlinZxdLWGNw=;
- b=NNbQnRNJ7zGaWJSceaFjFh0PqCkn8f4mSdQ3lxskrqSgLCk8mPlYaheQ9o5jYkULT9jc4+s6HdOEYKKVILA9cdGEikmEAmSP6GmZSDA7gnaTDkUnG4u5pqmHbO2UzIglfVOjEX3UPneC4FxDFjiThnhXul/UaUCifh8HS7HB5aEWA9+M1Zcr5vnLB68b88DEdf7sirC8Dl+EZuu8f2ZuwKKKKShxPqGoafVpHuaLuNL0N00qRYjMJt2B9Go35LIFNElmU6r+vtbs1XPfIG7dj4bX6q1CXlNE0IhdyuLGTUZbozMXXSRRVOxs2Pv6PcSjHhDmr123AauRliqZV0ttNA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nWgj1Djh5oVGiHM2nT92zyKoliBiU3ZIlinZxdLWGNw=;
- b=SRH5sI0vU35QEiXpgELMIVRaofbmzbGB6LNw4BFH4Ubf0w6ZfMYBJkQSzfOHDhfu2+ztL6ZCiSQ060p/TsZzAXpjzoNS9bPXT0YOV11kCKqJCSL3BdTNwVaWP1fnqhty8Nqk5KSk0O/+Pqgxj4PS90d8sNlORiMFZwEw+6ING5yciR6sLZsdxQHka56o3V8w98tfJ8tf4WscZDskDravQMSm5ku66lQyiRSwVjNHq8rYyq0VDdGyXbYtlSz35vlHvYxA4PorS14rpar7e1E569VtLWJDXTeBfR6HnXaEnwLmQ+80aVAnbKNnYYCATeOg+35dpRZM9QBcuulZKsjGyQ==
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
- by AM9PR04MB8454.eurprd04.prod.outlook.com (2603:10a6:20b:412::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.27; Fri, 14 Mar
- 2025 10:29:01 +0000
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630%4]) with mapi id 15.20.8534.025; Fri, 14 Mar 2025
- 10:29:01 +0000
-From: Peng Fan <peng.fan@nxp.com>
-To: Sudeep Holla <sudeep.holla@arm.com>, "linux-pm@vger.kernel.org"
-	<linux-pm@vger.kernel.org>, "arm-scmi@vger.kernel.org"
-	<arm-scmi@vger.kernel.org>
-CC: "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, Ulf Hansson <ulf.hansson@linaro.org>,
-	Cristian Marussi <cristian.marussi@arm.com>, Ranjani Vaidyanathan
-	<ranjani.vaidyanathan@nxp.com>
-Subject: RE: [PATCH] pmdomain: arm: scmi_pm_domain: Remove redundant state
- verification
-Thread-Topic: [PATCH] pmdomain: arm: scmi_pm_domain: Remove redundant state
- verification
-Thread-Index: AQHblMe4GnkknwhmmUSVPD82/DKJm7Nybh2g
-Date: Fri, 14 Mar 2025 10:29:00 +0000
-Message-ID:
- <PAXPR04MB8459F43DF554C008CD97FF3488D22@PAXPR04MB8459.eurprd04.prod.outlook.com>
-References: <20250314095851.443979-1-sudeep.holla@arm.com>
-In-Reply-To: <20250314095851.443979-1-sudeep.holla@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PAXPR04MB8459:EE_|AM9PR04MB8454:EE_
-x-ms-office365-filtering-correlation-id: 5d17884c-a90e-45ce-1686-08dd62e3094f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?4+QwD29+4XNwtswNen3d+tn2MfXdGtne1rgWaKqBEY07ZHg8pD81snvxp3pA?=
- =?us-ascii?Q?ulPIkzuAAbo6MJxuAcU9bVziJ6zLaFQpt0tMpF7wifRygpQMVnVxVYbCHITm?=
- =?us-ascii?Q?fWUUHVQ2S39ltPyOZYwP7iXdmf9jNJ4hx/UE38ZCRFp7Y6GEwNTNpxrBcT9q?=
- =?us-ascii?Q?gjXIjgsgn4HHXy7OUqb8kl1fAnfslJ4Hqo7FP3XN5m33SD33zV+CgqsARL+4?=
- =?us-ascii?Q?qZkRBLx04ji8yI15xZn4bYNsnnChNaLA+Jc805qOr8Sjf3IvfK1zRHsmnrol?=
- =?us-ascii?Q?Ev6RI1egiMPEyKXRUKSBAA6KXTzLUpRPMEL908AxzxYECWbL2+JzGV1622UI?=
- =?us-ascii?Q?6FyPByTfwaqE1vJ1I9pRM7VQEAODXx7maK0xoa849MgCLNjmUI7wBOWKnIj4?=
- =?us-ascii?Q?C1VR7Haa0hLzzpl75gA6Qu6pnFIvT4KgS9XApHaEWVwdDrtj4x7+enSiiVfo?=
- =?us-ascii?Q?O/2rBnjVhBjAy0IOo64o1cMZEhRm9b4aS1J4QN0ekDEmSESukjNBmsxCvRr9?=
- =?us-ascii?Q?dL/FUmjOjOjlCwRVD8xo8YXbESoP+6dLKGmhP2E17kbycIh/Hu+xOmwc8sBo?=
- =?us-ascii?Q?jH/iHy9H2bZy2jdfS81S+dHXcIHdk+mTJ5MMobPQ+a7ap+qpbMtcKU5caatZ?=
- =?us-ascii?Q?Kmoesc8Mdzv6MCYVOb/2jWrhEfPcFNfcJ+/Tnzjhn+v/iRlN8Lih5DUd0Xjf?=
- =?us-ascii?Q?UZfqsOsaued8YDOrqomqg8O0DS+4g3saQjCJNWf9pM8KH32NlKbWaogRFh4I?=
- =?us-ascii?Q?rrdAwINcr33v6QN3B12zmcWgQ/YvSYwk00g62PLJn1ufpbU7lmNqYTkqwDX2?=
- =?us-ascii?Q?bTC4WCw9apGjhkPdTyEs7PrMQXYYCpBYAKF1WVS5zkZMWLbQojZPyiae3jfu?=
- =?us-ascii?Q?aCN9Kx6OQrnr8hs77fhkinY39dlqVocgnu9o82hNLxycDGDB6BiPKi0XU24p?=
- =?us-ascii?Q?q8wPFRPXmDtcnlHsVVFbbAXENjTwuxYPOiAXM50LCNIypxwC2bdpmflb2+dg?=
- =?us-ascii?Q?qWSzOinHlch7yCKgiukLv8Vik4vbyIRldDaALSDZb//6y+3e6ZZFaKFop2iA?=
- =?us-ascii?Q?So7iaQsJXwBBdn6DLA3GKYI3UcTzkLJdNiAPGd4rMOOb48PQqL7+ws2soA3M?=
- =?us-ascii?Q?b6SANmR88aBYxtGRiV+8761MR43QNK8NgzF3SRMk6Q1qL15jsD5shsrymmAz?=
- =?us-ascii?Q?grxhDl6A7Pcs1JUKIklzM38cbn+v8H09pA36sX3gnggS51dGXfH0GyounCVV?=
- =?us-ascii?Q?4d0dOCT02TDmkVYhRIkMvAOuIFguEqG/Fk1BobGraH4/932Rro13yxc4T4As?=
- =?us-ascii?Q?Sbvxg0H3QQBsfzCqAP2zGxK5XsrI1q8oVIEu6r1nS3aLj3mqw64nk801eeh2?=
- =?us-ascii?Q?/EacwvBgPeYlbivlrcqI9Mz4/qnxNQtZMLPffP2qhBnDSeElhwZux8jUwjOP?=
- =?us-ascii?Q?Spfn/61j+irNht//CfieajmLjFmNHgnj?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?52sbSrraoICQDJWNmKF+S+7lZKJp2kq30Be0e9wsshH+w889GF7tecm43Bv8?=
- =?us-ascii?Q?lR5SldtS/vxxMQu2nIO76wN171kto9sa/8BozRXM1TppqiwCSkAaxkrNYV8I?=
- =?us-ascii?Q?4Jfs0p+/+0jep5fcBfCKfpaskLCGPRsrgWnAgernSFQ5o+quebo84KAADw2v?=
- =?us-ascii?Q?pHtN09YpKRy3A7WfxyCFSt2Z5bYCmoXUaUEUgfW+zXnlxT0WT8L67xS0ESE1?=
- =?us-ascii?Q?nHq3OkIyxA2ItM9KPUkizlZdAYPYurxqeyWbMEYp/sIwkUfO/fEajQ4cGpWN?=
- =?us-ascii?Q?drqELkUhEhvPUlM23OC7ysL9mBgzHk/GY0UZ6wRNPq3cq1JOmFCuLk7mle6W?=
- =?us-ascii?Q?5iWrlfQeZpUy46kBE2yBokNv+NOpCMRRlfwSB1hMW4iG2FP9moyvIOjrZuDk?=
- =?us-ascii?Q?HuG44SaakqWXlbuiVWxlTrrqAoZQZ4RjAThcQHlCUj0ej+MyC570k6DoAd1P?=
- =?us-ascii?Q?ofQIgl9/lBmM4jxnJ4rMhnMGTWC3b5w3JW4uT1vKLJbMAUnKgF4w0ELdh8oN?=
- =?us-ascii?Q?0OdkJ3IxX31Dv2QholBftL5PFDgzijHVyc2rsu8+w6+b105xCaN5dirXWsIQ?=
- =?us-ascii?Q?SMv2XVRFCZ6DOjOiVt2Op8wqHGPNf3H1NJa58d3OItOEqxNitk089uGYas0X?=
- =?us-ascii?Q?/wNbThb9tJGHy2eHxBvhgwa6A46oq/vvYln3DLWBFTkIPRUSwLCZZnjf7kGj?=
- =?us-ascii?Q?4eRCVVAPqKlkMtQvcphDVfahTuGrBkZjRXzazab4XKYMPHZ2n9FjMxsjpOrr?=
- =?us-ascii?Q?GEoZXOT5cRXqcg/rsAcMbxrJE8maKRvqth3Bct4EFDB+XDr2hkJpSOt4bBVI?=
- =?us-ascii?Q?C3IDm7zXZdD7Fpeq48YlHlABIrxTRWZ7UG/wCT3hNCcOtR42F+u6mJIeoXO8?=
- =?us-ascii?Q?L9aIDiDHu74ieYZiCDDc7x5co+02e2UxSAzDudhmtHH315l9+X4a3xLLVbkZ?=
- =?us-ascii?Q?+sCkVAm0Z4IA/FyIYfKwxpypl6M9eYobkeH5PeJf0EHc9tf9Qn431C1JpCRj?=
- =?us-ascii?Q?2nYvqVfYwVYWWqWyGIrShifrSethftdZkwFycN24oHL1cFUsyoqRbUrnXJ24?=
- =?us-ascii?Q?2lMndmVkOFRyS8LlhtddnGEKLWMzr2KWoppdkE2dsyHrFbsTRB+VmTZpDthH?=
- =?us-ascii?Q?Ecc/NPZMj2vsblpnB5RaVcgjfRHYTe/AO/oJLhVuaYeRVFAEZ+xJGp7eyVfk?=
- =?us-ascii?Q?A02KQDxsEkXPR6E0LUQjC31issFg3rNcwbFhM5X0oFi/9ObGhhNju0LCamyt?=
- =?us-ascii?Q?C2VO9lCVlZMMRDI0mKLnNLQOZq3syAdtAsNV1m4Qy/YCaje+aMqEhMEPgnxi?=
- =?us-ascii?Q?n7C0U9qDpgkdSlKyuzEuQRYRqFmvCOY271JkikhTwGM5OYIfTBWc49jP24qv?=
- =?us-ascii?Q?AVAacou1P+Jj/BYOPIv31rtROoGIkwsip3HIWu5yiJjm44VaqPdqPIMeQliU?=
- =?us-ascii?Q?1IvDVWd7uu2vMcVOM18P9cUZArJkImIJ8kk5Wl8ke//s6Ga/b+wYsqDjRDVX?=
- =?us-ascii?Q?+454bE3KC3m06jLRfcPyTDhjB81MlD4B5LGNYls22pNYDBd96A//N6eEa/WD?=
- =?us-ascii?Q?le5lyu8gkuAGDYXILPQ=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0781F4CAD;
+	Fri, 14 Mar 2025 10:32:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741948339; cv=none; b=WqtQ7Mz8HW1HYzb6f1axtuyS9loi7nOkONksiLYjFX287sF11HQRPtMD1RchqdkOGwBeCd33HXVi8X/Sgf2ZatDu8knQaaWzfcE8t/EG8YX3wN6qRf/31Ofgd8WZUdaozSBMSry9VZA48X8HY1c/nghS9/z3SMK5Wt8xj/ey0HA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741948339; c=relaxed/simple;
+	bh=bIVEOosLbXV7zBjslXZjI9/mMTUHcG4P15ca5rWDDm0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EuAPJGY/3JQczJhCo1YhSN8ZirczNnAklNh0FfM2D1LpBfxwvxPjq/SXle8ryotrQ1sAWxiAVEX9VbGrkxTdKWlHAI092aPBDFP7gUS161d/0qCJjz5ZrNhwxK0tWvoRaPaai27+VoD3CNtu89ktxBMhbEcU+WjfMW2pfcfEkUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j3+19/Bi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 735C0C4CEF4;
+	Fri, 14 Mar 2025 10:32:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741948338;
+	bh=bIVEOosLbXV7zBjslXZjI9/mMTUHcG4P15ca5rWDDm0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=j3+19/BiN6v+pKli7W3LfZ4dOW/TqRiIxjSoUqF9o+jkG4SSng7zRIqEKXKKBsH4C
+	 xkZ11M7AcGfz/2r4brm4/Xx4UhzihYkcsZDkpM8yn02ikkw3QTpvp5VKBsj26525oi
+	 5K0yrlqBThCiaSvkU1bzENme1lXVpV644FHoeWZ/u0yhkz8Mqm7ShqeWu4VjQ3VZrs
+	 M6jxYoyZTzIQY3Yy9ACoJLNz/1MPJo91jmWcq5GH1xosg1hhFuBUG+TFhibP2gQMCQ
+	 W8wpYHTeCVg1ZMErre5+7Ri//vKGuvhIjYvFEt2kjnee7bwYxbOsWAa1scEc2gWCLp
+	 fejBWC9+Re/zg==
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-2c1c4e364c8so864348fac.1;
+        Fri, 14 Mar 2025 03:32:18 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVZjn0UIaNMmKJudSk9qSWkK9TtYp8OChmevBXg76ysmXXaCZoVCLCvs1ctju9rktUSyVt4aFx5FHXc@vger.kernel.org, AJvYcCW0fdv/uP3FOs16J2Q+d7UdVeVfU74fnmTr7ga92nagBkyCAfP0bj1PqRxbjwLPEqbzGw8LjBSQDfn02k/r@vger.kernel.org, AJvYcCW3KoxyXYr0O/DLLfuwOtVjdAybD53xpYZ350fhtYDmpJcNnLHggIfDGbANv0jPjYc/nWSBYmWVG5Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCyeC7OM2QYfn1QHBkyLCJ5jrgsSRoFy72vCNGehDhZFJ7vb8p
+	9mY2bi1S5+WJ/fe8DQ/b+hodbG6tOFXHYkhAWFE7puj6PS4OUzIsGqiW46iR3T0zqvCvePXzJJ8
+	549LATPFzF/bGaoSoT+GgenyYQOY=
+X-Google-Smtp-Source: AGHT+IHMIhcxmJiI89lHkmcp10N9Gc8dwaHNOvydy7F0N4rYcB6pfEg4Jewk4sgyfM2HYz8d8QVhijGhPoQRMSCLG6M=
+X-Received: by 2002:a05:6871:8907:b0:2c3:13f7:2b3d with SMTP id
+ 586e51a60fabf-2c66faa0ad9mr3253949fac.13.1741948337647; Fri, 14 Mar 2025
+ 03:32:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d17884c-a90e-45ce-1686-08dd62e3094f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Mar 2025 10:29:00.9438
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PDYbmc0qKwTYLQxCBWOoiYcMBq6zsV5Vsanzc9Bb9rXma88ttianCegs20axgWkNWqQ5awN9gK97HKVeIlNHmA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8454
+References: <20250206131428.3261578-1-zhenglifeng1@huawei.com>
+ <20250206131428.3261578-4-zhenglifeng1@huawei.com> <CAJZ5v0iNzNROkPD4+b=Au8DwdF9unajKivdRQMBFfwzjFxHLcg@mail.gmail.com>
+ <4fc77a58-8c77-463c-a50d-06ad19685bfb@huawei.com>
+In-Reply-To: <4fc77a58-8c77-463c-a50d-06ad19685bfb@huawei.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 14 Mar 2025 11:32:05 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gmGx-9QsTTdbKi6EMQm2tePfhBdYMry_88gbybLUY6WA@mail.gmail.com>
+X-Gm-Features: AQ5f1JoupU6GpOA9Iyps8s1JuMZY-IPPw-xEHtHAfwnoaE6pdAQsbzMgFba8YeA
+Message-ID: <CAJZ5v0gmGx-9QsTTdbKi6EMQm2tePfhBdYMry_88gbybLUY6WA@mail.gmail.com>
+Subject: Re: [PATCH v5 3/8] ACPI: CPPC: Rename cppc_get_perf() to cppc_get_reg_val()
+To: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, lenb@kernel.org, robert.moore@intel.com, 
+	viresh.kumar@linaro.org, mario.limonciello@amd.com, gautham.shenoy@amd.com, 
+	ray.huang@amd.com, pierre.gondois@arm.com, acpica-devel@lists.linux.dev, 
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linuxarm@huawei.com, yumpusamongus@gmail.com, 
+	srinivas.pandruvada@linux.intel.com, jonathan.cameron@huawei.com, 
+	zhanjie9@hisilicon.com, lihuisong@huawei.com, hepeng68@huawei.com, 
+	fanghao11@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> Subject: [PATCH] pmdomain: arm: scmi_pm_domain: Remove
-> redundant state verification
->=20
-> Currently, scmi_pd_power() explicitly verifies whether the requested
-> power state was applied by calling state_get(). While this check could
-> detect failures where the state was not properly updated, ensuring
-> correctness is the responsibility of the SCMI firmware.
->=20
-> Removing this redundant state_get() call eliminates an unnecessary
-> round-trip to the firmware, improving efficiency. Any mismatches
-> between the requested and actual states should be handled by the
-> SCMI firmware, which must return a failure if state_set() is unsuccessful=
-.
->=20
-> Additionally, in some cases, checking the state after powering off a
-> domain may be unreliable or unsafe, depending on the firmware
-> implementation.
->=20
-> This patch removes the redundant verification, simplifying the function
-> without compromising correctness.
->=20
-> Cc: Peng Fan <peng.fan@nxp.com>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Cristian Marussi <cristian.marussi@arm.com>
-> Reported-and-tested-by: Ranjani Vaidyanathan
-> <ranjani.vaidyanathan@nxp.com>
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> ---
+On Fri, Mar 14, 2025 at 10:25=E2=80=AFAM zhenglifeng (A)
+<zhenglifeng1@huawei.com> wrote:
+>
+> On 2025/3/13 3:54, Rafael J. Wysocki wrote:
+>
+> > On Thu, Feb 6, 2025 at 2:14=E2=80=AFPM Lifeng Zheng <zhenglifeng1@huawe=
+i.com> wrote:
+> >>
+> >> Rename cppc_get_perf() to cppc_get_reg_val() as a generic function to =
+read
+> >> cppc registers. And extract the operations if register is in pcc out a=
+s
+> >> cppc_get_reg_val_in_pcc(). Without functional change.
+> >
+> > This should be split into two patches IMV.
+>
+> Yes. That makes sense. Thanks.
+>
+> >
+> >> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+> >> ---
+> >>  drivers/acpi/cppc_acpi.c | 66 +++++++++++++++++++++------------------=
+-
+> >>  1 file changed, 35 insertions(+), 31 deletions(-)
+> >>
+> >> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> >> index db22f8f107db..3c9c4ce2a0b0 100644
+> >> --- a/drivers/acpi/cppc_acpi.c
+> >> +++ b/drivers/acpi/cppc_acpi.c
+> >> @@ -1189,48 +1189,52 @@ static int cpc_write(int cpu, struct cpc_regis=
+ter_resource *reg_res, u64 val)
+> >>         return ret_val;
+> >>  }
+> >>
+> >> -static int cppc_get_perf(int cpunum, enum cppc_regs reg_idx, u64 *per=
+f)
+> >> +static int cppc_get_reg_val_in_pcc(int cpu, struct cpc_register_resou=
+rce *reg, u64 *val)
+> >>  {
+> >> -       struct cpc_desc *cpc_desc =3D per_cpu(cpc_desc_ptr, cpunum);
+> >> -       struct cpc_register_resource *reg;
+> >> +       int pcc_ss_id =3D per_cpu(cpu_pcc_subspace_idx, cpu);
+> >> +       struct cppc_pcc_data *pcc_ss_data =3D NULL;
+> >> +       int ret;
+> >>
+> >> -       if (!cpc_desc) {
+> >> -               pr_debug("No CPC descriptor for CPU:%d\n", cpunum);
+> >> +       if (pcc_ss_id < 0) {
+> >> +               pr_debug("Invalid pcc_ss_id\n");
+> >>                 return -ENODEV;
+> >>         }
+> >>
+> >> -       reg =3D &cpc_desc->cpc_regs[reg_idx];
+> >> +       pcc_ss_data =3D pcc_data[pcc_ss_id];
+> >>
+> >> -       if (IS_OPTIONAL_CPC_REG(reg_idx) && !CPC_SUPPORTED(reg)) {
+> >> -               pr_debug("CPC register (reg_idx=3D%d) is not supported=
+\n", reg_idx);
+> >> -               return -EOPNOTSUPP;
+> >> -       }
+> >
+> > I'm not a big fan of the IS_OPTIONAL_CPC_REG() macro.  I'm not
+> > convinced at all that it adds any value above (and in the next patch
+> > for that matter) and the message printing the register index is just
+> > plain unuseful to anyone who doesn't know how to decode it.
+>
+> With this index, it is easier to locate problems. This is what a "pr_debu=
+g"
+> for, isn't it?
 
-Reviewed-by: Peng Fan <peng.fan@nxp.com>
+For those who know how to decode it, yes.  For others, not really.
+
+> >
+> > If CPC_SUPPORTED(reg) is not true, the register cannot be used AFAICS
+> > regardless of what IS_OPTIONAL_CPC_REG() has to say about it.
+>
+> The name "CPC_SUPPORTED" may be a little confused. Actually, in ACPI 6.5,
+> only optional _CPC package fields that are not supported by the platform
+> should be encoded as 0 intergers or NULL registers. A mandatory field as =
+a
+> 0 interger is valid. So If I wanted to make this function as a generic on=
+e
+> to read cppc registers, it would have been more reasonable to do this
+> IS_OPTIONAL_CPC_REG() check before CPC_SUPPORTED().
+
+I see, so you need to explain this in the changelog.
+
+And IMV the code logic should be:
+
+(1) If this is a NULL register, don't use it.
+(2) If it is integer 0, check if it is optional.
+    (a) If it is optional, don't use it.
+    (b) Otherwise, use 0 as the value.
+
+Of course, there is a problem for platforms that may want to pass 0 as
+an optional field value, but this is a spec issue.
 
