@@ -1,174 +1,244 @@
-Return-Path: <linux-pm+bounces-24007-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24008-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92537A60ABA
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 09:05:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B675A60CB0
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 10:05:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C7E84169535
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 08:05:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F58917E144
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 09:05:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 451ED18CBEC;
-	Fri, 14 Mar 2025 08:05:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S9vGGJ0Y"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 429A21DE4D6;
+	Fri, 14 Mar 2025 09:05:02 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F52912CDBE;
-	Fri, 14 Mar 2025 08:05:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863801D619D;
+	Fri, 14 Mar 2025 09:05:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741939553; cv=none; b=T9BohrGZ03WdoSkOktdsYk+5GTOXTcHEFmhIzKWQFjzi1iRa4hkwUm/ytNzihjWKWi+wiFDmSXlHVzAlLPrGs/RE43mWrIdq9AJe1Uj0h0jDR+bh2BPbsfOwBatf2V7popTNYK9m7R8JFC3uBb9+za4WI2Qr4kCq6IQTV9XXFAI=
+	t=1741943102; cv=none; b=TWye5p7t/9p5UXuQ77HeVOICYXwG6VDa9CdINj35oJqVrXvXk9X5wOfwFjQjvkiGuKyuT2FysK9wbpmI41D1yD8P+pjZafv1YstejQFRUSq+dfMHnCSwbwmF2XYYY28AbzzvcqYepV1lLcVoOV4lxrIga8sHXG23xttbFjoNXbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741939553; c=relaxed/simple;
-	bh=521iapHwfmC+7rWHoT90eyWDbzdM7a67F9E+t6QMAsU=;
+	s=arc-20240116; t=1741943102; c=relaxed/simple;
+	bh=nvH3uncH0bvUPmkr8rI3ncI1+kzq869QL35edx2aCwY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nlSKvRxTvOLBPIhaX9MWX/1KT7lOZqxJrOovZtLJnuBNgOI1exmJUhuDB4+0NGlIIieNRTQueqGK/cil6yPBIk1obRMlJ08ZFMn+HU930cwqgtlwV0dNUf/z5eVLtkagbUscAeY/ev6RwrTk3qPbMNVLXPJqk5wc1Ip2xjwhSWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S9vGGJ0Y; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	 To:Cc:Content-Type; b=bXjBPAnYL6Vdnc8lwGZUwOVxsFUsXZBb/uviCQPis+6jPuAyGL8YMW/jQY2gZ2MOE93QnCpQhwIHPMjRjSv4lz3v0eIfSumffRpbrZybAqvYKytF8xzmFSBrUNDU81JWgJqn0OyLUF+YmBtUHK3ePTrMRosuNPTJgtsPvPEAch8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43cfe574976so11298995e9.1;
-        Fri, 14 Mar 2025 01:05:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741939550; x=1742544350; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a3F5U71lWqNXOgTEfdpYjf9JDJvOldx5d/H+DiwWMEE=;
-        b=S9vGGJ0Yhd1OiGvxRtkTdEF7fpVmTkBinjJEsUMmqDNvAM4iZTUjfmNWSu4bMjOW4S
-         3F3tGzmeXqwh9fTse/eJtlt7OTaCElgXoKSLaRiyurwm5EbWtly8MJesN2s0jbm2XOLG
-         If++OU13NMg00Z3E1PIXTrcbcyYAQQLiwMkv5nPI88H39jvkYczSP3W/zlN9/VTUhoPj
-         2ChCgBlqY/E5zWWjqYAh2OFkXmUcWSUi22tPQrH22CH9rD7nU61oO2mITRudxkSpXaD1
-         nC1r1rH2+WptOFq+FfnemvNoKhwllKy3GB4HQwxHuY7xMwhmlja2GLNalfKyiny85x1M
-         yBTQ==
+Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-86c29c0acdfso899474241.3;
+        Fri, 14 Mar 2025 02:05:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741939550; x=1742544350;
+        d=1e100.net; s=20230601; t=1741943098; x=1742547898;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=a3F5U71lWqNXOgTEfdpYjf9JDJvOldx5d/H+DiwWMEE=;
-        b=N7hpG+xvaG9bwHV3m5Q4CuRHeGWlaWdKVfyTxsImMgbdWf+7bJIJoRqyp3YnX1QLzu
-         J0gsbsH8OZGgh/vSadnPJC7lKptuFuo2yiweQkDC2kK9aLW0pNjDOJm2MlyKvPqb9c4+
-         2X33S6r5fWodbxhlje7d5dsogkefAB7WacuvcWOvTKEaLeItE56czVQsVWiWZokk8lgE
-         76V0uoiS2yxJiVSMUHn3FFeNE4R6nhl79Zjbop1NJm5WUpOxwCmNupvw2VE6u3/I4gDh
-         Olfy/60woowmBV9cL+qHR5t5jnKz6mUjUL5kze7Q3tmyPpwalZl7nP6ywWQx9S8IDXR6
-         OkpA==
-X-Forwarded-Encrypted: i=1; AJvYcCVcm6UMFM6hzqgO5WoeTthWZY9AzCFnCfcpTkDlZzTwmfWuDPP19xaxN18mIHyZ9DgwxBQ2PBvTHBaw@vger.kernel.org, AJvYcCVs0zyH2mBQLP4xV2+GJVxWLZBG3KNdvZ8VHq1vuo109QUleKohGZSq3y/Q2XGyGUGRltc/sVrR4ILzExQe@vger.kernel.org, AJvYcCWaDRwDJtY0Ckm1xO1bias5uUqKNxNZaccSKjxxdq4oIkZBlUdjO2qLagN2bJY1lodYP5Kd5yNo3vg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxE9fqEAPMZb7m9Qb+NQtZCuCqLBUQof28zG8TsphfADfOJxAHd
-	Bv5Gs9LcY4cKZYap1pvlOy2LJocUg6k+alAS4i6PiiNwGaaG9x3TP1WZtmGCo2qrfYZGmZ8/bd6
-	PLunrMhov+tuNDXwxihBK2YDikMUHyQ==
-X-Gm-Gg: ASbGncuffMr/kVewkN+gs/e6eGKL1IqZ6lG00WuUKnJXKKlzNgVupp8ZhyyYXiT+D8b
-	HeRIH6pAHb7IJmw6+BKrkQF911we8vuFB1/kalEAPYs+OrTIw1B2o+929nRnmsU/Czsrru3upH1
-	yZWs4Zhmb9zXaWCvB1XVVMiu1wJ5g=
-X-Google-Smtp-Source: AGHT+IHSsIY9kOWzB8AIo2vud0ffWpWSEgGT9PildP2s6lilEYAMq4bha/y00H24aF+H5NCOdU2BYpb0jAbV6/9/Tg8=
-X-Received: by 2002:a5d:6d02:0:b0:391:2b04:73d9 with SMTP id
- ffacd0b85a97d-3971f511669mr1764783f8f.49.1741939549717; Fri, 14 Mar 2025
- 01:05:49 -0700 (PDT)
+        bh=TKbt8iHgwdEIoDOURXW5r6Dn/HIhQtmrAuFwAE1RJos=;
+        b=DubRuh68kb5za9dSnD1kCn4JOGqwwdwv/Dcw1IwhuXG/czaMoWGChMPWid40m5g6JX
+         iVRBfcJHE0SwSB3h86bo0GMfV8LyVxUrrDn4GLA3s40aCkqYoyhHYiwxP0QTpNgq0T/j
+         RZPR/PWWXBT5FbQIz65gGPINZ6iT+GhhVCMsjE4jfdKjsgd4AZywhZOytlK7h6g4hE9K
+         CczZKtxRR5sWOk1X9UgGD0jBnhIWChgDwHYzlxt2xd2roUiReQVNxfhduQbluSwh90Hb
+         bxoS2Mkuhz6lf1SL4q6bffI5LOhnKWVBDdJrP3tmKhm+CgNfKCMkA3llnpsV0An29kn5
+         Wg8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVUUjYXcIUFPG2IMqTAR/JYcI9XYufwQTZQ17hvY5WEbdUSEXs/BkErHRVToa3XKbm2IFNDUMTnEcAAclSfR+MH+XE=@vger.kernel.org, AJvYcCXmBaMxO1TtoKWnBzLfuea6AtIvg01IlutkaThPY+rWurDAzPdd+LuKU1kXK91aN5ljBkrXCRr7IA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzcEh/fJAuyUNV+64yfc6vW78wn5osgaVx/Ckd3b6IB0LS35Ngr
+	fuYvfBbIu5PY5bZyFB/1VHCoKWg6MDsQSLi7Zmem1QaCOys2DdUABbeeaNOcpuI=
+X-Gm-Gg: ASbGncvhSnxw/QVCLhEsIMrVjszUsrUNOjGnfj9kbl5EhDg1vGYj+s+Sy9RP3JMP9rU
+	apGnv+RzTmGbrcxEv5luF8RGCBx3EWBb1N65D9mb0ToIxwFnY0vGCM9TYL/L0LN4zmpKCNtg0Zs
+	dhbo2nv0xjHBD45oqy5pGgaNVb4ryo8g2s78eTEoTmjtYhfdyVHSDbrlbM4P/9WXwyZJ2IrVQEd
+	5tlMYmgWunwMbthdJ1b7NXA2jLBj74+QgwCOsfxolKQFvQq28I9i9ryjExHXXA69pBdnk/D3ApO
+	5CT1SSAxbi1h18930fy78ackAEsAt1GbTO5L/IcySvkd+cIPJ/IEjk7mSijPwBvNj93rE7ep4Fx
+	HGgq2Ylk=
+X-Google-Smtp-Source: AGHT+IFh8jVDYLHsw1RJbUy9qWXtrKYXLTC16EiVEaCOXvCJ7lzORvCDrpXHgaeB9RHb3fQqqw/s5g==
+X-Received: by 2002:a05:6102:5126:b0:4c1:9e65:f90b with SMTP id ada2fe7eead31-4c3831f7ae6mr740815137.17.1741943098271;
+        Fri, 14 Mar 2025 02:04:58 -0700 (PDT)
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-86d90e748efsm508899241.24.2025.03.14.02.04.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Mar 2025 02:04:58 -0700 (PDT)
+Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-86718c2c3b9so826150241.2;
+        Fri, 14 Mar 2025 02:04:57 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVRmEopnRIxyJl68KRQk9RVPIObslhBpzna89gymkynLeyrmOEG1bD7O51EpTLzL/3raKULirjOXw==@vger.kernel.org, AJvYcCWC1cQ6qpKVdWLO+VM1lpMnT/QOXC+7Q5eNC7E0eoc5yXEl91xRn1qd8MlcfjSxulq4bP46gXBtQB7yAdbkDuTyAc8=@vger.kernel.org
+X-Received: by 2002:a05:6102:2ac8:b0:4c1:9695:c7c with SMTP id
+ ada2fe7eead31-4c38322a29bmr584595137.24.1741943097598; Fri, 14 Mar 2025
+ 02:04:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250310080237.7400-1-clamor95@gmail.com> <20250310080237.7400-2-clamor95@gmail.com>
- <20250311193732.GA4183071-robh@kernel.org> <CAPVz0n09ZP1i2tasdTvnt8RvjhALvUYjv9u_EGRtnXPOYQtuqQ@mail.gmail.com>
- <4d1c3eb1-5c42-490f-83e5-60de05ffad06@kernel.org>
-In-Reply-To: <4d1c3eb1-5c42-490f-83e5-60de05ffad06@kernel.org>
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Fri, 14 Mar 2025 10:05:38 +0200
-X-Gm-Features: AQ5f1JrEvItfx2OcaNPdug--EmXjf0r7KBek5RJXaO4gyKMX-UN6T1gJZXjpyME
-Message-ID: <CAPVz0n1e4DXgx41A6GydapbFxEgvEfu_AAPzcz7298mt5UnxOA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: power: supply: Document Maxim MAX8971 charger
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CAMuHMdXN9A-1P_qe=BwKjLaoqxU8iJUQK6h8=s-apR4Y0em_0Q@mail.gmail.com>
+ <CAMuHMdXXWH0Do5zXWJ1Uc6dyEb9o1chGSyeyzgDrX+v1wZ7e_A@mail.gmail.com>
+ <CAGETcx_wA9RB9QhMPqsLHDFZ4cwOFgE8dBL9ssFkT=J6DEgjGg@mail.gmail.com>
+ <CAMuHMdUCXJkg3rkngXf7cqa50u-TEAOntV6O=Nvg33Q9diPJPw@mail.gmail.com>
+ <CAMuHMdWLEHwjaNnysDZ_Unqj-SwmUdwRao_oJvYvVsQ9SCn06A@mail.gmail.com>
+ <CAMuHMdXcJN5M7PqJ1eABOOCfeMjvs51rMRzMxU=d2L=3LVgh_w@mail.gmail.com>
+ <CAJZ5v0jKOeZxzUXu9bHA4=SDio1FT3ZmfoOGqNNZO2+DN+U21Q@mail.gmail.com> <CAJZ5v0iJqUGX8cL2ZEm3420VMP0nWY2rPwCNsLLCs+sCaDDtbQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0iJqUGX8cL2ZEm3420VMP0nWY2rPwCNsLLCs+sCaDDtbQ@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 14 Mar 2025 10:04:44 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVTbf60gk-sfyHME6Xi_9wiW_VNvgsH0+Uy54WWpg4jiw@mail.gmail.com>
+X-Gm-Features: AQ5f1JrKtr8q2avG9v70wyHagbS1NGd5KOIiQj7W2tyN_HZ61QF50EafRHY3vbk
+Message-ID: <CAMuHMdVTbf60gk-sfyHME6Xi_9wiW_VNvgsH0+Uy54WWpg4jiw@mail.gmail.com>
+Subject: Re: s2idle blocked on dev->power.completion
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Saravana Kannan <saravanak@google.com>, 
+	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>, 
+	Linux PM list <linux-pm@vger.kernel.org>, 
+	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-=D1=81=D1=80, 12 =D0=B1=D0=B5=D1=80. 2025=E2=80=AF=D1=80. =D0=BE 11:49 Krzy=
-sztof Kozlowski <krzk@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
->
-> On 12/03/2025 07:02, Svyatoslav Ryhel wrote:
-> >>> +
-> >>> +  reg:
-> >>> +    maxItems: 1
-> >>> +
-> >>> +  interrupts:
-> >>> +    maxItems: 1
-> >>> +
-> >>> +  monitored-battery: true
-> >>> +
-> >>> +  maxim,usb-connector:
-> >>
-> >> Just 'connector', so when we have a 3rd case, we don't have a 3rd
-> >> vendor.
-> >>
-> >
-> > Please, please be explicit and specific, you could not tell me this in
->
-> git grep -C 3 connector:
->
-> > v3, you could but you decided to fuck up v4 as well. So wise.
->
-> We got a lot to review thus we make reviews concise. I understand that
-> it might lead to insufficient guidance, so more help in removing
-> workload from maintainers is always appreciated.
->
-> Instead of using vulgar words towards us, please put a bit more effort
-> and look at other recent bindings how they do it.
->
-> Review is provided in good faith and if it is by any chance incorrect,
-> it is enough to disagree instead of throwing things like above. That's
-> not acceptable.
->
-> > Additionally, if you want a generic 'connector' which can be
-> > referenced as 'connector: true' then add one, ATM this is classified
-> > under your own terms as 'vendor property' and needs a vendor prefix.
->
-> richtek,usb-connector is not the good example here. Your previous code he=
-re:
-> https://lore.kernel.org/all/20250225090014.59067-2-clamor95@gmail.com/
->
-> looks correct - you have there port. So where does charger_input point?
->
+Hi Rafael,
 
-Would the version from v3 with graph be acceptable?
+On Thu, 13 Mar 2025 at 18:35, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> On Thu, Mar 13, 2025 at 6:27=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.=
+org> wrote:
+> > On Thu, Mar 13, 2025 at 5:48=E2=80=AFPM Geert Uytterhoeven <geert@linux=
+-m68k.org> wrote:
+> > > On Thu, 13 Mar 2025 at 15:32, Geert Uytterhoeven <geert@linux-m68k.or=
+g> wrote:
+> > > > On Thu, 13 Feb 2025 at 11:26, Geert Uytterhoeven <geert@linux-m68k.=
+org> wrote:
+> > > > > On Thu, 13 Feb 2025 at 09:31, Saravana Kannan <saravanak@google.c=
+om> wrote:
+> > > > > > On Mon, Feb 10, 2025 at 2:24=E2=80=AFAM Geert Uytterhoeven <gee=
+rt@linux-m68k.org> wrote:
+> > > > > > > On Fri, 7 Feb 2025 at 16:08, Geert Uytterhoeven <geert@linux-=
+m68k.org> wrote:
+> > > > > > > > Instrumenting all dev->power.completion accesses in
+> > > > > > > > drivers/base/power/main.c reveals that resume is blocked in=
+ dpm_wait()
+> > > > > > > > in the call to wait_for_completion() for regulator-1p2v, wh=
+ich is
+> > > > > > > > indeed a dependency for the SN65DSI86 DSI-DP bridge.  Compa=
+ring
+> > > > > > >
+> > > > > > > [...]
+> > > > > > >
+> > > > > > > > Looking at /sys/devices/virtual/devlink, the non-working ca=
+se has the
+> > > > > > > > following extra entries:
+> > > > > > >
+> > > > > > > Note that the SN65DSI86 DSI-DP bridge driver uses the auxilia=
+ry bus
+> > > > > > > to create four subdevices:
+> > > > > > >   - ti_sn65dsi86.aux.0,
+> > > > > > >   - ti_sn65dsi86.bridge.0,
+> > > > > > >   - ti_sn65dsi86.gpio.0,
+> > > > > > >   - ti_sn65dsi86.pwm.0.
+> > > > > > > None of them have supplier:* symlinks in sysfs, so perhaps th=
+at is
+> > > > > > > the root cause of the issue?
+> > > > > >
+> > > > > > Sorry, I haven't had time to look into this closely. Couple of
+> > > > > > questions/suggestions that might give you some answers.
+> > > > > >
+> > > > > > Is this an issue only happening for s2idle or for s2ram too? I'=
+d guess
+> > > > > > both, but if not, that might tell you something?
+> > > > >
+> > > > > The two (very similar) boards I could reproduce the issue on do n=
+ot
+> > > > > support s2ram yet.
+> > > > >
+> > > > > > The only reason the wait_for_completion() wouldn't work is beca=
+use the
+> > > > > > supplier is not "completing"?
+> > > > >
+> > > > > Yes, the diff shows ca. 70 additional calls to "complete_all()" i=
+n the
+> > > > > good case.
+> > >
+> > > >   4. When the issue happens, /sys/devices/virtual/devlink shows 3
+> > > >      more links:
+> > > >        A. platform:feb00000.display is a supplier of platform:fed80=
+000.dsi-encoder
+> > > >        B. platform:fed80000.dsi-encoder is a supplier of platform:f=
+eb00000.display
+> > >
+> > > Their status file report "dormant".
+> > >
+> > > >        C. i2c:1-002c is a supplier of platform:fed80000.dsi-encoder
+> > >
+> > > Its status file reports "available".
+> > >
+> > > >   5. What happens in dpm_noirq_resume_devices()?
+> > > >
+> > > >        /*
+> > > >         * Trigger the resume of "async" devices upfront so they don=
+'t have to
+> > > >         * wait for the "non-async" ones they don't depend on.
+> > > >         */
+> > > >         i2c-1 (i2c bus) and 1-002c (bridge device) are async,
+> > > >         thus triggered first.
+> > > >         After that, the remaining devices are resumed.
+> > > >
+> > > >      In the bad case:
+> > > >
+> > > >        device_resume_noirq(fed80000.dsi-encoder, async=3Dfalse)
+> > > >          dpm_wait_for_superior()
+> > > >            parent soc: skipping wait_for_completion()
+> > > >            dpm_wait_for_suppliers()
+> > > >              supplier feb00000.display: skipped, DL_STATE_DORMANT
+> > > >              ^^^^^^^^^^^^^^^^^^^^^^^^^
+> > > > Cfr. extra link A above (harmless)
+> > > >
+> > > >              supplier e6150000.clock-controller: skipping wait_for_=
+completion()
+> > > >              supplier 1-002c: wait_for_completion() =3D> BLOCKED
+> > > >              ^^^^^^^^^^^^^^^
+> > > > Cfr. extra link C above, but the bridge device hasn't been resumed =
+yet.
+> > >
+> > > Changing the test for "DL_STATE_DORMANT"[1] in dpm_wait_for_suppliers=
+()
+> > > to also include "DL_STATE_AVAILABLE" makes it skip supplier 1-002c,
+> > > and fixes the issue.  Does that make sense?
+> >
+> > Good question.
+> >
+> > DL_STATE_AVAILABLE essentially means that the consumer hasn't been
+> > probed yet, but it doesn't mean that it can be suspended before its
+> > supplier.
+>
+> I really meant "resumed before its supplier", sorry for the confusion.
+>
+> Generally speaking, suppliers need to be resumed first regardless of
+> the status of the consumers.
 
->
-> >
-> >>> +    description:
-> >>> +      Phandle to a USB connector according to usb-connector.yaml. Th=
-e connector
-> >>> +      should be a child of the extcon device.
-> >>
-> >> 'extcon' is a Linuxism. Is there an actual requirement here that's not
-> >> *current* Linux requirements (which could change)? I assume the
-> >> requirement is to have vbus or some supply?
-> >>
-> >
-> > Pardon me, this schema is part of Linux kernel, no? I have no clue why
->
-> Bindings are used by other projects as well and they live here because
-> of possibility of review by skilled people and due to size of the
-> community. It does not make them, in general, Linux specific.
->
-> > you collectively decided to just ignore external connector detection
-> > devices. Ignorance does not affect the fact that such devices exist.
->
-> We didn't. They are described.
->
-> >
-> > And no, it does not need vbus not supply, it needs EXTCON
->
-> There is no such thing as "extcon" from hardware point of view. Point us
-> to any standard or even wikipedia article describing it.
->
->
-> Best regards,
-> Krzysztof
+Exactly, and that's being violated here.
+Before resume, dpm_noirq_list contains:
+     [...]
+   - fed80000.dsi-encoder
+     [...]
+   - regulator-1p2v
+     [...]
+   - 1-002c
+which is the order in which devices are to be resumed.
+
+regulator-1p2v is a supplier of 1-002c: OK.
+1-002c is a supplier of fed80000.dsi-encoder: NG.
+
+As devices are resumed in the inverse order they have been suspended
+before, suspend order is also wrong.  Hence checking also for
+DL_STATE_AVAILABLE would just fix the symptom, and not the cause, right?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
