@@ -1,330 +1,254 @@
-Return-Path: <linux-pm+bounces-24058-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24053-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7330EA6127B
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 14:23:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA9A4A6122A
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 14:12:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 150CD7A62D4
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 13:22:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C696462A27
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 13:12:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B21291FF7B3;
-	Fri, 14 Mar 2025 13:23:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94AFC1FF602;
+	Fri, 14 Mar 2025 13:12:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="dnHLHjMi"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="tMZoemAm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2076.outbound.protection.outlook.com [40.107.93.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7483B33062;
-	Fri, 14 Mar 2025 13:23:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741958591; cv=none; b=bJgiQWhzC6VPtTgpxB1ZiW39ZqyWdFhQArjIqQ23FEIeWruOiQ5zAoSnMzs8BCnT+bHY/sPEAUscaFTKQinFLwTBnvoAt1O8eR+UsWV51ngE/kuC1JIsYOz8wEUOWUt4UHl1cL2/6n87DeeuEeNv/iiFoA2rxCiFQO2/NGEtmlM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741958591; c=relaxed/simple;
-	bh=Xi6eAIqF9YoMvolpEr548W5nu/pRhUxpbEp+MqJVoug=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pSjDvQZ8MFnMT2aBOSGd6/9GItcoqL7PEqXIc2QecfIo8Uw0Hal9tARk3nGNsNDuKgv6jJ8NT6JWbodPS7tB3Ukx30OKXT++oI8O5zKn4tl6xXLmbUcuNdpIIgeywAIT4ijND2+I6A8c9UgyyF9MoY3kEEvYe3gEvWViH/7VKSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=dnHLHjMi; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.3.1)
- id 85438b371985ad6e; Fri, 14 Mar 2025 14:23:07 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 9C612912D03;
-	Fri, 14 Mar 2025 14:23:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1741958587;
-	bh=Xi6eAIqF9YoMvolpEr548W5nu/pRhUxpbEp+MqJVoug=;
-	h=From:Subject:Date;
-	b=dnHLHjMi2HqXVGWzEVcSUwKzwM0/LyfPDbbSgWpI7rWUCSCLVkiS32Pm9Xv/AY2/X
-	 EU19fnoN+fjI32oF1iuhTANLrOxeeyemK4NzMjDNV6NLnIvYpWsJsLNlq78vNeYaOm
-	 bBb3tY1TlYTAxgfSUKH9hDYuTOWmVJ5iwOFGATmWxqEO2vuK4LGCv3IkyU0TZkwr7Z
-	 hAfCi+L++U7BqrNThfTnIz6NCImAiydS7uOCaf5Kn95CGJ7p2B12UARl1Fky+2oIJQ
-	 MrtBhfigioVsBVu8rj9PcrQfRP2BM20TSUiYAwPfdyRkePwxgtGvyAUYjsUlDXGs97
-	 9Zgg2rCBg+KfQ==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson <ulf.hansson@linaro.org>,
- Johan Hovold <johan@kernel.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Jon Hunter <jonathanh@nvidia.com>, Saravana Kannan <saravanak@google.com>
-Subject: [PATCH v3 1/5] PM: sleep: Resume children after resuming the parent
-Date: Fri, 14 Mar 2025 13:50:09 +0100
-Message-ID: <22630663.EfDdHjke4D@rjwysocki.net>
-In-Reply-To: <10629535.nUPlyArG6x@rjwysocki.net>
-References: <10629535.nUPlyArG6x@rjwysocki.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C8F1FF605;
+	Fri, 14 Mar 2025 13:11:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.76
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741957920; cv=fail; b=fW81iahGbv5eo7IvgMcSPH3C9C6IK8z7YbvtUtpb/SL+MXSUFQyprfrfnEPz0M+eOodYk0IAuP3yq8vEuzzyV7DjK6fIDE0tEFgPW1e/Q05ymNFAsVtoACXpkFikiUzJYM3lariPqlrCiC6P80mzKppUnBnrxYA50+FnPSgXo1U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741957920; c=relaxed/simple;
+	bh=7ATV2sBQTCyNgqWJJQdc6Mi0xK3zCoBD7aBCZRplhVw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=oxO3lz272ZaEjDkPwLeHF5aimvB8YmhBqfyoSXHGjzFa3dYmr4aqTpLTjWk8aSpxob0Pm/EBZWqwvMtcGlfwGXZ6YRPCqX3Wzih2fb8J98o9zYDM9m1/Nq3tKuebR7PBu/5AinM4Ja1okxi0p2Yw8cO6sbLd//4c1UtBBWeuTtQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=tMZoemAm; arc=fail smtp.client-ip=40.107.93.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=iHIyx0dyYLxRdrBgNzYqAa5Fly4/0NadOGDjroh0bbA7Pt26dxF/Cwdgbner4J6bGNmGrj2uB2pc+n4VjMP1RO0WkYJB1n9raTnEtBKD4GpcqEtX8I2LELbxCXcLS8J6ium4zO08o1UjAEBKVu5iX+hF+gCq8woYKBX1CwYs7RskiJi5hiXGo0Xgg4gwZ33ky+1IApXd3kNkp+m4Ugm30rrErWZT+TSBZfq5MxZFv9m9ZL/G0aSa1eB0ULEkq2vHAV1yzG7YfhufNnc4rY7FHO2yAFgjPlu6jA54Vdl4xKotv8O1oRm0X5hAfaSvdTLMecb0ruFefscEyMpeqHrocg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6Kcd+oV0ocZ8cE75EgDRJRaCh/rRFS1gernAbao/tS0=;
+ b=h8GIC1Zu6rk44++VtuXXOfuN/5dXWpLSlWdOLzPV9qKCxgnGHRg0iYgzerTzQrQ7cKW14SZRsMgpVbo7MC/VAQtVq7zsbOSE7SZtJTbJMOdTR+2D6Os9ffRHfzq9hyw8Wl/X9MB2FIGJm6LqaC2e0HJS/eDhqHP2G0TuTkD4U8o1s0IWV4FyAA8cdyod/X1UfAoalFNbeNRlfoFNDjWoVYTlik+PTyz8IlcFWuKlPtfoHDIiCube/tpSp9uwM6peHk66mhGCRmNZjQCrsrB0YPLpUtQ/ZsvnkFfGsOiyIG5fPFUX5uaRaVsWkH1jyBPt9V0RFCJlSfeVBEyD5f8U/A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6Kcd+oV0ocZ8cE75EgDRJRaCh/rRFS1gernAbao/tS0=;
+ b=tMZoemAmDaxXmh+2+ytFMqD/3oNdvPIIz4aU5ynLT/wklR2PKKWZPFDeL+wjJHoLfdyU4etwMuSlkJWFEaiKI9oZj6vzxI03Mqv/FCpUkGuoeH+w3dM8YenvfN9hEPMXHiXuoMgpQw8FS1Q7MjPmNJXmERPLrY3CvNfMulobYJhrUS6Bw4Kgm7TSNwkTZXwtM61o+9ElDvnZob0QkeSG6m5XOFhf13o73i1EVrQxf7ewyNoOzRsjFhTxCCk4BoQCt1eSaLB0N3LI62XKg6O0LVkdDb1k+1IyXrpDBjBpGOSMuWkeQEL5kf9fBir5ps5XkjDpwG+PcRI3JxW7BE9oOg==
+Received: from CH5PR02CA0011.namprd02.prod.outlook.com (2603:10b6:610:1ed::28)
+ by BL1PR12MB5898.namprd12.prod.outlook.com (2603:10b6:208:396::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.28; Fri, 14 Mar
+ 2025 13:11:54 +0000
+Received: from CH1PEPF0000AD78.namprd04.prod.outlook.com
+ (2603:10b6:610:1ed:cafe::35) by CH5PR02CA0011.outlook.office365.com
+ (2603:10b6:610:1ed::28) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8534.24 via Frontend Transport; Fri,
+ 14 Mar 2025 13:11:54 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CH1PEPF0000AD78.mail.protection.outlook.com (10.167.244.56) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8534.20 via Frontend Transport; Fri, 14 Mar 2025 13:11:53 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 14 Mar
+ 2025 06:11:36 -0700
+Received: from [10.41.21.119] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Fri, 14 Mar
+ 2025 06:11:30 -0700
+Message-ID: <b2bd3258-51bd-462a-ae29-71f1d6f823f3@nvidia.com>
+Date: Fri, 14 Mar 2025 18:41:28 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: spam:low
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddufedtleegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuphgrmhfkphculdeftddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucfuphgrmhfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeekpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhtvghrnhesrhhofihlrghnugdrhhgrrhhvrghrugdrvgguuhdprhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=24 Fuz1=24 Fuz2=24
-
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-According to [1], the handling of device suspend and resume, and
-particularly the latter, involves unnecessary overhead related to
-starting new async work items for devices that cannot make progress
-right away because they have to wait for other devices.
-
-To reduce this problem in the resume path, use the observation that
-starting the async resume of the children of a device after resuming
-the parent is likely to produce less scheduling and memory management
-noise than starting it upfront while at the same time it should not
-increase the resume duration substantially.
-
-Accordingly, modify the code to start the async resume of the device's
-children when the processing of the parent has been completed in each
-stage of device resume and only start async resume upfront for devices
-without parents.
-
-Also make it check if a given device can be resumed asynchronously
-before starting the synchronous resume of it in case it will have to
-wait for another that is already resuming asynchronously.
-
-In addition to making the async resume of devices more friendly to
-systems with relatively less computing resources, this change is also
-preliminary for analogous changes in the suspend path.
-
-On the systems where it has been tested, this change by itself does
-not affect the overall system resume duration in a measurable way.
-
-Link: https://lore.kernel.org/linux-pm/20241114220921.2529905-1-saravanak@google.com/ [1]
-Suggested-by: Saravana Kannan <saravanak@google.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-v2 -> v3:
-   Introduce dpm_root_device() as a wrapper around the dev->parent check,
-   adjust comments.
-
-v1 -> v2:
-   Use a separate lock for power.work_in_progress protection which should
-   reduce lock contention on dpm_list_mtx.
-
----
- drivers/base/power/main.c |   85 +++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 66 insertions(+), 19 deletions(-)
-
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -63,6 +63,7 @@
- static DEFINE_MUTEX(dpm_list_mtx);
- static pm_message_t pm_transition;
- 
-+static DEFINE_MUTEX(async_wip_mtx);
- static int async_error;
- 
- static const char *pm_verb(int event)
-@@ -597,8 +598,11 @@
- 		&& !pm_trace_is_enabled();
- }
- 
--static bool dpm_async_fn(struct device *dev, async_func_t func)
-+static bool __dpm_async(struct device *dev, async_func_t func)
- {
-+	if (dev->power.work_in_progress)
-+		return true;
-+
- 	if (!is_async(dev))
- 		return false;
- 
-@@ -611,14 +615,37 @@
- 
- 	put_device(dev);
- 
-+	return false;
-+}
-+
-+static bool dpm_async_fn(struct device *dev, async_func_t func)
-+{
-+	guard(mutex)(&async_wip_mtx);
-+
-+	return __dpm_async(dev, func);
-+}
-+
-+static int dpm_async_with_cleanup(struct device *dev, void *fn)
-+{
-+	guard(mutex)(&async_wip_mtx);
-+
-+	if (!__dpm_async(dev, fn))
-+		dev->power.work_in_progress = false;
-+
-+	return 0;
-+}
-+
-+static void dpm_async_resume_children(struct device *dev, async_func_t func)
-+{
- 	/*
--	 * async_schedule_dev_nocall() above has returned false, so func() is
--	 * not running and it is safe to update power.work_in_progress without
--	 * extra synchronization.
-+	 * Start processing "async" children of the device unless it's been
-+	 * started already for them.
-+	 *
-+	 * This could have been done for the device's "async" consumers too, but
-+	 * they either need to wait for their parents or the processing has
-+	 * already started for them after their parents were processed.
- 	 */
--	dev->power.work_in_progress = false;
--
--	return false;
-+	device_for_each_child(dev, func, dpm_async_with_cleanup);
- }
- 
- static void dpm_clear_async_state(struct device *dev)
-@@ -627,6 +654,13 @@
- 	dev->power.work_in_progress = false;
- }
- 
-+static bool dpm_root_device(struct device *dev)
-+{
-+	return !dev->parent;
-+}
-+
-+static void async_resume_noirq(void *data, async_cookie_t cookie);
-+
- /**
-  * device_resume_noirq - Execute a "noirq resume" callback for given device.
-  * @dev: Device to handle.
-@@ -710,6 +744,8 @@
- 		dpm_save_failed_dev(dev_name(dev));
- 		pm_dev_err(dev, state, async ? " async noirq" : " noirq", error);
- 	}
-+
-+	dpm_async_resume_children(dev, async_resume_noirq);
- }
- 
- static void async_resume_noirq(void *data, async_cookie_t cookie)
-@@ -733,19 +769,20 @@
- 	mutex_lock(&dpm_list_mtx);
- 
- 	/*
--	 * Trigger the resume of "async" devices upfront so they don't have to
--	 * wait for the "non-async" ones they don't depend on.
-+	 * Start processing "async" root devices upfront so they don't wait for
-+	 * the "sync" devices they don't depend on.
- 	 */
- 	list_for_each_entry(dev, &dpm_noirq_list, power.entry) {
- 		dpm_clear_async_state(dev);
--		dpm_async_fn(dev, async_resume_noirq);
-+		if (dpm_root_device(dev))
-+			dpm_async_with_cleanup(dev, async_resume_noirq);
- 	}
- 
- 	while (!list_empty(&dpm_noirq_list)) {
- 		dev = to_device(dpm_noirq_list.next);
- 		list_move_tail(&dev->power.entry, &dpm_late_early_list);
- 
--		if (!dev->power.work_in_progress) {
-+		if (!dpm_async_fn(dev, async_resume_noirq)) {
- 			get_device(dev);
- 
- 			mutex_unlock(&dpm_list_mtx);
-@@ -781,6 +818,8 @@
- 	device_wakeup_disarm_wake_irqs();
- }
- 
-+static void async_resume_early(void *data, async_cookie_t cookie);
-+
- /**
-  * device_resume_early - Execute an "early resume" callback for given device.
-  * @dev: Device to handle.
-@@ -848,6 +887,8 @@
- 		dpm_save_failed_dev(dev_name(dev));
- 		pm_dev_err(dev, state, async ? " async early" : " early", error);
- 	}
-+
-+	dpm_async_resume_children(dev, async_resume_early);
- }
- 
- static void async_resume_early(void *data, async_cookie_t cookie)
-@@ -875,19 +916,20 @@
- 	mutex_lock(&dpm_list_mtx);
- 
- 	/*
--	 * Trigger the resume of "async" devices upfront so they don't have to
--	 * wait for the "non-async" ones they don't depend on.
-+	 * Start processing "async" root devices upfront so they don't wait for
-+	 * the "sync" devices they don't depend on.
- 	 */
- 	list_for_each_entry(dev, &dpm_late_early_list, power.entry) {
- 		dpm_clear_async_state(dev);
--		dpm_async_fn(dev, async_resume_early);
-+		if (dpm_root_device(dev))
-+			dpm_async_with_cleanup(dev, async_resume_early);
- 	}
- 
- 	while (!list_empty(&dpm_late_early_list)) {
- 		dev = to_device(dpm_late_early_list.next);
- 		list_move_tail(&dev->power.entry, &dpm_suspended_list);
- 
--		if (!dev->power.work_in_progress) {
-+		if (!dpm_async_fn(dev, async_resume_early)) {
- 			get_device(dev);
- 
- 			mutex_unlock(&dpm_list_mtx);
-@@ -919,6 +961,8 @@
- }
- EXPORT_SYMBOL_GPL(dpm_resume_start);
- 
-+static void async_resume(void *data, async_cookie_t cookie);
-+
- /**
-  * device_resume - Execute "resume" callbacks for given device.
-  * @dev: Device to handle.
-@@ -1018,6 +1062,8 @@
- 		dpm_save_failed_dev(dev_name(dev));
- 		pm_dev_err(dev, state, async ? " async" : "", error);
- 	}
-+
-+	dpm_async_resume_children(dev, async_resume);
- }
- 
- static void async_resume(void *data, async_cookie_t cookie)
-@@ -1049,19 +1095,20 @@
- 	mutex_lock(&dpm_list_mtx);
- 
- 	/*
--	 * Trigger the resume of "async" devices upfront so they don't have to
--	 * wait for the "non-async" ones they don't depend on.
-+	 * Start processing "async" root devices upfront so they don't wait for
-+	 * the "sync" devices they don't depend on.
- 	 */
- 	list_for_each_entry(dev, &dpm_suspended_list, power.entry) {
- 		dpm_clear_async_state(dev);
--		dpm_async_fn(dev, async_resume);
-+		if (dpm_root_device(dev))
-+			dpm_async_with_cleanup(dev, async_resume);
- 	}
- 
- 	while (!list_empty(&dpm_suspended_list)) {
- 		dev = to_device(dpm_suspended_list.next);
- 		list_move_tail(&dev->power.entry, &dpm_prepared_list);
- 
--		if (!dev->power.work_in_progress) {
-+		if (!dpm_async_fn(dev, async_resume)) {
- 			get_device(dev);
- 
- 			mutex_unlock(&dpm_list_mtx);
+User-Agent: Mozilla Thunderbird
+Subject: Re: [Patch 3/5] ACPI: CPPC: support updating epp, auto_sel and
+ {min|max_perf} from sysfs
+To: Pierre Gondois <pierre.gondois@arm.com>, <rafael@kernel.org>,
+	<viresh.kumar@linaro.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
+	<corbet@lwn.net>, <linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <acpica-devel@lists.linux.dev>,
+	<linux-kernel@vger.kernel.org>
+CC: <linux-tegra@vger.kernel.org>, <treding@nvidia.com>,
+	<jonathanh@nvidia.com>, <sashal@nvidia.com>, <vsethi@nvidia.com>,
+	<ksitaraman@nvidia.com>, <sanjayc@nvidia.com>, <bbasu@nvidia.com>, "Sumit
+ Gupta" <sumitg@nvidia.com>
+References: <20250211103737.447704-1-sumitg@nvidia.com>
+ <20250211103737.447704-4-sumitg@nvidia.com>
+ <ecd2190d-09a2-4e7e-a076-08f517fe20de@arm.com>
+Content-Language: en-US
+From: Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <ecd2190d-09a2-4e7e-a076-08f517fe20de@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH1PEPF0000AD78:EE_|BL1PR12MB5898:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0f4fea79-1798-43c3-6c85-08dd62f9ca82
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|82310400026|36860700013|1800799024|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?TWliQzJpVVhSd0pQY0ZROUdEUnlxMnVZL1d0UER4azhJZTlYcUpxVWNPblJN?=
+ =?utf-8?B?VUgyVDhjd0VtR2NYdUg1L2xxZ3hiTkhpN044Um9pbzgxaUNVSUJVSDNPY3pz?=
+ =?utf-8?B?SXdPSDhYMWVvbDMzR1lpeUUwUi8wRXBBK1Y4YTdmWVRHcDh1SExaeUlsdWdq?=
+ =?utf-8?B?aEpOaElqRkxRcEdyT1I4eDRhTXhHcEpTcG1Eb3JmeDVtRUNaMXRxRzdVVUdT?=
+ =?utf-8?B?dUJacXlIc2V0SnZMSG5CUFA4L0RhcFVZYnUxOUh6a0xBZXhKNEk2Y21wUEJv?=
+ =?utf-8?B?S1ZpdUJEVTVjTWYxWlRMWGNVc1grTmQyak9idUNHeFFCU0FlcktSQlpCQk95?=
+ =?utf-8?B?MGl5SnBCQURUME5MdVJLbWhHLzJ6cXJEK3dYd0wzMm1rV0VDUjlvbW12UkFj?=
+ =?utf-8?B?SkVXWTdSK1NJeVVIdU05V2psMEptaEdjYzFWTGt5WHRMK1RwTHdtb2FCWDJr?=
+ =?utf-8?B?TDhmdFY2K0lvVFJ1c1Z3N0M0Smp6SERuc3l1dXB4SEQ2STBFZjJCVmt4QnY1?=
+ =?utf-8?B?T0d6SDY2dlNFV0dmMFJ0b21HeERnNEQ5OXJFeTZZZTRNNU1LSDE4OTMwYlFL?=
+ =?utf-8?B?U2YrSFAyS1labHdPV29NSDdhRnp4TTRFSlQ5dzJlQVRqVzlRTTlmQk0vUzZI?=
+ =?utf-8?B?Q0NaQWtZOG9nbEkzN2JPQ0VJWFcrdzYwb1hIYmdlVnk5OWREZ2NkeWI2Tndm?=
+ =?utf-8?B?MmZveWRWWTVUdThseFJXOFNtK3NmeXhaaS8wdkllRmdjOHV1UE9sWUhjQUd6?=
+ =?utf-8?B?U0c0S2FhMGczbWNEemhsQ0FwWWlLUjZSd2JoNTA1YkZUZDUvdHBCcDREeGFo?=
+ =?utf-8?B?a2ovck9iT3JKNk4vZHRycjBaMTRBYWNPekNEVUY5MkpRTkFFR1hQSG11TSt2?=
+ =?utf-8?B?MHk1QUg4OEVSd0l2Nmc5K0FPalh6SkF5K2tXY2o4TDZNamlrejRjcExGKzB2?=
+ =?utf-8?B?R1BxbnlLZTgvRjBTeEtYOEZxRlk5bWhsQk5udXgzMTR0a25UT2thbkpETkNz?=
+ =?utf-8?B?YzFhSXZvNzZ2bHpkVXRmb1dCTExQeHQxenp4aVlCWGF5bFNuem9CTGJtRjAw?=
+ =?utf-8?B?SmFXWmIybysyL0p5bFpWSk9YRDVna0xOYnpRS0tWMGorMnUvUVpRVUliUGFu?=
+ =?utf-8?B?ZVBqYllnRmNIMUZPbzJXUXBZWlFPM09mRUNoMjFNUk0rcGxjL211ZklEZENQ?=
+ =?utf-8?B?eTJRYXJLVzdOYXV6alBMVkhUUDBWUFZBSHlUaTl4TVRlWDhDVVIzVm9XanFD?=
+ =?utf-8?B?Y21Tb3dEZmhCa0FNUEJMc3pwdXZFdjhleHJDWU9FMnJCR2plV1RNRDdzUEhS?=
+ =?utf-8?B?djA2VW9uV1RDR1AyM1ZXaXFtYzFCeW1scWhrUGlZU3VRS1lRYmpFZTV0L0k3?=
+ =?utf-8?B?d0Q4c0JCKzBxQ0UrcmRqVVE2SDNldnJIZHVLY0lSNno4N20vVnNoaFdtRFds?=
+ =?utf-8?B?RDRBYWEwYmllS1NKSkEwakxoSGRtNm5MNXdHczdoVWFmQ29GUkVmaHJlZDl0?=
+ =?utf-8?B?OHd4ZzFjZUZUZEtXQnY5aGI1NWJVQ0hCWTFWVFBXaGlLcnBMRjBpczUvVzFW?=
+ =?utf-8?B?MTVuZGlsdmFHaUlUK2ZpM3QwdVAzNEc4dWR2VjR1OUJ4c2Vta1czK3NjcUto?=
+ =?utf-8?B?dXZaYzRNNGU4MzZlbDk3MWhBVGYvOXl4Mkhlbll4cmxlZTlRZUdIVmF5WlJW?=
+ =?utf-8?B?alhKazNnd3NwV3l5cEI2VlMvejNoZUpWRTZQdlFlZHJ5bGp2ZHhMWXBaQVB1?=
+ =?utf-8?B?MXpsVHdudlpkdzNKUzkwUmxxaGRabVhkaTVGanVwR2pHMkJzVW0rY2JIMEZs?=
+ =?utf-8?B?UXJmc2dTdTdUY0d2S0VNZC9JZjZqRUU5ZzZ6ajRhcFI1NlRpTGszNmVkaERs?=
+ =?utf-8?B?bFpBSVpWMUw4K1NhNThieG4yd3E1UzQvL3lZYmdkWVVKR2tOU3RjZmNpc2Np?=
+ =?utf-8?B?NS9qUTNESldGc256bWx6TkpuT1Z0UmxtaGZOSHpjT0N2SHBVTmlTODFZcUZu?=
+ =?utf-8?B?b214SUhGMm5BSXNLSTZZUjZuY09FbjRDNGNMZjdJK1pGY3NzTmU2ZmpEbDJL?=
+ =?utf-8?Q?lIKVDX?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(376014)(82310400026)(36860700013)(1800799024)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2025 13:11:53.7433
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0f4fea79-1798-43c3-6c85-08dd62f9ca82
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH1PEPF0000AD78.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5898
 
 
 
+On 24/02/25 15:54, Pierre Gondois wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> Hello Sumit,
+> 
+> On 2/11/25 11:37, Sumit Gupta wrote:
+>> Add support to update the CPC registers used for Autonomous
+>> Performance Level Selection from acpi_cppc sysfs store nodes.
+>> Registers supported for updation are:
+>> - Engergy Performance Preference (EPP): energy_perf
+>> - Autonomous Selection: auto_sel
+>> - Maximum Performance: max_perf
+>> - Minimum Performance: min_perf
+>>
+>> Also, enable show nodes to read of the following CPC registers:
+>> - Performance Limited: perf_limited
+>> - Autonomous Activity Window: auto_activity_window
+>>
+>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+>> ---
+>>   drivers/acpi/cppc_acpi.c | 191 ++++++++++++++++++++++++++++++++++++---
+>>   include/acpi/cppc_acpi.h |   5 +
+>>   2 files changed, 183 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+>> index cc2bf958e84f..c60ad66ece85 100644
+>> --- a/drivers/acpi/cppc_acpi.c
+>> +++ b/drivers/acpi/cppc_acpi.c
+> 
+> [...]
+> 
+>>   sysfs_cppc_data(cppc_get_perf_caps, cppc_perf_caps, highest_perf, ro);
+>>   sysfs_cppc_data(cppc_get_perf_caps, cppc_perf_caps, lowest_perf, ro);
+>>   sysfs_cppc_data(cppc_get_perf_caps, cppc_perf_caps, nominal_perf, ro);
+>> @@ -177,9 +304,16 @@ sysfs_cppc_data(cppc_get_perf_caps, 
+>> cppc_perf_caps, lowest_nonlinear_perf, ro);
+>>   sysfs_cppc_data(cppc_get_perf_caps, cppc_perf_caps, guaranteed_perf, 
+>> ro);
+>>   sysfs_cppc_data(cppc_get_perf_caps, cppc_perf_caps, lowest_freq, ro);
+>>   sysfs_cppc_data(cppc_get_perf_caps, cppc_perf_caps, nominal_freq, ro);
+>> +sysfs_cppc_data(cppc_get_perf_caps, cppc_perf_caps, auto_sel, rw);
+>>
+>>   sysfs_cppc_data(cppc_get_perf_fb_ctrs, cppc_perf_fb_ctrs, 
+>> reference_perf, ro);
+>>   sysfs_cppc_data(cppc_get_perf_fb_ctrs, cppc_perf_fb_ctrs, 
+>> wraparound_time, ro);
+>> +sysfs_cppc_data(cppc_get_perf_fb_ctrs, cppc_perf_fb_ctrs, 
+>> perf_limited, ro);
+>> +
+>> +sysfs_cppc_data(cppc_get_perf_ctrls, cppc_perf_ctrls, min_perf, rw);
+>> +sysfs_cppc_data(cppc_get_perf_ctrls, cppc_perf_ctrls, max_perf, rw);
+> 
+> IIUC, this means that users can modify the min/max performance levels of 
+> the CPU
+> without having the cpufreq framework notified. Meaning that if a user 
+> modifies these
+> levels, the frequency selection will be done using the initial min/max 
+> performance
+> level.
+> I think it would be better not allow users to modifies these values 
+> directly. Reliying
+> on existing scaling_min_freq/scaling_max_freq files would be better IMO.
+> 
+> Regards,
+> Pierre
+
+
+Hi Pierre,
+
+Sorry to get back late on this.
+
+Providing the option to modify these registers from sysfs will help to
+easily tune for Power and Performance.
+When min/max_perf are updated or auto_sel is enabled from sysfs, the
+policy min/max can also be updated with those values.
+When auto_sel is disabled for a CPU from sysfs, then its policy min/max
+can be updated back to the nominal_perf and lowest_non_linear_perf.
+Was thinking of doing this in v2 after conclusion of [1].
+
+[1] 
+https://lore.kernel.org/lkml/f0f1b31b-a0fc-4d21-8b79-c896833dae35@nvidia.com/
+
+Best Regards,
+Sumit Gupta
 
 
