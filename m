@@ -1,129 +1,114 @@
-Return-Path: <linux-pm+bounces-24018-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24019-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8CEDA60EC9
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 11:26:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB3B4A60ED3
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 11:28:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01D913B05E0
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 10:26:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93CC03B322A
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 10:28:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F0B21F418A;
-	Fri, 14 Mar 2025 10:26:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C0161F4276;
+	Fri, 14 Mar 2025 10:28:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fj1rTbsV"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Jq0KWvbC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B11B21F416F;
-	Fri, 14 Mar 2025 10:26:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC1C1F4194
+	for <linux-pm@vger.kernel.org>; Fri, 14 Mar 2025 10:28:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741947976; cv=none; b=KoIjNkNtK9OGqY0jH5HO191UcZ0F2yGbfsxsKBzPVX/gr6yZD03ofavhxrHXP8GUhP80yo30ZW6uI0xZ+Wqrsq9nF8b7DYMF1qs7VPA/NYaPgGYNJabzathRBWUh/l1rbkHWzoIUsiBwbO7JZ6ixYwc0aBEcYEco96GAce4PBLU=
+	t=1741948097; cv=none; b=VMb3e8Tww8MoRY3fyNqop8E3ZDMh1KRI47BMoN3MjAnmSJHSaxzvA4lHcGZDWeeTFAwskVmI3IfdrrA6Wdjm2vmPn6gStfFCnz1Y18wOCOqjva9j7gJUaegfdFF2Ho/69ajjv+vvkyxMuCaBzPicYOAdwfG4XLTl1zNrPxqjXdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741947976; c=relaxed/simple;
-	bh=+vfTgiyYFj6cKd5S91WGxW+YTe/QnYFYKuf734yUw90=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uwgCByrweMRTMhmYOkrTIIsWvLTSzeOHeQB6hgcYP688pfgHBHUCxP9nil6j2QGofNah6TsRqLyTgvKKgnExb/9cibC7m3LbadeSdSqJi1Pk5cyYj22ZsGhC0BKxVcRR4OlVxdlutnNnVTFGUAso31GHcR8lqFeZQweLMVel/ic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fj1rTbsV; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741947974; x=1773483974;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+vfTgiyYFj6cKd5S91WGxW+YTe/QnYFYKuf734yUw90=;
-  b=Fj1rTbsVK2pRf5daxtcEvSkZMK2fpEENit6wuIQJ37wRN9E8hHtb/RaE
-   B9PBlba6B6ovDWhNH8hV+19pIF6gKqi1K7UEdMmPlS4XG9HcHYeQkZ7Tt
-   s9DKUjI+lfy5o5excJwk8DFePQAW4HMWN8pCvUf9KDDnQGQGV9yTSZTfN
-   men4lEWn3hk38EYYMN686QzKN870UZ6kiT/swtWTLC0RQAINglQA2ryfk
-   3ZUyEImisu2HIppTVVPIC5gLo8DmD2+eeXpYKBwMNpR9oVUzAIQqfZdCn
-   KninNeDvit3W8r87MVoiwgSTfP5DeVZuF3PI40h1oOlex+JeamVE6qjNi
-   g==;
-X-CSE-ConnectionGUID: 5sStalGESwyDxj1wijQzsQ==
-X-CSE-MsgGUID: J9vrR9PnS+O5yWbJK9rcAw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11372"; a="60633562"
-X-IronPort-AV: E=Sophos;i="6.14,246,1736841600"; 
-   d="scan'208";a="60633562"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2025 03:26:14 -0700
-X-CSE-ConnectionGUID: BLIWjnd1TE+RDaPWBBaW9w==
-X-CSE-MsgGUID: y3J9GLc1TSyDY43H3pg9tA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,246,1736841600"; 
-   d="scan'208";a="158381008"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 14 Mar 2025 03:26:10 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tt2Ey-000AL0-1D;
-	Fri, 14 Mar 2025 10:26:08 +0000
-Date: Fri, 14 Mar 2025 18:26:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oleksij Rempel <o.rempel@pengutronix.de>,
-	Sebastian Reichel <sre@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: oe-kbuild-all@lists.linux.dev, Oleksij Rempel <o.rempel@pengutronix.de>,
-	Mark Brown <broonie@kernel.org>, kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org,
-	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>
-Subject: Re: [PATCH v5 6/7] regulator: set Power State Change Reason before
- hw_protection_shutdown()
-Message-ID: <202503141835.M6AeKZTU-lkp@intel.com>
-References: <20250310103732.423542-7-o.rempel@pengutronix.de>
+	s=arc-20240116; t=1741948097; c=relaxed/simple;
+	bh=7lhUJ6eiiWP9IJ/FYhzjbXh+LAJRJWyTLSUXs2Uq9+Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ej88ZCiegXEsXkcCeOVzufq3hea6bQr2/UFmzYIpeSlJlV+L2F8Vi8sEHnrkUIKr0GLuX31nXRU6e/7wqW1F54ZY55+lJ9aH/7nF3DT0kQWABtg1G3qA/c72cNMf62XhPitv2K3LwhjZwPWSefMDFZGndlO+rwtilC95DYL4HaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Jq0KWvbC; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-543e4bbcd86so2120614e87.1
+        for <linux-pm@vger.kernel.org>; Fri, 14 Mar 2025 03:28:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1741948093; x=1742552893; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7lhUJ6eiiWP9IJ/FYhzjbXh+LAJRJWyTLSUXs2Uq9+Y=;
+        b=Jq0KWvbC+RGapBxE/79RV0BIeD9VvGdw1Fpe1TB3FQiE3Mx7M1ug74I43skmk/ysed
+         pW0eyKCVeuPLLFbAr8/7rZaVq+ypvWIqqp98ONbAm/K0er06k802QP0sKmwApc01jN5E
+         LJkRPCM7GjMxbAZVdkkbB+WFpnQ3yeovdkzSGgBhRM8hxbnIqo7S1fIfuHXiO9Srwm6f
+         0krXnLDsipucb1cr4hOpq8EflJ5+JkQWavCGVohox/GL31nKFJGEb3tY1JskSboySuXw
+         evvwW11mE8FMNJVAwglnLWQuelsD1w2tLYtm1nHAHAZQlQ3gbq3yJ1khhhuBRD+qlb/f
+         Bh5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741948093; x=1742552893;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7lhUJ6eiiWP9IJ/FYhzjbXh+LAJRJWyTLSUXs2Uq9+Y=;
+        b=L9HlzXVd93V+zhAjwNTAydFu3xwoP+t8Vrd+a2BSzxNaBW8yPwyjkP6wFFCAAxwUei
+         aUxFeDgJGDGYYTHY1bQP+CzMRxZlX2i7fRavVkXqqaNWpWyWXOOksKPusxEsiaK23aiU
+         k5Vreo5GhiysbyZPSrY2kYc2lTklfkBzEYkrFgjPSPcG2cPnzc/6OWAi9sqb+jieDSyd
+         ZjntYtxL6cMMocTgfyMPINF7l1i35iab8r49ZQi4ABi2rluXowf4aWyhO3Sxu8ppm9Ns
+         vJcNgvsuZ1e0g1dvmAGZFgXbFOlnmq4k2aNWJaDnHjsHaUvdqGzfizuVafOIP91dkVI2
+         hgNA==
+X-Forwarded-Encrypted: i=1; AJvYcCX4D9tLchEXlOXT3U1nAFa2yH74ZtY2uMM68ySU2bL4ZenyGEbSGl0GzO/G9u+bvQkfydhwbEz0Lw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyr/qLZvviA4TMMGB7wf7z3eSsn+N36n3rIQwLCuEXp583rVK0q
+	69L9riXezvBPfNzXr+nPmyxjzX6/SqBQVCKc3P1dgiLPfXWxPWB3tZD9/UCf4IBgGlGuOk5q4+3
+	o3rgVAqiUsSE/OtFPoxSCdyoro2ppSsJUazEnWwcONGKdZySj
+X-Gm-Gg: ASbGncsUBwV+C1thc8xuUZTM6Cs/WKfx5R6Ff5QmkPJES58vnfG1MaGlBkBkLK8hraq
+	BKWWq3px2mVFW/JQpT/z1V0+0a+eokU/+rNhkkN3qPxwzg0ftNjFdxvgh8IcYlTyXo9q2zddyw6
+	Hecp+gx97HWuZKr9GFzoc106A=
+X-Google-Smtp-Source: AGHT+IEn/Zc2evX7ABWKYXK/Rs9IfMZdPR9tSjfOKy1a8kRLZcgdXcqx09hfLow4+l9JiJIqttYJQGRGb5b/H78iKJ8=
+X-Received: by 2002:a05:6512:3087:b0:549:7330:6a5a with SMTP id
+ 2adb3069b0e04-549c3913d63mr621103e87.23.1741948093287; Fri, 14 Mar 2025
+ 03:28:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250310103732.423542-7-o.rempel@pengutronix.de>
+References: <20250309193612.251929-1-linux@treblig.org> <20250309193612.251929-5-linux@treblig.org>
+In-Reply-To: <20250309193612.251929-5-linux@treblig.org>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 14 Mar 2025 11:28:02 +0100
+X-Gm-Features: AQ5f1Jo6nSq2AFqXUDepXvu8J8Xduf-drgRoP8FzPPUsiMaA2xVOQZlsv65trtc
+Message-ID: <CACRpkdY2oZtu4vtTwHRMFxaoYWu3B5bfPN==thz=BT2F6BHQQw@mail.gmail.com>
+Subject: Re: [PATCH 4/9] mfd: pcF50633-gpio: Remove
+To: linux@treblig.org
+Cc: arnd@arndb.de, lee@kernel.org, dmitry.torokhov@gmail.com, sre@kernel.org, 
+	lgirdwood@gmail.com, broonie@kernel.org, alexandre.belloni@bootlin.com, 
+	danielt@kernel.org, jingoohan1@gmail.com, deller@gmx.de, brgl@bgdev.pl, 
+	tsbogend@alpha.franken.de, linux-mips@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-fbdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Oleksij,
+On Sun, Mar 9, 2025 at 8:36=E2=80=AFPM <linux@treblig.org> wrote:
 
-kernel test robot noticed the following build errors:
+> From: "Dr. David Alan Gilbert" <linux@treblig.org>
+>
+> The pcf50633 was used as part of the OpenMoko devices but
+> the support for its main chip was recently removed in:
+> commit 61b7f8920b17 ("ARM: s3c: remove all s3c24xx support")
+>
+> See https://lore.kernel.org/all/Z8z236h4B5A6Ki3D@gallifrey/
+>
+> Remove it.
+>
+> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
 
-[auto build test ERROR on sre-power-supply/for-next]
-[also build test ERROR on broonie-regulator/for-next rafael-pm/thermal linus/master v6.14-rc6]
-[cannot apply to next-20250314]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/power-Extend-power_on_reason-h-for-upcoming-PSCRR-framework/20250310-184319
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
-patch link:    https://lore.kernel.org/r/20250310103732.423542-7-o.rempel%40pengutronix.de
-patch subject: [PATCH v5 6/7] regulator: set Power State Change Reason before hw_protection_shutdown()
-config: powerpc64-randconfig-r122-20250314 (https://download.01.org/0day-ci/archive/20250314/202503141835.M6AeKZTU-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 14.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20250314/202503141835.M6AeKZTU-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503141835.M6AeKZTU-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   powerpc64-linux-ld: warning: discarding dynamic section .glink
-   powerpc64-linux-ld: warning: discarding dynamic section .plt
-   powerpc64-linux-ld: linkage table error against `set_power_state_change_reason'
-   powerpc64-linux-ld: stubs don't match calculated size
-   powerpc64-linux-ld: can not build stubs: bad value
-   powerpc64-linux-ld: drivers/regulator/core.o: in function `.regulator_notifier_call_chain':
->> core.c:(.text+0xc55c): undefined reference to `.set_power_state_change_reason'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Yours,
+Linus Walleij
 
