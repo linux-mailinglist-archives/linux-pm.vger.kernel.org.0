@@ -1,33 +1,33 @@
-Return-Path: <linux-pm+bounces-24046-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24047-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB5FCA610E9
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 13:25:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CB32A610EE
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 13:25:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54E47880FDA
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 12:24:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 756444626D5
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 12:24:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 110641FFC45;
-	Fri, 14 Mar 2025 12:23:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65D41200126;
+	Fri, 14 Mar 2025 12:23:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="hnPiE8W6"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="NfzF02sN"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D62200126;
-	Fri, 14 Mar 2025 12:23:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58890201013;
+	Fri, 14 Mar 2025 12:23:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741954985; cv=none; b=IhVgu9NQnRUEPwknbI0Sbu3Xl9h1gQktuoDyAm5r1dGkI2ewTm0yRGdvI8A/q9z+CWXcKxpJaBMd4HwlxfuS7LmGjc2tXImj5PAJB+pS8NYFwr+/TzNHs2Ja4g/hpjWj8AnEJbYdXxZeIhy9qu7aK+jCtHsHvIw7XpcSrAiDj30=
+	t=1741954989; cv=none; b=kYby3hn5wx8TZJFJXDB7S8v47z2pBcbdAIHQgR8M8dO47ngFiprs5GgAyu1LbEW5BnkUZvhehiYSKCc4fddLtfK2XEn0DG7UkLbC8QeTa+BSYG5cZZcFPVO8LotIOkvud1fHtA2Xzfrg+9P+8Uvsyyi2pZGYRVhB6AblRndT5M0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741954985; c=relaxed/simple;
-	bh=zMQ6DWz0g0KAvGYI4DW8GcUzfPgojjs6uodWTqFq2AE=;
-	h=Date:Message-Id:In-Reply-To:References:From:Subject:To:Cc; b=si7bM6SWvCijM4Hb08z8W9EI3esbWtHSx851utUnkfffrh3W+n9vxx3dohzAbFyOOW0Ws0F3hRf3ZxvhM8zmASy3Gbpi/HFusSlAJvTY8A8C89NAbrMrd7PK8NvJ0pFLqC5m7RJqSqq7csq0BLXq9+qDG8sWkDBAqhcWt8PsQKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=hnPiE8W6; arc=none smtp.client-ip=144.6.53.87
+	s=arc-20240116; t=1741954989; c=relaxed/simple;
+	bh=XbQQJ/qOHRDQabW/O+X7JtkYl4B5Sialc7eDChkh2dA=;
+	h=Date:Message-Id:In-Reply-To:References:From:Subject:To:Cc; b=OYh0eLvXTX1Y5JfL88z1S3zEibgfKg79vLoCYhCVvSebnqbYGopwrdXEs5WgkbfN6CbBeZx/uuYbjVcrWj15uK1OqQHPcNiDQ2emrNKL3sbCeoQpvb+Gm7QE22co5M/ZDo4NuQGobiYsrUPGsRp4phVhZvWmn5yTcqCHsD/U0+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=NfzF02sN; arc=none smtp.client-ip=144.6.53.87
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
@@ -36,23 +36,23 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
 	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
 	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=0Jo7R6apMb4O1fxPw9F7Z1rogwbXAzuvQtabTiWE71s=; b=hnPiE8W6Tes//8pNJZaYjIu4vp
-	y2SK8JW/ZXJ/TREDuRRT9Qd3HxEVPNiJLAg5b2MHDtUUb93K31AMstn8MawkXq8pEgig5kpWLmvxy
-	qrDgJMVVzHDsdvbn89sdajCTS6muhopMMzFQyAFZQHvYAaNoSSSXurVwWntM43Gx14TvNa7rcO+q6
-	Q57JMNxceIl84AFbP4uScMWOClsEK4Z66u5Mpusa0WNoa35GOrnd4qoVYuluL4YWrfcIvlmlvvlJL
-	nUEFsbkOw0Bli//I9omJMAzuPM6Wz5/SsKNYrkTZVfH0HmIjqRaHT5t6YtFfAx0075fYA5cYv9JWQ
-	+IFjs98g==;
+	bh=H79hgHg4jw3PQjcoYWfvd84mHhIO9k+ikAcZrZ8jTpM=; b=NfzF02sNvLmDSFYcuX8MqD61YI
+	Vablx9d9egF9FWrGRcYVaxP8/VP/F2jh5vjyHRp8SkZYb9uayforzv7Nx/tkhJF1nE927vrhICU6i
+	hYWAnkVxrONwYFBufisfkYrdCqPvD8siFtlN3nUlMhh/VfmShBp2MLyKeGpj0KWZHquTDDlkBikTe
+	UhTHJyoMT0yzl/e/+37qCP6eh09AQ/yy33xbLY62xQOk7OfNI0AH9IIYT+2sfhOXrRn2m9eehhFGu
+	dY2zCmPV0jgqjWvcvg+17+YqByjPGWgqT2nbZsfohovicNwcRKzPs3MeLbJxrtU4ex//EJH0oPOz2
+	x1ULebog==;
 Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
 	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1tt43o-006Zns-2Q;
-	Fri, 14 Mar 2025 20:22:45 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 14 Mar 2025 20:22:44 +0800
-Date: Fri, 14 Mar 2025 20:22:44 +0800
-Message-Id: <46d2b6d1f06dc00e89f6c527d69c0bed60dca8a1.1741954523.git.herbert@gondor.apana.org.au>
+	id 1tt43r-006ZoC-06;
+	Fri, 14 Mar 2025 20:22:48 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 14 Mar 2025 20:22:47 +0800
+Date: Fri, 14 Mar 2025 20:22:47 +0800
+Message-Id: <349a78bc53d3620a29cc6105b55985db51aa0a11.1741954523.git.herbert@gondor.apana.org.au>
 In-Reply-To: <cover.1741954523.git.herbert@gondor.apana.org.au>
 References: <cover.1741954523.git.herbert@gondor.apana.org.au>
 From: Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [v4 PATCH 09/13] crypto: acomp - Add support for folios
+Subject: [v4 PATCH 10/13] ubifs: Use crypto_acomp interface
 To: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
 Cc: Richard Weinberger <richard@nod.at>, Zhihao Cheng <chengzhihao1@huawei.com>, linux-mtd@lists.infradead.org, "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org, Steffen Klassert <steffen.klassert@secunet.com>, netdev@vger.kernel.org
 Precedence: bulk
@@ -61,434 +61,283 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 
-For many users, it's easier to supply a folio rather than an SG
-list since they already have them.  Add support for folios to the
-acomp interface.
+Replace the legacy crypto compression interface with the new acomp
+interface.
+
+Remove the compression mutexes and the overallocation for memory
+(the offender LZO has been fixed).
 
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 ---
- crypto/acompress.c                  | 40 +++++++++++--
- crypto/scompress.c                  | 68 ++++++++++++++--------
- include/crypto/acompress.h          | 89 +++++++++++++++++++++++++++--
- include/crypto/internal/acompress.h | 18 ++++++
- 4 files changed, 182 insertions(+), 33 deletions(-)
+ fs/ubifs/compress.c | 116 ++++++++++++++++++++++++++++----------------
+ fs/ubifs/journal.c  |   2 +-
+ fs/ubifs/ubifs.h    |  15 +-----
+ 3 files changed, 77 insertions(+), 56 deletions(-)
 
-diff --git a/crypto/acompress.c b/crypto/acompress.c
-index d54abc27330f..6ef335f5bf27 100644
---- a/crypto/acompress.c
-+++ b/crypto/acompress.c
-@@ -12,6 +12,7 @@
- #include <linux/errno.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/page-flags.h>
- #include <linux/seq_file.h>
- #include <linux/slab.h>
- #include <linux/string.h>
-@@ -189,18 +190,25 @@ static void acomp_reqchain_virt(struct acomp_req_chain *state, int err)
- 	req->base.err = err;
- 	state = &req->chain;
+diff --git a/fs/ubifs/compress.c b/fs/ubifs/compress.c
+index 0b48cbab8a3d..9046e796876d 100644
+--- a/fs/ubifs/compress.c
++++ b/fs/ubifs/compress.c
+@@ -15,7 +15,7 @@
+  * decompression.
+  */
  
--	if (state->src)
-+	if (state->flags & CRYPTO_ACOMP_REQ_SRC_VIRT)
- 		acomp_request_set_src_dma(req, state->src, slen);
--	if (state->dst)
-+	else if (state->flags & CRYPTO_ACOMP_REQ_SRC_FOLIO)
-+		acomp_request_set_src_folio(req, state->sfolio, state->soff, slen);
-+	if (state->flags & CRYPTO_ACOMP_REQ_DST_VIRT)
- 		acomp_request_set_dst_dma(req, state->dst, dlen);
--	state->src = NULL;
--	state->dst = NULL;
-+	else if (state->flags & CRYPTO_ACOMP_REQ_DST_FOLIO)
-+		acomp_request_set_dst_folio(req, state->dfolio, state->doff, dlen);
- }
+-#include <linux/crypto.h>
++#include <crypto/acompress.h>
+ #include "ubifs.h"
  
- static void acomp_virt_to_sg(struct acomp_req *req)
- {
- 	struct acomp_req_chain *state = &req->chain;
- 
-+	state->flags = req->base.flags & (CRYPTO_ACOMP_REQ_SRC_VIRT |
-+					  CRYPTO_ACOMP_REQ_DST_VIRT |
-+					  CRYPTO_ACOMP_REQ_SRC_FOLIO |
-+					  CRYPTO_ACOMP_REQ_DST_FOLIO);
-+
- 	if (acomp_request_src_isvirt(req)) {
- 		unsigned int slen = req->slen;
- 		const u8 *svirt = req->svirt;
-@@ -208,6 +216,17 @@ static void acomp_virt_to_sg(struct acomp_req *req)
- 		state->src = svirt;
- 		sg_init_one(&state->ssg, svirt, slen);
- 		acomp_request_set_src_sg(req, &state->ssg, slen);
-+	} else if (acomp_request_src_isfolio(req)) {
-+		struct folio *folio = req->sfolio;
-+		unsigned int slen = req->slen;
-+		size_t off = req->soff;
-+
-+		state->sfolio = folio;
-+		state->soff = off;
-+		sg_init_table(&state->ssg, 1);
-+		sg_set_page(&state->ssg, folio_page(folio, off / PAGE_SIZE),
-+			    slen, off % PAGE_SIZE);
-+		acomp_request_set_src_sg(req, &state->ssg, slen);
- 	}
- 
- 	if (acomp_request_dst_isvirt(req)) {
-@@ -217,6 +236,17 @@ static void acomp_virt_to_sg(struct acomp_req *req)
- 		state->dst = dvirt;
- 		sg_init_one(&state->dsg, dvirt, dlen);
- 		acomp_request_set_dst_sg(req, &state->dsg, dlen);
-+	} else if (acomp_request_dst_isfolio(req)) {
-+		struct folio *folio = req->dfolio;
-+		unsigned int dlen = req->dlen;
-+		size_t off = req->doff;
-+
-+		state->dfolio = folio;
-+		state->doff = off;
-+		sg_init_table(&state->dsg, 1);
-+		sg_set_page(&state->dsg, folio_page(folio, off / PAGE_SIZE),
-+			    dlen, off % PAGE_SIZE);
-+		acomp_request_set_src_sg(req, &state->dsg, dlen);
- 	}
- }
- 
-@@ -328,7 +358,7 @@ static int acomp_do_req_chain(struct acomp_req *req,
- 	int err;
- 
- 	if (crypto_acomp_req_chain(tfm) ||
--	    (!acomp_request_chained(req) && !acomp_request_isvirt(req)))
-+	    (!acomp_request_chained(req) && acomp_request_issg(req)))
- 		return op(req);
- 
- 	if (acomp_is_async(tfm)) {
-diff --git a/crypto/scompress.c b/crypto/scompress.c
-index ba9b22ba53fe..dc239ea8a46c 100644
---- a/crypto/scompress.c
-+++ b/crypto/scompress.c
-@@ -177,9 +177,10 @@ static int scomp_acomp_comp_decomp(struct acomp_req *req, int dir)
- 	unsigned int slen = req->slen;
- 	unsigned int dlen = req->dlen;
- 	struct page *spage, *dpage;
--	unsigned int soff, doff;
- 	unsigned int n;
- 	const u8 *src;
-+	size_t soff;
-+	size_t doff;
- 	u8 *dst;
- 	int ret;
- 
-@@ -192,38 +193,57 @@ static int scomp_acomp_comp_decomp(struct acomp_req *req, int dir)
- 	if (acomp_request_src_isvirt(req))
- 		src = req->svirt;
- 	else {
--		soff = req->src->offset;
--		spage = nth_page(sg_page(req->src), soff / PAGE_SIZE);
--		soff = offset_in_page(soff);
-+		src = scratch->src;
-+		do {
-+			if (acomp_request_src_isfolio(req)) {
-+				spage = folio_page(req->sfolio, 0);
-+				soff = req->soff;
-+			} else if (slen <= req->src->length) {
-+				spage = sg_page(req->src);
-+				soff = req->src->offset;
-+			} else
-+				break;
- 
--		n = slen / PAGE_SIZE;
--		n += (offset_in_page(slen) + soff - 1) / PAGE_SIZE;
--		if (slen <= req->src->length &&
--		    (!PageHighMem(nth_page(spage, n)) ||
--		     size_add(soff, slen) <= PAGE_SIZE))
-+			spage = nth_page(spage, soff / PAGE_SIZE);
-+			soff = offset_in_page(soff);
-+
-+			n = slen / PAGE_SIZE;
-+			n += (offset_in_page(slen) + soff - 1) / PAGE_SIZE;
-+			if (PageHighMem(nth_page(spage, n)) &&
-+			    size_add(soff, slen) <= PAGE_SIZE)
-+				break;
- 			src = kmap_local_page(spage) + soff;
--		else
--			src = scratch->src;
-+		} while (0);
- 	}
- 
- 	if (acomp_request_dst_isvirt(req))
- 		dst = req->dvirt;
- 	else {
--		doff = req->dst->offset;
--		dpage = nth_page(sg_page(req->dst), doff / PAGE_SIZE);
--		doff = offset_in_page(doff);
-+		unsigned int max = SCOMP_SCRATCH_SIZE;
- 
--		n = dlen / PAGE_SIZE;
--		n += (offset_in_page(dlen) + doff - 1) / PAGE_SIZE;
--		if (dlen <= req->dst->length &&
--		    (!PageHighMem(nth_page(dpage, n)) ||
--		     size_add(doff, dlen) <= PAGE_SIZE))
-+		dst = scratch->dst;
-+		do {
-+			if (acomp_request_dst_isfolio(req)) {
-+				dpage = folio_page(req->dfolio, 0);
-+				doff = req->doff;
-+			} else if (dlen <= req->dst->length) {
-+				dpage = sg_page(req->dst);
-+				doff = req->dst->offset;
-+			} else
-+				break;
-+
-+			dpage = nth_page(dpage, doff / PAGE_SIZE);
-+			doff = offset_in_page(doff);
-+
-+			n = dlen / PAGE_SIZE;
-+			n += (offset_in_page(dlen) + doff - 1) / PAGE_SIZE;
-+			if (PageHighMem(dpage + n) &&
-+			    size_add(doff, dlen) <= PAGE_SIZE)
-+				break;
- 			dst = kmap_local_page(dpage) + doff;
--		else {
--			if (dlen > SCOMP_SCRATCH_SIZE)
--				dlen = SCOMP_SCRATCH_SIZE;
--			dst = scratch->dst;
--		}
-+			max = dlen;
-+		} while (0);
-+		dlen = min(dlen, max);
- 	}
- 
- 	spin_lock_bh(&scratch->lock);
-diff --git a/include/crypto/acompress.h b/include/crypto/acompress.h
-index 03cb381c2c54..c497c73baf13 100644
---- a/include/crypto/acompress.h
-+++ b/include/crypto/acompress.h
-@@ -32,6 +32,12 @@
- /* Set this bit for if virtual address destination cannot be used for DMA. */
- #define CRYPTO_ACOMP_REQ_DST_NONDMA	0x00000010
- 
-+/* Set this bit if source is a folio. */
-+#define CRYPTO_ACOMP_REQ_SRC_FOLIO	0x00000020
-+
-+/* Set this bit if destination is a folio. */
-+#define CRYPTO_ACOMP_REQ_DST_FOLIO	0x00000040
-+
- #define CRYPTO_ACOMP_DST_MAX		131072
- 
- #define	MAX_SYNC_COMP_REQSIZE		0
-@@ -43,6 +49,7 @@
-                 __##name##_req, (tfm), (gfp), false)
- 
- struct acomp_req;
-+struct folio;
- 
- struct acomp_req_chain {
- 	struct list_head head;
-@@ -53,16 +60,31 @@ struct acomp_req_chain {
- 	void *data;
- 	struct scatterlist ssg;
- 	struct scatterlist dsg;
--	const u8 *src;
--	u8 *dst;
-+	union {
-+		const u8 *src;
-+		struct folio *sfolio;
-+	};
-+	union {
-+		u8 *dst;
-+		struct folio *dfolio;
-+	};
-+	size_t soff;
-+	size_t doff;
-+	u32 flags;
+ /* Fake description object for the "none" compressor */
+@@ -26,11 +26,8 @@ static struct ubifs_compressor none_compr = {
  };
  
- /**
-  * struct acomp_req - asynchronous (de)compression request
-  *
-  * @base:	Common attributes for asynchronous crypto requests
-- * @src:	Source Data
-- * @dst:	Destination data
-+ * @src:	Source scatterlist
-+ * @dst:	Destination scatterlist
-+ * @svirt:	Source virtual address
-+ * @dvirt:	Destination virtual address
-+ * @sfolio:	Source folio
-+ * @soff:	Source folio offset
-+ * @dfolio:	Destination folio
-+ * @doff:	Destination folio offset
-  * @slen:	Size of the input buffer
-  * @dlen:	Size of the output buffer and number of bytes produced
-  * @chain:	Private API code data, do not use
-@@ -73,11 +95,15 @@ struct acomp_req {
- 	union {
- 		struct scatterlist *src;
- 		const u8 *svirt;
-+		struct folio *sfolio;
- 	};
- 	union {
- 		struct scatterlist *dst;
- 		u8 *dvirt;
-+		struct folio *dfolio;
- 	};
-+	size_t soff;
-+	size_t doff;
- 	unsigned int slen;
- 	unsigned int dlen;
+ #ifdef CONFIG_UBIFS_FS_LZO
+-static DEFINE_MUTEX(lzo_mutex);
+-
+ static struct ubifs_compressor lzo_compr = {
+ 	.compr_type = UBIFS_COMPR_LZO,
+-	.comp_mutex = &lzo_mutex,
+ 	.name = "lzo",
+ 	.capi_name = "lzo",
+ };
+@@ -42,13 +39,8 @@ static struct ubifs_compressor lzo_compr = {
+ #endif
  
-@@ -316,6 +342,7 @@ static inline void acomp_request_set_callback(struct acomp_req *req,
- {
- 	u32 keep = CRYPTO_ACOMP_REQ_SRC_VIRT | CRYPTO_ACOMP_REQ_SRC_NONDMA |
- 		   CRYPTO_ACOMP_REQ_DST_VIRT | CRYPTO_ACOMP_REQ_DST_NONDMA |
-+		   CRYPTO_ACOMP_REQ_SRC_FOLIO | CRYPTO_ACOMP_REQ_DST_FOLIO |
- 		   CRYPTO_TFM_REQ_ON_STACK;
+ #ifdef CONFIG_UBIFS_FS_ZLIB
+-static DEFINE_MUTEX(deflate_mutex);
+-static DEFINE_MUTEX(inflate_mutex);
+-
+ static struct ubifs_compressor zlib_compr = {
+ 	.compr_type = UBIFS_COMPR_ZLIB,
+-	.comp_mutex = &deflate_mutex,
+-	.decomp_mutex = &inflate_mutex,
+ 	.name = "zlib",
+ 	.capi_name = "deflate",
+ };
+@@ -60,13 +52,8 @@ static struct ubifs_compressor zlib_compr = {
+ #endif
  
- 	req->base.complete = cmpl;
-@@ -352,6 +379,8 @@ static inline void acomp_request_set_params(struct acomp_req *req,
+ #ifdef CONFIG_UBIFS_FS_ZSTD
+-static DEFINE_MUTEX(zstd_enc_mutex);
+-static DEFINE_MUTEX(zstd_dec_mutex);
+-
+ static struct ubifs_compressor zstd_compr = {
+ 	.compr_type = UBIFS_COMPR_ZSTD,
+-	.comp_mutex = &zstd_enc_mutex,
+-	.decomp_mutex = &zstd_dec_mutex,
+ 	.name = "zstd",
+ 	.capi_name = "zstd",
+ };
+@@ -80,6 +67,40 @@ static struct ubifs_compressor zstd_compr = {
+ /* All UBIFS compressors */
+ struct ubifs_compressor *ubifs_compressors[UBIFS_COMPR_TYPES_CNT];
  
- 	req->base.flags &= ~(CRYPTO_ACOMP_REQ_SRC_VIRT |
- 			     CRYPTO_ACOMP_REQ_SRC_NONDMA |
-+			     CRYPTO_ACOMP_REQ_SRC_FOLIO |
-+			     CRYPTO_ACOMP_REQ_DST_FOLIO |
- 			     CRYPTO_ACOMP_REQ_DST_VIRT |
- 			     CRYPTO_ACOMP_REQ_DST_NONDMA);
- }
-@@ -374,6 +403,7 @@ static inline void acomp_request_set_src_sg(struct acomp_req *req,
- 
- 	req->base.flags &= ~CRYPTO_ACOMP_REQ_SRC_NONDMA;
- 	req->base.flags &= ~CRYPTO_ACOMP_REQ_SRC_VIRT;
-+	req->base.flags &= ~CRYPTO_ACOMP_REQ_SRC_FOLIO;
- }
- 
- /**
-@@ -393,6 +423,7 @@ static inline void acomp_request_set_src_dma(struct acomp_req *req,
- 	req->slen = slen;
- 
- 	req->base.flags &= ~CRYPTO_ACOMP_REQ_SRC_NONDMA;
-+	req->base.flags &= ~CRYPTO_ACOMP_REQ_SRC_FOLIO;
- 	req->base.flags |= CRYPTO_ACOMP_REQ_SRC_VIRT;
- }
- 
-@@ -413,10 +444,34 @@ static inline void acomp_request_set_src_nondma(struct acomp_req *req,
- 	req->svirt = src;
- 	req->slen = slen;
- 
-+	req->base.flags &= ~CRYPTO_ACOMP_REQ_SRC_FOLIO;
- 	req->base.flags |= CRYPTO_ACOMP_REQ_SRC_NONDMA;
- 	req->base.flags |= CRYPTO_ACOMP_REQ_SRC_VIRT;
- }
- 
-+/**
-+ * acomp_request_set_src_folio() -- Sets source folio
-+ *
-+ * Sets source folio required by an acomp operation.
-+ *
-+ * @req:	asynchronous compress request
-+ * @folio:	pointer to input folio
-+ * @off:	input folio offset
-+ * @len:	size of the input buffer
-+ */
-+static inline void acomp_request_set_src_folio(struct acomp_req *req,
-+					       struct folio *folio, size_t off,
-+					       unsigned int len)
++static int ubifs_compress_req(const struct ubifs_info *c,
++			      struct acomp_req *req,
++			      void *out_buf, int *out_len)
 +{
-+	req->sfolio = folio;
-+	req->soff = off;
-+	req->slen = len;
++	struct crypto_wait wait;
++	int in_len = req->slen;
++	int err;
 +
-+	req->base.flags &= ~CRYPTO_ACOMP_REQ_SRC_NONDMA;
-+	req->base.flags &= ~CRYPTO_ACOMP_REQ_SRC_VIRT;
-+	req->base.flags |= CRYPTO_ACOMP_REQ_SRC_FOLIO;
++	crypto_init_wait(&wait);
++	acomp_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG,
++				   crypto_req_done, &wait);
++	acomp_request_set_dst_dma(req, out_buf, *out_len);
++	err = crypto_acomp_compress(req);
++	err = crypto_wait_req(err, &wait);
++	*out_len = req->dlen;
++
++	if (unlikely(err)) {
++		ubifs_warn(c, "cannot compress %d bytes, compressor %s, error %d, leave data uncompressed",
++			   in_len,
++			   crypto_acomp_alg_name(crypto_acomp_reqtfm(req)),
++			   err);
++	} else if (in_len - *out_len < UBIFS_MIN_COMPRESS_DIFF) {
++		/*
++		 * If the data compressed only slightly, it is better
++		 * to leave it uncompressed to improve read speed.
++		 */
++		err = -E2BIG;
++	}
++
++	acomp_request_free(req);
++
++	return err;
 +}
 +
  /**
-  * acomp_request_set_dst_sg() -- Sets destination scatterlist
-  *
-@@ -435,6 +490,7 @@ static inline void acomp_request_set_dst_sg(struct acomp_req *req,
+  * ubifs_compress - compress data.
+  * @c: UBIFS file-system description object
+@@ -112,23 +133,14 @@ void ubifs_compress(const struct ubifs_info *c, const void *in_buf,
+ 	if (in_len < UBIFS_MIN_COMPR_LEN)
+ 		goto no_compr;
  
- 	req->base.flags &= ~CRYPTO_ACOMP_REQ_DST_NONDMA;
- 	req->base.flags &= ~CRYPTO_ACOMP_REQ_DST_VIRT;
-+	req->base.flags &= ~CRYPTO_ACOMP_REQ_DST_FOLIO;
+-	if (compr->comp_mutex)
+-		mutex_lock(compr->comp_mutex);
+-	err = crypto_comp_compress(compr->cc, in_buf, in_len, out_buf,
+-				   (unsigned int *)out_len);
+-	if (compr->comp_mutex)
+-		mutex_unlock(compr->comp_mutex);
+-	if (unlikely(err)) {
+-		ubifs_warn(c, "cannot compress %d bytes, compressor %s, error %d, leave data uncompressed",
+-			   in_len, compr->name, err);
+-		goto no_compr;
++	{
++		ACOMP_REQUEST_ALLOC(req, compr->cc, GFP_NOFS | __GFP_NOWARN);
++
++		acomp_request_set_src_nondma(req, in_buf, in_len);
++		err = ubifs_compress_req(c, req, out_buf, out_len);
+ 	}
+ 
+-	/*
+-	 * If the data compressed only slightly, it is better to leave it
+-	 * uncompressed to improve read speed.
+-	 */
+-	if (in_len - *out_len < UBIFS_MIN_COMPRESS_DIFF)
++	if (err)
+ 		goto no_compr;
+ 
+ 	return;
+@@ -139,6 +151,32 @@ void ubifs_compress(const struct ubifs_info *c, const void *in_buf,
+ 	*compr_type = UBIFS_COMPR_NONE;
+ }
+ 
++static int ubifs_decompress_req(const struct ubifs_info *c,
++				struct acomp_req *req,
++				const void *in_buf, int in_len, int *out_len)
++{
++	struct crypto_wait wait;
++	int err;
++
++	crypto_init_wait(&wait);
++	acomp_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG,
++				   crypto_req_done, &wait);
++	acomp_request_set_src_dma(req, in_buf, in_len);
++	err = crypto_acomp_decompress(req);
++	err = crypto_wait_req(err, &wait);
++	*out_len = req->dlen;
++
++	if (err)
++		ubifs_err(c, "cannot decompress %d bytes, compressor %s, error %d",
++			  in_len,
++			  crypto_acomp_alg_name(crypto_acomp_reqtfm(req)),
++			  err);
++
++	acomp_request_free(req);
++
++	return err;
++}
++
+ /**
+  * ubifs_decompress - decompress data.
+  * @c: UBIFS file-system description object
+@@ -155,7 +193,6 @@ void ubifs_compress(const struct ubifs_info *c, const void *in_buf,
+ int ubifs_decompress(const struct ubifs_info *c, const void *in_buf,
+ 		     int in_len, void *out_buf, int *out_len, int compr_type)
+ {
+-	int err;
+ 	struct ubifs_compressor *compr;
+ 
+ 	if (unlikely(compr_type < 0 || compr_type >= UBIFS_COMPR_TYPES_CNT)) {
+@@ -176,17 +213,12 @@ int ubifs_decompress(const struct ubifs_info *c, const void *in_buf,
+ 		return 0;
+ 	}
+ 
+-	if (compr->decomp_mutex)
+-		mutex_lock(compr->decomp_mutex);
+-	err = crypto_comp_decompress(compr->cc, in_buf, in_len, out_buf,
+-				     (unsigned int *)out_len);
+-	if (compr->decomp_mutex)
+-		mutex_unlock(compr->decomp_mutex);
+-	if (err)
+-		ubifs_err(c, "cannot decompress %d bytes, compressor %s, error %d",
+-			  in_len, compr->name, err);
++	{
++		ACOMP_REQUEST_ALLOC(req, compr->cc, GFP_NOFS | __GFP_NOWARN);
+ 
+-	return err;
++		acomp_request_set_dst_nondma(req, out_buf, *out_len);
++		return ubifs_decompress_req(c, req, in_buf, in_len, out_len);
++	}
  }
  
  /**
-@@ -454,6 +510,7 @@ static inline void acomp_request_set_dst_dma(struct acomp_req *req,
- 	req->dlen = dlen;
- 
- 	req->base.flags &= ~CRYPTO_ACOMP_REQ_DST_NONDMA;
-+	req->base.flags &= ~CRYPTO_ACOMP_REQ_DST_FOLIO;
- 	req->base.flags |= CRYPTO_ACOMP_REQ_DST_VIRT;
- }
- 
-@@ -473,10 +530,34 @@ static inline void acomp_request_set_dst_nondma(struct acomp_req *req,
- 	req->dvirt = dst;
- 	req->dlen = dlen;
- 
-+	req->base.flags &= ~CRYPTO_ACOMP_REQ_DST_FOLIO;
- 	req->base.flags |= CRYPTO_ACOMP_REQ_DST_NONDMA;
- 	req->base.flags |= CRYPTO_ACOMP_REQ_DST_VIRT;
- }
- 
-+/**
-+ * acomp_request_set_dst_folio() -- Sets destination folio
-+ *
-+ * Sets destination folio required by an acomp operation.
-+ *
-+ * @req:	asynchronous compress request
-+ * @folio:	pointer to input folio
-+ * @off:	input folio offset
-+ * @len:	size of the input buffer
-+ */
-+static inline void acomp_request_set_dst_folio(struct acomp_req *req,
-+					       struct folio *folio, size_t off,
-+					       unsigned int len)
-+{
-+	req->dfolio = folio;
-+	req->doff = off;
-+	req->dlen = len;
-+
-+	req->base.flags &= ~CRYPTO_ACOMP_REQ_DST_NONDMA;
-+	req->base.flags &= ~CRYPTO_ACOMP_REQ_DST_VIRT;
-+	req->base.flags |= CRYPTO_ACOMP_REQ_DST_FOLIO;
-+}
-+
- static inline void acomp_request_chain(struct acomp_req *req,
- 				       struct acomp_req *head)
+@@ -199,7 +231,7 @@ int ubifs_decompress(const struct ubifs_info *c, const void *in_buf,
+ static int __init compr_init(struct ubifs_compressor *compr)
  {
-diff --git a/include/crypto/internal/acompress.h b/include/crypto/internal/acompress.h
-index c1ed55a0e3bf..aaf59f3236fa 100644
---- a/include/crypto/internal/acompress.h
-+++ b/include/crypto/internal/acompress.h
-@@ -103,6 +103,14 @@ static inline bool acomp_request_chained(struct acomp_req *req)
- 	return crypto_request_chained(&req->base);
+ 	if (compr->capi_name) {
+-		compr->cc = crypto_alloc_comp(compr->capi_name, 0, 0);
++		compr->cc = crypto_alloc_acomp(compr->capi_name, 0, 0);
+ 		if (IS_ERR(compr->cc)) {
+ 			pr_err("UBIFS error (pid %d): cannot initialize compressor %s, error %ld",
+ 			       current->pid, compr->name, PTR_ERR(compr->cc));
+@@ -218,7 +250,7 @@ static int __init compr_init(struct ubifs_compressor *compr)
+ static void compr_exit(struct ubifs_compressor *compr)
+ {
+ 	if (compr->capi_name)
+-		crypto_free_comp(compr->cc);
++		crypto_free_acomp(compr->cc);
  }
  
-+static inline bool acomp_request_issg(struct acomp_req *req)
-+{
-+	return !(req->base.flags & (CRYPTO_ACOMP_REQ_SRC_VIRT |
-+				    CRYPTO_ACOMP_REQ_DST_VIRT |
-+				    CRYPTO_ACOMP_REQ_SRC_FOLIO |
-+				    CRYPTO_ACOMP_REQ_DST_FOLIO));
-+}
-+
- static inline bool acomp_request_src_isvirt(struct acomp_req *req)
- {
- 	return req->base.flags & CRYPTO_ACOMP_REQ_SRC_VIRT;
-@@ -135,6 +143,16 @@ static inline bool acomp_request_isnondma(struct acomp_req *req)
- 				  CRYPTO_ACOMP_REQ_DST_NONDMA);
- }
+ /**
+diff --git a/fs/ubifs/journal.c b/fs/ubifs/journal.c
+index 36ba79fbd2ff..7629ca9ecfe8 100644
+--- a/fs/ubifs/journal.c
++++ b/fs/ubifs/journal.c
+@@ -1625,7 +1625,7 @@ static int truncate_data_node(const struct ubifs_info *c, const struct inode *in
+ 	int err, dlen, compr_type, out_len, data_size;
  
-+static inline bool acomp_request_src_isfolio(struct acomp_req *req)
-+{
-+	return req->base.flags & CRYPTO_ACOMP_REQ_SRC_FOLIO;
-+}
-+
-+static inline bool acomp_request_dst_isfolio(struct acomp_req *req)
-+{
-+	return req->base.flags & CRYPTO_ACOMP_REQ_DST_FOLIO;
-+}
-+
- static inline bool crypto_acomp_req_chain(struct crypto_acomp *tfm)
- {
- 	return crypto_tfm_req_chain(&tfm->base);
+ 	out_len = le32_to_cpu(dn->size);
+-	buf = kmalloc_array(out_len, WORST_COMPR_FACTOR, GFP_NOFS);
++	buf = kmalloc(out_len, GFP_NOFS);
+ 	if (!buf)
+ 		return -ENOMEM;
+ 
+diff --git a/fs/ubifs/ubifs.h b/fs/ubifs/ubifs.h
+index 3375bbe0508c..7d0aaf5d2e23 100644
+--- a/fs/ubifs/ubifs.h
++++ b/fs/ubifs/ubifs.h
+@@ -124,13 +124,6 @@
+ #define OLD_ZNODE_AGE 20
+ #define YOUNG_ZNODE_AGE 5
+ 
+-/*
+- * Some compressors, like LZO, may end up with more data then the input buffer.
+- * So UBIFS always allocates larger output buffer, to be sure the compressor
+- * will not corrupt memory in case of worst case compression.
+- */
+-#define WORST_COMPR_FACTOR 2
+-
+ #ifdef CONFIG_FS_ENCRYPTION
+ #define UBIFS_CIPHER_BLOCK_SIZE FSCRYPT_CONTENTS_ALIGNMENT
+ #else
+@@ -141,7 +134,7 @@
+  * How much memory is needed for a buffer where we compress a data node.
+  */
+ #define COMPRESSED_DATA_NODE_BUF_SZ \
+-	(UBIFS_DATA_NODE_SZ + UBIFS_BLOCK_SIZE * WORST_COMPR_FACTOR)
++	(UBIFS_DATA_NODE_SZ + UBIFS_BLOCK_SIZE)
+ 
+ /* Maximum expected tree height for use by bottom_up_buf */
+ #define BOTTOM_UP_HEIGHT 64
+@@ -835,16 +828,12 @@ struct ubifs_node_range {
+  * struct ubifs_compressor - UBIFS compressor description structure.
+  * @compr_type: compressor type (%UBIFS_COMPR_LZO, etc)
+  * @cc: cryptoapi compressor handle
+- * @comp_mutex: mutex used during compression
+- * @decomp_mutex: mutex used during decompression
+  * @name: compressor name
+  * @capi_name: cryptoapi compressor name
+  */
+ struct ubifs_compressor {
+ 	int compr_type;
+-	struct crypto_comp *cc;
+-	struct mutex *comp_mutex;
+-	struct mutex *decomp_mutex;
++	struct crypto_acomp *cc;
+ 	const char *name;
+ 	const char *capi_name;
+ };
 -- 
 2.39.5
 
