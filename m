@@ -1,262 +1,174 @@
-Return-Path: <linux-pm+bounces-24006-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24007-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3AC8A60471
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 23:36:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92537A60ABA
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 09:05:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1B2C3A5E01
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 22:36:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C7E84169535
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 08:05:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C796B1F872D;
-	Thu, 13 Mar 2025 22:36:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 451ED18CBEC;
+	Fri, 14 Mar 2025 08:05:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bF3SgeJ1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S9vGGJ0Y"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5651F8721;
-	Thu, 13 Mar 2025 22:36:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F52912CDBE;
+	Fri, 14 Mar 2025 08:05:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741905376; cv=none; b=i1C3TQMAe9AW2Pue6WRT5jQfJHEAkXI66G5HoQidSZt7ngU94xFuf8O4r3rmZ4PzzJzvPGj9ncm5kF3sbb9yTa3XblHHIXt04OGCpJHReL2+Of/VtUIsWhp5XyVbJE4KSlbNa3XxTJLCMRjwJ3Lo2ee0Z43oQ7PpbmMkANSOhw8=
+	t=1741939553; cv=none; b=T9BohrGZ03WdoSkOktdsYk+5GTOXTcHEFmhIzKWQFjzi1iRa4hkwUm/ytNzihjWKWi+wiFDmSXlHVzAlLPrGs/RE43mWrIdq9AJe1Uj0h0jDR+bh2BPbsfOwBatf2V7popTNYK9m7R8JFC3uBb9+za4WI2Qr4kCq6IQTV9XXFAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741905376; c=relaxed/simple;
-	bh=TWaPls6LeWf6dTny1hQOf8nsOaK1A9CxcB8A/zdVsrU=;
+	s=arc-20240116; t=1741939553; c=relaxed/simple;
+	bh=521iapHwfmC+7rWHoT90eyWDbzdM7a67F9E+t6QMAsU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=V1qC05qT8M54lcoNCYnbOYBKRUznzjDmwx9NWDnnhiaShWL3x3yZnLWEV+0H1rx3YqJghlBV9H6CIQC40ogzdbtD5NK9WwJLrWtlwTGHMRmqnUeohxJQwGmoL+lyYN7fkxbFOQ3D9BT0gtAd73YxJGHX7wVBa3xzRr+M6MRuM+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bF3SgeJ1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EBDFC4CEF0;
-	Thu, 13 Mar 2025 22:36:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741905376;
-	bh=TWaPls6LeWf6dTny1hQOf8nsOaK1A9CxcB8A/zdVsrU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=bF3SgeJ13m0n3jXgo8FHGE4dSGdPf7G4FfvO4E4U1e8+VsSh+gl7RxL/9DulOFo/M
-	 RIpbqFTi6CQNl/7aVnnAZubG3eUh+5Tia7ZZojG7VqBxJtcq7DNmmbKCqKp1tP1qZS
-	 5tKKsw1BVKiOMC9ScijwPBVxkSQ9uUQYBofR4UsBP2nixOd4pEjcrdUuWdhSoKpvNm
-	 /qhbKQXVhyKXwPBfRTOKmwQyd6GJ9wHcXj7JPOO0nzPrwbm1MmlhmBSQsvfdwaX/QX
-	 ugH+sOD2WET1ytAzBjXBpGVkbO+f+BDeqPvQqbbDNa/fODgp9XTovzD25/CMsAi7Wy
-	 /Pe6SQ1wsrgYQ==
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-2c2504fa876so487166fac.0;
-        Thu, 13 Mar 2025 15:36:16 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUHVNh/nj6iJcVKjPOOVI7XbAmlRjRBlmAi4lyPhHlcFo4uVPiHU1we+yeVjBqTVC/yDuIHQrYwg7isbi0=@vger.kernel.org, AJvYcCVMlKZyTt8wJoI5+rvWq1QVI7XBD4LYHTHKjAUEKblX8j7FYBZTWUQLeg1+7/sXJfrxgGulbc1lDLI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8T/8Ea9iJ0WRAxw+KI4Lpjl+n6hCuCPJ8M2gRVP9cqKQ2gEbN
-	Bg3ciiMR/RPTV+zvtfxmJFq7Awb1OdLTA4EQN8Dd554ZgHbo3AJni4dSO2SmPwAJFnyCJY8bZkf
-	WNK5GxJjAcRweb+15eCT6dLNrblc=
-X-Google-Smtp-Source: AGHT+IGqdyI0yv7lmMd4g8gy1gwTrHv2GtFFQC2VWDk8SLMoUWVy+abKQXhnQtDZXihqEhPV6VFCLVYVHKw2ltFYIIQ=
-X-Received: by 2002:a05:6870:4943:b0:29e:671b:6003 with SMTP id
- 586e51a60fabf-2c6912275b1mr179213fac.32.1741905375273; Thu, 13 Mar 2025
- 15:36:15 -0700 (PDT)
+	 To:Cc:Content-Type; b=nlSKvRxTvOLBPIhaX9MWX/1KT7lOZqxJrOovZtLJnuBNgOI1exmJUhuDB4+0NGlIIieNRTQueqGK/cil6yPBIk1obRMlJ08ZFMn+HU930cwqgtlwV0dNUf/z5eVLtkagbUscAeY/ev6RwrTk3qPbMNVLXPJqk5wc1Ip2xjwhSWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S9vGGJ0Y; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43cfe574976so11298995e9.1;
+        Fri, 14 Mar 2025 01:05:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741939550; x=1742544350; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a3F5U71lWqNXOgTEfdpYjf9JDJvOldx5d/H+DiwWMEE=;
+        b=S9vGGJ0Yhd1OiGvxRtkTdEF7fpVmTkBinjJEsUMmqDNvAM4iZTUjfmNWSu4bMjOW4S
+         3F3tGzmeXqwh9fTse/eJtlt7OTaCElgXoKSLaRiyurwm5EbWtly8MJesN2s0jbm2XOLG
+         If++OU13NMg00Z3E1PIXTrcbcyYAQQLiwMkv5nPI88H39jvkYczSP3W/zlN9/VTUhoPj
+         2ChCgBlqY/E5zWWjqYAh2OFkXmUcWSUi22tPQrH22CH9rD7nU61oO2mITRudxkSpXaD1
+         nC1r1rH2+WptOFq+FfnemvNoKhwllKy3GB4HQwxHuY7xMwhmlja2GLNalfKyiny85x1M
+         yBTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741939550; x=1742544350;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a3F5U71lWqNXOgTEfdpYjf9JDJvOldx5d/H+DiwWMEE=;
+        b=N7hpG+xvaG9bwHV3m5Q4CuRHeGWlaWdKVfyTxsImMgbdWf+7bJIJoRqyp3YnX1QLzu
+         J0gsbsH8OZGgh/vSadnPJC7lKptuFuo2yiweQkDC2kK9aLW0pNjDOJm2MlyKvPqb9c4+
+         2X33S6r5fWodbxhlje7d5dsogkefAB7WacuvcWOvTKEaLeItE56czVQsVWiWZokk8lgE
+         76V0uoiS2yxJiVSMUHn3FFeNE4R6nhl79Zjbop1NJm5WUpOxwCmNupvw2VE6u3/I4gDh
+         Olfy/60woowmBV9cL+qHR5t5jnKz6mUjUL5kze7Q3tmyPpwalZl7nP6ywWQx9S8IDXR6
+         OkpA==
+X-Forwarded-Encrypted: i=1; AJvYcCVcm6UMFM6hzqgO5WoeTthWZY9AzCFnCfcpTkDlZzTwmfWuDPP19xaxN18mIHyZ9DgwxBQ2PBvTHBaw@vger.kernel.org, AJvYcCVs0zyH2mBQLP4xV2+GJVxWLZBG3KNdvZ8VHq1vuo109QUleKohGZSq3y/Q2XGyGUGRltc/sVrR4ILzExQe@vger.kernel.org, AJvYcCWaDRwDJtY0Ckm1xO1bias5uUqKNxNZaccSKjxxdq4oIkZBlUdjO2qLagN2bJY1lodYP5Kd5yNo3vg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxE9fqEAPMZb7m9Qb+NQtZCuCqLBUQof28zG8TsphfADfOJxAHd
+	Bv5Gs9LcY4cKZYap1pvlOy2LJocUg6k+alAS4i6PiiNwGaaG9x3TP1WZtmGCo2qrfYZGmZ8/bd6
+	PLunrMhov+tuNDXwxihBK2YDikMUHyQ==
+X-Gm-Gg: ASbGncuffMr/kVewkN+gs/e6eGKL1IqZ6lG00WuUKnJXKKlzNgVupp8ZhyyYXiT+D8b
+	HeRIH6pAHb7IJmw6+BKrkQF911we8vuFB1/kalEAPYs+OrTIw1B2o+929nRnmsU/Czsrru3upH1
+	yZWs4Zhmb9zXaWCvB1XVVMiu1wJ5g=
+X-Google-Smtp-Source: AGHT+IHSsIY9kOWzB8AIo2vud0ffWpWSEgGT9PildP2s6lilEYAMq4bha/y00H24aF+H5NCOdU2BYpb0jAbV6/9/Tg8=
+X-Received: by 2002:a5d:6d02:0:b0:391:2b04:73d9 with SMTP id
+ ffacd0b85a97d-3971f511669mr1764783f8f.49.1741939549717; Fri, 14 Mar 2025
+ 01:05:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1915694.tdWV9SEqCh@rjwysocki.net> <3271724.5fSG56mABF@rjwysocki.net>
- <CAGETcx8WwG96FEOyKR-qFA=S6GhpH-EKpVtghNtxt-CQ-3UB_g@mail.gmail.com>
-In-Reply-To: <CAGETcx8WwG96FEOyKR-qFA=S6GhpH-EKpVtghNtxt-CQ-3UB_g@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 13 Mar 2025 23:36:04 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0j0kD_HjbVzHb7=5nEYx_5fzwoBupPBQs2Fpfzho_amfg@mail.gmail.com>
-X-Gm-Features: AQ5f1JqGO9urv6h6LSsL5_fBZW8vlWhPh6b43YVtEZRQvEkAFjVW4Sr1oS6dPK4
-Message-ID: <CAJZ5v0j0kD_HjbVzHb7=5nEYx_5fzwoBupPBQs2Fpfzho_amfg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] PM: sleep: Suspend parents and suppliers after
- suspending subordinates
-To: Saravana Kannan <saravanak@google.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Johan Hovold <johan@kernel.org>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Jon Hunter <jonathanh@nvidia.com>
+References: <20250310080237.7400-1-clamor95@gmail.com> <20250310080237.7400-2-clamor95@gmail.com>
+ <20250311193732.GA4183071-robh@kernel.org> <CAPVz0n09ZP1i2tasdTvnt8RvjhALvUYjv9u_EGRtnXPOYQtuqQ@mail.gmail.com>
+ <4d1c3eb1-5c42-490f-83e5-60de05ffad06@kernel.org>
+In-Reply-To: <4d1c3eb1-5c42-490f-83e5-60de05ffad06@kernel.org>
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+Date: Fri, 14 Mar 2025 10:05:38 +0200
+X-Gm-Features: AQ5f1JrEvItfx2OcaNPdug--EmXjf0r7KBek5RJXaO4gyKMX-UN6T1gJZXjpyME
+Message-ID: <CAPVz0n1e4DXgx41A6GydapbFxEgvEfu_AAPzcz7298mt5UnxOA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: power: supply: Document Maxim MAX8971 charger
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 13, 2025 at 10:17=E2=80=AFPM Saravana Kannan <saravanak@google.=
-com> wrote:
+=D1=81=D1=80, 12 =D0=B1=D0=B5=D1=80. 2025=E2=80=AF=D1=80. =D0=BE 11:49 Krzy=
+sztof Kozlowski <krzk@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
 >
-> On Thu, Mar 13, 2025 at 1:35=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.=
-net> wrote:
+> On 12/03/2025 07:02, Svyatoslav Ryhel wrote:
+> >>> +
+> >>> +  reg:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  interrupts:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  monitored-battery: true
+> >>> +
+> >>> +  maxim,usb-connector:
+> >>
+> >> Just 'connector', so when we have a 3rd case, we don't have a 3rd
+> >> vendor.
+> >>
 > >
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > In analogy with the previous change affecting the resume path,
-> > make device_suspend() start the async suspend of the device's parent
-> > and suppliers after the device itself has been processed and make
-> > dpm_suspend() start processing "async" leaf devices (that is, devices
-> > without children or consumers) upfront because they don't need to wait
-> > for any other devices.
-> >
-> > On the Dell XPS13 9360 in my office, this change reduces the total
-> > duration of device suspend by approximately 100 ms (over 20%).
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Suggested-by: Saravana Kannan <saravanak@google.com>
-> > ---
-> >
-> > v1 -> v2:
-> >    * Adjust for the changes in patch [1/3].
-> >    * Fix walking suppliers in dpm_async_suspend_superior().
-> >    * Use device links read locking in dpm_async_suspend_superior() (Sar=
-avana).
-> >    * Move all devices to the target list even if there are errors in
-> >      dpm_suspend() so they are properly resumed during rollback (Sarava=
-na).
-> >
-> > ---
-> >  drivers/base/power/main.c |   78 +++++++++++++++++++++++++++++++++++++=
-+++++----
-> >  1 file changed, 72 insertions(+), 6 deletions(-)
-> >
-> > --- a/drivers/base/power/main.c
-> > +++ b/drivers/base/power/main.c
-> > @@ -1231,6 +1231,50 @@
-> >
-> >  /*------------------------- Suspend routines -------------------------=
-*/
-> >
-> > +static bool dpm_leaf_device(struct device *dev)
-> > +{
-> > +       struct device *child;
-> > +
-> > +       lockdep_assert_held(&dpm_list_mtx);
-> > +
-> > +       child =3D device_find_any_child(dev);
-> > +       if (child) {
-> > +               put_device(child);
-> > +
-> > +               return false;
-> > +       }
-> > +
-> > +       /*
-> > +        * Since this function is required to run under dpm_list_mtx, t=
-he
-> > +        * list_empty() below will only return true if the device's lis=
-t of
-> > +        * consumers is actually empty before calling it.
-> > +        */
-> > +       return list_empty(&dev->links.consumers);
-> > +}
+> > Please, please be explicit and specific, you could not tell me this in
 >
-> We need the equivalent of this for resume.
-
-Maybe.
-
-> > +
-> > +static void dpm_async_suspend_superior(struct device *dev, async_func_=
-t func)
-> > +{
-> > +       struct device_link *link;
-> > +       int idx;
-> > +
-> > +       mutex_lock(&dpm_list_mtx);
-> > +
-> > +       /* Start processing the device's parent if it is "async". */
-> > +       if (dev->parent)
-> > +               dpm_async_with_cleanup(dev->parent, func);
-> > +
-> > +       mutex_unlock(&dpm_list_mtx);
-> > +
-> > +       idx =3D device_links_read_lock();
-> > +
-> > +       /* Start processing the device's "async" suppliers. */
-> > +       list_for_each_entry_rcu(link, &dev->links.suppliers, c_node)
-> > +               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT)
-> > +                       dpm_async_with_cleanup(link->supplier, func);
+> git grep -C 3 connector:
 >
-> We should check that the rest of the consumers of the supplier are
-> "done" before we queue the supplier. With 386 device links (and the
-> number only increases as we add support for more properties), there's
-> no doubt that we'll hit this often.
-
-And I'm not doing this until I see any data confirming that it makes a
-difference in the order of 10% or more.
-
-> > +
-> > +       device_links_read_unlock(idx);
+> > v3, you could but you decided to fuck up v4 as well. So wise.
 >
-> Is passing idx to unlock a new (within the past 6 months) thing? I
-> don't remember having to do this in the past.
-
-It's SRCU and it's been there forever.
-
-> > +}
-> > +
-> >  /**
-> >   * resume_event - Return a "resume" message for given "suspend" sleep =
-state.
-> >   * @sleep_state: PM message representing a sleep state.
-> > @@ -1656,6 +1700,8 @@
-> >         device_links_read_unlock(idx);
-> >  }
-> >
-> > +static void async_suspend(void *data, async_cookie_t cookie);
-> > +
-> >  /**
-> >   * device_suspend - Execute "suspend" callbacks for given device.
-> >   * @dev: Device to handle.
-> > @@ -1785,7 +1831,13 @@
-> >
-> >         complete_all(&dev->power.completion);
-> >         TRACE_SUSPEND(error);
-> > -       return error;
-> > +
-> > +       if (error || async_error)
-> > +               return error;
-> > +
-> > +       dpm_async_suspend_superior(dev, async_suspend);
-> > +
-> > +       return 0;
-> >  }
-> >
-> >  static void async_suspend(void *data, async_cookie_t cookie)
-> > @@ -1803,6 +1855,7 @@
-> >  int dpm_suspend(pm_message_t state)
-> >  {
-> >         ktime_t starttime =3D ktime_get();
-> > +       struct device *dev;
-> >         int error =3D 0;
-> >
-> >         trace_suspend_resume(TPS("dpm_suspend"), state.event, true);
-> > @@ -1816,12 +1869,28 @@
-> >
-> >         mutex_lock(&dpm_list_mtx);
-> >
-> > +       /*
-> > +        * Start processing "async" leaf devices upfront because they d=
-on't need
-> > +        * to wait.
-> > +        */
-> > +       list_for_each_entry_reverse(dev, &dpm_prepared_list, power.entr=
-y) {
-> > +               dpm_clear_async_state(dev);
-> > +               if (dpm_leaf_device(dev))
-> > +                       dpm_async_with_cleanup(dev, async_suspend);
-> > +       }
-> > +
-> >         while (!list_empty(&dpm_prepared_list)) {
-> > -               struct device *dev =3D to_device(dpm_prepared_list.prev=
-);
-> > +               dev =3D to_device(dpm_prepared_list.prev);
-> >
-> >                 list_move(&dev->power.entry, &dpm_suspended_list);
-> >
-> > -               dpm_clear_async_state(dev);
-> > +               /*
-> > +                * Move all devices to the target list to resume them p=
-roperly
-> > +                * on errors.
-> > +                */
+> We got a lot to review thus we make reviews concise. I understand that
+> it might lead to insufficient guidance, so more help in removing
+> workload from maintainers is always appreciated.
 >
-> I did this initially on my end, but we have so many devices that
-> looping through them had a measurable impact.
+> Instead of using vulgar words towards us, please put a bit more effort
+> and look at other recent bindings how they do it.
+>
+> Review is provided in good faith and if it is by any chance incorrect,
+> it is enough to disagree instead of throwing things like above. That's
+> not acceptable.
+>
+> > Additionally, if you want a generic 'connector' which can be
+> > referenced as 'connector: true' then add one, ATM this is classified
+> > under your own terms as 'vendor property' and needs a vendor prefix.
+>
+> richtek,usb-connector is not the good example here. Your previous code he=
+re:
+> https://lore.kernel.org/all/20250225090014.59067-2-clamor95@gmail.com/
+>
+> looks correct - you have there port. So where does charger_input point?
+>
 
-Which I guess is super-important for error handling.  Come on.
+Would the version from v3 with graph be acceptable?
 
-> It's better to just splice the lists on error.
-
-On top of this change, yes.
+>
+> >
+> >>> +    description:
+> >>> +      Phandle to a USB connector according to usb-connector.yaml. Th=
+e connector
+> >>> +      should be a child of the extcon device.
+> >>
+> >> 'extcon' is a Linuxism. Is there an actual requirement here that's not
+> >> *current* Linux requirements (which could change)? I assume the
+> >> requirement is to have vbus or some supply?
+> >>
+> >
+> > Pardon me, this schema is part of Linux kernel, no? I have no clue why
+>
+> Bindings are used by other projects as well and they live here because
+> of possibility of review by skilled people and due to size of the
+> community. It does not make them, in general, Linux specific.
+>
+> > you collectively decided to just ignore external connector detection
+> > devices. Ignorance does not affect the fact that such devices exist.
+>
+> We didn't. They are described.
+>
+> >
+> > And no, it does not need vbus not supply, it needs EXTCON
+>
+> There is no such thing as "extcon" from hardware point of view. Point us
+> to any standard or even wikipedia article describing it.
+>
+>
+> Best regards,
+> Krzysztof
 
