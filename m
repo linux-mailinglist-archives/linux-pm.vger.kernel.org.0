@@ -1,94 +1,124 @@
-Return-Path: <linux-pm+bounces-24032-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24033-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FC30A6103C
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 12:43:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB651A61099
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 13:03:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F1641887BCE
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 11:43:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4184A3BF528
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Mar 2025 12:03:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E4531FDE08;
-	Fri, 14 Mar 2025 11:43:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rUqIMvDk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7808D1D5CDE;
+	Fri, 14 Mar 2025 12:03:49 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F034C1FC7CD;
-	Fri, 14 Mar 2025 11:43:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D02EF3C6BA;
+	Fri, 14 Mar 2025 12:03:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741952606; cv=none; b=bFqN23fnunXroPvOzlY00hNIjgnAtbZRPwBXh0L+Tm3TJGbH8fJai6V6f4TVKCRjwtpnkI7oZSU1Za2/C73LQyDN4w1tJmORNb7R9ZfZkCLC//nzjLLjOavYmB0t29Tk/c8k8iI6D4C/B/esBNv3CmOnASQ56/YVf4zwJpic6yY=
+	t=1741953829; cv=none; b=dgbypyNmG8cOASnASNnnJHEsBvhQsmKDAzfX3qd2XNute2Kjjki14DwuwJyRvdz6xsQ9njuKlGZ89yOcW2ChuZYQsCLrHcdeU2qdkT93nG+Z/u3vdoHUUIm57jl46i+plTlHx7UEsVKygy+JiLl2GRunoUbGEBON6789+E+YZaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741952606; c=relaxed/simple;
-	bh=HhnRgeIRMl8/ytxbRB5L7HJeFXLaGEfrKsFgITuJCvI=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=sMyDhzxCsi80pPeluV4fMN1Eim9fmCV3iA/Rgn6l4AICqZNUqGt05CkxXrgGANqPiEz3U0k9kD7O9v5fh0cbYITlSSPBukhpfM713t1HaTh4zblEgx6TE8CIgPGkQBx4vjwQ5zn4O9nUl2jXt47dk2hr2r9YbrKIlJfg4Q1A4kU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rUqIMvDk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9191EC4CEE3;
-	Fri, 14 Mar 2025 11:43:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741952605;
-	bh=HhnRgeIRMl8/ytxbRB5L7HJeFXLaGEfrKsFgITuJCvI=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=rUqIMvDkJPFPCIq8jp3YHiYV3Gkj0ISBfNfEhyGb/UYdeNZ9wvPqnfLIeTOkKFmYV
-	 dFNxLMNyjlpZZgoLlmVRwNAvDXLl+UYC1i5hq6DBp6/Im/fXKy+DukkMRx5nJmMupM
-	 LjNMv+Y0nvOFd9gjlJidoByXiu2ub1uT5UW/KW5Xvvama+/3ffoD72FyGdBom6UsQY
-	 h6h3ReIQtoB/BqwnOgT4gfBoUp0sTLFs7JlDIhBses8n7h+fsiqHNHPgbqAK+e6L0h
-	 CaX0FIPH5AWPOKRsb+OOJxnXh+HkCy4HvK+lWQz4dKqVe6gt7eCFW+fNvtTWh3H6RH
-	 I1lEigMyHyA+g==
-From: Lee Jones <lee@kernel.org>
-To: arnd@arndb.de, lee@kernel.org, dmitry.torokhov@gmail.com, 
- sre@kernel.org, lgirdwood@gmail.com, broonie@kernel.org, 
- alexandre.belloni@bootlin.com, danielt@kernel.org, jingoohan1@gmail.com, 
- deller@gmx.de, linus.walleij@linaro.org, brgl@bgdev.pl, 
- tsbogend@alpha.franken.de, linux@treblig.org
-Cc: linux-mips@vger.kernel.org, linux-input@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org, 
- linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20250311014959.743322-1-linux@treblig.org>
-References: <20250311014959.743322-1-linux@treblig.org>
-Subject: Re: (subset) [PATCH v2 0/9] Remove pcf50633
-Message-Id: <174195260130.4016186.12257329269298391220.b4-ty@kernel.org>
-Date: Fri, 14 Mar 2025 11:43:21 +0000
+	s=arc-20240116; t=1741953829; c=relaxed/simple;
+	bh=qikDiJMLCpRtaCKE/Y1FmzQczfwxIVA7dOqYr3ldh4M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ssZm4wSGahdzRYFc67sleM/FyZjoEk+/ewiUDragmy1ZE5SwCbGqX2zb0i/Szrs0ZnezWCD9VMTd7UNxL6d2HgSVnYyBALT2l9dNKn9RV8OZDvMt2R0BHDiLD4sKW4SIq7FxR899ZuCU0A+3bBBKy4LP6NALwK32ALY6225ZQsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 39EDD1424;
+	Fri, 14 Mar 2025 05:03:57 -0700 (PDT)
+Received: from pluto (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 28E3F3F5A1;
+	Fri, 14 Mar 2025 05:03:46 -0700 (PDT)
+Date: Fri, 14 Mar 2025 12:03:38 +0000
+From: Cristian Marussi <cristian.marussi@arm.com>
+To: Sudeep Holla <sudeep.holla@arm.com>
+Cc: linux-pm@vger.kernel.org, arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>
+Subject: Re: [PATCH] pmdomain: arm: scmi_pm_domain: Remove redundant state
+ verification
+Message-ID: <Z9QbGiuK9XTEpAdE@pluto>
+References: <20250314095851.443979-1-sudeep.holla@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.15-dev-510f9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250314095851.443979-1-sudeep.holla@arm.com>
 
-On Tue, 11 Mar 2025 01:49:50 +0000, linux@treblig.org wrote:
-> From: "Dr. David Alan Gilbert" <linux@treblig.org>
+On Fri, Mar 14, 2025 at 09:58:51AM +0000, Sudeep Holla wrote:
+> Currently, scmi_pd_power() explicitly verifies whether the requested
+> power state was applied by calling state_get(). While this check could
+> detect failures where the state was not properly updated, ensuring
+> correctness is the responsibility of the SCMI firmware.
 > 
-> The pcf50633 was used as part of the OpenMoko devices but
-> the support for its main chip was recently removed in:
-> commit 61b7f8920b17 ("ARM: s3c: remove all s3c24xx support")
+> Removing this redundant state_get() call eliminates an unnecessary
+> round-trip to the firmware, improving efficiency. Any mismatches
+> between the requested and actual states should be handled by the SCMI
+> firmware, which must return a failure if state_set() is unsuccessful.
 > 
-> See https://lore.kernel.org/all/Z8z236h4B5A6Ki3D@gallifrey/
+> Additionally, in some cases, checking the state after powering off a
+> domain may be unreliable or unsafe, depending on the firmware
+> implementation.
 > 
-> [...]
+> This patch removes the redundant verification, simplifying the function
+> without compromising correctness.
+> 
+> Cc: Peng Fan <peng.fan@nxp.com>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Cristian Marussi <cristian.marussi@arm.com>
+> Reported-and-tested-by: Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>  drivers/pmdomain/arm/scmi_pm_domain.c | 11 ++---------
+>  1 file changed, 2 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/pmdomain/arm/scmi_pm_domain.c b/drivers/pmdomain/arm/scmi_pm_domain.c
+> index 86b531e15b85..2a213c218126 100644
+> --- a/drivers/pmdomain/arm/scmi_pm_domain.c
+> +++ b/drivers/pmdomain/arm/scmi_pm_domain.c
+> @@ -24,8 +24,7 @@ struct scmi_pm_domain {
+>  
+>  static int scmi_pd_power(struct generic_pm_domain *domain, bool power_on)
+>  {
+> -	int ret;
+> -	u32 state, ret_state;
+> +	u32 state;
+>  	struct scmi_pm_domain *pd = to_scmi_pd(domain);
+>  
+>  	if (power_on)
+> @@ -33,13 +32,7 @@ static int scmi_pd_power(struct generic_pm_domain *domain, bool power_on)
+>  	else
+>  		state = SCMI_POWER_STATE_GENERIC_OFF;
+>  
+> -	ret = power_ops->state_set(pd->ph, pd->domain, state);
+> -	if (!ret)
+> -		ret = power_ops->state_get(pd->ph, pd->domain, &ret_state);
+> -	if (!ret && state != ret_state)
+> -		return -EIO;
+> -
+> -	return ret;
+> +	return power_ops->state_set(pd->ph, pd->domain, state);
+>  }
 
-Applied, thanks!
+...not sure about the history of this but it would have also definitely
+failed consistently on any systen where the SCMI Server exposes resources
+physical states (an IMPDEF behaviour), so that after a successfull set_OFF
+on a shared resource a subsequent get() could return that the resource is
+still physically ON if it was still needed by the other agennts sharing it...
 
-[1/9] mfd: pcf50633-adc: Remove
-      commit: 0d0e54953805af76f0022df39602f5668145f747
-[3/9] mfd: pcF50633-gpio: Remove
-      commit: 8559602247d0d054451c7a755942588d2c0de85d
-[8/9] mfd: pcf50633: Remove irq code
-      commit: 786ad21f4350601c9d118ddbd19b7b830c04ece6
-[9/9] mfd: pcf50633: Remove remains
-      commit: 44356090d59efd8db152e9eecb8e7f843be319f0
+LGTM.
+Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
 
---
-Lee Jones [李琼斯]
-
+Thanks,
+Cristian
 
