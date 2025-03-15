@@ -1,96 +1,120 @@
-Return-Path: <linux-pm+bounces-24085-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24086-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECD57A626B6
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 06:44:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 803CBA628BA
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 09:12:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 96DCD7A91BF
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 05:43:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98BDC3B3697
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 08:12:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC50B18FDB2;
-	Sat, 15 Mar 2025 05:44:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="PYNz1Jfv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07DFC1DE2DB;
+	Sat, 15 Mar 2025 08:12:39 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAD7315D1;
-	Sat, 15 Mar 2025 05:44:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63B628633F;
+	Sat, 15 Mar 2025 08:12:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742017492; cv=none; b=LedHV9XBG2YvHahooHzzvrK16ZPDniqniHuFTl7IPGPSjRVJe0Fmtk+zifsDqmTQA1UBAoi6UkcOT8SzqhTqX+vsJ3qFa44XjhxDEsYLPzc+4An9xavjLQBT+Bf9Yuf0qTeEgmzCqEqhNjkwnumhJJHu1U9lUL1/Lu2ExpMKpb8=
+	t=1742026358; cv=none; b=tvVsQFP5rkm1/RPP/19pZ55+IWFBYfSsd4zzIiBlJ+Nwdv/PpcuSLHn/QTjW4edL/rTql5Opv55sHsC1amkp9iFDLUfARITy9Rag5Hp0NHCJsCN7cuV2LT9u2W3/3iJeudbsOIjX3WLBKHIjAUmd2g3h33xtzy6vbB1zA3JlUoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742017492; c=relaxed/simple;
-	bh=Gn1M0TWmAcWZ9nKCuJ0Rz5lxFZMx2BIFmvRqdmztQMI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mMP77/bdW3PzYlhFostY1S4tdljZpwE6nSyXq1D2kPypPXtPX3/zgB8wI+ID1Bt/jalQnjPRBhIl4kce13ZuWR5+Y1elwdTxc5TXG4oVaKWaT9t5a8mWZ6S+h4qaifGLqtNryRnQ4RJy8YJlpdTY8Dyf94/BP48ZwRbmoeCvNAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=PYNz1Jfv; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=n6QHrjG4xFS2Vtdhn1I1SCFpoNnj0smpLOP3Qx1bE2M=; b=PYNz1Jfvpn7ZeUZP+ouqYIETKV
-	pU2XnfrPc+hKM7rw3d62FRphdrkhBTpWTNCc/PkWML+/n4IumwNtpQ7CLQIWGaxTSj5DAXpvk7Ura
-	cUBLLCmSsoyiAjIdJ1psFRdb5OFp7W11Bvgf1ksnKeF26yEs2GieL4sVxsdhwXyTF8UYys5bZCRFk
-	tfU63E9Rbca3ZHm53zYL/UQdQaOfKqFn5Lmpj1/MHVKEGu0HUijPgTUTvvf2PcH+OTrGGoZGzELie
-	nWzHUeExRqwbbBM44goGCPcrXoxe69kOKv7COYL6lxH5xr5powwbv5oU+8s+T4S3kDv5OwgW32eLa
-	FObTjY4Q==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1ttKJy-006mGR-0v;
-	Sat, 15 Mar 2025 13:44:31 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sat, 15 Mar 2025 13:44:30 +0800
-Date: Sat, 15 Mar 2025 13:44:30 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Zhihao Cheng <chengzhihao1@huawei.com>
-Cc: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-	Richard Weinberger <richard@nod.at>, linux-mtd@lists.infradead.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	netdev@vger.kernel.org
-Subject: Re: [v4 PATCH 10/13] ubifs: Use crypto_acomp interface
-Message-ID: <Z9UTvkmx_InPeqEB@gondor.apana.org.au>
-References: <cover.1741954523.git.herbert@gondor.apana.org.au>
- <349a78bc53d3620a29cc6105b55985db51aa0a11.1741954523.git.herbert@gondor.apana.org.au>
- <02dd5000-7ced-df02-d9d0-a3c1a410d062@huawei.com>
+	s=arc-20240116; t=1742026358; c=relaxed/simple;
+	bh=jG9oPcjZqHlbR4d47jM7VKXo5P/tae2bdnMELTmPOaM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=i2bFk9sTTs9FHFRA84i1QPccASBbg4kqCPK5/kUU3R7Y5I6iEQU9naXOOMlKpkdG+NIKSy9ofqZyMfRqNCmDeul/uqUrmIODgONtWPe+Bu5uqj4eFRoayA5weHauAUb6qMoxJ5IuAtpMp9lJi8oRvLlZ7hpmbzveVAWodEFRH14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+X-CSE-ConnectionGUID: ZMxv4JYITJmRHA9upJO4aQ==
+X-CSE-MsgGUID: n+2J8ZdeRyaN7PalhWpnvg==
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 15 Mar 2025 17:12:33 +0900
+Received: from ubuntu.adwin.renesas.com (unknown [10.226.92.58])
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id E69F641BFA40;
+	Sat, 15 Mar 2025 17:12:28 +0900 (JST)
+From: John Madieu <john.madieu.xa@bp.renesas.com>
+To: geert+renesas@glider.be,
+	conor+dt@kernel.org,
+	krzk+dt@kernel.org,
+	robh@kernel.org,
+	rafael@kernel.org,
+	daniel.lezcano@linaro.org
+Cc: magnus.damm@gmail.com,
+	devicetree@vger.kernel.org,
+	john.madieu@gmail.com,
+	rui.zhang@intel.com,
+	linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	sboyd@kernel.org,
+	biju.das.jz@bp.renesas.com,
+	linux-pm@vger.kernel.org,
+	lukasz.luba@arm.com,
+	John Madieu <john.madieu.xa@bp.renesas.com>
+Subject: [PATCH v3 0/6] thermal: renesas: Add support fot RZ/G3E
+Date: Sat, 15 Mar 2025 09:12:10 +0100
+Message-ID: <20250315081225.92118-1-john.madieu.xa@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <02dd5000-7ced-df02-d9d0-a3c1a410d062@huawei.com>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Mar 15, 2025 at 01:15:09PM +0800, Zhihao Cheng wrote:
->
-> Hi, Herbert. Can you show me which patch fixed the problem in LZO?
+Hello,
 
-https://web.git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git/commit/?id=cc47f07234f72cbd8e2c973cdbf2a6730660a463
- 
-> Does LZO guarantee the output data length smaller than input buffer length?
-> Which commit fixed the issue?
+This series adds support for the temperature sensor unit (TSU) found on the
+Renesas RZ/G3E SoC.
 
-The guarantee is that the algorithm will not write to the output
-buffer beyond the specific buffer length.
+The series consists of 7 patches (some of which are not related to the thermal
+framework) that progressively add TSU support as follows:
+- patch 1/6:    adds syscon/regmap support for accessing system controller
+                registers, enabling access to TSU calibration values
 
-For compression, you may specify a desired output length that is
-smaller than the input buffer, automatically stopping the compression
-if the input is incompressible.
+- patch 2/6:    adds dt-bindings
+- patch 3/6:    adds the actual TSU driver for the RZ/G3E
+- patch 4/6:    adds safety mechanism to make sure we we protect the chip in
+                case of consecutive read failures
+- patch 4-6/6:  add DT node and defconfig enablement
 
-Cheers,
+
+Changes:
+
+v1 -> v2
+ * Fix yaml warnings from dt-binding
+ * Update IRQ names to reflect TSU expectations
+
+v2 -> v3
+ * Remove useless 'renesas,tsu-operating-mode' property
+
+Regards,
+
+John Madieu (6):
+  soc: renesas: rz-sysc: add syscon/regmap support
+  dt-bindings: thermal: r9a09g047-tsu: Document the TSU unit
+  thermal: renesas: rzg3e: Add thermal driver for the Renesas RZ/G3E SoC
+  thermal: renesas: rzg3e: Add safety check when reading temperature
+  arm64: dts: renesas: r9a09g047: Add TSU node
+  arm64: defconfig: Enable RZ/G3E thermal
+
+ .../thermal/renesas,r9a09g047-tsu.yaml        | 113 +++++
+ MAINTAINERS                                   |   7 +
+ arch/arm64/boot/dts/renesas/r9a09g047.dtsi    |  48 ++
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/soc/renesas/Kconfig                   |   1 +
+ drivers/soc/renesas/r9a09g047-sys.c           |   1 +
+ drivers/soc/renesas/rz-sysc.c                 |  30 +-
+ drivers/soc/renesas/rz-sysc.h                 |   2 +
+ drivers/thermal/renesas/Kconfig               |   7 +
+ drivers/thermal/renesas/Makefile              |   1 +
+ drivers/thermal/renesas/rzg3e_thermal.c       | 479 ++++++++++++++++++
+ 11 files changed, 689 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
+ create mode 100644 drivers/thermal/renesas/rzg3e_thermal.c
+
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.25.1
+
 
