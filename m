@@ -1,321 +1,134 @@
-Return-Path: <linux-pm+bounces-24077-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24078-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84B4AA6232A
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 01:32:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 340A2A62362
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 01:49:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BBAE4421330
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 00:32:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3CD619C62D2
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 00:50:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE0B028F4;
-	Sat, 15 Mar 2025 00:32:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 107C12F50;
+	Sat, 15 Mar 2025 00:49:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="VymMNzgT"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ahpWgTdZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F842E3377;
-	Sat, 15 Mar 2025 00:31:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3DC33C9
+	for <linux-pm@vger.kernel.org>; Sat, 15 Mar 2025 00:49:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741998722; cv=none; b=YP8lTucDicdJdPn3KYVPBi8ME2q098OnsHUiFdKr/tpj78HMbIArzcx51ldzKe2JUmIpuXE1Fjvs9fG62hWSe3GR7aNNHNyU4WwQIGn12fj98zk2lP8lywrcpuFoGBbfEDAMFLssi6ZJq1VOOS1uTeaYF/PUECKzfrcLjKhQ6ug=
+	t=1741999785; cv=none; b=jVTx6TsX9FR9uaOL/mGi+KBZ6hzHSZZ4qdwso08inoxgvZ+NLiS6nsWoOXz/2iBvRIemy04T36DJAa7UcfCWbe4pi5MkT1R4MwEiQYvxixffp/OqucFzLLcPGufGypxX4GymxyV5fo1J3hDFdTxjsMNw8IJFnSVdpYI54c6Accs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741998722; c=relaxed/simple;
-	bh=Je8DBcuCNLQIuW9S+QysgJ0snPg8uIOECpzutgrWcBw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BQQkXgrlqxPqJblcy9YQ9BGJETj4XiFAMZ6aLFMTXREqYZlQ6Y9D6g5BmbgfjLOehlzvt99kHgJVpk+pnJKbS5NjFJ7YpUDVZYYP346xVBB/xrisi788n6xf2kxgYgni4eFH4mXl6WFcFj4ngB5TlLtweqNs3GxMCLiEKJz1i4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=VymMNzgT; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=t3ecUWY92S53odYjmM31lnI9pitPM2pM+xnXq3bFvsg=; b=VymMNzgTs1z8T84RIQQNiPfsqh
-	hJdYDA8EHMUIcWNmq8x1krK7oyDwo5BqKErXIYBgz2CSaGclFUAtXzw/SglY/AxHy1ZulvME7cTCl
-	bnPDFMSLw4q5kdezHuIRMQYwEiZaI6pIMQ4D5MWk6oJzNQkmuD3PHQ/Odx+A0VrZRGhhJlr3fZSRd
-	Zuj61q+lI3CiDYm8mticZaygOlDElUr/j8StYvpJ3DfKM8ECDYC+PocWHZIqsAWHGdXeG2KKQSBGs
-	wzjPHSuShtY3A5ZtW/NoQv7pAbA179WVdCuVBI/GDxS+5VOCenJqLZHc46HUsk4/aens9yLbLP7Tj
-	DoSdk3tA==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1ttFR8-006kEb-0B;
-	Sat, 15 Mar 2025 08:31:35 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sat, 15 Mar 2025 08:31:34 +0800
-Date: Sat, 15 Mar 2025 08:31:34 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: "Cabiddu, Giovanni" <giovanni.cabiddu@intel.com>
-Cc: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-	Richard Weinberger <richard@nod.at>,
-	Zhihao Cheng <chengzhihao1@huawei.com>,
-	linux-mtd@lists.infradead.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	netdev@vger.kernel.org
-Subject: [PATCH] crypto: qat - Remove dead code related to null dst
-Message-ID: <Z9TKZgYaVAerVVkU@gondor.apana.org.au>
-References: <cover.1741954320.git.herbert@gondor.apana.org.au>
- <1e29b349410b0d9822c8c0b8f6e01386a3c44d66.1741954320.git.herbert@gondor.apana.org.au>
- <Z9Q1euXeBy7x8zZI@gcabiddu-mobl.ger.corp.intel.com>
+	s=arc-20240116; t=1741999785; c=relaxed/simple;
+	bh=EVcLkRoYjzPskNvsgLUC1U6E5af0qrbR6gcf9LQ/UQM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=leEa/e93gfLAola7FIyMXzGy98XxcvjN3HG8b0dRFljPMBWK18bisXvZfV82SmnhdH+ebvAAvM+P2ndnySbBTIetMjqcDG8kOtWCP5Umh7iwPeM+dbtwhTPcLUEU+qh1TgAGNa+u0i5lqPbQ8/jllSWWSpKgmfYqFomlZeG7UQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ahpWgTdZ; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-22398e09e39so57618805ad.3
+        for <linux-pm@vger.kernel.org>; Fri, 14 Mar 2025 17:49:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1741999782; x=1742604582; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D1jM8RpZtcKZIilOJqvJ3/LMYhzoydClew6e4ccobUM=;
+        b=ahpWgTdZrxepaLdjwWi6FGIjFOmg2quhTaWPIl3GLik9D8p7eQC65Hwif+AMlp1T4H
+         hrrQhXL1guNdjxHtbsp7pNBAuOxpQzkHTEyp5oXXeMp6Zdwr5LxHedxoneCBfeD2WFP+
+         7W5EIJ/gQzsqwYfUx9528D6z/uZvEPhcXZ2OtaYoI8KTa1XA74QKUpUVQ1XhFDRRKBdY
+         vZV+Ux1HrrD0ZIqrsrNtWa4NgujnTfc3r62Ic/lhmrhz+/d71EUZXDwk1sxn24WVdlQq
+         moP8q4eIG0kPCrIZeCOLBwz6dAveCcy1/fzznRJFUXZroT03Q2OhQD8w/VsGcb5pdmqc
+         GtcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741999782; x=1742604582;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=D1jM8RpZtcKZIilOJqvJ3/LMYhzoydClew6e4ccobUM=;
+        b=BW76viSy1GJX7HL8JCKsy9oSEzJtqm+2F2w0/Mc64K0Mf3qiCTTkpJOpIFsfOuv555
+         Qoj0I5foBAlF1SJ5GN1uiP3ETvFdZDajRJkT1Osbxg2D2gbfJW1y8mm8SVjkoS6+iszj
+         RvpoQGX7YiqOGYj2GrJf5dgBVn1DaPzm1jI3getvy4Vct0hXiZB9E9ddukecNfpQEYWj
+         KPHRkSERj/fVv4S1Zt1I7/7tHpvYi/3WxJSt+paaEmSQPMF5z4dhO7YCkfvFHL27CUUN
+         WAgLHFmmlkpEVyLZCC571wxRl7WV68/FuiFqcKxgEmIOx5cLRYD4uPWA2QMUEhEwk2wM
+         dJpg==
+X-Forwarded-Encrypted: i=1; AJvYcCWU+ZxXE/9Nv+OAssOdN89BnAM8JQNPjtETicuTICSTAYGn2PVsnbBBQTJfHNUWvgmww9Q3tauKWA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywvnd1kenD5P/oIHpIk2ZcjhaiBX0iyPfFb/1j/OAP3ONcTKBNL
+	xsimzBASaFcHVdzm/OdZ9F/ybuo2lxRu+Ab0WygxGM/0JWxJ0Rxqsw0RahoIYQ==
+X-Gm-Gg: ASbGncsIdUZF58Xz7cpTzMkiSEhvb/9eVK0oZgABDmiNGput3Rt/gyBquvfPXoe0sx5
+	ECZp85iiNhQMUIGhXiwAJjBT57VR2RSNk4VXeV23uqzmwpGr9mgnId3SndxABeq5vVsEuYiHK5e
+	u48bY4MWBnkq2b6d8XCCVj0+ETSfpIM7lhFKPK065QgIIaYNYGvm3g47Nqk3u9p6s6RLJdMoIKL
+	4KYvYxSXmErZLKCLQy+a+cvStDWFG/9lVB+F8iE+53PgF3lt8QMAW2QdYD1NgVSbl0vyMDpCOh6
+	I2sScPpqJ5C94GRqoO3AeV46iEwa2EQIVMdS4yMgyi5HFpUnBvAHh9tgASsj6M5EB9YXq/IAP7b
+	T3i+fTsOPW0CFzS0ypdQEDOmPQCktVGXjjezMveOcLlyovOvjQWwefQ==
+X-Google-Smtp-Source: AGHT+IEmHc6dXkowj/KC6TLkI13gyY8Emlnd81lhhSStCWu+Bw/F/Vpl30+Ts5hmEGYnRZqPPjqDcw==
+X-Received: by 2002:a05:6a00:3d0c:b0:736:6151:c6ca with SMTP id d2e1a72fcca58-7372234b8f3mr5799632b3a.4.1741999781372;
+        Fri, 14 Mar 2025 17:49:41 -0700 (PDT)
+Received: from ?IPV6:2a00:79e0:2e14:7:1790:6e62:92ba:cb2b? ([2a00:79e0:2e14:7:1790:6e62:92ba:cb2b])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73711529397sm3501714b3a.22.2025.03.14.17.49.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Mar 2025 17:49:40 -0700 (PDT)
+Message-ID: <914a0df4-96d0-4cd4-ac87-3826fa9c1440@google.com>
+Date: Fri, 14 Mar 2025 17:49:38 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z9Q1euXeBy7x8zZI@gcabiddu-mobl.ger.corp.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/5] Add support for Battery Status & Battery Caps AMS in
+ TCPM
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Sebastian Reichel <sre@kernel.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
+ Pavel Machek <pavel@kernel.org>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-pm@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
+ Kyle Tso <kyletso@google.com>
+References: <20250312-batt_ops-v1-0-88e0bb3129fd@google.com>
+ <20250313-determined-wild-seahorse-f7871a@krzk-bin>
+Content-Language: en-US
+From: Amit Sunil Dhamne <amitsd@google.com>
+In-Reply-To: <20250313-determined-wild-seahorse-f7871a@krzk-bin>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 14, 2025 at 01:56:10PM +0000, Cabiddu, Giovanni wrote:
+Hi Krzysztof,
+
+Thanks for the review!
+
+On 3/13/25 1:50 AM, Krzysztof Kozlowski wrote:
+> On Wed, Mar 12, 2025 at 04:42:00PM -0700, Amit Sunil Dhamne wrote:
+>> Support for Battery Status & Battery Caps messages in response to
+>> Get_Battery_Status & Get_Battery_Cap request is required by USB PD devices
+>> powered by battery, as per "USB PD R3.1 V1.8 Spec", "6.13 Message
+>> Applicability" section. This patchset adds support for these AMSes
+>> to achieve greater compliance with the spec.
+> Which board uses it? I would be happy to see that connection between
+> batteries and USB connector on the schematics of some real device. How
+> does it look like?
+Any board that uses a USB Type-C connector that supplies power into or 
+out of a battery while operating in sink or source mode respectively. 
+The VBUS is connected to the (battery + buck boost IC's CHGin/Vin) or a 
+companion IFPMIC connected to a battery.  In our board we have USB 
+Connector <-> IFPMIC <-> Battery.
+
+Thanks,
+
+Amit
+
+> Best regards,
+> Krzysztof
 >
-> The implementation of this function in qat/qat_common/qat_bl.c
-> should be removed as well as. After this change, it is not getting
-> called.
-
-Thanks.  I'll fold this patch in if a rebase is needed.
-
----8<---
-Remove dead code left behind after the dropping of null dst support.
-
-Fix the areq->dst test so that a null dst is explicitly forbidden.
-
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
----
- drivers/crypto/intel/qat/qat_common/qat_bl.c  | 159 ------------------
- drivers/crypto/intel/qat/qat_common/qat_bl.h  |   6 -
- .../intel/qat/qat_common/qat_comp_algs.c      |   2 +-
- .../intel/qat/qat_common/qat_comp_req.h       |  10 --
- 4 files changed, 1 insertion(+), 176 deletions(-)
-
-diff --git a/drivers/crypto/intel/qat/qat_common/qat_bl.c b/drivers/crypto/intel/qat/qat_common/qat_bl.c
-index 338acf29c487..5e4dad4693ca 100644
---- a/drivers/crypto/intel/qat/qat_common/qat_bl.c
-+++ b/drivers/crypto/intel/qat/qat_common/qat_bl.c
-@@ -251,162 +251,3 @@ int qat_bl_sgl_to_bufl(struct adf_accel_dev *accel_dev,
- 				    extra_dst_buff, sz_extra_dst_buff,
- 				    sskip, dskip, flags);
- }
--
--static void qat_bl_sgl_unmap(struct adf_accel_dev *accel_dev,
--			     struct qat_alg_buf_list *bl)
--{
--	struct device *dev = &GET_DEV(accel_dev);
--	int n = bl->num_bufs;
--	int i;
--
--	for (i = 0; i < n; i++)
--		if (!dma_mapping_error(dev, bl->buffers[i].addr))
--			dma_unmap_single(dev, bl->buffers[i].addr,
--					 bl->buffers[i].len, DMA_FROM_DEVICE);
--}
--
--static int qat_bl_sgl_map(struct adf_accel_dev *accel_dev,
--			  struct scatterlist *sgl,
--			  struct qat_alg_buf_list **bl)
--{
--	struct device *dev = &GET_DEV(accel_dev);
--	struct qat_alg_buf_list *bufl;
--	int node = dev_to_node(dev);
--	struct scatterlist *sg;
--	int n, i, sg_nctr;
--	size_t sz;
--
--	n = sg_nents(sgl);
--	sz = struct_size(bufl, buffers, n);
--	bufl = kzalloc_node(sz, GFP_KERNEL, node);
--	if (unlikely(!bufl))
--		return -ENOMEM;
--
--	for (i = 0; i < n; i++)
--		bufl->buffers[i].addr = DMA_MAPPING_ERROR;
--
--	sg_nctr = 0;
--	for_each_sg(sgl, sg, n, i) {
--		int y = sg_nctr;
--
--		if (!sg->length)
--			continue;
--
--		bufl->buffers[y].addr = dma_map_single(dev, sg_virt(sg),
--						       sg->length,
--						       DMA_FROM_DEVICE);
--		bufl->buffers[y].len = sg->length;
--		if (unlikely(dma_mapping_error(dev, bufl->buffers[y].addr)))
--			goto err_map;
--		sg_nctr++;
--	}
--	bufl->num_bufs = sg_nctr;
--	bufl->num_mapped_bufs = sg_nctr;
--
--	*bl = bufl;
--
--	return 0;
--
--err_map:
--	for (i = 0; i < n; i++)
--		if (!dma_mapping_error(dev, bufl->buffers[i].addr))
--			dma_unmap_single(dev, bufl->buffers[i].addr,
--					 bufl->buffers[i].len,
--					 DMA_FROM_DEVICE);
--	kfree(bufl);
--	*bl = NULL;
--
--	return -ENOMEM;
--}
--
--static void qat_bl_sgl_free_unmap(struct adf_accel_dev *accel_dev,
--				  struct scatterlist *sgl,
--				  struct qat_alg_buf_list *bl,
--				  bool free_bl)
--{
--	if (bl) {
--		qat_bl_sgl_unmap(accel_dev, bl);
--
--		if (free_bl)
--			kfree(bl);
--	}
--	if (sgl)
--		sgl_free(sgl);
--}
--
--static int qat_bl_sgl_alloc_map(struct adf_accel_dev *accel_dev,
--				struct scatterlist **sgl,
--				struct qat_alg_buf_list **bl,
--				unsigned int dlen,
--				gfp_t gfp)
--{
--	struct scatterlist *dst;
--	int ret;
--
--	dst = sgl_alloc(dlen, gfp, NULL);
--	if (!dst) {
--		dev_err(&GET_DEV(accel_dev), "sg_alloc failed\n");
--		return -ENOMEM;
--	}
--
--	ret = qat_bl_sgl_map(accel_dev, dst, bl);
--	if (ret)
--		goto err;
--
--	*sgl = dst;
--
--	return 0;
--
--err:
--	sgl_free(dst);
--	*sgl = NULL;
--	return ret;
--}
--
--int qat_bl_realloc_map_new_dst(struct adf_accel_dev *accel_dev,
--			       struct scatterlist **sg,
--			       unsigned int dlen,
--			       struct qat_request_buffs *qat_bufs,
--			       gfp_t gfp)
--{
--	struct device *dev = &GET_DEV(accel_dev);
--	dma_addr_t new_blp = DMA_MAPPING_ERROR;
--	struct qat_alg_buf_list *new_bl;
--	struct scatterlist *new_sg;
--	size_t new_bl_size;
--	int ret;
--
--	ret = qat_bl_sgl_alloc_map(accel_dev, &new_sg, &new_bl, dlen, gfp);
--	if (ret)
--		return ret;
--
--	new_bl_size = struct_size(new_bl, buffers, new_bl->num_bufs);
--
--	/* Map new firmware SGL descriptor */
--	new_blp = dma_map_single(dev, new_bl, new_bl_size, DMA_TO_DEVICE);
--	if (unlikely(dma_mapping_error(dev, new_blp)))
--		goto err;
--
--	/* Unmap old firmware SGL descriptor */
--	dma_unmap_single(dev, qat_bufs->bloutp, qat_bufs->sz_out, DMA_TO_DEVICE);
--
--	/* Free and unmap old scatterlist */
--	qat_bl_sgl_free_unmap(accel_dev, *sg, qat_bufs->blout,
--			      !qat_bufs->sgl_dst_valid);
--
--	qat_bufs->sgl_dst_valid = false;
--	qat_bufs->blout = new_bl;
--	qat_bufs->bloutp = new_blp;
--	qat_bufs->sz_out = new_bl_size;
--
--	*sg = new_sg;
--
--	return 0;
--err:
--	qat_bl_sgl_free_unmap(accel_dev, new_sg, new_bl, true);
--
--	if (!dma_mapping_error(dev, new_blp))
--		dma_unmap_single(dev, new_blp, new_bl_size, DMA_TO_DEVICE);
--
--	return -ENOMEM;
--}
-diff --git a/drivers/crypto/intel/qat/qat_common/qat_bl.h b/drivers/crypto/intel/qat/qat_common/qat_bl.h
-index 3f5b79015400..2827d5055d3c 100644
---- a/drivers/crypto/intel/qat/qat_common/qat_bl.h
-+++ b/drivers/crypto/intel/qat/qat_common/qat_bl.h
-@@ -65,10 +65,4 @@ static inline gfp_t qat_algs_alloc_flags(struct crypto_async_request *req)
- 	return req->flags & CRYPTO_TFM_REQ_MAY_SLEEP ? GFP_KERNEL : GFP_ATOMIC;
- }
- 
--int qat_bl_realloc_map_new_dst(struct adf_accel_dev *accel_dev,
--			       struct scatterlist **newd,
--			       unsigned int dlen,
--			       struct qat_request_buffs *qat_bufs,
--			       gfp_t gfp);
--
- #endif
-diff --git a/drivers/crypto/intel/qat/qat_common/qat_comp_algs.c b/drivers/crypto/intel/qat/qat_common/qat_comp_algs.c
-index 9d5848e28ff8..a6e02405d402 100644
---- a/drivers/crypto/intel/qat/qat_common/qat_comp_algs.c
-+++ b/drivers/crypto/intel/qat/qat_common/qat_comp_algs.c
-@@ -183,7 +183,7 @@ static int qat_comp_alg_compress_decompress(struct acomp_req *areq, enum directi
- 	if (!areq->src || !slen)
- 		return -EINVAL;
- 
--	if (areq->dst && !dlen)
-+	if (!areq->dst || !dlen)
- 		return -EINVAL;
- 
- 	if (dir == COMPRESSION) {
-diff --git a/drivers/crypto/intel/qat/qat_common/qat_comp_req.h b/drivers/crypto/intel/qat/qat_common/qat_comp_req.h
-index 404e32c5e778..18a1f33a6db9 100644
---- a/drivers/crypto/intel/qat/qat_common/qat_comp_req.h
-+++ b/drivers/crypto/intel/qat/qat_common/qat_comp_req.h
-@@ -25,16 +25,6 @@ static inline void qat_comp_create_req(void *ctx, void *req, u64 src, u32 slen,
- 	req_pars->out_buffer_sz = dlen;
- }
- 
--static inline void qat_comp_override_dst(void *req, u64 dst, u32 dlen)
--{
--	struct icp_qat_fw_comp_req *fw_req = req;
--	struct icp_qat_fw_comp_req_params *req_pars = &fw_req->comp_pars;
--
--	fw_req->comn_mid.dest_data_addr = dst;
--	fw_req->comn_mid.dst_length = dlen;
--	req_pars->out_buffer_sz = dlen;
--}
--
- static inline void qat_comp_create_compression_req(void *ctx, void *req,
- 						   u64 src, u32 slen,
- 						   u64 dst, u32 dlen,
--- 
-2.39.5
-
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
