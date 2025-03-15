@@ -1,38 +1,39 @@
-Return-Path: <linux-pm+bounces-24086-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24089-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 803CBA628BA
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 09:12:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE446A628DC
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 09:17:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98BDC3B3697
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 08:12:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EB7A170A42
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 08:17:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07DFC1DE2DB;
-	Sat, 15 Mar 2025 08:12:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA9361DA61D;
+	Sat, 15 Mar 2025 08:17:45 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63B628633F;
-	Sat, 15 Mar 2025 08:12:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1997151985;
+	Sat, 15 Mar 2025 08:17:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742026358; cv=none; b=tvVsQFP5rkm1/RPP/19pZ55+IWFBYfSsd4zzIiBlJ+Nwdv/PpcuSLHn/QTjW4edL/rTql5Opv55sHsC1amkp9iFDLUfARITy9Rag5Hp0NHCJsCN7cuV2LT9u2W3/3iJeudbsOIjX3WLBKHIjAUmd2g3h33xtzy6vbB1zA3JlUoU=
+	t=1742026665; cv=none; b=h/GI5syErn/5neWBLM8RqbbWxz3U9iDjz2QI3uQdFYEY4vcCDRyjUHOq4U1lYnDS4du6sz1lnvctngwgKeLGb75M10+mzlknH29WKX+EuZ3ne/vdfZZLjU89O8nYHw3dVmknRTXMCMPsLeFlnuFc2Z+TxKPnj/JPKbKFJzk9TyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742026358; c=relaxed/simple;
-	bh=jG9oPcjZqHlbR4d47jM7VKXo5P/tae2bdnMELTmPOaM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=i2bFk9sTTs9FHFRA84i1QPccASBbg4kqCPK5/kUU3R7Y5I6iEQU9naXOOMlKpkdG+NIKSy9ofqZyMfRqNCmDeul/uqUrmIODgONtWPe+Bu5uqj4eFRoayA5weHauAUb6qMoxJ5IuAtpMp9lJi8oRvLlZ7hpmbzveVAWodEFRH14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+	s=arc-20240116; t=1742026665; c=relaxed/simple;
+	bh=1Hb++9YFOFzAFnWdg6BvGgFjx95pJoLUoc7uP9yuIW0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=oZyYe2+oDi9llmpzUyi8m83/cdXOD4KenepGbMGBANGFFf/QX7NntjzuzZTPgHgRy+2cTcDMVQ/PBvIJFBgiWJ48X6pmTMSq0axF5EQZrEGlayJ2YorbrC/uja6ve7clmAA8Rn3gAxgBffilwNen2O/cqKaMXm/Y5RoQG7b/VtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: ZMxv4JYITJmRHA9upJO4aQ==
-X-CSE-MsgGUID: n+2J8ZdeRyaN7PalhWpnvg==
+X-CSE-ConnectionGUID: /UhLPR4OTRO0rS1PpzK3yQ==
+X-CSE-MsgGUID: TZTc0ElXQCOnRgxUuexpFg==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 15 Mar 2025 17:12:33 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 15 Mar 2025 17:12:38 +0900
 Received: from ubuntu.adwin.renesas.com (unknown [10.226.92.58])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id E69F641BFA40;
-	Sat, 15 Mar 2025 17:12:28 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 3932241BFA40;
+	Sat, 15 Mar 2025 17:12:33 +0900 (JST)
 From: John Madieu <john.madieu.xa@bp.renesas.com>
 To: geert+renesas@glider.be,
 	conor+dt@kernel.org,
@@ -51,10 +52,12 @@ Cc: magnus.damm@gmail.com,
 	linux-pm@vger.kernel.org,
 	lukasz.luba@arm.com,
 	John Madieu <john.madieu.xa@bp.renesas.com>
-Subject: [PATCH v3 0/6] thermal: renesas: Add support fot RZ/G3E
-Date: Sat, 15 Mar 2025 09:12:10 +0100
-Message-ID: <20250315081225.92118-1-john.madieu.xa@bp.renesas.com>
+Subject: [PATCH v3 1/6] soc: renesas: rz-sysc: add syscon/regmap support
+Date: Sat, 15 Mar 2025 09:12:11 +0100
+Message-ID: <20250315081225.92118-2-john.madieu.xa@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250315081225.92118-1-john.madieu.xa@bp.renesas.com>
+References: <20250315081225.92118-1-john.madieu.xa@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -63,57 +66,135 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hello,
+The RZ/G3E system controller has various registers that control or report
+some properties specific to individual IPs. The regmap is registered as a
+syscon device to allow these IP drivers to access the registers through the
+regmap API.
 
-This series adds support for the temperature sensor unit (TSU) found on the
-Renesas RZ/G3E SoC.
+As other RZ SoCs might have custom read/write callbacks or max-offsets, let's
+register a custom regmap configuration.
 
-The series consists of 7 patches (some of which are not related to the thermal
-framework) that progressively add TSU support as follows:
-- patch 1/6:    adds syscon/regmap support for accessing system controller
-                registers, enabling access to TSU calibration values
+Signed-off-by: John Madieu <john.madieu.xa@bp.renesas.com>
+---
+v1 -> v2: no changes
+v2 -> v3: no changes
 
-- patch 2/6:    adds dt-bindings
-- patch 3/6:    adds the actual TSU driver for the RZ/G3E
-- patch 4/6:    adds safety mechanism to make sure we we protect the chip in
-                case of consecutive read failures
-- patch 4-6/6:  add DT node and defconfig enablement
+ drivers/soc/renesas/Kconfig         |  1 +
+ drivers/soc/renesas/r9a09g047-sys.c |  1 +
+ drivers/soc/renesas/rz-sysc.c       | 30 ++++++++++++++++++++++++++++-
+ drivers/soc/renesas/rz-sysc.h       |  2 ++
+ 4 files changed, 33 insertions(+), 1 deletion(-)
 
-
-Changes:
-
-v1 -> v2
- * Fix yaml warnings from dt-binding
- * Update IRQ names to reflect TSU expectations
-
-v2 -> v3
- * Remove useless 'renesas,tsu-operating-mode' property
-
-Regards,
-
-John Madieu (6):
-  soc: renesas: rz-sysc: add syscon/regmap support
-  dt-bindings: thermal: r9a09g047-tsu: Document the TSU unit
-  thermal: renesas: rzg3e: Add thermal driver for the Renesas RZ/G3E SoC
-  thermal: renesas: rzg3e: Add safety check when reading temperature
-  arm64: dts: renesas: r9a09g047: Add TSU node
-  arm64: defconfig: Enable RZ/G3E thermal
-
- .../thermal/renesas,r9a09g047-tsu.yaml        | 113 +++++
- MAINTAINERS                                   |   7 +
- arch/arm64/boot/dts/renesas/r9a09g047.dtsi    |  48 ++
- arch/arm64/configs/defconfig                  |   1 +
- drivers/soc/renesas/Kconfig                   |   1 +
- drivers/soc/renesas/r9a09g047-sys.c           |   1 +
- drivers/soc/renesas/rz-sysc.c                 |  30 +-
- drivers/soc/renesas/rz-sysc.h                 |   2 +
- drivers/thermal/renesas/Kconfig               |   7 +
- drivers/thermal/renesas/Makefile              |   1 +
- drivers/thermal/renesas/rzg3e_thermal.c       | 479 ++++++++++++++++++
- 11 files changed, 689 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
- create mode 100644 drivers/thermal/renesas/rzg3e_thermal.c
-
+diff --git a/drivers/soc/renesas/Kconfig b/drivers/soc/renesas/Kconfig
+index 49648cf28bd2..3ffd3a4ca18d 100644
+--- a/drivers/soc/renesas/Kconfig
++++ b/drivers/soc/renesas/Kconfig
+@@ -388,6 +388,7 @@ config RST_RCAR
+ 
+ config SYSC_RZ
+ 	bool "System controller for RZ SoCs" if COMPILE_TEST
++	select MFD_SYSCON
+ 
+ config SYSC_R9A08G045
+ 	bool "Renesas RZ/G3S System controller support" if COMPILE_TEST
+diff --git a/drivers/soc/renesas/r9a09g047-sys.c b/drivers/soc/renesas/r9a09g047-sys.c
+index cd2eb7782cfe..5b010a519fab 100644
+--- a/drivers/soc/renesas/r9a09g047-sys.c
++++ b/drivers/soc/renesas/r9a09g047-sys.c
+@@ -64,4 +64,5 @@ static const struct rz_sysc_soc_id_init_data rzg3e_sys_soc_id_init_data __initco
+ 
+ const struct rz_sysc_init_data rzg3e_sys_init_data = {
+ 	.soc_id_init_data = &rzg3e_sys_soc_id_init_data,
++	.max_register_offset = 0x170c,
+ };
+diff --git a/drivers/soc/renesas/rz-sysc.c b/drivers/soc/renesas/rz-sysc.c
+index 1c98da37b7d1..bcbc23da954b 100644
+--- a/drivers/soc/renesas/rz-sysc.c
++++ b/drivers/soc/renesas/rz-sysc.c
+@@ -6,8 +6,10 @@
+  */
+ 
+ #include <linux/io.h>
++#include <linux/mfd/syscon.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
++#include <linux/regmap.h>
+ #include <linux/sys_soc.h>
+ 
+ #include "rz-sysc.h"
+@@ -81,6 +83,14 @@ static int rz_sysc_soc_init(struct rz_sysc *sysc, const struct of_device_id *mat
+ 	return 0;
+ }
+ 
++static struct regmap_config rz_sysc_regmap = {
++	.name = "rz_sysc_regs",
++	.reg_bits = 32,
++	.reg_stride = 4,
++	.val_bits = 32,
++	.fast_io = true,
++};
++
+ static const struct of_device_id rz_sysc_match[] = {
+ #ifdef CONFIG_SYSC_R9A08G045
+ 	{ .compatible = "renesas,r9a08g045-sysc", .data = &rzg3s_sysc_init_data },
+@@ -97,14 +107,21 @@ MODULE_DEVICE_TABLE(of, rz_sysc_match);
+ 
+ static int rz_sysc_probe(struct platform_device *pdev)
+ {
++	const struct rz_sysc_init_data *data;
+ 	const struct of_device_id *match;
+ 	struct device *dev = &pdev->dev;
++	struct regmap *regmap;
+ 	struct rz_sysc *sysc;
++	int ret;
+ 
+ 	match = of_match_node(rz_sysc_match, dev->of_node);
+ 	if (!match)
+ 		return -ENODEV;
+ 
++	data = match->data;
++	if (!data)
++		return -EINVAL;
++
+ 	sysc = devm_kzalloc(dev, sizeof(*sysc), GFP_KERNEL);
+ 	if (!sysc)
+ 		return -ENOMEM;
+@@ -114,7 +131,18 @@ static int rz_sysc_probe(struct platform_device *pdev)
+ 		return PTR_ERR(sysc->base);
+ 
+ 	sysc->dev = dev;
+-	return rz_sysc_soc_init(sysc, match);
++	ret = rz_sysc_soc_init(sysc, match);
++
++	if (data->max_register_offset) {
++		rz_sysc_regmap.max_register = data->max_register_offset;
++		regmap = devm_regmap_init_mmio(dev, sysc->base, &rz_sysc_regmap);
++		if (IS_ERR(regmap))
++			return PTR_ERR(regmap);
++
++		ret = of_syscon_register_regmap(dev->of_node, regmap);
++	}
++
++	return ret;
+ }
+ 
+ static struct platform_driver rz_sysc_driver = {
+diff --git a/drivers/soc/renesas/rz-sysc.h b/drivers/soc/renesas/rz-sysc.h
+index aa83948c5117..37a3bb2c87f8 100644
+--- a/drivers/soc/renesas/rz-sysc.h
++++ b/drivers/soc/renesas/rz-sysc.h
+@@ -34,9 +34,11 @@ struct rz_sysc_soc_id_init_data {
+ /**
+  * struct rz_sysc_init_data - RZ SYSC initialization data
+  * @soc_id_init_data: RZ SYSC SoC ID initialization data
++ * @max_register_offset: Maximum SYSC register offset to be used by the regmap config
+  */
+ struct rz_sysc_init_data {
+ 	const struct rz_sysc_soc_id_init_data *soc_id_init_data;
++	u32 max_register_offset;
+ };
+ 
+ extern const struct rz_sysc_init_data rzg3e_sys_init_data;
 -- 
 2.25.1
 
