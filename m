@@ -1,199 +1,165 @@
-Return-Path: <linux-pm+bounces-24079-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24080-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31A1BA6237E
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 01:56:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F800A6259D
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 04:55:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68F25420AA4
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 00:56:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 996E8881C76
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 03:54:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC9ACA52;
-	Sat, 15 Mar 2025 00:56:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="00AEhJey"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D89C18A6AD;
+	Sat, 15 Mar 2025 03:54:59 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7622E10F1
-	for <linux-pm@vger.kernel.org>; Sat, 15 Mar 2025 00:56:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D571401C;
+	Sat, 15 Mar 2025 03:54:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742000202; cv=none; b=Kv4GPvi6rD9MzRsNPOP9TdLmdtVyVJUrU9hXIp8ES9uKcI3uNLSZTbFQRuQ8C6MHGrJUn/0F3NY1Svoz+Z37vb2jY5ziqRWW2F7kRwvGHWBPfOms5l5ScX7XUTNO5B2nbm/9dFe1/lFYu8kXCeKPiwu75doqlcCHa48PRYa0nqg=
+	t=1742010899; cv=none; b=tdQTbWm2HdCvUkqZxQ0BeQcN5cdHPomRagzVuJo1xlfJDmxfqDZ5lExto0kDPWiuC+I0tWZbTzBAOdCvxPbVPRp1sjp6PlaXnhaUk0tJnmBF6A/YA0OicmZrErVNM9gUcKErMxGAib63RzWJYOq6BwVHWOlRby9mqLISAPanIGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742000202; c=relaxed/simple;
-	bh=dFv//A/N53hUD/dKk0EKx9Sd5ho6SwDR5GWOeJGznwg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EaftdHRZ4UptqsG/dmShXKxfF363FbR36f3GW/IeQJS9vfIX2swyfxGJEZ6FnFm5Nfuxt2KZqXiesKTtK5uVCAXHTbohge9Al0XWQkgqJe20twMsJsDhOxpYK03th7MAqXcFPujXHNy65MXcrxK+bf5LSj0KgWqqbjorDkvU0MY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=00AEhJey; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-22409077c06so69058835ad.1
-        for <linux-pm@vger.kernel.org>; Fri, 14 Mar 2025 17:56:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1742000200; x=1742605000; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jlPzh6p1/5lGDsISw1+G4tFXT2WVaPLY/RSip+CLZfo=;
-        b=00AEhJeyHoC7TUYh0Es8UhYq8q/4iGYgJSXNWRgqPBTcNiAKtibh5POQA35s/4Xqcj
-         NKe703McvRb69PzQbFBJhfsu7LkfGBI7ibXbBtfb1QN4k05wz6SqNMyklkqRD8Wsn/il
-         CGrJdnAVXBE1OvBSzC6GkLSl4KB0RKaTs60+p8eCXpFKkM9+g78pMf73aCxnkaJ4VEAO
-         knpqzaw3NMNcdbAEIQr7wmRPqptGaSn9ZJfpTIOBORK/euDt7SBp+OQpuXLxr6hDTmiz
-         A3oTZT/y5R6WlEgq7krBNkIeGVLMOy9PzQjbfTsQRUxI0X6lmflPO1VqPKzherZpjJpq
-         CY1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742000200; x=1742605000;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jlPzh6p1/5lGDsISw1+G4tFXT2WVaPLY/RSip+CLZfo=;
-        b=N1X6V0kb9G/v7swNDt7Jzn+7gc3ncex3OgN+XUIf6jk821ahFHPYDsDXfyAn+9ndfF
-         dQ0Q4cyEJ2QAVDpET2ptQuVCX5RSj7q0RXQz2peCe0kLQOadPT2W3X0mCmEOp2OuFthq
-         d8qVLtaV2RCTwKlgLg92+Y2ZcAChYIhHvOAELv9TKbpQceveoYy/tDk34NveYSYNSa5f
-         VjQkzGNUAAclvFTYq2nBLzsn/DCDnYMZhUJdCEVoSS3lQAiz1xp/0/X/NFW7tShZz6Al
-         KRvRrpicUzUrgpQZecOBkfe/xRXY/1fkkTWxKjGfxvCO04EvrVLFsIXzTNemsDiGEBB7
-         ZKgg==
-X-Forwarded-Encrypted: i=1; AJvYcCUk+8mV9mn/eBEDU7cqUGLxaFAXPBYvLYti+DJ4oQTvSDEB6+wRCQUPIxcUFuqeIbOHwKMdAStuvQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4ysygO9VwlCz6dvM7OTPuUea/Cqg5bhs96AYGi6qQcz/vjWUx
-	Nr/DdwODJUOhVzPQSG4ahXbIUrJOLRhnYjnDJh0au5LPMWnxvurJAIwzheMofQ==
-X-Gm-Gg: ASbGncuXMcJV6QhIUCRoagU3XP1GE5+Qg+o64S6TSfJDWDQza12LB30HGX81HhmYmis
-	ytuhwGyUsoCz2Ds1KaMxj2Og54He89fnEi/eXAq6Q3s36GLigoFC8DxrEntfB7QT3ECoBjOgjdz
-	lapTncQXUAz3bqOCCT2oP58//hT52IN/bQSVOZ9TFUQrUFX8u7T5llZqYZzUP+AIY3Glq5pOOiF
-	A5cZGiH9Fxi837ncAQAglFFuLSf8RwriMz++YOm4wOE71u3nT4CiJRsYIVsPJWaN0uHY2ampxQr
-	kqox3NTEYaUc6d6z1CBDwPH8pctfR4bwsQrj4aiZBCVa8sXQY97im95ojl4eJGmad5BnwezwWiE
-	AcGqGIXar+k1RevLBF9SqHqsGXh3MsdaCSLkvad1vnho=
-X-Google-Smtp-Source: AGHT+IGLAZyr9y6XFIkao+qhVXq299qSBu0NyjP0SxDe+I/hBmyjWfLdod7q25DFZQQHCPjxfpF0Vg==
-X-Received: by 2002:a17:902:ecc5:b0:223:f7ec:f834 with SMTP id d9443c01a7336-225e0a840camr50486775ad.31.1742000199456;
-        Fri, 14 Mar 2025 17:56:39 -0700 (PDT)
-Received: from ?IPV6:2a00:79e0:2e14:7:1790:6e62:92ba:cb2b? ([2a00:79e0:2e14:7:1790:6e62:92ba:cb2b])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c68883d0sm34730585ad.10.2025.03.14.17.56.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Mar 2025 17:56:39 -0700 (PDT)
-Message-ID: <85c6de6a-f8b4-4e4e-8fa2-da53816abc89@google.com>
-Date: Fri, 14 Mar 2025 17:56:37 -0700
+	s=arc-20240116; t=1742010899; c=relaxed/simple;
+	bh=+HrchmFiWv4sJJZJLlQcXTxS1XWZzpWTRXOnR4nZLTs=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=ZX2wNidf6BhjwIemn9qoNEPC8PzcXYun6SKfw35lnfLPRL7JU15pyl6a5g/s66VvhCf7M8XSWu8rE9VIm8igzfFir8HUcwu7PTn/g7BFEIc7leCLPiMGWZtvnAnc/n9F4T+9GA7QFtL8XfkxKvrEpdySa1rol05g95dskjVqzN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4ZF6hD1qVlz2RTJX;
+	Sat, 15 Mar 2025 11:50:20 +0800 (CST)
+Received: from kwepemk500005.china.huawei.com (unknown [7.202.194.90])
+	by mail.maildlp.com (Postfix) with ESMTPS id 499811402E1;
+	Sat, 15 Mar 2025 11:54:45 +0800 (CST)
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemk500005.china.huawei.com (7.202.194.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Sat, 15 Mar 2025 11:54:44 +0800
+Subject: Re: [v4 PATCH 10/13] ubifs: Use crypto_acomp interface
+To: Herbert Xu <herbert@gondor.apana.org.au>, Linux Crypto Mailing List
+	<linux-crypto@vger.kernel.org>
+CC: Richard Weinberger <richard@nod.at>, <linux-mtd@lists.infradead.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+	<linux-pm@vger.kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>,
+	<netdev@vger.kernel.org>
+References: <cover.1741954523.git.herbert@gondor.apana.org.au>
+ <349a78bc53d3620a29cc6105b55985db51aa0a11.1741954523.git.herbert@gondor.apana.org.au>
+From: Zhihao Cheng <chengzhihao1@huawei.com>
+Message-ID: <023a23b0-d9fd-6d4d-d5a2-207e47419645@huawei.com>
+Date: Sat, 15 Mar 2025 11:54:43 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] dt-bindings: connector: add fixed-batteries property
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Sebastian Reichel <sre@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@kernel.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-pm@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
- Kyle Tso <kyletso@google.com>
-References: <20250312-batt_ops-v1-0-88e0bb3129fd@google.com>
- <20250312-batt_ops-v1-1-88e0bb3129fd@google.com>
- <20250313-tidy-kakapo-of-abundance-eebf91@krzk-bin>
-Content-Language: en-US
-From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <20250313-tidy-kakapo-of-abundance-eebf91@krzk-bin>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <349a78bc53d3620a29cc6105b55985db51aa0a11.1741954523.git.herbert@gondor.apana.org.au>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemk500005.china.huawei.com (7.202.194.90)
 
-Hi Krzysztof,
+ÔÚ 2025/3/14 20:22, Herbert Xu Ð´µÀ:
+> Replace the legacy crypto compression interface with the new acomp
+> interface.
+> 
+> Remove the compression mutexes and the overallocation for memory
+> (the offender LZO has been fixed).
+> 
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+> ---
+>   fs/ubifs/compress.c | 116 ++++++++++++++++++++++++++++----------------
+>   fs/ubifs/journal.c  |   2 +-
+>   fs/ubifs/ubifs.h    |  15 +-----
+>   3 files changed, 77 insertions(+), 56 deletions(-)
+> 
+> diff --git a/fs/ubifs/compress.c b/fs/ubifs/compress.c
+> index 0b48cbab8a3d..9046e796876d 100644
+> --- a/fs/ubifs/compress.c
+> +++ b/fs/ubifs/compress.c
+> @@ -15,7 +15,7 @@
+>    * decompression.
+>    */
+>   
+> -#include <linux/crypto.h>
+> +#include <crypto/acompress.h>
+>   #include "ubifs.h"
+>   
+>   /* Fake description object for the "none" compressor */
+> @@ -26,11 +26,8 @@ static struct ubifs_compressor none_compr = {
+>   };
+>   
+>   #ifdef CONFIG_UBIFS_FS_LZO
+> -static DEFINE_MUTEX(lzo_mutex);
+> -
+>   static struct ubifs_compressor lzo_compr = {
+>   	.compr_type = UBIFS_COMPR_LZO,
+> -	.comp_mutex = &lzo_mutex,
+>   	.name = "lzo",
+>   	.capi_name = "lzo",
+>   };
+> @@ -42,13 +39,8 @@ static struct ubifs_compressor lzo_compr = {
+>   #endif
+>   
+>   #ifdef CONFIG_UBIFS_FS_ZLIB
+> -static DEFINE_MUTEX(deflate_mutex);
+> -static DEFINE_MUTEX(inflate_mutex);
+> -
+>   static struct ubifs_compressor zlib_compr = {
+>   	.compr_type = UBIFS_COMPR_ZLIB,
+> -	.comp_mutex = &deflate_mutex,
+> -	.decomp_mutex = &inflate_mutex,
+>   	.name = "zlib",
+>   	.capi_name = "deflate",
+>   };
+> @@ -60,13 +52,8 @@ static struct ubifs_compressor zlib_compr = {
+>   #endif
+>   
+>   #ifdef CONFIG_UBIFS_FS_ZSTD
+> -static DEFINE_MUTEX(zstd_enc_mutex);
+> -static DEFINE_MUTEX(zstd_dec_mutex);
+> -
+>   static struct ubifs_compressor zstd_compr = {
+>   	.compr_type = UBIFS_COMPR_ZSTD,
+> -	.comp_mutex = &zstd_enc_mutex,
+> -	.decomp_mutex = &zstd_dec_mutex,
+>   	.name = "zstd",
+>   	.capi_name = "zstd",
+>   };
+> @@ -80,6 +67,40 @@ static struct ubifs_compressor zstd_compr = {
+>   /* All UBIFS compressors */
+>   struct ubifs_compressor *ubifs_compressors[UBIFS_COMPR_TYPES_CNT];
+>   
+> +static int ubifs_compress_req(const struct ubifs_info *c,
+> +			      struct acomp_req *req,
+> +			      void *out_buf, int *out_len)
+> +{
+> +	struct crypto_wait wait;
+> +	int in_len = req->slen;
+> +	int err;
+> +
+> +	crypto_init_wait(&wait);
+> +	acomp_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG,
+> +				   crypto_req_done, &wait);
+> +	acomp_request_set_dst_dma(req, out_buf, *out_len);
+> +	err = crypto_acomp_compress(req);
+> +	err = crypto_wait_req(err, &wait);
+> +	*out_len = req->dlen;
+> +
+> +	if (unlikely(err)) {
+> +		ubifs_warn(c, "cannot compress %d bytes, compressor %s, error %d, leave data uncompressed",
+> +			   in_len,
+> +			   crypto_acomp_alg_name(crypto_acomp_reqtfm(req)),
 
-On 3/13/25 1:48 AM, Krzysztof Kozlowski wrote:
-> On Wed, Mar 12, 2025 at 04:42:01PM -0700, Amit Sunil Dhamne wrote:
->> Add a new "fixed-batteries" DT property to connector class. This
->> property is populated with nodes associated with battery type power
->> supplies powering the USB PD connector. This is needed by the Type-C
->> Port Manager (TCPM) to query psy properties which are used to feed
-> What is "psy" in terms of bindings?
-In terms of bindings this should be a phandle to a device that 
-owns/manages the battery (whose driver will eventually call 
-devm_power_supply_register to register the battery). This could be a 
-fuel-guage ("sprd,sc2731-fgu", say), charger ("ti,bq24190") or a 
-platform device ("cw2015") containing "monitored-battery" property to 
-manage the simple battery.
->> Battery_Status & Battery_Capacity AMS.
->>
->> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->> ---
->>   Documentation/devicetree/bindings/connector/usb-connector.yaml | 8 ++++++++
->>   Documentation/devicetree/bindings/usb/maxim,max33359.yaml      | 1 +
->>   2 files changed, 9 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> index 11e40d225b9f3a0d0aeea7bf764f1c00a719d615..5e15bc060f5a2cfce842f83de738f1e8bae3ce2d 100644
->> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> @@ -300,6 +300,14 @@ properties:
->>       $ref: /schemas/types.yaml#/definitions/uint8-array
->>       maxItems: 4
->>   
->> +  fixed-batteries:
->> +    description: Contains references to nodes associated with battery type power
->> +      supplies powering the USB PD device. These batteries are fixed type and
-> What is a "battery type power supply"? If you just link here batteries,
-> then we have type for it - monitored-battery - but I doubt connector has
-> direct connection to the battery.
-Regarding "nodes associated with battery type power supplies", I meant 
-something like a fuel guage or a charger OR platform device with 
-"monitored-battery" that will manage the battery lifecycle. If I use 
-monitored-battery for this, I will be restricted to only querying 1 
-simple battery. Also, I don't mean PD connector device to be a fuel 
-guage or charger that manages a specific battery. It should just be able 
-to query any FG/Chg for the battery status to relay that info to the 
-connector's port partner.
+We get capi_name by 'crypto_acomp_alg_name(crypto_acomp_reqtfm(req))', 
+not compr->name.
 
-The intent of the patchset & this change is for the USB Type C protocol 
-manager module (that consumes these bindings) to be able to get info 
-(such as State of charge, design capacity, etc) from drivers that manage 
-the battery/batteries in the system. In order for such info to propagate 
-I need to hook up the references of these battery manager devices (fuel 
-guages, etc.) to connector.
-
-I have addressed the connector <-> battery question in the cover letter.
-
-
-> If you mean chargers, the OF graph is already there for this and no need
-> for this patch.
-
-No I don't mean just chargers in this case. Also, I didn't follow you on 
-the OF graph. Please can you explain further?
-
-
->
->> +      not hot swappable.
->> +    minItems: 1
->> +    maxItems: 4
->> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->> +
->>   dependencies:
->>     sink-vdos-v1: [ sink-vdos ]
->>     sink-vdos: [ sink-vdos-v1 ]
->> diff --git a/Documentation/devicetree/bindings/usb/maxim,max33359.yaml b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
->> index 3de4dc40b79192b60443421b557bd2fb18683bf7..66c99f0131f074f1c08e31d7481f555647e3b2f8 100644
->> --- a/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
->> +++ b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
->> @@ -75,6 +75,7 @@ examples:
->>                                          PDO_FIXED(9000, 2000, 0)>;
->>                   sink-bc12-completion-time-ms = <500>;
->>                   pd-revision = /bits/ 8 <0x03 0x01 0x01 0x08>;
->> +                fixed-batteries = <&batt1 &batt2>;
-> Two phandles, so two <>.
-
-Ack. Will fix it in the next revision.
-
-Thanks,
-
-Amit
-
-> Best regards,
-> Krzysztof
->
+There are conflicts in patch 2 on the latest mainline version, can you 
+rebase this series so I can do some tests for UBIFS.
 
