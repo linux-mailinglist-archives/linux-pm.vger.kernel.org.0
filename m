@@ -1,238 +1,207 @@
-Return-Path: <linux-pm+bounces-24117-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24118-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33752A62E8D
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 15:58:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97107A62F5A
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 16:40:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8BF87A678B
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 14:56:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC9A216E959
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Mar 2025 15:40:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 193A31FFC4B;
-	Sat, 15 Mar 2025 14:57:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63596202963;
+	Sat, 15 Mar 2025 15:40:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b/s6USe4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CCdmCi2D"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2BD91B4234;
-	Sat, 15 Mar 2025 14:57:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18F044A29;
+	Sat, 15 Mar 2025 15:40:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742050674; cv=none; b=GRB6WmcbF5ox1DJVtVmmlL+2DRUJNcSD+7f+KoX1ULeydmSPF4TcDAb63CRgMs/dNiqtmtd7U+0Ci++p5112dvvfZ+PWWxBqo0Vs1hPx1yImKrH2n746wfHZ4/IMN1dAwHnB7FtDAxdFyztLHKDY1/MhljKnnHJfm94dhGzHyLc=
+	t=1742053246; cv=none; b=VcwcDY8JLoe/XhuZjEBrUSFd9f5GXM2yyChc6ILonflgcCP67/oLgtnmeu3PAzGG13anjdbKJtUibHaHJ16unv1JNNbOXvI2AhXElSViaaCqjuE7m4JGruKVBeRUCqlqMZu9cNg5F5bwtbcrQPXWg7y32UH0wH6pae//fIjOL70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742050674; c=relaxed/simple;
-	bh=VAGcEkTA21upuXvwr1kQ3PnByIORGCDbW++j3x8AWAs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CtnJ8BCDcm3AEAAW5RqaPvvqL1vktOHOG3aDkd5bK9uJEMRxsH2QwVbzhtXJJeIG8GnStMurkFVNIlcFMsKuMs9+mj9S74pp+zO0CEBja9fvbhi2m4L3QIuVhLiQNuw0J0nPadXP7JkYgHLtnf42Z7dVT45kpGZ3gJHEc1DPVUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b/s6USe4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AED6C4AF09;
-	Sat, 15 Mar 2025 14:57:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742050673;
-	bh=VAGcEkTA21upuXvwr1kQ3PnByIORGCDbW++j3x8AWAs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=b/s6USe4OK1g6LB5sM8h4Q9/0T0IB568pRk6PYnh1BksfPxI7Gup0YMkIqpL1zr0f
-	 3NFxJx89KTKhl2MkV/tTxDIvHovLc0hKByDQrQRU4AjAI92FvSsBUUkPNZ7xfodOiA
-	 79hZr5h4sz2DXBXy9WKDUDvud0fvGDylDdqBq36zxF0CNeYJ8UMExUqsLxQhNHfAdz
-	 Hnzn2LBxR0f9kj7UPtYpwfIs7T6pDd0ILy2tSp9QlufUO2pGM7AL9vFxnpKyU4QgLK
-	 lT3j8BzxALSOeRT2dQ7n4pEtgWRPcJ2ZzdOi8LtexqwOQbp0cQuuNp0V2igjL+L0mM
-	 M0AXemjOgdOrg==
-Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3f3f4890596so1707963b6e.2;
-        Sat, 15 Mar 2025 07:57:53 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWLfWcN6Dx7V+jwGcvxKVmFRgb70EhIMDRMvImnRqE6H5GvnKlANXxemDdAYFJP0KISJs8/hxe8fX5gnCk=@vger.kernel.org, AJvYcCXfjRIbOKnZ2ZuqLP47spoDjhIK+NDuJAmKKfs69u/5nu7i0UL9ezWyCEYr+VfQuvyjPAf+8YQ/ETs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxO5IS/s+5xzixnyARxJQSYOZdrVjVEhWV5vB1AjipTWtGZv8MY
-	WiI6oceJ6QpU7Hho1YYq4doPRUSGTiLU7ydRvAxU1RhezCiswdj2FAe2yjud+puNfvF7kfQzp+g
-	jd1W5HahrMZcnPIvxt3vK6+ggyvo=
-X-Google-Smtp-Source: AGHT+IFtXlaQXRcbAUeBvfSA61J2gCJBOg1KbzrYBRTUvUPkIHmIZSDLtXFewyEXlGxqdUuAtBKd4BcGlUCIQ8LflRc=
-X-Received: by 2002:a05:6808:1828:b0:3fa:53b5:6f87 with SMTP id
- 5614622812f47-3fdf04592c0mr3568765b6e.34.1742050672591; Sat, 15 Mar 2025
- 07:57:52 -0700 (PDT)
+	s=arc-20240116; t=1742053246; c=relaxed/simple;
+	bh=XDzRU2dBwm+W590gBEQyWsDmZqDJlb/XIdqZ+49Rjno=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=G4sIo+yfQZ++k/I5FpBwftZeea/y0V6Ba7Srf+oeKV2l7U9+3ZCu6Dz8EWClY4oihDFrmJumaGBHrh1uITNP3FoJIicOPFxtNKR5xHuyVyX8t/8BS4gIPTPSGAgr7s93qhTchv4ag/+UIzHdDp6H7xTHoSHsp6GMhyeHPRKhaas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CCdmCi2D; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742053244; x=1773589244;
+  h=date:from:to:cc:subject:message-id;
+  bh=XDzRU2dBwm+W590gBEQyWsDmZqDJlb/XIdqZ+49Rjno=;
+  b=CCdmCi2DdgKlA16XCqfP3ZQ/i17A9nPApCGSNKbm5ieM2B/QF162x1J8
+   ddOxnv6Zll+d303VQwURGrdvv4dNng5hz5Xh9vWgDo7M3MqbYw2L93sLS
+   untXEdVDI1vokTCx9D4Pty9UIMl0Nmll5dfWINwvqUP2f6pdy0l2uw9pi
+   3nGT/wEe8AkJYYxcLOFRwuRMiGm+umlmcfGXF3ufByWgz4TVZYINWS5+R
+   e2JpADyqpOzuxCUVGkRm2oLtsT1R2SGLCBbcnHh7BJTNi/EieaH4nLW6X
+   vf4geIWbhD9xpglSd34JJpmRZSH07LnxNUxABdo8WKbiK6TqldTcQZgLi
+   g==;
+X-CSE-ConnectionGUID: Em8r+f0rQvmSqkPqUfFzdQ==
+X-CSE-MsgGUID: H88oqFS8RNCbYqlkjSMUwA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11374"; a="43105222"
+X-IronPort-AV: E=Sophos;i="6.14,250,1736841600"; 
+   d="scan'208";a="43105222"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2025 08:40:43 -0700
+X-CSE-ConnectionGUID: Tpdu8XhMQYWblunNzcTjVw==
+X-CSE-MsgGUID: r0YIKvxqTYOsWFNwbrAoeg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,250,1736841600"; 
+   d="scan'208";a="121581111"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 15 Mar 2025 08:40:41 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ttTct-000BPu-2U;
+	Sat, 15 Mar 2025 15:40:39 +0000
+Date: Sat, 15 Mar 2025 23:40:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 1fe6dd9309d02a2f3487b5495bea602d9e057548
+Message-ID: <202503152327.Eze7mP9A-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <10629535.nUPlyArG6x@rjwysocki.net> <CAGETcx8VmzU9xy39=_QAQ0pf5fZY=EbGOKrdy0_wLEW1pQ2oKw@mail.gmail.com>
-In-Reply-To: <CAGETcx8VmzU9xy39=_QAQ0pf5fZY=EbGOKrdy0_wLEW1pQ2oKw@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sat, 15 Mar 2025 15:57:41 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gXG+0CgBZTcxzenxHO-ah3YwFaQm6GHCeuyZT9CR=-zg@mail.gmail.com>
-X-Gm-Features: AQ5f1Jp0w9Tt0hvqJR7f0AX3YESUHYoYmItiba8gNUcvlIrCClt9FmqhkoQwQM0
-Message-ID: <CAJZ5v0gXG+0CgBZTcxzenxHO-ah3YwFaQm6GHCeuyZT9CR=-zg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] PM: sleep: Improvements of async suspend and
- resume of devices
-To: Saravana Kannan <saravanak@google.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Johan Hovold <johan@kernel.org>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Jon Hunter <jonathanh@nvidia.com>
-Content-Type: multipart/mixed; boundary="000000000000857917063062c7f4"
 
---000000000000857917063062c7f4
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 1fe6dd9309d02a2f3487b5495bea602d9e057548  Merge branch 'pm-sleep-testing' into bleeding-edge
 
-On Fri, Mar 14, 2025 at 10:06=E2=80=AFPM Saravana Kannan <saravanak@google.=
-com> wrote:
->
-> On Fri, Mar 14, 2025 at 6:24=E2=80=AFAM Rafael J. Wysocki <rjw@rjwysocki.=
-net> wrote:
-> >
-> > Hi Everyone,
-> >
-> > This is a new iteration of the async suspend/resume improvements work:
-> >
-> > https://lore.kernel.org/linux-pm/1915694.tdWV9SEqCh@rjwysocki.net/
-> >
-> > which includes some rework and fixes of the patches in the series linke=
-d
-> > above.  The most significant differences are splitting the second patch
-> > into two patches and adding a change to treat consumers like children
-> > during resume.
-> >
-> > This new iteration is based on linux-pm.git/linux-next and on the recen=
-t
-> > fix related to direct-complete:
-> >
-> > https://lore.kernel.org/linux-pm/12627587.O9o76ZdvQC@rjwysocki.net/
-> >
-> > The overall idea is still to start async processing for devices that ha=
-ve
-> > at least some dependencies met, but not necessarily all of them, to avo=
-id
-> > overhead related to queuing too many async work items that will have to
-> > wait for the processing of other devices before they can make progress.
-> >
-> > Patch [1/5] does this in all resume phases, but it just takes children
-> > into account (that is, async processing is started upfront for devices
-> > without parents and then, after resuming each device, it is started for
-> > the device's children).
-> >
-> > Patches [2/5] does this in the suspend phase of system suspend and only
-> > takes parents into account (that is, async processing is started upfron=
-t
-> > for devices without any children and then, after suspending each device=
-,
-> > it is started for the device's parent).
-> >
-> > Patch [3/5] extends it to the "late" and "noirq" suspend phases.
-> >
-> > Patch [4/5] adds changes to treat suppliers like parents during suspend=
-.
-> > That is, async processing is started upfront for devices without any
-> > children or consumers and then, after suspending each device, it is
-> > started for the device's parent and suppliers.
-> >
-> > Patch [5/5] adds changes to treat consumers like children during resume=
-.
-> > That is, async processing is started upfront for devices without a pare=
-nt
-> > or any suppliers and then, after resuming each device, it is started fo=
-r
-> > the device's children and consumers.
-> >
-> > Preliminary test results from one sample system are below.
-> >
-> > "Baseline" is the linux-pm.git/testing branch, "Parent/child"
-> > is that branch with patches [1-3/5] applied and "Device links"
-> > is that branch with patches [1-5/5] applied.
-> >
-> > "s/r" means "regular" suspend/resume, noRPM is "late" suspend
-> > and "early" resume, and noIRQ means the "noirq" phases of
-> > suspend and resume, respectively.  The numbers are suspend
-> > and resume times for each phase, in milliseconds.
-> >
-> >          Baseline       Parent/child    Device links
-> >
-> >        Suspend Resume  Suspend Resume  Suspend Resume
-> >
-> > s/r    427     449     298     450     294     442
-> > noRPM  13      1       13      1       13      1
-> > noIRQ  31      25      28      24      28      26
-> >
-> > s/r    408     442     298     443     301     447
-> > noRPM  13      1       13      1       13      1
-> > noIRQ  32      25      30      25      28      25
-> >
-> > s/r    408     444     310     450     298     439
-> > noRPM  13      1       13      1       13      1
-> > noIRQ  31      24      31      26      31      24
-> >
-> > It clearly shows an improvement in the suspend path after
-> > applying patches [1-3/5], easily attributable to patch [2/5],
-> > and clear difference after updating the async processing of
-> > suppliers and consumers.
+elapsed time: 1451m
 
-A "no" is missing above, it should be "and no clear difference after
-updating ...".
+configs tested: 113
+configs skipped: 2
 
-Also, please find attached a text file with sample results from 3
-different systems (including the one above), not for drawing any
-conclusions (the number of samples is too low), but to illustrate what
-can happen.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-While both Dell XPS13 systems show a consistent improvement after
-applying the first three patches, everything else is essentially a
-wash (particularly on the desktop machine that seems to suspend and
-resume as fast as it gets already).
+tested configs:
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-13.2.0
+arc                              allyesconfig    gcc-13.2.0
+arc                   randconfig-001-20250315    gcc-13.2.0
+arc                   randconfig-002-20250315    gcc-13.2.0
+arm                              allmodconfig    gcc-14.2.0
+arm                              allyesconfig    gcc-14.2.0
+arm                           h3600_defconfig    gcc-14.2.0
+arm                            hisi_defconfig    gcc-14.2.0
+arm                         lpc32xx_defconfig    clang-21
+arm                   randconfig-001-20250315    gcc-14.2.0
+arm                   randconfig-002-20250315    clang-21
+arm                   randconfig-003-20250315    clang-21
+arm                   randconfig-004-20250315    gcc-14.2.0
+arm                        vexpress_defconfig    gcc-14.2.0
+arm64                            allmodconfig    clang-18
+arm64                 randconfig-001-20250315    gcc-14.2.0
+arm64                 randconfig-002-20250315    gcc-14.2.0
+arm64                 randconfig-003-20250315    clang-16
+arm64                 randconfig-004-20250315    gcc-14.2.0
+csky                  randconfig-001-20250315    gcc-14.2.0
+csky                  randconfig-002-20250315    gcc-14.2.0
+hexagon                          allmodconfig    clang-21
+hexagon                          allyesconfig    clang-18
+hexagon               randconfig-001-20250315    clang-21
+hexagon               randconfig-002-20250315    clang-17
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250315    gcc-12
+i386        buildonly-randconfig-002-20250315    clang-19
+i386        buildonly-randconfig-003-20250315    clang-19
+i386        buildonly-randconfig-004-20250315    clang-19
+i386        buildonly-randconfig-005-20250315    gcc-11
+i386        buildonly-randconfig-006-20250315    gcc-12
+i386                                defconfig    clang-19
+loongarch             randconfig-001-20250315    gcc-14.2.0
+loongarch             randconfig-002-20250315    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+m68k                          multi_defconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+mips                        qi_lb60_defconfig    clang-18
+mips                        vocore2_defconfig    clang-15
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20250315    gcc-14.2.0
+nios2                 randconfig-002-20250315    gcc-14.2.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                            defconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                              defconfig    gcc-14.2.0
+parisc                randconfig-001-20250315    gcc-14.2.0
+parisc                randconfig-002-20250315    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                       eiger_defconfig    clang-17
+powerpc                    mvme5100_defconfig    gcc-14.2.0
+powerpc               randconfig-001-20250315    clang-21
+powerpc               randconfig-002-20250315    gcc-14.2.0
+powerpc               randconfig-003-20250315    clang-18
+powerpc64             randconfig-001-20250315    gcc-14.2.0
+powerpc64             randconfig-002-20250315    clang-18
+powerpc64             randconfig-003-20250315    gcc-14.2.0
+riscv                             allnoconfig    gcc-14.2.0
+riscv                               defconfig    clang-19
+riscv                 randconfig-001-20250315    gcc-14.2.0
+riscv                 randconfig-002-20250315    gcc-14.2.0
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-15
+s390                             allyesconfig    gcc-14.2.0
+s390                                defconfig    clang-15
+s390                  randconfig-001-20250315    clang-19
+s390                  randconfig-002-20250315    gcc-14.2.0
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                                  defconfig    gcc-14.2.0
+sh                    randconfig-001-20250315    gcc-14.2.0
+sh                    randconfig-002-20250315    gcc-14.2.0
+sh                           se7619_defconfig    gcc-14.2.0
+sh                   secureedge5410_defconfig    gcc-14.2.0
+sh                        sh7763rdp_defconfig    gcc-14.2.0
+sh                   sh7770_generic_defconfig    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250315    gcc-14.2.0
+sparc                 randconfig-002-20250315    gcc-14.2.0
+sparc64                             defconfig    gcc-14.2.0
+sparc64               randconfig-001-20250315    gcc-14.2.0
+sparc64               randconfig-002-20250315    gcc-14.2.0
+um                               allmodconfig    clang-21
+um                                allnoconfig    clang-18
+um                               allyesconfig    gcc-12
+um                                  defconfig    clang-21
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20250315    gcc-12
+um                    randconfig-002-20250315    clang-18
+um                           x86_64_defconfig    clang-15
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20250315    gcc-12
+x86_64      buildonly-randconfig-002-20250315    clang-19
+x86_64      buildonly-randconfig-003-20250315    clang-19
+x86_64      buildonly-randconfig-004-20250315    clang-19
+x86_64      buildonly-randconfig-005-20250315    clang-19
+x86_64      buildonly-randconfig-006-20250315    gcc-12
+x86_64                              defconfig    gcc-11
+xtensa                           alldefconfig    gcc-14.2.0
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                  nommu_kc705_defconfig    gcc-14.2.0
+xtensa                randconfig-001-20250315    gcc-14.2.0
+xtensa                randconfig-002-20250315    gcc-14.2.0
+xtensa                         virt_defconfig    gcc-14.2.0
 
-> >
-> > Note that there are systems where resume times are shorter after
-> > patches [1-3/5] too, but more testing is necessary.
-> >
-> > I do realize that this code can be optimized further, but it is not
-> > particularly clear to me that any further optimizations would make
-> > a significant difference and the changes in this series are deep
-> > enough to do in one go.
->
-> Thanks for adding patches 4 and 5!
-
-No problem.
-
-> Let me try to test them early next week and compare your patches 1-3,
-> 1-5 and my series (which does additional checks to make sure
-> suppliers/consumers are done). I do about 100 suspend/resume runs for
-> each kernel, so please bear with me while I get it.
-
-Thanks and no worries, please take as much time as needed.  I will be
-traveling next week, so I'll be a bit slow to respond anyway.
-
-Since I've got a confirmation from internal testing (carried out on a
-much wider range of machines and much more extensively that I can do
-it myself) that patches [1-3/5] are overall improvement, I'm planning
-to queue them up during the 6.16 cycle and other improvements can be
-done on top of them, including patches [4-5/5].  I also think that
-adding explicit status tracking (if it turns out to make things faster
-measurably with respect to this series) on top of patches [4-5/5]
-would be rather straightforward.
-
---000000000000857917063062c7f4
-Content-Type: text/plain; charset="US-ASCII"; name="async-suspend-resume.txt"
-Content-Disposition: attachment; filename="async-suspend-resume.txt"
-Content-Transfer-Encoding: base64
-Content-ID: <f_m8abl42g0>
-X-Attachment-Id: f_m8abl42g0
-
-CUJhc2VsaW5lCQlQYXJlbnRzL2NoaWxkcmVuCURldmljZSBsaW5rcwoKCVN1c3BlbmQJUmVzdW1l
-CQlTdXNwZW5kCVJlc3VtZQkJU3VzcGVuZAlSZXN1bWUKCkRlbGwgWFBTMTMgOTM2MAoKcy9yCTQy
-Nwk0NDkJCTI5OAk0NTAJCTI5NAk0NDIKbm9SUE0JMTMJMQkJMTMJMQkJMTMJMQpub0lSUQkzMQky
-NQkJMjgJMjQJCTI4CTI2CgpzL3IJNDA4CTQ0MgkJMjk4CTQ0MwkJMzAxCTQ0Nwpub1JQTQkxMwkx
-CQkxMwkxCQkxMwkxCm5vSVJRCTMyCTI1CQkzMAkyNQkJMjgJMjUKCnMvcgk0MDgJNDQ0CQkzMTAJ
-NDUwCQkyOTgJNDM5Cm5vUlBNCTEzCTEJCTEzCTEJCTEzCTEKbm9JUlEJMzEJMjQJCTMxCTI2CQkz
-MQkyNAoKRGVsbCBYUFMxMyA5MzgwCgpzL3IJNDM5CTI4MwkJMzE4CTI5MAkJMzE5CTI5MApub1JQ
-TQkxNQkyCQkxNQkxCQkxNQkyCm5vSVJRCTE5OAkxNzY2CQkyMDIJMTc0MwkJMjA0CTE3NjYKCnMv
-cgk0MzkJMjgxCQkzMTgJMjgwCQkzMjAJMjgwCm5vUlBNCTE1CTIJCTE1CTEJCTE1CTEKbm9JUlEJ
-MTk5CTE3ODEJCTIwMwkxNzgzCQkyMDUJMTc3MAoKcy9yCTQ0MAkyNzkJCTMxOQkyODEJCTMyMAky
-ODMKbm9SUE0JMTQJMgkJMTUJMQkJMTUJMQpub0lSUQkxOTcJMTc3NwkJMjAyCTE3NjUJCTIwMwkx
-NzI0CgpDb2ZmZWUgTGFrZSBEZXNrdG9wCgpzL3IJMTM4CTM0NwkJMTMwCTM0NQkJMTMyCTM0NApu
-b1JQTQkxNQkyCQkyMAkyCQkxNQkyCm5vSVJRCTE1CTI1CQkyMwkyNQkJMTYJMjYKCnMvcgkxMzMJ
-MzQ1CQkxMjQJMzQzCQkxMzEJMzQ2Cm5vUlBNCTE0CTEJCTEzCTEJCTEzCTEKbm9JUlEJMTUJMjUJ
-CTE0CTI1CQkxNAkyNQoKcy9yCTEyNAkzNDMJCTEyNgkzNDUJCTEyOAkzNDUKbm9SUE0JMTMJMQkJ
-MTMJMQkJMTMJMQpub0lSUQkxNAkyNQkJMTQJMjUJCTE0CTI2Cg==
---000000000000857917063062c7f4--
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
