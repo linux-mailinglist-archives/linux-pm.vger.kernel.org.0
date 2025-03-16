@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-24123-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24124-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38559A63679
-	for <lists+linux-pm@lfdr.de>; Sun, 16 Mar 2025 17:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 40BB3A63680
+	for <lists+linux-pm@lfdr.de>; Sun, 16 Mar 2025 17:52:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 211E8188D1EA
-	for <lists+linux-pm@lfdr.de>; Sun, 16 Mar 2025 16:50:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32241188D562
+	for <lists+linux-pm@lfdr.de>; Sun, 16 Mar 2025 16:52:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9F5C1B87E1;
-	Sun, 16 Mar 2025 16:49:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38A331C84DF;
+	Sun, 16 Mar 2025 16:52:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aHGya4GO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K9Ars1DB"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82FFA8F4A;
-	Sun, 16 Mar 2025 16:49:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0768E8F4A;
+	Sun, 16 Mar 2025 16:52:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742143795; cv=none; b=FYXBgasrATqyQBELNhq/Qn8895mV4ICggpjYpEOaFfUgqU+3REYFMRpFaOBl3H5pzTEg3AI2ZGIHRyM/a4W//SDYyukpGKOwoJQf8RbDZo9ZHLRlsgVrVrLm6CyMbb6FtoeAdIE9GOWPC03+9vqGD6gxPbO/H3D7ePe9jQEtyHg=
+	t=1742143940; cv=none; b=Uc5i5+H79CgMkwtIgPw/c5hv3B9LEeklAhrw3qS9NcmO4OJcK/kVHFrrAE2lacBJ3mZn8Msg2ZlZZrS6CewM2cKgfdypufnAvP4VP0/8BOOr6bUriGEO5GNvsFH3snWmCi+9E8Ubjcn/V1gcS1uaRNgCfGhtRCoDe5w05BuWxuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742143795; c=relaxed/simple;
-	bh=Qx8JZ5UXbAW4tdRKdlvaGVP1rWhm+NwDyBvCLqdgj6I=;
+	s=arc-20240116; t=1742143940; c=relaxed/simple;
+	bh=n78V4zbV/mHZlM5dXRpGh/gJ3GsjHWJsb+aVY10033g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e4TngWprT4FtwsPqYMm3TqfnTqa6TcTqVwVEAQCZW3nwMfUtAjpI8+KzBHvAT1xcaOeZYsPDvf+SX9QCaUw0TpOJuNUJZTBwB2ukE1cjAN/Ae/vnaSW3Sfv0cqMoWPF35EHOCTg7iaFhjynyNxWS+/ZO9J+qvUlYBtMHJ00FFOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aHGya4GO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EE8BC4CEDD;
-	Sun, 16 Mar 2025 16:49:49 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=fxOvSc6StmAOGgAwosf5mplbbHkXXmasw+Ri1Um0Rdn5v0n191Dbdp/BCQzVfW7XsY6ZMahN5s0ShP1MYD14LHAj0eAzH5Ss0KDAvnXD/ziRmc6m10QlQPlFd3Q5SYZ7spPkoePrKsPUgUPknUaxSkcTLPDOHp9Jvih4KCbGOZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K9Ars1DB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7068CC4CEDD;
+	Sun, 16 Mar 2025 16:52:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742143795;
-	bh=Qx8JZ5UXbAW4tdRKdlvaGVP1rWhm+NwDyBvCLqdgj6I=;
+	s=k20201202; t=1742143939;
+	bh=n78V4zbV/mHZlM5dXRpGh/gJ3GsjHWJsb+aVY10033g=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aHGya4GOKqq/rtzPOQ4KshuGRBOK2Lx+p9a60Z2ktt2X8RMYesvdqTOAB+B2STV4v
-	 2cruDw5G1lT4vl8xBe0UrXzwSaK/Ksy992DIT1/mMG5j9SxjbSLjTB5zAocD3CpPx8
-	 szzstemwXooYn43nGzcrvP7yQXzgQgs7AovcZK6awvjkFhbWmHRrwyL+IjIBe9zJ7j
-	 bSpRZgKQoKWz1EWpIMwhE3DutPAKnMGtHcpAiQxzVfFLOBqnWYj8p7kW/UScf9CmrJ
-	 8Z8d2mctoKxnnhPchMLLE5cylqdHhr8CulFPEeR4iVepxNSQDQNN1v9lrMLEsb3HL6
-	 8Y5CkzMsPM8jQ==
-Message-ID: <3a33dab7-87b2-4b74-b138-e368d4cbc358@kernel.org>
-Date: Sun, 16 Mar 2025 17:49:46 +0100
+	b=K9Ars1DBR870pJQUowUaiSR6+yE+luhEXbCDG4wiSyOBv6Ube2qmCtZNlJQDkKeDh
+	 /mjlL93scVn2D6WW0iiTOqr6qLqrbaargt1HnOz+1mXfBWzFU1N3hQFk4B9wc9XYJh
+	 Xv6QouSZBKT/uqKnAz9NEWskZgEs3H4gI6iXG3STQy47YDcZ/8B176DIgmVS3z/eR4
+	 GW7KFcnfwWYBK5Q/pbd/40FtL1Oh/XStZGVsIVc4KnFate3fz+5DxfuyY3bhyGAPUm
+	 LmSjwJR5SXFdkdlRK9yc/qci/cR7dGk21iwXaBehbWpCbqu5JjDdwiA6a1KAUHH4xt
+	 x9huWv09kt3AQ==
+Message-ID: <3f65fe16-56f8-4887-bb91-994b181ce5a9@kernel.org>
+Date: Sun, 16 Mar 2025 17:52:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] dt-bindings: connector: add fixed-batteries property
+Subject: Re: [PATCH 0/5] Add support for Battery Status & Battery Caps AMS in
+ TCPM
 To: Amit Sunil Dhamne <amitsd@google.com>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>,
@@ -64,9 +65,8 @@ Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  linux-pm@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
  Kyle Tso <kyletso@google.com>
 References: <20250312-batt_ops-v1-0-88e0bb3129fd@google.com>
- <20250312-batt_ops-v1-1-88e0bb3129fd@google.com>
- <20250313-tidy-kakapo-of-abundance-eebf91@krzk-bin>
- <85c6de6a-f8b4-4e4e-8fa2-da53816abc89@google.com>
+ <20250313-determined-wild-seahorse-f7871a@krzk-bin>
+ <914a0df4-96d0-4cd4-ac87-3826fa9c1440@google.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -112,69 +112,40 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <85c6de6a-f8b4-4e4e-8fa2-da53816abc89@google.com>
+In-Reply-To: <914a0df4-96d0-4cd4-ac87-3826fa9c1440@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 15/03/2025 01:56, Amit Sunil Dhamne wrote:
+On 15/03/2025 01:49, Amit Sunil Dhamne wrote:
 > Hi Krzysztof,
 > 
-> On 3/13/25 1:48 AM, Krzysztof Kozlowski wrote:
->> On Wed, Mar 12, 2025 at 04:42:01PM -0700, Amit Sunil Dhamne wrote:
->>> Add a new "fixed-batteries" DT property to connector class. This
->>> property is populated with nodes associated with battery type power
->>> supplies powering the USB PD connector. This is needed by the Type-C
->>> Port Manager (TCPM) to query psy properties which are used to feed
->> What is "psy" in terms of bindings?
-> In terms of bindings this should be a phandle to a device that 
-> owns/manages the battery (whose driver will eventually call 
-> devm_power_supply_register to register the battery). This could be a 
-
-So a charger? Please rephrain from putting Linux names into the bindings
-description.
-
-> fuel-guage ("sprd,sc2731-fgu", say), charger ("ti,bq24190") or a 
-> platform device ("cw2015") containing "monitored-battery" property to 
-> manage the simple battery.
-
-
->>> Battery_Status & Battery_Capacity AMS.
->>>
->>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->>> ---
->>>   Documentation/devicetree/bindings/connector/usb-connector.yaml | 8 ++++++++
->>>   Documentation/devicetree/bindings/usb/maxim,max33359.yaml      | 1 +
->>>   2 files changed, 9 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->>> index 11e40d225b9f3a0d0aeea7bf764f1c00a719d615..5e15bc060f5a2cfce842f83de738f1e8bae3ce2d 100644
->>> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
->>> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->>> @@ -300,6 +300,14 @@ properties:
->>>       $ref: /schemas/types.yaml#/definitions/uint8-array
->>>       maxItems: 4
->>>   
->>> +  fixed-batteries:
->>> +    description: Contains references to nodes associated with battery type power
->>> +      supplies powering the USB PD device. These batteries are fixed type and
->> What is a "battery type power supply"? If you just link here batteries,
->> then we have type for it - monitored-battery - but I doubt connector has
->> direct connection to the battery.
-> Regarding "nodes associated with battery type power supplies", I meant 
-> something like a fuel guage or a charger OR platform device with 
-> "monitored-battery" that will manage the battery lifecycle. If I use 
-> monitored-battery for this, I will be restricted to only querying 1 
-> simple battery. Also, I don't mean PD connector device to be a fuel 
-> guage or charger that manages a specific battery. It should just be able 
-> to query any FG/Chg for the battery status to relay that info to the 
-> connector's port partner.
+> Thanks for the review!
 > 
-> The intent of the patchset & this change is for the USB Type C protocol 
-> manager module (that consumes these bindings) to be able to get info 
+> On 3/13/25 1:50 AM, Krzysztof Kozlowski wrote:
+>> On Wed, Mar 12, 2025 at 04:42:00PM -0700, Amit Sunil Dhamne wrote:
+>>> Support for Battery Status & Battery Caps messages in response to
+>>> Get_Battery_Status & Get_Battery_Cap request is required by USB PD devices
+>>> powered by battery, as per "USB PD R3.1 V1.8 Spec", "6.13 Message
+>>> Applicability" section. This patchset adds support for these AMSes
+>>> to achieve greater compliance with the spec.
+>> Which board uses it? I would be happy to see that connection between
+>> batteries and USB connector on the schematics of some real device. How
+>> does it look like?
+> Any board that uses a USB Type-C connector that supplies power into or 
 
-The intent should be rather to accurately describe hardware and maybe
-that's the problem - you focus how to bend it for your drivers.
+If you keep responding like this, you will got nowhere, so let me
+re-iterate:
 
+Which upstream DTS (or upstream supported hardware) is going to use this
+binding, so I can see how you are going to implement it there in the
+entire system?
+
+> out of a battery while operating in sink or source mode respectively. 
+> The VBUS is connected to the (battery + buck boost IC's CHGin/Vin) or a 
+> companion IFPMIC connected to a battery.  In our board we have USB 
+> Connector <-> IFPMIC <-> Battery.
+
+Which board is that?
 
 Best regards,
 Krzysztof
