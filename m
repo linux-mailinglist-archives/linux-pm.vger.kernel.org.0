@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-24189-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24190-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE539A6548F
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 15:57:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED702A65496
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 15:57:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B37323B7C87
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 14:56:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7E7C3AB56D
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 14:57:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2FCB246348;
-	Mon, 17 Mar 2025 14:55:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58616248888;
+	Mon, 17 Mar 2025 14:56:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y1zIjvTX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LEniNIG5"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D03B2451F1;
-	Mon, 17 Mar 2025 14:55:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 299B32459E7;
+	Mon, 17 Mar 2025 14:56:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742223359; cv=none; b=NKoqAL6aT5twZKmSenExFRPTW86AYqI6aeHL7jlZ2wCbHGx+hWFcFBfMDOSqqGFDllrx4Q+GCd7k/H9K33iwKj3I6WguKsKnit1AAO87x1nPSMZ3AEiT3XlCtLnJGnR63k/faKeV3tdLgk0OPMUtkK1CCiyQixCosW0cetwOjHY=
+	t=1742223406; cv=none; b=FTjHtxQ79MQQNOTDY1ID5XLOiOpmxqCMZqmfaAs1syapjhQjGYnmUyMnz4j82BBU7ss+688m0+SOaPHDQYUASjY6lEh9srCYehsCplRV39Oq+MsJXJ7HOX1TjO4YD+dtwMszu5mjURS2yfCUtFbpCDCClcZ4LCG6GeBR6IUrgUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742223359; c=relaxed/simple;
-	bh=dufHt2ZbCtfSlksK/9SNCkEaezP+05PBRfmk1Spyi9M=;
+	s=arc-20240116; t=1742223406; c=relaxed/simple;
+	bh=B2ENly7R6r/XJpTTYG6qrVYYiaB3FjsbjEIrrOr3wYg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JzRtQKv3NfTJFcUC4nxtDmqSZV+Sjs/iNBOTfFKU78zFO4a0EvBOcQxn77yfwtJOWNN2/nEJ3EvZodNgkMooVypNCsjrAWs1LzIZJ8zhEsqYd34Aj+5S8jG5xmmiAszxCD5hih1xpcCmhe5O4sPaNITwuHokfXYYwi0a7ie0i3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y1zIjvTX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43128C4CEE9;
-	Mon, 17 Mar 2025 14:55:52 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=BNJH9BF8WeA1tnnxst/7w/4dSdsXpIcJkcV5txY/ZwgFxG8eZQ7MANFh1y6cwaVnI6n+q526CHp8bS1UjBdU0ZHbZUE1yseqTEnj4cTLhjJvNjMVBTpv+l8rv6IJd1D4oR6q+MKzWdWg1LoFRmU/WAEzxsV5o6tthLKQduHR2hY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LEniNIG5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34E74C4CEE3;
+	Mon, 17 Mar 2025 14:56:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742223359;
-	bh=dufHt2ZbCtfSlksK/9SNCkEaezP+05PBRfmk1Spyi9M=;
+	s=k20201202; t=1742223405;
+	bh=B2ENly7R6r/XJpTTYG6qrVYYiaB3FjsbjEIrrOr3wYg=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Y1zIjvTX3LkHV0Wqdi72WtXFqj+qg1TRka/DivNu4W6YzyFR6lnNeaq/sn9yOE9Hf
-	 OS5D2z/ivOJI4ER45vbsyqnAPNBnv/kmLXYxyZ0ZKDu3XO3ERgYMmGB4cDCOvOJySL
-	 bJ9Aa7A3bXWN32No/nk7r7sTuow36H3PUj8zZrr1LA19JBeAaoCeFXnF7Wgw77MMvV
-	 /pt8GEsrCkgRxw9QkBq7C1t/EqrchMSrayHnsXb6s8UmShbBEy4MGIrJwbT5MVerBJ
-	 RYJDVLdrHYNPi3qrBwedKETKtjGV1psa+6E8CwOKcruE4Fi0tV42SxaVdSzNS96VQt
-	 Vy2NgDdTkVFJQ==
-Message-ID: <21de806b-1d25-4feb-bc30-1b5c3adf1bb0@kernel.org>
-Date: Mon, 17 Mar 2025 15:55:50 +0100
+	b=LEniNIG554JAWcwubqotetd8oyRRvCOIzriSmNCLXVVV7VciatbyugzKjPblP+z2E
+	 LPTFoNv1PapF4WukJkWhQ6+qmBsRuIAELFSQmn+G3RQGQJV8YNaC2pd2Uwyjlu8zJC
+	 y2rUolaRta/ZLA/9+08PpBkbo5Zh75A/meJZ0N14r7MBU7s5c1aczmkD7808xd7L4+
+	 vWa4BSTnb+PxdCqJyhkGhjMCbaHGb4vCQHMmjZg78fhO17t+8RtQerb7Ru8MpGfEIb
+	 jF9nrqlFkYJyhQzpke0C3/rpcYKEvUGJubmcTdBA/473d38IPRkaXouauD+LXM3PNZ
+	 wZCqJ6A6wMzfw==
+Message-ID: <bb157e3f-d73e-4b08-9d01-0836bbe95172@kernel.org>
+Date: Mon, 17 Mar 2025 15:56:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -51,7 +51,8 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 6/6] arm64: defconfig: Enable RZ/G3E thermal
-To: John Madieu <john.madieu.xa@bp.renesas.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>,
+ John Madieu <john.madieu.xa@bp.renesas.com>
 Cc: "geert+renesas@glider.be" <geert+renesas@glider.be>,
  "conor+dt@kernel.org" <conor+dt@kernel.org>,
  "krzk+dt@kernel.org" <krzk+dt@kernel.org>, "robh@kernel.org"
@@ -71,6 +72,7 @@ References: <20250315081225.92118-1-john.madieu.xa@bp.renesas.com>
  <20250315081225.92118-7-john.madieu.xa@bp.renesas.com>
  <20250317-bipedal-inchworm-of-poetry-b60fc9@krzk-bin>
  <OSBPR01MB2775B7252468BCE234BFF7D5FFDF2@OSBPR01MB2775.jpnprd01.prod.outlook.com>
+ <CAMuHMdXxWCG-9tE7MsO3i+VXSjj6cZvH50fnQA=xvNfcQw842g@mail.gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -116,53 +118,37 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <OSBPR01MB2775B7252468BCE234BFF7D5FFDF2@OSBPR01MB2775.jpnprd01.prod.outlook.com>
+In-Reply-To: <CAMuHMdXxWCG-9tE7MsO3i+VXSjj6cZvH50fnQA=xvNfcQw842g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 17/03/2025 12:14, John Madieu wrote:
-> Hi Krzysztof,
+On 17/03/2025 14:06, Geert Uytterhoeven wrote:
+> Hi John,
 > 
-> Thanks for the review!
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzk@kernel.org>
->> Sent: Monday, March 17, 2025 10:29 AM
->> To: John Madieu <john.madieu.xa@bp.renesas.com>
->> Subject: Re: [PATCH v3 6/6] arm64: defconfig: Enable RZ/G3E thermal
+> On Mon, 17 Mar 2025 at 12:14, John Madieu <john.madieu.xa@bp.renesas.com> wrote:
+>>> From: Krzysztof Kozlowski <krzk@kernel.org>
+>>> On Sat, Mar 15, 2025 at 09:12:16AM +0100, John Madieu wrote:
+>>>> Enable the CONFIG_RZG3E_THERMAL flag for the RZ/G3E SoC.
+>>>
+>>> s/RZ/Renesas RZ/ and which *upstream* board uses it? This is not your
+>>> platform defconfig, but all platforms and all users defconfig.
+
+
+...
+
 >>
->> On Sat, Mar 15, 2025 at 09:12:16AM +0100, John Madieu wrote:
->>> Enable the CONFIG_RZG3E_THERMAL flag for the RZ/G3E SoC.
->>
->> s/RZ/Renesas RZ/ and which *upstream* board uses it? This is not your
->> platform defconfig, but all platforms and all users defconfig.
->>
+>> Hence my choice for RZG3E_THERMAL, or did I miss something in your comment?
 > 
-> Noted for the fix.
+> I think Krzysztof is complaining about "RZ/G3E SoC" in the patch
+> description, not about the name of the config symbol (which is fixed).
+> In addition, he asks for mentioning the board this will be used on.
 > 
-> However, most thermal drivers use SOC-specific config options,
-> as we can see in arm64 defconfig:
+> E.g.:
 > 
-> [...]
-> CONFIG_IMX8MM_THERMAL=m
-> CONFIG_K3_THERMAL=m
-> CONFIG_QORIQ_THERMAL=m
-> CONFIG_SUN8I_THERMAL=y
-> CONFIG_ROCKCHIP_THERMAL=m
-> CONFIG_RCAR_THERMAL=y
-> CONFIG_RCAR_GEN3_THERMAL=y
-> CONFIG_RZG2L_THERMAL=y
-> CONFIG_ARMADA_THERMAL=y
-> CONFIG_MTK_THERMAL=m
-> CONFIG_MTK_LVTS_THERMAL=m
-> CONFIG_BCM2711_THERMAL=m
-> CONFIG_BCM2835_THERMAL=m
-> CONFIG_BRCMSTB_THERMAL=m
-> [...]
-> 
-> Hence my choice for RZG3E_THERMAL, or did I miss something in your comment?
-Your commit msg must explain why do we want it. I gave you idea, if you
-don't want to use it, sure, come with other.
+>     Enable the Renesas RZ/G3E thermal driver, as used on the Renesas
+>     RZ/G3E SMARC EVK board.
+
+Yes.
 
 Best regards,
 Krzysztof
