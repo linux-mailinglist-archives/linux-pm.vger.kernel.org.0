@@ -1,122 +1,118 @@
-Return-Path: <linux-pm+bounces-24217-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24218-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7E5AA65BA8
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 18:57:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3E40A65C0E
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 19:10:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F6BA189CAB4
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 17:57:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F8E13BF36E
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 18:10:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 735CD1B3939;
-	Mon, 17 Mar 2025 17:57:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BDA11DD539;
+	Mon, 17 Mar 2025 18:10:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="J4ir1V1N"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VO/hjj+n"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0041A38E3;
-	Mon, 17 Mar 2025 17:57:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48DD51D934D;
+	Mon, 17 Mar 2025 18:10:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742234254; cv=none; b=A8LMEgV4Ary0zuDelB8XdP+bf7B/gin/naM1z5jVBS19Vx5QORnvcaBCt7XzpocHKPmUc9cJkLy0SulQRpqxE9+1cdFB8npSDi2jpKNHmDATfLLHayixexMvKRkfC0ZuYqL6PJaH3wDOf+09vYGa9YHauvTxhmVhCrfXm/7mI0I=
+	t=1742235037; cv=none; b=XAIvzORlao7sqDcLZvBBb5W2Fc6yXLR+oIeMHJ7LMz1pVwWWSBJSLiuzEMtVBIbHGOjskEbQy9PA/1tRhRSi58CLapXIjGaRN6X9Pdw+SzU/Off5rxn1fUv2niKrh1rjcWzj32IMaLF9YijptK6NIUDKOade1JX7lZncjEg0NXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742234254; c=relaxed/simple;
-	bh=hm3dL6UzDDNSHp2i5TtwBJQefX+U5wxitjITfilfjXE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fJvQFOTrkQn7GVSKjNhEQOcCL7SEMpQ9o1AZhk45P6SdWNwEmffR1cldiyZ6DmOvVWs1gZoKBPhhAk6U8m99L4cTIG4DYMzppvZlV7yXLnzf0m2Jta0uKwJYNzOwMEIpHQXt5cX4lRiwDTcAwNVwqFpRI/Mc926QY8bGYb4vfDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=J4ir1V1N; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1742234250;
-	bh=hm3dL6UzDDNSHp2i5TtwBJQefX+U5wxitjITfilfjXE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=J4ir1V1NC7bKT/TXMOdVWcSlztZvfONlx8GPt+iaLCJ5GzYtUZpr5MpI57L5P9YE+
-	 Ahyz8deS6jTDApHEJ4uQPA5XX56GuDEtGnSNQIzMo33EAzlwDLlSryl22j8rJvRnGu
-	 3drWqSsymgR1Zq0zqewAqVRxImy2a9doud9hppwg=
-Date: Mon, 17 Mar 2025 18:57:29 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Antheas Kapenekakis <lkml@antheas.dev>
-Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>, 
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Joaquin Ignacio Aramendia <samsagax@gmail.com>, Derek J Clark <derekjohn.clark@gmail.com>, 
-	Kevin Greenberg <kdgreenberg234@protonmail.com>, Joshua Tam <csinaction@pm.me>, 
-	Parth Menon <parthasarathymenon@gmail.com>, Eileen <eileen@one-netbook.com>, linux-kernel@vger.kernel.org, 
-	sre@kernel.org
-Subject: Re: [PATCH v5 12/13] power: supply: add inhibit-charge-awake to
- charge_behaviour
-Message-ID: <141a8bee-cc2c-4e46-86ed-60fde4beb5b3@t-8ch.de>
-References: <20250317155349.1236188-1-lkml@antheas.dev>
- <20250317155349.1236188-13-lkml@antheas.dev>
+	s=arc-20240116; t=1742235037; c=relaxed/simple;
+	bh=rT/AyEOiClBtwowhaMQK+QvAwVnXhSvSxxr11FPQ6g0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=VeKe04v7KO6f6l3madu+aisfSCMYgyXSeZjFdrVsJaeCqb9Valj3yDgb9jgNvfkLCTuQ0uCRb3C6L5JYCrQ+m9wRXVxRbWT4DM+fJjOvbCt/XHEV0shD2h182qb+FJS6lBC+KE0lWktAN172ZDtGrY8V0Fobznkh/BlSB+4jsA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VO/hjj+n; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86BB6C4CEEE;
+	Mon, 17 Mar 2025 18:10:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742235036;
+	bh=rT/AyEOiClBtwowhaMQK+QvAwVnXhSvSxxr11FPQ6g0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=VO/hjj+nb6Rych/h1Jvx8FICFB3n61x1Pk8D87e0n7pDkIvkOkfSqeglQ6GY71SWx
+	 Jmv34hUKjnd+oRKmrRA3bofcMKIwoY/2tOQAkomHwToncXHPrBS85G1PYnkMoeFeWO
+	 8cdo2H2WtTHfMBMLTpMuDzqXFbQFyx1h9HBpVCE5mLzuYKn6mHg/8gnsWkXP4TGiDY
+	 i6kEN9lQWZ1sHIa9flCOnnxUcIE6SU2zN2eZ8mxHyhYAiw9IFtpPk+Q+UkuJzxpPfy
+	 31bqNbgz/6l2FU7yeTkcwlQMukLa6aBkGNbxVDZM7kePp0Vg+icmrtHaJZ+DZclldS
+	 evoIgTA498v3g==
+From: Mark Brown <broonie@kernel.org>
+To: linux-kernel@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
+ Andre Przywara <andre.przywara@arm.com>, 
+ Herbert Xu <herbert@gondor.apana.org.au>, 
+ Jeff Johnson <jeff.johnson@oss.qualcomm.com>, linux-crypto@vger.kernel.org, 
+ Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ linux-rtc@vger.kernel.org, Takashi Iwai <tiwai@suse.com>, 
+ linux-sound@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org, 
+ Borislav Petkov <bp@alien8.de>, linux-acpi@vger.kernel.org, 
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>
+In-Reply-To: <20250317-plat2faux_dev-v1-0-5fe67c085ad5@arm.com>
+References: <20250317-plat2faux_dev-v1-0-5fe67c085ad5@arm.com>
+Subject: Re: (subset) [PATCH 0/9] drivers: Transition to the faux device
+ interface
+Message-Id: <174223503227.270320.5733466951381625938.b4-ty@kernel.org>
+Date: Mon, 17 Mar 2025 18:10:32 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250317155349.1236188-13-lkml@antheas.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-1b0d6
 
-On 2025-03-17 16:53:48+0100, Antheas Kapenekakis wrote:
-> OneXPlayer devices have a charge inhibit feature
-> that allows the user to select between it being
-> active always or only when the device is on.
+On Mon, 17 Mar 2025 10:13:12 +0000, Sudeep Holla wrote:
+> Recently when debugging why one of the scmi platform device was not
+> showing up under /sys/devices/platform/firmware:scmi instead was
+> appearing directly under /sys/devices/platform, I noticed the new
+> faux interface /sys/devices/faux.
 > 
-> Therefore, add attribute inhibit-charge-awake to
-> charge_behaviour to allow the user to select
-> that charge should be paused only when the device
-> is awake.
+> Looking through the discussion and the background, I got excited and
+> took the opportunity to clear all the platform devices under
+> /sys/devices/platform on the Arm Juno/FVP platforms that are really
+> faux devices. Only the platform devices created for the device nodes
+> from the DT remain under /sys/devices/platform after these changes.
 > 
-> Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
-> ---
->  Documentation/ABI/testing/sysfs-class-power | 11 ++++++-----
->  drivers/power/supply/power_supply_sysfs.c   |  1 +
->  drivers/power/supply/test_power.c           |  1 +
->  include/linux/power_supply.h                |  1 +
->  4 files changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-> index 2a5c1a09a28f9..78afb2422fc5a 100644
-> --- a/Documentation/ABI/testing/sysfs-class-power
-> +++ b/Documentation/ABI/testing/sysfs-class-power
-> @@ -508,11 +508,12 @@ Description:
->  		Access: Read, Write
->  
->  		Valid values:
-> -			================ ====================================
-> -			auto:            Charge normally, respect thresholds
-> -			inhibit-charge:  Do not charge while AC is attached
-> -			force-discharge: Force discharge while AC is attached
-> -			================ ====================================
-> +			===================== ========================================
-> +			auto:                 Charge normally, respect thresholds
-> +			inhibit-charge:       Do not charge while AC is attached
-> +			inhibit-charge-awake: inhibit-charge only when device is awake
-> +			force-discharge:      Force discharge while AC is attached
-> +			===================== ========================================
->  
->  What:		/sys/class/power_supply/<supply_name>/technology
->  Date:		May 2007
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-> index edb058c19c9c4..8d036faf220ec 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -140,6 +140,7 @@ static const char * const POWER_SUPPLY_SCOPE_TEXT[] = {
->  static const char * const POWER_SUPPLY_CHARGE_BEHAVIOUR_TEXT[] = {
->  	[POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO]		= "auto",
->  	[POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE]	= "inhibit-charge",
-> +	[POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE]	= "inhibit-charge-awake",
->  	[POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE]	= "force-discharge",
+> [...]
 
-Please keep the alignment.
+Applied to
 
->  };
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-<snip>
+Thanks!
+
+[6/9] ASoC: soc-utils: Transition to the faux device interface
+      commit: 18abb3797f1ceca97a705aa1c14cbec5c6fcab79
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
