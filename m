@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-24202-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24203-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A34F8A65711
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 17:02:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 360B8A656FF
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 17:00:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A33E17D217
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 15:56:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00262189D21C
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 15:56:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A79F41B042E;
-	Mon, 17 Mar 2025 15:54:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A52F31B4235;
+	Mon, 17 Mar 2025 15:54:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="CFVwkXwk"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="Xp4OGN9h"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B03D1A5BAF;
-	Mon, 17 Mar 2025 15:54:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32CD1B043E;
+	Mon, 17 Mar 2025 15:54:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742226852; cv=none; b=GEnC6koKcRzar8/ieHCL9dLLU/bRuZBe5/TCqDrv7r1wrEyxiDIwDGS83yJ4U8nfT3hWhvHyouEHKjrb5obHrb52iEITIhRHfljK552x+ZCudq8mxsXxnZj99fnxTrGrodaUeXliRJxdhjXBJRcSHCjrGeFPTmnWMg88a/vK+3c=
+	t=1742226854; cv=none; b=S5EFlRFr6WOA9xYdnVBxsrmqMvyo9DcoGrjkSngzATVUpXgIYTjIANfPmkrM0zEdMG3Kz3qQ5H3xUsM1nEHMr6G7CO19mh6kD/RDcX46amuAP5Fa27M29qewdYa2UFayX4YOmittS53PJ/bnAaSFJ/VzVrxSQ0AGcBICqlUlnvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742226852; c=relaxed/simple;
-	bh=tB5IqVaCrQjweRLudiZFfy5G6/+e6PG/KQ09ygaDgAc=;
+	s=arc-20240116; t=1742226854; c=relaxed/simple;
+	bh=yoqGJKnal9DYCnh0IwfKjc0tl6iG2sFiajTRj01DapU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=f8wSoiV8kONMbAkLnjr4P3s6nIrhOJwxECo+9sw5BiW0OkNuoxZAGOXpRRGCQY4/ZXFz7+8UefiVlcccATPrhOy2E8Xu8VwAeXvqPQjnU1c9bm5bQW/WEip2/jXYZ8+nZF/vf4O7rN9WlAuYWzNhosRcvlU/oWbNbf4iVYgI/aI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=CFVwkXwk; arc=none smtp.client-ip=185.138.42.100
+	 MIME-Version; b=BtI4NS7OvpU7QlfIWdcSLCBRbE04Xr+tKANHE5cqTQdTT2212vD0W/j27xg7kOCauH9Mq/5Tx6BEX6e7MOmD5YSeTN30Kw0Z9Z8hoEtpMBxiMAhf1mPBbmXilVdec32qQfpN8FNYlFCPVKnrrjGys4tiUqvcpST+d3mrak1BhEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=Xp4OGN9h; arc=none smtp.client-ip=185.138.42.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Received: from localhost.localdomain (unknown [IPv6:2a05:f6c2:511b:0:cbc0:999f:73ad:33bd])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 248F62E09478;
-	Mon, 17 Mar 2025 17:54:07 +0200 (EET)
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 0F48C2E0947A;
+	Mon, 17 Mar 2025 17:54:09 +0200 (EET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1742226848;
-	bh=xOJBRmPb77Upc6malwv2xiNxBLox/UlI116EjsTj0x0=; h=From:To:Subject;
-	b=CFVwkXwku8Yg0JUlIP+0nHaNQlYj3RJt7wm6LsRN1QAVYzDQ6FXMg1ehH3/u5KbxH
-	 ldYQjItWter2SUlhFDu44TL6U17U8GxkvcQcGj30JIPEFOxuW340tOmJJ3Xb/hiqr/
-	 BbGNFH4HreT/0IiILYkXDZFi7OHoV19zZEwcAHjg=
+	s=default; t=1742226850;
+	bh=htkcy/R1mvK/qCMqFlwUbifyGY+8azwR8Yn4zr7kqo4=; h=From:To:Subject;
+	b=Xp4OGN9hm3ltVNi6it6nZ9ddLc+Gwy60CWRfHXWxzoooCY8jbIAJYo7wisUhrKuLK
+	 c0uKPpM7Tr5HW8UVS5mvrurIHLlg5FkEFn98+92ySk/UDWUrpuBumcCKfWPIhQk62P
+	 i3bAu62yQrT8EaelUKBkje2zKvz3zUgl6j0m8azc=
 Authentication-Results: linux1587.grserver.gr;
 	spf=pass (sender IP is 2a05:f6c2:511b:0:cbc0:999f:73ad:33bd) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
 Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
@@ -61,9 +61,10 @@ Cc: linux-hwmon@vger.kernel.org,
 	sre@kernel.org,
 	linux@weissschuh.net,
 	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: [PATCH v5 05/13] platform/x86: oxpec: Rename ec group to tt_toggle
-Date: Mon, 17 Mar 2025 16:53:41 +0100
-Message-ID: <20250317155349.1236188-6-lkml@antheas.dev>
+Subject: [PATCH v5 06/13] platform/x86: oxpec: Add turbo led support to X1
+ devices
+Date: Mon, 17 Mar 2025 16:53:42 +0100
+Message-ID: <20250317155349.1236188-7-lkml@antheas.dev>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250317155349.1236188-1-lkml@antheas.dev>
 References: <20250317155349.1236188-1-lkml@antheas.dev>
@@ -75,46 +76,139 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-PPP-Message-ID: 
- <174222684857.25118.187880419746453389@linux1587.grserver.gr>
+ <174222685049.25210.12028853202139099731@linux1587.grserver.gr>
 X-PPP-Vhost: antheas.dev
 X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
 X-Virus-Status: Clean
 
-Currently, the EC group is used for the turbo button. However, the next
-patch in the series adds support for the LED button in X1 devices, which
-is only applicable for X1 devices. Therefore, rename it to prepare for
-adding the second group.
+The X1 and X1 mini lineups feature an LED nested within their turbo
+button. When turbo takeover is not enabled, the turbo button allows
+the device to switch from 18W to 25W TDP. When the device is in the
+25W TDP mode, the LED is turned on.
 
-Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
+However, when we engage turbo takeover, the turbo led remains on its
+last state, which might be illuminated and cannot be currently
+controlled. Therefore, add the register that controls it under sysfs,
+to allow userspace to turn it off once engaging turbo takeover and
+then control it as they wish.
+
+2024 OneXPlayer devices, other than the X1s, do not have a turbo LED.
+However, earlier models do, so this can be extended to them as well
+when the register for it is found.
+
 Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 ---
- drivers/platform/x86/oxpec.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/platform/x86/oxpec.c | 84 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 84 insertions(+)
 
 diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
-index dc3a0871809cd..8836b3df0d57e 100644
+index 8836b3df0d57e..d13704218d264 100644
 --- a/drivers/platform/x86/oxpec.c
 +++ b/drivers/platform/x86/oxpec.c
-@@ -681,18 +681,18 @@ static const struct hwmon_channel_info * const oxp_platform_sensors[] = {
- 	NULL,
+@@ -87,6 +87,12 @@ static enum oxp_board board;
+ 
+ #define OXP_TURBO_RETURN_VAL           0x00 /* Common return val */
+ 
++/* X1 Turbo LED */
++#define OXP_X1_TURBO_LED_REG           0x57
++
++#define OXP_X1_TURBO_LED_OFF           0x01
++#define OXP_X1_TURBO_LED_ON            0x02
++
+ static const struct dmi_system_id dmi_table[] = {
+ 	{
+ 		.matches = {
+@@ -434,6 +440,73 @@ static ssize_t tt_toggle_show(struct device *dev,
+ 
+ static DEVICE_ATTR_RW(tt_toggle);
+ 
++/* Callbacks for turbo LED attribute */
++static umode_t tt_led_is_visible(struct kobject *kobj,
++				    struct attribute *attr, int n)
++{
++	switch (board) {
++	case oxp_x1:
++		return attr->mode;
++	default:
++		break;
++	}
++	return 0;
++}
++
++static ssize_t tt_led_store(struct device *dev,
++			       struct device_attribute *attr, const char *buf,
++			       size_t count)
++{
++	u8 reg, val;
++	bool value;
++	int rval;
++
++	rval = kstrtobool(buf, &value);
++	if (rval)
++		return rval;
++
++	switch (board) {
++	case oxp_x1:
++		reg = OXP_X1_TURBO_LED_REG;
++		val = value ? OXP_X1_TURBO_LED_ON : OXP_X1_TURBO_LED_OFF;
++		break;
++	default:
++		return -EINVAL;
++	}
++	rval = write_to_ec(reg, val);
++
++	if (rval)
++		return rval;
++
++	return count;
++}
++
++static ssize_t tt_led_show(struct device *dev,
++			      struct device_attribute *attr, char *buf)
++{
++	int retval;
++	long enval;
++	long val;
++	u8 reg;
++
++	switch (board) {
++	case oxp_x1:
++		reg = OXP_X1_TURBO_LED_REG;
++		enval = OXP_X1_TURBO_LED_ON;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	retval = read_from_ec(reg, 1, &val);
++	if (retval)
++		return retval;
++
++	return sysfs_emit(buf, "%d\n", val == enval);
++}
++
++static DEVICE_ATTR_RW(tt_led);
++
+ /* PWM enable/disable functions */
+ static int oxp_pwm_enable(void)
+ {
+@@ -691,8 +764,19 @@ static struct attribute_group oxp_tt_toggle_attribute_group = {
+ 	.attrs = oxp_tt_toggle_attrs,
  };
  
--static struct attribute *oxp_ec_attrs[] = {
-+static struct attribute *oxp_tt_toggle_attrs[] = {
- 	&dev_attr_tt_toggle.attr,
- 	NULL
- };
- 
--static struct attribute_group oxp_ec_attribute_group = {
-+static struct attribute_group oxp_tt_toggle_attribute_group = {
- 	.is_visible = tt_toggle_is_visible,
--	.attrs = oxp_ec_attrs,
-+	.attrs = oxp_tt_toggle_attrs,
- };
- 
++static struct attribute *oxp_tt_led_attrs[] = {
++	&dev_attr_tt_led.attr,
++	NULL
++};
++
++static struct attribute_group oxp_tt_led_attribute_group = {
++	.is_visible = tt_led_is_visible,
++	.attrs = oxp_tt_led_attrs,
++};
++
  static const struct attribute_group *oxp_ec_groups[] = {
--	&oxp_ec_attribute_group,
-+	&oxp_tt_toggle_attribute_group,
+ 	&oxp_tt_toggle_attribute_group,
++	&oxp_tt_led_attribute_group,
  	NULL
  };
  
