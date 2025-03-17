@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-24203-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24204-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 360B8A656FF
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 17:00:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7C7FA6571E
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 17:03:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00262189D21C
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 15:56:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EDEB17DE4C
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 15:56:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A52F31B4235;
-	Mon, 17 Mar 2025 15:54:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5A831BEF9B;
+	Mon, 17 Mar 2025 15:54:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="Xp4OGN9h"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="J8/rvSIt"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32CD1B043E;
-	Mon, 17 Mar 2025 15:54:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31AD91B4F1F;
+	Mon, 17 Mar 2025 15:54:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742226854; cv=none; b=S5EFlRFr6WOA9xYdnVBxsrmqMvyo9DcoGrjkSngzATVUpXgIYTjIANfPmkrM0zEdMG3Kz3qQ5H3xUsM1nEHMr6G7CO19mh6kD/RDcX46amuAP5Fa27M29qewdYa2UFayX4YOmittS53PJ/bnAaSFJ/VzVrxSQ0AGcBICqlUlnvw=
+	t=1742226856; cv=none; b=ecaXclsFnR7sc3qGNwCQujjoa08VrwbDls2kyGTMIjqzkY6M03Nubl0QvcrzrrOz2xq9300BzK9+SSYI+S4a0iiQJFmln8KnBsmfO2qmmDIXniUHLD/fleZsfXYo/mDCMOhN3KBUJE1DWCQpbwKRy9TrjWmuoCVsGdPnIC/718g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742226854; c=relaxed/simple;
-	bh=yoqGJKnal9DYCnh0IwfKjc0tl6iG2sFiajTRj01DapU=;
+	s=arc-20240116; t=1742226856; c=relaxed/simple;
+	bh=NOBglK2Qm0Q1On+BVinoSr1EVnEvw2Jp6/SN/q0rUnI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BtI4NS7OvpU7QlfIWdcSLCBRbE04Xr+tKANHE5cqTQdTT2212vD0W/j27xg7kOCauH9Mq/5Tx6BEX6e7MOmD5YSeTN30Kw0Z9Z8hoEtpMBxiMAhf1mPBbmXilVdec32qQfpN8FNYlFCPVKnrrjGys4tiUqvcpST+d3mrak1BhEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=Xp4OGN9h; arc=none smtp.client-ip=185.138.42.100
+	 MIME-Version; b=lqvd9k//X6ntZbyEVmTamf8PFJWdP3U8e2RqQZrOTsBTsmHN0wJDP9ySOzSLrQH3wDrH2sgZPmBD5YQN+QR7yU+bbfN8SINhLos4QHsqesYEuKPVLjm5pqn5IiXPpcavSBF9w5GtXGuyBJswxTSMoJidjD4msZsBwII8TaDU+H4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=J8/rvSIt; arc=none smtp.client-ip=185.138.42.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Received: from localhost.localdomain (unknown [IPv6:2a05:f6c2:511b:0:cbc0:999f:73ad:33bd])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 0F48C2E0947A;
-	Mon, 17 Mar 2025 17:54:09 +0200 (EET)
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 048182E0946F;
+	Mon, 17 Mar 2025 17:54:10 +0200 (EET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1742226850;
-	bh=htkcy/R1mvK/qCMqFlwUbifyGY+8azwR8Yn4zr7kqo4=; h=From:To:Subject;
-	b=Xp4OGN9hm3ltVNi6it6nZ9ddLc+Gwy60CWRfHXWxzoooCY8jbIAJYo7wisUhrKuLK
-	 c0uKPpM7Tr5HW8UVS5mvrurIHLlg5FkEFn98+92ySk/UDWUrpuBumcCKfWPIhQk62P
-	 i3bAu62yQrT8EaelUKBkje2zKvz3zUgl6j0m8azc=
+	s=default; t=1742226853;
+	bh=ZKF6gDzYQyX19MF8K7/dBz3k5vZBjUkN2pdUColclfE=; h=From:To:Subject;
+	b=J8/rvSItUtMGPryOVRAy00uwTMd5P9zTFYMGZ62NpxsGmvq3BmYLMEtj3h4+gDAUi
+	 YF+KKTcLLdJ3ySeqXdF4n5WgSxPfd11zqET18OImBZzh6ibXsOVsu9uIJf/KV/ExSk
+	 FDpu2x/PZASjmBJmK68LBUttWShWaEKIS3MkzryA=
 Authentication-Results: linux1587.grserver.gr;
 	spf=pass (sender IP is 2a05:f6c2:511b:0:cbc0:999f:73ad:33bd) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
 Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
@@ -61,10 +61,10 @@ Cc: linux-hwmon@vger.kernel.org,
 	sre@kernel.org,
 	linux@weissschuh.net,
 	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: [PATCH v5 06/13] platform/x86: oxpec: Add turbo led support to X1
- devices
-Date: Mon, 17 Mar 2025 16:53:42 +0100
-Message-ID: <20250317155349.1236188-7-lkml@antheas.dev>
+Subject: [PATCH v5 07/13] platform/x86: oxpec: Move pwm_enable read to its own
+ function
+Date: Mon, 17 Mar 2025 16:53:43 +0100
+Message-ID: <20250317155349.1236188-8-lkml@antheas.dev>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250317155349.1236188-1-lkml@antheas.dev>
 References: <20250317155349.1236188-1-lkml@antheas.dev>
@@ -76,142 +76,94 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-PPP-Message-ID: 
- <174222685049.25210.12028853202139099731@linux1587.grserver.gr>
+ <174222685242.25318.1845623697253863095@linux1587.grserver.gr>
 X-PPP-Vhost: antheas.dev
 X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
 X-Virus-Status: Clean
 
-The X1 and X1 mini lineups feature an LED nested within their turbo
-button. When turbo takeover is not enabled, the turbo button allows
-the device to switch from 18W to 25W TDP. When the device is in the
-25W TDP mode, the LED is turned on.
+Currently, this driver breaks ABI by using auto as 0 and manual as 1.
+However, for pwm_enable, 0 is full speed, 1 is manual, and 2 is auto.
+For the correction to be possible, this means that the pwm_enable
+endpoint will need access to both pwm enable and value (as for
+the 0th value, the fan needs to be set to full power).
 
-However, when we engage turbo takeover, the turbo led remains on its
-last state, which might be illuminated and cannot be currently
-controlled. Therefore, add the register that controls it under sysfs,
-to allow userspace to turn it off once engaging turbo takeover and
-then control it as they wish.
+Therefore, begin by moving the current pwm_enable read to its own
+function, oxp_pwm_enable.
 
-2024 OneXPlayer devices, other than the X1s, do not have a turbo LED.
-However, earlier models do, so this can be extended to them as well
-when the register for it is found.
-
+Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
 Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 ---
- drivers/platform/x86/oxpec.c | 84 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 84 insertions(+)
+ drivers/platform/x86/oxpec.c | 50 +++++++++++++++++++-----------------
+ 1 file changed, 27 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
-index 8836b3df0d57e..d13704218d264 100644
+index d13704218d264..0ca965e224438 100644
 --- a/drivers/platform/x86/oxpec.c
 +++ b/drivers/platform/x86/oxpec.c
-@@ -87,6 +87,12 @@ static enum oxp_board board;
+@@ -559,6 +559,32 @@ static int oxp_pwm_disable(void)
+ 	}
+ }
  
- #define OXP_TURBO_RETURN_VAL           0x00 /* Common return val */
- 
-+/* X1 Turbo LED */
-+#define OXP_X1_TURBO_LED_REG           0x57
-+
-+#define OXP_X1_TURBO_LED_OFF           0x01
-+#define OXP_X1_TURBO_LED_ON            0x02
-+
- static const struct dmi_system_id dmi_table[] = {
- 	{
- 		.matches = {
-@@ -434,6 +440,73 @@ static ssize_t tt_toggle_show(struct device *dev,
- 
- static DEVICE_ATTR_RW(tt_toggle);
- 
-+/* Callbacks for turbo LED attribute */
-+static umode_t tt_led_is_visible(struct kobject *kobj,
-+				    struct attribute *attr, int n)
++static int oxp_pwm_read(long *val)
 +{
 +	switch (board) {
++	case orange_pi_neo:
++		return read_from_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, 1, val);
++	case aok_zoe_a1:
++	case aya_neo_2:
++	case aya_neo_air:
++	case aya_neo_air_1s:
++	case aya_neo_air_plus_mendo:
++	case aya_neo_air_pro:
++	case aya_neo_flip:
++	case aya_neo_geek:
++	case aya_neo_kun:
++	case oxp_2:
++	case oxp_fly:
++	case oxp_mini_amd:
++	case oxp_mini_amd_a07:
++	case oxp_mini_amd_pro:
 +	case oxp_x1:
-+		return attr->mode;
++		return read_from_ec(OXP_SENSOR_PWM_ENABLE_REG, 1, val);
 +	default:
-+		break;
++		return -EOPNOTSUPP;
 +	}
-+	return 0;
 +}
 +
-+static ssize_t tt_led_store(struct device *dev,
-+			       struct device_attribute *attr, const char *buf,
-+			       size_t count)
-+{
-+	u8 reg, val;
-+	bool value;
-+	int rval;
-+
-+	rval = kstrtobool(buf, &value);
-+	if (rval)
-+		return rval;
-+
-+	switch (board) {
-+	case oxp_x1:
-+		reg = OXP_X1_TURBO_LED_REG;
-+		val = value ? OXP_X1_TURBO_LED_ON : OXP_X1_TURBO_LED_OFF;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	rval = write_to_ec(reg, val);
-+
-+	if (rval)
-+		return rval;
-+
-+	return count;
-+}
-+
-+static ssize_t tt_led_show(struct device *dev,
-+			      struct device_attribute *attr, char *buf)
-+{
-+	int retval;
-+	long enval;
-+	long val;
-+	u8 reg;
-+
-+	switch (board) {
-+	case oxp_x1:
-+		reg = OXP_X1_TURBO_LED_REG;
-+		enval = OXP_X1_TURBO_LED_ON;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	retval = read_from_ec(reg, 1, &val);
-+	if (retval)
-+		return retval;
-+
-+	return sysfs_emit(buf, "%d\n", val == enval);
-+}
-+
-+static DEVICE_ATTR_RW(tt_led);
-+
- /* PWM enable/disable functions */
- static int oxp_pwm_enable(void)
- {
-@@ -691,8 +764,19 @@ static struct attribute_group oxp_tt_toggle_attribute_group = {
- 	.attrs = oxp_tt_toggle_attrs,
- };
- 
-+static struct attribute *oxp_tt_led_attrs[] = {
-+	&dev_attr_tt_led.attr,
-+	NULL
-+};
-+
-+static struct attribute_group oxp_tt_led_attribute_group = {
-+	.is_visible = tt_led_is_visible,
-+	.attrs = oxp_tt_led_attrs,
-+};
-+
- static const struct attribute_group *oxp_ec_groups[] = {
- 	&oxp_tt_toggle_attribute_group,
-+	&oxp_tt_led_attribute_group,
- 	NULL
- };
- 
+ /* Callbacks for hwmon interface */
+ static umode_t oxp_ec_hwmon_is_visible(const void *drvdata,
+ 				       enum hwmon_sensor_types type, u32 attr, int channel)
+@@ -656,29 +682,7 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
+ 			}
+ 			return 0;
+ 		case hwmon_pwm_enable:
+-			switch (board) {
+-			case orange_pi_neo:
+-				return read_from_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, 1, val);
+-			case aok_zoe_a1:
+-			case aya_neo_2:
+-			case aya_neo_air:
+-			case aya_neo_air_1s:
+-			case aya_neo_air_plus_mendo:
+-			case aya_neo_air_pro:
+-			case aya_neo_flip:
+-			case aya_neo_geek:
+-			case aya_neo_kun:
+-			case oxp_2:
+-			case oxp_fly:
+-			case oxp_mini_amd:
+-			case oxp_mini_amd_a07:
+-			case oxp_mini_amd_pro:
+-			case oxp_x1:
+-				return read_from_ec(OXP_SENSOR_PWM_ENABLE_REG, 1, val);
+-			default:
+-				break;
+-			}
+-			break;
++			return oxp_pwm_read(val);
+ 		default:
+ 			break;
+ 		}
 -- 
 2.48.1
 
