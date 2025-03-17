@@ -1,211 +1,204 @@
-Return-Path: <linux-pm+bounces-24211-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24212-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B402AA65771
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 17:09:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C539BA657B0
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 17:15:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CB96883A7F
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 16:02:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A751C175682
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 16:11:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C856117A31C;
-	Mon, 17 Mar 2025 16:02:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3503192D8A;
+	Mon, 17 Mar 2025 16:11:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="J9vJYFdb"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MEhXOilo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD391714AC;
-	Mon, 17 Mar 2025 16:02:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F6A188CB1
+	for <linux-pm@vger.kernel.org>; Mon, 17 Mar 2025 16:11:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742227358; cv=none; b=IsDGFUuf+lE7kGvfcv0RAoYcji1tj8D/WJEGiTNdzDwM4DmAaOl5y5NCmDSndhpp4GPrQ6577jf1vNvJhYnalVkzTnj2b/HYsFZgbUzO+XCtbyYPXeedxSPSGkGWF5ZbimkZb04NS+7dFKwVpk72v66LflJngSK3n2I7NI5397c=
+	t=1742227875; cv=none; b=Wk3sX1MolaYuKo3zE3V2XG8wkkrbPejLEVWTv08o5eJ/1DFmpsEyn0co3tNSIAeF7AN7e4N472c8WDSwMZpXVtw70AHFrOdvrxI18hFgtxED+WObZFeEzZY95eIgLWYcKsyAWTpMzrv60WTysU+XtpE/WACvbeHXRZKxvpyvPnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742227358; c=relaxed/simple;
-	bh=D4NAe2iUldLe4tWzQTlHWH/IOChqKMJQqbOqVgCD8UA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O7M+8ibvx4OvjM5VKbhIFM+VGN6yVA/Gv/5bLnmZ10JT/wChlTDedJUtpfSOV0y7/5IKNl6Zo6ABvJ5xBMfJt+p1qsiZga/HA7fte4LiVhGByqR9ir7JGMBLAeAfh/xK2Xi30pVTinMlRdg7tLWKzGC8N6+V1DCY5GmKuqrqzzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=J9vJYFdb; arc=none smtp.client-ip=185.138.42.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 79DF32E09564;
-	Mon, 17 Mar 2025 18:02:32 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1742227354;
-	bh=xqwq/Em1fb5FMerjkMCm9F29xL5Dgmo9MCoLm5hsuTI=;
-	h=Received:From:Subject:To;
-	b=J9vJYFdbDUkFtTdJrHn750leNJuSPKRLOyrlsePoc4IXZ7Aeg+L7ANV0j2BLlb/3I
-	 KwTX05/njWnzu8dS+wfh7bWLZhgcM8PbvrjVcnBXwfsr3Ku7jgymNu4Orm/NjGIU/h
-	 jp02v1fUuojgpkHLHy0dCY1Wn0Nq+cobguISHbis=
-Authentication-Results: linux1587.grserver.gr;
-        spf=pass (sender IP is 209.85.167.48) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lf1-f48.google.com
-Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-Received: by mail-lf1-f48.google.com with SMTP id
- 2adb3069b0e04-5493b5bc6e8so4926574e87.2;
-        Mon, 17 Mar 2025 09:02:32 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AJvYcCV16eyUBrMr8h0VgkaWUluFGaVnQAMtn+0f3tHEKRclAid9vtrnHuRtDyB3sm1V5B5weOa4w6vX4kM=@vger.kernel.org,
- AJvYcCVJaPdY00hXonZeXHw5uIN2D8I9SSJnSwm4/VKEI51t7gOSz6cffmars8ibp65La2K856vNTGunH9A=@vger.kernel.org,
- AJvYcCXyPTdPWcAryhkSqsf46ZwKWWhtvYwnZq65sxgGVgdNIGE01ZQNHDafmlJeH8EelzIf+lXRa01TxUuTZi+x@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3ARrQTcFIMiGzbGs5TuV4G+LeVTJw8TLeIoxVzGoOudEidOy1
-	qBcfAcGzi3QDg0b6Av4KY5aWfwEiPgaORpogUyILQ6IsqCjleQ1wy1J3ZR3o7r2fS0+qQo1WTRn
-	DnT58tZybamXDSt2msi+nyOLFL7U=
-X-Google-Smtp-Source: 
- AGHT+IFAz0kgLEC4uOK5AMohsc/jk5E7XXBP21RkpD3X51bWXhdPJnWXixdvWJ4et23gAPlBTH0Rax/SNpXgmxt28Rc=
-X-Received: by 2002:a05:6512:4016:b0:545:291:7ee0 with SMTP id
- 2adb3069b0e04-549c3989bd1mr7520993e87.34.1742227351699; Mon, 17 Mar 2025
- 09:02:31 -0700 (PDT)
+	s=arc-20240116; t=1742227875; c=relaxed/simple;
+	bh=Uoc1DrwhFhqKapvK2aZfs21XdFLHjo6sg1n08s0IZcE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DFkGAWe6R1eysE/aPAeOJbCXgtWndkGtku9sTwjU/u0RJ3ScKPGCoARJkQ8K8N9rFBUuRAr/K+jo6975ZpdeFfkQAVtv/hcGo81jovjk2HwR16ao70yxANTKsmkTouKROFdYFg8oj9yFPa9f+BCkQdlO3PXor3Wop4SKJFNuvxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MEhXOilo; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742227872;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gMxOns8OLCANHT+gWoMrsh+8iH9de53W50uJK8mjjKs=;
+	b=MEhXOiloO8IjTmd4nrxj3uvjB0In4oqAcr5MZqIO0BRCl/nl5OMyI62AGFJNQkjwI/nH/G
+	k/StE3ABLkicKUVSU44tXzX5yvwVf3kjKkJzoGbgPo+dfx+HI2T/VrOMFnXN0oQFznDFhB
+	b7Uk38Dt9vGCjb7usRS6GIGRiVUK9WA=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-617-_zFdxoy6PSqKnlB95EdUsg-1; Mon, 17 Mar 2025 12:11:11 -0400
+X-MC-Unique: _zFdxoy6PSqKnlB95EdUsg-1
+X-Mimecast-MFC-AGG-ID: _zFdxoy6PSqKnlB95EdUsg_1742227870
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-ac2bb3ac7edso512580466b.2
+        for <linux-pm@vger.kernel.org>; Mon, 17 Mar 2025 09:11:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742227870; x=1742832670;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gMxOns8OLCANHT+gWoMrsh+8iH9de53W50uJK8mjjKs=;
+        b=Vl6h6lR4H/B/24eMeSbK+qgFk46McWmhuwKJ9KNPjOtK02/VTm2g0ul+3YN4Py+uzf
+         oXChpdrVws38cYHjg0GS35jXd95qR3EJeThyXSvUT4lPtVOh2Bt4gkjEJNDk+pc1Qu55
+         AZFpa0WD8mjzIo6BPYrx4ixZuUWfspFDQLkuwsXTVJmQC3odx3KR757s4CZIfGuUt66b
+         nO/SlffaDn5orFwtGxRtX/ctRKV60AB9eXWuNRwNLBSl6i/9CRAeqdV4wwnDUgnaXzl8
+         uL2/8tAexeVYaFlGEDPjkISa1Bxa316581R0flInp45pVEKIxCihRm4Yd2FaruWPAkHt
+         mYpw==
+X-Forwarded-Encrypted: i=1; AJvYcCUazc+fhKUUQqICtlvYICSunsIUIfpH261s3PaDkKzqpwfX7XOK8U2pdhLqMIDsIQy/V3fKtp+oww==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yytcu0rEJRg4q6HBbJ+rtw5H0xJhgQqaIOnf2J9hTD83POIpyy2
+	7DzAV3Zmzg4u1kbXgBuh2xT7UJwnrNdihenMLBCDiyQlew8DztIAPVaTuoR0kvQLxpvn6YvVWX4
+	RSBsHt7r3BHSXqX+jzgXEPZI+XX2yXF7YUx+7fMdl9oihqwvE3Zgf0HiW
+X-Gm-Gg: ASbGncsPlfWiAxqczblYCMQuKjPJ2gE/WZVjiqsRySvxlgnuGzgSndgD2gMvuu+JJAo
+	lD/KpNE1/8FsYy9ATjR3YLOzdZrNaiGwzMtJVLfc9Qa9mv4yjaYfDFIvwd/p64Ehp/Ll7FWX2cI
+	16anIDrDh1kxI87OWlJKnpnLvE0RUnUdJWd3XnB2qzt8MkuBEcbBb3Gygbce04OtSsDw8DUf/LH
+	yBkMFz+q6uKuMuJS8X8/PGXuZ8EcRZCl22PWsEEBe2wJRbA+OtFB1P1mb6Vwdj8EGZR43dfese9
+	Pg4bZDI9Zy22x3/K7Zlz0SFhTaDiAIVZC/MLqgo8KpYuy/mTRujN12O4oq8b1zNj/Id6WaYaZiR
+	TBprtyLyd9SxJEQRvUTqyPog/2N9bEruMwJHcK2BYLdbzNh6W8K8xg1OrIKJRSh/x5w==
+X-Received: by 2002:a17:906:ee85:b0:ac2:d6d1:fe65 with SMTP id a640c23a62f3a-ac38d515007mr31489766b.41.1742227869874;
+        Mon, 17 Mar 2025 09:11:09 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH0sssDA3BQRaSOyamV/S0PXeQ9xKfhQPA6HZicsQtZlhud1G2Kdvgy67YBjeYvH5sJJ0eE7Q==
+X-Received: by 2002:a17:906:ee85:b0:ac2:d6d1:fe65 with SMTP id a640c23a62f3a-ac38d515007mr31484766b.41.1742227869395;
+        Mon, 17 Mar 2025 09:11:09 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac314858a8fsm676871266b.80.2025.03.17.09.11.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Mar 2025 09:11:08 -0700 (PDT)
+Message-ID: <d9da58be-7a83-4007-8ea7-8c6d6005094a@redhat.com>
+Date: Mon, 17 Mar 2025 17:11:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250317155349.1236188-1-lkml@antheas.dev>
-In-Reply-To: <20250317155349.1236188-1-lkml@antheas.dev>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Mon, 17 Mar 2025 17:02:19 +0100
-X-Gmail-Original-Message-ID: 
- <CAGwozwFpDT4gyEdjJfw8AGvd=_e-fn7yH-9_POzrPF7bOBQCnQ@mail.gmail.com>
-X-Gm-Features: AQ5f1JqzrAnul1Njdh95_GogWrVQDg12FtNQW814Szv4wMVky15Q9NrjTW90OdQ
-Message-ID: 
- <CAGwozwFpDT4gyEdjJfw8AGvd=_e-fn7yH-9_POzrPF7bOBQCnQ@mail.gmail.com>
-Subject: Re: [PATCH v5 00/13] hwmon: (oxpsensors) Add devices, features, fix
- ABI and move to platform/x86
-To: platform-driver-x86@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 12/13] power: supply: add inhibit-charge-awake to
+ charge_behaviour
+To: Antheas Kapenekakis <lkml@antheas.dev>,
+ platform-driver-x86@vger.kernel.org
 Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-pm@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
+ linux-pm@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+ Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Joaquin Ignacio Aramendia <samsagax@gmail.com>,
  Derek J Clark <derekjohn.clark@gmail.com>,
-	Kevin Greenberg <kdgreenberg234@protonmail.com>,
- Joshua Tam <csinaction@pm.me>,
-	Parth Menon <parthasarathymenon@gmail.com>, Eileen <eileen@one-netbook.com>,
-	linux-kernel@vger.kernel.org, sre@kernel.org, linux@weissschuh.net,
-	Hans de Goede <hdegoede@redhat.com>, "Limonciello,
- Mario" <Mario.Limonciello@amd.com>,
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Armin Wolf <W_Armin@gmx.de>
-Content-Type: text/plain; charset="UTF-8"
-X-PPP-Message-ID: 
- <174222735323.27976.11177177396523630123@linux1587.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
-X-Virus-Status: Clean
+ Kevin Greenberg <kdgreenberg234@protonmail.com>,
+ Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>,
+ Eileen <eileen@one-netbook.com>, linux-kernel@vger.kernel.org,
+ sre@kernel.org, linux@weissschuh.net
+References: <20250317155349.1236188-1-lkml@antheas.dev>
+ <20250317155349.1236188-13-lkml@antheas.dev>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20250317155349.1236188-13-lkml@antheas.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Forgot to add some ccs. Adding them here. Going very close to my ISPs'
-email limit per hour
+Hi,
 
-Antheas
+On 17-Mar-25 4:53 PM, Antheas Kapenekakis wrote:
+> OneXPlayer devices have a charge inhibit feature
+> that allows the user to select between it being
+> active always or only when the device is on.
+> 
+> Therefore, add attribute inhibit-charge-awake to
+> charge_behaviour to allow the user to select
+> that charge should be paused only when the device
+> is awake.
+> 
+> Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 
-On Mon, 17 Mar 2025 at 16:54, Antheas Kapenekakis <lkml@antheas.dev> wrote:
->
-> This four part series updates the oxpsensors module to bring it in line
-> with its Windows OneXPlayer counterpart. First, it adds support for all
-> 2024, 2025 OneXPlayer handhelds and their special variants. Then, it moves
-> the module to platform/x86 to allow for including more EC features.
->
-> Then, it adds the new charge limiting and bypass features that were first
-> introduced in the X1 and retrofit to older OneXFly variants and for
-> controlling the turbo led found in the X1 models. For Bypass, it adds a new
-> charge_behaviour variant called inhibit-charge-s0.
->
-> Finally, it performs a minor refactor by moving around switch statements
-> into their own functions, in order to allow for fixing the pwm1_enable ABI
-> in the final patch. Currently, pwm1_enable sets the fan to auto with the
-> value 0 and allows manual control with the value 1. This patch makes it
-> so 0 sets the fan to full speed, 1 sets the fan to manual control, and
-> 2 sets the fan to auto. This requires both setting enable and the fan
-> speed when the enable sysfs is written to as 0, hence the refactor.
->
-> As this is a minor ABI break and there is userspace software relying
-> on this previous behavior, the last patch also changes the /name of the
-> hwmon endpoint to "oxp_ec" from "oxpec" (mirroring WMI module conventions)
-> such that userspace software that relied on the previous behavior can be
-> retrofit to the new kernel while enabling correct functionality on old
-> and new kernels. Failing that, software that is not updated will just
-> stop controlling the fans, ensuring no malignant behavior.
->
+Thanks, patch looks good to me, FWIW:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
+
+
 > ---
-> V4: https://lore.kernel.org/all/20250311165406.331046-1-lkml@antheas.dev/
-> V3: https://lore.kernel.org/all/20250309112114.1177361-1-lkml@antheas.dev/
->
-> Changes since V4:
->     - Fix nits by Hans
->     - change inhibit-charge-s0 to inhibit-charge-awake
->     - use devm_battery_hook_register and power_supply_unregister_extension
->       (based on cros driver)
->     - move charge behavior patches to the end to make the rest of the series
->       easier to merge
->     - CC platform-x86 and power maintainers
->
-> Changes since V3:
->     - Fix nits by Derek
->     - Remove the hwmon documentation as it is not required for platform
->       drivers (suggested by Guenter)
->     - Add ACPI_BATTERY and HWMON depends to Kconfig
->       (reported by kernel robot)
->     - Homogenize driver into following reverse xmas convention
->
-> Changes since V2:
->     - Add ack by Guenter, move platform move patch to be third (not first
->       to allow for device support backport to lts kernels)
->     - Rework patch text, especially in the refactor patches as per Derek
->     - Change bypass to use charge_behaviour instead of charge_type, as that
->       ABI supports capability detection and is more appropriate
->     - Move battery attach to probe instead of init
->     - Fix bug where reading tt_led would instead use the turbo register
->
-> Changes since V1:
->     - Add X1 Pro, F1 Pro variants
->     - Fix minor typo in initial patches
->     - Convert oxp-sensors into a platform driver, as it is no longer
->       considered a hwmon driver.
->     - Add sysfs documentation and myself to the MAINTAINERS file
->     - Update documentation to state that this is the OneXPlayer/AOKZOE
->       platform driver, and that support for Ayaneo/OPI is provided until
->       they gain their own platform driver.
->
-> Antheas Kapenekakis (13):
->   hwmon: (oxp-sensors) Distinguish the X1 variants
->   hwmon: (oxp-sensors) Add all OneXFly variants
->   platform/x86: oxpec: Move hwmon/oxp-sensors to platform/x86
->   ABI: testing: add tt_toggle and tt_led entries
->   platform/x86: oxpec: Rename ec group to tt_toggle
->   platform/x86: oxpec: Add turbo led support to X1 devices
->   platform/x86: oxpec: Move pwm_enable read to its own function
->   platform/x86: oxpec: Move pwm value read/write to separate functions
->   platform/x86: oxpec: Move fan speed read to separate function
->   platform/x86: oxpec: Adhere to sysfs-class-hwmon and enable pwm on 2
->   platform/x86: oxpec: Follow reverse xmas convention for tt_toggle
->   power: supply: add inhibit-charge-awake to charge_behaviour
->   platform/x86: oxpec: Add charge threshold and behaviour to OneXPlayer
->
->  Documentation/ABI/testing/sysfs-class-power   |  11 +-
->  Documentation/ABI/testing/sysfs-platform-oxp  |  26 +
->  Documentation/hwmon/index.rst                 |   2 +-
->  Documentation/hwmon/oxp-sensors.rst           |  89 ---
->  MAINTAINERS                                   |   7 +-
->  drivers/hwmon/Kconfig                         |  11 -
->  drivers/hwmon/Makefile                        |   1 -
->  drivers/platform/x86/Kconfig                  |  13 +
->  drivers/platform/x86/Makefile                 |   3 +
->  .../oxp-sensors.c => platform/x86/oxpec.c}    | 628 ++++++++++++++----
->  drivers/power/supply/power_supply_sysfs.c     |   1 +
->  drivers/power/supply/test_power.c             |   1 +
->  include/linux/power_supply.h                  |   1 +
->  13 files changed, 542 insertions(+), 252 deletions(-)
->  create mode 100644 Documentation/ABI/testing/sysfs-platform-oxp
->  delete mode 100644 Documentation/hwmon/oxp-sensors.rst
->  rename drivers/{hwmon/oxp-sensors.c => platform/x86/oxpec.c} (52%)
->
->
-> base-commit: 4701f33a10702d5fc577c32434eb62adde0a1ae1
-> --
-> 2.48.1
->
+>  Documentation/ABI/testing/sysfs-class-power | 11 ++++++-----
+>  drivers/power/supply/power_supply_sysfs.c   |  1 +
+>  drivers/power/supply/test_power.c           |  1 +
+>  include/linux/power_supply.h                |  1 +
+>  4 files changed, 9 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+> index 2a5c1a09a28f9..78afb2422fc5a 100644
+> --- a/Documentation/ABI/testing/sysfs-class-power
+> +++ b/Documentation/ABI/testing/sysfs-class-power
+> @@ -508,11 +508,12 @@ Description:
+>  		Access: Read, Write
+>  
+>  		Valid values:
+> -			================ ====================================
+> -			auto:            Charge normally, respect thresholds
+> -			inhibit-charge:  Do not charge while AC is attached
+> -			force-discharge: Force discharge while AC is attached
+> -			================ ====================================
+> +			===================== ========================================
+> +			auto:                 Charge normally, respect thresholds
+> +			inhibit-charge:       Do not charge while AC is attached
+> +			inhibit-charge-awake: inhibit-charge only when device is awake
+> +			force-discharge:      Force discharge while AC is attached
+> +			===================== ========================================
+>  
+>  What:		/sys/class/power_supply/<supply_name>/technology
+>  Date:		May 2007
+> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+> index edb058c19c9c4..8d036faf220ec 100644
+> --- a/drivers/power/supply/power_supply_sysfs.c
+> +++ b/drivers/power/supply/power_supply_sysfs.c
+> @@ -140,6 +140,7 @@ static const char * const POWER_SUPPLY_SCOPE_TEXT[] = {
+>  static const char * const POWER_SUPPLY_CHARGE_BEHAVIOUR_TEXT[] = {
+>  	[POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO]		= "auto",
+>  	[POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE]	= "inhibit-charge",
+> +	[POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE]	= "inhibit-charge-awake",
+>  	[POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE]	= "force-discharge",
+>  };
+>  
+> diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
+> index 2a975a110f485..958e0c0cf2876 100644
+> --- a/drivers/power/supply/test_power.c
+> +++ b/drivers/power/supply/test_power.c
+> @@ -214,6 +214,7 @@ static const struct power_supply_desc test_power_desc[] = {
+>  		.property_is_writeable = test_power_battery_property_is_writeable,
+>  		.charge_behaviours = BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO)
+>  				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)
+> +				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE)
+>  				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE),
+>  	},
+>  	[TEST_USB] = {
+> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> index 6ed53b2921624..bb8e9e62ce834 100644
+> --- a/include/linux/power_supply.h
+> +++ b/include/linux/power_supply.h
+> @@ -212,6 +212,7 @@ enum power_supply_usb_type {
+>  enum power_supply_charge_behaviour {
+>  	POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO = 0,
+>  	POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE,
+> +	POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE,
+>  	POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE,
+>  };
+>  
+
 
