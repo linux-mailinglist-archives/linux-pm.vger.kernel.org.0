@@ -1,39 +1,39 @@
-Return-Path: <linux-pm+bounces-24182-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24183-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84B51A653CE
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 15:39:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 70772A653DB
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 15:40:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E517165DC5
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 14:39:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8FC816A87F
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 14:39:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14F5F245033;
-	Mon, 17 Mar 2025 14:38:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D2524501E;
+	Mon, 17 Mar 2025 14:39:05 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EBC4245023;
-	Mon, 17 Mar 2025 14:38:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 580622459DA;
+	Mon, 17 Mar 2025 14:39:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742222339; cv=none; b=msBM6hj/a+CHDwbqDyCevKvvKpKl30VUAzwxJ59ewv2i0c3uc32bKBQqXLr0UL3HBB33rv2jzA/5a6Qhzo+BDiuoDuuO/Glz23liitV1hoZIBpqUdnMZSkUzsRJuw5gHfoazyn05TMyqpcNv3L3v5tWCioTPg9lxajCLHC4BQSM=
+	t=1742222345; cv=none; b=fA5MeWnX5wwvrtdojCAEoVNzvlX5UmtuIbbZDUpYT4RP9PUuAwMU65lhvNPcom/fkqMhQYzr8+xjKjQ4jKjAK8/ZKy0Q5AimdUPmGRXE+tC7MO9XgU1Re/3bljgSk2DKRbYpeVBJFZTuZdRCmVH9B3fXXibTVVWgQHMqVL4b/Z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742222339; c=relaxed/simple;
-	bh=q29lb3j25m0QJGQhubl/mrs3os42rda55CCyap+LZ10=;
+	s=arc-20240116; t=1742222345; c=relaxed/simple;
+	bh=urePT83issd9/IbM9c8d8gFFrG6NiH+M8QCuF8DT3DQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hN3tniIBDYGpAYNkxlq3sEm6BzMLMS4OzXFNnd2wW2jZjudKKuECAg/5b8EyFIFU84UdD+c0ppPLfc9MRalU3MBfXl22/2lD27/PTf1LUnRFGeMApbryJ1gK8NG6iJQrKHR/fMizTCoAMgrjxCenpI817Dl954/Cgo3g44d7GY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
+	 MIME-Version; b=RhYrNRoWDlSTZHAQNwalTaITKGOTnkNBJ2cVV6WMy7Xw+TnJ8PKOqXYqQ8+ZntmDgNG0lfXZjVjyXiCzm2Z+3A8KX/wUiovQc94jtQsTjq6AWcBqjYPi+g2aj3qFwu0tcai7LOFgJcOF7/SkfkLFzXdXjNs1uvISnUEBJQvAzS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: 6ar5SHwOTdqdY4icvWrw9g==
-X-CSE-MsgGUID: 7nZHZycGQW+EYdK+ej21+Q==
+X-CSE-ConnectionGUID: 4bnGuOTyR0KgP/YAWGVW2A==
+X-CSE-MsgGUID: f91nkCc/QYWHaVENQt8BcQ==
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 17 Mar 2025 23:38:56 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 17 Mar 2025 23:39:02 +0900
 Received: from ubuntu.adwin.renesas.com (unknown [10.226.93.200])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 8E056401A473;
-	Mon, 17 Mar 2025 23:38:50 +0900 (JST)
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 97023401823E;
+	Mon, 17 Mar 2025 23:38:56 +0900 (JST)
 From: John Madieu <john.madieu.xa@bp.renesas.com>
 To: geert+renesas@glider.be,
 	conor+dt@kernel.org,
@@ -52,9 +52,9 @@ Cc: magnus.damm@gmail.com,
 	linux-pm@vger.kernel.org,
 	lukasz.luba@arm.com,
 	John Madieu <john.madieu.xa@bp.renesas.com>
-Subject: [PATCH v4 1/5] soc: renesas: rz-sysc: add syscon/regmap support
-Date: Mon, 17 Mar 2025 15:34:28 +0100
-Message-ID: <20250317143442.100590-2-john.madieu.xa@bp.renesas.com>
+Subject: [PATCH v4 2/5] dt-bindings: thermal: r9a09g047-tsu: Document the TSU unit
+Date: Mon, 17 Mar 2025 15:34:29 +0100
+Message-ID: <20250317143442.100590-3-john.madieu.xa@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250317143442.100590-1-john.madieu.xa@bp.renesas.com>
 References: <20250317143442.100590-1-john.madieu.xa@bp.renesas.com>
@@ -66,136 +66,116 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The RZ/G3E system controller has various registers that control or report
-some properties specific to individual IPs. The regmap is registered as a
-syscon device to allow these IP drivers to access the registers through the
-regmap API.
-
-As other RZ SoCs might have custom read/write callbacks or max-offsets, let's
-register a custom regmap configuration.
+The Renesas RZ/G3E SoC includes a Thermal Sensor Unit (TSU) block designed
+to measure the junction temperature. The device provides real-time
+temperature measurements for thermal management, utilizing a single
+dedicated channel (channel 1) for temperature sensing.
 
 Signed-off-by: John Madieu <john.madieu.xa@bp.renesas.com>
 ---
-v1 -> v2: no changes
-v2 -> v3: no changes
-v3 -> v4: no changes
+v1 -> v2:
+ * Fixes reg property specifier to get rid of yamlint warnings
+ * Fixes IRQ name to reflect TSU expectations
 
- drivers/soc/renesas/Kconfig         |  1 +
- drivers/soc/renesas/r9a09g047-sys.c |  1 +
- drivers/soc/renesas/rz-sysc.c       | 30 ++++++++++++++++++++++++++++-
- drivers/soc/renesas/rz-sysc.h       |  2 ++
- 4 files changed, 33 insertions(+), 1 deletion(-)
+v2 -> v3:
+ * Removees useless 'renesas,tsu-operating-mode' property 
 
-diff --git a/drivers/soc/renesas/Kconfig b/drivers/soc/renesas/Kconfig
-index 49648cf28bd2..3ffd3a4ca18d 100644
---- a/drivers/soc/renesas/Kconfig
-+++ b/drivers/soc/renesas/Kconfig
-@@ -388,6 +388,7 @@ config RST_RCAR
- 
- config SYSC_RZ
- 	bool "System controller for RZ SoCs" if COMPILE_TEST
-+	select MFD_SYSCON
- 
- config SYSC_R9A08G045
- 	bool "Renesas RZ/G3S System controller support" if COMPILE_TEST
-diff --git a/drivers/soc/renesas/r9a09g047-sys.c b/drivers/soc/renesas/r9a09g047-sys.c
-index cd2eb7782cfe..5b010a519fab 100644
---- a/drivers/soc/renesas/r9a09g047-sys.c
-+++ b/drivers/soc/renesas/r9a09g047-sys.c
-@@ -64,4 +64,5 @@ static const struct rz_sysc_soc_id_init_data rzg3e_sys_soc_id_init_data __initco
- 
- const struct rz_sysc_init_data rzg3e_sys_init_data = {
- 	.soc_id_init_data = &rzg3e_sys_soc_id_init_data,
-+	.max_register_offset = 0x170c,
- };
-diff --git a/drivers/soc/renesas/rz-sysc.c b/drivers/soc/renesas/rz-sysc.c
-index 1c98da37b7d1..bcbc23da954b 100644
---- a/drivers/soc/renesas/rz-sysc.c
-+++ b/drivers/soc/renesas/rz-sysc.c
-@@ -6,8 +6,10 @@
-  */
- 
- #include <linux/io.h>
-+#include <linux/mfd/syscon.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-+#include <linux/regmap.h>
- #include <linux/sys_soc.h>
- 
- #include "rz-sysc.h"
-@@ -81,6 +83,14 @@ static int rz_sysc_soc_init(struct rz_sysc *sysc, const struct of_device_id *mat
- 	return 0;
- }
- 
-+static struct regmap_config rz_sysc_regmap = {
-+	.name = "rz_sysc_regs",
-+	.reg_bits = 32,
-+	.reg_stride = 4,
-+	.val_bits = 32,
-+	.fast_io = true,
-+};
+v3 -> v4:
+ * Fixes commit message
+ * Fixes interrupt description
+ * Removes trip point definition
+
+ .../thermal/renesas,r9a09g047-tsu.yaml        | 81 +++++++++++++++++++
+ 1 file changed, 81 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
+
+diff --git a/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml b/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
+new file mode 100644
+index 000000000000..ef9308089bfc
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
+@@ -0,0 +1,81 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/renesas,r9a09g047-tsu.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- static const struct of_device_id rz_sysc_match[] = {
- #ifdef CONFIG_SYSC_R9A08G045
- 	{ .compatible = "renesas,r9a08g045-sysc", .data = &rzg3s_sysc_init_data },
-@@ -97,14 +107,21 @@ MODULE_DEVICE_TABLE(of, rz_sysc_match);
- 
- static int rz_sysc_probe(struct platform_device *pdev)
- {
-+	const struct rz_sysc_init_data *data;
- 	const struct of_device_id *match;
- 	struct device *dev = &pdev->dev;
-+	struct regmap *regmap;
- 	struct rz_sysc *sysc;
-+	int ret;
- 
- 	match = of_match_node(rz_sysc_match, dev->of_node);
- 	if (!match)
- 		return -ENODEV;
- 
-+	data = match->data;
-+	if (!data)
-+		return -EINVAL;
++title: Renesas RZ/G3E Temperature Sensor Unit (TSU)
 +
- 	sysc = devm_kzalloc(dev, sizeof(*sysc), GFP_KERNEL);
- 	if (!sysc)
- 		return -ENOMEM;
-@@ -114,7 +131,18 @@ static int rz_sysc_probe(struct platform_device *pdev)
- 		return PTR_ERR(sysc->base);
- 
- 	sysc->dev = dev;
--	return rz_sysc_soc_init(sysc, match);
-+	ret = rz_sysc_soc_init(sysc, match);
++maintainers:
++  - John Madieu <john.madieu.xa@bp.renesas.com>
 +
-+	if (data->max_register_offset) {
-+		rz_sysc_regmap.max_register = data->max_register_offset;
-+		regmap = devm_regmap_init_mmio(dev, sysc->base, &rz_sysc_regmap);
-+		if (IS_ERR(regmap))
-+			return PTR_ERR(regmap);
++description:
++  The Temperature Sensor Unit (TSU) is an integrated thermal sensor that
++  monitors the chip temperature on the Renesas RZ/G3E SoC. The TSU provides
++  real-time temperature measurements for thermal management.
 +
-+		ret = of_syscon_register_regmap(dev->of_node, regmap);
-+	}
++properties:
++  compatible:
++    const: renesas,r9a09g047-tsu
 +
-+	return ret;
- }
- 
- static struct platform_driver rz_sysc_driver = {
-diff --git a/drivers/soc/renesas/rz-sysc.h b/drivers/soc/renesas/rz-sysc.h
-index aa83948c5117..37a3bb2c87f8 100644
---- a/drivers/soc/renesas/rz-sysc.h
-+++ b/drivers/soc/renesas/rz-sysc.h
-@@ -34,9 +34,11 @@ struct rz_sysc_soc_id_init_data {
- /**
-  * struct rz_sysc_init_data - RZ SYSC initialization data
-  * @soc_id_init_data: RZ SYSC SoC ID initialization data
-+ * @max_register_offset: Maximum SYSC register offset to be used by the regmap config
-  */
- struct rz_sysc_init_data {
- 	const struct rz_sysc_soc_id_init_data *soc_id_init_data;
-+	u32 max_register_offset;
- };
- 
- extern const struct rz_sysc_init_data rzg3e_sys_init_data;
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  power-domains:
++    maxItems: 1
++
++  interrupts:
++    items:
++      - description: Conversion complete interrupt signal (pulse)
++      - description: Comparison result interrupt signal (level)
++
++  interrupt-names:
++    items:
++      - const: adi
++      - const: adcmpi
++
++  "#thermal-sensor-cells":
++    const: 0
++
++  renesas,tsu-calibration-sys:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: |
++      Phandle to the system controller (sys) that contains the TSU
++      calibration values used for temperature calculations.
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - resets
++  - power-domains
++  - interrupts
++  - interrupt-names
++  - "#thermal-sensor-cells"
++  - renesas,tsu-calibration-sys
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/renesas,r9a09g047-cpg.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    tsu: thermal@14002000 {
++        compatible = "renesas,r9a09g047-tsu";
++        reg = <0x14002000 0x1000>;
++        clocks = <&cpg CPG_MOD 0x10a>;
++        resets = <&cpg 0xf8>;
++        power-domains = <&cpg>;
++        interrupts = <GIC_SPI 250 IRQ_TYPE_EDGE_RISING>,
++                     <GIC_SPI 251 IRQ_TYPE_LEVEL_HIGH>;
++        interrupt-names = "adi", "adcmpi";
++        #thermal-sensor-cells = <0>;
++        renesas,tsu-calibration-sys = <&sys>;
++    };
 -- 
 2.25.1
 
