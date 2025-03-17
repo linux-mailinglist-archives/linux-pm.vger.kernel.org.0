@@ -1,320 +1,211 @@
-Return-Path: <linux-pm+bounces-24210-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24211-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F32FA656CA
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 16:58:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B402AA65771
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 17:09:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 255AF7A536A
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 15:57:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CB96883A7F
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 16:02:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38B011E8349;
-	Mon, 17 Mar 2025 15:54:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C856117A31C;
+	Mon, 17 Mar 2025 16:02:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="1pKMO8ut"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="J9vJYFdb"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 341801E5B77;
-	Mon, 17 Mar 2025 15:54:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD391714AC;
+	Mon, 17 Mar 2025 16:02:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742226870; cv=none; b=PUpmqW+GTTVC6oxMsR2WQJV19CkPezC/O88GUbVTpS6jTnVRoQ3XZ2WQKi3cDJenkkEW+7LkpHT89cUoyyo0hnONenFTRP+KCCopX8Ynusm8NL/8nWhLj29oiNtCw8uzSilcNyJyPHjB652KFaRw5ZOoXc+2kDm9dpi9AwKyQeM=
+	t=1742227358; cv=none; b=IsDGFUuf+lE7kGvfcv0RAoYcji1tj8D/WJEGiTNdzDwM4DmAaOl5y5NCmDSndhpp4GPrQ6577jf1vNvJhYnalVkzTnj2b/HYsFZgbUzO+XCtbyYPXeedxSPSGkGWF5ZbimkZb04NS+7dFKwVpk72v66LflJngSK3n2I7NI5397c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742226870; c=relaxed/simple;
-	bh=Y7K/RuMpkjeDrO4M011u3Dk/gKKBgruwRACBn5H/Azg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h6u8HKhTr+eQ3Mzn9+X7a/5hEZjaELqA87lI653T3NS5C04MkDuTJnZwNj1Xz16gVbzcILgMqrt5ovGiXZ7HdwpTARznseEW+elwb0RohxSLJmbtxdpXNRW3j8aKxUWUGK6LlgnwS9rP/wJQLJyIMBU4f7M5X/FGDcR+Mm4Um8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=1pKMO8ut; arc=none smtp.client-ip=185.138.42.100
+	s=arc-20240116; t=1742227358; c=relaxed/simple;
+	bh=D4NAe2iUldLe4tWzQTlHWH/IOChqKMJQqbOqVgCD8UA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O7M+8ibvx4OvjM5VKbhIFM+VGN6yVA/Gv/5bLnmZ10JT/wChlTDedJUtpfSOV0y7/5IKNl6Zo6ABvJ5xBMfJt+p1qsiZga/HA7fte4LiVhGByqR9ir7JGMBLAeAfh/xK2Xi30pVTinMlRdg7tLWKzGC8N6+V1DCY5GmKuqrqzzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=J9vJYFdb; arc=none smtp.client-ip=185.138.42.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
-Received: from localhost.localdomain (unknown [IPv6:2a05:f6c2:511b:0:cbc0:999f:73ad:33bd])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 4EC982E0947C;
-	Mon, 17 Mar 2025 17:54:24 +0200 (EET)
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 79DF32E09564;
+	Mon, 17 Mar 2025 18:02:32 +0200 (EET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1742226866;
-	bh=H0HeL6UFDvvlyKc7aV7cQGD8RGlrpo0C8vrVLj3ZgcA=; h=From:To:Subject;
-	b=1pKMO8utYpPvYPdC8D5+CIsvJTLRySjY/q7bfyiYBKYkYOHoTsqnJ61B5Q0D3fzRG
-	 kFJy2UHzUKAjA9klvbWNLxKl4x7ztKXVy/HG3mgGORxetcrZwicAN6mKZMu069EriD
-	 pzyp59Jm0mZFvEBvrbTia/xZPpTpzzTuX4napPOw=
+	s=default; t=1742227354;
+	bh=xqwq/Em1fb5FMerjkMCm9F29xL5Dgmo9MCoLm5hsuTI=;
+	h=Received:From:Subject:To;
+	b=J9vJYFdbDUkFtTdJrHn750leNJuSPKRLOyrlsePoc4IXZ7Aeg+L7ANV0j2BLlb/3I
+	 KwTX05/njWnzu8dS+wfh7bWLZhgcM8PbvrjVcnBXwfsr3Ku7jgymNu4Orm/NjGIU/h
+	 jp02v1fUuojgpkHLHy0dCY1Wn0Nq+cobguISHbis=
 Authentication-Results: linux1587.grserver.gr;
-	spf=pass (sender IP is 2a05:f6c2:511b:0:cbc0:999f:73ad:33bd) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
+        spf=pass (sender IP is 209.85.167.48) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lf1-f48.google.com
 Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-From: Antheas Kapenekakis <lkml@antheas.dev>
-To: platform-driver-x86@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
-	Derek J Clark <derekjohn.clark@gmail.com>,
-	Kevin Greenberg <kdgreenberg234@protonmail.com>,
-	Joshua Tam <csinaction@pm.me>,
-	Parth Menon <parthasarathymenon@gmail.com>,
-	Eileen <eileen@one-netbook.com>,
-	linux-kernel@vger.kernel.org,
-	sre@kernel.org,
-	linux@weissschuh.net,
-	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: [PATCH v5 13/13] platform/x86: oxpec: Add charge threshold and
- behaviour to OneXPlayer
-Date: Mon, 17 Mar 2025 16:53:49 +0100
-Message-ID: <20250317155349.1236188-14-lkml@antheas.dev>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250317155349.1236188-1-lkml@antheas.dev>
-References: <20250317155349.1236188-1-lkml@antheas.dev>
+Received: by mail-lf1-f48.google.com with SMTP id
+ 2adb3069b0e04-5493b5bc6e8so4926574e87.2;
+        Mon, 17 Mar 2025 09:02:32 -0700 (PDT)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCV16eyUBrMr8h0VgkaWUluFGaVnQAMtn+0f3tHEKRclAid9vtrnHuRtDyB3sm1V5B5weOa4w6vX4kM=@vger.kernel.org,
+ AJvYcCVJaPdY00hXonZeXHw5uIN2D8I9SSJnSwm4/VKEI51t7gOSz6cffmars8ibp65La2K856vNTGunH9A=@vger.kernel.org,
+ AJvYcCXyPTdPWcAryhkSqsf46ZwKWWhtvYwnZq65sxgGVgdNIGE01ZQNHDafmlJeH8EelzIf+lXRa01TxUuTZi+x@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3ARrQTcFIMiGzbGs5TuV4G+LeVTJw8TLeIoxVzGoOudEidOy1
+	qBcfAcGzi3QDg0b6Av4KY5aWfwEiPgaORpogUyILQ6IsqCjleQ1wy1J3ZR3o7r2fS0+qQo1WTRn
+	DnT58tZybamXDSt2msi+nyOLFL7U=
+X-Google-Smtp-Source: 
+ AGHT+IFAz0kgLEC4uOK5AMohsc/jk5E7XXBP21RkpD3X51bWXhdPJnWXixdvWJ4et23gAPlBTH0Rax/SNpXgmxt28Rc=
+X-Received: by 2002:a05:6512:4016:b0:545:291:7ee0 with SMTP id
+ 2adb3069b0e04-549c3989bd1mr7520993e87.34.1742227351699; Mon, 17 Mar 2025
+ 09:02:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250317155349.1236188-1-lkml@antheas.dev>
+In-Reply-To: <20250317155349.1236188-1-lkml@antheas.dev>
+From: Antheas Kapenekakis <lkml@antheas.dev>
+Date: Mon, 17 Mar 2025 17:02:19 +0100
+X-Gmail-Original-Message-ID: 
+ <CAGwozwFpDT4gyEdjJfw8AGvd=_e-fn7yH-9_POzrPF7bOBQCnQ@mail.gmail.com>
+X-Gm-Features: AQ5f1JqzrAnul1Njdh95_GogWrVQDg12FtNQW814Szv4wMVky15Q9NrjTW90OdQ
+Message-ID: 
+ <CAGwozwFpDT4gyEdjJfw8AGvd=_e-fn7yH-9_POzrPF7bOBQCnQ@mail.gmail.com>
+Subject: Re: [PATCH v5 00/13] hwmon: (oxpsensors) Add devices, features, fix
+ ABI and move to platform/x86
+To: platform-driver-x86@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-pm@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
+ Derek J Clark <derekjohn.clark@gmail.com>,
+	Kevin Greenberg <kdgreenberg234@protonmail.com>,
+ Joshua Tam <csinaction@pm.me>,
+	Parth Menon <parthasarathymenon@gmail.com>, Eileen <eileen@one-netbook.com>,
+	linux-kernel@vger.kernel.org, sre@kernel.org, linux@weissschuh.net,
+	Hans de Goede <hdegoede@redhat.com>, "Limonciello,
+ Mario" <Mario.Limonciello@amd.com>,
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Armin Wolf <W_Armin@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
 X-PPP-Message-ID: 
- <174222686573.25833.9637588748769200232@linux1587.grserver.gr>
+ <174222735323.27976.11177177396523630123@linux1587.grserver.gr>
 X-PPP-Vhost: antheas.dev
 X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
 X-Virus-Status: Clean
 
-With the X1 (AMD), OneXPlayer added a charge limit and charge inhibit
-feature to their devices. Charge limit allows for choosing an arbitrary
-battery charge setpoint in percentages. Charge ihibit allows to instruct
-the device to stop charging either when it is awake or always.
+Forgot to add some ccs. Adding them here. Going very close to my ISPs'
+email limit per hour
 
-This feature was then extended for the F1Pro as well. OneXPlayer also
-released BIOS updates for the X1 Mini, X1 (Intel), and F1 devices that
-add support for this feature. Therefore, enable it for all F1 and
-X1 devices.
+Antheas
 
-Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
----
- drivers/platform/x86/Kconfig |   1 +
- drivers/platform/x86/oxpec.c | 164 ++++++++++++++++++++++++++++++++++-
- 2 files changed, 161 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-index 82cfc76bc5c9f..f4d993658c01f 100644
---- a/drivers/platform/x86/Kconfig
-+++ b/drivers/platform/x86/Kconfig
-@@ -1189,6 +1189,7 @@ config SEL3350_PLATFORM
- config OXP_EC
- 	tristate "OneXPlayer EC platform control"
- 	depends on ACPI_EC
-+	depends on ACPI_BATTERY
- 	depends on HWMON
- 	depends on X86
- 	help
-diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
-index 39a29295f9cfe..88d839c2a4834 100644
---- a/drivers/platform/x86/oxpec.c
-+++ b/drivers/platform/x86/oxpec.c
-@@ -24,6 +24,7 @@
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/processor.h>
-+#include <acpi/battery.h>
- 
- /* Handle ACPI lock mechanism */
- static u32 oxp_mutex;
-@@ -60,6 +61,7 @@ enum oxp_board {
- };
- 
- static enum oxp_board board;
-+static struct device *oxp_dev;
- 
- /* Fan reading and PWM */
- #define OXP_SENSOR_FAN_REG             0x76 /* Fan reading is 2 registers long */
-@@ -93,6 +95,23 @@ static enum oxp_board board;
- #define OXP_X1_TURBO_LED_OFF           0x01
- #define OXP_X1_TURBO_LED_ON            0x02
- 
-+/* Battery extension settings */
-+#define EC_CHARGE_CONTROL_BEHAVIOURS_X1	(BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO)             | \
-+					 BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)    | \
-+					 BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE))
-+
-+#define OXP_X1_CHARGE_LIMIT_REG      0xA3 /* X1 charge limit (%) */
-+#define OXP_X1_CHARGE_INHIBIT_REG     0xA4 /* X1 bypass charging */
-+
-+#define OXP_X1_CHARGE_INHIBIT_MASK_AWAKE 0x01
-+/*
-+ * X1 Mask is 0x0A, OneXFly F1Pro is just 0x02
-+ * but the extra bit on the X1 does nothing.
-+ */
-+#define OXP_X1_CHARGE_INHIBIT_MASK_OFF 0x02
-+#define OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS (OXP_X1_CHARGE_INHIBIT_MASK_AWAKE | \
-+	OXP_X1_CHARGE_INHIBIT_MASK_OFF)
-+
- static const struct dmi_system_id dmi_table[] = {
- 	{
- 		.matches = {
-@@ -507,6 +526,136 @@ static ssize_t tt_led_show(struct device *dev,
- 
- static DEVICE_ATTR_RW(tt_led);
- 
-+/* Callbacks for charge behaviour attributes */
-+static bool oxp_psy_ext_supported(void)
-+{
-+	switch (board) {
-+	case oxp_x1:
-+	case oxp_fly:
-+		return 1;
-+	default:
-+		break;
-+	}
-+	return 0;
-+}
-+
-+static int oxp_psy_ext_get_prop(struct power_supply *psy,
-+				       const struct power_supply_ext *ext,
-+				       void *data,
-+				       enum power_supply_property psp,
-+				       union power_supply_propval *val)
-+{
-+	long raw_val;
-+	int ret;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
-+		ret = read_from_ec(OXP_X1_CHARGE_LIMIT_REG, 1, &raw_val);
-+		if (ret)
-+			return ret;
-+		if (raw_val > 100)
-+			return -EINVAL;
-+		val->intval = raw_val;
-+		return 0;
-+	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
-+		ret = read_from_ec(OXP_X1_CHARGE_INHIBIT_REG, 1, &raw_val);
-+		if (ret)
-+			return ret;
-+		if ((raw_val & OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS) ==
-+		    OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS)
-+			val->intval = POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE;
-+		else if ((raw_val & OXP_X1_CHARGE_INHIBIT_MASK_AWAKE) ==
-+			 OXP_X1_CHARGE_INHIBIT_MASK_AWAKE)
-+			val->intval = POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE;
-+		else
-+			val->intval = POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO;
-+		return 0;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int oxp_psy_ext_set_prop(struct power_supply *psy,
-+				       const struct power_supply_ext *ext,
-+				       void *data,
-+				       enum power_supply_property psp,
-+				       const union power_supply_propval *val)
-+{
-+	long raw_val;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
-+		if (val->intval > 100)
-+			return -EINVAL;
-+		return write_to_ec(OXP_X1_CHARGE_LIMIT_REG, val->intval);
-+	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
-+		switch (val->intval) {
-+		case POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO:
-+			raw_val = 0;
-+			break;
-+		case POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE:
-+			raw_val = OXP_X1_CHARGE_INHIBIT_MASK_AWAKE;
-+			break;
-+		case POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE:
-+			raw_val = OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS;
-+			break;
-+		default:
-+			return -EINVAL;
-+		}
-+
-+		return write_to_ec(OXP_X1_CHARGE_INHIBIT_REG, raw_val);
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int oxp_psy_prop_is_writeable(struct power_supply *psy,
-+					    const struct power_supply_ext *ext,
-+					    void *data,
-+					    enum power_supply_property psp)
-+{
-+	return true;
-+}
-+
-+static const enum power_supply_property oxp_psy_ext_props[] = {
-+	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
-+	POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD,
-+};
-+
-+struct power_supply_ext oxp_psy_ext = {
-+	.name			= "oxp-charge-control",
-+	.properties		= oxp_psy_ext_props,
-+	.num_properties		= ARRAY_SIZE(oxp_psy_ext_props),
-+	.charge_behaviours	= EC_CHARGE_CONTROL_BEHAVIOURS_X1,
-+	.get_property		= oxp_psy_ext_get_prop,
-+	.set_property		= oxp_psy_ext_set_prop,
-+	.property_is_writeable	= oxp_psy_prop_is_writeable,
-+};
-+
-+static int oxp_add_battery(struct power_supply *battery, struct acpi_battery_hook *hook)
-+{
-+	/* OneXPlayer devices only have one battery. */
-+	if (strcmp(battery->desc->name, "BAT0") != 0 &&
-+	    strcmp(battery->desc->name, "BAT1") != 0 &&
-+	    strcmp(battery->desc->name, "BATC") != 0 &&
-+	    strcmp(battery->desc->name, "BATT") != 0)
-+		return -ENODEV;
-+
-+	return power_supply_register_extension(battery, &oxp_psy_ext, oxp_dev, NULL);
-+}
-+
-+static int oxp_remove_battery(struct power_supply *battery, struct acpi_battery_hook *hook)
-+{
-+	power_supply_unregister_extension(battery, &oxp_psy_ext);
-+	return 0;
-+}
-+
-+static struct acpi_battery_hook battery_hook = {
-+	.add_battery = oxp_add_battery,
-+	.remove_battery = oxp_remove_battery,
-+	.name = "OneXPlayer Battery",
-+};
-+
- /* PWM enable/disable functions */
- static int oxp_pwm_enable(void)
- {
-@@ -845,12 +994,19 @@ static const struct hwmon_chip_info oxp_ec_chip_info = {
- static int oxp_platform_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
--	struct device *hwdev;
-+	int ret;
- 
--	hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
--						     &oxp_ec_chip_info, NULL);
-+	oxp_dev = dev;
-+	ret = PTR_ERR_OR_ZERO(devm_hwmon_device_register_with_info(
-+		dev, "oxp_ec", NULL, &oxp_ec_chip_info, NULL));
- 
--	return PTR_ERR_OR_ZERO(hwdev);
-+	if (ret)
-+		return ret;
-+
-+	if (oxp_psy_ext_supported())
-+		return devm_battery_hook_register(dev, &battery_hook);
-+
-+	return 0;
- }
- 
- static struct platform_driver oxp_platform_driver = {
--- 
-2.48.1
-
+On Mon, 17 Mar 2025 at 16:54, Antheas Kapenekakis <lkml@antheas.dev> wrote:
+>
+> This four part series updates the oxpsensors module to bring it in line
+> with its Windows OneXPlayer counterpart. First, it adds support for all
+> 2024, 2025 OneXPlayer handhelds and their special variants. Then, it moves
+> the module to platform/x86 to allow for including more EC features.
+>
+> Then, it adds the new charge limiting and bypass features that were first
+> introduced in the X1 and retrofit to older OneXFly variants and for
+> controlling the turbo led found in the X1 models. For Bypass, it adds a new
+> charge_behaviour variant called inhibit-charge-s0.
+>
+> Finally, it performs a minor refactor by moving around switch statements
+> into their own functions, in order to allow for fixing the pwm1_enable ABI
+> in the final patch. Currently, pwm1_enable sets the fan to auto with the
+> value 0 and allows manual control with the value 1. This patch makes it
+> so 0 sets the fan to full speed, 1 sets the fan to manual control, and
+> 2 sets the fan to auto. This requires both setting enable and the fan
+> speed when the enable sysfs is written to as 0, hence the refactor.
+>
+> As this is a minor ABI break and there is userspace software relying
+> on this previous behavior, the last patch also changes the /name of the
+> hwmon endpoint to "oxp_ec" from "oxpec" (mirroring WMI module conventions)
+> such that userspace software that relied on the previous behavior can be
+> retrofit to the new kernel while enabling correct functionality on old
+> and new kernels. Failing that, software that is not updated will just
+> stop controlling the fans, ensuring no malignant behavior.
+>
+> ---
+> V4: https://lore.kernel.org/all/20250311165406.331046-1-lkml@antheas.dev/
+> V3: https://lore.kernel.org/all/20250309112114.1177361-1-lkml@antheas.dev/
+>
+> Changes since V4:
+>     - Fix nits by Hans
+>     - change inhibit-charge-s0 to inhibit-charge-awake
+>     - use devm_battery_hook_register and power_supply_unregister_extension
+>       (based on cros driver)
+>     - move charge behavior patches to the end to make the rest of the series
+>       easier to merge
+>     - CC platform-x86 and power maintainers
+>
+> Changes since V3:
+>     - Fix nits by Derek
+>     - Remove the hwmon documentation as it is not required for platform
+>       drivers (suggested by Guenter)
+>     - Add ACPI_BATTERY and HWMON depends to Kconfig
+>       (reported by kernel robot)
+>     - Homogenize driver into following reverse xmas convention
+>
+> Changes since V2:
+>     - Add ack by Guenter, move platform move patch to be third (not first
+>       to allow for device support backport to lts kernels)
+>     - Rework patch text, especially in the refactor patches as per Derek
+>     - Change bypass to use charge_behaviour instead of charge_type, as that
+>       ABI supports capability detection and is more appropriate
+>     - Move battery attach to probe instead of init
+>     - Fix bug where reading tt_led would instead use the turbo register
+>
+> Changes since V1:
+>     - Add X1 Pro, F1 Pro variants
+>     - Fix minor typo in initial patches
+>     - Convert oxp-sensors into a platform driver, as it is no longer
+>       considered a hwmon driver.
+>     - Add sysfs documentation and myself to the MAINTAINERS file
+>     - Update documentation to state that this is the OneXPlayer/AOKZOE
+>       platform driver, and that support for Ayaneo/OPI is provided until
+>       they gain their own platform driver.
+>
+> Antheas Kapenekakis (13):
+>   hwmon: (oxp-sensors) Distinguish the X1 variants
+>   hwmon: (oxp-sensors) Add all OneXFly variants
+>   platform/x86: oxpec: Move hwmon/oxp-sensors to platform/x86
+>   ABI: testing: add tt_toggle and tt_led entries
+>   platform/x86: oxpec: Rename ec group to tt_toggle
+>   platform/x86: oxpec: Add turbo led support to X1 devices
+>   platform/x86: oxpec: Move pwm_enable read to its own function
+>   platform/x86: oxpec: Move pwm value read/write to separate functions
+>   platform/x86: oxpec: Move fan speed read to separate function
+>   platform/x86: oxpec: Adhere to sysfs-class-hwmon and enable pwm on 2
+>   platform/x86: oxpec: Follow reverse xmas convention for tt_toggle
+>   power: supply: add inhibit-charge-awake to charge_behaviour
+>   platform/x86: oxpec: Add charge threshold and behaviour to OneXPlayer
+>
+>  Documentation/ABI/testing/sysfs-class-power   |  11 +-
+>  Documentation/ABI/testing/sysfs-platform-oxp  |  26 +
+>  Documentation/hwmon/index.rst                 |   2 +-
+>  Documentation/hwmon/oxp-sensors.rst           |  89 ---
+>  MAINTAINERS                                   |   7 +-
+>  drivers/hwmon/Kconfig                         |  11 -
+>  drivers/hwmon/Makefile                        |   1 -
+>  drivers/platform/x86/Kconfig                  |  13 +
+>  drivers/platform/x86/Makefile                 |   3 +
+>  .../oxp-sensors.c => platform/x86/oxpec.c}    | 628 ++++++++++++++----
+>  drivers/power/supply/power_supply_sysfs.c     |   1 +
+>  drivers/power/supply/test_power.c             |   1 +
+>  include/linux/power_supply.h                  |   1 +
+>  13 files changed, 542 insertions(+), 252 deletions(-)
+>  create mode 100644 Documentation/ABI/testing/sysfs-platform-oxp
+>  delete mode 100644 Documentation/hwmon/oxp-sensors.rst
+>  rename drivers/{hwmon/oxp-sensors.c => platform/x86/oxpec.c} (52%)
+>
+>
+> base-commit: 4701f33a10702d5fc577c32434eb62adde0a1ae1
+> --
+> 2.48.1
+>
 
