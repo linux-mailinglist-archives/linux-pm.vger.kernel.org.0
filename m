@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-24198-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24199-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1B62A656D2
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 16:59:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10830A6572A
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 17:03:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B0662189B58F
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 15:55:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A89F53BBFE2
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 15:55:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50E9E17A30F;
-	Mon, 17 Mar 2025 15:54:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82C0D19CC28;
+	Mon, 17 Mar 2025 15:54:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="xJ6y4qFR"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="RaQPw6CM"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B52E2940D;
-	Mon, 17 Mar 2025 15:54:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2C4183CB0;
+	Mon, 17 Mar 2025 15:54:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742226844; cv=none; b=fSx/C2nlSXp8XPnpeKzGmU4/uNdnEihuUbnCsXTQySN6zV289Wfhbel0qZMEr+Js5NzFOuzuZBnq+EU2E1lV0qbkqK3N7xE22o/6S+88TkaTHD3CRwyb3fcssZWHHJNa4LMttPIzjIgPKzCDolua/LCqR3HcHfvaVX5VMWiJLJY=
+	t=1742226846; cv=none; b=RQwcjzsXHTUvQQ4PZ1PXASdIj7akG7azCst+ZFJtpMcG/blqGa97iYQr3uPilvuWtkeWNdnCBwiuMBoQ6iwbHHrr+gSWPgO3ff+KtuwEPf9oNUyqeUEvPEkWmybJ8UCDn9Bfu8O6MHBMAKbhqhXPynOtG8eC5ZmTmQqUgNcjqgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742226844; c=relaxed/simple;
-	bh=tdiUN/gA808UkpN6g6l5ag5+wM4qUAmQudO57SdnzHI=;
+	s=arc-20240116; t=1742226846; c=relaxed/simple;
+	bh=Gss3XMvEr6F8jZFASLjg30cmvsp+TDCFV0lyB/oGlnU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Y4+VG2r6orsZTtHq5qK2H6ozzH0kDmyGhk5jLXd8rixP98h0mTBszz86EfUH2Dm0SjAwNhX9GeTsaKfccVUI5EUuhffgNvRE5tgl7ZqR3liWzvYBy5ABbwIWswXPAciw6rdODtITl3SeZWgMtQQG3lN/+VERKHuBOphtBEM5xBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=xJ6y4qFR; arc=none smtp.client-ip=185.138.42.100
+	 MIME-Version; b=tDoH4nntObjX6o3JoQBmypLwPXW0JdufCQATQQshHFwLTtEsTjzwPouShElEj+XLX/TISgg1MWp84HC+tJ+PkxPW1bvVSjJUdeuAe1Rd9QJZpa9KWc28FHxWSMzrstHvVclLsR6H/GLiFBdemftWWvUvuAg5c7sRzkbeq3zqwuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=RaQPw6CM; arc=none smtp.client-ip=185.138.42.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Received: from localhost.localdomain (unknown [IPv6:2a05:f6c2:511b:0:cbc0:999f:73ad:33bd])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 64F882E0946E;
-	Mon, 17 Mar 2025 17:53:57 +0200 (EET)
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 6E8A42E09474;
+	Mon, 17 Mar 2025 17:53:59 +0200 (EET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1742226839;
-	bh=ZipG212NCF1KOV9rJuhRvhXErr3HGLMwbPUXCMDhaTs=; h=From:To:Subject;
-	b=xJ6y4qFR0i+lKwedfexi54OFVQCaYnQ7ivrXPHSMUExBk2HiSHf5md0bakZWATA2m
-	 QJVtzIPxoxdN5kRCHkeW/6/9cUH7Ua/R6tgIxDg4Vz12FtrDxIEvZJv2oUCo/agr3B
-	 um7WyxWQOvGevQIqtyrW+RlAcq++BzgWgUra5YtE=
+	s=default; t=1742226841;
+	bh=LSdJAQ0bA/H736JjZxupZ8TrXX+Ae+7knS+jEmuGyQg=; h=From:To:Subject;
+	b=RaQPw6CM0+75cYkDSnK9MuaM4cXnj983ZVEt01qr/wt6Eoq4KD2k3YTYQSV2FbKaP
+	 bZ3yEue6AGlpukX2e2suMVJUp8UCTuppphZD98SWiQ4oy/2e6XbEY9EsNWHGBbqMzP
+	 dBn8YOZTEFOvkZUyadsgq9G1Y2bG8yGHmfIuUJF0=
 Authentication-Results: linux1587.grserver.gr;
 	spf=pass (sender IP is 2a05:f6c2:511b:0:cbc0:999f:73ad:33bd) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
 Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
@@ -61,9 +61,9 @@ Cc: linux-hwmon@vger.kernel.org,
 	sre@kernel.org,
 	linux@weissschuh.net,
 	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: [PATCH v5 01/13] hwmon: (oxp-sensors) Distinguish the X1 variants
-Date: Mon, 17 Mar 2025 16:53:37 +0100
-Message-ID: <20250317155349.1236188-2-lkml@antheas.dev>
+Subject: [PATCH v5 02/13] hwmon: (oxp-sensors) Add all OneXFly variants
+Date: Mon, 17 Mar 2025 16:53:38 +0100
+Message-ID: <20250317155349.1236188-3-lkml@antheas.dev>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250317155349.1236188-1-lkml@antheas.dev>
 References: <20250317155349.1236188-1-lkml@antheas.dev>
@@ -75,63 +75,81 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-PPP-Message-ID: 
- <174222683886.22378.18442803234456392248@linux1587.grserver.gr>
+ <174222684095.22458.5968359271258115630@linux1587.grserver.gr>
 X-PPP-Vhost: antheas.dev
 X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
 X-Virus-Status: Clean
 
-Currently, the oxp-sensors driver fuzzy matches the X1 variants. Luckily,
-X1 and X1 mini share most hardware features so this works. However, they
-are completely different product lines, and there is an expectation that
-OneXPlayer will release more devices in the X1 line that may have
-differences.
+Currently, the driver only has the F1 OneXFly variant, which was based
+on the 7000 AMD platform. Add its special editions: F1 EVA-01, F1 OLED.
+F1 OLED might have been a dev unit, but it is supported by OneXConsole
+with the same features so add it. Then add the F1L variant which is
+based on the 8000 AMD platform and the F1Pro and its special edition
+EVA-02.
 
-Therefore, distinguish the 3 devices that currently exist in the market.
-These are the OneXPlayer X1 AMD and Intel variants, and the X1 mini which
-only has an AMD variant. As far as registers go, all three support the
-current driver functionality.
+One might ask why not just fuzzy match. Well, EVA-02 is a variant of
+F1Pro which is a Strix Point handheld, but does not have F1Pro in its
+name. This makes it risky to fuzzy match, as special variants in the
+future from different platforms might not have the same feature set
+or registers.
 
-Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
+By happenstance, all current devices use the same registers. For the
+charge limitting feature on this series, only F1Pro/X1 (AMD) were
+released with it, but OneXPlayer is providing bios updates for F1, F1L,
+X1 Mini units that use the same register, so treat all of them the same.
+
 Acked-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 ---
- drivers/hwmon/oxp-sensors.c | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
+ drivers/hwmon/oxp-sensors.c | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
 diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
-index 83730d9318240..5a4230ad3757e 100644
+index 5a4230ad3757e..f7a64fbc8f33e 100644
 --- a/drivers/hwmon/oxp-sensors.c
 +++ b/drivers/hwmon/oxp-sensors.c
-@@ -205,7 +205,28 @@ static const struct dmi_system_id dmi_table[] = {
+@@ -188,6 +188,41 @@ static const struct dmi_system_id dmi_table[] = {
+ 		},
+ 		.driver_data = (void *)oxp_fly,
+ 	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER F1 EVA-01"),
++		},
++		.driver_data = (void *)oxp_fly,
++	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER F1 OLED"),
++		},
++		.driver_data = (void *)oxp_fly,
++	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER F1L"),
++		},
++		.driver_data = (void *)oxp_fly,
++	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER F1Pro"),
++		},
++		.driver_data = (void *)oxp_fly,
++	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER F1 EVA-02"),
++		},
++		.driver_data = (void *)oxp_fly,
++	},
  	{
  		.matches = {
  			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
--			DMI_MATCH(DMI_BOARD_NAME, "ONEXPLAYER X1"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER X1 A"),
-+		},
-+		.driver_data = (void *)oxp_x1,
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER X1 i"),
-+		},
-+		.driver_data = (void *)oxp_x1,
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER X1 mini"),
-+		},
-+		.driver_data = (void *)oxp_x1,
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER X1Pro"),
- 		},
- 		.driver_data = (void *)oxp_x1,
- 	},
 -- 
 2.48.1
 
