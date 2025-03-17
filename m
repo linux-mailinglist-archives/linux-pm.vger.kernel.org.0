@@ -1,54 +1,54 @@
-Return-Path: <linux-pm+bounces-24175-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24176-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4963A651E9
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 14:55:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E0D9A651EB
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 14:55:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06D1A173145
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 13:55:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3850E3A5440
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 13:55:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13E2223FC6B;
-	Mon, 17 Mar 2025 13:55:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 800F623FC75;
+	Mon, 17 Mar 2025 13:55:49 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C06323ED62
-	for <linux-pm@vger.kernel.org>; Mon, 17 Mar 2025 13:55:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC7B823FC54
+	for <linux-pm@vger.kernel.org>; Mon, 17 Mar 2025 13:55:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742219748; cv=none; b=q0xgr7jlDzZatZceJBLQoGytjciiDLJrtv7j8Br4mjkrP9EjxtpQIjbc1JgJ6FbbTK7dM4HvDhLL49rSGJATPLbQF7PudlSDGq1fcoxDlpozygqP1XV/LC0ZXQAYlSOiYf88UDExVsNRfcPK/cFsz5cWOkfLKAzoP43+vy7Xd/Q=
+	t=1742219749; cv=none; b=CZWfE/6ILBS6WDb/dSc9jOPJJSIGUqfxSvZGS3538Ck5sAbGpO1f5IRDo6FtxwIU8tbrtjEUceg0cPm4H6hSJ7ljkS+a4Q1mNKR9zdGg8gPCbpv/rjLbP8E8n2MKXZIxtbiyYZCnewKG5WarP6vE2QOJEPZIvSX8A6zCwKn01U0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742219748; c=relaxed/simple;
-	bh=u9vODP8v8WgPk/9sAW1h8ebtIALXZ7YfXOpE32DjU80=;
+	s=arc-20240116; t=1742219749; c=relaxed/simple;
+	bh=JMIsGb8VYvJt2YUNg0dD2giiZhtZIXhCHFEA09ePRnQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=E5+dvvF8J36yLiysxdy4xH6VikkzffDciDGEjvl3+uGBNua4Iiz7gG4vOtpZX4iQ36dGzA4nRx1W8ccursEf0CTF6VSl3udNKd9WSEZlkPzJhvVCApEDvXzT4L04o7HbWmHFYA6EiB2gGzXlFqD/EU/EtCUeSGVsxhjhMHkbddU=
+	 MIME-Version; b=gATl053UGeOvWZaVih921vYJrfLt2RzsECa7MCKG/tE9Jy18DqH4erKOqambDcmDOcBUsE4Ay6XlZsBxV2Q/nAudAhxonbPo/bR1SxNXk36zmpPyf3445mLSOE3j8rIcXP85u+OjQpTAnMdXEI2uodgCcBHxDMS4c6lsLUJSC3U=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
-X-CSE-ConnectionGUID: JXN1PUbLQ1ewTyqqnqUiXg==
-X-CSE-MsgGUID: uT4KdloFQ1+zAeuTe4rBkQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11376"; a="43515490"
+X-CSE-ConnectionGUID: ijx/P0RARrWb3NyDpnwbcQ==
+X-CSE-MsgGUID: xWkNb2pVQ8iOrsYxloRfKQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11376"; a="43515494"
 X-IronPort-AV: E=Sophos;i="6.14,254,1736841600"; 
-   d="scan'208";a="43515490"
+   d="scan'208";a="43515494"
 Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2025 06:55:46 -0700
-X-CSE-ConnectionGUID: W3uA1tPIRGKQ2iE9/hVKng==
-X-CSE-MsgGUID: RnibvvxzQFS0xx4YbtRNiQ==
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2025 06:55:48 -0700
+X-CSE-ConnectionGUID: 21NeatP0SdKO10ieyr/e4w==
+X-CSE-MsgGUID: rwTB/OscTZKKeDJBljKiBw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,254,1736841600"; 
-   d="scan'208";a="127115532"
+   d="scan'208";a="127115538"
 Received: from powerlab.fi.intel.com (HELO powerlab.backendnet) ([10.237.71.25])
-  by orviesa005.jf.intel.com with ESMTP; 17 Mar 2025 06:55:45 -0700
+  by orviesa005.jf.intel.com with ESMTP; 17 Mar 2025 06:55:46 -0700
 From: Artem Bityutskiy <dedekind1@gmail.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>
 Cc: Linux PM Mailing List <linux-pm@vger.kernel.org>
-Subject: [PATCH v3 2/3] Documentation: admin-guide: pm: Document intel_idle C1 demotion
-Date: Mon, 17 Mar 2025 15:55:40 +0200
-Message-ID: <20250317135541.1471754-3-dedekind1@gmail.com>
+Subject: [PATCH v3 3/3] Documentation: ABI: testing: document the new cpuidle sysfs file
+Date: Mon, 17 Mar 2025 15:55:41 +0200
+Message-ID: <20250317135541.1471754-4-dedekind1@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250317135541.1471754-1-dedekind1@gmail.com>
 References: <20250317135541.1471754-1-dedekind1@gmail.com>
@@ -62,45 +62,39 @@ Content-Transfer-Encoding: 8bit
 
 From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 
-Document the intel_idle driver sysfs file for enabling/disabling C1
-demotion.
+Mention the new 'intel_c1_demotion' sysfs file in the "cpuidle" section
+and refer to "Documentation/admin-guide/pm/intel_idle.rst" for more
+information.
 
 Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 ---
- Documentation/admin-guide/pm/intel_idle.rst | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ Documentation/ABI/testing/sysfs-devices-system-cpu | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/pm/intel_idle.rst b/Documentation/admin-guide/pm/intel_idle.rst
-index 5940528146eb0..ed6f055d4b148 100644
---- a/Documentation/admin-guide/pm/intel_idle.rst
-+++ b/Documentation/admin-guide/pm/intel_idle.rst
-@@ -38,6 +38,27 @@ instruction at all.
- only way to pass early-configuration-time parameters to it is via the kernel
- command line.
+diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+index 206079d3bd5b1..6c4934d3f4db3 100644
+--- a/Documentation/ABI/testing/sysfs-devices-system-cpu
++++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+@@ -111,6 +111,7 @@ What:		/sys/devices/system/cpu/cpuidle/available_governors
+ 		/sys/devices/system/cpu/cpuidle/current_driver
+ 		/sys/devices/system/cpu/cpuidle/current_governor
+ 		/sys/devices/system/cpu/cpuidle/current_governer_ro
++		/sys/devices/system/cpu/cpuidle/intel_c1_demotion
+ Date:		September 2007
+ Contact:	Linux kernel mailing list <linux-kernel@vger.kernel.org>
+ Description:	Discover cpuidle policy and mechanism
+@@ -132,7 +133,11 @@ Description:	Discover cpuidle policy and mechanism
  
-+Sysfs Interface
-+===============
-+
-+The ``intel_idle`` driver exposes the following ``sysfs`` attributes in
-+``/sys/devices/system/cpu/cpuidle/``:
-+
-+``intel_c1_demotion``
-+	Enable or disable C1 demotion for all CPUs in the system. This file is
-+	only exposed on platforms that support the C1 demotion feature and where
-+	it was tested. Value 0 means that C1 demotion is disabled, value 1 means
-+	that it is enabled. Write 0 or 1 to disable or enable C1 demotion for
-+	all CPUs.
-+
-+	The C1 demotion feature involves the platform firmware demoting deep
-+	C-state requests from the OS (e.g., C6 requests) to C1. The idea is that
-+	firmware monitors CPU wake-up rate, and if it is higher than a
-+	platform-specific threshold, the firmware demotes deep C-state requests
-+	to C1. For example, Linux requests C6, but firmware noticed too many
-+	wake-ups per second, and it keeps the CPU in C1. When the CPU stays in
-+	C1 long enough, the platform promotes it back to C6. This may improve
-+	some workloads' performance, but it may also increase power consumption.
+ 		current_governor_ro: (RO) displays current idle policy.
  
- .. _intel-idle-enumeration-of-states:
+-		See Documentation/admin-guide/pm/cpuidle.rst and
++		intel_c1_demotion: (RW) enables/disables the C1 demotion
++		feature on Intel CPUs.
++
++		See Documentation/admin-guide/pm/cpuidle.rst,
++		Documentation/admin-guide/pm/intel_idle.rst, and
+ 		Documentation/driver-api/pm/cpuidle.rst for more information.
+ 
  
 -- 
 2.48.1
