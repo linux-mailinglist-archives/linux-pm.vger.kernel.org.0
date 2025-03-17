@@ -1,170 +1,122 @@
-Return-Path: <linux-pm+bounces-24128-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24129-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59C91A637B3
-	for <lists+linux-pm@lfdr.de>; Sun, 16 Mar 2025 23:32:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9444AA64084
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 07:01:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9379A16AF78
-	for <lists+linux-pm@lfdr.de>; Sun, 16 Mar 2025 22:32:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5C881890DE6
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Mar 2025 06:01:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10D3D1C5F2C;
-	Sun, 16 Mar 2025 22:32:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04EF3215047;
+	Mon, 17 Mar 2025 06:01:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IhUySBNv"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fbG8FZrL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5D8928E3F;
-	Sun, 16 Mar 2025 22:32:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DFFB157A48
+	for <linux-pm@vger.kernel.org>; Mon, 17 Mar 2025 06:01:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742164325; cv=none; b=Z9D35x9NTJgIwmgCnMMCEEhL/sUGXfZVWtgyehOsoGXfUEqqTMbC5qvOXJdfL7ZqoohQif9fMesYDJZf7e/zNr7HBt6S3CNnKNowUHphVCYpTY/GcdOqiV1Pa8gWOAHJUEgGhl1mqiMIVJjBTeDG2YGp0oJTRziKXZ5j4vANZZM=
+	t=1742191275; cv=none; b=OprMEYWbUQr3bjvF9v/Y2rWkaMnSWWj+R3ZtGNGnHWM7pdnBUKXo9Q0ceb34xyZu5vKJMLDHx1BQRDumSDHDZiqXGypiWY9tPl+JSC62/+OKS9WfDyLQbgO00kEAW1Z0NfC8bIq4bw/k0Ci1d7XwRrUheL0N6z25Vhn48Q7Nw/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742164325; c=relaxed/simple;
-	bh=++/L030K8s8P3l7kowTlhCo+8k2FfPs905r1ovqDuq0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fgKQ4DWpDJz50jDDbqZMtCCax3hDb/IcECAOwTUvNIaqZI4zHvAlSVJTDx0WJoe/dq8UQxEI1zhoX44UULeRsVmn7BtwGGlD6WuS0wVAcmjpqVFNvkCQIvP9Y2ATCyus6zKbVyocR6aTm4Ege0yYjghpYNiEkRccCCsAe8xFxvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IhUySBNv; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-22423adf751so57518875ad.2;
-        Sun, 16 Mar 2025 15:32:03 -0700 (PDT)
+	s=arc-20240116; t=1742191275; c=relaxed/simple;
+	bh=sYhKHIY1kH/Sv85aMyZfq/DmcwiJ9qI1WjhsBbWJhMg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hh7Bci4R798+pwhXvPPaBfpLi0Qk1WwBKG/Qh7mguJNi+vAispFV1ZYEw/aDmD808VemHL938M9adwAe75IsPZ0nFMF2f7N70gUNkKgzgUVJjst2TVYttRUHnquQefjJxFMvXNJxMhZ72itxYZVu5xdWn4L2RkeVRUkHZBNlVAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fbG8FZrL; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-224341bbc1dso70969765ad.3
+        for <linux-pm@vger.kernel.org>; Sun, 16 Mar 2025 23:01:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742164323; x=1742769123; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=xDy5g6sAXqWbdTcRppEhu8nA7CsEHIQ+vuUJcDxSUkE=;
-        b=IhUySBNvcVMMRllVlRUNcH5w63m49PYc0Wiiubb/pxM28Kpg8KK/EYeNwS0umy5NC+
-         YIr7nnOjoQsTMxalm96zqQVSSjaR0MX8uLA480+rnuEu/DdTeZEdmLVFhFPwb9nll+tW
-         EXfD7LCzWKjIzHNv4mrDW2oTCv7n5sO1bXmvE23kKESR20FF2OmMKDBIL+fy/CexBLpq
-         GdZxNrwUnHvdmpc4Q4DKxvyD/KN2YZ+bkVDgMefL0w3+qdUk+GdryqaBaU2YLmRPybdy
-         UssZeo1eF7fVrGqp9wDiBC/5DXhiaDwYhUFt9jFHAfThe+LrAaomapVFuVdqXC5ArjwQ
-         Ut0g==
+        d=linaro.org; s=google; t=1742191273; x=1742796073; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/t696LxEbizTgZEO/Thjd7sK7TQiRojJYmJJpO8fsxc=;
+        b=fbG8FZrLehgdWCO29kUwKdr5YeM4Sl83jKaHqRmb3b+8SC9EvCNovHHLocuUyjgik8
+         8P9QhOqy4su9VZzcmM54st1NYFvLDoiiC0KrRyi7fGNSu0PsV+B5lHoBwvIrDHYKTTR3
+         vuwA2w/B8nFy2Svdy5mSs8bzt5RRwkX4HawcfA4oLB6PTjWDF/Qf8MxMSw1tPWUDQrvX
+         auWxWqMcxCi64taM3jz+p7TzGu9yPNTYATVqk9vmx9M/S3DXcSlQiTpixBG03IjO0wmL
+         evnPcksjQdVQYMX3Z9GNqZiit6mEz5+28akOHgjBR47Qjib1rzrvVRhFk5oDPW93Jz75
+         KPwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742164323; x=1742769123;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1742191273; x=1742796073;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xDy5g6sAXqWbdTcRppEhu8nA7CsEHIQ+vuUJcDxSUkE=;
-        b=akTmkwLOvuJxXDRPVnKL0ruX1EpIniP1AtgMqu64Me2TKQY71ePwuSEMNy7Rnmv8jh
-         TYn7SnJl3Ofllfx0gSgmwdL0Y9ceFHjWCOGPIJe42nHnKLhEjDFyv/iH+WEqxpFBhdXQ
-         EblFuca2gFTbVPsnDRG8jqCNwqclDT5xnI+KWT8nrkymVSjsQwRzt9ZJwtye5PIwXMem
-         0+NOj6VrQUc/pfUSueHJ3vnjHKBf0k/lcgjVVh/TKydjlvVuB+hbt11aHVS/s15d9Jns
-         Wb5KJxdnnpgT7dYOH5aq4I+VKpSrKO8rAmxMnUtPPWGeirh2AdgcrdSuQAGzquNimFIZ
-         6ong==
-X-Forwarded-Encrypted: i=1; AJvYcCW/HfOdIby5uvM+2ocO+UBALkIwlfN0F45byE2fLrA7C+cxeOf/qlGS9IEFC/TmZhjmoQtkr0XGLcw=@vger.kernel.org, AJvYcCWkE8g215NPy9WYnF1WM4vtH4n+4rpsmwOm6isbVR2gyCaNthFl4XKu+bDpgc862tcuq+e+dOv4oSI=@vger.kernel.org, AJvYcCWqUJrV1y19Ubix7ERE2yTvP5ZzS5OIFsPlwsovomjGu5n5Bh/aDbTAW+9ZrYjMsU0McGpwSbBvplO8iug=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwagsM/Qa1vU9CT5d81gVQ6OlKCGGapIvCtfxAVywwXjwG4Fy4r
-	MGL/VmZGij689LMNHwZbMSH5ULIL5RekXFR57RI+SsseQgHlO4Oi
-X-Gm-Gg: ASbGncsSkY+TyGjIMDHI06sfJrJtgSIHhUjomjyLSxOd0onS8a2t09OZEiKGEViJEdS
-	BV4MNagBrqDSOFkcIIXqdRKrOE99d92Ji/3IX3hq4Xh2myKRwopUYiea/f0vDxWeIRk7jPRBCSg
-	wGgQVfM5k/Q8pNUfR6KqCKNWYabtxIXKXnGGxpcFrtBlapgdurA7nlD7+cqwuQn7NuQGvi1bAmU
-	wjFZNOz5Pnu/Zkg/CZir9DTdHgydWZ6B7eipjwVcoa0beTs8+mjnm7IClh1sQYnhjnIy//pbOOg
-	LSVr24F8v1Qk59j0VctzJRwftntWVfvGAEqGj1Xv6OzQCiFkvTx4mJLhAHd9qqgk62VZlfMSNTd
-	+8uUrlPGwXKXgtSA7ug==
-X-Google-Smtp-Source: AGHT+IEqRt02ambKckmFRQG0yplW4q06JLtDcJkJvcclCMybrxenPBYBU2JHaU8uGGgxgwaaxoGu3Q==
-X-Received: by 2002:a17:902:ccc6:b0:224:255b:c934 with SMTP id d9443c01a7336-225e0b2750dmr119155495ad.51.1742164322934;
-        Sun, 16 Mar 2025 15:32:02 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c6bd5c03sm61867465ad.249.2025.03.16.15.32.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Mar 2025 15:32:02 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9c20483c-dfe1-48b5-89da-680597d54791@roeck-us.net>
-Date: Sun, 16 Mar 2025 15:32:01 -0700
+        bh=/t696LxEbizTgZEO/Thjd7sK7TQiRojJYmJJpO8fsxc=;
+        b=jMyQT5sx1MFuBnHyNnGv78i/MeXXKupTcVxRmujymBTm5RNx95OolWndPbRir2Vdor
+         l7x9pmmjnNGRgl1bnbBvV4hsfxhN7JjpYYioSQVLQSJJ60W1FECF2SIywgClclOR3TLu
+         23DOMFY04GSdd+YCCT/TZwZz6YON/TONXRD/Nr0PidSY1TGsyRl/xsxISbANHMQOCW5c
+         X3ts+Sgfcx9oqTVopkgUrU3fBVrdwnpfi/176woD7+6GsPuD2DXq7C+uaULBqEt/YDRg
+         pUhdpRcJWi3IKWWbgonDpdcCs+RHxoBbZaNNNejpvlJ6mExJMYoYrXfs7OYUv2M0YAZ2
+         KiEA==
+X-Forwarded-Encrypted: i=1; AJvYcCWIA8TiHnaCJaNid9zho3nnDe6uItxcLPMKlUP3klbvurGY6SdS70j5RivR6tYQ+BxsWP0xmrOlWw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCmknjC0/pt+yr9rdqij2XskyirrBS4fIdT6AoZrcRePGMfqIz
+	2AEWRWfwoWR4ec3HR2raMGzAtZVF+l9fDugkLEWiew6/3O02O4GNKfrGo/+IbU8=
+X-Gm-Gg: ASbGncvzdFEgTiCCaH943GzCnn56m+dg92W+HuzTYGzwsZJanvfv6b6mLbdl+Bs4a0i
+	AyRZHm6zsadXHImRC8os/3Gf/KcBf0c2JN6jwvNqnEyGhTXW+Y/h9UgDc1tCh7/sY2Rvx7XsM+6
+	W2jO1tCYZwO/KkX73OTeez86G431L1/E+rnn8k8BE25Jq+m57mIzXIAbf/PnIieUGU8sqApDO7+
+	C3/TAjRhfdpSoYMHUnaJgZJ1uhUj49+LhOcd9msw+UShyUrDgRrqpC5zRCPNhrSnOoDPL6hLyn+
+	FfkoLdzJiEmTxtk6w8OXc+OBVwBnjHDSD6rJSTYlKnKZrA==
+X-Google-Smtp-Source: AGHT+IGZgTvwmbnlN60aL/w128MQKSBVf0ulmLghu2RqTVsFN9YIVHdgYTn08PK0fXwGZKBluWTVCg==
+X-Received: by 2002:a17:902:e74c:b0:223:3bf6:7e6a with SMTP id d9443c01a7336-225e0a40bb3mr160011395ad.12.1742191273540;
+        Sun, 16 Mar 2025 23:01:13 -0700 (PDT)
+Received: from localhost ([122.172.84.15])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c6bbeb94sm66648165ad.199.2025.03.16.23.01.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Mar 2025 23:01:12 -0700 (PDT)
+Date: Mon, 17 Mar 2025 11:31:10 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Jacky Bai <ping.bai@nxp.com>
+Cc: rafael@kernel.org, sudeep.holla@arm.com, ilia.lin@kernel.org,
+	tiny.windzz@gmail.com, wens@csie.org, jernej.skrabec@gmail.com,
+	samuel@sholland.org, matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev, linux-mediatek@lists.infradead.org,
+	imx@lists.linux.dev
+Subject: Re: [PATCH v3] cpufreq: Init cpufreq only for present CPUs
+Message-ID: <20250317060110.tvjat7ugmaceayyk@vireshk-i7>
+References: <20250313013928.529926-1-ping.bai@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 05/13] power: supply: add inhibit-charge-s0 to
- charge_behaviour
-To: Antheas Kapenekakis <lkml@antheas.dev>
-Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
- Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Joaquin Ignacio Aramendia <samsagax@gmail.com>,
- Derek J Clark <derekjohn.clark@gmail.com>,
- Kevin Greenberg <kdgreenberg234@protonmail.com>,
- Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>,
- Eileen <eileen@one-netbook.com>
-References: <20250311165406.331046-1-lkml@antheas.dev>
- <20250311165406.331046-6-lkml@antheas.dev>
- <CAGwozwELmp7v_46wmo_bbORWMEeA-NWRjXeRML4Jd=p=huLNaw@mail.gmail.com>
- <0aec1406-00cd-44ee-959f-48b646d3dad3@roeck-us.net>
- <CAGwozwHEoTb4uC=aoSXV2AMFjpZ_7+pDbMS1c_zs_QGAzC_qdA@mail.gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <CAGwozwHEoTb4uC=aoSXV2AMFjpZ_7+pDbMS1c_zs_QGAzC_qdA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250313013928.529926-1-ping.bai@nxp.com>
 
-On 3/16/25 09:46, Antheas Kapenekakis wrote:
-[ ... ]
->>> Do I need to cc anyone extra?
->>>
->>
->> You need to cc the maintainers of affected subsystems. Copying the mailing
->> list is insufficient.
->>
->> Guenter
->>
+On 13-03-25, 09:39, Jacky Bai wrote:
+> for_each_possible_cpu() is currently used to initialize cpufreq.
+> However, in cpu_dev_register_generic(), for_each_present_cpu()
+> is used to register CPU devices which means the CPU devices are
+> only registered for present CPUs and not all possible CPUs.
 > 
-> Can you tell me who to cc from platform-x86 and linux-pm?
+> With nosmp or maxcpus=0, only the boot CPU is present, lead
+> to the cpufreq probe failure or defer probe due to no cpu device
+> available for not present CPUs.
 > 
+> Change for_each_possible_cpu() to for_each_present_cpu() in the
+> above cpufreq drivers to ensure it only registers cpufreq for
+> CPUs that are actually present.
+> 
+> Fixes: b0c69e1214bc ("drivers: base: Use present CPUs in GENERIC_CPU_DEVICES")
+> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+> ---
+>  - v3 changes:
+>   - refine the changlog to drop the changed driver list.
 
-Just use scripts/get_maintainer.pl.
+Applied. Thanks.
 
-Guenter
-
+-- 
+viresh
 
