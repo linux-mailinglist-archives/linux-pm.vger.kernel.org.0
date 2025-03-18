@@ -1,126 +1,169 @@
-Return-Path: <linux-pm+bounces-24248-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24249-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF84BA673D7
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Mar 2025 13:26:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACC5FA67416
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Mar 2025 13:40:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4557B188A64C
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Mar 2025 12:26:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB73D7ACC4B
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Mar 2025 12:39:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E41B20C015;
-	Tue, 18 Mar 2025 12:25:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A17AF20CCD0;
+	Tue, 18 Mar 2025 12:37:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iDRB15o/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OAye3SLa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F36220C000
-	for <linux-pm@vger.kernel.org>; Tue, 18 Mar 2025 12:25:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C6220CCCD;
+	Tue, 18 Mar 2025 12:37:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742300755; cv=none; b=lZmr3WxiAJKYplcZ9omatILLwwk7TzohHnpZ0VcXfE8qiGFlv/+lipSZpaTxmOCSTLVMP4x8si9AuaEuzDrOR0hjIfJKNasO1FHQxroryWHtdrUSh6jCIoqdj3ipmdTGweBcCQ0tB6+n31jdRSy8GztgoZm0gmAaH0U0CrYKrXw=
+	t=1742301455; cv=none; b=aqdd5Q4KUajBDf98yysz5UjPju9TvizHZ8ulXmOYF3vLwg/nUG5F6fb7qDrhi/JbWt5r1aAKnpAC2wFQdvtnNQMA6vVXleBqSb8r5DoA8DplevrwU2Q02R0AQjOEJ/+rC/Wac385S3CoaC2T32IdojwLkBpQN90cizlG2ufziII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742300755; c=relaxed/simple;
-	bh=uWcup4zSOhXmCE7f8utEF9MDkob5Y3GjPtl0Flu5Fv4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JfDmlZYaKsvtPZ24W2qfvtgiTtfZ+P2wmjqFlpG7QbbgcQOpXjBjMGY3ow2q2lIi6j+TWSRvYEdX+gCRO1G24e5tvTDOQwuayI4G33OPDwHQ/+MelU0d6Zip9Yyht1GHcUBRxUXpD3e1QwIw2eAO1p1RWBj7X8AhCGliJqXkjLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iDRB15o/; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5497590ffbbso6161202e87.1
-        for <linux-pm@vger.kernel.org>; Tue, 18 Mar 2025 05:25:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1742300751; x=1742905551; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZtPLa6Gx4FxVSml/wkB43YfMAD/jyTKQtWnRVh8gh1s=;
-        b=iDRB15o/ymQM2Rs92dvh3gSbiKZaPScBH/Y3PK/cvrrKtcDHz6V0lEd3i7jy1yNPpZ
-         lJNFkQb5RhnpBVYlyYkYP+p1/BWbKkrv0Nu9a8A9Fe/aIpxnwGYoxPdIeiAf8b3lN2Ku
-         /Oaz0GSICvdCXq9uebrfNcv+syXkzvZRKUT1xVWay8TIpx/vG1IZGcxLYarIwqlSsJFW
-         4nd9W/1RkOAJo/O9lhXQH5KgnY5MQGf7oIiOoWBfPUcBFbZQyioTrvz843iipLcSTebK
-         jKuvlXsUIaEvcu9gY33cCddiL7CvjGNXpPHxu4VI/URCZKfY33axAcoaaZeg1AJq0S7C
-         /JRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742300751; x=1742905551;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZtPLa6Gx4FxVSml/wkB43YfMAD/jyTKQtWnRVh8gh1s=;
-        b=mU9v4k9pRVu/jpwLmipfXkTmMsKe7YXmOY2WmUEllJeVIHsTKby+XRhWn05Lz9pj+X
-         XJV/oMYd+eMLYCRT1iZ8UfO6Ud9TQ76FvlTJUtcZoctdyIjTYc34tG/6a7/Wt2XbAaTb
-         iy9Vi/9vgzebqLwjzJ/Hb5ainX7C4BYeYqWDtAb2t+oMI5APaTuEUoH1S3x1IyyvIs/m
-         93KMYQDcoLy2VYDKb+vr/oVik+KkYVDIxY0Hu9Hk2jKS58H96lo1bEFyPC0fe8NiUD3D
-         F3xF+W2db9x6ajxw7IM6DKHb7yab0QcqZcLLiinJcd+JDEFBQ8iNNokd+fHaGD32E7tc
-         SDlg==
-X-Forwarded-Encrypted: i=1; AJvYcCXME72CBeKHUEMPBVoBV7938CxIMroBx9mgbOm578PHa6t+pI32Eq9ky2G5l+Xs2W4ELVNJDupMTA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKdOlBhXUli1LBtw9P8JWeP37gUUnE58A0KMXRrdIC9OCkNKiS
-	GpiYJKwq9tFqFG4I/U7aXFvXe1s2p1YyYzC6lOWStX7qGDNmTNWY+CL7vvmaM5Bvu++KlhDkIaV
-	L
-X-Gm-Gg: ASbGncs8IQYAkq7TYbCveQHwuAHdGcODWLK9ZGrAg0FuKAB3isWjLN4ZqgOuorQpS0q
-	KM6HQHvGeIXiIAzDsU9bXJU0S3FFJJH/CaUp6Rm1+cRpgkPIRxI1nQkb40kCjHzUk66SqlVsaav
-	NsrjcSBt57oXGh0aehD3V1YTQi3GoWjdc7wUeZaYUVVrUf2rRMhWGH/PyBhJwQ/WqX26bQ3WhX2
-	zW+/M67lZNIjs0nIk3TXdbxbo023L1DP8OgTrzG+KfJvF6RamrrNMTdbdIVReyCwroNyLtKACiA
-	Vxm3t0bGpltt/K7RPgSgGLWKfSx2IQV3bQIs0Ju3iFmlPH/Ka2xPmZ2WK+MoKf/AUVo3pPE5XlD
-	cd3blOHYCK42WqHBl7YI=
-X-Google-Smtp-Source: AGHT+IGVZaHWKtN8hvWXYb4jPz6o8jybr9YNPIgsaj0qZXf8oAQIfNC+5+M6VxE6U6PaRzmbGl48Vg==
-X-Received: by 2002:a05:6512:3d8a:b0:545:1d96:d6f7 with SMTP id 2adb3069b0e04-549c396e431mr11868418e87.32.1742300751071;
-        Tue, 18 Mar 2025 05:25:51 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-549ba86528dsm1626584e87.138.2025.03.18.05.25.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Mar 2025 05:25:49 -0700 (PDT)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Linus <torvalds@linux-foundation.org>,
+	s=arc-20240116; t=1742301455; c=relaxed/simple;
+	bh=yLn+TNXVMhehXRKYhEHda1j3Z6SP3WHyEcxrp/VZbRE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fBv2M8EJTWWQ8EksDgIVsydNDLLHopd8qM5lKDDVz0B6fUSxoGBDHhDjrm+Gyj6o6lOsUSxJppo3QsBX4Bf+S8jZDMYPlb+J9baHoYIRJcLbnVDnkOzcMRZDFLNW9+GKxj5GFKnlHObHCY0Xs9/EUfwyFdPrbHfI2gYYSVsw+xA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OAye3SLa; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742301450; x=1773837450;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yLn+TNXVMhehXRKYhEHda1j3Z6SP3WHyEcxrp/VZbRE=;
+  b=OAye3SLaV59gw0IZzPW9EO/c1c9kratSsueTsvk6Jmpk0Ywup5CoJ77b
+   PygiyTkWVR1HmB3cXBJkrMeGrxHR1YeX8iapV2qVcJoPLxXNUZJWJghDM
+   C/V6i9TzMf6zAxT8XZK467XVU3voDDrY0odRKjNnMxEForZOutlAGOoCc
+   QoFRj0sEo2MUoWZIAUZoc4fOGYqpM0T4KG1N23ozjfdD0A5TJg6qVz44T
+   tK8XT4tMgNhxTMvQ2pWmL1tzGqlr24KChv8tYm4h4Awhk/UJi6mlg1cjl
+   tAulFP+O1vQjm8JcaXTv07gO4vtu+IcrHPHY5T0LQ9ow/T0vHe2+wj9IY
+   g==;
+X-CSE-ConnectionGUID: Z8EAfZH6S2SVWDlkoxoOPA==
+X-CSE-MsgGUID: 2xBMOCnDQR+xhVRYr9s09Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11377"; a="54824292"
+X-IronPort-AV: E=Sophos;i="6.14,256,1736841600"; 
+   d="scan'208";a="54824292"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2025 05:37:19 -0700
+X-CSE-ConnectionGUID: 02u19VQZTfKCfwVwJfzsFw==
+X-CSE-MsgGUID: cDJM3aYtQSuaD9d6HinG7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,256,1736841600"; 
+   d="scan'208";a="121979427"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 18 Mar 2025 05:37:15 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tuWC1-000Dkl-0C;
+	Tue, 18 Mar 2025 12:37:13 +0000
+Date: Tue, 18 Mar 2025 20:36:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Oleksij Rempel <o.rempel@pengutronix.de>,
+	Sebastian Reichel <sre@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: oe-kbuild-all@lists.linux.dev, Oleksij Rempel <o.rempel@pengutronix.de>,
+	Mark Brown <broonie@kernel.org>, kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
 	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] pmdomain fixes for v6.14-rc8
-Date: Tue, 18 Mar 2025 13:25:48 +0100
-Message-ID: <20250318122548.1328552-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.43.0
+	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>
+Subject: Re: [PATCH v5 6/7] regulator: set Power State Change Reason before
+ hw_protection_shutdown()
+Message-ID: <202503182046.kOuLXxTn-lkp@intel.com>
+References: <20250310103732.423542-7-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250310103732.423542-7-o.rempel@pengutronix.de>
 
-Hi Linus,
+Hi Oleksij,
 
-Here's a PR with a pmdomain fixe intended for v6.14-rc8. Details about the
-highlights are as usual found in the signed tag.
+kernel test robot noticed the following build errors:
 
-Please pull this in!
+[auto build test ERROR on sre-power-supply/for-next]
+[also build test ERROR on broonie-regulator/for-next rafael-pm/thermal linus/master v6.14-rc7]
+[cannot apply to next-20250317]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kind regards
-Ulf Hansson
+url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/power-Extend-power_on_reason-h-for-upcoming-PSCRR-framework/20250310-184319
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/20250310103732.423542-7-o.rempel%40pengutronix.de
+patch subject: [PATCH v5 6/7] regulator: set Power State Change Reason before hw_protection_shutdown()
+config: m68k-randconfig-r073-20250314 (https://download.01.org/0day-ci/archive/20250318/202503182046.kOuLXxTn-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250318/202503182046.kOuLXxTn-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503182046.kOuLXxTn-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   m68k-linux-ld: drivers/regulator/core.o: in function `regulator_handle_critical':
+>> drivers/regulator/core.c:5270:(.text+0x20c6): undefined reference to `set_power_state_change_reason'
 
 
-The following changes since commit d082ecbc71e9e0bf49883ee4afd435a77a5101b6:
+vim +5270 drivers/regulator/core.c
 
-  Linux 6.14-rc4 (2025-02-23 12:32:57 -0800)
+  5234	
+  5235	/**
+  5236	 * regulator_handle_critical - Handle events for system-critical regulators.
+  5237	 * @rdev: The regulator device.
+  5238	 * @event: The event being handled.
+  5239	 *
+  5240	 * This function handles critical events such as under-voltage, over-current,
+  5241	 * and unknown errors for regulators deemed system-critical. On detecting such
+  5242	 * events, it triggers a hardware protection shutdown with a defined timeout.
+  5243	 */
+  5244	static void regulator_handle_critical(struct regulator_dev *rdev,
+  5245					      unsigned long event)
+  5246	{
+  5247		enum pscr_reason pscr;
+  5248		const char *reason = NULL;
+  5249	
+  5250		if (!rdev->constraints->system_critical)
+  5251			return;
+  5252	
+  5253		switch (event) {
+  5254		case REGULATOR_EVENT_UNDER_VOLTAGE:
+  5255			reason = "System critical regulator: voltage drop detected";
+  5256			pscr = PSCR_UNDER_VOLTAGE;
+  5257			break;
+  5258		case REGULATOR_EVENT_OVER_CURRENT:
+  5259			reason = "System critical regulator: over-current detected";
+  5260			pscr = PSCR_OVER_CURRENT;
+  5261			break;
+  5262		case REGULATOR_EVENT_FAIL:
+  5263			reason = "System critical regulator: unknown error";
+  5264			pscr = PSCR_REGULATOR_FAILURE;
+  5265		}
+  5266	
+  5267		if (!reason)
+  5268			return;
+  5269	
+> 5270		set_power_state_change_reason(pscr);
+  5271		hw_protection_shutdown(reason,
+  5272				       rdev->constraints->uv_less_critical_window_ms);
+  5273	}
+  5274	
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.14-rc4
-
-for you to fetch changes up to ef17b519088ee0c167cf507820609732ec8bad1a:
-
-  pmdomain: amlogic: fix T7 ISP secpower (2025-03-05 15:51:04 +0100)
-
-----------------------------------------------------------------
-pmdomain providers:
- - amlogic: Fix T7 ISP secpower
-
-----------------------------------------------------------------
-Xianwei Zhao (1):
-      pmdomain: amlogic: fix T7 ISP secpower
-
- drivers/pmdomain/amlogic/meson-secure-pwrc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
