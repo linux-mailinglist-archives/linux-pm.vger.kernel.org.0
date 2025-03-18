@@ -1,84 +1,69 @@
-Return-Path: <linux-pm+bounces-24249-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24250-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACC5FA67416
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Mar 2025 13:40:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 513CEA6749D
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Mar 2025 14:13:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB73D7ACC4B
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Mar 2025 12:39:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8D86165DED
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Mar 2025 13:13:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A17AF20CCD0;
-	Tue, 18 Mar 2025 12:37:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 463A020CCD9;
+	Tue, 18 Mar 2025 13:13:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OAye3SLa"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="LRqoEGFD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C6220CCCD;
-	Tue, 18 Mar 2025 12:37:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9652F37;
+	Tue, 18 Mar 2025 13:13:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742301455; cv=none; b=aqdd5Q4KUajBDf98yysz5UjPju9TvizHZ8ulXmOYF3vLwg/nUG5F6fb7qDrhi/JbWt5r1aAKnpAC2wFQdvtnNQMA6vVXleBqSb8r5DoA8DplevrwU2Q02R0AQjOEJ/+rC/Wac385S3CoaC2T32IdojwLkBpQN90cizlG2ufziII=
+	t=1742303586; cv=none; b=W1+zVrgdQUH5zc6GNgEC2GuPg2nrPAiX8ndn3A4E4msTU6vaSLa/rBJohaWCE2T8Ifclspwt3nA9oNeGnkM5YFldZX6Cq0451ZLhPwF2b1EChTxZCFWM8ShS9WU8dCimtfln4Q5N6wavZ/cZLFJXaKeRtyw+/UPFzpr2bRqn8J4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742301455; c=relaxed/simple;
-	bh=yLn+TNXVMhehXRKYhEHda1j3Z6SP3WHyEcxrp/VZbRE=;
+	s=arc-20240116; t=1742303586; c=relaxed/simple;
+	bh=/HeK63g0iYyyasg3EaGVQTNugRUsBjZZuBQoSIDHybM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fBv2M8EJTWWQ8EksDgIVsydNDLLHopd8qM5lKDDVz0B6fUSxoGBDHhDjrm+Gyj6o6lOsUSxJppo3QsBX4Bf+S8jZDMYPlb+J9baHoYIRJcLbnVDnkOzcMRZDFLNW9+GKxj5GFKnlHObHCY0Xs9/EUfwyFdPrbHfI2gYYSVsw+xA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OAye3SLa; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742301450; x=1773837450;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yLn+TNXVMhehXRKYhEHda1j3Z6SP3WHyEcxrp/VZbRE=;
-  b=OAye3SLaV59gw0IZzPW9EO/c1c9kratSsueTsvk6Jmpk0Ywup5CoJ77b
-   PygiyTkWVR1HmB3cXBJkrMeGrxHR1YeX8iapV2qVcJoPLxXNUZJWJghDM
-   C/V6i9TzMf6zAxT8XZK467XVU3voDDrY0odRKjNnMxEForZOutlAGOoCc
-   QoFRj0sEo2MUoWZIAUZoc4fOGYqpM0T4KG1N23ozjfdD0A5TJg6qVz44T
-   tK8XT4tMgNhxTMvQ2pWmL1tzGqlr24KChv8tYm4h4Awhk/UJi6mlg1cjl
-   tAulFP+O1vQjm8JcaXTv07gO4vtu+IcrHPHY5T0LQ9ow/T0vHe2+wj9IY
-   g==;
-X-CSE-ConnectionGUID: Z8EAfZH6S2SVWDlkoxoOPA==
-X-CSE-MsgGUID: 2xBMOCnDQR+xhVRYr9s09Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11377"; a="54824292"
-X-IronPort-AV: E=Sophos;i="6.14,256,1736841600"; 
-   d="scan'208";a="54824292"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2025 05:37:19 -0700
-X-CSE-ConnectionGUID: 02u19VQZTfKCfwVwJfzsFw==
-X-CSE-MsgGUID: cDJM3aYtQSuaD9d6HinG7g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,256,1736841600"; 
-   d="scan'208";a="121979427"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 18 Mar 2025 05:37:15 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tuWC1-000Dkl-0C;
-	Tue, 18 Mar 2025 12:37:13 +0000
-Date: Tue, 18 Mar 2025 20:36:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oleksij Rempel <o.rempel@pengutronix.de>,
-	Sebastian Reichel <sre@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: oe-kbuild-all@lists.linux.dev, Oleksij Rempel <o.rempel@pengutronix.de>,
-	Mark Brown <broonie@kernel.org>, kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org,
-	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>
-Subject: Re: [PATCH v5 6/7] regulator: set Power State Change Reason before
- hw_protection_shutdown()
-Message-ID: <202503182046.kOuLXxTn-lkp@intel.com>
-References: <20250310103732.423542-7-o.rempel@pengutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OZ518YB2RQt5I/uyUWYkeR0VcxLGHdRO/NnsB+Tze0B2wIbzWsNM22nU2DRVce8vvwvwt51RTLCn2t6MQ3Z9PQL7ejkTPynOiEUq0SQNSiD9We1KO/1I0eqA5MTFNyhK9VsZGj2ybilxCcoPUf25nOGqn/jEyMfeirO1DdomBYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=LRqoEGFD; arc=none smtp.client-ip=80.241.56.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4ZHC1y2V9Sz9shl;
+	Tue, 18 Mar 2025 14:12:54 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1742303574;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nZg7KYseVqSzxe03YTERtCQVwxfRyFFBlFRftXqUL1w=;
+	b=LRqoEGFDgNtB9nYw2DcqGDcXJN5bec93E0w7/Ic/1C6vK1KeYaDcaANLrNwH/N57tQerEs
+	N+iG1EXTXpET6md2gbIidZ4WwEqtH9dfVFArrjVDPuEo4cD9xXZBddC6Em+6lbYzelgai0
+	ZHrZcB1s7DAmnteVnGwyXWnbfL/rB5KbvwazDlwnnlre4IWqwfZx22KQuMKh0jeSUbkH98
+	VlLUdnpgUWs1hDEppuqCOsnVzMqH1qulShQtRK79LJId7TMtY15Xcw6pNVLfGPQlO+Dx7T
+	XERPteHtO9hwoe7pSLUPYQ3rPJG8jp53nomJtq+yrYLL6BoSCoepbNVVqepMsQ==
+Date: Tue, 18 Mar 2025 14:12:48 +0100
+From: Anthony Ruhier <aruhier@mailbox.org>
+To: Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc: Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Abhinav Kumar <quic_abhinavk@quicinc.com>, 
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Marijn Suijten <marijn.suijten@somainline.org>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Maya Matuszczyk <maccraft123mc@gmail.com>, linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH v4 0/7] Support for GPU ACD feature on Adreno X1-85
+Message-ID: <dj256lrkc4s5ylqkqdrak6a6p3v62ckkd3orsg7ykz2w6ugllg@rbfkojacklvx>
+References: <20250109-gpu-acd-v4-0-08a5efaf4a23@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -87,83 +72,29 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250310103732.423542-7-o.rempel@pengutronix.de>
+In-Reply-To: <20250109-gpu-acd-v4-0-08a5efaf4a23@quicinc.com>
+X-MBO-RS-META: g43o4q78m7rpfhcwdtfye1rj1q8t7sc6
+X-MBO-RS-ID: 137da8c6ec8de9572e9
 
-Hi Oleksij,
+Using this patch serie on 6.14-rc (tested over multiple RCs, up to rc7) on a
+Yoga Slim 7x (x1e80100), I often get a video output freeze a few seconds after
+my wayland compositor loads. I can still ssh into the laptop. I get these
+kernel errors in loop:
 
-kernel test robot noticed the following build errors:
+	msm_dpu ae01000.display-controller: [drm:hangcheck_handler [msm]] *ERROR* 67.5.12.1: hangcheck detected gpu lockup rb 0!
+	msm_dpu ae01000.display-controller: [drm:hangcheck_handler [msm]] *ERROR* 67.5.12.1:     completed fence: 777
+	msm_dpu ae01000.display-controller: [drm:hangcheck_handler [msm]] *ERROR* 67.5.12.1:     submitted fence: 778
 
-[auto build test ERROR on sre-power-supply/for-next]
-[also build test ERROR on broonie-regulator/for-next rafael-pm/thermal linus/master v6.14-rc7]
-[cannot apply to next-20250317]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Rob Clark recommended to me to remove the higher GPU frequencies added by this
+patch (1.25Ghz and 1.175 Ghz). The lockups happen then less often, but are
+still present. It is easily reproducible.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/power-Extend-power_on_reason-h-for-upcoming-PSCRR-framework/20250310-184319
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
-patch link:    https://lore.kernel.org/r/20250310103732.423542-7-o.rempel%40pengutronix.de
-patch subject: [PATCH v5 6/7] regulator: set Power State Change Reason before hw_protection_shutdown()
-config: m68k-randconfig-r073-20250314 (https://download.01.org/0day-ci/archive/20250318/202503182046.kOuLXxTn-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250318/202503182046.kOuLXxTn-lkp@intel.com/reproduce)
+A way to mitigate the problem is by constantly moving my cursor during a few
+seconds after my wayland session starts, then no freeze happens. Reverting this
+patch serie fixes the problem.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503182046.kOuLXxTn-lkp@intel.com/
+Thanks,
 
-All errors (new ones prefixed by >>):
-
-   m68k-linux-ld: drivers/regulator/core.o: in function `regulator_handle_critical':
->> drivers/regulator/core.c:5270:(.text+0x20c6): undefined reference to `set_power_state_change_reason'
-
-
-vim +5270 drivers/regulator/core.c
-
-  5234	
-  5235	/**
-  5236	 * regulator_handle_critical - Handle events for system-critical regulators.
-  5237	 * @rdev: The regulator device.
-  5238	 * @event: The event being handled.
-  5239	 *
-  5240	 * This function handles critical events such as under-voltage, over-current,
-  5241	 * and unknown errors for regulators deemed system-critical. On detecting such
-  5242	 * events, it triggers a hardware protection shutdown with a defined timeout.
-  5243	 */
-  5244	static void regulator_handle_critical(struct regulator_dev *rdev,
-  5245					      unsigned long event)
-  5246	{
-  5247		enum pscr_reason pscr;
-  5248		const char *reason = NULL;
-  5249	
-  5250		if (!rdev->constraints->system_critical)
-  5251			return;
-  5252	
-  5253		switch (event) {
-  5254		case REGULATOR_EVENT_UNDER_VOLTAGE:
-  5255			reason = "System critical regulator: voltage drop detected";
-  5256			pscr = PSCR_UNDER_VOLTAGE;
-  5257			break;
-  5258		case REGULATOR_EVENT_OVER_CURRENT:
-  5259			reason = "System critical regulator: over-current detected";
-  5260			pscr = PSCR_OVER_CURRENT;
-  5261			break;
-  5262		case REGULATOR_EVENT_FAIL:
-  5263			reason = "System critical regulator: unknown error";
-  5264			pscr = PSCR_REGULATOR_FAILURE;
-  5265		}
-  5266	
-  5267		if (!reason)
-  5268			return;
-  5269	
-> 5270		set_power_state_change_reason(pscr);
-  5271		hw_protection_shutdown(reason,
-  5272				       rdev->constraints->uv_less_critical_window_ms);
-  5273	}
-  5274	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--
+Anthony Ruhier
 
