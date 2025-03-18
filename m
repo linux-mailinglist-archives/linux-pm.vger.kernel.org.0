@@ -1,125 +1,138 @@
-Return-Path: <linux-pm+bounces-24254-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24255-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEA50A67615
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Mar 2025 15:15:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00F55A67A46
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Mar 2025 18:04:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53047171BB9
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Mar 2025 14:15:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 178F03AB780
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Mar 2025 17:02:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC1C020AF7C;
-	Tue, 18 Mar 2025 14:15:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jmV0S5AS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46097211464;
+	Tue, 18 Mar 2025 17:02:33 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3650126C02;
-	Tue, 18 Mar 2025 14:15:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A0DB7DA95;
+	Tue, 18 Mar 2025 17:02:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742307354; cv=none; b=TvpNAJ4PpygaYsxRjCdLXl8IWE5oi2k+s3vZRXcVgAe9m++UBEAMUh6AXL4aagRJfqq3Uon7xC6Z96JeasDwn0mhehEWBfMMPaWcIpnNp9S7mBBsnpzEqpUC8F98nc+WfwUGNM6TqQJ+P5zJE+P5J3GLJs1sne3xluHk9u+1/OA=
+	t=1742317353; cv=none; b=MX3n7LxutqSIxHodE1LTMGSwLqbP7tlv330dpA2h0jum84cvAdyCuHg+khl8CYRmifhrf+HrMdhIxpp/4CKJn+bhyUZazUv37qQMYL3AxeI/juJbrtKYZQxEzJtbmYWa6I335BT6LtCUAsHxj7+hoEjVOBcdZkO2BZC5TlyyFe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742307354; c=relaxed/simple;
-	bh=UPjz8VZLsmlRm8QL0tudY2jJ5QityH3qNmJhumK1VPM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WXMoKmGQjhLdZM4xJ1DBsPi9yq7D3gkbHA7uWhTCmggxUfN6+yOIjrc6iz3Iwe2UqP5EUA4liJW9y2BLgpxYY6r70Zu+GHhhuW6LP18XWaLRVbD2MLqIBmTplihU10btH7qy86Sx+wUwQn3zuYdVPyJ7o6iP8xOIh1nPkLqODeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jmV0S5AS; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-22580c9ee0aso98308255ad.2;
-        Tue, 18 Mar 2025 07:15:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742307349; x=1742912149; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yw9gppKSxeHcWVBwaNXUHs12mj3KdYVNHxjn9Ui98is=;
-        b=jmV0S5ASI17IMU05Aw+Ta1EYvaqXcdDF5F/GLtrxq+FaThW1ouyt6fEuJlTmuQaYf3
-         LdLiV2br1IKNNSW7gmEpdV2ik6Xp/fYStJ9brQ/slWDKkYDjh6XUZifjm8hJ9ZLpPiO6
-         j512zZ71bAOA4W0uHh7bJsaiNa9H/8hvt/ekDwFSng057DzpwfpyqwgehDfiks+BWBVo
-         JQikj3+7elulFd4p7804Wkik1CHg/g9CofXdLqelM/XJun/LO02lQREFkEk4btQh5Z3n
-         ghGFsp5UcQQPxIsfxOaCoYV9vYvk3TBF/Jh1Le2UKV47kLlz+8/wb2PgDStSkXevQF2R
-         3AYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742307349; x=1742912149;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Yw9gppKSxeHcWVBwaNXUHs12mj3KdYVNHxjn9Ui98is=;
-        b=NEr0IifvLk5OJwBkRaPwb6oSWK6OQk81sELA6i1XcvDBrNIPaZgdzpTzgveu+vxzoM
-         uSQoO0iIKQGy4VJeg7BQZHlv5+C69h5QMt3m7iPTFkjBf7s/SccaPv9rpoK6xWAoBz9F
-         yJ5LO7W+cu4k78+JCwPJKG6m3Da3/5FSCQrrikYL6bI5mJL6aQUwwO90bpAfSzJYYiQh
-         l48OIOQIJvbQ0/tUcKiZoEquYwj4y3SGjripvXpOhADIr8J3qlYCXsimZqo8ZqKilWET
-         dfL4npVTzgeuaPiH0Ga4c6UF0RYt9fvl0PH1VZX933iQqh/8uFZOVDxqKQTJWeWhgkwZ
-         x5yQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU/pC6uIz3wPkavJ3LxjShTVHDJ8NIL9AK1t53HQuGgYQAs2qSZpBBD34UgZznuO5OfIpbgOtagivja6XX5@vger.kernel.org, AJvYcCVK4UmHSr36xsktwucRuFD43otMwDM8bhD0/6bkvpZ7fOt54V1WAbLiBUQP+VeZZupryTKth3de31U=@vger.kernel.org, AJvYcCXy4i179N5ny8CyDhPdQ2nwaRqDd+PWHvSTakFlmOQ6Yh0dNO37EKISpFcBcJSdirS+CcOX44VlzTnA7r8s@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkxGOoFy0dj5tPW4NKgeycndvnbLmOSOkUV7CJ3XF8/LnmTF67
-	hBRQXHLNUDXgBEXbergfSp6yv37nuwSDxXCJZeK+n1c5hl3y+0NH
-X-Gm-Gg: ASbGncubVspdquLPw7jhdhOKKjMoAo9BQQCEvE8nRR5tIod12GINGPoC4WjqaQXQNR7
-	QHytVpUTf9O3qV26mkdot9gafiYvl3gjaK5YiMyLhOcLmsNbt+31Xkep4Myb2TOr03b6SUg8+my
-	B9sNUp4/OwBy9GtWGttcVpFcmjHWOSalJwG380oZciIAPtkR75y/0Tq+HgKWCPDd2TmA5kFwFx+
-	A0/+Q6KKSWuzD9LRRqkvT1xcPLSIRxl0ia77EeCqAQxQmA/0D/gBHcrenRcqJ+RaU+LzFcLy39T
-	f+h1JxhlX9yW7d9wdNKw59tSOYd4nfB8F958/9cVPhtEo4Vrh779tIFCH01f8n1J7qEZ
-X-Google-Smtp-Source: AGHT+IFi9iMKBjpAg9KEVjkwVMJon/TRhaWEAz63sZWNS5Zv3rQiYjSCerddG2l8xfiUyKGEzOgSxw==
-X-Received: by 2002:a17:902:d488:b0:223:66bb:8993 with SMTP id d9443c01a7336-225e0b1001fmr211198205ad.43.1742307348944;
-        Tue, 18 Mar 2025 07:15:48 -0700 (PDT)
-Received: from localhost.localdomain ([183.242.254.176])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-225c6bbeb94sm94430715ad.199.2025.03.18.07.15.45
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 18 Mar 2025 07:15:48 -0700 (PDT)
-From: Miaoqian Lin <linmq006@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Stephan Gerhold <stephan@gerhold.net>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	linux-arm-msm@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: linmq006@gmail.com
-Subject: [PATCH] cpuidle: qcom: Fix refcount leak in spm_cpuidle_register
-Date: Tue, 18 Mar 2025 22:15:42 +0800
-Message-Id: <20250318141542.21748-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	s=arc-20240116; t=1742317353; c=relaxed/simple;
+	bh=t2GnSiDhEAc2jR0PhzuynsSMOQaft9R1wyxkUo9nGf0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=MQf8/BHQH3sWma9stC48UOw+ZKCQXDsyVojqMX1HQ4NzpUjykHBp2WR9svnKo/eWi9co8dd/JflUoR7tJxBizF7XQVxeP732isbkYJasU7juV1WkYsjPyk4qNQpEaCJ3nf3xeZnuiGpHjFkhOr36h6n6ogVkvkKY95Ag2rbea3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E3E15113E;
+	Tue, 18 Mar 2025 10:02:38 -0700 (PDT)
+Received: from e133711.arm.com (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5DD803F673;
+	Tue, 18 Mar 2025 10:02:27 -0700 (PDT)
+From: Sudeep Holla <sudeep.holla@arm.com>
+Subject: [PATCH v2 0/8] drivers: Transition to the faux device interface
+Date: Tue, 18 Mar 2025 17:01:38 +0000
+Message-Id: <20250318-plat2faux_dev-v2-0-e6cc73f78478@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPOm2WcC/13M0QqDIBiG4VuJ/3gONSy3o+5jxDD9XcLK0CaN8
+ N7ngp3s8P3ge3aIGBxGuFY7BEwuOj+X4KcK9KjmBxJnSgOnXNCaCbI81cqtem13g4lIzeVQiwE
+ vjYLyWQJatx3erS89urj68D74xL7rT2r/pMQIJcJi02oqhTKiU2E6az9Bn3P+AKkR/06oAAAA
+X-Change-ID: 20250315-plat2faux_dev-8c28b35be96a
+To: linux-kernel@vger.kernel.org
+Cc: Sudeep Holla <sudeep.holla@arm.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
+ Andre Przywara <andre.przywara@arm.com>, 
+ Herbert Xu <herbert@gondor.apana.org.au>, 
+ Jeff Johnson <jeff.johnson@oss.qualcomm.com>, linux-crypto@vger.kernel.org, 
+ Ard Biesheuvel <ardb@kernel.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ linux-rtc@vger.kernel.org, linux-efi@vger.kernel.org, 
+ Borislav Petkov <bp@alien8.de>, linux-acpi@vger.kernel.org, 
+ Andrew Lunn <andrew@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+ netdev@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2606; i=sudeep.holla@arm.com;
+ h=from:subject:message-id; bh=t2GnSiDhEAc2jR0PhzuynsSMOQaft9R1wyxkUo9nGf0=;
+ b=owEBbQKS/ZANAwAIAQBBurwxfuKYAcsmYgBn2acieVcuFHn7nofVPar556U8uqUx0UeOmvUB7
+ 8OjuFukCuOJAjMEAAEIAB0WIQS6ceUSBvMeskPdk+EAQbq8MX7imAUCZ9mnIgAKCRAAQbq8MX7i
+ mPWcD/9OhT5P2JtPLSEmgmvEEx5PdiAloyTNaOIxEEIseBHyRaSIrCKcADHd9YM+ERsTixMHTIi
+ 0d7nfnGoqpKXivC1B3c9ZZM2d+848ZxrknkKvMcN7kQQA9xA9DB+EgyQf8Q7muvrKmcijglHhGM
+ Ak4zDULpR/J1qgtv4VPrRyTrbO1BDpQhvqRLAUq+w8swlkH7IZ7fdcK5TjHlyg7MXGiIEu7r0/E
+ fTlX8RhbC2IL3kBzSEZpuDmBzi3YsVSzm6jv8lkP3p2EO34LP3lRzRtUHnVmWIXMtWf4cENSGZ0
+ HMpUqFf8o86N34J2hWTAVIIOoYYDcPvVnZA9K7OEgHhsAAI0hOwpXQWySWE6S+6IQPvlvPMfYgc
+ jtVGKJdZSi8IKTP4gx3a3qNkCWsXU96yvLO0KT2UhFWykIQ+jY3bDU1WaAkii3UmK66QmSpFeJL
+ tMPitm6pCyVWMwda0RkW16xwj7c7g1Gj8ja6dyPT0GRYAuxxNa5DW3bDymlN0pl0pXTOJwZfeMi
+ Rqo0Khp0PBB/sP2YP9+2pMDYGA/+1ZSDM9Bv+t7/DXfjZQob4XsKwbbXaAnD+IIu+s3IKDj9DhV
+ AjVOWc8TBf8Y9eB/9SHEtzU+PX3svORoqc97F34HtkNgJTdUUalYVL/QeBM/FIBOfgH8xnYqrWG
+ RlVakyMXJ9u+xTw==
+X-Developer-Key: i=sudeep.holla@arm.com; a=openpgp;
+ fpr=7360A21742ADF5A11767C1C139CFD4755FE2D5B4
 
-Fix a reference counter leak in spm_cpuidle_register() where
-of_node_put(cpu_node) was missing when of_parse_phandle() fails.
+Recently when debugging why one of the scmi platform device was not
+showing up under /sys/devices/platform/firmware:scmi instead was
+appearing directly under /sys/devices/platform, I noticed the new
+faux interface /sys/devices/faux.
 
-Fixes: 60f3692b5f0b ("cpuidle: qcom_spm: Detach state machine from main SPM handling")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Looking through the discussion and the background, I got excited and
+took the opportunity to clear all the platform devices under
+/sys/devices/platform on the Arm Juno/FVP platforms that are really
+faux devices. Only the platform devices created for the device nodes
+from the DT remain under /sys/devices/platform after these changes.
+
+All the patches are independent of each other and are part of the series
+just to demonstrate the use of macro module_faux_driver() where
+applicable. The idea is to get the macro merged first and then push the
+individual patches via respective subsystem later.
+
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 ---
- drivers/cpuidle/cpuidle-qcom-spm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v2:
+- Dropped all the modalias expect efivars(reason in the patch)
+- Defined new helper macro module_faux_driver() and moved most of the
+  drivers to use it
+- Dropped already queued ASoC and regulator changes
+- Link to v1: https://lore.kernel.org/r/20250317-plat2faux_dev-v1-0-5fe67c085ad5@arm.com
 
-diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
-index 3ab240e0e122..c9ab49b310fd 100644
---- a/drivers/cpuidle/cpuidle-qcom-spm.c
-+++ b/drivers/cpuidle/cpuidle-qcom-spm.c
-@@ -96,12 +96,12 @@ static int spm_cpuidle_register(struct device *cpuidle_dev, int cpu)
- 		return -ENODEV;
- 
- 	saw_node = of_parse_phandle(cpu_node, "qcom,saw", 0);
-+	of_node_put(cpu_node);
- 	if (!saw_node)
- 		return -ENODEV;
- 
- 	pdev = of_find_device_by_node(saw_node);
- 	of_node_put(saw_node);
--	of_node_put(cpu_node);
- 	if (!pdev)
- 		return -ENODEV;
- 
+---
+Sudeep Holla (8):
+      driver core: add helper macro for module_faux_driver() boilerplate
+      cpuidle: psci: Transition to the faux device interface
+      hwrng: arm-smccc-trng - transition to the faux device interface
+      rtc: efi: Transition to the faux device interface
+      virt: efi_secret: Transition to the faux device interface
+      efi: efivars: Transition to the faux device interface
+      ACPI: APEI: EINJ: Transition to the faux device interface
+      net: phy: fixed_phy: transition to the faux device interface
+
+ drivers/acpi/apei/einj-core.c             | 51 ++++---------------------------
+ drivers/char/hw_random/arm_smccc_trng.c   | 19 +++++-------
+ drivers/cpuidle/cpuidle-psci.c            | 32 +++----------------
+ drivers/firmware/efi/efi-pstore.c         |  2 +-
+ drivers/firmware/efi/efi.c                | 12 ++------
+ drivers/firmware/smccc/smccc.c            | 17 -----------
+ drivers/net/phy/fixed_phy.c               | 16 +++++-----
+ drivers/rtc/rtc-efi.c                     | 16 +++-------
+ drivers/virt/coco/efi_secret/efi_secret.c | 29 +++++-------------
+ include/linux/device/faux.h               | 49 +++++++++++++++++++++++++++++
+ 10 files changed, 90 insertions(+), 153 deletions(-)
+---
+base-commit: 4701f33a10702d5fc577c32434eb62adde0a1ae1
+change-id: 20250315-plat2faux_dev-8c28b35be96a
 -- 
-2.39.5 (Apple Git-154)
+Regards,
+Sudeep
 
 
