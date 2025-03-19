@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-24309-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24310-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40E6DA69793
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 19:12:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E58EDA69798
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 19:12:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 140C21668C5
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 18:12:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 91D337AEB23
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 18:11:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03FDE211710;
-	Wed, 19 Mar 2025 18:11:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC6F6213232;
+	Wed, 19 Mar 2025 18:11:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="IRhRDHtO"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="BuvuxTEP"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0AE020FA98;
-	Wed, 19 Mar 2025 18:11:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A32B211A00;
+	Wed, 19 Mar 2025 18:11:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742407890; cv=none; b=aPZKpIe3/P//AydE+BpPLamUdVFMfFdL4YX3RpD1zUfCJXdf8dQ8vU/1k47hu+uGvd9OA8XVT20JQ1xxcE2wXFVKobLegKKt8g3lRXVhTu/bZ3Jfg/mZ1NXwwTK1ZFtxhSC1KlgIxM4ULZp02lyBAQEhKmtx94v0dTCjnLxRWrM=
+	t=1742407892; cv=none; b=kJa3hzY4ABDfHAhdEYChDSW4zbssYm9wBPu+DIHebVNnFxsz9AuXtngzlQ8D9uyqB/w4sqLZYmq5TUhPImF+JKHSrI7UqDbyVZ+XRXN7XgvbskhJWm9eFzjTwgItO261QCI07cympBLKvJZK8EnfybIEueWjrKMrWYCsMln3pTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742407890; c=relaxed/simple;
-	bh=OhVEUcEzjbQVZ0w91N9nYEWsSxN9XG5JPoAdXtg3MfY=;
+	s=arc-20240116; t=1742407892; c=relaxed/simple;
+	bh=fxo7YKLqPTQqpfZWj4WWOS727JYFwPvRqMG5VgdGezM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=G+F9lJ6U5KGCMcdDME+Q0FmaiOfdoqyf3OeVwoRiTRJkWho97Dh5GeClUd+g+qwaIsaz4Q2bSisNhtH346fRP5tLlNmpxmB7vGwl9Pmb6fSjHgn5xx7JTNdiTb3UV6csRvTCd/ReIdTNJM4V214k92EwQXLhcWSnpAvu/PXvuOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=IRhRDHtO; arc=none smtp.client-ip=185.138.42.100
+	 MIME-Version; b=LmKllTA5AkSYC8yGguWTuEpsmV0tYptOyQ7o0qOlv30OeqU9indcSrMCJtq/3+MQrkd+9F13NVWd2/znlBhHk7KcBEKvbq7qikIuS2X5uftfxDjVS+3FXcSL7rKJp0DN6CFWNB2v7ksom/GVvtduVeulsBGsRMrkoi3DwGWS6TY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=BuvuxTEP; arc=none smtp.client-ip=185.138.42.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Received: from localhost.localdomain (unknown [IPv6:2a05:f6c2:511b:0:cbc0:999f:73ad:33bd])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 74E622E09407;
-	Wed, 19 Mar 2025 20:11:24 +0200 (EET)
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id E40992E0927E;
+	Wed, 19 Mar 2025 20:11:26 +0200 (EET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1742407886;
-	bh=UQJDxs1mtnDumBb2isG/FnxXPecbW6NXnOagBKtZQ44=; h=From:To:Subject;
-	b=IRhRDHtO58DQbBrU8FfZhyyvWvV5GoyXxbbO2OcvnqmmGkMRA0S+12r8Lk1qAxYQN
-	 ysNk+VM1zvEsdybDtYP0bJ6ERjcKJ8uTPfsmUGfbD3rePh1Sxi0VpR+ONXTVT1zq2M
-	 ZuLUAZFCFTdm6HVlS29AXOHvZgk8fry1DNiWufEI=
+	s=default; t=1742407888;
+	bh=3xy9aNmFP8vUFziUuxWin7iyjv/4K1w0WXqL+Rp5p7M=; h=From:To:Subject;
+	b=BuvuxTEP6w0DoD//CNxmk45diro7lBsJH89OIE92rznGyZzA4ltVog6KwKCxnldP6
+	 s8m9xJ9tfHevH/Z8yecqy59rfKwdbgOVUy9KcbaigigsWA/HFONkG/K3hLA5mbpDG4
+	 keLL8qVzWD4DmpQ29xfphl4110gLhs6HMLR798zE=
 Authentication-Results: linux1587.grserver.gr;
 	spf=pass (sender IP is 2a05:f6c2:511b:0:cbc0:999f:73ad:33bd) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
 Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
@@ -64,10 +64,10 @@ Cc: linux-hwmon@vger.kernel.org,
 	hdegoede@redhat.com,
 	mario.limonciello@amd.com,
 	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: [PATCH v7 03/14] platform/x86: oxpec: Move hwmon/oxp-sensors to
- platform/x86
-Date: Wed, 19 Mar 2025 19:10:30 +0100
-Message-ID: <20250319181044.392235-4-lkml@antheas.dev>
+Subject: [PATCH v7 04/14] ABI: testing: sysfs-class-oxp: add missing
+ documentation
+Date: Wed, 19 Mar 2025 19:10:31 +0100
+Message-ID: <20250319181044.392235-5-lkml@antheas.dev>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250319181044.392235-1-lkml@antheas.dev>
 References: <20250319181044.392235-1-lkml@antheas.dev>
@@ -77,268 +77,42 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-PPP-Message-ID: 
- <174240788636.2780.12986925471735633816@linux1587.grserver.gr>
+ <174240788854.2857.14778898420061662069@linux1587.grserver.gr>
 X-PPP-Vhost: antheas.dev
 X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
 X-Virus-Status: Clean
 
-The EC of OneXPlayer devices used to only control the fan.
-This is no longer the case, with the EC of OneXPlayer gaining
-additional functionality (turbo button, turbo led, battery controls).
+Add missing documentation about the tt_toggle attribute that was
+added in kernel 6.5.
 
-As it will be beneficial from a complexity perspective
-to retain this driver as a single unit, move it out
-of hwmon, and into platform/x86. Also, remove the
-hwmon documentation to avoid it becoming stale.
-
-While at it, add myself to the maintainer's file.
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: be144ee491272 ("hwmon: (oxp-sensors) Add tt_toggle attribute on supported boards")
 Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 ---
- Documentation/hwmon/index.rst                 |  2 +-
- Documentation/hwmon/oxp-sensors.rst           | 89 -------------------
- MAINTAINERS                                   |  7 +-
- drivers/hwmon/Kconfig                         | 11 ---
- drivers/hwmon/Makefile                        |  1 -
- drivers/platform/x86/Kconfig                  | 12 +++
- drivers/platform/x86/Makefile                 |  3 +
- .../oxp-sensors.c => platform/x86/oxpec.c}    | 10 +--
- 8 files changed, 24 insertions(+), 111 deletions(-)
- delete mode 100644 Documentation/hwmon/oxp-sensors.rst
- rename drivers/{hwmon/oxp-sensors.c => platform/x86/oxpec.c} (98%)
+ Documentation/ABI/testing/sysfs-platform-oxp | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-platform-oxp
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 874f8fd263252..dd7a54d5f2816 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -186,7 +186,7 @@ Hardware Monitoring Kernel Drivers
-    nzxt-kraken3
-    nzxt-smart2
-    occ
--   oxp-sensors
-+   oxpec
-    pc87360
-    pc87427
-    pcf8591
-diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
-deleted file mode 100644
-index 581c4dafbfa13..0000000000000
---- a/Documentation/hwmon/oxp-sensors.rst
-+++ /dev/null
-@@ -1,89 +0,0 @@
--.. SPDX-License-Identifier: GPL-2.0-or-later
--
--Kernel driver oxp-sensors
--=========================
--
--Authors:
--    - Derek John Clark <derekjohn.clark@gmail.com>
--    - Joaquín Ignacio Aramendía <samsagax@gmail.com>
--
--Description:
--------------
--
--Handheld devices from OneNetbook, AOKZOE, AYANEO, And OrangePi provide fan
--readings and fan control through their embedded controllers.
--
--Currently supports OneXPlayer devices, AOKZOE, AYANEO, and OrangePi
--handheld devices. AYANEO devices preceding the AIR and OneXPlayer devices
--preceding the Mini A07 are not supportable as the EC model is different
--and do not have manual control capabilities.
--
--Some OneXPlayer and AOKZOE models have a toggle for changing the behaviour
--of the "Turbo/Silent" button of the device. It will change the key event
--that it triggers with a flip of the `tt_toggle` attribute. See below for
--boards that support this function.
--
--Supported devices
-------------------
--
--Currently the driver supports the following handhelds:
--
-- - AOKZOE A1
-- - AOKZOE A1 PRO
-- - AYANEO 2
-- - AYANEO 2S
-- - AYANEO AIR
-- - AYANEO AIR 1S
-- - AYANEO AIR Plus (Mendocino)
-- - AYANEO AIR Pro
-- - AYANEO Flip DS
-- - AYANEO Flip KB
-- - AYANEO Geek
-- - AYANEO Geek 1S
-- - AYANEO KUN
-- - OneXPlayer 2
-- - OneXPlayer 2 Pro
-- - OneXPlayer AMD
-- - OneXPlayer mini AMD
-- - OneXPlayer mini AMD PRO
-- - OneXPlayer OneXFly
-- - OneXPlayer X1 A
-- - OneXPlayer X1 i
-- - OneXPlayer X1 mini
-- - OrangePi NEO-01
--
--"Turbo/Silent" button behaviour toggle is only supported on:
-- - AOK ZOE A1
-- - AOK ZOE A1 PRO
-- - OneXPlayer 2
-- - OneXPlayer 2 Pro
-- - OneXPlayer mini AMD (only with updated alpha BIOS)
-- - OneXPlayer mini AMD PRO
-- - OneXPlayer OneXFly
-- - OneXPlayer X1 A
-- - OneXPlayer X1 i
-- - OneXPlayer X1 mini
--
--Sysfs entries
---------------
--
--The following attributes are supported:
--
--fan1_input
--  Read Only. Reads current fan RPM.
--
--pwm1_enable
--  Read Write. Enable manual fan control. Write "1" to set to manual, write "0"
--  to let the EC control de fan speed. Read this attribute to see current status.
--
--pwm1
--  Read Write. Read this attribute to see current duty cycle in the range [0-255].
--  When pwm1_enable is set to "1" (manual) write any value in the range [0-255]
--  to set fan speed.
--
--tt_toggle
--  Read Write. Read this attribute to check the status of the turbo/silent
--  button behaviour function. Write "1" to activate the switch and "0" to
--  deactivate it. The specific keycodes and behaviour is specific to the device
--  both with this function on and off. This attribute is attached to the platform
--  driver and not to the hwmon driver (/sys/devices/platform/oxp-platform/tt_toggle)
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c9763412a5089..20720f92e4a63 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17656,12 +17656,13 @@ S:	Maintained
- F:	drivers/mtd/nand/onenand/
- F:	include/linux/mtd/onenand*.h
- 
--ONEXPLAYER FAN DRIVER
-+ONEXPLAYER PLATFORM EC DRIVER
-+M:	Antheas Kapenekakis <lkml@antheas.dev>
- M:	Derek John Clark <derekjohn.clark@gmail.com>
- M:	Joaquín Ignacio Aramendía <samsagax@gmail.com>
--L:	linux-hwmon@vger.kernel.org
-+L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
--F:	drivers/hwmon/oxp-sensors.c
-+F:	drivers/platform/x86/oxpec.c
- 
- ONIE TLV NVMEM LAYOUT DRIVER
- M:	Miquel Raynal <miquel.raynal@bootlin.com>
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 4cbaba15d86ef..09f7aed96d15e 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1774,17 +1774,6 @@ config SENSORS_NZXT_SMART2
- 
- source "drivers/hwmon/occ/Kconfig"
- 
--config SENSORS_OXP
--	tristate "OneXPlayer EC fan control"
--	depends on ACPI_EC
--	depends on X86
--	help
--		If you say yes here you get support for fan readings and control over
--		OneXPlayer handheld devices. Only OneXPlayer mini AMD handheld variant
--		boards are supported.
--
--		Can also be built as a module. In that case it will be called oxp-sensors.
--
- config SENSORS_PCF8591
- 	tristate "Philips PCF8591 ADC/DAC"
- 	depends on I2C
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index b7ef0f0562d37..0edb08824b178 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -181,7 +181,6 @@ obj-$(CONFIG_SENSORS_NTC_THERMISTOR)	+= ntc_thermistor.o
- obj-$(CONFIG_SENSORS_NZXT_KRAKEN2) += nzxt-kraken2.o
- obj-$(CONFIG_SENSORS_NZXT_KRAKEN3) += nzxt-kraken3.o
- obj-$(CONFIG_SENSORS_NZXT_SMART2) += nzxt-smart2.o
--obj-$(CONFIG_SENSORS_OXP) += oxp-sensors.o
- obj-$(CONFIG_SENSORS_PC87360)	+= pc87360.o
- obj-$(CONFIG_SENSORS_PC87427)	+= pc87427.o
- obj-$(CONFIG_SENSORS_PCF8591)	+= pcf8591.o
-diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-index 0258dd879d64b..82cfc76bc5c9f 100644
---- a/drivers/platform/x86/Kconfig
-+++ b/drivers/platform/x86/Kconfig
-@@ -1186,6 +1186,18 @@ config SEL3350_PLATFORM
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called sel3350-platform.
- 
-+config OXP_EC
-+	tristate "OneXPlayer EC platform control"
-+	depends on ACPI_EC
-+	depends on HWMON
-+	depends on X86
-+	help
-+		Enables support for the platform EC of OneXPlayer and AOKZOE
-+		handheld devices. This includes fan speed, fan controls, and
-+		disabling the default TDP behavior of the device. Due to legacy
-+		reasons, this driver also provides hwmon functionality to Ayaneo
-+		devices and the OrangePi Neo.
-+
- endif # X86_PLATFORM_DEVICES
- 
- config P2SB
-diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
-index e1b1429470674..f64a191c1162e 100644
---- a/drivers/platform/x86/Makefile
-+++ b/drivers/platform/x86/Makefile
-@@ -153,3 +153,6 @@ obj-$(CONFIG_WINMATE_FM07_KEYS)		+= winmate-fm07-keys.o
- 
- # SEL
- obj-$(CONFIG_SEL3350_PLATFORM)		+= sel3350-platform.o
-+
-+# OneXPlayer
-+obj-$(CONFIG_OXP_EC)		+= oxpec.o
-\ No newline at end of file
-diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/platform/x86/oxpec.c
-similarity index 98%
-rename from drivers/hwmon/oxp-sensors.c
-rename to drivers/platform/x86/oxpec.c
-index f7a64fbc8f33e..dc3a0871809cd 100644
---- a/drivers/hwmon/oxp-sensors.c
-+++ b/drivers/platform/x86/oxpec.c
-@@ -1,11 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0+
- /*
-- * Platform driver for OneXPlayer, AOKZOE, AYANEO, and OrangePi Handhelds
-- * that expose fan reading and control via hwmon sysfs.
-- *
-- * Old OXP boards have the same DMI strings and they are told apart by
-- * the boot cpu vendor (Intel/AMD). Of these older models only AMD is
-- * supported.
-+ * Platform driver for OneXPlayer and AOKZOE devices. For the time being,
-+ * it also exposes fan controls for AYANEO, and OrangePi Handhelds via
-+ * hwmon sysfs.
-  *
-  * Fan control is provided via pwm interface in the range [0-255].
-  * Old AMD boards use [0-100] as range in the EC, the written value is
-@@ -16,6 +13,7 @@
-  *
-  * Copyright (C) 2022 Joaquín I. Aramendía <samsagax@gmail.com>
-  * Copyright (C) 2024 Derek J. Clark <derekjohn.clark@gmail.com>
-+ * Copyright (C) 2025 Antheas Kapenekakis <lkml@antheas.dev>
-  */
- 
- #include <linux/acpi.h>
+diff --git a/Documentation/ABI/testing/sysfs-platform-oxp b/Documentation/ABI/testing/sysfs-platform-oxp
+new file mode 100644
+index 0000000000000..091269ab2c8c4
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-platform-oxp
+@@ -0,0 +1,13 @@
++What:		/sys/devices/platform/<platform>/tt_toggle
++Date:		Jun 2023
++KernelVersion:	6.5
++Contact:	"Antheas Kapenekakis" <lkml@antheas.dev>
++Description:
++		Takeover TDP controls from the device. OneXPlayer devices have a
++		turbo button that can be used to switch between two TDP modes
++		(usually 15W and 25W). By setting this attribute to 1, this
++		functionality is disabled, handing TDP control over to (Windows)
++		userspace software and the Turbo button turns into a keyboard
++		shortcut over the AT keyboard of the device. In addition,
++		using this setting is a prerequisite for PWM control for most
++		newer models (otherwise it NOOPs).
 -- 
 2.48.1
 
