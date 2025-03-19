@@ -1,141 +1,264 @@
-Return-Path: <linux-pm+bounces-24271-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24272-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FB14A6849B
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 06:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A8D9A6862D
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 08:53:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B20043BC0D6
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 05:35:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C1943BC050
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 07:52:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4414F20C488;
-	Wed, 19 Mar 2025 05:35:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F17A524FBFF;
+	Wed, 19 Mar 2025 07:52:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jdC9LqUV"
+	dkim=pass (1024-bit key) header.d=mysnt.onmicrosoft.com header.i=@mysnt.onmicrosoft.com header.b="kPYyRtH1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11021117.outbound.protection.outlook.com [52.101.70.117])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 508FB130A73
-	for <linux-pm@vger.kernel.org>; Wed, 19 Mar 2025 05:35:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742362511; cv=none; b=ity5G0AKtq8B28okI3kieMNfcnqQ/J9I/qc+8L9J/5prCbF+lk9UoqamlR/Deavoj5ZglNGy8GCIQBSWNJYaiXWRA3rxzyOCCZiym9QQJPt3ibtIRuHsY6OOYFIQe7pce+6whXAPps8oVZO4JE0tF5uIYmAbAwrEUGIx+KMULQs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742362511; c=relaxed/simple;
-	bh=BJqc2V4r6FqOy56nnp0RIfpnpHABd9NTrRkrL3bqP0o=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Qpw612JeEGZ/Uix2n6ViOwZL76gqHUGVC87GI4GsZIA39YPwrqnedM8fGLqbZXCt1PWXcGYHsCXeiEkiDOgnBj5PcsoW3E+/bjcGTjVnMFslSAGQ9pw1M6ekJpOdxQTbd8FrxfA6KxElcqXUeKFlgnEBljJIyCJwgx802ik6tAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jdC9LqUV; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43ce71582e9so27737025e9.1
-        for <linux-pm@vger.kernel.org>; Tue, 18 Mar 2025 22:35:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1742362507; x=1742967307; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=BJqc2V4r6FqOy56nnp0RIfpnpHABd9NTrRkrL3bqP0o=;
-        b=jdC9LqUVZrBJwSgXWzXWHyON+TwBUdI+F0w4DVTBXnHvko8786qrD1kbEzmHR9qrCo
-         PduBpHWUzxLJSw4CM/Dkc4C/ME2bI81WFOdQcKFLix6GqOsMJqoHZhw2qRPvW1CxC5zm
-         khk67HCGkxKI291ZVAfaHWnHz8uRlZIaaoon0dBRS8UTNWvPgNb6pPqEafG930P3Skjw
-         l3yVWExtHs29F6VsYwNbPDhX/wClYz0/t9IRSyR2RlILevJ8YZmroDaY5kTM1nbWcAU7
-         7/5tJIqn6Qqx4X4KUgbjSYC4knuyPf65YDvD+Fad+72om4qa1EuBOrOkHcJMUizOUA+T
-         OdIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742362507; x=1742967307;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BJqc2V4r6FqOy56nnp0RIfpnpHABd9NTrRkrL3bqP0o=;
-        b=XJCUpVoX9FbuE9zuPzooltKU88Jqyh5QtubU5rFca6RO8qtdRE0w+9hUEdYQfYNWKQ
-         2dzFA3eGOrp6cL12gEAcAPWO2DSZsxSrUiCfX2Q/67a+BLZztkouXgIJ+xy4tzklolU+
-         PDobRRo1tKfPG8oyz1p9QNbjVkBwhHEDYioLMEkEtE9/XO+D4288KlH49/FtRTYQIiSj
-         8oTBt22BtJdORdM+pwJpRaIwIu0ZXVy18LmkgGqy/5wZcU20iPx8F89iBnqqBAJjqObD
-         el/qSH85btKDh3Z0hFHc7ayszhcpFQ8BDQ6MHySGvLneYVQl2UkwQ0OOcPcrcuBuIRAP
-         +SFA==
-X-Forwarded-Encrypted: i=1; AJvYcCW0oKN4INfwtbf0VTeI05uKa9fFDzZaZBtYuFxlUlCXG0CDdXyKR7S3K/xPXBd1AO7pMdUP7vwCvA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YztRKk0Aj8NB7pnmCsIxUCFTGBK2plLTQAIDO63QvI2ja/yHE+G
-	pdyrUX5xYEepxKjPc47ARUUZ6S6Y3O8d0gWWKcNMzGHmwaqpFohVT4RR5W3Ui7UWl1NBQlG0Ppv
-	X
-X-Gm-Gg: ASbGncvy3LLap0xjaUrpIJtBPK5j3PEM4z+qcZy6x6QZdWNcwz11uAQjWmxgNCPlMqs
-	2NpUc9lDIjxp/3yaYMn55JyJITXsZ5Oaz6ry3sK4dcuDojZpEoXLB9ct41IZ7bF0OXIJL/n6qbU
-	fNUgarrfK6xPdq7hhQf2JtV+DOj21US7rSnKnfSqbKqs566XD3VBSSesWKvV3lzTjqZ49n9y+iJ
-	faQHsYTieCzLNe9iTOB3GWt18KC/X+W5jpMJWf6bAngTt5IDTvqlSvGzcoMISIDRYuCcvDMGDPF
-	2sLaYZ62jiJfOVRDvQfDwU4vuCWAOVMzCF2S5nGTCOORq3Qliw==
-X-Google-Smtp-Source: AGHT+IFEhSoQ/DQEODNld9+47I3jsF4TAZ+I7PfGqqGTO6NCSHxQ1Hg/oJ8JzcAfC5cy6PlHPs8sDA==
-X-Received: by 2002:a05:6000:1888:b0:391:2e97:5788 with SMTP id ffacd0b85a97d-39973b725b6mr1281339f8f.55.1742362507353;
-        Tue, 18 Mar 2025 22:35:07 -0700 (PDT)
-Received: from [10.1.1.109] ([80.111.64.44])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d43f6befesm7891435e9.25.2025.03.18.22.35.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Mar 2025 22:35:06 -0700 (PDT)
-Message-ID: <4f928b89586aa836ad3a905db740fdb5d9545b81.camel@linaro.org>
-Subject: Re: [PATCH] power: reset: reboot-mode: better compatibility with DT
- (replace ' ,/')
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Sebastian Reichel <sre@kernel.org>
-Cc: Peter Griffin <peter.griffin@linaro.org>, Tudor Ambarus	
- <tudor.ambarus@linaro.org>, Will McVicker <willmcvicker@google.com>, 
-	kernel-team@android.com, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Wed, 19 Mar 2025 05:35:05 +0000
-In-Reply-To: <20250307-reboot-mode-chars-v1-1-d83ff95da524@linaro.org>
-References: <20250307-reboot-mode-chars-v1-1-d83ff95da524@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.53.2-1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFAD1EF36A;
+	Wed, 19 Mar 2025 07:52:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.117
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1742370769; cv=fail; b=CpY9nLvrEED4U3KJ6svTsza8fEOtpMBDgLg0bPu88663zIq41bUoM8L9ofxRsVDW22yRjqH7cau29n6+z7IiISnzyHtDIzKY6KC3WT8C6y0sFYzogpH2HlPh4RWIHH6CbQ8vxYGOitlOEomn1pWHUcoiIBJtF7wgYwfPM4zyb+M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1742370769; c=relaxed/simple;
+	bh=pJx0BQ5DMNsrHkXL1bWl1caombs2/d79b5bo9KXm5fw=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=kAerejYzjOu4Z4aHA8fPZ5mnCsloIT75o+p7E0CNgy/cHgNWFlVIFbKd2wVYuGwBj5ZfjjV2f4ELdnn5UN289yE2unIKYneJV1M6BayGcLrKTNKBP7IUH+y0xcSpyh5azzvJ5A7vygpOxm2QBDgQReKlJjyu3gSUE4j2/XFnZeg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kontron.de; spf=pass smtp.mailfrom=kontron.de; dkim=pass (1024-bit key) header.d=mysnt.onmicrosoft.com header.i=@mysnt.onmicrosoft.com header.b=kPYyRtH1; arc=fail smtp.client-ip=52.101.70.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kontron.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kontron.de
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=E/5WZLSax/VzQmKOjXH6qUBbaHmNvHwrwyFbJLdheRSj5KnYczNLPVZGU3oj4Hwb0d5hdb+C3AILH/CTH7eV19nI2lmJbCXWtL7nuD2wxT1xN8N/KCDjKcr/iFXaE8zH3qnhTdySwYq3deleU2S6pxAZ1hLjCpxadHj+07FiL868fOz9FeHRe4oXbJCIw2eJ7Loy8/+sKtuqONTrxZ7UK2MgrBM/txy15a4AFheit7+obUJAb/3j8QZCtCeFisDpB9wtwEVGq/uqE0+4ERQWCQERJh6S3pWdivSlnKJuhzsRr52pyARtBGu1j/p4TTBWEiVdIvrBeZ/RycvgdYCFtg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iPESzy1K3lUPYi4FWormCWCnOZcrfT7AR8cTem0xXjI=;
+ b=tsS4eT6g2ZMQdwWNo+9AA11Q1HWG9+hBpTDckH7tPg5BysiXDTE10GxsMnQXTLohUJjVzfaDOh5q/gBDBr/rQ/EAZ51BbCc8m0n6zBgGbPagx8nXJT1ox/dxNw+7+/Ka4FzCvDGgQnmaaBk1R18g9+BoPxeGp+t8zA1RKDxeoPWqLQ1R8nhLI0mEiyRqPrVJobTR1aMz01upuSIeNB0wolbQK+RXGZBBsIe9zKOCkN3FyiMMn8Gg6O0/z1JqgY+X+GgiZB0NyhTuxHb4RQBY22JK1D0+4XafuBdZHGMT/bNC55hNEOUgqL/Il/oU8LHOIFHBLpkMPaTgzIgG9yjbug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
+ dkim=pass header.d=kontron.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
+ s=selector2-mysnt-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iPESzy1K3lUPYi4FWormCWCnOZcrfT7AR8cTem0xXjI=;
+ b=kPYyRtH1jyTUOq1VFiD8F4CN8TzAOf05etqiMf9Qbxo33jMmDZ9jNK5DTpDIDk9Lu/uV0Q3PnW1Jew0UA1gDyiCXpcQ/ygBlJcvsK2r89vwG0EQ29KbpEC7PDpDcJ0JAnl0ScssAqszaCjwAx5J5/OvpwhPzTROiOHHnt3DkDS8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kontron.de;
+Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::10)
+ by DB4PR10MB6288.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:380::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.34; Wed, 19 Mar
+ 2025 07:52:41 +0000
+Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::b854:7611:1533:2a19]) by PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::b854:7611:1533:2a19%4]) with mapi id 15.20.8534.031; Wed, 19 Mar 2025
+ 07:52:41 +0000
+Message-ID: <15acbb84-efa1-4ca6-bbfd-a4c3f17a7d19@kontron.de>
+Date: Wed, 19 Mar 2025 08:52:39 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: imx8mp: HDMI display blank/black problems
+To: Saravana Kannan <saravanak@google.com>, Adam Ford <aford173@gmail.com>,
+ l.stach@pengutronix.de, marex@denx.de
+Cc: mailinglist1@johanneskirchmair.de, johannes.kirchmair@skidata.com,
+ Laurent.pinchart@ideasonboard.com, airlied@gmail.com,
+ alexander.stein@ew.tq-group.com, andrzej.hajda@intel.com,
+ catalin.marinas@arm.com, conor+dt@kernel.org, daniel@ffwll.ch,
+ devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ festevam@gmail.com, jernej.skrabec@gmail.com, jonas@kwiboo.se,
+ kernel@pengutronix.de, kishon@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-pm@vger.kernel.org, maarten.lankhorst@linux.intel.com,
+ mripard@kernel.org, neil.armstrong@linaro.org, p.zabel@pengutronix.de,
+ rfoss@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
+ shawnguo@kernel.org, tzimmermann@suse.de, ulf.hansson@linaro.org,
+ victor.liu@nxp.com, vkoul@kernel.org, will@kernel.org
+References: <20240203165307.7806-1-aford173@gmail.com>
+ <20241025080544.136280-1-mailinglist1@johanneskirchmair.de>
+ <6d039ecf-0e48-415a-afd8-6bfce60081ae@kontron.de>
+ <CAHCN7xKevGWipBSch6gKVeJRT9Zb8QTchhxg3c=96XhnAvnjZw@mail.gmail.com>
+ <CAGETcx-LGZ1k-seh4LkvCobsxUk67QK40swiQvH6Wrzs0Log0A@mail.gmail.com>
+Content-Language: en-US, de-DE
+From: Frieder Schrempf <frieder.schrempf@kontron.de>
+In-Reply-To: <CAGETcx-LGZ1k-seh4LkvCobsxUk67QK40swiQvH6Wrzs0Log0A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR3P281CA0181.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a4::14) To PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:102:263::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR10MB5681:EE_|DB4PR10MB6288:EE_
+X-MS-Office365-Filtering-Correlation-Id: 68c18fe7-8968-4bba-263d-08dd66bb0682
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dUo0L3BnaHVvTGNRQ0FJODdXd3ZSdk1vbng0elRkdDZ1elpLd3FNcWJObzBY?=
+ =?utf-8?B?bHp2d2IxR3lCYjNmempWaGI5K1lDZkl2blNYcHdtNmdLYWM3ZldRUUFPQmtm?=
+ =?utf-8?B?clRYMmNMZGN3TzhpUWNJV0FEdWd5Q2dhRG5iNWIxZ0tQbGw3c2E0a2NTUkp4?=
+ =?utf-8?B?NVVnZzVNMVhhVWlrWnpjL08zUDhGdFlPQmt2UHQ3SlQ1cTJSNlVPTk95ZmRK?=
+ =?utf-8?B?eHJKcW5ENVd4eHBtMitGZnRKUXBsNWNVd29zU2pTNVR5WjRkSjdoYUQ1REda?=
+ =?utf-8?B?M1VJYkd4cnJLYWpyVWZGNUd6ZHVOWlhXR3hudTZXQWt0UWw4dFdPcEVEN2ZR?=
+ =?utf-8?B?MjgvUzcvMW5VQ2RxUlovOHg5aVFkN0cxVDVLYmZ0K1c1UCt5ME00bGFEYVJ3?=
+ =?utf-8?B?VFJFMDM5cFI4L0o2cTNJU1pXMWtqRk41Y3NvdFRGL2ZSU2lDY1YyVWZhM1J3?=
+ =?utf-8?B?aE8wTnF3NGJOYkpuV3hQaXBjMzkwOW9sRlZQT0R2dGJBRDRPTWxvQlFzcUts?=
+ =?utf-8?B?NkhET2RYNzduOEdBc1UzajR4ZkozS1ZqVEFJbUQvOUVOUWhsZEdIZkhoTFpT?=
+ =?utf-8?B?Rk51WnkwSkROTG5JTGZrV29mTEt2bTZxZVpYbm0rQmdTRGc1aG5aODIzTEZB?=
+ =?utf-8?B?alFBYWxMWkJuazdhTXdxRHhMT3lHNFM2K0FjMkN6Q25xMVNMR0Fkbkl1d1BI?=
+ =?utf-8?B?UTV3TzB0bVZLWUVqZWxpVjZlOS9JengxcURDR0w2Sjg4OWgwVDJRMitzSnRY?=
+ =?utf-8?B?WWtQRzNNYkxYazJ5MUpLN2FrY05PK1h4YkcvM1pxV2NqOWRFaUsyckZmdXJF?=
+ =?utf-8?B?ZU81SnZqRDEwK2ZobzZRTnJMNDNpbHlXS28vSU44VUU2UHBGV1k2L2krSWpL?=
+ =?utf-8?B?cUgzMzQ3dUFEdm5vRVFnbkxuTG10K253dWNaUTlZRkZvV2ZybmhLVXdMRVBT?=
+ =?utf-8?B?NnBKZldPY0xrN0c5Qy8yS3ZzYmR1UFg1L0lid3FoajJEcHZQb3pieFdVRG02?=
+ =?utf-8?B?aG9HVUp6bU9nOFB1UkN4a0puUHB6TG5sZmJBSmlsdEhEamc2aDNNKzJyTmFE?=
+ =?utf-8?B?VnIvZnNnYWpZcDV3dmljKzFIOCtXdDlsUCtsNWRsdy9UejlaUWkrMXNTbmZE?=
+ =?utf-8?B?UHlHMXZlRDJ3eEg4ME1tam52STU0b0ZwYy9TWHo3S1FqelZzV01Ud0U4Z0tY?=
+ =?utf-8?B?U01oVzdTMTFFU3lmRkJjbEhQOHE1VStEQlplZXhQQnlsSTV6QzFZQjNqQkZD?=
+ =?utf-8?B?N0h0MlVCSXBtYXJCL2tGTUZZYzBrNjRnck1VajFtQUpwUjlSYjcvdUJibS9m?=
+ =?utf-8?B?MzRTVnBFUXA4a3NBTmcweHdlZnRYb0EwWUFDS2xMUTBDMXZScGRqRGRLZnZa?=
+ =?utf-8?B?N3gvWG1NWUlqYnNnR3NNcm9QYWRGVE4wbVZPbm9QMHl1LzA4TVlqaFVNemtY?=
+ =?utf-8?B?WHB0cDI0M293WWEreE9hUlpOakw1bjNUVjRvV0RjSlhkbzJTdFBRM1lXbldu?=
+ =?utf-8?B?bVo2QThaWSt2NFlNOExFNnMrZld5dTF4K1pRTTN1UGVRV2d5NmVhalEwYUlB?=
+ =?utf-8?B?SmM3dVFuSEtsdU5HZHVqaW10dEVZd2JSVEdsVHRTOFYxTmNHdXR0ZjNEQWs5?=
+ =?utf-8?B?V3FGNHN5eWdRclRGMDc1YkdFQmpJY0hBdjRnbFNsK3ZjMWxhUnNsQkY0ODNx?=
+ =?utf-8?B?aWVoZXBGZmN0czBJU0FkS3d3NU9hRCtDQWovZTdXU201MFQ3VllrVzM0OXFV?=
+ =?utf-8?B?ZkRxU3IvTXcyRUZLMXZOTVJGY1VVUzM5ZUJnWUtkVzl2SjNMR21IanhPRnpr?=
+ =?utf-8?B?dXg3MGY2R0Z3Q29JampybDQ3b0plUVNKSmtKN0N5NzJ6MUNaLzBoK3p6WGRw?=
+ =?utf-8?Q?7F8FLaCl4JZNe?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?cVVTN29kci9FZVlMM05Jdi9xRytyY2RFcWpuOElLMTVYd1lQMEVFaXpkSERW?=
+ =?utf-8?B?L0lHb1hQZlJIUkFwWWdIeFhWRUhJbU1yYmJaWERNWHdtc2xXM2cxT2hjZE9N?=
+ =?utf-8?B?Qm92VExVZTMzNzVSak1wN3M4NURFSU95Q2lLNTh2SkZ5R2xsZWx5M0NYVTlN?=
+ =?utf-8?B?NHI4L3NSRUtPVU9Sd0VRL2hSektHVTJjK3prZlJRVGtHbUdCQ0xEL0VtKzJh?=
+ =?utf-8?B?VlppM29rNEtOTnl6dW9Ua1FWTkhJS1RKOW90T3RmVmpDd0djdTErb2JIenl4?=
+ =?utf-8?B?OERyODJUTSt4ZEpVV1VRYzNRZWZEZzdwNktTRmFQMG9DNnNFcWp3SStTTjAr?=
+ =?utf-8?B?eGh6OXB3QzN6dmlPZ3J0YWJ0SGRPL3YzcGswSjlHSEJJendOQnZNUnFMRUw4?=
+ =?utf-8?B?Q29uUGNzRmNlNk85UzZmdytMd2JFVmZlY3FyWGMraGw5OEJiQWk0VGl3OWh5?=
+ =?utf-8?B?OTlia2hwS3ZHMEVJeHNEYUJVeXhVa0JOSjNyQUtDaTZETkkxbDFGdk5XMzdx?=
+ =?utf-8?B?eXNMZVJIT0ZrSXM1V2dTNHMyRnB3c1g3TlN5M2VRY1dDRGlSL0pQS3E1K21n?=
+ =?utf-8?B?VTN5Y0FPUzhyWXM5SkV4VmYvUmU0YjY5RTFxRXFMYy9ON0prMWpOZmNIVWhr?=
+ =?utf-8?B?Mit6ZytFVkxDMEgveGgyOGxQL2tsZ1VOTFVlTDVSRGZ4MHBtYm5UWEFLUldu?=
+ =?utf-8?B?b0poa01CV3U1STB3Q1FnVWR2OU01QjJ1VGFxYkNTYkhvYXNYMjZ1eTczamd3?=
+ =?utf-8?B?MDlzZGRaM3k4VnNWWnJ0UU9CR3hwaUI3TlJENzE4SXQwTHBBb1R0bVEzTVRt?=
+ =?utf-8?B?SGo3VU1idGZ4WEFlT0ZNd2FmaGY1U2YzMFVEOWNTV1lkdlhLVGZjWUxjZ0ho?=
+ =?utf-8?B?N1VyWW1YMnlvRDEzU1FqUkFWeFIvYW8vcGh1bVdwZmVqaFJ2NXBkU3VzWlUw?=
+ =?utf-8?B?elBSMm1JSXFXVFRGbTVGOVBEZjlQaE82UnREWkNvTWFsZVlvS3dSd0pSS1lF?=
+ =?utf-8?B?dE5zdEZwZkdkY2tudnE0SDVJK1BNOXNoaFIyMmtST0xCb2g3c1JCN0VWOVpG?=
+ =?utf-8?B?KzRHL2lYQ0pGSXd2R3NhVUNGME1hdE96eFAwNUswWFRtUVJMK1d5Y3dmSVpn?=
+ =?utf-8?B?K0E0bjI4ZUVpaUhYRmthWjNOL0ttR1RzTnBISThMNG5WUHBJMU5JT1c2cGNu?=
+ =?utf-8?B?RXBqdUIxZ3REelJlVHBZMUtYMWpIWEtjeHgrdnAxcER4cGVmdVBURmVjU0Vo?=
+ =?utf-8?B?dTBjUjNuWTRCQzFIYzg2TmpyUVZIa1F4STRnY25FNk1FSE8wUDdaNDhnSXBR?=
+ =?utf-8?B?K3B6eGgyTVZuaVgvS0pKSFR4YjVON0NEOVRkZkJtWTBuWGNZaW5uNk94cUhB?=
+ =?utf-8?B?NENtTGc5WnNOVTUySHNUT2ZsNUg5YUQwQkZuL2s0TFlFYm9na2ZOTWZlRjlo?=
+ =?utf-8?B?bmppVzJIbE1seFZzbWhObisrdEFXTUttazhpZWtFbDZoZUtKV1NHWmc3WFB2?=
+ =?utf-8?B?dGtrSlU1TEVSYklONmFZN2ZBMUN1d285TXQzZEliWXZXTjRPWUVDc3dIRUtN?=
+ =?utf-8?B?MGdraWJzdUJGRmc0N1p2aTBxQXFjbkJOQVh6YS9ybE5OcTVCTTViSSs2STRQ?=
+ =?utf-8?B?cEdHU0dTYndLS24xcXlTcUgxYU00akZDTjE5T1VKdlVhSy94VG5tQzIwNVNp?=
+ =?utf-8?B?MWRWNm9zK2Y3WHhIeFREeGRoNWV5cGlnTmdtYWhOVEpyd2tFMndGcjZ3NlY0?=
+ =?utf-8?B?MC9Hb28wQnQ4MGF1VUdUNnVIdTJOeDcwdGVTcDdPRnJxVXVtb1FBSS93TU5J?=
+ =?utf-8?B?WllrTWYrN1p0TVJqdEhpcXZHZ1ZCY01CTkV0blMxbEN1RnlwSWZNQW1CVXR2?=
+ =?utf-8?B?RnRDSFdKSUduaEpIOHRmelgzVFpNYzJJbGtaaTVkbnhiam9wWEtncGhrZSta?=
+ =?utf-8?B?dlpDOEs5NVcraGsyNmxNeWJnRGpiTlhJSUwxQVM3Zm9zTUJBYXg1d3NKUXBm?=
+ =?utf-8?B?NElDa3p5ZTQ5UTR0ZmR4dlN6bXBPK0lzMlRENnhOa0pTYmRwcElPSVpiQk1S?=
+ =?utf-8?B?R1UxckthK25oM0htTlhNTWZjbUR0ejkxcVhqd1Q3eTVhcUtaVTF3eUFIT0dN?=
+ =?utf-8?B?ZWZTbCtza1c2NWh5SjJYc1k0akpFTldNci9GS1RubUZ6ZVljR2hXMk9uWVJG?=
+ =?utf-8?B?N2c9PQ==?=
+X-OriginatorOrg: kontron.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68c18fe7-8968-4bba-263d-08dd66bb0682
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Mar 2025 07:52:41.3083
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9DftqVdmch4m7BE0XZPpLvNfNT3XTIrcptXdyzl2FA30OoU740hdmogXLy5BTTHYYy6+NNHpJQOGnYifzwTqASpgTSyb7ULfSf6lhUW0cJI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB4PR10MB6288
 
-Hi,
+Am 30.10.24 um 9:20 PM schrieb Saravana Kannan:
+> On Wed, Oct 30, 2024 at 10:28 AM Adam Ford <aford173@gmail.com> wrote:
+>>
+>> On Wed, Oct 30, 2024 at 4:01 AM Frieder Schrempf
+>> <frieder.schrempf@kontron.de> wrote:
+>>>
+>>> Hi Johannes,
+>>>
+>>> On 25.10.24 10:05 AM, mailinglist1@johanneskirchmair.de wrote:
+>>>> [Sie erhalten nicht häufig E-Mails von mailinglist1@johanneskirchmair.de. Weitere Informationen, warum dies wichtig ist, finden Sie unter https://aka.ms/LearnAboutSenderIdentification ]
+>>>>
+>>>> Hey,
+>>>> We had some problems with the hdmi on the imx8mp and wanted to leave, what we found out about it, somewhere for others to find it.
+>>>>
+>>>> The problem was that our hdmi display sometimes stayed blank after hot plugging and sometimes at startup. On older kernel versions 6.6 we did not have the problem with the not mainlined hdmi patches.
+>>>> We tracked the commit down that introduced the problem for us. It was the following “driver core: Enable fw_devlink=rpm by default”  https://lore.kernel.org/lkml/20231113220948.80089-1-saravanak@google.com/
+>>>> So we switched back to FW_DEVLINK_FLAGS_ON via kernel parameter. Don’t really understand what the problem with RPM is.
+>>>>
+>>>> So, this information is just for reference. Maybe someone has an idea what is going on here. And how to fix the problem in a more proper way.
+>>>
+>>> Thanks for investigating and sharing your results!
+>>>
+>>> I'm seeing the same symptoms and previously found out that this is
+>>> related to LCDIF underrun errors. See [1] for more information.
+>>>
+>>> Adam has also started this thread: [2].
+>>>
+>>> Anyway, knowing that this is related to fw_devlink=rpm is really
+>>> helpful. I just tried with fw_devlink=on and wasn't able to see any
+>>> issues anymore. So this confirms your findings.
+>>
+>> I was off in the weeds thinking there was something wrong in timing
+>> and/or a race condition around the PLL or something.  This is good
+>> news.
+>> Please forgive my ignorance, what does fw_devlink do?  Is there
+>> something we can do in the driver itself to force its behavior?
+> 
+> fw_devlink figures out supplier/consumer dependencies between devices
+> and creates device links between them. This ensures proper
+> probe/suspend/resume/shutdown/runtime PM ordering.
+> 
+> fw_devlink=rpm vs on means "enforce all of these" vs "enforce all of
+> these except runtime PM".
+> 
+>> adam
+>>>
+>>> I hope that some of the driver framework and runtime PM experts can help
+>>> to find out what is actually wrong and how the correct fix might look like.
+>>>
+>>> I'm also CC-ing Saravana who authored the change from fw_devlink=on to
+>>> fw_devlink=rpm to see if they have anything to add.
+> 
+> When fw_devlink=rpm, you'll have device links created between
+> consumers and suppliers with the DL_FLAG_PM_RUNTIME flag set. So
+> before your device is runtime resumed, it'll make sure all your
+> suppliers are resumed first.
+> 
+> My guess is that there is some issue in the runtime PM handling in
+> these drivers. I don't have enough context to provide further insight.
 
-On Fri, 2025-03-07 at 07:50 +0000, Andr=C3=A9 Draszik wrote:
-> This driver's purpose is to parse boot modes described in DT, via key
-> (node name) / value pairs, and to match them to a reboot mode requested
-> by the kernel. Unfortunately, DT node names can not contain certain
-> characters, like space ' ' or comma ',' or slash '/', while the
-> requested reboot mode may.
->=20
-> This is a problem because it makes it impossible to match reboot modes
-> containing any of those characters.
->=20
-> For example, this makes it impossible to communicate DM verity errors
-> to the boot loader - DM verity errors trigger a reboot with mode
-> "dm-verity device corrupted" in drivers/md/dm-verity-target.c and
-> devices typically have to take action in that case [1]. Changing this
-> string itself is not feasible, see e.g. discussion in [2], but would
-> also just cover this one case.
->=20
-> Another example is Android, which may use comma in the reboot mode
-> string, e.g. as "shutdown,thermal" in [3].
->=20
-> The kernel also shouldn't prescribe what characters are allowed inside
-> the boot mode string for a user to set. It hasn't done this so far, and
-> introducing such a restriction would be an interface break and
-> arbitrarily enforce a random new policy.
->=20
-> Therefore, update this driver to do another round of string matching,
-> after replacing the common characters mentioned above with dash '-', if
-> a match hasn't been found without doing said replacement.
-> This now allows us to have DT entries of e.g.:
->=20
-> =C2=A0=C2=A0=C2=A0 mode-dm-verity-device-corrupted =3D <...>
->=20
-> and so on.
+I bet you are right. I tried to have a closer look but unfortunately I
+didn't make any progress.
 
-Friendly ping. Any thoughts on this?
+The drivers involved are lcdif_drv.c, imx8mp-hdmi-tx.c and
+phy-fsl-samsung-hdmi.c.
 
+As we see a "LCDIF Underrun Error" with fw_devlink=rpm my first guess
+would be that the suppliers of LCDIF are maybe turned on in the wrong order.
 
+Lucas, Marek: As the main authors of these drivers, do you think you
+could help a little with further debugging? Any ideas?
 
-Cheers,
-Andre'
-
+Thanks!
 
