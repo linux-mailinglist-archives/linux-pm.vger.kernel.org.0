@@ -1,209 +1,281 @@
-Return-Path: <linux-pm+bounces-24281-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24282-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A130BA68E4D
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 14:54:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CF47A68E61
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 15:01:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AEC3542338C
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 13:54:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0427176F0C
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 14:01:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 756481531E3;
-	Wed, 19 Mar 2025 13:54:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31566192D70;
+	Wed, 19 Mar 2025 14:01:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LDliM1mY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="guI65zrP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448BD1EF1D;
-	Wed, 19 Mar 2025 13:54:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13CA53CF58;
+	Wed, 19 Mar 2025 14:01:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742392465; cv=none; b=FMSCm8MZqejA4E90eTumRAYvHr9aRG3wsmNq7Mdg0zjtZHM7nB4iRArhtdF648yXUStveQEXccFdPnfAb9eLTFOxeJ27rYQPIJVTaiMcv/iQozZH7LWzkF3Q8MZw0B5MhM7LQd1F30HuInjgDE6R3KGWdhhZ4rYDeYAhdNpGUV0=
+	t=1742392903; cv=none; b=TIhD4Mwdo+T9JCaEpiXRW4913O+3i8k2Yh734CMM4OO0KV9KZ4x8DyFQ6jwd2XFVk8cz6VceOUy9T8MCLZD+3wJNXP2BeIOWcXOW3mwUMp953HS/bjfjhVD0cHZk/hIz0Q7ZRwNsbWUbzlSzL3Csw4MBzMearQuYZ8aQCR239dY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742392465; c=relaxed/simple;
-	bh=bcifr8S4Mb7kY/ExELY32tHcrvskcaRdRJ9ODW1TKuA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r32ZnW34wi+k6gXmigDAsSlI9Ha8t94vCJFynP5mxomBoZc7vn17i+5xSe0hJczNNI+adYC/zgtaHgUo4u3t+AFfN/YoSiyKZJQWqLmIEU/0KE64u0kZh+SKQJBal+BAcAvwv3b0hOhX7rNzGw3f744HZN3C/4tWFCfj3jDy9Ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LDliM1mY; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1742392903; c=relaxed/simple;
+	bh=Cxfy3d8S24ex7ouwQehd3bv8bVD26RHC43WD15fDdoE=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=nT9NTZFAPyogGBbyUzqyFiaD7NK/hMvC/bbC4MzxF7t42GRgcPPTI8xw/h+3+zVoPD/HiVhFHD0IrIWpFfLhWYpfDi1bITJ1HWe6XpHzWfg0X8syPdor4+k973ctyjEAT8xqYU4mJLVs/EURewIsXU0abAdyZbw+HSCV6ZzPvXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=guI65zrP; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742392464; x=1773928464;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bcifr8S4Mb7kY/ExELY32tHcrvskcaRdRJ9ODW1TKuA=;
-  b=LDliM1mYBVQKUGPbjmuD7nrWJvtlzc8/w5VQPVf1g4F9KoPbEuqcJfDe
-   d0mXoJAEkgpDALN0Rt8qx09y5Rtoas74DlrY+UmHesch42jikxd8l5ApK
-   3YG3SXY5B0P0CpAelhm0mYDZlGoTfpmNRDnUJKJu5siWATmHyFwat3u9I
-   RbFXsKp7byU0KomlQqAUxfgGWuiEV+AyGet1x2Ls//+1A/WETziN9fIzT
-   vCPP9v7OCMpf/zTQBTUh30+kzuiwbK4us2gxpMu8/43mbC9Zze0FrmsJd
-   nOAuJJM0rcFgG2+U1jdsBqZHuphXXkoFB0CgVkEx24Z6I89FrWmkjYgkQ
+  t=1742392901; x=1773928901;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Cxfy3d8S24ex7ouwQehd3bv8bVD26RHC43WD15fDdoE=;
+  b=guI65zrP5E3xgySwozR6OFPPS/4b+3f7d2l2CKD86oNdqrcp09SfK3RR
+   G0tNHhAM1IM4ppYggMV6RqPYN2SzVWVMbdnEoFlowQTiGw8WkA2mgyG2i
+   itr+HOPxQ/BhHHa3cQOhrM7BMaLhH8k3SY13buobqAhAEBPN0SxcjVtH5
+   rEklcILppkxcE8JZe963jbhV6Ul4icX3BrMxu4wRkndUkf4bCP2cdO993
+   tJ9tiufg9MxbJGevZ4YlBSSo+NKNGp8xCKdJ+9ReL49sgLbQiFPM6Ezsb
+   /o+473uDQXHhtDSwHklyIvvuj8cGp2XcXgSpDgjIocYW9nNLbmWp8FI9B
    Q==;
-X-CSE-ConnectionGUID: jFQ2uXK7RYqiZ3vbTEJSwA==
-X-CSE-MsgGUID: JdUnqBDUSe28JuTLG+dHag==
-X-IronPort-AV: E=McAfee;i="6700,10204,11378"; a="42754394"
+X-CSE-ConnectionGUID: TTglCm9sRx2UuVq/dt9plQ==
+X-CSE-MsgGUID: v3k77RP6TXK0B583RQ4w1g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11378"; a="43598702"
 X-IronPort-AV: E=Sophos;i="6.14,259,1736841600"; 
-   d="scan'208";a="42754394"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 06:54:23 -0700
-X-CSE-ConnectionGUID: h3mmb4ItRlmBb7GMIaTZ5g==
-X-CSE-MsgGUID: TYOhSRNEQ6ifJfCeT4ys4g==
+   d="scan'208";a="43598702"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 07:01:39 -0700
+X-CSE-ConnectionGUID: NjJY2e4/TBCzYpzX1mxF9Q==
+X-CSE-MsgGUID: BP6enlkOTFeM7vBIP0hAFA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,259,1736841600"; 
-   d="scan'208";a="127449990"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa003.jf.intel.com with SMTP; 19 Mar 2025 06:54:17 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 19 Mar 2025 15:54:16 +0200
-Date: Wed, 19 Mar 2025 15:54:16 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: amitsd@google.com
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	Sebastian Reichel <sre@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
-	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-Subject: Re: [PATCH 2/5] power: supply: core: add function to get supplies
- from fwnode
-Message-ID: <Z9rMiONSFDJInPYM@kuha.fi.intel.com>
-References: <20250312-batt_ops-v1-0-88e0bb3129fd@google.com>
- <20250312-batt_ops-v1-2-88e0bb3129fd@google.com>
+   d="scan'208";a="123120013"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.21])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 07:01:32 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Wed, 19 Mar 2025 16:01:29 +0200 (EET)
+To: Mario Limonciello <superm1@kernel.org>
+cc: Hans de Goede <hdegoede@redhat.com>, 
+    Mario Limonciello <mario.limonciello@amd.com>, 
+    Perry Yuan <perry.yuan@amd.com>, Thomas Gleixner <tglx@linutronix.de>, 
+    Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+    Dave Hansen <dave.hansen@linux.intel.com>, 
+    "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, 
+    "H . Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>, 
+    Huang Rui <ray.huang@amd.com>, 
+    "Gautham R . Shenoy" <gautham.shenoy@amd.com>, 
+    "Rafael J . Wysocki" <rafael@kernel.org>, 
+    Viresh Kumar <viresh.kumar@linaro.org>, 
+    "open list:AMD HETERO CORE HARDWARE FEEDBACK DRIVER" <platform-driver-x86@vger.kernel.org>, 
+    "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <linux-kernel@vger.kernel.org>, 
+    "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
+    "open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>, 
+    Perry Yuan <Perry.Yuan@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH v8 01/13] Documentation: x86: Add AMD Hardware Feedback
+ Interface documentation
+In-Reply-To: <20250218190822.1039982-2-superm1@kernel.org>
+Message-ID: <127a93b0-647f-bb0c-2bf4-649fc4d1f25e@linux.intel.com>
+References: <20250218190822.1039982-1-superm1@kernel.org> <20250218190822.1039982-2-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250312-batt_ops-v1-2-88e0bb3129fd@google.com>
+Content-Type: text/plain; charset=US-ASCII
 
-On Wed, Mar 12, 2025 at 04:42:02PM -0700, Amit Sunil Dhamne via B4 Relay wrote:
-> From: Amit Sunil Dhamne <amitsd@google.com>
+On Tue, 18 Feb 2025, Mario Limonciello wrote:
+
+> From: Perry Yuan <Perry.Yuan@amd.com>
 > 
-> Add a new helper function power_supply_get_by_fwnode_reference_array()
-> to retrieve a list of power_supplies associated with the fwnode's
-> property. The property can contain multiple nodes where each node is
-> associated with a power_supply. The list of power_supply objects will be
-> stored in an array supplied by the caller and the return value will
-> indicate the size of the resulting array.
-
-I don't think this API is necessary. If I've understood what you are
-after here, the batteries should simply have the Type-C psy(s) listed
-in the supplied_to and/or supplied_from.
-
-So you just need to make sure your battery nodes have the USB Type-C
-node(s) listed in the "power-supplies" property in your DT, no?
-
-thanks,
-
-> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> Introduce a new documentation file, `amd_hfi.rst`, which delves into the
+> implementation details of the AMD Hardware Feedback Interface and its
+> associated driver, `amd_hfi`. This documentation describes how the
+> driver provides hint to the OS scheduling which depends on the capability
+> of core performance and efficiency ranking data.
+> 
+> This documentation describes
+> * The design of the driver
+> * How the driver provides hints to the OS scheduling
+> * How the driver interfaces with the kernel for efficiency ranking data.
+> 
+> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
->  drivers/power/supply/power_supply_core.c | 60 ++++++++++++++++++++++++++++++++
->  include/linux/power_supply.h             |  5 +++
->  2 files changed, 65 insertions(+)
+>  Documentation/arch/x86/amd-hfi.rst | 127 +++++++++++++++++++++++++++++
+>  Documentation/arch/x86/index.rst   |   1 +
+>  2 files changed, 128 insertions(+)
+>  create mode 100644 Documentation/arch/x86/amd-hfi.rst
 > 
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-> index 76c340b38015af0a67a0d91305e6242a8646bf53..df1a52f85125748c4fdcb10687aa7ed2f626ded1 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -593,6 +593,66 @@ struct power_supply *devm_power_supply_get_by_phandle(struct device *dev,
->  EXPORT_SYMBOL_GPL(devm_power_supply_get_by_phandle);
->  #endif /* CONFIG_OF */
->  
-> +static int power_supply_match_fwnode(struct device *dev, const void *data)
-> +{
-> +	return dev && dev->parent && dev->parent->fwnode == data;
-> +}
+> diff --git a/Documentation/arch/x86/amd-hfi.rst b/Documentation/arch/x86/amd-hfi.rst
+> new file mode 100644
+> index 0000000000000..5d204688470e3
+> --- /dev/null
+> +++ b/Documentation/arch/x86/amd-hfi.rst
+> @@ -0,0 +1,127 @@
+> +.. SPDX-License-Identifier: GPL-2.0
 > +
-> +/**
-> + * power_supply_get_by_fwnode_reference_array() - Returns an array of power
-> + * supply objects associated with each fwnode reference present in the property
-> + * @fwnode: Pointer to fwnode to lookup property
-> + * @property: Name of property holding references
-> + * @psy: Resulting array of power_supply pointers. To be provided by the caller.
-> + * @size: size of power_supply pointer array.
-> + *
-> + * If power supply was found, it increases reference count for the
-> + * internal power supply's device. The user should power_supply_put()
-> + * after usage.
-> + *
-> + * Return: On success returns the number of power supply objects filled
-> + * in the @psy array.
-> + * -EOVERFLOW when size of @psy array is not suffice.
-> + * -EINVAL when @psy is NULL or @size is 0.
-> + * -ENODATA when fwnode does not contain the given property
-> + */
-> +int power_supply_get_by_fwnode_reference_array(struct fwnode_handle *fwnode,
-> +					       const char *property,
-> +					       struct power_supply **psy,
-> +					       ssize_t size)
-> +{
-> +	int ret, index, count = 0;
-> +	struct fwnode_reference_args args;
-> +	struct device *dev;
+> +======================================================================
+> +Hardware Feedback Interface For Hetero Core Scheduling On AMD Platform
+> +======================================================================
 > +
-> +	if (!psy || !size)
-> +		return -EINVAL;
+> +:Copyright: 2024 Advanced Micro Devices, Inc. All Rights Reserved.
 > +
-> +	for (index = 0; index < size &&
-> +	     !(ret = fwnode_property_get_reference_args(fwnode, property, NULL,
-> +							0, index, &args));
-> +	     ++index) {
-> +		dev = class_find_device(&power_supply_class, NULL, args.fwnode,
-> +					power_supply_match_fwnode);
-> +		fwnode_handle_put(args.fwnode);
-> +		if (!dev)
-> +			continue;
+> +:Author: Perry Yuan <perry.yuan@amd.com>
+> +:Author: Mario Limonciello <mario.limonciello@amd.com>
 > +
-> +		if (count > size)
-> +			return -EOVERFLOW;
+> +Overview
+> +--------
 > +
-> +		psy[count] = dev_get_drvdata(dev);
-> +		atomic_inc(&psy[count]->use_cnt);
-> +		++count;
-> +	}
+> +AMD Heterogeneous Core implementations are comprised of more than one
+> +architectural class and CPUs are comprised of cores of various efficiency and
+> +power capabilities: performance-oriented *classic cores* and power-efficient
+> +*dense cores*. As such, power management strategies must be designed to
+> +accommodate the complexities introduced by incorporating different core types.
+> +Heterogeneous systems can also extend to more than two architectural classes as
+> +well. The purpose of the scheduling feedback mechanism is to provide
+> +information to the operating system scheduler in real time such that the
+> +scheduler can direct threads to the optimal core.
 > +
-> +	if (ret != -ENOENT)
-> +		return ret;
+> +The goal of AMD's heterogeneous architecture is to attain power benefit by sending
+> +background thread to the dense cores while sending high priority threads to the classic
+> +cores. From a performance perspective, sending background threads to dense cores can free
+> +up power headroom and allow the classic cores to optimally service demanding threads.
+> +Furthermore, the area optimized nature of the dense cores allows for an increasing
+> +number of physical cores. This improved core density will have positive multithreaded
+> +performance impact.
+
+Hi Mario,
+
+Please fold these paragraphs to 80 characters so that they're easier to 
+read as textfiles (the table can obviously exceed that but there should be 
+no reason for the text paragraphs to have excessively long lines).
+
+My apologies for taking so long to get to review this series. Most of my 
+comments are quite minor but there's also 1-2 things that seem more 
+important. It seemed to me that there is some disconnetion between the 
+promises made in the Kconfig description and what is provided by the patch 
+series.
+
+--
+ i.
+
 > +
-> +	return index ? count : -ENODATA;
-> +}
-> +EXPORT_SYMBOL_GPL(power_supply_get_by_fwnode_reference_array);
+> +AMD Heterogeneous Core Driver
+> +-----------------------------
 > +
->  int power_supply_get_battery_info(struct power_supply *psy,
->  				  struct power_supply_battery_info **info_out)
->  {
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index 6ed53b292162469d7b357734d5589bff18a201d0..3f062607e5cd7c7f04384e34128ae0953e25d981 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -820,6 +820,11 @@ devm_power_supply_get_by_phandle(struct device *dev, const char *property)
->  { return NULL; }
->  #endif /* CONFIG_OF */
->  
-> +extern int
-> +power_supply_get_by_fwnode_reference_array(struct fwnode_handle *fwnode,
-> +					   const char *property,
-> +					   struct power_supply **psy,
-> +					   ssize_t size);
->  extern const enum power_supply_property power_supply_battery_info_properties[];
->  extern const size_t power_supply_battery_info_properties_size;
->  extern int power_supply_get_battery_info(struct power_supply *psy,
-> 
-> -- 
-> 2.49.0.rc0.332.g42c0ae87b1-goog
+> +The ``amd_hfi`` driver delivers the operating system a performance and energy efficiency
+> +capability data for each CPU in the system. The scheduler can use the ranking data
+> +from the HFI driver to make task placement decisions.
+> +
+> +Thread Classification and Ranking Table Interaction
+> +----------------------------------------------------
+> +
+> +The thread classification is used to select into a ranking table that describes
+> +an efficiency and performance ranking for each classification.
+> +
+> +Threads are classified during runtime into enumerated classes. The classes represent
+> +thread performance/power characteristics that may benefit from special scheduling behaviors.
+> +The below table depicts an example of thread classification and a preference where a given thread
+> +should be scheduled based on its thread class. The real time thread classification is consumed
+> +by the operating system and is used to inform the scheduler of where the thread should be placed.
+> +
+> +Thread Classification Example Table
+> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> ++----------+----------------+-------------------------------+---------------------+---------+
+> +| class ID | Classification | Preferred scheduling behavior | Preemption priority | Counter |
+> ++----------+----------------+-------------------------------+---------------------+---------+
+> +| 0        | Default        | Performant                    | Highest             |         |
+> ++----------+----------------+-------------------------------+---------------------+---------+
+> +| 1        | Non-scalable   | Efficient                     | Lowest              | PMCx1A1 |
+> ++----------+----------------+-------------------------------+---------------------+---------+
+> +| 2        | I/O bound      | Efficient                     | Lowest              | PMCx044 |
+> ++----------+----------------+-------------------------------+---------------------+---------+
+> +
+> +Thread classification is performed by the hardware each time that the thread is switched out.
+> +Threads that don't meet any hardware specified criteria will be classified as "default".
+> +
+> +AMD Hardware Feedback Interface
+> +--------------------------------
+> +
+> +The Hardware Feedback Interface provides to the operating system information
+> +about the performance and energy efficiency of each CPU in the system. Each
+> +capability is given as a unit-less quantity in the range [0-255]. A higher
+> +performance value indicates higher performance capability, and a higher
+> +efficiency value indicates more efficiency. Energy efficiency and performance
+> +are reported in separate capabilities in the shared memory based ranking table.
+> +
+> +These capabilities may change at runtime as a result of changes in the
+> +operating conditions of the system or the action of external factors.
+> +Power Management FW is responsible for detecting events that would require
+> +a reordering of the performance and efficiency ranking. Table updates would
+> +happen relatively infrequently and occur on the time scale of seconds or more.
+> +
+> +The following events trigger a table update:
+> +    * Thermal Stress Events
+> +    * Silent Compute
+> +    * Extreme Low Battery Scenarios
+> +
+> +The kernel or a userspace policy daemon can use these capabilities to modify
+> +task placement decisions. For instance, if either the performance or energy
+> +capabilities of a given logical processor becomes zero, it is an indication that
+> +the hardware recommends to the operating system to not schedule any tasks on
+> +that processor for performance or energy efficiency reasons, respectively.
+> +
+> +Implementation details for Linux
+> +--------------------------------
+> +
+> +The implementation of threads scheduling consists of the following steps:
+> +
+> +1. A thread is spawned and scheduled to the ideal core using the default
+> +   heterogeneous scheduling policy.
+> +2. The processor profiles thread execution and assigns an enumerated classification ID.
+> +   This classification is communicated to the OS via logical processor scope MSR.
+> +3. During the thread context switch out the operating system consumes the workload(WL)
+> +   classification which resides in a logical processor scope MSR.
+> +4. The OS triggers the hardware to clear its history by writing to an MSR,
+> +   after consuming the WL classification and before switching in the new thread.
+> +5. If due to the classification, ranking table, and processor availability,
+> +   the thread is not on its ideal processor, the OS will then consider scheduling
+> +   the thread on its ideal processor (if available).
+> +
+> +Ranking Table
+> +-------------
+> +The ranking table is a shared memory region that is used to communicate the
+> +performance and energy efficiency capabilities of each CPU in the system.
+> +
+> +The ranking table design includes rankings for each APIC ID in the system and
+> +rankings both for performance and efficiency for each workload classification.
+> +
+> +.. kernel-doc:: drivers/platform/x86/amd/hfi/hfi.c
+> +   :doc: amd_shmem_info
+> +
+> +Ranking Table update
+> +---------------------------
+> +The power management firmware issues an platform interrupt after updating the ranking
+> +table and is ready for the operating system to consume it. CPUs receive such interrupt
+> +and read new ranking table from shared memory which PCCT table has provided, then
+> +``amd_hfi`` driver parse the new table to provide new consume data for scheduling decisions.
+> diff --git a/Documentation/arch/x86/index.rst b/Documentation/arch/x86/index.rst
+> index 8ac64d7de4dc9..56f2923f52597 100644
+> --- a/Documentation/arch/x86/index.rst
+> +++ b/Documentation/arch/x86/index.rst
+> @@ -43,3 +43,4 @@ x86-specific Documentation
+>     features
+>     elf_auxvec
+>     xstate
+> +   amd-hfi
 > 
 
 -- 
-heikki
+ i.
+
 
