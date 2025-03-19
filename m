@@ -1,65 +1,65 @@
-Return-Path: <linux-pm+bounces-24284-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24285-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E1FFA68F1B
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 15:30:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11480A68E93
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 15:11:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B55119C44C9
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 14:04:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1AC083A81CC
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 14:07:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB9A21957FF;
-	Wed, 19 Mar 2025 14:04:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E23E1B0F33;
+	Wed, 19 Mar 2025 14:05:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WALkGqdZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nsnGL11R"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5727192D70;
-	Wed, 19 Mar 2025 14:04:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B6223AD;
+	Wed, 19 Mar 2025 14:05:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742393060; cv=none; b=p01SQkJgpyWc1dER/5cXMq6ifdCjX2hPsL/AHAEnXQuZgq70IWhT6NbQzw9WZ9/DQLrosfqP/8qU4A3cze3+S9KAh1kvQevc3Jk5wVp/vER+M8Iq3WZNr+nda5zj1upS8Df/hEgwAfOkID3/WIffFOgSkeUGpAVcz9RSbLTLfPo=
+	t=1742393112; cv=none; b=rLYSLNhItW76WO3uXy2dlw+i12+w6JeXnZk0ddb9iZr0tNl725WsLMJ2WNBge9rGjiZgXU3fXNwCGwCbgAwOCVfyTtL9OJDro5cnfU/xW39dCER+lyOcPRkJnbmMdwyHAexGZ88Yl5PdHpbg84IVeu/nSaINw58xYorM5AoUqZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742393060; c=relaxed/simple;
-	bh=yNhIuTQT3zGiXEdB6/mmhb/2R9aYMDsjHWvjnm36/zg=;
+	s=arc-20240116; t=1742393112; c=relaxed/simple;
+	bh=auuj8U0iIZPEnK1LHdzsygpODXcIt/+SyEI16lyN7Eo=;
 	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=n1NRPjycMHykS0T2kY9ZlrRvzqNqvsHmYHRS5qnsN4ocaunmwsxH5CmRtuEiToy/cGMuidtrVeNP2dsA1xfPU5oQH71+NoPhLLlU1n+VFXyOH3LjJRQ2Qidk+WOz1YuqgekVOTZauR0KM134QFWs4WlRfOQYurWJpYGqfYJNDIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WALkGqdZ; arc=none smtp.client-ip=198.175.65.15
+	 MIME-Version:Content-Type; b=PpE/Sg/2dcS+2DXJ9cmQHrYrtCJRi7qpYQj/nnHlY1bguJN7T8/xOyPeb6EiGha9NsLGF/o27dA2n8TBh+UR8S8AZ3Z3t36GUBRaGV2JHr7jpQ9PnDubUvs+AL8iRylf/eDVV1A10hafahjrKqXkP8F8MCHFhqzIg4DBMqIWSac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nsnGL11R; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742393059; x=1773929059;
+  t=1742393111; x=1773929111;
   h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=yNhIuTQT3zGiXEdB6/mmhb/2R9aYMDsjHWvjnm36/zg=;
-  b=WALkGqdZT9ztnpnbxfZj8Jy75ng4Q0n/nLqkisCYhNzX1K17RN3sWJAc
-   Nd9WCsydWW563+VMLUBOMGnV0v6GedEkZxzI9QeT5TH+/PaQgo6f3ECDf
-   PAqQjNhyeBtEd1S1P5VyJQIMXyOf5+ifKFnyajza3Tu6LeJ5bNvq7rNSZ
-   cFKvgF5rgUzdt28cBz6jW00ATnTkf42+XaXhT1I/fKaG2i5MHkp1eKSO4
-   KyT2lu8r0TezU+uI9y0Fq2z4iue9FqBP2hg/XT/N1r5BmSaHSZjPUhTKR
-   1vnCWCshfj59yni2QLI7MRIH71Ilpu80MYq1+W7VIscYq2dPl3FXW6+81
-   g==;
-X-CSE-ConnectionGUID: 7dpgSW+XTj2jZffE8yhZoQ==
-X-CSE-MsgGUID: U/gmOheaQAa1iXWwSE0/YQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11378"; a="47232890"
+   references:mime-version;
+  bh=auuj8U0iIZPEnK1LHdzsygpODXcIt/+SyEI16lyN7Eo=;
+  b=nsnGL11RzyFIT2D2ZW3Z0Bgrc/G7v5clCxlCz3PIMTeo6E2Ogz88BFPR
+   F+1oAsMmITkW2w5w/MN8D4iL6WMCp16BVibHlsqcyt1ICougG3HL93Y8V
+   Z/gJxUxgMe4DadNVaMafm+i4fVMKZavhX9YbVolivAR9Rl/AlSoRYha/1
+   xWjElhL9V1d9yBQn/NKTomDgi9Av6M83LVFbAqjNKJNrwGjmrq0DyP0nY
+   bCjCRx0583q1gc+PcB83TGDZ8LEb7OPiw8TlGmj4bGTJL8WpOZMRlz6sv
+   MGjoZFbhh09J3hsIlkcqcu4nwfPz0URHSPlX/LRalO7dmcgJMdqds2lK3
+   Q==;
+X-CSE-ConnectionGUID: hdpH3kv1Qf++MTe0Tbskdg==
+X-CSE-MsgGUID: d4sEPQUNT06ihujwSqbc+w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11378"; a="60977797"
 X-IronPort-AV: E=Sophos;i="6.14,259,1736841600"; 
-   d="scan'208";a="47232890"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 07:04:18 -0700
-X-CSE-ConnectionGUID: XTpZtMN2TgaM/N8iE8gasQ==
-X-CSE-MsgGUID: aG1afJdCRXW3BdwLM5Db+w==
+   d="scan'208";a="60977797"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 07:04:52 -0700
+X-CSE-ConnectionGUID: 8ypkxE1JQJ2856hFDMdnqQ==
+X-CSE-MsgGUID: wr1YiOOiTR6BDJYmJW9OEg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,259,1736841600"; 
-   d="scan'208";a="123567401"
+   d="scan'208";a="159812919"
 Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.21])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 07:04:10 -0700
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 07:04:44 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 19 Mar 2025 16:04:07 +0200 (EET)
+Date: Wed, 19 Mar 2025 16:04:40 +0200 (EET)
 To: Mario Limonciello <superm1@kernel.org>
 cc: Hans de Goede <hdegoede@redhat.com>, 
     Mario Limonciello <mario.limonciello@amd.com>, 
@@ -77,368 +77,192 @@ cc: Hans de Goede <hdegoede@redhat.com>,
     "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
     "open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>, 
     Perry Yuan <Perry.Yuan@amd.com>
-Subject: Re: [PATCH v8 05/13] platform/x86: hfi: parse CPU core ranking data
- from shared memory
-In-Reply-To: <20250218190822.1039982-6-superm1@kernel.org>
-Message-ID: <ce01e34c-f0c4-e97f-70ee-ddd3e8714285@linux.intel.com>
-References: <20250218190822.1039982-1-superm1@kernel.org> <20250218190822.1039982-6-superm1@kernel.org>
+Subject: Re: [PATCH v8 07/13] platform/x86: hfi: add online and offline
+ callback support
+In-Reply-To: <20250218190822.1039982-8-superm1@kernel.org>
+Message-ID: <529e9c45-df4f-440e-3232-106cbec12faf@linux.intel.com>
+References: <20250218190822.1039982-1-superm1@kernel.org> <20250218190822.1039982-8-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-968895965-1742388947=:10063"
-Content-ID: <fa88ff83-6072-fdfd-cdf6-0a17ccea4813@linux.intel.com>
-
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323328-968895965-1742388947=:10063
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <0dff5233-9270-e1ad-16f8-ae976a417165@linux.intel.com>
+Content-Type: text/plain; charset=US-ASCII
 
 On Tue, 18 Feb 2025, Mario Limonciello wrote:
 
 > From: Perry Yuan <Perry.Yuan@amd.com>
->=20
-> When `amd_hfi` driver is loaded, it will use PCCT subspace type 4 table
-> to retrieve the shared memory address which contains the CPU core ranking
-> table. This table includes a header that specifies the number of ranking
-> data entries to be parsed and rank each CPU core with the Performance and
-> Energy Efficiency capability as implemented by the CPU power management
-> firmware.
->=20
-> Once the table has been parsed, each CPU is assigned a ranking score
-> within its class. Subsequently, when the scheduler selects cores, it
-> chooses from the ranking list based on the assigned scores in each class,
-> thereby ensuring the optimal selection of CPU cores according to their
-> predefined classifications and priorities.
->=20
-> Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
+> 
+> There are some firmware parameters that need to be configured
+> when a CPU core is brought online or offline.
+> 
+> when CPU is online, it will initialize the workload classification
+> parameters to CPU firmware which will trigger the workload class ID
+> updating function.
+> 
+> Once the CPU is going to offline, it will need to disable the workload
+> classification function and clear the history.
+> 
+> Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 > Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
 > Co-developed-by: Mario Limonciello <mario.limonciello@amd.com>
 > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
-> v3:
->  * Reverse xmas tree order in amd_hfi_fill_metadata()
->  * s,for_each_present_cpu,for_each_possible_cpu,
-> v2:
->  * Drop __packed
+> v8:
+>  * Move cpus member to this patch
+>  * Add comment about online
+> v7:
+>  * move mutex to this patch
 > ---
->  drivers/platform/x86/amd/hfi/hfi.c | 194 +++++++++++++++++++++++++++++
->  1 file changed, 194 insertions(+)
->=20
-> diff --git a/drivers/platform/x86/amd/hfi/hfi.c b/drivers/platform/x86/am=
-d/hfi/hfi.c
-> index 426f7e520b76c..7ab7ae0ec72ca 100644
+>  drivers/platform/x86/amd/hfi/hfi.c | 87 ++++++++++++++++++++++++++++++
+>  1 file changed, 87 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/amd/hfi/hfi.c b/drivers/platform/x86/amd/hfi/hfi.c
+> index e1550f4463275..90b57175ccd97 100644
 > --- a/drivers/platform/x86/amd/hfi/hfi.c
 > +++ b/drivers/platform/x86/amd/hfi/hfi.c
-> @@ -18,22 +18,72 @@
->  #include <linux/io.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
-> +#include <linux/mailbox_client.h>
->  #include <linux/mutex.h>
-> +#include <linux/percpu-defs.h>
->  #include <linux/platform_device.h>
->  #include <linux/smp.h>
-> +#include <linux/topology.h>
-> +#include <linux/workqueue.h>
-> +
-> +#include <asm/cpu_device_id.h>
-> +
-> +#include <acpi/pcc.h>
-> +#include <acpi/cppc_acpi.h>
-> =20
->  #define AMD_HFI_DRIVER=09=09"amd_hfi"
-> +#define AMD_HFI_MAILBOX_COUNT=09=091
-> +#define AMD_HETERO_RANKING_TABLE_VER=092
-> =20
->  #define AMD_HETERO_CPUID_27=090x80000027
-> =20
->  static struct platform_device *device;
-> =20
-> +/**
-> + * struct amd_shmem_info - Shared memory table for AMD HFI
-> + *
-> + * @header:=09The PCCT table header including signature, length flags an=
-d command.
-> + * @version_number:=09=09Version number of the table
-> + * @n_logical_processors:=09Number of logical processors
-> + * @n_capabilities:=09=09Number of ranking dimensions (performance, effi=
-ciency, etc)
-> + * @table_update_context:=09Command being sent over the subspace
-> + * @n_bitmaps:=09=09=09Number of 32-bit bitmaps to enumerate all the API=
-C IDs
-> + *=09=09=09=09This is based on the maximum APIC ID enumerated in the sys=
-tem
-> + * @reserved:=09=09=0924 bit spare
-> + * @table_data:=09=09=09Bit Map(s) of enabled logical processors
-> + *=09=09=09=09Followed by the ranking data for each logical processor
-> + */
-> +struct amd_shmem_info {
-> +=09struct acpi_pcct_ext_pcc_shared_memory header;
-> +=09u32=09version_number=09=09:8,
-> +=09=09n_logical_processors=09:8,
-> +=09=09n_capabilities=09=09:8,
-> +=09=09table_update_context=09:8;
-> +=09u32=09n_bitmaps=09=09:8,
-> +=09=09reserved=09=09:24;
-> +=09u32=09table_data[];
-> +};
-> +
->  struct amd_hfi_data {
->  =09const char=09*name;
->  =09struct device=09*dev;
->  =09struct mutex=09lock;
-> +
-> +=09/* PCCT table related*/
-
-Missing space.
-
-> +=09struct pcc_mbox_chan=09*pcc_chan;
-> +=09void __iomem=09=09*pcc_comm_addr;
-> +=09struct acpi_subtable_header=09*pcct_entry;
-> +=09struct amd_shmem_info=09*shmem;
->  };
-> =20
-> +/**
-> + * struct amd_hfi_classes - HFI class capabilities per CPU
-> + * @perf:=09Performance capability
-> + * @eff:=09Power efficiency capability
-> + *
-> + * Capabilities of a logical processor in the ranking table. These capab=
-ilities
-> + * are unitless and specific to each HFI class.
-> + */
->  struct amd_hfi_classes {
->  =09u32=09perf;
->  =09u32=09eff;
-> @@ -42,21 +92,103 @@ struct amd_hfi_classes {
->  /**
+> @@ -93,6 +93,7 @@ struct amd_hfi_classes {
 >   * struct amd_hfi_cpuinfo - HFI workload class info per CPU
->   * @cpu:=09=09cpu index
-> + * @apic_id:=09=09apic id of the current cpu
->   * @class_index:=09workload class ID index
->   * @nr_class:=09=09max number of workload class supported
-> + * @ipcc_scores:=09ipcc scores for each class
->   * @amd_hfi_classes:=09current cpu workload class ranking data
->   *
->   * Parameters of a logical processor linked with hardware feedback class
->   */
+>   * @cpu:		cpu index
+>   * @apic_id:		apic id of the current cpu
+> + * @cpus:		mask of cpus associated with amd_hfi_cpuinfo
+>   * @class_index:	workload class ID index
+>   * @nr_class:		max number of workload class supported
+>   * @ipcc_scores:	ipcc scores for each class
+> @@ -103,6 +104,7 @@ struct amd_hfi_classes {
 >  struct amd_hfi_cpuinfo {
->  =09int=09=09cpu;
-> +=09u32=09=09apic_id;
->  =09s16=09=09class_index;
->  =09u8=09=09nr_class;
-> +=09int=09=09*ipcc_scores;
->  =09struct amd_hfi_classes=09*amd_hfi_classes;
->  };
-> =20
->  static DEFINE_PER_CPU(struct amd_hfi_cpuinfo, amd_hfi_cpuinfo) =3D {.cla=
-ss_index =3D -1};
-> =20
-> +static int find_cpu_index_by_apicid(unsigned int target_apicid)
-> +{
-> +=09int cpu_index;
-> +
-> +=09for_each_possible_cpu(cpu_index) {
-> +=09=09struct cpuinfo_x86 *info =3D &cpu_data(cpu_index);
-> +
-> +=09=09if (info->topo.apicid =3D=3D target_apicid) {
-> +=09=09=09pr_debug("match APIC id %d for CPU index: %d\n",
-> +=09=09=09=09 info->topo.apicid, cpu_index);
+>  	int		cpu;
+>  	u32		apic_id;
+> +	cpumask_var_t	cpus;
+>  	s16		class_index;
+>  	u8		nr_class;
+>  	int		*ipcc_scores;
+> @@ -111,6 +113,8 @@ struct amd_hfi_cpuinfo {
+>  
+>  static DEFINE_PER_CPU(struct amd_hfi_cpuinfo, amd_hfi_cpuinfo) = {.class_index = -1};
+>  
+> +static DEFINE_MUTEX(hfi_cpuinfo_lock);
 
-apicid is unsigned.
+Please mention what this protects.
 
-> +=09=09=09return cpu_index;
-> +=09=09}
-> +=09}
 > +
-> +=09return -ENODEV;
-> +}
-> +
-> +static int amd_hfi_fill_metadata(struct amd_hfi_data *amd_hfi_data)
-> +{
-> +=09struct acpi_pcct_ext_pcc_slave *pcct_ext =3D
-> +=09=09(struct acpi_pcct_ext_pcc_slave *)amd_hfi_data->pcct_entry;
-> +=09void __iomem *pcc_comm_addr;
-> +
-> +=09pcc_comm_addr =3D acpi_os_ioremap(amd_hfi_data->pcc_chan->shmem_base_=
-addr,
-> +=09=09=09=09=09amd_hfi_data->pcc_chan->shmem_size);
-> +=09if (!pcc_comm_addr) {
-> +=09=09pr_err("failed to ioremap PCC common region mem\n");
-
-Don't you have ->dev available in amd_hfi_data so you could use dev_*()=20
-for all prints?
-
-> +=09=09return -ENOMEM;
-> +=09}
-> +
-> +=09memcpy_fromio(amd_hfi_data->shmem, pcc_comm_addr, pcct_ext->length);
-> +=09iounmap(pcc_comm_addr);
-> +
-> +=09if (amd_hfi_data->shmem->header.signature !=3D PCC_SIGNATURE) {
-> +=09=09pr_err("invalid signature in shared memory\n");
-> +=09=09return -EINVAL;
-> +=09}
-> +=09if (amd_hfi_data->shmem->version_number !=3D AMD_HETERO_RANKING_TABLE=
-_VER) {
-> +=09=09pr_err("invalid version %d\n", amd_hfi_data->shmem->version_number=
-);
-> +=09=09return -EINVAL;
-> +=09}
-> +
-> +=09for (unsigned int i =3D 0; i < amd_hfi_data->shmem->n_bitmaps; i++) {
-> +=09=09u32 bitmap =3D amd_hfi_data->shmem->table_data[i];
-> +
-> +=09=09for (unsigned int j =3D 0; j < BITS_PER_TYPE(u32); j++) {
-> +=09=09=09int apic_id =3D i * BITS_PER_TYPE(u32) + j;
-
-Why is this signed?
-
-If you change to unsigned int, remember to adjust the print line too.
-
-> +=09=09=09struct amd_hfi_cpuinfo *info;
-> +=09=09=09int cpu_index;
-> +
-> +=09=09=09if (!(bitmap & BIT(j)))
-> +=09=09=09=09continue;
-> +
-> +=09=09=09cpu_index =3D find_cpu_index_by_apicid(apic_id);
-> +=09=09=09if (cpu_index < 0) {
-> +=09=09=09=09pr_warn("APIC ID %d not found\n", apic_id);
-> +=09=09=09=09continue;
-> +=09=09=09}
-> +
-> +=09=09=09info =3D per_cpu_ptr(&amd_hfi_cpuinfo, cpu_index);
-> +=09=09=09info->apic_id =3D apic_id;
-> +
-> +=09=09=09/* Fill the ranking data for each logical processor */
-> +=09=09=09info =3D per_cpu_ptr(&amd_hfi_cpuinfo, cpu_index);
-> +=09=09=09for (unsigned int k =3D 0; k < info->nr_class; k++) {
-> +=09=09=09=09u32 *table =3D amd_hfi_data->shmem->table_data +
-> +=09=09=09=09=09     amd_hfi_data->shmem->n_bitmaps +
-> +=09=09=09=09=09     i * info->nr_class;
-> +
-> +=09=09=09=09info->amd_hfi_classes[k].eff =3D table[apic_id + 2 * k];
-> +=09=09=09=09info->amd_hfi_classes[k].perf =3D table[apic_id + 2 * k + 1]=
-;
-> +=09=09=09}
-> +=09=09}
-> +=09}
-> +
-> +=09return 0;
-> +}
-> +
->  static int amd_hfi_alloc_class_data(struct platform_device *pdev)
+>  static int find_cpu_index_by_apicid(unsigned int target_apicid)
 >  {
->  =09struct amd_hfi_cpuinfo *hfi_cpuinfo;
-> @@ -73,6 +205,7 @@ static int amd_hfi_alloc_class_data(struct platform_de=
-vice *pdev)
-> =20
->  =09for_each_possible_cpu(idx) {
->  =09=09struct amd_hfi_classes *classes;
-> +=09=09int *ipcc_scores;
-> =20
->  =09=09classes =3D devm_kcalloc(dev,
->  =09=09=09=09       nr_class_id,
-> @@ -80,14 +213,71 @@ static int amd_hfi_alloc_class_data(struct platform_=
-device *pdev)
->  =09=09=09=09       GFP_KERNEL);
->  =09=09if (!classes)
->  =09=09=09return -ENOMEM;
-> +=09=09ipcc_scores =3D devm_kcalloc(dev, nr_class_id, sizeof(int), GFP_KE=
-RNEL);
-> +=09=09if (!ipcc_scores)
-> +=09=09=09return -ENOMEM;
->  =09=09hfi_cpuinfo =3D per_cpu_ptr(&amd_hfi_cpuinfo, idx);
->  =09=09hfi_cpuinfo->amd_hfi_classes =3D classes;
-> +=09=09hfi_cpuinfo->ipcc_scores =3D ipcc_scores;
->  =09=09hfi_cpuinfo->nr_class =3D nr_class_id;
->  =09}
-> =20
->  =09return 0;
+>  	int cpu_index;
+> @@ -234,6 +238,80 @@ static int amd_set_hfi_ipcc_score(struct amd_hfi_cpuinfo *hfi_cpuinfo, int cpu)
+>  	return 0;
 >  }
-> =20
-> +static int amd_hfi_metadata_parser(struct platform_device *pdev,
-> +=09=09=09=09   struct amd_hfi_data *amd_hfi_data)
+>  
+> +static int amd_hfi_set_state(unsigned int cpu, bool state)
 > +{
-> +=09struct acpi_pcct_ext_pcc_slave *pcct_ext;
-> +=09struct acpi_subtable_header *pcct_entry;
-> +=09struct mbox_chan *pcc_mbox_channels;
-> +=09struct acpi_table_header *pcct_tbl;
-> +=09struct pcc_mbox_chan *pcc_chan;
-> +=09acpi_status status;
-> +=09int ret;
+> +	int ret;
 > +
-> +=09pcc_mbox_channels =3D devm_kcalloc(&pdev->dev, AMD_HFI_MAILBOX_COUNT,
-> +=09=09=09=09=09 sizeof(*pcc_mbox_channels), GFP_KERNEL);
-> +=09if (!pcc_mbox_channels)
-> +=09=09return -ENOMEM;
-> +
-> +=09pcc_chan =3D devm_kcalloc(&pdev->dev, AMD_HFI_MAILBOX_COUNT,
-> +=09=09=09=09sizeof(*pcc_chan), GFP_KERNEL);
-> +=09if (!pcc_chan)
-> +=09=09return -ENOMEM;
-> +
-> +=09status =3D acpi_get_table(ACPI_SIG_PCCT, 0, &pcct_tbl);
-> +=09if (ACPI_FAILURE(status) || !pcct_tbl)
-> +=09=09return -ENODEV;
-> +
-> +=09/* get pointer to the first PCC subspace entry */
-> +=09pcct_entry =3D (struct acpi_subtable_header *) (
-> +=09=09=09(unsigned long)pcct_tbl + sizeof(struct acpi_table_pcct));
-> +
-> +=09pcc_chan->mchan =3D &pcc_mbox_channels[0];
-> +
-> +=09amd_hfi_data->pcc_chan =3D pcc_chan;
-> +=09amd_hfi_data->pcct_entry =3D pcct_entry;
-> +=09pcct_ext =3D (struct acpi_pcct_ext_pcc_slave *)pcct_entry;
-> +
-> +=09if (pcct_ext->length <=3D 0)
-> +=09=09return -EINVAL;
-> +
-> +=09amd_hfi_data->shmem =3D devm_kzalloc(amd_hfi_data->dev, pcct_ext->len=
-gth, GFP_KERNEL);
-> +=09if (!amd_hfi_data->shmem)
-> +=09=09return -ENOMEM;
-> +
-> +=09pcc_chan->shmem_base_addr =3D pcct_ext->base_address;
-> +=09pcc_chan->shmem_size =3D pcct_ext->length;
-> +
-> +=09/* parse the shared memory info from the pcct table */
+> +	ret = wrmsrl_on_cpu(cpu, AMD_WORKLOAD_CLASS_CONFIG, state);
 
-PCCT
+I'd prefer bool -> u64 conversion be done explicitly, eg. ,with ?: 
+operator.
 
-> +=09ret =3D amd_hfi_fill_metadata(amd_hfi_data);
+> +	if (ret)
+> +		return ret;
 > +
-> +=09acpi_put_table(pcct_tbl);
-> +
-> +=09return ret;
+> +	return wrmsrl_on_cpu(cpu, AMD_WORKLOAD_HRST, 0x1);
 > +}
 > +
->  static const struct acpi_device_id amd_hfi_platform_match[] =3D {
->  =09{"AMDI0104", 0},
->  =09{ }
-> @@ -116,6 +306,10 @@ static int amd_hfi_probe(struct platform_device *pde=
-v)
->  =09if (ret)
->  =09=09return ret;
-> =20
-> +=09ret =3D amd_hfi_metadata_parser(pdev, amd_hfi_data);
-> +=09if (ret)
-> +=09=09return ret;
+> +/**
+> + * amd_hfi_online() - Enable workload classification on @cpu
+> + * @cpu: CPU in which the workload classification will be enabled
+> + *
+> + * Return: 0 on success, negative error code on failure
+> + */
+> +static int amd_hfi_online(unsigned int cpu)
+> +{
+> +	struct amd_hfi_cpuinfo *hfi_info = per_cpu_ptr(&amd_hfi_cpuinfo, cpu);
+> +	struct amd_hfi_classes *hfi_classes;
+> +	int ret;
 > +
->  =09return 0;
->  }
-> =20
->=20
+> +	if (WARN_ON_ONCE(!hfi_info))
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * Check if @cpu as an associated, initialized and ranking data must be filled
 
---=20
+Please fold to 80 characters.
+
+> +	 */
+> +	hfi_classes = hfi_info->amd_hfi_classes;
+> +	if (!hfi_classes)
+> +		return -EINVAL;
+> +
+> +	guard(mutex)(&hfi_cpuinfo_lock);
+> +
+> +	if (!zalloc_cpumask_var(&hfi_info->cpus, GFP_KERNEL))
+> +		return -ENOMEM;
+> +
+> +	cpumask_set_cpu(cpu, hfi_info->cpus);
+> +
+> +	ret = amd_hfi_set_state(cpu, true);
+> +	if (ret)
+> +		pr_err("WCT enable failed for CPU %d\n", cpu);
+
+%u
+
+> +
+> +	return ret;
+> +}
+> +
+> +/**
+> + * amd_hfi_offline() - Disable workload classification on @cpu
+> + * @cpu: CPU in which the workload classification will be disabled
+> + *
+> + * Remove @cpu from those covered by its HFI instance.
+> + *
+> + * Return: 0 on success, negative error code on failure
+> + */
+> +static int amd_hfi_offline(unsigned int cpu)
+> +{
+> +	struct amd_hfi_cpuinfo *hfi_info = &per_cpu(amd_hfi_cpuinfo, cpu);
+> +	int ret;
+> +
+> +	if (WARN_ON_ONCE(!hfi_info))
+> +		return -EINVAL;
+> +
+> +	guard(mutex)(&hfi_cpuinfo_lock);
+> +
+> +	ret = amd_hfi_set_state(cpu, false);
+> +	if (ret)
+> +		pr_err("WCT disable failed for CPU %d\n", cpu);
+
+%u
+
+> +
+> +	free_cpumask_var(hfi_info->cpus);
+> +
+> +	return ret;
+> +}
+> +
+>  static int update_hfi_ipcc_scores(void)
+>  {
+>  	int cpu;
+> @@ -339,6 +417,15 @@ static int amd_hfi_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> +	/*
+> +	 * Tasks will already be running at the time this happens. This is
+> +	 * OK because rankings will be adjusted by the callbacks.
+> +	 */
+> +	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "x86/amd_hfi:online",
+> +				amd_hfi_online, amd_hfi_offline);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	return 0;
+>  }
+>  
+> 
+
+-- 
  i.
---8323328-968895965-1742388947=:10063--
+
 
