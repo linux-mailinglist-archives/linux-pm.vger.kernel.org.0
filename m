@@ -1,264 +1,344 @@
-Return-Path: <linux-pm+bounces-24272-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24273-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A8D9A6862D
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 08:53:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39102A688A2
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 10:50:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C1943BC050
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 07:52:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41F55885F98
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 09:45:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F17A524FBFF;
-	Wed, 19 Mar 2025 07:52:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mysnt.onmicrosoft.com header.i=@mysnt.onmicrosoft.com header.b="kPYyRtH1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D21925484C;
+	Wed, 19 Mar 2025 09:39:29 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11021117.outbound.protection.outlook.com [52.101.70.117])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFAD1EF36A;
-	Wed, 19 Mar 2025 07:52:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.117
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742370769; cv=fail; b=CpY9nLvrEED4U3KJ6svTsza8fEOtpMBDgLg0bPu88663zIq41bUoM8L9ofxRsVDW22yRjqH7cau29n6+z7IiISnzyHtDIzKY6KC3WT8C6y0sFYzogpH2HlPh4RWIHH6CbQ8vxYGOitlOEomn1pWHUcoiIBJtF7wgYwfPM4zyb+M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742370769; c=relaxed/simple;
-	bh=pJx0BQ5DMNsrHkXL1bWl1caombs2/d79b5bo9KXm5fw=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=kAerejYzjOu4Z4aHA8fPZ5mnCsloIT75o+p7E0CNgy/cHgNWFlVIFbKd2wVYuGwBj5ZfjjV2f4ELdnn5UN289yE2unIKYneJV1M6BayGcLrKTNKBP7IUH+y0xcSpyh5azzvJ5A7vygpOxm2QBDgQReKlJjyu3gSUE4j2/XFnZeg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kontron.de; spf=pass smtp.mailfrom=kontron.de; dkim=pass (1024-bit key) header.d=mysnt.onmicrosoft.com header.i=@mysnt.onmicrosoft.com header.b=kPYyRtH1; arc=fail smtp.client-ip=52.101.70.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kontron.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kontron.de
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=E/5WZLSax/VzQmKOjXH6qUBbaHmNvHwrwyFbJLdheRSj5KnYczNLPVZGU3oj4Hwb0d5hdb+C3AILH/CTH7eV19nI2lmJbCXWtL7nuD2wxT1xN8N/KCDjKcr/iFXaE8zH3qnhTdySwYq3deleU2S6pxAZ1hLjCpxadHj+07FiL868fOz9FeHRe4oXbJCIw2eJ7Loy8/+sKtuqONTrxZ7UK2MgrBM/txy15a4AFheit7+obUJAb/3j8QZCtCeFisDpB9wtwEVGq/uqE0+4ERQWCQERJh6S3pWdivSlnKJuhzsRr52pyARtBGu1j/p4TTBWEiVdIvrBeZ/RycvgdYCFtg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iPESzy1K3lUPYi4FWormCWCnOZcrfT7AR8cTem0xXjI=;
- b=tsS4eT6g2ZMQdwWNo+9AA11Q1HWG9+hBpTDckH7tPg5BysiXDTE10GxsMnQXTLohUJjVzfaDOh5q/gBDBr/rQ/EAZ51BbCc8m0n6zBgGbPagx8nXJT1ox/dxNw+7+/Ka4FzCvDGgQnmaaBk1R18g9+BoPxeGp+t8zA1RKDxeoPWqLQ1R8nhLI0mEiyRqPrVJobTR1aMz01upuSIeNB0wolbQK+RXGZBBsIe9zKOCkN3FyiMMn8Gg6O0/z1JqgY+X+GgiZB0NyhTuxHb4RQBY22JK1D0+4XafuBdZHGMT/bNC55hNEOUgqL/Il/oU8LHOIFHBLpkMPaTgzIgG9yjbug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
- dkim=pass header.d=kontron.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
- s=selector2-mysnt-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iPESzy1K3lUPYi4FWormCWCnOZcrfT7AR8cTem0xXjI=;
- b=kPYyRtH1jyTUOq1VFiD8F4CN8TzAOf05etqiMf9Qbxo33jMmDZ9jNK5DTpDIDk9Lu/uV0Q3PnW1Jew0UA1gDyiCXpcQ/ygBlJcvsK2r89vwG0EQ29KbpEC7PDpDcJ0JAnl0ScssAqszaCjwAx5J5/OvpwhPzTROiOHHnt3DkDS8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kontron.de;
-Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::10)
- by DB4PR10MB6288.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:380::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.34; Wed, 19 Mar
- 2025 07:52:41 +0000
-Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::b854:7611:1533:2a19]) by PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::b854:7611:1533:2a19%4]) with mapi id 15.20.8534.031; Wed, 19 Mar 2025
- 07:52:41 +0000
-Message-ID: <15acbb84-efa1-4ca6-bbfd-a4c3f17a7d19@kontron.de>
-Date: Wed, 19 Mar 2025 08:52:39 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: imx8mp: HDMI display blank/black problems
-To: Saravana Kannan <saravanak@google.com>, Adam Ford <aford173@gmail.com>,
- l.stach@pengutronix.de, marex@denx.de
-Cc: mailinglist1@johanneskirchmair.de, johannes.kirchmair@skidata.com,
- Laurent.pinchart@ideasonboard.com, airlied@gmail.com,
- alexander.stein@ew.tq-group.com, andrzej.hajda@intel.com,
- catalin.marinas@arm.com, conor+dt@kernel.org, daniel@ffwll.ch,
- devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
- festevam@gmail.com, jernej.skrabec@gmail.com, jonas@kwiboo.se,
- kernel@pengutronix.de, kishon@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-pm@vger.kernel.org, maarten.lankhorst@linux.intel.com,
- mripard@kernel.org, neil.armstrong@linaro.org, p.zabel@pengutronix.de,
- rfoss@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
- shawnguo@kernel.org, tzimmermann@suse.de, ulf.hansson@linaro.org,
- victor.liu@nxp.com, vkoul@kernel.org, will@kernel.org
-References: <20240203165307.7806-1-aford173@gmail.com>
- <20241025080544.136280-1-mailinglist1@johanneskirchmair.de>
- <6d039ecf-0e48-415a-afd8-6bfce60081ae@kontron.de>
- <CAHCN7xKevGWipBSch6gKVeJRT9Zb8QTchhxg3c=96XhnAvnjZw@mail.gmail.com>
- <CAGETcx-LGZ1k-seh4LkvCobsxUk67QK40swiQvH6Wrzs0Log0A@mail.gmail.com>
-Content-Language: en-US, de-DE
-From: Frieder Schrempf <frieder.schrempf@kontron.de>
-In-Reply-To: <CAGETcx-LGZ1k-seh4LkvCobsxUk67QK40swiQvH6Wrzs0Log0A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR3P281CA0181.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a4::14) To PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:263::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149F0253B65;
+	Wed, 19 Mar 2025 09:39:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1742377169; cv=none; b=Yr/6OG+ezUy7ClP87EJLdKSu9SwY2QWCTKIe5rjRZFIh73E5Pg+Zjy3pWGqV6o3EvxebefmDYHD896GHsk6WSzdcQjIr7UIAumbLJCAoi+zdQAz2txDiQxacO63fBUW6gAikY7V1WweOgKKWvk5oVWZJ18OQss98N1fiwAE216g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1742377169; c=relaxed/simple;
+	bh=O5m4J2uazvVon6VrejWT7QbkzPd8R8Ka6P+/dKxYqY8=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=FPqyeSEO8sfPgmtpKi0Z1HFOIDT/BkEFIBNL5V1wBimfA2bWGVU2i7P0Rxzfe5Bxpk+qQR5Sny8UHBVtKs9UfKux/jS4MKXe8I6lzkcVcoX2xlE7hoJBjs3O6ekwNUfHtsH7Qamnb4bSVtRFSgeZAk3PBH8RzZQSt2yqKEZMF5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.112])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4ZHk9H6zmDzpg72;
+	Wed, 19 Mar 2025 17:36:03 +0800 (CST)
+Received: from kwepemk500005.china.huawei.com (unknown [7.202.194.90])
+	by mail.maildlp.com (Postfix) with ESMTPS id D8A7F14033A;
+	Wed, 19 Mar 2025 17:39:17 +0800 (CST)
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemk500005.china.huawei.com (7.202.194.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Wed, 19 Mar 2025 17:39:16 +0800
+Subject: Re: [v5 PATCH 13/14] ubifs: Use crypto_acomp interface
+To: Herbert Xu <herbert@gondor.apana.org.au>, Linux Crypto Mailing List
+	<linux-crypto@vger.kernel.org>
+CC: Richard Weinberger <richard@nod.at>, <linux-mtd@lists.infradead.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+	<linux-pm@vger.kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>,
+	<netdev@vger.kernel.org>
+References: <cover.1742034499.git.herbert@gondor.apana.org.au>
+ <434ca0f270b1e76f2abb222ddb0d68d7f1e0831a.1742034499.git.herbert@gondor.apana.org.au>
+From: Zhihao Cheng <chengzhihao1@huawei.com>
+Message-ID: <d81b956d-8d08-8ddd-9746-5b0262a4e68e@huawei.com>
+Date: Wed, 19 Mar 2025 17:39:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR10MB5681:EE_|DB4PR10MB6288:EE_
-X-MS-Office365-Filtering-Correlation-Id: 68c18fe7-8968-4bba-263d-08dd66bb0682
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?dUo0L3BnaHVvTGNRQ0FJODdXd3ZSdk1vbng0elRkdDZ1elpLd3FNcWJObzBY?=
- =?utf-8?B?bHp2d2IxR3lCYjNmempWaGI5K1lDZkl2blNYcHdtNmdLYWM3ZldRUUFPQmtm?=
- =?utf-8?B?clRYMmNMZGN3TzhpUWNJV0FEdWd5Q2dhRG5iNWIxZ0tQbGw3c2E0a2NTUkp4?=
- =?utf-8?B?NVVnZzVNMVhhVWlrWnpjL08zUDhGdFlPQmt2UHQ3SlQ1cTJSNlVPTk95ZmRK?=
- =?utf-8?B?eHJKcW5ENVd4eHBtMitGZnRKUXBsNWNVd29zU2pTNVR5WjRkSjdoYUQ1REda?=
- =?utf-8?B?M1VJYkd4cnJLYWpyVWZGNUd6ZHVOWlhXR3hudTZXQWt0UWw4dFdPcEVEN2ZR?=
- =?utf-8?B?MjgvUzcvMW5VQ2RxUlovOHg5aVFkN0cxVDVLYmZ0K1c1UCt5ME00bGFEYVJ3?=
- =?utf-8?B?VFJFMDM5cFI4L0o2cTNJU1pXMWtqRk41Y3NvdFRGL2ZSU2lDY1YyVWZhM1J3?=
- =?utf-8?B?aE8wTnF3NGJOYkpuV3hQaXBjMzkwOW9sRlZQT0R2dGJBRDRPTWxvQlFzcUts?=
- =?utf-8?B?NkhET2RYNzduOEdBc1UzajR4ZkozS1ZqVEFJbUQvOUVOUWhsZEdIZkhoTFpT?=
- =?utf-8?B?Rk51WnkwSkROTG5JTGZrV29mTEt2bTZxZVpYbm0rQmdTRGc1aG5aODIzTEZB?=
- =?utf-8?B?alFBYWxMWkJuazdhTXdxRHhMT3lHNFM2K0FjMkN6Q25xMVNMR0Fkbkl1d1BI?=
- =?utf-8?B?UTV3TzB0bVZLWUVqZWxpVjZlOS9JengxcURDR0w2Sjg4OWgwVDJRMitzSnRY?=
- =?utf-8?B?WWtQRzNNYkxYazJ5MUpLN2FrY05PK1h4YkcvM1pxV2NqOWRFaUsyckZmdXJF?=
- =?utf-8?B?ZU81SnZqRDEwK2ZobzZRTnJMNDNpbHlXS28vSU44VUU2UHBGV1k2L2krSWpL?=
- =?utf-8?B?cUgzMzQ3dUFEdm5vRVFnbkxuTG10K253dWNaUTlZRkZvV2ZybmhLVXdMRVBT?=
- =?utf-8?B?NnBKZldPY0xrN0c5Qy8yS3ZzYmR1UFg1L0lid3FoajJEcHZQb3pieFdVRG02?=
- =?utf-8?B?aG9HVUp6bU9nOFB1UkN4a0puUHB6TG5sZmJBSmlsdEhEamc2aDNNKzJyTmFE?=
- =?utf-8?B?VnIvZnNnYWpZcDV3dmljKzFIOCtXdDlsUCtsNWRsdy9UejlaUWkrMXNTbmZE?=
- =?utf-8?B?UHlHMXZlRDJ3eEg4ME1tam52STU0b0ZwYy9TWHo3S1FqelZzV01Ud0U4Z0tY?=
- =?utf-8?B?U01oVzdTMTFFU3lmRkJjbEhQOHE1VStEQlplZXhQQnlsSTV6QzFZQjNqQkZD?=
- =?utf-8?B?N0h0MlVCSXBtYXJCL2tGTUZZYzBrNjRnck1VajFtQUpwUjlSYjcvdUJibS9m?=
- =?utf-8?B?MzRTVnBFUXA4a3NBTmcweHdlZnRYb0EwWUFDS2xMUTBDMXZScGRqRGRLZnZa?=
- =?utf-8?B?N3gvWG1NWUlqYnNnR3NNcm9QYWRGVE4wbVZPbm9QMHl1LzA4TVlqaFVNemtY?=
- =?utf-8?B?WHB0cDI0M293WWEreE9hUlpOakw1bjNUVjRvV0RjSlhkbzJTdFBRM1lXbldu?=
- =?utf-8?B?bVo2QThaWSt2NFlNOExFNnMrZld5dTF4K1pRTTN1UGVRV2d5NmVhalEwYUlB?=
- =?utf-8?B?SmM3dVFuSEtsdU5HZHVqaW10dEVZd2JSVEdsVHRTOFYxTmNHdXR0ZjNEQWs5?=
- =?utf-8?B?V3FGNHN5eWdRclRGMDc1YkdFQmpJY0hBdjRnbFNsK3ZjMWxhUnNsQkY0ODNx?=
- =?utf-8?B?aWVoZXBGZmN0czBJU0FkS3d3NU9hRCtDQWovZTdXU201MFQ3VllrVzM0OXFV?=
- =?utf-8?B?ZkRxU3IvTXcyRUZLMXZOTVJGY1VVUzM5ZUJnWUtkVzl2SjNMR21IanhPRnpr?=
- =?utf-8?B?dXg3MGY2R0Z3Q29JampybDQ3b0plUVNKSmtKN0N5NzJ6MUNaLzBoK3p6WGRw?=
- =?utf-8?Q?7F8FLaCl4JZNe?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cVVTN29kci9FZVlMM05Jdi9xRytyY2RFcWpuOElLMTVYd1lQMEVFaXpkSERW?=
- =?utf-8?B?L0lHb1hQZlJIUkFwWWdIeFhWRUhJbU1yYmJaWERNWHdtc2xXM2cxT2hjZE9N?=
- =?utf-8?B?Qm92VExVZTMzNzVSak1wN3M4NURFSU95Q2lLNTh2SkZ5R2xsZWx5M0NYVTlN?=
- =?utf-8?B?NHI4L3NSRUtPVU9Sd0VRL2hSektHVTJjK3prZlJRVGtHbUdCQ0xEL0VtKzJh?=
- =?utf-8?B?VlppM29rNEtOTnl6dW9Ua1FWTkhJS1RKOW90T3RmVmpDd0djdTErb2JIenl4?=
- =?utf-8?B?OERyODJUTSt4ZEpVV1VRYzNRZWZEZzdwNktTRmFQMG9DNnNFcWp3SStTTjAr?=
- =?utf-8?B?eGh6OXB3QzN6dmlPZ3J0YWJ0SGRPL3YzcGswSjlHSEJJendOQnZNUnFMRUw4?=
- =?utf-8?B?Q29uUGNzRmNlNk85UzZmdytMd2JFVmZlY3FyWGMraGw5OEJiQWk0VGl3OWh5?=
- =?utf-8?B?OTlia2hwS3ZHMEVJeHNEYUJVeXhVa0JOSjNyQUtDaTZETkkxbDFGdk5XMzdx?=
- =?utf-8?B?eXNMZVJIT0ZrSXM1V2dTNHMyRnB3c1g3TlN5M2VRY1dDRGlSL0pQS3E1K21n?=
- =?utf-8?B?VTN5Y0FPUzhyWXM5SkV4VmYvUmU0YjY5RTFxRXFMYy9ON0prMWpOZmNIVWhr?=
- =?utf-8?B?Mit6ZytFVkxDMEgveGgyOGxQL2tsZ1VOTFVlTDVSRGZ4MHBtYm5UWEFLUldu?=
- =?utf-8?B?b0poa01CV3U1STB3Q1FnVWR2OU01QjJ1VGFxYkNTYkhvYXNYMjZ1eTczamd3?=
- =?utf-8?B?MDlzZGRaM3k4VnNWWnJ0UU9CR3hwaUI3TlJENzE4SXQwTHBBb1R0bVEzTVRt?=
- =?utf-8?B?SGo3VU1idGZ4WEFlT0ZNd2FmaGY1U2YzMFVEOWNTV1lkdlhLVGZjWUxjZ0ho?=
- =?utf-8?B?N1VyWW1YMnlvRDEzU1FqUkFWeFIvYW8vcGh1bVdwZmVqaFJ2NXBkU3VzWlUw?=
- =?utf-8?B?elBSMm1JSXFXVFRGbTVGOVBEZjlQaE82UnREWkNvTWFsZVlvS3dSd0pSS1lF?=
- =?utf-8?B?dE5zdEZwZkdkY2tudnE0SDVJK1BNOXNoaFIyMmtST0xCb2g3c1JCN0VWOVpG?=
- =?utf-8?B?KzRHL2lYQ0pGSXd2R3NhVUNGME1hdE96eFAwNUswWFRtUVJMK1d5Y3dmSVpn?=
- =?utf-8?B?K0E0bjI4ZUVpaUhYRmthWjNOL0ttR1RzTnBISThMNG5WUHBJMU5JT1c2cGNu?=
- =?utf-8?B?RXBqdUIxZ3REelJlVHBZMUtYMWpIWEtjeHgrdnAxcER4cGVmdVBURmVjU0Vo?=
- =?utf-8?B?dTBjUjNuWTRCQzFIYzg2TmpyUVZIa1F4STRnY25FNk1FSE8wUDdaNDhnSXBR?=
- =?utf-8?B?K3B6eGgyTVZuaVgvS0pKSFR4YjVON0NEOVRkZkJtWTBuWGNZaW5uNk94cUhB?=
- =?utf-8?B?NENtTGc5WnNOVTUySHNUT2ZsNUg5YUQwQkZuL2s0TFlFYm9na2ZOTWZlRjlo?=
- =?utf-8?B?bmppVzJIbE1seFZzbWhObisrdEFXTUttazhpZWtFbDZoZUtKV1NHWmc3WFB2?=
- =?utf-8?B?dGtrSlU1TEVSYklONmFZN2ZBMUN1d285TXQzZEliWXZXTjRPWUVDc3dIRUtN?=
- =?utf-8?B?MGdraWJzdUJGRmc0N1p2aTBxQXFjbkJOQVh6YS9ybE5OcTVCTTViSSs2STRQ?=
- =?utf-8?B?cEdHU0dTYndLS24xcXlTcUgxYU00akZDTjE5T1VKdlVhSy94VG5tQzIwNVNp?=
- =?utf-8?B?MWRWNm9zK2Y3WHhIeFREeGRoNWV5cGlnTmdtYWhOVEpyd2tFMndGcjZ3NlY0?=
- =?utf-8?B?MC9Hb28wQnQ4MGF1VUdUNnVIdTJOeDcwdGVTcDdPRnJxVXVtb1FBSS93TU5J?=
- =?utf-8?B?WllrTWYrN1p0TVJqdEhpcXZHZ1ZCY01CTkV0blMxbEN1RnlwSWZNQW1CVXR2?=
- =?utf-8?B?RnRDSFdKSUduaEpIOHRmelgzVFpNYzJJbGtaaTVkbnhiam9wWEtncGhrZSta?=
- =?utf-8?B?dlpDOEs5NVcraGsyNmxNeWJnRGpiTlhJSUwxQVM3Zm9zTUJBYXg1d3NKUXBm?=
- =?utf-8?B?NElDa3p5ZTQ5UTR0ZmR4dlN6bXBPK0lzMlRENnhOa0pTYmRwcElPSVpiQk1S?=
- =?utf-8?B?R1UxckthK25oM0htTlhNTWZjbUR0ejkxcVhqd1Q3eTVhcUtaVTF3eUFIT0dN?=
- =?utf-8?B?ZWZTbCtza1c2NWh5SjJYc1k0akpFTldNci9GS1RubUZ6ZVljR2hXMk9uWVJG?=
- =?utf-8?B?N2c9PQ==?=
-X-OriginatorOrg: kontron.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68c18fe7-8968-4bba-263d-08dd66bb0682
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Mar 2025 07:52:41.3083
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9DftqVdmch4m7BE0XZPpLvNfNT3XTIrcptXdyzl2FA30OoU740hdmogXLy5BTTHYYy6+NNHpJQOGnYifzwTqASpgTSyb7ULfSf6lhUW0cJI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB4PR10MB6288
+In-Reply-To: <434ca0f270b1e76f2abb222ddb0d68d7f1e0831a.1742034499.git.herbert@gondor.apana.org.au>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemk500005.china.huawei.com (7.202.194.90)
 
-Am 30.10.24 um 9:20 PM schrieb Saravana Kannan:
-> On Wed, Oct 30, 2024 at 10:28â€¯AM Adam Ford <aford173@gmail.com> wrote:
->>
->> On Wed, Oct 30, 2024 at 4:01â€¯AM Frieder Schrempf
->> <frieder.schrempf@kontron.de> wrote:
->>>
->>> Hi Johannes,
->>>
->>> On 25.10.24 10:05 AM, mailinglist1@johanneskirchmair.de wrote:
->>>> [Sie erhalten nicht hÃ¤ufig E-Mails von mailinglist1@johanneskirchmair.de. Weitere Informationen, warum dies wichtig ist, finden Sie unter https://aka.ms/LearnAboutSenderIdentification ]
->>>>
->>>> Hey,
->>>> We had some problems with the hdmi on the imx8mp and wanted to leave, what we found out about it, somewhere for others to find it.
->>>>
->>>> The problem was that our hdmi display sometimes stayed blank after hot plugging and sometimes at startup. On older kernel versions 6.6 we did not have the problem with the not mainlined hdmi patches.
->>>> We tracked the commit down that introduced the problem for us. It was the following â€œdriver core: Enable fw_devlink=rpm by defaultâ€  https://lore.kernel.org/lkml/20231113220948.80089-1-saravanak@google.com/
->>>> So we switched back to FW_DEVLINK_FLAGS_ON via kernel parameter. Donâ€™t really understand what the problem with RPM is.
->>>>
->>>> So, this information is just for reference. Maybe someone has an idea what is going on here. And how to fix the problem in a more proper way.
->>>
->>> Thanks for investigating and sharing your results!
->>>
->>> I'm seeing the same symptoms and previously found out that this is
->>> related to LCDIF underrun errors. See [1] for more information.
->>>
->>> Adam has also started this thread: [2].
->>>
->>> Anyway, knowing that this is related to fw_devlink=rpm is really
->>> helpful. I just tried with fw_devlink=on and wasn't able to see any
->>> issues anymore. So this confirms your findings.
->>
->> I was off in the weeds thinking there was something wrong in timing
->> and/or a race condition around the PLL or something.  This is good
->> news.
->> Please forgive my ignorance, what does fw_devlink do?  Is there
->> something we can do in the driver itself to force its behavior?
+ÔÚ 2025/3/15 18:30, Herbert Xu Ð´µÀ:
+> Replace the legacy crypto compression interface with the new acomp
+> interface.
 > 
-> fw_devlink figures out supplier/consumer dependencies between devices
-> and creates device links between them. This ensures proper
-> probe/suspend/resume/shutdown/runtime PM ordering.
+> Remove the compression mutexes and the overallocation for memory
+> (the offender LZO has been fixed).
 > 
-> fw_devlink=rpm vs on means "enforce all of these" vs "enforce all of
-> these except runtime PM".
+> Cap the output buffer length for compression to eliminate the
+> post-compression check for UBIFS_MIN_COMPRESS_DIFF.
 > 
->> adam
->>>
->>> I hope that some of the driver framework and runtime PM experts can help
->>> to find out what is actually wrong and how the correct fix might look like.
->>>
->>> I'm also CC-ing Saravana who authored the change from fw_devlink=on to
->>> fw_devlink=rpm to see if they have anything to add.
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+> ---
+>   fs/ubifs/compress.c | 106 ++++++++++++++++++++++++++------------------
+>   fs/ubifs/journal.c  |   2 +-
+>   fs/ubifs/ubifs.h    |  15 +------
+>   3 files changed, 67 insertions(+), 56 deletions(-)
 > 
-> When fw_devlink=rpm, you'll have device links created between
-> consumers and suppliers with the DL_FLAG_PM_RUNTIME flag set. So
-> before your device is runtime resumed, it'll make sure all your
-> suppliers are resumed first.
+
+Tested-by: Zhihao Cheng <chengzhihao1@huawei.com> # For xfstests
+Reviewed-by: Zhihao Cheng <chengzhihao1@huawei.com>
+> diff --git a/fs/ubifs/compress.c b/fs/ubifs/compress.c
+> index 0b48cbab8a3d..a241ba01c9a8 100644
+> --- a/fs/ubifs/compress.c
+> +++ b/fs/ubifs/compress.c
+> @@ -15,7 +15,7 @@
+>    * decompression.
+>    */
+>   
+> -#include <linux/crypto.h>
+> +#include <crypto/acompress.h>
+>   #include "ubifs.h"
+>   
+>   /* Fake description object for the "none" compressor */
+> @@ -26,11 +26,8 @@ static struct ubifs_compressor none_compr = {
+>   };
+>   
+>   #ifdef CONFIG_UBIFS_FS_LZO
+> -static DEFINE_MUTEX(lzo_mutex);
+> -
+>   static struct ubifs_compressor lzo_compr = {
+>   	.compr_type = UBIFS_COMPR_LZO,
+> -	.comp_mutex = &lzo_mutex,
+>   	.name = "lzo",
+>   	.capi_name = "lzo",
+>   };
+> @@ -42,13 +39,8 @@ static struct ubifs_compressor lzo_compr = {
+>   #endif
+>   
+>   #ifdef CONFIG_UBIFS_FS_ZLIB
+> -static DEFINE_MUTEX(deflate_mutex);
+> -static DEFINE_MUTEX(inflate_mutex);
+> -
+>   static struct ubifs_compressor zlib_compr = {
+>   	.compr_type = UBIFS_COMPR_ZLIB,
+> -	.comp_mutex = &deflate_mutex,
+> -	.decomp_mutex = &inflate_mutex,
+>   	.name = "zlib",
+>   	.capi_name = "deflate",
+>   };
+> @@ -60,13 +52,8 @@ static struct ubifs_compressor zlib_compr = {
+>   #endif
+>   
+>   #ifdef CONFIG_UBIFS_FS_ZSTD
+> -static DEFINE_MUTEX(zstd_enc_mutex);
+> -static DEFINE_MUTEX(zstd_dec_mutex);
+> -
+>   static struct ubifs_compressor zstd_compr = {
+>   	.compr_type = UBIFS_COMPR_ZSTD,
+> -	.comp_mutex = &zstd_enc_mutex,
+> -	.decomp_mutex = &zstd_dec_mutex,
+>   	.name = "zstd",
+>   	.capi_name = "zstd",
+>   };
+> @@ -80,6 +67,30 @@ static struct ubifs_compressor zstd_compr = {
+>   /* All UBIFS compressors */
+>   struct ubifs_compressor *ubifs_compressors[UBIFS_COMPR_TYPES_CNT];
+>   
+> +static int ubifs_compress_req(const struct ubifs_info *c,
+> +			      struct acomp_req *req,
+> +			      void *out_buf, int *out_len,
+> +			      const char *compr_name)
+> +{
+> +	struct crypto_wait wait;
+> +	int in_len = req->slen;
+> +	int dlen = *out_len;
+> +	int err;
+> +
+> +	dlen = min(dlen, in_len - UBIFS_MIN_COMPRESS_DIFF);
+> +
+> +	crypto_init_wait(&wait);
+> +	acomp_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG,
+> +				   crypto_req_done, &wait);
+> +	acomp_request_set_dst_dma(req, out_buf, dlen);
+> +	err = crypto_acomp_compress(req);
+> +	err = crypto_wait_req(err, &wait);
+> +	*out_len = req->dlen;
+> +	acomp_request_free(req);
+> +
+> +	return err;
+> +}
+> +
+>   /**
+>    * ubifs_compress - compress data.
+>    * @c: UBIFS file-system description object
+> @@ -112,23 +123,14 @@ void ubifs_compress(const struct ubifs_info *c, const void *in_buf,
+>   	if (in_len < UBIFS_MIN_COMPR_LEN)
+>   		goto no_compr;
+>   
+> -	if (compr->comp_mutex)
+> -		mutex_lock(compr->comp_mutex);
+> -	err = crypto_comp_compress(compr->cc, in_buf, in_len, out_buf,
+> -				   (unsigned int *)out_len);
+> -	if (compr->comp_mutex)
+> -		mutex_unlock(compr->comp_mutex);
+> -	if (unlikely(err)) {
+> -		ubifs_warn(c, "cannot compress %d bytes, compressor %s, error %d, leave data uncompressed",
+> -			   in_len, compr->name, err);
+> -		goto no_compr;
+> +	{
+> +		ACOMP_REQUEST_ALLOC(req, compr->cc, GFP_NOFS | __GFP_NOWARN);
+> +
+> +		acomp_request_set_src_nondma(req, in_buf, in_len);
+> +		err = ubifs_compress_req(c, req, out_buf, out_len, compr->name);
+>   	}
+>   
+> -	/*
+> -	 * If the data compressed only slightly, it is better to leave it
+> -	 * uncompressed to improve read speed.
+> -	 */
+> -	if (in_len - *out_len < UBIFS_MIN_COMPRESS_DIFF)
+> +	if (err)
+>   		goto no_compr;
+>   
+>   	return;
+> @@ -139,6 +141,31 @@ void ubifs_compress(const struct ubifs_info *c, const void *in_buf,
+>   	*compr_type = UBIFS_COMPR_NONE;
+>   }
+>   
+> +static int ubifs_decompress_req(const struct ubifs_info *c,
+> +				struct acomp_req *req,
+> +				const void *in_buf, int in_len, int *out_len,
+> +				const char *compr_name)
+> +{
+> +	struct crypto_wait wait;
+> +	int err;
+> +
+> +	crypto_init_wait(&wait);
+> +	acomp_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG,
+> +				   crypto_req_done, &wait);
+> +	acomp_request_set_src_dma(req, in_buf, in_len);
+> +	err = crypto_acomp_decompress(req);
+> +	err = crypto_wait_req(err, &wait);
+> +	*out_len = req->dlen;
+> +
+> +	if (err)
+> +		ubifs_err(c, "cannot decompress %d bytes, compressor %s, error %d",
+> +			  in_len, compr_name, err);
+> +
+> +	acomp_request_free(req);
+> +
+> +	return err;
+> +}
+> +
+>   /**
+>    * ubifs_decompress - decompress data.
+>    * @c: UBIFS file-system description object
+> @@ -155,7 +182,6 @@ void ubifs_compress(const struct ubifs_info *c, const void *in_buf,
+>   int ubifs_decompress(const struct ubifs_info *c, const void *in_buf,
+>   		     int in_len, void *out_buf, int *out_len, int compr_type)
+>   {
+> -	int err;
+>   	struct ubifs_compressor *compr;
+>   
+>   	if (unlikely(compr_type < 0 || compr_type >= UBIFS_COMPR_TYPES_CNT)) {
+> @@ -176,17 +202,13 @@ int ubifs_decompress(const struct ubifs_info *c, const void *in_buf,
+>   		return 0;
+>   	}
+>   
+> -	if (compr->decomp_mutex)
+> -		mutex_lock(compr->decomp_mutex);
+> -	err = crypto_comp_decompress(compr->cc, in_buf, in_len, out_buf,
+> -				     (unsigned int *)out_len);
+> -	if (compr->decomp_mutex)
+> -		mutex_unlock(compr->decomp_mutex);
+> -	if (err)
+> -		ubifs_err(c, "cannot decompress %d bytes, compressor %s, error %d",
+> -			  in_len, compr->name, err);
+> +	{
+> +		ACOMP_REQUEST_ALLOC(req, compr->cc, GFP_NOFS | __GFP_NOWARN);
+>   
+> -	return err;
+> +		acomp_request_set_dst_nondma(req, out_buf, *out_len);
+> +		return ubifs_decompress_req(c, req, in_buf, in_len, out_len,
+> +					    compr->name);
+> +	}
+>   }
+>   
+>   /**
+> @@ -199,7 +221,7 @@ int ubifs_decompress(const struct ubifs_info *c, const void *in_buf,
+>   static int __init compr_init(struct ubifs_compressor *compr)
+>   {
+>   	if (compr->capi_name) {
+> -		compr->cc = crypto_alloc_comp(compr->capi_name, 0, 0);
+> +		compr->cc = crypto_alloc_acomp(compr->capi_name, 0, 0);
+>   		if (IS_ERR(compr->cc)) {
+>   			pr_err("UBIFS error (pid %d): cannot initialize compressor %s, error %ld",
+>   			       current->pid, compr->name, PTR_ERR(compr->cc));
+> @@ -218,7 +240,7 @@ static int __init compr_init(struct ubifs_compressor *compr)
+>   static void compr_exit(struct ubifs_compressor *compr)
+>   {
+>   	if (compr->capi_name)
+> -		crypto_free_comp(compr->cc);
+> +		crypto_free_acomp(compr->cc);
+>   }
+>   
+>   /**
+> diff --git a/fs/ubifs/journal.c b/fs/ubifs/journal.c
+> index 36ba79fbd2ff..7629ca9ecfe8 100644
+> --- a/fs/ubifs/journal.c
+> +++ b/fs/ubifs/journal.c
+> @@ -1625,7 +1625,7 @@ static int truncate_data_node(const struct ubifs_info *c, const struct inode *in
+>   	int err, dlen, compr_type, out_len, data_size;
+>   
+>   	out_len = le32_to_cpu(dn->size);
+> -	buf = kmalloc_array(out_len, WORST_COMPR_FACTOR, GFP_NOFS);
+> +	buf = kmalloc(out_len, GFP_NOFS);
+>   	if (!buf)
+>   		return -ENOMEM;
+>   
+> diff --git a/fs/ubifs/ubifs.h b/fs/ubifs/ubifs.h
+> index 3375bbe0508c..7d0aaf5d2e23 100644
+> --- a/fs/ubifs/ubifs.h
+> +++ b/fs/ubifs/ubifs.h
+> @@ -124,13 +124,6 @@
+>   #define OLD_ZNODE_AGE 20
+>   #define YOUNG_ZNODE_AGE 5
+>   
+> -/*
+> - * Some compressors, like LZO, may end up with more data then the input buffer.
+> - * So UBIFS always allocates larger output buffer, to be sure the compressor
+> - * will not corrupt memory in case of worst case compression.
+> - */
+> -#define WORST_COMPR_FACTOR 2
+> -
+>   #ifdef CONFIG_FS_ENCRYPTION
+>   #define UBIFS_CIPHER_BLOCK_SIZE FSCRYPT_CONTENTS_ALIGNMENT
+>   #else
+> @@ -141,7 +134,7 @@
+>    * How much memory is needed for a buffer where we compress a data node.
+>    */
+>   #define COMPRESSED_DATA_NODE_BUF_SZ \
+> -	(UBIFS_DATA_NODE_SZ + UBIFS_BLOCK_SIZE * WORST_COMPR_FACTOR)
+> +	(UBIFS_DATA_NODE_SZ + UBIFS_BLOCK_SIZE)
+>   
+>   /* Maximum expected tree height for use by bottom_up_buf */
+>   #define BOTTOM_UP_HEIGHT 64
+> @@ -835,16 +828,12 @@ struct ubifs_node_range {
+>    * struct ubifs_compressor - UBIFS compressor description structure.
+>    * @compr_type: compressor type (%UBIFS_COMPR_LZO, etc)
+>    * @cc: cryptoapi compressor handle
+> - * @comp_mutex: mutex used during compression
+> - * @decomp_mutex: mutex used during decompression
+>    * @name: compressor name
+>    * @capi_name: cryptoapi compressor name
+>    */
+>   struct ubifs_compressor {
+>   	int compr_type;
+> -	struct crypto_comp *cc;
+> -	struct mutex *comp_mutex;
+> -	struct mutex *decomp_mutex;
+> +	struct crypto_acomp *cc;
+>   	const char *name;
+>   	const char *capi_name;
+>   };
 > 
-> My guess is that there is some issue in the runtime PM handling in
-> these drivers. I don't have enough context to provide further insight.
 
-I bet you are right. I tried to have a closer look but unfortunately I
-didn't make any progress.
-
-The drivers involved are lcdif_drv.c, imx8mp-hdmi-tx.c and
-phy-fsl-samsung-hdmi.c.
-
-As we see a "LCDIF Underrun Error" with fw_devlink=rpm my first guess
-would be that the suppliers of LCDIF are maybe turned on in the wrong order.
-
-Lucas, Marek: As the main authors of these drivers, do you think you
-could help a little with further debugging? Any ideas?
-
-Thanks!
 
