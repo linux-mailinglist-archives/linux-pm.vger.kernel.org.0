@@ -1,105 +1,116 @@
-Return-Path: <linux-pm+bounces-24277-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24278-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA977A688EE
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 10:58:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB0F8A68A03
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 11:52:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5545718835B6
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 09:58:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18DB53BD2C9
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 10:52:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7FA72505CA;
-	Wed, 19 Mar 2025 09:57:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B18E253F2A;
+	Wed, 19 Mar 2025 10:52:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="CvxxG/ey"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cT+MkH9s"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0676E30100;
-	Wed, 19 Mar 2025 09:57:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9AA1AB50D;
+	Wed, 19 Mar 2025 10:52:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742378277; cv=none; b=abF/NOwCkO1WjM5GICcMINwOCkhUcbzRfF5RKOK1OTHbLtCHvtNfsv/B1zlj3NgMSqpW4ZfJ1iTGqxLpqXQIYXDYAl27ITWn1V34D1yzYCL0jNsqpjTaaKoGxxSkCWEo6xlra2RMc8TbOVqG8XJfLTSJWFJf6QXCgDQObyDPpmA=
+	t=1742381554; cv=none; b=on8WxoteXQKqEoYTyHui8drkCqSo9HR70rNKDlJ7OKJVJ2cI6qCjOMqDCm+/HybCva9Vy3RnZMElJyN2cC5zmuolvX7F1YPy4ChV1V5ACuHJrM8/UdjXS9MoscPyeJHZl3W/W3/1LZyxeSYlmPKwMIzC/LGQd5gTYHmmBvstqyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742378277; c=relaxed/simple;
-	bh=EDcNa8pK8yvc65/nE00YXl8sQ93rzcTZs/QoZCG+gQU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JQq/4TTyZXg5h5nD6TDVXT+Hfk5LXF2PVcXghz41VqdMsw+CYPYpeEu5KqGHgJu6uZ2gKCSipWR+92yI247j8Y/sviVjs15ThuBh9CFSELLGG7ztWjICakxHCxxNrlwvKxqtibg+jt3HKRrBFvW4OeihXu2B/vxbT+4Wa8//ioY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=CvxxG/ey; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=soZjkWmnxzqoseqLHBteHQrecOxj2rcgJpWAd/MQWSw=; b=CvxxG/eyewwJvyAZXaUOdQOndl
-	dPKTxPdgPfY/0NRpPiisMELtLDbUeB0vdhyo0lmJkLaC6L7RHoge1S+gQf99Di1uGEOl61jmR96LW
-	nWCXuiF31cKw2pvW/he2hq8aaizHtVlEXIBh/lsA18cuWCY/ZYDKYiMYmKeNzwNP+0uMuJgoufnaC
-	MCB7+EcY2Jenq9G3HVYX7RqY2iExTkKmCaZIGgfl4UZKX43XgiKXdE7mBUMfDov4/I6muJ2xIyIV7
-	7jn6z2rVncpR/OnSDEmTSjvJSP5/VNj5UFnLi+2H11U7I0m6kXnS+jcVBh57CwvpBxl/hPl3NMQyR
-	2sfc2gOw==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1tuqB2-008My9-1x;
-	Wed, 19 Mar 2025 17:57:33 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 19 Mar 2025 17:57:32 +0800
-Date: Wed, 19 Mar 2025 17:57:32 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-Cc: Richard Weinberger <richard@nod.at>,
-	Zhihao Cheng <chengzhihao1@huawei.com>,
-	linux-mtd@lists.infradead.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	netdev@vger.kernel.org
-Subject: Re: [v5 PATCH 10/14] crypto: acomp - Add support for folios
-Message-ID: <Z9qVDFAzse7y3zLa@gondor.apana.org.au>
-References: <cover.1742034499.git.herbert@gondor.apana.org.au>
- <aa5ce234573d4916ca7a2accf4297cea6f750437.1742034499.git.herbert@gondor.apana.org.au>
+	s=arc-20240116; t=1742381554; c=relaxed/simple;
+	bh=+5eTk3CDk04yPhTVw10VH3x7l3f52TYJyRYILkkWgC8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IA9kwcJBeLww+6Lio/qt0IsMMtnWt13PFqYnMFiRGwzkqynhDIjNLz7vh+IhZ2onVhrwVOmZBC6+J9IHP6uMB4TlL5qt9Th0OhNPL7oWB9Xp3/UPcTzL6njkUet9m//zHCcfjKZfWD7jwRhBhk5lfQShtNZa8ZKrFz/huxv3Row=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cT+MkH9s; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43cfdc2c8c9so25888515e9.2;
+        Wed, 19 Mar 2025 03:52:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742381552; x=1742986352; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gkfEnVzrLtFpzAFUzBpVtGSfYkdoQzRCMy1gAhvRfu0=;
+        b=cT+MkH9sLhSDuyQGwBaAMQcry+YWAToe9ibchiZ/2S55PtdcsjIxpJUkN2tdCkfkAP
+         U1qq20lNbWjRDurGFAIJGpouhbXiPDNFtCQEsmH6MwsNmLd7Wu8qsfgOBaFnkrFFZH1G
+         nEr2ngpP66kHleFwXwkdZtNhInIYHQMs7rC1l9gQZCK+mtVgyjFBMpEWyiUjbCyErajM
+         cWgyLM3wGqsogK9/2xroLzYr9/fpWcg4ZticicVkExBStAqlGA+r+ZYQUGXrPYyhaCmL
+         NmWCbOl93ql8a0h48dQI8heaWlxZjs2UAiqPa19s1Up5GvtpK5nCpRFL9oM0OQmz6bBX
+         sU9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742381552; x=1742986352;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gkfEnVzrLtFpzAFUzBpVtGSfYkdoQzRCMy1gAhvRfu0=;
+        b=hRo0QyFGu92Z6jIBNvjhQZox14DnvcybpMnUI9hm2nqndkl8TxUE5hsQJXZ7d/nof1
+         bdCv9YR7SWCE8i7cmcZ8FfSIqlQOko1sdyu7CvKCgHvzkJbX6sgwtMreATyY0kuEhRD1
+         PANe3/R7fi/DvUSWE7v7Q7n8RCi4JmhTTyuqpTatQmUs709DjNiczrN7yQEfRyFAe/UA
+         rNxS70qADRqRVFBNfp1YVFdrSEZP0tZIYpdD5IVpcu0l7QxDsKQtMoBW/Xk/3LjTx4gF
+         BdmUF1Fz+ZfXqx+hMgEgH54taiUp4+Ogy7FG+edR56JFynxq80GxQKjWC+0jjVLBBNDw
+         R60w==
+X-Forwarded-Encrypted: i=1; AJvYcCUuw/VBOqZzoI/9/w9+F0/thCWaJeBq9AepOWVLMXBCObcgEW7cCZYtdpGzxJq+LNPAXQThDEg0jpmnCP0=@vger.kernel.org, AJvYcCV4zl3TZ9JBkEGg9UEzOXjJwvf1Sc7gjDUDuTT5yG0GSFzgdnvyhw7JYC3TEzz/uhC5PQJ1n7eU+9E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEdn4iSBCDV6wZgLJ1ntjmmQa2ltQD+sY3Bi3+13QB0tvPkCi0
+	/yXhdN44mRD0JDsMut1cyW+KDymtRHkr5PpohW7qY2I7caa3mUU/VAJjDLNQ
+X-Gm-Gg: ASbGncuMBr5b6K0ciTev1vO0Mz2AG3Apne5CficaNFBieqc7+7tNH5IFdCSsLXsBh/Z
+	rqXaNvW4Ilr7hH20eDh6saNY98HzCM2B4u3qZg0/6DZkTqiZPneqaRGEd8p5hBiilWzjWOAS6Ty
+	kK8OG3znD21yGE+740HWxem2LlaVEOm25cfEWD909oKv9e9LjfM7lkwuhe23Th74Kb6dAFpAgyG
+	KXoKcPG+wqCQtJ9uC+8iPBSHKUu6gsacbYmLDu4WRTDxNeQX5ZPs7XdXH4shHsuL9Z/zsRtVjqH
+	WRWQsD6gHR1cZXcMitzpbzTWvuywaR0LCnHAelivRXmjPw==
+X-Google-Smtp-Source: AGHT+IEd9/0IBL8t/0Qgn7szi4bB58I7aKT97sS07YD26qyjHn0iSKVmrOiygpfZeBPPbAcam7oG7w==
+X-Received: by 2002:a05:600c:1d85:b0:43d:cc9:b09d with SMTP id 5b1f17b1804b1-43d4384218amr20157315e9.20.1742381551448;
+        Wed, 19 Mar 2025 03:52:31 -0700 (PDT)
+Received: from localhost ([194.120.133.58])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-43d43f43cbasm15017845e9.9.2025.03.19.03.52.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Mar 2025 03:52:31 -0700 (PDT)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Sebastian Reichel <sre@kernel.org>,
+	linux-pm@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH][next] power: supply: rk817: remove redundant null check on node
+Date: Wed, 19 Mar 2025 10:51:53 +0000
+Message-ID: <20250319105153.775155-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aa5ce234573d4916ca7a2accf4297cea6f750437.1742034499.git.herbert@gondor.apana.org.au>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Sat, Mar 15, 2025 at 06:30:40PM +0800, Herbert Xu wrote:
->
-> -		n = slen / PAGE_SIZE;
-> -		n += (offset_in_page(slen) + soff - 1) / PAGE_SIZE;
-> -		if (slen <= req->src->length &&
-> -		    (!PageHighMem(nth_page(spage, n)) ||
-> -		     size_add(soff, slen) <= PAGE_SIZE))
-> +			spage = nth_page(spage, soff / PAGE_SIZE);
-> +			soff = offset_in_page(soff);
-> +
-> +			n = slen / PAGE_SIZE;
-> +			n += (offset_in_page(slen) + soff - 1) / PAGE_SIZE;
-> +			if (PageHighMem(nth_page(spage, n)) &&
-> +			    size_add(soff, slen) <= PAGE_SIZE)
-> +				break;
+The pointer null is being null checked immediately after it has
+been assigned at the start of the function and not changed afterwards.
+The subsequent null check on node is redudant and can be removed.
 
-This should of course be
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/power/supply/rk817_charger.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-			size_add(soff, slen) > PAGE_SIZE
-
-> +			if (PageHighMem(dpage + n) &&
-> +			    size_add(doff, dlen) <= PAGE_SIZE)
-
-Ditto.
-
-Cheers,
+diff --git a/drivers/power/supply/rk817_charger.c b/drivers/power/supply/rk817_charger.c
+index 945c7720c4ae..1251022eb052 100644
+--- a/drivers/power/supply/rk817_charger.c
++++ b/drivers/power/supply/rk817_charger.c
+@@ -1088,7 +1088,7 @@ static int rk817_charger_probe(struct platform_device *pdev)
+ 	rk817_bat_calib_vol(charger);
+ 
+ 	pscfg.drv_data = charger;
+-	pscfg.fwnode = node ? &node->fwnode : NULL;
++	pscfg.fwnode = &node->fwnode;
+ 
+ 	/*
+ 	 * Get sample resistor value. Note only values of 10000 or 20000
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.49.0
+
 
