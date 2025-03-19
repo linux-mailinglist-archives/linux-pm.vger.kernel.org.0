@@ -1,65 +1,65 @@
-Return-Path: <linux-pm+bounces-24285-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24286-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11480A68E93
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 15:11:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1A43A68E86
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 15:08:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1AC083A81CC
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 14:07:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4AEBF7A2C82
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 14:07:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E23E1B0F33;
-	Wed, 19 Mar 2025 14:05:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 989051B4F09;
+	Wed, 19 Mar 2025 14:05:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nsnGL11R"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LEiGP4Gw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B6223AD;
-	Wed, 19 Mar 2025 14:05:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4BA11A3056;
+	Wed, 19 Mar 2025 14:05:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742393112; cv=none; b=rLYSLNhItW76WO3uXy2dlw+i12+w6JeXnZk0ddb9iZr0tNl725WsLMJ2WNBge9rGjiZgXU3fXNwCGwCbgAwOCVfyTtL9OJDro5cnfU/xW39dCER+lyOcPRkJnbmMdwyHAexGZ88Yl5PdHpbg84IVeu/nSaINw58xYorM5AoUqZ4=
+	t=1742393126; cv=none; b=LTB9xPa74bZG4bU6rVrv5o6uVFpkdSfmdSdcpq+osQwolgm/KE5/Na0V4Uermy08jAuzrlWVgaGQN9YEdqjlXFRQ6fUnS+4tT7DpGrP/Jyh5AiCm6PqACs0CSF9gOhWZyQtYkRuUuSX80MwLpO9bW4zjW3YLU8HLo5VK5bpjNm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742393112; c=relaxed/simple;
-	bh=auuj8U0iIZPEnK1LHdzsygpODXcIt/+SyEI16lyN7Eo=;
+	s=arc-20240116; t=1742393126; c=relaxed/simple;
+	bh=FykKi5B1OIIrB8kV/rDesHGQ7kViOrYXaOuFqKji6kk=;
 	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=PpE/Sg/2dcS+2DXJ9cmQHrYrtCJRi7qpYQj/nnHlY1bguJN7T8/xOyPeb6EiGha9NsLGF/o27dA2n8TBh+UR8S8AZ3Z3t36GUBRaGV2JHr7jpQ9PnDubUvs+AL8iRylf/eDVV1A10hafahjrKqXkP8F8MCHFhqzIg4DBMqIWSac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nsnGL11R; arc=none smtp.client-ip=198.175.65.10
+	 MIME-Version:Content-Type; b=uqq5R7UEmCMnSkiIItTjQPyfkk/8f21md+MMHfElngNxUFJtRB4cDI+22WP4OzQM3bXP0tKczZYuOWDtLqqHWbQBL6TFNQZtIWKIFmzkPTf8zJDFTin3acMfGKKo/RJbv/gWb2u393xVO12LydcEZre4KtR0HRl0AC0f+1153ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LEiGP4Gw; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742393111; x=1773929111;
+  t=1742393126; x=1773929126;
   h=from:date:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=auuj8U0iIZPEnK1LHdzsygpODXcIt/+SyEI16lyN7Eo=;
-  b=nsnGL11RzyFIT2D2ZW3Z0Bgrc/G7v5clCxlCz3PIMTeo6E2Ogz88BFPR
-   F+1oAsMmITkW2w5w/MN8D4iL6WMCp16BVibHlsqcyt1ICougG3HL93Y8V
-   Z/gJxUxgMe4DadNVaMafm+i4fVMKZavhX9YbVolivAR9Rl/AlSoRYha/1
-   xWjElhL9V1d9yBQn/NKTomDgi9Av6M83LVFbAqjNKJNrwGjmrq0DyP0nY
-   bCjCRx0583q1gc+PcB83TGDZ8LEb7OPiw8TlGmj4bGTJL8WpOZMRlz6sv
-   MGjoZFbhh09J3hsIlkcqcu4nwfPz0URHSPlX/LRalO7dmcgJMdqds2lK3
-   Q==;
-X-CSE-ConnectionGUID: hdpH3kv1Qf++MTe0Tbskdg==
-X-CSE-MsgGUID: d4sEPQUNT06ihujwSqbc+w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11378"; a="60977797"
+  bh=FykKi5B1OIIrB8kV/rDesHGQ7kViOrYXaOuFqKji6kk=;
+  b=LEiGP4GwtaeYo4pEluo+WcGa1b8/IhsgoiszzW6kDJey5khjNH6T71lm
+   UXO6CHWfoSpscQxxZwwwWNDvVLVUnWQCRCpm4M4Slv8BXEk9t88dx6kSj
+   AzueLnSDOQFHImh3Q9hwhMUqeTkCjq+9JFYZ2I4wy3p37MZA40+AduiU8
+   7IaL3X7Kl1RTDV5m4IhuwTyjiIxVIaVshUjFgzPO84gwm8q0x8elFBRwq
+   mCdXAJwGaQW8Xm3TidP19lKEXpm/0pROMvr4oFEu/01fPjbmZYdCMn8fj
+   EDUlbKFJahsCsrG6jYy3NnODBmRDg9ej2HPDCkq359Cxmxc4Lhmd0DEoz
+   g==;
+X-CSE-ConnectionGUID: XRbVggPMRfuHZVwO6e3Pjw==
+X-CSE-MsgGUID: IMe9F9wgSpG143fDeIL8ZQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11378"; a="47233470"
 X-IronPort-AV: E=Sophos;i="6.14,259,1736841600"; 
-   d="scan'208";a="60977797"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 07:04:52 -0700
-X-CSE-ConnectionGUID: 8ypkxE1JQJ2856hFDMdnqQ==
-X-CSE-MsgGUID: wr1YiOOiTR6BDJYmJW9OEg==
+   d="scan'208";a="47233470"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 07:05:24 -0700
+X-CSE-ConnectionGUID: xdB9ZGvyRyWA5i3/n3IEbw==
+X-CSE-MsgGUID: TG6HtdmlS5CiPVL7P6LI+w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,259,1736841600"; 
-   d="scan'208";a="159812919"
+   d="scan'208";a="123567657"
 Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.21])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 07:04:44 -0700
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 07:05:17 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 19 Mar 2025 16:04:40 +0200 (EET)
+Date: Wed, 19 Mar 2025 16:05:14 +0200 (EET)
 To: Mario Limonciello <superm1@kernel.org>
 cc: Hans de Goede <hdegoede@redhat.com>, 
     Mario Limonciello <mario.limonciello@amd.com>, 
@@ -75,13 +75,11 @@ cc: Hans de Goede <hdegoede@redhat.com>,
     "open list:AMD HETERO CORE HARDWARE FEEDBACK DRIVER" <platform-driver-x86@vger.kernel.org>, 
     "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <linux-kernel@vger.kernel.org>, 
     "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
-    "open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>, 
-    Perry Yuan <Perry.Yuan@amd.com>
-Subject: Re: [PATCH v8 07/13] platform/x86: hfi: add online and offline
- callback support
-In-Reply-To: <20250218190822.1039982-8-superm1@kernel.org>
-Message-ID: <529e9c45-df4f-440e-3232-106cbec12faf@linux.intel.com>
-References: <20250218190822.1039982-1-superm1@kernel.org> <20250218190822.1039982-8-superm1@kernel.org>
+    "open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v8 12/13] platform/x86/amd: hfi: Add debugfs support
+In-Reply-To: <20250218190822.1039982-13-superm1@kernel.org>
+Message-ID: <051984c1-c70b-3782-bda2-a00ed190525e@linux.intel.com>
+References: <20250218190822.1039982-1-superm1@kernel.org> <20250218190822.1039982-13-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -92,174 +90,106 @@ Content-Type: text/plain; charset=US-ASCII
 
 On Tue, 18 Feb 2025, Mario Limonciello wrote:
 
-> From: Perry Yuan <Perry.Yuan@amd.com>
+> From: Mario Limonciello <mario.limonciello@amd.com>
 > 
-> There are some firmware parameters that need to be configured
-> when a CPU core is brought online or offline.
-> 
-> when CPU is online, it will initialize the workload classification
-> parameters to CPU firmware which will trigger the workload class ID
-> updating function.
-> 
-> Once the CPU is going to offline, it will need to disable the workload
-> classification function and clear the history.
+> Add a dump of the class and capabilities table to debugfs to assist
+> with debugging scheduler issues.
 > 
 > Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
-> Co-developed-by: Mario Limonciello <mario.limonciello@amd.com>
 > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
 > v8:
->  * Move cpus member to this patch
->  * Add comment about online
-> v7:
->  * move mutex to this patch
+>  * s,for_each_present_cpu,for_each_possible_cpu,
+> v3:
+>  * Move idx to earlier line
 > ---
->  drivers/platform/x86/amd/hfi/hfi.c | 87 ++++++++++++++++++++++++++++++
->  1 file changed, 87 insertions(+)
+>  drivers/platform/x86/amd/hfi/hfi.c | 35 ++++++++++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
 > 
 > diff --git a/drivers/platform/x86/amd/hfi/hfi.c b/drivers/platform/x86/amd/hfi/hfi.c
-> index e1550f4463275..90b57175ccd97 100644
+> index 14378a0e09e21..79d065d7b6441 100644
 > --- a/drivers/platform/x86/amd/hfi/hfi.c
 > +++ b/drivers/platform/x86/amd/hfi/hfi.c
-> @@ -93,6 +93,7 @@ struct amd_hfi_classes {
->   * struct amd_hfi_cpuinfo - HFI workload class info per CPU
->   * @cpu:		cpu index
->   * @apic_id:		apic id of the current cpu
-> + * @cpus:		mask of cpus associated with amd_hfi_cpuinfo
->   * @class_index:	workload class ID index
->   * @nr_class:		max number of workload class supported
->   * @ipcc_scores:	ipcc scores for each class
-> @@ -103,6 +104,7 @@ struct amd_hfi_classes {
->  struct amd_hfi_cpuinfo {
->  	int		cpu;
->  	u32		apic_id;
-> +	cpumask_var_t	cpus;
->  	s16		class_index;
->  	u8		nr_class;
->  	int		*ipcc_scores;
-> @@ -111,6 +113,8 @@ struct amd_hfi_cpuinfo {
->  
->  static DEFINE_PER_CPU(struct amd_hfi_cpuinfo, amd_hfi_cpuinfo) = {.class_index = -1};
->  
-> +static DEFINE_MUTEX(hfi_cpuinfo_lock);
-
-Please mention what this protects.
-
+> @@ -13,6 +13,7 @@
+>  #include <linux/acpi.h>
+>  #include <linux/cpu.h>
+>  #include <linux/cpumask.h>
+> +#include <linux/debugfs.h>
+>  #include <linux/gfp.h>
+>  #include <linux/init.h>
+>  #include <linux/io.h>
+> @@ -74,6 +75,8 @@ struct amd_hfi_data {
+>  	void __iomem		*pcc_comm_addr;
+>  	struct acpi_subtable_header	*pcct_entry;
+>  	struct amd_shmem_info	*shmem;
 > +
->  static int find_cpu_index_by_apicid(unsigned int target_apicid)
->  {
->  	int cpu_index;
-> @@ -234,6 +238,80 @@ static int amd_set_hfi_ipcc_score(struct amd_hfi_cpuinfo *hfi_cpuinfo, int cpu)
+> +	struct dentry *dbgfs_dir;
+>  };
+>  
+>  /**
+> @@ -235,6 +238,13 @@ static int amd_hfi_alloc_class_data(struct platform_device *pdev)
 >  	return 0;
 >  }
 >  
-> +static int amd_hfi_set_state(unsigned int cpu, bool state)
+> +static void amd_hfi_remove(struct platform_device *pdev)
 > +{
-> +	int ret;
+> +	struct amd_hfi_data *dev = platform_get_drvdata(pdev);
 > +
-> +	ret = wrmsrl_on_cpu(cpu, AMD_WORKLOAD_CLASS_CONFIG, state);
-
-I'd prefer bool -> u64 conversion be done explicitly, eg. ,with ?: 
-operator.
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	return wrmsrl_on_cpu(cpu, AMD_WORKLOAD_HRST, 0x1);
+> +	debugfs_remove_recursive(dev->dbgfs_dir);
 > +}
 > +
-> +/**
-> + * amd_hfi_online() - Enable workload classification on @cpu
-> + * @cpu: CPU in which the workload classification will be enabled
-> + *
-> + * Return: 0 on success, negative error code on failure
-> + */
-> +static int amd_hfi_online(unsigned int cpu)
-> +{
-> +	struct amd_hfi_cpuinfo *hfi_info = per_cpu_ptr(&amd_hfi_cpuinfo, cpu);
-> +	struct amd_hfi_classes *hfi_classes;
-> +	int ret;
-> +
-> +	if (WARN_ON_ONCE(!hfi_info))
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * Check if @cpu as an associated, initialized and ranking data must be filled
-
-Please fold to 80 characters.
-
-> +	 */
-> +	hfi_classes = hfi_info->amd_hfi_classes;
-> +	if (!hfi_classes)
-> +		return -EINVAL;
-> +
-> +	guard(mutex)(&hfi_cpuinfo_lock);
-> +
-> +	if (!zalloc_cpumask_var(&hfi_info->cpus, GFP_KERNEL))
-> +		return -ENOMEM;
-> +
-> +	cpumask_set_cpu(cpu, hfi_info->cpus);
-> +
-> +	ret = amd_hfi_set_state(cpu, true);
-> +	if (ret)
-> +		pr_err("WCT enable failed for CPU %d\n", cpu);
-
-%u
-
-> +
-> +	return ret;
-> +}
-> +
-> +/**
-> + * amd_hfi_offline() - Disable workload classification on @cpu
-> + * @cpu: CPU in which the workload classification will be disabled
-> + *
-> + * Remove @cpu from those covered by its HFI instance.
-> + *
-> + * Return: 0 on success, negative error code on failure
-> + */
-> +static int amd_hfi_offline(unsigned int cpu)
-> +{
-> +	struct amd_hfi_cpuinfo *hfi_info = &per_cpu(amd_hfi_cpuinfo, cpu);
-> +	int ret;
-> +
-> +	if (WARN_ON_ONCE(!hfi_info))
-> +		return -EINVAL;
-> +
-> +	guard(mutex)(&hfi_cpuinfo_lock);
-> +
-> +	ret = amd_hfi_set_state(cpu, false);
-> +	if (ret)
-> +		pr_err("WCT disable failed for CPU %d\n", cpu);
-
-%u
-
-> +
-> +	free_cpumask_var(hfi_info->cpus);
-> +
-> +	return ret;
-> +}
-> +
->  static int update_hfi_ipcc_scores(void)
+>  static int amd_set_hfi_ipcc_score(struct amd_hfi_cpuinfo *hfi_cpuinfo, int cpu)
 >  {
->  	int cpu;
-> @@ -339,6 +417,15 @@ static int amd_hfi_probe(struct platform_device *pdev)
->  	if (ret)
->  		return ret;
+>  	for (int i = 0; i < hfi_cpuinfo->nr_class; i++)
+> @@ -389,6 +399,26 @@ static int amd_hfi_metadata_parser(struct platform_device *pdev,
+>  	return ret;
+>  }
 >  
-> +	/*
-> +	 * Tasks will already be running at the time this happens. This is
-> +	 * OK because rankings will be adjusted by the callbacks.
-> +	 */
-> +	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "x86/amd_hfi:online",
-> +				amd_hfi_online, amd_hfi_offline);
-> +	if (ret < 0)
-> +		return ret;
+> +static int class_capabilities_show(struct seq_file *s, void *unused)
+> +{
+> +	int cpu, idx;
+> +
+> +	seq_puts(s, "CPU #\tWLC\tPerf\tEff\n");
+> +	for_each_possible_cpu(cpu) {
+> +		struct amd_hfi_cpuinfo *hfi_cpuinfo = per_cpu_ptr(&amd_hfi_cpuinfo, cpu);
+> +
+> +		seq_printf(s, "%d", cpu);
+> +		for (idx = 0; idx < hfi_cpuinfo->nr_class; idx++) {
+> +			seq_printf(s, "\t%d\t%d\t%d\n", idx,
+> +				   hfi_cpuinfo->amd_hfi_classes[idx].perf,
+> +				   hfi_cpuinfo->amd_hfi_classes[idx].eff);
+
+Please use %u for unsigned variables.
+
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +DEFINE_SHOW_ATTRIBUTE(class_capabilities);
+> +
+>  static int amd_hfi_pm_resume(struct device *dev)
+>  {
+>  	int ret, cpu;
+> @@ -468,6 +498,10 @@ static int amd_hfi_probe(struct platform_device *pdev)
+>  
+>  	schedule_work(&sched_amd_hfi_itmt_work);
+>  
+> +	amd_hfi_data->dbgfs_dir = debugfs_create_dir("amd_hfi", arch_debugfs_dir);
+> +	debugfs_create_file("class_capabilities", 0644, amd_hfi_data->dbgfs_dir, pdev,
+> +			    &class_capabilities_fops);
 > +
 >  	return 0;
 >  }
 >  
+> @@ -479,6 +513,7 @@ static struct platform_driver amd_hfi_driver = {
+>  		.acpi_match_table = ACPI_PTR(amd_hfi_platform_match),
+>  	},
+>  	.probe = amd_hfi_probe,
+> +	.remove = amd_hfi_remove,
+>  };
+>  
+>  static int __init amd_hfi_init(void)
 > 
 
 -- 
