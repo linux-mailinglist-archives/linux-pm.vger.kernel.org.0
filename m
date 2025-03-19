@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-24317-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24318-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6C33A697B7
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 19:14:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02590A697D0
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 19:16:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C52BA188261F
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 18:14:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01C178A510A
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 18:13:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5ABC21A43C;
-	Wed, 19 Mar 2025 18:11:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FEDA21ABDC;
+	Wed, 19 Mar 2025 18:11:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="ILPjBzVI"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="3zi6N9X2"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C40218E97;
-	Wed, 19 Mar 2025 18:11:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C07321A44D;
+	Wed, 19 Mar 2025 18:11:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742407907; cv=none; b=XymeJRM6+UIiPHLn7W61q2Ww3zKq3W1WgzhS9OwyCS1gzetPjcqnz9yJdkkmOFbOYW4EMWw3C8XTJr8qzrVENoW3gAxDXoetqY3bZvz2LhUFcw5a31yul/x9fnJ6KvexYqq1tu0jaZDTfG4nnWLzVSmuodEDOLh01pW488gVEiI=
+	t=1742407911; cv=none; b=umE80rJzCMeWfwLbav2HwqYAsYzESnB9aAOeqTuYcUuNtuzjwzvkzDXgWDz1aRKOGUCNHRRyWN6y022Ez9bg4W0dF7Cj8dYKqrL55scBHDjIzIQiXKTQGqD/vliqtTclee/tNC4MHngm1xhRtZxGMSs5ExIOnlGGqjZIx01BAZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742407907; c=relaxed/simple;
-	bh=oJp+AcDHyF//++icEOks2WYjf0+rIVQorzDheMIQUQc=;
+	s=arc-20240116; t=1742407911; c=relaxed/simple;
+	bh=4oBqDRz1b/hZCjb2rMlYW8j4Kr9COzceI9oiCHijD/g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rE6ZRHpaMSSjGhBeqLCgnFWoxoxaqigVLlo+y0MjKfl46cHNcaY+c1VXuGSNkJ0c+bjPz1HqwUA061GXxQZH58y5lqgZyvvx+MHHo4u65TDTckm/57m7l+OfLFeKShbIbVDzoI52fN5kB2Dg0E10TSe729YmBACE7p39mSuFEtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=ILPjBzVI; arc=none smtp.client-ip=185.138.42.100
+	 MIME-Version; b=Lw8qjPkUw+n4cWdqZW3zRS0VwfJbaiQRJ1dZDZw3aI7orpd6WYl5hPPtX0XyMhVK6WQGbiU3TO8ayQmTe4V/Bi7Og1mSDyhRSSMQzW4VlnQe/2quNj2hWnSJ1aNzvdGKhqqbgJiu4v5NVh4ZJsQbyISQVr6jYEKboRkllnFBIdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=3zi6N9X2; arc=none smtp.client-ip=185.138.42.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Received: from localhost.localdomain (unknown [IPv6:2a05:f6c2:511b:0:cbc0:999f:73ad:33bd])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id D6D402E095D4;
-	Wed, 19 Mar 2025 20:11:41 +0200 (EET)
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 0F3952E095CF;
+	Wed, 19 Mar 2025 20:11:44 +0200 (EET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1742407903;
-	bh=vA3CGMQHbSQtTTweauRQx0SuUKgGgjHHt+95VrP2xiY=; h=From:To:Subject;
-	b=ILPjBzVI+fNbuskLdYm0kclgVc/00rvxI4Yo5i5SZDwlCPqymdpNiFI2kH9RGxsZZ
-	 M8BTulf6Puulw7T+czytj3wpzrWLwp1BA8LqVtNq7hb0syDTj8By+yrR7Jkh64bLFC
-	 dPUEDDQ4eJQIGNL1YIB5JSNU4WnLCh9Naw4Ei8Tc=
+	s=default; t=1742407905;
+	bh=cuUfNiaF2vgwpYa2Ey2t9IbxbchjhS3g8DIswxK5794=; h=From:To:Subject;
+	b=3zi6N9X2G7hqEsN9z5S1MRqUNqZc3TXSOZDP+1QN9wWS+eMmCgMLHJrnTLYL8fOBO
+	 JiiQ0lq3RnRQP+CQ+Kn6WXmkHMu+4teJ1zNPeTRAjLw5Y77ftwWUZTsaGO3LtoLrfY
+	 hEEo68ly1pmsUjLDSSGwfDXFmz5RYS8jJAQgQrjE=
 Authentication-Results: linux1587.grserver.gr;
 	spf=pass (sender IP is 2a05:f6c2:511b:0:cbc0:999f:73ad:33bd) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
 Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
@@ -64,10 +64,10 @@ Cc: linux-hwmon@vger.kernel.org,
 	hdegoede@redhat.com,
 	mario.limonciello@amd.com,
 	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: [PATCH v7 11/14] platform/x86: oxpec: Adhere to sysfs-class-hwmon and
- enable pwm on 2
-Date: Wed, 19 Mar 2025 19:10:38 +0100
-Message-ID: <20250319181044.392235-12-lkml@antheas.dev>
+Subject: [PATCH v7 12/14] platform/x86: oxpec: Follow reverse xmas convention
+ for tt_toggle
+Date: Wed, 19 Mar 2025 19:10:39 +0100
+Message-ID: <20250319181044.392235-13-lkml@antheas.dev>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250319181044.392235-1-lkml@antheas.dev>
 References: <20250319181044.392235-1-lkml@antheas.dev>
@@ -78,89 +78,57 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-PPP-Message-ID: <174240790348.3388.643265854959137827@linux1587.grserver.gr>
+X-PPP-Message-ID: 
+ <174240790562.3462.6522108493530506182@linux1587.grserver.gr>
 X-PPP-Vhost: antheas.dev
 X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
 X-Virus-Status: Clean
 
-Currently, the driver does not adhere to the sysfs-class-hwmon
-specification: 0 is used for auto fan control and 1 is used for manual
-control. However, it is expected that 0 sets the fan to full speed,
-1 sets the fan to manual, and then 2 is used for automatic control.
+Since the rest of the driver follows this convention, apply it to the
+tt_toggle attribute as well.
 
-Therefore, change the sysfs API to reflect this and enable pwm on 2.
-
-As we are breaking the ABI for this driver, rename oxpec to oxp_ec,
-reflecting the naming convention used by other drivers, to allow for
-a smooth migration in current userspace programs.
-
-Closes: https://lore.kernel.org/linux-hwmon/20241027174836.8588-1-derekjohn.clark@gmail.com/
-Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
+Suggested-by: Derek J. Clark <derekjohn.clark@gmail.com>
 Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 ---
- drivers/platform/x86/oxpec.c | 35 ++++++++++++++++++++++++++++++++---
- 1 file changed, 32 insertions(+), 3 deletions(-)
+ drivers/platform/x86/oxpec.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
-index 5b84647569931..97085ea9e8d77 100644
+index 97085ea9e8d77..2e4c7e6188f08 100644
 --- a/drivers/platform/x86/oxpec.c
 +++ b/drivers/platform/x86/oxpec.c
-@@ -731,7 +731,27 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
- 		case hwmon_pwm_input:
- 			return oxp_pwm_input_read(val);
- 		case hwmon_pwm_enable:
--			return oxp_pwm_read(val);
-+			ret = oxp_pwm_read(val);
-+			if (ret)
-+				return ret;
-+
-+			/* Check for auto and return 2 */
-+			if (!*val) {
-+				*val = 2;
-+				return 0;
-+			}
-+
-+			/* Return 0 if at full fan speed, 1 otherwise */
-+			ret = oxp_pwm_fan_speed(val);
-+			if (ret)
-+				return ret;
-+
-+			if (*val == 255)
-+				*val = 0;
-+			else
-+				*val = 1;
-+
-+			return 0;
- 		default:
- 			break;
- 		}
-@@ -745,15 +765,24 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
- static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
- 			      u32 attr, int channel, long val)
+@@ -275,9 +275,9 @@ static const struct dmi_system_id dmi_table[] = {
+ /* Helper functions to handle EC read/write */
+ static int read_from_ec(u8 reg, int size, long *val)
  {
+-	int i;
+-	int ret;
+ 	u8 buffer;
 +	int ret;
-+
- 	switch (type) {
- 	case hwmon_pwm:
- 		switch (attr) {
- 		case hwmon_pwm_enable:
- 			if (val == 1)
- 				return oxp_pwm_enable();
--			else if (val == 0)
-+			else if (val == 2)
- 				return oxp_pwm_disable();
--			return -EINVAL;
-+			else if (val != 0)
-+				return -EINVAL;
-+
-+			/* Enable PWM and set to max speed */
-+			ret = oxp_pwm_enable();
-+			if (ret)
-+				return ret;
-+			return oxp_pwm_input_write(255);
- 		case hwmon_pwm_input:
- 			return oxp_pwm_input_write(val);
- 		default:
++	int i;
+ 
+ 	if (!lock_global_acpi_lock())
+ 		return -EBUSY;
+@@ -389,8 +389,8 @@ static ssize_t tt_toggle_store(struct device *dev,
+ 			       struct device_attribute *attr, const char *buf,
+ 			       size_t count)
+ {
+-	int rval;
+ 	bool value;
++	int rval;
+ 
+ 	rval = kstrtobool(buf, &value);
+ 	if (rval)
+@@ -411,8 +411,8 @@ static ssize_t tt_toggle_show(struct device *dev,
+ 			      struct device_attribute *attr, char *buf)
+ {
+ 	int retval;
+-	u8 reg;
+ 	long val;
++	u8 reg;
+ 
+ 	switch (board) {
+ 	case oxp_mini_amd_a07:
 -- 
 2.48.1
 
