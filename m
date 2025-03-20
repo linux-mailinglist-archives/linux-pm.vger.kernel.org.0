@@ -1,115 +1,125 @@
-Return-Path: <linux-pm+bounces-24334-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24335-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F21DA6AA62
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Mar 2025 16:55:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 52598A6AA69
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Mar 2025 16:56:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D855480A94
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Mar 2025 15:55:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 247EF484EEF
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Mar 2025 15:56:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE1B91EB195;
-	Thu, 20 Mar 2025 15:55:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gd3BucY0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21E501EB1A8;
+	Thu, 20 Mar 2025 15:56:10 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890921E2852;
-	Thu, 20 Mar 2025 15:55:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DE1B1E98EA;
+	Thu, 20 Mar 2025 15:56:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742486117; cv=none; b=iehwpfIVzlqdNKRt/kg1raMlM7JmFEwAAMgcjUwmA8I2JZFPQV3e+nyIqE8dUW+ZZEHgtfmpA/Ln49U73+EprHSFjYUsSytkIwz6IyEQmFP+1AWK7OLHSt0Kj9YRtIkHwiU4RGY+ifYEsSyIDVfpF8Ix0+/EDJfJGBGRUDdUaLc=
+	t=1742486170; cv=none; b=XAZRaPqYYCY3+8CGJhBlAFoesncEvJuKBUVN4hfyKaV2nMrRBhIyiJ/YtyH0smHgZjiFPcwj/aex1d0Tuf1Dl35BibpKO1rz8L+vMz/oEdyGb5x8l+V9bgmJ5LY1GioNE26tyM0lWsAsmdZ9CqIZW7hd6HXgy1z3rmNjokbBRPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742486117; c=relaxed/simple;
-	bh=ugGwmlbHI7Ylp9+3EGFLGWP7T2pY9hjUfzoAi22qRmY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OW6eOFCiqEgINxoY2JQ5kcNANmgk86n6OVkLSkrSQhc6A6NugapP87Fk/AS6Q8LhTBUyEVTZ5u16gJ3KTu86dnZyZrt8HSl9kj6fgZC7KWNYmyMXrJP7JELrYzdEgzRheWU1Yevcr0fupy7Ok8rABLyYVjtCQgn4gc632vL/uf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gd3BucY0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CC98C4CEDD;
-	Thu, 20 Mar 2025 15:55:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742486117;
-	bh=ugGwmlbHI7Ylp9+3EGFLGWP7T2pY9hjUfzoAi22qRmY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Gd3BucY03/Of2qRjDDfcWqXci4x+52BbNqKJlbn1+/2lK13Cc8/Cazm5geAeGNBBV
-	 SLXwLFt+DLDTpGyRjXVl5+MdalEu+NPPrSlGpdMzTC/+n6mU5zM3ocd0bpRWJLpFJi
-	 qIyLoJZoPtQSQ5OyDJfestAahVs+FTOz7BU0O8VD1zGYYqWj2zOhX6AyHXD9x8l3X2
-	 q1ZZ5Ob0ilEGCmki51IANAjWZrUUCSTzcnUmq7DmQG41QCQuywMJ1xq5M2BpRPWA2g
-	 N1fwHOuFJWe4DyRe5+n1MyXvbwAcJl8cHhq1O2uscVbWY093yvHxlTDb0QsyvbIHOM
-	 seHFb4K/I3ARw==
-Date: Thu, 20 Mar 2025 15:55:10 +0000
-From: Lee Jones <lee@kernel.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Dzmitry Sankouski <dsankouski@gmail.com>,
-	Sebastian Reichel <sre@kernel.org>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Pavel Machek <pavel@ucw.cz>, Hans de Goede <hdegoede@redhat.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-	Purism Kernel Team <kernel@puri.sm>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [GIT PULL] Immutable branch between MFD, Input, LEDs and Power
- due for the v6.15 merge window
-Message-ID: <20250320155510.GU3890718@google.com>
-References: <20250123-starqltechn_integration_upstream-v17-0-8b06685b6612@gmail.com>
- <20250221160322.GE824852@google.com>
- <CAL_Jsq+f23KniKZuTHkOq5a7WL=pBy6PwuQwXmbPXMjq3Qax4A@mail.gmail.com>
+	s=arc-20240116; t=1742486170; c=relaxed/simple;
+	bh=h6Tcpw25xgx4OGNJRXuC8Ivumbn4vEdkkk6QO2pNB4M=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=muvsHwOJns0d+bLniVCgsuyEUVaBF+9ZlHbcsO36Evzy83Yc0YWFOYDr3DeTmezWgk+6CpAidXSw7QyF+n9peNNuH0ZKzx/WGPOuDZxAagyTx/ddhxuN10aQrwZ4FGUWAIX2v84ECg25wwcM2ZQK+bK4DmoYts86pzSaMB576yA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2FFAD1063;
+	Thu, 20 Mar 2025 08:56:14 -0700 (PDT)
+Received: from donnerap.arm.com (donnerap.manchester.arm.com [10.32.100.21])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D24693F673;
+	Thu, 20 Mar 2025 08:56:04 -0700 (PDT)
+From: Andre Przywara <andre.przywara@arm.com>
+To: Yangtao Li <tiny.windzz@gmail.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>
+Cc: Brandon Cheo Fusi <fusibrandon13@gmail.com>,
+	linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] cpufreq: sun50i: prevent out-of-bounds access
+Date: Thu, 20 Mar 2025 15:55:57 +0000
+Message-Id: <20250320155557.211211-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_Jsq+f23KniKZuTHkOq5a7WL=pBy6PwuQwXmbPXMjq3Qax4A@mail.gmail.com>
 
-On Mon, 17 Mar 2025, Rob Herring wrote:
+A KASAN enabled kernel reports an out-of-bounds access when handling the
+nvmem cell in the sun50i cpufreq driver:
+==================================================================
+BUG: KASAN: slab-out-of-bounds in sun50i_cpufreq_nvmem_probe+0x180/0x3d4
+Read of size 4 at addr ffff000006bf31e0 by task kworker/u16:1/38
 
-> On Fri, Feb 21, 2025 at 10:03 AM Lee Jones <lee@kernel.org> wrote:
-> >
-> > Enjoy!
-> >
-> > The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
-> >
-> >   Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
-> >
-> > are available in the Git repository at:
-> >
-> >   ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/ib-mfd-input-leds-power-v6.15
-> >
-> > for you to fetch changes up to aebb5fc9a0d87916133b911e1ef2cc04a7996335:
-> >
-> >   leds: max77705: Add LEDs support (2025-02-20 16:38:37 +0000)
-> >
-> > ----------------------------------------------------------------
-> > Immutable branch between MFD, Input, LEDs and Power due for the v6.15 merge window
-> >
-> > ----------------------------------------------------------------
-> > Dzmitry Sankouski (7):
-> >       dt-bindings: power: supply: add maxim,max77705 charger
-> >       dt-bindings: mfd: Add maxim,max77705
-> >       power: supply: max77705: Add charger driver for Maxim 77705
-> >       mfd: simple-mfd-i2c: Add MAX77705 support
-> >       mfd: Add new driver for MAX77705 PMIC
-> >       Input: max77693 - add max77705 haptic support
-> >       leds: max77705: Add LEDs support
-> 
-> None of this seems to be in linux-next, but now we have users in .dts files.
+This is because the DT specifies the nvmem cell as covering only two
+bytes, but we use a u32 pointer to read the value. DTs for other SoCs
+indeed specify 4 bytes, so we cannot just shorten the variable to a u16.
 
-None of what is in -next?  All of these patches are applied and pushed.
+Fortunately nvmem_cell_read() allows to return the length of the nvmem
+cell, in bytes, so we can use that information to only access the valid
+portion of the data.
+To cover multiple cell sizes, use memcpy() to copy the information into a
+zeroed u32 buffer, then also make sure we always read the data in little
+endian fashion, as this is how the data is stored in the SID efuses.
 
+Fixes: 6cc4bcceff9a ("cpufreq: sun50i: Refactor speed bin decoding")
+Reported-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+---
+ drivers/cpufreq/sun50i-cpufreq-nvmem.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+index 17d6a149f580d..c48ed04b82335 100644
+--- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
++++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+@@ -194,7 +194,9 @@ static int sun50i_cpufreq_get_efuse(void)
+ 	struct nvmem_cell *speedbin_nvmem;
+ 	const struct of_device_id *match;
+ 	struct device *cpu_dev;
+-	u32 *speedbin;
++	void *speedbin_ptr;
++	u32 speedbin = 0;
++	size_t len;
+ 	int ret;
+ 
+ 	cpu_dev = get_cpu_device(0);
+@@ -217,14 +219,18 @@ static int sun50i_cpufreq_get_efuse(void)
+ 		return dev_err_probe(cpu_dev, PTR_ERR(speedbin_nvmem),
+ 				     "Could not get nvmem cell\n");
+ 
+-	speedbin = nvmem_cell_read(speedbin_nvmem, NULL);
++	speedbin_ptr = nvmem_cell_read(speedbin_nvmem, &len);
+ 	nvmem_cell_put(speedbin_nvmem);
+-	if (IS_ERR(speedbin))
+-		return PTR_ERR(speedbin);
++	if (IS_ERR(speedbin_ptr))
++		return PTR_ERR(speedbin_ptr);
+ 
+-	ret = opp_data->efuse_xlate(*speedbin);
++	if (len <= 4)
++		memcpy(&speedbin, speedbin_ptr, len);
++	speedbin = le32_to_cpu(speedbin);
+ 
+-	kfree(speedbin);
++	ret = opp_data->efuse_xlate(speedbin);
++
++	kfree(speedbin_ptr);
+ 
+ 	return ret;
+ };
 -- 
-Lee Jones [李琼斯]
+2.46.3
+
 
