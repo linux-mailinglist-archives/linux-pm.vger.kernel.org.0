@@ -1,87 +1,136 @@
-Return-Path: <linux-pm+bounces-24326-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24327-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98B77A69CCB
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Mar 2025 00:42:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3F4DA6A06E
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Mar 2025 08:30:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B0A2425153
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Mar 2025 23:42:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1044618903AF
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Mar 2025 07:30:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D642223716;
-	Wed, 19 Mar 2025 23:42:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33FDE1F0998;
+	Thu, 20 Mar 2025 07:30:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UZLfRuoy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kyEww0H3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2DC2222A1;
-	Wed, 19 Mar 2025 23:42:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 717421EDA3C;
+	Thu, 20 Mar 2025 07:30:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742427740; cv=none; b=O+9Y8Gtg5/+vM+EbX2bXZf1ZpC0IQa+OpI/qx1T4IsA1hJ2z+Hhxk0zz+Cu1sFvHtb5hYmD2Ry61PKeuJJZNDZ27H+w+1/Gx4GWTNBI/OMV+dtn1xCVybGba7TgXDjLxVQTdkuCqeGLA1m2xY9xW/FvsXXIfhfcyJ/r8f2jVGVk=
+	t=1742455824; cv=none; b=mu1GW6UR2kLd8rxqGlxWZXVyWDlLDM/uLE+MLojKSR7g68h0pbTyMzUPdVxTo+1vHuBGT6d4C0mYQeWSP4/In1lNbaUPmxg7ROZx7Mvv95duwJc+rMlqCW7qsc6/pBWqOg8Z5a/1Fpm41oZ+qQBbI/nMoIm2y9gaBZ7K/YgTmQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742427740; c=relaxed/simple;
-	bh=2DHRKW+ZtPYLjeyzEWQuzOQUbGwhYP2SpRTrHx7JFZU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gWbSCbmKXjKBKAC6AAHyWT1gdJ/w1HuNynQfYO/+PLDBNE2Wbf/ILX473jvNxL+DIWqTYLg94CRMLYZzUkjnbG8XTCvO02voH34e4X6SNU9SxlOMom9RfXypQEXGgbeX5ac5HrkTkSwbq3i3a179QZAcS1E6Ks0TxyL0AeIX0Fg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UZLfRuoy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DDD0C4CEE4;
-	Wed, 19 Mar 2025 23:42:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742427739;
-	bh=2DHRKW+ZtPYLjeyzEWQuzOQUbGwhYP2SpRTrHx7JFZU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UZLfRuoyCH4ZyJdjYW1+dVKQAVE59LiiCQlbQvEtUh+hP9b+CoKpp30p1b9pkVvjR
-	 435PSCn218QDgYaR69XFEt19AmDWzE0uYofq3jAiU25axHRN9RdthgKoK5THD8UW5o
-	 RKupPN+D+lFApcFdB0SzpqKNBHkOlr0+DSFvNGH907+mnnPIOMsE4eMzkWoAiC+kiL
-	 4uAaZ5zbaEo4Zrvn4jnNXhQVudm9/nlGXYRO7g3mGt8+f8tL5C5J1p4qCb/w1NLbgl
-	 4MCwk9o0QQCBDr986iLidOykuw7Cbp336TPXiQyWW1TLlpGnAXVLJBPNKXgOp27jiC
-	 DlkmZmk9m60zQ==
-Date: Wed, 19 Mar 2025 18:42:18 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Sebastian Reichel <sre@kernel.org>, linux-kernel@vger.kernel.org,
-	Artur Rojek <contact@artur-rojek.eu>, devicetree@vger.kernel.org,
-	Mike Looijmans <mike.looijmans@topic.nl>, linux-pm@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Andrew Davis <afd@ti.com>,
-	Dzmitry Sankouski <dsankouski@gmail.com>,
-	Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH] dt-bindings: power: supply: Correct indentation and
- style in DTS example
-Message-ID: <174242773745.2648480.14551287782671331549.robh@kernel.org>
-References: <20250318081428.33979-1-krzysztof.kozlowski@linaro.org>
+	s=arc-20240116; t=1742455824; c=relaxed/simple;
+	bh=/+fImEp4W04HXan71vn8rI4+3p5PDYAMaSKv5xbvHLY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FCqXc/CEeucGKja0wf+It7ep+XcuW9qksgVGmEPjLleiTvxkyy33E7eyFxvQw5nAC/ZttkoYbgDBCm29TPRzEuEgMxgFvPV+JQM3GDJH1tiPcaEROmlYeFJCtQ4rtn89jUsG1lmQHJoXYRlQj5H2Q4AqfL6gJOMK132888hNmEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kyEww0H3; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-ac2ed007aacso114413366b.0;
+        Thu, 20 Mar 2025 00:30:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742455821; x=1743060621; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1Mpjffga6qbUYAqH/bNMoK3D9M2lbn6dBfVWt3T7sRg=;
+        b=kyEww0H34FsAksvRyHI4rwLu/hqJga9C8EUuSEOwyNKm4iaRnEMNyV46alkfsMJgPl
+         PaSEwy/rJtQW+JaR53ED2zeHWQjjM6lyF0x3fxPSnwjuFbhsBVUSoXH3aLq20Sib3fQC
+         BFa5TIjh0Jz5YB7Olh5K847LddOrLFEeGoo5xbT1GUOvUI1pCTLndzE85fS/X/a722aZ
+         5poST2jRBO8ymBmN4mh/EdRDGFXY+AjVHkhHpmGPm00SyytB8wRU4Rq1aQNrhZi/jBs/
+         6jNdzDsg86ilK82qW1ExexxQufnZECFGY+RV4IRCeRP4dVOzRXMwxBdgl5HDp7ksKA8d
+         URiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742455821; x=1743060621;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1Mpjffga6qbUYAqH/bNMoK3D9M2lbn6dBfVWt3T7sRg=;
+        b=LtaWV7HGNZ8mobdDcZjqXSYeD0LUB+YjrYFa/s6ZrCqgFZskezwsEeMUd6hXP2eOJU
+         1iir0ib42XSoQte+ubjPuCwAC0Li0Dr+IAFpjEdgs/701c37U7XkzegQ0U4rkdFXmmWx
+         tz7goJxVZhnhY58RPyzFJSePCDJUwXwpS2QTZCtY1ImBUS0rcM0xzK5NPyA1JU+7Lbii
+         2lHWreDV1MXqPZ9jFfOrg6vfUz7alRR5zi8tB+Lg7eHZY3CJhBlFd3yrQq2Upd0z/M6m
+         YbpNSvKQzGunvGx/chMZARUba4+veuOT1BcDWlHTa8iEFyZzDfaQyvYaMOQuUXTa9y1j
+         4cTA==
+X-Forwarded-Encrypted: i=1; AJvYcCVpCpiHE4fABtPH6mzRCHkMiYQ0xjlbDJq077VFVsZMB8/8M4w5/OnRmS59lH6BFcbfjmW2shGy10rL@vger.kernel.org, AJvYcCWi3E5EjZI6YeWJOR1ZvafEDIJbHNKiHc4nsHufVAreIzOkp8FIPHjgm+Bb3y3eBX5v6rhj7W8PJPVBcq5H@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCxuXYyAoHMpRDrTKW52eeICaM5u54Q1tAAQ0uazxfW8SyeswW
+	/hN2dpXuC201urT1TwiXYZE/z59HLdmvcu0bEobSekWHGqaWkwQlA8Y1sA==
+X-Gm-Gg: ASbGncsx8xE2olE9XAajGxT7q2yyOWH4rJz/XLj1tNacwyAKXHs+2H0kH0X8m/5fdb7
+	QeXNZws0h4OMccDKU3CSvmveF5JHNAKA/C8HlPjHDGV65Ihz+0kmqX3gtPO+63/nlWtQIl1TT/i
+	dBdZ2NpVzf6A4VRvoO//NAc9P/Q6WprC9eXA1v2ZWO4wl5YpXZ4AK9OIqsSfEBLIgXqfU4LL7F/
+	QB+XW+EC5YE1kwRhbRi9V7n38ngag/HRIDGy77Z0dhAK2YziL+p5y93kF362sSHUpcXU+6ER8jZ
+	eukz+I8f/bvBV/8W0dHH5mZKLTDfv3QVX0kr
+X-Google-Smtp-Source: AGHT+IGc+dwu9EUcNrsBwPKQKnvaWdpbi5M7BeDPB1b/hfzq87dN1iZBojDWoe4F4XskixC0I1fVmw==
+X-Received: by 2002:a17:907:97c8:b0:ac2:cdcb:1b39 with SMTP id a640c23a62f3a-ac3b7d946a6mr517067866b.19.1742455820315;
+        Thu, 20 Mar 2025 00:30:20 -0700 (PDT)
+Received: from xeon.. ([188.163.112.51])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3146aef69sm1115638466b.4.2025.03.20.00.30.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Mar 2025 00:30:19 -0700 (PDT)
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+To: Sebastian Reichel <sre@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/2] power: supply: Add support for Maxim MAX8971 charger
+Date: Thu, 20 Mar 2025 09:29:45 +0200
+Message-ID: <20250320072947.8174-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250318081428.33979-1-krzysztof.kozlowski@linaro.org>
+Content-Transfer-Encoding: 8bit
 
+The MAX8971 is a compact, high-frequency, high-efficiency
+switch-mode charger for a one-cell lithium-ion (Li+) battery.
 
-On Tue, 18 Mar 2025 09:14:28 +0100, Krzysztof Kozlowski wrote:
-> DTS example in the bindings should be indented with 2- or 4-spaces and
-> aligned with opening '- |'. Correct mixtures of the style or any other
-> indentations to use preferred 4-spaces.
-> 
-> No functional changes here, but saves some comments during reviews
-> of new patches built on the existing code.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/power/supply/bq25980.yaml        | 34 +++++++++----------
->  .../power/supply/ingenic,battery.yaml         | 14 ++++----
->  .../bindings/power/supply/ltc4162-l.yaml      | 18 +++++-----
->  .../bindings/power/supply/maxim,max77705.yaml |  4 +--
->  4 files changed, 35 insertions(+), 35 deletions(-)
-> 
+---
+Changes on switching from v4 to v5:
+- revert schema to v3
+- removed i2c_client from driver data
+- removed max8971_supplied_to
+- swapped power_supply_config filling .of_node with .fwnode
+- attr group liked to power_supply_config
+- added ABI properties description
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Changes on switching from v3 to v4:
+- swap graph with connector phandle
+
+Changes on switching from v2 to v3:
+- fast_charge_timer, top_off_threshold_current and top_off_timer converted to
+  device attributes. Other vendor properties removed.
+- removed max8971_config
+- removed unneded functions and definitions along vendor props removal
+- added __maybe_unused for resume function
+
+Changes on switching from v1 to v2:
+- swap phandle with graph for extcon
+- added power-supply ref
+---
+
+Svyatoslav Ryhel (2):
+  dt-bindings: power: supply: Document Maxim MAX8971 charger
+  power: supply: Add support for Maxim MAX8971 charger
+
+ Documentation/ABI/testing/sysfs-class-power   |  43 +
+ .../bindings/power/supply/maxim,max8971.yaml  |  68 ++
+ drivers/power/supply/Kconfig                  |  14 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/max8971_charger.c        | 750 ++++++++++++++++++
+ 5 files changed, 876 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,max8971.yaml
+ create mode 100644 drivers/power/supply/max8971_charger.c
+
+-- 
+2.43.0
 
 
