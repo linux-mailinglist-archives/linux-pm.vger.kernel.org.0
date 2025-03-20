@@ -1,75 +1,77 @@
-Return-Path: <linux-pm+bounces-24327-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24328-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3F4DA6A06E
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Mar 2025 08:30:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56A0AA6A06D
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Mar 2025 08:30:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1044618903AF
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Mar 2025 07:30:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA5BD422954
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Mar 2025 07:30:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33FDE1F0998;
-	Thu, 20 Mar 2025 07:30:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CF80204096;
+	Thu, 20 Mar 2025 07:30:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kyEww0H3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L5G6o5zK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 717421EDA3C;
-	Thu, 20 Mar 2025 07:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90230A47;
+	Thu, 20 Mar 2025 07:30:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742455824; cv=none; b=mu1GW6UR2kLd8rxqGlxWZXVyWDlLDM/uLE+MLojKSR7g68h0pbTyMzUPdVxTo+1vHuBGT6d4C0mYQeWSP4/In1lNbaUPmxg7ROZx7Mvv95duwJc+rMlqCW7qsc6/pBWqOg8Z5a/1Fpm41oZ+qQBbI/nMoIm2y9gaBZ7K/YgTmQg=
+	t=1742455825; cv=none; b=CF/s+ZU3lX/RK8b5+M9EdjMgTEhY5ka/+tpIjyIW1ipBWRXXNduA7gsbnwwrRsq52ms22+Mi5e1I2v/JZkQBGHcjhgJHbn6NAbcaUaAggw4ymFr4RfwIo/spyUOSWKb7Xy7ovkfxSI2m2MPUvhtCN1bDHjRwZqoF1eLzg6Hjd+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742455824; c=relaxed/simple;
-	bh=/+fImEp4W04HXan71vn8rI4+3p5PDYAMaSKv5xbvHLY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FCqXc/CEeucGKja0wf+It7ep+XcuW9qksgVGmEPjLleiTvxkyy33E7eyFxvQw5nAC/ZttkoYbgDBCm29TPRzEuEgMxgFvPV+JQM3GDJH1tiPcaEROmlYeFJCtQ4rtn89jUsG1lmQHJoXYRlQj5H2Q4AqfL6gJOMK132888hNmEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kyEww0H3; arc=none smtp.client-ip=209.85.218.41
+	s=arc-20240116; t=1742455825; c=relaxed/simple;
+	bh=hbyAjHLbBjqr0VU9niJ5oazmJV9tzGU7e6O8esJ6oe4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=thseyqHh60zp4qP3T4cIokenu9RrCed9i0ObLiqE6Bw65Z16yT51VPT0HH1snECPmkNmTQl52oycVAFA3ei/MNpyayBta6tInKioP8NuqLlrV5fd9rxafS97iGhc97Zh6ywqa8axeGJOD3Jf+dNJe0PS8Su9dv+RrILBno1YHc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L5G6o5zK; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-ac2ed007aacso114413366b.0;
-        Thu, 20 Mar 2025 00:30:22 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-abbd96bef64so94466666b.3;
+        Thu, 20 Mar 2025 00:30:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742455821; x=1743060621; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Mpjffga6qbUYAqH/bNMoK3D9M2lbn6dBfVWt3T7sRg=;
-        b=kyEww0H34FsAksvRyHI4rwLu/hqJga9C8EUuSEOwyNKm4iaRnEMNyV46alkfsMJgPl
-         PaSEwy/rJtQW+JaR53ED2zeHWQjjM6lyF0x3fxPSnwjuFbhsBVUSoXH3aLq20Sib3fQC
-         BFa5TIjh0Jz5YB7Olh5K847LddOrLFEeGoo5xbT1GUOvUI1pCTLndzE85fS/X/a722aZ
-         5poST2jRBO8ymBmN4mh/EdRDGFXY+AjVHkhHpmGPm00SyytB8wRU4Rq1aQNrhZi/jBs/
-         6jNdzDsg86ilK82qW1ExexxQufnZECFGY+RV4IRCeRP4dVOzRXMwxBdgl5HDp7ksKA8d
-         URiA==
+        d=gmail.com; s=20230601; t=1742455822; x=1743060622; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XH4XVjvmSOeJ56MEzJia6DNHDQ7WVeAKt9WlOAudWYs=;
+        b=L5G6o5zK/hEuhK+LONYQQQk+gW1FmJa81zL2VdCzmFhZV4BEun27IsxK3lhr7Nqty9
+         TBg7sHvLE9NnOOYgk2g1n+ARoWvzRXY7hCAae7gG1fCvgmGENnbB3VtRxKO0e5Y/8LBO
+         YZSPDC+Y7Xt3QA7utpJhuk3V6NALPek+boPszyh8ZaaTNcu1/P+wCL+lMBbZR+akYG0T
+         hJkkPBwa9C93cujdLRWJKt428f7UdSgzU3U0ZTKeE9ZZ5RNGW6S3IT7AqDuAjbhXZdQF
+         uI8LQWE6+mDB2arf9YA8z9wb1NZ38+ItIsamTqW3SrIk17GWIhUtNL/sSUjJdreF740A
+         EgUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742455821; x=1743060621;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1Mpjffga6qbUYAqH/bNMoK3D9M2lbn6dBfVWt3T7sRg=;
-        b=LtaWV7HGNZ8mobdDcZjqXSYeD0LUB+YjrYFa/s6ZrCqgFZskezwsEeMUd6hXP2eOJU
-         1iir0ib42XSoQte+ubjPuCwAC0Li0Dr+IAFpjEdgs/701c37U7XkzegQ0U4rkdFXmmWx
-         tz7goJxVZhnhY58RPyzFJSePCDJUwXwpS2QTZCtY1ImBUS0rcM0xzK5NPyA1JU+7Lbii
-         2lHWreDV1MXqPZ9jFfOrg6vfUz7alRR5zi8tB+Lg7eHZY3CJhBlFd3yrQq2Upd0z/M6m
-         YbpNSvKQzGunvGx/chMZARUba4+veuOT1BcDWlHTa8iEFyZzDfaQyvYaMOQuUXTa9y1j
-         4cTA==
-X-Forwarded-Encrypted: i=1; AJvYcCVpCpiHE4fABtPH6mzRCHkMiYQ0xjlbDJq077VFVsZMB8/8M4w5/OnRmS59lH6BFcbfjmW2shGy10rL@vger.kernel.org, AJvYcCWi3E5EjZI6YeWJOR1ZvafEDIJbHNKiHc4nsHufVAreIzOkp8FIPHjgm+Bb3y3eBX5v6rhj7W8PJPVBcq5H@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCxuXYyAoHMpRDrTKW52eeICaM5u54Q1tAAQ0uazxfW8SyeswW
-	/hN2dpXuC201urT1TwiXYZE/z59HLdmvcu0bEobSekWHGqaWkwQlA8Y1sA==
-X-Gm-Gg: ASbGncsx8xE2olE9XAajGxT7q2yyOWH4rJz/XLj1tNacwyAKXHs+2H0kH0X8m/5fdb7
-	QeXNZws0h4OMccDKU3CSvmveF5JHNAKA/C8HlPjHDGV65Ihz+0kmqX3gtPO+63/nlWtQIl1TT/i
-	dBdZ2NpVzf6A4VRvoO//NAc9P/Q6WprC9eXA1v2ZWO4wl5YpXZ4AK9OIqsSfEBLIgXqfU4LL7F/
-	QB+XW+EC5YE1kwRhbRi9V7n38ngag/HRIDGy77Z0dhAK2YziL+p5y93kF362sSHUpcXU+6ER8jZ
-	eukz+I8f/bvBV/8W0dHH5mZKLTDfv3QVX0kr
-X-Google-Smtp-Source: AGHT+IGc+dwu9EUcNrsBwPKQKnvaWdpbi5M7BeDPB1b/hfzq87dN1iZBojDWoe4F4XskixC0I1fVmw==
-X-Received: by 2002:a17:907:97c8:b0:ac2:cdcb:1b39 with SMTP id a640c23a62f3a-ac3b7d946a6mr517067866b.19.1742455820315;
-        Thu, 20 Mar 2025 00:30:20 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1742455822; x=1743060622;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XH4XVjvmSOeJ56MEzJia6DNHDQ7WVeAKt9WlOAudWYs=;
+        b=s5UZYaBoKRT8i2FpQqNPVErhCMrSwEuJzb+US2tsJS+/CXJcXa0PrFt84Tm+KrfWPp
+         v6bfcPwGidWc4f/dtjuMzy30NsvO7l8lqJKFTy5c/qohyFJ+X00ZqWmuhZdvTdlDPGRl
+         K2g+z04HcST0kS9xIOvhope920QPKouNGxrAeMw12oUVgcb6kErAbWaLD1TZRNf1KNQh
+         2yYnD+cPD0D6V1sx+QR5oqNNctUu1e07A8fjusapyWA5dEt0xTE0sKJSibRMJDWKlxcs
+         ndltpAz750U4wc1w0S4AqAV8blZauR/sjRCxy25gYccyhKQd8yT4f5ZEGVxDrMciR/rf
+         PD+w==
+X-Forwarded-Encrypted: i=1; AJvYcCUwPX0S431hy7iUl1InpbOZ1BtRpJJZSlICyIqD948OeUrtz34OuCQblzdnEXiMA5AqmVDisY2J2APt@vger.kernel.org, AJvYcCWZ51baRyjw563b7WdG51k3EhxFDZCtjm8OakhMOTogUsYBzdH2Nyy7BxAI0pseKUGPgkiTeLQw3mvaEdTs@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWjgSp8V/rtrBuhgQph1tWaVvfRivkNzncYr84wattHVK1H4z7
+	62NqPlrdT/OhWL6AxGoRcu/rKUiwN5Zt6JWVy3JaTXhWpU5QkMPk
+X-Gm-Gg: ASbGncs/FlBWvRQol7VVpwTQmz0AdWVOyoyY3DbL+PpQBDY1rt//vZgcTf6bZMvCkHc
+	WC/zasn6ZraiGupLH+PxNrAtEa8DTcHx9u1xO7bChtOeA5t5t7yTdm9oa7mfcTigO9ZBDi5wq1b
+	70eY8TAvMHDuOpk111sIG4guhUdQyCBVCHgB8TDdC2XB2rTau1zvue8e4pA1C+fcYyyUre7tsRC
+	sqP7QfPdSv3hm2wmOwOPrOc91DyznCE085RtAAZjYdGKQj/HXQzn606r1rMTkJhH1dzK3Gwp7yw
+	xMmQNcH/VkSbjwfPj8FOO4OprSPwG7sIjdAd
+X-Google-Smtp-Source: AGHT+IFTXBGn/x6chxICU5EtsLPZp9H2FEP5/3hrHaq4aQgzpHNAfP/1DfnREO5GKQVs2OdVe8nwWw==
+X-Received: by 2002:a17:907:7daa:b0:ac3:115f:453a with SMTP id a640c23a62f3a-ac3b7f63606mr592812766b.36.1742455821456;
+        Thu, 20 Mar 2025 00:30:21 -0700 (PDT)
 Received: from xeon.. ([188.163.112.51])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3146aef69sm1115638466b.4.2025.03.20.00.30.11
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3146aef69sm1115638466b.4.2025.03.20.00.30.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Mar 2025 00:30:19 -0700 (PDT)
+        Thu, 20 Mar 2025 00:30:21 -0700 (PDT)
 From: Svyatoslav Ryhel <clamor95@gmail.com>
 To: Sebastian Reichel <sre@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -78,10 +80,12 @@ To: Sebastian Reichel <sre@kernel.org>,
 Cc: linux-pm@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 0/2] power: supply: Add support for Maxim MAX8971 charger
-Date: Thu, 20 Mar 2025 09:29:45 +0200
-Message-ID: <20250320072947.8174-1-clamor95@gmail.com>
+Subject: [PATCH v5 1/2] dt-bindings: power: supply: Document Maxim MAX8971 charger
+Date: Thu, 20 Mar 2025 09:29:46 +0200
+Message-ID: <20250320072947.8174-2-clamor95@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250320072947.8174-1-clamor95@gmail.com>
+References: <20250320072947.8174-1-clamor95@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,46 +94,88 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The MAX8971 is a compact, high-frequency, high-efficiency
-switch-mode charger for a one-cell lithium-ion (Li+) battery.
+Add bindings for Maxim MAX8971 charger.
 
+Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 ---
-Changes on switching from v4 to v5:
-- revert schema to v3
-- removed i2c_client from driver data
-- removed max8971_supplied_to
-- swapped power_supply_config filling .of_node with .fwnode
-- attr group liked to power_supply_config
-- added ABI properties description
-
-Changes on switching from v3 to v4:
-- swap graph with connector phandle
-
-Changes on switching from v2 to v3:
-- fast_charge_timer, top_off_threshold_current and top_off_timer converted to
-  device attributes. Other vendor properties removed.
-- removed max8971_config
-- removed unneded functions and definitions along vendor props removal
-- added __maybe_unused for resume function
-
-Changes on switching from v1 to v2:
-- swap phandle with graph for extcon
-- added power-supply ref
----
-
-Svyatoslav Ryhel (2):
-  dt-bindings: power: supply: Document Maxim MAX8971 charger
-  power: supply: Add support for Maxim MAX8971 charger
-
- Documentation/ABI/testing/sysfs-class-power   |  43 +
- .../bindings/power/supply/maxim,max8971.yaml  |  68 ++
- drivers/power/supply/Kconfig                  |  14 +
- drivers/power/supply/Makefile                 |   1 +
- drivers/power/supply/max8971_charger.c        | 750 ++++++++++++++++++
- 5 files changed, 876 insertions(+)
+ .../bindings/power/supply/maxim,max8971.yaml  | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,max8971.yaml
- create mode 100644 drivers/power/supply/max8971_charger.c
 
+diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max8971.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max8971.yaml
+new file mode 100644
+index 000000000000..2244cc3d45a6
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/maxim,max8971.yaml
+@@ -0,0 +1,68 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/supply/maxim,max8971.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Maxim MAX8971 IC charger
++
++maintainers:
++  - Svyatoslav Ryhel <clamor95@gmail.com>
++
++description:
++  The MAX8971 is a compact, high-frequency, high-efficiency switch-mode charger
++  for a one-cell lithium-ion (Li+) battery.
++
++allOf:
++  - $ref: power-supply.yaml#
++
++properties:
++  compatible:
++    const: maxim,max8971
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  monitored-battery: true
++
++  port:
++    description:
++      An optional port node to link the extcon device to detect type of plug.
++    $ref: /schemas/graph.yaml#/properties/port
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        charger@35 {
++            compatible = "maxim,max8971";
++            reg = <0x35>;
++
++            interrupt-parent = <&gpio>;
++            interrupts = <74 IRQ_TYPE_LEVEL_LOW>;
++
++            monitored-battery = <&battery>;
++
++            port {
++                charger_input: endpoint {
++                    remote-endpoint = <&extcon_output>;
++                };
++            };
++        };
++    };
++...
 -- 
 2.43.0
 
