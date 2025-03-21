@@ -1,96 +1,157 @@
-Return-Path: <linux-pm+bounces-24389-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24390-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91CD2A6BEA9
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 16:50:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BAEBA6BF19
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 17:06:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BB713B8278
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 15:49:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BBDF417AA43
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 16:06:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23D6C1E0DD1;
-	Fri, 21 Mar 2025 15:49:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 571C31E22FA;
+	Fri, 21 Mar 2025 16:06:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s1PnUhfu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NvGalA/i"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F31B01D6DDD
-	for <linux-pm@vger.kernel.org>; Fri, 21 Mar 2025 15:49:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 331401DE4C2;
+	Fri, 21 Mar 2025 16:06:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742572168; cv=none; b=awIf2xGL3zu+lTxiqTEFVDdR2eEdMmcmdTxs3N8IyIPBI8IViL27m/WRfU5kyO/m50BG+oCg1f/iqKBlZhEgFIEDosLHkfBxCZB1zbzEJ8Z6whQG3BdKzR03437xM7qAPLIOs1xaZDBslQeZ7ejKlmklM86Zl7/sE++Kl4rjeBc=
+	t=1742573186; cv=none; b=gEnUNae3wa4xi6f2ces2Q61CkdgJfoBVGrp8eaJ07S9AmZeEBlffta5pnP0YnUfio8TVYtzenehObOREp8JWk5GUcKuTjDKXnD83sslP/EeCBK4EX2Rmf88aT1oerMHfb4iF92GOJrhOW3i49wsrgjSeZLFY69ddisAKj+nIN4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742572168; c=relaxed/simple;
-	bh=Qdbf2qT3Ab//VT+2i8/a8Gug+M/rmjwmuIzZSaXKobI=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=rKKhKsICAVu7VDUdDMb88igjW9uYnpNSdFJ+m8RCTAn/Vt15oVc4Q/oMDErS9OmXSy1tP0h8nECS1rcqVrhXnm+CmVLSJf/DQ7wZmyM0sTDV5UlCBwaOBrwTZckifj9ybAb02rddBT3l6HkGpgTKtdAtRzCwqORHELFXSdVgUh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s1PnUhfu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 59C86C4CEE8
-	for <linux-pm@vger.kernel.org>; Fri, 21 Mar 2025 15:49:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742572167;
-	bh=Qdbf2qT3Ab//VT+2i8/a8Gug+M/rmjwmuIzZSaXKobI=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=s1PnUhfuSEzczIAG+XlBrWHdfRGcXXzFTrlG89V+E99Biqh70Y+2K90T4WdAiLi0S
-	 aNsRDj79jCla5inl28pjSJIxDWN4uE4nFcnx4O/W+EvgjpWkVjhGz077BhNZhSHyhi
-	 i85NgevlVo9zGT6+0LoNHDxJbTeNEQz1Shh3OXJCu8V+n2jFEsebUeElUIzs42JltH
-	 t14QdZly6Ot4ae4uRLlFJVvOkJAevzminQBSIeOvA5R1pfSTPYHrhNwU3SK0ldkP2c
-	 HqXzadiEUhF6K0hZUH3N45jwDdxqaEOIeSAk07qqwQlPnxMix3wDlEJ9iP0SOLGWTP
-	 sefh37ILuD3kw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 3E6D3C41612; Fri, 21 Mar 2025 15:49:27 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 219858] AMD Zen 2 broken power management after sleep
-Date: Fri, 21 Mar 2025 15:49:27 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: mario.limonciello@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219858-137361-0FGCnXHwuk@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219858-137361@https.bugzilla.kernel.org/>
-References: <bug-219858-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1742573186; c=relaxed/simple;
+	bh=WgBVYTr0URRl3zJspKTAryBSC/YiYErKzgv7WS4Rg/s=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=fJoKGR3W3Q57YTby4gOkViWWAZYQGgRP4WXCGkwxoW+qEM2Rmq1yRYL39BRFUe+ENF1cwAmveTDwcwGla6fcZOfrUPwSbuLA/z+sBYL/NW8AAS4AMucvLZ8iG6BOUJPwdcwyUMywYtLi/9JPlxZNX7EHjQT8Mq/1ejneVX5+MJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NvGalA/i; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742573184; x=1774109184;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=WgBVYTr0URRl3zJspKTAryBSC/YiYErKzgv7WS4Rg/s=;
+  b=NvGalA/ikOrL5oPJYs+QnTxjGygBeYWWOIvfFHc3OkbJX2AwHpopTwqS
+   OrJ7JGqvsLvcwKeP1prZM7mVJTOfER54Pu75l/Fxr9j8e/jK3wFjwN7qC
+   SK/5ji+VMYsX0/5AhSQhmE9n8DiGMEF7b+LjyblXx5blGM0B6v0DiKpB9
+   7qQZ9t3oQhCYinN742ZwcgN+X4JUGCey/94l/s0aWmz+DeK3rMLdvIdAr
+   VOz0V9xhnp8gPVoJI15e8EZBeavaDkLOepeFPGKjHBbFPdNQ3UOf5upEx
+   k4Kt0Ju3dJwZMJUlGC8aC6kaTxjBeWUEXBcxhuhtx35JSY0kXfzmt0vxz
+   A==;
+X-CSE-ConnectionGUID: uCVdhp/3So2cYbOJXCtPug==
+X-CSE-MsgGUID: onEv0mKKQBKLcJNtxbhz7A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11380"; a="43726622"
+X-IronPort-AV: E=Sophos;i="6.14,264,1736841600"; 
+   d="scan'208";a="43726622"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2025 09:06:23 -0700
+X-CSE-ConnectionGUID: g7UgcbV4QTih6n+cWYD8tQ==
+X-CSE-MsgGUID: 1EcrVXRMQNGo+fC3Vk/4zw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,264,1736841600"; 
+   d="scan'208";a="123417648"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.112])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2025 09:06:06 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 21 Mar 2025 18:06:02 +0200 (EET)
+To: Easwar Hariharan <eahariha@linux.microsoft.com>, 
+    Andrew Morton <akpm@linux-foundation.org>
+cc: Yaron Avizrat <yaron.avizrat@intel.com>, Oded Gabbay <ogabbay@kernel.org>, 
+    Julia Lawall <Julia.Lawall@inria.fr>, 
+    Nicolas Palix <nicolas.palix@imag.fr>, 
+    James Smart <james.smart@broadcom.com>, 
+    Dick Kennedy <dick.kennedy@broadcom.com>, 
+    "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+    "Martin K. Petersen" <martin.petersen@oracle.com>, 
+    Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+    Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, 
+    David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>, 
+    Dongsheng Yang <dongsheng.yang@easystack.cn>, Jens Axboe <axboe@kernel.dk>, 
+    Xiubo Li <xiubli@redhat.com>, Damien Le Moal <dlemoal@kernel.org>, 
+    Niklas Cassel <cassel@kernel.org>, Carlos Maiolino <cem@kernel.org>, 
+    "Darrick J. Wong" <djwong@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+    Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, 
+    Sagi Grimberg <sagi@grimberg.me>, Frank Li <Frank.Li@nxp.com>, 
+    Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+    Sascha Hauer <s.hauer@pengutronix.de>, 
+    Pengutronix Kernel Team <kernel@pengutronix.de>, 
+    Fabio Estevam <festevam@gmail.com>, 
+    Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
+    Hans de Goede <hdegoede@redhat.com>, 
+    Henrique de Moraes Holschuh <hmh@hmh.eng.br>, 
+    Selvin Xavier <selvin.xavier@broadcom.com>, 
+    Kalesh AP <kalesh-anakkur.purayil@broadcom.com>, 
+    Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+    cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>, 
+    linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+    linux-sound@vger.kernel.org, linux-btrfs@vger.kernel.org, 
+    ceph-devel@vger.kernel.org, linux-block@vger.kernel.org, 
+    linux-ide@vger.kernel.org, linux-xfs@vger.kernel.org, 
+    linux-pm@vger.kernel.org, linux-nvme@lists.infradead.org, 
+    linux-spi@vger.kernel.org, imx@lists.linux.dev, 
+    linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
+    ibm-acpi-devel@lists.sourceforge.net, linux-rdma@vger.kernel.org
+Subject: Re: [PATCH v3 15/16] platform/x86: thinkpad_acpi: convert timeouts
+ to secs_to_jiffies()
+In-Reply-To: <20250225-converge-secs-to-jiffies-part-two-v3-15-a43967e36c88@linux.microsoft.com>
+Message-ID: <9e761e10-eb4d-0a34-79b5-ef4507f002c5@linux.intel.com>
+References: <20250225-converge-secs-to-jiffies-part-two-v3-0-a43967e36c88@linux.microsoft.com> <20250225-converge-secs-to-jiffies-part-two-v3-15-a43967e36c88@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219858
+On Tue, 25 Feb 2025, Easwar Hariharan wrote:
 
---- Comment #4 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-Also; if possible can you please see if you can reproduce it on this branch?
+> Commit b35108a51cf7 ("jiffies: Define secs_to_jiffies()") introduced
+> secs_to_jiffies().  As the value here is a multiple of 1000, use
+> secs_to_jiffies() instead of msecs_to_jiffies() to avoid the multiplication
+> 
+> This is converted using scripts/coccinelle/misc/secs_to_jiffies.cocci with
+> the following Coccinelle rules:
+> 
+> @depends on patch@
+> expression E;
+> @@
+> 
+> -msecs_to_jiffies
+> +secs_to_jiffies
+> (E
+> - * \( 1000 \| MSEC_PER_SEC \)
+> )
+> 
+> Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
 
-https://web.git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git/log/?=
-h=3Dlinux-next
+Applied to the review-ilpo-next branch.
 
-This is the code that is going into 6.15-rc1.  If it's fixed there, I might=
- be
-able to identify a commit to backport to 6.14.y.
+> ---
+>  drivers/platform/x86/thinkpad_acpi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
+> index ab1cade5ef231e9a9a520bc0cca82384c911a331..d269e791f7fbc2a8ccf96f28cb476beccb57c9a7 100644
+> --- a/drivers/platform/x86/thinkpad_acpi.c
+> +++ b/drivers/platform/x86/thinkpad_acpi.c
+> @@ -8512,7 +8512,7 @@ static void fan_watchdog_reset(void)
+>  	if (fan_watchdog_maxinterval > 0 &&
+>  	    tpacpi_lifecycle != TPACPI_LIFE_EXITING)
+>  		mod_delayed_work(tpacpi_wq, &fan_watchdog_task,
+> -			msecs_to_jiffies(fan_watchdog_maxinterval * 1000));
+> +			secs_to_jiffies(fan_watchdog_maxinterval));
+>  	else
+>  		cancel_delayed_work(&fan_watchdog_task);
+>  }
 
---=20
-You may reply to this email to add a comment.
+-- 
+ i.
 
-You are receiving this mail because:
-You are the assignee for the bug.=
 
