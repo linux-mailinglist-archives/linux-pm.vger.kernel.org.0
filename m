@@ -1,77 +1,77 @@
-Return-Path: <linux-pm+bounces-24384-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24385-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA20CA6BDB4
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 15:55:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0519A6BDAE
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 15:54:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28C43172573
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 14:54:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C05E47A5275
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 14:53:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E5431EFF96;
-	Fri, 21 Mar 2025 14:53:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3117522578A;
+	Fri, 21 Mar 2025 14:53:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kbiyQVug"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TTXm30RO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A794D1DE882;
-	Fri, 21 Mar 2025 14:53:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 173BF1E47CC;
+	Fri, 21 Mar 2025 14:53:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742568836; cv=none; b=tPUWWauEU9WzTLhwRv8RBAPOaWve5DTM28MvmuUUrfPJnWsbaX8Mtp/C/F8Di4NENNQ/WafpaQrbg0td3AcYLOs4/WKM8x1Ehhc3/5UzRCPK+Qlq7z8MhA4wTarRQFGdMeEuryVX+S+Rdaj+uU03vFMR+UmOV7CJyUYkm4xoRyE=
+	t=1742568838; cv=none; b=IcUwXbBsq2HTefrhbOJFuFGTX8LLL28kgHv5CvcUpBvbJwcBTseHp9lERMBIs2hH0TKJlhlUcJjm1DsOpjRO915ebuL1lQ6GpX2HMTG+AQ2ZmPLqmM0f95aTI69V/OsbIhjMJpx5JeXJlf0rdTtGOGg53q14IpiAVsTmwrv31MA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742568836; c=relaxed/simple;
-	bh=bXozqz1zbgxcW/1dC2QTCWjrRSGB28IIieO7/kJwCZw=;
+	s=arc-20240116; t=1742568838; c=relaxed/simple;
+	bh=2FLoquHqkq95j+BTbbuoOmsirAu6SJ/x5gWiBCwV75s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FD4nt93fbWn78FbHS2MqejxBqitJ/gg5MRn2h4ZftCfJXKr7W6+aflYTG2ZTbFgBrYAOF+6s/wjCnPx5Ff/6aZ2tIsQgPq2hATUANQl8qEAPm0AcVfoALk2ArY+rV/HCPsU02IIOiKkIZuVwHEtOK1GV36IJgYb/grMVoy133YY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kbiyQVug; arc=none smtp.client-ip=209.85.208.43
+	 MIME-Version; b=pIZK/KymPtiuylzVpGhJmd7nriA31aj2BeasuvQcWDEujzprf88PiXJNAAafK0k4+ha1pTYaU8QIJTiU4LAuzowZ0HYHO8PAkB0LOhZBOiU4lZwveJNW4lE1sLHytssc8PFoupTYzaL+egBD9dA6rp5fJj5oAn2EdOJf++Swld4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TTXm30RO; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5e5cded3e2eso2956574a12.0;
-        Fri, 21 Mar 2025 07:53:54 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-ac2bb7ca40bso455490666b.3;
+        Fri, 21 Mar 2025 07:53:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742568833; x=1743173633; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742568834; x=1743173634; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ROgyACEQa48lDCk5T9eREvPyJ322tIX1J/JDdpDWQ9Q=;
-        b=kbiyQVugQsQR+R2ASK0GIW3heLIDwcfQ9YC0hsVfEmj5ZSnnklWsI7zxH76Otk6Cyo
-         pLdiLUIX/YagpBm02XUMmwqb1Qng0Y7ZOA+3dvkzs46w7YfSAFBrfSpwaQQYXbEKGnnu
-         Y5bxx5ulo750eq+LebjsGkaHUHU85zx+bszqps/Z8WYkz0mwASdHSQmpplLveW9Y9iUB
-         7DYnqwbz2wyK3gOnibLdrPnO2IKCL3VJ8PoDg0LRVMaiMvFQVo8569cNiOSwhE6fiC2W
-         zoQEMD/LEn/TD98KFpNESDJoEL2CDUSUf8NJdlw4lhy5q09b8DT9V8WXjvIa3NT1D2AO
-         Zg4A==
+        bh=AWzJ96XhJyfSEt2rZUbqK0RHcX7x8UDPEhWBIKTUabE=;
+        b=TTXm30ROLP3EJbER0hSUQekJ5FuUCAm9O6sNhV5Lx47ndllFsqpisTVvnwLRgN6Jgc
+         Va7S1PgT5bjJ9nBTG2FpRXHjwxueuW2FbAnbJeHTI4/ApdLrfVKP+ui6eX8BMlFGn5/+
+         0bBacbYaAooo5NKva3QolH2HvmBFKTjuPdgQwTpRoZEg3f5ONxPpIMaZYZsqxl6NN0o8
+         4RXxucml3cTT4Kev3rcuCOSQQ4shWmNv5j4sAi3p7b5m87JrjOrxG0TRUaDLNjKUkNZT
+         wkKkjOQujdUm3+tZ9HxgMW5PlzxlYyR7ZKVc3AsdsypXp4dcaHwN7iVabDtMOjt8TLve
+         uv8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742568833; x=1743173633;
+        d=1e100.net; s=20230601; t=1742568834; x=1743173634;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ROgyACEQa48lDCk5T9eREvPyJ322tIX1J/JDdpDWQ9Q=;
-        b=kvRYsyrZDpFdtpNwXxg/VUxAGNCbuzg4F1k1wDLrzFx4d24MZ6nuC1TbN62wEBDNa5
-         5+rGqt14CrhP2kikS6ezmLyQnGnatOBokdPU2Ii9RBk8VEIjVfNw3hxQ4LkUKM1MvNGv
-         yt9EveWP4EAHtP1qZ3KX1Bk63t3o0iSm30OBuXdi7T2VJwrFguFzIBJLmFrQMj95WT7L
-         sCFQzm6rRG91zHAfwHzIA4r5josN/WDHUEOBd80x76SJ0SynjwSKPiyGrCrars1xCldJ
-         wDYAzZZp1qQPqms0E09xQWooFAFNma0gYosvic1jarefE+1CeJwD2wqV7JA17k2FBXot
-         +Q8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUWJ0mGGjLc2YCL5gb5p8K9+YqaXBlqyrts46eG6Wt0oCRRsN60AUTQDXgL0XZzvzQ03Gayn31pFR77xMwo@vger.kernel.org, AJvYcCW7P/Afwq2Cvs3KUCn1Ch2eQryqCNeE+XXBDGSe7xQQhWMefca1f4zxPb9Pt37nd1eSjKWogQjPgWpYnp8=@vger.kernel.org, AJvYcCXPTaK2bvwF4Aa6SsdzADy9row/ROoHZzPRYEqGz9jbLoszEUcy44bMA2AN0Gb1fdXI4eyl1adX/vHC@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJuH8fHuzdIpS5hgd1FIxSIjxm3ezUKUghpJP2Gd7Iy8ACuBPh
-	BFi5xUUAZt9myKlkM2u1/dhuSYyasNlMGLsTtkoI9yV6RfLuiTso
-X-Gm-Gg: ASbGncsntLUD2Nac4nWJgWWe5z34qKyssGaoEHHUyykITHKYf5PIBX6DH1VtCMVc+Me
-	7YEPUYF3S6ID15oZITDwRMQoirHXD/2c8F6HVlMcFJBApVTSoDzGS9qMyb5Xlhyy2iMPuro+zxe
-	I0GFq2/O//gr65gFEK6MzQGHS6JxJRya11ffBzM48mZgoEmNdNKth+axhmyETQr0UMnxHVfeE36
-	aGUCm0y+Fs+svpre89hKNNdqIHXQ6cTZLN8W0Di0nVs+Fq+MNdMllXUxv06J1P9s59C6tpjctRo
-	TikEeVT8dxs9HbTui0Vf4aGM8/kecu9UryBJ
-X-Google-Smtp-Source: AGHT+IF0GxHEx1dybgdsD9nbFWz2jcD0dSzT7hPIH7uUUPWxq4fUeuv43PUsqPceCV34qwOnLnPqLw==
-X-Received: by 2002:a17:907:86a7:b0:ab7:9df1:e562 with SMTP id a640c23a62f3a-ac3f2534b34mr425692166b.48.1742568832721;
-        Fri, 21 Mar 2025 07:53:52 -0700 (PDT)
+        bh=AWzJ96XhJyfSEt2rZUbqK0RHcX7x8UDPEhWBIKTUabE=;
+        b=TSXU0sJ8ZYKwbsmTuaJPEnUUymEeSITDiIoRjcf9raq0EQKBYtf3Tl2zHDxKXZktJ7
+         aJGSD6yn6cewgHUA3O8EOrjsba8dea5/lWvQGteDG5iG6jx+UjqeaQjqMCtnX9Yw1WfQ
+         of9aFag3Wk6XcAHWQHu8edxaXkPL62qwFs7ElExiK++X14pyu0d//WqfcwopxVQPsYzH
+         mgWs28p8qHDL8WEnpUfssRxRMagMXJxydZZoZ8bISW8cSQrTSdMLDzu1GOo9rvLf6734
+         zU7yY8EZdi4RfGf5Y+kIm1qXAhq01jxp65Is3IBLFPu5bnBkoOBX5FEmZYNeDcaM67Od
+         BA2A==
+X-Forwarded-Encrypted: i=1; AJvYcCUq4XscQF/zqzj2axPjepDa9RL3AePmW4QDEXTTucH7zGjHxs/i4UAn4g/o4y0MKPhc3GQgteVL/irs@vger.kernel.org, AJvYcCWduP3a1ak/8QtSBy0IbR9mAJOHE+/wn+2n9L4860A2tdj2BgBOPWgawL08JDabTPNrSn58xhoy9iR3gunw@vger.kernel.org, AJvYcCXCkF0BnFuu4RFoLPNWnu2O228jHXlHqgEWDofYB7DptxKj4T7kskjbnMEK3xbXCHve8vVGwPEV94eBUQU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4gVMD2ZYcKD8dTxZ4NRNes3r01FGCP7dwyUxlgDUKypM4u7FP
+	O9AiNEj4urzzPd/5w7Pbb2w1NvABA+bqCuKvZGgDIn2ReJge2OWO
+X-Gm-Gg: ASbGncvrMmZmJ0qAImLDtcMHIwbulQNXfnN3yF5sJA/dNrYPbZ17hzaoW5Jd7S8QnXg
+	/O68O2LnxxXKlUl2nbxQaI5VyvMSRR3fWyaatBjaydy+FLYILtC9OdQW1V8sTsXc8LhDeELoT6Y
+	sRWxXpPYh6LhDFXrlCf9YVQoo67DSBlC5YkxfmfTfEcZHhQ4ew5kE/5QprOcZTx2rlcYj6hKvfD
+	6x78Ba5IOAZfOSEVnWho3xfPhsI3KBUuvHGdoyxhA1dKUg0d8igfuwZoMzCvLbHn/4PC0RS0BD9
+	1mOrAu47WGRqqJuHzbF6p0efOkkn3Il3uH7t
+X-Google-Smtp-Source: AGHT+IGvDqpGgtceIfeAeqB5ZtatDYIz2iQuH7UnIToWNO8bF88kEkOM8yDIRQ4SI/yoMWRi41gcyw==
+X-Received: by 2002:a17:906:c109:b0:ac2:49de:45c1 with SMTP id a640c23a62f3a-ac3f257dd1amr395095366b.50.1742568834074;
+        Fri, 21 Mar 2025 07:53:54 -0700 (PDT)
 Received: from xeon.. ([188.163.112.51])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3efbe038dsm163224666b.138.2025.03.21.07.53.51
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3efbe038dsm163224666b.138.2025.03.21.07.53.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Mar 2025 07:53:52 -0700 (PDT)
+        Fri, 21 Mar 2025 07:53:53 -0700 (PDT)
 From: Svyatoslav Ryhel <clamor95@gmail.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -88,9 +88,9 @@ Cc: linux-pm@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-tegra@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/5] thermal: tegra: soctherm-fuse: parametrize configuration further
-Date: Fri, 21 Mar 2025 16:53:24 +0200
-Message-ID: <20250321145326.113211-4-clamor95@gmail.com>
+Subject: [PATCH v1 4/5] thermal: tegra: add Tegra114 specific SOCTHERM driver
+Date: Fri, 21 Mar 2025 16:53:25 +0200
+Message-ID: <20250321145326.113211-5-clamor95@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250321145326.113211-1-clamor95@gmail.com>
 References: <20250321145326.113211-1-clamor95@gmail.com>
@@ -102,199 +102,280 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Prepare soctherm fuse calibration for Tegra114 support.
+Add Tegra114 specific SOCTHERM driver.
 
 Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 ---
- drivers/thermal/tegra/soctherm-fuse.c     | 33 ++++++++++++++++-------
- drivers/thermal/tegra/soctherm.h          | 13 ++++++++-
- drivers/thermal/tegra/tegra124-soctherm.c |  8 ++++++
- drivers/thermal/tegra/tegra132-soctherm.c |  8 ++++++
- drivers/thermal/tegra/tegra210-soctherm.c |  8 ++++++
- 5 files changed, 59 insertions(+), 11 deletions(-)
+ drivers/thermal/tegra/Makefile            |   1 +
+ drivers/thermal/tegra/soctherm.c          |   6 +
+ drivers/thermal/tegra/soctherm.h          |   4 +
+ drivers/thermal/tegra/tegra114-soctherm.c | 213 ++++++++++++++++++++++
+ 4 files changed, 224 insertions(+)
+ create mode 100644 drivers/thermal/tegra/tegra114-soctherm.c
 
-diff --git a/drivers/thermal/tegra/soctherm-fuse.c b/drivers/thermal/tegra/soctherm-fuse.c
-index 190f95280e0b..3b808c4521b8 100644
---- a/drivers/thermal/tegra/soctherm-fuse.c
-+++ b/drivers/thermal/tegra/soctherm-fuse.c
-@@ -9,15 +9,10 @@
+diff --git a/drivers/thermal/tegra/Makefile b/drivers/thermal/tegra/Makefile
+index eb27d194c583..9b3e91f7fb97 100644
+--- a/drivers/thermal/tegra/Makefile
++++ b/drivers/thermal/tegra/Makefile
+@@ -4,6 +4,7 @@ obj-$(CONFIG_TEGRA_BPMP_THERMAL)	+= tegra-bpmp-thermal.o
+ obj-$(CONFIG_TEGRA30_TSENSOR)		+= tegra30-tsensor.o
  
- #include "soctherm.h"
- 
--#define NOMINAL_CALIB_FT			105
--#define NOMINAL_CALIB_CP			25
--
- #define FUSE_TSENSOR_CALIB_CP_TS_BASE_MASK	0x1fff
- #define FUSE_TSENSOR_CALIB_FT_TS_BASE_MASK	(0x1fff << 13)
- #define FUSE_TSENSOR_CALIB_FT_TS_BASE_SHIFT	13
- 
--#define FUSE_TSENSOR_COMMON			0x180
--
- /*
-  * Tegra210: Layout of bits in FUSE_TSENSOR_COMMON:
-  *    3                   2                   1                   0
-@@ -44,6 +39,13 @@
-  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  * |---------------------------------------------------| SHIFT_CP  |
-  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-+ *
-+ * Tegra11x: Layout of bits in FUSE_TSENSOR_COMMON aka FUSE_VSENSOR_CALIB:
-+ *    3                   2                   1                   0
-+ *  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-+ * | SHFT_FT |       BASE_FT       | SHIFT_CP  |      BASE_CP      |
-+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  */
- 
- #define CALIB_COEFFICIENT 1000000LL
-@@ -77,7 +79,7 @@ int tegra_calc_shared_calib(const struct tegra_soctherm_fuse *tfuse,
- 	s32 shifted_cp, shifted_ft;
- 	int err;
- 
--	err = tegra_fuse_readl(FUSE_TSENSOR_COMMON, &val);
-+	err = tegra_fuse_readl(tfuse->fuse_common_reg, &val);
- 	if (err)
- 		return err;
- 
-@@ -88,7 +90,7 @@ int tegra_calc_shared_calib(const struct tegra_soctherm_fuse *tfuse,
- 
- 	shifted_ft = (val & tfuse->fuse_shift_ft_mask) >>
- 		     tfuse->fuse_shift_ft_shift;
--	shifted_ft = sign_extend32(shifted_ft, 4);
-+	shifted_ft = sign_extend32(shifted_ft, tfuse->fuse_shift_ft_bits);
- 
- 	if (tfuse->fuse_spare_realignment) {
- 		err = tegra_fuse_readl(tfuse->fuse_spare_realignment, &val);
-@@ -96,10 +98,21 @@ int tegra_calc_shared_calib(const struct tegra_soctherm_fuse *tfuse,
- 			return err;
- 	}
- 
--	shifted_cp = sign_extend32(val, 5);
-+	shifted_cp = (val & tfuse->fuse_shift_cp_mask) >>
-+		     tfuse->fuse_shift_cp_shift;
-+	shifted_cp = sign_extend32(val, tfuse->fuse_shift_cp_bits);
- 
--	shared->actual_temp_cp = 2 * NOMINAL_CALIB_CP + shifted_cp;
--	shared->actual_temp_ft = 2 * NOMINAL_CALIB_FT + shifted_ft;
-+	shared->actual_temp_cp = 2 * tfuse->nominal_calib_cp + shifted_cp;
-+	shared->actual_temp_ft = 2 * tfuse->nominal_calib_ft + shifted_ft;
-+
-+	/*
-+	 * Tegra114 provides fuse thermal corrections in 0.5C while expected
-+	 * precision should be 1C
-+	 */
-+	if (tfuse->lower_precision) {
-+		shared->actual_temp_cp /= 2;
-+		shared->actual_temp_ft /= 2;
-+	}
- 
- 	return 0;
+ tegra-soctherm-y				:= soctherm.o soctherm-fuse.o
++tegra-soctherm-$(CONFIG_ARCH_TEGRA_114_SOC)	+= tegra114-soctherm.o
+ tegra-soctherm-$(CONFIG_ARCH_TEGRA_124_SOC)	+= tegra124-soctherm.o
+ tegra-soctherm-$(CONFIG_ARCH_TEGRA_132_SOC)	+= tegra132-soctherm.o
+ tegra-soctherm-$(CONFIG_ARCH_TEGRA_210_SOC)	+= tegra210-soctherm.o
+diff --git a/drivers/thermal/tegra/soctherm.c b/drivers/thermal/tegra/soctherm.c
+index a023c948afbd..78da82dc3b53 100644
+--- a/drivers/thermal/tegra/soctherm.c
++++ b/drivers/thermal/tegra/soctherm.c
+@@ -2049,6 +2049,12 @@ static void soctherm_init(struct platform_device *pdev)
  }
+ 
+ static const struct of_device_id tegra_soctherm_of_match[] = {
++#ifdef CONFIG_ARCH_TEGRA_114_SOC
++	{
++		.compatible = "nvidia,tegra114-soctherm",
++		.data = &tegra114_soctherm,
++	},
++#endif
+ #ifdef CONFIG_ARCH_TEGRA_124_SOC
+ 	{
+ 		.compatible = "nvidia,tegra124-soctherm",
 diff --git a/drivers/thermal/tegra/soctherm.h b/drivers/thermal/tegra/soctherm.h
-index 70501e73d586..6c0e0cc594a5 100644
+index 6c0e0cc594a5..75ee2a520886 100644
 --- a/drivers/thermal/tegra/soctherm.h
 +++ b/drivers/thermal/tegra/soctherm.h
-@@ -56,6 +56,13 @@
- #define SENSOR_TEMP2_MEM_TEMP_MASK		(0xffff << 16)
- #define SENSOR_TEMP2_PLLX_TEMP_MASK		0xffff
+@@ -148,6 +148,10 @@ int tegra_calc_tsensor_calib(const struct tegra_tsensor *sensor,
+ 			     const struct tsensor_shared_calib *shared,
+ 			     u32 *calib);
  
-+#define NOMINAL_CALIB_FT			105
-+#define T114X_CALIB_FT				90
-+#define NOMINAL_CALIB_CP			25
++#ifdef CONFIG_ARCH_TEGRA_114_SOC
++extern const struct tegra_soctherm_soc tegra114_soctherm;
++#endif
 +
-+#define FUSE_VSENSOR_CALIB			0x08c
-+#define FUSE_TSENSOR_COMMON			0x180
+ #ifdef CONFIG_ARCH_TEGRA_124_SOC
+ extern const struct tegra_soctherm_soc tegra124_soctherm;
+ #endif
+diff --git a/drivers/thermal/tegra/tegra114-soctherm.c b/drivers/thermal/tegra/tegra114-soctherm.c
+new file mode 100644
+index 000000000000..eca65ec6f8c1
+--- /dev/null
++++ b/drivers/thermal/tegra/tegra114-soctherm.c
+@@ -0,0 +1,213 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2014-2018, NVIDIA CORPORATION.  All rights reserved.
++ * Copyright (c) 2024, Svyatoslav Ryhel <clamor95@gmail.com>
++ */
 +
- /**
-  * struct tegra_tsensor_group - SOC_THERM sensor group data
-  * @name: short name of the temperature sensor group
-@@ -109,9 +116,13 @@ struct tsensor_group_thermtrips {
- 
- struct tegra_soctherm_fuse {
- 	u32 fuse_base_cp_mask, fuse_base_cp_shift;
-+	u32 fuse_shift_cp_mask, fuse_shift_cp_shift;
- 	u32 fuse_base_ft_mask, fuse_base_ft_shift;
- 	u32 fuse_shift_ft_mask, fuse_shift_ft_shift;
--	u32 fuse_spare_realignment;
-+	u32 fuse_shift_cp_bits, fuse_shift_ft_bits;
-+	u32 fuse_common_reg, fuse_spare_realignment;
-+	u32 nominal_calib_cp, nominal_calib_ft;
-+	bool lower_precision;
- };
- 
- struct tsensor_shared_calib {
-diff --git a/drivers/thermal/tegra/tegra124-soctherm.c b/drivers/thermal/tegra/tegra124-soctherm.c
-index 20ad27f4d1a1..dd4dd7e9014d 100644
---- a/drivers/thermal/tegra/tegra124-soctherm.c
-+++ b/drivers/thermal/tegra/tegra124-soctherm.c
-@@ -200,11 +200,19 @@ static const struct tegra_tsensor tegra124_tsensors[] = {
- static const struct tegra_soctherm_fuse tegra124_soctherm_fuse = {
- 	.fuse_base_cp_mask = 0x3ff,
- 	.fuse_base_cp_shift = 0,
-+	.fuse_shift_cp_mask = 0x1f,
-+	.fuse_shift_cp_shift = 0,
- 	.fuse_base_ft_mask = 0x7ff << 10,
- 	.fuse_base_ft_shift = 10,
- 	.fuse_shift_ft_mask = 0x1f << 21,
- 	.fuse_shift_ft_shift = 21,
-+	.fuse_shift_cp_bits = 5,
-+	.fuse_shift_ft_bits = 4,
-+	.fuse_common_reg = FUSE_TSENSOR_COMMON,
- 	.fuse_spare_realignment = 0x1fc,
++#include <linux/module.h>
++#include <linux/platform_device.h>
++
++#include <dt-bindings/thermal/tegra124-soctherm.h>
++
++#include "soctherm.h"
++
++#define TEGRA114_THERMTRIP_ANY_EN_MASK		(0x1 << 28)
++#define TEGRA114_THERMTRIP_MEM_EN_MASK		(0x1 << 27)
++#define TEGRA114_THERMTRIP_GPU_EN_MASK		(0x1 << 26)
++#define TEGRA114_THERMTRIP_CPU_EN_MASK		(0x1 << 25)
++#define TEGRA114_THERMTRIP_TSENSE_EN_MASK	(0x1 << 24)
++#define TEGRA114_THERMTRIP_GPUMEM_THRESH_MASK	(0xff << 16)
++#define TEGRA114_THERMTRIP_CPU_THRESH_MASK	(0xff << 8)
++#define TEGRA114_THERMTRIP_TSENSE_THRESH_MASK	0xff
++
++#define TEGRA114_THERMCTL_LVL0_UP_THRESH_MASK	(0xff << 17)
++#define TEGRA114_THERMCTL_LVL0_DN_THRESH_MASK	(0xff << 9)
++
++#define TEGRA114_THRESH_GRAIN			1000
++#define TEGRA114_BPTT				8
++
++static const struct tegra_tsensor_configuration tegra114_tsensor_config = {
++	.tall = 16300,
++	.tiddq_en = 1,
++	.ten_count = 1,
++	.tsample = 163,
++	.tsample_ate = 655,
++};
++
++static const struct tegra_tsensor_group tegra114_tsensor_group_cpu = {
++	.id = TEGRA124_SOCTHERM_SENSOR_CPU,
++	.name = "cpu",
++	.sensor_temp_offset = SENSOR_TEMP1,
++	.sensor_temp_mask = SENSOR_TEMP1_CPU_TEMP_MASK,
++	.pdiv = 10,
++	.pdiv_ate = 10,
++	.pdiv_mask = SENSOR_PDIV_CPU_MASK,
++	.pllx_hotspot_diff = 10,
++	.pllx_hotspot_mask = SENSOR_HOTSPOT_CPU_MASK,
++	.thermtrip_any_en_mask = TEGRA114_THERMTRIP_ANY_EN_MASK,
++	.thermtrip_enable_mask = TEGRA114_THERMTRIP_CPU_EN_MASK,
++	.thermtrip_threshold_mask = TEGRA114_THERMTRIP_CPU_THRESH_MASK,
++	.thermctl_isr_mask = THERM_IRQ_CPU_MASK,
++	.thermctl_lvl0_offset = THERMCTL_LEVEL0_GROUP_CPU,
++	.thermctl_lvl0_up_thresh_mask = TEGRA114_THERMCTL_LVL0_UP_THRESH_MASK,
++	.thermctl_lvl0_dn_thresh_mask = TEGRA114_THERMCTL_LVL0_DN_THRESH_MASK,
++};
++
++static const struct tegra_tsensor_group tegra114_tsensor_group_gpu = {
++	.id = TEGRA124_SOCTHERM_SENSOR_GPU,
++	.name = "gpu",
++	.sensor_temp_offset = SENSOR_TEMP1,
++	.sensor_temp_mask = SENSOR_TEMP1_GPU_TEMP_MASK,
++	.pdiv = 10,
++	.pdiv_ate = 10,
++	.pdiv_mask = SENSOR_PDIV_GPU_MASK,
++	.pllx_hotspot_diff = 5,
++	.pllx_hotspot_mask = SENSOR_HOTSPOT_GPU_MASK,
++	.thermtrip_any_en_mask = TEGRA114_THERMTRIP_ANY_EN_MASK,
++	.thermtrip_enable_mask = TEGRA114_THERMTRIP_GPU_EN_MASK,
++	.thermtrip_threshold_mask = TEGRA114_THERMTRIP_GPUMEM_THRESH_MASK,
++	.thermctl_isr_mask = THERM_IRQ_GPU_MASK,
++	.thermctl_lvl0_offset = THERMCTL_LEVEL0_GROUP_GPU,
++	.thermctl_lvl0_up_thresh_mask = TEGRA114_THERMCTL_LVL0_UP_THRESH_MASK,
++	.thermctl_lvl0_dn_thresh_mask = TEGRA114_THERMCTL_LVL0_DN_THRESH_MASK,
++};
++
++static const struct tegra_tsensor_group tegra114_tsensor_group_pll = {
++	.id = TEGRA124_SOCTHERM_SENSOR_PLLX,
++	.name = "pll",
++	.sensor_temp_offset = SENSOR_TEMP2,
++	.sensor_temp_mask = SENSOR_TEMP2_PLLX_TEMP_MASK,
++	.pdiv = 10,
++	.pdiv_ate = 10,
++	.pdiv_mask = SENSOR_PDIV_PLLX_MASK,
++	.thermtrip_any_en_mask = TEGRA114_THERMTRIP_ANY_EN_MASK,
++	.thermtrip_enable_mask = TEGRA114_THERMTRIP_TSENSE_EN_MASK,
++	.thermtrip_threshold_mask = TEGRA114_THERMTRIP_TSENSE_THRESH_MASK,
++	.thermctl_isr_mask = THERM_IRQ_TSENSE_MASK,
++	.thermctl_lvl0_offset = THERMCTL_LEVEL0_GROUP_TSENSE,
++	.thermctl_lvl0_up_thresh_mask = TEGRA114_THERMCTL_LVL0_UP_THRESH_MASK,
++	.thermctl_lvl0_dn_thresh_mask = TEGRA114_THERMCTL_LVL0_DN_THRESH_MASK,
++};
++
++static const struct tegra_tsensor_group tegra114_tsensor_group_mem = {
++	.id = TEGRA124_SOCTHERM_SENSOR_MEM,
++	.name = "mem",
++	.sensor_temp_offset = SENSOR_TEMP2,
++	.sensor_temp_mask = SENSOR_TEMP2_MEM_TEMP_MASK,
++	.pdiv = 10,
++	.pdiv_ate = 10,
++	.pdiv_mask = SENSOR_PDIV_MEM_MASK,
++	.pllx_hotspot_diff = 0,
++	.pllx_hotspot_mask = SENSOR_HOTSPOT_MEM_MASK,
++	.thermtrip_any_en_mask = TEGRA114_THERMTRIP_ANY_EN_MASK,
++	.thermtrip_enable_mask = TEGRA114_THERMTRIP_MEM_EN_MASK,
++	.thermtrip_threshold_mask = TEGRA114_THERMTRIP_GPUMEM_THRESH_MASK,
++	.thermctl_isr_mask = THERM_IRQ_MEM_MASK,
++	.thermctl_lvl0_offset = THERMCTL_LEVEL0_GROUP_MEM,
++	.thermctl_lvl0_up_thresh_mask = TEGRA114_THERMCTL_LVL0_UP_THRESH_MASK,
++	.thermctl_lvl0_dn_thresh_mask = TEGRA114_THERMCTL_LVL0_DN_THRESH_MASK,
++};
++
++static const struct tegra_tsensor_group *tegra114_tsensor_groups[] = {
++	&tegra114_tsensor_group_cpu,
++	&tegra114_tsensor_group_gpu,
++	&tegra114_tsensor_group_pll,
++	&tegra114_tsensor_group_mem,
++};
++
++static const struct tegra_tsensor tegra114_tsensors[] = {
++	{
++		.name = "cpu0",
++		.base = 0xc0,
++		.config = &tegra114_tsensor_config,
++		.calib_fuse_offset = 0x098,
++		.fuse_corr_alpha = 1196400,
++		.fuse_corr_beta = -13600000,
++		.group = &tegra114_tsensor_group_cpu,
++	}, {
++		.name = "cpu1",
++		.base = 0xe0,
++		.config = &tegra114_tsensor_config,
++		.calib_fuse_offset = 0x084,
++		.fuse_corr_alpha = 1196400,
++		.fuse_corr_beta = -13600000,
++		.group = &tegra114_tsensor_group_cpu,
++	}, {
++		.name = "cpu2",
++		.base = 0x100,
++		.config = &tegra114_tsensor_config,
++		.calib_fuse_offset = 0x088,
++		.fuse_corr_alpha = 1196400,
++		.fuse_corr_beta = -13600000,
++		.group = &tegra114_tsensor_group_cpu,
++	}, {
++		.name = "cpu3",
++		.base = 0x120,
++		.config = &tegra114_tsensor_config,
++		.calib_fuse_offset = 0x12c,
++		.fuse_corr_alpha = 1196400,
++		.fuse_corr_beta = -13600000,
++		.group = &tegra114_tsensor_group_cpu,
++	}, {
++		.name = "mem0",
++		.base = 0x140,
++		.config = &tegra114_tsensor_config,
++		.calib_fuse_offset = 0x158,
++		.fuse_corr_alpha = 1000000,
++		.fuse_corr_beta = 0,
++		.group = &tegra114_tsensor_group_mem,
++	}, {
++		.name = "mem1",
++		.base = 0x160,
++		.config = &tegra114_tsensor_config,
++		.calib_fuse_offset = 0x15c,
++		.fuse_corr_alpha = 1000000,
++		.fuse_corr_beta = 0,
++		.group = &tegra114_tsensor_group_mem,
++	}, {
++		.name = "gpu",
++		.base = 0x180,
++		.config = &tegra114_tsensor_config,
++		.calib_fuse_offset = 0x154,
++		.fuse_corr_alpha = 1124500,
++		.fuse_corr_beta = -9793100,
++		.group = &tegra114_tsensor_group_gpu,
++	}, {
++		.name = "pllx",
++		.base = 0x1a0,
++		.config = &tegra114_tsensor_config,
++		.calib_fuse_offset = 0x160,
++		.fuse_corr_alpha = 1224200,
++		.fuse_corr_beta = -14665000,
++		.group = &tegra114_tsensor_group_pll,
++	},
++};
++
++static const struct tegra_soctherm_fuse tegra114_soctherm_fuse = {
++	.fuse_base_cp_mask = 0x3ff,
++	.fuse_base_cp_shift = 0,
++	.fuse_shift_cp_mask = 0x3f << 10,
++	.fuse_shift_cp_shift = 10,
++	.fuse_base_ft_mask = 0x7ff << 16,
++	.fuse_base_ft_shift = 16,
++	.fuse_shift_ft_mask = 0x1f << 27,
++	.fuse_shift_ft_shift = 27,
++	.fuse_shift_cp_bits = 6,
++	.fuse_shift_ft_bits = 5,
++	.fuse_common_reg = FUSE_VSENSOR_CALIB,
++	.fuse_spare_realignment = 0,
 +	.nominal_calib_cp = NOMINAL_CALIB_CP,
-+	.nominal_calib_ft = NOMINAL_CALIB_FT,
-+	.lower_precision = false,
- };
- 
- const struct tegra_soctherm_soc tegra124_soctherm = {
-diff --git a/drivers/thermal/tegra/tegra132-soctherm.c b/drivers/thermal/tegra/tegra132-soctherm.c
-index b76308fdad9e..926836426688 100644
---- a/drivers/thermal/tegra/tegra132-soctherm.c
-+++ b/drivers/thermal/tegra/tegra132-soctherm.c
-@@ -200,11 +200,19 @@ static struct tegra_tsensor tegra132_tsensors[] = {
- static const struct tegra_soctherm_fuse tegra132_soctherm_fuse = {
- 	.fuse_base_cp_mask = 0x3ff,
- 	.fuse_base_cp_shift = 0,
-+	.fuse_shift_cp_mask = 0x1f,
-+	.fuse_shift_cp_shift = 0,
- 	.fuse_base_ft_mask = 0x7ff << 10,
- 	.fuse_base_ft_shift = 10,
- 	.fuse_shift_ft_mask = 0x1f << 21,
- 	.fuse_shift_ft_shift = 21,
-+	.fuse_shift_cp_bits = 5,
-+	.fuse_shift_ft_bits = 4,
-+	.fuse_common_reg = FUSE_TSENSOR_COMMON,
- 	.fuse_spare_realignment = 0x1fc,
-+	.nominal_calib_cp = NOMINAL_CALIB_CP,
-+	.nominal_calib_ft = NOMINAL_CALIB_FT,
-+	.lower_precision = false,
- };
- 
- const struct tegra_soctherm_soc tegra132_soctherm = {
-diff --git a/drivers/thermal/tegra/tegra210-soctherm.c b/drivers/thermal/tegra/tegra210-soctherm.c
-index d0ff793f18c5..2877a7b43f2a 100644
---- a/drivers/thermal/tegra/tegra210-soctherm.c
-+++ b/drivers/thermal/tegra/tegra210-soctherm.c
-@@ -201,11 +201,19 @@ static const struct tegra_tsensor tegra210_tsensors[] = {
- static const struct tegra_soctherm_fuse tegra210_soctherm_fuse = {
- 	.fuse_base_cp_mask = 0x3ff << 11,
- 	.fuse_base_cp_shift = 11,
-+	.fuse_shift_cp_mask = 0x1f,
-+	.fuse_shift_cp_shift = 0,
- 	.fuse_base_ft_mask = 0x7ff << 21,
- 	.fuse_base_ft_shift = 21,
- 	.fuse_shift_ft_mask = 0x1f << 6,
- 	.fuse_shift_ft_shift = 6,
-+	.fuse_shift_cp_bits = 5,
-+	.fuse_shift_ft_bits = 4,
-+	.fuse_common_reg = FUSE_TSENSOR_COMMON,
- 	.fuse_spare_realignment = 0,
-+	.nominal_calib_cp = NOMINAL_CALIB_CP,
-+	.nominal_calib_ft = NOMINAL_CALIB_FT,
-+	.lower_precision = false,
- };
- 
- static struct tsensor_group_thermtrips tegra210_tsensor_thermtrips[] = {
++	.nominal_calib_ft = T114X_CALIB_FT,
++	.lower_precision = true,
++};
++
++const struct tegra_soctherm_soc tegra114_soctherm = {
++	.tsensors = tegra114_tsensors,
++	.num_tsensors = ARRAY_SIZE(tegra114_tsensors),
++	.ttgs = tegra114_tsensor_groups,
++	.num_ttgs = ARRAY_SIZE(tegra114_tsensor_groups),
++	.tfuse = &tegra114_soctherm_fuse,
++	.thresh_grain = TEGRA114_THRESH_GRAIN,
++	.bptt = TEGRA114_BPTT,
++	.use_ccroc = false,
++};
 -- 
 2.43.0
 
