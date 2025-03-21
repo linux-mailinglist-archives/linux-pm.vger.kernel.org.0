@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-24371-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24372-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5443A6B9ED
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 12:32:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 433E7A6B9F2
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 12:33:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B35219C1EA4
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 11:32:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDADF3AFF76
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 11:32:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 030362206B1;
-	Fri, 21 Mar 2025 11:32:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC11322370A;
+	Fri, 21 Mar 2025 11:32:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SN/Rh+b0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EHKWPx6z"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5706155753;
-	Fri, 21 Mar 2025 11:32:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC174155753;
+	Fri, 21 Mar 2025 11:32:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742556738; cv=none; b=eybntG69c4t8dB7ArajTQcxgTEclY9IDBZzk6FI8JgTlI907xu3H01T7dnuwZTXvisvvyTzhaLLHH643gaE+2baSPmmrrfUdcypHstyzCtwyUbHJRseH+EovCLYGQrxI+8oVST8zldeNEXNJUaWwlsPm+yXsFabvvLyKHDhup6g=
+	t=1742556773; cv=none; b=g7g0OJ8byt8OuV22+x5VZJh3ORi2P+F/wMJCUTYwtAH7VPJoBGKzw53/dmcT6YfNH0PZVTeVce1i4qy5KAjoIvFOO+i5o1npW1ISHQKDdqsvCCGukld0/+PntJANhgtw1TSOgEbLQnJtiP/Pv5PGTAYVl3NAprL4cTncxnnt230=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742556738; c=relaxed/simple;
-	bh=1Wc2vlIwYcC3jhY0Jz7QVH4Dj57VeZG15hR+/aWfVGo=;
+	s=arc-20240116; t=1742556773; c=relaxed/simple;
+	bh=thGuF3rwJihqxHfpwT/xQ7dl/3hvnzuOYMlnV7gGVm4=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=RshA51VN2Cg/HTocHRy3q+N9Z3CqxX4qsGPMER22eFgjoMusVHNZ4/iuRWHtnTJHr2kc8ytY+2bOUGBab9qtTOUhc3MFsEjZo+2wxW/mHQBLIa28vLbG8mkViWa8yGRMiA7SD1oNY6pcgPtcJdyRfybtXqUuVwzA0qW5oW4qQ7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SN/Rh+b0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2458EC4CEE7;
-	Fri, 21 Mar 2025 11:32:14 +0000 (UTC)
+	 MIME-Version:Content-Type; b=ZyBVJ/T2AG2Hv1qdmD1zVZbe8nLViMoJXofoW2Wj5wE66T2FvWrH1B8Oyb9GUfwuxJS84BAnmOWnXio9/63T4sehbvGJ9xzgHxj9syjKrsktfmSL/eaugaMtnPUHJwXbhUshFWPAo3UatB8XPAzG8JxdjOPnPmeA2eGcW6bICjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EHKWPx6z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 692A2C4CEE3;
+	Fri, 21 Mar 2025 11:32:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742556738;
-	bh=1Wc2vlIwYcC3jhY0Jz7QVH4Dj57VeZG15hR+/aWfVGo=;
+	s=k20201202; t=1742556773;
+	bh=thGuF3rwJihqxHfpwT/xQ7dl/3hvnzuOYMlnV7gGVm4=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=SN/Rh+b0AiUEHVonJTT7heYqUtvzSbzZ+WcqLqrV33B85TPzFlYoKXLHjhAHgUX3N
-	 wUtYQoLI4scGp7UQNKYrv3S6ZXk5hFIQ9sX/aq+/JCiRitw1G3zIOuZj7IMSsKow3f
-	 WfypeOdSLl17QKR/rUY0mFhNuaEsiQGZbhdXzwH+kMSsxUDmrdet3Msv+uq3d9b5kb
-	 yBQ9bsgFXPZpvv9j1GE6LYqEgBEZGAtZpyWGAOgYbt1U2XtHx3fVj3NdlFRSUkA3On
-	 zQ+NyQPJ3iSAgEKxyUVqfmyib2Y0vS7gTnKRKLGhLeicrZ0tEOGmcP3SJEjAErr9ZQ
-	 5n7JQHtYcNKmg==
+	b=EHKWPx6zc8CSmKQULK8B1xcUHLeIU3jzwt9B86AqSqGwDSaNGNYuTJwoMBFt8d77y
+	 CEK2dD4XyFGfYsyeQ7eI9atqpYJcguBOt5N3ZuwS+pidqFAf6ETDZQ417AS8aoy+T4
+	 IDsdLzSPybMTmdK7dC5fKtz38H77DfvZL0Pp6KHJAdJ0IYaiTKcvrvRyqSIdorsYIO
+	 x4aFXb0HOsA5g329+WgsmXTqR1+AxIlDfOqWK2lU8b0adcjWJksC51AExTMHWa/tJX
+	 b7C2HeRJv2cFlQC/u8uY2DOVB2pC5dLSccOhP1MOQrxOr9gNCfzwKhZIZffV7kTJf5
+	 j1xNMkBYooUqw==
 From: Lee Jones <lee@kernel.org>
 To: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
  conor+dt@kernel.org, claudiu.beznea@tuxon.dev, sre@kernel.org, 
@@ -48,15 +48,14 @@ To: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
  p.zabel@pengutronix.de, Ryan.Wanner@microchip.com
 Cc: linux@armlinux.org.uk, devicetree@vger.kernel.org, 
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c5d602b7d4c29333013ef3f75544c2eb7e4b8dab.1740671156.git.Ryan.Wanner@microchip.com>
+ linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+In-Reply-To: <92543fcff4ab35e770b01d4c15d45cc5d55833f4.1740671156.git.Ryan.Wanner@microchip.com>
 References: <cover.1740671156.git.Ryan.Wanner@microchip.com>
- <c5d602b7d4c29333013ef3f75544c2eb7e4b8dab.1740671156.git.Ryan.Wanner@microchip.com>
-Subject: Re: (subset) [PATCH v3 01/21] dt-bindings: mfd: syscon: add
- microchip,sama7d65-ddr3phy
-Message-Id: <174255673486.2091509.9339030316768600844.b4-ty@kernel.org>
-Date: Fri, 21 Mar 2025 11:32:14 +0000
+ <92543fcff4ab35e770b01d4c15d45cc5d55833f4.1740671156.git.Ryan.Wanner@microchip.com>
+Subject: Re: (subset) [PATCH v3 02/21] dt-bindings: mfd: syscon: add
+ microchip,sama7d65-sfrbu
+Message-Id: <174255677015.2092266.3581610195037077485.b4-ty@kernel.org>
+Date: Fri, 21 Mar 2025 11:32:50 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,15 +66,15 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailer: b4 0.15-dev-510f9
 
-On Thu, 27 Feb 2025 08:51:48 -0700, Ryan.Wanner@microchip.com wrote:
-> Add SAMA7D65 DDR3phy compatible to DT bindings documentation
+On Thu, 27 Feb 2025 08:51:49 -0700, Ryan.Wanner@microchip.com wrote:
+> Add SAMA7D65 SFRBU compatible string to DT bindings documentation
 > 
 > 
 
 Applied, thanks!
 
-[01/21] dt-bindings: mfd: syscon: add microchip,sama7d65-ddr3phy
-        commit: 2b4d2bdc07a152b3869f7888f64f37d4b09ae58e
+[02/21] dt-bindings: mfd: syscon: add microchip,sama7d65-sfrbu
+        commit: 7e3ff6785039796728a515ea6e07378823e71be1
 
 --
 Lee Jones [李琼斯]
