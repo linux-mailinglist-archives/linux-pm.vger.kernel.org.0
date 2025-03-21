@@ -1,134 +1,426 @@
-Return-Path: <linux-pm+bounces-24373-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24374-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51D35A6BABD
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 13:34:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E205A6BC3E
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 14:59:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C811C4666AA
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 12:34:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89FB23B1F0A
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 13:58:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E96EA2248BE;
-	Fri, 21 Mar 2025 12:34:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A8D813774D;
+	Fri, 21 Mar 2025 13:58:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="ddIDAwJi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DRHJtSUF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE2B486250;
-	Fri, 21 Mar 2025 12:34:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4143A757EA;
+	Fri, 21 Mar 2025 13:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742560445; cv=none; b=CNEiG/vPP55b5q9gBLGbPpiOKavS+DZz06IpepnBsPvoqjHY00H9ipVtHy6LXiFuV4KnZR1he4UOZkGqzrXIo+MZxr5qGjs5mynnAYyBkYjOhD714Dd1jR6HxL7PM+q+5N3boKeYgHXvcjTdX4Zh1jKsWub0iK2cxemvIFf2H2A=
+	t=1742565503; cv=none; b=PLJeBJdg+lkCLf4qxKZmEilQINxMaPrPl+/6VvADd6nTe7IIVxreVm5FqdSRmECj/eHxXyKES7QY4HAGb3rpK8IfWZJJkNvfwaRMjCet8qkWGyp1esRbMHJ494KLWAQucVZ5L+o+Z8lhjontT9vJD/KWLnPfZER0v6GTx0uPkjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742560445; c=relaxed/simple;
-	bh=GFNU56b7WdHpKXPmdWPdZ2I/P7yGjJPYxXE7+9dTP5M=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Ftv2mWlVutgjmzeCEmVe+MnMMSo4G2yMDS26uXonmCLKzIAHMgrQRdX/R7gGcMxW52XG/iA8SoQ/2mu3SqGNG/1vB+K4sBtQZ0/9ERknosNqiJ8l0ASapUwoZTVIhewWxb9/uzquoRhpLLm6b6vSH93Sf1VQRg3zVMwWOZXgfC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=ddIDAwJi; arc=none smtp.client-ip=198.37.111.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+	s=arc-20240116; t=1742565503; c=relaxed/simple;
+	bh=6vAspCAiAB3DexjwsaE6SX9ZPw4xPF5SiOIgQi+Be5E=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=s7m4gzx68GJM6yX3Rzw8u6cM9rDJb9bqpAtId7ChuwqEzYPf7iav6sE72FxR6UxxybdEYAL45frM+kbQndwXbgznr0oaUq3uuJi+hEcxTVCLKg4x+hCSUD/xbIIRT0rvuZ0biWZLgzCMkSfIUxz4VQT6FusuRMBA1RGd5kakhJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DRHJtSUF; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1742560442;
-	bh=GFNU56b7WdHpKXPmdWPdZ2I/P7yGjJPYxXE7+9dTP5M=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=ddIDAwJieaefjo7z1ZfVPnDYd3rhPM/S0IgEBhmLVTn/KcXhs3IBP0cBzVrXN2mH6
-	 M7l9aCr4mQa4GockzM9BNKINOBwxqaEJvOB3+U5zAyK6Bbp2gNK1Xp+yFXdvmx/8Lz
-	 thTbTQ5TWOWOePOehemP29IXWvAoM/D2Aj7Kwts4=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 62E191C0396;
-	Fri, 21 Mar 2025 08:34:02 -0400 (EDT)
-Message-ID: <576418420308d2511a4c155cc57cf0b1420c273b.camel@HansenPartnership.com>
-Subject: Re: [LSF/MM/BPF TOPIC] Filesystem Suspend Resume
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: linux-fsdevel@vger.kernel.org, lsf-pc@lists.linux-foundation.org, 
-	"Rafael J. Wysocki"
-	 <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown
-	 <len.brown@intel.com>, linux-pm@vger.kernel.org
-Date: Fri, 21 Mar 2025 08:34:01 -0400
-In-Reply-To: <Z9z32X7k_eVLrYjR@infradead.org>
-References: 
-	<0a76e074ef262ca857c61175dd3d0dc06b67ec42.camel@HansenPartnership.com>
-	 <Z9xG2l8lm7ha3Pf2@infradead.org>
-	 <acae7a99f8acb0ebf408bb6fc82ab53fb687559c.camel@HansenPartnership.com>
-	 <Z9z32X7k_eVLrYjR@infradead.org>
-Autocrypt: addr=James.Bottomley@HansenPartnership.com;
- prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742565501; x=1774101501;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=6vAspCAiAB3DexjwsaE6SX9ZPw4xPF5SiOIgQi+Be5E=;
+  b=DRHJtSUFSljQWcrDa3sBh9qSAezRn2FZR0Nkd7y+kmHLcG7m01rcNn+9
+   urBwBnX9I1epbKZq11lYHIiZeUt13FdUzkJge8FhNJhdNqGpio8A7rQox
+   yvFr4eC9ErN5+XH9bO6E2RjzLvVYzBzeMrHA9JhZqJ8pumE1JdGI30Uxf
+   NAuYBEi6imEusOiuH/cVkXFaFlKjldWV8AeaqTA8AsXn1AdHIfDUTxi//
+   qQOmf6+Va6zRA9hvMj18h/QG+nRFDQPDhOzMMVkx+sArIIFWXbK+a/wOD
+   AZiRvDVk9lnT33uz8wqz+nKuMNOz08klV7S6BszadMzVrIyB9WdJR5FSC
+   A==;
+X-CSE-ConnectionGUID: nrOWR9qMTZqSNH6Daj0bKA==
+X-CSE-MsgGUID: 5TjKzZMyQqS66HuFGAbMew==
+X-IronPort-AV: E=McAfee;i="6700,10204,11380"; a="43993393"
+X-IronPort-AV: E=Sophos;i="6.14,264,1736841600"; 
+   d="scan'208";a="43993393"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2025 06:58:20 -0700
+X-CSE-ConnectionGUID: Q+PrO1GQR+yDST8Ra7hiIA==
+X-CSE-MsgGUID: JFJ/dsUnQ32ArMb4RPMMhg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,264,1736841600"; 
+   d="scan'208";a="123426742"
+Received: from mjarzebo-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.112])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2025 06:58:14 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 21 Mar 2025 15:58:09 +0200 (EET)
+To: Mario Limonciello <superm1@kernel.org>
+cc: Hans de Goede <hdegoede@redhat.com>, 
+    Mario Limonciello <mario.limonciello@amd.com>, 
+    Perry Yuan <perry.yuan@amd.com>, Thomas Gleixner <tglx@linutronix.de>, 
+    Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+    Dave Hansen <dave.hansen@linux.intel.com>, 
+    "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, 
+    "H . Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>, 
+    Huang Rui <ray.huang@amd.com>, 
+    "Gautham R . Shenoy" <gautham.shenoy@amd.com>, 
+    "Rafael J . Wysocki" <rafael@kernel.org>, 
+    Viresh Kumar <viresh.kumar@linaro.org>, 
+    "open list:AMD HETERO CORE HARDWARE FEEDBACK DRIVER" <platform-driver-x86@vger.kernel.org>, 
+    "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <linux-kernel@vger.kernel.org>, 
+    "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
+    "open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>, 
+    Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH v8 01/13] Documentation: x86: Add AMD Hardware Feedback
+ Interface documentation
+In-Reply-To: <a2e33d66-22ee-475b-817b-b52c6890859c@kernel.org>
+Message-ID: <58c49901-24b2-2209-9583-09e6b080cc08@linux.intel.com>
+References: <20250218190822.1039982-1-superm1@kernel.org> <20250218190822.1039982-2-superm1@kernel.org> <127a93b0-647f-bb0c-2bf4-649fc4d1f25e@linux.intel.com> <a2e33d66-22ee-475b-817b-b52c6890859c@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="8323328-1251599366-1742565489=:931"
 
-On Thu, 2025-03-20 at 22:23 -0700, Christoph Hellwig wrote:
-> On Thu, Mar 20, 2025 at 02:15:15PM -0400, James Bottomley wrote:
-> > On Thu, 2025-03-20 at 09:48 -0700, Christoph Hellwig wrote:
-> > [...]
-> > > We finally got hibernate to freeze file system on suspend,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323328-1251599366-1742565489=:931
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+
+On Thu, 20 Mar 2025, Mario Limonciello wrote:
+
+> On 3/19/2025 09:01, Ilpo J=C3=A4rvinen wrote:
+> > On Tue, 18 Feb 2025, Mario Limonciello wrote:
 > >=20
-> > I was looking for this to see if I could possibly plug something in
-> > for pseudo filesystems that don't have backing devices.=C2=A0 However, =
-I
-> > can't find the path where suspend causes freeze (at least the bdev
-> > doesn't seem to register any power notifier like the scsi block
-> > device does), where is the code?
+> > > From: Perry Yuan <Perry.Yuan@amd.com>
+> > >=20
+> > > Introduce a new documentation file, `amd_hfi.rst`, which delves into =
+the
+> > > implementation details of the AMD Hardware Feedback Interface and its
+> > > associated driver, `amd_hfi`. This documentation describes how the
+> > > driver provides hint to the OS scheduling which depends on the capabi=
+lity
+> > > of core performance and efficiency ranking data.
+> > >=20
+> > > This documentation describes
+> > > * The design of the driver
+> > > * How the driver provides hints to the OS scheduling
+> > > * How the driver interfaces with the kernel for efficiency ranking da=
+ta.
+> > >=20
+> > > Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> > > Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> > > Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > > ---
+> > >   Documentation/arch/x86/amd-hfi.rst | 127 ++++++++++++++++++++++++++=
++++
+> > >   Documentation/arch/x86/index.rst   |   1 +
+> > >   2 files changed, 128 insertions(+)
+> > >   create mode 100644 Documentation/arch/x86/amd-hfi.rst
+> > >=20
+> > > diff --git a/Documentation/arch/x86/amd-hfi.rst
+> > > b/Documentation/arch/x86/amd-hfi.rst
+> > > new file mode 100644
+> > > index 0000000000000..5d204688470e3
+> > > --- /dev/null
+> > > +++ b/Documentation/arch/x86/amd-hfi.rst
+> > > @@ -0,0 +1,127 @@
+> > > +.. SPDX-License-Identifier: GPL-2.0
+> > > +
+> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > +Hardware Feedback Interface For Hetero Core Scheduling On AMD Platfo=
+rm
+> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > +
+> > > +:Copyright: 2024 Advanced Micro Devices, Inc. All Rights Reserved.
+> > > +
+> > > +:Author: Perry Yuan <perry.yuan@amd.com>
+> > > +:Author: Mario Limonciello <mario.limonciello@amd.com>
+> > > +
+> > > +Overview
+> > > +--------
+> > > +
+> > > +AMD Heterogeneous Core implementations are comprised of more than on=
+e
+> > > +architectural class and CPUs are comprised of cores of various effic=
+iency
+> > > and
+> > > +power capabilities: performance-oriented *classic cores* and
+> > > power-efficient
+> > > +*dense cores*. As such, power management strategies must be designed=
+ to
+> > > +accommodate the complexities introduced by incorporating different c=
+ore
+> > > types.
+> > > +Heterogeneous systems can also extend to more than two architectural
+> > > classes as
+> > > +well. The purpose of the scheduling feedback mechanism is to provide
+> > > +information to the operating system scheduler in real time such that=
+ the
+> > > +scheduler can direct threads to the optimal core.
+> > > +
+> > > +The goal of AMD's heterogeneous architecture is to attain power bene=
+fit
+> > > by sending
+> > > +background thread to the dense cores while sending high priority thr=
+eads
+> > > to the classic
+> > > +cores. From a performance perspective, sending background threads to
+> > > dense cores can free
+> > > +up power headroom and allow the classic cores to optimally service
+> > > demanding threads.
+> > > +Furthermore, the area optimized nature of the dense cores allows for=
+ an
+> > > increasing
+> > > +number of physical cores. This improved core density will have posit=
+ive
+> > > multithreaded
+> > > +performance impact.
+> >=20
+> > Hi Mario,
+> >=20
+> > Please fold these paragraphs to 80 characters so that they're easier to
+> > read as textfiles (the table can obviously exceed that but there should=
+ be
+> > no reason for the text paragraphs to have excessively long lines).
+> >=20
+> > My apologies for taking so long to get to review this series.=20
 >=20
-> Looking again I can't find it either.=C2=A0 On the internet I find a patc=
-h
-> adding it from 2006:
-> =20
-> https://groups.google.com/g/fa.linux.kernel/c/dtxsNJ7ks58/m/mqU8SIAbvLgJ
+> No problem.  Thanks for looking.  I'll get a new version ready to put out
+> after the next merge window.
+>=20
+> > Most of my
+> > comments are quite minor but there's also 1-2 things that seem more
+> > important. It seemed to me that there is some disconnetion between the
+> > promises made in the Kconfig description and what is provided by the pa=
+tch
+> > series.
+>=20
+> Some of the series was pared down to go in multiple parts to make it easi=
+er to
+> review with follow ups for the dynamic stuff planned for the next iterati=
+on.
+>=20
+> You see some artifacts of that comments and Kconfig.  I figured it was be=
+tter
+> to leave as is for those given they get to the intent, but I can change i=
+f you
+> think it's better to adjust them when the next part lands instead.
 
-Wow google has a terrible interface.  This is the lore link:
+Okay, I thought that might be because such a split to multiple series. I=20
+think you can leave those as is as I assume to intention is to immediately=
+=20
+follow up with the other parts (and not like wait a few kernel releases=20
+or so)?
 
-https://lore.kernel.org/all/200611011200.18438.rjw@sisk.pl/
+--=20
+ i.
 
-So the patch indicates where to put direct hooks in the power
-management but it operates via bdev_freeze/thaw() which wouldn't work
-for pseudo filesystems, but could be replaced by a direct hook into the
-vfs that would iterate over superblocks calling
-freeze_super/thaw_super().
-
-> But I couldn't see if it got applied or disappaeared again somehow.
-> Adding the relevant maintainers.
-
-It looks like it got reposted about 5 years later as well (in the
-middle of a thread about xfs hibernate lockups):
-
-https://lore.kernel.org/all/201108032315.06012.rjw__14254.1066081778$131240=
-6161$gmane$org@sisk.pl/
-
-Then again 6 months later:
-
-https://lore.kernel.org/all/201201281445.49377.rjw@sisk.pl/
-
-everything kept foundering on deadlock problems between filesystems
-needing threads to shrink and complete writeout and the freezing of
-those threads.
-
-Let me digest all that and see if we have more hope this time around.
-
-Regards,
-
-James
-
+>=20
+> >=20
+> > --
+> >   i.
+> >=20
+> > > +
+> > > +AMD Heterogeneous Core Driver
+> > > +-----------------------------
+> > > +
+> > > +The ``amd_hfi`` driver delivers the operating system a performance a=
+nd
+> > > energy efficiency
+> > > +capability data for each CPU in the system. The scheduler can use th=
+e
+> > > ranking data
+> > > +from the HFI driver to make task placement decisions.
+> > > +
+> > > +Thread Classification and Ranking Table Interaction
+> > > +----------------------------------------------------
+> > > +
+> > > +The thread classification is used to select into a ranking table tha=
+t
+> > > describes
+> > > +an efficiency and performance ranking for each classification.
+> > > +
+> > > +Threads are classified during runtime into enumerated classes. The
+> > > classes represent
+> > > +thread performance/power characteristics that may benefit from speci=
+al
+> > > scheduling behaviors.
+> > > +The below table depicts an example of thread classification and a
+> > > preference where a given thread
+> > > +should be scheduled based on its thread class. The real time thread
+> > > classification is consumed
+> > > +by the operating system and is used to inform the scheduler of where=
+ the
+> > > thread should be placed.
+> > > +
+> > > +Thread Classification Example Table
+> > > +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> > > ++----------+----------------+-------------------------------+-------=
+--------------+---------+
+> > > +| class ID | Classification | Preferred scheduling behavior | Preemp=
+tion
+> > > priority | Counter |
+> > > ++----------+----------------+-------------------------------+-------=
+--------------+---------+
+> > > +| 0        | Default        | Performant                    | Highes=
+t
+> > > |         |
+> > > ++----------+----------------+-------------------------------+-------=
+--------------+---------+
+> > > +| 1        | Non-scalable   | Efficient                     | Lowest
+> > > | PMCx1A1 |
+> > > ++----------+----------------+-------------------------------+-------=
+--------------+---------+
+> > > +| 2        | I/O bound      | Efficient                     | Lowest
+> > > | PMCx044 |
+> > > ++----------+----------------+-------------------------------+-------=
+--------------+---------+
+> > > +
+> > > +Thread classification is performed by the hardware each time that th=
+e
+> > > thread is switched out.
+> > > +Threads that don't meet any hardware specified criteria will be
+> > > classified as "default".
+> > > +
+> > > +AMD Hardware Feedback Interface
+> > > +--------------------------------
+> > > +
+> > > +The Hardware Feedback Interface provides to the operating system
+> > > information
+> > > +about the performance and energy efficiency of each CPU in the syste=
+m.
+> > > Each
+> > > +capability is given as a unit-less quantity in the range [0-255]. A
+> > > higher
+> > > +performance value indicates higher performance capability, and a hig=
+her
+> > > +efficiency value indicates more efficiency. Energy efficiency and
+> > > performance
+> > > +are reported in separate capabilities in the shared memory based ran=
+king
+> > > table.
+> > > +
+> > > +These capabilities may change at runtime as a result of changes in t=
+he
+> > > +operating conditions of the system or the action of external factors=
+=2E
+> > > +Power Management FW is responsible for detecting events that would
+> > > require
+> > > +a reordering of the performance and efficiency ranking. Table update=
+s
+> > > would
+> > > +happen relatively infrequently and occur on the time scale of second=
+s or
+> > > more.
+> > > +
+> > > +The following events trigger a table update:
+> > > +    * Thermal Stress Events
+> > > +    * Silent Compute
+> > > +    * Extreme Low Battery Scenarios
+> > > +
+> > > +The kernel or a userspace policy daemon can use these capabilities t=
+o
+> > > modify
+> > > +task placement decisions. For instance, if either the performance or
+> > > energy
+> > > +capabilities of a given logical processor becomes zero, it is an
+> > > indication that
+> > > +the hardware recommends to the operating system to not schedule any =
+tasks
+> > > on
+> > > +that processor for performance or energy efficiency reasons,
+> > > respectively.
+> > > +
+> > > +Implementation details for Linux
+> > > +--------------------------------
+> > > +
+> > > +The implementation of threads scheduling consists of the following s=
+teps:
+> > > +
+> > > +1. A thread is spawned and scheduled to the ideal core using the def=
+ault
+> > > +   heterogeneous scheduling policy.
+> > > +2. The processor profiles thread execution and assigns an enumerated
+> > > classification ID.
+> > > +   This classification is communicated to the OS via logical process=
+or
+> > > scope MSR.
+> > > +3. During the thread context switch out the operating system consume=
+s the
+> > > workload(WL)
+> > > +   classification which resides in a logical processor scope MSR.
+> > > +4. The OS triggers the hardware to clear its history by writing to a=
+n
+> > > MSR,
+> > > +   after consuming the WL classification and before switching in the=
+ new
+> > > thread.
+> > > +5. If due to the classification, ranking table, and processor
+> > > availability,
+> > > +   the thread is not on its ideal processor, the OS will then consid=
+er
+> > > scheduling
+> > > +   the thread on its ideal processor (if available).
+> > > +
+> > > +Ranking Table
+> > > +-------------
+> > > +The ranking table is a shared memory region that is used to communic=
+ate
+> > > the
+> > > +performance and energy efficiency capabilities of each CPU in the sy=
+stem.
+> > > +
+> > > +The ranking table design includes rankings for each APIC ID in the s=
+ystem
+> > > and
+> > > +rankings both for performance and efficiency for each workload
+> > > classification.
+> > > +
+> > > +.. kernel-doc:: drivers/platform/x86/amd/hfi/hfi.c
+> > > +   :doc: amd_shmem_info
+> > > +
+> > > +Ranking Table update
+> > > +---------------------------
+> > > +The power management firmware issues an platform interrupt after upd=
+ating
+> > > the ranking
+> > > +table and is ready for the operating system to consume it. CPUs rece=
+ive
+> > > such interrupt
+> > > +and read new ranking table from shared memory which PCCT table has
+> > > provided, then
+> > > +``amd_hfi`` driver parse the new table to provide new consume data f=
+or
+> > > scheduling decisions.
+> > > diff --git a/Documentation/arch/x86/index.rst
+> > > b/Documentation/arch/x86/index.rst
+> > > index 8ac64d7de4dc9..56f2923f52597 100644
+> > > --- a/Documentation/arch/x86/index.rst
+> > > +++ b/Documentation/arch/x86/index.rst
+> > > @@ -43,3 +43,4 @@ x86-specific Documentation
+> > >      features
+> > >      elf_auxvec
+> > >      xstate
+> > > +   amd-hfi
+> > >=20
+> >=20
+>=20
+>=20
+--8323328-1251599366-1742565489=:931--
 
