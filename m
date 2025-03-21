@@ -1,117 +1,195 @@
-Return-Path: <linux-pm+bounces-24378-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24379-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57224A6BD0A
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 15:35:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2231A6BD5A
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 15:43:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0007A7A8704
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 14:33:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1752D188B51A
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Mar 2025 14:42:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB06B1D5166;
-	Fri, 21 Mar 2025 14:34:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24A831DB12D;
+	Fri, 21 Mar 2025 14:41:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gUmRVEEP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FTbTqF9A"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3216A1D6DDA
-	for <linux-pm@vger.kernel.org>; Fri, 21 Mar 2025 14:34:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E68EC1BBBFD;
+	Fri, 21 Mar 2025 14:41:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742567656; cv=none; b=CZF39nC97DgkP+JBfpR6rBv0c+z7dgx6C0lvLzpdVaF2cP7gMwyvjyr3xYrtyUeqPYsdHj3mCQxTZV2foUcI+xYdGJbPKAPLVmOM6yQ+oNkRerKo1kE3s3IvXiLWwngPn+cc7MG3gnQjajJd4gChcH9tT7oa0LUKNAx40QYIOKc=
+	t=1742568078; cv=none; b=fDjRvwUJtHkrM85Qy+XCFCO8Trtf3SPg4EY8d+AG/eFHfPW9U9U4UUSTXvJngQ3b8h5/Fkb2bFHwspmLjbyBqP8xRogOp7/nxaA+D5AsYCHIn+evULvHBlQ6Vn09vfa4U0mT/NezwMgS/IQqrjNNb57RUjVtNdayx9CM1gaWLIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742567656; c=relaxed/simple;
-	bh=6MoXFu4CLfosp+15aOYuT+yR51crnXpBLzFRutHhie8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=VyEZ5/bW7PkVrX/2a+ByZmok7nEBjk+JbZvhNtKKCWkbCDKJq7O4aP6vcF5uqudUkOQ6yEaJXl7DhCuqxrILOI8zwMr+V06V8J4TVBnnYgwQmwnZ2K4LoXJfFdNmzh6sUe6ummWcyr+5QZaOP0bdfBYpHBp77qWxXyIvVaW2Wv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gUmRVEEP; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-39133f709f5so1119915f8f.0
-        for <linux-pm@vger.kernel.org>; Fri, 21 Mar 2025 07:34:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1742567653; x=1743172453; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1kqVdYeLxFWfGG4ab3N4AIVapOQ8iQyK3/JzY3rIwWk=;
-        b=gUmRVEEPhIr9cMyEt9TTnQUDVTF6Y4fYxaJtt6CpdVuuPkcVNKGpOtuihXBBJiCGp/
-         dKjmlXbJENFSZ+XKYLNCULG7J82lE2nzQTOwbCiQe4P2tfTKgP2UBT37YzsieV2eDt26
-         fwyRdLoZv8eI0wMeIKJJxaCTb9OaD8XvNn8ufDRaHZzX59//FezpkUnRDUIpht4gJg2r
-         3d0CQYXEBD/VKUBED2fUAOEVHoxgoXp594PNsTpddcDxKfh0/ErDwf0ake0tfd7NdnPA
-         g4wiJazFluguLgv8v7JoWXGu5DYNytca4Ept4C6fLUyuPgwo7wGtndW3PzjPIZgQd6h8
-         eMAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742567653; x=1743172453;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1kqVdYeLxFWfGG4ab3N4AIVapOQ8iQyK3/JzY3rIwWk=;
-        b=Rxl55V4E9dIgqfpEu2xkZIu/JrqBlnPPiPE+vnPVDf0BSr6AtejG8TTAxEHplzgT06
-         /YP7nTCQZKzuY+sjwjGyNyV+5lapXlwocgTbUD25c8cb0c8Yei0kDZqRJpElvQw0U0oj
-         XFiMSm85ZWd1pxKglZqF9k7lqgnrkB9hnov8vgVZ1DRphYzoOSNLV+Zq2TMYefw21YG/
-         NjlL2zcbvyE8JrdC5Dz8pXLJ8nhfXLaNk9ujB4AyG24M1m5Cuk0qfnz55hoz1OEYkf3p
-         TSTi/PeTZ18ahawGW3HIzACmkjmKcoc19Sb0Fxk7bSWdJmAs4OhwjkGkyzPz7QbW7Xrj
-         3/7g==
-X-Forwarded-Encrypted: i=1; AJvYcCUsiWHhkmGMDz0k9oK1VsYgWuR6if8vcCK3koEmoZVT5luqK5VZpIDvr6eCkZvjZvBk9j9xtQgAMA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQ0jk2RDtkN/lXwB4w0C42DGwjbEOsK4T4neXPOVvcHD1ez2ld
-	pLbfrUUS3f9xq+bI8xq2a87WXZBXDqkD0PfCcsrOSeXgMzvCw+gvvB6SZjIbxGE=
-X-Gm-Gg: ASbGncscy0CQZt/pokHhhLWs01qG72k6kq2yoY1358oWAWvUvr/B3cBXMlhXKmyQlg+
-	4EFufAcxBcxSwwbA6EDfYEYC8SRSpDUWayNHoNNS7vAbXtfK7V9PsnhTHkhzJXK01SEL6F2HkJe
-	mpgPZLmNEOsbibv9YTOJtATvJxoHvO7PcU+eJfpm8/PgVBJc/MOFJc0riTQdONLFWHVSVgewCCi
-	+Ui4EsDksbuug9ye8FZnf0a8RbFR6QmX3Uh3WPLHm/UcBSkBRoBfbCPXKxwyZzkCy5rRzc8gTso
-	1q2egCvgWF27Kak71WLlAwhd60Xg98lqGKWQm+2sG3MPdtCujQ==
-X-Google-Smtp-Source: AGHT+IH3J7mR0ItKLtQh/BfAHr2Qv0TD83WieWbRHva+BSl455obiV7i95/cpX3n3cQBcn7spSf0kw==
-X-Received: by 2002:a05:6000:18a2:b0:390:f9d0:5e4 with SMTP id ffacd0b85a97d-3997f8fafb1mr3799744f8f.21.1742567653378;
-        Fri, 21 Mar 2025 07:34:13 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3997f99540bsm2503365f8f.2.2025.03.21.07.34.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Mar 2025 07:34:13 -0700 (PDT)
-Date: Fri, 21 Mar 2025 17:34:11 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Dzmitry Sankouski <dsankouski@gmail.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] power: supply: max77705: Fix error code in
- max77705_get_health()
-Message-ID: <0ea50e87-2b63-4062-8c2a-17537495f481@stanley.mountain>
+	s=arc-20240116; t=1742568078; c=relaxed/simple;
+	bh=zyk/9qyf/13ksj1qkC9QTG9vOLXhbZDwkWpoHz2iK18=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XYBb2K+Q5opcV4di2wa9Hma5yzsZpDNQ7sVBmVRt0pbGJUeHzoVAdjT4nbcvTi9e+mimmekGIAuAXfO22WSbLB4SiIDVf/3FF4e+wnfqBSt83ZeZigeDjHCdXnCHDRoFUXVRBMIvhQ53BZ/01l+zWJWIoiKRi5S7N8ThMkCwtAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FTbTqF9A; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0AEAC4CEE3;
+	Fri, 21 Mar 2025 14:41:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742568076;
+	bh=zyk/9qyf/13ksj1qkC9QTG9vOLXhbZDwkWpoHz2iK18=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=FTbTqF9A0FLqceBf4syWDKY56HuCVR74TupaXR6D9HFmArTZsSgKvWfRtcIWWUTVp
+	 KYwnoEvwJ4ehKuxQA75TeS4TtCkBaDMNCRa2l7VWjIe8bHoNU+2EEBmeMV2SC10vKZ
+	 bvo/wrUDgcYh5Xyy4+d0lVFlYFZNig4UpdeDv8YmgYhQIgiSfBK7NkzugWXNKMY1mf
+	 zRoMicEDYQvR5Flqedx0fXpIAZnCTHXhD3Dj0/KHtzmZXgySsniiV4PtfwDfEIertz
+	 m/QU0TALqgWvpL5onPngUmIf1vf+fMhsoESnePNUV3UVtheFW/DOFJPBq64HT8p2RS
+	 vNblR/Yq0RUZQ==
+Message-ID: <806cafb1-7bab-4001-9b28-3f412ca2fd89@kernel.org>
+Date: Fri, 21 Mar 2025 09:41:13 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <94f55158-1776-4f2f-9296-e307e83d569a@stanley.mountain>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 01/13] Documentation: x86: Add AMD Hardware Feedback
+ Interface documentation
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Hans de Goede <hdegoede@redhat.com>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Perry Yuan <perry.yuan@amd.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+ "H . Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
+ Huang Rui <ray.huang@amd.com>, "Gautham R . Shenoy"
+ <gautham.shenoy@amd.com>, "Rafael J . Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ "open list:AMD HETERO CORE HARDWARE FEEDBACK DRIVER"
+ <platform-driver-x86@vger.kernel.org>,
+ "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
+ <linux-kernel@vger.kernel.org>,
+ "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+ "open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>,
+ Bagas Sanjaya <bagasdotme@gmail.com>
+References: <20250218190822.1039982-1-superm1@kernel.org>
+ <20250218190822.1039982-2-superm1@kernel.org>
+ <127a93b0-647f-bb0c-2bf4-649fc4d1f25e@linux.intel.com>
+ <a2e33d66-22ee-475b-817b-b52c6890859c@kernel.org>
+ <58c49901-24b2-2209-9583-09e6b080cc08@linux.intel.com>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <58c49901-24b2-2209-9583-09e6b080cc08@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Return -EINVAL if the health is bad.  Don't return success.
+On 3/21/2025 08:58, Ilpo Järvinen wrote:
+> On Thu, 20 Mar 2025, Mario Limonciello wrote:
+> 
+>> On 3/19/2025 09:01, Ilpo Järvinen wrote:
+>>> On Tue, 18 Feb 2025, Mario Limonciello wrote:
+>>>
+>>>> From: Perry Yuan <Perry.Yuan@amd.com>
+>>>>
+>>>> Introduce a new documentation file, `amd_hfi.rst`, which delves into the
+>>>> implementation details of the AMD Hardware Feedback Interface and its
+>>>> associated driver, `amd_hfi`. This documentation describes how the
+>>>> driver provides hint to the OS scheduling which depends on the capability
+>>>> of core performance and efficiency ranking data.
+>>>>
+>>>> This documentation describes
+>>>> * The design of the driver
+>>>> * How the driver provides hints to the OS scheduling
+>>>> * How the driver interfaces with the kernel for efficiency ranking data.
+>>>>
+>>>> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>>>> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+>>>> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+>>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>>>> ---
+>>>>    Documentation/arch/x86/amd-hfi.rst | 127 +++++++++++++++++++++++++++++
+>>>>    Documentation/arch/x86/index.rst   |   1 +
+>>>>    2 files changed, 128 insertions(+)
+>>>>    create mode 100644 Documentation/arch/x86/amd-hfi.rst
+>>>>
+>>>> diff --git a/Documentation/arch/x86/amd-hfi.rst
+>>>> b/Documentation/arch/x86/amd-hfi.rst
+>>>> new file mode 100644
+>>>> index 0000000000000..5d204688470e3
+>>>> --- /dev/null
+>>>> +++ b/Documentation/arch/x86/amd-hfi.rst
+>>>> @@ -0,0 +1,127 @@
+>>>> +.. SPDX-License-Identifier: GPL-2.0
+>>>> +
+>>>> +======================================================================
+>>>> +Hardware Feedback Interface For Hetero Core Scheduling On AMD Platform
+>>>> +======================================================================
+>>>> +
+>>>> +:Copyright: 2024 Advanced Micro Devices, Inc. All Rights Reserved.
+>>>> +
+>>>> +:Author: Perry Yuan <perry.yuan@amd.com>
+>>>> +:Author: Mario Limonciello <mario.limonciello@amd.com>
+>>>> +
+>>>> +Overview
+>>>> +--------
+>>>> +
+>>>> +AMD Heterogeneous Core implementations are comprised of more than one
+>>>> +architectural class and CPUs are comprised of cores of various efficiency
+>>>> and
+>>>> +power capabilities: performance-oriented *classic cores* and
+>>>> power-efficient
+>>>> +*dense cores*. As such, power management strategies must be designed to
+>>>> +accommodate the complexities introduced by incorporating different core
+>>>> types.
+>>>> +Heterogeneous systems can also extend to more than two architectural
+>>>> classes as
+>>>> +well. The purpose of the scheduling feedback mechanism is to provide
+>>>> +information to the operating system scheduler in real time such that the
+>>>> +scheduler can direct threads to the optimal core.
+>>>> +
+>>>> +The goal of AMD's heterogeneous architecture is to attain power benefit
+>>>> by sending
+>>>> +background thread to the dense cores while sending high priority threads
+>>>> to the classic
+>>>> +cores. From a performance perspective, sending background threads to
+>>>> dense cores can free
+>>>> +up power headroom and allow the classic cores to optimally service
+>>>> demanding threads.
+>>>> +Furthermore, the area optimized nature of the dense cores allows for an
+>>>> increasing
+>>>> +number of physical cores. This improved core density will have positive
+>>>> multithreaded
+>>>> +performance impact.
+>>>
+>>> Hi Mario,
+>>>
+>>> Please fold these paragraphs to 80 characters so that they're easier to
+>>> read as textfiles (the table can obviously exceed that but there should be
+>>> no reason for the text paragraphs to have excessively long lines).
+>>>
+>>> My apologies for taking so long to get to review this series.
+>>
+>> No problem.  Thanks for looking.  I'll get a new version ready to put out
+>> after the next merge window.
+>>
+>>> Most of my
+>>> comments are quite minor but there's also 1-2 things that seem more
+>>> important. It seemed to me that there is some disconnetion between the
+>>> promises made in the Kconfig description and what is provided by the patch
+>>> series.
+>>
+>> Some of the series was pared down to go in multiple parts to make it easier to
+>> review with follow ups for the dynamic stuff planned for the next iteration.
+>>
+>> You see some artifacts of that comments and Kconfig.  I figured it was better
+>> to leave as is for those given they get to the intent, but I can change if you
+>> think it's better to adjust them when the next part lands instead.
+> 
+> Okay, I thought that might be because such a split to multiple series. I
+> think you can leave those as is as I assume to intention is to immediately
+> follow up with the other parts (and not like wait a few kernel releases
+> or so)?
+> 
 
-Fixes: a6a494c8e3ce ("power: supply: max77705: Add charger driver for Maxim 77705")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- drivers/power/supply/max77705_charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/max77705_charger.c b/drivers/power/supply/max77705_charger.c
-index 329b430d0e50..0e347353c41e 100644
---- a/drivers/power/supply/max77705_charger.c
-+++ b/drivers/power/supply/max77705_charger.c
-@@ -285,7 +285,7 @@ static int max77705_get_health(struct max77705_charger_data *charger, int *val)
- 	if (is_online) {
- 		ret = max77705_get_vbus_state(regmap, val);
- 		if (ret || (*val != POWER_SUPPLY_HEALTH_GOOD))
--			return ret;
-+			return -EINVAL;
- 	}
- 	return max77705_get_battery_health(charger, val);
- }
--- 
-2.47.2
-
+The next part was going to be submitted by another team.  Let me check 
+offline with them on their intended timing and I will make a call what 
+to do.
 
