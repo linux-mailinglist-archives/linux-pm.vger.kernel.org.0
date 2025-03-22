@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-24421-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24422-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F433A6C993
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Mar 2025 11:39:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E89C6A6C9A8
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Mar 2025 11:41:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 146EA7AC10E
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Mar 2025 10:38:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A975883713
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Mar 2025 10:39:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEF2E233716;
-	Sat, 22 Mar 2025 10:36:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D03B233D64;
+	Sat, 22 Mar 2025 10:36:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="np+E9Bzn"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="nDpKefdm"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 112591FBEAD;
-	Sat, 22 Mar 2025 10:36:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23DD91FBE8B;
+	Sat, 22 Mar 2025 10:36:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742639801; cv=none; b=j6AksQ4KDq9Pk3OqcNnDLtE0rzomnAHWQamuEwZ+rhfnzzjiSY6yGSfPN76FP03HikfBuQI9AIVqs+2tN+C0S3Jc1yD/N1CBo807NzzF5irILbwK2AljfLRQDUYIAFl/emkZYIenpB9EBeyR/194b2Br16dHHipAQ0r4I89HPYQ=
+	t=1742639804; cv=none; b=fI4JImv5IlHKe025tupydctSDy/Equ0Qco1y7uX1kdqL/RxBudR0XcasT7Ggw37GrvlvUEVa6erV92I5JUg3K2G4v8aibP7VD87oQhx17cQOqxq536muynxwNj0A9oASyv1urxaIMoimNcUS6H9pB5kwbq1tMDIA3yqkeSwmB3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742639801; c=relaxed/simple;
-	bh=aVqGtN3QwhRM6doiBqwyU2zDkyRdie+v4tz//I/VCH0=;
+	s=arc-20240116; t=1742639804; c=relaxed/simple;
+	bh=BDLDuEvbsk25r7z6QYqNqHi6PcFPOgzMWYfNsA5otrU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Sa82NC3i0BsmppdyV6sFdDMgHdp0X2q5nhMohjJExZET2iZKz1jlV1yUby8RilFk+lnsT/JYa7qflQ/BxWPo91zOqYDe9p6EsNMzKIXNDfRb6ac0Y9/0JOE6EGWHcljOBlRauemdJ+zIYanxH/dDuGbN5NZeu9gDRA2xvbBQD1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=np+E9Bzn; arc=none smtp.client-ip=185.138.42.100
+	 MIME-Version:Content-Type; b=Crue9SXA7nN6bD9HieMbMllJeUvym3KENCNR5nyn8LiQFVXKShUXvOpzHbq96jITfWt1rRUWrxYmy12qDlLpw+iV3PFHY3ipQVrOO9z3ccQsG/5VfD4Ad2H/OpQ7Zv6ErrBAWT2ypZEHcKKly336LE8o1y1YGCvIysPVRDguMt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=nDpKefdm; arc=none smtp.client-ip=185.138.42.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Received: from localhost.localdomain (unknown [IPv6:2a05:f6c2:511b:0:cbc0:999f:73ad:33bd])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id BEBD52E08CED;
-	Sat, 22 Mar 2025 12:36:35 +0200 (EET)
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 2B43E2E08CF3;
+	Sat, 22 Mar 2025 12:36:38 +0200 (EET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1742639797;
-	bh=KmPddrpBmfRtEMXNk1V1i/vYC/9JQYzVWERlUA4iSwI=; h=From:To:Subject;
-	b=np+E9BznrPm8KetaBo44Vz0UTGtsKj/lViUD9ZUTw2bEl1q/3S4LY+u/euom9Q5Hz
-	 LsjIrba1KCzBimO1Dg2cLygl9NAYXf1/Lv/jlGDMcHIMNaWsUA0rceM3fHEouIEuGr
-	 dHdvrRRSd//SJtZZu0C+vxa1wgC67cF5PwraWmKA=
+	s=default; t=1742639800;
+	bh=JVVt0Bc7RNFjQXq9FiS7Soy48tzLmI3yzRkNTFulO3A=; h=From:To:Subject;
+	b=nDpKefdmeCEkOc7ZQuXgcV5v2Y4VE7w0M+L3CQQnwDFvP9EE9o/klINhlzYMV892y
+	 2Ez92MAi70k37vdEHTdN90WSM3l05drWuhlTK+6iPpV7AVniBUpBb5qwGS1eY0LZqU
+	 WI+r7X9gnfc0Mhc1Wtn8Syvs17+vm/wtV1zMkQtw=
 Authentication-Results: linux1587.grserver.gr;
 	spf=pass (sender IP is 2a05:f6c2:511b:0:cbc0:999f:73ad:33bd) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
 Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
@@ -64,10 +64,10 @@ Cc: linux-hwmon@vger.kernel.org,
 	hdegoede@redhat.com,
 	mario.limonciello@amd.com,
 	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: [PATCH v8 12/14] platform/x86: oxpec: Follow reverse xmas convention
- for tt_toggle
-Date: Sat, 22 Mar 2025 11:36:04 +0100
-Message-ID: <20250322103606.680401-13-lkml@antheas.dev>
+Subject: [PATCH v8 13/14] power: supply: add inhibit-charge-awake to
+ charge_behaviour
+Date: Sat, 22 Mar 2025 11:36:05 +0100
+Message-ID: <20250322103606.680401-14-lkml@antheas.dev>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250322103606.680401-1-lkml@antheas.dev>
 References: <20250322103606.680401-1-lkml@antheas.dev>
@@ -80,58 +80,95 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-PPP-Message-ID: 
- <174263979762.11867.5392672809020696597@linux1587.grserver.gr>
+ <174263979977.11921.17801320383587416341@linux1587.grserver.gr>
 X-PPP-Vhost: antheas.dev
 X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
 X-Virus-Status: Clean
 
-Since the rest of the driver follows this convention, apply it to the
-tt_toggle attribute as well.
+OneXPlayer devices have a charge inhibit feature
+that allows the user to select between it being
+active always or only when the device is on.
 
-Suggested-by: Derek J. Clark <derekjohn.clark@gmail.com>
+Therefore, add attribute inhibit-charge-awake to
+charge_behaviour to allow the user to select
+that charge should be paused only when the device
+is awake.
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
 Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
 Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 ---
- drivers/platform/x86/oxpec.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ Documentation/ABI/testing/sysfs-class-power | 11 ++++++-----
+ drivers/power/supply/power_supply_sysfs.c   |  7 ++++---
+ drivers/power/supply/test_power.c           |  1 +
+ include/linux/power_supply.h                |  1 +
+ 4 files changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
-index 3bf2c597e9b00..0a5b33a842b24 100644
---- a/drivers/platform/x86/oxpec.c
-+++ b/drivers/platform/x86/oxpec.c
-@@ -275,9 +275,9 @@ static const struct dmi_system_id dmi_table[] = {
- /* Helper functions to handle EC read/write */
- static int read_from_ec(u8 reg, int size, long *val)
- {
--	int i;
--	int ret;
- 	u8 buffer;
-+	int ret;
-+	int i;
+diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+index 2a5c1a09a28f9..78afb2422fc5a 100644
+--- a/Documentation/ABI/testing/sysfs-class-power
++++ b/Documentation/ABI/testing/sysfs-class-power
+@@ -508,11 +508,12 @@ Description:
+ 		Access: Read, Write
  
- 	if (!lock_global_acpi_lock())
- 		return -EBUSY;
-@@ -389,8 +389,8 @@ static ssize_t tt_toggle_store(struct device *dev,
- 			       struct device_attribute *attr, const char *buf,
- 			       size_t count)
- {
--	int rval;
- 	bool value;
-+	int rval;
+ 		Valid values:
+-			================ ====================================
+-			auto:            Charge normally, respect thresholds
+-			inhibit-charge:  Do not charge while AC is attached
+-			force-discharge: Force discharge while AC is attached
+-			================ ====================================
++			===================== ========================================
++			auto:                 Charge normally, respect thresholds
++			inhibit-charge:       Do not charge while AC is attached
++			inhibit-charge-awake: inhibit-charge only when device is awake
++			force-discharge:      Force discharge while AC is attached
++			===================== ========================================
  
- 	rval = kstrtobool(buf, &value);
- 	if (rval)
-@@ -411,8 +411,8 @@ static ssize_t tt_toggle_show(struct device *dev,
- 			      struct device_attribute *attr, char *buf)
- {
- 	int retval;
--	u8 reg;
- 	long val;
-+	u8 reg;
+ What:		/sys/class/power_supply/<supply_name>/technology
+ Date:		May 2007
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index edb058c19c9c4..f769d5941d0d3 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -138,9 +138,10 @@ static const char * const POWER_SUPPLY_SCOPE_TEXT[] = {
+ };
  
- 	switch (board) {
- 	case oxp_mini_amd_a07:
+ static const char * const POWER_SUPPLY_CHARGE_BEHAVIOUR_TEXT[] = {
+-	[POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO]		= "auto",
+-	[POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE]	= "inhibit-charge",
+-	[POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE]	= "force-discharge",
++	[POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO]			= "auto",
++	[POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE]		= "inhibit-charge",
++	[POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE]	= "inhibit-charge-awake",
++	[POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE]		= "force-discharge",
+ };
+ 
+ static struct power_supply_attr power_supply_attrs[] __ro_after_init = {
+diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
+index 2a975a110f485..958e0c0cf2876 100644
+--- a/drivers/power/supply/test_power.c
++++ b/drivers/power/supply/test_power.c
+@@ -214,6 +214,7 @@ static const struct power_supply_desc test_power_desc[] = {
+ 		.property_is_writeable = test_power_battery_property_is_writeable,
+ 		.charge_behaviours = BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO)
+ 				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)
++				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE)
+ 				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE),
+ 	},
+ 	[TEST_USB] = {
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index 6ed53b2921624..bb8e9e62ce834 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -212,6 +212,7 @@ enum power_supply_usb_type {
+ enum power_supply_charge_behaviour {
+ 	POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO = 0,
+ 	POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE,
++	POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE,
+ 	POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE,
+ };
+ 
 -- 
 2.48.1
 
