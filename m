@@ -1,44 +1,44 @@
-Return-Path: <linux-pm+bounces-24405-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24406-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73B4AA6C84C
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Mar 2025 09:24:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92E9CA6C851
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Mar 2025 09:27:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5AB74188F099
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Mar 2025 08:24:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F008F463A72
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Mar 2025 08:27:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFAF51D516A;
-	Sat, 22 Mar 2025 08:23:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE5FA1D63E4;
+	Sat, 22 Mar 2025 08:27:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ieHacYSb"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="b4sbHhjl"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36471922C0;
-	Sat, 22 Mar 2025 08:23:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD35125B9;
+	Sat, 22 Mar 2025 08:27:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742631835; cv=none; b=pQEmSAjYN1xewknxnKW6xAcZl1pypONCt0Wfyd6TaOdELmWnhZIzv0QasZl8Qn8uiavyGf221gxKcjQqKdHyCf8A04we+gOb+DunhErFChSGI9jWCCTRBJoUFvkLfdMNkRqFyq4VrDPMnfLc/uVLmlBH+xc3HGzs/2B2nBArl94=
+	t=1742632071; cv=none; b=CkHL6vWPr3GwCcAA2o/vdx0USsZ1+KemMpG4wojfDAq2PECLyuuGqk/130JaaYvHDGPyD9Mf/cfR7PH0vruYRg6ltjTmO2cSzbWZs6I+p1j5BizWZftlSOFI8b6UD5VMAhSL7yMGOYX+J5nzutwDriaaWhnILhOWQjrv501hDNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742631835; c=relaxed/simple;
-	bh=1JtflKyowsrny4ccNJCHAmNyNDlmwMx7iwJtiAM/nUM=;
+	s=arc-20240116; t=1742632071; c=relaxed/simple;
+	bh=NQHaUUWzptTM+mnw75QsbGHoGuQWMrb7x4ZKP6YaLfo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QzM/+3MonUc7NN5qtyPrr4tZOHWEegQzonRJDk8ExYlFTtYa3sE7u9750Q6Zjtp4HP4UU0WL2YJ6CzS7od2vyxcDnv7IMwCQXm3Uwa8B/MbTCL99oOMkmCLo7ZY0NQO7IywdnZqloroZwT7/qebyq8rz03polLvVZfplIg6dJY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ieHacYSb; arc=none smtp.client-ip=159.69.126.157
+	 Content-Type:Content-Disposition:In-Reply-To; b=l5LT0OdibdX9bPiJGuwbaN0cCRcXwuu0fBIKkIXgtMjQOfzzYEUyApVMmZ1U+YE0slWLBHsEiCCnWVdauNg6aLq4WlMxW2MFyy0abeWSSgl4RbgiJRvbvBTu8d7sUI05NQR7940cbVfIferdYILU5GWlZH7d6jU0kSRT9I8oOwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=b4sbHhjl; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1742631830;
-	bh=1JtflKyowsrny4ccNJCHAmNyNDlmwMx7iwJtiAM/nUM=;
+	s=mail; t=1742632066;
+	bh=NQHaUUWzptTM+mnw75QsbGHoGuQWMrb7x4ZKP6YaLfo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ieHacYSblP1rXFXNlq5KdNwhsLxdwYdLZKMC4361xBtkcU/m/XU4UY3jN1IfsO7DA
-	 055e3C/5ao8WDHkypz4xGGwvrxC96YNEqtIE6vck218veniHGOKILA9tZXySo6mUYa
-	 9PdeqRp8z3e7sN0PJtTdM9WEiUVperKrsnRFS2RE=
-Date: Sat, 22 Mar 2025 09:23:49 +0100
+	b=b4sbHhjlF0ZC5JGElnJjHJPqA51VcDN8Zz4/H5zJ99pYDqylujPf0d4kiFanH3vMi
+	 wX4dyH51ZfkhDX2/w0itdHdKZoIMLN/2jahEES+2b8XnbvDFv5B/XbSiO9SOH3EeJD
+	 LKjQ1GVM9euYw0PCq5+rZUnomHZWrL8EnflO27po=
+Date: Sat, 22 Mar 2025 09:27:46 +0100
 From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 To: Antheas Kapenekakis <lkml@antheas.dev>
 Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
@@ -49,11 +49,11 @@ Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
 	Parth Menon <parthasarathymenon@gmail.com>, Eileen <eileen@one-netbook.com>, linux-kernel@vger.kernel.org, 
 	sre@kernel.org, ilpo.jarvinen@linux.intel.com, hdegoede@redhat.com, 
 	mario.limonciello@amd.com
-Subject: Re: [PATCH v6 11/14] platform/x86: oxpec: Adhere to
- sysfs-class-hwmon and enable pwm on 2
-Message-ID: <96d19837-167a-43d6-93ea-cd24844cff7f@t-8ch.de>
+Subject: Re: [PATCH v6 14/14] platform/x86: oxpec: Add charge threshold and
+ behaviour to OneXPlayer
+Message-ID: <0061f04a-e07f-4616-9db5-8b0ba319fd17@t-8ch.de>
 References: <20250319175512.27059-1-lkml@antheas.dev>
- <20250319175512.27059-12-lkml@antheas.dev>
+ <20250319175512.27059-15-lkml@antheas.dev>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,89 +62,244 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250319175512.27059-12-lkml@antheas.dev>
+In-Reply-To: <20250319175512.27059-15-lkml@antheas.dev>
 
-On 2025-03-19 18:55:06+0100, Antheas Kapenekakis wrote:
-> Currently, the driver does not adhere to the sysfs-class-hwmon
-> specification: 0 is used for auto fan control and 1 is used for manual
-> control. However, it is expected that 0 sets the fan to full speed,
-> 1 sets the fan to manual, and then 2 is used for automatic control.
+On 2025-03-19 18:55:09+0100, Antheas Kapenekakis wrote:
+> With the X1 (AMD), OneXPlayer added a charge limit and charge inhibit
+> feature to their devices. Charge limit allows for choosing an arbitrary
+> battery charge setpoint in percentages. Charge ihibit allows to instruct
+> the device to stop charging either when it is awake or always.
 > 
-> Therefore, change the sysfs API to reflect this and enable pwm on 2.
+> This feature was then extended for the F1Pro as well. OneXPlayer also
+> released BIOS updates for the X1 Mini, X1 (Intel), and F1 devices that
+> add support for this feature. Therefore, enable it for all F1 and
+> X1 devices.
 > 
-> As we are breaking the ABI for this driver, rename oxpec to oxp_ec,
-> reflecting the naming convention used by other drivers, to allow for
-> a smooth migration in current userspace programs.
-
-Where is the renaming being done?
-
-> Closes: https://lore.kernel.org/linux-hwmon/20241027174836.8588-1-derekjohn.clark@gmail.com/
-> Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
 > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 > ---
->  drivers/platform/x86/oxpec.c | 35 ++++++++++++++++++++++++++++++++---
->  1 file changed, 32 insertions(+), 3 deletions(-)
+>  drivers/platform/x86/Kconfig |   1 +
+>  drivers/platform/x86/oxpec.c | 160 ++++++++++++++++++++++++++++++++++-
+>  2 files changed, 157 insertions(+), 4 deletions(-)
 > 
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index 82cfc76bc5c9f..f4d993658c01f 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -1189,6 +1189,7 @@ config SEL3350_PLATFORM
+>  config OXP_EC
+>  	tristate "OneXPlayer EC platform control"
+>  	depends on ACPI_EC
+> +	depends on ACPI_BATTERY
+>  	depends on HWMON
+>  	depends on X86
+>  	help
 > diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
-> index e84afc5f53379..680fa537babf6 100644
+> index fe76973fa0c2c..2e9a1f17fef96 100644
 > --- a/drivers/platform/x86/oxpec.c
 > +++ b/drivers/platform/x86/oxpec.c
-> @@ -731,7 +731,27 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
->  		case hwmon_pwm_input:
->  			return oxp_pwm_input_read(val);
->  		case hwmon_pwm_enable:
-> -			return oxp_pwm_read(val);
-> +			ret = oxp_pwm_read(val);
-> +			if (ret)
-> +				return ret;
+> @@ -24,6 +24,7 @@
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/processor.h>
+> +#include <acpi/battery.h>
+>  
+>  /* Handle ACPI lock mechanism */
+>  static u32 oxp_mutex;
+> @@ -60,6 +61,7 @@ enum oxp_board {
+>  };
+>  
+>  static enum oxp_board board;
+> +static struct device *oxp_dev;
+>  
+>  /* Fan reading and PWM */
+>  #define OXP_SENSOR_FAN_REG             0x76 /* Fan reading is 2 registers long */
+> @@ -93,6 +95,23 @@ static enum oxp_board board;
+>  #define OXP_X1_TURBO_LED_OFF           0x01
+>  #define OXP_X1_TURBO_LED_ON            0x02
+>  
+> +/* Battery extension settings */
+> +#define EC_CHARGE_CONTROL_BEHAVIOURS	(BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO)             | \
+> +					 BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)    | \
+> +					 BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE))
 > +
-> +			/* Check for auto and return 2 */
-> +			if (!*val) {
-> +				*val = 2;
-> +				return 0;
-> +			}
+> +#define OXP_X1_CHARGE_LIMIT_REG      0xA3 /* X1 charge limit (%) */
+> +#define OXP_X1_CHARGE_INHIBIT_REG     0xA4 /* X1 bypass charging */
 > +
-> +			/* Return 0 if at full fan speed, 1 otherwise */
-> +			ret = oxp_pwm_fan_speed(val);
-> +			if (ret)
-> +				return ret;
+> +#define OXP_X1_CHARGE_INHIBIT_MASK_AWAKE 0x01
+> +/*
+> + * X1 Mask is 0x0A, OneXFly F1Pro is just 0x02
+> + * but the extra bit on the X1 does nothing.
+> + */
+> +#define OXP_X1_CHARGE_INHIBIT_MASK_OFF 0x02
+> +#define OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS (OXP_X1_CHARGE_INHIBIT_MASK_AWAKE | \
+> +	OXP_X1_CHARGE_INHIBIT_MASK_OFF)
 > +
-> +			if (*val == 255)
-> +				*val = 0;
-> +			else
-> +				*val = 1;
+>  static const struct dmi_system_id dmi_table[] = {
+>  	{
+>  		.matches = {
+> @@ -507,6 +526,129 @@ static ssize_t tt_led_show(struct device *dev,
+>  
+>  static DEVICE_ATTR_RW(tt_led);
+>  
+> +/* Callbacks for charge behaviour attributes */
+> +static bool oxp_psy_ext_supported(void)
+> +{
+> +	switch (board) {
+> +	case oxp_x1:
+> +	case oxp_fly:
+> +		return true;
+> +	default:
+> +		break;
+> +	}
+> +	return false;
+> +}
 > +
-> +			return 0;
->  		default:
->  			break;
->  		}
-> @@ -745,15 +765,24 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
->  static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
->  			      u32 attr, int channel, long val)
->  {
+> +static int oxp_psy_ext_get_prop(struct power_supply *psy,
+> +				       const struct power_supply_ext *ext,
+> +				       void *data,
+> +				       enum power_supply_property psp,
+> +				       union power_supply_propval *val)
+> +{
+> +	long raw_val;
 > +	int ret;
 > +
->  	switch (type) {
->  	case hwmon_pwm:
->  		switch (attr) {
->  		case hwmon_pwm_enable:
->  			if (val == 1)
->  				return oxp_pwm_enable();
-> -			else if (val == 0)
-> +			else if (val == 2)
->  				return oxp_pwm_disable();
-> -			return -EINVAL;
-> +			else if (val != 0)
-> +				return -EINVAL;
+> +	switch (psp) {
+> +	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
+> +		ret = read_from_ec(OXP_X1_CHARGE_LIMIT_REG, 1, &raw_val);
+> +		if (ret)
+> +			return ret;
+> +		if (raw_val > 100)
+> +			return -EINVAL;
+
+Theoretically raw_val could be < 0.
+
+> +		val->intval = raw_val;
+> +		return 0;
+> +	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
+> +		ret = read_from_ec(OXP_X1_CHARGE_INHIBIT_REG, 1, &raw_val);
+> +		if (ret)
+> +			return ret;
+> +		if ((raw_val & OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS) ==
+> +		    OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS)
+> +			val->intval = POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE;
+> +		else if ((raw_val & OXP_X1_CHARGE_INHIBIT_MASK_AWAKE) ==
+> +			 OXP_X1_CHARGE_INHIBIT_MASK_AWAKE)
+> +			val->intval = POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE;
+> +		else
+> +			val->intval = POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO;
+> +		return 0;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
 > +
-> +			/* Enable PWM and set to max speed */
-> +			ret = oxp_pwm_enable();
-> +			if (ret)
-> +				return ret;
-> +			return oxp_pwm_input_write(255);
->  		case hwmon_pwm_input:
->  			return oxp_pwm_input_write(val);
->  		default:
+> +static int oxp_psy_ext_set_prop(struct power_supply *psy,
+> +				       const struct power_supply_ext *ext,
+> +				       void *data,
+> +				       enum power_supply_property psp,
+> +				       const union power_supply_propval *val)
+> +{
+> +	long raw_val;
+> +
+> +	switch (psp) {
+> +	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
+> +		if (val->intval > 100)
+> +			return -EINVAL;
+> +		return write_to_ec(OXP_X1_CHARGE_LIMIT_REG, val->intval);
+> +	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
+> +		switch (val->intval) {
+> +		case POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO:
+> +			raw_val = 0;
+> +			break;
+> +		case POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE:
+> +			raw_val = OXP_X1_CHARGE_INHIBIT_MASK_AWAKE;
+> +			break;
+> +		case POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE:
+> +			raw_val = OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS;
+> +			break;
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +
+> +		return write_to_ec(OXP_X1_CHARGE_INHIBIT_REG, raw_val);
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static int oxp_psy_prop_is_writeable(struct power_supply *psy,
+> +					    const struct power_supply_ext *ext,
+> +					    void *data,
+> +					    enum power_supply_property psp)
+> +{
+> +	return true;
+> +}
+> +
+> +static const enum power_supply_property oxp_psy_ext_props[] = {
+> +	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
+> +	POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD,
+> +};
+> +
+> +struct power_supply_ext oxp_psy_ext = {
+
+static const
+
+> +	.name			= "oxp-charge-control",
+> +	.properties		= oxp_psy_ext_props,
+> +	.num_properties		= ARRAY_SIZE(oxp_psy_ext_props),
+> +	.charge_behaviours	= EC_CHARGE_CONTROL_BEHAVIOURS,
+> +	.get_property		= oxp_psy_ext_get_prop,
+> +	.set_property		= oxp_psy_ext_set_prop,
+> +	.property_is_writeable	= oxp_psy_prop_is_writeable,
+> +};
+> +
+> +static int oxp_add_battery(struct power_supply *battery, struct acpi_battery_hook *hook)
+> +{
+> +	return power_supply_register_extension(battery, &oxp_psy_ext, oxp_dev, NULL);
+> +}
+> +
+> +static int oxp_remove_battery(struct power_supply *battery, struct acpi_battery_hook *hook)
+> +{
+> +	power_supply_unregister_extension(battery, &oxp_psy_ext);
+> +	return 0;
+> +}
+> +
+> +static struct acpi_battery_hook battery_hook = {
+> +	.add_battery	= oxp_add_battery,
+> +	.remove_battery	= oxp_remove_battery,
+> +	.name		= "OneXPlayer Battery",
+> +};
+> +
+>  /* PWM enable/disable functions */
+>  static int oxp_pwm_enable(void)
+>  {
+> @@ -845,12 +987,22 @@ static const struct hwmon_chip_info oxp_ec_chip_info = {
+>  static int oxp_platform_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> -	struct device *hwdev;
+> +	int ret;
+> +
+> +	oxp_dev = dev;
+> +	ret = PTR_ERR_OR_ZERO(devm_hwmon_device_register_with_info(
+> +		dev, "oxp_ec", NULL, &oxp_ec_chip_info, NULL));
+>  
+> -	hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
+> -						     &oxp_ec_chip_info, NULL);
+> +	if (ret)
+> +		return ret;
+>  
+> -	return PTR_ERR_OR_ZERO(hwdev);
+> +	if (oxp_psy_ext_supported()) {
+> +		ret = devm_battery_hook_register(dev, &battery_hook);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+>  }
+>  
+>  static struct platform_driver oxp_platform_driver = {
 > -- 
 > 2.48.1
 > 
