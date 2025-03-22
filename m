@@ -1,131 +1,151 @@
-Return-Path: <linux-pm+bounces-24404-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24405-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26862A6C819
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Mar 2025 08:38:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73B4AA6C84C
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Mar 2025 09:24:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A347177E47
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Mar 2025 07:38:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5AB74188F099
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Mar 2025 08:24:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1767189F3B;
-	Sat, 22 Mar 2025 07:38:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFAF51D516A;
+	Sat, 22 Mar 2025 08:23:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JRLYCWF6"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ieHacYSb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA1612868B;
-	Sat, 22 Mar 2025 07:38:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36471922C0;
+	Sat, 22 Mar 2025 08:23:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742629125; cv=none; b=UTGtpnACP+W0noSQV3pNlXMrtIk1h/Ts/aRPd3TJ5O4L4XnCDv+9ZKp9KNRbJVB3HqwRicixqGIbUKAqSLnF0JlTH4ixeH0idO8Y1bOEaQnfkMdg5Ldf6TpZEClsh305ak4FzhHdqM7fMYgXCpKk0HESWW5eyucwws1/pdO9CRQ=
+	t=1742631835; cv=none; b=pQEmSAjYN1xewknxnKW6xAcZl1pypONCt0Wfyd6TaOdELmWnhZIzv0QasZl8Qn8uiavyGf221gxKcjQqKdHyCf8A04we+gOb+DunhErFChSGI9jWCCTRBJoUFvkLfdMNkRqFyq4VrDPMnfLc/uVLmlBH+xc3HGzs/2B2nBArl94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742629125; c=relaxed/simple;
-	bh=ayMGlcqMwQb+ftuOYdEgfcPSnBDR+02p6diqdiWcO6c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JODwT0RRw+ie7yck/ea0Sli8hvObdUzOmktpiMm/5Ga0HeO/na7D668TnT6rFcULQlVMRSDPoFB91csUam4MkFyahP4HfoicRPQQ7h9S/hodoHP63g+0Yz1ioJKolYFDhnOXLYAO1yr0Zpq3hu/Trg8eBKp9a9VknYEX6tSVvsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JRLYCWF6; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4393dc02b78so18184015e9.3;
-        Sat, 22 Mar 2025 00:38:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742629122; x=1743233922; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ayMGlcqMwQb+ftuOYdEgfcPSnBDR+02p6diqdiWcO6c=;
-        b=JRLYCWF6NzSQ1dYcLejAV0NTgfxVnsEvAGF3EdQ7i2m1JXEU+GFeIbmb8iN38Zhjhp
-         X+ugcflqhfSm0CwZ4XBJTFbrxbL7LBgrcs0DVEMmSdwaFIyYWNQ6l5yH5oBJXjCVpn8e
-         YQI33XoJ4A5EusZnPvKIhBRca/6M9ZpqZi4pv3ygCit3sEsVEou54VumOewpU7uiU1hm
-         wlIlrPkz59ikDRJB2JlXRrV1vOYlRq17GwRFDdOKxeIAICPqgty2WqF+jVeb8wkNxRXn
-         rAQufwXeoyZyH3+IwN7OKAPGGWxYJJNja8jkuTgCwvIH61IvV1ML3njvnvHf7e7TMSOC
-         /Dmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742629122; x=1743233922;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ayMGlcqMwQb+ftuOYdEgfcPSnBDR+02p6diqdiWcO6c=;
-        b=WaBNQ36Yj36YVQKwKGo4YgZdGA8+1IgxMhBXEKIYni9/9bNQAcCsFeKb+KZtwy7OD9
-         q59pZWDdeHiqkGO8gazKcYg7HR64lb4N2JvdFosjn9U8lYg4dPBswHMzz7Sb7zZ5SGn7
-         ElFfye5bKzqJH6a37ODZysJJvjBUJiBBSrzkSlYhnWGUxFkgF3X+3PKJ6GVc3iOp1hPW
-         0vh2H2w67ulSJ1vHk+AZirylDAaooTc+gurURoJiF9+THagFijDYb9vQAHCH5pqQEzfM
-         iwWcMzx6m3qfiBajwt7MDzGRNOnTti1Al+abVcgXo1sTRBZBEjOqo/jujoCrvGAg+q8d
-         6FDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWmFEJGhzHwgr3ubqL7Wcw5q59GUyPw3d24C8g07Cq1b3T5yG4XpeJWFo8d4IepGAa1XaNojAmjWJI=@vger.kernel.org, AJvYcCXrZGnE3BSalVZ5It5qEmGDgy9v1/EHI9pvX848Eud7pyBUBs/0si3WR/J2OzZEMmvzhIIdcrb3/O4N79Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YywiWO+/6Jkvcjnw2frGmzAz3E4lBi4N30SJIqlFNQw8SyTmUQZ
-	r7F72xfz7AD269CilkqP7drYtzhI3Sv4RMGcGV4NUoFP8KhLjS7I
-X-Gm-Gg: ASbGncsErKoLlF0r49qRp0JkHwybm7oz1a3+/bV4LyeilfXRBFwH8TKiSABoF5GWkSo
-	iM8jG5CNGA/1q1MesY0rIigHbkWVVFUa9n7eHIfe3SAihfYYN/8e630wI7z+aMmRX0cPlIoLYc7
-	XAoysXorEneNzGv2YntnnLRTniu/szWE3ytDZltnzUsis2ztTOTOEGr5iNk01EI96qUf2gX1Y7A
-	L6v8lyHWsE66mOLa2joK3VUmXibt4EfPv3gwnscjL7B+Gb4icD95MB9a45P6m10VwmiSLOZjthq
-	fsY/R1b/dUf59Yweou9A3I3kPqhorJdqQWhcvJvjMDgeeuc1WwaRIxwGslMxLmR2db3BjoZPX6P
-	+R54O4D0cvtlfemvnG63Q
-X-Google-Smtp-Source: AGHT+IGOAdcCQV9td5yBg/DeGMyuPfW6QJ09F7Nlor08PYOx21zTuurCfS0tdlMSsD+iLtwPsmEq7w==
-X-Received: by 2002:a05:600c:1909:b0:43c:e8ba:e166 with SMTP id 5b1f17b1804b1-43d50a213f6mr57806325e9.22.1742629121821;
-        Sat, 22 Mar 2025 00:38:41 -0700 (PDT)
-Received: from jernej-laptop.localnet (86-58-6-171.dynamic.telemach.net. [86.58.6.171])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3997f9eef37sm4347075f8f.85.2025.03.22.00.38.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Mar 2025 00:38:41 -0700 (PDT)
-From: Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To: Yangtao Li <tiny.windzz@gmail.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Chen-Yu Tsai <wens@csie.org>,
- Samuel Holland <samuel@sholland.org>, Andre Przywara <andre.przywara@arm.com>
-Cc: Brandon Cheo Fusi <fusibrandon13@gmail.com>, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: sun50i: prevent out-of-bounds access
-Date: Sat, 22 Mar 2025 08:38:39 +0100
-Message-ID: <2772067.mvXUDI8C0e@jernej-laptop>
-In-Reply-To: <20250320155557.211211-1-andre.przywara@arm.com>
-References: <20250320155557.211211-1-andre.przywara@arm.com>
+	s=arc-20240116; t=1742631835; c=relaxed/simple;
+	bh=1JtflKyowsrny4ccNJCHAmNyNDlmwMx7iwJtiAM/nUM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QzM/+3MonUc7NN5qtyPrr4tZOHWEegQzonRJDk8ExYlFTtYa3sE7u9750Q6Zjtp4HP4UU0WL2YJ6CzS7od2vyxcDnv7IMwCQXm3Uwa8B/MbTCL99oOMkmCLo7ZY0NQO7IywdnZqloroZwT7/qebyq8rz03polLvVZfplIg6dJY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ieHacYSb; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1742631830;
+	bh=1JtflKyowsrny4ccNJCHAmNyNDlmwMx7iwJtiAM/nUM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ieHacYSblP1rXFXNlq5KdNwhsLxdwYdLZKMC4361xBtkcU/m/XU4UY3jN1IfsO7DA
+	 055e3C/5ao8WDHkypz4xGGwvrxC96YNEqtIE6vck218veniHGOKILA9tZXySo6mUYa
+	 9PdeqRp8z3e7sN0PJtTdM9WEiUVperKrsnRFS2RE=
+Date: Sat, 22 Mar 2025 09:23:49 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Antheas Kapenekakis <lkml@antheas.dev>
+Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>, 
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Joaquin Ignacio Aramendia <samsagax@gmail.com>, Derek J Clark <derekjohn.clark@gmail.com>, 
+	Kevin Greenberg <kdgreenberg234@protonmail.com>, Joshua Tam <csinaction@pm.me>, 
+	Parth Menon <parthasarathymenon@gmail.com>, Eileen <eileen@one-netbook.com>, linux-kernel@vger.kernel.org, 
+	sre@kernel.org, ilpo.jarvinen@linux.intel.com, hdegoede@redhat.com, 
+	mario.limonciello@amd.com
+Subject: Re: [PATCH v6 11/14] platform/x86: oxpec: Adhere to
+ sysfs-class-hwmon and enable pwm on 2
+Message-ID: <96d19837-167a-43d6-93ea-cd24844cff7f@t-8ch.de>
+References: <20250319175512.27059-1-lkml@antheas.dev>
+ <20250319175512.27059-12-lkml@antheas.dev>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250319175512.27059-12-lkml@antheas.dev>
 
-Dne =C4=8Detrtek, 20. marec 2025 ob 16:55:57 Srednjeevropski standardni =C4=
-=8Das je Andre Przywara napisal(a):
-> A KASAN enabled kernel reports an out-of-bounds access when handling the
-> nvmem cell in the sun50i cpufreq driver:
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> BUG: KASAN: slab-out-of-bounds in sun50i_cpufreq_nvmem_probe+0x180/0x3d4
-> Read of size 4 at addr ffff000006bf31e0 by task kworker/u16:1/38
->=20
-> This is because the DT specifies the nvmem cell as covering only two
-> bytes, but we use a u32 pointer to read the value. DTs for other SoCs
-> indeed specify 4 bytes, so we cannot just shorten the variable to a u16.
->=20
-> Fortunately nvmem_cell_read() allows to return the length of the nvmem
-> cell, in bytes, so we can use that information to only access the valid
-> portion of the data.
-> To cover multiple cell sizes, use memcpy() to copy the information into a
-> zeroed u32 buffer, then also make sure we always read the data in little
-> endian fashion, as this is how the data is stored in the SID efuses.
->=20
-> Fixes: 6cc4bcceff9a ("cpufreq: sun50i: Refactor speed bin decoding")
-> Reported-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+On 2025-03-19 18:55:06+0100, Antheas Kapenekakis wrote:
+> Currently, the driver does not adhere to the sysfs-class-hwmon
+> specification: 0 is used for auto fan control and 1 is used for manual
+> control. However, it is expected that 0 sets the fan to full speed,
+> 1 sets the fan to manual, and then 2 is used for automatic control.
+> 
+> Therefore, change the sysfs API to reflect this and enable pwm on 2.
+> 
+> As we are breaking the ABI for this driver, rename oxpec to oxp_ec,
+> reflecting the naming convention used by other drivers, to allow for
+> a smooth migration in current userspace programs.
 
-Thanks for fixing that!
+Where is the renaming being done?
 
-Reviewed-by: Jernej =C5=A0krabec <jernej.skrabec@gmail.com>
-
-Best regards,
-Jernej
-
-
+> Closes: https://lore.kernel.org/linux-hwmon/20241027174836.8588-1-derekjohn.clark@gmail.com/
+> Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
+> Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+> ---
+>  drivers/platform/x86/oxpec.c | 35 ++++++++++++++++++++++++++++++++---
+>  1 file changed, 32 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
+> index e84afc5f53379..680fa537babf6 100644
+> --- a/drivers/platform/x86/oxpec.c
+> +++ b/drivers/platform/x86/oxpec.c
+> @@ -731,7 +731,27 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
+>  		case hwmon_pwm_input:
+>  			return oxp_pwm_input_read(val);
+>  		case hwmon_pwm_enable:
+> -			return oxp_pwm_read(val);
+> +			ret = oxp_pwm_read(val);
+> +			if (ret)
+> +				return ret;
+> +
+> +			/* Check for auto and return 2 */
+> +			if (!*val) {
+> +				*val = 2;
+> +				return 0;
+> +			}
+> +
+> +			/* Return 0 if at full fan speed, 1 otherwise */
+> +			ret = oxp_pwm_fan_speed(val);
+> +			if (ret)
+> +				return ret;
+> +
+> +			if (*val == 255)
+> +				*val = 0;
+> +			else
+> +				*val = 1;
+> +
+> +			return 0;
+>  		default:
+>  			break;
+>  		}
+> @@ -745,15 +765,24 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
+>  static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
+>  			      u32 attr, int channel, long val)
+>  {
+> +	int ret;
+> +
+>  	switch (type) {
+>  	case hwmon_pwm:
+>  		switch (attr) {
+>  		case hwmon_pwm_enable:
+>  			if (val == 1)
+>  				return oxp_pwm_enable();
+> -			else if (val == 0)
+> +			else if (val == 2)
+>  				return oxp_pwm_disable();
+> -			return -EINVAL;
+> +			else if (val != 0)
+> +				return -EINVAL;
+> +
+> +			/* Enable PWM and set to max speed */
+> +			ret = oxp_pwm_enable();
+> +			if (ret)
+> +				return ret;
+> +			return oxp_pwm_input_write(255);
+>  		case hwmon_pwm_input:
+>  			return oxp_pwm_input_write(val);
+>  		default:
+> -- 
+> 2.48.1
+> 
 
