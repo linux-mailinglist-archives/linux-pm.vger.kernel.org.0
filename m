@@ -1,40 +1,63 @@
-Return-Path: <linux-pm+bounces-24435-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24436-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A536FA6CE7E
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Mar 2025 10:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B4B9A6CF37
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Mar 2025 13:36:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C02393A98C0
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Mar 2025 09:18:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C914D3B4ED2
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Mar 2025 12:36:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34B10201021;
-	Sun, 23 Mar 2025 09:18:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5D9017D2;
+	Sun, 23 Mar 2025 12:36:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="A5GWs8ZZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1E5A1754B;
-	Sun, 23 Mar 2025 09:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3CDE623;
+	Sun, 23 Mar 2025 12:36:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742721526; cv=none; b=Eb4J/OlNPJjPpjs5dZUt6Ae8CJXsDGI0GO9MxZvmiMtEp8xcu9Zdry5KnD9kslU2jM1P2v1Oc+QDMWQXIIfBUv7varBiDc18o7h8ieamNDe4MDZa1aPQfNS0RNgvJ/B6JJnJX5ecfKH/wXOBmiGVOOsZkOF1nIaLQHnCZ+vDjUk=
+	t=1742733376; cv=none; b=K28RyGGbIDv+ZV2f0EgxijTTT1l3zdi5RGBLi40k5aNezyQeHHPMLQqg6+JobfTOZbFQ0NgFyVGNElKZPudgewILWWlVTK+DiabCsQvz/Ge/P5+SoXBvXtSbcWfOWzm0AI44yx6+/EeQG/qqMpsfh6MrMii77IqidDQmMHRvlpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742721526; c=relaxed/simple;
-	bh=5HZmLzce4L9XeAcPttemnSzWQxYapG6GBhfDbqgHz10=;
+	s=arc-20240116; t=1742733376; c=relaxed/simple;
+	bh=cKnmb/AvRSbteASF5DT+ty/21aXMVv19VOgr9QzltMs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RqU3joL5eo6CjOG/88/9gvhib74ssDnDJm6634WPT7Xv5vAGwOjXxKoXgtltcKPAnQPiY2kcnhechGyh02ymhQG6gIn3PnlFRnZIx/B5NyHW0/mAcYBl4zzCwxpymGTjFGFDcfliw2pxQHmfvqDPnMkyUb+sm+dqXwd7DkD9/So=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B9DDE106F;
-	Sun, 23 Mar 2025 02:18:41 -0700 (PDT)
-Received: from [10.57.41.149] (unknown [10.57.41.149])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4888E3F63F;
-	Sun, 23 Mar 2025 02:18:33 -0700 (PDT)
-Message-ID: <1e870bd8-0e13-4e0d-bbe9-e9f601f59a50@arm.com>
-Date: Sun, 23 Mar 2025 09:18:30 +0000
+	 In-Reply-To:Content-Type; b=cP5NurDTI1MoL5dqt7rmnbe3Bf541yaSzqpKVUzPoEpynG1UzgLyXYZLng7p7zvLaH0dzmH1zLBu3hZmS78uD1gr7M4dX5Cz9YVqW/4Dexva5YAZ/DF5IdkSvetHeWoVSoUcNP+dEl9I1WgtGxPfSFH/Va0gkwcDj1/m4NjhGqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=A5GWs8ZZ; arc=none smtp.client-ip=199.89.3.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 004.mia.mailroute.net (Postfix) with ESMTP id 4ZLFzD1Dqjzm0ytd;
+	Sun, 23 Mar 2025 12:36:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1742733366; x=1745325367; bh=5tj9iO/ST31ro8NtZXZ+WYzO
+	2KM6kAX7w53AjZ7Mg0A=; b=A5GWs8ZZ3fEVqp/IdS6gJ5ndHfUdUWDGXjSVadOm
+	ULUDNHfTeBg63zQOC/FYqWafLEyyAuM3Acaon/qlwAwmofjkUL5leSzGQEXN4bfp
+	WeJcisPT0KAPbeKZdB/55HMrN8u5xr/jwzLKUE+ozDsWc3cCxJOnvCU7Pgx2VhdT
+	5acN3hB2uASO90SyDR+xECFYnU7+e+XAhi/WOOc8UV5nhrk8hNZ7pYayDN7zx8FL
+	ol/sdTCpYOQjem7jkiWyVzuQVGtdBVJkqMjD/+1LXwYaJrpJm28WeIN4ToORgdA4
+	/dIFh62l4lQ0i1AeUXXBP2LnlNa5+p1Aqie5zaD/JRTR1Q==
+X-Virus-Scanned: by MailRoute
+Received: from 004.mia.mailroute.net ([127.0.0.1])
+ by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id dO7ADQ8zc2Rh; Sun, 23 Mar 2025 12:36:06 +0000 (UTC)
+Received: from [10.46.23.145] (unknown [156.39.10.100])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4ZLFz56LcHzm0pKT;
+	Sun, 23 Mar 2025 12:36:00 +0000 (UTC)
+Message-ID: <1ae51ccc-66cc-4551-b649-2f5883e2f5a2@acm.org>
+Date: Sun, 23 Mar 2025 05:35:59 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -44,7 +67,8 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] cpuidle: psd: add power sleep demotion prevention for
  fast I/O devices
-To: "King, Colin" <colin.king@intel.com>, Jens Axboe <axboe@kernel.dk>,
+To: "King, Colin" <colin.king@intel.com>,
+ Christian Loehle <christian.loehle@arm.com>, Jens Axboe <axboe@kernel.dk>,
  "Rafael J. Wysocki" <rafael@kernel.org>,
  Daniel Lezcano <daniel.lezcano@linaro.org>,
  "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
@@ -54,143 +78,29 @@ References: <33882f284ac6e6d1ec766ca4bb2f3b88@intel.com>
  <f18607ca-30dc-43de-be77-fec69968aeec@arm.com>
  <SJ2PR11MB7670F63C7052C88637D305DF8DDF2@SJ2PR11MB7670.namprd11.prod.outlook.com>
 Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
+From: Bart Van Assche <bvanassche@acm.org>
 In-Reply-To: <SJ2PR11MB7670F63C7052C88637D305DF8DDF2@SJ2PR11MB7670.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/17/25 10:03, King, Colin wrote:
-> Hi Christian, 
-> 
-> Follow-up below:
-> 
->> -----Original Message-----
->> From: Christian Loehle <christian.loehle@arm.com>
->> Sent: 03 March 2025 22:25
->> To: King, Colin <colin.king@intel.com>; Jens Axboe <axboe@kernel.dk>; Rafael
->> J. Wysocki <rafael@kernel.org>; Daniel Lezcano <daniel.lezcano@linaro.org>;
->> linux-block@vger.kernel.org; linux-pm@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Subject: Re: [PATCH] cpuidle: psd: add power sleep demotion prevention for
->> fast I/O devices
->>
->> On 3/3/25 16:43, Colin Ian King wrote:
->>> Modern processors can drop into deep sleep states relatively quickly
->>> to save power. However, coming out of deep sleep states takes a small
->>> amount of time and this is detrimental to performance for I/O devices
->>> such as fast PCIe NVME drives when servicing a completed I/O
->>> transactions.
->>>
->>> Testing with fio with read/write RAID0 PCIe NVME devices on various
->>> modern SMP based systems (such as 96 thead Granite Rapids Xeon 6741P)
->>> has shown that on 85-90% of read/write transactions issued on a CPU
->>> are completed by the same CPU, so it makes some sense to prevent the
->>> CPU from dropping into a deep sleep state to help reduce I/O handling
->>> latency.
->>
->> For the platform you tested on that may be true, but even if we constrain
->> ourselves to pci-nvme there's a variety of queue/irq mappings where this
->> doesn't hold I'm afraid.
-> 
-> This code is optional, one can enable it or disable it via the config option. Also, 
+On 3/17/25 3:03 AM, King, Colin wrote:
+> This code is optional, one can enable it or disable it via the config option. Also,
 > even when it is built-in one can disable it by writing 0 to the sysfs file
->   /sys/devices/system/cpu/cpuidle/psd_cpu_lat_timeout_ms
-> 
->>
->>>
->>> This commit introduces a simple, lightweight and fast power sleep
->>> demotion mechanism that provides the block layer a way to inform the
->>> menu governor to prevent a CPU from going into a deep sleep when an
->>> I/O operation is requested. While it is true that some I/Os may not
->>
->> s/requested/completed is the full truth, isn't it?
->>
->>> be serviced on the same CPU that issued the I/O request and hence is
->>> not 100% perfect the mechanism does work well in the vast majority of
->>> I/O operations and there is very small overhead with the sleep
->>> demotion prevention.
->>>
->>> Test results on a 96 thread Xeon 6741P with a 6 way RAID0 PCIe NVME md
->>> array using fio 3.35 performing random read and read-write test on a
->>> 512GB file with 8 concurrent I/O jobs. Tested with the
->>> NHM_C1_AUTO_DEMOTE bit set in MSR_PKG_CST_CONFIG_CONTROL set in
->> the BIOS.
->>>
->>> Test case: random reads, results based on geometic mean of results
->>> from
->>> 5 test runs:
->>>            Bandwidth         IO-ops   Latency   Bandwidth
->>>            read (bytes/sec)  per sec    (ns)    % Std.Deviation
->>> Baseline:  21365755610	     20377     390105   1.86%
->>> Patched:   25950107558       24748     322905   0.16%
->>
->> What is the baseline?
->> Do you mind trying with Rafael's recently posted series?
->> Given the IOPS I'd expect good results from that alone already.
->> https://lore.kernel.org/lkml/1916668.tdWV9SEqCh@rjwysocki.net/
->>
->> (Happy to see teo as comparison too, which you don't modify).
-> 
-> OK, I re-ran the tests on 6.14-rc5 on the same H/W. The "Baseline" is 6.14-rc5 without
-> Raphel's patch. I also testing the Baseline with C6 and C6P disabled as this stops deeper
-> C-state sleeps and in theory should provide "best performance". I also benchmarked with
-> Raphel's patch and just my patch, and finally Raphels patch AND my patch:
-> 
-> Reads
->                         Bandwidth       Bandwidth       latency         latency
->                         Bytes/sec       %Std.Dev.       nanosecs        %Std.Dev.
-> Baseline                25689182477     0.15            326177          0.15
-> C6, C6P disabled        25839580014     0.19            324349          0.19
-> Raphels Patch:          25695523747     0.06            326150          0.06
-> My patch:               25782011833     0.07            324999          0.07
-> Raphel + My patch:      25792551514     0.10            324924          0.10
+>    /sys/devices/system/cpu/cpuidle/psd_cpu_lat_timeout_ms
 
-So these are mostly equal right?
+I'm not sure we need even more configuration knobs in sysfs. How are
+users expected to find this configuration option? How should they
+decide whether to enable or to disable it?
 
-> 
-> Writes
->                         Bandwidth       Bandwidth       latency         latency
->                         Bytes/sec       %Std.Dev.       nanosecs        %Std.Dev.
-> Baseline                15220468898     3.33            550290          3.36
-> C6, C6P disabled        13405624707     0.66            625424          0.66
-> Raphels Patch:          14017625200     1.15            598049          1.16
-> My patch:               15444417488     3.73            467818          29.10
-> Raphel + My patch:      14037711032     1.13            597143          1.13
+Please take a look at this proposal and let me know whether this would
+solve the issue that you are looking into: "[LSF/MM/BPF Topic] Energy-
+Efficient I/O" (https://lore.kernel.org/linux-block/ad1018b6-7c0b-4d70-
+b845-c869287d3cf3@acm.org/). The only disadvantage of this approach
+compared to the cpuidle patch is that it requires RPM (runtime power
+management) to be enabled. Maybe I should look into modifying the
+approach such that it does not rely on RPM.
 
-These don't make sense to me, why would C6 / C6P be this bad?
-Why would Rafael's patch make it worse?
-Are these just noise?
+Thanks,
 
-> 
-> Combined Read+Writes, Reads
-> 
->                         Bandwidth       Bandwidth       latency         latency
->                         Bytes/sec       %Std.Dev.       nanosecs        %Std.Dev.
-> Baseline                10132229433     0.41            484919          0.25
-> C6, C6P disabled        10567536346     0.60            515260          1.16
-> Raphels Patch:          10171044817     0.37            486937          0.20
-> My patch:               10468953527     0.07            504797          0.07
-> Raphel + My patch:      10174707546     1.26            488263          1.13
-> 
-> Combined Read+Writes, Writes
-> 
->                         Bandwidth       Bandwidth       latency         latency
->                         Bytes/sec       %Std.Dev.       nanosecs        %Std.Dev.
-> Baseline                10139393169     0.44            342132          1.23
-> C6, C6P disabled        10583264662     0.63            277052          3.87
-> Raphels Patch:          10178275035     0.39            336989          0.94
-> My patch:               10482766569     1.28            294803          6.87
-> Raphel + My patch:      10183837235     0.38            330657          3.39      
-
-The above two indicate a +3% from (now mainline) Rafael's patch to yours.
-There's no reason why Rafael + your patch should be worse than just your patch.
-If this is statistically significant we would need to look into why.
-
-FWIW I think the energy cost of essentially remaining in polling even for quite
-sporadic IO can't be understated IMO.
-Comparison for teo, which might slightly better than menu while not outright
-disabling idle would be interesting still.
-
-
-
+Bart.
 
