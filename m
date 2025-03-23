@@ -1,236 +1,121 @@
-Return-Path: <linux-pm+bounces-24429-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24430-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB97DA6CB93
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Mar 2025 18:14:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55993A6CE31
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Mar 2025 08:14:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A10A16E106
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Mar 2025 17:14:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB0C9170BFF
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Mar 2025 07:14:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02CFE16DECB;
-	Sat, 22 Mar 2025 17:14:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8005200BA1;
+	Sun, 23 Mar 2025 07:14:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b="gk2OfcHW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DVKqnD4t"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from latitanza.investici.org (latitanza.investici.org [82.94.249.234])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7FB22318
-	for <linux-pm@vger.kernel.org>; Sat, 22 Mar 2025 17:14:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.94.249.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A827AD24;
+	Sun, 23 Mar 2025 07:14:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742663676; cv=none; b=fWklJAA+Cp4VPc/ESX8YFgkBC7sExiHPLM7sFlnT//gbpVRcsdQJVNtfI7+/R7N0479PEnTxLeI4gimFik+v1mwRpksnlpT2JSIh4IQXrUlofhIO7Oa+sRp3oueM1mPAOTbqQ9QhtmdCb8zJS/l8SBfsBHpiO9ZqNV5GmTpuWuk=
+	t=1742714093; cv=none; b=Rp6jFlQGiC439udYh5ADfZYsG1SjeC73Rxt7o7xhvBvkVH2MKv0BWALCRUMSRz9/7ja1/6Z2o5FcKrR+Aldy+F0IsPLkoNSodT9hFpunPnKwLIjzKg/H6IuGw8IQug4TlkbOYbJjbzEaWEAg2HR8IXm4IGv7qmWwVVaaQ6eslQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742663676; c=relaxed/simple;
-	bh=au+yljSMjctj4dEiq1ddcWMUfVe+yy+Bxe85yyInsqo=;
-	h=Date:From:To:Cc:Subject:Message-Id:Mime-Version:Content-Type; b=LrqH8HB7JGFCzN/GJtIMc+ewgKrp5Ba29SKElDIAv61bAJeBSdw/nmQoW5P4wV/0otU3C0pszCbd+9OOZGWh4QtJ2ZWbI/mZwrM0pX80JvwzvgeNwveE8k9Z2BCqq6xfysGkz0R7+gb8OObeNiWYVObjlR5uVjbvs7wpSsbuHGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org; spf=pass smtp.mailfrom=paranoici.org; dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b=gk2OfcHW; arc=none smtp.client-ip=82.94.249.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paranoici.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paranoici.org;
-	s=stigmate; t=1742663063;
-	bh=f1mTLMRt3XHthIxze0PAtoVs+DWkMNn2LidG7T+zus4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=gk2OfcHWGQGzGfym6yyENOuCJLB8K4OYMWKJ4AFb7P0yoDJ0qfg3XQyy+GZYoq07y
-	 MLAI9hceCVUqCyhpm5GlNsLbmHH4ZiON43UMS8VAgYv2t05YEYYJCXgO6mTwBQSaqp
-	 m+ixJhBfqq/aTuzVCIRwHBIV8aSwBDyqbEKb2fnQ=
-Received: from mx3.investici.org (unknown [127.0.0.1])
-	by latitanza.investici.org (Postfix) with ESMTP id 4ZKlzC2p7ZzGp4d;
-	Sat, 22 Mar 2025 17:04:23 +0000 (UTC)
-Received: from [82.94.249.234] (mx3.investici.org [82.94.249.234]) (Authenticated sender: invernomuto@paranoici.org) by localhost (Postfix) with ESMTPSA id 4ZKlzC2cy2zGp4Y;
-	Sat, 22 Mar 2025 17:04:23 +0000 (UTC)
-Received: from frx by crunch with local (Exim 4.98.1)
-	(envelope-from <invernomuto@paranoici.org>)
-	id 1tw2Gj-00000000OAX-3Wi5;
-	Sat, 22 Mar 2025 18:04:21 +0100
-Date: Sat, 22 Mar 2025 18:03:57 +0100
-From: Francesco Poli <invernomuto@paranoici.org>
-To: linux-pm list <linux-pm@vger.kernel.org>
-Cc: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
- "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>
-Subject: cpupower: systemd unit to run cpupower at boot
-Message-Id: <20250322180357.1c17a180f1808533de77f186@paranoici.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1742714093; c=relaxed/simple;
+	bh=GJHelorMo/7+pcp0cFYxOAb4+HlzolzvwhZk6Y9/JeA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=s27GiMtFKri/kk8W97/s1zm99SewsD3PmpTpizaryGnmYjyA+A85hqr504PwtInl05TJ5zgv0BMojFf5gWTPVqpeDf+QPTUOLaYHDFTtoZiggAAlmUOuHqA5QYp10s6eMwFgX84HNBv1qTUqXPQakxZF6VVTvT1NXtRFu7sXvLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DVKqnD4t; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5e6167d0536so6471075a12.1;
+        Sun, 23 Mar 2025 00:14:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742714090; x=1743318890; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FtNt80DAB335/uRKq5f5fTTE5QKZJIZOvKQIq5dr29k=;
+        b=DVKqnD4trgy56lWh77pMDYPY2wPCRqHeeyLtfcsHoWhhqRU0SJo/lPpry9z4zL0deX
+         k95hPsBtwjf/N/9bP6Z4X/vot9bL1KxBV+inkz5oGIA4Ji5pqTefzEFk4ZbHc8WGTcA6
+         9BU5NDfV011wesTDZ7h8VHP4ssl1wk0Hu/7CbBhGqmCXecYgZXnFIBE8w4f4QSPnTLy8
+         sb7Ci/ZmG6F+f4IkKjOUCHycuPS0CzIiseDE2SKc82wquo9yPUm6bkyQ7qkQ/5jKL1eP
+         ZhQlgfuslXQbw6k8Vi7+YX9XIHiCcVWSNhXgwoRtMGwummoQgwmcKf+kCv7X2E5DMZG8
+         uEkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742714090; x=1743318890;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FtNt80DAB335/uRKq5f5fTTE5QKZJIZOvKQIq5dr29k=;
+        b=AhsB3vLzP2jTuk/mXN5kIX4QLfogQOtqT8p3ezhW/W5DAmCLwQ7OdIzb4T9ZI43wJF
+         iIFtrrOI6uP7qYSltDxaT2DkyfhpDwFyOa8hCBlUEblBbuddqWiqxP2+bHgZGxO0d+Tj
+         VkfOHcSEBySpXSPGPnZo6eZ6NNGb0iJER8HxtPY86YtnxVi55bD6fGZwXUCKaKX9Z7h6
+         vB+3lL8MmIb9iWvwt0e1CBhwrfXFL7A2zXOqOSF48nyHxGg3PRIywED7fEeBHri5Ocxw
+         HE1RL0B995OEvl/q77nrhQj7WnG0q2/3HRxSmt5QbEi3ed5Sf3a2cESk0F6WPGZ9hpmq
+         EBuA==
+X-Forwarded-Encrypted: i=1; AJvYcCURIYxy5C1UaEFSGyB+JQnr3SNHbmMg+N5IhusF9DjiF2gYelrqPJGt0hdASLu2LqyHZcu3e+cH95RvBLw=@vger.kernel.org, AJvYcCV+19Nnx007XT1TrNSNdQDBipAsp25aj4k+CevpGWW/pKT+NkY+Gghw5d6AC+ESB2HlRtaigUhw9FwLtLE=@vger.kernel.org, AJvYcCWL46Z8lB2n24uzYPsH9Giimenm4xiZ7eYukV57Nw3OfBPTDPnwM2KtN3rTbzD7n1MQfbIna7kleC0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxT9ZUaH2nFpHU8aRMVJ4fBHcCzfAjGSTVgfuxX8g74G6kVxU4q
+	mxbtravAFtgdw9Xl4uwspSQmJHFbB1bEnMGRSbA0HicRUzIvmQiH
+X-Gm-Gg: ASbGncv5IEZ931tacW3NSS9K0tCYqhIegH5weAC+XKGLxcgWAhFJgmfeSo/heQ/MTY5
+	F7aHyI5oFexut6x/S6Gc48fkyem7M1if5QX21++DgcIf+5FnqE+3XdAWtcZdG6Ut6oAc25hlriN
+	vCSfmN6i9oI8DTLWDQnpS21RYxH9EIo55KywObrBFoIZ+gv2bjbMoR7ZCmZPa+fyKnUaubwXQ6I
+	9DeiTyaUxxSTpV3yauZHpR70foeoRHbH1XldfsRIl/GXE0JGlDTGMI5Gp9fEYmEY6OFKWbL0PVM
+	NApIbMwvMv8/l+DbU1kzudLOGXW1dDfSmMNs
+X-Google-Smtp-Source: AGHT+IEfM2FhgguV6hU5oZP0B6rU5mJe4cX3B7K6QzAse5rXY7gvhfVbQuMkX6QRZ3r/6inKt6vEwQ==
+X-Received: by 2002:a05:6402:42c5:b0:5eb:ca95:4a91 with SMTP id 4fb4d7f45d1cf-5ebcd51e684mr7106227a12.31.1742714089885;
+        Sun, 23 Mar 2025 00:14:49 -0700 (PDT)
+Received: from xeon.. ([188.163.112.51])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5ebccfaecfbsm4218283a12.41.2025.03.23.00.14.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Mar 2025 00:14:49 -0700 (PDT)
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+To: Lee Jones <lee@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Sebastian Reichel <sre@kernel.org>,
+	Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-tegra@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH v1 0/4] power: supply: add support for Pegatron Chagall battery
+Date: Sun, 23 Mar 2025 09:14:20 +0200
+Message-ID: <20250323071424.48779-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pgp-signature";
- micalg="PGP-SHA512";
- boundary="Signature=_Sat__22_Mar_2025_18_03_57_+0100_KTxyxrej=eZjFosd"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
---Signature=_Sat__22_Mar_2025_18_03_57_+0100_KTxyxrej=eZjFosd
-Content-Type: multipart/mixed;
- boundary="Multipart=_Sat__22_Mar_2025_18_03_57_+0100_x59OeMwBaG2EwAr0"
+The Pegatron Chagall is an Android tablet utilizing a customized Cypress
+CG7153AM microcontroller (MCU) as its battery fuel gauge. It supports a
+single-cell battery and features a dual-color charging LED.
 
+Svyatoslav Ryhel (4):
+  dt-bindings: vendor-prefixes: add prefix for Pegatron Corporation
+  dt-bindings: mfd: Document Infineon/Cypress CG7153AM MCU
+  power/supply: Add driver for Pegatron Chagall battery
+  ARM: tegra: chagall: Add embedded controller node
 
---Multipart=_Sat__22_Mar_2025_18_03_57_+0100_x59OeMwBaG2EwAr0
-Content-Type: text/plain; charset=US-ASCII
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+ .../bindings/mfd/cypress,cg7153am.yaml        |  55 ++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ .../dts/nvidia/tegra30-pegatron-chagall.dts   |  16 +
+ drivers/power/supply/Kconfig                  |  12 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/chagall-battery.c        | 308 ++++++++++++++++++
+ 6 files changed, 394 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/cypress,cg7153am.yaml
+ create mode 100644 drivers/power/supply/chagall-battery.c
 
-Dear Linux CPU power monitoring subsystem maintainers,
-the 'cpupower' program is a very convenient tool to manage
-cpufreq/cpuidle tunables.  Thanks for maintaining it!
+-- 
+2.43.0
 
-The typical use case requires to run 'cpupower' at boot, in order to
-set the desired values (governor and/or min and max frequencies, and so
-forth).  It may be run in other situations, but, in my experience,
-'cpupower' is usually run at boot and then forgotten.
-
-However, there is no convenient way to automatically run 'cpupower' at
-boot with the desired options.  Unless the GNU/Linux distribution you
-are using provides one, I mean...
-I've seen people who put some commands into the deprecated 'rc.local'
-file and all other sorts of do-it-yourself strategies to run 'cpupower'
-at boot.
-
-It would be nice, if 'cpupower' came with some upstream-maintained
-mechanism to run it at boot.
-
-I use Debian GNU/Linux, which provides no such mechanism.  So I thought
-I could build one.
-I took a look at how this is done in the [Arch Linux package] and I
-enhanced/modernized the systemd unit (the three files in Arch Linux are
-released under "GPL-2.0-or-later" terms).
-
-[Arch Linux package]: <https://gitlab.archlinux.org/archlinux/packaging/pac=
-kages/linux-tools>
-
-The attached files are tested on Debian GNU/Linux trixie (current
-Debian testing, which will be released as stable Debian 13 in some
-months, possibly on next summer) and work fine for me and for some
-other people.
-The 'cpupower.sh' script has been further improved, after analyzing it
-with 'shellcheck'.
-
-I hereby release the files under the terms of the GNU GPL license,
-version 2 or later.
-Could you please ship the three files with the official 'cpupower'
-tool?
-
-Thanks for reading so far and for considering my little contribution.
-Please let me know, thanks for your time!
-
-
-N.B.:
-As I am sure you know, if a user wants to manually install the
-three files, the commands are:
-
-  # install -m 644 cpupower.default /etc/default/cpupower
-  # install -m 755 cpupower.sh /usr/libexec/cpupower
-  # install -m 644 cpupower.service /usr/lib/systemd/system/
-  # systemctl daemon-reload
-
-After this manual installation, the '/etc/default/cpupower' file can be
-edited as appropriate and then the following command can be issued:
-
-  # systemctl enable --now cpupower.service
-
-
-
-
-
---=20
- http://www.inventati.org/frx/
- There's not a second to spare! To the laboratory!
-..................................................... Francesco Poli .
- GnuPG key fpr =3D=3D CA01 1147 9CD2 EFDF FB82  3925 3E1C 27E1 1F69 BFFE
-
---Multipart=_Sat__22_Mar_2025_18_03_57_+0100_x59OeMwBaG2EwAr0
-Content-Type: application/octet-stream;
- name="cpupower.default"
-Content-Disposition: attachment;
- filename="cpupower.default"
-Content-Transfer-Encoding: base64
-
-IyBkZWZhdWx0cyBmaWxlIGZvciBsaW51eC1jcHVwb3dlcgoKIyAtLS0gQ1BVIGNsb2NrIGZyZXF1
-ZW5jeSAtLS0KCiMgRGVmaW5lIENQVSBnb3Zlcm5vcgojIHZhbGlkIGdvdmVybm9yczogb25kZW1h
-bmQsIHBlcmZvcm1hbmNlLCBwb3dlcnNhdmUsIGNvbnNlcnZhdGl2ZSwgdXNlcnNwYWNlLgojR09W
-RVJOT1I9J29uZGVtYW5kJwoKIyBMaW1pdCBmcmVxdWVuY3kgcmFuZ2UKIyBWYWxpZCBzdWZmaXhl
-czogSHosIGtIeiAoZGVmYXVsdCksIE1IeiwgR0h6LCBUSHoKI01JTl9GUkVRPSIyLjI1R0h6Igoj
-TUFYX0ZSRVE9IjNHSHoiCgojIFNwZWNpZmljIGZyZXF1ZW5jeSB0byBiZSBzZXQuCiMgUmVxdWly
-ZXMgdXNlcnNwYWNlIGdvdmVybm9yIHRvIGJlIGF2YWlsYWJsZS4KIyBJZiB0aGlzIG9wdGlvbiBp
-cyBzZXQsIGFsbCB0aGUgcHJldmlvdXMgZnJlcXVlbmN5IG9wdGlvbnMgYXJlIGlnbm9yZWQKI0ZS
-RVE9CgojIC0tLSBDUFUgcG9saWN5IC0tLQoKIyBTZXRzIGEgcmVnaXN0ZXIgb24gc3VwcG9ydGVk
-IEludGVsIHByb2Nlc3NvcmUgd2hpY2ggYWxsb3dzIHNvZnR3YXJlIHRvIGNvbnZleQojIGl0cyBw
-b2xpY3kgZm9yIHRoZSByZWxhdGl2ZSBpbXBvcnRhbmNlIG9mIHBlcmZvcm1hbmNlIHZlcnN1cyBl
-bmVyZ3kgc2F2aW5ncyB0bwojIHRoZSAgcHJvY2Vzc29yLiBTZWUgbWFuICgxKSBDUFVQT1dFUi1T
-RVQgZm9yIGFkZGl0aW9uYWwgZGV0YWlscy4KI1BFUkZfQklBUz0K
-
---Multipart=_Sat__22_Mar_2025_18_03_57_+0100_x59OeMwBaG2EwAr0
-Content-Type: application/octet-stream;
- name="cpupower.service"
-Content-Disposition: attachment;
- filename="cpupower.service"
-Content-Transfer-Encoding: base64
-
-W1VuaXRdCkRlc2NyaXB0aW9uPUFwcGx5IGNwdXBvd2VyIGNvbmZpZ3VyYXRpb24KQ29uZGl0aW9u
-VmlydHVhbGl6YXRpb249IWNvbnRhaW5lcgoKW1NlcnZpY2VdClR5cGU9b25lc2hvdApFbnZpcm9u
-bWVudEZpbGU9LS9ldGMvZGVmYXVsdC9jcHVwb3dlcgpFeGVjU3RhcnQ9L3Vzci9saWJleGVjL2Nw
-dXBvd2VyClJlbWFpbkFmdGVyRXhpdD15ZXMKCltJbnN0YWxsXQpXYW50ZWRCeT1tdWx0aS11c2Vy
-LnRhcmdldAo=
-
---Multipart=_Sat__22_Mar_2025_18_03_57_+0100_x59OeMwBaG2EwAr0
-Content-Type: text/x-sh;
- name="cpupower.sh"
-Content-Disposition: attachment;
- filename="cpupower.sh"
-Content-Transfer-Encoding: quoted-printable
-
-#!/bin/sh
-# Copyright (C) 2012, S=C3=A9bastien Luttringer
-# Copyright (C) 2024, Francesco Poli <invernomuto@paranoici.org>
-# SPDX-License-Identifier: GPL-2.0-or-later
-
-ESTATUS=3D0
-
-# apply CPU clock frequency options
-if test -n "$FREQ"
-then
-    cpupower frequency-set -f "$FREQ" > /dev/null || ESTATUS=3D1
-elif test -n "${GOVERNOR}${MIN_FREQ}${MAX_FREQ}"
-then
-    cpupower frequency-set \
-      ${GOVERNOR:+ -g "$GOVERNOR"} \
-      ${MIN_FREQ:+ -d "$MIN_FREQ"} ${MAX_FREQ:+ -u "$MAX_FREQ"} \
-      > /dev/null || ESTATUS=3D1
-fi
-
-# apply CPU policy options
-if test -n "$PERF_BIAS"
-then
-    cpupower set -b "$PERF_BIAS" > /dev/null || ESTATUS=3D1
-fi
-
-exit $ESTATUS
-
---Multipart=_Sat__22_Mar_2025_18_03_57_+0100_x59OeMwBaG2EwAr0--
-
---Signature=_Sat__22_Mar_2025_18_03_57_+0100_KTxyxrej=eZjFosd
-Content-Type: application/pgp-signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEygERR5zS79/7gjklPhwn4R9pv/4FAmfe7X0ACgkQPhwn4R9p
-v/5bqBAAwkfPp2SUoMGO+wCQ6H4jDRpo8VniDC4uAUhyESnEvrACdX7tgMHn0PEe
-oPFFdINatZjX+LHx7R+MhAaXBrtIrDjDFHignWkXXMjrJWbFZbPuukJR+Ml12o6W
-bcJ+7CUJS1ZN5soyKL3+RFq09sAnuy62+G8fLr70OKSANonZrWTo7hFtOnNTRxKC
-I/BaPgFIomoUezL/a06f4kvK5XFu0aStkMgifKYRrPiWw6EcXVxpuM0pqZ9u0klH
-H3/N4/H10KE6/q4RG2zBTgoQnxsrdzTv4CfqHBx0/S7IrILx62dzXkw171ZWxoK5
-B3z4DmjCX68Lg1Bs+F53HZ0msCRvon7J2j2JqhP8xTD4pnwDx6JxHZar3roexWQj
-qcdA3u9kPKGN9Gq0uSd4ssj85Y9YCJmNH29GenVjjS73PN0/g+mK76qej8FEAXbf
-46dCzSrrqApAC9HPRZ3986wdoojkKNjsMuArstidPQxDQJyM/vF5GsagC5otuYxI
-s1cDAskbRThEneTx5Xez92LvCS2l64Cr0DsFPyXf6ggd4uK66eGo5aESdmW7c9di
-aMDhf36RooJhM8ySRfP9U1vjinu5c6wCthoMAhZ8e5RH+2WqJEl8YWNZwElE1Vni
-/x/xNF2DhnCXXffNK2GSB5xwTcswdjs6gHxQXdw12mRWmmvH6BE=
-=Sz0a
------END PGP SIGNATURE-----
-
---Signature=_Sat__22_Mar_2025_18_03_57_+0100_KTxyxrej=eZjFosd--
 
