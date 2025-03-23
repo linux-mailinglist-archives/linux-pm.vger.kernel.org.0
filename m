@@ -1,106 +1,121 @@
-Return-Path: <linux-pm+bounces-24436-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24437-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B4B9A6CF37
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Mar 2025 13:36:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1789AA6CFBF
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Mar 2025 15:31:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C914D3B4ED2
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Mar 2025 12:36:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADD26188DE7B
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Mar 2025 14:31:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5D9017D2;
-	Sun, 23 Mar 2025 12:36:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF2613A8C1;
+	Sun, 23 Mar 2025 14:31:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="A5GWs8ZZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TdBSEeBv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3CDE623;
-	Sun, 23 Mar 2025 12:36:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BFE86ADD;
+	Sun, 23 Mar 2025 14:31:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742733376; cv=none; b=K28RyGGbIDv+ZV2f0EgxijTTT1l3zdi5RGBLi40k5aNezyQeHHPMLQqg6+JobfTOZbFQ0NgFyVGNElKZPudgewILWWlVTK+DiabCsQvz/Ge/P5+SoXBvXtSbcWfOWzm0AI44yx6+/EeQG/qqMpsfh6MrMii77IqidDQmMHRvlpc=
+	t=1742740279; cv=none; b=HMJ9/fAt7BdlZPvmygD8DT/mTYeMYxhUohHkyfoUnVfBCYxHVZX6q9JDPQq53t8ftBZv21L4TX3b9fCA9foFQP9Y2tcLCbXM8WDdJBh3PytgIPcH8lut5dfkqj6AnAJUZa71ZM1LLSgsigm07Kf0jhF/L+YgLK57rypHDBRuz8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742733376; c=relaxed/simple;
-	bh=cKnmb/AvRSbteASF5DT+ty/21aXMVv19VOgr9QzltMs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cP5NurDTI1MoL5dqt7rmnbe3Bf541yaSzqpKVUzPoEpynG1UzgLyXYZLng7p7zvLaH0dzmH1zLBu3hZmS78uD1gr7M4dX5Cz9YVqW/4Dexva5YAZ/DF5IdkSvetHeWoVSoUcNP+dEl9I1WgtGxPfSFH/Va0gkwcDj1/m4NjhGqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=A5GWs8ZZ; arc=none smtp.client-ip=199.89.3.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 004.mia.mailroute.net (Postfix) with ESMTP id 4ZLFzD1Dqjzm0ytd;
-	Sun, 23 Mar 2025 12:36:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1742733366; x=1745325367; bh=5tj9iO/ST31ro8NtZXZ+WYzO
-	2KM6kAX7w53AjZ7Mg0A=; b=A5GWs8ZZ3fEVqp/IdS6gJ5ndHfUdUWDGXjSVadOm
-	ULUDNHfTeBg63zQOC/FYqWafLEyyAuM3Acaon/qlwAwmofjkUL5leSzGQEXN4bfp
-	WeJcisPT0KAPbeKZdB/55HMrN8u5xr/jwzLKUE+ozDsWc3cCxJOnvCU7Pgx2VhdT
-	5acN3hB2uASO90SyDR+xECFYnU7+e+XAhi/WOOc8UV5nhrk8hNZ7pYayDN7zx8FL
-	ol/sdTCpYOQjem7jkiWyVzuQVGtdBVJkqMjD/+1LXwYaJrpJm28WeIN4ToORgdA4
-	/dIFh62l4lQ0i1AeUXXBP2LnlNa5+p1Aqie5zaD/JRTR1Q==
-X-Virus-Scanned: by MailRoute
-Received: from 004.mia.mailroute.net ([127.0.0.1])
- by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id dO7ADQ8zc2Rh; Sun, 23 Mar 2025 12:36:06 +0000 (UTC)
-Received: from [10.46.23.145] (unknown [156.39.10.100])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4ZLFz56LcHzm0pKT;
-	Sun, 23 Mar 2025 12:36:00 +0000 (UTC)
-Message-ID: <1ae51ccc-66cc-4551-b649-2f5883e2f5a2@acm.org>
-Date: Sun, 23 Mar 2025 05:35:59 -0700
+	s=arc-20240116; t=1742740279; c=relaxed/simple;
+	bh=YtZNCx20UFkJV4E3LyfleA9XyUWhTkdQ7uT5cV/wZTk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MsG0ngPYmFm7bSVmgPwfZ4bCvViItNowvOn1byt6HAwEFgVmbqYc2/S61H/Ef/6x1PBcDdv0IcoHehTE5GdWCZlpEeYuRijy8Nwe5Z6JId0m7IRBzJelKt/PK8qWBqJQw5AIEpfmD1fCkRqGVRNG3cS2t23E05FpO2pE/6NjNzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TdBSEeBv; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6feafc707d3so30846007b3.1;
+        Sun, 23 Mar 2025 07:31:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742740277; x=1743345077; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OwhPzibW/0lFOIn8jrj1EKhaVT3olcHCJQYIQSwSsTQ=;
+        b=TdBSEeBvBgY8OQS6fj5Wzpm8NR6lqcp+NPPF8FHiYMZ+n3mqjDYJ9vq9lqm51Cpzh6
+         USBWOlSHE2+l0YT2EXfTedVO1GoQuNRCqsoBxuky8VFlL5sZLXLszhKiXAa2pQ2YorIz
+         bRBDYI64OtWb3SP8CZ5mWXByxvGYVS9TL86SGGWVrbATl6H3ZA5kZXKZbmEesK5ogT9R
+         019QpuwTZPMsXCw7VT1BecTUmoxmdUgx9Lc/M2lCNwwdM9k+DYOck9ydfmbI1F4PNG07
+         Nk9pVPtfeE/da0F+hFnn13HYgNUcpuZ/dQg1gkHfixZJOZFa0XDWy8Gw3sVvZiK4EPzx
+         fjnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742740277; x=1743345077;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OwhPzibW/0lFOIn8jrj1EKhaVT3olcHCJQYIQSwSsTQ=;
+        b=tIa4L9jCcHNmQEuWEMLMM8Dh2Bm/hDy/f9FK8boVfEMdDm6LCfkv49DxdRx89Y3P4r
+         ceoyky7ZDrpVNZnSajo8+efAV8DuxRmVNaNDsgfJvGwVVzwY9SXGBg9gOVlaaYjSwkZy
+         sqByQuGRER4Nn+WyTuNggDdoihU2fsFmMO5s/X3qhvALX8wlgnUnowBGdZ3aTa7/corp
+         bTFvxntQtyYJuk93/jM4iyIGJiWKS+cjRDymdNKSyMH9HT6iYymR6RMu4jq1Znu0w4s8
+         Le/USFi30PdjXV9u01rXefFe6OCTTkXInAmnmwS6JWaEf66nI8L9aok+g0ImwoLvVyfk
+         otxA==
+X-Forwarded-Encrypted: i=1; AJvYcCW+ZpCjA9NrpFpqMys4sj/VtdWCx99+6LAYAalbt6Y3MlGiEochxFwtuyQKqGUQCM5RYp7dCwNcbqXvuJM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4sNPmH/0J7Gr0YUVzqAVa/UT87vtmiUF7usBRUwzHENC2rNpx
+	OJj5eFqcU73QP1YjVzyaOkLq98E4OQfQ+Q36QTiA5ZlgjulYaebbXJjh0g==
+X-Gm-Gg: ASbGnctRUct396o7GPkZsc73q33nk4rti1vn/zanLhlmV88s1KqfM0w4nERenmBfeNr
+	a8FlZKcRERwJt2QHbeTSxMUFgfrKFMNSTA7UkJrm9IW9I8GBgXcvs189Tbg/hB7imZjEKoW+b/G
+	RfMWgNFOqeVvkvMrIO/21KmgXVSAxQTCpXeF5N8zUy4+qGrjL1BSQKW4UXqRwwjMEKBu4csRaF2
+	fQSI3H88WeejM1N4DrIwhIh/umqlgGrl6GKyCITYMUkfil3w//hF1ed9ZDczkelQvV9IJA26wR7
+	N6SiFmhiezMqp6PtIT8oSAwHlK2lZQlHRQ2olkDTLaMxlostlUAOPH3Qbm2fdXY=
+X-Google-Smtp-Source: AGHT+IFRvr4hm2z2D9ZBuYN0ijqS9RopqxklrqSwifTjVMR0JdghmeXmwrRSkSsh+ZzcWINa7J2LBw==
+X-Received: by 2002:a05:690c:dc7:b0:6fe:b88e:4d94 with SMTP id 00721157ae682-700bac6f9bbmr138344887b3.19.1742740276596;
+        Sun, 23 Mar 2025 07:31:16 -0700 (PDT)
+Received: from localhost ([64.234.79.138])
+        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-700ba73b9b8sm11361287b3.11.2025.03.23.07.31.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Mar 2025 07:31:16 -0700 (PDT)
+From: kendrajmoore <kendra.j.moore3443@gmail.com>
+To: linux-pm@vger.kernel.org
+Cc: lenb@kernel.org,
+	linux-kernel@vger.kernel.org,
+	Kendra Moore <kendra.j.moore3443@gmail.com>
+Subject: [PATCH] Replace strncpy with strscpy to ensure null-termination
+Date: Sun, 23 Mar 2025 10:31:11 -0400
+Message-Id: <20250323143111.79886-1-kendra.j.moore3443@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpuidle: psd: add power sleep demotion prevention for
- fast I/O devices
-To: "King, Colin" <colin.king@intel.com>,
- Christian Loehle <christian.loehle@arm.com>, Jens Axboe <axboe@kernel.dk>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <33882f284ac6e6d1ec766ca4bb2f3b88@intel.com>
- <f18607ca-30dc-43de-be77-fec69968aeec@arm.com>
- <SJ2PR11MB7670F63C7052C88637D305DF8DDF2@SJ2PR11MB7670.namprd11.prod.outlook.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <SJ2PR11MB7670F63C7052C88637D305DF8DDF2@SJ2PR11MB7670.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/17/25 3:03 AM, King, Colin wrote:
-> This code is optional, one can enable it or disable it via the config option. Also,
-> even when it is built-in one can disable it by writing 0 to the sysfs file
->    /sys/devices/system/cpu/cpuidle/psd_cpu_lat_timeout_ms
+From: Kendra Moore <kendra.j.moore3443@gmail.com>
 
-I'm not sure we need even more configuration knobs in sysfs. How are
-users expected to find this configuration option? How should they
-decide whether to enable or to disable it?
+The field pcounter->name is used as a null-terminated string.
+Using strncpy() with ARRAY_SIZE - 1 does not guarantee
+null-termination and can lead to undefined behavior if the source
+is too long.
 
-Please take a look at this proposal and let me know whether this would
-solve the issue that you are looking into: "[LSF/MM/BPF Topic] Energy-
-Efficient I/O" (https://lore.kernel.org/linux-block/ad1018b6-7c0b-4d70-
-b845-c869287d3cf3@acm.org/). The only disadvantage of this approach
-compared to the cpuidle patch is that it requires RPM (runtime power
-management) to be enabled. Maybe I should look into modifying the
-approach such that it does not rely on RPM.
+This patch replaces it with strscpy() which ensures
+null-termination and returns an error code if truncation occurs.
 
-Thanks,
+Signed-off-by: Kendra Moore <kendra.j.moore3443@gmail.com>
+---
+ tools/power/x86/turbostat/turbostat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Bart.
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index 8d5011a0bf60..8f24e18d3de0 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -9345,7 +9345,7 @@ int pmt_add_counter(unsigned int guid, unsigned int seq, const char *name, enum
+ 	}
+ 
+ 	if (new_counter) {
+-		strncpy(pcounter->name, name, ARRAY_SIZE(pcounter->name) - 1);
++		strscpy(pcounter->name, name, ARRAY_SIZE(pcounter->name));
+ 		pcounter->type = type;
+ 		pcounter->scope = scope;
+ 		pcounter->lsb = lsb;
+-- 
+2.39.5
+
 
