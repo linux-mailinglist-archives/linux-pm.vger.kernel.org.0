@@ -1,77 +1,77 @@
-Return-Path: <linux-pm+bounces-24431-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24432-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30B70A6CE33
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Mar 2025 08:15:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EA3EA6CE42
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Mar 2025 08:16:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CBCD3B4EDA
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Mar 2025 07:14:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85389189C251
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Mar 2025 07:15:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F8A5202989;
-	Sun, 23 Mar 2025 07:14:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EB6E202C4A;
+	Sun, 23 Mar 2025 07:14:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mQhpCroE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VtdzCkhl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767771FC0E9;
-	Sun, 23 Mar 2025 07:14:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AED5220296E;
+	Sun, 23 Mar 2025 07:14:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742714095; cv=none; b=ojQ812gd00CFeWYodPYsZHNQWcKXzV2zsBguTXjgvgsLA9Ak2t3h2Qt5LVrjrCIvzspdDjHaQeFPfvhHW1yMm0jo+wWwr5tteFdZm4mGAhGl9RrBCffvhTQcMjkZaa2UIoQbdOajgU7HDNGiMRVkQBJE24lENjk20KXMuuAExTM=
+	t=1742714096; cv=none; b=GQ7U9lmbpJui+np8zzx5cV9YE+WRKRQeb99YQrGSUwWj+FayIXd6ueKXh9lqbnUrCP+7djTZl1Z5c6tCcV1G0MmeYsT+ZNseS1pQHEVUKDry2evqGzBqT9x4nYSUAJ2P4aQ0tqkVVEXeQ/azTGu/S5dq8sRdPJxdBXzUjr4SeKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742714095; c=relaxed/simple;
-	bh=LbfqHIJBiWIwwt+TO1iq0U3ZOV0oDMuejgyOImjp2RM=;
+	s=arc-20240116; t=1742714096; c=relaxed/simple;
+	bh=CWhQXv6t3smUOD52oWFdekfMPw+WhSEXP5k7xJ0iT2g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SVTXzMaICbgVFiNtL6uYh7OIKPyyPf2rfeywezn8XxTBSAP1yP0Ea59piv8k7FrYExdsu1Nw26pd79R3+Xj3tXX/MZR8bF4J8PxEky3UChPP7kaYFxuPTMoXWKeC2cbK2ojq004beieNw1B++Hchf7uM4tTQL7RcRtFf/KukyH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mQhpCroE; arc=none smtp.client-ip=209.85.208.45
+	 MIME-Version; b=GQFoH5cGGgEDexPn6W7YMv2rCNuOHvI0ZlZr9oFTOQ1h0r1zcTJLc02ZHfNib00DVKdHmJWCs+xu09Pr3iTKNtHIOGJ9GJnsikKxFwBTpu5UjJ1NobCm0ExG29V8oWgRmwnIETyZib9Eu0kmEKDS8c1vKegRObX+xvYZ/N+fIo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VtdzCkhl; arc=none smtp.client-ip=209.85.208.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5e033c2f106so4839276a12.3;
-        Sun, 23 Mar 2025 00:14:53 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5e673822f76so5243734a12.2;
+        Sun, 23 Mar 2025 00:14:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742714091; x=1743318891; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742714093; x=1743318893; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=k1mSfG9tzE1vlwLPDBezMTy+3PVMsOvW4K1F0qCroTU=;
-        b=mQhpCroExgEG0F8pSWbF2lIHptct9UiV1qb9rpL3U5AFDrC0tAvbt4kAl1VSzk1WuW
-         petZfBF1g+aBvu9L8NdBfhxgX3g+gS/M+ElgH/LLMs835QbJW1VG+DFuzAo2kQeJhaOK
-         ruVZ/9vs2i4PzUyhf1QVIYorHIEhYxhbX9MP7GS19WPGV/RWS6JGDxmItSG/waTHIGjR
-         bIcSFYI8MqCROwd+1lK8CXxpojp0zobC6g6a3y1evB8KuFAKln4sjZBPvVL9W/if9mxn
-         n4/WLNbhxhCe68pfAfktRskPuXyALu0XUKGFuCActhUs05qns6Nc7DZhWFIQXc8ihjxA
-         L7mA==
+        bh=29uewYC+iRTpdEimjLoyLiSalpqvIJ8kugFIJHF4NTA=;
+        b=VtdzCkhlQtIR3cjFA88sSCeXgQZttGzzySb/+mGT28t5jRj73dN9d18PT8LVperQwN
+         Snz8lh635Q5zP5ijmFTLhz7fdKAJk9CvjjHrrGQQGWJ7o6L0i8ir7Fn70sOQ3Qsy+li2
+         7Jw4FxX3j3J39yMaBElVpcybayKiMjtlNe1vFD22tZEGhOz4So8UTeWlJD0QGdjcRLoX
+         icvs1wP4R3aiZOSmFArchus12s4l5ti+UFVTzCisHOgzJsAF7SvEudwB5u9xtyhY7mxT
+         +ctswss5+L2SX3FPYqUUPV2SzBoZc7yC1GsXE4lkEEhitGCvEffTvxPHO2sE8EWNZup/
+         Erfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742714091; x=1743318891;
+        d=1e100.net; s=20230601; t=1742714093; x=1743318893;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=k1mSfG9tzE1vlwLPDBezMTy+3PVMsOvW4K1F0qCroTU=;
-        b=NydIqguhqax6mwhyIGJDGzqWFeSvac7H6X56zQqOv7I4YUsO/tK5yv0tpjYMJLKcpx
-         x/3AZO8hRR/JD39fohzNhTP/t2Ai1/aqQ3AwzRoJGpeJln40ScMbBDacbqT1Q1eShsQt
-         6ZafI2EdIaWSU4gxIbYvdE6k1megf+xbLFtNhg0/r87Gzrk6KcgE/TKc/opzuQ/Wpm2h
-         mA6OzlynSaRwsrKYymzn2mAqOcT40r4sDNkTsDODR0e50uj4oh2e92GEm8TEZX10SgdS
-         y761w1rQppYFRhyWmiysjuSuX0mV/MI6XnDRZM95jGLD3VoT8e1SjpQ9M6NN73fK4JAC
-         tC7g==
-X-Forwarded-Encrypted: i=1; AJvYcCU+BJdf9OzbvVJohgOCLZdDiKPggLYRq6JGOBa5PhxSJ0sDStx2vf9LKMbLNm3A2cZp8DxkfVoj5PU=@vger.kernel.org, AJvYcCU2dpLj+kHsAdiV4xEIxX67yXVcf8AM9/IGcnGxWo+DggzFYLTzHgBZD9EItKPCO2hifP/n/CU6H7JUyDI=@vger.kernel.org, AJvYcCUWU1xfUqOvIYOXAudyqZZ+Md6aDX59KA/+bfPYIiM0Kizaoy4G2GSsnPyhKKVy+2iz1AXt3uWxkSTtMlo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMHOwG2bXxK7ODMnhhubPOkvCj7bo2Sl0wnyxiR/Ejrz/D9lMY
-	5yN/ZVABIO0YWFSfRUwwLUP8hLmtltahOK1Mq2X8urXihmcEqe0fNzJ+TA==
-X-Gm-Gg: ASbGncsWoI0rLtuTn3SZVk0pXsw71wQCNElFW2kzMXNVytCJkC+NGenN1jqeX3YuwoR
-	9hpXLgxtKExl49IuhPFZcTpNBMO5uLvd8B8jHXxwRX62pwyK/Wb2aHiQb5z9gSzoR+5Z3s3qi1b
-	zXpM6zPBEs4+j94bcKX1SD6SUcMUWst2kO/jXR4CDjqhm2erRKrPLsb/bHtlPuEwXOw5vlJkZEy
-	SdP+6H/VuQ2CPGvHRniva6JZlF5pw69QKmKwUc5tYxjz5MWEw6oUHnrw3Kp3oKjTqCND3u3St+/
-	5CWG0ocMj9grmTFenkT+IDXFLHr4FHGCMMez
-X-Google-Smtp-Source: AGHT+IFUCQdaf1gJxSDknQhy2Z+Dm5vufDvDp/v5PIZGlQ15eVmjUOCJgWaoqFmDfVj/No6fvDsovw==
-X-Received: by 2002:a05:6402:42c8:b0:5dc:9589:9f64 with SMTP id 4fb4d7f45d1cf-5ebcd4342bfmr7112233a12.13.1742714091393;
-        Sun, 23 Mar 2025 00:14:51 -0700 (PDT)
+        bh=29uewYC+iRTpdEimjLoyLiSalpqvIJ8kugFIJHF4NTA=;
+        b=G4pFuxbMjzSt4YKpo99lB2kR43SFsjhP8NYNEOoAndR4HR/4kkdOkTfouysPrQy0Gx
+         IYeXAuOJ25naQPqRi/Q0OgpdVqUsNJLJ6V5dEzM6ne4hKQWwQvXkkhFMHCERWsx/UQEG
+         Tf7i5MozcQBT7nHeT+KqskFfR+t7e5vNaJCg2o4NOg4/s4R0jxzlKkEDnoXHZpQOD9zo
+         uHa/vRAgucVM+IN4IaS9R/LJ17YZphOzElmF3liN3kA2dI9SSwqNu0/5s+iP6cx42MNB
+         FXn4G8p1FAjAFv9vwyZ8rrsKrIfE2b72eYlAhhLNtK+CiKL2gWXu7HDjm9yS5wgWgCRl
+         PRUg==
+X-Forwarded-Encrypted: i=1; AJvYcCV0tnujrOjcu/L57M7UdgDGMOiWdpf+OauFEaoCimmjWW7f1KjmvnFxiLgCqEddlWKtdnhNZlvHaCA=@vger.kernel.org, AJvYcCXCIrgCiNiPtkhaLfYSz3O9znNuze9riOl+YNPLMdq0o8YK7fo5/DtRRMWQRbnIqGhnJg3hX6I5hWGotaM=@vger.kernel.org, AJvYcCXltvT+GPbOoqwP6Hep4UX1qcVXKTl8McRJX15ch3kN8onk325DtikR0eJ6Vayp/7QN0EsuUoasYQEt4tA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwErWPEaKXrB1DnvnmmrReDpXdqbH2wS73ecZaXEcJODOVycaqh
+	+UVm9c8I1Mn58Jc7MmoXa/idB9bJIMo66A2H7yES6yG1z2ANxMFT
+X-Gm-Gg: ASbGncsb/ST1t9NSg6+MUQHHxd1h1v/rnl9RmNB/TtaWHcNlsfyv1CWZWnbzzN1z4Lj
+	1f5A5xdvjRC7XTGI/Q2gei7stf9+XX13EBw3jQbnkBqLuCRN3opZMJwBeNyUs2gsJpS6bPNGcbo
+	uQis4tRB3HgwYBJY2a4CEnVWExNsCpo38FkizZvoCBZsk+BkjzwVhceVQUcyL8zCC2BIMWwPgyE
+	AvBygQRYd2998IltM1iCWnxW02m7OyDOQvg9C0l+VWH+kF7ur2wEjf4Pi0gm440xXypXIenm2YG
+	14U/r/bzLPzy67GMTsd5zBo5SBMxK1Htk4kB
+X-Google-Smtp-Source: AGHT+IEqd+7IPPUUb7zOi8eoTIbMKKkpIbd/z7ELoYmkbF9H9wVTaXKTVrjAw53cjx+cV8jr75ScWg==
+X-Received: by 2002:a05:6402:27d3:b0:5e5:71e:8c63 with SMTP id 4fb4d7f45d1cf-5ebcd466aa5mr8265071a12.15.1742714092740;
+        Sun, 23 Mar 2025 00:14:52 -0700 (PDT)
 Received: from xeon.. ([188.163.112.51])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5ebccfaecfbsm4218283a12.41.2025.03.23.00.14.50
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5ebccfaecfbsm4218283a12.41.2025.03.23.00.14.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Mar 2025 00:14:50 -0700 (PDT)
+        Sun, 23 Mar 2025 00:14:52 -0700 (PDT)
 From: Svyatoslav Ryhel <clamor95@gmail.com>
 To: Lee Jones <lee@kernel.org>,
 	Rob Herring <robh@kernel.org>,
@@ -85,9 +85,9 @@ Cc: devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-tegra@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH v1 1/4] dt-bindings: vendor-prefixes: add prefix for Pegatron Corporation
-Date: Sun, 23 Mar 2025 09:14:21 +0200
-Message-ID: <20250323071424.48779-2-clamor95@gmail.com>
+Subject: [PATCH v1 2/4] dt-bindings: mfd: Document Infineon/Cypress CG7153AM MCU
+Date: Sun, 23 Mar 2025 09:14:22 +0200
+Message-ID: <20250323071424.48779-3-clamor95@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250323071424.48779-1-clamor95@gmail.com>
 References: <20250323071424.48779-1-clamor95@gmail.com>
@@ -99,28 +99,77 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-PEGATRON Corporation is a Taiwanese electronics manufacturing company that
-mainly develops computing, communications and consumer electronics for
-branded vendors. Link https://www.pegatroncorp.com/
+Add binding for Cypress CG7153AM embedded controller. Pegatron implemented
+a custom configuration of this MCU in their Chagall tablets, utilizing it
+for battery monitoring.
 
 Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ .../bindings/mfd/cypress,cg7153am.yaml        | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/cypress,cg7153am.yaml
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index da01616802c7..d36389aa4d7b 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1146,6 +1146,8 @@ patternProperties:
-     description: Parallax Inc.
-   "^pda,.*":
-     description: Precision Design Associates, Inc.
-+  "^pegatron,.*":
-+    description: Pegatron Corporation
-   "^pericom,.*":
-     description: Pericom Technology Inc.
-   "^pervasive,.*":
+diff --git a/Documentation/devicetree/bindings/mfd/cypress,cg7153am.yaml b/Documentation/devicetree/bindings/mfd/cypress,cg7153am.yaml
+new file mode 100644
+index 000000000000..f8469b5e3816
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mfd/cypress,cg7153am.yaml
+@@ -0,0 +1,55 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mfd/cypress,cg7153am.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Infineon/Cypress Semicon CG7153AM Microcontroller
++
++maintainers:
++  - Svyatoslav Ryhel <clamor95@gmail.com>
++
++description:
++  The CG7153AM, an 8-bit programmable microcontroller from Infineon/Cypress
++  Semiconductor, communicates over I2C and is implemented in devices like the
++  Pegatron Chagall tablet for fuel gauge and battery control functions.
++
++$ref: /schemas/power/supply/power-supply.yaml
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - pegatron,chagall-ec # Pegatron Chagall tablet device
++          - const: cypress,cg7153am
++      - items:
++          const: cypress,cg7153am
++
++  reg:
++    maxItems: 1
++
++  monitored-battery: true
++  power-supplies: true
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        embedded-controller@10 {
++            compatible = "pegatron,chagall-ec", "cypress,cg7153am";
++            reg = <0x10>;
++
++            monitored-battery = <&battery>;
++            power-supplies = <&mains>;
++        };
++    };
++...
 -- 
 2.43.0
 
