@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-24462-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24463-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2A52A6DF8C
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Mar 2025 17:25:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA588A6DF8E
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Mar 2025 17:25:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D79601681E7
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Mar 2025 16:25:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 81A147A28B9
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Mar 2025 16:24:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D48B42638B0;
-	Mon, 24 Mar 2025 16:25:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 796EF263C65;
+	Mon, 24 Mar 2025 16:25:50 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92FDF263892;
-	Mon, 24 Mar 2025 16:25:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15AD62638AD;
+	Mon, 24 Mar 2025 16:25:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742833540; cv=none; b=QdSH5hW35UtVte3FMqmbBj/nCpODqgw4RCtJkElzeWcBbpmSF+yPk/y7MQqpL1YpnA0UsBABwRIOVs2zgIhEXXwJma+hib2idht/GK6nUqTEJC/Gmxbo/C1weW9Lv20xROZjwGUO1mOFrMmQDXw5IqGDq86m1nFz7JxiReKsEXA=
+	t=1742833550; cv=none; b=Xm8aItD2V1hq5/UNMNulpVGWiVyehDRFQwG7x/WglYtESL1dhF3bYyEDllLS8S520nWJJCIY5ph639pwtJUns8urmxhQV9Ey4fTuiIgblp1R9NpWBQmJAIkZUduS+27+jji3XWHYV69eYZEpXddlGV4/+t+i9XOe0aQ3GAt47CU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742833540; c=relaxed/simple;
-	bh=wC5vydyGm5rivyr8+UBxwa+Vbvcm9vCXbspYQDoO70U=;
+	s=arc-20240116; t=1742833550; c=relaxed/simple;
+	bh=O23nC2ib6/Uawc94qMLOSYvg0d7JqzEsZfGYS4Fb9nY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E2Mea2eEMC4U2VBwoiwUdErjLizmAj2jg9e2CWOhJz6nOu5SNhEo+uYngabBWi+fu+mBZcmt0APGyihR9eH/fe+KkYVo0yO3dClxx684vuC7rC//i5Hum+9cr0jthj+raiRNNAQUIXNQHtFSY69yhXhQFcb0Ex+JPfSa8eOA9gI=
+	 In-Reply-To:Content-Type; b=m7eYIt0EPkjl6WnFRG/1qjdXgdzeT3AvJBbBqlpEZ7kOy6gzJgDZm0uYFUnUvNlSB+9U1Ur5thoT4E/YiHC/iab8vDQna3TQflNzvLIbj0ELpxABbcYmMxQs7R3iY0EgWFoVGXi69pFkURlCgZ36PFQGUEgn4wZF0cJAkJG0Lz8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E645116F3;
-	Mon, 24 Mar 2025 09:25:43 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9C6DE16F3;
+	Mon, 24 Mar 2025 09:25:53 -0700 (PDT)
 Received: from [10.57.69.87] (unknown [10.57.69.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C6B513F58B;
-	Mon, 24 Mar 2025 09:25:35 -0700 (PDT)
-Message-ID: <40c849f4-aaeb-48fb-87af-dfe9d404fc7d@arm.com>
-Date: Mon, 24 Mar 2025 16:25:39 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7B0A63F58B;
+	Mon, 24 Mar 2025 09:25:45 -0700 (PDT)
+Message-ID: <9bb64bd4-8715-481b-9e08-73b715a78927@arm.com>
+Date: Mon, 24 Mar 2025 16:25:49 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,8 +42,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC][PATCH v0.3 4/6] PM: EM: Move CPU capacity check to
- em_adjust_new_capacity()
+Subject: Re: [RFC][PATCH v0.3 5/6] PM: EM: Introduce em_adjust_cpu_capacity()
 To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
  Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Peter Zijlstra
@@ -57,117 +56,109 @@ Cc: LKML <linux-kernel@vger.kernel.org>, Peter Zijlstra
  Christian Loehle <christian.loehle@arm.com>,
  Viresh Kumar <viresh.kumar@linaro.org>
 References: <22640172.EfDdHjke4D@rjwysocki.net>
- <2667366.Lt9SDvczpP@rjwysocki.net>
+ <2446858.NG923GbCHz@rjwysocki.net>
 Content-Language: en-US
 From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <2667366.Lt9SDvczpP@rjwysocki.net>
+In-Reply-To: <2446858.NG923GbCHz@rjwysocki.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Rafael,
 
-On 3/7/25 19:17, Rafael J. Wysocki wrote:
+
+On 3/7/25 19:39, Rafael J. Wysocki wrote:
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Move the check of the CPU capacity currently stored in the energy model
-> against the arch_scale_cpu_capacity() value to em_adjust_new_capacity()
-> so it will be done regardless of where the latter is called from.
+> Add a function for updating the Energy Model for a CPU after its
+> capacity has changed, which subsequently will be used by the
+> intel_pstate driver.
 > 
-> This will be useful when a new em_adjust_new_capacity() caller is added
-> subsequently.
-> 
-> While at it, move the pd local variable declaration in
-> em_check_capacity_update() into the loop in which it is used.
-> 
-> No intentional functional impact.
+> An EM_PERF_DOMAIN_ARTIFICIAL check is added to em_adjust_new_capacity()
+> to prevent it from calling em_compute_costs() for an "artificial" perf
+> domain with a NULL cb parameter which would cause it to crash.
 > 
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->   kernel/power/energy_model.c |   40 +++++++++++++++++-----------------------
->   1 file changed, 17 insertions(+), 23 deletions(-)
 > 
+> Note that this function is needed because the performance level values
+> in the EM "state" table need to be adjusted on CPU capacity changes.  In
+> the intel_pstate case the cost values associated with them don't change
+> because they are artificial anyway, so replacing the entire table just
+> in order to update the performance level values is a bit wasteful, but
+> it seems to be an exception (in the other cases when the CPU capacity
+> changes, the cost values change too AFAICS).
+> 
+> ---
+>   include/linux/energy_model.h |    2 ++
+>   kernel/power/energy_model.c  |   28 ++++++++++++++++++++++++----
+>   2 files changed, 26 insertions(+), 4 deletions(-)
+> 
+> --- a/include/linux/energy_model.h
+> +++ b/include/linux/energy_model.h
+> @@ -179,6 +179,7 @@
+>   int em_dev_update_chip_binning(struct device *dev);
+>   int em_update_performance_limits(struct em_perf_domain *pd,
+>   		unsigned long freq_min_khz, unsigned long freq_max_khz);
+> +void em_adjust_cpu_capacity(unsigned int cpu);
+>   void em_rebuild_sched_domains(void);
+>   
+>   /**
+> @@ -405,6 +406,7 @@
+>   {
+>   	return -EINVAL;
+>   }
+> +void em_adjust_cpu_capacity(unsigned int cpu) {}
+>   static inline void em_rebuild_sched_domains(void) {}
+>   #endif
+>   
 > --- a/kernel/power/energy_model.c
 > +++ b/kernel/power/energy_model.c
-> @@ -721,10 +721,24 @@
->    * Adjustment of CPU performance values after boot, when all CPUs capacites
->    * are correctly calculated.
->    */
-> -static void em_adjust_new_capacity(struct device *dev,
-> +static void em_adjust_new_capacity(unsigned int cpu, struct device *dev,
->   				   struct em_perf_domain *pd)
+> @@ -698,10 +698,12 @@
 >   {
-> +	unsigned long cpu_capacity = arch_scale_cpu_capacity(cpu);
->   	struct em_perf_table *em_table;
-> +	struct em_perf_state *table;
-> +	unsigned long em_max_perf;
-> +
-> +	rcu_read_lock();
-> +	table = em_perf_state_from_pd(pd);
-> +	em_max_perf = table[pd->nr_perf_states - 1].performance;
-> +	rcu_read_unlock();
-> +
-> +	if (em_max_perf == cpu_capacity)
-> +		return;
-> +
-> +	pr_debug("updating cpu%d cpu_cap=%lu old capacity=%lu\n", cpu,
-> +		 cpu_capacity, em_max_perf);
+>   	int ret;
 >   
->   	em_table = em_table_dup(pd);
->   	if (!em_table) {
-> @@ -740,9 +754,6 @@
+> -	ret = em_compute_costs(dev, em_table->state, NULL, pd->nr_perf_states,
+> -			       pd->flags);
+> -	if (ret)
+> -		goto free_em_table;
+> +	if (!(pd->flags & EM_PERF_DOMAIN_ARTIFICIAL)) {
+> +		ret = em_compute_costs(dev, em_table->state, NULL,
+> +				       pd->nr_perf_states, pd->flags);
+> +		if (ret)
+> +			goto free_em_table;
+> +	}
+>   
+>   	ret = em_dev_update_perf_domain(dev, em_table);
+>   	if (ret)
+> @@ -751,6 +753,24 @@
+>   	em_recalc_and_update(dev, pd, em_table);
+>   }
+>   
+> +/**
+> + * em_adjust_cpu_capacity() - Adjust the EM for a CPU after a capacity update.
+> + * @cpu: Target CPU.
+> + *
+> + * Adjust the existing EM for @cpu after a capacity update under the assumption
+> + * that the capacity has been updated in the same way for all of the CPUs in
+> + * the same perf domain.
+> + */
+> +void em_adjust_cpu_capacity(unsigned int cpu)
+> +{
+> +	struct device *dev = get_cpu_device(cpu);
+> +	struct em_perf_domain *pd;
+> +
+> +	pd = em_pd_get(dev);
+> +	if (pd)
+> +		em_adjust_new_capacity(cpu, dev, pd);
+> +}
+> +
 >   static void em_check_capacity_update(void)
 >   {
 >   	cpumask_var_t cpu_done_mask;
-> -	struct em_perf_state *table;
-> -	struct em_perf_domain *pd;
-> -	unsigned long cpu_capacity;
->   	int cpu;
->   
->   	if (!zalloc_cpumask_var(&cpu_done_mask, GFP_KERNEL)) {
-> @@ -753,7 +764,7 @@
->   	/* Check if CPUs capacity has changed than update EM */
->   	for_each_possible_cpu(cpu) {
->   		struct cpufreq_policy *policy;
-> -		unsigned long em_max_perf;
-> +		struct em_perf_domain *pd;
->   		struct device *dev;
->   
->   		if (cpumask_test_cpu(cpu, cpu_done_mask))
-> @@ -776,24 +787,7 @@
->   		cpumask_or(cpu_done_mask, cpu_done_mask,
->   			   em_span_cpus(pd));
->   
-> -		cpu_capacity = arch_scale_cpu_capacity(cpu);
-> -
-> -		rcu_read_lock();
-> -		table = em_perf_state_from_pd(pd);
-> -		em_max_perf = table[pd->nr_perf_states - 1].performance;
-> -		rcu_read_unlock();
-> -
-> -		/*
-> -		 * Check if the CPU capacity has been adjusted during boot
-> -		 * and trigger the update for new performance values.
-> -		 */
-> -		if (em_max_perf == cpu_capacity)
-> -			continue;
-> -
-> -		pr_debug("updating cpu%d cpu_cap=%lu old capacity=%lu\n",
-> -			 cpu, cpu_capacity, em_max_perf);
-> -
-> -		em_adjust_new_capacity(dev, pd);
-> +		em_adjust_new_capacity(cpu, dev, pd);
->   	}
->   
->   	free_cpumask_var(cpu_done_mask);
 > 
 > 
 > 
-
 
 LGTM,
 
 Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-
-Regards,
-Lukasz
 
