@@ -1,145 +1,139 @@
-Return-Path: <linux-pm+bounces-24457-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24458-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16DDFA6DD1E
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Mar 2025 15:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A86F2A6DD63
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Mar 2025 15:49:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FFD1188AD90
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Mar 2025 14:35:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2AF841882FCF
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Mar 2025 14:49:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6674E25FA23;
-	Mon, 24 Mar 2025 14:35:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2594225D536;
+	Mon, 24 Mar 2025 14:49:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="e/BCoVIB"
+	dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b="TF7D20An"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
+Received: from devianza.investici.org (devianza.investici.org [198.167.222.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26FCE261376;
-	Mon, 24 Mar 2025 14:34:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB91C25F7BC
+	for <linux-pm@vger.kernel.org>; Mon, 24 Mar 2025 14:49:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.167.222.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742826902; cv=none; b=OowsReiwxVYV8wsEn3DFQoaX8cmhJSTtCSqPNwst1ldoTqgyd2Obp8zo6B3M1BVjRWbb/D1BSrul5eCJpbhDnpSCNmaBUkazpOTzg2ZHwa3kKg0FkO0SE1GcNhe39ls82gsIzRbsi253Of8/kZLe8gVJLIEGS8BlFJ6QULYlGq8=
+	t=1742827782; cv=none; b=K6uo7IpPgM0UqBEL0mCYPl0bRk8caBouFEUGz5+CSKpLlxlKdg3f7Am0K02mzjNmc+PNrG0ftHSqAFuj2wCYCpkW2I7JrtFeDFdlrjOVWx2OVsNC7mGPOwelfOV/t4ZkBGjcA+s/TlqoNRtem6ci1yOyuggdLnO+w39I64kysJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742826902; c=relaxed/simple;
-	bh=eXZOjdsz3n3Gnq7r2I/kxtbzwWU3mSzTlQX9+6VwZjo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dB2XesuUV/5iKSxMhheYF778H9iuAzS5THSPR2umIq6qo/1OTVTVXDFTHN0etCYZIYqpWtI45/T82IM6I3C9bwCZACE15vCCYu+ztmSnVkXhQNYQVw0p4Ec7WIugn+kIHZTLejiMG4MpwVi6iBW/ehFjaffcwmbjTXTPL4/VW34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=e/BCoVIB; arc=none smtp.client-ip=198.37.111.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1742826897;
-	bh=eXZOjdsz3n3Gnq7r2I/kxtbzwWU3mSzTlQX9+6VwZjo=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=e/BCoVIB2xjGLwwZhZh13iLYyQw8MEbshM/0g+jMd4kl/GBirsniZq66xCNmRUZR8
-	 Gyswg9KtN/vhJ9tFbSMZdy/3GBCU4whHFtRCot+OJeVeuYMlYi+6iemoKrOW67FUMc
-	 DJBBe7/+4rgLkvM44iwMmTgYc0uqB0b9oTdOCKPQ=
-Received: from [172.22.32.239] (unknown [99.209.85.25])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 6714D1C036F;
-	Mon, 24 Mar 2025 10:34:57 -0400 (EDT)
-Message-ID: <9f5bea0af3e32de0e338481d6438676d99f40be7.camel@HansenPartnership.com>
-Subject: Re: [Lsf-pc] [LSF/MM/BPF TOPIC] Filesystem Suspend Resume
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Jan Kara <jack@suse.cz>
-Cc: Christoph Hellwig <hch@infradead.org>, linux-fsdevel@vger.kernel.org, 
- lsf-pc@lists.linux-foundation.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-  Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>,
- linux-pm@vger.kernel.org
-Date: Mon, 24 Mar 2025 10:34:56 -0400
-In-Reply-To: <vnb6flqo3hhijz4kb3yio5rxzaugvaxharocvtf4j4s5o5xynm@nbccfx5xqvnk>
-References: 
-	<0a76e074ef262ca857c61175dd3d0dc06b67ec42.camel@HansenPartnership.com>
-	 <Z9xG2l8lm7ha3Pf2@infradead.org>
-	 <acae7a99f8acb0ebf408bb6fc82ab53fb687559c.camel@HansenPartnership.com>
-	 <Z9z32X7k_eVLrYjR@infradead.org>
-	 <576418420308d2511a4c155cc57cf0b1420c273b.camel@HansenPartnership.com>
-	 <62bfd49bc06a58e435431610256e722651e1e5ca.camel@HansenPartnership.com>
-	 <vnb6flqo3hhijz4kb3yio5rxzaugvaxharocvtf4j4s5o5xynm@nbccfx5xqvnk>
-Autocrypt: addr=James.Bottomley@HansenPartnership.com;
- prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+	s=arc-20240116; t=1742827782; c=relaxed/simple;
+	bh=4Bkx80EoyjanVtkC6e4fqLhmeJp14LvUdbINeWaGlhk=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=gkevy/iulRiJrbNJK4FFRv+IFMnf7FmiNCfl94iG2rBhRb12KXno6dGHrnG1w8JkgazEJtJJAlzzyMTTl0G1GZzC/QPO7cWmhvjsnepnmzeKShwNGzBTeDIYbQqgDurR6DwNWH5vSnxegTtQatTOLTl98rnNFCSoXGNDfkY5D7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org; spf=pass smtp.mailfrom=paranoici.org; dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b=TF7D20An; arc=none smtp.client-ip=198.167.222.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paranoici.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paranoici.org;
+	s=stigmate; t=1742827384;
+	bh=d/qv9SzNMP44v1ww6E+eqzu1hpeaSjpmsHfu5NyxdyA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=TF7D20AnZxSESbvaLMKYNTxbIHKUmdQN0RxexEi1WRfzF6uW+amn8k/ifznl3CClo
+	 kICALpa0AbOQQyFlTOQzaK0hm+Kvihvum3PE5vZtZ2vhJMQlp8RiAQIa+c9/jkpcQu
+	 msDQsH1UkfK3lncsuD0OIQY6BLgR5+Td7mNZUc0A=
+Received: from mx2.investici.org (unknown [127.0.0.1])
+	by devianza.investici.org (Postfix) with ESMTP id 4ZLwlD2CDlz6v97;
+	Mon, 24 Mar 2025 14:43:04 +0000 (UTC)
+Received: from [198.167.222.108] (mx2.investici.org [198.167.222.108]) (Authenticated sender: invernomuto@paranoici.org) by localhost (Postfix) with ESMTPSA id 4ZLwlD1vgzz6v94;
+	Mon, 24 Mar 2025 14:43:04 +0000 (UTC)
+Received: from frx by crunch with local (Exim 4.98.1)
+	(envelope-from <invernomuto@paranoici.org>)
+	id 1twj15-00000000EH5-01UE;
+	Mon, 24 Mar 2025 15:43:03 +0100
+Date: Mon, 24 Mar 2025 15:42:47 +0100
+From: Francesco Poli <invernomuto@paranoici.org>
+To: "John B. Wyatt IV" <jwyatt@redhat.com>
+Cc: linux-pm list <linux-pm@vger.kernel.org>, Thomas Renninger
+ <trenn@suse.com>, Shuah Khan <shuah@kernel.org>, John Kacur
+ <jkacur@redhat.com>
+Subject: Re: cpupower: systemd unit to run cpupower at boot
+Message-Id: <20250324154247.7fff2ca1c0df263c16a0f397@paranoici.org>
+In-Reply-To: <Z-FQwMuVf_p7FoHn@thinkpad2024>
+References: <20250322180357.1c17a180f1808533de77f186@paranoici.org>
+	<Z-FQwMuVf_p7FoHn@thinkpad2024>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Type: multipart/signed; protocol="application/pgp-signature";
+ micalg="PGP-SHA512";
+ boundary="Signature=_Mon__24_Mar_2025_15_42_47_+0100_YUjcKFIf7Obr2u9G"
 
-On Mon, 2025-03-24 at 12:38 +0100, Jan Kara wrote:
-> On Fri 21-03-25 13:00:24, James Bottomley via Lsf-pc wrote:
-> > On Fri, 2025-03-21 at 08:34 -0400, James Bottomley wrote:
-> > [...]
-> > > Let me digest all that and see if we have more hope this time
-> > > around.
-> >=20
-> > OK, I think I've gone over it all.=C2=A0 The biggest problem with
-> > resurrecting the patch was bugs in ext3, which isn't a problem now.
-> > Most of the suspend system has been rearchitected to separate
-> > suspending user space processes from kernel ones.=C2=A0 The sync it
-> > currently does occurs before even user processes are frozen.=C2=A0 I
-> > think
-> > (as most of the original proposals did) that we just do freeze all
-> > supers (using the reverse list) after user processes are frozen but
-> > just before kernel threads are (this shouldn't perturb the image
-> > allocation in hibernate, which was another source of bugs in xfs).
+--Signature=_Mon__24_Mar_2025_15_42_47_+0100_YUjcKFIf7Obr2u9G
+Content-Type: text/plain; charset=US-ASCII
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, 24 Mar 2025 08:32:00 -0400 John B. Wyatt IV wrote:
+
+> On Sat, Mar 22, 2025 at 06:03:57PM +0100, Francesco Poli wrote:
+> > The attached files are tested on Debian GNU/Linux trixie (current
 >=20
-> So as far as my memory serves the fundamental problem with this
-> approach was FUSE - once userspace is frozen, you cannot write to
-> FUSE filesystems so filesystem freezing of FUSE would block if
-> userspace is already suspended. You may even have a setup like:
+> Would you please submit this in the form of a patch that we can apply
+> to the tree?
+
+Thanks for your reply.
+I can try to submit in the form of a patch.
+
 >=20
-> bdev <- fs <- FUSE filesystem <- loopback file <- loop device <-
-> another fs
+> Please read (note the no attachments):
+> https://www.kernel.org/doc/html/latest/process/submitting-patches.html
+
+Wow, long document!
+I am beginning to read it.
+
+A question: should I base the patch on the mainline tree
+<git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git>
+or should I clone another, more specific tree?
+
 >=20
-> So you really have to be careful to freeze this stack without causing
-> deadlocks.
-
-Ah, so that explains why the sys_sync() sits in suspend resume *before*
-freezing userspace ... that always appeared odd to me.
-
->  So you need to be freezing userspace after filesystems are
-> frozen but then you have to deal with the fact that parts of your
-> userspace will be blocked in the kernel (trying to do some write)
-> waiting for the filesystem to thaw. But it might be tractable these
-> days since I have a vague recollection that system suspend is now
-> able to gracefully handle even tasks in uninterruptible sleep.
-
-There is another thing I thought about: we don't actually have to
-freeze across the sleep.  It might be possible simply to invoke
-freeze/thaw where sys_sync() is now done to get a better on stable
-storage image?  That should have fewer deadlock issues.
-
-> > There's a final wrinkle in that if I plumb efivarfs into all this,
-> > it needs to know whether it was a hibernate or suspend, but I can
-> > add that as an extra freeze_holder flag.
-> >=20
-> > This looked like such a tiny can of worms when I opened it; now it
-> > seems to be a lot bigger on the inside than it was on the outside,
-> > sigh.
+> We do this to easily be able to comment in the mailing list and make it
+> easy for others to review.
 >=20
-> Never underestimate the amount of worms in a can ;)
+> > I took a look at how this is done in the [Arch Linux package] and I
+> > enhanced/modernized the systemd unit (the three files in Arch Linux are
+> > released under "GPL-2.0-or-later" terms).
+> Is this an issue Shuah?
 
-Tell me about it ...
+I hope that's not an issue.
+Please let me know as soon as possible, if it is!    ;-)
 
-Regards,
 
-James
+--=20
+ http://www.inventati.org/frx/
+ There's not a second to spare! To the laboratory!
+..................................................... Francesco Poli .
+ GnuPG key fpr =3D=3D CA01 1147 9CD2 EFDF FB82  3925 3E1C 27E1 1F69 BFFE
 
+--Signature=_Mon__24_Mar_2025_15_42_47_+0100_YUjcKFIf7Obr2u9G
+Content-Type: application/pgp-signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEygERR5zS79/7gjklPhwn4R9pv/4FAmfhb2cACgkQPhwn4R9p
+v/5LuQ//TERTVwJ2P+14SzSvHJpUj2bKwXJvOHnsO0V+6yvjCr437X8pdVx/3pRS
+3g6rQ6u+etBbPSHO/iuIgzKNZVMUJ5Wxnbqhor8/jBQTCUkohCYje+azJ0gLorVR
+Dum0j8T1PAK+LMG8ZjwzzC/FIdQBuCOFqW/IXxuOwAWfNOMbzwxCq+ypnmufCJ24
+JknvPmYSIfIwiSDQ6kiEuNCjPx1ihoBj6WE4YtknrUqg2AKXmH96TrWUCOUWO38C
+Nj1k4zHwMlSkYr1+7JhlyLgs9ooOXMmyzeQZVOMZRhPacFlJMkJP7bKVZul+e00e
+7GQbDG5Ki4+nMZrLuIaLXrkhh5tssziWN+nhm39wxfye8n/+w4tFFD8X1iOg6fX/
+XUlNCqYIAy449rogNNPDzkj6Y6hT4HNTdoOsEEVnRcuQBPuYZlPYTQDcHWkxt1iQ
+CErhb7YnAXwlmZAV5fIyVKPn4tglRYL2sVM2thwmpvrM851g0yuzdv87lB8JjCno
+4YDBTkann2sh4ifW5TpEdDW5qOBmjrzGCQLZ0jFU9I5m5XogekS2f86a6kIq4DKl
+Gs/7xozzQ9a6Mr6aL3vpDTzlTa9l3wH52HYrWIQRpBxV+6BP3sILIE7JygXKrk04
+ACWgUOr6iY5YmDxJAZecCkG44ZMDnUhO00B13/zoFjz4tPGafb4=
+=1D3N
+-----END PGP SIGNATURE-----
+
+--Signature=_Mon__24_Mar_2025_15_42_47_+0100_YUjcKFIf7Obr2u9G--
 
