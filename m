@@ -1,105 +1,91 @@
-Return-Path: <linux-pm+bounces-24449-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24450-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F08B3A6D940
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Mar 2025 12:38:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A1922A6DA25
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Mar 2025 13:32:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 83D4318919D4
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Mar 2025 11:38:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5CEC41894386
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Mar 2025 12:32:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18CAE25DD05;
-	Mon, 24 Mar 2025 11:38:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAC2425DCE7;
+	Mon, 24 Mar 2025 12:32:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="NMzcS0d0";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="vlkbrFzq";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="NMzcS0d0";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="vlkbrFzq"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AKDAQAFH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81A621E0DB3
-	for <linux-pm@vger.kernel.org>; Mon, 24 Mar 2025 11:38:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1922A1D86F6
+	for <linux-pm@vger.kernel.org>; Mon, 24 Mar 2025 12:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742816304; cv=none; b=XAXJqTQogi6bzLArJLEI5ZJvtpY/Hjrpk9Vbckplzj3KZRijGp0eMr0gQyzqsc23jVfr06qkAFhBqFFIsCL3/PWb2W1JQDVUvgp8w4nLEhVklP5feZsqGNHNghj+LV8mCXedH7TvhH8aznK99t3veoy6/7MFizyzgsnJ1eRn8iI=
+	t=1742819529; cv=none; b=WObHmsj51I8691WkaOoCURJK6ARQOLooiEDFcySxQ5Kj6zeMPh1zy0WVJ8YRHWnx98ru2aYa2MW9mkXhPed6nCSLAZXKeMewNtAoaFzqdv+4xRaZ3ETzeSawpY3gKK9wSWigqJMIAkNmZNsRZi8ncuxVe4e4P7VECUdnIt3l6Uk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742816304; c=relaxed/simple;
-	bh=65y7ROalBBStYZ/k3UJFvtBLjZT5xl3nBPhDTZ3PGnI=;
+	s=arc-20240116; t=1742819529; c=relaxed/simple;
+	bh=KW5Aw5zPxWIfey3C2kZHC2uTu5mi3pFumurzo+narCo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r6X6GXQV0KUlglSZcbjjjZV3/loIyl8jMBvV2UwegRQAqtYY+IhoyxGDm6l7zwFtU3K4BvE2YELPWW6MxTLmfHWnXU4Q4jscBZOdhU7OzMYL1MxT5aytfUFOGzzx6ak2aAJU/jmfxT4TgxcIgU5weRI+uZksp6Jb79UQQF8+MR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=NMzcS0d0; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=vlkbrFzq; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=NMzcS0d0; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=vlkbrFzq; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 9D8DF2117D;
-	Mon, 24 Mar 2025 11:38:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1742816300; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tJ6SDOXK+DrXUhFAsHPCtJg4OamijECXMnArcrJVDi0bfvDwvPnl/yNqvF0MUHeuCLjQOdSbNnaxOTQ+AHL0chKJGJk78YxCZNyPijlXpmG/HknSH7VvFwqD+UFxGcFoU3jU006OPPRfndYwIMx3duk0Jw512F3iCKydJZL+bf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AKDAQAFH; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742819527;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=14iO73jmtexEGQvspYl/bmufl1PRHA8ASQMCDBnBTjs=;
-	b=NMzcS0d0vPEKsyNEtpRbTtyMCzSZ3oB5oA7La2GH0pkYXumqVljIZqzTPh9dCBr4hXNyvf
-	1anR4IHk3WvgJNYgN6cYaAbgd6kdElTGpotJD8CWzf2IjxH8zTnbq+voNfkEDA7OjL13Fe
-	zjhxKGDjJaszmb0+kaFCaGUVJeJ/OAM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1742816300;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=14iO73jmtexEGQvspYl/bmufl1PRHA8ASQMCDBnBTjs=;
-	b=vlkbrFzquyDYDJnNvfjH9X072JgGjoNxqaXG0mpWBkj/jfSnXuncwSbegVXRGgnyCv97oO
-	h8P5aBVlK3uTDGBA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1742816300; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=14iO73jmtexEGQvspYl/bmufl1PRHA8ASQMCDBnBTjs=;
-	b=NMzcS0d0vPEKsyNEtpRbTtyMCzSZ3oB5oA7La2GH0pkYXumqVljIZqzTPh9dCBr4hXNyvf
-	1anR4IHk3WvgJNYgN6cYaAbgd6kdElTGpotJD8CWzf2IjxH8zTnbq+voNfkEDA7OjL13Fe
-	zjhxKGDjJaszmb0+kaFCaGUVJeJ/OAM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1742816300;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=14iO73jmtexEGQvspYl/bmufl1PRHA8ASQMCDBnBTjs=;
-	b=vlkbrFzquyDYDJnNvfjH9X072JgGjoNxqaXG0mpWBkj/jfSnXuncwSbegVXRGgnyCv97oO
-	h8P5aBVlK3uTDGBA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 90203137AC;
-	Mon, 24 Mar 2025 11:38:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id TmglIyxE4WdsDwAAD6G6ig
-	(envelope-from <jack@suse.cz>); Mon, 24 Mar 2025 11:38:20 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 49376A076A; Mon, 24 Mar 2025 12:38:20 +0100 (CET)
-Date: Mon, 24 Mar 2025 12:38:20 +0100
-From: Jan Kara <jack@suse.cz>
-To: James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc: Christoph Hellwig <hch@infradead.org>, linux-fsdevel@vger.kernel.org, 
-	lsf-pc@lists.linux-foundation.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org
-Subject: Re: [Lsf-pc] [LSF/MM/BPF TOPIC] Filesystem Suspend Resume
-Message-ID: <vnb6flqo3hhijz4kb3yio5rxzaugvaxharocvtf4j4s5o5xynm@nbccfx5xqvnk>
-References: <0a76e074ef262ca857c61175dd3d0dc06b67ec42.camel@HansenPartnership.com>
- <Z9xG2l8lm7ha3Pf2@infradead.org>
- <acae7a99f8acb0ebf408bb6fc82ab53fb687559c.camel@HansenPartnership.com>
- <Z9z32X7k_eVLrYjR@infradead.org>
- <576418420308d2511a4c155cc57cf0b1420c273b.camel@HansenPartnership.com>
- <62bfd49bc06a58e435431610256e722651e1e5ca.camel@HansenPartnership.com>
+	bh=gCZm2j6VgR31/Jo73E4X0cDwzfnUjTVV3zsHPrQ3334=;
+	b=AKDAQAFHh1OHZtLI5KJqPMMZ+gv5nHjNdzwPJGnJ4HV8rSk0OoYpd+BFsi7huzIoEBMJH7
+	EkX8kZyO3XW6d7FthFsCJrHxC0DCJHPuK1pbumhtHNAVzpIx5X/2pbFByvYz6xh6EaCZ6Q
+	eA/7/6K1waSk8I1fVC9uub8HxkHy5LA=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-443-7ZfK9mvSMz-jaBApkYkyTw-1; Mon, 24 Mar 2025 08:32:03 -0400
+X-MC-Unique: 7ZfK9mvSMz-jaBApkYkyTw-1
+X-Mimecast-MFC-AGG-ID: 7ZfK9mvSMz-jaBApkYkyTw_1742819523
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7c53e316734so853912785a.2
+        for <linux-pm@vger.kernel.org>; Mon, 24 Mar 2025 05:32:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742819523; x=1743424323;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gCZm2j6VgR31/Jo73E4X0cDwzfnUjTVV3zsHPrQ3334=;
+        b=S1aW/JEwssW0bWlrMHoM4pWCT88OyO5+4rGn4mE25uQOIqFKjEOKiatGgygJas7Fiw
+         fhfHKr4LXLyLCE3jUgF+M3HG6PpCIQ/r0uJIeBPcy2sM3EExMpAxZXQHCZZ2cuMGRRFy
+         A5aEcZ+/iQXL6svMKCsXlk9A8fKNWdhb7/D9uPX7SoEEjY4OiO4jNJKlECOlRur67Ra2
+         0mGdZ/z0BEGTzkXQUOc/FJb/zX7NeVelUGOEYjB/VxOJ8ICp3A9mykSrhE8TuEUI9wSv
+         wxaPZISBIEFiuMZ0dsmZZyMRg6ezrd1V5KnceZ12VpISNZUMb1L6L8U4StfRjut8j/JF
+         UVQw==
+X-Gm-Message-State: AOJu0YyFf+582GaxRnUc6J1aNJksCUKbstolgy6O/jwZ8hj/6NyHjcm8
+	MDwIZj3L63HNUQN1mmvD/HBemwcMqRR/ddEImVEStQKqq/+swObdZQ8S9Kg234Yq0d2lcTku15h
+	tTQjfLRL8539UnKd07Awb/uXV9b6h5QwEzbT2Vijtpsl3NSMedO0h1X5+
+X-Gm-Gg: ASbGncs+sgfCc9yKY9Jz45ly6bOwTNmrzyOLIQlpI2PXQhXFMLDDRCCVqpLtq1LR5bT
+	s/K4WL4kJguInprQwIjPYwUvCKwOtX34qlWveNeXl2wUi29JzK7aHMMJAxrzgtcXOPDquXfvsnS
+	9bByLlgnp2d/i6GdOcKA6pluH6zgt05MMXO2QUhsrJiXISGPseuyGPVlXgXpVnj2kEJu9Ug5Bfm
+	aIJF1F1Eu/xSM4IzWxVdU+we2q/py/4YmPQMucI9yeBKPZadYIYQLZCIb3ZqKP+SrQX0gTPs4JM
+	4D12IV5HBLNK
+X-Received: by 2002:a05:620a:bcd:b0:7c5:5229:2f1f with SMTP id af79cd13be357-7c5ba12daecmr1898157585a.5.1742819523042;
+        Mon, 24 Mar 2025 05:32:03 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE7DYTvtKn0P/kl/BHa8wQSRfuYtCao6wlu6Q9PsCZC1ThqSVz6wqDYT32DS0iIX8Uj/iHJxQ==
+X-Received: by 2002:a05:620a:bcd:b0:7c5:5229:2f1f with SMTP id af79cd13be357-7c5ba12daecmr1898153785a.5.1742819522572;
+        Mon, 24 Mar 2025 05:32:02 -0700 (PDT)
+Received: from thinkpad2024 ([71.217.80.241])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c5b935f1c1sm501833285a.117.2025.03.24.05.32.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Mar 2025 05:32:02 -0700 (PDT)
+Date: Mon, 24 Mar 2025 08:32:00 -0400
+From: "John B. Wyatt IV" <jwyatt@redhat.com>
+To: Francesco Poli <invernomuto@paranoici.org>
+Cc: linux-pm list <linux-pm@vger.kernel.org>,
+	Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
+	John Kacur <jkacur@redhat.com>
+Subject: Re: cpupower: systemd unit to run cpupower at boot
+Message-ID: <Z-FQwMuVf_p7FoHn@thinkpad2024>
+References: <20250322180357.1c17a180f1808533de77f186@paranoici.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -108,74 +94,29 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <62bfd49bc06a58e435431610256e722651e1e5ca.camel@HansenPartnership.com>
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	URIBL_BLOCKED(0.00)[imap1.dmz-prg2.suse.org:helo,suse.com:email];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email]
-X-Spam-Score: -3.80
-X-Spam-Flag: NO
+In-Reply-To: <20250322180357.1c17a180f1808533de77f186@paranoici.org>
 
-On Fri 21-03-25 13:00:24, James Bottomley via Lsf-pc wrote:
-> On Fri, 2025-03-21 at 08:34 -0400, James Bottomley wrote:
-> [...]
-> > Let me digest all that and see if we have more hope this time around.
-> 
-> OK, I think I've gone over it all.  The biggest problem with
-> resurrecting the patch was bugs in ext3, which isn't a problem now. 
-> Most of the suspend system has been rearchitected to separate
-> suspending user space processes from kernel ones.  The sync it
-> currently does occurs before even user processes are frozen.  I think
-> (as most of the original proposals did) that we just do freeze all
-> supers (using the reverse list) after user processes are frozen but
-> just before kernel threads are (this shouldn't perturb the image
-> allocation in hibernate, which was another source of bugs in xfs).
+On Sat, Mar 22, 2025 at 06:03:57PM +0100, Francesco Poli wrote:
+> The attached files are tested on Debian GNU/Linux trixie (current
 
-So as far as my memory serves the fundamental problem with this approach
-was FUSE - once userspace is frozen, you cannot write to FUSE filesystems
-so filesystem freezing of FUSE would block if userspace is already
-suspended. You may even have a setup like:
+Would you please submit this in the form of a patch that we can apply
+to the tree?
 
-bdev <- fs <- FUSE filesystem <- loopback file <- loop device <- another fs
+Please read (note the no attachments):
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html
 
-So you really have to be careful to freeze this stack without causing
-deadlocks. So you need to be freezing userspace after filesystems are
-frozen but then you have to deal with the fact that parts of your userspace
-will be blocked in the kernel (trying to do some write) waiting for the
-filesystem to thaw. But it might be tractable these days since I have a
-vague recollection that system suspend is now able to gracefully handle
-even tasks in uninterruptible sleep.
+We do this to easily be able to comment in the mailing list and make it
+easy for others to review.
 
-> There's a final wrinkle in that if I plumb efivarfs into all this, it
-> needs to know whether it was a hibernate or suspend, but I can add that
-> as an extra freeze_holder flag.
-> 
-> This looked like such a tiny can of worms when I opened it; now it
-> seems to be a lot bigger on the inside than it was on the outside,
-> sigh.
+> I took a look at how this is done in the [Arch Linux package] and I
+> enhanced/modernized the systemd unit (the three files in Arch Linux are
+> released under "GPL-2.0-or-later" terms).
+Is this an issue Shuah?
 
-Never underestimate the amount of worms in a can ;)
-
-								Honza
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Sincerely,
+John Wyatt
+Software Engineer, Core Kernel
+Red Hat
+
 
