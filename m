@@ -1,102 +1,91 @@
-Return-Path: <linux-pm+bounces-24441-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24442-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7919A6D3C3
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Mar 2025 06:43:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33518A6D3E0
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Mar 2025 06:48:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 182B27A5010
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Mar 2025 05:42:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC93C188A2CD
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Mar 2025 05:48:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 291DC16EB42;
-	Mon, 24 Mar 2025 05:43:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 200DC10A3E;
+	Mon, 24 Mar 2025 05:48:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rPBjfKRn"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iHycOaRX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 827EC2D052
-	for <linux-pm@vger.kernel.org>; Mon, 24 Mar 2025 05:43:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909083C17
+	for <linux-pm@vger.kernel.org>; Mon, 24 Mar 2025 05:48:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742795023; cv=none; b=GnXtsVdSkUa8dhSKIyvlWTf7R5uY1Cj2DEcq+XbtTrxxJ7WWD3NeH8g4VzbZbsnF2L8Zp76QBqLgylbhSo4T+yJNVlamUCsw5rRrIs1CE++UVI302ytCjUAIWMpjyl65p8ePsQMDjG9KE7jW7Kb+Cg7AvXKpJXZfIdVrN1n9alg=
+	t=1742795300; cv=none; b=XfquSmBfWJ42FZxi4zdP0kbk5E89srPXtfwyzFvkLyGpl3+6Ee5N2FBmD0iFyKKXOXXXJkt4O2wx/7IXDRMyazrem0bcYivrno004jkzgR0zznWl5sC84qmxAse3khQmadNzZ6N1lBrjWdQdg2LCoIje+O45PZn4sKwsJaIIMK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742795023; c=relaxed/simple;
-	bh=fDHDnmQOUKbYWvor4HRHMJSkRLSzGU857d5h+34i5GQ=;
+	s=arc-20240116; t=1742795300; c=relaxed/simple;
+	bh=hFzwVsvlTm6FzsGdNshq6DKl0QckI85JLKWYGluazmY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u9pzqlSUw50exmVrR5TFaQJ+qig7pRwWq1fsXpquy5lBIIRqDlhLTKdQyr8UuuFuiqoPUuY4hQYlirqMuIxOLcEMVzvIo+0kYgTXRNtTqTumUPFwsKHaTPBQAr9QdntKtr9210pRhEwqAGTBoyNt+CXEb9UZ9gI04pYCWjQDGCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rPBjfKRn; arc=none smtp.client-ip=209.85.214.180
+	 Content-Type:Content-Disposition:In-Reply-To; b=hM7WljZ5bkoO+SO2n8/3aEIuQzuHMTOZFJRMcFY/JFhovc9FN7ewljlXjYqDI6+MjFVzm0mJkWM+cMOKsEOV0fNudekP8yYBSIkgmDPi9ke54doug8ezKrxuA7mErg8EqK1xQYcJ9ef87qKAAJYCnD1Njju8mRikD8WEoyJVOfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iHycOaRX; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-227b650504fso11841375ad.0
-        for <linux-pm@vger.kernel.org>; Sun, 23 Mar 2025 22:43:41 -0700 (PDT)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-224191d92e4so72281605ad.3
+        for <linux-pm@vger.kernel.org>; Sun, 23 Mar 2025 22:48:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1742795021; x=1743399821; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1742795297; x=1743400097; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=XZYqBd8vEY+viBvNer60WQXhZvWLjiw6xgE86uO2OEU=;
-        b=rPBjfKRnVm8KDbb3TrXDHR6FEwfDcJfO4jkn341rsh2yCxAUZuy0PQXb6QzNmHw4GP
-         j25mg4yzLN72SVD5R91Borrpqeix6i0wd3Mq1HS6FWmbSUrzrm5QkFjCoxUfv1w9UIdA
-         DdKT3OMAZKLh9y9H65GrS0Cwi3AcJG4Ru7Nm18SjHWlxX5K+r4MKsY12B9j7VIyMoJs7
-         hRag1O/FKbmHM7hoQWZbDgtSCC/5+NkxcuLj6UVw9+wzolaxZ3x1a23Piu2soXoReV5j
-         5lIYUWA9gf3CgqguW8Lz38MosQlGg+EtrlDOTVD9u6qIUFDw+WzvOs8TdcRDycbRsKPz
-         TJNg==
+        bh=/R5x+1WOSlr2ATn0vFw3CXpQGRrxOjJ4eIn39P6K6yc=;
+        b=iHycOaRXVSPS6yb6dEnf8W+4Q2WsAdhBQ1hpvlPa66apUY1Cuer/vKlWnnA6o2WZoT
+         Uj/FI2HxeO+UnG9zHWSeLELuILRARVeXysqWha6+l3lQ4LsK3h7qnFz6ZxH7aP9DNRzx
+         l8dOc9zbP+5MlASmu2XIC5FHv8xAMdq3NGHsnFwYMTiO86/gJfpmGkb3Ty/rQL2Pk13g
+         7/YwgFdZ+f2BxNRgKRfW2/akKT6KOAJkg8Mcto0D5GnPSgHNGPwew0JkdIIXC36ItNke
+         Szjw/Ku3NCMjbwbYX+tsuUYlSjnwW5t6fjzZz+ChfJd/wTP65DI/yGqjE3XCaWIR3hHA
+         ucPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742795021; x=1743399821;
+        d=1e100.net; s=20230601; t=1742795297; x=1743400097;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XZYqBd8vEY+viBvNer60WQXhZvWLjiw6xgE86uO2OEU=;
-        b=jBIiz9Gc/4zYbQsNkFQAJnuCKNtC3cGwR6+7BXYlB0+xXqwphqVPPgbYcZluTsCht5
-         adTOPN4IR3qPUKS1iMQf7SSuDlJN72MXo5sRgO9O3jkvlYzMgmBDEiW84lMY59mnQpC/
-         xM9noWo2F0w1fYAAz4z17e0iSnrHLm2k/PJwPBYw6uqbCJlAkO/rSrUeksNLIFYjATbm
-         xj9pZbNybKM8RjtryY6Z7X093z5O6Bro/amLnCrLVegjUI1ha3cpX7Fp84v9GUNwpQIs
-         Y1AYCq3MxUYjInKW0fYPjoaf2QxzGYsKbhthzYpZsQkWNRcgXekRtgKkfJkWrxmKh+aN
-         2FCg==
-X-Forwarded-Encrypted: i=1; AJvYcCWGl3bmMu2ynhNw7zPaLrx54IDe3V4fVJhMw17e8pNxhJWvNvka1/pq27ItcyYJ57opgGdyMR2/eA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YydvzOjlptwj09Na1L76AValRMLuWAf0NYQL+9qYkvcrvqRatZz
-	KLLL1Dg9/7DgkzvVqZ99/5D1yrEQHwXr/EArVlbwmpCPt8+8QodlBGwLs3P4+Gg=
-X-Gm-Gg: ASbGncuhpl28kBs1UyLe5fXiWiW8gGLiHXXst5ea5Dc4B6UHzA5sMp8oDi1yLKNu1Ga
-	rpiIIM6jckROs+bb88teHEtMrgl/YsiiVcWgR9ZTfdWNap+Wr20KNLGWbU9SPn0+7OwLFjFRmlD
-	g8HTF3h0sUC1O5pUZkNfUvRGYA/3gH0gLlLDaN5bi2Jue7UJoK/AguGoL99WHFbIr8Q3TLF96NC
-	206OiQ1U9ROFOTnJUz3eL3DzJo9P/hvUWPror8UahmdYhFrzxHVFFvpr1r1rOD/SHNTxoEE3RFU
-	3TMyIL1aYuUiXb5V/DgfexHDVPNivRhoHWvbcwZJR0IQMg==
-X-Google-Smtp-Source: AGHT+IG7ucfZiFRoh0M2V5ggHMX64UITYEnNDz5nQP04P/WihSFxf9WsMLMFop+iaLC/4c9SxWUzIQ==
-X-Received: by 2002:a17:902:ec82:b0:21f:6fb9:9299 with SMTP id d9443c01a7336-22780d8bfe0mr197243365ad.27.1742795020544;
-        Sun, 23 Mar 2025 22:43:40 -0700 (PDT)
+        bh=/R5x+1WOSlr2ATn0vFw3CXpQGRrxOjJ4eIn39P6K6yc=;
+        b=u+PNyUGWnhB8CH51Oo6lMWZ3DUPtMUzIzDk9I+2HYgsaOW9jRxS+vf7MsQPEfMhaSa
+         AaFDcAR8WxllcErDxQdxV7/noO4CJtgS/rAJasgc7zDd0MV4XXrMxnQ+R4jYtFF9XW8Y
+         X0k1+O7HvGfcTNVrrvr39/0UdBba2YLOR/HwvsK9J76zcAO0TuuPYlBELW3LMksCYj+4
+         hfJbtCFnE6oLxYrd/PbyU9YW0p3iS2vHe6exBDCcl069rJ7pt9NY0TXbl3CCXwMQ4+tl
+         en7D8AxURQBn6FdLd+ao+aTDbMKRO07v/yvrpdMR/jdTtCp4dn0srD5L2iaKLQFFsW2v
+         gfGg==
+X-Forwarded-Encrypted: i=1; AJvYcCVePWDxKT9p76NEqQNPsSA6YoJQLCDnA7PBCQOph7BX0Aqw0kdTS+oYK+PRBSsz/P60iv26ogszTQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzr3FU6HzxYe+W8XSj9NYJTD2AA9Qpzklzg0VIo4ZRAh1HZs8vh
+	emAx8hJaBqX8sDp5dFT9md5B1HV7rZGG6r9cedngg0IYTGggBPjCKhK2gtSxGwU=
+X-Gm-Gg: ASbGncsP250Rh0jQBczxA9uVQUj2mYqOaFN8ul26bF2C5Y/dlpKVMGw34Ajr+A1H/zm
+	SnB+gPySH0kuJYZ1+LT/mlpmPbeRhTTQNA8a0S62tioUlsk1ph2YkNLNOoiqSkSy/FztIJmA3rS
+	gQ/JEve0OCGUXXK5qemS8A8xfGzAFpVIZndupbQiePTJtkVIAVBLYuVM8qzm2ONawv+4tcoh+4B
+	LlaGQCN35urW2Oi4A4WULHJAjXnGpUXbTk0z+rjmhTYQU8XlXe0mxiD9GvZN47ry3Zy1p66eFWl
+	9eNv2m/UJrdHDWAvly61usOzk+2B0doMstIA9dmcxW4ILQ==
+X-Google-Smtp-Source: AGHT+IEjzOfTYFKH7m9L7KhblERHs6U5SD2x2kJlkL36nq/EuBvZ3tJQu+dClNO0tHh2wUcONaNzMw==
+X-Received: by 2002:a05:6a00:b4e:b0:736:34a2:8a20 with SMTP id d2e1a72fcca58-73905a2300cmr18173268b3a.21.1742795296466;
+        Sun, 23 Mar 2025 22:48:16 -0700 (PDT)
 Received: from localhost ([122.172.83.32])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22780f3a846sm61958045ad.51.2025.03.23.22.43.39
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73906158ef2sm7170982b3a.141.2025.03.23.22.48.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Mar 2025 22:43:39 -0700 (PDT)
-Date: Mon, 24 Mar 2025 11:13:33 +0530
+        Sun, 23 Mar 2025 22:48:15 -0700 (PDT)
+Date: Mon, 24 Mar 2025 11:18:05 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Chun-Jen Tseng =?utf-8?B?KOabvuS/iuS7gSk=?= <Chun-Jen.Tseng@mediatek.com>
-Cc: "cw00.choi@samsung.com" <cw00.choi@samsung.com>,
-	"rafael@kernel.org" <rafael@kernel.org>,
-	Project_Global_Chrome_Upstream_Group <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	"myungjoo.ham@samsung.com" <myungjoo.ham@samsung.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"kyungmin.park@samsung.com" <kyungmin.park@samsung.com>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH v3 1/3] cpufreq: mediatek: using global lock avoid race
- condition
-Message-ID: <20250324054333.sgwwksawnybx3lp4@vireshk-i7>
-References: <20250214074353.1169864-1-chun-jen.tseng@mediatek.com>
- <20250214074353.1169864-2-chun-jen.tseng@mediatek.com>
- <20250219054209.erwfp7sgzchaiuds@vireshk-i7>
- <e8337c5eee0cadb797bacf26b00f1ca303c5147f.camel@mediatek.com>
- <20250321045624.mwm2mnkqeow5uids@vireshk-i7>
- <2a73b5ca35692c8ffa68c9ff0df73e24a592967d.camel@mediatek.com>
- <20250321060148.adhxjexpnm4dkpnt@vireshk-i7>
- <e1c2c12bace22d1803d16ecbfb32129518d87157.camel@mediatek.com>
+To: Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>
+Cc: Yangtao Li <tiny.windzz@gmail.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
+	Andre Przywara <andre.przywara@arm.com>,
+	Brandon Cheo Fusi <fusibrandon13@gmail.com>,
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: sun50i: prevent out-of-bounds access
+Message-ID: <20250324054805.3x3nwl4vtvf63rwj@vireshk-i7>
+References: <20250320155557.211211-1-andre.przywara@arm.com>
+ <2772067.mvXUDI8C0e@jernej-laptop>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -106,48 +95,36 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e1c2c12bace22d1803d16ecbfb32129518d87157.camel@mediatek.com>
+In-Reply-To: <2772067.mvXUDI8C0e@jernej-laptop>
 
-Hi,
-
-Thanks for sharing the details this time, it makes it much clearer
-now.
-
-On 24-03-25, 03:21, Chun-Jen Tseng (曾俊仁) wrote:
-> I think the best configuration sequence is as follows:
->   cpufreq policy -> set frequency -> CCI governor get
-> CPUFREQ_POSTCHANGE NB -> choose CCI frequency -> set CCI frequency
+On 22-03-25, 08:38, Jernej Škrabec wrote:
+> Dne četrtek, 20. marec 2025 ob 16:55:57 Srednjeevropski standardni čas je Andre Przywara napisal(a):
+> > A KASAN enabled kernel reports an out-of-bounds access when handling the
+> > nvmem cell in the sun50i cpufreq driver:
+> > ==================================================================
+> > BUG: KASAN: slab-out-of-bounds in sun50i_cpufreq_nvmem_probe+0x180/0x3d4
+> > Read of size 4 at addr ffff000006bf31e0 by task kworker/u16:1/38
+> > 
+> > This is because the DT specifies the nvmem cell as covering only two
+> > bytes, but we use a u32 pointer to read the value. DTs for other SoCs
+> > indeed specify 4 bytes, so we cannot just shorten the variable to a u16.
+> > 
+> > Fortunately nvmem_cell_read() allows to return the length of the nvmem
+> > cell, in bytes, so we can use that information to only access the valid
+> > portion of the data.
+> > To cover multiple cell sizes, use memcpy() to copy the information into a
+> > zeroed u32 buffer, then also make sure we always read the data in little
+> > endian fashion, as this is how the data is stored in the SID efuses.
+> > 
+> > Fixes: 6cc4bcceff9a ("cpufreq: sun50i: Refactor speed bin decoding")
+> > Reported-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 > 
-> However, in drivers/devfreq/governor_passive.c#L77,
-> get_target_freq_with_cpufreq() retrieves the current frequency of each
-> policy,
-> and it determines the CCI frequency based on the frequency of each
-> policy.
+> Thanks for fixing that!
 > 
-> But if policy-0 and policy-6 enter simultaneously, the CCI governor
-> might get an incorrect frequency.
+> Reviewed-by: Jernej Škrabec <jernej.skrabec@gmail.com>
 
-Yes it may fetch the current frequency (or last known one), but that
-shouldn't be a problem as the postchange notification for policy-6
-should get called right after and should fix the issue. Right ?
-
-I don't think this is a race and if this requires fixing. clk_get()
-for any device, will always return the last configured value, while
-the clock might be changing at the same time.
-
-What's important is that you don't get an incorrect frequency (as in
-based on intermediate values of registers, etc). Note that the last
-configured frequency isn't an incorrect frequency.
-
-> cpufreq policy-0 -> set frequency -> CCI governor get
-> CPUFREQ_POSTCHANGE NB -> choose CCI frequency -> set CCI frequency
-> => during this time, the CCI governor gets policy-0 and policy-6, BUT
-> policy-6 may change frequency by cpufreq driver at the same time.
-
-Sure, and I don't see a problem with that. The issue is there only if
-we can reach a state where CCI is left configured in the wrong state.
-Which I don't think would happen here as the postchange notifier will
-get called again, forcing a switch of frequency again.
+Applied. Thanks.
 
 -- 
 viresh
