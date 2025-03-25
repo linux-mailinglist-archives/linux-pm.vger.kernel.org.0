@@ -1,176 +1,207 @@
-Return-Path: <linux-pm+bounces-24485-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24486-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F791A6E560
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Mar 2025 22:16:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECFE5A6E7F9
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Mar 2025 02:32:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 509EF3BC847
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Mar 2025 21:11:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A26816A6F7
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Mar 2025 01:32:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73BDA1EFFA7;
-	Mon, 24 Mar 2025 21:07:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AE6145979;
+	Tue, 25 Mar 2025 01:31:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fromorbit-com.20230601.gappssmtp.com header.i=@fromorbit-com.20230601.gappssmtp.com header.b="mkoFiDWX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eGE+m4Ng"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D15281EFFA0
-	for <linux-pm@vger.kernel.org>; Mon, 24 Mar 2025 21:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3D65BA53;
+	Tue, 25 Mar 2025 01:31:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742850477; cv=none; b=htySiMXLj72hcKZPiL6peATdt2kXBbhK+ik6Sl02/7wb8vKPm+8Rjp/yiacELi8TBgiB6+tiw+qGrGE1BjDlFdQSumPwzGrXv5QwV+8f3CxFnjYkmtEtmMs98LGptAT8i7Q8F1sk8RIhfW2DBXEZK5SxdhoZP0N4ND6yqiTvH0Y=
+	t=1742866315; cv=none; b=ZLyXcaN7Jy+kg41L5gRGsLm53L+rGaoFt1pTRmJoc17udL2R6SwTjTVFWzC1/DnzQBv4nSLYr45+NdW80rDdklneTzboxJwL8OynDiG3daF9mJ2pJBUQpFA9L+shbdBe10JxsxxbmvZvumMdqkft3hxJzvl/JJiCTFLedfwckPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742850477; c=relaxed/simple;
-	bh=4+jaryzPcQ12ZvI9RQnmYqDwxiUM2Ss9JeZ9IjK2aEs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i4AgL9vdrlGWbxAjeG7OQrQUjW2Z7vPPD83oFo+rZlxegmeuesnIVmGB/GjkLcbSUnHWgr0ro2TzDlLw/BnQ4ZBcZRCyms7xSxkk/KVUlr484/nTRwJ//h68xWv8mif5B4GD/LraPcXkPRUYR3X/ad1+E0OyIqNsEoLnDs0GNro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fromorbit.com; spf=pass smtp.mailfrom=fromorbit.com; dkim=pass (2048-bit key) header.d=fromorbit-com.20230601.gappssmtp.com header.i=@fromorbit-com.20230601.gappssmtp.com header.b=mkoFiDWX; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fromorbit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fromorbit.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-223fb0f619dso98392345ad.1
-        for <linux-pm@vger.kernel.org>; Mon, 24 Mar 2025 14:07:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20230601.gappssmtp.com; s=20230601; t=1742850475; x=1743455275; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=aVl4lakBwoWZF41jXp3J5+FdS/l6n2CEhMSYPi2Gqro=;
-        b=mkoFiDWXKBWGyFclRoHJYhSsnsJIJNaa2tMIrG8W94DZAjj5Bz5MaK+m87AaMFaVtS
-         z0UCQD6FHqAe4DgpyhEuzzzKmiu2EGsesZ+z6+/+CEDSgaBF/bK8hMk7/pH3ncmgMWJS
-         6nBbaPnggH0Ni5Pludi++qHFpxFNRhh5S8tAP66BT6Y2taS9O38Hh4TyW6fpt12/+edi
-         Wp5HxX4g83oLGPjTDqlq6THMpUfeUZmNKwRexVI9H/Mzp6lZJ1lPVZHmzO/Ye+Roedoo
-         fuHgRo3CS/xxNd4tj9pp7/pgCQU15Sy0JtiarQsISe3J8kuwaVP1a8BYVuVt7bvChElT
-         s0zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742850475; x=1743455275;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aVl4lakBwoWZF41jXp3J5+FdS/l6n2CEhMSYPi2Gqro=;
-        b=vAD5rgjayRbLY1faA0X587FPJOAzlnQHOd9Vqc7EArPr59IHPb2dIi/2GZXkq7sLNh
-         BEEbijeoQoFTtbiWBQFGOcoa+opgSC+/esclvLBTB/geArX3CyuJj8V3qyzbOpKD8nNh
-         E6UoUVh4jeJjmQeiQvhK4WboGFv4z5t3N48FHSEvJxLoAGtrFADPmTY3fA/sU+1neLKm
-         1+uJU55Mb/3KhZ58T/8tnSyYgtIchQqAO+MAhFOfRK2QfUwFBokYiPacHvlHrIIX+k/n
-         F0at+yKWtugi4eNoX6Tf+Dk553sNUqc9hEOMIc63f1xWFvFN70j7IyoMFzQVFXxeg2sD
-         GC+g==
-X-Forwarded-Encrypted: i=1; AJvYcCVs3ySjyfGrcqsyBlveL3esgE9WNmxzyomCoEXhl4IrqDAw7i3RETTpS+CBQjiissVZ3Ka0k6ptZA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzA6DeDqbE+d5OphTnYzj5CYL/DSAu4dgwIXR/TKbCVSQShEC1h
-	g8WnLq38b7fF18e8IiHVkj59ivojWsbonjrwtPTlT1zTQNxwVibw6WQCxpLfwrI=
-X-Gm-Gg: ASbGncuykds7urdp78bQ88xM4YgPgHy32h0+wV86SOdbsWf4JiysIDxr3Uy0I+E11nX
-	U6najErxTnOj12sT8d+ReIhLVSYf5F4eKry+4Xfan1SUBnYQvuC3FneM1YXcycz7iJxXMjlgxPe
-	kbTJbnnuRC7ATdB0X3V43ebjRw/nm4z6p3z+F9XerxkEW0xNzskbFdeMwgb5qSf9pQQY2Z5uC+/
-	+zASrHoQ7Z9sMYSNHUpCBR6PFqdxLqYObIV3c8o/ofJo45Jv55HGXmfp4YokFbEqXWwql9cXtJL
-	Dr1OnXrOUn9HrwCIpdr2L7bTvFF0mOLh5p07Xtm0eFFR6krgOSbG0t4btTVwYHfiF3/+SbpnXvh
-	LpJqIfiAemzFIDaB7WfDR
-X-Google-Smtp-Source: AGHT+IGBlddCZHNeQdFhYj/bvEzKbB+kc3uyNwp3f7ivS7rNy9g1PBas8hv90pYnHQsQK8CZ9ipArQ==
-X-Received: by 2002:a05:6a20:430c:b0:1f5:9961:c44 with SMTP id adf61e73a8af0-1fe42f09264mr25955542637.3.1742850474958;
-        Mon, 24 Mar 2025 14:07:54 -0700 (PDT)
-Received: from dread.disaster.area (pa49-186-36-239.pa.vic.optusnet.com.au. [49.186.36.239])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7390611c8afsm8508538b3a.111.2025.03.24.14.07.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Mar 2025 14:07:54 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.98)
-	(envelope-from <david@fromorbit.com>)
-	id 1twp1U-0000000HQmN-0PkU;
-	Tue, 25 Mar 2025 08:07:52 +1100
-Date: Tue, 25 Mar 2025 08:07:52 +1100
-From: Dave Chinner <david@fromorbit.com>
-To: James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc: Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@infradead.org>,
-	linux-fsdevel@vger.kernel.org, lsf-pc@lists.linux-foundation.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>,
-	linux-pm@vger.kernel.org
-Subject: Re: [Lsf-pc] [LSF/MM/BPF TOPIC] Filesystem Suspend Resume
-Message-ID: <Z-HJqLI7Bi4iHWKU@dread.disaster.area>
-References: <0a76e074ef262ca857c61175dd3d0dc06b67ec42.camel@HansenPartnership.com>
- <Z9xG2l8lm7ha3Pf2@infradead.org>
- <acae7a99f8acb0ebf408bb6fc82ab53fb687559c.camel@HansenPartnership.com>
- <Z9z32X7k_eVLrYjR@infradead.org>
- <576418420308d2511a4c155cc57cf0b1420c273b.camel@HansenPartnership.com>
- <62bfd49bc06a58e435431610256e722651e1e5ca.camel@HansenPartnership.com>
- <vnb6flqo3hhijz4kb3yio5rxzaugvaxharocvtf4j4s5o5xynm@nbccfx5xqvnk>
- <Z-HFjTGaOnOjnhLP@dread.disaster.area>
- <7f3eddf89f8fd128ffeb643bc582e45a7d13c216.camel@HansenPartnership.com>
+	s=arc-20240116; t=1742866315; c=relaxed/simple;
+	bh=m9o5uIA7KuvW5DNvB+jxx0/ZMRcYVE9NeLZeHBADx4w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qhKhyba3xLqnqhSODyXfSqX+Mdtx1RZUKftDoETuW/E7HwZSXgDpV+ZaKz0EyVTE7ReAjs25ELrNdKM3miWkwfZQVe1vPNqgC7sGLrbfARPTPPd1IRJ7YYMCMSPYKvZ8k0Fe5Qdl69m+Xkb29khY9qz+SMvCSLUjC9k0gJtNloY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eGE+m4Ng; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A3BCC4CEDD;
+	Tue, 25 Mar 2025 01:31:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742866314;
+	bh=m9o5uIA7KuvW5DNvB+jxx0/ZMRcYVE9NeLZeHBADx4w=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=eGE+m4NgZPGMDWStEwsLiyyEvTPRksiuvO8cI2s7h9i6xhGwEkbtwp1KrLu512EKm
+	 dXNtymhU24dfYDw4da8e+7mgFgvKSadupLJ+pl0Z052Zzv/QkJPKU9mBF3SrI3I7GE
+	 Wsx9Ze1fyB7KaxRKRxmnlXX3oKWtK1joWdk0Srnez+mVUVi7r6syYtfQwNTQJBh6Nm
+	 GvVtjnNBZzegczV3EQgY2Pgb2Of8Vleb3/Ny2P2c27Mm0BfaQ4GwefmtJRUr6KVa9b
+	 Bo5YGcx8ITSxVh+r6xYY2NfoAuKwsjnpAwLpenpjUK1AGit3CLIAvT6SSQL7/o/GoZ
+	 uwtW/TytbAYJA==
+Message-ID: <3dec3def-df4b-49ac-8102-01118b793798@kernel.org>
+Date: Mon, 24 Mar 2025 20:31:51 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7f3eddf89f8fd128ffeb643bc582e45a7d13c216.camel@HansenPartnership.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/5] cpufreq/amd-pstate: Add dynamic energy performance
+ preference
+To: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
+ "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+ Perry Yuan <perry.yuan@amd.com>
+Cc: "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
+ <linux-kernel@vger.kernel.org>,
+ "open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+ Mario Limonciello <mario.limonciello@amd.com>
+References: <20250321022858.1538173-1-superm1@kernel.org>
+ <20250321022858.1538173-2-superm1@kernel.org>
+ <186c3fa4-fe85-4989-9edd-fdb6345859a9@amd.com>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <186c3fa4-fe85-4989-9edd-fdb6345859a9@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 24, 2025 at 05:02:54PM -0400, James Bottomley wrote:
-> On Tue, 2025-03-25 at 07:50 +1100, Dave Chinner wrote:
-> > On Mon, Mar 24, 2025 at 12:38:20PM +0100, Jan Kara wrote:
-> > > On Fri 21-03-25 13:00:24, James Bottomley via Lsf-pc wrote:
-> > > > On Fri, 2025-03-21 at 08:34 -0400, James Bottomley wrote:
-> > > > [...]
-> > > > > Let me digest all that and see if we have more hope this time
-> > > > > around.
-> > > > 
-> > > > OK, I think I've gone over it all.  The biggest problem with
-> > > > resurrecting the patch was bugs in ext3, which isn't a problem
-> > > > now.  Most of the suspend system has been rearchitected to
-> > > > separate suspending user space processes from kernel ones.  The
-> > > > sync it currently does occurs before even user processes are
-> > > > frozen.  I think (as most of the original proposals did) that we
-> > > > just do freeze all supers (using the reverse list) after user
-> > > > processes are frozen but just before kernel threads are (this
-> > > > shouldn't perturb the image allocation in hibernate, which was
-> > > > another source of bugs in xfs).
-> > > 
-> > > So as far as my memory serves the fundamental problem with this
-> > > approach was FUSE - once userspace is frozen, you cannot write to
-> > > FUSE filesystems so filesystem freezing of FUSE would block if
-> > > userspace is already suspended. You may even have a setup like:
-> > > 
-> > > bdev <- fs <- FUSE filesystem <- loopback file <- loop device <-
-> > > another fs
-> > > 
-> > > So you really have to be careful to freeze this stack without
-> > > causing deadlocks. So you need to be freezing userspace after
-> > > filesystems are frozen but then you have to deal with the fact that
-> > > parts of your userspace will be blocked in the kernel (trying to do
-> > > some write) waiting for the filesystem to thaw. But it might be
-> > > tractable these days since I have a vague recollection that system
-> > > suspend is now able to gracefully handle even tasks in
-> > > uninterruptible sleep.
-> > 
-> > I thought we largely solved this problem with userspace flusher
-> > threads being able to call prctl(PR_IO_FLUSHER) to tell the kernel
-> > they are part of the IO stack and so need to be considered
-> > special from the POV of memory allocation and write (dirty page)
-> > throttling.
-> > 
-> > Maybe hibernate needs to be aware of these userspace flusher
-> > tasks and only suspend them after filesystems are frozen instead
-> > of when userspace is initially halted?
+On 3/24/2025 03:19, Dhananjay Ugwekar wrote:
+> On 3/21/2025 7:58 AM, Mario Limonciello wrote:
+>> From: Mario Limonciello <mario.limonciello@amd.com>
+>>
+>> Dynamic energy performance preference will change the EPP profile
+>> based on whether the machine is running on AC or DC power.
+>>
+>> A notification chain from the power supply core is used to adjust
+>> EPP values on plug in or plug out events.
+>>
+>> For non-server systems:
+>>      * the default EPP for AC mode is `performance`.
+>>      * the default EPP for DC mode is `balance_performance`.
+>>
+>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>> ---
+>> v3->v4:
+>>   * Handle Kconfig not being set
+>>   * Fix dynamic epp default on server
+>> v2-v3:
+>>   * Fix typo in Kconfig
+>> v1->v2:
+>>   * Change defaults to performance (AC) and balance_performance (DC)
+>>   * Default Kconfig to disabled for now
+>>   * Rebase on latest branch
+>> ---
+>>   Documentation/admin-guide/pm/amd-pstate.rst |  18 ++-
+>>   drivers/cpufreq/Kconfig.x86                 |  12 ++
+>>   drivers/cpufreq/amd-pstate.c                | 135 +++++++++++++++++++-
+>>   drivers/cpufreq/amd-pstate.h                |   5 +-
+>>   4 files changed, 161 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
+>> index 412423c54f258..2e076650dc77c 100644
+>> --- a/Documentation/admin-guide/pm/amd-pstate.rst
+>> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
+>> @@ -289,7 +289,7 @@ and user can change current preference according to energy or performance needs
+>>   Please get all support profiles list from
+>>   ``energy_performance_available_preferences`` attribute, all the profiles are
+>>   integer values defined between 0 to 255 when EPP feature is enabled by platform
+>> -firmware, if EPP feature is disabled, driver will ignore the written value
+>> +firmware, but if the dynamic EPP feature is enabled, driver will block writes.
+>>   This attribute is read-write.
+>>   
+>>   ``boost``
+>> @@ -311,6 +311,22 @@ boost or `1` to enable it, for the respective CPU using the sysfs path
+>>   Other performance and frequency values can be read back from
+>>   ``/sys/devices/system/cpu/cpuX/acpi_cppc/``, see :ref:`cppc_sysfs`.
+>>   
+>> +Dynamic energy performance profile
+>> +==================================
+>> +The amd-pstate driver supports dynamically selecting the energy performance
+>> +profile based on whether the machine is running on AC or DC power.
+>> +
+>> +Whether this behavior is enabled by default with the kernel config option
+>> +`CONFIG_X86_AMD_PSTATE_DYNAMIC_EPP`. This behavior can also be overridden
+>> +at runtime by the sysfs file ``/sys/devices/system/cpu/cpufreq/policyX/dynamic_epp``.
 > 
-> I can confirm it's not.  Its check for kernel thread is in
-> kernel/power/process.c:try_to_freeze_tasks().  It really only uses the
-> PF_KTHREAD flag in differentiating between user and kernel threads.
+> The file is actually located at "/sys/devices/system/cpu/amd_pstate/dynamic_epp"
 > 
-> But what I heard in the session was that we should freeze filesystems
-> before any tasks because that means tasks touching the frozen fs freeze
-> themselves.
+>> +
+>> +When set to enabled, the driver will select a different energy performance
+>> +profile when the machine is running on battery or AC power.
+>> +When set to disabled, the driver will not change the energy performance profile
+>> +based on the power source and will not react to user desired power state.
+>> +
+>> +Attempting to manually write to the ``energy_performance_preference`` sysfs
+>> +file will fail when ``dynamic_epp`` is enabled.
+>>   
+>>   ``amd-pstate`` vs ``acpi-cpufreq``
+>>   ======================================
+> [snip]
+>> @@ -1502,9 +1611,15 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
+>>   			return ret;
+>>   		WRITE_ONCE(cpudata->cppc_req_cached, value);
+>>   	}
+>> -	ret = amd_pstate_set_epp(policy, cpudata->epp_default);
+>> +
+>> +	if (dynamic_epp) {
+>> +		policy->policy = CPUFREQ_POLICY_PERFORMANCE;
+> 
+> So, we are allowing the dynamic EPP framework to modify the EPP value in performance
+> governor as well? Shouldn't we allow dynamic_epp only with powersave governor.
 
-But that's exactly the behaviour that leads to FUSE based deadlocks,
-is it not? i.e. freeze the backing fs, then try to freeze the FUSE
-filesystem and the freeze blocks forever trying to write to the
-frozen backing fs....
+You're right; I was trying to avoid issues in 
+amd_pstate_epp_set_policy() but I'll come up with a way to correct this.
 
-What am I missing here?
+> 
+>> +		ret = amd_pstate_set_dynamic_epp(policy);
+>> +	}
+>> +	else
+>> +		ret = amd_pstate_set_epp(policy, amd_pstate_get_balanced_epp(policy));
+>>   	if (ret)
+>> -		return ret;
+>> +		goto free_cpudata1;
+>>   
+>>   	current_pstate_driver->adjust_perf = NULL;
+>>   
+>> @@ -1521,6 +1636,8 @@ static void amd_pstate_epp_cpu_exit(struct cpufreq_policy *policy)
+>>   	struct amd_cpudata *cpudata = policy->driver_data;
+>>   
+>>   	if (cpudata) {
+>> +		if (cpudata->dynamic_epp)
+>> +			amd_pstate_clear_dynamic_epp(policy);
+>>   		kfree(cpudata);
+>>   		policy->driver_data = NULL;
+>>   	}
+>> @@ -1556,6 +1673,10 @@ static int amd_pstate_epp_set_policy(struct cpufreq_policy *policy)
+>>   	if (!policy->cpuinfo.max_freq)
+>>   		return -ENODEV;
+>>   
+>> +	/* policy can't be changed to powersave policy while dynamic epp is enabled */
+>> +	if (policy->policy == CPUFREQ_POLICY_POWERSAVE && cpudata->dynamic_epp)
+>> +		return -EBUSY;
+>> +
+>>   	cpudata->policy = policy->policy;
+>>   
+>>   	ret = amd_pstate_epp_update_limit(policy);
+>> diff --git a/drivers/cpufreq/amd-pstate.h b/drivers/cpufreq/amd-pstate.h
+>> index fbe1c08d3f061..6882876f895de 100644
+>> --- a/drivers/cpufreq/amd-pstate.h
+>> +++ b/drivers/cpufreq/amd-pstate.h
+>> @@ -104,7 +104,10 @@ struct amd_cpudata {
+>>   	/* EPP feature related attributes*/
+>>   	u32	policy;
+>>   	bool	suspended;
+>> -	u8	epp_default;
+>> +	u8	epp_default_ac;
+>> +	u8	epp_default_dc;
+>> +	bool	dynamic_epp;
+>> +	struct notifier_block power_nb;
+>>   };
+>>   
+>>   /*
+> 
 
--Dave
--- 
-Dave Chinner
-david@fromorbit.com
 
