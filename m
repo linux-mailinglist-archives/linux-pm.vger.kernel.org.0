@@ -1,221 +1,155 @@
-Return-Path: <linux-pm+bounces-24501-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24502-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 564E5A70D12
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Mar 2025 23:41:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B982FA70D7F
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 00:13:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18AC218950AC
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Mar 2025 22:40:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31CE4171A17
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Mar 2025 23:13:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FC0326A093;
-	Tue, 25 Mar 2025 22:40:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tagu8h6T"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C68C26A089;
+	Tue, 25 Mar 2025 23:13:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F07426A089;
-	Tue, 25 Mar 2025 22:40:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA5C61A76AE
+	for <linux-pm@vger.kernel.org>; Tue, 25 Mar 2025 23:13:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742942423; cv=none; b=jjHtfLzNooEjLPRFzz0L1c04cM+cDY6ufPKV+PFRFMJ0fzfGe0+iJclgfYC7OlV/B/NH4BNtf2yTp8A3Ec3qKqYedrEBq9HfoTaKUVfq5f1h9sD5tSskyWfWEb1IXirzC/PCyct3ruEzlFowi2gSnjwaH0RbaJp2iXke5Sdt2Hc=
+	t=1742944397; cv=none; b=qTze6p1Z8k7l7A85xuEia7fJlMMALFFAUiXKIAJdGv4dXLyM9Y/s8HIcqGfD1AClxNdt5w0nS/ViJwBySEQ/+T2+AvK3f3DT7TjJ5wz/JvhTUDztRowZXeBKCThGuOKUHS9U+kWNBSxRq6/q6HOTC7B5RYnG11mhxxUYA4VCaWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742942423; c=relaxed/simple;
-	bh=ZwFQGGHCzEWqYV+kgRF0C+r5YrECLUTwbbkpi6uTcMc=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=r5RurRvN8xO2/QuQ8EmQZ0aeslC5iYovJBBITTCRRYEILW6XrZkaPMkcm6M7EhJ8aPcFkYtCKmfaokx9hE/8pB3pSUAcba/dHi/ZXJSE9JhIMJGvOip4JJajzx9I0o1NBkD+jqwFXZXSBBgQW9npORupmIoiDXtClUzOqSx6zBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tagu8h6T; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F21ACC4CEE9;
-	Tue, 25 Mar 2025 22:40:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742942423;
-	bh=ZwFQGGHCzEWqYV+kgRF0C+r5YrECLUTwbbkpi6uTcMc=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=Tagu8h6TXiZN1htJwb26+AeAvfUUIMU8gmWGtEY/iwYylXhz+G87b+5dhgjh8WroX
-	 CfTLgxFBFP6Qh1bLYWFY4ve06ZMx1LmgkzkIZIGQThY+TqCzbnechN4mdOANlCJHSF
-	 ykUto/fDJJfxvIfNUCS0oEFd+jD/1fldGOa6afjKWYkgexr5fQYXNS79jWIomTWD70
-	 QgPdVS2CPKHPYz2jf2cUWDl4WmFj9C/JhxALphtFBie3E5NPthq52uhATKE/8hdgFk
-	 nkgb7epYm3ko2hB1VRn04IURtecg0ya+vK8Ey6nIds2t2nyc54pvIXhcVlLHmnN/SR
-	 mOcG7HWvJSA3w==
-Message-ID: <38d9650fc11a674c8b689d6bab937acf@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1742944397; c=relaxed/simple;
+	bh=6sWe4aERWUOwF2kMuXLU8LvEYbl0kzYPUBnM6PECUCQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ee+daY1keruq2fidkCvqINAQecbFVgph3/S5VKjD49PQAolFkF8hgNbSFOYYgFsTILBPOHW/mAQrK3PK3MqssXncSwWGEyE47b52bM/h6qHRf0WKX7u8GDFm9umEPZRpn6m/ZURk+WWWb/TTYEadoJozCVBHaajs3beLm1GL0rU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1txDSI-00064Z-Iw; Wed, 26 Mar 2025 00:13:10 +0100
+Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1txDSH-001eeV-2h;
+	Wed, 26 Mar 2025 00:13:10 +0100
+Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
+	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1txDSI-00EnBh-0e;
+	Wed, 26 Mar 2025 00:13:10 +0100
+From: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Date: Wed, 26 Mar 2025 00:13:02 +0100
+Subject: [PATCH] pmdomain: core: only disable unused domains after
+ genpd_power_off_unused has passed
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <e90a0c77-61a0-49db-86ba-bac253f8ec53@samsung.com>
-References: <20250303143629.400583-1-m.wilczynski@samsung.com> <CGME20250303143637eucas1p1a3abdea520ab88688de1263a5f07bba0@eucas1p1.samsung.com> <20250303143629.400583-5-m.wilczynski@samsung.com> <de50dd55e1285726e8d5ebae73877486.sboyd@kernel.org> <4c035603-4c11-4e71-8ef3-b857a81bf5ef@samsung.com> <aacd03a071dce7b340d7170eae59d662d58f23b1.camel@pengutronix.de> <e90a0c77-61a0-49db-86ba-bac253f8ec53@samsung.com>
-Subject: Re: [PATCH v1 4/4] clk: thead: Add GPU clock gate control with CLKGEN reset support
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org
-To: Michal Wilczynski <m.wilczynski@samsung.com>, Philipp Zabel <p.zabel@pengutronix.de>, alex@ghiti.fr, aou@eecs.berkeley.edu, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org, jszhang@kernel.org, krzk+dt@kernel.org, m.szyprowski@samsung.com, mturquette@baylibre.com, palmer@dabbelt.com, paul.walmsley@sifive.com, robh@kernel.org, wefu@redhat.com, Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 25 Mar 2025 15:40:20 -0700
-User-Agent: alot/0.12.dev8+g17a99a841c4b
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250326-pmdomain_core-v1-1-c35d342f934f@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIAH0442cC/x3MQQqAIBBA0avIrBNsIhddJSImHWsWqShEEN09a
+ fkW/z9QuQhXmNQDhS+pkmJD3ylwB8WdtfhmQIOjGdDqfPp0ksTVpcLab0gYcHOGLLQmFw5y/79
+ 5ed8P7uLmbl8AAAA=
+X-Change-ID: 20250326-pmdomain_core-db2a2f2bc0a6
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel@pengutronix.de, Michael Grzeschik <m.grzeschik@pengutronix.de>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2082;
+ i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
+ bh=6sWe4aERWUOwF2kMuXLU8LvEYbl0kzYPUBnM6PECUCQ=;
+ b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBn4ziFtimtaQcE1/vOM8ozsEGLCHzBIR84o84rl
+ ZNmG+HicNmJAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZ+M4hQAKCRC/aVhE+XH0
+ qxqoD/0fYbHVaTyk1VaoE1STd9h0jVBzj06s8McsPu+0U529mgqj8JSgI5tF2bJL5goyZY5iENy
+ WPauj95AWjTflGx/kqplVf3wLpd+Czf6u69EzTfD06eF4YfQw++L9CDBkCgQyX1fspBCkLsmP9e
+ MXKH2HxSyYZpsFbl5Btuuhx9a9fJ9egojS9sFIhD3uRm6S4HXbgZek8zea+kSPMoa2xWrkadbzc
+ 6WyJX8MHvgIH9uQGmqURS53M6Z6NMzjedDnTbI+YxnRERfw3YQlYhhUNIvoBj1RpY6oAGnmdrAF
+ GPCeLNNRZ52ryAWucE7SWYabFbsb0eos7Ftz9JS6EZh+OzhD3XCYUlVipoCQi+OQEoiBL2t6/OW
+ Nu25aOxyYF8nUK/MGPD6rn9k3SIOHgpVP+I+MKR103kD424kpG7R7aYB8+lIurm3IAdEbJYuDL8
+ 6rGkWKCj+hOXmGku3icNcVPyHulgCMYaIUkvZqJXeCJbnP8Q/4nXWU0sZ9QAapsnAjvYspB729n
+ uoUikdt4Qibd2O2DUIDpNUf2MeCoNKD6s0sGGsbJn4DCDNe+60qLHyzJsw77c6suLYj2NhgrmUa
+ 6isLiBgUjg8ZxZaldDBEj9r2p3CEydkrsz/uzCCRuf6o0vU0VfrIfam7jZyakk8Lj8PuxZCMkwv
+ 8rFb0OXnJZ8PFFA==
+X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
+ fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-Quoting Michal Wilczynski (2025-03-19 02:22:11)
->=20
->=20
-> On 3/13/25 10:25, Philipp Zabel wrote:
-> > On Do, 2025-03-06 at 17:43 +0100, Michal Wilczynski wrote:
-> >>
-> >> On 3/6/25 00:47, Stephen Boyd wrote:
-> >>> Quoting Michal Wilczynski (2025-03-03 06:36:29)
-> >>>> The T-HEAD TH1520 has three GPU clocks: core, cfg, and mem. The mem
-> >>>> clock gate is marked as "Reserved" in hardware, while core and cfg a=
-re
-> >>>> configurable. In order for these clock gates to work properly, the
-> >>>> CLKGEN reset must be managed in a specific sequence.
-> >>>>
-> >>>> Move the CLKGEN reset handling to the clock driver since it's
-> >>>> fundamentally a clock-related workaround [1]. This ensures that clk_=
-enabled
-> >>>> GPU clocks stay physically enabled without external interference from
-> >>>> the reset driver.  The reset is now deasserted only when both core a=
-nd
-> >>>> cfg clocks are enabled, and asserted when either of them is disabled.
-> >>>>
-> >>>> The mem clock is configured to use nop operations since it cannot be
-> >>>> controlled.
-> >>>>
-> >>>> Link: https://lore.kernel.org/all/945fb7e913a9c3dcb40697328b7e9842b7=
-5fea5c.camel@pengutronix.de [1]
-> >>>>
-> >>>> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
-> >>> [...]
-> >>>> diff --git a/drivers/clk/thead/clk-th1520-ap.c b/drivers/clk/thead/c=
-lk-th1520-ap.c
-> >>>> index ea96d007aecd..1dfcde867233 100644
-> >>>> --- a/drivers/clk/thead/clk-th1520-ap.c
-> >>>> +++ b/drivers/clk/thead/clk-th1520-ap.c
-> >>>> @@ -862,17 +863,70 @@ static CCU_GATE(CLK_SRAM1, sram1_clk, "sram1",=
- axi_aclk_pd, 0x20c, BIT(3), 0);
-> >>> [...]
-> >>>> =20
-> >>>>  static CCU_GATE_CLK_OPS(CLK_GPU_MEM, gpu_mem_clk, "gpu-mem-clk",
-> >>>>                         video_pll_clk_pd, 0x0, BIT(2), 0, clk_nop_op=
-s);
-> >>>> +static CCU_GATE_CLK_OPS(CLK_GPU_CORE, gpu_core_clk, "gpu-core-clk",
-> >>>> +                       video_pll_clk_pd, 0x0, BIT(3), 0, ccu_gate_g=
-pu_ops);
-> >>>> +static CCU_GATE_CLK_OPS(CLK_GPU_CFG_ACLK, gpu_cfg_aclk, "gpu-cfg-ac=
-lk",
-> >>>> +                       video_pll_clk_pd, 0x0, BIT(4), 0, ccu_gate_g=
-pu_ops);
-> >>>> +
-> >>>> +static void ccu_gpu_clk_disable(struct clk_hw *hw)
-> >>>> +{
-> >>>> +       struct ccu_gate *cg =3D hw_to_ccu_gate(hw);
-> >>>> +       unsigned long flags;
-> >>>> +
-> >>>> +       spin_lock_irqsave(&gpu_reset_lock, flags);
-> >>>> +
-> >>>> +       ccu_disable_helper(&cg->common, cg->enable);
-> >>>> +
-> >>>> +       if ((cg =3D=3D &gpu_core_clk &&
-> >>>> +            !clk_hw_is_enabled(&gpu_cfg_aclk.common.hw)) ||
-> >>>> +           (cg =3D=3D &gpu_cfg_aclk &&
-> >>>> +            !clk_hw_is_enabled(&gpu_core_clk.common.hw)))
-> >>>> +               reset_control_assert(gpu_reset);
-> >>>
-> >>> Why can't the clk consumer control the reset itself? Doing this here =
-is
-> >>> not ideal because we hold the clk lock when we try to grab the reset
-> >>> lock. These are all spinlocks that should be small in lines of code
-> >>> where the lock is held, but we're calling into an entire other framew=
-ork
-> >>> under a spinlock. If an (unrelated) reset driver tries to grab the clk
-> >>> lock it will deadlock.
-> >>
-> >> So in our case the clk consumer is the drm/imagination driver. Here is
-> >> the comment from the maintainer for my previous attempt to use a reset
-> >> driver to abstract the GPU init sequence [1]:
-> >>
-> >> "Do you know what this resets? From our side, the GPU only has a single
-> >> reset line (which I assume to be GPU_RESET)."
-> >>
-> >> "I don't love that this procedure appears in the platform reset driver.
-> >> I appreciate it may not be clear from the SoC TRM, but this is the
-> >> standard reset procedure for all IMG Rogue GPUs. The currently
-> >> supported TI SoC handles this in silicon, when power up/down requests
-> >> are sent so we never needed to encode it in the driver before.
-> >>
-> >> Strictly speaking, the 32 cycle delay is required between power and
-> >> clocks being enabled and the reset line being deasserted. If nothing
-> >> here touches power or clocks (which I don't think it should), the delay
-> >> could potentially be lifted to the GPU driver."=20
-> >>
-> >> From the drm/imagination maintainers point of view their hardware has
-> >> only one reset, the extra CLKGEN reset is SoC specific.
-> >=20
-> > If I am understanding correctly, the CLKGEN reset doesn't reset
-> > anything in the GPU itself, but holds the GPU clock generator block in
-> > reset, effectively disabling the three GPU clocks as a workaround for
-> > the always-ungated GPU_MEM clock.
-> >=20
-> >> Also the reset driver maintainer didn't like my way of abstracting two
-> >> resets ("GPU" and and SoC specific"CLKGEN") into one reset
-> >=20
-> > That is one part of it. The other is that (according to my
-> > understanding as laid out above), the combined GPU+CLKGEN reset would
-> > effectively disable all three GPU clocks for a while, after the GPU
-> > driver has already requested them to be enabled.
->=20
-> Thank you for your comments Philipp, it seems like we're on the same
-> page here. I was wondering whether there is anything I can do to move the
-> patches forward.
->=20
-> Stephen, if the current patch is a no go from your perspective could you
-> please advise whether there is a way to solve this in a clock that would
-> be acceptable to you.
+If the genpd_power_off_unsused late_initcall did not pass yet, skip any
+genpd_power_off call. During the boot phase possible domain consumers
+could show up, so it is not helpful to disable and enable the power
+domains during that time.
 
-It looks like the SoC glue makes the interactions between the clk and
-reset frameworks complicated because GPU clks don't work if a reset is
-asserted. You're trying to find a place to coordinate the clk and reset.
-Am I right?
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+---
+ drivers/pmdomain/core.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-I'd advise managing the clks and resets in a generic power domain that
-is attached to the GPU device. In that power domain, coordinate the clk
-and reset sequencing so that the reset is deasserted before the clks are
-enabled (or whatever the actual requirement is). If the GPU driver
-_must_ have a clk and reset pointer to use, implement one that either
-does nothing or flag to the GPU driver that the power domain is managing
-all this for it so it should just use runtime PM and system PM hooks to
-turn on the clks and take the GPU out of reset.
+diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+index 6c94137865c9b568666fb296e20e8669574a9576..493eee39e726abd62df8b8def047434871d15125 100644
+--- a/drivers/pmdomain/core.c
++++ b/drivers/pmdomain/core.c
+@@ -44,6 +44,8 @@ static DEFINE_IDA(genpd_ida);
+ static LIST_HEAD(gpd_list);
+ static DEFINE_MUTEX(gpd_list_lock);
+ 
++static bool genpd_power_off_unused_passed;
++
+ struct genpd_lock_ops {
+ 	void (*lock)(struct generic_pm_domain *genpd);
+ 	void (*lock_nested)(struct generic_pm_domain *genpd, int depth);
+@@ -1023,6 +1025,14 @@ static void genpd_power_off_work_fn(struct work_struct *work)
+ 
+ 	genpd = container_of(work, struct generic_pm_domain, power_off_work);
+ 
++	/*
++	 * If the genpd_power_off_unsused late_initcall did not pass yet
++	 * skip any genpd_power_off call since we are still in boot phase
++	 * where possible pw domain consumers could show up.
++	 */
++	if (!genpd_power_off_unused_passed)
++		return;
++
+ 	genpd_lock(genpd);
+ 	genpd_power_off(genpd, false, 0);
+ 	genpd_unlock(genpd);
+@@ -1249,6 +1259,8 @@ static int __init genpd_power_off_unused(void)
+ 		return 0;
+ 	}
+ 
++	genpd_power_off_unused_passed = true;
++
+ 	pr_info("genpd: Disabling unused power domains\n");
+ 	mutex_lock(&gpd_list_lock);
+ 
+@@ -3272,6 +3284,8 @@ EXPORT_SYMBOL_GPL(of_genpd_parse_idle_states);
+ 
+ static int __init genpd_bus_init(void)
+ {
++	genpd_power_off_unused_passed = false;
++
+ 	return bus_register(&genpd_bus_type);
+ }
+ core_initcall(genpd_bus_init);
 
-From what I can tell, the GPU driver maintainer doesn't want to think
-about the wrapper that likely got placed around the hardware block
-shipped by IMG. This wrapper is the SoC glue that needs to go into a
-generic power domain so that the different PM resources, reset, clk,
-etc. can be coordinated based on the GPU device's power state. It's
-either that, or go the dwc3 route and have SoC glue platform drivers
-that manage this stuff and create a child device to represent the hard
-macro shipped by the vendor like Synopsys/Imagination. Doing the parent
-device design isn't as flexible as PM domains because you can only have
-one parent device and the child device state can be ignored vs. many PM
-domains attached in a graph to a device that are more directly
-influenced by the device using runtime PM.
+---
+base-commit: b3c623b9a94f7f798715c87e7a75ceeecf15292f
+change-id: 20250326-pmdomain_core-db2a2f2bc0a6
 
-Maybe you'll be heartened to know this problem isn't unique and has
-existed for decades :) I don't know what state the graphics driver is in
-but they'll likely be interested in solving this problem in a way that
-doesn't "pollute" their driver with SoC specific details. It's all a
-question of where you put the code. The reset framework wants to focus
-on resets, the clk framework wants to focus on clks, and the graphics
-driver wants to focus on graphics. BTW, we went through a similar
-discussion with regulators and clks years ago and ended up handling that
-with OPPs and power domains.
+Best regards,
+-- 
+Michael Grzeschik <m.grzeschik@pengutronix.de>
 
-I believe a PM domain is the right place for this kind of stuff, and I
-actually presented on this topic at OSSEU[1], but I don't maintain that
-code. Ulf does.
-
-[1] https://osseu2024.sched.com/event/1ej38/the-case-for-an-soc-power-manag=
-ement-driver-stephen-boyd-google
 
