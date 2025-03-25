@@ -1,181 +1,168 @@
-Return-Path: <linux-pm+bounces-24487-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24488-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06405A6E7FF
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Mar 2025 02:34:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F907A6E872
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Mar 2025 04:00:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11C023B4DEE
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Mar 2025 01:34:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B97A57A25A6
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Mar 2025 02:59:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0566C14386D;
-	Tue, 25 Mar 2025 01:34:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6D43176AB5;
+	Tue, 25 Mar 2025 03:00:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HRWg8BfU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DkxmB9m5"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25C145979;
-	Tue, 25 Mar 2025 01:34:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B62D929408;
+	Tue, 25 Mar 2025 03:00:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742866459; cv=none; b=ni/yFDbG7NW/DgU2S4jMJ3+EYjPFp+109fAvp1s+pAHh3HgFPE9/DA68bfThpA9u4CYiLywOGo5NMkoxoxSE4/+63iRGMmuURLyXP7fVFSecpltEQmYwKchv3LjTuEKTcWD12LAbhusK2dlli0jeieKSXw8Sgiz6jNzp6P05G7Y=
+	t=1742871612; cv=none; b=a34ov0Thwede/CuxNqyzH89JT3ksfsIlWPleCne2F2HtvxuYGlqfZtSfF5Pn8YIaO+idnuocl1s7ngA/e7kU2KGPfXhvPYXlz89Mp7LbZ1ej6JHGKcm/7VEattD+nCaNOGIqpfU1tK/ORjRELEF1WvvAvvCvBEKP4/liYCAaWMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742866459; c=relaxed/simple;
-	bh=k6YTo4Zr5Qq8YQxTYAb1qPCJ6BxZ9R4fMywb4Roq9EY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bHnJCdl+8isDM0PQgv8GiMAyKjpB2BCEARBuKKHFqkW9/kmggPiYuCkuwT9VuI1upXF1ov4X9bWnKJL1/rBdvVgvHsMKwv6A7L/EVAA3tUi/+ySx8uILjwN9ZO9Ei0xJOPZz7mhA1fzorEqJNa6Vv1qe0Yypp0awT/VhrQTBB8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HRWg8BfU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A418FC4CEDD;
-	Tue, 25 Mar 2025 01:34:17 +0000 (UTC)
+	s=arc-20240116; t=1742871612; c=relaxed/simple;
+	bh=kdPMBibLH/yez18tp3tlaahIu5VsHTU259fGn/4jyQo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oJVlngQVp9TtJUkFsA79Om4H203Qgd9g0jN2ieQG9Pjjzo0PHcIov0xvovBYhpRhEsC9QBY/iswT01xVl38ThSCL53v5vEGjqfkiMAY0GqPtJVrXdAYhD0Ms7iQBMxCMHwPWfjvr4zbBgUPQHL1qtDJrwJ+EyrHS4wHr5/VbPTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DkxmB9m5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32EADC4CEDD;
+	Tue, 25 Mar 2025 03:00:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742866458;
-	bh=k6YTo4Zr5Qq8YQxTYAb1qPCJ6BxZ9R4fMywb4Roq9EY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=HRWg8BfUdlcAzZlz488smp25PEXzJ6S6mqALPHJaDq8OqS8BUKoRxTsoA+m0NkeYU
-	 XDj1+53wO5Hq6xgUf8hmoapDuw5HpGCyW/mnzguwG9fs0U69UE83du+hzcBTmhkiZ5
-	 AXdz9bQAr6Xi46D30fSyhR5jqzwYBO0KOGR5b/rozhKNSDtHTUKcQmDg5sOq+/jfdf
-	 44QELlfHbHTLwIVvLgJn/C5A3oHdCQhozRRYnQxcyRK6XvNWfrnpdjWcy2Cxxlv8ve
-	 E6EMa2lf16WlriWZzkrwhBcvgCgLPa+MPGf/DL6QqKcgXJvzNrbuiVsmsm63tRmH0k
-	 AQLO+qXLwS3nQ==
-Message-ID: <784b2e21-10fb-44d8-b874-b6bc2ee238c6@kernel.org>
-Date: Mon, 24 Mar 2025 20:34:16 -0500
+	s=k20201202; t=1742871612;
+	bh=kdPMBibLH/yez18tp3tlaahIu5VsHTU259fGn/4jyQo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=DkxmB9m513BCDmqfq6M8Mm5MX+1h0K8ISn8PTtOoIPerDR7um/wMv77YtmWfmz2nZ
+	 fjdYCty2HfSs7IQhWAE2XeRbRDhIfywHUOhIqQI25Gm8k3agUI41LnWtZ+k/+LtAm3
+	 OKhs4vvF938iEX8bNDOFs0TcFc9RxDiEmSKBuX+wz9zMbvM0dCbp0Gb4j3Q/qV9X5o
+	 qfZKM/HH5IA3HwuBa3Y+r6cYuIqGiYxFYnbpdR4Gd4/Q6w7tLIBZlCW30g0EL3ZgES
+	 +vLaPw0vMR8sjRiCc8CdjtdIOVMG5CDsrySX0WMgS6/XmHU2tTll/R8gnH+0Sxgops
+	 UqTnqvH8kX6Dw==
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5eb5ecf3217so9032138a12.3;
+        Mon, 24 Mar 2025 20:00:12 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUy9sZMEQ55VYyBZLxDQv/KqTS7Xpsit4B5cwOUJE2HxpTO/f+9u9PX8xc/KGgCekaMl/Eq/1IoC5Hs5UqL@vger.kernel.org, AJvYcCVwT6Mdp758LfbQjmJlTkg4M3JE8D1i7u16qWoXCZjm9NUU8/NhG8zhy2dbcv9/gbbY4vvvM86HWaQC@vger.kernel.org, AJvYcCXSALVGQOZvw4MiHI2vTqN9sufvDnYMmiqer7BMYV4zFuHOAKSk36GxACzoEv+DPoKLl+XcfqdYE4wcux4=@vger.kernel.org, AJvYcCXldsxGbKjjJ8FOPNg0uDm7vD06am/c5AzWDKm09PMDuEruiqkrPZLi3qFRG57fdEKvXhzYmgnHtD0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxV91zKGomy1X/ttxjO9C3Ct85fyf2oL4j2DaFDLYZdy0NY6QVw
+	tdA8lUEbVUXHW9Ubk6pomJwOGK8K9yPuagIQbHyXZT3/idAE0mu8yiPmrbJQ9uKIoVxAMwRo9uI
+	IA3lCy+AtBhz2YzH2SOAfbq+PAg==
+X-Google-Smtp-Source: AGHT+IE3QSDPASR1s+nvT5rVlKy95tLrHztKiVeza2RPpLc3nhGJkSRj8CDw6TvAGMN64kzNpUhRLGwyYJxd3/EHS/k=
+X-Received: by 2002:a17:907:2d92:b0:ac2:7cf9:71a0 with SMTP id
+ a640c23a62f3a-ac3f251fba6mr1525711466b.48.1742871610756; Mon, 24 Mar 2025
+ 20:00:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/5] cpufreq/amd-pstate: Add dynamic energy performance
- preference
-To: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
- "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
- Perry Yuan <perry.yuan@amd.com>
-Cc: "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
- <linux-kernel@vger.kernel.org>,
- "open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
- Mario Limonciello <mario.limonciello@amd.com>
-References: <20250321022858.1538173-1-superm1@kernel.org>
- <20250321022858.1538173-2-superm1@kernel.org>
- <4d224956-b4f9-4b0c-b5fb-70abe82e6ab5@amd.com>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <4d224956-b4f9-4b0c-b5fb-70abe82e6ab5@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250323071424.48779-1-clamor95@gmail.com> <20250323071424.48779-3-clamor95@gmail.com>
+ <20250324165257.GA458528-robh@kernel.org> <CAPVz0n3=-QL1_NGP31WX_4LQBt5-T47BbU_yn6td1zk9C2T=iA@mail.gmail.com>
+In-Reply-To: <CAPVz0n3=-QL1_NGP31WX_4LQBt5-T47BbU_yn6td1zk9C2T=iA@mail.gmail.com>
+From: Rob Herring <robh@kernel.org>
+Date: Mon, 24 Mar 2025 21:59:58 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLCW+zE2LfsVybuxn_xu1JwtLSXSbMNj-YYfVgtYhZcaQ@mail.gmail.com>
+X-Gm-Features: AQ5f1JpysCtkCUgcjLane3iayaPg4HSVsmHDOlKr6Lj27dEl2msQmnjpD8eCuPc
+Message-ID: <CAL_JsqLCW+zE2LfsVybuxn_xu1JwtLSXSbMNj-YYfVgtYhZcaQ@mail.gmail.com>
+Subject: Re: [PATCH v1 2/4] dt-bindings: mfd: Document Infineon/Cypress
+ CG7153AM MCU
+To: Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: Lee Jones <lee@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/24/2025 04:58, Dhananjay Ugwekar wrote:
-> On 3/21/2025 7:58 AM, Mario Limonciello wrote:
->> From: Mario Limonciello <mario.limonciello@amd.com>
->>
->> Dynamic energy performance preference will change the EPP profile
->> based on whether the machine is running on AC or DC power.
->>
->> A notification chain from the power supply core is used to adjust
->> EPP values on plug in or plug out events.
->>
->> For non-server systems:
->>      * the default EPP for AC mode is `performance`.
->>      * the default EPP for DC mode is `balance_performance`.
->>
->> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->> ---
->> v3->v4:
->>   * Handle Kconfig not being set
->>   * Fix dynamic epp default on server
->> v2-v3:
->>   * Fix typo in Kconfig
->> v1->v2:
->>   * Change defaults to performance (AC) and balance_performance (DC)
->>   * Default Kconfig to disabled for now
->>   * Rebase on latest branch
->> ---
->>   Documentation/admin-guide/pm/amd-pstate.rst |  18 ++-
->>   drivers/cpufreq/Kconfig.x86                 |  12 ++
->>   drivers/cpufreq/amd-pstate.c                | 135 +++++++++++++++++++-
->>   drivers/cpufreq/amd-pstate.h                |   5 +-
->>   4 files changed, 161 insertions(+), 9 deletions(-)
->>
-> [snip]
->> @@ -1050,6 +1056,73 @@ static void amd_pstate_cpu_exit(struct cpufreq_policy *policy)
->>   	kfree(cpudata);
->>   }
->>   
->> +static int amd_pstate_get_balanced_epp(struct cpufreq_policy *policy)
->> +{
->> +	struct amd_cpudata *cpudata = policy->driver_data;
->> +
->> +	if (power_supply_is_system_supplied())
->> +		return cpudata->epp_default_ac;
->> +	else
->> +		return cpudata->epp_default_dc;
->> +}
->> +
->> +static int amd_pstate_power_supply_notifier(struct notifier_block *nb,
->> +					    unsigned long event, void *data)
->> +{
->> +	struct amd_cpudata *cpudata = container_of(nb, struct amd_cpudata, power_nb);
->> +	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(cpudata->cpu);
-> 
-> For consistency, we should add "if (!policy)" check I think
-> 
->> +	u8 epp;
->> +	int ret;
->> +
->> +	if (event != PSY_EVENT_PROP_CHANGED)
->> +		return NOTIFY_OK;
->> +
->> +	epp = amd_pstate_get_balanced_epp(policy);
->> +
->> +	ret = amd_pstate_set_epp(policy, epp);
->> +	if (ret)
->> +		pr_warn("Failed to set CPU %d EPP %u: %d\n", cpudata->cpu, epp, ret);
->> +
->> +	return NOTIFY_OK;
->> +}
-> [snip]
->> @@ -1364,6 +1444,32 @@ static ssize_t prefcore_show(struct device *dev,
->>   	return sysfs_emit(buf, "%s\n", str_enabled_disabled(amd_pstate_prefcore));
->>   }
->>   
->> +static ssize_t dynamic_epp_show(struct device *dev,
->> +				struct device_attribute *attr, char *buf)
->> +{
->> +	return sysfs_emit(buf, "%s\n", str_enabled_disabled(dynamic_epp));
->> +}
->> +
->> +static ssize_t dynamic_epp_store(struct device *a, struct device_attribute *b,
->> +				 const char *buf, size_t count)
->> +{
->> +	bool enabled;
->> +	int ret;
->> +
->> +	ret = kstrtobool(buf, &enabled);
->> +	if (ret)
->> +		return ret;
->> +
->> +	if (dynamic_epp == enabled)
->> +		return -EINVAL;
->> +
->> +	/* reinitialize with desired dynamic EPP value */
->> +	dynamic_epp = enabled;
->> +	ret = amd_pstate_change_driver_mode(cppc_state);
-> 
-> I think implicitly changing the driver mode when we write to dynamic_epp file might lead to some confusions.
+On Mon, Mar 24, 2025 at 12:06=E2=80=AFPM Svyatoslav Ryhel <clamor95@gmail.c=
+om> wrote:
+>
+> =D0=BF=D0=BD, 24 =D0=B1=D0=B5=D1=80. 2025=E2=80=AF=D1=80. =D0=BE 18:52 Ro=
+b Herring <robh@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
+> >
+> > On Sun, Mar 23, 2025 at 09:14:22AM +0200, Svyatoslav Ryhel wrote:
+> > > Add binding for Cypress CG7153AM embedded controller. Pegatron implem=
+ented
+> > > a custom configuration of this MCU in their Chagall tablets, utilizin=
+g it
+> > > for battery monitoring.
+> > >
+> > > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> > > ---
+> > >  .../bindings/mfd/cypress,cg7153am.yaml        | 55 +++++++++++++++++=
+++
+> > >  1 file changed, 55 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/mfd/cypress,cg7=
+153am.yaml
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/mfd/cypress,cg7153am.y=
+aml b/Documentation/devicetree/bindings/mfd/cypress,cg7153am.yaml
+> > > new file mode 100644
+> > > index 000000000000..f8469b5e3816
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/mfd/cypress,cg7153am.yaml
+> > > @@ -0,0 +1,55 @@
+> > > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/mfd/cypress,cg7153am.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Infineon/Cypress Semicon CG7153AM Microcontroller
+> > > +
+> > > +maintainers:
+> > > +  - Svyatoslav Ryhel <clamor95@gmail.com>
+> > > +
+> > > +description:
+> > > +  The CG7153AM, an 8-bit programmable microcontroller from Infineon/=
+Cypress
+> > > +  Semiconductor, communicates over I2C and is implemented in devices=
+ like the
+> > > +  Pegatron Chagall tablet for fuel gauge and battery control functio=
+ns.
+> > > +
+> > > +$ref: /schemas/power/supply/power-supply.yaml
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    oneOf:
+> > > +      - items:
+> > > +          - enum:
+> > > +              - pegatron,chagall-ec # Pegatron Chagall tablet device
+> > > +          - const: cypress,cg7153am
+> > > +      - items:
+> > > +          const: cypress,cg7153am
+> >
+> > Is this just some general purpose uC which could be used for anything
+> > and the interface exposed is Pegatron's invention. If so, then I'd drop
+> > the cypress,cg7153am compatible. What use would it be to software?
+> >
+>
+> Yeah, Cypress made an MPU, Pegatron used it as a base to make a fuel gaug=
+e.
+>
+> You propose smth like this?
+>
+>       - items:
+>           - enum:
+>               - pegatron,chagall-ec # Pegatron Chagall tablet device
+>           - const: cypress,cg7153am
+>
+> Without oneOf and second item or remove cypress,cg7153am entirely and
+> submit as pegatron,chagall-ec.yaml? Just to be clear.
+>
+> I am fine with removing oneOf and items: const: cypress,cg7153am, but
+> I would like to preserve cypress,cg7153am as second compatible since
+> this is an actual MCU model.
 
-How about only allowing to write dynamic_epp attribute when in active 
-mode already?
+I would just drop the cypress compatible entirely. It needs to be
+useful to a client (OS) in some way. If you said something like the
+firmware downloading is defined by Cypress or some other feature, then
+it would make sense. Otherwise, how this interface is implemented is
+irrelevant. I can't think of any other embedded controller where we
+have a compatible for the underlying MCU.
 
-> 
->> +
->> +	return ret ? ret : count;
->> +}
->> +
->>   cpufreq_freq_attr_ro(amd_pstate_max_freq);
->>   cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
-
+Rob
 
