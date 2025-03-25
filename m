@@ -1,110 +1,149 @@
-Return-Path: <linux-pm+bounces-24496-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24497-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C557A709EF
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Mar 2025 20:06:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA666A70A8C
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Mar 2025 20:33:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED7803A9116
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Mar 2025 19:00:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4732217A60C
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Mar 2025 19:30:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDC3E1AE876;
-	Tue, 25 Mar 2025 19:00:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F26571DF98F;
+	Tue, 25 Mar 2025 19:30:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gv68XKRw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VfS0eGJe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1610E15E96;
-	Tue, 25 Mar 2025 19:00:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62A4719049A;
+	Tue, 25 Mar 2025 19:30:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742929244; cv=none; b=UoS/3DtahV6BJZC2VVuzgy60+2nA19gA4cfLMRwUeGAC3zkBiqsTM3XH+4Aha7mCj1KGvsHfFIdDSzJ5uFFeQ19UoN9NeAU25wHoZu/Fgp0VrzupQ898V/0l5YvnlzaZoWgDhpxiuzRJPARUAnZx3nqCbrmUk9v9VY1FVvoHsC0=
+	t=1742931043; cv=none; b=GWa3Q3ycOUcWSXNutsgeNQVoJT18rUPWY43pCTyhUV9Ydvsq54A2CC6bcMpHd5m1b3wYshsCo6DBMcqIe8syap1QBD8fcaQ9Kz95HgoeQFhDM0GiLFhr2Y6px3azp0QiHS7vNJ7BATZEwPU+BL+qAHJJBbXK/ldw26qUkl6Z4UM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742929244; c=relaxed/simple;
-	bh=ZpoJko3p4m03qrok6iCtBZzPC7kUT0DPMT6jgwjpz+M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ks5LW3vVQwCw3n938KdsIFYId1eqeRSMTX+E8cG0CysG79CX/ac8hEL1oPqR40zjB92due1vmy6EInEB5qYuddEPw8J9SWbxGf2Y7OOTeIf3Fwcm0Xh1uV6C8JHo+C83dMY8zwwO2ySJFzZ8YZpPsuj+O+H+9GqMf5c1ZNBgaW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gv68XKRw; arc=none smtp.client-ip=209.85.128.41
+	s=arc-20240116; t=1742931043; c=relaxed/simple;
+	bh=V8M1FIqocDVgTg/Qhn+pCa3avFJiRNIIhW1vxEi3fyk=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=U0M0+qlAbTPGyeK9SqvXgD9TQXRIZt6G7UPD9ZIKJxGv2PlaZFOjTLONtClVhREdOIgZcWyBF2C+hjQMacxW2qTwa1KpFJEghfbllufk76DAXeekqEXcM3J94XCbJnJJtUGuUmfAtpxGh7ILSRlNIJIpwtb9MpyGeXUwe6sifbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VfS0eGJe; arc=none smtp.client-ip=209.85.160.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4394a0c65fcso54157255e9.1;
-        Tue, 25 Mar 2025 12:00:42 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-2c6ed7ec0a5so1679056fac.1;
+        Tue, 25 Mar 2025 12:30:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742929241; x=1743534041; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZpoJko3p4m03qrok6iCtBZzPC7kUT0DPMT6jgwjpz+M=;
-        b=Gv68XKRwqop4pzkKc9JlRdw2HwgjCUxJ728IdtYxiSaWSufWez/xjOYXbhyAo2RBe6
-         oQ6tMm8pEfuhEf+ax1Jt7XH3ujtp5GGElDpyZdfdXMHHSPnUTTQF6TsNarDOpN98WXTg
-         3Mne9WpBulGgNDgiRkKdIhUd7E9dlW6dEYXMbo47mQFVzspYHn8a/R8/4+M7ZdTa5PWR
-         oWCRG4esW6kxtRFg5NxTIic2TSL1KqevjabugPH5NFMoEM0ba6Ov5yvi7DnCH6bll/qD
-         0H3jxv3wIoVw2bIHgEs1DthGHpqlqaTzvM4YQGX5BY47bkWHv8h/meUNE4GoyANDvoqL
-         OuAA==
+        d=gmail.com; s=20230601; t=1742931041; x=1743535841; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4W8NwGIv3g9q9bD90ERb4CwpLXg29q/gl0kZGMFw8mM=;
+        b=VfS0eGJeFTdeJrV9qZN3LifrY1/PuswrTGeRCXGF3+a+ua9Ls1A3y1vU5Mm8seF9Mn
+         kow7/dBf84SMK9L5iM1f8FT9QpOAwSz4i2KBb0x5Yyo2Xygs/zsmvkJeD2S9stIbOzH2
+         p7gOygpuW4WpAlk4V9VRS4rX0q5x+f3Aj3gt/RuNFgsG0VIC+KqCCsqJiRS1tidMMKWA
+         RC4hCA1NTUwYRt3fPmJRcFYBXEEUybYMyXMTCIx4zRDh/dxcCuTjpVzHkrPt/tGGYvwc
+         7AiuR7WAH8LOgKEQCFQ5FdtozuFK5l5nwEgZEdE9Fba7vRTZYJqB4tyMwghC5zrTcH3v
+         1hVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742929241; x=1743534041;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZpoJko3p4m03qrok6iCtBZzPC7kUT0DPMT6jgwjpz+M=;
-        b=bBPvM/fS+Xqacy5/Zvb76+WH//nfRisti/UWKFki/PT9GZh5CyAnXqqKK9ul2pQGTx
-         n7JODJwOeVptrKnZ5KdkXmXU0JsXBli2xJx9enncwt/VisCynd8d72om23ObF7PnPEvS
-         FPan5OTyiq0wGxDt4HFnMdzskO0bGFxkO/2bJ8vbNZNlC7/7BVldruRVN4pZf9JxUMQt
-         dd0t3ahHxtuusu5MMUXiKDXC+2u4bjv5VUNp+y+jxaW61fhtCo941UXUSi0xwdZKOKL/
-         Q6T69ya3gQZhBZepmCk/scIVOxYUwXuI9HhlS6oevZtgMQpYQY0msWvnjbFkQ0tKfkd+
-         ouPA==
-X-Forwarded-Encrypted: i=1; AJvYcCUOkVSC6OJP1ivCNAESf3dyoTleIlp46V0Lz2OIjjCRWMjCmdo/KPz/v75xiwxZjwPJJYCuHUvq+24=@vger.kernel.org, AJvYcCUzX/PBpbxXEgp3RKo5LO6qkXsRaZS54TT8oMgSA/G6tqZueVFvfdf6mv5ssb9Ntt41qYtmvRg379I=@vger.kernel.org, AJvYcCVV46X4hUPHiG/G4suGxIbgp2RZ995/PGCnjVl+FCHtwYDdG/SKfThM6wpoKDgm/9ymlDcunNxfpMNIIfo=@vger.kernel.org, AJvYcCXkTvagOqLh6s0PEryWSIm4bDfph7XKE0k3VylNt+1mnM7u0BhyTRqB/veyherNsvocttvWJSOravMd9+pt@vger.kernel.org
-X-Gm-Message-State: AOJu0YwD0mACV3RbNGziLreMlxAclIpvBBu3JWERAKQGOYtn14q5844e
-	G8KXpPxGocuOG7xRT4c0Ih9D/r++bt4z6r2HewU0A/+Rd8F0diaJG0d+niyHOpNPV5vBU8Tg08h
-	Sjfs2YuhOfQFR8TSKLkTTUXy4WGs=
-X-Gm-Gg: ASbGncsnVJqfs18Kc3D5W0t/eJoAxNZWznyxwzul/7d+TCiwn981Gsgob0sloT4FwCB
-	q60EYOjhtwIMd8PMTVI+R0RJOmhHuqlOqoOYtip3YDFmCqukAjjkwJ234j/004+NzW3AjDab/J8
-	puOC6mGqWsPhou0q+O6+pxTpRng5k=
-X-Google-Smtp-Source: AGHT+IEDc3tyF/hFbw4j068/Le/2Xa4I49R2ihKwn1SilHlKBN8C9u6EyQgv8p1bCiDJ+HvE0ISRQn0HPEZ6zk620RE=
-X-Received: by 2002:a5d:6d0a:0:b0:391:306f:57de with SMTP id
- ffacd0b85a97d-3997f9405c4mr17108463f8f.45.1742929241148; Tue, 25 Mar 2025
- 12:00:41 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1742931041; x=1743535841;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4W8NwGIv3g9q9bD90ERb4CwpLXg29q/gl0kZGMFw8mM=;
+        b=d90AEH/1+fXPNnG1dnrLydxWF3RIH3vWNIT84pYeA4GwDt1FiKazPZGJGe+Vxe5giQ
+         UfBQdvzYzjwPJCD6MqGSrnMCewzyay+dgJ06sqQkaIbqZ5YeK/q0Aq/t8iz0fk6YhWMB
+         UUv8xm4iv4hZGM1pkDJGfbJIu9xkDVrAtaUT0GssjxM9TM4fxwlN/3YNorpnvFuzxsQY
+         ob4pYC2t6ENeFA8w1CeN+AHv8TseWZhq3CGjNF4tzp0uUvxygiaVWy7MKvmLrja5f4/1
+         pqsrXYacfLoH/aoYDJUSc5ci3mPyp/+reBjDps38xroLMdJRjuLhV0PRwXxA5DDXLz0D
+         S52g==
+X-Forwarded-Encrypted: i=1; AJvYcCUD9Pqbj9j0tZzeD+UjAjpWsPArUPnQ2VMSacsp6I9ReiOwii/oC6gYZqWyg1DSBj6dBaJbEAHJ8O4=@vger.kernel.org, AJvYcCUe3IcUAbir6HpU2YHKZTn6DR7HqNv7dZqvEFuspVDVJgv8w4+YYmjZJbgCTf5E++EsuXtRj2wQVwMcvBg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5GF/9+9MpPSGzdJju1vhBUYrI/oXUpCQwHvpC4Ve7ZjVGWHss
+	iqkSdb3dKW4gUOWtEA7OslbmglsHYYKUiAp7VeEyW+4fy60MLOl7RZcCGgbb
+X-Gm-Gg: ASbGncvzbgp/DxzHxiUZUg35nkTwI5wWnhieri7w0g1+ECLeenc68YgyBytJuI4QEZu
+	XBwgQeVj4LDf97XYikPv99iPviJB2Vw0z5QYSmB2tGL8enpBobafyZd5dw7BSF42vHC+MI4EYKO
+	ATHo4C7DbuKpMdKmpiUsTlYWeVeQFvuTgWZq4wB0TKq++iPJJkc4VZnT7p2yJz3aP3N6DsYDylA
+	/JMrudJI4rCSnlC1UmJgWruTIPbGqu0zHZTARVbOFQJkf2IwHT5188SKs1M0uEyYApKQUzepadt
+	50lnnmNSbZtyDE+lwlzhXoiRh/S6fmXd6sAkooRJf+Bm0g==
+X-Google-Smtp-Source: AGHT+IEwsieHitnF5P9+HL5fGRcvkWJOdtlW3j2FjuRo8vp7AE4y1CEzqZ9QMeBYn1I8NAM+YMV68Q==
+X-Received: by 2002:a05:6871:8301:b0:29e:74a0:e03f with SMTP id 586e51a60fabf-2c7804c7e14mr11154768fac.24.1742931040920;
+        Tue, 25 Mar 2025 12:30:40 -0700 (PDT)
+Received: from debian ([200.92.175.161])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2c77f0f6825sm2644934fac.43.2025.03.25.12.30.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Mar 2025 12:30:40 -0700 (PDT)
+Date: Tue, 25 Mar 2025 13:30:44 -0600
+From: Enrique Isidoro Vazquez Ramos <kike.correo99.f@gmail.com>
+To: glaroque@baylibre.com, rafael@kernel.org, daniel.lezcano@linaro.org,
+	rui.zhang@intel.com, lukasz.luba@arm.com, linux-pm@vger.kernel.org,
+	linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] thermal: amlogic: Rename Uptat to uptat to follow kernel
+ coding style
+Message-ID: <Z-MEZNMLUmj75uxN@debian.debian>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250321095556.91425-1-clamor95@gmail.com> <20250321095556.91425-3-clamor95@gmail.com>
- <69024f13d296cf2127e7f4229d1e6ece@kernel.org>
-In-Reply-To: <69024f13d296cf2127e7f4229d1e6ece@kernel.org>
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Tue, 25 Mar 2025 21:00:30 +0200
-X-Gm-Features: AQ5f1JoHj-5VGdi3sDjJ-Kr3rNBl5Ntlplq3pMlWWE5QBTFl7BLAfEiK3RB3B3s
-Message-ID: <CAPVz0n2GYUjV_LojZKMzAGC5P8APC5G-A_ApinV=-_K5YoO0wA@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] drivers: clk: tegra: add DFLL support for Tegra 4
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: Jonathan Hunter <jonathanh@nvidia.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Peter De Schrijver <pdeschrijver@nvidia.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Prashant Gaikwad <pgaikwad@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-=D0=B2=D1=82, 25 =D0=B1=D0=B5=D1=80. 2025=E2=80=AF=D1=80. =D0=BE 20:56 Step=
-hen Boyd <sboyd@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
->
-> Quoting Svyatoslav Ryhel (2025-03-21 02:55:55)
-> > Extend the Tegra124 driver to include DFLL configuration settings requi=
-red
-> > for Tegra114 compatibility.
-> >
-> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> > ---
->
-> Drive by nitpick. The subject should drop "drivers: " because it's
-> implicit from "clk:".
+The variable Uptat uses CamelCase, which violates the kernel's coding
+style that mandates snake_case for variable names. This is a purely
+cosmetic change with no functional impact.
 
-If this is the only remark you have to this commit, I am happy to fix it ;)
+Compilation tested with:
+- checkpatch.pl --strict passed (no new warnings/errors).
+
+Signed-off-by: Enrique Isidoro Vazquez Ramos <kike.correo99.f@gmail.com>
+---
+ drivers/thermal/amlogic_thermal.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/thermal/amlogic_thermal.c b/drivers/thermal/amlogic_thermal.c
+index 3c5f7dbddf2c..5448d772db12 100644
+--- a/drivers/thermal/amlogic_thermal.c
++++ b/drivers/thermal/amlogic_thermal.c
+@@ -7,10 +7,10 @@
+  *
+  * Register value to celsius temperature formulas:
+  *	Read_Val	    m * U
+- * U = ---------, Uptat = ---------
++ * U = ---------, uptat = ---------
+  *	2^16		  1 + n * U
+  *
+- * Temperature = A * ( Uptat + u_efuse / 2^16 )- B
++ * Temperature = A * ( uptat + u_efuse / 2^16 )- B
+  *
+  *  A B m n : calibration parameters
+  *  u_efuse : fused calibration value, it's a signed 16 bits value
+@@ -112,7 +112,7 @@ static int amlogic_thermal_code_to_millicelsius(struct amlogic_thermal *pdata,
+ 	const struct amlogic_thermal_soc_calib_data *param =
+ 					pdata->data->calibration_parameters;
+ 	int temp;
+-	s64 factor, Uptat, uefuse;
++	s64 factor, uptat, uefuse;
+ 
+ 	uefuse = pdata->trim_info & TSENSOR_TRIM_SIGN_MASK ?
+ 			     ~(pdata->trim_info & TSENSOR_TRIM_TEMP_MASK) + 1 :
+@@ -121,12 +121,12 @@ static int amlogic_thermal_code_to_millicelsius(struct amlogic_thermal *pdata,
+ 	factor = param->n * temp_code;
+ 	factor = div_s64(factor, 100);
+ 
+-	Uptat = temp_code * param->m;
+-	Uptat = div_s64(Uptat, 100);
+-	Uptat = Uptat * BIT(16);
+-	Uptat = div_s64(Uptat, BIT(16) + factor);
++	uptat = temp_code * param->m;
++	uptat = div_s64(uptat, 100);
++	uptat = uptat * BIT(16);
++	uptat = div_s64(uptat, BIT(16) + factor);
+ 
+-	temp = (Uptat + uefuse) * param->A;
++	temp = (uptat + uefuse) * param->A;
+ 	temp = div_s64(temp, BIT(16));
+ 	temp = (temp - param->B) * 100;
+ 
+-- 
+2.39.5
+
 
