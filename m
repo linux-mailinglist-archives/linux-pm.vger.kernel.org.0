@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-24486-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24487-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECFE5A6E7F9
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Mar 2025 02:32:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06405A6E7FF
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Mar 2025 02:34:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A26816A6F7
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Mar 2025 01:32:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11C023B4DEE
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Mar 2025 01:34:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AE6145979;
-	Tue, 25 Mar 2025 01:31:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0566C14386D;
+	Tue, 25 Mar 2025 01:34:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eGE+m4Ng"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HRWg8BfU"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3D65BA53;
-	Tue, 25 Mar 2025 01:31:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25C145979;
+	Tue, 25 Mar 2025 01:34:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742866315; cv=none; b=ZLyXcaN7Jy+kg41L5gRGsLm53L+rGaoFt1pTRmJoc17udL2R6SwTjTVFWzC1/DnzQBv4nSLYr45+NdW80rDdklneTzboxJwL8OynDiG3daF9mJ2pJBUQpFA9L+shbdBe10JxsxxbmvZvumMdqkft3hxJzvl/JJiCTFLedfwckPA=
+	t=1742866459; cv=none; b=ni/yFDbG7NW/DgU2S4jMJ3+EYjPFp+109fAvp1s+pAHh3HgFPE9/DA68bfThpA9u4CYiLywOGo5NMkoxoxSE4/+63iRGMmuURLyXP7fVFSecpltEQmYwKchv3LjTuEKTcWD12LAbhusK2dlli0jeieKSXw8Sgiz6jNzp6P05G7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742866315; c=relaxed/simple;
-	bh=m9o5uIA7KuvW5DNvB+jxx0/ZMRcYVE9NeLZeHBADx4w=;
+	s=arc-20240116; t=1742866459; c=relaxed/simple;
+	bh=k6YTo4Zr5Qq8YQxTYAb1qPCJ6BxZ9R4fMywb4Roq9EY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qhKhyba3xLqnqhSODyXfSqX+Mdtx1RZUKftDoETuW/E7HwZSXgDpV+ZaKz0EyVTE7ReAjs25ELrNdKM3miWkwfZQVe1vPNqgC7sGLrbfARPTPPd1IRJ7YYMCMSPYKvZ8k0Fe5Qdl69m+Xkb29khY9qz+SMvCSLUjC9k0gJtNloY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eGE+m4Ng; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A3BCC4CEDD;
-	Tue, 25 Mar 2025 01:31:53 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=bHnJCdl+8isDM0PQgv8GiMAyKjpB2BCEARBuKKHFqkW9/kmggPiYuCkuwT9VuI1upXF1ov4X9bWnKJL1/rBdvVgvHsMKwv6A7L/EVAA3tUi/+ySx8uILjwN9ZO9Ei0xJOPZz7mhA1fzorEqJNa6Vv1qe0Yypp0awT/VhrQTBB8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HRWg8BfU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A418FC4CEDD;
+	Tue, 25 Mar 2025 01:34:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742866314;
-	bh=m9o5uIA7KuvW5DNvB+jxx0/ZMRcYVE9NeLZeHBADx4w=;
+	s=k20201202; t=1742866458;
+	bh=k6YTo4Zr5Qq8YQxTYAb1qPCJ6BxZ9R4fMywb4Roq9EY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=eGE+m4NgZPGMDWStEwsLiyyEvTPRksiuvO8cI2s7h9i6xhGwEkbtwp1KrLu512EKm
-	 dXNtymhU24dfYDw4da8e+7mgFgvKSadupLJ+pl0Z052Zzv/QkJPKU9mBF3SrI3I7GE
-	 Wsx9Ze1fyB7KaxRKRxmnlXX3oKWtK1joWdk0Srnez+mVUVi7r6syYtfQwNTQJBh6Nm
-	 GvVtjnNBZzegczV3EQgY2Pgb2Of8Vleb3/Ny2P2c27Mm0BfaQ4GwefmtJRUr6KVa9b
-	 Bo5YGcx8ITSxVh+r6xYY2NfoAuKwsjnpAwLpenpjUK1AGit3CLIAvT6SSQL7/o/GoZ
-	 uwtW/TytbAYJA==
-Message-ID: <3dec3def-df4b-49ac-8102-01118b793798@kernel.org>
-Date: Mon, 24 Mar 2025 20:31:51 -0500
+	b=HRWg8BfUdlcAzZlz488smp25PEXzJ6S6mqALPHJaDq8OqS8BUKoRxTsoA+m0NkeYU
+	 XDj1+53wO5Hq6xgUf8hmoapDuw5HpGCyW/mnzguwG9fs0U69UE83du+hzcBTmhkiZ5
+	 AXdz9bQAr6Xi46D30fSyhR5jqzwYBO0KOGR5b/rozhKNSDtHTUKcQmDg5sOq+/jfdf
+	 44QELlfHbHTLwIVvLgJn/C5A3oHdCQhozRRYnQxcyRK6XvNWfrnpdjWcy2Cxxlv8ve
+	 E6EMa2lf16WlriWZzkrwhBcvgCgLPa+MPGf/DL6QqKcgXJvzNrbuiVsmsm63tRmH0k
+	 AQLO+qXLwS3nQ==
+Message-ID: <784b2e21-10fb-44d8-b874-b6bc2ee238c6@kernel.org>
+Date: Mon, 24 Mar 2025 20:34:16 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -61,14 +61,14 @@ Cc: "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
  Mario Limonciello <mario.limonciello@amd.com>
 References: <20250321022858.1538173-1-superm1@kernel.org>
  <20250321022858.1538173-2-superm1@kernel.org>
- <186c3fa4-fe85-4989-9edd-fdb6345859a9@amd.com>
+ <4d224956-b4f9-4b0c-b5fb-70abe82e6ab5@amd.com>
 Content-Language: en-US
 From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <186c3fa4-fe85-4989-9edd-fdb6345859a9@amd.com>
+In-Reply-To: <4d224956-b4f9-4b0c-b5fb-70abe82e6ab5@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/24/2025 03:19, Dhananjay Ugwekar wrote:
+On 3/24/2025 04:58, Dhananjay Ugwekar wrote:
 > On 3/21/2025 7:58 AM, Mario Limonciello wrote:
 >> From: Mario Limonciello <mario.limonciello@amd.com>
 >>
@@ -100,108 +100,82 @@ On 3/24/2025 03:19, Dhananjay Ugwekar wrote:
 >>   drivers/cpufreq/amd-pstate.h                |   5 +-
 >>   4 files changed, 161 insertions(+), 9 deletions(-)
 >>
->> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
->> index 412423c54f258..2e076650dc77c 100644
->> --- a/Documentation/admin-guide/pm/amd-pstate.rst
->> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
->> @@ -289,7 +289,7 @@ and user can change current preference according to energy or performance needs
->>   Please get all support profiles list from
->>   ``energy_performance_available_preferences`` attribute, all the profiles are
->>   integer values defined between 0 to 255 when EPP feature is enabled by platform
->> -firmware, if EPP feature is disabled, driver will ignore the written value
->> +firmware, but if the dynamic EPP feature is enabled, driver will block writes.
->>   This attribute is read-write.
->>   
->>   ``boost``
->> @@ -311,6 +311,22 @@ boost or `1` to enable it, for the respective CPU using the sysfs path
->>   Other performance and frequency values can be read back from
->>   ``/sys/devices/system/cpu/cpuX/acpi_cppc/``, see :ref:`cppc_sysfs`.
->>   
->> +Dynamic energy performance profile
->> +==================================
->> +The amd-pstate driver supports dynamically selecting the energy performance
->> +profile based on whether the machine is running on AC or DC power.
->> +
->> +Whether this behavior is enabled by default with the kernel config option
->> +`CONFIG_X86_AMD_PSTATE_DYNAMIC_EPP`. This behavior can also be overridden
->> +at runtime by the sysfs file ``/sys/devices/system/cpu/cpufreq/policyX/dynamic_epp``.
-> 
-> The file is actually located at "/sys/devices/system/cpu/amd_pstate/dynamic_epp"
-> 
->> +
->> +When set to enabled, the driver will select a different energy performance
->> +profile when the machine is running on battery or AC power.
->> +When set to disabled, the driver will not change the energy performance profile
->> +based on the power source and will not react to user desired power state.
->> +
->> +Attempting to manually write to the ``energy_performance_preference`` sysfs
->> +file will fail when ``dynamic_epp`` is enabled.
->>   
->>   ``amd-pstate`` vs ``acpi-cpufreq``
->>   ======================================
 > [snip]
->> @@ -1502,9 +1611,15 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
->>   			return ret;
->>   		WRITE_ONCE(cpudata->cppc_req_cached, value);
->>   	}
->> -	ret = amd_pstate_set_epp(policy, cpudata->epp_default);
+>> @@ -1050,6 +1056,73 @@ static void amd_pstate_cpu_exit(struct cpufreq_policy *policy)
+>>   	kfree(cpudata);
+>>   }
+>>   
+>> +static int amd_pstate_get_balanced_epp(struct cpufreq_policy *policy)
+>> +{
+>> +	struct amd_cpudata *cpudata = policy->driver_data;
 >> +
->> +	if (dynamic_epp) {
->> +		policy->policy = CPUFREQ_POLICY_PERFORMANCE;
-> 
-> So, we are allowing the dynamic EPP framework to modify the EPP value in performance
-> governor as well? Shouldn't we allow dynamic_epp only with powersave governor.
-
-You're right; I was trying to avoid issues in 
-amd_pstate_epp_set_policy() but I'll come up with a way to correct this.
-
-> 
->> +		ret = amd_pstate_set_dynamic_epp(policy);
->> +	}
+>> +	if (power_supply_is_system_supplied())
+>> +		return cpudata->epp_default_ac;
 >> +	else
->> +		ret = amd_pstate_set_epp(policy, amd_pstate_get_balanced_epp(policy));
->>   	if (ret)
->> -		return ret;
->> +		goto free_cpudata1;
->>   
->>   	current_pstate_driver->adjust_perf = NULL;
->>   
->> @@ -1521,6 +1636,8 @@ static void amd_pstate_epp_cpu_exit(struct cpufreq_policy *policy)
->>   	struct amd_cpudata *cpudata = policy->driver_data;
->>   
->>   	if (cpudata) {
->> +		if (cpudata->dynamic_epp)
->> +			amd_pstate_clear_dynamic_epp(policy);
->>   		kfree(cpudata);
->>   		policy->driver_data = NULL;
->>   	}
->> @@ -1556,6 +1673,10 @@ static int amd_pstate_epp_set_policy(struct cpufreq_policy *policy)
->>   	if (!policy->cpuinfo.max_freq)
->>   		return -ENODEV;
->>   
->> +	/* policy can't be changed to powersave policy while dynamic epp is enabled */
->> +	if (policy->policy == CPUFREQ_POLICY_POWERSAVE && cpudata->dynamic_epp)
->> +		return -EBUSY;
+>> +		return cpudata->epp_default_dc;
+>> +}
 >> +
->>   	cpudata->policy = policy->policy;
->>   
->>   	ret = amd_pstate_epp_update_limit(policy);
->> diff --git a/drivers/cpufreq/amd-pstate.h b/drivers/cpufreq/amd-pstate.h
->> index fbe1c08d3f061..6882876f895de 100644
->> --- a/drivers/cpufreq/amd-pstate.h
->> +++ b/drivers/cpufreq/amd-pstate.h
->> @@ -104,7 +104,10 @@ struct amd_cpudata {
->>   	/* EPP feature related attributes*/
->>   	u32	policy;
->>   	bool	suspended;
->> -	u8	epp_default;
->> +	u8	epp_default_ac;
->> +	u8	epp_default_dc;
->> +	bool	dynamic_epp;
->> +	struct notifier_block power_nb;
->>   };
->>   
->>   /*
+>> +static int amd_pstate_power_supply_notifier(struct notifier_block *nb,
+>> +					    unsigned long event, void *data)
+>> +{
+>> +	struct amd_cpudata *cpudata = container_of(nb, struct amd_cpudata, power_nb);
+>> +	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(cpudata->cpu);
 > 
+> For consistency, we should add "if (!policy)" check I think
+> 
+>> +	u8 epp;
+>> +	int ret;
+>> +
+>> +	if (event != PSY_EVENT_PROP_CHANGED)
+>> +		return NOTIFY_OK;
+>> +
+>> +	epp = amd_pstate_get_balanced_epp(policy);
+>> +
+>> +	ret = amd_pstate_set_epp(policy, epp);
+>> +	if (ret)
+>> +		pr_warn("Failed to set CPU %d EPP %u: %d\n", cpudata->cpu, epp, ret);
+>> +
+>> +	return NOTIFY_OK;
+>> +}
+> [snip]
+>> @@ -1364,6 +1444,32 @@ static ssize_t prefcore_show(struct device *dev,
+>>   	return sysfs_emit(buf, "%s\n", str_enabled_disabled(amd_pstate_prefcore));
+>>   }
+>>   
+>> +static ssize_t dynamic_epp_show(struct device *dev,
+>> +				struct device_attribute *attr, char *buf)
+>> +{
+>> +	return sysfs_emit(buf, "%s\n", str_enabled_disabled(dynamic_epp));
+>> +}
+>> +
+>> +static ssize_t dynamic_epp_store(struct device *a, struct device_attribute *b,
+>> +				 const char *buf, size_t count)
+>> +{
+>> +	bool enabled;
+>> +	int ret;
+>> +
+>> +	ret = kstrtobool(buf, &enabled);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if (dynamic_epp == enabled)
+>> +		return -EINVAL;
+>> +
+>> +	/* reinitialize with desired dynamic EPP value */
+>> +	dynamic_epp = enabled;
+>> +	ret = amd_pstate_change_driver_mode(cppc_state);
+> 
+> I think implicitly changing the driver mode when we write to dynamic_epp file might lead to some confusions.
+
+How about only allowing to write dynamic_epp attribute when in active 
+mode already?
+
+> 
+>> +
+>> +	return ret ? ret : count;
+>> +}
+>> +
+>>   cpufreq_freq_attr_ro(amd_pstate_max_freq);
+>>   cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
 
 
