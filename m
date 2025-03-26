@@ -1,220 +1,148 @@
-Return-Path: <linux-pm+bounces-24529-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24530-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E46FAA71D64
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 18:40:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E3A6A71D73
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 18:41:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05BF93A6EBB
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 17:38:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F3FB16AC41
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 17:41:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4A3B232378;
-	Wed, 26 Mar 2025 17:38:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3DCF23E32F;
+	Wed, 26 Mar 2025 17:41:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fNLiZKgm"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="UARbOku2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A77AE22ACD1;
-	Wed, 26 Mar 2025 17:38:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28F9523CEF8
+	for <linux-pm@vger.kernel.org>; Wed, 26 Mar 2025 17:41:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743010714; cv=none; b=cMxxVS2ISajpUjomQFEmEA/BTPC/st92xp99S8M5867rSjTvqnzr76QNClycr10YqL/Vvqu2ziIqIt9YdEIrfYvImf5YzKgZMGzVNNNstNxAm//R/IgA+hQEbeY+O3YQ1WkXi13iULR75Ser3gAttpQhOAHcebYVzHhsv7AUReE=
+	t=1743010900; cv=none; b=jqLxBKxVI+NhNfl/AJFZBuT3VZk+f6FUExACPI/ywoOpfgfLdx5tQ3MBsi9Onifx57EBDNFldesstCe3Mwqpbo8C1dbjv1v+iipTCW9LYHi1FygZHHgPbWKaYi2aPypqwmM0r6n7Gui6RseFHIq89xa7SWRE+1tB+IeLV+FycwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743010714; c=relaxed/simple;
-	bh=ZyxutTsVh46fH3XEd2TbSh2/N648DOeEQ0+sSrSt2iU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Asemec58egtuRTClSYCLV+fxyUmoI7oUH6+tRQUuNnWf6HVlk3Pbpj25UNYoNeZar/k2UGx9gHzu1xaVnxaA/An1EyBi/khNWodEiUlu9eRiDWwYQ3m8hd27J7oJ8icKiAOe4rLYIjziKjX+aOAFfAPi2BOQTe0vfVLphlgGz5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fNLiZKgm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B513C4CEF2;
-	Wed, 26 Mar 2025 17:38:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743010714;
-	bh=ZyxutTsVh46fH3XEd2TbSh2/N648DOeEQ0+sSrSt2iU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fNLiZKgmPihLdjwoInNV7fqOMOc/StItt6c3ipl+qfnrjmUIPCojqIbIqcgR3kQr2
-	 QZUV1QTiYfD0eOU/hR9LUwbm5c4ZGkQZNt1LsTm6MYi+LkgedCgFQd0mgNn8Vi/RqU
-	 j5s6ws2mKKQp81hDDZrpKh70ICJngD3NOB1Fe3Ttbf0MimxG64mF6bxx3ciqBoXNhS
-	 8Odoew8ggFEnzscFFQbgxWZqorgkQPCi3GW7yHmrKM0n0gGEF2Xq5r0QlFZPsj7nX9
-	 G89yQcs34d7wUxOtGWZGCdtqlnh5wShQKEbncOC/SnfYfRoIA5kK5l/AerhpyxHnjs
-	 ko+095DmLIqzg==
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-600038877ebso70287eaf.0;
-        Wed, 26 Mar 2025 10:38:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU6XxPbL831fg9pWAv14daxpE8o+WawW9TbWmVqXtvFHkrDHc7q6aIcnjjnQGBPvObNf+1eXlSaez5L@vger.kernel.org, AJvYcCULBsBL7/5ubP/nU+8O611BEALjgMn6e6pEA3iFtXSe1B8ORy0plqNCs5DpE2Tzg1GXbtZ5JDJLYWQaOHY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwD1egAa81CVr5fZAxzQsgtgek7ipXz1MqiBHP4hqciSORwQK39
-	QXeLfbR8ZOlBj32mLfKL1wGWR5vJmBL6qGD8zYNFvaMGtiCjbJvLvUbN8E/oTmmhbyumJIEhJXc
-	SB0/pC0Knz1v9cReikLc7MiwV884=
-X-Google-Smtp-Source: AGHT+IGg7eH9QWYfbDrBJ2FJDudyXDT9YK3hV3X5mb5l8doONA3okbIYrYqOJiry/b3Gtou6+i/QFZ04lWY33we4Jao=
-X-Received: by 2002:a05:6870:5b9b:b0:2c1:3d93:c192 with SMTP id
- 586e51a60fabf-2c848221302mr204027fac.37.1743010713193; Wed, 26 Mar 2025
- 10:38:33 -0700 (PDT)
+	s=arc-20240116; t=1743010900; c=relaxed/simple;
+	bh=dPZgitgsGwSsjuUHxo7G7lYI6fjnEbCeZqlMQtm+0Xg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qeky8Mq9HRgHA47w3YvKtOO+hNksT93eevC1CTdXLrHVYwWZEU8HBA3MJ7BKV5L9DWCr6WwJ0ZImC8BqKMz172WgwdGg30NcCZn6gOSbxPLsgwJkT6YhpYjrMPqTs0Z98KPnrzeCoS2wcBNU/T295u3DGShO+OU+qhnLxN5xFqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=UARbOku2; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52QFkekI000678
+	for <linux-pm@vger.kernel.org>; Wed, 26 Mar 2025 17:41:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=0e0BEB4eko8NvNN495XsFKzx
+	AAwQjYeFziRudbDnS3g=; b=UARbOku2Gc5sIx+hapZo/JURDT+HpDOE1F0w+3ug
+	sobUY5/w6QT7dQ8A3mrAUyd90pF6tMIaZSQ2BxpB0257f82g4YVBbF5GUDP4nLSx
+	uedLj0jOFXOPnsB5607PhZF0e4+xVcQgVwiLCZspdjP5Tk/P91mdNT74wT346cHn
+	QtUWef1Kq1ft2sqp6w22MzBRqfRv8C+wKSyMFAwvsP9NdwXsmiwHrmewc+omgb3u
+	fVrUR1Mb9mbDq0AvxC3NnGFIOUAgBSOJqaQfpOxRuR3mvpg0gWj8BJNtaxpsSQhn
+	tKAcCgoun8tDn5VuncXQWcMJVy47SamyzHnhZ9S0aBmh9g==
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45kypsbnn1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Wed, 26 Mar 2025 17:41:38 +0000 (GMT)
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4767261982eso1667701cf.2
+        for <linux-pm@vger.kernel.org>; Wed, 26 Mar 2025 10:41:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743010897; x=1743615697;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0e0BEB4eko8NvNN495XsFKzxAAwQjYeFziRudbDnS3g=;
+        b=cDg97z8ksv3c+VX2RzDamEOO1c3d2wYap14UOUJDaDllZtlrXzATs0CnUfgoK6cL4l
+         G0gA+zvpjC37EJxcpUfFvp4vMSOiHS/JQpN2l0woxBf11/hyu3my1x+/7I6KEW0w8K+a
+         Q8WFs0nl9xYdE0k0AwpS6WRFIeOMBWu5dHUA17ZtL7mheh8ZhAickYljkAwkrlvxYkjx
+         QdXHc6QuuPu3ey0CYwn1ixW+kUWSyQqKxDfwY4pYCxXIm6UB73CwhEVsl0S79efgWky8
+         MSqzE/mKqbRiP7EcGUbPIyZBxMVWkNeOtmEJZDu0kYZCArWwVAo2arYX2s3AsQqhRwPa
+         ALhw==
+X-Forwarded-Encrypted: i=1; AJvYcCWnn1peGFctvOuhSqmrSQnRmaGNqiQHOGon8Sn63o9wAnVm+Y9ciE/vRl1QvFtZIl3ZvtF6FzyJEw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzz+ZbGOEpEF7NBBu6xkoJbOJiu/5fkn2gpEROZN1GknA6HIKOQ
+	D495w0wL8LH8rUz1KJcZN7EW4T0PGcndOE1e3+KwglP7Y9O8f5a650WWsPo7RFe36LXgsLE7dxt
+	XxTwZVvJRzas0Bj1sFpC7uBAiYPPwHEdJHAWB7v42F84Fwjl17aAJxyoJew==
+X-Gm-Gg: ASbGncvODZoZGMP0HCe1RpMlmpbNBShlSks4Bf6PHqde23nd+hCOBpcRRJavbVIP6ys
+	krhYvyU1HKeaWlM/lS3a0JG5I6t+rbgmDSmkihAxNEUuIsMegvXWTbugWaH2DjgoOGVHh0wra1s
+	AiXwT40kBTnILwV1Q5g2xcKajCZCXQQXQhu9qEf+5gqze3dDsTc1tXmibhg2UnA/+O/7uCfsCuY
+	rpOTY1IYOML21rjYOe093Zw+6NefWvONVna3Z6IEJLPCSYtEQczEjiFV1xzHyZk3kgsXUaRvEKO
+	THitnRbbOUBYV+XJP6S2nfq8q9VI+Mxte4b6TaOXnWLEe2YjBOSjqGPc3iis5B5ckL9nWPAt9/V
+	uT0s=
+X-Received: by 2002:a05:622a:1e89:b0:476:a03b:96e1 with SMTP id d75a77b69052e-4776e21bfdemr8187701cf.52.1743010896856;
+        Wed, 26 Mar 2025 10:41:36 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IElZlPHzzeXuOhqUTtRJ08UHmrzkaRjY0W7vKQkAdgIF7PW8h3Tr/mClGH5KbRXI9kzx8/sVQ==
+X-Received: by 2002:a05:622a:1e89:b0:476:a03b:96e1 with SMTP id d75a77b69052e-4776e21bfdemr8187181cf.52.1743010896364;
+        Wed, 26 Mar 2025 10:41:36 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54ad646872fsm1847854e87.9.2025.03.26.10.41.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Mar 2025 10:41:34 -0700 (PDT)
+Date: Wed, 26 Mar 2025 19:41:32 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+Cc: Georgi Djakov <djakov@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Odelu Kukatla <quic_okukatla@quicinc.com>,
+        Mike Tipton <quic_mdtipton@quicinc.com>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V10 4/7] interconnect: qcom: icc-rpmh: Add dynamic icc
+ node id support
+Message-ID: <qmzskuz7h5pqmhemk6kdky7rpoocppemq4stuhl36nqlvqt5pn@uvrxxoakynhu>
+References: <20250324183203.30127-1-quic_rlaggysh@quicinc.com>
+ <20250324183203.30127-5-quic_rlaggysh@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250317093445.361821-1-csokas.bence@prolan.hu> <20250317093445.361821-2-csokas.bence@prolan.hu>
-In-Reply-To: <20250317093445.361821-2-csokas.bence@prolan.hu>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 26 Mar 2025 18:38:22 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hJZBxU6SSq9C8gp2peETFWu0jbhrM82B5GvQkVXPR+9Q@mail.gmail.com>
-X-Gm-Features: AQ5f1JrcLyMXU0AXf56Zv0FLxsWH5M_UdoHXg48ickDdwk4WFSdM0LXMMkgNyG4
-Message-ID: <CAJZ5v0hJZBxU6SSq9C8gp2peETFWu0jbhrM82B5GvQkVXPR+9Q@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] pm: runtime: Add new devm functions
-To: =?UTF-8?B?QmVuY2UgQ3PDs2vDoXM=?= <csokas.bence@prolan.hu>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Varshini Rajendran <varshini.rajendran@microchip.com>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
-	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Alexander Dahl <ada@thorsis.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Pavel Machek <pavel@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250324183203.30127-5-quic_rlaggysh@quicinc.com>
+X-Proofpoint-ORIG-GUID: F5_bniVwxaUJmew6M8UTsI3YNbpqNnQr
+X-Authority-Analysis: v=2.4 cv=fIA53Yae c=1 sm=1 tr=0 ts=67e43c52 cx=c_pps a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10 a=Vs1iUdzkB0EA:10 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8 a=7MvtbgVdnMJevg9Cfp0A:9 a=CjuIK1q_8ugA:10
+ a=a_PwQJl-kcHnX1M80qC6:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-GUID: F5_bniVwxaUJmew6M8UTsI3YNbpqNnQr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-26_08,2025-03-26_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ mlxlogscore=798 bulkscore=0 impostorscore=0 suspectscore=0 mlxscore=0
+ phishscore=0 priorityscore=1501 lowpriorityscore=0 clxscore=1011
+ adultscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2503260109
 
-On Mon, Mar 17, 2025 at 10:35=E2=80=AFAM Bence Cs=C3=B3k=C3=A1s <csokas.ben=
-ce@prolan.hu> wrote:
->
-> Add `devm_pm_runtime_set_active()` and
-> `devm_pm_runtime_get_noresume()` for
-> simplifying common use cases in drivers.
->
-> Signed-off-by: Bence Cs=C3=B3k=C3=A1s <csokas.bence@prolan.hu>
+On Mon, Mar 24, 2025 at 06:32:00PM +0000, Raviteja Laggyshetty wrote:
+> Interconnect framework relies on static IDs for creating,
+> linking and maintaning the topology. This dependency on static
+> IDs prevents creating two instances of same provider. To overcome
+> the dependency on static IDs, dynamic ID support is being added.
+> To facilitate dynamic node ID support, the driver now uses
+> node pointers for links instead of static node IDs and icc_node
+> pointer is added as member in qcom_icc_node structure to track
+> the node creation.
+> 
+> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
 > ---
->  drivers/base/power/runtime.c | 36 ++++++++++++++++++++++++++++++++++++
->  include/linux/pm_runtime.h   |  4 ++++
->  2 files changed, 40 insertions(+)
->
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index 9589ccb0fda2..821a8b4961d4 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -1568,6 +1568,24 @@ void pm_runtime_enable(struct device *dev)
->  }
->  EXPORT_SYMBOL_GPL(pm_runtime_enable);
->
-> +static void pm_runtime_set_suspended_action(void *data)
-> +{
-> +       pm_runtime_set_suspended(data);
-> +}
-> +
-> +/**
-> + * devm_pm_runtime_set_active - devres-enabled version of pm_runtime_set=
-_active.
-> + *
-> + * @dev: Device to handle.
-> + */
-> +int devm_pm_runtime_set_active(struct device *dev)
-> +{
-> +       pm_runtime_set_active(dev);
-> +
-> +       return devm_add_action_or_reset(dev, pm_runtime_set_suspended_act=
-ion, dev);
-> +}
-> +EXPORT_SYMBOL_GPL(devm_pm_runtime_set_active);
+>  drivers/interconnect/qcom/icc-rpmh.c | 17 ++++++++++++++---
+>  drivers/interconnect/qcom/icc-rpmh.h |  5 +++++
+>  2 files changed, 19 insertions(+), 3 deletions(-)
+> 
 
-I said I didn't like it and I'm still not liking it.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 
-The problem is that the primary role of pm_runtime_set_active() is to
-prepare the device for enabling runtime PM, so in the majority of
-cases it should be followed by pm_runtime_enable().  It is also not
-always necessary to call pm_runtime_set_suspended() after disabling
-runtime PM for a device, like when the device has been
-runtime-suspended before disabling runtime PM for it.  This is not
-like releasing a resource that has been allocated and using devm for
-it in the above way is at least questionable.
-
-Now, there is a reason why calling pm_runtime_set_suspended() on a
-device after disabling runtime PM for it is a good idea at all.
-Namely, disabling runtime PM alone does not release the device's
-suppliers or its parent, so if you want to release them after
-disabling runtime PM for the device, you need to do something more.
-I'm thinking that this is a  mistake in the design of the runtime PM
-core.
-
-If there were functions like pm_runtime_enable_in_state() (taking an
-additional state argument and acquiring all of the necessary
-references on the parent and suppliers of the target device) and
-pm_runtime_disable_and_forget() (that in addition to disabling runtime
-PM would drop the references acquired by the former), then it would
-make a perfect sense to provide a devm variant of
-pm_runtime_enable_in_state() with the cleanup action pointing to
-pm_runtime_disable_and_forget().
-
-If this helps, I can do some work on providing
-pm_runtime_enable_in_state() and pm_runtime_disable_and_forget() or
-equivalent.
-
-> +
->  static void pm_runtime_disable_action(void *data)
->  {
->         pm_runtime_dont_use_autosuspend(data);
-> @@ -1590,6 +1608,24 @@ int devm_pm_runtime_enable(struct device *dev)
->  }
->  EXPORT_SYMBOL_GPL(devm_pm_runtime_enable);
->
-> +static void pm_runtime_put_noidle_action(void *data)
-> +{
-> +       pm_runtime_put_noidle(data);
-> +}
-> +
-> +/**
-> + * devm_pm_runtime_get_noresume - devres-enabled version of pm_runtime_g=
-et_noresume.
-> + *
-> + * @dev: Device to handle.
-> + */
-> +int devm_pm_runtime_get_noresume(struct device *dev)
-> +{
-> +       pm_runtime_get_noresume(dev);
-> +
-> +       return devm_add_action_or_reset(dev, pm_runtime_put_noidle_action=
-, dev);
-> +}
-> +EXPORT_SYMBOL_GPL(devm_pm_runtime_get_noresume);
-> +
->  /**
->   * pm_runtime_forbid - Block runtime PM of a device.
->   * @dev: Device to handle.
-> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-> index 7fb5a459847e..364355da349a 100644
-> --- a/include/linux/pm_runtime.h
-> +++ b/include/linux/pm_runtime.h
-> @@ -96,7 +96,9 @@ extern void pm_runtime_new_link(struct device *dev);
->  extern void pm_runtime_drop_link(struct device_link *link);
->  extern void pm_runtime_release_supplier(struct device_link *link);
->
-> +int devm_pm_runtime_set_active(struct device *dev);
->  extern int devm_pm_runtime_enable(struct device *dev);
-> +int devm_pm_runtime_get_noresume(struct device *dev);
->
->  /**
->   * pm_suspend_ignore_children - Set runtime PM behavior regarding childr=
-en.
-> @@ -294,7 +296,9 @@ static inline bool pm_runtime_blocked(struct device *=
-dev) { return true; }
->  static inline void pm_runtime_allow(struct device *dev) {}
->  static inline void pm_runtime_forbid(struct device *dev) {}
->
-> +static inline int devm_pm_runtime_set_active(struct device *dev) { retur=
-n 0; }
->  static inline int devm_pm_runtime_enable(struct device *dev) { return 0;=
- }
-> +static inline int devm_pm_runtime_get_noresume(struct device *dev) { ret=
-urn 0; }
->
->  static inline void pm_suspend_ignore_children(struct device *dev, bool e=
-nable) {}
->  static inline void pm_runtime_get_noresume(struct device *dev) {}
-> --
-> 2.48.1
->
->
->
+-- 
+With best wishes
+Dmitry
 
