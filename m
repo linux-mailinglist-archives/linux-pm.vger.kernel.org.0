@@ -1,231 +1,263 @@
-Return-Path: <linux-pm+bounces-24506-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24507-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A97FA712FB
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 09:44:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54747A715AE
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 12:26:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D89FA188ACF0
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 08:44:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 218E73B2498
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 11:24:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 150AB1A3BC0;
-	Wed, 26 Mar 2025 08:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E1821D8DE0;
+	Wed, 26 Mar 2025 11:25:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="l7attKm1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="owjI7ujj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E24417CA1B
-	for <linux-pm@vger.kernel.org>; Wed, 26 Mar 2025 08:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 070BAEEC3
+	for <linux-pm@vger.kernel.org>; Wed, 26 Mar 2025 11:24:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742978630; cv=none; b=KxtdFJU4vqBB+EmFFHn/vSxxLfkjNxraBa4/UoQ9PumNECwO2b1h39p3HeYClmRzbaXEjJyWi2mkQPkzf6qTdnq84EuHpjPE6FBIgWSMpO0wyNEQ30FOeUcrcUt+8XdwVu7TUYyXqdlwo7kN6wdEaPASFS6VuOSsi9W4AuWOLJc=
+	t=1742988302; cv=none; b=Dwqw4JqzFr7Z/5PoGgtFkRl+EXe5CHCppLKWEARDzDD6X2ncf9LkeyxdQnuinSr3X3xk7z6wT8BFSCwkvzlj/nHMeGcP+0qaK/oeUj1B/wb4loRvHQQaXrqy+wczu5kwssuXQM9qk0ydTaFJIITJWdThNvo6pSouQi35NqMntMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742978630; c=relaxed/simple;
-	bh=+/vbVvp7TBfeyIb5aA4p3N2on+ew4il4U+oUd2qfWzQ=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=VUrusIJogdkBVu/Eea1pkykJXsYx9GJTke2tG3IbnG8mVkvbsHom7sIMFIzBznPiadQeAVw5osro5u1sZ5ydlpiWE3J1aDlSIit90AUvoQX9RNxX0R7BIyDb/LOburQW4aeDjqiiMN6pUmQkNz44iubrNCAbrSTrM6rZHjEv4gI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=l7attKm1; arc=none smtp.client-ip=209.85.128.44
+	s=arc-20240116; t=1742988302; c=relaxed/simple;
+	bh=PtOldyJkQTuOrIlrZ0MS2qSdzcnjeTVIRPUO/G6iQWg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OLIZRYQHZTBevgDUWITlfX5duDJZmB+4tcBARdvkNLxd05TD4ZouuBrQEOQL2Az4UF8j0cAcBx/K94SJDhBLWus5LURi8tHfBIDgicgPKqrwSYNcg03IKMa3seHTrHjn4c6vZB4hC46J+Q4xUsNO1fzJ6gcf5LF3AiheY5/DAoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=owjI7ujj; arc=none smtp.client-ip=209.85.128.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43cf58eea0fso34124055e9.0
-        for <linux-pm@vger.kernel.org>; Wed, 26 Mar 2025 01:43:47 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6fd80f30ba5so43263337b3.3
+        for <linux-pm@vger.kernel.org>; Wed, 26 Mar 2025 04:24:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1742978626; x=1743583426; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5sJ0/cjtOuS0rqzVhbqmd3GPHS9gnvVNLtBH1FZbB0Y=;
-        b=l7attKm1xluM3oHLAS0WMzTmTJlxJi5GU8WUfenriYx2jiXlB4rJ73EO1WuX8ZeAkH
-         evZ7f0wQUADbT1j9b7lJzlEWpO0x5DedyXX+t43ZnYaxGeUvMb41fBr5FQk4sAfJnimy
-         36xf9+oHdVl5yfcOXcAN/xMqt0S8PJ6wowNO5iNwK1j2HmMnr0cfAbJY8WBTtDOxNGJz
-         YrhDHsu3XBV/L51b5wkgkSDuTk4rDnh4I1+E3OIGmjQoFS8eQXM4+48Wfb8yIZPr7jkk
-         2u/tRV2d1LI35s3ppYtw0Lryk9uukKebvSuyS7hIoQc5eAz1VsAtU1WbAdBk2OhS/Kcp
-         hPTA==
+        d=linaro.org; s=google; t=1742988299; x=1743593099; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CAKfg0qsqFTp3rC4gKRjScpyZGRWGz93JbWST6kAsnA=;
+        b=owjI7ujj7JWmWS6SVVsCM7txATPiNOvF3yprKYwoxiSW6Rp7yL5r5cSaQjrmWrz2tF
+         tzcgp0wApnTXPa/lCxK3HLlCgRuZVWUozrxLXku69AbUwLU3mx7ydZFpjlP76+5zygxF
+         C7ofQyaO+ieEFzkr3Jv88po1SaZFM8pCTxtm/XkwL6MC6BTFPV9DMdT5oLDz3K5AM0sp
+         2ea9xPu7bMqnEgVCn/Nja7hvwpje+WjEI0av+drjFY55e+5Awxn+dAyqIqqL3edeKdcl
+         SF/lXyJ/znTHi4EV5AUFMPQip/mtkFGW0MLV3ljD/jp5YwloM5dk2iZgVIFsY0c5Wm+W
+         D3iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742978626; x=1743583426;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5sJ0/cjtOuS0rqzVhbqmd3GPHS9gnvVNLtBH1FZbB0Y=;
-        b=ZBqztfjElD+Dp/pe2FgmFnAwfKWmVuzQMdhmTC+ghfcIaieoFeFMbNx+S/iqRAB1TZ
-         oZoq8IBP1HKoddO8GOy1jHsaFoFeYWlsEmfn2Stb3v8mnts6BpI1j0h3OwiWIxRVrah8
-         5m2AGj2MudHLe9srXL9bNNTGoXmE3Y/32Vq+HotHXr8KS0twxiDE5ITxY08sar01TI1Q
-         L/8wMnE1lO4FD7PlLCkbnZY/fpfC23KLJxRfrGz3LD3qVJnZy6Y1G2cYyub0EUfpTLzZ
-         Aalvzu9lPa26yCENV4IW1yZCsuqFgFzkuE+EJnXQVVpFbmCO58hXIB33byvFtR5zOa1+
-         56xQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWBwY4mxvJH/btUVxRp/Jn3EyGh2toIvcLOxJJPZ+hnr45rEULcaUnW5xv7VhOM6bCRrVlShwFYIQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYi7/0umv3TY5RpJkNppcO5HuDL3ovbejt2CXT7w0z51ZA/8DB
-	h4YoMS6bnBhjdbgGptff5xfnf/VlKvTIlF0CwWTiPiIOBtM3UIwtfo8Of61OfUY=
-X-Gm-Gg: ASbGncv/wHZhTO4/iIufqkZpSciy+3BoFd8GaufqjW0vGCqAUBoQ51P8gQN6QSvYdDR
-	agLQIfjT4Ak7F5wAAfY3P8PFnB05oZd3jhgqpNItkD/izRKINT54P4p1SNtTYWBt+ij+FAhPWWv
-	FM2cmmuufT70n21HlxapA+Zk4cVychW2HjAa2vSYwg+/McWqQ3b8L/ClMBu19B258jhsqVEHY/E
-	aAqhV41u7vDz4UUcPcJc++W0lEPyKgfTCiJD1AHv0yW2hyuIXup1v+mPDAL29Rsj89XUP37r4DS
-	K5Czo44Gigs8ThP+PvFptHxoX4+u8K2Pg6YAllLVjxLzzVO2nCOQvsy2+bkZwUxo3ycQfLRhHQO
-	JiiT3AxB3
-X-Google-Smtp-Source: AGHT+IFF0Aq5lld9jdkAuw42huB04Wc3niueUjPOAlPTax9zhbSZF2hXpyEJQbfXp9HVFKoj2aF1Uw==
-X-Received: by 2002:a05:600c:45cf:b0:43c:e478:889 with SMTP id 5b1f17b1804b1-43d508715e4mr174902685e9.0.1742978626245;
-        Wed, 26 Mar 2025 01:43:46 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3997f9ef098sm15849259f8f.84.2025.03.26.01.43.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Mar 2025 01:43:45 -0700 (PDT)
-Message-ID: <8a52679e-830d-4a7f-8eb7-c6ea90c735d7@linaro.org>
-Date: Wed, 26 Mar 2025 09:43:44 +0100
+        d=1e100.net; s=20230601; t=1742988299; x=1743593099;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CAKfg0qsqFTp3rC4gKRjScpyZGRWGz93JbWST6kAsnA=;
+        b=RJWi02IHlrYOAu/EqwUgPUxVwayC3ksp7YWJ/v0xHe7enY/uSjqqVfHU9jScByEXx4
+         YVTdEPm9A3DBUONlCgrBa66PWDBTp53TAmhNfTCXygBuM422XMhSFJa2cIZOhZr+iHLh
+         SMHUUI+0sm0b8TgMP/HDRSEhX2s701+VSHeBubQzVqxIyWjPuOa2NF3UZxhyRM1Qf7rq
+         Jl7MqvmONMcdzaXy+LXLvKLca4iyTnnE4sGX2dIWqfd8KlIgep1xPVhTQR7wEgkPTX2/
+         IMKML41wolqZ2ZSYaFBGNo0UI1q36tkkZjbmd2rA1o2VAjbbsBouJh+cgBumOJ7YDiYi
+         UK8A==
+X-Forwarded-Encrypted: i=1; AJvYcCUx1Yw8lck7rGYW7WDqD8uqdXA5HgpTT6PMlg6EH+GKbIFJZc5GCu5Vp70DVBqzGLNS4F43/x9H6Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwnDocDCP/4Wa8SsP1MbNHjGpD9hb/UHW+C0edZiQw6kAl9nCe
+	lShzgxiqbk4aNUyVXEe09y6ifXDH8Z/uWFLYDQkZ90/y1JxjUzy2TnUcJfi+HinmarT/wGjOJ/z
+	tx8N9Vm9RsRrnSx4rbSpuHnywNmD6H/cFQwnATQ==
+X-Gm-Gg: ASbGncsh6roXh43n0H/FX1p/WVVEejhzptXeLDVwNDkViB8CfuD0awqSgquNI4j4myX
+	7Ol0mMmNuUAEWaUKEFi7xAhMDUwDmjuhYXKthjRlH27Xz5IkuJxDN8AF2bIeI3Kz83WwNRcF0OJ
+	WDz6q5oA9XktuTgrZTVQlvG30PL1ADXLcQygP8D0mG57maThCAdSYOdJ642AI=
+X-Google-Smtp-Source: AGHT+IG0bRqZ7yucLkko4jSBCBt6Lj/LtcXgRGGRXa8ZXxRF/rWOCdZbLtb/q8iP+odXXLa6ynfR6bWujWIchPutkxQ=
+X-Received: by 2002:a05:690c:f86:b0:6f9:7921:480e with SMTP id
+ 00721157ae682-700babfd2d6mr231478087b3.5.1742988298731; Wed, 26 Mar 2025
+ 04:24:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Frank Li <Frank.Li@nxp.com>, Alice Guo <alice.guo@nxp.com>,
- Praveenkumar I <quic_ipkumar@quicinc.com>,
- Trevor Woerner <twoerner@gmail.com>,
- =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
- Johan Hovold <johan@kernel.org>,
- Linux PM mailing list <linux-pm@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] thermal drivers for v6.15-rc1
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250303143629.400583-1-m.wilczynski@samsung.com>
+ <CGME20250303143637eucas1p1a3abdea520ab88688de1263a5f07bba0@eucas1p1.samsung.com>
+ <20250303143629.400583-5-m.wilczynski@samsung.com> <de50dd55e1285726e8d5ebae73877486.sboyd@kernel.org>
+ <4c035603-4c11-4e71-8ef3-b857a81bf5ef@samsung.com> <aacd03a071dce7b340d7170eae59d662d58f23b1.camel@pengutronix.de>
+ <e90a0c77-61a0-49db-86ba-bac253f8ec53@samsung.com> <38d9650fc11a674c8b689d6bab937acf@kernel.org>
+In-Reply-To: <38d9650fc11a674c8b689d6bab937acf@kernel.org>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 26 Mar 2025 12:24:22 +0100
+X-Gm-Features: AQ5f1Jr_9rY3NEgVW4bBC1NZ3qSkcNWvCh-D1oUbC5XKRCPzJhBOl8lQH97_HVA
+Message-ID: <CAPDyKFqsJaTrF0tBSY-TjpqdVt5=6aPQHYfnDebtphfRZSU=-Q@mail.gmail.com>
+Subject: Re: [PATCH v1 4/4] clk: thead: Add GPU clock gate control with CLKGEN
+ reset support
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: Michal Wilczynski <m.wilczynski@samsung.com>, Philipp Zabel <p.zabel@pengutronix.de>, alex@ghiti.fr, 
+	aou@eecs.berkeley.edu, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org, 
+	jszhang@kernel.org, krzk+dt@kernel.org, m.szyprowski@samsung.com, 
+	mturquette@baylibre.com, palmer@dabbelt.com, paul.walmsley@sifive.com, 
+	robh@kernel.org, wefu@redhat.com, linux-clk@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+On Tue, 25 Mar 2025 at 23:40, Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting Michal Wilczynski (2025-03-19 02:22:11)
+> >
+> >
+> > On 3/13/25 10:25, Philipp Zabel wrote:
+> > > On Do, 2025-03-06 at 17:43 +0100, Michal Wilczynski wrote:
+> > >>
+> > >> On 3/6/25 00:47, Stephen Boyd wrote:
+> > >>> Quoting Michal Wilczynski (2025-03-03 06:36:29)
+> > >>>> The T-HEAD TH1520 has three GPU clocks: core, cfg, and mem. The mem
+> > >>>> clock gate is marked as "Reserved" in hardware, while core and cfg are
+> > >>>> configurable. In order for these clock gates to work properly, the
+> > >>>> CLKGEN reset must be managed in a specific sequence.
+> > >>>>
+> > >>>> Move the CLKGEN reset handling to the clock driver since it's
+> > >>>> fundamentally a clock-related workaround [1]. This ensures that clk_enabled
+> > >>>> GPU clocks stay physically enabled without external interference from
+> > >>>> the reset driver.  The reset is now deasserted only when both core and
+> > >>>> cfg clocks are enabled, and asserted when either of them is disabled.
+> > >>>>
+> > >>>> The mem clock is configured to use nop operations since it cannot be
+> > >>>> controlled.
+> > >>>>
+> > >>>> Link: https://lore.kernel.org/all/945fb7e913a9c3dcb40697328b7e9842b75fea5c.camel@pengutronix.de [1]
+> > >>>>
+> > >>>> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+> > >>> [...]
+> > >>>> diff --git a/drivers/clk/thead/clk-th1520-ap.c b/drivers/clk/thead/clk-th1520-ap.c
+> > >>>> index ea96d007aecd..1dfcde867233 100644
+> > >>>> --- a/drivers/clk/thead/clk-th1520-ap.c
+> > >>>> +++ b/drivers/clk/thead/clk-th1520-ap.c
+> > >>>> @@ -862,17 +863,70 @@ static CCU_GATE(CLK_SRAM1, sram1_clk, "sram1", axi_aclk_pd, 0x20c, BIT(3), 0);
+> > >>> [...]
+> > >>>>
+> > >>>>  static CCU_GATE_CLK_OPS(CLK_GPU_MEM, gpu_mem_clk, "gpu-mem-clk",
+> > >>>>                         video_pll_clk_pd, 0x0, BIT(2), 0, clk_nop_ops);
+> > >>>> +static CCU_GATE_CLK_OPS(CLK_GPU_CORE, gpu_core_clk, "gpu-core-clk",
+> > >>>> +                       video_pll_clk_pd, 0x0, BIT(3), 0, ccu_gate_gpu_ops);
+> > >>>> +static CCU_GATE_CLK_OPS(CLK_GPU_CFG_ACLK, gpu_cfg_aclk, "gpu-cfg-aclk",
+> > >>>> +                       video_pll_clk_pd, 0x0, BIT(4), 0, ccu_gate_gpu_ops);
+> > >>>> +
+> > >>>> +static void ccu_gpu_clk_disable(struct clk_hw *hw)
+> > >>>> +{
+> > >>>> +       struct ccu_gate *cg = hw_to_ccu_gate(hw);
+> > >>>> +       unsigned long flags;
+> > >>>> +
+> > >>>> +       spin_lock_irqsave(&gpu_reset_lock, flags);
+> > >>>> +
+> > >>>> +       ccu_disable_helper(&cg->common, cg->enable);
+> > >>>> +
+> > >>>> +       if ((cg == &gpu_core_clk &&
+> > >>>> +            !clk_hw_is_enabled(&gpu_cfg_aclk.common.hw)) ||
+> > >>>> +           (cg == &gpu_cfg_aclk &&
+> > >>>> +            !clk_hw_is_enabled(&gpu_core_clk.common.hw)))
+> > >>>> +               reset_control_assert(gpu_reset);
+> > >>>
+> > >>> Why can't the clk consumer control the reset itself? Doing this here is
+> > >>> not ideal because we hold the clk lock when we try to grab the reset
+> > >>> lock. These are all spinlocks that should be small in lines of code
+> > >>> where the lock is held, but we're calling into an entire other framework
+> > >>> under a spinlock. If an (unrelated) reset driver tries to grab the clk
+> > >>> lock it will deadlock.
+> > >>
+> > >> So in our case the clk consumer is the drm/imagination driver. Here is
+> > >> the comment from the maintainer for my previous attempt to use a reset
+> > >> driver to abstract the GPU init sequence [1]:
+> > >>
+> > >> "Do you know what this resets? From our side, the GPU only has a single
+> > >> reset line (which I assume to be GPU_RESET)."
+> > >>
+> > >> "I don't love that this procedure appears in the platform reset driver.
+> > >> I appreciate it may not be clear from the SoC TRM, but this is the
+> > >> standard reset procedure for all IMG Rogue GPUs. The currently
+> > >> supported TI SoC handles this in silicon, when power up/down requests
+> > >> are sent so we never needed to encode it in the driver before.
+> > >>
+> > >> Strictly speaking, the 32 cycle delay is required between power and
+> > >> clocks being enabled and the reset line being deasserted. If nothing
+> > >> here touches power or clocks (which I don't think it should), the delay
+> > >> could potentially be lifted to the GPU driver."
+> > >>
+> > >> From the drm/imagination maintainers point of view their hardware has
+> > >> only one reset, the extra CLKGEN reset is SoC specific.
+> > >
+> > > If I am understanding correctly, the CLKGEN reset doesn't reset
+> > > anything in the GPU itself, but holds the GPU clock generator block in
+> > > reset, effectively disabling the three GPU clocks as a workaround for
+> > > the always-ungated GPU_MEM clock.
+> > >
+> > >> Also the reset driver maintainer didn't like my way of abstracting two
+> > >> resets ("GPU" and and SoC specific"CLKGEN") into one reset
+> > >
+> > > That is one part of it. The other is that (according to my
+> > > understanding as laid out above), the combined GPU+CLKGEN reset would
+> > > effectively disable all three GPU clocks for a while, after the GPU
+> > > driver has already requested them to be enabled.
+> >
+> > Thank you for your comments Philipp, it seems like we're on the same
+> > page here. I was wondering whether there is anything I can do to move the
+> > patches forward.
+> >
+> > Stephen, if the current patch is a no go from your perspective could you
+> > please advise whether there is a way to solve this in a clock that would
+> > be acceptable to you.
+>
+> It looks like the SoC glue makes the interactions between the clk and
+> reset frameworks complicated because GPU clks don't work if a reset is
+> asserted. You're trying to find a place to coordinate the clk and reset.
+> Am I right?
+>
+> I'd advise managing the clks and resets in a generic power domain that
+> is attached to the GPU device. In that power domain, coordinate the clk
+> and reset sequencing so that the reset is deasserted before the clks are
+> enabled (or whatever the actual requirement is). If the GPU driver
+> _must_ have a clk and reset pointer to use, implement one that either
+> does nothing or flag to the GPU driver that the power domain is managing
+> all this for it so it should just use runtime PM and system PM hooks to
+> turn on the clks and take the GPU out of reset.
+>
+> From what I can tell, the GPU driver maintainer doesn't want to think
+> about the wrapper that likely got placed around the hardware block
+> shipped by IMG. This wrapper is the SoC glue that needs to go into a
+> generic power domain so that the different PM resources, reset, clk,
+> etc. can be coordinated based on the GPU device's power state. It's
+> either that, or go the dwc3 route and have SoC glue platform drivers
+> that manage this stuff and create a child device to represent the hard
+> macro shipped by the vendor like Synopsys/Imagination. Doing the parent
+> device design isn't as flexible as PM domains because you can only have
+> one parent device and the child device state can be ignored vs. many PM
+> domains attached in a graph to a device that are more directly
+> influenced by the device using runtime PM.
+>
+> Maybe you'll be heartened to know this problem isn't unique and has
+> existed for decades :) I don't know what state the graphics driver is in
+> but they'll likely be interested in solving this problem in a way that
+> doesn't "pollute" their driver with SoC specific details. It's all a
+> question of where you put the code. The reset framework wants to focus
+> on resets, the clk framework wants to focus on clks, and the graphics
+> driver wants to focus on graphics. BTW, we went through a similar
+> discussion with regulators and clks years ago and ended up handling that
+> with OPPs and power domains.
 
-Hi Rafael,
+Right, power-domain providers are mostly implementing SoC specific code.
 
-please consider the following changes since commit 
-c3b659b74541f4564f9f5a39f65e625c47e77e21:
+In some cases, power-domain providers also handle per device SoC
+specific constraints/sequences, which seems what you are discussing
+here. For that, genpd has a couple of callbacks that could be
+interesting to have a look at, such as:
 
-   Merge branches 'thermal-core' and 'thermal-misc' (2025-03-24 14:09:38 
-+0100)
+genpd->attach|detach_dev() - for probe/remove
+genpd.dev_ops->start|stop() - for runtime/system PM
 
-are available in the Git repository at:
+That said, maybe just using the regular genpd->power_on|off() callback
+is sufficient here, depending on how you decide to model things.
 
-  
-ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
-tags/thermal-v6.15-rc1
+>
+> I believe a PM domain is the right place for this kind of stuff, and I
+> actually presented on this topic at OSSEU[1], but I don't maintain that
+> code. Ulf does.
+>
+> [1] https://osseu2024.sched.com/event/1ej38/the-case-for-an-soc-power-management-driver-stephen-boyd-google
 
-for you to fetch changes up to 1b4ef46fd6660712afcfdd841eadd928193e850f:
-
-   thermal/drivers/qcom-spmi-temp-alarm: Drop unused driver data 
-(2025-03-25 20:52:04 +0100)
-
-----------------------------------------------------------------
-- Used dev_err_probe() helpers to simplify the init code in the Qoriq
-   driver (Frank Li)
-
-- Powered down the Qoriq's TMU at suspend time (Alice Guo)
-
-- Added ipq5332, ipq5424 compatible for the QCom's tsens driver and
-   TSENS enable / calibration support for V2 (Praveenkumar I)
-
-- Added missing rk3328 mapping entry (Trevor Woerner)
-
-- Removed duplicate struct declaration in the thermal core header
-   (Xueqin Luo)
-
-- Disabled the monitoring mode during suspend for the LVTS Mediatek
-   driver to prevent temperature acquisition glitches (Nícolas
-   F. R. A. Prado)
-
-- Disabled Stage 3 thermal threshold on the LVTS Mediatek driver
-   because it disables the suspend ability and does have an not
-   interrupt handler (Nícolas F. R. A. Prado)
-
-- Fixed low temperature offset interrupt on the LVTS Mediatek driver
-   to prevent multiple interrupts when the system is at its normal
-   functionning temperature (Nícolas F. R. A. Prado)
-
-- Enable the interrupts on the LVTS Mediatek driver only on used
-   sensors (Nícolas F. R. A. Prado)
-
-- Added the BCM74110 compatible DT binding and the corresponding code
-   to support the chip with a different process (Florian Fainelli)
-
-- Corrected indentation and style in DTS example (Krzysztof Kozlowski)
-
-- Unified hexadecimal annotatation in the rcar_gen3 driver (Niklas
-   Söderlund)
-
-- Factored out the code logic to read the fuse on the on Gen3 and Gen4
-   drivers (Niklas Söderlund)
-
-- Dropped unused driver data on the QCom's spmi temperature alarm
-   driver (Johan Hovold)
-
-----------------------------------------------------------------
-Alice Guo (1):
-       thermal/drivers/qoriq: Power down TMU on system suspend
-
-Florian Fainelli (2):
-       dt-bindings: thermal: Update for BCM74110
-       thermal/drivers/brcmstb_thermal: Add support for BCM74110
-
-Frank Li (1):
-       thermal/drivers/qoriq: Use dev_err_probe() simplify the code
-
-Johan Hovold (1):
-       thermal/drivers/qcom-spmi-temp-alarm: Drop unused driver data
-
-Krzysztof Kozlowski (1):
-       dt-bindings: thermal: Correct indentation and style in DTS example
-
-Niklas Söderlund (2):
-       thermal: rcar_gen3: Use lowercase hex constants
-       thermal: rcar_gen3: Reuse logic to read fuses on Gen3 and Gen4
-
-Nícolas F. R. A. Prado (5):
-       thermal/drivers/mediatek/lvts: Disable monitor mode during suspend
-       thermal/drivers/mediatek/lvts: Disable Stage 3 thermal threshold
-       thermal/drivers/mediatek/lvts: Disable low offset IRQ for minimum 
-threshold
-       thermal/drivers/mediatek/lvts: Start sensor interrupts disabled
-       thermal/drivers/mediatek/lvts: Only update IRQ enable for valid 
-sensors
-
-Praveenkumar I (2):
-       dt-bindings: thermal: tsens: Add ipq5332, ipq5424 compatible
-       thermal/drivers/tsens: Add TSENS enable and calibration support 
-for V2
-
-Trevor Woerner (1):
-       thermal/drivers/rockchip: Add missing rk3328 mapping entry
-
-xueqin Luo (1):
-       thermal: core: Remove duplicate struct declaration
-
-  .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml |  48 +++---
-  .../devicetree/bindings/thermal/brcm,avs-tmon.yaml |   1 +
-  .../devicetree/bindings/thermal/imx-thermal.yaml   |  40 ++---
-  .../bindings/thermal/imx8mm-thermal.yaml           |   8 +-
-  .../devicetree/bindings/thermal/qcom-tsens.yaml    |  18 +++
-  drivers/thermal/broadcom/brcmstb_thermal.c         |  11 +-
-  drivers/thermal/mediatek/lvts_thermal.c            | 103 ++++++++----
-  drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |   1 -
-  drivers/thermal/qcom/tsens-v2.c                    | 178 
-+++++++++++++++++++++
-  drivers/thermal/qcom/tsens.c                       |   8 +-
-  drivers/thermal/qcom/tsens.h                       |   3 +
-  drivers/thermal/qoriq_thermal.c                    |  47 +++---
-  drivers/thermal/renesas/rcar_gen3_thermal.c        | 107 ++++++-------
-  drivers/thermal/rockchip_thermal.c                 |   1 +
-  include/linux/thermal.h                            |   2 -
-  15 files changed, 409 insertions(+), 167 deletions(-)
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Kind regards
+Uffe
 
