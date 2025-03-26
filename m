@@ -1,54 +1,54 @@
-Return-Path: <linux-pm+bounces-24543-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24544-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDF8DA71E5C
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 19:28:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29335A71E65
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 19:29:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6ABA07A51DD
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 18:26:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3FCD3B978F
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 18:28:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7A2925A2DF;
-	Wed, 26 Mar 2025 18:26:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E266925BACF;
+	Wed, 26 Mar 2025 18:26:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RPxAusWO"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="MIwa1tjw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C58812580D2;
-	Wed, 26 Mar 2025 18:26:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD08F258CFA;
+	Wed, 26 Mar 2025 18:26:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743013598; cv=none; b=HyXzicwnyHwnx7KUBidtxEjrdphT4ZnyJv5QEG8ZEy4K6YY0y307m/AVKDlV1dZQQHeYQqtVwOBwJCfXKVgSZtHpUc3zNXH5MK9nZN2NZfAXPZn4Q8B06S3cbtBgq7c6X6HajGkK5G06So3HCR95av6DNZpt9LXyXR7ILGKUfrg=
+	t=1743013599; cv=none; b=hrn5Kbf31Z0NKfnqIht6Ny5oaTfRZvjn1w0JDr+OAMaP5iID9BLiVnffXd+VpQFVE2aUPhZC+MGB1c6CMd6oq+2gaPzNqEb6cPxRGM56dkBCIJwHv8Rg5wgSVOzGHA7i0qBGis4QWffnKAPsfMzjH0Y/DecqyFGF2sM8SK9hRA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743013598; c=relaxed/simple;
-	bh=vAlRbDLpBPvP27lE5l60zdFPJjk/fx1iTxJsOyArih8=;
+	s=arc-20240116; t=1743013599; c=relaxed/simple;
+	bh=gJfK6+B5JQj/94XazxErSDyeIkb7T600MeCpaeGZceg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=f1HchB6EpJEl8XGw/+y+5tuU3iMS9WisUuxv6q6GfQWO4pK5fZG4BWnIniwgag3v5rYGGmWVpcdIjxKxPZbh/IfN2MF0iEOVsH8UU4MIg31tN/nCEiWyVDl6lVyuIOtjYcLw2Sm8VinmLkh6BxSYQH+rHlHVhx1rIv6rU1SDAfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RPxAusWO; arc=none smtp.client-ip=217.70.183.201
+	 In-Reply-To:To:Cc; b=tvkxpQKbCWB102oMsAt1LmcU23rcy43mZpdZgkePhvKHvIeS80Gyk130cK0rHEjdnX6yuM8GFpBd4a6ZFhQA6rO8VOvb/Gv1dNysLxqgctMDwvooGKU4yMd8ySqlqXlE6u8ZQb7MDdq6fNEK+s21jFhQ3Z25o15be/O12D2R304=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=MIwa1tjw; arc=none smtp.client-ip=217.70.183.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D81734441C;
-	Wed, 26 Mar 2025 18:26:33 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 30DCD44440;
+	Wed, 26 Mar 2025 18:26:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1743013595;
+	t=1743013596;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=t2hsGs3TPtjFLp63wGPsUwJ0AqSkzAmn92jic3zpuq8=;
-	b=RPxAusWOpENU7S+0Gm6/ZorY7WocaT/IlByfoaDUzw/QcIBrAcdCo734i2ubSBsnX9hARj
-	CXlaxA8jExPw3ZBbze+xDVOPFzaw4bLYWcucOZrGxZDlpmBk1FL7pdEx66Qhn6I8fewkE9
-	hVWs8cB0b8zSxpL+WJB/3imhLhZ7SHeTcQhkAzKVfvIc3gt5wZU08102nIELKlLZjfNMIX
-	apcQ3WMsuDUn7ebSslAsiscmz1TUA9wcp1X/ai580VAEmxhIePq3rFB6+Cn80a3ipaf6c+
-	vJ0NlQQkKAOl5xVY+xFIWMUtot/6GK4MnbS4uursyGA5iNz1VLZxddnhVbhBTw==
+	bh=YQwpVU/XbRJq6paA0C/EVBzKGAJNY3Fgxupz9l/uNkA=;
+	b=MIwa1tjwQLR5HbQmg2fPVW7fJahFLAqOE8nuTFOWA7gEfxYtBRIT03BoKDRgOUeVnfUbyC
+	PKepVBMVy0mJzsfzGg8TtiI/9MG3ksPO8skQd5ArSsucxQ2D/QA1Qxm5hMqem3332l0dfF
+	BYLhZj9Qz5C2upuN1nHxqeFXWZ4eH246Ph8bH4ifj932eLz3HNhmTommXMCSglfP4zPb4N
+	tuvDkgimwP4Nskio+9s2VSb03zXE/M1gxiQqdni2fRSCLKsJkvRqwkyGiyTvFiSO7CGXMQ
+	oR5UKi1NxSBzvhmDMHDDFLQYa5ARrTDc5+OhN7BrCKu5QiB7+TkgWFrjoJiBjA==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Wed, 26 Mar 2025 19:26:22 +0100
-Subject: [PATCH RFC 07/10] clk: Ensure all RPM enabled clocks are enabled
- before reparenting orphans
+Date: Wed, 26 Mar 2025 19:26:23 +0100
+Subject: [PATCH RFC 08/10] clk: Move runtime PM calls out of the
+ prepare_lock in clk_unregister()
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250326-cross-lock-dep-v1-7-3199e49e8652@bootlin.com>
+Message-Id: <20250326-cross-lock-dep-v1-8-3199e49e8652@bootlin.com>
 References: <20250326-cross-lock-dep-v1-0-3199e49e8652@bootlin.com>
 In-Reply-To: <20250326-cross-lock-dep-v1-0-3199e49e8652@bootlin.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
@@ -91,59 +91,41 @@ In order to fix the ABBA locking situation between clock and power
 domains, let's disimburse these two locks by preventing any runtime PM
 call to happen with the clk prepare_lock mutex acquired.
 
-Reparenting orphans upon introduction of a new provider means that if
-there is a match, the core will recalculate the rates, which requires
-the relevant clocks to be enabled.
-
-There is not much we can do to guess which clocks will need rate
-recalculation, so better ensure all registered clocks are resumed before
-doing the reparenting operation which obviously requires acquiring the
-clk prepare_lock to protect against concurrent accesses on the clk tree
-topology.
+The clk_unregister() routine calls clk_core_set_parent_nolock() which
+can runtime resume basically any clock randomly in the system after
+having acquired the main clk lock. In this case the easier approach to
+avoid failures is to make sure we wake up all runtime PM enabled clocks
+in the system before acquiring the lock. We are not in a hot path
+anyway.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/clk/clk.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ drivers/clk/clk.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 95f53bc427d8980287bfe668d1c993023e0e078b..4c2f2d2b7735dfbe323fec4e0d331302534bc849 100644
+index 4c2f2d2b7735dfbe323fec4e0d331302534bc849..339ebfa8cca729ffb84127e01a21f741bc270cb3 100644
 --- a/drivers/clk/clk.c
 +++ b/drivers/clk/clk.c
-@@ -5032,8 +5032,16 @@ int of_clk_add_provider(struct device_node *np,
- 	mutex_unlock(&of_clk_mutex);
- 	pr_debug("Added clock from %pOF\n", np);
+@@ -4574,6 +4574,9 @@ void clk_unregister(struct clk *clk)
  
-+	ret = clk_pm_runtime_get_all();
-+	if (ret) {
-+		of_clk_del_provider(np);
-+		return ret;
-+	}
-+
- 	clk_core_reparent_orphans();
+ 	clk_debug_unregister(clk->core);
  
-+	clk_pm_runtime_put_all();
++	if (clk_pm_runtime_get_all())
++		return;
 +
- 	ret = of_clk_set_defaults(np, true);
- 	if (ret < 0)
- 		of_clk_del_provider(np);
-@@ -5074,8 +5082,16 @@ int of_clk_add_hw_provider(struct device_node *np,
- 	mutex_unlock(&of_clk_mutex);
- 	pr_debug("Added clk_hw provider from %pOF\n", np);
+ 	clk_prepare_lock();
  
-+	ret = clk_pm_runtime_get_all();
-+	if (ret) {
-+		of_clk_del_provider(np);
-+		return ret;
-+	}
-+
- 	clk_core_reparent_orphans();
+ 	ops = clk->core->ops;
+@@ -4617,6 +4620,8 @@ void clk_unregister(struct clk *clk)
+ 					__func__, clk->core->name);
+ 	clk_prepare_unlock();
  
 +	clk_pm_runtime_put_all();
 +
- 	ret = of_clk_set_defaults(np, true);
- 	if (ret < 0)
- 		of_clk_del_provider(np);
+ 	kref_put(&clk->core->ref, __clk_release);
+ 	free_clk(clk);
+ }
 
 -- 
 2.48.1
