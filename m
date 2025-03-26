@@ -1,263 +1,185 @@
-Return-Path: <linux-pm+bounces-24507-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24508-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54747A715AE
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 12:26:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB04BA71786
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 14:28:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 218E73B2498
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 11:24:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3F033B09D3
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 13:26:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E1821D8DE0;
-	Wed, 26 Mar 2025 11:25:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="owjI7ujj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21A4B1E833C;
+	Wed, 26 Mar 2025 13:27:00 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 070BAEEC3
-	for <linux-pm@vger.kernel.org>; Wed, 26 Mar 2025 11:24:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA8521E1E18;
+	Wed, 26 Mar 2025 13:26:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742988302; cv=none; b=Dwqw4JqzFr7Z/5PoGgtFkRl+EXe5CHCppLKWEARDzDD6X2ncf9LkeyxdQnuinSr3X3xk7z6wT8BFSCwkvzlj/nHMeGcP+0qaK/oeUj1B/wb4loRvHQQaXrqy+wczu5kwssuXQM9qk0ydTaFJIITJWdThNvo6pSouQi35NqMntMk=
+	t=1742995620; cv=none; b=VS1YuQB8IZN/Kz6jS5gJvmz6XUDV9HC0DhToKsB7Pl0p0jIixYhuKzyzcAy2PQ69Aq5aGGQMm35lwKoSAf8JGsahLF0gyBYCVgvaCEgLxbeSGuMbRVM1dwUX8XqSbQ8vCTNFEUKk95qDAVRbsXHi681FpCUCOyv5VJERTfOq5dg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742988302; c=relaxed/simple;
-	bh=PtOldyJkQTuOrIlrZ0MS2qSdzcnjeTVIRPUO/G6iQWg=;
+	s=arc-20240116; t=1742995620; c=relaxed/simple;
+	bh=BfugzdJy1020xKX9PNyXbohhH1lWWG+ul9/669rea4w=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OLIZRYQHZTBevgDUWITlfX5duDJZmB+4tcBARdvkNLxd05TD4ZouuBrQEOQL2Az4UF8j0cAcBx/K94SJDhBLWus5LURi8tHfBIDgicgPKqrwSYNcg03IKMa3seHTrHjn4c6vZB4hC46J+Q4xUsNO1fzJ6gcf5LF3AiheY5/DAoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=owjI7ujj; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6fd80f30ba5so43263337b3.3
-        for <linux-pm@vger.kernel.org>; Wed, 26 Mar 2025 04:24:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1742988299; x=1743593099; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CAKfg0qsqFTp3rC4gKRjScpyZGRWGz93JbWST6kAsnA=;
-        b=owjI7ujj7JWmWS6SVVsCM7txATPiNOvF3yprKYwoxiSW6Rp7yL5r5cSaQjrmWrz2tF
-         tzcgp0wApnTXPa/lCxK3HLlCgRuZVWUozrxLXku69AbUwLU3mx7ydZFpjlP76+5zygxF
-         C7ofQyaO+ieEFzkr3Jv88po1SaZFM8pCTxtm/XkwL6MC6BTFPV9DMdT5oLDz3K5AM0sp
-         2ea9xPu7bMqnEgVCn/Nja7hvwpje+WjEI0av+drjFY55e+5Awxn+dAyqIqqL3edeKdcl
-         SF/lXyJ/znTHi4EV5AUFMPQip/mtkFGW0MLV3ljD/jp5YwloM5dk2iZgVIFsY0c5Wm+W
-         D3iQ==
+	 To:Cc:Content-Type; b=iT4RvgPYlWpHS82lZyQsB+aq0Z7cFjmLCIqG5oZJZ601CVWa9imRR4/jXnU24toxJCGpYGi6PEw0lczgPxHkaZgD+YAvE4Uhds46FOUI+3bQ+yJzPUcT7gflOdKUJMFwI33ZEA3wF9banNOjBYEH8FjZazMonqRrjTdqvknHfzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-520847ad493so6523286e0c.1;
+        Wed, 26 Mar 2025 06:26:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742988299; x=1743593099;
+        d=1e100.net; s=20230601; t=1742995616; x=1743600416;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CAKfg0qsqFTp3rC4gKRjScpyZGRWGz93JbWST6kAsnA=;
-        b=RJWi02IHlrYOAu/EqwUgPUxVwayC3ksp7YWJ/v0xHe7enY/uSjqqVfHU9jScByEXx4
-         YVTdEPm9A3DBUONlCgrBa66PWDBTp53TAmhNfTCXygBuM422XMhSFJa2cIZOhZr+iHLh
-         SMHUUI+0sm0b8TgMP/HDRSEhX2s701+VSHeBubQzVqxIyWjPuOa2NF3UZxhyRM1Qf7rq
-         Jl7MqvmONMcdzaXy+LXLvKLca4iyTnnE4sGX2dIWqfd8KlIgep1xPVhTQR7wEgkPTX2/
-         IMKML41wolqZ2ZSYaFBGNo0UI1q36tkkZjbmd2rA1o2VAjbbsBouJh+cgBumOJ7YDiYi
-         UK8A==
-X-Forwarded-Encrypted: i=1; AJvYcCUx1Yw8lck7rGYW7WDqD8uqdXA5HgpTT6PMlg6EH+GKbIFJZc5GCu5Vp70DVBqzGLNS4F43/x9H6Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwnDocDCP/4Wa8SsP1MbNHjGpD9hb/UHW+C0edZiQw6kAl9nCe
-	lShzgxiqbk4aNUyVXEe09y6ifXDH8Z/uWFLYDQkZ90/y1JxjUzy2TnUcJfi+HinmarT/wGjOJ/z
-	tx8N9Vm9RsRrnSx4rbSpuHnywNmD6H/cFQwnATQ==
-X-Gm-Gg: ASbGncsh6roXh43n0H/FX1p/WVVEejhzptXeLDVwNDkViB8CfuD0awqSgquNI4j4myX
-	7Ol0mMmNuUAEWaUKEFi7xAhMDUwDmjuhYXKthjRlH27Xz5IkuJxDN8AF2bIeI3Kz83WwNRcF0OJ
-	WDz6q5oA9XktuTgrZTVQlvG30PL1ADXLcQygP8D0mG57maThCAdSYOdJ642AI=
-X-Google-Smtp-Source: AGHT+IG0bRqZ7yucLkko4jSBCBt6Lj/LtcXgRGGRXa8ZXxRF/rWOCdZbLtb/q8iP+odXXLa6ynfR6bWujWIchPutkxQ=
-X-Received: by 2002:a05:690c:f86:b0:6f9:7921:480e with SMTP id
- 00721157ae682-700babfd2d6mr231478087b3.5.1742988298731; Wed, 26 Mar 2025
- 04:24:58 -0700 (PDT)
+        bh=tmOEoyHY2Ks0gUuytaK4wjrwLTqw4vCXipxUeutcC98=;
+        b=gSlWjTfG2Kh+1odtGkBop9ikapZvxCja/bIpFa1ocSjSDpsg9vFKVtN5EMJhTABJBA
+         L2gOegSDd+Z7maWtinNNJsGoXwlTwwNiPV7ct5wc8dcQdQPQfi92qsrgc/lkMpZxG8J9
+         9npjp5Cou7nDcycwmNwam0VbbIRRu3cCHJSKO8aL0KPj9vTXTZVy78FPsIvuakoO0sj8
+         LZGYN2Uc7JkV46KJXo6Vo1QtHwmBWfrQVnmD3gFhXLiN24lMu4OF2luY4F1OfhW36UYD
+         qx0AzUPI03oQC1LOGlCwU303jZV2jSvVM5YbwCTNFCh1YhsrLHyRrOWG1zm/i9Z+4tBk
+         Inuw==
+X-Forwarded-Encrypted: i=1; AJvYcCUIChoi5MbG3ooh6nFrres2wcLZjbYJAQkixOCvj14KtpPGaAmU0meT4HV07jLGprKlV7nX3oVq/smmYqtYHXfL5yw=@vger.kernel.org, AJvYcCUbtH0RYvf5JVZSikLf2lPNpTyIaXMjBACprGajYeah29uFaNGHQ8w2C2HhLfDYMRuMz9oGPqOv7MEUTsDh@vger.kernel.org, AJvYcCW8yGu3MG9lYEN4mM6UvLCo1keaj1znOXcmoV0V2CcfvGrdd31bq5DdrlOCyd56W6riioMD0fpbjkJR@vger.kernel.org, AJvYcCX82Z7jM+I2gPU6nv8R2pabhfbRMKNAEWznzfMJs8qFkPIbLtNm/TP/cKfXRiCuMG3YNqzc9UfAWXU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbGW5WvgMLwk0jm14B2QCmb0ol/AdrDfy1TW6jNlFm1suRRBWg
+	65Az2PdfD8oBtGybTbRspFgPS6jXhQuNafLw+pBI6oiweVRmlVHyJxOHCI6Cefs=
+X-Gm-Gg: ASbGncsVjddy7uSJNb7JKRF0r8jpUDIld3tRXdoesUwC8D9dzED0Wkto5Du0UvDwpU0
+	MUiqaMfbg8AzJ51isyoBe39UC+sgVMqaP9kja96htj8D/J3Triyzf9Fp6UvfsHHM48zaYksMGRN
+	kDEuBziJ2T9KhcK3MyXHG3jHmkfgroWR6p5+JiKGR6BEAfQ3qPvQBUGhmKjhUotuIAtLwqE6Fq+
+	V+0/Mt4fsoim4UVOGkgAX+x3qudg1VrWhTYP9QyPVLt/92NxIVbLA4TmZBDI5h5km3GY5oZTY0C
+	WwAT1L1JXT4R1hfxiMnoVovlYDmIAnUzzf/srA21MVqlff8wvfsjya15jq/uzUo8bm8bj8WWIds
+	4BPnO9GqDfGnV9eCzQ8y6EQ==
+X-Google-Smtp-Source: AGHT+IHUQLjZE7FzyRalMeA+QfRgRAwqGd60bRKNHApZ58Wzqi0GQn7ixD3u6fZA04MD9XQEVcqrPg==
+X-Received: by 2002:a05:6122:6081:b0:51f:3eee:89e7 with SMTP id 71dfb90a1353d-525a854e0dcmr16250334e0c.11.1742995615767;
+        Wed, 26 Mar 2025 06:26:55 -0700 (PDT)
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com. [209.85.221.180])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-525a735b95fsm2185583e0c.5.2025.03.26.06.26.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Mar 2025 06:26:55 -0700 (PDT)
+Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-51eb1a714bfso7180719e0c.3;
+        Wed, 26 Mar 2025 06:26:55 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVdhBFvceILJWFkePwva6TgGcch5AwbbnO/KSQ1CQYKf2vEfNeLRzcHNg3l1voIRERHqHcVq7J5PfJJNgMlVu1PI2E=@vger.kernel.org, AJvYcCVpjOOXiD/ZtR/x0UXz85cmAKO3AwawrB0CDZatrnS6xIhXdUCtp/J3X9kw50e/pLMed6mATc4Y5mKBtse8@vger.kernel.org, AJvYcCXbm1Oa7l6cSf9hIvDBeZfeTXdlWENGxhrMwOOP6yBkYNW2NT/K8iwuf58JpIpIPBH5gOzA2iV04Gfq@vger.kernel.org, AJvYcCXe1d8PxktcTHae9fBEWLXGBqtDOcP81ZMJz4gnodfQE86zTpSDsoc3RjxD/goimvgGE5inbPd1pxQ=@vger.kernel.org
+X-Received: by 2002:a05:6122:251b:b0:520:61ee:c7f9 with SMTP id
+ 71dfb90a1353d-525a84c5e96mr16364284e0c.7.1742995615066; Wed, 26 Mar 2025
+ 06:26:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250303143629.400583-1-m.wilczynski@samsung.com>
- <CGME20250303143637eucas1p1a3abdea520ab88688de1263a5f07bba0@eucas1p1.samsung.com>
- <20250303143629.400583-5-m.wilczynski@samsung.com> <de50dd55e1285726e8d5ebae73877486.sboyd@kernel.org>
- <4c035603-4c11-4e71-8ef3-b857a81bf5ef@samsung.com> <aacd03a071dce7b340d7170eae59d662d58f23b1.camel@pengutronix.de>
- <e90a0c77-61a0-49db-86ba-bac253f8ec53@samsung.com> <38d9650fc11a674c8b689d6bab937acf@kernel.org>
-In-Reply-To: <38d9650fc11a674c8b689d6bab937acf@kernel.org>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 26 Mar 2025 12:24:22 +0100
-X-Gm-Features: AQ5f1Jr_9rY3NEgVW4bBC1NZ3qSkcNWvCh-D1oUbC5XKRCPzJhBOl8lQH97_HVA
-Message-ID: <CAPDyKFqsJaTrF0tBSY-TjpqdVt5=6aPQHYfnDebtphfRZSU=-Q@mail.gmail.com>
-Subject: Re: [PATCH v1 4/4] clk: thead: Add GPU clock gate control with CLKGEN
- reset support
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: Michal Wilczynski <m.wilczynski@samsung.com>, Philipp Zabel <p.zabel@pengutronix.de>, alex@ghiti.fr, 
-	aou@eecs.berkeley.edu, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org, 
-	jszhang@kernel.org, krzk+dt@kernel.org, m.szyprowski@samsung.com, 
-	mturquette@baylibre.com, palmer@dabbelt.com, paul.walmsley@sifive.com, 
-	robh@kernel.org, wefu@redhat.com, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org
+References: <20250324135701.179827-1-claudiu.beznea.uj@bp.renesas.com> <20250324135701.179827-3-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20250324135701.179827-3-claudiu.beznea.uj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 26 Mar 2025 14:26:43 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUUNFo4pqbXh1xMatsv7T7cnq0SmDxM_o9em0=gpurdCA@mail.gmail.com>
+X-Gm-Features: AQ5f1Jo5c_rzCtK6r04J2m-KHiI22CUo11JxOin2-O__Lj4JFrTCJtdIWo19EQs
+Message-ID: <CAMuHMdUUNFo4pqbXh1xMatsv7T7cnq0SmDxM_o9em0=gpurdCA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] thermal: renesas: rzg3s: Add thermal driver for
+ the Renesas RZ/G3S SoC
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com, 
+	lukasz.luba@arm.com, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	geert+renesas@glider.be, magnus.damm@gmail.com, p.zabel@pengutronix.de, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 25 Mar 2025 at 23:40, Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Michal Wilczynski (2025-03-19 02:22:11)
-> >
-> >
-> > On 3/13/25 10:25, Philipp Zabel wrote:
-> > > On Do, 2025-03-06 at 17:43 +0100, Michal Wilczynski wrote:
-> > >>
-> > >> On 3/6/25 00:47, Stephen Boyd wrote:
-> > >>> Quoting Michal Wilczynski (2025-03-03 06:36:29)
-> > >>>> The T-HEAD TH1520 has three GPU clocks: core, cfg, and mem. The mem
-> > >>>> clock gate is marked as "Reserved" in hardware, while core and cfg are
-> > >>>> configurable. In order for these clock gates to work properly, the
-> > >>>> CLKGEN reset must be managed in a specific sequence.
-> > >>>>
-> > >>>> Move the CLKGEN reset handling to the clock driver since it's
-> > >>>> fundamentally a clock-related workaround [1]. This ensures that clk_enabled
-> > >>>> GPU clocks stay physically enabled without external interference from
-> > >>>> the reset driver.  The reset is now deasserted only when both core and
-> > >>>> cfg clocks are enabled, and asserted when either of them is disabled.
-> > >>>>
-> > >>>> The mem clock is configured to use nop operations since it cannot be
-> > >>>> controlled.
-> > >>>>
-> > >>>> Link: https://lore.kernel.org/all/945fb7e913a9c3dcb40697328b7e9842b75fea5c.camel@pengutronix.de [1]
-> > >>>>
-> > >>>> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
-> > >>> [...]
-> > >>>> diff --git a/drivers/clk/thead/clk-th1520-ap.c b/drivers/clk/thead/clk-th1520-ap.c
-> > >>>> index ea96d007aecd..1dfcde867233 100644
-> > >>>> --- a/drivers/clk/thead/clk-th1520-ap.c
-> > >>>> +++ b/drivers/clk/thead/clk-th1520-ap.c
-> > >>>> @@ -862,17 +863,70 @@ static CCU_GATE(CLK_SRAM1, sram1_clk, "sram1", axi_aclk_pd, 0x20c, BIT(3), 0);
-> > >>> [...]
-> > >>>>
-> > >>>>  static CCU_GATE_CLK_OPS(CLK_GPU_MEM, gpu_mem_clk, "gpu-mem-clk",
-> > >>>>                         video_pll_clk_pd, 0x0, BIT(2), 0, clk_nop_ops);
-> > >>>> +static CCU_GATE_CLK_OPS(CLK_GPU_CORE, gpu_core_clk, "gpu-core-clk",
-> > >>>> +                       video_pll_clk_pd, 0x0, BIT(3), 0, ccu_gate_gpu_ops);
-> > >>>> +static CCU_GATE_CLK_OPS(CLK_GPU_CFG_ACLK, gpu_cfg_aclk, "gpu-cfg-aclk",
-> > >>>> +                       video_pll_clk_pd, 0x0, BIT(4), 0, ccu_gate_gpu_ops);
-> > >>>> +
-> > >>>> +static void ccu_gpu_clk_disable(struct clk_hw *hw)
-> > >>>> +{
-> > >>>> +       struct ccu_gate *cg = hw_to_ccu_gate(hw);
-> > >>>> +       unsigned long flags;
-> > >>>> +
-> > >>>> +       spin_lock_irqsave(&gpu_reset_lock, flags);
-> > >>>> +
-> > >>>> +       ccu_disable_helper(&cg->common, cg->enable);
-> > >>>> +
-> > >>>> +       if ((cg == &gpu_core_clk &&
-> > >>>> +            !clk_hw_is_enabled(&gpu_cfg_aclk.common.hw)) ||
-> > >>>> +           (cg == &gpu_cfg_aclk &&
-> > >>>> +            !clk_hw_is_enabled(&gpu_core_clk.common.hw)))
-> > >>>> +               reset_control_assert(gpu_reset);
-> > >>>
-> > >>> Why can't the clk consumer control the reset itself? Doing this here is
-> > >>> not ideal because we hold the clk lock when we try to grab the reset
-> > >>> lock. These are all spinlocks that should be small in lines of code
-> > >>> where the lock is held, but we're calling into an entire other framework
-> > >>> under a spinlock. If an (unrelated) reset driver tries to grab the clk
-> > >>> lock it will deadlock.
-> > >>
-> > >> So in our case the clk consumer is the drm/imagination driver. Here is
-> > >> the comment from the maintainer for my previous attempt to use a reset
-> > >> driver to abstract the GPU init sequence [1]:
-> > >>
-> > >> "Do you know what this resets? From our side, the GPU only has a single
-> > >> reset line (which I assume to be GPU_RESET)."
-> > >>
-> > >> "I don't love that this procedure appears in the platform reset driver.
-> > >> I appreciate it may not be clear from the SoC TRM, but this is the
-> > >> standard reset procedure for all IMG Rogue GPUs. The currently
-> > >> supported TI SoC handles this in silicon, when power up/down requests
-> > >> are sent so we never needed to encode it in the driver before.
-> > >>
-> > >> Strictly speaking, the 32 cycle delay is required between power and
-> > >> clocks being enabled and the reset line being deasserted. If nothing
-> > >> here touches power or clocks (which I don't think it should), the delay
-> > >> could potentially be lifted to the GPU driver."
-> > >>
-> > >> From the drm/imagination maintainers point of view their hardware has
-> > >> only one reset, the extra CLKGEN reset is SoC specific.
-> > >
-> > > If I am understanding correctly, the CLKGEN reset doesn't reset
-> > > anything in the GPU itself, but holds the GPU clock generator block in
-> > > reset, effectively disabling the three GPU clocks as a workaround for
-> > > the always-ungated GPU_MEM clock.
-> > >
-> > >> Also the reset driver maintainer didn't like my way of abstracting two
-> > >> resets ("GPU" and and SoC specific"CLKGEN") into one reset
-> > >
-> > > That is one part of it. The other is that (according to my
-> > > understanding as laid out above), the combined GPU+CLKGEN reset would
-> > > effectively disable all three GPU clocks for a while, after the GPU
-> > > driver has already requested them to be enabled.
-> >
-> > Thank you for your comments Philipp, it seems like we're on the same
-> > page here. I was wondering whether there is anything I can do to move the
-> > patches forward.
-> >
-> > Stephen, if the current patch is a no go from your perspective could you
-> > please advise whether there is a way to solve this in a clock that would
-> > be acceptable to you.
->
-> It looks like the SoC glue makes the interactions between the clk and
-> reset frameworks complicated because GPU clks don't work if a reset is
-> asserted. You're trying to find a place to coordinate the clk and reset.
-> Am I right?
->
-> I'd advise managing the clks and resets in a generic power domain that
-> is attached to the GPU device. In that power domain, coordinate the clk
-> and reset sequencing so that the reset is deasserted before the clks are
-> enabled (or whatever the actual requirement is). If the GPU driver
-> _must_ have a clk and reset pointer to use, implement one that either
-> does nothing or flag to the GPU driver that the power domain is managing
-> all this for it so it should just use runtime PM and system PM hooks to
-> turn on the clks and take the GPU out of reset.
->
-> From what I can tell, the GPU driver maintainer doesn't want to think
-> about the wrapper that likely got placed around the hardware block
-> shipped by IMG. This wrapper is the SoC glue that needs to go into a
-> generic power domain so that the different PM resources, reset, clk,
-> etc. can be coordinated based on the GPU device's power state. It's
-> either that, or go the dwc3 route and have SoC glue platform drivers
-> that manage this stuff and create a child device to represent the hard
-> macro shipped by the vendor like Synopsys/Imagination. Doing the parent
-> device design isn't as flexible as PM domains because you can only have
-> one parent device and the child device state can be ignored vs. many PM
-> domains attached in a graph to a device that are more directly
-> influenced by the device using runtime PM.
->
-> Maybe you'll be heartened to know this problem isn't unique and has
-> existed for decades :) I don't know what state the graphics driver is in
-> but they'll likely be interested in solving this problem in a way that
-> doesn't "pollute" their driver with SoC specific details. It's all a
-> question of where you put the code. The reset framework wants to focus
-> on resets, the clk framework wants to focus on clks, and the graphics
-> driver wants to focus on graphics. BTW, we went through a similar
-> discussion with regulators and clks years ago and ended up handling that
-> with OPPs and power domains.
+Hi Claudiu,
 
-Right, power-domain providers are mostly implementing SoC specific code.
-
-In some cases, power-domain providers also handle per device SoC
-specific constraints/sequences, which seems what you are discussing
-here. For that, genpd has a couple of callbacks that could be
-interesting to have a look at, such as:
-
-genpd->attach|detach_dev() - for probe/remove
-genpd.dev_ops->start|stop() - for runtime/system PM
-
-That said, maybe just using the regular genpd->power_on|off() callback
-is sufficient here, depending on how you decide to model things.
-
+On Mon, 24 Mar 2025 at 14:57, Claudiu <claudiu.beznea@tuxon.dev> wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 >
-> I believe a PM domain is the right place for this kind of stuff, and I
-> actually presented on this topic at OSSEU[1], but I don't maintain that
-> code. Ulf does.
+> The Renesas RZ/G3S SoC features a Thermal Sensor Unit (TSU) that reports
+> the junction temperature. The temperature is reported through a dedicated
+> ADC channel. Add a driver for the Renesas RZ/G3S TSU.
 >
-> [1] https://osseu2024.sched.com/event/1ej38/the-case-for-an-soc-power-management-driver-stephen-boyd-google
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> ---
+>
+> Changes in v3:
+> - drop the runtime resume/suspend from rzg3s_thermal_get_temp(); this
+>   is not needed as the temperature is read with ADC
+> - opened the devres group id in rzg3s_thermal_probe() and rename
+>   previsouly rzg3s_thermal_probe() to rzg3s_thermal_probe_helper(), to
+>   have simpler code; this approach was suggested by Jonathan in [1];
+>   as there is no positive feedback for the generic solution [2] this
+>   looks currently the best approach
 
-Kind regards
-Uffe
+Thanks for the update!
+
+> --- /dev/null
+> +++ b/drivers/thermal/renesas/rzg3s_thermal.c
+
+> +static int rzg3s_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+> +{
+> +       struct rzg3s_thermal_priv *priv = thermal_zone_device_priv(tz);
+> +       int ts_code_ave = 0;
+> +       int ret, val;
+> +
+> +       if (priv->mode != THERMAL_DEVICE_ENABLED)
+> +               return -EAGAIN;
+> +
+> +       for (u8 i = 0; i < TSU_READ_STEPS; i++) {
+> +               ret = iio_read_channel_raw(priv->channel, &val);
+> +               if (ret < 0)
+> +                       return ret;
+> +
+> +               ts_code_ave += val;
+> +               /*
+> +                * According to the HW manual (section 40.4.4 Procedure for Measuring the
+> +                * Temperature) we need to wait here at leat 3us.
+> +                */
+> +               usleep_range(5, 10);
+> +       }
+> +
+> +       ret = 0;
+> +       ts_code_ave = DIV_ROUND_CLOSEST(MCELSIUS(ts_code_ave), TSU_READ_STEPS);
+> +
+> +       /*
+> +        * According to the HW manual (section 40.4.4 Procedure for Measuring the Temperature)
+> +        * the computation formula is as follows:
+> +        *
+> +        * Tj = (ts_code_ave - priv->calib1) * 165 / (priv->calib0 - priv->calib1) - 40
+> +        *
+> +        * Convert everything to mili Celsius before applying the formula to avoid
+
+milli
+
+> +        * losing precision.
+> +        */
+> +
+> +       *temp = DIV_ROUND_CLOSEST((s64)(ts_code_ave - MCELSIUS(priv->calib1)) * MCELSIUS(165),
+> +                                 MCELSIUS(priv->calib0 - priv->calib1)) - MCELSIUS(40);
+
+This is a 64-by-32 division. When compile-testing on arm32:
+
+rzg3s_thermal.c:(.text+0x330): undefined reference to `__aeabi_ldivmod'
+
+> +
+> +       /* Report it in mili degrees Celsius and round it up to 0.5 degrees Celsius. */
+
+milli
+
+
+> +       *temp = roundup(*temp, 500);
+> +
+> +       return ret;
+> +}
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
