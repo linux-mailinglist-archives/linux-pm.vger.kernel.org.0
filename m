@@ -1,54 +1,54 @@
-Return-Path: <linux-pm+bounces-24545-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24546-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BCBCA71E61
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 19:28:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E1A4A71E6C
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 19:30:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99E4E7A1AF9
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 18:27:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5A053B3B16
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 18:28:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D582425DD12;
-	Wed, 26 Mar 2025 18:26:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 955C125EF9B;
+	Wed, 26 Mar 2025 18:26:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DHocBZj4"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="WQBePKR6"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9510425A647;
-	Wed, 26 Mar 2025 18:26:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73EB825D524;
+	Wed, 26 Mar 2025 18:26:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743013601; cv=none; b=B4HldJYJTKc2zqR6o0lUn4W6OqVB/spXdo+b1oMNf3HIKW2B8Mba61h2UsZMd/Z5IVf3mnPP019LIEw/V5CL5txUZmNNXxXq9a/lrORpMe+r7uFfmFcUrgtyre6UfKKnedopfQj0vopoLGL9GyPVEsUowY30frPmhE2hZBzh3kw=
+	t=1743013602; cv=none; b=B+lfBENgT2i0m0j9XCMJUrrFx3sp1z9up6o6nPZjRToas81YhbKhR9n3ObH5vWgPEuMHL0QkeEWwHz2vq89ZEccT6+FhFI7JgpD6gcrpeXnc9xYN9cGcX+ENg47XjF5z6JSnh0/d8BU59P+o6BzG9rcCOdBo9sIb/TzQsqLbeco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743013601; c=relaxed/simple;
-	bh=p/SQu/txIkaclb7CmktdQaCDuOWlbdrrhqQjCNeoSGg=;
+	s=arc-20240116; t=1743013602; c=relaxed/simple;
+	bh=2hOOkKfJ2O24FeBerSRc7TzBcA7RAdNIvqDCbUOqPBs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RRvejFURQdc9IQ23xgn4sLLPTm5tshymyxWpVr/uSmWs5q7ZTVUfq9gPGf+jMSN9t4OOsfahPfHGZBgeje9z3AzPsO+BNyybnYd2BIz8Uv/ARXfC0x0pLk0XNgT3GGQiKkOT07aWZt7yGR2I7H2FZAdDz8/aRkLToX66nffRtXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DHocBZj4; arc=none smtp.client-ip=217.70.183.201
+	 In-Reply-To:To:Cc; b=bIMeYPny+SRWPFKI0XKfB8Q9o3AFAU43srAyHanFMTgfVnNj4Fg+2paIFXEhfZ3GS59BC9pZtNpidXgfGteCTJPMSuPLvemvG7il5/3zQ0feBXLBGbpW8p5FG5AAwaXLpXq53cEtgGoa1NvxkMqp/jJ+4BBIt2xDiIxEZxHsRWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=WQBePKR6; arc=none smtp.client-ip=217.70.183.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7093944446;
-	Wed, 26 Mar 2025 18:26:36 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BD6F844447;
+	Wed, 26 Mar 2025 18:26:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1743013597;
+	t=1743013598;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=R3+Mu9M77+PpoOK75hoSqIuv6VHqsXdDyRQbbbzxiv0=;
-	b=DHocBZj4pX8S9PdrRo5/CUny+pFhQH9TSirK/9Hz8o5d4FsIwaZS2PrrSFMObOwFxtSWTP
-	NemWy6D+8pBsIyLoqXW06FOvNoyLdgrSwYYXT4EZ+CrnlixAd2L1rUtrGvuMHa7aKIuIpE
-	ArH1PPcdG7TPbWgE/syqXZM9vE1A0uBgT7R9kfZqPBSxNN2t33IspnrE6k8bdXCysh3F4I
-	4Pz2b57XjaaatcKIjtRccjom0k6DkN2zr6hjYJuBFC0iH2UWiWrbtiNEzjHaNI2MNY/Wl7
-	xbv22sE35t/xAoMXfAkKGCF8uf42Sxcor9XA+Owt3WGOoQKttzWLJ6KynCYbLA==
+	bh=G6fDJAgeivWwEjOlUOt+sxMAv2+TjUSgdeW6xREfgQ4=;
+	b=WQBePKR6H4Qi0pPpju+j0GA4z4uw2abs39R6ZvrmXUT7QQXG06s56xvKtQtO4KjWqdF7Df
+	dpT/YQ+1W6kwCwSyqW5+tjpfVHHzIO7tqSJA6+/0WUtzbpDlMCnHdEw8jMrzTPnlmIObSK
+	8vUfxrXsB+MtbES6OucJb75vs1SRo8cWbcHk/7m5OzXaD2pqSNWeIsg6oDca6m9kLRw2CD
+	PQZUTQsucwmimu2Yl3CYP0VIZrfNDvNJr398UMc4+x4Iu5MIlwJD2F6CQW3d2ZYKzF2Tv6
+	0mbek6lj9SZIX133MF4YJtQ33N8t8yElehLWVozJtTLRsqIvOfycZjMwUxP2Vw==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Wed, 26 Mar 2025 19:26:24 +0100
-Subject: [PATCH RFC 09/10] clk: Make sure clock parents and children are
- resumed when necessary
+Date: Wed, 26 Mar 2025 19:26:25 +0100
+Subject: [PATCH RFC 10/10] clk: Fix the ABBA locking issue with runtime PM
+ subcalls
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250326-cross-lock-dep-v1-9-3199e49e8652@bootlin.com>
+Message-Id: <20250326-cross-lock-dep-v1-10-3199e49e8652@bootlin.com>
 References: <20250326-cross-lock-dep-v1-0-3199e49e8652@bootlin.com>
 In-Reply-To: <20250326-cross-lock-dep-v1-0-3199e49e8652@bootlin.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
@@ -87,239 +87,129 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduieeivdehucetufdoteggode
  hgtphhtthhopehssghohigusehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkhhhilhhmrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomh
 X-GND-Sasl: miquel.raynal@bootlin.com
 
-Any pm_runtime_get() call will both wake up the core clock as well as
-its parents. But there are some cases which also require resuming the
-children clocks. One way to do that is to use the new
-pm_runtime_get_consumers() helper.
+The clock subsystem is calling runtime PM callbacks after having
+acquired its own lock, which is in general problematic, especially
+because when PM callbacks enter the power domain subsystem, we have the
+following scenario:
+mutex_lock(prepare_lock)
+mutex_lock(genpd_lock)
+But on the other side, devices may enable power domains, which
+themselves might require clocks, forcing the following path:
+mutex_lock(genpd_lock)
+mutex_lock(prepare_lock)
 
-It's been identified that the following situation may require resuming
-the children:
-- getting the rate
-- setting the rate
-- changing the parent (especially since it may produce rate changes)
-- putting the clock, which may involve reparenting as well
-
-In order to fix the ABBA locking situation between clock and power
-domains, let's disimburse these two locks by resuming the children
-outside of the prepare_lock in one function call by using this new
-helper.
+The clk core has been modified in order to avoid the need for "late"
+runtime PM calls (ie. inside the clk prepare_lock), so what remains to
+be done is to simply remove these inner runtime calls.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/clk/clk.c | 77 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+ drivers/clk/clk.c | 31 +++++--------------------------
+ 1 file changed, 5 insertions(+), 26 deletions(-)
 
 diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 339ebfa8cca729ffb84127e01a21f741bc270cb3..26af3a134fa7b9d7f4a77ff473df7e79fd465789 100644
+index 26af3a134fa7b9d7f4a77ff473df7e79fd465789..652551860201f2d4ed606c55079dc4fb655d9fa0 100644
 --- a/drivers/clk/clk.c
 +++ b/drivers/clk/clk.c
-@@ -119,6 +119,20 @@ static int clk_pm_runtime_get(struct clk_core *core)
- 	return pm_runtime_resume_and_get(core->dev);
- }
- 
-+static int clk_pm_runtime_get_and_consumers(struct clk_core *core)
-+{
-+	int ret;
-+
-+	if (!core || !core->rpm_enabled)
-+		return 0;
-+
-+	ret = pm_runtime_resume_and_get(core->dev);
-+	if (!ret)
-+		pm_runtime_get_consumers(core->dev);
-+
-+	return ret;
-+}
-+
- static int clk_pm_runtime_get_if_active(struct clk_core *core)
+@@ -1961,10 +1961,9 @@ static unsigned long clk_recalc(struct clk_core *core,
  {
- 	int ret;
-@@ -141,6 +155,16 @@ static void clk_pm_runtime_put(struct clk_core *core)
- 	pm_runtime_put_sync(core->dev);
- }
+ 	unsigned long rate = parent_rate;
  
-+static void clk_pm_runtime_put_and_consumers(struct clk_core *core)
-+{
-+	if (!core || !core->rpm_enabled)
-+		return;
-+
-+	pm_runtime_put_consumers(core->dev);
-+
-+	pm_runtime_put_sync(core->dev);
-+}
-+
- /**
-  * clk_pm_runtime_get_all() - Runtime "get" all clk provider devices
-  *
-@@ -2010,10 +2034,15 @@ unsigned long clk_get_rate(struct clk *clk)
- 	if (!clk)
- 		return 0;
- 
-+	if (clk_pm_runtime_get_and_consumers(clk->core))
-+		return 0;
-+
- 	clk_prepare_lock();
- 	rate = clk_core_get_rate_recalc(clk->core);
- 	clk_prepare_unlock();
- 
-+	clk_pm_runtime_put_and_consumers(clk->core);
+-	if (core->ops->recalc_rate && !clk_pm_runtime_get(core)) {
++	if (core->ops->recalc_rate)
+ 		rate = core->ops->recalc_rate(core->hw, parent_rate);
+-		clk_pm_runtime_put(core);
+-	}
 +
  	return rate;
  }
- EXPORT_SYMBOL_GPL(clk_get_rate);
-@@ -2605,6 +2634,10 @@ int clk_set_rate(struct clk *clk, unsigned long rate)
- 	if (!clk)
- 		return 0;
  
-+	ret = clk_pm_runtime_get_and_consumers(clk->core);
-+	if (ret)
-+		return ret;
-+
- 	/* prevent racing with updates to the clock topology */
- 	clk_prepare_lock();
+@@ -2458,9 +2457,6 @@ static void clk_change_rate(struct clk_core *core)
+ 		best_parent_rate = core->parent->rate;
+ 	}
  
-@@ -2618,6 +2651,8 @@ int clk_set_rate(struct clk *clk, unsigned long rate)
- 
- 	clk_prepare_unlock();
- 
-+	clk_pm_runtime_put_and_consumers(clk->core);
-+
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(clk_set_rate);
-@@ -2648,6 +2683,10 @@ int clk_set_rate_exclusive(struct clk *clk, unsigned long rate)
- 	if (!clk)
- 		return 0;
- 
-+	ret = clk_pm_runtime_get_and_consumers(clk->core);
-+	if (ret)
-+		return ret;
-+
- 	/* prevent racing with updates to the clock topology */
- 	clk_prepare_lock();
- 
-@@ -2665,6 +2704,8 @@ int clk_set_rate_exclusive(struct clk *clk, unsigned long rate)
- 
- 	clk_prepare_unlock();
- 
-+	clk_pm_runtime_put_and_consumers(clk->core);
-+
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(clk_set_rate_exclusive);
-@@ -2755,12 +2796,18 @@ int clk_set_rate_range(struct clk *clk, unsigned long min, unsigned long max)
- 	if (!clk)
- 		return 0;
- 
-+	ret = clk_pm_runtime_get_and_consumers(clk->core);
-+	if (ret)
-+		return ret;
-+
- 	clk_prepare_lock();
- 
- 	ret = clk_set_rate_range_nolock(clk, min, max);
- 
- 	clk_prepare_unlock();
- 
-+	clk_pm_runtime_put_and_consumers(clk->core);
-+
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(clk_set_rate_range);
-@@ -2964,6 +3011,10 @@ int clk_set_parent(struct clk *clk, struct clk *parent)
- 	if (!clk)
- 		return 0;
- 
-+	ret = clk_pm_runtime_get_and_consumers(clk->core);
-+	if (ret)
-+		return ret;
-+
- 	clk_prepare_lock();
- 
- 	if (clk->exclusive_count)
-@@ -2977,6 +3028,8 @@ int clk_set_parent(struct clk *clk, struct clk *parent)
- 
- 	clk_prepare_unlock();
- 
-+	clk_pm_runtime_put_and_consumers(clk->core);
-+
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(clk_set_parent);
-@@ -3459,10 +3512,16 @@ static int clk_rate_set(void *data, u64 val)
- 	struct clk_core *core = data;
- 	int ret;
- 
-+	ret = clk_pm_runtime_get_and_consumers(core);
-+	if (ret)
-+		return ret;
-+
- 	clk_prepare_lock();
- 	ret = clk_core_set_rate_nolock(core, val);
- 	clk_prepare_unlock();
- 
-+	clk_pm_runtime_put_and_consumers(core);
-+
- 	return ret;
+-	if (clk_pm_runtime_get(core))
+-		return;
+-
+ 	if (core->flags & CLK_SET_RATE_UNGATE) {
+ 		clk_core_prepare(core);
+ 		clk_core_enable_lock(core);
+@@ -2523,8 +2519,6 @@ static void clk_change_rate(struct clk_core *core)
+ 	/* handle the new child who might not be in core->children yet */
+ 	if (core->new_child)
+ 		clk_change_rate(core->new_child);
+-
+-	clk_pm_runtime_put(core);
  }
  
-@@ -3518,11 +3577,18 @@ DEFINE_DEBUGFS_ATTRIBUTE(clk_prepare_enable_fops, clk_prepare_enable_get,
- static int clk_rate_get(void *data, u64 *val)
+ static unsigned long clk_core_req_round_rate_nolock(struct clk_core *core,
+@@ -2562,7 +2556,6 @@ static int clk_core_set_rate_nolock(struct clk_core *core,
  {
- 	struct clk_core *core = data;
-+	int ret;
-+
-+	ret = clk_pm_runtime_get_and_consumers(core);
-+	if (ret)
+ 	struct clk_core *top, *fail_clk;
+ 	unsigned long rate;
+-	int ret;
+ 
+ 	if (!core)
+ 		return 0;
+@@ -2582,28 +2575,21 @@ static int clk_core_set_rate_nolock(struct clk_core *core,
+ 	if (!top)
+ 		return -EINVAL;
+ 
+-	ret = clk_pm_runtime_get(core);
+-	if (ret)
+-		return ret;
+-
+ 	/* notify that we are about to change rates */
+ 	fail_clk = clk_propagate_rate_change(top, PRE_RATE_CHANGE);
+ 	if (fail_clk) {
+ 		pr_debug("%s: failed to set %s rate\n", __func__,
+ 				fail_clk->name);
+ 		clk_propagate_rate_change(top, ABORT_RATE_CHANGE);
+-		ret = -EBUSY;
+-		goto err;
++		return -EBUSY;
+ 	}
+ 
+ 	/* change the rates */
+ 	clk_change_rate(top);
+ 
+ 	core->req_rate = req_rate;
+-err:
+-	clk_pm_runtime_put(core);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ /**
+@@ -2953,16 +2939,12 @@ static int clk_core_set_parent_nolock(struct clk_core *core,
+ 		p_rate = parent->rate;
+ 	}
+ 
+-	ret = clk_pm_runtime_get(core);
+-	if (ret)
+-		return ret;
+-
+ 	/* propagate PRE_RATE_CHANGE notifications */
+ 	ret = __clk_speculate_rates(core, p_rate);
+ 
+ 	/* abort if a driver objects */
+ 	if (ret & NOTIFY_STOP_MASK)
+-		goto runtime_put;
 +		return ret;
  
- 	clk_prepare_lock();
- 	*val = clk_core_get_rate_recalc(core);
- 	clk_prepare_unlock();
+ 	/* do the re-parent */
+ 	ret = __clk_set_parent(core, parent, p_index);
+@@ -2975,9 +2957,6 @@ static int clk_core_set_parent_nolock(struct clk_core *core,
+ 		__clk_recalc_accuracies(core);
+ 	}
  
-+	clk_pm_runtime_put_and_consumers(core);
-+
- 	return 0;
+-runtime_put:
+-	clk_pm_runtime_put(core);
+-
+ 	return ret;
  }
  
-@@ -3659,12 +3725,18 @@ static ssize_t current_parent_write(struct file *file, const char __user *ubuf,
- 	if (!parent)
- 		return -ENOENT;
- 
-+	err = clk_pm_runtime_get_and_consumers(parent);
-+	if (err)
-+		return err;
-+
- 	clk_prepare_lock();
- 	err = clk_core_set_parent_nolock(core, parent);
- 	clk_prepare_unlock();
- 	if (err)
- 		return err;
- 
-+	clk_pm_runtime_put_and_consumers(parent);
-+
- 	return count;
- }
- 
-@@ -4762,6 +4834,9 @@ void __clk_put(struct clk *clk)
- 	if (!clk || WARN_ON_ONCE(IS_ERR(clk)))
- 		return;
- 
-+	if (clk_pm_runtime_get_and_consumers(clk->core))
-+		return;
-+
- 	clk_prepare_lock();
- 
- 	/*
-@@ -4784,6 +4859,8 @@ void __clk_put(struct clk *clk)
- 
- 	clk_prepare_unlock();
- 
-+	clk_pm_runtime_put_and_consumers(clk->core);
-+
- 	owner = clk->core->owner;
- 	kref_put(&clk->core->ref, __clk_release);
- 	module_put(owner);
 
 -- 
 2.48.1
