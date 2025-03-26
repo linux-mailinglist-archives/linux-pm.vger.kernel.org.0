@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-24538-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24539-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6105A71E4D
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 19:26:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8692DA71E50
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 19:27:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E185171920
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 18:26:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73F963B3A3C
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 18:26:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5E85253B52;
-	Wed, 26 Mar 2025 18:26:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29F2F255249;
+	Wed, 26 Mar 2025 18:26:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="QcRFWQ6W"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HtU8fdh7"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E47F2459CB;
-	Wed, 26 Mar 2025 18:26:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D167C253329;
+	Wed, 26 Mar 2025 18:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743013592; cv=none; b=SqR6oAS/PoyIIeP3MiPhFkXrtGayg5pvv63DSmTHKdEpMW1u5pEKsAfAbiVinPbLGOxVhr3MivJ0IWVjW94eKg8tm7+6zd316RkIzsY2IQci16/Odkm77Z3HbT+KrAmCXbuc2nDfrXQKwAvJmJjU7E8mBqqnwqDu2eau5Rx4C3s=
+	t=1743013594; cv=none; b=YiULyy7c9BtaOm4dRt8c1LIGaJoZB/2gugD3L46Sh/kHgDLQ6RDxw6J30AEis/1R8GHYWp5mZUkzbBS4tS98/Kd3KURiUfAvJ50RRVyevMOtru5JvvK8JXILojlkfkhX01XrM7tEMgXMOScS++aXaigrybxAHnatqyqIQh4FiVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743013592; c=relaxed/simple;
-	bh=pUdbIzTSWu9FizDsOr0A4bulFwTYwtPu12MdLYGg1c0=;
+	s=arc-20240116; t=1743013594; c=relaxed/simple;
+	bh=sNLIxfRQxoLMAhgUD68uj8OIlLkhY/ZJlt5ea2wwBSQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Tp+h98jLuVKdLFgkqOoFumidc5ZQPS1oHgaCJWrg8IMqrb2Sojoytiq6z0f4O5oUc1AfRlkzq1NMH94VqwYGKLFNz6BD7xuBShRmXHb0NjPJOGaiGnbLasoYknly91YmSRbNfBP8ExNsdL+/FzdQlfbzv5fv0eCFZOe/6OU4guU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=QcRFWQ6W; arc=none smtp.client-ip=217.70.183.201
+	 In-Reply-To:To:Cc; b=SYnqc3I1gJibTq+LGtj8bCDwznCFaMSetUtcW3LIsqDrE3LzsSCCXpOlpMku6HYfDdQDeXl+496EMHeiPI9/sWJe7laetgDk7A+gr/9QIjufHJgVkTA1Rb0Bt0xWZyh4B6QylHWc0XkeJwtGC7zvUPrH2Qou0HtWa7jFzc3zv78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HtU8fdh7; arc=none smtp.client-ip=217.70.183.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A16714441C;
-	Wed, 26 Mar 2025 18:26:27 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D5F474443D;
+	Wed, 26 Mar 2025 18:26:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1743013588;
+	t=1743013589;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=2Cfz0a/5S6u6nHzcv1rW0zQzLUAGoNaXxXWFyhaaNgQ=;
-	b=QcRFWQ6WLTgdNy2fray1YCL5Mh7OyoyMSVnWPJZf5cQxDrIdJvzc1f5CHnaHOdjuU9A3If
-	ghl6wjWjwdVhm1wJ8nyGsUnDFHBcNgIS0PeZxyDR22sJ/4mxubnVq6I/zZmboXPAiz8Efp
-	rRjdK2myTh/SJ9CKwxa6/WoCv35itqwrStihuxn8FfV1mLskPHQtJN1h9UF/RYo1b6dAz2
-	nx42HfGGrlCo+h9L2mZLmaF5pbdN4jfT30fnQv9aQI3ymjJzFSotvh/x0VrFbxFeH3i6EN
-	vstciFxNHiwjApJDO7Z7lFgU0tP3RX8565Cyzc6qgORcN+JGyiA/jEA8dSrVRQ==
+	bh=k+D4+TVvLLcIqytfuD7J/XNoklUwFm0W6VvZ8tlYmJk=;
+	b=HtU8fdh7KePPCVVs9OoRBWCkqO2qnhsZ7a3r2bxlZb5tjI2un0xAtctzxTQ6PGahKj9ket
+	J3zoCgV5+dr5QarWYkE5m2NiEGTxbXDuu5680oLiItkhvX9TGmlNELK2j/B5bOzZcdF1lh
+	EEqPyoKT0njR1vzl76N3sko45VurrjY0CfFmL9DLTJPHSc/r7cVK2CPbGNF7eCi1mG2m1/
+	LFSLM8Y+hnwLTfpJbz8I2RZQFhx55Qr3HkHrNDiVUuICdhcjyY4w5DvM9Z/IgMRrBhLik7
+	+A3dISVCcSFimQa5Q3TXFLspZrZbpnxYNfHb8bw7ncy7kt/HNiV8TyxeBQQFUA==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Wed, 26 Mar 2025 19:26:17 +0100
-Subject: [PATCH RFC 02/10] clk: Improve comments with usual punctuation
+Date: Wed, 26 Mar 2025 19:26:18 +0100
+Subject: [PATCH RFC 03/10] clk: Avoid non needed runtime PM calls
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250326-cross-lock-dep-v1-2-3199e49e8652@bootlin.com>
+Message-Id: <20250326-cross-lock-dep-v1-3-3199e49e8652@bootlin.com>
 References: <20250326-cross-lock-dep-v1-0-3199e49e8652@bootlin.com>
 In-Reply-To: <20250326-cross-lock-dep-v1-0-3199e49e8652@bootlin.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
@@ -86,40 +86,59 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduieeivdehucetufdoteggode
  hgtphhtthhopehssghohigusehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkhhhilhhmrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomh
 X-GND-Sasl: miquel.raynal@bootlin.com
 
-These two-line comments did not meant anything to me until I figured out
-they were two separated sentences. Clarify these comments.
+clk_core_is_prepared() needs the clock to be runtime resumed in order to
+call the ->is_prepared() callback. But at the same time, clk_prepare()
+runtime resumes the clock and clk_unprepare() runtime disables it.
+
+The fact that the clock might be runtime resumed do not indicate it's
+been prepared, however the fact that it's been prepared implies that
+it's been runtime resumed.
+
+We can safely check the runtime status of the clock (and RPM increment
+it in this case) instead of actually calling resume. With this little
+trick, clk_core_is_prepared() can be called from anywhere without extra
+constraint regarding the fact that the prepare_lock mutex might be
+acquired or not already.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/clk/clk.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/clk/clk.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index cf7720b9172ff223d86227aad144e15375ddfd86..7df9965bcbdffd641e6dbf5bff3d3b20079a3af3 100644
+index 7df9965bcbdffd641e6dbf5bff3d3b20079a3af3..1c15d72cd3daeeb5bb4f0d94c9f387526fab75ae 100644
 --- a/drivers/clk/clk.c
 +++ b/drivers/clk/clk.c
-@@ -289,8 +289,8 @@ static bool clk_core_is_prepared(struct clk_core *core)
- 	bool ret = false;
+@@ -119,6 +119,20 @@ static int clk_pm_runtime_get(struct clk_core *core)
+ 	return pm_runtime_resume_and_get(core->dev);
+ }
  
- 	/*
--	 * .is_prepared is optional for clocks that can prepare
--	 * fall back to software usage counter if it is missing
-+	 * .is_prepared is optional for clocks that can prepare.
-+	 * Fall back to software usage counter if it is missing.
- 	 */
++static int clk_pm_runtime_get_if_active(struct clk_core *core)
++{
++	int ret;
++
++	if (!core || !core->rpm_enabled)
++		return 0;
++
++	ret = pm_runtime_get_if_active(core->dev);
++	if (ret == 1)
++		return 0;
++
++	return -EINVAL;
++}
++
+ static void clk_pm_runtime_put(struct clk_core *core)
+ {
+ 	if (!core->rpm_enabled)
+@@ -295,7 +309,7 @@ static bool clk_core_is_prepared(struct clk_core *core)
  	if (!core->ops->is_prepared)
  		return core->prepare_count;
-@@ -308,8 +308,8 @@ static bool clk_core_is_enabled(struct clk_core *core)
- 	bool ret = false;
  
- 	/*
--	 * .is_enabled is only mandatory for clocks that gate
--	 * fall back to software usage counter if .is_enabled is missing
-+	 * .is_enabled is only mandatory for clocks that gate.
-+	 * Fall back to software usage counter if .is_enabled is missing
- 	 */
- 	if (!core->ops->is_enabled)
- 		return core->enable_count;
+-	if (!clk_pm_runtime_get(core)) {
++	if (!clk_pm_runtime_get_if_active(core)) {
+ 		ret = core->ops->is_prepared(core->hw);
+ 		clk_pm_runtime_put(core);
+ 	}
 
 -- 
 2.48.1
