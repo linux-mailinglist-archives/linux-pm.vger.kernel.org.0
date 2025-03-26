@@ -1,185 +1,202 @@
-Return-Path: <linux-pm+bounces-24508-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24509-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB04BA71786
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 14:28:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DAFAA719BE
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 16:07:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3F033B09D3
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 13:26:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 558A31773A8
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 15:00:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21A4B1E833C;
-	Wed, 26 Mar 2025 13:27:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E63D1F4174;
+	Wed, 26 Mar 2025 14:59:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="UPed4qDW";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="gZ+O2RX3";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="UPed4qDW";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="gZ+O2RX3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA8521E1E18;
-	Wed, 26 Mar 2025 13:26:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AB0D1B21B8
+	for <linux-pm@vger.kernel.org>; Wed, 26 Mar 2025 14:59:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742995620; cv=none; b=VS1YuQB8IZN/Kz6jS5gJvmz6XUDV9HC0DhToKsB7Pl0p0jIixYhuKzyzcAy2PQ69Aq5aGGQMm35lwKoSAf8JGsahLF0gyBYCVgvaCEgLxbeSGuMbRVM1dwUX8XqSbQ8vCTNFEUKk95qDAVRbsXHi681FpCUCOyv5VJERTfOq5dg=
+	t=1743001180; cv=none; b=EndS+9O1qfhtRrRQTdAu4YrAUlcTkCk9aD66++lkvd7xV86REVJnmce1H7264F/v55Fw3rbGfEirl1BfwMaZs/ekaTfqgFWmgSpy8CzRvz05fjA/ImK385hE70SfzKoQkIO5Ft5S2qjRG5sK0UgMqm2Sr+sGbBOydFSoxraB4BI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742995620; c=relaxed/simple;
-	bh=BfugzdJy1020xKX9PNyXbohhH1lWWG+ul9/669rea4w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iT4RvgPYlWpHS82lZyQsB+aq0Z7cFjmLCIqG5oZJZ601CVWa9imRR4/jXnU24toxJCGpYGi6PEw0lczgPxHkaZgD+YAvE4Uhds46FOUI+3bQ+yJzPUcT7gflOdKUJMFwI33ZEA3wF9banNOjBYEH8FjZazMonqRrjTdqvknHfzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-520847ad493so6523286e0c.1;
-        Wed, 26 Mar 2025 06:26:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742995616; x=1743600416;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tmOEoyHY2Ks0gUuytaK4wjrwLTqw4vCXipxUeutcC98=;
-        b=gSlWjTfG2Kh+1odtGkBop9ikapZvxCja/bIpFa1ocSjSDpsg9vFKVtN5EMJhTABJBA
-         L2gOegSDd+Z7maWtinNNJsGoXwlTwwNiPV7ct5wc8dcQdQPQfi92qsrgc/lkMpZxG8J9
-         9npjp5Cou7nDcycwmNwam0VbbIRRu3cCHJSKO8aL0KPj9vTXTZVy78FPsIvuakoO0sj8
-         LZGYN2Uc7JkV46KJXo6Vo1QtHwmBWfrQVnmD3gFhXLiN24lMu4OF2luY4F1OfhW36UYD
-         qx0AzUPI03oQC1LOGlCwU303jZV2jSvVM5YbwCTNFCh1YhsrLHyRrOWG1zm/i9Z+4tBk
-         Inuw==
-X-Forwarded-Encrypted: i=1; AJvYcCUIChoi5MbG3ooh6nFrres2wcLZjbYJAQkixOCvj14KtpPGaAmU0meT4HV07jLGprKlV7nX3oVq/smmYqtYHXfL5yw=@vger.kernel.org, AJvYcCUbtH0RYvf5JVZSikLf2lPNpTyIaXMjBACprGajYeah29uFaNGHQ8w2C2HhLfDYMRuMz9oGPqOv7MEUTsDh@vger.kernel.org, AJvYcCW8yGu3MG9lYEN4mM6UvLCo1keaj1znOXcmoV0V2CcfvGrdd31bq5DdrlOCyd56W6riioMD0fpbjkJR@vger.kernel.org, AJvYcCX82Z7jM+I2gPU6nv8R2pabhfbRMKNAEWznzfMJs8qFkPIbLtNm/TP/cKfXRiCuMG3YNqzc9UfAWXU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbGW5WvgMLwk0jm14B2QCmb0ol/AdrDfy1TW6jNlFm1suRRBWg
-	65Az2PdfD8oBtGybTbRspFgPS6jXhQuNafLw+pBI6oiweVRmlVHyJxOHCI6Cefs=
-X-Gm-Gg: ASbGncsVjddy7uSJNb7JKRF0r8jpUDIld3tRXdoesUwC8D9dzED0Wkto5Du0UvDwpU0
-	MUiqaMfbg8AzJ51isyoBe39UC+sgVMqaP9kja96htj8D/J3Triyzf9Fp6UvfsHHM48zaYksMGRN
-	kDEuBziJ2T9KhcK3MyXHG3jHmkfgroWR6p5+JiKGR6BEAfQ3qPvQBUGhmKjhUotuIAtLwqE6Fq+
-	V+0/Mt4fsoim4UVOGkgAX+x3qudg1VrWhTYP9QyPVLt/92NxIVbLA4TmZBDI5h5km3GY5oZTY0C
-	WwAT1L1JXT4R1hfxiMnoVovlYDmIAnUzzf/srA21MVqlff8wvfsjya15jq/uzUo8bm8bj8WWIds
-	4BPnO9GqDfGnV9eCzQ8y6EQ==
-X-Google-Smtp-Source: AGHT+IHUQLjZE7FzyRalMeA+QfRgRAwqGd60bRKNHApZ58Wzqi0GQn7ixD3u6fZA04MD9XQEVcqrPg==
-X-Received: by 2002:a05:6122:6081:b0:51f:3eee:89e7 with SMTP id 71dfb90a1353d-525a854e0dcmr16250334e0c.11.1742995615767;
-        Wed, 26 Mar 2025 06:26:55 -0700 (PDT)
-Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com. [209.85.221.180])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-525a735b95fsm2185583e0c.5.2025.03.26.06.26.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Mar 2025 06:26:55 -0700 (PDT)
-Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-51eb1a714bfso7180719e0c.3;
-        Wed, 26 Mar 2025 06:26:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVdhBFvceILJWFkePwva6TgGcch5AwbbnO/KSQ1CQYKf2vEfNeLRzcHNg3l1voIRERHqHcVq7J5PfJJNgMlVu1PI2E=@vger.kernel.org, AJvYcCVpjOOXiD/ZtR/x0UXz85cmAKO3AwawrB0CDZatrnS6xIhXdUCtp/J3X9kw50e/pLMed6mATc4Y5mKBtse8@vger.kernel.org, AJvYcCXbm1Oa7l6cSf9hIvDBeZfeTXdlWENGxhrMwOOP6yBkYNW2NT/K8iwuf58JpIpIPBH5gOzA2iV04Gfq@vger.kernel.org, AJvYcCXe1d8PxktcTHae9fBEWLXGBqtDOcP81ZMJz4gnodfQE86zTpSDsoc3RjxD/goimvgGE5inbPd1pxQ=@vger.kernel.org
-X-Received: by 2002:a05:6122:251b:b0:520:61ee:c7f9 with SMTP id
- 71dfb90a1353d-525a84c5e96mr16364284e0c.7.1742995615066; Wed, 26 Mar 2025
- 06:26:55 -0700 (PDT)
+	s=arc-20240116; t=1743001180; c=relaxed/simple;
+	bh=4EMwqAjp2xuwlSoW1yzAXiuCjA85mTNhACjbmWCpSMM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EapXbHwFEUA0HKDbx5PhbQIUx65KehWVGYKFP7wzbPRFvl74H/I17ORWk2sxkSIY7P8MWbKqEnfhBVinm7p0reT0Dtsuueu5WEQ/Kuo+49+vaY3sQQcdOl9U6qkwXI3FVMOzTbJaxac2RPfBT9Cga5t84a6rzWRc06e4BK5aU2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=UPed4qDW; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=gZ+O2RX3; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=UPed4qDW; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=gZ+O2RX3; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 951B01F449;
+	Wed, 26 Mar 2025 14:59:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1743001176; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+NQA8++I8fEYtCn7Y0UzFYWmoWfjCwWdwgkHlqc8FbI=;
+	b=UPed4qDWARs76TUUvm3ZvUnOX6jgOdVdnI2Kh+yZAn9fBhPfxFvbYtj2IK0OA/5dSfAUFS
+	hVK7HJEJhh8ws2bWt2/FN+NppBIeXdSeogvGxZpvkBKgmqP0Yx5mi8dJq1Kud4q3SkAZb5
+	UyoLvCmRljtp6FKvV19gCSsr898Bxd8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1743001176;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+NQA8++I8fEYtCn7Y0UzFYWmoWfjCwWdwgkHlqc8FbI=;
+	b=gZ+O2RX3yJg0lzF0UJTbrDvFbSKp8rV3pHaFftqFdH4MOAq6F3LoPipXUglTZ9+tN9Qbq1
+	VrhiNtCY+s9yhjBg==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=UPed4qDW;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=gZ+O2RX3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1743001176; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+NQA8++I8fEYtCn7Y0UzFYWmoWfjCwWdwgkHlqc8FbI=;
+	b=UPed4qDWARs76TUUvm3ZvUnOX6jgOdVdnI2Kh+yZAn9fBhPfxFvbYtj2IK0OA/5dSfAUFS
+	hVK7HJEJhh8ws2bWt2/FN+NppBIeXdSeogvGxZpvkBKgmqP0Yx5mi8dJq1Kud4q3SkAZb5
+	UyoLvCmRljtp6FKvV19gCSsr898Bxd8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1743001176;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+NQA8++I8fEYtCn7Y0UzFYWmoWfjCwWdwgkHlqc8FbI=;
+	b=gZ+O2RX3yJg0lzF0UJTbrDvFbSKp8rV3pHaFftqFdH4MOAq6F3LoPipXUglTZ9+tN9Qbq1
+	VrhiNtCY+s9yhjBg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8461E13927;
+	Wed, 26 Mar 2025 14:59:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id yZ5LIFgW5GeIUgAAD6G6ig
+	(envelope-from <jack@suse.cz>); Wed, 26 Mar 2025 14:59:36 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 211E0A082A; Wed, 26 Mar 2025 15:59:36 +0100 (CET)
+Date: Wed, 26 Mar 2025 15:59:36 +0100
+From: Jan Kara <jack@suse.cz>
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: Jan Kara <jack@suse.cz>, Dave Chinner <david@fromorbit.com>, 
+	Christoph Hellwig <hch@infradead.org>, linux-fsdevel@vger.kernel.org, lsf-pc@lists.linux-foundation.org, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
+	linux-pm@vger.kernel.org
+Subject: Re: [Lsf-pc] [LSF/MM/BPF TOPIC] Filesystem Suspend Resume
+Message-ID: <vhwrsep5wa5j5mn3gads2tw7b2aeo6j6p3nffvxumknfuwhdva@pohjz7u45nwc>
+References: <acae7a99f8acb0ebf408bb6fc82ab53fb687559c.camel@HansenPartnership.com>
+ <Z9z32X7k_eVLrYjR@infradead.org>
+ <576418420308d2511a4c155cc57cf0b1420c273b.camel@HansenPartnership.com>
+ <62bfd49bc06a58e435431610256e722651e1e5ca.camel@HansenPartnership.com>
+ <vnb6flqo3hhijz4kb3yio5rxzaugvaxharocvtf4j4s5o5xynm@nbccfx5xqvnk>
+ <Z-HFjTGaOnOjnhLP@dread.disaster.area>
+ <7f3eddf89f8fd128ffeb643bc582e45a7d13c216.camel@HansenPartnership.com>
+ <Z-HJqLI7Bi4iHWKU@dread.disaster.area>
+ <l6qesrzfadpiknnpy7dare7pfnxyfjljseuxvhjcajszymktu3@oitqnbt6fwvr>
+ <1af829aa7a65eb5ebc0614a00f7019615ed0f62b.camel@HansenPartnership.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250324135701.179827-1-claudiu.beznea.uj@bp.renesas.com> <20250324135701.179827-3-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20250324135701.179827-3-claudiu.beznea.uj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 26 Mar 2025 14:26:43 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUUNFo4pqbXh1xMatsv7T7cnq0SmDxM_o9em0=gpurdCA@mail.gmail.com>
-X-Gm-Features: AQ5f1Jo5c_rzCtK6r04J2m-KHiI22CUo11JxOin2-O__Lj4JFrTCJtdIWo19EQs
-Message-ID: <CAMuHMdUUNFo4pqbXh1xMatsv7T7cnq0SmDxM_o9em0=gpurdCA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] thermal: renesas: rzg3s: Add thermal driver for
- the Renesas RZ/G3S SoC
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com, 
-	lukasz.luba@arm.com, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	geert+renesas@glider.be, magnus.damm@gmail.com, p.zabel@pengutronix.de, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1af829aa7a65eb5ebc0614a00f7019615ed0f62b.camel@HansenPartnership.com>
+X-Rspamd-Queue-Id: 951B01F449
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MIME_TRACE(0.00)[0:+];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.cz:dkim,suse.com:email];
+	RCVD_COUNT_THREE(0.00)[3];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCVD_TLS_LAST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -4.01
+X-Spam-Flag: NO
 
-Hi Claudiu,
+On Tue 25-03-25 22:36:56, James Bottomley wrote:
+> On Tue, 2025-03-25 at 14:42 +0100, Jan Kara wrote:
+> [...]
+> > If I remember correctly, the problem in the past was, that if you
+> > leave userspace running while freezing filesystems, some processes
+> > may enter uninterruptible sleep waiting for fs to be thawed and in
+> > the past suspend code was not able to hibernate such processes. But I
+> > think this obstacle has been removed couple of years ago as now we
+> > could use TASK_FREEZABLE flag in sb_start_write() ->
+> > percpu_rwsem_wait and thus allow tasks blocked on frozen filesystem
+> > to be hibernated.
+> 
+> I tested this and we do indeed deadlock hibernation on the processes
+> touching the filesystem (systemd-journald actually).   But if I make
+> this change:
+> 
+> diff --git a/kernel/locking/percpu-rwsem.c b/kernel/locking/percpu-rwsem.c
+> index 6083883c4fe0..720418720bbc 100644
+> --- a/kernel/locking/percpu-rwsem.c
+> +++ b/kernel/locking/percpu-rwsem.c
+> @@ -156,7 +156,7 @@ static void percpu_rwsem_wait(struct percpu_rw_semaphore *sem, bool reader)
+>  	spin_unlock_irq(&sem->waiters.lock);
+>  
+>  	while (wait) {
+> -		set_current_state(TASK_UNINTERRUPTIBLE);
+> +		set_current_state(TASK_UNINTERRUPTIBLE|TASK_FREEZABLE);
+>  		if (!smp_load_acquire(&wq_entry.private))
+>  			break;
+>  		schedule();
+> 
+> Then everything will work, with no lockdep problems (thanks,
+> Christian).  Is that the change you want me to make or should
+> sb_start_write be using a special freezable version of
+> percpu_rwsem_wait()?
 
-On Mon, 24 Mar 2025 at 14:57, Claudiu <claudiu.beznea@tuxon.dev> wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->
-> The Renesas RZ/G3S SoC features a Thermal Sensor Unit (TSU) that reports
-> the junction temperature. The temperature is reported through a dedicated
-> ADC channel. Add a driver for the Renesas RZ/G3S TSU.
->
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> ---
->
-> Changes in v3:
-> - drop the runtime resume/suspend from rzg3s_thermal_get_temp(); this
->   is not needed as the temperature is read with ADC
-> - opened the devres group id in rzg3s_thermal_probe() and rename
->   previsouly rzg3s_thermal_probe() to rzg3s_thermal_probe_helper(), to
->   have simpler code; this approach was suggested by Jonathan in [1];
->   as there is no positive feedback for the generic solution [2] this
->   looks currently the best approach
+I was thinking about this. The possible problem with this may be that a
+task waiting in percpu_rwsem_wait() is hibernated and if it holds another
+lock (e.g. some mutex) and there's another task waiting for this mutex,
+then hibernation fails because that other task cannot be hibernated. With
+sb_start_write() specifically, this is usually not a problem because this
+is the outermoust lock we take. The only catch here would be if a process
+is blocked in a write page fault for a frozen filesystem. Then we are
+holding mmap_sem for the process so hibernation could fail this way. But
+I'd guess this is rare enough that we could live with that possibility.
 
-Thanks for the update!
+So to summarize I think we may need to introduce freezable variant of
+percpu_rwsem_down_read() and use it in sb_start_write().
 
-> --- /dev/null
-> +++ b/drivers/thermal/renesas/rzg3s_thermal.c
-
-> +static int rzg3s_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
-> +{
-> +       struct rzg3s_thermal_priv *priv = thermal_zone_device_priv(tz);
-> +       int ts_code_ave = 0;
-> +       int ret, val;
-> +
-> +       if (priv->mode != THERMAL_DEVICE_ENABLED)
-> +               return -EAGAIN;
-> +
-> +       for (u8 i = 0; i < TSU_READ_STEPS; i++) {
-> +               ret = iio_read_channel_raw(priv->channel, &val);
-> +               if (ret < 0)
-> +                       return ret;
-> +
-> +               ts_code_ave += val;
-> +               /*
-> +                * According to the HW manual (section 40.4.4 Procedure for Measuring the
-> +                * Temperature) we need to wait here at leat 3us.
-> +                */
-> +               usleep_range(5, 10);
-> +       }
-> +
-> +       ret = 0;
-> +       ts_code_ave = DIV_ROUND_CLOSEST(MCELSIUS(ts_code_ave), TSU_READ_STEPS);
-> +
-> +       /*
-> +        * According to the HW manual (section 40.4.4 Procedure for Measuring the Temperature)
-> +        * the computation formula is as follows:
-> +        *
-> +        * Tj = (ts_code_ave - priv->calib1) * 165 / (priv->calib0 - priv->calib1) - 40
-> +        *
-> +        * Convert everything to mili Celsius before applying the formula to avoid
-
-milli
-
-> +        * losing precision.
-> +        */
-> +
-> +       *temp = DIV_ROUND_CLOSEST((s64)(ts_code_ave - MCELSIUS(priv->calib1)) * MCELSIUS(165),
-> +                                 MCELSIUS(priv->calib0 - priv->calib1)) - MCELSIUS(40);
-
-This is a 64-by-32 division. When compile-testing on arm32:
-
-rzg3s_thermal.c:(.text+0x330): undefined reference to `__aeabi_ldivmod'
-
-> +
-> +       /* Report it in mili degrees Celsius and round it up to 0.5 degrees Celsius. */
-
-milli
-
-
-> +       *temp = roundup(*temp, 500);
-> +
-> +       return ret;
-> +}
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
 
