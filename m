@@ -1,153 +1,173 @@
-Return-Path: <linux-pm+bounces-24535-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24536-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDC6CA71DB2
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 18:49:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F07E9A71E47
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 19:26:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C2F71897017
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 17:47:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A3591715DB
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Mar 2025 18:26:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B37CA23FC52;
-	Wed, 26 Mar 2025 17:46:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0D8424C08F;
+	Wed, 26 Mar 2025 18:26:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b="JvPU8+Q3"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="O+SDvGO3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx1.secunet.com (mx1.secunet.com [62.96.220.36])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2EF2405E7
-	for <linux-pm@vger.kernel.org>; Wed, 26 Mar 2025 17:46:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.96.220.36
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42DCF24C676;
+	Wed, 26 Mar 2025 18:26:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743011210; cv=none; b=Ta76L5WPdXjAznddY6TkjWn5THohovAwNI+KXIevreCMw+/tWAtZ4oAjwaAMH5qy4p0EvRzw9hxIoAO5GNEjkyEc9Dek44npD7NHHPoqOtVsFdg1wmoL3qgsa7vqc9142KKsErduyUzc129W1MdE+hromKI9fgJg7s3i63V3q+U=
+	t=1743013590; cv=none; b=hObOMQPLagzjoh5cYq5BsD5bokLAP3xv7taTJoEXW5N5QSPjb50b2uL9io8Ah670Og6HQg47cNGif5Vz1NQqUgvSQcFU+LaAU5ZJVqz7reyfHBrtX/NoYabc3Lhxou2zL9sRyDreW+fTfIr9SE5Ly7udXNFCKo7xA6iQH89YsF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743011210; c=relaxed/simple;
-	bh=uOnUbusdxLPfaLLXwy8bMUPxzSL/WJI0OMMcpStIZNE=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=sDLa2sGD8QiAP3Y53TisWdyFEzVbApomV1aPBj00apqOJqzUC4wwKUbcwpNLkoMY8BxJLaMx7iq8QapK/wAB3IC0DKJRnOG+Z+v61TrExAQlMSdqGrweTbydgJHaYOu88vod1Ld/e++tmdOGtO56pU6Nh47xXcylNI0XbgHGJlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=secunet.com; spf=pass smtp.mailfrom=secunet.com; dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b=JvPU8+Q3; arc=none smtp.client-ip=62.96.220.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=secunet.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=secunet.com
-Received: from localhost (localhost [127.0.0.1])
-	by mx1.secunet.com (Postfix) with ESMTP id B40FF2082E;
-	Wed, 26 Mar 2025 18:46:39 +0100 (CET)
-X-Virus-Scanned: by secunet
-Received: from mx1.secunet.com ([127.0.0.1])
- by localhost (mx1.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iCgHHvP5Vevf; Wed, 26 Mar 2025 18:46:39 +0100 (CET)
-Received: from cas-essen-01.secunet.de (rl1.secunet.de [10.53.40.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mx1.secunet.com (Postfix) with ESMTPS id 1A3252074F;
-	Wed, 26 Mar 2025 18:46:39 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.secunet.com 1A3252074F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=secunet.com;
-	s=202301; t=1743011199;
-	bh=uOnUbusdxLPfaLLXwy8bMUPxzSL/WJI0OMMcpStIZNE=;
-	h=From:To:CC:Subject:Date:Reply-To:From;
-	b=JvPU8+Q3n4+lco+VjuZFwZq8+8K1uKPVbnMleiIGeA7ZwEywW/1/Cx+Gyv7mrsQG+
-	 7Xw4om4scdopyMYYs/69uZSCKF/5z7JcourvBYMryFvvOXRDwT7+zc+8f5q7P3a+rN
-	 YRcmiGAt14+A7yblZIdiUFO9IzmYtzvMQLhw9Cu8SRKxTZX66gQ6ux7k6zi3i3r/a3
-	 gp1Ve/x84xXJ5xz3+gqOhAI3cVAKzEeylX9lIKMahWWw/eoBo89a7Mj59LuVyCg9D4
-	 R2GKrc/2aLZDJ8X96PUm/TzOgjmzHqJgFv7gc6+Flx7h23LynLkPzEjHpCDXrQWpXX
-	 MFx2q9of6Jt8g==
-Received: from mbx-essen-02.secunet.de (10.53.40.198) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Wed, 26 Mar 2025 18:46:38 +0100
-Received: from mbx-essen-02.secunet.de (10.53.40.198) by
- mbx-essen-02.secunet.de (10.53.40.198) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Wed, 26 Mar 2025 18:46:38 +0100
-Received: from mbx-essen-02.secunet.de ([fe80::fcaf:ee74:71ad:4eff]) by
- mbx-essen-02.secunet.de ([fe80::fcaf:ee74:71ad:4eff%8]) with mapi id
- 15.01.2507.039; Wed, 26 Mar 2025 18:46:38 +0100
-From: "Gwara, Mateusz" <mateusz.gwara@secunet.com>
-To: "rui.zhang@intel.com" <rui.zhang@intel.com>
-CC: "17a637f633a7560ca87d7461fc56632e5f9e41cc.camel@intel.com"
-	<17a637f633a7560ca87d7461fc56632e5f9e41cc.camel@intel.com>,
-	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>, "Wassenberg, Dennis"
-	<Dennis.Wassenberg@secunet.com>, "linux-pm@vger.kernel.org"
-	<linux-pm@vger.kernel.org>, "lukasz.luba@arm.com" <lukasz.luba@arm.com>,
-	"Gwara, Mateusz" <mateusz.gwara@secunet.com>, "rafael@kernel.org"
-	<rafael@kernel.org>, "ricardo.neri@intel.com" <ricardo.neri@intel.com>,
-	"srinivas.pandruvada@intel.com" <srinivas.pandruvada@intel.com>
-Subject: Re: TCC cooling on Meteorlake
-Thread-Topic: Re: TCC cooling on Meteorlake
-Thread-Index: AdueTC2FeiaDZ7NlSpi4yQxAiQkLXQ==
-Date: Wed, 26 Mar 2025 17:46:38 +0000
-Message-ID: <b7c2e49c84d94b9e93f3156250346ec8@secunet.com>
-Reply-To: "17a637f633a7560ca87d7461fc56632e5f9e41cc.camel@intel.com"
-	<17a637f633a7560ca87d7461fc56632e5f9e41cc.camel@intel.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1743013590; c=relaxed/simple;
+	bh=cXiZhnXHaQK9fCDQbtwo7JXZu3LnVl0tUtL+xZ/MnSw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KzJt546iZ3HUHqhJXKQIJoZ+e38orIr7v1X8AFHK82jEXS8S/PFYQfIvddqe4HLROalGO5hr0K6vfZ5OOjCo6gP9fiW4KgSJlgfvRb4Q3COMip0snX6LdiainfxhGrDYVlvpW0fUEqjJt2qIN6L1ZFv94PPBR17gRWhTJ6Axx8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=O+SDvGO3; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E19FC4443C;
+	Wed, 26 Mar 2025 18:26:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1743013586;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=yZ9fztDkm6sfredMdtB+lEs4P0LHgszuyKLAym8M8R0=;
+	b=O+SDvGO3ttnvT/LkaDti1OpTQBagDdVyyXukf571Tr8vdgFbOcYtrljscDrVrCkNxlM1d9
+	OQj/Q16ye034mttOujwCV/P7j1a//8RZgFyKbaqaBbwNWUeJubEKn30Zfjx1sn4I5nYLb5
+	/rhPKRk5W0/9qQrDGHiui9ahU9YN0Fs0SzzRYmXS7+WnBAj36cZ3iFwjnc861npmibhSGu
+	J7GLi/H3PowQ17Uv5xmTziDkMwlqT46in/wMvEOPcLLGLiAVd+sgitfw6c33RQNZkAr1ox
+	rQCXFWuwQV+13jRcX97SjX8+ZeG6Q8UC3Bnxb9oziX0LLYhHL1rf6hn6t45gyA==
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH RFC 00/10] Fix the ABBA locking situation between clk and
+ runtime PM
+Date: Wed, 26 Mar 2025 19:26:15 +0100
+Message-Id: <20250326-cross-lock-dep-v1-0-3199e49e8652@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMdG5GcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDYwNz3eSi/OJi3Zz85GzdlNQC3VQz0zQjC9PkVItUQyWgpoKi1LTMCrC
+ B0UpBbs5KsbW1AOko02llAAAA
+X-Change-ID: 20250307-cross-lock-dep-e65f285ce8e1
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
+ Len Brown <len.brown@intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Danilo Krummrich <dakr@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-clk@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>, 
+ Lucas Stach <l.stach@pengutronix.de>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Marek Vasut <marex@denx.de>, Ulf Hansson <ulf.hansson@linaro.org>, 
+ Kevin Hilman <khilman@kernel.org>, Fabio Estevam <festevam@denx.de>, 
+ Jacky Bai <ping.bai@nxp.com>, Peng Fan <peng.fan@nxp.com>, 
+ Shawn Guo <shawnguo@kernel.org>, Shengjiu Wang <shengjiu.wang@nxp.com>, 
+ linux-imx@nxp.com, Ian Ray <ian.ray@gehealthcare.com>, 
+ =?utf-8?q?Herv=C3=A9_Codina?= <herve.codina@bootlin.com>, 
+ Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+ Saravana Kannan <saravanak@google.com>, 
+ Miquel Raynal <miquel.raynal@bootlin.com>
+X-Mailer: b4 0.15-dev
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduieeivdehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhufffkfggtgfgvfevofesthejredtredtjeenucfhrhhomhepofhiqhhuvghlucftrgihnhgrlhcuoehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpedugfefveegtdfhvdehudfgkefgheetveefvdelheeuiedukefgfeejheefheevueenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegludelvddrudeikedrgedvrdegiegnpdhmrghilhhfrhhomhepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdekpdhrtghpthhtohepmhgrrhgvgiesuggvnhigrdguvgdprhgtphhtthhopehlihhnuhigqdhimhigsehngihprdgtohhmpdhrtghpthhtoheplhhinhhugidqtghlkhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehirghnrdhrrgihsehgvghhvggrlhhthhgtrghrvgdrtghomhdprhgtphhtthhopehmthhurhhquhgvt
+ hhtvgessggrhihlihgsrhgvrdgtohhmpdhrtghpthhtohepshgsohihugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhhihhlmhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhm
+X-GND-Sasl: miquel.raynal@bootlin.com
 
->> The offset is set to 14=B0C on a Meteor Lake CPU.
+As explained in the following thread, there is a known ABBA locking
+dependency between clk and runtime PM.
+Link: https://lore.kernel.org/linux-clk/20240527181928.4fc6b5f0@xps-13/
 
-> do you know who sets it?
+The problem is that the clk subsystem uses a mutex to protect concurrent
+accesses to its tree structure, and so do other subsystems such as
+generic power domains. While it holds its own mutex, the clk subsystem
+performs runtime PM calls which end up executing callbacks from other
+subsystems (again, gen PD is in the loop). But typically power domains
+may also need to perform clock related operations, and thus the
+following two situations may happen:
 
-On most systems this value is being set in the BIOS by the OEM to match
-the cooling system performance in which the CPU is used in.
+mutex_lock(clk);
+mutex_lock(genpd);
 
+or
 
->> We run our Raptor Lake devices with a TCC Offset of 3=B0C which is what
->> is usually set
+mutex_lock(genpd);
+mutex_lock(clk);
 
-> and who sets it?
+As of today I know that at least NXP i.MX8MP and MediaTek MT8183 SoCs
+are complex enough to face this kind of issues.
 
-This value is derived from what a OEM (in our case, Lenovo) sets in their B=
-IOS,
-but as we experienced problems that occur after thermal events or system su=
-spend/recume cycles
-we have our own service runnig on our custom linux based operating system
-that makes sure the value is always set correctly.
+There's been a first workaround to "silence" lockdep with the most
+obvious case triggering the warning: making sure all clocks are RPM
+enabled before running the clk_disable_unused() work, but this is just
+addressing one situation among many other potentially problematic
+situations. In the past, both Laurent Pinchart and Marek Vasut have
+experienced these issues when enabling HDMI and audio support,
+respectively.
 
-> I have applied this patch on a couple of machines that I can access but
-> unfortunately they all have TCC offset bit locked. So please check if
-> it works as expected or not.
+Following a discussion we had at last Plumbers with Steven, I am
+proposing to decouple both locks by changing a bit the clk approach:
+let's always runtime resume all clocks that we *might* need before
+taking the clock lock. But how do we know the list? Well, depending on
+the situation we may either need to wake up:
+- the upper part of the tree during prepare/unprepare operations.
+- the lower part of the tree during (read) rate operations.
+- the upper part and the lower part of the tree otherwise (especially
+  during rate changes which may involve reparenting).
 
-Will do gladly. Thanks for pointing this out. It's possible that other OEMs=
- won't allow to change this value.
+Luckily, we do not need to do that by hand, are more importantly we do
+not need to use the clock tree for that because thanks to the work from
+Saravana, we already have device links describing exhaustively the
+consumer/supplier relationships. The clock topology (from a runtime PM
+perspective) is reflected in these links. In practice, we do not care
+about all consumers, but the few clock operations that will actually
+trigger runtime PM operations are probably not impacting enough to
+justify something more complex.
 
-> And FYI, both intel_tcc_cooling and the proc_thermal
-> "tcc_offset_degree_celsius" attribute are based on the same tcc
-> helpers, so I don't think there is any difference between these two
-> knobs.
+So here it is: every patch in this series decouples the two locks in
+various places of the clock subsystem, until we reach a point where all
+needed clocks will always be resumed before acquiring the core lock. It
+obviously requires a few new helpers in the RPM core which may probably
+be enhanced, I've tried to keep them as simple and straightforward as
+possible.
 
-That's true. I've seen that they point to the same address.
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+---
+Miquel Raynal (10):
+      PM: runtime: Add helpers to resume consumers
+      clk: Improve comments with usual punctuation
+      clk: Avoid non needed runtime PM calls
+      clk: Avoid open coded-logic when a there is a helper available
+      clk: Move runtime PM calls out of the prepare_lock in clk_init()
+      clk: Move runtime PM calls out of the prepare_lock in clk_prepare()
+      clk: Ensure all RPM enabled clocks are enabled before reparenting orphans
+      clk: Move runtime PM calls out of the prepare_lock in clk_unregister()
+      clk: Make sure clock parents and children are resumed when necessary
+      clk: Fix the ABBA locking issue with runtime PM subcalls
 
---=20
-Mateusz Gwara
-Senior Software Developer
-Department Network & Client Security
-Division Public Authorities
-secunet Security Networks AG
+ drivers/base/power/runtime.c |  54 ++++++++++++
+ drivers/clk/clk.c            | 204 +++++++++++++++++++++++++++++++------------
+ include/linux/pm_runtime.h   |   2 +
+ 3 files changed, 204 insertions(+), 56 deletions(-)
+---
+base-commit: ab6df33805e6e6e4ac1a519cfcade3f7f19f6ff1
+change-id: 20250307-cross-lock-dep-e65f285ce8e1
 
-Tel.: +49 201 54 54-2934
-E-Mail: mateusz.gwara@secunet.com
-Alt-Moabit 96, 10559 Berlin
-www.secunet.com
-______________________________________________________________________
-
-secunet Security Networks AG
-Sitz: Kurf=FCrstenstra=DFe 58, 45138 Essen, Deutschland
-Amtsgericht Essen HRB 13615
-Vorstand: Axel Deininger (Vors.), Torsten Henn, Dr. Kai Martius, Jessica No=
-spers
-Aufsichtsratsvorsitzender: Dr. Ralf Wintergerst
-______________________________________________________________________
+Best regards,
+-- 
+Miquel Raynal <miquel.raynal@bootlin.com>
 
 
