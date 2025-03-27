@@ -1,82 +1,137 @@
-Return-Path: <linux-pm+bounces-24553-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24554-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90952A72B27
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Mar 2025 09:11:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EB8EA72C02
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Mar 2025 10:02:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A41E3BA7A2
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Mar 2025 08:11:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D17B716F804
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Mar 2025 09:02:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E8D01FFC49;
-	Thu, 27 Mar 2025 08:11:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D91D200BB4;
+	Thu, 27 Mar 2025 09:02:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IQitGDUy"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="E61gGyTB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD501FF7D6;
-	Thu, 27 Mar 2025 08:11:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15B02E3392;
+	Thu, 27 Mar 2025 09:02:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743063080; cv=none; b=m/hfVA037TNCuNEq+ui5W9yYe6cub4uoC3DKpp0/pySTzCVGSG6HDOL3HB3sH2f4piKDsKDogNifjIO6zllRfHl5b4vDcTlNSmGmhK1oiRNFRq+yT+WrLXWPDFS7vOR4gX9oOv8V5WC/DGS3M8mKR6Jm9rcafTMI8M+6AMidEm0=
+	t=1743066159; cv=none; b=Iwv+J3bgS26CxEuWhzsy1VwGQuiEanYd3OVtsw7MDDNtWKWRBsyTx7jGI/RCu8ScP0oKdM+bbtc4gfyEB/424w6v9FWSooNH7rv34XEGt6r/JHr4BD/Fw7U6SPxsuqAilhmQzG3lrgrxdWiZqS85zLnA66+ec4l3RjU+ZSDR8GM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743063080; c=relaxed/simple;
-	bh=bmXqFqU22qluSfxAA/IxXQn2uRD9aGuQ4sNUF6q33mk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oumew7bhuevTBS6Hux7N6to1tifSx0ZLrtQ17xgZygvfisCtf/XNus9jok5rFyXufDNmHKkx0hnvAIcClUBuSdsgkV+QdqOdOiYzCrlOpoEnYoGw7SuHdZt8nbEvZWqO6dfxUEbwvW4mFPRt+GTNrXuu3drmtGX8WQET80qwS4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IQitGDUy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE544C4CEDD;
-	Thu, 27 Mar 2025 08:11:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743063079;
-	bh=bmXqFqU22qluSfxAA/IxXQn2uRD9aGuQ4sNUF6q33mk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IQitGDUyAlG1CIo/auYlxpRBRrN95Gymr8nzmSj2Bn7K8PkVAvTCgSFJDhY/nVWs1
-	 yWlVnM9QbuxeYrNtbL+kLC0j9R1bhISfo1VVxfGZtmOO4U3UqG+lEODshvmvzc3xGi
-	 GWBjUxVZwdeG59X+9ZY9FU7w3j0NZBlzXlPD3UikmIHyc1uyBC/6k4NQRoE6/HtoCl
-	 ONEpliDvX6/jIddCO2AUdsR1E+lZTOLoWwii+++23Ceezs8IGTdvazTujhORk6Yh7f
-	 ZprQka3sxc4n1k/olZnuIBeD6LTx6lfwUpJFi97h8wl/DLsX3Cup/reseKhJHIsrlL
-	 cn57K0VDwuogA==
-Date: Thu, 27 Mar 2025 09:11:16 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Ryan.Wanner@microchip.com
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev, 
-	lee@kernel.org, sre@kernel.org, p.zabel@pengutronix.de, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v4 08/11] dt-bindings: mfd: syscon: add
- microchip,sama7d65-secumod
-Message-ID: <20250327-nocturnal-fulmar-of-holiness-6b6ac5@krzk-bin>
-References: <cover.1742936082.git.Ryan.Wanner@microchip.com>
- <7248bb9d4ed491b178072b09830d6d68fde7b872.1742936082.git.Ryan.Wanner@microchip.com>
+	s=arc-20240116; t=1743066159; c=relaxed/simple;
+	bh=vXbzMvI8xnmjgKw15kKlhD/TMZJmO6ZSLHM9wefS9+Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=a/jwEDeR/pX+S4YX3Eqm+FCCopHycHgOK69vB0jVufLE3BgaHCvqZg5uniSQZKt9qWC+WtY0hv/sLqbRwIT9voTX2wyPj17hNRTxXpV00w3ykJukwUAgwWuKsdXMKj7PVhTC2Wsj+bDc4eOATxhGs9V4r6PJaZFPsoaYYRQQr/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=E61gGyTB; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 90F79A05BE;
+	Thu, 27 Mar 2025 10:02:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=mail; bh=W1RiWtLO8VNQPU8YB74t
+	HFSwgOx71KqqDsRGA0ES6vA=; b=E61gGyTBdifXDaAGlQu9TU0t1/vkLn5f1WTf
+	kL8PBLD3Az5qSyISZLH806zyRlgvL7Rw7Qm1YLGyz9kC7aFrqcGV9VFPLpwCejTU
+	0ezuyDl2ptXmQeWglg6cCEhn4HmSA1vovnVtZ5KRDbz10fnhDw51HjRdMHWBaP2R
+	SyvkJ2QDfMQBib6rnPinoi2a/12vilb1ge3X8OgoOF7Ndou9ZvETZD22p/uOtZoV
+	+DS+71SHF0E0qJ0sOnM/ntFmYrFvAUYdyH80YxQbqPXGoAsAI/kKPwlnzYxLEGEJ
+	TqxGqncaQxKppJ62MuzY/WEJm9XZodBCFXiki26yz4G2/AlA3u0fonjFPPj7CsVu
+	2QEN1dQ+PsBp5pLFbjlGeFc8+rZQ6fGUvKdgd+7AI+eFR8wrjwvTZ484E7aklffr
+	KeQhOSP/KdGNISl7NNoCpLlgr6KIFzzPOqN7XgKcQF0HDEDE9OeDeNj17YWJmtJj
+	78wmNC+OLf0TOoLcWWA2UTditlnM8MHPDXXDXluLxnGv2rB/Fhc+bw9dYaPGB/Dj
+	Cu3+I7zwDWb1yClIuuxO2okVo151d7qQuJAKVxMnZm2Q/CkRMoKUbTJ2ATk2PEbY
+	XxOWwI6vXod2Hu/w/EESuAgcHKu9J9eTYpOyzknI+wyczNgYmowoUh2bcHZ4gzHU
+	i12a8V0=
+Message-ID: <3e6d7071-1ba9-484c-9dcb-c5da6ad1ffe3@prolan.hu>
+Date: Thu, 27 Mar 2025 10:02:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7248bb9d4ed491b178072b09830d6d68fde7b872.1742936082.git.Ryan.Wanner@microchip.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 1/2] pm: runtime: Add new devm functions
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Varshini
+ Rajendran" <varshini.rajendran@microchip.com>, Tudor Ambarus
+	<tudor.ambarus@linaro.org>, Mark Brown <broonie@kernel.org>,
+	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>, "Len
+ Brown" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, "Alexander
+ Dahl" <ada@thorsis.com>, Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea
+	<claudiu.beznea@tuxon.dev>, Pavel Machek <pavel@kernel.org>
+References: <20250317093445.361821-1-csokas.bence@prolan.hu>
+ <20250317093445.361821-2-csokas.bence@prolan.hu>
+ <CAJZ5v0hJZBxU6SSq9C8gp2peETFWu0jbhrM82B5GvQkVXPR+9Q@mail.gmail.com>
+Content-Language: en-US, hu-HU
+From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
+In-Reply-To: <CAJZ5v0hJZBxU6SSq9C8gp2peETFWu0jbhrM82B5GvQkVXPR+9Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
+ ATLAS.intranet.prolan.hu (10.254.0.229)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A2980D948526C7760
 
-On Wed, Mar 26, 2025 at 08:35:41AM -0700, Ryan.Wanner@microchip.com wrote:
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
+Hi,
+
+On 2025. 03. 26. 18:38, Rafael J. Wysocki wrote:
+> I said I didn't like it and I'm still not liking it.
+
+You didn't really elaborate further, but now I'm glad I could understand 
+your dislike.
+
+> The problem is that the primary role of pm_runtime_set_active() is to
+> prepare the device for enabling runtime PM, so in the majority of
+> cases it should be followed by pm_runtime_enable().  It is also not
+> always necessary to call pm_runtime_set_suspended() after disabling
+> runtime PM for a device, like when the device has been
+> runtime-suspended before disabling runtime PM for it.  This is not
+> like releasing a resource that has been allocated and using devm for
+> it in the above way is at least questionable.
 > 
-> Add SAMA7D65 SECUMOD compatible string to DT bindings documentation.
+> Now, there is a reason why calling pm_runtime_set_suspended() on a
+> device after disabling runtime PM for it is a good idea at all.
+> Namely, disabling runtime PM alone does not release the device's
+> suppliers or its parent, so if you want to release them after
+> disabling runtime PM for the device, you need to do something more.
+> I'm thinking that this is a  mistake in the design of the runtime PM
+> core.
+
+Well, this is the order in which the original driver worked before 
+anyways. As a quick fix, would it work if we created a devm function 
+that would pm_runtime_set_active(), immediately followed by 
+pm_runtime_enable(), and on cleanup it would pm_runtime_set_suspended() 
+followed by pm_runtime_disable_action() (i.e. 
+pm_runtime_dont_use_autosuspend() and pm_runtime_disable())?
+
+> If there were functions like pm_runtime_enable_in_state() (taking an
+> additional state argument and acquiring all of the necessary
+> references on the parent and suppliers of the target device) and
+> pm_runtime_disable_and_forget() (that in addition to disabling runtime
+> PM would drop the references acquired by the former), then it would
+> make a perfect sense to provide a devm variant of
+> pm_runtime_enable_in_state() with the cleanup action pointing to
+> pm_runtime_disable_and_forget().
 > 
-> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-> ---
->  Documentation/devicetree/bindings/arm/atmel,sama5d2-secumod.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> If this helps, I can do some work on providing
+> pm_runtime_enable_in_state() and pm_runtime_disable_and_forget() or
+> equivalent.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I mean sure, if that's something you want to work on, but it sounds like 
+it would entail much more work, plus it wouldn't be easy to backport it 
+to 6.14.y stable later.
 
-Best regards,
-Krzysztof
+Bence
 
 
