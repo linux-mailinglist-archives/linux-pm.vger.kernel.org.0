@@ -1,163 +1,177 @@
-Return-Path: <linux-pm+bounces-24577-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24579-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2A44A74CC7
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Mar 2025 15:34:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50364A74D83
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Mar 2025 16:15:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1CEF3B5A9E
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Mar 2025 14:32:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0BAD3BC172
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Mar 2025 15:15:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D94C1D63D9;
-	Fri, 28 Mar 2025 14:30:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67B771B87E2;
+	Fri, 28 Mar 2025 15:15:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="QWTlLNnK";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="78mYvrRR";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="QWTlLNnK";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="78mYvrRR"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GII7KUtn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14E51D5CC1
-	for <linux-pm@vger.kernel.org>; Fri, 28 Mar 2025 14:30:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1066B1C860C
+	for <linux-pm@vger.kernel.org>; Fri, 28 Mar 2025 15:15:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743172256; cv=none; b=DQfuUbU32faytwqDX6ns04Ybi8BPTap/wl3gTS3h/Um14JZFhQOTyqWAE8mM+fSF6bHqhtO2aKVeWfUL4F814wsXhzxP7taAhZvmoi4oPoCej/thjqwbywrs7dT4Lef5PGcG9WDWiEzv6aEECwbSCJc40PyvLlVLkJrITvOGGwc=
+	t=1743174926; cv=none; b=AXvW7G46z7bNkhloeRXseUTDjxS+vLMXjdSxLQhw/ybImCf8Ci1K6pcH0otOxzJ8/8Jusq7UMFTRFmfgazQd+pisHyweEe+hhQ3NQSQAAR9oJVUzunbwuBbLnIUZO7ENob3PxivCQczMPaMJ2Xr5w309ZeQXZf1pfU8hg0lx+n8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743172256; c=relaxed/simple;
-	bh=K8pdPrPH2/V9uEO9ZVDq/4eu4bA60pgngP9tp9BWxSs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Jc034cRjCCmMbkjCimo+BWrvDTGcnG1x84V40Bm3AKu6eLoaCToaiA4BHXwHpqAikLUyo7NduoPhPin/smE/Jt5Wtbet35z+rozzGcStdwt8KjA63hyfKq8prp4sk0yzeueobjmhfrmI+5Wxtigm+A5C/MvrhrDTpYT2oc7fsbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=QWTlLNnK; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=78mYvrRR; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=QWTlLNnK; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=78mYvrRR; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 9CF9A211D1;
-	Fri, 28 Mar 2025 14:30:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1743172246; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=J6XVCLbyTVqkdwNo0naeJBfFSzYf4PuaJD4ozQH+Q3A=;
-	b=QWTlLNnK7eulyhB+ffKQMPhlAMe2VAp0GnPsP+4ivlmvvyceSlYi4yn8ZLVfh/4cM0A0jZ
-	aK1D7c+K+ntQdH1MbV1ykAxSv9dAVHVr50t3qWPCKrBRqabA/z6dhTtcd1AKHfk5wKW8DM
-	pIeWj0QpZHKQKWCsHe15q/gpu8Dowp0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1743172246;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=J6XVCLbyTVqkdwNo0naeJBfFSzYf4PuaJD4ozQH+Q3A=;
-	b=78mYvrRRRHk9rvw1O+qs5Oa4BaVr9bpaOR5m/80xfKiaJWeWennciTq5E/oBvPG6vBPyT8
-	q2MDOwzylzVUhEAA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1743172246; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=J6XVCLbyTVqkdwNo0naeJBfFSzYf4PuaJD4ozQH+Q3A=;
-	b=QWTlLNnK7eulyhB+ffKQMPhlAMe2VAp0GnPsP+4ivlmvvyceSlYi4yn8ZLVfh/4cM0A0jZ
-	aK1D7c+K+ntQdH1MbV1ykAxSv9dAVHVr50t3qWPCKrBRqabA/z6dhTtcd1AKHfk5wKW8DM
-	pIeWj0QpZHKQKWCsHe15q/gpu8Dowp0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1743172246;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=J6XVCLbyTVqkdwNo0naeJBfFSzYf4PuaJD4ozQH+Q3A=;
-	b=78mYvrRRRHk9rvw1O+qs5Oa4BaVr9bpaOR5m/80xfKiaJWeWennciTq5E/oBvPG6vBPyT8
-	q2MDOwzylzVUhEAA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8208D139D4;
-	Fri, 28 Mar 2025 14:30:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id kG9oH5ay5meUeAAAD6G6ig
-	(envelope-from <ggherdovich@suse.cz>); Fri, 28 Mar 2025 14:30:46 +0000
-From: Giovanni Gherdovich <ggherdovich@suse.cz>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>
-Cc: Len Brown <lenb@kernel.org>,
-	Giovanni Gherdovich <ggherdovich@suse.cz>,
-	linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH 2/2] ACPI: processor: idle: Remove obsolete comment
-Date: Fri, 28 Mar 2025 15:30:40 +0100
-Message-ID: <20250328143040.9348-2-ggherdovich@suse.cz>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250328143040.9348-1-ggherdovich@suse.cz>
-References: <20250328143040.9348-1-ggherdovich@suse.cz>
+	s=arc-20240116; t=1743174926; c=relaxed/simple;
+	bh=LbrjVDuqcQ+iJXIRRIvMyE403IP8vZQPi2Qzf0eMaKo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=S5YrNRctoa/n9KwAh+bCyYDRW3WF5+30uNLF8uB7ipXx/f3ysfVuMYF5uqJ5VVgWDESpeOvrOs8Qf/iWOEkOaq6NKlnn81aQXXwTESTgayNLljCqWiNy0qIimX60cFoXFvP77VvZBqJ9K+7RhSXq1AUixkrlNV3jhC0WP95IeY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GII7KUtn; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ac2c663a3daso439871766b.2
+        for <linux-pm@vger.kernel.org>; Fri, 28 Mar 2025 08:15:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1743174921; x=1743779721; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CTb/6m+cqxX8FWirPINl0MalDPq0y5qkx5epBIXmSTQ=;
+        b=GII7KUtnOJJIpKDV2bom+1EiSjVTlu7/ZgGV8xWmMR174LSUwc5YppJfFFBOKx7dtV
+         sPr+aJRiiQbK7dKzAvCJVWbcjy9Jm1uDgUC9FNiFf4A6b4EzbiLEDee6OrKThNH2cN4i
+         zfgMvrqPclWaC8K4iNLQHX/TO611aKdaoohvmn4BzpQzO+dV7Ytm0bEkhpQ/7QkRwO1Z
+         padjk4wGtYyPGdhDI/RNUmsmvubzb9j0ntlKztBMB5ILI4LOojfJ0Ekcm/3Hol5ujWkH
+         dbmkeWwHLNkNjxWnwYrRu56m/ynsXg6MHh38yKq3bjNAj9BKemEJu2dOLcT6qqH8FAi1
+         AKUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743174921; x=1743779721;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CTb/6m+cqxX8FWirPINl0MalDPq0y5qkx5epBIXmSTQ=;
+        b=ks8wbljvYEEIRQGNNvbjCQKrT7UNfD8m4w6W0v8LhR/bQbbDYAI2VQpE3DFVEbcq3Z
+         1Up5/QwskaaF9G7aDNM9Ao0BPE/WVtmlFCW4z4ak5Rvn2NZYT4OYPe2BTdIubLYI6H4c
+         KCIcYFa8K0EtsM3Szv8RMFrOP2XDXlngj87aLDQrN72hrTxSxELm104KbTNNhlAjf8N8
+         i8prQljllU9G5D9yS87RFwCF7fIm688GsE1TmiS0XkRNwCsOmwuaQeFjEDMOf4NBeBNS
+         6NTTCmf1cL7ttY7OEDQgH62o7IXv4wYflHYh7owjXwEaMXtOJfP3djfF52mqPsTVvmsH
+         4Izw==
+X-Forwarded-Encrypted: i=1; AJvYcCUi70yPmojyTlPCFHfrCd1VjSejtZhUhP1+O14e9FrQN9/JGSs/q+3QY2e980F/9Cf1XjWvlj0Zxw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxk23v8xQ6ly2z3t1IxerYfngGWkmcbM00TkD6Ent+sjTYi6UqM
+	2wM73qFfGUWLQdvDkI0YGfS+Ul4ECoNfp8SXYV5n82e+dAP1IoMa/BqNty3l6IJ6D2gQytUIjcD
+	V0Os=
+X-Gm-Gg: ASbGncsRlq43+E++bc9FUHgUB1z+wjDNKfouH5ASnCSGc81Qsq89U4qNIG5Lru7TlTn
+	FCmgfj2fmGi89ZL48HAjXzShgffzU5c8eOjw79lCHP52G+gV0QxKWlP2B2OkKz45oDBZMrBs7Pr
+	+yPTe8RZuwLI3hyr+TKJ4fC//4gDsEltrXzY6yRYODXB4RB8aKds0jZ0QKn/oumf6kXmxlwC5vP
+	RoT755KBPgBRcfahMjygSSAUet6QIXEN1SbOZaqj7bTSPS8fd4vVl5FyjGmcdK5eEGqt2gnvomY
+	MobiA4uKLLBYhi2lkJAY+dOQf0sKDKkELCi6JmLFDnUnYdRWyyQ4AaN6Fd+V1D1gvpWZdozqpXO
+	KWqbZNTFMs5XyiqT9NaaVq9n1ngOy
+X-Google-Smtp-Source: AGHT+IGx/OKAyGwvOZBy0ZMKJFwNxxrxi+pIE6CmLb9aaW4fvxERRLfNh9G8DBj8v5e+gDV9fv4WjQ==
+X-Received: by 2002:a17:907:7f0f:b0:abf:6e6a:885c with SMTP id a640c23a62f3a-ac6faf14d75mr574320366b.23.1743174921074;
+        Fri, 28 Mar 2025 08:15:21 -0700 (PDT)
+Received: from puffmais.c.googlers.com (8.239.204.35.bc.googleusercontent.com. [35.204.239.8])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac71927b742sm178789266b.65.2025.03.28.08.15.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Mar 2025 08:15:20 -0700 (PDT)
+From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+Subject: [PATCH v4 0/3] support Linux reboot modes in syscon-reboot on
+ gs101 (Google Pixel)
+Date: Fri, 28 Mar 2025 15:15:18 +0000
+Message-Id: <20250328-syscon-reboot-reset-mode-v4-0-77ba57703ace@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-6.80 / 50.00];
-	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[99.99%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Score: -6.80
-X-Spam-Flag: NO
+X-B4-Tracking: v=1; b=H4sIAAa95mcC/43OywrCMBAF0F8pWRvJo3nUlf8hLpJ02ga0kaQES
+ +m/m3alCOJquAP3zCwoQfSQ0KlaUITskw9jCfWhQm4wYw/YtyUjRpggjEmc5uTCiCPYEKYyEkz
+ 4HlrAQkqhtdW1AopK/RGh88+dvlxLHnyaQpz3S5lu2z/QTDHBDXXUSkalNHC++dHEcAyxR5ua2
+ b8SK1KnidaSK2Kt+pL4u6R+SHz7STTGCe441+ZDWtf1BevceLhVAQAA
+X-Change-ID: 20250226-syscon-reboot-reset-mode-566588b847e1
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
+Cc: Peter Griffin <peter.griffin@linaro.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-samsung-soc@vger.kernel.org, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+X-Mailer: b4 0.14.2
 
-Since commit 496121c02127e9c460b436244c38260b044cc45a ("ACPI: processor:
-idle: Allow probing on platforms with one ACPI C-state"), the comment
-doesn't reflect the code anymore; remove it.
+This series updates syscon-reboot to support warm/soft and soft/hard
+reboot on gs101-based boards (Google Pixel 6 and Pixel 6 Pro).
 
-Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
+Linux supports a couple different reboot modes, but syscon-reboot
+doesn't distinguish between them and issues the same syscon register
+write irrespective of the reboot mode requested by the kernel.
+
+This is a problem when platforms want to do a cold reboot most of the
+time, which could e.g. wipe RAM etc, but also want to support rebooting
+while keeping RAM contents in certain cases.
+
+On gs101, this can be implemented using different syscon register
+writes.
+
+As Rob pointed out in [1], register access shouldn't be encoded into
+DT, though. At the same time, at least on gs101, the difference is just
+different register values in different registers. Therefore these
+patches:
+
+    * add a specific binding for gs101 reset
+    * update the generic syscon reset driver to support this new
+      compatible 'google,gs101-reboot'. In this case, and as suggested
+      in [1], the syscon writes are then deducted from the compatible,
+      rather than parsing them from DT.
+
+The existing generic syscon-reboot driver seems like a suitable place
+to add support for that, given all of this is straight forward and
+simple and similar to the existing code. If the preference is to have a
+separate driver copying much of the existing generic syscon-reboot
+driver code instead, please let me know.
+
+Link: https://lore.kernel.org/all/20250227132644.GA1924628-robh@kernel.org/ [1]
+
+Signed-off-by: André Draszik <andre.draszik@linaro.org>
 ---
- drivers/acpi/processor_idle.c | 4 ----
- 1 file changed, 4 deletions(-)
+Changes in v4:
+- Rob:
+  - don't add more properties to existing 'syscon-reboot' compatible /
+    binding
+  - add specific binding for 'google,gs101-reboot' compatible and
+    related driver changes
+- Link to v3: https://lore.kernel.org/r/20250227-syscon-reboot-reset-mode-v3-0-959ac53c338a@linaro.org
 
-diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-index b181f7fc2090..2a076c7a825a 100644
---- a/drivers/acpi/processor_idle.c
-+++ b/drivers/acpi/processor_idle.c
-@@ -482,10 +482,6 @@ static int acpi_processor_get_cstate_info(struct acpi_processor *pr)
- 
- 	pr->power.count = acpi_processor_power_verify(pr);
- 
--	/*
--	 * if one state of type C2 or C3 is available, mark this
--	 * CPU as being "idle manageable"
--	 */
- 	for (i = 1; i < ACPI_PROCESSOR_MAX_POWER; i++) {
- 		if (pr->power.states[i].valid) {
- 			pr->power.count = i;
+Changes in v3:
+- support <reset-mode>-reg in driver, not just in binding, doh...
+- correctly parse <reset-mode>-offset
+- add a comment for all the BUILD_BUG_ON() checks
+- Link to v2: https://lore.kernel.org/r/20250226-syscon-reboot-reset-mode-v2-0-f80886370bb7@linaro.org
+
+Changes in v2:
+- fix whitespace issues in binding
+- Link to v1: https://lore.kernel.org/r/20250226-syscon-reboot-reset-mode-v1-0-91c1b62166ae@linaro.org
+
+---
+André Draszik (3):
+      dt-bindings: power: reset: google,gs101-reboot: add Google GS101 specific reset
+      dt-bindings: soc: samsung: exynos-pmu: update reset for gs101
+      power: reset: syscon-reboot: add gs101-specific reset
+
+ .../bindings/power/reset/google,gs101-reboot.yaml  | 32 +++++++
+ .../bindings/soc/samsung/exynos-pmu.yaml           | 21 +++++
+ MAINTAINERS                                        |  1 +
+ drivers/power/reset/syscon-reboot.c                | 98 +++++++++++++++++-----
+ 4 files changed, 131 insertions(+), 21 deletions(-)
+---
+base-commit: db8da9da41bced445077925f8a886c776a47440c
+change-id: 20250226-syscon-reboot-reset-mode-566588b847e1
+
+Best regards,
 -- 
-2.43.0
+André Draszik <andre.draszik@linaro.org>
 
 
