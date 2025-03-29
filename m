@@ -1,139 +1,130 @@
-Return-Path: <linux-pm+bounces-24601-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24602-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6098EA7560F
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Mar 2025 12:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AC64A75651
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Mar 2025 14:02:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DAAF164F7C
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Mar 2025 11:49:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A392816EECB
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Mar 2025 13:02:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C67E012EBE7;
-	Sat, 29 Mar 2025 11:49:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41E7A1AB50D;
+	Sat, 29 Mar 2025 13:01:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZEzktlo+"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="q2q+5wxu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.web.de (mout.web.de [217.72.192.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF5C282F5;
-	Sat, 29 Mar 2025 11:49:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5406520E6;
+	Sat, 29 Mar 2025 13:01:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743248943; cv=none; b=UB0492A4E68U8ZJh6MbZg4nMiPIUNqt8SAliNh0tdNc7UTULr0KCz+oEcyvWv9DFFPyJZ7JoRlfpLbamnweXaFlTaGNaVxAidx/3hbR7jDEtaqZ6g4lXRooWnlXTBrBcaa7u19Dsi8703VReWobHkSSSM3oT0GhS6ts1ovf46Es=
+	t=1743253317; cv=none; b=gcLrKLNRU3HiYq95yLr+hm3Y6yb8jaK14liNaQpKuSfVoo5LRvIjjP4L9N7+4TUY1aUsohO/k9d9HSHUle7RO0wvQ1hzS8ShH2a1/OXMgI6j27dBNfuSSWHUSDzliFi4T28RRwbwhvZzSGQgNzKHgA8cnxIj6bxO//Tql5XvuGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743248943; c=relaxed/simple;
-	bh=R3ysMq8tXrd0iXqg/79CSxJMvQiFIWNUV5ThYj7cluA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PQOR9kClHRylDE/3eZj8HwSR38S6hLFmTWqA3hcuH71t8d0XeiCLvjm8YHA6fBRyP+Qm5s53xQBU+5cY2VRJuQwXg9U5ihvhjpQoY7BpW/35OvaZHfSf2+lR58TfrIhA8h+86XNvLnjj9ivS/PVTmWcVQkVC9PqEz/9pyuY1P3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZEzktlo+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17A75C4CEEB;
-	Sat, 29 Mar 2025 11:49:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743248943;
-	bh=R3ysMq8tXrd0iXqg/79CSxJMvQiFIWNUV5ThYj7cluA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ZEzktlo+SBHTzFg/pOyCBDVmLJ2P5x+gYsqaLp4bGBsM5AQQrvmTvg4NIU635bFdw
-	 AaJvO90N3WTQp5IRsXRHx/Z4cxgtRN7vJeWH2Jlv2wlgZWgVNJ0GfYjtEtAA6fOPRf
-	 gVxG1foI/TxOFx9dJ9EErEENQKzVkkBixeOfHHhwGVB/4E/70nImv/k99RHQ0U7c+5
-	 ewJS9OwntzTmF0+9aKpDMOLkaz0uJQk2ADZ0w2OUVFxQqpMyeYxmgXhM91lg5p0BzX
-	 3KnkToMWMIQtJ6uFczMvIF8sjfupQiGQ6IzO6k9FgskK4V1CkhvapVhbJpC9S8nyNa
-	 WGsBMnPutQxAQ==
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-2c75830b455so1909395fac.1;
-        Sat, 29 Mar 2025 04:49:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU29RUb8xSRceQtL2wc0lb7tCJrm7F5N5OhjKtxgEPb6FWl7epdnpEkkKOdEvffoBme97SJ+aJfkKA=@vger.kernel.org, AJvYcCUCG5/ETD4hoys/6AVzy1kltKQz+ljNRwjsDPn27B3D/OhM9Wg+IQWh0sP6PhjIW+2B6gG7eL6s68UivZI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbMD8Yy4CDc1Wsolyj9M/7FQBq5jqkA4WR7AmeweOR4zS2ByaY
-	rbXH0152u7523STGwvfpPV3kDSFb7bPA7JW1y/KXI+I1ci3fTvH9ECxTZRVQnogta9sSzdPGI27
-	MfDRe29r2N1879JeEDHVhm/7SMAw=
-X-Google-Smtp-Source: AGHT+IEMk6cUowGpKB06ZKnQ6ugmoXr0Fd3zU8OJ8t4VtZQHXXcooyhsjt1dof/cGqAkvywb9jVtCNqSgt3g2GfbAYU=
-X-Received: by 2002:a05:6871:1ca:b0:2c2:3da4:6389 with SMTP id
- 586e51a60fabf-2cbcf56f67dmr1393331fac.23.1743248942327; Sat, 29 Mar 2025
- 04:49:02 -0700 (PDT)
+	s=arc-20240116; t=1743253317; c=relaxed/simple;
+	bh=Am2w47/73gq+uett9Rw8f58u333+sFYsQ8cWX1qaAPw=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=UKq1yIl2E0m0mzQU5baFZp0jh+zSOQ56rF1m1F1qBjVIGKLiTh30eQaEZU01hXQZB9F8QcpCdIIwbzvOWle3Li4iwiRnULOWYJnpc3agNP7FoeIvwXBWIp/28cDf60tGXLKuobE7CSfn49kzQcYXP0/JMvran9GCFWgJROuzMOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=q2q+5wxu; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1743253312; x=1743858112; i=markus.elfring@web.de;
+	bh=Tp3dkmDDfClZJ6SRNE5grrhh78twSDzP7nsBHUHXXns=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=q2q+5wxuQSBkqtUQ2p14Pj4tX1KisKZ9KDC2j9khrDffazfOnhuvRHQ3WO71Gx+C
+	 N2S2zN9dYwyNu1t7qlbNjApiJ64kNgmUM55pmEh65igNjwrpy0XRGi9QUPQQ2o80e
+	 6/irG2Fv6q51p/n2geHHC2sK/4ViXtRPRKiJm0yav+5CayVSrdZur6cK0mucIJivy
+	 uZiOe3XSxJdYnrszWzos9hO7TzM+hJCiaone6LV1/C0mqDHBOA33OnBL5Lb3hdquM
+	 XkPHK7eY1f393jS/O1ltu9rw6fXjdLm6TWZmI2zT+AIRDxzhr0AigyRVI08U5VimN
+	 qUHjUdq9ze5B7idvLA==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.93.33]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MXocY-1tdVyW0rRU-00YS3z; Sat, 29
+ Mar 2025 14:01:52 +0100
+Message-ID: <207f5f63-39b2-4801-ab98-8fd8cb7c1302@web.de>
+Date: Sat, 29 Mar 2025 14:01:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <4651448.LvFx2qVVIh@rjwysocki.net> <1928789.tdWV9SEqCh@rjwysocki.net>
- <Z-dUm_z8daM_nQoy@mail-itl>
-In-Reply-To: <Z-dUm_z8daM_nQoy@mail-itl>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sat, 29 Mar 2025 12:48:50 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0h_UzXkT5eS9FPq-UBqTsprhHuGK_YHDVRyPNPcYcKC4A@mail.gmail.com>
-X-Gm-Features: AQ5f1Jo2UkPdGxRMnhKgIBB75PtQHeJttpo2X-cbaVMa39Pk6fuAo8nL-RAp8TE
-Message-ID: <CAJZ5v0h_UzXkT5eS9FPq-UBqTsprhHuGK_YHDVRyPNPcYcKC4A@mail.gmail.com>
-Subject: Re: [PATCH v1 01/10] cpufreq: Reference count policy in cpufreq_update_limits()
-To: =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= <marmarek@invisiblethingslab.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Mario Limonciello <mario.limonciello@amd.com>, Sudeep Holla <sudeep.holla@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+To: John Madieu <john.madieu.xa@bp.renesas.com>,
+ linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>
+Cc: John Madieu <john.madieu@gmail.com>, LKML <linux-kernel@vger.kernel.org>,
+ Biju Das <biju.das.jz@bp.renesas.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ Magnus Damm <magnus.damm@gmail.com>, Stephen Boyd <sboyd@kernel.org>,
+ Zhang Rui <rui.zhang@intel.com>
+References: <20250317143442.100590-4-john.madieu.xa@bp.renesas.com>
+Subject: Re: [PATCH v4 3/5] thermal: renesas: rzg3e: Add thermal driver for
+ the Renesas RZ/G3E SoC
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20250317143442.100590-4-john.madieu.xa@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:5n9T1IjtlRMCWnQgJ9Ekav5awbr89GIg/I+0aCfw8sZL6XUdZSO
+ ZNQa0eHPPNSTK1uck9in6Hjq8LoToiBV1+ODE6jqYP3YoddNrgWb3pJj3uVB6L+gBZP26W/
+ SSPu+2ZXQdcWru/RU6WIXHnrHRf1xT7s4QEACET1CoJI6ogUxt+9CYALGjdzqnBCzfViq/J
+ Yt/0rq9BAqSTQ8J2LNiBA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:9vNJ6TBTLdA=;7Ii4yRb+C8sJIMUSyLbzf86clx/
+ 0d4OWf4znONxJoj5gakPM1kTRv2vLTXL4tbLf3ZyQ/48hzZNa50nYWHIA4JpySg/u/fbPSg76
+ SVv3gr1sBo/UVUGJTuQ+ywZrtidXddUnGaJFEZuWx2/jWOl7hADeqc8pZ8te4LF599vvMio3L
+ tBmOdzMuV5HNgUDZ0M+Zii6n3IulyVtUXTJ3T62f4/LXaBz2eDyTn3xX54qY28vX4rPY3fE9s
+ p4/KuFGjrxXK6M65sDZuBPMHjr/DV/35XYyuxjZUPTDpjAtZYq/ggVZt8MH1vjkJMrziVHiAb
+ wLOS32ryWU7jCRUA3y42bfC/uy9Ac54A9DC1b3xQXd+cKerTJpnFprHg+h63C2lEylZEwG/h4
+ VpbFbrOwOIkKESk6Vt5j1iz65/EgWafrjfgov+FzfmCvFPmS0hLNbA4jNUDMbo92RlexRtiZF
+ SVW93MGVmMa2qgeIWFs4Hfwbbo4y8rcE8eicsHZrbuLk9lOA4wJ5S82xhZXqh2ihkMoJqDZaO
+ eKRgrg9tFTT6wc5/zf0LweoyZkqv8RFf/tRs2kPcKeHOofgaYEn//oX94wzKXsjoJ5VEeQQfh
+ VXGyR593GErOj706z4PB55fGcrs/mCpsUcgiOXVm3aPmRH3zVSOkLcZVQ97eNHRGUwCZTBOUz
+ aApZnzAlWbSGepoXOgfMkJAkgnJ5hXJ1JlQAeekk669tcejXcZAxLZls5sGPQPfJiNGF8Xg+g
+ lerhNDCu59NMO1ScMMzYyCHoQmCHI1eC90ulHIEiPi5yvLTUz5/PXkztdNjAas6VNNA82rNZ/
+ JhlrD9K3AhliNApM23n2PpCXVmwq0SJwAoTj01DMc22sBkk87lKgo6T9bPRJpjys0T4wnLd1H
+ 4YBbGFfFWjNl/scp/hhlIDtEVa2yDMz2ze4h8yYKoBhMqTdeb2/DXh5wjT7W4eEc6n+yqoKXq
+ lBgPtxs60z/J6RgK2O8/8O0MrPsQATe+mrMBWvsIErhGgWjxdyiws/Wpoyd4ICVirADUYDEz3
+ 2IwloCzOgt1lMXRDy+4fkMurPmRI3SlJBYzMFqSbth9c0B5O/Pv8EJk7sD2oAJPqEGGawxPPL
+ FT+tJsarDbI1A1NlOwO/W70NB1vFH6rXPiW7SfdsCMqT45QWIDjWbqaCv4aM0L0lgoJKMrAEW
+ r6TEsOtbtu+2+hP82hPG1UbQO3cYFqmZHzWKC1afcu0uyqVP6+9JnJsqP7//jBPyFbBcLM0uq
+ 8o4whuQ8DdfwiG55OPL+SCJEQV2k21nSkWA1w5tqytcfu1NqSHl+YYe4GFBZvl7dslwLHn3g3
+ ZuJedFSfLvrW2KZxe5APss0IehMjXC2GAEpaev21RYSYP1GOm/rIDcQy3DWN8ZOYX/8kw9TEW
+ bZIUh3Pbsqr687hcj/HMUSdywwJ2vDLuWezGhsnxzAJIrVNguHQdxD/KQoDAs58K2atpCxPMd
+ 2Bh2hI4CR0lJmkqHVmSeAOfgtwWDKGuif0X0Ug5XRkJm/YwrQ
 
-On Sat, Mar 29, 2025 at 3:02=E2=80=AFAM Marek Marczykowski-G=C3=B3recki
-<marmarek@invisiblethingslab.com> wrote:
->
-> On Fri, Mar 28, 2025 at 09:39:08PM +0100, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Since acpi_processor_notify() can be called before registering a cpufre=
-q
-> > driver or even in cases when a cpufreq driver is not registered at all,
-> > cpufreq_update_limits() needs to check if a cpufreq driver is present
-> > and prevent it from being unregistered.
-> >
-> > For this purpose, make it call cpufreq_cpu_get() to obtain a cpufreq
-> > policy pointer for the given CPU and reference count the corresponding
-> > policy object, if present.
-> >
-> > Fixes: 5a25e3f7cc53 ("cpufreq: intel_pstate: Driver-specific handling o=
-f _PPC updates")
-> > Closes: https://lore.kernel.org/linux-acpi/Z-ShAR59cTow0KcR@mail-itl
-> > Reporetd-by: Marek Marczykowski-G=C3=B3recki <marmarek@invisiblethingsl=
-ab.com>
->
-> Reported
+=E2=80=A6
+> +++ b/drivers/thermal/renesas/rzg3e_thermal.c
+> @@ -0,0 +1,445 @@
+=E2=80=A6
+> +static irqreturn_t rzg3e_thermal_adc_irq(int irq, void *dev_id)
+> +{
+=E2=80=A6
+> +	int new_temp =3D temp_val * MILLIDEGREE_PER_DEGREE;
+> +
+> +	scoped_guard(spinlock_irqsave, &priv->reg_lock) {
+> +		priv->cached_temp =3D new_temp;
+> +	}
+> +
+> +	complete(&priv->conv_complete);
+=E2=80=A6
 
-Right, thanks!
+Are curly brackets really relevant for such a =E2=80=9Cscoped guard=E2=80=
+=9D?
+https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
+e/Documentation/process/coding-style.rst?h=3Dv6.14#n197
 
-> I wanted to propose also Tested-by tag, but technically it's not me who
-> tested it: https://forum.qubes-os.org/t/kernel-latest-6-13-6-boot-loop/32=
-926/18
-
-You can ask the original tester whether or not they would be willing
-to give a tag, though.
-
-> > Cc: All applicable <stable@vger.kernel.org>
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/cpufreq/cpufreq.c |    6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -2781,6 +2781,12 @@
-> >   */
-> >  void cpufreq_update_limits(unsigned int cpu)
-> >  {
-> > +     struct cpufreq_policy *policy __free(put_cpufreq_policy);
-> > +
-> > +     policy =3D cpufreq_cpu_get(cpu);
-> > +     if (!policy)
-> > +             return;
-> > +
-> >       if (cpufreq_driver->update_limits)
-> >               cpufreq_driver->update_limits(cpu);
-> >       else
-> >
-> >
-> >
->
-> --
-> Best Regards,
-> Marek Marczykowski-G=C3=B3recki
-> Invisible Things Lab
+Regards,
+Markus
 
