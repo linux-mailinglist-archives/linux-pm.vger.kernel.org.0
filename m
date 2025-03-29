@@ -1,195 +1,205 @@
-Return-Path: <linux-pm+bounces-24599-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24600-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95F0DA753F2
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Mar 2025 02:44:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09DC9A753F9
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Mar 2025 03:02:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53A2D1896D36
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Mar 2025 01:44:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F286175DA6
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Mar 2025 02:02:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16D682EAE4;
-	Sat, 29 Mar 2025 01:44:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42D04290F;
+	Sat, 29 Mar 2025 02:02:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TVJDaLVm"
+	dkim=pass (2048-bit key) header.d=invisiblethingslab.com header.i=@invisiblethingslab.com header.b="JWeXMDwF";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="oBCbwYk5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13E9315A8
-	for <linux-pm@vger.kernel.org>; Sat, 29 Mar 2025 01:44:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A19801;
+	Sat, 29 Mar 2025 02:02:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743212665; cv=none; b=svTJNi5+uXut2CCzacMYn8dEhQLYFhHCrFDHOLSBd+IjrhrAr1w1IOLFLPSy7helat8avcTt3y0McvlvenV3yelYCUzt5zeZyi2CDpEMmj9RVSsrDIqBkwLccmT1dXutsP97tBVDkiaAB2d9z6z/1MW4I0Xa+UTNnPOjMrZKB8w=
+	t=1743213731; cv=none; b=XVeS3fZs9aO6L6oFVhqfuu7arvWR3tIe4eVNjEXPiFQt+1lOIURtsmjpfHeUPDOy8tCMMFx8gLjsB2EM9alNaTgn5Gp3mQWlvKk2l9AVFvJGfY7Koll1YZ0XuOsuzA6mIlE8qHowgBoczHDjY7tS+OZMwLK53Ry5jUTUDGopeO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743212665; c=relaxed/simple;
-	bh=DnV7vRN0lEH6EzXjMbUXtQUHI3fnnZRqw/5IC56SvFI=;
+	s=arc-20240116; t=1743213731; c=relaxed/simple;
+	bh=e/V1ZHt0uebkLWbaqsJY8znBoXzzMRg+4ELVgEr4G1Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=keCfjmSEYTUwvXgV+fGePzyqQ1copnALF0y7skNeXCFMgDd5o6GnMrAFCpOVaY1po52tdi3FnDAF0iXY54ZgFGO7wOiuReqBkrHJuqx+msc03R/D3HeN2P1CHUndvSlmfBiBZ18sqxV60D5O6SpLgKcX7fd9kvO3BzJCYoPqwig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TVJDaLVm; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1743212660;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rrchpPNwlMYuDeEE/R/ZDKIqGUjMFbA0Mk/lyFLmNEU=;
-	b=TVJDaLVmGzYc1y6fFe30lcVXG17M1yojvbAIkGF71pe62RfsHvVvvHpkFji/yQAdejlXSS
-	J5vtAkwYDrwVa7ZO30BrRYBHussHAvEkM4x5YcYHCaezKMkP5E7nLgmCL+EEX5avh3FD6E
-	hh1FfOeAK/cFlBcACNCU3Bv6CMBZC84=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-427-UkCKEg-cOlK3QBJdhl5i_w-1; Fri,
- 28 Mar 2025 21:44:17 -0400
-X-MC-Unique: UkCKEg-cOlK3QBJdhl5i_w-1
-X-Mimecast-MFC-AGG-ID: UkCKEg-cOlK3QBJdhl5i_w_1743212656
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1FE8F196D2CC;
-	Sat, 29 Mar 2025 01:44:15 +0000 (UTC)
-Received: from localhost (unknown [10.72.112.12])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A927D180175A;
-	Sat, 29 Mar 2025 01:44:11 +0000 (UTC)
-Date: Sat, 29 Mar 2025 09:44:06 +0800
-From: Baoquan He <bhe@redhat.com>
-To: Roberto Ricci <io@r-ricci.it>
-Cc: Dave Young <dyoung@redhat.com>, ebiederm@xmission.com,
-	rafael@kernel.org, pavel@ucw.cz, ytcoode@gmail.com,
-	kexec@lists.infradead.org, linux-pm@vger.kernel.org,
-	akpm@linux-foundation.org, regressions@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [REGRESSION] Kernel booted via kexec fails to resume from
- hibernation
-Message-ID: <Z+dQZozsbdls6yqJ@MiWiFi-R3L-srv>
-References: <Z4WFjBVHpndct7br@desktop0a>
- <Z5bx7ZHNcyc5fM_L@darkstar.users.ipa.redhat.com>
- <CALu+AoSSKh=5ELgQyzDrGEDm5fm2XKteH1ZC70mm89pNSSPMHw@mail.gmail.com>
- <Z-c7V2hptt9U9UCl@desktop0a>
+	 Content-Type:Content-Disposition:In-Reply-To; b=m/41tUJShroHcBlAZnHhV8OiHl9Kn+nRNufAcagRVhiBJQFiM0qzfgKq2rXesxyAaJhGTfQ+GIxmA9xWwMrTZxsRTeP7laZSB0FmRRJZMDH9vSVJIkNjUvnUwa0I9LKOBRN5PV/OHFyXul3UnqSPsOMuFlZ6Gco1rwkOTI+fz3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=invisiblethingslab.com; spf=pass smtp.mailfrom=invisiblethingslab.com; dkim=pass (2048-bit key) header.d=invisiblethingslab.com header.i=@invisiblethingslab.com header.b=JWeXMDwF; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=oBCbwYk5; arc=none smtp.client-ip=103.168.172.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=invisiblethingslab.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=invisiblethingslab.com
+Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
+	by mailfout.phl.internal (Postfix) with ESMTP id 7D74A13833EC;
+	Fri, 28 Mar 2025 22:02:07 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-11.internal (MEProxy); Fri, 28 Mar 2025 22:02:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	invisiblethingslab.com; h=cc:cc:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1743213727;
+	 x=1743300127; bh=QycLDA4stR8tZNNCUyXC3JQQhELaYMs4b0Np04+ALWQ=; b=
+	JWeXMDwFXIwIgMQgAxRl/OOBwzkqEMPAVsCDFmovtpam5vRiePz3g0Olzx8VCzPc
+	aBvutot94Mm5aqEIVEG83C9Mj3RFMqLhRL9INbX8+DCH5lBAzzRVpY0+KR3yc29y
+	dKZY8s72hHnB/6FY4dlFs2IXaBz2DWx/eL0OB1RbM25SlA4e4MuZGp1MN+exTh+O
+	JNM/aqOJJIAL+nEb3Fqe8yEsRzfopmhXTqAt2STBRiOVfZvuBbulKshbJSFMij9a
+	YElXkq3zKbCwz5jFWduNE6OQnuAD2Ng3guiQl8MPBoODtCETjKGB6gHcwA79kdFp
+	/hA9+ZATeMXdJNIoJAVwpA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1743213727; x=1743300127; bh=QycLDA4stR8tZNNCUyXC3JQQhELaYMs4b0N
+	p04+ALWQ=; b=oBCbwYk5E6eR/NtyMSNCiff25vhQArhbewUeK2K+SucGgZ72kLk
+	Dvr3ySTxA9WNLbcHhsxOOnmON52byOlJpSsma7M3+bAlWonup8yA9s77ynzTWMmV
+	pVJVNSDeeMh65NF6sWftMF6iFUToVuT3v7Qs3vYXOfBjYpIMy6yFL/u0z5ZaaIyJ
+	FXk3oWsrtMpdmJAg3AaNGQvsbxwKeouEuaXT0vf09pbheG4LUV3JZa7EjwGUL8Ba
+	5Da3ULYtXT3AHVaPEi7/yd+6k6cowvB/SASCOGqE9qmfZDLvwpfdR2tz4XXFvM9K
+	Feu/NIhfkKWdzrCRPQipPMtrnvM4f+BEjRQ==
+X-ME-Sender: <xms:nlTnZ1bDpSkXWkY9849fOc_iQxfNfp9XhXIiv1oLvepGr3uPLBTZXg>
+    <xme:nlTnZ8aLUZgBsso7PMi6POvBdkojgITHcB4eKQN50lGRAxM867zXCU66KsQW-Udns
+    HWab7s60xKD1g>
+X-ME-Received: <xmr:nlTnZ3-_NKQphR5IbPF8vuIXTHl98uxEzL__89-QahmAYZsvRZtRgXPyugV7MLBd2UUFpd_TyJhTCkShJ6cdZVq7lojg5mK0kg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddujedvledvucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesghdtreertddt
+    jeenucfhrhhomhepofgrrhgvkhcuofgrrhgtiiihkhhofihskhhiqdfikphrvggtkhhiuc
+    eomhgrrhhmrghrvghksehinhhvihhsihgslhgvthhhihhnghhslhgrsgdrtghomheqnecu
+    ggftrfgrthhtvghrnhepgeehheeludegueeugedvffekjedvvdeludfgieevteeijefhie
+    evieejhffhgeeinecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpqhhusggvshdqohhs
+    rdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrrhhmrghrvghksehinhhvihhsihgslhgvthhhihhnghhslhgrsgdrtghomhdpnhgs
+    pghrtghpthhtohepjedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprhhjfiesrh
+    hjfiihshhotghkihdrnhgvthdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhk
+    vghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrd
+    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehvihhrvghshhdrkhhumhgrrheslhhinhgr
+    rhhordhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslh
+    hinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehmrghrihhordhlihhmohhntghi
+    vghllhhosegrmhgurdgtohhmpdhrtghpthhtohepshhuuggvvghprdhhohhllhgrsegrrh
+    hmrdgtohhm
+X-ME-Proxy: <xmx:nlTnZzoPeT6J7_mHr1xLuYNtLB540uk-01M8lnXoY40FgOsScN4fKw>
+    <xmx:nlTnZwpc9e7c3BkkRsHPjs_LOh_m2P791xl5LcCcEfd3BJMlWgxdZA>
+    <xmx:nlTnZ5TIRzVCqkFYvmxpV85zwsDcNN5xgvMu-rG09CKubbAlrj-ATA>
+    <xmx:nlTnZ4rw0uCj87u3zanC1kNgAJVVJrtI3L7CMR40UUlvdN5jX1wDug>
+    <xmx:n1TnZ4KT7df4pPBwBXS7j4gA7ubEq4HF6rZr03DZQY6kC1ORnTiWzMfB>
+Feedback-ID: i1568416f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 28 Mar 2025 22:02:05 -0400 (EDT)
+Date: Sat, 29 Mar 2025 03:02:01 +0100
+From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH v1 01/10] cpufreq: Reference count policy in
+ cpufreq_update_limits()
+Message-ID: <Z-dUm_z8daM_nQoy@mail-itl>
+References: <4651448.LvFx2qVVIh@rjwysocki.net>
+ <1928789.tdWV9SEqCh@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="KGJBHCHIqZX+AzAF"
 Content-Disposition: inline
-In-Reply-To: <Z-c7V2hptt9U9UCl@desktop0a>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+In-Reply-To: <1928789.tdWV9SEqCh@rjwysocki.net>
 
-On 03/29/25 at 01:14am, Roberto Ricci wrote:
-> On 2025-01-27 10:42 +0800, Dave Young wrote:
-> > On Mon, 27 Jan 2025 at 10:39, Dave Young <dyoung@redhat.com> wrote:
-> > > On 01/13/25 at 10:28pm, Roberto Ricci wrote:
-> > > > After rebooting the system via kexec, hibernating and rebooting the machine, this oops occurs:
-> > > >
-> > > [snip]
-> > > >
-> > > > I will send the kernel config and dmesg in replies to this email.
-> > > >
-> > >
-> > > I tried your config (removed some config driver related which is not useful), but it can not boot on my kvm guest.
-> > > Firstly I saw a panic in ftrace path,  then I rebuilt the kernel without ftrace, it panicked again but in kvm related code path.
-> > > Both are not related to kexec at all so I suspect your bug is not kexec specific.
-> > >
-> > > [snip]
-> > >
-> > > You can find the kernel config here (with the ftrace enabled):
-> > > https://people.redhat.com/~ruyang/snakeyear/panic-ftrace.config
-> > 
-> > BTW, if I disable KASAN then kernel can boot, anyway kexec +
-> > hibernation works fine with a few tests, no panics.
-> > 
-> > >
-> > > Thanks
-> > > Dave
-> 
-> Hi,
-> 
-> sorry for the late reply. I tried your modified config, but I'm getting
-> the same oops I originally reported. No idea why the oops is not
-> happening for you.
 
-Not that oops is not happening in my side, I can't boot kernel built
-with you provided config on Fedora OS. 
+--KGJBHCHIqZX+AzAF
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 29 Mar 2025 03:02:01 +0100
+From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH v1 01/10] cpufreq: Reference count policy in
+ cpufreq_update_limits()
 
-> 
-> Anyway, I performed yet another bisection, this time with just plain
-> defconfig plus CONFIG_KEXEC_FILE=y, and I got different results.
-> 
-> Updated steps to reproduce:
-> 1. Boot kernel >= v6.8 in a virtual machine created with this command:
->    `qemu-system-x86_64 -enable-kvm -smp 1 -m 4.0G -hda disk.qcow2`
-> 2. Load the same kernel with:
->    `kexec --kexec-file-syscall -l /boot/vmlinuz-6.14.0 --initrd /boot/initramfs-6.14.0.img --reuse-cmdline`
-> 3. Reboot (or call `kexec -e` directly)
-> 4. Hibernate and reboot: `printf reboot >/sys/power/disk && printf disk >/sys/power/state`
-> 5. Upon resuming, three things could happen, depending on luck:
+On Fri, Mar 28, 2025 at 09:39:08PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>=20
+> Since acpi_processor_notify() can be called before registering a cpufreq
+> driver or even in cases when a cpufreq driver is not registered at all,
+> cpufreq_update_limits() needs to check if a cpufreq driver is present
+> and prevent it from being unregistered.
+>=20
+> For this purpose, make it call cpufreq_cpu_get() to obtain a cpufreq
+> policy pointer for the given CPU and reference count the corresponding
+> policy object, if present.
+>=20
+> Fixes: 5a25e3f7cc53 ("cpufreq: intel_pstate: Driver-specific handling of =
+_PPC updates")
+> Closes: https://lore.kernel.org/linux-acpi/Z-ShAR59cTow0KcR@mail-itl
+> Reporetd-by: Marek Marczykowski-G=C3=B3recki <marmarek@invisiblethingslab=
+=2Ecom>
 
-OK, this is a little complicated. wondering why you need to do the
-hibernation and reboot. Just for curiosity.
+Reported
 
-> 5a. A kernel oops:
-> ```
-> [   42.574201] BUG: kernel NULL pointer dereference, address: 0000000000000000
-...snip... 
-> I will send config and dmesg in replies to this email.
-> 
-> The bisection pointed to
-> b3ba234171cd kexec_file: load kernel at top of system RAM if required
-> 
-> #regzbot introduced: b3ba234171cd0d58df0a13c262210ff8b5fd2830
-> 
-> Now that I think about it, this was the commit I found when I did the
-> very first bisection after I found the bug. But I could not get the same
-> result with subsequent bisections, so I didn't mention it in my original
-> report.
-> 
-> When reverting b3ba234171cd on top of v6.14, merge conflicts must be
-> solved, I hope I did it right:
+I wanted to propose also Tested-by tag, but technically it's not me who
+tested it: https://forum.qubes-os.org/t/kernel-latest-6-13-6-boot-loop/3292=
+6/18
 
-I doubt how this caused the failure. I have several questions, could you
-help answer:
+> Cc: All applicable <stable@vger.kernel.org>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/cpufreq/cpufreq.c |    6 ++++++
+>  1 file changed, 6 insertions(+)
+>=20
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -2781,6 +2781,12 @@
+>   */
+>  void cpufreq_update_limits(unsigned int cpu)
+>  {
+> +	struct cpufreq_policy *policy __free(put_cpufreq_policy);
+> +
+> +	policy =3D cpufreq_cpu_get(cpu);
+> +	if (!policy)
+> +		return;
+> +
+>  	if (cpufreq_driver->update_limits)
+>  		cpufreq_driver->update_limits(cpu);
+>  	else
+>=20
+>=20
+>=20
 
-1) Can this problem be stably reproduced with kexec_file_load?
+--=20
+Best Regards,
+Marek Marczykowski-G=C3=B3recki
+Invisible Things Lab
 
-2) if answer to 1) is yes, can reverting b3ba234171cd fix it stably?
+--KGJBHCHIqZX+AzAF
+Content-Type: application/pgp-signature; name=signature.asc
 
-3) If answer to 1) and 2) is yes, does kexec_load works for you? Asking
-this because kexec_load interface defaults to put kexec kernel on top of
-system RAM which is equivalent to applying commit b3ba234171cd.
+-----BEGIN PGP SIGNATURE-----
 
-4) Can you add '-d' to 'kexec -l' to print more debugging message?
+iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAmfnVJsACgkQ24/THMrX
+1yzUGQf+PQ8QdbuWgXIo+xFm+zARm08zZkxhAzij9gxb8iJgbZZ6WqLoXoAxiiKH
+UmMroeB1t/3GAz9a/45XBjregO5HwE8T64lutm+BuYPMaSrHoYqQn4U/7QRixJcr
+Ygz3MwpYwe7tICNW6Pmf078NOiVIxys7Na4htfoDP8sJq/B/4RIwg9pDr+TzO6BV
+3N6m2H+4IqXXDkNECU9Ow722eH6ObtInbcFuaal1W3kNY7g+fal1gJUFPCC5YBEp
+h4CL9s5iOwnPvHgN0sIjT8LV3HhlV2FGKBpWhW891JjF1UH8HETGHNIDe/KzIKiZ
+ucjSxUjIF0p6tArlHim3VjhUrbugSg==
+=Qk/O
+-----END PGP SIGNATURE-----
 
-5) Can normal kexec trigger the failure? I mean operating kexec w/o
-the hibernation/resumption. 
-
-> 
-> ```
-> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> index 3eedb8c226ad..3014be212afd 100644
-> --- a/kernel/kexec_file.c
-> +++ b/kernel/kexec_file.c
-> @@ -614,10 +614,7 @@ static int kexec_walk_resources(struct kexec_buf *kbuf,
->                                            crashk_res.start, crashk_res.end,
->                                            kbuf, func);
->  #endif
-> -       if (kbuf->top_down)
-> -               return walk_system_ram_res_rev(0, ULONG_MAX, kbuf, func);
-> -       else
-> -               return walk_system_ram_res(0, ULONG_MAX, kbuf, func);
-> +       return walk_system_ram_res(0, ULONG_MAX, kbuf, func);
->  }
-> 
->  /**
-> ```
-> 
-> Applying this diff solves the problem for v6.14.
-> 
-
+--KGJBHCHIqZX+AzAF--
 
