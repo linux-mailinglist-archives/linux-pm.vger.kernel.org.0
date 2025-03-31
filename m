@@ -1,122 +1,136 @@
-Return-Path: <linux-pm+bounces-24642-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24643-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 994B7A764BB
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 13:08:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43BA7A764F9
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 13:32:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F24733AA5E4
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 11:08:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF582169764
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 11:32:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 425F11DF973;
-	Mon, 31 Mar 2025 11:08:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0FE91BEF6D;
+	Mon, 31 Mar 2025 11:32:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KwAhWdBb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oHeVbEJx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93E82AEE1;
-	Mon, 31 Mar 2025 11:08:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 915E4339A1;
+	Mon, 31 Mar 2025 11:32:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743419293; cv=none; b=LLR8NeHFkZE+9kNCgetJJBJ3Vi93U/Q06kLcg7ljkZjMvsNkfH5OK35sBANE7WTLSskUTBmOt3q4Sw0QZm+P6uIfNpbHk/86z9VK8xxn7QTv+NCUbSTa+IwbTibowISeZV+hfIiXKcz+dvKNCdzmotGPgsMTvLBJHHKQrJLkR/4=
+	t=1743420757; cv=none; b=rwUQVXEXQNqQRQGqbrBkFxBj97uUB7D5IUtBTNTAuFvDfpKVaUFvzF4BIV1ErBBL+2ioWQieTYke4PWbb7n5y8/FWcQork0zMuEnBCfMgMNBk4Y1LxU91fcOYksqJEycbbM52GaSzFnI5AxOhbUy0G5MNu2oOxeHLiGXFbaA06o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743419293; c=relaxed/simple;
-	bh=ABbYmkdZot2xo1j9ZE43O5qMAIZuh7Wo1WZXf7p9nQ8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HPDyAWi2JmSFEZvabpuwiMZgdJUZI70GAGR4OOS/1l2qD+83/U8IIhL7vcdYiEr0D6JYUWIJM9OZU6scdO/2KLENOndp1YySv1fOaxqbsq6k8DR0JYxfBZhqU31nw3zvFKbU7CH6FHbLJ8speQh/4q273XRqMWLvHPyp+85+gnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KwAhWdBb; arc=none smtp.client-ip=209.85.214.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2240b4de12bso55787585ad.2;
-        Mon, 31 Mar 2025 04:08:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743419291; x=1744024091; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NQQM3Yu8f39BKq2Mg/PjZ0Uv+SRmBe59/r9UjuQMsco=;
-        b=KwAhWdBb9yClGr6oBYYq7h0Uce6u9C/fr4gs6276sgoisCEJoEHRjimA+0U+fCfutp
-         TxBLzlXr1BWHhKLRffUxWUD0yJ+2TVS2NF792s4DFrysWmFWvgy6EhM5mctCihOPaaYm
-         gbSQJlEvQLoeoFC7B/cWAz3yV+MaNPiwJovyqDwRGARGGoHtHfcLqSw6U7IcT315iWZZ
-         esPNmqjnUlbWqYde0+Ud2+RFR04/+QR4OGPHQoii5nyeikGWsMQHeXv6zBbBUk5Sx7ns
-         KbPSRm4Cz2vzZbnsHr3kaUYv5H+WgJu3rufmoVk8hJuOUS8V28pyi+RHAbC9nGs324WF
-         +oKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743419291; x=1744024091;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NQQM3Yu8f39BKq2Mg/PjZ0Uv+SRmBe59/r9UjuQMsco=;
-        b=PrbdtSBxBTdvy8AoZWUh1GPEb/wxnzuQgUQZI4gOfRoFdO1aMNCtGSg7CBqbx8/i11
-         LmKEUNUci/d4hmf0z8oZNIHbIuTjVJUaQieG3s4yxakYa8YuYGdUXh9q1JRegFT04h8Q
-         s/ggBA30uNjKoFBkWlPuc90L3UKn5YsR9jwja+RLd4EZUKhZBlFNdVGAr4uuohsPVTFX
-         Knt9TfMdBJrElC6QKOUAm60iMtjnuYKymmReqYFms9tl/9TrriejYBcxX3QDu4I7ythw
-         HnY8H1N1krLIQD5oossitbmQkTrfN0MdN8RSapmb7iSXUOH6Oezg066+eeW31nyVt8Zv
-         XrKQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW4h8dDwjdG2z+7mGTtPAczcXDanXwBCtNxMz1X77gHGZE7mv5pT04NZEDk2QariRFXDNvoqHm0mrjkSSsoaIrFEhE=@vger.kernel.org, AJvYcCWc/dovgWD6Ld/kTGB3hLzfJZ1IC94SCpoxfz+qR7+02pxQrwHHa2j533YIGqczx3fwtc3s0PEXCyxVW8o=@vger.kernel.org, AJvYcCXYc5veThWirG4Lhvo0wB4703gkMQxO17y5Ptjnkbd0LRfeVgu/lAz/3GmwxX/41cstoNs7D8oenq8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz22YuOsE6xo/bp7d2xGqCriCsrOhD/fzWnMTcDXRNGhvQT8ZaT
-	8lPsGzhA32Njk3tuhIYD+YXCDUHuuVV/HS01ATq2MnuFYekg3hgw
-X-Gm-Gg: ASbGnctrc3OQDlmNR9vFMxRPv9FFEeIyCqZWT9srtXqjtlhJP8ojWnanK3gfGW10HOu
-	7Fqpka0R/XiReuWK2jljCwe1Y8dYCxfBmfhhWtuY0WwgbRpp4Ddfq0PZOeIbwbT0uNS5mIDSJad
-	59lu+4UOE5T6fuL/Q3vZNumAPp/Nq1L+UWt186uyv33TLHi2Q0TbCpgk71fbaVukW4o/W9JPLxp
-	iMOe22oTw+D4uc+Z6dtP3q6HQdX3RKOwQz9WCE9QtkaiUesbWTfCwyeYEicFo+cNSYiPfsktJIy
-	iAAFxdQKUKnbQ0cv0Kgr0arRdevLe9xRzUuHqMOCAArt5IUxCokfE8hVw7kcoV+y3D8jlyg=
-X-Google-Smtp-Source: AGHT+IEfDTgHboSZ6iP2dwOP4vEW2XdDO0sbdpyybIi/mimcrNizy0gR6Y/LkkD3gFM65fgc+CAQ5Q==
-X-Received: by 2002:a17:902:c408:b0:220:cb6c:2e30 with SMTP id d9443c01a7336-2292fa010cemr150564165ad.49.1743419290986;
-        Mon, 31 Mar 2025 04:08:10 -0700 (PDT)
-Received: from henry.localdomain ([111.202.148.167])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2291f1dfbb4sm66890615ad.198.2025.03.31.04.08.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Mar 2025 04:08:10 -0700 (PDT)
-From: Henry Martin <bsdhenrymartin@gmail.com>
-To: djakov@kernel.org,
-	krzk@kernel.org
-Cc: s.nawrocki@samsung.com,
-	a.swigon@samsung.com,
-	alim.akhtar@samsung.com,
-	linux-pm@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Henry Martin <bsdhenrymartin@gmail.com>
-Subject: [PATCH] interconnect: Add NULL check in exynos_generic_icc_probe
-Date: Mon, 31 Mar 2025 19:08:02 +0800
-Message-Id: <20250331110802.9658-1-bsdhenrymartin@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1743420757; c=relaxed/simple;
+	bh=05Ub8boU60E8Z7QxJ+cd0L+rxka8vuLP3vAU+K959fw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=scmab68bV5em47Z5Q1UkTSXVxqC7YrqTMCUzVnBMg2epUP8WdaumkqUMct0IyF/F8KZw/qAz1b3/14VVKYTjxczDMyOwzNR5OeWTS+fxe8SbFNzWde3mabKZNh6EYE8bwT0YxLB2aBqac2sXbg6OFSiHe5KzU+r78HlPGXlwFWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oHeVbEJx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89EC7C4CEE3;
+	Mon, 31 Mar 2025 11:32:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743420757;
+	bh=05Ub8boU60E8Z7QxJ+cd0L+rxka8vuLP3vAU+K959fw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=oHeVbEJxjnGLhNtejItA+2MzVyYN2C+rL8HlhaxNaxeWLIF4N9MMDMGs/vR7s+wsR
+	 kmAFXpc0XcrWImNAWhwb1uSCctUWkoUWue1QeeGj8WlEeRhVe5K6BZGTZgQqLBGxCM
+	 OtJDJgDHr15868zJztTZNpvCH1kX+/E2A1Sda/pCRKeDk2AMZQXx3qn72lZJ3SYPtq
+	 bnMUYtlYtVo4NVH+/9SaT4C7o0dqmmFlNuPnRYw5ofj46LY5rNn6kEDlBsgYmQqMug
+	 s/mNQI45pZ7lkHd0M8uoqqSs9N8Z9Zhipfnb4aBpf9w0UWtoWHN9sZd6rrg9Knm+G2
+	 P92hQvhpJ/9vg==
+Message-ID: <7f8a3f75-f66f-4380-ae60-b84f6752da0b@kernel.org>
+Date: Mon, 31 Mar 2025 13:32:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] interconnect: Add NULL check in exynos_generic_icc_probe
+To: Henry Martin <bsdhenrymartin@gmail.com>, djakov@kernel.org
+Cc: s.nawrocki@samsung.com, a.swigon@samsung.com, alim.akhtar@samsung.com,
+ linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20250331110802.9658-1-bsdhenrymartin@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20250331110802.9658-1-bsdhenrymartin@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-When devm_kasprintf() fails, it returns a NULL pointer. However, this return value is not properly checked in the function exynos_generic_icc_probe.
+On 31/03/2025 13:08, Henry Martin wrote:
+> When devm_kasprintf() fails, it returns a NULL pointer. However, this return value is not properly checked in the function exynos_generic_icc_probe.
 
-A NULL check should be added after the devm_kasprintf() to prevent potential NULL pointer dereference error. This is similar to the commit 050b23d081da.
+Please wrap commit message according to Linux coding style / submission
+process (neither too early nor over the limit):
+https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
 
-Fixes: 2f95b9d5cf0b3 ("interconnect: Add generic interconnect driver for Exynos SoCs")
-Signed-off-by: Henry Martin <bsdhenrymartin@gmail.com>
----
- drivers/interconnect/samsung/exynos.c | 2 ++
- 1 file changed, 2 insertions(+)
+Please run scripts/checkpatch.pl on the patches and fix reported
+warnings. After that, run also 'scripts/checkpatch.pl --strict' on the
+patches and (probably) fix more warnings. Some warnings can be ignored,
+especially from --strict run, but the code here looks like it needs a
+fix. Feel free to get in touch if the warning is not clear.
 
-diff --git a/drivers/interconnect/samsung/exynos.c b/drivers/interconnect/samsung/exynos.c
-index 9e041365d909..3dccc84f72cf 100644
---- a/drivers/interconnect/samsung/exynos.c
-+++ b/drivers/interconnect/samsung/exynos.c
-@@ -134,6 +134,8 @@ static int exynos_generic_icc_probe(struct platform_device *pdev)
- 	priv->node = icc_node;
- 	icc_node->name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "%pOFn",
- 					bus_dev->of_node);
-+	if (!icc_node->name)
-+		return -ENOMEM;
- 	if (of_property_read_u32(bus_dev->of_node, "samsung,data-clock-ratio",
- 				 &priv->bus_clk_ratio))
- 		priv->bus_clk_ratio = EXYNOS_ICC_DEFAULT_BUS_CLK_RATIO;
--- 
-2.34.1
 
+> 
+> A NULL check should be added after the devm_kasprintf() to prevent potential NULL pointer dereference error. 
+
+
+
+> This is similar to the commit 050b23d081da.
+
+Not related. These are different drivers, so drop.
+
+These apply to all your patches.
+
+
+Best regards,
+Krzysztof
 
