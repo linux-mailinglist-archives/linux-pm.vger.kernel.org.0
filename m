@@ -1,60 +1,60 @@
-Return-Path: <linux-pm+bounces-24648-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24649-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3798A76831
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 16:39:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB011A7683E
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 16:40:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2784188D095
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 14:38:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7F581885726
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 14:39:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AD5721CFFF;
-	Mon, 31 Mar 2025 14:34:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E387421D5AE;
+	Mon, 31 Mar 2025 14:34:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r2P1U4Qq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jn4DcN9S"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E314D21CFF4;
-	Mon, 31 Mar 2025 14:34:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA18D21D5A7;
+	Mon, 31 Mar 2025 14:34:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743431677; cv=none; b=MPnS7RAS+OKSBCnZHuJwzW4btcTaRieIm00rbbGbRXbkm8vh0m9upgdmaaqxheWZmz4vdBL4fji3rGt4YCa0ZP0JdK1KSqVY4M31v4tL69F8UC/MVycoOusB0Zh3dEfWTJxtSs/sFeE3iLhYkAxWSX+T23mRcp0r8Sn068MTiP8=
+	t=1743431681; cv=none; b=Umu6PfDWCswgQKS2xs9z01Abt5xQmR8giLlWCiPASLdH5pszYhsZBNcegYq0KFTwyHL5P3nyPFucs2Y2xA3B11hpwp5olMLHECxIsMYfv6qIn2e0z66f7ere8mxsZ6pYdwZlD2U9ylovtEr8yeK7IJYK0iD4pMy9UE3yC6ULQDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743431677; c=relaxed/simple;
-	bh=fXZH4l1iUrtD4rCU5FUQoM/601hb0cPp0ER2W/vDQ9s=;
+	s=arc-20240116; t=1743431681; c=relaxed/simple;
+	bh=GIrt7w0DLmjw04BZ37oHxkGh+eTxPO57Gus5gul+Uuo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=LZ/uT5W2ZuqSBNaLSY/CYJ0Y2U8O59AhwqHBf/liSYsHaxsr8w21NBO7wEtMkjMNbOCjPahYBz8aMJV3DG/Hpd1mVDs/JX+sikK8hfeFTl/DJG2PbyL/4kHIHWj798BM2pxMkF4b6fFHRZQA9ERCgjcl5voenlalyy/7oUo+Q0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r2P1U4Qq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B46DC4CEEB;
-	Mon, 31 Mar 2025 14:34:35 +0000 (UTC)
+	 MIME-Version; b=c34VDPTzw3jU0kAqzzZ5g6lNKSc31k/mNv1XuEh9XCjC3U2uW8YMy32FUFSwAW0KGy354eWMeuc+ShqssBd7PeJ457yuw3sBozCZlEZWn+ziVP/KkHAxpb/MEM6ZEP/SbK9ZCyv/8K3uc+VG3bcJkLQOhuCYeXODH8OAydtxJRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jn4DcN9S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F358C4CEE3;
+	Mon, 31 Mar 2025 14:34:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743431676;
-	bh=fXZH4l1iUrtD4rCU5FUQoM/601hb0cPp0ER2W/vDQ9s=;
+	s=k20201202; t=1743431681;
+	bh=GIrt7w0DLmjw04BZ37oHxkGh+eTxPO57Gus5gul+Uuo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=r2P1U4QqdN2kx9UhRKScB12jWs0S1g4+iJXeR5jNWo1X+YOGztQTGeA/Szv7SnFnk
-	 KAjvGK4u2zgvBJcgAqxbazxEg0QnGC9r3rVzjS2BFgGb69akrikEJ1vArBQbnOrAlP
-	 v2q1uFR5R2nI1FjezBdxKhRbCemGAhsUzCy+GHqpdA/ZnY2pPA32eVcP7ucbDykE7B
-	 wbrqmeOEAWtuFAwURiZC6XAFV4P338wMZjdpjjJo6fyuXo5vAVUj2r93y+Igc4ANwL
-	 nudM51ycIA0A9L17tWtkA+jlRkerFYMwhGU5nMG63G0W+effUoY7GzMgnghwOpceTY
-	 hqs9RYsbRERqA==
+	b=jn4DcN9Sismu84Q1M4GTygU0FNGUhraxzQ57+GVS8d/PpvbcnzYxaKTsA2cb4/k97
+	 giNCv+OHHFOyV0B7Z1fImfQJpFsJIjYJ1nBxcOe/5/FZ5Y1mzy6rYWLDeuyteJoZZR
+	 Uh+cKZ3rRfQ72LuWikTyrQA66M9HwAyh4HTTDCTUSzfWkPFC57noVa0YcfG3GvTgWe
+	 4vpyrHQ+0tmV/1dYXEHOS4g9fN0oijPcZh9YukaDzL1bWsgpX76fBBa3op6eVgES1Y
+	 N1RmQt9+K3TcMI1iDT5D56zNyelbVnWwKTzWj/lDs+qlGs1eEdsPDOb4gM4Ty0IVbc
+	 huZzCzEZI5h1Q==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Lizhi Xu <lizhi.xu@windriver.com>,
-	syzbot+ace60642828c074eb913@syzkaller.appspotmail.com,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+Cc: Mario Limonciello <mario.limonciello@amd.com>,
+	"Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+	Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>,
+	Miroslav Pavleski <miroslav@pavleski.net>,
 	Sasha Levin <sashal@kernel.org>,
+	ray.huang@amd.com,
 	rafael@kernel.org,
-	pavel@kernel.org,
-	len.brown@intel.com,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 11/18] PM: hibernate: Avoid deadlock in hibernate_compressor_param_set()
-Date: Mon, 31 Mar 2025 10:34:01 -0400
-Message-Id: <20250331143409.1682789-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.14 13/18] cpufreq/amd-pstate: Invalidate cppc_req_cached during suspend
+Date: Mon, 31 Mar 2025 10:34:03 -0400
+Message-Id: <20250331143409.1682789-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250331143409.1682789-1-sashal@kernel.org>
 References: <20250331143409.1682789-1-sashal@kernel.org>
@@ -69,180 +69,50 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.14
 Content-Transfer-Encoding: 8bit
 
-From: Lizhi Xu <lizhi.xu@windriver.com>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-[ Upstream commit 52323ed1444ea5c2a5f1754ea0a2d9c8c216ccdf ]
+[ Upstream commit b7a41156588ad03757bf0a2f0e05d6cbcebeaa9e ]
 
-syzbot reported a deadlock in lock_system_sleep() (see below).
+During resume it's possible the firmware didn't restore the CPPC request
+MSR but the kernel thinks the values line up. This leads to incorrect
+performance after resume from suspend.
 
-The write operation to "/sys/module/hibernate/parameters/compressor"
-conflicts with the registration of ieee80211 device, resulting in a deadlock
-when attempting to acquire system_transition_mutex under param_lock.
+To fix the issue invalidate the cached value at suspend. During resume use
+the saved values programmed as cached limits.
 
-To avoid this deadlock, change hibernate_compressor_param_set() to use
-mutex_trylock() for attempting to acquire system_transition_mutex and
-return -EBUSY when it fails.
-
-Task flags need not be saved or adjusted before calling
-mutex_trylock(&system_transition_mutex) because the caller is not going
-to end up waiting for this mutex and if it runs concurrently with system
-suspend in progress, it will be frozen properly when it returns to user
-space.
-
-syzbot report:
-
-syz-executor895/5833 is trying to acquire lock:
-ffffffff8e0828c8 (system_transition_mutex){+.+.}-{4:4}, at: lock_system_sleep+0x87/0xa0 kernel/power/main.c:56
-
-but task is already holding lock:
-ffffffff8e07dc68 (param_lock){+.+.}-{4:4}, at: kernel_param_lock kernel/params.c:607 [inline]
-ffffffff8e07dc68 (param_lock){+.+.}-{4:4}, at: param_attr_store+0xe6/0x300 kernel/params.c:586
-
-which lock already depends on the new lock.
-
-the existing dependency chain (in reverse order) is:
-
--> #3 (param_lock){+.+.}-{4:4}:
-       __mutex_lock_common kernel/locking/mutex.c:585 [inline]
-       __mutex_lock+0x19b/0xb10 kernel/locking/mutex.c:730
-       ieee80211_rate_control_ops_get net/mac80211/rate.c:220 [inline]
-       rate_control_alloc net/mac80211/rate.c:266 [inline]
-       ieee80211_init_rate_ctrl_alg+0x18d/0x6b0 net/mac80211/rate.c:1015
-       ieee80211_register_hw+0x20cd/0x4060 net/mac80211/main.c:1531
-       mac80211_hwsim_new_radio+0x304e/0x54e0 drivers/net/wireless/virtual/mac80211_hwsim.c:5558
-       init_mac80211_hwsim+0x432/0x8c0 drivers/net/wireless/virtual/mac80211_hwsim.c:6910
-       do_one_initcall+0x128/0x700 init/main.c:1257
-       do_initcall_level init/main.c:1319 [inline]
-       do_initcalls init/main.c:1335 [inline]
-       do_basic_setup init/main.c:1354 [inline]
-       kernel_init_freeable+0x5c7/0x900 init/main.c:1568
-       kernel_init+0x1c/0x2b0 init/main.c:1457
-       ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
-       ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
-
--> #2 (rtnl_mutex){+.+.}-{4:4}:
-       __mutex_lock_common kernel/locking/mutex.c:585 [inline]
-       __mutex_lock+0x19b/0xb10 kernel/locking/mutex.c:730
-       wg_pm_notification drivers/net/wireguard/device.c:80 [inline]
-       wg_pm_notification+0x49/0x180 drivers/net/wireguard/device.c:64
-       notifier_call_chain+0xb7/0x410 kernel/notifier.c:85
-       notifier_call_chain_robust kernel/notifier.c:120 [inline]
-       blocking_notifier_call_chain_robust kernel/notifier.c:345 [inline]
-       blocking_notifier_call_chain_robust+0xc9/0x170 kernel/notifier.c:333
-       pm_notifier_call_chain_robust+0x27/0x60 kernel/power/main.c:102
-       snapshot_open+0x189/0x2b0 kernel/power/user.c:77
-       misc_open+0x35a/0x420 drivers/char/misc.c:179
-       chrdev_open+0x237/0x6a0 fs/char_dev.c:414
-       do_dentry_open+0x735/0x1c40 fs/open.c:956
-       vfs_open+0x82/0x3f0 fs/open.c:1086
-       do_open fs/namei.c:3830 [inline]
-       path_openat+0x1e88/0x2d80 fs/namei.c:3989
-       do_filp_open+0x20c/0x470 fs/namei.c:4016
-       do_sys_openat2+0x17a/0x1e0 fs/open.c:1428
-       do_sys_open fs/open.c:1443 [inline]
-       __do_sys_openat fs/open.c:1459 [inline]
-       __se_sys_openat fs/open.c:1454 [inline]
-       __x64_sys_openat+0x175/0x210 fs/open.c:1454
-       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-       do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
-       entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
--> #1 ((pm_chain_head).rwsem){++++}-{4:4}:
-       down_read+0x9a/0x330 kernel/locking/rwsem.c:1524
-       blocking_notifier_call_chain_robust kernel/notifier.c:344 [inline]
-       blocking_notifier_call_chain_robust+0xa9/0x170 kernel/notifier.c:333
-       pm_notifier_call_chain_robust+0x27/0x60 kernel/power/main.c:102
-       snapshot_open+0x189/0x2b0 kernel/power/user.c:77
-       misc_open+0x35a/0x420 drivers/char/misc.c:179
-       chrdev_open+0x237/0x6a0 fs/char_dev.c:414
-       do_dentry_open+0x735/0x1c40 fs/open.c:956
-       vfs_open+0x82/0x3f0 fs/open.c:1086
-       do_open fs/namei.c:3830 [inline]
-       path_openat+0x1e88/0x2d80 fs/namei.c:3989
-       do_filp_open+0x20c/0x470 fs/namei.c:4016
-       do_sys_openat2+0x17a/0x1e0 fs/open.c:1428
-       do_sys_open fs/open.c:1443 [inline]
-       __do_sys_openat fs/open.c:1459 [inline]
-       __se_sys_openat fs/open.c:1454 [inline]
-       __x64_sys_openat+0x175/0x210 fs/open.c:1454
-       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-       do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
-       entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
--> #0 (system_transition_mutex){+.+.}-{4:4}:
-       check_prev_add kernel/locking/lockdep.c:3163 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3282 [inline]
-       validate_chain kernel/locking/lockdep.c:3906 [inline]
-       __lock_acquire+0x249e/0x3c40 kernel/locking/lockdep.c:5228
-       lock_acquire.part.0+0x11b/0x380 kernel/locking/lockdep.c:5851
-       __mutex_lock_common kernel/locking/mutex.c:585 [inline]
-       __mutex_lock+0x19b/0xb10 kernel/locking/mutex.c:730
-       lock_system_sleep+0x87/0xa0 kernel/power/main.c:56
-       hibernate_compressor_param_set+0x1c/0x210 kernel/power/hibernate.c:1452
-       param_attr_store+0x18f/0x300 kernel/params.c:588
-       module_attr_store+0x55/0x80 kernel/params.c:924
-       sysfs_kf_write+0x117/0x170 fs/sysfs/file.c:139
-       kernfs_fop_write_iter+0x33d/0x500 fs/kernfs/file.c:334
-       new_sync_write fs/read_write.c:586 [inline]
-       vfs_write+0x5ae/0x1150 fs/read_write.c:679
-       ksys_write+0x12b/0x250 fs/read_write.c:731
-       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-       do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
-       entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-other info that might help us debug this:
-
-Chain exists of:
-  system_transition_mutex --> rtnl_mutex --> param_lock
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(param_lock);
-                               lock(rtnl_mutex);
-                               lock(param_lock);
-  lock(system_transition_mutex);
-
- *** DEADLOCK ***
-
-Reported-by: syzbot+ace60642828c074eb913@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=ace60642828c074eb913
-Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
-Link: https://patch.msgid.link/20250224013139.3994500-1-lizhi.xu@windriver.com
-[ rjw: New subject matching the code changes, changelog edits ]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+Reviewed-by: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
+Reported-by: Miroslav Pavleski <miroslav@pavleski.net>
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217931
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/power/hibernate.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/cpufreq/amd-pstate.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 10a01af63a807..b129ed1d25a8a 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -1446,10 +1446,10 @@ static const char * const comp_alg_enabled[] = {
- static int hibernate_compressor_param_set(const char *compressor,
- 		const struct kernel_param *kp)
- {
--	unsigned int sleep_flags;
- 	int index, ret;
- 
--	sleep_flags = lock_system_sleep();
-+	if (!mutex_trylock(&system_transition_mutex))
-+		return -EBUSY;
- 
- 	index = sysfs_match_string(comp_alg_enabled, compressor);
- 	if (index >= 0) {
-@@ -1461,7 +1461,7 @@ static int hibernate_compressor_param_set(const char *compressor,
- 		ret = index;
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 313550fa62d41..340fb00aec6d7 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -1617,7 +1617,7 @@ static int amd_pstate_epp_reenable(struct cpufreq_policy *policy)
+ 					  max_perf, policy->boost_enabled);
  	}
  
--	unlock_system_sleep(sleep_flags);
-+	mutex_unlock(&system_transition_mutex);
+-	return amd_pstate_update_perf(cpudata, 0, 0, max_perf, cpudata->epp_cached, false);
++	return amd_pstate_epp_update_limit(policy);
+ }
  
- 	if (ret)
- 		pr_debug("Cannot set specified compressor %s\n",
+ static int amd_pstate_epp_cpu_online(struct cpufreq_policy *policy)
+@@ -1666,6 +1666,9 @@ static int amd_pstate_epp_suspend(struct cpufreq_policy *policy)
+ 	if (cppc_state != AMD_PSTATE_ACTIVE)
+ 		return 0;
+ 
++	/* invalidate to ensure it's rewritten during resume */
++	cpudata->cppc_req_cached = 0;
++
+ 	/* set this flag to avoid setting core offline*/
+ 	cpudata->suspended = true;
+ 
 -- 
 2.39.5
 
