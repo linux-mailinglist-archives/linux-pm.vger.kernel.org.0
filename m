@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-24643-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24644-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43BA7A764F9
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 13:32:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E101A76501
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 13:34:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF582169764
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 11:32:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 466643A8A1C
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 11:34:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0FE91BEF6D;
-	Mon, 31 Mar 2025 11:32:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26D8C1E230E;
+	Mon, 31 Mar 2025 11:34:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oHeVbEJx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PmxyTS81"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 915E4339A1;
-	Mon, 31 Mar 2025 11:32:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7351B423C;
+	Mon, 31 Mar 2025 11:34:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743420757; cv=none; b=rwUQVXEXQNqQRQGqbrBkFxBj97uUB7D5IUtBTNTAuFvDfpKVaUFvzF4BIV1ErBBL+2ioWQieTYke4PWbb7n5y8/FWcQork0zMuEnBCfMgMNBk4Y1LxU91fcOYksqJEycbbM52GaSzFnI5AxOhbUy0G5MNu2oOxeHLiGXFbaA06o=
+	t=1743420849; cv=none; b=GwxxBUvGHK31dHpOd9XSFfJFmA6BYrfmPVbDXffPxGfSp8u/OzjlZ8E/kiNBjDa7ldt1TapTvE/sEpObd2vyYwu9BHUbyWfJE53Krh7emrPeBHr7+X44Gb0+BTfvyYuAJYw0C8TgAzmIilO6s/SYLtVoShR9YMxvvSYDWaLjcuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743420757; c=relaxed/simple;
-	bh=05Ub8boU60E8Z7QxJ+cd0L+rxka8vuLP3vAU+K959fw=;
+	s=arc-20240116; t=1743420849; c=relaxed/simple;
+	bh=AdhodZymALRnjBVB1cvDW3VKR+3nCqlWPtZ+Sr/4LME=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=scmab68bV5em47Z5Q1UkTSXVxqC7YrqTMCUzVnBMg2epUP8WdaumkqUMct0IyF/F8KZw/qAz1b3/14VVKYTjxczDMyOwzNR5OeWTS+fxe8SbFNzWde3mabKZNh6EYE8bwT0YxLB2aBqac2sXbg6OFSiHe5KzU+r78HlPGXlwFWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oHeVbEJx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89EC7C4CEE3;
-	Mon, 31 Mar 2025 11:32:33 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=WhIwi9sVseKZz6+Z8V4gNHdyc2NrOg2fjCF7r3mP8F4Q9fW4RgoNUtPCmfTiMZc8tYQadVUQbM0KgCcZAPy/poiwWu9O7YHRyGOP3JYmB65CHzeVMeqZbmfkj8vLBxBXa1qvbL6ZJ9JZR8wiTmdVNQZd+xm3XC4QcGmGmqk6WJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PmxyTS81; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCD12C4CEE3;
+	Mon, 31 Mar 2025 11:34:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743420757;
-	bh=05Ub8boU60E8Z7QxJ+cd0L+rxka8vuLP3vAU+K959fw=;
+	s=k20201202; t=1743420848;
+	bh=AdhodZymALRnjBVB1cvDW3VKR+3nCqlWPtZ+Sr/4LME=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=oHeVbEJxjnGLhNtejItA+2MzVyYN2C+rL8HlhaxNaxeWLIF4N9MMDMGs/vR7s+wsR
-	 kmAFXpc0XcrWImNAWhwb1uSCctUWkoUWue1QeeGj8WlEeRhVe5K6BZGTZgQqLBGxCM
-	 OtJDJgDHr15868zJztTZNpvCH1kX+/E2A1Sda/pCRKeDk2AMZQXx3qn72lZJ3SYPtq
-	 bnMUYtlYtVo4NVH+/9SaT4C7o0dqmmFlNuPnRYw5ofj46LY5rNn6kEDlBsgYmQqMug
-	 s/mNQI45pZ7lkHd0M8uoqqSs9N8Z9Zhipfnb4aBpf9w0UWtoWHN9sZd6rrg9Knm+G2
-	 P92hQvhpJ/9vg==
-Message-ID: <7f8a3f75-f66f-4380-ae60-b84f6752da0b@kernel.org>
-Date: Mon, 31 Mar 2025 13:32:30 +0200
+	b=PmxyTS814D6kpdfDTbIgcvdbFyJLvt3GBnP4tKDteq0n1OOhAQN7KOMO6JmIdykcb
+	 fF7c3sNBi7iuco70yT7nt5phvxrBfasgi4bAVNfSXIWSpB856plooVK3U+VVQyZf9F
+	 wGTypz5PgjJC8QJKpXJjPiKuj9BiYk2OikxjsoiwGNdymOKyMy4TXiiPjFwL+lHd6p
+	 M41rQ99TOxK7LAgoKhOvk40CWojYfxd5gF2Wi4hcki8RS1g/odo1D0dR5hupZ+6MVD
+	 q1hJJghQmUPifXDR6wo1Ouw9+0MJsKehoahVCJEU+5Jmde1kOc1EcOzX3eJvZIKUF8
+	 ioRKY8CHZTWHA==
+Message-ID: <2a3754ac-a4f2-4074-bb3e-18c973e04da2@kernel.org>
+Date: Mon, 31 Mar 2025 13:34:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -106,29 +106,26 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 31/03/2025 13:08, Henry Martin wrote:
-> When devm_kasprintf() fails, it returns a NULL pointer. However, this return value is not properly checked in the function exynos_generic_icc_probe.
-
-Please wrap commit message according to Linux coding style / submission
-process (neither too early nor over the limit):
-https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
-
-Please run scripts/checkpatch.pl on the patches and fix reported
-warnings. After that, run also 'scripts/checkpatch.pl --strict' on the
-patches and (probably) fix more warnings. Some warnings can be ignored,
-especially from --strict run, but the code here looks like it needs a
-fix. Feel free to get in touch if the warning is not clear.
-
-
+> ---
+>  drivers/interconnect/samsung/exynos.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> A NULL check should be added after the devm_kasprintf() to prevent potential NULL pointer dereference error. 
+> diff --git a/drivers/interconnect/samsung/exynos.c b/drivers/interconnect/samsung/exynos.c
+> index 9e041365d909..3dccc84f72cf 100644
+> --- a/drivers/interconnect/samsung/exynos.c
+> +++ b/drivers/interconnect/samsung/exynos.c
+> @@ -134,6 +134,8 @@ static int exynos_generic_icc_probe(struct platform_device *pdev)
+>  	priv->node = icc_node;
+>  	icc_node->name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "%pOFn",
+>  					bus_dev->of_node);
+> +	if (!icc_node->name)
+> +		return -ENOMEM;
 
+Ah, and this also leaks ICC node.
 
-
-> This is similar to the commit 050b23d081da.
-
-Not related. These are different drivers, so drop.
-
-These apply to all your patches.
+Don't create such patches in automated way, but really analyze the
+entire code. You just looked at other persons' commit and decided to do
+the same, but this is not correct.
 
 
 Best regards,
