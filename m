@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-24657-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24658-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 061FEA76898
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 16:50:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EF05A768A3
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 16:51:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 11F8016AFB5
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 14:49:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ECE287A142F
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 14:49:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0D5C22AE7F;
-	Mon, 31 Mar 2025 14:37:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F83922D4DD;
+	Mon, 31 Mar 2025 14:37:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s+uSrkNt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k3atrgKf"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73ADA21B8F5;
-	Mon, 31 Mar 2025 14:37:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C8921B9F6;
+	Mon, 31 Mar 2025 14:37:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743431833; cv=none; b=IxoCyfBiHsCwqMnqwSrItIv/HoHWoikkvdSxeKQaJtAomRVeSAuHxmWASTvuT4fcvIk8Mpvj0GRMCBt2HR63NsB74Dy6wCHuyStucOo2wLrmNgL5tAVECVc1utr6iltp6pCcqdFqjhxX+4BUfHUVRZXDMKsU4lJBO74+bYe9aTA=
+	t=1743431851; cv=none; b=cfVLgVkYynSmXRYSgCd+So6RIXM8xkO6S6F2r6l3Ye6SG2hzYmORo90GBSNhnRh13LqPvQiAzAFlHO39cR75RqZNdcA2AT+PAmwpXmwd7UkZS92j7ckfJlqNJj299Eg1R+IZnhWQqYRi5HqDpKIINPznH2fPTZIiKevyfb9FO2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743431833; c=relaxed/simple;
+	s=arc-20240116; t=1743431851; c=relaxed/simple;
 	bh=doh+7ARyEYWjZJvgKfbqcxfkqsBHv0qsRf5JId0INjw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fvvqITBfTqA650/HOgGi9v3z70md27VlZYhcxX/Lkk0mcePhGsdWngfkVwBxTrzQA2Kc2LNPfw20lQeoOt9vU/alx/8GuEh/J4sCyD8djKId8qZP0puN9ZG2gSc5BgAvauJNuj4QuSTFd4JPgnc/odSH/qDLQ6359aCWb3pIqFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s+uSrkNt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5AB2C4CEE3;
-	Mon, 31 Mar 2025 14:37:11 +0000 (UTC)
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=EhvqlLfBG/owoGBfXP9ueugCJSyVZ8qTscD7r5xYqdnxZ9LpwYhx+r8V8/0PF0CXaH318lnvZeFQQKPf5qXEA7sJrh7BnkA1PkWaIHT2stOzEivOsZbG2HCP2BbVA5zniIOMi8NH27cSUAKbnz3fEefe/ACr4YQ3K1gZSMoR+xQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k3atrgKf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AAD2C4CEE4;
+	Mon, 31 Mar 2025 14:37:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743431833;
+	s=k20201202; t=1743431850;
 	bh=doh+7ARyEYWjZJvgKfbqcxfkqsBHv0qsRf5JId0INjw=;
 	h=From:To:Cc:Subject:Date:From;
-	b=s+uSrkNtiMOmBdzyCQmROJ4dTRkTYBB65PggTst+CZOQ1Ap5EsNIwU31AQcGyKIn+
-	 GExquxiVL72QnsVdhwPUPW6KbkMbhzcZQREO93DicM4XMx8Ok4bW7zqF/omFRmhUTv
-	 ZL40NgYaqix/okhWxUUskQ9V3PvapMyj7YiFx/x1KrAt6knoED89AoqMSEOGJPbKmA
-	 ZV4Ju2TXUa9xEan87JKVs44Frqu/eXdBplJ8sHo69zohd1SBj/4vg6Yruzf3qkGGcT
-	 VqNwpRA9yelU2GCMvw5ERg5s0wX+dXx+32I5ts3rhO+KUapbVnS9fiZJURHhxtyouS
-	 gpXwRKqyP3h0w==
+	b=k3atrgKfckisFLP/9gKDGvlWCvIe2BVdG+IH6il79cD2Fe8xe3o+IKTfcsS+/gD0Z
+	 xfxRXCAY6CKJzdJ1jRcyKLMcU30cQ5DslY+kc1HYYMM3hiXpA0RhYg0nAiHP8t8QmW
+	 lfLuvrBm0GH09bIMJ4x+ZA7/Tk/hZsJQfPGiyw3U16GKNdUHXXbSLPZDRdmcEqSe1y
+	 6SWqVx258NG52PNTDBQhRav/92R3mpNBb0f+nz/aPubCYQP3VoLwwu01hf89PVe8/Z
+	 h/QaP9jcYRcNzgCRCfhAwLGhCR4BZU0cdTI4gfSU54Ei5LcdQro8+tiZONjfsXc7NO
+	 dMh0VsyH4IpBQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -52,9 +52,9 @@ Cc: Zhongqiu Han <quic_zhonhan@quicinc.com>,
 	jkacur@redhat.com,
 	peng.fan@nxp.com,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 1/6] pm: cpupower: bench: Prevent NULL dereference on malloc failure
-Date: Mon, 31 Mar 2025 10:37:03 -0400
-Message-Id: <20250331143710.1686600-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 1/5] pm: cpupower: bench: Prevent NULL dereference on malloc failure
+Date: Mon, 31 Mar 2025 10:37:22 -0400
+Message-Id: <20250331143728.1686696-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.235
+X-stable-base: Linux 5.4.291
 Content-Transfer-Encoding: 8bit
 
 From: Zhongqiu Han <quic_zhonhan@quicinc.com>
