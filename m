@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-24620-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24621-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 443F2A75F47
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 09:11:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBBA2A75F51
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 09:15:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BE473A8BBE
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 07:11:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CBD3167FC6
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Mar 2025 07:15:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C2CA1AD3E5;
-	Mon, 31 Mar 2025 07:11:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 820DF1B0F1E;
+	Mon, 31 Mar 2025 07:15:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XSdeyP93"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ay1EarCv"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8E541A7046;
-	Mon, 31 Mar 2025 07:11:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8542E3395;
+	Mon, 31 Mar 2025 07:15:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743405093; cv=none; b=HKzwBaX6/0vfdemGD/k5aoYebVVYbpIQ/ywzcZPhxfgu4I9Npih6GVtatWhzRxyf9oFYBmUgmfPGj0G+H0X4M+TNKW55vDTtcufZqlfNUaXhbWR5f4hK2Fs35WhxzIllJS+UiUn3w0ihnMJuvQFOmlAFmu6fQuj9DAFjnT5iVW0=
+	t=1743405320; cv=none; b=rIzKm8ZGZtPbE911xYuveEGBvcK4wvDxwiNNfwKYi/fddR/mXVFaj+8bDF0gd0geFaRoJzeiAVR3u2ywUcPVn14hUKTWC/p5/DSCF5a6eo6NJZq2s5mwQ6vIZFcwYSbLKwYtYnfquqGi7frHef3tanVoScJRFsVJzje7tasLHkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743405093; c=relaxed/simple;
-	bh=xT7WrDbAbzGj6vaDIChdvhzipFV59/v3gg7SXkyKn/0=;
+	s=arc-20240116; t=1743405320; c=relaxed/simple;
+	bh=U9WwColyPjE0PpqjI7kbqYiBlOxCoADRrn2LMrMsr6k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dj5ct3OUS/zlnchkff1zQEXXvDyDhXftOliqduK5isYddPOJPHNpZXyID7OfSQcwy5JiCtxsOX18DGsvRkZlwKcG39nJrWCeUI3xH+bZxYFBIItc+AE62VwAJKyQRKoTsRMGlaCo7Uiqx5JVnkVDrYoLRG+lMARze1+KUD+XTf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XSdeyP93; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 697F1C4CEE3;
-	Mon, 31 Mar 2025 07:11:31 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=rZ2fyXkbeY7gr964vctrzjOCMG1U3kjjpAtBBsAOzmDHmuWxj/JKI7hhlRzO8AznjB3jhxRPnqlpKk8WJ/XLPKFzNfJi3Xun9Ec6pQJywVR5hSVx5FYPhGYWkB4OxZh12DjKUbW8/aeU1fHr6LgySQNjbMaGNqdWYob9a0t/P4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ay1EarCv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1769C4CEE3;
+	Mon, 31 Mar 2025 07:15:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743405092;
-	bh=xT7WrDbAbzGj6vaDIChdvhzipFV59/v3gg7SXkyKn/0=;
+	s=k20201202; t=1743405319;
+	bh=U9WwColyPjE0PpqjI7kbqYiBlOxCoADRrn2LMrMsr6k=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XSdeyP937ISbslf0eEzJY8M6DYJnTqjE+jVb60RjB5P67SAFNTShNRYCKBFASxLDs
-	 W2oJaOvepv4bZhaaCbg0tOvgGZwzF1cVN+qQVTCT7O5MPS45emLqzilhLwBqoFhv6i
-	 SEeC1N2sQeZxgM8u+RbduukDLjdBIcomOj+llpbpMsn3LokbNfZu4apPL1UH44eqWo
-	 xEm/eqIa2LM17yDDFJmrxQfpq/EP6jAq6VVja97cFeVihSom8P/NmTNFsHKCTLHoH+
-	 NdXSAwCcEipajZ5JX3OISZZvxSE4w1xl/oUU+VrCgkHk2hhvVWkQ3xmpNGagwvc6jM
-	 k7ls3aKigRzgg==
-Date: Mon, 31 Mar 2025 09:11:28 +0200
+	b=ay1EarCvuM4L667uBXmzflmFp6Gpw+QkTMwL8AEnelkr5h9Rs4pnLyMNxJc5fSia0
+	 4P4suRMQCzZ+F8Lc7OkB7/Rr5+rbsfMR2kBNvnds9HXdtBvtI9qA+WzMag1hTEqquc
+	 f/pJOOT6/cn0u2zA9zcQlMvuaroEopWI8xLGcy9BWxH1FmCn6HGtbBWYvsVnPr39MR
+	 bXBE5Qi6jJl2cIDHP1pxKjTv9Fu1ShNBolIxr0srHHjSAU9i+ugaoxv3EdGT2PVzKn
+	 9LMt9OvneCmz8DWaLTBbD4q26Fmf2Ag2naHinrAmsxsfLPCktVsx80hdSdvyuhkLwj
+	 MvCmukjMnIfWg==
+Date: Mon, 31 Mar 2025 09:15:16 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: =?utf-8?B?QW5kcsOp?= Draszik <andre.draszik@linaro.org>
 Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -50,11 +50,11 @@ Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
 	Tudor Ambarus <tudor.ambarus@linaro.org>, Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
 	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] dt-bindings: power: reset: google,gs101-reboot:
- add Google GS101 specific reset
-Message-ID: <20250331-unnatural-tacky-mouflon-a1157b@krzk-bin>
+Subject: Re: [PATCH v4 2/3] dt-bindings: soc: samsung: exynos-pmu: update
+ reset for gs101
+Message-ID: <20250331-curvy-daring-urchin-aeafa8@krzk-bin>
 References: <20250328-syscon-reboot-reset-mode-v4-0-77ba57703ace@linaro.org>
- <20250328-syscon-reboot-reset-mode-v4-1-77ba57703ace@linaro.org>
+ <20250328-syscon-reboot-reset-mode-v4-2-77ba57703ace@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -64,73 +64,49 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250328-syscon-reboot-reset-mode-v4-1-77ba57703ace@linaro.org>
+In-Reply-To: <20250328-syscon-reboot-reset-mode-v4-2-77ba57703ace@linaro.org>
 
-On Fri, Mar 28, 2025 at 03:15:19PM +0000, Andr=C3=A9 Draszik wrote:
-> GS101 supports a couple different reset types via certain registers in
-> the SYSCON register map.
->=20
-> Add a binding for this.
+On Fri, Mar 28, 2025 at 03:15:20PM +0000, Andr=C3=A9 Draszik wrote:
+> Add the gs101-specific reset node, allow it on gs101, and disallow it
+> on !gs101. Similarly, disallow the generic 'syscon-reboot' on gs101, as
+> we want the specific one in that case.
 >=20
 > Signed-off-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
 > ---
->  .../bindings/power/reset/google,gs101-reboot.yaml  | 32 ++++++++++++++++=
+>  .../devicetree/bindings/soc/samsung/exynos-pmu.yaml | 21 +++++++++++++++=
 ++++++
->  MAINTAINERS                                        |  1 +
->  2 files changed, 33 insertions(+)
+>  1 file changed, 21 insertions(+)
 >=20
-> diff --git a/Documentation/devicetree/bindings/power/reset/google,gs101-r=
-eboot.yaml b/Documentation/devicetree/bindings/power/reset/google,gs101-reb=
-oot.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..cbd0a1d9b45af0cb994d616c5=
-6b96440c43ab971
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/reset/google,gs101-reboot.y=
-aml
-> @@ -0,0 +1,32 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/reset/google,gs101-reboot.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Google GS101 syscon-mapped reset
-> +
-> +maintainers:
-> +  - Andr=C3=A9 Draszik <andre.draszik@linaro.org>
-> +
-> +description:
-> +  GS101 supports a couple different reset types via certain registers in=
- the
-> +  SYSCON register map. This map is retrieved from the parental dt-node. =
-So the
-> +  gs101-reboot node should be represented as a sub-node of such a node.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
+> diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yam=
+l b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
+> index 204da6fe458d2d4bfeee1471ebc5c38247477ae2..8c7362cf3eeab11f6bb13a27e=
+b295d5ee6721b71 100644
+> --- a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
+> +++ b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
+> @@ -97,6 +97,12 @@ properties:
+>      $ref: /schemas/phy/samsung,dp-video-phy.yaml
+>      unevaluatedProperties: false
+> =20
+> +  gs101-reboot:
 
-Just const instead of these two
+syscon-reboot
 
+> +    $ref: /schemas/power/reset/google,gs101-reboot.yaml#
 
-> +          - const: google,gs101-reboot
-> +
-> +  priority:
-> +    default: 192
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +allOf:
-> +  - $ref: restart-handler.yaml#
+=2E.. which leads us to the existing node. Just use oneOf:
 
-Missing example... unless you are adding it in the other patch to the
-parent node. but then separate schema for just two properties and allOf:
-is really too much. Altough let me comment on the other patch.
+oneOf:
+  - $ref: /schemas/power/reset/syscon-reboot.yaml#
+  - $ref: /schemas/power/reset/google,gs101-reboot.yaml#
+
+or actually better:
+
+additionalProperties: true
+properties:
+  compatible:
+    enum:
+      - syscon-reboot
+      - google,gs101-reboot
 
 Best regards,
 Krzysztof
