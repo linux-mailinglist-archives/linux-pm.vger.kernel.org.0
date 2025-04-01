@@ -1,221 +1,122 @@
-Return-Path: <linux-pm+bounces-24699-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24701-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CED9A77A6F
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Apr 2025 14:14:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD32BA77B5D
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Apr 2025 14:53:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD551188D4E2
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Apr 2025 12:14:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A6523AEEB8
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Apr 2025 12:52:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3878F202C38;
-	Tue,  1 Apr 2025 12:14:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B197F2036ED;
+	Tue,  1 Apr 2025 12:52:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m/m2p2JW"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="UDI7LhQZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 089111F91CD;
-	Tue,  1 Apr 2025 12:14:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 710462036E1
+	for <linux-pm@vger.kernel.org>; Tue,  1 Apr 2025 12:52:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743509648; cv=none; b=odbC3U4GVkP1U3P+PwuGJoFnh6kSqWBDMv9OZ8yIlmJtBoMQmZZGqxWrfF54aoDQyIQn/R/QLzdZIMPi5KRGHVBkEihp+kBhmZ86N+2z20seRfMI9oqVqiXuyV+cb5hIJjp9WDvVgbK7VTLZ2v1p1xiCur66FX6gpH5WahUFAB0=
+	t=1743511959; cv=none; b=JCApBUsEGU24+cWtLn5qq6Se8D/1HPH3ISp4eiGyB0hq5eEM5ybPkVy7tvXRDmNlGbYIkxXx7pHLxgM0LpxE7xRlPv12wNhOl4ZhOEY0liFnyByBQOFP7FOsTcSWWJgmkGg3+YMmaV8l9q+aovEvlLCnc1GmHbK1dbDuUP0jezg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743509648; c=relaxed/simple;
-	bh=cW+SgWG4t5icqmSDD5B28BvPyfh8yfBleexRLseF73k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z7IduuxXE6+B03ZWxDxhXZtOyxF3EIh21tfOgn8mOSIk85iQCpleZZI+Ut1KJV68ChvdRIbf3Th+PBJCuY9oGRsfj0cTp/PeqcpmTvAwZMHm1XVXihkFeXQXgDhZvORfffnRwn/2KRsB5Mtvfk69uqXh1+BrOumBBZal1qg+LsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m/m2p2JW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C69DC4CEED;
-	Tue,  1 Apr 2025 12:14:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743509646;
-	bh=cW+SgWG4t5icqmSDD5B28BvPyfh8yfBleexRLseF73k=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=m/m2p2JWYS9MkVHRFy5prVSfpIMH5SY3jiiWZrPRgGhfd0KNH/PA1tOg7S+KrJxkk
-	 JSX0cD90OB4srHDpp2NCGpyjzGIwACeD0oMeDEI8FNeU3Te/nSYZJ7IQ8PWzdUMktP
-	 CDXdXN96p45hx7W98t9osxv7ohk1bS66TN+4GeSI2mFN8/2rYf0/Ma6kRPhVynCyUW
-	 70E0A1eIbNihkaJVcogpm4i7xO3+1O18jP3ZXUGFwY/oCWWK2b3Xjxd35+2ElDER5Q
-	 hbUeOONMmPAY/FcwTQ0BwB/gJZhc+EhEcCLduC0klRJrH0mL52uS+E/hvi0irNyREs
-	 YZcmhVD7KYUvA==
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-2c818343646so3537995fac.3;
-        Tue, 01 Apr 2025 05:14:06 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUMrZQzrAu7UkbdnV/sC/nmXueENngvryKfXSR8c7+lxXDHT3/NNRI306Q0JNOctq+FympXMSN+I4U=@vger.kernel.org, AJvYcCWFhajWfdqvZaYPT/zH0Vj5js9X4Gqa3IKNn6/w1fTswFzj2pOvnSLz3y5vXLCJkglVOlxLJTJ5yAfn@vger.kernel.org, AJvYcCXI9bZWAUzTvzL4n7lb4DLNJNkiNwFK/d3j1sy3icOgrgAySbVKKbZJouOVn+rBnfGRttABtWWjQLF+zjJB@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywhi0w1DlNHixMHdFhSJxS3ibbmRy8phzYa/n0PS+XwaunhDKAn
-	1DNa2yJFo6P/dnsAxSytlBRcrjQlEqvvIFjok9RRooez/jvxpMNmigIwnjQiLXyG2DZz3lY3gHi
-	krl3gTgaVXEMh12dBaLf00FNzqnE=
-X-Google-Smtp-Source: AGHT+IGOlogupRrW1ILu3k/BWzEUrlfnOQdl3bgoOraLGfT5cXQwFCdTo4dpWOe+YYaMJLSMdHaLzj7VnVnNwllSJKU=
-X-Received: by 2002:a05:6870:330a:b0:29e:69a9:8311 with SMTP id
- 586e51a60fabf-2cbcf7e09acmr7956746fac.36.1743509645617; Tue, 01 Apr 2025
- 05:14:05 -0700 (PDT)
+	s=arc-20240116; t=1743511959; c=relaxed/simple;
+	bh=/To2QMK9osYpOZIEVtBmmtVVu15jo2nNA5nI60R+u+M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X3BDbVV0pN9w0vesNcYWEFAc0W5Jah6bMxwN3etyJFBhDdaKavaPGSkCR2kei9CWGBLOBptQbc2Zyhmw21N6b4O9hnA/MKEzOaiJaaQ+TcDh8bHOtIc1JRGghpFdtmx/RFRTgZfE//HEgVMpldVrpsmLyzgiVBmugIo5cJH4RVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=UDI7LhQZ; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5D8EA432F4;
+	Tue,  1 Apr 2025 12:52:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1743511955;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=13l0CQ3+3TzvDqW7m4TraU+Cgtn0HfSr7CCd6UAQKZ0=;
+	b=UDI7LhQZ+tJ+0o6GeS961IKKKeGGFGJM2DEzGa9X2364roIpqkd+r3dHF3y3Q/jHYBBHCl
+	Y9YqUdCnAT6ojpr0JnyniGw/iqelMjkYQ73y7Ai1hHhsmsWHlsejUAATyF3x9tA7feR26T
+	PrVagGT40ZVWkc816gs5CLNOQWdoq2+Qhu/ZTwRcYpKWPY2+aBWDOaWuHFX4DFW2bF7uHZ
+	1DFFn4abfJuh4fwjKZdUba+PT3D83ARtGyWMSCryM45DaG+0Rw3POWdtcltSYDdfTHyp1n
+	G0gmmHRYXZQT8YdA/dlhhuJS1+KalrOkwukeBCgHyk6ieOPmvgsVkBJpNJtZqg==
+Date: Tue, 1 Apr 2025 14:52:35 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Alexander Shiyan <eagle.alexander923@gmail.com>
+Cc: linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Subject: Re: [PATCH] power: reset: at91-reset: Optimize at91_reset()
+Message-ID: <20250401125235b4f44db6@mail.local>
+References: <20250307053809.20245-1-eagle.alexander923@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250328143040.9348-1-ggherdovich@suse.cz> <20250328143040.9348-2-ggherdovich@suse.cz>
- <SJ0PR11MB66228319834B1C7B48FCE52EF5AD2@SJ0PR11MB6622.namprd11.prod.outlook.com>
- <CAJZ5v0gC3DzanSdPqQiJ4JQppgNeRA7Z9Cge7NxmTO_shoUyOA@mail.gmail.com> <7a14ea42462a346958954f328933f583dcf9cb52.camel@intel.com>
-In-Reply-To: <7a14ea42462a346958954f328933f583dcf9cb52.camel@intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 1 Apr 2025 14:13:54 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0juH2kYx-fyyfoFLBTjg30y59Dwj1wBYXxuHvU2c7X31w@mail.gmail.com>
-X-Gm-Features: AQ5f1JqInvfmF-dEU2O33yfuIWE_7Znqodgm49GlPYWEkfdKphYD_-K3cc_SD6g
-Message-ID: <CAJZ5v0juH2kYx-fyyfoFLBTjg30y59Dwj1wBYXxuHvU2c7X31w@mail.gmail.com>
-Subject: Re: [PATCH 2/2] ACPI: processor: idle: Remove obsolete comment
-To: "Zhang, Rui" <rui.zhang@intel.com>
-Cc: "rafael@kernel.org" <rafael@kernel.org>, "ggherdovich@suse.cz" <ggherdovich@suse.cz>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "lenb@kernel.org" <lenb@kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250307053809.20245-1-eagle.alexander923@gmail.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukedvkeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeeiudeuteehhfekgeejveefhfeiudejuefhgfeljefgjeegkeeujeeugfehgefgnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudegmeehheeimeejrgdttdemvdgrtgejmehfvgegvgemheeirggumegtkegvgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudegmeehheeimeejrgdttdemvdgrtgejmehfvgegvgemheeirggumegtkegvgedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopegvrghglhgvrdgrlhgvgigrnhguvghrledvfeesghhmrghilhdrtghomhdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpr
+ hgtphhtthhopehsrhgvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnihgtohhlrghsrdhfvghrrhgvsehmihgtrhhotghhihhprdgtohhmpdhrtghpthhtoheptghlrghuughiuhdrsggviihnvggrsehtuhigohhnrdguvghv
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Tue, Apr 1, 2025 at 2:25=E2=80=AFAM Zhang, Rui <rui.zhang@intel.com> wro=
-te:
->
-> On Mon, 2025-03-31 at 14:07 +0200, Rafael J. Wysocki wrote:
-> > On Mon, Mar 31, 2025 at 9:38=E2=80=AFAM Zhang, Rui <rui.zhang@intel.com=
-> wrote:
-> > >
-> > > > -----Original Message-----
-> > > > From: Giovanni Gherdovich <ggherdovich@suse.cz>
-> > > > Sent: Friday, March 28, 2025 10:31 PM
-> > > > To: Rafael J . Wysocki <rafael@kernel.org>; Zhang, Rui
-> > > > <rui.zhang@intel.com>
-> > > > Cc: Len Brown <lenb@kernel.org>; Giovanni Gherdovich
-> > > > <ggherdovich@suse.cz>; linux-acpi@vger.kernel.org; linux-
-> > > > kernel@vger.kernel.org; linux-pm@vger.kernel.org
-> > > > Subject: [PATCH 2/2] ACPI: processor: idle: Remove obsolete comment
-> > > > Importance: High
-> > > >
-> > > > Since commit 496121c02127e9c460b436244c38260b044cc45a ("ACPI:
-> > > > processor:
-> > > > idle: Allow probing on platforms with one ACPI C-state"), the
-> > > > comment
-> > > > doesn't reflect the code anymore; remove it.
-> > > >
-> > > > Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
-> > > > ---
-> > > >  drivers/acpi/processor_idle.c | 4 ----
-> > > >  1 file changed, 4 deletions(-)
-> > > >
-> > > > diff --git a/drivers/acpi/processor_idle.c
-> > > > b/drivers/acpi/processor_idle.c
-> > > > index b181f7fc2090..2a076c7a825a 100644
-> > > > --- a/drivers/acpi/processor_idle.c
-> > > > +++ b/drivers/acpi/processor_idle.c
-> > > > @@ -482,10 +482,6 @@ static int
-> > > > acpi_processor_get_cstate_info(struct
-> > > > acpi_processor *pr)
-> > > >
-> > > >       pr->power.count =3D acpi_processor_power_verify(pr);
-> > > >
-> > > > -     /*
-> > > > -      * if one state of type C2 or C3 is available, mark this
-> > > > -      * CPU as being "idle manageable"
-> > > > -      */
-> > > >       for (i =3D 1; i < ACPI_PROCESSOR_MAX_POWER; i++) {
-> > > >               if (pr->power.states[i].valid) {
-> > > >                       pr->power.count =3D i;
-> > > > --
-> > > > 2.43.0
-> > >
-> > > I think we can clean up a bit more. How about the patch below?
-> > >
-> > > From 115d3a07febff32eed49f9343ef111e7e1452f9d Mon Sep 17 00:00:00
-> > > 2001
-> > > From: "Zhang, Rui" <rui.zhang@intel.com>
-> > > Date: Mon, 31 Mar 2025 07:29:57 +0000
-> > > Subject: [PATCH] ACPI: processor: idle: Simplify
-> > >  acpi_processor_get_cstate_info() logic
-> > >
-> > > Since commit 496121c02127 ("ACPI: processor: idle: Allow probing on
-> > > platforms with one ACPI C-state"), acpi_idle driver can be probed
-> > > with
-> > > C1 only.
-> > >
-> > > Optimize the logic for setting pr->power.count and pr->flags.power by
-> > > 1. unconditionally set pr->flags.power leveraging the fact that C1 is
-> > >    always valid after acpi_processor_get_power_info_default().
-> > > 2. update acpi_processor_power_verify() to return the highest valid
-> > >    C-state directly.
-> > >
-> > > No functional change intended.
-> > >
-> > > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> > > ---
-> > >  drivers/acpi/processor_idle.c | 15 ++-------------
-> > >  1 file changed, 2 insertions(+), 13 deletions(-)
-> > >
-> > > diff --git a/drivers/acpi/processor_idle.c
-> > > b/drivers/acpi/processor_idle.c
-> > > index 698897b29de2..7ce8c3802937 100644
-> > > --- a/drivers/acpi/processor_idle.c
-> > > +++ b/drivers/acpi/processor_idle.c
-> > > @@ -442,7 +442,7 @@ static int acpi_processor_power_verify(struct
-> > > acpi_processor *pr)
-> > >
-> > >                 lapic_timer_check_state(i, pr, cx);
-> > >                 tsc_check_state(cx->type);
-> > > -               working++;
-> > > +               working =3D i;
-> >
-> > What if some states are skipped because they are invalid?  'working'
-> > can be less than 'i' then AFAICS.
->
-> yes, but please refer to my comments here and below,
->
-> 1. 'working' is used as return value only in acpi_processor_power_verify(=
-).
->
-> >
-> > >         }
-> > >
-> > >         if (buggy_latency) {
-> > > @@ -457,7 +457,6 @@ static int acpi_processor_power_verify(struct
-> > > acpi_processor *pr)
-> > >
-> > >  static int acpi_processor_get_cstate_info(struct acpi_processor *pr)
-> > >  {
-> > > -       unsigned int i;
-> > >         int result;
-> > >
-> > >
-> > > @@ -477,17 +476,7 @@ static int acpi_processor_get_cstate_info(struct
-> > > acpi_processor *pr)
-> > >         acpi_processor_get_power_info_default(pr);
-> > >
-> > >         pr->power.count =3D acpi_processor_power_verify(pr);
->
-> 2. acpi_processor_get_cstate_info(), which is the only caller of
-> acpi_processor_power_verify(), use this return value to set
-> pr->power.count.
+On 07/03/2025 08:38:09+0300, Alexander Shiyan wrote:
+> This patch adds a small optimization to the low-level at91_reset()
+> function, which includes:
+> - Removes the extra branch, since the following store operations
+>   already have proper condition checks.
+> - Removes the definition of the clobber register r4, since it is
+>   no longer used in the code.
+> 
+> Fixes: fcd0532fac2a ("power: reset: at91-reset: make at91sam9g45_restart() generic")
+> Signed-off-by: Alexander Shiyan <eagle.alexander923@gmail.com>
+Reviewed-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-So far so good.
+> ---
+>  drivers/power/reset/at91-reset.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/power/reset/at91-reset.c b/drivers/power/reset/at91-reset.c
+> index 036b18a1f90f..511f5a8f8961 100644
+> --- a/drivers/power/reset/at91-reset.c
+> +++ b/drivers/power/reset/at91-reset.c
+> @@ -129,12 +129,11 @@ static int at91_reset(struct notifier_block *this, unsigned long mode,
+>  		"	str	%4, [%0, %6]\n\t"
+>  		/* Disable SDRAM1 accesses */
+>  		"1:	tst	%1, #0\n\t"
+> -		"	beq	2f\n\t"
+>  		"	strne	%3, [%1, #" __stringify(AT91_DDRSDRC_RTR) "]\n\t"
+>  		/* Power down SDRAM1 */
+>  		"	strne	%4, [%1, %6]\n\t"
+>  		/* Reset CPU */
+> -		"2:	str	%5, [%2, #" __stringify(AT91_RSTC_CR) "]\n\t"
+> +		"	str	%5, [%2, #" __stringify(AT91_RSTC_CR) "]\n\t"
+>  
+>  		"	b	.\n\t"
+>  		:
+> @@ -145,7 +144,7 @@ static int at91_reset(struct notifier_block *this, unsigned long mode,
+>  		  "r" cpu_to_le32(AT91_DDRSDRC_LPCB_POWER_DOWN),
+>  		  "r" (reset->data->reset_args),
+>  		  "r" (reset->ramc_lpr)
+> -		: "r4");
+> +	);
+>  
+>  	return NOTIFY_DONE;
+>  }
+> -- 
+> 2.39.1
+> 
 
-> > > -
-> > > -       /*
-> > > -        * if one state of type C2 or C3 is available, mark this
-> > > -        * CPU as being "idle manageable"
-> > > -        */
-> > > -       for (i =3D 1; i < ACPI_PROCESSOR_MAX_POWER; i++) {
-> > > -               if (pr->power.states[i].valid) {
-> > > -                       pr->power.count =3D i;
->
-> 3. use a loop to override pr->power.count with the index of the highest
-> valid state
-
-I see.
-
-> So I'm proposing to return the index of the highest valid state directly
-> in acpi_processor_power_verify() and then we don't need this loop any
-> more.
-
-OK, so I'd prefer to first rename power.count to power.max_index
-(which it really is) and then make the changes you have proposed.
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
