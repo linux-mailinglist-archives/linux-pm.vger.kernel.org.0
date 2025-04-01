@@ -1,124 +1,160 @@
-Return-Path: <linux-pm+bounces-24696-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24697-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D94DCA77931
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Apr 2025 13:00:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2264CA77A14
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Apr 2025 13:52:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 38880188E19E
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Apr 2025 11:00:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 602733A0382
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Apr 2025 11:51:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C15D1EE017;
-	Tue,  1 Apr 2025 11:00:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04DF21E766E;
+	Tue,  1 Apr 2025 11:51:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IFKlv0RR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UABBcv3N"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C0A31E7C07;
-	Tue,  1 Apr 2025 11:00:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C96679476;
+	Tue,  1 Apr 2025 11:51:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743505218; cv=none; b=FBYGUplL1TVNWuy5NQu4w2Momzh9BGStUQWAOmNs07UMATzwguTOKDjT1CdMTQWDma6DEG5K91oDvkjaD/ALRfyT4fDaOTor7ViTA6JWFXZE5prNUpIGnA3y4UgEMqRF131JJ7wAXjYZ0Z2AUhGjAZLQGg2DTqD+OM3wNZMvYHA=
+	t=1743508315; cv=none; b=oMdUsbQRFg56Ex4qzfRdilMqltVpBSMAlFG7HbpGwHRFmg3ehgkgUvRBFDaN0zc9d5n8rQxkRqO3qqaP1fsHC4PcfFHih5e3BooZLrqJ/K8egY/VlzLbUhFeR0ccDaaFXTLUb5KQE7tpNJtU2yvkg24tu7VRSTiQboCwpsPQfRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743505218; c=relaxed/simple;
-	bh=qWyx6JaicvUMSDl3rJ9lq4nU3wRLwv+Zso9ILN7y1nc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QNyQvh+iGM92POGfimTrxDB9bjlv1j2eTQk216BLu4p82g8l8G7+sFWAwm0bQnFhmQqIS+1BICxcU4dvu5CRrB8P8hWxlFx0K2wwYXQj+MhZBI0D6MXzf/LyatRmicjeuiEoBf/NW/n9Z3FzT03VNyYS52G+MSzVtpotdtoGfIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IFKlv0RR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48820C4CEE4;
-	Tue,  1 Apr 2025 11:00:14 +0000 (UTC)
+	s=arc-20240116; t=1743508315; c=relaxed/simple;
+	bh=E+aYB8ocMdh2cBhiUzobqPIZzwXAJ/3ZPCQMLoddGjU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=u4RsFB4COrZizE/Ca4e5AEb8Jm6It2kcI9kzbhV4PcY48r+2WnXQr2CUP3M0w8ccV2KrQ5Ic0VYvAaM2+HnUN3htdZc+GXZa+CJBt8MoVZaIEsnFetR8V5uSBDYx28omYoTy0fG0grhLw3tVO9R5RanMUc2DQ2L2Mz47SyHX1Oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UABBcv3N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32D75C4CEE8;
+	Tue,  1 Apr 2025 11:51:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743505216;
-	bh=qWyx6JaicvUMSDl3rJ9lq4nU3wRLwv+Zso9ILN7y1nc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=IFKlv0RR0iKUzOpu8CjUJ3W0VXjSlceuMXQaarGF0MckP9tOwG0q/CiXFLuqf400d
-	 vGQhc98xM1C9FfLRslr/gaUYy9E1zs3vP+lOJhAolEzrkra7aP0hsU0HlHYX1+zBaE
-	 YRIIOjyn1fgzUuDiFR+67TR97B2GwlSGm/gmzPUuGv5mQ143S7Y2Bf3f2J06rO+Zsj
-	 XxF0iHy3aS0AYLqzi2/8HzYpGI5Hr+PcHmQ7lQTQZmJHDz6bQOb6P1ihhqLb/0gO7u
-	 4+5DHLO8N+WhSqHMWSjyB++krjnHERACw85LG4TGWc/ZWhIapD8omhyghKYlxZjUef
-	 78lJs2C2je4Kg==
-Message-ID: <f59af2ac-a7a2-4490-8858-30c7f98e4149@kernel.org>
-Date: Tue, 1 Apr 2025 13:00:11 +0200
+	s=k20201202; t=1743508315;
+	bh=E+aYB8ocMdh2cBhiUzobqPIZzwXAJ/3ZPCQMLoddGjU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=UABBcv3NrzktVMTtqvzxm3QMZPvFUVakwxGongmJO3GLk3MwHBU1mvBAaQPdVnl0j
+	 JrjlPX/P6yGaIGwePJDz5O6nb0tQZb7UlK5ifl226N48TjhUGhWp8S6mBpcrdTEeVO
+	 4MDT1x1ezh9vUKsiMmZZ/hWECjXZD7dtqJjxKwB1PVa9quV6miMIrHfINUj+PcB6Ot
+	 NDpt1b5JtIeJR83ylovowynWdcekeqCHM665GvHmrNCFSDO3UOY7ri8onBX+JmWOHk
+	 9hPlh3juk+j59AI6Wz8zGQhQvZVQk/aBc68er3yCJgL0CRNsvgUCoGQhaeR1iLCB35
+	 X58D/Fz4t+7Gw==
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-2c81fffd523so1703448fac.0;
+        Tue, 01 Apr 2025 04:51:55 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVipO+tVVSSTAF9IiAKA8wrQJ5JSRDVRGfd+3mVoScBy1BqMVrJ1F9DtIbDC4EZmJrf7qzxR0zFvTrelV4=@vger.kernel.org, AJvYcCWzbvUgRC6UXpU19/h0PFcLWtcrAZ+L20wYdqJrGiuxNcIsCOWIeQopGFv306ANmm8c/HOY4LzN@vger.kernel.org
+X-Gm-Message-State: AOJu0YzL32TD6/HGYt+x1xNB+ZTpvg5Bs+hSUGd/Lm6qTJWLAv5vCoaP
+	4IYCX57BjV+JyIGdKWfmU8RMF31AT1nmWjWUcBRtcLzOInEa7DrdZGjHMS8q6CoLWEg5ENMWsKL
+	E8Ok/Wvr25C+aE6Q0dz1bdLH2hi8=
+X-Google-Smtp-Source: AGHT+IFn6Bi+Dnctzh8KGZpcYIv+IQJGBcrY8EaGdyE5gFfCz0hm86z5KpV94NN/Wu3rjBA2PsRpNuD6A8MHac3owAQ=
+X-Received: by 2002:a05:6871:82b:b0:29e:5e83:150e with SMTP id
+ 586e51a60fabf-2cbcf77437dmr5836423fac.27.1743508314455; Tue, 01 Apr 2025
+ 04:51:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] backlight: pm8941: Add NULL check in
- exynos_generic_icc_probe()
-To: Henry Martin <bsdhenrymartin@gmail.com>, georgi.djakov@linaro.org
-Cc: s.nawrocki@samsung.com, a.swigon@samsung.com, alim.akhtar@samsung.com,
- linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20250401104518.25391-1-bsdhenrymartin@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20250401104518.25391-1-bsdhenrymartin@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250401075728.3626147-1-xin@zytor.com>
+In-Reply-To: <20250401075728.3626147-1-xin@zytor.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 1 Apr 2025 13:51:43 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0j4_i7FyMi1gnZZ1ymi=SkAySpk28oWoitGo4BOt-Wsyg@mail.gmail.com>
+X-Gm-Features: AQ5f1Jok1Tlzb8a-RMfEeGheQ4w5um035keyQcoquNa3nRQtyfJpYgCWyrRs4yY
+Message-ID: <CAJZ5v0j4_i7FyMi1gnZZ1ymi=SkAySpk28oWoitGo4BOt-Wsyg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] x86/fred: Fix system hang during S4 resume with
+ FRED enabled
+To: "Xin Li (Intel)" <xin@zytor.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org, rafael@kernel.org, pavel@kernel.org, 
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, luto@kernel.org, 
+	brgerst@gmail.com, jgross@suse.com, torvalds@linux-foundation.org, 
+	xi.pardee@intel.com, todd.e.brandt@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 01/04/2025 12:45, Henry Martin wrote:
-> devm_kasprintf() returns NULL when memory allocation fails. Currently,
-> exynos_generic_icc_probe() does not check for this case, which results
-> in a NULL pointer dereference.
-> 
-> Add NULL check after devm_kasprintf() to prevent this issue.
-> 
-> Fixes: 2f95b9d5cf0b ("interconnect: Add generic interconnect driver for Exynos SoCs")
-> Signed-off-by: Henry Martin <bsdhenrymartin@gmail.com>
+On Tue, Apr 1, 2025 at 9:57=E2=80=AFAM Xin Li (Intel) <xin@zytor.com> wrote=
+:
+>
+> Upon a wakeup from S4, the restore kernel starts and initializes the
+> FRED MSRs as needed from its perspective.  It then loads a hibernation
+> image, including the image kernel, and attempts to load image pages
+> directly into their original page frames used before hibernation unless
+> those frames are currently in use.  Once all pages are moved to their
+> original locations, it jumps to a "trampoline" page in the image kernel.
+>
+> At this point, the image kernel takes control, but the FRED MSRs still
+> contain values set by the restore kernel, which may differ from those
+> set by the image kernel before hibernation.  Therefore, the image kernel
+> must ensure the FRED MSRs have the same values as before hibernation.
+> Since these values depend only on the location of the kernel text and
+> data, they can be recomputed from scratch.
+>
+> Reported-by: Xi Pardee <xi.pardee@intel.com>
+> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
+> Suggested-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> Signed-off-by: Xin Li (Intel) <xin@zytor.com>
+> Tested-by: Todd Brandt <todd.e.brandt@intel.com>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Brian Gerst <brgerst@gmail.com>
+> Cc: Juergen Gross <jgross@suse.com>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: stable@vger.kernel.org # 6.9+
+
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
 > ---
+>
+> Change in v2:
+> * Rewrite the change log and in-code comments based on Rafael's feedback.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thanks!
 
-Best regards,
-Krzysztof
+> ---
+>  arch/x86/power/cpu.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+>
+> diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
+> index 63230ff8cf4f..08e76a5ca155 100644
+> --- a/arch/x86/power/cpu.c
+> +++ b/arch/x86/power/cpu.c
+> @@ -27,6 +27,7 @@
+>  #include <asm/mmu_context.h>
+>  #include <asm/cpu_device_id.h>
+>  #include <asm/microcode.h>
+> +#include <asm/fred.h>
+>
+>  #ifdef CONFIG_X86_32
+>  __visible unsigned long saved_context_ebx;
+> @@ -231,6 +232,19 @@ static void notrace __restore_processor_state(struct=
+ saved_context *ctxt)
+>          */
+>  #ifdef CONFIG_X86_64
+>         wrmsrl(MSR_GS_BASE, ctxt->kernelmode_gs_base);
+> +
+> +       /*
+> +        * Reinitialize FRED to ensure the FRED MSRs contain the same val=
+ues
+> +        * as before hibernation.
+> +        *
+> +        * Note, the setup of FRED RSPs requires access to percpu data
+> +        * structures.  Therefore, FRED reinitialization can only occur a=
+fter
+> +        * the percpu access pointer (i.e., MSR_GS_BASE) is restored.
+> +        */
+> +       if (ctxt->cr4 & X86_CR4_FRED) {
+> +               cpu_init_fred_exceptions();
+> +               cpu_init_fred_rsps();
+> +       }
+>  #else
+>         loadsegment(fs, __KERNEL_PERCPU);
+>  #endif
+>
+> base-commit: 535bd326c5657fe570f41b1f76941e449d9e2062
+> --
+> 2.49.0
+>
 
