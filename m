@@ -1,129 +1,124 @@
-Return-Path: <linux-pm+bounces-24695-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24696-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BCE1A7790F
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Apr 2025 12:45:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D94DCA77931
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Apr 2025 13:00:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5180516A822
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Apr 2025 10:45:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 38880188E19E
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Apr 2025 11:00:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C68C81EE008;
-	Tue,  1 Apr 2025 10:45:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C15D1EE017;
+	Tue,  1 Apr 2025 11:00:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SNt1VGjK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IFKlv0RR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f195.google.com (mail-pl1-f195.google.com [209.85.214.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD9126AE4;
-	Tue,  1 Apr 2025 10:45:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C0A31E7C07;
+	Tue,  1 Apr 2025 11:00:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743504335; cv=none; b=P5zhlwVdxOKcJ+2qwcrcYNrvto29TP0rJ9veGwlFYMom+dVp2oeC1tGcQ5xBffPxKPcByrAa294FlBG4JH4f0pqTokRso/0Oqi2T21KaKU9rATeynFpVFvpUe55DyACFDw81G3hCAdZB7NEhAUibuPjNHPSZbt8N/4b9nCHIBAw=
+	t=1743505218; cv=none; b=FBYGUplL1TVNWuy5NQu4w2Momzh9BGStUQWAOmNs07UMATzwguTOKDjT1CdMTQWDma6DEG5K91oDvkjaD/ALRfyT4fDaOTor7ViTA6JWFXZE5prNUpIGnA3y4UgEMqRF131JJ7wAXjYZ0Z2AUhGjAZLQGg2DTqD+OM3wNZMvYHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743504335; c=relaxed/simple;
-	bh=1J2qbwEWhTOM+i9p0aZch6e63TdcFavMP/FTEsA4tBE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=f6petCBvo5C/DApjKyfGMlvVW/YtbGyXsM2VWSnTka8JhY5vABgAVS0mgmOOH1Hx5GIvayc+cEjkqy8DkopMEWxIcq18Qa0nkhbmgRglrmhQOdqqjhNuW/3Tyeca0Tgp9KUMB4KyJ+2XR067d26jiIToVtf6dz3qJyU8grLG4io=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SNt1VGjK; arc=none smtp.client-ip=209.85.214.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f195.google.com with SMTP id d9443c01a7336-22548a28d0cso144586025ad.3;
-        Tue, 01 Apr 2025 03:45:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743504333; x=1744109133; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=S+ws8im8ohTlJQtEnzDmiWkVTfAf613mtu+yQQ/ls+Y=;
-        b=SNt1VGjKyEF3kjHqcAa8rBPsOAW+B7VegczyqzKfEgH7gmZAewsgzZukbr1XntLhyd
-         myq7lk0mb4p/2K2Ma5G7zQHGPJy/I4IDKknRfMVnU47v+EECaMM+2bJZJ9vBoMPceRPd
-         Z9g3CLwQesbgZIALw4PWH1fhoaoG/kcbp3+NWWU0btHcOwSC0DcsuSmnmM5juTFg50mF
-         G8orYVpJNLNZ258jIl77QE7IenNy1fgfmmchLbf2up7FJN/1ppVWbIJeWUmUQo0fIftf
-         5x+fZftSF7gGMj9j2qb1Qvc4AtWQqHrfefI5WkaZqK6PxBbse5IFaPFNfmIXCeWK+LDc
-         gr9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743504333; x=1744109133;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S+ws8im8ohTlJQtEnzDmiWkVTfAf613mtu+yQQ/ls+Y=;
-        b=CL8mVoZO+icqTR0SgFXSd16cwsoTzJ3TwdMOKUCiT7759w/3gCga6iO+lFN6/D8KK+
-         zn5pCFEoaHuN14suR/Cj8EQH+RNwb6IGwMRiZ3URxugHtxNG2BYbIluBg01X07C12eA9
-         iyfG75wUHegzr0qNXbVc1LoNzm1/qoyXLs97Qsk+c0vHgp4uvMMhhHFkiJAAAZiFJSrx
-         g09efICpWklNHqG+LgSLyNdBD9h7ZbVonnsj601lerq3RWf4BKfr1waIfjeKIwvvqz1M
-         nieqX3F0YGdkofCS41N5C+FbC4Z36Mnf8PI5FOjTuiFOIVAZQ9ivt9Pv7zwCBS/WhNKP
-         Iifg==
-X-Forwarded-Encrypted: i=1; AJvYcCU28Fo3a+btYBYaq8rwVfP69RJ6IQdUne73E5tNdYq2w7+k32N9g8NXD0tqjGnEzC0qBH0UzDcNEgXxyoJh6bgB0xA=@vger.kernel.org, AJvYcCUhPvRvPZdIhdv+ABeAuK2z2/Fd2k7I6xNgxqFJcaCTa/ScytdyYEGHLEj4gTVikTvNssnLXEL8PxrkXaE=@vger.kernel.org, AJvYcCXJNG5KNLmngJnrPizt5WhfxkOhb0OR06r2f4lCxqslEmunmMVoXYQHHYnQDoTxKAovTyWzB55VRDY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvHh0P5CocPo7Dg2pLQTMWbvxBWsM3oEUG9qNPvwXG0Og8eXxd
-	lnB0Mb2mf9DktjO94HJIq0xrrQev7oPBdxs0E/u6gHufWUciRVus
-X-Gm-Gg: ASbGnctiFO7zoLfqGKd0k0xIB01TdY2S1R/U4J15UxiZtORUAlQ3kxiErYwK27GtezC
-	VNFZ5QutL8eI1vBDDOfF1UTKS5v/uXqOkmYln6yHmrtu2/DuqLXkuGRTUkzBtm2fOQu23B1Vssv
-	eG9ry8mHnGRcbEVTyfEV0KxwcvYRaWvlOYBdYCKHbL4/XFZlTw7ZQ5DrptTRA4xrr4XHXPhzMsk
-	wtqdJQ3ihBPCZSJoAdjMiWiy9VRoyOO+C5BIlNvaQ37RH3cx/ollcx4jeUFxO8b11NQgryi6EFf
-	U97hyxcmMk+QRQNFE/7W9Hq94y6MN/CxBxNB3W1z5V9wVTV+Je+jYdK465MhTKdmofymtE4=
-X-Google-Smtp-Source: AGHT+IFiE33VzXMHFadbE/k13q7hzIvU2xHpjvXzKZJeSnDxESI91BfikXodcenS9QgtP0ShUFDirQ==
-X-Received: by 2002:a17:902:da88:b0:223:f408:c3f7 with SMTP id d9443c01a7336-2292f96232amr175133745ad.16.1743504333420;
-        Tue, 01 Apr 2025 03:45:33 -0700 (PDT)
-Received: from henry.localdomain ([111.202.148.167])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2291f1cf4ebsm84926285ad.155.2025.04.01.03.45.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Apr 2025 03:45:32 -0700 (PDT)
-From: Henry Martin <bsdhenrymartin@gmail.com>
-To: georgi.djakov@linaro.org,
-	krzk@kernel.org
-Cc: s.nawrocki@samsung.com,
-	a.swigon@samsung.com,
-	alim.akhtar@samsung.com,
-	linux-pm@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Henry Martin <bsdhenrymartin@gmail.com>
-Subject: [PATCH v2] backlight: pm8941: Add NULL check in exynos_generic_icc_probe()
-Date: Tue,  1 Apr 2025 18:45:18 +0800
-Message-Id: <20250401104518.25391-1-bsdhenrymartin@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1743505218; c=relaxed/simple;
+	bh=qWyx6JaicvUMSDl3rJ9lq4nU3wRLwv+Zso9ILN7y1nc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QNyQvh+iGM92POGfimTrxDB9bjlv1j2eTQk216BLu4p82g8l8G7+sFWAwm0bQnFhmQqIS+1BICxcU4dvu5CRrB8P8hWxlFx0K2wwYXQj+MhZBI0D6MXzf/LyatRmicjeuiEoBf/NW/n9Z3FzT03VNyYS52G+MSzVtpotdtoGfIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IFKlv0RR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48820C4CEE4;
+	Tue,  1 Apr 2025 11:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743505216;
+	bh=qWyx6JaicvUMSDl3rJ9lq4nU3wRLwv+Zso9ILN7y1nc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=IFKlv0RR0iKUzOpu8CjUJ3W0VXjSlceuMXQaarGF0MckP9tOwG0q/CiXFLuqf400d
+	 vGQhc98xM1C9FfLRslr/gaUYy9E1zs3vP+lOJhAolEzrkra7aP0hsU0HlHYX1+zBaE
+	 YRIIOjyn1fgzUuDiFR+67TR97B2GwlSGm/gmzPUuGv5mQ143S7Y2Bf3f2J06rO+Zsj
+	 XxF0iHy3aS0AYLqzi2/8HzYpGI5Hr+PcHmQ7lQTQZmJHDz6bQOb6P1ihhqLb/0gO7u
+	 4+5DHLO8N+WhSqHMWSjyB++krjnHERACw85LG4TGWc/ZWhIapD8omhyghKYlxZjUef
+	 78lJs2C2je4Kg==
+Message-ID: <f59af2ac-a7a2-4490-8858-30c7f98e4149@kernel.org>
+Date: Tue, 1 Apr 2025 13:00:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] backlight: pm8941: Add NULL check in
+ exynos_generic_icc_probe()
+To: Henry Martin <bsdhenrymartin@gmail.com>, georgi.djakov@linaro.org
+Cc: s.nawrocki@samsung.com, a.swigon@samsung.com, alim.akhtar@samsung.com,
+ linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20250401104518.25391-1-bsdhenrymartin@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20250401104518.25391-1-bsdhenrymartin@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-devm_kasprintf() returns NULL when memory allocation fails. Currently,
-exynos_generic_icc_probe() does not check for this case, which results
-in a NULL pointer dereference.
+On 01/04/2025 12:45, Henry Martin wrote:
+> devm_kasprintf() returns NULL when memory allocation fails. Currently,
+> exynos_generic_icc_probe() does not check for this case, which results
+> in a NULL pointer dereference.
+> 
+> Add NULL check after devm_kasprintf() to prevent this issue.
+> 
+> Fixes: 2f95b9d5cf0b ("interconnect: Add generic interconnect driver for Exynos SoCs")
+> Signed-off-by: Henry Martin <bsdhenrymartin@gmail.com>
+> ---
 
-Add NULL check after devm_kasprintf() to prevent this issue.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Fixes: 2f95b9d5cf0b ("interconnect: Add generic interconnect driver for Exynos SoCs")
-Signed-off-by: Henry Martin <bsdhenrymartin@gmail.com>
----
-V1 -> V2: The fix ensures icc_node cleanup on devm_kasprintf() failure
-without restructuring the proven error handling workflow.
-
- drivers/interconnect/samsung/exynos.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/interconnect/samsung/exynos.c b/drivers/interconnect/samsung/exynos.c
-index 9e041365d909..57e779b3e942 100644
---- a/drivers/interconnect/samsung/exynos.c
-+++ b/drivers/interconnect/samsung/exynos.c
-@@ -134,6 +134,10 @@ static int exynos_generic_icc_probe(struct platform_device *pdev)
- 	priv->node = icc_node;
- 	icc_node->name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "%pOFn",
- 					bus_dev->of_node);
-+	if (!icc_node->name) {
-+		ret = -ENOMEM;
-+		goto err_node_del;
-+	}
- 	if (of_property_read_u32(bus_dev->of_node, "samsung,data-clock-ratio",
- 				 &priv->bus_clk_ratio))
- 		priv->bus_clk_ratio = EXYNOS_ICC_DEFAULT_BUS_CLK_RATIO;
--- 
-2.34.1
-
+Best regards,
+Krzysztof
 
