@@ -1,221 +1,240 @@
-Return-Path: <linux-pm+bounces-24708-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24709-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 969B0A77FA7
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Apr 2025 17:58:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C990A780B2
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Apr 2025 18:41:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1AE63B0541
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Apr 2025 15:54:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 927397A2524
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Apr 2025 16:40:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84A2A20C485;
-	Tue,  1 Apr 2025 15:54:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0905020DD47;
+	Tue,  1 Apr 2025 16:41:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pm5Ny6kd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XrhKYfji"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3BC20B81B;
-	Tue,  1 Apr 2025 15:54:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCD6F20D516;
+	Tue,  1 Apr 2025 16:41:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743522876; cv=none; b=mrCQcZEB3SOUMtcAjtNsoPcyRMitouNZJIctItV1id0oHHFZbQS7fhB67sqk6FA45DWGoiP3mbVNs2M93ScvMWdVQsC6vWonrhz4HIFz2hKzvc/zbo5k3hd7FfFqvlk/Yo4kDZZ65xaCun5hjjU/rJn8oOg23J//Hlgx+AspAEs=
+	t=1743525675; cv=none; b=DW80NS65wsRy9SsFaKiznix2SH0ckhedX+QFilXqpPp4Do6TvpZPyr6KzwhvSGPjsZ7j6NtootLctgJdo4xidYW2zz/Zi0qggXpCLUksD/n4jlDDexq05Shrzt9pYVBRjqHb2d+dTWjoUmTy2PYio9dWAdLwInh30wxJTGn3Z+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743522876; c=relaxed/simple;
-	bh=JOWHdatgb3Kw12Rv13dmVlUlEF36EFQzZtP/Bg464Ho=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=kTYqCXwVne+BivGK0nS8bouwbmH6/tmOqnzDPJ7VL3Zqmd6+jgiUxdlTT4vBgUQyNMt3SNf5v86eJg+BRiSsR2v0xYFy5JiCalaRlfIWTorAeKLsC4zCtn6jEjARw+tXLanYxj7bz3Y7yJAtmNc1C95Scdydtb/uX+wSU5FB7Dw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pm5Ny6kd; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743522875; x=1775058875;
-  h=date:from:to:cc:subject:message-id;
-  bh=JOWHdatgb3Kw12Rv13dmVlUlEF36EFQzZtP/Bg464Ho=;
-  b=Pm5Ny6kd3krdqxIYmXcerNJ4cJE6pEjP8tfOphu9yFABcoML7eCVv3eu
-   fkVsbkZikNn28dYGhhOVCz/+dvaIJjmHa05lOjzzow+S7PuactlfkOBRt
-   bsJSMwXD8P5cz19+iLi9+Legt1i3sCenLvg9pHy93p++sOSzbrKIzO7ai
-   PTrIMI1bu3rNY27ZzYZFhxFMVshWQOKzxI8uCsMMZPDtYnudijkbxZVvH
-   +UKcK/+HoFf5HexSp7uVeCTwHGCyOH3PgbWdEJZZigwowi/Hqh5eDPxPp
-   k6Mr9UxPL3a6kj2oQbKBv9sb54YpQin9cU2gsXVM3yPVYZ9/nqEHnYwUI
-   A==;
-X-CSE-ConnectionGUID: 9nUfnlU7ROuxxPmRC3zSNQ==
-X-CSE-MsgGUID: VLibrUORSS+R3cw9CDc9Rw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11391"; a="48646138"
-X-IronPort-AV: E=Sophos;i="6.14,293,1736841600"; 
-   d="scan'208";a="48646138"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2025 08:54:34 -0700
-X-CSE-ConnectionGUID: RhlBAMduRv251/ZEpQreog==
-X-CSE-MsgGUID: ZOhklllbS/WcDEV9xtWj0Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,293,1736841600"; 
-   d="scan'208";a="127245636"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 01 Apr 2025 08:54:32 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tzdwc-0009xu-0p;
-	Tue, 01 Apr 2025 15:54:30 +0000
-Date: Tue, 01 Apr 2025 23:54:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- de27f67c9d90ad0d41f14330027467b00517bbd7
-Message-ID: <202504012357.7K7wwEqi-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1743525675; c=relaxed/simple;
+	bh=1gLhTGr9l4B6cXOGLPFVG5q64lvtMbM6/m8pzagYpbU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=d3WtJyWFicGOGbD+JtPcQKtoC6SSKU0QwUgHUcet1VZRr+cetUvfK6Z8KWHii4ieQ/cCBLgfZ18xsuM/wzj7IgCbyPNJRRxqCMzH2iy6kIyHAzEY0s27BP++5SPZEdDWHlXkrZmckwzFOUY+1XyzAnyHX5MtPRFIyrt9rhAvdk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XrhKYfji; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47E6BC4CEED;
+	Tue,  1 Apr 2025 16:41:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743525675;
+	bh=1gLhTGr9l4B6cXOGLPFVG5q64lvtMbM6/m8pzagYpbU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=XrhKYfji1O5VVc0m3pVmiek3wlBysahevwvD4uF0BAO1Pv80bs4rTS+CWURqeqpdu
+	 aR1VnApBwaumrUWEEZjkl1xHck26LPPAjvtIhhOUL7EodlWBhhrDp1YnXaBpVUKoxy
+	 vu66bfEZAkuMb5vMnb8EjZIbLqlQlouXEwlVl691oHdtDQL3NOauFY8b///y+isCqI
+	 JlSZM/VgCrZiUWo8WUmVjVwAUkrWjgsl25sZDif/6ZGW4UnogWsN3FidYdczTdtKCr
+	 vinfcwBuwjN/Y+aFPkKooassEGIngPDBkPSfq97DR5wxa2LJ2Of3C8jnyvh7iDnLdM
+	 KeilThHGeg8eQ==
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-2c2504fa876so1490024fac.0;
+        Tue, 01 Apr 2025 09:41:15 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU59z/o59f1NZS5OC07Ep7S0eIDYDMDkUcHmBw8Lgy+9KfjiNf/dYc+CO2CtcyYQaLk8pSmdhtQWzJfJw==@vger.kernel.org, AJvYcCVIlhZYN5yY64DjEipFdoWVaRgFKBKlHnWTwKoprPFimkSTlxN1oeNhnOcoD75i9uGzZqlG2hUWmZo=@vger.kernel.org, AJvYcCXQPoRB5jOtpyHAddWaO+rklUIqPEvhaTVKlGrc9aYSf3hYGDsJtMVeCM617qQCwFJQl3n25z4kp0CciuS+@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFxt+LFVNWlh9jmsqi++x2q+d55oC32hNyX3MFmfv/MHBa7o2M
+	XIPaENa+dSHiTQt6a6PuYE3bv3LDr7ahXkqwu5v+Ho6AwITwBzgmOIGZO30u82DA//JSw1tZzTn
+	Oz2jX0d7foneXnD+BKdt4+NDSzbc=
+X-Google-Smtp-Source: AGHT+IGVXZ+0BVDFKICSSMwrK67DZSsDNux/3FyKeJP2ZsYnODa6XRbFXoGvWozBU8NYZA0rltVFvYQzLnASEJnV66k=
+X-Received: by 2002:a05:6808:6f88:b0:3fa:8bfd:7721 with SMTP id
+ 5614622812f47-3ff0f59b9efmr8000188b6e.27.1743525674482; Tue, 01 Apr 2025
+ 09:41:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <33882f284ac6e6d1ec766ca4bb2f3b88@intel.com> <f18607ca-30dc-43de-be77-fec69968aeec@arm.com>
+ <SJ2PR11MB7670F63C7052C88637D305DF8DDF2@SJ2PR11MB7670.namprd11.prod.outlook.com>
+ <1ae51ccc-66cc-4551-b649-2f5883e2f5a2@acm.org> <SJ2PR11MB7670B2AEFF7C0DABE6856F258DA62@SJ2PR11MB7670.namprd11.prod.outlook.com>
+ <ad852ef9-5207-4b70-8834-2db6aa5e1a51@arm.com> <SJ2PR11MB7670E05E066CCC16AFEA16A18DAC2@SJ2PR11MB7670.namprd11.prod.outlook.com>
+ <743b3472-e1a4-4fdc-ac2d-6e74c51022c4@arm.com>
+In-Reply-To: <743b3472-e1a4-4fdc-ac2d-6e74c51022c4@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 1 Apr 2025 18:41:03 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gryQv8hQO0yp5Ssh2v6jvCtrF-g0xJhOrrxfrDeDeq=Q@mail.gmail.com>
+X-Gm-Features: AQ5f1JqFA7IwPhhQcfGCN8j-8gC1KfAULXjhN1fIy5y9GFpwTc_hCUHt5sJFE3U
+Message-ID: <CAJZ5v0gryQv8hQO0yp5Ssh2v6jvCtrF-g0xJhOrrxfrDeDeq=Q@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: psd: add power sleep demotion prevention for
+ fast I/O devices
+To: Christian Loehle <christian.loehle@arm.com>, "King, Colin" <colin.king@intel.com>
+Cc: Bart Van Assche <bvanassche@acm.org>, Jens Axboe <axboe@kernel.dk>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	"linux-block@vger.kernel.org" <linux-block@vger.kernel.org>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: de27f67c9d90ad0d41f14330027467b00517bbd7  Merge branch 'pm-sleep-testing' into bleeding-edge
+On Tue, Apr 1, 2025 at 5:15=E2=80=AFPM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> On 4/1/25 16:03, King, Colin wrote:
+> > Hi,
+> >
+> > Reply at end..
+> >
+> >> -----Original Message-----
+> >> From: Christian Loehle <christian.loehle@arm.com>
+> >> Sent: 26 March 2025 16:27
+> >> To: King, Colin <colin.king@intel.com>; Bart Van Assche
+> >> <bvanassche@acm.org>; Jens Axboe <axboe@kernel.dk>; Rafael J. Wysocki
+> >> <rafael@kernel.org>; Daniel Lezcano <daniel.lezcano@linaro.org>; linux=
+-
+> >> block@vger.kernel.org; linux-pm@vger.kernel.org
+> >> Cc: linux-kernel@vger.kernel.org
+> >> Subject: Re: [PATCH] cpuidle: psd: add power sleep demotion prevention=
+ for
+> >> fast I/O devices
+> >>
+> >> On 3/26/25 15:04, King, Colin wrote:
+> >>> Hi,
+> >>>
+> >>>> -----Original Message-----
+> >>>> From: Bart Van Assche <bvanassche@acm.org>
+> >>>> Sent: 23 March 2025 12:36
+> >>>> To: King, Colin <colin.king@intel.com>; Christian Loehle
+> >>>> <christian.loehle@arm.com>; Jens Axboe <axboe@kernel.dk>; Rafael J.
+> >>>> Wysocki <rafael@kernel.org>; Daniel Lezcano
+> >>>> <daniel.lezcano@linaro.org>; linux-block@vger.kernel.org;
+> >>>> linux-pm@vger.kernel.org
+> >>>> Cc: linux-kernel@vger.kernel.org
+> >>>> Subject: Re: [PATCH] cpuidle: psd: add power sleep demotion
+> >>>> prevention for fast I/O devices
+> >>>>
+> >>>> On 3/17/25 3:03 AM, King, Colin wrote:
+> >>>>> This code is optional, one can enable it or disable it via the
+> >>>>> config option. Also, even when it is built-in one can disable it by
+> >>>>> writing 0 to the
+> >>>> sysfs file
+> >>>>>    /sys/devices/system/cpu/cpuidle/psd_cpu_lat_timeout_ms
+> >>>>
+> >>>> I'm not sure we need even more configuration knobs in sysfs.
+> >>>
+> >>> It's useful for enabling / disabling the functionality, as well as so=
+me form of
+> >> tuning for slower I/O devices, so I think it is justifiable.
+> >>>
+> >>>> How are users
+> >>>> expected to find this configuration option? How should they decide
+> >>>> whether to enable or to disable it?
+> >>>
+> >>> I can send a V2 with some documentation if that's required.
+> >>>
+> >>>>
+> >>>> Please take a look at this proposal and let me know whether this
+> >>>> would solve the issue that you are looking into: "[LSF/MM/BPF Topic]
+> >> Energy- Efficient I/O"
+> >>>> (https://lore.kernel.org/linux-block/ad1018b6-7c0b-4d70-
+> >>>> b845-c869287d3cf3@acm.org/). The only disadvantage of this approach
+> >>>> compared to the cpuidle patch is that it requires RPM (runtime power
+> >>>> management) to be enabled. Maybe I should look into modifying the
+> >>>> approach such that it does not rely on RPM.
+> >>>
+> >>> I've had a look, the scope of my patch is a bit wider.  If my patch
+> >>> gets accepted I'm going to also look at putting the psd call into
+> >>> other devices (such as network devices) to also stop deep states whil=
+e
+> >>> these devices are busy.  Since the code is very lightweight I was hop=
+ing this
+> >> was going to be relatively easy and simple to use in various devices i=
+n the
+> >> future.
+> >>
+> >> IMO this needs to be a lot more fine-grained then, both in terms of wh=
+ich
+> >> devices or even IO is affected (Surely some IO is fine with at least *=
+some*
+> >> latency) but also how aggressive we are in blocking.
+> >> Just looking at some common latency/residency of idle states out there=
+ I don't
+> >> think it's reasonable to force polling for a 3-10ms (rounding up with =
+the jiffie)
+> >> period.
+> >
+> > The current solution by a customer is that they are resorting to disabl=
+ing C6/C6P and hence
+> > all the CPUs are essentially in a non-low power state all the time.  Th=
+e opt-in solution
+> > provided in the patch provides nearly the same performance and will re-=
+enable deeper
+> > C-states once the I/O is completed.
+> >
+> > As I mentioned earlier, the jiffies are used because it's low-touch and=
+ very fast with negligible
+> > impact on the I/O paths. Using finer grained timing is far more an expe=
+nsive operation and
+> > is a huge overhead on very fast I/O devices.
+> >
+> > Also, this is a user config and tune-able choice. Users can opt-in to u=
+sing this if they want
+> > to pay for the extra CPU overhead for a bit more I/O performance. If th=
+ey don't want it, they
+> > don't need to enable it.
+> >
+> >> Playing devil's advocate if the system is under some thermal/power pre=
+ssure
+> >> we might actually reduce throughput by burning so much power on this.
+> >> This seems like the stuff that is easily convincing because it improve=
+s
+> >> throughput and then taking care of power afterwards is really hard. :/
+> >>
+> >
+> > The current solution is when the user is trying to get maximum bandwidt=
+h and disabling C6/C6P
+> > so they are already keeping the system busy. This solution at least wil=
+l save power when I/O is idling.
+> >
+>
+> No. They can set the pm qos latency constraint when they care about 'maxi=
+mum bandwidth'
+> and remove the constraint when they don't.
+> If they just disable the idle states at boot and never enable them at lea=
+st they have no
+> grounds to complain to kernel people about, they should know what they're=
+ doing is detrimental
+> to power.
 
-elapsed time: 1453m
+I think that they know about it, but they are complaining that there's
+no alternative.
 
-configs tested: 127
-configs skipped: 5
+Well, this is not entirely true because of the PM QoS latency
+constraints that can be used, but this requires admin access which
+isn't popular.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Hence (I think) the idea to add an opt-in that will effectively
+disable C6/C6P temporarily when I/O is pending (in progress, queued up
+or whatever), but this may very well use the existing PM QoS latency
+constraints framework under the hood instead of adding something new.
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-14.2.0
-arc                               allnoconfig    gcc-14.2.0
-arc                              allyesconfig    gcc-14.2.0
-arc                   randconfig-001-20250401    gcc-12.4.0
-arc                   randconfig-002-20250401    gcc-14.2.0
-arm                              allmodconfig    gcc-14.2.0
-arm                               allnoconfig    clang-21
-arm                              allyesconfig    gcc-14.2.0
-arm                          ep93xx_defconfig    clang-21
-arm                       imx_v4_v5_defconfig    clang-15
-arm                          pxa3xx_defconfig    clang-21
-arm                   randconfig-001-20250401    gcc-7.5.0
-arm                   randconfig-002-20250401    gcc-8.5.0
-arm                   randconfig-003-20250401    clang-18
-arm                   randconfig-004-20250401    clang-14
-arm                             rpc_defconfig    clang-18
-arm                         vf610m4_defconfig    gcc-14.2.0
-arm64                            alldefconfig    gcc-14.2.0
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-002-20250401    clang-20
-arm64                 randconfig-003-20250401    gcc-8.5.0
-arm64                 randconfig-004-20250401    gcc-6.5.0
-csky                              allnoconfig    gcc-14.2.0
-csky                  randconfig-001-20250401    gcc-14.2.0
-csky                  randconfig-002-20250401    gcc-10.5.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-21
-hexagon                          allyesconfig    clang-21
-hexagon               randconfig-001-20250401    clang-21
-hexagon               randconfig-002-20250401    clang-21
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250401    gcc-12
-i386        buildonly-randconfig-002-20250401    clang-20
-i386        buildonly-randconfig-003-20250401    clang-20
-i386        buildonly-randconfig-004-20250401    clang-20
-i386        buildonly-randconfig-005-20250401    gcc-12
-i386        buildonly-randconfig-006-20250401    clang-20
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch                 loongson3_defconfig    gcc-14.2.0
-loongarch             randconfig-001-20250401    gcc-14.2.0
-loongarch             randconfig-002-20250401    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-m68k                       m5208evb_defconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-mips                        bcm47xx_defconfig    clang-18
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250401    gcc-8.5.0
-nios2                 randconfig-002-20250401    gcc-6.5.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-openrisc                            defconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                              defconfig    gcc-14.2.0
-parisc                randconfig-001-20250401    gcc-11.5.0
-parisc                randconfig-002-20250401    gcc-5.5.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                          allyesconfig    clang-21
-powerpc                    mvme5100_defconfig    gcc-14.2.0
-powerpc               randconfig-001-20250401    clang-21
-powerpc               randconfig-002-20250401    gcc-8.5.0
-powerpc               randconfig-003-20250401    clang-20
-powerpc                     tqm8541_defconfig    clang-21
-powerpc64             randconfig-001-20250401    clang-21
-powerpc64             randconfig-002-20250401    clang-17
-powerpc64             randconfig-003-20250401    gcc-6.5.0
-riscv                            allmodconfig    clang-21
-riscv                             allnoconfig    gcc-14.2.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    clang-21
-riscv             nommu_k210_sdcard_defconfig    gcc-14.2.0
-riscv                 randconfig-001-20250401    clang-21
-riscv                 randconfig-002-20250401    clang-14
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-15
-s390                             allyesconfig    gcc-14.2.0
-s390                                defconfig    clang-15
-s390                  randconfig-001-20250401    clang-15
-s390                  randconfig-002-20250401    gcc-9.3.0
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                                  defconfig    gcc-14.2.0
-sh                    randconfig-001-20250401    gcc-12.4.0
-sh                    randconfig-002-20250401    gcc-12.4.0
-sh                           se7750_defconfig    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250401    gcc-11.5.0
-sparc                 randconfig-002-20250401    gcc-7.5.0
-sparc64                             defconfig    gcc-14.2.0
-sparc64               randconfig-001-20250401    gcc-9.3.0
-sparc64               randconfig-002-20250401    gcc-13.3.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-21
-um                               allyesconfig    gcc-12
-um                                  defconfig    clang-21
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20250401    gcc-12
-um                    randconfig-002-20250401    gcc-11
-um                           x86_64_defconfig    clang-15
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250401    clang-20
-x86_64      buildonly-randconfig-002-20250401    gcc-12
-x86_64      buildonly-randconfig-003-20250401    clang-20
-x86_64      buildonly-randconfig-004-20250401    clang-20
-x86_64      buildonly-randconfig-005-20250401    gcc-12
-x86_64      buildonly-randconfig-006-20250401    clang-20
-x86_64                              defconfig    gcc-11
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250401    gcc-9.3.0
-xtensa                randconfig-002-20250401    gcc-13.3.0
+> Furthermore we might be better off disabling C6/C6P than staying in a pol=
+ling state (whenever we've
+> completed an IO in the last ~5 to 20ms, depending on the HZ setting).
+> Again, the wastefulness of a polling state can hardly be overestimated, e=
+specially given
+> that it doesn't seem to be necessary at all here?
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I don't think it is necessary or at least the need for it would need
+to be demonstrated.  In fact, on x86, every time the poll state is
+selected, it turns out to be overly shallow, at least in the results
+I've seen so far.
+
+Most likely, it would be sufficient to have a CPU latency PM QoS
+request registered per I/O entity and set the limit for it slightly
+above the C1 (or C1E) exit latency when there's I/O to process.  After
+completing the I/O, the request can be update to the "don't care"
+value.
 
