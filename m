@@ -1,120 +1,154 @@
-Return-Path: <linux-pm+bounces-24724-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24725-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35FFDA78DD9
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Apr 2025 14:08:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3B7DA7919B
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Apr 2025 17:00:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F0E63B2A33
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Apr 2025 12:06:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C0CB416F644
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Apr 2025 15:00:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E911223816D;
-	Wed,  2 Apr 2025 12:06:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C169923AE93;
+	Wed,  2 Apr 2025 15:00:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hyA4rq+R"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jv20uYzl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C51D238D45
-	for <linux-pm@vger.kernel.org>; Wed,  2 Apr 2025 12:06:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 979E123AE7C;
+	Wed,  2 Apr 2025 15:00:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743595584; cv=none; b=JiQM6AcBGTGB2pk1Nwgbk2T/yw3smBnltcD+E4Lh2OD3BJs4p1dL5Zd5yTmmjM4s8chXSY88/d2nQREYH3vJ7JIIjC7KFbuqM28XujHwDnY57j0SDn7h6YoaRSaR8Fouh0HQSdYS5CxiekJecMgAZo9oA9pnZLc48rjyRUGQ3yQ=
+	t=1743606006; cv=none; b=VBqzHDtM77OT1iAg2Kfo8r//C6VwgNJ8ope0nrl++weB3B+EWFF6DEDJg1/zIKcsoXAokMEahd1+CYzyAhoDHiRqR02+MXvVvxlOpWSgbSCqY61NGIUTYwLYrruDJvyXVLDtYA6VtFpYvBsKoLC8sWpJFiEMHAvQ6wa26uCZl3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743595584; c=relaxed/simple;
-	bh=NqsU/+7oxZL1YCnN3qRWYdYhLF155n2ACcMqk7+Lz9c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tPDjProv3o88327IJJeQ2bkIYFLjB+UHtxxxqsZJQJ79Q4qSPCYmiuKqJW3DKWoZpwz2NsRzos1CwUsgPgX7j+1UZVe3BMX/jJvDmCkS/XIVX2b+gmdBApM8+B/ddma5MRXsc1+IaMn4zoDCYFhbtb/kzh5escZ++sXPY3elz64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hyA4rq+R; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-54b10956398so953906e87.0
-        for <linux-pm@vger.kernel.org>; Wed, 02 Apr 2025 05:06:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1743595581; x=1744200381; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zEG4gecI8tD+Jl0eEYFS/WRbrree3429dPKL1Yhc7hE=;
-        b=hyA4rq+Rv0BaMBUL7rFuBVDKN/CL4czjJlF/soLUu/NDqDAPgZv7p05t0Hr30tsVWq
-         T24ID3iRivFwbDgPUpEvodTxPddaF4vacyV9kCTjrNfJafp+soVcxJXy2qv3+ir8diuN
-         SFihR6ZvAYRQVkz+OpiMRBdCDHln368SsqzulhTau1FaP4tIcACWlqn/zHNcAItBvVjn
-         wgEAminPRWgrRn5uJvR7xNqqMwEveq9TippRF3AKuOE5FXNF5m0uOsIdZOCugwWlqR75
-         F/GFgfUB7SWmzbxDnoxu7x7AwrSdU4BBCbx1V3+yHPkOvZ43P81KjtxHEO2vFhpi/bcF
-         jxwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743595581; x=1744200381;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zEG4gecI8tD+Jl0eEYFS/WRbrree3429dPKL1Yhc7hE=;
-        b=UrNNlLUCT0spjMSAwjsKwMZzXnBLDD7HPDtnQ/fku2VBToyAD1TeZCo9oqVUog1KV9
-         9uNu5HHzg7ZX3M+fRJo7P96pzZmxowB3vrMrci8bCzI+8d4/llrTxJ9jCu/DAs5BCwD3
-         69KnO93nLIMZol2uOtlCiuRHGuz66N+DzJtYa86l1mFylg4uBM6l+7ws/dj1vpXjWQwE
-         rM1m9atbRWByLY84PKFOjeiEGfnMfttfWI8C679Optfi1z96dOmDS5EO+Ar0L9ELo2bK
-         TELMyG7bXB/F1t0XmfxQrwtccgZTUC5w5yoIAvDpk75CZJ06M3HXCEOfTXRDYg5rSfFF
-         1zYA==
-X-Forwarded-Encrypted: i=1; AJvYcCX1P0RzFSVJ14HwE4qeyf0+InUG/J1fej6LDdOLAq/KJE8050/YUC8BrgzKe4+QQSVeJxpl8yc/jQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTtzwhu8NdKcAmXfHrxD2Zi45t3E8FTJxoi3pSNPqMUJA5o0Nn
-	7nT85SDFZ0XoC9LYu9LrhTm5P/Y7b72LE5q/xydZvHfjZfuqOiGEvzB7lZjVNkI=
-X-Gm-Gg: ASbGnctjeWB+9DWZAp2YOoIURa72zVmdbeZ/WcwPG/1ZDjv0MAEV9J2ObhsGS/cHSad
-	2TDNSMzpAuotxPPybjtlSlHOsMzBeX+yF+0TuuJRIyu7bhUXl5ZUM59iY0nVTxFHgjMWh6gezIh
-	mdsqehTCEYLafMULZlxBrFmvVYTfsxlFA6vCNHEl1Bf5HUqX8lWwXH2c33MGcVmvO3zy5NZ28mU
-	hX7c1Jgmj+hOS1T9XZLhWdvCuV5+YsiV6lBHjg2Tpxo/jhNG2ltAM1zLdXNKsWPC3OpiPnEmoip
-	GFWJVqJTFleYG5LuuAdYgx0peoZ1fuu01iRxRNS6aWxGRyDUpFy9iGbs20gRWt4ODzRPLImMLE+
-	NZezE6hXqqk3Y93fBS30=
-X-Google-Smtp-Source: AGHT+IHAorU5HIF63fzGnkivetyexueQYMJ3ZBC4Gy8XB0gdbMI3Klf829/ZF7PMB3Gu1bJ9VZlDzw==
-X-Received: by 2002:a05:6512:3d28:b0:548:878b:ccb3 with SMTP id 2adb3069b0e04-54c1a1daf7dmr682827e87.25.1743595581025;
-        Wed, 02 Apr 2025 05:06:21 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54b09591bc4sm1594858e87.166.2025.04.02.05.06.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Apr 2025 05:06:20 -0700 (PDT)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-pm@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] pmdomain: core: Reset genpd->states to avoid freeing invalid data
-Date: Wed,  2 Apr 2025 14:06:13 +0200
-Message-ID: <20250402120613.1116711-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1743606006; c=relaxed/simple;
+	bh=gkTDlBLspVsDUeTz3Xteu6bE9B4OIpL6/8gC3s6pajo=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=eMZgqLqhpQ8aUZhVbxYHOoXJ3476J4gROh87uCo6RGMQUowVIQtCcMFxR2+xmzIMlkdAu5PcEZhz72VtM2DhVT4Y8HnTWHJ9vz4EtZduZxACzICaouJdftz4pUZ4+FkCmVNDd/aC6/tRVI9ydtUUVswOmUYK3K+srfFoLqxovKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jv20uYzl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02F0BC4CEDD;
+	Wed,  2 Apr 2025 15:00:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743606006;
+	bh=gkTDlBLspVsDUeTz3Xteu6bE9B4OIpL6/8gC3s6pajo=;
+	h=From:Date:Subject:To:Cc:From;
+	b=jv20uYzl2hoDJG0WGnpQd0St6H3Z19cQwZoGZFRMV+cAWQ7qNV4kFy2iz7RoqGYUy
+	 CFNub+wuodsMfYahnE4BPzgSpUkpXql94e9NBxrk8BnNPCyvgCIdTwV/tyv+vh0LUP
+	 fzD8l1PcmEoVdZt/uSZbzCaqb0NMF3Sdfx8r270w4NBj+R50HqjToEZLrTKM+IK97Q
+	 jqr4pKwlPwnFVTPOspOAZIh1T3EVoalR0MaYeacpCjHzvw0GzvqZjTYJAapkZ7JQgy
+	 ln+L7wUr9X4IBI/vyMvhrDzuFCF3Rlqnp9J9NWqMo+myaP9mgt3QIfiXV7uTqvsPAE
+	 P80z3+u3bHLMQ==
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-72c14138668so1637624a34.2;
+        Wed, 02 Apr 2025 08:00:05 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWVuaS66E/7uo3JyDtMo/VCSyHLLcFo7EaNpjFxHd7Cg2MOu2xmtZeJy/s4sfTdUF4uP5dXODJlXg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwsU8O1Yd84BjcykT4/9jkmNucTQI0qXVnjBv/KS2P6PrmOPR2
+	jolCWYK9PygsWo/5Q9ZARDuqFDKEmOAEndq80WtNoR8lLGqsOukGaWoEPtkGma1ZTIPIq8Nv8Li
+	cg+lpnZ5y6GOqM/uhjStVPsujZ6E=
+X-Google-Smtp-Source: AGHT+IE5oqwISwQehu9eNdF5AQbKiisSs0JngsBv/p6GfDXWgEdO8QaFWKWkkdBaXlSbn+xOdgrKkwqIkcYT6J8tKuE=
+X-Received: by 2002:a05:6830:4129:b0:72b:9196:c15c with SMTP id
+ 46e09a7af769-72c6376d558mr8869774a34.6.1743606005216; Wed, 02 Apr 2025
+ 08:00:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 2 Apr 2025 16:59:54 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gtr2acS0ZNux5TzHrawoxC6jD474H1s-_MHBQPAe3fkA@mail.gmail.com>
+X-Gm-Features: AQ5f1JpH3iy5XIProJMzMZmb6DlVsrpsMkn9qtpwW6zLuKbMA1JwtDfUPBV2pg0
+Message-ID: <CAJZ5v0gtr2acS0ZNux5TzHrawoxC6jD474H1s-_MHBQPAe3fkA@mail.gmail.com>
+Subject: [GIT PULL] More ACPI updates for v6.15-rc1
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-If genpd_alloc_data() allocates data for the default power-states for the
-genpd, let's make sure to also reset the pointer in the error path. This
-makes sure a genpd provider driver doesn't end up trying to free the data
-again, but using an invalid pointer.
+Hi Linus,
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/pmdomain/core.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Please pull from the tag
 
-diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-index 9b2f28b34bb5..c179464047fe 100644
---- a/drivers/pmdomain/core.c
-+++ b/drivers/pmdomain/core.c
-@@ -2229,8 +2229,10 @@ static int genpd_alloc_data(struct generic_pm_domain *genpd)
- 	return 0;
- put:
- 	put_device(&genpd->dev);
--	if (genpd->free_states == genpd_free_default_power_state)
-+	if (genpd->free_states == genpd_free_default_power_state) {
- 		kfree(genpd->states);
-+		genpd->states = NULL;
-+	}
- free:
- 	if (genpd_is_cpu_domain(genpd))
- 		free_cpumask_var(genpd->cpus);
--- 
-2.43.0
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-6.15-rc1-2
 
+with top-most commit 5bf46fe2b84cda662062f7aca73e15602c76a844
+
+ Merge branches 'acpi-video', 'acpi-platform-profile' and 'acpi-misc'
+
+on top of commit 21e0ff5b10ec1b61fda435d42db4ba80d0cdfded
+
+ Merge tag 'acpi-6.15-rc1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+
+to receive more ACPI/PNP updates for 6.15-rc1.
+
+These are fixes and cleanups on top of the previous ACPI material for
+6.15-rc1 merged recently:
+
+ - Extend the Lenovo Yoga Tab 3 ACPI quirk to skip GPIO event-handlers
+   along with ACPI AC and battery which makes it work with Linux when
+   started in the Windows mode (Hans de Goede).
+
+ - Prevent the ACPI processor idle driver from being used on systems
+   without _CST and with invalid C2/C3 in FADT in order to restore its
+   previous (and expected) behavior that has been altered inadvertently
+   by a recent code change (Giovanni Gherdovich).
+
+ - Skip ACPI IRQ override on ASUS Vivobook 14 X1404VAP to make the
+   internal keyboard work on it (Paul Menzel).
+
+ - Make the ACPI backlight driver handle fetching EDID passed as
+   ACPI_TYPE_PACKAGE which is not specification-compliant, but
+   has been encountered in the field (Gergo Koteles).
+
+ - Simplify the aggregation of choices in the ACPI platform-profile
+   driver which has been unlocked by recent modifications of that
+   driver (Kurt Borja).
+
+ - Use str_enabled_disabled() instead of hardcoded strings in the ACPI
+   code related to NUMA (Thorsten Blum).
+
+ - Add Intel OC Watchdog device IDs to non-PNP device list to prevent
+   PNP from claiming the devices that carry these IDs in which case
+   non-PNP drivers cannot bind to them (Diogo Ivo).
+
+Thanks!
+
+
+---------------
+
+Diogo Ivo (1):
+      ACPI: PNP: Add Intel OC Watchdog IDs to non-PNP device list
+
+Gergo Koteles (1):
+      ACPI: video: Handle fetching EDID as ACPI_TYPE_PACKAGE
+
+Giovanni Gherdovich (1):
+      ACPI: processor: idle: Return an error if both P_LVL{2,3} idle
+states are invalid
+
+Hans de Goede (1):
+      ACPI: x86: Extend Lenovo Yoga Tab 3 quirk with skip GPIO event-handlers
+
+Kurt Borja (1):
+      ACPI: platform_profile: Optimize _aggregate_choices()
+
+Paul Menzel (1):
+      ACPI: resource: Skip IRQ override on ASUS Vivobook 14 X1404VAP
+
+Thorsten Blum (1):
+      ACPI: NUMA: Use str_enabled_disabled() helper function
+
+---------------
+
+ drivers/acpi/acpi_pnp.c         |  2 ++
+ drivers/acpi/acpi_video.c       |  9 ++++++++-
+ drivers/acpi/numa/srat.c        | 22 ++++++++--------------
+ drivers/acpi/platform_profile.c | 13 +++++--------
+ drivers/acpi/processor_idle.c   |  4 ++++
+ drivers/acpi/resource.c         |  7 +++++++
+ drivers/acpi/x86/utils.c        |  3 ++-
+ 7 files changed, 36 insertions(+), 24 deletions(-)
 
