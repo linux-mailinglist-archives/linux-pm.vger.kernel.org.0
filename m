@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-24768-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24767-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F07CCA7AFB5
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Apr 2025 22:58:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13F45A7AF4D
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Apr 2025 22:47:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE2D13AF915
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Apr 2025 20:50:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35D031898082
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Apr 2025 20:42:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BB5E2505D6;
-	Thu,  3 Apr 2025 19:24:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DABA1253B62;
+	Thu,  3 Apr 2025 19:19:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="XUasF8mO"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="RPXWsdw0"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B40DD230985;
-	Thu,  3 Apr 2025 19:24:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C202512CE;
+	Thu,  3 Apr 2025 19:19:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743708299; cv=none; b=WG2nDPWszn3DNlJnuu4jzTqM9XjqeGzdLA4dCRxtUb28GEYfl7qRzVygn80GlktUlZ292b467ecCBdQYLenUa+18eTHVG5MifGdTJzqleCsp2Ft836wzRek3lqYJ9JA6mn0EHTt6DM0FymlHyHNrwFK+Mw5x1eegf1FMRf35fxU=
+	t=1743707992; cv=none; b=lIZRykkob9VKTaPcoCx7/u7hlc6g8x2aVwkJU2yIYpw4Esh7LTcCuxIX1lVuBJcoAD0t1R7BvZL2tVhDr+dKHBpxJuhjoWh5Vwng9zCkqC0tyfJMv3sg4uFP35dhQ+WVuZWfe6T6JTu8ejfaQRxkAKsdtquKqafhM6lkeiCHQdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743708299; c=relaxed/simple;
-	bh=M0B7DYBkTlQRKyQ+laESOGNy2whZ2BwQqOZRb/DqqjE=;
+	s=arc-20240116; t=1743707992; c=relaxed/simple;
+	bh=uPpUnikI6V5BZQyx2/t+prng46nejSRfS5Mgvb/auw4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=O4+XmQlW7AIbJxejZJAzmMiKwQRzMZrxm+Iz9Nu8Cn6qcGILC91b6M6+cOLCY/Co1D28HJB0OB3XR0udwG/IPKOhjv1bi+NuQtlr2aL7xmzYEyZqafQon7N2V8M49w5PAcTvWU/PpDG7IUfnTVDudqzNudU5sfjL2hC4dMVgovs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=XUasF8mO; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=tFM2SiJ0ggqkSeQAyHppG7xqAJWTVQTIu1C1SjiQF36Fmq37M2DWon9BDzynggMGoXLY7EjQE0aiJ5tYlb0M7pUAp/IJKu0sPeo2IdYQClgvT1qo0qUKPWZJc3g7Voo/bsMlIr4/elwqVS2ET7CeXZ7GFCTCgipOS3KQY/W/XEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=RPXWsdw0; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.3.1)
- id 07fea8c86a4f491e; Thu, 3 Apr 2025 21:24:54 +0200
+ id c2c9616ba3bbde8e; Thu, 3 Apr 2025 21:19:42 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 0E9B99014E8;
-	Thu,  3 Apr 2025 21:24:54 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 912619014E8;
+	Thu,  3 Apr 2025 21:19:41 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1743708294;
-	bh=M0B7DYBkTlQRKyQ+laESOGNy2whZ2BwQqOZRb/DqqjE=;
+	s=dkim; t=1743707982;
+	bh=uPpUnikI6V5BZQyx2/t+prng46nejSRfS5Mgvb/auw4=;
 	h=From:Subject:Date;
-	b=XUasF8mOaPYG+wQJtAcQbKOaZX6/9wTo0gU4Cf/n3azEHJc8ejngA2aWYUKmamOe8
-	 PGCz41VFLrUY6klUoL7+OGckJW37SZRudnEVagSiJVaP7U9ypakfAQAHhlrqiNU+Ou
-	 MJAFnCzxK8HP7GGEYG7pa2K0v9IFjPfN+03XX4zsk5MiN9AEFYCm9jF5wHLcqcmlZP
-	 yuO+CFTtH8wYqwYNxODxvPKsxiFnXCkr5OBOsY3kPi5Camw4QTTPBYZ16j4bs3yU4v
-	 tNSAubaNznEbEks5HPTdznLonOS3/DVQFM2eThkN/Bt6jsSlTd39JY1oMeUpIUNkJ5
-	 yrqfSGVEe73pg==
+	b=RPXWsdw0a+vIwjm/6lop6uh0ejJMTyc6IUyX1aVNUFzzfGYYerrcPdzZu/h2vbDnN
+	 LLcRRwSzUIVcMWE46NrL3Mhq7CzTZa+hO4NZDOvfKzdMe41ibGekEz6j9oVWAKA1du
+	 T2qCy3Ry65bip5gr/R0PwLEcxSUWECgZbiUEhKPX8wazD1FOF2YsqsWTF+KlKz9PbO
+	 BPEAeyaq4C/yAEvhBoU+Dx2NTjGzIy9dPzwnzR9wKErsmXGwB1Hlhv9Pn2zByvmnQk
+	 P/PrVlKDG88QER8dc6wTxasf9hXlp22ytX/QJf+ubGSsIEKnmq6Uq4W5ryWV8N6keM
+	 gtXfwgNboJKCA==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
@@ -58,10 +58,9 @@ Cc: LKML <linux-kernel@vger.kernel.org>,
  Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
  Doug Smythies <dsmythies@telus.net>,
  Aboorva Devarajan <aboorvad@linux.ibm.com>
-Subject:
- [PATCH v1 1/2] cpuidle: teo: Move candidate state lookup to separate function
-Date: Thu, 03 Apr 2025 21:16:47 +0200
-Message-ID: <4991828.GXAFRqVoOG@rjwysocki.net>
+Subject: [PATCH v1 2/2] cpuidle: teo: Refine handling of short idle intervals
+Date: Thu, 03 Apr 2025 21:18:38 +0200
+Message-ID: <2239639.irdbgypaU6@rjwysocki.net>
 In-Reply-To: <4661520.LvFx2qVVIh@rjwysocki.net>
 References: <4661520.LvFx2qVVIh@rjwysocki.net>
 Precedence: bulk
@@ -75,159 +74,168 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: spam:low
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukeelfeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuphgrmhfkphculdeftddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuufhprghmkfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheptghhrhhishhtihgrnhdrlhhovgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=14 Fuz1=14 Fuz2=14
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukeelfeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuphgrmhfkphculdeftddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuufhprghmkfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheptghhrhhishhtihgrnhdrlhhovgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Move the code looking up a new candidate idle state in teo, after
-deciding that the initial candidate (the deepest enabled idle state) is
-likely too deep, into a separate function in preparation for subsequent
-changes.
+Make teo take all recent wakeups (both timer and non-timer) into
+account when looking for a new candidate idle state in the cases
+when the majority of recent idle intervals are within the
+LATENCY_THRESHOLD_NS range or the latency limit is within the
+LATENCY_THRESHOLD_NS range.
 
-No intentional functional impact.
+Since the tick_nohz_get_sleep_length() invocation is likely to be
+skipped in those cases, timer wakeups should arguably be taken into
+account somehow in case they are significant while the current code
+mostly looks at non-timer wakeups under the assumption that frequent
+timer wakeups are unlikely in the given idle duration range which
+may or may not be accurate.
+
+The most natural way to do that is to add the "hits" metric to the
+sums used during the new candidate idle state lookup which effectively
+means the above.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/cpuidle/governors/teo.c |  120 +++++++++++++++++++++-------------------
- 1 file changed, 63 insertions(+), 57 deletions(-)
+ drivers/cpuidle/governors/teo.c |   99 ++++++++++++++++++++++------------------
+ 1 file changed, 55 insertions(+), 44 deletions(-)
 
 --- a/drivers/cpuidle/governors/teo.c
 +++ b/drivers/cpuidle/governors/teo.c
-@@ -259,6 +259,67 @@
- 	return state_idx;
- }
+@@ -261,11 +261,12 @@
  
-+static int teo_get_candidate(struct cpuidle_driver *drv,
-+			     struct cpuidle_device *dev,
-+			     struct teo_cpu *cpu_data,
-+			     int idx, unsigned int idx_intercepts)
-+{
-+	int first_suitable_idx = idx;
-+	unsigned int intercepts = 0;
-+	int i;
-+
-+	/*
-+	 * Look for the deepest idle state whose target residency had
-+	 * not exceeded the idle duration in over a half of the relevant
-+	 * cases in the past.
-+	 *
-+	 * Take the possible duration limitation present if the tick
-+	 * has been stopped already into account.
-+	 */
-+	for (i = idx - 1; i >= 0; i--) {
-+		intercepts += cpu_data->state_bins[i].intercepts;
-+		if (2 * intercepts > idx_intercepts) {
-+			/*
-+			 * Use the current state unless it is too
-+			 * shallow or disabled, in which case take the
-+			 * first enabled state that is deep enough.
-+			 */
-+			if (teo_state_ok(i, drv) && !dev->states_usage[i].disable) {
-+				idx = i;
-+				break;
-+			}
-+
-+			idx = first_suitable_idx;
-+			break;
-+		}
-+
-+		if (dev->states_usage[i].disable)
-+			continue;
-+
-+		if (teo_state_ok(i, drv)) {
-+			/*
-+			 * The current state is deep enough, but still
-+			 * there may be a better one.
-+			 */
-+			first_suitable_idx = i;
-+			continue;
-+		}
-+
-+		/*
-+		 * The current state is too shallow, so if no suitable
-+		 * states other than the initial candidate have been
-+		 * found, give up (the remaining states to check are
-+		 * shallower still), but otherwise the first suitable
-+		 * state other than the initial candidate may turn out
-+		 * to be preferable.
-+		 */
-+		if (first_suitable_idx == idx)
-+			break;
-+	}
-+
-+	return idx;
-+}
-+
- /**
-  * teo_select - Selects the next idle state to enter.
-  * @drv: cpuidle driver containing state data.
-@@ -355,63 +416,8 @@
- 	 * all of the deeper states, a shallower idle state is likely to be a
- 	 * better choice.
- 	 */
--	if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) {
--		int first_suitable_idx = idx;
--
--		/*
--		 * Look for the deepest idle state whose target residency had
--		 * not exceeded the idle duration in over a half of the relevant
--		 * cases in the past.
--		 *
--		 * Take the possible duration limitation present if the tick
--		 * has been stopped already into account.
--		 */
--		intercept_sum = 0;
--
--		for (i = idx - 1; i >= 0; i--) {
--			struct teo_bin *bin = &cpu_data->state_bins[i];
--
--			intercept_sum += bin->intercepts;
--
--			if (2 * intercept_sum > idx_intercept_sum) {
--				/*
--				 * Use the current state unless it is too
--				 * shallow or disabled, in which case take the
--				 * first enabled state that is deep enough.
--				 */
--				if (teo_state_ok(i, drv) &&
--				    !dev->states_usage[i].disable) {
--					idx = i;
--					break;
--				}
--				idx = first_suitable_idx;
--				break;
--			}
--
--			if (dev->states_usage[i].disable)
--				continue;
--
--			if (teo_state_ok(i, drv)) {
--				/*
--				 * The current state is deep enough, but still
--				 * there may be a better one.
--				 */
--				first_suitable_idx = i;
--				continue;
--			}
--
--			/*
--			 * The current state is too shallow, so if no suitable
--			 * states other than the initial candidate have been
--			 * found, give up (the remaining states to check are
--			 * shallower still), but otherwise the first suitable
--			 * state other than the initial candidate may turn out
--			 * to be preferable.
--			 */
--			if (first_suitable_idx == idx)
--				break;
--		}
--	}
-+	if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum)
-+		idx = teo_get_candidate(drv, dev, cpu_data, idx, idx_intercept_sum);
+ static int teo_get_candidate(struct cpuidle_driver *drv,
+ 			     struct cpuidle_device *dev,
+-			     struct teo_cpu *cpu_data,
+-			     int idx, unsigned int idx_intercepts)
++			     struct teo_cpu *cpu_data, int constraint_idx,
++			     int idx, unsigned int idx_events,
++			     bool count_all_events)
+ {
+ 	int first_suitable_idx = idx;
+-	unsigned int intercepts = 0;
++	unsigned int events = 0;
+ 	int i;
  
  	/*
- 	 * If there is a latency constraint, it may be necessary to select an
+@@ -277,8 +278,11 @@
+ 	 * has been stopped already into account.
+ 	 */
+ 	for (i = idx - 1; i >= 0; i--) {
+-		intercepts += cpu_data->state_bins[i].intercepts;
+-		if (2 * intercepts > idx_intercepts) {
++		events += cpu_data->state_bins[i].intercepts;
++		if (count_all_events)
++			events += cpu_data->state_bins[i].hits;
++
++		if (2 * events > idx_events) {
+ 			/*
+ 			 * Use the current state unless it is too
+ 			 * shallow or disabled, in which case take the
+@@ -316,6 +320,12 @@
+ 		if (first_suitable_idx == idx)
+ 			break;
+ 	}
++	/*
++	 * If there is a latency constraint, it may be necessary to select an
++	 * idle state shallower than the current candidate one.
++	 */
++	if (idx > constraint_idx)
++		return constraint_idx;
+ 
+ 	return idx;
+ }
+@@ -410,49 +420,50 @@
+ 	}
+ 
+ 	/*
+-	 * If the sum of the intercepts metric for all of the idle states
+-	 * shallower than the current candidate one (idx) is greater than the
+-	 * sum of the intercepts and hits metrics for the candidate state and
+-	 * all of the deeper states, a shallower idle state is likely to be a
+-	 * better choice.
+-	 */
+-	if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum)
+-		idx = teo_get_candidate(drv, dev, cpu_data, idx, idx_intercept_sum);
+-
+-	/*
+-	 * If there is a latency constraint, it may be necessary to select an
+-	 * idle state shallower than the current candidate one.
+-	 */
+-	if (idx > constraint_idx)
+-		idx = constraint_idx;
+-
+-	/*
+-	 * If either the candidate state is state 0 or its target residency is
+-	 * low enough, there is basically nothing more to do, but if the sleep
+-	 * length is not updated, the subsequent wakeup will be counted as an
+-	 * "intercept" which may be problematic in the cases when timer wakeups
+-	 * are dominant.  Namely, it may effectively prevent deeper idle states
+-	 * from being selected at one point even if no imminent timers are
+-	 * scheduled.
+-	 *
+-	 * However, frequent timers in the RESIDENCY_THRESHOLD_NS range on one
+-	 * CPU are unlikely (user space has a default 50 us slack value for
+-	 * hrtimers and there are relatively few timers with a lower deadline
+-	 * value in the kernel), and even if they did happen, the potential
+-	 * benefit from using a deep idle state in that case would be
+-	 * questionable anyway for latency reasons.  Thus if the measured idle
+-	 * duration falls into that range in the majority of cases, assume
+-	 * non-timer wakeups to be dominant and skip updating the sleep length
+-	 * to reduce latency.
++	 * If the measured idle duration has fallen into the
++	 * RESIDENCY_THRESHOLD_NS range in the majority of recent cases, it is
++	 * likely to fall into that range next time, so it is better to avoid
++	 * adding latency to the idle state selection path.  Accordingly, aim
++	 * for skipping the sleep length update in that case.
+ 	 *
+ 	 * Also, if the latency constraint is sufficiently low, it will force
+ 	 * shallow idle states regardless of the wakeup type, so the sleep
+-	 * length need not be known in that case.
++	 * length need not be known in that case either.
+ 	 */
+-	if ((!idx || drv->states[idx].target_residency_ns < RESIDENCY_THRESHOLD_NS) &&
+-	    (2 * cpu_data->short_idles >= cpu_data->total ||
+-	     latency_req < LATENCY_THRESHOLD_NS))
+-		goto out_tick;
++	if (2 * cpu_data->short_idles >= cpu_data->total ||
++	    latency_req < LATENCY_THRESHOLD_NS) {
++		/*
++		 * Look for a new candidate idle state and use all events (both
++		 * "intercepts" and "hits") because the sleep length update is
++		 * likely to be skipped and timer wakeups need to be taken into
++		 * account in a different way in case they are significant.
++		 */
++		idx = teo_get_candidate(drv, dev, cpu_data, idx, constraint_idx,
++					idx_intercept_sum + idx_hit_sum, true);
++		/*
++		 * If the new candidate state is state 0 or its target residency
++		 * is low enough, return it right away without stopping the
++		 * scheduler tick.
++		 */
++		if (!idx || drv->states[idx].target_residency_ns < RESIDENCY_THRESHOLD_NS)
++			goto out_tick;
++	} else if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) {
++		/*
++		 * Look for a new candidate state because the current one is
++		 * likely too deep, but use the "intercepts" metric only because
++		 * the sleep length is going to be determined later and for now
++		 * it is only necessary to find a state that will be suitable
++		 * in case the CPU is "intercepted".
++		 */
++		idx = teo_get_candidate(drv, dev, cpu_data, idx, constraint_idx,
++					idx_intercept_sum, false);
++	} else if (idx > constraint_idx) {
++		/*
++		 * The current candidate state is too deep for the latency
++		 * constraint at hand, so change it to a suitable one.
++		 */
++		idx = constraint_idx;
++	}
+ 
+ 	duration_ns = tick_nohz_get_sleep_length(&delta_tick);
+ 	cpu_data->sleep_length_ns = duration_ns;
 
 
 
