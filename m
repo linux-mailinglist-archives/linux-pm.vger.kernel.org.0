@@ -1,80 +1,54 @@
-Return-Path: <linux-pm+bounces-24739-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24740-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D785DA79A95
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Apr 2025 05:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 30C17A79B1F
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Apr 2025 07:11:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CDF03ADEFF
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Apr 2025 03:40:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 807373B653D
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Apr 2025 05:10:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 975B618CBFB;
-	Thu,  3 Apr 2025 03:41:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 317C919C54E;
+	Thu,  3 Apr 2025 05:10:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lyY9CgLj"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="V9uVTX4x"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2DEE54F81
-	for <linux-pm@vger.kernel.org>; Thu,  3 Apr 2025 03:41:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D81418CC08;
+	Thu,  3 Apr 2025 05:10:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743651667; cv=none; b=rpnruuvngl2mQ0rwcNVQRHN6icdc4Kgqcjhk2gupaPj3oQcROAj4IsitMiKP/GyA2xM4xvRBiLF1gVd4FLrUfcEllynYjTSUt02hIjBmaj6ExbjgdBSivKzk9sv/VwFXij3EjwA0/tSgIhEXlt1irRkJ5fpctO+JBXZ4iqctBmw=
+	t=1743657027; cv=none; b=hNwm+BioJTr4GOpkEK7MgRsY5MYL7kSHz/o1x2a38NbOvjeLtHPXI0Ek6k69E2PvZbpJj9dm4Y/IJOHnZfr414mwNzxBhTQyNENCJuhJ2jI6A/H4Ceo6lcps99Z91Fp1DlAbDnN/YoY5eQAvO0qfu036KilcdaqjU6TTTd/tshw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743651667; c=relaxed/simple;
-	bh=4aTH+S+5/DaE7SK3f14o739lz7d4vHx+nHgg53Ilpic=;
+	s=arc-20240116; t=1743657027; c=relaxed/simple;
+	bh=MTxYIeG6rjC76KiaCXCUAaJgwwxt3fQ9t7T7cB6jvQs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qL/zdyPkkmJoLvgFLml4DVwhQpbYu4OmLr6LvAUIesLp/QpMM6BRiUVwbcDkz1whwANukuhxBZ44l/X0rjeRzdKMC8hl+jpDtcydlrQVkFgakP3HBujQSu+9wRJZ8+yjeM8+wtIpTnYuuxRvp2D8kvFUELuhZhXgCInnvzj0N5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lyY9CgLj; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-225df540edcso21507695ad.0
-        for <linux-pm@vger.kernel.org>; Wed, 02 Apr 2025 20:41:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743651665; x=1744256465; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q0tEj5kz4If7Ej673fi5hk/2hJig3VYxT41dAgyMOLI=;
-        b=lyY9CgLjw5w/omaCCOXRmGOkLC04kzcy2leKTC+7T42kKoJTSdWKzNmOjhxgW3UxzO
-         /97cz3bumayZzjInyeK17jY03f/x4aX3euSUjs0n3saU/BlKKpLEVHdZpIiqIV92Pqx+
-         zcKezlq1zGycE/WtglYmo6de0b7VO3G5Ec2iIENeXiCptQvvD7/hSZajDdjKem9M+ORD
-         UwdrdCwkPk0tLGrKlTyyB8vRBz3mEQKchMX6EjK3tzKja9nCZNtAz1GlpdiPLcWHjuby
-         NCQxszMh9hmSQiP/677re+qjNIBv5V/KtX+aTnkgLnNmsVejO7FoNzTE2/tTjI3Al5HK
-         Ixiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743651665; x=1744256465;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q0tEj5kz4If7Ej673fi5hk/2hJig3VYxT41dAgyMOLI=;
-        b=FlzaOs6Vwicb26q3cqysL9D+49YFnw6RAu5vGs3GBddnj/g+eXRzFpzcglUReqIjgM
-         GMtXA2Ns/iEn9L6AQDhi2uJo6Vt5SwPDPIa+tIZczH7tYdKsDOo5jd9fIVcHc5zawo9d
-         IFmePckpM3eEjnaOc0yFu/GKgVvrIgbY5vadweca3umN5LaU2Jly9XN/fgVct1lEA80n
-         LQBDY1RXdgGJ9Nz00t0Qs60BIsxU5F5hnqN3RI24rfKb6Gtje311ywkniBNRFhAFXLMV
-         Io3ZShEZuadkFoUAItEZoIh4Jc+1DlIFYSFEJgbptIUOXBrej1QTE94YvXX6cnAtctMJ
-         urBg==
-X-Forwarded-Encrypted: i=1; AJvYcCVgHy+FjSXxikz7WMWpQ2olZi7R0CefPAlzvGjLkMJEkYKu1P8sS7nRwjkyqHtyu6xRYm2tGNasCw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxO8xw4O5pk0pmxyEcJrCB4k4/9oZuK0JmQHi8bsd6qQ51WboS9
-	VrZ+InfO4CiFkB/M6YFAEtXwkEO29PGwhwOB4NVxmYgSHUymnfGyfkAs9K69Wg==
-X-Gm-Gg: ASbGncugvO816dheBBA+HnjOVpK8mOGgNflNKTOidVUHJwz38tUPzV2B4Gu6mE3PiRQ
-	wiS6Fie92qh7Hl6YvDKDtqwWR2kvx46NF0yg0o9YzRdnXoFsHOFJHzOWr7Vx/2AgeE/RhY+QHL3
-	Ib1SI2qoKwekxZQn6Wfw26Fa4bVfKslLuFfFK/RKuWwyVZ5t8fnCMEwHN/mFmvF1pZ6ZgdmRLVN
-	YQdT/NI9hX8Fb5MUPJUhBJWmurOZ+/jJIduXiBUUGPh52GLojry5YxWeRquglp82UXtrYgmYZyV
-	x8ZZkRVyC6a/FVdNx36QAg0+mYbnkN9x/tloMQqIG1Ld38kJap5hwQu+1Jxe/U1y1OK719ctH6y
-	y/m5FrqYCR1QzlpR2rZPB/O0IqmdV3Kr8T8sFIg0jKe4=
-X-Google-Smtp-Source: AGHT+IF+aLQLn6pLeab1Mot3xJ/DQBJV5mL7CVD5eHdMlU/bvNw7/84AH4TtA5RPRM1hKWlLyvBvkA==
-X-Received: by 2002:a17:902:ccca:b0:215:58be:3349 with SMTP id d9443c01a7336-229765ecb95mr30013415ad.14.1743651664993;
-        Wed, 02 Apr 2025 20:41:04 -0700 (PDT)
-Received: from ?IPV6:2a00:79e0:2e14:7:33af:bd9c:23d7:88c5? ([2a00:79e0:2e14:7:33af:bd9c:23d7:88c5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2297865e483sm3887005ad.116.2025.04.02.20.41.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Apr 2025 20:41:04 -0700 (PDT)
-Message-ID: <7c7cff17-2c53-4dcd-8760-50c72760de5b@google.com>
-Date: Wed, 2 Apr 2025 20:41:02 -0700
+	 In-Reply-To:Content-Type; b=uWw4w9UmoLb4AOAcvHCup6+Ei75cX0CZoZQRUhBjiw6i3ThzWMXpmOQLrO6c3SoLAtISqCdYQ/6W7OI/Fou4ZThUvUSLkw9/CDs/kxNT5pNLtH1x2wm/t9OdTSjSI1asZ5BotTq2PEDUV1cMbKfp88+DMusIhQ9LqmzmO5BVuwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=V9uVTX4x; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [192.168.7.202] ([71.202.166.45])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53359MMx352770
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Wed, 2 Apr 2025 22:09:23 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53359MMx352770
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025032001; t=1743656967;
+	bh=vsKRR0KcxHt+bY5piLdo+Eui94XS6wGecFObRFyi4AA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=V9uVTX4xgBbACAe/f7Zrx5r+z9b4d1DfYgbNIB8wYvA68c1uxe0ihfeMYGbviPIoI
+	 wTMFzQg2Fid5gHaVjQFISDACPHyspg7RzwHijSy6/ZmCrt/DlP4GvTHPiqGcB/4cvd
+	 AXYWHXLY7oKRr3YH+gVlWe8bvGTKcZn6fFapbQodpDHtCHy2EbuxOzLWKaU/ptKGkZ
+	 YqGfSlTUalEu5dyJYTz3tBI0kwslGoJnWU1+IYMdKiUnn8nJQY3z4rbePe1d1wtRq2
+	 Ft7OOFI4h7fGZ1G8M4ScF2LdGFEFm/MkylKdAYsHDEPOzjpBz+P8h/DypI1JQXduc+
+	 RpGH73LFcK3gg==
+Message-ID: <c316a6c6-b97c-48b2-9598-d44e2ec72fbc@zytor.com>
+Date: Wed, 2 Apr 2025 22:09:21 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,101 +56,91 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/5] Add support for Battery Status & Battery Caps AMS in
- TCPM
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Sebastian Reichel <sre@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@kernel.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-pm@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
- Kyle Tso <kyletso@google.com>
-References: <20250312-batt_ops-v1-0-88e0bb3129fd@google.com>
- <20250313-determined-wild-seahorse-f7871a@krzk-bin>
- <914a0df4-96d0-4cd4-ac87-3826fa9c1440@google.com>
- <3f65fe16-56f8-4887-bb91-994b181ce5a9@kernel.org>
- <9852e5a8-843d-48ae-90d0-7991628e93b3@google.com>
- <442bebf4-4de1-42d1-a14b-2bb509fea12f@kernel.org>
+Subject: Re: [RFC PATCH v1 01/15] x86/msr: Replace __wrmsr() with
+ native_wrmsrl()
+To: Ingo Molnar <mingo@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>
+Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+        linux-edac@vger.kernel.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-ide@vger.kernel.org,
+        linux-pm@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, jgross@suse.com,
+        andrew.cooper3@citrix.com, peterz@infradead.org, acme@kernel.org,
+        namhyung@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+        haiyangz@microsoft.com, decui@microsoft.com,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20250331082251.3171276-1-xin@zytor.com>
+ <20250331082251.3171276-2-xin@zytor.com> <Z-pruogreCuU66wm@gmail.com>
+ <9D15DE81-2E68-4FCD-A133-4963602E18C9@zytor.com> <Z-ubVFyoOzwKhI53@gmail.com>
 Content-Language: en-US
-From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <442bebf4-4de1-42d1-a14b-2bb509fea12f@kernel.org>
+From: Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <Z-ubVFyoOzwKhI53@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
+On 4/1/2025 12:52 AM, Ingo Molnar wrote:
+>> Should we rename the *msrl() functions to *msrq() as part of this
+>> overhaul?
+> Yeah, that's a good idea, and because talk is cheap I just implemented
+> this in the tip:WIP.x86/msr branch with a couple of other cleanups in
+> this area (see the shortlog & diffstat below), but the churn is high:
+> 
+>    144 files changed, 1034 insertions(+), 1034 deletions(-)
 
-On 3/21/25 12:51 AM, Krzysztof Kozlowski wrote:
-> On 20/03/2025 22:11, Amit Sunil Dhamne wrote:
->> On 3/16/25 9:52 AM, Krzysztof Kozlowski wrote:
->>> On 15/03/2025 01:49, Amit Sunil Dhamne wrote:
->>>> Hi Krzysztof,
->>>>
->>>> Thanks for the review!
->>>>
->>>> On 3/13/25 1:50 AM, Krzysztof Kozlowski wrote:
->>>>> On Wed, Mar 12, 2025 at 04:42:00PM -0700, Amit Sunil Dhamne wrote:
->>>>>> Support for Battery Status & Battery Caps messages in response to
->>>>>> Get_Battery_Status & Get_Battery_Cap request is required by USB PD devices
->>>>>> powered by battery, as per "USB PD R3.1 V1.8 Spec", "6.13 Message
->>>>>> Applicability" section. This patchset adds support for these AMSes
->>>>>> to achieve greater compliance with the spec.
->>>>> Which board uses it? I would be happy to see that connection between
->>>>> batteries and USB connector on the schematics of some real device. How
->>>>> does it look like?
->>>> Any board that uses a USB Type-C connector that supplies power into or
->>> If you keep responding like this, you will got nowhere, so let me
->>> re-iterate:
->>>
->>> Which upstream DTS (or upstream supported hardware) is going to use this
->>> binding, so I can see how you are going to implement it there in the
->>> entire system?
->> This is for maxim,max33359 Type-C controller.
-> Stop deflecting the questions. max33359 is not a board. I already asked
-> two times.
->
-> Apparently admitting "no upstream users" is impossible, so let's state
-> the obvious:
->
-> There are no upstream users of this.
+Hi Ingo,
 
-max33359 controller has an upstream user i.e., gs101-oriole (Pixel 6) 
-board. Totally agree that at the moment there are no upstream 
-devices/drivers for the Fuel Gauge (that my patchset has a dependency 
-on) in gs101-oriole board. gs101-oriole uses max77759 fuel gauge device. 
-I see that there's an effort for upstreaming it 
-(https://lore.kernel.org/all/20250102-b4-gs101_max77759_fg-v2-0-87959abeb7ff@uclouvain.be/). 
-I will mark my patches as dependent on it + demonstrate the relationship 
-of the devices in the gs101-oriole board. Hope that's okay?
+I noticed that you keep the type of MSR index in these patches as
+"unsigned int".
 
+I'm thinking would it be better to standardize it as "u32"?
 
-Thanks,
+Because:
+1) MSR index is placed in ECX to execute MSR instructions, and the
+    high-order 32 bits of RCX are ignored on 64-bit.
+2) MSR index is encoded as a 32-bit immediate in the new immediate form
+    MSR instructions.
 
-Amit
-
->> This would property would have been present for the connector present in
->> the typec device for gs101-oriole board (that uses the max33359
->> controller).
->
-> But it is not.
->
->
->> However, I will be exploring existing bindings to describe the
->> relationship for now.
->>
->>>> out of a battery while operating in sink or source mode respectively.
->>>> The VBUS is connected to the (battery + buck boost IC's CHGin/Vin) or a
->>>> companion IFPMIC connected to a battery.  In our board we have USB
->>>> Connector <-> IFPMIC <-> Battery.
->>> Which board is that?
->> gs101-oriole board.
->
-> Then why this is not used? The board was released some years ago, so I
-> do not see a problem in using it.
->
-> Best regards,
-> Krzysztof
+Thanks!
+     Xin
 
