@@ -1,151 +1,137 @@
-Return-Path: <linux-pm+bounces-24822-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24823-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D38C6A7BEDF
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 16:17:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02299A7C011
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 16:57:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AE103B8AAA
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 14:17:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6A973BDDE2
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 14:56:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BFB71EFFBD;
-	Fri,  4 Apr 2025 14:17:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 317FE1F4C95;
+	Fri,  4 Apr 2025 14:56:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bab2Mxno"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lYq0Ahwk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B111EBFF0;
-	Fri,  4 Apr 2025 14:17:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D769B1F4631;
+	Fri,  4 Apr 2025 14:56:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743776241; cv=none; b=TR/lp18zmSLa1WAsKvF1fD8H7jNkmlN0cwZC6JQtoP0UadT7TQFg8iAzeZg0YfOddCIu6YCe3tfK/nB6vBrObJ/pErYXtYuUB7quXqmZrfdEski9bZ0eb0H3h2tYQl6s/SweR14QoGvRXpVlUy0F31/Fk/rsln1RSsZqUtgff2k=
+	t=1743778566; cv=none; b=OWXEAmgpiSwmmpmIiML/lezMxcwNKfHMjh0cprm2+lSaCAu+kaMXf9IU6JASs4AIh0rZTwjzjshGUapMCSHjaBVi6j4GPvBJcbnK/Wt6NsqIzBAuWv6Y0k3h9CuOU+F4Elk9k5XsI3XkC2W1ax/f3zWwEufxqgL+a5nSPuRprCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743776241; c=relaxed/simple;
-	bh=+1U1cWovTA5uTsLrg02/upXbC5wZqI1dP4zYTSOQYpQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=awJ8K7X5Vk+NJcFRPxQYWKO9w3bbTttWXjmipS5hnc47Y/JRbADKgwlw60jKtIMkiUtRWwqPBEUb/ImAXQvMsfTpDNMUgbd852HeVYruzM1I1Qcoisrg3RkKgEiQ4/bvQOFxNXNxmkoBUq+AEk9lpZyAtPDFagJiu3Tss4UX/uc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bab2Mxno; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-30332dfc820so2061136a91.2;
-        Fri, 04 Apr 2025 07:17:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743776238; x=1744381038; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jJkY/rj+UDur6IhWIRiqvOf7fRgwOlEqOQiYwibJQko=;
-        b=Bab2MxnoA8eGrTroJ002+2kDriZKHdhY6pdGIIApXqGFi/L8oCFgP78jCRJhlNrS7k
-         tLghWAkzpHNC2Ngl4alNQA6IqbOvHVljjrE5ESDUI8EKNgJMA54KzgQrNtoLpa6FIgVp
-         y10kr7gXp5HWcFEPFfdrVJlyHN8tRelV1nrEb0BTXJD2zRpC16szbJ88yWm/JEmR/+rL
-         6i3BmxZwH1PR2nqMfM/e2SJFtehxug5Tyri1CmPkK+0ZuM+jfERZP83zw8qDIWth9Yab
-         MVLdoexlL84nKZ2VLmhFeODcAw128uNn+qtAvl/5QOwmpICunZ2KYRT2YnwVnDkb/O7b
-         wjqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743776238; x=1744381038;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jJkY/rj+UDur6IhWIRiqvOf7fRgwOlEqOQiYwibJQko=;
-        b=aF9tY2LR+rBsCTcyCX2LDarHtqYmB9xmPg64Jmzu/8gdIgBpokXS2x/PtWuCRjUeub
-         TnSOEDs7lCgkU0csqFlRAoTxQA/E01Z0jxEWeYYAMJ6OgGs6pqL5ClYySH78msBwzonh
-         EdLuaCpWKQafA6F19Fx9/RhNTEdjDnJPHQ0UBhNkJ3SEow3oD6vRTlWif5WJEy7a4CB0
-         2CAB43QrUnk5AdBpvElDNBfxX+PPzSUlJGK0EZj5lQErS7x0/FsP2m9InkZAqGs16Jo7
-         y9c69/V7P3cZGfK1k5obgtz/8I3ytbAL8muAToHuOS+tMS2jTYnTlG5yqrcqV+yT8tN6
-         zMsA==
-X-Forwarded-Encrypted: i=1; AJvYcCXdY9vpxexGEjUPeICAlGQIBxWmX14CcSG1VCxjQCDffBBzaKXl3WvYO+s7HVnDUnK19aEcmx7j/BFyjyA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQMU+VC1HuKicwMl7G88YdlKTh4jJb2KhOGSedxQQq/+TYrcmX
-	O3mryVv4vqNKbslcrwnVvuoaJH/PXssXl1mjzHEFocrW5yvXKKEQfIcy1pqy
-X-Gm-Gg: ASbGncvZKQmfPZZoaER9+n1pY7xPNwMfxHCtXYPUWVbyGdUJK1odXFKyEVR36OExczo
-	olNLJk6rnOq2k5EQNztQTEuMp7tS4YxCrLxaJSjmoaLDmWGmjf7xk/y9JmObFl81BUab7QD+6Ih
-	LmCBPZuLOfep2G5bFkPZzPplaMH7pbG8gU5nhNpq763kDplxvhaNqtWRpqfoNOgbop6e+UCfnsw
-	iraM0YmxmmdToiQJaZjlcnQ7vg6NgKZsMt9WAvU1FFJC8RTuH+nay6/0a0fLczVhB5z6GIRpbLx
-	m5q2RsIaieP7+DLjHVgHfjy6YX7f4FpKt1lmCb5O7tI=
-X-Google-Smtp-Source: AGHT+IGq9BLsszWtOE+3T1GWMl1g2khKbvr87Eb9IDtheXW5uB6Qt8lknEwKp1TWBl0CEPIqeeafWA==
-X-Received: by 2002:a17:90b:524f:b0:2ea:712d:9a82 with SMTP id 98e67ed59e1d1-306a498bfbbmr5106652a91.29.1743776238250;
-        Fri, 04 Apr 2025 07:17:18 -0700 (PDT)
-Received: from hiago-nb ([2804:1b3:a7c2:fdb9:802:4e79:d42a:3b39])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3057ca1f40fsm3693825a91.4.2025.04.04.07.17.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Apr 2025 07:17:17 -0700 (PDT)
-Date: Fri, 4 Apr 2025 11:17:13 -0300
-From: Hiago De Franco <hiagofranco@gmail.com>
-To: linux-pm@vger.kernel.org
-Cc: Peng Fan <peng.fan@nxp.com>, Ulf Hansson <ulf.hansson@linaro.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	regressions@lists.linux.dev
-Subject: [REGRESSION] Kernel reboots unexpectdely on i.MX8X when Cortex-M4 is
- running and it was started by U-Boot bootaux
-Message-ID: <20250404141713.ac2ntcsjsf7epdfa@hiago-nb>
+	s=arc-20240116; t=1743778566; c=relaxed/simple;
+	bh=ZKC9yGDKP7ZL9SggbwEVntc6h66l9cUcpFwGsLIdwyU=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=lKA+zS0UMD6zZOeNFxnjNMCj9R6nqI9DB9yYT46K135ebojv/CpfWMZZjyAm3PiM6tP++k5i0URBuAKoodnyryACCX2RV0QPeJmZYimrisqd+8cqOCQYHtIjC6dI27WYKYVA/atlrQ5DYc7oSJb8xA95dGU02h5EcLp8OMcrLWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lYq0Ahwk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08F3BC4CEDD;
+	Fri,  4 Apr 2025 14:56:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743778565;
+	bh=ZKC9yGDKP7ZL9SggbwEVntc6h66l9cUcpFwGsLIdwyU=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=lYq0AhwkZcTUWyVwicaZ1vvM7sdLhXVWb88uIIREKJeM4f4dFtPRR+5YtBnIQ3+8S
+	 4rmWfDWxmKz8BkutmGYcsQCbqBKQsOpb3vKdZoOj3zlMzyIr63+JtEno2kDqBxKGaL
+	 uSpnRzGTivLPzIQSa2vlGQgFkEoHK4Djr247EPkB1MI0mgoQqCboWVbZe1YDRxstNw
+	 XL6TPr4SJ3ntriVvow1CY9ZhW/TaC9VWQaFtDYXQkEycuv4vNUekj/x3m4CmjcWhg8
+	 J/6CXGfE842P8cqvOhDfI5vtBqXZj1W2sAP8ubZBZr4Jve8ltlaLGaw/5ccWSyVqKq
+	 iX0gZX5BzPDSQ==
+Date: Fri, 04 Apr 2025 09:56:03 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-#regzbot introduced: 4f6c983261
-
-Hi Peng and all,
-
-Commit 4f6c9832613b ("genpd: imx: scu-pd: initialize is_off according to
-HW state") introduced a regression where the Kernel reboots unexpectedly
-(without any warnings, crashes or errors) when the Cortex-M4 was loaded
-and running by U-Boot, using the bootaux command:
-
-# load mmc 0:2 ${loadaddr} /home/root/hello_world.bin
-# bootaux ${loadaddr} 0
-# boot
-
-This is a simple hello world binary that prints a message into the
-M40.UART0 pin (demo from NXP MCUXpresso).
-
-Before this commit, everything worked as expected, Linux boots fine and
-the HMP core keeps running and printing messages to the UART. After the
-commit, the kernel reboots at the beggining of the boot process. The
-only relevant message is printed by U-Boot after reset:
-
-"Reset cause: SCFW fault reset"
-
-This commit was bisectabled, the same device tree, u-boot version, and
-SCFW versions were used. Reverting this commit fixes the issues.
-
-For testing purposes, I created the following patch which also fixes the
-issue:
-
-diff --git a/drivers/pmdomain/imx/scu-pd.c b/drivers/pmdomain/imx/scu-pd.c
-index 38f3cdd21042..0477b3fb4991 100644
---- a/drivers/pmdomain/imx/scu-pd.c
-+++ b/drivers/pmdomain/imx/scu-pd.c
-@@ -539,6 +539,9 @@ imx_scu_add_pm_domain(struct device *dev, int idx,
-                return NULL;
-        }
-
-+       if (strstr("cm40", sc_pd->name) != NULL)
-+               is_off = true;
-+
-        ret = pm_genpd_init(&sc_pd->pd, NULL, is_off);
-        if (ret) {
-                dev_warn(dev, "failed to init pd %s rsrc id %d",
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Bjorn Andersson <andersson@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, linux-kernel@vger.kernel.org, 
+ Conor Dooley <conor@kernel.org>, linux-rockchip@lists.infradead.org, 
+ Daniel Machon <daniel.machon@microchip.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+ UNGLinuxDriver@microchip.com, Jerome Brunet <jbrunet@baylibre.com>, 
+ Kevin Hilman <khilman@baylibre.com>, linux-sunxi@lists.linux.dev, 
+ Liviu Dudau <liviu.dudau@arm.com>, linux-arm-kernel@lists.infradead.org, 
+ Fabio Estevam <festevam@gmail.com>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, Stephen Boyd <sboyd@kernel.org>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+ linux-renesas-soc@vger.kernel.org, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ Magnus Damm <magnus.damm@gmail.com>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Geert Uytterhoeven <geert+renesas@glider.be>, 
+ Viresh Kumar <vireshk@kernel.org>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, zhouyanjie@wanyeetech.com, 
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>, Heiko Stuebner <heiko@sntech.de>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, linux-pm@vger.kernel.org, 
+ linux-mediatek@lists.infradead.org, Chen-Yu Tsai <wens@csie.org>, 
+ linux-mips@vger.kernel.org, imx@lists.linux.dev, 
+ Samuel Holland <samuel@sholland.org>, Sudeep Holla <sudeep.holla@arm.com>, 
+ Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ linux-arm-msm@vger.kernel.org, Nicolas Ferre <nicolas.ferre@microchip.com>, 
+ linux-amlogic@lists.infradead.org, Sascha Hauer <s.hauer@pengutronix.de>, 
+ Steen Hegelund <Steen.Hegelund@microchip.com>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+In-Reply-To: <20250403-dt-cpu-schema-v1-14-076be7171a85@kernel.org>
+References: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
+ <20250403-dt-cpu-schema-v1-14-076be7171a85@kernel.org>
+Message-Id: <174377856145.1313232.11316769002552655294.robh@kernel.org>
+Subject: Re: [PATCH 14/19] dt-bindings: arm/cpus: Add schemas for
+ "enable-method" dependencies
 
 
-Test Environment:
-- Hardware: Colibri iMX8DX 1GB with Colbiri Evaluation Board.
-- U-Boot Version: 2024.04
-- U-Boot Build info:
-	SCFW 83624b99, SECO-FW c9de51c0, IMX-MKIMAGE 4622115c, ATF 7c64d4e
+On Thu, 03 Apr 2025 21:59:35 -0500, Rob Herring (Arm) wrote:
+> Replace the prose for properties dependent on specific "enable-method"
+> values with schemas defining the same requirements.
+> 
+> Both "qcom,acc" and "qcom,saw" properties appear to be required for any
+> of the Qualcomm enable-method values, so the schema is a bit simpler
+> than what the text said. The references to arm/msm/qcom,saw2.txt and
+> arm/msm/qcom,kpss-acc.txt are out of date, so just drop them.
+> 
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/arm/cpus.yaml | 82 +++++++++++++++----------
+>  1 file changed, 49 insertions(+), 33 deletions(-)
+> 
 
-The issue is not present on: v6.5
+My bot found errors running 'make dt_binding_check' on your patch:
 
-The real root cause is still unclear to me. Anybody has any ideas? I am
-happy to share more details if needed.
+yamllint warnings/errors:
 
-Cheers,
-Hiago.
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,saw2.example.dtb: cpu@0: 'qcom,acc' is a required property
+	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
+
+doc reference errors (make refcheckdocs):
+Warning: Documentation/translations/ja_JP/process/submit-checklist.rst references a file that doesn't exist: Documentation/translations/ja_JP/SubmitChecklist
+Documentation/translations/ja_JP/process/submit-checklist.rst: Documentation/translations/ja_JP/SubmitChecklist
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250403-dt-cpu-schema-v1-14-076be7171a85@kernel.org
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
 
