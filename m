@@ -1,50 +1,49 @@
-Return-Path: <linux-pm+bounces-24787-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24788-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB825A7B657
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 05:03:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA702A7B65E
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 05:03:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E109F17909A
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 03:03:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D3A6178F4B
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 03:03:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FED91B4242;
-	Fri,  4 Apr 2025 03:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63A581C8616;
+	Fri,  4 Apr 2025 03:00:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g/nOEnzC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dMWjOXGo"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB7441B4227;
-	Fri,  4 Apr 2025 03:00:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 286D91C84BE;
+	Fri,  4 Apr 2025 03:00:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743735601; cv=none; b=Lg3oTMW5gJeOr1/5/H/fAW0m+zInYbnxl1yXOcM2Fm8J2esnPNtj53zrMyzus9gWfEGlu5FFH87PAP4oV0xCmX2glcxAOG9f1ZZ9t1vgPh+yShNyxDElR4vyUhl3wFcT0JwBAd+tLhRSZUqW0gK2V8H3qFsjh4t8fA3uYpcg1Bc=
+	t=1743735602; cv=none; b=mMO5olcXKUDQXfX5CfBY9F3/d3s2bhwywbRBpwKxtPzGHbPiI66fj9otnmaI+93EOsVmU24cHVWxeIxPA7Cc7/YIJOcbM7t2lz9tpJSoqozv1McFHWzh6wWY0+hvEXGnx3V5wBpEE9ReeyY312dEn+ueEqvdwRuXCoPAP8842VM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743735601; c=relaxed/simple;
-	bh=jooiBRiLZ5KXTeX7sTZYMvh719V+Qu5vq1GtZM6CWWA=;
+	s=arc-20240116; t=1743735602; c=relaxed/simple;
+	bh=6cslgmm9oQIu/lOy/Nngvpo3/Efl2kNGCI97+vDsecU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qK+danf0uib9EwofYbky4KPao56Q3d0GfI4IUz4IM2d6r1cp7qv5ell5h9fs1+Gmi1KyDuX3Gpt495eJ4ite4Vuz7ACd7l4lyIkVwHRso7OliOhZgG0RJJLC0fHRlnTjieZtJujnO1e1bnwtjIlxCotwiZDganGUx7B81yXgVQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g/nOEnzC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4003C4CEE3;
-	Fri,  4 Apr 2025 02:59:59 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=JmBEkMMoTM8UCzNLKfBPMpj0d+1HrhnF5MuDUE27fULruswO4bqwS4W6EnD6ulP/OhaaH8Ce7d6C4crdaHcDoEcV2loU2ZtoPQTzfF3CPB83j54+gG4Cs6ph9bK+nqdCcJ3PAynx+k3FWZFN2FMuwr3iF2uuBRftLWvKUj+LiEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dMWjOXGo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C0E7C4CEEA;
+	Fri,  4 Apr 2025 03:00:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743735600;
-	bh=jooiBRiLZ5KXTeX7sTZYMvh719V+Qu5vq1GtZM6CWWA=;
+	s=k20201202; t=1743735601;
+	bh=6cslgmm9oQIu/lOy/Nngvpo3/Efl2kNGCI97+vDsecU=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=g/nOEnzC90yU3P0Hon/50j7bjUU/KNblbpYe76syN5W2QOwwzzoNvatmCdI8LKjVB
-	 GXztCu4IL/A0IORZ4wEe5qoYTPu5Pg2qdTI/GADX2IpCtl7Qlq3BQHZO/zX+1p8D+1
-	 WWVmMPsdLpyQouxJvuQnVlL4t01jBhIea2T09Usomwxj5PZfFpxRCGDgrurnsztTdB
-	 LvDckdMjWvj4seYBkbJOQVVX3OvNQDV+Z/f9IycDIz/I8RnpgnpRFLLS+VkO+vHJ7g
-	 W15YUZMzei1FJHwfHbyfxPUCyc1xy9tvhheao1yd31ibmMsHDhN8tRCzytLaIxuI+5
-	 QtnT/Tce6b/3w==
+	b=dMWjOXGofzF2+tDya9v6l8znJNIr0XFdwvGI+daCjlkFRLuMzx9sNn4HHfNMsEjWt
+	 pgrdJOHr0uVGh9HgUr/nTO+5y6FiiQlMDGsELglKzmI+PqZrG58NBPEDcwy8l8HpKc
+	 JOOXdTwbEZ1iNhXJkRnKTCideHzOnBoxGrg/0mNfDVKWWmx9xxz/wMtFnStrhM473Q
+	 5bK2NAeUuwKQJKl6yijneJ+QIiZ4zLzrzf4ypXsZNFc16VAyE2aZgwAl/6H63lCYua
+	 EX5vmVkwswaYPlmACGBIfBBDS5IdDS1y/zNsjyKj7uoJoq4RplRjGnqafkptFbZBzh
+	 yDi2XjUD/mJ1Q==
 From: "Rob Herring (Arm)" <robh@kernel.org>
-Date: Thu, 03 Apr 2025 21:59:35 -0500
-Subject: [PATCH 14/19] dt-bindings: arm/cpus: Add schemas for
- "enable-method" dependencies
+Date: Thu, 03 Apr 2025 21:59:36 -0500
+Subject: [PATCH 15/19] dt-bindings: arm/cpus: Re-wrap 'description' entries
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250403-dt-cpu-schema-v1-14-076be7171a85@kernel.org>
+Message-Id: <20250403-dt-cpu-schema-v1-15-076be7171a85@kernel.org>
 References: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
 In-Reply-To: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
 To: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -93,129 +92,176 @@ Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-amlogic@lists.infradead.org, linux-renesas-soc@vger.kernel.org
 X-Mailer: b4 0.15-dev
 
-Replace the prose for properties dependent on specific "enable-method"
-values with schemas defining the same requirements.
-
-Both "qcom,acc" and "qcom,saw" properties appear to be required for any
-of the Qualcomm enable-method values, so the schema is a bit simpler
-than what the text said. The references to arm/msm/qcom,saw2.txt and
-arm/msm/qcom,kpss-acc.txt are out of date, so just drop them.
+Some of the 'description' entries have odd line wrapping and incorrect
+YAML block modifiers. The 'description' entries should typically wrap
+at 80 chars. Reformat the entries to follow that along with using '>'
+modifiers as appropriate.
 
 Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/arm/cpus.yaml | 82 +++++++++++++++----------
- 1 file changed, 49 insertions(+), 33 deletions(-)
+ Documentation/devicetree/bindings/arm/cpus.yaml | 85 +++++++++++--------------
+ 1 file changed, 36 insertions(+), 49 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-index 2e666b2a4dcd..963a9320cba8 100644
+index 963a9320cba8..3e76de3e950d 100644
 --- a/Documentation/devicetree/bindings/arm/cpus.yaml
 +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-@@ -273,8 +273,6 @@ properties:
-     description:
-       The DT specification defines this as 64-bit always, but some 32-bit Arm
-       systems have used a 32-bit value which must be supported.
--      Required for systems that have an "enable-method"
--        property value of "spin-table".
+@@ -10,9 +10,9 @@ maintainers:
+   - Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
  
-   cpu-idle-states:
+ description: |+
+-  The device tree allows to describe the layout of CPUs in a system through
+-  the "cpus" node, which in turn contains a number of subnodes (ie "cpu")
+-  defining properties for every cpu.
++  The device tree allows to describe the layout of CPUs in a system through the
++  "cpus" node, which in turn contains a number of subnodes (ie "cpu") defining
++  properties for every cpu.
+ 
+   Bindings for CPU nodes follow the Devicetree Specification, available from:
+ 
+@@ -41,45 +41,40 @@ description: |+
+ properties:
+   reg:
+     maxItems: 1
+-    description: |
+-      Usage and definition depend on ARM architecture version and
+-      configuration:
++    description: >
++      Usage and definition depend on ARM architecture version and configuration:
+ 
+-      On uniprocessor ARM architectures previous to v7
+-      this property is required and must be set to 0.
++      On uniprocessor ARM architectures previous to v7 this property is required
++      and must be set to 0.
+ 
+-      On ARM 11 MPcore based systems this property is
+-        required and matches the CPUID[11:0] register bits.
++      On ARM 11 MPcore based systems this property is required and matches the
++      CPUID[11:0] register bits.
+ 
+-        Bits [11:0] in the reg cell must be set to
+-        bits [11:0] in CPU ID register.
++        Bits [11:0] in the reg cell must be set to bits [11:0] in CPU ID register.
+ 
+         All other bits in the reg cell must be set to 0.
+ 
+-      On 32-bit ARM v7 or later systems this property is
+-        required and matches the CPU MPIDR[23:0] register
+-        bits.
++      On 32-bit ARM v7 or later systems this property is required and matches
++      the CPU MPIDR[23:0] register bits.
+ 
+-        Bits [23:0] in the reg cell must be set to
+-        bits [23:0] in MPIDR.
++        Bits [23:0] in the reg cell must be set to bits [23:0] in MPIDR.
+ 
+         All other bits in the reg cell must be set to 0.
+ 
+-      On ARM v8 64-bit systems this property is required
+-        and matches the MPIDR_EL1 register affinity bits.
++      On ARM v8 64-bit systems this property is required and matches the
++      MPIDR_EL1 register affinity bits.
+ 
+         * If cpus node's #address-cells property is set to 2
+ 
+-          The first reg cell bits [7:0] must be set to
+-          bits [39:32] of MPIDR_EL1.
++          The first reg cell bits [7:0] must be set to bits [39:32] of
++          MPIDR_EL1.
+ 
+-          The second reg cell bits [23:0] must be set to
+-          bits [23:0] of MPIDR_EL1.
++          The second reg cell bits [23:0] must be set to bits [23:0] of
++          MPIDR_EL1.
+ 
+         * If cpus node's #address-cells property is set to 1
+ 
+-          The reg cell bits [23:0] must be set to bits [23:0]
+-          of MPIDR_EL1.
++          The reg cell bits [23:0] must be set to bits [23:0] of MPIDR_EL1.
+ 
+       All other bits in the reg cells must be set to 0.
+ 
+@@ -278,29 +273,26 @@ properties:
      $ref: /schemas/types.yaml#/definitions/phandle-array
-@@ -333,24 +331,13 @@ properties:
- 
-   qcom,saw:
-     $ref: /schemas/types.yaml#/definitions/phandle
+     items:
+       maxItems: 1
 -    description: |
--      Specifies the SAW* node associated with this CPU.
--
--      Required for systems that have an "enable-method" property
--      value of "qcom,kpss-acc-v1" or "qcom,kpss-acc-v2"
--
--      * arm/msm/qcom,saw2.txt
+-      List of phandles to idle state nodes supported
+-      by this cpu (see ./idle-states.yaml).
 +    description:
-+      Specifies the SAW node associated with this CPU.
++      List of phandles to idle state nodes supported by this cpu (see
++      ./idle-states.yaml).
  
-   qcom,acc:
-     $ref: /schemas/types.yaml#/definitions/phandle
--    description: |
--      Specifies the ACC* node associated with this CPU.
--
--      Required for systems that have an "enable-method" property
--      value of "qcom,kpss-acc-v1", "qcom,kpss-acc-v2", "qcom,msm8226-smp" or
--      "qcom,msm8916-smp".
--
--      * arm/msm/qcom,kpss-acc.txt
-+    description:
-+      Specifies the ACC node associated with this CPU.
+   capacity-dmips-mhz:
+     description:
+       u32 value representing CPU capacity (see ../cpu/cpu-capacity.txt) in
+-      DMIPS/MHz, relative to highest capacity-dmips-mhz
+-      in the system.
++      DMIPS/MHz, relative to highest capacity-dmips-mhz in the system.
+ 
+   cci-control-port: true
+ 
+   dynamic-power-coefficient:
+     $ref: /schemas/types.yaml#/definitions/uint32
+-    description:
+-      A u32 value that represents the running time dynamic
+-      power coefficient in units of uW/MHz/V^2. The
+-      coefficient can either be calculated from power
++    description: >
++      A u32 value that represents the running time dynamic power coefficient in
++      units of uW/MHz/V^2. The coefficient can either be calculated from power
+       measurements or derived by analysis.
+ 
+-      The dynamic power consumption of the CPU  is
+-      proportional to the square of the Voltage (V) and
+-      the clock frequency (f). The coefficient is used to
++      The dynamic power consumption of the CPU  is proportional to the square of
++      the Voltage (V) and the clock frequency (f). The coefficient is used to
+       calculate the dynamic power as below -
+ 
+       Pdyn = dynamic-power-coefficient * V^2 * f
+@@ -309,10 +301,6 @@ properties:
+ 
+   performance-domains:
+     maxItems: 1
+-    description:
+-      List of phandles and performance domain specifiers, as defined by
+-      bindings of the performance domain provider. See also
+-      dvfs/performance-domain.yaml.
+ 
+   power-domains:
+     description:
+@@ -341,22 +329,21 @@ properties:
  
    rockchip,pmu:
      $ref: /schemas/types.yaml#/definitions/phandle
-@@ -378,22 +365,51 @@ properties:
-       formed by encoding the target CPU id into the low bits of the
-       physical start address it should jump to.
+-    description: |
++    description: >
+       Specifies the syscon node controlling the cpu core power domains.
  
--if:
--  # If the enable-method property contains one of those values
--  properties:
--    enable-method:
--      contains:
--        enum:
--          - brcm,bcm11351-cpu-method
--          - brcm,bcm23550
--          - brcm,bcm-nsp-smp
--  # and if enable-method is present
--  required:
--    - enable-method
--
--then:
--  required:
--    - secondary-boot-reg
-+allOf:
-+  - if:
-+      # If the enable-method property contains one of those values
-+      properties:
-+        enable-method:
-+          contains:
-+            enum:
-+              - brcm,bcm11351-cpu-method
-+              - brcm,bcm23550
-+              - brcm,bcm-nsp-smp
-+      # and if enable-method is present
-+      required:
-+        - enable-method
-+    then:
-+      required:
-+        - secondary-boot-reg
-+  - if:
-+      properties:
-+        enable-method:
-+          enum:
-+            - spin-table
-+            - renesas,r9a06g032-smp
-+      required:
-+        - enable-method
-+    then:
-+      required:
-+        - cpu-release-addr
-+  - if:
-+      properties:
-+        enable-method:
-+          enum:
-+            - qcom,kpss-acc-v1
-+            - qcom,kpss-acc-v2
-+            - qcom,msm8226-smp
-+            - qcom,msm8916-smp
-+      required:
-+        - enable-method
-+    then:
-+      required:
-+        - qcom,acc
-+        - qcom,saw
-+    else:
-+      properties:
-+        qcom,acc: false
-+        qcom,saw: false
+-      Optional for systems that have an "enable-method"
+-      property value of "rockchip,rk3066-smp"
+-      While optional, it is the preferred way to get access to
+-      the cpu-core power-domains.
++      Optional for systems that have an "enable-method" property value of
++      "rockchip,rk3066-smp". While optional, it is the preferred way to get
++      access to the cpu-core power-domains.
  
- required:
-   - device_type
+   secondary-boot-reg:
+     $ref: /schemas/types.yaml#/definitions/uint32
+-    description: |
++    description: >
+       Required for systems that have an "enable-method" property value of
+       "brcm,bcm11351-cpu-method", "brcm,bcm23550" or "brcm,bcm-nsp-smp".
+ 
+-      This includes the following SoCs: |
+-      BCM11130, BCM11140, BCM11351, BCM28145, BCM28155, BCM21664, BCM23550
++      This includes the following SoCs:
++      BCM11130, BCM11140, BCM11351, BCM28145, BCM28155, BCM21664, BCM23550,
+       BCM58522, BCM58525, BCM58535, BCM58622, BCM58623, BCM58625, BCM88312
+ 
+       The secondary-boot-reg property is a u32 value that specifies the
 
 -- 
 2.47.2
