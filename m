@@ -1,108 +1,151 @@
-Return-Path: <linux-pm+bounces-24821-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24822-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C91C9A7BED3
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 16:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D38C6A7BEDF
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 16:17:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F20BC3BB00D
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 14:13:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AE103B8AAA
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 14:17:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B85931F193D;
-	Fri,  4 Apr 2025 14:13:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BFB71EFFBD;
+	Fri,  4 Apr 2025 14:17:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pZ/Hx86i"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bab2Mxno"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9353942A87
-	for <linux-pm@vger.kernel.org>; Fri,  4 Apr 2025 14:13:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B111EBFF0;
+	Fri,  4 Apr 2025 14:17:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743776027; cv=none; b=dZMOy4K/jk4h5U5pofPWCGOZvPkNVbO7kiwpfNWrMDIQWhw3H64X+JVu4eY4t523AtnRuLn8LMgMI3Rh2YyvfDJ+s9UOrzKOsww5O/61+P7p7Bs/5KnfUgNDe08P58km/pUIUWdh24g0qHS1f4LvU0vEdxii/2wiF0b6MFdCWUw=
+	t=1743776241; cv=none; b=TR/lp18zmSLa1WAsKvF1fD8H7jNkmlN0cwZC6JQtoP0UadT7TQFg8iAzeZg0YfOddCIu6YCe3tfK/nB6vBrObJ/pErYXtYuUB7quXqmZrfdEski9bZ0eb0H3h2tYQl6s/SweR14QoGvRXpVlUy0F31/Fk/rsln1RSsZqUtgff2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743776027; c=relaxed/simple;
-	bh=b6CBWN3GPasTJBGfQtT/gUQ+MGQeMASZBmOC5yeHljk=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=upABjZeD2LuDWupKSVQSodIMs0vZcJJY++EjR9OU+4XFCxsEt7j7uR5wX8gbPMKx+4HQWgu+tbwgf/lvQV/ckvYrdlkyJ7rhDGuK9Vb7hCRSQz7hhv0H2a5hedroKFYPrTVofC/Y4Cd7yODuVOryPq/ZsuofYAOMEDJ+dP5M1Rk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pZ/Hx86i; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6BA55C4CEE8
-	for <linux-pm@vger.kernel.org>; Fri,  4 Apr 2025 14:13:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743776027;
-	bh=b6CBWN3GPasTJBGfQtT/gUQ+MGQeMASZBmOC5yeHljk=;
-	h=From:To:Subject:Date:From;
-	b=pZ/Hx86i2fGvU+t3vVCpCwLVU1scDXPwPOH792kHN3p7DVw3gCLOpM1TvI4JzjFLp
-	 fu1V309CbZa9q5L1rFQ2ACdH2lTPJYcuW5nEinpZfrqTEQEl+dHKasX6alPiT28WyS
-	 z2rOvSjQOgghLBsYS8g3fYOot88GSwN5JXzLFejO0zRJV32B8Fm5hrGVrZwcJSYRX6
-	 +Vg6NtvOXpUcVKRkyv78vZhdMqOJlJUnybRN12ypW9kSNOir0V4eQ04PHfdNhHoj4z
-	 4DR719chxfEQfmnvppGiSyH6/6v2nVxlVY3tA1NI4XkSkQ2e2FLitl4SJjpWgUtMfu
-	 9NJKIvYXMGylg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 59C85C41616; Fri,  4 Apr 2025 14:13:47 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
+	s=arc-20240116; t=1743776241; c=relaxed/simple;
+	bh=+1U1cWovTA5uTsLrg02/upXbC5wZqI1dP4zYTSOQYpQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=awJ8K7X5Vk+NJcFRPxQYWKO9w3bbTttWXjmipS5hnc47Y/JRbADKgwlw60jKtIMkiUtRWwqPBEUb/ImAXQvMsfTpDNMUgbd852HeVYruzM1I1Qcoisrg3RkKgEiQ4/bvQOFxNXNxmkoBUq+AEk9lpZyAtPDFagJiu3Tss4UX/uc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bab2Mxno; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-30332dfc820so2061136a91.2;
+        Fri, 04 Apr 2025 07:17:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743776238; x=1744381038; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jJkY/rj+UDur6IhWIRiqvOf7fRgwOlEqOQiYwibJQko=;
+        b=Bab2MxnoA8eGrTroJ002+2kDriZKHdhY6pdGIIApXqGFi/L8oCFgP78jCRJhlNrS7k
+         tLghWAkzpHNC2Ngl4alNQA6IqbOvHVljjrE5ESDUI8EKNgJMA54KzgQrNtoLpa6FIgVp
+         y10kr7gXp5HWcFEPFfdrVJlyHN8tRelV1nrEb0BTXJD2zRpC16szbJ88yWm/JEmR/+rL
+         6i3BmxZwH1PR2nqMfM/e2SJFtehxug5Tyri1CmPkK+0ZuM+jfERZP83zw8qDIWth9Yab
+         MVLdoexlL84nKZ2VLmhFeODcAw128uNn+qtAvl/5QOwmpICunZ2KYRT2YnwVnDkb/O7b
+         wjqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743776238; x=1744381038;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jJkY/rj+UDur6IhWIRiqvOf7fRgwOlEqOQiYwibJQko=;
+        b=aF9tY2LR+rBsCTcyCX2LDarHtqYmB9xmPg64Jmzu/8gdIgBpokXS2x/PtWuCRjUeub
+         TnSOEDs7lCgkU0csqFlRAoTxQA/E01Z0jxEWeYYAMJ6OgGs6pqL5ClYySH78msBwzonh
+         EdLuaCpWKQafA6F19Fx9/RhNTEdjDnJPHQ0UBhNkJ3SEow3oD6vRTlWif5WJEy7a4CB0
+         2CAB43QrUnk5AdBpvElDNBfxX+PPzSUlJGK0EZj5lQErS7x0/FsP2m9InkZAqGs16Jo7
+         y9c69/V7P3cZGfK1k5obgtz/8I3ytbAL8muAToHuOS+tMS2jTYnTlG5yqrcqV+yT8tN6
+         zMsA==
+X-Forwarded-Encrypted: i=1; AJvYcCXdY9vpxexGEjUPeICAlGQIBxWmX14CcSG1VCxjQCDffBBzaKXl3WvYO+s7HVnDUnK19aEcmx7j/BFyjyA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQMU+VC1HuKicwMl7G88YdlKTh4jJb2KhOGSedxQQq/+TYrcmX
+	O3mryVv4vqNKbslcrwnVvuoaJH/PXssXl1mjzHEFocrW5yvXKKEQfIcy1pqy
+X-Gm-Gg: ASbGncvZKQmfPZZoaER9+n1pY7xPNwMfxHCtXYPUWVbyGdUJK1odXFKyEVR36OExczo
+	olNLJk6rnOq2k5EQNztQTEuMp7tS4YxCrLxaJSjmoaLDmWGmjf7xk/y9JmObFl81BUab7QD+6Ih
+	LmCBPZuLOfep2G5bFkPZzPplaMH7pbG8gU5nhNpq763kDplxvhaNqtWRpqfoNOgbop6e+UCfnsw
+	iraM0YmxmmdToiQJaZjlcnQ7vg6NgKZsMt9WAvU1FFJC8RTuH+nay6/0a0fLczVhB5z6GIRpbLx
+	m5q2RsIaieP7+DLjHVgHfjy6YX7f4FpKt1lmCb5O7tI=
+X-Google-Smtp-Source: AGHT+IGq9BLsszWtOE+3T1GWMl1g2khKbvr87Eb9IDtheXW5uB6Qt8lknEwKp1TWBl0CEPIqeeafWA==
+X-Received: by 2002:a17:90b:524f:b0:2ea:712d:9a82 with SMTP id 98e67ed59e1d1-306a498bfbbmr5106652a91.29.1743776238250;
+        Fri, 04 Apr 2025 07:17:18 -0700 (PDT)
+Received: from hiago-nb ([2804:1b3:a7c2:fdb9:802:4e79:d42a:3b39])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3057ca1f40fsm3693825a91.4.2025.04.04.07.17.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Apr 2025 07:17:17 -0700 (PDT)
+Date: Fri, 4 Apr 2025 11:17:13 -0300
+From: Hiago De Franco <hiagofranco@gmail.com>
 To: linux-pm@vger.kernel.org
-Subject: [Bug 219981] New: Regression on amd-pstate suspend/remove
-Date: Fri, 04 Apr 2025 14:13:47 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: vincent.maurin.fr@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression
-Message-ID: <bug-219981-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+Cc: Peng Fan <peng.fan@nxp.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	regressions@lists.linux.dev
+Subject: [REGRESSION] Kernel reboots unexpectdely on i.MX8X when Cortex-M4 is
+ running and it was started by U-Boot bootaux
+Message-ID: <20250404141713.ac2ntcsjsf7epdfa@hiago-nb>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219981
+#regzbot introduced: 4f6c983261
 
-            Bug ID: 219981
-           Summary: Regression on amd-pstate suspend/remove
-           Product: Power Management
-           Version: 2.5
-          Hardware: AMD
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: cpufreq
-          Assignee: linux-pm@vger.kernel.org
-          Reporter: vincent.maurin.fr@gmail.com
-        Regression: No
+Hi Peng and all,
 
-The issue that was reported here was solved by adding handlers for
-suspend/resume events https://bugzilla.kernel.org/show_bug.cgi?id=3D215938
+Commit 4f6c9832613b ("genpd: imx: scu-pd: initialize is_off according to
+HW state") introduced a regression where the Kernel reboots unexpectedly
+(without any warnings, crashes or errors) when the Cortex-M4 was loaded
+and running by U-Boot, using the bootaux command:
 
-These handlers has been removed with this commit
-https://github.com/torvalds/linux/commit/2064543f5ba0d2929e3e9b3a616c3262a5=
-7c7925
-and I am suffering the same issue again (so scaling frequencies are ignored
-after a suspend)
+# load mmc 0:2 ${loadaddr} /home/root/hello_world.bin
+# bootaux ${loadaddr} 0
+# boot
 
---=20
-You may reply to this email to add a comment.
+This is a simple hello world binary that prints a message into the
+M40.UART0 pin (demo from NXP MCUXpresso).
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+Before this commit, everything worked as expected, Linux boots fine and
+the HMP core keeps running and printing messages to the UART. After the
+commit, the kernel reboots at the beggining of the boot process. The
+only relevant message is printed by U-Boot after reset:
+
+"Reset cause: SCFW fault reset"
+
+This commit was bisectabled, the same device tree, u-boot version, and
+SCFW versions were used. Reverting this commit fixes the issues.
+
+For testing purposes, I created the following patch which also fixes the
+issue:
+
+diff --git a/drivers/pmdomain/imx/scu-pd.c b/drivers/pmdomain/imx/scu-pd.c
+index 38f3cdd21042..0477b3fb4991 100644
+--- a/drivers/pmdomain/imx/scu-pd.c
++++ b/drivers/pmdomain/imx/scu-pd.c
+@@ -539,6 +539,9 @@ imx_scu_add_pm_domain(struct device *dev, int idx,
+                return NULL;
+        }
+
++       if (strstr("cm40", sc_pd->name) != NULL)
++               is_off = true;
++
+        ret = pm_genpd_init(&sc_pd->pd, NULL, is_off);
+        if (ret) {
+                dev_warn(dev, "failed to init pd %s rsrc id %d",
+
+
+Test Environment:
+- Hardware: Colibri iMX8DX 1GB with Colbiri Evaluation Board.
+- U-Boot Version: 2024.04
+- U-Boot Build info:
+	SCFW 83624b99, SECO-FW c9de51c0, IMX-MKIMAGE 4622115c, ATF 7c64d4e
+
+The issue is not present on: v6.5
+
+The real root cause is still unclear to me. Anybody has any ideas? I am
+happy to share more details if needed.
+
+Cheers,
+Hiago.
 
