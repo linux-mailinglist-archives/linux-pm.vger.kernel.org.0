@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-24801-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24802-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 893F3A7BB98
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 13:33:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EA59A7BB99
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 13:34:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E37AD189F4FF
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 11:32:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6D591B6069E
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 11:32:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D363F1DF994;
-	Fri,  4 Apr 2025 11:32:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0E101E7C01;
+	Fri,  4 Apr 2025 11:32:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="LJPXaVbq"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="DpZaC4An"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC1801DB548;
-	Fri,  4 Apr 2025 11:32:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 284E61E1DE7;
+	Fri,  4 Apr 2025 11:32:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743766336; cv=none; b=NXy4s1+JC+sYLnGWXIK0JlhA8Oby9JwOwcgeVUb5764GdPNgYdKu2rIk+oPOhoMHk2ONVeqoObwfZZewVA2uSvK6UoPOdnSEL+7SAGiyMHWz63sdF9qRWDdV/Js8EHnY0GWXyUlwOYV5BnJmmJFDQX3PEk3+uGEJ1Q3qOiUu++E=
+	t=1743766339; cv=none; b=LDgeT+kez1JFseljPwmiyxYgiv2Y51BqBaU6Be18vURHZp7NsR6Zl2l2i7vR0aYBtUJBXdvBxhW2Gl/1BpMhc3aNrlrY8N4FOVOF9r/gZDB8lGlQ/xGaJNByYdoZtM8nDXPjK25c8H3VIEdJvaTRlyPWdMmELxwi+GbcPBmooNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743766336; c=relaxed/simple;
-	bh=Jw1FPz6DF2WaJMktgqsDpD5UOieABbNHs5cz1OQV7+Y=;
+	s=arc-20240116; t=1743766339; c=relaxed/simple;
+	bh=7ro02tI4QOXGzdStpWGlX+ZgeJtEMwipR1RCkON1Law=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gNzpW2DITi09ND55C92Pd8DMhdF4ZaKY+g6sQbWr3aoTTEuUesvl80FDKKrLCSMLIpPPjdZj47TwzV4ts3/yEhKWTL7YbUGLja/bkMnvzYM7j2R4nqIh4vTK9oyTDbEnUoMy1vVijclV12PmImq7kgbzzjkwlObjrcN5yyAqT9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=LJPXaVbq; arc=none smtp.client-ip=148.251.105.195
+	 In-Reply-To:Content-Type; b=oQ8b7BS6Rd1YbufTK3QZ7ifznAi4C7Vw8FFkquFvSdLNb2J9noNz6BazdIBJiwhJxPJGNfdkGBhx0GI/VwJQDrbc+MwaPLqJm6CpbmZicsH4n1uMDkNlsB872G8FlTPnTW0Wu+uOhpdcby+JFox0AN8lmsRrMKhpQ1YmpE762BM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=DpZaC4An; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1743766333;
-	bh=Jw1FPz6DF2WaJMktgqsDpD5UOieABbNHs5cz1OQV7+Y=;
+	s=mail; t=1743766335;
+	bh=7ro02tI4QOXGzdStpWGlX+ZgeJtEMwipR1RCkON1Law=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=LJPXaVbq60/Cb5k5MJ7zBEKHhcJ/RJ2XOeSUfeGVa9B6t5StSeJpF5Rh8VSpyV4OG
-	 6qvbZA+DJiPKvA8oZmtxELP2AOQ0sZld5CamuOMDVdPFj6a78TccHaPK4Tvrr486vK
-	 jdSaxZDfwi0ncvAB9XwcoOY+tv9gv16LHwc9o8cmvTeXa2UskaGu4S1VKAfK8nGrZE
-	 vct7UyFGwVmWVCvZDCSClpfCMUyShZvHciYs3+sipjVjXeruKaQXsGVaHfymqTd+Og
-	 mPFSiSQmlYOjLNoHLs/SMTb/qZ/5zrPp+oAQM2P0hEj8RVXesY8cFd5/XQBtMb6elN
-	 Yrr95JBG7PAJg==
+	b=DpZaC4Ang2pBxxjmTz68g2C7ibpYHZpQh6M1Vf54ldz6Gdj74ETP0av4qGoCb/ZLE
+	 Nd8AggnN0xOivQCv3RRa6fUi4tBVfF2x3DzzzOGG2grt8rNvhOOkHge7mFCFX+t6Za
+	 PVEwNsWgnGUJqEYiXE1bkFT7+QLm1lXuCtguq+z0aersqXj/R9Nwm7q/Lh60UJifPD
+	 fvkkpnRm7HihkIPmz7RoHJFMHc6n9qkvDcTDSk8+gNG2xtpCfoGo+Ve20jQIiWIbSZ
+	 OhtlgUsxflfecAZAqNlLv6M6uBpC9jDo/tSHTaNjFijVjLM1CyXO+HY82Ey/eXajOU
+	 E2bLKaqY9B3rA==
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id A836E17E0C50;
-	Fri,  4 Apr 2025 13:32:10 +0200 (CEST)
-Message-ID: <547daa6c-0ca9-44c0-9317-02e006926dc3@collabora.com>
-Date: Fri, 4 Apr 2025 13:32:09 +0200
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 27B6717E0FC3;
+	Fri,  4 Apr 2025 13:32:13 +0200 (CEST)
+Message-ID: <236b31a6-3602-4705-9d04-48bdff719cc2@collabora.com>
+Date: Fri, 4 Apr 2025 13:32:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,7 +57,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 16/19] dt-bindings: Reference opp-v1 schema in CPU schemas
+Subject: Re: [PATCH 19/19] dt-bindings: cpufreq: Drop redundant Mediatek
+ binding
 To: "Rob Herring (Arm)" <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
@@ -92,22 +93,20 @@ Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  imx@lists.linux.dev, linux-rockchip@lists.infradead.org,
  linux-amlogic@lists.infradead.org, linux-renesas-soc@vger.kernel.org
 References: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
- <20250403-dt-cpu-schema-v1-16-076be7171a85@kernel.org>
+ <20250403-dt-cpu-schema-v1-19-076be7171a85@kernel.org>
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Content-Language: en-US
-In-Reply-To: <20250403-dt-cpu-schema-v1-16-076be7171a85@kernel.org>
+In-Reply-To: <20250403-dt-cpu-schema-v1-19-076be7171a85@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 Il 04/04/25 04:59, Rob Herring (Arm) ha scritto:
-> The opp-v1 binding is only used in MIPS and arm32 CPU nodes, so add a
-> $ref to it in the CPU schemas and drop the "select".
-> 
-> As opp-v1 has long been deprecated, mark it as such.
+> The Mediatek CPUFreq binding document just describes properties from
+> the CPU node which the driver uses. This is redundant as all the
+> properties are described in the arm/cpus.yaml schema.
 > 
 > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 
-ARM//MediaTek:
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 
