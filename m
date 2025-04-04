@@ -1,137 +1,119 @@
-Return-Path: <linux-pm+bounces-24823-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24824-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02299A7C011
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 16:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CF57A7C1B5
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 18:44:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6A973BDDE2
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 14:56:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2CCAD3B8D24
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 16:44:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 317FE1F4C95;
-	Fri,  4 Apr 2025 14:56:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00F8820E007;
+	Fri,  4 Apr 2025 16:44:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lYq0Ahwk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G+1nuHta"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D769B1F4631;
-	Fri,  4 Apr 2025 14:56:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0171EF370;
+	Fri,  4 Apr 2025 16:44:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743778566; cv=none; b=OWXEAmgpiSwmmpmIiML/lezMxcwNKfHMjh0cprm2+lSaCAu+kaMXf9IU6JASs4AIh0rZTwjzjshGUapMCSHjaBVi6j4GPvBJcbnK/Wt6NsqIzBAuWv6Y0k3h9CuOU+F4Elk9k5XsI3XkC2W1ax/f3zWwEufxqgL+a5nSPuRprCs=
+	t=1743785075; cv=none; b=NK3+4sK1z/ZR2c8ov59xZyWy1WMputFytJiRgpDb7ez0iGU11e93da+Sq2cml+RVdZTMyqG2VGh9urNdyHq3N5+JNADBGajUDrfBzoLobW4sqw8jt7atpl2uxQVlhUyAyQBdyyubJ46EB4hln3aGS1ADaV6MMvjwOn9KhrPw5ko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743778566; c=relaxed/simple;
-	bh=ZKC9yGDKP7ZL9SggbwEVntc6h66l9cUcpFwGsLIdwyU=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=lKA+zS0UMD6zZOeNFxnjNMCj9R6nqI9DB9yYT46K135ebojv/CpfWMZZjyAm3PiM6tP++k5i0URBuAKoodnyryACCX2RV0QPeJmZYimrisqd+8cqOCQYHtIjC6dI27WYKYVA/atlrQ5DYc7oSJb8xA95dGU02h5EcLp8OMcrLWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lYq0Ahwk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08F3BC4CEDD;
-	Fri,  4 Apr 2025 14:56:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743778565;
-	bh=ZKC9yGDKP7ZL9SggbwEVntc6h66l9cUcpFwGsLIdwyU=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=lYq0AhwkZcTUWyVwicaZ1vvM7sdLhXVWb88uIIREKJeM4f4dFtPRR+5YtBnIQ3+8S
-	 4rmWfDWxmKz8BkutmGYcsQCbqBKQsOpb3vKdZoOj3zlMzyIr63+JtEno2kDqBxKGaL
-	 uSpnRzGTivLPzIQSa2vlGQgFkEoHK4Djr247EPkB1MI0mgoQqCboWVbZe1YDRxstNw
-	 XL6TPr4SJ3ntriVvow1CY9ZhW/TaC9VWQaFtDYXQkEycuv4vNUekj/x3m4CmjcWhg8
-	 J/6CXGfE842P8cqvOhDfI5vtBqXZj1W2sAP8ubZBZr4Jve8ltlaLGaw/5ccWSyVqKq
-	 iX0gZX5BzPDSQ==
-Date: Fri, 04 Apr 2025 09:56:03 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1743785075; c=relaxed/simple;
+	bh=jd/7IZ1uZPU6UQm0EzVBwWHG9PUeSbDpdEAjlLYE5Xg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RPW4IQnJZ0/VFjkj0NKVp5bWR0bLPMfJFMbPi5CNEfY8N4q42EzeOqy6JR367104O9YP8tLSgcuZ/VEePsm0bohk/kLPHXW2dGBR0BOzP4tICwnh8e8m6oP1eQt0wb07hkzmkwGuvEGRMOrbA0miUlUkW6QB4caeKvBBZXqxGag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G+1nuHta; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-736c1cf75e4so1900186b3a.2;
+        Fri, 04 Apr 2025 09:44:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743785074; x=1744389874; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NuDjKqU/zJ9aMgBXHX6eXeC15pS8mlcSXTl6w1NpC/w=;
+        b=G+1nuHta7YhlpzffZBt1WK165DIWertm2+gUS9cDQq2sSY1F+Gs5kAUcvSoYkmKwiT
+         6RyGq6NKUXBqPBdGBrsrB27DIj0yizYm8WAFQUWAosGOgrN9nt+BH3bJXIEenylVqM4X
+         iZFSb/joTM30SGqyIyo6Lj7i3MlCyU95AJVsfeaktvc18S5iMbkf/XQGLXMVN9NJpzUF
+         eWLA7bBT7UwwLzMrx79CSGRcn7N9JYIkOzV4YY1ulzpgzhEu2ZAIAjmFWV2hp1sxKHKI
+         ReC7zzOyXsqdD95ipt16I0p0gDm+SXX2XtiV5lm/yH4+a0uGaEzSaj9kzkuIVkEUmwYv
+         7W0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743785074; x=1744389874;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NuDjKqU/zJ9aMgBXHX6eXeC15pS8mlcSXTl6w1NpC/w=;
+        b=cBAkKnoU90T3qt8RIz8DzTAVLRPBdb5I/VzviSpt9bQ3g3SpuuJiQfa79Qe1CcttNS
+         tlTONfOOhcvivowRParMfsVMbDgVnXPtLQEI0FqFQ2J75at+N+FZz+QdSB3sJiQa0BjX
+         /+KW0soYBQSYUgzq4X4vaPrrtbwgISBxVLmSo5L8GAajyC/CkDOyyF0/4/ByfeXYidEf
+         nxR9OqW9/iDxVhqNoFqFHLAVD4PXQyHXleQysYhwJfdyNg/A47eLtv3ueS+0GCD4Po9f
+         jx7RtxTD9GABEIMK4LY3zTrpGbAm1XFXurt+fbL15XcdtviGRJ+6UF5xRwB6s/HVoLuM
+         W8EA==
+X-Forwarded-Encrypted: i=1; AJvYcCVsk0WckLg7aHuADQL+wjdoTHuZOtZdoOF6KGZinIRAFP9BQ+KoPa+CEYSDIIu4gaIuNzgOQEf5nrk=@vger.kernel.org, AJvYcCWlLY2bQeeYwQ8Z34J1lW7Pu3ufb5kuE/5EtklTof5Pd3yvIHufaOMrHuCHyop5BIfiF10u9qo+UGyICc0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgGuDmSjs3ZnVQThSZNtntEgL1e+2iyaw4M6qVgY/jiFR7J6/m
+	vPC1dG9c1+NFydUZPxfFaB1popOL4Uq09uthenFnp5heVA4dbMwe
+X-Gm-Gg: ASbGncvQTXN+VY/MZIYHaXikNhK0DumxxmYkXghpdPhmjRaXP7umc7l/qWTAUm1EAaa
+	AX/vP14uIU9S1fDyLO+zkU0EUP2dGX+3/E+/5CT/Lao+s0X+UvUirNYVS9Uq7HUFewRrQVTppw7
+	0X2dxWDubnOYqfyX4WbiYSLJdeAxqfS8iUsNqhvl9j43zJJvBE3B9eKeN0xkbKlD1RywtLnhDrf
+	OQDwPo/P/FqBhRkTia1TlgUWXtOB8qDY9crzwad8cVxAQOxz7lVWbjK+/GB4vO07kGQ7RuAbEsM
+	L8gs5aMQcNqkjVdFYGPB1iIX0bhECz80e4D3icEVivQ=
+X-Google-Smtp-Source: AGHT+IGA2+5a3BkHSLQ7fnrH0CvUccQdBM+8f757JwVDB2xJq2KAZWTALrj8BSSj5G/WcAs0lQvHgg==
+X-Received: by 2002:a05:6a00:10d2:b0:739:4723:c4d7 with SMTP id d2e1a72fcca58-739e7142c56mr4155788b3a.22.1743785073708;
+        Fri, 04 Apr 2025 09:44:33 -0700 (PDT)
+Received: from nuvole.. ([144.202.86.13])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-739d9ea093asm3710786b3a.102.2025.04.04.09.44.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Apr 2025 09:44:33 -0700 (PDT)
+From: Pengyu Luo <mitltlatltl@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Pengyu Luo <mitltlatltl@gmail.com>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] cpufreq: Add SM8650 to cpufreq-dt-platdev blocklist
+Date: Sat,  5 Apr 2025 00:42:19 +0800
+Message-ID: <20250404164219.166918-1-mitltlatltl@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Bjorn Andersson <andersson@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, linux-kernel@vger.kernel.org, 
- Conor Dooley <conor@kernel.org>, linux-rockchip@lists.infradead.org, 
- Daniel Machon <daniel.machon@microchip.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
- UNGLinuxDriver@microchip.com, Jerome Brunet <jbrunet@baylibre.com>, 
- Kevin Hilman <khilman@baylibre.com>, linux-sunxi@lists.linux.dev, 
- Liviu Dudau <liviu.dudau@arm.com>, linux-arm-kernel@lists.infradead.org, 
- Fabio Estevam <festevam@gmail.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, Stephen Boyd <sboyd@kernel.org>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>, 
- linux-renesas-soc@vger.kernel.org, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
- Magnus Damm <magnus.damm@gmail.com>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Geert Uytterhoeven <geert+renesas@glider.be>, 
- Viresh Kumar <vireshk@kernel.org>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, zhouyanjie@wanyeetech.com, 
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, Heiko Stuebner <heiko@sntech.de>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, linux-pm@vger.kernel.org, 
- linux-mediatek@lists.infradead.org, Chen-Yu Tsai <wens@csie.org>, 
- linux-mips@vger.kernel.org, imx@lists.linux.dev, 
- Samuel Holland <samuel@sholland.org>, Sudeep Holla <sudeep.holla@arm.com>, 
- Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- linux-arm-msm@vger.kernel.org, Nicolas Ferre <nicolas.ferre@microchip.com>, 
- linux-amlogic@lists.infradead.org, Sascha Hauer <s.hauer@pengutronix.de>, 
- Steen Hegelund <Steen.Hegelund@microchip.com>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-In-Reply-To: <20250403-dt-cpu-schema-v1-14-076be7171a85@kernel.org>
-References: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
- <20250403-dt-cpu-schema-v1-14-076be7171a85@kernel.org>
-Message-Id: <174377856145.1313232.11316769002552655294.robh@kernel.org>
-Subject: Re: [PATCH 14/19] dt-bindings: arm/cpus: Add schemas for
- "enable-method" dependencies
+Content-Transfer-Encoding: 8bit
 
+SM8650 have already been supported by qcom-cpufreq-hw driver, but
+never been added to cpufreq-dt-platdev. This makes noise
 
-On Thu, 03 Apr 2025 21:59:35 -0500, Rob Herring (Arm) wrote:
-> Replace the prose for properties dependent on specific "enable-method"
-> values with schemas defining the same requirements.
-> 
-> Both "qcom,acc" and "qcom,saw" properties appear to be required for any
-> of the Qualcomm enable-method values, so the schema is a bit simpler
-> than what the text said. The references to arm/msm/qcom,saw2.txt and
-> arm/msm/qcom,kpss-acc.txt are out of date, so just drop them.
-> 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/arm/cpus.yaml | 82 +++++++++++++++----------
->  1 file changed, 49 insertions(+), 33 deletions(-)
-> 
+[    0.388525] cpufreq-dt cpufreq-dt: failed register driver: -17
+[    0.388537] cpufreq-dt cpufreq-dt: probe with driver cpufreq-dt failed with error -17
 
-My bot found errors running 'make dt_binding_check' on your patch:
+So adding it to the cpufreq-dt-platdev driver's blocklist to fix it.
 
-yamllint warnings/errors:
+Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
+---
+ drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,saw2.example.dtb: cpu@0: 'qcom,acc' is a required property
-	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
-
-doc reference errors (make refcheckdocs):
-Warning: Documentation/translations/ja_JP/process/submit-checklist.rst references a file that doesn't exist: Documentation/translations/ja_JP/SubmitChecklist
-Documentation/translations/ja_JP/process/submit-checklist.rst: Documentation/translations/ja_JP/SubmitChecklist
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250403-dt-cpu-schema-v1-14-076be7171a85@kernel.org
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index 2aa00769c..a010da0f6 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -175,6 +175,7 @@ static const struct of_device_id blocklist[] __initconst = {
+ 	{ .compatible = "qcom,sm8350", },
+ 	{ .compatible = "qcom,sm8450", },
+ 	{ .compatible = "qcom,sm8550", },
++	{ .compatible = "qcom,sm8650", },
+ 
+ 	{ .compatible = "st,stih407", },
+ 	{ .compatible = "st,stih410", },
+-- 
+2.49.0
 
 
