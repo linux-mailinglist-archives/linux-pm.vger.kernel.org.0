@@ -1,365 +1,155 @@
-Return-Path: <linux-pm+bounces-24792-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24793-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03703A7B688
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 05:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0955FA7B700
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 06:56:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 66F24189E4A0
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 03:05:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63482188FAB3
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 04:56:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57B201EA7E3;
-	Fri,  4 Apr 2025 03:00:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4AC31386B4;
+	Fri,  4 Apr 2025 04:56:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZzYCy357"
+	dkim=pass (2048-bit key) header.d=qtmlabs.xyz header.i=@qtmlabs.xyz header.b="EvttBZce"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from s1.g1.infrastructure.qtmlabs.xyz (s1.g1.infrastructure.qtmlabs.xyz [107.172.1.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21FFE1EA7D3;
-	Fri,  4 Apr 2025 03:00:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA2AA95E;
+	Fri,  4 Apr 2025 04:56:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=107.172.1.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743735608; cv=none; b=frHoOBV7NCnisA2+wTi4HiKeuSxTYqH/revKdfIvqSAs8HZtgCXQ9vOJclGu1uo7YHKA0VwJSvdian7OwFzV7gXY0v75xWdTVJLZPBRkZEonaKlEr/zhwEMVms0aqPPQSQ8/0g9e2hJhromRgqgj6QWYIWEpXxt4vHF9EcHWP1g=
+	t=1743742593; cv=none; b=kU9nIX0hOD+m750i/n/yMdJ+RuK68s5xKlX+JpPKtbZCjKK9EFW3pTS8r+4IzhR+daGBqTqZjG4pW/kvCb8265bnm+8dtVPISoZik/pFH/PzJV2j8bOIZQXPTg6MUiJS7nuffPvlGH+aD4F6/m8ZmuoeGJzlnx6rbM4KLQmxoq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743735608; c=relaxed/simple;
-	bh=+bglFes+JWUyYqhoWvdBTyyAUTU6Hu68wW9iKCwLBnY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=T3vzCW2csWyQQwS3YUVXhlHwsgdSP1pP5zga5dn5g/rM8iZ/laffF1ocfXgt7Yqnosc6LquwTtSq+u/SITm2gSE65OujzqnB2tnaPh5Yo51D4YaF6BtntGkuc9DsCR4dHLV0vi74CJjENCGN17TKddxpUME/aaLQHGA3DTt8ak4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZzYCy357; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53F80C4CEE3;
-	Fri,  4 Apr 2025 03:00:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743735606;
-	bh=+bglFes+JWUyYqhoWvdBTyyAUTU6Hu68wW9iKCwLBnY=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ZzYCy3572wAcb8VXN5IFR/xxSAoz+Ll8686K4A7qg8wIFI38fvJ8QSFQwX/eI7L6g
-	 9GswgwONrsiJoNkwsyrplALvNfCFcd8MaJKyb2kpDe/SMbAsiOEjmnUMrHu/+qEU44
-	 fc6+c+FKbR7mO9dkD4/sTpNP2Yvqw5zu1a79e2a7C/Y3mq9VrjXacawISc3gE7kwgm
-	 R1rrrZ20y/p8is2HZkHzkIPf4pvhIgTK1ctQnusjL0OrXjK1ZXlPMNFNLcVp0TxB9Z
-	 E9pl1+SlJ/3xi8ckKlkbV5SPf06nhMkBkco7rmYFgKHjgOa8xRquq6E/AnK3C/a00M
-	 T7EX1lGR7l7NQ==
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Date: Thu, 03 Apr 2025 21:59:40 -0500
-Subject: [PATCH 19/19] dt-bindings: cpufreq: Drop redundant Mediatek
- binding
+	s=arc-20240116; t=1743742593; c=relaxed/simple;
+	bh=nwhDu68aWdWRGWKSFWI4REESRhrTBgR1bfnknaQzRfc=;
+	h=Content-Type:Message-ID:Date:MIME-Version:Subject:From:To:Cc:
+	 References:In-Reply-To; b=D5vIvF79nurPaTdOVkJ+ufG4aFjlTB4eQ7TwPFlouKJk9c1Hb1HGSNOauBs8Sj0gcAXcEGR/CgDWBVHCR8BM9iIoeJ8O7i+oFPNrvKjpiCBTboS2ldc4MWSzTyMR6ngGRZao04K7JSIgowYrKjYTaQyGhNHc0TrbyQDGVm304CM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qtmlabs.xyz; spf=pass smtp.mailfrom=qtmlabs.xyz; dkim=pass (2048-bit key) header.d=qtmlabs.xyz header.i=@qtmlabs.xyz header.b=EvttBZce; arc=none smtp.client-ip=107.172.1.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qtmlabs.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qtmlabs.xyz
+Content-Type: multipart/mixed; boundary="------------QNl5qfMEuxRVraWYtdKPb7kl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qtmlabs.xyz; s=dkim;
+	t=1743742589;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vau1mPOVxvBKN2mqH71v2LRxp6uq3iTaCAxzKJIn02I=;
+	b=EvttBZcejpCKd38V1E4icwkGSfefBiF9OpE8mKuYddA8vEIxPuNrv2n4/uelEym54+yJtI
+	sWEdYXo9743t6WTxlZjCz+F05LIa89q3kpLVxCtHkJQKwxUEs9s5Jd2jbje6G+mqUznBWW
+	zw+gNKcRHsxLCaESAB2q3YSsyYwK+a7vxidWEXX1a2L7KXgqjsptfS9laevme9Z6nGS5Ft
+	oempeWsiUZSVHpr7rHdfXpGpKdQSBcN9PWgUvmA8IybtVXK25xINb5sb3o6TAMwzq9pMU0
+	cE5alLNMfYnXgzazSEWGG38Hn0UbUBLxW06KasCnSdjA0s45W9gfvGXkys+HCg==
+Authentication-Results: s1.g1.infrastructure.qtmlabs.xyz;
+	auth=pass smtp.mailfrom=msizanoen@qtmlabs.xyz
+Message-ID: <004d85e4-d23d-43af-87ca-8d037abba51d@qtmlabs.xyz>
+Date: Fri, 4 Apr 2025 11:56:21 +0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Subject: Re: [REGRESSION] Kernel booted via kexec fails to resume from
+ hibernation
+From: msizanoen <msizanoen@qtmlabs.xyz>
+To: Roberto Ricci <io@r-ricci.it>
+Cc: ebiederm@xmission.com, rafael@kernel.org, pavel@ucw.cz,
+ ytcoode@gmail.com, kexec@lists.infradead.org, linux-pm@vger.kernel.org,
+ akpm@linux-foundation.org, regressions@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+References: <Z4WFjBVHpndct7br@desktop0a> <Z4WGSMdF6seQm9GV@desktop0a>
+ <b9f6ed5a-74b9-47c0-b073-9922dbe6119b@qtmlabs.xyz>
+ <Z-8E-LLs1dFWfn6J@desktop0a>
+ <691be719-7d4c-4cb1-87d6-cca7834547fe@qtmlabs.xyz>
+Content-Language: en-US
+In-Reply-To: <691be719-7d4c-4cb1-87d6-cca7834547fe@qtmlabs.xyz>
+X-Spamd-Bar: +
+X-Spam-Level: *
+
+This is a multi-part message in MIME format.
+--------------QNl5qfMEuxRVraWYtdKPb7kl
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250403-dt-cpu-schema-v1-19-076be7171a85@kernel.org>
-References: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
-In-Reply-To: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
-To: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Samuel Holland <samuel@sholland.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>, 
- Liviu Dudau <liviu.dudau@arm.com>, Sudeep Holla <sudeep.holla@arm.com>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
- Stephen Boyd <sboyd@kernel.org>, zhouyanjie@wanyeetech.com, 
- Conor Dooley <conor@kernel.org>, 
- Nicolas Ferre <nicolas.ferre@microchip.com>, 
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
- Steen Hegelund <Steen.Hegelund@microchip.com>, 
- Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com, 
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, Heiko Stuebner <heiko@sntech.de>, 
- Neil Armstrong <neil.armstrong@linaro.org>, 
- Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
- Geert Uytterhoeven <geert+renesas@glider.be>, 
- Magnus Damm <magnus.damm@gmail.com>
-Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org, 
- linux-arm-msm@vger.kernel.org, linux-mips@vger.kernel.org, 
- imx@lists.linux.dev, linux-rockchip@lists.infradead.org, 
- linux-amlogic@lists.infradead.org, linux-renesas-soc@vger.kernel.org
-X-Mailer: b4 0.15-dev
 
-The Mediatek CPUFreq binding document just describes properties from
-the CPU node which the driver uses. This is redundant as all the
-properties are described in the arm/cpus.yaml schema.
+Also, can you reproduce this issue with a target kernel (the kernel 
+being kexec-ed) that has one of the patches attached (select the correct 
+one according to your kernel version) applied, with either kexec_load or 
+kexec_file_load?
 
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
----
- .../bindings/cpufreq/cpufreq-mediatek.txt          | 250 ---------------------
- 1 file changed, 250 deletions(-)
+On 4/4/25 09:54, msizanoen wrote:
+> Can you send the dmesg logs for this case (6.13 + mentioned patch 
+> series backported as target kernel, using kexec_load)?
+>
+> On 4/4/25 05:00, Roberto Ricci wrote:
+>> On 2025-04-01 19:59 +0700, msizanoen wrote:
+>>> [snip]
+>>> It seems like `e820__register_nosave_regions` is erroneously marking 
+>>> some
+>>> kernel memory as nosave in the presence of sub-page e820 regions. In 
+>>> theory
+>>> backporting
+>>> https://lore.kernel.org/all/20250214090651.3331663-1-rppt@kernel.org/ 
+>>> should
+>>> be sufficient to avoid this but a fix for the actual root cause is
+>>> preferred.
+>> When using kexec_file_load, this patch series fixes the issue not only
+>> in theory but also in practice.
+>> But the issue with kexec_load (see
+>> https://lore.kernel.org/all/Z-hYWc9LtBU1Yhtg@desktop0a/
+>> ), which might be related, is not fixed.
+--------------QNl5qfMEuxRVraWYtdKPb7kl
+Content-Type: text/x-patch; charset=UTF-8; name="for-6.14-and-earlier.diff"
+Content-Disposition: attachment; filename="for-6.14-and-earlier.diff"
+Content-Transfer-Encoding: base64
 
-diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt
-deleted file mode 100644
-index e0a4ba599abc..000000000000
---- a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt
-+++ /dev/null
-@@ -1,250 +0,0 @@
--Binding for MediaTek's CPUFreq driver
--=====================================
--
--Required properties:
--- clocks: A list of phandle + clock-specifier pairs for the clocks listed in clock names.
--- clock-names: Should contain the following:
--	"cpu"		- The multiplexer for clock input of CPU cluster.
--	"intermediate"	- A parent of "cpu" clock which is used as "intermediate" clock
--			  source (usually MAINPLL) when the original CPU PLL is under
--			  transition and not stable yet.
--	Please refer to Documentation/devicetree/bindings/clock/clock-bindings.txt for
--	generic clock consumer properties.
--- operating-points-v2: Please refer to Documentation/devicetree/bindings/opp/opp-v2.yaml
--	for detail.
--- proc-supply: Regulator for Vproc of CPU cluster.
--
--Optional properties:
--- sram-supply: Regulator for Vsram of CPU cluster. When present, the cpufreq driver
--	       needs to do "voltage tracking" to step by step scale up/down Vproc and
--	       Vsram to fit SoC specific needs. When absent, the voltage scaling
--	       flow is handled by hardware, hence no software "voltage tracking" is
--	       needed.
--- mediatek,cci:
--	Used to confirm the link status between cpufreq and mediatek cci. Because
--	cpufreq and mediatek cci could share the same regulator in some MediaTek SoCs.
--	To prevent the issue of high frequency and low voltage, we need to use this
--	property to make sure mediatek cci is ready.
--	For details of mediatek cci, please refer to
--	Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
--- #cooling-cells:
--	For details, please refer to
--	Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
--
--Example 1 (MT7623 SoC):
--
--	cpu_opp_table: opp_table {
--		compatible = "operating-points-v2";
--		opp-shared;
--
--		opp-598000000 {
--			opp-hz = /bits/ 64 <598000000>;
--			opp-microvolt = <1050000>;
--		};
--
--		opp-747500000 {
--			opp-hz = /bits/ 64 <747500000>;
--			opp-microvolt = <1050000>;
--		};
--
--		opp-1040000000 {
--			opp-hz = /bits/ 64 <1040000000>;
--			opp-microvolt = <1150000>;
--		};
--
--		opp-1196000000 {
--			opp-hz = /bits/ 64 <1196000000>;
--			opp-microvolt = <1200000>;
--		};
--
--		opp-1300000000 {
--			opp-hz = /bits/ 64 <1300000000>;
--			opp-microvolt = <1300000>;
--		};
--	};
--
--	cpu0: cpu@0 {
--		device_type = "cpu";
--		compatible = "arm,cortex-a7";
--		reg = <0x0>;
--		clocks = <&infracfg CLK_INFRA_CPUSEL>,
--			 <&apmixedsys CLK_APMIXED_MAINPLL>;
--		clock-names = "cpu", "intermediate";
--		operating-points-v2 = <&cpu_opp_table>;
--		#cooling-cells = <2>;
--	};
--	cpu@1 {
--		device_type = "cpu";
--		compatible = "arm,cortex-a7";
--		reg = <0x1>;
--		operating-points-v2 = <&cpu_opp_table>;
--	};
--	cpu@2 {
--		device_type = "cpu";
--		compatible = "arm,cortex-a7";
--		reg = <0x2>;
--		operating-points-v2 = <&cpu_opp_table>;
--	};
--	cpu@3 {
--		device_type = "cpu";
--		compatible = "arm,cortex-a7";
--		reg = <0x3>;
--		operating-points-v2 = <&cpu_opp_table>;
--	};
--
--Example 2 (MT8173 SoC):
--	cpu_opp_table_a: opp_table_a {
--		compatible = "operating-points-v2";
--		opp-shared;
--
--		opp-507000000 {
--			opp-hz = /bits/ 64 <507000000>;
--			opp-microvolt = <859000>;
--		};
--
--		opp-702000000 {
--			opp-hz = /bits/ 64 <702000000>;
--			opp-microvolt = <908000>;
--		};
--
--		opp-1001000000 {
--			opp-hz = /bits/ 64 <1001000000>;
--			opp-microvolt = <983000>;
--		};
--
--		opp-1105000000 {
--			opp-hz = /bits/ 64 <1105000000>;
--			opp-microvolt = <1009000>;
--		};
--
--		opp-1183000000 {
--			opp-hz = /bits/ 64 <1183000000>;
--			opp-microvolt = <1028000>;
--		};
--
--		opp-1404000000 {
--			opp-hz = /bits/ 64 <1404000000>;
--			opp-microvolt = <1083000>;
--		};
--
--		opp-1508000000 {
--			opp-hz = /bits/ 64 <1508000000>;
--			opp-microvolt = <1109000>;
--		};
--
--		opp-1573000000 {
--			opp-hz = /bits/ 64 <1573000000>;
--			opp-microvolt = <1125000>;
--		};
--	};
--
--	cpu_opp_table_b: opp_table_b {
--		compatible = "operating-points-v2";
--		opp-shared;
--
--		opp-507000000 {
--			opp-hz = /bits/ 64 <507000000>;
--			opp-microvolt = <828000>;
--		};
--
--		opp-702000000 {
--			opp-hz = /bits/ 64 <702000000>;
--			opp-microvolt = <867000>;
--		};
--
--		opp-1001000000 {
--			opp-hz = /bits/ 64 <1001000000>;
--			opp-microvolt = <927000>;
--		};
--
--		opp-1209000000 {
--			opp-hz = /bits/ 64 <1209000000>;
--			opp-microvolt = <968000>;
--		};
--
--		opp-1404000000 {
--			opp-hz = /bits/ 64 <1007000000>;
--			opp-microvolt = <1028000>;
--		};
--
--		opp-1612000000 {
--			opp-hz = /bits/ 64 <1612000000>;
--			opp-microvolt = <1049000>;
--		};
--
--		opp-1807000000 {
--			opp-hz = /bits/ 64 <1807000000>;
--			opp-microvolt = <1089000>;
--		};
--
--		opp-1989000000 {
--			opp-hz = /bits/ 64 <1989000000>;
--			opp-microvolt = <1125000>;
--		};
--	};
--
--	cpu0: cpu@0 {
--		device_type = "cpu";
--		compatible = "arm,cortex-a53";
--		reg = <0x000>;
--		enable-method = "psci";
--		cpu-idle-states = <&CPU_SLEEP_0>;
--		clocks = <&infracfg CLK_INFRA_CA53SEL>,
--			 <&apmixedsys CLK_APMIXED_MAINPLL>;
--		clock-names = "cpu", "intermediate";
--		operating-points-v2 = <&cpu_opp_table_a>;
--	};
--
--	cpu1: cpu@1 {
--		device_type = "cpu";
--		compatible = "arm,cortex-a53";
--		reg = <0x001>;
--		enable-method = "psci";
--		cpu-idle-states = <&CPU_SLEEP_0>;
--		clocks = <&infracfg CLK_INFRA_CA53SEL>,
--			 <&apmixedsys CLK_APMIXED_MAINPLL>;
--		clock-names = "cpu", "intermediate";
--		operating-points-v2 = <&cpu_opp_table_a>;
--	};
--
--	cpu2: cpu@100 {
--		device_type = "cpu";
--		compatible = "arm,cortex-a72";
--		reg = <0x100>;
--		enable-method = "psci";
--		cpu-idle-states = <&CPU_SLEEP_0>;
--		clocks = <&infracfg CLK_INFRA_CA72SEL>,
--			 <&apmixedsys CLK_APMIXED_MAINPLL>;
--		clock-names = "cpu", "intermediate";
--		operating-points-v2 = <&cpu_opp_table_b>;
--	};
--
--	cpu3: cpu@101 {
--		device_type = "cpu";
--		compatible = "arm,cortex-a72";
--		reg = <0x101>;
--		enable-method = "psci";
--		cpu-idle-states = <&CPU_SLEEP_0>;
--		clocks = <&infracfg CLK_INFRA_CA72SEL>,
--			 <&apmixedsys CLK_APMIXED_MAINPLL>;
--		clock-names = "cpu", "intermediate";
--		operating-points-v2 = <&cpu_opp_table_b>;
--	};
--
--	&cpu0 {
--		proc-supply = <&mt6397_vpca15_reg>;
--	};
--
--	&cpu1 {
--		proc-supply = <&mt6397_vpca15_reg>;
--	};
--
--	&cpu2 {
--		proc-supply = <&da9211_vcpu_reg>;
--		sram-supply = <&mt6397_vsramca7_reg>;
--	};
--
--	&cpu3 {
--		proc-supply = <&da9211_vcpu_reg>;
--		sram-supply = <&mt6397_vsramca7_reg>;
--	};
+ZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9lODIwLmMgYi9hcmNoL3g4Ni9rZXJuZWwv
+ZTgyMC5jCmluZGV4IDgyYjk2ZWQ5ODkwYS4uZWY2ZTYzOWU0M2ZhIDEwMDY0NAotLS0gYS9h
+cmNoL3g4Ni9rZXJuZWwvZTgyMC5jCisrKyBiL2FyY2gveDg2L2tlcm5lbC9lODIwLmMKQEAg
+LTc1NCwyMCArNzU0LDIwIEBAIHZvaWQgX19pbml0IGU4MjBfX21lbW9yeV9zZXR1cF9leHRl
+bmRlZCh1NjQgcGh5c19hZGRyLCB1MzIgZGF0YV9sZW4pCiB2b2lkIF9faW5pdCBlODIwX19y
+ZWdpc3Rlcl9ub3NhdmVfcmVnaW9ucyh1bnNpZ25lZCBsb25nIGxpbWl0X3BmbikKIHsKIAlp
+bnQgaTsKLQl1bnNpZ25lZCBsb25nIHBmbiA9IDA7CisJdTY0IGxhc3RfYWRkciA9IDA7CiAK
+IAlmb3IgKGkgPSAwOyBpIDwgZTgyMF90YWJsZS0+bnJfZW50cmllczsgaSsrKSB7CiAJCXN0
+cnVjdCBlODIwX2VudHJ5ICplbnRyeSA9ICZlODIwX3RhYmxlLT5lbnRyaWVzW2ldOwogCi0J
+CWlmIChwZm4gPCBQRk5fVVAoZW50cnktPmFkZHIpKQotCQkJcmVnaXN0ZXJfbm9zYXZlX3Jl
+Z2lvbihwZm4sIFBGTl9VUChlbnRyeS0+YWRkcikpOworCQlpZiAobGFzdF9hZGRyIDwgZW50
+cnktPmFkZHIpCisJCQlyZWdpc3Rlcl9ub3NhdmVfcmVnaW9uKFBGTl9VUChsYXN0X2FkZHIp
+LCBQRk5fRE9XTihlbnRyeS0+YWRkcikpOwogCi0JCXBmbiA9IFBGTl9ET1dOKGVudHJ5LT5h
+ZGRyICsgZW50cnktPnNpemUpOworCQlsYXN0X2FkZHIgPSBlbnRyeS0+YWRkciArIGVudHJ5
+LT5zaXplOwogCiAJCWlmIChlbnRyeS0+dHlwZSAhPSBFODIwX1RZUEVfUkFNICYmIGVudHJ5
+LT50eXBlICE9IEU4MjBfVFlQRV9SRVNFUlZFRF9LRVJOKQotCQkJcmVnaXN0ZXJfbm9zYXZl
+X3JlZ2lvbihQRk5fVVAoZW50cnktPmFkZHIpLCBwZm4pOworCQkJcmVnaXN0ZXJfbm9zYXZl
+X3JlZ2lvbihQRk5fVVAoZW50cnktPmFkZHIpLCBQRk5fRE9XTihsYXN0X2FkZHIpKTsKIAot
+CQlpZiAocGZuID49IGxpbWl0X3BmbikKKwkJaWYgKFBGTl9ET1dOKGxhc3RfYWRkcikgPj0g
+bGltaXRfcGZuKQogCQkJYnJlYWs7CiAJfQogfQo=
+--------------QNl5qfMEuxRVraWYtdKPb7kl
+Content-Type: text/x-patch; charset=UTF-8; name="for-master.diff"
+Content-Disposition: attachment; filename="for-master.diff"
+Content-Transfer-Encoding: base64
 
--- 
-2.47.2
+ZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9lODIwLmMgYi9hcmNoL3g4Ni9rZXJuZWwv
+ZTgyMC5jCmluZGV4IDU3MTIwZjA3NDljYy4uYzMyZWY3ZjUyMDVmIDEwMDY0NAotLS0gYS9h
+cmNoL3g4Ni9rZXJuZWwvZTgyMC5jCisrKyBiL2FyY2gveDg2L2tlcm5lbC9lODIwLmMKQEAg
+LTc1MywyMCArNzUzLDIwIEBAIHZvaWQgX19pbml0IGU4MjBfX21lbW9yeV9zZXR1cF9leHRl
+bmRlZCh1NjQgcGh5c19hZGRyLCB1MzIgZGF0YV9sZW4pCiB2b2lkIF9faW5pdCBlODIwX19y
+ZWdpc3Rlcl9ub3NhdmVfcmVnaW9ucyh1bnNpZ25lZCBsb25nIGxpbWl0X3BmbikKIHsKIAlp
+bnQgaTsKLQl1bnNpZ25lZCBsb25nIHBmbiA9IDA7CisJdTY0IGxhc3RfYWRkciA9IDA7CiAK
+IAlmb3IgKGkgPSAwOyBpIDwgZTgyMF90YWJsZS0+bnJfZW50cmllczsgaSsrKSB7CiAJCXN0
+cnVjdCBlODIwX2VudHJ5ICplbnRyeSA9ICZlODIwX3RhYmxlLT5lbnRyaWVzW2ldOwogCi0J
+CWlmIChwZm4gPCBQRk5fVVAoZW50cnktPmFkZHIpKQotCQkJcmVnaXN0ZXJfbm9zYXZlX3Jl
+Z2lvbihwZm4sIFBGTl9VUChlbnRyeS0+YWRkcikpOworCQlpZiAobGFzdF9hZGRyIDwgZW50
+cnktPmFkZHIpCisJCQlyZWdpc3Rlcl9ub3NhdmVfcmVnaW9uKFBGTl9VUChsYXN0X2FkZHIp
+LCBQRk5fRE9XTihlbnRyeS0+YWRkcikpOwogCi0JCXBmbiA9IFBGTl9ET1dOKGVudHJ5LT5h
+ZGRyICsgZW50cnktPnNpemUpOworCQlsYXN0X2FkZHIgPSBlbnRyeS0+YWRkciArIGVudHJ5
+LT5zaXplOwogCiAJCWlmIChlbnRyeS0+dHlwZSAhPSBFODIwX1RZUEVfUkFNKQotCQkJcmVn
+aXN0ZXJfbm9zYXZlX3JlZ2lvbihQRk5fVVAoZW50cnktPmFkZHIpLCBwZm4pOworCQkJcmVn
+aXN0ZXJfbm9zYXZlX3JlZ2lvbihQRk5fVVAoZW50cnktPmFkZHIpLCBQRk5fRE9XTihsYXN0
+X2FkZHIpKTsKIAotCQlpZiAocGZuID49IGxpbWl0X3BmbikKKwkJaWYgKFBGTl9ET1dOKGxh
+c3RfYWRkcikgPj0gbGltaXRfcGZuKQogCQkJYnJlYWs7CiAJfQogfQo=
 
+--------------QNl5qfMEuxRVraWYtdKPb7kl--
 
