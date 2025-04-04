@@ -1,179 +1,125 @@
-Return-Path: <linux-pm+bounces-24812-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24813-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06FAFA7BD82
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 15:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 023D3A7BDA0
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 15:20:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0E2A3B9892
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 13:16:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B18B33BA305
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 13:18:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2CC21F12F2;
-	Fri,  4 Apr 2025 13:16:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B5A41EE7B3;
+	Fri,  4 Apr 2025 13:18:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eKW8BkEP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 226BA1EB9F3;
-	Fri,  4 Apr 2025 13:16:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3EB82D98;
+	Fri,  4 Apr 2025 13:18:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743772607; cv=none; b=fZTL8244HK6bngbJzv42Mjg/RXElcio+2vdw9qLH+k744HUcV6yxStXgzhiPYiuRSOyMWhD+KvA+EkMk+T/kP6C+9UGn7bTjI4lBv+ZDYskc8K7PMNu+oT1Qsu28kSWftmJl6AOeukAKgIl935s1iH8OGp4yESgT2h6XYk+1hMo=
+	t=1743772724; cv=none; b=ldpW0QR9ASWFCyZCaY+k+g+cSEDGJmTg/WMqVVmB7oQvrJpxoQe+CleuUO3p2GLd+L55hotAVA/sLYAwhMb15XdK5EPZAbpkYUx6DbL4TbqJ3yztA7sPiph67zK+93edPx96EilX3CAcVDXS4s3L8UVNnRLS7jSqOjCyVJF+l5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743772607; c=relaxed/simple;
-	bh=Rgy2gfndJX3PsB92jWszKXmI5B60tkP+ysr7rxwu8+Y=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FbaEJaX0dhyOvainMWSIB/4CsLqbzJyDFqoqQgH8ZrcdWKezY51+8C5Z1SiTd/rCHCo6Bwg1o/ARSAhLPB7TVU0jaWcXcXk+xblJC2oJ/TOs2xwrAO6ZusrzjyyT5iO5DN0bv4ycoSJcrqlCPaCykyk0lAX4sib5gr3rSyqTERs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZTfDD4glsz6M4MH;
-	Fri,  4 Apr 2025 21:13:00 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7425514062A;
-	Fri,  4 Apr 2025 21:16:42 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 4 Apr
- 2025 15:16:41 +0200
-Date: Fri, 4 Apr 2025 14:16:39 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Terry Bowman <terry.bowman@amd.com>
-CC: <dave@stgolabs.net>, <dave.jiang@intel.com>, <alison.schofield@intel.com>,
-	<vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
-	<dan.j.williams@intel.com>, <willy@infradead.org>, <jack@suse.cz>,
-	<rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>,
-	<ming.li@zohomail.com>, <nathan.fontenot@amd.com>,
-	<Smita.KoralahalliChannabasappa@amd.com>, <huang.ying.caritas@gmail.com>,
-	<yaoxt.fnst@fujitsu.com>, <peterz@infradead.org>,
-	<gregkh@linuxfoundation.org>, <quic_jjohnson@quicinc.com>,
-	<ilpo.jarvinen@linux.intel.com>, <bhelgaas@google.com>,
-	<andriy.shevchenko@linux.intel.com>, <mika.westerberg@linux.intel.com>,
-	<akpm@linux-foundation.org>, <gourry@gourry.net>,
-	<linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, <rrichter@amd.com>, <benjamin.cheatham@amd.com>,
-	<PradeepVineshReddy.Kodamati@amd.com>, <lizhijian@fujitsu.com>
-Subject: Re: [PATCH v3 1/4] kernel/resource: Provide mem region release for
- SOFT RESERVES
-Message-ID: <20250404141639.00000f59@huawei.com>
-In-Reply-To: <20250403183315.286710-2-terry.bowman@amd.com>
-References: <20250403183315.286710-1-terry.bowman@amd.com>
-	<20250403183315.286710-2-terry.bowman@amd.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1743772724; c=relaxed/simple;
+	bh=8p+c4MB2Vz2NLD+RiN8PNGA7Pc+YAFAuwCP+/mMX5Bs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=syr+2X+tTBERF6utb9ugcFi2InI1tPTBhVhyRyP4oQBMDOHpBR0zxWXH9Esj7PNjLpc/ckdJQ1iPBO9zMOhfON9tqZV6YOc4yyCAeitZRQ/YrRW5AQt1cJSXgNuLm0UV4P4D4F31NcZP6af1YqMgzW/MHdvEy1Yi+yfZAS2tTS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eKW8BkEP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DBDCC4CEDD;
+	Fri,  4 Apr 2025 13:18:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743772723;
+	bh=8p+c4MB2Vz2NLD+RiN8PNGA7Pc+YAFAuwCP+/mMX5Bs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=eKW8BkEPXJzBEfA6eyTODP0H96m9hqR98uXmWJ+NQbzBwEXHrdYrjtSd1C8RWZmfz
+	 2rcbpHdZXLJRVcFaE9n5Kp4yS8ugzHBQqGEDWJS2qXvoobc+wP2LpgFooZ3AZGa3xa
+	 6bKGGVFi85i5+b/AfCt8XkZRJhnqVnGqQ0ftCT5vqRVzGTuQFelxLx7V8tqxC1gZv7
+	 u1xcnhxGxabJM0V87wUWYVqmKLm/TNRviJGpd0rTUcnJlFhcHwhwwXhdKoE4G2UVgz
+	 pjRM+2K+IxITVbj+DgcmSYFJK28J91/7Ppto2N1C+xXzQUFvu+zdmpvR8Gf7606QS7
+	 J6mnKZPky2aVw==
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-ac28e66c0e1so311005966b.0;
+        Fri, 04 Apr 2025 06:18:43 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU74/AFkwfml4gbLJgq9B9nT7NigzWroHm/O7v4+JSE0HLq4cZFyhHESaVr+F/jFy+qajPMTwncmn3v@vger.kernel.org, AJvYcCVca6V00CRoBKtmUtOIWtOWE5bY3mOa0M3AJPEMAT/M4vh5VjsFQPQ45bzqYVVQj1v7jl0dK/wssQnFMWW1hw==@vger.kernel.org, AJvYcCVt6RIcvH0oORKvmL8WVdavu8J9SIIBSl6so57Ms21AUG21xMzChc5O1PjM/fy6+n2yMjWJ+zWNRmg=@vger.kernel.org, AJvYcCWElHLSNXK4GYCk3a16tcR6mVf0iXDTjD+tQu8rLGZk1JoGx7Eh4+5gpu5FcfCTBzXW/mL8+/iG8bTY4xPW@vger.kernel.org, AJvYcCWTtfUlgX6ca+PColQA4KXdHY/u7g/lLUiAbFptm2aFsFc/00VHmr5O94tToY1z2tK9KyL0ld/Nhi8BFyN6s/E2Cag=@vger.kernel.org, AJvYcCWfxWgSkvrs/iJ68oR2IeT8oaObM1OA9mAL2rutoTP5TKuARVZyrJvsl7CBRfJCbJGKvh3QvOQ76MujuQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8YR5iHRp2Qh7Z2jWkc5AaOgn5a34dBGvx+jVMh3ExHPtM5C+8
+	1pBb3M464xHdP+wExqQ0UhfhXaJiaMywYle0yjI90bJfXs6BIaLsHy2yExCeS/8YZYyTAI8fTnJ
+	rvAVb4Zmpo/AYxO4iWIW6k+XLhw==
+X-Google-Smtp-Source: AGHT+IGeMGvCEeK8AclL93nVBIzL9ZaOIe89VJXnsQlCY86LywWmTQFiXrpurfnLdBj4EjlXLbq/bSkPsN9UQIZ0bQ0=
+X-Received: by 2002:a17:907:7209:b0:ac3:45c6:a1ec with SMTP id
+ a640c23a62f3a-ac7d6d5dff4mr229454566b.25.1743772721929; Fri, 04 Apr 2025
+ 06:18:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- frapeml500008.china.huawei.com (7.182.85.71)
+References: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
+ <20250403-dt-cpu-schema-v1-6-076be7171a85@kernel.org> <Z-_K2XDEcbtcCMVM@linaro.org>
+In-Reply-To: <Z-_K2XDEcbtcCMVM@linaro.org>
+From: Rob Herring <robh@kernel.org>
+Date: Fri, 4 Apr 2025 08:18:30 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJT-0gwvJnMb63izy6WwJpBVsswkauL8OMLCrF08q9HYQ@mail.gmail.com>
+X-Gm-Features: ATxdqUHOgMca65CFxOkpc1GwFhcina94zKtpSzj7uSzh0WZ2vI4WGj4U0KjYQTw
+Message-ID: <CAL_JsqJT-0gwvJnMb63izy6WwJpBVsswkauL8OMLCrF08q9HYQ@mail.gmail.com>
+Subject: Re: [PATCH 06/19] arm64: dts: qcom: msm8939: Fix CPU node
+ "enable-method" property dependencies
+To: Stephan Gerhold <stephan.gerhold@linaro.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Samuel Holland <samuel@sholland.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Liviu Dudau <liviu.dudau@arm.com>, 
+	Sudeep Holla <sudeep.holla@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Viresh Kumar <vireshk@kernel.org>, 
+	Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, zhouyanjie@wanyeetech.com, 
+	Conor Dooley <conor@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>, Steen Hegelund <Steen.Hegelund@microchip.com>, 
+	Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Heiko Stuebner <heiko@sntech.de>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org, 
+	linux-arm-msm@vger.kernel.org, linux-mips@vger.kernel.org, 
+	imx@lists.linux.dev, linux-rockchip@lists.infradead.org, 
+	linux-amlogic@lists.infradead.org, linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 3 Apr 2025 13:33:12 -0500
-Terry Bowman <terry.bowman@amd.com> wrote:
+On Fri, Apr 4, 2025 at 7:04=E2=80=AFAM Stephan Gerhold
+<stephan.gerhold@linaro.org> wrote:
+>
+> On Thu, Apr 03, 2025 at 09:59:27PM -0500, Rob Herring (Arm) wrote:
+> > The "qcom,acc" and "qcom,saw" properties aren't valid with "spin-table"
+> > enable-method nor are they used on 64-bit kernels, so they can be
+> > dropped.
+> >
+>
+> The bootloader we currently use on these devices reads these properties
+> to set up the spin-table, so removing these will break booting secondary
+> CPU cores.
+>
+> The motivation for implementing it that way was that 32-bit vs 64-bit
+> kernel shouldn't be relevant for the describing the hardware blocks in
+> the device tree. The code in the bootloader is generic and handles
+> different SoCs (e.g. msm8916 with 4 cores and msm8939 with 8 cores, the
+> enable sequences are identical).
+>
+> Can we keep this in somehow? To be fair, I'm not sure what property we
+> could match on to check if these properties are allowed ...
 
-> From: Nathan Fontenot <nathan.fontenot@amd.com>
-> 
-> Add a release_Sam_region_adjustable() interface to allow for
+Yes, we can keep them. We'll have to allow them with "spin-table" and
+"psci" I guess.
 
-Who is Sam?  (typo)
-
-> removing SOFT RESERVE memory resources. This extracts out the code
-> to remove a mem region into a common __release_mem_region_adjustable()
-> routine, this routine takes additional parameters of an IORES
-> descriptor type to add checks for IORES_DESC_* and a flag to check
-> for IORESOURCE_BUSY to control it's behavior.
-> 
-> The existing release_mem_region_adjustable() is a front end to the
-> common code and a new release_srmem_region_adjustable() is added to
-> release SOFT RESERVE resources.
-> 
-> Signed-off-by: Nathan Fontenot <nathan.fontenot@amd.com>
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> ---
->  include/linux/ioport.h |  3 +++
->  kernel/resource.c      | 55 +++++++++++++++++++++++++++++++++++++++---
->  2 files changed, 54 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/ioport.h b/include/linux/ioport.h
-> index 5385349f0b8a..718360c9c724 100644
-> --- a/include/linux/ioport.h
-> +++ b/include/linux/ioport.h
-> @@ -357,6 +357,9 @@ extern void __release_region(struct resource *, resource_size_t,
->  #ifdef CONFIG_MEMORY_HOTREMOVE
->  extern void release_mem_region_adjustable(resource_size_t, resource_size_t);
->  #endif
-> +#ifdef CONFIG_CXL_REGION
-> +extern void release_srmem_region_adjustable(resource_size_t, resource_size_t);
-I'm not sure the srmem is obvious enough.  Maybe it's worth the long
-name to spell it out some more.. e.g. something like
-
-extern void release_softresv_mem_region_adjustable() ?
-> +#endif
->  #ifdef CONFIG_MEMORY_HOTPLUG
->  extern void merge_system_ram_resource(struct resource *res);
->  #endif
-> diff --git a/kernel/resource.c b/kernel/resource.c
-> index 12004452d999..0195b31064b0 100644
-> --- a/kernel/resource.c
-> +++ b/kernel/resource.c
-> @@ -1387,7 +1387,7 @@ void __release_region(struct resource *parent, resource_size_t start,
->  }
->  EXPORT_SYMBOL(__release_region);
->  
-> -#ifdef CONFIG_MEMORY_HOTREMOVE
-> +#if defined(CONFIG_MEMORY_HOTREMOVE) || defined(CONFIG_CXL_REGION)
->  /**
->   * release_mem_region_adjustable - release a previously reserved memory region
-
-Looks like you left the old docs which I'm guessing is not the intent.
-
->   * @start: resource start address
-> @@ -1407,7 +1407,10 @@ EXPORT_SYMBOL(__release_region);
->   *   assumes that all children remain in the lower address entry for
->   *   simplicity.  Enhance this logic when necessary.
->   */
-> -void release_mem_region_adjustable(resource_size_t start, resource_size_t size)
-> +static void __release_mem_region_adjustable(resource_size_t start,
-> +					    resource_size_t size,
-> +					    bool busy_check,
-> +					    int res_desc)
->  {
->  	struct resource *parent = &iomem_resource;
->  	struct resource *new_res = NULL;
-> @@ -1446,7 +1449,12 @@ void release_mem_region_adjustable(resource_size_t start, resource_size_t size)
->  		if (!(res->flags & IORESOURCE_MEM))
->  			break;
->  
-> -		if (!(res->flags & IORESOURCE_BUSY)) {
-> +		if (busy_check && !(res->flags & IORESOURCE_BUSY)) {
-> +			p = &res->child;
-> +			continue;
-> +		}
-> +
-> +		if (res_desc != IORES_DESC_NONE && res->desc != res_desc) {
->  			p = &res->child;
->  			continue;
->  		}
-> @@ -1496,7 +1504,46 @@ void release_mem_region_adjustable(resource_size_t start, resource_size_t size)
->  	write_unlock(&resource_lock);
->  	free_resource(new_res);
->  }
-> -#endif	/* CONFIG_MEMORY_HOTREMOVE */
-> +#endif
-> +
-> +#ifdef CONFIG_MEMORY_HOTREMOVE
-> +/**
-> + * release_mem_region_adjustable - release a previously reserved memory region
-As above. I was surprised to see new docs in here for an existing function.
-I think you forgot to delete the now wrongly placed ones above.
-
-Jonathan
-
+Rob
 
