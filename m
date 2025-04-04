@@ -1,50 +1,50 @@
-Return-Path: <linux-pm+bounces-24780-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24781-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B89D1A7B635
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 05:01:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FFDBA7B64F
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 05:03:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 547133B95F4
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 03:01:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 435F9189C045
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 03:01:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E88A719ABC2;
-	Fri,  4 Apr 2025 02:59:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC8D119D886;
+	Fri,  4 Apr 2025 02:59:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MpXVnVMr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sGzlfMKi"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AADE413AA2E;
-	Fri,  4 Apr 2025 02:59:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF3B313B2BB;
+	Fri,  4 Apr 2025 02:59:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743735591; cv=none; b=H5eoG67lyQeRgMM+9yjfGlTkunPTGaNMgdEB9652YS8bg6/MfwZBXt9fFzv0aTnPRzBW2rbfRMJ3J8dYjXC8Z4gtBP8vYeY5PMLwOImVsyBPI+djVJQVwKfqY41G0iXC6fiw2hfQ2sokwkYGT58/ssavVmNTWNtgrP07SLjFE0Y=
+	t=1743735592; cv=none; b=SmBpb2xZXgTxTKDrxXr12pY31I620VjYsxWmXVCNecWRE2utAjIYIpEKMN6Mudf+EHwt7MiUNJ4CTQshs4k59yKs16xJr/3Q15XxAP0xuVdT8bxAUhnwSnSCXtGmw6dhcoeN6wxTUSxpncLnRw1xCuXOa9XPuDUPr3xCNsUDFbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743735591; c=relaxed/simple;
-	bh=nVo5X/MosXjoMIZOdVn7ETl8AN7NiwovxfdEw8OmSOs=;
+	s=arc-20240116; t=1743735592; c=relaxed/simple;
+	bh=NXfOJoK0Dz0mef/BAq7y8KxDDG3duFbiuiL1Z6QJ9BI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=emJSVJkt6Kp4dAfvwkR6SOta5HWTWi0lbZuYJVNAxMHv4HaR7Jfn1lQXVws04fKJJKSkfrn5jxcOAxaJbJdLFUvnxmUKeei1R+8rHU+wHfsFvXbSRc4TBa6BsHqk4ldFRn5SO5yQzopTXy13oAPQ3H+Zn+qWxiLNoCd+zHUMgh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MpXVnVMr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFD73C4CEE7;
-	Fri,  4 Apr 2025 02:59:50 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=notKgkXuQIbGCaCqoPTV4WYTP0ZBMSu+PIwUyCbScNE4HGR5ll3CUb7cyuI0TJKcSi/s58xY++LxgoqaQm3U8pEkRu1hVQpHRC93u798+lN8IE/llJqOgcR+O4YNRo79My/6X5AFwOTTJuVfUMPoHwPRGOyzwai0T1CiffMzAPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sGzlfMKi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DE6DC4CEE7;
+	Fri,  4 Apr 2025 02:59:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743735591;
-	bh=nVo5X/MosXjoMIZOdVn7ETl8AN7NiwovxfdEw8OmSOs=;
+	s=k20201202; t=1743735592;
+	bh=NXfOJoK0Dz0mef/BAq7y8KxDDG3duFbiuiL1Z6QJ9BI=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=MpXVnVMrGj9jX534Z3QILWihteFROOZpFGF7cY4LpdJ/vHXhydB+UXGlWiL4yWQB4
-	 MkCR3gilGWmLGChDVWTTcfkMDs63dzW3J8NpL+I63xv6gf44HszHnPF5aNKa0h4T7c
-	 caRfFdYnPhzgZc1JocQT3/Q6LiL9G+DMwtJtDjgwmmquwSNBTS2H8djS9qC2sphBN2
-	 P1Cgp4AVOzpzTpPm8SpIsWdV0ESebX0hsTqoMjdNevs2pD82PnipJyPInDkUM2QXYA
-	 Z7Lg/Tk+1JcZyy9fVa7gbntS/8pmlDuzwioeuqSQW0x75dypqHfY+J4/VPsE36jmr2
-	 bm5Z7w4iLaFaQ==
+	b=sGzlfMKi1upb46KlxcbmpIatBcJlDA+lJRioYblOpv5TuMcIgUURlrFv/QVkqvcTU
+	 cqjZ3jite7u9/lrkFPtYLaZQU+UPcpDjuKKwQKVdaz05Zt2Wg2bX8aD21CBMmgztP/
+	 597TFjZnnA5cS1HbMOvLF6ZZO6RT4hAa1J+fA2rlUycXmgZf53mYjv6qE+Elqb9F7E
+	 V6LVIXszs4tasfp/HFFOFuNBTRwJoQvjb168YTZBNWldrVQST227wqM+8fQaQlV3RP
+	 O1V2tZKhlzmE6O5RVW6E9/CixcMg8/3k12lNJLB9F/Ieoqt9oPG0IvqU/qqu+JWsS6
+	 zwQKoFaWCIVXQ==
 From: "Rob Herring (Arm)" <robh@kernel.org>
-Date: Thu, 03 Apr 2025 21:59:28 -0500
-Subject: [PATCH 07/19] arm64: dts: qcom: msm8992-lg-h815: Fix CPU node
- "enable-method" property dependencies
+Date: Thu, 03 Apr 2025 21:59:29 -0500
+Subject: [PATCH 08/19] arm: dts: qcom: msm8916: Move "qcom,acc" and
+ "qcom,saw" to 32-bit .dtsi
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250403-dt-cpu-schema-v1-7-076be7171a85@kernel.org>
+Message-Id: <20250403-dt-cpu-schema-v1-8-076be7171a85@kernel.org>
 References: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
 In-Reply-To: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
 To: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -93,52 +93,84 @@ Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-amlogic@lists.infradead.org, linux-renesas-soc@vger.kernel.org
 X-Mailer: b4 0.15-dev
 
-The "spin-table" enable-method requires "cpu-release-addr" property,
-so add a dummy entry. It is assumed the bootloader will fill in the
-correct values.
+The "qcom,acc" and "qcom,saw" properties are only used with 32-bit
+kernels. Of course, booting a 64-bit or 32-bit kernel shouldn't matter
+to the DTS, but the "enable-method" is already different for 32-bit.
 
 Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/msm8992-lg-h815.dts | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/arm/boot/dts/qcom/qcom-msm8916-smp.dtsi | 8 ++++++++
+ arch/arm64/boot/dts/qcom/msm8916.dtsi        | 8 --------
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8992-lg-h815.dts b/arch/arm64/boot/dts/qcom/msm8992-lg-h815.dts
-index 4520d5d51a29..6a231afad85d 100644
---- a/arch/arm64/boot/dts/qcom/msm8992-lg-h815.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8992-lg-h815.dts
-@@ -93,26 +93,32 @@ key-vol-up {
+diff --git a/arch/arm/boot/dts/qcom/qcom-msm8916-smp.dtsi b/arch/arm/boot/dts/qcom/qcom-msm8916-smp.dtsi
+index 94b7694eeeff..594cc4a3a78b 100644
+--- a/arch/arm/boot/dts/qcom/qcom-msm8916-smp.dtsi
++++ b/arch/arm/boot/dts/qcom/qcom-msm8916-smp.dtsi
+@@ -4,15 +4,23 @@ / {
+ 	cpus {
+ 		cpu@0 {
+ 			enable-method = "qcom,msm8916-smp";
++			qcom,acc = <&cpu0_acc>;
++			qcom,saw = <&cpu0_saw>;
+ 		};
+ 		cpu@1 {
+ 			enable-method = "qcom,msm8916-smp";
++			qcom,acc = <&cpu1_acc>;
++			qcom,saw = <&cpu1_saw>;
+ 		};
+ 		cpu@2 {
+ 			enable-method = "qcom,msm8916-smp";
++			qcom,acc = <&cpu2_acc>;
++			qcom,saw = <&cpu2_saw>;
+ 		};
+ 		cpu@3 {
+ 			enable-method = "qcom,msm8916-smp";
++			qcom,acc = <&cpu3_acc>;
++			qcom,saw = <&cpu3_saw>;
+ 		};
  
- &cpu0 {
- 	enable-method = "spin-table";
-+	cpu-release-addr = /bits/ 64 <0>;
- };
+ 		idle-states {
+diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+index 8f35c9af1878..88e452752de6 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+@@ -144,8 +144,6 @@ cpu0: cpu@0 {
+ 			#cooling-cells = <2>;
+ 			power-domains = <&cpu_pd0>;
+ 			power-domain-names = "psci";
+-			qcom,acc = <&cpu0_acc>;
+-			qcom,saw = <&cpu0_saw>;
+ 		};
  
- &cpu1 {
- 	enable-method = "spin-table";
-+	cpu-release-addr = /bits/ 64 <0>;
- };
+ 		cpu1: cpu@1 {
+@@ -159,8 +157,6 @@ cpu1: cpu@1 {
+ 			#cooling-cells = <2>;
+ 			power-domains = <&cpu_pd1>;
+ 			power-domain-names = "psci";
+-			qcom,acc = <&cpu1_acc>;
+-			qcom,saw = <&cpu1_saw>;
+ 		};
  
- &cpu2 {
- 	enable-method = "spin-table";
-+	cpu-release-addr = /bits/ 64 <0>;
- };
+ 		cpu2: cpu@2 {
+@@ -174,8 +170,6 @@ cpu2: cpu@2 {
+ 			#cooling-cells = <2>;
+ 			power-domains = <&cpu_pd2>;
+ 			power-domain-names = "psci";
+-			qcom,acc = <&cpu2_acc>;
+-			qcom,saw = <&cpu2_saw>;
+ 		};
  
- &cpu3 {
- 	enable-method = "spin-table";
-+	cpu-release-addr = /bits/ 64 <0>;
- };
+ 		cpu3: cpu@3 {
+@@ -189,8 +183,6 @@ cpu3: cpu@3 {
+ 			#cooling-cells = <2>;
+ 			power-domains = <&cpu_pd3>;
+ 			power-domain-names = "psci";
+-			qcom,acc = <&cpu3_acc>;
+-			qcom,saw = <&cpu3_saw>;
+ 		};
  
- &cpu4 {
- 	enable-method = "spin-table";
-+	cpu-release-addr = /bits/ 64 <0>;
- };
- 
- &cpu5 {
- 	enable-method = "spin-table";
-+	cpu-release-addr = /bits/ 64 <0>;
- };
- 
- &pm8994_resin {
+ 		l2_0: l2-cache {
 
 -- 
 2.47.2
