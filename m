@@ -1,49 +1,49 @@
-Return-Path: <linux-pm+bounces-24783-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24784-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C5B3A7B665
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 05:04:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19064A7B64E
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 05:03:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EAFA189D1B6
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 03:02:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87E7F3B8FF9
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 03:02:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0B841A38E4;
-	Fri,  4 Apr 2025 02:59:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02CC31A8407;
+	Fri,  4 Apr 2025 02:59:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IWCsZoJx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XIrMHwGT"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92C2A1A3145;
-	Fri,  4 Apr 2025 02:59:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5541A725A;
+	Fri,  4 Apr 2025 02:59:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743735595; cv=none; b=isDvbDiVo0yjDZb/fs8WFHHh9pHLhHk07M0iOkU2raVMMJuG4+PjcbspaQ82mxEXefEp39YCpmeXF7TzYuefJv3+Gz8GNpz+qFL3hH85loakul++n4bfGtigZ027S6Sf1Tsj5h+0/gYlxBwIajfgfk7NuPRRAFCNca1t99Btyhw=
+	t=1743735597; cv=none; b=jVpCOF8B0wTPlwcyWGBF+xNGytqQg0WrGb3heBJPX0nMjNi1qTvcLi+4nPCoCobFvKxNf48jfQX0Cr/4WFxeTziy3eGrMBBOwXLwO/feJpTCao9bfmCcQIIc+lOciEKLfGzDltem+0hsfaycxfxrKnzFVfQmc+7B0zFepBhz51o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743735595; c=relaxed/simple;
-	bh=xMgbsjBv9Kef+UFcQ6l0JsE73pnNHHIi5V3EKTVvKZU=;
+	s=arc-20240116; t=1743735597; c=relaxed/simple;
+	bh=xxnpE5qJ/N71v6fr0ntanbnn0YWeubI80yQwzP2nKgo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=o3OmKVHGLmO6DTcJTKw6TEpS7St29Bzh/4fsrexhJyP1jGdL9/GQIxi/CXY3QIv8WUWMKWl1OvDYc8evUqtQaKChoEEVjBBJa890c+1v+++jEkDQ8+o350kGK6hCWXOX5sD6NBnqWpeVkQ56FIMC/Q7aRQe3Moo+jiNXHac1cA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IWCsZoJx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D85A7C4CEEA;
-	Fri,  4 Apr 2025 02:59:54 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=IH9zTCRZoBE8iQIKT10fXW4zR5SU4qGEQdCBJtPpL67/XPxGFuvWg86NAoSW82uEC1lXHR2L1ST8SaDQV3B9qIGCg7oO1NEo+yuDJjdiTbl8avw1fn+IeOoXi4XW548qWJN8vc/F5Oj++2TJdnyq0Td7zUT2QrAvR5nnTxp8GiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XIrMHwGT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB7BC4CEE9;
+	Fri,  4 Apr 2025 02:59:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743735595;
-	bh=xMgbsjBv9Kef+UFcQ6l0JsE73pnNHHIi5V3EKTVvKZU=;
+	s=k20201202; t=1743735596;
+	bh=xxnpE5qJ/N71v6fr0ntanbnn0YWeubI80yQwzP2nKgo=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=IWCsZoJxuJf4uC4DHbLlZqGIlVn0yqULR8Xtwd1cvdcGj7FhgjRQsG2SZFQd0XerM
-	 CRUVey1D2fQtZTk306phmWw6frB7jh1SH8kVjnZg+Qubx0VBm/vyiWFIzZpWBR08PA
-	 /LZ/0lId4BBMvcDw1WOPh7PViu2YUoTQ+UAqMt+Y7hyQdMNBm+uZwkM3WH9Tcr5/23
-	 Vd8Ft9GnkB81oQy2ce+2bXpECXxW3bO6y598SZCfo3GvNV1vdgjQQvH5ZZ6EYT4wcG
-	 6pqTzBxnPTqB8+Dy9NGVG76jnC1SNKcdt17QiODpJwYElrrof8OiFD5VlOEZ+y99Gs
-	 jg+wxJbjyDYcA==
+	b=XIrMHwGTXb4RmttX/4kwcXrnnodX0JBT8uweoux/nL/HuKOCPfCBajnBFPeD8Vts6
+	 Gxe61aW4gvaTXmKw6+t5HolmnAW2Voe3vCOH6CoEzBtJxFC7kFmaeCW+xjLtma4zQz
+	 ++plRy91W12HopTil7NZc1ybIwDLVV4XS0vSsAgmEKXZzpEGXa0NWNGe8YGQUDFq7g
+	 UO7KBuOKY4U2H35uR9JTDOezj0jCkY4PTq+UF987lhUjRS4VKyqb6aJ/ET9NTmi+nP
+	 8TGp3QOoj802IkgOm+5C2Z/QNMN0ZE8AL8H0rwftmHSLbeAbe8AJfG9aNj9PPoqaWO
+	 BgFjh05sC9akQ==
 From: "Rob Herring (Arm)" <robh@kernel.org>
-Date: Thu, 03 Apr 2025 21:59:31 -0500
-Subject: [PATCH 10/19] arm/arm64: dts: imx: Drop redundant CPU
+Date: Thu, 03 Apr 2025 21:59:32 -0500
+Subject: [PATCH 11/19] arm: dts: qcom: ipq4019: Drop redundant CPU
  "clock-latency"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250403-dt-cpu-schema-v1-10-076be7171a85@kernel.org>
+Message-Id: <20250403-dt-cpu-schema-v1-11-076be7171a85@kernel.org>
 References: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
 In-Reply-To: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
 To: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -95,174 +95,50 @@ X-Mailer: b4 0.15-dev
 
 The "clock-latency" property is part of the deprecated opp-v1 binding
 and is redundant if the opp-v2 table has equal or larger values in any
-"clock-latency-ns". The OPP tables have values of 150000, so it can be
+"clock-latency-ns". The OPP table has values of 256000, so it can be
 removed.
 
 Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- arch/arm/boot/dts/nxp/imx/imx7s.dtsi      | 1 -
- arch/arm64/boot/dts/freescale/imx8mm.dtsi | 4 ----
- arch/arm64/boot/dts/freescale/imx8mn.dtsi | 4 ----
- arch/arm64/boot/dts/freescale/imx8mp.dtsi | 4 ----
- arch/arm64/boot/dts/freescale/imx8mq.dtsi | 4 ----
- 5 files changed, 17 deletions(-)
+ arch/arm/boot/dts/qcom/qcom-ipq4019.dtsi | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/nxp/imx/imx7s.dtsi b/arch/arm/boot/dts/nxp/imx/imx7s.dtsi
-index 2629968001a7..9235dd7e93bb 100644
---- a/arch/arm/boot/dts/nxp/imx/imx7s.dtsi
-+++ b/arch/arm/boot/dts/nxp/imx/imx7s.dtsi
-@@ -73,7 +73,6 @@ cpu0: cpu@0 {
- 			device_type = "cpu";
- 			reg = <0>;
- 			clock-frequency = <792000000>;
--			clock-latency = <61036>; /* two CLK32 periods */
- 			clocks = <&clks IMX7D_CLK_ARM>;
- 			cpu-idle-states = <&cpu_sleep_wait>;
+diff --git a/arch/arm/boot/dts/qcom/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom/qcom-ipq4019.dtsi
+index 06b20c196faf..fceb2f5f5482 100644
+--- a/arch/arm/boot/dts/qcom/qcom-ipq4019.dtsi
++++ b/arch/arm/boot/dts/qcom/qcom-ipq4019.dtsi
+@@ -53,7 +53,6 @@ cpu@0 {
+ 			reg = <0x0>;
+ 			clocks = <&gcc GCC_APPS_CLK_SRC>;
+ 			clock-frequency = <0>;
+-			clock-latency = <256000>;
  			operating-points-v2 = <&cpu0_opp_table>;
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-index 4de3bf22902b..cfebaa01217e 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-@@ -62,7 +62,6 @@ A53_0: cpu@0 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
- 			reg = <0x0>;
--			clock-latency = <61036>; /* two CLK32 periods */
- 			clocks = <&clk IMX8MM_CLK_ARM>;
- 			enable-method = "psci";
- 			i-cache-size = <0x8000>;
-@@ -83,7 +82,6 @@ A53_1: cpu@1 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
+ 		};
+ 
+@@ -67,7 +66,6 @@ cpu@1 {
  			reg = <0x1>;
--			clock-latency = <61036>; /* two CLK32 periods */
- 			clocks = <&clk IMX8MM_CLK_ARM>;
- 			enable-method = "psci";
- 			i-cache-size = <0x8000>;
-@@ -102,7 +100,6 @@ A53_2: cpu@2 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
+ 			clocks = <&gcc GCC_APPS_CLK_SRC>;
+ 			clock-frequency = <0>;
+-			clock-latency = <256000>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 		};
+ 
+@@ -81,7 +79,6 @@ cpu@2 {
  			reg = <0x2>;
--			clock-latency = <61036>; /* two CLK32 periods */
- 			clocks = <&clk IMX8MM_CLK_ARM>;
- 			enable-method = "psci";
- 			i-cache-size = <0x8000>;
-@@ -121,7 +118,6 @@ A53_3: cpu@3 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
+ 			clocks = <&gcc GCC_APPS_CLK_SRC>;
+ 			clock-frequency = <0>;
+-			clock-latency = <256000>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 		};
+ 
+@@ -95,7 +92,6 @@ cpu@3 {
  			reg = <0x3>;
--			clock-latency = <61036>; /* two CLK32 periods */
- 			clocks = <&clk IMX8MM_CLK_ARM>;
- 			enable-method = "psci";
- 			i-cache-size = <0x8000>;
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-index a5f9cfb46e5d..848ba5e46ee6 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-@@ -62,7 +62,6 @@ A53_0: cpu@0 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
- 			reg = <0x0>;
--			clock-latency = <61036>;
- 			clocks = <&clk IMX8MN_CLK_ARM>;
- 			enable-method = "psci";
- 			i-cache-size = <0x8000>;
-@@ -83,7 +82,6 @@ A53_1: cpu@1 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
- 			reg = <0x1>;
--			clock-latency = <61036>;
- 			clocks = <&clk IMX8MN_CLK_ARM>;
- 			enable-method = "psci";
- 			i-cache-size = <0x8000>;
-@@ -102,7 +100,6 @@ A53_2: cpu@2 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
- 			reg = <0x2>;
--			clock-latency = <61036>;
- 			clocks = <&clk IMX8MN_CLK_ARM>;
- 			enable-method = "psci";
- 			i-cache-size = <0x8000>;
-@@ -121,7 +118,6 @@ A53_3: cpu@3 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
- 			reg = <0x3>;
--			clock-latency = <61036>;
- 			clocks = <&clk IMX8MN_CLK_ARM>;
- 			enable-method = "psci";
- 			i-cache-size = <0x8000>;
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-index ce6793b2d57e..f8afdba71c36 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-@@ -65,7 +65,6 @@ A53_0: cpu@0 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
- 			reg = <0x0>;
--			clock-latency = <61036>;
- 			clocks = <&clk IMX8MP_CLK_ARM>;
- 			enable-method = "psci";
- 			i-cache-size = <0x8000>;
-@@ -86,7 +85,6 @@ A53_1: cpu@1 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
- 			reg = <0x1>;
--			clock-latency = <61036>;
- 			clocks = <&clk IMX8MP_CLK_ARM>;
- 			enable-method = "psci";
- 			i-cache-size = <0x8000>;
-@@ -105,7 +103,6 @@ A53_2: cpu@2 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
- 			reg = <0x2>;
--			clock-latency = <61036>;
- 			clocks = <&clk IMX8MP_CLK_ARM>;
- 			enable-method = "psci";
- 			i-cache-size = <0x8000>;
-@@ -124,7 +121,6 @@ A53_3: cpu@3 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
- 			reg = <0x3>;
--			clock-latency = <61036>;
- 			clocks = <&clk IMX8MP_CLK_ARM>;
- 			enable-method = "psci";
- 			i-cache-size = <0x8000>;
-diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-index d51de8d899b2..d27b824995eb 100644
---- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-@@ -106,7 +106,6 @@ A53_0: cpu@0 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
- 			reg = <0x0>;
--			clock-latency = <61036>; /* two CLK32 periods */
- 			clocks = <&clk IMX8MQ_CLK_ARM>;
- 			enable-method = "psci";
- 			i-cache-size = <0x8000>;
-@@ -126,7 +125,6 @@ A53_1: cpu@1 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
- 			reg = <0x1>;
--			clock-latency = <61036>; /* two CLK32 periods */
- 			clocks = <&clk IMX8MQ_CLK_ARM>;
- 			enable-method = "psci";
- 			i-cache-size = <0x8000>;
-@@ -144,7 +142,6 @@ A53_2: cpu@2 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
- 			reg = <0x2>;
--			clock-latency = <61036>; /* two CLK32 periods */
- 			clocks = <&clk IMX8MQ_CLK_ARM>;
- 			enable-method = "psci";
- 			i-cache-size = <0x8000>;
-@@ -162,7 +159,6 @@ A53_3: cpu@3 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
- 			reg = <0x3>;
--			clock-latency = <61036>; /* two CLK32 periods */
- 			clocks = <&clk IMX8MQ_CLK_ARM>;
- 			enable-method = "psci";
- 			i-cache-size = <0x8000>;
+ 			clocks = <&gcc GCC_APPS_CLK_SRC>;
+ 			clock-frequency = <0>;
+-			clock-latency = <256000>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 		};
+ 
 
 -- 
 2.47.2
