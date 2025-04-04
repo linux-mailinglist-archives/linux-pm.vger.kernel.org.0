@@ -1,50 +1,50 @@
-Return-Path: <linux-pm+bounces-24774-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24775-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4D5AA7B60C
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 04:59:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6803AA7B610
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 05:00:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 451C03B8866
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 02:59:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F25C6189B8DC
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 03:00:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3CC3137930;
-	Fri,  4 Apr 2025 02:59:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3430914F9EB;
+	Fri,  4 Apr 2025 02:59:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RiI7QF4Q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VJ0e7SAx"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A8C4315A;
-	Fri,  4 Apr 2025 02:59:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81B8149E17;
+	Fri,  4 Apr 2025 02:59:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743735582; cv=none; b=rry8xRT6GOb4tg5bx0Ieg5l+sKnUaiB/8wuIV/QDzAR+QSEcu+Kwxkty2dYOGRbzgCy3YRzXEUq4DQfUPAnUXJds4aoH2qbm4Jf+3GgETrsiGV0DJsppfhWAhDgFKANKSLHoqsdinaYzwBOnAGPgem8vC+M9GqkasUIbWZ0yykE=
+	t=1743735584; cv=none; b=bsPWlCa/qHC/QpeGh/7dNnrara+DWPat5CgysTEbrvu4HdOFZPOx7ciXrVIGKuwJHPA+ukdv43obWLorZM3t9wp1W5sMNHp8qsJ0rxZSiuvAtW4nHTpITBsXh2VtVA11G3V4IaiyqwtPvxQ0z7ikhcg1lDD44H1W/Q1McadeqDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743735582; c=relaxed/simple;
-	bh=5rtDQ0pe7WShvacxxNJLUqvyINRo/AXE5vD1stW6jE8=;
+	s=arc-20240116; t=1743735584; c=relaxed/simple;
+	bh=BFNG9yNPBQp7lePtcF6xD0SGvnVh48+ACatG3ueW7Nc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=E2GmcHzQOr8EXL/QFtI90QujtX5m8SrQNKiTEkJiKA14r+PKdlN1fIBZhx+20FyAivBLvwqyr/5+qbBgjQk3XwRg/uyKScPXFnGRvoVzFIfnpAbiA6EEjDcgIG0oNySuj+2WGBNULE+LVA1bo2oRzosJnI9GAaP8L0Cdxq3HJt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RiI7QF4Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9EE0C4CEE7;
-	Fri,  4 Apr 2025 02:59:41 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=ndkbzm/yf17XGrYIrf/jhMl/aKBzHGI9U9B6bA+Ac8JT21uQi1TPcXK+lMBXDeaGZ6GE9nIraxkglIzDc4HYT9XfeUo6TWkBbehiDiZfkc3/6rOfMlzG025xll8xN3QEJBvo+xdZY6A7EIXHVegleRuLr86OCsNNbeOrKz3OlHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VJ0e7SAx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DBB4C4CEF9;
+	Fri,  4 Apr 2025 02:59:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743735581;
-	bh=5rtDQ0pe7WShvacxxNJLUqvyINRo/AXE5vD1stW6jE8=;
+	s=k20201202; t=1743735583;
+	bh=BFNG9yNPBQp7lePtcF6xD0SGvnVh48+ACatG3ueW7Nc=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=RiI7QF4QKTnEWoFPph74b7vTTM/C0H5U/et9pNcxSlU59KyGPZFNV+brPyXwaepz9
-	 KLVDwu3w2hDzi/J6nmwnrAUCMbyIJUNguH4ZwmXy7GY3k34plvSw0apXzHjtbL/JiB
-	 fHNKWkKHWfVX6kKZAkXCeaCuVd3YVWKwvmfjXf+eCSUKsqRLiSyyjTzKvwC48Fgl/N
-	 66plYdx2J+E8uU09r4TVAJ84N2SBEaXKVQQscPog8/6dDfqp2eL2fR2J2DXkp7XQC5
-	 VoVJj3czjxbBwKonugcBm3JgGhq2hncnAlD4K3x2D04gPtAliniMLLFtRSWpExAY+v
-	 iavi1HrZP7Thg==
+	b=VJ0e7SAxLo+dcCqV1y3fiUbeOj8nzMsubkIcSK61bhYmhFqk2usnd0d5OPi7EKFdM
+	 DRyI+aUiub90+OB8O8n9WkGNHSq5XjDhMNm+jODyHcVHCh8hI7SogIEa2XHIKBVbw8
+	 6tHA5u923suAWQtSIIk/r+qK55kVswhMUDnDMPy8x6G2h1iJ6myNUFghF4bIy9SHk7
+	 1uL3lBV9f3bS0qy+RIFP3V8Bnxf3aItkKniTAn6Dhy/J/vRlG5X3AfYwDnSpkSqKXZ
+	 5Fe4SyAA72tc2gCFbxbhmwKehbH+Di1xzgWfn9O8OHHZMPggV0LnlKOpky195Gw6O8
+	 kIqHaQHcEPOZg==
 From: "Rob Herring (Arm)" <robh@kernel.org>
-Date: Thu, 03 Apr 2025 21:59:22 -0500
-Subject: [PATCH 01/19] arm64: dts: allwinner: h5/h6: Drop spurious
- 'clock-latency-ns' properties
+Date: Thu, 03 Apr 2025 21:59:23 -0500
+Subject: [PATCH 02/19] arm64: dts: broadcom: bcm2712: Use "l2-cache" for L2
+ cache node names
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250403-dt-cpu-schema-v1-1-076be7171a85@kernel.org>
+Message-Id: <20250403-dt-cpu-schema-v1-2-076be7171a85@kernel.org>
 References: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
 In-Reply-To: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
 To: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -93,87 +93,55 @@ Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-amlogic@lists.infradead.org, linux-renesas-soc@vger.kernel.org
 X-Mailer: b4 0.15-dev
 
-'clock-latency-ns' is not a valid property for CPU nodes. It belongs in
-OPP table (which has it). Drop them from the CPU nodes.
+There's no need include the CPU number in the L2 cache node names as
+the names are local to the CPU nodes. The documented node name is
+also just "l2-cache".
 
 Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi | 4 ----
- arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi | 4 ----
- 2 files changed, 8 deletions(-)
+ arch/arm64/boot/dts/broadcom/bcm2712.dtsi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi
-index d3caf27b6a55..48802bf02f3b 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi
-@@ -16,7 +16,6 @@ cpu0: cpu@0 {
- 			reg = <0>;
- 			enable-method = "psci";
- 			clocks = <&ccu CLK_CPUX>;
--			clock-latency-ns = <244144>; /* 8 32k periods */
- 			#cooling-cells = <2>;
- 		};
+diff --git a/arch/arm64/boot/dts/broadcom/bcm2712.dtsi b/arch/arm64/boot/dts/broadcom/bcm2712.dtsi
+index 9e610a89a337..ad0cac8e4444 100644
+--- a/arch/arm64/boot/dts/broadcom/bcm2712.dtsi
++++ b/arch/arm64/boot/dts/broadcom/bcm2712.dtsi
+@@ -64,7 +64,7 @@ cpu0: cpu@0 {
+ 			i-cache-sets = <256>; // 64KiB(size)/64(line-size)=1024ways/4-way set
+ 			next-level-cache = <&l2_cache_l0>;
  
-@@ -26,7 +25,6 @@ cpu1: cpu@1 {
- 			reg = <1>;
- 			enable-method = "psci";
- 			clocks = <&ccu CLK_CPUX>;
--			clock-latency-ns = <244144>; /* 8 32k periods */
- 			#cooling-cells = <2>;
- 		};
+-			l2_cache_l0: l2-cache-l0 {
++			l2_cache_l0: l2-cache {
+ 				compatible = "cache";
+ 				cache-size = <0x80000>;
+ 				cache-line-size = <64>;
+@@ -88,7 +88,7 @@ cpu1: cpu@1 {
+ 			i-cache-sets = <256>; // 64KiB(size)/64(line-size)=1024ways/4-way set
+ 			next-level-cache = <&l2_cache_l1>;
  
-@@ -36,7 +34,6 @@ cpu2: cpu@2 {
- 			reg = <2>;
- 			enable-method = "psci";
- 			clocks = <&ccu CLK_CPUX>;
--			clock-latency-ns = <244144>; /* 8 32k periods */
- 			#cooling-cells = <2>;
- 		};
+-			l2_cache_l1: l2-cache-l1 {
++			l2_cache_l1: l2-cache {
+ 				compatible = "cache";
+ 				cache-size = <0x80000>;
+ 				cache-line-size = <64>;
+@@ -112,7 +112,7 @@ cpu2: cpu@2 {
+ 			i-cache-sets = <256>; // 64KiB(size)/64(line-size)=1024ways/4-way set
+ 			next-level-cache = <&l2_cache_l2>;
  
-@@ -46,7 +43,6 @@ cpu3: cpu@3 {
- 			reg = <3>;
- 			enable-method = "psci";
- 			clocks = <&ccu CLK_CPUX>;
--			clock-latency-ns = <244144>; /* 8 32k periods */
- 			#cooling-cells = <2>;
- 		};
- 	};
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-index 2301c59b41b1..73e8604315c5 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-@@ -27,7 +27,6 @@ cpu0: cpu@0 {
- 			reg = <0>;
- 			enable-method = "psci";
- 			clocks = <&ccu CLK_CPUX>;
--			clock-latency-ns = <244144>; /* 8 32k periods */
- 			#cooling-cells = <2>;
- 			i-cache-size = <0x8000>;
- 			i-cache-line-size = <64>;
-@@ -44,7 +43,6 @@ cpu1: cpu@1 {
- 			reg = <1>;
- 			enable-method = "psci";
- 			clocks = <&ccu CLK_CPUX>;
--			clock-latency-ns = <244144>; /* 8 32k periods */
- 			#cooling-cells = <2>;
- 			i-cache-size = <0x8000>;
- 			i-cache-line-size = <64>;
-@@ -61,7 +59,6 @@ cpu2: cpu@2 {
- 			reg = <2>;
- 			enable-method = "psci";
- 			clocks = <&ccu CLK_CPUX>;
--			clock-latency-ns = <244144>; /* 8 32k periods */
- 			#cooling-cells = <2>;
- 			i-cache-size = <0x8000>;
- 			i-cache-line-size = <64>;
-@@ -78,7 +75,6 @@ cpu3: cpu@3 {
- 			reg = <3>;
- 			enable-method = "psci";
- 			clocks = <&ccu CLK_CPUX>;
--			clock-latency-ns = <244144>; /* 8 32k periods */
- 			#cooling-cells = <2>;
- 			i-cache-size = <0x8000>;
- 			i-cache-line-size = <64>;
+-			l2_cache_l2: l2-cache-l2 {
++			l2_cache_l2: l2-cache {
+ 				compatible = "cache";
+ 				cache-size = <0x80000>;
+ 				cache-line-size = <64>;
+@@ -136,7 +136,7 @@ cpu3: cpu@3 {
+ 			i-cache-sets = <256>; // 64KiB(size)/64(line-size)=1024ways/4-way set
+ 			next-level-cache = <&l2_cache_l3>;
+ 
+-			l2_cache_l3: l2-cache-l3 {
++			l2_cache_l3: l2-cache {
+ 				compatible = "cache";
+ 				cache-size = <0x80000>;
+ 				cache-line-size = <64>;
 
 -- 
 2.47.2
