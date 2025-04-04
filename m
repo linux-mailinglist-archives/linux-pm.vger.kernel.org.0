@@ -1,189 +1,142 @@
-Return-Path: <linux-pm+bounces-24825-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24826-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAC67A7C262
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 19:28:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1863A7C352
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 20:55:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DF1F1B60357
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 17:28:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B7CE1B603F8
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 18:55:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BF66214A9C;
-	Fri,  4 Apr 2025 17:28:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C74FE195B1A;
+	Fri,  4 Apr 2025 18:55:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="VXKxz8nD"
+	dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b="DOLIei0e"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-81.smtpout.orange.fr [80.12.242.81])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C733213D539;
-	Fri,  4 Apr 2025 17:28:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1E31A5B8E
+	for <linux-pm@vger.kernel.org>; Fri,  4 Apr 2025 18:55:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743787692; cv=none; b=WCzb2Fq/GEjasdhSVTo28QS13tr9jklQlrlMx3ppAR/k4vz1MUy0rG4jMQzJu8r6nn5F5oszigTlqaALdV7KcahFJM1gwp/uUGzfWQj0JgyPHlKHJTJLGgZj29lBAlMn9N68UljuTy/EPFWFX+04cNXTsHgQfGqYBBAwZwoYsiM=
+	t=1743792923; cv=none; b=pY36GkveU58Btrwk748s5TlNMEAzHhAKvXV5i/pDDx6CNfh2sXSZGREzgePOSRE/HC926rjTYv5O0JPq2pH6F5y/4pECxgTxZyY6NRLDTsnHeYtCECZd8GzB5JOkl11QgrG7hSetCYvBFsHPtmcFio4aYQH4Ou96KdK76V9UuWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743787692; c=relaxed/simple;
-	bh=EZGg8Gsu11BD2bNrVJs8YMypzinC9NMtnPqW0GajYIY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WeCLcpVI83ntOrlsta0UhgFRZzTbjd2j5cUBgoRNIr6aMQT8Wyzhp0usI6XwbiSLUSYc8nn9EJ6KeoMH4xxoFPA+D97kRwcWo7JUjFGXQN/yLgvwQSR3RE02tOldepkwbHDopYV4aKkK/Ikj9GikQfs/55pXB/2bgMN36fzCdPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=VXKxz8nD; arc=none smtp.client-ip=80.12.242.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from fedora.home ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id 0kpmujQtk0cMk0kppu7Xwj; Fri, 04 Apr 2025 19:28:05 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1743787685;
-	bh=IVF5MH+xrIg+FKCXHElsJo5pQsZIf4uqVbohRHguyNA=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=VXKxz8nD+qB8M9bxkYi5SuOD8uDi0oYHBR3SfucxOYlAx/Nh654Z5BQYqi2VCpATW
-	 n8dLPnYK6bDVwPp4xPQcKcAQm1U6Q060fBIzG9z3u8i97Qi+xFuf/M2kmKGgYLy3DM
-	 75Zvay3ky5Egz2TmEUEzxaLWufO9yePhrJaT/eAkAEgs1sNDL7JVQwiTopkoIyoj2V
-	 Jn68Y0OnTrHYplv4s/5OaID9BaMxX+D73brEOa1q7MKg7NzKGwFOzRzSIJ7PSlPzWA
-	 ywLl5XJzbanbd/IpAjwNyEeNf4T7xgWk/xArVtpKt6SoUxG065seFptoIg6TDoKPjR
-	 zvVWncsvcpDMQ==
-X-ME-Helo: fedora.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 04 Apr 2025 19:28:05 +0200
-X-ME-IP: 90.11.132.44
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: Sebastian Reichel <sre@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	patches@opensource.cirrus.com,
-	linux-pm@vger.kernel.org
-Subject: [PATCH] power: supply: wm831x: Constify struct chg_map and some arrays
-Date: Fri,  4 Apr 2025 19:27:38 +0200
-Message-ID: <0edde57b691db7f920d121fdbd5ebc3fb24f30f1.1743787625.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1743792923; c=relaxed/simple;
+	bh=VfeedzAG7UGtPpSXuBMYVnF8aSHrgVbQjdxnN8frKgc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iRBF/hadlmed3aMsxu21m06NLA7hmmudwbLX2f/cALeHLCG38/hsf4IcYf+btW/Iy9IFcY4KYyJ0AGDk9wKrXlTITq7Ty73vVioanPW6p8FFXo1XkTYzIpRYYFhEKuIvbXTXXwIdSYTv9sZ3jiqTUQDq4ROSlIxBS6Gyg9fLiMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com; spf=none smtp.mailfrom=pdp7.com; dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b=DOLIei0e; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pdp7.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-227b650504fso23565125ad.0
+        for <linux-pm@vger.kernel.org>; Fri, 04 Apr 2025 11:55:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pdp7-com.20230601.gappssmtp.com; s=20230601; t=1743792921; x=1744397721; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=32troSjWvB/PDlVrpO70BnGFukXnYd/0VAcsVL2VxIE=;
+        b=DOLIei0ecBYGFmicWeKfI87N/P67NqV9YEsJR1Nc7HvTZqxxIhVEpIo1lsB0YKg5qa
+         L/BxUwXOuJvF0/LV5vxUjG30mMi5XHqiGguC8u3bg0d+HOF6ADEbYnPaOqf/HRrnLxCj
+         hy/9t4Of0LEas01mlWuodDDJnqlZIIO2/y56CPaiob5Fh8d4n/GbIAYC/p1WMfKuvsZy
+         wqk4VaAbqlD0luES9CaXDhDNG/56ytgbPBUENTxl/585/D7g1OfoHu52dH9YCSBCwSy4
+         2Zcm/8hWDjlUMpQ8ms/Zl3BtPFrgChehC7iirN3Ej0iZ8EqQS4QPpPOE7aoNHvNrIys/
+         IM8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743792921; x=1744397721;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=32troSjWvB/PDlVrpO70BnGFukXnYd/0VAcsVL2VxIE=;
+        b=nJfUP6EUSb3p7gNS7T5184h7JzwFnYzO6Z/8aMoRi7E58QivQUuDW1j5gI3JTJ4neQ
+         RN4+ttKHZ/pNKDF4sP7vQzjEaee5RE/o2JBGBJZm+XWJVPAQu5Ar+JrlEK2pv4iFHj/5
+         CQaxtz9BIg4lgML3YqZ3jWfPCdqSRYlc9Qg8iVMWzG339jWL1N5llSZcPEkrvHI/H7aY
+         EZaJtuDk65lYyIB892RhWRxws7PkHHqfMW56nl/95aRpmFNhTskj1WLyvh5R1Q+/v0Su
+         1vKrsavIqrxn5SLTy6x14RB/+EJR0zk+JaauT0JXNQe6LDJwFL2Pvdw7vAlG+mEx2tJN
+         84tQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV3W4rY1gLLz51Lhr3BH3VAYUMTJa09MTf7TRtrRA3hLMrRU3hcWP/X6hNYflad+7YSL3neT12o5w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeYOLAIAs/PR4ZJgNP9UX80+cQU9ACjWLwFhugzm51XdDHwCje
+	/U/6Yk9HftgaiDrObVuiXp/S7pN9F9rfKiKeGpYYa8L5Q61Rp6p4mX0OsStzfio=
+X-Gm-Gg: ASbGncsZfAt2adO6JnZX1+6+OlnSf7nLX/SeR6CvjX3saKiSuoBagrn+vGDx7hFjuG5
+	GccI6m9qusvhTYcaMOSwS3Fhk0wvO6npz2pCCFltRz0J8fCbEnlJ8F6yKAsUN0dauSU5InU19IM
+	bZu3DLNtiJq8oIAXI+tYsNyje8ZQaesyMMlKE+aQ92uMiYufjk9p0mbGO6Eoi3lqRrNNyBwrC3W
+	mjg94evdXBGN7/jNdc5tO7cskJwPVIYZvYeV7pl+JC8KLfMg9oZ/0AN2FgFQqsEGJomBnrMHUoW
+	O2fG2TR7ECc/ixKLiwakGQPmNR4ZJOMDX24=
+X-Google-Smtp-Source: AGHT+IECmYP3SjonjrfaeQPGWit3y+M9U7cHmSeJkMMAtjCbnPOJUL/PaAkD08+LqlcqZzBhgLpMMw==
+X-Received: by 2002:a17:902:ef10:b0:216:53fa:634f with SMTP id d9443c01a7336-22a8a1d4617mr66236245ad.48.1743792921190;
+        Fri, 04 Apr 2025 11:55:21 -0700 (PDT)
+Received: from x1 ([97.115.235.21])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2297866e4c2sm35763515ad.199.2025.04.04.11.55.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Apr 2025 11:55:20 -0700 (PDT)
+Date: Fri, 4 Apr 2025 11:55:17 -0700
+From: Drew Fustini <drew@pdp7.com>
+To: Michal Wilczynski <m.wilczynski@samsung.com>,
+	Conor Dooley <conor@kernel.org>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	guoren@kernel.org, wefu@redhat.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	jszhang@kernel.org, ulf.hansson@linaro.org,
+	m.szyprowski@samsung.com, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v8 5/5] riscv: Enable PM_GENERIC_DOMAINS for T-Head SoCs
+Message-ID: <Z/ArFVx6l5Urh9KV@x1>
+References: <20250311171900.1549916-1-m.wilczynski@samsung.com>
+ <CGME20250311172035eucas1p104dcbae706bec735194a1dc4a30db969@eucas1p1.samsung.com>
+ <20250311171900.1549916-6-m.wilczynski@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250311171900.1549916-6-m.wilczynski@samsung.com>
 
-'struct chg_map' is not modified in this driver.
+On Tue, Mar 11, 2025 at 06:19:00PM +0100, Michal Wilczynski wrote:
+> T-Head SoCs feature separate power domains (power islands) for major
+> components like the GPU, Audio, and NPU. To manage the power states of
+> these components effectively, the kernel requires generic power domain
+> support.
+> 
+> This commit enables `CONFIG_PM_GENERIC_DOMAINS` for T-Head SoCs,
+> allowing the power domain driver for these components to be compiled and
+> integrated. This ensures proper power management and energy efficiency
+> on T-Head platforms.
+> 
+> By selecting `PM_GENERIC_DOMAINS`, we provide the necessary framework
+> for the power domain drivers to function correctly on RISC-V
+> architecture with T-Head SoCs.
+> 
+> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+> ---
+>  arch/riscv/Kconfig.socs | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+> index 1916cf7ba450..83833ded8908 100644
+> --- a/arch/riscv/Kconfig.socs
+> +++ b/arch/riscv/Kconfig.socs
+> @@ -53,6 +53,7 @@ config ARCH_THEAD
+>  	bool "T-HEAD RISC-V SoCs"
+>  	depends on MMU && !XIP_KERNEL
+>  	select ERRATA_THEAD
+> +	select PM_GENERIC_DOMAINS if PM
+>  	help
+>  	  This enables support for the RISC-V based T-HEAD SoCs.
+>  
+> -- 
+> 2.34.1
+> 
 
-Constifying these structures moves some data to a read-only section, so
-increase overall security.
+Reviewed-by: Drew Fustini <drew@pdp7.com>
 
-While at it, also constify a few other arrays.
+Conor - would you be able to take this Kconfig.socs patch?
 
-On a x86_64, with allmodconfig, as an example:
-Before:
-======
-   text	   data	    bss	    dec	    hex	filename
-  14263	   1744	      0	  16007	   3e87	drivers/power/supply/wm831x_power.o
-
-After:
-=====
-   text	   data	    bss	    dec	    hex	filename
-  14695	   1288	      0	  15983	   3e6f	drivers/power/supply/wm831x_power.o
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Compile tested-only.
----
- drivers/power/supply/wm831x_power.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/power/supply/wm831x_power.c b/drivers/power/supply/wm831x_power.c
-index 538055b29dec..6acdba7885ca 100644
---- a/drivers/power/supply/wm831x_power.c
-+++ b/drivers/power/supply/wm831x_power.c
-@@ -89,7 +89,7 @@ static int wm831x_wall_get_prop(struct power_supply *psy,
- 	return ret;
- }
- 
--static enum power_supply_property wm831x_wall_props[] = {
-+static const enum power_supply_property wm831x_wall_props[] = {
- 	POWER_SUPPLY_PROP_ONLINE,
- 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
- };
-@@ -120,7 +120,7 @@ static int wm831x_usb_get_prop(struct power_supply *psy,
- 	return ret;
- }
- 
--static enum power_supply_property wm831x_usb_props[] = {
-+static const enum power_supply_property wm831x_usb_props[] = {
- 	POWER_SUPPLY_PROP_ONLINE,
- 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
- };
-@@ -171,21 +171,21 @@ struct chg_map {
- 	int reg_val;
- };
- 
--static struct chg_map trickle_ilims[] = {
-+static const struct chg_map trickle_ilims[] = {
- 	{  50, 0 << WM831X_CHG_TRKL_ILIM_SHIFT },
- 	{ 100, 1 << WM831X_CHG_TRKL_ILIM_SHIFT },
- 	{ 150, 2 << WM831X_CHG_TRKL_ILIM_SHIFT },
- 	{ 200, 3 << WM831X_CHG_TRKL_ILIM_SHIFT },
- };
- 
--static struct chg_map vsels[] = {
-+static const struct chg_map vsels[] = {
- 	{ 4050, 0 << WM831X_CHG_VSEL_SHIFT },
- 	{ 4100, 1 << WM831X_CHG_VSEL_SHIFT },
- 	{ 4150, 2 << WM831X_CHG_VSEL_SHIFT },
- 	{ 4200, 3 << WM831X_CHG_VSEL_SHIFT },
- };
- 
--static struct chg_map fast_ilims[] = {
-+static const struct chg_map fast_ilims[] = {
- 	{    0,  0 << WM831X_CHG_FAST_ILIM_SHIFT },
- 	{   50,  1 << WM831X_CHG_FAST_ILIM_SHIFT },
- 	{  100,  2 << WM831X_CHG_FAST_ILIM_SHIFT },
-@@ -204,7 +204,7 @@ static struct chg_map fast_ilims[] = {
- 	{ 1000, 15 << WM831X_CHG_FAST_ILIM_SHIFT },
- };
- 
--static struct chg_map eoc_iterms[] = {
-+static const struct chg_map eoc_iterms[] = {
- 	{ 20, 0 << WM831X_CHG_ITERM_SHIFT },
- 	{ 30, 1 << WM831X_CHG_ITERM_SHIFT },
- 	{ 40, 2 << WM831X_CHG_ITERM_SHIFT },
-@@ -215,7 +215,7 @@ static struct chg_map eoc_iterms[] = {
- 	{ 90, 7 << WM831X_CHG_ITERM_SHIFT },
- };
- 
--static struct chg_map chg_times[] = {
-+static const struct chg_map chg_times[] = {
- 	{  60,  0 << WM831X_CHG_TIME_SHIFT },
- 	{  90,  1 << WM831X_CHG_TIME_SHIFT },
- 	{ 120,  2 << WM831X_CHG_TIME_SHIFT },
-@@ -235,7 +235,7 @@ static struct chg_map chg_times[] = {
- };
- 
- static void wm831x_battery_apply_config(struct wm831x *wm831x,
--				       struct chg_map *map, int count, int val,
-+				       const struct chg_map *map, int count, int val,
- 				       int *reg, const char *name,
- 				       const char *units)
- {
-@@ -462,7 +462,7 @@ static int wm831x_bat_get_prop(struct power_supply *psy,
- 	return ret;
- }
- 
--static enum power_supply_property wm831x_bat_props[] = {
-+static const enum power_supply_property wm831x_bat_props[] = {
- 	POWER_SUPPLY_PROP_STATUS,
- 	POWER_SUPPLY_PROP_ONLINE,
- 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-@@ -470,7 +470,7 @@ static enum power_supply_property wm831x_bat_props[] = {
- 	POWER_SUPPLY_PROP_CHARGE_TYPE,
- };
- 
--static const char *wm831x_bat_irqs[] = {
-+static const char * const wm831x_bat_irqs[] = {
- 	"BATT HOT",
- 	"BATT COLD",
- 	"BATT FAIL",
--- 
-2.49.0
-
+Thanks,
+Drew
 
