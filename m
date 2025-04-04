@@ -1,49 +1,49 @@
-Return-Path: <linux-pm+bounces-24790-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24791-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 242F6A7B675
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 05:05:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4086EA7B66D
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 05:04:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FF9117A400
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 03:04:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC1B23A46AB
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 03:04:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDF891DE8A0;
-	Fri,  4 Apr 2025 03:00:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 066981E3DE0;
+	Fri,  4 Apr 2025 03:00:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q/n2/+qA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BIydFOU9"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 924E51DE2A9;
-	Fri,  4 Apr 2025 03:00:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFEA21E1DF7;
+	Fri,  4 Apr 2025 03:00:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743735604; cv=none; b=gE8ycj5biaEva0y95HqyU+CoKMiBPPWKc9qW5GnlDycYrENky/XtjJG/CT/DIuH3oj0+4TIBBKRyhCLeslqyGqvvbTmGhUft35HRhKe3vWO5MgvoFT61rl7X1o5btvSvzLuiQF/jaSnKc+9jsc4OYlhtov/Nhg3V9EUHJ7NwBrI=
+	t=1743735605; cv=none; b=ABvrrU/lKaL3W4v/6Sw/i+ChVeMTH7isquA1HwqNUn+liK8wQaECleIqqdArbopjIkIvLK3RPSm5+aBUepIdXlppioUc7y6NVZOfDE2nRTzz58gr8cdGzLZdzrKT62C/s2sZeemUBTLhZjmtImdoe8oBDce90T+x/glFPUN7Luc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743735604; c=relaxed/simple;
-	bh=qt04cpMtce1Dpx+XQO1X0rXON/Jr6p5yPdGytRb8Eas=;
+	s=arc-20240116; t=1743735605; c=relaxed/simple;
+	bh=VTRjZwZIi8q294b4YyTHrd0BG++P7ph5Qta/NAw+IT8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aAzoLtlrtUNpeGssoRdFpjT4hfeWlKwRhc6thYTnzv2jA+q0kJOz8m/uv72ySkhaSrfnUWTn04VFlEdZjHmZD1Ft+5+i0SOSRfWKhY91xJA65ks86wXkfHI6+CWKXJ722Zp1WOV8wmXtuoxxdXaz5G3yANq+LlXAbYt3WyA+NBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q/n2/+qA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D06E7C4CEE3;
-	Fri,  4 Apr 2025 03:00:03 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=ZJ/603cTIzp5ecrMS613WuWn/ZyXkXVjlXR/LtkD1jwznHSSUQCpi3/a9oO2VwIavbfXnfhpdaFt0vox4f+GdEkU2NG1Kfny1gOO7CciC06U/8AZZwHThm9kvIitipEqn3Ac+wYjCRwUeJrLROgWGBZkMyTT9rCKkoM//nFpv7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BIydFOU9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1030DC4CEE9;
+	Fri,  4 Apr 2025 03:00:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743735604;
-	bh=qt04cpMtce1Dpx+XQO1X0rXON/Jr6p5yPdGytRb8Eas=;
+	s=k20201202; t=1743735605;
+	bh=VTRjZwZIi8q294b4YyTHrd0BG++P7ph5Qta/NAw+IT8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Q/n2/+qAbQ4lqGimi3B39jw61JwhYStJxbhIKpQByr6sATNhR0pByuj78+ofl0w3b
-	 mDYpwWD136Zeead5FiF3meTxotK0fSVSKY+pLIMCy6nHHT2XntZ2hIuZGE0CofixOf
-	 66GxYVVp8SPCEKljznidvtg8tyHPaWU3lqYPRODKskhUIdq8wmiyjOHnbX1UV5O/Hd
-	 1zXJDjHiwOeHhIiGKBrIEfSSy+5HgAQSIgjQkV+JNHxsvQiURpsgi3Auk/qhrqM7bU
-	 xft6O+le2YtCNm5Wk4E3pmvSVZajHPPBt2o9L5ObkWzDIY4YhQ+RA9wpGjeEYy7Lxk
-	 JSnSa3SGRCJlA==
+	b=BIydFOU9aJ9WhFAro8qghVTYQjHFs1Y2yZH4wibAW+ULHXKPCLPkRsy8d5oEx+P1/
+	 7Hf6x9eRUkjhWNVFDw8HAyxVL60tteeZLa+l0vLO0aXmI7gnLie+EpmL2PS11qVJYp
+	 xtIncqHBwXONuQspx+OM+dasoKJT4dzSHFN57/cN4VWkCms54jj2egjQDdMFmuhRKE
+	 mLjNtcfcBBslTMrt3O/4G+vg3XGVeaNpnOm2YoZvIupH38/6PxnwbZhh+59CyPHO7k
+	 rN6g4n76GbbVf3pd7BHkiVfkXnCHHO23yIhvWKPkp9pE4zZ+IRqV+P5Mdn30fiwwoM
+	 XayRRMFqSmyww==
 From: "Rob Herring (Arm)" <robh@kernel.org>
-Date: Thu, 03 Apr 2025 21:59:38 -0500
-Subject: [PATCH 17/19] dt-bindings: arm/cpus: Add missing properties
+Date: Thu, 03 Apr 2025 21:59:39 -0500
+Subject: [PATCH 18/19] dt-bindings: arm/cpus: Add power-domains constraints
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250403-dt-cpu-schema-v1-17-076be7171a85@kernel.org>
+Message-Id: <20250403-dt-cpu-schema-v1-18-076be7171a85@kernel.org>
 References: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
 In-Reply-To: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
 To: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -92,144 +92,40 @@ Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-amlogic@lists.infradead.org, linux-renesas-soc@vger.kernel.org
 X-Mailer: b4 0.15-dev
 
-The Arm CPU schema is missing a number of properties already in use.
-This has gone unnoticed as extra properties have not been restricted.
-Add a missing reference to cpu.yaml, and add all the missing properties.
-
-As "clock-latency" and "voltage-tolerance" are related to opp-v1, add
-those properties to the opp-v1.yaml schema.
-
-With this, other properties can be prevented from creeping in with
-'unevaluatedProperties: false'.
+The "power-domains" and "power-domains-names" properties are missing any
+constraints. Add the constraints and drop the generic descriptions.
 
 Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/arm/cpus.yaml   | 46 ++++++++++++++++++++++-
- Documentation/devicetree/bindings/opp/opp-v1.yaml | 16 ++++++++
- 2 files changed, 61 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/arm/cpus.yaml | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-index 3d2b6286efb8..6f74ebfd38df 100644
+index 6f74ebfd38df..5bd5822db8af 100644
 --- a/Documentation/devicetree/bindings/arm/cpus.yaml
 +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-@@ -299,6 +299,16 @@ properties:
- 
-       where voltage is in V, frequency is in MHz.
- 
-+  interconnects:
-+    minItems: 1
-+    maxItems: 2
-+
-+  nvmem-cells:
-+    maxItems: 1
-+
-+  nvmem-cell-names:
-+    const: speed_grade
-+
-   performance-domains:
+@@ -313,19 +313,15 @@ properties:
      maxItems: 1
  
-@@ -317,6 +327,31 @@ properties:
+   power-domains:
+-    description:
+-      List of phandles and PM domain specifiers, as defined by bindings of the
+-      PM domain provider (see also ../power_domain.txt).
++    maxItems: 1
+ 
+   power-domain-names:
+     description:
+-      A list of power domain name strings sorted in the same order as the
+-      power-domains property.
+-
+       For PSCI based platforms, the name corresponding to the index of the PSCI
+       PM domain provider, must be "psci". For SCMI based platforms, the name
        corresponding to the index of an SCMI performance domain provider, must be
        "perf".
++    enum: [ psci, perf, cpr ]
  
-+  resets:
-+    maxItems: 1
-+
-+  arm-supply:
-+    deprecated: true
-+    description: Use 'cpu-supply' instead
-+
-+  cpu0-supply:
-+    deprecated: true
-+    description: Use 'cpu-supply' instead
-+
-+  mem-supply: true
-+
-+  proc-supply:
-+    deprecated: true
-+    description: Use 'cpu-supply' instead
-+
-+  sram-supply:
-+    deprecated: true
-+    description: Use 'mem-supply' instead
-+
-+  mediatek,cci:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: Link to Mediatek Cache Coherent Interconnect
-+
-   qcom,saw:
-     $ref: /schemas/types.yaml#/definitions/phandle
-     description:
-@@ -327,6 +362,11 @@ properties:
-     description:
-       Specifies the ACC node associated with this CPU.
- 
-+  qcom,freq-domain:
-+    description: Specifies the QCom CPUFREQ HW associated with the CPU.
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    maxItems: 1
-+
-   rockchip,pmu:
-     $ref: /schemas/types.yaml#/definitions/phandle
-     description: >
-@@ -352,7 +392,11 @@ properties:
-       formed by encoding the target CPU id into the low bits of the
-       physical start address it should jump to.
- 
-+  thermal-idle:
-+    type: object
-+
- allOf:
-+  - $ref: /schemas/cpu.yaml#
-   - $ref: /schemas/opp/opp-v1.yaml#
-   - if:
-       # If the enable-method property contains one of those values
-@@ -407,7 +451,7 @@ required:
- dependencies:
-   rockchip,pmu: [enable-method]
- 
--additionalProperties: true
-+unevaluatedProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/opp/opp-v1.yaml b/Documentation/devicetree/bindings/opp/opp-v1.yaml
-index 1b59b103dab6..61c080e50859 100644
---- a/Documentation/devicetree/bindings/opp/opp-v1.yaml
-+++ b/Documentation/devicetree/bindings/opp/opp-v1.yaml
-@@ -21,6 +21,18 @@ description: |+
- deprecated: true
- 
- properties:
-+  clock-latency:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      The latency in nanoseconds for clock changes. Use OPP tables for new
-+      designs instead.
-+
-+  voltage-tolerance:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    maximum: 10
-+    description:
-+      The voltage tolerance in percent. Use OPP tables for new designs instead.
-+
-   operating-points:
-     $ref: /schemas/types.yaml#/definitions/uint32-matrix
-     items:
-@@ -28,8 +40,12 @@ properties:
-         - description: Frequency in kHz
-         - description: Voltage for OPP in uV
- 
-+dependencies:
-+  clock-latency: [ operating-points ]
-+  voltage-tolerance: [ operating-points ]
- 
- additionalProperties: true
-+
- examples:
-   - |
-     cpus {
+   resets:
+     maxItems: 1
 
 -- 
 2.47.2
