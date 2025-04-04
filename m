@@ -1,49 +1,50 @@
-Return-Path: <linux-pm+bounces-24776-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24777-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9963DA7B61A
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 05:00:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0D70A7B622
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 05:00:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D7CB3B8EF6
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 03:00:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 625A93B8801
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 03:00:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65803167DB7;
-	Fri,  4 Apr 2025 02:59:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C450617F4F6;
+	Fri,  4 Apr 2025 02:59:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DUkDnjSM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qGkOYwQv"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F1B1624C9;
-	Fri,  4 Apr 2025 02:59:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8616617A318;
+	Fri,  4 Apr 2025 02:59:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743735585; cv=none; b=MKsMEiL/huPkKrXjAkh9cWw38Z4FDRHIb9eUz5F2kHxoezZQUVMUA5hYZkQDpw5QRjYSV0LByX1ZEhKRuXZxRyKM+EMpnxRGP5lTE3BV94t/LPhQh1QNsl3sZ4c/8d1m8GGvHGPhY95P3YmbXDQVE23KtXJSFLXbMD4oXKJGP3w=
+	t=1743735586; cv=none; b=B495s353vuBplVcMJGn542Az/k8G+5NI2Kb2y/I6OkEhIDxZyqRe81oyaSaFrDk2pwhamjkzTdQVUPA4GRjPRFSIYJ4NSp5K51fvOUm4DArRsl0fXLEMEpD9eZIvEG8Y68oS6cYUvEwsTK0g6iydKG0t30+wpDDvgM5CPjvn/Ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743735585; c=relaxed/simple;
-	bh=TR8856X/yXYP9UKEhMkJp7m8f9J+E8ChQGwtop6ZgA8=;
+	s=arc-20240116; t=1743735586; c=relaxed/simple;
+	bh=Z1vjAGywXYfiVgOwNiyG0noL4S7j+UnQpBh2x5H0shU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=e54X88oZxnDXtjG+6i6bdkl+i3u/j6Si43gWPUE8o58Oh677VWOKpWa4aKdUb9zMLZzEDy2Bu7bAhYvcyAZgs/NM/2X00pD4aiGI4Bvou/p2PAynL6QUrg9+ZqSYuY7ee/abX6fowiDF2NdMf92nl4yE0g380IPpCHsETks84M8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DUkDnjSM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65CD0C4AF09;
-	Fri,  4 Apr 2025 02:59:44 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=dGVH4+Nt9DI/O0iAaFVFRmYaHRwNYDhONut+9gZAW6Io+ZfkbhyEc6BGF3LE0quIbG3+2cmhXVtz3364eQ3WgLFQEIfO6u5YlD6/7oua3180loB7AuDNRCAyGJtiUUbYwFvsB7d+kLlPJpvdvRQniNDqyYOOS65tK+SsW63ULGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qGkOYwQv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB4E3C4CEE3;
+	Fri,  4 Apr 2025 02:59:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743735584;
-	bh=TR8856X/yXYP9UKEhMkJp7m8f9J+E8ChQGwtop6ZgA8=;
+	s=k20201202; t=1743735586;
+	bh=Z1vjAGywXYfiVgOwNiyG0noL4S7j+UnQpBh2x5H0shU=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=DUkDnjSM63kRZnwvM0O4CQNp4fGHP7NjHc0kMEGoFudbMbZwd7akrMVPzA7z4fsP/
-	 LbzLYWMYPxL/Vp+jaNCT4G1kQQzfAPiLVe4GRnL7kHU6DyYihy7ZNO+Y43TX8Bnp/E
-	 SQu6P3nGqwmxa0ZwYvgvpIfC7S8pOEGp4HN86eV4rekb6QVHa59ZiQ86gFvXN16cYI
-	 ucq6IBizPqNpMPbRYiTdJeylxn6GfB6XEj6dMKmNQaF7mrRz9hp4c59gvk5IxjrbBn
-	 Mw/HuaEhMQ/esGlKPERqAE7RhxCvANISjn9KUarZ5Qu46dIXeGUrJsVuY8dHYWwh96
-	 LEIua7+H5rxVg==
+	b=qGkOYwQvYSxLYVzVO275Gh1fX6j5hRYE+1mqVqk/+RSIeVV6WelGep2C9jlA5gi/U
+	 J8f32eUfkmjd4CKkjwzjMcFCCYuNbc3W7cDHzU8kV+CoIIW2I7zifAImjHi6xO5APq
+	 GP7ZY4d3hqhJw3Ll3TqtcJCCdiSrMhjekkx/TYEQsNcn83Lvtqo5F0u6LGEAelzhCs
+	 K8y8ktRzgD4FEsRcLIpliun0dZS+cO9Hsq4AfvtqOnRUDs9uilMS65MUAIHz+2naEI
+	 1XY946kOQqa6r5pNxrcjViJzQwrOwIzKcD5DlB6RkVhJUJwH3QGAuvJNQwbBiyQEoT
+	 JNFST/H+h3Szw==
 From: "Rob Herring (Arm)" <robh@kernel.org>
-Date: Thu, 03 Apr 2025 21:59:24 -0500
-Subject: [PATCH 03/19] arm64: dts: morello: Fix-up cache nodes
+Date: Thu, 03 Apr 2025 21:59:25 -0500
+Subject: [PATCH 04/19] arm64: dts: microchip: sparx5: Fix CPU node
+ "enable-method" property dependencies
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250403-dt-cpu-schema-v1-3-076be7171a85@kernel.org>
+Message-Id: <20250403-dt-cpu-schema-v1-4-076be7171a85@kernel.org>
 References: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
 In-Reply-To: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
 To: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -92,87 +93,32 @@ Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-amlogic@lists.infradead.org, linux-renesas-soc@vger.kernel.org
 X-Mailer: b4 0.15-dev
 
-There's no need include the CPU number in the L2 cache node names as
-the names are local to the CPU nodes. The documented node name is
-also just "l2-cache".
-
-The L3 cache is not part of cpu@0/l2-cache as it is shared among all
-cores. Move it to /cpus node which is the typical place for shared
-caches.
+The "spin-table" enable-method requires "cpu-release-addr" property,
+so add a dummy entry. It is assumed the bootloader will fill in the
+correct values.
 
 Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- arch/arm64/boot/dts/arm/morello.dtsi | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/arm/morello.dtsi b/arch/arm64/boot/dts/arm/morello.dtsi
-index 0bab0b3ea969..5bc1c725dc86 100644
---- a/arch/arm64/boot/dts/arm/morello.dtsi
-+++ b/arch/arm64/boot/dts/arm/morello.dtsi
-@@ -44,7 +44,7 @@ cpu0: cpu@0 {
- 			next-level-cache = <&l2_0>;
- 			clocks = <&scmi_dvfs 0>;
+diff --git a/arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi b/arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi
+index 32bb76b3202a..83bf5c81b5f7 100644
+--- a/arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi
++++ b/arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi
+@@ -12,10 +12,12 @@ &psci {
  
--			l2_0: l2-cache-0 {
-+			l2_0: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
- 				/* 8 ways set associative */
-@@ -53,13 +53,6 @@ l2_0: l2-cache-0 {
- 				cache-sets = <2048>;
- 				cache-unified;
- 				next-level-cache = <&l3_0>;
--
--				l3_0: l3-cache {
--					compatible = "cache";
--					cache-level = <3>;
--					cache-size = <0x100000>;
--					cache-unified;
--				};
- 			};
- 		};
+ &cpu0 {
+ 	enable-method = "spin-table";
++	cpu-release-addr = /bits/ 64 <0>;
+ };
  
-@@ -78,7 +71,7 @@ cpu1: cpu@100 {
- 			next-level-cache = <&l2_1>;
- 			clocks = <&scmi_dvfs 0>;
+ &cpu1 {
+ 	enable-method = "spin-table";
++	cpu-release-addr = /bits/ 64 <0>;
+ };
  
--			l2_1: l2-cache-1 {
-+			l2_1: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
- 				/* 8 ways set associative */
-@@ -105,7 +98,7 @@ cpu2: cpu@10000 {
- 			next-level-cache = <&l2_2>;
- 			clocks = <&scmi_dvfs 1>;
- 
--			l2_2: l2-cache-2 {
-+			l2_2: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
- 				/* 8 ways set associative */
-@@ -132,7 +125,7 @@ cpu3: cpu@10100 {
- 			next-level-cache = <&l2_3>;
- 			clocks = <&scmi_dvfs 1>;
- 
--			l2_3: l2-cache-3 {
-+			l2_3: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
- 				/* 8 ways set associative */
-@@ -143,6 +136,13 @@ l2_3: l2-cache-3 {
- 				next-level-cache = <&l3_0>;
- 			};
- 		};
-+
-+		l3_0: l3-cache {
-+			compatible = "cache";
-+			cache-level = <3>;
-+			cache-size = <0x100000>;
-+			cache-unified;
-+		};
- 	};
- 
- 	firmware {
+ &uart0 {
 
 -- 
 2.47.2
