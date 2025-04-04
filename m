@@ -1,160 +1,128 @@
-Return-Path: <linux-pm+bounces-24794-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24795-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5382BA7B77B
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 07:50:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24EA4A7B7A0
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 08:13:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85EC3189CE1A
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 05:50:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E25C21735BC
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Apr 2025 06:13:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 114D816F8E5;
-	Fri,  4 Apr 2025 05:50:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56FF01862BB;
+	Fri,  4 Apr 2025 06:13:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qtmlabs.xyz header.i=@qtmlabs.xyz header.b="HkWrS4lG"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="FLlcagOC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from s1.g1.infrastructure.qtmlabs.xyz (s1.g1.infrastructure.qtmlabs.xyz [107.172.1.117])
+Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 338E115DBB3;
-	Fri,  4 Apr 2025 05:50:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=107.172.1.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6197101F2;
+	Fri,  4 Apr 2025 06:13:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743745814; cv=none; b=ArkQU6aaMUe+gspkkM2v/amYKZYaSvzi1TFQCf3qXqMwe2E8G5uy85xri7vsPM3oQwGgQYezlm/WvBVuwy5kbeHyqZN3+E3WcHGyYgSV0BVLc129yWsiLb1uwvLJQ1sRrLWDULoYGWO1lfWCyZLhXp1OYUrGhAb20LQdeuiIbuo=
+	t=1743747194; cv=none; b=RNHEeESzrATt1vT/baCeACuTr6kEfMniGIw/Qa2hQwwUpvV93265LbV/bgoSDlC4CA2K38zHTMglc3OfndW9ZhWc1hRwqncfCGxo8xlLqrPNcs95YGriny6dp6D+x9DW/HlPCSHRktK1bpipNHfyCopt3PvNy0579aDsn7Do8pg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743745814; c=relaxed/simple;
-	bh=E0lTe+FJPV0F1VKQxQbHoHGJojoKObYVSGdv5v9cqxw=;
-	h=Content-Type:Message-ID:Date:MIME-Version:Subject:From:To:Cc:
-	 References:In-Reply-To; b=uoZv9tJ473RHyrpmoprUAvwAjiTEdPiyWqJEWf3CNzj5nDENUNKYwiNhtXUIklI6YbnhqQk8IiXFfqDPZ6X84bhCteB+emACIgKyeKTaPSA2fGD2wv6tlgnloA9AzWh70uPinRs1OpqGQdue6uQGmr/jnpU3d+o9pxrQ/2lZA/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qtmlabs.xyz; spf=pass smtp.mailfrom=qtmlabs.xyz; dkim=pass (2048-bit key) header.d=qtmlabs.xyz header.i=@qtmlabs.xyz header.b=HkWrS4lG; arc=none smtp.client-ip=107.172.1.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qtmlabs.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qtmlabs.xyz
-Content-Type: multipart/mixed; boundary="------------08L6YdHquZUpv03HEHpbPDhB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qtmlabs.xyz; s=dkim;
-	t=1743745810;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+ytiwc9QXzR9VaVB1US+GOGp83Z98Cx/zqNhgfzVo6k=;
-	b=HkWrS4lG4mKe4eli15RrfKo6WsOqx2JmVjBov6gUuHXf8P0/0dCu5wzDoMpKWSdaJkQJqP
-	TQApk0DgsMM5F5ZTl6tEN0lxx9g/Z4TYTPawLFlDNv5KNidgOR9CTNzr7hI9+wsj/38vi0
-	/aQj0iYD4KKdP6VoR7xsZJk12F4sWv90H+HmA3WLohwOBqoJfsQwzPJXJiJTbY1A79Ifuw
-	OA0+unqYbrODdbLBy1o7cwk+nUwvctiBsAXi6sV+4FXaKyJVyw1olTBsYWakIY5EAT9Q3Q
-	6BSjTAGnOKXd51gCSFMzKCXgoLeuYrTZ3ZNSQ9V19vtJlS0LpK4skaU4gY4j/w==
-Authentication-Results: s1.g1.infrastructure.qtmlabs.xyz;
-	auth=pass smtp.mailfrom=msizanoen@qtmlabs.xyz
-Message-ID: <4081fbd9-0a5f-49d6-9553-4f964bf5ef27@qtmlabs.xyz>
-Date: Fri, 4 Apr 2025 12:50:03 +0700
+	s=arc-20240116; t=1743747194; c=relaxed/simple;
+	bh=D/d1gnPCumIccAY1D58aMP6d2nRRx7Cr8jlQwlsQyhI=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L12oFGtEVUGGGy6tA/c4F7yMwf//Ttyo7d5LbryAaNoKjb+Ya2lxvqpq01IqDL38BDQco8eI8qgLH9UICK7kNgsZi47En1wZA11nNkaa6WvuWL6apNuktGi5Dqy3PCW2BopHsGOI3uYRtJvdBbxVfWqg1Eaf+PMphYYedYAu398=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=FLlcagOC; arc=none smtp.client-ip=198.47.19.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 5346D073265204
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 4 Apr 2025 01:13:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1743747180;
+	bh=KVWOwvRPO7YvD8ife4s6y5HXtx59DE9Bhv5GKy5bWME=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=FLlcagOCAFXhKEBo2g69Vx91biEEicL67yNaykYglTguEFH+U1KZVfHYarNRCHBua
+	 DCDOeF0+rF+wOQ3+Eu3Z+ZCuL79E3OANB4j/mA+l0/LlMJiywQg3u96TdpH0B7HFJS
+	 CX8Efn0Le1+K6IWtV9jDlMjPBz1NxefQfyMgYXeY=
+Received: from DFLE20.ent.ti.com ([10.64.6.57])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTP id 5346D0b3032094;
+	Fri, 4 Apr 2025 01:13:00 -0500
+Received: from flwvowa01.ent.ti.com (10.64.41.90) by DFLE20.ent.ti.com
+ (10.64.6.57) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1748.10; Fri, 4 Apr
+ 2025 01:13:00 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by flwvowa01.ent.ti.com
+ (10.64.41.90) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2507.34; Fri, 4 Apr
+ 2025 01:13:00 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 4 Apr 2025 01:13:00 -0500
+Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 5346CxRT123540;
+	Fri, 4 Apr 2025 01:12:59 -0500
+Date: Fri, 4 Apr 2025 11:42:58 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+CC: <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] pmdomain: core: Reset genpd->states to avoid freeing
+ invalid data
+Message-ID: <20250404061258.alstrdgpz75gywna@lcpd911>
+References: <20250402120613.1116711-1-ulf.hansson@linaro.org>
+ <20250403080815.jsdoydcczkeuvmy6@lcpd911>
+ <CAPDyKFrgYVMvaBf13ksdJ6Zr6bvLo1Jmz8yLiyg_43hs65STVQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [REGRESSION] Kernel booted via kexec fails to resume from
- hibernation
-From: msizanoen <msizanoen@qtmlabs.xyz>
-To: Roberto Ricci <io@r-ricci.it>
-Cc: ebiederm@xmission.com, rafael@kernel.org, pavel@ucw.cz,
- ytcoode@gmail.com, kexec@lists.infradead.org, linux-pm@vger.kernel.org,
- akpm@linux-foundation.org, regressions@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <Z4WFjBVHpndct7br@desktop0a> <Z4WGSMdF6seQm9GV@desktop0a>
- <b9f6ed5a-74b9-47c0-b073-9922dbe6119b@qtmlabs.xyz>
- <Z-8E-LLs1dFWfn6J@desktop0a>
- <691be719-7d4c-4cb1-87d6-cca7834547fe@qtmlabs.xyz>
- <004d85e4-d23d-43af-87ca-8d037abba51d@qtmlabs.xyz>
-Content-Language: en-US
-In-Reply-To: <004d85e4-d23d-43af-87ca-8d037abba51d@qtmlabs.xyz>
-X-Spamd-Bar: +
-X-Spam-Level: *
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFrgYVMvaBf13ksdJ6Zr6bvLo1Jmz8yLiyg_43hs65STVQ@mail.gmail.com>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-This is a multi-part message in MIME format.
---------------08L6YdHquZUpv03HEHpbPDhB
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Apr 03, 2025 at 17:55:41 +0200, Ulf Hansson wrote:
+> On Thu, 3 Apr 2025 at 10:08, Dhruva Gole <d-gole@ti.com> wrote:
+> >
+> > On Apr 02, 2025 at 14:06:13 +0200, Ulf Hansson wrote:
+> > > If genpd_alloc_data() allocates data for the default power-states for the
+> > > genpd, let's make sure to also reset the pointer in the error path. This
+> > > makes sure a genpd provider driver doesn't end up trying to free the data
+> > > again, but using an invalid pointer.
+> >
+> > I maybe missing something but if kfree works similar to [1]GNU free() won't
+> > it make the genpd->states NULL anyway? Have you actually seen scenarios
+> > where the genpd->states is remaining non-NULL even after kfree?
+> 
+> Yes. kfree() doesn't reset the pointer to the data.
 
-Here's an updated version of the patch that better handles pathological 
-e820 tables.
+Gotcha.
 
-On 4/4/25 11:56, msizanoen wrote:
-> Also, can you reproduce this issue with a target kernel (the kernel 
-> being kexec-ed) that has one of the patches attached (select the 
-> correct one according to your kernel version) applied, with either 
-> kexec_load or kexec_file_load?
->
-> On 4/4/25 09:54, msizanoen wrote:
->> Can you send the dmesg logs for this case (6.13 + mentioned patch 
->> series backported as target kernel, using kexec_load)?
->>
->> On 4/4/25 05:00, Roberto Ricci wrote:
->>> On 2025-04-01 19:59 +0700, msizanoen wrote:
->>>> [snip]
->>>> It seems like `e820__register_nosave_regions` is erroneously 
->>>> marking some
->>>> kernel memory as nosave in the presence of sub-page e820 regions. 
->>>> In theory
->>>> backporting
->>>> https://lore.kernel.org/all/20250214090651.3331663-1-rppt@kernel.org/ 
->>>> should
->>>> be sufficient to avoid this but a fix for the actual root cause is
->>>> preferred.
->>> When using kexec_file_load, this patch series fixes the issue not only
->>> in theory but also in practice.
->>> But the issue with kexec_load (see
->>> https://lore.kernel.org/all/Z-hYWc9LtBU1Yhtg@desktop0a/
->>> ), which might be related, is not fixed.
---------------08L6YdHquZUpv03HEHpbPDhB
-Content-Type: text/x-patch; charset=UTF-8; name="for-6.14-and-earlier-v2.diff"
-Content-Disposition: attachment; filename="for-6.14-and-earlier-v2.diff"
-Content-Transfer-Encoding: base64
+[...]
+> > >       put_device(&genpd->dev);
+> > > -     if (genpd->free_states == genpd_free_default_power_state)
+> > > +     if (genpd->free_states == genpd_free_default_power_state) {
+> > >               kfree(genpd->states);
+> > > +             genpd->states = NULL;
+> >
+> > Also the coding convention for kfree in other places in pmdomains
+> > doesn't seem to follow this practise either...
+> 
+> Right. I am not suggesting changing them all. Only this one, as it's a
+> special case and an error path.
+> 
+> genpd->states may be allocated by both the genpd provider driver and
+> internally by genpd via pm_genpd_init(), hence we need to be a bit
+> more careful.
+> 
 
-ZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9lODIwLmMgYi9hcmNoL3g4Ni9rZXJuZWwv
-ZTgyMC5jCmluZGV4IDQ4OTNkMzBjZTQzOC4uNWQ5NjNkZjYzYjdhIDEwMDY0NAotLS0gYS9h
-cmNoL3g4Ni9rZXJuZWwvZTgyMC5jCisrKyBiL2FyY2gveDg2L2tlcm5lbC9lODIwLmMKQEAg
-LTc1NCwyMiArNzU0LDIxIEBAIHZvaWQgX19pbml0IGU4MjBfX21lbW9yeV9zZXR1cF9leHRl
-bmRlZCh1NjQgcGh5c19hZGRyLCB1MzIgZGF0YV9sZW4pCiB2b2lkIF9faW5pdCBlODIwX19y
-ZWdpc3Rlcl9ub3NhdmVfcmVnaW9ucyh1bnNpZ25lZCBsb25nIGxpbWl0X3BmbikKIHsKIAlp
-bnQgaTsKLQl1bnNpZ25lZCBsb25nIHBmbiA9IDA7CisJdTY0IGxhc3RfYWRkciA9IDA7CiAK
-IAlmb3IgKGkgPSAwOyBpIDwgZTgyMF90YWJsZS0+bnJfZW50cmllczsgaSsrKSB7CiAJCXN0
-cnVjdCBlODIwX2VudHJ5ICplbnRyeSA9ICZlODIwX3RhYmxlLT5lbnRyaWVzW2ldOwogCi0J
-CWlmIChwZm4gPCBQRk5fVVAoZW50cnktPmFkZHIpKQotCQkJcmVnaXN0ZXJfbm9zYXZlX3Jl
-Z2lvbihwZm4sIFBGTl9VUChlbnRyeS0+YWRkcikpOwotCi0JCXBmbiA9IFBGTl9ET1dOKGVu
-dHJ5LT5hZGRyICsgZW50cnktPnNpemUpOwotCiAJCWlmIChlbnRyeS0+dHlwZSAhPSBFODIw
-X1RZUEVfUkFNICYmIGVudHJ5LT50eXBlICE9IEU4MjBfVFlQRV9SRVNFUlZFRF9LRVJOKQot
-CQkJcmVnaXN0ZXJfbm9zYXZlX3JlZ2lvbihQRk5fVVAoZW50cnktPmFkZHIpLCBwZm4pOwor
-CQkJY29udGludWU7CiAKLQkJaWYgKHBmbiA+PSBsaW1pdF9wZm4pCi0JCQlicmVhazsKKwkJ
-aWYgKGxhc3RfYWRkciA8IGVudHJ5LT5hZGRyKQorCQkJcmVnaXN0ZXJfbm9zYXZlX3JlZ2lv
-bihQRk5fVVAobGFzdF9hZGRyKSwgUEZOX0RPV04oZW50cnktPmFkZHIpKTsKKworCQlsYXN0
-X2FkZHIgPSBlbnRyeS0+YWRkciArIGVudHJ5LT5zaXplOwogCX0KKworCXJlZ2lzdGVyX25v
-c2F2ZV9yZWdpb24oUEZOX1VQKGxhc3RfYWRkciksIGxpbWl0X3Bmbik7CiB9CiAKICNpZmRl
-ZiBDT05GSUdfQUNQSQo=
---------------08L6YdHquZUpv03HEHpbPDhB
-Content-Type: text/x-patch; charset=UTF-8; name="for-master-v2.diff"
-Content-Disposition: attachment; filename="for-master-v2.diff"
-Content-Transfer-Encoding: base64
+I see.. okay then,
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
-ZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9lODIwLmMgYi9hcmNoL3g4Ni9rZXJuZWwv
-ZTgyMC5jCmluZGV4IDU3MTIwZjA3NDljYy4uNjU2ZWQ3YWJkMjhkIDEwMDY0NAotLS0gYS9h
-cmNoL3g4Ni9rZXJuZWwvZTgyMC5jCisrKyBiL2FyY2gveDg2L2tlcm5lbC9lODIwLmMKQEAg
-LTc1MywyMiArNzUzLDIxIEBAIHZvaWQgX19pbml0IGU4MjBfX21lbW9yeV9zZXR1cF9leHRl
-bmRlZCh1NjQgcGh5c19hZGRyLCB1MzIgZGF0YV9sZW4pCiB2b2lkIF9faW5pdCBlODIwX19y
-ZWdpc3Rlcl9ub3NhdmVfcmVnaW9ucyh1bnNpZ25lZCBsb25nIGxpbWl0X3BmbikKIHsKIAlp
-bnQgaTsKLQl1bnNpZ25lZCBsb25nIHBmbiA9IDA7CisJdTY0IGxhc3RfYWRkciA9IDA7CiAK
-IAlmb3IgKGkgPSAwOyBpIDwgZTgyMF90YWJsZS0+bnJfZW50cmllczsgaSsrKSB7CiAJCXN0
-cnVjdCBlODIwX2VudHJ5ICplbnRyeSA9ICZlODIwX3RhYmxlLT5lbnRyaWVzW2ldOwogCi0J
-CWlmIChwZm4gPCBQRk5fVVAoZW50cnktPmFkZHIpKQotCQkJcmVnaXN0ZXJfbm9zYXZlX3Jl
-Z2lvbihwZm4sIFBGTl9VUChlbnRyeS0+YWRkcikpOwotCi0JCXBmbiA9IFBGTl9ET1dOKGVu
-dHJ5LT5hZGRyICsgZW50cnktPnNpemUpOwotCiAJCWlmIChlbnRyeS0+dHlwZSAhPSBFODIw
-X1RZUEVfUkFNKQotCQkJcmVnaXN0ZXJfbm9zYXZlX3JlZ2lvbihQRk5fVVAoZW50cnktPmFk
-ZHIpLCBwZm4pOworCQkJY29udGludWU7CiAKLQkJaWYgKHBmbiA+PSBsaW1pdF9wZm4pCi0J
-CQlicmVhazsKKwkJaWYgKGxhc3RfYWRkciA8IGVudHJ5LT5hZGRyKQorCQkJcmVnaXN0ZXJf
-bm9zYXZlX3JlZ2lvbihQRk5fVVAobGFzdF9hZGRyKSwgUEZOX0RPV04oZW50cnktPmFkZHIp
-KTsKKworCQlsYXN0X2FkZHIgPSBlbnRyeS0+YWRkciArIGVudHJ5LT5zaXplOwogCX0KKwor
-CXJlZ2lzdGVyX25vc2F2ZV9yZWdpb24oUEZOX1VQKGxhc3RfYWRkciksIGxpbWl0X3Bmbik7
-CiB9CiAKICNpZmRlZiBDT05GSUdfQUNQSQo=
 
---------------08L6YdHquZUpv03HEHpbPDhB--
+-- 
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
