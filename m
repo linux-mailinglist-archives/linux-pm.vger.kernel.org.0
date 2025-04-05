@@ -1,124 +1,136 @@
-Return-Path: <linux-pm+bounces-24843-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24844-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A66DEA7C97B
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Apr 2025 15:53:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D492A7C9B4
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Apr 2025 16:42:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0D997A6DB3
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Apr 2025 13:52:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D54F91898BE1
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Apr 2025 14:42:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B57C1EF368;
-	Sat,  5 Apr 2025 13:53:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56DF21F3FE5;
+	Sat,  5 Apr 2025 14:42:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="AaJJ56Kw"
+	dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b="kpKTySCR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2344C74;
-	Sat,  5 Apr 2025 13:53:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0CD1E5217
+	for <linux-pm@vger.kernel.org>; Sat,  5 Apr 2025 14:42:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743861229; cv=none; b=UbqlmgXvex6xn3D+BCrMaWqxB3J+X3OveuzPlAM5IFlcAg7a3pfEyQCd1C3WK6r5Tq91nahEMeGJWk47uPeluj2KBcYQTaLZ2/bZDpYXVxBGtuhNsLQUoXAwkHcysvtvqdtr2n3QFC0sbK7Ns2Avd+3Bcaup8yuOkg+yylFxZVk=
+	t=1743864159; cv=none; b=tLu0SKa43JG1Oapf54DwUD51t2u/6RKE158+2dyeiL42SAgu5VqZFewdZ/iBbgziO44KdnWki54GDQjZjhoRvgJfJ3IL2rHVgB6u7CCyx2dMbQaRRa8UbOjrmtl2CBy78snyjyfJJT5ZoaeGGuZOakkFt7YYYdPNRhLEdCz9Js0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743861229; c=relaxed/simple;
-	bh=6kbRGQd1SkeeAIEBr/yL2/lIqNa6RfTO2IR0o/S3lgk=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MbqSVAcsL+exM6b/6QLQIG3z9SjEPdImE6jo7Ulo3vhcziLpvHcJndD+4wGLiR1w5NO0ffe2HlWGvN9VJynu88XLLESx5ZYM+HtIl9MYduo8lzHf7+25I88hEqmKQ6OPev1Z179yl7iEPvBWe+j0O/z73dBQ2FVX6MdN6faVT4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=AaJJ56Kw; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 535B9sHA027789;
-	Sat, 5 Apr 2025 13:53:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=djBv5Xe95ErQ/suR/GZcXg
-	HV0QBorZnp1GcAyIUIdhM=; b=AaJJ56KwtiBjpqBlELAEXNwshqt78+pT+MjeUN
-	vHhk7oU1X5aqljTSRQfG9k5zXwf6w/RualNoBJmicJxPDV4qhBS5iEUn0dehzcoj
-	Gdi/Irzb5M2YZNI7HkmE/6vyR13myVMZhdOtpj5Z9lHyT6VXqCSSXCsynMtFg3ep
-	JKkxw/+9tNmedqHcwyUXPLdG/aoicBUPG70wuqwaVLHChZsFUEvY+zTNYii83zuS
-	q1rZBr4j183XjszIaN6hpY+izjORm9yPFtuvqHPKEGn5J2PeCejkwKIXPXCM+zxW
-	qi1j5EKonpriHENWZCOmn7lOzAPX+gosnuWnpm6K4mqN01bA==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45twbe0je6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 05 Apr 2025 13:53:33 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 535DrXJe023032
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 5 Apr 2025 13:53:33 GMT
-Received: from zhonhan-gv.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Sat, 5 Apr 2025 06:53:31 -0700
-From: Zhongqiu Han <quic_zhonhan@quicinc.com>
-To: <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
-        <christian.loehle@arm.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_zhonhan@quicinc.com>
-Subject: [PATCH v2] cpuidle: menu: Optimize bucket assignment when next_timer_ns equals KTIME_MAX
-Date: Sat, 5 Apr 2025 21:53:08 +0800
-Message-ID: <20250405135308.1854342-1-quic_zhonhan@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1743864159; c=relaxed/simple;
+	bh=XfnEVi3ovC/zw6g3a+nScy1RtngEkEo5Aoq+dlPJPpk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ljRxpPjt7DfUez+YANFpaOrD4HyLdPALd+tPfRXfe1GIzeA5CN+FiDUsTXfNJtUwr4VHZvJ/eWTiyzMpDMoHsCAd8Ja7fGMjy++9Z9F82lgb3fo/CJQTcFJksBqIGSl350pXKSVXIUqNwtlnq9K7Jqh+9N4N25EV86qUhz9J4pk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de; spf=pass smtp.mailfrom=posteo.de; dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b=kpKTySCR; arc=none smtp.client-ip=185.67.36.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.de
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout01.posteo.de (Postfix) with ESMTPS id CE19D240027
+	for <linux-pm@vger.kernel.org>; Sat,  5 Apr 2025 16:42:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+	t=1743864148; bh=XfnEVi3ovC/zw6g3a+nScy1RtngEkEo5Aoq+dlPJPpk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:
+	 Content-Transfer-Encoding:Content-Type:Autocrypt:OpenPGP:From;
+	b=kpKTySCR9tVzJeZkrRR96FmaI5z2uTfS1UgZ1LpQ3uiZDUhk5hZl1Wg7atK7sF7Py
+	 t2asO+qjhckqLWTAXxzO0qKwssbnQJVHhCap2/Ttyl5qFKDRg6KUJBn1mT57NZN74A
+	 U2yd4Y81VINm50wKMQoE5w5YEKYFNIWFZlwKMcZMeKWKbJuW5GTkUsl3J5sqBlokOe
+	 HlMB62MvRhv1jhGOhOHSSQuYMBXt7PXHJVTolJDFbkwv334aH2+ZC//yE6KFT/KF6+
+	 fWFBhnGyRrDLlxlIWTNnqZLWzpqSPXXxc6mO/SFGpd74DILF9X3KADVWBTc4IBkgvM
+	 JBCaAeSLwoOlg==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4ZVJ8s527hz9rxK;
+	Sat,  5 Apr 2025 16:42:21 +0200 (CEST)
+From: Alexander Reimelt <alexander.reimelt@posteo.de>
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+ "Rob Herring (Arm)" <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Samuel Holland <samuel@sholland.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>,
+ Liviu Dudau <liviu.dudau@arm.com>, Sudeep Holla <sudeep.holla@arm.com>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Stephen Boyd <sboyd@kernel.org>, zhouyanjie@wanyeetech.com,
+ Conor Dooley <conor@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+ Steen Hegelund <Steen.Hegelund@microchip.com>,
+ Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com,
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, Heiko Stuebner <heiko@sntech.de>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Magnus Damm <magnus.damm@gmail.com>,
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, linux-mips@vger.kernel.org,
+ imx@lists.linux.dev, linux-rockchip@lists.infradead.org,
+ linux-amlogic@lists.infradead.org, linux-renesas-soc@vger.kernel.org
+Subject:
+ Re: [PATCH 07/19] arm64: dts: qcom: msm8992-lg-h815: Fix CPU node
+ "enable-method" property dependencies
+Date: Sat, 05 Apr 2025 14:42:21 +0000
+Message-ID: <4999945.OV4Wx5bFTl@stinkpad>
+In-Reply-To: <d3592f32-e29c-4b40-b045-7267795a9617@oss.qualcomm.com>
+References:
+ <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
+ <470e2155-7145-44ab-9d6d-117a2d98d7f8@oss.qualcomm.com>
+ <d3592f32-e29c-4b40-b045-7267795a9617@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _JCNgLbSgJlseBRLWeykxQOEX2ZMpXJ6
-X-Authority-Analysis: v=2.4 cv=T7OMT+KQ c=1 sm=1 tr=0 ts=67f135dd cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=7CQSdrXTAAAA:8 a=8PjpGhcAf3todJjbOTUA:9
- a=TjNXssC_j7lpFel5tvFf:22 a=a-qgeE7W1pNrGK8U0ZQC:22
-X-Proofpoint-ORIG-GUID: _JCNgLbSgJlseBRLWeykxQOEX2ZMpXJ6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-05_06,2025-04-03_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=708 lowpriorityscore=0 adultscore=0 phishscore=0 bulkscore=0
- mlxscore=0 malwarescore=0 suspectscore=0 priorityscore=1501 spamscore=0
- clxscore=1015 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2504050086
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+Autocrypt: addr=alexander.reimelt@posteo.de;
+  keydata=xjMEZg0fSRYJKwYBBAHaRw8BAQdAIcaNTdj3NWDe5HQPCUs6oYyQygAJWP9LCzhr+C7RwMrNG2Fs
+  ZXhhbmRlci5yZWltZWx0QHBvc3Rlby5kZcKZBBMWCgBBFiEEM+Wy6sI/mP5S0zIFHqi3OKk8uRIF
+  AmYNH0kCGwMFCQWjo9cFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQHqi3OKk8uRJ8ogD9
+  EVg4zgfmC2SqXCgms6LETAzVX4CrAS8yMhyd7Md921cA/R8lhm9B96RYgA7MvFPFJb1T6JFY75Jg
+  QLXrtIE5llwHzjgEZg0fSRIKKwYBBAGXVQEFAQEHQBGDuxZLOTvppxyM4G18fSR6xzT0xkkPOia7
+  Bh6L1vAAAwEIB8J+BBgWCgAmFiEEM+Wy6sI/mP5S0zIFHqi3OKk8uRIFAmYNH0kCGwwFCQWjo9cA
+  CgkQHqi3OKk8uRIa1wD8CZDdCAKXstgXY96eeSSP7MecEF5TBdmWOiVgjlEIpoEA/RnGuDaj06B1
+  F51wyGAjYXSmn5qFoNHu3yXyLUkFz1ME
+OpenPGP: url=https://posteo.de/keys/alexander.reimelt@posteo.de.asc
 
-Directly assign the last bucket value instead of calling which_bucket()
-when next_timer_ns equals KTIME_MAX, the largest possible value that
-always falls into the last bucket. This avoids unnecessary calculations
-and enhances performance.
+> On 4/4/25 10:30 PM, Konrad Dybcio wrote:
+> > On 4/4/25 4:59 AM, Rob Herring (Arm) wrote:
+> >> The "spin-table" enable-method requires "cpu-release-addr" property,
+> >> so add a dummy entry. It is assumed the bootloader will fill in the
+> >> correct values.
+> >> 
+> >> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> >> ---
+> > 
+> > This looks good to me without knowing any better about the specifics
+> > of this device..
+> > 
+> > +Alexander - does the bootloader you use take care of this? Otherwise
+> > we can just do what Sony devices do and stop on removing the psci node
 
-Reviewed-by: Christian Loehle <christian.loehle@arm.com>
-Signed-off-by: Zhongqiu Han <quic_zhonhan@quicinc.com>
----
-v1 -> v2:
-- Rebased on top of current next.
-- Following Christian's review suggestions, remove unnecessary code comments.
-- Link to v1: https://lore.kernel.org/all/20250403092852.1072015-1-quic_zhonhan@quicinc.com/
+I currently can't test this, but the bootloader (lk2nd) will set it.
 
- drivers/cpuidle/governors/menu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Alexander
 
-diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors/menu.c
-index 39aa0aea61c6..52d5d26fc7c6 100644
---- a/drivers/cpuidle/governors/menu.c
-+++ b/drivers/cpuidle/governors/menu.c
-@@ -255,7 +255,7 @@ static int menu_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
- 		 */
- 		data->next_timer_ns = KTIME_MAX;
- 		delta_tick = TICK_NSEC / 2;
--		data->bucket = which_bucket(KTIME_MAX);
-+		data->bucket = BUCKETS - 1;
- 	}
- 
- 	if (unlikely(drv->state_count <= 1 || latency_req == 0) ||
--- 
-2.25.1
 
 
