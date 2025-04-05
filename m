@@ -1,135 +1,109 @@
-Return-Path: <linux-pm+bounces-24840-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24841-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5726CA7C7D6
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Apr 2025 08:19:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A356A7C869
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Apr 2025 11:07:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E52A1189AEF8
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Apr 2025 06:20:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36AD43BB4C0
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Apr 2025 09:07:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D9EA1C3F30;
-	Sat,  5 Apr 2025 06:19:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A07911C861B;
+	Sat,  5 Apr 2025 09:07:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kWfoeCHn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N7V+pz+o"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f193.google.com (mail-pf1-f193.google.com [209.85.210.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F139314F125;
-	Sat,  5 Apr 2025 06:19:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AEC52E62A0
+	for <linux-pm@vger.kernel.org>; Sat,  5 Apr 2025 09:07:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743833992; cv=none; b=a/YsvEX2nQo3dpkAcCnThxwD+IN9Iw7gsYb0MO4XR+MoYJWll6diHu3hd2lxopAh5TQPZNjyJrkR51vrgFm/yaY7sW0iCWuGqCBqHtkvYj2CK/sDdoHaoazykS2B2hjba3xjDKAbnivZyYErN2DlUqcH2mDniBWuc5U8sokW+to=
+	t=1743844040; cv=none; b=LePPjO4t+ii2z3Ct1NkLK6KXYp3RHZ117Bncs7+uofhGCDu0lBRTxYkcxtjU+I/lQiBllTRYWOZbuLiPRYIfj7+imfAeyi8oNcgNoYB1lYRXKUdfKyAQCb4eIaFMUzvSb74612dRaoHKU9D7OINdbScJ+WQ4SMWwanGitXiZmsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743833992; c=relaxed/simple;
-	bh=kOe2Z+PD8qy5TNtkdQdGx6znyJnRdjYOSo+/Z9ZAFW0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=A4MvjzwY9jHJOvhp3wMgO3DvKe7VEAGEoAVmjSUL4MS9SwGskhJHmhzAgXHkbdAX/0rDNiTn6UT9PP4MQyY2XhlTWPYYP3n/uJUcVcHhH0hSwsE4TqBGwUy25NsorzkpKaHQFGzQtstW/31fy3QrTgZvX/aYfX5PH8zHwCtKzS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kWfoeCHn; arc=none smtp.client-ip=209.85.210.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f193.google.com with SMTP id d2e1a72fcca58-736ee709c11so2366471b3a.1;
-        Fri, 04 Apr 2025 23:19:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743833990; x=1744438790; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jvlWzim6YndqWu3ZQu0rSQefXK13/0JaECZ5f7JnfO4=;
-        b=kWfoeCHnTCtbEepUjc7oLnW9UMSs468lKBnrcc9/UHgHGtJHjHh56SWkaIYWNyrqGL
-         pYM8BU0BCLGpRkX5wZ23JrBfRRtyJjOpjGCuGm+V8XNfZwTsF0oWFZgJQ1B1P8BNRG7e
-         JwDVHWZm5+c1xI9T0GRRuGycLioOYTyWeA39CsZzIjixanwSMQlEL0+WxUQPs6qRjdR8
-         5pBMnETpNxOH8XjgbfpZdZF94JZUrpowvFXDEjouJLkChWeZq6K6boK/8HwkwdGEQ4en
-         Bp7O/pHUbjSXRp1xK4Ju8Qf9jCJn8DQx3sdP7AbOTqtgiM+HrmZlSSKhJfF/X0/Md0j8
-         fhUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743833990; x=1744438790;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jvlWzim6YndqWu3ZQu0rSQefXK13/0JaECZ5f7JnfO4=;
-        b=a+1WvWQY+KsfJH5I2TI7h221Y6mG9SG7i9FIUrIDOzScAmcJk57fk2F4HHE1lzanSp
-         fMlkEfENk08XZVg3ZFRbOGe1j422IElVKadsv1rC84dMI03CFQCqmUPIK3AgzRSkJS+v
-         olmrErqSc0E2Xy1TEWuttWMMPzURK9PhV30E4HvQODO3JK8PZFVJWxLSHa8ERJomhP+t
-         q16xChabNI6qRAf5oHDEFNGcTWkPcTuq/61eJUhNKYBG2p+x56kL9N7s5ICWLKGnlsHW
-         bQxb8DOnN70ihiKBb3A5RzJn2jUBU0NbZmcn+Qlo4C9YDgm7b0bvel8Og8qBkSUJKcTa
-         iCyg==
-X-Forwarded-Encrypted: i=1; AJvYcCUw/xBjUKhFYTsDUFb8lfM9vzHsoSvVD9+xjuR0sZWjAPALCmUgk2FXCeYf+cAzC+HcUeSz3CodL3g=@vger.kernel.org, AJvYcCVk4RuuqRi0xW3G+WR6k9xoEAf0B+PhnwMdCJLy8IJqDbU0uqZGbjVyn8mNPdavheUUt+e2Gl5D5sG7wXU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHQ/9WyjvRin/UG7PQn4NOvysCG34VNKP+bQhaUrcRFmCeSugc
-	cEUrhxRZWhkGCw3mUW1cieKrnZJnb3eRyY0JqLHYMGK0Yr1cX5WofurtvkX1906eww==
-X-Gm-Gg: ASbGncvLS5wH/S3/jN4NDSkLJk1Zq30/4xe/PJHM4zyPNmvhuBXKeBtfHF8kDLmP9PC
-	cFSeNDxF2cUMeJ2wU09quKrnYr3ed/Hcoqy9l1YCLgdc9rhE5tMuNN9+eo7xe+KtyB2iC3mlCZu
-	K3iw7qzUsS/1PUaIpVvqiVmZGjAKRB2+KO9KF8MYvOWQRTCxK/YcHvDDDzdgpeSVI/BpNX2WL1g
-	DgjVXjhyyYFYz31biUROzmH6rJ9WYa/9rbflWI5Uj7Sw6vVsnpBYEhhjFxwc3Bcx5roS4pOgTna
-	W96rAfAvGyyuy8+rvWO7ZfDxW13IWSD2cAVnQ9U6O/qxRuU4MCZSBNzu8WEY76nX7h57sGJk3mp
-	3empl
-X-Google-Smtp-Source: AGHT+IFAtgmoL2nMv36spwTBvOI1Zop6q8ft1LpTEtdlGsfFq6JVDVDdNNkOWYXi+baTWF6/wwaPdQ==
-X-Received: by 2002:a05:6a21:900f:b0:1f5:75a9:526c with SMTP id adf61e73a8af0-20107efef3emr7651006637.13.1743833990025;
-        Fri, 04 Apr 2025 23:19:50 -0700 (PDT)
-Received: from henry.localdomain ([223.72.104.254])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af9bc41a65asm3830209a12.69.2025.04.04.23.19.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Apr 2025 23:19:49 -0700 (PDT)
-From: Henry Martin <bsdhenrymartin@gmail.com>
-To: sven@svenpeter.dev,
-	j@jannau.net,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org
-Cc: alyssa@rosenzweig.io,
-	neal@gompa.dev,
-	asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Henry Martin <bsdhenrymartin@gmail.com>
-Subject: [PATCH v1] cpufreq: apple-soc: Fix null-ptr-deref in apple_soc_cpufreq_get_rate()
-Date: Sat,  5 Apr 2025 14:19:27 +0800
-Message-Id: <20250405061927.75485-1-bsdhenrymartin@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1743844040; c=relaxed/simple;
+	bh=AeemlDFjC6v1MKYlYp4QMHBC5jJGQ2iQqzR2cCNmozg=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ECQRtLVA12hRrQT8kYw71BUKr/SUnnJNwnb9ZIOj43Ox09bTUPi9bnyrb8UiXvNjKkRlS4MrfAnp9oHWq9ViySqirlanAPx5kNx4fxcR2v0J7woc/hjG57/WNrt9Ng/mx/w+G10RvzDXMuxumx18EaS5cmwv9fiFZwVMbP2H/Ak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N7V+pz+o; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E6192C4CEEC
+	for <linux-pm@vger.kernel.org>; Sat,  5 Apr 2025 09:07:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743844039;
+	bh=AeemlDFjC6v1MKYlYp4QMHBC5jJGQ2iQqzR2cCNmozg=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=N7V+pz+oNhnTmJIrxl5CT8y+nUa6B7XILY7u+OTn8Ig0NgiBHB9agDs8EsqFcnsQV
+	 4GR5MizBfb295/D9NFGbnF5DthSNOHWLL0MvIxYMJfadJ4RTges2jNXbxqnjmjkbJK
+	 V3+jMpjTfkMrGwAT7+OY56Jl/gkSXrUwslaDZQ6mLzvWZjQZrHTUhFpOqxEtCD5V7c
+	 DR4IxFSo84R7/bfkDOfYXxQirmspnhDRG0IEOhEeq/5KD50QJEdGlUiyUenD6AIFKR
+	 iocT0zReZtg88oA1yuCZwIEgjfI+D04ub/n2wWZs/D3ep9MDt/zjjz1Z6zM6NOjvIk
+	 W2cXMC/Y+v4EA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id D72CEC53BC7; Sat,  5 Apr 2025 09:07:19 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 219966] modpost: EXPORT symbol "policy_has_boost_freq"
+ [vmlinux] version generation failed, symbol will not be versioned.
+Date: Sat, 05 Apr 2025 09:07:19 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: pmenzel+bugzilla.kernel.org@molgen.mpg.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-219966-137361-oAAu7roBUR@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219966-137361@https.bugzilla.kernel.org/>
+References: <bug-219966-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-cpufreq_cpu_get_raw() can return NULL when the target CPU is not present
-in the policy->cpus mask. apple_soc_cpufreq_get_rate() does not check
-for this case, which results in a NULL pointer dereference.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219966
 
-Fixes: 6286bbb40576 ("cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states")
-Signed-off-by: Henry Martin <bsdhenrymartin@gmail.com>
----
- drivers/cpufreq/apple-soc-cpufreq.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de) changed:
 
-diff --git a/drivers/cpufreq/apple-soc-cpufreq.c b/drivers/cpufreq/apple-soc-cpufreq.c
-index 4994c86feb57..9156becfa367 100644
---- a/drivers/cpufreq/apple-soc-cpufreq.c
-+++ b/drivers/cpufreq/apple-soc-cpufreq.c
-@@ -134,11 +134,17 @@ static const struct of_device_id apple_soc_cpufreq_of_match[] __maybe_unused = {
- 
- static unsigned int apple_soc_cpufreq_get_rate(unsigned int cpu)
- {
--	struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
--	struct apple_cpu_priv *priv = policy->driver_data;
-+	struct cpufreq_policy *policy;
-+	struct apple_cpu_priv *priv;
- 	struct cpufreq_frequency_table *p;
- 	unsigned int pstate;
- 
-+	policy = cpufreq_cpu_get_raw(cpu);
-+	if (!policy)
-+		return 0;
-+
-+	priv = policy->driver_data;
-+
- 	if (priv->info->cur_pstate_mask) {
- 		u32 reg = readl_relaxed(priv->reg_base + APPLE_DVFS_STATUS);
- 
--- 
-2.34.1
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |pmenzel+bugzilla.kernel.org
+                   |                            |@molgen.mpg.de
 
+--- Comment #1 from Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de)=
+ ---
+Thank you. I also get this, but I only with =E2=80=9C6.15-rc0=E2=80=9D and =
+not with 6.14. In my
+case, I bisected [1] the issue to commit 6a367577153a (percpu/x86:=20
+enable strict percpu checks via named AS qualifiers) [2].
+
+
+[1]:
+https://lore.kernel.org/lkml/eb3c109f-550f-44ce-b0a1-3837aef1d02a@molgen.mp=
+g.de/T/#u
+[2]:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
+it/?id=3D6a367577153acd9b432a5340fb10891eeb7e10f1
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
