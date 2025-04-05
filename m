@@ -1,84 +1,91 @@
-Return-Path: <linux-pm+bounces-24839-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24840-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21264A7C7CD
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Apr 2025 08:09:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5726CA7C7D6
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Apr 2025 08:19:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC7C017C4D5
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Apr 2025 06:09:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E52A1189AEF8
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Apr 2025 06:20:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1815419F495;
-	Sat,  5 Apr 2025 06:09:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D9EA1C3F30;
+	Sat,  5 Apr 2025 06:19:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FM3CBNEt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kWfoeCHn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pf1-f193.google.com (mail-pf1-f193.google.com [209.85.210.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B75C20322;
-	Sat,  5 Apr 2025 06:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F139314F125;
+	Sat,  5 Apr 2025 06:19:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743833358; cv=none; b=cJWwrWx2YZT3RtsTfHjE0Oohie3b6rk+UvWhVP+BbzKww4eClGYS0fommh+sjDxlXYLDDTg0GWz8w9rgHcWzFN48pzGOX+/ofGMyUjm4aRVxTwCYwtR3xkr/JyAWwFAmaoBLGnoesCleWCBFNdbSGSoWqYenI1XOkidaSxjk+mU=
+	t=1743833992; cv=none; b=a/YsvEX2nQo3dpkAcCnThxwD+IN9Iw7gsYb0MO4XR+MoYJWll6diHu3hd2lxopAh5TQPZNjyJrkR51vrgFm/yaY7sW0iCWuGqCBqHtkvYj2CK/sDdoHaoazykS2B2hjba3xjDKAbnivZyYErN2DlUqcH2mDniBWuc5U8sokW+to=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743833358; c=relaxed/simple;
-	bh=B+BGBh9/ZyqwuxfNp8Q+TqOH/E+o6f7iwTQX3pqY2Zw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=M1l0HNVoAHGScY/rM4Y6aVhnMdf/k78YpE9k6Rdo3pC8DtrSgGxHZCPC019OivkIA5XsiNW3OQkUlX5nmD5UUMFhHSz3+SoTlwhM86O4L/uMUY7RlhLOl1BVkNuNmxtJo97cBKqn7LSRTE/tQTNF4BDj56n7/IIy/QbCWC5m68Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FM3CBNEt; arc=none smtp.client-ip=209.85.216.48
+	s=arc-20240116; t=1743833992; c=relaxed/simple;
+	bh=kOe2Z+PD8qy5TNtkdQdGx6znyJnRdjYOSo+/Z9ZAFW0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=A4MvjzwY9jHJOvhp3wMgO3DvKe7VEAGEoAVmjSUL4MS9SwGskhJHmhzAgXHkbdAX/0rDNiTn6UT9PP4MQyY2XhlTWPYYP3n/uJUcVcHhH0hSwsE4TqBGwUy25NsorzkpKaHQFGzQtstW/31fy3QrTgZvX/aYfX5PH8zHwCtKzS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kWfoeCHn; arc=none smtp.client-ip=209.85.210.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-301493f461eso2005396a91.3;
-        Fri, 04 Apr 2025 23:09:16 -0700 (PDT)
+Received: by mail-pf1-f193.google.com with SMTP id d2e1a72fcca58-736ee709c11so2366471b3a.1;
+        Fri, 04 Apr 2025 23:19:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743833356; x=1744438156; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1743833990; x=1744438790; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fNWhRR/ovxm0M4uhjynvurYQ9eBz0J7kRxtKIE6QrzQ=;
-        b=FM3CBNEtlVMifoBcWsqZM2FbFFnIS+PfASjevuUdhYTkKhGbMlVM9lHThtLVnuDtMq
-         mn3iqnUc4YwOoH3Gbi/WN8o+TcjqiD/adWnzNFbAr9LkB6LVuzTg5iihfKhlQ9nCFVvK
-         9RKAlkKEpj0eZ/Jwo/BEpNjeHOn1tjSknMaH2G84CF7+79qJTnXxTAvH1otTYbkdjBbv
-         aEn3Yzu8Sx4PNz7GQdgu6p1E+J/UhQj0oMxsIBtI7rF1PNfqC/A60FrDt3xTwWKY6z6m
-         MHKPgqzvMVRBqnsmRiJpIqt4eQLnqSdnmfPWwE65ggyR6hP+vAQyLtGQoKgBsslcUp4J
-         bQOA==
+        bh=jvlWzim6YndqWu3ZQu0rSQefXK13/0JaECZ5f7JnfO4=;
+        b=kWfoeCHnTCtbEepUjc7oLnW9UMSs468lKBnrcc9/UHgHGtJHjHh56SWkaIYWNyrqGL
+         pYM8BU0BCLGpRkX5wZ23JrBfRRtyJjOpjGCuGm+V8XNfZwTsF0oWFZgJQ1B1P8BNRG7e
+         JwDVHWZm5+c1xI9T0GRRuGycLioOYTyWeA39CsZzIjixanwSMQlEL0+WxUQPs6qRjdR8
+         5pBMnETpNxOH8XjgbfpZdZF94JZUrpowvFXDEjouJLkChWeZq6K6boK/8HwkwdGEQ4en
+         Bp7O/pHUbjSXRp1xK4Ju8Qf9jCJn8DQx3sdP7AbOTqtgiM+HrmZlSSKhJfF/X0/Md0j8
+         fhUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743833356; x=1744438156;
+        d=1e100.net; s=20230601; t=1743833990; x=1744438790;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fNWhRR/ovxm0M4uhjynvurYQ9eBz0J7kRxtKIE6QrzQ=;
-        b=lEA//hl3mSV413kYwNMQkozTqdYUOkGMzm8dFyHt1iTMmNjaYv3/3gn6/VuPzZBSE9
-         XEXPT8heep+1VI2tgAiLNYPwoGSVT2wv+qjcxsqGTDqXl0eK8qc6oi07KtSd3nxcBQ0q
-         c7vkiG13MfvU19LIhCDrfDww3URUiWbuut7achKYtqgpBTmntIUNgDRMjEYD1mN+KxrP
-         0NZUUJpOMnXoSgxDRgFag1N8KqTTdFW3ChzBNRd1eNhSNqW0FLQKWTn+oYdk78KI4haD
-         6jhTDKBKrbHgS1xzgDcfEGnHN+srQu7TMAadbhUS4gPcncbWxexiNpINRZORiUTfZL5h
-         w20g==
-X-Forwarded-Encrypted: i=1; AJvYcCXLhH3uDo0zIWvxG7HAYHfEuLVWBxmgR6qLuSVVEOzG6Da/3pYMM4xdqEwPbim+Verkt98yUwsGdpEVACc=@vger.kernel.org, AJvYcCXYOENmU4DLb+pm4EtfbxAhwOu8lMm6P1jIoz8sYCSiWaOjKR8V5Yy/AuP1xS0WIKFq6NMxVB2hLV0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGpazPuYArNgkptISQtYCM2lR5yZoRE7ApcFRA4P6nggDv4oKb
-	nO7apV7SHxHsBRtSlj7g5alHZS3YIdXrb/McmBGEfgIt3Pt69hGO
-X-Gm-Gg: ASbGncs+AXkmg1ptnC0MnD2GTOcKGhOJx9PQSJhrTWtr5s9yN1KvDS3zvm5Ie4m971t
-	UjtubLFzJ7c/DVzibT33nMk4Kp6jL95VNtFCn1Jv0naokVHqwVWCfBzR/AUpcRnPNJO+abEhrdP
-	Ds+FMECNxexfFh4Ax2uhRLE+nKxP7Y7mUTjkZJqXksmyPW+qp5Lje/Y3ZIYzuY+qU0kCOfzq3RS
-	xmsI/Fcn/ftNEPwz4GScFJDbZvgtTBkr4fq8QoZ4m/inHe2ouHzHJYiu4sqiSz/CCAxqpiMJ3dr
-	mHeIt/j/GNkWGZPU02mSHW3wo6jVPrQ5+enmhtw7WtkC8t76N1pe
-X-Google-Smtp-Source: AGHT+IG0jOTHi4vKNz27jWmJ2UN0YXn3x15yY0/5g8HEvMONRPU4e1aBfqd8QNWb8WuXfEN4R0vuuQ==
-X-Received: by 2002:a17:90b:2e4f:b0:2ef:67c2:4030 with SMTP id 98e67ed59e1d1-306a62134b3mr6048851a91.27.1743833355770;
-        Fri, 04 Apr 2025 23:09:15 -0700 (PDT)
-Received: from atom0118.. ([2405:201:c009:5aac:bedd:ad5f:bc75:2674])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-305983d7f19sm4608016a91.40.2025.04.04.23.09.13
+        bh=jvlWzim6YndqWu3ZQu0rSQefXK13/0JaECZ5f7JnfO4=;
+        b=a+1WvWQY+KsfJH5I2TI7h221Y6mG9SG7i9FIUrIDOzScAmcJk57fk2F4HHE1lzanSp
+         fMlkEfENk08XZVg3ZFRbOGe1j422IElVKadsv1rC84dMI03CFQCqmUPIK3AgzRSkJS+v
+         olmrErqSc0E2Xy1TEWuttWMMPzURK9PhV30E4HvQODO3JK8PZFVJWxLSHa8ERJomhP+t
+         q16xChabNI6qRAf5oHDEFNGcTWkPcTuq/61eJUhNKYBG2p+x56kL9N7s5ICWLKGnlsHW
+         bQxb8DOnN70ihiKBb3A5RzJn2jUBU0NbZmcn+Qlo4C9YDgm7b0bvel8Og8qBkSUJKcTa
+         iCyg==
+X-Forwarded-Encrypted: i=1; AJvYcCUw/xBjUKhFYTsDUFb8lfM9vzHsoSvVD9+xjuR0sZWjAPALCmUgk2FXCeYf+cAzC+HcUeSz3CodL3g=@vger.kernel.org, AJvYcCVk4RuuqRi0xW3G+WR6k9xoEAf0B+PhnwMdCJLy8IJqDbU0uqZGbjVyn8mNPdavheUUt+e2Gl5D5sG7wXU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHQ/9WyjvRin/UG7PQn4NOvysCG34VNKP+bQhaUrcRFmCeSugc
+	cEUrhxRZWhkGCw3mUW1cieKrnZJnb3eRyY0JqLHYMGK0Yr1cX5WofurtvkX1906eww==
+X-Gm-Gg: ASbGncvLS5wH/S3/jN4NDSkLJk1Zq30/4xe/PJHM4zyPNmvhuBXKeBtfHF8kDLmP9PC
+	cFSeNDxF2cUMeJ2wU09quKrnYr3ed/Hcoqy9l1YCLgdc9rhE5tMuNN9+eo7xe+KtyB2iC3mlCZu
+	K3iw7qzUsS/1PUaIpVvqiVmZGjAKRB2+KO9KF8MYvOWQRTCxK/YcHvDDDzdgpeSVI/BpNX2WL1g
+	DgjVXjhyyYFYz31biUROzmH6rJ9WYa/9rbflWI5Uj7Sw6vVsnpBYEhhjFxwc3Bcx5roS4pOgTna
+	W96rAfAvGyyuy8+rvWO7ZfDxW13IWSD2cAVnQ9U6O/qxRuU4MCZSBNzu8WEY76nX7h57sGJk3mp
+	3empl
+X-Google-Smtp-Source: AGHT+IFAtgmoL2nMv36spwTBvOI1Zop6q8ft1LpTEtdlGsfFq6JVDVDdNNkOWYXi+baTWF6/wwaPdQ==
+X-Received: by 2002:a05:6a21:900f:b0:1f5:75a9:526c with SMTP id adf61e73a8af0-20107efef3emr7651006637.13.1743833990025;
+        Fri, 04 Apr 2025 23:19:50 -0700 (PDT)
+Received: from henry.localdomain ([223.72.104.254])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af9bc41a65asm3830209a12.69.2025.04.04.23.19.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Apr 2025 23:09:15 -0700 (PDT)
-From: Atul Kumar Pant <atulpant.linux@gmail.com>
-To: rafael@kernel.org,
-	daniel.lezcano@linaro.org
-Cc: Atul Kumar Pant <atulpant.linux@gmail.com>,
+        Fri, 04 Apr 2025 23:19:49 -0700 (PDT)
+From: Henry Martin <bsdhenrymartin@gmail.com>
+To: sven@svenpeter.dev,
+	j@jannau.net,
+	rafael@kernel.org,
+	viresh.kumar@linaro.org
+Cc: alyssa@rosenzweig.io,
+	neal@gompa.dev,
+	asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
 	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] cpuidle: governors: Fixes typos in comments
-Date: Sat,  5 Apr 2025 11:39:09 +0530
-Message-Id: <20250405060909.2026332-1-atulpant.linux@gmail.com>
+	linux-kernel@vger.kernel.org,
+	Henry Martin <bsdhenrymartin@gmail.com>
+Subject: [PATCH v1] cpufreq: apple-soc: Fix null-ptr-deref in apple_soc_cpufreq_get_rate()
+Date: Sat,  5 Apr 2025 14:19:27 +0800
+Message-Id: <20250405061927.75485-1-bsdhenrymartin@gmail.com>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -88,35 +95,40 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fixes typos and corrects spelling in the comments.
+cpufreq_cpu_get_raw() can return NULL when the target CPU is not present
+in the policy->cpus mask. apple_soc_cpufreq_get_rate() does not check
+for this case, which results in a NULL pointer dereference.
 
-Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
+Fixes: 6286bbb40576 ("cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states")
+Signed-off-by: Henry Martin <bsdhenrymartin@gmail.com>
 ---
- drivers/cpuidle/governors/teo.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/cpufreq/apple-soc-cpufreq.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
-index 8fe5e1b47..bfa55c1ea 100644
---- a/drivers/cpuidle/governors/teo.c
-+++ b/drivers/cpuidle/governors/teo.c
-@@ -19,7 +19,7 @@
-  *
-  * Of course, non-timer wakeup sources are more important in some use cases,
-  * but even then it is generally unnecessary to consider idle duration values
-- * greater than the time time till the next timer event, referred as the sleep
-+ * greater than the time till the next timer event, referred as the sleep
-  * length in what follows, because the closest timer will ultimately wake up the
-  * CPU anyway unless it is woken up earlier.
-  *
-@@ -311,7 +311,7 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
- 		struct cpuidle_state *s = &drv->states[i];
+diff --git a/drivers/cpufreq/apple-soc-cpufreq.c b/drivers/cpufreq/apple-soc-cpufreq.c
+index 4994c86feb57..9156becfa367 100644
+--- a/drivers/cpufreq/apple-soc-cpufreq.c
++++ b/drivers/cpufreq/apple-soc-cpufreq.c
+@@ -134,11 +134,17 @@ static const struct of_device_id apple_soc_cpufreq_of_match[] __maybe_unused = {
  
- 		/*
--		 * Update the sums of idle state mertics for all of the states
-+		 * Update the sums of idle state metrics for all of the states
- 		 * shallower than the current one.
- 		 */
- 		intercept_sum += prev_bin->intercepts;
+ static unsigned int apple_soc_cpufreq_get_rate(unsigned int cpu)
+ {
+-	struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
+-	struct apple_cpu_priv *priv = policy->driver_data;
++	struct cpufreq_policy *policy;
++	struct apple_cpu_priv *priv;
+ 	struct cpufreq_frequency_table *p;
+ 	unsigned int pstate;
+ 
++	policy = cpufreq_cpu_get_raw(cpu);
++	if (!policy)
++		return 0;
++
++	priv = policy->driver_data;
++
+ 	if (priv->info->cur_pstate_mask) {
+ 		u32 reg = readl_relaxed(priv->reg_base + APPLE_DVFS_STATUS);
+ 
 -- 
 2.34.1
 
