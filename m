@@ -1,88 +1,84 @@
-Return-Path: <linux-pm+bounces-24838-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24839-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC0F8A7C7C0
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Apr 2025 07:55:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21264A7C7CD
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Apr 2025 08:09:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7539F3B12BA
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Apr 2025 05:54:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC7C017C4D5
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Apr 2025 06:09:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB6091B3940;
-	Sat,  5 Apr 2025 05:54:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1815419F495;
+	Sat,  5 Apr 2025 06:09:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BGNMAs6v"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FM3CBNEt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f67.google.com (mail-pj1-f67.google.com [209.85.216.67])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70C391C5D55;
-	Sat,  5 Apr 2025 05:54:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B75C20322;
+	Sat,  5 Apr 2025 06:09:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743832499; cv=none; b=cVcCI4dOnjQGAzUIv8s26h26rkk2+Wp6yK0JdNRfTY/CmhmpcIPU7XXNM8AKNNdmlLmE6+YjJNVPgB87knD6DLCkLAHjf8y6d5T2xEYriJBZeDfMBaQepL8Bsa7wW1jeDEZCbY3+/3UQinAvm3Y0WSRTpYVL4HQcL6MgUnXpD50=
+	t=1743833358; cv=none; b=cJWwrWx2YZT3RtsTfHjE0Oohie3b6rk+UvWhVP+BbzKww4eClGYS0fommh+sjDxlXYLDDTg0GWz8w9rgHcWzFN48pzGOX+/ofGMyUjm4aRVxTwCYwtR3xkr/JyAWwFAmaoBLGnoesCleWCBFNdbSGSoWqYenI1XOkidaSxjk+mU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743832499; c=relaxed/simple;
-	bh=We9oXwORVimFqBPPGA/hvHaf6inkTosUkB3Mur4TS9I=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lOoJgxy3H6t9K85dK8MDxx3wkObQDP43hEbZIuavisvTbEZu9llx6igHcx7e3BVngdNFgBIuiABzFHZcP7sVaYTxlNrRrgW5Ja6TA4ymd3NmMfb7aG509UzoogE9g+oJaOggZZo8BduyIqzxEXPyCrHoo4DR4ezAg2G+nx0LqJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BGNMAs6v; arc=none smtp.client-ip=209.85.216.67
+	s=arc-20240116; t=1743833358; c=relaxed/simple;
+	bh=B+BGBh9/ZyqwuxfNp8Q+TqOH/E+o6f7iwTQX3pqY2Zw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=M1l0HNVoAHGScY/rM4Y6aVhnMdf/k78YpE9k6Rdo3pC8DtrSgGxHZCPC019OivkIA5XsiNW3OQkUlX5nmD5UUMFhHSz3+SoTlwhM86O4L/uMUY7RlhLOl1BVkNuNmxtJo97cBKqn7LSRTE/tQTNF4BDj56n7/IIy/QbCWC5m68Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FM3CBNEt; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f67.google.com with SMTP id 98e67ed59e1d1-303a66af07eso2086951a91.2;
-        Fri, 04 Apr 2025 22:54:58 -0700 (PDT)
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-301493f461eso2005396a91.3;
+        Fri, 04 Apr 2025 23:09:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743832498; x=1744437298; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1743833356; x=1744438156; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ELXP8BnMg0kJvaDE3S2jRkd/Etcxd1UmTQ1mFWYQwxU=;
-        b=BGNMAs6v7cK+gb9Vb9D7wPhsHbOZXHQDdAOVAiIJHJkegacNVmY/Mrz8RCQk4Ie06y
-         uh9s37mw2M9TWkfPXPoof8WMxEVdwuqBAkhEEHjLnvWb7TDwaeYnP7FkJVUv/svZJzYd
-         QaCGYhXRilqK4IrBND0dkLfBaGj3rWyOlrC3auLBzfoL2TA8rk39+eVs3VnvgnEA6Mng
-         tUDOBgP8hw8T7x+BL8U2/zWu1E2PiGOrGPLryNrF6f67ZoOJuv7FC9B9xuodod89qcdj
-         +kJTf11Ea5ESAQtkaMoJQfgDNc8J/0QqYfnefHyMDyI0VBjJuasFudiLpJqQPuZ6kPkC
-         hDDA==
+        bh=fNWhRR/ovxm0M4uhjynvurYQ9eBz0J7kRxtKIE6QrzQ=;
+        b=FM3CBNEtlVMifoBcWsqZM2FbFFnIS+PfASjevuUdhYTkKhGbMlVM9lHThtLVnuDtMq
+         mn3iqnUc4YwOoH3Gbi/WN8o+TcjqiD/adWnzNFbAr9LkB6LVuzTg5iihfKhlQ9nCFVvK
+         9RKAlkKEpj0eZ/Jwo/BEpNjeHOn1tjSknMaH2G84CF7+79qJTnXxTAvH1otTYbkdjBbv
+         aEn3Yzu8Sx4PNz7GQdgu6p1E+J/UhQj0oMxsIBtI7rF1PNfqC/A60FrDt3xTwWKY6z6m
+         MHKPgqzvMVRBqnsmRiJpIqt4eQLnqSdnmfPWwE65ggyR6hP+vAQyLtGQoKgBsslcUp4J
+         bQOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743832498; x=1744437298;
+        d=1e100.net; s=20230601; t=1743833356; x=1744438156;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ELXP8BnMg0kJvaDE3S2jRkd/Etcxd1UmTQ1mFWYQwxU=;
-        b=PDSgIXPDs+BaEfygWJj6lxKJELMEyv6j3Ojk9zTQBHtqe6qq4VW7ZM+2vW1pSlqWWD
-         lRlecJfz2QIKN9sZ/gs0b0G32MJtqkDhnPX7C7hAzCkQ4rc3FLiTY5RGctsJXpbRIXR+
-         a3TlgtzkrjaNKr3XG6A53dl5IlYVxo5LfLkGVzByE+5M2rjvMkqSde+hsoRzFn+brfzj
-         sWVgScFyeFSNiI0F+b/zKO2BST9r01q02f4F4EuGCtd3vFzcYHJ0pxz+mJGpabTDMyK9
-         q6U1QY/IRPjypCX8FwIUaXuxFz8OV/GoXIWiw9Z7gIhiu+q6bPA6sREX6FEQHlOVb2uF
-         979g==
-X-Forwarded-Encrypted: i=1; AJvYcCWZuIZdaM2R7+4jwXOPbGSpqyEGZqyxBpRksRLPkZDAsOrKLbWeMs+YSwc2enzR+3QbZNsmGhBEyUA=@vger.kernel.org, AJvYcCXoOU7SWaGKabrQTah69buwl/H7za/M6ipYgKitaJCS+p6wpQ2gkn4/dGxyvjefAJgRhtJXds5zQI/zd/g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzlELDJyB+BPatlFCeYUuJNfHZAGnih1qsttM9lgDnoMdKdL7i
-	1PwYVy4SVQ4+wVFMcl/g/MnRb0Rsx7SmqOUMIEiGQvqDVOhL+/k9
-X-Gm-Gg: ASbGncsWSyVWKl0r2dddxpLcr5hep90Oyv9leggti5lAdWMR07HRiHQy3zjOI09T7A+
-	v5DgvQIcAO3EYuY1+YVYO44HHnou3uuY1SVGzBuNwB2jBNlTFUOkiki0j0gBWLMT/7agG7I4Bff
-	cZgqHw4yoDIGPiLb0a9sHRzSDVxeN7HSQFlkosCPa6BdVPFYl5/6SgIKzcbf3yPhlhFQv05r/rm
-	L+R3oMbZASd0DpkRhTzQkEczI8NTikaAc6glZ37GrUzcGj39orXB1rQcin6j9NzeZaL7JLLRnmK
-	RbrzefBsXO+3y9r9oZIteiiBFyztPK9Js+sxh+XhbXzrak3UvGOr571f3Nifhju1pjUJfw==
-X-Google-Smtp-Source: AGHT+IFYqOzn0CbqAzO6U16/vv3yxNPBs7vBAGPe7v1D1GRNSbbegU+qDr2xpouLjVmiFE9cnTiGcg==
-X-Received: by 2002:a17:90a:fc44:b0:2ee:aed2:c15c with SMTP id 98e67ed59e1d1-306af788c23mr2724148a91.28.1743832497475;
-        Fri, 04 Apr 2025 22:54:57 -0700 (PDT)
-Received: from henry.localdomain ([223.72.104.130])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30561ca5da3sm5555489a91.0.2025.04.04.22.54.53
+        bh=fNWhRR/ovxm0M4uhjynvurYQ9eBz0J7kRxtKIE6QrzQ=;
+        b=lEA//hl3mSV413kYwNMQkozTqdYUOkGMzm8dFyHt1iTMmNjaYv3/3gn6/VuPzZBSE9
+         XEXPT8heep+1VI2tgAiLNYPwoGSVT2wv+qjcxsqGTDqXl0eK8qc6oi07KtSd3nxcBQ0q
+         c7vkiG13MfvU19LIhCDrfDww3URUiWbuut7achKYtqgpBTmntIUNgDRMjEYD1mN+KxrP
+         0NZUUJpOMnXoSgxDRgFag1N8KqTTdFW3ChzBNRd1eNhSNqW0FLQKWTn+oYdk78KI4haD
+         6jhTDKBKrbHgS1xzgDcfEGnHN+srQu7TMAadbhUS4gPcncbWxexiNpINRZORiUTfZL5h
+         w20g==
+X-Forwarded-Encrypted: i=1; AJvYcCXLhH3uDo0zIWvxG7HAYHfEuLVWBxmgR6qLuSVVEOzG6Da/3pYMM4xdqEwPbim+Verkt98yUwsGdpEVACc=@vger.kernel.org, AJvYcCXYOENmU4DLb+pm4EtfbxAhwOu8lMm6P1jIoz8sYCSiWaOjKR8V5Yy/AuP1xS0WIKFq6NMxVB2hLV0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGpazPuYArNgkptISQtYCM2lR5yZoRE7ApcFRA4P6nggDv4oKb
+	nO7apV7SHxHsBRtSlj7g5alHZS3YIdXrb/McmBGEfgIt3Pt69hGO
+X-Gm-Gg: ASbGncs+AXkmg1ptnC0MnD2GTOcKGhOJx9PQSJhrTWtr5s9yN1KvDS3zvm5Ie4m971t
+	UjtubLFzJ7c/DVzibT33nMk4Kp6jL95VNtFCn1Jv0naokVHqwVWCfBzR/AUpcRnPNJO+abEhrdP
+	Ds+FMECNxexfFh4Ax2uhRLE+nKxP7Y7mUTjkZJqXksmyPW+qp5Lje/Y3ZIYzuY+qU0kCOfzq3RS
+	xmsI/Fcn/ftNEPwz4GScFJDbZvgtTBkr4fq8QoZ4m/inHe2ouHzHJYiu4sqiSz/CCAxqpiMJ3dr
+	mHeIt/j/GNkWGZPU02mSHW3wo6jVPrQ5+enmhtw7WtkC8t76N1pe
+X-Google-Smtp-Source: AGHT+IG0jOTHi4vKNz27jWmJ2UN0YXn3x15yY0/5g8HEvMONRPU4e1aBfqd8QNWb8WuXfEN4R0vuuQ==
+X-Received: by 2002:a17:90b:2e4f:b0:2ef:67c2:4030 with SMTP id 98e67ed59e1d1-306a62134b3mr6048851a91.27.1743833355770;
+        Fri, 04 Apr 2025 23:09:15 -0700 (PDT)
+Received: from atom0118.. ([2405:201:c009:5aac:bedd:ad5f:bc75:2674])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-305983d7f19sm4608016a91.40.2025.04.04.23.09.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Apr 2025 22:54:56 -0700 (PDT)
-From: Henry Martin <bsdhenrymartin@gmail.com>
-To: sudeep.holla@arm.com,
-	cristian.marussi@arm.com,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org
-Cc: arm-scmi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+        Fri, 04 Apr 2025 23:09:15 -0700 (PDT)
+From: Atul Kumar Pant <atulpant.linux@gmail.com>
+To: rafael@kernel.org,
+	daniel.lezcano@linaro.org
+Cc: Atul Kumar Pant <atulpant.linux@gmail.com>,
 	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Henry Martin <bsdhenrymartin@gmail.com>
-Subject: [PATCH v1] cpufreq: scmi: Fix null-ptr-deref in scmi_cpufreq_get_rate()
-Date: Sat,  5 Apr 2025 13:54:47 +0800
-Message-Id: <20250405055447.73925-1-bsdhenrymartin@gmail.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] cpuidle: governors: Fixes typos in comments
+Date: Sat,  5 Apr 2025 11:39:09 +0530
+Message-Id: <20250405060909.2026332-1-atulpant.linux@gmail.com>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -92,42 +88,35 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-cpufreq_cpu_get_raw() can return NULL when the target CPU is not present
-in the policy->cpus mask. scmi_cpufreq_get_rate() does not check for
-this case, which results in a NULL pointer dereference.
+Fixes typos and corrects spelling in the comments.
 
-Add NULL check after cpufreq_cpu_get_raw() to prevent this issue.
-
-Fixes: 99d6bdf33877 ("cpufreq: add support for CPU DVFS based on SCMI message protocol")
-Signed-off-by: Henry Martin <bsdhenrymartin@gmail.com>
+Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
 ---
- drivers/cpufreq/scmi-cpufreq.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/cpuidle/governors/teo.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-index c310aeebc8f3..c735f39245bf 100644
---- a/drivers/cpufreq/scmi-cpufreq.c
-+++ b/drivers/cpufreq/scmi-cpufreq.c
-@@ -37,11 +37,17 @@ static struct cpufreq_driver scmi_cpufreq_driver;
+diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
+index 8fe5e1b47..bfa55c1ea 100644
+--- a/drivers/cpuidle/governors/teo.c
++++ b/drivers/cpuidle/governors/teo.c
+@@ -19,7 +19,7 @@
+  *
+  * Of course, non-timer wakeup sources are more important in some use cases,
+  * but even then it is generally unnecessary to consider idle duration values
+- * greater than the time time till the next timer event, referred as the sleep
++ * greater than the time till the next timer event, referred as the sleep
+  * length in what follows, because the closest timer will ultimately wake up the
+  * CPU anyway unless it is woken up earlier.
+  *
+@@ -311,7 +311,7 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+ 		struct cpuidle_state *s = &drv->states[i];
  
- static unsigned int scmi_cpufreq_get_rate(unsigned int cpu)
- {
--	struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
--	struct scmi_data *priv = policy->driver_data;
-+	struct cpufreq_policy *policy;
-+	struct scmi_data *priv;
- 	unsigned long rate;
- 	int ret;
- 
-+	policy = cpufreq_cpu_get_raw(cpu);
-+	if (!policy)
-+		return 0;
-+
-+	priv = policy->driver_data;
-+
- 	ret = perf_ops->freq_get(ph, priv->domain_id, &rate, false);
- 	if (ret)
- 		return 0;
+ 		/*
+-		 * Update the sums of idle state mertics for all of the states
++		 * Update the sums of idle state metrics for all of the states
+ 		 * shallower than the current one.
+ 		 */
+ 		intercept_sum += prev_bin->intercepts;
 -- 
 2.34.1
 
