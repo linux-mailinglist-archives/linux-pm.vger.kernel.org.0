@@ -1,94 +1,68 @@
-Return-Path: <linux-pm+bounces-24850-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24851-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B745A7CD42
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Apr 2025 10:06:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F36CCA7CFD2
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Apr 2025 20:58:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B609F1890C15
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Apr 2025 08:07:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BC5327A380D
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Apr 2025 18:57:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9E8913633F;
-	Sun,  6 Apr 2025 08:06:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD7FC19D882;
+	Sun,  6 Apr 2025 18:58:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZrF0Zhl1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oYiMUDoH"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2D51C68F
-	for <linux-pm@vger.kernel.org>; Sun,  6 Apr 2025 08:06:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9957B1624F7
+	for <linux-pm@vger.kernel.org>; Sun,  6 Apr 2025 18:58:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743926811; cv=none; b=HxHJFznTR4dYSzWKHqPBQDFdtjZzyF/FKSyezbvtrTAj0xL4Cg3+Hq+PygWqolaWgknNWgvn3tjiFdxXTjNwCle5HydA/9thKpQaWqRCe6CQyVT5ZxZExf7tRkoqr88TL8FWs6dMHL2896xuZvLoeNLE+J+Xergt6+yMlUz2uoc=
+	t=1743965904; cv=none; b=TysOpUv5gO5nv3exz6jK1YRkdbs8mxDQ7AxWNZu4ifTUR2zfjoRE5y4DLKDTbv5tJZbmc6kCdSrLkUFihoAr+SpfexepKsw61ctSnVZLaMGls5RLUAiO58xjgf7EBrtR/At04jMsw42lXAdxYg1ea67oMQdP8cg5ZWuFyo7Egsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743926811; c=relaxed/simple;
-	bh=nHAF0R29Rh/oZ7VffOe3EcZ+fwxDX/EIE9xVBHrw2j8=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=TSTyv3Sq+mrYiY8M7hZrTAi7yRBdscoD93POd/8WrtdEpSmTQP1xgc+xkw/giOmvzj/LUqKdx5awdvaCZk/gBdL2UZ0HOXVH4KvXe3A7seIU/VQwzv1VnpIqSDv0/FdKXNjans2JsiDw3QIrsV90peFu6PmvrE3RtUBVwTKFu8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZrF0Zhl1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0B115C4CEED
-	for <linux-pm@vger.kernel.org>; Sun,  6 Apr 2025 08:06:51 +0000 (UTC)
+	s=arc-20240116; t=1743965904; c=relaxed/simple;
+	bh=NVCRQsoPQ7kvwmbcN/OAawRzYHH4mict9P1bYVM7+b4=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=XAlErVfsQEoLjkFtCdQHeNr6lRx2i3gMJMcYPV87I5BSM7pr9U93Xk3eTYCsc6C4XOYxUv59Yf4QRHIgKKNBpMyr79DBGTO/fu1KHibU/2nJkLfNZde1VNHxWAAtCKOIBup7bAMpCk6wKgQZBUaiSWHtflkxkOW7k9mb5PL/T68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oYiMUDoH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C6E9C4CEE3
+	for <linux-pm@vger.kernel.org>; Sun,  6 Apr 2025 18:58:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743926811;
-	bh=nHAF0R29Rh/oZ7VffOe3EcZ+fwxDX/EIE9xVBHrw2j8=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=ZrF0Zhl1XQ5SyoLi8GBWc6p6F3m56NsQZ24A+piprmywBPCIbCB9aXHRDCGB3Z0tR
-	 rQOuEkkeZQtUPAwxl9ayCi6KqIuAP6T8YS5rOkkOZXu+cI5oj3HtCR/IpvwtSGTxOy
-	 /2ewkJz+LGMen7AxgyasIjLXglS6JPw1s6Q1QSl3rzEd3nHzD6zprKKx5z1SwRAM2W
-	 5VuhAKDzdVS4OoEP6MAN2p2ADve5Uihq1b3ctQO5X87kOj4suFEqXvITs4mxKUDxmw
-	 eIDR+VreW2Qiv62R0fPXiTuDYFEFJSPHNw+VNHrmqyDnXZhQndNgjroeVYfqlPWRCz
-	 xKdjig/3ZEhuA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id E6846C53BC7; Sun,  6 Apr 2025 08:06:50 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
+	s=k20201202; t=1743965904;
+	bh=NVCRQsoPQ7kvwmbcN/OAawRzYHH4mict9P1bYVM7+b4=;
+	h=From:To:Subject:Date:From;
+	b=oYiMUDoHA1asus9nEaPE11bRulhZc5THD/z54GYvBJ/t3/Ak7N+M2LvmffE8Rawx8
+	 gXdRaEQL22cEKLiipSYi1JXk53fPsp/VE1w1g4AHHwgim0orCh/pjk0JkF5sF/wEQp
+	 kz0gmV3kWnXTepowfWGdT+U5j4IfePuy4UH12UsHhEtuB/yNYZY9WM0Qy1XCqwz9zq
+	 aFYJBO4i2cAdKrrlg4cEQchH+Xh2Cis8j2veXGyp85dVDzPAOP2tngszE5voqn91v2
+	 TtDXYUgQs+cDR9DtjJFmudiA/faFpxqjJ1xcRwYI5Q5yCg8eQquCFo81uOQMU5/s2o
+	 rFvdTLHA50NEQ==
+From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
-Subject: [Bug 219966] modpost: EXPORT symbol "policy_has_boost_freq"
- [vmlinux] version generation failed, symbol will not be versioned.
-Date: Sun, 06 Apr 2025 08:06:50 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: pmenzel+bugzilla.kernel.org@molgen.mpg.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219966-137361-1jVnW0bILd@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219966-137361@https.bugzilla.kernel.org/>
-References: <bug-219966-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+Subject: [PATCH 0/10] turbostat 2025.05.06 for Linux-6.15 merge
+Date: Sun,  6 Apr 2025 14:57:09 -0400
+Message-ID: <20250406185820.765991-1-lenb@kernel.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219966
+Support up to 8192 processors
+Add cpuidle governor debug telemetry, disabled by default
+Update default output to exclude cpuidle invocation counts
+Bug fixes
 
---- Comment #3 from Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de)=
- ---
-Thank you. Indeed, the warnings are gone with your patch. Sorry, for not
-checking that before.
+Please let me know if you have any troubles with turbostat.
 
-@sander44, could you please confirm.
+thanks!
+-Len
 
---=20
-You may reply to this email to add a comment.
 
-You are receiving this mail because:
-You are the assignee for the bug.=
 
