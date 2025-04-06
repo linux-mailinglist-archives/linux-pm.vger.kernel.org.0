@@ -1,53 +1,52 @@
-Return-Path: <linux-pm+bounces-24859-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24860-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 895CAA7CFD9
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Apr 2025 20:58:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23875A7CFDA
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Apr 2025 20:58:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 162971888F5F
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Apr 2025 18:58:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABDD818894C5
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Apr 2025 18:58:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AEDD1A3142;
-	Sun,  6 Apr 2025 18:58:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CF391A9B29;
+	Sun,  6 Apr 2025 18:58:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FkUGmTC3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xlj1pESg"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571461A2C0B
-	for <linux-pm@vger.kernel.org>; Sun,  6 Apr 2025 18:58:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD80F1A8F9E
+	for <linux-pm@vger.kernel.org>; Sun,  6 Apr 2025 18:58:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743965912; cv=none; b=cbHerPNf1Asa/6dWhLhDLymvn3VH7+17h8iL4ebKm7TjMw+JT4dyTeAW3pr/XmFMC/3eAVtvP28xBx0f4PnmTqvkboL6O8Fg3uL9xAQVEeNuON9eOM4EKzOVrK04ztdT9PcSFANUfwQEbdrlwwg5f3q2EwNwQU9bigOOl8abfuo=
+	t=1743965912; cv=none; b=dDZKiFlzA60/QosBa59YbAXcv2jyZYLAr80iKLrOjx450oBuEiNeiP6qTyR2grxmJwxjzCkkOXx22KM84rHfsx4NEZhCbzjzZSQTsjbiiv7Uj8QzdC3A0XqSjqyVJwwuHHAcpeDBiaMcCAin/MvHmGOs87RpOk2Z2NA9yZ9GiwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1743965912; c=relaxed/simple;
-	bh=17AI1he28sTOXWCZfEVtnNpkF0FtQMKiPHMrcyzxPzc=;
+	bh=OzC/HdfftBnvfrUQOID09G7YqUNwp6J582o5d/B05ms=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=U2sQgVuS5YXUTfjLdrQ2FPwGTuUkgcNEPak3dJEvKaimpTPsXQsNIbZqqhpgHwMqBKyUrvW0/F78rcVCocbcfrJzLfLQy+s1edRPLAMQNSHHsI0dHtBaRMeWE2cJKKVMCkvxbG/YYRETCtZKNDniC8qSzDM/n9e2N/tq4Zlc3EQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FkUGmTC3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24B8BC4CEEA;
-	Sun,  6 Apr 2025 18:58:31 +0000 (UTC)
+	 MIME-Version; b=Q3yWFOczrAEl5vG6Z1MMN0uJOL7j/dE/SpxKsjinEl212QglslOtw3iei1IPb0zlSU74PLH6woX1TM51DO/K72Z9Ev272oql2zm5/ragVFmFPUj7YKtso0LLbQSrwhll0TWEmhFvgrxGEbtEjpXOD/64xDr5A8rR0QviKAQqwaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xlj1pESg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D6F9C4CEE3;
+	Sun,  6 Apr 2025 18:58:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743965911;
-	bh=17AI1he28sTOXWCZfEVtnNpkF0FtQMKiPHMrcyzxPzc=;
+	s=k20201202; t=1743965912;
+	bh=OzC/HdfftBnvfrUQOID09G7YqUNwp6J582o5d/B05ms=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=FkUGmTC3CkChIyL7nfasFWruyD6m37kqpO+G2Vpoa8SyQRC7nr6a18aeEbgXK1jTj
-	 ruI2ijVEdXLqhd3I3u7f5h+yrh1bOe1FNslIN0pq8k4AAfTxUbT7lV9dx0jFHNzUvn
-	 gVJSVM6XK0MPfW9/UrV93CG5fP4fGRi2H4x21upXyIHeE9+6PJWYHgWNznxMwKFxCX
-	 f6LU3F3MwXm5GYNUkSFieu89lrXbV0+eNMR+tPnfFe78+ntitCLPLhCBNF56Qmi6NG
-	 WP0qALFMsOgHaZFzPCf7nj7+YHlns5q9R4LfCa/e/jrugvxqKYahtAG2FWnXzrSnZ1
-	 zQ8ASHmCBD5BQ==
+	b=Xlj1pESgK0JpRSTHxZdO5gTPORvdMNCUhD8B4wmTFM/2pMfoK0icTb6CPpjRaHVvt
+	 Rwrm49M73CaxWKmDKihf+M2zjNIXRta0HLf6SG0P0+qMlo2GjtZlm2a1NqDkCxY3Jn
+	 I7M0E6jaZng5gf2dXbZ3fUrCKCPpk8fcxgHTiIb25KSnYbs9MfSzuL6KMh/jSpGWuj
+	 cuncNPGuzSrbb7nrychQTk5OdSGhw+8m35LQFm7UnBsQQTE6QsnZvw+59e2K4cPuAS
+	 LoCb6ev91Gbva/c40Fcy/7UEImeesdvc7qATiCZWldTa+1p6KqclKOb7TqhhzJTBld
+	 0ZZonMUAhBD+A==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
-Cc: Zhang Rui <rui.zhang@intel.com>,
-	Len Brown <len.brown@intel.com>
-Subject: [PATCH 08/10] tools/power turbostat: Restore GFX sysfs fflush() call
-Date: Sun,  6 Apr 2025 14:57:17 -0400
-Message-ID: <f8b136ef2605c1bf62020462d10e35228760aa19.1743965272.git.len.brown@intel.com>
+Cc: Len Brown <len.brown@intel.com>
+Subject: [PATCH 09/10] tools/power turbostat: re-factor sysfs code
+Date: Sun,  6 Apr 2025 14:57:18 -0400
+Message-ID: <994633894f208a0151baaee1688ab3c431912553.1743965272.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <1c7c7388e6c31f46b26a884d80b45efbad8237b2.1743965272.git.len.brown@intel.com>
 References: <1c7c7388e6c31f46b26a884d80b45efbad8237b2.1743965272.git.len.brown@intel.com>
@@ -61,30 +60,98 @@ Reply-To: Len Brown <lenb@kernel.org>
 Organization: Intel Open Source Technology Center
 Content-Transfer-Encoding: 8bit
 
-From: Zhang Rui <rui.zhang@intel.com>
+From: Len Brown <len.brown@intel.com>
 
-Do fflush() to discard the buffered data, before each read of the
-graphics sysfs knobs.
+Probe cpuidle "sysfs" residency and counts separately,
+since soon we will make one disabled on, and the
+other disabled off.
 
-Fixes: ba99a4fc8c24 ("tools/power turbostat: Remove unnecessary fflush() call")
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+Clarify that some BIC (build-in-counters) are actually "groups".
+since we're about to re-name some of those groups.
+
+no functional change.
+
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/power/x86/turbostat/turbostat.c | 31 ++++++++++++++++++---------
+ 1 file changed, 21 insertions(+), 10 deletions(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 70e17d4ad9b6..c9a34c16c7a8 100644
+index c9a34c16c7a8..df0391bedcde 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -6039,6 +6039,7 @@ int snapshot_graphics(int idx)
- 	int retval;
+@@ -273,10 +273,10 @@ struct msr_counter bic[] = {
+ #define	BIC_NMI			(1ULL << 61)
+ #define	BIC_CPU_c1e		(1ULL << 62)
  
- 	rewind(gfx_info[idx].fp);
-+	fflush(gfx_info[idx].fp);
+-#define BIC_TOPOLOGY (BIC_Package | BIC_Node | BIC_CoreCnt | BIC_PkgCnt | BIC_Core | BIC_CPU | BIC_Die)
+-#define BIC_THERMAL_PWR (BIC_CoreTmp | BIC_PkgTmp | BIC_PkgWatt | BIC_CorWatt | BIC_GFXWatt | BIC_RAMWatt | BIC_PKG__ | BIC_RAM__ | BIC_SysWatt)
+-#define BIC_FREQUENCY (BIC_Avg_MHz | BIC_Busy | BIC_Bzy_MHz | BIC_TSC_MHz | BIC_GFXMHz | BIC_GFXACTMHz | BIC_SAMMHz | BIC_SAMACTMHz | BIC_UNCORE_MHZ)
+-#define BIC_IDLE (BIC_Busy | BIC_sysfs | BIC_CPU_c1 | BIC_CPU_c3 | BIC_CPU_c6 | BIC_CPU_c7 | BIC_GFX_rc6 | BIC_Pkgpc2 | BIC_Pkgpc3 | BIC_Pkgpc6 | BIC_Pkgpc7 | BIC_Pkgpc8 | BIC_Pkgpc9 | BIC_Pkgpc10 | BIC_CPU_LPI | BIC_SYS_LPI | BIC_Mod_c6 | BIC_Totl_c0 | BIC_Any_c0 | BIC_GFX_c0 | BIC_CPUGFX | BIC_SAM_mc6 | BIC_Diec6)
++#define BIC_GROUP_TOPOLOGY (BIC_Package | BIC_Node | BIC_CoreCnt | BIC_PkgCnt | BIC_Core | BIC_CPU | BIC_Die)
++#define BIC_GROUP_THERMAL_PWR (BIC_CoreTmp | BIC_PkgTmp | BIC_PkgWatt | BIC_CorWatt | BIC_GFXWatt | BIC_RAMWatt | BIC_PKG__ | BIC_RAM__ | BIC_SysWatt)
++#define BIC_GROUP_FREQUENCY (BIC_Avg_MHz | BIC_Busy | BIC_Bzy_MHz | BIC_TSC_MHz | BIC_GFXMHz | BIC_GFXACTMHz | BIC_SAMMHz | BIC_SAMACTMHz | BIC_UNCORE_MHZ)
++#define BIC_GROUP_IDLE (BIC_Busy | BIC_sysfs | BIC_CPU_c1 | BIC_CPU_c3 | BIC_CPU_c6 | BIC_CPU_c7 | BIC_GFX_rc6 | BIC_Pkgpc2 | BIC_Pkgpc3 | BIC_Pkgpc6 | BIC_Pkgpc7 | BIC_Pkgpc8 | BIC_Pkgpc9 | BIC_Pkgpc10 | BIC_CPU_LPI | BIC_SYS_LPI | BIC_Mod_c6 | BIC_Totl_c0 | BIC_Any_c0 | BIC_GFX_c0 | BIC_CPUGFX | BIC_SAM_mc6 | BIC_Diec6)
+ #define BIC_OTHER (BIC_IRQ | BIC_NMI | BIC_SMI | BIC_ThreadC | BIC_CoreTmp | BIC_IPC)
  
- 	switch (idx) {
- 	case GFX_rc6:
+ #define BIC_DISABLED_BY_DEFAULT	(BIC_USEC | BIC_TOD | BIC_APIC | BIC_X2APIC)
+@@ -2354,16 +2354,16 @@ unsigned long long bic_lookup(char *name_list, enum show_hide_mode mode)
+ 				retval |= ~0;
+ 				break;
+ 			} else if (!strcmp(name_list, "topology")) {
+-				retval |= BIC_TOPOLOGY;
++				retval |= BIC_GROUP_TOPOLOGY;
+ 				break;
+ 			} else if (!strcmp(name_list, "power")) {
+-				retval |= BIC_THERMAL_PWR;
++				retval |= BIC_GROUP_THERMAL_PWR;
+ 				break;
+ 			} else if (!strcmp(name_list, "idle")) {
+-				retval |= BIC_IDLE;
++				retval |= BIC_GROUP_IDLE;
+ 				break;
+ 			} else if (!strcmp(name_list, "frequency")) {
+-				retval |= BIC_FREQUENCY;
++				retval |= BIC_GROUP_FREQUENCY;
+ 				break;
+ 			} else if (!strcmp(name_list, "other")) {
+ 				retval |= BIC_OTHER;
+@@ -10260,7 +10260,7 @@ int is_deferred_skip(char *name)
+ 	return 0;
+ }
+ 
+-void probe_sysfs(void)
++void probe_cpuidle_residency(void)
+ {
+ 	char path[64];
+ 	char name_buf[16];
+@@ -10304,6 +10304,16 @@ void probe_sysfs(void)
+ 		if (state < min_state)
+ 			min_state = state;
+ 	}
++}
++
++void probe_cpuidle_counts(void)
++{
++	char path[64];
++	char name_buf[16];
++	FILE *input;
++	int state;
++	int min_state = 1024, max_state = 0;
++	char *sp;
+ 
+ 	for (state = 10; state >= 0; --state) {
+ 
+@@ -10602,7 +10612,8 @@ int main(int argc, char **argv)
+ 		print_bootcmd();
+ 	}
+ 
+-	probe_sysfs();
++	probe_cpuidle_residency();
++	probe_cpuidle_counts();
+ 
+ 	if (!getuid())
+ 		set_rlimit();
 -- 
 2.45.2
 
