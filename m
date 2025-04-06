@@ -1,53 +1,54 @@
-Return-Path: <linux-pm+bounces-24856-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24857-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B09EA7CFD6
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Apr 2025 20:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 25970A7CFD8
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Apr 2025 20:58:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F00B1887D25
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Apr 2025 18:58:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E72C01889448
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Apr 2025 18:58:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B88B1A7262;
-	Sun,  6 Apr 2025 18:58:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D17A61A2622;
+	Sun,  6 Apr 2025 18:58:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HNFEbdRE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jmco9d/K"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7783E1A5BAA
-	for <linux-pm@vger.kernel.org>; Sun,  6 Apr 2025 18:58:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACFB11A08B1
+	for <linux-pm@vger.kernel.org>; Sun,  6 Apr 2025 18:58:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743965909; cv=none; b=YeuEBYLGM4vuk7stYWSlKS+/FZaqAEQq2jv4Hkbo6frU9ibhojbZP5qe+lxIqhBjg8PJVxFsErBZoCrbhHcRjKN3cy3+kqoOo1Ql3CzOd5uWTip86X7UE0j0zmxC7abuDAwMzJXlYbFROOfuu1BYbakvbPYukvfI5groWa/g1n8=
+	t=1743965910; cv=none; b=PLVzX9zifPsSXA78WEowJIDHOOM/X0ofLIwFjeeV6OX+YLEcCyrHxJ7lWt2CeZmc1Hh/xrfgGhhcpnEK6KpQl+Wg6nGFCFzkDoHsLAxSAhfAdfCiH8svaPZgzxrT1DEz778BaVA8lkD48ncIjpELYRmCCLKUD3nxzhZZslo0h4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743965909; c=relaxed/simple;
-	bh=6dxvlMJtzHBprvASZggI+VYGDRBseTStoDal0K69vZw=;
+	s=arc-20240116; t=1743965910; c=relaxed/simple;
+	bh=MESxv7015TB2C6nWfpmPu2AjsvIBZINelF1XBMnV2fM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i3+NmzzLqpsCVVvm+mVVmnOl5n0VArrELfgIvYhubL5/bIzV4bX/NC+Dt/WsJ1RTMZUqPL4hcSG4XhfmQt1jilw5wKJTVjDb8jlJA7TLaMav5p9hJ0cBYAIiZANFTZT2cFO+PMlnzJwEfK6/oUiQV5aqCOH7TpiedJ3TjcHc/C0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HNFEbdRE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D34EC4CEEA;
-	Sun,  6 Apr 2025 18:58:28 +0000 (UTC)
+	 MIME-Version; b=RxNjpxRsGgBfqUT0OgUOdvo9EbgJcZjm9BJE8jEeEhXgKUYF8zjhNOa4Dvleap33l0u8EwB+Cw/w5LNCW7O+bXaDg0VCTr/hna/GJFR9oMsdLmMXtoDm+iFgn6n2gaLtAjj4LkPM3yi7gt8sCAGEYcACOQxeKoGKQ7MmlbrpMtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jmco9d/K; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4836AC4CEE3;
+	Sun,  6 Apr 2025 18:58:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743965909;
-	bh=6dxvlMJtzHBprvASZggI+VYGDRBseTStoDal0K69vZw=;
+	s=k20201202; t=1743965910;
+	bh=MESxv7015TB2C6nWfpmPu2AjsvIBZINelF1XBMnV2fM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=HNFEbdRE31Yzl9Zb0BqTfy5J92yZ1B8DLm+82Zlv+fzRBSJRRo1E40pUBD01tWXIs
-	 vCb0EcgQiCUgarGDINbXK9DLoowPmNIL/DNH+9s5F+mbSFDEJzBRQ9ZKAuYz+UwsCK
-	 TPk6fKwke2CNUTXM/JA2fENtSEMA/qcyULj8ADJeJ9TBB6Qd6CAfgsxq/jXQM9Jeq4
-	 VNQP5ionfF7XQ9W99bbSx6qnno+/QjSnywjv+cFwXa3ECj2AMxaiynfQP2pyubOHAE
-	 TwAGdUun0oS9b3pVgJWW1M/5m9tP/DTwyk+XUdHrLxil5uEAHycqlFYpO1weDFc3tL
-	 up/taYZ3x0AoA==
+	b=Jmco9d/KmOkNnzcFfBYfSBxWvHoNrrLyamuum4FBfaq2PiFUPhy6b7+oVfq1sBUfL
+	 Kn6yl5xE3aNWCxPCAMgT29LSfQS1SGB5TuTlYt9QBTzvehVAZwlYfeo586VysN8nSL
+	 wxTcEK3Uz92Iog+Co8c5RwNvCIr99RIkJ9DnBOYFBVWk/y7fzcfSX42UygVS+pW2aq
+	 0sQHIEY+2+YiAePkFAcEdYfx0wxC6JB1NGUMQ/MtUWv3hzqq1ALNdUdZv38jaijmxF
+	 bq8ppI2B+3FGG4ypSSbIid0miFqarZt/aIlxj2LikBobYkhRXEXzxG0zXlQbHpW30H
+	 nhHNZgROX92SA==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
-Cc: Justin Ernst <justin.ernst@hpe.com>,
-	Len Brown <len.brown@intel.com>
-Subject: [PATCH 05/10] tools/power turbostat: Increase CPU_SUBSET_MAXCPUS to 8192
-Date: Sun,  6 Apr 2025 14:57:14 -0400
-Message-ID: <eb187540d13ae260b91dbca7257bc44bd83ca8c6.1743965272.git.len.brown@intel.com>
+Cc: Len Brown <len.brown@intel.com>,
+	Arjan van de Ven <arjan@linux.intel.com>,
+	Chen Yu <yu.c.chen@intel.com>
+Subject: [PATCH 06/10] tools/power turbostat: report CoreThr per measurement interval
+Date: Sun,  6 Apr 2025 14:57:15 -0400
+Message-ID: <f729775f79a9c942c6c82ed6b44bd030afe10423.1743965272.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <1c7c7388e6c31f46b26a884d80b45efbad8237b2.1743965272.git.len.brown@intel.com>
 References: <1c7c7388e6c31f46b26a884d80b45efbad8237b2.1743965272.git.len.brown@intel.com>
@@ -61,44 +62,54 @@ Reply-To: Len Brown <lenb@kernel.org>
 Organization: Intel Open Source Technology Center
 Content-Transfer-Encoding: 8bit
 
-From: Justin Ernst <justin.ernst@hpe.com>
+From: Len Brown <len.brown@intel.com>
 
-On systems with >= 1024 cpus (in my case 1152), turbostat fails with the error output:
-	"turbostat: /sys/fs/cgroup/cpuset.cpus.effective: cpu str malformat 0-1151"
+The CoreThr column displays total thermal throttling events
+since boot time.
 
-A similar error appears with the use of turbostat --cpu when the inputted cpu
-range contains a cpu number >= 1024:
-	# turbostat -c 1100-1151
-	"--cpu 1100-1151" malformed
-	...
+Change it to report events during the measurement interval.
 
-Both errors are caused by parse_cpu_str() reaching its limit of CPU_SUBSET_MAXCPUS.
+This is more useful for showing a user the current conditions.
+Total events since boot time are still available to the user via
+/sys/devices/system/cpu/cpu*/thermal_throttle/*
 
-It's a good idea to limit the maximum cpu number being parsed, but 1024 is too low.
-For a small increase in compute and allocated memory, increasing CPU_SUBSET_MAXCPUS
-brings support for parsing cpu numbers >= 1024.
+Document CoreThr on turbostat.8
 
-Increase CPU_SUBSET_MAXCPUS to 8192, a common setting for CONFIG_NR_CPUS on x86_64.
-
-Signed-off-by: Justin Ernst <justin.ernst@hpe.com>
+Fixes: eae97e053fe30 ("turbostat: Support thermal throttle count print")
+Reported-by: Arjan van de Ven <arjan@linux.intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
+Cc: Chen Yu <yu.c.chen@intel.com>
 ---
+ tools/power/x86/turbostat/turbostat.8 | 2 ++
  tools/power/x86/turbostat/turbostat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/tools/power/x86/turbostat/turbostat.8 b/tools/power/x86/turbostat/turbostat.8
+index 52d727e29ea7..144565151e1e 100644
+--- a/tools/power/x86/turbostat/turbostat.8
++++ b/tools/power/x86/turbostat/turbostat.8
+@@ -172,6 +172,8 @@ The system configuration dump (if --quiet is not used) is followed by statistics
+ .PP
+ \fBPkgTmp\fP Degrees Celsius reported by the per-package Package Thermal Monitor.
+ .PP
++\fBCoreThr\fP Core Thermal Throttling events during the measurement interval.  Note that events since boot can be find in /sys/devices/system/cpu/cpu*/thermal_throttle/*
++.PP
+ \fBGFX%rc6\fP The percentage of time the GPU is in the "render C6" state, rc6, during the measurement interval. From /sys/class/drm/card0/power/rc6_residency_ms or /sys/class/drm/card0/gt/gt0/rc6_residency_ms or /sys/class/drm/card0/device/tile0/gtN/gtidle/idle_residency_ms depending on the graphics driver being used.
+ .PP
+ \fBGFXMHz\fP Instantaneous snapshot of what sysfs presents at the end of the measurement interval. From /sys/class/graphics/fb0/device/drm/card0/gt_cur_freq_mhz or /sys/class/drm/card0/gt_cur_freq_mhz or /sys/class/drm/card0/gt/gt0/rps_cur_freq_mhz or /sys/class/drm/card0/device/tile0/gtN/freq0/cur_freq depending on the graphics driver being used.
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index f29e47fe4249..218aca958923 100644
+index 218aca958923..70e17d4ad9b6 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -1121,7 +1121,7 @@ void probe_platform_features(unsigned int family, unsigned int model)
- int backwards_count;
- char *progname;
+@@ -3485,7 +3485,7 @@ void delta_core(struct core_data *new, struct core_data *old)
+ 	old->c6 = new->c6 - old->c6;
+ 	old->c7 = new->c7 - old->c7;
+ 	old->core_temp_c = new->core_temp_c;
+-	old->core_throt_cnt = new->core_throt_cnt;
++	old->core_throt_cnt = new->core_throt_cnt - old->core_throt_cnt;
+ 	old->mc6_us = new->mc6_us - old->mc6_us;
  
--#define CPU_SUBSET_MAXCPUS	1024	/* need to use before probe... */
-+#define CPU_SUBSET_MAXCPUS	8192	/* need to use before probe... */
- cpu_set_t *cpu_present_set, *cpu_possible_set, *cpu_effective_set, *cpu_allowed_set, *cpu_affinity_set, *cpu_subset;
- size_t cpu_present_setsize, cpu_possible_setsize, cpu_effective_setsize, cpu_allowed_setsize, cpu_affinity_setsize, cpu_subset_size;
- #define MAX_ADDED_THREAD_COUNTERS 24
+ 	DELTA_WRAP32(new->core_energy.raw_value, old->core_energy.raw_value);
 -- 
 2.45.2
 
