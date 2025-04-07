@@ -1,146 +1,133 @@
-Return-Path: <linux-pm+bounces-24892-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24893-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC923A7E6D8
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Apr 2025 18:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 12768A7E741
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Apr 2025 18:52:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2028165D51
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Apr 2025 16:28:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E540175D10
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Apr 2025 16:47:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B02CB209691;
-	Mon,  7 Apr 2025 16:27:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEF292116E4;
+	Mon,  7 Apr 2025 16:46:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FeW7eUP1"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Nuh6OFc3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7423B209668
-	for <linux-pm@vger.kernel.org>; Mon,  7 Apr 2025 16:27:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4474221149C;
+	Mon,  7 Apr 2025 16:46:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744043269; cv=none; b=TOxzUuU6yEMfuF7N22sJKyJKbuZZWvu8cHltqT9CroaLUzmrc4v3oFc8VRwc6R3Cgd3PJxml8s8eOKdRarGjgnJbZvKo51DnJNbVxsarO622fH4JGV3puC1RNDoADNrc7PrQWVQCauDWzA50upq6TtL6TTKZjdnSHyyVJTorH2A=
+	t=1744044416; cv=none; b=ExFq455bAEWr3ZiExy6B8C3QkGaIK+iAhN4O9DnvwTjnb5huGKOnIh8V5/3lhegtlfG9km+J6+2t0SjyM3oDxI3e2IoS9K3J1R6gZg9twUCcCK1V7uUQAH7r0CASFlp16m9pG0TionFfadEsVrhPHGZXzvrVZKYSJHxxDpNKEj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744043269; c=relaxed/simple;
-	bh=2E83vRDeGBi2KQKmMy4PdlP5hsTnpBPGTayVZg7p9Bg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=e3NgSGzR3BgsG54y8SK/nAT8zK1kLxp7R42BEdpzYPcTxTWkO9WGYwME2Py2J3+ANBGuSAaAFPl9wqkeYbmKHW+1DdrErxkVrxPaaCDp1AeZbhRNTSAmVP7X39ruWO5PL+MhQim9fXVfsr10euYN7+w6Nty0QJt8Py9J+yuUkDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FeW7eUP1; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6ef60e500d7so36383197b3.0
-        for <linux-pm@vger.kernel.org>; Mon, 07 Apr 2025 09:27:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744043266; x=1744648066; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2E83vRDeGBi2KQKmMy4PdlP5hsTnpBPGTayVZg7p9Bg=;
-        b=FeW7eUP1i/jYIUpdt3/leYbgv4gpUcdvDfUNZK64WiG6COQYdVySysz4YiKEtbIh0/
-         S8aLXCvuTjbS2AY9yE0ZdKx4U/uovegIxr/GIUcNp4RzZT+s6zLezo8rAXK5IqA5z/v/
-         Dsh3qe1CZiy5UCntu0FIGhxcshsgilkgJdQNLZm0aP+qreMirmDbbw4SRUhRTP7am75L
-         ZAtEe5ugzMYw1WPYaWi+m9su1IF9pu72hXB34UEX5SyXi1EoKDus5TFMTB5xNYq8ZhF5
-         DBnMuB9zK2myHZECWdNpALEAqsWaC9pc+EbblWL3TEv27NLSYFk0e/09zBFYVkeg6L+o
-         I2Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744043266; x=1744648066;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2E83vRDeGBi2KQKmMy4PdlP5hsTnpBPGTayVZg7p9Bg=;
-        b=SDdRZy654YuoSdZgz/r83/7qBVz9X8jSihju/eAmmc8IGwyM0++hQjmueSeAaNscH+
-         ZBWs3bwFzk0uTo8mffbL7NyhWkOmDZLR5Ih1JuzsElx98jJGBV0SlCJqCwEpjUWpA9fI
-         IUrjEkJMTCMUlzFsmm875sAmTijHwaOMFlrpDWnjLkSSA4jEojJxJNryJmT0U3RKKUI0
-         3L98K4BrhyTCvioDkR7MGUW8ypeeTWRMt1ds9k6voOSVGtRS0Y5PXJJpGR9omxZ4YmCP
-         /zhWy5CyqKlGYVXGhfknBx97G2874HpDE8DK9qHVi+HlOoqL56vw704rpUM6BFipp9eS
-         FYIw==
-X-Forwarded-Encrypted: i=1; AJvYcCViCa/tHQogo161gMA0TjzmhJM1lhVfMY0oBgLGYIcvJ2ycnnRHGyzGsxxuct3MwL8lkBTgo2rauA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLr+jtOhkqNutuUUIeylPpGpNOnaN7xgiyTwkUr/ymBKcU37N0
-	ho9kdSU1fPW0vLaZlfzqDxev05Nn81dFyc+N/a8oGn0kL+9orq4Zfp7YRtoqjDVFCnyR97e36U1
-	BYoJu7mR7zGRItfV/JKAp4rPl6pssOIK892wfQA==
-X-Gm-Gg: ASbGncuDGyL57WnnlEzVhBrlUoAMhwS56Sfz8zOCISV97Bjg0WhA4VnlpmmopUlIl1h
-	dTPXRO0wSgCavpO+NKcK0NPzXUKUIrpUpphRYL9Nd8/o0RPVOfRTuEVpYYjE//NEWUdUn0iaVmE
-	+imQJRNzBzpyMORbJ3zRHaAmP2RRs=
-X-Google-Smtp-Source: AGHT+IGtNp2BrAkn3PRcCBrP5vhlJ1looux4OpDWyP6ljq92N0vWykgYWHtVBu01P5IBh7MS/lbuITHOgr8FD7w/MVE=
-X-Received: by 2002:a05:690c:a84:b0:6f9:9d40:35cb with SMTP id
- 00721157ae682-703f41267b0mr168266747b3.6.1744043266227; Mon, 07 Apr 2025
- 09:27:46 -0700 (PDT)
+	s=arc-20240116; t=1744044416; c=relaxed/simple;
+	bh=c4KBYqPr3jTX/BN6Q4aT5hyNkfv7vvC3t8calp633Ug=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JkroASAhsAByIznWNK5M0UWXm88/kupCKukHAwmm3DwABqPYWwOuBUSRyGesAKjJF8lqxn+TJHnMalCpIskprFcIGGoaoSJCAJR2egz1EaGcUMaHLh2q4ww0sSDXgvfz9w5xpsGn7ro2E9eGO1znV55tQd+LIAh9iuqO2Ts6dxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Nuh6OFc3; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 910F543137;
+	Mon,  7 Apr 2025 16:46:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1744044412;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RXJpfmhZ+8yM3mjrwdmbYrVV3J33ZSlFaLXrj0slIbA=;
+	b=Nuh6OFc3/kXzo6DFhHDNjBix1k6eSZDM8GdsMsXmsU0V3T4vccLEgUCC4EgQeWaqxdDd+m
+	6iDycLP0ZRwOMlRdIP55ClDsYY3RRZggJjGc57Tbk0t12a7NIkAiyOyEKWjVYYGcYtB8cY
+	LSF3wv/M4lhju7DTiyJXQ8Vfvi1s2OBuTch5r0lwm/s2X3bqq+j8hq+NI1nantxL2od+tP
+	b5oVECDGuEQqoTNn/1N8Bm58s4JuR7NFVdrwxCIpRF2xGRCvUw2WN9uKmJ98U/NeGEgPJo
+	E8lKL1tTsWOpYcW6n8W0UST7oX+rytoqLVzC9dA4uDFH/LG6/2QHCJ7BxnoDoA==
+Date: Mon, 7 Apr 2025 18:46:47 +0200
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+To: Petr Mladek <pmladek@suse.com>, Daniel Lezcano
+ <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui
+ <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Florian Fainelli
+ <florian.fainelli@broadcom.com>, Ray Jui <rjui@broadcom.com>, Scott Branden
+ <sbranden@broadcom.com>, Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Steven Rostedt
+ <rostedt@goodmis.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>, Sergey Senozhatsky
+ <senozhatsky@chromium.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Morton
+ <akpm@linux-foundation.org>, Alex Shi <alexs@kernel.org>, Yanteng Si
+ <si.yanteng@linux.dev>, Binbin Zhou <zhoubinbin@loongson.cn>, Thomas
+ Petazzoni <thomas.petazzoni@bootlin.com>, Michael Turquette
+ <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Geert
+ Uytterhoeven <geert+renesas@glider.be>, Liu Ying <victor.liu@nxp.com>,
+ linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] vsprintf: remove redundant and unused %pCn
+ format specifier
+Message-ID: <20250407184647.3b72de47@booty>
+In-Reply-To: <Z9BKW_06nLAOzYfY@pathway.suse.cz>
+References: <20250311-vsprintf-pcn-v2-0-0af40fc7dee4@bootlin.com>
+	<20250311-vsprintf-pcn-v2-2-0af40fc7dee4@bootlin.com>
+	<Z9BKW_06nLAOzYfY@pathway.suse.cz>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
- <20250403-dt-cpu-schema-v1-9-076be7171a85@kernel.org> <03011a33-174b-4027-bdd2-043aa685380b@oss.qualcomm.com>
-In-Reply-To: <03011a33-174b-4027-bdd2-043aa685380b@oss.qualcomm.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 7 Apr 2025 18:27:10 +0200
-X-Gm-Features: ATxdqUE6-dDNiPO2iJ2zywPixm7KYg2Lx2vGxVH4s4tPgli0QW4REXdhqc3rxfE
-Message-ID: <CAPDyKFoZ7NfN+pkCPnusvTOEaxbQhr=1FJqzdDGrLcKAzBpGyQ@mail.gmail.com>
-Subject: Re: [PATCH 09/19] arm: dts: qcom: sdx55/sdx65: Fix CPU power-domain-names
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: "Rob Herring (Arm)" <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Liviu Dudau <liviu.dudau@arm.com>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Viresh Kumar <vireshk@kernel.org>, 
-	Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, zhouyanjie@wanyeetech.com, 
-	Conor Dooley <conor@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>, Steen Hegelund <Steen.Hegelund@microchip.com>, 
-	Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Heiko Stuebner <heiko@sntech.de>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, linux-mips@vger.kernel.org, 
-	imx@lists.linux.dev, linux-rockchip@lists.infradead.org, 
-	linux-amlogic@lists.infradead.org, linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtddtjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeelffefgfehhfdtvdefueefieevkefggfelkeeiudetkeektedvhedukefgvddvnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegsohhothihpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdelpdhrtghpthhtohepphhmlhgruggvkhesshhushgvrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrt
+ ghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepfhhlohhrihgrnhdrfhgrihhnvghllhhisegsrhhorggutghomhdrtghomhdprhgtphhtthhopehrjhhuihessghrohgruggtohhmrdgtohhmpdhrtghpthhtohepshgsrhgrnhguvghnsegsrhhorggutghomhdrtghomh
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
-On Fri, 4 Apr 2025 at 22:41, Konrad Dybcio
-<konrad.dybcio@oss.qualcomm.com> wrote:
->
-> On 4/4/25 4:59 AM, Rob Herring (Arm) wrote:
-> > "rpmhpd" is not documented nor used anywhere. As the enable-method is
-> > "psci" use "psci" for the power-domain name.
-> >
-> > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> > ---
->
-> "psci" is what we want here, but these platforms require some more
-> massaging..
+Hello Petr, Daniel,
 
-So this isn't for CPU performance scaling?
+On Tue, 11 Mar 2025 15:36:11 +0100
+Petr Mladek <pmladek@suse.com> wrote:
 
->
-> These SoCs don't seem to have any PSCI idle states (deeper than WFI)
-> described, which is no bueno, as they support some..
+> On Tue 2025-03-11 10:21:23, Luca Ceresoli wrote:
+> > %pC and %pCn print the same string, and commit 900cca294425 ("lib/vsprintf:
+> > add %pC{,n,r} format specifiers for clocks") introducing them does not
+> > clarify any intended difference. It can be assumed %pC is a default for
+> > %pCn as some other specifiers do, but not all are consistent with this
+> > policy. Moreover there is now no other suffix other than 'n', which makes a
+> > default not really useful.
+> > 
+> > All users in the kernel were using %pC except for one which has been
+> > converted. So now remove %pCn and all the unnecessary extra code and
+> > documentation.
+> > 
+> > Acked-by: Stephen Boyd <sboyd@kernel.org>
+> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>  
+> 
+> Makes sense. Looks and works well, so:
+> 
+> Reviewed-by: Petr Mladek <pmladek@suse.com>
+> Tested-by: Petr Mladek <pmladek@suse.com>
+> 
+> Daniel, if I get it correctly, you have already taken the 1st patch.
+> Would you mind to take also this patch using the same tree, please?
+> Otherwise, we would need to coordinate pull requests in the upcoming
+> merge window ;-)
 
-If PSCI PC mode is the only supported CPU suspend mode, we don't need
-the power-domain topology to be described in DT as it's optional to
-use.
+I see none of these two patches in linux-next.
 
-Is this a PC or OSI based platform?
+Anything I should do? Resend? Or just wait a bit more?
 
->
-> I'll try to improve this.
->
-> Konrad
->
+Best regards,
+Luca
 
-Kind regards
-Uffe
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
