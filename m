@@ -1,146 +1,164 @@
-Return-Path: <linux-pm+bounces-24917-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24920-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5D91A7F15D
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 01:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 339CCA7F183
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 01:52:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C90D17A693
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Apr 2025 23:47:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C0AF17F3A5
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Apr 2025 23:50:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29CB3255E26;
-	Mon,  7 Apr 2025 23:42:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EF4E22A810;
+	Mon,  7 Apr 2025 23:49:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ti61MM7H"
+	dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b="L2YOGPD3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D772550C4;
-	Mon,  7 Apr 2025 23:42:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7163121B8F8
+	for <linux-pm@vger.kernel.org>; Mon,  7 Apr 2025 23:49:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744069357; cv=none; b=OPguwdWgYb5iYkw2/44K+wjYYjU0SH8HnUdKyQ/ujHRAN2esiTjqcPctudJztZnYbPGWSAFCUuXsbiwbXPqG9ixlYUBf9pGl2c22hudF5QyDMJGcXpsDglQB+qOKSHSSTVETS7nbIbs3LW01sZII3srx4UcfFeI5wxmFPwXbBKw=
+	t=1744069775; cv=none; b=t+hH9C/9JPGeOTmOVMwjHFJkT/kLcCIxV0+vqiVcNT3S8KBE2JxBUFCCzIZvE0GIb0k3rqkM3TI4gJSJDH/0uFxybpHD1z3hxyHZGbcoE7P1696isTotiOEH8V12klcuKQzHZmz8jNy577BadGbIUTg5kG7xbja4lm4HWd/wwGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744069357; c=relaxed/simple;
-	bh=Er3hegLgwCFhC/Ruck5UgO4+9V5jnr65pYLNSjYW1MQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FzZwJmYXWfVWQTtTqsKNU4KcHAwHvUq/FAAKHRm5y7ao8PaWtGXOuD/WItf01MTvztFa4fYJ16sORVG/ceSD9yTpEbM/wuV1ZF8eMl+VXKYobQFHk+MDl5VUE8GgwMKHnv4IRTEnTWpLlXRfPvhlBnghzUOfzgmYR4vK5ErloMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ti61MM7H; arc=none smtp.client-ip=209.85.219.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e53ef7462b6so4814441276.3;
-        Mon, 07 Apr 2025 16:42:34 -0700 (PDT)
+	s=arc-20240116; t=1744069775; c=relaxed/simple;
+	bh=SOz3vG7Jm/O1HWCz9lJv4YGTUeCHZOMa7Enen02WajU=;
+	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type; b=SRHQiOfXqoIZ+hF+KYNIxYEBCBF4lVdY1r6q8C/PjMezgaFhsahTJHD/lsdeAmGZ9jQZifrmWCq1kRjgtPyIHoVZYmEcCD6V2WwMlHwPZ2MUQUdWqT/0hmEda1r7FZXA0uYoqKY/leW3/GfSts2zepPurILXrsquAy+ET1d1xnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net; spf=pass smtp.mailfrom=telus.net; dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b=L2YOGPD3; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=telus.net
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-af980595952so3169446a12.2
+        for <linux-pm@vger.kernel.org>; Mon, 07 Apr 2025 16:49:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744069354; x=1744674154; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rEZyehd4zLYWxImC6V7ghpPr92k+M9DC2r20TkQaMas=;
-        b=Ti61MM7HWNyWGxAGkK+rdoqDbhonstrgswtIPK/sJ33RR48soOjZdyxRQnTvG+NlWM
-         Gf/2/Go2X+r3QfiyWtGoVRVlkcRMG7lvpxedO1fmHGz4JqkR2JxiZyG3JAZGbS7jFZYq
-         ZkDpCk6AqmU1sW2doh99GqpGO9MwU9vo1HVP5qPqyFhQZagcsv1L27PH1AKbtgLbtCFC
-         ublMWZ0f9phdDG75OIP/IoSYAn9tBcw9RcJ2rkL6KGs7uzCQ7A0XB+pc2A3/3xGx3NB9
-         zOVYvT6I0DkBAw8NIzHo5/dMFdVf5oZCUlYbC4rK9CbZB1Du47UCHIE0EUKyqV3d8Vtz
-         Pi6w==
+        d=telus.net; s=google; t=1744069772; x=1744674572; darn=vger.kernel.org;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2bpXYNg2Q2BZtYHIEGgpFB8yTDxvQVFgPQJVNFRPplE=;
+        b=L2YOGPD3xoF/AXfVm/8F57ZnQxcmt0oLiZJ5V7dyk5yuGTj3OPnDwuthGHa0TLKg7s
+         O7r11zJVapk4ksIlJ6WfltOf/hDd6eAGALsNspMr/37nrIOnJEAovbi3t1n3cQtfCTa0
+         Dudj1x8uDj1SuVEPoLqvM+/7e+U57gqMb8Y8C/k4kUylao8FZRn7SyMB4eJlwD10irQp
+         98Zy4JX2sTcw/wHMkqteQfo+07txxcmstwIoNgtPbFGmI2FPuNz8IL8+C1lsQZBukJtc
+         ZnNhQsOdS54ZGvpdZLqUBUW6LgxegCs48w7pS+hW8CG1NUIRFlNFrsXHMwZQMRr4dhXS
+         wr2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744069354; x=1744674154;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rEZyehd4zLYWxImC6V7ghpPr92k+M9DC2r20TkQaMas=;
-        b=p+turHNdpdPl9mvW6lttIxZvY47TgumlkQZqtfe5cB6CX2Xni8g370gETDVAKuojzj
-         WIrGKgHn/xJNYuHjF7E1jcinGqvMslgvRptEajs8EC0YLWnCUMsCd9e0E2GGPGpK3C5+
-         TnHRc7oiA5CfVcxzqx5BfjUFy3Pf8+FCXmwU+0Lhe85E+1xlxxazXT+pBDqGuaPHeoEH
-         v/uecBZyR95P0cyNmJENSafzz5g0CsB1ApnJfwga9xdWKLjCD/SMPv05AlbQSt+KDlfN
-         pK7UU4X+tVG+mbYyq6BRg87nZerxAJJYt6uNuNUfJ+Z8LHUkNP50966u3Zdg0aFHZmYm
-         5xbA==
-X-Forwarded-Encrypted: i=1; AJvYcCV5C2GoZLX3clRCJlvngpqQttVm4edTGTy0BIgHe/bvOzC4fGMVFvEHq2ThH011QkGhltKq0LKw@vger.kernel.org, AJvYcCWbNfDUg+mH7ordX9CHaj7j9vlpPDZRO7ZP8V/0g/Ahu2QtQV/OX9r53gP9mtFDUSQ+UGgNmvMXSW+lF2IE@vger.kernel.org, AJvYcCXHaKP7XkVpgU4Q4oZP7Xo/CQ3GST96yBQLjkrrGU6Dm3Ta9UN9EHb2hv4jx6dcOPVBIOfLqs34lmE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRoWBbrWFufbUt8wJzKMjcOU+ezVPf09Fc0GR7rYheTrXPLBfM
-	P3/lIR5cxXya5nkPRypM4p29lKr14IJQTDF/yaS8n+Cj6NDWF9vL
-X-Gm-Gg: ASbGncuemmYSTcW2BngIxlk6rTr5xwbc7QxcXCD0aQk40vd08BqglPiJ9ws9VH7HXb0
-	LbTqwL347jPx5u4GQqJYf96yQjj3oEzjZLXlCxQlJL8AZGdfWdp8WACo8rHeBQFfMqEe54+lc3q
-	urRPRtjP5MzpCVqT3hh+ZSjO+Atd5K817uNLoilGqkrzyYYQn4ZNyLuQpzZoF+XA+nrFMzZ0FGU
-	80zMyP+qBy9AQHm3bbwyiC3vcQ00us6vbfqnuQi2z0uWrp+BrndBulGV8Q1ZFr7NvaeghQOdcjo
-	LTEtgrRtDIX5ZQ653wlo3P+WEfteUYZoK5Jl
-X-Google-Smtp-Source: AGHT+IE5QNAfFkOFKjfUYz3+47925/olDBVlwaEQV+A5zw8RcFXQs1h3huSyPi7xSOcPqQJx6E0RTA==
-X-Received: by 2002:a05:6902:480e:b0:e6d:deb9:6381 with SMTP id 3f1490d57ef6-e6e1c2dc239mr23407047276.43.1744069353752;
-        Mon, 07 Apr 2025 16:42:33 -0700 (PDT)
-Received: from localhost ([2a03:2880:25ff:74::])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e6e0c8cf2d7sm2583871276.14.2025.04.07.16.42.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Apr 2025 16:42:33 -0700 (PDT)
-From: Nhat Pham <nphamcs@gmail.com>
-To: linux-mm@kvack.org
-Cc: akpm@linux-foundation.org,
-	hannes@cmpxchg.org,
-	hughd@google.com,
-	yosry.ahmed@linux.dev,
-	mhocko@kernel.org,
-	roman.gushchin@linux.dev,
-	shakeel.butt@linux.dev,
-	muchun.song@linux.dev,
-	len.brown@intel.com,
-	chengming.zhou@linux.dev,
-	kasong@tencent.com,
-	chrisl@kernel.org,
-	huang.ying.caritas@gmail.com,
-	ryan.roberts@arm.com,
-	viro@zeniv.linux.org.uk,
-	baohua@kernel.org,
-	osalvador@suse.de,
-	lorenzo.stoakes@oracle.com,
-	christophe.leroy@csgroup.eu,
-	pavel@kernel.org,
-	kernel-team@meta.com,
-	linux-kernel@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [RFC PATCH 14/14] zswap: do not start zswap shrinker if there is no physical swap slots
-Date: Mon,  7 Apr 2025 16:42:15 -0700
-Message-ID: <20250407234223.1059191-15-nphamcs@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250407234223.1059191-1-nphamcs@gmail.com>
-References: <20250407234223.1059191-1-nphamcs@gmail.com>
+        d=1e100.net; s=20230601; t=1744069772; x=1744674572;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2bpXYNg2Q2BZtYHIEGgpFB8yTDxvQVFgPQJVNFRPplE=;
+        b=Tgq4u5n2A1WjC5/h+XLb7lAznFSUmY+AE6kcaCv6GT97h+dvWsbOrjAJ2EZHHm0KiY
+         /mqd7obnNR5kZGvJV9E0eS90AU5Igvtdxjwe5XfpV2qTRiz/V3Ll1s0ZatHgplF3xs5O
+         /r0F/QzCToo3Rjk+Tshgpyf80F2f6BjWTN9uREMp21BemDnux+umG6AX1IOxmCvouzrp
+         QLOu5RePoT7+XHbzJuCWcly2QC0NBHWtFayVoYSDzZafeQKv4A0Rva6hpivfxnGqF4bS
+         T780Kf23GB+0bWZr9JwnzGnEv4TtIFWGCNuv8ibhkL5swkIn2AJQy4qbE5Wm0yGnzBb3
+         p4yg==
+X-Gm-Message-State: AOJu0Yx8w4wYzDJcqUa8kMNhi4/aclebtKGJOYOHJ6ZaDDB8hItNliaU
+	jmKZMpqo/cCJL1tAGRpA+WYyDkwBNY3T+kNX5P3l7H3KN7UGYJmVEZZD04iVEpI=
+X-Gm-Gg: ASbGnctdRIxgttGtkfV2HmhP7UgUQUJjWiiZc/yklgHp0mtbC/ORiYdIHQBRIYqgmqn
+	P8qohLj1P7AEVWarPsQw1AfuuI9k56+7iiuZ8fBnOWc4ySwWUu0lD6dZuhhAq2Z6y+Cqk5cCs5E
+	iMSKskx/BfCFtm13/VNjuAph4wFd5GNjc69IJH39KA+Nr3PfC1nSXurexDzcJIpkBZjJhiv+VC2
+	7jH9lTmQwwoiNrZgNWWw6XVAEWblkYltrOo9BsUC2LIm8mfES7dRab+Abg2kTMYgXbV0p5e3msJ
+	xykxYqZSLcYfmc0sck7weqG8GmC00YLVV6kFb+PZKD0swASQeZvvDsCa0G/t9jgaS4rZKamUGWE
+	GYh+z7RhG2A==
+X-Google-Smtp-Source: AGHT+IFemBAq/3v8iYPDmDEujfCwWufabf3j8rLUdtZy/CVt2kmZmb2ogYEtZ9kEbdQwpJhlP4z6jA==
+X-Received: by 2002:a17:90b:50c7:b0:2ff:71ad:e84e with SMTP id 98e67ed59e1d1-306a612c906mr20734260a91.10.1744069771670;
+        Mon, 07 Apr 2025 16:49:31 -0700 (PDT)
+Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3057cb8e2afsm9763402a91.42.2025.04.07.16.49.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 07 Apr 2025 16:49:31 -0700 (PDT)
+From: "Doug Smythies" <dsmythies@telus.net>
+To: "'srinivas pandruvada'" <srinivas.pandruvada@linux.intel.com>
+Cc: "'Linux PM'" <linux-pm@vger.kernel.org>,
+	"'LKML'" <linux-kernel@vger.kernel.org>,
+	"'Viresh Kumar'" <viresh.kumar@linaro.org>,
+	"'Mario Limonciello'" <mario.limonciello@amd.com>,
+	"'Sudeep Holla'" <sudeep.holla@arm.com>,
+	"Doug Smythies" <dsmythies@telus.net>,
+	"'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
+	"'Rafael J. Wysocki'" <rafael@kernel.org>
+References: <4651448.LvFx2qVVIh@rjwysocki.net>	 <8560367.NyiUUSuA9g@rjwysocki.net>	 <CAJZ5v0iMYSTnX9mkZb8aEmtbKxWOgsshNJ_AqnB9Mn27y8jzeQ@mail.gmail.com> <2362a42de1403e99a66551575efd910cc92980bc.camel@linux.intel.com>
+In-Reply-To: <2362a42de1403e99a66551575efd910cc92980bc.camel@linux.intel.com>
+Subject: RE: [PATCH v1 10/10] cpufreq: Pass policy pointer to ->update_limits()
+Date: Mon, 7 Apr 2025 16:49:34 -0700
+Message-ID: <005501dba817$b710fe60$2532fb20$@telus.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQHyyTywk7Ob2ryTGJPPDQHQdNaAdgIkhChBAemkHNAByw3tNbM7zVSA
+Content-Language: en-ca
 
-When swap is virtualized, we no longer pre-allocate a slot on swapfile
-for each zswap entry. Do not start the zswap shrinker if there is no
-physical swap slots available.
+On 2025.04.07 15:38 srinivas pandruvada wrote:
+> On Mon, 2025-04-07 at 20:48 +0200, Rafael J. Wysocki wrote:
+>> On Fri, Mar 28, 2025 at 9:49=E2=80=AFPM Rafael J. Wysocki =
+<rjw@rjwysocki.net> wrote:
+>>>=20
+>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>=20
+>>> Since cpufreq_update_limits() obtains a cpufreq policy pointer for
+>>> the
+>>> given CPU and reference counts the corresponding policy object, it
+>>> may
+>>> as well pass the policy pointer to the cpufreq driver's -
+>>> >update_limits()
+>>> callback which allows that callback to avoid invoking
+>>> cpufreq_cpu_get()
+>>> for the same CPU.
+>>>=20
+>>> Accordingly, redefine ->update_limits() to take a policy pointer
+>>> instead
+>>> of a CPU number and update both drivers implementing it,
+>>> intel_pstate
+>>> and amd-pstate, as needed.
+>>>=20
+>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>=20
+> Hi Rafael,
+>
+>> Hi Srinivas,
+>>=20
+>> If you have any concerns regarding this patch, please let me know
+>> (note that it is based on the [05/10]).
+>>=20
+> Changes looks fine, but wants to test out some update limits from
+> interrupt path.
+> Checked your branches at linux-pm, not able to locate in any branch to
+> apply.
+> Please point me to a branch.
 
-Signed-off-by: Nhat Pham <nphamcs@gmail.com>
----
- mm/zswap.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Hi Srinivas,
 
-diff --git a/mm/zswap.c b/mm/zswap.c
-index 15429825d667..f2f412cc1911 100644
---- a/mm/zswap.c
-+++ b/mm/zswap.c
-@@ -1277,6 +1277,14 @@ static unsigned long zswap_shrinker_count(struct shrinker *shrinker,
- 	if (!zswap_shrinker_enabled || !mem_cgroup_zswap_writeback_enabled(memcg))
- 		return 0;
- 
-+	/*
-+	 * When swap is virtualized, we do not have any swap slots on swapfile
-+	 * preallocated for zswap objects. If there is no slot available, we
-+	 * cannot writeback and should just bail out here.
-+	 */
-+	if (IS_ENABLED(CONFIG_VIRTUAL_SWAP) && !get_nr_swap_pages())
-+		return 0;
-+
- 	/*
- 	 * The shrinker resumes swap writeback, which will enter block
- 	 * and may enter fs. XXX: Harmonize with vmscan.c __GFP_FS
--- 
-2.47.1
+You can get the series from patchworks [1].
+Then just edit it, deleting patch 1 of 10, because that one was included =
+in kernel 6.15-rc1
+The rest will apply cleanly to kernel 6.15-rc1.
+
+I just did all this in the last hour, because I wanted to check if the =
+patchset fixed a years old
+issue with HWP enabled, intel_cpufreq, schedutil, minimum frequency set =
+above hardware
+minimum was properly reflected in scaling_cur_freq  when the frequency =
+was stale. [2]
+The issue is not fixed.
+
+[1] =
+https://patchwork.kernel.org/project/linux-pm/patch/2315023.iZASKD2KPV@rj=
+wysocki.net/
+[2] =
+https://lore.kernel.org/linux-pm/CAAYoRsU2=3DqOUhBKSRskcoRXSgBudWgDNVvKtJ=
+A+c22cPa8EZ1Q@mail.gmail.com/
+
 
 
