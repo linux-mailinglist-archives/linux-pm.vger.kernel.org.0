@@ -1,71 +1,70 @@
-Return-Path: <linux-pm+bounces-24896-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24897-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EC6DA7EC79
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Apr 2025 21:17:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21BFAA7EC75
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Apr 2025 21:17:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BADD34472BB
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Apr 2025 19:10:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 621841884ABE
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Apr 2025 19:12:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5919256C9A;
-	Mon,  7 Apr 2025 18:46:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73AA2265CAF;
+	Mon,  7 Apr 2025 18:48:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aQEyrUFe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EJe6Z253"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1AF22256D;
-	Mon,  7 Apr 2025 18:46:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4861D265CAA;
+	Mon,  7 Apr 2025 18:48:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744051609; cv=none; b=NB+BfaMIDcINsDnsRyY+6P/63GSnk97ClGL5Wj8BoNjcfXoXXnmyxbqdP0jHqJ/sbG5ovpadmEWcJhx2LX/mrkzslD5tzTebBqyR31EysOAYNnQLJI3cWeokfFICSfUOiZ0vhNEx5ey7LNTMQH/jmNi+nNJ15f+W0oOjpLzDi9U=
+	t=1744051719; cv=none; b=ua7afTlOpq0KIi1n+f4B6rtdJ0f0A+5ornRtujzJKFbmH4QeC2tViz3bZePXVs7K+7dESLp9iuvn6VXpNjthdY2EiuGRXiwi3M+j8chIqY8VF0v1ny2sgPlbtUkdz93jhNm1HH7p8CRNt25O0+Sxxryn7ZHG+wjFVT0+KB1yiMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744051609; c=relaxed/simple;
-	bh=mHnRQrUz+4kvAeo6aGycQsGqtBT2rI2fecmfh3LmTuA=;
+	s=arc-20240116; t=1744051719; c=relaxed/simple;
+	bh=BLCsZfMlmMhyQ/8BEjb8uHOKjFKoD5yX+WqdA4NIZ/I=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KgvYTFtXyrd7tPvDyiwzgUyEAe0d/wxJpyDoAgbE+8wu2iH0toS1k9OSR5RW19rJ6P7NaaXj+0Lz1NRQnEE/y/olX7vheMt/8UZJzUU6YrgVxLhHKrCCWQ7j+Cn8ox4NUT4DVyKD9rB+IvNoJ7BZkDErq1X0J8WuKzGdEyFMUTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aQEyrUFe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 379F0C4CEEA;
-	Mon,  7 Apr 2025 18:46:49 +0000 (UTC)
+	 To:Cc:Content-Type; b=gDKsfa9KtSVGQBvVq0G+Yc9X56lSCKtj8xM0M8PgiJMmaNVvRsU35xcLLdQdT2rU31Ae0UsmmsMuOzmpYUed7Q9FaB090Cz6HrwJwEI4UZak0Bq+oUWdinIWJFRtwA/4u8Uc/Xrw03umUWaUE9ja5BhkRQR569o0awAZI1C0Bnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EJe6Z253; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 246DAC4CEDD;
+	Mon,  7 Apr 2025 18:48:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744051609;
-	bh=mHnRQrUz+4kvAeo6aGycQsGqtBT2rI2fecmfh3LmTuA=;
+	s=k20201202; t=1744051719;
+	bh=BLCsZfMlmMhyQ/8BEjb8uHOKjFKoD5yX+WqdA4NIZ/I=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=aQEyrUFejFBWiX5MQ+KtqSGSPBlyke8cXqyPg/yuXyoUWQW0178hMqT4lxEGazPr1
-	 9w+A5ywp0zwyStwhXpn5lhJsxcqNaRbhCvn++ylSA26D5maUCgZN7nRgALGveuE1dy
-	 hj2xrnQSw/L05YObx5q0ztufrLBZ+aD1654LCHJzjI4ogc2SaBmZuhM00psF/vcuYA
-	 4Jt9LtK2JH4ATYTBzuykDhav0Ps8Fzu8smP0zHAEWD0/vxDtn+bi6e6BuMWt/kOoND
-	 Y/u5FlIO4hm2ux9HJB85ItrM+ux8N9jUdiRsrljLyjkesC3EJ9/OT20z806QxEcPPj
-	 pu5DJ3cDMxWjA==
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-2c12b7af278so3317181fac.0;
-        Mon, 07 Apr 2025 11:46:49 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXE+YbBhQxtD5OhUW4w7Ia3pMHVG7w+7g4o8T1NPDlpq1WXvcVZq/pV/Wcp9wF1FjqObhxhjLnYnYoFNwc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4ztj2dRqG2RqNiE7KQVIWXWDmDWzsrfd8t7N0Fuczmfm7sV/X
-	aurkh6eHYuOPtWkNoeAfyCwoAls8Jz3Zop5pKcFSbQLgynobJ504LipoY2IOJBZEkkUMO8g3Jjc
-	wkc5Z8tvPmsTfl2siy+cqM3e6tF0=
-X-Google-Smtp-Source: AGHT+IE2+vBTKe9EtPxXIZLDGFxhC67FMH7CpylNJaJ36uL2RJ7DxAR/F+bFIuPqDcZ+XNZbR2fTHA5JxJSyBht8Oek=
-X-Received: by 2002:a05:6871:6183:b0:29e:5152:dab1 with SMTP id
- 586e51a60fabf-2d064a73137mr318273fac.13.1744051608521; Mon, 07 Apr 2025
- 11:46:48 -0700 (PDT)
+	b=EJe6Z253AA/oSHZLuPl/J6JKpsmnk+AzVN/N793dskIFALKNAJwpmE7CAlA4wCn6H
+	 mpfrn/09SS9/uCN8t9ewYdJc7qT/zWUoULKuGrTCW1K5Hc8ul6nbFVZdyrhEk0Acre
+	 k5IgujQ15xryG5GlS6Wb9N8TtmSTWgtNoLvWBeh3GT6XY0Y0/tyJlNIhv1gJsOfFwg
+	 NSTlmrj0bhIckM0u8FDMy+tkDoCwixx7HTthQJnUAWHrrBjuksbQ5OnH0D7ehCjiHv
+	 17nv+eG/lFmw4Mx1Tj3TUxsAvb22LV2tCzhy+vuNwDftIOheoYgzvWVHNFOLK6gJZ/
+	 U7XtJWgS9Qjkg==
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-2c7b2c14455so3192429fac.2;
+        Mon, 07 Apr 2025 11:48:39 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV12ZzyXm3FqhPYGVOlDSTFd940wDQXd1nMyDWOIvxuweSMB6fJrggTF5sjwIw9XZlCyufbURtGTeGX6KU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMEnsuGcFusgOHMTsVfQWGVn09vbx4mxpUXH9Xrga52oMifTdb
+	fKInnc1E9zDQF1YxHfFbnB4nFdKrEzdb8wtPN3JzJkZ+vW1D+BVd9TbFOEH/RU/QWF1aeaeOIDn
+	5mGaeApR8VUTHmqoG5sSckgBIsLk=
+X-Google-Smtp-Source: AGHT+IFrqlHqRYH87UcQwF4jmAs00nMOADUhfEmbJ0+JBk41kaHnZhqMrZQ7+hARpldminEFJC2jf/8TlhdhVZVtJMo=
+X-Received: by 2002:a05:6870:ecab:b0:2bd:456c:923 with SMTP id
+ 586e51a60fabf-2cc9e59c5fcmr7891241fac.11.1744051718492; Mon, 07 Apr 2025
+ 11:48:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <4651448.LvFx2qVVIh@rjwysocki.net> <2315023.iZASKD2KPV@rjwysocki.net>
-In-Reply-To: <2315023.iZASKD2KPV@rjwysocki.net>
+References: <4651448.LvFx2qVVIh@rjwysocki.net> <8560367.NyiUUSuA9g@rjwysocki.net>
+In-Reply-To: <8560367.NyiUUSuA9g@rjwysocki.net>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 7 Apr 2025 20:46:37 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gSVd05e+Wtx9WuxW1ETAt=_z9pAyyg7oQzKD4LhrA89Q@mail.gmail.com>
-X-Gm-Features: ATxdqUEtRSlzKEHxWBODwox92YuYeZYMboEOwjqSX-wnx9jwOv8J7S5FBu5R-6c
-Message-ID: <CAJZ5v0gSVd05e+Wtx9WuxW1ETAt=_z9pAyyg7oQzKD4LhrA89Q@mail.gmail.com>
-Subject: Re: [PATCH v1 05/10] cpufreq: intel_pstate: Rearrange max frequency
- updates handling code
+Date: Mon, 7 Apr 2025 20:48:26 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iMYSTnX9mkZb8aEmtbKxWOgsshNJ_AqnB9Mn27y8jzeQ@mail.gmail.com>
+X-Gm-Features: ATxdqUH1BaGEagIbW7krbv_XHndcRweKBMxNf5P6IVT2_wOv-gox_ZQ12i4ef3E
+Message-ID: <CAJZ5v0iMYSTnX9mkZb8aEmtbKxWOgsshNJ_AqnB9Mn27y8jzeQ@mail.gmail.com>
+Subject: Re: [PATCH v1 10/10] cpufreq: Pass policy pointer to ->update_limits()
 To: "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
 	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
@@ -74,124 +73,136 @@ Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 28, 2025 at 9:58=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.ne=
+On Fri, Mar 28, 2025 at 9:49=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.ne=
 t> wrote:
 >
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 >
-> Rename __intel_pstate_update_max_freq() to intel_pstate_update_max_freq()
-> and move the cpufreq policy reference counting and locking into it (and
-> implement the locking with the recently introduced cpufreq policy "write"
-> locking guard).
+> Since cpufreq_update_limits() obtains a cpufreq policy pointer for the
+> given CPU and reference counts the corresponding policy object, it may
+> as well pass the policy pointer to the cpufreq driver's ->update_limits()
+> callback which allows that callback to avoid invoking cpufreq_cpu_get()
+> for the same CPU.
 >
-> No intentional functional impact.
+> Accordingly, redefine ->update_limits() to take a policy pointer instead
+> of a CPU number and update both drivers implementing it, intel_pstate
+> and amd-pstate, as needed.
 >
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
 Hi Srinivas,
 
-If you have any concerns regarding this patch, please let me know.
+If you have any concerns regarding this patch, please let me know
+(note that it is based on the [05/10]).
 
 > ---
->  drivers/cpufreq/intel_pstate.c |   52 +++++++++++++---------------------=
--------
->  1 file changed, 17 insertions(+), 35 deletions(-)
+>  drivers/cpufreq/amd-pstate.c   |    7 ++-----
+>  drivers/cpufreq/cpufreq.c      |    2 +-
+>  drivers/cpufreq/intel_pstate.c |   29 ++++++++++++++++++-----------
+>  include/linux/cpufreq.h        |    2 +-
+>  4 files changed, 22 insertions(+), 18 deletions(-)
 >
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -821,19 +821,16 @@
+>         schedule_work(&sched_prefcore_work);
+>  }
+>
+> -static void amd_pstate_update_limits(unsigned int cpu)
+> +static void amd_pstate_update_limits(struct cpufreq_policy *policy)
+>  {
+> -       struct cpufreq_policy *policy __free(put_cpufreq_policy) =3D cpuf=
+req_cpu_get(cpu);
+>         struct amd_cpudata *cpudata;
+>         u32 prev_high =3D 0, cur_high =3D 0;
+>         bool highest_perf_changed =3D false;
+> +       unsigned int cpu =3D policy->cpu;
+>
+>         if (!amd_pstate_prefcore)
+>                 return;
+>
+> -       if (!policy)
+> -               return;
+> -
+>         if (amd_get_highest_perf(cpu, &cur_high))
+>                 return;
+>
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -2741,7 +2741,7 @@
+>                 return;
+>
+>         if (cpufreq_driver->update_limits)
+> -               cpufreq_driver->update_limits(cpu);
+> +               cpufreq_driver->update_limits(policy);
+>         else
+>                 cpufreq_policy_refresh(policy);
+>  }
 > --- a/drivers/cpufreq/intel_pstate.c
 > +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -1353,9 +1353,16 @@
+> @@ -1353,14 +1353,9 @@
 >                 cpufreq_update_policy(cpu);
 >  }
 >
-> -static void __intel_pstate_update_max_freq(struct cpudata *cpudata,
-> -                                          struct cpufreq_policy *policy)
-> +static bool intel_pstate_update_max_freq(struct cpudata *cpudata)
+> -static bool intel_pstate_update_max_freq(struct cpudata *cpudata)
+> +static void __intel_pstate_update_max_freq(struct cpufreq_policy *policy=
+,
+> +                                          struct cpudata *cpudata)
 >  {
+> -       struct cpufreq_policy *policy __free(put_cpufreq_policy);
+> -
+> -       policy =3D cpufreq_cpu_get(cpudata->cpu);
+> -       if (!policy)
+> -               return false;
+> -
+>         guard(cpufreq_policy_write)(policy);
+>
+>         if (hwp_active)
+> @@ -1370,16 +1365,28 @@
+>                         cpudata->pstate.max_freq : cpudata->pstate.turbo_=
+freq;
+>
+>         refresh_frequency_limits(policy);
+> +}
+> +
+> +static bool intel_pstate_update_max_freq(struct cpudata *cpudata)
+> +{
 > +       struct cpufreq_policy *policy __free(put_cpufreq_policy);
 > +
 > +       policy =3D cpufreq_cpu_get(cpudata->cpu);
 > +       if (!policy)
 > +               return false;
 > +
-> +       guard(cpufreq_policy_write)(policy);
-> +
->         if (hwp_active)
->                 intel_pstate_get_hwp_cap(cpudata);
+> +       __intel_pstate_update_max_freq(policy, cpudata);
 >
-> @@ -1363,44 +1370,24 @@
->                         cpudata->pstate.max_freq : cpudata->pstate.turbo_=
-freq;
->
->         refresh_frequency_limits(policy);
-> +
-> +       return true;
+>         return true;
 >  }
 >
->  static void intel_pstate_update_limits(unsigned int cpu)
+> -static void intel_pstate_update_limits(unsigned int cpu)
+> +static void intel_pstate_update_limits(struct cpufreq_policy *policy)
 >  {
-> -       struct cpufreq_policy *policy =3D cpufreq_cpu_acquire(cpu);
-> -       struct cpudata *cpudata;
-> -
-> -       if (!policy)
-> -               return;
-> -
-> -       cpudata =3D all_cpu_data[cpu];
-> -
-> -       __intel_pstate_update_max_freq(cpudata, policy);
-> -
-> -       /* Prevent the driver from being unregistered now. */
-> -       mutex_lock(&intel_pstate_driver_lock);
-> +       struct cpudata *cpudata =3D all_cpu_data[cpu];
+> -       struct cpudata *cpudata =3D all_cpu_data[cpu];
+> +       struct cpudata *cpudata =3D all_cpu_data[policy->cpu];
+> +
+> +       __intel_pstate_update_max_freq(policy, cpudata);
 >
-> -       cpufreq_cpu_release(policy);
-> -
-> -       hybrid_update_capacity(cpudata);
-> -
-> -       mutex_unlock(&intel_pstate_driver_lock);
-> +       if (intel_pstate_update_max_freq(cpudata))
-> +               hybrid_update_capacity(cpudata);
+> -       if (intel_pstate_update_max_freq(cpudata))
+> -               hybrid_update_capacity(cpudata);
+> +       hybrid_update_capacity(cpudata);
 >  }
 >
 >  static void intel_pstate_update_limits_for_all(void)
->  {
->         int cpu;
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -399,7 +399,7 @@
+>         unsigned int    (*get)(unsigned int cpu);
 >
-> -       for_each_possible_cpu(cpu) {
-> -               struct cpufreq_policy *policy =3D cpufreq_cpu_acquire(cpu=
-);
-> -
-> -               if (!policy)
-> -                       continue;
-> -
-> -               __intel_pstate_update_max_freq(all_cpu_data[cpu], policy)=
-;
-> -
-> -               cpufreq_cpu_release(policy);
-> -       }
-> +       for_each_possible_cpu(cpu)
-> +               intel_pstate_update_max_freq(all_cpu_data[cpu]);
+>         /* Called to update policy limits on firmware notifications. */
+> -       void            (*update_limits)(unsigned int cpu);
+> +       void            (*update_limits)(struct cpufreq_policy *policy);
 >
->         mutex_lock(&hybrid_capacity_lock);
->
-> @@ -1840,13 +1827,8 @@
->  {
->         struct cpudata *cpudata =3D
->                 container_of(to_delayed_work(work), struct cpudata, hwp_n=
-otify_work);
-> -       struct cpufreq_policy *policy =3D cpufreq_cpu_acquire(cpudata->cp=
-u);
-> -
-> -       if (policy) {
-> -               __intel_pstate_update_max_freq(cpudata, policy);
-> -
-> -               cpufreq_cpu_release(policy);
->
-> +       if (intel_pstate_update_max_freq(cpudata)) {
->                 /*
->                  * The driver will not be unregistered while this functio=
-n is
->                  * running, so update the capacity without acquiring the =
-driver
+>         /* optional */
+>         int             (*bios_limit)(int cpu, unsigned int *limit);
 >
 >
 >
