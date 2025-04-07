@@ -1,217 +1,201 @@
-Return-Path: <linux-pm+bounces-24901-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24903-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C370CA7EF72
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Apr 2025 22:53:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E38EFA7F04B
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 00:28:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A6B216F899
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Apr 2025 20:53:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C53B817AD83
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Apr 2025 22:28:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20FD721ABAC;
-	Mon,  7 Apr 2025 20:53:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CF852222D2;
+	Mon,  7 Apr 2025 22:28:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kpnmail.nl header.i=@kpnmail.nl header.b="pAN/g3r3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bl0qO2eX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.187])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F8E1C5F06
-	for <linux-pm@vger.kernel.org>; Mon,  7 Apr 2025 20:53:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06B961B87CF;
+	Mon,  7 Apr 2025 22:28:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744059198; cv=none; b=EM8NAmiqVwhMbLUunQ27dlSv6i/pMa6PilJ+vkMsQ94ZnzqLwxegI32GcFoZ0M5J/GRSDIjuKkvBYtvrxyCcepUowZa39ITsOz3n6KnPDHIvwz1+sYsZBRK8OnPkL9fS8VbuEmWpjcac05Amy/bVBWmCJ0AWET9aWMur6nBhr7w=
+	t=1744064888; cv=none; b=eZz4xuSeM0cKtdenp0wb6naWx/RnWzsknlrca7IfFlMUR0VV8l3ctuZh4Xms1TwtSTmFUG/7o2UimM0PTUPu+gHVgKAYB8k2KPw3rgg4ElVqv7/bhaZ6c9At04Y1M97OXSEoAB7qH5uvo8US0RsWfW3/6rDHbb8IzVrULpTw7Pw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744059198; c=relaxed/simple;
-	bh=6UdzA84OUgTGKO1uqvZ1DbslZq1kXSRMOGSmqhIm3KI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=B0LdKT973J8LPUf+LbP8C5UPAyAicgf0SqK367Uc5xwm2+m4ztf4b4SleEeoiY1Lv26IHGbk8jJvJW3cmM6a630StcUXzjCTTVWNf8fGi+hnbugQ/lZyI8mAsoAbDSfJl3IwpvE7KXjC1/rQC+Rq4phMie/DtJ1tmH1WGGmezp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=redhat.com; spf=fail smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=kpnmail.nl header.i=@kpnmail.nl header.b=pAN/g3r3; arc=none smtp.client-ip=195.121.94.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=redhat.com
-X-KPN-MessageId: 5b4f35aa-13f2-11f0-beb8-005056992ed3
-Received: from smtp.kpnmail.nl (unknown [10.31.155.8])
-	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-	id 5b4f35aa-13f2-11f0-beb8-005056992ed3;
-	Mon, 07 Apr 2025 22:53:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=kpnmail.nl; s=kpnmail01;
-	h=mime-version:message-id:date:subject:to:from;
-	bh=ZW9j9CVqft7u6ZmAvaLOCHdM98NK5xfmZrgJrWrJ2iM=;
-	b=pAN/g3r39d60riu+w45IF1gJd6IcTczOBuxezBGoZfbOykTLXJnwZPLpmR9tiD9/jLK/zfKqVAjRp
-	 2qD3ZI/LtiT5GkhoH/bCbar77jBa/KspT5HGSmZyykfCRgOt1w1hi8sRTkgSuxuW8Y2X48SF8maFgO
-	 nNw9gORRybbAJSx0=
-X-KPN-MID: 33|aCNIhL/PiBouYIsz44b2ylw1Qu54JSip1JtAuGiPcvsixYPcJ4l5/tKUtdcm4eq
- iRgV+55vd1dh68nscdfqDjP+uuh+dS/PlY+eV01aJ0+A=
-X-KPN-VerifiedSender: No
-X-CMASSUN: 33|aJULggOI/JQSc4VC5KPvgBqq1cNubskUcNh3avS8uRz7y2Yz2ra5cA3TBdjoKq8
- pBNlnwmDlkS2jA3o2IBA1yg==
-Received: from localhost.localdomain (77-171-66-179.fixed.kpn.net [77.171.66.179])
-	by smtp.kpnmail.nl (Halon) with ESMTPSA
-	id 2a527e8a-13f2-11f0-97d1-00505699d6e5;
-	Mon, 07 Apr 2025 22:52:06 +0200 (CEST)
-From: Jelle van der Waa <jvanderw@redhat.com>
-To: Sebastian Reichel <sre@kernel.org>
-Cc: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-	Hans de Goede <hdegoede@redhat.com>,
-	linux-pm@vger.kernel.org,
-	Jelle van der Waa <jvanderwaa@redhat.com>
-Subject: [PATCH 1/1] power: supply: support charge_types in extensions
-Date: Mon,  7 Apr 2025 22:18:45 +0200
-Message-ID: <20250407201845.332348-2-jvanderw@redhat.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250407201845.332348-1-jvanderw@redhat.com>
-References: <20250407201845.332348-1-jvanderw@redhat.com>
+	s=arc-20240116; t=1744064888; c=relaxed/simple;
+	bh=6idXwPqbUKauYl+/ROVCk0OuBY2aHUha+iuVpPPXTws=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=a9rJHFvsY45nWAqJOmCcOGQnC0D4XGb3dNB99YyuCJcy6jGTIaE131yh8CpZKY3Fwr3biOqr9a39waZfTVzECkuk+wTFVxJD0mqBpLpTT32mK2R+oyOKOZjKq5R+RTeWqu/kopI+2N2gjt3y1SxdnUTO0p5PyQIW2CaJRc86j7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bl0qO2eX; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744064887; x=1775600887;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=6idXwPqbUKauYl+/ROVCk0OuBY2aHUha+iuVpPPXTws=;
+  b=Bl0qO2eXHHXEFtmmNp6CmVrlJLsbTZc3Md4hXK+wWrFxhGvrBZg3i7+0
+   rkEYOvg/tG2kZ34UJweqOxNB915bIGxHjKNtYhFdAA4hW6lG8NkBJL1aS
+   R+gmgi3Ovs+xax/Hzl1zuuHhFfe3MOOhjZ6ieLwrl0W402QJICkSi8L3D
+   wVMBi9xTWPo/nbUwyAxaf9QrXraLCYMRIpaem17WcjNGnu0kMWmNUzK7W
+   +aAEXp71K+ec0xinFr472yqIwZ29/ZULKZPabliqBU3oLdUjApfMbyJR0
+   xenj16oZhUtNDcU2UAWFp7+qBoyh+heWzI6QQvJ94qDH4353Sen2V21IE
+   Q==;
+X-CSE-ConnectionGUID: 14hEI+JpQEq0nEIGAf7lZg==
+X-CSE-MsgGUID: 9CbUmNA2SSuwwzx5oDBlRg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="44724873"
+X-IronPort-AV: E=Sophos;i="6.15,196,1739865600"; 
+   d="scan'208";a="44724873"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 15:28:06 -0700
+X-CSE-ConnectionGUID: rZ+xuASHRsOPb1YYwHijnA==
+X-CSE-MsgGUID: 2ioR69SNQvCzcg5gUgU0qQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,196,1739865600"; 
+   d="scan'208";a="128611698"
+Received: from spandruv-desk1.amr.corp.intel.com ([10.125.111.59])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 15:28:06 -0700
+Message-ID: <2362a42de1403e99a66551575efd910cc92980bc.camel@linux.intel.com>
+Subject: Re: [PATCH v1 10/10] cpufreq: Pass policy pointer to
+ ->update_limits()
+From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki"
+	 <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML
+ <linux-kernel@vger.kernel.org>,  Viresh Kumar <viresh.kumar@linaro.org>,
+ Mario Limonciello <mario.limonciello@amd.com>, Sudeep Holla
+ <sudeep.holla@arm.com>
+Date: Mon, 07 Apr 2025 15:27:59 -0700
+In-Reply-To: <CAJZ5v0iMYSTnX9mkZb8aEmtbKxWOgsshNJ_AqnB9Mn27y8jzeQ@mail.gmail.com>
+References: <4651448.LvFx2qVVIh@rjwysocki.net>
+	 <8560367.NyiUUSuA9g@rjwysocki.net>
+	 <CAJZ5v0iMYSTnX9mkZb8aEmtbKxWOgsshNJ_AqnB9Mn27y8jzeQ@mail.gmail.com>
+Autocrypt: addr=srinivas.pandruvada@linux.intel.com; prefer-encrypt=mutual;
+ keydata=mQGNBGYHNAsBDAC7tv5u9cIsSDvdgBBEDG0/a/nTaC1GXOx5MFNEDL0LWia2p8Asl7igx
+ YrB68fyfPNLSIgtCmps0EbRUkPtoN5/HTbAEZeJUTL8Xdoe6sTywf8/6/DMheEUzprE4Qyjt0HheW
+ y1JGvdOA0f1lkxCnPXeiiDY4FUqQHr3U6X4FPqfrfGlrMmGvntpKzOTutlQl8eSAprtgZ+zm0Jiwq
+ NSiSBOt2SlbkGu9bBYx7mTsrGv+x7x4Ca6/BO9o5dIvwJOcfK/cXC/yxEkr1ajbIUYZFEzQyZQXrT
+ GUGn8j3/cXQgVvMYxrh3pGCq9Q0Q6PAwQYhm97ipXa86GcTpP5B2ip9xclPtDW99sihiL8euTWRfS
+ TUsEI+1YzCyz5DU32w3WiXr3ITicaMV090tMg9phIZsjfFbnR8hY03n0kRNWWFXi/ch2MsZCCqXIB
+ oY/SruNH9Y6mnFKW8HSH762C7On8GXBYJzH6giLGeSsbvis2ZmV/r+LmswwZ6ACcOKLlvvIukAEQE
+ AAbQ5U3Jpbml2YXMgUGFuZHJ1dmFkYSA8c3Jpbml2YXMucGFuZHJ1dmFkYUBsaW51eC5pbnRlbC5j
+ b20+iQHRBBMBCAA7FiEEdki2SeUi0wlk2xcjOqtdDMJyisMFAmYHNAsCGwMFCwkIBwICIgIGFQoJC
+ AsCBBYCAwECHgcCF4AACgkQOqtdDMJyisMobAv+LLYUSKNuWhRN3wS7WocRPCi3tWeBml+qivCwyv
+ oZbmE2LcxYFnkcj6YNoS4N1CHJCr7vwefWTzoKTTDYqz3Ma0D0SbR1p/dH0nDgN34y41HpIHf0tx0
+ UxGMgOWJAInq3A7/mNkoLQQ3D5siG39X3bh9Ecg0LhMpYwP/AYsd8X1ypCWgo8SE0J/6XX/HXop2a
+ ivimve15VklMhyuu2dNWDIyF2cWz6urHV4jmxT/wUGBdq5j87vrJhLXeosueRjGJb8/xzl34iYv08
+ wOB0fP+Ox5m0t9N5yZCbcaQug3hSlgp9hittYRgIK4GwZtNO11bOzeCEMk+xFYUoa5V8JWK9/vxrx
+ NZEn58vMJ/nxoJzkb++iV7KBtsqErbs5iDwFln/TRJAQDYrtHJKLLFB9BGUDuaBOmFummR70Rbo55
+ J9fvUHc2O70qteKOt5A0zv7G8uUdIaaUHrT+VOS7o+MrbPQcSk+bl81L2R7TfWViCmKQ60sD3M90Y
+ oOfCQxricddC
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Jelle van der Waa <jvanderwaa@redhat.com>
-
-Similar to charge_behaviour, charge_types is an enum option with
-multiple possible values. To be able to use it with a power_supply
-extension its known values have to be exposed.
-
-Signed-off-by: Jelle van der Waa <jvanderwaa@redhat.com>
----
- drivers/power/supply/power_supply_sysfs.c | 23 ++++++++++++++++++++++-
- drivers/power/supply/test_power.c         | 20 ++++++++++++++++++--
- include/linux/power_supply.h              |  1 +
- 3 files changed, 41 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index edb058c19c9c..6d80640511b5 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -321,6 +321,27 @@ static ssize_t power_supply_show_charge_behaviour(struct device *dev,
- 						  value->intval, buf);
- }
- 
-+static ssize_t power_supply_show_charge_types(struct device *dev,
-+					      struct power_supply *psy,
-+					      enum power_supply_charge_type current_type,
-+					      char *buf)
-+{
-+	struct power_supply_ext_registration *reg;
-+
-+	scoped_guard(rwsem_read, &psy->extensions_sem) {
-+		power_supply_for_each_extension(reg, psy) {
-+			if (power_supply_ext_has_property(reg->ext,
-+							  POWER_SUPPLY_PROP_CHARGE_TYPES))
-+				return power_supply_charge_types_show(dev,
-+						reg->ext->charge_types,
-+						current_type, buf);
-+		}
-+	}
-+
-+	return power_supply_charge_types_show(dev, psy->desc->charge_types,
-+						  current_type, buf);
-+}
-+
- static ssize_t power_supply_format_property(struct device *dev,
- 					    bool uevent,
- 					    struct device_attribute *attr,
-@@ -365,7 +386,7 @@ static ssize_t power_supply_format_property(struct device *dev,
- 	case POWER_SUPPLY_PROP_CHARGE_TYPES:
- 		if (uevent) /* no possible values in uevents */
- 			goto default_format;
--		ret = power_supply_charge_types_show(dev, psy->desc->charge_types,
-+		ret = power_supply_show_charge_types(dev, psy,
- 						     value.intval, buf);
- 		break;
- 	case POWER_SUPPLY_PROP_MODEL_NAME ... POWER_SUPPLY_PROP_SERIAL_NUMBER:
-diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
-index 2a975a110f48..0d9cc0c5613e 100644
---- a/drivers/power/supply/test_power.c
-+++ b/drivers/power/supply/test_power.c
-@@ -37,6 +37,8 @@ static int battery_charge_counter	= -1000;
- static int battery_current		= -1600;
- static enum power_supply_charge_behaviour battery_charge_behaviour =
- 	POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO;
-+static enum power_supply_charge_type battery_charge_types =
-+	POWER_SUPPLY_CHARGE_TYPE_NONE;
- static bool battery_extension;
- 
- static bool module_initialized;
-@@ -87,7 +89,7 @@ static int test_power_get_battery_property(struct power_supply *psy,
- 		val->intval = battery_status;
- 		break;
- 	case POWER_SUPPLY_PROP_CHARGE_TYPE:
--		val->intval = POWER_SUPPLY_CHARGE_TYPE_FAST;
-+		val->intval = battery_charge_types;
- 		break;
- 	case POWER_SUPPLY_PROP_HEALTH:
- 		val->intval = battery_health;
-@@ -129,6 +131,9 @@ static int test_power_get_battery_property(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
- 		val->intval = battery_charge_behaviour;
- 		break;
-+	case POWER_SUPPLY_PROP_CHARGE_TYPES:
-+		val->intval = battery_charge_types;
-+		break;
- 	default:
- 		pr_info("%s: some properties deliberately report errors.\n",
- 			__func__);
-@@ -140,7 +145,7 @@ static int test_power_get_battery_property(struct power_supply *psy,
- static int test_power_battery_property_is_writeable(struct power_supply *psy,
- 						    enum power_supply_property psp)
- {
--	return psp == POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR;
-+	return psp == POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR | POWER_SUPPLY_PROP_CHARGE_TYPES;
- }
- 
- static int test_power_set_battery_property(struct power_supply *psy,
-@@ -156,6 +161,14 @@ static int test_power_set_battery_property(struct power_supply *psy,
- 		}
- 		battery_charge_behaviour = val->intval;
- 		break;
-+	case POWER_SUPPLY_PROP_CHARGE_TYPES:
-+		if (val->intval < 0 ||
-+		    val->intval >= BITS_PER_TYPE(typeof(psy->desc->charge_types)) ||
-+		    !(BIT(val->intval) & psy->desc->charge_types)) {
-+			return -EINVAL;
-+		}
-+		battery_charge_types = val->intval;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -188,6 +201,7 @@ static enum power_supply_property test_power_battery_props[] = {
- 	POWER_SUPPLY_PROP_CURRENT_AVG,
- 	POWER_SUPPLY_PROP_CURRENT_NOW,
- 	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
-+	POWER_SUPPLY_PROP_CHARGE_TYPES,
- };
- 
- static char *test_power_ac_supplied_to[] = {
-@@ -215,6 +229,8 @@ static const struct power_supply_desc test_power_desc[] = {
- 		.charge_behaviours = BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO)
- 				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)
- 				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE),
-+		.charge_types = BIT(POWER_SUPPLY_CHARGE_TYPE_NONE)
-+				   | BIT(POWER_SUPPLY_CHARGE_TYPE_LONGLIFE)
- 	},
- 	[TEST_USB] = {
- 		.name = "test_usb",
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 888824592953..c4cb854971f5 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -288,6 +288,7 @@ struct power_supply_desc {
- struct power_supply_ext {
- 	const char *const name;
- 	u8 charge_behaviours;
-+	u32 charge_types;
- 	const enum power_supply_property *properties;
- 	size_t num_properties;
- 
--- 
-2.49.0
+T24gTW9uLCAyMDI1LTA0LTA3IGF0IDIwOjQ4ICswMjAwLCBSYWZhZWwgSi4gV3lzb2NraSB3cm90
+ZToKPiBPbiBGcmksIE1hciAyOCwgMjAyNSBhdCA5OjQ54oCvUE0gUmFmYWVsIEouIFd5c29ja2kg
+PHJqd0Byand5c29ja2kubmV0Pgo+IHdyb3RlOgo+ID4gCj4gPiBGcm9tOiBSYWZhZWwgSi4gV3lz
+b2NraSA8cmFmYWVsLmoud3lzb2NraUBpbnRlbC5jb20+Cj4gPiAKPiA+IFNpbmNlIGNwdWZyZXFf
+dXBkYXRlX2xpbWl0cygpIG9idGFpbnMgYSBjcHVmcmVxIHBvbGljeSBwb2ludGVyIGZvcgo+ID4g
+dGhlCj4gPiBnaXZlbiBDUFUgYW5kIHJlZmVyZW5jZSBjb3VudHMgdGhlIGNvcnJlc3BvbmRpbmcg
+cG9saWN5IG9iamVjdCwgaXQKPiA+IG1heQo+ID4gYXMgd2VsbCBwYXNzIHRoZSBwb2xpY3kgcG9p
+bnRlciB0byB0aGUgY3B1ZnJlcSBkcml2ZXIncyAtCj4gPiA+dXBkYXRlX2xpbWl0cygpCj4gPiBj
+YWxsYmFjayB3aGljaCBhbGxvd3MgdGhhdCBjYWxsYmFjayB0byBhdm9pZCBpbnZva2luZwo+ID4g
+Y3B1ZnJlcV9jcHVfZ2V0KCkKPiA+IGZvciB0aGUgc2FtZSBDUFUuCj4gPiAKPiA+IEFjY29yZGlu
+Z2x5LCByZWRlZmluZSAtPnVwZGF0ZV9saW1pdHMoKSB0byB0YWtlIGEgcG9saWN5IHBvaW50ZXIK
+PiA+IGluc3RlYWQKPiA+IG9mIGEgQ1BVIG51bWJlciBhbmQgdXBkYXRlIGJvdGggZHJpdmVycyBp
+bXBsZW1lbnRpbmcgaXQsCj4gPiBpbnRlbF9wc3RhdGUKPiA+IGFuZCBhbWQtcHN0YXRlLCBhcyBu
+ZWVkZWQuCj4gPiAKPiA+IFNpZ25lZC1vZmYtYnk6IFJhZmFlbCBKLiBXeXNvY2tpIDxyYWZhZWwu
+ai53eXNvY2tpQGludGVsLmNvbT4KPiAKSGkgUmFmYWVsLAoKPiBIaSBTcmluaXZhcywKPiAKPiBJ
+ZiB5b3UgaGF2ZSBhbnkgY29uY2VybnMgcmVnYXJkaW5nIHRoaXMgcGF0Y2gsIHBsZWFzZSBsZXQg
+bWUga25vdwo+IChub3RlIHRoYXQgaXQgaXMgYmFzZWQgb24gdGhlIFswNS8xMF0pLgo+IApDaGFu
+Z2VzIGxvb2tzIGZpbmUsIGJ1dCB3YW50cyB0byB0ZXN0IG91dCBzb21lIHVwZGF0ZSBsaW1pdHMg
+ZnJvbQppbnRlcnJ1cHQgcGF0aC4KQ2hlY2tlZCB5b3VyIGJyYW5jaGVzIGF0IGxpbnV4LXBtLCBu
+b3QgYWJsZSB0byBsb2NhdGUgaW4gYW55IGJyYW5jaCB0bwphcHBseS4KUGxlYXNlIHBvaW50IG1l
+IHRvIGEgYnJhbmNoLgoKVGhhbmtzLApTcmluaXZhcwoKPiA+IC0tLQo+ID4gwqBkcml2ZXJzL2Nw
+dWZyZXEvYW1kLXBzdGF0ZS5jwqDCoCB8wqDCoMKgIDcgKystLS0tLQo+ID4gwqBkcml2ZXJzL2Nw
+dWZyZXEvY3B1ZnJlcS5jwqDCoMKgwqDCoCB8wqDCoMKgIDIgKy0KPiA+IMKgZHJpdmVycy9jcHVm
+cmVxL2ludGVsX3BzdGF0ZS5jIHzCoMKgIDI5ICsrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0K
+PiA+IC0KPiA+IMKgaW5jbHVkZS9saW51eC9jcHVmcmVxLmjCoMKgwqDCoMKgwqDCoCB8wqDCoMKg
+IDIgKy0KPiA+IMKgNCBmaWxlcyBjaGFuZ2VkLCAyMiBpbnNlcnRpb25zKCspLCAxOCBkZWxldGlv
+bnMoLSkKPiA+IAo+ID4gLS0tIGEvZHJpdmVycy9jcHVmcmVxL2FtZC1wc3RhdGUuYwo+ID4gKysr
+IGIvZHJpdmVycy9jcHVmcmVxL2FtZC1wc3RhdGUuYwo+ID4gQEAgLTgyMSwxOSArODIxLDE2IEBA
+Cj4gPiDCoMKgwqDCoMKgwqDCoCBzY2hlZHVsZV93b3JrKCZzY2hlZF9wcmVmY29yZV93b3JrKTsK
+PiA+IMKgfQo+ID4gCj4gPiAtc3RhdGljIHZvaWQgYW1kX3BzdGF0ZV91cGRhdGVfbGltaXRzKHVu
+c2lnbmVkIGludCBjcHUpCj4gPiArc3RhdGljIHZvaWQgYW1kX3BzdGF0ZV91cGRhdGVfbGltaXRz
+KHN0cnVjdCBjcHVmcmVxX3BvbGljeQo+ID4gKnBvbGljeSkKPiA+IMKgewo+ID4gLcKgwqDCoMKg
+wqDCoCBzdHJ1Y3QgY3B1ZnJlcV9wb2xpY3kgKnBvbGljeSBfX2ZyZWUocHV0X2NwdWZyZXFfcG9s
+aWN5KSA9Cj4gPiBjcHVmcmVxX2NwdV9nZXQoY3B1KTsKPiA+IMKgwqDCoMKgwqDCoMKgIHN0cnVj
+dCBhbWRfY3B1ZGF0YSAqY3B1ZGF0YTsKPiA+IMKgwqDCoMKgwqDCoMKgIHUzMiBwcmV2X2hpZ2gg
+PSAwLCBjdXJfaGlnaCA9IDA7Cj4gPiDCoMKgwqDCoMKgwqDCoCBib29sIGhpZ2hlc3RfcGVyZl9j
+aGFuZ2VkID0gZmFsc2U7Cj4gPiArwqDCoMKgwqDCoMKgIHVuc2lnbmVkIGludCBjcHUgPSBwb2xp
+Y3ktPmNwdTsKPiA+IAo+ID4gwqDCoMKgwqDCoMKgwqAgaWYgKCFhbWRfcHN0YXRlX3ByZWZjb3Jl
+KQo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybjsKPiA+IAo+ID4gLcKg
+wqDCoMKgwqDCoCBpZiAoIXBvbGljeSkKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IHJldHVybjsKPiA+IC0KPiA+IMKgwqDCoMKgwqDCoMKgIGlmIChhbWRfZ2V0X2hpZ2hlc3RfcGVy
+ZihjcHUsICZjdXJfaGlnaCkpCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0
+dXJuOwo+ID4gCj4gPiAtLS0gYS9kcml2ZXJzL2NwdWZyZXEvY3B1ZnJlcS5jCj4gPiArKysgYi9k
+cml2ZXJzL2NwdWZyZXEvY3B1ZnJlcS5jCj4gPiBAQCAtMjc0MSw3ICsyNzQxLDcgQEAKPiA+IMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm47Cj4gPiAKPiA+IMKgwqDCoMKgwqDC
+oMKgIGlmIChjcHVmcmVxX2RyaXZlci0+dXBkYXRlX2xpbWl0cykKPiA+IC3CoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIGNwdWZyZXFfZHJpdmVyLT51cGRhdGVfbGltaXRzKGNwdSk7Cj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjcHVmcmVxX2RyaXZlci0+dXBkYXRlX2xpbWl0
+cyhwb2xpY3kpOwo+ID4gwqDCoMKgwqDCoMKgwqAgZWxzZQo+ID4gwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIGNwdWZyZXFfcG9saWN5X3JlZnJlc2gocG9saWN5KTsKPiA+IMKgfQo+ID4g
+LS0tIGEvZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jCj4gPiArKysgYi9kcml2ZXJzL2Nw
+dWZyZXEvaW50ZWxfcHN0YXRlLmMKPiA+IEBAIC0xMzUzLDE0ICsxMzUzLDkgQEAKPiA+IMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjcHVmcmVxX3VwZGF0ZV9wb2xpY3koY3B1KTsKPiA+
+IMKgfQo+ID4gCj4gPiAtc3RhdGljIGJvb2wgaW50ZWxfcHN0YXRlX3VwZGF0ZV9tYXhfZnJlcShz
+dHJ1Y3QgY3B1ZGF0YSAqY3B1ZGF0YSkKPiA+ICtzdGF0aWMgdm9pZCBfX2ludGVsX3BzdGF0ZV91
+cGRhdGVfbWF4X2ZyZXEoc3RydWN0IGNwdWZyZXFfcG9saWN5Cj4gPiAqcG9saWN5LAo+ID4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IGNwdWRhdGEgKmNwdWRhdGEpCj4gPiDCoHsK
+PiA+IC3CoMKgwqDCoMKgwqAgc3RydWN0IGNwdWZyZXFfcG9saWN5ICpwb2xpY3kgX19mcmVlKHB1
+dF9jcHVmcmVxX3BvbGljeSk7Cj4gPiAtCj4gPiAtwqDCoMKgwqDCoMKgIHBvbGljeSA9IGNwdWZy
+ZXFfY3B1X2dldChjcHVkYXRhLT5jcHUpOwo+ID4gLcKgwqDCoMKgwqDCoCBpZiAoIXBvbGljeSkK
+PiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiBmYWxzZTsKPiA+IC0KPiA+
+IMKgwqDCoMKgwqDCoMKgIGd1YXJkKGNwdWZyZXFfcG9saWN5X3dyaXRlKShwb2xpY3kpOwo+ID4g
+Cj4gPiDCoMKgwqDCoMKgwqDCoCBpZiAoaHdwX2FjdGl2ZSkKPiA+IEBAIC0xMzcwLDE2ICsxMzY1
+LDI4IEBACj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IGNwdWRhdGEtPnBzdGF0ZS5tYXhfZnJlcSA6IGNwdWRhdGEtCj4gPiA+cHN0YXRlLnR1cmJvX2Zy
+ZXE7Cj4gPiAKPiA+IMKgwqDCoMKgwqDCoMKgIHJlZnJlc2hfZnJlcXVlbmN5X2xpbWl0cyhwb2xp
+Y3kpOwo+ID4gK30KPiA+ICsKPiA+ICtzdGF0aWMgYm9vbCBpbnRlbF9wc3RhdGVfdXBkYXRlX21h
+eF9mcmVxKHN0cnVjdCBjcHVkYXRhICpjcHVkYXRhKQo+ID4gK3sKPiA+ICvCoMKgwqDCoMKgwqAg
+c3RydWN0IGNwdWZyZXFfcG9saWN5ICpwb2xpY3kgX19mcmVlKHB1dF9jcHVmcmVxX3BvbGljeSk7
+Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgIHBvbGljeSA9IGNwdWZyZXFfY3B1X2dldChjcHVkYXRh
+LT5jcHUpOwo+ID4gK8KgwqDCoMKgwqDCoCBpZiAoIXBvbGljeSkKPiA+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIHJldHVybiBmYWxzZTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqAgX19p
+bnRlbF9wc3RhdGVfdXBkYXRlX21heF9mcmVxKHBvbGljeSwgY3B1ZGF0YSk7Cj4gPiAKPiA+IMKg
+wqDCoMKgwqDCoMKgIHJldHVybiB0cnVlOwo+ID4gwqB9Cj4gPiAKPiA+IC1zdGF0aWMgdm9pZCBp
+bnRlbF9wc3RhdGVfdXBkYXRlX2xpbWl0cyh1bnNpZ25lZCBpbnQgY3B1KQo+ID4gK3N0YXRpYyB2
+b2lkIGludGVsX3BzdGF0ZV91cGRhdGVfbGltaXRzKHN0cnVjdCBjcHVmcmVxX3BvbGljeQo+ID4g
+KnBvbGljeSkKPiA+IMKgewo+ID4gLcKgwqDCoMKgwqDCoCBzdHJ1Y3QgY3B1ZGF0YSAqY3B1ZGF0
+YSA9IGFsbF9jcHVfZGF0YVtjcHVdOwo+ID4gK8KgwqDCoMKgwqDCoCBzdHJ1Y3QgY3B1ZGF0YSAq
+Y3B1ZGF0YSA9IGFsbF9jcHVfZGF0YVtwb2xpY3ktPmNwdV07Cj4gPiArCj4gPiArwqDCoMKgwqDC
+oMKgIF9faW50ZWxfcHN0YXRlX3VwZGF0ZV9tYXhfZnJlcShwb2xpY3ksIGNwdWRhdGEpOwo+ID4g
+Cj4gPiAtwqDCoMKgwqDCoMKgIGlmIChpbnRlbF9wc3RhdGVfdXBkYXRlX21heF9mcmVxKGNwdWRh
+dGEpKQo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaHlicmlkX3VwZGF0ZV9jYXBh
+Y2l0eShjcHVkYXRhKTsKPiA+ICvCoMKgwqDCoMKgwqAgaHlicmlkX3VwZGF0ZV9jYXBhY2l0eShj
+cHVkYXRhKTsKPiA+IMKgfQo+ID4gCj4gPiDCoHN0YXRpYyB2b2lkIGludGVsX3BzdGF0ZV91cGRh
+dGVfbGltaXRzX2Zvcl9hbGwodm9pZCkKPiA+IC0tLSBhL2luY2x1ZGUvbGludXgvY3B1ZnJlcS5o
+Cj4gPiArKysgYi9pbmNsdWRlL2xpbnV4L2NwdWZyZXEuaAo+ID4gQEAgLTM5OSw3ICszOTksNyBA
+QAo+ID4gwqDCoMKgwqDCoMKgwqAgdW5zaWduZWQgaW50wqDCoMKgICgqZ2V0KSh1bnNpZ25lZCBp
+bnQgY3B1KTsKPiA+IAo+ID4gwqDCoMKgwqDCoMKgwqAgLyogQ2FsbGVkIHRvIHVwZGF0ZSBwb2xp
+Y3kgbGltaXRzIG9uIGZpcm13YXJlCj4gPiBub3RpZmljYXRpb25zLiAqLwo+ID4gLcKgwqDCoMKg
+wqDCoCB2b2lkwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAoKnVwZGF0ZV9saW1pdHMpKHVuc2lnbmVk
+IGludCBjcHUpOwo+ID4gK8KgwqDCoMKgwqDCoCB2b2lkwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAo
+KnVwZGF0ZV9saW1pdHMpKHN0cnVjdCBjcHVmcmVxX3BvbGljeQo+ID4gKnBvbGljeSk7Cj4gPiAK
+PiA+IMKgwqDCoMKgwqDCoMKgIC8qIG9wdGlvbmFsICovCj4gPiDCoMKgwqDCoMKgwqDCoCBpbnTC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKCpiaW9zX2xpbWl0KShpbnQgY3B1LCB1bnNpZ25lZCBp
+bnQKPiA+ICpsaW1pdCk7Cj4gPiAKPiA+IAo+ID4gCj4gPiAKPiAKCg==
 
 
