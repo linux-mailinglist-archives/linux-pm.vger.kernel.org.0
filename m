@@ -1,132 +1,102 @@
-Return-Path: <linux-pm+bounces-24885-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24886-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D921AA7E587
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Apr 2025 18:03:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0BFEA7E589
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Apr 2025 18:03:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 721FD3B083A
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Apr 2025 15:53:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52E481898415
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Apr 2025 15:56:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 829BB204F97;
-	Mon,  7 Apr 2025 15:50:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38186207DE6;
+	Mon,  7 Apr 2025 15:53:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xe5YDho2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CcuoTgV4"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581BD1C1AD4;
-	Mon,  7 Apr 2025 15:50:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C90A204C11;
+	Mon,  7 Apr 2025 15:53:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744041047; cv=none; b=fs52c0DURvosjwLf0JvMFNHnPmCR/sutT7PmROlohjwk8QJ5gZQ2DCiJD3gv/a3GpHOUDhRaAtcFhrNGlWmIbibVwKL8WDTPwV4fEksTMjFlNtvKcQs8UgkesPOLUqCLUuOFIrm937nBcMiOAaoizm9CMk4YgyhKBQL8EjfSdVw=
+	t=1744041202; cv=none; b=dog1YwzrB/kHryQ7aaMtzHRKlvQfaylR/qMaazq7dLFu8lFGXYIlo/4Ye82xPpfKShZ+i9Dto2D6/gYNOlrr652MUtxYpoc0Va4/LExkO+oDZikf3h90/hjMTNNtDamcrwS82Z5i4Ts+sAK0Jvds+8hjv3M2Pt+wSLbB2mqpKr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744041047; c=relaxed/simple;
-	bh=HOVDM5euQFPEYRsSiD6INj8UKBND48N799jToiiUcwM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X4CfPnv//IKJR0zv8QvCQ2qgP5XW36ItgYCh8iv8s1IS5nElA7FTI1KPS5FzGThKe6Y9O/rKyrMsC1ymM2WGlYN1FIhGQgVX6cF+kgNGScIGLESImikURyga+L4g+fS7FJD9jRgeJetSafqqxPShVn+hWqI8rMHp2nQ/U8xjti4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xe5YDho2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D89AAC4CEE9;
-	Mon,  7 Apr 2025 15:50:43 +0000 (UTC)
+	s=arc-20240116; t=1744041202; c=relaxed/simple;
+	bh=NIrIJzzmdQL32hJN2sevH3JixRQ0+8i8QHBKjFJpt5o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=f843lp7QXjGM0KgVv3QzOOs0qDCAqrSGCXBVnyMjrivSk+tnBYGFHjBeJU3FeXxI4rx0Vya/gcj5B0QkfPd7v3zZkpiBQfNedtzMa8rTAaOs82DejBBF/aEV8f9QqQEcEp59+7TMrA+b9+b6pKEjoS63hZHwFvf5YwVuulbKOYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CcuoTgV4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B207C4CEE7;
+	Mon,  7 Apr 2025 15:53:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744041047;
-	bh=HOVDM5euQFPEYRsSiD6INj8UKBND48N799jToiiUcwM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Xe5YDho20tt0siJerFzpmq9NDCAWHIYtVGUro+LhqodieEuMdX1pzUrpO+VGSpNOq
-	 vdkCmy6gSbV1u6JVxZzIBd/IMiO8VXy/kkLE9hdndv16ribWcRslGQvqz5SK1Po17Y
-	 393sKyBd68Uy7PNdkAfil3fYnhm1ipP67KyqsrZc0KryQ5IbSz30kcVHVn+svRpveX
-	 x9iRGix2zt2ssYZuEo1SQ56H7fTRcmyfab/94gClr6VDZ6lQTM6v0UeWORPDMGsUeH
-	 Pru+qlgwBH5BYsS+JLfEp2YLGcYygCaOnl0FQ8vLyiU2GbSmEMYzmdASdyauQjw8zl
-	 euhgED/iB1JQQ==
-Date: Mon, 7 Apr 2025 16:50:41 +0100
+	s=k20201202; t=1744041201;
+	bh=NIrIJzzmdQL32hJN2sevH3JixRQ0+8i8QHBKjFJpt5o=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=CcuoTgV47FXyu6zNK+dq2segR1GdghpPTPda+6XN00y2K+8rJo7H0kIZtgREE8ret
+	 xiPrhuZeMJZiNO0f5SgpSU4bn+WB1SwVk9QMgsIRaJZrsRCCJJ5MQq22uaklCAWr3p
+	 RCSa96y7/Tjg8eBgeGwWMTKuxoTPQfNUKrnK2m8a7G+FbugClJgP/pzrNVPMRreg5f
+	 LGbpzKYe46OlGiCOLqdsWXslA7ZF8zXhprO5LZjFqafFLSBA1Nej6sP1BBnwgyG/Fv
+	 xMB7FCT0vP8cSGaTEo3sT2/hSQVdC8tx7eAdlyNlmCuVUTpMigDARSS/KeuyfJ6Zgr
+	 CmfeyiEeMcyjQ==
 From: Conor Dooley <conor@kernel.org>
-To: Drew Fustini <drew@pdp7.com>
-Cc: Michal Wilczynski <m.wilczynski@samsung.com>, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, guoren@kernel.org,
-	wefu@redhat.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, alex@ghiti.fr, jszhang@kernel.org,
-	ulf.hansson@linaro.org, m.szyprowski@samsung.com,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v8 5/5] riscv: Enable PM_GENERIC_DOMAINS for T-Head SoCs
-Message-ID: <20250407-synergy-staff-b1cec90ffe72@spud>
-References: <20250311171900.1549916-1-m.wilczynski@samsung.com>
- <CGME20250311172035eucas1p104dcbae706bec735194a1dc4a30db969@eucas1p1.samsung.com>
- <20250311171900.1549916-6-m.wilczynski@samsung.com>
- <Z/ArFVx6l5Urh9KV@x1>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	drew@pdp7.com,
+	guoren@kernel.org,
+	wefu@redhat.com,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	jszhang@kernel.org,
+	ulf.hansson@linaro.org,
+	m.szyprowski@samsung.com,
+	Michal Wilczynski <m.wilczynski@samsung.com>
+Cc: conor@kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: (subset) [PATCH v8 0/5] TH1520 SoC: Add AON firmware & power-domain support
+Date: Mon,  7 Apr 2025 16:53:03 +0100
+Message-ID: <20250407-diabolic-draw-200389f7d6f0@spud>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20250311171900.1549916-1-m.wilczynski@samsung.com>
+References:  <CGME20250311172030eucas1p12dda42760f751174e774b8d1a3d3f4cd@eucas1p1.samsung.com> <20250311171900.1549916-1-m.wilczynski@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="1GHzjvTYK5Cechhc"
-Content-Disposition: inline
-In-Reply-To: <Z/ArFVx6l5Urh9KV@x1>
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=657; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=n+5hM5kQu6ehBQ3n8017RawWqIN18GKPHpFuSaJtspw=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDOmfv9w78Ij31uJti0qcPn9UvyjW1zH94RHDDZG1DJ+6X /yfkxfp3lHKwiDGwSArpsiSeLuvRWr9H5cdzj1vYeawMoEMYeDiFICJzCpk+M1mvj/LPvDz037h SRO3vs1+a+fS33fCuZm172lyo7OdYxsjQ8sti/PNp0IbLrEFvmBy6Db5KMIf8iaLq0X9ocBlnz5 1VgA=
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
 
+From: Conor Dooley <conor.dooley@microchip.com>
 
---1GHzjvTYK5Cechhc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, 11 Mar 2025 18:18:55 +0100, Michal Wilczynski wrote:
+> This patch series introduces and documents power management (PM) support and
+> the AON firmware driver for the T-Head TH1520 SoC, as used on the LicheePi 4A
+> board. While part of a larger effort to enable the Imagination BXM-4-64 GPU
+> upstream, these patches can merge independently.
+> 
+> Bigger series cover letter:
+> https://lore.kernel.org/all/20250219140239.1378758-1-m.wilczynski@samsung.com/
+> 
+> [...]
 
-On Fri, Apr 04, 2025 at 11:55:17AM -0700, Drew Fustini wrote:
-> On Tue, Mar 11, 2025 at 06:19:00PM +0100, Michal Wilczynski wrote:
-> > T-Head SoCs feature separate power domains (power islands) for major
-> > components like the GPU, Audio, and NPU. To manage the power states of
-> > these components effectively, the kernel requires generic power domain
-> > support.
-> >=20
-> > This commit enables `CONFIG_PM_GENERIC_DOMAINS` for T-Head SoCs,
-> > allowing the power domain driver for these components to be compiled and
-> > integrated. This ensures proper power management and energy efficiency
-> > on T-Head platforms.
-> >=20
-> > By selecting `PM_GENERIC_DOMAINS`, we provide the necessary framework
-> > for the power domain drivers to function correctly on RISC-V
-> > architecture with T-Head SoCs.
-> >=20
-> > Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
-> > ---
-> >  arch/riscv/Kconfig.socs | 1 +
-> >  1 file changed, 1 insertion(+)
-> >=20
-> > diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-> > index 1916cf7ba450..83833ded8908 100644
-> > --- a/arch/riscv/Kconfig.socs
-> > +++ b/arch/riscv/Kconfig.socs
-> > @@ -53,6 +53,7 @@ config ARCH_THEAD
-> >  	bool "T-HEAD RISC-V SoCs"
-> >  	depends on MMU && !XIP_KERNEL
-> >  	select ERRATA_THEAD
-> > +	select PM_GENERIC_DOMAINS if PM
-> >  	help
-> >  	  This enables support for the RISC-V based T-HEAD SoCs.
-> > =20
-> > --=20
-> > 2.34.1
-> >=20
->=20
-> Reviewed-by: Drew Fustini <drew@pdp7.com>
->=20
-> Conor - would you be able to take this Kconfig.socs patch?
+Applied to riscv-config-for-next, thanks!
 
-I can I suppose, sure.
+[5/5] riscv: Enable PM_GENERIC_DOMAINS for T-Head SoCs
+      https://git.kernel.org/conor/c/54fe9380a50b
 
---1GHzjvTYK5Cechhc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ/P0UQAKCRB4tDGHoIJi
-0iqrAP98LTJtRIOeY8UUUHZUC78KX8XxI12BXLyp4jgDxClmsgEA0QO0tJ0PHxnZ
-yruNFvb0b0zbXqoxQUCkKLMZmgOsDQM=
-=bAyp
------END PGP SIGNATURE-----
-
---1GHzjvTYK5Cechhc--
+Thanks,
+Conor.
 
