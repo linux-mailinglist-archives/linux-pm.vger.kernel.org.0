@@ -1,139 +1,196 @@
-Return-Path: <linux-pm+bounces-24945-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24946-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5A52A80F51
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 17:09:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3390AA80F88
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 17:15:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C8D787B8FF3
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 15:04:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C32174634AA
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 15:11:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B74C22B8A0;
-	Tue,  8 Apr 2025 15:04:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87A042288D3;
+	Tue,  8 Apr 2025 15:11:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kti8LqJJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U8qNatti"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f195.google.com (mail-pf1-f195.google.com [209.85.210.195])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F5B51EB194;
-	Tue,  8 Apr 2025 15:04:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86F6227E96;
+	Tue,  8 Apr 2025 15:11:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744124666; cv=none; b=smOkkuvSwcVpjXsqELiVO5B79R+ZtKSdX2pjK0ZgmwNjZMvjhredsWbojilLxfwnKVCQVwg+/a786ZG0Q6Az5G5WAwiy+a0rWAzUkwUurIX2gwN6qsQdCr1cltXjmmRHVOoUL6zcah9V5gkvyI99/xVWq3X5c4IKjs+qyMcwCZs=
+	t=1744125095; cv=none; b=EgEPmK5ijGlwgnvJfkDV97PlHSP2E4y9qPHAKZWuh9MhAOjcaCBGvaZkR4T9I89cwc5UUcITzDmBYZ+HxFozxWxIt1Ei3d0c04FENFYcSm539Sr3f0UFT28lCOeo688B0Eam7ekldPzPJ80q0fYUXtiGdJhCIAuMnQpqc96fcwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744124666; c=relaxed/simple;
-	bh=0idBfCTzKenTxIiSwgSu/KdenyNnfTy6Efd7dSG2ssA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YO5rqUwwPAfNx/7IwFva8lsOM2WU2r96iZJ5+CEcyRPDaEoZxxR50n9Y623iAEgpSVbRcTM/i0dtXUYbWhivKK6UI3Ti70vCheDsOCVsonN7roT881lGJyJBzJ7UffktSM2fC5iVrjQ31n4xGk8W0tU/+8uK5vIlPtSBuz2gQBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kti8LqJJ; arc=none smtp.client-ip=209.85.210.195
+	s=arc-20240116; t=1744125095; c=relaxed/simple;
+	bh=iAge/TCQFEQxz188bugCjBSt7K57C1F/d/6gwLwpoCw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UJLp85aK0h689+UOfgdFIgBK5CcMJMeu/6rD8r6n0VDAaWML2lzEQ1tVi460GPhLtSn2sjzOVe6B0UgapyBcGeO2ylLRalvDSl2WWBPJQ56zcA8M1yfkponcafROHBJNFC1gHassCrvEAEtcFDxZdSXJm/PTN3WrkcDz+1X/Iaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U8qNatti; arc=none smtp.client-ip=209.85.219.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f195.google.com with SMTP id d2e1a72fcca58-7399838db7fso5134960b3a.0;
-        Tue, 08 Apr 2025 08:04:23 -0700 (PDT)
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6e8fb83e137so51574916d6.0;
+        Tue, 08 Apr 2025 08:11:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744124663; x=1744729463; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1744125092; x=1744729892; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hW0uMB23s6rTN+79K6wuOhxoVdGvng8abYobjgd2dY0=;
-        b=Kti8LqJJze+WRxQ1rmG31G9KAtsEOF2oSivBpKHgAsE8cnV16wdW1tw6QTyUkc4npZ
-         UN65CsEkICj6nR+s5l1XhYbx1CEgV9a3SsddDg1bEML6t63R3VcPQac2rehXVVuizGdQ
-         MBkMCpyFp/CJRKN+D0y1i/fS5yigH/NENkupU7+EtgTfVsnLR1J0bkkKowD1rDTPbvJk
-         2utHrp8+iju1Wq/3Nb9hCLq+lVnMD5yIY44NgTHnJ3ejSJUotvN0gAOLfYZ0gamX+wQ/
-         5Z2JyIKUdnJyF27x1V/hAMcaXhlG077nWme9TXYkKLtwYj5Dzhn+xuWDAqs9IyZM/Me1
-         R5Cw==
+        bh=fi2eBmkzJiBdyrJlnjIzeZPmXlpwSuN6LV/0MwZZJQk=;
+        b=U8qNatti0qrsZHGCzmGv6ql/rwWpZHtmzA50WAQ4421wkZqGdyl9JFha6twjgSdiEG
+         h8qJ7vSvKoJUev+0rWt626i6ltKZ6FOpeC8LbxDs3KkGoe/vzid+N6ZelIGKBnpa+z6n
+         QAvRiPiU6AakIk/1FC+3p4BlbSalFX96U97oBSejJFNGfJ1QT8xfDvCtFUgtny0FJc95
+         hKKDD8JuX5uJwbiddRTt6MgLn2FvMZs2Ur0vNxJrquSiSDxpuAkTzjOK6YLPjMKwF06+
+         +E5a1ZyY3S9sEJHaAXglWAcRzdvWRU9nYcTj18+utn2yWrMaTJtg17v2DecgkOjG63HU
+         8+4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744124663; x=1744729463;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1744125092; x=1744729892;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hW0uMB23s6rTN+79K6wuOhxoVdGvng8abYobjgd2dY0=;
-        b=OwK/vTDCp5x1kFskCkQkZMt2IufC8yssXszTjuhslWFJ7gG1SNtcpJkKraIs3Wgq2g
-         oAUzn1/770WhfpjhRZBg9LcLLYYY0hIEUMCV3DdjGBmyLSVza6LhcVpS9jqr3zWJxtX7
-         TE4qw5cfBu/1fltqqM9hR/xHiQR0wU7zepif5IooR21gMHKgo6X6lN8B04U9gzT2RcTX
-         0/Zqkhg26eOvLgFgHebevpBq95U30jSvxCQAN6bwQdTn8q6ULokzMrRw+mwkib+1Btdv
-         PKgH94FFmivUWZNC+LY8iJPnC4fmaikuk8DvuiBtzh4kpjc2/eHTa0EkYs8OQ+I13nmG
-         cvVg==
-X-Forwarded-Encrypted: i=1; AJvYcCW/88P7nQzSZd7eAmRGIxUoM0JiKv6y8MK4uRKpqSQcK0d+JUNnzEKY+kLtniqLq+en4KvlpiiYQxfu2JA=@vger.kernel.org, AJvYcCW7ZwFfrLCdE9mhSowBw4NFdSp8Vci6GlIhK+PLGxSNRUQG5BjuwusybuM+gPY+sl4P9tunuBsbDZ8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+UznuYE/FZwCkMnbWpIhwAeBC5RmGsnvAiQbJepYv0Moby2Qp
-	lZohrCSoeHOnYvGO2g/SvRY7gBVP1Z+cjNrNT4EuUxfmI07rlzuF
-X-Gm-Gg: ASbGnctl/X6bN/IIbiTchp2Oo6O753pdvVWAAx5ApNXkDzPQRdFc572Z0Q2FcZciCSJ
-	UGxAhT4RPK5Nlmuma9KfQLo5khQ7ubXu3SLRYJfWIoTQjK+j+mWM+9axFRVZXpl4rTsWRitgwn+
-	tfol3sox6B6CdZAK8O88YjcwKfgo5TSxJuRxPTT5Xl8/e4PSKxK4bWy2Dqmj4AgZP3FeNlXVj+r
-	IrV9ocb0c4A9X190zZZXrKMXqbn1JsEXWMS8Q//fczU0aZeBnsls18ALck1p+1Jioym9QTM7UMi
-	9YYSttmwll19KgPtp85Z9KwIukqNoA6Ou1FkhTzBL0IaGEHu8mOfLJ6RHkLkhaKH+zcFCZ45xFC
-	mwdzWhw==
-X-Google-Smtp-Source: AGHT+IFcrw32IadEZbTZ2yTefdbGLJ4deVn8ImGq3fcHBOxM9j/Ojp5mMqxmgwQ1EbK8z0e1SyOJQw==
-X-Received: by 2002:aa7:875a:0:b0:736:b3cb:5db with SMTP id d2e1a72fcca58-73b9d4019ddmr4916731b3a.11.1744124663010;
-        Tue, 08 Apr 2025 08:04:23 -0700 (PDT)
-Received: from henry.localdomain ([111.202.148.133])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-739d9ea097asm11068474b3a.90.2025.04.08.08.04.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Apr 2025 08:04:22 -0700 (PDT)
-From: Henry Martin <bsdhenrymartin@gmail.com>
-To: sudeep.holla@arm.com,
-	cristian.marussi@arm.com,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org
-Cc: arm-scmi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Henry Martin <bsdhenrymartin@gmail.com>
-Subject: [PATCH v2 2/2] cpufreq: scpi: Fix null-ptr-deref in scpi_cpufreq_get_rate()
-Date: Tue,  8 Apr 2025 23:03:54 +0800
-Message-Id: <20250408150354.104532-3-bsdhenrymartin@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250408150354.104532-1-bsdhenrymartin@gmail.com>
-References: <20250408150354.104532-1-bsdhenrymartin@gmail.com>
+        bh=fi2eBmkzJiBdyrJlnjIzeZPmXlpwSuN6LV/0MwZZJQk=;
+        b=LxLsFkSxYHTEZugp/ZEBiX0aESm/JpGC1UmfAqvNuxWX+BcUwvhz5lxx2o9L8wpvPT
+         0tQgQRuYU5HYJBQR51f+CNAKh2wXx1ch8XbPfWmi6MhfkuiPFTEUSDOn4yqdUW91fSzK
+         5BdyU1TfYSFgz//yxT/LQ5TjhaHvbWUq2PMucEdy1fB7sM1FWuFyJyNa1PGYs13LhCbC
+         x283g+svvqcjCr5k2nfv4XeDb/Y6renZJM2GBBj8GkhrnPO40/T4C1bkE1XB2IxPakdC
+         P+Ae9D458BhmnZhK3FsT2W/mJEuyZuuPIbhWqL/49D7mBzrQoC5TfLqBOt6WOQZhkk7I
+         dNig==
+X-Forwarded-Encrypted: i=1; AJvYcCUPO2hqRq8/gq78clrLHCRTU7TGV0AFGMxRHg3G4fHWJ1th4Pgpvdmi7tdFJRNujO65MdxPAQn00+g=@vger.kernel.org, AJvYcCUai74JV9RYvmbGBvBde2a552mywVKtTQG6evmmmtxKtvghgwPC4OZbzC1oMJRzwORwfphl4nte@vger.kernel.org, AJvYcCVbkomYQ75rcuU+sLmelldOPEtgYDrVA3VS9J8mMwmM2H2pLLWBYMVYp0Gc9IAYwHuyb7CJcUnMcUzPbpr/@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxugec4ui2UqWqTxjUgU2vsEwZHvyTg9GgRy8bQ/0/I2xJpjyYz
+	MfDnd9NzBjA/qwVZzG5VJY27e8FCFsNx3PxDpeOVDM6tRAo4cAO8uB8LDQhtBykuZy+gnbjGDFR
+	BpTgwNUmjysVlk6oXLvEc2EltIf4=
+X-Gm-Gg: ASbGncsCb4EpquGEroieiB8VLfKetR+0MsGNBf+N/KZ3xQf8dzc/eo+sW/T8EPCu/5o
+	fQgln+2GnpLXpqYGExbChNVXLyFPwrKe2vV1LQiVxuI5Tz46SSOzhoN4gqA3ZPpw/lvcE5UUcg3
+	4RcMQ80v1kHv+fQ2v5cu+MrU2JwLlr7NOtXfUWf3N2KwcSigOIRkFxLsqjpw==
+X-Google-Smtp-Source: AGHT+IEBzzayKvqC39EUgHVBWtu/wY1YXqZBYY6cBaTXuY1bD1506pK2P8WVCfFC0SJvQwUENGg3TY07BxlZ30qZMmY=
+X-Received: by 2002:a05:6214:20a1:b0:6ed:df6:cdcd with SMTP id
+ 6a1803df08f44-6f0b749934amr221872706d6.21.1744125092487; Tue, 08 Apr 2025
+ 08:11:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250407234223.1059191-1-nphamcs@gmail.com> <20250407234223.1059191-4-nphamcs@gmail.com>
+ <20250408141555.GA816@cmpxchg.org>
+In-Reply-To: <20250408141555.GA816@cmpxchg.org>
+From: Nhat Pham <nphamcs@gmail.com>
+Date: Tue, 8 Apr 2025 08:11:21 -0700
+X-Gm-Features: ATxdqUHmaTfVyV2I-0EHfU2y-rKG2ACn3QSFVY1QEBvNDfhELczRDQ5ahbXOhYE
+Message-ID: <CAKEwX=PSK-f0mK=Ffsvqs72qicPAoUWW-MdcNurj4PO0NMuJ3w@mail.gmail.com>
+Subject: Re: [RFC PATCH 03/14] mm: swap: add a separate type for physical swap slots
+To: Johannes Weiner <hannes@cmpxchg.org>
+Cc: linux-mm@kvack.org, akpm@linux-foundation.org, hughd@google.com, 
+	yosry.ahmed@linux.dev, mhocko@kernel.org, roman.gushchin@linux.dev, 
+	shakeel.butt@linux.dev, muchun.song@linux.dev, len.brown@intel.com, 
+	chengming.zhou@linux.dev, kasong@tencent.com, chrisl@kernel.org, 
+	huang.ying.caritas@gmail.com, ryan.roberts@arm.com, viro@zeniv.linux.org.uk, 
+	baohua@kernel.org, osalvador@suse.de, lorenzo.stoakes@oracle.com, 
+	christophe.leroy@csgroup.eu, pavel@kernel.org, kernel-team@meta.com, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-cpufreq_cpu_get_raw() can return NULL when the target CPU is not present
-in the policy->cpus mask. scpi_cpufreq_get_rate() does not check for
-this case, which results in a NULL pointer dereference.
+On Tue, Apr 8, 2025 at 7:16=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.org>=
+ wrote:
+>
+> On Mon, Apr 07, 2025 at 04:42:04PM -0700, Nhat Pham wrote:
+> > In preparation for swap virtualization, add a new type to represent the
+> > physical swap slots of swapfile. This allows us to separates:
+> >
+> > 1. The logical view of the swap entry (i.e what is stored in page table
+> >    entries and used to index into the swap cache), represented by the
+> >    old swp_entry_t type.
+> >
+> > from:
+> >
+> > 2. Its physical backing state (i.e the actual backing slot on the swap
+> >    device), represented by the new swp_slot_t type.
+> >
+> > The functions that operate at the physical level (i.e on the swp_slot_t
+> > types) are also renamed where appropriate (prefixed with swp_slot_* for
+> > e.g). We also take this opportunity to re-arrange the header files
+> > (include/linux/swap.h and swapops.h), grouping the swap API into the
+> > following categories:
+> >
+> > 1. Virtual swap API (i.e functions on swp_entry_t type).
+> >
+> > 2. Swap cache API (mm/swap_state.c)
+> >
+> > 3. Swap slot cache API (mm/swap_slots.c)
+> >
+> > 4. Physical swap slots and device API (mm/swapfile.c).
+>
+> This all makes sense.
+>
+> However,
+>
+> > @@ -483,50 +503,37 @@ static inline long get_nr_swap_pages(void)
+> >       return atomic_long_read(&nr_swap_pages);
+> >  }
+> >
+> > -extern void si_swapinfo(struct sysinfo *);
+> > -swp_entry_t folio_alloc_swap(struct folio *folio);
+> > -bool folio_free_swap(struct folio *folio);
+> > -void put_swap_folio(struct folio *folio, swp_entry_t entry);
+> > -extern swp_entry_t get_swap_page_of_type(int);
+> > -extern int get_swap_pages(int n, swp_entry_t swp_entries[], int order)=
+;
+> > -extern int add_swap_count_continuation(swp_entry_t, gfp_t);
+> > -extern void swap_shmem_alloc(swp_entry_t, int);
+> > -extern int swap_duplicate(swp_entry_t);
+> > -extern int swapcache_prepare(swp_entry_t entry, int nr);
+> > -extern void swap_free_nr(swp_entry_t entry, int nr_pages);
+> > -extern void swapcache_free_entries(swp_entry_t *entries, int n);
+> > -extern void free_swap_and_cache_nr(swp_entry_t entry, int nr);
+> > +void si_swapinfo(struct sysinfo *);
+> > +swp_slot_t swap_slot_alloc_of_type(int);
+> > +int swap_slot_alloc(int n, swp_slot_t swp_slots[], int order);
+> > +void swap_slot_free_nr(swp_slot_t slot, int nr_pages);
+> > +void swap_slot_cache_free_slots(swp_slot_t *slots, int n);
+> >  int swap_type_of(dev_t device, sector_t offset);
+> > +sector_t swapdev_block(int, pgoff_t);
+> >  int find_first_swap(dev_t *device);
+> > -extern unsigned int count_swap_pages(int, int);
+> > -extern sector_t swapdev_block(int, pgoff_t);
+> > -extern int __swap_count(swp_entry_t entry);
+> > -extern int swap_swapcount(struct swap_info_struct *si, swp_entry_t ent=
+ry);
+> > -extern int swp_swapcount(swp_entry_t entry);
+> > -struct swap_info_struct *swp_swap_info(swp_entry_t entry);
+> > +unsigned int count_swap_pages(int, int);
+> > +struct swap_info_struct *swap_slot_swap_info(swp_slot_t slot);
+> >  struct backing_dev_info;
+> > -extern int init_swap_address_space(unsigned int type, unsigned long nr=
+_pages);
+> > -extern void exit_swap_address_space(unsigned int type);
+> > -extern struct swap_info_struct *get_swap_device(swp_entry_t entry);
+> > +struct swap_info_struct *swap_slot_tryget_swap_info(swp_slot_t slot);
+> >  sector_t swap_folio_sector(struct folio *folio);
+>
+> this is difficult to review.
+>
+> Can you please split out:
+>
+> 1. Code moves / cut-and-paste
+>
+> 2. Renames
+>
+> 3. New code
+>
+> into three separate steps
 
-Fixes: 343a8d17fa8d ("cpufreq: scpi: remove arm_big_little dependency")
-Signed-off-by: Henry Martin <bsdhenrymartin@gmail.com>
----
-V1 -> V2: Use `if (unlikely(!policy))` instead of `if (!policy)`
+Makes sense, yeah.
 
- drivers/cpufreq/scpi-cpufreq.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+I will reorganize the series as follows:
 
-diff --git a/drivers/cpufreq/scpi-cpufreq.c b/drivers/cpufreq/scpi-cpufreq.c
-index 17cda84f00df..dcbb0ae7dd47 100644
---- a/drivers/cpufreq/scpi-cpufreq.c
-+++ b/drivers/cpufreq/scpi-cpufreq.c
-@@ -29,9 +29,16 @@ static struct scpi_ops *scpi_ops;
- 
- static unsigned int scpi_cpufreq_get_rate(unsigned int cpu)
- {
--	struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
--	struct scpi_data *priv = policy->driver_data;
--	unsigned long rate = clk_get_rate(priv->clk);
-+	struct cpufreq_policy *policy;
-+	struct scpi_data *priv;
-+	unsigned long rate;
-+
-+	policy = cpufreq_cpu_get_raw(cpu);
-+	if (unlikely(!policy))
-+		return 0;
-+
-+	priv = policy->driver_data;
-+	rate = clk_get_rate(priv->clk);
- 
- 	return rate / 1000;
- }
--- 
-2.34.1
-
+1. Rearrange in the first patch (which I already did for
+mm/swapfile.c, but now I'll also rearrange the functions in header
+files as well).
+2. One more patch to rename the function and add the new type.
+3. The rest of the series (new API, new code, etc.).
 
