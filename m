@@ -1,204 +1,188 @@
-Return-Path: <linux-pm+bounces-24934-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24935-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97A21A8074D
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 14:36:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11E82A80BB8
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 15:20:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 617CC1B8104F
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 12:30:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AEC01BC4476
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 13:14:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CEEE26B0A2;
-	Tue,  8 Apr 2025 12:27:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 583621CAA71;
+	Tue,  8 Apr 2025 13:04:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VMrI9nxB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BAl9Fr5t"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E4B1B87CF
-	for <linux-pm@vger.kernel.org>; Tue,  8 Apr 2025 12:27:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809CD1C5F08;
+	Tue,  8 Apr 2025 13:04:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744115266; cv=none; b=NUSRjatw8BJUTtQL8pTmJRilgZn9iFU/EmshJE/FQORv5ePXg7SLLgX9oKC1UTea6Kp+quU41PYgNGv+Qzvhvw2qmipfPCOd1+OBTYCwsMm3Bo+hxDDxd+1xxwEOcvPZzRJ+6CWeY/3501xNd7Jusi0ExCzUmKSx82CO6MHJA3c=
+	t=1744117453; cv=none; b=ZRAXZkn2ARbH3cUqBJG/3M4x2DM1yJsvWwDCaXKT5Tx/v7wejoAr3hWMxxHafMYy9blEFGFMcDtLBNxzz+8vExNIa/2hxiDOo06A6+GTjl8O414lN5U/Nj9cRvXjcvXtwSTvwAXHvHa+wbP0vjo9ZmHUBxX1Qode8uLX42MMeKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744115266; c=relaxed/simple;
-	bh=IDQ1GUBQnBf8rB+j8B4YQyr6pwORfkpzRHAeXl4MJdI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=solo0UNmMRiCoCZlmPzG6DsakQqZ1MgdC36wwSfj9pK8q94vzqd8Ml7DCsYimrvj86AwEpUYrQ9xk3oxyVyeucD7ReX2D8CGDU4We9yzOrJd/rPEqh3IKKc+D6nkT+AEwvc2uNQZ41MYr+wfF/M5EMqlY0XS65iiEhzu17l/c48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VMrI9nxB; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-700b17551cdso53440597b3.0
-        for <linux-pm@vger.kernel.org>; Tue, 08 Apr 2025 05:27:44 -0700 (PDT)
+	s=arc-20240116; t=1744117453; c=relaxed/simple;
+	bh=phvG9LGBV5uu7snUj6raZk7nsiIEVPDHKML9MQ6RgRU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VJmfdyg3azFDNemkGBsihRdK2W/W080a4acwy1JiDOl6mk8q3Ankfq6DN72kebkF92pfFaMkEv5I9doW5/077c861eStj/fsfA7auI3Vv/+zGDY3lK/ID8Hh7c6x/DzVL++6i00iJVi5vrES3S/niRRzUxgODSnoQ/fm6yK7Pew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BAl9Fr5t; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-ac298c8fa50so927187166b.1;
+        Tue, 08 Apr 2025 06:04:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744115264; x=1744720064; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gB1seewdxiTr2VW07A3+uDKCe37V8ksv4C8EdOhGRy0=;
-        b=VMrI9nxB0s0Z99TUT7AT9OOLUGMyfuRHfG+aR+L2o2WS1Z8C76iRCy3CPMgS/R5JLQ
-         odPaDbDCDYb7ccEua9sI2sRWmDF7/XAMGe0GC+Hsqnp0Be5p9Ev8elj55TnkGpif/EwD
-         1GGhlNxIHGcccvmpxI26h4pfN4xAz4E6Asihf39+/Xzfg4Oey99U3Wx9cJTdiKo3lbML
-         Hz9fJY/HIeHdMEi1N3rcoGoO+y3LHC6QqxkXEItDV1LIVPQEhpKpdqMcbHt67xT1W+E3
-         4xul1M1L4/cAzkmQQflunjOP55QuoHwAp+7oBcTVy9a2aLB3gfRbJVH2UDV692i544d3
-         CMgA==
+        d=gmail.com; s=20230601; t=1744117450; x=1744722250; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=609ZDUaaXCTvHp63HLV78FTKwEGS1VrIa2wh0r/CJ10=;
+        b=BAl9Fr5tzHDAPY16tix2yGkHCF4e1zDhdk7MQq1gillR2LATJo7cfMmTPRhlIQETKs
+         srwgDyFa3ZdV8xDPqb8V7+Wm5Ni3fza83eMs4mcLll9FRkAVnZAZV9JIE6NqetBuQX8J
+         8ST+7moWeQoABRM8pfksnUjkjixloSsIYoF9iSnhM9BSXZhtbBSaJFl9vrEoy5AWTS+O
+         jgf2+h2qTcz40reGnUmp4oN155ndr/Fm90aSavIUhMeMU83AIbylnoxdYjXav70CglQV
+         xdNttv+xXQN1Eo2Q5ADVLzXSh6/gHgX2/AWEw41hGSQvo/7+pcHGPD2PVX3+VY3oSMQG
+         FZew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744115264; x=1744720064;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gB1seewdxiTr2VW07A3+uDKCe37V8ksv4C8EdOhGRy0=;
-        b=lWUmtA+O3q4n040Sj1GqGwJbIlweN65tRa0K2wn3ujRpq2huKcC0HoQqM3qrrFhcLE
-         bVOEeD/ZsMkbqta8SJpC3C6oOa3nflx0HtUm3oB/EraJ0RdkaoQWRcRzeauL9VfpamKU
-         Ex6brbM74qEYQHJfiPXSDOIh3MDA1fITJf3/wzRUfYHm/XWbNcpqRzDI51ljvfxMUY1C
-         29I0f/85ddgAmXZzrBgZwxCKvAphjKVBXsvrtIT/S4RWK+Ra/fN4Vt8mXhbl7C0//G3d
-         1Co7i78zK6nO67EWnAD2LLSq4ZLn+vyF5n9baAXqZbZ+vjaxlxVb+FdEI4lxIFgoovFP
-         RKNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUwq3RJMJsTa+G/RAFGEm1+lhHuqZTS6RWl+y88yW7gsY2V+V0p1dAVfpJ4jXiFjkDmAdTxB7YzVg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvkyRg/12ZQIHRUy7VUNKAEdwRwtEukY1ml97/85rBJsQQnY6d
-	fGmaS8oSB/emuiTCnIGAQpJJ5EBIaaz4S74yR0rrnQYTzcYPrf+iezYI2nn7NSvIPVkUabctPIr
-	SE53jniPwHYxodL4RB7FqdWkakOq0Sm5zRsjsyw==
-X-Gm-Gg: ASbGncvmAq3396/2i7IWxfqnEWTi0xx/UuH3rOvU2ZrnK5UhatadZbhw2MuKuelHl/7
-	KuESNMsVlrzP8RHhlXBhhrKX9oSequmEYfd9pJ0o5vC9gvnTsF0Fvl8dGvxT9Jx4fu7XE/52Iod
-	gp+vjbX1oWVvKmKmqjbBlBPJNde8g=
-X-Google-Smtp-Source: AGHT+IHPTBP1/MTjSrc/I/MptAtnciiKhGr+WPv5BjoVAvGTZrpvXVXjRqBEPOIQ+IqwWxaW3A1IyTTYeV/ni7FYYsI=
-X-Received: by 2002:a05:690c:4b06:b0:6f9:af1f:53a4 with SMTP id
- 00721157ae682-703e16636afmr292316087b3.32.1744115263719; Tue, 08 Apr 2025
- 05:27:43 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1744117450; x=1744722250;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=609ZDUaaXCTvHp63HLV78FTKwEGS1VrIa2wh0r/CJ10=;
+        b=sb8VZlZfoGdwaTRr4OufnUogMkM8FIx61NdhBhbeF2hbPPUSyqyOtzG/olXfCIdTJ/
+         59mk2ERV1olI+eWhhe8gVuyF93geD5LK1kOahnCRswydqTHDQO9kIwmjQDVWRaBVM8kE
+         65AChAEUtBWFhfGbHfqdPcFXLGc4x/LQPuAHYR+6XcTYskoE1KMSxH4YZlu4iobWBHGd
+         G74+mXgNu47BClSbjCZbM7D3RAcLGDeWlz6Rb68mYa0f2hKBCVtu16pASIl7z8wEu/CH
+         ai7xXcBlmkBUirIv1JgZRYqwwRY2MFMOkazc4vU/CKpNsmumEmTqWRcBP/O+4VEnV4cx
+         Mg7g==
+X-Forwarded-Encrypted: i=1; AJvYcCU37RJOoUJ2z1cfXzC7GbsMTKsCpprVbpLiI/mV5TZRm0cfUgi6PoieyIuw6vc12kZzUAZ3ute6aZA=@vger.kernel.org, AJvYcCWW7s9CAqkyBdOMUQm38lCfKC1lqRTQCZ/2t5sgtj/kzs7IU0urXDDAFi9UhBFjUotkQElfSefieM5/MpvS@vger.kernel.org, AJvYcCWfo2uqdawENiQ9EURX14fgxpJPHacSJeD6jdLaUvl6CpBqP9akyZLiZJK7yW0qRHjVZGLDqsGa@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxA/5VR5bNEMfGTyEmt+6kS8PZjUM8z9H9dXSj4MnN1nKUSGR/
+	GBgyrJ6TQok/9KFcZ05E9JBDC0hKRvLT+JpTjrykxg3fKmRqcvsN
+X-Gm-Gg: ASbGncvgMv0LKmneHiFoH7Uvm919YnTfMv22vO8fZL2D0Y73TbVNH7mtqIeMudHmCLE
+	vKFtQrFmtE8mCG0FrwJNMeOYp/yrwn/CMDnumfyAVf3LMysUyHHJUB5RwmXnAKVAjz3LcE7fowg
+	lO5GL68iUZRer3vKlNTyiN80ED4FJj51CJTSibAvykUhc9KTHiZrL+XSw6NKwAzQ3bxc5rhrrgq
+	NyVBv+0b+8vbprz5B6F4qqb3woFboL3AKgjiJXxYV0u1pNk56kyHmpgBqaFm7PV0oePgEuPRCF5
+	lrDuc+pNE+FFvNhJidSVaq/SFIdmDsTOIB3b3UIQOWlBqj6JuuP3hd1DZxYO16Rws+R4tisd7pp
+	Y
+X-Google-Smtp-Source: AGHT+IGzSGm+pF8QY7moyCNfRsEXqKQ2FCB+iJZLi5PsFvzZo1B3MvlWqhsuKTJSbqBEzIrbkZYGNw==
+X-Received: by 2002:a17:907:3d92:b0:ac3:ccf7:3a11 with SMTP id a640c23a62f3a-ac7d198f6d6mr1424146766b.44.1744117449142;
+        Tue, 08 Apr 2025 06:04:09 -0700 (PDT)
+Received: from [172.17.139.17] ([163.114.131.192])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac7bfe99c7dsm919058366b.57.2025.04.08.06.04.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Apr 2025 06:04:08 -0700 (PDT)
+Message-ID: <983965b6-2262-4f72-a672-39085dcdaa3c@gmail.com>
+Date: Tue, 8 Apr 2025 14:04:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250303143629.400583-1-m.wilczynski@samsung.com>
- <CGME20250303143637eucas1p1a3abdea520ab88688de1263a5f07bba0@eucas1p1.samsung.com>
- <20250303143629.400583-5-m.wilczynski@samsung.com> <de50dd55e1285726e8d5ebae73877486.sboyd@kernel.org>
- <4c035603-4c11-4e71-8ef3-b857a81bf5ef@samsung.com> <aacd03a071dce7b340d7170eae59d662d58f23b1.camel@pengutronix.de>
- <e90a0c77-61a0-49db-86ba-bac253f8ec53@samsung.com> <38d9650fc11a674c8b689d6bab937acf@kernel.org>
- <CAPDyKFqsJaTrF0tBSY-TjpqdVt5=6aPQHYfnDebtphfRZSU=-Q@mail.gmail.com>
- <ef17e5d1-b364-41e1-ab8b-86140cbe69b2@samsung.com> <21983f8d-681d-4fed-ae44-42eee44c7f14@samsung.com>
-In-Reply-To: <21983f8d-681d-4fed-ae44-42eee44c7f14@samsung.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 8 Apr 2025 14:27:07 +0200
-X-Gm-Features: ATxdqUHjCmHHXOL_8iuBi_mjDxdVOZW28WwVm4E83fRcaHrvrprcU7GgL8K7Wwo
-Message-ID: <CAPDyKFofVfrK04OVmJ2aX_0uMV0b+f8dCpoezpA9LJbnSOf-9Q@mail.gmail.com>
-Subject: Re: [PATCH v1 4/4] clk: thead: Add GPU clock gate control with CLKGEN
- reset support
-To: Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, alex@ghiti.fr, 
-	aou@eecs.berkeley.edu, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org, 
-	jszhang@kernel.org, krzk+dt@kernel.org, m.szyprowski@samsung.com, 
-	mturquette@baylibre.com, palmer@dabbelt.com, paul.walmsley@sifive.com, 
-	robh@kernel.org, wefu@redhat.com, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 00/14] Virtual Swap Space
+To: Nhat Pham <nphamcs@gmail.com>, linux-mm@kvack.org
+Cc: akpm@linux-foundation.org, hannes@cmpxchg.org, hughd@google.com,
+ yosry.ahmed@linux.dev, mhocko@kernel.org, roman.gushchin@linux.dev,
+ shakeel.butt@linux.dev, muchun.song@linux.dev, len.brown@intel.com,
+ chengming.zhou@linux.dev, kasong@tencent.com, chrisl@kernel.org,
+ huang.ying.caritas@gmail.com, ryan.roberts@arm.com, viro@zeniv.linux.org.uk,
+ baohua@kernel.org, osalvador@suse.de, lorenzo.stoakes@oracle.com,
+ christophe.leroy@csgroup.eu, pavel@kernel.org, kernel-team@meta.com,
+ linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20250407234223.1059191-1-nphamcs@gmail.com>
+Content-Language: en-US
+From: Usama Arif <usamaarif642@gmail.com>
+In-Reply-To: <20250407234223.1059191-1-nphamcs@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-[...]
 
-> >>>
-> >>> It looks like the SoC glue makes the interactions between the clk and
-> >>> reset frameworks complicated because GPU clks don't work if a reset i=
-s
-> >>> asserted. You're trying to find a place to coordinate the clk and res=
-et.
-> >>> Am I right?
-> >>>
-> >>> I'd advise managing the clks and resets in a generic power domain tha=
-t
-> >>> is attached to the GPU device. In that power domain, coordinate the c=
-lk
-> >>> and reset sequencing so that the reset is deasserted before the clks =
-are
-> >>> enabled (or whatever the actual requirement is). If the GPU driver
-> >>> _must_ have a clk and reset pointer to use, implement one that either
-> >>> does nothing or flag to the GPU driver that the power domain is manag=
-ing
-> >>> all this for it so it should just use runtime PM and system PM hooks =
-to
-> >>> turn on the clks and take the GPU out of reset.
-> >>>
-> >>> From what I can tell, the GPU driver maintainer doesn't want to think
-> >>> about the wrapper that likely got placed around the hardware block
-> >>> shipped by IMG. This wrapper is the SoC glue that needs to go into a
-> >>> generic power domain so that the different PM resources, reset, clk,
-> >>> etc. can be coordinated based on the GPU device's power state. It's
-> >>> either that, or go the dwc3 route and have SoC glue platform drivers
-> >>> that manage this stuff and create a child device to represent the har=
-d
-> >>> macro shipped by the vendor like Synopsys/Imagination. Doing the pare=
-nt
-> >>> device design isn't as flexible as PM domains because you can only ha=
-ve
-> >>> one parent device and the child device state can be ignored vs. many =
-PM
-> >>> domains attached in a graph to a device that are more directly
-> >>> influenced by the device using runtime PM.
-> >>>
-> >>> Maybe you'll be heartened to know this problem isn't unique and has
-> >>> existed for decades :) I don't know what state the graphics driver is=
- in
-> >>> but they'll likely be interested in solving this problem in a way tha=
-t
-> >>> doesn't "pollute" their driver with SoC specific details. It's all a
-> >>> question of where you put the code. The reset framework wants to focu=
-s
-> >>> on resets, the clk framework wants to focus on clks, and the graphics
-> >>> driver wants to focus on graphics. BTW, we went through a similar
-> >>> discussion with regulators and clks years ago and ended up handling t=
-hat
-> >>> with OPPs and power domains.
-> >>
-> >> Right, power-domain providers are mostly implementing SoC specific cod=
-e.
-> >>
-> >> In some cases, power-domain providers also handle per device SoC
-> >> specific constraints/sequences, which seems what you are discussing
-> >> here. For that, genpd has a couple of callbacks that could be
-> >> interesting to have a look at, such as:
-> >>
-> >> genpd->attach|detach_dev() - for probe/remove
-> >> genpd.dev_ops->start|stop() - for runtime/system PM
-> >>
-> >> That said, maybe just using the regular genpd->power_on|off() callback
-> >> is sufficient here, depending on how you decide to model things.
-> >
-> >
-> > Thanks Stephen, Ulf !
-> >
-> > So the way forward I see:
-> >
-> > 1) The reset driver can be merged as-is, if Philipp is fine with this
-> > code [2].
-> > 2) I will cook up the update to the thead power-domain driver which wil=
-l
-> > handle reset and clock management.
->
-> Hi Ulf,
-> I'm working on the series right now and I wanted to ask you how you
-> prefer versioning to be handled. Would you like me to send a series as a
-> v1, or treat is as a continuation of this series [1] and send as a v9.
-> Would like to avoid any confusion.
 
-I would suggest starting over with v1, but don't forget to refer to
-some of the previous attempts/discussion in the cover-letter.  At
-least I would be fine by this.
+On 08/04/2025 00:42, Nhat Pham wrote:
+> 
+> V. Benchmarking
+> 
+> As a proof of concept, I run the prototype through some simple
+> benchmarks:
+> 
+> 1. usemem: 16 threads, 2G each, memory.max = 16G
+> 
+> I benchmarked the following usemem commands:
+> 
+> time usemem --init-time -w -O -s 10 -n 16 2g
+> 
+> Baseline:
+> real: 33.96s
+> user: 25.31s
+> sys: 341.09s
+> average throughput: 111295.45 KB/s
+> average free time: 2079258.68 usecs
+> 
+> New Design:
+> real: 35.87s
+> user: 25.15s
+> sys: 373.01s
+> average throughput: 106965.46 KB/s
+> average free time: 3192465.62 usecs
+> 
+> To root cause this regression, I ran perf on the usemem program, as
+> well as on the following stress-ng program:
+> 
+> perf record -ag -e cycles -G perf_cg -- ./stress-ng/stress-ng  --pageswap $(nproc) --pageswap-ops 100000
+> 
+> and observed the (predicted) increase in lock contention on swap cache
+> accesses. This regression is alleviated if I put together the
+> following hack: limit the virtual swap space to a sufficient size for
+> the benchmark, range partition the swap-related data structures (swap
+> cache, zswap tree, etc.) based on the limit, and distribute the
+> allocation of virtual swap slotss among these partitions (on a per-CPU
+> basis):
+> 
+> real: 34.94s
+> user: 25.28s
+> sys: 360.25s
+> average throughput: 108181.15 KB/s
+> average free time: 2680890.24 usecs
+> 
+> As mentioned above, I will implement proper dynamic swap range
+> partitioning in a follow up work.
+> 
+> 2. Kernel building: zswap enabled, 52 workers (one per processor),
+> memory.max = 3G.
+> 
+> Baseline:
+> real: 183.55s
+> user: 5119.01s
+> sys: 655.16s
+> 
+> New Design:
+> real: mean: 184.5s
+> user: mean: 5117.4s
+> sys: mean: 695.23s
+> 
+> New Design (Static Partition)
+> real: 183.95s
+> user: 5119.29s
+> sys: 664.24s
+> 
 
->
-> Thanks,
-> Micha=C5=82
->
-> [1] - https://lore.kernel.org/all/20250311171900.1549916-1-m.wilczynski@s=
-amsung.com/
->
+Hi Nhat,
 
-[...]
+Thanks for the patches! I have glanced over a couple of them, but this was the main question that came to my mind.
 
-Kind regards
-Uffe
+Just wanted to check if you had a look at the memory regression during these benchmarks?
+
+Also what is sizeof(swp_desc)? Maybe we can calculate the memory overhead as sizeof(swp_desc) * swap size/PAGE_SIZE?
+
+For a 64G swap that is filled with private anon pages, the overhead in MB might be (sizeof(swp_desc) in bytes * 16M) - 16M (zerobitmap) - 16M*8 (swap map)?
+
+This looks like a sizeable memory regression?
+
+Thanks,
+Usama
+
 
