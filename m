@@ -1,108 +1,119 @@
-Return-Path: <linux-pm+bounces-24931-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24932-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16E4FA7FA19
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 11:45:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A22B5A80253
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 13:46:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 017BE1894963
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 09:41:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 876464423FA
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 11:41:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A04DE266B4A;
-	Tue,  8 Apr 2025 09:35:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44C37265602;
+	Tue,  8 Apr 2025 11:41:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="kRPeka47"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kmo638XH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81208266593;
-	Tue,  8 Apr 2025 09:35:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E29719AD5C;
+	Tue,  8 Apr 2025 11:41:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744104939; cv=none; b=XF447oFQ0f+UNPz8y2XzvaTMWruoAA/VEi2FOLuQR0tqbZOIfVNaKIsGpKLt4dEa0zC0k8zYB7C9IH0Kry/ffRPJDiWRit9aTZohkP0pc8zwVu7cPFqrDxy3VE0pgpfF5mOjdlnuTNJKBb6wywQyzw8kRk9Qrw0Tq9XZCGruuYI=
+	t=1744112476; cv=none; b=RuNUNVwmbFBh0x8n42MOC/a4oSBRlHApTHowqztNjE9CgPsUt4yl0FC+yo0ujvYkQGLBcalfc2ryUXIMXJluGPzd9VgnNMT0HbSwwfnBWNiwX6qMwtHHxcXdlCx7dKrXNRIcOfvAPWIck0fY8pEFJStcQwcWcE9dqqBLY8ctBbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744104939; c=relaxed/simple;
-	bh=EJSHMKpGhViqTfouoTjG+vkCRWxUv1idSyLcCyeRa1Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FowtkyRXLclY4D5BWZUHH8gEapeI9B+ojKAZz9fq83QD/WuJUmNNaKaNZO3LYPR6vAUVMPRYXC41xE3G40WrL2wfIGP9kQwYjfVsoSBFA5KfRFWIppJPKh2tz3tKmT2WdcsblUQrJWi9eGz8Zqk0GHOgXQl+ONAg6cnLD1nzADo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=kRPeka47; arc=none smtp.client-ip=217.194.8.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
-Received: from gaggiata.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-	by mail11.truemail.it (Postfix) with ESMTPA id 7B98F1F9BC;
-	Tue,  8 Apr 2025 11:35:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1744104935;
-	bh=epFMM6E3b5n0AAjQqhCMwFutqLu+axl/bDlyBr62jpM=;
-	h=Received:From:To:Subject;
-	b=kRPeka47FL9mUb/LiDd/KpngGvLjxHugS25K7j24KcMayZUKVJPhJdJic4fXTaRVi
-	 fPOKGwxQ9qqLyl/6RhA+Mkw+mSUUotd/VLHTPRETb8/UwuMohmuRXW2/8U1bs6f4VH
-	 Oi86j2bfeCOn5i5AOeFvnjiAxLLKcY1NZFy8sbaYmOVOVxEuQogIE6orN3NX/x1J8h
-	 YqBnKXKQ9DHpF+MV9LJeyRylGN9US8ePAGtJBC4+Ph1R1G+T1m6qPROnW/SZtOPqNl
-	 HOkkaWNeoZ7K7vLm7xW/IvqQLofWQOA+ODX83FJvJAcIHsqOYm8yU5rO7K+M2NBmFz
-	 tJS0d65nIZHLw==
-Received: by gaggiata.pivistrello.it (Postfix, from userid 1000)
-	id 328987F8D5; Tue,  8 Apr 2025 11:35:35 +0200 (CEST)
-Date: Tue, 8 Apr 2025 11:35:35 +0200
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: Francesco Dolcini <francesco@dolcini.it>,
-	Amitkumar Karwar <amitkumar.karwar@nxp.com>,
-	Neeraj Kale <neeraj.sanjaykale@nxp.com>, Nishanth Menon <nm@ti.com>,
-	Tero Kristo <kristo@kernel.org>,
-	Santosh Shilimkar <ssantosh@kernel.org>,
-	linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-serial@vger.kernel.org, regressions@lists.linux.dev
-Subject: Re: Kernel WARNING (RCU) with btnxpuart on TI AM62 platform
-Message-ID: <Z_Tt58Ar9TAUy4gB@gaggiata.pivistrello.it>
-References: <20250408083512.GA26035@francesco-nb>
- <a8e7171b-d859-4611-9681-e4c614f29d64@molgen.mpg.de>
+	s=arc-20240116; t=1744112476; c=relaxed/simple;
+	bh=Y4Qqj2e8sRw4IcpVEs62t53lddToNxMVHOHtZI31qLA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PwA/IOaGOvhcoRNS/XzV8W2noUdWRR3l9zkGlaaKqojVO8WQE2mKauc4dM2EW4irAu7nx1qv/fl8zf2dH2iLKpejipI+eOM8m234o40QXJ/bvD0S4KxZrvVNy4bVBhdk2/9nAH4Nf55hGuRtO7d8BQ29rebONNCfYsRCKFe6W+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kmo638XH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5C95C4CEEB;
+	Tue,  8 Apr 2025 11:41:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744112475;
+	bh=Y4Qqj2e8sRw4IcpVEs62t53lddToNxMVHOHtZI31qLA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Kmo638XHPrDfntfbt/7HnD3EEGtmgwL3ZC0AURBYbePPWWs/RQlt+S5tzOGj8Hwcx
+	 KTR1nbXWf1YlnvF+5g6SVgiQ9xnzDtb+REbT4rwOY8CHdEYQvFMTFsiJJCYrdImevc
+	 Ih1cbPOmopQub4X4CNS1q0Fi8kxb6huWaxmwCOCEhQ+7XE95oNN9iYqN4uFjqIhbbr
+	 QFvKm/wEDMU/rDlzHsbCcUEHRUTSiGsf8tmjlKrcspvYq4EwUtEZMnpkXZMoSlHw1T
+	 C4Wcq7OfDCwUNnOfGJj9h3FtvR6Q4iocRIcJeYMcfsSlAzhfL6a50xALxCadO3DU3x
+	 4KPlmo63QswoQ==
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-72c16e658f4so2342266a34.1;
+        Tue, 08 Apr 2025 04:41:15 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVkf1brNWi00lbQgJxSGYH90ftQF6YkD2Kema2OZplaYMNvYO/pb8n9wUm10BAON6Zx4g4EmZCTGoAB13E=@vger.kernel.org, AJvYcCXuEAlU55CjMJj+gJIapqXKVZhAvxkES2gFeBT6x5b+Hb9BD/R+P0I9GYXsHMumfilNFgS+W7TAL8g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzq3vm/EIjXxOqHGJ0nBULCPthkt0i08HmViOr/84z9Te2Vde7G
+	p6O4IvOkivI8ytdBLzCsrXKvQHkUiAR+qpL7w1uQNcjeSaomLCXOufn4gu6tnLkqjx5eIt0mpqs
+	z52Qd4ox0xwCNk944g1CPYzzX+oY=
+X-Google-Smtp-Source: AGHT+IEcpWj1ur7hPh90DboICwtcCiawjXAh0K7u+IcizwWx+1R+Zd+C5PAclMFiSvtu+Yttll2dZVgfwpVHzhSJSKw=
+X-Received: by 2002:a05:6830:2a8a:b0:72b:a6f4:de5e with SMTP id
+ 46e09a7af769-72e37fd1343mr9972915a34.26.1744112475133; Tue, 08 Apr 2025
+ 04:41:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a8e7171b-d859-4611-9681-e4c614f29d64@molgen.mpg.de>
+References: <4651448.LvFx2qVVIh@rjwysocki.net> <8560367.NyiUUSuA9g@rjwysocki.net>
+ <CAJZ5v0iMYSTnX9mkZb8aEmtbKxWOgsshNJ_AqnB9Mn27y8jzeQ@mail.gmail.com> <2362a42de1403e99a66551575efd910cc92980bc.camel@linux.intel.com>
+In-Reply-To: <2362a42de1403e99a66551575efd910cc92980bc.camel@linux.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 8 Apr 2025 13:41:01 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0i7uUFDcTYuam4Hz2fYxpnT6QQQzULk8CNHvkOUfg=bfQ@mail.gmail.com>
+X-Gm-Features: ATxdqUEzPWxoGPM3HLYod2V1jjuFZnoOwCx--NKvhKQb62bHicBeqE3gV5M-skg
+Message-ID: <CAJZ5v0i7uUFDcTYuam4Hz2fYxpnT6QQQzULk8CNHvkOUfg=bfQ@mail.gmail.com>
+Subject: Re: [PATCH v1 10/10] cpufreq: Pass policy pointer to ->update_limits()
+To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
+	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Mario Limonciello <mario.limonciello@amd.com>, 
+	Sudeep Holla <sudeep.holla@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On Tue, Apr 8, 2025 at 12:28=E2=80=AFAM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> On Mon, 2025-04-07 at 20:48 +0200, Rafael J. Wysocki wrote:
+> > On Fri, Mar 28, 2025 at 9:49=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysock=
+i.net>
+> > wrote:
+> > >
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > Since cpufreq_update_limits() obtains a cpufreq policy pointer for
+> > > the
+> > > given CPU and reference counts the corresponding policy object, it
+> > > may
+> > > as well pass the policy pointer to the cpufreq driver's -
+> > > >update_limits()
+> > > callback which allows that callback to avoid invoking
+> > > cpufreq_cpu_get()
+> > > for the same CPU.
+> > >
+> > > Accordingly, redefine ->update_limits() to take a policy pointer
+> > > instead
+> > > of a CPU number and update both drivers implementing it,
+> > > intel_pstate
+> > > and amd-pstate, as needed.
+> > >
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> Hi Rafael,
+>
+> > Hi Srinivas,
+> >
+> > If you have any concerns regarding this patch, please let me know
+> > (note that it is based on the [05/10]).
+> >
+> Changes looks fine, but wants to test out some update limits from
+> interrupt path.
+> Checked your branches at linux-pm, not able to locate in any branch to
+> apply.
+> Please point me to a branch.
 
-On Tue, Apr 08, 2025 at 11:26:47AM +0200, Paul Menzel wrote:
-> [Cc: +regressions@]
-> 
-> #regzbot introduced: v6.14..v6.15-rc1
-> 
-> 
-> Thank you for your report.
-> 
-> Am 08.04.25 um 10:35 schrieb Francesco Dolcini:
-> 
-> > I do have the following kernel warning with 6.15-rc1, on a TI AM62
-> > platform (arm64), single CPU core, using btnxpuart driver, any idea?
-> > PREEMPT_RT is enabled, if it matters.
-> > 
-> > Either the issue is not systematic, or multi cores SoCs are not affected
-> > (no error on the exact same image on a dual nor on quad core TI AM62).
-> > 
-> > 
-> > [   23.139080] Voluntary context switch within RCU read-side critical section!
-> > [   23.139119] WARNING: CPU: 0 PID: 61 at /kernel/rcu/tree_plugin.h:332 rcu_note_context_switch+0x3c4/0x430
-
-...
-
-> As I understood, that it’s a regression, and you can reproduce it, would it
-> be possible, that you bisected the issue?
-
-I am not sure if this is a regression. It's possible that the issue is not new,
-and it is just non systematic. For sure it was reproduced by our CI on v6.15-rc1.
-
-Francesco
-
+I'll put it in 'testing' later today.
 
