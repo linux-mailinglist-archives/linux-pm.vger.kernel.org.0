@@ -1,136 +1,170 @@
-Return-Path: <linux-pm+bounces-24961-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24962-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 879FEA813C7
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 19:35:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3C1CA813F5
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 19:48:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 097997B7B14
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 17:34:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE16546837D
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 17:48:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55EA623BFBC;
-	Tue,  8 Apr 2025 17:35:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 530FF23CF07;
+	Tue,  8 Apr 2025 17:47:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="DGIa7MQr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZJW8peCx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1167222B8D2;
-	Tue,  8 Apr 2025 17:35:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F9E023E34F;
+	Tue,  8 Apr 2025 17:47:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744133733; cv=none; b=aRBnG9Ei6nLT8ge1dxiRD+6WSlwic5JW9w3BeDTVQgrLd+ZmE6QeMQG0Zfp1Y93PQmeY/QN0KG4wfqt/tPS6z20GrxsRmbhyDuRmJNtC72SmJHD8k66Y0ydw/Zk9HulhTOtJpIXNGOXHDzn3BUyD4a56GZikjCGoW+L3GcYMExk=
+	t=1744134465; cv=none; b=qg6xy1Qb5OYzeZYQ+dSA6PiZfhdPOEBqX4bZGHFGkFtTLJcIVUUxpBZJWK2tUIiSLwymN1rBilOqVwJSY7n/XljVaRJWw7U2oJhCOl508iF8u8JONeLhQ/FYsiAHfuZdtXhbLMvPRoHjIxUf0ykmW6fJRPVC3tcSiiejc6Cqjbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744133733; c=relaxed/simple;
-	bh=voU6MwLZqCQnV0FdjD08dZZ9AHYyERMxnrmtBaVaoZ4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gyoBIaMRcfwuNKJ8Tz/6DJR/Y8vWGt//kzkV6B9maaOAG/ixieOMulh+I4UsDTmQkbqlvLXju9dJqagOaEJfG4CUepHwNulAdRfKYmWRQquVEyqkdCeSQYRJV/UbUcQUjywPORgRGmHJTYWShbdtE9C0sqA7oqkIP1xQquLaRjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=DGIa7MQr; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [192.168.7.202] ([71.202.166.45])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 538HYKRg3088620
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Tue, 8 Apr 2025 10:34:21 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 538HYKRg3088620
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025032001; t=1744133664;
-	bh=WkvwYM1YWnU4TAJ+J/9Vt8/Lh0xsIqteV787gUNx/Oo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DGIa7MQrPXWSVvRWGj8J9I9uLnNFKLmCzMcxqp9sA7nAoJC1WJHTTBphRx8Kv8ojG
-	 TFKk4S0MJqG1qE6jdToL7U6LViQMYDTnT6XmG6GZ/+eQjdbb1OSynNFMrpEtzEVoKZ
-	 g0KcbVkw9oMHB5iu0Rp5BEfOt7OQlb08CtRaOpdIjsTXVHGAxBTuXCRraYO5P9wS94
-	 8v73kdOA2NdbUZ2X6Zw6P5nUDUF44s5P31zcgszZbitLnPnn1PucZbcA7gNJNvVE5d
-	 daoTYgTnVa8ixFIdolcOCNPBmW+yivuG8gYwjhDdkQiDgWmAvrkZdHD6C59UDRz+ez
-	 9U2wrN1TZ2BKQ==
-Message-ID: <3b91a47c-e453-406a-815d-67c438d73a4d@zytor.com>
-Date: Tue, 8 Apr 2025 10:34:20 -0700
+	s=arc-20240116; t=1744134465; c=relaxed/simple;
+	bh=zptJOXWD95DsZZXqKCKA4a7kcU5OVsuiSy9vlDH7JOs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WHpgArCzSzgTwd2mnUi4uJk5gAw99VC+ywh7tPP0owjIUsXNliXtL7lvAxDa/qOuuAma6XpNnuP9xvMkuW3H/yXvCI812Mg1A01VLkcFVysAH3qN0S8efP0blXVfrLHDNUe6jhchPXT7EjrDSVk5S8iFGVEPBvZKNYkK/1MDNjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZJW8peCx; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744134464; x=1775670464;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=zptJOXWD95DsZZXqKCKA4a7kcU5OVsuiSy9vlDH7JOs=;
+  b=ZJW8peCxEDz72iYwVvX7VU1wRx3iJPFJA4N+WFD17p05xtFb6mHHkrtY
+   40pKVjGNAVb7FYZxqqfHR//7FFG3YXIDvLVfJG6AQk09Zxnf5oaW9uQDQ
+   3FJG0PCj/N7+1Lhtk2AzD523GZeIcMt674Hc/NxUU8hsQSZWlnDYeiwz6
+   BoCV25zt+/VxZMmzSExVHrNupmgc0Ng5WeugFxIU1uDgkRRHBERlof5Ho
+   lUrqB1TflTdjm5Tv6GKY+vdrTr83wej06fmbQGnd9eySmCrPfJe0JO2vT
+   rKNz2Kz8azTVrHwty+7uKDCurb2wc+aIQd4DLqVpXBVH1iXYgdTcW02qa
+   g==;
+X-CSE-ConnectionGUID: rig7wPmpTJaL8tgNlyIVEw==
+X-CSE-MsgGUID: PBWViyWjTjya+2knapHscw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="48291859"
+X-IronPort-AV: E=Sophos;i="6.15,198,1739865600"; 
+   d="scan'208";a="48291859"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2025 10:47:43 -0700
+X-CSE-ConnectionGUID: onU/gqSRQ+OL7P3AtSBxvA==
+X-CSE-MsgGUID: pYnWEB7kROCZ9N3gYR11mQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,198,1739865600"; 
+   d="scan'208";a="159335040"
+Received: from spandruv-desk1.amr.corp.intel.com ([10.125.111.121])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2025 10:47:42 -0700
+Message-ID: <6346af9942a0e6730fd6b26f2586b82e6fc04d4c.camel@linux.intel.com>
+Subject: Re: [PATCH v1 10/10] cpufreq: Pass policy pointer to
+ ->update_limits()
+From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM
+ <linux-pm@vger.kernel.org>,  LKML <linux-kernel@vger.kernel.org>, Viresh
+ Kumar <viresh.kumar@linaro.org>, Mario Limonciello
+ <mario.limonciello@amd.com>, Sudeep Holla <sudeep.holla@arm.com>
+Date: Tue, 08 Apr 2025 10:47:42 -0700
+In-Reply-To: <CAJZ5v0hJCtqbkyMaOSMNoiD5DSz+H6PK_FyUdoVTZTVWEFJQyQ@mail.gmail.com>
+References: <4651448.LvFx2qVVIh@rjwysocki.net>
+	 <8560367.NyiUUSuA9g@rjwysocki.net>
+	 <CAJZ5v0iMYSTnX9mkZb8aEmtbKxWOgsshNJ_AqnB9Mn27y8jzeQ@mail.gmail.com>
+	 <2362a42de1403e99a66551575efd910cc92980bc.camel@linux.intel.com>
+	 <CAJZ5v0i7uUFDcTYuam4Hz2fYxpnT6QQQzULk8CNHvkOUfg=bfQ@mail.gmail.com>
+	 <CAJZ5v0hJCtqbkyMaOSMNoiD5DSz+H6PK_FyUdoVTZTVWEFJQyQ@mail.gmail.com>
+Autocrypt: addr=srinivas.pandruvada@linux.intel.com; prefer-encrypt=mutual;
+ keydata=mQGNBGYHNAsBDAC7tv5u9cIsSDvdgBBEDG0/a/nTaC1GXOx5MFNEDL0LWia2p8Asl7igx
+ YrB68fyfPNLSIgtCmps0EbRUkPtoN5/HTbAEZeJUTL8Xdoe6sTywf8/6/DMheEUzprE4Qyjt0HheW
+ y1JGvdOA0f1lkxCnPXeiiDY4FUqQHr3U6X4FPqfrfGlrMmGvntpKzOTutlQl8eSAprtgZ+zm0Jiwq
+ NSiSBOt2SlbkGu9bBYx7mTsrGv+x7x4Ca6/BO9o5dIvwJOcfK/cXC/yxEkr1ajbIUYZFEzQyZQXrT
+ GUGn8j3/cXQgVvMYxrh3pGCq9Q0Q6PAwQYhm97ipXa86GcTpP5B2ip9xclPtDW99sihiL8euTWRfS
+ TUsEI+1YzCyz5DU32w3WiXr3ITicaMV090tMg9phIZsjfFbnR8hY03n0kRNWWFXi/ch2MsZCCqXIB
+ oY/SruNH9Y6mnFKW8HSH762C7On8GXBYJzH6giLGeSsbvis2ZmV/r+LmswwZ6ACcOKLlvvIukAEQE
+ AAbQ5U3Jpbml2YXMgUGFuZHJ1dmFkYSA8c3Jpbml2YXMucGFuZHJ1dmFkYUBsaW51eC5pbnRlbC5j
+ b20+iQHRBBMBCAA7FiEEdki2SeUi0wlk2xcjOqtdDMJyisMFAmYHNAsCGwMFCwkIBwICIgIGFQoJC
+ AsCBBYCAwECHgcCF4AACgkQOqtdDMJyisMobAv+LLYUSKNuWhRN3wS7WocRPCi3tWeBml+qivCwyv
+ oZbmE2LcxYFnkcj6YNoS4N1CHJCr7vwefWTzoKTTDYqz3Ma0D0SbR1p/dH0nDgN34y41HpIHf0tx0
+ UxGMgOWJAInq3A7/mNkoLQQ3D5siG39X3bh9Ecg0LhMpYwP/AYsd8X1ypCWgo8SE0J/6XX/HXop2a
+ ivimve15VklMhyuu2dNWDIyF2cWz6urHV4jmxT/wUGBdq5j87vrJhLXeosueRjGJb8/xzl34iYv08
+ wOB0fP+Ox5m0t9N5yZCbcaQug3hSlgp9hittYRgIK4GwZtNO11bOzeCEMk+xFYUoa5V8JWK9/vxrx
+ NZEn58vMJ/nxoJzkb++iV7KBtsqErbs5iDwFln/TRJAQDYrtHJKLLFB9BGUDuaBOmFummR70Rbo55
+ J9fvUHc2O70qteKOt5A0zv7G8uUdIaaUHrT+VOS7o+MrbPQcSk+bl81L2R7TfWViCmKQ60sD3M90Y
+ oOfCQxricddC
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 01/15] x86/msr: Replace __wrmsr() with
- native_wrmsrl()
-To: Ingo Molnar <mingo@kernel.org>
-Cc: "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        virtualization@lists.linux.dev, linux-edac@vger.kernel.org,
-        kvm@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-ide@vger.kernel.org, linux-pm@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
-        peterz@infradead.org, acme@kernel.org, namhyung@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        kan.liang@linux.intel.com, wei.liu@kernel.org, ajay.kaher@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
-        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
-        haiyangz@microsoft.com, decui@microsoft.com,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20250331082251.3171276-1-xin@zytor.com>
- <20250331082251.3171276-2-xin@zytor.com> <Z-pruogreCuU66wm@gmail.com>
- <9D15DE81-2E68-4FCD-A133-4963602E18C9@zytor.com> <Z-ubVFyoOzwKhI53@gmail.com>
- <7a503d55-db41-42da-8133-4a3dbbd36c7e@zytor.com> <Z-y4pGxgiP55lpOj@gmail.com>
-Content-Language: en-US
-From: Xin Li <xin@zytor.com>
-Autocrypt: addr=xin@zytor.com; keydata=
- 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
- l75w1xInsg==
-In-Reply-To: <Z-y4pGxgiP55lpOj@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 4/1/2025 9:10 PM, Ingo Molnar wrote:
-> Yeah, I moved it over to:
-> 
->    git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git WIP.x86/msr
-> 
+On Tue, 2025-04-08 at 15:37 +0200, Rafael J. Wysocki wrote:
+> On Tue, Apr 8, 2025 at 1:41=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.o=
+rg>
+> wrote:
+> >=20
+> > On Tue, Apr 8, 2025 at 12:28=E2=80=AFAM srinivas pandruvada
+> > <srinivas.pandruvada@linux.intel.com> wrote:
+> > >=20
+> > > On Mon, 2025-04-07 at 20:48 +0200, Rafael J. Wysocki wrote:
+> > > > On Fri, Mar 28, 2025 at 9:49=E2=80=AFPM Rafael J. Wysocki
+> > > > <rjw@rjwysocki.net>
+> > > > wrote:
+> > > > >=20
+> > > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > >=20
+> > > > > Since cpufreq_update_limits() obtains a cpufreq policy
+> > > > > pointer for
+> > > > > the
+> > > > > given CPU and reference counts the corresponding policy
+> > > > > object, it
+> > > > > may
+> > > > > as well pass the policy pointer to the cpufreq driver's -
+> > > > > > update_limits()
+> > > > > callback which allows that callback to avoid invoking
+> > > > > cpufreq_cpu_get()
+> > > > > for the same CPU.
+> > > > >=20
+> > > > > Accordingly, redefine ->update_limits() to take a policy
+> > > > > pointer
+> > > > > instead
+> > > > > of a CPU number and update both drivers implementing it,
+> > > > > intel_pstate
+> > > > > and amd-pstate, as needed.
+> > > > >=20
+> > > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >=20
+> > > Hi Rafael,
+> > >=20
+> > > > Hi Srinivas,
+> > > >=20
+> > > > If you have any concerns regarding this patch, please let me
+> > > > know
+> > > > (note that it is based on the [05/10]).
+> > > >=20
+> > > Changes looks fine, but wants to test out some update limits from
+> > > interrupt path.
+> > > Checked your branches at linux-pm, not able to locate in any
+> > > branch to
+> > > apply.
+> > > Please point me to a branch.
+> >=20
+> > I'll put it in 'testing' later today.
+>=20
+> Now available from
+>=20
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+> testing
+>=20
+Looks good.
 
-Hi Ingo,
+Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-Are you going to merge it into tip in this development cycle for the
-v6.16 merge window?
-
-Thanks!
-     Xin
+Thanks,
+Srinivas
 
