@@ -1,196 +1,346 @@
-Return-Path: <linux-pm+bounces-24946-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24947-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3390AA80F88
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 17:15:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCF5FA80FB7
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 17:21:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C32174634AA
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 15:11:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47BC83A6173
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 15:17:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87A042288D3;
-	Tue,  8 Apr 2025 15:11:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2638522ACD6;
+	Tue,  8 Apr 2025 15:17:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U8qNatti"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X92gh4Mb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86F6227E96;
-	Tue,  8 Apr 2025 15:11:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D61228375;
+	Tue,  8 Apr 2025 15:17:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744125095; cv=none; b=EgEPmK5ijGlwgnvJfkDV97PlHSP2E4y9qPHAKZWuh9MhAOjcaCBGvaZkR4T9I89cwc5UUcITzDmBYZ+HxFozxWxIt1Ei3d0c04FENFYcSm539Sr3f0UFT28lCOeo688B0Eam7ekldPzPJ80q0fYUXtiGdJhCIAuMnQpqc96fcwA=
+	t=1744125423; cv=none; b=vGJOOnuOvZgdHamOX1Q3PSIubGfGQ6zh9j3uf/7oN7ZWWXzzztnwOnSoPCWqLqwV9g/ar4+Plemp07lLp0nQfkPreKcWrjhtwDoYvlYnUbgOJONza8auh5Yap90XV/rcfQTJ/gFXM+oVsqIkoRCcix7tCRZb4C2A19PG/JyC85I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744125095; c=relaxed/simple;
-	bh=iAge/TCQFEQxz188bugCjBSt7K57C1F/d/6gwLwpoCw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UJLp85aK0h689+UOfgdFIgBK5CcMJMeu/6rD8r6n0VDAaWML2lzEQ1tVi460GPhLtSn2sjzOVe6B0UgapyBcGeO2ylLRalvDSl2WWBPJQ56zcA8M1yfkponcafROHBJNFC1gHassCrvEAEtcFDxZdSXJm/PTN3WrkcDz+1X/Iaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U8qNatti; arc=none smtp.client-ip=209.85.219.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6e8fb83e137so51574916d6.0;
-        Tue, 08 Apr 2025 08:11:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744125092; x=1744729892; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fi2eBmkzJiBdyrJlnjIzeZPmXlpwSuN6LV/0MwZZJQk=;
-        b=U8qNatti0qrsZHGCzmGv6ql/rwWpZHtmzA50WAQ4421wkZqGdyl9JFha6twjgSdiEG
-         h8qJ7vSvKoJUev+0rWt626i6ltKZ6FOpeC8LbxDs3KkGoe/vzid+N6ZelIGKBnpa+z6n
-         QAvRiPiU6AakIk/1FC+3p4BlbSalFX96U97oBSejJFNGfJ1QT8xfDvCtFUgtny0FJc95
-         hKKDD8JuX5uJwbiddRTt6MgLn2FvMZs2Ur0vNxJrquSiSDxpuAkTzjOK6YLPjMKwF06+
-         +E5a1ZyY3S9sEJHaAXglWAcRzdvWRU9nYcTj18+utn2yWrMaTJtg17v2DecgkOjG63HU
-         8+4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744125092; x=1744729892;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fi2eBmkzJiBdyrJlnjIzeZPmXlpwSuN6LV/0MwZZJQk=;
-        b=LxLsFkSxYHTEZugp/ZEBiX0aESm/JpGC1UmfAqvNuxWX+BcUwvhz5lxx2o9L8wpvPT
-         0tQgQRuYU5HYJBQR51f+CNAKh2wXx1ch8XbPfWmi6MhfkuiPFTEUSDOn4yqdUW91fSzK
-         5BdyU1TfYSFgz//yxT/LQ5TjhaHvbWUq2PMucEdy1fB7sM1FWuFyJyNa1PGYs13LhCbC
-         x283g+svvqcjCr5k2nfv4XeDb/Y6renZJM2GBBj8GkhrnPO40/T4C1bkE1XB2IxPakdC
-         P+Ae9D458BhmnZhK3FsT2W/mJEuyZuuPIbhWqL/49D7mBzrQoC5TfLqBOt6WOQZhkk7I
-         dNig==
-X-Forwarded-Encrypted: i=1; AJvYcCUPO2hqRq8/gq78clrLHCRTU7TGV0AFGMxRHg3G4fHWJ1th4Pgpvdmi7tdFJRNujO65MdxPAQn00+g=@vger.kernel.org, AJvYcCUai74JV9RYvmbGBvBde2a552mywVKtTQG6evmmmtxKtvghgwPC4OZbzC1oMJRzwORwfphl4nte@vger.kernel.org, AJvYcCVbkomYQ75rcuU+sLmelldOPEtgYDrVA3VS9J8mMwmM2H2pLLWBYMVYp0Gc9IAYwHuyb7CJcUnMcUzPbpr/@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxugec4ui2UqWqTxjUgU2vsEwZHvyTg9GgRy8bQ/0/I2xJpjyYz
-	MfDnd9NzBjA/qwVZzG5VJY27e8FCFsNx3PxDpeOVDM6tRAo4cAO8uB8LDQhtBykuZy+gnbjGDFR
-	BpTgwNUmjysVlk6oXLvEc2EltIf4=
-X-Gm-Gg: ASbGncsCb4EpquGEroieiB8VLfKetR+0MsGNBf+N/KZ3xQf8dzc/eo+sW/T8EPCu/5o
-	fQgln+2GnpLXpqYGExbChNVXLyFPwrKe2vV1LQiVxuI5Tz46SSOzhoN4gqA3ZPpw/lvcE5UUcg3
-	4RcMQ80v1kHv+fQ2v5cu+MrU2JwLlr7NOtXfUWf3N2KwcSigOIRkFxLsqjpw==
-X-Google-Smtp-Source: AGHT+IEBzzayKvqC39EUgHVBWtu/wY1YXqZBYY6cBaTXuY1bD1506pK2P8WVCfFC0SJvQwUENGg3TY07BxlZ30qZMmY=
-X-Received: by 2002:a05:6214:20a1:b0:6ed:df6:cdcd with SMTP id
- 6a1803df08f44-6f0b749934amr221872706d6.21.1744125092487; Tue, 08 Apr 2025
- 08:11:32 -0700 (PDT)
+	s=arc-20240116; t=1744125423; c=relaxed/simple;
+	bh=YBHV1R1LANqwOlZ3bpGukqGWjvNFHr67D3rL1PJ5cBc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u70KtKiep2jDdsk14fRKAcBW8xd9Hz933VtHeehWBTV30ryMrXUSemq/06B6M1qJJdjfKSRQ92pNMPigPpmSTvwvsqdkoFm0dspQYpmExe4BXh3/+Swl+0Tv9BdzFR/PvqNyeuTU24XW+QZ78XVmLx3XCdoAn3KoZW6RSS9HqlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X92gh4Mb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29D62C4CEE5;
+	Tue,  8 Apr 2025 15:16:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744125422;
+	bh=YBHV1R1LANqwOlZ3bpGukqGWjvNFHr67D3rL1PJ5cBc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=X92gh4MbpheXmMlisobrsJH9pTK+vbMHIiGSscsBOd56YoWUZGvQ9GHj7I9cJe6h+
+	 5dRHXUfyB/dxqlFo5efWZ5yeva/1Aye54sPNLiKAx3IKWSUHvzQvwQK9j124PuMPO1
+	 Y35Yap4gT60rXG6sxYh1je5jWv5XHC2V0k8g9rvvbg5T87FCunh5tk/suoXaa7r8gb
+	 pMwBuEX3Lo7OopzWgRIar0Stmwj/J1rMPvIyQ5cKlGybubscMOgKlJHBDaRyeD8mCW
+	 7ZjoCSUkXBiR50nZuTt8sUNYrBzIKvTY4X1U61ituZEnCC5LTi3UZCuapNVgKZV5pc
+	 cvcAxj3fXp2Ng==
+Date: Tue, 8 Apr 2025 17:16:52 +0200
+From: Lorenzo Pieralisi <lpieralisi@kernel.org>
+To: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>
+Cc: Elliot Berman <quic_eberman@quicinc.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, cros-qcom-dts-watchers@chromium.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+	Melody Olvera <quic_molvera@quicinc.com>,
+	Shivendra Pratap <quic_spratap@quicinc.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Stephen Boyd <swboyd@chromium.org>, linux-pm@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, Elliot Berman <elliotb317@gmail.com>,
+	Elliot Berman <elliot.berman@oss.qualcomm.com>
+Subject: Re: [PATCH v9 2/5] firmware: psci: Read and use vendor reset types
+Message-ID: <Z/U95G+2GsoLD6Mi@lpieralisi>
+References: <20250303-arm-psci-system_reset2-vendor-reboots-v9-0-b2cf4a20feda@oss.qualcomm.com>
+ <20250303-arm-psci-system_reset2-vendor-reboots-v9-2-b2cf4a20feda@oss.qualcomm.com>
+ <Z9QQw6BcE7IXzu+r@lpieralisi>
+ <Z+K3uNjTNbq3pUis@hu-mojha-hyd.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250407234223.1059191-1-nphamcs@gmail.com> <20250407234223.1059191-4-nphamcs@gmail.com>
- <20250408141555.GA816@cmpxchg.org>
-In-Reply-To: <20250408141555.GA816@cmpxchg.org>
-From: Nhat Pham <nphamcs@gmail.com>
-Date: Tue, 8 Apr 2025 08:11:21 -0700
-X-Gm-Features: ATxdqUHmaTfVyV2I-0EHfU2y-rKG2ACn3QSFVY1QEBvNDfhELczRDQ5ahbXOhYE
-Message-ID: <CAKEwX=PSK-f0mK=Ffsvqs72qicPAoUWW-MdcNurj4PO0NMuJ3w@mail.gmail.com>
-Subject: Re: [RFC PATCH 03/14] mm: swap: add a separate type for physical swap slots
-To: Johannes Weiner <hannes@cmpxchg.org>
-Cc: linux-mm@kvack.org, akpm@linux-foundation.org, hughd@google.com, 
-	yosry.ahmed@linux.dev, mhocko@kernel.org, roman.gushchin@linux.dev, 
-	shakeel.butt@linux.dev, muchun.song@linux.dev, len.brown@intel.com, 
-	chengming.zhou@linux.dev, kasong@tencent.com, chrisl@kernel.org, 
-	huang.ying.caritas@gmail.com, ryan.roberts@arm.com, viro@zeniv.linux.org.uk, 
-	baohua@kernel.org, osalvador@suse.de, lorenzo.stoakes@oracle.com, 
-	christophe.leroy@csgroup.eu, pavel@kernel.org, kernel-team@meta.com, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z+K3uNjTNbq3pUis@hu-mojha-hyd.qualcomm.com>
 
-On Tue, Apr 8, 2025 at 7:16=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.org>=
- wrote:
->
-> On Mon, Apr 07, 2025 at 04:42:04PM -0700, Nhat Pham wrote:
-> > In preparation for swap virtualization, add a new type to represent the
-> > physical swap slots of swapfile. This allows us to separates:
-> >
-> > 1. The logical view of the swap entry (i.e what is stored in page table
-> >    entries and used to index into the swap cache), represented by the
-> >    old swp_entry_t type.
-> >
-> > from:
-> >
-> > 2. Its physical backing state (i.e the actual backing slot on the swap
-> >    device), represented by the new swp_slot_t type.
-> >
-> > The functions that operate at the physical level (i.e on the swp_slot_t
-> > types) are also renamed where appropriate (prefixed with swp_slot_* for
-> > e.g). We also take this opportunity to re-arrange the header files
-> > (include/linux/swap.h and swapops.h), grouping the swap API into the
-> > following categories:
-> >
-> > 1. Virtual swap API (i.e functions on swp_entry_t type).
-> >
-> > 2. Swap cache API (mm/swap_state.c)
-> >
-> > 3. Swap slot cache API (mm/swap_slots.c)
-> >
-> > 4. Physical swap slots and device API (mm/swapfile.c).
->
-> This all makes sense.
->
-> However,
->
-> > @@ -483,50 +503,37 @@ static inline long get_nr_swap_pages(void)
-> >       return atomic_long_read(&nr_swap_pages);
-> >  }
-> >
-> > -extern void si_swapinfo(struct sysinfo *);
-> > -swp_entry_t folio_alloc_swap(struct folio *folio);
-> > -bool folio_free_swap(struct folio *folio);
-> > -void put_swap_folio(struct folio *folio, swp_entry_t entry);
-> > -extern swp_entry_t get_swap_page_of_type(int);
-> > -extern int get_swap_pages(int n, swp_entry_t swp_entries[], int order)=
-;
-> > -extern int add_swap_count_continuation(swp_entry_t, gfp_t);
-> > -extern void swap_shmem_alloc(swp_entry_t, int);
-> > -extern int swap_duplicate(swp_entry_t);
-> > -extern int swapcache_prepare(swp_entry_t entry, int nr);
-> > -extern void swap_free_nr(swp_entry_t entry, int nr_pages);
-> > -extern void swapcache_free_entries(swp_entry_t *entries, int n);
-> > -extern void free_swap_and_cache_nr(swp_entry_t entry, int nr);
-> > +void si_swapinfo(struct sysinfo *);
-> > +swp_slot_t swap_slot_alloc_of_type(int);
-> > +int swap_slot_alloc(int n, swp_slot_t swp_slots[], int order);
-> > +void swap_slot_free_nr(swp_slot_t slot, int nr_pages);
-> > +void swap_slot_cache_free_slots(swp_slot_t *slots, int n);
-> >  int swap_type_of(dev_t device, sector_t offset);
-> > +sector_t swapdev_block(int, pgoff_t);
-> >  int find_first_swap(dev_t *device);
-> > -extern unsigned int count_swap_pages(int, int);
-> > -extern sector_t swapdev_block(int, pgoff_t);
-> > -extern int __swap_count(swp_entry_t entry);
-> > -extern int swap_swapcount(struct swap_info_struct *si, swp_entry_t ent=
-ry);
-> > -extern int swp_swapcount(swp_entry_t entry);
-> > -struct swap_info_struct *swp_swap_info(swp_entry_t entry);
-> > +unsigned int count_swap_pages(int, int);
-> > +struct swap_info_struct *swap_slot_swap_info(swp_slot_t slot);
-> >  struct backing_dev_info;
-> > -extern int init_swap_address_space(unsigned int type, unsigned long nr=
-_pages);
-> > -extern void exit_swap_address_space(unsigned int type);
-> > -extern struct swap_info_struct *get_swap_device(swp_entry_t entry);
-> > +struct swap_info_struct *swap_slot_tryget_swap_info(swp_slot_t slot);
-> >  sector_t swap_folio_sector(struct folio *folio);
->
-> this is difficult to review.
->
-> Can you please split out:
->
-> 1. Code moves / cut-and-paste
->
-> 2. Renames
->
-> 3. New code
->
-> into three separate steps
+On Tue, Mar 25, 2025 at 07:33:36PM +0530, Mukesh Ojha wrote:
+> On Fri, Mar 14, 2025 at 12:19:31PM +0100, Lorenzo Pieralisi wrote:
+> > On Mon, Mar 03, 2025 at 01:08:31PM -0800, Elliot Berman wrote:
+> > > From: Elliot Berman <elliot.berman@oss.qualcomm.com>
+> > > 
+> > > SoC vendors have different types of resets and are controlled through
+> > > various registers. For instance, Qualcomm chipsets can reboot to a
+> > > "download mode" that allows a RAM dump to be collected. Another example
+> > > is they also support writing a cookie that can be read by bootloader
+> > > during next boot. PSCI offers a mechanism, SYSTEM_RESET2, for these
+> > > vendor reset types to be implemented without requiring drivers for every
+> > > register/cookie.
+> > > 
+> > > Add support in PSCI to statically map reboot mode commands from
+> > > userspace to a vendor reset and cookie value using the device tree.
+> > 
+> > I have managed to discuss a little bit this patchset over the last
+> > few days and I think we have defined a plan going forward.
+> > 
+> > A point that was raised is:
+> > 
+> > https://man7.org/linux/man-pages/man2/reboot.2.html
+> > 
+> > LINUX_REBOOT_CMD_RESTART2 *arg command, what is it supposed to
+> > represent ?
+> > 
+> > Is it the mode the system should reboot into OR it is the
+> > actual command to be issued (which is what this patchset
+> > implements) ?
+> > 
+> > LINUX_REBOOT_CMD_RESTART "..a default restart..."
+> > 
+> > It is unclear what "default" means. We wonder whether the
+> > reboot_mode variable was introduced to _define_ that "default".
+> > 
+> > So, in short, my aim is trying to decouple reboot_mode from the
+> > LINUX_REBOOT_CMD_RESTART2 *arg command.
+> > 
+> > I believe that adding a sysfs interface to reboot-mode driver
+> > infrastructure would be useful, so that the commands would
+> > be exposed to userspace and userspace can set the *arg command
+> > specifically to issue a given reset/mode.
+> > 
+> > I wonder why this is not already in place for eg syscon-reboot-mode
+> > resets, how does user space issue a command in those systems if the
+> > available commands aren't exposed to userspace ?
+> > 
+> > Is there a kernel entity exposing those "modes" to userspace, somehow ?
+> > 
+> > > A separate initcall is needed to parse the devicetree, instead of using
+> > > psci_dt_init because mm isn't sufficiently set up to allocate memory.
+> > > 
+> > > Reboot mode framework is close but doesn't quite fit with the
+> > > design and requirements for PSCI SYSTEM_RESET2. Some of these issues can
+> > > be solved but doesn't seem reasonable in sum:
+> > >  1. reboot mode registers against the reboot_notifier_list, which is too
+> > >     early to call SYSTEM_RESET2. PSCI would need to remember the reset
+> > >     type from the reboot-mode framework callback and use it
+> > >     psci_sys_reset.
+> > >  2. reboot mode assumes only one cookie/parameter is described in the
+> > >     device tree. SYSTEM_RESET2 uses 2: one for the type and one for
+> > >     cookie.
+> > 
+> > This can be changed and I think it should, so that the reboot modes
+> > are exposed to user space and PSCI can use that.
+> > 
+> In the case of a regular reboot or panic, the reboot/panic notifiers run
+> first, followed by the restart notifiers. The PSCI reset/reset2 should
+> be the last call from Linux, and ideally, this call should not fail.
+> 
+> Reboot mode notifiers => restart notifiers or Panic notifiers => restart
+> notifiers
+> 
+> So, if I understand correctly, you mean that we can change the reboot
+> mode framework to expose the arguments available to user space. We can
+> extend it to accept magic and cookies, save them in the reboot
+> framework, and retrieve them via a call from PSCI during a regular
+> reboot or panic based on the current arguments. Is this leading towards
+> writing an ARM-specific PSCI-reboot-mode driver, which in its reboot
+> notifier callback saves the magic and cookies, and these magic and
+> cookies will be used during psci_sys_reset2()? Or is there something
+> wrong with my understanding?
 
-Makes sense, yeah.
+No, you got it right (apologies for the delay in replying) - if the
+case for making reboot mode available to user space is accepted.
 
-I will reorganize the series as follows:
+> P.S. We appreciate Elliot for his work and follow-up on this while being
+> employed at Qualcomm.
 
-1. Rearrange in the first patch (which I already did for
-mm/swapfile.c, but now I'll also rearrange the functions in header
-files as well).
-2. One more patch to rename the function and add the new type.
-3. The rest of the series (new API, new code, etc.).
+Yes I sincerely do for his patience, thank you.
+
+Lorenzo
+
+> > >  3. psci cpuidle driver already registers a driver against the
+> > >     arm,psci-1.0 compatible. Refactoring would be needed to have both a
+> > >     cpuidle and reboot-mode driver.
+> > > 
+> > > Signed-off-by: Elliot Berman <elliot.berman@oss.qualcomm.com>
+> > > ---
+> > >  drivers/firmware/psci/psci.c | 105 +++++++++++++++++++++++++++++++++++++++++++
+> > >  1 file changed, 105 insertions(+)
+> > > 
+> > > diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+> > > index a1ebbe9b73b136218e9d9f9b8daa7756b3ab2fbe..6f8c47deaec0225f26704e1f3bcad52603127a85 100644
+> > > --- a/drivers/firmware/psci/psci.c
+> > > +++ b/drivers/firmware/psci/psci.c
+> > > @@ -80,6 +80,14 @@ static u32 psci_cpu_suspend_feature;
+> > >  static bool psci_system_reset2_supported;
+> > >  static bool psci_system_off2_hibernate_supported;
+> > >  
+> > > +struct psci_reset_param {
+> > > +	const char *mode;
+> > > +	u32 reset_type;
+> > > +	u32 cookie;
+> > > +};
+> > > +static struct psci_reset_param *psci_reset_params __ro_after_init;
+> > > +static size_t num_psci_reset_params __ro_after_init;
+> > > +
+> > >  static inline bool psci_has_ext_power_state(void)
+> > >  {
+> > >  	return psci_cpu_suspend_feature &
+> > > @@ -306,9 +314,39 @@ static int get_set_conduit_method(const struct device_node *np)
+> > >  	return 0;
+> > >  }
+> > >  
+> > > +static int psci_vendor_system_reset2(const char *cmd)
+> > > +{
+> > > +	unsigned long ret;
+> > > +	size_t i;
+> > > +
+> > > +	for (i = 0; i < num_psci_reset_params; i++) {
+> > > +		if (!strcmp(psci_reset_params[i].mode, cmd)) {
+> > > +			ret = invoke_psci_fn(PSCI_FN_NATIVE(1_1, SYSTEM_RESET2),
+> > > +					     psci_reset_params[i].reset_type,
+> > > +					     psci_reset_params[i].cookie, 0);
+> > > +			/*
+> > > +			 * if vendor reset fails, log it and fall back to
+> > > +			 * architecture reset types
+> > 
+> > That's not what the code does.
+> > 
+> Ack.
+> 
+> -Mukesh
+> 
+> > > +			 */
+> > > +			pr_err("failed to perform reset \"%s\": %ld\n", cmd,
+> > > +			       (long)ret);
+> > > +			return 0;
+> > > +		}
+> > > +	}
+> > > +
+> > > +	return -ENOENT;
+> > > +}
+> > > +
+> > >  static int psci_sys_reset(struct notifier_block *nb, unsigned long action,
+> > >  			  void *data)
+> > >  {
+> > > +	/*
+> > > +	 * try to do the vendor system_reset2
+> > > +	 * If there wasn't a matching command, fall back to architectural resets
+> > > +	 */
+> > > +	if (data && !psci_vendor_system_reset2(data))
+> > > +		return NOTIFY_DONE;
+> > > +
+> > >  	if ((reboot_mode == REBOOT_WARM || reboot_mode == REBOOT_SOFT) &&
+> > >  	    psci_system_reset2_supported) {
+> > >  		/*
+> > > @@ -795,6 +833,73 @@ static const struct of_device_id psci_of_match[] __initconst = {
+> > >  	{},
+> > >  };
+> > >  
+> > > +#define REBOOT_PREFIX "mode-"
+> > > +
+> > > +static int __init psci_init_system_reset2_modes(void)
+> > > +{
+> > > +	const size_t len = strlen(REBOOT_PREFIX);
+> > > +	struct psci_reset_param *param;
+> > > +	struct device_node *psci_np __free(device_node) = NULL;
+> > > +	struct device_node *np __free(device_node) = NULL;
+> > > +	struct property *prop;
+> > > +	size_t count = 0;
+> > > +	u32 magic[2];
+> > > +	int num;
+> > > +
+> > > +	if (!psci_system_reset2_supported)
+> > > +		return 0;
+> > > +
+> > > +	psci_np = of_find_matching_node(NULL, psci_of_match);
+> > > +	if (!psci_np)
+> > > +		return 0;
+> > > +
+> > > +	np = of_find_node_by_name(psci_np, "reset-types");
+> > > +	if (!np)
+> > > +		return 0;
+> > 
+> > Related to my initial question above. If LINUX_REBOOT_CMD_RESTART2 *arg command,
+> > is the actual reset to be issued, should we add a default mode "cold"
+> > and, if SYSTEM_RESET2 is supported, a "warm" reset mode too ?
+> > 
+> > It all boils down to what *arg represents - adding "cold" and "warm"
+> > modes would remove the dependency on reboot_mode for resets issued
+> > through LINUX_REBOOT_CMD_RESTART2, the question is whether this
+> > is the correct thing to do.
+> > 
+> > Comments very welcome.
+> > 
+> > Thanks,
+> > Lorenzo
+> > 
+> > > +
+> > > +	for_each_property_of_node(np, prop) {
+> > > +		if (strncmp(prop->name, REBOOT_PREFIX, len))
+> > > +			continue;
+> > > +		num = of_property_count_u32_elems(np, prop->name);
+> > > +		if (num != 1 && num != 2)
+> > > +			continue;
+> > > +
+> > > +		count++;
+> > > +	}
+> > > +
+> > > +	param = psci_reset_params =
+> > > +		kcalloc(count, sizeof(*psci_reset_params), GFP_KERNEL);
+> > > +	if (!psci_reset_params)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	for_each_property_of_node(np, prop) {
+> > > +		if (strncmp(prop->name, REBOOT_PREFIX, len))
+> > > +			continue;
+> > > +
+> > > +		num = of_property_read_variable_u32_array(np, prop->name, magic,
+> > > +							  1, ARRAY_SIZE(magic));
+> > > +		if (num < 0) {
+> > > +			pr_warn("Failed to parse vendor reboot mode %s\n",
+> > > +				param->mode);
+> > > +			kfree_const(param->mode);
+> > > +			continue;
+> > > +		}
+> > > +
+> > > +		param->mode = kstrdup_const(prop->name + len, GFP_KERNEL);
+> > > +		if (!param->mode)
+> > > +			continue;
+> > > +
+> > > +		/* Force reset type to be in vendor space */
+> > > +		param->reset_type = PSCI_1_1_RESET_TYPE_VENDOR_START | magic[0];
+> > > +		param->cookie = num > 1 ? magic[1] : 0;
+> > > +		param++;
+> > > +		num_psci_reset_params++;
+> > > +	}
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +arch_initcall(psci_init_system_reset2_modes);
+> > > +
+> > >  int __init psci_dt_init(void)
+> > >  {
+> > >  	struct device_node *np;
+> > > 
+> > > -- 
+> > > 2.34.1
+> > > 
 
