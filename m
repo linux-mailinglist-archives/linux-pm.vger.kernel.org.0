@@ -1,287 +1,175 @@
-Return-Path: <linux-pm+bounces-24969-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24970-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3597A8170E
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 22:43:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0F6DA817E2
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 23:51:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E0DB8A3BAA
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 20:43:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC27416B4BF
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 21:51:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3E2023F41D;
-	Tue,  8 Apr 2025 20:43:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F00E2475E3;
+	Tue,  8 Apr 2025 21:51:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b="Wv9wdJLG"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="fHN20sUj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from latitanza.investici.org (latitanza.investici.org [82.94.249.234])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F87D225779
-	for <linux-pm@vger.kernel.org>; Tue,  8 Apr 2025 20:43:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.94.249.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B741D1E2843
+	for <linux-pm@vger.kernel.org>; Tue,  8 Apr 2025 21:51:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744145014; cv=none; b=UmyLQqpMJS0wZfwKx9QN5sitk4haNN+OtR9xBaYC5afxsLl0JfmcXyrExyVpmxVWog0+S2iGCqNmxe1M5pWu43BqX8d9YkZotXCOTYWbcehuY3m4zVCAf2vM54+gP0a0B3HRny58zO+pEQI0WXO80RVEZWW9jS4vhjjwoC9I+c0=
+	t=1744149103; cv=none; b=LbN0gpxKnVOUDhzYIlbjir3eAkJBtwNGeiTFDxvrQLn24fAn+lrhoj3YZuoV4Lfdq/wl27ILmLa4mcDCKc/LeMAl6cqmt+OIEn5gegOe781BJYmPFdjNdH3JBGIxqC8QIK0bsCCjv2C8ob4/6SttoEVnJU4kUuMJuxZDWcDyj4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744145014; c=relaxed/simple;
-	bh=hE9TlwTLm/No6r+i32j7nhRyV9vuDST0xpyUeZQL1Gc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KO4TS7Dhh0teGLrZ9c4NyLih/fEfVjWmfacj/P7/LLe9zQ7PSYQ8iamIpqI+OTNu9f/SwmLqS8hmbGFzLd6dH5pK0ffAAtOmMM2yMH+uqcKkX7FQDbbic+BCZx2g+lKGSsAZ9vGtivyje4+U/Z1i3oWopanaWcu9+Wx9HHseYx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org; spf=pass smtp.mailfrom=paranoici.org; dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b=Wv9wdJLG; arc=none smtp.client-ip=82.94.249.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paranoici.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paranoici.org;
-	s=stigmate; t=1744144663;
-	bh=554QVMBMAfhg+1R2aXTl13i3kNiX36KlOnfhdLgRDCo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Wv9wdJLGGIr1iYTK4B0cCm+GrV6s+1Tx6fUFp2OBED4bhD39Nl+LxD0IoRtPxk0M0
-	 WFFQHQuSaq2dzSdyq71S50vVSU4zAVFFa4ea7CgQqYBkMNXJdxURwJckSXAyqavSSz
-	 HKZUyD8idwDbFoLOcyA15hG0VlOCFTdsPgddzcwY=
-Received: from mx3.investici.org (unknown [127.0.0.1])
-	by latitanza.investici.org (Postfix) with ESMTP id 4ZXHvW4xzJzGp6N;
-	Tue,  8 Apr 2025 20:37:43 +0000 (UTC)
-Received: from [82.94.249.234] (mx3.investici.org [82.94.249.234]) (Authenticated sender: invernomuto@paranoici.org) by localhost (Postfix) with ESMTPSA id 4ZXHvW4TCNzGp48;
-	Tue,  8 Apr 2025 20:37:43 +0000 (UTC)
-Received: from frx by crunch with local (Exim 4.98.2)
-	(envelope-from <invernomuto@paranoici.org>)
-	id 1u2FhW-000000009xG-1tob;
-	Tue, 08 Apr 2025 22:37:42 +0200
-From: "Francesco Poli (wintermute)" <invernomuto@paranoici.org>
-To: linux-pm list <linux-pm@vger.kernel.org>
-Cc: Francesco Poli <invernomuto@paranoici.org>,
-	Thomas Renninger <trenn@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"John B. Wyatt IV" <jwyatt@redhat.com>,
-	John Kacur <jkacur@redhat.com>
-Subject: [PATCH] cpupower: add a systemd service to run cpupower
-Date: Tue,  8 Apr 2025 22:32:46 +0200
-Message-ID: <20250408203641.37195-1-invernomuto@paranoici.org>
-X-Mailer: git-send-email 2.47.2
+	s=arc-20240116; t=1744149103; c=relaxed/simple;
+	bh=SO5j5WgpKL3BcXKO5kOdxByCJcvTLcn9ijCoQY04dpQ=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=VDTqrXreIPSbm4xqz9PDOJJSvn+R8MiJ8b+mu7ydTjh0WTV9gXseaaF+zOPXJ9AIanNRGC6Pl2b0R7xp2d8ipiyR3cm7rVRQzTV8qp6FekIDdDREwCPOuytizN6JmTMRkry3msTXS3KZ6ZBDFXoPJM8rNZq+Th0nj2KGO+PkmVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=fHN20sUj; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 538JYxBd014992
+	for <linux-pm@vger.kernel.org>; Tue, 8 Apr 2025 21:51:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	4qYMmx1cwwXQQRUe4B443jnoYMCJS9Y4BrBHvddUYs0=; b=fHN20sUjyr6/tJLY
+	VFhatTXDYbz76Q0DK5zR2QYW9X9Y/auQ1nlJ7HFpRTshffjRlcLSirXqIxTLYqXN
+	w9ZEOnVuhOGlCcoyLHhIlt8tdrbPluKXVrQurRD6TS6/lva/R+tq9uDsvFZ0xQ+Z
+	a8oBH20Ljg9CewBtye8yMMArv4aaBjMQDRJ5jO0eqoUpthRtmP68Ac4hWhMDDm5g
+	y/cf6cS5DuNI8wypYHE7MXHll3Esx3tiBVKMMI9PAOg77sogXsoWndhNgaO91H7w
+	ttTbf4MUUpKSARWg9BevWtu+FFt5XOHTPhBZob3Dbve218YHPWsWynBBu7NIsiLf
+	LJtPTQ==
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45twbuhadj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 08 Apr 2025 21:51:40 +0000 (GMT)
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-225505d1ca5so51488805ad.2
+        for <linux-pm@vger.kernel.org>; Tue, 08 Apr 2025 14:51:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744149099; x=1744753899;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4qYMmx1cwwXQQRUe4B443jnoYMCJS9Y4BrBHvddUYs0=;
+        b=NhjkuUQTVCxklvw92SIgQLhU8DhOT5xDy9W4BHUi5Z7vT+KC/hLezDvxmkHBomWwvO
+         HJRA9hetlOEbwtTBQgFsBjGL1OM1fdsu1giKuj7/sgpQOpmvGoyIZ1X89gutkkXetdM9
+         cs2LrbuG0A8AYIu/LboeXQfmReYJTFhRMVr8MfpGKFEyOrbi4GUdQh6jZUyMGwj60Smf
+         bTtIDwFT/6DBrkEXF9M2/7A58HQTN9ByctsVRtGZnZE7qQg+x+cluOFFfXp/+xEL/GTo
+         OJinWMY2WldBLkbfS37JkHCjmwUkU8o6aDXzwyTJYLle8ZS+dG3C5KdVI5hHA8S0qn7L
+         STAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXREWV6FoGq9AM+NFpNP1qH37sfsS+UKE+UZX5HMIZJR4bGcv6y73YMNjNIGuHByKrsYPQbmPzvuA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTW/z3/sxgznTL9p5Buw58mqbbuEkz6FPN2o/sND7gTRtaBhik
+	D4ysEcXIzK+X3XCeQzi62Y7o7F7fcpEuMSDhnIP2BAlgwgI5g25SviBXj007YaqEPiesBfUM57X
+	8fY3L/BpwsKrGu6tY2nAvrDfAjaEsgy6m4gNUR6Z9Yb40SIujmBhJVknfZg==
+X-Gm-Gg: ASbGncv1AA8p43nbqFbmOdCtlLgiGPFBl1F82koVBVW622iXmdOh91aJgFpy1k/DLFA
+	Tpxc/zOxpPjWiZvwPZ1eQylTXg4QBUTbAwx0NofiHsG+fqh32+KkwetXOvWb+aWHljmH1Y2h/xM
+	aF56VqLXjyy830t4AZP+YD9hCRTwa737hnOv5EI8dQ8t62Edj9rDs8Lvwxn1ifOUo3aJOlgHtK9
+	1aeWgMA7YWXYHKRXJsz79L22SnrwWZD/eKBCd9y4fnIAwa2HR7pBaitGwCxU9PtQ0SS36dxKOhq
+	iwIJ5etXE+5XGSsBh5bjCRpMB8HIfYV7xzdzJaYlFREIbefZZw5mqApRAMrtdd5+RtvVX8UHlWO
+	Lh43pxg==
+X-Received: by 2002:a17:903:1245:b0:221:7b4a:476c with SMTP id d9443c01a7336-22ac2992a09mr8608985ad.18.1744149099659;
+        Tue, 08 Apr 2025 14:51:39 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFCNranT1CO/GEUVT0ohp6e+mD5pBJVFGlgN+QUZlRKj2YbWbEFTNk7ni641yJ3KvIeudhivw==
+X-Received: by 2002:a17:903:1245:b0:221:7b4a:476c with SMTP id d9443c01a7336-22ac2992a09mr8608705ad.18.1744149099281;
+        Tue, 08 Apr 2025 14:51:39 -0700 (PDT)
+Received: from [10.71.114.173] (i-global254.qualcomm.com. [199.106.103.254])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-229785ada60sm106004875ad.3.2025.04.08.14.51.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Apr 2025 14:51:38 -0700 (PDT)
+Message-ID: <de34c654-5b9c-4c21-aee3-e732f6ed374f@oss.qualcomm.com>
+Date: Tue, 8 Apr 2025 14:51:37 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/5 RESEND] thermal: qcom-spmi-temp-alarm: Add support
+ for new TEMP_ALARM subtypes
+From: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+To: amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org
+Cc: rui.zhang@intel.com, lukasz.luba@arm.com, david.collins@oss.qualcomm.com,
+        srinivas.kandagatla@linaro.org, stefan.schmidt@linaro.org,
+        quic_tsoni@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmitry.baryshkov@linaro.org
+References: <20250320202408.3940777-1-anjelique.melendez@oss.qualcomm.com>
+Content-Language: en-US
+In-Reply-To: <20250320202408.3940777-1-anjelique.melendez@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: HXnsagJuLA4qB2luG9ln76EjqDK6t-BU
+X-Proofpoint-ORIG-GUID: HXnsagJuLA4qB2luG9ln76EjqDK6t-BU
+X-Authority-Analysis: v=2.4 cv=dbeA3WXe c=1 sm=1 tr=0 ts=67f59a6c cx=c_pps a=cmESyDAEBpBGqyK7t0alAg==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=p-nOP-kxAAAA:8 a=EUspDBNiAAAA:8
+ a=P6RHbN-0fNZ3JhbA0IsA:9 a=QEXdDO2ut3YA:10 a=1OuFwYUASf3TG4hYMiVC:22 a=TjNXssC_j7lpFel5tvFf:22 a=XN2wCei03jY4uMu7D0Wg:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-08_09,2025-04-08_04,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 mlxlogscore=999 phishscore=0 mlxscore=0 spamscore=0
+ malwarescore=0 clxscore=1015 adultscore=0 priorityscore=1501
+ lowpriorityscore=0 bulkscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502280000 definitions=main-2504080151
 
-One of the most typical use cases of the 'cpupower' utility works as
-follows: run 'cpupower' at boot with the desired command-line options
-and then forget about it.
 
-Add a systemd service (disabled by default) that automates this use
-case (for environments where the initialization system is 'systemd'),
-by running 'cpupower' at boot with the settings read from a default
-configuration file.
 
-The systemd service, the associated support script and the
-corresponding default configuration file are derived from what is
-provided by the Arch Linux package (under "GPL-2.0-or-later" terms),
-modernized and enhanced in various ways (the script has also been
-checked with 'shellcheck').
+On 3/20/2025 1:24 PM, Anjelique Melendez wrote:
+> Add support in the qcom-spmi-temp-alarm driver for the new PMIC
+> TEMP_ALARM peripheral subtypes: GEN2 rev 2 and LITE. The GEN2 rev 2
+> subtype provides greater flexibility in temperature threshold
+> specification by using an independent register value to configure
+> each of the three thresholds. The LITE subtype utilizes a simplified
+> set of control registers to configure two thresholds: warning and
+> shutdown. While at it refactor the qcom-spmi-temp-alarm driver to limit
+> code reuse and if/else statements when deciphering between TEMP_ALARM
+> peripheral subtypes.
+> 
+> Also add support to avoid a potential issue on certain versions of
+> the TEMP_ALARM GEN2 subtype when automatic stage 2 partial shutdown
+> is disabled.
+> 
+> This patch series is a continuation of older series from 7/2024
+> (https://lore.kernel.org/all/20240729231259.2122976-1-quic_amelende@quicinc.com/)
+> but current series has been reworked to address the change in thermal framework to
+> update .set_trip_temp() callback function variables
+> (https://lore.kernel.org/all/8392906.T7Z3S40VBb@rjwysocki.net/)
+> 
+> Changes since v2:
+>    - Updated function name to include "gen1" in patch 2/5
+>    - Added Dmitry's reviewed-by tag in patch 2/5
+>    - link: https://lore.kernel.org/all/20250225192429.2328092-1-anjelique.melendez@oss.qualcomm.com/
+> Changes since v1:
+>    - Remove unnecessary moving of code
+>    - Added new v2 patch 3/5 add a preparation patch to v1 patch 2/5
+>    - Updated temp alarm data function names to be consistently named
+>    - link: https://lore.kernel.org/all/20250213210403.3396392-1-anjelique.melendez@oss.qualcomm.com/
+> 
+> Anjelique Melendez (4):
+>    thermal: qcom-spmi-temp-alarm: Add temp alarm data struct based on HW
+>      subtype
+>    thermal: qcom-spmi-temp-alarm: Prepare to support additional Temp
+>      Alarm subtypes
+>    thermal: qcom-spmi-temp-alarm: add support for GEN2 rev 2 PMIC
+>      peripherals
+>    thermal: qcom-spmi-temp-alarm: add support for LITE PMIC peripherals
+> 
+> David Collins (1):
+>    thermal: qcom-spmi-temp-alarm: enable stage 2 shutdown when required
+> 
+>   drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 515 ++++++++++++++++++--
+>   1 file changed, 464 insertions(+), 51 deletions(-)
+> 
+Hi Amit and Thara,
+Can you take a look at changes when you have a chance.
 
-Link: https://gitlab.archlinux.org/archlinux/packaging/packages/linux-tools/-/tree/dd2e2a311e05413d0d87a0346ffce8c7e98d6d2b
-
-Signed-off-by: Francesco Poli (wintermute) <invernomuto@paranoici.org>
----
- tools/power/cpupower/Makefile            | 14 ++++++++++++
- tools/power/cpupower/README              | 18 +++++++++++++++
- tools/power/cpupower/cpupower.default    | 28 ++++++++++++++++++++++++
- tools/power/cpupower/cpupower.service.in | 16 ++++++++++++++
- tools/power/cpupower/cpupower.sh         | 26 ++++++++++++++++++++++
- 5 files changed, 102 insertions(+)
- create mode 100644 tools/power/cpupower/cpupower.default
- create mode 100644 tools/power/cpupower/cpupower.service.in
- create mode 100644 tools/power/cpupower/cpupower.sh
-
-diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-index 51a95239fe06..2bdfb2bfe88a 100644
---- a/tools/power/cpupower/Makefile
-+++ b/tools/power/cpupower/Makefile
-@@ -2,6 +2,7 @@
- # Makefile for cpupower
- #
- # Copyright (C) 2005,2006 Dominik Brodowski <linux@dominikbrodowski.net>
-+# Copyright (C) 2025      Francesco Poli <invernomuto@paranoici.org>
- #
- # Based largely on the Makefile for udev by:
- #
-@@ -68,6 +69,7 @@ bindir ?=	/usr/bin
- sbindir ?=	/usr/sbin
- mandir ?=	/usr/man
- libdir ?=	/usr/lib
-+libexecdir ?=	/usr/libexec
- includedir ?=	/usr/include
- localedir ?=	/usr/share/locale
- docdir ?=       /usr/share/doc/packages/cpupower
-@@ -80,6 +82,7 @@ CP = cp -fpR
- INSTALL = /usr/bin/install -c
- INSTALL_PROGRAM = ${INSTALL}
- INSTALL_DATA  = ${INSTALL} -m 644
-+SETPERM_DATA  = chmod 644
- #bash completion scripts get sourced and so they should be rw only.
- INSTALL_SCRIPT = ${INSTALL} -m 644
- 
-@@ -299,6 +302,14 @@ install-tools: $(OUTPUT)cpupower
- 	$(INSTALL_PROGRAM) $(OUTPUT)cpupower $(DESTDIR)${bindir}
- 	$(INSTALL) -d $(DESTDIR)${bash_completion_dir}
- 	$(INSTALL_SCRIPT) cpupower-completion.sh '$(DESTDIR)${bash_completion_dir}/cpupower'
-+	$(INSTALL) -d $(DESTDIR)${confdir}default
-+	$(INSTALL_DATA) cpupower.default '$(DESTDIR)${confdir}default/cpupower'
-+	$(INSTALL) -d $(DESTDIR)${libexecdir}
-+	$(INSTALL_PROGRAM) cpupower.sh '$(DESTDIR)${libexecdir}/cpupower'
-+	$(INSTALL) -d $(DESTDIR)${libdir}/systemd/system
-+	sed 's|___CDIR___|$(DESTDIR)${confdir}|; s|___LDIR___|$(DESTDIR)${libexecdir}|' cpupower.service.in > '$(DESTDIR)${libdir}/systemd/system/cpupower.service'
-+	$(SETPERM_DATA) '$(DESTDIR)${libdir}/systemd/system/cpupower.service'
-+	if test -d /run/systemd/system; then systemctl daemon-reload; fi
- 
- install-man:
- 	$(INSTALL_DATA) -D man/cpupower.1 $(DESTDIR)${mandir}/man1/cpupower.1
-@@ -333,6 +344,9 @@ uninstall:
- 	- rm -f $(DESTDIR)${includedir}/cpufreq.h
- 	- rm -f $(DESTDIR)${includedir}/cpuidle.h
- 	- rm -f $(DESTDIR)${bindir}/utils/cpupower
-+	- rm -f $(DESTDIR)${confdir}default/cpupower
-+	- rm -f $(DESTDIR)${libexecdir}/cpupower
-+	- rm -f $(DESTDIR)${libdir}/systemd/system/cpupower.service
- 	- rm -f $(DESTDIR)${mandir}/man1/cpupower.1
- 	- rm -f $(DESTDIR)${mandir}/man1/cpupower-frequency-set.1
- 	- rm -f $(DESTDIR)${mandir}/man1/cpupower-frequency-info.1
-diff --git a/tools/power/cpupower/README b/tools/power/cpupower/README
-index 2678ed81d311..3c34ef67e0cf 100644
---- a/tools/power/cpupower/README
-+++ b/tools/power/cpupower/README
-@@ -59,6 +59,10 @@ $ sudo make install
- -----------------------------------------------------------------------
- | man pages              | /usr/man                                   |
- -----------------------------------------------------------------------
-+| systemd service        | /usr/lib                                   |
-+-----------------------------------------------------------------------
-+| systemd support script | /usr/libexec                               |
-+-----------------------------------------------------------------------
- 
- To put it in other words it makes build results available system-wide,
- enabling any user to simply start using it without any additional steps
-@@ -109,6 +113,10 @@ The files will be installed to the following dirs:
- -----------------------------------------------------------------------
- | man pages              | ${DESTDIR}/usr/man                         |
- -----------------------------------------------------------------------
-+| systemd service        | ${DESTDIR}/usr/lib                         |
-+-----------------------------------------------------------------------
-+| systemd support script | ${DESTDIR}/usr/libexec                     |
-+-----------------------------------------------------------------------
- 
- If you look at the table for the default 'make' output dirs you will
- notice that the only difference with the non-default case is the
-@@ -173,6 +181,16 @@ The issue is that binary cannot find the 'libcpupower' library. So, we
- shall point to the lib dir:
- sudo LD_LIBRARY_PATH=lib64/ ./bin/cpupower
- 
-+systemd service
-+---------------
-+
-+A systemd service is also provided to run the cpupower utility at boot with
-+settings read from a configuration file. In order to enable this systemd
-+service, edit '${DESTDIR}/etc/default/cpupower' and then issue the following
-+command:
-+
-+$ sudo systemctl enable --now cpupower.service
-+
- 
- THANKS
- ------
-diff --git a/tools/power/cpupower/cpupower.default b/tools/power/cpupower/cpupower.default
-new file mode 100644
-index 000000000000..b2fd3c37e277
---- /dev/null
-+++ b/tools/power/cpupower/cpupower.default
-@@ -0,0 +1,28 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+# Copyright (C) 2012, Sébastien Luttringer
-+# Copyright (C) 2024, Francesco Poli <invernomuto@paranoici.org>
-+
-+# defaults file for linux-cpupower
-+
-+# --- CPU clock frequency ---
-+
-+# Define CPU governor
-+# valid governors: ondemand, performance, powersave, conservative, userspace.
-+#GOVERNOR='ondemand'
-+
-+# Limit frequency range
-+# Valid suffixes: Hz, kHz (default), MHz, GHz, THz
-+#MIN_FREQ="2.25GHz"
-+#MAX_FREQ="3GHz"
-+
-+# Specific frequency to be set.
-+# Requires userspace governor to be available.
-+# If this option is set, all the previous frequency options are ignored
-+#FREQ=
-+
-+# --- CPU policy ---
-+
-+# Sets a register on supported Intel processore which allows software to convey
-+# its policy for the relative importance of performance versus energy savings to
-+# the  processor. See man (1) CPUPOWER-SET for additional details.
-+#PERF_BIAS=
-diff --git a/tools/power/cpupower/cpupower.service.in b/tools/power/cpupower/cpupower.service.in
-new file mode 100644
-index 000000000000..f91eaed03872
---- /dev/null
-+++ b/tools/power/cpupower/cpupower.service.in
-@@ -0,0 +1,16 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+# Copyright (C) 2012-2020, Sébastien Luttringer
-+# Copyright (C) 2024, Francesco Poli <invernomuto@paranoici.org>
-+
-+[Unit]
-+Description=Apply cpupower configuration
-+ConditionVirtualization=!container
-+
-+[Service]
-+Type=oneshot
-+EnvironmentFile=-___CDIR___default/cpupower
-+ExecStart=___LDIR___/cpupower
-+RemainAfterExit=yes
-+
-+[Install]
-+WantedBy=multi-user.target
-diff --git a/tools/power/cpupower/cpupower.sh b/tools/power/cpupower/cpupower.sh
-new file mode 100644
-index 000000000000..a37dd4cfdb2b
---- /dev/null
-+++ b/tools/power/cpupower/cpupower.sh
-@@ -0,0 +1,26 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+# Copyright (C) 2012, Sébastien Luttringer
-+# Copyright (C) 2024, Francesco Poli <invernomuto@paranoici.org>
-+
-+ESTATUS=0
-+
-+# apply CPU clock frequency options
-+if test -n "$FREQ"
-+then
-+    cpupower frequency-set -f "$FREQ" > /dev/null || ESTATUS=1
-+elif test -n "${GOVERNOR}${MIN_FREQ}${MAX_FREQ}"
-+then
-+    cpupower frequency-set \
-+      ${GOVERNOR:+ -g "$GOVERNOR"} \
-+      ${MIN_FREQ:+ -d "$MIN_FREQ"} ${MAX_FREQ:+ -u "$MAX_FREQ"} \
-+      > /dev/null || ESTATUS=1
-+fi
-+
-+# apply CPU policy options
-+if test -n "$PERF_BIAS"
-+then
-+    cpupower set -b "$PERF_BIAS" > /dev/null || ESTATUS=1
-+fi
-+
-+exit $ESTATUS
-
-base-commit: a64dcfb451e254085a7daee5fe51bf22959d52d3
--- 
-2.47.2
-
+Thanks,
+Anjelique
 
