@@ -1,176 +1,136 @@
-Return-Path: <linux-pm+bounces-24960-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24961-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65B76A81325
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 19:00:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 879FEA813C7
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 19:35:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0FE28A0C03
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 16:59:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 097997B7B14
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 17:34:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A879D232786;
-	Tue,  8 Apr 2025 16:59:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55EA623BFBC;
+	Tue,  8 Apr 2025 17:35:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R0Qi4AO1"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="DGIa7MQr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD51DB676;
-	Tue,  8 Apr 2025 16:59:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1167222B8D2;
+	Tue,  8 Apr 2025 17:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744131585; cv=none; b=BiBVj9vkwSCYWo84biEwY4Z8QKxMjG6iBpjki+Ntz+TyzqphTS1WxJ9UjYLqG/+S9t3IG2L/VWO90hkj5tKI95acAlCILtn5Iujeig4rOLP33D8yH9jSRQEpqBPkzz+3fyrr8WGcWHeX4Ts9V7+MaqQwOMV9+PAHnm3C2qzWpCM=
+	t=1744133733; cv=none; b=aRBnG9Ei6nLT8ge1dxiRD+6WSlwic5JW9w3BeDTVQgrLd+ZmE6QeMQG0Zfp1Y93PQmeY/QN0KG4wfqt/tPS6z20GrxsRmbhyDuRmJNtC72SmJHD8k66Y0ydw/Zk9HulhTOtJpIXNGOXHDzn3BUyD4a56GZikjCGoW+L3GcYMExk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744131585; c=relaxed/simple;
-	bh=DftV1a27ak/l5309d19IF5/drsGm5W5ni5972SsniR4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=k/cUsK7vVmyNvEUOsol6hDH7BKqwAbdDGgYKCACNCjMyqToBfzx3lHk17Nq8P+R0iW0Qru/4PM6AvfEnB79sDUnNi3NoCbLGiQ7nEI/S6zxga7F/Gz9LyT19idPrxpbmoDKVRv8yUqlEJR1l+oJC1c1kRs7VJksulZBa20+hW0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R0Qi4AO1; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-30bf7d0c15eso56390071fa.0;
-        Tue, 08 Apr 2025 09:59:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744131582; x=1744736382; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DftV1a27ak/l5309d19IF5/drsGm5W5ni5972SsniR4=;
-        b=R0Qi4AO1QrhORrmi1CQShYnzjvgQG1nLyCrH9F3AKHt9UrVBM7M7bOXmsoTVyHAIuG
-         DnJMMw8i2LClUBVBhgiv2o3zMlBMnCdmux9VIuf+VwKM3A+XToM3Hu9OZ9UWjXtYUFwY
-         ooWLwvCoX8/YKZeXPIEuiNcDwZiu/ylMKhdMKgDaC7iRq8gy182wYkGkTdFzCGzeVlyC
-         xOYoEwCvx65opZG2QJ4repGPhdNfnqGES0V9Mqy+6wWW7bZFw8MZSMe2VEAkL6kOM05y
-         XGXWcWF3DNwfXETedhLJi4FghYt16f+gXaCqFypVM/zLZcV56txRePiLNkp6LvLJXjqY
-         PXpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744131582; x=1744736382;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DftV1a27ak/l5309d19IF5/drsGm5W5ni5972SsniR4=;
-        b=Sk8jkHkbmt4qU+l8YqnFgM57SVii+5cHt7dBri98ofaW/n7iOsPYBNOlCZ86V2uSk8
-         mQATI2QIcsH6HPYz+FbIcLxU7hyrTQHKf1grVNpRebNr/desJz9Hz087oN2n2I1NcHFC
-         dSrrzhPVOC7YHjHinvzoPo/Vhgh3JIpQxAwRHQjmkG5tdegqWNO4zgvUsBBniNGHxVtK
-         gyqmSt64LR7DtpA3kbMVlW+QE9GWq6vHH2Eaz0uXBh+xHKp80SKWGXwPfd36FNon8e6U
-         8go1sUy+zWoJL77xVheA6BP1+SQFrEPIIZ3YMdsvyCrnOVBgtfHVSRVceXv04ZwloQsp
-         Gs2w==
-X-Forwarded-Encrypted: i=1; AJvYcCV2/L6meTTICwo98VvM66iRKLlqjwj8P9fDt8f+k9uE7qz60WgxYdYcFSl/Vd55Z2Kd5fefvY6uTmM=@vger.kernel.org, AJvYcCX18KUWqfxL/jGrPpmHCYmsbyf7yZaVlUtGyvCqlcvs6CuXJul0lhWRGtWQZNLHSVPGuc+KNGame99q9snT@vger.kernel.org, AJvYcCXeUdRTLlGdTx0JyB33UDMpV8U/II33yLQx2BvqxDMPE87iY3yrgN4nYT2yLgrg2/TEVS39Q4vL@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSIt9ikiDVyxFOgleYo2lz8RwXjlaUcFCoij8K473ku6O2/6KF
-	EYiDJZgCcwOH5TLLgXdDrkMS4VCEyBW3S3Ue3XAcCJ3Cvkc64LmScR4qTr+3RMv9CCLLez2YLu/
-	F/Nw66CGY43Ha0gZyYsNTPLtegcs=
-X-Gm-Gg: ASbGncsUZMlak2TkMXxlWOr7BvC7QkwcHC+aTGVaCeS2uGQEG4wHz2E2qHgrKBPJdmu
-	1JJ7AbkRmKlxQCBgSjIsr1vVk9lLOdgXqw8EiBHX3yugy6kbAX/JwFuzyxFqEIQk/dVLUdKPu2X
-	NS4g00zaP14II29rKAN8XvEKb5pg==
-X-Google-Smtp-Source: AGHT+IH9R7h7ieFhvrQGM67HDK4QXM6Z/1TM33bKp4N8o3XFtaF4quedno31N3Wfa38ljpf82w+2jKVzk5o6XxRjqZI=
-X-Received: by 2002:a2e:bd81:0:b0:30b:f775:bb25 with SMTP id
- 38308e7fff4ca-30f0a190a9emr57862711fa.36.1744131581435; Tue, 08 Apr 2025
- 09:59:41 -0700 (PDT)
+	s=arc-20240116; t=1744133733; c=relaxed/simple;
+	bh=voU6MwLZqCQnV0FdjD08dZZ9AHYyERMxnrmtBaVaoZ4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gyoBIaMRcfwuNKJ8Tz/6DJR/Y8vWGt//kzkV6B9maaOAG/ixieOMulh+I4UsDTmQkbqlvLXju9dJqagOaEJfG4CUepHwNulAdRfKYmWRQquVEyqkdCeSQYRJV/UbUcQUjywPORgRGmHJTYWShbdtE9C0sqA7oqkIP1xQquLaRjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=DGIa7MQr; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [192.168.7.202] ([71.202.166.45])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 538HYKRg3088620
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Tue, 8 Apr 2025 10:34:21 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 538HYKRg3088620
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025032001; t=1744133664;
+	bh=WkvwYM1YWnU4TAJ+J/9Vt8/Lh0xsIqteV787gUNx/Oo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=DGIa7MQrPXWSVvRWGj8J9I9uLnNFKLmCzMcxqp9sA7nAoJC1WJHTTBphRx8Kv8ojG
+	 TFKk4S0MJqG1qE6jdToL7U6LViQMYDTnT6XmG6GZ/+eQjdbb1OSynNFMrpEtzEVoKZ
+	 g0KcbVkw9oMHB5iu0Rp5BEfOt7OQlb08CtRaOpdIjsTXVHGAxBTuXCRraYO5P9wS94
+	 8v73kdOA2NdbUZ2X6Zw6P5nUDUF44s5P31zcgszZbitLnPnn1PucZbcA7gNJNvVE5d
+	 daoTYgTnVa8ixFIdolcOCNPBmW+yivuG8gYwjhDdkQiDgWmAvrkZdHD6C59UDRz+ez
+	 9U2wrN1TZ2BKQ==
+Message-ID: <3b91a47c-e453-406a-815d-67c438d73a4d@zytor.com>
+Date: Tue, 8 Apr 2025 10:34:20 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250407234223.1059191-1-nphamcs@gmail.com> <CAMgjq7CdARdTEZB3ik4X9cAzNUFa6GRqjT61brygihGUYFBAeQ@mail.gmail.com>
- <CAKEwX=M5y4yoW62U5GkHTxaDaD7UOJu_sgkkwNXJ5Hn4Gvot9g@mail.gmail.com>
-In-Reply-To: <CAKEwX=M5y4yoW62U5GkHTxaDaD7UOJu_sgkkwNXJ5Hn4Gvot9g@mail.gmail.com>
-From: Kairui Song <ryncsn@gmail.com>
-Date: Wed, 9 Apr 2025 00:59:24 +0800
-X-Gm-Features: ATxdqUHGkDm_i6GEKMJkd2mD4BjrHrGRZ9eR_uwYqr_cY42CF_aL_IYSEBAo7bQ
-Message-ID: <CAMgjq7D9Z=u2J18DExmzeU8fRbvqNwyC3tem2aykAsm79=QGEA@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/14] Virtual Swap Space
-To: Nhat Pham <nphamcs@gmail.com>
-Cc: linux-mm@kvack.org, akpm@linux-foundation.org, hannes@cmpxchg.org, 
-	hughd@google.com, yosry.ahmed@linux.dev, mhocko@kernel.org, 
-	roman.gushchin@linux.dev, shakeel.butt@linux.dev, muchun.song@linux.dev, 
-	len.brown@intel.com, chengming.zhou@linux.dev, chrisl@kernel.org, 
-	huang.ying.caritas@gmail.com, ryan.roberts@arm.com, viro@zeniv.linux.org.uk, 
-	baohua@kernel.org, osalvador@suse.de, lorenzo.stoakes@oracle.com, 
-	christophe.leroy@csgroup.eu, pavel@kernel.org, kernel-team@meta.com, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 01/15] x86/msr: Replace __wrmsr() with
+ native_wrmsrl()
+To: Ingo Molnar <mingo@kernel.org>
+Cc: "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux.dev, linux-edac@vger.kernel.org,
+        kvm@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-ide@vger.kernel.org, linux-pm@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
+        peterz@infradead.org, acme@kernel.org, namhyung@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        kan.liang@linux.intel.com, wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+        haiyangz@microsoft.com, decui@microsoft.com,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20250331082251.3171276-1-xin@zytor.com>
+ <20250331082251.3171276-2-xin@zytor.com> <Z-pruogreCuU66wm@gmail.com>
+ <9D15DE81-2E68-4FCD-A133-4963602E18C9@zytor.com> <Z-ubVFyoOzwKhI53@gmail.com>
+ <7a503d55-db41-42da-8133-4a3dbbd36c7e@zytor.com> <Z-y4pGxgiP55lpOj@gmail.com>
+Content-Language: en-US
+From: Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <Z-y4pGxgiP55lpOj@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 9, 2025 at 12:48=E2=80=AFAM Nhat Pham <nphamcs@gmail.com> wrote=
-:
->
-> On Tue, Apr 8, 2025 at 9:23=E2=80=AFAM Kairui Song <ryncsn@gmail.com> wro=
-te:
-> >
-> >
-> > Thanks for sharing the code, my initial idea after the discussion at
-> > LSFMM is that there is a simple way to combine this with the "swap
-> > table" [1] design of mine to solve the performance issue of this
-> > series: just store the pointer of this struct in the swap table. It's
-> > a bruteforce and glue like solution but the contention issue will be
-> > gone.
->
-> Was waiting for your submission, but I figured I should send what I
-> had out first for immediate feedback :)
->
-> Johannes actually proposed something similar to your physical swap
-> allocator for the virtual swap slots allocation logic, to solve our
-> lock contention problem. My apologies - I should have name-dropped you
-> in the RFC cover as well (the cover was a bit outdated, and I haven't
-> updated the newest developments that came from the LSFMMBPF
-> conversation in the cover letter).
->
-> >
-> > Of course it's not a good approach, ideally the data structure can be
-> > simplified to an entry type in the swap table. The swap table series
-> > handles locking and synchronizations using either cluster lock
-> > (reusing swap allocator and existing swap logics) or folio lock (kind
-> > of like page cache). So many parts can be much simplified, I think it
-> > will be at most ~32 bytes per page with a virtual device (including
-> > the intermediate pointers).Will require quite some work though.
-> >
-> > The good side with that approach is we will have a much lower memory
-> > overhead and even better performance. And the virtual space part will
-> > be optional, for non virtual setup the memory consumption will be only
-> > 8 bytes per page and also dynamically allocated, as discussed at
-> > LSFMM.
->
-> I think one problem with your design, which I alluded to at the
-> conference, is that it doesn't quite work for our requirements -
-> namely the separation of zswap from its underlying backend.
->
-> All the metadata HAVE to live at the virtual layer. For once, we are
-> duplicating the logic if we push this to the backend.
->
-> But more than that, there are lifetime operations that HAVE to be
-> backend-agnostic. For instance, on the swap out path, when we unmap
-> the page from the page table, we do swap_duplicate() (i.,e increasing
-> the swap count/reference count of the swap entries). At that point, we
-> have not (and cannot) make a decision regarding the backend storage
-> yet, and thus does not have any backend-specific places to hold this
-> piece of information. If we couple all the backends then yeah sure we
-> can store it at the physical swapfile level, but that defeats the
-> purpose of swap virtualization :)
+On 4/1/2025 9:10 PM, Ingo Molnar wrote:
+> Yeah, I moved it over to:
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git WIP.x86/msr
+> 
 
-Ah, now I get why you have to store the data in the virtual layer.
+Hi Ingo,
 
-I was thinking that doing it in the physical layer will make it easier
-to reuse what swap already has. But if you need to be completely
-backend-agnostic, then just keep it in the virtual layer. Seems not a
-foundunmentail issue, it could be worked out in some way I think. eg.
-using another table type. I'll check if that would work after I've
-done the initial parts.
+Are you going to merge it into tip in this development cycle for the
+v6.16 merge window?
 
->
-> >
-> > So sorry that I still have a few parts undone, looking forward to
-> > posting in about one week, eg. After this weekend it goes well. I'll
-> > also try to check your series first to see how these can be
-> > collaborated better.
->
-> Of course, I'm not against collaboration :) As I mentioned earlier, we
-> need more work on the allocation part, which your physical swapfile
-> allocator should either work, or serve as the inspiration for.
->
-> Cheers,
-> Nhat
+Thanks!
+     Xin
 
