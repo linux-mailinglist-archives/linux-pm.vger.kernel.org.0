@@ -1,188 +1,126 @@
-Return-Path: <linux-pm+bounces-24935-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24936-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11E82A80BB8
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 15:20:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD2BFA80CB1
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 15:44:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AEC01BC4476
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 13:14:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C172E1BC12DE
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 13:38:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 583621CAA71;
-	Tue,  8 Apr 2025 13:04:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B940217A312;
+	Tue,  8 Apr 2025 13:37:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BAl9Fr5t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uv8gKvYZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809CD1C5F08;
-	Tue,  8 Apr 2025 13:04:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A281632DF;
+	Tue,  8 Apr 2025 13:37:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744117453; cv=none; b=ZRAXZkn2ARbH3cUqBJG/3M4x2DM1yJsvWwDCaXKT5Tx/v7wejoAr3hWMxxHafMYy9blEFGFMcDtLBNxzz+8vExNIa/2hxiDOo06A6+GTjl8O414lN5U/Nj9cRvXjcvXtwSTvwAXHvHa+wbP0vjo9ZmHUBxX1Qode8uLX42MMeKg=
+	t=1744119457; cv=none; b=qSksNWcMJXNPQxQ7YPpUS8KGWPd3y0NxC5ZBWW92nn0+H8mdQ6BU1rjmaAdKlUSQegkKNcoC9YFsllj27KNii1p+mad3CiMQrfPVesY3rz/8zYIQqqyRPwdcLWZRFkHRExPihY2hDyKUjouRd8FxPmCWFss6ujkAqTROpEYjuDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744117453; c=relaxed/simple;
-	bh=phvG9LGBV5uu7snUj6raZk7nsiIEVPDHKML9MQ6RgRU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VJmfdyg3azFDNemkGBsihRdK2W/W080a4acwy1JiDOl6mk8q3Ankfq6DN72kebkF92pfFaMkEv5I9doW5/077c861eStj/fsfA7auI3Vv/+zGDY3lK/ID8Hh7c6x/DzVL++6i00iJVi5vrES3S/niRRzUxgODSnoQ/fm6yK7Pew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BAl9Fr5t; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-ac298c8fa50so927187166b.1;
-        Tue, 08 Apr 2025 06:04:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744117450; x=1744722250; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=609ZDUaaXCTvHp63HLV78FTKwEGS1VrIa2wh0r/CJ10=;
-        b=BAl9Fr5tzHDAPY16tix2yGkHCF4e1zDhdk7MQq1gillR2LATJo7cfMmTPRhlIQETKs
-         srwgDyFa3ZdV8xDPqb8V7+Wm5Ni3fza83eMs4mcLll9FRkAVnZAZV9JIE6NqetBuQX8J
-         8ST+7moWeQoABRM8pfksnUjkjixloSsIYoF9iSnhM9BSXZhtbBSaJFl9vrEoy5AWTS+O
-         jgf2+h2qTcz40reGnUmp4oN155ndr/Fm90aSavIUhMeMU83AIbylnoxdYjXav70CglQV
-         xdNttv+xXQN1Eo2Q5ADVLzXSh6/gHgX2/AWEw41hGSQvo/7+pcHGPD2PVX3+VY3oSMQG
-         FZew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744117450; x=1744722250;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=609ZDUaaXCTvHp63HLV78FTKwEGS1VrIa2wh0r/CJ10=;
-        b=sb8VZlZfoGdwaTRr4OufnUogMkM8FIx61NdhBhbeF2hbPPUSyqyOtzG/olXfCIdTJ/
-         59mk2ERV1olI+eWhhe8gVuyF93geD5LK1kOahnCRswydqTHDQO9kIwmjQDVWRaBVM8kE
-         65AChAEUtBWFhfGbHfqdPcFXLGc4x/LQPuAHYR+6XcTYskoE1KMSxH4YZlu4iobWBHGd
-         G74+mXgNu47BClSbjCZbM7D3RAcLGDeWlz6Rb68mYa0f2hKBCVtu16pASIl7z8wEu/CH
-         ai7xXcBlmkBUirIv1JgZRYqwwRY2MFMOkazc4vU/CKpNsmumEmTqWRcBP/O+4VEnV4cx
-         Mg7g==
-X-Forwarded-Encrypted: i=1; AJvYcCU37RJOoUJ2z1cfXzC7GbsMTKsCpprVbpLiI/mV5TZRm0cfUgi6PoieyIuw6vc12kZzUAZ3ute6aZA=@vger.kernel.org, AJvYcCWW7s9CAqkyBdOMUQm38lCfKC1lqRTQCZ/2t5sgtj/kzs7IU0urXDDAFi9UhBFjUotkQElfSefieM5/MpvS@vger.kernel.org, AJvYcCWfo2uqdawENiQ9EURX14fgxpJPHacSJeD6jdLaUvl6CpBqP9akyZLiZJK7yW0qRHjVZGLDqsGa@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxA/5VR5bNEMfGTyEmt+6kS8PZjUM8z9H9dXSj4MnN1nKUSGR/
-	GBgyrJ6TQok/9KFcZ05E9JBDC0hKRvLT+JpTjrykxg3fKmRqcvsN
-X-Gm-Gg: ASbGncvgMv0LKmneHiFoH7Uvm919YnTfMv22vO8fZL2D0Y73TbVNH7mtqIeMudHmCLE
-	vKFtQrFmtE8mCG0FrwJNMeOYp/yrwn/CMDnumfyAVf3LMysUyHHJUB5RwmXnAKVAjz3LcE7fowg
-	lO5GL68iUZRer3vKlNTyiN80ED4FJj51CJTSibAvykUhc9KTHiZrL+XSw6NKwAzQ3bxc5rhrrgq
-	NyVBv+0b+8vbprz5B6F4qqb3woFboL3AKgjiJXxYV0u1pNk56kyHmpgBqaFm7PV0oePgEuPRCF5
-	lrDuc+pNE+FFvNhJidSVaq/SFIdmDsTOIB3b3UIQOWlBqj6JuuP3hd1DZxYO16Rws+R4tisd7pp
-	Y
-X-Google-Smtp-Source: AGHT+IGzSGm+pF8QY7moyCNfRsEXqKQ2FCB+iJZLi5PsFvzZo1B3MvlWqhsuKTJSbqBEzIrbkZYGNw==
-X-Received: by 2002:a17:907:3d92:b0:ac3:ccf7:3a11 with SMTP id a640c23a62f3a-ac7d198f6d6mr1424146766b.44.1744117449142;
-        Tue, 08 Apr 2025 06:04:09 -0700 (PDT)
-Received: from [172.17.139.17] ([163.114.131.192])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac7bfe99c7dsm919058366b.57.2025.04.08.06.04.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Apr 2025 06:04:08 -0700 (PDT)
-Message-ID: <983965b6-2262-4f72-a672-39085dcdaa3c@gmail.com>
-Date: Tue, 8 Apr 2025 14:04:06 +0100
+	s=arc-20240116; t=1744119457; c=relaxed/simple;
+	bh=FYhTE/iY9Y+AzxVNHuLvd4WShotIjn52sSa5sln1lrQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LQjVF+6y6gBPhmWW4RdOOvSyTP0LoHgxhY0033HVUO0gAAvu3oYjeVizs5cZxpUSS6MXxgMwljH1V1V1CEMdRgS3AHjRvVkfW55KxdYm18lNBipFD+i6+x2CAzgs6JzYAegL6/ri0pOOhLh0C5Sg6genorwyXz4/nJkGC0acwSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uv8gKvYZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEF41C4CEEC;
+	Tue,  8 Apr 2025 13:37:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744119457;
+	bh=FYhTE/iY9Y+AzxVNHuLvd4WShotIjn52sSa5sln1lrQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=uv8gKvYZOxTnZdY0kaKd6FfRtBKdSQeRlS8xgoNb3TbCBt8rFIBllwn5HFtEVSmkj
+	 HGNw8KRFyjfqKZ6vVo7Q5ILOY/qnDl15t/mvpl2shaLm6fBRS8++vE3Wptj+gxEyAv
+	 r5OEDjeiELYQvQMFHw99mWl3rJTXewJS7FC6nJj3qB/jW5KB9Xlq4+NZBs/TZzg9Pc
+	 B/EAED1DfVYkfKwV6Crj7usAFkBI0woxUmRsOfjpBYUhQRrnpveYZFHo9P8M5PlvN/
+	 7K08e9f7fp6mtStt+nIOYxdGoEwLW69JeJa92DtF5GkKU+0qG39guG6m9PNQB4SBaG
+	 LgAtU8VAaV25Q==
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-2b8e26063e4so2894470fac.3;
+        Tue, 08 Apr 2025 06:37:36 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVLeMBkcZ4YzcRg8QbH4uQ5I1OonAseaaRbnUdxoQMAyIv6PyivuyRY/9atiu3NCXxZ+yDqPqzeKYb7L2E=@vger.kernel.org, AJvYcCWqsBVYX9TRrIC5Q5+W8Uh12HxUs3MYj8uyFfcjMvvIKN8o2v8HJzYLYcpVsXEBHQhM8pp8x0YM8aE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YykHZT91tEmIzb7fzQYPg2eT0Yu3PpIR6y5Qm5Sqd3IKYm39Omk
+	6wxfHV4Gx1X3wKCof6utnl7nxb0+woWE27mB+z4mG/WGyxmWvsSpQpKMtwtb48twCXKGSBmAezA
+	xkN2UzrFPP44ux4kI5WNLnIIqkUA=
+X-Google-Smtp-Source: AGHT+IGRAb61WFFRgfsEeOJinw/+ed+QxyallZV2HUVj9aBY9akS78F0a6R6DBNGpRCCIF3fc585Boi5z1vTofAQfZ8=
+X-Received: by 2002:a05:6870:4d10:b0:2c2:71f:2c0b with SMTP id
+ 586e51a60fabf-2cd32eb7750mr7025079fac.11.1744119456219; Tue, 08 Apr 2025
+ 06:37:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 00/14] Virtual Swap Space
-To: Nhat Pham <nphamcs@gmail.com>, linux-mm@kvack.org
-Cc: akpm@linux-foundation.org, hannes@cmpxchg.org, hughd@google.com,
- yosry.ahmed@linux.dev, mhocko@kernel.org, roman.gushchin@linux.dev,
- shakeel.butt@linux.dev, muchun.song@linux.dev, len.brown@intel.com,
- chengming.zhou@linux.dev, kasong@tencent.com, chrisl@kernel.org,
- huang.ying.caritas@gmail.com, ryan.roberts@arm.com, viro@zeniv.linux.org.uk,
- baohua@kernel.org, osalvador@suse.de, lorenzo.stoakes@oracle.com,
- christophe.leroy@csgroup.eu, pavel@kernel.org, kernel-team@meta.com,
- linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20250407234223.1059191-1-nphamcs@gmail.com>
-Content-Language: en-US
-From: Usama Arif <usamaarif642@gmail.com>
-In-Reply-To: <20250407234223.1059191-1-nphamcs@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <4651448.LvFx2qVVIh@rjwysocki.net> <8560367.NyiUUSuA9g@rjwysocki.net>
+ <CAJZ5v0iMYSTnX9mkZb8aEmtbKxWOgsshNJ_AqnB9Mn27y8jzeQ@mail.gmail.com>
+ <2362a42de1403e99a66551575efd910cc92980bc.camel@linux.intel.com> <CAJZ5v0i7uUFDcTYuam4Hz2fYxpnT6QQQzULk8CNHvkOUfg=bfQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0i7uUFDcTYuam4Hz2fYxpnT6QQQzULk8CNHvkOUfg=bfQ@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 8 Apr 2025 15:37:23 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hJCtqbkyMaOSMNoiD5DSz+H6PK_FyUdoVTZTVWEFJQyQ@mail.gmail.com>
+X-Gm-Features: ATxdqUEAF_o5jnFIRHZPzl5rUxlanD7LPJjjrI0gfAf7gry5f-ssJM1-NxQ7ytE
+Message-ID: <CAJZ5v0hJCtqbkyMaOSMNoiD5DSz+H6PK_FyUdoVTZTVWEFJQyQ@mail.gmail.com>
+Subject: Re: [PATCH v1 10/10] cpufreq: Pass policy pointer to ->update_limits()
+To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Mario Limonciello <mario.limonciello@amd.com>, Sudeep Holla <sudeep.holla@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Apr 8, 2025 at 1:41=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
+> wrote:
+>
+> On Tue, Apr 8, 2025 at 12:28=E2=80=AFAM srinivas pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> >
+> > On Mon, 2025-04-07 at 20:48 +0200, Rafael J. Wysocki wrote:
+> > > On Fri, Mar 28, 2025 at 9:49=E2=80=AFPM Rafael J. Wysocki <rjw@rjwyso=
+cki.net>
+> > > wrote:
+> > > >
+> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >
+> > > > Since cpufreq_update_limits() obtains a cpufreq policy pointer for
+> > > > the
+> > > > given CPU and reference counts the corresponding policy object, it
+> > > > may
+> > > > as well pass the policy pointer to the cpufreq driver's -
+> > > > >update_limits()
+> > > > callback which allows that callback to avoid invoking
+> > > > cpufreq_cpu_get()
+> > > > for the same CPU.
+> > > >
+> > > > Accordingly, redefine ->update_limits() to take a policy pointer
+> > > > instead
+> > > > of a CPU number and update both drivers implementing it,
+> > > > intel_pstate
+> > > > and amd-pstate, as needed.
+> > > >
+> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > Hi Rafael,
+> >
+> > > Hi Srinivas,
+> > >
+> > > If you have any concerns regarding this patch, please let me know
+> > > (note that it is based on the [05/10]).
+> > >
+> > Changes looks fine, but wants to test out some update limits from
+> > interrupt path.
+> > Checked your branches at linux-pm, not able to locate in any branch to
+> > apply.
+> > Please point me to a branch.
+>
+> I'll put it in 'testing' later today.
 
+Now available from
 
-On 08/04/2025 00:42, Nhat Pham wrote:
-> 
-> V. Benchmarking
-> 
-> As a proof of concept, I run the prototype through some simple
-> benchmarks:
-> 
-> 1. usemem: 16 threads, 2G each, memory.max = 16G
-> 
-> I benchmarked the following usemem commands:
-> 
-> time usemem --init-time -w -O -s 10 -n 16 2g
-> 
-> Baseline:
-> real: 33.96s
-> user: 25.31s
-> sys: 341.09s
-> average throughput: 111295.45 KB/s
-> average free time: 2079258.68 usecs
-> 
-> New Design:
-> real: 35.87s
-> user: 25.15s
-> sys: 373.01s
-> average throughput: 106965.46 KB/s
-> average free time: 3192465.62 usecs
-> 
-> To root cause this regression, I ran perf on the usemem program, as
-> well as on the following stress-ng program:
-> 
-> perf record -ag -e cycles -G perf_cg -- ./stress-ng/stress-ng  --pageswap $(nproc) --pageswap-ops 100000
-> 
-> and observed the (predicted) increase in lock contention on swap cache
-> accesses. This regression is alleviated if I put together the
-> following hack: limit the virtual swap space to a sufficient size for
-> the benchmark, range partition the swap-related data structures (swap
-> cache, zswap tree, etc.) based on the limit, and distribute the
-> allocation of virtual swap slotss among these partitions (on a per-CPU
-> basis):
-> 
-> real: 34.94s
-> user: 25.28s
-> sys: 360.25s
-> average throughput: 108181.15 KB/s
-> average free time: 2680890.24 usecs
-> 
-> As mentioned above, I will implement proper dynamic swap range
-> partitioning in a follow up work.
-> 
-> 2. Kernel building: zswap enabled, 52 workers (one per processor),
-> memory.max = 3G.
-> 
-> Baseline:
-> real: 183.55s
-> user: 5119.01s
-> sys: 655.16s
-> 
-> New Design:
-> real: mean: 184.5s
-> user: mean: 5117.4s
-> sys: mean: 695.23s
-> 
-> New Design (Static Partition)
-> real: 183.95s
-> user: 5119.29s
-> sys: 664.24s
-> 
-
-Hi Nhat,
-
-Thanks for the patches! I have glanced over a couple of them, but this was the main question that came to my mind.
-
-Just wanted to check if you had a look at the memory regression during these benchmarks?
-
-Also what is sizeof(swp_desc)? Maybe we can calculate the memory overhead as sizeof(swp_desc) * swap size/PAGE_SIZE?
-
-For a 64G swap that is filled with private anon pages, the overhead in MB might be (sizeof(swp_desc) in bytes * 16M) - 16M (zerobitmap) - 16M*8 (swap map)?
-
-This looks like a sizeable memory regression?
-
-Thanks,
-Usama
-
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git testing
 
