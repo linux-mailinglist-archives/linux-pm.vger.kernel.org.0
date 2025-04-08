@@ -1,238 +1,203 @@
-Return-Path: <linux-pm+bounces-24949-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24950-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBF8AA80FE3
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 17:27:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D63FEA81017
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 17:33:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC54C170005
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 15:22:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1B0E1B6332F
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Apr 2025 15:29:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37112227EBD;
-	Tue,  8 Apr 2025 15:22:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66B75229B21;
+	Tue,  8 Apr 2025 15:28:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="RxpER7NL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB6A91D5CCD;
-	Tue,  8 Apr 2025 15:22:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744125749; cv=none; b=J8NFDCSijDkzsp9IGsbbz6NxN1wX4+YkkuWzQmbKIUOCuJ6m31MBLu+xHFUNrDJ8zehVQ3KuuV6O5iu3D/hp5cLlKx2EIQHrmpTqDw5o8cEXewRsyZx6qA4PY7xklY9xw3R55EbkMH+63w1XlyNNT9uLywTRG1tyifHLR2dGgTw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744125749; c=relaxed/simple;
-	bh=Zd9NWY8CeLpfatz1dGJTJYTsqlKS4JB6NgIxmQhqYb4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GJTrLPK3SusgIOaiLlGXSYp6pr+r67C4799KhxOug4bgLqxrso/SZkhbCiF8pUk9wcrVFOF8QhkLmDC2CaO4MZt5wgMWOZkC2ivJcotjY0W8KXz/7hFI8j+bZRSaJafKF1u0owYUiQPRiDHAG792AnX0qWSakPfBKAXuJdM38d4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kerneltoast.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kerneltoast.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-227b828de00so56901375ad.1;
-        Tue, 08 Apr 2025 08:22:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744125745; x=1744730545;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6lm+t/vI8lVFf9WHLlENTbYY2NK46dgivCLq/xG2L0k=;
-        b=ADdZBZgR9R0yRZ9O/wRNA5sVD0BNxfaCLXizYEdaoiXRItXmciWtEzN+nPEF/YR8gH
-         5Of0BAcO1PJ/va/ictd/hrRNqQybpx/OiMBxhd4SlxuaYSN58mRVXXFeVblt5Gk+nK3a
-         /LVinOYLgcmiNawNYCxHeJuGEPfnacFM9uODJEbkWW6txc8uP4xThn6s1Ari7/7cJUNa
-         4x0iRXly2eY/dnNpgnQvlDRjWL4VW5/OEjoJj48i7x9nUBhQYbsHuI3jLnHqvaVgzS6s
-         Xa3GNwUoOHGrHXYDwwSoPK2iCnqBPsxqPKFw2/CXaRdOEMbMiY/UdPbI7C0Zdxv5T2YX
-         q4qQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVWuaPcW8kf6VPMZmK++VKx3zKxd4tidZbLJirO8fY/KIYqepcfdBa0qEYmrdNjpu8CLdbqzTHdI34=@vger.kernel.org, AJvYcCWbhA4ujpNzuLoesPlmzCzP48g3fiz9kc4XyKYspBrfuZ+UrkNZN3KNETKhqWq/iz/lPZD+mL4lGktJn4E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFBdp5Ckj7MxLCI17uII+QvlNQE6OdWY7vt6v6Y/R6h/URYTf1
-	MDY4mPUU4NVSRYudao51RfgNRfFXsXM+enGGAQOZlQqG95I19HyT
-X-Gm-Gg: ASbGncsUBRgV1O3CCZUf+aEjg8g2KiUsUjmpY3Z5eBmt46tlzUtP9FdecyouUhzVadA
-	Rm3FNKpr7wny8yHcTT52X9DXZt5/+rGPCpiJyTTNbatE1aTbfCdb5QpvqS15P4+ccutlNvBLBb/
-	3Z6EYyqia942Vl5S9Qjfeq7JX/C7MsiKllZQEWsHpazYlqh9G9Z0lva9UiQHyP8fXvKsx7WdR+N
-	vV8XL92/OQ4Weg3+4nQoObwi3sChKGnLdQoY5dhIKeX9DFyNmmhukuDLZYkl9UNs0hYzEa7lhWI
-	S+Z434DpYeMVkX1Q296f/YkrBvbD98SWWYdFRloBL79Ao+Z9wKTCaN6oxyarCFOvh4/DaR1nnQ=
-	=
-X-Google-Smtp-Source: AGHT+IFinU7HdbOjTqhDEfAVUeUY/1h2L7SL99XFLsfwYhOW3YO5nfnKCUYKpUDfuOdjnSMmkDy6zA==
-X-Received: by 2002:a17:902:e785:b0:224:1d1c:8837 with SMTP id d9443c01a7336-22a9552b138mr193548115ad.19.1744125745135;
-        Tue, 08 Apr 2025 08:22:25 -0700 (PDT)
-Received: from sultan-box.localdomain ([142.147.89.201])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2297865bdaesm101468625ad.111.2025.04.08.08.22.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Apr 2025 08:22:24 -0700 (PDT)
-Date: Tue, 8 Apr 2025 08:22:20 -0700
-From: Sultan Alsawaf <sultan@kerneltoast.com>
-To: Stephan Gerhold <stephan.gerhold@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, regressions@lists.linux.dev,
-	Johan Hovold <johan@kernel.org>
-Subject: Re: [PATCH 1/2] cpufreq: schedutil: Fix superfluous updates caused
- by need_freq_update
-Message-ID: <Z_U_LN0AtH_n4YtE@sultan-box.localdomain>
-References: <20241212015734.41241-1-sultan@kerneltoast.com>
- <20241212015734.41241-2-sultan@kerneltoast.com>
- <Z_Tlc6Qs-tYpxWYb@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D967229B0E;
+	Tue,  8 Apr 2025 15:28:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744126097; cv=pass; b=fg8I9UczjfG0+B5D5PeVokOgWdeVChboAPPTLhXiwaek0oBdLPYzXzEHdJbOEQCDlK22XRpY4uz4cczBI5AWr4GFgaBZLrmlM4R0IcNA4YWYC/Umd4XVCU/t9BWncIpqCg8D9LdTEzmCYkNuSgZcPQwn0NfYpDwh3eofnfA1aD0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744126097; c=relaxed/simple;
+	bh=LfDuHZhyQMnq6p04/ZVlHuZD2GEXNqvywnJ3zYqMRVw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=RqKuy89h9U0dCPfo2+c+Vj3OwgXqVoP1QA0LifBfOUJoJmn6CACUzLlWPqJ7FcLaLAgHgjbQ0/if3bbdyJYzG98oaHnjkgiq1EICH+XLb49Bh4czCGkoRITGgqO21E8rkVPJxYcmld8/ZREjfTVSm36ONFYJ7iEVLxxD/YTVOig=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=RxpER7NL; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1744126071; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=Clq1p2ElUtXuJl0mcuE/6qBe736x7qHLqEUOi+K2KDAMXFOzO/N8/Pv5gfgTqcSXZrVrAk77la8+eAx7JSnWdJnAaVQaNN+pmi7xqidaYEV5FbW3Lq4eZCKAkeDjORWj8AEVdr0CNTrH257bY1oDyhuXeLFz6PK3VJq1A5gn5tU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1744126071; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=mR1vtbmwt5QaC5nynO+8PlhkL6P8DxSsCm16ycxu7/E=; 
+	b=TexdogQOJne1PjO/V9ACajg3CwQUX6tRTy53BzRK3AHjuPS8TgFgi0BO4xSajCiiwv14ICFlbX2E+Idle06VKw4xqorlLR59IzBMZH/n/uUPiZfNGx4JpVLfx0P6ctVoslZqXJ0qxjgkTHv5zuiYEyGcXvwQF0UYRM/RuxZ/F4Q=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1744126071;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:To:To:Cc:Cc:Reply-To;
+	bh=mR1vtbmwt5QaC5nynO+8PlhkL6P8DxSsCm16ycxu7/E=;
+	b=RxpER7NLYCcUf00ifcNz5XOXD7MWBS3srvR/3Ig2/Go4XkHz3jIuYsM2mq0kzOkp
+	Lk7FygTNMrE8kVVWPP7Yq3e1ddGgFhHsH0PlSVBBSfhpnqMkw1Vpuc9lGJc1JVA7c+3
+	s/HsezfV8tRE8tVMDKYOa2Hc2qPA10UvKwIBsJpw=
+Received: by mx.zohomail.com with SMTPS id 1744126070257421.07626011841296;
+	Tue, 8 Apr 2025 08:27:50 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Date: Tue, 08 Apr 2025 17:27:01 +0200
+Subject: [PATCH RESEND] pmdomain: rockchip: keep PD_NVM on RK3576 always on
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z_Tlc6Qs-tYpxWYb@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250408-rk3576-emmc-fix-v1-1-3009828b1b31@collabora.com>
+X-B4-Tracking: v=1; b=H4sIAERA9WcC/3VOuw6CMBT9FXJnL+EWCsrkIKuDjoahlCKNQLVFo
+ iH8uw26Op73mcEpq5WDPJjBqkk7bQYPaBOAbMVwVahrj4FFjEcxZWhvMc9SVH0vsdEvzGq5JZG
+ yLGEMfOpulafXxgucinNxPED55a16PP3A+BMr4RRK0/d6zIMpDYmjlbSaW+1GY9/rq4lW998DE
+ yFhzeOkTnYioYbvpek6URkrQt8O5bIsH8X091jnAAAA
+X-Change-ID: 20250317-rk3576-emmc-fix-7dc81a627422
+To: Ulf Hansson <ulf.hansson@linaro.org>, Heiko Stuebner <heiko@sntech.de>, 
+ Elaine Zhang <zhangqing@rock-chips.com>, 
+ Finley Xiao <finley.xiao@rock-chips.com>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ Detlev Casanova <detlev.casanova@collabora.com>, kernel@collabora.com, 
+ linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+X-Mailer: b4 0.14.2
 
-Hi Stephan,
+Due to what seemingly is a hardware bug, PD_NVM never comes up quite the
+same after being turned off once. The result is that the sdhci
+controller will lock up the entire SoC when it's accessing its CQHCI
+registers.
 
-On Tue, Apr 08, 2025 at 10:59:31AM +0200, Stephan Gerhold wrote:
-> Hi,
-> 
-> On Wed, Dec 11, 2024 at 05:57:32PM -0800, Sultan Alsawaf wrote:
-> > From: "Sultan Alsawaf (unemployed)" <sultan@kerneltoast.com>
-> > 
-> > A redundant frequency update is only truly needed when there is a policy
-> > limits change with a driver that specifies CPUFREQ_NEED_UPDATE_LIMITS.
-> > 
-> > In spite of that, drivers specifying CPUFREQ_NEED_UPDATE_LIMITS receive a
-> > frequency update _all the time_, not just for a policy limits change,
-> > because need_freq_update is never cleared.
-> > 
-> > Furthermore, ignore_dl_rate_limit()'s usage of need_freq_update also leads
-> > to a redundant frequency update, regardless of whether or not the driver
-> > specifies CPUFREQ_NEED_UPDATE_LIMITS, when the next chosen frequency is the
-> > same as the current one.
-> > 
-> > Fix the superfluous updates by only honoring CPUFREQ_NEED_UPDATE_LIMITS
-> > when there's a policy limits change, and clearing need_freq_update when a
-> > requisite redundant update occurs.
-> > 
-> > This is neatly achieved by moving up the CPUFREQ_NEED_UPDATE_LIMITS test
-> > and instead setting need_freq_update to false in sugov_update_next_freq().
-> > 
-> > Signed-off-by: Sultan Alsawaf (unemployed) <sultan@kerneltoast.com>
-> > ---
-> >  kernel/sched/cpufreq_schedutil.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > index 28c77904ea74..e51d5ce730be 100644
-> > --- a/kernel/sched/cpufreq_schedutil.c
-> > +++ b/kernel/sched/cpufreq_schedutil.c
-> > @@ -83,7 +83,7 @@ static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
-> >  
-> >  	if (unlikely(sg_policy->limits_changed)) {
-> >  		sg_policy->limits_changed = false;
-> > -		sg_policy->need_freq_update = true;
-> > +		sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
-> >  		return true;
-> >  	}
-> >  
-> > @@ -96,7 +96,7 @@ static bool sugov_update_next_freq(struct sugov_policy *sg_policy, u64 time,
-> >  				   unsigned int next_freq)
-> >  {
-> >  	if (sg_policy->need_freq_update)
-> > -		sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
-> > +		sg_policy->need_freq_update = false;
-> >  	else if (sg_policy->next_freq == next_freq)
-> >  		return false;
-> >  
-> 
-> This patch breaks cpufreq throttling (e.g. for thermal cooling) for
-> cpufreq drivers that:
-> 
->  - Have policy->fast_switch_enabled/fast_switch_possible set, but
->  - Do not have CPUFREQ_NEED_UPDATE_LIMITS flag set
-> 
-> There are several examples for this in the tree (search for
-> "fast_switch_possible"). Of all those drivers, only intel-pstate and
-> amd-pstate (sometimes) set CPUFREQ_NEED_UPDATE_LIMITS.
-> 
-> I can reliably reproduce this with scmi-cpufreq on a Qualcomm X1E
-> laptop:
-> 
->  1. I added some low temperature trip points in the device tree,
->     together with passive cpufreq cooling.
->  2. I run a CPU stress test on all CPUs and monitor the temperatures
->     and CPU frequencies.
-> 
-> When using "performance" governor instead of "schedutil", the CPU
-> frequencies are being throttled as expected, as soon as the temperature
-> trip points are reached.
-> 
-> When using "schedutil", the CPU frequencies stay at maximum as long as
-> the stress test is running. No throttling happens, so the device heats
-> up far beyond the defined temperature trip points. Throttling is applied
-> only after stopping the stress test, since this forces schedutil to
-> re-evaluate the CPU frequency.
-> 
-> Reverting this commit fixes the problem.
-> 
-> Looking at the code, I think the problem is that:
->  - sg_policy->limits_changed does not result in
->    sg->policy->need_freq_update without CPUFREQ_NEED_UPDATE_LIMITS
->    anymore, and
->  - Without sg->policy->need_freq_update, get_next_freq() skips calling
->    cpufreq_driver_resolve_freq(), which would normally apply the policy
->    min/max constraints.
-> 
-> Do we need to set CPUFREQ_NEED_UPDATE_LIMITS for all cpufreq drivers
-> that set policy->fast_switch_possible? If I'm reading the documentation
-> comment correctly, that flag is just supposed to enable notifications if
-> the policy min/max changes, but the resolved target frequency is still
-> the same. This is not the case here, the target frequency needs to be
-> throttled, but schedutil isn't applying the new limits.
-> 
-> Any suggestions how to fix this? I'm happy to test patches with my
-> setup.
+The downstream kernel hacks around this by setting
+GENPD_FLAG_RPM_ALWAYS_ON in the mmc host driver, which does not seem
+like the right place for this.
 
-Thank you for reporting this. As I see it, sg_policy->need_freq_update is
-working correctly now; however, sg_policy->limits_changed relied on the broken
-behavior of sg_policy->need_freq_update and therefore sg_policy->limits_changed
-needs to be fixed.
+Set GENPD_FLAG_ALWAYS_ON in the pmdomain driver for PD_NVM. I'm using
+the non-RPM version of the flag here because I have my doubts a
+suspend-resume cycle will fix it. Suspend-resume currently seems busted,
+so I couldn't test this.
 
-Can you try this patch:
+Fixes: cfee1b507758 ("pmdomain: rockchip: Add support for RK3576 SoC")
+Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+---
+ drivers/pmdomain/rockchip/pm-domains.c | 48 ++++++++++++++++++----------------
+ 1 file changed, 26 insertions(+), 22 deletions(-)
 
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 1a19d69b91ed3..f37b999854d52 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -82,7 +82,6 @@ static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
- 		return false;
- 
- 	if (unlikely(sg_policy->limits_changed)) {
--		sg_policy->limits_changed = false;
- 		sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
- 		return true;
- 	}
-@@ -171,9 +170,11 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
- 	freq = get_capacity_ref_freq(policy);
- 	freq = map_util_freq(util, freq, max);
- 
--	if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
-+	if (freq == sg_policy->cached_raw_freq && !sg_policy->limits_changed &&
-+	    !sg_policy->need_freq_update)
- 		return sg_policy->next_freq;
- 
-+	sg_policy->limits_changed = false;
- 	sg_policy->cached_raw_freq = freq;
- 	return cpufreq_driver_resolve_freq(policy, freq);
+diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
+index 03bcf79a461f5db14173b35c0d110541e6d3f760..2b220b7c77b3d292f49cbc60338d3925146fb211 100644
+--- a/drivers/pmdomain/rockchip/pm-domains.c
++++ b/drivers/pmdomain/rockchip/pm-domains.c
+@@ -48,6 +48,7 @@ struct rockchip_domain_info {
+ 	int ack_mask;
+ 	bool active_wakeup;
+ 	bool need_regulator;
++	bool always_on;
+ 	int pwr_w_mask;
+ 	int req_w_mask;
+ 	int clk_ungate_mask;
+@@ -154,7 +155,7 @@ struct rockchip_pmu {
+ 	.need_regulator = regulator,			\
  }
+ 
+-#define DOMAIN_M_O_R_G(_name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, ack, g_mask, wakeup)	\
++#define DOMAIN_M_O_R_G(_name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, ack, g_mask, wakeup, _always_on)	\
+ {							\
+ 	.name = _name,					\
+ 	.pwr_offset = p_offset,				\
+@@ -171,6 +172,7 @@ struct rockchip_pmu {
+ 	.clk_ungate_mask = (g_mask),			\
+ 	.ack_mask = (ack),				\
+ 	.active_wakeup = wakeup,			\
++	.always_on = _always_on,			\
+ }
+ 
+ #define DOMAIN_RK3036(_name, req, ack, idle, wakeup)		\
+@@ -204,8 +206,8 @@ struct rockchip_pmu {
+ #define DOMAIN_RK3568(name, pwr, req, wakeup)		\
+ 	DOMAIN_M(name, pwr, pwr, req, req, req, wakeup)
+ 
+-#define DOMAIN_RK3576(name, p_offset, pwr, status, r_status, r_offset, req, idle, g_mask, wakeup)	\
+-	DOMAIN_M_O_R_G(name, p_offset, pwr, status, 0, r_status, r_status, r_offset, req, idle, idle, g_mask, wakeup)
++#define DOMAIN_RK3576(name, p_offset, pwr, status, r_status, r_offset, req, idle, g_mask, wakeup, always_on)	\
++	DOMAIN_M_O_R_G(name, p_offset, pwr, status, 0, r_status, r_status, r_offset, req, idle, idle, g_mask, wakeup, always_on)
+ 
+ /*
+  * Dynamic Memory Controller may need to coordinate with us -- see
+@@ -846,6 +848,8 @@ static int rockchip_pm_add_one_domain(struct rockchip_pmu *pmu,
+ 	pd->genpd.flags = GENPD_FLAG_PM_CLK;
+ 	if (pd_info->active_wakeup)
+ 		pd->genpd.flags |= GENPD_FLAG_ACTIVE_WAKEUP;
++	if (pd_info->always_on)
++		pd->genpd.flags |= GENPD_FLAG_ALWAYS_ON;
+ 	pm_genpd_init(&pd->genpd, NULL,
+ 		      !rockchip_pmu_domain_is_on(pd) ||
+ 		      (pd->info->mem_status_mask && !rockchip_pmu_domain_is_mem_on(pd)));
+@@ -1210,25 +1214,25 @@ static const struct rockchip_domain_info rk3568_pm_domains[] = {
+ };
+ 
+ static const struct rockchip_domain_info rk3576_pm_domains[] = {
+-	[RK3576_PD_NPU]		= DOMAIN_RK3576("npu",    0x0, BIT(0),  BIT(0), 0,       0x0, 0,       0,       0,       false),
+-	[RK3576_PD_NVM]		= DOMAIN_RK3576("nvm",    0x0, BIT(6),  0,      BIT(6),  0x4, BIT(2),  BIT(18), BIT(2),  false),
+-	[RK3576_PD_SDGMAC]	= DOMAIN_RK3576("sdgmac", 0x0, BIT(7),  0,      BIT(7),  0x4, BIT(1),  BIT(17), 0x6,     false),
+-	[RK3576_PD_AUDIO]	= DOMAIN_RK3576("audio",  0x0, BIT(8),  0,      BIT(8),  0x4, BIT(0),  BIT(16), BIT(0),  false),
+-	[RK3576_PD_PHP]		= DOMAIN_RK3576("php",    0x0, BIT(9),  0,      BIT(9),  0x0, BIT(15), BIT(15), BIT(15), false),
+-	[RK3576_PD_SUBPHP]	= DOMAIN_RK3576("subphp", 0x0, BIT(10), 0,      BIT(10), 0x0, 0,       0,       0,       false),
+-	[RK3576_PD_VOP]		= DOMAIN_RK3576("vop",    0x0, BIT(11), 0,      BIT(11), 0x0, 0x6000,  0x6000,  0x6000,  false),
+-	[RK3576_PD_VO1]		= DOMAIN_RK3576("vo1",    0x0, BIT(14), 0,      BIT(14), 0x0, BIT(12), BIT(12), 0x7000,  false),
+-	[RK3576_PD_VO0]		= DOMAIN_RK3576("vo0",    0x0, BIT(15), 0,      BIT(15), 0x0, BIT(11), BIT(11), 0x6800,  false),
+-	[RK3576_PD_USB]		= DOMAIN_RK3576("usb",    0x4, BIT(0),  0,      BIT(16), 0x0, BIT(10), BIT(10), 0x6400,  true),
+-	[RK3576_PD_VI]		= DOMAIN_RK3576("vi",     0x4, BIT(1),  0,      BIT(17), 0x0, BIT(9),  BIT(9),  BIT(9),  false),
+-	[RK3576_PD_VEPU0]	= DOMAIN_RK3576("vepu0",  0x4, BIT(2),  0,      BIT(18), 0x0, BIT(7),  BIT(7),  0x280,   false),
+-	[RK3576_PD_VEPU1]	= DOMAIN_RK3576("vepu1",  0x4, BIT(3),  0,      BIT(19), 0x0, BIT(8),  BIT(8),  BIT(8),  false),
+-	[RK3576_PD_VDEC]	= DOMAIN_RK3576("vdec",   0x4, BIT(4),  0,      BIT(20), 0x0, BIT(6),  BIT(6),  BIT(6),  false),
+-	[RK3576_PD_VPU]		= DOMAIN_RK3576("vpu",    0x4, BIT(5),  0,      BIT(21), 0x0, BIT(5),  BIT(5),  BIT(5),  false),
+-	[RK3576_PD_NPUTOP]	= DOMAIN_RK3576("nputop", 0x4, BIT(6),  0,      BIT(22), 0x0, 0x18,    0x18,    0x18,    false),
+-	[RK3576_PD_NPU0]	= DOMAIN_RK3576("npu0",   0x4, BIT(7),  0,      BIT(23), 0x0, BIT(1),  BIT(1),  0x1a,    false),
+-	[RK3576_PD_NPU1]	= DOMAIN_RK3576("npu1",   0x4, BIT(8),  0,      BIT(24), 0x0, BIT(2),  BIT(2),  0x1c,    false),
+-	[RK3576_PD_GPU]		= DOMAIN_RK3576("gpu",    0x4, BIT(9),  0,      BIT(25), 0x0, BIT(0),  BIT(0),  BIT(0),  false),
++	[RK3576_PD_NPU]		= DOMAIN_RK3576("npu",    0x0, BIT(0),  BIT(0), 0,       0x0, 0,       0,       0,       false, false),
++	[RK3576_PD_NVM]		= DOMAIN_RK3576("nvm",    0x0, BIT(6),  0,      BIT(6),  0x4, BIT(2),  BIT(18), BIT(2),  false, true),
++	[RK3576_PD_SDGMAC]	= DOMAIN_RK3576("sdgmac", 0x0, BIT(7),  0,      BIT(7),  0x4, BIT(1),  BIT(17), 0x6,     false, false),
++	[RK3576_PD_AUDIO]	= DOMAIN_RK3576("audio",  0x0, BIT(8),  0,      BIT(8),  0x4, BIT(0),  BIT(16), BIT(0),  false, false),
++	[RK3576_PD_PHP]		= DOMAIN_RK3576("php",    0x0, BIT(9),  0,      BIT(9),  0x0, BIT(15), BIT(15), BIT(15), false, false),
++	[RK3576_PD_SUBPHP]	= DOMAIN_RK3576("subphp", 0x0, BIT(10), 0,      BIT(10), 0x0, 0,       0,       0,       false, false),
++	[RK3576_PD_VOP]		= DOMAIN_RK3576("vop",    0x0, BIT(11), 0,      BIT(11), 0x0, 0x6000,  0x6000,  0x6000,  false, false),
++	[RK3576_PD_VO1]		= DOMAIN_RK3576("vo1",    0x0, BIT(14), 0,      BIT(14), 0x0, BIT(12), BIT(12), 0x7000,  false, false),
++	[RK3576_PD_VO0]		= DOMAIN_RK3576("vo0",    0x0, BIT(15), 0,      BIT(15), 0x0, BIT(11), BIT(11), 0x6800,  false, false),
++	[RK3576_PD_USB]		= DOMAIN_RK3576("usb",    0x4, BIT(0),  0,      BIT(16), 0x0, BIT(10), BIT(10), 0x6400,  true,  false),
++	[RK3576_PD_VI]		= DOMAIN_RK3576("vi",     0x4, BIT(1),  0,      BIT(17), 0x0, BIT(9),  BIT(9),  BIT(9),  false, false),
++	[RK3576_PD_VEPU0]	= DOMAIN_RK3576("vepu0",  0x4, BIT(2),  0,      BIT(18), 0x0, BIT(7),  BIT(7),  0x280,   false, false),
++	[RK3576_PD_VEPU1]	= DOMAIN_RK3576("vepu1",  0x4, BIT(3),  0,      BIT(19), 0x0, BIT(8),  BIT(8),  BIT(8),  false, false),
++	[RK3576_PD_VDEC]	= DOMAIN_RK3576("vdec",   0x4, BIT(4),  0,      BIT(20), 0x0, BIT(6),  BIT(6),  BIT(6),  false, false),
++	[RK3576_PD_VPU]		= DOMAIN_RK3576("vpu",    0x4, BIT(5),  0,      BIT(21), 0x0, BIT(5),  BIT(5),  BIT(5),  false, false),
++	[RK3576_PD_NPUTOP]	= DOMAIN_RK3576("nputop", 0x4, BIT(6),  0,      BIT(22), 0x0, 0x18,    0x18,    0x18,    false, false),
++	[RK3576_PD_NPU0]	= DOMAIN_RK3576("npu0",   0x4, BIT(7),  0,      BIT(23), 0x0, BIT(1),  BIT(1),  0x1a,    false, false),
++	[RK3576_PD_NPU1]	= DOMAIN_RK3576("npu1",   0x4, BIT(8),  0,      BIT(24), 0x0, BIT(2),  BIT(2),  0x1c,    false, false),
++	[RK3576_PD_GPU]		= DOMAIN_RK3576("gpu",    0x4, BIT(9),  0,      BIT(25), 0x0, BIT(0),  BIT(0),  BIT(0),  false, false),
+ };
+ 
+ static const struct rockchip_domain_info rk3588_pm_domains[] = {
 
+---
+base-commit: 64e9fdfc89a76fed38d8ddeed72d42ec71957ed9
+change-id: 20250317-rk3576-emmc-fix-7dc81a627422
 
-> 
-> Thanks,
-> Stephan
-> 
-> #regzbot introduced: 8e461a1cb43d69d2fc8a97e61916dce571e6bb31
+Best regards,
+-- 
+Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 
-Thanks,
-Sultan
 
