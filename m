@@ -1,116 +1,98 @@
-Return-Path: <linux-pm+bounces-25014-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25015-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6E00A82568
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 14:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 80603A8263A
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 15:25:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2ACA18872CE
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 12:54:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13A601898F70
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 13:22:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 869182620CA;
-	Wed,  9 Apr 2025 12:54:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lyEH997M"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F0AB25B66B;
+	Wed,  9 Apr 2025 13:21:37 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 551B126157E;
-	Wed,  9 Apr 2025 12:54:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61008218EA2;
+	Wed,  9 Apr 2025 13:21:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744203269; cv=none; b=YfQzCgfR7iDQaE7I0qcXs0O1zX8rR/vOxq3BQfkDl91d50H7yZqpD5g76t69fG1XkUPZqjeXpozemBS3/fsXwD4JAygpooiIKnVtf6vc49odqSPWZmzZKOMJ5tCauknpjTAh172FD7FYxUA4oaHbIzwyv0jWj5HDOp5MrbThtVU=
+	t=1744204897; cv=none; b=fdk3l0fqpqusa32X1wY0X9ELQTQwi3bV1U2EjN0SH9LKPVvqOfip9cDAkEwrAqVSzFQiSX9hGwnx9SE/T4q36DkY7LdwU4Yp0SP9hoXsNzA1hOdpcKoJtwsBC60/IU9YgnVB0g5D1MOXS30QSluPuSham12nYKikLqQjOtO5PgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744203269; c=relaxed/simple;
-	bh=5cjw3hniuS5c3kOgjuPKIqsfz6OH0LbiKTbZY3HNO0Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SljSS6DnuTcNTNMV+aALUts3f2Er/jWvb3SvX+9urUslyFnTBwBiRQA9HJc5sM6Zfc08l9JHrZ3n/pwJ5QgzV7d48yV5P71UhvDW1PpyCs6w/td19BQlJpLUsNBtnxJgKAVPj/CqQ05ZFm1qzLltnZN98TaEpg+Gt4m9RzpLKbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyEH997M; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C02B7C4CEEC;
-	Wed,  9 Apr 2025 12:54:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744203268;
-	bh=5cjw3hniuS5c3kOgjuPKIqsfz6OH0LbiKTbZY3HNO0Y=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=lyEH997MDF/YGs2ecKpNMIJsYSl91ea8N6V9wcZTLxRIZFukKbGKbHs0uZ+WOSogx
-	 AHQa7KRuR7fZgwGGUWjrjLhZYBpIFl8zY+ARByPxvnk9aow0yZykZ5MKic6vlv4nXN
-	 RtCObxO4P2ohETRUm9ov3VLel70p7G8BfnD9pHHA7ZMrc0nFpVb8vAaEOV1wJBg8UP
-	 zwYj2OdRsUwvSdQ0cI7OwF95gZT1Wfkjh3EpOKeD65mNk2kZXq9+FCLEMFeS8N0MNO
-	 dx8lMkwSb4z8bskzphfMistkgRbxwfXArc8dHOvkPn8WboXAiHNPZJhfu9W4iRrtMB
-	 p6QwhwNNJXsPA==
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-60288fd4169so3402310eaf.3;
-        Wed, 09 Apr 2025 05:54:28 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUwQBpVg3oPtS4m0vnX5biOr72BixlKPnpfvpMpRO4Jvocplox2wdr+KvYk7UphQpD9/j7U9iNBrvqjjAol@vger.kernel.org, AJvYcCWevv/QoFDK0xjK6TVGSSH3QtvsKd9BypPCo2PwtXZbdNcimHzauPeaJfqXK06z30qDvAFp9Buoz52p@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCtedBG35jzOwJX6a+x/GNXoENAEQHPFGqJwfBrkkmVam6eIH3
-	VlIYmXC7EqQkI7wICYSwKy4kmGYhJy8tsAFHuAxRlWwmYkjVlK4wZ6ApNI1/5vYRuIkuU8CjX2B
-	ZXbKOaIHdin+Qi0OEwjw9cXmGJxg=
-X-Google-Smtp-Source: AGHT+IFVhR+NI8Q625FD1y6jfu8AWqdmxMqx5ND6/p58CuOaU4O4cuOfkDi0Tts9pcEs8NAdJFX45dy//gA9DXkrUxM=
-X-Received: by 2002:a05:6871:aa03:b0:2b3:55b3:e38 with SMTP id
- 586e51a60fabf-2d08de0f73bmr1518549fac.21.1744203268071; Wed, 09 Apr 2025
- 05:54:28 -0700 (PDT)
+	s=arc-20240116; t=1744204897; c=relaxed/simple;
+	bh=zr4G9PuRlvn1Iebs/Po3WpTXgWWeStxGqrwJOl40BRI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SFPh46Y77s4uIcuTrQgtGLGDT6k2zb1BOsX+6nyy/uSPvsPwSU5dFIkKOi1h46Ilxe9sCDQpleUUu4cffr91p8kqVhAFn2iLlDT8JErwfApwyvL5ShSWZiCqmjz09p1Q/DYuoj/QrUtC82TaiyJuEzex7LGSN1X4jdw/7DgC7qg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1541B15A1;
+	Wed,  9 Apr 2025 06:21:35 -0700 (PDT)
+Received: from bogus (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DCFAE3F694;
+	Wed,  9 Apr 2025 06:21:32 -0700 (PDT)
+Date: Wed, 9 Apr 2025 14:21:30 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: Cristian Marussi <cristian.marussi@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Henry Martin <bsdhenrymartin@gmail.com>, arm-scmi@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>
+Subject: Re: [v2 0/2] cpufreq: scmi/scpi: Fix NULL pointer dereference in
+ get_rate()
+Message-ID: <20250409-glistening-hasty-ape-c9c7e9@sudeepholla>
+References: <20250408150354.104532-1-bsdhenrymartin@gmail.com>
+ <0558b7f7-8c69-4664-afc6-bae4fdc6f071@web.de>
+ <20250409-merry-gay-lemur-8288cf@sudeepholla>
+ <52aa52a5-7081-41ee-872e-f1728c06daf1@web.de>
+ <Z_Zhp38o9KiicPVw@pluto>
+ <3f5662dc-7547-4585-a396-4546fa98d34f@web.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250328143040.9348-1-ggherdovich@suse.cz> <20250328143040.9348-2-ggherdovich@suse.cz>
- <b29519a2da5b85f484b0f402062df2b58ec38afe.camel@intel.com>
-In-Reply-To: <b29519a2da5b85f484b0f402062df2b58ec38afe.camel@intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 9 Apr 2025 14:54:15 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iwzoqg939Kx2pwRbKo3CS--tU=+w+1cpHL35gd=3-yTQ@mail.gmail.com>
-X-Gm-Features: ATxdqUG3ZYhJlSIdVt73T05FStiWHfkpSBrgWK4bhFvJZAI83WDC-7ULwh4-Pn8
-Message-ID: <CAJZ5v0iwzoqg939Kx2pwRbKo3CS--tU=+w+1cpHL35gd=3-yTQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] ACPI: processor: idle: Remove obsolete comment
-To: "Zhang, Rui" <rui.zhang@intel.com>, "ggherdovich@suse.cz" <ggherdovich@suse.cz>
-Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "lenb@kernel.org" <lenb@kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3f5662dc-7547-4585-a396-4546fa98d34f@web.de>
 
-On Wed, Apr 9, 2025 at 2:54=E2=80=AFAM Zhang, Rui <rui.zhang@intel.com> wro=
-te:
->
-> On Fri, 2025-03-28 at 15:30 +0100, Giovanni Gherdovich wrote:
-> > Since commit 496121c02127e9c460b436244c38260b044cc45a ("ACPI:
-> > processor:
-> > idle: Allow probing on platforms with one ACPI C-state"), the comment
-> > doesn't reflect the code anymore; remove it.
+On Wed, Apr 09, 2025 at 02:25:52PM +0200, Markus Elfring wrote:
+> >>>> Can any other summary phrase variants become more desirable accordingly?
 > >
-> > Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
->
-> This is a standalone cleanup, and further cleanups are posted in a
-> separate patch set on top of this one, so
->
-> Acked-by: Zhang Rui <rui.zhang@intel.com>
+> > I agree with Sudeep, the above sentence is completely incomprehensible
+> > to me
+> 
+> Can any suggestions gain acceptance also for better summary phrases?
+> 
+> 
+> 
+> >>> This is meaningless, sorry can't parse. Ignoring it as others in the
+> >>> community are doing already.
+> >> Do you care if the term “null pointer dereference” would be used in consistent ways?
+> >
+> > ...this is more comprehensible,
+> 
+> Thanks for another bit of constructive information.
+> 
+> 
+> >                                 but again I cannot grasp what's yor advice
+> > specifically on this commit message.
+> May the usage of abbreviations be reconsidered once more also for such messages
+> (in presented update steps)?
+> 
 
-Applied as 6.16 material, thanks!
+Still can't understand you. Sorry for that. Alternatively, you can do what
+I sometimes do: just write the whole commit log as you would expect and see
+if that helps. I am sure that helps, so please do that.
 
-> > ---
-> >  drivers/acpi/processor_idle.c | 4 ----
-> >  1 file changed, 4 deletions(-)
-> >
-> > diff --git a/drivers/acpi/processor_idle.c
-> > b/drivers/acpi/processor_idle.c
-> > index b181f7fc2090..2a076c7a825a 100644
-> > --- a/drivers/acpi/processor_idle.c
-> > +++ b/drivers/acpi/processor_idle.c
-> > @@ -482,10 +482,6 @@ static int acpi_processor_get_cstate_info(struct
-> > acpi_processor *pr)
-> >
-> >       pr->power.count =3D acpi_processor_power_verify(pr);
-> >
-> > -     /*
-> > -      * if one state of type C2 or C3 is available, mark this
-> > -      * CPU as being "idle manageable"
-> > -      */
-> >       for (i =3D 1; i < ACPI_PROCESSOR_MAX_POWER; i++) {
-> >               if (pr->power.states[i].valid) {
-> >                       pr->power.count =3D i;
->
+-- 
+Regards,
+Sudeep
 
