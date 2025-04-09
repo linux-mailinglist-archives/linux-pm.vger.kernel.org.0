@@ -1,123 +1,173 @@
-Return-Path: <linux-pm+bounces-25017-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25018-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4D16A827AC
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 16:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AEC5A82823
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 16:38:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 96C4D4A32DB
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 14:24:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E62BD16D625
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 14:37:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 465EE25E836;
-	Wed,  9 Apr 2025 14:24:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08583266B72;
+	Wed,  9 Apr 2025 14:36:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="olLEdyb9"
+	dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b="gubZZ9X6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6771615ECD7;
-	Wed,  9 Apr 2025 14:24:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1835C25F788
+	for <linux-pm@vger.kernel.org>; Wed,  9 Apr 2025 14:36:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744208662; cv=none; b=jBvddh6x0s9OUrzOu3vlovcM/3A6mT/sNsiA5KUQhm8XJZTOKZb1mZCc+TQBavEjL6qyB4i15Ze8/c5s74CixEQXm+jCaUortoi9fPi2soHP7DSS1NuT5BvreUyN5p+F+iOVSAAqSsRfn6y0vPBcWDDlaHigD25nHtUm38WN0Uc=
+	t=1744209404; cv=none; b=QH8DI2Me1nEE0FzCgo7rUsGZYlf4crLP6NjBzyXtHr9PJIovHq2FNrYwUPKc4nyhxTeL/FIDnsV+v34wNr2muWGmUi+HBxUOB3mNqYy8WWhq1jBZ9joGR0AejmDEYxAMF+dZqSbrIc4tVvetg2+5w0AtxzddcceGdCvWAKbBXhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744208662; c=relaxed/simple;
-	bh=FEX86ieQtTjcsMrvm61w0FN/i4G3RKlhYgTWDNp/5kQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XqogzRjx++XaZINgQBegsUenbIVIBDGJU0PA0HhNKV/SsktlyRG1zNVjLD7GLqJlXqQIl0dCPvOagJBwo5TWBnqbpKs3NbrV8nQP8Cf3h+8LZU2SZvCsCnmQdraeS0BWRyMBupLHjk+R0Da9aHPxo4LcEzWDhLhx7w8GEkjLKVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=olLEdyb9; arc=none smtp.client-ip=212.227.15.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1744208642; x=1744813442; i=markus.elfring@web.de;
-	bh=FEX86ieQtTjcsMrvm61w0FN/i4G3RKlhYgTWDNp/5kQ=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=olLEdyb9QhIEe2b+MMOQ4sF0MMbx/vSk6E0kv0p/w8KYLIRB+hh10n9pgxgXrCCW
-	 4L2MKYie4uGqRcHAIM/ZQhpAXAGJCcdO5mDjcGX3usmqxxv7m7mBXGg+NVwNBo5Zh
-	 s+eD8sa/OWxwPimDUTb/2x5kJyoQGrquMaX7pKmYypVYq/JlFkVo36NlEfIQG3aLA
-	 KzdzYdd8cVLBpnUn2T/gxI8ltQ+++AQjaRsJhJt0SM7CVDOs0PQHMyYU8J2t7UJ0q
-	 RZJLPe8mEIQHZnKI/PXfDCKSsjqx/aBeE/jzvSi+AhBKxtWBqEJbFgNY+BUr30k5N
-	 QHwsjl9lDp0HzE+KBA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.29] ([94.31.70.27]) by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MVrft-1tbP7f0J4X-00MPqE; Wed, 09
- Apr 2025 16:24:02 +0200
-Message-ID: <daf7934a-17f7-4e41-ba00-cec155437c7e@web.de>
-Date: Wed, 9 Apr 2025 16:24:01 +0200
+	s=arc-20240116; t=1744209404; c=relaxed/simple;
+	bh=p72AwNBSZMnrmO6FTmJqH/yL5IxqIrTxcB5sW8OzJ5M=;
+	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type; b=oPmUyuP3HmqPq3ryUsl6GkXsoXmA3QfbVim0nTgtY0IX+eA0LnUVj0mk6LJGlOwUEMgKtRWDhSitlwKRw0xgXdxQgzO7722jA5IcvHpkjNnkIRblTduRnbrz4IfSuM/oUvpjGKfSXHHSrnF155y5p5XvY1f2zf+U/mauAAFfjn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net; spf=pass smtp.mailfrom=telus.net; dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b=gubZZ9X6; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=telus.net
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2ff615a114bso811587a91.0
+        for <linux-pm@vger.kernel.org>; Wed, 09 Apr 2025 07:36:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google; t=1744209402; x=1744814202; darn=vger.kernel.org;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=v2o5jlCeBg1HPoD5yGBcEHxzsNv9Am09qdqlW/Zm/bo=;
+        b=gubZZ9X6ieIUSUrcEqWozS3ouYWJ8ZIoQOYqsam+GW+L87jgDhfTtNv2J6oEKFl+1v
+         B5r+ADvEOA15D3ceGR7BfW4FVzagzJagzl0C3d/3Put1nl0hmaI3vL9XqsMgzRM0o4ud
+         D7uKEPzx1tifMRlYcJgVNLJR9zrS4cr06QCl1yLyrut2Ze2LF73WWJ7v8BNomETYL23r
+         NzQumIBef2TzML5Y705FiHXauybfkVmeDE5Lak3/67eXr93M33i2MIzmDi+vEG1wnPeZ
+         a/PWc9jWegsDvLqoBP+NWvC8qHIy9wAhqF5R1io38j82e7Ji8nHAArLj2Ly98FCZgV3W
+         jUBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744209402; x=1744814202;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v2o5jlCeBg1HPoD5yGBcEHxzsNv9Am09qdqlW/Zm/bo=;
+        b=u9aoCuF8Q9zX/gEQWKpR0JXY/RcT0USWhD7Y9BLnXx8S657UprTUkhXhqut8fE8cyS
+         aMa9VbfRLysAmBFPbCh/8I4fVaoc9xHoZ9IraDY55DoCHvYuCj+mforvIDxlpXB5Wosx
+         ECT/A00hrnfSjg5ScMNEbjAOJKG1vaS7i/E6ovY5OmMUdUyHjrkkwKIFdSPHxLz7/pV2
+         QBNmnBrKL6JsJPJLJ1bXjLKgj1d1HKsbU7/G6kBPpdyvxQsv3Tv7N0/uSi1frAsHVlca
+         82P0jgdzO5XCbhNz96lwLzkcp4bJOxhxrEBLfA+dinpQeXXX1ZvRkfShnRw+AhZjq3C0
+         bH7g==
+X-Forwarded-Encrypted: i=1; AJvYcCWoCq26CvvTw4BK4qV5c7qlLBjEdCPqWCFdFO8Nf5ycj6eHz4GKrumS6wBp1nDr5YV6F0Yiq9t6EA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIdzwE6OwfYDJ2MBP7JZkoajETwqZHLy2tZI/KdUEDxjqP7V7x
+	j3CnTHp8ADTCe6B6DDjg2xZPdkqEHuvSr7GGj9tsNrAHWOAumyZfe7phTuZ1cbs=
+X-Gm-Gg: ASbGncv88/rOGkaUKYZEliODX7QwmHmiDgeuDI8qz9QZnT0algg6SJ0t06lp3gOCWrh
+	JN+0WQoXcC3nIrRl7g2gJa12oN24wM8T7q79Ssm7I9uqEvIQOIzB7LeJ9mQ85kp2j3wyY+9GbB7
+	1ev3y6YUtV7k0nnQPi+8Q7IF3K/PcpqN3pSoGQjoZN948nOjm3PhUjk0w9GtbT+AIL3ey9zX+21
+	gjRZdVR0ZIDDkwtGqdD/pZjmvFh++heIttLPzT5xgxzwVYiOFSLuwSI/GqjSguba2vU9qPc/8T9
+	+HdlfrbLaDuGBTXtsdajXi3KVDPzDzw5pnVYbsDkxQePsHUQEXGcmuqzmIPngH/HE7/LHLr52ZJ
+	CcnN1tw==
+X-Google-Smtp-Source: AGHT+IFmMczAe+eysU0mnPkmcG7378iURe5t5+vn8+7auVk+eCv2ZRCObVGU/DsIL51RZBz7Jh8nxg==
+X-Received: by 2002:a17:90b:5388:b0:2ee:8cbb:de28 with SMTP id 98e67ed59e1d1-306dc046bdamr5001983a91.8.1744209402371;
+        Wed, 09 Apr 2025 07:36:42 -0700 (PDT)
+Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-306dd12b599sm1684414a91.23.2025.04.09.07.36.41
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 09 Apr 2025 07:36:41 -0700 (PDT)
+From: "Doug Smythies" <dsmythies@telus.net>
+To: "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
+Cc: "'LKML'" <linux-kernel@vger.kernel.org>,
+	"'Daniel Lezcano'" <daniel.lezcano@linaro.org>,
+	"'Christian Loehle'" <christian.loehle@arm.com>,
+	"'Artem Bityutskiy'" <artem.bityutskiy@linux.intel.com>,
+	"'Aboorva Devarajan'" <aboorvad@linux.ibm.com>,
+	"'Linux PM'" <linux-pm@vger.kernel.org>,
+	"Doug Smythies" <dsmythies@telus.net>
+References: <4661520.LvFx2qVVIh@rjwysocki.net>
+In-Reply-To: <4661520.LvFx2qVVIh@rjwysocki.net>
+Subject: RE: [PATCH v1 0/2] cpuidle: teo: Refine handling of short idle intervals
+Date: Wed, 9 Apr 2025 07:36:42 -0700
+Message-ID: <000f01dba95c$d0504b10$70f0e130$@telus.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [v2 0/2] cpufreq: scmi/scpi: Fix NULL pointer dereference in
- get_rate()
-To: Sudeep Holla <sudeep.holla@arm.com>,
- Cristian Marussi <cristian.marussi@arm.com>,
- Henry Martin <bsdhenrymartin@gmail.com>, arm-scmi@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc: LKML <linux-kernel@vger.kernel.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>
-References: <20250408150354.104532-1-bsdhenrymartin@gmail.com>
- <0558b7f7-8c69-4664-afc6-bae4fdc6f071@web.de>
- <20250409-merry-gay-lemur-8288cf@sudeepholla>
- <52aa52a5-7081-41ee-872e-f1728c06daf1@web.de> <Z_Zhp38o9KiicPVw@pluto>
- <3f5662dc-7547-4585-a396-4546fa98d34f@web.de>
- <20250409-glistening-hasty-ape-c9c7e9@sudeepholla>
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20250409-glistening-hasty-ape-c9c7e9@sudeepholla>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain;
+	charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:t5v7mMZJZZsS+n267hBMyKvP4/+RVlchh+BOFxAknfqwRji+4RW
- GJJCwak089+mygl9TaQLJxO9SecKQ83EoLnNIHTGpv9rSZpYMCue7oc0vULqJ9F+ieswSng
- f+7k0YST3xTps3fs4RFvL63F7eSU9mXjPNa/XvLH4V1/ZscD4ROaJeAiar6rNCu9Yr24NLs
- UOVKQTdttGjcIsLTP0rkA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:HOIHOb3bGZ4=;1rP3BcuxMDYjjaUCQBgbe3i9IxE
- wM4gO39oEm9HdYKzPTnx3fUD9f3EKCGO7sUMwuU7Qp+WSJetes3zhWBpXv9lbLbcU/fjOXQ0D
- yiGMi/1DeSgyjxJdS9kcjrLdpj1DsevuYXD9rSV83BjV69c1952DNdJgyvKeNnJsQ2A9F1Qi/
- RijB94SnsfaFiJPj6piqdgOxlLkMRjAc3RcqiuHel4fALDVeC9Lt2DR8qBzsvUllU6VlLTUif
- w/g3L8YfTIcrQbWoWv89Hxj1d2mDeOmCYYMoghgEJEZ4ZSaG8QSnH9solSeS4QMy1E7XgLjBC
- 2w14jmra2DMHyD9BMR/pOKHtaZltpQQUcoB4MMur2Pt/tVvXSoIpfb3n1t1Jd7CaeS10qwsRA
- XH6hEv+5gDAIHLk9dJik7AKsXUUs/c3c9iXrgCel+T/pT62ibsSrAEPfW7VrwRQIhDiLviIaT
- xRqLv3I+ek/Dpk5E9GtQttd6SYefM+e8pCGvh/UL9zBPgKpNr0yUnSe9lWEFrh+PToa45egSw
- aEzv8F3nnexauzHHt2Y3fCrodKO8NFpP7UAEzCmbOVuLk9fWwwaVR6okh8PnuFKYxnpgjWPP5
- ccLUE8WA+K0qHr1OJ3NL7FIe9XpQ5IIahARNb8o3UcAYjqtHB5h72U/EHmiSAfl1U8GfcotKt
- VnYT9QQ74TVYlong1Pgw9fHZg0jFWygUqCbCPTvjk9Mai9/svhdflEmvM5J+ggDIUS2zDrhkY
- T8ochudKdXJ1rzDV+d3GF2q3gGrm5LiaxlSuzxnQ4+MrSULS3m1jyUIbe84JtOFFu3nhvGFO4
- PhGuATu2NExKNmbp5YBVuWrwy2EjWYMGIu83bfvnG/js933lPfGnn/BpK3MOIjSqqqw97WTWc
- 0VdDbGGkYBQdgfmcdqermzaVwCnl3pG5z9s3nI+wA+afG07MmsnIM81P6Tkeo77t3T1+8mWGf
- wE91b6jim3eE0/zfs7SzG1GLU/E3PupDO4VJFnvGOQ5IFTXmjtB/YB4blaJw3FgGHM9zS8H8q
- qLQKhltSWHqsAbTUNUpFLVOXL9JMTWE77xpcdHBI2krJDv+iEe8NH51cUJIl3PBwhFMg8itkN
- H9veGeDqDZWkytci/7eq7xeI7jyN9i6OMDRy/gukxF713zHW/UV/d5EQMRMykJ0LW6Zc7UI9X
- ap6naO/L6B5MXmzTxV6w66dn0c8dccsgA5UMtTeeEDlFCBlrG0uBc271sPwFW/n1iCt4FLQwT
- 3ltqpcxa7Ou8rx+TfUHcjZ03IjtP+AKlJbScxWRLEZDNL92XlJGYM+tkO/aylCmMuazNTxQQ2
- 6ha2SjasrUxa1eZ6UgBoATbpyzL88CryofWpBNPO8Ee9O6/q8i5wU20Zrhe4fcsmL1wezrIYw
- ifCsR77pR6BhHYL6bQbk2nA8zq+9/DocHITIfp3lTDgKKFvlQCn5UaQkHGySXiwarQSl3Kyqt
- 3weslyYFLRKXYMcHcwNTIJtPHFoMcLT+bBBPvhTUftCmEjUruqQRAldHrebKfqBwpimqB0KY5
- JzaegFLNIz5sitxTED8=
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-ca
+Thread-Index: AQH70ytUHgkW+C/EsxWbGWbn/cpOQ7NbDDaA
 
->> May the usage of abbreviations be reconsidered once more also for such =
-messages
->> (in presented update steps)?
+On 2025.04.03 12:16 Rafael J. Wysocki wrote:
+
+> Hi Everyone,
+
+Hi Rafael,
+
+> This series is intended to address an issue with overly aggressive =
+selection
+> of idle state 0 (the polling state) in teo on x86 in some cases when =
+timer
+> wakeups dominate the CPU wakeup pattern.
 >
-> Still can't understand you. Sorry for that. =E2=80=A6
+> In those cases, timer wakeups are not taken into account when they are
+> within the LATENCY_THRESHOLD_NS range and the idle state selection may
+> be based entirely on non-timer wakeups which may be rare.  This causes
+> the prediction accuracy to be low and too much energy may be used as
+> a result.
+>
+> The first patch is preparatory and it is not expected to make any
+> functional difference.
+>
+> The second patch causes teo to take timer wakeups into account if it
+> is about to skip the tick_nohz_get_sleep_length() invocation, so they
+> get a chance to influence the idle state selection.
+>
+> I have been using this series on my systems for several weeks and =
+observed
+> a significant reduction of the polling state selection rate in =
+multiple
+> workloads.
 
-Will any communication challenges need further clarifications also accordi=
-ng to
-wordings like the following?
-* null-ptr-deref
-* null pointer dereference
+I ran many tests on this patch set.
+In general, there is nothing significant to report.
 
-Regards,
-Markus
+There seemed to be a little less power use for the adrestia test and it =
+took a little longer to execute, but the average wakeup latency was the =
+same.
+
+I am still having noise and repeatability issues with my main periodic =
+tests, where CPU is swept from low to high at serveral work sleep =
+frequencies.
+But I didn't observe anything significant.
+
+In order to use more shallow idle states with a periodic workflow, I =
+launched 2000 threads with each at 113 Hertz work/sleep frequency and =
+almost no work to do for each work packet.
+The patched version used between 1 and 1.5 less processor package power, =
+at around 85 watts.
+The patched version spent about 3.5% in idle state 0 verses about 5% for =
+the unpatched version.
+The patched version spent about 31.8% in idle state 1 verses about 30.2% =
+for the unpatched version.
+
+Test computer:
+Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
+Distro: Ubuntu 24.04.1, server, no desktop GUI.
+CPU frequency scaling driver: intel_pstate
+HWP: disabled.
+CPU frequency scaling governor: performance
+Ilde driver: intel_idle
+Idle governor: teo
+Idle states: 4: name : description:
+  state0/name:POLL                desc:CPUIDLE CORE POLL IDLE
+  state1/name:C1_ACPI          desc:ACPI FFH MWAIT 0x0
+  state2/name:C2_ACPI          desc:ACPI FFH MWAIT 0x30
+  state3/name:C3_ACPI          desc:ACPI FFH MWAIT 0x60
+
+... Doug
+
+
 
