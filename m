@@ -1,63 +1,63 @@
-Return-Path: <linux-pm+bounces-25039-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25040-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAB98A83014
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 21:11:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C8B6A83016
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 21:11:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8EBB189107B
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 19:11:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6435179675
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 19:11:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05CEE27BF65;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9285227BF8A;
 	Wed,  9 Apr 2025 19:11:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aWtA+k4X"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LQIaXS51"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36145277801;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E25278178;
 	Wed,  9 Apr 2025 19:11:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744225865; cv=none; b=OfFtACvcfUgTuzUFWo39F7EMDu/MFkFtYNuvMoHd8wMoXRBAlHNqBILrynhjZJ2t8/aCOuiPmG+1a4nH0maX6l/PNzAKn2cBRleO2rdzONR9Ui+pXJCCMsqoGxNNKRx3lWW/Jvsr+ORmC3xKfJyWnlXMkOh8nDF3qrir1XCoTac=
+	t=1744225866; cv=none; b=PjkQ3b6VvvgqmbD82SJXEgJjb5+V4TnqurJo9RJsdPYfTvAT9WWM/ByCBi23do/jUhsxkt0dpTZAykvgXclsyJut7itXNMqxvgN/32Arb0L4kLZ4jH7dZCrVYpbYGvZr9/Uk9C2qecVIcq+1mNYX5vtm6QpDzsghg2OnepGMdbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744225865; c=relaxed/simple;
-	bh=XrkOz4zdjQP0Y7svw7ZGaYJQkN9aHF2bxU6CsHIHtpc=;
+	s=arc-20240116; t=1744225866; c=relaxed/simple;
+	bh=lpJsU9iy11FDUJMjbmjkElc6nW3jvhD3qSFafGs65Yg=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=l0n89hsNlg7rXTcV+kfoFllXWXWspZfZrtiWSlpxPUXV3U7UD07reDBJg2oN36slGfkO4cE65l/3layXL49IUM83+vljbQaiEJa8wyOhn6/kOlEDTLJKsJdsJ0pzYgWTkf1TqYclTCIifX9Ny/SOpLd32KyBqpEcdHPoKslO1mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aWtA+k4X; arc=none smtp.client-ip=192.198.163.11
+	 MIME-Version:Content-Type; b=in3L8styTxiYoCIxcGdHS4lss/H+lLqin9WnAUd/mq4XAB8WUKrm9GmrBrwVZoXOva9kL/wALShgcOWelwvcXBCiRpQAM8+NmyI3WU7nAwCbenK2USee7bfqg+dJa5nVJLAAbooSowmaahH1XC4ECiiprqFhgHSQCUUb5l+6Mpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LQIaXS51; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744225864; x=1775761864;
+  t=1744225865; x=1775761865;
   h=from:to:subject:date:message-id:in-reply-to:references:
    mime-version:content-transfer-encoding;
-  bh=XrkOz4zdjQP0Y7svw7ZGaYJQkN9aHF2bxU6CsHIHtpc=;
-  b=aWtA+k4Xu2ZNDFKdNv0d8jBo1O/K4frRkl97u9yCE+5HP7M7gYYOPK8U
-   Gw1Pgb7x0G82KpTTElFwCs0M10HPhvuWHCgQS38VrmQXMJ/ZG3NuSLqQT
-   R4UVVNVPnjZN6itaZHp44DKFH6AMGGOyZ383a9Y8iOdyBx72f9chvU0/g
-   AYtjyRRvWpSwUpLEajtlGHzRJB3q+4zCsegSw7cxEEKXWS6pGi3N/eml7
-   ui9jP5SHQPi+GbnxPxDqYn8pKifsjfk+FeJitd4w6iWtT+M3QxygeLlfw
-   9rcbghsLiMRANG05bEdsSLtblkzD6qhcL6PXS9pNx21mjo9LKNBZT/lmc
+  bh=lpJsU9iy11FDUJMjbmjkElc6nW3jvhD3qSFafGs65Yg=;
+  b=LQIaXS51cTSazexhYVU4I+hDPe+NhxRGTz0S+1PdxJC5BcNKiWvS0092
+   r5rogcMCK9mGwxKjLzTkuxFaj9bp7iN0JUAAJTQzF7nJ2TJ6Uya87DgdU
+   utfMjHaU2ChQsYe6rqil7IvHGf+Okkg4qXKMB5Fk1FysSfFtDw0AXMP8D
+   A+quwKssZjbpGLlEyauocjoBVE039Cxo0O/NW9Z6+6j+dDyQA9Q2DTPI8
+   JiCCMwDjS0CCAfuIkBUl9FNoPXZSdfqoeSMPp7KzTMzjSx72Kx/Gitip6
+   TJqBrRWom9rLBtTgPlvq2jywK2kOJnAi+TyCEPC6xbT0mhswcdXv+1BdI
    g==;
-X-CSE-ConnectionGUID: l1Cy0jKAQ7Osqvjk2MruMw==
-X-CSE-MsgGUID: /52H8CjqSymEo+pG/K/0uQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11399"; a="56386770"
+X-CSE-ConnectionGUID: Ft5HcSwMRKGlCAp4z4S05Q==
+X-CSE-MsgGUID: J0ja2BmBQlWjPUVRgOGydg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11399"; a="56386774"
 X-IronPort-AV: E=Sophos;i="6.15,201,1739865600"; 
-   d="scan'208";a="56386770"
+   d="scan'208";a="56386774"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
   by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2025 12:11:02 -0700
-X-CSE-ConnectionGUID: AORIQy2jS8m/10fwXFq8eA==
-X-CSE-MsgGUID: lbI226v8SQy2g5QyQD+Ssw==
+X-CSE-ConnectionGUID: 905ZdpwdSEekT4QXJntgag==
+X-CSE-MsgGUID: Kbn3VqLEQRSDP89SMgep7g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,201,1739865600"; 
-   d="scan'208";a="133401236"
+   d="scan'208";a="133401252"
 Received: from mdroper-mobl2.amr.corp.intel.com (HELO xpardee-desk.intel.com) ([10.124.220.250])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2025 12:11:01 -0700
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2025 12:11:02 -0700
 From: Xi Pardee <xi.pardee@linux.intel.com>
 To: xi.pardee@linux.intel.com,
 	irenic.rajneesh@gmail.com,
@@ -67,9 +67,9 @@ To: xi.pardee@linux.intel.com,
 	platform-driver-x86@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH v3 3/8] platform/x86:intel/pmc: Move PMC devid to core.h
-Date: Wed,  9 Apr 2025 12:10:45 -0700
-Message-ID: <20250409191056.15434-4-xi.pardee@linux.intel.com>
+Subject: [PATCH v3 4/8] platform/x86:intel/pmc: Convert index variables to be unsigned
+Date: Wed,  9 Apr 2025 12:10:46 -0700
+Message-ID: <20250409191056.15434-5-xi.pardee@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250409191056.15434-1-xi.pardee@linux.intel.com>
 References: <20250409191056.15434-1-xi.pardee@linux.intel.com>
@@ -82,111 +82,66 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Move PMC devid definition for each PMC of Arrow Lake and Meteor
-Lake platforms to core.h. This patch is a preparation step to
-introduce a new SSRAM Telemetry driver which will be using the
-PMC devid.
+Convert the index variables type to be unsigned to avoid confusion
+and error.
 
 Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
 Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/platform/x86/intel/pmc/arl.c  | 12 ++++--------
- drivers/platform/x86/intel/pmc/core.h | 12 ++++++++++++
- drivers/platform/x86/intel/pmc/mtl.c  |  9 +++------
- 3 files changed, 19 insertions(+), 14 deletions(-)
+ drivers/platform/x86/intel/pmc/core.c            | 5 +++--
+ drivers/platform/x86/intel/pmc/core.h            | 2 +-
+ drivers/platform/x86/intel/pmc/ssram_telemetry.c | 2 +-
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/platform/x86/intel/pmc/arl.c b/drivers/platform/x86/intel/pmc/arl.c
-index 320993bd6d31..a6b2eb850ff0 100644
---- a/drivers/platform/x86/intel/pmc/arl.c
-+++ b/drivers/platform/x86/intel/pmc/arl.c
-@@ -651,29 +651,25 @@ static const struct pmc_reg_map arl_pchs_reg_map = {
- 	.etr3_offset = ETR3_OFFSET,
- };
+diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
+index a42dc62d70da..a53a7677122c 100644
+--- a/drivers/platform/x86/intel/pmc/core.c
++++ b/drivers/platform/x86/intel/pmc/core.c
+@@ -1457,7 +1457,8 @@ static int pmc_core_get_lpm_req(struct pmc_dev *pmcdev, struct pmc *pmc)
  
--#define PMC_DEVID_SOCM 0x777f
--#define PMC_DEVID_SOCS 0xae7f
--#define PMC_DEVID_IOEP 0x7ecf
--#define PMC_DEVID_PCHS 0x7f27
- static struct pmc_info arl_pmc_info_list[] = {
- 	{
- 		.guid	= IOEP_LPM_REQ_GUID,
--		.devid	= PMC_DEVID_IOEP,
-+		.devid	= PMC_DEVID_ARL_IOEP,
- 		.map	= &mtl_ioep_reg_map,
- 	},
- 	{
- 		.guid	= SOCS_LPM_REQ_GUID,
--		.devid	= PMC_DEVID_SOCS,
-+		.devid	= PMC_DEVID_ARL_SOCS,
- 		.map	= &arl_socs_reg_map,
- 	},
- 	{
- 		.guid	= PCHS_LPM_REQ_GUID,
--		.devid	= PMC_DEVID_PCHS,
-+		.devid	= PMC_DEVID_ARL_PCHS,
- 		.map	= &arl_pchs_reg_map,
- 	},
- 	{
- 		.guid	= SOCM_LPM_REQ_GUID,
--		.devid	= PMC_DEVID_SOCM,
-+		.devid	= PMC_DEVID_ARL_SOCM,
- 		.map	= &mtl_socm_reg_map,
- 	},
- 	{}
+ static int pmc_core_ssram_get_lpm_reqs(struct pmc_dev *pmcdev)
+ {
+-	int ret, i;
++	unsigned int i;
++	int ret;
+ 
+ 	if (!pmcdev->ssram_pcidev)
+ 		return -ENODEV;
+@@ -1484,7 +1485,7 @@ const struct pmc_reg_map *pmc_core_find_regmap(struct pmc_info *list, u16 devid)
+ }
+ 
+ int pmc_core_pmc_add(struct pmc_dev *pmcdev, u64 pwrm_base,
+-		     const struct pmc_reg_map *reg_map, int pmc_index)
++		     const struct pmc_reg_map *reg_map, unsigned int pmc_index)
+ {
+ 	struct pmc *pmc = pmcdev->pmcs[pmc_index];
+ 
 diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
-index 09aac6daabbd..ce1b949b1004 100644
+index ce1b949b1004..c3b07075d017 100644
 --- a/drivers/platform/x86/intel/pmc/core.h
 +++ b/drivers/platform/x86/intel/pmc/core.h
-@@ -298,6 +298,18 @@ enum ppfear_regs {
- #define PTL_PMC_LTR_CUR_PLT			0x1C2C
- #define PTL_PCD_PMC_MMIO_REG_LEN		0x31A8
+@@ -515,7 +515,7 @@ int pmc_core_ssram_init(struct pmc_dev *pmcdev, int func);
+ int generic_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info);
+ const struct pmc_reg_map *pmc_core_find_regmap(struct pmc_info *list, u16 devid);
+ int pmc_core_pmc_add(struct pmc_dev *pmcdev, u64 pwrm_base,
+-		     const struct pmc_reg_map *reg_map, int pmc_index);
++		     const struct pmc_reg_map *reg_map, unsigned int pmc_index);
  
-+/* SSRAM PMC Device ID */
-+/* ARL */
-+#define PMC_DEVID_ARL_SOCM	0x777f
-+#define PMC_DEVID_ARL_SOCS	0xae7f
-+#define PMC_DEVID_ARL_IOEP	0x7ecf
-+#define PMC_DEVID_ARL_PCHS	0x7f27
-+
-+/* MTL */
-+#define PMC_DEVID_MTL_SOCM	0x7e7f
-+#define PMC_DEVID_MTL_IOEP	0x7ecf
-+#define PMC_DEVID_MTL_IOEM	0x7ebf
-+
- extern const char *pmc_lpm_modes[];
+ extern struct pmc_dev_info spt_pmc_dev;
+ extern struct pmc_dev_info cnp_pmc_dev;
+diff --git a/drivers/platform/x86/intel/pmc/ssram_telemetry.c b/drivers/platform/x86/intel/pmc/ssram_telemetry.c
+index e1a83425d802..10ead4398a68 100644
+--- a/drivers/platform/x86/intel/pmc/ssram_telemetry.c
++++ b/drivers/platform/x86/intel/pmc/ssram_telemetry.c
+@@ -74,7 +74,7 @@ static inline u64 get_base(void __iomem *addr, u32 offset)
+ }
  
- struct pmc_bit_map {
-diff --git a/drivers/platform/x86/intel/pmc/mtl.c b/drivers/platform/x86/intel/pmc/mtl.c
-index 8862829694a7..8f1b01657277 100644
---- a/drivers/platform/x86/intel/pmc/mtl.c
-+++ b/drivers/platform/x86/intel/pmc/mtl.c
-@@ -947,23 +947,20 @@ static const struct pmc_reg_map mtl_ioem_reg_map = {
- 	.lpm_reg_index = MTL_LPM_REG_INDEX,
- };
- 
--#define PMC_DEVID_SOCM	0x7e7f
--#define PMC_DEVID_IOEP	0x7ecf
--#define PMC_DEVID_IOEM	0x7ebf
- static struct pmc_info mtl_pmc_info_list[] = {
- 	{
- 		.guid	= SOCP_LPM_REQ_GUID,
--		.devid	= PMC_DEVID_SOCM,
-+		.devid	= PMC_DEVID_MTL_SOCM,
- 		.map	= &mtl_socm_reg_map,
- 	},
- 	{
- 		.guid	= IOEP_LPM_REQ_GUID,
--		.devid	= PMC_DEVID_IOEP,
-+		.devid	= PMC_DEVID_MTL_IOEP,
- 		.map	= &mtl_ioep_reg_map,
- 	},
- 	{
- 		.guid	= IOEM_LPM_REQ_GUID,
--		.devid	= PMC_DEVID_IOEM,
-+		.devid	= PMC_DEVID_MTL_IOEM,
- 		.map	= &mtl_ioem_reg_map
- 	},
- 	{}
+ static int
+-pmc_core_ssram_get_pmc(struct pmc_dev *pmcdev, int pmc_idx, u32 offset)
++pmc_core_ssram_get_pmc(struct pmc_dev *pmcdev, unsigned int pmc_idx, u32 offset)
+ {
+ 	struct pci_dev *ssram_pcidev = pmcdev->ssram_pcidev;
+ 	void __iomem __free(pmc_core_iounmap) *tmp_ssram = NULL;
 -- 
 2.43.0
 
