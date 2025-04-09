@@ -1,198 +1,188 @@
-Return-Path: <linux-pm+bounces-25026-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25027-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82805A82DD2
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 19:45:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9800DA82E12
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 19:56:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8520B8820ED
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 17:43:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A77AB88505C
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 17:55:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5596227602A;
-	Wed,  9 Apr 2025 17:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71011270EC2;
+	Wed,  9 Apr 2025 17:55:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TSEa44w6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mt6RI8WY"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29AE5198E8C;
-	Wed,  9 Apr 2025 17:43:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4343B1CF8B;
+	Wed,  9 Apr 2025 17:55:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744220630; cv=none; b=iKJdtF3mzfAO/Km3NVq9jMkxYSFl6iwHFLlIpbHCQ3EWi7SB6JskcMt2IW94VRtEeXfOTVB4zVvbZZSmG63A96D0gJHQk2YuX8beNPzs8wNLmZaHx3DmvAJWFMAT4cPQ6Xu/KiGwBBqs9HkrWP/ilGLbObwhFnU6AiYxN2kQ4Uo=
+	t=1744221332; cv=none; b=t4f3tdd+TVRSStjWbPsiMkshLr+fvXW/8uCLDVwf8OFlTtIH8Cg8dIxSsFwqPfp2Wk8N3/q3+/K1fxQIPTPOYUUxOiiHM7ExAzRPMeRioLcWBXzbY2MJuLMx1nPCzhtZ4/wM/h46ng1ppPBai6WU9Ll1eSr/lqmtZOUBiaQmFmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744220630; c=relaxed/simple;
-	bh=MtID83NVzrryWVOVO0Svs05fGH/vIbBHq9cB2N/UeCk=;
+	s=arc-20240116; t=1744221332; c=relaxed/simple;
+	bh=9r66Wfrha929p07ng1Y/KZsuo0v815X+zoxiuQrI03o=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hPe0SQRDJ7sH71A82w2XuEpdz+D4Dwng2xQLHLLSyclV7mNZyivVr9hCu8p0z5HiUW+Vc7FdZtma0FWM5nCQoiF9XEHGF+vHHWY0G8sZ8IKcfHXVbHR9gwl282+l8P5GUfNP6MGP4ij90PUxPchy4SjNh/2nJnuDdq4dzyTSl5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TSEa44w6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 844E3C4CEED;
-	Wed,  9 Apr 2025 17:43:49 +0000 (UTC)
+	 To:Cc:Content-Type; b=OIS5an8wpY6lzO50cUFbz2cVxv77fMXAod8PXhPguIigkmgDBKZ+Bl5I+8rv8IDKh26DzxTuGV/DUrmmlIcVO2wrGawvdkTfZ4KGjQpKOz97k2wWa4Qh0uQ3+j4E3+gkmBDBqTA+EDul71HZI2xdb/0B0QHuDW8OAkbCoUeTVQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mt6RI8WY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B872AC4CEEB;
+	Wed,  9 Apr 2025 17:55:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744220629;
-	bh=MtID83NVzrryWVOVO0Svs05fGH/vIbBHq9cB2N/UeCk=;
+	s=k20201202; t=1744221331;
+	bh=9r66Wfrha929p07ng1Y/KZsuo0v815X+zoxiuQrI03o=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=TSEa44w6B7unc/ZsNLKHX4+rhG7W+tF6t+sZbTP1gjyf+JQEmSksFeTUOp9VMkB6j
-	 V5X0zENSlMCQheEBAEUkbxrwXKtQGWb6ABZmClMHbBrSR99YjvBzu/al/A8iIKyRn4
-	 9g2VSHATuMz0Od+w+5uocSuDSGCczE+ktkRfXA49xHmU4jt9ibT1BIBRB2uIMZoNaO
-	 2dB22BmtMmFEjCYGUpvwc7ldxg5n1+1axR2mFMGLqERXWz/PpXdRARizR1pF22CK11
-	 DqtaFEY60CI0rdCfuvTzUQBQ+XwSfTXNnMCypgRxbFJcKHSen+yH+IPQ7oIOyaAmOP
-	 FsMCUqCAhYdcw==
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-2cc89c59cc0so592467fac.0;
-        Wed, 09 Apr 2025 10:43:49 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUlh1bkufDY2PBYmQj+gR+5ua8nBoj5BgC5jSGo0Qb48bjHq+oLjorbh1hk76Hnya/mNWG4oF8togrl4IQ=@vger.kernel.org, AJvYcCWP9tvgoxv8StHa4+qHcZAp9KNuxIvJPn2DCctBeq3t6d8kYFqDDwFsznGIfZfIyLb4LxrNQYwqURzg@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWh2vBbGgWo+cPRwUV5kh+nFWNoNQ85pQLbUeHiq6Eq8iHoOR4
-	fpz8/iIOVTtElQcb233oUtq0Dx/7fXvfxlD7NWMhUgPqaotFsApT/ddlIxHHThlZEfkJQMoQLSA
-	cySyLuWyEKgAtnHGAOEEarrS5gk8=
-X-Google-Smtp-Source: AGHT+IEPa25BLLz45O3A0aw2iD4LjOUUKGFiVDtx9bT0W1iV2DAm1cz3hWJk/Q9WFcb6+s9b/jRDJAaSzvz/wnM7boI=
-X-Received: by 2002:a05:6871:50c3:b0:29e:3d2a:a4a9 with SMTP id
- 586e51a60fabf-2d0ad00e7d7mr261368fac.5.1744220628802; Wed, 09 Apr 2025
- 10:43:48 -0700 (PDT)
+	b=mt6RI8WYF1RIawWkad3srN7T8VU/vt/myELopiUs0eBBUmkcBoOq90TTHhnROJ8lH
+	 t8uWG3zKo2cWM1uYWdKLs/LOFrEN8Va5WMiR4Ua7CYlfhClmCxdF9nwATag4hcW/Rl
+	 9oABDKiZK663k62mzvJGZ7u0CxB2/ZVoU6askowRpALcrW6DEO348AShabngMRBbx1
+	 UvdIBTGYTzt5QGWbZigQ0Lb6+vPMRuhNNub7hnpQgaGrjlyqthPQSUwnflKtWwIOec
+	 oKQGJepLDN9F0Zm4FfaHb2r+gLxjEjGlsBml0HfQ3MSesypjLgYq8M5xxKjX5BIMJ8
+	 ZVQOUJnqzpMSw==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-2c12b7af278so5789fac.0;
+        Wed, 09 Apr 2025 10:55:31 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW5Ed2DQOWL/SFoMbRWXspLmER/jTa0adbycK30xOTjUuuIK1LawZnmlCYzqV5MRtVy/OTP7sdxmP8=@vger.kernel.org, AJvYcCXQD1hrxUCjWoDbFerHJgVKeeUWzBdAVuWKCwafZyR9D7KDIE2B5lbUSqplCA3gKB5eUc4HSx8qcBNdnM8t@vger.kernel.org, AJvYcCXhQPwRVLg2t8+iTUzcw61bklgpOTTJgQHyWiyLYfGIsELjYoh63itoFsESSLSm8fbzz4Vm/f+UIGQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPGBcCCRPZfSmubVNF39deAfa5+tdmMIzUKR2Qp+4EgGNmmI6R
+	NfF6twzQ9I6p+QuE4o9Ag8ysiD7BONqNk+W+xhg77LoVgcY8APxOM2c+jFEa04fZePG3KguSe2p
+	qNlRwacUUESDlBqD04MUeCdG03qc=
+X-Google-Smtp-Source: AGHT+IGO+jjqHSBXWjTWnVsJIN7eK1oOONxiSCBMknxBMzVZk3syrHLRphRe2sQeYc6PCuzK/Vi72uVzOo1BrkBsC1Q=
+X-Received: by 2002:a05:6871:a594:b0:2b8:41ef:2ca with SMTP id
+ 586e51a60fabf-2d0ad053dddmr312843fac.6.1744221331026; Wed, 09 Apr 2025
+ 10:55:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250327195928.680771-2-csokas.bence@prolan.hu> <20250327195928.680771-3-csokas.bence@prolan.hu>
-In-Reply-To: <20250327195928.680771-3-csokas.bence@prolan.hu>
+References: <20250326-cross-lock-dep-v1-0-3199e49e8652@bootlin.com>
+ <20250326-cross-lock-dep-v1-1-3199e49e8652@bootlin.com> <CAJZ5v0gFER-nbWpZK6FMDJCXA+iPQUm5DZDAiRY3ahugR2MM=g@mail.gmail.com>
+ <874izdlblm.fsf@bootlin.com>
+In-Reply-To: <874izdlblm.fsf@bootlin.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 9 Apr 2025 19:43:37 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jmuzvo-xzGBDhGVBbY7svbrqEdi-SeJrx5BG=qtN6ZiQ@mail.gmail.com>
-X-Gm-Features: ATxdqUGGv3EHTXO2Nz1qHrCletcbUOdpHS7e7KIVtcT50Kb-Q5VhiMdKVyPZvbU
-Message-ID: <CAJZ5v0jmuzvo-xzGBDhGVBbY7svbrqEdi-SeJrx5BG=qtN6ZiQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] pm: runtime: Add new devm functions
-To: =?UTF-8?B?QmVuY2UgQ3PDs2vDoXM=?= <csokas.bence@prolan.hu>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Varshini Rajendran <varshini.rajendran@microchip.com>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
-	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
+Date: Wed, 9 Apr 2025 19:55:19 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0irZj7ttvUqb-iENQS6BX+KTGuTqyVh0DxgKmsoKrBcbA@mail.gmail.com>
+X-Gm-Features: ATxdqUEhvTKg_Dm0U4wlDBZsG6FgRkNszoP9ogCJEM3XAr3NbaLY303rrxWg228
+Message-ID: <CAJZ5v0irZj7ttvUqb-iENQS6BX+KTGuTqyVh0DxgKmsoKrBcbA@mail.gmail.com>
+Subject: Re: [PATCH RFC 01/10] PM: runtime: Add helpers to resume consumers
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Alexander Dahl <ada@thorsis.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Pavel Machek <pavel@kernel.org>
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+	Chen-Yu Tsai <wenst@chromium.org>, Lucas Stach <l.stach@pengutronix.de>, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Marek Vasut <marex@denx.de>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Kevin Hilman <khilman@kernel.org>, 
+	Fabio Estevam <festevam@denx.de>, Jacky Bai <ping.bai@nxp.com>, Peng Fan <peng.fan@nxp.com>, 
+	Shawn Guo <shawnguo@kernel.org>, Shengjiu Wang <shengjiu.wang@nxp.com>, linux-imx@nxp.com, 
+	Ian Ray <ian.ray@gehealthcare.com>, =?UTF-8?Q?Herv=C3=A9_Codina?= <herve.codina@bootlin.com>, 
+	Luca Ceresoli <luca.ceresoli@bootlin.com>, Saravana Kannan <saravanak@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 27, 2025 at 8:59=E2=80=AFPM Bence Cs=C3=B3k=C3=A1s <csokas.benc=
-e@prolan.hu> wrote:
->
-> Add `devm_pm_runtime_set_active_enabled()` and
-> `devm_pm_runtime_get_noresume()` for simplifying common cases in drivers.
->
-> Signed-off-by: Bence Cs=C3=B3k=C3=A1s <csokas.bence@prolan.hu>
+Hi,
 
-I can apply this one alone if you want me to do that, but I could also
-apply the other patch in the series if it got an ACK from the driver
-maintainer.
+On Fri, Mar 28, 2025 at 10:59=E2=80=AFAM Miquel Raynal
+<miquel.raynal@bootlin.com> wrote:
+>
+> Hello Rafael,
+>
+> >> The runtime PM core currently allows to runtime resume/suspend a devic=
+e,
+> >> or its suppliers.
+> >>
+> >> Let's make it also possible to runtime resume/suspend consumers.
+> >>
+> >> Consumers and suppliers are seen here through the description made by
+> >> device_links.
+> >
+> > It would be good to explain why all of this is needed.
+> >
+> > I gather that it is used for resolving some synchronization issues in
+> > the clk framework, but neither the cover letter nor this changelog
+> > explains how it is used.
+>
+> The explanation is quite long, there have been already 3 full threads
+> from people attempting to fix a problem that resides in the clock
+> subsystem (but that may also be probably problematic in others, just
+> uncovered so far). I don't know if you took the time to read the cover
+> letter:
+> https://lore.kernel.org/linux-clk/20250326-cross-lock-dep-v1-0-3199e49e86=
+52@bootlin.com/
+> It tries to explain the problem and the approach to fix this problem,
+> but let me try to give a runtime PM focused view of it here.
+>
+> [Problem]
+>
+> We do have an ABBA locking situation between clk and any other subsystem
+> that might be in use during runtime_resume() operations, provided that
+> these subsystems also make clk calls at some point. The usual suspect
+> here are power domains.
+>
+> There are different approaches that can be taken but the one that felt
+> the most promising when we discussed it during last LPC (and also the
+> one that was partially implemented in the clk subsystem already for a
+> tiny portion of it) is the rule that "subsystem locks should not be kept
+> acquired while calling in some other subsystems".
+>
+> Typically in the clk subsystem the logic is:
+>
+> func() {
+>         mutex_lock(clk);
+>         runtime_resume(clk);
+>         ...
+> }
+>
+> Whereas what would definitely work without locking issues is the
+> opposite:
+>
+> func() {
+>         runtime_resume(clk);
+>         mutex_lock(clk);
+>         ...
+> }
+>
+> Of course life is not so simple, and the clock core is highly
+> recursive, which means inverting the two calls like I hinted above
+> simply does not work as we go deeper in the subcalls. As a result, we
+> need to runtime resume *all* the relevant clocks in advance, before
+> calling functions recursively (the lock itself is allowed to re-enter
+> and is not blocking in this case).
+>
+> I followed all possible paths in the clock subsystem and identified 3
+> main categories. The list of clocks we need to runtime resume in advance
+> can either be:
+> 1- the parent clocks
+> 2- the child clocks
+> 3- the parent and child clocks
+> 4- all the clocks (typically for debugfs/sysfs purposes).
+>
+> [Solution 1: discarded]
+>
+> The first approach to do that was do to some guessing based on the clock
+> tree topology. Unfortunately this approach does not stand because it is
+> virtually unbounded. In order to know the clock topology we must acquire
+> the clock main lock. In order to runtime resume we must release it. As a
+> result, this logic is virtually unbounded (even though in practice we
+> would converge at some point). So this approach was discarded by Steven.
+>
+> [Solution 2: this proposal]
+>
+> After the LPC discussion with Steven, I also discussed with Saravana
+> about this and he pointed that since we were using fw_devlink=3Drpm by
+> default now, all providers -including clock controllers of course- would
+> already be runtime resumed the first time we would make a
+> runtime_resume(clk), and thus all the nested calls were no longer
+> needed. This native solution was already addressing point #1 above (and
+> partially point #3) and all I had to do was to make a similar function
+> for point #2.
 
-> ---
->  drivers/base/power/runtime.c | 44 ++++++++++++++++++++++++++++++++++++
->  include/linux/pm_runtime.h   |  4 ++++
->  2 files changed, 48 insertions(+)
->
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index 0e127b0329c0..205a4f8828b0 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -1568,6 +1568,32 @@ void pm_runtime_enable(struct device *dev)
->  }
->  EXPORT_SYMBOL_GPL(pm_runtime_enable);
->
-> +static void pm_runtime_set_suspended_action(void *data)
-> +{
-> +       pm_runtime_set_suspended(data);
-> +}
-> +
-> +/**
-> + * devm_pm_runtime_set_active_enabled - set_active version of devm_pm_ru=
-ntime_enable.
-> + *
-> + * @dev: Device to handle.
-> + */
-> +int devm_pm_runtime_set_active_enabled(struct device *dev)
-> +{
-> +       int err;
-> +
-> +       err =3D pm_runtime_set_active(dev);
-> +       if (err)
-> +               return err;
-> +
-> +       err =3D devm_add_action_or_reset(dev, pm_runtime_set_suspended_ac=
-tion, dev);
-> +       if (err)
-> +               return err;
-> +
-> +       return devm_pm_runtime_enable(dev);
-> +}
-> +EXPORT_SYMBOL_GPL(devm_pm_runtime_set_active_enabled);
-> +
->  static void pm_runtime_disable_action(void *data)
->  {
->         pm_runtime_dont_use_autosuspend(data);
-> @@ -1590,6 +1616,24 @@ int devm_pm_runtime_enable(struct device *dev)
->  }
->  EXPORT_SYMBOL_GPL(devm_pm_runtime_enable);
->
-> +static void pm_runtime_put_noidle_action(void *data)
-> +{
-> +       pm_runtime_put_noidle(data);
-> +}
-> +
-> +/**
-> + * devm_pm_runtime_get_noresume - devres-enabled version of pm_runtime_g=
-et_noresume.
-> + *
-> + * @dev: Device to handle.
-> + */
-> +int devm_pm_runtime_get_noresume(struct device *dev)
-> +{
-> +       pm_runtime_get_noresume(dev);
-> +
-> +       return devm_add_action_or_reset(dev, pm_runtime_put_noidle_action=
-, dev);
-> +}
-> +EXPORT_SYMBOL_GPL(devm_pm_runtime_get_noresume);
-> +
->  /**
->   * pm_runtime_forbid - Block runtime PM of a device.
->   * @dev: Device to handle.
-> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-> index 7fb5a459847e..756b842dcd30 100644
-> --- a/include/linux/pm_runtime.h
-> +++ b/include/linux/pm_runtime.h
-> @@ -96,7 +96,9 @@ extern void pm_runtime_new_link(struct device *dev);
->  extern void pm_runtime_drop_link(struct device_link *link);
->  extern void pm_runtime_release_supplier(struct device_link *link);
->
-> +int devm_pm_runtime_set_active_enabled(struct device *dev);
->  extern int devm_pm_runtime_enable(struct device *dev);
-> +int devm_pm_runtime_get_noresume(struct device *dev);
->
->  /**
->   * pm_suspend_ignore_children - Set runtime PM behavior regarding childr=
-en.
-> @@ -294,7 +296,9 @@ static inline bool pm_runtime_blocked(struct device *=
-dev) { return true; }
->  static inline void pm_runtime_allow(struct device *dev) {}
->  static inline void pm_runtime_forbid(struct device *dev) {}
->
-> +static inline int devm_pm_runtime_set_active_enabled(struct device *dev)=
- { return 0; }
->  static inline int devm_pm_runtime_enable(struct device *dev) { return 0;=
- }
-> +static inline int devm_pm_runtime_get_noresume(struct device *dev) { ret=
-urn 0; }
->
->  static inline void pm_suspend_ignore_children(struct device *dev, bool e=
-nable) {}
->  static inline void pm_runtime_get_noresume(struct device *dev) {}
-> --
-> 2.49.0
->
->
+So this depends on DT being used and fw_devlink=3Drpm being used, doesn't i=
+t?
+
+You cannot really assume in general that there will be device links
+between parents and children.
 
