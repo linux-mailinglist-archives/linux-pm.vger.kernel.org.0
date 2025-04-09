@@ -1,119 +1,114 @@
-Return-Path: <linux-pm+bounces-25024-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25025-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 111DEA82DB9
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 19:36:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3390AA82DCA
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 19:40:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 071AE18844CB
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 17:36:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1155E882174
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 17:38:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D806126FA5D;
-	Wed,  9 Apr 2025 17:36:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF61D277028;
+	Wed,  9 Apr 2025 17:38:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R095+pdI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Za4d8Isp"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE3441C5D7D;
-	Wed,  9 Apr 2025 17:36:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D11277020;
+	Wed,  9 Apr 2025 17:38:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744220165; cv=none; b=XUq8tVqIphCb1WTY3BhkO69Ldht38rLrmSsX/o8Hw0PyeoNQ+gZF5F7B3nv43OK5ux9O0hr0/0837yD7Wd+64aEASCZ+puw4IaqZUHuZjtgrX+Zjl64p15a/dOC3ULGvVDv1X3IgBAVrwc1Un8ijOYzXXYrnALpfL58Vxi5lM1A=
+	t=1744220334; cv=none; b=pO3LM9ikkFoRQL9PuDfOa6WJEQ3f/NioawWcQbvqZcrNzNCczOaKUkcBk5R8X7UB8+xx9enHl8oXbcFYVMNFyqslzB1RwYTVZHKM3u754PYVIgECAlvj0SYRKfYgLKkiEY6WkT4PfYbvKAEDIieLsuJ/YmLQAz/dtva9zu7RikI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744220165; c=relaxed/simple;
-	bh=118j6dSY2LWufoMHA0NQiowWmkCyuLbqD1TJeYp1heE=;
+	s=arc-20240116; t=1744220334; c=relaxed/simple;
+	bh=nZshXwi1QcuYkN3se0SKyC0JzvBlTbMAFvIp4LJDCDI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tv2AeBupAspJgux1VWgaN/wtoyuxgzYYs1LuU+T3mV8XAQa+4Ikt/fpTZSdDeTwJ+YzF2fFEheG+72IMQBDkKaSN5SLX3+zgrvtAK2BHm6DXgcEOAkkqFRWzN6SZZXq3IcuKHgAAuwopirB4YL2iLSyfAKh0mUorwyMpZm0TB1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R095+pdI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E547C4CEE7;
-	Wed,  9 Apr 2025 17:36:05 +0000 (UTC)
+	 To:Cc:Content-Type; b=i9l+y6DlhGwjBQJCGEI4afiHuUKjHag0rI38tVO9JTg1xOdWATjmj72JKePkJRsPz7i25txpyQ61gi9FBBTm11tO9M8i3kMNSbHsOSvQNVoZ9jTXpT+WWZJDLytOjvTqDEVK0Qk7L6655UMOGVRjCjufCIcN+YJQQ3uNlsQ4lgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Za4d8Isp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 381BBC4CEE7;
+	Wed,  9 Apr 2025 17:38:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744220165;
-	bh=118j6dSY2LWufoMHA0NQiowWmkCyuLbqD1TJeYp1heE=;
+	s=k20201202; t=1744220334;
+	bh=nZshXwi1QcuYkN3se0SKyC0JzvBlTbMAFvIp4LJDCDI=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=R095+pdIFdyFVKIvdunsyUvXeKwsJkTl+HOo7bxwLGFcQ97SbLIKHH5ZvVJeiGn1g
-	 qLbiFhUmFNP1N9Qixi4sYaKlhXxw3/SrnxMsFt+S6m+9ExfF/eRtlNTOFIcelXrNzU
-	 lY7Yu4lHr3fnA4mEiaCX2Urx7sZ5jh/7jenFoxZOgC7/KMG35n+mPWXllR49ObQWkc
-	 nMs8FmeiypsFR0ege4oE+KUWYqFeLucwCiMYcW2/PXRM7qj0QQLK0BuSHWc4dU/SP5
-	 eSoC2VKpTShb0wnoXFPMQiwpnKCcKJVAzOanIiTFygQjdzw5/giGp6XQux3g/8642E
-	 Di1EnjT1xq21g==
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-603ff8e915aso1795877eaf.3;
-        Wed, 09 Apr 2025 10:36:05 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUrcWAsVsYzY0Za1wdjtt1xfOp+ljGzS9J1s6sYM/CPPc0IVleaXgKTmD4GomU+m+ah66fiu/ABJT/cWlg=@vger.kernel.org, AJvYcCVEizAdJQrgfeWuL9DA8gN/SIsoncCaPA3/+VpCVh4AC0m8aQFZ0n5xx5v0NYwL3kXhJGCtIaPGiwU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdytfDMdFCwwZkAowztw4qf47GMkWBi0R107dSZUWXzlUYMr+w
-	SZFucdgb0q+cT0/8KyzZkc0Sg/OTzLSptDXSf5ZAAmiCMd+gCi/OM1hYb0HvtfdW1cVGoD4Zm2A
-	Nro3Y37nf/6q23b4zjokPHOIhJp8=
-X-Google-Smtp-Source: AGHT+IHBnYpZQiiOB3am9fC3lA9CN47uPxJnr9ShV+UAV/NROnWurDgTFqjecZi6QaLUkY3Qg5a/TrQjclVUDTQOQ4Q=
-X-Received: by 2002:a05:6871:aa17:b0:2c1:5b95:5f1b with SMTP id
- 586e51a60fabf-2d08ddf6828mr2251840fac.23.1744220164390; Wed, 09 Apr 2025
- 10:36:04 -0700 (PDT)
+	b=Za4d8IspMlX2sDIntlELpZo3BEtXyJpZgb+xE/1Maw2VJZen5E3PhHiyfNh93GD23
+	 IOEW9GFxi3MyP5uMdNOKLEtoev+25yMjj/qmoDRFoGJRHFgdnH5XkeOe1uFBCQiMtM
+	 1qTJdlkXehdod71j7paYGQeDE2rgE21TbNtowbGEL02gCVHPELURuIBCLy8gxjJmc/
+	 0GI3/gPJb4SKIT/C7gKWtvET/Ezgl2+q+m638ZWjnO+7AdXjPWczvSNXIr7U3IAYYh
+	 fkMGN6k4Qfp49ujXR+sBs9DNcIAR2ToulBBg5zL9EWEZ82yJeqW4nDlvFc9egK8UyO
+	 SAJy5/mhnzSIg==
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-2c2504fa876so1893395fac.0;
+        Wed, 09 Apr 2025 10:38:54 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW57qyRLZlSSgP1p9gpYe+Fd/69ryMOXh8u56PYchSPTLFs2fiQ2AtfVvp3P+XoMHwC7a79owx/d90=@vger.kernel.org, AJvYcCWW8NZGZDTZVje0Qzc9aQFbac7vW9Cmh+z25kZCnuZKsnD0ZqVMRrexzaczVhP/rWSBpd8jl/RDpYGvAYs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxaZ9G1XFM4vYzlcVp+wi9Brx2yv+8PlBYhLrVGuDyl/FotoJi0
+	YLIXyL/ZGSQB9b3dMCYZmdyB+F9bg+ZAu77LdsjEhW0lxlMtCBE+EEMsqn2aJOjYhI2a3B6RfLK
+	OjVGX+gaq9JdC+v060kZ193NpcKA=
+X-Google-Smtp-Source: AGHT+IGFfNFzXB/WwmXIgjgZoJppXAKjcQ+AGSnKXLYSrbVri6pAj8EQxfnzt48/Ok5RaxVy9sDeOF2tdrpflm4B7uY=
+X-Received: by 2002:a05:6870:ff90:b0:296:beb3:aa40 with SMTP id
+ 586e51a60fabf-2d091bb56e3mr1846767fac.36.1744220333489; Wed, 09 Apr 2025
+ 10:38:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250405060909.2026332-1-atulpant.linux@gmail.com>
-In-Reply-To: <20250405060909.2026332-1-atulpant.linux@gmail.com>
+References: <20250405135308.1854342-1-quic_zhonhan@quicinc.com>
+In-Reply-To: <20250405135308.1854342-1-quic_zhonhan@quicinc.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 9 Apr 2025 19:35:53 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gu+5P=rnM=JC67kC-6dfO2P00oMBh7=73j+Et8beas3A@mail.gmail.com>
-X-Gm-Features: ATxdqUHyYoKwZwhyf74Kld-IO1Ir59iLSTW5nbCU5hxN-WDSRonxjztLWGuBWaQ
-Message-ID: <CAJZ5v0gu+5P=rnM=JC67kC-6dfO2P00oMBh7=73j+Et8beas3A@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: governors: Fixes typos in comments
-To: Atul Kumar Pant <atulpant.linux@gmail.com>
-Cc: rafael@kernel.org, daniel.lezcano@linaro.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Wed, 9 Apr 2025 19:38:42 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iWLSSvyei_-KdNZs6iWCgy9f1LpVYcaPSW7ZOig-3=yw@mail.gmail.com>
+X-Gm-Features: ATxdqUFz2gT4MZkdsbZ4T4OCv426tFu1HzrLA_WhCAC7-mPwAP3Bksqf-BNXlTg
+Message-ID: <CAJZ5v0iWLSSvyei_-KdNZs6iWCgy9f1LpVYcaPSW7ZOig-3=yw@mail.gmail.com>
+Subject: Re: [PATCH v2] cpuidle: menu: Optimize bucket assignment when
+ next_timer_ns equals KTIME_MAX
+To: Zhongqiu Han <quic_zhonhan@quicinc.com>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, christian.loehle@arm.com, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Apr 5, 2025 at 8:09=E2=80=AFAM Atul Kumar Pant <atulpant.linux@gmai=
-l.com> wrote:
+On Sat, Apr 5, 2025 at 3:53=E2=80=AFPM Zhongqiu Han <quic_zhonhan@quicinc.c=
+om> wrote:
 >
-> Fixes typos and corrects spelling in the comments.
+> Directly assign the last bucket value instead of calling which_bucket()
+> when next_timer_ns equals KTIME_MAX, the largest possible value that
+> always falls into the last bucket. This avoids unnecessary calculations
+> and enhances performance.
 >
-> Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
+> Reviewed-by: Christian Loehle <christian.loehle@arm.com>
+> Signed-off-by: Zhongqiu Han <quic_zhonhan@quicinc.com>
 > ---
->  drivers/cpuidle/governors/teo.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> v1 -> v2:
+> - Rebased on top of current next.
+> - Following Christian's review suggestions, remove unnecessary code comme=
+nts.
+> - Link to v1: https://lore.kernel.org/all/20250403092852.1072015-1-quic_z=
+honhan@quicinc.com/
 >
-> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/=
-teo.c
-> index 8fe5e1b47..bfa55c1ea 100644
-> --- a/drivers/cpuidle/governors/teo.c
-> +++ b/drivers/cpuidle/governors/teo.c
-> @@ -19,7 +19,7 @@
->   *
->   * Of course, non-timer wakeup sources are more important in some use ca=
-ses,
->   * but even then it is generally unnecessary to consider idle duration v=
-alues
-> - * greater than the time time till the next timer event, referred as the=
- sleep
-> + * greater than the time till the next timer event, referred as the slee=
-p
->   * length in what follows, because the closest timer will ultimately wak=
-e up the
->   * CPU anyway unless it is woken up earlier.
->   *
-> @@ -311,7 +311,7 @@ static int teo_select(struct cpuidle_driver *drv, str=
-uct cpuidle_device *dev,
->                 struct cpuidle_state *s =3D &drv->states[i];
+>  drivers/cpuidle/governors/menu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
->                 /*
-> -                * Update the sums of idle state mertics for all of the s=
-tates
-> +                * Update the sums of idle state metrics for all of the s=
-tates
->                  * shallower than the current one.
+> diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors=
+/menu.c
+> index 39aa0aea61c6..52d5d26fc7c6 100644
+> --- a/drivers/cpuidle/governors/menu.c
+> +++ b/drivers/cpuidle/governors/menu.c
+> @@ -255,7 +255,7 @@ static int menu_select(struct cpuidle_driver *drv, st=
+ruct cpuidle_device *dev,
 >                  */
->                 intercept_sum +=3D prev_bin->intercepts;
+>                 data->next_timer_ns =3D KTIME_MAX;
+>                 delta_tick =3D TICK_NSEC / 2;
+> -               data->bucket =3D which_bucket(KTIME_MAX);
+> +               data->bucket =3D BUCKETS - 1;
+>         }
+>
+>         if (unlikely(drv->state_count <=3D 1 || latency_req =3D=3D 0) ||
 > --
 
-Applied as 6.16 material with some edits in the subject and changelog, than=
-ks!
+Applied as 6.16 material, thanks!
 
