@@ -1,87 +1,87 @@
-Return-Path: <linux-pm+bounces-25000-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25001-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84658A82284
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 12:43:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFC92A822A3
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 12:47:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EBA4C1BA69D7
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 10:42:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B273E8A33E7
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 10:47:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E20CB25DD00;
-	Wed,  9 Apr 2025 10:41:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B6F125D552;
+	Wed,  9 Apr 2025 10:47:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vGXkogIk"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D2ClEn4i"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1B025D521
-	for <linux-pm@vger.kernel.org>; Wed,  9 Apr 2025 10:41:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 837D925D8FD
+	for <linux-pm@vger.kernel.org>; Wed,  9 Apr 2025 10:47:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744195315; cv=none; b=XQuMq6QXu2maIvy1PAp9sAbC2GVxPew0Dj7MtQ1//J3b/68IpPlLFlVTzPOnf+X11Eg7M85gITUn6r0cYlyKv3D24HHzZH0qDFkIMcBSDc/L5iHqc2UhRHpgBXJREHirVtI6wR82AQYDdzCmAqp1C/0MyLctXFYaS433gUwymGU=
+	t=1744195626; cv=none; b=hmWzlzeFH51hBjg1lDok6tgUWikKgsBIlcqES7Kb9JfbUhIslL0pcGG2GQrxQGDwFVGoN6wa+IX/3arMUPq3QouzbpnzMS69lLrEs1W3fva5lIJuXqIibXSEuIPEFc3oFUXWqVdMeESJoTc7jsf3Z8N8Np/oifLxBJqJYsaHV8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744195315; c=relaxed/simple;
-	bh=u4imxXMhWH+lE0stnEdXi80NbKFnl0KzUsQSbsGJErk=;
+	s=arc-20240116; t=1744195626; c=relaxed/simple;
+	bh=m4Va46OtnmnAHRcSLsZlTiRU5ke7iLxP4nopo7OMND8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Py78TCnbXlI5ehLPvV3BNwRRA2zwVZPoiBpQEZV/n9CLGwTwV1ERl/D+r1svkcB8w+iTsOXgn/hY1vWF2plo59SA1I+H3SDPmFwuz/R6NhwVuW4cLpwAoBxPTKKXVo7Q5klKqO/kOrfXHX6LRx8iu/NECtlhVqDhzjNXgtWqXdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vGXkogIk; arc=none smtp.client-ip=209.85.128.175
+	 To:Cc:Content-Type; b=K4evxbcPg8AAsTUA+FadpIjhdt3T1bjCzndYk9EkHcx4FaR5wBzM2c7KgE/dRUsc9cqPsFkleIIMkm39991Vhus3o0WN1wLFhrm0MvGc768C27tgmI3nluKyQOyamQ+YWuIR33KANPw6B0tdgkGzEtANpqWqctzKKQfzVHHMUsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=D2ClEn4i; arc=none smtp.client-ip=209.85.128.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-700b17551cdso65329777b3.0
-        for <linux-pm@vger.kernel.org>; Wed, 09 Apr 2025 03:41:53 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-702628e34f2so5541307b3.0
+        for <linux-pm@vger.kernel.org>; Wed, 09 Apr 2025 03:47:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744195312; x=1744800112; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1744195623; x=1744800423; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zbx/nnTrG6Q4jtzUnp3dgghp62oCSk+raqpc9aCKiZs=;
-        b=vGXkogIkxu7sqj+W+yucDQ0EzdgVKFBipazVeSrcRjkp9nGViIB27x/6BFHebfVZ9j
-         5LS913tTymyCQUFL2kseOUI4xUCb+nChHAfT/bfOiXzEVOnp0TEXTAXOY8+oLDyJdKuP
-         utA8OzzKjcLaSXnw9g3aXo2uc/wd6z+X0getZcoWZJ3qkiNWx1RX5D3js6fWkuMr9/bM
-         HTmsg0JBUUxxO6pcsF8vwZ/Iq4YT1JMpW8pQDpT2hoT68HWXyrpuJoa/aVzQ6Md0RMfI
-         3MfTkB6r8G8YyWvqeRhDx4MpTLhv/lq7Aoh4Qtiu1H3B1F3TZ78N5arOh9Fkm7SnzucQ
-         az/g==
+        bh=Ug1/Rx9R3a7L/ACPQ03wXzk3pC2LRXFr7H0a//DFfV4=;
+        b=D2ClEn4iLQPJIv6iecAbKk0EiX4xuWIy25VcMJJbipPcdXTirKrH3NaeP4Ru43+fPp
+         LzyEatedRp31UM76ZPKJ7obXXTFt3by3h7gwuwoRvW+duvK02s6tiF1oHst9vBE1p2TD
+         OJ6DZgaiUNhGhTKEq4aHJgXF5LGMDFPBLfVbWJuLhaSdTXeAqnkLihq0xWHuTAB/8ris
+         LyA0KRdHJ8TlDz5n/o0siFtUaV6CPiWuqE0UnKJPEw1rkpmqpum19rCa8UmH5l9/Oizv
+         4CfunijP5WYpnUdJNXFXr/pIaUxsngfa/QUs+kaF98ilX9LIzTBk5AubK9r0qIG6QrPR
+         I6lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744195312; x=1744800112;
+        d=1e100.net; s=20230601; t=1744195623; x=1744800423;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zbx/nnTrG6Q4jtzUnp3dgghp62oCSk+raqpc9aCKiZs=;
-        b=CecCOlIKE7IaqSr3RWzlCugwCz7uDkBLCA4QsUHxpOyIAypThULeyV4BGpvCdY1bzj
-         jdPcJ3BDzgrp0gcY/INNKIceZy+QgUB6kLSh3Yk9vAhyO8VfglDtM6cT6gExFRS0jo9u
-         hfRjNyM/hVSJzaeY0trkGEONOEmMSSppWl6pL6YwrGioqQtoweH87P7HamYYxRKu2wjJ
-         xLHpoJGN2rrGmUQayTJQ8ANL7pNX9SgyGfCpXDCanbZrhASt3CP1p9j+UNEKngi5CDLS
-         27WjrKeTbVJQa3KOAPJ4sO3GLEMx7hxipvKN5jpr7AUy5XXKhPudtuioRfCrnKCs4adr
-         YHcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWYLHaVlw60HCbxHo+TcMTvOX89279/WtYmLA7WpmV6hcGbngsKel6unI8+wclW5b6S7Hmf7083NQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfAJxjsPSmpJWvk/TvYl1P7djwI/UJm9ZjS6VjnICow+YPqOTx
-	y5gYha0AauskivoAdOcqJJE7kljuCiN3OUVaYRfjJk2MDezKSGRUI9WdtwGpCeyQMEd523qDeRT
-	gs9tnD6c/clmj7IgYguci/pLe8my22zZXGsqiAw==
-X-Gm-Gg: ASbGnctWHE8j2MjTCwzu/GRidWDV/nJKXgKr6i81L8N6/ez8VTXKra638t7MbW8Qq96
-	0iesf0ZsF4RQWR7AqKPnpk8SWtVlPgN9BmVDMtww0v9mq4BQbamOsdjdkRpIcAPCidCoPg9RpcY
-	53/kJAAKIcXcwozSgcjzcQryOaHl6TpLhzrg==
-X-Google-Smtp-Source: AGHT+IFcW3dVYG/NllcMUbiQFPsaC2kMGwBB25zgb5C4LoLaPrqyxQ+CvN8joNvk0vnecmPTbBGtAkQPDSjYEggyHcE=
-X-Received: by 2002:a05:690c:4889:b0:6fd:4485:9255 with SMTP id
- 00721157ae682-7053ae70affmr35816427b3.24.1744195312358; Wed, 09 Apr 2025
- 03:41:52 -0700 (PDT)
+        bh=Ug1/Rx9R3a7L/ACPQ03wXzk3pC2LRXFr7H0a//DFfV4=;
+        b=KG/vw3zV/53nFhv2O/t7srC4gyGU4gCbnfCDG/CPyAo+Z6COwvUnUImDeaRvSSxOwA
+         imv38l763wb5zIQJo4UWWNQA3DR+XFuz4Bd0nKMHJ6yfOWjBaw2MfJhGFJss9WF81RAV
+         cvv7M+oyL0iSE9/NhE92zcEp4nhmVsHviCxcjw0j0oAow2iIR/g/BYsKAoibW29SmtdD
+         7OcLMNvtrYrYpJy2WOBfrtQfH2pbM9rqxTQg3Qwz8OLJqg+O7Vq+EreqxPPjmA+EFG9C
+         LPxFBRjZZ+PqBke/vfzBY+Wle4v620RPKaimzi9fqWVEVrxxNYx66RpRVcagdckl+qNK
+         C5LA==
+X-Forwarded-Encrypted: i=1; AJvYcCWG3si4aAzGH6i+Jlyf2Dgu25zcKVaYPobRyU9Yj6XslINFu293YqX+iYH3qy7UXVgM6fXKcWJiFw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmLXj4lGb+CGLLsxoWrHVG1SMSn/RMW9X8Exr5fbrBrtIrd3CN
+	OE4ez8zUS7JyetgsrUM20x6epe+VPDi148DJGq2b/83gshw0gkt2XVp/cBgAIJYAjXXrmVfiscz
+	hYB1xAc+HOwyn/jtnkU9XwZ27Q6zg/f0IXAIlYw==
+X-Gm-Gg: ASbGncs6hQ0xs055toBrooj0hmThy+q7DUqHo0k2jZ6wkx5BPlXSy3pLchQCN2lUZlr
+	34jXZjQZ1StkfUf8F9hjtHMeU1+RM9m1Mi5RNRxVyzQGH1Adse8F/86U/1u7p58ySHnSGoJxbJR
+	ldrFY6Q4E+MAEQmd3lkhj8KcE=
+X-Google-Smtp-Source: AGHT+IGLd51JNY7rKV6DKAjjcFIJNQXnQmEroecayzdKgQX36GYPDaf36afd9Jqfjo6bT//7LWckn6OcAbTZ+MentbY=
+X-Received: by 2002:a05:690c:b92:b0:6fe:bf32:a427 with SMTP id
+ 00721157ae682-70538d993f8mr41204337b3.0.1744195623423; Wed, 09 Apr 2025
+ 03:47:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CGME20250409093031eucas1p2222e9dc4d354e9b66b7183922c0fb3cf@eucas1p2.samsung.com>
- <20250409093025.2917087-1-m.wilczynski@samsung.com> <20250409093025.2917087-2-m.wilczynski@samsung.com>
-In-Reply-To: <20250409093025.2917087-2-m.wilczynski@samsung.com>
+References: <CGME20250409093031eucas1p1ee277da31b7de9a16f6b7345df6a89ab@eucas1p1.samsung.com>
+ <20250409093025.2917087-1-m.wilczynski@samsung.com> <20250409093025.2917087-3-m.wilczynski@samsung.com>
+In-Reply-To: <20250409093025.2917087-3-m.wilczynski@samsung.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 9 Apr 2025 12:41:16 +0200
-X-Gm-Features: ATxdqUGWw59JsfUXBmewm_-nQPR1HPGJKXnfN1JdqM3oC2wFfjOLFi3_5CNvBz8
-Message-ID: <CAPDyKFpoSwKAmiWyvNt1fVyu6=NU1oVOmQLVuzX_bG=-5KrM2Q@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] dt-bindings: firmware: thead,th1520: Add clocks
- and resets
+Date: Wed, 9 Apr 2025 12:46:26 +0200
+X-Gm-Features: ATxdqUGnjrckU6XxZcEHMsxQfLuVOyOu_RZdVP-4RZ3RcySv_EDwyCFMIW9CLPg
+Message-ID: <CAPDyKFoyfu2n_JfUy7PRZf1gMEZ3KKAdykjnWhS0L+wkYhbEmA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] pmdomain: thead: Add GPU-specific clock and reset
+ handling for TH1520
 To: Michal Wilczynski <m.wilczynski@samsung.com>
 Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, 
 	guoren@kernel.org, wefu@redhat.com, p.zabel@pengutronix.de, 
@@ -91,108 +91,199 @@ Content-Type: text/plain; charset="UTF-8"
 
 On Wed, 9 Apr 2025 at 11:30, Michal Wilczynski <m.wilczynski@samsung.com> wrote:
 >
-> Prepare for handling GPU clock and reset sequencing through a generic
-> power domain by adding clock and reset properties to the TH1520 AON
-> firmware bindings.
+> Extend the TH1520 power domain driver to manage GPU related clocks and
+> resets via generic PM domain start/stop callbacks.
 >
-> The T-HEAD TH1520 GPU requires coordinated management of two clocks
-> (core and sys) and two resets (GPU and GPU CLKGEN). Due to SoC-specific
-> requirements, the CLKGEN reset must be carefully managed alongside clock
-> enables to ensure proper GPU operation, as discussed on the mailing list
-> [1].
+> The TH1520 GPU requires a special sequence to correctly initialize:
+> - Enable the GPU clocks
+> - Deassert the GPU clkgen reset
+> - Delay for a few cycles to satisfy hardware requirements
+> - Deassert the GPU core reset
 >
-> Since the coordination is now handled through a power domain, only the
-> programmable clocks (core and sys) are exposed. The GPU MEM clock is
-> ignored, as it is not controllable on the TH1520 SoC.
+> This sequence is SoC-specific and needs to be abstracted away from the
+> Imagination GPU driver, which expects a standard single reset line.
+> Following discussions with kernel maintainers, this logic is placed
+> inside a PM domain instead of polluting the clock or reset frameworks,
+> or the GPU driver itself [1].
 >
-> This approach follows upstream maintainers' recommendations [1] to
-> avoid SoC-specific details leaking into the GPU driver or clock/reset
-> frameworks directly.
+> Managing this inside a generic power domain allows better coordination
+> of clocks, resets, and power state, and aligns with the direction of
+> treating PM domains as SoC-specific "power management drivers".
 >
-> [1] - https://lore.kernel.org/all/38d9650fc11a674c8b689d6bab937acf@kernel.org/
+> [1] - https://lore.kernel.org/all/CAPDyKFqsJaTrF0tBSY-TjpqdVt5=6aPQHYfnDebtphfRZSU=-Q@mail.gmail.com/
 >
 > Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
 > ---
->  .../bindings/firmware/thead,th1520-aon.yaml   | 28 +++++++++++++++++++
->  1 file changed, 28 insertions(+)
+>  drivers/pmdomain/thead/th1520-pm-domains.c | 119 +++++++++++++++++++++
+>  1 file changed, 119 insertions(+)
 >
-> diff --git a/Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml b/Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
-> index bbc183200400..8075874bcd6b 100644
-> --- a/Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
-> +++ b/Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
-> @@ -25,6 +25,16 @@ properties:
->    compatible:
->      const: thead,th1520-aon
+> diff --git a/drivers/pmdomain/thead/th1520-pm-domains.c b/drivers/pmdomain/thead/th1520-pm-domains.c
+> index f702e20306f4..aa85c3954c39 100644
+> --- a/drivers/pmdomain/thead/th1520-pm-domains.c
+> +++ b/drivers/pmdomain/thead/th1520-pm-domains.c
+> @@ -5,17 +5,29 @@
+>   * Author: Michal Wilczynski <m.wilczynski@samsung.com>
+>   */
 >
-> +  clocks:
-> +    items:
-> +      - description: GPU core clock
-> +      - description: GPU sys clock
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+>  #include <linux/firmware/thead/thead,th1520-aon.h>
+>  #include <linux/slab.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_domain.h>
+> +#include <linux/reset.h>
+>
+>  #include <dt-bindings/power/thead,th1520-power.h>
+>
+> +#define TH1520_GPU_RESET_IDX 0
+> +#define TH1520_GPU_CLKGEN_RESET_IDX 1
 > +
-> +  clock-names:
-> +    items:
-> +      - const: gpu-core
-> +      - const: gpu-sys
-
-These clocks don't look like they belong to the power-domain node, but
-rather the GPU's node.
-
-Or is this in fact the correct description of the HW?
-
+>  struct th1520_power_domain {
+>         struct th1520_aon_chan *aon_chan;
+>         struct generic_pm_domain genpd;
+>         u32 rsrc;
 > +
->    mboxes:
->      maxItems: 1
->
-> @@ -32,13 +42,27 @@ properties:
->      items:
->        - const: aon
->
-> +  resets:
-> +    items:
-> +      - description: GPU reset
-> +      - description: GPU CLKGEN reset
+> +       struct clk_bulk_data *clks;
+> +       int num_clks;
+> +       struct reset_control_bulk_data *resets;
+> +       int num_resets;
 > +
-> +  reset-names:
-> +    items:
-> +      - const: gpu
-> +      - const: gpu-clkgen
+>  };
+>
+>  struct th1520_power_info {
+> @@ -61,6 +73,99 @@ static int th1520_pd_power_off(struct generic_pm_domain *domain)
+>         return th1520_aon_power_update(pd->aon_chan, pd->rsrc, false);
+>  }
+>
+> +static int th1520_gpu_init_clocks(struct device *dev,
+> +                                 struct th1520_power_domain *pd)
+> +{
+> +       static const char *const clk_names[] = { "gpu-core", "gpu-sys" };
+> +       int i, ret;
 > +
-
-Ditto for the reset.
-
->    "#power-domain-cells":
->      const: 1
+> +       pd->num_clks = ARRAY_SIZE(clk_names);
+> +       pd->clks = devm_kcalloc(dev, pd->num_clks, sizeof(*pd->clks), GFP_KERNEL);
+> +       if (!pd->clks)
+> +               return -ENOMEM;
+> +
+> +       for (i = 0; i < pd->num_clks; i++)
+> +               pd->clks[i].id = clk_names[i];
+> +
+> +       ret = devm_clk_bulk_get(dev, pd->num_clks, pd->clks);
+> +       if (ret)
+> +               return dev_err_probe(dev, ret, "Failed to get GPU clocks\n");
+> +
+> +       return 0;
+> +}
+> +
+> +static int th1520_gpu_init_resets(struct device *dev,
+> +                                 struct th1520_power_domain *pd)
+> +{
+> +       static const char *const reset_names[] = { "gpu", "gpu-clkgen" };
+> +       int i, ret;
+> +
+> +       pd->num_resets = ARRAY_SIZE(reset_names);
+> +       pd->resets = devm_kcalloc(dev, pd->num_resets, sizeof(*pd->resets),
+> +                                 GFP_KERNEL);
+> +       if (!pd->resets)
+> +               return -ENOMEM;
+> +
+> +       for (i = 0; i < pd->num_resets; i++)
+> +               pd->resets[i].id = reset_names[i];
+> +
+> +       ret = devm_reset_control_bulk_get_exclusive(dev, pd->num_resets,
+> +                                                   pd->resets);
+> +       if (ret)
+> +               return dev_err_probe(dev, ret, "Failed to get GPU resets\n");
+> +
+> +       return 0;
+> +}
+> +
+> +static int th1520_gpu_domain_start(struct device *dev)
+> +{
+> +       struct generic_pm_domain *genpd = pd_to_genpd(dev->pm_domain);
+> +       struct th1520_power_domain *pd = to_th1520_power_domain(genpd);
+> +       int ret;
+> +
+> +       ret = clk_bulk_prepare_enable(pd->num_clks, pd->clks);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = reset_control_deassert(pd->resets[TH1520_GPU_CLKGEN_RESET_IDX].rstc);
+> +       if (ret)
+> +               goto err_disable_clks;
+> +
+> +       /*
+> +        * According to the hardware manual, a delay of at least 32 clock
+> +        * cycles is required between de-asserting the clkgen reset and
+> +        * de-asserting the GPU reset. Assuming a worst-case scenario with
+> +        * a very high GPU clock frequency, a delay of 1 microsecond is
+> +        * sufficient to ensure this requirement is met across all
+> +        * feasible GPU clock speeds.
+> +        */
+> +       udelay(1);
+> +
+> +       ret = reset_control_deassert(pd->resets[TH1520_GPU_RESET_IDX].rstc);
+> +       if (ret)
+> +               goto err_assert_clkgen;
+> +
+> +       return 0;
+> +
+> +err_assert_clkgen:
+> +       reset_control_assert(pd->resets[TH1520_GPU_CLKGEN_RESET_IDX].rstc);
+> +err_disable_clks:
+> +       clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
+> +       return ret;
+> +}
+> +
+> +static int th1520_gpu_domain_stop(struct device *dev)
+> +{
+> +       struct generic_pm_domain *genpd = pd_to_genpd(dev->pm_domain);
+> +       struct th1520_power_domain *pd = to_th1520_power_domain(genpd);
+> +
+> +       reset_control_assert(pd->resets[TH1520_GPU_RESET_IDX].rstc);
+> +       reset_control_assert(pd->resets[TH1520_GPU_CLKGEN_RESET_IDX].rstc);
+> +       clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
+> +
+> +       return 0;
+> +}
+> +
+>  static struct generic_pm_domain *th1520_pd_xlate(const struct of_phandle_args *spec,
+>                                                  void *data)
+>  {
+> @@ -99,6 +204,20 @@ th1520_add_pm_domain(struct device *dev, const struct th1520_power_info *pi)
+>         pd->genpd.power_off = th1520_pd_power_off;
+>         pd->genpd.name = pi->name;
 >
->  required:
->    - compatible
-> +  - clocks
-> +  - clock-names
->    - mboxes
->    - mbox-names
-> +  - resets
-> +  - reset-names
->    - "#power-domain-cells"
->
->  additionalProperties: false
-> @@ -47,7 +71,11 @@ examples:
->    - |
->      aon: aon {
->          compatible = "thead,th1520-aon";
-> +        clocks = <&clk_vo 0>, <&clk_vo 1>;
-> +        clock-names = "gpu-core", "gpu-sys";
->          mboxes = <&mbox_910t 1>;
->          mbox-names = "aon";
-> +        resets = <&rst 0>, <&rst 1>;
-> +        reset-names = "gpu", "gpu-clkgen";
->          #power-domain-cells = <1>;
->      };
+> +       /* there are special callbacks for the GPU */
+> +       if (pi == &th1520_pd_ranges[TH1520_GPU_PD]) {
+> +               ret = th1520_gpu_init_clocks(dev, pd);
+
+Assuming both the clocks and the reset are really resources that
+belong to the GPU, I would suggest to use two callbacks for the genpd
+in question to implement the get/put of the clocks and reset from
+there.
+
+pd->genpd->attach_dev
+pd->genpd->detach_dev
+
+> +               if (ret)
+> +                       return ERR_PTR(ret);
+> +
+> +               ret = th1520_gpu_init_resets(dev, pd);
+> +               if (ret)
+> +                       return ERR_PTR(ret);
+> +
+> +               pd->genpd.dev_ops.start = th1520_gpu_domain_start;
+> +               pd->genpd.dev_ops.stop = th1520_gpu_domain_stop;
+> +       }
+> +
+>         ret = pm_genpd_init(&pd->genpd, NULL, true);
+>         if (ret)
+>                 return ERR_PTR(ret);
 > --
 > 2.34.1
 >
-
-That said, it's still possible to make both the clocks and reset being
-managed from the genpd provider. I will comment on that separately for
-patch2.
 
 Kind regards
 Uffe
