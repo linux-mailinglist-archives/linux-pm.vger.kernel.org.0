@@ -1,154 +1,119 @@
-Return-Path: <linux-pm+bounces-25051-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25052-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BAD1A83096
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 21:34:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 517D0A8317F
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 22:02:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 272334449A4
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 19:34:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0189F188DEAC
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 19:59:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF7F51F2BA4;
-	Wed,  9 Apr 2025 19:34:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2848215064;
+	Wed,  9 Apr 2025 19:54:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a+S20Ogz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VulSS1Yw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96D9E143748;
-	Wed,  9 Apr 2025 19:34:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62CA7214A7F;
+	Wed,  9 Apr 2025 19:54:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744227265; cv=none; b=VAQlniUQ4EDCDTsRYHEWKzMGmxECLd2VeBKsA+jv41RZ3byLiIFL4d9iLSD3+r/QY/DIJpEg2XU33El+tOvwlBofBVRzJMhFh07K9zbygKCqKZS/8kOPGG08ur2rmAImvnpwWghv+LnlFo+Cs0Zuc8uaCnTHaD2npxfhOd5CK4s=
+	t=1744228451; cv=none; b=WYahd8HijWGGgljQZwVoZI2y9iN7Yu25MdRJayLwzDJ0xXYr3kOsrgEFcbp0MEAI9L7VB/hPe03dIH33eeTOFrVLd7+KKMfihkmPm+KNMgUfyHh7OTG6mrgAfzL9H0JbKZhyMRsUyt6UdfJtcNbIv1IDNz2JS+no33SQ5YUsoyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744227265; c=relaxed/simple;
-	bh=2vOJoxdNP20mQK3UiS0RfjI+E8Wm/mByxTHPEUjCAOs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tz/GyG1b9QyvCZFWO4H+HME+epkiTI8qvogCfrBa0pm+Z7LfwXiSum9Lp27/3Dse9FSc7+l+B165HxBf/16Yof5sACyj9vIQsQRUCCJ9tPHdtmYCc9HEaB3HguwoUTVmL4SQzb84ymp75RFe94Se/1gfAvHClY2gVuF115MhHQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a+S20Ogz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D694C4CEE9;
-	Wed,  9 Apr 2025 19:34:25 +0000 (UTC)
+	s=arc-20240116; t=1744228451; c=relaxed/simple;
+	bh=q7KvwDfQqFDNGgQf6PyiHomLFAW6NL2n557EpD26id8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oy1/Yaw991znhwp5goXstaqIx3MSAul68EdkULkv06fub7A452cZfm2d1VFeXm8c1Ih6pxf3fij9Zu0Nk0uXQ8nrabO2A8y3aAJxh0RDq+tamaRNUbCt20kGjzAfweWC6OTatmjxnItm2Iu7FiAA/Sp0NrSMhPH5/3GAfhyiNfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VulSS1Yw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 260C8C4CEE2;
+	Wed,  9 Apr 2025 19:54:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744227265;
-	bh=2vOJoxdNP20mQK3UiS0RfjI+E8Wm/mByxTHPEUjCAOs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=a+S20Ogz2aBgFaushLkB5eVBNyZIgUSX4KMnHqk+g7Ec4GeJWIdSdhuNiorMwTW49
-	 FQ+wxLaq7NOAe8qKD+sV4ApTiICjCssaVX33XA8+XmqoOGTBVMwqEXhJyybgtn3FbM
-	 YcGmv9OJmrp0B0gg2m/dehIMUYpIsDxfTrLupo7nslm9fIqMMQyopuzGR1OoiHz6eP
-	 QfIwE2UPlJZRqhfjsp8PwfXgZX6P5aXfuZfJ6SOoN5j9rRrLtu2V25gC0vTJKhSpUU
-	 xpSXYBDkAfYFOhpd4ujWxHaj23lCHcsTEenxg5j53OpDM+EtdhDAvZfwRhW7aW7tNh
-	 EXec9K/yJr+fw==
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-2a01bcd0143so9188072fac.2;
-        Wed, 09 Apr 2025 12:34:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVmxCe4h6zLy0HgwNOCN8+H/DkB1HA+wnw1hpHhUv70gOW8onD3MsVHPgA2UzptKBFJOHQbwKgvPRoR@vger.kernel.org, AJvYcCXQ5dWGsj+UztbxBmkVvPDrLkqrVCR/9gaF16VvEaakX+RDm55usDUfaklIWd5Prq2WwL5j0Zv1OSE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0LiT3y3BtuGWTjPTtabEE9Ma3wVHPvKRrXYI7zLwZzEFl7Qnu
-	pIQynp+p2N5hr6H0J+9SmkXJBExmvwCgw4jEkqx/3c1KtTK/0vH87gfmpoYRrnX/rwjRemAr9yH
-	rciknaA4RUetJZhBj6KoDMsOOa5c=
-X-Google-Smtp-Source: AGHT+IF1EOTSsHu6PwO7CQca/F8ZGj5qwdWoncQouS6lp4WoUO8bFBjNu283luRGQSJDHNAzpoZaPGEr9HneQ1apEeM=
-X-Received: by 2002:a05:6871:e418:b0:2c2:260:d77b with SMTP id
- 586e51a60fabf-2d08dcdf089mr2503514fac.5.1744227264335; Wed, 09 Apr 2025
- 12:34:24 -0700 (PDT)
+	s=k20201202; t=1744228450;
+	bh=q7KvwDfQqFDNGgQf6PyiHomLFAW6NL2n557EpD26id8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VulSS1YwlnFjfym00iwjm8nZpYCyp06C0ojMIpSCSHZR4u0kCve/HPOLSpwGvY8u5
+	 pBTjBb/9vduXt1yHmPU9a+E8F7KAYhYpWKQEBBPX+/hfy20lXzFqyHyY8B+HK6sZUf
+	 xN3fYMEJoURP0ouK4XLhP558hxwDPdlv3j55wiCtlhRPkFu/TgXbgsw4c31dujDZWx
+	 WI68CmIsMMEvM72xxyr1xE96ssKn4YT5iCMXcjHWRmRp8UzErdBvMQgGb+caLf69ln
+	 4GvtnHjQrXPK2u6hCjNy/AUsgKBW8iPDB+syZsrtkVGFcuJdzKsEe35yQuSR5M6flU
+	 mNFGcP/z9LOpg==
+Date: Wed, 9 Apr 2025 21:53:59 +0200
+From: Ingo Molnar <mingo@kernel.org>
+To: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Dave Hansen <dave.hansen@intel.com>, Xin Li <xin@zytor.com>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+	linux-edac@vger.kernel.org, kvm@vger.kernel.org,
+	xen-devel@lists.xenproject.org, linux-ide@vger.kernel.org,
+	linux-pm@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, jgross@suse.com,
+	andrew.cooper3@citrix.com, peterz@infradead.org, acme@kernel.org,
+	namhyung@kernel.org, mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+	irogers@google.com, adrian.hunter@intel.com,
+	kan.liang@linux.intel.com, wei.liu@kernel.org,
+	ajay.kaher@broadcom.com, alexey.amakhalov@broadcom.com,
+	bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+	pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+	luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+	haiyangz@microsoft.com, decui@microsoft.com
+Subject: Re: [RFC PATCH v1 01/15] x86/msr: Replace __wrmsr() with
+ native_wrmsrl()
+Message-ID: <Z_bQV2oOnJlwbxnk@gmail.com>
+References: <20250331082251.3171276-1-xin@zytor.com>
+ <20250331082251.3171276-2-xin@zytor.com>
+ <Z-pruogreCuU66wm@gmail.com>
+ <9D15DE81-2E68-4FCD-A133-4963602E18C9@zytor.com>
+ <a0254e73-bf7c-4876-b64e-b08e96044666@zytor.com>
+ <e5770add-9d18-40e1-929d-df7c40f3c7d1@intel.com>
+ <ADCFB190-A89A-460D-81A6-80E20AEFBFBC@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <202504100128.AjbVDQgK-lkp@intel.com> <20250409-wine-swift-of-tempest-eae2cb@sudeepholla>
-In-Reply-To: <20250409-wine-swift-of-tempest-eae2cb@sudeepholla>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 9 Apr 2025 21:34:13 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iaxP9wz14WSi4saEJTiQau5vDBxWi0t_e5UzGrJAHe_g@mail.gmail.com>
-X-Gm-Features: ATxdqUFGJglX_EWRCO_-dcl4UqyApcv4Gv2qoxdxwy54YWSlW7CBu3F3gBCHGzI
-Message-ID: <CAJZ5v0iaxP9wz14WSi4saEJTiQau5vDBxWi0t_e5UzGrJAHe_g@mail.gmail.com>
-Subject: Re: [rafael-pm:bleeding-edge 39/52] drivers/acpi/apei/einj-core.c:877:43:
- error: expected identifier
-To: Sudeep Holla <sudeep.holla@arm.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-acpi@vger.kernel.org, devel@acpica.org, linux-pm@vger.kernel.org, 
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ADCFB190-A89A-460D-81A6-80E20AEFBFBC@zytor.com>
 
-On Wed, Apr 9, 2025 at 9:25=E2=80=AFPM Sudeep Holla <sudeep.holla@arm.com> =
-wrote:
->
-> On Thu, Apr 10, 2025 at 02:10:04AM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git bleeding-edge
-> > head:   089d4e79e2c932faef79e0061cb874000f755009
-> > commit: 4ec052af63c58a62a896508cc5f8a0a2f516a590 [39/52] ACPI: APEI: EI=
-NJ: Transition to the faux device interface
-> > config: x86_64-buildonly-randconfig-001-20250409 (https://download.01.o=
-rg/0day-ci/archive/20250410/202504100128.AjbVDQgK-lkp@intel.com/config)
-> > compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58=
-df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20250410/202504100128.AjbVDQgK-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202504100128.AjbVDQgK-l=
-kp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> drivers/acpi/apei/einj-core.c:877:43: error: expected identifier
-> >      877 | module_faux_driver(acpi_einj, einj_probe, __exit_p(einj_remo=
-ve), true);
-> >          |                                           ^
-> >    include/linux/init.h:397:21: note: expanded from macro '__exit_p'
-> >      397 | #define __exit_p(x) NULL
-> >          |                     ^
-> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-> >        8 | #define NULL ((void *)0)
-> >          |              ^
-> > >> drivers/acpi/apei/einj-core.c:877:1: error: type specifier missing, =
-defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplici=
-t-int]
-> >      877 | module_faux_driver(acpi_einj, einj_probe, __exit_p(einj_remo=
-ve), true);
-> >          | ^
-> >          | int
-> > >> drivers/acpi/apei/einj-core.c:877:19: error: a function declaration =
-without a prototype is deprecated in all versions of C [-Werror,-Wstrict-pr=
-ototypes]
-> >      877 | module_faux_driver(acpi_einj, einj_probe, __exit_p(einj_remo=
-ve), true);
-> >          |                   ^
-> >          |                                                             =
-         void
-> >    3 errors generated.
-> >
-> >
-> > vim +877 drivers/acpi/apei/einj-core.c
-> >
-> >    876
-> >  > 877        module_faux_driver(acpi_einj, einj_probe, __exit_p(einj_r=
-emove), true);
-> >    878
-> >
->
-> The macro module_faux_driver() was not merged as most of the users I
-> posted in v2 of the series depend on modprobe and modalias and that
-> doesn't work with faux devices.
->
-> If this ACPI APEI EINJ also needs that support we can't use faux device.
-> But I think this doesn't have modalias, so v1 of this change[1] which
-> doesn't  introduce/use the macro module_faux_driver() can be used instead=
-.
->
-> Sorry for the noise with v2.
 
-No worries.
+* H. Peter Anvin <hpa@zytor.com> wrote:
 
-I've picked up the v1 instead, let's see how it goes.
+> On April 2, 2025 8:41:07 AM PDT, Dave Hansen <dave.hansen@intel.com> wrote:
+> >On 3/31/25 22:53, Xin Li wrote:
+> >> Per "struct msr" defined in arch/x86/include/asm/shared/msr.h:
+> >> 
+> >> struct msr {
+> >>         union {
+> >>                 struct {
+> >>                         u32 l;
+> >>                         u32 h;
+> >>                 };
+> >>                 u64 q;
+> >>         };
+> >> };
+> >> 
+> >> Probably *msrq() is what we want?
+> >
+> > What would folks think about "wrmsr64()"? It's writing a 64-bit 
+> > value to an MSR and there are a lot of functions in the kernel that 
+> > are named with the argument width in bits.
+> 
+> Personally, I hate the extra verbosity, mostly visual, since numerals 
+> are nearly as prominent as capital letters they tend to attract the 
+> eye. There is a reason why they aren't used this way in assembly 
+> languages.
 
-> [1] https://lore.kernel.org/all/20250317-plat2faux_dev-v1-8-5fe67c085ad5@=
-arm.com/
+So what's the consensus here? Both work for me, but I have to pick one. :-)
+
+Thanks,
+
+	Ingo
 
