@@ -1,90 +1,114 @@
-Return-Path: <linux-pm+bounces-25048-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25049-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10EEBA83041
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 21:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EB02A8307D
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 21:25:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B5F9B1B61DB3
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 19:18:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 455301B6625D
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 19:25:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 036311E22E6;
-	Wed,  9 Apr 2025 19:18:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E28F91E5018;
+	Wed,  9 Apr 2025 19:25:38 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB9B41C6BE;
-	Wed,  9 Apr 2025 19:17:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53119165F1A;
+	Wed,  9 Apr 2025 19:25:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744226281; cv=none; b=HObqfkdJVxg30O1MG2TgXrmVpgpyKjn3FnTJv8bDGtegCHZZsEBeaMvSrRflFP/X2783ZNbXtjLSmt1P5DhqX1ZhngW9w9gCPkWs+eUCFRbCmOTPUKqCu8Kw0dUaKNHfNreEx18ccXFb2wEa1ZzfmBkHsUljKpPICCjTrw/Xl8w=
+	t=1744226738; cv=none; b=nAPZvlHZnFQug3DIpCERegDs5ehqIVc3+DA/NBgxfhL+YBEWchQPxSmkxYAfEE8l/F6GiwhUSLW6txIPWqWmJBo+GE8diSXZgRDZNdwNDLhmMl0y45CI2av3PVE7kNq0ZrcJa1AdiRvAS4ICpt30dWW30UKFFov/Oso/OIZ4ldI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744226281; c=relaxed/simple;
-	bh=SW+anX2q3RaqVoCHxVXbf8GdHLpP6Zl5Lw6Q/sV1Ezw=;
+	s=arc-20240116; t=1744226738; c=relaxed/simple;
+	bh=Ysj3nuOh7CwY62QEP9McBgLiwll5Fv8qypJTov/oVpk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IEfLJRY5tDIR4Hs/PcQGnFCxmfuLShlG7RLP0O6poe0XiJVx2L9DPsstQQXj3it4LHZaCtSI7jyQ9I7jKE6bzSCJk8qnX/Br6B/i2n057lz9Izeh6ZWvcDIKY4vKIVXmHwqwst34e8lE5C2pyXdHDawBlruLGmnfvm+dXyWjfMA=
+	 Content-Type:Content-Disposition:In-Reply-To; b=iY/X4kFo+NSE1rN/Eg8DSrCrF7vE/xUTdsNq5uhG2P6bR1AiwyO87blI2dKG/H9t4f/8SydsH9lYKkLJrv+BgWYdOWcHqXdhdich6t0LqxIXJDRQl3SIZuzIrx/MTcSjJ+cbtsUipHXYy7UWcMToFVUYvp2WaNC63wvoGengd2M=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B080D15A1;
-	Wed,  9 Apr 2025 12:17:59 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19F3E15A1;
+	Wed,  9 Apr 2025 12:25:37 -0700 (PDT)
 Received: from bogus (unknown [10.57.41.33])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE6DF3F694;
-	Wed,  9 Apr 2025 12:17:57 -0700 (PDT)
-Date: Wed, 9 Apr 2025 20:17:54 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B72F83F694;
+	Wed,  9 Apr 2025 12:25:34 -0700 (PDT)
+Date: Wed, 9 Apr 2025 20:25:31 +0100
 From: Sudeep Holla <sudeep.holla@arm.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/9] cpuidle: psci: Transition to the faux device
- interface
-Message-ID: <20250409-adorable-venomous-cormorant-d01246@sudeepholla>
-References: <20250317-plat2faux_dev-v1-0-5fe67c085ad5@arm.com>
- <20250317-plat2faux_dev-v1-1-5fe67c085ad5@arm.com>
- <CAJZ5v0gcRDJFJtnPY+sszkUEYsdqxfm194Y7=namkD0qYnokHg@mail.gmail.com>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Sudeep Holla <sudeep.holla@arm.com>, linux-acpi@vger.kernel.org,
+	devel@acpica.org, linux-pm@vger.kernel.org,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: Re: [rafael-pm:bleeding-edge 39/52]
+ drivers/acpi/apei/einj-core.c:877:43: error: expected identifier
+Message-ID: <20250409-wine-swift-of-tempest-eae2cb@sudeepholla>
+References: <202504100128.AjbVDQgK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0gcRDJFJtnPY+sszkUEYsdqxfm194Y7=namkD0qYnokHg@mail.gmail.com>
+In-Reply-To: <202504100128.AjbVDQgK-lkp@intel.com>
 
-On Wed, Apr 09, 2025 at 08:03:32PM +0200, Rafael J. Wysocki wrote:
-> On Mon, Mar 17, 2025 at 11:13 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > The PSCI cpuidle driver does not require the creation of a platform
-> > device. Originally, this approach was chosen for simplicity when the
-> > driver was first implemented.
-> >
-> > With the introduction of the lightweight faux device interface, we now
-> > have a more appropriate alternative. Migrate the driver to utilize the
-> > faux bus, given that the platform device it previously created was not
-> > a real one anyway. This will simplify the code, reducing its footprint
-> > while maintaining functionality.
-> >
-> > Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > Cc: linux-pm@vger.kernel.org
-> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+On Thu, Apr 10, 2025 at 02:10:04AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+> head:   089d4e79e2c932faef79e0061cb874000f755009
+> commit: 4ec052af63c58a62a896508cc5f8a0a2f516a590 [39/52] ACPI: APEI: EINJ: Transition to the faux device interface
+> config: x86_64-buildonly-randconfig-001-20250409 (https://download.01.org/0day-ci/archive/20250410/202504100128.AjbVDQgK-lkp@intel.com/config)
+> compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250410/202504100128.AjbVDQgK-lkp@intel.com/reproduce)
 > 
-> Do you want me to pick up this one?
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202504100128.AjbVDQgK-lkp@intel.com/
 > 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/acpi/apei/einj-core.c:877:43: error: expected identifier
+>      877 | module_faux_driver(acpi_einj, einj_probe, __exit_p(einj_remove), true);
+>          |                                           ^
+>    include/linux/init.h:397:21: note: expanded from macro '__exit_p'
+>      397 | #define __exit_p(x) NULL
+>          |                     ^
+>    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+>        8 | #define NULL ((void *)0)
+>          |              ^
+> >> drivers/acpi/apei/einj-core.c:877:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+>      877 | module_faux_driver(acpi_einj, einj_probe, __exit_p(einj_remove), true);
+>          | ^
+>          | int
+> >> drivers/acpi/apei/einj-core.c:877:19: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+>      877 | module_faux_driver(acpi_einj, einj_probe, __exit_p(einj_remove), true);
+>          |                   ^                                                  
+>          |                                                                      void
+>    3 errors generated.
+> 
+> 
+> vim +877 drivers/acpi/apei/einj-core.c
+> 
+>    876	
+>  > 877	module_faux_driver(acpi_einj, einj_probe, __exit_p(einj_remove), true);
+>    878	
+>
 
-Yes you can pick this up.
+The macro module_faux_driver() was not merged as most of the users I
+posted in v2 of the series depend on modprobe and modalias and that
+doesn't work with faux devices.
 
-Just checked again, this is v1 and correct version.
+If this ACPI APEI EINJ also needs that support we can't use faux device.
+But I think this doesn't have modalias, so v1 of this change[1] which
+doesn't  introduce/use the macro module_faux_driver() can be used instead.
+
+Sorry for the noise with v2.
 
 -- 
 Regards,
 Sudeep
+
+[1] https://lore.kernel.org/all/20250317-plat2faux_dev-v1-8-5fe67c085ad5@arm.com/
 
