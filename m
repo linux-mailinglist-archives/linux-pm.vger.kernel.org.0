@@ -1,61 +1,63 @@
-Return-Path: <linux-pm+bounces-24998-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-24997-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 878ACA82183
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 11:59:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2EEFA82173
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 11:57:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5762616C467
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 09:58:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 510D68A6B25
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Apr 2025 09:56:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CB9F25D535;
-	Wed,  9 Apr 2025 09:58:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1071125D52F;
+	Wed,  9 Apr 2025 09:56:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="cwrItvD6"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="uQDWmYB2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
+Received: from out203-205-221-164.mail.qq.com (out203-205-221-164.mail.qq.com [203.205.221.164])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 665812B2DA;
-	Wed,  9 Apr 2025 09:58:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A38AE25D206;
+	Wed,  9 Apr 2025 09:56:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.164
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744192720; cv=none; b=TScFuIkjUfZJVogwKF4ghfVfVl+za/qbl51D6kvCm5njf7fQBTcyy7+zAYod/MhQ0obzWQSprJh//sJdkoyR9wO81I5mRIvZuJu/NgHbpvxLs44zIgQQuZq+nWGOqEr7Sd3XvAPshvVZmvw2OYPinscX0oZT8wamHVUuT433rno=
+	t=1744192611; cv=none; b=ahxXmXz/BiLt6e1ZsHNjpk8bzE+nw/Mn2G2esz/XIss18376S7b137tpQ+1QQ6eOIamr9BBsgzwTisnQetztpTQ+RCiHRTt742/rWuwYeIt3wFvsXUlXx6AQGVTqT0bGhhNp4gvBnXhlzuWgkldLbk3aJcSSf/GextZb3L5HMZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744192720; c=relaxed/simple;
-	bh=+3JfXT1Xs5fV6IP12sI9JzAAOim7iJsMfyQ6w0e5gxA=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=X77FfHmXB+fYSTfJyYNdwj9ixWGgh/K3TIl6y0cgzjeuRNq95umvQZfBEwLo/sdn33mBMuVrijXnv5kn5l5s2CkpNkDo2OOPBlpv9gfVtB+JOqfpaTdAxCO4i2QjWFmvfF12QuSSsX4kw0JDRXcWdAfqIRzRxqC3/DKhooyvi3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=cwrItvD6; arc=none smtp.client-ip=162.62.57.64
+	s=arc-20240116; t=1744192611; c=relaxed/simple;
+	bh=wK1y6dHPy4sbGssX93eGO5NCjBNTcZms0HLXlXqdmeM=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=jtv11MKwsNwKkb1Sa+YJd6JoRktsBib6m3n5wpwSfWzjAQ/OnaKGvbZvj49SBD8LvsvGMzmgDWOVg1M+b/Oqeteqpl0JItVyMyRhzLJPv4qncfBstTlz+dwYsaAcqT6rmZG1L+21Iv9reO3JJkc7OO2WSGEPQbxANKNOCgVNLAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=uQDWmYB2; arc=none smtp.client-ip=203.205.221.164
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1744192706; bh=+lyAfonLE1WC9lkwgR5fNnzG/kCwzKlfRCzS5ujqlpw=;
-	h=From:To:Cc:Subject:Date;
-	b=cwrItvD6FrtHAYm0SuOuDYeuj5NWQs5VI52utkSpmpBwYd3dTvnOlac3ARXKUhApE
-	 ayt31MIt0qZtTLm4tCfFHuKkOtmszFWcRFwFyPLlgKXGRleK/iUHVd0QYM5TaiMzhp
-	 ore0gNQja84Z6QW8NlZsLP6PNqUZky0lFUpaLaIc=
+	t=1744192304; bh=7Y4Q2wgqKIpLG/t08yDgQVZzMfyRABq6eyXLD9OhCis=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=uQDWmYB2tfWuwCCZsRlCVj4aTl+da6p3nlEofHUzzk2CrS7ds5gks04Q65pcDUDhy
+	 WiELwRIPqxWSQKPxjSIxazBDaoe4Yunoz6qlArOBVaMyRTXkCvv/dMRr1VKhbIHvLM
+	 ejc+Co1WifnhhvkJSDBvmB+KeJPJpjtLyq13WPkg=
 Received: from localhost.localdomain ([116.128.244.169])
-	by newxmesmtplogicsvrsza29-0.qq.com (NewEsmtp) with SMTP
-	id C71194AE; Wed, 09 Apr 2025 17:49:49 +0800
-X-QQ-mid: xmsmtpt1744192189tzh3ku7q2
-Message-ID: <tencent_D6C4728C5C687C042BA7C156B0F3ECF7AE05@qq.com>
-X-QQ-XMAILINFO: MLQF5pNkQhvxiqkx6mdELVKIwLq3+oG8ZVIOq2Njw6DkGw45tjnxQoLppcwGyC
-	 kX2Vy+O/6O/hEEL5PHfSDLMsNvDkvpP6gY59SRTODlsmX5aHEsakNUonbkva2xj+6te53r7OhkwB
-	 3t8Q993M5iU7iBO9Fv7TyN9CFBM6X2v4o5s3LDHLjj5uL9q9A2hVu2VfSKs8WtZsyItJflyOPSOO
-	 JpT4lC3PUy11nC59brIj8nlCsRp13g1swZQ6wYFEu1Mm3po+E5oR327UxAz8LQJAEzoFnWcW29ha
-	 YJyz/jaVYxROdRSXTDBeVriXxuhHLEcDz7muziNqeVEqO/5Z5fv0T3a6PUULYD6hxhFU9ub0rzoA
-	 ByTMCm1GpiKGObCPRi8yc83aW0NDegFqINhG/S8diTbruYYGipiVuFOj6erAifJX8cK/nteSIOzp
-	 tWwkEm+fVh58xKtISGm281HM/XmqEzjoH16HmkvNG2UjzHFnQq/2hAqC17H4B14OcS4QAJJCl9Qy
-	 j9LPpaA0WT9htPGUbbQTKlGyxJlryVoLeWuD1KE37un53DfuRhATbVBqPeIr++rk61Jon08aeTMH
-	 NT94fqnPG1FdIVRo/cxPSV1OJ5kGwObNMAMVbMxKZdGziaxAtT++7NdUtTyCg0uO3MMSEZVOIguV
-	 sWazrMy7lMhigpm2DeBzA4MiAT8AMLD3gz9HlyjaNPnPsMwumxNtbWTvhIqKKNyg211NqNelMG6b
-	 GdldoKbojB2iAPxzrKToFi1b13LCZXyUpivo+EP2rdSmUGGw+BdoToavO3pF74xPBXVKlMRjlSxC
-	 49NhYV8VA84WLsJDnQ5m/eaYUIFfBxKKPcnxz1HOdmhXV9vo61ypceiw9eJ3r70+8+S+lyVEZyVG
-	 EDgJv8mqxACW0shN2ta0XWjSOHAazrzRpQGVtlycQwjkzL4Qj8kSlAdgSCWygXYSaxNwwDh3nzHN
-	 9R6ttKlcebFZt7ny8umA==
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
+	by newxmesmtplogicsvrszb21-0.qq.com (NewEsmtp) with SMTP
+	id CEB04603; Wed, 09 Apr 2025 17:51:43 +0800
+X-QQ-mid: xmsmtpt1744192303tvp8i7h6x
+Message-ID: <tencent_C797B88F7509E18C70E48CD99275BAFD1E0A@qq.com>
+X-QQ-XMAILINFO: Mg/13mbJq/Ru6Y7pf9rnxlFchTWPyEfj/S7AIffDwpj/H3SURotqVEM0ta4n4o
+	 ZtdnahsYqyYJQJPtQtsf81LRHSRFKgO2Dj+sVSh+karuWL2kVQXDdRZimbIHkMVWraPzcPTx2Qil
+	 bdVQrfGSrwza+eTwNvLP1jJDB4Tey/GJLKkspk6YU6lysjskwbb1ECNP8w2q0B/zDqgbfcPYFVOP
+	 7trh+3dEOe+rgNoSllQOJJa5su2sWN8qCxUT649mCf/irsowHNNatTcMm6hLWJSrpO675SZ/2Lnd
+	 uMlAY8/bcxY+u1lzb5pkgMbjDu15Dx+NLmejAxHB7fSuA+5xdX2ODVHdendZ1plUrQMgnl29808H
+	 prWJUXBecvGmi+QuOjMnbD2l2bE/VP0nMAWsdW5hJVBYvwG72nAOCi38Zx8bz0bybIMPBkPsmpHZ
+	 UNIMAz7UuojB80IptKuedAcJ6zfBoazA6qYuooGVsWGQNypi3lU4GJF0Hqn3TdUN0xxZsVrW4Cvg
+	 PLodkWCUJcfWvY9SGZoNKXnzgU9C5xPX7JFZFOp5ee6bmEiCP4gFvBbkKQkzyAUrt1vNvbXQZKZK
+	 RXJIVg48NkltijSl2RzHvDNPeu+SfPw3cpRpMC+SjDV4vXvAVEFK839Kn9arNEWXaFQqyL269wj8
+	 0Nf9dqjRc4dF3REMRGWJ3Mf0LCLlX8IAJLWDKg6JyqMrVQpQQgcNTAH6z1QHcFdJw4HHFSapvlVb
+	 XYBv4mLYfL5voJivFH1bf2lxe/OW+533BNTsUbmYm8Mdp+V7GV2k2blvRNcbPni9dMIGijuLf3+c
+	 V46QHZ5SsduccyktGbi0FBjLKtbk9smm7fjdMKgetkfxCGMzh6VFejEbTm8wdZQsH+i1FLKKPAEW
+	 PF5Q4jVOdImlujCKr6hicre872nrZZWU6oyfyJ4GTa0+SGSuo0vhDb32ZjOcf65WJpULIEipUEsi
+	 KY7zC6agAZI08t5lH3oN06jxYC+TdVWCfdzqwdGttuMTx/Jf1xx+aoc9fiQJJS0dz358MXu/0OXP
+	 tlNFIBXw==
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
 From: Yaxiong Tian <iambestgod@qq.com>
 To: rafael@kernel.org,
 	viresh.kumar@linaro.org,
@@ -63,10 +65,12 @@ To: rafael@kernel.org,
 Cc: linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Yaxiong Tian <tianyaxiong@kylinos.cn>
-Subject: [PATCH 0/2]  Fix and optimize some comments in the CPCC EM model 
-Date: Wed,  9 Apr 2025 17:49:48 +0800
-X-OQ-MSGID: <20250409094948.1684994-1-iambestgod@qq.com>
+Subject: [PATCH 1/2] cpufreq: cppc: Update and opt comment for cost calculation method
+Date: Wed,  9 Apr 2025 17:51:41 +0800
+X-OQ-MSGID: <20250409095141.1691685-1-iambestgod@qq.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <tencent_D6C4728C5C687C042BA7C156B0F3ECF7AE05@qq.com>
+References: <tencent_D6C4728C5C687C042BA7C156B0F3ECF7AE05@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,34 +81,41 @@ Content-Transfer-Encoding: 8bit
 
 From: Yaxiong Tian <tianyaxiong@kylinos.cn>
 
-Commit <740fcdc2c20ec> ("cpufreq: CPPC: Register EM based on efficiency 
-class information") introduced a very good feature. However, since commit
-<1b600da510735a> ("PM: EM: Optimize em_cpu_energy() and remove division"), 
-the energy calculation formula in the EM model has changed. Therefore, some
-comments need to be updated and corrected to avoid misunderstandings.
+commit <1b600da510735a> ("PM: EM: Optimize em_cpu_energy() and remove division")
+updated the energy calculation method, so the original comment needs to be updated
+and opt.
 
-I carefully analyzed the code theoretically and found that the new energy 
-calculation formula doesn't affect the current code - in fact, it has brought 
-some improvements. For example, consider four efficiency classes (1, 2, 3, 4). 
-Under the old logic, there were cases where tasks would be scheduled to class 4 
-CPUs instead of class 3 CPUs. This happened because the old energy calculation 
-formula divided by CPU capacity, and since class 3 CPUs have lower capacity than 
-class 4, it sometimes went against the original intention.
+Signed-off-by: Yaxiong Tian  <tianyaxiong@kylinos.cn>
+---
+ drivers/cpufreq/cppc_cpufreq.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-Considering that the comments about CPPC_EM_COST_GAP might be confusing, I've 
-added some analytical comments before CPPC_EM_COST_GAP in the latest code to 
-help other developers better understand. 
-
-Of course, this is just my personal understanding - please point out if 
-there are any mistakes.
-
-Yaxiong Tian (2):
-  cpufreq: cppc: Update and opt comment for cost calculation method
-  cpufreq: cppc: Add comments for CPPC_EM_COST_GAP calculation
-
- drivers/cpufreq/cppc_cpufreq.c | 44 ++++++++++++++++++++++++++++++----
- 1 file changed, 40 insertions(+), 4 deletions(-)
-
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index b3d74f9adcf0..756034b21682 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -379,9 +379,18 @@ static unsigned int get_perf_level_count(struct cpufreq_policy *policy)
+ 	return 1 + max_cap / CPPC_EM_CAP_STEP - min_cap / CPPC_EM_CAP_STEP;
+ }
+ 
+-/*
+- * The cost is defined as:
+- *   cost = power * max_frequency / frequency
++/**
++ * compute_cost - Calculate the cost for a given CPU and performance level step
++ * @cpu:  Target CPU
++ * @step: Performance level step
++ *
++ * CPPC uses a linear cost model since it only provides relative efficiency ratios:
++ *   Base cost (per CPU):    CPPC_EM_COST_GAP * efficiency_class
++ *   Step cost (per level):  step * CPPC_EM_COST_STEP
++ *
++ * Lower cost implies higher efficiency. The model ensures:
++ *   1. Higher efficiency CPUs (low efficiency_class) always have lower cost.
++ *   2. Higher performance levels (larger step) linearly increase cost.
+  */
+ static inline unsigned long compute_cost(int cpu, int step)
+ {
 -- 
 2.25.1
 
