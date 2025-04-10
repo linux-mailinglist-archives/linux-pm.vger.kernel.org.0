@@ -1,81 +1,130 @@
-Return-Path: <linux-pm+bounces-25084-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25085-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DAA9A83A29
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 09:03:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18EE0A83A66
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 09:11:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 453CA3AEF62
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 07:02:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C58311B60A5A
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 07:11:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41059204C38;
-	Thu, 10 Apr 2025 07:02:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 404C1205505;
+	Thu, 10 Apr 2025 07:11:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gTd5IMyz"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tIdOdnh5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50A2D1DFDE
-	for <linux-pm@vger.kernel.org>; Thu, 10 Apr 2025 07:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC472036E6
+	for <linux-pm@vger.kernel.org>; Thu, 10 Apr 2025 07:11:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744268533; cv=none; b=OFapykUlG7nY4Sj0w03O6hiQYfdatBe4NIsEaHOgT31I+tU2P3sElooS7v0FDgbBmUnyQr/NL75Or9N1OSBM1A9bOgAOGeB1kAL9+1uoTeN+IaxQ9pdevZsiHqirWot5Zjgv1t/GIP82pw39OXmwm9W4oBdzAPsOTHXlqkHHvYs=
+	t=1744269069; cv=none; b=ePRSYphclhiy3LwH8tIf9kE8RZFdc/ZTd8AY4I1kBaC4IHHW+MDDAXITgh67IsjVwIf//ClfyedG67yPnmSE95LrfohoVl6wq0ZwYihaGFZvE+WkpwhI7AAR47dbRpX02zXqQt2dVnQCTz7QtZB4BSGzhrTcAEjKcbhm8zJQxT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744268533; c=relaxed/simple;
-	bh=6sPJoDSdCcLSNb4YZX1uM25dYeyiyLwAh3M7tzgwDMc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QslOLGm0+GU+7dZz+q2d022Rc2PqCpxR2aqPAwYn/UMj934q8Ai0fLdNW0IRny0zsLWj63gKtnkoeCqtGu/G42l7k7p+f+EXhw8Gvgxj+FuDHS4ZBhprwLCpMuV0pNnxzhnEC3gp8aZAFFun6sF4l7gQ1zq3QBwHB9SSGBO0zng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gTd5IMyz; arc=none smtp.client-ip=209.85.221.54
+	s=arc-20240116; t=1744269069; c=relaxed/simple;
+	bh=dvCmIESeU+0C8gMiKn7xzTjU+gOvecKI17trA15juLg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fOquWnhPZHuAT7q0TkLfIv26B2puZGFtNFyvKeL/K/AupIPQCDzr+UWsRdTrGLmyqFJOHag2y+Li6oFc47doCBcCqIThXqkLksGUUoEZe4GxOzk9yHXcvCnmRVL6f7wJAKdL0qaH7yWGZIiFV9LCvSQ3MeKu6awdf8/Sf4xrsbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tIdOdnh5; arc=none smtp.client-ip=209.85.218.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-39c14016868so304208f8f.1
-        for <linux-pm@vger.kernel.org>; Thu, 10 Apr 2025 00:02:09 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ac2dfdf3c38so93861266b.3
+        for <linux-pm@vger.kernel.org>; Thu, 10 Apr 2025 00:11:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744268528; x=1744873328; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hgLyB76w0gcP39GV2XV9QbhWppqwOFBubIrp/4UCNt4=;
-        b=gTd5IMyzRCp+VFmyDgMDe+pzE41eGu+k2axf/nrfXEJUa6uvmx1T9WhHixSxAFITFE
-         n02lX6oKzttbmJiH5hVNR5OM1eTcpVluI39uObpE9X3IBhwSgwhds8nJfWkzufJpLACl
-         jI1MP9dHkIinEsLfUXx4HWlnlQxe992cWU3A4vquSvTY/ExKDR9zbPCTfPGiGeZAKsbd
-         mifzERY9m1WKVcazwJB+3knttTVZ9Tu5fsq8E0CYMIG9jw3DUS4Ik/tJ+j/dGEjvGxCp
-         xwVBABx9D/RJiW0BpRb46bLtYW7Au17c3r1B0Hpj75Y1D/RzEihiWDpc68LCyRoMgWM5
-         s+iw==
+        d=linaro.org; s=google; t=1744269064; x=1744873864; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3OcYzRuci4DVDvTV5wL2NFanwr7+BVH3bP+rdckE45M=;
+        b=tIdOdnh5oAZhGDM7uWD7RpFi4PXKOpQH6bh/n6RPVExFaUig3IrrpAlmLffcoAUVEU
+         MX014UXDe4T40u/EftWo4s5x7Tfbl6ddorAyUyFoojwWXHNZPXzCUVvJ0BKuLt2Zln56
+         a9ZaXziLlH5zb79VpOa4J9zfhPBr5SL1YX7Gq/Nb66faCX0wibrTNMCRCeDleyom/yMp
+         MeUi6X82iteHze09A2ldUfnKq+mbSGsEF/6uHwsfp3dBGY+oM0HYZ5aGwa5pOHDHc8Ay
+         CK11lSEjbcHMJzrXDAILKdg1PmRsd1ujsrGNBAswtbvAcRded3p4H/9/qzWLloQS36HJ
+         Kqug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744268528; x=1744873328;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hgLyB76w0gcP39GV2XV9QbhWppqwOFBubIrp/4UCNt4=;
-        b=LkxZ7vDguvWc7iIxNOqwkqUSyV7Ef/2sSn8BxTKwvNgDQkdc6E9U4d1e9Gq3MamxLU
-         oC1vlsBRKagpGMAt7R3Q0crsvaAuPzLaQa6PLCpiMiEJS8mbhQrs6ARLCUJn/dYpeeAQ
-         idELaQMUUumEckEk3lkreCshybHN8OuFMO1xhbMrKAJqzG4602spPhxlQ17C1JSig0/K
-         JhPUVHtJEZdXO7mN63m54ouDywKodmLRHJIrtELhiaugtVB5+EcwzqkynEpd5RMqrX/Y
-         PeQo20OxWDntNiR9QlIFbr0utG4NLSsqMTkRtr3+IK5C3pCO2yVfOuYtYyLuL5iJ6uyV
-         +o+g==
-X-Gm-Message-State: AOJu0YxISlbhhpGHYp/yZwGwnV99ljUwzqZYjZNr82/yzpafLuR0wzW3
-	/fIpj7EehQzPhhrbkZ3VnqgqyEgNRtn1J+z78i0NTZdET+GTLbl7+VRMCvWX0b4=
-X-Gm-Gg: ASbGncuWGlAfp/AGeZtKQtaZWB/z8//2Wux3fWy4HwAqeRP6usrHQ0wP/hEeG8kHPu7
-	nXEeoXptEYcNSBo+g5Mbo6/oY7yVqYt0y25rqhSlfYd3aEPvPQy5A9tMghkZipwGbcB08qENKGq
-	ArcqivQ966SCvl4/rQA5tHCw9QBbn2nXiAwKY9qKa5qXw9pKE65t+1pYcq6qLZTm63SkVqaPFHh
-	R8QW9zacbK9PYzbvkC3I0qfcAW8U47FByRZmFvSppvK7mlRNEv3vUM7yFdFNtA6rLtvx9pAShmt
-	LwgjhTv/gRzXHukuL/57PHkC3k/agnXUPbeGYU0nulW7kQ==
-X-Google-Smtp-Source: AGHT+IFFDJzRolMy6fSdjlehSMT8Cz0/fTG8bLShZz45R41zW8Xq1JfPfu6m64TYP2VCR/Il1HSn0w==
-X-Received: by 2002:adf:9dc1:0:b0:39a:d20b:5c14 with SMTP id ffacd0b85a97d-39d8fd8a268mr771526f8f.36.1744268528562;
-        Thu, 10 Apr 2025 00:02:08 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-39d893fdfd9sm3879676f8f.92.2025.04.10.00.02.07
+        d=1e100.net; s=20230601; t=1744269064; x=1744873864;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3OcYzRuci4DVDvTV5wL2NFanwr7+BVH3bP+rdckE45M=;
+        b=T4uco9jFz3Aw8Dj3o7h39ZjN9LN8WvrN+f66Feq0PDNkDzR1EexB62QD/nW+w4lRfE
+         IxOd63+UwUJXZ0g6vvY3z/FQgLIXWgXuLKM2tDWJ8pJ/ZFhKMVG77DWi6BPsRdwuxY+K
+         eDRzImgMwvgN1Qj64eL/ZKJoPJZo8ep4Ma3AM4XifPM/55lBkIfC3H5t7pYRonQXwEQ3
+         ANsfOa5bMILDUHb42ShL+kyBHtVNE4sSEKnIVsZoQgSLz1rTMJN5H0YYPATaVw1KkfF/
+         gLW3mZ8cLRQ9oX12ou3lND+0XoMxxA+1QOwTNkHtIEv8f9t0Io2PHNWgwQB5qvLJtnTT
+         WF2A==
+X-Forwarded-Encrypted: i=1; AJvYcCUJUKznsqsikyCIr3OuDA/K2VlMs51xjlz71pdCg2ijBjj8GqF8obJIxeCR4sHot1TBWFiVrcz5fA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy22BhQZ/7neaeaGedIar4wi0EtHcVY6M+ztJxxejIOdev7VspK
+	xyewDaXqpcEfo5klwJL572HP1JTl7BPlCRgi0g+EhnBCi/m71O9y8skhSOOozQw=
+X-Gm-Gg: ASbGncu/fg+L7WNur/G1iTJUFf0sovjw2DzXCVu+hOsz6nTQMC9yeW54Xc9KZkcwIrL
+	hJkgATv8iZCmN1qshs7qBLP4jr0Y1h6iJ8/7Q545e3ThR49D69u4VF7A3WYDxXiYj8Flu6MI7Pk
+	ydnEYAy7fyX8dH8ZVFOTgPRs8k60QdQuOhu7NNKE5N0zocATmK2JjCWu54FsKG9RYnco4iF+r6D
+	z2jGEY8ucyoP3sX/ODtyl44QL+SvVn5F5lUKzyMnKzYUxqgNKBZM1DRqcV06AIJCh2UaA1OJv2W
+	VDbcv0/v/6Qgjmh5pzFY7F99gLMC4r+NY4uiUbQAkDP+U8u7K40=
+X-Google-Smtp-Source: AGHT+IETfspJRi9jQhAHy7G+NAIq/HN8GQhfewV/oWn/J+Tx4X7F7gfIyNI7Jkc9sjEejt3cHqWuJA==
+X-Received: by 2002:a17:907:da0:b0:aca:a1d7:a830 with SMTP id a640c23a62f3a-acabd185e69mr120878666b.13.1744269064280;
+        Thu, 10 Apr 2025 00:11:04 -0700 (PDT)
+Received: from linaro.org ([2a02:2454:ff21:ef30:ae8a:4fb8:9c71:6be])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acaa1cb3fcdsm219989266b.107.2025.04.10.00.11.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Apr 2025 00:02:08 -0700 (PDT)
-Date: Thu, 10 Apr 2025 10:02:04 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc: linux-pm@vger.kernel.org
-Subject: [bug report] cpufreq: Use __free() for policy reference counting
- cleanup
-Message-ID: <765545b5-f278-47a9-8a67-904cbff177c2@stanley.mountain>
+        Thu, 10 Apr 2025 00:11:03 -0700 (PDT)
+Date: Thu, 10 Apr 2025 09:10:57 +0200
+From: Stephan Gerhold <stephan.gerhold@linaro.org>
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>,
+	"Rob Herring (Arm)" <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>, zhouyanjie@wanyeetech.com,
+	Conor Dooley <conor@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Steen Hegelund <Steen.Hegelund@microchip.com>,
+	Daniel Machon <daniel.machon@microchip.com>,
+	UNGLinuxDriver@microchip.com, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-mips@vger.kernel.org, imx@lists.linux.dev,
+	linux-rockchip@lists.infradead.org,
+	linux-amlogic@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: Re: [PATCH 09/19] arm: dts: qcom: sdx55/sdx65: Fix CPU
+ power-domain-names
+Message-ID: <Z_dvAT7LdR7xbH45@linaro.org>
+References: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
+ <20250403-dt-cpu-schema-v1-9-076be7171a85@kernel.org>
+ <03011a33-174b-4027-bdd2-043aa685380b@oss.qualcomm.com>
+ <CAPDyKFoZ7NfN+pkCPnusvTOEaxbQhr=1FJqzdDGrLcKAzBpGyQ@mail.gmail.com>
+ <66f8d957-f7a5-4aec-b8e7-5bcc7ff7f569@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -84,45 +133,64 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <66f8d957-f7a5-4aec-b8e7-5bcc7ff7f569@oss.qualcomm.com>
 
-Hello Rafael J. Wysocki,
+On Wed, Apr 09, 2025 at 08:35:29PM +0200, Konrad Dybcio wrote:
+> On 4/7/25 6:27 PM, Ulf Hansson wrote:
+> > On Fri, 4 Apr 2025 at 22:41, Konrad Dybcio
+> > <konrad.dybcio@oss.qualcomm.com> wrote:
+> >>
+> >> On 4/4/25 4:59 AM, Rob Herring (Arm) wrote:
+> >>> "rpmhpd" is not documented nor used anywhere. As the enable-method is
+> >>> "psci" use "psci" for the power-domain name.
+> >>>
+> >>> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> >>> ---
+> >>
+> >> "psci" is what we want here, but these platforms require some more
+> >> massaging..
+> > 
+> > So this isn't for CPU performance scaling?
+> 
+> Nope!
+> 
 
-Commit 5b90b0ce2705 ("cpufreq: Use __free() for policy reference
-counting cleanup") from Mar 28, 2025 (linux-next), leads to the
-following Smatch static checker warning:
+Huh, this is definitely "perf" (= cpufreq) and not "psci" (= cpuidle).
+If you run blame on this line you get to:
 
-	drivers/cpufreq/cpufreq.c:2562 cpufreq_get_policy()
-	error: uninitialized symbol 'cpu_policy'.
+commit 0ec7bde7b590f8efa5823df3b52b32dd373060ff
+Author: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Date:   Thu Apr 8 22:34:45 2021 +0530
 
-drivers/cpufreq/cpufreq.c
-    2552 /**
-    2553  * cpufreq_get_policy - get the current cpufreq_policy
-    2554  * @policy: struct cpufreq_policy into which the current cpufreq_policy
-    2555  *        is written
-    2556  * @cpu: CPU to find the policy for
-    2557  *
-    2558  * Reads the current cpufreq policy.
-    2559  */
-    2560 int cpufreq_get_policy(struct cpufreq_policy *policy, unsigned int cpu)
-    2561 {
---> 2562         struct cpufreq_policy *cpu_policy __free(put_cpufreq_policy);
-    2563 
-    2564         if (!policy)
-    2565                 return -EINVAL;
+    ARM: dts: qcom: sdx55: Add CPUFreq support
 
-If policy is NULL then we call put_cpufreq_policy() on an uninitialized
-pointer.  But this function is never called so it's dead code.
+    Add CPUFreq support to SDX55 platform using the cpufreq-dt driver.
+    There is no dedicated hardware block available on this platform to
+    carry on the CPUFreq duties. Hence, it is accomplished using the CPU
+    clock and regulators tied together by the operating points table.
 
-    2566 
-    2567         cpu_policy = cpufreq_cpu_get(cpu);
-    2568         if (!cpu_policy)
-    2569                 return -EINVAL;
-    2570 
-    2571         memcpy(policy, cpu_policy, sizeof(*policy));
-    2572 
-    2573         return 0;
-    2574 }
+https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0ec7bde7b590f8efa5823df3b52b32dd373060ff
 
-regards,
-dan carpenter
+The OPP table looks like it's supposed to set SDX55_CX performance
+states according to the chosen CPU frequency. MSM8909 has a similar
+setup where the CPU is supplied directly by VDDCX and we describe that
+with "perf" too [1].
+
+What I don't understand is why the name "rpmhpd" does not appear
+in any driver. The MSM8909 setup goes via qcom-cpufreq-nvmem, where
+"perf" is directly assigned for cpufreq scaling. I can only think of two
+possible reasons:
+
+ - The power domain is implicitly attached to the OPP table(?), because
+   there is just a single power domain defined on the CPU, or
+
+ - This was never working correctly.
+
+For both cases, I think it would be best to change the power domain name
+to "perf" like Uffe suggested.
+
+Thanks,
+Stephan
+
+[1]: https://lore.kernel.org/linux-pm/20231018-msm8909-cpufreq-v2-0-0962df95f654@kernkonzept.com/
 
