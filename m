@@ -1,50 +1,50 @@
-Return-Path: <linux-pm+bounces-25139-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25141-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAD84A848A2
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 17:53:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA85FA8489D
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 17:53:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 77468179AA5
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 15:49:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 803B13B7520
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 15:49:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01EDD28EA48;
-	Thu, 10 Apr 2025 15:47:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D54AC28F930;
+	Thu, 10 Apr 2025 15:47:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uGYzjYYn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fG2TpuqM"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E4528D85A;
-	Thu, 10 Apr 2025 15:47:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 943A128EA7F;
+	Thu, 10 Apr 2025 15:47:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744300074; cv=none; b=qd+hZNWgwC5nSrFyny8gPHcfNREBw94cD3ARWKAIK18rp+Xr5+jjqacX1sp4HxjTWwBXBiG/q+itf5zoeNmtydQKNyZwMwNZI4orzt4ptJtZtMzqRjAFmZVE7MQ2pwa9t8tk2/TXB5Dg7d9wnefwKVNQQvy6wbJOlmPBdUVB3mo=
+	t=1744300077; cv=none; b=qhcORsP1VxRoi4wRtrPJFnrBGJpI72oGh8TUklHILb5mN+dYjn4cIRfvtJgRucIjGOgCD4+8v/7iFwcE2SOjSdo6GMPHqNWBRVRDhZ1+Lr2AzZTIy2J5mUpS8Q9UZHEQ5ac1vVDBUcZU3Nl1eappS/NZJmgNJs8qhXhlo/HPqIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744300074; c=relaxed/simple;
-	bh=nVo5X/MosXjoMIZOdVn7ETl8AN7NiwovxfdEw8OmSOs=;
+	s=arc-20240116; t=1744300077; c=relaxed/simple;
+	bh=w8D/oQlbjYFMA654Kfwwvab2rVq8372zGCPcqKW1Iu0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UQWDIQsSXytOrAQwBVhvW83+RQ8vt8MHB/t60fXqG7OeqwrOmio0BgKh0Yn9cbDFV8I9dU3sBjWQEo+9jIY3zY0K3UYmD1J/mDLipG1gWPql3d1Ku+g1u8F/TOKbI/z1e/1IpP1cw60uCac3lnuuNoRaFxHtxwxc+rt0H6nDY4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uGYzjYYn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55A8CC4CEE9;
-	Thu, 10 Apr 2025 15:47:54 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=lVSxWQul8mRTcH4cdvjnyylSeqD4HXdcq20LU//2dW5GCX2NePYYFhlmVqI0QupN3Uaa4LcqgWXmzqDCMBLEfYyVuJJnYSM8vDzdXRntb0VjFRjTP9cDiERQMz3IjQGp1VMjU36WkkY9sWyJqjPY+5aXfXoMq8gJgUOrRh80/NI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fG2TpuqM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE3ADC4CEE8;
+	Thu, 10 Apr 2025 15:47:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744300074;
-	bh=nVo5X/MosXjoMIZOdVn7ETl8AN7NiwovxfdEw8OmSOs=;
+	s=k20201202; t=1744300076;
+	bh=w8D/oQlbjYFMA654Kfwwvab2rVq8372zGCPcqKW1Iu0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=uGYzjYYnTyApltpYtEA9/9oZnG7/797Cn8q6jqLk/EiRZu5XNF9EqiZug9/5/DkhX
-	 FRosU37qIN5bQ1dUS0YVTjxFaqmabQ38JtCNt1L0lFwpmaWS5mnlYPBXQY6s0rIHQc
-	 Nsu2qcZnsHflTkFFwv8LjQyI1/3LA0m8kUxUChx9BT0j/UhiUPJCikDLhEclCZHBIC
-	 si6a0LUoUuapa5Y9l8wAc5gqlVpgGczwcdrrgDhN4YbSPiV+50DSgLPVlpyH2bpcbC
-	 2MRLG1p4C84SGSxRS3OFcHEyOHInbBplC/dIIFurvHHjPYY9PShPHMVmWUO9mmFbmq
-	 8QArAGCBXYMSQ==
+	b=fG2TpuqMMHHyYZtykHxBYOOreDpwV+ldhF4Z5Qy+/+1VXWQ49leBhORYlyDtMvG/U
+	 s0WqonhwLJRWz0RL+p1Pn0QquD9o35gsf+po8VW6kll00ijBpV0kRkUFtAN8tW/UPD
+	 qYfRXrcQ1KCnPHN8qNAPaYn7F+b8tWIiL4aR0n5C3a6Fq7S12sz5nXEnBcuZFyvaGn
+	 cSuVuT01eLQbeYBv51ckvqUHv3N9rjCw/uF9DlZTS4EKdamYhxQ4/Zh/EJtAFERtPU
+	 FFNHgAu3/FaAT+jqRU1sI5ZiGte/aL2KnKPX5eJUdd2+unfwIwf6LeZPkclUmONFY7
+	 wOKwYMsAvfkSA==
 From: "Rob Herring (Arm)" <robh@kernel.org>
-Date: Thu, 10 Apr 2025 10:47:27 -0500
-Subject: [PATCH v2 06/17] arm64: dts: qcom: msm8992-lg-h815: Fix CPU node
- "enable-method" property dependencies
+Date: Thu, 10 Apr 2025 10:47:28 -0500
+Subject: [PATCH v2 07/17] arm: dts: qcom: sdx55/sdx65: Fix CPU
+ power-domain-names
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250410-dt-cpu-schema-v2-6-63d7dc9ddd0a@kernel.org>
+Message-Id: <20250410-dt-cpu-schema-v2-7-63d7dc9ddd0a@kernel.org>
 References: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
 In-Reply-To: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
 To: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -91,52 +91,44 @@ Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org
 X-Mailer: b4 0.15-dev
 
-The "spin-table" enable-method requires "cpu-release-addr" property,
-so add a dummy entry. It is assumed the bootloader will fill in the
-correct values.
+"rpmhpd" is not documented nor used anywhere. The power-domain is used
+for performance scaling (cpufreq), so "perf" is the correct name to use.
 
 Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/msm8992-lg-h815.dts | 6 ++++++
- 1 file changed, 6 insertions(+)
+v2:
+ - Use "perf" instead of "psci"
+---
+ arch/arm/boot/dts/qcom/qcom-sdx55.dtsi | 2 +-
+ arch/arm/boot/dts/qcom/qcom-sdx65.dtsi | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8992-lg-h815.dts b/arch/arm64/boot/dts/qcom/msm8992-lg-h815.dts
-index 4520d5d51a29..6a231afad85d 100644
---- a/arch/arm64/boot/dts/qcom/msm8992-lg-h815.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8992-lg-h815.dts
-@@ -93,26 +93,32 @@ key-vol-up {
- 
- &cpu0 {
- 	enable-method = "spin-table";
-+	cpu-release-addr = /bits/ 64 <0>;
- };
- 
- &cpu1 {
- 	enable-method = "spin-table";
-+	cpu-release-addr = /bits/ 64 <0>;
- };
- 
- &cpu2 {
- 	enable-method = "spin-table";
-+	cpu-release-addr = /bits/ 64 <0>;
- };
- 
- &cpu3 {
- 	enable-method = "spin-table";
-+	cpu-release-addr = /bits/ 64 <0>;
- };
- 
- &cpu4 {
- 	enable-method = "spin-table";
-+	cpu-release-addr = /bits/ 64 <0>;
- };
- 
- &cpu5 {
- 	enable-method = "spin-table";
-+	cpu-release-addr = /bits/ 64 <0>;
- };
- 
- &pm8994_resin {
+diff --git a/arch/arm/boot/dts/qcom/qcom-sdx55.dtsi b/arch/arm/boot/dts/qcom/qcom-sdx55.dtsi
+index 39530eb580ea..20fdae9825e0 100644
+--- a/arch/arm/boot/dts/qcom/qcom-sdx55.dtsi
++++ b/arch/arm/boot/dts/qcom/qcom-sdx55.dtsi
+@@ -57,7 +57,7 @@ cpu0: cpu@0 {
+ 			enable-method = "psci";
+ 			clocks = <&apcs>;
+ 			power-domains = <&rpmhpd SDX55_CX>;
+-			power-domain-names = "rpmhpd";
++			power-domain-names = "perf";
+ 			operating-points-v2 = <&cpu_opp_table>;
+ 		};
+ 	};
+diff --git a/arch/arm/boot/dts/qcom/qcom-sdx65.dtsi b/arch/arm/boot/dts/qcom/qcom-sdx65.dtsi
+index 6b23ee676c9e..c8e312dcd26b 100644
+--- a/arch/arm/boot/dts/qcom/qcom-sdx65.dtsi
++++ b/arch/arm/boot/dts/qcom/qcom-sdx65.dtsi
+@@ -58,7 +58,7 @@ cpu0: cpu@0 {
+ 			enable-method = "psci";
+ 			clocks = <&apcs>;
+ 			power-domains = <&rpmhpd SDX65_CX_AO>;
+-			power-domain-names = "rpmhpd";
++			power-domain-names = "perf";
+ 			operating-points-v2 = <&cpu_opp_table>;
+ 		};
+ 	};
 
 -- 
 2.47.2
