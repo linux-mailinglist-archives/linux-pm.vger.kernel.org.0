@@ -1,97 +1,91 @@
-Return-Path: <linux-pm+bounces-25101-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25102-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C845A84141
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 12:55:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD706A84163
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 13:04:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 348DA3A20EF
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 10:52:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A64E21B685A0
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 11:04:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B176F276057;
-	Thu, 10 Apr 2025 10:52:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="sEIITVji"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29ECC26FA40;
+	Thu, 10 Apr 2025 11:04:36 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0332256C75;
-	Thu, 10 Apr 2025 10:52:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CFD61DF991;
+	Thu, 10 Apr 2025 11:04:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.51.61.248
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744282360; cv=none; b=hXHmew3kaEkWwgf6s6wQukUZR2jDHKxDazuH1gsBTBOPqr6duTpSA7yClxtFW5B04jkBIID+wE17lNQ4oVc1NOU0ztq6X6Bnpu805WGq2UD+Y7cbqsrepwLAs+oynMACKn7yRXg3CJjp06tkEK6j8hEGQGGUhl+JRwuIxHkq9Z0=
+	t=1744283076; cv=none; b=ecyykA/2xzIKqXohM+BOBDyfJqaQUUXiGsrS0uheM8poDrVqpjjeF5K1qBjm3RWEAsccQFWE8BTXDT1zr351QCoBWQtAcarkOmeyYZVVSBXavM/vJmE74L/k9Ajhxt6OiL0CeEsmhEJPqUhmMitHtUMqPN00YBW9dZN5IkOvBic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744282360; c=relaxed/simple;
-	bh=7wBrrTzsBst25ssilXMw28kvSf5Er6C0Dk03FWz+HXM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GmuB/SwXZpMTi0MIa7TlfHBY55eiz5CVC6lDNC7WflMN1o2bZCj0sBHl6FXAZq9vtvvvuGoy4W+3nHlSr2eqCnLoKqFnhUGtkjW/QV946ow+1eZtFaI3rNfMi89WjGCxsdgNr57sM9z+qxxWWusMdWLF6cLglpwkmiA4aQCE7zY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=sEIITVji; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=oKSUbsgAB3mRyb0GnkDkQig+o1YJFRaynD1xrmGVCo4=; b=sEIITVjixbiNYSW2H2MdnpCltD
-	+Ut5StqPYsNgQpqKhE9yE4NZHmky+/PntwXYQbPYQz73fKppPVad0pgW+gQJmDVoJl/Hy+N0FQxFR
-	lyPuFB3pBMo7TwFstDVzVov2wMBegl1Z8U6zO5vOCddDbM8lyLkTuAjmDS8VLCVBlsxUasbAbwMQW
-	Mwix8RnK1KcYI5MpbvT3D+k5k+lQFGhR83o6sUyW4Rs4d2zb3QqluYp9WwlCVusnmrna29axMSpa3
-	j0zOSK8E7trz3d7Amdk9ZN16c/o8Cj6ZK3T+d+aS8FyjnlzRyiK6nOK+tDtEwO/BQZo+nABGLg7/M
-	YquEn8zA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1u2pWJ-00000002mNu-0nYK;
-	Thu, 10 Apr 2025 10:52:31 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 5A84A3003C4; Thu, 10 Apr 2025 12:52:31 +0200 (CEST)
-Date: Thu, 10 Apr 2025 12:52:31 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: K Prateek Nayak <kprateek.nayak@amd.com>
-Cc: Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Waiman Long <llong@redhat.com>,
-	Swapnil Sapkal <swapnil.sapkal@amd.com>,
-	Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
-	Huang Rui <ray.huang@amd.com>, Perry Yuan <perry.yuan@amd.com>
-Subject: Re: [PATCH v2 0/4] sched/fair: Dynamic asym priority support
-Message-ID: <20250410105231.GF30687@noisy.programming.kicks-ass.net>
-References: <20250409053446.23367-1-kprateek.nayak@amd.com>
+	s=arc-20240116; t=1744283076; c=relaxed/simple;
+	bh=0Y1XnrQEe3NOjFlcNK2ehU36OMVowYRQh6cyPGFkes0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=n24lwq1IH8NgdpxK5ZLfACD5cvilev1FZ6zfycI82Yg1aongtXWHYOx07TMNTb1MAloEgMxNXN8nUnCWLmsQv+Zum/qrP2JEupyBLnL3F/v7rQs53ZXuZaAZN5HRgCZlV33KQYYz/4kFCjDA5LUciu03wAED06ikhlEEWFkvmi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com; spf=pass smtp.mailfrom=inspur.com; arc=none smtp.client-ip=210.51.61.248
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inspur.com
+Received: from jtjnmail201601.home.langchao.com
+        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id 202504101904235318;
+        Thu, 10 Apr 2025 19:04:23 +0800
+Received: from locahost.localdomain.com (10.94.12.92) by
+ jtjnmail201601.home.langchao.com (10.100.2.1) with Microsoft SMTP Server id
+ 15.1.2507.39; Thu, 10 Apr 2025 19:04:24 +0800
+From: Charles Han <hanchunchao@inspur.com>
+To: <s.nawrocki@samsung.com>, <a.swigon@samsung.com>, <djakov@kernel.org>,
+	<krzk@kernel.org>, <alim.akhtar@samsung.com>, <cw00.choi@samsung.com>
+CC: <linux-pm@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	Charles Han <hanchunchao@inspur.com>
+Subject: [PATCH] interconnect: samsung: Add NULL check in exynos_generic_icc_probe
+Date: Thu, 10 Apr 2025 19:04:20 +0800
+Message-ID: <20250410110421.77580-1-hanchunchao@inspur.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250409053446.23367-1-kprateek.nayak@amd.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+tUid: 2025410190423d4e3250a732bb1a33e9b6b03863240d7
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
 
-On Wed, Apr 09, 2025 at 05:34:42AM +0000, K Prateek Nayak wrote:
-> K Prateek Nayak (4):
->   sched/fair: Use READ_ONCE() to read sg->asym_prefer_cpu
->   sched/topology: Introduce sched_update_asym_prefer_cpu()
->   cpufreq/amd-pstate: Update asym_prefer_cpu when core rankings change
->   sched/debug: Print the local group's asym_prefer_cpu
-> 
->  drivers/cpufreq/amd-pstate.c   |  4 ++-
->  include/linux/sched/topology.h |  6 ++++
->  kernel/sched/debug.c           |  4 +++
->  kernel/sched/fair.c            |  5 +--
->  kernel/sched/topology.c        | 58 ++++++++++++++++++++++++++++++++++
->  5 files changed, 74 insertions(+), 3 deletions(-)
+devm_kasprintf() can return a NULL pointer on failure,but this
+returned value in exynos_generic_icc_probe() is not checked.
+Add NULL check in exynos_generic_icc_probe(), to handle kernel NULL
+pointer dereference error.
 
-This seems reasonable. I'll queue it up, and unless someone (robot or
-real person) objects, we'll get it merged :-)
+Fixes: 2f95b9d5cf0b ("interconnect: Add generic interconnect driver for Exynos SoCs")
+Signed-off-by: Charles Han <hanchunchao@inspur.com>
+---
+ drivers/interconnect/samsung/exynos.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/interconnect/samsung/exynos.c b/drivers/interconnect/samsung/exynos.c
+index 9e041365d909..f3568f0d92d1 100644
+--- a/drivers/interconnect/samsung/exynos.c
++++ b/drivers/interconnect/samsung/exynos.c
+@@ -134,6 +134,11 @@ static int exynos_generic_icc_probe(struct platform_device *pdev)
+ 	priv->node = icc_node;
+ 	icc_node->name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "%pOFn",
+ 					bus_dev->of_node);
++	if (!icc_node->name) {
++		devm_kfree(&pdev->dev, priv);
++		return -ENOMEM;
++	}
++
+ 	if (of_property_read_u32(bus_dev->of_node, "samsung,data-clock-ratio",
+ 				 &priv->bus_clk_ratio))
+ 		priv->bus_clk_ratio = EXYNOS_ICC_DEFAULT_BUS_CLK_RATIO;
+-- 
+2.43.0
+
 
