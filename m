@@ -1,114 +1,147 @@
-Return-Path: <linux-pm+bounces-25127-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25131-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFB69A847F9
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 17:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B4896A84811
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 17:35:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 601224C83BE
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 15:31:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6266167DCD
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 15:34:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D079F1EB1A2;
-	Thu, 10 Apr 2025 15:31:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F81B1E9B0F;
+	Thu, 10 Apr 2025 15:34:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HkvIGeOB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ry7BWx4X"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2BD1EA7F1
-	for <linux-pm@vger.kernel.org>; Thu, 10 Apr 2025 15:31:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5747C1E1A16;
+	Thu, 10 Apr 2025 15:34:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744299087; cv=none; b=H3HAp5u/JK72S0xFILJByjOil0a6lpZt5wVF8C151MLMqK+Xnl6tiZuEOvwHVrIQ40dMKvQ42Kex4luh99ON9X8Hs8Azncmgcc/SvJ7iwhGFM5ef9OL6dJipK+BWZygnp5UJ8uBUlqPRmHycpBfxHpg3GUZfTKv6sNrMgxPt79I=
+	t=1744299294; cv=none; b=W9PVxFYVWBjDKXouj8LbUutMuoK9BLO9o0CUdbTn7t+aFmbYxCflU8dOf2mL2Gk1r0Rk05EHGeVC/Mkiz34M/SGG1HbrjRZXt1a0TBzt2uYmYNeIV7TagFn6xPs1IgR9eWxlxh0PpZhSpn18t5lM8E5lS2EsMFjx3UT7V+URBJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744299087; c=relaxed/simple;
-	bh=r3JTRn7aV4blg2a2YgRoIRk3Um3EVfph1TuyxH1KW2I=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QcMgiL414aN5aImiJucNiMRmA6nCSrPAKjI2DKyJ4nCrz9yhs+4YCbzqghrf6LB4AU5rGdB6Kd/Mehx6frALT6HNbQmGOp+5ZlAxKrtN11tb5VXPy9W+8lWued5Zkw8rrV7fjdC7tro0WEuG4yq+OuU+9HsGS7JToobC9cUoYtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HkvIGeOB; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744299086; x=1775835086;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=r3JTRn7aV4blg2a2YgRoIRk3Um3EVfph1TuyxH1KW2I=;
-  b=HkvIGeOB6vXTw2v3ACFGNgPx6B/hHRL3vWO/2CckruMCSsux/gcEVicT
-   UtUSRE1eOFZxXOay94LsOuyCXbMvDO9FhVtLxhzxQBImCOyr6V9Rj0Ynz
-   xjqUoIHbGTrnhxrpTcOJKUpXqxigAjTUBsgimGYEklvmh1Qd6oDNuMJWR
-   kh4WQiu37NJU6JMGwy/u/JFnibm0Ve8Q+F/FSKE83C//iTZm48KJTrb36
-   dd0qdiOeRZKUbMTsly7HJSS+ahAnciMOVO28S/fsT2gsCNVnagVZcgzM4
-   s0myPA+oRC5iJ+Oxb4Sk/mBoE1ofL2uYbyPOFRKd9C6PjkN71q6qFovjZ
-   w==;
-X-CSE-ConnectionGUID: eIDtsrLxRaC+AiPht+4ohg==
-X-CSE-MsgGUID: d5A+KR+wRbCPieOdG2fkfQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11400"; a="56806970"
-X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
-   d="scan'208";a="56806970"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2025 08:31:24 -0700
-X-CSE-ConnectionGUID: NRPbCnWaSfGxN5jR51laYA==
-X-CSE-MsgGUID: p9XtM2HOSeSoykbzahdcLg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
-   d="scan'208";a="129475387"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2025 08:31:22 -0700
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 614B3120B56;
-	Thu, 10 Apr 2025 18:31:16 +0300 (EEST)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
-	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1u2ts4-00HOeC-1C;
-	Thu, 10 Apr 2025 18:31:16 +0300
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-pm@vger.kernel.org
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>,
-	Pavel Machek <pavel@kernel.org>,
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCH 7/7] Documentation: PM: *_autosuspend() functions update last busy time
-Date: Thu, 10 Apr 2025 18:31:06 +0300
-Message-Id: <20250410153106.4146265-8-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250410153106.4146265-1-sakari.ailus@linux.intel.com>
-References: <20250410153106.4146265-1-sakari.ailus@linux.intel.com>
+	s=arc-20240116; t=1744299294; c=relaxed/simple;
+	bh=Zv+Um0ud9dyGlFs+NxyqU2VYlQwgrjWX8XbkLklXQMk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BHF5zbqqjRikhvcNE8j/qOc3zFXA1bDG/UuS3mhYxFyNf8n8MxzluyWeGbwb0IRxvxPscBN3Cg7ktVo1VgizHqQOQum/zOvrK08yvICsP7sXMNQzi7zJpORsAZY1dpcigLy7cqRp/cEEy1+4yFHX2G3w3PT2iAkwZThySNsRRhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ry7BWx4X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2262C4CEE9;
+	Thu, 10 Apr 2025 15:34:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744299292;
+	bh=Zv+Um0ud9dyGlFs+NxyqU2VYlQwgrjWX8XbkLklXQMk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Ry7BWx4XZb4pF7DKL87KtGi6rEUTHbfD/nwTyaFSoaxoEPu2Dao6EShPoLS8gGuGS
+	 bYiRCMpP6doJr0PUkrPLdJ/re6PV/r3A+i/7oL+BNnJWLWqRKvTnSQrQgTe/fcJKPj
+	 g/M4slMc2IvSxAQTCIoULVcPPZS/pdWOSvK0rVJL2e6VwDhWxEnEKKLjhnBWo9bngX
+	 9lChs2a+EvBDxfFEYMkvWPww6i5js+jn0/mfoXS56pVHpnKgE1YxaWIPUjPUBIFEKF
+	 Z5ztIE/Dx9Ixpiw+v+k7NRskNryVnlH4dICfA5aGq6+3P+FhgbhPxUJnrisVRRf9H/
+	 oRVMfx6EdlTiA==
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-2c1c9b7bd9aso539967fac.0;
+        Thu, 10 Apr 2025 08:34:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWrBy+cblsnyra88B6kn2sjzxd+bTYqldQh4jq7DMxlttBO7rzkdiAIUe9Z0wXfQJiBbchDNKIMSc0=@vger.kernel.org, AJvYcCXkqePN14cUA1g2dPOwG3UPHUbgCSSnnrogdQnf9eYLAFB+5kxx4xIJJr3mwO5I9RIVbC1UJMvnMyR4FZM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnuPeesgakx3cAXzJpdKzWnQrKVPZdfuoPIrKZdr+mVlgHSM72
+	o0MVjOFfqjPSMUwAz3ltfjrKcVN6cUWmTRQVa1ktDH5NCbUVC7r4DZTxDqnshn7AlWFoJVs5gox
+	hWP2z698v83gt7yP76ZapYpn2PFI=
+X-Google-Smtp-Source: AGHT+IE4pxDce+3DuPfmtgFYtz5PPOwwmefMW3guIZlO6Tzul/1CkZr1Lmkt8rKNDj0krYw+/X7DRVOn9u4lv1uZCr0=
+X-Received: by 2002:a05:6871:64c9:b0:2bc:9787:affe with SMTP id
+ 586e51a60fabf-2d0b5bb97e1mr1746144fac.10.1744299291966; Thu, 10 Apr 2025
+ 08:34:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250410024439.20859-1-sultan@kerneltoast.com>
+In-Reply-To: <20250410024439.20859-1-sultan@kerneltoast.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 10 Apr 2025 17:34:39 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jKyy-3cELyDQTynE3Dv29V15F5f+w0A-H_nu+4LuaaYw@mail.gmail.com>
+X-Gm-Features: ATxdqUGv-blLo91PP0wa4Y8Aq0RZu24wohJZpW2y1vTEU0c4WIIHykq1K6JyWLE
+Message-ID: <CAJZ5v0jKyy-3cELyDQTynE3Dv29V15F5f+w0A-H_nu+4LuaaYw@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: schedutil: Don't ignore limit changes when util
+ is unchanged
+To: Sultan Alsawaf <sultan@kerneltoast.com>
+Cc: Stephan Gerhold <stephan.gerhold@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Ingo Molnar <mingo@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, Christian Loehle <christian.loehle@arm.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Document that the *_autosuspend() variants of the Runtime PM functions
-update the last busy timestamp.
+On Thu, Apr 10, 2025 at 4:45=E2=80=AFAM Sultan Alsawaf <sultan@kerneltoast.=
+com> wrote:
+>
+> From: Sultan Alsawaf <sultan@kerneltoast.com>
+>
+> When utilization is unchanged, a policy limits update is ignored unless
+> CPUFREQ_NEED_UPDATE_LIMITS is set. This occurs because limits_changed
+> depends on the old broken behavior of need_freq_update to trigger a call
+> into cpufreq_driver_resolve_freq() to evaluate the changed policy limits.
+>
+> After fixing need_freq_update, limit changes are ignored without
+> CPUFREQ_NEED_UPDATE_LIMITS, at least until utilization changes enough to
+> make map_util_freq() return something different.
+>
+> Fix the ignored limit changes by preserving the value of limits_changed
+> until get_next_freq() is called, so limits_changed can trigger a call to
+> cpufreq_driver_resolve_freq().
+>
+> Reported-and-tested-by: Stephan Gerhold <stephan.gerhold@linaro.org>
+> Link: https://lore.kernel.org/lkml/Z_Tlc6Qs-tYpxWYb@linaro.org
+> Fixes: 8e461a1cb43d6 ("cpufreq: schedutil: Fix superfluous updates caused=
+ by need_freq_update")
+> Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
+> ---
+>  kernel/sched/cpufreq_schedutil.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_sche=
+dutil.c
+> index 1a19d69b91ed3..f37b999854d52 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -82,7 +82,6 @@ static bool sugov_should_update_freq(struct sugov_polic=
+y *sg_policy, u64 time)
+>                 return false;
+>
+>         if (unlikely(sg_policy->limits_changed)) {
+> -               sg_policy->limits_changed =3D false;
+>                 sg_policy->need_freq_update =3D cpufreq_driver_test_flags=
+(CPUFREQ_NEED_UPDATE_LIMITS);
+>                 return true;
+>         }
+> @@ -171,9 +170,11 @@ static unsigned int get_next_freq(struct sugov_polic=
+y *sg_policy,
+>         freq =3D get_capacity_ref_freq(policy);
+>         freq =3D map_util_freq(util, freq, max);
+>
+> -       if (freq =3D=3D sg_policy->cached_raw_freq && !sg_policy->need_fr=
+eq_update)
+> +       if (freq =3D=3D sg_policy->cached_raw_freq && !sg_policy->limits_=
+changed &&
+> +           !sg_policy->need_freq_update)
+>                 return sg_policy->next_freq;
+>
+> +       sg_policy->limits_changed =3D false;
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- Documentation/power/runtime_pm.rst | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+AFAICS, after this code modification, a limit change may be missed due
+to a possible race with sugov_limits() which cannot happen if
+sg_policy->limits_changed is only cleared when it is set before
+updating sg_policy->need_freq_update.
 
-diff --git a/Documentation/power/runtime_pm.rst b/Documentation/power/runtime_pm.rst
-index 91bc93422262..c8dbdb8595e5 100644
---- a/Documentation/power/runtime_pm.rst
-+++ b/Documentation/power/runtime_pm.rst
-@@ -887,7 +887,8 @@ instead of the non-autosuspend counterparts::
- 
- Drivers may also continue to use the non-autosuspend helper functions; they
- will behave normally, which means sometimes taking the autosuspend delay into
--account (see pm_runtime_idle).
-+account (see pm_runtime_idle). The autosuspend variants of the functions also
-+call pm_runtime_mark_last_busy().
- 
- Under some circumstances a driver or subsystem may want to prevent a device
- from autosuspending immediately, even though the usage counter is zero and the
--- 
-2.39.5
-
+>         sg_policy->cached_raw_freq =3D freq;
+>         return cpufreq_driver_resolve_freq(policy, freq);
+>  }
+> --
+> 2.49.0
+>
 
