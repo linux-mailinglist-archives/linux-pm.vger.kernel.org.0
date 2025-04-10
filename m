@@ -1,271 +1,155 @@
-Return-Path: <linux-pm+bounces-25152-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25153-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0178AA84917
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 18:00:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDB63A8492F
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 18:04:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E9261888407
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 15:57:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED4DA3A85A2
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 16:03:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B06DE1EB5CB;
-	Thu, 10 Apr 2025 15:57:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="S3mlOzKk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1804B1DF258;
+	Thu, 10 Apr 2025 16:03:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2050.outbound.protection.outlook.com [40.107.236.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0FD31E8329;
-	Thu, 10 Apr 2025 15:57:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744300650; cv=fail; b=eblQxWvLzMlYHFbc5HGSVqwEGhXvxJPMhPbcNo73eTqJr3NewB6mRGUq/YPgoNRT6d2w76soFpl4UVZrMggtvw3tokHaDWhMuOgPIFg9gHU31FcZlgbntKcqBO4rqTzu03iM6qGfBTXnQESxQ0YQtW+PePBGeBT6I9GZ4FJ1GOQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744300650; c=relaxed/simple;
-	bh=vvsruQT3fdt5JNcE1pFv574bR3pxNrlyleABNmSp+4c=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=RiA6PBy9AhKDBRrzRILqEmRvOJL/106THc0mPlWafE94eS3myd4qT9zc4u+OTdMNk2hNgbUVC3wFaCCYgoIb1qi/5bNDyS0tOwg/wQYqqoE99xGaXH/NkSP2ITg/FZfBTtIQ9gS9n8ujei/JKAxMEWXB9nHLtryV+eLdUfw5fNQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=S3mlOzKk; arc=fail smtp.client-ip=40.107.236.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mQpszrnUtJKzOup1Z6HIjiDwRvA5sy/BmaXHqXuSk88VHRW18H3v4tgT9kzcTmEHC1yNXZ+ygZaYip0Vc3QFJEte+opWuGFhAqXeLEtLGrtfoy5YOSbH9mQKGyADgWkJcr8uIuOxEvHaihe4nG6SIFdBnAZkrSRX4sesI0WH6qP4L4rjea+Xm9LvsUqsCxeD+/oEjtAHOoyZflaDC5HW7fdPS5staSJqnyvBUV0U/ImftydmBS8XE8Q392kqGMm+S/e78dzkHoFq/dpS9Aew1/IqWoTf0YJYDN7GIn3D+KoHcQULQuQPkGk3zH0UEjD/1L0omZV+jQn15iaXW4Ia9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lZ07Qegye/+3iWbSpHD/AM1yMcjHEwIb6HZ1xBtb/Ck=;
- b=Dfjrm9HH1jpnmFAsd9BB0+IYTQrJ5sGJ9IU7ingpB//omBkye5AJljzgrbajI6VSxg9g9bGeI55IRvbriOf5IQBcz2RVPd0t1zK4iiwdvackGLitsZX6DAEX+y4oHIDRg9UDE4u4fBisEhDDCx9661zcqSmscfRBrbtyahny5wgmnc5EslXAUGKmGLWzT71ieLd2SYO0c07ZjypOz2P7Ya4KEJvv9NzqAL3i3cN4Q4OqFvyly3kX06Ry+1K+NDlX8ZokBz8/S75ZutyX8XsxtxMAmQzvUKHqhjIcFsPkhYsaXoMC+tSPn4K0q48L4i88pqIxQvmwhw3j8jwO+2J/Gg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lZ07Qegye/+3iWbSpHD/AM1yMcjHEwIb6HZ1xBtb/Ck=;
- b=S3mlOzKkRaJTi5Ywhpv77S6diVftn5TAP9F8+ijLdagQTWt9thhZXWyBUQ68LV/hJzNX80uWwnQiyYcsb0RVAln7zJY0mVHD37eE8YSO2Rjq8RO4qDIOjiDEdYsBffku2FWFZn0Ann+XvQvX1EQ7pe7CPG14SOZfZubZYkS6IiQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS0PR12MB6390.namprd12.prod.outlook.com (2603:10b6:8:ce::7) by
- SJ2PR12MB8783.namprd12.prod.outlook.com (2603:10b6:a03:4d0::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8606.32; Thu, 10 Apr
- 2025 15:57:25 +0000
-Received: from DS0PR12MB6390.namprd12.prod.outlook.com
- ([fe80::38ec:7496:1a35:599f]) by DS0PR12MB6390.namprd12.prod.outlook.com
- ([fe80::38ec:7496:1a35:599f%5]) with mapi id 15.20.8606.033; Thu, 10 Apr 2025
- 15:57:24 +0000
-Message-ID: <c9c65e4a-720b-4913-870e-c322bf33c80f@amd.com>
-Date: Thu, 10 Apr 2025 10:57:19 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/4] cxl: Update Soft Reserved resources upon region
- creation
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: dave@stgolabs.net, dave.jiang@intel.com, alison.schofield@intel.com,
- vishal.l.verma@intel.com, ira.weiny@intel.com, dan.j.williams@intel.com,
- willy@infradead.org, jack@suse.cz, rafael@kernel.org, len.brown@intel.com,
- pavel@ucw.cz, ming.li@zohomail.com, nathan.fontenot@amd.com,
- Smita.KoralahalliChannabasappa@amd.com, huang.ying.caritas@gmail.com,
- yaoxt.fnst@fujitsu.com, peterz@infradead.org, gregkh@linuxfoundation.org,
- quic_jjohnson@quicinc.com, ilpo.jarvinen@linux.intel.com,
- bhelgaas@google.com, andriy.shevchenko@linux.intel.com,
- mika.westerberg@linux.intel.com, akpm@linux-foundation.org,
- gourry@gourry.net, linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
- nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
- linux-pm@vger.kernel.org, rrichter@amd.com, benjamin.cheatham@amd.com,
- PradeepVineshReddy.Kodamati@amd.com, lizhijian@fujitsu.com
-References: <20250403183315.286710-1-terry.bowman@amd.com>
- <20250403183315.286710-3-terry.bowman@amd.com>
- <20250404143252.00007d06@huawei.com>
-Content-Language: en-US
-From: "Bowman, Terry" <terry.bowman@amd.com>
-In-Reply-To: <20250404143252.00007d06@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA1P222CA0063.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:2c1::12) To DS0PR12MB6390.namprd12.prod.outlook.com
- (2603:10b6:8:ce::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E6EB1D5AD4;
+	Thu, 10 Apr 2025 16:03:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744300995; cv=none; b=sgdJyG4adaMKt0GrFJrDqUKomgW+PrRiV1Md0cOQtHHYbOW1mbTW4KTLsV3C0gm6WzaSXpzU8Dt3HhepI2Hvcrmp36s/Vnu5t24e0KE9Pc+gbHEJy8+7dVC2ISdLcXJzQj1RY4cOFK2DFGt5flNkri7nFTUbVjZKy7nBdxLf8w0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744300995; c=relaxed/simple;
+	bh=/oTDpAu7OrD2QLuiv4BkYLDBdd7znkvA2V5FJSnC4Mw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TXAmUVn7zvV4NZmnRDC20ItO4Q4+C12/s1OZdCLUftuFjNomSW86rKsu3XZQOPL7pnWNI17qETVaKCNCenLIiRFU7X/dsC0XqoeOQXa0T++rPN/DcZelB8Cf9Lj3vjEUF8AZSg9/Noc0wgElwCIgsw0M84WhK0Sks2xpZGwDQnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kerneltoast.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kerneltoast.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-22401f4d35aso12579645ad.2;
+        Thu, 10 Apr 2025 09:03:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744300992; x=1744905792;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YyULdQ2xbd0MfyWk0JJOZlIlL3Zu2lJHTx06r7dn5CA=;
+        b=oT7tYMjyGRkXvIobefxB7243bkoPNrFB2dMf+oT0CpFgZ69ezmYJtFtSxpIDBlppei
+         FlboECnXGjtHlFpi7l9Bb79l6nA0yPl4dhxGsnE8tprN/nTuM0YVJZU3TEZ/rKgGhYpT
+         FkhFsJfe0wg6zvr7O7rU91zyAQ4X251C8lGRq9IcVgIxzkMiBk3xGjtrB3bq8JruH8Hc
+         AG6lx1Q8E7Ng094J92vo7kzXIJQDiEsScUcLYlFKsoHO2NILLezkUu0b2oM3C8WXSUkw
+         fuJFgaw5IsRNwPMIQIwOYrZs074MRop5XiIKGId5+sy4EV3be9pYzAXplgqwfQ6h9T5A
+         caeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWVri40dBDFSLQlUrEoe43gdbm9ZeJ8NY2HnFNuFtLads71w9Dx8H42mC5eYgV7oDZukzlN6aOJC5KxbWY=@vger.kernel.org, AJvYcCXwsiBMEsEn6yZ0rlGjalPo1CAcb6P8ue0VDbqjDp5FWhKkq+mq26JoIkWY93bHyg6WkTwssPR84fk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQFuzUGtnDGbmeib8Yc8pqxskFlqlxI/M5JYtDAQV9O0bPSzYa
+	jk0ppyB72ud8FS2i/KLHeVyYmHTreJfVOKdYsxuQW7uv7pKn5XPh
+X-Gm-Gg: ASbGncuL64+pz0UBw7T6O8gZStLwdlMhiWyZaeRFMTxAaV1CplruAdghitPRe+X8wJr
+	RleazjYFSAonK4hvjdotSJolanjfbjlQ/nxbgbrm5YrF7Jv2/aviw9sZqZnyLlvKySvOcJYQDtZ
+	o5KOpaUCzEwzqfDgNjlbzVBjlh1teqXmRqWphUeEc/6lZdALNim9RR5wEcIuzM/fc2cVEeEsDv7
+	1J3OZIzhmdWq1lHuk6ereRdtSF4XjpRJWWG2R+TWH7+xf+TGoZSsfWEqVxN3SMPl40HFYndiPYX
+	mf6MzNum4AVgjR2FAqWzRyeDrxh0BeU/AFaXNHKyxH0Q9taggBi9bmrSn/nRToJSdpfGgg==
+X-Google-Smtp-Source: AGHT+IFeC7Gwe6Y4Y3eXlv1Xmgv943loMBAjrYsh3ubashC2+WryPC2L6Z3XTDFLlEKEEqdrQETCzQ==
+X-Received: by 2002:a17:902:f686:b0:224:376:7a07 with SMTP id d9443c01a7336-22b2edca7e3mr38991655ad.13.1744300991731;
+        Thu, 10 Apr 2025 09:03:11 -0700 (PDT)
+Received: from sultan-box.localdomain ([142.147.89.201])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22ac7b8ae95sm32378625ad.61.2025.04.10.09.03.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Apr 2025 09:03:11 -0700 (PDT)
+Date: Thu, 10 Apr 2025 09:03:07 -0700
+From: Sultan Alsawaf <sultan@kerneltoast.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Stephan Gerhold <stephan.gerhold@linaro.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Christian Loehle <christian.loehle@arm.com>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: schedutil: Don't ignore limit changes when util
+ is unchanged
+Message-ID: <Z_fru1i1OpAQ-hJq@sultan-box.localdomain>
+References: <20250410024439.20859-1-sultan@kerneltoast.com>
+ <CAJZ5v0jKyy-3cELyDQTynE3Dv29V15F5f+w0A-H_nu+4LuaaYw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR12MB6390:EE_|SJ2PR12MB8783:EE_
-X-MS-Office365-Filtering-Correlation-Id: 877d47e4-869a-4bcb-2611-08dd784862bd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?b3plMCt2NmVkUFhRdTVhZmhyY3pJdW42Z25xOEZzOGdRc1NtU0ZqZmIxQUR1?=
- =?utf-8?B?RmFPNE40WmdqRGZnOGFDWXVhei85VG1HNWFyUktnbXpPNnRnSUM4QmJXS1N6?=
- =?utf-8?B?bWZtSGdEdzFTS3JqeHlxSFJtNWRTQzJoUjNUT3FBTllDN1lIL2l4Q1lveGNS?=
- =?utf-8?B?SUEvdmY2Y2Z5a3YycVlTNUdjVjBzQURrd2dGeVlWRUlVRUF0NDV5U2VOazJt?=
- =?utf-8?B?Qk9pM1NVVE51SSt0cml1NWxVVmFJdnJnL2JrYjZIN2pnNndiYlpNUjE2WlRq?=
- =?utf-8?B?QXN5Q1NFeVBtOWlQaFJ5NFIra0V0UWh3elNLWlVKcUs4ZVVjTmRRakcvVSti?=
- =?utf-8?B?bXdmRlJFY1pYREV3RXJiV3RSbGJieStvaEtkanVIRXdTQTlqT0NYTFVIOEFM?=
- =?utf-8?B?K2c2QUdURTVObXgybW1kMlpsT251TjAzZzVXV2xXb2dkdDE3N1lBQ2R2UndS?=
- =?utf-8?B?MGxXcnFJOUZobFBPSWJjaHJOdkN2WDJTMDE5UCtFM0JoTXJKK0JqQ2hjQTVD?=
- =?utf-8?B?QXJpUGVnU2h1aXAzNzh5eUtVVFB4bVg4WmExOE8zYW1oMDh4aVlkNFJjNzU3?=
- =?utf-8?B?RS9hUHVDQmozOTVlZ2kvWXJxRnFmMU1SdlZUNkRFNzZ4T3crc2h1VmUzNHVP?=
- =?utf-8?B?MDV1MWR3UzUrL3RyNnZlWXBFRUtUZ1J3dmkxOHlubXpmZllNSlVhd2Rwbk03?=
- =?utf-8?B?TUl4TmpvOWc2dEZyUFNVc2dDZEt4TWRWeGduMG92dWRUN1Y2ZW1qK3o2TklP?=
- =?utf-8?B?Q2xTMGpRTk1ObVNjWGk2eWVLUFhzNTB1NVNMSEVTdnIwMGlIeDh0UEoxdlEv?=
- =?utf-8?B?T0wzT2VjaXFadWFpUERjVUFJVGhUMDRxRVZaS1JKSmowWUkva2c5NDBrMGhn?=
- =?utf-8?B?T0NJbFdOeFRwOGo5cE9NaG1FK0piUC9Jd3RtcUc3cEszaUlkVUh5STdWSlZE?=
- =?utf-8?B?dUNURUVrOTB5ZjUxNG1wZGZkTUhSeUs2MUhMcjZkRU5NdmJkVjNLNUZLRmJl?=
- =?utf-8?B?ZGRVVytvYm1SdSsybm5LK05pNy96Qmh1eFROSGdBeUZJM0VxWkwwL1NJa1Ir?=
- =?utf-8?B?ZnB0TEtuMzI4ZS9odVNhMjBteVJ2Y2d0UU9XSmdUSnpPVkFHL2kzSm5CREp3?=
- =?utf-8?B?Ris0UXprWFFHUkJrR2RtOHVRNEdqTDBVQVJUY0thZUp5L1ozSVhLcHhCSDQ0?=
- =?utf-8?B?QmhmaGxyaFc0cXUwaVNkbStXOXlXbGJ3Z3BUWXd6N2ZwWkUwOWtEN3puV3V6?=
- =?utf-8?B?cWZCNEM3K3VnZnpaamF3dkU0TWxRdi8yVGJpQjMwSU9GbFhIejRjZ0xCVnRZ?=
- =?utf-8?B?VjFwMTBZcXJWUCtpZTJzRFAzdVdGWEZWRFVHbXhxSWh0M2RVVVU0NjczQ2dm?=
- =?utf-8?B?NUoydmUvRUk4UGpVSG8wOXd1Q3p2STBzQm94Z2VlTGZFS2s2NjNGS1EzOXpw?=
- =?utf-8?B?RklJVjdUTW9lb3BRTi91NWhMN1pjUjNWNVk2N25TN2QwWWJ3Z3p4U3lCMDJT?=
- =?utf-8?B?Z1FNZjVRejA4WEltSjg4Z1hQa0kyTHZrd2lMWVMrMjRYR3Y0WjBXN3QwNHdK?=
- =?utf-8?B?L0VjVGhLVDBhTzVaZmlCamdQZDNYaDBvZXAvbHZsTFNxTXRoVEtPN0VxaE5S?=
- =?utf-8?B?ZHpVOUthRTNTa2hDMlluVXkrWk50RWE1a0tWK0MxdktBbmZQeXdDT0Via2hj?=
- =?utf-8?B?Rm1uS01FM0xOdlhsTDNydm1sQ2lCWlBrQ2NzaEZGU2x5cE5IMXJaako2bm1B?=
- =?utf-8?B?WlQ1RDNocXAxVmtvODdQd05HRmh6eXM4SG5TbnZVbnNpSVlhaWMvZXhZZkRV?=
- =?utf-8?B?dWovcENTZXRTcWVrWDdGLzNzOW40RTg1SGN2Z0d0N0VVRHdKRnFIU3RNOERW?=
- =?utf-8?B?ZmtwY1lpaEpqSlBDbXFQVWZZVWpHQ1NKSVJOZSsvSXYyTHEzdW5QckMrbURi?=
- =?utf-8?Q?bitoTBgPR+M=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6390.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?NGdSVWY1ckUwcDFYOEltUkRMQ0Y4WkRDQlZXZS95aG5LZytTcUM0aHJXMzlY?=
- =?utf-8?B?NUhUVng1WEJ0MTljRjFaZHVITHQ2TE5jS2t0K0xyYXJIeEYyRzMrWGQ4Rk51?=
- =?utf-8?B?cXpFbktzTmFPcFRyNFFibENJci9vdWNLcEl3OC9JRlNQOUY5UHk2Z2dFOG94?=
- =?utf-8?B?d083TlIrUzk2bGFPQ29hQ0RYLytwR3l3d2phSEs4R0t5TGNPa1MvUUlzY0pz?=
- =?utf-8?B?MjQwekFjR3ZUSFp3ZXBpaG5pQTBBQXRIb25hM2NDSDh3WEs3TytSUEdwQXJy?=
- =?utf-8?B?Q2JDcVdiSm1FK3BsbVhSL3JDUjEvdjdjMDZQcFgyMDd6RWgwTjUyZTNSNlMv?=
- =?utf-8?B?dW9hK0VGVEFWSEZsdzI5YVpxNnBYQzNGYlpVaEFIQUlHZytWemZKSE1zSk11?=
- =?utf-8?B?aGI4TTJjYTZ5MkNEWGo3OENad1RmbXdKQlowalRicjlrMzVubGZyZUR0akhH?=
- =?utf-8?B?VGdKZFhoYzBid0NQSDJJZzZDQWNzZHhpWFNrRXlvQmJTYWVYUEdWQ0k4N09p?=
- =?utf-8?B?V2huMTRCd0ZwcStucjlHYWdQRjduWi9XcWNVam4xWHJMOGtmWlRzMy80eEtn?=
- =?utf-8?B?Mm5ENWpDcytsV2RDZjZzU2ZBMUFYeE1kTUFmTGJpRy9IZ2NPVlE4Uk9sQnkv?=
- =?utf-8?B?d1p4eE81Z3QxRUtFTjFzQ2xiME1lVk11dXJkdHVKY1Q0T2ZpY3FDMS9zWHdo?=
- =?utf-8?B?OFlidG5LaTlUaVhic1BWVDBHWCtJOVFwZHB4NzhZaGhUQTcwMVJjZkwxUm02?=
- =?utf-8?B?MWw3ZEo0ZUtLVzR5VHVYVmhIeExPL1MvQmZvRjduc3EwdjlrL0t1d0JTR2tI?=
- =?utf-8?B?WmoraG91SzRxSnNkVHUwQW1Uc1lJZmUzWFAzNTRGZ2xlQjQzMXlLU1ZGeEQz?=
- =?utf-8?B?Y3BxZS91amRSK3h2OGtXakl1T3FScFArS0wxWVMyMjNHL2lVVnp1WHpBK3Bt?=
- =?utf-8?B?YWZOaW5LMFBzTDlYcXlhb29FR3N1L2ZpTG5TSGlGYlpaQXd4OG52VExoZy9Z?=
- =?utf-8?B?a1BzQW9mQUIxSGpiTnVDMUphR2ZRUDBzYW9WSWxCVDdaMzRjaEY1bWc0bzlV?=
- =?utf-8?B?ckpJVjh5V09DOXg4dTZKbSt5TjVGbTVGVlR2M2kxNVppM1VmVUM3bFBGb3R1?=
- =?utf-8?B?Sk9sTHdKSXdVN1ZhZDRDTkFmUTdsREY0T0lLaXlTeVpQV1VhWDFLSC9YVGRS?=
- =?utf-8?B?VTM3MkVhU3ZkdWdwTC9CRHdnYzgxSXZFaFJCWlBBOXFKSVJIK215akVKQ0NL?=
- =?utf-8?B?dDlsRzgrUkJNbno4RnVTaWNZVWRJUHAvMyt3N1o5dlc0NStnU2tNYitPRVF4?=
- =?utf-8?B?dzdtbkNXL3N0aU5xUmx4bDZYRGtTRFFyZmNjMTdGZzdSWFFyWC9hOWdGYzJj?=
- =?utf-8?B?QU54aEVsM3Y1REgyeU5zdGtxVGVzck1oWng0czlDZkk4d3dMRTVzZVJLUUti?=
- =?utf-8?B?RUc2TkxsUUx4MDRwdzlLY0phQk1Yc3ZrOGR0M1dBcDBDN3VvRWFReTlWMUZR?=
- =?utf-8?B?WWlhcDFKNUJ3eFloSWJmaS9KUEhiczJqSFpDZCt4U3NNRDFyMzdaalg4L0ow?=
- =?utf-8?B?Sk5WbEdlM2lTZlNsSmJydE5QSmU4SkJJWUh4STZuaGdxV28yVlpobE5BQ2ow?=
- =?utf-8?B?b2hTMnZGSDV2K0tvZXhVQU9mZlliTjQzMkRPdG52bERvRXZhL1VwajBBNVhM?=
- =?utf-8?B?elZieUR5SS84RnF2MGNTMW9UandDL29BTjJOeTgxQWM1aHd4SWdkeTROMEgw?=
- =?utf-8?B?QnN4L2d2eUZWRy9aSWwxV2F0NTNUSTNpKzljaVpRdDZTSmtkcktkM3ZvbVhO?=
- =?utf-8?B?aXV4L05PRk1sa2RjVEVZaFRDR2h3MEhzb1daWEVMemFOOHVsWTl2NWc5VjRT?=
- =?utf-8?B?NWtxbjMvWmlDb1VSL1Y5Ylp4TXdQMXlWN1Z0ZUFnMVY2bE4xd3VSQ1luNS9O?=
- =?utf-8?B?enJmMFhzendOSG1aQU9nakptbnpsSkZFMHNZL2FNYVhtSGRsT1RXUHhkK0Jt?=
- =?utf-8?B?Qnd2MWxFVyt5UVpEM2dMWWg2YmM5VWJIT1ZoTTc4UHkvM2VCR3ZuV0xta0Ft?=
- =?utf-8?B?VCtMMFZaT3hIREZsNWJiYVVzWFRqTUdQbDIrV3psZjJLYjIwdmhtS3JIMVZz?=
- =?utf-8?Q?TOJAXpXL/U/a++fS+f4qnhMr6?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 877d47e4-869a-4bcb-2611-08dd784862bd
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6390.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2025 15:57:24.8060
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eIpl9xCyS5ypIqAas1NWqFAT3fI8bFW3T2Jylc29VwmalR/tU9i1PXC1lFs+XKb4WdXTOWsGsbvnVEQK23Q14Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8783
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0jKyy-3cELyDQTynE3Dv29V15F5f+w0A-H_nu+4LuaaYw@mail.gmail.com>
 
-On 4/4/2025 8:32 AM, Jonathan Cameron wrote:
-> On Thu, 3 Apr 2025 13:33:13 -0500
-> Terry Bowman <terry.bowman@amd.com> wrote:
+On Thu, Apr 10, 2025 at 05:34:39PM +0200, Rafael J. Wysocki wrote:
+> On Thu, Apr 10, 2025 at 4:45 AM Sultan Alsawaf <sultan@kerneltoast.com> wrote:
+> >
+> > From: Sultan Alsawaf <sultan@kerneltoast.com>
+> >
+> > When utilization is unchanged, a policy limits update is ignored unless
+> > CPUFREQ_NEED_UPDATE_LIMITS is set. This occurs because limits_changed
+> > depends on the old broken behavior of need_freq_update to trigger a call
+> > into cpufreq_driver_resolve_freq() to evaluate the changed policy limits.
+> >
+> > After fixing need_freq_update, limit changes are ignored without
+> > CPUFREQ_NEED_UPDATE_LIMITS, at least until utilization changes enough to
+> > make map_util_freq() return something different.
+> >
+> > Fix the ignored limit changes by preserving the value of limits_changed
+> > until get_next_freq() is called, so limits_changed can trigger a call to
+> > cpufreq_driver_resolve_freq().
+> >
+> > Reported-and-tested-by: Stephan Gerhold <stephan.gerhold@linaro.org>
+> > Link: https://lore.kernel.org/lkml/Z_Tlc6Qs-tYpxWYb@linaro.org
+> > Fixes: 8e461a1cb43d6 ("cpufreq: schedutil: Fix superfluous updates caused by need_freq_update")
+> > Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
+> > ---
+> >  kernel/sched/cpufreq_schedutil.c | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> > index 1a19d69b91ed3..f37b999854d52 100644
+> > --- a/kernel/sched/cpufreq_schedutil.c
+> > +++ b/kernel/sched/cpufreq_schedutil.c
+> > @@ -82,7 +82,6 @@ static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
+> >                 return false;
+> >
+> >         if (unlikely(sg_policy->limits_changed)) {
+> > -               sg_policy->limits_changed = false;
+> >                 sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
+> >                 return true;
+> >         }
+> > @@ -171,9 +170,11 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
+> >         freq = get_capacity_ref_freq(policy);
+> >         freq = map_util_freq(util, freq, max);
+> >
+> > -       if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
+> > +       if (freq == sg_policy->cached_raw_freq && !sg_policy->limits_changed &&
+> > +           !sg_policy->need_freq_update)
+> >                 return sg_policy->next_freq;
+> >
+> > +       sg_policy->limits_changed = false;
 > 
->> From: Nathan Fontenot <nathan.fontenot@amd.com>
->>
->> Update handling of SOFT RESERVE iomem resources that intersect with
->> CXL region resources to remove intersections from the SOFT RESERVE
->> resources. The current approach of leaving SOFT RESERVE resources as
->> is can cause failures during hotplug replace of CXL devices because
->> the resource is not available for reuse after teardown of the CXL device.
->>
->> To accomplish this the cxl acpi driver creates a worker thread at the
-> 
-> Inconsistent in capitalization. I'd just use CXL ACPI here given you used CXL PCI
-> below.
-> 
+> AFAICS, after this code modification, a limit change may be missed due
+> to a possible race with sugov_limits() which cannot happen if
+> sg_policy->limits_changed is only cleared when it is set before
+> updating sg_policy->need_freq_update.
 
-Thanks. I will update.
+I don't think that's the case because sg_policy->limits_changed is cleared
+before the new policy limits are evaluated in cpufreq_driver_resolve_freq().
+Granted, if we wanted to be really certain of this, we'd need release semantics.
 
->> end of cxl_acpi_probe(). This worker thread first waits for the CXL PCI
->> CXL mem drivers have loaded. The cxl core/suspend.c code is updated to
->> add a pci_loaded variable, in addition to the mem_active variable, that
->> is updated when the pci driver loads. Remove CONFIG_CXL_SUSPEND Kconfig as
->> it is no longer needed. A new cxl_wait_for_pci_mem() routine uses a
->> waitqueue for both these driver to be loaded. The need to add this
->> additional waitqueue is ensure the CXL PCI and CXL mem drivers have loaded
->> before we wait for their probe, without it the cxl acpi probe worker thread
->> calls wait_for_device_probe() before these drivers are loaded.
->>
->> After the CXL PCI and CXL mem drivers load the cxl acpi worker thread
-> CXL ACPI
-> 
->> uses wait_for_device_probe() to ensure device probe routines have
->> completed.
-> 
-> Does it matter if these drivers go away again?  Everything seems
-> to be one way at the moment.
-> 
+Looking closer at cpufreq.c actually, isn't there already a race on the updated
+policy limits (policy->min and policy->max) since they can be updated again
+while schedutil reads them via cpufreq_driver_resolve_freq()?
 
-There is a maximum timeout wait period. I'll add these details to the 
-commit message here.
-
->>
->> Once probe completes and regions have been created, find all cxl
-> 
-> CXL
-> 
->> regions that have been created and trim any SOFT RESERVE resources
->> that intersect with the region.
->>
->> Update cxl_acpi_exit() to cancel pending waitqueue work.
->>
->> Signed-off-by: Nathan Fontenot <nathan.fontenot@amd.com>
->> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> 
-> 
->> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
->> index be8a7dc77719..40835ec692c8 100644
->> --- a/drivers/cxl/cxl.h
->> +++ b/drivers/cxl/cxl.h
->> @@ -858,6 +858,7 @@ bool is_cxl_pmem_region(struct device *dev);
->>  struct cxl_pmem_region *to_cxl_pmem_region(struct device *dev);
->>  int cxl_add_to_region(struct cxl_port *root,
->>  		      struct cxl_endpoint_decoder *cxled);
->> +int cxl_region_srmem_update(void);
-> 
-> As before: srmem is a bit obscure. Maybe spell it out more.
-> 
-
-Yes, will update.
-
--Terry
-
->>  struct cxl_dax_region *to_cxl_dax_region(struct device *dev);
->>  u64 cxl_port_get_spa_cache_alias(struct cxl_port *endpoint, u64 spa);
->>  #else
->> @@ -902,6 +903,8 @@ void cxl_coordinates_combine(struct access_coordinate *out,
->>  
->>  bool cxl_endpoint_decoder_reset_detected(struct cxl_port *port);
->>  
->> +void cxl_wait_for_pci_mem(void);
-> 
-
+Sultan
 
