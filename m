@@ -1,69 +1,69 @@
-Return-Path: <linux-pm+bounces-25123-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25124-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58D9DA847E8
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 17:31:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44800A847FE
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 17:33:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 687647B1203
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 15:30:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92DAA3B5A78
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 15:31:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12EC91E9900;
-	Thu, 10 Apr 2025 15:31:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC9811E9B29;
+	Thu, 10 Apr 2025 15:31:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VPvxZyd/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WgIvuIIs"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36272193077
-	for <linux-pm@vger.kernel.org>; Thu, 10 Apr 2025 15:31:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A5541E990A
+	for <linux-pm@vger.kernel.org>; Thu, 10 Apr 2025 15:31:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744299084; cv=none; b=ZUdqt0pNELesiXtuSExnypRiq9Dc75e+oJZxv5toBrPeiWDEIcuDGQ8ehIbCQa3KLqsPiPOgUDQmEbMXhwyb3u61QBH5X3TwD+Z1vmOmtKnbZX0nC4flpy0Zf3oG09aYlDB03mcXPK2LjOkXqQJnC7+tsOBFtjYqRUH72LoreaA=
+	t=1744299085; cv=none; b=W6IBC0RrNlgxCr88iAIs+YF/XgKepCwXEa0q9P7oc1wzpQTJKKS3CEyHvtraJ8UCKo8xshJUIszTiD2PYitLDcbkWRsq1E3mLVqncFdStVKGw9cSjV/RA3vhZ2xXKKr/OCPC3os2e5auvd9P9DsOwSwOlrxFac4DLGyoEZyHTBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744299084; c=relaxed/simple;
-	bh=W8crODUB8xrSpQVtSCP9b1nV0htDp1pQSBDRemQY/0k=;
+	s=arc-20240116; t=1744299085; c=relaxed/simple;
+	bh=o0USEwNqtA6J/OKBmvCUCRDgFagrn1UkPo+qUBa8N7Y=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uh6KiiAHmyxu2ekfhGNF8LwioWgxvOV/ddvmLBl17qwe82GrgRxlg5eTfrRaG9CcgA+4ch7UY63bxiUxEJW2NhmWgbfpVfJhYKULOhniw7rjAAbvkl7eJi5VKGbf1SSqUawvtE0pvf8wfpf4esTVCK8UWxUT2p3zpmrDujA7F0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VPvxZyd/; arc=none smtp.client-ip=198.175.65.13
+	 MIME-Version; b=miZZfBn/FY2UP9RE8pD5Fa3f48npnUhoguzR9Ueg9iaANPZGelCXhDeriHDU7BdooovhYw6oezm5EK6lRwn6I2IEJhqvpmfY7C+6KOBMgWPMplKg2lga9EC/ytbmFKR6pYFIOFg4NdIADfpgnU+qGCeONneHyPA7YyxyjMp+Vzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WgIvuIIs; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744299082; x=1775835082;
+  t=1744299084; x=1775835084;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=W8crODUB8xrSpQVtSCP9b1nV0htDp1pQSBDRemQY/0k=;
-  b=VPvxZyd/iIdnCVU2TDLcPeFVUg4StaTCpF0yIr8496b0fgOhn1qlWxJW
-   WIRvQGpfU9wwmJayj2lb0yr6Xxj9tYATlez2RoV19B1o9linVrK5okq1J
-   sS+L5zmJK8zmoiUI6Hjeaxw4fQoko425ax943AG8mzQWvR03dxXF7mrBG
-   rV2SvcO4EyjVvcc81O37E/v7U3GIn++YklKq+Z/NTHdGfxQcVSuXsNaf1
-   6dR7YMtHzYtMFPqPCBlwxLe58sPUDLzWTcoKwxHBIF18EV2ug/RyTj966
-   M6b9XM/Mzf1qQ/iR+mLkhfM5xXaFlf3E1Lz8NRm87pz5bkc6ixFaZVoY1
-   w==;
-X-CSE-ConnectionGUID: eH9V0DItTXaxy8I6RZN8TQ==
-X-CSE-MsgGUID: /rcg6Yc9R7C4LTa8tdy+ZQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11400"; a="56806945"
+  bh=o0USEwNqtA6J/OKBmvCUCRDgFagrn1UkPo+qUBa8N7Y=;
+  b=WgIvuIIskf0lAs4hTSqmXGs1HFSPLEokRuIL61C82PJBfCh3NUs0FaXZ
+   4kFgb3so/kHNOahf0cLDqyvwvJ9SqaaQIOciBpzfCb7xcYZWBBOwZ1Ta2
+   oZTXiS1G6g+sxfc+9qThIWkso9a06uv21GdOyjlp6ZHruzQtzBW4zH+8D
+   Q9QJ8On6QL1uINEdkXChZbrRDphrGy46Y8JXdmabJpzxAlgMoemDzu6aY
+   bEHdM79K0iSYMseQ8cxdLlvypPs4jkRZb6d4VnCvLIAtBUuf8e8e2EyVJ
+   9DXAnXfxVk1obWRO2xhqDuKOuWegxbqfraUI6BmybrBZcAn9QfC+HVFfw
+   A==;
+X-CSE-ConnectionGUID: LuENVIv7Q4iqp5+UOxCj5g==
+X-CSE-MsgGUID: hHrACrZoRayQUlknNIZk9Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11400"; a="56806951"
 X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
-   d="scan'208";a="56806945"
+   d="scan'208";a="56806951"
 Received: from fmviesa010.fm.intel.com ([10.60.135.150])
   by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2025 08:31:22 -0700
-X-CSE-ConnectionGUID: X87sOONnRXSQf2OLAe4lZQ==
-X-CSE-MsgGUID: eYN/pWflRNWMnoxY9vGsPA==
+X-CSE-ConnectionGUID: tbvuUqOHQHCg7UFUKzN4bQ==
+X-CSE-MsgGUID: W+UWpzCZQB6BaoZ49e/xvQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
-   d="scan'208";a="129475363"
+   d="scan'208";a="129475369"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2025 08:31:19 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 4673811FA2F;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 46F8911FB1F;
 	Thu, 10 Apr 2025 18:31:16 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1u2ts4-00HOdi-0n;
+	id 1u2ts4-00HOdm-0t;
 	Thu, 10 Apr 2025 18:31:16 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -72,9 +72,9 @@ Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Len Brown <len.brown@intel.com>,
 	Pavel Machek <pavel@kernel.org>,
 	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCH 1/7] Documentation: pm: runtime: Fix a reference to pm_runtime_autosuspend()
-Date: Thu, 10 Apr 2025 18:31:00 +0300
-Message-Id: <20250410153106.4146265-2-sakari.ailus@linux.intel.com>
+Subject: [PATCH 2/7] pm: runtime: Document return values of suspend related API functions
+Date: Thu, 10 Apr 2025 18:31:01 +0300
+Message-Id: <20250410153106.4146265-3-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250410153106.4146265-1-sakari.ailus@linux.intel.com>
 References: <20250410153106.4146265-1-sakari.ailus@linux.intel.com>
@@ -86,29 +86,241 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-pm_runtime_autosuspend() got accidentally renamed as
-__pm_runtime_autosuspend() whereas the intention in the patch was to
-rename pm_runtime_put_autosuspend() only. Fix it.
+Document return values for device suspend and idle related API functions.
 
-Fixes: b7d46644e554 ("PM: runtime: Add pm_runtime_put_autosuspend() replacement")
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- Documentation/power/runtime_pm.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/pm_runtime.h | 147 ++++++++++++++++++++++++++++++++++---
+ 1 file changed, 138 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/power/runtime_pm.rst b/Documentation/power/runtime_pm.rst
-index 12f429359a82..63344bea8393 100644
---- a/Documentation/power/runtime_pm.rst
-+++ b/Documentation/power/runtime_pm.rst
-@@ -154,7 +154,7 @@ suspending the device are satisfied) and to queue up a suspend request for the
- device in that case.  If there is no idle callback, or if the callback returns
- 0, then the PM core will attempt to carry out a runtime suspend of the device,
- also respecting devices configured for autosuspend.  In essence this means a
--call to __pm_runtime_autosuspend() (do note that drivers needs to update the
-+call to pm_runtime_autosuspend() (do note that drivers needs to update the
- device last busy mark, pm_runtime_mark_last_busy(), to control the delay under
- this circumstance).  To prevent this (for example, if the callback routine has
- started a delayed suspend), the routine must return a non-zero value.  Negative
+diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+index 7fb5a459847e..3e31cbebc527 100644
+--- a/include/linux/pm_runtime.h
++++ b/include/linux/pm_runtime.h
+@@ -333,6 +333,20 @@ static inline void pm_runtime_release_supplier(struct device_link *link) {}
+  * Invoke the "idle check" callback of @dev and, depending on its return value,
+  * set up autosuspend of @dev or suspend it (depending on whether or not
+  * autosuspend has been enabled for it).
++ *
++ * Return:
++ * * 0: Success.
++ * * -EINVAL: Runtime PM error.
++ * * -EACCES: Runtime PM disabled.
++ * * -EAGAIN: Runtime PM usage_count non-zero, Runtime PM status change ongoing
++ *            or device not in %RPM_ACTIVE state.
++ * * -EBUSY: Runtime PM child_count non-zero.
++ * * -EPERM: Device PM QoS resume latency 0.
++ * * -EINPROGRESS: Suspend already in progress.
++ * * -ENOSYS: CONFIG_PM not enabled.
++ * * 1: Device already suspended.
++ * Other values and conditions for the above values are possible as returned by
++ * Runtime PM idle and suspend callbacks.
+  */
+ static inline int pm_runtime_idle(struct device *dev)
+ {
+@@ -342,6 +356,18 @@ static inline int pm_runtime_idle(struct device *dev)
+ /**
+  * pm_runtime_suspend - Suspend a device synchronously.
+  * @dev: Target device.
++ *
++ * Return:
++ * * 0: Success.
++ * * -EINVAL: Runtime PM error.
++ * * -EACCES: Runtime PM disabled.
++ * * -EAGAIN: Runtime PM usage_count non-zero or Runtime PM status change ongoing.
++ * * -EBUSY: Runtime PM child_count non-zero.
++ * * -EPERM: Device PM QoS resume latency 0.
++ * * -ENOSYS: CONFIG_PM not enabled.
++ * * 1: Device already suspended.
++ * Other values and conditions for the above values are possible as returned by
++ * Runtime PM suspend callbacks.
+  */
+ static inline int pm_runtime_suspend(struct device *dev)
+ {
+@@ -354,6 +380,18 @@ static inline int pm_runtime_suspend(struct device *dev)
+  *
+  * Set up autosuspend of @dev or suspend it (depending on whether or not
+  * autosuspend is enabled for it) without engaging its "idle check" callback.
++ *
++ * Return:
++ * * 0: Success.
++ * * -EINVAL: Runtime PM error.
++ * * -EACCES: Runtime PM disabled.
++ * * -EAGAIN: Runtime PM usage_count non-zero or Runtime PM status change ongoing.
++ * * -EBUSY: Runtime PM child_count non-zero.
++ * * -EPERM: Device PM QoS resume latency 0.
++ * * -ENOSYS: CONFIG_PM not enabled.
++ * * 1: Device already suspended.
++ * Other values and conditions for the above values are possible as returned by
++ * Runtime PM suspend callbacks.
+  */
+ static inline int pm_runtime_autosuspend(struct device *dev)
+ {
+@@ -375,6 +413,18 @@ static inline int pm_runtime_resume(struct device *dev)
+  *
+  * Queue up a work item to run an equivalent of pm_runtime_idle() for @dev
+  * asynchronously.
++ *
++ * Return:
++ * * 0: Success.
++ * * -EINVAL: Runtime PM error.
++ * * -EACCES: Runtime PM disabled.
++ * * -EAGAIN: Runtime PM usage_count non-zero, Runtime PM status change ongoing
++ *            or device not in %RPM_ACTIVE state.
++ * * -EBUSY: Runtime PM child_count non-zero.
++ * * -EPERM: Device PM QoS resume latency 0.
++ * * -EINPROGRESS: Suspend already in progress.
++ * * -ENOSYS: CONFIG_PM not enabled.
++ * * 1: Device already suspended.
+  */
+ static inline int pm_request_idle(struct device *dev)
+ {
+@@ -396,6 +446,17 @@ static inline int pm_request_resume(struct device *dev)
+  *
+  * Queue up a work item to run an equivalent pm_runtime_autosuspend() for @dev
+  * asynchronously.
++ *
++ * Return:
++ * * 0: Success.
++ * * -EINVAL: Runtime PM error.
++ * * -EACCES: Runtime PM disabled.
++ * * -EAGAIN: Runtime PM usage_count non-zero or Runtime PM status change ongoing.
++ * * -EBUSY: Runtime PM child_count non-zero.
++ * * -EPERM: Device PM QoS resume latency 0.
++ * * -EINPROGRESS: Suspend already in progress.
++ * * -ENOSYS: CONFIG_PM not enabled.
++ * * 1: Device already suspended.
+  */
+ static inline int pm_request_autosuspend(struct device *dev)
+ {
+@@ -460,6 +521,17 @@ static inline int pm_runtime_resume_and_get(struct device *dev)
+  *
+  * Decrement the runtime PM usage counter of @dev and if it turns out to be
+  * equal to 0, queue up a work item for @dev like in pm_request_idle().
++ *
++ * Return:
++ * * 0: Success.
++ * * -EINVAL: Runtime PM error.
++ * * -EACCES: Runtime PM disabled.
++ * * -EAGAIN: Runtime PM usage_count non-zero or Runtime PM status change ongoing.
++ * * -EBUSY: Runtime PM child_count non-zero.
++ * * -EPERM: Device PM QoS resume latency 0.
++ * * -EINPROGRESS: Suspend already in progress.
++ * * -ENOSYS: CONFIG_PM not enabled.
++ * * 1: Device already suspended.
+  */
+ static inline int pm_runtime_put(struct device *dev)
+ {
+@@ -472,6 +544,17 @@ static inline int pm_runtime_put(struct device *dev)
+  *
+  * Decrement the runtime PM usage counter of @dev and if it turns out to be
+  * equal to 0, queue up a work item for @dev like in pm_request_autosuspend().
++ *
++ * Return:
++ * * 0: Success.
++ * * -EINVAL: Runtime PM error.
++ * * -EACCES: Runtime PM disabled.
++ * * -EAGAIN: Runtime PM usage_count non-zero or Runtime PM status change ongoing.
++ * * -EBUSY: Runtime PM child_count non-zero.
++ * * -EPERM: Device PM QoS resume latency 0.
++ * * -EINPROGRESS: Suspend already in progress.
++ * * -ENOSYS: CONFIG_PM not enabled.
++ * * 1: Device already suspended.
+  */
+ static inline int __pm_runtime_put_autosuspend(struct device *dev)
+ {
+@@ -484,6 +567,17 @@ static inline int __pm_runtime_put_autosuspend(struct device *dev)
+  *
+  * Decrement the runtime PM usage counter of @dev and if it turns out to be
+  * equal to 0, queue up a work item for @dev like in pm_request_autosuspend().
++ *
++ * Return:
++ * * 0: Success.
++ * * -EINVAL: Runtime PM error.
++ * * -EACCES: Runtime PM disabled.
++ * * -EAGAIN: Runtime PM usage_count non-zero or Runtime PM status change ongoing.
++ * * -EBUSY: Runtime PM child_count non-zero.
++ * * -EPERM: Device PM QoS resume latency 0.
++ * * -EINPROGRESS: Suspend already in progress.
++ * * -ENOSYS: CONFIG_PM not enabled.
++ * * 1: Device already suspended.
+  */
+ static inline int pm_runtime_put_autosuspend(struct device *dev)
+ {
+@@ -500,9 +594,20 @@ static inline int pm_runtime_put_autosuspend(struct device *dev)
+  * return value, set up autosuspend of @dev or suspend it (depending on whether
+  * or not autosuspend has been enabled for it).
+  *
+- * The possible return values of this function are the same as for
+- * pm_runtime_idle() and the runtime PM usage counter of @dev remains
+- * decremented in all cases, even if it returns an error code.
++ * The runtime PM usage counter of @dev remains decremented in all cases, even
++ * if it returns an error code.
++ *
++ * Return:
++ * * 0: Success.
++ * * -EINVAL: Runtime PM error.
++ * * -EACCES: Runtime PM disabled.
++ * * -EAGAIN: Runtime PM usage_count non-zero or Runtime PM status change ongoing.
++ * * -EBUSY: Runtime PM child_count non-zero.
++ * * -EPERM: Device PM QoS resume latency 0.
++ * * -ENOSYS: CONFIG_PM not enabled.
++ * * 1: Device already suspended.
++ * Other values and conditions for the above values are possible as returned by
++ * Runtime PM suspend callbacks.
+  */
+ static inline int pm_runtime_put_sync(struct device *dev)
+ {
+@@ -516,9 +621,21 @@ static inline int pm_runtime_put_sync(struct device *dev)
+  * Decrement the runtime PM usage counter of @dev and if it turns out to be
+  * equal to 0, carry out runtime-suspend of @dev synchronously.
+  *
+- * The possible return values of this function are the same as for
+- * pm_runtime_suspend() and the runtime PM usage counter of @dev remains
+- * decremented in all cases, even if it returns an error code.
++ * The runtime PM usage counter of @dev remains decremented in all cases, even
++ * if it returns an error code.
++ *
++ * Return:
++ * * 0: Success.
++ * * -EINVAL: Runtime PM error.
++ * * -EACCES: Runtime PM disabled.
++ * * -EAGAIN: Runtime PM usage_count non-zero or Runtime PM status change ongoing.
++ * * -EAGAIN: usage_count non-zero or Runtime PM status change ongoing.
++ * * -EBUSY: Runtime PM child_count non-zero.
++ * * -EPERM: Device PM QoS resume latency 0.
++ * * -ENOSYS: CONFIG_PM not enabled.
++ * * 1: Device already suspended.
++ * Other values and conditions for the above values are possible as returned by
++ * Runtime PM suspend callbacks.
+  */
+ static inline int pm_runtime_put_sync_suspend(struct device *dev)
+ {
+@@ -533,9 +650,21 @@ static inline int pm_runtime_put_sync_suspend(struct device *dev)
+  * equal to 0, set up autosuspend of @dev or suspend it synchronously (depending
+  * on whether or not autosuspend has been enabled for it).
+  *
+- * The possible return values of this function are the same as for
+- * pm_runtime_autosuspend() and the runtime PM usage counter of @dev remains
+- * decremented in all cases, even if it returns an error code.
++ * The runtime PM usage counter of @dev remains decremented in all cases, even
++ * if it returns an error code.
++ *
++ * Return:
++ * * 0: Success.
++ * * -EINVAL: Runtime PM error.
++ * * -EACCES: Runtime PM disabled.
++ * * -EAGAIN: Runtime PM usage_count non-zero or Runtime PM status change ongoing.
++ * * -EBUSY: Runtime PM child_count non-zero.
++ * * -EPERM: Device PM QoS resume latency 0.
++ * * -EINPROGRESS: Suspend already in progress.
++ * * -ENOSYS: CONFIG_PM not enabled.
++ * * 1: Device already suspended.
++ * Other values and conditions for the above values are possible as returned by
++ * Runtime PM suspend callbacks.
+  */
+ static inline int pm_runtime_put_sync_autosuspend(struct device *dev)
+ {
 -- 
 2.39.5
 
