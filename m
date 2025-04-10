@@ -1,50 +1,50 @@
-Return-Path: <linux-pm+bounces-25146-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25147-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2290A848B8
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 17:54:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 420AAA848BD
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 17:54:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E61FC188A1F6
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 15:51:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 160069C2319
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 15:51:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7865A290BCE;
-	Thu, 10 Apr 2025 15:48:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88C14293457;
+	Thu, 10 Apr 2025 15:48:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l2gIODf+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qg97LQXx"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E3BF290BC3;
-	Thu, 10 Apr 2025 15:48:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510AF29344A;
+	Thu, 10 Apr 2025 15:48:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744300085; cv=none; b=O0Ag1ugGxcFfpPTw98fxUz3gmnnevCIkWw8SbuaXchrKPrFqpbumWBbzXx/kbCKNULFxBcCim2/qvaF1IDKV2+YV1Mf6w/JN873lUSdSi/vLcz5QySyoR3vTHi+HusxHJIWDB59UwZdO4GURsHG1lpxXghvtJ+XBD/G39hkPtGM=
+	t=1744300086; cv=none; b=HV5gHtifVp/Y2hQWea+OWOnOJnqPMXeCgIQ3Nyf3XCwgxzMUeeJSwKcnNOXjbI3wXHlPXu3Q430uNPWjeoNZIWC1cSBx+8xGnn07p3hh2DFO2YVfmn248GzHF9qhAZl2oo6aebpc3MgIiOR359ottY/XRbZAjC2GkJLvff1/0no=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744300085; c=relaxed/simple;
-	bh=dKAOoXa8SCYRYEZ5DexCu2UhSLqHH8rlgSZklM08q94=;
+	s=arc-20240116; t=1744300086; c=relaxed/simple;
+	bh=d2xEle5JR0P+8ywA0siIkzQPF9OlhK/me+6AtXOc0AY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oZt4nKbxjgTc3ZOTwZGbisxkQ+NVoFNAerHgwcmZAbIlBbHk3xsDPMbuMGnVAWnpgTDXrhtY0v0EyvD1toVvjdesCH6v8G6R6Fl/i5zSWgjvVuySaWoU9xL9j+4aa7mHunZdpovmsZi1F4wDccfypU4/i6KkPuki/L0i2H6Vm28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l2gIODf+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74791C4CEDD;
-	Thu, 10 Apr 2025 15:48:04 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=Osx311PQ79Mk5Phqr/2hx4+zu8QY5Fu5KOjVyuB3hCfv/ptXgakIsw2OAkM2187wHB3i7FZOIjd0DwR5MCAyFwyQgR79p7gpcsYaEugzvLPl2NFbzx0vI2uqlyRA7uqflbkFd41xrFC79k+6f0rg2KqRiIp4kIN3rARwexJ53yM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qg97LQXx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4C31C4CEDD;
+	Thu, 10 Apr 2025 15:48:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744300084;
-	bh=dKAOoXa8SCYRYEZ5DexCu2UhSLqHH8rlgSZklM08q94=;
+	s=k20201202; t=1744300086;
+	bh=d2xEle5JR0P+8ywA0siIkzQPF9OlhK/me+6AtXOc0AY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=l2gIODf+ANFVlqZ9CulzWNQFCDEoQRk9OTYtBUUUmUr+0KRxQ+QpqorLHa6YLWbl8
-	 v3Oi2r0xr7ARSLLOMqYg5AZWNrArNFy1udHWR+bJVRxAxFquzbOBL3NmlJ561hNlLA
-	 fgqJ3BYhZfnGst0as+dG+23NMcPorSF+hKBPcg2XZk1HNLWkLkkH51tNlODcQCvckQ
-	 4LSBDn59C62j13sYFO/xz4YPyXOa0LmbDztipsCo3yE50CeVEm/RfpOSRPmrotfBrH
-	 QjFjYrdKte/IjRM21kzYTJi9VvedUeiF+JT+R2BNFy99OSpj3GB9FUVaTetGmcoZq2
-	 18/BEZEbZraOA==
+	b=qg97LQXxGV9ue31R3MdJVO2YsWgEzGw16N4u8DA8cSMGiQre4zl71TcotrYsR03/s
+	 qxPvL6r0xo8sAMHg/GmU2Ydh7pqHl4uCL4KwtnVRK4bZcRVsku0EjD5jyo920SnEgM
+	 3YPNYEJKauEYI/YTN2EPPH9Sgs2M98xRB4VCeDSvhZ0XTwsK3MYnJyr5+oehnPZQPR
+	 x7DBrqvDUukbGMNLfanV1kuogiP7OWadByi5f7drA7qqyQOQ/TrgE8YzeedwdpTED9
+	 TzmFsWHaGHmHPqL4Wkm1pjhIUHDaaOUuQh+21Lzzb9zRW9meTqoHS7x7RiG56MLbUg
+	 XAsxucDqzahhA==
 From: "Rob Herring (Arm)" <robh@kernel.org>
-Date: Thu, 10 Apr 2025 10:47:34 -0500
-Subject: [PATCH v2 13/17] dt-bindings: arm/cpus: Re-wrap 'description'
- entries
+Date: Thu, 10 Apr 2025 10:47:35 -0500
+Subject: [PATCH v2 14/17] dt-bindings: Reference opp-v1 schema in CPU
+ schemas
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250410-dt-cpu-schema-v2-13-63d7dc9ddd0a@kernel.org>
+Message-Id: <20250410-dt-cpu-schema-v2-14-63d7dc9ddd0a@kernel.org>
 References: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
 In-Reply-To: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
 To: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -89,180 +89,70 @@ Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-rockchip@lists.infradead.org, linux-amlogic@lists.infradead.org, 
  linux-renesas-soc@vger.kernel.org, linux-mips@vger.kernel.org, 
  linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org, 
- Sudeep Holla <sudeep.holla@arm.com>
+ Viresh Kumar <viresh.kumar@linaro.org>, Sudeep Holla <sudeep.holla@arm.com>
 X-Mailer: b4 0.15-dev
 
-Some of the 'description' entries have odd line wrapping and incorrect
-YAML block modifiers. The 'description' entries should typically wrap
-at 80 chars. Reformat the entries to follow that along with using '>'
-modifiers as appropriate.
+The opp-v1 binding is only used in MIPS and arm32 CPU nodes, so add a
+$ref to it in the CPU schemas and drop the "select".
+
+As opp-v1 has long been deprecated, mark it as such.
 
 Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 ---
- Documentation/devicetree/bindings/arm/cpus.yaml | 85 +++++++++++--------------
- 1 file changed, 36 insertions(+), 49 deletions(-)
+ Documentation/devicetree/bindings/arm/cpus.yaml   | 1 +
+ Documentation/devicetree/bindings/mips/cpus.yaml  | 3 ++-
+ Documentation/devicetree/bindings/opp/opp-v1.yaml | 2 +-
+ 3 files changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-index 351be2f77581..acf38b3518dd 100644
+index acf38b3518dd..5af1396d631f 100644
 --- a/Documentation/devicetree/bindings/arm/cpus.yaml
 +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-@@ -10,9 +10,9 @@ maintainers:
-   - Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+@@ -353,6 +353,7 @@ properties:
+       physical start address it should jump to.
  
- description: |+
--  The device tree allows to describe the layout of CPUs in a system through
--  the "cpus" node, which in turn contains a number of subnodes (ie "cpu")
--  defining properties for every cpu.
-+  The device tree allows to describe the layout of CPUs in a system through the
-+  "cpus" node, which in turn contains a number of subnodes (ie "cpu") defining
-+  properties for every cpu.
+ allOf:
++  - $ref: /schemas/opp/opp-v1.yaml#
+   - if:
+       # If the enable-method property contains one of those values
+       properties:
+diff --git a/Documentation/devicetree/bindings/mips/cpus.yaml b/Documentation/devicetree/bindings/mips/cpus.yaml
+index a85137add668..471373ad0cfb 100644
+--- a/Documentation/devicetree/bindings/mips/cpus.yaml
++++ b/Documentation/devicetree/bindings/mips/cpus.yaml
+@@ -50,6 +50,7 @@ properties:
+   device_type: true
  
-   Bindings for CPU nodes follow the Devicetree Specification, available from:
+ allOf:
++  - $ref: /schemas/opp/opp-v1.yaml#
+   - if:
+       properties:
+         compatible:
+@@ -68,7 +69,7 @@ required:
+   - compatible
+   - reg
  
-@@ -41,45 +41,40 @@ description: |+
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
+diff --git a/Documentation/devicetree/bindings/opp/opp-v1.yaml b/Documentation/devicetree/bindings/opp/opp-v1.yaml
+index 07e26c267815..1b59b103dab6 100644
+--- a/Documentation/devicetree/bindings/opp/opp-v1.yaml
++++ b/Documentation/devicetree/bindings/opp/opp-v1.yaml
+@@ -18,7 +18,7 @@ description: |+
+ 
+   This binding only supports voltage-frequency pairs.
+ 
+-select: true
++deprecated: true
+ 
  properties:
-   reg:
-     maxItems: 1
--    description: |
--      Usage and definition depend on ARM architecture version and
--      configuration:
-+    description: >
-+      Usage and definition depend on ARM architecture version and configuration:
- 
--      On uniprocessor ARM architectures previous to v7
--      this property is required and must be set to 0.
-+      On uniprocessor ARM architectures previous to v7 this property is required
-+      and must be set to 0.
- 
--      On ARM 11 MPcore based systems this property is
--        required and matches the CPUID[11:0] register bits.
-+      On ARM 11 MPcore based systems this property is required and matches the
-+      CPUID[11:0] register bits.
- 
--        Bits [11:0] in the reg cell must be set to
--        bits [11:0] in CPU ID register.
-+        Bits [11:0] in the reg cell must be set to bits [11:0] in CPU ID register.
- 
-         All other bits in the reg cell must be set to 0.
- 
--      On 32-bit ARM v7 or later systems this property is
--        required and matches the CPU MPIDR[23:0] register
--        bits.
-+      On 32-bit ARM v7 or later systems this property is required and matches
-+      the CPU MPIDR[23:0] register bits.
- 
--        Bits [23:0] in the reg cell must be set to
--        bits [23:0] in MPIDR.
-+        Bits [23:0] in the reg cell must be set to bits [23:0] in MPIDR.
- 
-         All other bits in the reg cell must be set to 0.
- 
--      On ARM v8 64-bit systems this property is required
--        and matches the MPIDR_EL1 register affinity bits.
-+      On ARM v8 64-bit systems this property is required and matches the
-+      MPIDR_EL1 register affinity bits.
- 
-         * If cpus node's #address-cells property is set to 2
- 
--          The first reg cell bits [7:0] must be set to
--          bits [39:32] of MPIDR_EL1.
-+          The first reg cell bits [7:0] must be set to bits [39:32] of
-+          MPIDR_EL1.
- 
--          The second reg cell bits [23:0] must be set to
--          bits [23:0] of MPIDR_EL1.
-+          The second reg cell bits [23:0] must be set to bits [23:0] of
-+          MPIDR_EL1.
- 
-         * If cpus node's #address-cells property is set to 1
- 
--          The reg cell bits [23:0] must be set to bits [23:0]
--          of MPIDR_EL1.
-+          The reg cell bits [23:0] must be set to bits [23:0] of MPIDR_EL1.
- 
-       All other bits in the reg cells must be set to 0.
- 
-@@ -278,29 +273,26 @@ properties:
-     $ref: /schemas/types.yaml#/definitions/phandle-array
-     items:
-       maxItems: 1
--    description: |
--      List of phandles to idle state nodes supported
--      by this cpu (see ./idle-states.yaml).
-+    description:
-+      List of phandles to idle state nodes supported by this cpu (see
-+      ./idle-states.yaml).
- 
-   capacity-dmips-mhz:
-     description:
-       u32 value representing CPU capacity (see ../cpu/cpu-capacity.txt) in
--      DMIPS/MHz, relative to highest capacity-dmips-mhz
--      in the system.
-+      DMIPS/MHz, relative to highest capacity-dmips-mhz in the system.
- 
-   cci-control-port: true
- 
-   dynamic-power-coefficient:
-     $ref: /schemas/types.yaml#/definitions/uint32
--    description:
--      A u32 value that represents the running time dynamic
--      power coefficient in units of uW/MHz/V^2. The
--      coefficient can either be calculated from power
-+    description: >
-+      A u32 value that represents the running time dynamic power coefficient in
-+      units of uW/MHz/V^2. The coefficient can either be calculated from power
-       measurements or derived by analysis.
- 
--      The dynamic power consumption of the CPU  is
--      proportional to the square of the Voltage (V) and
--      the clock frequency (f). The coefficient is used to
-+      The dynamic power consumption of the CPU  is proportional to the square of
-+      the Voltage (V) and the clock frequency (f). The coefficient is used to
-       calculate the dynamic power as below -
- 
-       Pdyn = dynamic-power-coefficient * V^2 * f
-@@ -309,10 +301,6 @@ properties:
- 
-   performance-domains:
-     maxItems: 1
--    description:
--      List of phandles and performance domain specifiers, as defined by
--      bindings of the performance domain provider. See also
--      dvfs/performance-domain.yaml.
- 
-   power-domains:
-     description:
-@@ -341,22 +329,21 @@ properties:
- 
-   rockchip,pmu:
-     $ref: /schemas/types.yaml#/definitions/phandle
--    description: |
-+    description: >
-       Specifies the syscon node controlling the cpu core power domains.
- 
--      Optional for systems that have an "enable-method"
--      property value of "rockchip,rk3066-smp"
--      While optional, it is the preferred way to get access to
--      the cpu-core power-domains.
-+      Optional for systems that have an "enable-method" property value of
-+      "rockchip,rk3066-smp". While optional, it is the preferred way to get
-+      access to the cpu-core power-domains.
- 
-   secondary-boot-reg:
-     $ref: /schemas/types.yaml#/definitions/uint32
--    description: |
-+    description: >
-       Required for systems that have an "enable-method" property value of
-       "brcm,bcm11351-cpu-method", "brcm,bcm23550" or "brcm,bcm-nsp-smp".
- 
--      This includes the following SoCs: |
--      BCM11130, BCM11140, BCM11351, BCM28145, BCM28155, BCM21664, BCM23550
-+      This includes the following SoCs:
-+      BCM11130, BCM11140, BCM11351, BCM28145, BCM28155, BCM21664, BCM23550,
-       BCM58522, BCM58525, BCM58535, BCM58622, BCM58623, BCM58625, BCM88312
- 
-       The secondary-boot-reg property is a u32 value that specifies the
+   operating-points:
 
 -- 
 2.47.2
