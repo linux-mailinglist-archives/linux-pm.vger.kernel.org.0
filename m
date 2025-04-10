@@ -1,140 +1,92 @@
-Return-Path: <linux-pm+bounces-25105-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25106-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85884A842CE
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 14:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AAE16A842DC
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 14:19:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBC8B3AE818
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 12:16:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B97F8A3042
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 12:18:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B9E72836AB;
-	Thu, 10 Apr 2025 12:16:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 437F9283CAD;
+	Thu, 10 Apr 2025 12:18:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PdU+r2Vq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j5QRr4G2"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0066214234;
-	Thu, 10 Apr 2025 12:16:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10ECB2836A2;
+	Thu, 10 Apr 2025 12:18:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744287408; cv=none; b=dAp9Ur5Fy4klO8GUqRJ1hqnRkbHyQs9auMk7YPqYJfZ9PSGsifBSmqGI/CHsI9i1aK6x00JtOiI2pBGYKCjg0nrkH9VqzlDpEAOPdNuYR4k6GJF+yIvKUltYkukwGe5geYItPnkGYb+jtDbLAz/lmya/hb/Fh4Ocfqa7P8Fy2xg=
+	t=1744287500; cv=none; b=k8FFn1RJtXnDgvSeOaIk6gNyNG9f6IeHU0C5tRgo56o82VZGBRh/RBLRV1OLF+0rtSrD4OLB9gr4g2crFh49KXkUQEu2PynkNcK8qzuv/RmCD25V50YeysZ6wQZIgfy9TZBetOC3v7iMQavDHiAFT/C4CV2JXBEapVf9DvIf4qY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744287408; c=relaxed/simple;
-	bh=kVly1EE2XeoTRvQPjdFp6oy1mrdHieGAoQT4jHkDYms=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uky/uKGLpzYdj/TWF3rnKE4zjkAKDH6cMy1gY6cihE+ComBM/isIf6RMRVrFeV5Z5COhHgUH9TY3NxM1YNqnU2ssVL3j060wxgWgaX1zV9dGguAwXhK/tX3WfQOJAiyY3mD8cekVnjp/SFcBj0AkVM4MMdrFvQSK1SW7XBklwa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PdU+r2Vq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF1BDC4CEDD;
-	Thu, 10 Apr 2025 12:16:44 +0000 (UTC)
+	s=arc-20240116; t=1744287500; c=relaxed/simple;
+	bh=4BVqr/XqDb+5NSo2+kH+wLgC8NV6iDfBNUktuDeuLM0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=m3ZcookXffmxUbh9iB9MvpZvcjJV/6lB3mAyV0lKwmda260dhG9sz2r7j8ysYggPGPFitkZuQKX8px8AJlNroPUu6n/EysDyXpHs4UoGLzkOE8y/O13J2DFQqKF2O4Vb3eThpq8vUgRXIQO/JgDZ7sjLwgE4Wv5IPBbH16c/ma0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j5QRr4G2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 882F7C4CEDD;
+	Thu, 10 Apr 2025 12:18:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744287407;
-	bh=kVly1EE2XeoTRvQPjdFp6oy1mrdHieGAoQT4jHkDYms=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PdU+r2Vq78gaAheELNKaEXxcKxp0M4hS7kXhKQhdLnQeOD4vkGJSxhDV3YcrbfBpF
-	 LBxAHKn+wdzjpTrDw1wGyUtZkNULCyg8Sr6UJEPOKpc2U4xtvsVP+UKcPbWD+E48IE
-	 wgFfPbImp6Emusduxq9/wtt/C894e9Bu4FPY54wbS9YlncqMkJxC3VYiA+1RczitWb
-	 wjXRKLSwxAYRmSkmtN7x8FuyLRxh0EBJF9lTIlVZoWRRaT0OALLaRo68WaFqp7xH3B
-	 3ZY/a2oTMf+0ZZdd3ENBPfUmRWk56+cTQvpdcuvNjPE6FpIb45hTBEyM4WcHRSbbLl
-	 7oaLiMLjTxKjQ==
-Message-ID: <9cc33c4b-05e6-4203-8762-205eb3d4e9df@kernel.org>
-Date: Thu, 10 Apr 2025 14:16:42 +0200
+	s=k20201202; t=1744287499;
+	bh=4BVqr/XqDb+5NSo2+kH+wLgC8NV6iDfBNUktuDeuLM0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=j5QRr4G2ubW5NqayzbNJX+yW7XLsESRkHL7uXk5gbOX/JevG4n0SfQhCMGgNtSJ5k
+	 E4C21h3/a89V77XUsARO8V71AbSX1cI2+nYSLLJH9g9DIyVhgUpscmnDU/XZADY6tr
+	 U0kbdz6GUWc22HjBaIeGq+UvlPhBq6cDKXtndq19/m1A78NrdjQYGv1cHCcPigIyLl
+	 3uj7Mv6OvV9Vegy98LpCaZTK72YlXShRQLJDm8t9HntQu3YNzkXcIwy5b6n1ZL2cGB
+	 LV9LpOT9untQLNvsDd9WhSJp2c1yLfUKox97TstaMRdoTbwAmfpfYDWiaOAJIjZObU
+	 bA+XfSDUd+Z6Q==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-2d0a742df27so567006fac.1;
+        Thu, 10 Apr 2025 05:18:19 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUHt3IQ8JD5JbgRya9ucq+KPkI4IMejrFk9xaO/jC2JzIfdUfw6FSDHBaZvlOh4ep8gxdynJ/10Sig6@vger.kernel.org, AJvYcCVOS60nOjrSUoh34bcu0xzZ49dwmBa4mdVf339PI72ctOwbT3KzKUG2KVNV11Eim/Bh+5W0BOpKQ18=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCiOkZGq0SCdYx8Ty05ZPm4fcWWYqsQnVNgZoBclnhUvVRAjk6
+	z05vu9pUUwZwZ0/++bc3whokIvZGwy+cXGdXFwecNmqBL0gkARIwg6ipCVN6al+vnU7XTRiaqoZ
+	fg2vH6QGYp9NxrQrGPDQvPosfZtA=
+X-Google-Smtp-Source: AGHT+IE6fIsIEe6iWpAOXTcBIN3kqZDFmJ7NTX3K8WTxkXdzD0ealEYHCmAWMTdQ5dL+KS3cl2QAYT1grmTIe97QB6I=
+X-Received: by 2002:a05:6871:788a:b0:2c2:1c01:c111 with SMTP id
+ 586e51a60fabf-2d0b395d0f1mr1280480fac.2.1744287498871; Thu, 10 Apr 2025
+ 05:18:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] interconnect: samsung: Add NULL check in
- exynos_generic_icc_probe
-To: Charles Han <hanchunchao@inspur.com>, s.nawrocki@samsung.com,
- a.swigon@samsung.com, djakov@kernel.org, alim.akhtar@samsung.com,
- cw00.choi@samsung.com
-Cc: linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20250410110421.77580-1-hanchunchao@inspur.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
- QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
- gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
- /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
- iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
- VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
- 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
- xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
- eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
- AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
- MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
- Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
- ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
- vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
- oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
- lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
- t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
- uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
- 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
- 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250410110421.77580-1-hanchunchao@inspur.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <202504101132.pgiDBR2Q-lkp@intel.com> <d7d99d34ea030d96256531cf09d21d5c6ec16433.camel@intel.com>
+In-Reply-To: <d7d99d34ea030d96256531cf09d21d5c6ec16433.camel@intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 10 Apr 2025 14:18:07 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0j66twBjA0fV+NBrQvG0ciLDhcggA72OedJwkSCtjho8w@mail.gmail.com>
+X-Gm-Features: ATxdqUEbSdG9J9QT0i58HoFYL_4SZJPzRda9B8OYaRJYC79AbA7FRCLfSzVj2do
+Message-ID: <CAJZ5v0j66twBjA0fV+NBrQvG0ciLDhcggA72OedJwkSCtjho8w@mail.gmail.com>
+Subject: Re: [rafael-pm:bleeding-edge 44/56] drivers/acpi/processor_idle.c:464:22:
+ warning: unused variable 'i'
+To: "Zhang, Rui" <rui.zhang@intel.com>
+Cc: lkp <lkp@intel.com>, "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	"devel@acpica.org" <devel@acpica.org>, 
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>, 
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>, "rjw@rjwysocki.net" <rjw@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/04/2025 13:04, Charles Han wrote:
-> devm_kasprintf() can return a NULL pointer on failure,but this
-> returned value in exynos_generic_icc_probe() is not checked.
-> Add NULL check in exynos_generic_icc_probe(), to handle kernel NULL
-> pointer dereference error.
-> 
-> Fixes: 2f95b9d5cf0b ("interconnect: Add generic interconnect driver for Exynos SoCs")
-> Signed-off-by: Charles Han <hanchunchao@inspur.com>
-> ---
->  drivers/interconnect/samsung/exynos.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/interconnect/samsung/exynos.c b/drivers/interconnect/samsung/exynos.c
-> index 9e041365d909..f3568f0d92d1 100644
-> --- a/drivers/interconnect/samsung/exynos.c
-> +++ b/drivers/interconnect/samsung/exynos.c
-> @@ -134,6 +134,11 @@ static int exynos_generic_icc_probe(struct platform_device *pdev)
->  	priv->node = icc_node;
->  	icc_node->name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "%pOFn",
->  					bus_dev->of_node);
-> +	if (!icc_node->name) {
-> +		devm_kfree(&pdev->dev, priv);
+On Thu, Apr 10, 2025 at 9:56=E2=80=AFAM Zhang, Rui <rui.zhang@intel.com> wr=
+ote:
+>
+> On Thu, 2025-04-10 at 11:51 +0800, kernel test robot wrote:
+> > Hi Zhang,
+> >
+> > FYI, the error/warning was bisected to this commit, please ignore it if
+> > it's irrelevant.
+>
+> yes, this is a valid report.
+>
+> Rafael,
+> Do I need to send an updated patch or you will handle this directly?
 
-Instead of doing some scripting changes you need to look at the code.
-Look at other error paths, how they are doing it.
-
-Otherwise please explain why you need to release a managed resource?
-
-Best regards,
-Krzysztof
+I've fixed it up locally, thanks!
 
