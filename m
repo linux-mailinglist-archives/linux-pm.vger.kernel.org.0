@@ -1,144 +1,130 @@
-Return-Path: <linux-pm+bounces-25110-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25111-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBE97A84358
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 14:39:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65EAFA84391
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 14:46:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 755A88C6146
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 12:37:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCA19189DF7E
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 12:44:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5F3B2857D1;
-	Thu, 10 Apr 2025 12:37:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5032628540E;
+	Thu, 10 Apr 2025 12:44:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NOV4rMa8"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="hf/PPn+n"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D9C285414
-	for <linux-pm@vger.kernel.org>; Thu, 10 Apr 2025 12:37:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744288626; cv=none; b=rmvHkFydiD9jjOghaTf+6DDuMYqH0xBpA7Vk1qNP1uiiKHniKraiJ7lAbbRx3DCxZjRtH5XHGv8tI0ol2xN2WleGTP1MBG5tLM1Kt3pR6h1t/VvpvVLiKiydQWMjjkyfYXRFxFyzPN98TVTOxKztjVKs4uviD0bMRI/0vj+ffDc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744288626; c=relaxed/simple;
-	bh=ABz4cDqiNS3kQXrpTOAbpSPw5QYVtGShy0gfjNUg76g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=f4Azi34wMe7djPxAKbVIfnHszqxvtwTnsucLDwyaGr/QopnAIU028+eeA5DqBXXH3JCvEoLERcdx4yQnBRtbF7zQ9C/MZkBH3ltBBSlODSPFKVUJxWlP12eOj2XdQUqwhKqYN6EPri+C9nF2zGvpqHaNKjbxL9CSLCIw/NYcVXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NOV4rMa8; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43cfe63c592so8787765e9.2
-        for <linux-pm@vger.kernel.org>; Thu, 10 Apr 2025 05:37:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744288623; x=1744893423; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9VoKRS+yOUVccmHWqHCUYdtGt2QnJX1Av3s20gfz76g=;
-        b=NOV4rMa8QMEc1TVhjAIqYIGZmJEfEaMV0wWzzFFqJUR7uQHKKQPAmse7sK/wo4ukZf
-         zedLA1q0E+Lbx94iT6YqFRz6Jnf9BeAb6jxI+nS/ixwcrhNdLWLT+W55WtI/NEKuwzQe
-         R3V66jMYVLNQZAM7UPJxpMkNC1KIswxFKbQ813d10tN3xrW5narf7Dzh9AejOS8jLyqP
-         NB7KAvFMG9TtUvYkkBALHKB6HzuFS9uiETs7feTiJtuFykGcVbiXfs4NDdO9j6CUohBi
-         rPIBWbXOV69V71DmyWEE2rvqbCsBnW2JDSklReyPmD1x2P3wQ8a3GA4Mw8ZNzwY6TwRL
-         YaOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744288623; x=1744893423;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9VoKRS+yOUVccmHWqHCUYdtGt2QnJX1Av3s20gfz76g=;
-        b=tYwPtz0Vxx2TcrfvHKmCsvnMPVe8THXx6dWw5fKsxbmdUkRNjmBh1j6u7Xh+NUQZO4
-         /aDnyQ5mWaz8gH28MPlfRsEfU+HyhYeN+BRWPD2yc0QgMX8MF1l/cQTbIqyh2AHzTe6J
-         V7GhnYRdQoJJBZwhW3km30r4iSrRvdKz3RFzH/0qNbgss5/WiMuJC5qGe6z0bIMDqsqs
-         2i6Q2E4QozBuzjVUK7/bixeJlq99Gnj0k4Gzj1QZ6rn+GmNeSX0cwMmoJwDp1gCv1QYK
-         7QtKQzZ8bJtaJbdEvvZ3kH9ZwV3WtvLYNqT3Ly3+daSuACuzGHMs8KeK9CX34z2Pz5l8
-         LEUg==
-X-Forwarded-Encrypted: i=1; AJvYcCWetpmi5I6h8QPR7JRBvaIku0BC6UtjcNesWvg4h6osrGrezMIOd6a6f8vsKFBloT6Wvg0gtoChqg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YykcFCD+NLYBLw+yzGNJNp2ERe4lAxWczNd4+Z2if+8aOZB/yHm
-	hL2SgbG0806ZubPclhtthIi4f/h33jlSll255B9arzEozvpmAZQsz4QjTC6mOXM=
-X-Gm-Gg: ASbGncvLF1HWYuEygem1yaUPqpFAOgOLWHOyS6YsMbMx3qXlZ1+zTpEUK8vS9odYRi5
-	IRZRqe1em11S/r5yMAjACKOUaHE9LxkRuEW9GJK+TXPLe85+m4AzYkF9wWe/TvMtjWYj3Htnn/a
-	TV3e+EmwiQUvz1NaBi77CSYRJskFDCfjf3oQbRxe2zBrFtyPtMpUuzKlfPMEK8ut46MhnNaPHzD
-	32ufU7tSWW4khajLxiWECldYW8lZeGTexd8Z/292t/mQjsbUu5G7LBNnXDDp9FBTGn0oydQ7kkD
-	yj8uouukw+XMm7VzgVvKzbR5gI1Nbz3IblI4YqhLH3idglRuu1LcdSr/0czeXKu71kQSwk0vEy4
-	Z5wAwiuFqT1+RAQ==
-X-Google-Smtp-Source: AGHT+IGMoIZKu18tKxGlE0nCM035PBeR69RdqmMHuq8h1Eu58CnOlQWvz4UQddkUAElDY1GsfzU8ew==
-X-Received: by 2002:a05:600c:348a:b0:43c:fdbe:4398 with SMTP id 5b1f17b1804b1-43f2fdceccfmr22721935e9.6.1744288622955;
-        Thu, 10 Apr 2025 05:37:02 -0700 (PDT)
-Received: from [192.168.69.238] (88-187-86-199.subs.proxad.net. [88.187.86.199])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43f207cb88asm53015095e9.37.2025.04.10.05.37.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Apr 2025 05:37:02 -0700 (PDT)
-Message-ID: <20de7ce7-1cfc-40bb-9457-84e462cf4483@linaro.org>
-Date: Thu, 10 Apr 2025 14:37:00 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CCB82853EA;
+	Thu, 10 Apr 2025 12:44:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744289078; cv=pass; b=rH7ZOrSfCBVlRaZ1/+q3LT9sihbVw+lat6bNMM2f/cn/WEjd0qlb5sR5airSCxV/totIC2YhrJ4dQI90VfX/nYWq6RkGBCCNnnrjqtU9Q4zT+pMfOAKwVcjvGccFGPZ4JS3X2hjG9BI/20tQj4pWCTN+ASqEa6XvEPVgVnkxcvg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744289078; c=relaxed/simple;
+	bh=/XY1s941qrrmoSZKz0kUv7RWnzbemE9Z2YY27XwIl4U=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mdjly2N1yajWHqKbjZuN3BkHJntEYYsdAN0ynYBi0A8uf9ZPXFdxgI4h629QCDRbZJfsSn0WPhiycOx7aUO4ymyMEFkRjnyLZaIqP+1G+3+wj3BmBliukzHuiOdcM3pjCJNFl2Ouo3p+kAfQqjbfEzb+LGx1zzpmEXmZBxRI9go=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=hf/PPn+n; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1744289049; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=faUr5cMNVJEtxkEF81Uj66v0dLpqsPPbOQ8jeHs+xjdzkfu20q5tyxCGuJdgnkvjNQyi7LdlGMby2SHrjeb7zfpy10MEUBxa/TsMJb/otf87w7zIhK8upE8pUIYrb+WMGGdn68unk6B3YFkH7EsR2lWuVMBi0pq15gntgaE7qhg=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1744289049; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=q5riLeTe/Eu2n5//o/VPdIzBfe0QKtBNXlz9iKtSP2Q=; 
+	b=FAwslMOd1D3HFexQPIoaHr9ykGjPn+yhh37TR+myOwni4K2r7IL22j/bkAY8hqsvcvlP9bqA2RyqSvfeoudmoS97rjJDZ72TA1dcoODVLzXSTf9T3s79i4uuJmUBZvOXHbxgpNWl8+XklImn1hfMmmPgUk6caZ8KotoSCFxuccY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1744289049;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+	bh=q5riLeTe/Eu2n5//o/VPdIzBfe0QKtBNXlz9iKtSP2Q=;
+	b=hf/PPn+ncwxnG6f2I+tARaUTsD3w8+H/v4M/MvP6LjGueeGOqhHIC8KRA256Ou4Z
+	JeBu/vXfJdQLf02AbSGpkh+oK3Rr4kU3Cm3f6Q9DQJQhONMtlSSVm0U7tKzdlxkX9Ra
+	v0EPXQJS1/C1AyqYnR4FHr6n3ELAWicoGLly1jOk=
+Received: by mx.zohomail.com with SMTPS id 1744289048170962.4372419761808;
+	Thu, 10 Apr 2025 05:44:08 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Heiko Stuebner <heiko@sntech.de>, Elaine Zhang <zhangqing@rock-chips.com>,
+ Finley Xiao <finley.xiao@rock-chips.com>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Detlev Casanova <detlev.casanova@collabora.com>, kernel@collabora.com,
+ linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+ Shawn Lin <shawn.lin@rock-chips.com>
+Subject:
+ Re: [PATCH RESEND] pmdomain: rockchip: keep PD_NVM on RK3576 always on
+Date: Thu, 10 Apr 2025 14:44:03 +0200
+Message-ID: <10136636.CDJkKcVGEf@workhorse>
+In-Reply-To:
+ <CAPDyKFpw=qXT6Qh_Gyub7L3ELdODPkyEZVtALvnJZ3OZQeS76w@mail.gmail.com>
+References:
+ <20250408-rk3576-emmc-fix-v1-1-3009828b1b31@collabora.com>
+ <CAPDyKFpw=qXT6Qh_Gyub7L3ELdODPkyEZVtALvnJZ3OZQeS76w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/19] arm64: dts: morello: Fix-up cache nodes
-To: "Rob Herring (Arm)" <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
- Jernej Skrabec <jernej.skrabec@gmail.com>,
- Samuel Holland <samuel@sholland.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Liviu Dudau <liviu.dudau@arm.com>, Sudeep Holla <sudeep.holla@arm.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
- Stephen Boyd <sboyd@kernel.org>, zhouyanjie@wanyeetech.com,
- Conor Dooley <conor@kernel.org>, Nicolas Ferre
- <nicolas.ferre@microchip.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Steen Hegelund <Steen.Hegelund@microchip.com>,
- Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Heiko Stuebner <heiko@sntech.de>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Magnus Damm <magnus.damm@gmail.com>
-Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-mips@vger.kernel.org,
- imx@lists.linux.dev, linux-rockchip@lists.infradead.org,
- linux-amlogic@lists.infradead.org, linux-renesas-soc@vger.kernel.org
-References: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
- <20250403-dt-cpu-schema-v1-3-076be7171a85@kernel.org>
-Content-Language: en-US
-From: =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-In-Reply-To: <20250403-dt-cpu-schema-v1-3-076be7171a85@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-On 4/4/25 04:59, Rob Herring (Arm) wrote:
-> There's no need include the CPU number in the L2 cache node names as
-> the names are local to the CPU nodes. The documented node name is
-> also just "l2-cache".
+On Thursday, 10 April 2025 14:10:56 Central European Summer Time Ulf Hansson wrote:
+> + Shawn Lin
 > 
-> The L3 cache is not part of cpu@0/l2-cache as it is shared among all
-> cores. Move it to /cpus node which is the typical place for shared
-> caches.
+> On Tue, 8 Apr 2025 at 17:28, Nicolas Frattaroli
+> <nicolas.frattaroli@collabora.com> wrote:
+> >
+> > Due to what seemingly is a hardware bug, PD_NVM never comes up quite the
+> > same after being turned off once. The result is that the sdhci
+> > controller will lock up the entire SoC when it's accessing its CQHCI
+> > registers.
+> >
+> > The downstream kernel hacks around this by setting
+> > GENPD_FLAG_RPM_ALWAYS_ON in the mmc host driver, which does not seem
+> > like the right place for this.
+> >
+> > Set GENPD_FLAG_ALWAYS_ON in the pmdomain driver for PD_NVM. I'm using
+> > the non-RPM version of the flag here because I have my doubts a
+> > suspend-resume cycle will fix it. Suspend-resume currently seems busted,
+> > so I couldn't test this.
+> >
+> > Fixes: cfee1b507758 ("pmdomain: rockchip: Add support for RK3576 SoC")
+> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 > 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> ---
->   arch/arm64/boot/dts/arm/morello.dtsi | 22 +++++++++++-----------
->   1 file changed, 11 insertions(+), 11 deletions(-)
+> Shawn Lin recently made some changes [1] to make UFS work for this
+> platform, as you probably know of. In particular the changes affected
+> how to handle the UFS controller from the power-domain point of view.
+> Could it be that something similar is missing for NVM too?
+> 
+> In any case, I am happy to apply this as a fix if you still think it
+> makes sense.
+> 
+> Kind regards
+> Uffe
+> 
+> [1]
+> https://lore.kernel.org/all/1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com/
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Oh my, good catch. That does look like a similar kind of thing, and
+potentially a better solution than what I'm going for.
+
+I'll have to do some testing on my side, thank you for bringing this
+particular part of the UFS series to my attention. I'll either respond
+here or post a new version of the patch series depending on the outcome
+of said testing.
+
+Kind regards,
+Nicolas Frattaroli
+
 
 
