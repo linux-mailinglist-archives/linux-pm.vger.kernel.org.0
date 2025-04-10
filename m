@@ -1,416 +1,212 @@
-Return-Path: <linux-pm+bounces-25167-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25168-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74DFBA84B69
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 19:44:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 883A4A84C15
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 20:28:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 384451883E7E
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 17:45:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFA711BA5E26
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 18:28:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5930293B61;
-	Thu, 10 Apr 2025 17:41:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D035728D847;
+	Thu, 10 Apr 2025 18:27:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="GCKbnhXW"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="rHgxW1Q7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2088.outbound.protection.outlook.com [40.107.220.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07C2A293B53;
-	Thu, 10 Apr 2025 17:41:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744306912; cv=none; b=Rsg/gVwOOUrVaDEqLar8Z/gvLAfZ8uTjsQeNzz2HDCpXp1htbVMRlIeE3cNNKv110ixBLOmXGMru0t5UuKWqv2/MSl/JaPazw0HveZqz6L8xdcwJ/AGxlm1VooacQ7fopKiYibnhRVrIGxml2NgqoRvEsUZefRMZhP1fUjxgmGk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744306912; c=relaxed/simple;
-	bh=Iw1b1gPpFnV3kYDmxmY10sXEO5cZquvEfrX4CcLnjvU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Yke7MqAnSD0qq8jutBb/fzKqKYNNn0e/6nHdgtqqbU7mXZEJzMBry8JK5W7TMgxHXP76lq3C7DkisZ62Vl3Y1LwbJVmdu1aMUOgeeZWAqeYI3cQl/o8ShiJvV2ufEPZJ3Gd+ttV+eklzuHJvQDownsrmjQiNfdtbsK3fHZoUHnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=GCKbnhXW; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53AGb3wH030687;
-	Thu, 10 Apr 2025 17:41:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=igmHdp1goxSc7Okys1uUaljy
-	fErYD+LAM4qCDj9CvEc=; b=GCKbnhXW4g23xoVqjhoTqLrJpIGa7dn7h5FOFXE6
-	6kSA9SVvekN7ZBKaNQdYXHwXTFPgXVTTF9BZoXLjLYl6UwnIe8sONsLyTdlC/thz
-	ox23X5vF73gIZc8IFrXFUOqqji+xSfO+gngF729Pg4qPb4XuiTGYn9jwljH03aQ/
-	khusFZxVsoRhOiw4ypwlQkr12TT0ajIEFm5lI/CIPZTod8epkvy9SfM9B0PvZkn9
-	n2Qa4NfpIJ2XYIqHlvzoIPkMPKkzTU6EEszIZpc1Y8VE864/LzK+lcsNU5ZqCx8g
-	N6ZUStUw1DVurvfaWO4s9z/0KV2Q12WXwKFQYmN+oQW2Rg==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45twftqn1v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 10 Apr 2025 17:41:46 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53AHfjUu007762
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 10 Apr 2025 17:41:45 GMT
-Received: from hu-ptalari-hyd.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 10 Apr 2025 10:41:39 -0700
-From: Praveen Talari <quic_ptalari@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby
-	<jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski
-	<krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Viresh Kumar
-	<vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd
-	<sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Praveen Talari
-	<quic_ptalari@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-CC: <psodagud@quicinc.com>, <djaggi@quicinc.com>, <quic_msavaliy@quicinc.com>,
-        <quic_vtanuku@quicinc.com>, <quic_arandive@quicinc.com>,
-        <quic_mnaresh@quicinc.com>, <quic_shazhuss@quicinc.com>
-Subject: [PATCH v1 9/9] serial: qcom-geni: Enable Serial on SA8255p Qualcomm platforms
-Date: Thu, 10 Apr 2025 23:10:10 +0530
-Message-ID: <20250410174010.31588-10-quic_ptalari@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20250410174010.31588-1-quic_ptalari@quicinc.com>
-References: <20250410174010.31588-1-quic_ptalari@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F30C128C5BE;
+	Thu, 10 Apr 2025 18:27:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.88
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744309670; cv=fail; b=H42oGlF2WiOaN6PzXnbrK6WwhpXOFBetoP6YJYuWZ+6MgxdB4EYF/Ma5XlQMPTHeaufgLMOGxlSUIVQuRqN851rg9HjAdK2vpO0h5VW3zPshNDrr5MCqat5aHsCl5HGExCgafqTzHhSjZdQ49DOPx4++mApgFeUGeUk/lAn+FZQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744309670; c=relaxed/simple;
+	bh=yLTBpYizmArkRX4w2miFi3ByvidQ2xmxZD4atTJ8BMg=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=cNbuXD/+55QszCamRCM3UWTsjyH+QLpZCM+juTDUDiR3kynhgoDHDFXWm5R5VoiQiMgUS3M8moB6uWHPj0nhQnsAQ5/2eICYj5udZvJD3N9d4nRtQwHaFGUc2VnGbIhM5upagfbxhtHA/aIFnUCE4xNXw4ccSQS6sbVTvbXZL/I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=rHgxW1Q7; arc=fail smtp.client-ip=40.107.220.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=MD17GdkNsTDClL1vU+Krzp5rq6QkKcPDkPIbuJ2p2kgSUP5sVGIQX2goUYoqnPtcGhVcUyePKGp6gtuLe3zb0IGhlzFO23Tl+Ngb9+9bRPCmiHksl4A6wGg1Egz+4O+Q+VVOcyZ8XUuMMkWy1K3g6auIJ8bouKFyaflPF+aqEmms9yZvRrOitbzXBbzHoUaxOgO/uW/u0Y8kLbiA50PA0okCDWpQp9KhRZcniMPngQkp2FLfuvXtmsJB2esBL3OGFuPmXEJEJbehyVWvFM0lSSN3r2g2itK3nk+Fh+D6CHnG+o0rSLbo68ppnVuN3EH6qU2LDma9C8f5vhUZp1oFSQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=poZqf9VCopl4ibeBi6fv7JHKZy3DookTjj12hLmyn1o=;
+ b=MIPIMT+8Gdu0/vmjjp4UVw14uT2dzle+LeOqWBh0vJeRHVogwHtVo6n3potl7BGRLdx+boUYqdxjdEccQcqsQLjZ8DrRXyfLqm7WHwP4fR0YTf+4f5F+cAaFRBjFYi4j1GIma4g+4F1hhvVRyqXEQoWjYuAewSZG21rjufS6/nwdinWD4RnTBhudYTkffT0LFFYWBpOl7czAmsfX1oohgPmYIS41fabGTV+t7cmy7iT7xTrmsVk++7EBwBBBtO9ANr/Y0fXsjpQ0EqGGrfeIlDAX4VhFXVyNQ7OkadYvxpdqqDZFR8Ok45p49zBXGH6znuZdmuNo2Va3tdiaPK0kOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=poZqf9VCopl4ibeBi6fv7JHKZy3DookTjj12hLmyn1o=;
+ b=rHgxW1Q7UAVV8CvZrNc51zmEKHsC4pytpeqIA0S64nA+YgKQTh4EZtvlwIyHuJtSacLQSs1W4fgeeqZ08oJCn3/QHHzb4FmPT246m4vTNPIb2B0bPqQwYy8BXPf1EGABMRW22DampWhmi/JTkX4wwx6HndMPEx71wkvaILb8eKI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS0PR12MB6390.namprd12.prod.outlook.com (2603:10b6:8:ce::7) by
+ LV3PR12MB9356.namprd12.prod.outlook.com (2603:10b6:408:20c::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.21; Thu, 10 Apr
+ 2025 18:27:46 +0000
+Received: from DS0PR12MB6390.namprd12.prod.outlook.com
+ ([fe80::38ec:7496:1a35:599f]) by DS0PR12MB6390.namprd12.prod.outlook.com
+ ([fe80::38ec:7496:1a35:599f%5]) with mapi id 15.20.8606.033; Thu, 10 Apr 2025
+ 18:27:46 +0000
+Message-ID: <8556d931-d2a9-4dd7-824a-a67317ddaa05@amd.com>
+Date: Thu, 10 Apr 2025 13:27:40 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 3/4] dax/mum: Save the dax mum platform device pointer
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: dave@stgolabs.net, dave.jiang@intel.com, alison.schofield@intel.com,
+ vishal.l.verma@intel.com, ira.weiny@intel.com, dan.j.williams@intel.com,
+ willy@infradead.org, jack@suse.cz, rafael@kernel.org, len.brown@intel.com,
+ pavel@ucw.cz, ming.li@zohomail.com, nathan.fontenot@amd.com,
+ Smita.KoralahalliChannabasappa@amd.com, huang.ying.caritas@gmail.com,
+ yaoxt.fnst@fujitsu.com, peterz@infradead.org, gregkh@linuxfoundation.org,
+ quic_jjohnson@quicinc.com, ilpo.jarvinen@linux.intel.com,
+ bhelgaas@google.com, andriy.shevchenko@linux.intel.com,
+ mika.westerberg@linux.intel.com, akpm@linux-foundation.org,
+ gourry@gourry.net, linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
+ nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+ linux-pm@vger.kernel.org, rrichter@amd.com, benjamin.cheatham@amd.com,
+ PradeepVineshReddy.Kodamati@amd.com, lizhijian@fujitsu.com
+References: <20250403183315.286710-1-terry.bowman@amd.com>
+ <20250403183315.286710-4-terry.bowman@amd.com>
+ <20250404143409.00000961@huawei.com>
+Content-Language: en-US
+From: "Bowman, Terry" <terry.bowman@amd.com>
+In-Reply-To: <20250404143409.00000961@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA9P223CA0029.NAMP223.PROD.OUTLOOK.COM
+ (2603:10b6:806:26::34) To DS0PR12MB6390.namprd12.prod.outlook.com
+ (2603:10b6:8:ce::7)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=B5+50PtM c=1 sm=1 tr=0 ts=67f802da cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=XR8D0OoHHMoA:10 a=COk6AnOGAAAA:8 a=_gOkJu00RtHYCxNnkZMA:9 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: APJrblqz01FAAvKM_FtgAZFTZ0AC0Jk5
-X-Proofpoint-ORIG-GUID: APJrblqz01FAAvKM_FtgAZFTZ0AC0Jk5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-10_05,2025-04-10_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- suspectscore=0 malwarescore=0 bulkscore=0 phishscore=0 spamscore=0
- priorityscore=1501 adultscore=0 impostorscore=0 lowpriorityscore=0
- mlxscore=0 clxscore=1015 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2504100127
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR12MB6390:EE_|LV3PR12MB9356:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8a1e31b0-1904-4f2b-814d-08dd785d63b9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?T0I0ZFZYWGVQZlpuNmgycGdGa3AxSEJFNW12K0F6YXV5cnN5Ujh5cXAvMlNE?=
+ =?utf-8?B?NC9uMWhYWjVNeElxYnB0dkJ2ZXNBQjNjVnpuTVV2bDdwK3F2SDh2SWNPbUFL?=
+ =?utf-8?B?Nk1rTDZXSXUrSmhHemZLRVRTRlA3ZTZnTmVaa3E5QUdGTHhtK0xxNGphQ29P?=
+ =?utf-8?B?UVZSYnNaSUtIcnFRVFh6cTVKUWcySDk2aHh1MWZRalRJeDFWN1hRaUNIWlMv?=
+ =?utf-8?B?bjJxSGtJZjcwaVRNYnd4VXVLY29YbnpXTFAwb0ZpdGVrSi9Sa3hEempnbmcr?=
+ =?utf-8?B?dnhNUEd3V3FFa3lXSWxmcnVGWWJORkpYTjJyWVdKdDZyQmF6MXJNZkYvRktU?=
+ =?utf-8?B?ai9DajgrcWZHN1Z1RVIyTEMvR1ZLNzRzTWJ6L29PanlwUDVBMjlHN0pYdEJy?=
+ =?utf-8?B?TllscUV2WGRleDhweTJLNzJxbmVzME5vUW0vVnlUQ0NrN3psWlB6WFFpei9w?=
+ =?utf-8?B?UWJrU24rR2RvQmFFOFFFa28rV0Fzck53dFZQcE11eVVMT1dON25QbVFJMXNP?=
+ =?utf-8?B?bDdDVlcxdkgwT0Z2OGJKM0YxRGJHazFscHJ3bFlZTzNhRGJNY0lRRzFwb2ls?=
+ =?utf-8?B?UysweW9iMWlXOHlOdEExT3Znb1U0djNESlFFWmxGTzBxNnB3cFJWNlZGN1NB?=
+ =?utf-8?B?TFRETlphNHY0MkpBYTZTUjJvTHRPOXRpMHduUFhSVGFNK1dkTDJTdW9zUTk2?=
+ =?utf-8?B?OUkwelhPekwrM3MrTWxiUW1QNlpURUhLeFpuUW1CQ2tUTjFzWTJHWTdDdksz?=
+ =?utf-8?B?YUpZcVVZb0ZvWitickN1QnZodFFDcDM3ZmRmRHpKY3pEM2VnZVJCSEZvMG5F?=
+ =?utf-8?B?d0FTTElEM3Iza3ZXZlpNL0JESkkxUFhBUTdqTUpJa3RMMWw2RldvcmxOeVIx?=
+ =?utf-8?B?cVU4WVlNeWpDRzZiZFJjMk1DVklnQm9EWS9yenNQeTFONGpVWUpnODVEY09o?=
+ =?utf-8?B?REp5QjB2MitsVzhDSUdZalRLemRtRk1DK0p3clZGVCt6MjdIQkl6V0k0UHEz?=
+ =?utf-8?B?OVZBWUxXRkVGc1A0QytqQ3NhQTVyc2p2MXJFeDAwWENMYm1KZmJGWVBHNFQ5?=
+ =?utf-8?B?T3Qwd1BYTmVMbWg1Q1JFR0pLSHVQMkdpenpFOWNjM2M5NVUzdmFGMzA4OXpX?=
+ =?utf-8?B?S0pmbHhXRGIyS0xaODYrT3FoTmZRQmNEckcveFRDNWtFSDl2TlNNM1lmbUs4?=
+ =?utf-8?B?b0xocG9BdXpLL0tUK2dyTkVzeGNRaXlKTS9DbkJmbDdRdkRNZHIrQ3BqSnhD?=
+ =?utf-8?B?eWNPRWI0NyszY0drbnpZRnZBME5SWk1pRVRtWERRbDJqRTRUMnlSODNuNFFy?=
+ =?utf-8?B?c0tZZU1oQlFERlJBRnErZmsrTTB0djBSMTVaZis2SUUvTFhxRXBxZDVITEVi?=
+ =?utf-8?B?RDB6MGljUTRNeGdZVnc2aGNpWm93V0VzaVlxaVlUYXdBSXh5a1p3L01WaHlS?=
+ =?utf-8?B?MGovVWx4V1ZiVzkzVXo4ZkNTK1Y3d0dadU9FWElvMFFSVTJSTzNUbm5VSjlV?=
+ =?utf-8?B?dEtLTEJMMXhtaGpWbDArREJUNEJLbWFmcEZ5UFMwUjNobGt0V3hzeUdYeVRG?=
+ =?utf-8?B?ZE9MU0cvRmc2QkI4TnNibUYxaWdJWUdleis5eXUweTZodnNxZmRQWXZKOGpu?=
+ =?utf-8?B?T1ZHdEFsMlE2dkI1NHFwSkUxdHJ0ZXVtMStKVjh3N1VwT1cyYWNLL0tFekVx?=
+ =?utf-8?B?ZVhBSjdKVXRQTlplenFoM2NGYURkeC9scWlFU0dCNXhBOHB6djZRZktPOTRz?=
+ =?utf-8?B?YnJBS0N1a3h0ZkVFc1hRQlhMQU5jRFZkUVJySzg1Um15YTZEN1RwMW5RMDY2?=
+ =?utf-8?B?N0RPWjVyUVNvUk1maVlWR3p0TnhjMzVMdVF5MU82VTZlVUIvZ1dETlU3eGE0?=
+ =?utf-8?Q?cvMNcSpZ63L6N?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6390.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?cXAzUGhIYVZiakFQSHZDS01BOE9EVVc5elJ2MDFveVp5NCtOS2hhcEZnQ1pV?=
+ =?utf-8?B?SzN4Z3ZXTHVCU3RZY0FONmRjZGJUaldqN0Nwckl2dmxlaUVZS2hFSDg0OWRR?=
+ =?utf-8?B?aUFuc2NxRWFxSXVUT3RqdElHUHNYaXJTTm9QZS9URXI0Q1pubXJVNUtIam5j?=
+ =?utf-8?B?M1E4a05NQ3VUTkZqWHRzUjNGTy9vVWR0NzQvSHA2Mk9WczU3bWFyZnZkQURF?=
+ =?utf-8?B?UFBTYzA5TDBpNHBxYVZTZHE4N2JQQzhuRGJibFVXeXg1ZFg2cE05Zyt1U2V5?=
+ =?utf-8?B?WUU0L2t5L1VzVmdBcVd1QnVkNmFHUmdKRXdQbXpoaVRKS1NPeUMyQVh4SjBG?=
+ =?utf-8?B?azZ4ZTEwemJpV1lQYWFXbnRRQzN2dUZOOG96VVhteGdzalM1NE5pL2VBcVJs?=
+ =?utf-8?B?MUpxUmpEaUoySnBKZHZDdTFJUjRzc2V3T1pNdUg2ZkdwYzlaQjNUVjRCK2RH?=
+ =?utf-8?B?MWxpdU42em8rUm5vUlY1aG1SNGZrUStXdnVpaFRhOFkyS0Zia1VrQ0dHVjVs?=
+ =?utf-8?B?WGc4REQ3ZGlkZHhzQjg0WTZ0VEdwOGFpeVJXYytYWWhtYmU0cmhxbHNDdmhV?=
+ =?utf-8?B?YlZJcUErQmE3aUdrUDRRbWpuOUpFWFZTRm1iRHNMcC9LYUdXVHRla1dUbGFy?=
+ =?utf-8?B?RDF5VXREQnpRVUhqVGtjNHM5dzMxSnpXUURYcHhZaEFwY0ZnWVFucTN3bU83?=
+ =?utf-8?B?bFk1L1FxL0g1emtUUXBZbVRJOGx6UEZ4REl1cVBVb2tBZGg1eG9sVDFRZlpa?=
+ =?utf-8?B?bkc2Y01RVjRjTFE1ckRPLzlSdVR1VllhakR3ZkpDdHdmQ0hlVHJiOTJsNFNm?=
+ =?utf-8?B?bGNwWDhYNUhPOU53OW95cS9ra1RHWkdtRk85aWpheXkxWUhaMjdmT3hqVWda?=
+ =?utf-8?B?Qm12bkdCSnduL2g3S3FSNkk0YTF0TE5oQ2hLckRZNThxTXlHMi9zQktublFU?=
+ =?utf-8?B?RkIxMmFzSHpwL0RheGN2OHhYRTF2Z2RJL2o3RUpORlI2OHdubzhWWitDeHlx?=
+ =?utf-8?B?MHhaRzcxSWZyYmdpb3pPbnRMYVlWU1p3QzVCOENsMXR3NzdiSi80TEQxRFlx?=
+ =?utf-8?B?dXkrUHRwbEp1RnVTWUllcGxtNUxuRnRWWE5LSm44ZHRhL3B6SjdqeDlUSzdR?=
+ =?utf-8?B?LzNZZzhEKzBLb3NidFVqQmZxM0NIQTU3TldCd0lQL2RyVWxGenZISkxsd2FL?=
+ =?utf-8?B?RnR4dTdiNUxuS3lnb0x5d2Y2cTBUTmN1U3pSZndMbDFzQmR4bUk4Nm9QUmpJ?=
+ =?utf-8?B?c3dlSkFNdUtoWXRhUzFtZzFmY3ZIUFJralZ5NGRGLzRlaXRGeXM2eFlSSUh3?=
+ =?utf-8?B?b01yQWJ5Rzh1cUtQalg5b2hzZi80NERKMGFzdzlwWGlhaXh6NC9aajdEaHhW?=
+ =?utf-8?B?MzgrRHhOcm52d0sxRXAxSHNuVERDb05OcTFrV1cxMGE4c00wMGlFb09HTnEy?=
+ =?utf-8?B?L2FFUDVzb3N3Z3FqNXg4VEk1TTN1NG5Pc3dEUmpKczVXSFZBWWZJcUx5MXh3?=
+ =?utf-8?B?YnZ6cFFLZkUrRWFDNW9ldUh3bzNQdWVkOTc4bVNpRUxIK2xpNHZYcFJ5eit4?=
+ =?utf-8?B?N2xzRnlESlRYZGNRemdaTW5LWGNuMXVLa3Q1VTRTL3o5d04wUXZtMXlobTFq?=
+ =?utf-8?B?dUwrb04xME54U1ZGekY5UTRDQ1NUMTlSN1dFeU9CZU0zakVxZUhBbVV0SmZo?=
+ =?utf-8?B?L3ZKQVdqdThpdndOQ1V6UlZJN3hQM3Y3NTJSWnZPRnM0SGlPYUJ3UjJUNGJI?=
+ =?utf-8?B?VFBiVldMOS83Z0RXdTUwbmM4Y3ZCYjBJS3FzYS9xVEtGR1dVTUZzRmVIM3Zi?=
+ =?utf-8?B?RFZPOE84NnVheE1Kc1prRExtNnExbEZVTmpZWHpCTFJZOXY5cnBHRjBLVy90?=
+ =?utf-8?B?dUtFWHBLaFNlSTBZajF4bFBqTWhpRSttbS9sRUg0RndFSHR6cXcvRmR0Uzh1?=
+ =?utf-8?B?T2FKRFNXSmVQMGh2cUNjMkZVYWRDTDJLUGhFVDBKZUpNUnk1YVZicVlqYUlr?=
+ =?utf-8?B?VUZhbDYwRWY3ZFlqRG80WG1ianE0WE9QOW1SWVVaWW9MM3hxQm1BNUU3alVl?=
+ =?utf-8?B?YmN3QWhObkplN2o1ZE1LV29adEp6eklzVnF1elVaSDJqZmFlSFJHWW5qcnZ5?=
+ =?utf-8?Q?XUCiUS7NqzLIn/3mUGLSJ2H8X?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a1e31b0-1904-4f2b-814d-08dd785d63b9
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6390.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2025 18:27:45.9125
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BEhJ+I+Ro113Vm2VVoCk/Pm462es6BsEubURqelb0MnRR5ckUYksa2JsvO6lK1n4K7qC47zZov8C0A8Rdh8Ymg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR12MB9356
 
-The Qualcomm automotive SA8255p SoC relies on firmware to configure
-platform resources, including clocks, interconnects and TLMM.
-The driver requests resources operations over SCMI using power
-and performance protocols.
+On 4/4/2025 8:34 AM, Jonathan Cameron wrote:
+> On Thu, 3 Apr 2025 13:33:14 -0500
+> Terry Bowman <terry.bowman@amd.com> wrote:
+> 
+>> From: Nathan Fontenot <nathan.fontenot@amd.com>
+> 
+> mum?
+> 
+>>
+>> In order to handle registering hmem devices for SOFT RESERVE
+>> resources after the dax hmem device initialization occurs
+>> we need to save a reference to the dax hmem platform device
+>> that will be used in a following patch.
+>>
+>> Saving the platform device pointer also allows us to clean
+>> up the walk_hmem_resources() routine to no require the
+>> struct device argument.
+>>
+>> There should be no functional changes.
+>>
+>> Signed-off-by: Nathan Fontenot <nathan.fontenot@amd.com>
+>> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> 
 
-The SCMI power protocol enables or disables resources like clocks,
-interconnect paths, and TLMM (GPIOs) using runtime PM framework APIs,
-such as resume/suspend, to control power states(on/off).
+Thanks. Updated to be hmem. 
 
-The SCMI performance protocol manages UART baud rates, with each baud
-rate represented by a performance level. The driver uses the
-dev_pm_opp_set_level() API to request the desired baud rate by
-specifying the performance level.
-
-Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
----
- drivers/tty/serial/qcom_geni_serial.c | 150 +++++++++++++++++++++++---
- 1 file changed, 136 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index 9649297d4a9e..40b71d4b7590 100644
---- a/drivers/tty/serial/qcom_geni_serial.c
-+++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -11,6 +11,7 @@
- #include <linux/irq.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/pm_domain.h>
- #include <linux/pm_opp.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
-@@ -98,9 +99,16 @@
- 
- #define DMA_RX_BUF_SIZE		2048
- 
-+#define DOMAIN_IDX_POWER	0
-+#define DOMAIN_IDX_PERF		1
-+
- struct qcom_geni_device_data {
- 	bool console;
- 	enum geni_se_xfer_mode mode;
-+	struct dev_pm_domain_attach_data pd_data;
-+	int (*geni_serial_pwr_rsc_init)(struct uart_port *uport);
-+	int (*geni_serial_set_rate)(struct uart_port *uport, unsigned long clk_freq);
-+	int (*geni_serial_switch_power_state)(struct uart_port *uport, bool state);
- };
- 
- struct qcom_geni_private_data {
-@@ -138,6 +146,7 @@ struct qcom_geni_serial_port {
- 
- 	struct qcom_geni_private_data private_data;
- 	const struct qcom_geni_device_data *dev_data;
-+	struct dev_pm_domain_list *pd_list;
- };
- 
- static const struct uart_ops qcom_geni_console_pops;
-@@ -1315,6 +1324,42 @@ static int geni_serial_set_rate(struct uart_port *uport, unsigned long baud)
- 	return 0;
- }
- 
-+static int geni_serial_set_level(struct uart_port *uport, unsigned long baud)
-+{
-+	struct qcom_geni_serial_port *port = to_dev_port(uport);
-+	struct device *perf_dev = port->pd_list->pd_devs[DOMAIN_IDX_PERF];
-+
-+	/*
-+	 * The performance protocol sets UART communication
-+	 * speeds by selecting different performance levels
-+	 * through the OPP framework.
-+	 *
-+	 * Supported perf levels for baudrates in firmware are below
-+	 * +---------------------+--------------------+
-+	 * |  Perf level value   |  Baudrate values   |
-+	 * +---------------------+--------------------+
-+	 * |      300            |      300           |
-+	 * |      1200           |      1200          |
-+	 * |      2400           |      2400          |
-+	 * |      4800           |      4800          |
-+	 * |      9600           |      9600          |
-+	 * |      19200          |      19200         |
-+	 * |      38400          |      38400         |
-+	 * |      57600          |      57600         |
-+	 * |      115200         |      115200        |
-+	 * |      230400         |      230400        |
-+	 * |      460800         |      460800        |
-+	 * |      921600         |      921600        |
-+	 * |      2000000        |      2000000       |
-+	 * |      3000000        |      3000000       |
-+	 * |      3200000        |      3200000       |
-+	 * |      4000000        |      4000000       |
-+	 * +---------------------+--------------------+
-+	 */
-+
-+	return dev_pm_opp_set_level(perf_dev, baud);
-+}
-+
- static void qcom_geni_serial_set_termios(struct uart_port *uport,
- 					 struct ktermios *termios,
- 					 const struct ktermios *old)
-@@ -1333,7 +1378,7 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
- 	/* baud rate */
- 	baud = uart_get_baud_rate(uport, termios, old, 300, 4000000);
- 
--	ret = geni_serial_set_rate(uport, baud);
-+	ret = port->dev_data->geni_serial_set_rate(uport, baud);
- 	if (ret) {
- 		dev_err(port->se.dev,
- 			"%s: Failed to set  baud: %u  ret: %d\n",
-@@ -1624,8 +1669,27 @@ static int geni_serial_resources_on(struct uart_port *uport)
- 	return ret;
- }
- 
--static int geni_serial_resource_init(struct qcom_geni_serial_port *port)
-+static int geni_serial_resource_state(struct uart_port *uport, bool power_on)
-+{
-+	return power_on ? geni_serial_resources_on(uport) : geni_serial_resources_off(uport);
-+}
-+
-+static int geni_serial_pwr_init(struct uart_port *uport)
- {
-+	struct qcom_geni_serial_port *port = to_dev_port(uport);
-+	int ret;
-+
-+	ret = dev_pm_domain_attach_list(port->se.dev,
-+					&port->dev_data->pd_data, &port->pd_list);
-+	if (ret <= 0)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int geni_serial_resource_init(struct uart_port *uport)
-+{
-+	struct qcom_geni_serial_port *port = to_dev_port(uport);
- 	int ret;
- 
- 	port->se.clk = devm_clk_get(port->se.dev, "se");
-@@ -1756,13 +1820,16 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 	port->se.dev = &pdev->dev;
- 	port->se.wrapper = dev_get_drvdata(pdev->dev.parent);
- 
--	ret = geni_serial_resource_init(port);
-+	ret = port->dev_data->geni_serial_pwr_rsc_init(uport);
- 	if (ret)
- 		return ret;
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res)
--		return -EINVAL;
-+	if (!res) {
-+		ret = -EINVAL;
-+		goto error;
-+	}
-+
- 	uport->mapbase = res->start;
- 
- 	port->tx_fifo_depth = DEF_FIFO_DEPTH_WORDS;
-@@ -1772,19 +1839,26 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 	if (!data->console) {
- 		port->rx_buf = devm_kzalloc(uport->dev,
- 					    DMA_RX_BUF_SIZE, GFP_KERNEL);
--		if (!port->rx_buf)
--			return -ENOMEM;
-+		if (!port->rx_buf) {
-+			ret = -ENOMEM;
-+			goto error;
-+		}
- 	}
- 
- 	port->name = devm_kasprintf(uport->dev, GFP_KERNEL,
- 			"qcom_geni_serial_%s%d",
- 			uart_console(uport) ? "console" : "uart", uport->line);
--	if (!port->name)
--		return -ENOMEM;
-+	if (!port->name) {
-+		ret = -ENOMEM;
-+		goto error;
-+	}
- 
- 	irq = platform_get_irq(pdev, 0);
--	if (irq < 0)
--		return irq;
-+	if (irq < 0) {
-+		ret = irq;
-+		goto error;
-+	}
-+
- 	uport->irq = irq;
- 	uport->has_sysrq = IS_ENABLED(CONFIG_SERIAL_QCOM_GENI_CONSOLE);
- 
-@@ -1806,7 +1880,7 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 			IRQF_TRIGGER_HIGH, port->name, uport);
- 	if (ret) {
- 		dev_err(uport->dev, "Failed to get IRQ ret %d\n", ret);
--		return ret;
-+		goto error;
- 	}
- 
- 	pm_runtime_enable(port->se.dev);
-@@ -1830,6 +1904,7 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 
- error:
- 	pm_runtime_disable(port->se.dev);
-+	dev_pm_domain_detach_list(port->pd_list);
- 	return ret;
- }
- 
-@@ -1842,22 +1917,31 @@ static void qcom_geni_serial_remove(struct platform_device *pdev)
- 	device_init_wakeup(&pdev->dev, false);
- 	pm_runtime_disable(port->se.dev);
- 	uart_remove_one_port(drv, &port->uport);
-+	dev_pm_domain_detach_list(port->pd_list);
- }
- 
- static int qcom_geni_serial_runtime_suspend(struct device *dev)
- {
- 	struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
- 	struct uart_port *uport = &port->uport;
-+	int ret = 0;
- 
--	return geni_serial_resources_off(uport);
-+	if (port->dev_data->geni_serial_switch_power_state)
-+		ret = port->dev_data->geni_serial_switch_power_state(uport, false);
-+
-+	return ret;
- };
- 
- static int qcom_geni_serial_runtime_resume(struct device *dev)
- {
- 	struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
- 	struct uart_port *uport = &port->uport;
-+	int ret = 0;
-+
-+	if (port->dev_data->geni_serial_switch_power_state)
-+		ret = port->dev_data->geni_serial_switch_power_state(uport, true);
- 
--	return geni_serial_resources_on(uport);
-+	return ret;
- };
- 
- static int qcom_geni_serial_suspend(struct device *dev)
-@@ -1895,11 +1979,41 @@ static int qcom_geni_serial_resume(struct device *dev)
- static const struct qcom_geni_device_data qcom_geni_console_data = {
- 	.console = true,
- 	.mode = GENI_SE_FIFO,
-+	.geni_serial_pwr_rsc_init = geni_serial_resource_init,
-+	.geni_serial_set_rate = geni_serial_set_rate,
-+	.geni_serial_switch_power_state = geni_serial_resource_state,
- };
- 
- static const struct qcom_geni_device_data qcom_geni_uart_data = {
- 	.console = false,
- 	.mode = GENI_SE_DMA,
-+	.geni_serial_pwr_rsc_init = geni_serial_resource_init,
-+	.geni_serial_set_rate = geni_serial_set_rate,
-+	.geni_serial_switch_power_state = geni_serial_resource_state,
-+};
-+
-+static const struct qcom_geni_device_data sa8255p_qcom_geni_console_data = {
-+	.console = true,
-+	.mode = GENI_SE_FIFO,
-+	.pd_data = {
-+		.pd_flags = PD_FLAG_DEV_LINK_ON,
-+		.pd_names = (const char*[]) { "power", "perf" },
-+		.num_pd_names = 2,
-+	},
-+	.geni_serial_pwr_rsc_init = geni_serial_pwr_init,
-+	.geni_serial_set_rate = geni_serial_set_level,
-+};
-+
-+static const struct qcom_geni_device_data sa8255p_qcom_geni_uart_data = {
-+	.console = false,
-+	.mode = GENI_SE_DMA,
-+	.pd_data = {
-+		.pd_flags = PD_FLAG_DEV_LINK_ON,
-+		.pd_names = (const char*[]) { "power", "perf" },
-+		.num_pd_names = 2,
-+	},
-+	.geni_serial_pwr_rsc_init = geni_serial_pwr_init,
-+	.geni_serial_set_rate = geni_serial_set_level,
- };
- 
- static const struct dev_pm_ops qcom_geni_serial_pm_ops = {
-@@ -1913,10 +2027,18 @@ static const struct of_device_id qcom_geni_serial_match_table[] = {
- 		.compatible = "qcom,geni-debug-uart",
- 		.data = &qcom_geni_console_data,
- 	},
-+	{
-+		.compatible = "qcom,sa8255p-geni-debug-uart",
-+		.data = &sa8255p_qcom_geni_console_data,
-+	},
- 	{
- 		.compatible = "qcom,geni-uart",
- 		.data = &qcom_geni_uart_data,
- 	},
-+	{
-+		.compatible = "qcom,sa8255p-geni-uart",
-+		.data = &sa8255p_qcom_geni_uart_data,
-+	},
- 	{}
- };
- MODULE_DEVICE_TABLE(of, qcom_geni_serial_match_table);
--- 
-2.17.1
-
+-Terry
 
