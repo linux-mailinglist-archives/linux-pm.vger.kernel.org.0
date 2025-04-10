@@ -1,132 +1,112 @@
-Return-Path: <linux-pm+bounces-25097-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25098-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FC6DA8409A
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 12:27:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD2D8A840A8
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 12:29:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E21073AC688
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 10:20:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5AA49E1DA7
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 10:24:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2140C280CCA;
-	Thu, 10 Apr 2025 10:20:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87E9E280CDD;
+	Thu, 10 Apr 2025 10:24:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="BpJeU/3i"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Z0PPNX7o"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86FB280A5E;
-	Thu, 10 Apr 2025 10:20:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF2A126FDB3
+	for <linux-pm@vger.kernel.org>; Thu, 10 Apr 2025 10:24:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744280455; cv=none; b=igPidyvshw1ftALER4pvDZXrS9yFHlgwqWzo4yU4KoWTNRipv/QPF03in2pmv4CTBp049K6rA356NLH/8Ydl0xy5p7anzxk1+HfgQ+QZ6E+9K3DkSUtXSJAb81lG+4jkAnS8lGOeCPGWCZPMr2t2Fc1qE9gtfk84qKPOcxmpBME=
+	t=1744280678; cv=none; b=tWs8zmSt3gSY96/zS5TNeaKGUF5X53sZG/OUzp6Z+JTYYUouH61Y5CQm/k9lwv0ohpeM7hygdWBsBCjgnCMsR42f5xsHoj7+ekQfVkX++MYxcnnznLXa5B0sAdf0Mol5WhlIz0hOFs90YD4tDfvrkSDMOHIs3dE3ShbbIEvhRR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744280455; c=relaxed/simple;
-	bh=1IKsX9rjaHiAEr7/mQDOAhjFE6YbmjKCSxhS3PGU7jE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GYkZwjXxyH4CWlFkPD8UNilFt4LNq+q1HhNOQaNo3OU3W8ylZbOJqKnCfBbfJxt+nk5nAU36OUwaAh29DCiq1J4zjpGhur6wLhAag87MXH3LGOn3FHa/OV5GPqxQpMqZtSPwb8udfQ/laxuXw/c9sx0vTpoyH1O8PoMm4aqHWTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=BpJeU/3i; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 000B68A24E8;
-	Thu, 10 Apr 2025 12:20:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1744280444;
-	bh=1IKsX9rjaHiAEr7/mQDOAhjFE6YbmjKCSxhS3PGU7jE=;
-	h=From:Subject:Date;
-	b=BpJeU/3ivkedSnXS2mXJIdZrp+ogpJ1DFVi1ktrokkQ6KrlatdLx2+zO97GGa//tb
-	 RvTITTs4mrDEGZ7FoZaWVWS9SyThpIpciB2QahttghDut4+il8B2HD5//gtHn14RE4
-	 mXAWPLaPL7k2nm3bH4eFTpFVdOgao1pYdqyCtlwxYK/iY60rzSnZctQfywMNLYJ+Qs
-	 ahtYSyLQQ7Y3hQhhEXmuKGpqBGrfy4pb0rsP6bxLtZmeMTHAd21WqBUIGvB3eiItJ+
-	 K15MPTjdXOwPBFIYH336xhsNKsBQXfHG3GGVIaTF4Ri4B0kwQyDO5pGuOIRWAkvWS9
-	 UtqD2rXShht2w==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Sudeep Holla <sudeep.holla@arm.com>, Dan Carpenter <dan.carpenter@linaro.org>
-Subject: [PATCH v1] cpufreq: Drop unused cpufreq_get_policy()
-Date: Thu, 10 Apr 2025 12:20:43 +0200
-Message-ID: <2802770.mvXUDI8C0e@rjwysocki.net>
+	s=arc-20240116; t=1744280678; c=relaxed/simple;
+	bh=4XYqEvw3pO3aeYAiEFs0J+jvt5iPOecIwEe31S/Ndpo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V4AwdvaRI2jWSIu49CD42N9NJAA8zjLM7CqFsEsN2eT81gKaK/oQLCHp67VmSJuFNAqZSoErluD5mqpcNeI7Csh6QmgMXnG7TZU3FLrvMqE+/LYVKh6zMnel2JgFk6f0VK9AG8UA08Ka0wgiABAr0JfUN5uMGh0/zwEkQu6EoCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Z0PPNX7o; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7394945d37eso470079b3a.3
+        for <linux-pm@vger.kernel.org>; Thu, 10 Apr 2025 03:24:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1744280676; x=1744885476; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GX68swA9HrxO+eJnfk16Z9K7ND9yYGB3bnUXxmarCAA=;
+        b=Z0PPNX7o9993BtdNkIE1oujzCdBR6E2UFw9tovVN9RzM9QP6EzvuA2jcOFUVOhcx1Y
+         gTP5N7UW+bBbcBw26uY45aldIgyTsgCr3AYeSgAW/mXUUSc/AcyTHYRmTU16oQaBvgVg
+         6zdrDxXc9ohVksYgN01HhKfzoljdUuGDEln2iImsjnMoBreoRlkmak5Mu2hFJaKa1sMQ
+         PUZM3Uy1HgVvxRSKYdPMebiGQngIfkTg5s/xLBd/sNL5ClcMfhU37kmNbkkw+xh3953G
+         geWz1wskxJRZpuUY6AQruUky6iFzkOGueByiWBaVwPt/f5p7mwQ0OylI2Q1wu7xb2u2u
+         n+Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744280676; x=1744885476;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GX68swA9HrxO+eJnfk16Z9K7ND9yYGB3bnUXxmarCAA=;
+        b=vB7nXnUn1ei2s4sTLK+L0RHhKAGwKlYaGsETrYsroNaer4nXjiUkQ7bnR3tZeOjITD
+         ltTrk10K3ZewILsFh7An6vpDdBLwQRcrRdd2PBtX/dh8Dtro+o9mZxLxkxBxnx5Qlpzi
+         WQfaNQprlltKnU2jUnpsYgKFR1uERFZmo5qnlOlCvAWd022efZx1djgjRLxntucItz9q
+         oEjgUY1pF6wQhk+9VJP9WQ6LPTJN2UBZZl1yVpsH9Xkk61JlGR+UK0VjGqAnO55uGg1S
+         6h/SqVbxQRjxpW2znWW+hDJgYe4ZEY6de/4/xlXgKtSklNa0VMdFLbMFi5dzQZkOcPL0
+         47YA==
+X-Gm-Message-State: AOJu0Yy8GbEcJuwhLgfuVa2uwBg+wMwB9XLz8kZfr2PzieX1TRgcqJ1W
+	kHIyj/bGyydboj/XSs0U7tX+FHkXbhnhJ/W0rMQxtF9H2pVzTfmbLhOqcninkMI=
+X-Gm-Gg: ASbGnct8nYBOt08c+wUPdj9pev9ZQa+d93PvykkkFL3iwvbXj0z/XswIFhn/OgvdP8K
+	m6NfSc8IJ2SQDQnab8Oz4i110ZA6AMO2VUN7xUaSG+qC4EvG4IA0opiv2402QdxM5lrNhGrAOhx
+	4sQVXLvORDUnDPsLsO5aRlBe3/uB3e3JRarZAKdHYiL9nYTjfvM3l+YChxmyRNrLCHHB7lfYwLa
+	wAJqm8uRwwKFdTuUUcn7C1FOBGbVqUt7m+LDgGg23VdOxGqSjMRKyvU/RIulQBKuYTnvimnIS3W
+	NzN9Qsw1FYDkBjOYEizvdQn6U1AQ7vEwwcCrR8yzgQ==
+X-Google-Smtp-Source: AGHT+IG2sLEZsm/PLhGsSjVJrT/g86UCeqGu2+t3DsfzOYJpMkwBlq4ZwTimT+XjrTeI9HudHDhEDg==
+X-Received: by 2002:a05:6a21:329b:b0:1f5:7eb5:72dc with SMTP id adf61e73a8af0-2016944d22cmr3592752637.3.1744280675957;
+        Thu, 10 Apr 2025 03:24:35 -0700 (PDT)
+Received: from localhost ([122.172.83.32])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73bb1d2b256sm2984539b3a.14.2025.04.10.03.24.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Apr 2025 03:24:35 -0700 (PDT)
+Date: Thu, 10 Apr 2025 15:54:33 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>
+Subject: Re: [PATCH v1] cpufreq: Drop unused cpufreq_get_policy()
+Message-ID: <20250410102433.fro7cwxri2kitwck@vireshk-i7>
+References: <2802770.mvXUDI8C0e@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdekieehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehvihhrvghshhdrkhhumhgrrheslhhinhgrrhhordhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehmrghrihhordhlihhmohh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2802770.mvXUDI8C0e@rjwysocki.net>
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 10-04-25, 12:20, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> A recent change has introduced a bug into cpufreq_get_policy(), but this
+> function is not used, so it's better to drop it altogether.
+> 
+> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/cpufreq/cpufreq.c |   25 -------------------------
+>  include/linux/cpufreq.h   |    1 -
+>  2 files changed, 26 deletions(-)
 
-A recent change has introduced a bug into cpufreq_get_policy(), but this
-function is not used, so it's better to drop it altogether.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/cpufreq/cpufreq.c |   25 -------------------------
- include/linux/cpufreq.h   |    1 -
- 2 files changed, 26 deletions(-)
-
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -2549,31 +2549,6 @@
-  *                          POLICY INTERFACE                         *
-  *********************************************************************/
- 
--/**
-- * cpufreq_get_policy - get the current cpufreq_policy
-- * @policy: struct cpufreq_policy into which the current cpufreq_policy
-- *	is written
-- * @cpu: CPU to find the policy for
-- *
-- * Reads the current cpufreq policy.
-- */
--int cpufreq_get_policy(struct cpufreq_policy *policy, unsigned int cpu)
--{
--	struct cpufreq_policy *cpu_policy __free(put_cpufreq_policy);
--
--	if (!policy)
--		return -EINVAL;
--
--	cpu_policy = cpufreq_cpu_get(cpu);
--	if (!cpu_policy)
--		return -EINVAL;
--
--	memcpy(policy, cpu_policy, sizeof(*policy));
--
--	return 0;
--}
--EXPORT_SYMBOL(cpufreq_get_policy);
--
- DEFINE_PER_CPU(unsigned long, cpufreq_pressure);
- 
- /**
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -241,7 +241,6 @@
- 
- u64 get_cpu_idle_time(unsigned int cpu, u64 *wall, int io_busy);
- 
--int cpufreq_get_policy(struct cpufreq_policy *policy, unsigned int cpu);
- void refresh_frequency_limits(struct cpufreq_policy *policy);
- void cpufreq_update_policy(unsigned int cpu);
- void cpufreq_update_limits(unsigned int cpu);
-
-
-
+-- 
+viresh
 
