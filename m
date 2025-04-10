@@ -1,52 +1,53 @@
-Return-Path: <linux-pm+bounces-25117-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25118-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39D6BA84685
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 16:40:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B116A84688
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 16:40:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4279A188C139
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 14:40:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AB523B9103
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 14:39:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D97828C5AF;
-	Thu, 10 Apr 2025 14:39:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C6B228CF54;
+	Thu, 10 Apr 2025 14:39:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="VigZi9Q3"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ZmOQdVz9"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264E5202F71;
-	Thu, 10 Apr 2025 14:39:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 508FE284B31;
+	Thu, 10 Apr 2025 14:39:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744295996; cv=none; b=PEoS4B7Kxr1g2qPbESlT5Xs8tbqwaofDZXHMeR0J78YP6IQ1iuRObQpiXA0ba1/natERrCRRBgzym3CcMjPafhEUwI0AcyjogzCADoEU92KPEm0xk5ALEak9kKvzMoXt6xXcM/g2GeJbLFhyjWePIiorBVj5vwi8HWKAsNboHUo=
+	t=1744295997; cv=none; b=Ymq+rI2bk83NKgZnCwtpeLR6dmTqi9YK8ZtM6Z/UOwsStjj2oUBVtAt7tDRfbE/FeDQs0aXoWiK81WNp7m0+CA2g3RA4oG3lGLg/7sk8vqR/cgXQEzkN/8leSqBfKEVVTZ2IlEOazr0UtPxal/tU7eXbE7fe6s/TE/eGT+09z4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744295996; c=relaxed/simple;
-	bh=fQLVhdECukn8rSnKioZ4Hkj2E9G8FUbxvYOvve74Sbs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=r0iyIsN2gXU9MIM/H2vBeKBj8ZkCUWlxabFZjeBRSaxGB/wb3BklDBYa9iVgQkCgHgPo9gQ6qKhE0duKDo3YxVPrhlDumUEgNKcsEC+qqp3fRznaG4nD7h3Oudnj8HmrSijnljAWFMwgM/oCmF9RvgtX+kH9inYSPoX131z9cYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=VigZi9Q3; arc=none smtp.client-ip=148.251.105.195
+	s=arc-20240116; t=1744295997; c=relaxed/simple;
+	bh=UM8eRGMMrRlZ9igteIR0+9yJOLiReCR0kDQJdYbv4lA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=D5qWzXLi07NirWeyBdw85q9CUnPCDVsTRG9s5a+WcV/gR+6Vz95YDSk91/hPkeHHKZydTeswOHZWbLMFyxpCW7Fj28jVb2655j7MuS8KXF7JBqWo/8FuL3ZOBlSyNCMVr/BJpGjxZmJHM1DSf+M1S2dueCtUkBB6GrMwe4gBfZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ZmOQdVz9; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1744295991;
-	bh=fQLVhdECukn8rSnKioZ4Hkj2E9G8FUbxvYOvve74Sbs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=VigZi9Q3jBLWJn/fh7ChGoQpxIboSo65/aQK+G92HSh1pXJOHrqIubrpp7ZHmmbPP
-	 7YtePeEWQEEKjF5mCuxMxJ7gYFqFJZERKXFCbZ3gZJnG27++i5b2529uaOEFLO7lLL
-	 22fleaCt56LcgyVFNgYRS5ZhN8CSs/6G0AWi6EjSfkU40VldYIqdY1sp9iH/sqk7GE
-	 m7bWh94XZUXnwS/FVTWZ9T0FmDEyltm2/Fs0dEaZiU9aLUIpCt7twD7hNrESYnAzpI
-	 t6AhmZFJrvZ/zPG83MM7m8uT4S+9qPUxxPKf70IqNNtAv8rD2VQzLHrdvJkSbQYxpx
-	 PG6EKR/5yMVMw==
+	s=mail; t=1744295993;
+	bh=UM8eRGMMrRlZ9igteIR0+9yJOLiReCR0kDQJdYbv4lA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ZmOQdVz9NGS7NtFcyLuTddjNxN/VL6lXI10K5TmTGBFSR+g4LggqeFGpH3bYffs96
+	 zCVbGjwNHHlKNUictGQELTvAUbebWiIf34aCRUGIuiInyxvI7NFmLqc8fE8A2ZMSSI
+	 0c+eqKx4Rv5aqtfEnVli1ceZntCv2/RbvJGr2e6kpuVbLbEjEz/cQHJNIWGU3ZhvmT
+	 Ls3Bb5mZnSEMQ6k5aHgu1BKThYHDFzd7cflyMd9pKMivsqHKi7zmvjPnaTQuG0AGZt
+	 BBZ0o6uVJpwK2WDqTzftQJrpY4Hsr6yss4Rr/hFGxiJuK17OYFDagSwog/J+/k0Kqt
+	 eVGcsYEuJNobg==
 Received: from IcarusMOD.eternityproject.eu (fi-19-199-243.service.infuturo.it [151.19.199.243])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 64F0317E0C8D;
-	Thu, 10 Apr 2025 16:39:48 +0200 (CEST)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 45AD717E0CA7;
+	Thu, 10 Apr 2025 16:39:51 +0200 (CEST)
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 To: robh@kernel.org
 Cc: krzk+dt@kernel.org,
@@ -66,10 +67,12 @@ Cc: krzk+dt@kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org,
 	kernel@collabora.com
-Subject: [PATCH v1 0/3] MediaTek Dimensity 1200 - Add Power Domains support
-Date: Thu, 10 Apr 2025 16:39:41 +0200
-Message-ID: <20250410143944.475773-1-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v1 1/3] dt-bindings: power: mediatek: Support Dimensity 1200 MT6893 MTCMOS
+Date: Thu, 10 Apr 2025 16:39:42 +0200
+Message-ID: <20250410143944.475773-2-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250410143944.475773-1-angelogioacchino.delregno@collabora.com>
+References: <20250410143944.475773-1-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,24 +81,77 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In preparation for adding basic support for the OnePlus Nord 2 5G
-DN2103 smartphone, this series adds support for the power domains
-(MTCMOS) of the MediaTek Dimensity 1200 (MT6893) SoC.
+Add support for the Power Domains (MTCMOS) integrated into the
+MediaTek Dimensity 1200 (MT6893) SoC.
 
-AngeloGioacchino Del Regno (3):
-  dt-bindings: power: mediatek: Support Dimensity 1200 MT6893 MTCMOS
-  pmdomain: mediatek: Bump maximum bus protect data array elements
-  pmdomain: mediatek: Add support for Dimensity 1200 MT6893
-
- .../power/mediatek,power-controller.yaml      |   2 +
- drivers/pmdomain/mediatek/mt6893-pm-domains.h | 585 ++++++++++++++++++
- drivers/pmdomain/mediatek/mtk-pm-domains.c    |   5 +
- drivers/pmdomain/mediatek/mtk-pm-domains.h    |   2 +-
- .../dt-bindings/power/mediatek,mt6893-power.h |  35 ++
- 5 files changed, 628 insertions(+), 1 deletion(-)
- create mode 100644 drivers/pmdomain/mediatek/mt6893-pm-domains.h
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ .../power/mediatek,power-controller.yaml      |  2 ++
+ .../dt-bindings/power/mediatek,mt6893-power.h | 35 +++++++++++++++++++
+ 2 files changed, 37 insertions(+)
  create mode 100644 include/dt-bindings/power/mediatek,mt6893-power.h
 
+diff --git a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+index 591a080ca3ff..9c7cc632abee 100644
+--- a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
++++ b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+@@ -25,6 +25,7 @@ properties:
+     enum:
+       - mediatek,mt6735-power-controller
+       - mediatek,mt6795-power-controller
++      - mediatek,mt6893-power-controller
+       - mediatek,mt8167-power-controller
+       - mediatek,mt8173-power-controller
+       - mediatek,mt8183-power-controller
+@@ -88,6 +89,7 @@ $defs:
+         description: |
+           Power domain index. Valid values are defined in:
+               "include/dt-bindings/power/mt6795-power.h" - for MT8167 type power domain.
++              "include/dt-bindings/power/mediatek,mt6893-power.h" - for MT6893 type power domain.
+               "include/dt-bindings/power/mt8167-power.h" - for MT8167 type power domain.
+               "include/dt-bindings/power/mt8173-power.h" - for MT8173 type power domain.
+               "include/dt-bindings/power/mt8183-power.h" - for MT8183 type power domain.
+diff --git a/include/dt-bindings/power/mediatek,mt6893-power.h b/include/dt-bindings/power/mediatek,mt6893-power.h
+new file mode 100644
+index 000000000000..aeab51bb2ad8
+--- /dev/null
++++ b/include/dt-bindings/power/mediatek,mt6893-power.h
+@@ -0,0 +1,35 @@
++/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
++/*
++ * Copyright (c) 2025 Collabora Ltd
++ *                    AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
++ */
++
++#ifndef _DT_BINDINGS_POWER_MT6893_POWER_H
++#define _DT_BINDINGS_POWER_MT6893_POWER_H
++
++#define MT6893_POWER_DOMAIN_CONN		0
++#define MT6893_POWER_DOMAIN_MFG0		1
++#define MT6893_POWER_DOMAIN_MFG1		2
++#define MT6893_POWER_DOMAIN_MFG2		3
++#define MT6893_POWER_DOMAIN_MFG3		4
++#define MT6893_POWER_DOMAIN_MFG4		5
++#define MT6893_POWER_DOMAIN_MFG5		6
++#define MT6893_POWER_DOMAIN_MFG6		7
++#define MT6893_POWER_DOMAIN_ISP			8
++#define MT6893_POWER_DOMAIN_ISP2		9
++#define MT6893_POWER_DOMAIN_IPE			10
++#define MT6893_POWER_DOMAIN_VDEC0		11
++#define MT6893_POWER_DOMAIN_VDEC1		12
++#define MT6893_POWER_DOMAIN_VENC0		13
++#define MT6893_POWER_DOMAIN_VENC1		14
++#define MT6893_POWER_DOMAIN_MDP			15
++#define MT6893_POWER_DOMAIN_DISP		16
++#define MT6893_POWER_DOMAIN_AUDIO		17
++#define MT6893_POWER_DOMAIN_ADSP		18
++#define MT6893_POWER_DOMAIN_CAM			19
++#define MT6893_POWER_DOMAIN_CAM_RAWA		20
++#define MT6893_POWER_DOMAIN_CAM_RAWB		21
++#define MT6893_POWER_DOMAIN_CAM_RAWC		22
++#define MT6893_POWER_DOMAIN_DP_TX		23
++
++#endif /* _DT_BINDINGS_POWER_MT6893_POWER_H */
 -- 
 2.49.0
 
