@@ -1,130 +1,152 @@
-Return-Path: <linux-pm+bounces-25111-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25112-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65EAFA84391
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 14:46:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E05FEA844B0
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 15:26:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCA19189DF7E
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 12:44:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 17AF27AAD59
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 13:23:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5032628540E;
-	Thu, 10 Apr 2025 12:44:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B825928A3E2;
+	Thu, 10 Apr 2025 13:24:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="hf/PPn+n"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fEoGPYfb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CCB82853EA;
-	Thu, 10 Apr 2025 12:44:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744289078; cv=pass; b=rH7ZOrSfCBVlRaZ1/+q3LT9sihbVw+lat6bNMM2f/cn/WEjd0qlb5sR5airSCxV/totIC2YhrJ4dQI90VfX/nYWq6RkGBCCNnnrjqtU9Q4zT+pMfOAKwVcjvGccFGPZ4JS3X2hjG9BI/20tQj4pWCTN+ASqEa6XvEPVgVnkxcvg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744289078; c=relaxed/simple;
-	bh=/XY1s941qrrmoSZKz0kUv7RWnzbemE9Z2YY27XwIl4U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mdjly2N1yajWHqKbjZuN3BkHJntEYYsdAN0ynYBi0A8uf9ZPXFdxgI4h629QCDRbZJfsSn0WPhiycOx7aUO4ymyMEFkRjnyLZaIqP+1G+3+wj3BmBliukzHuiOdcM3pjCJNFl2Ouo3p+kAfQqjbfEzb+LGx1zzpmEXmZBxRI9go=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=hf/PPn+n; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1744289049; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=faUr5cMNVJEtxkEF81Uj66v0dLpqsPPbOQ8jeHs+xjdzkfu20q5tyxCGuJdgnkvjNQyi7LdlGMby2SHrjeb7zfpy10MEUBxa/TsMJb/otf87w7zIhK8upE8pUIYrb+WMGGdn68unk6B3YFkH7EsR2lWuVMBi0pq15gntgaE7qhg=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1744289049; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=q5riLeTe/Eu2n5//o/VPdIzBfe0QKtBNXlz9iKtSP2Q=; 
-	b=FAwslMOd1D3HFexQPIoaHr9ykGjPn+yhh37TR+myOwni4K2r7IL22j/bkAY8hqsvcvlP9bqA2RyqSvfeoudmoS97rjJDZ72TA1dcoODVLzXSTf9T3s79i4uuJmUBZvOXHbxgpNWl8+XklImn1hfMmmPgUk6caZ8KotoSCFxuccY=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1744289049;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-	bh=q5riLeTe/Eu2n5//o/VPdIzBfe0QKtBNXlz9iKtSP2Q=;
-	b=hf/PPn+ncwxnG6f2I+tARaUTsD3w8+H/v4M/MvP6LjGueeGOqhHIC8KRA256Ou4Z
-	JeBu/vXfJdQLf02AbSGpkh+oK3Rr4kU3Cm3f6Q9DQJQhONMtlSSVm0U7tKzdlxkX9Ra
-	v0EPXQJS1/C1AyqYnR4FHr6n3ELAWicoGLly1jOk=
-Received: by mx.zohomail.com with SMTPS id 1744289048170962.4372419761808;
-	Thu, 10 Apr 2025 05:44:08 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Heiko Stuebner <heiko@sntech.de>, Elaine Zhang <zhangqing@rock-chips.com>,
- Finley Xiao <finley.xiao@rock-chips.com>,
- Sebastian Reichel <sebastian.reichel@collabora.com>,
- Detlev Casanova <detlev.casanova@collabora.com>, kernel@collabora.com,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
- Shawn Lin <shawn.lin@rock-chips.com>
-Subject:
- Re: [PATCH RESEND] pmdomain: rockchip: keep PD_NVM on RK3576 always on
-Date: Thu, 10 Apr 2025 14:44:03 +0200
-Message-ID: <10136636.CDJkKcVGEf@workhorse>
-In-Reply-To:
- <CAPDyKFpw=qXT6Qh_Gyub7L3ELdODPkyEZVtALvnJZ3OZQeS76w@mail.gmail.com>
-References:
- <20250408-rk3576-emmc-fix-v1-1-3009828b1b31@collabora.com>
- <CAPDyKFpw=qXT6Qh_Gyub7L3ELdODPkyEZVtALvnJZ3OZQeS76w@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D08626A1C3;
+	Thu, 10 Apr 2025 13:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744291451; cv=none; b=ZWlgh6sa4uyDLBXevcZ/Kx4eF1z2ud9SULr8ahH1XTm3f57q8SZnOdUBPJJs0peP2TgevY6vO5dxuBkHqvskJzJnKMDQVFWoczY87/6/YLmo1Twsuc+aTTGPhccogcsgMSxm+3H8kSPbF+Z+pWIBHcM8/PjI3a/XvqkkZEIfdso=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744291451; c=relaxed/simple;
+	bh=PjNnYyU7svnG4Jb+MSeLk+eCfOL5ztj8PIv/APnVBKk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ePETkNLEVreV7ThqQ+zFDa9ui6ZMMlcJ0qkPwVLYXcAdNQ3s2g2y7zIPWohEgylONr5oroA+UpA1Q6RDRxQCR7zSJ+vyKbN7TtLADNY/8UVUwdg0xmRRhxGu4rb0c3Cf1+Oq1LKfA8pvo9uAmhpNQ+JPKmS1AncNb1UxB9jD+p8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fEoGPYfb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08B57C4CEE9;
+	Thu, 10 Apr 2025 13:24:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744291451;
+	bh=PjNnYyU7svnG4Jb+MSeLk+eCfOL5ztj8PIv/APnVBKk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=fEoGPYfbsH3FHAVy1oEB4KLltybzVT3xkDV1DQCj26L95+FJb7v2aV/c0i6o1OcU1
+	 hLbNuD2+qEH1k9IS739Hlb5U7C5Cjgp27sGGFcg1X3K01flVsJ/TGZIgryEKS2sU+L
+	 v9dMY82uZIL/7p8k1u5O5QRF+9V/LG6pwNmOoh7jdI8doJloHt+OnUD/pavoCVbgdn
+	 hSomcUIOhUu2LRZO6p49WDhnKgz2LEbK5uE+cksCR01W8zq0b9fJK4CyJvq2DpG5wO
+	 CwM7AZ1ajKCCLAUrdGq726lbNRqFjhcyhWcH4iY7JzthFejy3J6CuKu9vbsW+ufGyI
+	 pOoM+/VMFe3SA==
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-2c76a1b574cso266465fac.2;
+        Thu, 10 Apr 2025 06:24:10 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVYoUdIWiTj6QFsBacejbvJiWgmfEHRCXlnBufXDqu8x6Z6dFuYdP2Ssp2b2II/4+5nPfYTGnyXJxg=@vger.kernel.org, AJvYcCVkH1JuqUktGadbxX9LWYwf2parDZSLGG5/FmotX+rW4EGKmmSky4vRkcb7+TJqYjQXTP/PUOpT4QTxbUw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxNh82SOSeBzymAaRMOIN3CEBX4G7a+uXp+MCneT/2jzASx+TP
+	z2uxbY0NmfebwcAWpb2rCCR673dvkhZT5m2lA2Hr3nj0yMPtc/0PeyYmhNz3XwCS1Z2u80WrPgC
+	jF+0Eu55b7a0umaw33tNOc7HJ3Xg=
+X-Google-Smtp-Source: AGHT+IGnrjgpZpg9n2Ziq3OF/5GTRm4gYLzeqI8ltqxf1OdwbonWUqdZsxQ/g2yJei3J5HaWR/tty6qVcp/p6wYkA50=
+X-Received: by 2002:a05:6870:888b:b0:29e:766d:e969 with SMTP id
+ 586e51a60fabf-2d0b3611dd9mr1593089fac.10.1744291450278; Thu, 10 Apr 2025
+ 06:24:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+References: <tencent_8478BF8F2549630842D323E7394CB6F49D08@qq.com>
+In-Reply-To: <tencent_8478BF8F2549630842D323E7394CB6F49D08@qq.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 10 Apr 2025 15:23:59 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jfAdBbKXBg7k0og6MucptJc9G=RTzFPd=N3Q0VdfToFQ@mail.gmail.com>
+X-Gm-Features: ATxdqUFCwlbj0go7vNzpWyH9o9Srm-eULI9a3R27FKSSz_G2gBxWttNvIfXFkBs
+Message-ID: <CAJZ5v0jfAdBbKXBg7k0og6MucptJc9G=RTzFPd=N3Q0VdfToFQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: EM: Fix potential division-by-zero error in em_compute_costs()
+To: Yaxiong Tian <iambestgod@qq.com>
+Cc: lukasz.luba@arm.com, rafael@kernel.org, len.brown@intel.com, 
+	pavel@kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Yaxiong Tian <tianyaxiong@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thursday, 10 April 2025 14:10:56 Central European Summer Time Ulf Hansson wrote:
-> + Shawn Lin
-> 
-> On Tue, 8 Apr 2025 at 17:28, Nicolas Frattaroli
-> <nicolas.frattaroli@collabora.com> wrote:
-> >
-> > Due to what seemingly is a hardware bug, PD_NVM never comes up quite the
-> > same after being turned off once. The result is that the sdhci
-> > controller will lock up the entire SoC when it's accessing its CQHCI
-> > registers.
-> >
-> > The downstream kernel hacks around this by setting
-> > GENPD_FLAG_RPM_ALWAYS_ON in the mmc host driver, which does not seem
-> > like the right place for this.
-> >
-> > Set GENPD_FLAG_ALWAYS_ON in the pmdomain driver for PD_NVM. I'm using
-> > the non-RPM version of the flag here because I have my doubts a
-> > suspend-resume cycle will fix it. Suspend-resume currently seems busted,
-> > so I couldn't test this.
-> >
-> > Fixes: cfee1b507758 ("pmdomain: rockchip: Add support for RK3576 SoC")
-> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> 
-> Shawn Lin recently made some changes [1] to make UFS work for this
-> platform, as you probably know of. In particular the changes affected
-> how to handle the UFS controller from the power-domain point of view.
-> Could it be that something similar is missing for NVM too?
-> 
-> In any case, I am happy to apply this as a fix if you still think it
-> makes sense.
-> 
-> Kind regards
-> Uffe
-> 
-> [1]
-> https://lore.kernel.org/all/1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com/
+On Thu, Apr 10, 2025 at 7:39=E2=80=AFAM Yaxiong Tian <iambestgod@qq.com> wr=
+ote:
+>
+> From: Yaxiong Tian <tianyaxiong@kylinos.cn>
+>
+> When the device is of a non-CPU type, table[i].performance won't be
+> initialized in the previous em_init_performance(), resulting in division
+>  by zero when calculating costs in em_compute_costs().
+>
+> Considering that the performance field in struct em_perf_state is defined
+> as "CPU performance (capacity) at a given frequency", the original
+> calculation method should be maintained when the device is of a non-CPU
+> type.
+>
+> Fixes: <1b600da51073> ("PM: EM: Optimize em_cpu_energy() and remove divis=
+ion")
+>
+> Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
+> ---
+>  kernel/power/energy_model.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> index d9b7e2b38c7a..bbd95573d91e 100644
+> --- a/kernel/power/energy_model.c
+> +++ b/kernel/power/energy_model.c
+> @@ -231,9 +231,11 @@ static int em_compute_costs(struct device *dev, stru=
+ct em_perf_state *table,
+>                             unsigned long flags)
+>  {
+>         unsigned long prev_cost =3D ULONG_MAX;
+> +       u64 fmax;
 
-Oh my, good catch. That does look like a similar kind of thing, and
-potentially a better solution than what I'm going for.
+Why not initialize it here?  Also please retain the reverse x-mas tree
+ordering of declarations.
 
-I'll have to do some testing on my side, thank you for bringing this
-particular part of the UFS series to my attention. I'll either respond
-here or post a new version of the patch series depending on the outcome
-of said testing.
+>         int i, ret;
+>
+>         /* Compute the cost of each performance state. */
+> +       fmax =3D (u64) table[nr_states - 1].frequency;
 
-Kind regards,
-Nicolas Frattaroli
+No need to cast to u64 explicitly (it will be cast anyway).
 
+>         for (i =3D nr_states - 1; i >=3D 0; i--) {
+>                 unsigned long power_res, cost;
+>
+> @@ -245,9 +247,15 @@ static int em_compute_costs(struct device *dev, stru=
+ct em_perf_state *table,
+>                                 return -EINVAL;
+>                         }
+>                 } else {
+> -                       /* increase resolution of 'cost' precision */
+> -                       power_res =3D table[i].power * 10;
+> -                       cost =3D power_res / table[i].performance;
+> +                       if (_is_cpu_device(dev)) {
+> +                               /* increase resolution of 'cost' precisio=
+n */
+> +                               power_res =3D table[i].power * 10;
+> +                               cost =3D power_res / table[i].performance=
+;
+> +                       } else {
+> +                               power_res =3D table[i].power;
+> +                               cost =3D div64_u64(fmax * power_res, tabl=
+e[i].frequency);
 
+Why is it necessary to compute the "cost" field value for non-CPU
+devices at all?
+
+> +
+
+An excess empty line.
+
+> +                       }
+>                 }
+>
+>                 table[i].cost =3D cost;
+> --
 
