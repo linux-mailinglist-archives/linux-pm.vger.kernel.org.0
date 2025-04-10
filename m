@@ -1,50 +1,49 @@
-Return-Path: <linux-pm+bounces-25136-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25137-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E026A84880
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 17:51:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9E29A84888
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 17:52:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BF081BA6DAB
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 15:49:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFC8218820CF
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 15:49:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A752283682;
-	Thu, 10 Apr 2025 15:47:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28B2928C5C9;
+	Thu, 10 Apr 2025 15:47:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N3WR9nvb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tp2pgYbw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0A9A256C8A;
-	Thu, 10 Apr 2025 15:47:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCB1328C5A1;
+	Thu, 10 Apr 2025 15:47:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744300071; cv=none; b=KtIqkK5yqCYZ37jioNkk8WFwS4N5aJ87HYD0459z954lGRvMKHBef3rOAN7fZqB1QtRaKTvDCWjDqU/Dqkhuadpe9evUB6tHts+s+FgHs09SoQRQ8DwwiTcHBQejpfVbI7oYZzJi/Ydv2kNHSyMRtFt4S34YnVvj1pv3ZbgJZYU=
+	t=1744300072; cv=none; b=QySQ8T+8NmGc0l560uMqcholIr9JJJYVhNhMluh81aN6hEOpC5NONuNJ4v2ljutxzlyhP6oyzjxMn+6+Qm7CPGx6FgQBH9bdnJHQpT9Pu5re0VViY3keG95MXibu7IFcElF2zb1l1ha9idSfnG6TjxVpq0yrUbj6iT4mM0SIkPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744300071; c=relaxed/simple;
-	bh=iDeiMpH2/KxFQOc/7AuYydAb8NCVCSm+fEB6mcijRro=;
+	s=arc-20240116; t=1744300072; c=relaxed/simple;
+	bh=zdpdwCUxt4/JGxD9zT4n5tnKqmSCQRjKtGwRibbyTKY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eTP1CEZDlKFq72Gm9khm5ZQbb4el5DA0FmZyZ7X+h5GZp9xKNlF8n0q6krB98b5cYHEmBEw1P2q0vDhHsddXSm3h/iLB1XRQgoa7Kzqmjg2/5nRU47/BbftTavthav+68IZD5VkZfk1ay8n4n1zmQhb5sQsRoO7nofNR3wWAXYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N3WR9nvb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16781C4CEDD;
-	Thu, 10 Apr 2025 15:47:50 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=a6sgO7u6q9lVb3cFwaoquVXV7E5KWaOZua7+SW0IgzPX4mPfhFQQgRM6uhZsxHUNg0cntYrC2I6EwyCh0O3QuzjirpkC4q+vwfKkVEHkvE/2qerIIOJp/HzyhfIGM3EejKhIBBwymrxxJhsGKw5UScnbttWAmMwI6EauBNhr7Oc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tp2pgYbw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80D35C4CEEB;
+	Thu, 10 Apr 2025 15:47:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744300070;
-	bh=iDeiMpH2/KxFQOc/7AuYydAb8NCVCSm+fEB6mcijRro=;
+	s=k20201202; t=1744300071;
+	bh=zdpdwCUxt4/JGxD9zT4n5tnKqmSCQRjKtGwRibbyTKY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=N3WR9nvbHwdU8OqfFIc/mAfEz0Nmc09RDoFYeBK7Cd1q4dU8AiGidDCnyDh2Yd6Ff
-	 khtIEZeAm5b3jsSSJCwlepHT5Cjj7NPKSZRHCw+YnxgdCh+KREBBp8Lv14VEFi4Dwi
-	 RlYARWcnQS1qsk7DPNfsjiBO0DHdhlse12UYxFM9X2jY8w8vYAu8NxrNxkiG4smfD2
-	 K+u7CqTDULdw+eay4gEuHbdO4mN6JROOW/+cMc8jwjY3mdH4cOIFRIqM2LD4ggstNg
-	 XT+EhJsutbL2iP7y0ydVIsOgAupR55qA+AUnocPW19n1khPPot918ofQg6cvjhRrCs
-	 aMHf0ORhxZLHg==
+	b=Tp2pgYbwXQf4eNwmKaH2Y9ewJRXbwjukqmEfd7gasC1BhxcwjreBEF/j1FACoOJ3n
+	 fKdwiHbTde/95llhHDX8LEPLU4Q4kNtch6X4Gtag9EjN2DFSU8oWDvoTpT/y2sS1Pn
+	 YmTtSWsXG0o9T5Sg1Jk0GmoLLj5liyC4MKb2I4in0MtWDSMgjb7jQH7P54PdHi0Fge
+	 /tyeSwBW8Wh77LfjdWWAOh6WEV2iDOQG5FKK3zDdiLTqnwsmbzSybdW8BOIUXAcbdX
+	 0UJ7W6RDn1M45MgKlVI+3jHU6otRqGgsNJieEZO0dRqPBzL4/hTBj9ujca+//zyDCU
+	 vOQslelhGs3xw==
 From: "Rob Herring (Arm)" <robh@kernel.org>
-Date: Thu, 10 Apr 2025 10:47:24 -0500
-Subject: [PATCH v2 03/17] arm64: dts: microchip: sparx5: Fix CPU node
- "enable-method" property dependencies
+Date: Thu, 10 Apr 2025 10:47:25 -0500
+Subject: [PATCH v2 04/17] arm64: dts: qcom: qdu1000: Fix qcom,freq-domain
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250410-dt-cpu-schema-v2-3-63d7dc9ddd0a@kernel.org>
+Message-Id: <20250410-dt-cpu-schema-v2-4-63d7dc9ddd0a@kernel.org>
 References: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
 In-Reply-To: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
 To: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -88,37 +87,59 @@ Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-arm-msm@vger.kernel.org, imx@lists.linux.dev, 
  linux-rockchip@lists.infradead.org, linux-amlogic@lists.infradead.org, 
  linux-renesas-soc@vger.kernel.org, linux-mips@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org
+ linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.15-dev
 
-The "spin-table" enable-method requires "cpu-release-addr" property,
-so add a dummy entry. It is assumed the bootloader will fill in the
-correct values.
+The correct property name is 'qcom,freq-domain', not
+'qcom,freq-domains'.
 
 Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-Reviewed-by: Daniel Machon <daniel.machon@microchip.com>
-Tested-by: Daniel Machon <daniel.machon@microchip.com>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 ---
- arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm64/boot/dts/qcom/qdu1000.dtsi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi b/arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi
-index 32bb76b3202a..83bf5c81b5f7 100644
---- a/arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi
-+++ b/arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi
-@@ -12,10 +12,12 @@ &psci {
- 
- &cpu0 {
- 	enable-method = "spin-table";
-+	cpu-release-addr = /bits/ 64 <0>;
- };
- 
- &cpu1 {
- 	enable-method = "spin-table";
-+	cpu-release-addr = /bits/ 64 <0>;
- };
- 
- &uart0 {
+diff --git a/arch/arm64/boot/dts/qcom/qdu1000.dtsi b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+index f973aa8f7477..7c8d78fd7ebf 100644
+--- a/arch/arm64/boot/dts/qcom/qdu1000.dtsi
++++ b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+@@ -47,7 +47,7 @@ cpu0: cpu@0 {
+ 			enable-method = "psci";
+ 			power-domains = <&cpu_pd0>;
+ 			power-domain-names = "psci";
+-			qcom,freq-domains = <&cpufreq_hw 0>;
++			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			next-level-cache = <&l2_0>;
+ 			l2_0: l2-cache {
+ 				compatible = "cache";
+@@ -70,7 +70,7 @@ cpu1: cpu@100 {
+ 			enable-method = "psci";
+ 			power-domains = <&cpu_pd1>;
+ 			power-domain-names = "psci";
+-			qcom,freq-domains = <&cpufreq_hw 0>;
++			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			next-level-cache = <&l2_100>;
+ 			l2_100: l2-cache {
+ 				compatible = "cache";
+@@ -88,7 +88,7 @@ cpu2: cpu@200 {
+ 			enable-method = "psci";
+ 			power-domains = <&cpu_pd2>;
+ 			power-domain-names = "psci";
+-			qcom,freq-domains = <&cpufreq_hw 0>;
++			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			next-level-cache = <&l2_200>;
+ 			l2_200: l2-cache {
+ 				compatible = "cache";
+@@ -106,7 +106,7 @@ cpu3: cpu@300 {
+ 			enable-method = "psci";
+ 			power-domains = <&cpu_pd3>;
+ 			power-domain-names = "psci";
+-			qcom,freq-domains = <&cpufreq_hw 0>;
++			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			next-level-cache = <&l2_300>;
+ 			l2_300: l2-cache {
+ 				compatible = "cache";
 
 -- 
 2.47.2
