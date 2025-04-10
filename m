@@ -1,75 +1,87 @@
-Return-Path: <linux-pm+bounces-25069-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25070-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DE5CA83767
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 05:52:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0B76A837E5
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 06:37:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 320B2442170
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 03:52:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1F1E465799
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Apr 2025 04:37:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 609621F0E4E;
-	Thu, 10 Apr 2025 03:52:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD6ED1EF080;
+	Thu, 10 Apr 2025 04:37:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YwOcuUOp"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ukcsbc1t"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D759BA2E;
-	Thu, 10 Apr 2025 03:52:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5111CAA80
+	for <linux-pm@vger.kernel.org>; Thu, 10 Apr 2025 04:37:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744257168; cv=none; b=JWDmnyT20WAnJ7WU/Jy4PUOgp3mVjAKApKVxJ2xF+ubfZEBRWIGFpnDbkGNqnXAUoRmNuo0BLrLFTGy3AHK2hns7wY3Vg7RK5eu/vRvwxhogLY347WGqSOwbGrc2/YfuYfFjuyvLkohKPlg2Gro4j6eO/7w0AXslpbAH2QDLCl8=
+	t=1744259868; cv=none; b=g0PfzSvCRvvT9gTGkOGgdzkTBQ2qOAs4nU7oWzi/FrVG2WN2TrqOqeZW+sHY5skvj5UT+gYM3nlvx4cBQuuXICfkd/NPGNuUK0VQ0nVkRfHrzIB9RoBDGibUnjRh3jQ2Css9YbA9EgP68xuQwdc4ug8N9sHQCyAdOcPl/4V1jJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744257168; c=relaxed/simple;
-	bh=A5/gT1Io+FjLH1NAuQckHXozz8RZRaLNgZHmXQJCPcM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XPoGMO4a/H4fmOthWOR2wni18ArGI5zEfzjqn/MMyY3QdRcFbcZtficroBJXRE6/cq0Q2uKTuC0IJZFLrfppit83DaL5LBU0DL2S57Cy0z+FqBA5StmQ0OaZGd7nZSjqwH5qQYnrfCH5XxLqCOCqZ8l0Ax0QpY9o73Gjpdn/4Sk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YwOcuUOp; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744257166; x=1775793166;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=A5/gT1Io+FjLH1NAuQckHXozz8RZRaLNgZHmXQJCPcM=;
-  b=YwOcuUOp4k1kortz7V882pm2jwM/IfgqkOdxhyolNY71xBrW+RMkgIdq
-   u4To4x8Nvz3bEju3E3cUrmYbtPZLQoEI9LKn367HkqJ40mA5lz7oWkRzU
-   TDE6wqErgAExrRSCHlw5RmpZhXX9kv8mR9zdoxkaepLE396gWn3HYcXQI
-   7oe6tEiXh2zu3YJzC3uZuZO6FgPEqzeU0KRvQLEYTp8pp9pIZHdaJNiIB
-   d5XQaAjjQ0qTZ75OyRKK/cIh8euzW+QuAUSNrwOVFnZ2iqZeKcA4rybgZ
-   ERtyKjmO4msPYV5zB+RPR1nK10GCek3on1y85PvJPe8fzWDhUtDo/oalk
-   w==;
-X-CSE-ConnectionGUID: KifBUOsoQiehHC+AJrS1xQ==
-X-CSE-MsgGUID: 4tDePKohTyiKdRO2fmLt+g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11399"; a="45645433"
-X-IronPort-AV: E=Sophos;i="6.15,201,1739865600"; 
-   d="scan'208";a="45645433"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2025 20:52:46 -0700
-X-CSE-ConnectionGUID: mTzQ1ISrTXO0z2i+TsWkMQ==
-X-CSE-MsgGUID: if2eRd8TRAy6LAeG7bwLRQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,201,1739865600"; 
-   d="scan'208";a="128518544"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 09 Apr 2025 20:52:43 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u2iy0-0009ZX-2B;
-	Thu, 10 Apr 2025 03:52:40 +0000
-Date: Thu, 10 Apr 2025 11:51:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zhang Rui <rui.zhang@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-	devel@acpica.org, linux-pm@vger.kernel.org,
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: [rafael-pm:bleeding-edge 44/56]
- drivers/acpi/processor_idle.c:464:22: warning: unused variable 'i'
-Message-ID: <202504101132.pgiDBR2Q-lkp@intel.com>
+	s=arc-20240116; t=1744259868; c=relaxed/simple;
+	bh=1Xix/mO6aE19SIT5lyF30wlU6UXfyC7ZaeE7p6sIKzY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mPB5m6Ecdb2dW9H2sSaWvDIFl+kzMzy2qp26R6Y98EuzBcG9wjdJap9zcf/JuAEuRsbDZHTjL1fVTUUIvlcFr7HYhAh+bySBIQDWEeVdEMi+5Llt7qc/l6GLozOC7UoWFs8pzZ/Xy0rlvaod/fdYnLqm33sePnh7HCEWAnGN+Ds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ukcsbc1t; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-73712952e1cso299248b3a.1
+        for <linux-pm@vger.kernel.org>; Wed, 09 Apr 2025 21:37:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1744259866; x=1744864666; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dKq9kzMYsicKdtkGA5MBDLw3TZIwxRLfS0ALUoxDg9c=;
+        b=Ukcsbc1tJEjKUe37Yx1xWKCw7+bC/ztgqwJNZQJ+1jbpQslcw0z9jssFrlYsPjjanl
+         MLLpd8JiGo0pc+zsrM1mI+G/wr5a2d2m2rGNOfUPlUNGt/BncCB+61oyl1R3LjHcicj7
+         IqAesfPeTDSSdbku0Zzhgk0uYwK8ry/mjOq0NXLIUXqw3OqzQwj90F1V+nN7JT3Azm5B
+         bsCCbopKRDKJ4InUXWJ6ZSU/gQm3TukuX84BQFHqLhb4E+6+4C0UmAEXjoYMCyEInAOy
+         fn/CNmfGwEbfklAtntQC8zSxS0kCtedjnWU3UmzFFzWwFU7MzVxedWvLvwgbhVwBlf50
+         61SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744259866; x=1744864666;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dKq9kzMYsicKdtkGA5MBDLw3TZIwxRLfS0ALUoxDg9c=;
+        b=pqtArCP4Bdb5Rvz6zpl8ne9d84MTMMGP0fbUnL39nAoJ2ZNE5nI6TnDMQjUg0tSfA2
+         OeU9WyaaQbVcYVU88ca4ES8jAe4Pxf5XLXaJn/LP550Wx3Tz2/VWHDnd6HCQH62BAFTM
+         pw1p93J1Bke4i1FmSzHhyhBEmkGvspWmxFShptjgz/BR7Q/K72Xmmaym59Z5VHe09JYU
+         G2DngaHVCxHgRygH5XxNfgO+y+IDRSIw20CaIlPs69mZyx1dcdThd1FVnI8kKo28/ySV
+         B1F0n4l+YkNHWOfWcLECHdW6mb2c1Pb5g8gyuiMR8Y7b4YktKpEqiZxHRD88Hckx9aac
+         I/hQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXbPk8gtvrPQHmwrzb7p+j5DJIG8EknbwBWNhqiKODlQsGpIJU05oZvQBD0ofTAMtfRyPTmdgj4Dw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz53ztL+9qLUiWN2XsUE8ISaMtNo2hIoxbRcO3UwGz5Wf/QPw5J
+	ZXvejGMDXgqNxDygWrZa4RWMfp55j+TchdBBfcjjx65gmAioRoyJAHfdvMMEXNM=
+X-Gm-Gg: ASbGncsgIrzGwrzHwSheFKdYScwvPDzOujdLC9Nt8qQQzCfzV50tX+S6yUMQ/KX5YcX
+	4rr3N6TlOOC/BmDCOTrdLo20LKUN5ih5aemCTgc2iKYQsUewyZwWIV4ygoE22O6Njx6522QQaMM
+	ViFajhdFxQAFhvHvFpuEa/sThk57hT15g1tgTUHlSdtVctJ0nxxhcVCAa7Zo3p2Q2RmpQsdqmQb
+	jZzlWEbrgS9EogFPXJFHGPDvuePr1HxvB4FLi46FeKZ4uzgiIpnuKehQE15Gic1GELgMnbQbZmL
+	O6/0AmukRYi52G0Ea8GOL4AHy+iBYsOuK318YX3FGA==
+X-Google-Smtp-Source: AGHT+IE5WApQf0idcPfilUjF6fBUp39jssoyHNZPfC/qpfeRdr8GHZIk0YeghJmMBYI3ABubgqhHhA==
+X-Received: by 2002:a05:6a20:d528:b0:1f5:9069:e563 with SMTP id adf61e73a8af0-201694cef6fmr2822217637.21.1744259866440;
+        Wed, 09 Apr 2025 21:37:46 -0700 (PDT)
+Received: from localhost ([122.172.83.32])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73bb1e3842dsm2345076b3a.108.2025.04.09.21.37.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Apr 2025 21:37:45 -0700 (PDT)
+Date: Thu, 10 Apr 2025 10:07:43 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Henry Martin <bsdhenrymartin@gmail.com>
+Cc: sven@svenpeter.dev, j@jannau.net, alyssa@rosenzweig.io, neal@gompa.dev,
+	rafael@kernel.org, asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] cpufreq: apple-soc: Fix null-ptr-deref in
+ apple_soc_cpufreq_get_rate()
+Message-ID: <20250410043743.rxwixe7slr342d56@vireshk-i7>
+References: <20250409124813.47193-1-bsdhenrymartin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,69 +90,23 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250409124813.47193-1-bsdhenrymartin@gmail.com>
 
-Hi Zhang,
+On 09-04-25, 20:48, Henry Martin wrote:
+> cpufreq_cpu_get_raw() can return NULL when the target CPU is not present
+> in the policy->cpus mask. apple_soc_cpufreq_get_rate() does not check
+> for this case, which results in a NULL pointer dereference.
+> 
+> Fixes: 6286bbb40576 ("cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states")
+> Signed-off-by: Henry Martin <bsdhenrymartin@gmail.com>
+> ---
+> V1 -> V2: Use `if (unlikely(!policy))` instead of `if (!policy)`
+> 
+>  drivers/cpufreq/apple-soc-cpufreq.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   655d33f14d6cebcf46e422bcb9d225d791bba42f
-commit: 8ea9d119e7c666b6d87697af1b69193354c865d1 [44/56] ACPI: processor: idle: Remove redundant pr->power.count assignment
-config: i386-buildonly-randconfig-003-20250409 (https://download.01.org/0day-ci/archive/20250410/202504101132.pgiDBR2Q-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250410/202504101132.pgiDBR2Q-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504101132.pgiDBR2Q-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/acpi/processor_idle.c: In function 'acpi_processor_get_cstate_info':
->> drivers/acpi/processor_idle.c:464:22: warning: unused variable 'i' [-Wunused-variable]
-     464 |         unsigned int i;
-         |                      ^
-
-
-vim +/i +464 drivers/acpi/processor_idle.c
-
-^1da177e4c3f415 Linus Torvalds      2005-04-16  461  
-a36a7fecfe60717 Sudeep Holla        2016-07-21  462  static int acpi_processor_get_cstate_info(struct acpi_processor *pr)
-^1da177e4c3f415 Linus Torvalds      2005-04-16  463  {
-^1da177e4c3f415 Linus Torvalds      2005-04-16 @464  	unsigned int i;
-^1da177e4c3f415 Linus Torvalds      2005-04-16  465  	int result;
-^1da177e4c3f415 Linus Torvalds      2005-04-16  466  
-^1da177e4c3f415 Linus Torvalds      2005-04-16  467  
-^1da177e4c3f415 Linus Torvalds      2005-04-16  468  	/* NOTE: the idle thread may not be running while calling
-^1da177e4c3f415 Linus Torvalds      2005-04-16  469  	 * this function */
-^1da177e4c3f415 Linus Torvalds      2005-04-16  470  
-991528d73486679 Venkatesh Pallipadi 2006-09-25  471  	/* Zero initialize all the C-states info. */
-991528d73486679 Venkatesh Pallipadi 2006-09-25  472  	memset(pr->power.states, 0, sizeof(pr->power.states));
-991528d73486679 Venkatesh Pallipadi 2006-09-25  473  
-^1da177e4c3f415 Linus Torvalds      2005-04-16  474  	result = acpi_processor_get_power_info_cst(pr);
-6d93c64803a5fea Venkatesh Pallipadi 2005-09-15  475  	if (result == -ENODEV)
-c5a114f1fb2d3c5 Darrick J. Wong     2006-10-19  476  		result = acpi_processor_get_power_info_fadt(pr);
-6d93c64803a5fea Venkatesh Pallipadi 2005-09-15  477  
-991528d73486679 Venkatesh Pallipadi 2006-09-25  478  	if (result)
-991528d73486679 Venkatesh Pallipadi 2006-09-25  479  		return result;
-991528d73486679 Venkatesh Pallipadi 2006-09-25  480  
-991528d73486679 Venkatesh Pallipadi 2006-09-25  481  	acpi_processor_get_power_info_default(pr);
-991528d73486679 Venkatesh Pallipadi 2006-09-25  482  
-cf82478840188f8 Janosch Machowinski 2005-08-20  483  	pr->power.count = acpi_processor_power_verify(pr);
-8fa2f8bd6ad10ec Zhang Rui           2025-04-09  484  	pr->flags.power = 1;
-^1da177e4c3f415 Linus Torvalds      2005-04-16  485  
-d550d98d3317378 Patrick Mochel      2006-06-27  486  	return 0;
-^1da177e4c3f415 Linus Torvalds      2005-04-16  487  }
-^1da177e4c3f415 Linus Torvalds      2005-04-16  488  
-
-:::::: The code at line 464 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+Applied. Thanks.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+viresh
 
