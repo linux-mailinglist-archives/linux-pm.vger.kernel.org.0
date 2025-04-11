@@ -1,111 +1,110 @@
-Return-Path: <linux-pm+bounces-25199-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25201-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BAF0A8512A
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 03:21:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5325DA85142
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 03:33:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B900465D9D
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 01:21:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94751177430
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 01:33:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69F7F26F461;
-	Fri, 11 Apr 2025 01:21:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6047417C21C;
+	Fri, 11 Apr 2025 01:33:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JTlPmKyP"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="BYcE7RSW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C11BD299;
-	Fri, 11 Apr 2025 01:21:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 454FC2572;
+	Fri, 11 Apr 2025 01:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744334474; cv=none; b=BxdZb2U+xCH9np0DN8yE0fsnflP/CwzMz6VsNK7GY/7f2e4fFQYHvDQdY0cexX1QxbQoKp0mOuyrouVRGS9VlWwA0wST4aSjEEhwDF+CmBhj2wpIA5Uq+pLfRfLyamk5pdeRsLbus1Azvb+T1lkz7pO6kcU+rIyhLUdI7jN6URc=
+	t=1744335223; cv=none; b=n5y8FD7o/88BmaHkzRT0c2vlhUlFbe8s59k84kPHEa/7m+y46gV4MgWzNyCey3nsFHf8D9RwDZ8PPR8DZ0/24qcC0O3thRJ/byMGOcXld2dd11olDOFiBP9OoEXOGJp+b2PqRXnOttWg0qmeMXqTFOKBEJEff3DGbJSSpl00F7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744334474; c=relaxed/simple;
-	bh=o046V02WtqlkkRSSA2YGh7WNKcRkrZEbNpFokx1S5W0=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=Uzgi81XEngTwSN+s9eRTJshvm8qoNloxWBXq9wGEfc1pxfKS470AHOQUnYc+aOqFAZ0UiW2s6fEa6bL24hyM7iYaDrCqi4x3u+TImTR1oaHss7SX3HBJK0pqW5DGyhq4z0/ES1MQ4rjay8BaPvtWl7Ca+NYLQovqm2vzr8ZVEKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JTlPmKyP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D109C4CEDD;
-	Fri, 11 Apr 2025 01:21:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744334473;
-	bh=o046V02WtqlkkRSSA2YGh7WNKcRkrZEbNpFokx1S5W0=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=JTlPmKyPES5VA7ZmxJLYX1Msxt/oigWQD0OYiLRLmvQ4k5N4T8xhUdZ5xzhOfWfuU
-	 2QirmG6s7SD3uYGjXNTWWb45j1z9JkqnBu7gopdKbjSvx9rbMggpw5ony3HE8patxh
-	 UqDtEJx0igTWcE0PJwIO1gX2qY9tq4pWjs2IxBRyBg+4a42zX1PngeGYx+LOBBsXHw
-	 J1NZwi8Z8/HI45/GGHSFJWQcYdavbZJDJl5zz3gu3UIqCLLyTtC59/DeNxPHEJ1+So
-	 4yKPPFKWwyvqnuCfRaxSFcTsAecRigu1p04AelE1h1NBItayGmFO3F3QY0YCYUFDxr
-	 stsTG6NEuqFRg==
-Date: Thu, 10 Apr 2025 20:21:12 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1744335223; c=relaxed/simple;
+	bh=hGCh7kA2+bRIRVnJON1ffOpq+SDsWUqLmA/JelpqzXM=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=TtMSSlBCFXLoYhjWykAeisjABN05XzmohKKdbMc/S+rTRfWsdRK7gz3MrVu5qHU4j8l3iwAfBpuJ+WttNXNmOo0yjXILGxO7352f4Tb7d4GxTZP9IolIYR87T7QvhIuEvDhK1qhD0HsanqMhyUSMT/ino6hQHEhrC3WGO1ohCCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=BYcE7RSW; arc=none smtp.client-ip=162.62.57.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1744334905; bh=nJ5w2zPDFEQ9dl0Cxqt4gZXORo+iBIQnVvHhz6r4NpY=;
+	h=From:To:Cc:Subject:Date;
+	b=BYcE7RSW7JQ9fmjXHKQtogYQR2zc15wrFLM1nkfXAI60ttFwUi30Fbj+zRp88AgDE
+	 dTIb6jRTUY/90jW69RrrbMVvjrOtxkYrdyEpJExkPkIOcf1t/jRP68fo0MiTNzspCh
+	 Z7HxDUjBdVpqJNddOeMnCvYYSypDTmVtGYAsjs8s=
+Received: from localhost.localdomain ([116.128.244.169])
+	by newxmesmtplogicsvrszb16-1.qq.com (NewEsmtp) with SMTP
+	id 717B2E57; Fri, 11 Apr 2025 09:28:23 +0800
+X-QQ-mid: xmsmtpt1744334903t2fzg2zhk
+Message-ID: <tencent_EE27C7D1D6BDB3EE57A2C467CC59A866C405@qq.com>
+X-QQ-XMAILINFO: OQ59tfF64tJLVPZYM9A6w/qx8MuYhy4MSSGwTKJt15c6EQSY9FxX2Afti/pF8B
+	 dtE0FQS16WmVIkVBpGiyollQmwsczVfqks3i49gXt6LmBizQpveQ2yHqH3KncFlHtABDbWH3Wq9c
+	 6rK9C0zKNFhhhbledMIibXl4J/4tW98Jt4owPOxnR27DW0/qbyUzeTKBm1K7x10sM5Pf6f9wD+xb
+	 DXFAxYrH+CnRHdwLII3HCzLxNglEOLjvqpE0XV3VeVP2ocgi0/yx5HMgsHCqCDmI37IN3oFKx/2s
+	 t/2YVFU3He+PRzq2yQePzkyHzpq29G4U0F2lDX2JmWybiTfeUJjohIOslNhQhXhaxoSaM/NIy9xN
+	 Ahq6GqcI2ogb3Ul3PYH9Z+2wUUH/e0E6bPBE43MRzQHsDpi52zGXMNRV5aWwLK5qmgv2+vPGyFp7
+	 d12S1RI0WHLt0TfTpHjc4SCFXLHXDjfvnmABRQ2ZLmcSDk6m3IfxpWDzCTqQvKJdgHaSx3rs71HJ
+	 h+W3zKyt9jHsxsSGfsjgScf06tsaPiGn0/LzEb9k0Eym3KOUaCTnN/odWNbG4WjbUgvCn18vQ82Z
+	 kw/aPgxpOYsZ4Mn483wAFzcxr5MWD07QDujfDV1Znt+bZr4/ob5V4MLqiiDBwTMN89bOEK+xbTUC
+	 ecmOIlY5ewaG67e4sLyXORygJeOqG/26VeeN+tAw+J43NiaPc04Tc9RyRJ7ecLabKUcllye7eCVf
+	 BJDxs1cmjCs6V8m7DcErV4LXUvCFos66z2eO8itmqqTfLWTT+kXnINEBaqdACH4KzFggeSxOXPGV
+	 pvaahFOvvAVKzRUJHR6HjRQB33aKONN4DLVuUYh40qiFGxaKXNI7Mze+ZS5fHZh9dYSi4zvSgLzp
+	 kI6mt10b7gworg7m96dhXRVFClmoT0tisqkjCvEW90QjRYzPCU4vXwK0LJGyDYb+vyOk3nFrBN2x
+	 OWgy9LKr72ghuFArv/Ea/hWRQ1ywQ1
+X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+From: Yaxiong Tian <iambestgod@qq.com>
+To: rafael@kernel.org,
+	lukasz.luba@arm.com
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yaxiong Tian <tianyaxiong@kylinos.cn>
+Subject: [PATCH v2] PM: EM: Fix potential division-by-zero error in em_compute_costs()
+Date: Fri, 11 Apr 2025 09:28:21 +0800
+X-OQ-MSGID: <20250411012821.87829-1-iambestgod@qq.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>, 
- linux-arm-kernel@lists.infradead.org, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, devicetree@vger.kernel.org, 
- Andre Przywara <andre.przywara@arm.com>, 
- Philipp Zabel <p.zabel@pengutronix.de>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, Yangtao Li <tiny.windzz@gmail.com>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, linux-kernel@vger.kernel.org, 
- linux-sunxi@lists.linux.dev, Conor Dooley <conor+dt@kernel.org>, 
- Vasily Khoruzhick <anarsoul@gmail.com>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
- Piotr Oniszczuk <piotr.oniszczuk@gmail.com>, 
- "Rafael J . Wysocki" <rafael@kernel.org>
-To: iuncuim <iuncuim@gmail.com>
-In-Reply-To: <20250411003827.782544-7-iuncuim@gmail.com>
-References: <20250411003827.782544-1-iuncuim@gmail.com>
- <20250411003827.782544-7-iuncuim@gmail.com>
-Message-Id: <174433447237.1635065.9681378963946489764.robh@kernel.org>
-Subject: Re: [PATCH 6/6] dt-bindings: thermal: sun8i: Add A523 THS0/1
- controllers
+Content-Transfer-Encoding: 8bit
 
+From: Yaxiong Tian <tianyaxiong@kylinos.cn>
 
-On Fri, 11 Apr 2025 08:38:26 +0800, iuncuim wrote:
-> From: Mikhail Kalashnikov <iuncuim@gmail.com>
-> 
-> Add dt-bindings description of the thermal sensors in the A523 processor.
-> 
-> Signed-off-by: Mikhail Kalashnikov <iuncuim@gmail.com>
-> ---
->  .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml           | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
+When the device is of a non-CPU type, table[i].performance won't be
+initialized in the previous em_init_performance(), resulting in division
+by zero when calculating costs in em_compute_costs().
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Since the 'cost' algorithm is only used for EAS energy efficiency
+calculations and is currently not utilized by other device drivers, we
+should add the _is_cpu_device(dev) check to prevent this division-by-zero
+issue.
 
-yamllint warnings/errors:
+Fixes: <1b600da51073> ("PM: EM: Optimize em_cpu_energy() and remove division")
+Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
+---
+ kernel/power/energy_model.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.example.dtb: thermal-sensor@1c25000 (allwinner,sun8i-h3-ths): clock-names:1: 'gpadc' was expected
-	from schema $id: http://devicetree.org/schemas/thermal/allwinner,sun8i-a83t-ths.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250411003827.782544-7-iuncuim@gmail.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+index d9b7e2b38c7a..d1fa7e8787b5 100644
+--- a/kernel/power/energy_model.c
++++ b/kernel/power/energy_model.c
+@@ -244,7 +244,7 @@ static int em_compute_costs(struct device *dev, struct em_perf_state *table,
+ 					cost, ret);
+ 				return -EINVAL;
+ 			}
+-		} else {
++		} else if (_is_cpu_device(dev)) {
+ 			/* increase resolution of 'cost' precision */
+ 			power_res = table[i].power * 10;
+ 			cost = power_res / table[i].performance;
+-- 
+2.25.1
 
 
