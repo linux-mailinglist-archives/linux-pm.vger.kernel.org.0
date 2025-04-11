@@ -1,68 +1,68 @@
-Return-Path: <linux-pm+bounces-25292-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25291-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BC6FA865AB
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 20:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 09033A865A6
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 20:41:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 77A5F4A72C3
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 18:42:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 012FD4A721C
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 18:41:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39527269D01;
-	Fri, 11 Apr 2025 18:41:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C6AF269836;
+	Fri, 11 Apr 2025 18:41:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d9Lq+nM/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b3gmgPBj"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C85269892;
-	Fri, 11 Apr 2025 18:41:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2218A2690F0;
+	Fri, 11 Apr 2025 18:41:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744396913; cv=none; b=l5pZ3RNN8cQQDDl9dXqu/i8g40ECWq7tcioHORhB5HnusllLtODBW6KShmrp3j1rfE4HXnxqysVXblmRzyQEltAZVmTF52qMS8Hm8M7SOY1PMXQdBls9qXHrTXmoLnZE0Hfl8avyH6B59ItUEFDH1iw6fMzMwafZ5wmCyu9QmO8=
+	t=1744396911; cv=none; b=FpydZ459t7Ahbn4DxnpctBVLM/KQbAPbe7A0fxwXB8I7pTaenX1qfbeQpAROsTf9pwupuEGhc57/sJjXREjCj9g0NFuMNYh/4Bp90Nv8I6rqp2J596BVq7KKIvPCsHZ3SrlNwGVK1z0+k4zerzFMeXV31V6Hp3tLpwhzMy3p2lM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744396913; c=relaxed/simple;
-	bh=NY8+7+ZEmdWqqx0zQOF9aAujJPW4CRyp6FmkPwIcd+w=;
+	s=arc-20240116; t=1744396911; c=relaxed/simple;
+	bh=1iI4AfPrlPKUrGY6yeu/1zp9gMl5LZUj8I/yLIFJQZk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y6pCbFvNiXcmQ1fxo1MNa+q0oQGFulYTYgdFrQMY7cKBaqaBufzSURQmpU69BA5NNU++N/Nyd5tm6CSxLOAh0jWnKaFudOwk8JR6+61D4S19A8UHsfHENJXBZ8h/7PmbaJgOSBL3jNPn1sWG1gtrVjPtyiNsTbe/Hf5dE+2l940=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d9Lq+nM/; arc=none smtp.client-ip=192.198.163.8
+	 Content-Type:Content-Disposition:In-Reply-To; b=MLOILKuppf+8tHReN3PiaMIAjy0rmOk4lCvg9mmMn1XM78A/G+weWQdASdYfsArESngheodF53fecVVY794+FuOL0tfdLVX2NKx3RAwHGl/ED3dngHimKA6gvJ6mj8d+1UoYQUICu6TavrL/6hBMg0ZFies9xF3TNCGZgBprP90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b3gmgPBj; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744396911; x=1775932911;
+  t=1744396909; x=1775932909;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=NY8+7+ZEmdWqqx0zQOF9aAujJPW4CRyp6FmkPwIcd+w=;
-  b=d9Lq+nM/2lV5ChjjnQ/zGREVg7pP3vjW11ZIFfd4SEd6pb5Os7uEyySQ
-   Kb0V/rnnpuaEomBjr2ZjfvuWI0Ya2NkEKYgnpZSKvcI0S7NL0RUrRGqUL
-   G5puANSFUtBwqgQ5g/HgOl1YbdqAfBLnmnBAfXX7k/6NFcecqLSJPIbeF
-   cfysNlryKFaoPJ3lCZH2umQQ4X62Ybn/OeaOisEORL3A7F3vdLegaWo7/
-   mMIRTEHIJootX7LO2jQAOjJ6hr9KRoxTfa08gdjCyicZobvcq5ndSBIdN
-   xISSme44mctcWE8vPAWKhraV0it29da9AFwvgxteVwE/2/pXKQ0EbfNBT
-   g==;
-X-CSE-ConnectionGUID: RlttfFGIS3mXtNGLCkFurA==
-X-CSE-MsgGUID: WARzn40OR9Cm0hDklpGVWw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11401"; a="63500552"
+  bh=1iI4AfPrlPKUrGY6yeu/1zp9gMl5LZUj8I/yLIFJQZk=;
+  b=b3gmgPBjzm7JSGgp//U02k+WH6FpxneP4+wnlHuzYcjJLEm1L3Hb5S7b
+   B57d77Lwlxrj4tOcQ9CC98cZzFsHJXRtIGrr/A1fnzatEExasdwfdtZD6
+   3n8BUoEV+Q2mccfw0WcMqzjzn5oZ46U+cMQq3t+Cte2mXa9diJ4m9vguc
+   LeCBmeJCXnYEIqJNSiJzBkZTG04afDbZsL9jMnysUpd+uhZP+9q0moGdN
+   6mFT/aRW2eGmr/rUjDBQoVyod4mFvXNKVa4eAEaAGDTgB3S3GDnGqn/hs
+   lAFzVJUa8rqe2q3XRC5/064MtuZPAjEuYEmFiPs9al5knaMO5Bc1k8NkD
+   A==;
+X-CSE-ConnectionGUID: MJO0Ehl1RHuT70iYESW5YQ==
+X-CSE-MsgGUID: m2V9Yo7jQQW4PFH8xLRoDA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11401"; a="63500548"
 X-IronPort-AV: E=Sophos;i="6.15,205,1739865600"; 
-   d="scan'208";a="63500552"
+   d="scan'208";a="63500548"
 Received: from fmviesa006.fm.intel.com ([10.60.135.146])
   by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2025 11:41:48 -0700
-X-CSE-ConnectionGUID: e3q01x+CRf6UfIA1beGItA==
-X-CSE-MsgGUID: 8a1ba08VQkKVcgN2zvTF2A==
+X-CSE-ConnectionGUID: pJSGaWLJTF2fqMRCROz6IQ==
+X-CSE-MsgGUID: nmZqz5r4RXGz8z9j0H9ajw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,205,1739865600"; 
-   d="scan'208";a="129124558"
+   d="scan'208";a="129124557"
 Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
   by fmviesa006.fm.intel.com with ESMTP; 11 Apr 2025 11:41:43 -0700
 Received: from kbuild by b207828170a5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u3JJt-000BJa-0o;
+	id 1u3JJt-000BJc-0s;
 	Fri, 11 Apr 2025 18:41:41 +0000
-Date: Sat, 12 Apr 2025 02:40:51 +0800
+Date: Sat, 12 Apr 2025 02:40:52 +0800
 From: kernel test robot <lkp@intel.com>
 To: Praveen Talari <quic_ptalari@quicinc.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -77,13 +77,13 @@ To: Praveen Talari <quic_ptalari@quicinc.com>,
 	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	psodagud@quicinc.com, djaggi@quicinc.com, quic_msavaliy@quicinc.com,
-	quic_vtanuku@quicinc.com, quic_arandive@quicinc.com,
-	quic_mnaresh@quicinc.com, quic_shazhuss@quicinc.com
+Cc: oe-kbuild-all@lists.linux.dev, psodagud@quicinc.com, djaggi@quicinc.com,
+	quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com,
+	quic_arandive@quicinc.com, quic_mnaresh@quicinc.com,
+	quic_shazhuss@quicinc.com
 Subject: Re: [PATCH v1 4/9] soc: qcom: geni-se: Enable QUPs on SA8255p
  Qualcomm platforms
-Message-ID: <202504120226.2XbpK0yU-lkp@intel.com>
+Message-ID: <202504120240.SMbLkgHv-lkp@intel.com>
 References: <20250410174010.31588-5-quic_ptalari@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -109,21 +109,23 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Praveen-Talari/opp-add-ne
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
 patch link:    https://lore.kernel.org/r/20250410174010.31588-5-quic_ptalari%40quicinc.com
 patch subject: [PATCH v1 4/9] soc: qcom: geni-se: Enable QUPs on SA8255p Qualcomm platforms
-config: arm-randconfig-001-20250412 (https://download.01.org/0day-ci/archive/20250412/202504120226.2XbpK0yU-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250412/202504120226.2XbpK0yU-lkp@intel.com/reproduce)
+config: arc-randconfig-001-20250412 (https://download.01.org/0day-ci/archive/20250412/202504120240.SMbLkgHv-lkp@intel.com/config)
+compiler: arc-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250412/202504120240.SMbLkgHv-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504120226.2XbpK0yU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504120240.SMbLkgHv-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/soc/qcom/qcom-geni-se.c:953:1: warning: unused label 'out' [-Wunused-label]
+   drivers/soc/qcom/qcom-geni-se.c: In function 'geni_se_probe':
+>> drivers/soc/qcom/qcom-geni-se.c:953:1: warning: label 'out' defined but not used [-Wunused-label]
      953 | out:
-         | ^~~~
-   1 warning generated.
+         | ^~~
+--
+>> drivers/soc/qcom/qcom-geni-se.c:110: warning: Function parameter or struct member 'geni_se_rsc_init' not described in 'geni_se_desc'
 
 
 vim +/out +953 drivers/soc/qcom/qcom-geni-se.c
