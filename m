@@ -1,179 +1,119 @@
-Return-Path: <linux-pm+bounces-25243-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25244-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AC31A85C4D
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 13:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BA5E4A85C5E
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 13:59:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00D9E16E253
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 11:54:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F3E716F848
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 11:58:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8019227CCEA;
-	Fri, 11 Apr 2025 11:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E9F629AAEB;
+	Fri, 11 Apr 2025 11:58:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yu44am9v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RvtzN8HW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9526A1DE3C7;
-	Fri, 11 Apr 2025 11:54:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDC8298CD9;
+	Fri, 11 Apr 2025 11:58:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744372483; cv=none; b=fBsGQ5WPJMX3VYuztit6DNJB50lSQulW1b36WQhO7ngYunRz+LLw3NALBnKiiYrcjWvljmTxw67EJPmfMIze4VXEopXc4htS7DFoXFhlP+khw+P0xQwDTAGZF+d4Y/xyXYL7kSiJ0boRxbetSjhksmE9m5laq9k+PTbtpWHsSF0=
+	t=1744372717; cv=none; b=SOvh7og7sve4+Iyoj0tJ6eqm3Fuob0Z8vBn9w7DodZ65W1o/9S4m83PgZY2eMHgBdQloTe3hAZSgtesl+BOAz9cbUIXkNHhuoctBC7tW+pgJuHqOWxnr7uoUsgi86NsUQMigNnsXGdpjzsq8eZipDXMIWW/FjOJq7pGctspMuYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744372483; c=relaxed/simple;
-	bh=FkkJf/hTRJd9G+IbffEny8MkSPwptYc8MpG0MAAxlvI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=izWkPaDU6xU5B5rZJ3TGF+PEDEt3vNAlDMs6D1jbof/EkBQGytYmzSmpKGjecCC2JhVcQSPtG0jdEStSTrM3PPkB4VOj6nbe61UdGm5DcQDk0tIl44IpCbyZkADkcIGQ0PZs+kwGMPVWuZVsoB/dPjTfjrC8cHAaUttMNmtig0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yu44am9v; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744372482; x=1775908482;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=FkkJf/hTRJd9G+IbffEny8MkSPwptYc8MpG0MAAxlvI=;
-  b=Yu44am9vDkqvGEQs4D++JqUdTd8CyyzPd24akKjhNy5DRvmgCZsNpeGM
-   M78C6eg3fbXex/xxPx2xW+UP/LTG1MCaDlqwM+fKUBSCurCrUJ5dJX9k3
-   4U4bJT6y9T1bryfd7PNr0c/UGR7Orar9GqGsuzDFgXdiXaSe3rlniTCx3
-   rI3ZPuFK+Nou11orwXtPDey2R3N1Ulh3xrBiTMmQv5jbVIDf+VmAcYej1
-   hICKmbm+RtKgz+/YluR+tarSxbM7LJ4Gm6r0UX+BufxEXJ0J1Au2hVEn5
-   /Miyklb+Pk4LmW+jeigBrrNwGHRQqoSzlBQxwuReaRD20gMb3091eil2M
-   g==;
-X-CSE-ConnectionGUID: s4JmWa6pTvq7lO4l4T0Wlg==
-X-CSE-MsgGUID: ceZHJgLWQleXidKmA57eWA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11400"; a="56566792"
-X-IronPort-AV: E=Sophos;i="6.15,205,1739865600"; 
-   d="scan'208";a="56566792"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2025 04:54:40 -0700
-X-CSE-ConnectionGUID: KhyK7pI+TIqKkR5vc0rFHw==
-X-CSE-MsgGUID: REe/K4z4QNSmfO1Is0nqVw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,205,1739865600"; 
-   d="scan'208";a="129176852"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.16])
-  by fmviesa007.fm.intel.com with ESMTP; 11 Apr 2025 04:54:40 -0700
-From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To: rafael@kernel.org,
-	daniel.lezcano@linaro.org,
-	rui.zhang@intel.com,
-	lukasz.luba@arm.com
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] thermal: intel: int340x: Fix Panther Lake DLVR support
-Date: Fri, 11 Apr 2025 04:54:38 -0700
-Message-ID: <20250411115438.594114-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.48.1
+	s=arc-20240116; t=1744372717; c=relaxed/simple;
+	bh=ePFF4GGH8AopDjRasGCwQmpgIQb6LyuLsOSi1mcIjU4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DrvSrrgO/dysDoH20DhOFWz+csu6pynLt4WuTrDD1FQItTaQX4p9GF44MT3WB6VHTo91YzO3vf9RNHLL4G71+HQ8pzUXj0Sklahcg1VVPAcoqajC+exStwnTQqzmg6h9U2rkXaRy4XC/O0f8fyXNUh1G6U1kJP+iC9ON+pzAoDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RvtzN8HW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BB0CC4CEE2;
+	Fri, 11 Apr 2025 11:58:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744372717;
+	bh=ePFF4GGH8AopDjRasGCwQmpgIQb6LyuLsOSi1mcIjU4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RvtzN8HWxAwCIvkN6HCqqxfGOxfSFf19EicjQaspg5ESxbw+SxHXeiickOJzw/hq0
+	 biwAXLqZaBSVBBx26AiP6Zx1NOCsvklAw1wqJ8XWRejKgXm6wYSWNG8qAgEXdVxZGM
+	 tAWH3847/h0PHRih1lnWpfxWO7gH+yM2+odo3+KUEQJaUNqeqNQnxlRX7Uy6WAB5UI
+	 DkY4RrvPfP0JNUA5fTbh1qCGcxieOtjG8SX7xYp/xvNwqv5KX2xK9SrWmeURa37lb3
+	 Uvy6K6jcFCsEYeLsEj6niJMNjyra0c1HBb3Qx6RPxn9b9f2OEuqevMkO4yCH1Uxt8H
+	 0hBmsvi6B/t8g==
+Date: Fri, 11 Apr 2025 13:58:28 +0200
+From: Danilo Krummrich <dakr@kernel.org>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Danilo Krummrich <dakr@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+	rust-for-linux@vger.kernel.org,
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+	Erik Schilling <erik.schilling@linaro.org>,
+	Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
+	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
+	Yury Norov <yury.norov@gmail.com>, Burak Emir <bqe@google.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Russell King <linux@armlinux.org.uk>, linux-clk@vger.kernel.org,
+	Michael Turquette <mturquette@baylibre.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V9 15/17] rust: cpufreq: Extend abstractions for driver
+ registration
+Message-ID: <Z_kD5G3WhcYlgqmr@cassiopeiae>
+References: <cover.1744366571.git.viresh.kumar@linaro.org>
+ <2f7a1331ad513b94fb47c05bf1d0f5c3fa803858.1744366572.git.viresh.kumar@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2f7a1331ad513b94fb47c05bf1d0f5c3fa803858.1744366572.git.viresh.kumar@linaro.org>
 
-Panther lake uses same register offsets as Lunar Lake. But the
-registers are still pointing to the default table.
+On Fri, Apr 11, 2025 at 04:25:14PM +0530, Viresh Kumar wrote:
+> +pub struct Registration<T: Driver> {
+> +    drv: KBox<UnsafeCell<bindings::cpufreq_driver>>,
+> +    _p: PhantomData<T>,
+> +}
+> +
+> +// SAFETY: `Registration` doesn't offer any methods or access to fields when shared between threads
+> +// or CPUs, so it is safe to share it.
+> +unsafe impl<T: Driver> Sync for Registration<T> {}
+> +
+> +#[allow(clippy::non_send_fields_in_send_ty)]
+> +// SAFETY: Registration with and unregistration from the cpufreq subsystem can happen from any
+> +// thread.  Additionally, `T::Data` (which is dropped during unregistration) is `Send`, so it is
+> +// okay to move `Registration` to different threads.
+> +unsafe impl<T: Driver> Send for Registration<T> {}
+> +
+> +impl<T: Driver> Registration<T> {
+> +    /// Registers a CPU frequency driver with the cpufreq core.
+> +    pub fn new(name: &'static CStr, data: T::Data, flags: u16, boost: bool) -> Result<Self> {
 
-Move the selection of register offsets table from the actual attribute
-read/write callbacks to the proc_thermal_rfim_add(). This way it is clean
-and in future such issues can be avoided.
+Do you really need the private data? It seems to be used by only very few
+drivers in C either.
 
-Fixes: e50eeababa94 ("thermal: intel: int340x: Panther Lake DLVR support")
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- .../int340x_thermal/processor_thermal_rfim.c  | 33 ++++++++++---------
- 1 file changed, 17 insertions(+), 16 deletions(-)
+If yes, I think you have to split this up into a CpufreqDriver structure and a
+separate Registration. Otherwise you won't ever get access to the private data
+again, after Registration::new_foreign_owned().
 
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-index dad63f2d5f90..3a028b78d9af 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-@@ -166,15 +166,18 @@ static const struct mmio_reg adl_dvfs_mmio_regs[] = {
- 	{ 0, 0x5A40, 1, 0x1, 0}, /* rfi_disable */
- };
- 
-+static const struct mapping_table *dlvr_mapping;
-+static const struct mmio_reg *dlvr_mmio_regs_table;
-+
- #define RFIM_SHOW(suffix, table)\
- static ssize_t suffix##_show(struct device *dev,\
- 			      struct device_attribute *attr,\
- 			      char *buf)\
- {\
--	const struct mapping_table *mapping = NULL;\
-+	const struct mmio_reg *mmio_regs = dlvr_mmio_regs_table;\
-+	const struct mapping_table *mapping = dlvr_mapping;\
- 	struct proc_thermal_device *proc_priv;\
- 	struct pci_dev *pdev = to_pci_dev(dev);\
--	const struct mmio_reg *mmio_regs;\
- 	const char **match_strs;\
- 	int ret, err;\
- 	u32 reg_val;\
-@@ -186,12 +189,6 @@ static ssize_t suffix##_show(struct device *dev,\
- 		mmio_regs = adl_dvfs_mmio_regs;\
- 	} else if (table == 2) { \
- 		match_strs = (const char **)dlvr_strings;\
--		if (pdev->device == PCI_DEVICE_ID_INTEL_LNLM_THERMAL) {\
--			mmio_regs = lnl_dlvr_mmio_regs;\
--			mapping = lnl_dlvr_mapping;\
--		} else {\
--			mmio_regs = dlvr_mmio_regs;\
--		} \
- 	} else {\
- 		match_strs = (const char **)fivr_strings;\
- 		mmio_regs = tgl_fivr_mmio_regs;\
-@@ -214,12 +211,12 @@ static ssize_t suffix##_store(struct device *dev,\
- 			       struct device_attribute *attr,\
- 			       const char *buf, size_t count)\
- {\
--	const struct mapping_table *mapping = NULL;\
-+	const struct mmio_reg *mmio_regs = dlvr_mmio_regs_table;\
-+	const struct mapping_table *mapping = dlvr_mapping;\
- 	struct proc_thermal_device *proc_priv;\
- 	struct pci_dev *pdev = to_pci_dev(dev);\
- 	unsigned int input;\
- 	const char **match_strs;\
--	const struct mmio_reg *mmio_regs;\
- 	int ret, err;\
- 	u32 reg_val;\
- 	u32 mask;\
-@@ -230,12 +227,6 @@ static ssize_t suffix##_store(struct device *dev,\
- 		mmio_regs = adl_dvfs_mmio_regs;\
- 	} else if (table == 2) { \
- 		match_strs = (const char **)dlvr_strings;\
--		if (pdev->device == PCI_DEVICE_ID_INTEL_LNLM_THERMAL) {\
--			mmio_regs = lnl_dlvr_mmio_regs;\
--			mapping = lnl_dlvr_mapping;\
--		} else {\
--			mmio_regs = dlvr_mmio_regs;\
--		} \
- 	} else {\
- 		match_strs = (const char **)fivr_strings;\
- 		mmio_regs = tgl_fivr_mmio_regs;\
-@@ -448,6 +439,16 @@ int proc_thermal_rfim_add(struct pci_dev *pdev, struct proc_thermal_device *proc
- 	}
- 
- 	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DLVR) {
-+		switch (pdev->device) {
-+		case PCI_DEVICE_ID_INTEL_LNLM_THERMAL:
-+		case PCI_DEVICE_ID_INTEL_PTL_THERMAL:
-+			dlvr_mmio_regs_table = lnl_dlvr_mmio_regs;
-+			dlvr_mapping = lnl_dlvr_mapping;
-+			break;
-+		default:
-+			dlvr_mmio_regs_table = dlvr_mmio_regs;
-+			break;
-+		}
- 		ret = sysfs_create_group(&pdev->dev.kobj, &dlvr_attribute_group);
- 		if (ret)
- 			return ret;
--- 
-2.49.0
+Note that we typically want Registration::new_foreign_owned(), because it
+implies the guaranteed "fence" for where we can safely consider a device to be
+bound. If we'd give out a Registration instance instead, the driver can
+arbitrarily extend its lifetime across the remove() boundary.
 
+If no, it seems to me that you can even avoid allocating a struct cpufreq_driver
+dynamically and make it const instead. The fields name, boost_enabled and flags
+could be required consts in your cpufreq::Driver trait.
 
