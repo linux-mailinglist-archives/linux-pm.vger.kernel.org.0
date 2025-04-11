@@ -1,31 +1,31 @@
-Return-Path: <linux-pm+bounces-25251-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25246-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9A08A85CF1
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 14:23:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CAB6A85CFB
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 14:24:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62AE21BA748B
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 12:19:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EEB19A49E6
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 12:18:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5332A2BD5BC;
-	Fri, 11 Apr 2025 12:18:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCE9C29DB8F;
+	Fri, 11 Apr 2025 12:18:23 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B652BD5B3
-	for <linux-pm@vger.kernel.org>; Fri, 11 Apr 2025 12:18:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFF0129C357
+	for <linux-pm@vger.kernel.org>; Fri, 11 Apr 2025 12:18:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744373908; cv=none; b=iUDghfhsgpH7vGoxqyHWxiWYS7LZ6skYosjNasPFFXEe8gDIX5EZ+GN5CI7GsimgvL3efLzowAQwX6OBdt+VhpdYcjGO4OSxyBCINgj13m6GM/dI9v+9YeQdagWtJOaLh6vX001xE+5rrYajLyJ2Va17PF21m+An1hOHTdbADZM=
+	t=1744373903; cv=none; b=K5qTFHq4ix6B8YhkFOVfFgvzQWHz9PZwZiADAoDvTFMB2/fpwHNAU2tDAdeZBl5k0T6ctCjXdTa6AgzvgF8jq+b4z1pG1IIDS6EjRJ64/7rk3dRIJ0z18y8M6ihnB00Cd/d39Hnr6sAKeoY7ZfwFanN3CfiVExFJNJe+NQQX1To=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744373908; c=relaxed/simple;
-	bh=NUyfHXKDD6v3aWEOOVgewfAqWd9qq3kYppr+Q23ReSY=;
+	s=arc-20240116; t=1744373903; c=relaxed/simple;
+	bh=penylcrZjRjoRlt2DxZgzg5QOoQPPyQfH7KISVKYXtg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=hVXMMIHfsP+R6lM17GuqY2liAxzHOdyOW66IsZl1IUwg7AdTIK/DjFSnCfNAlJZwYUisYd2+4AYmUuuXPcpdyDhewG4PSQW+odawe/0bg2IP+wabk0xFzdCvHoOclOCsnJri/M1Ds6Ezfp8xlOuQHbV+H5eIDqq6tH8+YOmRt+U=
+	 MIME-Version; b=qk/VhKT2H+g4HILdXwlCBng0wLfmeAd9+DaOVPbx+cH39m6aCyhiImeMG7oWURhDMEb3o9ULC8PGFuRguVXNPomIYlp8x9AEA8+KtjaEFZkIskg21mIRGXBrcR+Qmmjfm+9f8Y6lCERVluvYU7wW6aiawf+eXWX8RfZKBvQ65fs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,16 +33,16 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ore@pengutronix.de>)
-	id 1u3DKZ-0006JX-Fu; Fri, 11 Apr 2025 14:17:59 +0200
+	id 1u3DKZ-0006JY-Fv; Fri, 11 Apr 2025 14:17:59 +0200
 Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac])
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <ore@pengutronix.de>)
-	id 1u3DKY-004Qka-22;
+	id 1u3DKY-004Qkc-2A;
 	Fri, 11 Apr 2025 14:17:58 +0200
 Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.96)
 	(envelope-from <ore@pengutronix.de>)
-	id 1u3DKY-002PCC-1g;
+	id 1u3DKY-002PCM-1k;
 	Fri, 11 Apr 2025 14:17:58 +0200
 From: Oleksij Rempel <o.rempel@pengutronix.de>
 To: Sebastian Reichel <sre@kernel.org>,
@@ -51,6 +51,7 @@ To: Sebastian Reichel <sre@kernel.org>,
 	Tzung-Bi Shih <tzungbi@kernel.org>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
 	kernel@pengutronix.de,
 	linux-kernel@vger.kernel.org,
 	Liam Girdwood <lgirdwood@gmail.com>,
@@ -61,13 +62,12 @@ Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
 	linux-pm@vger.kernel.org,
 	=?UTF-8?q?S=C3=B8ren=20Andersen?= <san@skov.dk>,
 	Guenter Roeck <groeck@chromium.org>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
 	Ahmad Fatoum <a.fatoum@pengutronix.de>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	chrome-platform@lists.linux.dev
-Subject: [PATCH v8 6/7] power: reset: add PSCR NVMEM Driver for Recording Power State Change Reasons
-Date: Fri, 11 Apr 2025 14:17:56 +0200
-Message-Id: <20250411121757.573419-7-o.rempel@pengutronix.de>
+Subject: [PATCH v8 7/7] Documentation: Add sysfs documentation for PSCRR reboot reason tracking
+Date: Fri, 11 Apr 2025 14:17:57 +0200
+Message-Id: <20250411121757.573419-8-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250411121757.573419-1-o.rempel@pengutronix.de>
 References: <20250411121757.573419-1-o.rempel@pengutronix.de>
@@ -83,328 +83,105 @@ X-SA-Exim-Mail-From: ore@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-This driver utilizes the Power State Change Reasons Recording (PSCRR)
-framework to store specific power state change information, such as
-shutdown or reboot reasons, into a designated non-volatile memory
-(NVMEM) cell.
+Add documentation for the Power State Change Reason Recorder (PSCRR)
+sysfs interface, which allows tracking of system shutdown and reboot
+reasons. The documentation provides details on available sysfs entries
+under `/sys/kernel/pscrr/`, explaining their functionality, example usage,
+and how they interact with different backend storage options (e.g., NVMEM).
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
 ---
-changes v6:
-- rename pscr_reason to psc_reason
-changes v5:
-- avoid a build against NVMEM=m
-changes v4:
-- remove devicetree dependencies
+changes v8:
+- Simplify and clarify example sysfs value comments
+- Add note that not all values are meaningful on every system
+changes v7:
+- document expected values
 ---
- drivers/power/reset/Kconfig       |  22 +++
- drivers/power/reset/Makefile      |   1 +
- drivers/power/reset/pscrr-nvmem.c | 254 ++++++++++++++++++++++++++++++
- 3 files changed, 277 insertions(+)
- create mode 100644 drivers/power/reset/pscrr-nvmem.c
+ .../ABI/testing/sysfs-kernel-reboot-pscrr     | 74 +++++++++++++++++++
+ 1 file changed, 74 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-kernel-reboot-pscrr
 
-diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-index 7e4c4f317938..33ccdecd6442 100644
---- a/drivers/power/reset/Kconfig
-+++ b/drivers/power/reset/Kconfig
-@@ -341,3 +341,25 @@ menuconfig PSCRR
- 	  be recorded unless hardware provides the reset cause.
- 
- 	  If unsure, say N.
-+
-+if PSCRR
-+
-+config PSCRR_NVMEM
-+	tristate "Generic NVMEM-based Power State Change Reason Recorder"
-+	depends on NVMEM || !NVMEM
-+	help
-+	  This option enables support for storing power state change reasons
-+	  (such as shutdown, reboot, or power failure events) into a designated
-+	  NVMEM (Non-Volatile Memory) cell.
-+
-+	  This feature allows embedded systems to retain power transition
-+	  history even after a full system restart or power loss. It is useful
-+	  for post-mortem debugging, automated recovery strategies, and
-+	  improving system reliability.
-+
-+	  The NVMEM cell used for storing these reasons can be dynamically
-+	  configured via module parameters.
-+
-+	  If unsure, say N.
-+
-+endif
-diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-index dbd6ae6b26a4..532698552d40 100644
---- a/drivers/power/reset/Makefile
-+++ b/drivers/power/reset/Makefile
-@@ -33,6 +33,7 @@ obj-$(CONFIG_POWER_RESET_SYSCON) += syscon-reboot.o
- obj-$(CONFIG_POWER_RESET_SYSCON_POWEROFF) += syscon-poweroff.o
- obj-$(CONFIG_POWER_RESET_RMOBILE) += rmobile-reset.o
- obj-$(CONFIG_PSCRR) += pscrr.o
-+obj-$(CONFIG_PSCRR_NVMEM) += pscrr-nvmem.o
- obj-$(CONFIG_REBOOT_MODE) += reboot-mode.o
- obj-$(CONFIG_SYSCON_REBOOT_MODE) += syscon-reboot-mode.o
- obj-$(CONFIG_POWER_RESET_SC27XX) += sc27xx-poweroff.o
-diff --git a/drivers/power/reset/pscrr-nvmem.c b/drivers/power/reset/pscrr-nvmem.c
+diff --git a/Documentation/ABI/testing/sysfs-kernel-reboot-pscrr b/Documentation/ABI/testing/sysfs-kernel-reboot-pscrr
 new file mode 100644
-index 000000000000..7d02d989893f
+index 000000000000..96369422ed6e
 --- /dev/null
-+++ b/drivers/power/reset/pscrr-nvmem.c
-@@ -0,0 +1,254 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * pscrr_nvmem.c - PSCRR backend for storing shutdown reasons in small NVMEM
-+ *		   cells
-+ *
-+ * This backend provides a way to persist power state change reasons in a
-+ * non-volatile memory (NVMEM) cell, ensuring that reboot causes can be
-+ * analyzed post-mortem. Unlike traditional logging to eMMC or NAND, which
-+ * may be unreliable during power failures, this approach allows storing
-+ * reboot reasons in small, fast-access storage like RTC scratchpads, EEPROM,
-+ * or FRAM.
-+ *
-+ * The module allows dynamic configuration of the NVMEM device and cell
-+ * via module parameters:
-+ *
-+ * Example usage:
-+ *   modprobe pscrr-nvmem nvmem_name=pcf85063_nvram0 cell_name=pscr@0,0
-+ */
++++ b/Documentation/ABI/testing/sysfs-kernel-reboot-pscrr
+@@ -0,0 +1,74 @@
++What:		/sys/kernel/pscrr/reason
++Date:		April 2025
++KernelVersion:  6.16
++Contact:	Oleksij Rempel <o.rempel@pengutronix.de>
++Description:
++		This file provides access to the current power state
++		change reason. If supported, the reason may be stored
++		persistently in an NVMEM cell or another backend.
 +
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/nvmem-consumer.h>
-+#include <linux/pscrr.h>
-+#include <linux/slab.h>
++		Reading this file returns an integer representing the
++		current shutdown or reboot cause.
 +
-+/*
-+ * Module parameters:
-+ *   nvmem_name: Name of the NVMEM device (e.g. "pcf85063_nvram0").
-+ *   cell_name : Sysfs name of the cell on that device (e.g. "pscr@0,0").
-+ */
-+static char *nvmem_name;
-+module_param(nvmem_name, charp, 0444);
-+MODULE_PARM_DESC(nvmem_name, "Name of the NVMEM device (e.g. pcf85063_nvram0)");
++		Writing an integer value to this file sets the reason
++		to be stored for system analysis on next reboot.
 +
-+static char *cell_name;
-+module_param(cell_name, charp, 0444);
-+MODULE_PARM_DESC(cell_name, "Sysfs name of the NVMEM cell (e.g. pscr@0,0)");
++		Example usage:
++		  Read:
++			$ cat /sys/kernel/pscrr/reason
++			1   # (Example: Under-voltage shutdown)
 +
-+struct pscrr_nvmem_priv {
-+	struct nvmem_device *nvmem;
-+	struct nvmem_cell *cell;
++		  Write:
++			$ echo 4 > /sys/kernel/pscrr/reason
++			# Sets the reason to 4 (Example: Over-temperature shutdown)
 +
-+	size_t total_bits;
-+	size_t max_val;
-+};
++		Note:
++		  Not all systems support all reason values. Hardware or
++		  configuration may limit which reasons are applicable.
 +
-+static struct pscrr_nvmem_priv *priv;
++		Values are defined in:
++		  - include/linux/reboot.h (enum psc_reason)
 +
-+static int pscrr_nvmem_write_reason(enum psc_reason reason)
-+{
-+	size_t required_bytes;
-+	u32 val;
-+	int ret;
++		Supported Values:
++		  (from include/linux/reboot.h)
 +
-+	if (!priv || !priv->cell)
-+		return -ENODEV;
++		+-------+---------------------------+--------------------------+
++		| Value | Symbol                    | Description              |
++		+-------+---------------------------+--------------------------+
++		| 0     | PSCR_UNKNOWN              | Unknown or unspecified   |
++		|       |                           | power state change reason|
++		+-------+---------------------------+--------------------------+
++		| 1     | PSCR_UNDER_VOLTAGE        | Supply voltage dropped   |
++		|       |                           | below safe threshold     |
++		+-------+---------------------------+--------------------------+
++		| 2     | PSCR_OVER_CURRENT         | Excessive current draw or|
++		|       |                           | potential short circuit  |
++		+-------+---------------------------+--------------------------+
++		| 3     | PSCR_REGULATOR_FAILURE    | Voltage regulator failure|
++		|       |                           | preventing stable supply |
++		+-------+---------------------------+--------------------------+
++		| 4     | PSCR_OVER_TEMPERATURE     | Unsafe system temperature|
++		|       |                           | detected by sensors      |
++		+-------+---------------------------+--------------------------+
++		| 5     | PSCR_EC_PANIC             | Reboot triggered by EC   |
++		|       |                           | (Embedded Controller)    |
++		+-------+---------------------------+--------------------------+
 +
-+	/* Ensure reason fits in the available storage */
-+	if (reason > priv->max_val) {
-+		pr_err("PSCRR-nvmem: Reason %d exceeds max storable value %zu for %zu-bit cell\n",
-+		       reason, priv->max_val, priv->total_bits);
-+		return -ERANGE;
-+	}
++What:		/sys/kernel/pscrr/reason_boot
++Date:		April 2025
++KernelVersion:  6.16
++Contact:	Oleksij Rempel <o.rempel@pengutronix.de>
++Description:
++		This file provides the last recorded power state change
++		reason from before the current boot. If a supported backend
++		is configured (e.g., NVMEM), the value is retained across
++		reboots.
 +
-+	val = reason;
++		Example usage:
++		  Read:
++			$ cat /sys/kernel/pscrr/reason_boot
++			4   # (Example: Over-temperature shutdown)
 +
-+	/* Determine required bytes for storing total_bits */
-+	required_bytes = (priv->total_bits + 7) / 8;
++		Supported values:
++		  Same as /sys/kernel/pscrr/reason (see above).
 +
-+	/* Write the reason to the NVMEM cell */
-+	ret = nvmem_cell_write(priv->cell, &val, required_bytes);
-+	if (ret < 0) {
-+		pr_err("PSCRR-nvmem: Failed to write reason %d, err=%d (%pe)\n",
-+		       reason, ret, ERR_PTR(ret));
-+		return ret;
-+	}
-+
-+	pr_debug("PSCRR-nvmem: Successfully wrote reason %d\n", reason);
-+
-+	return 0;
-+}
-+
-+static int pscrr_nvmem_read_reason(enum psc_reason *reason)
-+{
-+	size_t required_bytes, len;
-+	unsigned int val;
-+	int ret = 0;
-+	void *buf;
-+
-+	if (!priv || !priv->cell)
-+		return -ENODEV;
-+
-+	buf = nvmem_cell_read(priv->cell, &len);
-+	if (IS_ERR(buf)) {
-+		ret = PTR_ERR(buf);
-+		pr_err("PSCRR-nvmem: Failed to read cell, err=%d (%pe)\n", ret,
-+		       ERR_PTR(ret));
-+		return ret;
-+	}
-+
-+	/* Calculate the required number of bytes */
-+	required_bytes = (priv->total_bits + 7) / 8;
-+
-+	/* Validate that the returned length is large enough */
-+	if (len < required_bytes) {
-+		pr_err("PSCRR-nvmem: Read length %zu is too small (need at least %zu bytes)\n",
-+		       len, required_bytes);
-+		kfree(buf);
-+		return -EIO;
-+	}
-+
-+	/* Extract value safely with proper memory alignment handling */
-+	val = 0;
-+	memcpy(&val, buf, required_bytes);
-+
-+	/* Mask only the necessary bits to avoid garbage data */
-+	val &= (1U << priv->total_bits) - 1;
-+
-+	kfree(buf);
-+
-+	*reason = (enum psc_reason)val;
-+
-+	pr_debug("PSCRR-nvmem: Read reason => %d (from %zu bytes, %zu bits used)\n",
-+		 *reason, len, priv->total_bits);
-+
-+	return 0;
-+}
-+
-+static const struct pscrr_backend_ops pscrr_nvmem_ops = {
-+	.write_reason = pscrr_nvmem_write_reason,
-+	.read_reason  = pscrr_nvmem_read_reason,
-+};
-+
-+static int __init pscrr_nvmem_init(void)
-+{
-+	size_t bytes, bits;
-+	int ret;
-+
-+	if (!nvmem_name || !cell_name) {
-+		pr_err("PSCRR-nvmem: Must specify both nvmem_name and cell_name.\n");
-+		return -EINVAL;
-+	}
-+
-+	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->nvmem = nvmem_device_get_by_name(nvmem_name);
-+	if (IS_ERR(priv->nvmem)) {
-+		ret = PTR_ERR(priv->nvmem);
-+		pr_err("PSCRR-nvmem: nvmem_device_get_by_name(%s) failed: %d\n",
-+		       nvmem_name, ret);
-+		priv->nvmem = NULL;
-+		goto err_free;
-+	}
-+
-+	priv->cell = nvmem_cell_get_by_sysfs_name(priv->nvmem, cell_name);
-+	if (IS_ERR(priv->cell)) {
-+		ret = PTR_ERR(priv->cell);
-+		pr_err("PSCRR-nvmem: nvmem_cell_get_by_sysfs_name(%s) failed, err=%pe\n",
-+		       cell_name, ERR_PTR(ret));
-+		priv->cell = NULL;
-+		goto err_dev_put;
-+	}
-+
-+	ret = nvmem_cell_get_size(priv->cell, &bytes, &bits);
-+	if (ret < 0) {
-+		pr_err("PSCRR-nvmem: Failed to get cell size, err=%pe\n",
-+		       ERR_PTR(ret));
-+		goto err_cell_put;
-+	}
-+
-+	if (bits)
-+		priv->total_bits = bits;
-+	else
-+		priv->total_bits = bytes * 8;
-+
-+	if (priv->total_bits > 31) {
-+		pr_err("PSCRR-nvmem: total_bits=%zu is too large (max 31 allowed)\n",
-+		       priv->total_bits);
-+		return -EOVERFLOW;
-+	}
-+
-+	priv->max_val = (1 << priv->total_bits) - 1;
-+	pr_debug("PSCRR-nvmem: Cell size: %zu bytes + %zu bits => total_bits=%zu\n",
-+		 bytes, bits, priv->total_bits);
-+
-+	/*
-+	 * If we store reasons 0..PSCR_MAX_REASON, the largest needed is
-+	 * 'PSCR_MAX_REASON'. That must fit within total_bits.
-+	 * So the max storable integer is (1 << total_bits) - 1.
-+	 */
-+	if (priv->max_val < PSCR_MAX_REASON) {
-+		pr_err("PSCRR-nvmem: Not enough bits (%zu) to store up to reason=%d\n",
-+		       priv->total_bits, PSCR_MAX_REASON);
-+		ret = -ENOSPC;
-+		goto err_cell_put;
-+	}
-+
-+	/* 4. Register with pscrr_core. */
-+	ret = pscrr_core_init(&pscrr_nvmem_ops);
-+	if (ret) {
-+		pr_err("PSCRR-nvmem: pscrr_core_init() failed: %d\n", ret);
-+		goto err_cell_put;
-+	}
-+
-+	pr_info("PSCRR-nvmem: Loaded (nvmem=%s, cell=%s), can store 0..%zu\n",
-+		nvmem_name, cell_name, priv->max_val);
-+	return 0;
-+
-+err_cell_put:
-+	if (priv->cell) {
-+		nvmem_cell_put(priv->cell);
-+		priv->cell = NULL;
-+	}
-+err_dev_put:
-+	if (priv->nvmem) {
-+		nvmem_device_put(priv->nvmem);
-+		priv->nvmem = NULL;
-+	}
-+err_free:
-+	kfree(priv);
-+	priv = NULL;
-+	return ret;
-+}
-+
-+static void __exit pscrr_nvmem_exit(void)
-+{
-+	pscrr_core_exit();
-+
-+	if (priv) {
-+		if (priv->cell) {
-+			nvmem_cell_put(priv->cell);
-+			priv->cell = NULL;
-+		}
-+		if (priv->nvmem) {
-+			nvmem_device_put(priv->nvmem);
-+			priv->nvmem = NULL;
-+		}
-+		kfree(priv);
-+		priv = NULL;
-+	}
-+
-+	pr_info("pscrr-nvmem: Unloaded\n");
-+}
-+
-+module_init(pscrr_nvmem_init);
-+module_exit(pscrr_nvmem_exit);
-+
-+MODULE_AUTHOR("Oleksij Rempel <o.rempel@pengutronix.de>");
-+MODULE_DESCRIPTION("PSCRR backend for storing reason code in NVMEM");
-+MODULE_LICENSE("GPL");
 -- 
 2.39.5
 
