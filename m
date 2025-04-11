@@ -1,122 +1,230 @@
-Return-Path: <linux-pm+bounces-25288-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25289-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A9CFA86535
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 20:05:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37803A86549
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 20:16:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D0349A2666
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 18:03:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E42CB4C71E8
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 18:16:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB748258CE7;
-	Fri, 11 Apr 2025 18:03:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0575F21D5AE;
+	Fri, 11 Apr 2025 18:16:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fBErLamH"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="YgAw9tB1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9592F20F08E;
-	Fri, 11 Apr 2025 18:03:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA2E2367DC;
+	Fri, 11 Apr 2025 18:16:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744394595; cv=none; b=bOSRdyMQkV8Assg9dULzi8KglOa/hpkFRymu9IP8Gjomnm3DjYUt8QgCvszItR0sdW2blbiaUgQ7l8pqa5BeOG8p/8e7fT8IzEoGM83605EHaxffIcxc/kFcGvD6v7fjDqOG1e5NbB14Le/luHh/Bybpo5Z9ffwt0fRHkUdtOlI=
+	t=1744395363; cv=none; b=KswkwXV7Vemo8MD7LcZPUrJyL2uHouzbA79eBcNbqt1KHdYzJV6d8MpZoUQXlhgxgaT4UCmYcKIA3Fi24vi9aCvnzSxiXcqSTylwPsNuwamgT8EWAZ+TPdAj9zIMYMA+SuK556fNZH2ibS7b0hmWDQ43NUaArQd/KiOvtjHeSUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744394595; c=relaxed/simple;
-	bh=WkEFiBHfIO5jmz+oePTSYJtLhr8/7pRTP8FdSbo0DRw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bRO0+i2Udc/T3bNRgwnpL+wm6ZXB94uvv1kX/GtOJ0J7eIjkHB2wSQgOqGyl1ruJ27gSbN6MBJrcKKV2vp5D2pPBQQ3IXkvr+3u+hKprT/GdHSB0ifWG98y/7RV8e5hn68Bi8fQfzyHV9rV4LbEVcXR1yzJ3FQu3XlE/azNgW1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fBErLamH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C08ECC4CEE2;
-	Fri, 11 Apr 2025 18:03:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744394594;
-	bh=WkEFiBHfIO5jmz+oePTSYJtLhr8/7pRTP8FdSbo0DRw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fBErLamHQUxnHJPSUBr1MbBfvq4joYezZ4Tv91nkmPSkeyfyRQabkQ0PC2YFRAi+f
-	 dRTuo3Zfws9w6Grxq98FAwT0GZBAs/9oujAIvnov/AorEZ0V9i4yhY+L8p3IEzOZ2+
-	 2wUIVpf5FJ+79CaXE/CCgitlyarSvoRPGFq6MLZr2aAbNemQAOC4ggi5LKMCY5y0W7
-	 b2Jwh/779qAluQjcDTKei3/0FykUwpefLmabh2MaPWUKjM87tUweCehu3EJ+poRZFm
-	 T3b0IMSMNeUJouZGOTCUBh3zxeK91npz1yKSO5yTxfwbxvc32Dna3YY8yOVUsIzjhm
-	 3Dt28LH9EAk9Q==
-Date: Fri, 11 Apr 2025 20:03:04 +0200
-From: Danilo Krummrich <dakr@kernel.org>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Danilo Krummrich <dakr@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>, linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-	rust-for-linux@vger.kernel.org,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Erik Schilling <erik.schilling@linaro.org>,
-	Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
-	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
-	Burak Emir <bqe@google.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Russell King <linux@armlinux.org.uk>, linux-clk@vger.kernel.org,
-	Michael Turquette <mturquette@baylibre.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V9 09/17] rust: cpu: Add from_cpu()
-Message-ID: <Z_lZWPr1vBCrYbkA@cassiopeiae>
-References: <cover.1744366571.git.viresh.kumar@linaro.org>
- <475bc73d8d11290446a4135af76aea123c6d80ee.1744366571.git.viresh.kumar@linaro.org>
- <Z_lAyGy1o80MPVOC@yury>
+	s=arc-20240116; t=1744395363; c=relaxed/simple;
+	bh=dyUHYy7uA2zYq4DX3dwXYPvpZrduLWaoUC38taKSDAY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=SK5fRzT+iNMYO5g8zTjZicOO++if3tA/3SN8BMNw1/SPbFB2Dw1vWXRrcvzGzkxrL0ci63LNeuuBcNHKAslZ5DXZywcA/Dq40RkAhztCh8cK9Oezr2MiAg4YkhFGfYNRD92YF3CPWEnmNzy78F1KJzrthCZ2Rg0UbGEaKCmM1GM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=YgAw9tB1; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53BFBKvF018740;
+	Fri, 11 Apr 2025 18:15:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Z3WYEGHjhVBiH0fk/qwPhN94rw6DRAu9oRxXveAoAAw=; b=YgAw9tB1oFNXcH7C
+	H1WUnW1biTBR0Hix+yYpH5y4z6YhctvW7RV681op+sRyVeZn673ErOdtwojm4Z1q
+	w7zbn46AN8UC0pDCoAMh6bAi+Blq7FNehXXIr1sA/fUVPhR+jx8yc9B7M9gl/2XB
+	JvuY3OsOAKt5o7jNMOk0mjX6Bdy+AWMjIY2DIgK7ZJhLZfFEx5Bggy9eXb/jhAEw
+	7J8FV1FIT5qYO/ZAMSdV00krHbwm1BMqDc1RQUE1lk86w0qPjb2DtMAUQkFChTMd
+	UwRB+Ber+vbLG6P/lWBuipcq99W+u1cpbEwQeFZQoXrJ4lS2mDzjZYFldSvq0ldH
+	UebAmg==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45twdguewh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 11 Apr 2025 18:15:37 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53BIFaVv005437
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 11 Apr 2025 18:15:36 GMT
+Received: from [10.216.49.215] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 11 Apr
+ 2025 11:15:30 -0700
+Message-ID: <c4ae42cc-872d-41ea-95ad-9dc294f1a5a1@quicinc.com>
+Date: Fri, 11 Apr 2025 23:45:26 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z_lAyGy1o80MPVOC@yury>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 2/9] dt-bindings: serial: describe SA8255p
+To: Rob Herring <robh@kernel.org>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby
+	<jirislaby@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "Conor
+ Dooley" <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konradybcio@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, "Nishanth Menon" <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J.
+ Wysocki" <rafael@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <psodagud@quicinc.com>,
+        <djaggi@quicinc.com>, <quic_msavaliy@quicinc.com>,
+        <quic_vtanuku@quicinc.com>, <quic_arandive@quicinc.com>,
+        <quic_mnaresh@quicinc.com>, <quic_shazhuss@quicinc.com>,
+        Nikunj Kela
+	<quic_nkela@quicinc.com>
+References: <20250410174010.31588-1-quic_ptalari@quicinc.com>
+ <20250410174010.31588-3-quic_ptalari@quicinc.com>
+ <20250411175730.GA3642862-robh@kernel.org>
+Content-Language: en-US
+From: Praveen Talari <quic_ptalari@quicinc.com>
+In-Reply-To: <20250411175730.GA3642862-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Authority-Analysis: v=2.4 cv=PJgP+eqC c=1 sm=1 tr=0 ts=67f95c5a cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=gEfo2CItAAAA:8 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8
+ a=_YL1DZwizIQu3P7nRPwA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=sptkURWiP4Gy88Gu7hUp:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: Fh9pCnJHT4bNCV0ULywHERNNYgfEWTZ8
+X-Proofpoint-GUID: Fh9pCnJHT4bNCV0ULywHERNNYgfEWTZ8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-11_07,2025-04-10_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 clxscore=1015 adultscore=0 malwarescore=0 spamscore=0
+ impostorscore=0 suspectscore=0 mlxlogscore=999 bulkscore=0 mlxscore=0
+ priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2504110116
 
-On Fri, Apr 11, 2025 at 12:18:26PM -0400, Yury Norov wrote:
-> On Fri, Apr 11, 2025 at 04:25:08PM +0530, Viresh Kumar wrote:
-> > +/// Creates a new instance of CPU's device.
-> > +///
-> > +/// # Safety
-> > +///
-> > +/// Reference counting is not implemented for the CPU device in the C code. When a CPU is
-> > +/// hot-unplugged, the corresponding CPU device is unregistered, but its associated memory
-> > +/// is not freed.
-> > +///
-> > +/// Callers must ensure that the CPU device is not used after it has been unregistered.
-> > +/// This can be achieved, for example, by registering a CPU hotplug notifier and removing
-> > +/// any references to the CPU device within the notifier's callback.
-> > +pub unsafe fn from_cpu(cpu: u32) -> Result<&'static Device> {
-> > +    // SAFETY: The pointer returned by `get_cpu_device()`, if not `NULL`, is a valid pointer to
-> > +    // a `struct device` and is never freed by the C code.
-> > +    let ptr = unsafe { bindings::get_cpu_device(cpu) };
+Hi
 
-You don't need to justify the return value here, you need to justify why cpu is
-a valid value to call get_cpu_device() with.
+On 4/11/2025 11:27 PM, Rob Herring wrote:
+> On Thu, Apr 10, 2025 at 11:10:03PM +0530, Praveen Talari wrote:
+>> From: Nikunj Kela <quic_nkela@quicinc.com>
+>>
+>> SA8255p platform abstracts resources such as clocks, interconnect and
+>> GPIO pins configuration in Firmware. SCMI power and perf protocols are
+>> used to send request for resource configurations.
+>>
+>> Add DT bindings for the QUP GENI UART controller on sa8255p platform.
+>>
+>> Co-developed-by: Praveen Talari <quic_ptalari@quicinc.com>
+>> Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
+> Your tags go last because you touched this last (I assume). The order
+> here would be correct if you were the original author, but Nikunj made
+> significant enough changes to change the author and also sent the
+> patches. The sender always has the last S-o-b (until the maintainer
+> adds their's when applying).
+Do you mean like below
+Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+Co-developed-by: Praveen Talari <quic_ptalari@quicinc.com>
 
-> > +    if ptr.is_null() {
-> > +        return Err(ENODEV);
-> > +    }
-> > +
-> > +    // SAFETY: The pointer returned by `get_cpu_device()`, if not `NULL`, is a valid pointer to
-> > +    // a `struct device` and is never freed by the C code.
+Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
 
-Here, the comment is good.
+Are Co-developed-by and Signed-off-by both needed or can i keep s-o-b?
 
-> If you think that writing the same thing twice would help in SAFETY
-> department, I'd recommend you to write it for a couple more times.
+>
+>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+>> ---
+>>   .../serial/qcom,sa8255p-geni-uart.yaml        | 59 +++++++++++++++++++
+>>   1 file changed, 59 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/serial/qcom,sa8255p-geni-uart.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/serial/qcom,sa8255p-geni-uart.yaml b/Documentation/devicetree/bindings/serial/qcom,sa8255p-geni-uart.yaml
+>> new file mode 100644
+>> index 000000000000..0dbfbfa1d504
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/serial/qcom,sa8255p-geni-uart.yaml
+>> @@ -0,0 +1,59 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/serial/qcom,sa8255p-geni-uart.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Qualcomm Geni based QUP UART interface
+>> +
+>> +maintainers:
+>> +  - Praveen Talari <quic_ptalari@quicinc.com>
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/serial/serial.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - qcom,sa8255p-geni-uart
+>> +      - qcom,sa8255p-geni-debug-uart
+>> +
+>> +  interrupts:
+>> +    minItems: 1
+>> +    items:
+>> +      - description: UART core irq
+>> +      - description: Wakeup irq (RX GPIO)
+> If this is a wakeup source, then you should have interrupt-names with
+> 'wakeup' for the 2nd irq.
 
-Fixing the above, should also fix the duplication. :)
+We have taken reference of below existing yaml file
 
-> > +    Ok(unsafe { Device::as_ref(ptr) })
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+
+>
+>> +
+>> +  power-domains:
+>> +    minItems: 2
+>> +    maxItems: 2
+>> +
+>> +  power-domain-names:
+>> +    items:
+>> +      - const: power
+>> +      - const: perf
+>> +
+>> +  reg:
+>> +    maxItems: 1
+> 'reg' goes after compatible.
+We have taken reference of 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+>
+>> +
+>> +required:
+>> +  - compatible
+>> +  - interrupts
+>> +  - reg
+>> +  - power-domains
+>> +  - power-domain-names
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +
+>> +    serial@990000 {
+>> +        compatible = "qcom,sa8255p-geni-uart";
+>> +        reg = <0x990000 0x4000>;
+>> +        interrupts = <GIC_SPI 531 IRQ_TYPE_LEVEL_HIGH>;
+>> +        power-domains = <&scmi0_pd 0>, <&scmi0_dvfs 0>;
+>> +        power-domain-names = "power", "perf";
+>> +    };
+>> +...
+>> -- 
+>> 2.17.1
+>>
 
