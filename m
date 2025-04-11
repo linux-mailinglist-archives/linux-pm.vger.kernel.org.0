@@ -1,132 +1,118 @@
-Return-Path: <linux-pm+bounces-25258-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25259-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66FBAA85F73
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 15:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 526D0A8609A
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 16:30:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED2D01888832
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 13:43:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24CCE1B81539
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 14:30:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 543991D5ACF;
-	Fri, 11 Apr 2025 13:43:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14B0B1F4CAE;
+	Fri, 11 Apr 2025 14:30:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kYtYR9HT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SkccE8nC"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2461A13E898;
-	Fri, 11 Apr 2025 13:43:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB6901F417A;
+	Fri, 11 Apr 2025 14:30:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744379012; cv=none; b=N0z5RB5pP1pxMGh6ZY7PshWNByzPtYLhMHlrN+BLuMPogvOZn5cv+rq28MXssxOcPMu7Ut6lqfnnfWHfZVihtxwc4GZpV6rczywAnHdH9px10oKq0EiIGrye8e777BR7nWy8v+yDL7VeKtLzuVHZKtVoopKxZGkcRWoUqMm2oRE=
+	t=1744381811; cv=none; b=Y4vOCFSuTb+MU6VSgrDZXzlyT/6Mf+Lec8AC1olhpb76I3t9msFJ2dHt0HWHU59R2G2VJnQPi5F27l2icIPKXpaq6WPcitUy/b2cTasVRwQzobssH9848EbEj6BimyyGdt4DWofXz2aNEP8M1fku8PKKbY+EsLADjPer84xAncI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744379012; c=relaxed/simple;
-	bh=tliAMtv1OcJaSk4zt2mFjXPHpuo4+e2d80RH30k39qg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r9BMWAiVSINdGsFMg0i0jZSRbwJQ+P4iJXYcMtALcWOgp9rD/mXwWOJfF0rrbh5xXhz4UfxaqTHFCg66zRxgUxY9fhoM9XBRtXo3Ff+SjrNCgAZqjYQoqno+7wuRhHX/xMxqdUUz0YnWdlZvLW3gtozupv+bCwUswM9SBIvOhZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kYtYR9HT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55A24C4CEE7;
-	Fri, 11 Apr 2025 13:43:31 +0000 (UTC)
+	s=arc-20240116; t=1744381811; c=relaxed/simple;
+	bh=aKErMgxVbs+xUrWl8vNAgJtDuFNx5da5an6Q5t47O+A=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=eeFVcbLycFk9LpafYh3ipczQbMxrTZcVEFQtwbwastVDUNC0Mi/m78M9wpdBr+xUbfikBXaaSChcoY1xLhOcLqyDp/4vu7dYnw/c0ub9uZJVXrOTGkix9HyewmqGIES0GQhr6PRdE+Lm37uwGTF0pMnGqNQgCsmTpOUzjwucsk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SkccE8nC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CF01C4CEE7;
+	Fri, 11 Apr 2025 14:30:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744379011;
-	bh=tliAMtv1OcJaSk4zt2mFjXPHpuo4+e2d80RH30k39qg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kYtYR9HTZBwMP5Oi7bPretfsvPfOvYCRBS72D97j7i3aPPNTx2mrMavXTUE6McB9f
-	 eTbX6bKtprpTBwHE2o48DSGO3p5BNHOT+nxdbcl0Gq6RpscUvQrNXjeLq4pZV15Afx
-	 Ntbw5YpLpXkixY2/VcHFc1SpYlgJHv9tGOVUeceRLfMjUPmbLjGftwcOXvB1ErfW1k
-	 z+rdIwx6u/uhB7vbmz8CcpHuPlSmtfoANznSJIhe/6W4TJ/goaw/USm8ZNj5qdPXgS
-	 ozeIXMulaLNv2bYN3z3FZkW/VtEbFHxfl/4UuxBFw8Y7oE/dRrYMe50F5OZeTH9Rqh
-	 3DtQX7+3B2iKA==
-Date: Fri, 11 Apr 2025 08:43:30 -0500
-From: Rob Herring <robh@kernel.org>
-To: iuncuim <iuncuim@gmail.com>
-Cc: Vasily Khoruzhick <anarsoul@gmail.com>,
-	Yangtao Li <tiny.windzz@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Andre Przywara <andre.przywara@arm.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Piotr Oniszczuk <piotr.oniszczuk@gmail.com>
-Subject: Re: [PATCH 6/6] dt-bindings: thermal: sun8i: Add A523 THS0/1
- controllers
-Message-ID: <20250411134330.GA3054295-robh@kernel.org>
-References: <20250411003827.782544-1-iuncuim@gmail.com>
- <20250411003827.782544-7-iuncuim@gmail.com>
+	s=k20201202; t=1744381810;
+	bh=aKErMgxVbs+xUrWl8vNAgJtDuFNx5da5an6Q5t47O+A=;
+	h=From:Date:Subject:To:Cc:From;
+	b=SkccE8nCAgIjIQ1vYKumzUm1/ywjp1658zPJqMD07gn55b2wogMIeLlqeXWtUBEUW
+	 kWW2pR+teLTvPH6k6c/ykxmCfHam83NX5FoWv//APw7fFpsY9GocZtklAVYNqF2ZJi
+	 yjc6CWWZ86XEmEiJW4Nz5VCT0PN58JDa9pjHzaMx90eY5gFT+mt3ZaX4t+tL1JGjXq
+	 fQnd4eZokiQdNvjm5RSmpNk/8K230RZkEYTtqcRKVsMIu/5W5hOroEi4np5yANtz+2
+	 l2IeD+u+kF0YttGqY2Snx3alNcVvryCSoDrGhw9ig/qoL5WoSr7lboV4ds/qsrBY7z
+	 x/CogI6gmojuA==
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-2d0920c6f96so1182540fac.1;
+        Fri, 11 Apr 2025 07:30:10 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV2NpUuHsKkcIZKtrf0jGB9ko5QmOGgwcVUZM5ge8MtzRX+9KSzI4nEDFSbb151hthoSevMIwO7x3NKdSw=@vger.kernel.org, AJvYcCVfS7wasbJP87aaacIbaXauislgG6/ztHYDcIfOowy5e3zlm//c/7lksP/28ZjiGwrKzqx4cffF8pQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywg9wmXwUCZ6LkNDc+nyfnix1IJ4JeOobCWGzGhI5ngf95VOJIG
+	8HaHuLavyLl5uAa53vXhIiTse89QdPwFQwynqMJuXcJxFc6T8YM4GDc+y3Shhc+2uL5gvGQ0Pq2
+	MBOoscOaHiAVXqcC8i7OdS7XsKbU=
+X-Google-Smtp-Source: AGHT+IEKLQVgQGIDC6CoyMs0cDrFKXnGh6FRKItdtN8Q1MNXaMGq1BH3zAGp41hrmMb9/IXA52hdZFtn1qFuE9tMVsk=
+X-Received: by 2002:a05:6870:6f14:b0:2cf:bc73:7bb2 with SMTP id
+ 586e51a60fabf-2d0d5cf3960mr1730677fac.14.1744381809589; Fri, 11 Apr 2025
+ 07:30:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250411003827.782544-7-iuncuim@gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 11 Apr 2025 16:29:58 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iEn-Lyic6zxDehxF1HHfNfg11_S7COMsHnZeQ+TzZAsA@mail.gmail.com>
+X-Gm-Features: ATxdqUE4Uv7yWFaD_KWqchTFzOWSZpHH0_Dmpi-EtzCnNuJ0_TkNVLmU64PwDcg
+Message-ID: <CAJZ5v0iEn-Lyic6zxDehxF1HHfNfg11_S7COMsHnZeQ+TzZAsA@mail.gmail.com>
+Subject: [GIT PULL] ACPI fixes for v6.15-rc2
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Apr 11, 2025 at 08:38:26AM +0800, iuncuim wrote:
-> From: Mikhail Kalashnikov <iuncuim@gmail.com>
-> 
-> Add dt-bindings description of the thermal sensors in the A523 processor.
+Hi Linus,
 
-That's obvious from the diff. What's not is how is the h/w different 
-from prior versions? For example, why is there another clock?
+Please pull from the tag
 
-> 
-> Signed-off-by: Mikhail Kalashnikov <iuncuim@gmail.com>
-> ---
->  .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml           | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
-> index 3e61689f6..70ac395ef 100644
-> --- a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
-> @@ -24,17 +24,21 @@ properties:
->        - allwinner,sun50i-h5-ths
->        - allwinner,sun50i-h6-ths
->        - allwinner,sun50i-h616-ths
-> +      - allwinner,sun55i-a523-ths0
-> +      - allwinner,sun55i-a523-ths1
->  
->    clocks:
->      minItems: 1
->      items:
->        - description: Bus Clock
-> +      - description: GPADC Clock
->        - description: Module Clock
->  
->    clock-names:
->      minItems: 1
->      items:
->        - const: bus
-> +      - const: gpadc
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-6.15-rc2
 
-You cannot add new entries in the middle. They must go on the end and 
-you then need to restrict the existing users to 2 clocks. And for the 
-new users, how many clocks are required? 1, 2, or 3?
+with top-most commit dcc4aca53338d09f7b3272e00aab4a1ff8c69067
 
->        - const: mod
->  
->    reg:
-> @@ -107,6 +111,7 @@ allOf:
->              enum:
->                - allwinner,sun8i-h3-ths
->                - allwinner,sun20i-d1-ths
-> +              - allwinner,sun55i-a523-ths0
->  
->      then:
->        properties:
-> -- 
-> 2.49.0
-> 
+ Merge branches 'acpi-ec' and 'acpi-button'
+
+on top of commit 0af2f6be1b4281385b618cb86ad946eded089ac8
+
+ Linux 6.15-rc1
+
+to receive ACPI fixes for 6.15-rc2.
+
+These fix a recent regression in the ACPI button driver, add quirks
+related to EC wakeups from suspend-to-idle and fix coding mistakes
+related to the usage of sizeof() in the PPTT parser code:
+
+ - Add suspend-to-idle EC wakeup quirks for Lenovo Go S (Mario
+   Limonciello).
+
+ - Prevent ACPI button from sending spurions KEY_POWER events to user
+   space in some cases after a recent update (Mario Limonciello).
+
+ - Compute the size of a structure instead of the size of a pointer
+   in two places in the PPTT parser code (Jean-Marc Eurin).
+
+Thanks!
+
+
+---------------
+
+Jean-Marc Eurin (1):
+      ACPI PPTT: Fix coding mistakes in a couple of sizeof() calls
+
+Mario Limonciello (2):
+      ACPI: button: Only send `KEY_POWER` for `ACPI_BUTTON_NOTIFY_STATUS`
+      ACPI: EC: Set ec_no_wakeup for Lenovo Go S
+
+---------------
+
+ drivers/acpi/button.c |  2 +-
+ drivers/acpi/ec.c     | 28 ++++++++++++++++++++++++++++
+ drivers/acpi/pptt.c   |  4 ++--
+ 3 files changed, 31 insertions(+), 3 deletions(-)
 
