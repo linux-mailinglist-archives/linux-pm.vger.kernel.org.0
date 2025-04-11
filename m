@@ -1,171 +1,224 @@
-Return-Path: <linux-pm+bounces-25207-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25208-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05B12A856C2
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 10:39:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BD7EA856E0
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 10:44:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 052CD8A276F
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 08:37:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FE431BA0395
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 08:44:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E550293B79;
-	Fri, 11 Apr 2025 08:37:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68266296158;
+	Fri, 11 Apr 2025 08:44:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dy+fjYOl"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dq7bU5a0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA63827E1CD
-	for <linux-pm@vger.kernel.org>; Fri, 11 Apr 2025 08:37:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52B8229614A
+	for <linux-pm@vger.kernel.org>; Fri, 11 Apr 2025 08:44:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744360679; cv=none; b=F/DIubkL/511+Xrdbur/HiXYMIssH82ORYyojVtI135hGUlgrwwJgZ35N5fBvVT7Yv54r2Y7mAXhI6t/Z26fKFHI3MugMEF9LVkJgfsSua3WS9f7Fkl8snO4JhYDoVHGp1dOGbiXVIqWagqBGB4Nm5IdgtWdmFNGB1O1BV+5p0Q=
+	t=1744361082; cv=none; b=PtAveUs/94spTDzlw9jJLgAm5GQbnoerj9jf8ufJTsdWnCuEg6Sg8E/TZ35Gjx4kGqElHoll3DMsMaFUfuK+yEch14qr+4fmVsomOJHgZ8b2sWDgPBkUefMNXFV2Hgx7AD4R+3GLIDqBkqnz2GLjSpd+pzePF7zUv7J6LV7VuBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744360679; c=relaxed/simple;
-	bh=5kt3MWtin3KNwdzDbJU//7Uxuz+S1QGZ/maTZ/hrbSs=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=nj+77t+wqY5h+h48gM9eoQbxC5OC9fnGtOaQuVvrKG+MMf4mC5ZMF6okEenNavTSTwYEHyjlUd32YOG3PZANlGpZVfA8qSRbrBDoq1rfdMVb0rYq7mF2oxAC+2OWChdSesyNMerl29Ws3+5aeToTqVUET6JAqRktM/dg3ghyypI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dy+fjYOl; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-43edecbfb46so12793115e9.0
-        for <linux-pm@vger.kernel.org>; Fri, 11 Apr 2025 01:37:55 -0700 (PDT)
+	s=arc-20240116; t=1744361082; c=relaxed/simple;
+	bh=uQms5T9GBYZwPgvuRXFc7lqMU5m7t7Nv9XiicuMUwDI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=I9gb4/9Ro5tY6/Xy10h9KWNmjO0SKaC4B9cWYsVWwKqcLqmh+Xw0A2UAwkI0MkwBS5ICYZ51Zk+PPxV3AKvnn9bkgEHnK9gaJxqcw+YS0Xg3M9s04FcmyidvrzLSSfsomTVt0XvjukaFOcg7ceM7kp80a8rcVXYHIjl3LvQC3FE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dq7bU5a0; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43cfa7e7f54so10834295e9.1
+        for <linux-pm@vger.kernel.org>; Fri, 11 Apr 2025 01:44:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744360674; x=1744965474; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wH2ZPuzfR/sU9gtELQf1xx9ouW+DErODBwUT5LwG1mM=;
-        b=dy+fjYOl2NWtqXJHHd4H+Tpo9L+/m3lsuYvwRfy7cD+16NN+q8tvv5gyAlQ0ra23IO
-         0C98gB9Qk4qsQXQfsD3sRaiVfwIoa64x0I/ZKzJsNADmHD9OfLWgy7apo4hEn2PEWWg9
-         zJ/s2Ceme8nWBZ4R6ljHMBWREuI5HZqI/Z00u20fltn6RwNN64mweBGMGSThN4Goureo
-         aSwEoq15ptQnQZ6pwArHiL4cz9QwxQbPuYz2J1dg+V8q4Cgt8bPcj20M7gH7pGlbSbVU
-         /olenrBVqU5Smru3g91jmBiFa9msCGO+1nblQGmsJKojRvQLNUorj7flEXND1KBhwNJT
-         S46A==
+        d=suse.com; s=google; t=1744361078; x=1744965878; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ym+swB0IGqW3GD8TUu3RUZwOm8qCGuP91NxIKul8xpM=;
+        b=dq7bU5a0KSFRSffiEK5ouQV9VLS5yS93sRok4aCUxCu/6rwFfH5ZnradTr163QTDrQ
+         Twaw8EKp6vlPa4QOqXH/l8LJPgYhZP8r55aK/MQWlEuF3m1n0SSRPyx5M8Js+dffd2Hw
+         J95jZsU8bqDJ10EDZrrzGRqLS0R829vJ6uvVgJXqfj71d26MwGmNO9/oXhL6CjtDU4fE
+         OdNP8SqXsVal6GGcXtOTeAJwIlkd60gurg0gOaRCClbAWGf2ByYOYhRV1fomQaSfHxHO
+         HS+lVAAWzKW/z/c08zwfhZGIhRfrM+SxYhweuoBXvulTbcHf0rVBcjI7+stlL6pOSweo
+         2KDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744360674; x=1744965474;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wH2ZPuzfR/sU9gtELQf1xx9ouW+DErODBwUT5LwG1mM=;
-        b=hEj8jrOnThgN+3qAiQfu7XnO3KXvMkn+uEFXeqz1MET/z9mH8titQ9WJPgFd/Fae50
-         pc302r+Gr8crVw34rgnNVCSaeHMoW39ZOSZn/itZ/LbfzyvnreyRo+wx3SsNth8OIP+D
-         jN4h+eF1ULZuqlVg6vi8ecz8GcxuU38W2GmJ3sKaqOJjt+dB9rSLpZo9ALnsiE5ert4g
-         PKtPB5dQHgK7DvI/N/8b+Jy6oSbZla0fb2pzfajJkxV/nrfwZ4umHR/puyaXcDMH59ed
-         AhnHAqq5RYhQMb+7fSDdkY+Ch2hCg5T6FYRjp1g9+Zg1798wjxEll8z5P4t3GMO+SCIA
-         /VmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUOEH+5VnVFOSHDoz8qKSxFSn5wp34T0hHh76Enb3KEUEPbs0P7qC5qoSb6b/vGk244+OzFlQMWMQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBlEN7PiOBz8SW/3JDZnBwwEEqgCiUTxD40C1+54uV09/eQP1I
-	E9DN2rBgZf586fJCd2SQQarMoLOr90C+7GckY7nyfSvlX2FRoLp1bb3K5NMwFHw=
-X-Gm-Gg: ASbGnctC6TNj7rHJf8MaSz63G6UuREJLXPrAX0hQo7q02yxCyD0/KCKcZ13cAcwXe8U
-	4H0kHsxqi2jAfbLZfbiL9Ycz7shLiq3Uuvi+T3GbAn1EvWk7PCwpEw39gTlv5nRMPqmQf9qGPRa
-	OYCpfu9ivzrdvVdX9th1E4CV6+M9dJWZtWNbZtrJreVRtt6oKI9Lfn+jMIOG2mKUaLIIsAmVCV6
-	wLBEdcjLPq52nP6DH8tCQNNLH71oyvt91G2Cjxd+t9ZeFbIOxrsZkpb9NFk1H+XLP6PMRyHRqTP
-	vtDarJx05OZBccOF4xRZeXJuiz3SDDX7DV7DaC4JPLZpFZ/grrUs7nhj+qk71Q==
-X-Google-Smtp-Source: AGHT+IESQEmfqjjVD+jC6dd63FDfAGrpItTMGFb0BJ+4OP4VGIDucBWUqxZDD69YlSOe5qeibdfp9g==
-X-Received: by 2002:a05:6000:2c5:b0:38f:3224:65ff with SMTP id ffacd0b85a97d-39ea51ecb8bmr1357243f8f.5.1744360673907;
-        Fri, 11 Apr 2025 01:37:53 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:3d9:2080:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eae9777a0sm1326282f8f.43.2025.04.11.01.37.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Apr 2025 01:37:53 -0700 (PDT)
-From: Neil Armstrong <neil.armstrong@linaro.org>
-To: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Samuel Holland <samuel@sholland.org>, Conor Dooley <conor@kernel.org>, 
- Nicolas Ferre <nicolas.ferre@microchip.com>, 
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
- Steen Hegelund <Steen.Hegelund@microchip.com>, 
- Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, Heiko Stuebner <heiko@sntech.de>, 
- Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
- Geert Uytterhoeven <geert+renesas@glider.be>, 
- Magnus Damm <magnus.damm@gmail.com>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, Andy Gross <agross@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
- Stephen Boyd <sboyd@kernel.org>, zhouyanjie@wanyeetech.com, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
- Stephan Gerhold <stephan.gerhold@linaro.org>, 
- "Rob Herring (Arm)" <robh@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, imx@lists.linux.dev, 
- linux-rockchip@lists.infradead.org, linux-amlogic@lists.infradead.org, 
- linux-renesas-soc@vger.kernel.org, linux-mips@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org, 
- Andre Przywara <andre.przywara@arm.com>, 
- =?utf-8?q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>, 
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
- Sudeep Holla <sudeep.holla@arm.com>, Viresh Kumar <viresh.kumar@linaro.org>, 
- Ulf Hansson <ulf.hansson@linaro.org>
-In-Reply-To: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
-References: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
-Subject: Re: (subset) [PATCH v2 00/17] Arm cpu schema clean-ups
-Message-Id: <174436067236.3436338.6767561918297500530.b4-ty@linaro.org>
-Date: Fri, 11 Apr 2025 10:37:52 +0200
+        d=1e100.net; s=20230601; t=1744361078; x=1744965878;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ym+swB0IGqW3GD8TUu3RUZwOm8qCGuP91NxIKul8xpM=;
+        b=bROyEzPnHEq5KlIr9AKo4eFB10Luu+hgdztTwnnLEn7mbXvOwvZC2xfTNtdsu8C9gc
+         93kfkXJka8gEzYvtBM+vjkkix9RuICvcsENxBWELoM+Pp2rfEpRHeHVuTc6D0fmwNWwU
+         w1XV0kEYTK01mikI5GoW5ZptesuCsN/XBzpMSq/bd/88gRl2BgUmdioyX58P2AQqseh4
+         mswASRA4jva+EzV85woKcENpEMNhRMRFdza3cd1MF+TTsvF0aEdokDdiCbmc2VIGbH92
+         Sa2h6s551xXcFL5eC4eIDXYiVHdcxc5epEKPfwKPgxbrZ/wadUFWLcJytXMw6+ahbFzS
+         nhVg==
+X-Forwarded-Encrypted: i=1; AJvYcCVbxlf+fsZXEUIvIncYbasfPppjo9B7G+EPgaGIp9Fpwf3/Sjo6Vvh9phDBkeIwclR6GOjrCgbXMg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6eACowzkWQsVsfOCYKr4pN/xy4A9Hd9+Ft5kZDS7WbENEJZ/B
+	axZGLc1pVd2HUYASBRQ9TUm7cCFC8j/aiuyF++zvSL8qQEqdXk2D1ZXqm1TN4mc=
+X-Gm-Gg: ASbGnctXdcUaP8rSdpjA/o8x9lHVVxknL6kDLTASzX4By6vaVEsndNzQYRlMQ5DNnkk
+	xHHCLHG8bBMNAZizsFR493rV3CeSSpkZ1IgPPW8QYdwp8wPQKf2UZc/HbrtBiBpXMgTZvww2dfX
+	Kkb2W77fIx9YVNhfcw4z2vRJDaV6DY3iIh6ZjsfsCbS2mQxQDLkWWJDVDHNIQdebiAIeRejHVFP
+	mLB2ID1C7AWqxGgGC6o6VaVmhODJTgj1cbUNjK3Shakk8W6dyB53P2n+RVvOWS3Oe2tQLHxiY1S
+	RVz2W68kXLHmQDiZB1SZFn8ja2ABbt/aqWWLjg==
+X-Google-Smtp-Source: AGHT+IFKNUhGZrGZqRnXSCGsdpeGUvavp84OjEvM5R0nmvrxT8ATRqB5MuH3sqH0n0cc88cvltPmyw==
+X-Received: by 2002:a05:600c:1e0e:b0:439:8490:d1e5 with SMTP id 5b1f17b1804b1-43f2ea2a1a9mr53082445e9.4.1744361078490;
+        Fri, 11 Apr 2025 01:44:38 -0700 (PDT)
+Received: from [192.168.2.177] ([81.0.8.231])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43f206269c8sm82609535e9.16.2025.04.11.01.44.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Apr 2025 01:44:38 -0700 (PDT)
+Message-ID: <25d92af3-5aa4-4090-a60b-fff3bc30fcf4@suse.com>
+Date: Fri, 11 Apr 2025 10:44:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/3] dt-bindings: power: mediatek: Support Dimensity
+ 1200 MT6893 MTCMOS
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ robh@kernel.org
+Cc: krzk+dt@kernel.org, conor+dt@kernel.org, ulf.hansson@linaro.org,
+ matthias.bgg@gmail.com, fshao@chromium.org, y.oudjana@protonmail.com,
+ wenst@chromium.org, lihongbo22@huawei.com, mandyjh.liu@mediatek.com,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, kernel@collabora.com
+References: <20250410143944.475773-1-angelogioacchino.delregno@collabora.com>
+ <20250410143944.475773-2-angelogioacchino.delregno@collabora.com>
+Content-Language: en-US, ca-ES, es-ES
+From: Matthias Brugger <mbrugger@suse.com>
+Autocrypt: addr=mbrugger@suse.com; keydata=
+ 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
+ PVrr2NoUqi/bxI8fFQJD1jVj8K0=
+In-Reply-To: <20250410143944.475773-2-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.2
 
-Hi,
 
-On Thu, 10 Apr 2025 10:47:21 -0500, Rob Herring (Arm) wrote:
-> The Arm cpu.yaml schema fails to restrict allowed properties in 'cpu'
-> nodes. The result, not surprisely, is a number of additional properties
-> and errors in .dts files. This series resolves those issues.
+
+On 10/04/2025 16:39, AngeloGioacchino Del Regno wrote:
+> Add support for the Power Domains (MTCMOS) integrated into the
+> MediaTek Dimensity 1200 (MT6893) SoC.
 > 
-> There's still more properties in arm32 DTS files which I have not
-> documented. Mostly yet more supply names and "fsl,soc-operating-points".
-> What's a few more warnings on the 10000s of warnings...
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+Reviewed-by: Matthias Brugger <mbrugger@suse.com>
+
+> ---
+>   .../power/mediatek,power-controller.yaml      |  2 ++
+>   .../dt-bindings/power/mediatek,mt6893-power.h | 35 +++++++++++++++++++
+>   2 files changed, 37 insertions(+)
+>   create mode 100644 include/dt-bindings/power/mediatek,mt6893-power.h
 > 
-> [...]
-
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.16/arm64-dt)
-
-[11/17] arm64: dts: amlogic: Drop redundant CPU "clock-latency"
-        https://git.kernel.org/amlogic/c/4bc28af2da876531e5183d25ae807e608c816d18
-
-These changes has been applied on the intermediate git tree [1].
-
-The v6.16/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
-for inclusion in their intermediate git branches in order to be sent to Linus during
-the next merge window, or sooner if it's a set of fixes.
-
-In the cases of fixes, those will be merged in the current release candidate
-kernel and as soon they appear on the Linux master branch they will be
-backported to the previous Stable and Long-Stable kernels [2].
-
-The intermediate git branches are merged daily in the linux-next tree [3],
-people are encouraged testing these pre-release kernels and report issues on the
-relevant mailing-lists.
-
-If problems are discovered on those changes, please submit a signed-off-by revert
-patch followed by a corrective changeset.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-
--- 
-Neil
+> diff --git a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> index 591a080ca3ff..9c7cc632abee 100644
+> --- a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> +++ b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> @@ -25,6 +25,7 @@ properties:
+>       enum:
+>         - mediatek,mt6735-power-controller
+>         - mediatek,mt6795-power-controller
+> +      - mediatek,mt6893-power-controller
+>         - mediatek,mt8167-power-controller
+>         - mediatek,mt8173-power-controller
+>         - mediatek,mt8183-power-controller
+> @@ -88,6 +89,7 @@ $defs:
+>           description: |
+>             Power domain index. Valid values are defined in:
+>                 "include/dt-bindings/power/mt6795-power.h" - for MT8167 type power domain.
+> +              "include/dt-bindings/power/mediatek,mt6893-power.h" - for MT6893 type power domain.
+>                 "include/dt-bindings/power/mt8167-power.h" - for MT8167 type power domain.
+>                 "include/dt-bindings/power/mt8173-power.h" - for MT8173 type power domain.
+>                 "include/dt-bindings/power/mt8183-power.h" - for MT8183 type power domain.
+> diff --git a/include/dt-bindings/power/mediatek,mt6893-power.h b/include/dt-bindings/power/mediatek,mt6893-power.h
+> new file mode 100644
+> index 000000000000..aeab51bb2ad8
+> --- /dev/null
+> +++ b/include/dt-bindings/power/mediatek,mt6893-power.h
+> @@ -0,0 +1,35 @@
+> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
+> +/*
+> + * Copyright (c) 2025 Collabora Ltd
+> + *                    AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> + */
+> +
+> +#ifndef _DT_BINDINGS_POWER_MT6893_POWER_H
+> +#define _DT_BINDINGS_POWER_MT6893_POWER_H
+> +
+> +#define MT6893_POWER_DOMAIN_CONN		0
+> +#define MT6893_POWER_DOMAIN_MFG0		1
+> +#define MT6893_POWER_DOMAIN_MFG1		2
+> +#define MT6893_POWER_DOMAIN_MFG2		3
+> +#define MT6893_POWER_DOMAIN_MFG3		4
+> +#define MT6893_POWER_DOMAIN_MFG4		5
+> +#define MT6893_POWER_DOMAIN_MFG5		6
+> +#define MT6893_POWER_DOMAIN_MFG6		7
+> +#define MT6893_POWER_DOMAIN_ISP			8
+> +#define MT6893_POWER_DOMAIN_ISP2		9
+> +#define MT6893_POWER_DOMAIN_IPE			10
+> +#define MT6893_POWER_DOMAIN_VDEC0		11
+> +#define MT6893_POWER_DOMAIN_VDEC1		12
+> +#define MT6893_POWER_DOMAIN_VENC0		13
+> +#define MT6893_POWER_DOMAIN_VENC1		14
+> +#define MT6893_POWER_DOMAIN_MDP			15
+> +#define MT6893_POWER_DOMAIN_DISP		16
+> +#define MT6893_POWER_DOMAIN_AUDIO		17
+> +#define MT6893_POWER_DOMAIN_ADSP		18
+> +#define MT6893_POWER_DOMAIN_CAM			19
+> +#define MT6893_POWER_DOMAIN_CAM_RAWA		20
+> +#define MT6893_POWER_DOMAIN_CAM_RAWB		21
+> +#define MT6893_POWER_DOMAIN_CAM_RAWC		22
+> +#define MT6893_POWER_DOMAIN_DP_TX		23
+> +
+> +#endif /* _DT_BINDINGS_POWER_MT6893_POWER_H */
 
 
