@@ -1,218 +1,171 @@
-Return-Path: <linux-pm+bounces-25293-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25294-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C171A865F9
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 21:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BBA6A866EC
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 22:15:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A60FF3B8E7A
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 19:12:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88EC68A83BA
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 20:14:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D43A277801;
-	Fri, 11 Apr 2025 19:12:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D8C6283C87;
+	Fri, 11 Apr 2025 20:14:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cHwZFwGI"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Du9FSdYt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 372DC27703C;
-	Fri, 11 Apr 2025 19:12:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8CF12836BA
+	for <linux-pm@vger.kernel.org>; Fri, 11 Apr 2025 20:14:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744398775; cv=none; b=W3/K/TmvEHzpvNqgQSkU1P1r7YTb4m506RuFL+GK8WA3gQqFV7+/dHuu4oRVh7blX/OK6eammj3gqW4ufwLJp6I/uqdKvzSZ2yS0zyOe0jcNavJWVwozXNfsNUro0yvFreVNHKmzea5UBokHiK535JWyz4ASKzC4LGJe/EqOeL8=
+	t=1744402461; cv=none; b=rLWtu2iro15FU3O1ZNy6wGsfbHU1pP0V3N1UNTMZa8bc0oSk4w+5vI8CsDYZObZ5hkdtNqMUvvoWi05cAJCNKVq/PIZ03AxzYV8Sq5XQB7jwtpt+1GWjqsuI6tnSJ8EoYqaNu1+ipwAV0HdMNvKEHKxyxoo40610ii/Vsy2FDnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744398775; c=relaxed/simple;
-	bh=x5lzlhqUWayiREF1DTdz0Deyy9l2UALfFeK3fvta88s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IappZ+BYL1suPkTb12N4Jsg3uAfuSJ6fx/YGfYT8D4LYrQXVwx4dlYBj5/TLToEEH84235CoPFy9BuNvUExrmmvJmm/MisHEPXIHNNwul9nwtZkz2hHAaWsZLUjoK8jtbMewVHgC3LxWX79G2lw1nGJ5FoJdF/yzQG+A2jMXqp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cHwZFwGI; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744398773; x=1775934773;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=x5lzlhqUWayiREF1DTdz0Deyy9l2UALfFeK3fvta88s=;
-  b=cHwZFwGIdLH0mvwDcOfxKtCl6ry/m0Z1Up7dbR+7+go9Co9IIoVvO4yM
-   Fst41BGaYaRLSsD+roUK6Lu/06UXv3nLQdpHH9p1q4g9umKmkNsygZ8ee
-   3rhcdnxpRPXfEPkb8kMgZJzLh7SGfyfevhcOJOJxsWbr5W2Iq2UDArRFY
-   /8aHEXNkc/aPBL61y+U40ajfrpdjTnETfYybeuwQ1J/zHhUBYyR8PpZgX
-   45rBYfBRYrywpNhkOn+FOoWthAOGzk9AgKQsjLKjNUcHZMAINUH1ipZM/
-   dsukBHFuTxUnFCSP9FUrf41xOy2RAXxZZMel4RZ7+j8CECQI9cFPx0U3V
-   Q==;
-X-CSE-ConnectionGUID: jyCcv2ySRZuRy9b95XUjyw==
-X-CSE-MsgGUID: N1Il5Rt7TBiA9/rSoZkkpg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11401"; a="63503479"
-X-IronPort-AV: E=Sophos;i="6.15,205,1739865600"; 
-   d="scan'208";a="63503479"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2025 12:12:52 -0700
-X-CSE-ConnectionGUID: xDwBl6seQs627YDvRm9z8g==
-X-CSE-MsgGUID: 5YBIxDutQSuWAHUYbvDAiQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,205,1739865600"; 
-   d="scan'208";a="129833114"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 11 Apr 2025 12:12:45 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u3Jnv-000BKY-1t;
-	Fri, 11 Apr 2025 19:12:43 +0000
-Date: Sat, 12 Apr 2025 03:12:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Praveen Talari <quic_ptalari@quicinc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, psodagud@quicinc.com, djaggi@quicinc.com,
-	quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com,
-	quic_arandive@quicinc.com, quic_mnaresh@quicinc.com,
-	quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v1 7/9] serial: qcom-geni: move clock-rate logic to
- separate function
-Message-ID: <202504120237.YIWM0gvQ-lkp@intel.com>
-References: <20250410174010.31588-8-quic_ptalari@quicinc.com>
+	s=arc-20240116; t=1744402461; c=relaxed/simple;
+	bh=aZ5XOR4b/IgaLq9DuiIrp4snw8Hhr6iyzEACFHVcv4Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pdkht+ylfpP7ijKoLJWWYTky4QfYK228MPbtq0w1upBECWyyPG/glXHFdaMVnWcg2epz97az21UAyzn6Lp5mrRvvyPT2YbZDLVS4C1enhzCiJh2f3Y1oWWJv14+4K6H6AJHdu4oKMIsJqvv8J7M6WAWl5nuaIlIXprJf4mSmSw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Du9FSdYt; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53BEdv52000661
+	for <linux-pm@vger.kernel.org>; Fri, 11 Apr 2025 20:14:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	nRKMxs4PD+KnoQqGDOySfKgieFf8nDxLnTvx+NwRVVQ=; b=Du9FSdYtPdpmt4Ch
+	lBuYniEmpCuSY+/7jBZ9NOKmqihhYF5+LPv3r1DEaMMhU02yctL59fNl5AN8vR7X
+	5C8W9JRm9+EmAyk94ny+cFNL5ORhYKwGFhYfUVy5l5Q2mnvXfjvQX8cyUHfeBiyq
+	PM/eChF1NUdiS+vc9nLZnmOCnxAjc+kUZrxWM5kIiXGhZnUU02tCyRo74M4r9MNn
+	cvk+JOS0NZ3qqipXMjCVOxaQ9H66Mn1rnFt8B5sfuaH2B3lmx8YV5zBdOMDy4rQ1
+	iT3MXoYSipYwVXaAs2PMK2pH3BtLGY/qfbYK7uT8YM7/sK2LgMVL+G/NTcE3YB2x
+	S/lvaA==
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45twd33hud-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 11 Apr 2025 20:14:18 +0000 (GMT)
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6ece59c3108so4117266d6.2
+        for <linux-pm@vger.kernel.org>; Fri, 11 Apr 2025 13:14:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744402457; x=1745007257;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nRKMxs4PD+KnoQqGDOySfKgieFf8nDxLnTvx+NwRVVQ=;
+        b=BVdjUrsZmGh0Uj2Nfg0NnBR7XbXsefimurKCD0HpiPeyApN0xS+ydwqcJn+UoWFb2L
+         WojA+JTHrlwWL1PNewQT9r8GhhhdMV7ttp6sGM3XUB9nNxs3bWDIL/BG7MkFDTV8Nox8
+         9E95BtEGf1NNJEDbVM6z2YvO0LEQqh1IWk/Pvm93bkSG4kJDIRIADsWzHxxwYrfjklkp
+         MtjpaSEWrpXBXPRrcJ9sBreKFbmD5qY+TU0lM62+dbu3ZMLa8Blh40kU8YnHFIGsc1e5
+         zMfm8LWEq+1chNGKLsCAQdtq1yQM3UZKKCLm5i96Qsaj1azzHdbWsAsYA2HJ8uCIQsEU
+         uujA==
+X-Forwarded-Encrypted: i=1; AJvYcCU9MjP/mzdpWhdedcsb/sI+vur2RYtqwNDv/Cox6yr+32iurFJdzo9nEL4p+oaCQQmGRHD6j0/ZyQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/+X4KPpj1f9dOCi3u/0qC7nckIqsLj4uEKz8qSoO72jlkCd8K
+	YWSHKvR2k0QAIp3AZNhJaHvGk+8tp1OQHYzzlzLnPeeDLbQTAIeetgg1ijjK9QKJX8QYVGJVHcz
+	ANbqqSWo4Sb0J3ndQTTNbUUr46Mn0EaM5wsjwDOCK03pshOnZgg5XFMvxJA==
+X-Gm-Gg: ASbGncutpiGuvHRpCtitPBeLFoTglcdf7Ppv7HWURHdeaV61INSDNAFnvbYkBlkSf3w
+	cHxON1yc0NemEJdmO8t9xrqnh/DNxLEDkWuRgazb0+38p5dwqJYUN51P80gtHS76QHOtZC8nMcV
+	3IhML6gFALoGVnCq94vDISnPCCNNSO1nbI1A9NFVhT2VKkdsmNO4muiAr58qa5y6plL4ED1wzRX
+	Wr+nhE+anL6KwUVWm+qtWS0ZLRVo+wC0zedWL3F3lETQX8RYoHVPjyjQwEvjYoAwrJ8bzI4VKnM
+	FWXTUGHeVJi4F6+xoCOF+ka7sabXi0WSPOGwGf9vsrDv+IKN0Va8wsZ4rJGohH2IZw==
+X-Received: by 2002:a05:620a:468a:b0:7c5:6fee:246f with SMTP id af79cd13be357-7c7af0ee0f1mr242774285a.1.1744402457584;
+        Fri, 11 Apr 2025 13:14:17 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHwq+5VQLqjQev0co+4uNLsPoLMOr0u0ds72aNYr+2pB2wGb498Fhw3ISm8Ze3I7I0OKlaiMA==
+X-Received: by 2002:a05:620a:468a:b0:7c5:6fee:246f with SMTP id af79cd13be357-7c7af0ee0f1mr242772685a.1.1744402457216;
+        Fri, 11 Apr 2025 13:14:17 -0700 (PDT)
+Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acaa1ce7fd1sm486862466b.168.2025.04.11.13.14.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Apr 2025 13:14:16 -0700 (PDT)
+Message-ID: <321ddc86-6ead-4079-8b0b-6527f0badeb1@oss.qualcomm.com>
+Date: Fri, 11 Apr 2025 22:14:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250410174010.31588-8-quic_ptalari@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 3/4] thermal/drivers/cpuidle_cooling: Change the
+ registration function
+To: Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com
+Cc: lukasz.luba@arm.com, Viresh Kumar <viresh.kumar@linaro.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Javi Merino <javi.merino@kernel.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        "open list:THERMAL/CPU_COOLING" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Wasim Nazir <quic_wasimn@quicinc.com>
+References: <20200429103644.5492-1-daniel.lezcano@linaro.org>
+ <20200429103644.5492-3-daniel.lezcano@linaro.org>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20200429103644.5492-3-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: bkRuke5wOb3LI1iNbnhjvRN7iAII87Rg
+X-Proofpoint-GUID: bkRuke5wOb3LI1iNbnhjvRN7iAII87Rg
+X-Authority-Analysis: v=2.4 cv=NaLm13D4 c=1 sm=1 tr=0 ts=67f9781a cx=c_pps a=wEM5vcRIz55oU/E2lInRtA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=jWAD08MBTVrP8qBQ8tgA:9 a=QEXdDO2ut3YA:10 a=OIgjcC2v60KrkQgK7BGD:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-11_08,2025-04-10_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ priorityscore=1501 adultscore=0 malwarescore=0 suspectscore=0
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=851 clxscore=1015 phishscore=0
+ spamscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2504110128
 
-Hi Praveen,
+On 4/29/20 12:36 PM, Daniel Lezcano wrote:
+> Today, there is no user for the cpuidle cooling device. The targetted
+> platform is ARM and ARM64.
+> 
+> The cpuidle and the cpufreq cooling device are based on the device tree.
+> 
+> As the cpuidle cooling device can have its own configuration depending
+> on the platform and the available idle states. The DT node description
+> will give the optional properties to set the cooling device up.
+> 
+> Do no longer rely on the CPU node which is prone to error and will
+> lead to a confusion in the DT because the cpufreq cooling device is
+> also using it. Let initialize the cpuidle cooling device with the DT
+> binding.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on tty/tty-testing]
-[also build test WARNING on tty/tty-next tty/tty-linus robh/for-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.15-rc1 next-20250411]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Praveen-Talari/opp-add-new-helper-API-dev_pm_opp_set_level/20250411-015310
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-patch link:    https://lore.kernel.org/r/20250410174010.31588-8-quic_ptalari%40quicinc.com
-patch subject: [PATCH v1 7/9] serial: qcom-geni: move clock-rate logic to separate function
-config: arm-randconfig-002-20250412 (https://download.01.org/0day-ci/archive/20250412/202504120237.YIWM0gvQ-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 7.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250412/202504120237.YIWM0gvQ-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504120237.YIWM0gvQ-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/device.h:15:0,
-                    from include/linux/node.h:18,
-                    from include/linux/cpu.h:17,
-                    from arch/arm/include/asm/cpu.h:11,
-                    from arch/arm/include/asm/smp_plat.h:12,
-                    from arch/arm/include/asm/irq_work.h:5,
-                    from include/linux/irq_work.h:64,
-                    from include/linux/console.h:19,
-                    from drivers/tty/serial/qcom_geni_serial.c:8:
-   drivers/tty/serial/qcom_geni_serial.c: In function 'geni_serial_set_rate':
->> drivers/tty/serial/qcom_geni_serial.c:1289:4: warning: format '%u' expects argument of type 'unsigned int', but argument 3 has type 'long unsigned int' [-Wformat=]
-       "Couldn't find suitable clock rate for %u\n",
-       ^
-   include/linux/dev_printk.h:110:16: note: in definition of macro 'dev_printk_index_wrap'
-      _p_func(dev, fmt, ##__VA_ARGS__);   \
-                   ^~~
-   include/linux/dev_printk.h:154:49: note: in expansion of macro 'dev_fmt'
-     dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                    ^~~~~~~
-   drivers/tty/serial/qcom_geni_serial.c:1288:3: note: in expansion of macro 'dev_err'
-      dev_err(port->se.dev,
-      ^~~~~~~
-   drivers/tty/serial/qcom_geni_serial.c:1294:24: warning: format '%u' expects argument of type 'unsigned int', but argument 4 has type 'long unsigned int' [-Wformat=]
-     dev_dbg(port->se.dev, "desired_rate = %u, clk_rate = %lu, clk_div = %u\n",
-                           ^
-   include/linux/dev_printk.h:139:28: note: in definition of macro 'dev_no_printk'
-       _dev_printk(level, dev, fmt, ##__VA_ARGS__); \
-                               ^~~
-   include/linux/dev_printk.h:171:33: note: in expansion of macro 'dev_fmt'
-     dev_no_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                    ^~~~~~~
-   drivers/tty/serial/qcom_geni_serial.c:1294:2: note: in expansion of macro 'dev_dbg'
-     dev_dbg(port->se.dev, "desired_rate = %u, clk_rate = %lu, clk_div = %u\n",
-     ^~~~~~~
-   drivers/tty/serial/qcom_geni_serial.c: In function 'qcom_geni_serial_pm':
-   drivers/tty/serial/qcom_geni_serial.c:1666:32: warning: unused variable 'port' [-Wunused-variable]
-     struct qcom_geni_serial_port *port = to_dev_port(uport);
-                                   ^~~~
+[...]
 
 
-vim +1289 drivers/tty/serial/qcom_geni_serial.c
+> -int cpuidle_cooling_register(struct cpuidle_driver *drv)
+> +void cpuidle_cooling_register(struct cpuidle_driver *drv)
+>  {
+> -	return cpuidle_of_cooling_register(NULL, drv);
+> +	struct device_node *cooling_node;
+> +	struct device_node *cpu_node;
+> +	int cpu, ret;
+> +
+> +	for_each_cpu(cpu, drv->cpumask) {
+> +
+> +		cpu_node = of_cpu_device_node_get(cpu);
+> +
+> +		cooling_node = of_get_child_by_name(cpu_node, "thermal-idle");
+> +
+> +		of_node_put(cpu_node);
+> +
+> +		if (!cooling_node) {
+> +			pr_debug("'thermal-idle' node not found for cpu%d\n", cpu);
+> +			continue;
+> +		}
+> +
+> +		ret = __cpuidle_cooling_register(cooling_node, drv);
+[5 years later, adding some folks & linux-arm-msm]
 
-c4f528795d1add Karthikeyan Ramasubramanian 2018-03-14  1269  
-68765ed6fdd109 Praveen Talari              2025-04-10  1270  static int geni_serial_set_rate(struct uart_port *uport, unsigned long baud)
-c4f528795d1add Karthikeyan Ramasubramanian 2018-03-14  1271  {
-00ce7c6e86b5d1 Bartosz Golaszewski         2022-12-29  1272  	struct qcom_geni_serial_port *port = to_dev_port(uport);
-c4f528795d1add Karthikeyan Ramasubramanian 2018-03-14  1273  	unsigned long clk_rate;
-7cf563b2c84624 Akash Asthana               2020-06-23  1274  	unsigned int avg_bw_core;
-68765ed6fdd109 Praveen Talari              2025-04-10  1275  	unsigned int clk_div;
-68765ed6fdd109 Praveen Talari              2025-04-10  1276  	u32 ver, sampling_rate;
-68765ed6fdd109 Praveen Talari              2025-04-10  1277  	u32 ser_clk_cfg;
-ce734600545fc7 Vivek Gautam                2019-08-01  1278  
-ce734600545fc7 Vivek Gautam                2019-08-01  1279  	sampling_rate = UART_OVERSAMPLING;
-ce734600545fc7 Vivek Gautam                2019-08-01  1280  	/* Sampling rate is halved for IP versions >= 2.5 */
-ce734600545fc7 Vivek Gautam                2019-08-01  1281  	ver = geni_se_get_qup_hw_version(&port->se);
-c9ca43d42ed8d5 Paras Sharma                2020-09-30  1282  	if (ver >= QUP_SE_VERSION_2_5)
-ce734600545fc7 Vivek Gautam                2019-08-01  1283  		sampling_rate /= 2;
-ce734600545fc7 Vivek Gautam                2019-08-01  1284  
-c2194bc999d41e Vijaya Krishna Nivarthi     2022-05-16  1285  	clk_rate = get_clk_div_rate(port->se.clk, baud,
-c2194bc999d41e Vijaya Krishna Nivarthi     2022-05-16  1286  		sampling_rate, &clk_div);
-c474c775716edd Vijaya Krishna Nivarthi     2022-07-16  1287  	if (!clk_rate) {
-c474c775716edd Vijaya Krishna Nivarthi     2022-07-16  1288  		dev_err(port->se.dev,
-0fec518018cc5c Douglas Anderson            2022-08-02 @1289  			"Couldn't find suitable clock rate for %u\n",
-c474c775716edd Vijaya Krishna Nivarthi     2022-07-16  1290  			baud * sampling_rate);
-68765ed6fdd109 Praveen Talari              2025-04-10  1291  		return -EINVAL;
-c474c775716edd Vijaya Krishna Nivarthi     2022-07-16  1292  	}
-c474c775716edd Vijaya Krishna Nivarthi     2022-07-16  1293  
-18536cc8fab81f Johan Hovold                2023-07-14  1294  	dev_dbg(port->se.dev, "desired_rate = %u, clk_rate = %lu, clk_div = %u\n",
-c474c775716edd Vijaya Krishna Nivarthi     2022-07-16  1295  			baud * sampling_rate, clk_rate, clk_div);
-c4f528795d1add Karthikeyan Ramasubramanian 2018-03-14  1296  
-c4f528795d1add Karthikeyan Ramasubramanian 2018-03-14  1297  	uport->uartclk = clk_rate;
-8ece7b754bc34f Johan Hovold                2023-07-14  1298  	port->clk_rate = clk_rate;
-a5819b548af0cc Rajendra Nayak              2020-06-15  1299  	dev_pm_opp_set_rate(uport->dev, clk_rate);
-c4f528795d1add Karthikeyan Ramasubramanian 2018-03-14  1300  	ser_clk_cfg = SER_CLK_EN;
-c4f528795d1add Karthikeyan Ramasubramanian 2018-03-14  1301  	ser_clk_cfg |= clk_div << CLK_DIV_SHFT;
-c4f528795d1add Karthikeyan Ramasubramanian 2018-03-14  1302  
-7cf563b2c84624 Akash Asthana               2020-06-23  1303  	/*
-7cf563b2c84624 Akash Asthana               2020-06-23  1304  	 * Bump up BW vote on CPU and CORE path as driver supports FIFO mode
-7cf563b2c84624 Akash Asthana               2020-06-23  1305  	 * only.
-7cf563b2c84624 Akash Asthana               2020-06-23  1306  	 */
-7cf563b2c84624 Akash Asthana               2020-06-23  1307  	avg_bw_core = (baud > 115200) ? Bps_to_icc(CORE_2X_50_MHZ)
-7cf563b2c84624 Akash Asthana               2020-06-23  1308  						: GENI_DEFAULT_BW;
-7cf563b2c84624 Akash Asthana               2020-06-23  1309  	port->se.icc_paths[GENI_TO_CORE].avg_bw = avg_bw_core;
-7cf563b2c84624 Akash Asthana               2020-06-23  1310  	port->se.icc_paths[CPU_TO_GENI].avg_bw = Bps_to_icc(baud);
-7cf563b2c84624 Akash Asthana               2020-06-23  1311  	geni_icc_set_bw(&port->se);
-7cf563b2c84624 Akash Asthana               2020-06-23  1312  
-68765ed6fdd109 Praveen Talari              2025-04-10  1313  	writel(ser_clk_cfg, uport->membase + GENI_SER_M_CLK_CFG);
-68765ed6fdd109 Praveen Talari              2025-04-10  1314  	writel(ser_clk_cfg, uport->membase + GENI_SER_S_CLK_CFG);
-68765ed6fdd109 Praveen Talari              2025-04-10  1315  	return 0;
-68765ed6fdd109 Praveen Talari              2025-04-10  1316  }
-68765ed6fdd109 Praveen Talari              2025-04-10  1317  
+So this commit changed the driver so that idle injection cooling is
+only initialized if the dt configuration is present - should we not
+always register it, with some sane defaults?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Konrad
 
