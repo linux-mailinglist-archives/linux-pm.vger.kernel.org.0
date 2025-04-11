@@ -1,82 +1,81 @@
-Return-Path: <linux-pm+bounces-25228-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25229-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF5E0A85AE1
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 13:03:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A7C3A85ACC
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 13:01:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A56279A621D
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 10:59:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 079FA1BA84A8
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 11:00:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C20D2989BF;
-	Fri, 11 Apr 2025 10:59:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B923D298CC6;
+	Fri, 11 Apr 2025 10:59:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mcA34Pzu"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="H1qYXtG2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A31E2989B5
-	for <linux-pm@vger.kernel.org>; Fri, 11 Apr 2025 10:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35465298CB0
+	for <linux-pm@vger.kernel.org>; Fri, 11 Apr 2025 10:59:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744369153; cv=none; b=nRLi4AgGcsy0tMSWJiB5CSePGI5nHll2WXL05hqV5+2eDm1IHmRNmZYpCLjz/iVstua8v2U9eha9F5B4R/a18JBsdhLkX8v9jwOBDX0nQS9jGSkFKPNMjQNC1pVRQxj2AAnfdeqSYbzseFag2PUMVuELqr2z4D26EKAGygTvKZc=
+	t=1744369155; cv=none; b=isCtVVAjluJpkIwZ0mw1kxcVVKWDsKc3MTTT7uSwONYQfc/PY7f9cknX+e1zi7Ub4+S3N5xqa4pruyDe7UWbkGj2tEL/Xas2Igyjo0RxYE+5nft4P6uQkJ9qEY21SX//K4f5DV/dwfjm5UhUwlPPIG2fdmZGgGWw7XQZBImneQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744369153; c=relaxed/simple;
-	bh=3RKsje1PNFnVLXX/G/S0mGGvTG/fkpcBc573XS0cMC8=;
+	s=arc-20240116; t=1744369155; c=relaxed/simple;
+	bh=pRm5rikPg836Cpaht6T2Bti6G/gsdEEiL/oreW2ehWs=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=N1Nj9Y8ergtQYGEX8JnI8x7qCKyQ1QJiqePKwnhRupVNrJ2XcbEL+umxZhBFHpcYlHVmHaNfNJm9cZOflh1f5jVYdsDZfSl8YADN7Ng2g0338msLHv0qU9OMGgiXPE7wJ1hGW1eI1gQbCRuGDvzg2vwYoC+/7rIoMbBXwZit+uA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mcA34Pzu; arc=none smtp.client-ip=209.85.210.176
+	 MIME-Version; b=P4pbiG/27hMuzHYg9PdPllTsbHwTgGsya/FSWZBevAjNJItRkTgD3EkuGXCUeznrK4unuSknL8XBaSrpJ0YiBca6hh3kON2jFeVvQlauWcpHBLXVfZt+Jzgz0RjoGZUaU5IwugKCLtsNHhF7XZ5KohGCSUHj+LMaOEr7ZdKA7mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=H1qYXtG2; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7376dd56eccso1996491b3a.0
-        for <linux-pm@vger.kernel.org>; Fri, 11 Apr 2025 03:59:10 -0700 (PDT)
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b041afe0ee1so1365013a12.1
+        for <linux-pm@vger.kernel.org>; Fri, 11 Apr 2025 03:59:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744369150; x=1744973950; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1744369153; x=1744973953; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=edDXYIWfYTwXBeTDJlsnMSAARjZrtAvFKTS5hVZIGiw=;
-        b=mcA34Pzurpur0DDaHADjr7IhnvD/H0ufGUH8ybJ1IoNuIJtcsslT/xhLBi3dghuvEk
-         UvZ1yQkjIhqRji0BBcFKL4fRjBqr1Og9WusuPR/2RITxQrpnHAGAvdCc/b8mmgGYVFD9
-         Jmtdme9ToN4BljyT+w3oxdgQjXfVYlwqtPg4HIkZlKTzlKAV5VgUzyywDLaqb9bAIq8B
-         G3y12prmyDQNRK3IeWZ+ttCfRp6jiVFVgZXBHaj6zbT0gbWxkTlUm+KICFRtre/CZ34q
-         dEP//J7bv/WHmzmDQXtj52adqG4KL6YvRW0EqMkWLaPORpXSZI0I+1kLAloJCYESWm/w
-         iPBA==
+        bh=eaMUD1BDVL417dtmG3+/1YWJeUCWl78+KVSs+NX3TJI=;
+        b=H1qYXtG2w6A9BaStWjrBIEmiaJMoT491tdHxBC94cM/FM1hfGw05kHtxEYk//+wVkW
+         PD4MANlH4dyT503CI/lm/kQwGFL1v7AvDdDIXF8leLKJngjgtYozW/GeVf8zxIxYkbj5
+         TpCY30DzU40NPzn74YF3l3MSJVT1CrIIgeVocBEQPpUx+UuONzzGif2mX8dGO4Wxr4ZY
+         M24ntogLefdIwgMK+IzE9w+5EJ0mlNLQeXzJbiYRO1RYYs4YkbIEqXk2FSjFW7iuIN9+
+         L89wd2mXQhdmS6vsLrxotENe6obm8SrzyoWO4rPj/71TgK7BM5vWhI4ujDGK0AQGnYt0
+         qeUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744369150; x=1744973950;
+        d=1e100.net; s=20230601; t=1744369153; x=1744973953;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=edDXYIWfYTwXBeTDJlsnMSAARjZrtAvFKTS5hVZIGiw=;
-        b=mGIhw6ge37fAPHjLGTTLThKkd7wVO0v/WEsNIgkVlElqCvh6f0TalH6tHB2xbGsuHu
-         iuJcXgTouuC2vDY4nWKKbvvRFv55Nq2csSVtdfoFQs38J1uAneZUf6e3Qdb0kbG0thEm
-         RCOkMOyfuFkBElPR5V0NbBZm00sM7pKT0hQN9dwOvwprPcmYztN5pDZMNjPhl7Rj7ycO
-         dvVdllMMNzJpOtnUAgqQfRF6zyvlwOzxPJgMKtESrb/vMQmDI3fGVlN7x86fteXK4Uax
-         1Er3ChTbhntG5f270x6hg9JiNHgPJCjjamoZ99kZseAtjCzR7FmHvFogFLP0msUZkYYI
-         zdGg==
-X-Gm-Message-State: AOJu0YwFdqgqP0Se5caqXgu1NgD09jcsIGE3BVWI22e+epXxtqB7Qf2/
-	8ZrhCgdI4qcBeOLNG16Q23XJ77FnJtggb1ZWDCYiVUKJx2rZRTYqff0snXNE0hk=
-X-Gm-Gg: ASbGncv/jCKnsNOxXb9O7KUNWnAVaNWKeR5QCm30sJ4cMuBV44sR50buelZC0w01Iqd
-	xNlyVtZStpP/v38Eh5UjI6JjoN1rS1j+fr9KrHRcoqkHkhhlc2L2yyRSfDw66yJve/5N4Pl57pN
-	NzTQf1AKocWZXol2xOdUPM3kWz7vnoh9gOUtF3sm2bb3Qij3LQb/QhEGA0pobLxv7SBX0XLouUS
-	Xf3dItcPYE+YIpb6QIwik+Fl/bxt5W/WzHR+hfiqmPa24sjxOFtJ99hUo7y66oeTDU9BuyAvGI/
-	06wO4Mmg4UbHpKhEf75aKqelWWFlBG9O1UICvvmAtw==
-X-Google-Smtp-Source: AGHT+IHnmO8U1SRyZKo+9xUWfLqZAtCOSfF+JiScx5mOjsMCUB5lZMSIgenh0Na/qgfbZOqoDLyYGA==
-X-Received: by 2002:aa7:8890:0:b0:736:ab21:8a69 with SMTP id d2e1a72fcca58-73bd0ea93eamr2951177b3a.0.1744369150256;
-        Fri, 11 Apr 2025 03:59:10 -0700 (PDT)
+        bh=eaMUD1BDVL417dtmG3+/1YWJeUCWl78+KVSs+NX3TJI=;
+        b=drrtYwcSxq11+A6pKf1qMh74q8w549atu6dDvT7yTMgTSJQPyVsFd/NGlh8abeRfu1
+         6SHcOafC3Z5O3waEDDYGPn1LiXg7j3zEuaQtBYGb3dQU4r4FbUFAxKvFVQz7FQhK7OVF
+         HJIy/+O4XIwTu9xyf6PIU/VgzA32obXMowTA5CSU5KuK9j5kLOPAd5KRB1mQ1/AqSutu
+         aPDzsD2NLuHGVK+xTdZtC76e8Etf02BiRL+v1LMHC4cACMK0lxqPIKg9F0Bb21UeXzmJ
+         UE2RMvmeoYa2VgIDeXAPMvIFt8KW0DL9BNhkNALPhEL3caikzgyZnsk1Xy4wH53oR71K
+         7mUA==
+X-Forwarded-Encrypted: i=1; AJvYcCWgH7/mXiR1xQWNTMFG5fIFaqHtTD7uuEhrO8KgelXNcjgZrzvn9XbyBdhOSdYyMNH/RR4TDxeVFA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyh1ghVJmiyt5/UvZCe+wiVs296VIDZNI0h26Lrsv8/fF5/w7vn
+	qRBLGfE7FK5UDSU5DgeLBRHh1XFHqAS9uAyeE8Y/td2ToFxH1OBH+zNmSlKU1tw=
+X-Gm-Gg: ASbGnctjKUPqmJqK456gnpQIXYqM3At8kUcQ77lnxyd5L4K2GeVGmNKxvOfhYdxiWAD
+	vAlwpigFYtU8KVenYmg6O3B+UrfNxOX+CgFkiBKPJgBIXAshXMMlRpDU043IFwRJAie7B3/1pg+
+	Z8Fy3fKgKbbR0OEi/u4e1mJ1T1d4Y96mZ4iYfMaMbVJDlYxN6+x5IB/ZFKoqMwND+KRMctNqxsu
+	pUd4iVKoWpjEffIop5B9PyBc+cHANra1Pzu9fosz65TncVvCt/zFOIj5vBvtFmY5JIW4+5YygNa
+	UOlGN1+2fb3uY/F+101HS0yJj24TmPdpT+vGhxGAaoi77A2KjLyf
+X-Google-Smtp-Source: AGHT+IGwEFN9ddJRuuBdJHj8RuzbOI95LYFz7Xvvsh4FpaazgcpxsU/NNRYSzTHyEh8WHWzJdCHM0Q==
+X-Received: by 2002:a05:6a21:108f:b0:1ee:dded:e5b with SMTP id adf61e73a8af0-201797b1ec9mr3954789637.24.1744369153569;
+        Fri, 11 Apr 2025 03:59:13 -0700 (PDT)
 Received: from localhost ([122.172.83.32])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73bd2198c00sm1234519b3a.10.2025.04.11.03.59.09
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73bd233787asm1222223b3a.173.2025.04.11.03.59.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Apr 2025 03:59:09 -0700 (PDT)
+        Fri, 11 Apr 2025 03:59:13 -0700 (PDT)
 From: Viresh Kumar <viresh.kumar@linaro.org>
 To: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
 	Danilo Krummrich <dakr@redhat.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Yury Norov <yury.norov@gmail.com>,
 	Miguel Ojeda <ojeda@kernel.org>,
 	Alex Gaynor <alex.gaynor@gmail.com>,
 	Boqun Feng <boqun.feng@gmail.com>,
@@ -87,7 +86,8 @@ To: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Alice Ryhl <aliceryhl@google.com>,
 	Trevor Gross <tmgross@umich.edu>,
 	Danilo Krummrich <dakr@kernel.org>
-Cc: linux-pm@vger.kernel.org,
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-pm@vger.kernel.org,
 	Vincent Guittot <vincent.guittot@linaro.org>,
 	Stephen Boyd <sboyd@kernel.org>,
 	Nishanth Menon <nm@ti.com>,
@@ -97,15 +97,16 @@ Cc: linux-pm@vger.kernel.org,
 	=?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>,
 	Joakim Bech <joakim.bech@linaro.org>,
 	Rob Herring <robh@kernel.org>,
+	Yury Norov <yury.norov@gmail.com>,
 	Burak Emir <bqe@google.com>,
 	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
 	Russell King <linux@armlinux.org.uk>,
 	linux-clk@vger.kernel.org,
 	Michael Turquette <mturquette@baylibre.com>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH V9 03/17] rust: cpumask: Add initial abstractions
-Date: Fri, 11 Apr 2025 16:25:02 +0530
-Message-Id: <9a004e3dff5321dae3b96df2817799daa699ce01.1744366571.git.viresh.kumar@linaro.org>
+Subject: [PATCH V9 04/17] MAINTAINERS: Add entry for Rust cpumask API
+Date: Fri, 11 Apr 2025 16:25:03 +0530
+Message-Id: <69c085aa4ea2418ed400591bf9be22c215a924e6.1744366571.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1744366571.git.viresh.kumar@linaro.org>
 References: <cover.1744366571.git.viresh.kumar@linaro.org>
@@ -117,365 +118,35 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add initial Rust abstractions for struct cpumask, covering a subset of
-its APIs. Additional APIs can be added as needed.
+Update the MAINTAINERS file to include the Rust abstractions for cpumask
+API.
 
-These abstractions will be used in upcoming Rust support for cpufreq and
-OPP frameworks.
+Yury has indicated that he does not wish to maintain the Rust code but
+would like to be listed as a reviewer.
 
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Reviewed-by: Yury Norov <yury.norov@gmail.com>
 ---
- rust/kernel/cpumask.rs | 328 +++++++++++++++++++++++++++++++++++++++++
- rust/kernel/lib.rs     |   1 +
- 2 files changed, 329 insertions(+)
- create mode 100644 rust/kernel/cpumask.rs
+ MAINTAINERS | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/rust/kernel/cpumask.rs b/rust/kernel/cpumask.rs
-new file mode 100644
-index 000000000000..a9d22c1d7a5a
---- /dev/null
-+++ b/rust/kernel/cpumask.rs
-@@ -0,0 +1,328 @@
-+// SPDX-License-Identifier: GPL-2.0
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 96b827049501..bd7c54af4fd4 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6237,6 +6237,12 @@ L:	linux-riscv@lists.infradead.org
+ S:	Maintained
+ F:	drivers/cpuidle/cpuidle-riscv-sbi.c
+ 
++CPUMASK API [RUST]
++M:	Viresh Kumar <viresh.kumar@linaro.org>
++R:	Yury Norov <yury.norov@gmail.com>
++S:	Maintained
++F:	rust/kernel/cpumask.rs
 +
-+//! CPU Mask abstractions.
-+//!
-+//! C header: [`include/linux/cpumask.h`](srctree/include/linux/cpumask.h)
-+
-+use crate::{
-+    alloc::{AllocError, Flags},
-+    bindings,
-+    prelude::*,
-+    types::Opaque,
-+};
-+
-+#[cfg(CONFIG_CPUMASK_OFFSTACK)]
-+use core::ptr::{self, NonNull};
-+
-+#[cfg(not(CONFIG_CPUMASK_OFFSTACK))]
-+use core::mem::MaybeUninit;
-+
-+use core::ops::{Deref, DerefMut};
-+
-+/// A CPU Mask.
-+///
-+/// Rust abstraction for the C `struct cpumask`.
-+///
-+/// # Invariants
-+///
-+/// A [`Cpumask`] instance always corresponds to a valid C `struct cpumask`.
-+///
-+/// The callers must ensure that the `struct cpumask` is valid for access and remains valid for the
-+/// lifetime of the returned reference.
-+///
-+/// ## Examples
-+///
-+/// The following example demonstrates how to update a [`Cpumask`].
-+///
-+/// ```
-+/// use kernel::bindings;
-+/// use kernel::cpumask::Cpumask;
-+///
-+/// fn set_clear_cpu(ptr: *mut bindings::cpumask, set_cpu: u32, clear_cpu: i32) {
-+///     // SAFETY: The `ptr` is valid for writing and remains valid for the lifetime of the
-+///     // returned reference.
-+///     let mask = unsafe { Cpumask::from_raw_mut(ptr) };
-+///
-+///     mask.set(set_cpu);
-+///     mask.clear(clear_cpu);
-+/// }
-+/// ```
-+#[repr(transparent)]
-+pub struct Cpumask(Opaque<bindings::cpumask>);
-+
-+impl Cpumask {
-+    /// Creates a mutable reference to an existing `struct cpumask` pointer.
-+    ///
-+    /// # Safety
-+    ///
-+    /// The caller must ensure that `ptr` is valid for writing and remains valid for the lifetime
-+    /// of the returned reference.
-+    pub unsafe fn from_raw_mut<'a>(ptr: *mut bindings::cpumask) -> &'a mut Self {
-+        // SAFETY: Guaranteed by the safety requirements of the function.
-+        //
-+        // INVARIANT: The caller ensures that `ptr` is valid for writing and remains valid for the
-+        // lifetime of the returned reference.
-+        unsafe { &mut *ptr.cast() }
-+    }
-+
-+    /// Creates a reference to an existing `struct cpumask` pointer.
-+    ///
-+    /// # Safety
-+    ///
-+    /// The caller must ensure that `ptr` is valid for reading and remains valid for the lifetime
-+    /// of the returned reference.
-+    pub unsafe fn from_raw<'a>(ptr: *const bindings::cpumask) -> &'a Self {
-+        // SAFETY: Guaranteed by the safety requirements of the function.
-+        //
-+        // INVARIANT: The caller ensures that `ptr` is valid for reading and remains valid for the
-+        // lifetime of the returned reference.
-+        unsafe { &*ptr.cast() }
-+    }
-+
-+    /// Obtain the raw `struct cpumask` pointer.
-+    pub fn as_raw(&self) -> *mut bindings::cpumask {
-+        self as *const _ as _
-+    }
-+
-+    /// Set `cpu` in the cpumask.
-+    ///
-+    /// Equivalent to the kernel's `__cpumask_set_cpu` API.
-+    #[inline]
-+    pub fn set(&mut self, cpu: u32) {
-+        // SAFETY: By the type invariant, `self.as_raw` is a valid argument to `__cpumask_set_cpu`.
-+        unsafe { bindings::__cpumask_set_cpu(cpu, self.as_raw()) };
-+    }
-+
-+    /// Clear `cpu` in the cpumask.
-+    ///
-+    /// Equivalent to the kernel's `__cpumask_clear_cpu` API.
-+    #[inline]
-+    pub fn clear(&mut self, cpu: i32) {
-+        // SAFETY: By the type invariant, `self.as_raw` is a valid argument to
-+        // `__cpumask_clear_cpu`.
-+        unsafe { bindings::__cpumask_clear_cpu(cpu, self.as_raw()) };
-+    }
-+
-+    /// Test `cpu` in the cpumask.
-+    ///
-+    /// Equivalent to the kernel's `cpumask_test_cpu` API.
-+    #[inline]
-+    pub fn test(&self, cpu: i32) -> bool {
-+        // SAFETY: By the type invariant, `self.as_raw` is a valid argument to `cpumask_test_cpu`.
-+        unsafe { bindings::cpumask_test_cpu(cpu, self.as_raw()) }
-+    }
-+
-+    /// Set all CPUs in the cpumask.
-+    ///
-+    /// Equivalent to the kernel's `cpumask_setall` API.
-+    #[inline]
-+    pub fn setall(&mut self) {
-+        // SAFETY: By the type invariant, `self.as_raw` is a valid argument to `cpumask_setall`.
-+        unsafe { bindings::cpumask_setall(self.as_raw()) };
-+    }
-+
-+    /// Checks if cpumask is empty.
-+    ///
-+    /// Equivalent to the kernel's `cpumask_empty` API.
-+    #[inline]
-+    pub fn empty(&self) -> bool {
-+        // SAFETY: By the type invariant, `self.as_raw` is a valid argument to `cpumask_empty`.
-+        unsafe { bindings::cpumask_empty(self.as_raw()) }
-+    }
-+
-+    /// Checks if cpumask is full.
-+    ///
-+    /// Equivalent to the kernel's `cpumask_full` API.
-+    #[inline]
-+    pub fn full(&self) -> bool {
-+        // SAFETY: By the type invariant, `self.as_raw` is a valid argument to `cpumask_full`.
-+        unsafe { bindings::cpumask_full(self.as_raw()) }
-+    }
-+
-+    /// Get weight of the cpumask.
-+    ///
-+    /// Equivalent to the kernel's `cpumask_weight` API.
-+    #[inline]
-+    pub fn weight(&self) -> u32 {
-+        // SAFETY: By the type invariant, `self.as_raw` is a valid argument to `cpumask_weight`.
-+        unsafe { bindings::cpumask_weight(self.as_raw()) }
-+    }
-+
-+    /// Copy cpumask.
-+    ///
-+    /// Equivalent to the kernel's `cpumask_copy` API.
-+    #[inline]
-+    pub fn copy(&self, dstp: &mut Self) {
-+        // SAFETY: By the type invariant, `Self::as_raw` is a valid argument to `cpumask_copy`.
-+        unsafe { bindings::cpumask_copy(dstp.as_raw(), self.as_raw()) };
-+    }
-+}
-+
-+/// A CPU Mask pointer.
-+///
-+/// Rust abstraction for the C `struct cpumask_var_t`.
-+///
-+/// # Invariants
-+///
-+/// A [`CpumaskVar`] instance always corresponds to a valid C `struct cpumask_var_t`.
-+///
-+/// The callers must ensure that the `struct cpumask_var_t` is valid for access and remains valid
-+/// for the lifetime of [`CpumaskVar`].
-+///
-+/// ## Examples
-+///
-+/// The following example demonstrates how to create and update a [`CpumaskVar`].
-+///
-+/// ```
-+/// use kernel::cpumask::CpumaskVar;
-+///
-+/// let mut mask = CpumaskVar::new(GFP_KERNEL).unwrap();
-+///
-+/// assert!(mask.empty());
-+/// mask.set(2);
-+/// assert!(mask.test(2));
-+/// mask.set(3);
-+/// assert!(mask.test(3));
-+/// assert_eq!(mask.weight(), 2);
-+///
-+/// let mask2 = CpumaskVar::try_clone(&mask).unwrap();
-+/// assert!(mask2.test(2));
-+/// assert!(mask2.test(3));
-+/// assert_eq!(mask2.weight(), 2);
-+/// ```
-+pub struct CpumaskVar {
-+    #[cfg(CONFIG_CPUMASK_OFFSTACK)]
-+    ptr: NonNull<Cpumask>,
-+    #[cfg(not(CONFIG_CPUMASK_OFFSTACK))]
-+    mask: Cpumask,
-+}
-+
-+impl CpumaskVar {
-+    /// Creates an initialized instance of the [`CpumaskVar`].
-+    pub fn new(_flags: Flags) -> Result<Self, AllocError> {
-+        Ok(Self {
-+            #[cfg(CONFIG_CPUMASK_OFFSTACK)]
-+            ptr: {
-+                let mut ptr: *mut bindings::cpumask = ptr::null_mut();
-+
-+                // SAFETY: Depending on the value of `_flags`, this call may sleep. Other than
-+                // that, it is always safe to call this method.
-+                //
-+                // INVARIANT: The associated memory is freed when the `CpumaskVar` goes out of
-+                // scope.
-+                unsafe { bindings::zalloc_cpumask_var(&mut ptr, _flags.as_raw()) };
-+                NonNull::new(ptr.cast()).ok_or(AllocError)?
-+            },
-+
-+            #[cfg(not(CONFIG_CPUMASK_OFFSTACK))]
-+            // SAFETY: FFI type is valid to be zero-initialized.
-+            //
-+            // INVARIANT: The associated memory is freed when the `CpumaskVar` goes out of scope.
-+            mask: unsafe { core::mem::zeroed() },
-+        })
-+    }
-+
-+    /// Creates an uninitialized instance of the [`CpumaskVar`].
-+    ///
-+    /// # Safety
-+    ///
-+    /// The caller must ensure that the returned [`CpumaskVar`] is properly initialized before
-+    /// getting used.
-+    unsafe fn new_uninit(_flags: Flags) -> Result<Self, AllocError> {
-+        Ok(Self {
-+            #[cfg(CONFIG_CPUMASK_OFFSTACK)]
-+            ptr: {
-+                let mut ptr: *mut bindings::cpumask = ptr::null_mut();
-+
-+                // SAFETY: Depending on the value of `_flags`, this call may sleep. Other than
-+                // that, it is always safe to call this method.
-+                //
-+                // INVARIANT: The associated memory is freed when the `CpumaskVar` goes out of
-+                // scope.
-+                unsafe { bindings::alloc_cpumask_var(&mut ptr, _flags.as_raw()) };
-+                NonNull::new(ptr.cast()).ok_or(AllocError)?
-+            },
-+            #[cfg(not(CONFIG_CPUMASK_OFFSTACK))]
-+            // SAFETY: Guaranteed by the safety requirements of the function.
-+            //
-+            // INVARIANT: The associated memory is freed when the `CpumaskVar` goes out of scope.
-+            mask: unsafe { MaybeUninit::uninit().assume_init() },
-+        })
-+    }
-+
-+    /// Creates a mutable reference to an existing `struct cpumask_var_t` pointer.
-+    ///
-+    /// # Safety
-+    ///
-+    /// The caller must ensure that `ptr` is valid for writing and remains valid for the lifetime
-+    /// of the returned reference.
-+    pub unsafe fn from_raw_mut<'a>(ptr: *mut bindings::cpumask_var_t) -> &'a mut Self {
-+        // SAFETY: Guaranteed by the safety requirements of the function.
-+        //
-+        // INVARIANT: The caller ensures that `ptr` is valid for writing and remains valid for the
-+        // lifetime of the returned reference.
-+        unsafe { &mut *ptr.cast() }
-+    }
-+
-+    /// Creates a reference to an existing `struct cpumask_var_t` pointer.
-+    ///
-+    /// # Safety
-+    ///
-+    /// The caller must ensure that `ptr` is valid for reading and remains valid for the lifetime
-+    /// of the returned reference.
-+    pub unsafe fn from_raw<'a>(ptr: *const bindings::cpumask_var_t) -> &'a Self {
-+        // SAFETY: Guaranteed by the safety requirements of the function.
-+        //
-+        // INVARIANT: The caller ensures that `ptr` is valid for reading and remains valid for the
-+        // lifetime of the returned reference.
-+        unsafe { &*ptr.cast() }
-+    }
-+
-+    /// Clones cpumask.
-+    pub fn try_clone(cpumask: &Cpumask) -> Result<Self> {
-+        // SAFETY: The returned cpumask_box is initialized right after this call.
-+        let mut cpumask_box = unsafe { Self::new_uninit(GFP_KERNEL) }?;
-+
-+        cpumask.copy(&mut cpumask_box);
-+        Ok(cpumask_box)
-+    }
-+}
-+
-+// Make [`CpumaskVar`] behave like a pointer to [`Cpumask`].
-+impl Deref for CpumaskVar {
-+    type Target = Cpumask;
-+
-+    #[cfg(CONFIG_CPUMASK_OFFSTACK)]
-+    fn deref(&self) -> &Self::Target {
-+        // SAFETY: The caller owns CpumaskVar, so it is safe to deref the cpumask.
-+        unsafe { &*self.ptr.as_ptr() }
-+    }
-+
-+    #[cfg(not(CONFIG_CPUMASK_OFFSTACK))]
-+    fn deref(&self) -> &Self::Target {
-+        &self.mask
-+    }
-+}
-+
-+impl DerefMut for CpumaskVar {
-+    #[cfg(CONFIG_CPUMASK_OFFSTACK)]
-+    fn deref_mut(&mut self) -> &mut Cpumask {
-+        // SAFETY: The caller owns CpumaskVar, so it is safe to deref the cpumask.
-+        unsafe { self.ptr.as_mut() }
-+    }
-+
-+    #[cfg(not(CONFIG_CPUMASK_OFFSTACK))]
-+    fn deref_mut(&mut self) -> &mut Cpumask {
-+        &mut self.mask
-+    }
-+}
-+
-+impl Drop for CpumaskVar {
-+    fn drop(&mut self) {
-+        #[cfg(CONFIG_CPUMASK_OFFSTACK)]
-+        // SAFETY: By the type invariant, `self.as_raw` is a valid argument to `free_cpumask_var`.
-+        unsafe {
-+            bindings::free_cpumask_var(self.as_raw())
-+        };
-+    }
-+}
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index de07aadd1ff5..75f78f6bfaa6 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -42,6 +42,7 @@
- pub mod block;
- #[doc(hidden)]
- pub mod build_assert;
-+pub mod cpumask;
- pub mod cred;
- pub mod device;
- pub mod device_id;
+ CRAMFS FILESYSTEM
+ M:	Nicolas Pitre <nico@fluxnic.net>
+ S:	Maintained
 -- 
 2.31.1.272.g89b43f80a514
 
