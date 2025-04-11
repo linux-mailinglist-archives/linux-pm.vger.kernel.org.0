@@ -1,261 +1,149 @@
-Return-Path: <linux-pm+bounces-25277-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25279-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4223A862E4
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 18:09:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EDD0A86308
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 18:19:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFDE419E296F
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 16:08:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94CE9172AE3
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 16:19:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C40A12144DF;
-	Fri, 11 Apr 2025 16:07:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62E1921B909;
+	Fri, 11 Apr 2025 16:19:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VKpB/9z1"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="HCMVPE3V"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1228478F45;
-	Fri, 11 Apr 2025 16:07:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C6278F45;
+	Fri, 11 Apr 2025 16:19:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744387665; cv=none; b=EGMsX7lcuV/Ul/gu5zJkGyq75rODpLNIaCf4IKyNdjeqnSd8X8XVqASyYyrp9Gmu06/k5i1+8Xu/v8XXu4al/VUY1h8YACv1iAAiunFUUIhwF1rpkiCPiMWPqgrT3U/hhZALzl4sslIZHKheVZkUTXwWpU75UxabTKFco3VTRBE=
+	t=1744388351; cv=none; b=VoVMkcsLnN17JuH1Yzq8giyUJWNESVhfTt4saj3ImOWQoE1MXNxaaunBRxj0X5jdVypC7pWfu7e+c1V1IJWJouyJYissTObFLEi0UtpGUebsySbXdHcbxHNNLk7eK04JDcvholQB1Th2b73tAv/eLZyp4OQiV9hGQSKhIFnsTog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744387665; c=relaxed/simple;
-	bh=62MRMmZqQC/emagflICIZ4N1OBFtw1P5mArm6eWQI1M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cLBElH0eCsBZw3/2aNpH9tbzkm/nIgkEuXwAfGi3uBq7tDqz6MFcvdBvZpVrYjxsRNr7jRJou7FQ5nVjLkteowTnjzUVudzsM7V0I1cTMxea8OH1ztErZF0Odvb7ciV0FEmzbfqGMuEp5ueECmY9fwg/guAxU9nlQROJvjmjRnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VKpB/9z1; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-736c277331eso3150165b3a.1;
-        Fri, 11 Apr 2025 09:07:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744387663; x=1744992463; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7NCc2G2kByYmch6+idHD1dvRRPTby9dT9KjT7z2UwxQ=;
-        b=VKpB/9z1nwHZcfZGqWyDMuRBBHqEarxZv4iRPo4eVEGg42K7Mc7o0GisYfKkJq5bk8
-         6KC//b+fNdX5CboDG4pum9W8LTPbJMel9TMhHK2tIOJxroiTzmWbZZicwug5APPXi6fO
-         XnQE9tlx5MiypSZFwwtos3+VtNpECtix8KPGAuivBHsfwRlpKUWPFNmpb3bXJpSmBI4s
-         mjngdzefU6L+8fzIkW3hx1yJXybauSgyTvu7vM/Zo5U9vO3j4N2dG15n4bAu2Y2psaXN
-         JaGQUbyJW9le7lXheY20HRDHolBEQ1vU78GQLry74UPuz+6fO+U+3XW57z3XpJaJ9tac
-         dN2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744387663; x=1744992463;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7NCc2G2kByYmch6+idHD1dvRRPTby9dT9KjT7z2UwxQ=;
-        b=GKOUN9lCvoPlIQF/3p3AnutHorVqsRiezi4Ou+7OGr0DN6CTYS11E3rL9bRCNkKWin
-         cYyN2DOipOoc1THh0prDLYv/hGrgJcaW50jfMx3gjXRluEkOvphN3P/3okxOd9OkOhQ4
-         KfVKqXvn8EevRUgH0by6eMmzPepuKbo4nua9lqyUDNQR+SecgA3giWZAartKoeamzdbc
-         V6ubw7l6ffuTNwwhtYCuNAKHGpzsaFM4RSNp4V2DdRimd/wrLL7hvJ0YrNOKUR7ArScv
-         ek3V27n02YT8p76XNSKYgGswYZbdiDBzxX5QmURASSHCbTTON18p9x7mg59G2FZ2Ot8P
-         YvJw==
-X-Forwarded-Encrypted: i=1; AJvYcCUq+4tFF6UBFqQOZq3cR0CAO2oz16gnImtVNI8f67AUmg3c5bUP3D19XAb+K69NUsCmabAztbl5bgo=@vger.kernel.org, AJvYcCWqz5n4FXjvPj1Fpj/g+xvt/0U1Lvl2P02kovbBrFCMBPXsuuxzu/rSv6UphT5Fbeclvmjw8PyMuPQ7oZAMjBk=@vger.kernel.org, AJvYcCXG+KT4IewCMKv38lH7vVZCmVCPE8rfqsOBLni5us+OzGouwDPX9OM8VMgV2AcSZPJzuzp+1uKL0qE=@vger.kernel.org, AJvYcCXtv6TJCjtzUM4jeyyEIeaciTYh8PrzFe0Df3otuutVJon3utcT8mrDkhnKQTy1X8gO3VcVuWA9+cbac5hY@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrjX7xexyFmEqEIaa7xMfb8U4YqbSr2imwiz35SdIC1DI1DGUA
-	1PWSqDKFqx2hc5ML2v4lrVgxBp7+Gu4FCVURShhFSR36viF96cx9
-X-Gm-Gg: ASbGncvic8+ntJgP6N3ojmsDKsujlp6bfjBaws7opcFj2zvoVme3n9KgEHSKeuVxoEL
-	S5tovN92knsuNsG3taq0TMXa12gkddmFr4V0lr3GMM+Szb+KtKoKGe43lVaaM5Itet1n1HcTpVd
-	EmnoPfVoABI5EqAFistuceVljfH9vtjrjYu1RVWSdGF/fWPtjVcxfWaCwOSwwKenZiAxYL+2Wtc
-	GEaxAFbpwjvhprQWM6O+HgH1ovKZYguFhCPbLdkLmRbheTpUZa1Vp9Y6F4YGH91i+zQuSjLw7eA
-	Drl2990V2nAplnafPG80i1Pxj1UGPuRQgByGJ0bw
-X-Google-Smtp-Source: AGHT+IG38RnNE2cQHtptce8kSm9+pS6wCRqFcqxOz4wGNYYeuCVJwvF6rpCwjA0rcpis4oJfnWcb5A==
-X-Received: by 2002:a05:6a21:9d91:b0:1f3:3864:bbe0 with SMTP id adf61e73a8af0-2017953ac13mr4925687637.8.1744387663065;
-        Fri, 11 Apr 2025 09:07:43 -0700 (PDT)
-Received: from localhost ([216.228.127.131])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b02a2d3a250sm4210141a12.62.2025.04.11.09.07.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Apr 2025 09:07:42 -0700 (PDT)
-Date: Fri, 11 Apr 2025 12:07:40 -0400
-From: Yury Norov <yury.norov@gmail.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Danilo Krummrich <dakr@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>, linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-	rust-for-linux@vger.kernel.org,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Erik Schilling <erik.schilling@linaro.org>,
-	Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
-	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
-	Burak Emir <bqe@google.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Russell King <linux@armlinux.org.uk>, linux-clk@vger.kernel.org,
-	Michael Turquette <mturquette@baylibre.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V9 08/17] cpufreq: Use enum for cpufreq flags that use
- BIT()
-Message-ID: <Z_k-TFCkLWu9eiFt@yury>
-References: <cover.1744366571.git.viresh.kumar@linaro.org>
- <efbdd8212a90175c293313de961c34d13b9f4b43.1744366571.git.viresh.kumar@linaro.org>
+	s=arc-20240116; t=1744388351; c=relaxed/simple;
+	bh=FwB0GwMAz/Jk/IzQsALinleh/WbxSkWUJOqn3edRflE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UwFyheWmZ9eoGeJvJ5fgw5w45J6aIOm+nPpRE2cpazs5Gk/3rUNiBbldjVfhuecgx0MJAp9sbJaMY+Bebl03Dwu70RKndYSCwKsR1q7Eqc0WwAhueVryTikG1bfGYOL2BnSx6Zn0BFR4BWOgwo00KoQ9phL2IcYLIUqgKcttqL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=HCMVPE3V; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [192.168.7.202] ([71.202.166.45])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53BGI8eE556627
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 11 Apr 2025 09:18:09 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53BGI8eE556627
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025032001; t=1744388294;
+	bh=Ko0DVDPZk1lmFb0ezN24lfEVEQfJNexfOA0BljZTyTI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=HCMVPE3VUrByMrInwuaCfKprmguQQdiEPaKMoCCTWK2LUmCWRi9fEDI7gTCEM9ZJh
+	 877M78JwB16h8FPAsWwuVFC0wKwAGh+MrTEDORzFRNDjA6ntRXVp9X6/6lOIl59oJ3
+	 uYFB51IHSPgzXhXFMAWKx/iQZ3ZaaS6/JA9hM9lNT+/4EPW4tgiUwYY8Rkz/Hbuozo
+	 ILeAs4jjcfjHKvDa1+szOGPBgVbNz2Y4TlEr9lsDpHVkczAbTCSntN3pgBgz6Bt+Fw
+	 g2OEgqh6D59YEkxvIXk6+Up3koKlMZT9PzSktqzu1CxwA4/XsBT06O8aEnafCL/t1D
+	 mD+w4YrYz7V2w==
+Message-ID: <41eb2d08-1b2d-4ca8-bcb7-f5f4611f91a9@zytor.com>
+Date: Fri, 11 Apr 2025 09:18:08 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <efbdd8212a90175c293313de961c34d13b9f4b43.1744366571.git.viresh.kumar@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 10/15] KVM: VMX: Use WRMSRNS or its immediate form
+ when available
+To: Sean Christopherson <seanjc@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+        linux-edac@vger.kernel.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-ide@vger.kernel.org,
+        linux-pm@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org,
+        acme@kernel.org, namhyung@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, luto@kernel.org,
+        boris.ostrovsky@oracle.com, kys@microsoft.com, haiyangz@microsoft.com,
+        decui@microsoft.com
+References: <20250331082251.3171276-1-xin@zytor.com>
+ <20250331082251.3171276-11-xin@zytor.com> <Z_hTI8ywa3rTxFaz@google.com>
+Content-Language: en-US
+From: Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <Z_hTI8ywa3rTxFaz@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Apr 11, 2025 at 04:25:07PM +0530, Viresh Kumar wrote:
-> The BIT() macro is too complex for Rust's bindgen to interpret as
+On 4/10/2025 4:24 PM, Sean Christopherson wrote:
+>> +/*
+>> + * Write EAX to MSR_IA32_SPEC_CTRL.
+>> + *
+>> + * Choose the best WRMSR instruction based on availability.
+>> + *
+>> + * Replace with 'wrmsrns' and 'wrmsrns %rax, $MSR_IA32_SPEC_CTRL' once binutils support them.
+>> + */
+>> +.macro WRITE_EAX_TO_MSR_IA32_SPEC_CTRL
+>> +	ALTERNATIVE_2 __stringify(mov $MSR_IA32_SPEC_CTRL, %ecx;		\
+>> +				  xor %edx, %edx;				\
+>> +				  mov %edi, %eax;				\
+>> +				  ds wrmsr),					\
+>> +		      __stringify(mov $MSR_IA32_SPEC_CTRL, %ecx;		\
+>> +				  xor %edx, %edx;				\
+>> +				  mov %edi, %eax;				\
+>> +				  ASM_WRMSRNS),					\
+>> +		      X86_FEATURE_WRMSRNS,					\
+>> +		      __stringify(xor %_ASM_AX, %_ASM_AX;			\
+>> +				  mov %edi, %eax;				\
+>> +				  ASM_WRMSRNS_RAX; .long MSR_IA32_SPEC_CTRL),	\
+>> +		      X86_FEATURE_MSR_IMM
+>> +.endm
+> This is quite hideous.  I have no objection to optimizing __vmx_vcpu_run(), but
+> I would much prefer that a macro like this live in generic code, and that it be
+> generic.  It should be easy enough to provide an assembly friendly equivalent to
+> __native_wrmsr_constant().
 
-The BIT() is as simple as '1 << nr'. How that it's so complex for that
-tool to realize that '1 << 2' is the constant?
-
-> integer constants. This results in many of the cpufreq macros being
-> undefined in Rust auto-generated bindings. By replacing the "#define"
-> macros with an "enum", we ensure that bindgen can properly evaluate
-> these values, enabling their seamless use in Rust code.
-> 
-> No intentional functional impact.
-
-The code you're wiping is perfectly correct. And you clearly state
-that one of your tools is broken. Please fix your tool or find any
-other solution.
-
-We don't touch correct code, sorry.
- 
-> Suggested-by: Alice Ryhl <aliceryhl@google.com>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  include/linux/cpufreq.h | 96 ++++++++++++++++++++++-------------------
->  1 file changed, 51 insertions(+), 45 deletions(-)
-> 
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index 400fee6427a5..354ae35fe708 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -298,11 +298,12 @@ static inline void cpufreq_stats_record_transition(struct cpufreq_policy *policy
->   *                      CPUFREQ DRIVER INTERFACE                     *
->   *********************************************************************/
->  
-> -#define CPUFREQ_RELATION_L 0  /* lowest frequency at or above target */
-> -#define CPUFREQ_RELATION_H 1  /* highest frequency below or at target */
-> -#define CPUFREQ_RELATION_C 2  /* closest frequency to target */
-> -/* relation flags */
-> -#define CPUFREQ_RELATION_E BIT(2) /* Get if possible an efficient frequency */
-> +enum {
-> +	CPUFREQ_RELATION_L = 0, /* lowest frequency at or above target */
-> +	CPUFREQ_RELATION_H = BIT(0), /* highest frequency below or at target */
-> +	CPUFREQ_RELATION_C = BIT(1), /* closest frequency to target */
-> +	CPUFREQ_RELATION_E = BIT(2), /* Get if possible an efficient frequency */
-> +};
->  
->  #define CPUFREQ_RELATION_LE (CPUFREQ_RELATION_L | CPUFREQ_RELATION_E)
->  #define CPUFREQ_RELATION_HE (CPUFREQ_RELATION_H | CPUFREQ_RELATION_E)
-> @@ -424,52 +425,57 @@ struct cpufreq_driver {
->  
->  /* flags */
->  
-> -/*
-> - * Set by drivers that need to update internal upper and lower boundaries along
-> - * with the target frequency and so the core and governors should also invoke
-> - * the diver if the target frequency does not change, but the policy min or max
-> - * may have changed.
-> - */
-> -#define CPUFREQ_NEED_UPDATE_LIMITS		BIT(0)
-> +enum {
-> +	/*
-> +	 * Set by drivers that need to update internal upper and lower
-> +	 * boundaries along with the target frequency and so the core and
-> +	 * governors should also invoke the diver if the target frequency does
-> +	 * not change, but the policy min or max may have changed.
-> +	 */
-> +	CPUFREQ_NEED_UPDATE_LIMITS		= BIT(0),
->  
-> -/* loops_per_jiffy or other kernel "constants" aren't affected by frequency transitions */
-> -#define CPUFREQ_CONST_LOOPS			BIT(1)
-> +	/*
-> +	 * loops_per_jiffy or other kernel "constants" aren't affected by
-> +	 * frequency transitions.
-> +	 */
-> +	CPUFREQ_CONST_LOOPS			= BIT(1),
->  
-> -/*
-> - * Set by drivers that want the core to automatically register the cpufreq
-> - * driver as a thermal cooling device.
-> - */
-> -#define CPUFREQ_IS_COOLING_DEV			BIT(2)
-> +	/*
-> +	 * Set by drivers that want the core to automatically register the
-> +	 * cpufreq driver as a thermal cooling device.
-> +	 */
-> +	CPUFREQ_IS_COOLING_DEV			= BIT(2),
->  
-> -/*
-> - * This should be set by platforms having multiple clock-domains, i.e.
-> - * supporting multiple policies. With this sysfs directories of governor would
-> - * be created in cpu/cpu<num>/cpufreq/ directory and so they can use the same
-> - * governor with different tunables for different clusters.
-> - */
-> -#define CPUFREQ_HAVE_GOVERNOR_PER_POLICY	BIT(3)
-> +	/*
-> +	 * This should be set by platforms having multiple clock-domains, i.e.
-> +	 * supporting multiple policies. With this sysfs directories of governor
-> +	 * would be created in cpu/cpu<num>/cpufreq/ directory and so they can
-> +	 * use the same governor with different tunables for different clusters.
-> +	 */
-> +	CPUFREQ_HAVE_GOVERNOR_PER_POLICY	= BIT(3),
->  
-> -/*
-> - * Driver will do POSTCHANGE notifications from outside of their ->target()
-> - * routine and so must set cpufreq_driver->flags with this flag, so that core
-> - * can handle them specially.
-> - */
-> -#define CPUFREQ_ASYNC_NOTIFICATION		BIT(4)
-> +	/*
-> +	 * Driver will do POSTCHANGE notifications from outside of their
-> +	 * ->target() routine and so must set cpufreq_driver->flags with this
-> +	 *  flag, so that core can handle them specially.
-> +	 */
-> +	CPUFREQ_ASYNC_NOTIFICATION		= BIT(4),
->  
-> -/*
-> - * Set by drivers which want cpufreq core to check if CPU is running at a
-> - * frequency present in freq-table exposed by the driver. For these drivers if
-> - * CPU is found running at an out of table freq, we will try to set it to a freq
-> - * from the table. And if that fails, we will stop further boot process by
-> - * issuing a BUG_ON().
-> - */
-> -#define CPUFREQ_NEED_INITIAL_FREQ_CHECK	BIT(5)
-> +	/*
-> +	 * Set by drivers which want cpufreq core to check if CPU is running at
-> +	 * a frequency present in freq-table exposed by the driver. For these
-> +	 * drivers if CPU is found running at an out of table freq, we will try
-> +	 * to set it to a freq from the table. And if that fails, we will stop
-> +	 * further boot process by issuing a BUG_ON().
-> +	 */
-> +	CPUFREQ_NEED_INITIAL_FREQ_CHECK		= BIT(5),
->  
-> -/*
-> - * Set by drivers to disallow use of governors with "dynamic_switching" flag
-> - * set.
-> - */
-> -#define CPUFREQ_NO_AUTO_DYNAMIC_SWITCHING	BIT(6)
-> +	/*
-> +	 * Set by drivers to disallow use of governors with "dynamic_switching"
-> +	 * flag set.
-> +	 */
-> +	CPUFREQ_NO_AUTO_DYNAMIC_SWITCHING	= BIT(6),
-> +};
->  
->  int cpufreq_register_driver(struct cpufreq_driver *driver_data);
->  void cpufreq_unregister_driver(struct cpufreq_driver *driver_data);
-> -- 
-> 2.31.1.272.g89b43f80a514
+Will do.
 
