@@ -1,164 +1,177 @@
-Return-Path: <linux-pm+bounces-25299-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25300-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 195EBA86853
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 23:31:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13FD8A8694A
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Apr 2025 01:37:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C61FF9A5761
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 21:30:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17CCA9A6E01
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 23:37:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6666A29AB04;
-	Fri, 11 Apr 2025 21:30:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 022DE2BEC4A;
+	Fri, 11 Apr 2025 23:37:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pwRp0W5r"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZvvTsaXV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722DB28F948;
-	Fri, 11 Apr 2025 21:30:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5CA2BE7CB;
+	Fri, 11 Apr 2025 23:37:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744407030; cv=none; b=Fv8WMBiM9kHCCEhTgCZmsJ2rk1mrx7RF621y79lMzyUigVc8rCcvAE35OersbW9GQvp31UkddcMcJWGj/iMiPYOpCkISbN/GMoF+DI/He2GtccOD8oBW8d+bEiqsBp2r+NfWxHKMCgFyZRicPANCQvxZ0lHONmsAIyTJ4IkDl3Y=
+	t=1744414632; cv=none; b=e/kqaCGAfsSUtuSYc2coW9oO6xnXpqzp9rVx8LpdGgnfmv6RW2go0m5Ju5FpEDY5RjrX9BJTGMs1D6a5J9Mu2819n3lLRPS4EkOKXIXq3+O9WhWGUf6Y/o0Z/8iisg7SByal6I0MSs7aJ9Mym59DuTLw5H/aOSpmmxGGBMOCZxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744407030; c=relaxed/simple;
-	bh=NK+PMuBUPUJ6Uqqi5FVej1Q0hExaLxjl/NqH3NKGqRM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KlrG+1mW9JZrYA6DWrD5kys+tWdGoDw6fhstmQ+e4vU4+Q9SUQtr9YItgEFEsNZWC8fwhHc3YFlKdHf7v7JoDluueuRZZXdOGyTnDgzNXA7h9KsoW4NNwjPuYaJSlaAoAUMgIAe/bFzc7mSUBbj6bdBaZe2MEynxwOSeoNO1ByQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pwRp0W5r; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53BEhWbf019687;
-	Fri, 11 Apr 2025 21:30:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=jdhyv9hjm6QUrsT/wcxw2z
-	TNKs20yDomAVmT1aUQSfE=; b=pwRp0W5ryybSH390VH0XdIRdKMmb/GsOq/cSGW
-	Mwfj3t+XhIJVxZzgEGJ1J29qJMMpveZzDXcoM/wpceeDqYJFAc3GvwMPXDpUbmaF
-	FgBbJylk1CkStlv8pWHixPBRpnQGyUg5klGw5EP5oW9ZZ0Aq6ISZNPsPe3WSdLTQ
-	1U7fed5lKBCwbwLKtHiWvUyBYYYLTLZsEuRfocgcHcRBAH07CAylj+Oj3Gn/bqX4
-	VMn+AWU3uMv8PuDTnumEv9CWRNW+haGUl1x/kjbCMnz5JnFpCTm5QZtwUDtaAka9
-	EaUKFlpjm+TEU68t27UO6HZz8x6mbPheml/XQvKLwagulZ1Q==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45twcrutbk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 11 Apr 2025 21:30:15 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53BLUEIE001413
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 11 Apr 2025 21:30:14 GMT
-Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 11 Apr 2025 14:30:14 -0700
-From: Mike Tipton <quic_mdtipton@quicinc.com>
-To: Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi
-	<cristian.marussi@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Viresh
- Kumar" <viresh.kumar@linaro.org>
-CC: <arm-scmi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Mike Tipton
-	<quic_mdtipton@quicinc.com>
-Subject: [PATCH] cpufreq: scmi: Skip SCMI devices that aren't used by the CPUs
-Date: Fri, 11 Apr 2025 14:29:41 -0700
-Message-ID: <20250411212941.1275572-1-quic_mdtipton@quicinc.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1744414632; c=relaxed/simple;
+	bh=b/3gzVMfgYxEZ77GHCaJmjb5ba9wNIawHHXzPE8U/VU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KSdK0XeMksMvwUly0wAciT5/1xAmx3UwPfytAJl//kDgrYa01nkxJUiHwrBheNYwnZIgYbb/3XHEWorMSMqOdIrQOJVzll9b8V39KylPOn8zfrcCVztgeAJLOE1FgOBwUAnftUDepS7v9YV76I3sENWj4WEE1sQNRdc5j0uvL0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZvvTsaXV; arc=none smtp.client-ip=209.85.210.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-72bbd3a3928so1472800a34.2;
+        Fri, 11 Apr 2025 16:37:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744414630; x=1745019430; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=TKjBnAI0llRD88HQinqqWPzae0oerPBARTmSqosHWIk=;
+        b=ZvvTsaXV4rplAtOS98F92pBQaXngjbUmnqXqmKq/Hx5JN2vj35GCDnum3o3XU5vp8t
+         /9KmnC4btl+S+vJuyLDE+BY2SwsWArCm4b5iQ6YUFY9ni2Ejh+UmQGawSqaXQQpwoeTR
+         q0dBMU9OB/jwCi/NZcTI+JsEvDV5R5vcdLi2mcxRwo7wZKWMsCadb3eGPU3prBrbMSpR
+         7OZ/UP+XoLmI/a7t3dhx45K8RbBZfLPUCtckQv8DxkaTcxqpn9nAftQjaYe4DfrStWdJ
+         SOPK3hDC8FPCsUSE7nI7eqIjDNcvXCwYNxM9G8ptYtDTONQCvSvyhIagHn7EMyBmpHQ7
+         u8fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744414630; x=1745019430;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TKjBnAI0llRD88HQinqqWPzae0oerPBARTmSqosHWIk=;
+        b=J9rxFCxXk9cJtX+0hvaDfMCZdX3vhgJrteHrbHHMltGEOxo/gsR6KARn24GhLuZdYP
+         L19wSyTxpJzIqHuxibH6UDtXzwfsvsYXLuYeELe4q6BHeRR6Qe0MDzUoRKgIj5Gt29Su
+         HQ8qpgpS9jMWU60C/VRXKfjmO2E+/3NdR43A5A5+yMwHP+fRJokGv/h8KjAhq7oegLSK
+         hOqNUyvOvUzQyrBrTgabEU9KMeYmjTG3E5AVE7YCVCOYTJUQkGjRCS4Oj72MaVnloIGR
+         i+fzTnlrrFmM0KGvypYvnkPylMysJFjFHgipY13IETqgqLGLnQDwL6GgzlfPoUPZ3+fK
+         SA8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVS3o7euHcxmzBWO2+AR6g1pqIMDtYubMOp/ONox4FaxcBLWEfH8Wx2pots2ddnaBFuV1cFyAQkBtPMDjUx@vger.kernel.org, AJvYcCVkz9KYGBWZQHvGR5UsnVauWr5pKnrLAnTdZTT8g9X6YlK3Ab1WMv3/MGmib9CRMFPEI6PX26YVC4k=@vger.kernel.org, AJvYcCWCFTw2FDIiOhqzCgDWMLmDZKpGI8Kj6ZULr8ePOG5u9uyXcX1bmiNOuS55FXhOATX43HWKGneMsFuaLc2+@vger.kernel.org, AJvYcCWLWymJ4Marc9OAqJYXCc43gSNeo9zuFHC+T2Cb5eIMKIoTHd6GiWwu1rAFIAKkOM/GeWWN0gUDmHV/Eggoh8G7TrE=@vger.kernel.org, AJvYcCX+YXy2bVVWGOjsj3bdtnEC+bl8P3V4/S3vgkMgljR3MpUF5I8PPpE9iKSS11ta8IZOVIG3TiSFMVCc0Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0mXwShbAiXploK3fTDMX1Lz6NmeftGtDVtBrMLDuJXUKk+X8/
+	jdwP9VWgmdN3lJjwBYzXxffxFkdtwaMvwcVNpiex7DnhUdeEWILw
+X-Gm-Gg: ASbGnctQJ2R7b+IKvDrQMtpdoxb9QesvoXcnF2d+62v8p/DCsbB2ZxRkKCBc2sr5x6o
+	Us23+0rGTzwtXwUZXiUuMiC77leCSSHQttxJVytOq+NzYJKu0zeEIcOUY8AVH88OwgVqYw3wwa2
+	h0x6AReEYSqqyhLea4k3EfTdW5ybQNCp2y/rMSlnAWGYUTDgDq5gdjbOm++yIYPl+EIaQPSAjXD
+	SIxhjQLiVdLBukQcifLod5JURBzpOxR7yTmp89Bv+iMNvltI9v+jiAOZLjVwa3pqvxY2EdVXGqg
+	xHNh3a720soqOjRekRgQMlWzSPgbQeO364F0mys0KOTYGlZqgFCS+aXUmwFjnJzAxgtS
+X-Google-Smtp-Source: AGHT+IFJfzFy8MikJxGoTFLuN6tcrmJtPOA/qBHSB3opFc0xc5RXfyX0+z3ecAr5bH4Qt7gKQzRQRg==
+X-Received: by 2002:a05:6830:d1a:b0:72c:4032:76f with SMTP id 46e09a7af769-72e86304edfmr3726235a34.12.1744414630055;
+        Fri, 11 Apr 2025 16:37:10 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-72e73d7140esm1131783a34.22.2025.04.11.16.37.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Apr 2025 16:37:08 -0700 (PDT)
+Message-ID: <0ce8559d-5c7d-43a0-8177-7704969fd334@gmail.com>
+Date: Fri, 11 Apr 2025 16:37:03 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 02/17] arm64: dts: broadcom: bcm2712: Use "l2-cache"
+ for L2 cache node names
+To: "Rob Herring (Arm)" <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Samuel Holland <samuel@sholland.org>, Conor Dooley <conor@kernel.org>,
+ Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+ Steen Hegelund <Steen.Hegelund@microchip.com>,
+ Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, Heiko Stuebner <heiko@sntech.de>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Magnus Damm <magnus.damm@gmail.com>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, Andy Gross <agross@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Stephen Boyd <sboyd@kernel.org>, zhouyanjie@wanyeetech.com,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Stephan Gerhold <stephan.gerhold@linaro.org>
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, imx@lists.linux.dev,
+ linux-rockchip@lists.infradead.org, linux-amlogic@lists.infradead.org,
+ linux-renesas-soc@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+ =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+References: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
+ <20250410-dt-cpu-schema-v2-2-63d7dc9ddd0a@kernel.org>
+Content-Language: en-US
+From: Florian Fainelli <f.fainelli@gmail.com>
+Autocrypt: addr=f.fainelli@gmail.com; keydata=
+ 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
+ WlfRzlpjIPmdjgoicA==
+In-Reply-To: <20250410-dt-cpu-schema-v2-2-63d7dc9ddd0a@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 2wjL0GughldwcNUypIhw6NcJCtHR9kIA
-X-Authority-Analysis: v=2.4 cv=QuVe3Uyd c=1 sm=1 tr=0 ts=67f989e7 cx=c_pps a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=3H110R4YSZwA:10 a=XR8D0OoHHMoA:10 a=COk6AnOGAAAA:8 a=RUjNBLSMCPId_BJTEh8A:9 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: 2wjL0GughldwcNUypIhw6NcJCtHR9kIA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-11_08,2025-04-10_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- spamscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0 priorityscore=1501
- clxscore=1011 phishscore=0 impostorscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2504110138
 
-Currently, all SCMI devices with performance domains attempt to register
-a cpufreq driver, even if their performance domains aren't used to
-control the CPUs. The cpufreq framework only supports registering a
-single driver, so only the first device will succeed. And if that device
-isn't used for the CPUs, then cpufreq will scale the wrong domains.
+On 4/10/25 08:47, Rob Herring (Arm) wrote:
+> There's no need include the CPU number in the L2 cache node names as
+> the names are local to the CPU nodes. The documented node name is
+> also just "l2-cache".
+> 
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
-To avoid this, return early from scmi_cpufreq_probe() if the probing
-SCMI device isn't referenced by the CPU device phandles.
+Not sure how you had intended for me to pick up that patch without 
+copying the maintainers.
 
-This keeps the existing assumption that all CPUs are controlled by a
-single SCMI device.
-
-Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
----
- drivers/cpufreq/scmi-cpufreq.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
-
-diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-index 944e899eb1be..7981a879974b 100644
---- a/drivers/cpufreq/scmi-cpufreq.c
-+++ b/drivers/cpufreq/scmi-cpufreq.c
-@@ -393,6 +393,32 @@ static struct cpufreq_driver scmi_cpufreq_driver = {
- 	.set_boost	= cpufreq_boost_set_sw,
- };
- 
-+static bool scmi_dev_used_by_cpus(struct device *scmi_dev)
-+{
-+	struct device_node *scmi_np = scmi_dev->of_node;
-+	struct device_node *np;
-+	struct device *cpu_dev;
-+	int cpu, idx;
-+
-+	for_each_possible_cpu(cpu) {
-+		cpu_dev = get_cpu_device(cpu);
-+		if (!cpu_dev)
-+			continue;
-+
-+		np = cpu_dev->of_node;
-+
-+		if (of_parse_phandle(np, "clocks", 0) == scmi_np)
-+			return true;
-+
-+		idx = of_property_match_string(np, "power-domain-names", "perf");
-+
-+		if (of_parse_phandle(np, "power-domains", idx) == scmi_np)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
- static int scmi_cpufreq_probe(struct scmi_device *sdev)
- {
- 	int ret;
-@@ -404,6 +430,9 @@ static int scmi_cpufreq_probe(struct scmi_device *sdev)
- 	if (!handle)
- 		return -ENODEV;
- 
-+	if (!scmi_dev_used_by_cpus(dev))
-+		return 0;
-+
- 	scmi_cpufreq_driver.driver_data = sdev;
- 
- 	perf_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_PERF, &ph);
+Applied nonetheless, thanks!
 -- 
-2.34.1
-
+Florian
 
