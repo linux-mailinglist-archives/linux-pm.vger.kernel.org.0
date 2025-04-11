@@ -1,79 +1,110 @@
-Return-Path: <linux-pm+bounces-25274-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25275-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65CC6A86211
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 17:40:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF854A86234
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 17:46:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D2F57A2214
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 15:38:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 799364C2EA8
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Apr 2025 15:45:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D49420FA98;
-	Fri, 11 Apr 2025 15:39:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eP2/l+t9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 449792144BB;
+	Fri, 11 Apr 2025 15:44:39 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71D4F126C13;
-	Fri, 11 Apr 2025 15:39:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A6520E33F;
+	Fri, 11 Apr 2025 15:44:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744385983; cv=none; b=g1bBCoVrQLsq6OgIgwT7GzaDUrjz21YaUbAZy3HThbn9Fjyx8pRHQp3Z1GTJYh92CP+BGRKd6EHdIYSzguL2lVzfv896Md1Jzslx1AnoPgOx+hQVWV+kZmNxw4SDQD9RfwbKXpt8LodAvf1wh566vkOsrexXVmDPHGXLQcCuObA=
+	t=1744386279; cv=none; b=c4pNGGTwHXcvQ68BGXek6t2AwW9LgFnbOdR2lSyGrmL8jrqYjEBF/IMHunDwACz7fuEx9surOF86xwHPIF09qG9rFkhKn0Gxz+u9Ghi8WjaliCVTNiLdvRIcjqZDDjNAR4nGMoTaljyAPyY/5cwv735bYsdD4z6rbCF+1lqqglo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744385983; c=relaxed/simple;
-	bh=Pp8gWwsTe95m4POPpr0p+oZ8ctEVyWyrO2gkk+rEL0o=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=rv4prJ3knN1skm04lzAa4oUWmdlOGjgAwMvC/uuSh9d/gYonTfmjqjc3AA9ScffOY/1Hu8RTQlmFWkNfaQxcTxCVEhhqgufDENpg3WM9h3B0Fb/PPtA3R7mocmyeqtVg1iT/IkuJ0Lzl3N9TwSdM/sc6NT+m3V99fCHRjHdjb5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eP2/l+t9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52C34C4CEE2;
-	Fri, 11 Apr 2025 15:39:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744385983;
-	bh=Pp8gWwsTe95m4POPpr0p+oZ8ctEVyWyrO2gkk+rEL0o=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=eP2/l+t9CK9ENvJZSLL+WWtUictdTtYfxAQeLBRNLgJ5E0zVg4ZgxMwNhqk+6wv11
-	 Q0OST+KDsFuiMPmscSQDx4J4LyKbBNMujpAupn3LZCaA0FUKBAEiNbZH/RiFRIqOZ3
-	 kmvfU9X5WXPS09MPv8ktcg2tFD3xaytcMBqcihfhMLLU15DVfiTaHBaInJD1HPeK23
-	 R8mQ3cQkCQHdyYtrS9cFDCFeZ+op0zRtOKipDiikCPVUcfy3l9u6l0b8Xr/D0KHAQZ
-	 a5S0WnWH0mpvvobHa/KStTSUMdQhzs3THZPYcMnjLOkeUIm7hX6vclARKNxpOaTxIy
-	 zOPdottLH50oA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3435238111E2;
-	Fri, 11 Apr 2025 15:40:22 +0000 (UTC)
-Subject: Re: [GIT PULL] ACPI fixes for v6.15-rc2
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0iEn-Lyic6zxDehxF1HHfNfg11_S7COMsHnZeQ+TzZAsA@mail.gmail.com>
-References: <CAJZ5v0iEn-Lyic6zxDehxF1HHfNfg11_S7COMsHnZeQ+TzZAsA@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0iEn-Lyic6zxDehxF1HHfNfg11_S7COMsHnZeQ+TzZAsA@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.15-rc2
-X-PR-Tracked-Commit-Id: dcc4aca53338d09f7b3272e00aab4a1ff8c69067
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c86e5b561a4a6b81828528fe61adf7352b756c7f
-Message-Id: <174438602105.317646.16092832788959241563.pr-tracker-bot@kernel.org>
-Date: Fri, 11 Apr 2025 15:40:21 +0000
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+	s=arc-20240116; t=1744386279; c=relaxed/simple;
+	bh=rhk63kE+eFhK1H4ZWcBbfIoHVGFGzCPZDckKZnOUHQk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=et/FOIqPqqqStsIfyuo5mTi9MxCejeiEmE/gZZk3i0c5lMl9Mvo4kCdYVrQ/gXMJLr3XeuRY3xeXBELYpF23RWdUnchlw/BTgntZx9rmZNeIxj2spDJZVyYSSADpDfR6Ui2H5DqfgCSTRiHbmjLff0Eq2/1dgEiAhH1BALdMV3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88281C4CEE7;
+	Fri, 11 Apr 2025 15:44:38 +0000 (UTC)
+Received: from wens.tw (localhost [127.0.0.1])
+	by wens.tw (Postfix) with ESMTP id F10975FCDB;
+	Fri, 11 Apr 2025 23:44:35 +0800 (CST)
+From: Chen-Yu Tsai <wens@csie.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>, Conor Dooley <conor@kernel.org>, 
+ Nicolas Ferre <nicolas.ferre@microchip.com>, 
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+ Steen Hegelund <Steen.Hegelund@microchip.com>, 
+ Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, Heiko Stuebner <heiko@sntech.de>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ Geert Uytterhoeven <geert+renesas@glider.be>, 
+ Magnus Damm <magnus.damm@gmail.com>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, Andy Gross <agross@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
+ Stephen Boyd <sboyd@kernel.org>, zhouyanjie@wanyeetech.com, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+ Stephan Gerhold <stephan.gerhold@linaro.org>, 
+ "Rob Herring (Arm)" <robh@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, imx@lists.linux.dev, 
+ linux-rockchip@lists.infradead.org, linux-amlogic@lists.infradead.org, 
+ linux-renesas-soc@vger.kernel.org, linux-mips@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org, 
+ Andre Przywara <andre.przywara@arm.com>, 
+ =?utf-8?q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
+ Sudeep Holla <sudeep.holla@arm.com>, Viresh Kumar <viresh.kumar@linaro.org>, 
+ Ulf Hansson <ulf.hansson@linaro.org>
+In-Reply-To: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
+References: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
+Subject: Re: (subset) [PATCH v2 00/17] Arm cpu schema clean-ups
+Message-Id: <174438627597.2569515.3740142615905391643.b4-ty@csie.org>
+Date: Fri, 11 Apr 2025 23:44:35 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.2
 
-The pull request you sent on Fri, 11 Apr 2025 16:29:58 +0200:
+On Thu, 10 Apr 2025 10:47:21 -0500, Rob Herring (Arm) wrote:
+> The Arm cpu.yaml schema fails to restrict allowed properties in 'cpu'
+> nodes. The result, not surprisely, is a number of additional properties
+> and errors in .dts files. This series resolves those issues.
+> 
+> There's still more properties in arm32 DTS files which I have not
+> documented. Mostly yet more supply names and "fsl,soc-operating-points".
+> What's a few more warnings on the 10000s of warnings...
+> 
+> [...]
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.15-rc2
+Applied to dt-for-6.16 in git@github.com:linux-sunxi/linux-sunxi.git, thanks!
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c86e5b561a4a6b81828528fe61adf7352b756c7f
+[01/17] arm64: dts: allwinner: h5/h6: Drop spurious 'clock-latency-ns' properties
+        commit: 4df05f4a5fead4e5fc7e3c39cae74e5c0dc5282a
 
-Thank you!
-
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Chen-Yu Tsai <wens@csie.org>
+
 
