@@ -1,190 +1,195 @@
-Return-Path: <linux-pm+bounces-25319-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25320-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65226A86EF2
-	for <lists+linux-pm@lfdr.de>; Sat, 12 Apr 2025 20:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 96C0EA86FA6
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Apr 2025 22:46:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E86F19E1D64
-	for <lists+linux-pm@lfdr.de>; Sat, 12 Apr 2025 18:45:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0568189EDE0
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Apr 2025 20:46:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1348421018F;
-	Sat, 12 Apr 2025 18:44:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E3EA18C910;
+	Sat, 12 Apr 2025 20:45:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bdfXe+Tp"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="PPx1dBZw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAC34219A86
-	for <linux-pm@vger.kernel.org>; Sat, 12 Apr 2025 18:44:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744483491; cv=none; b=NpI9rLr7gHidSoDsPkfOjcVWLjFTz9j0Ax0QERsof963eMnRNq11UD74udE0npU2so6nXv0RceEPJiybhWgAh7sDK6aUT4CKpOImDB8AYed21K0r7OeT0tq1ZN3t4KaJKTWHUB/EBG6iLmVyXFhC0hxfirPViSon3M4uNxO8RiY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744483491; c=relaxed/simple;
-	bh=/0rTgN3CWyGaWSbo8cqotd6Cw5wtRrrqwsaI4LeKjLA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=E2r0CCQ+0C8kzgLKl+b+0V9k+bCXibOHkGNmgitB21ERJswMWYuBaG6rdAAlGgDzP9u++NJUl/bQWCwHZ8RgEaAJlE1EFrOn/FIQTTi8PEnRaUHcs3ypYlEdnfLJoVs16WMfkCnx4QdBuMa5mV4y98xwqLUA6tnDaEJLNd3+6PQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bdfXe+Tp; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744483489; x=1776019489;
-  h=date:from:to:cc:subject:message-id;
-  bh=/0rTgN3CWyGaWSbo8cqotd6Cw5wtRrrqwsaI4LeKjLA=;
-  b=bdfXe+Tpcx/DZbZQg6xDhm3x61vB9gKXt5Z/GgYjQG8ufHyVfaAojvQS
-   ofwzNerQWCp45Lk0sOVG3ScSl60eQ2O99E5becC3G7utmEI1meA3EDzdX
-   Lxxjzx2l1x7Nc4c2/1pR8MMFB3QlThYoBBxoga/SMohWwq4iHg8w8stNe
-   +vJx7r+n1pAhRr7hG3mG4/VR5VeZ5hGvVc/GBY3bOrgrdsjg2X8GYaBVw
-   M9wQ2BmGrGxLIZo4DCyKJhVTA8UgudZ/8rNnsQ5n5LHdYAgHHClupaBrW
-   8XKGGuKqh/JxraPVSx4h1VpFneh88FNng6pZ+iUechcLqwjItO73P181T
-   A==;
-X-CSE-ConnectionGUID: S1M2r8ATROKPwFmKVLR2uA==
-X-CSE-MsgGUID: xjSR1ZzpR36qxxBsTOPAIA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="56670046"
-X-IronPort-AV: E=Sophos;i="6.15,208,1739865600"; 
-   d="scan'208";a="56670046"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2025 11:44:48 -0700
-X-CSE-ConnectionGUID: M8vY6B8BTuqOO42hZjTtWg==
-X-CSE-MsgGUID: iyuW7xkjTRmZgDuwkgkB4A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,208,1739865600"; 
-   d="scan'208";a="134552684"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 12 Apr 2025 11:44:47 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u3fqP-000C1y-0c;
-	Sat, 12 Apr 2025 18:44:45 +0000
-Date: Sun, 13 Apr 2025 02:44:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: linux-pm@vger.kernel.org
-Subject: [amd-pstate:bleeding-edge] BUILD SUCCESS
- d87e4026d1b20e4f237b29e0c956ad415f533de2
-Message-ID: <202504130258.wqPT9NTq-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC851148832;
+	Sat, 12 Apr 2025 20:45:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744490758; cv=pass; b=dlGk4ZzhELUwHEUgXhnceCJnCr1+RJzUi9/ZDCesVl1sRAvr/jQh/Q8LrqyJZryuy/sjOpAE3xw9RjzLsR16ms1TLb2S8Zopf/PzXwch4g3J5D8B3SPRxX8C6+jU4tSDiATaAlgWH+H+BwP7e2yBIZLUkkiZ5ApUzBglYUIuDAY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744490758; c=relaxed/simple;
+	bh=ntwujtdB35n8FOylzS58DbsgUrHCSdjp+UwNAlfu7KQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZPb+EXhGNiTEIzR5R2iIrAQFZc/SERIKUKX0DmtOilRcN7Vp5Zi2M9qdZcAYdlgerUe48SCXDoQ+w3OZ3b4kyZ5ly1st3Z3Ayvp6+dOQUVK1vzB52kEGCa2BpMAGO1o6atJQhJ7+Ldl5E+5E7joPYIOBkhjV2ih4Umx58IlpYwE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=PPx1dBZw; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1744490727; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=LkB4JmyPpInWvLyByLSXnrVwUoHwkko0u0pgw7pRQuJ8cnCjbEUOJ0QByfp1DVNc87WcDJdTrMjvwo8H5qW2VpVBpJSWsVzj6R8om4Q30l/xCX+SBth+ukcVpfgfLtb8nc4UDysXMqumpybjoBdxeRZGQZxCobR+eaW0vXtS3KU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1744490727; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=Ck4o/n3lpkxAXlPzedzjCk/JD+YtxzckBUpPpLxJb6o=; 
+	b=Fzo2zKJFej2Ingwr3PPjnkPU4k2Tx7JeYwULVE9T7dUQInM5NcUNgiiYYNchX5aEEP6QRjH5WAr+2NFI+YpjblMo9DFui1YVEBcp+0sJkYh36Ew8f4qO92ZsCuoIJyzelTt8XS6bhYnUHDb7odjMJQGE/jII9Wblk1Nl1Nwd0M4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1744490727;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:To:To:Cc:Cc:Reply-To;
+	bh=Ck4o/n3lpkxAXlPzedzjCk/JD+YtxzckBUpPpLxJb6o=;
+	b=PPx1dBZwrk2/pChhtqkioqIHh5RKqd9VDJ4kk/HvIClo890Q6K1dNuh56IWPb7gc
+	kiUJs3fF6Kw2hc9BMcgj1UeuW0RqTiv3p5yuVarNCaePg7fDCPrXxjid8mD7W4TBTVd
+	eSCsikskvXbgOKRioptue4ke9eea40NL27KpXMJE=
+Received: by mx.zohomail.com with SMTPS id 1744490726578169.77104371916073;
+	Sat, 12 Apr 2025 13:45:26 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Date: Sat, 12 Apr 2025 22:45:08 +0200
+Subject: [PATCH v2] mmc: sdhci-of-dwcmshc: add PD workaround on RK3576
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250412-rk3576-emmc-fix-v2-1-830e653ad4f0@collabora.com>
+X-B4-Tracking: v=1; b=H4sIANPQ+mcC/3WOyw6CMBREf4V07TW9ffBa+R+GRSlFGoFqi0Rj+
+ Hdr3RldzmTOzDxJMN6aQOrsSbxZbbBujoLtMqIHNZ8M2C5qwiiTlGMB/sxlkYOZJg29vUPR6RJ
+ VzgrBGInUxZtop8Zj89HeXG+xePmYpFXBgHbTZJc6W/M9SvAayTs82LA4/0hvVkzpv8MrAkInu
+ ehEpQT28qDdOKrWebWP7e8viRW0/M1ySquSlS22HL/YZtu2F2uNYI0bAQAA
+X-Change-ID: 20250317-rk3576-emmc-fix-7dc81a627422
+To: Shawn Lin <shawn.lin@rock-chips.com>, 
+ Ulf Hansson <ulf.hansson@linaro.org>, Heiko Stuebner <heiko@sntech.de>, 
+ Elaine Zhang <zhangqing@rock-chips.com>, 
+ Finley Xiao <finley.xiao@rock-chips.com>, 
+ Adrian Hunter <adrian.hunter@intel.com>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ Detlev Casanova <detlev.casanova@collabora.com>, kernel@collabora.com, 
+ linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-mmc@vger.kernel.org, 
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+X-Mailer: b4 0.14.2
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git bleeding-edge
-branch HEAD: d87e4026d1b20e4f237b29e0c956ad415f533de2  cpufreq/amd-pstate: Enable ITMT support after initializing core rankings
+RK3576's power domains have a peculiar problem where the PD_NVM
+power domain, of which the sdhci controller is a part, seemingly does
+not have idempotent disable/enable. The end effect is that if PD_NVM
+gets turned off by the generic power domain logic because all the
+devices depending on it are suspended, then the next time the sdhci
+device is unsuspended, it'll hang the SoC as soon as it tries accessing
+the CQHCI registers.
 
-elapsed time: 1445m
+RK3576's UFS support needed a new dev_pm_genpd_rpm_always_on function
+added to the generic power domains API to handle what appears to be a
+similar hardware issue.
 
-configs tested: 97
-configs skipped: 1
+Use this new function to ask for the same treatment in the sdhci
+controller by giving rk3576 its own platform data with its own postinit
+function. The benefit of doing this instead of marking the power domains
+always on in the power domain core is that we only do this if we know
+the platform we're running on actually uses the sdhci controller. For
+others, keeping PD_NVM always on would be a waste, as they won't run
+into this specific issue. The only other IP in PD_NVM that could be
+affected is FSPI0. If it gets a mainline driver, it will probably want
+to do the same thing.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+---
+Changes in v2:
+- Rewrite patch to use dev_pm_genpd_rpm_always_on in sdhci driver
+  instead, after Ulf Hansson made me aware of its existence
+- Link to v1: https://lore.kernel.org/r/20250408-rk3576-emmc-fix-v1-1-3009828b1b31@collabora.com
+---
+ drivers/mmc/host/sdhci-of-dwcmshc.c | 39 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-tested configs:
-alpha                            allyesconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-14.2.0
-arc                              allyesconfig    gcc-14.2.0
-arc                   randconfig-001-20250412    gcc-14.2.0
-arc                   randconfig-002-20250412    gcc-14.2.0
-arc                    vdk_hs38_smp_defconfig    gcc-14.2.0
-arm                              allmodconfig    gcc-14.2.0
-arm                              allyesconfig    gcc-14.2.0
-arm                        mvebu_v5_defconfig    gcc-14.2.0
-arm                   randconfig-001-20250412    clang-21
-arm                   randconfig-002-20250412    gcc-7.5.0
-arm                   randconfig-003-20250412    clang-21
-arm                   randconfig-004-20250412    clang-21
-arm64                            allmodconfig    clang-19
-arm64                 randconfig-001-20250412    clang-21
-arm64                 randconfig-002-20250412    clang-21
-arm64                 randconfig-003-20250412    gcc-8.5.0
-arm64                 randconfig-004-20250412    clang-21
-csky                  randconfig-001-20250412    gcc-14.2.0
-csky                  randconfig-002-20250412    gcc-14.2.0
-hexagon                          allmodconfig    clang-17
-hexagon                          allyesconfig    clang-21
-hexagon               randconfig-001-20250412    clang-21
-hexagon               randconfig-002-20250412    clang-21
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250412    clang-20
-i386        buildonly-randconfig-002-20250412    clang-20
-i386        buildonly-randconfig-003-20250412    clang-20
-i386        buildonly-randconfig-004-20250412    clang-20
-i386        buildonly-randconfig-005-20250412    clang-20
-i386        buildonly-randconfig-006-20250412    gcc-11
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch             randconfig-001-20250412    gcc-14.2.0
-loongarch             randconfig-002-20250412    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-mips                   sb1250_swarm_defconfig    gcc-14.2.0
-nios2                 randconfig-001-20250412    gcc-8.5.0
-nios2                 randconfig-002-20250412    gcc-10.5.0
-openrisc                          allnoconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                randconfig-001-20250412    gcc-7.5.0
-parisc                randconfig-002-20250412    gcc-9.3.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                     ksi8560_defconfig    gcc-14.2.0
-powerpc               randconfig-001-20250412    clang-18
-powerpc               randconfig-002-20250412    clang-21
-powerpc               randconfig-003-20250412    clang-18
-powerpc64             randconfig-001-20250412    clang-21
-powerpc64             randconfig-002-20250412    clang-21
-powerpc64             randconfig-003-20250412    clang-21
-riscv                             allnoconfig    gcc-14.2.0
-riscv                 randconfig-001-20250412    clang-20
-riscv                 randconfig-001-20250413    gcc-14.2.0
-riscv                 randconfig-002-20250412    gcc-8.5.0
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-14.2.0
-s390                  randconfig-001-20250412    clang-18
-s390                  randconfig-001-20250413    gcc-8.5.0
-s390                  randconfig-002-20250412    gcc-9.3.0
-s390                  randconfig-002-20250413    gcc-8.5.0
-sh                               allmodconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                             espt_defconfig    gcc-14.2.0
-sh                    randconfig-001-20250412    gcc-14.2.0
-sh                    randconfig-001-20250413    gcc-11.5.0
-sh                    randconfig-002-20250412    gcc-14.2.0
-sh                    randconfig-002-20250413    gcc-9.3.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                 randconfig-001-20250412    gcc-10.3.0
-sparc                 randconfig-001-20250413    gcc-6.5.0
-sparc                 randconfig-002-20250412    gcc-13.3.0
-sparc                 randconfig-002-20250413    gcc-14.2.0
-sparc64               randconfig-001-20250412    gcc-13.3.0
-sparc64               randconfig-002-20250412    gcc-5.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-21
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250412    gcc-12
-um                    randconfig-002-20250412    gcc-12
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250412    gcc-12
-x86_64      buildonly-randconfig-002-20250412    clang-20
-x86_64      buildonly-randconfig-003-20250412    gcc-11
-x86_64      buildonly-randconfig-004-20250412    clang-20
-x86_64      buildonly-randconfig-005-20250412    clang-20
-x86_64      buildonly-randconfig-006-20250412    clang-20
-x86_64                              defconfig    gcc-11
-xtensa                randconfig-001-20250412    gcc-14.2.0
-xtensa                randconfig-002-20250412    gcc-13.3.0
+diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
+index 09b9ab15e4995f0bddf57dd309c010c849be40d9..a00aec05eff2da8197cc64690ba9665be756e54a 100644
+--- a/drivers/mmc/host/sdhci-of-dwcmshc.c
++++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
+@@ -17,6 +17,7 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_domain.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/reset.h>
+ #include <linux/sizes.h>
+@@ -745,6 +746,28 @@ static void dwcmshc_rk35xx_postinit(struct sdhci_host *host, struct dwcmshc_priv
+ 	}
+ }
+ 
++static void dwcmshc_rk3576_postinit(struct sdhci_host *host, struct dwcmshc_priv *dwc_priv)
++{
++	struct device *dev = mmc_dev(host->mmc);
++	int ret;
++
++	/*
++	 * This works around what appears to be a silicon bug, which makes the
++	 * PD_NVM power domain, which the sdhci controller on the RK3576 is in,
++	 * never come back the same way once it's turned off once. This can
++	 * happen during early kernel boot if no driver is using either PD_NVM
++	 * or its child power domain PD_SDGMAC for a short moment, leading to it
++	 * being turned off to save power. By keeping it on, sdhci suspending
++	 * won't lead to PD_NVM becoming a candidate for getting turned off.
++	 */
++	ret = dev_pm_genpd_rpm_always_on(dev, true);
++	if (ret && ret != -EOPNOTSUPP)
++		dev_warn(dev, "failed to set PD rpm always on, SoC may hang later: %pe\n",
++			 ERR_PTR(ret));
++
++	dwcmshc_rk35xx_postinit(host, dwc_priv);
++}
++
+ static int th1520_execute_tuning(struct sdhci_host *host, u32 opcode)
+ {
+ 	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+@@ -1176,6 +1199,18 @@ static const struct dwcmshc_pltfm_data sdhci_dwcmshc_rk35xx_pdata = {
+ 	.postinit = dwcmshc_rk35xx_postinit,
+ };
+ 
++static const struct dwcmshc_pltfm_data sdhci_dwcmshc_rk3576_pdata = {
++	.pdata = {
++		.ops = &sdhci_dwcmshc_rk35xx_ops,
++		.quirks = SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN |
++			  SDHCI_QUIRK_BROKEN_TIMEOUT_VAL,
++		.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN |
++			   SDHCI_QUIRK2_CLOCK_DIV_ZERO_BROKEN,
++	},
++	.init = dwcmshc_rk35xx_init,
++	.postinit = dwcmshc_rk3576_postinit,
++};
++
+ static const struct dwcmshc_pltfm_data sdhci_dwcmshc_th1520_pdata = {
+ 	.pdata = {
+ 		.ops = &sdhci_dwcmshc_th1520_ops,
+@@ -1274,6 +1309,10 @@ static const struct of_device_id sdhci_dwcmshc_dt_ids[] = {
+ 		.compatible = "rockchip,rk3588-dwcmshc",
+ 		.data = &sdhci_dwcmshc_rk35xx_pdata,
+ 	},
++	{
++		.compatible = "rockchip,rk3576-dwcmshc",
++		.data = &sdhci_dwcmshc_rk3576_pdata,
++	},
+ 	{
+ 		.compatible = "rockchip,rk3568-dwcmshc",
+ 		.data = &sdhci_dwcmshc_rk35xx_pdata,
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+---
+base-commit: 64e9fdfc89a76fed38d8ddeed72d42ec71957ed9
+change-id: 20250317-rk3576-emmc-fix-7dc81a627422
+
+Best regards,
+-- 
+Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+
 
