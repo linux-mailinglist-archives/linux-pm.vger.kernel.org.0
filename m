@@ -1,111 +1,117 @@
-Return-Path: <linux-pm+bounces-25317-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25318-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A9A8A86EC4
-	for <lists+linux-pm@lfdr.de>; Sat, 12 Apr 2025 20:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 29731A86EC6
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Apr 2025 20:32:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF23C189FCC0
-	for <lists+linux-pm@lfdr.de>; Sat, 12 Apr 2025 18:31:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DF4C1896352
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Apr 2025 18:32:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF90820CCFB;
-	Sat, 12 Apr 2025 18:31:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2847720298A;
+	Sat, 12 Apr 2025 18:32:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VPnnyI7Z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fr2Uy2ZY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C3681EA7E9
-	for <linux-pm@vger.kernel.org>; Sat, 12 Apr 2025 18:31:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981411392;
+	Sat, 12 Apr 2025 18:32:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744482669; cv=none; b=N78fQNZ1EB/o3K02UzTaTnBVZlL56tOHY7WMj/FY2Jap5WYm2munjEkLXPn9OKJNJA8K7QyvabcsEMRBQQ8Y1OS8Zeyb2iuE8PBBUGYecDyZ6BneanSJrJlIItJ72sVgsX+SyHCI9gpIJehLcx7w13RLTn2Cu+GskGwMnhx+4z4=
+	t=1744482744; cv=none; b=SOG7nEe573HTkfB2RrcbycWhmm/MLaIHS25/QnJbfOXNOTHu7J3Dye3gEMEh4tgzgnXb1fgyA0AlNvhhvNwwBk2Gwqmoy8r4Dnw6EeKTkfA15Fvyvs9RagwLwUnoV5vrT3WPyCHWfI8gVHtfEkweV/2Xkk+7Z5UQMRFxD1fY9Rg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744482669; c=relaxed/simple;
-	bh=UXWTbPpVMi3wyEEzFn8t+68PK89c4a+mJ8HY7oopugg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M/xu0CKrSNFkrVTGxnoVIf1bGwqBSL8F70jLVnqOCg94QERS7H/bZjrRx3RwaFxuzUK3Nnv7JoAQYX2YXBXIv4iVmzr0cSTsRT8k55Wfl10HIch10sVRo9GyC67zeFz+fyKiUVTJA6LsUHCyToJ0cuVedUQZ7VF22gW5c8/t62E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VPnnyI7Z; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43cfebc343dso22968575e9.2
-        for <linux-pm@vger.kernel.org>; Sat, 12 Apr 2025 11:31:07 -0700 (PDT)
+	s=arc-20240116; t=1744482744; c=relaxed/simple;
+	bh=T3Qc1STNEB1yk7+zuWvJIvGi5r/g6z5PQsnptk7pOCk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LrqWB/LHduouMf9kpVQIfypv1070k64v6SWV0oj9Y3mvu8Y1z3OA5cpl2MTVHE+QkuTEho+6neelcY9YOTp2ShUR8dH2iS0Qohx55W3wvM4OR/zbNzxPQAw5PTb4beEy3YNuJk07toptP8WU8bM43oJ3ih83TiYubG7f5E/Kmsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fr2Uy2ZY; arc=none smtp.client-ip=209.85.221.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-5240d07fee1so81793e0c.1;
+        Sat, 12 Apr 2025 11:32:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744482666; x=1745087466; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3CyrR9KNkaoIb+djhhX7+16j+DQ68McNR1nNH1QOCtU=;
-        b=VPnnyI7Zyl95p1eP3iF0Rjo7IgOUK/ixCTmtTrln3TQLOQX+lTXVj6OWA5jY61Hgtx
-         mVJ6YLixpcayFjWddRu9kNNyQkUiSac0r6nWck054BLWZusYkyuNBCTEgpDbVPlheIXT
-         CYHvFjp9jQ7J4au5tDMVReIlQ3e0L8nk0DraehaQPa9RvpkMSLm0AP08PbmHcvDJKuxp
-         XCFuHz1CIngXkL8XBIsGEHaaWfXKtk6/oEFnva5MlRCABxmu8SHTnKJZzV0W7du/HS9p
-         DpmXm4TaUEfa538XDTn8aUNbLxn0VAGzco5iM+Hbs0Asmwkhd/i0P3guwKCLb8AlMK/J
-         vDuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744482666; x=1745087466;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1744482741; x=1745087541; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3CyrR9KNkaoIb+djhhX7+16j+DQ68McNR1nNH1QOCtU=;
-        b=oRXbp5+d/ShsKVeAWAoM4BcdB+EDV0gWce5HG9Z2Tc1Bgy5ktq5FMOPRZXONOARqwO
-         7tRRN5k46bAosQ6qmbDCAcMT9lVDF88eD92rJok5M630s6y8FPjq7j1LXgTeJwf8ht2F
-         o/NXGYoZRk6cwj7Q0G/1QDT45VlpB0LANfH8gMVzWA+PFIOPq6u9oTgVNR8Q3K4wJh51
-         Cjbnl7buVXa0JqyNrlasy+u03umGDvbwUZZmbQ9uy3gOlqvqcCjC39A4pZUG7rzQyQgY
-         0a2Y62u+MDibTPHLT6OUQl/yrQkai0SOSVRwAEBs/rD+BTQ6CHpUXd4jeM98nMfp+AHS
-         P4aQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWf1/QwDAbd7tfAbiQz1dTAf45ho9bNeVPyhBXxToz3uIRHNQS/KXqUQnJSxiNgYUNZJ/44Geul/w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyahHWNucrrfz7VtAccjlR5g3UdFBZ7uOmdqg+tbVR6BiuKjy9c
-	Ov66AoZloAjrL9Oj/UCX9VVuPO7cq/XrEy5lCbMekYYHbumJbp9pZJD53Jzyz8M=
-X-Gm-Gg: ASbGncvgYXLDbUJor0BMtsjX/bby4alhcXfXLduVvmzuxHmfulNoMpCADQaHCmrofRW
-	VN36jg4v/jqIkCJpy5aqvaKsl8gYf8r9U2BrinhnAnhs7uZSYAw50alo39IJYHBt5+sg35XVvDA
-	b/15HImqE1vhqmaLVD2bj7LxlLVhXi6jPo0sbDNsAKYfTh7igyY/Jsdk39IpWaWrewYDO/RFuX8
-	7dUT+cBCxIQXA83OEDd/lMH2g/dZ8ATW9kfe45znJdRkw4ZTjTVL0mUkS7+CE5AWdLcsfvWkZc6
-	Cr90aAff64LvAskIv5DQ6cVaBDM1h4gPfNOcMbiWtHpOww==
-X-Google-Smtp-Source: AGHT+IHARGq36rcwuoUqKZ76aegRkcgHirTp4EATHkOfGBZZRYyZYhGL+bYneAm7wceJLq4bHfWKmA==
-X-Received: by 2002:a05:600c:a53:b0:43d:fa58:81d4 with SMTP id 5b1f17b1804b1-43f3a9afbbdmr59892105e9.33.1744482666250;
-        Sat, 12 Apr 2025 11:31:06 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-39eae96407esm5776966f8f.17.2025.04.12.11.31.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Apr 2025 11:31:05 -0700 (PDT)
-Date: Sat, 12 Apr 2025 21:30:59 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Chenyuan Yang <chenyuan0y@gmail.com>
-Cc: sudeep.holla@arm.com, cristian.marussi@arm.com, rafael@kernel.org,
-	viresh.kumar@linaro.org, arm-scmi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: scmi: Fix possible null pointer dereference
-Message-ID: <0081fcd8-da99-47b2-b136-3ea04232046a@stanley.mountain>
-References: <20250412180831.3252963-1-chenyuan0y@gmail.com>
+        bh=T3Qc1STNEB1yk7+zuWvJIvGi5r/g6z5PQsnptk7pOCk=;
+        b=fr2Uy2ZY67DAzF3w4HYhxB62WBAwxBjsj4perDH3i432rJQaxgpUhGjKsFsZGkEzwY
+         vOKyR/lUdyMUAO7ZZy7Lj+GbhNMLnsfX1wqMyD1d1hoQ/P8b64k3DfbL8SrhJGPaIm+X
+         MSiKmAHngT41blDQ1hdI+/lR1bOQFcL8lQC/6cuFavKcNqP6wbJNcGBOi4Nfcy1ckjKf
+         7fCUxQw3abvS4IAx0ZS67nv4QbHlX5s0lVpnFRhW06OZFRQsuVvMycAD5/zbRjOl9LZJ
+         ASa4e67KZiLik8Q3qWVlPPd+hA+dIeTu0ztGZ3yMDYfyqmvhpe6deTl9QPYiiYWjSLIT
+         VA+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744482741; x=1745087541;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T3Qc1STNEB1yk7+zuWvJIvGi5r/g6z5PQsnptk7pOCk=;
+        b=SrBG6EVI6Fx+N6ZGQxxz0Ncsj2yULWLip+ezBlfr9w5TxlmO/mdCoAA1r0qaKMvKhs
+         1NjEuFDoKRdmGtklJI3Vj3gLmjvcYuKJAB5J29+zOrgjF9rbRk3b0JJA3lTzOXmQurxT
+         iDCuYvdnPpEffIFIz8O2hRJNCWGW8bnvpacFT6HyoX0q1J2qwKCXbqDlcvGBPv2U1g/s
+         fCbT7EmNpbFCly6e3LFky1t0SOXeHF5yaRi6IfgRr8v4fEGyNB8VQL5fqHSsh05SBAel
+         VNYctn0+nWC+oQxw4LWyLDfxOdLQXh/433Q7effK83GloJzmHU/7b94vT7puEqCGce6+
+         T83g==
+X-Forwarded-Encrypted: i=1; AJvYcCVZpS70X7klWE2JWbHKu2n5NYmmxGjvvAR2QPwDekZYd99G5HnP3O1rOmvimoWoi1ElrIPPMgw6zrA=@vger.kernel.org, AJvYcCXFJrdubRAOjkAv0Zb49MZ35dJjv1dGvQRN274BNhIasblB6zOw0mGpWVJAGQD3p4wVgV10WoI98Q==@vger.kernel.org, AJvYcCXMZ2MXm0zBAk0HvsyPHcWbRCpfaBgOwNY15SbLexDOGHnOjel26Pj0Q0LPQ/SW8dJibGt2kxXio7AcZx1H@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbKQoXdSF1/jCa7XQJL65FqSHtUwTSbEaPEUe+7fqTV70grgtL
+	Ipf894J5P4+eyo2fnAvCAJi1VRrULJ69CiP67asXbSamLnt/JbCRFjRFLa2bDzh10v9J8oWuJUj
+	bAHPaGHepq7CfK9N25vDN1GXbSw==
+X-Gm-Gg: ASbGncsXU390jboR007/yWXUmABxuWfw7CHF91/IQ2pAiQ04h1tMmOXxAs71BOqXqu4
+	bvH7wKhhcYwS+2UilMVFgWzPBK0I4gdViKNbkZpaJRQyq+vQXNeb91G8I46xp8RD742vM+Tireb
+	aZgmwvwL3tr92AzDnevxAzKvA=
+X-Google-Smtp-Source: AGHT+IFCaLFGAxkVT2lKsAkCtftPnKhBh6OillpidkjEeNtDizhqaCJZ4mRNIO8IrtKoYG9vlpMmuPDQ1K3J4xbTIcg=
+X-Received: by 2002:a05:6102:15a3:b0:4c4:e3d2:25c2 with SMTP id
+ ada2fe7eead31-4c9e7836f75mr1550793137.6.1744482741062; Sat, 12 Apr 2025
+ 11:32:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250412180831.3252963-1-chenyuan0y@gmail.com>
+References: <20250412180831.3252963-1-chenyuan0y@gmail.com> <0081fcd8-da99-47b2-b136-3ea04232046a@stanley.mountain>
+In-Reply-To: <0081fcd8-da99-47b2-b136-3ea04232046a@stanley.mountain>
+From: Chenyuan Yang <chenyuan0y@gmail.com>
+Date: Sat, 12 Apr 2025 13:32:10 -0500
+X-Gm-Features: ATxdqUFVNadBq9M9pZcwFONeYCEW6qDbC52ykl-YedCykxT8ppzW_PXwHA1Fxys
+Message-ID: <CALGdzurRtHLOokUH7GOhmkDkzBioDFt1iJ19eSbrjyeWW7p4KA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: scmi: Fix possible null pointer dereference
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: sudeep.holla@arm.com, cristian.marussi@arm.com, rafael@kernel.org, 
+	viresh.kumar@linaro.org, arm-scmi@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Apr 12, 2025 at 01:08:31PM -0500, Chenyuan Yang wrote:
-> Check if policy is NULL before dereferencing it.
-> 
-> This is similar to the commit cf7de25878a1
-> ("cppc_cpufreq: Fix possible null pointer dereference").
-> 
-> This is found by our static analysis tool KNighter.
-> 
-> Signed-off-by: Chenyuan Yang <chenyuan0y@gmail.com>
-> Fixes: 99d6bdf33877 ("cpufreq: add support for CPU DVFS based on SCMI message protocol")
+On Sat, Apr 12, 2025 at 1:31=E2=80=AFPM Dan Carpenter <dan.carpenter@linaro=
+.org> wrote:
+>
+> On Sat, Apr 12, 2025 at 01:08:31PM -0500, Chenyuan Yang wrote:
+> > Check if policy is NULL before dereferencing it.
+> >
+> > This is similar to the commit cf7de25878a1
+> > ("cppc_cpufreq: Fix possible null pointer dereference").
+> >
+> > This is found by our static analysis tool KNighter.
+> >
+> > Signed-off-by: Chenyuan Yang <chenyuan0y@gmail.com>
+> > Fixes: 99d6bdf33877 ("cpufreq: add support for CPU DVFS based on SCMI m=
+essage protocol")
+>
+> Henry Martin already fixed this in commit 484d3f15cc6c ("cpufreq: scmi:
+> Fix null-ptr-deref in scmi_cpufreq_get_rate()").
 
-Henry Martin already fixed this in commit 484d3f15cc6c ("cpufreq: scmi:
-Fix null-ptr-deref in scmi_cpufreq_get_rate()").
+Thanks so much for pointing this out!
+It is good to hear that there is already a fix.
 
-regards,
-dan carpenter
+> regards,
+> dan carpenter
 
+-Chenyuan
 
