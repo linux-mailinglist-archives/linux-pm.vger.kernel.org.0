@@ -1,150 +1,137 @@
-Return-Path: <linux-pm+bounces-25330-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25331-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7348FA871C7
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Apr 2025 13:11:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59395A8723B
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Apr 2025 16:45:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69FEF1754D7
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Apr 2025 11:11:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E8A27A7633
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Apr 2025 14:43:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 343401ACED9;
-	Sun, 13 Apr 2025 11:11:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 804C61C84DD;
+	Sun, 13 Apr 2025 14:44:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BRnWJBq7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aTv0EwJL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB001A8F79;
-	Sun, 13 Apr 2025 11:11:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F8F91C1F21;
+	Sun, 13 Apr 2025 14:44:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744542663; cv=none; b=QoGzdurtNjLKhkFkZvVoWhgv+euh4Q0tkAWiG2Fo/2Znl4TY0R2avwrxqvcHlmcKegMSaxqYi6FAzHu1ZINtdxhjh4zMVkMZBVaJwSWG9zQLGfD46UryUCxk5OJAHRb5UHdgzDoFPWBsBlVvRLgUZYsCGAiuVq9V4XyrIpbZlPA=
+	t=1744555499; cv=none; b=SNvTYb00oa9rdsmD7wQCSpbANM1UXK4RT1EKG1BjDCq8Fxk7/16KdT/ZznG2NOu7gDlhKye1a7BCQ4409oNyqSFMpFeo7za5ah8A279ZcPLXkDj/8DF/AYyZScl6yxHVjgSxHQo6nyZRrZtSWVjG+Gj4froW8+gUMsOQXKqtdrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744542663; c=relaxed/simple;
-	bh=BBXGgxmEIZfQk26iEKset/TH1HIPQXdklPwmouELyIY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=alsuBhL+PwzCcdAZvWzYWdomlr+Qqn6Rc1Dxdo/x9qbk9ZPA0CiEi4R5BqBADuXL/oYFW3wRvqBLg2Wmg1ayrE4mc9REKkBZU8OjzoqzX+xHx/vPIQvtYHggxQxpVvh4sESrlpdTSOzw4PraN9qQlIaUTfd0f2vs9X1Hq0N94MA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BRnWJBq7; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5e66407963fso6241720a12.2;
-        Sun, 13 Apr 2025 04:11:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744542659; x=1745147459; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=taQydatFRUUIgWEIrpl5CYVqIF0OiF14uRuCSzbkAJY=;
-        b=BRnWJBq76rOAMrhFjdZXErt7zPEcH0cSmgfmZuOBqX1aLUuKigm9ZXlUGPGcUxJq2Y
-         bdW6fnhtbM4UPOBwTSJeqsB3Ibmet8sU631/BPlPOyl149mRMkjq/ZfQbXeCYJkFNhxy
-         XGYWhoZZo6ifM38TD8CSEot1yzhjrJ4mlxMxvwE8zRQTxMXt2t/714ZmjJU15ckN88yR
-         +tKua44Vsz2R6rK9HNzonTujKkOVw+5+VxSX1/02oxMTkE1itM0t0IjKCnKQTeoe4eio
-         +fROy3cqh1VE3Kq+SssD15Y+nJKVhCBe75CnsjefJxrSqCYCm2ZawQ8S87KTzYlllb/x
-         TbeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744542659; x=1745147459;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=taQydatFRUUIgWEIrpl5CYVqIF0OiF14uRuCSzbkAJY=;
-        b=MgyM03BgYfKUsxbgqAoN1BR7vPBlXnWiLJDv0BgdYixDpVdU2xwBxzaG429LQcJEVP
-         MC4u0YcmIcqiUuXf9J8BE+7PMDKLkwsuwOt0wdxwi0bYNfHd1/OI/SLnZw5FFAwYzWT2
-         dHkcpMZpjPRnuUN7cl63kW514iuCtkD9ujHF8tf75lXc8Rbbm4EyuFbN5+OVYB6N7Z/h
-         psxshC4FQ8BuvEv4giUW37rZJMF9R6jomlo0aVj7RM8SjanVDRT5VgGkk7CyPIBFJWaC
-         N2dnuD2cxEp/8A06CFrh4lX+5Ms0JBQ4T5YtsPwuVigtfZW1xvlLbPcd8izYMEwsG3sF
-         j6qA==
-X-Forwarded-Encrypted: i=1; AJvYcCU7rypBzMiLQnYEx8m/0qcwCXIZ70YReMCHKMaQd9/SIHS3WnRefS2q7plCb6dt1YZq/xRLWNMs6lUv@vger.kernel.org, AJvYcCV3ZtJLHt+FyS11WoxjuxWjTgN8g7m4dL2E+XG602mInuuGAbRhUnw0ZMFRWY2RgMhY1W5/x89kMF3Oc1I=@vger.kernel.org, AJvYcCVv01JPftyvdn5x9d+f21nnlhxgWEy/wc93jlLW4tqF3Cx3k+ROVWAIdEiWv1P9AQiFeceCJ6solDUNl6xq@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7X7NXAq+zqkzpVkTjIJ1ndIKlkj4uuvngHCg/84qEpYnGqCfD
-	SP7gjHIvtoMw2twnepLhJrF/yB5OFNaqCQ3E3kesiBpKDp0NaOcm
-X-Gm-Gg: ASbGncv6aZgbGk3wzXzHhKNiJgRYlvmJ6R0xyzs2Jdsh/oJ748gwUoR+qcSENofHYoA
-	Q4bzME7KgLUNJBsiOqXrsrunip+JQKWUGU/kH0MK0p3iLIu1xyua04nihetwHXwS4ECN4YgmkN9
-	2DLIUCKevfJllPZj+nC5dgS2KQNIU/IwwmumyIMHHldkVB63RZbjIbDi6KuZREjXB/M0IOoZPVe
-	cyhUpvekIdZPqSJIHX+pGUfEEmGmrgnUJ8WXW8cXFLCri6uBKXks1g5SBFaPrVN6eqjLT6WSKu2
-	EyFaqqHGhbHv12/Zg5QV0h2BCmVngPIo
-X-Google-Smtp-Source: AGHT+IGPC9f/KWk0lWHsX3nZmihYw21EjWEm1OZsXaWLqJQRQ5y0yZvbB3JEz1t9QR2eEzbb/Zp6ew==
-X-Received: by 2002:a17:906:c14e:b0:ac3:c56c:26ca with SMTP id a640c23a62f3a-acad3446a15mr776027366b.8.1744542659317;
-        Sun, 13 Apr 2025 04:10:59 -0700 (PDT)
-Received: from xeon.. ([188.163.112.51])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acaa1be98d4sm728571266b.59.2025.04.13.04.10.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Apr 2025 04:10:59 -0700 (PDT)
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-To: Sebastian Reichel <sre@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-	Aradhya Bhatia <a-bhatia1@ti.com>,
-	Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-tegra@vger.kernel.org
-Subject: [PATCH v2 4/4] ARM: tegra: chagall: Add embedded controller node
-Date: Sun, 13 Apr 2025 14:10:33 +0300
-Message-ID: <20250413111033.11408-5-clamor95@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250413111033.11408-1-clamor95@gmail.com>
-References: <20250413111033.11408-1-clamor95@gmail.com>
+	s=arc-20240116; t=1744555499; c=relaxed/simple;
+	bh=aJWz1QDvLinhEs6itBhA0RHzGTs8f6L+aT6P1LOOut8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ss4nBWHsWLoqG6J5p4MlyybznwhjuRS4kc8MNKuGOsC+j8yCG73ouUBeWM1nn4/XawF8CsQ9Tm6/PZI/PyNUYsRe/2hK9rYqRol9nDlpsudCKbjVZRV0TunJb6DsY0aT7Rm+4KU+Yj3DFeNV9zXY5O8+KLtbhnwChAkdP48liOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aTv0EwJL; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744555499; x=1776091499;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=aJWz1QDvLinhEs6itBhA0RHzGTs8f6L+aT6P1LOOut8=;
+  b=aTv0EwJLcM8oKpfp+hLuLPGsm37EfGJtE1l2wE7COHooMXqNxIZ0v9c2
+   w0U6Bo2yaZ22dTxJshOVl3VM6xnSSuM5OiZwuxGe851xGguXsit715Zhk
+   4+hbBVdJIdo7xMh0u+ldkBZBqmF8qk5mypmfUpElo4jHU6eWQBOel2ztB
+   389zL8G+xrPmhR4EW79fPjNUo1xIRSR/DjLA0jhb0RdSgSQTcwOz/86pA
+   umplq6kyMiDbnBftsaEOLAKmD01mMvSmAbTsP5pkdspj3irba2Boa/gog
+   iCuFb25h2xVoMdddlHfZvELZs4mCvGV8WyvyOWTSU0r9v0K5IsZH3uQQI
+   A==;
+X-CSE-ConnectionGUID: 8B1ZHo6xS8mrRdFs41Xp1w==
+X-CSE-MsgGUID: Xs4+6GHqT82j9xnA9X6GMQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="45742740"
+X-IronPort-AV: E=Sophos;i="6.15,210,1739865600"; 
+   d="scan'208";a="45742740"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2025 07:44:58 -0700
+X-CSE-ConnectionGUID: 6OnYtDAmT/CaghxEm3Zoxg==
+X-CSE-MsgGUID: Hwr+u6p/SRGmn21JzaBj4w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,210,1739865600"; 
+   d="scan'208";a="160565674"
+Received: from spandruv-desk1.amr.corp.intel.com ([10.125.108.247])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2025 07:44:57 -0700
+Message-ID: <b7b0b3f98f8fad9cc9559e1c4ce832387c520d7a.camel@linux.intel.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Use raw_smp_processor_id() in
+ hwp_get_cpu_scaling()
+From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To: Xi Ruoyao <xry111@xry111.site>, "Rafael J. Wysocki" <rafael@kernel.org>,
+  Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, Dave Hansen
+ <dave.hansen@linux.intel.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Sun, 13 Apr 2025 07:44:56 -0700
+In-Reply-To: <20250412103434.5321-1-xry111@xry111.site>
+References: <20250412103434.5321-1-xry111@xry111.site>
+Autocrypt: addr=srinivas.pandruvada@linux.intel.com; prefer-encrypt=mutual;
+ keydata=mQGNBGYHNAsBDAC7tv5u9cIsSDvdgBBEDG0/a/nTaC1GXOx5MFNEDL0LWia2p8Asl7igx
+ YrB68fyfPNLSIgtCmps0EbRUkPtoN5/HTbAEZeJUTL8Xdoe6sTywf8/6/DMheEUzprE4Qyjt0HheW
+ y1JGvdOA0f1lkxCnPXeiiDY4FUqQHr3U6X4FPqfrfGlrMmGvntpKzOTutlQl8eSAprtgZ+zm0Jiwq
+ NSiSBOt2SlbkGu9bBYx7mTsrGv+x7x4Ca6/BO9o5dIvwJOcfK/cXC/yxEkr1ajbIUYZFEzQyZQXrT
+ GUGn8j3/cXQgVvMYxrh3pGCq9Q0Q6PAwQYhm97ipXa86GcTpP5B2ip9xclPtDW99sihiL8euTWRfS
+ TUsEI+1YzCyz5DU32w3WiXr3ITicaMV090tMg9phIZsjfFbnR8hY03n0kRNWWFXi/ch2MsZCCqXIB
+ oY/SruNH9Y6mnFKW8HSH762C7On8GXBYJzH6giLGeSsbvis2ZmV/r+LmswwZ6ACcOKLlvvIukAEQE
+ AAbQ5U3Jpbml2YXMgUGFuZHJ1dmFkYSA8c3Jpbml2YXMucGFuZHJ1dmFkYUBsaW51eC5pbnRlbC5j
+ b20+iQHRBBMBCAA7FiEEdki2SeUi0wlk2xcjOqtdDMJyisMFAmYHNAsCGwMFCwkIBwICIgIGFQoJC
+ AsCBBYCAwECHgcCF4AACgkQOqtdDMJyisMobAv+LLYUSKNuWhRN3wS7WocRPCi3tWeBml+qivCwyv
+ oZbmE2LcxYFnkcj6YNoS4N1CHJCr7vwefWTzoKTTDYqz3Ma0D0SbR1p/dH0nDgN34y41HpIHf0tx0
+ UxGMgOWJAInq3A7/mNkoLQQ3D5siG39X3bh9Ecg0LhMpYwP/AYsd8X1ypCWgo8SE0J/6XX/HXop2a
+ ivimve15VklMhyuu2dNWDIyF2cWz6urHV4jmxT/wUGBdq5j87vrJhLXeosueRjGJb8/xzl34iYv08
+ wOB0fP+Ox5m0t9N5yZCbcaQug3hSlgp9hittYRgIK4GwZtNO11bOzeCEMk+xFYUoa5V8JWK9/vxrx
+ NZEn58vMJ/nxoJzkb++iV7KBtsqErbs5iDwFln/TRJAQDYrtHJKLLFB9BGUDuaBOmFummR70Rbo55
+ J9fvUHc2O70qteKOt5A0zv7G8uUdIaaUHrT+VOS7o+MrbPQcSk+bl81L2R7TfWViCmKQ60sD3M90Y
+ oOfCQxricddC
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add embedded controller node to Pegatron Chagall device-tree.
+On Sat, 2025-04-12 at 18:34 +0800, Xi Ruoyao wrote:
+> Use raw_smp_processor_id() instead of plain smp_processor_id() in
+> hwp_get_cpu_scaling(), otherwise we get some errors on a Lenovo
+> Thinkpad
+> T14P Gen 2:
+>=20
+> =C2=A0=C2=A0=C2=A0 BUG: using smp_processor_id() in preemptible [00000000=
+] code:
+> swapper/0/1
+> =C2=A0=C2=A0=C2=A0 caller is hwp_get_cpu_scaling+0x7f/0xc0
+>=20
+> Fixes: b52aaeeadfac ("cpufreq: intel_pstate: Avoid SMP calls to get
+> cpu-type")
+> Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
----
- .../boot/dts/nvidia/tegra30-pegatron-chagall.dts | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/arch/arm/boot/dts/nvidia/tegra30-pegatron-chagall.dts b/arch/arm/boot/dts/nvidia/tegra30-pegatron-chagall.dts
-index 4012f9c799a8..b7d0ebb766a6 100644
---- a/arch/arm/boot/dts/nvidia/tegra30-pegatron-chagall.dts
-+++ b/arch/arm/boot/dts/nvidia/tegra30-pegatron-chagall.dts
-@@ -1155,6 +1155,14 @@ lcd_ddc: i2c@7000c000 {
- 		status = "okay";
- 		clock-frequency = <400000>;
- 
-+		embedded-controller@10 {
-+			compatible = "pegatron,chagall-ec";
-+			reg = <0x10>;
-+
-+			monitored-battery = <&battery>;
-+			power-supplies = <&mains>;
-+		};
-+
- 		/* Wolfson Microelectronics WM8903 audio codec */
- 		wm8903: audio-codec@1a {
- 			compatible = "wlf,wm8903";
-@@ -2596,6 +2604,14 @@ backlight: backlight {
- 		default-brightness-level = <15>;
- 	};
- 
-+	battery: battery-cell {
-+		compatible = "simple-battery";
-+		device-chemistry = "lithium-ion-polymer";
-+		charge-full-design-microamp-hours = <3050000>;
-+		energy-full-design-microwatt-hours = <23000000>;
-+		operating-range-celsius = <0 45>;
-+	};
-+
- 	/* PMIC has a built-in 32KHz oscillator which is used by PMC */
- 	clk32k_in: clock-32k {
- 		compatible = "fixed-clock";
--- 
-2.43.0
+> ---
+> =C2=A0drivers/cpufreq/intel_pstate.c | 2 +-
+> =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/cpufreq/intel_pstate.c
+> b/drivers/cpufreq/intel_pstate.c
+> index 4aad79d26c64..bfc20b978240 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -2209,7 +2209,7 @@ static int knl_get_turbo_pstate(int cpu)
+> =C2=A0static int hwp_get_cpu_scaling(int cpu)
+> =C2=A0{
+> =C2=A0	if (hybrid_scaling_factor) {
+> -		struct cpuinfo_x86 *c =3D
+> &cpu_data(smp_processor_id());
+> +		struct cpuinfo_x86 *c =3D
+> &cpu_data(raw_smp_processor_id());
+> =C2=A0		u8 cpu_type =3D c->topo.intel_type;
+> =C2=A0
+> =C2=A0		/*
 
 
