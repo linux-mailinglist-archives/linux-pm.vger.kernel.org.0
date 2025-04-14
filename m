@@ -1,161 +1,167 @@
-Return-Path: <linux-pm+bounces-25345-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25347-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B9CDA87883
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 09:15:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52652A87919
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 09:40:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8931516E365
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 07:15:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 065361712C0
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 07:40:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F30323A9A0;
-	Mon, 14 Apr 2025 07:15:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="GwG03lGK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8198D25A358;
+	Mon, 14 Apr 2025 07:35:45 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68647239083;
-	Mon, 14 Apr 2025 07:15:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C88C1259C9D
+	for <linux-pm@vger.kernel.org>; Mon, 14 Apr 2025 07:35:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744614937; cv=none; b=D8rfxXvYej8cry7NyH7STCzGWawqNv85ImbBtafvZcYKe1bJmHsc3UEWMOPPXSXugxj7Ec7BkgV67avtbBAPiG71hL+YbQMEk1+vwkqLOWszHXQ/HIIdFhJ1qKWgsN/NdZUDhcfBdl5u55bs/azfZDsiNHNMPb318HC2VokVrVc=
+	t=1744616145; cv=none; b=UW5lDbmaEgcW3gRq46TMueRMM026UgdfyV9Gtf8tV9/PgeGzwOWZgRDakKb8L7B5VS54IQTwUTjFVX31VNmWKHhfK0GCJA0RB9dhbGsRXmiw/CjsFUI+my9n98iWwNzgaJ5rzgWMKzyV0EiiyF9KjKRxHnkd15ZKjxZM4DSbQBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744614937; c=relaxed/simple;
-	bh=Tw2tXWs2wGcWRTPB0gJYGHNMRJ7yGZsEUJwm+877cbg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=lu6JwR9zIstucU4bkNDfS2QkGHB4hMF+AhJBCjWM6vFTlfY3+HNU5V8jco09j0b66wtSddwXcVd9qJ+yG+tOrcnUmW5766kQXBY8e0d+iiaDIlm0l1sZW7LO3jmfcN6JUMk2I3AutRSpOFZN0SmHDVkyQNf3DC7lfGq7lVaF03M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=GwG03lGK; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53E708fH025241;
-	Mon, 14 Apr 2025 07:15:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=Tw2tXW
-	s2wGcWRTPB0gJYGHNMRJ7yGZsEUJwm+877cbg=; b=GwG03lGKemGPtTBlyeeP7z
-	t5PiQtP/NQoZ8ZIaxdgVmAeKI2Qo8W/+LXMLBaSrbHsHmBApl4BJIQhU4jHRF5Yq
-	2uFBnIEx61zaLFsnM07EDNY5Y62akaP2fVnL5ZOO+FKy8D2xY6iETh8QYih2rbta
-	MfOQ+AxqWOGqy0YdxARMK4ahvAmEZ7KrLAEjKR92pDwEa0bl48viavBkzLzZYIe7
-	FJmuIn+GdhuRBa+F7QoepQURCx8FzA7wHMSEnsKguL6BV1YKAqNzycOKW4XxRGxr
-	jlPmHF+D+avU+BKaLJkH6fOuFbOP14M8qZONd9Lj0gPoBEcl69cgsWZ/Ie1lUs4Q
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 460bqpb8gd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 14 Apr 2025 07:15:27 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 53E7FQNP001293;
-	Mon, 14 Apr 2025 07:15:26 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 460bqpb8ga-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 14 Apr 2025 07:15:26 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 53E3vXLw017170;
-	Mon, 14 Apr 2025 07:15:25 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 46040kn0d9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 14 Apr 2025 07:15:25 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 53E7FNTW21955250
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 14 Apr 2025 07:15:23 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 489C758061;
-	Mon, 14 Apr 2025 07:15:25 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id F09DB58056;
-	Mon, 14 Apr 2025 07:15:21 +0000 (GMT)
-Received: from li-c18b6acc-24ee-11b2-a85c-81492619bda1.ibm.com (unknown [9.43.55.58])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 14 Apr 2025 07:15:21 +0000 (GMT)
-Message-ID: <23742d13848a8cdf24da43c08ebe061211f46ecc.camel@linux.ibm.com>
-Subject: Re: [PATCH v1 0/2] cpuidle: teo: Refine handling of short idle
- intervals
-From: Aboorva Devarajan <aboorvad@linux.ibm.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM
- <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano	
- <daniel.lezcano@linaro.org>,
-        Christian Loehle <christian.loehle@arm.com>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-        Doug Smythies
- <dsmythies@telus.net>
-Date: Mon, 14 Apr 2025 12:45:20 +0530
-In-Reply-To: <4661520.LvFx2qVVIh@rjwysocki.net>
-References: <4661520.LvFx2qVVIh@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+	s=arc-20240116; t=1744616145; c=relaxed/simple;
+	bh=Ou2vOurVWHondECFpfTMtcoZVsobG8aP/abnWazjfsk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Ojppz+fJj/Tf6iiacph7H9FcdijYH2JxcQxJlwplZ+8BxXk6wA4P8XRpjVilVp4rLiT9BPRGH5n7hqKpgzaefHAlbevom9KlR2HmjPZKiUKkwlLWMFxi9H5Q/iDF6EySI9cVcz44V/v2rQkMIKkdrVaMkqWGP7LblVFsAlvRcyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <a.fatoum@pengutronix.de>)
+	id 1u4ELw-0002p3-QH; Mon, 14 Apr 2025 09:35:36 +0200
+Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <a.fatoum@pengutronix.de>)
+	id 1u4ELv-000DDx-2u;
+	Mon, 14 Apr 2025 09:35:35 +0200
+Received: from localhost ([::1] helo=dude05.red.stw.pengutronix.de)
+	by dude05.red.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <a.fatoum@pengutronix.de>)
+	id 1u4ELv-00BnLF-2i;
+	Mon, 14 Apr 2025 09:35:35 +0200
+From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Date: Mon, 14 Apr 2025 09:35:31 +0200
+Subject: [PATCH v3] docs: ABI: replace mcroce@microsoft.com with new Meta
+ address
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Qgar2r_EoA08XHseT2LeY_WhDTieWko-
-X-Proofpoint-GUID: CsHK94dMR4RWHs-9S7HhOpJZ1qXzrPII
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-14_01,2025-04-10_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- adultscore=0 mlxscore=0 bulkscore=0 mlxlogscore=643 spamscore=0
- phishscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502280000 definitions=main-2504140049
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250414-fix-mcroce-mail-bounce-v3-1-0aed2d71f3d7@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIAMK6/GcC/4XNQQ6DIBAF0Ks0rEvDIKJ01Xs0XSiOSlLBgBIb4
+ 92LJl01TXfzJ3/erCSgNxjI9bQSj9EE42wK2flEdF/ZDqlpUiaccQEcFG3NQgftnUY6VOZJazf
+ bNGe8VIyBVILlJB2PHlPzgO+PlHsTJudfx58I+/YvGYECFSpVQNaSSXYb0Xbz5J01y6VBsruRf
+ 6yccSh+WjxZWKqiFTXkuvy2tm17AyCCJoINAQAA
+X-Change-ID: 20241219-fix-mcroce-mail-bounce-328900169405
+To: Matteo Croce <teknoraver@meta.com>, Jens Axboe <axboe@kernel.dk>, 
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, linux-block@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel@pengutronix.de, Ahmad Fatoum <a.fatoum@pengutronix.de>
+X-Mailer: b4 0.14.2
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-On Thu, 2025-04-03 at 21:16 +0200, Rafael J. Wysocki wrote:
-> Hi Everyone,
->=20
-> This series is intended to address an issue with overly aggressive select=
-ion
-> of idle state 0 (the polling state) in teo on x86 in some cases when time=
-r
-> wakeups dominate the CPU wakeup pattern.
->=20
-> In those cases, timer wakeups are not taken into account when they are
-> within the LATENCY_THRESHOLD_NS range and the idle state selection may
-> be based entirely on non-timer wakeups which may be rare.=C2=A0 This caus=
-es
-> the prediction accuracy to be low and too much energy may be used as
-> a result.
->=20
-> The first patch is preparatory and it is not expected to make any
-> functional difference.
->=20
-> The second patch causes teo to take timer wakeups into account if it
-> is about to skip the tick_nohz_get_sleep_length() invocation, so they
-> get a chance to influence the idle state selection.
->=20
-> I have been using this series on my systems for several weeks and observe=
-d
-> a significant reduction of the polling state selection rate in multiple
-> workloads.
->=20
-> Thanks!
->=20
->=20
+The Microsoft email address is bouncing:
 
-Hi Rafael,
+    550 5.4.1 Recipient address rejected: Access denied.
 
-I'm running some tests and going through the patch.
-I haven't noticed any deviations so far, will post the results shortly.
+So let's replace it with Matteo's current mail address.
 
-Thanks,
-Aboorva
+Acked-by: Matteo Croce <teknoraver@meta.com>
+Link: https://lore.kernel.org/all/BYAPR15MB2504E4B02DFFB1E55871955DA1062@BYAPR15MB2504.namprd15.prod.outlook.com/
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+---
+get_maintainers.pl picks off the stale address from the file otherwise
 
+[1]: https://lore.kernel.org/all/20241219-hw_protection-reboot-v1-6-263a0c1df802@pengutronix.de/
+---
+Changes in v3:
+- drop RFC prefix
+- Link to v2: https://lore.kernel.org/r/20250217-fix-mcroce-mail-bounce-v2-1-e897f4b15c80@pengutronix.de
 
+Changes in v2:
+- Added Matteo's Acked-by 
+- Link to v1: https://lore.kernel.org/r/20241219-fix-mcroce-mail-bounce-v1-1-4912116b6060@pengutronix.de
+---
+ Documentation/ABI/stable/sysfs-block          |  2 +-
+ Documentation/ABI/testing/sysfs-kernel-reboot | 10 +++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
+diff --git a/Documentation/ABI/stable/sysfs-block b/Documentation/ABI/stable/sysfs-block
+index 3879963f0f01e5f291e40bb7cf3fb638e7a61d6b..11545c9e2e93f2a15637cef6309d875c4ce8e385 100644
+--- a/Documentation/ABI/stable/sysfs-block
++++ b/Documentation/ABI/stable/sysfs-block
+@@ -77,7 +77,7 @@ Description:
+ 
+ What:		/sys/block/<disk>/diskseq
+ Date:		February 2021
+-Contact:	Matteo Croce <mcroce@microsoft.com>
++Contact:	Matteo Croce <teknoraver@meta.com>
+ Description:
+ 		The /sys/block/<disk>/diskseq files reports the disk
+ 		sequence number, which is a monotonically increasing
+diff --git a/Documentation/ABI/testing/sysfs-kernel-reboot b/Documentation/ABI/testing/sysfs-kernel-reboot
+index e117aba46be0e8d3cdff3abfb678f8847a726122..52571fd5ddba517b86bed8867fe6b84c8ed7a6b9 100644
+--- a/Documentation/ABI/testing/sysfs-kernel-reboot
++++ b/Documentation/ABI/testing/sysfs-kernel-reboot
+@@ -1,7 +1,7 @@
+ What:		/sys/kernel/reboot
+ Date:		November 2020
+ KernelVersion:	5.11
+-Contact:	Matteo Croce <mcroce@microsoft.com>
++Contact:	Matteo Croce <teknoraver@meta.com>
+ Description:	Interface to set the kernel reboot behavior, similarly to
+ 		what can be done via the reboot= cmdline option.
+ 		(see Documentation/admin-guide/kernel-parameters.txt)
+@@ -9,25 +9,25 @@ Description:	Interface to set the kernel reboot behavior, similarly to
+ What:		/sys/kernel/reboot/mode
+ Date:		November 2020
+ KernelVersion:	5.11
+-Contact:	Matteo Croce <mcroce@microsoft.com>
++Contact:	Matteo Croce <teknoraver@meta.com>
+ Description:	Reboot mode. Valid values are: cold warm hard soft gpio
+ 
+ What:		/sys/kernel/reboot/type
+ Date:		November 2020
+ KernelVersion:	5.11
+-Contact:	Matteo Croce <mcroce@microsoft.com>
++Contact:	Matteo Croce <teknoraver@meta.com>
+ Description:	Reboot type. Valid values are: bios acpi kbd triple efi pci
+ 
+ What:		/sys/kernel/reboot/cpu
+ Date:		November 2020
+ KernelVersion:	5.11
+-Contact:	Matteo Croce <mcroce@microsoft.com>
++Contact:	Matteo Croce <teknoraver@meta.com>
+ Description:	CPU number to use to reboot.
+ 
+ What:		/sys/kernel/reboot/force
+ Date:		November 2020
+ KernelVersion:	5.11
+-Contact:	Matteo Croce <mcroce@microsoft.com>
++Contact:	Matteo Croce <teknoraver@meta.com>
+ Description:	Don't wait for any other CPUs on reboot and
+ 		avoid anything that could hang.
+ 
 
+---
+base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+change-id: 20241219-fix-mcroce-mail-bounce-328900169405
 
+Best regards,
+-- 
+Ahmad Fatoum <a.fatoum@pengutronix.de>
 
 
