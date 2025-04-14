@@ -1,63 +1,63 @@
-Return-Path: <linux-pm+bounces-25390-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25391-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76EC7A88A5C
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 19:50:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B55AA88A92
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 20:00:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9387F7AAC59
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 17:49:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F939189A1A5
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 18:00:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7AB128B508;
-	Mon, 14 Apr 2025 17:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1450528B4E3;
+	Mon, 14 Apr 2025 18:00:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WX+P93mK"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OZV6rAjo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8A61A08AB;
-	Mon, 14 Apr 2025 17:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C6C288CB6;
+	Mon, 14 Apr 2025 18:00:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744652982; cv=none; b=nW9f4FKE2fMhY1/4zTt2MmFRX6M646FDI1LI9g6h74Zjl2qP9fzAzAgkmcqtdVpxgVyS2AX/Eyvn2a+S4C0r/fggSmkB9Ijp6BAicv5zXF+dUYDhfRdic/eVlhnbghRPIR1mbx8IENB9BSZ9si52qIvebkntbfwFxeIIH+BHxbs=
+	t=1744653612; cv=none; b=RIX+11W6vn4FnNVc9HRXbIMfM/M+Vuz1HefaYRAXVyFi72FgGdEWFjIBftwRo1obL51gDgrzRrWXx0ITBOYXeaZeu8eH7vKuf9QGRQfPgtT/VgMwIoiiDp8wLHTdVwVhGqtigcOZddqqaWa7inK5rZaVmEC5cq7UXMOOxloRVYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744652982; c=relaxed/simple;
-	bh=ulqrosDqiUlPlEkamQ1xyIFEuty/JmTNovXKiA2L3IU=;
+	s=arc-20240116; t=1744653612; c=relaxed/simple;
+	bh=+CoYcsP98tUeuncLLLFjvVY9A37RssOyoYXVp+8fEpo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=DVa99rxHYQQhsd+j+KZfn19bVakVs61hA8Jtk38khH6zpvtk1P1pg661gE9BASAh1C9bZJe/jNnQt1bW1QFBkqwZi/WT/uIrCeoTw5eDs9wzmijvpeWK2IxvwvBXnz9937VXcM4u7OB/rpiqSX/fNQ5kpzfZakFKetoamNVLjPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=WX+P93mK; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:Content-Type; b=nX0xRBvC19w9Y2dGRXnn/3hl5KNWoQbl1qXvMj+FpbGs0HbAEN0o7hzZej8wPiXSQhBMsiJp00uMLAnlT1+gAbs3ExKV1vwOqozN1jvTaCcnX3JP/7m4ZvNn2TcQc5esoKlLQGDCQ2a1DqgcplZ88ofOUUmEftknS5HV5c5A1yE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=OZV6rAjo; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53E99qtg011395;
-	Mon, 14 Apr 2025 17:49:22 GMT
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53E9AF9T017437;
+	Mon, 14 Apr 2025 18:00:06 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	3yPyywTlsnu2wroIHMQvuyXG7piAsNEAqqurWw7fZ5g=; b=WX+P93mKx4PK3NOj
-	xh6vf6nHiXCBBWURnrOTWK0PFFCFi4dcv/bVkOXZem4aHPSif9elmQmHb8N4J0f3
-	PpqeVeeBu8RuRTL2pLeAT6VG47PWtk+neOiRYRblfAxE+hiZ3dRMYdG4BK6blZea
-	9hF+qYzygsFV4WwWbg3f/XlLFQ6Ye4wsdly/FdcEYjCffbIFoPnALi335BNxyn6S
-	peYjhh4APdN2RVDdlBhdcwK+zITRgUiByUAQlFoABQy4WGYumyb/Vbpi09smeXGp
-	o5kdDY6XFpzlzn2/rWUaG67zUxqlcJNf6RCfLaUub5kPiaLqbCCJbJSRknJBFKde
-	L8nkAw==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45yg8wdbvm-1
+	+m3M7q4RcMjSlbZqaN3PtP+0QBeAAlsXq7JC4+LsdA0=; b=OZV6rAjo/XCBN5sF
+	Uvc+kqFXH3xiJRyXKau+5wYOVdtNLTr88zklQZpJk1ZIRl5/zInqS5BTNa/y5wZ9
+	iqtybdYnW6oCCoB9fgHyYHQQTLNte8EF9DU5UgFHcpsDu3seqvih0z5SLl5HnD9N
+	K8yAa7RL0uIYDz1P5tlKucGVYarNxPtSxePmxrRAWvNb7DSs4xiPTLs5BeZfkWE/
+	tdqkeQ49YkFJ8aiN9Trh7u/B8c4iMxVFu/n8UzQAt5KuOuJOZ6LhX20F+Q+Q+8cz
+	XLstUJKHrukk/oN7ynn3KLCnGFe0SFFp3zzbFiLfWCGPscD771uF4kRRTz6hcrtn
+	KIcs3g==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45ygd6de10-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 14 Apr 2025 17:49:22 +0000 (GMT)
+	Mon, 14 Apr 2025 18:00:06 +0000 (GMT)
 Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53EHnLCv028213
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53EI05Nb018506
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 14 Apr 2025 17:49:21 GMT
+	Mon, 14 Apr 2025 18:00:05 GMT
 Received: from [10.216.13.250] (10.80.80.8) by nasanex01c.na.qualcomm.com
  (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 14 Apr
- 2025 10:49:13 -0700
-Message-ID: <de05fd91-b8d2-4799-a57b-ccc6e9fbafd9@quicinc.com>
-Date: Mon, 14 Apr 2025 23:19:09 +0530
+ 2025 10:59:57 -0700
+Message-ID: <1e69b6f5-efe7-4b81-8bea-b463b1eacfd4@quicinc.com>
+Date: Mon, 14 Apr 2025 23:29:53 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -65,7 +65,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 9/9] serial: qcom-geni: Enable Serial on SA8255p
+Subject: Re: [PATCH v1 4/9] soc: qcom: geni-se: Enable QUPs on SA8255p
  Qualcomm platforms
 To: Jiri Slaby <jirislaby@kernel.org>,
         Greg Kroah-Hartman
@@ -88,91 +88,88 @@ CC: <psodagud@quicinc.com>, <djaggi@quicinc.com>, <quic_msavaliy@quicinc.com>,
         <quic_vtanuku@quicinc.com>, <quic_arandive@quicinc.com>,
         <quic_mnaresh@quicinc.com>, <quic_shazhuss@quicinc.com>
 References: <20250410174010.31588-1-quic_ptalari@quicinc.com>
- <20250410174010.31588-10-quic_ptalari@quicinc.com>
- <4183462f-7e4c-4da2-8f6b-0dadf26e1b2a@kernel.org>
+ <20250410174010.31588-5-quic_ptalari@quicinc.com>
+ <abbfc13d-d6f5-485f-a73d-6a89e15f0ff6@kernel.org>
 Content-Language: en-US
 From: Praveen Talari <quic_ptalari@quicinc.com>
-In-Reply-To: <4183462f-7e4c-4da2-8f6b-0dadf26e1b2a@kernel.org>
+In-Reply-To: <abbfc13d-d6f5-485f-a73d-6a89e15f0ff6@kernel.org>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
 X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01c.na.qualcomm.com (10.45.79.139)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=E9TNpbdl c=1 sm=1 tr=0 ts=67fd4aa2 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=COk6AnOGAAAA:8 a=ju1iAOFsNRn_4Ngbc6QA:9 a=3ZKOabzyN94A:10
+X-Proofpoint-ORIG-GUID: mcRZeR5fc5ZqeuH0u5O6SW9r8zsyvGff
+X-Proofpoint-GUID: mcRZeR5fc5ZqeuH0u5O6SW9r8zsyvGff
+X-Authority-Analysis: v=2.4 cv=ANaQCy7k c=1 sm=1 tr=0 ts=67fd4d26 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=COk6AnOGAAAA:8 a=BTMtgF0SbkP0gLXr6YcA:9 a=3ZKOabzyN94A:10
  a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-ORIG-GUID: Jaq6r0Om7_7zFUCmQPg-SgGrNwa1g1rG
-X-Proofpoint-GUID: Jaq6r0Om7_7zFUCmQPg-SgGrNwa1g1rG
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-04-14_07,2025-04-10_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- mlxscore=0 bulkscore=0 clxscore=1015 phishscore=0 lowpriorityscore=0
- suspectscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
- impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2504140129
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ mlxlogscore=999 suspectscore=0 clxscore=1015 lowpriorityscore=0
+ phishscore=0 impostorscore=0 spamscore=0 priorityscore=1501 malwarescore=0
+ bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2504140130
 
-HI
 
-On 4/14/2025 1:39 PM, Jiri Slaby wrote:
+On 4/14/2025 1:26 PM, Jiri Slaby wrote:
 > On 10. 04. 25, 19:40, Praveen Talari wrote:
->> The Qualcomm automotive SA8255p SoC relies on firmware to configure
->> platform resources, including clocks, interconnects and TLMM.
->> The driver requests resources operations over SCMI using power
->> and performance protocols.
+>> On the sa8255p platform, resources such as clocks,interconnects
+>> and TLMM (GPIO) configurations are managed by firmware.
 >>
->> The SCMI power protocol enables or disables resources like clocks,
->> interconnect paths, and TLMM (GPIOs) using runtime PM framework APIs,
->> such as resume/suspend, to control power states(on/off).
+>> Introduce a platform data function callback to distinguish whether
+>> resource control is performed by firmware or directly by the driver
+>> in linux.
 >>
->> The SCMI performance protocol manages UART baud rates, with each baud
->> rate represented by a performance level. The driver uses the
->> dev_pm_opp_set_level() API to request the desired baud rate by
->> specifying the performance level.
+>> The refactor ensures clear differentiation of resource
+>> management mechanisms, improving maintainability and flexibility
+>> in handling platform-specific configurations.
 >>
 >> Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
 >> ---
->>   drivers/tty/serial/qcom_geni_serial.c | 150 +++++++++++++++++++++++---
->>   1 file changed, 136 insertions(+), 14 deletions(-)
+>>   drivers/soc/qcom/qcom-geni-se.c | 78 +++++++++++++++++++++------------
+>>   1 file changed, 50 insertions(+), 28 deletions(-)
 >>
->> diff --git a/drivers/tty/serial/qcom_geni_serial.c 
->> b/drivers/tty/serial/qcom_geni_serial.c
->> index 9649297d4a9e..40b71d4b7590 100644
->> --- a/drivers/tty/serial/qcom_geni_serial.c
->> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> ...
->> @@ -1624,8 +1669,27 @@ static int geni_serial_resources_on(struct 
->> uart_port *uport)
->>       return ret;
+>> diff --git a/drivers/soc/qcom/qcom-geni-se.c 
+>> b/drivers/soc/qcom/qcom-geni-se.c
+>> index 4cb959106efa..5e2add1e04d3 100644
+>> --- a/drivers/soc/qcom/qcom-geni-se.c
+>> +++ b/drivers/soc/qcom/qcom-geni-se.c
+>> @@ -105,6 +105,8 @@ struct geni_wrapper {
+>>   struct geni_se_desc {
+>>       unsigned int num_clks;
+>>       const char * const *clks;
+>> +    int (*geni_se_rsc_init)(struct geni_wrapper *wrapper,
+>> +                const struct geni_se_desc *desc);
+>>   };
+>>     static const char * const icc_path_names[] = {"qup-core", 
+>> "qup-config",
+>> @@ -891,10 +893,44 @@ int geni_icc_disable(struct geni_se *se)
 >>   }
->>   -static int geni_serial_resource_init(struct qcom_geni_serial_port 
->> *port)
->> +static int geni_serial_resource_state(struct uart_port *uport, bool 
->> power_on)
+>>   EXPORT_SYMBOL_GPL(geni_icc_disable);
+>>   +static int geni_se_resource_init(struct geni_wrapper *wrapper,
+>> +                 const struct geni_se_desc *desc)
 >> +{
->> +    return power_on ? geni_serial_resources_on(uport) : 
->> geni_serial_resources_off(uport);
->> +}
->> +
->> +static int geni_serial_pwr_init(struct uart_port *uport)
->>   {
->> +    struct qcom_geni_serial_port *port = to_dev_port(uport);
+>> +    struct device *dev = wrapper->dev;
 >> +    int ret;
+>> +    int i;
 >> +
->> +    ret = dev_pm_domain_attach_list(port->se.dev,
->> +                    &port->dev_data->pd_data, &port->pd_list);
->> +    if (ret <= 0)
->> +        return -EINVAL;
+>> +    wrapper->num_clks = min_t(unsigned int, desc->num_clks, MAX_CLKS);
 >
-> Any reason to reroute every (sane) error code into EINVAL?
+> I thought min_t is no longer needed in these cases?
 
-i opted for EINVAL instead of EBUSY because i don't want the probe to be 
-re-executed if the firmware does not support SE.
-Let me know if you have any suggestions.
+it is needed since there are two types of QUPs - the normal QUP which 
+uses 2 clocks,
 
-Thanks,
+and HUB QUP which uses only 1 clock.
 
-Praveen Talari
-
+>
+>> +
+>> +    for (i = 0; i < wrapper->num_clks; ++i)
+>
+> FWIW i should be unsigned too.
+>
+> thanks,
 
