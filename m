@@ -1,227 +1,105 @@
-Return-Path: <linux-pm+bounces-25370-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25372-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 731E4A8819E
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 15:19:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD23DA884F7
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 16:30:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBAE73A9052
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 13:19:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 10E3E165045
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 14:26:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B70A076410;
-	Mon, 14 Apr 2025 13:19:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EB0C2C1E14;
+	Mon, 14 Apr 2025 14:02:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="K7pVOzyY"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="t9pCPRQ2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA1F2433CB
-	for <linux-pm@vger.kernel.org>; Mon, 14 Apr 2025 13:19:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25AC727FD7D;
+	Mon, 14 Apr 2025 14:02:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744636769; cv=none; b=cuRJut5XzUjaU6IEBsrjyUfPGkEvROzQeMIk+SXtfEU9WeNbDrqs5gLlvQXxtf0KHAZByomx6ARgreX8Iu3KY2HUlYZb/n9gxE1yYm5VjsU3EyNqd2OKaGkwMdEcbDLhMT8aPVkbNYloj5y3Ssc5u4ohaUUnwhteklo+JI2+aas=
+	t=1744639335; cv=none; b=F1+6XPkbiQr45XjqDchGSGUjQKZVaXu5Nsg1ueW+TnV6fF7capHEsQ3OvkUbcMhj7zBS0gxnideduSzlRtAtWzCA0xtguyjpevfQSHoAdnfewX1jEpRae0mDAfRpL60y4Ia3rOPWcZaPZ3F/cjIBhXont/MpWF+Wbhao0NzVyE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744636769; c=relaxed/simple;
-	bh=4WbjWndT1sMKVQI5cmcoiYHcbPsF1JCdp/Dys+QMVtw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gi6WmPOouriVR1+lI9psZlyW2764nhO+WlUcIstPyLsPjOaKyjPI52XdhHhZHahJayiL3DxkG9b0z9nvWJlal7LfCi7U1bUZBZfTm5a0RHfBgwMK5oApnsdTcqaj/E6fZJcQxmyXlwc5oGa/uq1YOhNgaWrAJ6M+8D/lWNJ5a5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=K7pVOzyY; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744636766;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4B6GaTPwmvnHhTHOaGuMDBI5sHEqGfaJZbjG4rKzdlo=;
-	b=K7pVOzyY5e+2HfIN4lgF8pX6QBvuRLuq9qUh31KxeSUoX0Y3mmqz7Ui+nGKBrYzy1Qjx8H
-	Q58xvoNXwvUa3vNaX3IddrkLt0u+U6y54Jcgd2GiNhTBtWK8n0ytgGK5/l8XOfTj3K8rDr
-	vFNVV2dmx0fgaskN1/jEKpx7aQJDQzA=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-458-Tgzuf07xNRK_xaL_4S8ENg-1; Mon,
- 14 Apr 2025 09:19:23 -0400
-X-MC-Unique: Tgzuf07xNRK_xaL_4S8ENg-1
-X-Mimecast-MFC-AGG-ID: Tgzuf07xNRK_xaL_4S8ENg_1744636762
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C16C4195608A;
-	Mon, 14 Apr 2025 13:19:21 +0000 (UTC)
-Received: from carbon.redhat.com (unknown [10.44.32.142])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 86FB13001D15;
-	Mon, 14 Apr 2025 13:19:19 +0000 (UTC)
-From: Jelle van der Waa <jvanderwaa@redhat.com>
-To: Sebastian Reichel <sre@kernel.org>,
-	linux-pm@vger.kernel.org
-Cc: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Jelle van der Waa <jvanderwaa@redhat.com>
-Subject: [PATCH v2 1/1] power: supply: support charge_types in extensions
-Date: Mon, 14 Apr 2025 15:18:40 +0200
-Message-ID: <20250414131840.382756-2-jvanderwaa@redhat.com>
-In-Reply-To: <20250414131840.382756-1-jvanderwaa@redhat.com>
-References: <20250414131840.382756-1-jvanderwaa@redhat.com>
+	s=arc-20240116; t=1744639335; c=relaxed/simple;
+	bh=CndQFGuLnQ703+fOAOJDmmHIDhuS/2SEJT3iDiK/hvQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Xf9S0Ler6W4VNGoMqKB/f7064MxTKWW9aw49ET07mo//ikBfl1hLxe4mftJzpAelhwHxtpe+Cef4SY4GcxRQD/+uBJKlnQQSI8+xLzzPJ2ebnlGCjPLwPh6jG7tBrvDGi4sJuo19mp57KWSY+bYzijMnrJvCFnxoqddpyg9nVD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=t9pCPRQ2; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id B451CA0370;
+	Mon, 14 Apr 2025 15:56:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=mail; bh=8fUTt49ngH9LwQeutmpq
+	Atan+y77TmFvSLDx00ftJms=; b=t9pCPRQ2tmxUZmdzLFDzbVZeoRtXZjDfgQoU
+	JMJpuozYaayHGe5M8rtZeul0OU/+F9X4CpMRAVyMFQFkPO7wR8zzEFtkI74Ye0dI
+	ADOz7gwLOQPJeZujzuajq635AW7etk4of6jaKUDWUnjyUgcgFHA4wFSlBn/Wema8
+	h8PFPH2UyOzNqCyjL2KDQXPqbCYhed4NZ+0Rdyx3IVfp7MVupbKlIeo055aR5zyn
+	HiCcr96E4uWhI47L71f0twy8JsoxjMausdIw6mCa8yjWiEtCvWdk6CGx7J6CHx0T
+	3vuIVBNAzb4osY94mucmeauKFPNuFOfSdxzd9dJ8utOPILJ/OE8X5nPlPxMHeiMC
+	wVXUT1b961oG1BveaAZz2BIctqzdxleO5HU5r+7ayNSEvR5IdBqo6C18d17+1q/k
+	6OfkDYosROTg7TUakxHUyXJ8/R5NGwv3dJcEYDWEujln53H1zsGk5oI6J/J0KlkT
+	D6Sfd2ElQtNUWMqubsWtaD+9X51Ux5MhtelheK6OGoHUbcfr/RTY2UgGmTWZJrVd
+	zrgeq4F2WGqcvULyHEHgHmQqicc3w6dcEJqT07jV+Rc7UpvLaUahU8thqM5ebD+i
+	PQ0nPK8VdUJDejG2Hffd2qnwkKH5+R/XbwdIHNuP1hKpkDZkJbL0w8fkZJkLUI+F
+	Y3cED88=
+Message-ID: <832eb5e3-7e2d-4ed2-8571-eca9fe129013@prolan.hu>
+Date: Mon, 14 Apr 2025 15:56:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 1/2] pm: runtime: Add new devm functions
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Mark Brown <broonie@kernel.org>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Varshini
+ Rajendran" <varshini.rajendran@microchip.com>, Tudor Ambarus
+	<tudor.ambarus@linaro.org>, <linux-spi@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, Len Brown <len.brown@intel.com>,
+	Pavel Machek <pavel@ucw.cz>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>, Alexander Dahl <ada@thorsis.com>,
+	"Nicolas Ferre" <nicolas.ferre@microchip.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Pavel Machek <pavel@kernel.org>
+References: <20250327195928.680771-2-csokas.bence@prolan.hu>
+ <20250327195928.680771-3-csokas.bence@prolan.hu>
+ <CAJZ5v0jmuzvo-xzGBDhGVBbY7svbrqEdi-SeJrx5BG=qtN6ZiQ@mail.gmail.com>
+Content-Language: en-US, hu-HU
+From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
+In-Reply-To: <CAJZ5v0jmuzvo-xzGBDhGVBbY7svbrqEdi-SeJrx5BG=qtN6ZiQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
+ ATLAS.intranet.prolan.hu (10.254.0.229)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A2980D94853647464
 
-Similar to charge_behaviour, charge_types is an enum option where
-reading the property shows the supported values, with the active value
-surrounded by brackets. To be able to use it with a power_supply
-extension a bitmask with the supported charge_Types values has to be
-added to power_supply_ext.
+Hi,
 
-Signed-off-by: Jelle van der Waa <jvanderwaa@redhat.com>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
----
-V1->V2: clarified commit message, fix small logic error discovered by
--Wparentheses and changed example charge_types to use Long
-Life/Standard.
----
- drivers/power/supply/power_supply_sysfs.c | 23 ++++++++++++++++++++++-
- drivers/power/supply/test_power.c         | 20 ++++++++++++++++++--
- include/linux/power_supply.h              |  1 +
- 3 files changed, 41 insertions(+), 3 deletions(-)
+On 2025. 04. 09. 19:43, Rafael J. Wysocki wrote:
+> On Thu, Mar 27, 2025 at 8:59 PM Bence Csókás <csokas.bence@prolan.hu> wrote:
+>>
+>> Add `devm_pm_runtime_set_active_enabled()` and
+>> `devm_pm_runtime_get_noresume()` for simplifying common cases in drivers.
+>>
+>> Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
+> 
+> I can apply this one alone if you want me to do that, but I could also
+> apply the other patch in the series if it got an ACK from the driver
+> maintainer.
 
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index edb058c19c9c..6d80640511b5 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -321,6 +321,27 @@ static ssize_t power_supply_show_charge_behaviour(struct device *dev,
- 						  value->intval, buf);
- }
- 
-+static ssize_t power_supply_show_charge_types(struct device *dev,
-+					      struct power_supply *psy,
-+					      enum power_supply_charge_type current_type,
-+					      char *buf)
-+{
-+	struct power_supply_ext_registration *reg;
-+
-+	scoped_guard(rwsem_read, &psy->extensions_sem) {
-+		power_supply_for_each_extension(reg, psy) {
-+			if (power_supply_ext_has_property(reg->ext,
-+							  POWER_SUPPLY_PROP_CHARGE_TYPES))
-+				return power_supply_charge_types_show(dev,
-+						reg->ext->charge_types,
-+						current_type, buf);
-+		}
-+	}
-+
-+	return power_supply_charge_types_show(dev, psy->desc->charge_types,
-+						  current_type, buf);
-+}
-+
- static ssize_t power_supply_format_property(struct device *dev,
- 					    bool uevent,
- 					    struct device_attribute *attr,
-@@ -365,7 +386,7 @@ static ssize_t power_supply_format_property(struct device *dev,
- 	case POWER_SUPPLY_PROP_CHARGE_TYPES:
- 		if (uevent) /* no possible values in uevents */
- 			goto default_format;
--		ret = power_supply_charge_types_show(dev, psy->desc->charge_types,
-+		ret = power_supply_show_charge_types(dev, psy,
- 						     value.intval, buf);
- 		break;
- 	case POWER_SUPPLY_PROP_MODEL_NAME ... POWER_SUPPLY_PROP_SERIAL_NUMBER:
-diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
-index 2a975a110f48..b5f148081c51 100644
---- a/drivers/power/supply/test_power.c
-+++ b/drivers/power/supply/test_power.c
-@@ -37,6 +37,8 @@ static int battery_charge_counter	= -1000;
- static int battery_current		= -1600;
- static enum power_supply_charge_behaviour battery_charge_behaviour =
- 	POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO;
-+static enum power_supply_charge_type battery_charge_types =
-+	POWER_SUPPLY_CHARGE_TYPE_STANDARD;
- static bool battery_extension;
- 
- static bool module_initialized;
-@@ -87,7 +89,7 @@ static int test_power_get_battery_property(struct power_supply *psy,
- 		val->intval = battery_status;
- 		break;
- 	case POWER_SUPPLY_PROP_CHARGE_TYPE:
--		val->intval = POWER_SUPPLY_CHARGE_TYPE_FAST;
-+		val->intval = battery_charge_types;
- 		break;
- 	case POWER_SUPPLY_PROP_HEALTH:
- 		val->intval = battery_health;
-@@ -129,6 +131,9 @@ static int test_power_get_battery_property(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
- 		val->intval = battery_charge_behaviour;
- 		break;
-+	case POWER_SUPPLY_PROP_CHARGE_TYPES:
-+		val->intval = battery_charge_types;
-+		break;
- 	default:
- 		pr_info("%s: some properties deliberately report errors.\n",
- 			__func__);
-@@ -140,7 +145,7 @@ static int test_power_get_battery_property(struct power_supply *psy,
- static int test_power_battery_property_is_writeable(struct power_supply *psy,
- 						    enum power_supply_property psp)
- {
--	return psp == POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR;
-+	return psp == POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR || psp == POWER_SUPPLY_PROP_CHARGE_TYPES;
- }
- 
- static int test_power_set_battery_property(struct power_supply *psy,
-@@ -156,6 +161,14 @@ static int test_power_set_battery_property(struct power_supply *psy,
- 		}
- 		battery_charge_behaviour = val->intval;
- 		break;
-+	case POWER_SUPPLY_PROP_CHARGE_TYPES:
-+		if (val->intval < 0 ||
-+		    val->intval >= BITS_PER_TYPE(typeof(psy->desc->charge_types)) ||
-+		    !(BIT(val->intval) & psy->desc->charge_types)) {
-+			return -EINVAL;
-+		}
-+		battery_charge_types = val->intval;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -188,6 +201,7 @@ static enum power_supply_property test_power_battery_props[] = {
- 	POWER_SUPPLY_PROP_CURRENT_AVG,
- 	POWER_SUPPLY_PROP_CURRENT_NOW,
- 	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
-+	POWER_SUPPLY_PROP_CHARGE_TYPES,
- };
- 
- static char *test_power_ac_supplied_to[] = {
-@@ -215,6 +229,8 @@ static const struct power_supply_desc test_power_desc[] = {
- 		.charge_behaviours = BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO)
- 				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)
- 				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE),
-+		.charge_types = BIT(POWER_SUPPLY_CHARGE_TYPE_STANDARD)
-+				   | BIT(POWER_SUPPLY_CHARGE_TYPE_LONGLIFE)
- 	},
- 	[TEST_USB] = {
- 		.name = "test_usb",
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 888824592953..c4cb854971f5 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -288,6 +288,7 @@ struct power_supply_desc {
- struct power_supply_ext {
- 	const char *const name;
- 	u8 charge_behaviours;
-+	u32 charge_types;
- 	const enum power_supply_property *properties;
- 	size_t num_properties;
- 
--- 
-2.49.0
+I think you can apply it and then Mark can apply the SPI part to his 
+tree. @broonie what do you think?
+
+Bence
 
 
