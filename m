@@ -1,402 +1,388 @@
-Return-Path: <linux-pm+bounces-25342-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25343-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5135FA877A3
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 08:01:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52465A877C1
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 08:09:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5401A16F98D
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 06:01:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17B963AE694
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 06:09:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C16C519DF5B;
-	Mon, 14 Apr 2025 06:01:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2571319DF5B;
+	Mon, 14 Apr 2025 06:09:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="eNecHrcs"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="SdOUyh/J"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2050.outbound.protection.outlook.com [40.107.104.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE28B28F4;
-	Mon, 14 Apr 2025 06:01:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744610475; cv=none; b=bjGbeIO1hohwAQtkUMNFoc+oLj+sNgHp4cn8B0ajB6yB9J+/SgzCGdoYm8MjBVXmBsRsmFHNoZnm2/28mrFUU4pQb2sTXowMbs07B0UoyeFQy0opJIBG+LAS+7hew4kShVAJtF30aqkwTICOY1K/UtEKq6QeLFsVE4BS/P7Bj+A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744610475; c=relaxed/simple;
-	bh=mSAY3a+fSWoE+a40aq6TToaWfWJC62cAV9qkF6Bc0kQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Vv/lXYXkcv92nGbDyKW2Au3yWA4Agdm0LYzpaplw/E6KA5L/8K8JCcK8vwX3f7EIq3CPu7jb2dHGXF9tU5xsqQovwFQZzLICZl4Cln0WuyIq05SPGDozpsZcbnybnMTfY1rA1T2a9X/C+QboHvdh1XYw+yTKVUeSCy94MATZlK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=eNecHrcs; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53DMeTOQ003355;
-	Mon, 14 Apr 2025 06:01:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=R3UXd/
-	FoEzDEZ/l6o/aqQq+UWAbcKTgnnD42YUOJCY8=; b=eNecHrcsrS1a/y7znP+A0k
-	GGRMP0NWewHBde4wToXNIz6IxU/TG7b4ojMJrmtc8pEJgibO8MTR5jI1MvEHl54x
-	Izut+aw+czZ1u5kRuLvIM/3ZnPDsxS6rjSuKPJD/AMP71y6Mq6wV/2x1lvbFc3hh
-	x4GnecjoiJsAiuvMGE76kQo/HEkJlcTqeetb6RFOJj5Vs3VvXbmvEhwWklTgqcSg
-	nFjTSpCZC9ZzfyEYY23gue8VmwDF/IVPspRgw7UGapWwbKEozHyUo5CYU+LqHX9r
-	6NmHOz3qcYWHYD954vIHuDvwQ3c7avVSAUtrjsCBOgtYN/5hFHFSjMaZL6J20E1A
-	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 460ndssctj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 14 Apr 2025 06:01:07 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 53E4tTYs016407;
-	Mon, 14 Apr 2025 06:01:06 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 460571vj4b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 14 Apr 2025 06:01:06 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 53E615g031982248
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 14 Apr 2025 06:01:05 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 473FB58063;
-	Mon, 14 Apr 2025 06:01:05 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 55C6C5805A;
-	Mon, 14 Apr 2025 06:01:02 +0000 (GMT)
-Received: from li-c18b6acc-24ee-11b2-a85c-81492619bda1.ibm.com (unknown [9.43.55.58])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 14 Apr 2025 06:01:01 +0000 (GMT)
-Message-ID: <ceb2759f3bdcebc4be99d8967b9292a9b85fadc7.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 1/1] cpuidle: menu: Prefer polling state for short
- idle durations
-From: Aboorva Devarajan <aboorvad@linux.ibm.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-        Christian Loehle
-	 <christian.loehle@arm.com>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Gautam Menghani	
- <gautam@linux.ibm.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date: Mon, 14 Apr 2025 11:31:00 +0530
-In-Reply-To: <CAJZ5v0js=Ca4MtcTa2zO2B_fCZNJrOAJzRKAPWSD6fFzn88z_w@mail.gmail.com>
-References: <20250317060357.29451-1-aboorvad@linux.ibm.com>
-	 <525a2352-dc57-45ca-adb2-f7039c37145e@arm.com>
-	 <CAJZ5v0js=Ca4MtcTa2zO2B_fCZNJrOAJzRKAPWSD6fFzn88z_w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54F8E191F95;
+	Mon, 14 Apr 2025 06:09:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.104.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744610995; cv=fail; b=GQcX9vcAi+Euqq+JzZGGVUScTpAOfQfvhmPN7c/AocF7zWi2i6rxoi7Ha9D6f0jx7k9C7SgDvbl/q8Rq4llayr5DAMEIpfo56aYTmzb+7A83VKorW/iTZtA814nXIds7GKfVqx/E2+vUs/ULOaXBOSjarmogHWZhW7/K+GzlL6o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744610995; c=relaxed/simple;
+	bh=YdhsN156COUWlk9uFSm1pMbi6H3bQi1TYhehQMeANCE=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=ohCMGJWg1sjg0nCioCS90Dc6419OPansr6wu/cpgP2hILzD8huhN6hcvWVifyTJdIo7GJmKLvVfHRWawxlpt+iV8ANNnpjNHmpwPKdk0ZQ3atAGDeehzXDOsdstBUbtUihn/6KVg8ynCdfGzIgJad+5XgtqwrqciMqraWuHAJBk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=SdOUyh/J; arc=fail smtp.client-ip=40.107.104.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XymWrqTHsEGaPNg+TRN8iUgwR0bjFntFTL9u8rq23DpV9blLKIEXgrg2jfk2FDlme8KXPtMINn3uw3afnL05iMQ9Zx6x5dYP8QsuWj/PwnhCdzzI8ApNW53WCvaZgTBl9acrIQOgVN5oa18lqKCotWVV+rRpcZE/B/v6UexpYRGn7JdmotIlnxSTf+0oP5JMU8Hc75yOD4O88uYx8G5qPN8yiS0iQRp39GNXinYf91jkmmHXDyTYE+ODMWAGflS/kBwe8buSyYFaLAkxgchepF/tmp8LdYqsEwmCXgoL1XGvZy+CdXV0BhYzcAQfXv3q6eUr6bAP0hJtROvrMomj1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xVAg16JVCAiG9MQW0qpPpwc3/MP7bc75m1yF5eeUErA=;
+ b=cZT1slbWvsqiAgJ+qVY/1T+7UBEtPud6KeDUxTZVj8/sdnJ1K3HUNhCPfkSSNb7z7YylRoV7ukNJyp8XP4dx+B2Y1kypy0Xcvo8D4NLPz8mlKDO+8KVe4oY30Ie/86gy1dfQ6ke08wI3ff1kjBW/a5089zdjBkiBiGfvaSgB6XYGqOajiI0+lRxSyV7ubuquVuA2u8GQzXrnXnqTVVbAY0dM7TXxxZbEr3E19nTjZ/MxM/LF7W2KFvfnr3wMgTCfOE1/4j/P0HqfP4redMECQxIi4RBQtCQMH/Sz4hxZr6ZMY44sAOZ4Tfcyt86VVX19krmuMFtk/8xp2OipA1iHKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xVAg16JVCAiG9MQW0qpPpwc3/MP7bc75m1yF5eeUErA=;
+ b=SdOUyh/JHtr7W7hVpk6tLXHFTuZB1r7kyZvvQfhP0P6+Wad2Jc7eBvFrV0hrWvjxdw2K3efvb2owzIII/tqL59V4olDloccHUSJUuYR7zUvrJDFvVrAQM9M0yZOG6t6Y/XHv78rFijRilUxNlWkCKIwWgtaEvg+0fDlO3ephT1YqHuOa31DNoGefLteFi1bqDCqAf3svVfheWiI17gde7xCTpqW7Ev58SoTJWiZCCxpUZbNYxvA7wXJerD30aS/mM7RJTsiVgLKfK/1Tjp50oqCCHPWWKMtd0+ys63HdqnXHIprsz1yTCipMFw7szGIKXXhJSxj0Bg+spmElc65sAg==
+Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
+ by DBAPR04MB7221.eurprd04.prod.outlook.com (2603:10a6:10:1b1::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.32; Mon, 14 Apr
+ 2025 06:09:49 +0000
+Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
+ ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
+ ([fe80::165a:30a2:5835:9630%5]) with mapi id 15.20.8632.030; Mon, 14 Apr 2025
+ 06:09:49 +0000
+From: Peng Fan <peng.fan@nxp.com>
+To: Hiago De Franco <hiagofranco@gmail.com>
+CC: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, Ulf Hansson
+	<ulf.hansson@linaro.org>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer
+	<s.hauer@pengutronix.de>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "regressions@lists.linux.dev"
+	<regressions@lists.linux.dev>, Hiago De Franco <hiago.franco@toradex.com>
+Subject: RE: [REGRESSION] Kernel reboots unexpectdely on i.MX8X when Cortex-M4
+ is running and it was started by U-Boot bootaux
+Thread-Topic: [REGRESSION] Kernel reboots unexpectdely on i.MX8X when
+ Cortex-M4 is running and it was started by U-Boot bootaux
+Thread-Index: AQHbpWxIyVwHrK1A2UqE7zPASmzQ0LOedbwAgAAHyXCAADO/AIAECmYA
+Date: Mon, 14 Apr 2025 06:09:49 +0000
+Message-ID:
+ <PAXPR04MB8459ED33238AA790252E730988B32@PAXPR04MB8459.eurprd04.prod.outlook.com>
+References: <20250404141713.ac2ntcsjsf7epdfa@hiago-nb>
+ <20250411125024.i2pib4hyeq4g6ffw@hiago-nb>
+ <PAXPR04MB8459ED6CE869173D4051257088B62@PAXPR04MB8459.eurprd04.prod.outlook.com>
+ <20250411162328.y2kchvdb4v4xi2lj@hiago-nb>
+In-Reply-To: <20250411162328.y2kchvdb4v4xi2lj@hiago-nb>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR04MB8459:EE_|DBAPR04MB7221:EE_
+x-ms-office365-filtering-correlation-id: 5f00f20e-aedf-421d-1612-08dd7b1af6b0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?GS08y8v7Bj0UdXM+YFZgacSaOkA5sDgnlGJqMejUa8p8q8g5Bu88WgfGafZ1?=
+ =?us-ascii?Q?ZL6bVtyG5X3MQsar34vxEALXIOCZNmAgDMVRPmxlKYSDYdeN2QTWHapsWf16?=
+ =?us-ascii?Q?R8CWEFKjV/QnQ0H7QT4+FpeKvbLjsA5TMWP/7eOWp3rp/XYixwUqOxX3RwZZ?=
+ =?us-ascii?Q?TjtFOuZYOZsPT1rlFdc2bFZl6W02DhhTKu+R3/YNn6MSFxRkcfMqpfSNHjZ2?=
+ =?us-ascii?Q?28AilgMDfl27LJFOyRP6dBJElJV9lWdp0SV1UstzCrklv7WVbxsrSVrD2p0S?=
+ =?us-ascii?Q?8MOIZ5M0e03gw13NewoZoQS4/B0GY3zGFS0DpMxJwIkamb2Ip56eqcJpjlaB?=
+ =?us-ascii?Q?AXVttCJyTl6lXxdm0kuHIWlFJKrFJjBUtkvLuBWs3SisK/wEtlqAHQeQj6ZW?=
+ =?us-ascii?Q?v5Gq7AtQH+KH2QI2R5ZDXPYnW5ZNZxA+QfV1WlTP3WR/UJIv4QSYqLllKfkj?=
+ =?us-ascii?Q?nJo9oE/rbn4obqcmsF3DAC0yBwP4xqPnGQpE+FPqiNhdDx76gxSzau76jk28?=
+ =?us-ascii?Q?82pArh+qi6bkXElHUOZLTBgBGaBuHIzzJr9t5GUlu9UYUuFV3gS+ASrPTZla?=
+ =?us-ascii?Q?muYpJQEQulDT1FUOaszMt0UshDEKt+IDFxjTFr9IpeOHuEL31uV5MWw3DEJf?=
+ =?us-ascii?Q?qBLt1stkEyoOXaV4eJrDT8gRZRqbi7TSiU9SmcMzCzldicwEQ/zgU9YdgqCI?=
+ =?us-ascii?Q?lcL1Xl2uQP43yZoE3uTQZV71kzv/1gPj1unSOwXomQN3N/H8fyGL62kyo5cM?=
+ =?us-ascii?Q?lHcA0G8dNNRk948yjAb0apKR5q4BBMuVjtHvfTJsG2a9fhbco63Yh2479Ton?=
+ =?us-ascii?Q?pEoXGr6rpGJxQXE9EoTSF96XA6R/jtniDCA8ipu/5U78lPjP1DPwzymbqNpv?=
+ =?us-ascii?Q?zgiDjNZdy1M7iFAN2YVYyJ8w0evCUVBi92FetWiWczSVgr8k0F5iQBW3LWnx?=
+ =?us-ascii?Q?jv5uMYs2pPX6n/HAG/nNOP7pGAcOxLOpgRc+YGQSA/YP3TjoeBENhzpyOkaw?=
+ =?us-ascii?Q?3dUwROFtHzw810cyG1JkllrqlPt91kgUneJ4S0UoaqZL5FUF56H/twXS3uar?=
+ =?us-ascii?Q?SMUh58PraJGyWnN4CqNgcGIP+SLVEeUSwEPEmQU1Wxelzsa2aTC6i81u3Hxv?=
+ =?us-ascii?Q?N6kZMmJWX+gV/tG2qZ8F1mN8rcI85fG0b5cfL8f85tSt74oIahicAC1o+C/3?=
+ =?us-ascii?Q?ExIJ+2nC7pQq0YqJTgZ2uT0Y0dwJ9UKO7zjmMm10Vhpjggn1U64ZdWctKsio?=
+ =?us-ascii?Q?C/OqnU9py5DFecIUWJwbl48TYO9ECEvGSYeAYRsz5wDFjiipPRnK1dAKcYdM?=
+ =?us-ascii?Q?z6kZ7MgGTC3cz/WPLn7zqLxtKpKAqCQUH/CUuNQHS7DUOJuQi8668e6jvp9m?=
+ =?us-ascii?Q?x8i/qa6Q4zdxFckfogezEk0Df6iteyrYD+23c2exkzjXfCYi3IzMd7esA200?=
+ =?us-ascii?Q?bsw+JgiGO4OQd/71X6BJ5SYOZs8vfbH6yhKmUePPfLoFzZ6cHxq7zw=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?f/CQh87NgFmyD4RNKR5C5yawiDxo9uNGpbkRlEcESP66JGZk0/bQNsrUDy0x?=
+ =?us-ascii?Q?lvURllKdvMBdJBxFa39zjA1prJ1WlbGGK4HmXuZYLEvlRxnMlOuXAL71pR4Q?=
+ =?us-ascii?Q?trNDYfpERXgoKqPJ56ae+nlf39/rsPOenJLUJD0iGQk3i9nijeYmNN/IU3tk?=
+ =?us-ascii?Q?nx4OOguA5BVkLSMgmCe6ctUClK58m5LabfMP/rjccEkg6/D1CcfoYHOw2EUP?=
+ =?us-ascii?Q?0546JWZ/OnX9O9DzQ9HXv9nQacwiWkI6Q8Pw5mK3rO4YSVcs1UJJMnoZnZUe?=
+ =?us-ascii?Q?TSYrNC9zioFdiGWAaVKEIHe4YytVlHOUQ9J+nVwygoOgiehKE/oax3uwv61p?=
+ =?us-ascii?Q?XP/rPMkWgwEGRVipNwb4v+UGyYnybtypghuQ5KowS80YIY0fye+cpWATDB5H?=
+ =?us-ascii?Q?olqMUahJHoBGN53hqZQ8QC5/YejENqTlMIlJB7iuLSQ6yNo1s08F7w0mfESo?=
+ =?us-ascii?Q?szFV2wBzUn6AgdkZHPqDNpC6woRotf0AdtUIH5Nl1adXKBH+D3pHfErVuUEB?=
+ =?us-ascii?Q?0zrvsDTtowwCLM6Wrunr9Z+ck+/tqV7XBsUYg31cZt2GbEI+BnnAsFzwu31d?=
+ =?us-ascii?Q?2HeeIVVWquWfRuMMYiZy4ZaVdIoSpSl3LR0LUMbAZfqRoqDIBDaM5pEZ2ZrI?=
+ =?us-ascii?Q?b2hyr7n3V6KFAAPwU4+S9NFel0BXxudKYzwwMdw7MzKjxmUVLhxiLGkBQe8m?=
+ =?us-ascii?Q?sgI9dugMIg5ojmZg5vsCbsxtx924HF+TEoHDKAYmpz4mu2XO4Krtvyv0vK5+?=
+ =?us-ascii?Q?C/7Fog9Kbj2tZNQGBHtr9BhT9HOlJLk7EudIcwtNsFBJ5gY6G61xm2GsAUhG?=
+ =?us-ascii?Q?ovO5CS9a1gD2ZNHP8IFQoi2CELqliX58ZljFqDhrnCnAAOv1E9B/xdkzy8s+?=
+ =?us-ascii?Q?tH8dafQLz/k+Etq/IkNe4PpWMAxQWwd0zuEgpyet72FpfxGK687C96veoEXS?=
+ =?us-ascii?Q?OmgV7+AmBFMsk4lrEVSiNjpvLg4zDc533/0/wp0/tS2qvFH/4rFAQs0Ggvuf?=
+ =?us-ascii?Q?n3SagwI7srAwFaY6ebn2gaseX4NAOizVANpJfYpdFEXisc7OuHcetVL6fV2L?=
+ =?us-ascii?Q?cJNnUZP2j1uf2wfbhMaxPwamdKoweorwDJJHDdA3ziYShnvRT4ww+LzqihSd?=
+ =?us-ascii?Q?gh5CZWFRiojU6Y75+E9Fs5vX78knhOkZY96fjW0bWTEgk3txTaG5lHDuup8i?=
+ =?us-ascii?Q?qPR4o4ErRycV7apfNRCfnvk3wXQgBdqVIXsd23K0Z3X3Pw9R6KnU+nkIJWhE?=
+ =?us-ascii?Q?ouHLIanIHsJ4mlA1pbRjy3NrIErROsQhGdJLl44LjTV18RSGqlEiSeKkDm80?=
+ =?us-ascii?Q?54uo/3NZVPl3NbQ6AUTVpxgLFQgT7fRGzhsMDXT6HhiyxBJNyOdL4m/GJOpQ?=
+ =?us-ascii?Q?CjcldavTgd/qLT2IawW9pyevSZxIKov91DmqUTOgQMUINXwV3pFkDG3yD2EN?=
+ =?us-ascii?Q?XnjX1/Rao3wD6SMeOuiKtcxNA1uUB1adq0fvO0adngp7fVHiThzHUVliVoEU?=
+ =?us-ascii?Q?K8NctyEe30U5cmrC9B04hmHpaDLOFD7t1/OLmCoc4hAk9Dz9NsrrxDMDjFaU?=
+ =?us-ascii?Q?sawUbO2t86e9VRQPUaY=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: B9HCfGWrE8rNVFWt8NdnCucvliKio5zo
-X-Proofpoint-ORIG-GUID: B9HCfGWrE8rNVFWt8NdnCucvliKio5zo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-14_01,2025-04-10_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
- mlxscore=0 malwarescore=0 suspectscore=0 priorityscore=1501
- mlxlogscore=999 bulkscore=0 spamscore=0 adultscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502280000 definitions=main-2504140042
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f00f20e-aedf-421d-1612-08dd7b1af6b0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Apr 2025 06:09:49.4370
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 3teFmPanowaMfJr698OjANhcCST/M/nnH0OyO5KbIfZEUrbxf3c7BBqerVQQ2GAXtQRXjaSy2+qklszAiTmztA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7221
 
-On Tue, 2025-04-01 at 18:58 +0200, Rafael J. Wysocki wrote:
-> On Mon, Mar 17, 2025 at 9:35=E2=80=AFAM Christian Loehle
-> <christian.loehle@arm.com> wrote:
-> >=20
-> > On 3/17/25 06:03, Aboorva Devarajan wrote:
-> > > Avoid selecting deep idle state when the predicted idle duration is
-> > > shorter than its target residency, as this leads to unnecessary state
-> > > transitions without energy savings.
-> > >=20
-> > > On virtualized PowerPC (pseries) systems, where only one polling stat=
-e
-> > > (Snooze) and one deep state (CEDE) are available, selecting CEDE when
-> > > its target residency exceeds the predicted idle duration hurts
-> > > performance.
-> > >=20
-> > > For example, if the predicted idle duration is 15 us and the first
-> > > non-polling state has a target residency of 120 us, selecting it
-> > > would be suboptimal.
-> > >=20
-> > > Remove the condition introduced in commit 69d25870f20c
-> > > ("cpuidle: fix the menu governor to boost IO performance") that
-> > > prioritized non-polling states even when their target residency
-> > > exceeded the predicted idle duration and allow polling states to
-> > > be selected when appropriate.
-> > >=20
-> > > Performance improvement observed with pgbench on PowerPC (pseries)
-> > > system:
-> > > +---------------------------+------------+------------+------------+
-> > > > Metric=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | Baseline=C2=A0=C2=
-=A0 | Patched=C2=A0=C2=A0=C2=A0 | Change (%) |
-> > > +---------------------------+------------+------------+------------+
-> > > > Transactions/sec (TPS)=C2=A0=C2=A0=C2=A0 | 494,834=C2=A0=C2=A0=C2=
-=A0 | 538,707=C2=A0=C2=A0=C2=A0 | +8.85%=C2=A0=C2=A0=C2=A0=C2=A0 |
-> > > > Avg latency (ms)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 | 0.162=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 0.149=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 | -8.02%=C2=A0=C2=A0=C2=A0=C2=A0 |
-> > > +---------------------------+------------+------------+------------+
-> > >=20
-> > > CPUIdle state usage:
-> > > +--------------+--------------+-------------+
-> > > > Metric=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | Baseline=C2=A0=C2=A0=
-=C2=A0=C2=A0 | Patched=C2=A0=C2=A0=C2=A0=C2=A0 |
-> > > +--------------+--------------+-------------+
-> > > > Total usage=C2=A0 | 12,703,630=C2=A0=C2=A0 | 13,941,966=C2=A0 |
-> > > > Above usage=C2=A0 | 11,388,990=C2=A0=C2=A0 | 1,620,474=C2=A0=C2=A0 =
-|
-> > > > Below usage=C2=A0 | 19,973=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 68=
-4,708=C2=A0=C2=A0=C2=A0=C2=A0 |
-> > > +--------------+--------------+-------------+
-> > >=20
-> > > Above/Total and Below/Total usage percentages:
-> > > +------------------------+-----------+---------+
-> > > > Metric=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | Baseline=C2=A0 | Patched |
-> > > +------------------------+-----------+---------+
-> > > > Above % (Above/Total)=C2=A0 | 89.67%=C2=A0=C2=A0=C2=A0 | 11.63%=C2=
-=A0 |
-> > > > Below % (Below/Total)=C2=A0 | 0.16%=C2=A0=C2=A0=C2=A0=C2=A0 | 4.91%=
-=C2=A0=C2=A0 |
-> > > > Total cpuidle miss (%) | 89.83%=C2=A0=C2=A0=C2=A0 | 16.54%=C2=A0 |
-> > > +------------------------+-----------+---------+
-> > >=20
-> > > Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
-> > >=20
-> > > ---
-> > >=20
-> > > v1: https://lore.kernel.org/all/20240809073120.250974-1-aboorvad@linu=
-x.ibm.com/
-> > >=20
-> > > v1 -> v2:
-> > >=20
-> > > - Drop cover letter and improve commit message.
-> > > ---
-> > > =C2=A0drivers/cpuidle/governors/menu.c | 11 -----------
-> > > =C2=A01 file changed, 11 deletions(-)
-> > >=20
-> > > diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/gover=
-nors/menu.c
-> > > index 28363bfa3e4c..4b199377e4be 100644
-> > > --- a/drivers/cpuidle/governors/menu.c
-> > > +++ b/drivers/cpuidle/governors/menu.c
-> > > @@ -296,17 +296,6 @@ static int menu_select(struct cpuidle_driver *dr=
-v, struct cpuidle_device *dev,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 idx =3D i; /* fir=
-st enabled state */
-> > >=20
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 if (s->target_residency_ns > predicted_ns) {
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Use a physic=
-al idle state, not busy polling, unless
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * a timer is g=
-oing to trigger soon enough.
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if ((drv->states[idx=
-].flags & CPUIDLE_FLAG_POLLING) &&
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 s->exit_latency_ns <=3D latency_req &&
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 s->target_residency_ns <=3D data->next_timer_ns) {
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 predicted_ns =3D s->target_residency_ns;
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 idx =3D i;
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (predicted_ns =
-< TICK_NSEC)
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> > >=20
-> >=20
-> > I'm still fine with this and don't see a better way to solve the report=
-ed
-> > issue generally, see the discussion on v1.
-> > Rafael, do you have any objections?
+> Subject: Re: [REGRESSION] Kernel reboots unexpectdely on i.MX8X
+> when Cortex-M4 is running and it was started by U-Boot bootaux
 >=20
-> The behavior change on x86 would be rather unacceptable I'm afraid.
+> Hi Peng,
 >=20
-> As already stated in a different thread today, on x86 the polling
-> state turns out to be overly shallow most of the time even before this
-> patch.
+> On Fri, Apr 11, 2025 at 01:23:32PM +0000, Peng Fan wrote:
+> > Hi,
+> >
+> > Sorry for late.
+> > > Subject: Re: [REGRESSION] Kernel reboots unexpectdely on i.MX8X
+> when
+> > > Cortex-M4 is running and it was started by U-Boot bootaux
+> > >
+> > > On Fri, Apr 04, 2025 at 11:17:13AM -0300, Hiago De Franco wrote:
+> > > > #regzbot introduced: 4f6c983261
+> > > >
+> > > > Hi Peng and all,
+> > > >
+> > > > Commit 4f6c9832613b ("genpd: imx: scu-pd: initialize is_off
+> > > according
+> > > > to HW state") introduced a regression where the Kernel reboots
+> > > > unexpectedly (without any warnings, crashes or errors) when the
+> > > > Cortex-M4 was loaded and running by U-Boot, using the bootaux
+> > > command:
+> > > >
+> > > > # load mmc 0:2 ${loadaddr} /home/root/hello_world.bin #
+> bootaux
+> > > > ${loadaddr} 0 # boot
+> > > >
+> > > > This is a simple hello world binary that prints a message into the
+> > > > M40.UART0 pin (demo from NXP MCUXpresso).
+> >
+> > Which release is this image from?
 >=20
-> > We could make this conditional on there being a high latency difference=
- between
-> > polling and non-polling to keep x86 behavior.
+> This is MCUXpresso SDK 2.9.0.
 >=20
-> If I'm not mistaken, to address the issue at hand, it would be
-> sufficient to add an "s->target_residency_ns < RESIDENCY_THRESHOLD_NS"
-> condition to the if () statement removed by this patch, wouldn't it?
+> >
+> > > >
+> > > > Before this commit, everything worked as expected, Linux boots
+> > > > fine and the HMP core keeps running and printing messages to
+> the UART.
+> > > > After the commit, the kernel reboots at the beggining of the boot
+> > > > process. The only relevant message is printed by U-Boot after
+> reset:
+> > > >
+> > > > "Reset cause: SCFW fault reset"
+> > > >
+> > > > This commit was bisectabled, the same device tree, u-boot
+> version,
+> > > and
+> > > > SCFW versions were used. Reverting this commit fixes the issues.
+> > > >
+> > > > For testing purposes, I created the following patch which also
+> > > > fixes the
+> > > > issue:
+> > > >
+> > > > diff --git a/drivers/pmdomain/imx/scu-pd.c
+> > > > b/drivers/pmdomain/imx/scu-pd.c index
+> > > 38f3cdd21042..0477b3fb4991
+> > > > 100644
+> > > > --- a/drivers/pmdomain/imx/scu-pd.c
+> > > > +++ b/drivers/pmdomain/imx/scu-pd.c
+> > > > @@ -539,6 +539,9 @@ imx_scu_add_pm_domain(struct device
+> > > *dev, int idx,
+> > > >                 return NULL;
+> > > >         }
+> > > >
+> > > > +       if (strstr("cm40", sc_pd->name) !=3D NULL)
+> > > > +               is_off =3D true;
+> > > > +
+> > > >         ret =3D pm_genpd_init(&sc_pd->pd, NULL, is_off);
+> > > >         if (ret) {
+> > > >                 dev_warn(dev, "failed to init pd %s rsrc id %d",
+> > > >
+> > > >
+> > > > Test Environment:
+> > > > - Hardware: Colibri iMX8DX 1GB with Colbiri Evaluation Board.
+> > > > - U-Boot Version: 2024.04
+> > > > - U-Boot Build info:
+> > > > 	SCFW 83624b99, SECO-FW c9de51c0, IMX-MKIMAGE
+> > > 4622115c, ATF 7c64d4e
+> > > >
+> > > > The issue is not present on: v6.5
+> > > >
+> > > > The real root cause is still unclear to me. Anybody has any ideas?
+> > > > I am happy to share more details if needed.
+> >
+> > Have you tried pd_ignore_unused?
+> >
+> > I think it is linux power down M4 which M4 is running, then SCFW
+> > reports error. So please give a try pd_ignore_unused.
+>=20
+> For debugging purposes, I tried it and it works, kernel boots fine with
+> M4 running and pd_ignore_unused parameter.
+>=20
+> >
+> > If this is the case, may I know do you have m4 nodes in dts and with
+> > power domain included?
+>=20
+> This is the device tree overlay I am testing:
+>=20
+> /dts-v1/;
+> /plugin/;
+>=20
+> #include <dt-bindings/clock/imx8mm-clock.h>
+> #include <dt-bindings/firmware/imx/rsrc.h>
+>=20
+> / {
+> 	compatible =3D "toradex,colibri-imx8x";
+> };
+>=20
+> &{/} {
+> 	imx8x-cm4 {
+> 		compatible =3D "fsl,imx8qxp-cm4";
+> 		mbox-names =3D "tx", "rx", "rxdb";
+> 		mboxes =3D <&lsio_mu5 0 1
+> 			  &lsio_mu5 1 1
+> 			  &lsio_mu5 3 1>;
+> 		memory-region =3D <&vdevbuffer>, <&vdev0vring0>,
+> <&vdev0vring1>,
+> 				<&vdev1vring0>, <&vdev1vring1>,
+> <&rsc_table>;
+> 		power-domains =3D <&pd IMX_SC_R_M4_0_PID0>,
+> 				<&pd IMX_SC_R_M4_0_MU_1A>;
+> 		fsl,entry-address =3D <0x34fe0000>;
+> 		fsl,resource-id =3D <IMX_SC_R_M4_0_PID0>;
+> 	};
+>=20
+> 	reserved-memory {
+> 		#address-cells =3D <2>;
+> 		#size-cells =3D <2>;
+> 		ranges;
+>=20
+> 		vdev0vring0: memory@90000000 {
+> 			reg =3D <0 0x90000000 0 0x8000>;
+> 			no-map;
+> 		};
+>=20
+> 		vdev0vring1: memory@90008000 {
+> 			reg =3D <0 0x90008000 0 0x8000>;
+> 			no-map;
+> 		};
+>=20
+> 		vdev1vring0: memory@90010000 {
+> 			reg =3D <0 0x90010000 0 0x8000>;
+> 			no-map;
+> 		};
+>=20
+> 		vdev1vring1: memory@90018000 {
+> 			reg =3D <0 0x90018000 0 0x8000>;
+> 			no-map;
+> 		};
+>=20
+> 		rsc_table: memory@900ff000 {
+> 			reg =3D <0 0x900ff000 0 0x1000>;
+> 			no-map;
+> 		};
+>=20
+> 		vdevbuffer: memory@90400000 {
+> 			compatible =3D "shared-dma-pool";
+> 			reg =3D <0 0x90400000 0 0x100000>;
+> 			no-map;
+> 		};
+> 	};
+> };
+>=20
+> &lsio_mu5 {
+> 	status =3D "okay";
+> };
+>=20
+> This was basically copied from
+> arch/arm64/boot/dts/freescale/imx8qxp-mek.dts. Do you see anything
+> wrong? Should I also add the "clocks" property to imx8x-cm4 node?
 
-Hi Rafael,
+In your case, m4 is in same scu partition as a53, so m4
+power domain is manageable(owned) by Linux.
 
-Thanks for your response. Since the first physical state for the pseries sy=
-stem
-(PowerVM) has a target residency of is 120 us, adding the condition
-`s->target_residency_ns < RESIDENCY_THRESHOLD_NS` will indeed resolve the i=
-ssue.
+However to m4 earlyboot(kicked by bootloader),
+if you not wanna linux to handle m4, use scu_rm
+to create a separate partition in u-boot.
+If you wanna linux to handle m4, but not wanna linux
+to shutdown the pd in kernel boot, imx_rproc.c
+needs to be built in, and need to add a clock entry
+or use clock optional api in imx_rproc.c .
 
-This change will ensure we only switch if the target residency of the physi=
-cal polling
-state is below 15 us which should be good.
+Current imx_rproc.c needs a clock entry to probe pass.
 
-
-Basic CPU Idle test: (1) carried out on a PowerVM (Power10) system.
-
-Base Kernel:  =20
- CPU Wakee  CPU Waker  Sleep Interval (us)  Total Usage Diff  Total Time Di=
-ff (ns)  Total Above Diff  Total Below Diff  Above %  Below %
-        10         39                2.585            302245               =
- 463259                 5                 0     0.00     0.00
-        10         39                4.735           1023429               =
-2449157                 7                 2     0.00     0.00
-        10         39                7.339           1321973               =
-2542391                 6                 0     0.00     0.00
-        10         39               12.376            798039               =
-5429695                 5                 0     0.00     0.00
-        10         39               22.373            443568               =
-7677710            232439                 0    52.40     0.00
-        10         39               32.472            306655               =
-8514874            306552                 0    99.97     0.00
-        10         39               42.385            235004               =
-8800135            231795                 1    98.63     0.00
-        10         39               52.461            190079               =
-9029907            187694                 1    98.75     0.00
-        10         39               62.473            159704               =
-9182151            157656                 0    98.72     0.00
-        10         39               72.442            137826               =
-9282009            136055                 1    98.72     0.00
-        10         39               82.462            120114               =
-9308294            118640                 1    98.77     0.00
-        10         39               92.464            106081               =
-9278734            104725                 2    98.72     0.00
-        10         39              102.477             96663               =
-9422966             95415                 2    98.71     0.00
-        10         39              112.413             88117               =
-9459074             86972                 1    98.70     0.00
-        10         39              122.465             80942               =
-9497520             79064                10    97.68     0.01
-        10         39              132.430             75825               =
-9544063              1035               913     1.36     1.20
-        10         39              142.442             70511               =
-9561624               969               843     1.37     1.20
-        10         39              152.449             65929               =
-9586042               936               762     1.42     1.16
-        10         39              202.425             49782               =
-9636037               960               591     1.93     1.19
-        10         39              302.405             33770               =
-9749277               415               392     1.23     1.16
-        10         39              402.443             25403               =
-9701667               306               292     1.20     1.15
-        10         39              502.433             20751               =
-9826491               245               236     1.18     1.14
-        10         39              602.451             17468               =
-9832612               208               203     1.19     1.16
-        10         39              702.492             15135               =
-9847269               193               168     1.28     1.11
-        10         39              802.501             13369               =
-9856279               159               151     1.19     1.13
-        10         39              902.507             12007               =
-9862544               147               138     1.22     1.15
-        10         39             1002.499             10906               =
-9865485               132               135     1.21     1.24
-       =20
-With suggested change:    =20
- CPU Wakee  CPU Waker  Sleep Interval (us)  Total Usage Diff  Total Time Di=
-ff (ns)  Total Above Diff  Total Below Diff  Above %  Below %
-        10         39                2.682            247169               =
- 433222                 1                 0     0.00     0.00
-        10         39                4.803           1007178               =
-2560799                 6                 0     0.00     0.00
-        10         39                7.357           1327004               =
-2754768                 6                 1     0.00     0.00
-        10         39               12.362            799098               =
-5556114                 6                 0     0.00     0.00
-        10         39               22.380            443901               =
-7402339                 6                 2     0.00     0.00
-        10         39               32.388            307357               =
-8190282                 6                 1     0.00     0.00
-        10         39               42.423            234908               =
-8625490                 6                 0     0.00     0.00
-        10         39               52.425            190224               =
-8882797                 0                 0     0.00     0.00
-        10         39               62.354            159019               =
-9000032                 6                 0     0.00     0.00
-        10         39               72.380            137887               =
-9182585                11                 4     0.01     0.00
-        10         39               82.412            121129               =
-9285328                 2                 1     0.00     0.00
-        10         39               92.398            107844               =
-9326098                 3                15     0.00     0.01
-        10         39              102.456             97320               =
-9408519                 3                 1     0.00     0.00
-        10         39              112.358             88884               =
-9468555                 6                 4     0.01     0.00
-        10         39              122.402             81630               =
-9517007                 6                42     0.01     0.05
-        10         39              132.359            111082               =
-9528254             38190             37018    34.38    33.32
-        10         39              142.368             71612               =
-9636036              1309              1318     1.83     1.84
-        10         39              152.466             66791               =
-9663690              1152              1086     1.72     1.63
-        10         39              202.453             50412               =
-9745668               999               707     1.98     1.40
-        10         39              302.454             34045               =
-9828326               429               427     1.26     1.25
-        10         39              402.480             25851               =
-9868703               319               328     1.23     1.27
-        10         39              502.407             20931               =
-9877533               273               271     1.30     1.29
-        10         39              602.440             17602               =
-9878219               224               225     1.27     1.28
-        10         39              702.465             15254               =
-9915818               192               196     1.26     1.28
-        10         39              802.452             13462               =
-9930026               161               158     1.20     1.17
-        10         39              902.461             12089               =
-9933506               144               138     1.19     1.14
-        10         39             1002.483             10988               =
-9942937               130               130     1.18     1.18
-       =20
+I think in your case, this driver not probe pass, so the
+M4 pd still get powered off.
 
 
+Regards,
+Peng.
 
-I'm a bit curious on why RESIDENCY_THRESHOLD_NS is hardcoded to 15 us? Woul=
-d it make sense to make this value tunable instead?
-
-I actually have a patch that makes it configurable via sysfs to include it =
-along with this change if you think that would be useful.=20
-
-Looking forward for your comments on this.
-
-Thanks and regards,
-Aboorva
-
-[1]: https://github.com/AboorvaDevarajan/linux-utils/tree/main/cpuidle/cpui=
-dle_wakeup
+>=20
+> >
+> > Anyway, I will give a try on i.MX8QM EVK.
+>=20
+> Great, thanks.
+>=20
+> >
+> > >
+> > > Hello everyone, as this introduced a regression, should I send a
+> > > revert for 4f6c983261?
+> >
+> > Please wait a while, I think we need find root cause.
+> >
+> > Thanks,
+> > Peng.
+> >
+> > Or any ideas that might help fix this issue?
+> > >
+> > > >
+> > > > Cheers,
+> > > > Hiago.
+> > >
+> > > Cheers,
+> > > Hiago.
+>=20
+> Cheers,
+> Hiago.
 
