@@ -1,167 +1,163 @@
-Return-Path: <linux-pm+bounces-25347-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25348-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52652A87919
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 09:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 47531A87947
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 09:45:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 065361712C0
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 07:40:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E76B7161EF1
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 07:44:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8198D25A358;
-	Mon, 14 Apr 2025 07:35:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11B6225B66A;
+	Mon, 14 Apr 2025 07:43:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="azFDULDu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C88C1259C9D
-	for <linux-pm@vger.kernel.org>; Mon, 14 Apr 2025 07:35:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F05257AD7;
+	Mon, 14 Apr 2025 07:43:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744616145; cv=none; b=UW5lDbmaEgcW3gRq46TMueRMM026UgdfyV9Gtf8tV9/PgeGzwOWZgRDakKb8L7B5VS54IQTwUTjFVX31VNmWKHhfK0GCJA0RB9dhbGsRXmiw/CjsFUI+my9n98iWwNzgaJ5rzgWMKzyV0EiiyF9KjKRxHnkd15ZKjxZM4DSbQBU=
+	t=1744616607; cv=none; b=lpZPb4d9nSGMBuZcJTeDo2KJ1fOrd7imHf/UPG4IFnOjcdHS+HpiQISJa7N1Os4+6cEMzlRcWCo3fjUiVBGRwhPSFVmqqAZ/KyGCgD2Lt/xjvHLFyRkpFhci6DW+c3H1a5pWCKxXMyalpxAdBy4kKzb4zAlvLBWqNdQmz23QBq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744616145; c=relaxed/simple;
-	bh=Ou2vOurVWHondECFpfTMtcoZVsobG8aP/abnWazjfsk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Ojppz+fJj/Tf6iiacph7H9FcdijYH2JxcQxJlwplZ+8BxXk6wA4P8XRpjVilVp4rLiT9BPRGH5n7hqKpgzaefHAlbevom9KlR2HmjPZKiUKkwlLWMFxi9H5Q/iDF6EySI9cVcz44V/v2rQkMIKkdrVaMkqWGP7LblVFsAlvRcyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1u4ELw-0002p3-QH; Mon, 14 Apr 2025 09:35:36 +0200
-Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1u4ELv-000DDx-2u;
-	Mon, 14 Apr 2025 09:35:35 +0200
-Received: from localhost ([::1] helo=dude05.red.stw.pengutronix.de)
-	by dude05.red.stw.pengutronix.de with esmtp (Exim 4.96)
-	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1u4ELv-00BnLF-2i;
-	Mon, 14 Apr 2025 09:35:35 +0200
-From: Ahmad Fatoum <a.fatoum@pengutronix.de>
-Date: Mon, 14 Apr 2025 09:35:31 +0200
-Subject: [PATCH v3] docs: ABI: replace mcroce@microsoft.com with new Meta
- address
+	s=arc-20240116; t=1744616607; c=relaxed/simple;
+	bh=tf/PEHyYC+GBZMw14mMpsvDNIqms1Sh+qIoWrHc5IsE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Wk5fu97ZP4RFCz8Plki9OsHeqsBY2kBHqHxp46/BjLehztofTkySdpCFIjA3xkKRMOxOcb/M8Z49Anf+wkwTQjUwMK+NQnGeUq3n2/aYokNDr0LaaCe7FCeDAFcSB+Vy3sD6cfx7F/YOTTXTPijoq/ELYr/C5BEL/TgCr6ZRedE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=azFDULDu; arc=none smtp.client-ip=115.124.30.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1744616593; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=C6S9D8CaBKO/q2oBksdQOb459DEafNnNvUFs5jBUstY=;
+	b=azFDULDuHExDCt5FswzsqBiw7GRjdeF5X4tmjj/+mIXPx9ZocY8uR29jO/vEJhIlHYY9a+jvyiDy5CNXeQ2s8vYdiCtZiVhbyTmGgkniYDwsWY/a3gD+yekO7r9dkhQ2Y/ncQGdhcDwpSDfATmFxHfzk1+V1VImjkIVEz/qyfSc=
+Received: from 30.246.161.79(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WWirnWt_1744616589 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 14 Apr 2025 15:43:10 +0800
+Message-ID: <6b313eef-c576-4c0c-8d9f-8ef0bf3cc0fd@linux.alibaba.com>
+Date: Mon, 14 Apr 2025 15:43:09 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250414-fix-mcroce-mail-bounce-v3-1-0aed2d71f3d7@pengutronix.de>
-X-B4-Tracking: v=1; b=H4sIAMK6/GcC/4XNQQ6DIBAF0Ks0rEvDIKJ01Xs0XSiOSlLBgBIb4
- 92LJl01TXfzJ3/erCSgNxjI9bQSj9EE42wK2flEdF/ZDqlpUiaccQEcFG3NQgftnUY6VOZJazf
- bNGe8VIyBVILlJB2PHlPzgO+PlHsTJudfx58I+/YvGYECFSpVQNaSSXYb0Xbz5J01y6VBsruRf
- 6yccSh+WjxZWKqiFTXkuvy2tm17AyCCJoINAQAA
-X-Change-ID: 20241219-fix-mcroce-mail-bounce-328900169405
-To: Matteo Croce <teknoraver@meta.com>, Jens Axboe <axboe@kernel.dk>, 
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, linux-block@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- kernel@pengutronix.de, Ahmad Fatoum <a.fatoum@pengutronix.de>
-X-Mailer: b4 0.14.2
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 10/11] arm64: idle: export arch_cpu_idle()
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-pm@vger.kernel.org, kvm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-acpi@vger.kernel.org, catalin.marinas@arm.com, will@kernel.org,
+ x86@kernel.org, pbonzini@redhat.com, vkuznets@redhat.com, rafael@kernel.org,
+ daniel.lezcano@linaro.org, peterz@infradead.org, arnd@arndb.de,
+ lenb@kernel.org, mark.rutland@arm.com, harisokn@amazon.com,
+ mtosatti@redhat.com, sudeep.holla@arm.com, cl@gentwo.org, maz@kernel.org,
+ misono.tomohiro@fujitsu.com, maobibo@loongson.cn, zhenglifeng1@huawei.com,
+ joao.m.martins@oracle.com, boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+References: <20250218213337.377987-1-ankur.a.arora@oracle.com>
+ <20250218213337.377987-11-ankur.a.arora@oracle.com>
+ <18875bd7-bf01-4ba8-b38a-4c0767e3130e@linux.alibaba.com>
+ <87h62u76xg.fsf@oracle.com>
+ <f384a766-d91a-4db5-9ed6-c1ed6079da1d@linux.alibaba.com>
+ <87ikn75rrn.fsf@oracle.com>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <87ikn75rrn.fsf@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-The Microsoft email address is bouncing:
 
-    550 5.4.1 Recipient address rejected: Access denied.
 
-So let's replace it with Matteo's current mail address.
+在 2025/4/14 11:46, Ankur Arora 写道:
+> 
+> Shuai Xue <xueshuai@linux.alibaba.com> writes:
+> 
+>> 在 2025/4/12 04:57, Ankur Arora 写道:
+>>> Shuai Xue <xueshuai@linux.alibaba.com> writes:
+>>>
+>>>> 在 2025/2/19 05:33, Ankur Arora 写道:
+>>>>> Needed for cpuidle-haltpoll.
+>>>>> Acked-by: Will Deacon <will@kernel.org>
+>>>>> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+>>>>> ---
+>>>>>     arch/arm64/kernel/idle.c | 1 +
+>>>>>     1 file changed, 1 insertion(+)
+>>>>> diff --git a/arch/arm64/kernel/idle.c b/arch/arm64/kernel/idle.c
+>>>>> index 05cfb347ec26..b85ba0df9b02 100644
+>>>>> --- a/arch/arm64/kernel/idle.c
+>>>>> +++ b/arch/arm64/kernel/idle.c
+>>>>> @@ -43,3 +43,4 @@ void __cpuidle arch_cpu_idle(void)
+>>>>>     	 */
+>>>>>     	cpu_do_idle();
+>>>>
+>>>> Hi, Ankur,
+>>>>
+>>>> With haltpoll_driver registered, arch_cpu_idle() on x86 can select
+>>>> mwait_idle() in idle threads.
+>>>>
+>>>> It use MONITOR sets up an effective address range that is monitored
+>>>> for write-to-memory activities; MWAIT places the processor in
+>>>> an optimized state (this may vary between different implementations)
+>>>> until a write to the monitored address range occurs.
+>>> MWAIT is more capable than WFE -- it allows selection of deeper idle
+>>> state. IIRC C2/C3.
+>>>
+>>>> Should arch_cpu_idle() on arm64 also use the LDXR/WFE
+>>>> to avoid wakeup IPI like x86 monitor/mwait?
+>>> Avoiding the wakeup IPI needs TIF_NR_POLLING and polling in idle support
+>>> that this series adds.
+>>> As Haris notes, the negative with only using WFE is that it only allows
+>>> a single idle state, one that is fairly shallow because the event-stream
+>>> causes a wakeup every 100us.
+>>> --
+>>> ankur
+>>
+>> Hi, Ankur and Haris
+>>
+>> Got it, thanks for explaination :)
+>>
+>> Comparing sched-pipe performance on Rund with Yitian 710, *IPC improved 35%*:
+> 
+> Thanks for testing Shuai. I wasn't expecting the IPC to improve by quite
+> that much :). The reduced instructions make sense since we don't have to
+> handle the IRQ anymore but we would spend some of the saved cycles
+> waiting in WFE instead.
+> 
+> I'm not familiar with the Yitian 710. Can you check if you are running
+> with WFE? That's the __smp_cond_load_relaxed_timewait() path vs the
+> __smp_cond_load_relaxed_spinwait() path in [0]. Same question for the
+> Kunpeng 920.
 
-Acked-by: Matteo Croce <teknoraver@meta.com>
-Link: https://lore.kernel.org/all/BYAPR15MB2504E4B02DFFB1E55871955DA1062@BYAPR15MB2504.namprd15.prod.outlook.com/
-Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
----
-get_maintainers.pl picks off the stale address from the file otherwise
+Yes, it running with __smp_cond_load_relaxed_timewait().
 
-[1]: https://lore.kernel.org/all/20241219-hw_protection-reboot-v1-6-263a0c1df802@pengutronix.de/
----
-Changes in v3:
-- drop RFC prefix
-- Link to v2: https://lore.kernel.org/r/20250217-fix-mcroce-mail-bounce-v2-1-e897f4b15c80@pengutronix.de
+I use perf-probe to check if WFE is available in Guest:
 
-Changes in v2:
-- Added Matteo's Acked-by 
-- Link to v1: https://lore.kernel.org/r/20241219-fix-mcroce-mail-bounce-v1-1-4912116b6060@pengutronix.de
----
- Documentation/ABI/stable/sysfs-block          |  2 +-
- Documentation/ABI/testing/sysfs-kernel-reboot | 10 +++++-----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+perf probe 'arch_timer_evtstrm_available%return r=$retval'
+perf record -e probe:arch_timer_evtstrm_available__return -aR sleep 1
+perf script
+swapper       0 [000]  1360.063049: probe:arch_timer_evtstrm_available__return: (ffff800080a5c640 <- ffff800080d42764) r=0x1
 
-diff --git a/Documentation/ABI/stable/sysfs-block b/Documentation/ABI/stable/sysfs-block
-index 3879963f0f01e5f291e40bb7cf3fb638e7a61d6b..11545c9e2e93f2a15637cef6309d875c4ce8e385 100644
---- a/Documentation/ABI/stable/sysfs-block
-+++ b/Documentation/ABI/stable/sysfs-block
-@@ -77,7 +77,7 @@ Description:
- 
- What:		/sys/block/<disk>/diskseq
- Date:		February 2021
--Contact:	Matteo Croce <mcroce@microsoft.com>
-+Contact:	Matteo Croce <teknoraver@meta.com>
- Description:
- 		The /sys/block/<disk>/diskseq files reports the disk
- 		sequence number, which is a monotonically increasing
-diff --git a/Documentation/ABI/testing/sysfs-kernel-reboot b/Documentation/ABI/testing/sysfs-kernel-reboot
-index e117aba46be0e8d3cdff3abfb678f8847a726122..52571fd5ddba517b86bed8867fe6b84c8ed7a6b9 100644
---- a/Documentation/ABI/testing/sysfs-kernel-reboot
-+++ b/Documentation/ABI/testing/sysfs-kernel-reboot
-@@ -1,7 +1,7 @@
- What:		/sys/kernel/reboot
- Date:		November 2020
- KernelVersion:	5.11
--Contact:	Matteo Croce <mcroce@microsoft.com>
-+Contact:	Matteo Croce <teknoraver@meta.com>
- Description:	Interface to set the kernel reboot behavior, similarly to
- 		what can be done via the reboot= cmdline option.
- 		(see Documentation/admin-guide/kernel-parameters.txt)
-@@ -9,25 +9,25 @@ Description:	Interface to set the kernel reboot behavior, similarly to
- What:		/sys/kernel/reboot/mode
- Date:		November 2020
- KernelVersion:	5.11
--Contact:	Matteo Croce <mcroce@microsoft.com>
-+Contact:	Matteo Croce <teknoraver@meta.com>
- Description:	Reboot mode. Valid values are: cold warm hard soft gpio
- 
- What:		/sys/kernel/reboot/type
- Date:		November 2020
- KernelVersion:	5.11
--Contact:	Matteo Croce <mcroce@microsoft.com>
-+Contact:	Matteo Croce <teknoraver@meta.com>
- Description:	Reboot type. Valid values are: bios acpi kbd triple efi pci
- 
- What:		/sys/kernel/reboot/cpu
- Date:		November 2020
- KernelVersion:	5.11
--Contact:	Matteo Croce <mcroce@microsoft.com>
-+Contact:	Matteo Croce <teknoraver@meta.com>
- Description:	CPU number to use to reboot.
- 
- What:		/sys/kernel/reboot/force
- Date:		November 2020
- KernelVersion:	5.11
--Contact:	Matteo Croce <mcroce@microsoft.com>
-+Contact:	Matteo Croce <teknoraver@meta.com>
- Description:	Don't wait for any other CPUs on reboot and
- 		avoid anything that could hang.
- 
+arch_timer_evtstrm_available returns true, so
+__smp_cond_load_relaxed_timewait() is used.
 
----
-base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
-change-id: 20241219-fix-mcroce-mail-bounce-328900169405
+> 
+> Also, I'm working on a new version of the series in [1]. Would you be
+> okay trying that out?
 
-Best regards,
--- 
-Ahmad Fatoum <a.fatoum@pengutronix.de>
+Sure. Please cc me when you send out a new version.
 
+> 
+> Thanks
+> Ankur
+> 
+> [0] https://lore.kernel.org/lkml/20250203214911.898276-1-ankur.a.arora@oracle.com/
+> [1] https://lore.kernel.org/lkml/20250203214911.898276-4-ankur.a.arora@oracle.com/
+> 
+
+Thanks.
+Shuai
 
