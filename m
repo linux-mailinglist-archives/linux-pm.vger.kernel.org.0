@@ -1,115 +1,147 @@
-Return-Path: <linux-pm+bounces-25382-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25383-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6855DA888C5
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 18:41:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1CD5A88949
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 19:02:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 752FD17AD92
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 16:41:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24B091893A1B
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 17:03:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A757288CA7;
-	Mon, 14 Apr 2025 16:41:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41F3F2820D6;
+	Mon, 14 Apr 2025 17:02:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q8L6O3n8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="haXXUUQ5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9EF62820AF;
-	Mon, 14 Apr 2025 16:41:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5B04539A;
+	Mon, 14 Apr 2025 17:02:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744648872; cv=none; b=d65r+QVfdyWI5BnEAX1CBkuUxuMQUptcqNJWK4l4l21vmV5+9rxwxan0sDE0EnoOcAWgPxw6rwgi99DM8Z3CYAHcYBzYWL0v5Lp5INUFPfJwvAGL9E6ru3qC7npCe5UynxLqTbvkrerDq8wJKDFBhcSqQXnUn8IfvZ54xLsKC0o=
+	t=1744650165; cv=none; b=FBRCHYgh8EJvnuLCAMHLhGvmV0pSj9ohVqoIz7zZWk9nSnx/wCcD49X2PsJUbM5KVN20v3c+zjp2eJjb8quDNExj4Qaq1i+ShD9FV8tW7apxge0ROVaGlHhtF3MS6MPz5Mrc9jKoL8i+tEfn4DSW3u0Lmn4e/Hd+R2poWqzfr0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744648872; c=relaxed/simple;
-	bh=7OhxpBuonXoqqwgHU4YnELp3MYl43EUyqa8tiP/vePk=;
+	s=arc-20240116; t=1744650165; c=relaxed/simple;
+	bh=KqFT3PKAxBM7aneYNA4QM0R7Gd1DemUhbyEfOOJZdwc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JMdxMj6D3uJPqDbHqdcSQubsgi6PdXAktN3bO74D2e06Whvr9MOJ2F+6Jy76+r7r/0Jzj601ikNb27XNFZ41WkWfp558dJdjArRX1+UjFyLwlemmA5Z7prVH+g0v8E/FVe3XoYp24FTGsd8THycU9yb93SzIVSh+wVkQwfngLX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q8L6O3n8; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744648871; x=1776184871;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7OhxpBuonXoqqwgHU4YnELp3MYl43EUyqa8tiP/vePk=;
-  b=Q8L6O3n8/x2vgpajESBoLx4dEppCaJUAbR09DOCWmzvTEa7RlHbJIDaJ
-   Xt40/ruF5G2xw9i78b330S9IjdBzkUrtR/f8dP7Ba+jgfe63uWOUjcv9C
-   Uih+VV59vZ8H5HjrabYv2m1mbrX3wEHyOqhYvnW2HVbFAo3hBxuzXS80U
-   osPuGruDmNpsSu+0lFdV6Jw2fBjBzJdlK/pwbzTkoi/wr9toYLiTLwhRl
-   2UtbNLSdjnrM9tBSm3xnVIhqyZAFGbtNF9Szmc9KGKMPRfqz30+/4f8jx
-   NDS6/f5IHKFYvpevt6A6UsytLXO15nPvnX0SwZxTw+KPt1YnAsXxUak/B
-   w==;
-X-CSE-ConnectionGUID: yyRnbnXeS8qhq18t7bL/sA==
-X-CSE-MsgGUID: ANzuMlkvTrSP2xlI034BRw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11403"; a="46260513"
-X-IronPort-AV: E=Sophos;i="6.15,212,1739865600"; 
-   d="scan'208";a="46260513"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 09:41:10 -0700
-X-CSE-ConnectionGUID: uVWiwWU4Tm6Heaolflslng==
-X-CSE-MsgGUID: nzXHcC1fQQ2MQIFr/vkTBQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,212,1739865600"; 
-   d="scan'208";a="129868035"
-Received: from jamart5x-mobl1.amr.corp.intel.com (HELO desk) ([10.125.145.223])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 09:41:09 -0700
-Date: Mon, 14 Apr 2025 09:41:02 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Xi Ruoyao <xry111@xry111.site>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=ghxVq4wfI9T/VpgrrQGHQ4EcZ6hXTesPpkVkT5G+1EJo1y6TDFT15KIhdF58v0UVv7YA+eKu6o4NP0UfDbl6TFM09v8etH55NAbK8lbB1PXKUZI7jkBzuKVVgJvnHNSk08DB0NyLncxbi4fcHgEQ3obX4jtDcEreSX6OjjxGcm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=haXXUUQ5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BD4FC4CEEB;
+	Mon, 14 Apr 2025 17:02:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744650164;
+	bh=KqFT3PKAxBM7aneYNA4QM0R7Gd1DemUhbyEfOOJZdwc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=haXXUUQ5j7/xdMK6YjwHt6lr9C50Nl/g7bFmEYMZvNiz+gF0wIYn0k0JlsN7AgIIr
+	 4iu+74zlC0pGVbnny4GpZcvFCtRv7UbXiLj/Jktoz55Xw4OI0gFEF9IMr5JRkbS89a
+	 FWUp+fMSf5UkmLfyLJ4Oh8mMhzRX4zRBtIyxizLmg1yK8LXnD6fzQ4a/5VdOID9XcX
+	 dE75rVIJSiBbQRqIjkmlXD+Sz1tODj0aRj329Hqs8wN3tRMUOekPmkiQJuBXhlIRBs
+	 zzEUQdKKdZxKbNiIRzd4lVHI7DTVE6ie+lpUtXY7UaT3cQKWd5+rfYxv5sIPEdod6N
+	 ZZHwk4psw8ppw==
+Date: Mon, 14 Apr 2025 18:02:33 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Rob Herring <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Steen Hegelund <Steen.Hegelund@microchip.com>,
+	Daniel Machon <daniel.machon@microchip.com>,
+	UNGLinuxDriver@microchip.com,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Andy Gross <agross@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>, zhouyanjie@wanyeetech.com,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Use raw_smp_processor_id() in
- hwp_get_cpu_scaling()
-Message-ID: <20250414164102.vfk64a44mvutg4dh@desk>
-References: <20250412103434.5321-1-xry111@xry111.site>
- <b7b0b3f98f8fad9cc9559e1c4ce832387c520d7a.camel@linux.intel.com>
- <12659608.O9o76ZdvQC@rjwysocki.net>
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Stephan Gerhold <stephan.gerhold@linaro.org>,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, imx@lists.linux.dev,
+	linux-rockchip@lists.infradead.org,
+	linux-amlogic@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 03/17] arm64: dts: microchip: sparx5: Fix CPU node
+ "enable-method" property dependencies
+Message-ID: <20250414-fragile-same-9cd06114cd85@spud>
+References: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
+ <20250410-dt-cpu-schema-v2-3-63d7dc9ddd0a@kernel.org>
+ <20250411-ebay-exerciser-392c42daf5ba@spud>
+ <CAL_JsqJza-bufzjZ415THyDDQaOfk8F+JRFvFxzNwObG=NKVJQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="pt+1yttKuNYLWgzQ"
 Content-Disposition: inline
-In-Reply-To: <12659608.O9o76ZdvQC@rjwysocki.net>
+In-Reply-To: <CAL_JsqJza-bufzjZ415THyDDQaOfk8F+JRFvFxzNwObG=NKVJQ@mail.gmail.com>
 
-On Mon, Apr 14, 2025 at 05:19:04PM +0200, Rafael J. Wysocki wrote:
-> On Sunday, April 13, 2025 4:44:56 PM CEST srinivas pandruvada wrote:
-> > On Sat, 2025-04-12 at 18:34 +0800, Xi Ruoyao wrote:
-> > > Use raw_smp_processor_id() instead of plain smp_processor_id() in
-> > > hwp_get_cpu_scaling(), otherwise we get some errors on a Lenovo
-> > > Thinkpad
-> > > T14P Gen 2:
-> > > 
-> > >     BUG: using smp_processor_id() in preemptible [00000000] code:
-> > > swapper/0/1
-> > >     caller is hwp_get_cpu_scaling+0x7f/0xc0
-> > > 
-> > > Fixes: b52aaeeadfac ("cpufreq: intel_pstate: Avoid SMP calls to get
-> > > cpu-type")
-> > > Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+
+--pt+1yttKuNYLWgzQ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Apr 11, 2025 at 03:26:50PM -0500, Rob Herring wrote:
+> On Fri, Apr 11, 2025 at 11:22=E2=80=AFAM Conor Dooley <conor@kernel.org> =
+wrote:
 > >
-> > Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> 
-> It's still broken after this patch though because the function should
-> use the cpu_data() of the target CPU and not of the CPU running the code.
+> > On Thu, Apr 10, 2025 at 10:47:24AM -0500, Rob Herring (Arm) wrote:
+> > > The "spin-table" enable-method requires "cpu-release-addr" property,
+> > > so add a dummy entry. It is assumed the bootloader will fill in the
+> > > correct values.
+> > >
+> > > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> > > Reviewed-by: Daniel Machon <daniel.machon@microchip.com>
+> > > Tested-by: Daniel Machon <daniel.machon@microchip.com>
+> >
+> > This is already applied, guess I forgot to merge it into the branch that
+> > appears in linux next. I'll do that now..
+>=20
+> Sometimes I check next, but in this case I just looked at replies for
+> which there were none. I dislike submitting dts changes because it's a
+> range of AWOL maintainers, only applying around some rcN (so up to 2
+> months later), silently applying, and applied but never in linux-next
+> (until in soc tree).
 
-Sorry for missing that.
+Let's add "send the b4 ty email" to the list of things that I did not
+do, but thought that I had done.
 
-I noticed that find_hybrid_pmu_for_cpu() doesn't take the cpu argument.
-Does it suffer from the same problem?
+--pt+1yttKuNYLWgzQ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-init_hybrid_pmu(int cpu)
-{
-	struct cpu_hw_events *cpuc = &per_cpu(cpu_hw_events, cpu);
-	struct x86_hybrid_pmu *pmu = find_hybrid_pmu_for_cpu();
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ/0/qQAKCRB4tDGHoIJi
+0llIAQCfeSIfGZefusGStXxy21uaJUGlki/H/XzQ1dq4t278oAD9GMv/CXNEj8CG
+oPoSllLdscFoA/5qVRjJh0erPiNF8gA=
+=q+yA
+-----END PGP SIGNATURE-----
+
+--pt+1yttKuNYLWgzQ--
 
