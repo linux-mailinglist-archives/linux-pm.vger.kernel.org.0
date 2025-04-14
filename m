@@ -1,304 +1,129 @@
-Return-Path: <linux-pm+bounces-25388-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25389-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17CC8A88988
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 19:15:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCF6DA88A5A
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 19:49:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53A9C1895E8C
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 17:15:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CBF2A17CA55
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 17:49:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A45528A1DD;
-	Mon, 14 Apr 2025 17:15:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F35028A1F8;
+	Mon, 14 Apr 2025 17:49:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="JOvvIrKn"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="OWsAVJsJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4BA289360;
-	Mon, 14 Apr 2025 17:15:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F34228A1CC;
+	Mon, 14 Apr 2025 17:49:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744650909; cv=none; b=dE6R3Pr4pVNaSWblfKJOnwKbWKmzVRNByeJLwzHH/hQz4X+RBhw06kSpi3ETl4emo1G8we4sj8S8yR1KHlB0LCYruyERwB3+beVfjqXtGhFq+y4jnH7tpRp20gSSyRuDR1D7yh4g8svMUf41xYFZg0dm0DvOz3QvHgnDQOULt2I=
+	t=1744652981; cv=none; b=Y61OcmbIIFlS68AJmR490lYlDn6SLm5oCq0VMtlH4/jQdOHcyI7mwS6j0jihBuIGC3nJKIJDzO/Q3WxvIAEEjjU0QIvq47s3f0tN9AMfoXR65SdFcneobc17ksybpDqb83VNfdyh2UiMXidKmWN5QbYXfXCT73ISmFpRN6Fe77k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744650909; c=relaxed/simple;
-	bh=dlGf92UFV+ckbKnZntoWZ+oVvS5yIxAL0pi0RWf0AKM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=mbnj6jvSd4IT1SohiCRcOSdUK3pJIwn+zXD1BE+pJgkggsJTsp9e+jHZgeHbXvcteQxPShIamL/6SXvvhERLueckFN7TQFF8sKqoeE9tGJcYwgfNZOsH3uVMDOVvEdvODFKB6In5LvqIBoFikAjFtaSEzbYbSYPQUfsdWWZCk3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=JOvvIrKn; arc=none smtp.client-ip=217.194.8.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
-Received: from francesco-nb.corp.toradex.com (31-10-206-125.static.upc.ch [31.10.206.125])
-	by mail11.truemail.it (Postfix) with ESMTPA id E9B931FC15;
-	Mon, 14 Apr 2025 19:15:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1744650904;
-	bh=T3bc8Op2Zld0Q0DNhuVhhUQ2pn3oSrVd6mywcjBGb5Y=; h=From:To:Subject;
-	b=JOvvIrKnPfFHjN+Y+8h6mkeF4XMJU/ZJtqpayVsgMPiAtTCsHVhc1fYbjjFHcf5af
-	 nfM7Y0Lmgf/PpmJ0n4Y3zjjexl3Rpxt7fG909MvWftfjVGSRUIKHtvEoE5DTf+Buuk
-	 XYZXgTPjR8iU8fvzD8LnRNzTztd/kVUoaoH1SgNewCOAwRT+bfMQmPQbZsj5oOT6F+
-	 JCyuGn9IjHjoyOsuLNedWYKPKFwq9/MfSqz0uijzj3GzUOdlZdHgai1xgOWYRdtGjE
-	 VM6EzdkR3J373xWCtClzOzP8A7UVHdl35DWzlvfQ9gDE20BxOxS53z8DN9bIS4dfFR
-	 L8UqISN7tnwnw==
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Emanuele Ghidoli <ghidoliemanuele@gmail.com>,
-	Francesco Dolcini <francesco@dolcini.it>,
-	Sebastian Reichel <sre@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
-	Francesco Dolcini <francesco.dolcini@toradex.com>,
-	linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] power: reset: add Toradex Embedded Controller
-Date: Mon, 14 Apr 2025 19:14:55 +0200
-Message-Id: <20250414171455.155155-3-francesco@dolcini.it>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250414171455.155155-1-francesco@dolcini.it>
-References: <20250414171455.155155-1-francesco@dolcini.it>
+	s=arc-20240116; t=1744652981; c=relaxed/simple;
+	bh=pCf6zl5WWMLk499XrU3ze5XCG4TXFPjHsQDAk9yq3ts=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eUG3gUgmmVKRdIaXhY7SVMzsoTrHS8Ul+GWVXUcNR2UIKeVM4xeUKY+XNyrtpXVhnNHztj5TTmP8dmj6BvfI1VQQDvMfmgHf2DMA4WKt+Lk1EpbYZs+Yy/sCilIFLX4RM3b3fDA8emKD0Q5ETF1PVC7VLX2m1PX2mz4GEpZ4HPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=OWsAVJsJ; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [192.168.7.202] ([71.202.166.45])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53EHmldx2305377
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Mon, 14 Apr 2025 10:48:48 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53EHmldx2305377
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025032001; t=1744652930;
+	bh=pCf6zl5WWMLk499XrU3ze5XCG4TXFPjHsQDAk9yq3ts=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=OWsAVJsJQtReNkvBxn4n90Jw5b4hgpiiMsQMj1kLj82PEd0mx8nuHiF2kM8Mvx3Xw
+	 LqxRXhBr5R0xxDPh57nO2hOouAGBLY3AKdZeqNoPCmA97JPCWtZ0UYmnsK+6p053w2
+	 lqlg5oeia/VCC2I4n1QOzlzq2Q+EByucHb13DRq32ZiCSS+Txt0R8+YpBvAIWB7Gct
+	 FuwsCZqp8vL1531axOppQPBxHdE0eB7iOltYssLVQ7RMeDVsVCMmRKTPxkgHRBImAx
+	 dIJ72y7yKeVu96cbY7s+wNxgXc4DZJO3Heom3U0XoQS1v8gYW+MgQaG/x5uDeQr3y+
+	 wlW0XdVD1zBrA==
+Message-ID: <0cad1e0b-2bfd-4258-90cd-8d319bf0e74a@zytor.com>
+Date: Mon, 14 Apr 2025 10:48:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 10/15] KVM: VMX: Use WRMSRNS or its immediate form
+ when available
+To: "H. Peter Anvin" <hpa@zytor.com>, Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+        linux-edac@vger.kernel.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-ide@vger.kernel.org,
+        linux-pm@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, jgross@suse.com,
+        andrew.cooper3@citrix.com, peterz@infradead.org, acme@kernel.org,
+        namhyung@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, luto@kernel.org,
+        boris.ostrovsky@oracle.com, kys@microsoft.com, haiyangz@microsoft.com,
+        decui@microsoft.com
+References: <20250331082251.3171276-1-xin@zytor.com>
+ <20250331082251.3171276-11-xin@zytor.com> <Z_hTI8ywa3rTxFaz@google.com>
+ <CALMp9eRJkzA2YXf1Dfxt3ONP+P9aTA=WPraOPJPJ6C6j677+6Q@mail.gmail.com>
+ <fa16949e-7842-45f7-9715-1bdda13b762a@zytor.com>
+ <EAB44BB2-99BB-4D4A-8306-0235D2931E72@zytor.com>
+Content-Language: en-US
+From: Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <EAB44BB2-99BB-4D4A-8306-0235D2931E72@zytor.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+On 4/12/2025 4:10 PM, H. Peter Anvin wrote:
+> Also,*in this specific case* IA32_SPEC_CTRL is architecturally nonserializing, i.e. WRMSR executes as WRMSRNS anyway.
 
-Toradex SMARC iMX8MP and SMARC iMX95 SoM modules use a small Embedded
-Controller (EC) to manage power and reset functions and related SMARC
-signals.
-
-This driver implements power-off and reboot handlers, communicating with
-the EC via I2C to issue the appropriate power management commands.
-
-During probe, the driver logs the Embedded Controller ID (unique ID for
-each SMARC board supported) in hex format along with the firmware version.
-
-Signed-off-by: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
-Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
----
-v2: no changes
-v1: https://lore.kernel.org/lkml/20250407114947.41421-1-francesco@dolcini.it/
----
- MAINTAINERS                           |   1 +
- drivers/power/reset/Kconfig           |  13 +++
- drivers/power/reset/Makefile          |   1 +
- drivers/power/reset/tdx-ec-poweroff.c | 150 ++++++++++++++++++++++++++
- 4 files changed, 165 insertions(+)
- create mode 100644 drivers/power/reset/tdx-ec-poweroff.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5ddb279436f8..ad811c003c51 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -24413,6 +24413,7 @@ M:	Emanuele Ghidoli <ghidoliemanuele@gmail.com>
- M:	Francesco Dolcini <francesco@dolcini.it>
- S:	Maintained
- F:	Documentation/devicetree/bindings/power/reset/toradex,smarc-ec.yaml
-+F:	drivers/power/reset/tdx-ec-poweroff.c
- 
- TORTURE-TEST MODULES
- M:	Davidlohr Bueso <dave@stgolabs.net>
-diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-index 60bf0ca64cf3..e71f0af4e378 100644
---- a/drivers/power/reset/Kconfig
-+++ b/drivers/power/reset/Kconfig
-@@ -216,6 +216,19 @@ config POWER_RESET_ST
- 	help
- 	  Reset support for STMicroelectronics boards.
- 
-+config POWER_RESET_TORADEX_EC
-+	tristate "Toradex Embedded Controller power-off and reset driver"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  This driver supports power-off and reset for SMARC Toradex SoMs,
-+	  for example the SMARC iMX8MP and SMARC iMX95, using Toradex
-+	  Embedded Controller (EC).
-+
-+	  Say Y here if you have a Toradex SMARC SoM.
-+
-+	  If unsure, say N.
-+
- config POWER_RESET_TPS65086
- 	bool "TPS65086 restart driver"
- 	depends on MFD_TPS65086
-diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-index 10782d32e1da..1b9b63a1a873 100644
---- a/drivers/power/reset/Makefile
-+++ b/drivers/power/reset/Makefile
-@@ -24,6 +24,7 @@ obj-$(CONFIG_POWER_RESET_QNAP) += qnap-poweroff.o
- obj-$(CONFIG_POWER_RESET_REGULATOR) += regulator-poweroff.o
- obj-$(CONFIG_POWER_RESET_RESTART) += restart-poweroff.o
- obj-$(CONFIG_POWER_RESET_ST) += st-poweroff.o
-+obj-$(CONFIG_POWER_RESET_TORADEX_EC) += tdx-ec-poweroff.o
- obj-$(CONFIG_POWER_RESET_TPS65086) += tps65086-restart.o
- obj-$(CONFIG_POWER_RESET_VERSATILE) += arm-versatile-reboot.o
- obj-$(CONFIG_POWER_RESET_VEXPRESS) += vexpress-poweroff.o
-diff --git a/drivers/power/reset/tdx-ec-poweroff.c b/drivers/power/reset/tdx-ec-poweroff.c
-new file mode 100644
-index 000000000000..3302a127fce5
---- /dev/null
-+++ b/drivers/power/reset/tdx-ec-poweroff.c
-@@ -0,0 +1,150 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Toradex Embedded Controller driver
-+ *
-+ * Copyright (C) 2025 Toradex
-+ *
-+ * Author: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
-+ */
-+
-+#include <linux/array_size.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/reboot.h>
-+#include <linux/regmap.h>
-+#include <linux/types.h>
-+
-+#define EC_CHIP_ID_REG                  0x00
-+#define EC_CHIP_ID_SMARC_IMX95          0x11
-+#define EC_CHIP_ID_SMARC_IMX8MP         0x12
-+
-+#define EC_VERSION_REG_MAJOR            0x01
-+#define EC_VERSION_REG_MINOR            0x02
-+#define EC_ID_VERSION_LEN               3
-+
-+#define EC_CMD_REG                      0xD0
-+#define EC_CMD_POWEROFF                 0x01
-+#define EC_CMD_RESET                    0x02
-+
-+#define EC_REG_MAX                      0xD0
-+
-+static const struct regmap_range volatile_ranges[] = {
-+	regmap_reg_range(EC_CMD_REG, EC_CMD_REG),
-+};
-+
-+static const struct regmap_access_table volatile_table = {
-+	.yes_ranges	= volatile_ranges,
-+	.n_yes_ranges	= ARRAY_SIZE(volatile_ranges),
-+};
-+
-+static const struct regmap_range read_ranges[] = {
-+	regmap_reg_range(EC_CHIP_ID_REG, EC_VERSION_REG_MINOR),
-+};
-+
-+static const struct regmap_access_table read_table = {
-+	.yes_ranges	= read_ranges,
-+	.n_yes_ranges	= ARRAY_SIZE(read_ranges),
-+};
-+
-+static const struct regmap_config regmap_config = {
-+	.reg_bits	= 8,
-+	.val_bits	= 8,
-+	.max_register	= EC_REG_MAX,
-+	.cache_type	= REGCACHE_RBTREE,
-+	.rd_table	= &read_table,
-+	.volatile_table = &volatile_table,
-+};
-+
-+static int tdx_ec_cmd(struct regmap *regmap, u8 cmd)
-+{
-+	int err = regmap_write(regmap, EC_CMD_REG, cmd);
-+
-+	if (err)
-+		dev_err(regmap_get_device(regmap), "Failed to send command 0x%02X: %d\n", cmd, err);
-+
-+	return err;
-+}
-+
-+static int tdx_ec_power_off(struct sys_off_data *data)
-+{
-+	struct regmap *regmap = data->cb_data;
-+	int err;
-+
-+	err = tdx_ec_cmd(regmap, EC_CMD_POWEROFF);
-+
-+	return err ? NOTIFY_BAD : NOTIFY_DONE;
-+}
-+
-+static int tdx_ec_restart(struct sys_off_data *data)
-+{
-+	struct regmap *regmap = data->cb_data;
-+	int err;
-+
-+	err = tdx_ec_cmd(regmap, EC_CMD_RESET);
-+
-+	return err ? NOTIFY_BAD : NOTIFY_DONE;
-+}
-+
-+static int tdx_ec_register_power_off_restart(struct device *dev, struct regmap *regmap)
-+{
-+	int err;
-+
-+	err = devm_register_sys_off_handler(dev, SYS_OFF_MODE_RESTART,
-+					    SYS_OFF_PRIO_FIRMWARE,
-+					    tdx_ec_restart, regmap);
-+	if (err)
-+		return err;
-+
-+	return devm_register_sys_off_handler(dev, SYS_OFF_MODE_POWER_OFF,
-+					     SYS_OFF_PRIO_FIRMWARE,
-+					     tdx_ec_power_off, regmap);
-+}
-+
-+static int tdx_ec_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	u8 reg_val[EC_ID_VERSION_LEN];
-+	struct regmap *regmap;
-+	int err;
-+
-+	regmap = devm_regmap_init_i2c(client, &regmap_config);
-+	if (IS_ERR(regmap))
-+		return PTR_ERR(regmap);
-+
-+	err = regmap_bulk_read(regmap, EC_CHIP_ID_REG, &reg_val, EC_ID_VERSION_LEN);
-+	if (err)
-+		return dev_err_probe(dev, err,
-+				     "Cannot read id and version registers\n");
-+
-+	dev_info(dev, "Toradex Embedded Controller id %x - Firmware %u.%u\n",
-+		 reg_val[0], reg_val[1], reg_val[2]);
-+
-+	err = tdx_ec_register_power_off_restart(dev, regmap);
-+	if (err)
-+		return dev_err_probe(dev, err,
-+				     "Cannot register system restart handler\n");
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id __maybe_unused of_tdx_ec_match[] = {
-+	{ .compatible = "toradex,smarc-ec" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, of_tdx_ec_match);
-+
-+static struct i2c_driver tdx_ec_driver = {
-+	.probe			= tdx_ec_probe,
-+	.driver			= {
-+		.name		= "toradex-smarc-ec",
-+		.of_match_table = of_tdx_ec_match,
-+	},
-+};
-+module_i2c_driver(tdx_ec_driver);
-+
-+MODULE_AUTHOR("Emanuele Ghidoli <emanuele.ghidoli@toradex.com>");
-+MODULE_DESCRIPTION("Toradex SMARC Embedded Controller driver");
-+MODULE_LICENSE("GPL");
--- 
-2.39.5
-
+While the immediate form WRMSRNS could be faster because the MSR index
+is available *much* earlier in the pipeline, right?
 
