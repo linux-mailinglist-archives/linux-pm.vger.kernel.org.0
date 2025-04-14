@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-25350-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25351-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62C6CA8799A
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 09:58:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62903A879A1
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 09:59:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 278113B004F
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 07:58:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F22516D64A
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 07:59:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88DCD258CDA;
-	Mon, 14 Apr 2025 07:58:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0AA3258CE9;
+	Mon, 14 Apr 2025 07:59:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sbmEv6Ry"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AHNbcNiN"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 543093596A;
-	Mon, 14 Apr 2025 07:58:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9963596A;
+	Mon, 14 Apr 2025 07:59:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744617508; cv=none; b=aEwH8APO/lSioXkNMsHLnLQ7LrIicHCCE4/094JZ8b1lb/AjL+ZxBD4aHUmesbo6iLlk58XYjSr+OHQONUoWqz9D8tPgX4oFgBDWjWPDjG4M12LH86NirhNCx/L3tZoJ46Z5GiWXdbi+BXG8mWMdPs56LqzNuloT0XRy8jaziLI=
+	t=1744617593; cv=none; b=QP30S4GlPimHqEPzEid5gGYRarJdMi0wXw6tlTMy9REEDRKEOd/u8Kr9MKfM6lwTOKBgaNBWIZMUZQtMdkwcHsaaRmBTfV2OilbYS7ZtH78xi1zC0cEWyacUn/jCQodEgPQtYWbzG0+KxbckTA6uFKOU3oVQE3tk9Wm80He3Rmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744617508; c=relaxed/simple;
-	bh=7AxnqcMREsOqzV9Hmh6jIsTleP+7ISV8YFXgd9Tyboo=;
+	s=arc-20240116; t=1744617593; c=relaxed/simple;
+	bh=1bnCLfYD1N/7FH6EJnrYINk0rg5SxIRcBCuxsYXVlTA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MZo3FjWkrtVF9gg9uiow9p/T59G42gFscDzLWikr9nyjoVw3SoPesjnF1ZUSIhFwoZpscL3LFCGdx4+x7CVLZ7k+BkCPyYz+ZZ7wgzo8jP2HQozcnh6cNsOaiPLa3/pHFspu9XdhiCoGwQSFPISyPmu9YvRZp2lNZRMrzfWaZ1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sbmEv6Ry; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E3DEC4CEE2;
-	Mon, 14 Apr 2025 07:58:23 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=rYZRLcG7XIT7qZ9kPmR8hfnPkbtax9YESACGsYyOaB6A4Rrq80+u9lsq6YfiJ8DTijZS8FS1J3KaOg1t6dPi04h6SYAkxWkO4bRKCqrj8z9YQh4Jk7F/5B3FtfFXypX4ztW14sHIS9rjEYYZIVutOC8FN3ccLedbrnSYekWRlyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AHNbcNiN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B36C2C4CEE2;
+	Mon, 14 Apr 2025 07:59:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744617507;
-	bh=7AxnqcMREsOqzV9Hmh6jIsTleP+7ISV8YFXgd9Tyboo=;
+	s=k20201202; t=1744617593;
+	bh=1bnCLfYD1N/7FH6EJnrYINk0rg5SxIRcBCuxsYXVlTA=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=sbmEv6RyzndJXwehw6NePkhkxV5B74OWhAydLQm4VTiGlK0iO3da08wod3qT+fyUy
-	 7uSdYA+sRSFibZVVDarNQGt+F/hRu1Z9QMK8CvFJnNDVnZXXqdz2QH9GymYuI5ytVn
-	 Phd5AM3DWbXKAopH7Ce1ip7jG+wgq2Tty325Jrr28JvcZE3VfgkgR0PRZQgjTjTJ8n
-	 iRzMfQ+lj+BOyPAKGMHdmBLQk6LK5TTmsG0dExJ8qd6JEpovszsWH+QlOpWKk+ahru
-	 akUJS5r4GHCz03l2yK4GyLmf163wtgg3DFjH2nEgmwzjAQBbTt/oVWF1FKNuRepJXP
-	 Dm6j4LK+GJDkw==
-Message-ID: <e48d81c5-65f1-4ef9-9acb-323bf287767d@kernel.org>
-Date: Mon, 14 Apr 2025 09:58:21 +0200
+	b=AHNbcNiNu3S7fZFAKk9LU2Fj5GndNrbEKguvARwxnGX/pTA0bx7LwUCYNi21XaazM
+	 6zEMxtWJB4Qe5HBXij+5+Bxi9kjtyDruhWbOEZVCOnVuYcf1upAM0rAUnzYsciYUnK
+	 QZjEo16Ma+2OozY9s44HQepA1mlw/fay6NgVJw1bBexLfaQDOsFG1X5z6IdTAqmO0V
+	 uj+Mfz/iGI9OhXExIzmcqagk21y5KsZQpUh6RpYiioJOoZ5+TTVWf4IR4AuVSrdPMx
+	 qTeTbSsEGmSzvxsONvmV/7IlBz2kTQW8PL6e/enZgC2Soaf8xxh+ZPz5be390KzI6K
+	 +aRloD+UTjnkg==
+Message-ID: <df025c47-8de8-4f95-a8fa-8d5d5dce5d5f@kernel.org>
+Date: Mon, 14 Apr 2025 09:59:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 5/9] serial: qcom-geni: move resource initialization to
+Subject: Re: [PATCH v1 6/9] serial: qcom-geni: move resource control logic to
  separate functions
 To: Praveen Talari <quic_ptalari@quicinc.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -65,7 +65,7 @@ Cc: psodagud@quicinc.com, djaggi@quicinc.com, quic_msavaliy@quicinc.com,
  quic_vtanuku@quicinc.com, quic_arandive@quicinc.com,
  quic_mnaresh@quicinc.com, quic_shazhuss@quicinc.com
 References: <20250410174010.31588-1-quic_ptalari@quicinc.com>
- <20250410174010.31588-6-quic_ptalari@quicinc.com>
+ <20250410174010.31588-7-quic_ptalari@quicinc.com>
 Content-Language: en-US
 From: Jiri Slaby <jirislaby@kernel.org>
 Autocrypt: addr=jirislaby@kernel.org; keydata=
@@ -110,78 +110,72 @@ Autocrypt: addr=jirislaby@kernel.org; keydata=
  f/bIWIr0cqQmqQ33FgRhrG1+Xml6UXyJ2jExmlO8JljuOGeXYh6ZkIEyzqzffzBLXZCujlYQ
  DFXpyMNVJ2ZwPmX2mWEoYuaBU0JN7wM+/zWgOf2zRwhEuD3A2cO2PxoiIfyUEfB9SSmffaK/
  S4xXoB6wvGENZ85Hg37C7WDNdaAt6Xh2uQIly5grkgvWppkNy4ZHxE+jeNsU7tg=
-In-Reply-To: <20250410174010.31588-6-quic_ptalari@quicinc.com>
+In-Reply-To: <20250410174010.31588-7-quic_ptalari@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 10. 04. 25, 19:40, Praveen Talari wrote:
-> Enhances code readability and future modifications within the new API.
+> Supports use in PM system/runtime frameworks, helping to
+> distinguish new resource control mechanisms and facilitate
+> future modifications within the new API.
 > 
-> Move the code that handles the actual initialization of resources
-> like clock and ICC paths to a separate function, making the
-> probe function cleaner.
-
-The $SUBJ is misleading. There is only one function here.
-
+> The code that handles the actual enable or disable of resources
+> like clock and ICC paths to a separate function
+> (geni_serial_resources_on() and geni_serial_resources_off()) which
+> enhances code readability.
 > 
 > Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
 > ---
->   drivers/tty/serial/qcom_geni_serial.c | 65 ++++++++++++++++-----------
->   1 file changed, 39 insertions(+), 26 deletions(-)
+>   drivers/tty/serial/qcom_geni_serial.c | 53 +++++++++++++++++++++------
+>   1 file changed, 42 insertions(+), 11 deletions(-)
 > 
 > diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> index a80ce7aaf309..889ce8961e0a 100644
+> index 889ce8961e0a..e341f5090ecc 100644
 > --- a/drivers/tty/serial/qcom_geni_serial.c
 > +++ b/drivers/tty/serial/qcom_geni_serial.c
 > @@ -1572,6 +1572,42 @@ static struct uart_driver qcom_geni_uart_driver = {
 >   	.nr =  GENI_UART_PORTS,
 >   };
 >   
-> +static int geni_serial_resource_init(struct qcom_geni_serial_port *port)
+> +static int geni_serial_resources_off(struct uart_port *uport)
 > +{
+> +	struct qcom_geni_serial_port *port = to_dev_port(uport);
 > +	int ret;
 > +
-> +	port->se.clk = devm_clk_get(port->se.dev, "se");
-> +	if (IS_ERR(port->se.clk)) {
-> +		ret = PTR_ERR(port->se.clk);
+> +	dev_pm_opp_set_rate(uport->dev, 0);
+> +	ret = geni_se_resources_off(&port->se);
+> +	if (ret)
+> +		return ret;
+> +
+> +	geni_icc_disable(&port->se);
+> +
+> +	return ret;
 
-You can return this directly, without assigning it to ret, right?
+This is a bit confusing (needs context). return 0 directly.
 
-> +		dev_err(port->se.dev, "Err getting SE Core clk %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = geni_icc_get(&port->se, NULL);
-> +	if (ret)
-> +		return ret;
-> +
-> +	port->se.icc_paths[GENI_TO_CORE].avg_bw = GENI_DEFAULT_BW;
-> +	port->se.icc_paths[CPU_TO_GENI].avg_bw = GENI_DEFAULT_BW;
-> +
-> +	/* Set BW for register access */
-> +	ret = geni_icc_set_bw(&port->se);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = devm_pm_opp_set_clkname(port->se.dev, "se");
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* OPP table is optional */
-> +	ret = devm_pm_opp_of_add_table(port->se.dev);
-> +	if (ret && ret != -ENODEV) {
-> +		dev_err(port->se.dev, "invalid OPP table in device tree\n");
-> +		return ret;
-> +	}
-> +
-> +	return 0;
 > +}
+> +
+> +static int geni_serial_resources_on(struct uart_port *uport)
+> +{
+> +	struct qcom_geni_serial_port *port = to_dev_port(uport);
+> +	int ret;
+> +
+> +	ret = geni_icc_enable(&port->se);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = geni_se_resources_on(&port->se);
+> +	if (ret) {
+> +		geni_icc_disable(&port->se);
+> +		return ret;
+> +	}
+> +
+> +	if (port->clk_rate)
+> +		dev_pm_opp_set_rate(uport->dev, port->clk_rate);
+> +
+> +	return ret;
 
-A \n missing here.
-
->   static void qcom_geni_serial_pm(struct uart_port *uport,
->   		unsigned int new_state, unsigned int old_state)
->   {
+Same here.
 
 thanks,
 -- 
