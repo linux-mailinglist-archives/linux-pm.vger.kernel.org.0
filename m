@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-25414-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25415-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43149A88E1C
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 23:45:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30A4AA88E1D
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 23:45:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF7893B6347
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 21:43:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F189D3B6662
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 21:44:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8DE2207DEE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9029208961;
 	Mon, 14 Apr 2025 21:42:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="XEV9D1Pm"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="EQzlmdJf"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C29FD1F3BBB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B83B1FF7A5;
 	Mon, 14 Apr 2025 21:42:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744666932; cv=none; b=TDeSQ8+Rbw/jQJUnAmNWLPBBmoKh3uHaH9acMFGUOgUq/AQWxgbNBBPvs+TYE22TtyNwGF47Yl3sM2Aya1QiyQ1E4hoKvVqS8syuYIaFiujQ+rdl6KAhH22ZQixf/okdsXnqNpgBQi5NaMaDC7k+Lgo3vZ5lW0bjIRFxRd57GK8=
+	t=1744666932; cv=none; b=YmQR9QY+tTo/1FfZ6CvYRV5n03gV/RXN7CxfTYuoKIH6Lo9LJcAyZFFiAQa4wR6JH5+TeWEuXAPZvejJ3HJAoFYR6qjqpXWnEhyb6jRbxWhNlqb7hCh5qKOVEYUJ4tFreZWayf8myiAAF4yayjLLkHdSUEHL0OqeRwrh7KNlujo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1744666932; c=relaxed/simple;
-	bh=Lw4rXsYC+bu7ZWiwiV6VoaI+H0Ns4VGc7RhKmXhNrBk=;
+	bh=cp3KlP5kz8uShLGylSzqchQUQS7t4AEaR6YGK7e5dDw=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TsDxW3XcT40MFLyqRIst0nhk5UPSPhPaKfw4lmYC0buXBmvNAWvlhNBfJLn+wUVADZW0Tuzwuecsxm/m8/IFtGAIFC1XT4lRoAbOoPbW5YGzbgRkvHvu6eqJWCnqSq24QQzwbt8alUB825PccGqNaa+VwBRzUND0tDZH7L0Snyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=XEV9D1Pm; arc=none smtp.client-ip=68.232.154.123
+	 MIME-Version:Content-Type; b=InhMw/RbNMGDugwARIx/pNBLSAadWD/4KHApDeVqX+JuFHHqkaSDcB57tE7LGptr18ybY1GD77SKh/ompRE2LWaMQIcVRF0d31o11WxigkzyfDXjEOzQmYaFYX2RLGhlh4W1VigF9Rfxt+SK0cUBIEx6b4xxFhyjp62P39JoY1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=EQzlmdJf; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1744666930; x=1776202930;
+  t=1744666931; x=1776202931;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Lw4rXsYC+bu7ZWiwiV6VoaI+H0Ns4VGc7RhKmXhNrBk=;
-  b=XEV9D1Pm9G3ZNwCncO0ZBZ4LIuPniHJsunOi10qhelqh1wQ3JCzm57KC
-   lgWezYfFZj++UeGjVdmiSsoYyTpdgc6mIxcyOMUwzs5G5KwkIHN9cyVBl
-   KEDkYyGvD5dFYwS5NRV92/zkgwmGPogBIj9NSVuvnHqsdpQ0xxOnXAiY3
-   XqSVsNNw9nphlmeQcgcUeYkczUmHECc2S5pzlUA0ICzkseiVKfZPA/9Im
-   zmOxGmas/molWPA/qQEXh0gae7/EkmO12aFWkanzMq1M3hbZFkcsJ8khH
-   cO1vq0AnM1Cm4vjcNFhTq9x6YSH5ilYSooqk2chTNAi7zj8PaEqbRzjtb
+  bh=cp3KlP5kz8uShLGylSzqchQUQS7t4AEaR6YGK7e5dDw=;
+  b=EQzlmdJfiAVHbP5Yi7XbpBY8pVGmCPOHKsf/SHWA352jSU8eHsjDgkkS
+   caR4NP9Kz8XByyei3GpPw61phruVP2z+3XPzLcM3dIqKJPY/Fns7ugDpj
+   8g1RYc9MM3MwUux+/lBCIFUBc4rzoI5UpreWm5fRcDUHop9QZMQCHdWqr
+   FsZj30yoiSLhjUdFsb4oCyv9VOZ0OREMqspAi0t4Rr1XLRi+WvlDNlxnU
+   ecwjfNaUu5qckskPz6GHeF5FWL5acZ4cwkhjt42MuUb5trW+i07JvKqUT
+   FXZIQcTqSAWXI6iomEkW0Wsw7yjee0RX35RieKsM26+D7zEXJlYn7N10v
    A==;
 X-CSE-ConnectionGUID: jf75aQsXSneWELgtntpGWQ==
-X-CSE-MsgGUID: hNKqRSUARQqRIMPx+wlHXw==
+X-CSE-MsgGUID: MHSMuxp7TpCpQCP646iirw==
 X-IronPort-AV: E=Sophos;i="6.15,212,1739862000"; 
-   d="scan'208";a="40006678"
+   d="scan'208";a="40006679"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
   by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Apr 2025 14:41:58 -0700
@@ -66,9 +66,9 @@ To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
 CC: <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
 	<linux-rtc@vger.kernel.org>, Ryan Wanner <Ryan.Wanner@microchip.com>
-Subject: [PATCH v5 10/11] ARM: dts: microchip: sama7d65: Add RTT and GPBR Support for sama7d65 SoC
-Date: Mon, 14 Apr 2025 14:41:27 -0700
-Message-ID: <e8868ef06102241b47883ba10edaed751831be6d.1744666011.git.Ryan.Wanner@microchip.com>
+Subject: [PATCH v5 11/11] ARM: dts: microchip: sama7d65: Add RTT timer to curiosity board
+Date: Mon, 14 Apr 2025 14:41:28 -0700
+Message-ID: <463581224a07bf122c6907d34a0c5c71b1cc73e1.1744666011.git.Ryan.Wanner@microchip.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1744666011.git.Ryan.Wanner@microchip.com>
 References: <cover.1744666011.git.Ryan.Wanner@microchip.com>
@@ -83,44 +83,28 @@ Content-Type: text/plain
 
 From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-Add RTT support for SAMA7D65 SoC. The GPBR is added so the SoC is able
-to store the RTT time data.
+Add RTT timer with backup register for SAMA7D65_Curiosity board.
 
 Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 ---
- arch/arm/boot/dts/microchip/sama7d65.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm/boot/dts/microchip/sama7d65.dtsi b/arch/arm/boot/dts/microchip/sama7d65.dtsi
-index 8439c6a9e9f2..bec70164a75c 100644
---- a/arch/arm/boot/dts/microchip/sama7d65.dtsi
-+++ b/arch/arm/boot/dts/microchip/sama7d65.dtsi
-@@ -132,6 +132,13 @@ shdwc: poweroff@e001d200 {
- 			status = "disabled";
- 		};
+diff --git a/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts b/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
+index 30fdc4f55a3b..3105fe1766c3 100644
+--- a/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
++++ b/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
+@@ -141,6 +141,10 @@ pinctrl_uart6_default: uart6-default {
+ 	};
+ };
  
-+		rtt: rtc@e001d300 {
-+			compatible = "microchip,sama7d65-rtt", "atmel,at91sam9260-rtt";
-+			reg = <0xe001d300 0x30>;
-+			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clk32k 0>;
-+		};
++&rtt {
++	atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
++};
 +
- 		clk32k: clock-controller@e001d500 {
- 			compatible = "microchip,sama7d65-sckc", "microchip,sam9x60-sckc";
- 			reg = <0xe001d500 0x4>;
-@@ -146,6 +153,11 @@ rtc: rtc@e001d800 {
- 			clocks = <&clk32k 1>;
- 		};
- 
-+		gpbr: syscon@e001d700 {
-+			compatible = "microchip,sama7d65-gpbr", "syscon";
-+			reg = <0xe001d700 0x48>;
-+		};
-+
- 		chipid@e0020000 {
- 			compatible = "microchip,sama7d65-chipid";
- 			reg = <0xe0020000 0x8>;
+ &sdmmc1 {
+ 	bus-width = <4>;
+ 	pinctrl-names = "default";
 -- 
 2.43.0
 
