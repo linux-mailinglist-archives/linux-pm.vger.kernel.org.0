@@ -1,63 +1,63 @@
-Return-Path: <linux-pm+bounces-25405-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25406-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CA07A88DF0
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 23:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A4313A88DF5
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 23:42:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94A9B3A7A5B
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 21:41:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A58893A7FC2
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 21:42:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BFE31F3FC0;
-	Mon, 14 Apr 2025 21:42:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EAC11F4297;
+	Mon, 14 Apr 2025 21:42:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="SS1KNV+l"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="nIZ+GCVZ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73A71F37C3;
-	Mon, 14 Apr 2025 21:42:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EAB71F3BAB;
+	Mon, 14 Apr 2025 21:42:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744666925; cv=none; b=r2QUQEYenxBdLBirP608LskyprGYJtl//05+y3vMtqZt6CYEHH2dSHRyuquT0S3Cssio6k9rCHzQdkhMYC9VxwgjtjV713w7yApX5mhS076eYsNWPQv1K+1rQqc59I7M0hQqp4fNUq37+iIq/A1Wgyg+uUGeFHAXHf2UOTxxFnk=
+	t=1744666926; cv=none; b=jPm6xl63lGyP3K8wvP1w3r/S+NJ78kv958+gSFT9COhC0TIYCVNmLSHPYhQNjJQ1O3cgIB9WQSzSO2DoLPgZ6p9uRWA4pihMfOl39VQoFKtUzFCYy8c2+834lNWoP6g0Z5rq8LXG6Q/PCUzMT7tCUO0d24u4mfrrUhxY190Gk6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744666925; c=relaxed/simple;
-	bh=y6zBcUQgWavANG8NsuRsZDucUUdJh5SHXwtzFjn3t3c=;
+	s=arc-20240116; t=1744666926; c=relaxed/simple;
+	bh=jOJz2FR/B0tRpFsFUS+2kPu1QtdKBp50iFZ5wBb9Z9c=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MkZrCq1Q0nKMy7aHNPhfP6l3SQhtUaFngDQnGZaBmXIElc1FHNnSVSNl2+FKIUIoJRWfgeyWjSt+9eDwpFLSH/BZuq1oKHukKrNb6tcn+CcWo9kjHj26dWaO+W5qVPcvCxg9V5oYElvhx9po7GFSxka6aw1aNxpZw1oCYBnRNQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=SS1KNV+l; arc=none smtp.client-ip=68.232.154.123
+	 MIME-Version:Content-Type; b=e/cY/L4/2U6fKW9xvXI+RAbsIEJVLJ8flxn2bUW4CKgNgdu3tKEgqFyUy2kkfHGdzx+KlO3T+FI3/3p+7SEwNvT6CG4jgpfvMAVZ3hsCwuNHX/hiCXicpFGbBy9WAf5b//gtHcH6bFi0ye5ZgNsodJBmbEN4dxin8qcaE341lrg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=nIZ+GCVZ; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1744666923; x=1776202923;
+  t=1744666924; x=1776202924;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=y6zBcUQgWavANG8NsuRsZDucUUdJh5SHXwtzFjn3t3c=;
-  b=SS1KNV+lSIUgzW8prAD46q4jQrewiDHSoJZzrhcbF6QA5pDdyKXZJv3D
-   gGDk5qhnef/DoAUAQDNA0wUXG0VIC1eMYrWftJbzcx5emcm2exleMprVk
-   nyBEaVEd15QstkVCsidiyt+ws1DcfoydVbnTjrffzyv+tjxUqJLhDKZFz
-   Qt2LRFFDdpX0yzi79K6YcdiSQaI9jPGplqtRCur5H1UgiTD0XEsszURz3
-   zEe+RQ+CajVvJOgCcsC1cCiPviWC1NsbCusFNQHZPXmZdF1JPzU/HuzqE
-   1dCKEXWV5xZ97jj2INq1OPF9TjlBUow/K04424eR5+Q2xxqn/V/VEvGug
-   w==;
+  bh=jOJz2FR/B0tRpFsFUS+2kPu1QtdKBp50iFZ5wBb9Z9c=;
+  b=nIZ+GCVZa2NjjH5PikWXF3DtjDJuiwy36UykC0CmWnxcrlEPip2ztiNP
+   ZvWxXPAIyAHiXGqhio5fCebafNoSykD/zy4d+HRclz+qG3rU7BIyoIncG
+   SGTNhPtiC/pV0FV0OWBRVSxQTL1B79T3zcxeUSy0ptvlht+8QWWZJAv7+
+   P5hyVk3OVErtekyA6qV9cRCB7Vlu+oSqbTWX1/kRrh9AlTPB4PJzmtk+Y
+   z8IRMrKlZ6Yfe42+5fTx/2iCiisD7/uP9dvzDs86Y82QrS7perX4UHWiO
+   zh/YvXRABCstQUSA6bjuoLdvxpnyFVZY3UHjsKsFu4fXEBvxIwJ9hOA/b
+   A==;
 X-CSE-ConnectionGUID: jf75aQsXSneWELgtntpGWQ==
-X-CSE-MsgGUID: oWsgq+VNSYGlvgdS9mCSUQ==
+X-CSE-MsgGUID: kear+yGWQxarTgaYcOwEtg==
 X-IronPort-AV: E=Sophos;i="6.15,212,1739862000"; 
-   d="scan'208";a="40006667"
+   d="scan'208";a="40006669"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
   by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Apr 2025 14:41:55 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Mon, 14 Apr 2025 14:41:04 -0700
+ 15.1.2507.44; Mon, 14 Apr 2025 14:41:05 -0700
 Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.44 via Frontend Transport; Mon, 14 Apr 2025 14:41:04 -0700
+ 15.1.2507.44 via Frontend Transport; Mon, 14 Apr 2025 14:41:05 -0700
 From: <Ryan.Wanner@microchip.com>
 To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
 	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
@@ -66,9 +66,9 @@ To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
 CC: <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
 	<linux-rtc@vger.kernel.org>, Ryan Wanner <Ryan.Wanner@microchip.com>
-Subject: [PATCH v5 01/11] dt-bindings: sram: Add microchip,sama7d65-sram
-Date: Mon, 14 Apr 2025 14:41:18 -0700
-Message-ID: <35015e91dfd7d2240d05160a75cdd6dc4f4e6e79.1744666011.git.Ryan.Wanner@microchip.com>
+Subject: [PATCH v5 02/11] dt-bindings: power: reset: atmel,sama5d2-shdwc: Add microchip,sama7d65-shdwc
+Date: Mon, 14 Apr 2025 14:41:19 -0700
+Message-ID: <24666308604d3eb9f2b8c64d4a466c6fd77120e9.1744666011.git.Ryan.Wanner@microchip.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1744666011.git.Ryan.Wanner@microchip.com>
 References: <cover.1744666011.git.Ryan.Wanner@microchip.com>
@@ -83,26 +83,30 @@ Content-Type: text/plain
 
 From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-Add microchip,sama7d65-sram compatibility to DT binding documentation.
+Add SAMA7D65 SHDWC compatible to DT bindings documentation
 
 Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 Acked-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/sram/sram.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ .../devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/sram/sram.yaml b/Documentation/devicetree/bindings/sram/sram.yaml
-index 7c1337e159f2..3071c5075ee4 100644
---- a/Documentation/devicetree/bindings/sram/sram.yaml
-+++ b/Documentation/devicetree/bindings/sram/sram.yaml
-@@ -31,6 +31,7 @@ properties:
-         - amlogic,meson-gxbb-sram
-         - arm,juno-sram-ns
-         - atmel,sama5d2-securam
-+        - microchip,sama7d65-securam
-         - nvidia,tegra186-sysram
-         - nvidia,tegra194-sysram
-         - nvidia,tegra234-sysram
+diff --git a/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
+index 0735ceb7c103..9c34249b2d6d 100644
+--- a/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
++++ b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
+@@ -16,6 +16,11 @@ description: |
+ properties:
+   compatible:
+     oneOf:
++      - items:
++          - enum:
++              - microchip,sama7d65-shdwc
++          - const: microchip,sama7g5-shdwc
++          - const: syscon
+       - items:
+           - const: microchip,sama7g5-shdwc
+           - const: syscon
 -- 
 2.43.0
 
