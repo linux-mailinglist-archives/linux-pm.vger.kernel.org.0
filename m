@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-25351-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25352-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62903A879A1
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 09:59:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3D0DA879A8
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 10:01:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F22516D64A
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 07:59:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ECB117A695F
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Apr 2025 08:00:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0AA3258CE9;
-	Mon, 14 Apr 2025 07:59:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4323C1EB5C9;
+	Mon, 14 Apr 2025 08:01:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AHNbcNiN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RejD54Bj"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9963596A;
-	Mon, 14 Apr 2025 07:59:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A5512F42;
+	Mon, 14 Apr 2025 08:01:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744617593; cv=none; b=QP30S4GlPimHqEPzEid5gGYRarJdMi0wXw6tlTMy9REEDRKEOd/u8Kr9MKfM6lwTOKBgaNBWIZMUZQtMdkwcHsaaRmBTfV2OilbYS7ZtH78xi1zC0cEWyacUn/jCQodEgPQtYWbzG0+KxbckTA6uFKOU3oVQE3tk9Wm80He3Rmw=
+	t=1744617708; cv=none; b=Q9h1rG8a1lg7f1HXtV61p6OIPPMjzhlzMrty6gOGWP4IHKGUmK2eaQyuctht8bs3hrdr9OqszgzLgX/lQ8I8LwlZk2/5tLwp+A0DBHwqlac6n8cMlmV0Z+Rn3sAjJGZXRRz1ORu5tRRBDshgnw999DUxNWsl3zUStqEHeRYY7gM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744617593; c=relaxed/simple;
-	bh=1bnCLfYD1N/7FH6EJnrYINk0rg5SxIRcBCuxsYXVlTA=;
+	s=arc-20240116; t=1744617708; c=relaxed/simple;
+	bh=TjMXHWiQGYFhQQlesKoJ3UCFTUeDAYPGaObEjM5rE50=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rYZRLcG7XIT7qZ9kPmR8hfnPkbtax9YESACGsYyOaB6A4Rrq80+u9lsq6YfiJ8DTijZS8FS1J3KaOg1t6dPi04h6SYAkxWkO4bRKCqrj8z9YQh4Jk7F/5B3FtfFXypX4ztW14sHIS9rjEYYZIVutOC8FN3ccLedbrnSYekWRlyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AHNbcNiN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B36C2C4CEE2;
-	Mon, 14 Apr 2025 07:59:48 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=jyuDmHPCKmcwT4tvoapNn45CKgFWlkY1NUuKI+wVwjCRIhmB9uCbzvB7caHwNxhi1dKkkuHaoGUv7DMW7JFWj4UCsqUEbia3DDhTD9HO9Ep4dev30f/sJvL9IQfRplCZlo5pYhpl3icTZxWacbeZHvIA4iLG8qBK8x1n6fVc94M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RejD54Bj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CA95C4CEE2;
+	Mon, 14 Apr 2025 08:01:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744617593;
-	bh=1bnCLfYD1N/7FH6EJnrYINk0rg5SxIRcBCuxsYXVlTA=;
+	s=k20201202; t=1744617707;
+	bh=TjMXHWiQGYFhQQlesKoJ3UCFTUeDAYPGaObEjM5rE50=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=AHNbcNiNu3S7fZFAKk9LU2Fj5GndNrbEKguvARwxnGX/pTA0bx7LwUCYNi21XaazM
-	 6zEMxtWJB4Qe5HBXij+5+Bxi9kjtyDruhWbOEZVCOnVuYcf1upAM0rAUnzYsciYUnK
-	 QZjEo16Ma+2OozY9s44HQepA1mlw/fay6NgVJw1bBexLfaQDOsFG1X5z6IdTAqmO0V
-	 uj+Mfz/iGI9OhXExIzmcqagk21y5KsZQpUh6RpYiioJOoZ5+TTVWf4IR4AuVSrdPMx
-	 qTeTbSsEGmSzvxsONvmV/7IlBz2kTQW8PL6e/enZgC2Soaf8xxh+ZPz5be390KzI6K
-	 +aRloD+UTjnkg==
-Message-ID: <df025c47-8de8-4f95-a8fa-8d5d5dce5d5f@kernel.org>
-Date: Mon, 14 Apr 2025 09:59:47 +0200
+	b=RejD54Bj7c3QEILZ45XVMVfY4jsiT6+1kO+U4hwQCTADHPVTGkEFZpmMfUkTN7noh
+	 XiLrPnINqEqJ8pQKeM8gvdgmkgzRYegYDbDr8zS1E/IazeF6bGqOeE4B+I9CQ6n9BZ
+	 HuH/eKLWScOV40TOSXVyRGxGAp16zH9BsY6BenX22ieAqN3BLgpS5+emRoGxXLEXIX
+	 Hr627CEc5md4pTatCOgEEno1lH6uEFVr5XoVzcLEgsMAQhSFlAXNODHhGJMzVIzwbu
+	 eGZI+TZXXwXz0UWRLxfFSaGWetx5MC8aYxY6Jhr/oKVFZERkqVNasVDH+za7TxKi87
+	 MGVWe8mfNL2Cw==
+Message-ID: <966960bf-0d5a-4e1f-af77-b573c3d1e1cb@kernel.org>
+Date: Mon, 14 Apr 2025 10:01:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 6/9] serial: qcom-geni: move resource control logic to
- separate functions
+Subject: Re: [PATCH v1 7/9] serial: qcom-geni: move clock-rate logic to
+ separate function
 To: Praveen Talari <quic_ptalari@quicinc.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -65,7 +65,7 @@ Cc: psodagud@quicinc.com, djaggi@quicinc.com, quic_msavaliy@quicinc.com,
  quic_vtanuku@quicinc.com, quic_arandive@quicinc.com,
  quic_mnaresh@quicinc.com, quic_shazhuss@quicinc.com
 References: <20250410174010.31588-1-quic_ptalari@quicinc.com>
- <20250410174010.31588-7-quic_ptalari@quicinc.com>
+ <20250410174010.31588-8-quic_ptalari@quicinc.com>
 Content-Language: en-US
 From: Jiri Slaby <jirislaby@kernel.org>
 Autocrypt: addr=jirislaby@kernel.org; keydata=
@@ -110,72 +110,72 @@ Autocrypt: addr=jirislaby@kernel.org; keydata=
  f/bIWIr0cqQmqQ33FgRhrG1+Xml6UXyJ2jExmlO8JljuOGeXYh6ZkIEyzqzffzBLXZCujlYQ
  DFXpyMNVJ2ZwPmX2mWEoYuaBU0JN7wM+/zWgOf2zRwhEuD3A2cO2PxoiIfyUEfB9SSmffaK/
  S4xXoB6wvGENZ85Hg37C7WDNdaAt6Xh2uQIly5grkgvWppkNy4ZHxE+jeNsU7tg=
-In-Reply-To: <20250410174010.31588-7-quic_ptalari@quicinc.com>
+In-Reply-To: <20250410174010.31588-8-quic_ptalari@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 10. 04. 25, 19:40, Praveen Talari wrote:
-> Supports use in PM system/runtime frameworks, helping to
-> distinguish new resource control mechanisms and facilitate
-> future modifications within the new API.
+> Facilitates future modifications within the new function,
+> leading to better readability and maintainability of the code.
 > 
-> The code that handles the actual enable or disable of resources
-> like clock and ICC paths to a separate function
-> (geni_serial_resources_on() and geni_serial_resources_off()) which
-> enhances code readability.
+> Move the code that handles the actual logic of clock-rate
+> calculations to a separate function geni_serial_set_rate()
+> which enhances code readability.
 > 
 > Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
 > ---
->   drivers/tty/serial/qcom_geni_serial.c | 53 +++++++++++++++++++++------
->   1 file changed, 42 insertions(+), 11 deletions(-)
+>   drivers/tty/serial/qcom_geni_serial.c | 56 +++++++++++++++++----------
+>   1 file changed, 36 insertions(+), 20 deletions(-)
 > 
 > diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> index 889ce8961e0a..e341f5090ecc 100644
+> index e341f5090ecc..25d16ac3f406 100644
 > --- a/drivers/tty/serial/qcom_geni_serial.c
 > +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -1572,6 +1572,42 @@ static struct uart_driver qcom_geni_uart_driver = {
->   	.nr =  GENI_UART_PORTS,
->   };
+...
+> @@ -1323,6 +1310,37 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
+>   	port->se.icc_paths[CPU_TO_GENI].avg_bw = Bps_to_icc(baud);
+>   	geni_icc_set_bw(&port->se);
 >   
-> +static int geni_serial_resources_off(struct uart_port *uport)
-> +{
-> +	struct qcom_geni_serial_port *port = to_dev_port(uport);
-> +	int ret;
-> +
-> +	dev_pm_opp_set_rate(uport->dev, 0);
-> +	ret = geni_se_resources_off(&port->se);
-> +	if (ret)
-> +		return ret;
-> +
-> +	geni_icc_disable(&port->se);
-> +
-> +	return ret;
+> +	writel(ser_clk_cfg, uport->membase + GENI_SER_M_CLK_CFG);
+> +	writel(ser_clk_cfg, uport->membase + GENI_SER_S_CLK_CFG);
+> +	return 0;
 
-This is a bit confusing (needs context). return 0 directly.
+Did this pass checkpatch?
 
 > +}
 > +
-> +static int geni_serial_resources_on(struct uart_port *uport)
+> +static void qcom_geni_serial_set_termios(struct uart_port *uport,
+> +					 struct ktermios *termios,
+> +					 const struct ktermios *old)
 > +{
 > +	struct qcom_geni_serial_port *port = to_dev_port(uport);
-> +	int ret;
+> +	unsigned int baud;
+> +	unsigned long timeout;
+> +	u32 bits_per_char;
+> +	u32 tx_trans_cfg;
+> +	u32 tx_parity_cfg;
+> +	u32 rx_trans_cfg;
+> +	u32 rx_parity_cfg;
+> +	u32 stop_bit_len;
+> +	int ret = 0;
 > +
-> +	ret = geni_icc_enable(&port->se);
-> +	if (ret)
-> +		return ret;
+> +	/* baud rate */
+> +	baud = uart_get_baud_rate(uport, termios, old, 300, 4000000);
 > +
-> +	ret = geni_se_resources_on(&port->se);
+> +	ret = geni_serial_set_rate(uport, baud);
 > +	if (ret) {
-> +		geni_icc_disable(&port->se);
-> +		return ret;
+> +		dev_err(port->se.dev,
+> +			"%s: Failed to set  baud: %u  ret: %d\n",
+
+Why the doubled spaces?
+
+> +			__func__, baud, ret);
+> +		return;
 > +	}
 > +
-> +	if (port->clk_rate)
-> +		dev_pm_opp_set_rate(uport->dev, port->clk_rate);
-> +
-> +	return ret;
-
-Same here.
+>   	/* parity */
+>   	tx_trans_cfg = readl(uport->membase + SE_UART_TX_TRANS_CFG);
+>   	tx_parity_cfg = readl(uport->membase + SE_UART_TX_PARITY_CFG);
 
 thanks,
 -- 
