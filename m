@@ -1,130 +1,152 @@
-Return-Path: <linux-pm+bounces-25485-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25486-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33425A8A52B
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 19:18:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52502A8A533
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 19:19:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C06063B1060
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 17:17:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E895A3B497B
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 17:19:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F389519E967;
-	Tue, 15 Apr 2025 17:17:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4DD821CA12;
+	Tue, 15 Apr 2025 17:19:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uzmbIYra"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NoU3BWUr"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C984D6FC5;
-	Tue, 15 Apr 2025 17:17:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDAAC21C9E9;
+	Tue, 15 Apr 2025 17:19:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744737478; cv=none; b=QMUkZzEcbuaYrYWu/dftSlMi5QWPTGMdgZUM9+z7DS+K+PhnKeuQFx9Qo1lLHrQ+LC5pn8QYO1JD8UrsLAprUXVuXlnfNtyrszr7D5bHtXpGBfanbSlvRoUPasr4jCrl3pAuB/4HMnYZkdtQFEev4m08+2mhEcIqHDzQ/VT0CAE=
+	t=1744737591; cv=none; b=PvBvl8le7GDdyh8tm4zpeYxQBcaeJ61JIjktySiCRJdjQKMcaJ66J4tn75uPsHkLCNI+ZjnbaUbUxcFUPVc85WwjTkYOUwhKCSHS+NkPlaNTFml17gICH2lC168GSJdCJnNlxhrMgXXhgpLH3OFlcIw/5mPJ4wVjFyGiHJjyaWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744737478; c=relaxed/simple;
-	bh=0AKl/IsRYslwoVUW1m7o9u3fbr4ueHyDO0QWtpy18/E=;
+	s=arc-20240116; t=1744737591; c=relaxed/simple;
+	bh=uv4W3IqKCIYFhIRS6Tcr37NLaU3zwS0rWhXFN6Gl6dI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kHb7pWL88CaFzKlqTs5OD40ARQTZm/k8ntPmRXuntevB8yZS9/gJDBUTV16dxUkZvi5lof+0AppIpQ5Bo5snIJDbZ6U71J/VN4beKUJw/kgh8MV8o2QzjIjyDrMcBQDNqJCvGZwOWxwFYetgFcyvtODmNihShSnsPfW21ICfhcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uzmbIYra; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2319CC4CEEF;
-	Tue, 15 Apr 2025 17:17:58 +0000 (UTC)
+	 To:Cc:Content-Type; b=VjYshwnOvSd3kyZdD+vEDPvRADXJt89F964iyFChY2AtEIAXLmiU1E2i3pVS/GQAdo59g1pEViuweUQe3tV+a6gSRId4XJoPsmoxFU/yh+48FHhnQx4T2jxxbxVtFyPhFrWW6KPnGkOC/PSuyVmJNeKJcaVJuhv6HhuYBKeTcg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NoU3BWUr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33759C4CEEE;
+	Tue, 15 Apr 2025 17:19:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744737478;
-	bh=0AKl/IsRYslwoVUW1m7o9u3fbr4ueHyDO0QWtpy18/E=;
+	s=k20201202; t=1744737591;
+	bh=uv4W3IqKCIYFhIRS6Tcr37NLaU3zwS0rWhXFN6Gl6dI=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=uzmbIYraB+/hNPPpeHu5iQ59YfOzP/UIesCQXOHlU7LhdjCd3W/5SpGYiv/6/LyXH
-	 ZobA3oHULhM0Ktuxt4iv7U3aKT3kZKsF/H+fUBTIIijcvwxrv66m0Xt/+tiDJ6Rfrn
-	 ++YkWONByXXL2LR7lOh5YTabvrgPx7I3zsgPa6huIHsxp/gc2n7NWq2lAB5cXU7NUA
-	 AoKKOjUzfEVZZfKZdDXi+nHZBpNDomcEFSX87ZD7k19DVq252y7mLtRw7+EB83yk5A
-	 2LA4yBfGYoWXHVgUgSlEjwfSgTpW+Wip3c5uJINpQmKAjeP7kqB0EqORYu97HqcYSt
-	 xi0Hmv0T6/NhA==
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-2b8e26063e4so2829108fac.3;
-        Tue, 15 Apr 2025 10:17:58 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVJIDV7jNvl6JyvNBxT8thhjmrLlwZMniCTJgefd9ildHFRqtVVacLG0n5HcQYcItwTfmg7PfOWrf/Hqs8=@vger.kernel.org, AJvYcCWzS0Ex30xW22RHBdSgFY5dV0Yt95I4MufraIzX1nuC/3wYltt9uE8rMm17Gn2ljBU3oCirlffLnXA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNMpn9yYYZSVP7IgfHjEFWyB1hRNOI2COk06Dm/c18FEUW8l3X
-	PefonMcDY4toZZnR98cZF2W3mVN7CJjw/my+OPsZ8CCtFNkGn9bHRbemuTasPuhiVU2wNwk58DZ
-	3IsCKeG1Z/Qo3vs/lIgQthi9FbRY=
-X-Google-Smtp-Source: AGHT+IE8i9pYhCWpc0Z0zMWQ4IuY2YHkZmpW07tdSUgh5pECuqRMh2pTlndSFdkHU7kgpYSBSTpnnbMkIsLySUGS1Po=
-X-Received: by 2002:a05:6871:410c:b0:29e:4a13:603f with SMTP id
- 586e51a60fabf-2d4c3966836mr2578fac.4.1744737477341; Tue, 15 Apr 2025 10:17:57
- -0700 (PDT)
+	b=NoU3BWUrj7f8tS49OExJLBpgfcFkooIpEOGMZJSBCtZiGhwMgaHB3R632n5Mfu9dv
+	 Xsk/0DYntgp+bMa/sYM4F8QTnXoY2K5QhxDgM5W/4t+uutRuHp5ExOm+WbSgJtc+oh
+	 hLq8Ou9IFjKUGcO5T/GO3s3qUNZ5fHceKMb20LDTd0DVbXgjhDNfKhMi2RrwodUA1Z
+	 96yTgnQF1Y4/Ngn9mbGkyH9NFebRZYRjZIch2d+4ny46R73RhRWVOdWw4i6TxAUrkO
+	 50lV+0z9QuDFOoXUyzxZiN3f42POGtob2DlXXvaXQ82P7BCGj1jrC1mMcYh/++zVO1
+	 uNqm5alrbtYSQ==
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-72e965ddd79so1667554a34.0;
+        Tue, 15 Apr 2025 10:19:51 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWZRH6Y+bYtNkExKztGTqoYMpt0uSkp3/uOI2gF4d0ZezAkQCsW5KucVfeBs5y4YyXeHmYup8DdNWJzdLY=@vger.kernel.org, AJvYcCXUu+GAfXxx/ijFKlxzekswtqtxMlXy2PvknxBZfnTV5s2IDJr0vHRUttYIo+bQBratViplaDDnJfk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9HZRZPhxj6td8IC+dpzog5Bi3d46VWjaK6hJH4aknLl5D8OUX
+	ArqpbyY/ZThKYePVS7Y9UpZNoD24FZ9u8/dgoEhhtEEvuTPLi1WHhrt/mnhcfMMetNszFq3dhW+
+	EfD4U/Tf08qWHgWs634Iax+Vhs4o=
+X-Google-Smtp-Source: AGHT+IHfadXt208Vc4RWZMjFXdA71akOqXcmngW9Brd10iN59d4xz1W7CVRGhjIKSY6HM2F7L42TVMNZDgaTEpj23zQ=
+X-Received: by 2002:a05:6830:4709:b0:72b:9e5f:54a0 with SMTP id
+ 46e09a7af769-72ec1ccb5eamr82987a34.21.1744737590486; Tue, 15 Apr 2025
+ 10:19:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <tencent_EE27C7D1D6BDB3EE57A2C467CC59A866C405@qq.com> <tencent_6D2374392DB66C9D23BF6E2546638A42EC08@qq.com>
-In-Reply-To: <tencent_6D2374392DB66C9D23BF6E2546638A42EC08@qq.com>
+References: <tencent_EE27C7D1D6BDB3EE57A2C467CC59A866C405@qq.com>
+ <143378b0-5740-4f2b-9a79-f04cf9ef1f77@arm.com> <tencent_AE7CE43CDAD6747AFF0E952C8D0908A98D0A@qq.com>
+ <tencent_002D68A7E02F76C9D218B090D6085F0E8C06@qq.com>
+In-Reply-To: <tencent_002D68A7E02F76C9D218B090D6085F0E8C06@qq.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 15 Apr 2025 19:17:45 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iE_iw+pSBppEWnJw=2=DFNa-J2VPDorTNF=Mve+0PNCg@mail.gmail.com>
-X-Gm-Features: ATxdqUGlC1rknMXLhtRZskxYJ82qaSpg2SVaqpZAeB9vwYey56V6yOt0pI7hiXI
-Message-ID: <CAJZ5v0iE_iw+pSBppEWnJw=2=DFNa-J2VPDorTNF=Mve+0PNCg@mail.gmail.com>
-Subject: Re: [PATCH v3] PM: EM: Fix potential division-by-zero error in em_compute_costs()
+Date: Tue, 15 Apr 2025 19:19:39 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0he_mxfxmkrMLc73jCvJxDGAeW_JZDmNZa25PtH2qMK_g@mail.gmail.com>
+X-Gm-Features: ATxdqUESNGKFdsr7aaNbqMDBrBBTtgUL3gnaiQhekaoP9vU1yoiAmbt0Ax3z7LE
+Message-ID: <CAJZ5v0he_mxfxmkrMLc73jCvJxDGAeW_JZDmNZa25PtH2qMK_g@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: EM: Fix potential division-by-zero error in em_compute_costs()
 To: Yaxiong Tian <iambestgod@qq.com>
-Cc: lukasz.luba@arm.com, rafael@kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Yaxiong Tian <tianyaxiong@kylinos.cn>
+Cc: Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Yaxiong Tian <tianyaxiong@kylinos.cn>, rafael@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 14, 2025 at 11:09=E2=80=AFAM Yaxiong Tian <iambestgod@qq.com> w=
-rote:
+On Tue, Apr 15, 2025 at 4:03=E2=80=AFAM Yaxiong Tian <iambestgod@qq.com> wr=
+ote:
 >
-> From: Yaxiong Tian <tianyaxiong@kylinos.cn>
 >
-> When the device is of a non-CPU type, table[i].performance won't be
-> initialized in the previous em_init_performance(), resulting in division
-> by zero when calculating costs in em_compute_costs().
 >
-> Since the 'cost' algorithm is only used for EAS energy efficiency
-> calculations and is currently not utilized by other device drivers, we
-> should add the _is_cpu_device(dev) check to prevent this division-by-zero
-> issue.
+> =E5=9C=A8 2025/4/15 09:12, Yaxiong Tian =E5=86=99=E9=81=93:
+> >
+> >
+> > =E5=9C=A8 2025/4/14 16:08, Lukasz Luba =E5=86=99=E9=81=93:
+> >> Hi Yaxiong,
+> >>
+> >> On 4/11/25 02:28, Yaxiong Tian wrote:
+> >>> From: Yaxiong Tian <tianyaxiong@kylinos.cn>
+> >>>
+> >>> When the device is of a non-CPU type, table[i].performance won't be
+> >>> initialized in the previous em_init_performance(), resulting in divis=
+ion
+> >>> by zero when calculating costs in em_compute_costs().
+> >>>
+> >>> Since the 'cost' algorithm is only used for EAS energy efficiency
+> >>> calculations and is currently not utilized by other device drivers, w=
+e
+> >>> should add the _is_cpu_device(dev) check to prevent this
+> >>> division-by-zero
+> >>> issue.
+> >>>
+> >>> Fixes: <1b600da51073> ("PM: EM: Optimize em_cpu_energy() and remove
+> >>> division")
+> >>> Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
+> >>> ---
+> >>>   kernel/power/energy_model.c | 2 +-
+> >>>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.=
+c
+> >>> index d9b7e2b38c7a..d1fa7e8787b5 100644
+> >>> --- a/kernel/power/energy_model.c
+> >>> +++ b/kernel/power/energy_model.c
+> >>> @@ -244,7 +244,7 @@ static int em_compute_costs(struct device *dev,
+> >>> struct em_perf_state *table,
+> >>>                       cost, ret);
+> >>>                   return -EINVAL;
+> >>>               }
+> >>> -        } else {
+> >>> +        } else if (_is_cpu_device(dev)) {
+> >>>               /* increase resolution of 'cost' precision */
+> >>>               power_res =3D table[i].power * 10;
+> >>>               cost =3D power_res / table[i].performance;
+> >>
+> >>
+> >> As the test robot pointed out, please set the 'cost' to 0
+> >> where it's declared.
+> >>
+> >> The rest should be fine.
+> >>
+> >> Regards,
+> >> Lukasz
+> >
+> > Sorry, the V3 version with cost=3D0 still has issues.
+> >
+> > I noticed that if the cost is set to 0, the condition "if (table[i].cos=
+t
+> >   >=3D prev_cost)" in the following code will always evaluate to true. =
+This
+> >   will incorrectly set the flags to EM_PERF_STATE_INEFFICIENT.
+> >
+> > Should we change ">=3D" to ">"?
+> >
 >
-> Fixes: <1b600da51073> ("PM: EM: Optimize em_cpu_energy() and remove divis=
-ion")
+> Sorry Again=EF=BC=8C Setting EM_PERF_STATE_INEFFICIENT in this case is co=
+rrect.
+> Earlier, I misunderstood the definition/usage of EM_PERF_STATE_INEFFICIEN=
+T.
 
-Please look at the Fixes: tags in the kernel git history.  They don't
-look like the one above.
-
-> Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
-> ---
->  kernel/power/energy_model.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> index d9b7e2b38c7a..fc972cc1fc12 100644
-> --- a/kernel/power/energy_model.c
-> +++ b/kernel/power/energy_model.c
-> @@ -235,7 +235,7 @@ static int em_compute_costs(struct device *dev, struc=
-t em_perf_state *table,
->
->         /* Compute the cost of each performance state. */
->         for (i =3D nr_states - 1; i >=3D 0; i--) {
-> -               unsigned long power_res, cost;
-> +               unsigned long power_res, cost =3D 0;
->
->                 if ((flags & EM_PERF_DOMAIN_ARTIFICIAL) && cb->get_cost) =
-{
->                         ret =3D cb->get_cost(dev, table[i].frequency, &co=
-st);
-> @@ -244,7 +244,7 @@ static int em_compute_costs(struct device *dev, struc=
-t em_perf_state *table,
->                                         cost, ret);
->                                 return -EINVAL;
->                         }
-> -               } else {
-> +               } else if (_is_cpu_device(dev)) {
-
-Can't you just check this upfront at the beginning of the function and
-make it bail out if dev is not a CPU device?
-
->                         /* increase resolution of 'cost' precision */
->                         power_res =3D table[i].power * 10;
->                         cost =3D power_res / table[i].performance;
-> --
+Well, EM_PERF_STATE_INEFFICIENT is only looked at in CPU energy
+models, so setting it in a non-CPU one is redundant.
 
