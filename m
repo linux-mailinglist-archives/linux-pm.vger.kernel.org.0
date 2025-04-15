@@ -1,273 +1,255 @@
-Return-Path: <linux-pm+bounces-25428-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25427-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97207A892B9
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 06:15:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8CCCA8929B
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 05:41:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13A963B6DE7
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 04:15:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BDA8B7A90E6
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 03:40:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A900319A;
-	Tue, 15 Apr 2025 04:15:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A77C217F24;
+	Tue, 15 Apr 2025 03:41:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="E1z1LHnR"
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="r6V1zvGy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-m49239.qiye.163.com (mail-m49239.qiye.163.com [45.254.49.239])
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013006.outbound.protection.outlook.com [52.101.72.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D5FAD21;
-	Tue, 15 Apr 2025 04:15:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.239
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744690524; cv=none; b=HowS5Tbeq7RC6vaCtMqAkkg8rNyOZ0LDkVcMuyALsVnUituQ6qnajhBNKK479JTlx6N/mNHypZECr1NXHFL3zjgMdxIBLKBMbUFC9s1VWCmeSc42ETdIT9OcqXv+Ywx348ZXWC59svxSZS05uj0k8EY/2HtvB5pVA6vFdmICTnc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744690524; c=relaxed/simple;
-	bh=tMr8or3cqLs/Q21epdU7HEzAbywli1m2K9GYuir2ERg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NsEm+WUjlgalbrN5jpX47RCOY4ceSQC5hn/QW0iOqH/noDY+rWqZ0Cly5rt2XxCcEqYOC/kFCxDOOBwJTtBu8lAUIMomzV6toCybk8jubGH1OxJ0OYud+d94hmMvVCpSTciY+INrkMoXh+jP9VbdmfaDj6P4W1CrEfI/Z4Cg840=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=E1z1LHnR; arc=none smtp.client-ip=45.254.49.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from localhost.localdomain (unknown [103.29.142.67])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 11e3d216f;
-	Tue, 15 Apr 2025 11:39:45 +0800 (GMT+08:00)
-From: Kever Yang <kever.yang@rock-chips.com>
-To: heiko@sntech.de
-Cc: linux-rockchip@lists.infradead.org,
-	Shaohan Yao <shaohan.yao@rock-chips.com>,
-	Kever Yang <kever.yang@rock-chips.com>,
-	linux-pm@vger.kernel.org,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	linux-kernel@vger.kernel.org,
-	Zhang Rui <rui.zhang@intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH v2 2/2] thermal: rockchip: Add support for rk3562 SoC
-Date: Tue, 15 Apr 2025 11:39:40 +0800
-Message-Id: <20250415033940.47914-2-kever.yang@rock-chips.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250415033940.47914-1-kever.yang@rock-chips.com>
-References: <20250415033940.47914-1-kever.yang@rock-chips.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2571A2DFA2D;
+	Tue, 15 Apr 2025 03:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.6
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744688464; cv=fail; b=aPBA90zPk8t2e3w0MUpWXYyt5oMq01EgSIXmtZBavi8Vjg/UnYpd0m5qK/FghYMuAehBOy0rE59ptcEH5IZaS1kBkFrpw9sVFYwBzmr1OzV36cGlkcUgK5ZPmtxRWJjtCo7uWLY6K/b0FMHSIp8tvev6oKQBhledHP2MCLS8gnA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744688464; c=relaxed/simple;
+	bh=4uJogHapYuAK8/0hvb1Wb6Sj6En818ZTuIo/pDjCC58=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hz9Cyg1+N6nlQ+0kObRAVs6tbEy619ZV4Zso5RuJwdvT8FEnO7Ziz7ywpB6wXZfnUN1L1ocsPcjWTvRJsJKEURNXcbAvEoSRoOBsIWU+oyYzEggSrldcElGXwVYI3oxiaD47WvSivIHoERWo8TM9RePmNDIbgaVNIldcrLsaiKI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=r6V1zvGy; arc=fail smtp.client-ip=52.101.72.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XfhY9BmbQertGj8GxSOk2H9yp72mbJBHJbThy030k7OPvX/IkYrnTg/Lf+HrpzlsR5XdrQt+xTVqwILKCQyCVI+U3kMZj8aqMnTFyDA7yBamL364McVmGVSRTwxWVO61WzYP9uybsyT8m15VPj0Z3wzNiKv9Q/W3VGmBfQutTx+2EQ5XRz8qYiSW4Q4bIjEi/KPhSGsxlexphYiPedWgN6xveHuaZDDjFMfw19dwO1s9dheTb44MlnwfpojTdeAQka1LQZiBRJJM+E0sWI/BN3QyhKnxZJ3LvJJ/YjlaadOlhWq+1nS0+pTmAzp6eHeyG3SyQTd14Uz1vdSV9RD8kw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bzRveKKo9lwUcdEL9dECP7gh0izKDOCuKCvlm8AZlJw=;
+ b=i3QdhbG2dFC2jOUfPB4f6AnW/JRt3uzfwy5WW/WZYzPprV2xy2AXMDAWfVapYYLqcWMo+lXS+wbVHKRqR1AZrj9JMIKREa+SF8fB4W1I0CA7i7X3Y+xTxTIKCb1wtO3yUEy8O0DR9QkoG/hYlZfK4Nh0cEsTeHpKOEgHK+8V97MMzxdftTQ24j+pYM4LP7tQJAOOzBnx6QF1YDwxWitoN5GeRyqC3j1TKHEnchzpGNVrT0NBGOtj3/9FK2MWwitaJ58OFOg5YcxSplIItYicCLWOoCGNCiGLQAt6XIis1kL9gM1SWw3Z8dnrIgtXlto38fF7iDyvAMW7ih8p6o2WfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 195.60.68.100) smtp.rcpttodomain=kernel.org smtp.mailfrom=axis.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bzRveKKo9lwUcdEL9dECP7gh0izKDOCuKCvlm8AZlJw=;
+ b=r6V1zvGy64qDT9tP2rdrxVb7AjyYHxVFCG8Tnw7Ax4mWObOvU78GVeaZ9J3ERiLATFAuGquUGAoaYqFxJDLVq4K58N2GRlPXOxTnxTcE2HJMpadxYvnvQuy7KtNQYVUVOOiNEOiIWnlO36ZIybA1SjgcAmSFbv1zDMigfPfPQVI=
+Received: from PAZP264CA0235.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:238::16)
+ by AM7PR02MB6420.eurprd02.prod.outlook.com (2603:10a6:20b:1c1::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.35; Tue, 15 Apr
+ 2025 03:40:57 +0000
+Received: from AM1PEPF000252DB.eurprd07.prod.outlook.com
+ (2603:10a6:102:238:cafe::9c) by PAZP264CA0235.outlook.office365.com
+ (2603:10a6:102:238::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8632.36 via Frontend Transport; Tue,
+ 15 Apr 2025 03:40:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
+ smtp.mailfrom=axis.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=axis.com;
+Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
+ 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
+ client-ip=195.60.68.100; helo=mail.axis.com; pr=C
+Received: from mail.axis.com (195.60.68.100) by
+ AM1PEPF000252DB.mail.protection.outlook.com (10.167.16.53) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8655.12 via Frontend Transport; Tue, 15 Apr 2025 03:40:57 +0000
+Received: from SE-MAIL21W.axis.com (10.20.40.16) by se-mail01w.axis.com
+ (10.20.40.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.44; Tue, 15 Apr
+ 2025 05:40:56 +0200
+Received: from se-mail01w.axis.com (10.20.40.7) by SE-MAIL21W.axis.com
+ (10.20.40.16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.44; Tue, 15 Apr
+ 2025 05:40:56 +0200
+Received: from se-intmail02x.se.axis.com (10.4.0.28) by se-mail01w.axis.com
+ (10.20.40.7) with Microsoft SMTP Server id 15.1.2507.44 via Frontend
+ Transport; Tue, 15 Apr 2025 05:40:56 +0200
+Received: from pc4cv4203v8f.sh.cn.axis.com (pc4cv4203v8f.sh.cn.axis.com [192.168.77.92])
+	by se-intmail02x.se.axis.com (Postfix) with ESMTP id EA49A155;
+	Tue, 15 Apr 2025 05:40:55 +0200 (CEST)
+Received: by pc4cv4203v8f.sh.cn.axis.com (Postfix, from userid 12715)
+	id 19424D3923; Tue, 15 Apr 2025 11:40:55 +0800 (CST)
+From: Jerry Lv <Jerry.Lv@axis.com>
+To: =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>, Sebastian Reichel
+	<sre@kernel.org>
+CC: <kernel@axis.com>, Jerry Lv <Jerry.Lv@axis.com>,
+	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4] power: supply: bq27xxx: Retrieve again when busy
+Date: Tue, 15 Apr 2025 11:40:47 +0800
+Message-ID: <20250415-foo-fix-v2-1-5b45a395e4cc@axis.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.14.1
 Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCSBhJVh9LSB8eQ04fT0NISVYVFAkWGhdVEwETFh
-	oSFyQUDg9ZV1kYEgtZQVlKS0hVSUJVSk9JVU1MWVdZFhoPEhUdFFlBWU9LSFVKS0lPT09IVUpLS1
-	VKQktLWQY+
-X-HM-Tid: 0a9637880cbf03afkunm11e3d216f
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NSI6Qyo*TDJPKBoBUUsQLB0I
-	NzdPChFVSlVKTE9PTUNDSENNQkhOVTMWGhIXVRAeDR4JVQIaFRw7CRQYEFYYExILCFUYFBZFWVdZ
-	EgtZQVlKS0hVSUJVSk9JVU1MWVdZCAFZQUxJQkg3Bg++
-DKIM-Signature:a=rsa-sha256;
-	b=E1z1LHnRVGLNNS4WWPVLhmjYfgda3WsrsneNuwVnou+gflyY7DJcEepEsxSu0G25Mbj/FiFFtEL9fCgZhfXAP4cgof0iaT+8lBiTsHBqTU9KJUfohk2rfg1DQvVbukDu+odLnXPoQQPwQvZgaw9gYDtm0TklzApbxfnXCwy4xfo=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
-	bh=1Tre13DFbEzWLiu/T9e9wWJekgfPen9D+iwat8GNKM0=;
-	h=date:mime-version:subject:message-id:from;
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM1PEPF000252DB:EE_|AM7PR02MB6420:EE_
+X-MS-Office365-Filtering-Correlation-Id: decd927a-051c-40ad-20bf-08dd7bcf5515
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|376014|36860700013|7053199007|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Unp4djljRGZjckVIdDlVVjdXQ2VSOGYwd3FTOHJ3c1FXMWcwMnZTNzFiMSs2?=
+ =?utf-8?B?c0RnY1pYb0ppVGRweEplRERYMFlGT0hsTDJUOE5nS3cyT2NYcEdmYVQrVmVT?=
+ =?utf-8?B?WFVYaWxxV0luOVpxaHMvOEdGR2hDQVBMMWg3V2l0WmV2c1JvVU9abGdySEd1?=
+ =?utf-8?B?eVR5ZXlaalpiRnMvSHJRTklzMU9QdDZVZ203Qk1ya2l3S1hMNjJJQ2VoK3Nj?=
+ =?utf-8?B?VUpJSmFlVFRMUGtwUUw5cHdlQys4Ym9mcDVTVHl5SG96K3cxbmNhQlJpWmUx?=
+ =?utf-8?B?UWY5L0d6RWdNeFFkcU9wOEtENW1UbGVpN25CY1FJaENNRnFhajhCNmF3TEc4?=
+ =?utf-8?B?eE52MEZZMDVMSUZSa0FMbFdSdElPNTB3aHh1UE9ZY2lFVWVyeHV5TnExRUY3?=
+ =?utf-8?B?Sm1aU3N0QzhXL3pPRHBIY3NOVUhPSW95QUk1MXNZQndhdDJlVk4wWkgwYjZu?=
+ =?utf-8?B?NTBXVTVJWjU5ZVRDRFVFNmlnUWxtUzJJenVRSVVBV0hDTHl0cUhnTWhKMGor?=
+ =?utf-8?B?dStCcVg5UGw1RUROV2IyTkRZVWxuZU5EVjJSMGhodDY0OUZjOEJ1MVd3WEps?=
+ =?utf-8?B?OFdaU1d1QzJGOGROR1NTYzc1OXJONW5XTnVIdW1TVnh1cjFRMmpzYWlKQXFC?=
+ =?utf-8?B?YlFrM1hTdXhNV1Z0SUhvTW9tTWtvcVB6QTZQWjlLUXdQR1BoRkxTZktLZkRF?=
+ =?utf-8?B?TGl5dmViK21vblhhQlVubXh5SDc5OVlBclZDWEJFU3IwKzBBK3Jzc3owMXJV?=
+ =?utf-8?B?VDdVTGVUMm1DVmV1MzJhSEpicDNYS04rTmZoQ3dnTDdYbkVaWGxhSWdQSFdn?=
+ =?utf-8?B?QldjSGlFZlVYYjhNVjRKeHhVTTdZZnJpZzB0a1JaZDl2bWFPQSsvMnlNYWN4?=
+ =?utf-8?B?UW5hS1R5bGUzWEtqVU5ER1VydWg4U2lGY0V3WVJiQWRQOHdWWFVsRURKYm1L?=
+ =?utf-8?B?bkpaQU9mdmFlOHd0dkxlZHZWZHExQW45NDJIMHZ1T3ZaZHdqSWNua1I4SVl3?=
+ =?utf-8?B?SkthZURJSlord1hqdDRHQmxkMmRhQlVnYWtVbENNelhzK0RoNlhjN1FWYmM5?=
+ =?utf-8?B?WWduN01ObE5ITUdFNEFFTmF1Q2RnZWtkVG9sZ0ZPVFhRUHJjRWw5Y2t2L2VS?=
+ =?utf-8?B?bFdKbmFXVHNYNy80Y2o2RFRwc1o1M0dHTkpubWx5bHN4NkdqQXZhWXZjQnRF?=
+ =?utf-8?B?bzE5bGhmbGNsSEJXZFJYRlJCcVJmSktFQmdSOHl4c2l1bFFWMi9EY3NveEt4?=
+ =?utf-8?B?eFRBOFZ0Z2ZmTnZsQmZkVEtKWEdnOUY4MU5sSnBYeENhRDRqbTVpeDc1TGtG?=
+ =?utf-8?B?RzVGTDd2c1NyVHhYcStiQnE0MkZ2b2NySEd5RTc4NDkxWkR0cDZGM294V2M0?=
+ =?utf-8?B?bEpXY3ltREt6V3N3QmYvR2xETjg2VGtRK1YvT3JUcWtMcFNaMUlpQ1UrajI4?=
+ =?utf-8?B?Tk1sdDdTZjJJVTFxWXZvMmdhS1ZKVjRyeE5LbHdSTVY0M2c5aWJxLzlnVXVM?=
+ =?utf-8?B?RWdvOXRZQ1hhdm9wemFuSVBPK0lKOGVSNEN4VVlQQU9tbGFrcjE3ODNscmpl?=
+ =?utf-8?B?MklVSWJDQlZYa0hScmdXenIrc3FBMGxtdkU4dEtyY0JWRGpKU09ZUWtPSkhQ?=
+ =?utf-8?B?bXRoNGY3cEVycHNGSXRnT2grZVBGY0Y1V0Y5c2dHdFNmMHIzSG1hTU1GSXJE?=
+ =?utf-8?B?VkJmWlB2TWtiRTIwSk1pZ2loa2tZTUZ1Vkd6ZWM3UGcwN01STkNXVzdMUVBw?=
+ =?utf-8?B?R2N3YW81aWRxZGNFWmE0WHZKOHI0MVZXcThGczRoVk9aTTB0UVZXMHdJY0ZF?=
+ =?utf-8?B?TktvSXJMOGZhSDllSFpxWEpxdGU0aXFyaXBTdytvZ29GdGV2c0Rxd0NwaFlt?=
+ =?utf-8?B?cHc5ZzhpblVUSUVzQVpKUFdDbU94UHJJRm1SNHZQY3B3b1VVYkdlZlVXT2pV?=
+ =?utf-8?B?YkZoY2t5UVlGakgyemZObWR3YUUxRGRydFp6TTMzaHJhMUVYWkNYMVRMUWdl?=
+ =?utf-8?B?NFZKcm1yS20vd2pUbTVKdkV4UW1GUFptMDY5NDR5bU41cUNZZXFiYlNRRmdR?=
+ =?utf-8?B?MkhvU3gyV2cwcWROR2luTTFnckxsWU1YRXBpdz09?=
+X-Forefront-Antispam-Report:
+	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(36860700013)(7053199007)(13003099007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: axis.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2025 03:40:57.1902
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: decd927a-051c-40ad-20bf-08dd7bcf5515
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM1PEPF000252DB.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR02MB6420
 
-From: Shaohan Yao <shaohan.yao@rock-chips.com>
+Multiple applications may access the battery gauge at the same time, so
+the gauge may be busy and EBUSY will be returned. The driver will set a
+flag to record the EBUSY state, and this flag will be kept until the next
+periodic update. When this flag is set, bq27xxx_battery_get_property()
+will just return ENODEV until the flag is updated.
 
-There is one Temperature Sensor with channel 0 on rk3562 SoC.
-This driver adds the mapping table as-is from the TRM so that we can
-always sync to the TRM once there have any change in the future.
+Even if the gauge was busy during the last accessing attempt, returning
+ENODEV is not ideal, and can cause confusion in the applications layer.
 
-Signed-off-by: Shaohan Yao <shaohan.yao@rock-chips.com>
-Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
+Instead, retry accessing the I2C to update the flag is as expected, for
+the gauge typically recovers from busy state within a few milliseconds.
+If still failed to access the gauge, the real error code would be returned
+instead of ENODEV (as suggested by Pali Rohár).
+
+Reviewed-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Jerry Lv <Jerry.Lv@axis.com>
 ---
+Changes in v4:
+- Optimize the I2C retry logic
+- Add Reviewed-by tag
+- Link to v3: https://lore.kernel.org/all/20250319-foo-fix-v2-1-ff4cb232ef42@axis.com
+
+Changes in v3:
+- Move I2C retry logic to bq27xxx_battery_i2c_read()
+- Link to v2: https://lore.kernel.org/all/20241029-foo-fix-v1-1-1dbfed72d023@axis.com
 
 Changes in v2:
-- Update the commit message
+- Retry up to 3 times when gauge is busy
+- return the real error code when fail to access the device
+- Link to v1: https://lore.kernel.org/all/20240913-foo-fix2-v1-1-a0f499404f3a@axis.com
+---
+ drivers/power/supply/bq27xxx_battery.c     |  2 +-
+ drivers/power/supply/bq27xxx_battery_i2c.c | 13 ++++++++++++-
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
- drivers/thermal/rockchip_thermal.c | 112 ++++++++++++++++++++++++++++-
- 1 file changed, 111 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
-index a8ad85feb68f..3278472b06f9 100644
---- a/drivers/thermal/rockchip_thermal.c
-+++ b/drivers/thermal/rockchip_thermal.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (c) 2014-2016, Fuzhou Rockchip Electronics Co., Ltd
-+ * Copyright (c) 2014-2021, Fuzhou Rockchip Electronics Co., Ltd.
-+ * Copyright (c) 2021-2024, Rockchip Electronics Co., Ltd.
-  * Caesar Wang <wxt@rock-chips.com>
+diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
+index 750fda543308..99631ab46e8e 100644
+--- a/drivers/power/supply/bq27xxx_battery.c
++++ b/drivers/power/supply/bq27xxx_battery.c
+@@ -2030,7 +2030,7 @@ static int bq27xxx_battery_get_property(struct power_supply *psy,
+ 	mutex_unlock(&di->lock);
+ 
+ 	if (psp != POWER_SUPPLY_PROP_PRESENT && di->cache.flags < 0)
+-		return -ENODEV;
++		return di->cache.flags;
+ 
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_STATUS:
+diff --git a/drivers/power/supply/bq27xxx_battery_i2c.c b/drivers/power/supply/bq27xxx_battery_i2c.c
+index ba0d22d90429..868e95f0887e 100644
+--- a/drivers/power/supply/bq27xxx_battery_i2c.c
++++ b/drivers/power/supply/bq27xxx_battery_i2c.c
+@@ -6,6 +6,7 @@
+  *	Andrew F. Davis <afd@ti.com>
   */
  
-@@ -185,6 +186,8 @@ struct rockchip_thermal_data {
- #define TSADCV2_AUTO_PERIOD_HT			0x6c
- #define TSADCV3_AUTO_PERIOD			0x154
- #define TSADCV3_AUTO_PERIOD_HT			0x158
-+#define TSADCV9_Q_MAX				0x210
-+#define TSADCV9_FLOW_CON			0x218
++#include <linux/delay.h>
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
+@@ -31,6 +32,7 @@ static int bq27xxx_battery_i2c_read(struct bq27xxx_device_info *di, u8 reg,
+ 	struct i2c_msg msg[2];
+ 	u8 data[2];
+ 	int ret;
++	int retry = 0;
  
- #define TSADCV2_AUTO_EN				BIT(0)
- #define TSADCV2_AUTO_EN_MASK			BIT(16)
-@@ -195,6 +198,7 @@ struct rockchip_thermal_data {
- #define TSADCV2_AUTO_TSHUT_POLARITY_MASK	BIT(24)
+ 	if (!client->adapter)
+ 		return -ENODEV;
+@@ -47,7 +49,16 @@ static int bq27xxx_battery_i2c_read(struct bq27xxx_device_info *di, u8 reg,
+ 	else
+ 		msg[1].len = 2;
  
- #define TSADCV3_AUTO_Q_SEL_EN			BIT(1)
-+#define TSADCV3_AUTO_Q_SEL_EN_MASK		BIT(17)
- 
- #define TSADCV2_INT_SRC_EN(chn)			BIT(chn)
- #define TSADCV2_INT_SRC_EN_MASK(chn)		BIT(16 + (chn))
-@@ -220,6 +224,12 @@ struct rockchip_thermal_data {
- #define TSADCV5_AUTO_PERIOD_HT_TIME		1622 /* 2.5ms */
- #define TSADCV6_AUTO_PERIOD_TIME		5000 /* 2.5ms */
- #define TSADCV6_AUTO_PERIOD_HT_TIME		5000 /* 2.5ms */
-+#define TSADCV7_AUTO_PERIOD_TIME		3000 /* 2.5ms */
-+#define TSADCV7_AUTO_PERIOD_HT_TIME		3000 /* 2.5ms */
-+#define TSADCV12_AUTO_PERIOD_TIME		3000 /* 2.5ms */
-+#define TSADCV12_AUTO_PERIOD_HT_TIME		3000 /* 2.5ms */
-+#define TSADCV3_Q_MAX_VAL			0x7ff /* 11bit 2047 */
-+#define TSADCV12_Q_MAX_VAL			0xfff /* 12bit 4095 */
- 
- #define TSADCV2_USER_INTER_PD_SOC		0x340 /* 13 clocks */
- #define TSADCV5_USER_INTER_PD_SOC		0xfc0 /* 97us, at least 90us */
-@@ -230,6 +240,8 @@ struct rockchip_thermal_data {
- 
- #define PX30_GRF_SOC_CON2			0x0408
- 
-+#define RK3562_GRF_TSADC_CON			0x0580
+-	ret = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
++	do {
++		ret = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
++		if (ret == -EBUSY && ++retry < 3) {
++			/* sleep 10 milliseconds when busy */
++			usleep_range(10000, 11000);
++			continue;
++		}
++		break;
++	} while (1);
 +
- #define RK3568_GRF_TSADC_CON			0x0600
- #define RK3568_GRF_TSADC_ANA_REG0		(0x10001 << 0)
- #define RK3568_GRF_TSADC_ANA_REG1		(0x10001 << 1)
-@@ -498,6 +510,45 @@ static const struct tsadc_table rk3399_code_table[] = {
- 	{TSADCV3_DATA_MASK, 125000},
- };
+ 	if (ret < 0)
+ 		return ret;
  
-+static const struct tsadc_table rk3562_code_table[] = {
-+	{0, -40000},
-+	{1419, -40000},
-+	{1428, -35000},
-+	{1436, -30000},
-+	{1445, -25000},
-+	{1453, -20000},
-+	{1462, -15000},
-+	{1470, -10000},
-+	{1479, -5000},
-+	{1487, 0},
-+	{1496, 5000},
-+	{1504, 10000},
-+	{1512, 15000},
-+	{1521, 20000},
-+	{1529, 25000},
-+	{1538, 30000},
-+	{1546, 35000},
-+	{1555, 40000},
-+	{1563, 45000},
-+	{1572, 50000},
-+	{1580, 55000},
-+	{1589, 60000},
-+	{1598, 65000},
-+	{1606, 70000},
-+	{1615, 75000},
-+	{1623, 80000},
-+	{1632, 85000},
-+	{1640, 90000},
-+	{1648, 95000},
-+	{1657, 100000},
-+	{1666, 105000},
-+	{1674, 110000},
-+	{1682, 115000},
-+	{1691, 120000},
-+	{1699, 125000},
-+	{TSADCV2_DATA_MASK, 125000},
-+};
-+
- static const struct tsadc_table rk3568_code_table[] = {
- 	{0, -40000},
- 	{1584, -40000},
-@@ -835,6 +886,37 @@ static void rk_tsadcv8_initialize(struct regmap *grf, void __iomem *regs,
- 			       regs + TSADCV2_AUTO_CON);
- }
- 
-+static void rk_tsadcv12_initialize(struct regmap *grf, void __iomem *regs,
-+				   enum tshut_polarity tshut_polarity)
-+{
-+	writel_relaxed(TSADCV12_AUTO_PERIOD_TIME, regs + TSADCV3_AUTO_PERIOD);
-+	writel_relaxed(TSADCV12_AUTO_PERIOD_HT_TIME,
-+		       regs + TSADCV3_AUTO_PERIOD_HT);
-+	writel_relaxed(TSADCV2_HIGHT_INT_DEBOUNCE_COUNT,
-+		       regs + TSADCV3_HIGHT_INT_DEBOUNCE);
-+	writel_relaxed(TSADCV2_HIGHT_TSHUT_DEBOUNCE_COUNT,
-+		       regs + TSADCV3_HIGHT_TSHUT_DEBOUNCE);
-+	writel_relaxed(TSADCV12_Q_MAX_VAL, regs + TSADCV9_Q_MAX);
-+	writel_relaxed(TSADCV3_AUTO_Q_SEL_EN | TSADCV3_AUTO_Q_SEL_EN_MASK,
-+		       regs + TSADCV2_AUTO_CON);
-+	if (tshut_polarity == TSHUT_HIGH_ACTIVE)
-+		writel_relaxed(TSADCV2_AUTO_TSHUT_POLARITY_HIGH |
-+			       TSADCV2_AUTO_TSHUT_POLARITY_MASK,
-+			       regs + TSADCV2_AUTO_CON);
-+	else
-+		writel_relaxed(TSADCV2_AUTO_TSHUT_POLARITY_MASK,
-+			       regs + TSADCV2_AUTO_CON);
-+
-+	if (!IS_ERR(grf)) {
-+		regmap_write(grf, RK3562_GRF_TSADC_CON, RK3568_GRF_TSADC_TSEN);
-+		udelay(15);
-+		regmap_write(grf, RK3562_GRF_TSADC_CON, RK3568_GRF_TSADC_ANA_REG0);
-+		regmap_write(grf, RK3562_GRF_TSADC_CON, RK3568_GRF_TSADC_ANA_REG1);
-+		regmap_write(grf, RK3562_GRF_TSADC_CON, RK3568_GRF_TSADC_ANA_REG2);
-+		usleep_range(100, 200);
-+	}
-+}
-+
- static void rk_tsadcv2_irq_ack(void __iomem *regs)
- {
- 	u32 val;
-@@ -1259,6 +1341,30 @@ static const struct rockchip_tsadc_chip rk3399_tsadc_data = {
- 	},
- };
- 
-+static const struct rockchip_tsadc_chip rk3562_tsadc_data = {
-+	.chn_offset = 0,
-+	.chn_num = 1, /* one channels for tsadc */
-+
-+	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-+	.tshut_polarity = TSHUT_LOW_ACTIVE, /* default TSHUT LOW ACTIVE */
-+	.tshut_temp = 95000,
-+
-+	.initialize = rk_tsadcv12_initialize,
-+	.irq_ack = rk_tsadcv4_irq_ack,
-+	.control = rk_tsadcv4_control,
-+	.get_temp = rk_tsadcv4_get_temp,
-+	.set_alarm_temp = rk_tsadcv3_alarm_temp,
-+	.set_tshut_temp = rk_tsadcv3_tshut_temp,
-+	.set_tshut_mode = rk_tsadcv3_tshut_mode,
-+
-+	.table = {
-+		.id = rk3562_code_table,
-+		.length = ARRAY_SIZE(rk3562_code_table),
-+		.data_mask = TSADCV2_DATA_MASK,
-+		.mode = ADC_INCREMENT,
-+	},
-+};
-+
- static const struct rockchip_tsadc_chip rk3568_tsadc_data = {
- 	/* cpu, gpu */
- 	.chn_offset = 0,
-@@ -1338,6 +1444,10 @@ static const struct of_device_id of_rockchip_thermal_match[] = {
- 		.compatible = "rockchip,rk3399-tsadc",
- 		.data = (void *)&rk3399_tsadc_data,
- 	},
-+	{
-+		.compatible = "rockchip,rk3562-tsadc",
-+		.data = (void *)&rk3562_tsadc_data,
-+	},
- 	{
- 		.compatible = "rockchip,rk3568-tsadc",
- 		.data = (void *)&rk3568_tsadc_data,
+
+---
+base-commit: 42f7652d3eb527d03665b09edac47f85fb600924
+change-id: 20241008-foo-fix-b2244cbe6dce
+
+Best regards,
 -- 
-2.25.1
+Jerry Lv <Jerry.Lv@axis.com>
 
 
