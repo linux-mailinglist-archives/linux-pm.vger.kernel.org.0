@@ -1,162 +1,203 @@
-Return-Path: <linux-pm+bounces-25469-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25470-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC5D4A89E42
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 14:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 05CDCA89EF7
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 15:08:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B7757AC2FE
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 12:35:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0FE8F7A2DE8
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 13:07:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 145DA284679;
-	Tue, 15 Apr 2025 12:35:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 195A72973BA;
+	Tue, 15 Apr 2025 13:08:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=invisiblethingslab.com header.i=@invisiblethingslab.com header.b="g1vL/jWZ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="AIsj/ITX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8E5B1C3C14;
-	Tue, 15 Apr 2025 12:35:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A92402949F9;
+	Tue, 15 Apr 2025 13:08:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744720554; cv=none; b=JL/AK1+WARgQDfwbE57LwRJPAUf8uGxOI3kvgPfxvOd2DWuY0dYjYofOn2t12wBhc6kKvc5H19R0S9rgFUhXqKxaq1eYFvpcxqekWiHkxPaaOXph5t5TG4DhJEAUaV88ybcyvUMb+wKc4ZcnWjI5X/GB1IHbS2bGjQQvq9Uk1iM=
+	t=1744722505; cv=none; b=qH6Uudy82Gn29vngm/MAyb6dDQH4f3jxu33QW4QNbDMv8hV9ZkbqzjQtM6J49cAInmL9qmtN+0lH2Yq71w3LWQdbBO3aXcLyWfEvnplPmwXZaK01DWMREsxofv6FxwKcFhorRx5F9886Aejjfcxhqm2xAvNt2OjE84NdSX3XA5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744720554; c=relaxed/simple;
-	bh=cvMdXWlyO7zZdUfihtvKjmStE03P3p/iRalM774IBBs=;
+	s=arc-20240116; t=1744722505; c=relaxed/simple;
+	bh=LFHHOdKIEHi28QunVdPZ/PA6tBElS1oeV9WZk8dvqyM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ri5cWcImEmcPxOJ1hnEMCkz+JuX3W/HjiVeI8v1kzVm7QrHvGQcIoFSp4Zv6NH2DVSfqT0/xtoanX84s5HwziAUus9Uy7fnDN3vMSfSIOLNHUfubk+i0gnARMRXur17YAbgesxgkFS14gaVbqgySTiKLVWhqeJ4+IAtbM2oQPM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74DEB15A1;
-	Tue, 15 Apr 2025 05:35:49 -0700 (PDT)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DFE7C3F694;
-	Tue, 15 Apr 2025 05:35:49 -0700 (PDT)
-Date: Tue, 15 Apr 2025 13:35:47 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 2/8] cpuidle: psci: Transition to the faux device
- interface
-Message-ID: <20250415-vigorous-platypus-of-management-c2ddaf@sudeepholla>
-References: <20250318-plat2faux_dev-v2-0-e6cc73f78478@arm.com>
- <20250318-plat2faux_dev-v2-2-e6cc73f78478@arm.com>
- <2025041515-duplex-recant-7235@gregkh>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mIv99LA8wXECliyc76d7zqTvtEHbcwQ5sKscvwEABkR4OCTZchTxZjboryf2XzkoVErUQWGHwcAqCzOUWuW6KsjfoGZyVnodqlXfhBvOKIDY/0iC+uXlKi8i/yLhAdadzYin6BF7OC9jwMf1vUA9uuAprvSoxD5aSxr1cCw2rqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=invisiblethingslab.com; spf=pass smtp.mailfrom=invisiblethingslab.com; dkim=pass (2048-bit key) header.d=invisiblethingslab.com header.i=@invisiblethingslab.com header.b=g1vL/jWZ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=AIsj/ITX; arc=none smtp.client-ip=103.168.172.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=invisiblethingslab.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=invisiblethingslab.com
+Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 8197111403AB;
+	Tue, 15 Apr 2025 09:08:21 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-02.internal (MEProxy); Tue, 15 Apr 2025 09:08:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	invisiblethingslab.com; h=cc:cc:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1744722501;
+	 x=1744808901; bh=xA9Xlxmq09ENSXnxA5kYNDInLOQ3lpFIKckJl2wyvaY=; b=
+	g1vL/jWZr3xkJdvosSFyNpaQEwlrs+73YlTa3DGoJ2K8qE590Lt91C94eIJMLP4n
+	mUVT2QcuGomlo3bJj+WQLpgj7WEVx32qa4KdeVg/K92WRUBVnP53Sfx/Yi2HXmIw
+	ik276X+c91Pr3B41mjTN5lS4QLuG5f0PtIm8d4vqte0MBWCKvDh+REjWPpDvtKoF
+	WOZNa6YPJ9YysE+Bu8ncET9aQCO0+ekCJn9hiBjkZkUhMoDrhOJNcC8dJ88UTq4x
+	hOtSNSf5+rK+l60VjoRS/IyWLkvvpdZsYTWwuN5GyMEaA8ThMidbI/WfgicsT/ai
+	vR9v/h8iRuEc4SjYxBQOjQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1744722501; x=1744808901; bh=xA9Xlxmq09ENSXnxA5kYNDInLOQ3lpFIKck
+	Jl2wyvaY=; b=AIsj/ITXRvXP8HSHn5v7D5jPmeFus07tcwjNZBQe9WOR8Eydwrt
+	99gZsQ98cQPRaJribXXIorfYekWjutv1qkUsR6BFTjpTiCRVcgCJg/aqBlviH1a6
+	pliO51bpkBn+uGCTR7n6kNSBaYY+5gwUWO3nqNzLrKxO3SkmuRcxWu4uKhiNWapv
+	KSuabtdmi0R/bCnZAbLYLt7IHJIX2YVEg3Wzy5IQwhrifMertSCu53Y/1UGozSdV
+	tLHACvQB7lP0oRw6PWrj8bhDOQgL2EPjfirqNgUwhXSTHGtGJ9z7UWIiiCL/MDCe
+	nUqrd1q++ZWSzg6JGHGE+5s1+jO8ct2h/Hg==
+X-ME-Sender: <xms:RVr-Z2-TPWDoW7h1aJm1kaX8KOYgu_zF_AKnW949Oa_m86QTnWG3_Q>
+    <xme:RVr-Z2uc98BzCabdwRI6zn-I81OIKdBgoZxXUvX7OtNxz2Jp0ydNYYV_VTnejz7F_
+    sQjSuIn-6tofg>
+X-ME-Received: <xmr:RVr-Z8AT-pO4Y-BlwPRB88Yb9X6ziy9NkJhtPWoVdOcD2e9Wu7PpmNqepUsHnc5QSJv8iY16lp3Ot97cDJ2ZPwfAA4332Juptg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvvdefheejucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesghdtreertddt
+    jeenucfhrhhomhepofgrrhgvkhcuofgrrhgtiiihkhhofihskhhiqdfikphrvggtkhhiuc
+    eomhgrrhhmrghrvghksehinhhvihhsihgslhgvthhhihhnghhslhgrsgdrtghomheqnecu
+    ggftrfgrthhtvghrnhepieeluddvkeejueekhfffteegfeeiffefjeejvdeijedvgfejhe
+    etuddvkeffudeinecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghr
+    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrghrmhgrrhgvkhesihhnvh
+    hishhisghlvghthhhinhhgshhlrggsrdgtohhmpdhnsggprhgtphhtthhopeekpdhmohgu
+    vgepshhmthhpohhuthdprhgtphhtthhopehsthgrsghlvgesvhhgvghrrdhkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhrtghpthht
+    oheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplh
+    hinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    vhhirhgvshhhrdhkuhhmrghrsehlihhnrghrohdrohhrghdprhgtphhtthhopehsrhhinh
+    hivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghp
+    thhtohepmhgrrhhiohdrlhhimhhonhgtihgvlhhlohesrghmugdrtghomhdprhgtphhtth
+    hopehsuhguvggvphdrhhholhhlrgesrghrmhdrtghomh
+X-ME-Proxy: <xmx:RVr-Z-dUHKnSdf-w9rXPpVuPNkRVVpQJEE9PBrK8bL6P674zxAsDXA>
+    <xmx:RVr-Z7N0j0hzCIdyd9hMv5sUfen1276k32BuET95lKPOK6IejgL3Vw>
+    <xmx:RVr-Z4ke2BfIe0JpTytFypMnrqV1X4H-leQJURJnr0Yg_f0BzEd8rw>
+    <xmx:RVr-Z9unXbn7phtJyIj_NwqtMhc9b-CscMtKd30cLMZt0NH9IppzEw>
+    <xmx:RVr-Z2szoRQdYP3IO5AIgkOfuvltUKW3bn65M2OMWwaZZTLkQWaJGPap>
+Feedback-ID: i1568416f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 15 Apr 2025 09:08:19 -0400 (EDT)
+Date: Tue, 15 Apr 2025 15:08:17 +0200
+From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
+To: stable@vger.kernel.org
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH v1 01/10] cpufreq: Reference count policy in
+ cpufreq_update_limits()
+Message-ID: <Z_5aQdqYJCFkcHLi@mail-itl>
+References: <4651448.LvFx2qVVIh@rjwysocki.net>
+ <1928789.tdWV9SEqCh@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="eMX8NdoxMYxrK7da"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2025041515-duplex-recant-7235@gregkh>
+In-Reply-To: <1928789.tdWV9SEqCh@rjwysocki.net>
 
-On Tue, Apr 15, 2025 at 02:21:33PM +0200, Greg Kroah-Hartman wrote:
-> On Tue, Mar 18, 2025 at 05:01:40PM +0000, Sudeep Holla wrote:
-> > The PSCI cpuidle driver does not require the creation of a platform
-> > device. Originally, this approach was chosen for simplicity when the
-> > driver was first implemented.
-> > 
-> > With the introduction of the lightweight faux device interface, we now
-> > have a more appropriate alternative. Migrate the driver to utilize the
-> > faux bus, given that the platform device it previously created was not
-> > a real one anyway. This will simplify the code, reducing its footprint
-> > while maintaining functionality.
-> > 
-> > Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > Cc: linux-pm@vger.kernel.org
-> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> > ---
-> >  drivers/cpuidle/cpuidle-psci.c | 32 ++++----------------------------
-> >  1 file changed, 4 insertions(+), 28 deletions(-)
-> > 
-> > diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> > index 2562dc001fc1de69732ef28f383d2809262a3d96..5d4d6daed36d8540ba2ce3dc54a3180731b03d22 100644
-> > --- a/drivers/cpuidle/cpuidle-psci.c
-> > +++ b/drivers/cpuidle/cpuidle-psci.c
-> > @@ -16,7 +16,7 @@
-> >  #include <linux/kernel.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of.h>
-> > -#include <linux/platform_device.h>
-> > +#include <linux/device/faux.h>
-> >  #include <linux/psci.h>
-> >  #include <linux/pm_domain.h>
-> >  #include <linux/pm_runtime.h>
-> > @@ -404,14 +404,14 @@ static int psci_idle_init_cpu(struct device *dev, int cpu)
-> >   * to register cpuidle driver then rollback to cancel all CPUs
-> >   * registration.
-> >   */
-> > -static int psci_cpuidle_probe(struct platform_device *pdev)
-> > +static int psci_cpuidle_probe(struct faux_device *fdev)
-> >  {
-> >  	int cpu, ret;
-> >  	struct cpuidle_driver *drv;
-> >  	struct cpuidle_device *dev;
-> >  
-> >  	for_each_possible_cpu(cpu) {
-> > -		ret = psci_idle_init_cpu(&pdev->dev, cpu);
-> > +		ret = psci_idle_init_cpu(&fdev->dev, cpu);
-> >  		if (ret)
-> >  			goto out_fail;
-> >  	}
-> > @@ -431,28 +431,4 @@ static int psci_cpuidle_probe(struct platform_device *pdev)
-> >  	return ret;
-> >  }
-> >  
-> > -static struct platform_driver psci_cpuidle_driver = {
-> > -	.probe = psci_cpuidle_probe,
-> > -	.driver = {
-> > -		.name = "psci-cpuidle",
-> > -	},
-> > -};
-> > -
-> > -static int __init psci_idle_init(void)
-> > -{
-> > -	struct platform_device *pdev;
-> > -	int ret;
-> > -
-> > -	ret = platform_driver_register(&psci_cpuidle_driver);
-> > -	if (ret)
-> > -		return ret;
-> > -
-> > -	pdev = platform_device_register_simple("psci-cpuidle", -1, NULL, 0);
-> > -	if (IS_ERR(pdev)) {
-> > -		platform_driver_unregister(&psci_cpuidle_driver);
-> > -		return PTR_ERR(pdev);
-> > -	}
-> > -
-> > -	return 0;
-> > -}
-> > -device_initcall(psci_idle_init);
-> > +module_faux_driver(psci_cpuidle, psci_cpuidle_probe, NULL, true);
-> 
-> See, what does "true" mean here?
-> 
-> Why would you ever want "false"?
-> 
 
-There were few efi platform devices that were created conditionally and
-the idea with this true/false was to pass that condition. I agree it was
-not clean. Anyways since efi platform devices can't be moved to faux
-devices, this flag becomes useless as it is most true for all other users.
+--eMX8NdoxMYxrK7da
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 15 Apr 2025 15:08:17 +0200
+From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
+To: stable@vger.kernel.org
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH v1 01/10] cpufreq: Reference count policy in
+ cpufreq_update_limits()
 
-Also as mention in the other thread, the need for macro also become very
-weak as efi devices can't be moved into faux.
+On Fri, Mar 28, 2025 at 09:39:08PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>=20
+> Since acpi_processor_notify() can be called before registering a cpufreq
+> driver or even in cases when a cpufreq driver is not registered at all,
+> cpufreq_update_limits() needs to check if a cpufreq driver is present
+> and prevent it from being unregistered.
+>=20
+> For this purpose, make it call cpufreq_cpu_get() to obtain a cpufreq
+> policy pointer for the given CPU and reference count the corresponding
+> policy object, if present.
+>=20
+> Fixes: 5a25e3f7cc53 ("cpufreq: intel_pstate: Driver-specific handling of =
+_PPC updates")
+> Closes: https://lore.kernel.org/linux-acpi/Z-ShAR59cTow0KcR@mail-itl
+> Reporetd-by: Marek Marczykowski-G=C3=B3recki <marmarek@invisiblethingslab=
+=2Ecom>=20
+> Cc: All applicable <stable@vger.kernel.org>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-So all the patches in v1 except efi and trng are now queued via respective
-trees using faux device apis directly without this weird macro 😄.
+It looks like this patch is missing in stable branches.
 
--- 
-Regards,
-Sudeep
+> ---
+>  drivers/cpufreq/cpufreq.c |    6 ++++++
+>  1 file changed, 6 insertions(+)
+>=20
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -2781,6 +2781,12 @@
+>   */
+>  void cpufreq_update_limits(unsigned int cpu)
+>  {
+> +	struct cpufreq_policy *policy __free(put_cpufreq_policy);
+> +
+> +	policy =3D cpufreq_cpu_get(cpu);
+> +	if (!policy)
+> +		return;
+> +
+>  	if (cpufreq_driver->update_limits)
+>  		cpufreq_driver->update_limits(cpu);
+>  	else
+>=20
+>=20
+>=20
+
+--=20
+Best Regards,
+Marek Marczykowski-G=C3=B3recki
+Invisible Things Lab
+
+--eMX8NdoxMYxrK7da
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAmf+WkEACgkQ24/THMrX
+1yz5hgf/S6i//LIDY5LglLWFfkwReDhT9lIsdeaE8WVCNsUbsduRvWJoSRduxa2f
+ZvLbGwAxs5KMdrp9/3iW/1g8lC/OP15/U+yEXnAl3aSt4Qp+xOmizbSSPe8pPU+R
+G738/u7TNhAekKTEG4+AFs+H6ezuBf2nflDvjmMO7jzk9MhfMeJV26maKWYTedEc
+NKVUTHWVMpfqMb/gS3HGCg7gHiX3uHcnkaiOJb4oejWQziq12IPxVwtsfjecbGRR
+T/NyBFVJcfuAGQa2n8H19oxAPQJqK/AQdSiXJh8hZ8qBRfHkQViTzWC4ocLu639B
+i3p9StmI2FwzJhmmutWgP0D1UxK1BQ==
+=BhXG
+-----END PGP SIGNATURE-----
+
+--eMX8NdoxMYxrK7da--
 
