@@ -1,183 +1,219 @@
-Return-Path: <linux-pm+bounces-25480-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25481-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57703A8A4CA
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 19:00:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2932EA8A4EC
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 19:06:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BD741901EBF
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 17:00:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92CB73AFD13
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 17:05:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39B0B29B79D;
-	Tue, 15 Apr 2025 16:59:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52CA3176AC5;
+	Tue, 15 Apr 2025 17:05:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s9Wo8wfB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nHjyEEVJ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1186817A2F8;
-	Tue, 15 Apr 2025 16:59:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289946FC5;
+	Tue, 15 Apr 2025 17:05:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744736398; cv=none; b=bqHGSOF108qOpZr5gb2nTwssxkMxG+2kGzfP6S2zUYEKucX4+mVrlkJN1bsADL70G72WSo0Es4UvrjNHCU2D918q+ToDojYwPRGqQvqar/7sBQQPZPSx4Rdv05Oh5CT2CyjsK//3Ubint/Wf63Tc+UZCnbW9VioEgiPdXAJNZfc=
+	t=1744736755; cv=none; b=heqJPT2M78YKn7MrMxOssM9gBY/fhLsz5g55Mvn2LYHmcFQwxl6PjJh6hO/LY0egvEBS4Anm0yjNNMYJmDIBLYx5+QvdEx7z03Kljx4Q6zVwdNBbhdnfkiBmlOH8JibDQO7KgmyXSAaY6+kBec5WsQdOCbT+HPQ+cI5S8oxXR4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744736398; c=relaxed/simple;
-	bh=hekA5sSay81odGS8KN3L8RNR60gbS176RT1c1dPcp7I=;
+	s=arc-20240116; t=1744736755; c=relaxed/simple;
+	bh=HsKHEdkEbY3fGX/jXwfPRB8xGPMVKkEpNhsdWRk1pXo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jCopJU3Q3BdADJ0At3uwVCwqtrZoicTDFfKxJVWbf5fuZa/4ehuJ1czrvP38pjQ4e3nvsg+X7Y60q/XVEs9Wj3iOZ4zx5aXT1NuDqMd7uGWmXQpdSrGVhaR7Wzjli9wbyVfWmN/dDZsRQ68bBbDZZKKphrl9Eu0Zz2AciOgRrCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s9Wo8wfB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89B8FC4CEEB;
-	Tue, 15 Apr 2025 16:59:57 +0000 (UTC)
+	 To:Cc:Content-Type; b=dz9kqaMIVJGJz3JjD+t6XYjxyyMEOjWURGNwwUEmGz/bLcef8PEWj7rEXHBT4OHNcoo36L7j5KtVICtGjJMnBRlP0RKMz4zA4CMUXPXB1uX6qita6uPSlIb8xE6fL5g6rECorfxcr0nHi17XAyBid6K2dsVKcTxrkve0a8LxdVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nHjyEEVJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92811C4CEEC;
+	Tue, 15 Apr 2025 17:05:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744736397;
-	bh=hekA5sSay81odGS8KN3L8RNR60gbS176RT1c1dPcp7I=;
+	s=k20201202; t=1744736754;
+	bh=HsKHEdkEbY3fGX/jXwfPRB8xGPMVKkEpNhsdWRk1pXo=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=s9Wo8wfBYJ0DcFr+hwgeEXeHlXshfgmcWQfz9BWyOlNThqLwT84S1/2RdoSKxkUaR
-	 21VBH2jp+zZbsEZSA1LOSf+vhaoZN2YyMNVbGehKvQ63qc284ZEdwOFP6q5wT4LF7i
-	 reSVl9A/h8XChJL91jtbJlyQZCiBVzENVTBuhhq+Vvcx9yexmLdm7wIT8/OOBmQcot
-	 9JHCBGVx3oYSwhpfOdxu4kK3lzPKAiJwzu4TJb6B8PZ6dlvw8WDPqNQgq993X7XxpI
-	 4HUGG181rux6DiLCvK8uDXdY7010RK5fRZzY5ou5+RQcoppLNm2VtzFdm+fVv7TAX6
-	 WdMU3hdgko98g==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-2d09d495c6cso1643084fac.3;
-        Tue, 15 Apr 2025 09:59:57 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVIiN38DoWKJWwvemjbBk0gZLhJQrFgPhQuM7FPVjUU+2+zYF9kj9iVopsYE6lnN6qXRP5m/SOrOUe5FAI=@vger.kernel.org, AJvYcCWJEZfK4aloMXAFufPbDCqNtsk/apDB2ZE6AsE9WlB4aXNJOX9XieZ5c7LiRes0Jwkbf1pTQ05RZ4g=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6SQPt0kxf3Uc82q0wByZDigMVHVo36qNTs5fsvPaeIY0BIadb
-	qM0i7LDEdvCau6/nQ23NSAzPxzac/CroEhK6SUDLzaWpfvwmYCwcLK2UijOeervF3VRtxrUO4T8
-	tM6hkmG5wgi3Z079qfqLET5xnZvU=
-X-Google-Smtp-Source: AGHT+IE17orsWraUADshZs7Bkgwwk4B/+7ACOA+1ofXY2D3rl9/81je0pV9HLaeNN/L12cjY+uI7SQSxualbqcI6waI=
-X-Received: by 2002:a05:6870:889a:b0:2c1:b58c:bef with SMTP id
- 586e51a60fabf-2d0d5f68495mr10448320fac.38.1744736396846; Tue, 15 Apr 2025
- 09:59:56 -0700 (PDT)
+	b=nHjyEEVJA6e+nZzLGD0w1RxE+34AI8XIBwnNSStboNgMnIN//JFS5QmKqllwx/MWu
+	 gNeiaxMNGiTBsyXTr3/+Cf8Ed9V1vFYd2Tp7JZUbCMB+XUVYcvjm1WjQJBt3D4nF4n
+	 X/oduN66KPImgi4CEO5ZACgd4hP+iTD8dETf6FnCevl566QFSXzqLFRXTT+e8+psWl
+	 NHTigiZgWrNw+FMjQLLcqZDRdxCQlGggvyKwlb2aduoGBTp0lUSiD8cCqtnoZFQosf
+	 IwB3VK59BkbNm1LnAfpHo4emfZsdxIPMOiy4EHYuzrsTBSvbq4jscehyqos22QZcyS
+	 JMqh46O1GL5YQ==
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-2c7f876b321so1881691fac.1;
+        Tue, 15 Apr 2025 10:05:54 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUTHSDUZfmL9DbEpx7aA9u2DDX+uehpBLP2gUHNgUxuSg8UK3v3OqDIE7l5qkcOq8QzVAaC4BL8DZ1rR/w=@vger.kernel.org, AJvYcCWtEUSNFrph2+d7aleabLivzngeV2JVdU2cvw6DX+kshRqKDZ14eumDoIXUhrIx45TUplMB5hQBWc8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFZiaUryfPSm2TFn0OzYVrdfbM4NS/orD+Uo2lKoU6ia9UGz+6
+	qNiVycJqUKz9utT8//rQoOkPmawuaMMi6sIYYSRl/Q0FHODQqfqSG259y9aT13BlKAD9iPUvFH0
+	0ZKfMpDJ5MnrxSBa0j5u1v77p6y8=
+X-Google-Smtp-Source: AGHT+IEYV2kVtH8X6w7XB4diHvAseLjJYsXwDutomeeI+5p30ScQANM3FB+C5eOT903S2jofLe8TluCgUBLEm2CcJbE=
+X-Received: by 2002:a05:6871:6117:b0:29e:40f8:ad9b with SMTP id
+ 586e51a60fabf-2d0d5c868bdmr11309377fac.14.1744736753828; Tue, 15 Apr 2025
+ 10:05:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250411115438.594114-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20250411115438.594114-1-srinivas.pandruvada@linux.intel.com>
+References: <20250415004215.48757-1-changwoo@igalia.com> <d29e4ea6-2bfe-4017-b7c8-0d77613959f4@arm.com>
+In-Reply-To: <d29e4ea6-2bfe-4017-b7c8-0d77613959f4@arm.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 15 Apr 2025 18:59:45 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iOZ+D9uR-Sd=shJXLsQ_myOhf8pJeB=E_rK7g_u6SyRA@mail.gmail.com>
-X-Gm-Features: ATxdqUFLV9P9YBzJA4t01WKTlAMR_-WdzZ78kRP1Rqhsw6btj4P2ltMFqF3jGA0
-Message-ID: <CAJZ5v0iOZ+D9uR-Sd=shJXLsQ_myOhf8pJeB=E_rK7g_u6SyRA@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel: int340x: Fix Panther Lake DLVR support
-To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com, 
-	lukasz.luba@arm.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Tue, 15 Apr 2025 19:05:42 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jx44heAgXPwCDriGo-xyjX2pUP+PG1cQwjme_=EHo3rg@mail.gmail.com>
+X-Gm-Features: ATxdqUHI6abZKG4tAU291VyM3De8vG2jlmR6pAnWPQoREbt37JQq2DgLfPWHgnc
+Message-ID: <CAJZ5v0jx44heAgXPwCDriGo-xyjX2pUP+PG1cQwjme_=EHo3rg@mail.gmail.com>
+Subject: Re: [PATCH] PM: EM: Add inotify support when the energy model is updated.
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: Changwoo Min <changwoo@igalia.com>, rafael@kernel.org, christian.loehle@arm.com, 
+	tj@kernel.org, len.brown@intel.com, kernel-dev@igalia.com, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, pavel@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 11, 2025 at 1:54=E2=80=AFPM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On Tue, Apr 15, 2025 at 10:31=E2=80=AFAM Lukasz Luba <lukasz.luba@arm.com> =
+wrote:
 >
-> Panther lake uses same register offsets as Lunar Lake. But the
-> registers are still pointing to the default table.
+> Hi Changwoo,
 >
-> Move the selection of register offsets table from the actual attribute
-> read/write callbacks to the proc_thermal_rfim_add(). This way it is clean
-> and in future such issues can be avoided.
+> Thanks for the patch.
 >
-> Fixes: e50eeababa94 ("thermal: intel: int340x: Panther Lake DLVR support"=
-)
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
->  .../int340x_thermal/processor_thermal_rfim.c  | 33 ++++++++++---------
->  1 file changed, 17 insertions(+), 16 deletions(-)
+> On 4/15/25 01:42, Changwoo Min wrote:
+> > The sched_ext schedulers [1] currently access the energy model through =
+the
+> > debugfs to make energy-aware scheduling decisions [2]. The userspace pa=
+rt
+> > of a sched_ext scheduler feeds the necessary (post-processed) energy-mo=
+del
+> > information to the BPF part of the scheduler.
 >
-> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim=
-.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-> index dad63f2d5f90..3a028b78d9af 100644
-> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-> @@ -166,15 +166,18 @@ static const struct mmio_reg adl_dvfs_mmio_regs[] =
-=3D {
->         { 0, 0x5A40, 1, 0x1, 0}, /* rfi_disable */
->  };
+> This is very interesting use case!
 >
-> +static const struct mapping_table *dlvr_mapping;
-> +static const struct mmio_reg *dlvr_mmio_regs_table;
-> +
->  #define RFIM_SHOW(suffix, table)\
->  static ssize_t suffix##_show(struct device *dev,\
->                               struct device_attribute *attr,\
->                               char *buf)\
->  {\
-> -       const struct mapping_table *mapping =3D NULL;\
-> +       const struct mmio_reg *mmio_regs =3D dlvr_mmio_regs_table;\
-> +       const struct mapping_table *mapping =3D dlvr_mapping;\
->         struct proc_thermal_device *proc_priv;\
->         struct pci_dev *pdev =3D to_pci_dev(dev);\
-> -       const struct mmio_reg *mmio_regs;\
->         const char **match_strs;\
->         int ret, err;\
->         u32 reg_val;\
-> @@ -186,12 +189,6 @@ static ssize_t suffix##_show(struct device *dev,\
->                 mmio_regs =3D adl_dvfs_mmio_regs;\
->         } else if (table =3D=3D 2) { \
->                 match_strs =3D (const char **)dlvr_strings;\
-> -               if (pdev->device =3D=3D PCI_DEVICE_ID_INTEL_LNLM_THERMAL)=
- {\
-> -                       mmio_regs =3D lnl_dlvr_mmio_regs;\
-> -                       mapping =3D lnl_dlvr_mapping;\
-> -               } else {\
-> -                       mmio_regs =3D dlvr_mmio_regs;\
-> -               } \
->         } else {\
->                 match_strs =3D (const char **)fivr_strings;\
->                 mmio_regs =3D tgl_fivr_mmio_regs;\
-> @@ -214,12 +211,12 @@ static ssize_t suffix##_store(struct device *dev,\
->                                struct device_attribute *attr,\
->                                const char *buf, size_t count)\
->  {\
-> -       const struct mapping_table *mapping =3D NULL;\
-> +       const struct mmio_reg *mmio_regs =3D dlvr_mmio_regs_table;\
-> +       const struct mapping_table *mapping =3D dlvr_mapping;\
->         struct proc_thermal_device *proc_priv;\
->         struct pci_dev *pdev =3D to_pci_dev(dev);\
->         unsigned int input;\
->         const char **match_strs;\
-> -       const struct mmio_reg *mmio_regs;\
->         int ret, err;\
->         u32 reg_val;\
->         u32 mask;\
-> @@ -230,12 +227,6 @@ static ssize_t suffix##_store(struct device *dev,\
->                 mmio_regs =3D adl_dvfs_mmio_regs;\
->         } else if (table =3D=3D 2) { \
->                 match_strs =3D (const char **)dlvr_strings;\
-> -               if (pdev->device =3D=3D PCI_DEVICE_ID_INTEL_LNLM_THERMAL)=
- {\
-> -                       mmio_regs =3D lnl_dlvr_mmio_regs;\
-> -                       mapping =3D lnl_dlvr_mapping;\
-> -               } else {\
-> -                       mmio_regs =3D dlvr_mmio_regs;\
-> -               } \
->         } else {\
->                 match_strs =3D (const char **)fivr_strings;\
->                 mmio_regs =3D tgl_fivr_mmio_regs;\
-> @@ -448,6 +439,16 @@ int proc_thermal_rfim_add(struct pci_dev *pdev, stru=
-ct proc_thermal_device *proc
->         }
+> >
+> > However, there is a limitation in the current debugfs support of the en=
+ergy
+> > model. When the energy model is updated (em_dev_update_perf_domain), th=
+ere
+> > is no way for the userspace part to know such changes (besides polling =
+the
+> > debugfs files).
+> >
+> > Therefore, add inotify support (IN_MODIFY) when the energy model is
+> > updated. With this inotify support, the sched_ext scheduler can monitor=
+ the
+> > energy model change in userspace using the regular inotify interface an=
+d
+> > feed the updated energy model information to make energy-aware scheduli=
+ng
+> > decisions.
+> >
+> > [1] https://lwn.net/Articles/922405/
+> > [2] https://github.com/sched-ext/scx/pull/1624
+> >
+> > Signed-off-by: Changwoo Min <changwoo@igalia.com>
+> > ---
+> >   kernel/power/energy_model.c | 47 ++++++++++++++++++++++++++++++++++++=
++
+> >   1 file changed, 47 insertions(+)
+> >
+> > diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> > index d9b7e2b38c7a..0c06e0278df6 100644
+> > --- a/kernel/power/energy_model.c
+> > +++ b/kernel/power/energy_model.c
+> > @@ -14,6 +14,7 @@
+> >   #include <linux/cpumask.h>
+> >   #include <linux/debugfs.h>
+> >   #include <linux/energy_model.h>
+> > +#include <linux/fsnotify.h>
+> >   #include <linux/sched/topology.h>
+> >   #include <linux/slab.h>
+> >
+> > @@ -156,9 +157,53 @@ static int __init em_debug_init(void)
+> >       return 0;
+> >   }
+> >   fs_initcall(em_debug_init);
+> > +
+> > +static void em_debug_update_ps(struct em_perf_domain *em_pd, int i,
+> > +                            struct dentry *pd)
+> > +{
+> > +     static const char *names[] =3D {
+> > +             "frequency",
+> > +             "power",
+> > +             "cost",
+> > +             "performance",
+> > +             "inefficient",
+> > +     };
+> > +     struct em_perf_state *table;
+> > +     unsigned long freq;
+> > +     struct dentry *d, *cd;
+> > +     char name[24];
+> > +     int j;
+> > +
+> > +     rcu_read_lock();
+> > +     table =3D em_perf_state_from_pd(em_pd);
+> > +     freq =3D table[i].frequency;
+> > +     rcu_read_unlock();
+> > +
+> > +     snprintf(name, sizeof(name), "ps:%lu", freq);
+> > +     d =3D debugfs_lookup(name, pd);
+> > +
+> > +     for (j =3D 0; j < ARRAY_SIZE(names); j++) {
+> > +             cd =3D debugfs_lookup(names[j], d);
+> > +             if (!cd)
+> > +                     return;
+> > +             fsnotify_dentry(cd, FS_MODIFY);
+> > +             cond_resched();
+> > +     }
+> > +}
+> > +
+> > +static void em_debug_update(struct device *dev)
+> > +{
+> > +     struct dentry *d;
+> > +     int i;
+> > +
+> > +     d =3D debugfs_lookup(dev_name(dev), rootdir);
+> > +     for (i =3D 0; i < dev->em_pd->nr_perf_states; i++)
+> > +             em_debug_update_ps(dev->em_pd, i, d);
+> > +}
+> >   #else /* CONFIG_DEBUG_FS */
+> >   static void em_debug_create_pd(struct device *dev) {}
+> >   static void em_debug_remove_pd(struct device *dev) {}
+> > +static void em_debug_update(struct device *dev) {}
+> >   #endif
+> >
+> >   static void em_release_table_kref(struct kref *kref)
+> > @@ -323,6 +368,8 @@ int em_dev_update_perf_domain(struct device *dev,
+> >
+> >       em_table_free(old_table);
+> >
+> > +     em_debug_update(dev);
+> > +
 >
->         if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DLVR) {
-> +               switch (pdev->device) {
-> +               case PCI_DEVICE_ID_INTEL_LNLM_THERMAL:
-> +               case PCI_DEVICE_ID_INTEL_PTL_THERMAL:
-> +                       dlvr_mmio_regs_table =3D lnl_dlvr_mmio_regs;
-> +                       dlvr_mapping =3D lnl_dlvr_mapping;
-> +                       break;
-> +               default:
-> +                       dlvr_mmio_regs_table =3D dlvr_mmio_regs;
-> +                       break;
-> +               }
->                 ret =3D sysfs_create_group(&pdev->dev.kobj, &dlvr_attribu=
-te_group);
->                 if (ret)
->                         return ret;
-> --
+> I would move this out of the locked section, below the mutex
+> unlock. Looking at the code in em_debug_update() you are trying
+> to send such notification for each EM's table entry * number of
+> fields, which is heavy. The RCU copy that you get will make sure
+> you have consistent view on the data and you don't have to
+> be under the mutex lock.
+>
+> A different question would be if the notification has to be
+> that heavy?
+> Can we just 'ping' the user-space that there is a change and ask to read
+> the new values?
+>
+> Another question, but this time to Rafael would be if for such use case
+> we can use debugfs, or we need a sysfs?
 
-Applied as 6.15-rc support, thanks!
+debugfs is not really suitable for this IMV and the problem at hand is
+a symptom of that (but there will be more issues in the future
+AFAICS).
+
+Before starting to invent new interfaces for user space, though, I'm
+wondering why the BPF code cannot obtain the energy model information
+from the kernel?
+
+> >       mutex_unlock(&em_pd_mutex);
+> >       return 0;
+> >   }
 
