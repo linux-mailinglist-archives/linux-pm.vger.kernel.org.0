@@ -1,201 +1,173 @@
-Return-Path: <linux-pm+bounces-25504-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25476-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 186E3A8AF4E
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 06:46:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B119BA8A448
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 18:38:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 209A54421A9
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 04:46:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 28F25189A09D
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 16:38:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34F9122FF2B;
-	Wed, 16 Apr 2025 04:44:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F3CF21E092;
+	Tue, 15 Apr 2025 16:38:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HN9wTUWU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iTvZU0Bq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE4622A4E9;
-	Wed, 16 Apr 2025 04:44:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D46C0946F;
+	Tue, 15 Apr 2025 16:38:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744778658; cv=none; b=X3tybGH+fDvorkjfDglxEU5yuWiDjYNLkeHB46X9xeGlfuZ/I+KLL9rY/ZaLlqjkTctOXiO1lclJmy/11WsVsr1tKnF37ec/aeW2gCyQULFp1RxLO2JcNU3Zmj8OKUcVFDxv94yF0iUZOtfl4AEglq6o+yFaUtC8aBLSFSYzmDc=
+	t=1744735120; cv=none; b=ecOknNh2cSd4cpxl68mrPSbo1/DmYHIZgYpWi8j4ornoaCqlFpCqGSnSSmgjbn2PTsDF+6JQiVNFBnbi38BHqlG+/ptR92hjx5LusxT5Jg/3oPYoPy/die83XG4gU0IiTLXYmsbCKnAM8Wk7cNfwG9mOMj+0CW7qldzswVtuw2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744778658; c=relaxed/simple;
-	bh=UvtYsKzxmsrlyk4Ve4cXnLzHORt0pQYPk1Ml4T5SR78=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=snXPXRt217GKfjlBoasLN57uATYN8nFN2VKp3PAHFPDcjO96Pl8tYlelho71LgQSj/xDEkaHBXuvM2Zt/IL5ngJ5F4Iwyszu8g3N/4LIbufirDXQh9Byz2hj4Q8E1otujbLgrKRivkmDoek76MsEvQit8X9VUCbpsNnBJ2rCstg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HN9wTUWU; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744778656; x=1776314656;
-  h=date:from:to:cc:subject:message-id;
-  bh=UvtYsKzxmsrlyk4Ve4cXnLzHORt0pQYPk1Ml4T5SR78=;
-  b=HN9wTUWUy2Sl3dqi/g0P+qKpIdJ1aYdDZJI67ITpxRnxS7E9z8oKZVZu
-   KE71TIAfl7dVPmQNGBC1tSby7Fcbw67AW3i/Lf+GJ+6HOh49Deh31xhtR
-   JyHfaTs0oq5bVh1jTl+mTHxyrumrWcWrXwDRskkIJXH6W2lDLmGRMVp3+
-   lg+O5R8a8/+00lj/3vw2SFZfLXM0j0lN85stmZydWdDl/ySaj9UPcnnv2
-   EJ654NlPDhNoaJXRbHt86LFhPNQ7ydzWiTjJzWxaYIwhCMHh2XH+S0fVT
-   LZADCR8+fOhR4yAdyCar5om6eqaae9RzyaD/hOqb3TD1Vd3vtSAmmQfvC
-   A==;
-X-CSE-ConnectionGUID: AqrT7uExS7eb9SnLwFxscg==
-X-CSE-MsgGUID: jQKufkqnQb6WVavE4uidJQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11404"; a="45445483"
-X-IronPort-AV: E=Sophos;i="6.15,215,1739865600"; 
-   d="scan'208";a="45445483"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2025 21:44:08 -0700
-X-CSE-ConnectionGUID: 0Eio3+/WTbWfkZRDPoBpwg==
-X-CSE-MsgGUID: Ll6UtypJQLKm+c3vJCvBzw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,215,1739865600"; 
-   d="scan'208";a="134426652"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 15 Apr 2025 21:44:07 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u4jIC-000Gjy-0s;
-	Tue, 15 Apr 2025 16:37:48 +0000
-Date: Wed, 16 Apr 2025 00:37:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:fixes] BUILD SUCCESS
- df8d205d1ef21ee66376042321fcfc9c27527d11
-Message-ID: <202504160053.hSUo5PyO-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1744735120; c=relaxed/simple;
+	bh=0o7WgPMPfYd1M0lo6UxGC5WgKFAvsFlwbf9fWHZjo9w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I7/XkOBM4daE6qqbW+W/Q1KTehShwmC3MR5cm6Iq2itW/o18k2npNqpOJsB/Z4ZNVZ9ASXqRQw/ZHOPqHEqwGHX2cKpLeMdOf5r9c2mK3B/rMz550dt7QP+OA39EBSafUTDDIF5Ds+Z9GoXuwalSvMesitkeFiUTryV47iKa2kw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iTvZU0Bq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33EF6C4CEEB;
+	Tue, 15 Apr 2025 16:38:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744735119;
+	bh=0o7WgPMPfYd1M0lo6UxGC5WgKFAvsFlwbf9fWHZjo9w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iTvZU0BqP6qpK6DcIv2U+8b6I2t7T39DXhYrMioqJ8nk2ouDeGKjxoKAoa3s0FXgS
+	 UF3sQ4W+Bp1BVpeyeu9RO2uIh6VZoYHrEbag5zahGtqawWffwbyDR5Ud2Trv7akIja
+	 KRbOlLP1u4hBwnVTMD95sxZVXOtAuhR+7p5TepQySBKdYrQ3KtH2xQAt2+7ZlywKhD
+	 YkQm7b2lQemIo/RHlqtI5ZRPQ5WEtxAMt8YEmQJDFJ7I7/bU2R26KJC5FV9m2lTd15
+	 MfKSv66ipbJ1NebxdXDELJg/yD/1PYJkJiwUGk/kU9jDegydIU71qcrQgoQKLQTRzg
+	 QnwzLg9l0YvOQ==
+Date: Tue, 15 Apr 2025 17:38:32 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Michal Wilczynski <m.wilczynski@samsung.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>,
+	Fu Wei <wefu@redhat.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Frank Binns <frank.binns@imgtec.com>,
+	Matt Coster <matt.coster@imgtec.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	m.szyprowski@samsung.com, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 2/4] dt-bindings: firmware: thead,th1520: Add resets
+ for GPU clkgen
+Message-ID: <20250415-tycoon-naming-20ba5a55c469@spud>
+References: <20250414-apr_14_for_sending-v2-0-70c5af2af96c@samsung.com>
+ <CGME20250414185315eucas1p1fae2d6250bfd30b12bb084e197c02948@eucas1p1.samsung.com>
+ <20250414-apr_14_for_sending-v2-2-70c5af2af96c@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="FhDPjeA6XL6WHJ2b"
+Content-Disposition: inline
+In-Reply-To: <20250414-apr_14_for_sending-v2-2-70c5af2af96c@samsung.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git fixes
-branch HEAD: df8d205d1ef21ee66376042321fcfc9c27527d11  Merge branch 'pm-cpufreq-fixes' into fixes
 
-elapsed time: 1450m
+--FhDPjeA6XL6WHJ2b
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-configs tested: 107
-configs skipped: 1
+On Mon, Apr 14, 2025 at 08:52:56PM +0200, Michal Wilczynski wrote:
+> Extend the TH1520 AON firmware bindings to describe the GPU clkgen reset
+> line, required for proper GPU clock and reset sequencing.
+>=20
+> The T-HEAD TH1520 GPU requires coordinated management of two clocks
+> (core and sys) and two resets (GPU core reset and GPU clkgen
+> reset).  Only the clkgen reset is exposed at the AON level, to support
+> SoC-specific initialization handled through a generic PM domain. The GPU
+> core reset remains described in the GPU device node, as from the GPU
+> driver's perspective, there is only a single reset line [1].
+>=20
+> This follows upstream maintainers' recommendations [2] to abstract
+> SoC specific details into the PM domain layer rather than exposing them
+> to drivers directly.
+>=20
+> [1] - https://lore.kernel.org/all/816db99d-7088-4c1a-af03-b9a825ac09dc@im=
+gtec.com/
+> [2] - https://lore.kernel.org/all/38d9650fc11a674c8b689d6bab937acf@kernel=
+=2Eorg/
+>=20
+> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+> ---
+>  .../devicetree/bindings/firmware/thead,th1520-aon.yaml        | 11 +++++=
+++++++
+>  1 file changed, 11 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/firmware/thead,th1520-aon.=
+yaml b/Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
+> index bbc183200400de7aadbb21fea21911f6f4227b09..6ea3029c222df9ba6ea7d423b=
+92ba248cfb02cc0 100644
+> --- a/Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
+> +++ b/Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
+> @@ -32,6 +32,13 @@ properties:
+>      items:
+>        - const: aon
+> =20
+> +  resets:
+> +    maxItems: 1
+> +
+> +  reset-names:
+> +    items:
+> +      - const: gpu-clkgen
+> +
+>    "#power-domain-cells":
+>      const: 1
+> =20
+> @@ -39,6 +46,8 @@ required:
+>    - compatible
+>    - mboxes
+>    - mbox-names
+> +  - resets
+> +  - reset-names
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Given these are new required properties, have you made sure in the
+driver that their absence will not cause problems with older
+devicetrees? I took a brief look at the driver, and it _looked_ like you
+were failing if they were not there? It was a brief look though, tbf.
 
-tested configs:
-alpha                            allyesconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-14.2.0
-arc                              allyesconfig    gcc-14.2.0
-arc                   randconfig-001-20250415    gcc-14.2.0
-arc                   randconfig-002-20250415    gcc-14.2.0
-arm                              allmodconfig    gcc-14.2.0
-arm                              allyesconfig    gcc-14.2.0
-arm                         bcm2835_defconfig    clang-21
-arm                         lpc18xx_defconfig    clang-21
-arm                   randconfig-001-20250415    clang-21
-arm                   randconfig-002-20250415    clang-21
-arm                   randconfig-003-20250415    gcc-10.5.0
-arm                   randconfig-004-20250415    gcc-6.5.0
-arm64                            allmodconfig    clang-19
-arm64                 randconfig-001-20250415    clang-16
-arm64                 randconfig-002-20250415    gcc-7.5.0
-arm64                 randconfig-003-20250415    gcc-9.5.0
-arm64                 randconfig-004-20250415    gcc-9.5.0
-csky                  randconfig-001-20250415    gcc-13.3.0
-csky                  randconfig-002-20250415    gcc-14.2.0
-hexagon                          allmodconfig    clang-17
-hexagon                          allyesconfig    clang-21
-hexagon               randconfig-001-20250415    clang-20
-hexagon               randconfig-002-20250415    clang-21
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250415    clang-20
-i386        buildonly-randconfig-002-20250415    clang-20
-i386        buildonly-randconfig-003-20250415    clang-20
-i386        buildonly-randconfig-004-20250415    clang-20
-i386        buildonly-randconfig-005-20250415    gcc-12
-i386        buildonly-randconfig-006-20250415    gcc-12
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch             randconfig-001-20250415    gcc-14.2.0
-loongarch             randconfig-002-20250415    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250415    gcc-13.3.0
-nios2                 randconfig-002-20250415    gcc-7.5.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                randconfig-001-20250415    gcc-12.4.0
-parisc                randconfig-002-20250415    gcc-10.5.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                          allyesconfig    clang-21
-powerpc                     ep8248e_defconfig    gcc-14.2.0
-powerpc                      pasemi_defconfig    clang-21
-powerpc               randconfig-001-20250415    gcc-5.5.0
-powerpc               randconfig-002-20250415    clang-17
-powerpc               randconfig-003-20250415    gcc-7.5.0
-powerpc64             randconfig-001-20250415    gcc-7.5.0
-powerpc64             randconfig-002-20250415    clang-17
-powerpc64             randconfig-003-20250415    gcc-10.5.0
-riscv                            allmodconfig    clang-21
-riscv                             allnoconfig    gcc-14.2.0
-riscv                            allyesconfig    clang-16
-riscv                 randconfig-001-20250415    gcc-14.2.0
-riscv                 randconfig-002-20250415    gcc-9.3.0
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-14.2.0
-s390                  randconfig-001-20250415    clang-21
-s390                  randconfig-002-20250415    gcc-7.5.0
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                     magicpanelr2_defconfig    gcc-14.2.0
-sh                    randconfig-001-20250415    gcc-11.5.0
-sh                    randconfig-002-20250415    gcc-9.3.0
-sh                           sh2007_defconfig    gcc-14.2.0
-sh                  sh7785lcr_32bit_defconfig    gcc-14.2.0
-sparc                            alldefconfig    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250415    gcc-6.5.0
-sparc                 randconfig-002-20250415    gcc-12.4.0
-sparc64               randconfig-001-20250415    gcc-14.2.0
-sparc64               randconfig-002-20250415    gcc-12.4.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-21
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250415    clang-21
-um                    randconfig-002-20250415    clang-21
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250415    clang-20
-x86_64      buildonly-randconfig-002-20250415    gcc-11
-x86_64      buildonly-randconfig-003-20250415    gcc-12
-x86_64      buildonly-randconfig-004-20250415    clang-20
-x86_64      buildonly-randconfig-005-20250415    clang-20
-x86_64      buildonly-randconfig-006-20250415    gcc-12
-x86_64                              defconfig    gcc-11
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250415    gcc-6.5.0
-xtensa                randconfig-002-20250415    gcc-10.5.0
+>    - "#power-domain-cells"
+> =20
+>  additionalProperties: false
+> @@ -49,5 +58,7 @@ examples:
+>          compatible =3D "thead,th1520-aon";
+>          mboxes =3D <&mbox_910t 1>;
+>          mbox-names =3D "aon";
+> +        resets =3D <&rst 0>;
+> +        reset-names =3D "gpu-clkgen";
+>          #power-domain-cells =3D <1>;
+>      };
+>=20
+> --=20
+> 2.34.1
+>=20
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--FhDPjeA6XL6WHJ2b
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ/6LiAAKCRB4tDGHoIJi
+0lZuAQCABS+eFSdx3kXhK23lYrr3kZQ87Y4bNEqSHSKXfVbSNwD+LpI2rl8eyDPG
++EnkNfmTOSNRo+kDYlSKMLijsV19qQI=
+=yRlm
+-----END PGP SIGNATURE-----
+
+--FhDPjeA6XL6WHJ2b--
 
