@@ -1,162 +1,243 @@
-Return-Path: <linux-pm+bounces-25465-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25467-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1787CA89A41
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 12:33:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B54BA89B66
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 13:05:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 192F93B7C76
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 10:32:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5277A1777C8
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 11:05:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 820F929116F;
-	Tue, 15 Apr 2025 10:29:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1967D288C98;
+	Tue, 15 Apr 2025 11:05:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rb7Qeah8"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="uY6cyIVa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 978BC29115C
-	for <linux-pm@vger.kernel.org>; Tue, 15 Apr 2025 10:29:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05BEB27A105
+	for <linux-pm@vger.kernel.org>; Tue, 15 Apr 2025 11:05:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744712965; cv=none; b=eeFKyIUKVxMgRls9F5CePJIb8FIU5vzFRKfDmwXCypQjMGBn7sGAU3r/MSRFFoKMDUlFZKwA/RaEaMurPlQanxv5R8nikrrcOFcWIWXEyy8LtweJNFs+pu6KlGcmAQR0V2FTdssSLPfGuFlEFpRdFqyC1bfUDdAbB0K7+rcyMF8=
+	t=1744715125; cv=none; b=V9hYkLql3m27RYeIqRwG2mCxNBxF2KgmRSogkK6X7vVXpfh1NRrzlNgQHtIVCxlqehG8w5KB88EqWkzRg89rJV4968uwOWY9krqzLfbjzVx0jfu12w8DjveTvoYoKObqFRM6140X2w/FsC6LKWGO48WsZWxanZpmvXl8oeQ8m5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744712965; c=relaxed/simple;
-	bh=WAJr82FrsHYXu+5YGyk9NIhyBQaipAptPFKzmt+imbM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EwjPXbTdsPexuoQQRmwcn5euXkYZ/BI6MmMeEdZkgvSmhOiIsVal6dB/DOTxYrJ887r1t7URyryn5HyJ0n+knp+CHyChN74Omb+aOc5zR4CYovnssl1i+pdrnpLOQFo4iV1bu8G0V+FiYAp28K+pq9IBR/v1rqGtlc8P/Q/nPHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rb7Qeah8; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-736bfa487c3so4610026b3a.1
-        for <linux-pm@vger.kernel.org>; Tue, 15 Apr 2025 03:29:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744712963; x=1745317763; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=w8WIm7JBhiWCi7fBzix5XYwTayAnxjcDkZHAFyWo6KQ=;
-        b=rb7Qeah88j5+c5NjxmMDSqTk0uHshnMD8PdWXA5npeNw3WeAhErUpcYP6r9ANv16wP
-         g88SZtupb8KBju8TrPgR6eJfVO0mSPjJQw4UCCJQt9Px/DS10hWmttuhaY7EzB8Uv/Ei
-         JHnKglfbZshQ9CNrJcpAKA4UEEAyziYd+kVFdUBXnSo9w6NbXVAVcPUrQuRugPHSEmpx
-         pKo7ThO1rBgEon1o98Dnehyhv7QoGMKMpgnV58x5yGH4aPKY9V0uj+7PDnP/AAFvfRBF
-         iIqDj25l+pc1CvMPIorxYyxQzUr6F9HLo8GxBcOg7p4d1k44l/T6smt/2j48SAOoMIqy
-         t6nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744712963; x=1745317763;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w8WIm7JBhiWCi7fBzix5XYwTayAnxjcDkZHAFyWo6KQ=;
-        b=X6Z9dbXTUrB/zDzVqXmQzGc777ohCxzdYsTxmJf58UUgF/BjhCVmHKTcLRaJnlBDzH
-         Iy13p4rSa6a0vkY/qbiFyJZtJWun58NyV3gj+4oJXP/o/3Q2JC3wcFnGBW/1j4VDxVDg
-         it4L/uS1ZfFAZ2qY4kzML+FKe70hPjh2CiHgBKrNgS54EJXY6GoU3zQjL4nZJB7fGqGK
-         OzC97BosmLNONGCL+IX8dLBZYSxJZxtXt7yfY0zXq7Oxs6qk2GJWGTlEB1myclH1whbp
-         8nJkECdOcg32XffZoLhoWGwg8j+SlvvKTHdCo8GxpgwLrsqguiK3mfV5ue4LTnqeClfe
-         J7Mg==
-X-Forwarded-Encrypted: i=1; AJvYcCVIlMn+DvBW7NikE+kSnnX/8IO7gy0O4W8mSu86givi5MLU38eF1lMIUYaYTl296Zxc+4tKo9RrDQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHcdUrlxYT8GDn5Y/HQL6LlRkS7W6EgoPLJpr4mxPJX+lxJXFo
-	MmH4/uiO0/Q0MwfHAhJ+fI+DVUE8iYBP0wiePU5XLaB1xxzxocrSww0iZM1qcBs=
-X-Gm-Gg: ASbGncuJsJkffxx+VSOKOUgkG07ILLG1vhwJjOfbtEkOt0x/bDdV1NX2txaRsmP2A+t
-	wcxWcSlyAbbTQIpiNvFW2anRiYMZ1WkCPuJEWl2PkOQZKTBHpkOO24NvQ9weAzDvNpBp55QuvLl
-	oZjMBzUvw0Xb40FZmoddE5of7DMvuJoAyirC61frxYK7IpezvQ/6qsVLfshUfv4gEtl2rNHFTWm
-	gOi28cRX57Y1YkROKr5fxYemrzs0ybY6MCxREnAG9z0hc77mPhU9D/ACH0SnMn9AsAd0/TbQr5e
-	HnRMfdVMJcDXbJasmzsyxJwyth0JMdf5m5DgoFUgEg==
-X-Google-Smtp-Source: AGHT+IEf7wZiquoN/jvqZOk9knw/TvnbgoeeZknmIHERtvY4tqspbW0S/OlAAtvz+bGNryP8Hb453g==
-X-Received: by 2002:a05:6a00:a91:b0:736:62a8:e52d with SMTP id d2e1a72fcca58-73bd11fe733mr21565120b3a.12.1744712962726;
-        Tue, 15 Apr 2025 03:29:22 -0700 (PDT)
-Received: from localhost ([122.172.83.32])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73bd21c78a8sm8164229b3a.70.2025.04.15.03.29.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Apr 2025 03:29:21 -0700 (PDT)
-Date: Tue, 15 Apr 2025 15:59:19 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Lifeng Zheng <zhenglifeng1@huawei.com>, nic.c3.14@gmail.com
-Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linuxarm@huawei.com,
-	jonathan.cameron@huawei.com, zhanjie9@hisilicon.com,
-	lihuisong@huawei.com, fanghao11@huawei.com
-Subject: Re: [PATCH v2 4/4] cpufreq: ACPI: Remove set_boost in
- acpi_cpufreq_cpu_init()
-Message-ID: <20250415102919.rqvukeycue6rmiku@vireshk-i7>
-References: <20250117101457.1530653-1-zhenglifeng1@huawei.com>
- <20250117101457.1530653-5-zhenglifeng1@huawei.com>
+	s=arc-20240116; t=1744715125; c=relaxed/simple;
+	bh=vMO8bv3nyf0PgqSsbSg1AULWccl+KRG6FZHAuNWt9F8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=uO2NH51OIHeMNe8bq9c6LeW1WHfGvYJgQeH5ZfHqtfYQUndxyNF0hDUAEh0ATAxOXxaoJcNidKMHi5fzmOsToyLq0K6sShPgx+r4dkeO4kec7NyxXGp0x3VLwWKWrljJKHc8dA3kXW2jM1ai4NICJ2lmQWmF8ZizMNHJeQz5PGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=uY6cyIVa; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250415110520euoutp0248e9f743ef02a43e14a83069c894ab80~2eShmwHMO0774607746euoutp02X
+	for <linux-pm@vger.kernel.org>; Tue, 15 Apr 2025 11:05:20 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250415110520euoutp0248e9f743ef02a43e14a83069c894ab80~2eShmwHMO0774607746euoutp02X
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1744715120;
+	bh=aLn/AEFMpttKdygzkWg+Y5Dq2mkLBesLmZHzH94VPGc=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=uY6cyIVadW/vgbiERrhcIxL0GHwfXF31yDhVUYAvyQjf4f0ZBze5MMNdVXABC54Il
+	 BgM0uPxBSRO+OSBgN5TEnYa4T50QSJSPnv73eBtPsk04igBUThWdJlCnOme7XmITU7
+	 CJ30e5WDBNWA3tM2NKhLvd93N+yqw4bmhFPiSWYM=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+	20250415110519eucas1p13d350463a1db089b07e6f07975d75457~2eShF3vr-1800318003eucas1p1M;
+	Tue, 15 Apr 2025 11:05:19 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+	eusmges2new.samsung.com (EUCPMTA) with SMTP id 21.CB.20409.F6D3EF76; Tue, 15
+	Apr 2025 12:05:19 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20250415110519eucas1p282dfd609fa94c8d7dc2f8c5582124fe7~2eSgnW5bQ0518205182eucas1p2E;
+	Tue, 15 Apr 2025 11:05:19 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20250415110518eusmtrp225a31cef6c14e09144833c668f90dac0~2eSgmFd9S2890028900eusmtrp2h;
+	Tue, 15 Apr 2025 11:05:18 +0000 (GMT)
+X-AuditID: cbfec7f4-c39fa70000004fb9-b9-67fe3d6fce8c
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+	eusmgms1.samsung.com (EUCPMTA) with SMTP id 46.17.19920.E6D3EF76; Tue, 15
+	Apr 2025 12:05:18 +0100 (BST)
+Received: from [192.168.1.44] (unknown [106.210.136.40]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20250415110517eusmtip2fcfb3b74759928d6aab8b3af31fed6a3~2eSfcbQPF1773317733eusmtip2w;
+	Tue, 15 Apr 2025 11:05:17 +0000 (GMT)
+Message-ID: <a3142259-1c72-45b9-b148-5e5e6bef87f9@samsung.com>
+Date: Tue, 15 Apr 2025 13:05:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250117101457.1530653-5-zhenglifeng1@huawei.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 4/4] drm/imagination: Skip clocks if platform PM
+ manages resources
+To: Matt Coster <Matt.Coster@imgtec.com>, Maxime Ripard <mripard@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich
+	<dakr@kernel.org>, Pavel Machek <pavel@kernel.org>, Drew Fustini
+	<drew@pdp7.com>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, Rob
+	Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor
+	Dooley <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Philipp
+	Zabel <p.zabel@pengutronix.de>, Frank Binns <Frank.Binns@imgtec.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann
+	<tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter
+	<simona@ffwll.ch>, "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+Content-Language: en-US
+From: Michal Wilczynski <m.wilczynski@samsung.com>
+In-Reply-To: <1226d261-247a-4a7c-a414-7db4a24fab9e@imgtec.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01SfUxTVxzNfe/xXlsseRYnV2G6NXMLMlDApTcKZl3MfIYt0USzRVhYM58t
+	jFLTWrc5jEUqX9JRl8GkOEDGxIDdEtoiJVZmRSorKwY/mIavoeVLGCDI2IZ0tA83/jvnd889
+	53duLg8XlZHreWmZR1l1pixDTAqIxra/PNGqxEX51vIRiG51V2PossODoSelUySqbPUEob4u
+	K4buPpsk0Y/e2xQacWQTaNTUR6I7zedJNGNoBahxRk8ic2svhS5M2whU09QMUG7BxSDU23eL
+	QPmTOhx9N1uCI9/VJgqV/9FCIev42SDkMn+A9C3fEG9DxjFXRTB2Uy/FFNk7ANNQV0AyPfev
+	kkxF+z6m/4wLYyw1Jxm9uQ1jip9vZSav3SOZr6x1gLG4v2RmGjbsDTkoSDjEZqQdY9Vbdn4s
+	UNwe9GJHciI+d7oZHRhdWwj4PEhvg48W/sQLgYAnoi8B+GDOSHJkFsCuAiPFkRkAx30l4MWV
+	0dxHy6paAIftFwiOTABYfLMG86uE9E5YPKsP8mOC3gTLr+fh3Hw1bC97TPjxS/RG2P/wHOXH
+	oXQyNJvPBTRr6PfgQP8g5jfF6XsUHPH6AtE4HQYfPq4MBJB0HByorQwE8JfC6utdGKfZCHNs
+	5YFGkC4RQOMZ3VICb4nsghU5kVyFUDjmslIcjoA+O+cJaRUcsD3FOZwF7UWuZbwD9nj+Jv02
+	OB0Jf2rewo2l8J8HUzjnHgJ/m1jNbRACv278dnkshPm5Ik79OiwpMvwX6rnUiBmB2LTiUUwr
+	OppWdDH9n1sFiDoQxmo1SjmrictkP4vRyJQabaY85hOVsgEs/V73omu2CdSOTcc4AcYDTgB5
+	uHiN0CNZlIuEh2RfHGfVqlS1NoPVOEE4jxCHCatbTstFtFx2lP2UZY+w6henGI+/XocFJ0VG
+	O7M6ReEuKqkwqk2sWzfklTtTwgddJ/Lu8FNCpYezsr5XTwpf80jm4EScPSr/d4fkF6H1h7OG
+	7F8lb1lTO7xlJ4NF18MXDCrK5pPOG1Aqybe4z79yyjfx6oHazYrEjlVD2fWV65Lw0hsZ764F
+	80V7lFdu7nk2ZaGHxm9clC0+feN4T3vy5X1m0TXYGf3+R0N1yfGbWu+e2LZr1c+6aS27vdCR
+	3j12umy38YDCfcqnaP/Q2lHK16ftjY/OdrwTvBDV25Kg7ZZapMPKiq5OZ/7+xKoE/nZJyv34
+	w+nzZGzI7mNPDs4/3297ebg4Qm6MHWCrI64kWvLS1Rve3MEXExqFLHYzrtbI/gXYpfatLAQA
+	AA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrDKsWRmVeSWpSXmKPExsVy+t/xe7p5tv/SDc6dNrE4cX0Rk8WaveeY
+	LF5P+8BmMf/IOVaLe5e2MFlc+fqezWLd0wvsFi/2NrJYvJx1j83i8q45bBafe48wWmz73MJm
+	sfbIXXaLhR+3slgs2bGL0aKtcxmrxd17J1gsOt43MFvM/TKV2eL/nh3sFrPf7We32PJmIqvF
+	8bXhFi37p7A4SHjs/baAxWPnrLvsHj07zzB6bFrVyeZx59oeNo95JwM97ncfZ/LYvKTeo2Xt
+	MSaP/r8GHu/3XWXz6NuyitFj8+lqj8+b5AL4ovRsivJLS1IVMvKLS2yVog0tjPQMLS30jEws
+	9QyNzWOtjEyV9O1sUlJzMstSi/TtEvQyLjx6ylTQLFNx6LRHA+NLsS5GTg4JAROJl22P2boY
+	uTiEBJYySjxY84kdIiEjca37JQuELSzx51oXVNFrRonGW3eYQRK8AnYS/V9aWEFsFgFVidkH
+	26HighInZz4BaxYVkJe4f2sG2FBhgWiJtWtngNWICPhIPLj/iAlkKLPAbXaJmx+msUBs2Msk
+	sXtuL1g3s4C4xK0n85lAbDYBI4kHy+eDbeME2rx69XGgOAdQjbrE+nlCEOXyEs1bZzNPYBSa
+	heSOWUgmzULomIWkYwEjyypGkdTS4tz03GJDveLE3OLSvHS95PzcTYzAZLPt2M/NOxjnvfqo
+	d4iRiYPxEKMEB7OSCO8583/pQrwpiZVVqUX58UWlOanFhxhNgWExkVlKNDkfmO7ySuINzQxM
+	DU3MLA1MLc2MlcR53S6fTxMSSE8sSc1OTS1ILYLpY+LglGpg2n0mbPpWl+LNEfO5Zh0S+PW+
+	/9ENuwrhs9vkpezVz0Zcvmu8U3j1mo/l0hJPQmdOcuYrcPope7iues3L5m+LWesKDPZO0O5r
+	5wt9tezaW63G+dfaFaM/nqpNbWCxuZr18azF3YQ7XDMdtHV0D/7Tkz09UWf+JiaGY5u37dm1
+	gG/dvLJfhTFbLrLH2x9Yti66O6b8WnNA6NoWn5Ut4k1b5jFkrteeKmC6bl7bHHu18AMf9sh7
+	KohsjGALXOBZuCNR161gZ8x0X/Nl3q+7H7q3X2zpUI43qXX2ucQxzatd2d1uqbTAtFVac/hf
+	ld0od1hvvnL+f26bNzxSh37dP53BJMC4v4RJ4+belvpjPs2blFiKMxINtZiLihMBJxWbGL8D
+	AAA=
+X-CMS-MailID: 20250415110519eucas1p282dfd609fa94c8d7dc2f8c5582124fe7
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250414185317eucas1p139284a38dc4418ac90bd081c2825142a
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20250414185317eucas1p139284a38dc4418ac90bd081c2825142a
+References: <20250414-apr_14_for_sending-v2-0-70c5af2af96c@samsung.com>
+	<CGME20250414185317eucas1p139284a38dc4418ac90bd081c2825142a@eucas1p1.samsung.com>
+	<20250414-apr_14_for_sending-v2-4-70c5af2af96c@samsung.com>
+	<20250415-poetic-magenta-cicada-9d1ee7@houat>
+	<1226d261-247a-4a7c-a414-7db4a24fab9e@imgtec.com>
 
-On 17-01-25, 18:14, Lifeng Zheng wrote:
-> At the end of cpufreq_online() in cpufreq.c, set_boost is executed and the
-> per-policy boost flag is set to mirror the cpufreq_driver boost. So it is
-> not necessary to run set_boost in acpi_cpufreq_cpu_init().
+
+
+On 4/15/25 11:15, Matt Coster wrote:
+> On 15/04/2025 09:55, Maxime Ripard wrote:
+>> On Mon, Apr 14, 2025 at 08:52:58PM +0200, Michal Wilczynski wrote:
+>>> Update the Imagination PVR driver to skip clock management during
+>>> initialization if the platform PM has indicated that it manages platform
+>>> resources.
+>>>
+>>> This is necessary for platforms like the T-HEAD TH1520, where the GPU's
+>>> clocks and resets are managed via a PM domain, and should not be
+>>> manipulated directly by the GPU driver.
+>>>
+>>> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+>>> ---
+>>>  drivers/gpu/drm/imagination/pvr_device.c | 14 ++++++++++----
+>>>  1 file changed, 10 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/imagination/pvr_device.c b/drivers/gpu/drm/imagination/pvr_device.c
+>>> index 1704c0268589bdeb65fa6535f9ec63182b0a3e94..f40468b99cf14da418aeecde086f009695ff877c 100644
+>>> --- a/drivers/gpu/drm/imagination/pvr_device.c
+>>> +++ b/drivers/gpu/drm/imagination/pvr_device.c
+>>> @@ -504,10 +504,16 @@ pvr_device_init(struct pvr_device *pvr_dev)
+>>>  	if (err)
+>>>  		return err;
+>>>  
+>>> -	/* Enable and initialize clocks required for the device to operate. */
+>>> -	err = pvr_device_clk_init(pvr_dev);
+>>> -	if (err)
+>>> -		return err;
+>>> +	/*
+>>> +	 * Only initialize clocks if they are not managed by the platform's
+>>> +	 * PM domain.
+>>> +	 */
+>>> +	if (!device_platform_resources_pm_managed(dev)) {
+>>> +		/* Enable and initialize clocks required for the device to operate. */
+>>> +		err = pvr_device_clk_init(pvr_dev);
+>>> +		if (err)
+>>> +			return err;
+>>> +	}
+>>
+>> So, how does that work for devfreq? I can understand the rationale for
+>> resets and the sys clock, but the core clock at least should really be
+>> handled by the driver.
+
+Hi Maxime, Matt,
+
+Thanks for the feedback.
+
+This commit is trying to prevent the pvr RUNTIME_PM_OPS from controlling the
+clocks or resets, as there is a custom start/stop sequence needed for
+the TH1520 SoC coded in patch 3 of this series.
+
+static const struct dev_pm_ops pvr_pm_ops = {
+	RUNTIME_PM_OPS(pvr_power_device_suspend, pvr_power_device_resume, pvr_power_device_idle)
+};
+
+So, if the core clock needs to be used for other purposes like devfreq,
+we could move the device_platform_resources_pm_managed() check to the
+pvr_power_* functions instead. This would prevent the clocks and resets
+from being managed in runtime PM in the consumer driver, while still
+allowing the GPU driver to access and control clocks like the core clock
+as needed for other purposes.
+
+That way, clocks could be safely shared between the PM domain driver and the
+device driver, with generic PM driver controlling the start/stop
+sequence for reset and clocks. We would probably need to find a
+better name for the flag then, to more clearly reflect that it's about
+delegating clock/reset PM runtime control, rather than full resource
+ownership.
+
 > 
-> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-> ---
->  drivers/cpufreq/acpi-cpufreq.c | 5 -----
->  1 file changed, 5 deletions(-)
+> I agree, this feels a bit "all or nothing" to me. There's only one clock
+> on this platform that has issues, we can still control the other two
+> just fine.
 > 
-> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-> index c9ebacf5c88e..f4b5e455f173 100644
-> --- a/drivers/cpufreq/acpi-cpufreq.c
-> +++ b/drivers/cpufreq/acpi-cpufreq.c
-> @@ -891,11 +891,6 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
->  	if (perf->states[0].core_frequency * 1000 != freq_table[0].frequency)
->  		pr_warn(FW_WARN "P-state 0 is not max freq\n");
->  
-> -	if (acpi_cpufreq_driver.set_boost) {
-> -		set_boost(policy, acpi_cpufreq_driver.boost_enabled);
-> -		policy->boost_enabled = acpi_cpufreq_driver.boost_enabled;
-> -	}
-> -
->  	return result;
->  
->  err_unreg:
+> I thought fixed clocks were the standard mechanism for exposing
+> non-controllable clocks to device drivers?
 
-https://bugzilla.kernel.org/show_bug.cgi?id=220013
+That's correct — and it's not really about the MEM clock at this point.
+The main goal is to ensure the custom power-up sequence for the TH1520
+SoC is followed. That sequence is implemented in
+th1520_gpu_domain_start() in patch 3 of this series.
 
-"
-On kernel 6.13.8, disabling boost by setting
-/sys/devices/system/cpu/cpufreq/boost to 0 would persist after
-resuming from suspend. After updating to 6.14.2, the system is able to
-enter boost states after resuming from suspend despite the boost flag
-still being set to 0. Toggling it to 1 and then back to 0 in this
-state re-disables boost. My system uses the acpi-cpufreq driver.
-"
+Regards,
+Michał
 
-This bug report is filed and git bisect points to this commit.
-
-Rafael, I think the commit in question did the right thing and there
-is something else in the driver that is causing the issue here.
-
-I think the problem here is cpufreq_boost_down_prep(), which gets
-called during suspend path and enables the boost.
-
-But since the boost was never enabled from flag's point of view, it
-never gets disabled again on resume.
-
-I have suggested following for now to check if this is the case or
-not:
-
-diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-index 924314cdeebc..d8599ae7922f 100644
---- a/drivers/cpufreq/acpi-cpufreq.c
-+++ b/drivers/cpufreq/acpi-cpufreq.c
-@@ -538,6 +538,7 @@ static int cpufreq_boost_down_prep(unsigned int cpu)
-         * Clear the boost-disable bit on the CPU_DOWN path so that
-         * this cpu cannot block the remaining ones from boosting.
-         */
-+       policy->boost_enabled = true;
-        return boost_set_msr(1);
- }
-
--- 
-viresh
+> 
+> Cheers,
+> Matt
+> 
+>>
+>> Maxime
+> 
+> 
 
