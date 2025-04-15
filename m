@@ -1,343 +1,132 @@
-Return-Path: <linux-pm+bounces-25446-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25461-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06D69A897B6
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 11:16:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 422B9A899B0
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 12:19:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 07121179E22
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 09:16:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2237A3BB5FF
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 10:18:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C3BC274644;
-	Tue, 15 Apr 2025 09:16:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4632F28F539;
+	Tue, 15 Apr 2025 10:17:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=imgtec.com header.i=@imgtec.com header.b="kF1GqHsT";
-	dkim=pass (1024-bit key) header.d=IMGTecCRM.onmicrosoft.com header.i=@IMGTecCRM.onmicrosoft.com header.b="YBEOLifl"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="HIkj3hXa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx07-00376f01.pphosted.com (mx07-00376f01.pphosted.com [185.132.180.163])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B3311C8634;
-	Tue, 15 Apr 2025 09:16:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=185.132.180.163
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744708578; cv=fail; b=CXIMQRxQjrkhcXNADFNfRpfuwnScXmodoEd2/mWeYhCualtr5gYVt8ARnLQBH0kx28Ef5LPcCsz+YL+I0fE6VI2kPjmO7AQk2t+QN6pIMFdtOd3tG0BrnqB8nMQdYreSyRAnfLq8MkZHjmiB2alY02QJSQ5eBF28+EQ0h1xg4lY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744708578; c=relaxed/simple;
-	bh=WQyQMEefTdXvZTSmZ7iAunhr9X3LrT142oIm14kBuXY=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=g3cI5pr4cap1aMeoGlVHtuo/QJAxS/0BBdqnv3ML/WTaKdNOSxOWUoalgi1JKtx8URsNmAMVp00uVz17DfuoWGE5r8XuTmJdn7ayjGNNEJ9Vxph1XcuE22qAGVCsQAM+hWpS+zeGHjmfIEAnc6HrZeyEsLK6G8SHc6AxkkdSN6s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=imgtec.com; spf=pass smtp.mailfrom=imgtec.com; dkim=pass (2048-bit key) header.d=imgtec.com header.i=@imgtec.com header.b=kF1GqHsT; dkim=pass (1024-bit key) header.d=IMGTecCRM.onmicrosoft.com header.i=@IMGTecCRM.onmicrosoft.com header.b=YBEOLifl; arc=fail smtp.client-ip=185.132.180.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=imgtec.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=imgtec.com
-Received: from pps.filterd (m0168889.ppops.net [127.0.0.1])
-	by mx07-00376f01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53F5YrMk014874;
-	Tue, 15 Apr 2025 10:15:27 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=imgtec.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=dk201812; bh=PGObreo/yEWaijscsYbYZHIpQ
-	qswJCw6mKw7pKuwNC4=; b=kF1GqHsT3u37juBTFQk+yUImT8L0e/QoaP2o5bgzA
-	uapghvF6P6bNonG29i66XEv6bMf6gKyw1nMDieVHl1MjuoeYje7/W7BVGPYVsoYM
-	7E6tlc6isDYGdVpHUe8V2X081nCAtMC4WFsQE2+I9YC/t9kFFERXhKS+kpjZHy/W
-	hfgZrEOZ++7Y/ClnTaApW1UNsNlvuHPZbUNM80geZOWWJEoqkiUolUqUFRx0HsLn
-	xYLFlJn2YdAFz+T9M91TafLNOK6xNUeMMOZBaK5DA41VbEW9HViBz7X1qGeB7Pat
-	EUpJ3CeF5WiTX5Oh0LE64ecRqphcfnfdXxdxrdevHsaaw==
-Received: from lo0p265cu003.outbound.protection.outlook.com (mail-uksouthazlp17012052.outbound.protection.outlook.com [40.93.67.52])
-	by mx07-00376f01.pphosted.com (PPS) with ESMTPS id 45yg8vt113-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 15 Apr 2025 10:15:25 +0100 (BST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YANrASPEPkz5sbzF0NHiDKDxp1gQMPw1t8y0m4dIX9QOVsb8ynQJghzXdpqB03oA4h6fEtC44qipzENFHgUW7/rzRc9RMGueKrI/WDE6kEOM3ZIE+uGJUux2lFVDHnfBKRtzoeG07JHUjEi3pAB5LmL56AQ2ifBnOTEadx3/w4ZCBGAPrX7UuZUnVCncRyXqmVQlWpo1wM6WXeoy6z36TMHGjks+WGS8wotuF5RzC4Tq48mVKsNZhW7LGu5IV1+FzyhxWJ78fDZm1Bh8GQ+hBRBGZnCSKGn/rPZ0+r0XIxoEaLp0bCjjJqP53D4zaXpecEnyVo31CNQ/AChfOMEr6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PGObreo/yEWaijscsYbYZHIpQqswJCw6mKw7pKuwNC4=;
- b=WLd0wMtbKRRHPZMJha+B16wCbJuIRfbLNS2X9+/78XVn3HiQ12zAMZmXgrD8WNTB769tf2wH/b96mUJJ6pNhk7L5NB3QCLpkwkR5KYbONBEpkwaN0MOjtPq4yjW4O/E2pB7Ilv4Hk8wptjnQYtrBdjwkofzUXHxWMzuqSBHQcw2ud9l4AoqVAMcMFRdb4gZ5y7+1V7RGUgc8ujRb65zI8+SOalQ4InddMK1wRP+eGbddiNdA95p7MMA3P/S9GyKiFtUUVF30ANVctgoby85CR9X8mHqCrqlLe4GQuRtS9200+I8wyytWe/LvfSbcVqnINCTYjzzEqtqKGxnwdisj+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=imgtec.com; dmarc=pass action=none header.from=imgtec.com;
- dkim=pass header.d=imgtec.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=IMGTecCRM.onmicrosoft.com; s=selector2-IMGTecCRM-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PGObreo/yEWaijscsYbYZHIpQqswJCw6mKw7pKuwNC4=;
- b=YBEOLiflywKLJ/K/LybT9WHafpjtXGv+R9rdPC6g4+uzEE5elysRRqbJjQ7R/CVb0m2hg4d38ZCa35ppNAIhfvpV/W6qVXgldKkNB/PuAVG+d+be0PWvODgBDUcLS7ghOiciC5gOvZeNGXjeSKlJCsO/ohGCz4yY0Gug3jKP5Oo=
-Received: from CWXP265MB3397.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:e7::8) by
- LO8P265MB7597.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:3a7::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8655.19; Tue, 15 Apr 2025 09:15:23 +0000
-Received: from CWXP265MB3397.GBRP265.PROD.OUTLOOK.COM
- ([fe80::8e9d:6b2f:9881:1e15]) by CWXP265MB3397.GBRP265.PROD.OUTLOOK.COM
- ([fe80::8e9d:6b2f:9881:1e15%3]) with mapi id 15.20.8655.018; Tue, 15 Apr 2025
- 09:15:23 +0000
-From: Matt Coster <Matt.Coster@imgtec.com>
-To: Maxime Ripard <mripard@kernel.org>,
-        Michal Wilczynski
-	<m.wilczynski@samsung.com>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>,
-        Danilo Krummrich
-	<dakr@kernel.org>, Pavel Machek <pavel@kernel.org>,
-        Drew Fustini
-	<drew@pdp7.com>, Guo Ren <guoren@kernel.org>,
-        Fu Wei <wefu@redhat.com>, Rob
- Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor
- Dooley <conor+dt@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Philipp
- Zabel <p.zabel@pengutronix.de>,
-        Frank Binns <Frank.Binns@imgtec.com>,
-        Maarten
- Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann
-	<tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Simona Vetter
-	<simona@ffwll.ch>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-Subject: Re: [PATCH v2 4/4] drm/imagination: Skip clocks if platform PM
- manages resources
-Thread-Topic: [PATCH v2 4/4] drm/imagination: Skip clocks if platform PM
- manages resources
-Thread-Index: AQHbreQa3V8I6/6Uk0avpnwvKJG4OrOkcgwA
-Date: Tue, 15 Apr 2025 09:15:23 +0000
-Message-ID: <1226d261-247a-4a7c-a414-7db4a24fab9e@imgtec.com>
-References: <20250414-apr_14_for_sending-v2-0-70c5af2af96c@samsung.com>
- <CGME20250414185317eucas1p139284a38dc4418ac90bd081c2825142a@eucas1p1.samsung.com>
- <20250414-apr_14_for_sending-v2-4-70c5af2af96c@samsung.com>
- <20250415-poetic-magenta-cicada-9d1ee7@houat>
-In-Reply-To: <20250415-poetic-magenta-cicada-9d1ee7@houat>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CWXP265MB3397:EE_|LO8P265MB7597:EE_
-x-ms-office365-filtering-correlation-id: 2a38b341-5e78-47fa-37e1-08dd7bfe0d8d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|7416014|1800799024|376014|38070700018|4053099003;
-x-microsoft-antispam-message-info:
- =?utf-8?B?bGRVWC9qVlllU3F5NSs3TkJlcncyMHBsaXh2RnhFM0ZCWGE4QThQYkFzMEsz?=
- =?utf-8?B?bzFnaVhmUGpMSjBjTUlmVDhXd1RYM3VhMUNqR1pUVVBvMDFSN1Z1Rk9FNys5?=
- =?utf-8?B?dmZ4ZisrcURhTmdraGNDaFArMExST0N0WUZ0b1hHNWNKMjR1amdKd2kya1BS?=
- =?utf-8?B?VTY5MENKS0pxcDB2QUs3VWhmVDBLSFlpdVRGWFY4b0piUVF6MFU1MkhtUnNX?=
- =?utf-8?B?OHIrbkFxbTFoL0tKTEpVUnNFNU9sQm51L1ZTZmFHTWEwR2VhaHcwUy9PcjFp?=
- =?utf-8?B?QWpWTGRqZEtVaCtxZkp0Y0UvUkhHRTBHWlJ2cElwTzlmcnVXeUplVHlKTFlY?=
- =?utf-8?B?QW1la2RqVHpGdDFydllMZkdwYTVBclVHVEk2SEVlMHNGSFlRa1hGNEp0Qjcx?=
- =?utf-8?B?M0ZiVjdPVFloR3dXTDg5b2pBVHBvLzg3d2xyeThrTzdESjRGY0tkLzRCanVX?=
- =?utf-8?B?MmdjZ3JZSS82YVVjRWxkVTdsYXNONEpUTkRXOWovanVPMi9VWUp3OTMyK1Z2?=
- =?utf-8?B?OTQ0aG9kYzBlVlNCQVFsL2NScDRLYVk3OVNNQUYyYXE3LzI3Mmx4UTk1NW1h?=
- =?utf-8?B?dTJTNkNncmVQVWtYamc0VGV0T1Z2ZjZWN3JseFZkYU1IYXFWTmZTRzdJS25T?=
- =?utf-8?B?bEZxVG9MYmRNL3d3NXZ3UndvaDdoNm9aM3lCam9LdmhKR25LK1ZzaFQrekNY?=
- =?utf-8?B?dFlCUkYrdzZvUU1mMHVjMkFZdzFVZEZsYk1SY1FhSjdhT09NUG1FQWRrMVNu?=
- =?utf-8?B?dWdmNXdTZVBFWlU3WUtPa3grMXFDTkF4czROTGFoMGlXQ2grWGV5UGppQzdY?=
- =?utf-8?B?OThSdXZhNW45NHcyRkhHWFcvbWVWOXpGYVVOK21qNnR2eWxNSy96Skw0SDhu?=
- =?utf-8?B?MHZaT1MxMVJ1eXhQTGo4STd4dTlkTGkvTGJFQnFMUHVIbC9BYS9zV2p0Rzls?=
- =?utf-8?B?ckRFSm4xNmRnMkl3ZlFVSDA3eC9vWTExRUJoZ1NhQzcxZjNENDZyVWFlKzVB?=
- =?utf-8?B?ZFR4ZE16RGJ3YzcyVyt4SVFZWXRYUEZzQ1FsNnY3M1pqdExQb2puVmJUcDZB?=
- =?utf-8?B?THZZR3pCZURVd3hOK0VTNVo2OW1IZE9nTTkrVFRJS2JMMm1zVlR1WWpJQS80?=
- =?utf-8?B?NmFIWVZZbk9jRldjK1BtSE1Vb05BM2thaEg2YzFXVEtTUmpjMFBJZDNETHNp?=
- =?utf-8?B?R0pWQ05VL2s5MlkwZFQxVmJSTzFUdWs3WThWblo3TVBUc0VUZjFIZDRmZXhF?=
- =?utf-8?B?SnF6d2htYm9Mdmh4Sk1XYTZkYkttYVMyZnpESWFSL3hNdUVIY1RWMDBDdzAv?=
- =?utf-8?B?SlVxV29Oa3lRUm8yVHBJQXB6MmpPa3FSVzJvWk8wRkkyeVlwM0lZdnVRa3Rm?=
- =?utf-8?B?WU9KeVkxTzUyOThnZFp2elZCeU1PNlpLRGU2d1FaSWNpeE1FR2lUTFJ3T0tk?=
- =?utf-8?B?TzBVcHVoQndpV2J1WE8rK0lVdWJRaVpFS2tlN1M5MXEwYlNjRFAwVFczRkxN?=
- =?utf-8?B?b0Q1K0tqcGNnMmZ3WnM0WUJ0b2tCQ0k1RDh4TXZuWDFxcWFyU1ZIdW85YzdG?=
- =?utf-8?B?d3hMU0ZPYzV5aEltdVc3MGJudEM2MHdmdGNNVVFHeXVwZWlobmV3V2NKZlBz?=
- =?utf-8?B?dzVHZGVacjB6VXJiZ2ZXSnc5enNDbWJxYXpNRUlZRGE1UzlHZnhoRFdOdDVn?=
- =?utf-8?B?b2Q0Nzg2dUxnajI5N0VCL2RnQWxISmdhVm5hMnNEYW5ONGg2VDdxcDZZUUxY?=
- =?utf-8?B?cXFJbU0vejFYZVlaVEtMY0pIbG9RKzdhVDlibE1FaHpDQWlkL2plWEtSb0RG?=
- =?utf-8?B?M0o0T25tNHA1R210djViVHFOZmxMZjJxVk9LclZHN2NDYlQ2OHZWSGpYejRZ?=
- =?utf-8?B?VmFYS0c4L1kzaER4YWNsb01Remd6d1kzbm5xZmN1aHl0M2VEdDVVNUpnV0RJ?=
- =?utf-8?B?eWM1cEp5Ty9WLy81TTk3Q05XR1lOdTNRTmFSZ0l6WlVGZ1V4RU1LVVVybHU0?=
- =?utf-8?B?SDlBZlVLVWVBPT0=?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWXP265MB3397.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(1800799024)(376014)(38070700018)(4053099003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?R0N3S1BLYTgrbkxpd2JTZ2hIeHZEVlFPTkNseXdVelYyQzE4WnFGR0c1dDRB?=
- =?utf-8?B?SDloQUJCckF4ckxxZkZnTDMzRWJ4djBjdkJzTjY3ZWRHMng5MjU0djM0Y2pO?=
- =?utf-8?B?czVQRnVEeHR2MXhsM3NDYy9KTENCR0VGY0VLZXRtbHZITzlXc2trb0NuRHBH?=
- =?utf-8?B?NUFxdGh5L2NmNHBGTm5yaWR3TG5DQWJjTVp5RHdRZFM0TU9sRXVEaFMzV1lq?=
- =?utf-8?B?RnowWFp3cTBSdHNOYUpwMGdZMWo2OTZES3dpdWJFaDNmcUtqZ3I2UWhXM1RJ?=
- =?utf-8?B?RmduYUM0endydjNoOEc4NFpnSU9qYUN6Y3FPcVFFVWtIZndWVGVvVktwbmQ2?=
- =?utf-8?B?dFdHMGRva1c2ZTBTQkJPTnRMSlM1UVgrZzFEcU9jakZGMzQwd2N6ZGtFMDhC?=
- =?utf-8?B?cE9kRTNkdGhSZjVsMzJpcS8zaUFhSEFFYWQwWmxSWkhKSkRlVm91bHNOd0hN?=
- =?utf-8?B?aVFIY29ITFlaSjNabkc2YVhqaWx0ZUhQcDFHdk10Zml5YXI2bDJYMC9SZm1u?=
- =?utf-8?B?M2xsZE5hMFRnd1pFbHo2SXNJZkFmZXZkTWo4K202RVNmWVRBTUp5VU90a3BT?=
- =?utf-8?B?M3FNbDdiQVN0OXdHYTZkcGh6WWpSdC9PQmNTOUN4bWhyTlVFaUc2NkV5T1ZM?=
- =?utf-8?B?QVJ2bDFtVllOWHUyemg1UVhqTGNnM2pyMnFPVEZ1MmRGS2ZrMitQTmQydHJC?=
- =?utf-8?B?V2J2M0wrSFU1RUhCdUFZUVQ2MnRoazdsaEtRK3NJVkMwbEpMdWY5RDZ1ZDJT?=
- =?utf-8?B?QnFRQU5KdkQxZ1pzRGFvYlN3dzljcGJ6WVJlMWovOExaSFJlZ2VHM01vcDE0?=
- =?utf-8?B?dWxHNUVSSFhNTnhvcjFEU0pNSnY3b0FUaHBuWll1VzM1VDFKZUdTR0kxZEZH?=
- =?utf-8?B?cmNjVnVkY083SWZXcHlvUHROTjk2Mkw3UG5EbU1JQ3VoWFA4R3VrVHREdjFT?=
- =?utf-8?B?OHVJczUrQjJJazZSM0Zaa2FaZ1EwYktLSmtJMU9RcHpKbG1nbXZKSGp4V0NE?=
- =?utf-8?B?TVRMMEVMZGJaN1FQUDNwSkludjJRcHpQdStudzF4eE4yYlRIQkhjNHBqRjJr?=
- =?utf-8?B?alA2TEphSTNpRVhWRFAraDY4V0o0MzlLdVFPQUFVdHpVYjZPeGI3bTZiUUhJ?=
- =?utf-8?B?L2lIRUZSNFFEZittTk9LdmlsUG9UTGVwL2IwaEM2ZUh2dWxjUzI1Z3I3WE15?=
- =?utf-8?B?WXFUeHdTVGpsWi92clREb1ZFTSs0RC9MTnF5U2Z6eSt4SWRld2NibVJQeHdI?=
- =?utf-8?B?ejZoUXNGMktNYVN4eDhDZGxhSWZTcVozRnZ6NUNhZW1Td2tzUVRQK21xMmFm?=
- =?utf-8?B?NkFCSGd4OEZQRkhIayt5R3FrVVY1SG1pZE02NlRQVldkSXZtVkpQR0FPSjcw?=
- =?utf-8?B?eHlrNGk1SUkyRmo3Y0Nuc3B4aWRyQkxoQk1zN1pDWkh6T2VZZFYwWklpMkkz?=
- =?utf-8?B?c2lWUi9pSXNIU1k3ZTVtYjdzK3E2T2JxZDQwRWRpV3FvaVV0eXludnl0NlVP?=
- =?utf-8?B?bEI4emRvTlV3SHdFTmhJM1RhcmpuVk1ianpiVVI3Szh3TjFZaE9wWHpFOTli?=
- =?utf-8?B?ay9SM2FScGxOREt0eFE1WmRjUXZDeEQ1a2pLVFdTWUowME1DTFVoQ3RHbjhV?=
- =?utf-8?B?QmU5NHlaakhxc0JqL3NLb2xMTUdYZ0twNEVZblZmd0dhY01Vd3MxdStqbnI0?=
- =?utf-8?B?UHZOQjJMS3NRLzAzRUx0TXpmQmYzcWtVL3Rjb2dLMnZPR2FRd011T3R1NmlO?=
- =?utf-8?B?SERlVUVBck5MWG5sbHYvUkhNZXU5THdzMVlzQmlqc1hqcHQ5eHlaTmNzN0hM?=
- =?utf-8?B?OCtkaktuSC80UTErdCtheGovZDNZaTE1RVA1YXUzMnVYZGFBMEV4bHdaQi9Q?=
- =?utf-8?B?WkNzQlo4MC94dUZUdEhNRlZ6cUIxS2ZRVnYreXJlV1dBd0pjWHpKMFVac0Vz?=
- =?utf-8?B?U040VE5rRU0xZmJHQ0pjd2lGai9Yd2ROOE56enJ6WWxpUklFeVZRSWE0TmVx?=
- =?utf-8?B?cG1WUGkzaCtKOVk5VVNrd3dwcVBUQjQzQm1mY21RZjNCd2REWDFzTFJWMHhN?=
- =?utf-8?B?ZzFMZ3hhT2x5QkIvZzIxYUFyWXRNTjFvbDZVa3U2bkUzaHlVWVhyZzNJMG53?=
- =?utf-8?B?R2ZEdjArR3UvNFVmd2JDY3lubWF2OXJKQzZRdDRDcVF2QUIyUEcrY3EwTzJ6?=
- =?utf-8?B?VWc9PQ==?=
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature";
-	boundary="------------7eIK9eS3654lDBA7R0WfEFcK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B72A28E603;
+	Tue, 15 Apr 2025 10:17:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744712268; cv=none; b=i5D4qlTBvqv9RDQLkb3e5VN5XCUo2aGfhzBQ22/ZGKjnZ+QoI24rlWAnkjUrMW4rqOHCLId3ei/NHUkeYBs2BIVorUN9pCejzc/PkavdQckW+Gb3bUGYC1mZhq9qjcbJ3H3DczDcsDbu2J1yFr8mbRDAljKbu8mYDosvrsyEI2M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744712268; c=relaxed/simple;
+	bh=rTjRFIAfHD4DB+9hVzG2jvqsve39fU1uZXYWiFw8EcI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ozwKTbLnUPd/jYKqmnaeGPjAoX3wqXDUGSb3cS0mu9gbEcuSU0zccVQbEcB6lBdKGpaKz+dBcKxG6jNSAzJx5K/9aO1rgM/4nv+cEYDIEfDBLGHILJsmajHb9rWmGInUYTs9wb1ROrf9nnDXwIypxu2xZdTPEb3KoWfF8u5Swa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=HIkj3hXa; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 9CA13662667;
+	Tue, 15 Apr 2025 12:17:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1744712259;
+	bh=rTjRFIAfHD4DB+9hVzG2jvqsve39fU1uZXYWiFw8EcI=;
+	h=From:Subject:Date;
+	b=HIkj3hXaJh4egXuWilkzCDhgrJn8X+omM+hM2urQww6y5foUbzUGPD+AQ/ryAbaRb
+	 iAQCWWLVzJyjtFftz/O8MUVqNZTmODRFpWLa5JbkEwubLsrwgBa4gZts/FA4YhlbbA
+	 zJsTnWhpLsYdGl/Iqksx8UZ3JT+OVT7o08DDftZKuRScH5ZcdrItuJU/wTvdSPYNDA
+	 WkuZlUh3qcB0T2Ov+ChUp+jU7/gwksN/RDqf1R229gBxX2qy97UGF3x5m6G60HkZ1R
+	 LhpP2ip+FYU48eWdA6sUNpcAL1JnmXRHfS/mMm6NIS8RYh7uNPMek1zLl/HQ4Rv8KR
+	 L7/1+F5mbnZUA==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Christian Loehle <christian.loehle@arm.com>,
+ Sultan Alsawaf <sultan@kerneltoast.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Valentin Schneider <vschneid@redhat.com>, Ingo Molnar <mingo@redhat.com>
+Subject:
+ [PATCH v2 0/6] cpufreq/sched: Improve synchronization of policy limits
+ updates with schedutil
+Date: Tue, 15 Apr 2025 11:52:10 +0200
+Message-ID: <6171293.lOV4Wx5bFT@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: imgtec.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CWXP265MB3397.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a38b341-5e78-47fa-37e1-08dd7bfe0d8d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Apr 2025 09:15:23.5219
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 0d5fd8bb-e8c2-4e0a-8dd5-2c264f7140fe
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jclKssrQAtM26agJyrlFaVlIAoXl+C6b3olkYwMN4OG0thT23zFh0YCBaxjX2x6PUFbhCeN+MS9H5Dwu2gYDtA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO8P265MB7597
-X-Proofpoint-GUID: QMdwYOF3KSjUoWwJ0QoUg1R3ADa6VogM
-X-Authority-Analysis: v=2.4 cv=OMsn3TaB c=1 sm=1 tr=0 ts=67fe23ae cx=c_pps a=+8G7KV7MoNjfk4g9SO/OOg==:117 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=XR8D0OoHHMoA:10
- a=NgoYpvdbvlAA:10 a=hD80L64hAAAA:8 a=r_1tXGB3AAAA:8 a=cg-36aUXAHM9IJLQJ2MA:9 a=QEXdDO2ut3YA:10 a=NGHoSze0NoZO2hb-OsAA:9 a=FfaGCDsud1wA:10 a=t8nPyN_e6usw4ciXM-Pk:22
-X-Proofpoint-ORIG-GUID: QMdwYOF3KSjUoWwJ0QoUg1R3ADa6VogM
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvvdefvddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeduuddprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehvihhrvghshhdrkhhumhgrrheslhhinhgrrhhordhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=11 Fuz1=11 Fuz2=11
 
---------------7eIK9eS3654lDBA7R0WfEFcK
-Content-Type: multipart/mixed; boundary="------------0T4pGmpUW4blsCVOiRdsA0ib";
- protected-headers="v1"
-From: Matt Coster <matt.coster@imgtec.com>
-To: Maxime Ripard <mripard@kernel.org>,
- Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
- Danilo Krummrich <dakr@kernel.org>, Pavel Machek <pavel@kernel.org>,
- Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>,
- Fu Wei <wefu@redhat.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, Frank Binns
- <frank.binns@imgtec.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, m.szyprowski@samsung.com,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-Message-ID: <1226d261-247a-4a7c-a414-7db4a24fab9e@imgtec.com>
-Subject: Re: [PATCH v2 4/4] drm/imagination: Skip clocks if platform PM
- manages resources
-References: <20250414-apr_14_for_sending-v2-0-70c5af2af96c@samsung.com>
- <CGME20250414185317eucas1p139284a38dc4418ac90bd081c2825142a@eucas1p1.samsung.com>
- <20250414-apr_14_for_sending-v2-4-70c5af2af96c@samsung.com>
- <20250415-poetic-magenta-cicada-9d1ee7@houat>
-In-Reply-To: <20250415-poetic-magenta-cicada-9d1ee7@houat>
+Hi Everyone,
 
---------------0T4pGmpUW4blsCVOiRdsA0ib
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+This is an update of
 
-On 15/04/2025 09:55, Maxime Ripard wrote:
-> On Mon, Apr 14, 2025 at 08:52:58PM +0200, Michal Wilczynski wrote:
->> Update the Imagination PVR driver to skip clock management during
->> initialization if the platform PM has indicated that it manages platfo=
-rm
->> resources.
->>
->> This is necessary for platforms like the T-HEAD TH1520, where the GPU'=
-s
->> clocks and resets are managed via a PM domain, and should not be
->> manipulated directly by the GPU driver.
->>
->> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
->> ---
->>  drivers/gpu/drm/imagination/pvr_device.c | 14 ++++++++++----
->>  1 file changed, 10 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/imagination/pvr_device.c b/drivers/gpu/dr=
-m/imagination/pvr_device.c
->> index 1704c0268589bdeb65fa6535f9ec63182b0a3e94..f40468b99cf14da418aeec=
-de086f009695ff877c 100644
->> --- a/drivers/gpu/drm/imagination/pvr_device.c
->> +++ b/drivers/gpu/drm/imagination/pvr_device.c
->> @@ -504,10 +504,16 @@ pvr_device_init(struct pvr_device *pvr_dev)
->>  	if (err)
->>  		return err;
->> =20
->> -	/* Enable and initialize clocks required for the device to operate. =
-*/
->> -	err =3D pvr_device_clk_init(pvr_dev);
->> -	if (err)
->> -		return err;
->> +	/*
->> +	 * Only initialize clocks if they are not managed by the platform's
->> +	 * PM domain.
->> +	 */
->> +	if (!device_platform_resources_pm_managed(dev)) {
->> +		/* Enable and initialize clocks required for the device to operate.=
- */
->> +		err =3D pvr_device_clk_init(pvr_dev);
->> +		if (err)
->> +			return err;
->> +	}
->=20
-> So, how does that work for devfreq? I can understand the rationale for
-> resets and the sys clock, but the core clock at least should really be
-> handled by the driver.
+https://lore.kernel.org/linux-pm/3364921.aeNJFYEL58@rjwysocki.net/
 
-I agree, this feels a bit "all or nothing" to me. There's only one clock
-on this platform that has issues, we can still control the other two
-just fine.
+that replaces the first patch with a better fix and adds one more patch
+after the second one.
 
-I thought fixed clocks were the standard mechanism for exposing
-non-controllable clocks to device drivers?
+The original cover letter is still generally applicable:
 
-Cheers,
-Matt
+"This series of patches has been inspired by the discussion following a bug
+ report regarding the patch at
 
->=20
-> Maxime
+ https://lore.kernel.org/lkml/20241212015734.41241-2-sultan@kerneltoast.com/
+
+ and its attempted unsuccessful resolution:
+
+ https://lore.kernel.org/linux-pm/20250410024439.20859-1-sultan@kerneltoast.com/
+
+ which basically leads to the conclusion that cpufreq policy limits updates are
+ not sufficiently synchronized with the scheditil governor, especially in the
+ fast switching case in which running the driver callback is the only way to
+ make the new policy limits take effect.
+
+ The purpose of this series is to address this concern."
+
+Patch [1/6] is a fix for the issue introduced by the patch linked above (please
+see the patch changelog for details), for 6.15-rc.  The remaining patches are
+for 6.16.
+
+Patch [2/6] adds memory barriers in two places in schedutil along with some
+WRITE_ONCE()/READ_ONCE() annotations to ensure that policy limits updates will
+not be missed due to reordering of instructions.
+
+Patch [3/6] prevents limits_changed from being used for purposes unrelated to
+changing the policy limits.
+
+Patch [4/6] is a preparatory function rename with no functional impact.
+
+Patch [5/6] updates the cpufreq core to avoid situations in which
+cpufreq_driver_resolve_freq(), called by schedutil, may see intermediate
+values of policy->min and policy->max and makes that function address the
+unlikely case in which it may see policy->min > policy->max.
+
+Patch [6/6] cleans up the code after the previous changes.
+
+Please see individual patch changelogs for details.
+
+Thanks!
 
 
---=20
-Matt Coster
-E: matt.coster@imgtec.com
 
---------------0T4pGmpUW4blsCVOiRdsA0ib--
-
---------------7eIK9eS3654lDBA7R0WfEFcK
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-wnsEABYIACMWIQS4qDmoJvwmKhjY+nN5vBnz2d5qsAUCZ/4jqgUDAAAAAAAKCRB5vBnz2d5qsFy0
-AQD7qyOSrzvSOHUAM/T21E2D7ABo7J8ss23WclU9RHIAPAEAzjFTrQyLWtrOf9EwZkhvjuCekxRy
-hIy7j0ms2ZfItw4=
-=0hfU
------END PGP SIGNATURE-----
-
---------------7eIK9eS3654lDBA7R0WfEFcK--
 
