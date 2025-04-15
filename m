@@ -1,167 +1,179 @@
-Return-Path: <linux-pm+bounces-25477-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25478-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B54FA8A46B
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 18:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5065CA8A47A
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 18:45:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 751EA7A28ED
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 16:42:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 40D167ACC95
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 16:44:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29CA9292933;
-	Tue, 15 Apr 2025 16:43:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B2C729B780;
+	Tue, 15 Apr 2025 16:45:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SSTRW9ox"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Q6oA97FC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFAC727F74F;
-	Tue, 15 Apr 2025 16:43:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4879429E05C;
+	Tue, 15 Apr 2025 16:45:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744735389; cv=none; b=eoGP1Fipnb61m2YkaKSgL3fN8R3dT4pOx7U8gFQVB9eIeZMtFpWhkaVzkUiHRiS7rx8Runijd2DYSb9MZG36EOyFe92FTYkAGaNdDX7LSpnZpPOzEky7n6VKqFCxS7qwp1kLKaUsRDEkjlHzowD4P/rkoV90LHnxBEdKoC/aoTc=
+	t=1744735512; cv=none; b=UlKX7b9WcfrvB4RZHzaF7j+i1HRstwki+8IO9FpI0B/YhLZyopOw44iF4nEeGsKv1fqwS1tzzqdTMD/urn16HoZahKyoYyx1VG8WKivco/0ayBsWe6f7djKveQNci4+0GsrdEUPgYVqa9jcrBPCmKkb1nJpgIiOXbcsXRolv8BA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744735389; c=relaxed/simple;
-	bh=u95dBuLRjhdfXitfe59a5c3chs1JKSGBptgj8nnq0po=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KzR0z9Dk2blKYUZ7dYn5vM0zfbLXGJaUubC+o2K2w5rWwWN5hT3DkgukHwPL7MZWZ3cWG7wtv3o/EjzxgPYnydQYRCu+shzrxmgjzC9kOe+mWeUkIMmZOQ8mmquDzQRBU0oxMEOzHfC3GZSgQu2AIYSmeV6o0X/F8peiRT7l/co=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SSTRW9ox; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 695F5C4CEEC;
-	Tue, 15 Apr 2025 16:43:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744735388;
-	bh=u95dBuLRjhdfXitfe59a5c3chs1JKSGBptgj8nnq0po=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SSTRW9oxwi6t6BeOmnz5XKCkgql93kGJJvL3lgjDd3s7AgKf9v2H8X/sQVy78qbRF
-	 XlUR/AMhJniKi3dPiKEHsx+DBL1hXeuZrsgvmfb+1nSolGXDHnXjmG+BjElH0lWVm2
-	 7KlwCKos259oJJXMaimUODj95ATn1ZH2mqJt18dKTc9p9Wb0s+MKiR7kuEtPVvQWqp
-	 E6qvGRZWHtj4qppb2jANy0p3WACo/EV2JsN9c6EUWUvtHRPGuo8vKjgQQ8ibY84S0H
-	 ICBokVM6NJhYXK3dHZe5Wcf3CxdTdjphQV5VLTU1Py8nNdtXxehYGJWar/Z4kpO9rq
-	 Xdnj5akXzs0og==
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-2c873231e7bso3626078fac.3;
-        Tue, 15 Apr 2025 09:43:08 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUhj9UVIyOpJjn467GNrISWfU4/VwOLZL7ZrhhDMsCIBnud3VrkbjSqTwK8Hr6inVKtLIbJaf4spLvF@vger.kernel.org, AJvYcCX/widAhGrfBDr4s8lqBIIJuvm+Yxs/fQVxQbYKD6hmu5sKquEWnLGVPG7EEn0FKwe1dWz7zlJQSbs=@vger.kernel.org, AJvYcCXHFM8/kgT7q7EXk4oDoDxn3QX+U3nbQi2gOu134AIddCe1HvKoQ80MUbhUNm95nDF4c/IxM4kcz8yz1SXe@vger.kernel.org
-X-Gm-Message-State: AOJu0YwoECVRoJqILw+03jYGmqhHkvuKacSK30axfaswddz3l/EUvkXx
-	5xCyibW+oqCkqGVMDcH5Lf1/8K/pDqlhKQ1BKTl9LZdPgFfsHbYtRqMe9jt/EP1kxKj6W+V/5v9
-	Pvag1ei2CXwA55l9xFJ/lhSUEOYU=
-X-Google-Smtp-Source: AGHT+IGyns0wKcIA6JT3DidO5LCfWPBQ89zz6U8ulYdw6epDaXaSmmPM+mVRcjXZP13jUV0tTep4Qgkj6OohB9PkpUw=
-X-Received: by 2002:a05:6871:3743:b0:29e:27b6:bea5 with SMTP id
- 586e51a60fabf-2d0d5f2462dmr9973324fac.25.1744735387716; Tue, 15 Apr 2025
- 09:43:07 -0700 (PDT)
+	s=arc-20240116; t=1744735512; c=relaxed/simple;
+	bh=VOnDxQaAKRWw2IKlU/+VitLZInyTZ7+P1ECUBgtIElI=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RZuEsRRD1mzZma9kYWuXXOnGDEqO3FKlx5Ki2NklR7oO9dg/5L0fnET8CKE09fOQOcaQvPE65gbo+LkvM6qsX6PSlyJqDThgziMwdxz4qKiBG7Xcbt1KCAZbB4NFam1hlWR4Q9ThiSfw9Y6Jm6VsMaed0sh5Ol55tNw4JJon9MQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Q6oA97FC; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53F8tCtH025071;
+	Tue, 15 Apr 2025 16:44:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=+kDB+MDxRVThD8Eyv10zNktc
+	2R/pYfeT2l4xLH5sq0c=; b=Q6oA97FCcAITogJh02z4K9O3Oh77YbOdAt0jViLC
+	GsRzb7YcHmSMJT7flsasQeNge24zxRQqa0esofn4G9vjwRyv6tikvC4UpQDKgp6W
+	I2fmDiAq2tI8tQRoOn1ZNYa/yc1a+8g052Rq90KUrbwSEGsjliOjIEaafTmL/aLz
+	pk2B12DJ9eVvPdoiYKrGixaBkDufi2YVPHNoFWggFo2uQET6Bf3UF/49lDRNmIH7
+	uQ3fLzSAiSCy8f71mE2Ig7LnHgrXcxyqRFrGom7wrPW6XxZ3kDbaknGZ9wgtFbbc
+	rizWfVdhmIDePT6lwrFM/TOT7G4j5tk0ZZ4gmT9afd1F3g==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45yg8wgu3x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 15 Apr 2025 16:44:57 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53FGiuiK019612
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 15 Apr 2025 16:44:56 GMT
+Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Tue, 15 Apr 2025 09:44:56 -0700
+Date: Tue, 15 Apr 2025 09:44:55 -0700
+From: Mike Tipton <quic_mdtipton@quicinc.com>
+To: Peng Fan <peng.fan@oss.nxp.com>
+CC: Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi
+	<cristian.marussi@arm.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh
+ Kumar <viresh.kumar@linaro.org>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cpufreq: scmi: Skip SCMI devices that aren't used by the
+ CPUs
+Message-ID: <Z/6NB2QRvRrqwgcQ@hu-mdtipton-lv.qualcomm.com>
+References: <20250411212941.1275572-1-quic_mdtipton@quicinc.com>
+ <20250415090655.GA10243@nxa18884-linux>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CGME20250414185314eucas1p1ae57b937773a2ed4ce8d52d5598eb028@eucas1p1.samsung.com>
- <20250414-apr_14_for_sending-v2-0-70c5af2af96c@samsung.com> <20250414-apr_14_for_sending-v2-1-70c5af2af96c@samsung.com>
-In-Reply-To: <20250414-apr_14_for_sending-v2-1-70c5af2af96c@samsung.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 15 Apr 2025 18:42:56 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0irRq8_p35vf41_ZgomW0X=KZN+0HqwU2K9PvPRm8iZQA@mail.gmail.com>
-X-Gm-Features: ATxdqUFwFy97e7VWF90uH5loEGafOroniuxmOCaFHFC3QunM9DSgMFJWfDaMgSM
-Message-ID: <CAJZ5v0irRq8_p35vf41_ZgomW0X=KZN+0HqwU2K9PvPRm8iZQA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] PM: device: Introduce platform_resources_managed flag
-To: Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Frank Binns <frank.binns@imgtec.com>, Matt Coster <matt.coster@imgtec.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	m.szyprowski@samsung.com, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250415090655.GA10243@nxa18884-linux>
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Authority-Analysis: v=2.4 cv=E9TNpbdl c=1 sm=1 tr=0 ts=67fe8d09 cx=c_pps a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=3H110R4YSZwA:10 a=kj9zAlcOel0A:10 a=XR8D0OoHHMoA:10 a=COk6AnOGAAAA:8 a=nqZ6nTEg5KUHkvYbfU8A:9 a=CjuIK1q_8ugA:10
+ a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: 6zJdl26a50mbWxYTiGA4Xw4GOcA4slVa
+X-Proofpoint-GUID: 6zJdl26a50mbWxYTiGA4Xw4GOcA4slVa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-15_06,2025-04-15_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ mlxscore=0 bulkscore=0 clxscore=1015 phishscore=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
+ impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2504150116
 
-On Mon, Apr 14, 2025 at 8:53=E2=80=AFPM Michal Wilczynski
-<m.wilczynski@samsung.com> wrote:
->
-> Introduce a new dev_pm_info flag - platform_resources_managed, to
-> indicate whether platform PM resources such as clocks or resets are
-> managed externally (e.g. by a generic power domain driver) instead of
-> directly by the consumer device driver.
+On Tue, Apr 15, 2025 at 05:06:55PM +0800, Peng Fan wrote:
+> On Fri, Apr 11, 2025 at 02:29:41PM -0700, Mike Tipton wrote:
+> >Currently, all SCMI devices with performance domains attempt to register
+> >a cpufreq driver, even if their performance domains aren't used to
+> >control the CPUs. The cpufreq framework only supports registering a
+> >single driver, so only the first device will succeed. And if that device
+> >isn't used for the CPUs, then cpufreq will scale the wrong domains.
+> >
+> >To avoid this, return early from scmi_cpufreq_probe() if the probing
+> >SCMI device isn't referenced by the CPU device phandles.
+> >
+> >This keeps the existing assumption that all CPUs are controlled by a
+> >single SCMI device.
+> >
+> >Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
+> >---
+> > drivers/cpufreq/scmi-cpufreq.c | 29 +++++++++++++++++++++++++++++
+> > 1 file changed, 29 insertions(+)
+> >
+> >diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+> >index 944e899eb1be..7981a879974b 100644
+> >--- a/drivers/cpufreq/scmi-cpufreq.c
+> >+++ b/drivers/cpufreq/scmi-cpufreq.c
+> >@@ -393,6 +393,32 @@ static struct cpufreq_driver scmi_cpufreq_driver = {
+> > 	.set_boost	= cpufreq_boost_set_sw,
+> > };
+> > 
+> >+static bool scmi_dev_used_by_cpus(struct device *scmi_dev)
+> >+{
+> >+	struct device_node *scmi_np = scmi_dev->of_node;
+> >+	struct device_node *np;
+> >+	struct device *cpu_dev;
+> >+	int cpu, idx;
+> >+
+> >+	for_each_possible_cpu(cpu) {
+> >+		cpu_dev = get_cpu_device(cpu);
+> >+		if (!cpu_dev)
+> >+			continue;
+> >+
+> >+		np = cpu_dev->of_node;
+> >+
+> >+		if (of_parse_phandle(np, "clocks", 0) == scmi_np)
+> >+			return true;
+> >+
+> >+		idx = of_property_match_string(np, "power-domain-names", "perf");
+> >+
+> >+		if (of_parse_phandle(np, "power-domains", idx) == scmi_np)
+> >+			return true;
+> >+	}
+> >+
+> >+	return false;
+> >+}
+> >+
+> > static int scmi_cpufreq_probe(struct scmi_device *sdev)
+> > {
+> > 	int ret;
+> >@@ -404,6 +430,9 @@ static int scmi_cpufreq_probe(struct scmi_device *sdev)
+> > 	if (!handle)
+> > 		return -ENODEV;
+> > 
+> >+	if (!scmi_dev_used_by_cpus(dev))
+> >+		return 0;
+> 
+> Should 'return -ENOTSUPP' be used here?
+> There is no need to mark the probe success.
 
-I think that this is genpd-specific and so I don't think it belongs in
-struct dev_pm_info.
+Returning -ENOTSUPP will add noise in the logs from probe failures, for
+example:
 
-There is dev->power.subsys_data->domain_data, why not use it for this?
+    scmi-cpufreq scmi_dev.4: probe with driver scmi-cpufreq failed with error -524
 
-Also, it should be documented way more comprehensively IMV.
+These are "expected" failures, so this would be misleading. However, we
+could return -ENODEV instead which doesn't log anything by default. It
+uses a dev_dbg() in that case:
 
-Who is supposed to set it and when?  What does it mean when it is set?
+    scmi-cpufreq scmi_dev.4: probe with driver scmi-cpufreq rejects match -19
 
-> This flag enables device drivers to cooperate with SoC-specific PM
-> domains by conditionally skipping management of clocks and resets when
-> the platform owns them.
->
-> This idea was discussed on the mailing list [1].
->
-> [1] - https://lore.kernel.org/all/CAPDyKFq=3DBF5f2i_Sr1cmVqtVAMgr=3D0Fqsk=
-sL7RHZLKn++y0uwg@mail.gmail.com/
->
-> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
-> ---
->  include/linux/device.h | 11 +++++++++++
->  include/linux/pm.h     |  1 +
->  2 files changed, 12 insertions(+)
->
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index 79e49fe494b7c4c70d902886db63c4cfe5b4de4f..3e7a36dd874cfb6b98e2451c7=
-a876989aa9f1913 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -881,6 +881,17 @@ static inline bool device_async_suspend_enabled(stru=
-ct device *dev)
->         return !!dev->power.async_suspend;
->  }
->
-> +static inline bool device_platform_resources_pm_managed(struct device *d=
-ev)
-
-Could this function name be shorter?
-
-> +{
-> +       return dev->power.platform_resources_managed;
-> +}
-> +
-> +static inline void device_platform_resources_set_pm_managed(struct devic=
-e *dev,
-> +                                                           bool val)
-
-Ditto?
-
-> +{
-> +       dev->power.platform_resources_managed =3D val;
-> +}
-> +
->  static inline bool device_pm_not_required(struct device *dev)
->  {
->         return dev->power.no_pm;
-> diff --git a/include/linux/pm.h b/include/linux/pm.h
-> index f0bd8fbae4f2c09c63d780bb2528693acf2d2da1..cd6cb59686e4a5e9eaa2701d1=
-e44af2abbfd88d1 100644
-> --- a/include/linux/pm.h
-> +++ b/include/linux/pm.h
-> @@ -670,6 +670,7 @@ struct dev_pm_info {
->         bool                    no_pm:1;
->         bool                    early_init:1;   /* Owned by the PM core *=
-/
->         bool                    direct_complete:1;      /* Owned by the P=
-M core */
-> +       bool                    platform_resources_managed:1;
->         u32                     driver_flags;
->         spinlock_t              lock;
->  #ifdef CONFIG_PM_SLEEP
->
-> --
-> 2.34.1
->
->
+Returning -ENODEV seems more appropriate. I can make that change.
 
