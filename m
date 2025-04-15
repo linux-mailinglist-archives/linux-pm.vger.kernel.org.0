@@ -1,133 +1,142 @@
-Return-Path: <linux-pm+bounces-25471-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25472-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 390A7A89F1C
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 15:12:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6012FA8A089
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 16:04:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A346D19020FB
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 13:13:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6D263AC3AF
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 14:03:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5772129A3C2;
-	Tue, 15 Apr 2025 13:12:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B36120469E;
+	Tue, 15 Apr 2025 14:03:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k958yCx9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OsWxxCh9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2982989A9;
-	Tue, 15 Apr 2025 13:12:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 592E41B412A
+	for <linux-pm@vger.kernel.org>; Tue, 15 Apr 2025 14:03:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744722754; cv=none; b=ls2SMS4AZ5FRvH3KZMppTPbVngDbjlvubfjsa32/yC0oWVgVLua6yKl871siyPu0SD8aYCRHPoWTXoyz8MrT+U1l/tWZsEAxy65cwTUgCL5pYXZLoaWlhSHCp9iYwCbzJyN12K1Z7ZDGSkKokRThr3z1mij5zBwLGYKiXghPHBY=
+	t=1744725834; cv=none; b=iKl3kZZ+UO5HkqmOS7iLqVcOiARMxDQZ7lZATKlMT2whRDtT4PPe+1S36iXTQ0ZfPiCL6GacPYrn51/mxNAslcgoZcUI2msRIvnInEVpilzaLkL9r1QVX4PntQdmb8ha43wKD4tKbVW3nfbrnP/AQqdtbdfQOZyrqvt5D6iKrrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744722754; c=relaxed/simple;
-	bh=NvOGweny3//9PpU6g+4X9hkULpzaTPAuQjLSl6LDn5A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jvzbt/4PMIzjcIPzhfDL8I9acb8Pa5G/9pC/4A9BIDa7ylbhaezef2SQYyrfM2fikPeB0V08orSjnzQQucqIu77xXQkasc703e96b8j0N5jpZ5Z+RehVtIrHbZxaNy264Duv9dfh3F7m3PCDMqqML9Wpp0Er6povp0ZX8OlQ12E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k958yCx9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96C1DC4AF09;
-	Tue, 15 Apr 2025 13:12:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744722753;
-	bh=NvOGweny3//9PpU6g+4X9hkULpzaTPAuQjLSl6LDn5A=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=k958yCx9+v4kckx+SPonwhjsq1VKNVbGDW+tScgS2FgQouS3NJzLirzUNCltrBREA
-	 LVmAUxTl4FPx0Bh3XuL+z7P+9lOR577/LmjB8C/qdVXL2PCfl+6oVbUl8CWi8HaYtd
-	 iE6VidSp28AHtkqIn1t+BzXxE7PaWhUuQbfyWsF9jPTBASsgPqsa/ZnP56bZxUQGyu
-	 AgpTG+rRAOXkyL0NH9E+WMF3NlMIbX27qpLx+7WtjnhGE3h69EpsgHetBe5J1hkufI
-	 h37ty6ipxig0gmdDN0UUDyCpHyb5JR6N6tVFGdeXlUIYdR2iGzAvWwRtjt27iu4mjJ
-	 YNgz3vdA9idtg==
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-2c769da02b0so3763862fac.3;
-        Tue, 15 Apr 2025 06:12:33 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU8Wx3GLYpm+M82l64cktXB3NfYYvMBLB6cfrgvddx2GJ4rCSF0Xd7GNXZxY/eAKLHPkcnfjOTv3Rc=@vger.kernel.org, AJvYcCWQ/FG2PxOOgZsAbeAVTqgVXXGMHXjDxwp+N3mDjful5ghAuij2Rhi/LWEZ+nO3lj+ah0FWwooDIhP6wWg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkjLRWJjBN5C5QZ5d9wN9cD41phJwc93I+l1uaxwYi2P4s4K6G
-	g7lvA1i+2MJ3XxcQ/0w5BzI+CYewCqcxIbTV13cmzmyawhjrEAcbiKhXNrgUxs+Pxk4RMJkxB94
-	JRG9B/jDyHeJRFsr0cBGrv3DIcUA=
-X-Google-Smtp-Source: AGHT+IHQz7afKClIl9JufIHbfXY8ywdQ1OxG3dTUq+Tinrq+8ujCnjZuoRlAVf6U7oolhBUM7P3nNKRRbGwANWnXCgI=
-X-Received: by 2002:a05:6870:289b:b0:2bc:66cc:1507 with SMTP id
- 586e51a60fabf-2d0d5cf7285mr9975832fac.12.1744722752838; Tue, 15 Apr 2025
- 06:12:32 -0700 (PDT)
+	s=arc-20240116; t=1744725834; c=relaxed/simple;
+	bh=5bfJsgR3m/o/t1OHYyV5icrvh0iH7ZHvs7Ywc6HuCLQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HTDNx/pcu1iowLGD0byrPY2W6s10RGrksMw1LVXypNr3LTsEmNIzOW4p7hrNfdF+1yWxCNZLOFA9YqaHDHejeEYwSA2pHMkitocShDohw2Z/d/849BbEd19A6qCTYfdVf+VHPKFe30lCu5lg3+T1zYNAOWdpL4Na/e4wJowqgAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OsWxxCh9; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43cfdc2c8c9so30669995e9.2
+        for <linux-pm@vger.kernel.org>; Tue, 15 Apr 2025 07:03:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1744725830; x=1745330630; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iSMcwciXFDhUl1+08Fh5h1VKOSqvYJ+dyCoPGR8uh48=;
+        b=OsWxxCh9AqUGgGsVqTi1oF0oryuKwgJB33nNah2EGri4j8gQSGov4kJD5t9+JhPrAL
+         nUKMKtNLxoXq46H966wtgF/j1WDKlIdceaLUXi9nrjS9NoOBsqU84KTk/ORJZs965TeW
+         C9TtuJTedhqZys/PLfLGcFMUHSPeQUX2ZcaZ8mAtMWHifGlAUrRPQw6AwYno+NEPk/IR
+         moLqTjL0Vvsyh0haw2GEBOUU+Eb4vk0kVzUhLha5Dz3lAOIKoM4hT9mxC8vGtBQxHwIl
+         dzVdW4lLv4rClxk4R5zUN+Czlam8OzykP3JsiOK2n81YdMLiDYNWAxnc2SzIVsv1aYCZ
+         XI/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744725830; x=1745330630;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iSMcwciXFDhUl1+08Fh5h1VKOSqvYJ+dyCoPGR8uh48=;
+        b=PA6XosgMVk9ouWfgJblicCR1UVsVTS2TsuzccDoegvBJs6wXeegNATxCpzcpExWog4
+         1L1cJMjwja81yXQ6aGFpvz1/caeEn5ecnoX2gMBWyw+xIsIit4sF+SNUgNyY4a90AeqY
+         NU9Uj/aDWAyq2wv8fKYyl+JokiFQ3BYjzlPwm0nNHbuwT7oAffzJTlYn/0hvZSdBkAdj
+         qng1XjpRB82677s1fUI8kiYwHR0LFPVAL9jlh4YOvM0YsrKXeYujlKzgiUIv0EmcrIJq
+         m9npOgbhZwepTH3eAoZbYyyJBsudnDwc2LtmCKekp3vhq3xtaOxNC57H+RI7raMZfrW+
+         zT5w==
+X-Forwarded-Encrypted: i=1; AJvYcCW+ffNJlbPeoqw7+JM3a5tJRqlzLzMGKzKHYPYzfAI1FmDEdxEPkFrjHXi+MQS8wH5QXvxDqEQl4Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNYh5pvBvtkklN2IgXlFoUtHqQxiFfN/P5v1pnfnzBA0ICJcJI
+	KcAsc1Px5zzBOQDtC6maE1yEMfvTWYDToqstBoHwmN6s5gUd+foc6pj2WRUH/7rMOK7QH6r2n63
+	0
+X-Gm-Gg: ASbGnctKdBFW49G880VUgpSqtvJHwUlwWi5qQzkhQm18HfozurDQqCgw1XPFHr9nFQ8
+	JAdeNe0l5YuPX/TXa0K7AZHNgqCnGg8ATwRaRcPSaWTN0qSYFokn0H1RuE9YMt/U8QQMqLB3YYk
+	vBRrodY7E3ePLp1gcV99Cm+0wGXtJOGFd9p18aAA2wgxnLE6lNjIgMNLsw4W6I/DiTnU1qPQeaf
+	EYiu1tAI4usl2XROxUxuGB+LS2I2HrdNSPJrb6wawenE30vBvKvm33aOwjWQ/Xa5gHc+mG/wx2U
+	jNufEAO8DVtxp6oTOJEz8N3yC0T9sVW6iL7Zg+aPFKA12rz3TQ0oYkqV6tmQuo7p4Lmo2zJt
+X-Google-Smtp-Source: AGHT+IFEA/aJ+3RMT11dq2pF/arT4Y9Og71cDqv5JQgKpe3srWBWNpFe/YkbdCDPZghLlxg4Cni8LA==
+X-Received: by 2002:a05:600c:46d0:b0:43d:209:21fd with SMTP id 5b1f17b1804b1-43f3a9b02b3mr165355905e9.30.1744725830091;
+        Tue, 15 Apr 2025 07:03:50 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:3d9:2080:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43f206332d9sm210480765e9.13.2025.04.15.07.03.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Apr 2025 07:03:49 -0700 (PDT)
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH 0/2] interconnect: qcom: sm8650: add MASTER_APSS_NOC system
+ NoC node
+Date: Tue, 15 Apr 2025 16:03:46 +0200
+Message-Id: <20250415-topic-sm8650-upstream-icc-apss-noc-v1-0-9e6bea3943d8@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <4651448.LvFx2qVVIh@rjwysocki.net> <1928789.tdWV9SEqCh@rjwysocki.net>
- <Z_5aQdqYJCFkcHLi@mail-itl>
-In-Reply-To: <Z_5aQdqYJCFkcHLi@mail-itl>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 15 Apr 2025 15:12:20 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hoSoa+DpN3jYSgQ1T8aWxcT806hJJOOwY5c8cRs3T1Fw@mail.gmail.com>
-X-Gm-Features: ATxdqUHc-dIqFVvUeKybIaMPNzyJQH1Kh_mq1jQvhviOH-6zO6Sh8oW5sWNMXnQ
-Message-ID: <CAJZ5v0hoSoa+DpN3jYSgQ1T8aWxcT806hJJOOwY5c8cRs3T1Fw@mail.gmail.com>
-Subject: Re: [PATCH v1 01/10] cpufreq: Reference count policy in cpufreq_update_limits()
-To: =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= <marmarek@invisiblethingslab.com>
-Cc: stable@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Mario Limonciello <mario.limonciello@amd.com>, Sudeep Holla <sudeep.holla@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEJn/mcC/32OMQ6DMBAEv2JdnYtsgsHxVyIKY47EBRh8gCIh/
+ h4rNKlSzhY7swNTCsRgxQ6JtsAhjhnURYB/ufFJGLrMUMhCy1JpXOIUPPJgKi1xnXhJ5AYM3qO
+ bmHGMHvXNSeN6p0xfQz6aEvXh/ZU8mpMTzWt2LecIrWNCH4chLFZs1TV7klfwG2HFmSDrPwlzZ
+ KTW65aoNPeqs5uC5jg+Gj90KuYAAAA=
+X-Change-ID: 20250415-topic-sm8650-upstream-icc-apss-noc-53a08afa18f7
+To: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=993;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=5bfJsgR3m/o/t1OHYyV5icrvh0iH7ZHvs7Ywc6HuCLQ=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBn/mdDpn+xZ+RYrEX6/OBCAaF4nMt5i8FhE6bkIpjk
+ 1Q83B1KJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZ/5nQwAKCRB33NvayMhJ0erpD/
+ 94TG9P4WKRl4RZy23i/74ssR70noio15L2KIquvl0ZxaFcSJBwRXUTNx0/nyIvhKzAAiqEBNalEFrg
+ 7ZxEEYi5aG9RggPiTNA4E9/Oui2VgpJXnBY9SSnyD6IDQo/vBiez+Xqj4a/hr2HJB9T5OgvqkcUaVp
+ Vw7zLgyjl4NOzoL5/1EzKMK0KqJB0C2IvA9umFd/z0+YFIiCHRH/tqa2g4JYUtabRdjPbZEo6W1eyS
+ Jc5V7BRg0NFIYchg7ZdmdsYXT+I3dwpi4FFlVrIr0RS9PwE27+A/9DxapFgu0bhZKW2i0I7WbKnjL9
+ x7fqtXwozUQ2glGspmwTdty11ewChIAOwKjo9kT/W1ah//ThZbBzOlCfFpM9TdY86kwDZHXVKf6Xks
+ nDS9UoYEOchdOwAeyvhmyeMdPj/TGyoscKh6igal60WvLEAlXgh3hXuWZWmBibU/vZhm59Efae76ye
+ dOvE25Kgfu+xLwxYoRNZpVRxev9C5rIlonD493WmUpWJ5C71TmbqvWix3N5urILnQABkqEXg9+Z0MN
+ T4P3qSSXcBAiSdz8TYv/nTv/iBARtYxOyFp96JQBmP1YLSHt6Hve34+r24iIzXHZQg9oCVET1j/dpA
+ F3mtzz0Jh81q0GejGaJLYrMDoKN8h8UiwLfkEW9rnQPZMLDGuMFiPZ6gU0SQ==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 
-On Tue, Apr 15, 2025 at 3:08=E2=80=AFPM Marek Marczykowski-G=C3=B3recki
-<marmarek@invisiblethingslab.com> wrote:
->
-> On Fri, Mar 28, 2025 at 09:39:08PM +0100, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Since acpi_processor_notify() can be called before registering a cpufre=
-q
-> > driver or even in cases when a cpufreq driver is not registered at all,
-> > cpufreq_update_limits() needs to check if a cpufreq driver is present
-> > and prevent it from being unregistered.
-> >
-> > For this purpose, make it call cpufreq_cpu_get() to obtain a cpufreq
-> > policy pointer for the given CPU and reference count the corresponding
-> > policy object, if present.
-> >
-> > Fixes: 5a25e3f7cc53 ("cpufreq: intel_pstate: Driver-specific handling o=
-f _PPC updates")
-> > Closes: https://lore.kernel.org/linux-acpi/Z-ShAR59cTow0KcR@mail-itl
-> > Reporetd-by: Marek Marczykowski-G=C3=B3recki <marmarek@invisiblethingsl=
-ab.com>
-> > Cc: All applicable <stable@vger.kernel.org>
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> It looks like this patch is missing in stable branches.
+Add the missing MASTER_APSS_NOC system NoC node,
+synced from downstream driver.
 
-It may have not been picked up by the "stable" maintainers yet.
+Depends on:
+- https://lore.kernel.org/all/20250407-topic-sm8650-upstream-icc-qos-v1-1-93b33f99a455@linaro.org/
 
-> > ---
-> >  drivers/cpufreq/cpufreq.c |    6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -2781,6 +2781,12 @@
-> >   */
-> >  void cpufreq_update_limits(unsigned int cpu)
-> >  {
-> > +     struct cpufreq_policy *policy __free(put_cpufreq_policy);
-> > +
-> > +     policy =3D cpufreq_cpu_get(cpu);
-> > +     if (!policy)
-> > +             return;
-> > +
-> >       if (cpufreq_driver->update_limits)
-> >               cpufreq_driver->update_limits(cpu);
-> >       else
-> >
-> >
-> >
->
-> --
-> Best Regards,
-> Marek Marczykowski-G=C3=B3recki
-> Invisible Things Lab
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Neil Armstrong (2):
+      dt-bindings: interconnect: sm8650: document the MASTER_APSS_NOC
+      interconnect: qcom: sm8650: add the MASTER_APSS_NOC
+
+ drivers/interconnect/qcom/sm8650.c                  | 19 +++++++++++++++++++
+ drivers/interconnect/qcom/sm8650.h                  |  1 +
+ include/dt-bindings/interconnect/qcom,sm8650-rpmh.h |  1 +
+ 3 files changed, 21 insertions(+)
+---
+base-commit: 64e9fdfc89a76fed38d8ddeed72d42ec71957ed9
+change-id: 20250415-topic-sm8650-upstream-icc-apss-noc-53a08afa18f7
+prerequisite-change-id: 20250407-topic-sm8650-upstream-icc-qos-ebc5bee4896d:v1
+prerequisite-patch-id: 04fba63dd9b30c5ff407351a86ba445373c841b7
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
+
 
