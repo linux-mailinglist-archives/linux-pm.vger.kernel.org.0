@@ -1,175 +1,240 @@
-Return-Path: <linux-pm+bounces-25474-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25475-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26332A8A084
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 16:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 37BBBA8A134
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 16:35:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BDC1172C70
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 14:04:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A0A017B609
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 14:35:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D70F327B4EB;
-	Tue, 15 Apr 2025 14:03:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A990B20B1E8;
+	Tue, 15 Apr 2025 14:35:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VPYVucay"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="RFv2Lok0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2064.outbound.protection.outlook.com [40.107.237.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFB31C3BFC
-	for <linux-pm@vger.kernel.org>; Tue, 15 Apr 2025 14:03:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744725835; cv=none; b=lkSw4ckniozgRTgg2V8QmegG2hoS1pPs31Rde6xx246mXAONWTMocR5eoII5vdvV/bdAYBLdDWManG+FyBlA7eUhHMEaAC5A9lLViyNZbC/z+CTvycVKv3nnGyLo5J9moxV3jLdT7+u5dSICM4IVa8TgKlOUeb7dzEGP0YPOAsU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744725835; c=relaxed/simple;
-	bh=ZUMaY3dlz9lDIRgs1PBOQEps4QcSaiaHIY+Pz/GU5Oc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bMnxZJCzgqJATkyr3xHanWEH7UHXAGndKNr+FWsAB9cEjI4ZvMWYKG46bwOsBIYMSd5GuqgFrwx5IP0u9+45wz4XXDrzXMvDzdOnAPBt6cXRoeCM7hEucH8soaMVtRYOewjfOXcMf5D+KKipvAbrpkY0jaKUuvlAz97EMsgHk+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VPYVucay; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43d04ea9d9aso28379795e9.3
-        for <linux-pm@vger.kernel.org>; Tue, 15 Apr 2025 07:03:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744725832; x=1745330632; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=POkWqpZmZzT/QyzZw7C/DVyyTQMZgcCqqfwdkFJOiZE=;
-        b=VPYVucay1jJ6ioNH5hpr0hDr8oswMY2JUU7fMW80VlOVCly4EhJPdq26RvDjrMoOcU
-         MFV5GLArMkNW3JGx9F04xutxn/pwxAFX4xywmKvtKUXa9EOJtZy62UUqGKlUNd5IMBOv
-         q0aZZy6069jXV750Gkl8m3KShCKHktM5o13K9XwKzsu0P/ebnN78kzfUAaGQlMLIpmym
-         VYyTemKItqdXDCDigkzJ7OHS5L+fUOdxGEtVTumA1qq/pIbqI0Df/Wh2PNzKG2+ffxQu
-         yfLsiM7kV1JENxcEtxUigdN2GkrTs6N/E9kI1vK40nm9DtSASoxbDW2T/jUFbDYHILcd
-         Y9yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744725832; x=1745330632;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=POkWqpZmZzT/QyzZw7C/DVyyTQMZgcCqqfwdkFJOiZE=;
-        b=f/d8r7hPn9MmGu5VfwUooRcn4v0kFA7wuXLR6q4oOD43AneiDoMnDaJ02djGv+EsqQ
-         3cvKPSPzI4df6damtOWBKTOUxoiunrn0aDJg/krSfbIt5eEwblzQHxvazc/p+mxcHGgv
-         sHuJektwSMIMebwqecA/A7pKd/eol3bNond0afLgBi3n07G1yjgScE7kP4yFcFQGXI0I
-         84hhKdZWgfnhkZAAmvecwi9oiAEsHVrc0XqjJykzST/ad05JLggkDgbGJXFfrjAg543S
-         vown8fvoktmMMvfZYnwIBIwE6KnLy02FREgf4PvSK/WVunAa/mRPEt746cVGmNyMj8Zp
-         8Wow==
-X-Forwarded-Encrypted: i=1; AJvYcCVqjZIhOZS88sKY7Pv915NjA76AdgTKwgDbexlA6me+haZNzPn8/nVXf52v64+iWJX/SHd+uFzzuQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcRwDQZhCPa4ls0VNgSWBG2hMOXUXiCi/6rAwC1IWePoR3e94Y
-	HCASO+1I7KJWeZVwh+Et2QLVnWAPz+qHso/uOlrJ01fzr5bSF6tOYYV+dZBsDZwLBfmW3xCKgBE
-	H
-X-Gm-Gg: ASbGncv0CgM+csLI3DiC+uF7StxJRv0NlocaE1Rqj2G1HZzRXEqvrR6VtAaaETr6EIU
-	VRQ9EC2dHNQOIbcMlxORwK+MAvCRBb0EYH4ZAdE+cbIUJKSa1RfyrJpGKHdvr14ULeMmi2oMvWp
-	jDGca195alT8oZSp/9eZ6OsRoPsMgWPMKTfu/dTzGaE1axqvuoGRpRnBLFZTHRUhtLjaUAT3c4K
-	IgILjnKtM9bXLvgt3SuaGm4hijSaE2/0re9kfv89Bz/YBcNTWBgQfh6pQvD1tvkUdkLkUlVOJtD
-	cmECdGSZbPw83blfVEt79irC5E6TrCUQ5119gbYluFH1XLKD0vvN/PLH3L2GpbfgXpPSEk9S
-X-Google-Smtp-Source: AGHT+IEqLgllgG6L0zPJ7hSdFTSoB8uDVAxU+CD5pH/V4v0HUxYGptOrn1f0jN+ptjhwnNLqYFMRZA==
-X-Received: by 2002:a05:600c:1e14:b0:43d:ea:51d2 with SMTP id 5b1f17b1804b1-43f3a93f681mr147738345e9.14.1744725831864;
-        Tue, 15 Apr 2025 07:03:51 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:3d9:2080:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43f206332d9sm210480765e9.13.2025.04.15.07.03.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Apr 2025 07:03:51 -0700 (PDT)
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Tue, 15 Apr 2025 16:03:48 +0200
-Subject: [PATCH 2/2] interconnect: qcom: sm8650: add the MASTER_APSS_NOC
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD161B0434;
+	Tue, 15 Apr 2025 14:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.64
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744727754; cv=fail; b=f6qtNXtHDMZaKX74sX7f0hUvwYUo2UWAyIuHYDd8A/pEHNpz+ctgHw8xaoBjsHfSPKzFnXi5YLLDN9rJucTh41VWE/D8PT1IFMyd24jfV9F5tbeszE7EBe6PleubVMz8QkIc4K4g4hELkC6vtrXcWqtRGHN1aUe9RhyNGS+BQDI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744727754; c=relaxed/simple;
+	bh=xyjBnfLPVnkj7ZkoQCAN5Ij2ONP7D9CL1pXULClS2tU=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=Wk1/JjkrQt+k3h8RSSENkzl3GE/gc0fJYHQeXt5NFS6ODmVAf8r9vnjNkTT6oaS40PcOAz68V2xWEIXO32RFqOrHZQ8kahEM9C2P0U35qvXyAjWZByVkF+Yv1h2wcKnsh5r6b+GvPX9lwyCTkt5OQj4Rmc5X537zG/PW9D8m7vA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=RFv2Lok0; arc=fail smtp.client-ip=40.107.237.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=fkIV/3iclndlqrojjb1eRIfW+CUaN3bctxwECyifcm4XAqWagEI7TthNXy06pPHaLioiqO3qfE14bFYslxvQIFM/LLz4ghRbRipnfffHltESsl988jIbFYPs4vj2NY7J0A06mmZlxdMAm8k6kstjvIRD2n8S8P3kvsbSCQc8QpgdBOSPcyNT1LvnXxed1JWDmS9wJKRJpqROhn9XDQ3Krq9bMFzOL0FC6Bj0FsKg7Hnzi+rWhS3H7IoxJzqUbeViE/EdRPoMhE3rVUdZvR/SblJo2zlgMEiG3fgbwxNOoWXXO+84b1bt/1yiQBKyrY80ozllzr1aMsEEWZatoSo7BA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KwlcIfEvWCzhAjyja9ClQ8QccK6VavqtCY4neu8a9ts=;
+ b=CXylAmqfBWTDFCZSWICa/DFOhIXpJNwcZUFStTwjveVVweIwgYBeiJ/tQA/J0U+pFAizlIeeXL3QdAU+il3GO/SpEFCZAH9mAlDNl+ro3152imQNRnjnRwnUGiREotMAPz8TNrggtNzHUvhDTpRBqlim5tontAKnrbe6mBCvaBct03L1BRBF+gpujY3VwDf1aZHvNmTrV2V2GYEh4V861CA4tENIQ8MgM/c6Ob/NNegr4RoHz0s3P4TuYLFgoU8rY9G7bwfzf6KXGBkWhf2tPqQPxnGpwo8Qa7NnxPcYcxFAoGtde27c0CO8O+tkQTTqmI8EXYzFiQp7ZosEOdwSEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KwlcIfEvWCzhAjyja9ClQ8QccK6VavqtCY4neu8a9ts=;
+ b=RFv2Lok0EVQ28EGB0vHsbg1WEoWvkxIrG2bG2jopb9IWTsscvVYZZSyLOnzR/qJSQMzQsKH7Ao6brssBwUwqm29/bda7ThlBFG6flzZM6wzwckQgr6nb5NHizOKdcvfJutOwVVeWZlub9y+afGNe2sYc+EeBV4/mXNsnvjryM60=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by SN7PR12MB6863.namprd12.prod.outlook.com (2603:10b6:806:264::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.36; Tue, 15 Apr
+ 2025 14:35:49 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca%4]) with mapi id 15.20.8632.035; Tue, 15 Apr 2025
+ 14:35:49 +0000
+Message-ID: <50b0e014-b359-4762-add5-a4835afd372f@amd.com>
+Date: Tue, 15 Apr 2025 09:35:47 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] cpufreq/amd-pstate: Add offline, online and suspend
+ callbacks for amd_pstate_driver
+To: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>, gautham.shenoy@amd.com
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250415102118.694999-1-dhananjay.ugwekar@amd.com>
+ <20250415102118.694999-2-dhananjay.ugwekar@amd.com>
+Content-Language: en-US
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <20250415102118.694999-2-dhananjay.ugwekar@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA0PR11CA0139.namprd11.prod.outlook.com
+ (2603:10b6:806:131::24) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250415-topic-sm8650-upstream-icc-apss-noc-v1-2-9e6bea3943d8@linaro.org>
-References: <20250415-topic-sm8650-upstream-icc-apss-noc-v1-0-9e6bea3943d8@linaro.org>
-In-Reply-To: <20250415-topic-sm8650-upstream-icc-apss-noc-v1-0-9e6bea3943d8@linaro.org>
-To: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2017;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=ZUMaY3dlz9lDIRgs1PBOQEps4QcSaiaHIY+Pz/GU5Oc=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBn/mdE4Ap38CwY6Hel8BSUGMRamHbsk/PQ7JDXaAmG
- MPyP3WiJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZ/5nRAAKCRB33NvayMhJ0f+BD/
- 9pVMjvFr+TK+TSCw+AfaNe4Vit91MGZ/8ynFDqqy5oRpeH8WCVJ0M3+nHKtxSps0SAoP+g3McHlbD0
- NGlpDQdJHYFQa6H1ljv9OOZs7CuvVF3jHNF67bmcYFg4dIBlazG/82j7QY9XipEXTXdqEtgQIbHvKy
- GjcQC5oGWnZW0tBOVmlHc7DSLugsqU5fnUug7ZoDJHQGxEkqkrb29jcyVyrRUzezS83Cv0V/vGuA7Y
- Fu7v8HgaZegRoYjzePNftu5/3IG2fDu7ZNwsYepS6pKJ7/JDZmSF6e1d7IyMkeGr05JE5ebsEWRtjn
- FDsgTpQ2ugYjH/xG4Djw/MylMm0hZLTXqZ3rFEDTrvt60IMPjywPMk9s51e456fXWEOUrT15WzFjP4
- gJeTJnGcR/ZmQyEjLvlX0xN7Rc7rC7susuhfuvk5UrMx1mk9JKchb9p/AJslsyARNVczaVoOJxBW8l
- m/tQzQzqe2ID+YsZZByvDOSA8b/BDPtM1rA4zS2WtMxyk9NsYs2EISnsHM+XLdh1gM+6EZWjeEZMtw
- tEYxSRO7Blc8CnTUXugnQjK5cD1tEBtnlMCqbh/WT/qyS/2Af2pd/0dmMzr5Eq7FWvW9LfICwAuKqw
- xp7qLVmGM5uohySkBAVkMHDX1KAPHkDXYVluBWsGVKnVs++BAQT1zFMybSlg==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SN7PR12MB6863:EE_
+X-MS-Office365-Filtering-Correlation-Id: b5781b02-dbb5-4e0d-1108-08dd7c2ad0a9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?OEtSd2dwbTFMOHRpWVdvNlBHeFNCanZtSWZNM0pDOUkxUG9TQTdGT1hVZnN1?=
+ =?utf-8?B?Zk1td0RtR3ljVGJoeHg1Z3dPMkoxanlLeWI5OWxiQzVDTVROUW4zMExPVjc4?=
+ =?utf-8?B?bXlFM1lnUVZwcy9kMVhUUjVWekg0ZVVFY1lZalJ5dndXUGhGbXpBb3VHZlJs?=
+ =?utf-8?B?UERYSEg2dFRGQi9GUEhzUDVid3gvV0h4VG9FZkkwVEJadGVma0MwazRCNEFi?=
+ =?utf-8?B?OXk3ejA5dUFDSFVyY29kM3lrRU13cDE3QWRvN2w0YUhDVXVNSnAyRXdWRlJZ?=
+ =?utf-8?B?emQwWjhHZHNCKy9BZDVJODZlUWxRVHp3N0FvYStuOTkzWTN2WVVEWHBwL0Z3?=
+ =?utf-8?B?QmMzU0l5VkY0dEpLTi9Md2lGWHJGMU1DcU01blJ4N3NiUWJjcGQ2RWJlTWp2?=
+ =?utf-8?B?clBqUUJ2MnB2bTlXQjB0QkFuSndBa2sydEdHU1RPZEl1MVlxM3Q2ZXhTWmxR?=
+ =?utf-8?B?YnFuRXpNNk5PakQxOW5oc1hsd05zalRrdlhyRWJwN2dMakZ6a3FmSHBjZ056?=
+ =?utf-8?B?cnlzMjNJVEE3YVhFdDJqcld0OVg1bmRRVHVQTnFJd2Q3U0tLQlFrLzJHTVZw?=
+ =?utf-8?B?SFJ0QnR0WVRyL01wRUlPdWp5RVlOTVE4UmR2SVNLUXFnVzUxZ3hYc1hJaXZp?=
+ =?utf-8?B?emFIcUszam1aTUl1Y2Z1alk0dEdjZmpObHdtcVQ4V1Vob0s4S3QrNnRNbHBR?=
+ =?utf-8?B?azN2QzFLTUJSSVAyVURVdHdteVJNLzBVM2ZJQXBZSDJUbHBBOHVmOG1rVkk2?=
+ =?utf-8?B?c1VDSkRYZXJRcEFLVW9FaS9xbXQ2bitXN0ZpbHp1cERNcmFJRFFaL3oxSERw?=
+ =?utf-8?B?aDlyWnFnS3BFcnFINDZPNXJNTDVXeUU1emFHaDN5RzJqbTFSUmhpc3F4L0Nq?=
+ =?utf-8?B?UXN0aERuc3FqUFNkbkhtWStBVE1kaHhZdW9nbmpFazhxMkNWZXBJLzA3VlIx?=
+ =?utf-8?B?WHV6bi9hVUdLc3FLdkVpN3ZjWU1Vc0lJNEhCU0kveTBRamdpUFFidTEzNlN3?=
+ =?utf-8?B?MFZicDBoUXI3TjJjS3ZZeXY4cjNjVk9aRHR5YnE4TzZCSWhyOUwvNDlwZmFS?=
+ =?utf-8?B?cmpKQUVpS085M2xnanZqSUVEWjhUZHdiVTloem8rNzQzYzJ0R1dQMlBoSkFh?=
+ =?utf-8?B?dHUxTXdjdUtTU3l0M3pkWUxWbXdXV2dmM0VjSHp3WGlZQjZENmFZell3U09s?=
+ =?utf-8?B?Z0pxVkJuSmlDNEd3cjRGOWRVVXJOYS9iWkhIbVNhZHNsV0drZUhRb3RVR2NO?=
+ =?utf-8?B?NFJKSXAxOVpNbFdSUmZrcnVwSEsyTndTRDBwQVNqZkhnL2pocnI5YUQ5V3ZX?=
+ =?utf-8?B?ZUdXb3Z4blQ0bElpUFB6UmxNVVB4N2E1QmloUzRkdWducGFIbUhDY3diQzd5?=
+ =?utf-8?B?TWwzUU1JamhvZGIyWTN1ZWFLYTFDb1Q0dnkxS3dyL1NDSC9NWDkxS1paaDdr?=
+ =?utf-8?B?dExIUGZBdGdxU3pRM2RtdVpyVmpMRnI4N2toWVlJdE1Cd2tLMWgvVXoxTEFO?=
+ =?utf-8?B?T3plUGFBZk5ENFc1OFRhc0pFUFNKdXltTkxzOUFQajdTYXpIZzhGVFVndzdz?=
+ =?utf-8?B?QmlpU0poOWJTNGs5ZUdoYWVGTlBRTjRmNkI4TEhLQUxJTU43RHZobGo1Ykhk?=
+ =?utf-8?B?OEE2M3dzRjlJVGREMURQL2dJV1BhYW5mNWZ4eEFMSnByWlVTaEt0eWJvZUZ5?=
+ =?utf-8?B?TWgrSVZETzFJOUp5aDBTZFhFUG9KNEp1RmN5V2V2eUFsWjFHcDc2ZGo1ZEpB?=
+ =?utf-8?B?VWlMTEhFK2dXbEltbUgrN1UvclY4aSsxcE5Qay9tSGJPd1k0eFhvTWl5czl3?=
+ =?utf-8?B?Ty9Wend2UysvNDBwZ1VyV214dGJzQVNIQm12Yi9FUHA5RnpqZXZibS8xam1i?=
+ =?utf-8?B?VlJPbVNLZ3NXSDNSYVVMYXdNcHN3SUM5V3BtMWF0K0RTK2h3bkxPby9VNXpv?=
+ =?utf-8?Q?rMZZuF1VI4E=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?aW9JamZnb2J0anZzVldLanJtUkw0eHp5NXZzOEJXczltemdtVnUrMXVxNGJL?=
+ =?utf-8?B?UVFxVjB6amlwMmVVclRUc3FIamhUMXN4L3RHRThOQThIZTFCWmNwRm5NSjBt?=
+ =?utf-8?B?RVYrQTc5ODdXK2hteStxYUVmMjdVclRWYjUrRzNrN1IwTE5lRUxHbUpPVjRD?=
+ =?utf-8?B?bWhCS1JkT0lwcHpZUDBzYk9aVzJqY0V0Y2VCSS9IbmsySGhaeHRacytxTEtZ?=
+ =?utf-8?B?MDYxa0RZTUJXLzdickxHMkFIaEU5L3ZSaVlZNGtsOVBPeU5xenYyOWZxOEpV?=
+ =?utf-8?B?RmtydTl5dkJnSWhNaGF2aERnVnNZUmJSY1NnQUVXeUVXYU1ZczljcmdjdDVS?=
+ =?utf-8?B?LzFwWWpyNmQ1N3BTRmpvSHNZaGI1VkVYaWlOTjV1UzFETHZBT25ERW1rNU9G?=
+ =?utf-8?B?cGIxdDFZL0cyRHRpNkdEaU5FMlBlUEtoQmhmMFBDbGw3bThvM3RZYTV1MW9T?=
+ =?utf-8?B?dGxMNDVTT2w5eSs2N0c5dnMybURNK3JSdU5oWXhmNjZpTElMMXg0SHh1Ynpl?=
+ =?utf-8?B?d21VQ0tuZ0pQN0pnaFB6WE1HQlA1dGJkbEtFNlBIaFA4OG5vZjNSNy91M1Bk?=
+ =?utf-8?B?Q3JLb210Z29EQjNoOU9IVWZURmx4U0szOWxheURjOG92Y0QyYXBFWEp6TnFL?=
+ =?utf-8?B?azN2enRvV2lVb0Y2ZHVaWllKeVNXa0ZhM0N6aU1FamFKMlNqcXhwZWFKTTBn?=
+ =?utf-8?B?VVVZa3YyODgvMEl0VkhuZEFuS0RSTWlmWHpQNnVwcFkwc1JMUldIcXNoYW8w?=
+ =?utf-8?B?YU83aWlESC9ycjV4dGVjWGU2VnF0b1VPRFNLbnJoWXBjV0VsUEsyNjl3bklJ?=
+ =?utf-8?B?T1V0azZTaWdEMDhKMTBHTytrR0dSYnRGTXhFbG9DNUNHZk1oYkVoeE14Tmh5?=
+ =?utf-8?B?cFdZUkdmNFpYeEZRY0ptejY4UWN0N3dvTmpLRyttNVBEZlM4NXVPUUZlbnNh?=
+ =?utf-8?B?REJYMmZHMnFKQmxOVWl4MjRNYmdJalB0TzhsdkY1YkgwZ1lUYmhhZlJYdkdV?=
+ =?utf-8?B?OHRvQzFoRUE5dXhnZzEwNHR1bzBpSVNudmt4QlZnd2lrRHBPbkpRc0xJQXNr?=
+ =?utf-8?B?dkFPVzdQTHp3NmJkbjRzUUdqNDZsRi9jSDJGUWw2WDFwb1hlRkI3V2VXVXFn?=
+ =?utf-8?B?RXZTMUZZODlaTzNzQVZHQjJyQXI1UzdFOTRxcmU3dnA2Y1ZrTkRuTUJxN3h4?=
+ =?utf-8?B?b0c3cHFnYkZGV2ZaaG5ITWdmMlpaSVNJKzlodXRKTHdiR0NqQno0ZEVIRURa?=
+ =?utf-8?B?bkwweDZJaHFnZ0V3Sk1wSEErRUJjVHpaUlBLMUFFZVA1Y0dpOUZqSXdJQXBX?=
+ =?utf-8?B?MWRUOGxHSjZvdXJWQlBpcXRwcjZTWkJHMGh3cnhOOGJRYWQ0ejFtSld2MGQ3?=
+ =?utf-8?B?cU55TzdiS2U1TWNjZTAyTUxZVFhza1FRUURUU1Aya0E0MVAzNFhWM0JoSWFm?=
+ =?utf-8?B?QkozcFI4SjhmTEJYZTVCVnREY1Y5d09qU05uc3NUQTZ6OFhaaXVXVVFRZnJU?=
+ =?utf-8?B?aXdSZkVNUnAwMDVLZ2Z5ak9GVkFaVzBSTW5EUUxNU096c3IzVG10RVJXYktY?=
+ =?utf-8?B?R1hoZGxnQXBSVU0rc3RNb0FtdndtMWxXZmQ1NWV6VlBtQ0l6UnFTcnZMZUhu?=
+ =?utf-8?B?ODhxeEN3TzdPanJSdWZQc09vdkpQSWNMZ3JZcDJhbTlLN1lPbTFTeGhERWpq?=
+ =?utf-8?B?UWJaek0ya2s2WnRFVHJXM3BDM2o1VS85N3B4cXRidzRXVDIxdmhjK3JvRmxO?=
+ =?utf-8?B?cXdaOGRGZXhyTldJcFJUQlpVY2pyVU1wVmR4eTdpY3FkazdXR0huamt6L25J?=
+ =?utf-8?B?K25Ua0VBTnB2V3hZK3ZRL2ZCR1ZGQnZ5RDlMTFplODI0SnVvZG9US09hWUQz?=
+ =?utf-8?B?Q0hNYm4wWHJ1c0wzWDZtdm9nMjlWVVdUa0lJZjh1cFJBTWFXMVhNcW1PaXg4?=
+ =?utf-8?B?YTEvTUhBbnNXZmc4MnhCMEE0K21GQmtsMDlBd082aUhjdVp1aGJ5SXA5UW9r?=
+ =?utf-8?B?c2dyMzhsN3Q4cVNQZ1hXWlYwbDdNWWJlVy9sc2hqVDB4Um9iUVBIR09FaEMw?=
+ =?utf-8?B?cVNXN1JDc3JLMWFabDl4MFcwUXZ3cjFhU2QvTm03aHp5U0lEcFhWL1A0VjBR?=
+ =?utf-8?Q?sX3m6s1i/e8Ttb/PLwYmWoOzf?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b5781b02-dbb5-4e0d-1108-08dd7c2ad0a9
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2025 14:35:49.0166
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2HVbbWfi9nhTErp+L/85J5LkfAhIbcaPpeaRbqnwxBvC58rxKA0EhTK1I9Bm9MrrAu3d3PmQTblsnXVVdgrwvQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6863
 
-Add the MASTER_APSS_NOC interconnect node of the system NoC
-and the associated QoS configuration.
+On 4/15/2025 5:21 AM, Dhananjay Ugwekar wrote:
+> Rename and use the existing amd_pstate_epp callbacks for amd_pstate driver
+> as well. Remove the debug print in online callback while at it.
+> 
+> These callbacks will be needed to support the "Requested CPU Min Frequency"
+> BIOS option.
+> 
+> Signed-off-by: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- drivers/interconnect/qcom/sm8650.c | 19 +++++++++++++++++++
- drivers/interconnect/qcom/sm8650.h |  1 +
- 2 files changed, 20 insertions(+)
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 
-diff --git a/drivers/interconnect/qcom/sm8650.c b/drivers/interconnect/qcom/sm8650.c
-index f6911891503a7ed65be8bc37ed600e87d4cfcc42..1eb2cc3bea672a01f88bfcf24fd82395a07ea36f 100644
---- a/drivers/interconnect/qcom/sm8650.c
-+++ b/drivers/interconnect/qcom/sm8650.c
-@@ -847,6 +847,24 @@ static struct qcom_icc_node qnm_aggre2_noc = {
- 	.links = { SM8650_SLAVE_SNOC_GEM_NOC_SF },
- };
- 
-+static struct qcom_icc_qosbox qnm_apss_noc_qos = {
-+	.num_ports = 1,
-+	.port_offsets = { 0x1c000 },
-+	.prio = 2,
-+	.urg_fwd = 0,
-+	.prio_fwd_disable = 1,
-+};
-+
-+static struct qcom_icc_node qnm_apss_noc = {
-+	.name = "qnm_apss_noc",
-+	.id = SM8650_MASTER_APSS_NOC,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.qosbox = &qnm_apss_noc_qos,
-+	.num_links = 1,
-+	.links = { SM8650_SLAVE_SNOC_GEM_NOC_SF },
-+};
-+
- static struct qcom_icc_node qns_a1noc_snoc = {
- 	.name = "qns_a1noc_snoc",
- 	.id = SM8650_SLAVE_A1NOC_SNOC,
-@@ -1946,6 +1964,7 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
- 	[MASTER_A1NOC_SNOC] = &qnm_aggre1_noc,
- 	[MASTER_A2NOC_SNOC] = &qnm_aggre2_noc,
- 	[SLAVE_SNOC_GEM_NOC_SF] = &qns_gemnoc_sf,
-+	[MASTER_APSS_NOC] = &qnm_apss_noc,
- };
- 
- static const struct qcom_icc_desc sm8650_system_noc = {
-diff --git a/drivers/interconnect/qcom/sm8650.h b/drivers/interconnect/qcom/sm8650.h
-index de35c956fe4995aba9e962e52f47bf773b2211c1..b6610225b38acce12c47046769bb0460a1ae4229 100644
---- a/drivers/interconnect/qcom/sm8650.h
-+++ b/drivers/interconnect/qcom/sm8650.h
-@@ -139,5 +139,6 @@
- #define SM8650_SLAVE_USB3_0			127
- #define SM8650_SLAVE_VENUS_CFG			128
- #define SM8650_SLAVE_VSENSE_CTRL_CFG		129
-+#define SM8650_MASTER_APSS_NOC			130
- 
- #endif
-
--- 
-2.34.1
+> ---
+>   drivers/cpufreq/amd-pstate.c | 17 +++++++++--------
+>   1 file changed, 9 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index c29840ba3b30..02de51001eba 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -1568,19 +1568,17 @@ static int amd_pstate_epp_set_policy(struct cpufreq_policy *policy)
+>   	return 0;
+>   }
+>   
+> -static int amd_pstate_epp_cpu_online(struct cpufreq_policy *policy)
+> +static int amd_pstate_cpu_online(struct cpufreq_policy *policy)
+>   {
+> -	pr_debug("AMD CPU Core %d going online\n", policy->cpu);
+> -
+>   	return amd_pstate_cppc_enable(policy);
+>   }
+>   
+> -static int amd_pstate_epp_cpu_offline(struct cpufreq_policy *policy)
+> +static int amd_pstate_cpu_offline(struct cpufreq_policy *policy)
+>   {
+>   	return 0;
+>   }
+>   
+> -static int amd_pstate_epp_suspend(struct cpufreq_policy *policy)
+> +static int amd_pstate_suspend(struct cpufreq_policy *policy)
+>   {
+>   	struct amd_cpudata *cpudata = policy->driver_data;
+>   
+> @@ -1618,6 +1616,9 @@ static struct cpufreq_driver amd_pstate_driver = {
+>   	.fast_switch    = amd_pstate_fast_switch,
+>   	.init		= amd_pstate_cpu_init,
+>   	.exit		= amd_pstate_cpu_exit,
+> +	.online		= amd_pstate_cpu_online,
+> +	.offline	= amd_pstate_cpu_offline,
+> +	.suspend	= amd_pstate_suspend,
+>   	.set_boost	= amd_pstate_set_boost,
+>   	.update_limits	= amd_pstate_update_limits,
+>   	.name		= "amd-pstate",
+> @@ -1630,9 +1631,9 @@ static struct cpufreq_driver amd_pstate_epp_driver = {
+>   	.setpolicy	= amd_pstate_epp_set_policy,
+>   	.init		= amd_pstate_epp_cpu_init,
+>   	.exit		= amd_pstate_epp_cpu_exit,
+> -	.offline	= amd_pstate_epp_cpu_offline,
+> -	.online		= amd_pstate_epp_cpu_online,
+> -	.suspend	= amd_pstate_epp_suspend,
+> +	.offline	= amd_pstate_cpu_offline,
+> +	.online		= amd_pstate_cpu_online,
+> +	.suspend	= amd_pstate_suspend,
+>   	.resume		= amd_pstate_epp_resume,
+>   	.update_limits	= amd_pstate_update_limits,
+>   	.set_boost	= amd_pstate_set_boost,
 
 
