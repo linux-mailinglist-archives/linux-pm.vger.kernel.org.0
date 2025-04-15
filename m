@@ -1,152 +1,91 @@
-Return-Path: <linux-pm+bounces-25486-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25487-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52502A8A533
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 19:19:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C7FCA8A54F
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 19:23:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E895A3B497B
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 17:19:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FB25442E80
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 17:23:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4DD821CA12;
-	Tue, 15 Apr 2025 17:19:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3CB5215793;
+	Tue, 15 Apr 2025 17:23:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NoU3BWUr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IS5MinAf"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDAAC21C9E9;
-	Tue, 15 Apr 2025 17:19:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72EEB1BC2A;
+	Tue, 15 Apr 2025 17:23:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744737591; cv=none; b=PvBvl8le7GDdyh8tm4zpeYxQBcaeJ61JIjktySiCRJdjQKMcaJ66J4tn75uPsHkLCNI+ZjnbaUbUxcFUPVc85WwjTkYOUwhKCSHS+NkPlaNTFml17gICH2lC168GSJdCJnNlxhrMgXXhgpLH3OFlcIw/5mPJ4wVjFyGiHJjyaWc=
+	t=1744737806; cv=none; b=lPQdWptz4Z+yEsREq8+9ntOotFRG+kSVXQZ/Gv30yIJTVIsrBX23wOcftEn/dvjKMyJS8G+tW072f67y8ftPaVxpEHvsnytp2SZ9zamxPtJij+FAg9NQWpE7U/PUiZn39bh60VRo+S8dhPHyV3ZHBrFmpY/IC3g3qpyVNRvKXcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744737591; c=relaxed/simple;
-	bh=uv4W3IqKCIYFhIRS6Tcr37NLaU3zwS0rWhXFN6Gl6dI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VjYshwnOvSd3kyZdD+vEDPvRADXJt89F964iyFChY2AtEIAXLmiU1E2i3pVS/GQAdo59g1pEViuweUQe3tV+a6gSRId4XJoPsmoxFU/yh+48FHhnQx4T2jxxbxVtFyPhFrWW6KPnGkOC/PSuyVmJNeKJcaVJuhv6HhuYBKeTcg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NoU3BWUr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33759C4CEEE;
-	Tue, 15 Apr 2025 17:19:51 +0000 (UTC)
+	s=arc-20240116; t=1744737806; c=relaxed/simple;
+	bh=yaZo5HTwWyPwFa+BmejUuYfJejNARyfDGIEj1j58WyQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=RFsSiZqeRV82fRjhlT4cn9IFsxukKgigWXUTg22y2T3L5lA1XdzA9169H4swi2Ep2oXPrHBDEOvVLNqvtd3ouDJa3dQKkH96P7X7Jg/ntxZdD1eKQeBQPha0qPYxawUpBc5ScPdCWdBTm00uXU8hd12f7TpDvFTd6Y2IsJA71hE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IS5MinAf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 366B6C4CEE9;
+	Tue, 15 Apr 2025 17:23:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744737591;
-	bh=uv4W3IqKCIYFhIRS6Tcr37NLaU3zwS0rWhXFN6Gl6dI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=NoU3BWUrj7f8tS49OExJLBpgfcFkooIpEOGMZJSBCtZiGhwMgaHB3R632n5Mfu9dv
-	 Xsk/0DYntgp+bMa/sYM4F8QTnXoY2K5QhxDgM5W/4t+uutRuHp5ExOm+WbSgJtc+oh
-	 hLq8Ou9IFjKUGcO5T/GO3s3qUNZ5fHceKMb20LDTd0DVbXgjhDNfKhMi2RrwodUA1Z
-	 96yTgnQF1Y4/Ngn9mbGkyH9NFebRZYRjZIch2d+4ny46R73RhRWVOdWw4i6TxAUrkO
-	 50lV+0z9QuDFOoXUyzxZiN3f42POGtob2DlXXvaXQ82P7BCGj1jrC1mMcYh/++zVO1
-	 uNqm5alrbtYSQ==
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-72e965ddd79so1667554a34.0;
-        Tue, 15 Apr 2025 10:19:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWZRH6Y+bYtNkExKztGTqoYMpt0uSkp3/uOI2gF4d0ZezAkQCsW5KucVfeBs5y4YyXeHmYup8DdNWJzdLY=@vger.kernel.org, AJvYcCXUu+GAfXxx/ijFKlxzekswtqtxMlXy2PvknxBZfnTV5s2IDJr0vHRUttYIo+bQBratViplaDDnJfk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9HZRZPhxj6td8IC+dpzog5Bi3d46VWjaK6hJH4aknLl5D8OUX
-	ArqpbyY/ZThKYePVS7Y9UpZNoD24FZ9u8/dgoEhhtEEvuTPLi1WHhrt/mnhcfMMetNszFq3dhW+
-	EfD4U/Tf08qWHgWs634Iax+Vhs4o=
-X-Google-Smtp-Source: AGHT+IHfadXt208Vc4RWZMjFXdA71akOqXcmngW9Brd10iN59d4xz1W7CVRGhjIKSY6HM2F7L42TVMNZDgaTEpj23zQ=
-X-Received: by 2002:a05:6830:4709:b0:72b:9e5f:54a0 with SMTP id
- 46e09a7af769-72ec1ccb5eamr82987a34.21.1744737590486; Tue, 15 Apr 2025
- 10:19:50 -0700 (PDT)
+	s=k20201202; t=1744737805;
+	bh=yaZo5HTwWyPwFa+BmejUuYfJejNARyfDGIEj1j58WyQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=IS5MinAf55aSLnW94s8yMqwZ1wZjb521aXAF1ekUfDYry3IX5VX8gSXuSAiiJzWLZ
+	 +lxUetawsjegnCh1PFnhfCbmZxZcW86EdjKAUzBWN/jxJdh8dQk0IkXxWbRSmY3Xr8
+	 PbAubgmf+qZnoHBKABjkci4vN+Cgyv6MUeDaCZMvnbzIzYfLUpnLQtj+08//3JuaiE
+	 8zRaBsaLsKM0RFen2PV3YTKtRwMBRo+rAMQ3YzTHXmVUFDM/kp+t85cPWCd8DgusQm
+	 v267OefCwJny+m1JiLmF8nOfbM+aobn1DqdZ30F2jg2pz2AQQlLBNViH3xdnEnUAtG
+	 kNVuNeoJfAMkQ==
+From: Lee Jones <lee@kernel.org>
+To: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+ nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
+ claudiu.beznea@tuxon.dev, lee@kernel.org, sre@kernel.org, 
+ p.zabel@pengutronix.de, Ryan.Wanner@microchip.com
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-rtc@vger.kernel.org
+In-Reply-To: <cover.1744666011.git.Ryan.Wanner@microchip.com>
+References: <cover.1744666011.git.Ryan.Wanner@microchip.com>
+Subject: Re: (subset) [PATCH v5 00/11] Enable Power Modes Support for
+ SAMA7D65 SoC
+Message-Id: <174473780295.3016428.18003689351078217968.b4-ty@kernel.org>
+Date: Tue, 15 Apr 2025 18:23:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <tencent_EE27C7D1D6BDB3EE57A2C467CC59A866C405@qq.com>
- <143378b0-5740-4f2b-9a79-f04cf9ef1f77@arm.com> <tencent_AE7CE43CDAD6747AFF0E952C8D0908A98D0A@qq.com>
- <tencent_002D68A7E02F76C9D218B090D6085F0E8C06@qq.com>
-In-Reply-To: <tencent_002D68A7E02F76C9D218B090D6085F0E8C06@qq.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 15 Apr 2025 19:19:39 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0he_mxfxmkrMLc73jCvJxDGAeW_JZDmNZa25PtH2qMK_g@mail.gmail.com>
-X-Gm-Features: ATxdqUESNGKFdsr7aaNbqMDBrBBTtgUL3gnaiQhekaoP9vU1yoiAmbt0Ax3z7LE
-Message-ID: <CAJZ5v0he_mxfxmkrMLc73jCvJxDGAeW_JZDmNZa25PtH2qMK_g@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: EM: Fix potential division-by-zero error in em_compute_costs()
-To: Yaxiong Tian <iambestgod@qq.com>
-Cc: Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Yaxiong Tian <tianyaxiong@kylinos.cn>, rafael@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.15-dev-510f9
 
-On Tue, Apr 15, 2025 at 4:03=E2=80=AFAM Yaxiong Tian <iambestgod@qq.com> wr=
-ote:
->
->
->
-> =E5=9C=A8 2025/4/15 09:12, Yaxiong Tian =E5=86=99=E9=81=93:
-> >
-> >
-> > =E5=9C=A8 2025/4/14 16:08, Lukasz Luba =E5=86=99=E9=81=93:
-> >> Hi Yaxiong,
-> >>
-> >> On 4/11/25 02:28, Yaxiong Tian wrote:
-> >>> From: Yaxiong Tian <tianyaxiong@kylinos.cn>
-> >>>
-> >>> When the device is of a non-CPU type, table[i].performance won't be
-> >>> initialized in the previous em_init_performance(), resulting in divis=
-ion
-> >>> by zero when calculating costs in em_compute_costs().
-> >>>
-> >>> Since the 'cost' algorithm is only used for EAS energy efficiency
-> >>> calculations and is currently not utilized by other device drivers, w=
-e
-> >>> should add the _is_cpu_device(dev) check to prevent this
-> >>> division-by-zero
-> >>> issue.
-> >>>
-> >>> Fixes: <1b600da51073> ("PM: EM: Optimize em_cpu_energy() and remove
-> >>> division")
-> >>> Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
-> >>> ---
-> >>>   kernel/power/energy_model.c | 2 +-
-> >>>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.=
-c
-> >>> index d9b7e2b38c7a..d1fa7e8787b5 100644
-> >>> --- a/kernel/power/energy_model.c
-> >>> +++ b/kernel/power/energy_model.c
-> >>> @@ -244,7 +244,7 @@ static int em_compute_costs(struct device *dev,
-> >>> struct em_perf_state *table,
-> >>>                       cost, ret);
-> >>>                   return -EINVAL;
-> >>>               }
-> >>> -        } else {
-> >>> +        } else if (_is_cpu_device(dev)) {
-> >>>               /* increase resolution of 'cost' precision */
-> >>>               power_res =3D table[i].power * 10;
-> >>>               cost =3D power_res / table[i].performance;
-> >>
-> >>
-> >> As the test robot pointed out, please set the 'cost' to 0
-> >> where it's declared.
-> >>
-> >> The rest should be fine.
-> >>
-> >> Regards,
-> >> Lukasz
-> >
-> > Sorry, the V3 version with cost=3D0 still has issues.
-> >
-> > I noticed that if the cost is set to 0, the condition "if (table[i].cos=
-t
-> >   >=3D prev_cost)" in the following code will always evaluate to true. =
-This
-> >   will incorrectly set the flags to EM_PERF_STATE_INEFFICIENT.
-> >
-> > Should we change ">=3D" to ">"?
-> >
->
-> Sorry Again=EF=BC=8C Setting EM_PERF_STATE_INEFFICIENT in this case is co=
-rrect.
-> Earlier, I misunderstood the definition/usage of EM_PERF_STATE_INEFFICIEN=
-T.
+On Mon, 14 Apr 2025 14:41:17 -0700, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
+> 
+> This patch set adds support for low power modes for the SAMA7D65 SoC and
+> the required components and changes for low power modes.
+> 
+> The series includes changes in the asm code to account for the addtional
+> clocks that are in this SoC.
+> 
+> [...]
 
-Well, EM_PERF_STATE_INEFFICIENT is only looked at in CPU energy
-models, so setting it in a non-CPU one is redundant.
+Applied, thanks!
+
+[06/11] dt-bindings: mfd: atmel: Add microchip,sama7d65-gpbr
+        commit: cf616eb55ba84118d0f8274a3e78dd526ef235a4
+[07/11] dt-bindings: mfd: syscon: atmel,sama5d2-secumod: convert to yaml
+        commit: da4151479628b170074dadcdcdbb1c042643bd3b
+[08/11] dt-bindings: mfd: syscon: add microchip,sama7d65-secumod
+        commit: d0eceba4d13341a1d2d52a1ffc31b6987174dfd0
+
+--
+Lee Jones [李琼斯]
+
 
