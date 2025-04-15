@@ -1,219 +1,132 @@
-Return-Path: <linux-pm+bounces-25481-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25482-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2932EA8A4EC
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 19:06:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B114A8A4F3
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 19:07:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92CB73AFD13
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 17:05:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03D9E188F8C1
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 17:07:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52CA3176AC5;
-	Tue, 15 Apr 2025 17:05:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E1731F8ADB;
+	Tue, 15 Apr 2025 17:07:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nHjyEEVJ"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="Oez1Mv79"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289946FC5;
-	Tue, 15 Apr 2025 17:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A812DFA4F;
+	Tue, 15 Apr 2025 17:07:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744736755; cv=none; b=heqJPT2M78YKn7MrMxOssM9gBY/fhLsz5g55Mvn2LYHmcFQwxl6PjJh6hO/LY0egvEBS4Anm0yjNNMYJmDIBLYx5+QvdEx7z03Kljx4Q6zVwdNBbhdnfkiBmlOH8JibDQO7KgmyXSAaY6+kBec5WsQdOCbT+HPQ+cI5S8oxXR4w=
+	t=1744736831; cv=none; b=Ne1k8EA//ceRYj7RxfVItwqvifZzXET6kaZL1f3NJ0jQopx2lLYRQ5gPRwMaGYWKkREPM+hsXqDuGVtJl0wHJibueJNiuyKZ48ZaF18A3dKOFpLrNfWy+ia3onPi1BMkPYV+BHbrt2vGP/JzW1SsU/xYFqGM9XQ4MoP0/Q2UFLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744736755; c=relaxed/simple;
-	bh=HsKHEdkEbY3fGX/jXwfPRB8xGPMVKkEpNhsdWRk1pXo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dz9kqaMIVJGJz3JjD+t6XYjxyyMEOjWURGNwwUEmGz/bLcef8PEWj7rEXHBT4OHNcoo36L7j5KtVICtGjJMnBRlP0RKMz4zA4CMUXPXB1uX6qita6uPSlIb8xE6fL5g6rECorfxcr0nHi17XAyBid6K2dsVKcTxrkve0a8LxdVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nHjyEEVJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92811C4CEEC;
-	Tue, 15 Apr 2025 17:05:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744736754;
-	bh=HsKHEdkEbY3fGX/jXwfPRB8xGPMVKkEpNhsdWRk1pXo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nHjyEEVJA6e+nZzLGD0w1RxE+34AI8XIBwnNSStboNgMnIN//JFS5QmKqllwx/MWu
-	 gNeiaxMNGiTBsyXTr3/+Cf8Ed9V1vFYd2Tp7JZUbCMB+XUVYcvjm1WjQJBt3D4nF4n
-	 X/oduN66KPImgi4CEO5ZACgd4hP+iTD8dETf6FnCevl566QFSXzqLFRXTT+e8+psWl
-	 NHTigiZgWrNw+FMjQLLcqZDRdxCQlGggvyKwlb2aduoGBTp0lUSiD8cCqtnoZFQosf
-	 IwB3VK59BkbNm1LnAfpHo4emfZsdxIPMOiy4EHYuzrsTBSvbq4jscehyqos22QZcyS
-	 JMqh46O1GL5YQ==
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-2c7f876b321so1881691fac.1;
-        Tue, 15 Apr 2025 10:05:54 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUTHSDUZfmL9DbEpx7aA9u2DDX+uehpBLP2gUHNgUxuSg8UK3v3OqDIE7l5qkcOq8QzVAaC4BL8DZ1rR/w=@vger.kernel.org, AJvYcCWtEUSNFrph2+d7aleabLivzngeV2JVdU2cvw6DX+kshRqKDZ14eumDoIXUhrIx45TUplMB5hQBWc8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFZiaUryfPSm2TFn0OzYVrdfbM4NS/orD+Uo2lKoU6ia9UGz+6
-	qNiVycJqUKz9utT8//rQoOkPmawuaMMi6sIYYSRl/Q0FHODQqfqSG259y9aT13BlKAD9iPUvFH0
-	0ZKfMpDJ5MnrxSBa0j5u1v77p6y8=
-X-Google-Smtp-Source: AGHT+IEYV2kVtH8X6w7XB4diHvAseLjJYsXwDutomeeI+5p30ScQANM3FB+C5eOT903S2jofLe8TluCgUBLEm2CcJbE=
-X-Received: by 2002:a05:6871:6117:b0:29e:40f8:ad9b with SMTP id
- 586e51a60fabf-2d0d5c868bdmr11309377fac.14.1744736753828; Tue, 15 Apr 2025
- 10:05:53 -0700 (PDT)
+	s=arc-20240116; t=1744736831; c=relaxed/simple;
+	bh=EI47d3gLk6JDxnelrUCIkAxqsrSEus0fpZccWjnVwFQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=llI9lHERNMboiK7Taekz7UAm51/efkiGBI61Bham3ZVzSBfO1LfJWOl9O/yX9j2vn2AZcyio7ttOCzC4ZCVpV+QnpRb6JPq+Kk/Og+68c4SqioegNmnvfjQ/4I/owcB1GIXFZnTPjnL9aE13QG6nLjH/JORE6Tnj+rxx+DZLq8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=Oez1Mv79; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [192.168.7.202] ([71.202.166.45])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53FH62kZ2924897
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Tue, 15 Apr 2025 10:06:03 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53FH62kZ2924897
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025032001; t=1744736765;
+	bh=sYVoLqxhxOeFaKrerdeOEPvZqIzHi1P++Hlli5LIh8I=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Oez1Mv79N+ydfKx6xAF2IhxGVRPH744Tz9xe/ds8eZLye00UTUDRQr+nmsg6htH8Z
+	 dJIuHKFrlBSaQRmppmSoydyVEHWAjfH1LRFJ0tPi++p4djXQ9kM7L/FSKvPnLORy9O
+	 uUA0vHWVGCFl199JsokZ7L10iZbM7X7Ji7p2HTVg+spStWMWLpkz8cGsabxNnk/v71
+	 mi+bbMfyHnLXhRZT4cXYqQeTfaoVE0YRSX4FhgS+LxkUsGHFcsok+rlQcFZRI9JGGJ
+	 rQO2cnYPosLU/30b5tFrYvNIfW1NsM6vvi8POkxKCS7u6Kww+QXA4xUcdjCMvTtfrj
+	 HGOfFWfg60zNQ==
+Message-ID: <c4fcb208-ee5d-4781-85ce-3b75e651d047@zytor.com>
+Date: Tue, 15 Apr 2025 10:06:01 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250415004215.48757-1-changwoo@igalia.com> <d29e4ea6-2bfe-4017-b7c8-0d77613959f4@arm.com>
-In-Reply-To: <d29e4ea6-2bfe-4017-b7c8-0d77613959f4@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 15 Apr 2025 19:05:42 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jx44heAgXPwCDriGo-xyjX2pUP+PG1cQwjme_=EHo3rg@mail.gmail.com>
-X-Gm-Features: ATxdqUHI6abZKG4tAU291VyM3De8vG2jlmR6pAnWPQoREbt37JQq2DgLfPWHgnc
-Message-ID: <CAJZ5v0jx44heAgXPwCDriGo-xyjX2pUP+PG1cQwjme_=EHo3rg@mail.gmail.com>
-Subject: Re: [PATCH] PM: EM: Add inotify support when the energy model is updated.
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: Changwoo Min <changwoo@igalia.com>, rafael@kernel.org, christian.loehle@arm.com, 
-	tj@kernel.org, len.brown@intel.com, kernel-dev@igalia.com, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, pavel@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 10/15] KVM: VMX: Use WRMSRNS or its immediate form
+ when available
+To: "H. Peter Anvin" <hpa@zytor.com>, Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+        linux-edac@vger.kernel.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-ide@vger.kernel.org,
+        linux-pm@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, jgross@suse.com,
+        andrew.cooper3@citrix.com, peterz@infradead.org, acme@kernel.org,
+        namhyung@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, luto@kernel.org,
+        boris.ostrovsky@oracle.com, kys@microsoft.com, haiyangz@microsoft.com,
+        decui@microsoft.com
+References: <20250331082251.3171276-1-xin@zytor.com>
+ <20250331082251.3171276-11-xin@zytor.com> <Z_hTI8ywa3rTxFaz@google.com>
+ <CALMp9eRJkzA2YXf1Dfxt3ONP+P9aTA=WPraOPJPJ6C6j677+6Q@mail.gmail.com>
+ <fa16949e-7842-45f7-9715-1bdda13b762a@zytor.com>
+ <EAB44BB2-99BB-4D4A-8306-0235D2931E72@zytor.com>
+ <0cad1e0b-2bfd-4258-90cd-8d319bf0e74a@zytor.com>
+ <D212FABE-38FE-45D3-A082-CA819CCFFF95@zytor.com>
+Content-Language: en-US
+From: Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <D212FABE-38FE-45D3-A082-CA819CCFFF95@zytor.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Apr 15, 2025 at 10:31=E2=80=AFAM Lukasz Luba <lukasz.luba@arm.com> =
-wrote:
->
-> Hi Changwoo,
->
-> Thanks for the patch.
->
-> On 4/15/25 01:42, Changwoo Min wrote:
-> > The sched_ext schedulers [1] currently access the energy model through =
-the
-> > debugfs to make energy-aware scheduling decisions [2]. The userspace pa=
-rt
-> > of a sched_ext scheduler feeds the necessary (post-processed) energy-mo=
-del
-> > information to the BPF part of the scheduler.
->
-> This is very interesting use case!
->
-> >
-> > However, there is a limitation in the current debugfs support of the en=
-ergy
-> > model. When the energy model is updated (em_dev_update_perf_domain), th=
-ere
-> > is no way for the userspace part to know such changes (besides polling =
-the
-> > debugfs files).
-> >
-> > Therefore, add inotify support (IN_MODIFY) when the energy model is
-> > updated. With this inotify support, the sched_ext scheduler can monitor=
- the
-> > energy model change in userspace using the regular inotify interface an=
-d
-> > feed the updated energy model information to make energy-aware scheduli=
-ng
-> > decisions.
-> >
-> > [1] https://lwn.net/Articles/922405/
-> > [2] https://github.com/sched-ext/scx/pull/1624
-> >
-> > Signed-off-by: Changwoo Min <changwoo@igalia.com>
-> > ---
-> >   kernel/power/energy_model.c | 47 ++++++++++++++++++++++++++++++++++++=
-+
-> >   1 file changed, 47 insertions(+)
-> >
-> > diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> > index d9b7e2b38c7a..0c06e0278df6 100644
-> > --- a/kernel/power/energy_model.c
-> > +++ b/kernel/power/energy_model.c
-> > @@ -14,6 +14,7 @@
-> >   #include <linux/cpumask.h>
-> >   #include <linux/debugfs.h>
-> >   #include <linux/energy_model.h>
-> > +#include <linux/fsnotify.h>
-> >   #include <linux/sched/topology.h>
-> >   #include <linux/slab.h>
-> >
-> > @@ -156,9 +157,53 @@ static int __init em_debug_init(void)
-> >       return 0;
-> >   }
-> >   fs_initcall(em_debug_init);
-> > +
-> > +static void em_debug_update_ps(struct em_perf_domain *em_pd, int i,
-> > +                            struct dentry *pd)
-> > +{
-> > +     static const char *names[] =3D {
-> > +             "frequency",
-> > +             "power",
-> > +             "cost",
-> > +             "performance",
-> > +             "inefficient",
-> > +     };
-> > +     struct em_perf_state *table;
-> > +     unsigned long freq;
-> > +     struct dentry *d, *cd;
-> > +     char name[24];
-> > +     int j;
-> > +
-> > +     rcu_read_lock();
-> > +     table =3D em_perf_state_from_pd(em_pd);
-> > +     freq =3D table[i].frequency;
-> > +     rcu_read_unlock();
-> > +
-> > +     snprintf(name, sizeof(name), "ps:%lu", freq);
-> > +     d =3D debugfs_lookup(name, pd);
-> > +
-> > +     for (j =3D 0; j < ARRAY_SIZE(names); j++) {
-> > +             cd =3D debugfs_lookup(names[j], d);
-> > +             if (!cd)
-> > +                     return;
-> > +             fsnotify_dentry(cd, FS_MODIFY);
-> > +             cond_resched();
-> > +     }
-> > +}
-> > +
-> > +static void em_debug_update(struct device *dev)
-> > +{
-> > +     struct dentry *d;
-> > +     int i;
-> > +
-> > +     d =3D debugfs_lookup(dev_name(dev), rootdir);
-> > +     for (i =3D 0; i < dev->em_pd->nr_perf_states; i++)
-> > +             em_debug_update_ps(dev->em_pd, i, d);
-> > +}
-> >   #else /* CONFIG_DEBUG_FS */
-> >   static void em_debug_create_pd(struct device *dev) {}
-> >   static void em_debug_remove_pd(struct device *dev) {}
-> > +static void em_debug_update(struct device *dev) {}
-> >   #endif
-> >
-> >   static void em_release_table_kref(struct kref *kref)
-> > @@ -323,6 +368,8 @@ int em_dev_update_perf_domain(struct device *dev,
-> >
-> >       em_table_free(old_table);
-> >
-> > +     em_debug_update(dev);
-> > +
->
-> I would move this out of the locked section, below the mutex
-> unlock. Looking at the code in em_debug_update() you are trying
-> to send such notification for each EM's table entry * number of
-> fields, which is heavy. The RCU copy that you get will make sure
-> you have consistent view on the data and you don't have to
-> be under the mutex lock.
->
-> A different question would be if the notification has to be
-> that heavy?
-> Can we just 'ping' the user-space that there is a change and ask to read
-> the new values?
->
-> Another question, but this time to Rafael would be if for such use case
-> we can use debugfs, or we need a sysfs?
+On 4/14/2025 11:56 PM, H. Peter Anvin wrote:
+>> arlier in the pipeline, right?
+> Yes, but then it would be redundant with the virtualization support.
+> 
 
-debugfs is not really suitable for this IMV and the problem at hand is
-a symptom of that (but there will be more issues in the future
-AFAICS).
-
-Before starting to invent new interfaces for user space, though, I'm
-wondering why the BPF code cannot obtain the energy model information
-from the kernel?
-
-> >       mutex_unlock(&em_pd_mutex);
-> >       return 0;
-> >   }
+So better to drop this patch then.
 
