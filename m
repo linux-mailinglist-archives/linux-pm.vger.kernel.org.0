@@ -1,173 +1,167 @@
-Return-Path: <linux-pm+bounces-25476-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25477-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B119BA8A448
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 18:38:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B54FA8A46B
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 18:43:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 28F25189A09D
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 16:38:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 751EA7A28ED
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Apr 2025 16:42:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F3CF21E092;
-	Tue, 15 Apr 2025 16:38:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29CA9292933;
+	Tue, 15 Apr 2025 16:43:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iTvZU0Bq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SSTRW9ox"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D46C0946F;
-	Tue, 15 Apr 2025 16:38:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFAC727F74F;
+	Tue, 15 Apr 2025 16:43:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744735120; cv=none; b=ecOknNh2cSd4cpxl68mrPSbo1/DmYHIZgYpWi8j4ornoaCqlFpCqGSnSSmgjbn2PTsDF+6JQiVNFBnbi38BHqlG+/ptR92hjx5LusxT5Jg/3oPYoPy/die83XG4gU0IiTLXYmsbCKnAM8Wk7cNfwG9mOMj+0CW7qldzswVtuw2U=
+	t=1744735389; cv=none; b=eoGP1Fipnb61m2YkaKSgL3fN8R3dT4pOx7U8gFQVB9eIeZMtFpWhkaVzkUiHRiS7rx8Runijd2DYSb9MZG36EOyFe92FTYkAGaNdDX7LSpnZpPOzEky7n6VKqFCxS7qwp1kLKaUsRDEkjlHzowD4P/rkoV90LHnxBEdKoC/aoTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744735120; c=relaxed/simple;
-	bh=0o7WgPMPfYd1M0lo6UxGC5WgKFAvsFlwbf9fWHZjo9w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I7/XkOBM4daE6qqbW+W/Q1KTehShwmC3MR5cm6Iq2itW/o18k2npNqpOJsB/Z4ZNVZ9ASXqRQw/ZHOPqHEqwGHX2cKpLeMdOf5r9c2mK3B/rMz550dt7QP+OA39EBSafUTDDIF5Ds+Z9GoXuwalSvMesitkeFiUTryV47iKa2kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iTvZU0Bq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33EF6C4CEEB;
-	Tue, 15 Apr 2025 16:38:35 +0000 (UTC)
+	s=arc-20240116; t=1744735389; c=relaxed/simple;
+	bh=u95dBuLRjhdfXitfe59a5c3chs1JKSGBptgj8nnq0po=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KzR0z9Dk2blKYUZ7dYn5vM0zfbLXGJaUubC+o2K2w5rWwWN5hT3DkgukHwPL7MZWZ3cWG7wtv3o/EjzxgPYnydQYRCu+shzrxmgjzC9kOe+mWeUkIMmZOQ8mmquDzQRBU0oxMEOzHfC3GZSgQu2AIYSmeV6o0X/F8peiRT7l/co=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SSTRW9ox; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 695F5C4CEEC;
+	Tue, 15 Apr 2025 16:43:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744735119;
-	bh=0o7WgPMPfYd1M0lo6UxGC5WgKFAvsFlwbf9fWHZjo9w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iTvZU0BqP6qpK6DcIv2U+8b6I2t7T39DXhYrMioqJ8nk2ouDeGKjxoKAoa3s0FXgS
-	 UF3sQ4W+Bp1BVpeyeu9RO2uIh6VZoYHrEbag5zahGtqawWffwbyDR5Ud2Trv7akIja
-	 KRbOlLP1u4hBwnVTMD95sxZVXOtAuhR+7p5TepQySBKdYrQ3KtH2xQAt2+7ZlywKhD
-	 YkQm7b2lQemIo/RHlqtI5ZRPQ5WEtxAMt8YEmQJDFJ7I7/bU2R26KJC5FV9m2lTd15
-	 MfKSv66ipbJ1NebxdXDELJg/yD/1PYJkJiwUGk/kU9jDegydIU71qcrQgoQKLQTRzg
-	 QnwzLg9l0YvOQ==
-Date: Tue, 15 Apr 2025 17:38:32 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Pavel Machek <pavel@kernel.org>,
-	Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>,
-	Fu Wei <wefu@redhat.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Frank Binns <frank.binns@imgtec.com>,
-	Matt Coster <matt.coster@imgtec.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	m.szyprowski@samsung.com, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 2/4] dt-bindings: firmware: thead,th1520: Add resets
- for GPU clkgen
-Message-ID: <20250415-tycoon-naming-20ba5a55c469@spud>
-References: <20250414-apr_14_for_sending-v2-0-70c5af2af96c@samsung.com>
- <CGME20250414185315eucas1p1fae2d6250bfd30b12bb084e197c02948@eucas1p1.samsung.com>
- <20250414-apr_14_for_sending-v2-2-70c5af2af96c@samsung.com>
+	s=k20201202; t=1744735388;
+	bh=u95dBuLRjhdfXitfe59a5c3chs1JKSGBptgj8nnq0po=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=SSTRW9oxwi6t6BeOmnz5XKCkgql93kGJJvL3lgjDd3s7AgKf9v2H8X/sQVy78qbRF
+	 XlUR/AMhJniKi3dPiKEHsx+DBL1hXeuZrsgvmfb+1nSolGXDHnXjmG+BjElH0lWVm2
+	 7KlwCKos259oJJXMaimUODj95ATn1ZH2mqJt18dKTc9p9Wb0s+MKiR7kuEtPVvQWqp
+	 E6qvGRZWHtj4qppb2jANy0p3WACo/EV2JsN9c6EUWUvtHRPGuo8vKjgQQ8ibY84S0H
+	 ICBokVM6NJhYXK3dHZe5Wcf3CxdTdjphQV5VLTU1Py8nNdtXxehYGJWar/Z4kpO9rq
+	 Xdnj5akXzs0og==
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-2c873231e7bso3626078fac.3;
+        Tue, 15 Apr 2025 09:43:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUhj9UVIyOpJjn467GNrISWfU4/VwOLZL7ZrhhDMsCIBnud3VrkbjSqTwK8Hr6inVKtLIbJaf4spLvF@vger.kernel.org, AJvYcCX/widAhGrfBDr4s8lqBIIJuvm+Yxs/fQVxQbYKD6hmu5sKquEWnLGVPG7EEn0FKwe1dWz7zlJQSbs=@vger.kernel.org, AJvYcCXHFM8/kgT7q7EXk4oDoDxn3QX+U3nbQi2gOu134AIddCe1HvKoQ80MUbhUNm95nDF4c/IxM4kcz8yz1SXe@vger.kernel.org
+X-Gm-Message-State: AOJu0YwoECVRoJqILw+03jYGmqhHkvuKacSK30axfaswddz3l/EUvkXx
+	5xCyibW+oqCkqGVMDcH5Lf1/8K/pDqlhKQ1BKTl9LZdPgFfsHbYtRqMe9jt/EP1kxKj6W+V/5v9
+	Pvag1ei2CXwA55l9xFJ/lhSUEOYU=
+X-Google-Smtp-Source: AGHT+IGyns0wKcIA6JT3DidO5LCfWPBQ89zz6U8ulYdw6epDaXaSmmPM+mVRcjXZP13jUV0tTep4Qgkj6OohB9PkpUw=
+X-Received: by 2002:a05:6871:3743:b0:29e:27b6:bea5 with SMTP id
+ 586e51a60fabf-2d0d5f2462dmr9973324fac.25.1744735387716; Tue, 15 Apr 2025
+ 09:43:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="FhDPjeA6XL6WHJ2b"
-Content-Disposition: inline
-In-Reply-To: <20250414-apr_14_for_sending-v2-2-70c5af2af96c@samsung.com>
-
-
---FhDPjeA6XL6WHJ2b
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <CGME20250414185314eucas1p1ae57b937773a2ed4ce8d52d5598eb028@eucas1p1.samsung.com>
+ <20250414-apr_14_for_sending-v2-0-70c5af2af96c@samsung.com> <20250414-apr_14_for_sending-v2-1-70c5af2af96c@samsung.com>
+In-Reply-To: <20250414-apr_14_for_sending-v2-1-70c5af2af96c@samsung.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 15 Apr 2025 18:42:56 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0irRq8_p35vf41_ZgomW0X=KZN+0HqwU2K9PvPRm8iZQA@mail.gmail.com>
+X-Gm-Features: ATxdqUFwFy97e7VWF90uH5loEGafOroniuxmOCaFHFC3QunM9DSgMFJWfDaMgSM
+Message-ID: <CAJZ5v0irRq8_p35vf41_ZgomW0X=KZN+0HqwU2K9PvPRm8iZQA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] PM: device: Introduce platform_resources_managed flag
+To: Michal Wilczynski <m.wilczynski@samsung.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Frank Binns <frank.binns@imgtec.com>, Matt Coster <matt.coster@imgtec.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	m.szyprowski@samsung.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 14, 2025 at 08:52:56PM +0200, Michal Wilczynski wrote:
-> Extend the TH1520 AON firmware bindings to describe the GPU clkgen reset
-> line, required for proper GPU clock and reset sequencing.
->=20
-> The T-HEAD TH1520 GPU requires coordinated management of two clocks
-> (core and sys) and two resets (GPU core reset and GPU clkgen
-> reset).  Only the clkgen reset is exposed at the AON level, to support
-> SoC-specific initialization handled through a generic PM domain. The GPU
-> core reset remains described in the GPU device node, as from the GPU
-> driver's perspective, there is only a single reset line [1].
->=20
-> This follows upstream maintainers' recommendations [2] to abstract
-> SoC specific details into the PM domain layer rather than exposing them
-> to drivers directly.
->=20
-> [1] - https://lore.kernel.org/all/816db99d-7088-4c1a-af03-b9a825ac09dc@im=
-gtec.com/
-> [2] - https://lore.kernel.org/all/38d9650fc11a674c8b689d6bab937acf@kernel=
-=2Eorg/
->=20
+On Mon, Apr 14, 2025 at 8:53=E2=80=AFPM Michal Wilczynski
+<m.wilczynski@samsung.com> wrote:
+>
+> Introduce a new dev_pm_info flag - platform_resources_managed, to
+> indicate whether platform PM resources such as clocks or resets are
+> managed externally (e.g. by a generic power domain driver) instead of
+> directly by the consumer device driver.
+
+I think that this is genpd-specific and so I don't think it belongs in
+struct dev_pm_info.
+
+There is dev->power.subsys_data->domain_data, why not use it for this?
+
+Also, it should be documented way more comprehensively IMV.
+
+Who is supposed to set it and when?  What does it mean when it is set?
+
+> This flag enables device drivers to cooperate with SoC-specific PM
+> domains by conditionally skipping management of clocks and resets when
+> the platform owns them.
+>
+> This idea was discussed on the mailing list [1].
+>
+> [1] - https://lore.kernel.org/all/CAPDyKFq=3DBF5f2i_Sr1cmVqtVAMgr=3D0Fqsk=
+sL7RHZLKn++y0uwg@mail.gmail.com/
+>
 > Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
 > ---
->  .../devicetree/bindings/firmware/thead,th1520-aon.yaml        | 11 +++++=
-++++++
->  1 file changed, 11 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/firmware/thead,th1520-aon.=
-yaml b/Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
-> index bbc183200400de7aadbb21fea21911f6f4227b09..6ea3029c222df9ba6ea7d423b=
-92ba248cfb02cc0 100644
-> --- a/Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
-> +++ b/Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
-> @@ -32,6 +32,13 @@ properties:
->      items:
->        - const: aon
-> =20
-> +  resets:
-> +    maxItems: 1
-> +
-> +  reset-names:
-> +    items:
-> +      - const: gpu-clkgen
-> +
->    "#power-domain-cells":
->      const: 1
-> =20
-> @@ -39,6 +46,8 @@ required:
->    - compatible
->    - mboxes
->    - mbox-names
-> +  - resets
-> +  - reset-names
+>  include/linux/device.h | 11 +++++++++++
+>  include/linux/pm.h     |  1 +
+>  2 files changed, 12 insertions(+)
+>
+> diff --git a/include/linux/device.h b/include/linux/device.h
+> index 79e49fe494b7c4c70d902886db63c4cfe5b4de4f..3e7a36dd874cfb6b98e2451c7=
+a876989aa9f1913 100644
+> --- a/include/linux/device.h
+> +++ b/include/linux/device.h
+> @@ -881,6 +881,17 @@ static inline bool device_async_suspend_enabled(stru=
+ct device *dev)
+>         return !!dev->power.async_suspend;
+>  }
+>
+> +static inline bool device_platform_resources_pm_managed(struct device *d=
+ev)
 
-Given these are new required properties, have you made sure in the
-driver that their absence will not cause problems with older
-devicetrees? I took a brief look at the driver, and it _looked_ like you
-were failing if they were not there? It was a brief look though, tbf.
+Could this function name be shorter?
 
->    - "#power-domain-cells"
-> =20
->  additionalProperties: false
-> @@ -49,5 +58,7 @@ examples:
->          compatible =3D "thead,th1520-aon";
->          mboxes =3D <&mbox_910t 1>;
->          mbox-names =3D "aon";
-> +        resets =3D <&rst 0>;
-> +        reset-names =3D "gpu-clkgen";
->          #power-domain-cells =3D <1>;
->      };
->=20
-> --=20
+> +{
+> +       return dev->power.platform_resources_managed;
+> +}
+> +
+> +static inline void device_platform_resources_set_pm_managed(struct devic=
+e *dev,
+> +                                                           bool val)
+
+Ditto?
+
+> +{
+> +       dev->power.platform_resources_managed =3D val;
+> +}
+> +
+>  static inline bool device_pm_not_required(struct device *dev)
+>  {
+>         return dev->power.no_pm;
+> diff --git a/include/linux/pm.h b/include/linux/pm.h
+> index f0bd8fbae4f2c09c63d780bb2528693acf2d2da1..cd6cb59686e4a5e9eaa2701d1=
+e44af2abbfd88d1 100644
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -670,6 +670,7 @@ struct dev_pm_info {
+>         bool                    no_pm:1;
+>         bool                    early_init:1;   /* Owned by the PM core *=
+/
+>         bool                    direct_complete:1;      /* Owned by the P=
+M core */
+> +       bool                    platform_resources_managed:1;
+>         u32                     driver_flags;
+>         spinlock_t              lock;
+>  #ifdef CONFIG_PM_SLEEP
+>
+> --
 > 2.34.1
->=20
-
---FhDPjeA6XL6WHJ2b
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ/6LiAAKCRB4tDGHoIJi
-0lZuAQCABS+eFSdx3kXhK23lYrr3kZQ87Y4bNEqSHSKXfVbSNwD+LpI2rl8eyDPG
-+EnkNfmTOSNRo+kDYlSKMLijsV19qQI=
-=yRlm
------END PGP SIGNATURE-----
-
---FhDPjeA6XL6WHJ2b--
+>
+>
 
