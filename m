@@ -1,126 +1,121 @@
-Return-Path: <linux-pm+bounces-25569-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25578-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20269A90B0D
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 20:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C7ACAA90CFA
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 22:18:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 74BE41889875
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 18:13:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53AD219E003B
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 20:18:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C4A221A434;
-	Wed, 16 Apr 2025 18:12:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FBC4229B1A;
+	Wed, 16 Apr 2025 20:18:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="I6igity2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bcOZ3WWM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB221AF0BC;
-	Wed, 16 Apr 2025 18:12:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B277219A79
+	for <linux-pm@vger.kernel.org>; Wed, 16 Apr 2025 20:18:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744827170; cv=none; b=fCWGbPsHjl/zBNTOcn/6231SuJ87bvb3gG/WuprNvxoMXmHXXLfqhWuwFfjNQMNCLnIQVlk++0XuR1jzJ64JoVWiAxaZnjdNCKm88nH6UsPworbakr1veksrDwU9M1GRD+7kN7jX4jve8KXxRrjPCDDDcmg20zlETBIk77dLm2g=
+	t=1744834701; cv=none; b=GFFUH97im9/HbXUxcG5/YBL9bQZkqG3d7rBGkAx2ihs1vQzxxn+9jG5qsmdm3zUIXPIrTV1qudtSiHI+8GUOxFPiNT5JPytKwUW+sTcEc2ehxsWjyLenwZyiMBMDqsVtClsQT9HPHQaJ3mB+UYjYXM5zbz+rgI7MlbctVFnQjLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744827170; c=relaxed/simple;
-	bh=p6lZpJkVX9UkBcwJa0YIg46R9uDoxvpxGH9F8PLq/Q8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=D/vTBd6/m7GdsrHa2yNJJHpkUVpoypZC3iz2X91ql2ty3xYSU2bQCT03G5m4bN4Nm2WAaP55hlwiq3LnChUcfNxlfZI6la0mKkMtHS3ZW99MQInPLGtpC9if/pMHOB/dMIzJXe1h0OLqhHW7R2Ot6ludX4sgO94ZbWxZBhTL3Ok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=I6igity2; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 4D75B662714;
-	Wed, 16 Apr 2025 20:12:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1744827165;
-	bh=p6lZpJkVX9UkBcwJa0YIg46R9uDoxvpxGH9F8PLq/Q8=;
-	h=From:Subject:Date;
-	b=I6igity2Dw9lBf3q+iF7XjByV2oQ+CxjerVombDSs9e3eZlfgzmgYrE9ioA1tDt32
-	 AYa2vfEWV+3ualUWbVnc58vkEfP9P1G1rtQCIfN6i5yQqhWPLgkIFeW8ZQ/FvJpAKU
-	 f5R37AnG108I2I7jW2mp5BAFQQIWxeyIoTCSd+SOdn/8+nbj9WfR02wy0a8nzMivig
-	 Kx6ORQMbyzlBEWnGch3sg/KseHdEuea3Tro3LRfBQnATd5EKKCMHBxOfHvpkEJhUAk
-	 V/q1uAgMUzY2yUXQeGd/ISQZXXmsJxHWskQrpKEEc1gGW/uQbD0s9ZUKcmFqQO0nqN
-	 JoxHsggIi7C9Q==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Peter Zijlstra <peterz@infradead.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Morten Rasmussen <morten.rasmussen@arm.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
- Pierre Gondois <pierre.gondois@arm.com>,
- Christian Loehle <christian.loehle@arm.com>
-Subject:
- [RFT][PATCH v1 8/8] cpufreq: intel_pstate: EAS: Increase cost for CPUs using
- L3 cache
-Date: Wed, 16 Apr 2025 20:12:07 +0200
-Message-ID: <47159248.fMDQidcC6G@rjwysocki.net>
-In-Reply-To: <3344336.aeNJFYEL58@rjwysocki.net>
-References: <3344336.aeNJFYEL58@rjwysocki.net>
+	s=arc-20240116; t=1744834701; c=relaxed/simple;
+	bh=0SmEON0Tw+ZzqwBF2QPH0kEjZgsLnEhgxvYjYRg4ye0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LH/zUYxfpE7qBRJVKHeGfFzF/jNgSVYzLzLzMnP4eDXG2SapIRnDPGoHjHz+dGbSPxCcxm29Dtz1yXYadRVlyj68vPfwD8u+KBvZYgXk2EPqvuuLJYFtdBtivUaNnPvjViS0x1Wc9F+YZBHdJolPwyFHOYu6uHa7vMAuuWBIBjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bcOZ3WWM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2563C4CEE2
+	for <linux-pm@vger.kernel.org>; Wed, 16 Apr 2025 20:18:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744834700;
+	bh=0SmEON0Tw+ZzqwBF2QPH0kEjZgsLnEhgxvYjYRg4ye0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=bcOZ3WWMnixM4FANu/OD2oz3ruZGJuTV5zqnUeJb+MkkWIofHYuXw+3ucQwGpjq6t
+	 usfFcWAlMflJZWm6sgjgZQKciVHp8OLrGFUu6z7JczlKHsAQQ2LRYj6LwChi22Sxau
+	 VNnfg2+2XItEysBkKVSBsxAI4L6p1HKJfIQEii5xyWoIrCqR0ljzPk3GHNi6XX2+ur
+	 H8G/ZNYhcQKWZByxniZlMfTsB2BwyQhjsY+IdV6ij/4yUw0158Jta/Rw7QZ97D5DjK
+	 JhueRQPVEWetBxP1AIPwBXU8890vEkogQ5eUjWjPcLdOwLfGzHSxUUE2dU813/ogzK
+	 AyVKFAyphoVGw==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-2c2504fa876so2034089fac.0
+        for <linux-pm@vger.kernel.org>; Wed, 16 Apr 2025 13:18:20 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUuYwcUR/fLjBGPotvVVEFjST9O4IJk1F1mpIdrPlOvnjO/psX0OhQcuJFmRZXonerfdJwicDYjmg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxbj7NYPnmlrOdnbskjFr0LR+eRU0YGh76JfHrbe4LdEFenRtKT
+	f/eKeV9ho/eeL2jwuI8kIrW1+bWy+tuLcYPKp0jHWax9GUew3x4I1j9gzxFEczPzWiaJP8vyIeG
+	Pc+XIIXRaKOZ3jsZ4CaPAJAvT0/U=
+X-Google-Smtp-Source: AGHT+IEXa2aduTrtJnKLVgDfMJZEG/0fAQ9rBK/JLb8BuXZK/qu0gCYcYGEDRjjmSyqSQeoKyZ2HZzkRFLSOFjTK/7c=
+X-Received: by 2002:a05:6870:fe8a:b0:2b8:ec17:66e9 with SMTP id
+ 586e51a60fabf-2d4d2aa3809mr2138299fac.11.1744834700040; Wed, 16 Apr 2025
+ 13:18:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <51d02a58-433b-470f-86ee-618994cecb22@infradead.org>
+In-Reply-To: <51d02a58-433b-470f-86ee-618994cecb22@infradead.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 16 Apr 2025 22:18:08 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jOtYC+5SnY5eM3ys0frwXYJ9oWAC-aBASOT8YBJw6Sqw@mail.gmail.com>
+X-Gm-Features: ATxdqUF8RWa3N-MP8eJ5tilT-grwcdjkD2lFL-4bhOBrOlN4CvubkEP6QVMq2io
+Message-ID: <CAJZ5v0jOtYC+5SnY5eM3ys0frwXYJ9oWAC-aBASOT8YBJw6Sqw@mail.gmail.com>
+Subject: Re: cpufreq governors
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvvdejtdehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepuddupdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=11 Fuz1=11 Fuz2=11
+Content-Transfer-Encoding: quoted-printable
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi Randy,
 
-On some hybrid platforms some efficient CPUs (E-cores) are not connected
-to the L3 cache, but there are no other differences between them and the
-other E-cores that use L3.  In that case, it is generally more efficient
-to run "light" workloads on the E-cores that do not use L3 and allow all
-of the cores using L3, including P-cores, to go into idle states.
+On Thu, Apr 10, 2025 at 10:39=E2=80=AFPM Randy Dunlap <rdunlap@infradead.or=
+g> wrote:
+>
+> Hi Rafael,
+>
+> My little (Intel) laptop needs some performance improvement (IMO) so I se=
+t out
+> to read Documentation/admin-guide/pm/cpufreq.rst. I still have some
+> questions that I hope you can give me some insights into.
+>
+>
+> 1. Can I use the schedutil policy governor even though the P-state govern=
+or
+> seems to be the default?
 
-For this reason, slightly increase the cost for all CPUs sharing the L3
-cache to make EAS prefer CPUs that do not use it to the other CPUs with
-the same perf-to-frequency scaling factor (if any).
+Yes, you can.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/cpufreq/intel_pstate.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+Change /sys/devices/system/cpu/intel_pstate/status to "passive" and
+you'll be able to use regular cpufreq governors, including schedutil.
 
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -979,6 +979,7 @@
- 			   unsigned long *cost)
- {
- 	struct pstate_data *pstate = &all_cpu_data[dev->id]->pstate;
-+	struct cpu_cacheinfo *cacheinfo = get_cpu_cacheinfo(dev->id);
- 
- 	/*
- 	 * The smaller the perf-to-frequency scaling factor, the larger the IPC
-@@ -991,6 +992,13 @@
- 	 * of the same type in different "utilization bins" is different.
- 	 */
- 	*cost = div_u64(100ULL * INTEL_PSTATE_CORE_SCALING, pstate->scaling) + freq;
-+	/*
-+	 * Inrease the cost slightly for CPUs able to access L3 to avoid litting
-+	 * it up too eagerly in case some other CPUs of the same type cannot
-+	 * access it.
-+	 */
-+	if (cacheinfo->num_levels >= 3)
-+		(*cost)++;
- 
- 	return 0;
- }
+> 2. Or should I just continue to use the P-state governor? Is it preferred=
+?
+> If so, why?
 
+That really depends on what you're going to run.
 
+The default intel_pstate internal governor (in the "powersave" mode)
+lets the processor adjust itself to the utilization expected by it,
+while schedutil gives hints on what utilization is expected by the
+kernel to it.  The latter may help it to avoid rising the frequency
+too eagerly or to make other similar mistakes sometimes.
 
+It generally is reasonable to try both and see which one works better for y=
+ou.
+
+> 3. Can a cpufreq policy governor be changed by whether a laptop is runnin=
+g
+> on battery power or A/C power?
+
+Yes, this is technically possible, but the kernel doesn't do it.  An
+agent in user space that detects configuration changes and makes
+adjustments is necessary for that.
+
+> Thanks for your help.
+
+No problem.
 
