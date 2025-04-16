@@ -1,135 +1,116 @@
-Return-Path: <linux-pm+bounces-25525-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25526-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6C20A8B2EE
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 10:05:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CB80A8B2F4
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 10:08:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 637803B0C76
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 08:05:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 20820189EE76
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 08:08:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B0DC22D7A3;
-	Wed, 16 Apr 2025 08:05:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84DA022D7A1;
+	Wed, 16 Apr 2025 08:08:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XSRdqTw+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tQTIoTgN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D62031F94C
-	for <linux-pm@vger.kernel.org>; Wed, 16 Apr 2025 08:05:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF59347B4
+	for <linux-pm@vger.kernel.org>; Wed, 16 Apr 2025 08:08:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744790722; cv=none; b=Z9vl647/Ir7Nyu4Fshjsq5qamh4P9qd7eqjSaXy4Kk4ScLjnrRwd0cWDBBcHVrt6qOH1ZYDB+FcvJfJN1AErkcmkFEuehc8/kBjCHaAqrZFIfl0pUdgao3fRwUhFikB84FhH89wOHaBI7ssskL09x/9QIh4VV4unphUG9JW0jBk=
+	t=1744790908; cv=none; b=AD+cJLbGKW+0scN9enk1fBNxzv6bFWp30m5hEdxg2MyakLlu8RNDX12Pj1YG+QsLZgCpKkTxv1DrzNbAthneleEdx2p7abl5LmK6c0/76hL8miL1UAglu2eM/oAvfBpauEtt6Y7+MbgeOrBr03aLxsVdyGLar2b/LUUk6rgPV3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744790722; c=relaxed/simple;
-	bh=WsWHta+JMAg/6F0TNR0UBnNl/C11bjBp6muXAtHOYx4=;
+	s=arc-20240116; t=1744790908; c=relaxed/simple;
+	bh=cISqzIV2rgmQuFECu6naEw6ahnHMaxpCS8NBxarpuTc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HVANOuKbbP7649s+B9VhZ2BlhE25uM+5XACZIIXkM5/fbdD8MRqDHjyBIRI7wdHGZpQez3mqXqy8QfileZuYf0ZWKKLqig6uXV8Bsj3mSla8pfAz+e27zBdSIZc+FTpehh8Ix3Aeg8ol3D/iFA7yxfcdcdB4EAZw8AtIE7eSjgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XSRdqTw+; arc=none smtp.client-ip=209.85.210.170
+	 Content-Type:Content-Disposition:In-Reply-To; b=tI3a/DjG3Rt9EpcL8DigUju9ztvrLroq6LWB52IX5cdreCX8/xj4aJsK/c8mEALLZ5xops1ZWnTT9jW/YqodPDo/NnO1RZlI7ZPDfi65/md2ZZ41pikBqyAnzOJd8JpwFvYajIu5SbNZgMtpNnzWOJuGmq3UA7ipnH1qe0/3UWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tQTIoTgN; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-736e52948ebso7303296b3a.1
-        for <linux-pm@vger.kernel.org>; Wed, 16 Apr 2025 01:05:20 -0700 (PDT)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-22928d629faso63178865ad.3
+        for <linux-pm@vger.kernel.org>; Wed, 16 Apr 2025 01:08:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744790720; x=1745395520; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=inoGsYpigja5jTUghwsLjcEVgXmFJ+nXb0AjbaYD9QM=;
-        b=XSRdqTw+n1Mam73vjtRm0CtBFwy/BcuWZNAE2njoNHVVtskrjTWhMxgff99BZ2tIBk
-         ywy2+kw5Acv0GGgr36N4tkDxofw8eXi1sqdfQHPUKpxYmsPJpjdFXM51HgqixPRLkoi4
-         Oo0T7EE+Q0VfduFebDN6ALc3K+qubXKgi+wb5nWaENZYDm9YPwlsmk4tDGMW/LeGarUX
-         zCIwowcNGf2FZqSALUtoquLizeLrSTNQRyxglR207eiELjH5CBNu9zWD5eW/PFhNISW0
-         pwsAS8c9SZLuSjmkAZB3OhNudsXArzbGdQSwmjeZu0VsF0h4aEbRZDy5rl8xPeBVbQ+J
-         H/AA==
+        d=linaro.org; s=google; t=1744790906; x=1745395706; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kmSfwQ+4oMYT6Kcqo2GkIzn25RS/V98reH2HMxWJJ1E=;
+        b=tQTIoTgNqAXrldVnYkxogF62Z+ZlQyDqc2J0yfJ4ymfY0EKOxKgkWd5Ry7DLfvbBEj
+         2Qvzkzc/SeNL82IPXzfPMNOdnJX+bKPJRaDCM8V6VJEN5Miw3hNYaHH2RkIVFNG5F1ct
+         BLckGogd3SidOrpGdqs8bOuFTJMgkyUrbyCx2iEZoHQaLc8WFxuZBQxIpSjXAMXLWWO8
+         Hf1uepXj5lFF6C78eh0NjPYu9wxZKWwTZEl5LtRxhwjnpNnls+8moRRBcaWpuwtG1Jkl
+         K2hzK13e9RGBV7WfgnRW23jrTlcbRCBVMjRDDuWuv1JQOGcBsoVgP63V0UgF3LSLZuH5
+         pq8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744790720; x=1745395520;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=inoGsYpigja5jTUghwsLjcEVgXmFJ+nXb0AjbaYD9QM=;
-        b=hr+mlLNEPsb+WhE0LCO/SF+O1HC0JOy7+zktIhJMirG7YyY1VM0Q/FxwDeSXIZdiEY
-         e6yDbM+xMIVafZmgM3dwsqY8Fc/PZaK1k4X5utmUj/DqL2hKL6c5yvjKoEaj68E9GSVh
-         gWmekYMHeQ19G4LV2bqclmcFuEFrXNQeAf/iRwHYChfgb9pKujVNVXvJwHQ88IaZrm2v
-         qZEYZ2qpwZi7gnxhYF8eIbYOJfvDRLKofm4i4q/Sei/Onr6COeOgB+DdJLxLvrstQWnQ
-         cmzN70GBHgSMLEQx4zGkof2tmuntk2c4JIr8ft8C4Kdj+Zzk4x214J8nM+GG2JGAH0oD
-         IQRw==
-X-Forwarded-Encrypted: i=1; AJvYcCV3DqkHamp2NSd1/ZHigsNufK5phWJqoGMj6XeWODDkDoroC9Qdl2sXJGt52fbyWkIjKSgDTq6bWg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyN2qEuw8uVQUWwt5dMnbvCGeiSsfHCufRt66k1ZBH1g/mtyFno
-	7ObnwJx0ptrOvB9bosbJTBXR7FRP5GgVhiy0QouZt//wjLRa7DnGQWAxIYppfM0=
-X-Gm-Gg: ASbGncvs6eatODc09s1K8TdliB6SbJxT6tvY84kOP6gCvuvj/ubMWIQs24UMPnGnJzr
-	uWw6XlNZdjWinekOnYEIA2p/csaMldSQ5ptB13g0+uz8JxMBQC2n6vLlcVb2B1hNVvkzcOkHgxX
-	/Y25ECiRO6Ad3+HvM21taAQnGwgEpKjPegutVhPz82jxaDgoW5ZGS04fdwVXMxumwwj1WJ6pPsu
-	a923v4CNkDmi4+9hDJox7rXKuTsHPdl6vuoYh/Zf20e3hvdF/gjEPL/qoZCrecyKc9lzgpdPlh1
-	Y7gskjnaWPInAAbQ3mDUZ/MVNMLWYNSLXj1L3gjMJN8mLnzGE80D
-X-Google-Smtp-Source: AGHT+IHE9GKOiXUJRd9ZbjDhVSEPnNsM58LQq5KKO/sJrxGQ10BPtZiiagmUa7v9I1/Pe/Ala+WMrA==
-X-Received: by 2002:aa7:888d:0:b0:736:baa0:2acd with SMTP id d2e1a72fcca58-73c267f1bebmr1314183b3a.20.1744790720067;
-        Wed, 16 Apr 2025 01:05:20 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1744790906; x=1745395706;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kmSfwQ+4oMYT6Kcqo2GkIzn25RS/V98reH2HMxWJJ1E=;
+        b=M0hHd66OQ7wN50qmMSSIJpFkmtkGuUkDcgg8a7WN3CbLjgpvq7bJDXbGcAnuiM/Oht
+         UnEwwBOPW8fx/exXOSRpYOWKOngKStd+Yozdh0aOn4CXDyuMF2U8KvKfyk6pCC5OGqrJ
+         e+Lj9mEc7ZxHGfOCAEwGok8iQI+PfB1KMFkZYaMWZZFLibV2AaApU0YGecXVZ9XS6601
+         HXJYgnRmU81qcPFV0EN+3N+BvHBp02Q2orUENb4ZiDepchqIFc9ev2wlFUCZP+arQ5lx
+         ji23z+TX9tj4Z4j/C2846k5mV/xd1iaBpk3eIyCdMMc0Dkk9Vb/pM8A+x/S7CZzEFRxp
+         /t2g==
+X-Forwarded-Encrypted: i=1; AJvYcCUZc8FpMqAOL0bI3aq6n88sKiAirC4iPP//dwJ9zVIdj76eMK+3s86hkLxlOvbfZUyu1xgMOSU0zw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyY2lyln9E4+rsPY3CUrc5rn/vZCFhL+rOiP8IviUgoqaAavgPg
+	fz2eS+USiAcH5IkN0onNh/UgWr4JCIGMxGe1tY7tdIp8HVxpPOOJ6z275DRZq3s=
+X-Gm-Gg: ASbGncsOsLI0u+iXmmXsWs5AvkZYxZCeFMGvxzggBTJ22QZgYQeeqeMVCEiISXDIPfl
+	qqJzBvX9oLBntoQZ8tcdY4Fm4xuIJTzpeheCq0OpXpgI0dISsdc/nFDPypYL9gupfbu9sHm0nJ0
+	ePaVugK8PVKK2yT412nokGpNvQ9PqU5u2TmI8y29fJo0/ZveLHYH2CLmRiF8a1yzCwH18tUWyNU
+	kG2PRn8/3mqOI8MWR/NAqPzwxXEbaVPcg1iiYRH2Q+GEWwGkfWq0qa1yRFTZ/6ayCGusBwMT/N1
+	JxH1pa0vSQVE8UrAvOADPhBCXYMnyxBNBg1ahH1qSw==
+X-Google-Smtp-Source: AGHT+IE6TlfbDAIcOi0+kKiF9dSLIx1avDG6iWMigbvyHt10Iqv0HYIjEVBLNqGX+RGWKXXryiaNag==
+X-Received: by 2002:a17:902:f643:b0:223:44c5:4eb8 with SMTP id d9443c01a7336-22c35964dc7mr16617625ad.32.1744790906135;
+        Wed, 16 Apr 2025 01:08:26 -0700 (PDT)
 Received: from localhost ([122.172.83.32])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73bd230dd17sm9721455b3a.129.2025.04.16.01.05.18
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22c33fa5f4dsm8011945ad.121.2025.04.16.01.08.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Apr 2025 01:05:19 -0700 (PDT)
-Date: Wed, 16 Apr 2025 13:35:17 +0530
+        Wed, 16 Apr 2025 01:08:25 -0700 (PDT)
+Date: Wed, 16 Apr 2025 13:38:23 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Chun-Jen Tseng =?utf-8?B?KOabvuS/iuS7gSk=?= <Chun-Jen.Tseng@mediatek.com>
-Cc: "cw00.choi@samsung.com" <cw00.choi@samsung.com>,
-	"rafael@kernel.org" <rafael@kernel.org>,
-	Project_Global_Chrome_Upstream_Group <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	"myungjoo.ham@samsung.com" <myungjoo.ham@samsung.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"kyungmin.park@samsung.com" <kyungmin.park@samsung.com>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH v3 1/3] cpufreq: mediatek: using global lock avoid race
- condition
-Message-ID: <20250416080517.feansrkpycsynk6t@vireshk-i7>
-References: <20250214074353.1169864-1-chun-jen.tseng@mediatek.com>
- <20250214074353.1169864-2-chun-jen.tseng@mediatek.com>
- <20250219054209.erwfp7sgzchaiuds@vireshk-i7>
- <e8337c5eee0cadb797bacf26b00f1ca303c5147f.camel@mediatek.com>
- <20250321045624.mwm2mnkqeow5uids@vireshk-i7>
- <2a73b5ca35692c8ffa68c9ff0df73e24a592967d.camel@mediatek.com>
- <20250321060148.adhxjexpnm4dkpnt@vireshk-i7>
- <e1c2c12bace22d1803d16ecbfb32129518d87157.camel@mediatek.com>
- <20250324054333.sgwwksawnybx3lp4@vireshk-i7>
- <06356a55cdb3c34dfc716349d1967f95655b0ab2.camel@mediatek.com>
+To: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+Cc: Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, stable@vger.kernel.org,
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH] cpufreq: cppc: Fix invalid return value in .get()
+ callback
+Message-ID: <20250416080823.o6urglwgm4qdx263@vireshk-i7>
+References: <20250413101142.125173-1-maz@kernel.org>
+ <23466140-5d0c-435f-8e73-d1c4826930ec@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <06356a55cdb3c34dfc716349d1967f95655b0ab2.camel@mediatek.com>
+In-Reply-To: <23466140-5d0c-435f-8e73-d1c4826930ec@huawei.com>
 
-On 14-04-25, 08:42, Chun-Jen Tseng (曾俊仁) wrote:
-> Hi Viresh,
+On 14-04-25, 09:35, zhenglifeng (A) wrote:
+> On 2025/4/13 18:11, Marc Zyngier wrote:
+> > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> > index b3d74f9adcf0b..cb93f00bafdba 100644
+> > --- a/drivers/cpufreq/cppc_cpufreq.c
+> > +++ b/drivers/cpufreq/cppc_cpufreq.c
+> > @@ -747,7 +747,7 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+> >  	int ret;
+> >  
+> >  	if (!policy)
+> > -		return -ENODEV;
+> > +		return 0;
+> >  
+> >  	cpu_data = policy->driver_data;
+> >  
 > 
-> The CCI level choose by Max_Level(LCPU & BCPU frequency) in devfreq
-> driver.
-> without global lock, It may choose wrong CCI level and cause system
-> stall.
-> 
-> I hope this flow is serial setting like, BCPU / LCPU set frequency ->
-> set CCI level -> BCPU / LCPU set frequency -> set CCI level -> ......
-> 
-> without global lock, it could be LCPU / BCPU set frequency -> set CCI
-> level(during this time, it may change BCPU / LCPU frequency and cause
-> system stall.
-> 
-> I also can only do global lock on ccifreq_support SoC.
+> Reviewed-by: Lifeng Zheng <zhenglifeng1@huawei.com>
 
-As explained earlier, I don't think there is a race here. May be I am
-wrong. And so I need a clear code path example from you, which proves
-that there is a race here.
+Applied. Thanks.
 
 -- 
 viresh
