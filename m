@@ -1,122 +1,142 @@
-Return-Path: <linux-pm+bounces-25565-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25566-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEEBFA907A6
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 17:26:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A050BA907B9
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 17:29:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 673433B057A
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 15:25:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46AD8165548
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 15:28:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD16C189BB5;
-	Wed, 16 Apr 2025 15:26:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A1DD20E007;
+	Wed, 16 Apr 2025 15:28:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hgviw3OR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 018CD1C7015;
-	Wed, 16 Apr 2025 15:26:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F73E20CCED;
+	Wed, 16 Apr 2025 15:28:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744817168; cv=none; b=BeHLO/RdVrVQwRX3vSMYJCK0HE1YrtoByd7nuGKS9DdvfYk0HOHAn4XA7on/r+NQURkbAF4PNujbgqKtjLflJ4eqIhRUHSPDal/4qjHAZ/v1nz+rTsL++ORMLAvHvMHF9AdiBzVWiWAEfG2W1kO3eKlwWfw8Eb0ye70j2cRt6MQ=
+	t=1744817314; cv=none; b=Rjh3NH5NLxevyolJIQq/wCnrPePZYis6aS2cifbcl5RVFVlxGUroli1vMMaaXZ7oXUjoEfNLNLehKA8AtfLq9pRZqVUi+3FzIA/qgdPYeDrZaKGBw/+Iq+ziRuNZ9tUkLtkpzFVOPGeCBr4mk/J9OuD0R0Adju5QiRh41HzIALQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744817168; c=relaxed/simple;
-	bh=xuApqJIpg/A6yzMAM3bP2JnbdsNFyPu87tU3HFOJVPw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k3xKm7R5IO4+lRfEufFI5LJbxphnshFIP4JuYj3ToKlEfyzPZeAv2EkZFg1vqNKszODgtHsLwn7fcU/4U8nAu2mc4yIJvrjittz5Z6v6VigyzD6OSreNuPEkHdzkcYPyUSe26keQrPfrbnSe6L4P/oRo1iHNDuSo36ZiHgbySW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1347A1595;
-	Wed, 16 Apr 2025 08:26:04 -0700 (PDT)
-Received: from [10.57.71.18] (unknown [10.57.71.18])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3C57C3F66E;
-	Wed, 16 Apr 2025 08:26:05 -0700 (PDT)
-Message-ID: <df494648-b0c1-402b-8644-b50f20011c5f@arm.com>
-Date: Wed, 16 Apr 2025 16:26:03 +0100
+	s=arc-20240116; t=1744817314; c=relaxed/simple;
+	bh=MsjbhaOEphesSSCIElxFHXGU2418nAkZZ+N11+IBNWI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OY6KY0CrdFK5JBiRniCPxUWIUxwfKvA9LNCkZVWV5uzgMR7mYQqFQ987dbExgFXsszREBSog1vuFWu7OVRbuF2Df59i4MSvxcf8KDclGlOG5UIMO1+VqI8ndxFqytbapyCUqPsXiUHkYLPuv8aSrgAhtdyn4AgZz6kl0k4bUv60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hgviw3OR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAABAC4AF0B;
+	Wed, 16 Apr 2025 15:28:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744817313;
+	bh=MsjbhaOEphesSSCIElxFHXGU2418nAkZZ+N11+IBNWI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Hgviw3OR/US8/QNzOjmDG46VPiKo/APFf5VruUj/KrYzyvMj0e/GNrFxYYJJL+0+W
+	 IGbZrqryRP/TJTl56CX/gdMzTcJr2egUeYGEylvZGjZIAsH8f0+I8BiXxomlCin4g8
+	 XsuDWilSzul+C8j8stpxRdwDT8mk/hdkn3TNHzedXAn1WfUezihb33uvGElVCRCz5x
+	 h9qhSSgP3LGtR6C7xk7FZDkKyIOIoiz+Jy6lI9SuScAmcNSQgw7isJWQl4VbQ8PSmF
+	 agUxJBtcphNn5AN6Rj8V4JrrBTt3Qk4JcktnxhTgB3zk3jNsmW382fATnYEGPkOxtz
+	 CfLzUGaaCpS+g==
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-72c172f1de1so3887292a34.3;
+        Wed, 16 Apr 2025 08:28:33 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUw5mt3STlqBNcDAkl62cQGORBuqp2CZwgJI2hUdutc82YORvC3uHjrseJUe+cEz4Bmv/aRVcgl1Wp0xpQ=@vger.kernel.org, AJvYcCWypInSIbSauylpt/f8AbUXxs+QwpBAUDRpmCpzwEO8u4zaWYFdpnYM9Mv9sX0ledDYRnLL0jpE8y0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8eInft4AeM5BQPlg1OvDketdYpXMiYyzxD+Gjfifh/bC+1AB6
+	N+fiuALQrj9Ypf1SUgTVllJrQAv7I6U4jO5rwJE80JLjsOn9SZGAAs7oRjA/LkB/tn3+cOawFBC
+	++Wm8Qb5ocjsiBPeQfpwaBiFjwBo=
+X-Google-Smtp-Source: AGHT+IGdOJonCplCSu4kXZCYw+CiIoY+ia2VQfjjcicIv8BbTyEkCPzMxvsFNZ/0r7MFzSnEYVyNn+zLFgzzkOiKSvg=
+X-Received: by 2002:a05:6830:3748:b0:72b:8f4e:8c61 with SMTP id
+ 46e09a7af769-72ec6d215efmr1532487a34.24.1744817313009; Wed, 16 Apr 2025
+ 08:28:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] PM: EM: Fix potential division-by-zero error in
- em_compute_costs()
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- Yaxiong Tian <tianyaxiong@kylinos.cn>, Yaxiong Tian <iambestgod@qq.com>
-References: <tencent_EE27C7D1D6BDB3EE57A2C467CC59A866C405@qq.com>
- <tencent_6D2374392DB66C9D23BF6E2546638A42EC08@qq.com>
- <CAJZ5v0iE_iw+pSBppEWnJw=2=DFNa-J2VPDorTNF=Mve+0PNCg@mail.gmail.com>
- <tencent_8E3A87C6D6A193F757BA846F0C41887CC405@qq.com>
- <CAJZ5v0iq4bw3WAk1yQRP=B3zk-rRYwibKNRjSfu=PGqTt6RNYw@mail.gmail.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0iq4bw3WAk1yQRP=B3zk-rRYwibKNRjSfu=PGqTt6RNYw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <4661520.LvFx2qVVIh@rjwysocki.net> <2239639.irdbgypaU6@rjwysocki.net>
+ <1c0c6caa-e56c-454a-a976-81303dee1852@arm.com>
+In-Reply-To: <1c0c6caa-e56c-454a-a976-81303dee1852@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 16 Apr 2025 17:28:22 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0g-=DB_W5jkxxCERy22jz9a_V1Tcj8hiVwL6_R+xSM=gQ@mail.gmail.com>
+X-Gm-Features: ATxdqUHLX0aZbmy5IcEK3XvUJxiV3QkGqST-gk2VoRr0NR_-QkNL1i3K3PdwmP0
+Message-ID: <CAJZ5v0g-=DB_W5jkxxCERy22jz9a_V1Tcj8hiVwL6_R+xSM=gQ@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] cpuidle: teo: Refine handling of short idle intervals
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, Doug Smythies <dsmythies@telus.net>, 
+	Aboorva Devarajan <aboorvad@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Apr 16, 2025 at 5:00=E2=80=AFPM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> On 4/3/25 20:18, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Make teo take all recent wakeups (both timer and non-timer) into
+> > account when looking for a new candidate idle state in the cases
+> > when the majority of recent idle intervals are within the
+> > LATENCY_THRESHOLD_NS range or the latency limit is within the
+> > LATENCY_THRESHOLD_NS range.
+> >
+> > Since the tick_nohz_get_sleep_length() invocation is likely to be
+> > skipped in those cases, timer wakeups should arguably be taken into
+> > account somehow in case they are significant while the current code
+> > mostly looks at non-timer wakeups under the assumption that frequent
+> > timer wakeups are unlikely in the given idle duration range which
+> > may or may not be accurate.
+> >
+> > The most natural way to do that is to add the "hits" metric to the
+> > sums used during the new candidate idle state lookup which effectively
+> > means the above.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Hi Rafael,
+> I might be missing something so bare with me.
+> Quoting the cover-letter too:
+> "In those cases, timer wakeups are not taken into account when they are
+> within the LATENCY_THRESHOLD_NS range and the idle state selection may
+> be based entirely on non-timer wakeups which may be rare.  This causes
+> the prediction accuracy to be low and too much energy may be used as
+> a result.
+>
+> The first patch is preparatory and it is not expected to make any
+> functional difference.
+>
+> The second patch causes teo to take timer wakeups into account if it
+> is about to skip the tick_nohz_get_sleep_length() invocation, so they
+> get a chance to influence the idle state selection."
+>
+> If the timer wakeups are < LATENCY_THRESHOLD_NS we will not do
+>
+> cpu_data->sleep_length_ns =3D tick_nohz_get_sleep_length(&delta_tick);
+>
+> but
+>
+> cpu_data->sleep_length_ns =3D KTIME_MAX;
+>
+> therefore
+> idx_timer =3D drv->state_count - 1
+> idx_duration =3D some state with residency < LATENCY_THRESHOLD_NS
+>
+> For any reasonable system therefore idx_timer !=3D idx_duration
+> (i.e. there's an idle state deeper than LATENCY_THRESHOLD_NS).
+> So hits will never be incremented?
 
+Why never?
 
-On 4/16/25 12:58, Rafael J. Wysocki wrote:
-> On Wed, Apr 16, 2025 at 4:57 AM Yaxiong Tian <iambestgod@qq.com> wrote:
->>
->> 在 2025/4/16 01:17, Rafael J. Wysocki 写道:
->>> On Mon, Apr 14, 2025 at 11:09 AM Yaxiong Tian <iambestgod@qq.com> wrote:
->>>>
->>>> From: Yaxiong Tian <tianyaxiong@kylinos.cn>
->>>>
->>>> When the device is of a non-CPU type, table[i].performance won't be
->>>> initialized in the previous em_init_performance(), resulting in division
->>>> by zero when calculating costs in em_compute_costs().
->>>>
->>>> Since the 'cost' algorithm is only used for EAS energy efficiency
->>>> calculations and is currently not utilized by other device drivers, we
->>>> should add the _is_cpu_device(dev) check to prevent this division-by-zero
->>>> issue.
->>>>
->>>> Fixes: <1b600da51073> ("PM: EM: Optimize em_cpu_energy() and remove division")
->>>
->>> Please look at the Fixes: tags in the kernel git history.  They don't
->>> look like the one above.
->>>
->> Yes, there's an extra '<>' here.
->>
->>>> Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
->>>> ---
->>>>    kernel/power/energy_model.c | 4 ++--
->>>>    1 file changed, 2 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
->>>> index d9b7e2b38c7a..fc972cc1fc12 100644
->>>> --- a/kernel/power/energy_model.c
->>>> +++ b/kernel/power/energy_model.c
->>>> @@ -235,7 +235,7 @@ static int em_compute_costs(struct device *dev, struct em_perf_state *table,
->>>>
->>>>           /* Compute the cost of each performance state. */
->>>>           for (i = nr_states - 1; i >= 0; i--) {
->>>> -               unsigned long power_res, cost;
->>>> +               unsigned long power_res, cost = 0;
->>>>
->>>>                   if ((flags & EM_PERF_DOMAIN_ARTIFICIAL) && cb->get_cost) {
->>>>                           ret = cb->get_cost(dev, table[i].frequency, &cost);
->>>> @@ -244,7 +244,7 @@ static int em_compute_costs(struct device *dev, struct em_perf_state *table,
->>>>                                           cost, ret);
->>>>                                   return -EINVAL;
->>>>                           }
->>>> -               } else {
->>>> +               } else if (_is_cpu_device(dev)) {
->>>
->>> Can't you just check this upfront at the beginning of the function and
->>> make it bail out if dev is not a CPU device?
->>>
->> Sure, But the current implementation applies em_compute_costs() to both
->> non-CPU devices and CPU devices.
-> 
-> Maybe it shouldn't do that for non-CPU ones?
+First of all, you need to get into the "2 * cpu_data->short_idles >=3D
+cpu_data->total" case somehow and this may be through timer wakeups.
 
-It shouldn't call this cost computation for non-CPU devices.
-Let me check that.
+> How would adding hits then help this case?
+
+They may be dominant when this condition triggers for the first time.
 
