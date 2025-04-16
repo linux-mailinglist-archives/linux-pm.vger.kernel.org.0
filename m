@@ -1,196 +1,237 @@
-Return-Path: <linux-pm+bounces-25552-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25553-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB816A8B953
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 14:39:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCC93A8B98C
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 14:47:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C4FD11666AD
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 12:39:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7129D7A8750
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 12:45:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E68C11B960;
-	Wed, 16 Apr 2025 12:39:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A23562EAE4;
+	Wed, 16 Apr 2025 12:47:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ufMbBZza"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 995EA17BA6;
-	Wed, 16 Apr 2025 12:39:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A02A11CA0;
+	Wed, 16 Apr 2025 12:47:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744807160; cv=none; b=Y5SaJr31w2bK0xOfUs9ThwjNJ2r0QZW39g7ws9p2+oboZOz/nkhrU5A+hHIPP4pzIwDVLM9IUiQQEzZUfYNRz8Hw1pAOsokzIALonP/7r05B0G3fArBm9d+WPNzJqDGxlGqxI/NZUYFDQgikxqfYvVxSuIAX2LDG/K8AsBox5Mk=
+	t=1744807622; cv=none; b=iNJv4X0lFKAiQ+Mxmk23cKpfmfmPuZipnBEnVrkmwveUUjE7pyvE4B4rCvLE0mw9FjLSze17fVuCvaZ+PYUJCSWjZul39m5EUbn6ZXE9J0zL2fOel8B7kTFSz3+vQEvnE4ZHiwYQZ2DH4WZqtSlyv7/o6aHK29JHkNsfhHCrGQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744807160; c=relaxed/simple;
-	bh=rSuWRa1vIupLg/d8A28F0xfPJvQox9WpPM5efvX+iDw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KOPgqyb5FT91Q5wKw/RFvaN+nhuKsv7++7MSrKTCs7LJQeNVFuoCM2IAiA6Oh+6PrHyBU4vEW1nvg4ZGK80Bhtxwzbb5VoC8dziwP9k8LjT4F5BY/0SL8wRGmXAtbiDZBDsbPkvcQyQjBlKWE+EO+yDZESCcdzWZ+2gC+L71yDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6DF301595;
-	Wed, 16 Apr 2025 05:39:14 -0700 (PDT)
-Received: from [10.1.35.42] (e127648.arm.com [10.1.35.42])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 51C413F694;
-	Wed, 16 Apr 2025 05:39:14 -0700 (PDT)
-Message-ID: <ce438098-ee9c-4808-b409-bb57b62794f0@arm.com>
-Date: Wed, 16 Apr 2025 13:39:12 +0100
+	s=arc-20240116; t=1744807622; c=relaxed/simple;
+	bh=LvJ12tKplLNrFrTCz4Wzqin22ujyIlOPSdlj12fSrN8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p6c79JPwKqtOXmXDgcvRVoLY1XWr//82EF+0FRHX9E3pzXx0p6WkkqrSKfNQ1O0HpZPoWyENHVgaMFXykUfup+XXs6nZIFdMJ8DrmKxkKpERFWykekfTxKodQlYSyxKXRv2je2bW2vWcYcqmEQUp1SEqRurm/qDSnmSITzBNuvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ufMbBZza; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 705C6C4CEE2;
+	Wed, 16 Apr 2025 12:46:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744807620;
+	bh=LvJ12tKplLNrFrTCz4Wzqin22ujyIlOPSdlj12fSrN8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ufMbBZzaEUx30bSlUVP3sqOw//LJN3SAfJPd8tH3iTGtQ3tjSddJ5/M0RLqX4FSjT
+	 DhP7cnt0EWXxkA/8Xe3QuweEZl2iPLQwz6oQOWsWT0E+8G6+WOT5BUJP2zbTTKM91B
+	 xRY7Iu1ZfJ9LUnAMbZSLMQ51o3pObzL+uA/dz6TMyI1gIOh9d4PlQQ8s/CQFeGvX0t
+	 2Hf6RY7hq4jpgCpTCXEOjdIZk1FW+lQ/uS3Q36RpTrWzyM0EqTyZbanAomZaa+0LGs
+	 /m8dehnanFXVpzxyiJEZ6W89mnjJoTSwHGbF8OlQR0qI96XD99ls5QaMKTYVX6Fsqf
+	 sZOUnS9t3bOaA==
+Date: Wed, 16 Apr 2025 14:46:52 +0200
+From: Danilo Krummrich <dakr@kernel.org>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Danilo Krummrich <dakr@redhat.com>,
+	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	rust-for-linux@vger.kernel.org,
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+	Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
+	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
+	Yury Norov <yury.norov@gmail.com>, Burak Emir <bqe@google.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Russell King <linux@armlinux.org.uk>, linux-clk@vger.kernel.org,
+	Michael Turquette <mturquette@baylibre.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V10 14/15] rust: opp: Extend OPP abstractions with
+ cpufreq support
+Message-ID: <Z_-mvB7hibFD4Q34@pollux>
+References: <cover.1744783509.git.viresh.kumar@linaro.org>
+ <a940d1b1a02d99fdc80ba8d0526c35a776854cb3.1744783509.git.viresh.kumar@linaro.org>
+ <Z_9v24SghlIhT62r@pollux>
+ <20250416095943.f3jxy55bamekscst@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/6] cpufreq: Avoid using inconsistent policy->min and
- policy->max
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Sultan Alsawaf <sultan@kerneltoast.com>,
- Peter Zijlstra <peterz@infradead.org>,
- Valentin Schneider <vschneid@redhat.com>, Ingo Molnar <mingo@redhat.com>
-References: <6171293.lOV4Wx5bFT@rjwysocki.net>
- <9458818.CDJkKcVGEf@rjwysocki.net>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <9458818.CDJkKcVGEf@rjwysocki.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250416095943.f3jxy55bamekscst@vireshk-i7>
 
-On 4/15/25 11:04, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wed, Apr 16, 2025 at 03:29:43PM +0530, Viresh Kumar wrote:
+> On 16-04-25, 10:52, Danilo Krummrich wrote:
+> > This config is needed quite often, it probably makes sense to move this code in
+> > its own Rust module, i.e.:
+> > 
+> > 	#[cfg(CONFIG_CPU_FREQ)]
+> > 	pub mod freq;
 > 
-> Since cpufreq_driver_resolve_freq() can run in parallel with
-> cpufreq_set_policy() and there is no synchronization between them,
-> the former may access policy->min and policy->max while the latter
-> is updating them and it may see intermediate values of them due
-> to the way the update is carried out.  Also the compiler is free
-> to apply any optimizations it wants both to the stores in
-> cpufreq_set_policy() and to the loads in cpufreq_driver_resolve_freq()
-> which may result in additional inconsistencies.
-> 
-> To address this, use WRITE_ONCE() when updating policy->min and
-> policy->max in cpufreq_set_policy() and use READ_ONCE() for reading
-> them in cpufreq_driver_resolve_freq().  Moreover, rearrange the update
-> in cpufreq_set_policy() to avoid storing intermediate values in
-> policy->min and policy->max with the help of the observation that
-> their new values are expected to be properly ordered upfront.
-> 
-> Also modify cpufreq_driver_resolve_freq() to take the possible reverse
-> ordering of policy->min and policy->max, which may happen depending on
-> the ordering of operations when this function and cpufreq_set_policy()
-> run concurrently, into account by always honoring the max when it
-> turns out to be less than the min (in case it comes from thermal
-> throttling or similar).
-> 
-> Fixes: 151717690694 ("cpufreq: Make policy min/max hard requirements")
-> Cc: 5.16+ <stable@vger.kernel.org> # 5.16+
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Like this ?
 
-Just so I understand, the reason you don't squish 4-6 into one is
-because this is the only fix? I do get that, but doesn't the fact
-that it could easily be picked for backports make up for the additional
-refactor?
-Actual changes from patches 4-6 look good to me.
+Yes, I thought of a separate file, but I that should work as well.
 
-> ---
 > 
-> v1 -> v2: Minor edit in the subject
+> diff --git a/rust/kernel/opp.rs b/rust/kernel/opp.rs
+> index 734be8b6d0ef..f4cabe859c43 100644
+> --- a/rust/kernel/opp.rs
+> +++ b/rust/kernel/opp.rs
+> @@ -20,10 +20,67 @@
+>  };
 > 
-> ---
->  drivers/cpufreq/cpufreq.c |   46 ++++++++++++++++++++++++++++++++++++----------
->  1 file changed, 36 insertions(+), 10 deletions(-)
-> 
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -490,14 +490,12 @@
->  }
->  EXPORT_SYMBOL_GPL(cpufreq_disable_fast_switch);
->  
-> -static unsigned int clamp_and_resolve_freq(struct cpufreq_policy *policy,
-> -					   unsigned int target_freq,
-> -					   unsigned int relation)
-> +static unsigned int __resolve_freq(struct cpufreq_policy *policy,
-> +				   unsigned int target_freq,
-> +				   unsigned int relation)
->  {
->  	unsigned int idx;
->  
-> -	target_freq = clamp_val(target_freq, policy->min, policy->max);
-> -
->  	if (!policy->freq_table)
->  		return target_freq;
->  
-> @@ -507,6 +505,15 @@
->  	return policy->freq_table[idx].frequency;
->  }
->  
-> +static unsigned int clamp_and_resolve_freq(struct cpufreq_policy *policy,
-> +					   unsigned int target_freq,
-> +					   unsigned int relation)
-> +{
-> +	target_freq = clamp_val(target_freq, policy->min, policy->max);
+>  #[cfg(CONFIG_CPU_FREQ)]
+> -use crate::cpufreq;
+> +// Frequency table implementation.
+> +mod freq {
+> +    use crate::cpufreq;
+> +    use core::ops::Deref;
+> +    use super::*;
 > +
-> +	return __resolve_freq(policy, target_freq, relation);
+> +    /// OPP frequency table.
+> +    ///
+> +    /// A [`cpufreq::Table`] created from [`Table`].
+> +    pub struct FreqTable {
+> +        dev: ARef<Device>,
+> +        ptr: *mut bindings::cpufreq_frequency_table,
+> +    }
+> +
+> +    impl FreqTable {
+> +        /// Creates a new instance of [`FreqTable`] from [`Table`].
+> +        pub(crate) fn new(table: &Table) -> Result<Self> {
+> +            let mut ptr: *mut bindings::cpufreq_frequency_table = ptr::null_mut();
+> +
+> +            // SAFETY: The requirements are satisfied by the existence of [`Device`] and its safety
+> +            // requirements.
+> +            to_result(unsafe {
+> +                bindings::dev_pm_opp_init_cpufreq_table(table.dev.as_raw(), &mut ptr)
+> +            })?;
+> +
+> +            Ok(Self {
+> +                dev: table.dev.clone(),
+> +                ptr,
+> +            })
+> +        }
+> +
+> +        // Returns a reference to the underlying [`cpufreq::Table`].
+> +        #[inline]
+> +        fn table(&self) -> &cpufreq::Table {
+> +            // SAFETY: The `ptr` is guaranteed by the C code to be valid.
+> +            unsafe { cpufreq::Table::from_raw(self.ptr) }
+> +        }
+> +    }
+> +
+> +    impl Deref for FreqTable {
+> +        type Target = cpufreq::Table;
+> +
+> +        #[inline]
+> +        fn deref(&self) -> &Self::Target {
+> +            self.table()
+> +        }
+> +    }
+> +
+> +    impl Drop for FreqTable {
+> +        fn drop(&mut self) {
+> +            // SAFETY: The pointer was created via `dev_pm_opp_init_cpufreq_table`, and is only
+> +            // freed here.
+> +            unsafe {
+> +                bindings::dev_pm_opp_free_cpufreq_table(self.dev.as_raw(), &mut self.as_raw())
+> +            };
+> +        }
+> +    }
 > +}
-> +
->  /**
->   * cpufreq_driver_resolve_freq - Map a target frequency to a driver-supported
->   * one.
-> @@ -521,7 +528,22 @@
->  unsigned int cpufreq_driver_resolve_freq(struct cpufreq_policy *policy,
->  					 unsigned int target_freq)
->  {
-> -	return clamp_and_resolve_freq(policy, target_freq, CPUFREQ_RELATION_LE);
-> +	unsigned int min = READ_ONCE(policy->min);
-> +	unsigned int max = READ_ONCE(policy->max);
-> +
-> +	/*
-> +	 * If this function runs in parallel with cpufreq_set_policy(), it may
-> +	 * read policy->min before the update and policy->max after the update
-> +	 * or the other way around, so there is no ordering guarantee.
-> +	 *
-> +	 * Resolve this by always honoring the max (in case it comes from
-> +	 * thermal throttling or similar).
-> +	 */
-> +	if (unlikely(min > max))
-> +		min = max;
-> +
-> +	return __resolve_freq(policy, clamp_val(target_freq, min, max),
-> +			      CPUFREQ_RELATION_LE);
+> 
+>  #[cfg(CONFIG_CPU_FREQ)]
+> -use core::ops::Deref;
+> +pub use freq::FreqTable;
+> 
+>  use core::{marker::PhantomData, ptr};
+> 
+> @@ -502,60 +559,6 @@ extern "C" fn config_regulators(
+>      }
 >  }
->  EXPORT_SYMBOL_GPL(cpufreq_driver_resolve_freq);
->  
-> @@ -2632,11 +2654,15 @@
->  	 * Resolve policy min/max to available frequencies. It ensures
->  	 * no frequency resolution will neither overshoot the requested maximum
->  	 * nor undershoot the requested minimum.
-> +	 *
-> +	 * Avoid storing intermediate values in policy->max or policy->min and
-> +	 * compiler optimizations around them because them may be accessed
-
-s/them/they/
-
-> +	 * concurrently by cpufreq_driver_resolve_freq() during the update.
->  	 */
-> -	policy->min = new_data.min;
-> -	policy->max = new_data.max;
-> -	policy->min = clamp_and_resolve_freq(policy, policy->min, CPUFREQ_RELATION_L);
-> -	policy->max = clamp_and_resolve_freq(policy, policy->max, CPUFREQ_RELATION_H);
-> +	WRITE_ONCE(policy->max, __resolve_freq(policy, new_data.max, CPUFREQ_RELATION_H));
-> +	new_data.min = __resolve_freq(policy, new_data.min, CPUFREQ_RELATION_L);
-> +	WRITE_ONCE(policy->min, new_data.min > policy->max ? policy->max : new_data.min);
-> +
->  	trace_cpu_frequency_limits(policy);
->  
->  	cpufreq_update_pressure(policy);
 > 
+> -/// OPP frequency table.
+> -///
+> -/// A [`cpufreq::Table`] created from [`Table`].
+> -#[cfg(CONFIG_CPU_FREQ)]
+> -pub struct FreqTable {
+> -    dev: ARef<Device>,
+> -    ptr: *mut bindings::cpufreq_frequency_table,
+> -}
+> -
+> -#[cfg(CONFIG_CPU_FREQ)]
+> -impl FreqTable {
+> -    /// Creates a new instance of [`FreqTable`] from [`Table`].
+> -    fn new(table: &Table) -> Result<Self> {
+> -        let mut ptr: *mut bindings::cpufreq_frequency_table = ptr::null_mut();
+> -
+> -        // SAFETY: The requirements are satisfied by the existence of [`Device`] and its safety
+> -        // requirements.
+> -        to_result(unsafe {
+> -            bindings::dev_pm_opp_init_cpufreq_table(table.dev.as_raw(), &mut ptr)
+> -        })?;
+> -
+> -        Ok(Self {
+> -            dev: table.dev.clone(),
+> -            ptr,
+> -        })
+> -    }
+> -
+> -    // Returns a reference to the underlying [`cpufreq::Table`].
+> -    #[inline]
+> -    fn table(&self) -> &cpufreq::Table {
+> -        // SAFETY: The `ptr` is guaranteed by the C code to be valid.
+> -        unsafe { cpufreq::Table::from_raw(self.ptr) }
+> -    }
+> -}
+> -
+> -#[cfg(CONFIG_CPU_FREQ)]
+> -impl Deref for FreqTable {
+> -    type Target = cpufreq::Table;
+> -
+> -    #[inline]
+> -    fn deref(&self) -> &Self::Target {
+> -        self.table()
+> -    }
+> -}
+> -
+> -#[cfg(CONFIG_CPU_FREQ)]
+> -impl Drop for FreqTable {
+> -    fn drop(&mut self) {
+> -        // SAFETY: The pointer was created via `dev_pm_opp_init_cpufreq_table`, and is only freed
+> -        // here.
+> -        unsafe { bindings::dev_pm_opp_free_cpufreq_table(self.dev.as_raw(), &mut self.as_raw()) };
+> -    }
+> -}
+> -
+>  /// A reference-counted OPP table.
+>  ///
+>  /// Rust abstraction for the C `struct opp_table`.
 > 
-> 
-
+> -- 
+> viresh
 
