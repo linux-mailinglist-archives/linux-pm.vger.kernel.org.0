@@ -1,52 +1,52 @@
-Return-Path: <linux-pm+bounces-25574-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25573-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E3B3A90B15
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11CA1A90B14
 	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 20:13:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 350014604D3
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 18:13:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D717E7A66E2
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 18:12:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C137B22154B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD4322206B6;
 	Wed, 16 Apr 2025 18:12:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="MM3I5nJJ"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="O08rCwsn"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED03121CFF6;
-	Wed, 16 Apr 2025 18:12:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA2C21CFEA;
+	Wed, 16 Apr 2025 18:12:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744827175; cv=none; b=Jyl21wUue4vrwPPqOzRgJmjbb7wQEFly8X5LCvOOppPhacuM6gJgEQihFLHpjaS48wt8l1tndMW1gma80+SA3s+Jdz51c2EF5Teq73wPkvKB9y7m5NQqmFelh3pE9j3ekADlX3F70HUSuYWHQhi7UA6dPqRMkyS9wwBWGKSpKvQ=
+	t=1744827175; cv=none; b=VEMnTICPuZpsdw496eesGR2YBampjUUhDlbNwuBeV59/VybGwK/GCYFLsBqvhbL2GTiVv2j3Mm5EZ+dwqQLr8kkcbrNICL8nHLD2vu6oEP61wiA6iaIs5mcxoTsgoMA4DUczRNhRT0gyNAnOBOmBxx/gENKg0lYkorQQbw48O1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1744827175; c=relaxed/simple;
-	bh=uaq6qM+Ck6AxQX9+RJSqmkPle2TaQ7kI+Uy3iMaX6a0=;
+	bh=FTOuMPjeTUHaacx8ul/ZKRVujZeYC6eVmnz2zMxqLEM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pmEUKyziQF62A0JYi5gtFkyUVkCAnqjLM9a1AT+lPF5DyjWpudaP8ERcStfN7OXFn1IGD0YsLnu4xb0aoxihp4RwrxrOAonh66mD2knnIof3quEKCWYdKOfvaVKmCNrMlPBUH3sUC9U5XZA9OiuIxFi3WxJedyeB9L/Kg9+oGdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=MM3I5nJJ; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=Eu8EZr+bcKcu9s8zYAZXvFhEwr5VdBOKwcFyLT+qqifLOfVwHgZV8iSXbgDzClTvFLr0mGuKjceLZiGW+nv3edHWvOSxWSs50yj42zAs+P3uMl7/VtyFhl6Sxx7cGPNeEA75wNOiD5+Q/0rRea+r80XtWfhktxXgTR9TXiqN2b8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=O08rCwsn; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 7A676662719;
-	Wed, 16 Apr 2025 20:12:50 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 988E7662718;
+	Wed, 16 Apr 2025 20:12:49 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1744827171;
-	bh=uaq6qM+Ck6AxQX9+RJSqmkPle2TaQ7kI+Uy3iMaX6a0=;
+	s=dkim; t=1744827170;
+	bh=FTOuMPjeTUHaacx8ul/ZKRVujZeYC6eVmnz2zMxqLEM=;
 	h=From:Subject:Date;
-	b=MM3I5nJJjWyN4SOSGReaZWFXzqWI9ybsdE62U0zfPtnueHY6SNmTgtyOfSFuxSjRm
-	 yuw9FSkM/gLQ6JSN7bsNnPIZBqxq+a0q179cFZeepvjQoPsktOHK53zrsZm51Mv5vZ
-	 h449YANwSfdVkBWvD7Pa7YrSWZkTJWVjWr9kYb91bvZD+qmRPcUZ2kAYyzy95VHl2d
-	 +82xwHaR7+5ne02yHc1hnixQTelZqCxRmanPBiwpeDXrVHWEn7/Ge0KvsH7bOEJvWk
-	 8CbnarFmNN7RBTWMPte/gi8x/BEq2oTegRqwJi/jU0D+hFTnv2239gd3svrjesXgyS
-	 L02ABIvmdQVoA==
+	b=O08rCwsnw+VV+pxjDr81KbTxjsg9lO8K1MInKwmc1/IadA5zTtJfEQo9BjjvZ1xor
+	 nBuTYB0Qtm+YbNfUl8uLGL9Jump3XfN2tgm0xCTkou9CPYBueub5NkwcSVgTWQLfVr
+	 LpSREu/xdBtPjPL2/Q2s+C8W4dWEUfHpMPxndUFo2JG9ei1C3tLKVfkENlgF8Y96Ph
+	 syUscB/z9AFtMfmJdOyIr2LVGCR2FKGKnzHD0ycj/Q5bsWO4bZ1oDpu+5iR0yz5Yo3
+	 mhxTKFyQNvLViekIRDcJFeiNutxaqZGqtvdMTL7MemPiDMXqeikOCmTwrVVx3ypVtb
+	 UcgnhCtFOHOpA==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
@@ -59,10 +59,10 @@ Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
  Pierre Gondois <pierre.gondois@arm.com>,
  Christian Loehle <christian.loehle@arm.com>
 Subject:
- [RFT][PATCH v1 3/8] cpufreq/sched: Allow .setpolicy() cpufreq drivers to
- enable EAS
-Date: Wed, 16 Apr 2025 20:01:06 +0200
-Message-ID: <8554829.NyiUUSuA9g@rjwysocki.net>
+ [RFT][PATCH v1 4/8] PM: EM: Move CPU capacity check to
+ em_adjust_new_capacity()
+Date: Wed, 16 Apr 2025 20:04:23 +0200
+Message-ID: <1921260.CQOukoFCf9@rjwysocki.net>
 In-Reply-To: <3344336.aeNJFYEL58@rjwysocki.net>
 References: <3344336.aeNJFYEL58@rjwysocki.net>
 Precedence: bulk
@@ -76,58 +76,107 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvvdejtdeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepuddupdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdh
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvvdejtdeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepuddupdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdh
 X-DCC--Metrics: v370.home.net.pl 1024; Body=11 Fuz1=11 Fuz2=11
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Some cpufreq drivers, like intel_pstate, have built-in governors that
-are used instead of regular cpufreq governors, schedutil in particular,
-but they can work with EAS just fine, so allow EAS to be used with
-those drivers.
+Move the check of the CPU capacity currently stored in the energy model
+against the arch_scale_cpu_capacity() value to em_adjust_new_capacity()
+so it will be done regardless of where the latter is called from.
+
+This will be useful when a new em_adjust_new_capacity() caller is added
+subsequently.
+
+While at it, move the pd local variable declaration in
+em_check_capacity_update() into the loop in which it is used.
+
+No intentional functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 ---
 
-v0.3 -> v1
-     * Rebase on top of the new [1-2/8].
-     * Update the diagnostic message printed if the conditions are not met.
-
-This patch is regarded as a cleanup for 6.16.
+v0.3 -> v1:
+     * Added R-by from Lukasz.
 
 ---
- drivers/cpufreq/cpufreq.c |   13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ kernel/power/energy_model.c |   40 +++++++++++++++++-----------------------
+ 1 file changed, 17 insertions(+), 23 deletions(-)
 
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -3054,7 +3054,16 @@
+--- a/kernel/power/energy_model.c
++++ b/kernel/power/energy_model.c
+@@ -721,10 +721,24 @@
+  * Adjustment of CPU performance values after boot, when all CPUs capacites
+  * are correctly calculated.
+  */
+-static void em_adjust_new_capacity(struct device *dev,
++static void em_adjust_new_capacity(unsigned int cpu, struct device *dev,
+ 				   struct em_perf_domain *pd)
+ {
++	unsigned long cpu_capacity = arch_scale_cpu_capacity(cpu);
+ 	struct em_perf_table *em_table;
++	struct em_perf_state *table;
++	unsigned long em_max_perf;
++
++	rcu_read_lock();
++	table = em_perf_state_from_pd(pd);
++	em_max_perf = table[pd->nr_perf_states - 1].performance;
++	rcu_read_unlock();
++
++	if (em_max_perf == cpu_capacity)
++		return;
++
++	pr_debug("updating cpu%d cpu_cap=%lu old capacity=%lu\n", cpu,
++		 cpu_capacity, em_max_perf);
  
- 	guard(cpufreq_policy_read)(policy);
+ 	em_table = em_table_dup(pd);
+ 	if (!em_table) {
+@@ -740,9 +754,6 @@
+ static void em_check_capacity_update(void)
+ {
+ 	cpumask_var_t cpu_done_mask;
+-	struct em_perf_state *table;
+-	struct em_perf_domain *pd;
+-	unsigned long cpu_capacity;
+ 	int cpu;
  
--	return sugov_is_governor(policy);
-+	/*
-+	 * For EAS compatibility, require that either schedutil is the policy
-+	 * governor or the policy is governed directly by the cpufreq driver.
-+	 *
-+	 * In the latter case, it is assumed that EAS can only be enabled by the
-+	 * cpufreq driver itself which will not enable EAS if it does not meet
-+	 * the EAS' expectations regarding performance scaling response.
-+	 */
-+	return sugov_is_governor(policy) || (!policy->governor &&
-+		policy->policy != CPUFREQ_POLICY_UNKNOWN);
- }
+ 	if (!zalloc_cpumask_var(&cpu_done_mask, GFP_KERNEL)) {
+@@ -753,7 +764,7 @@
+ 	/* Check if CPUs capacity has changed than update EM */
+ 	for_each_possible_cpu(cpu) {
+ 		struct cpufreq_policy *policy;
+-		unsigned long em_max_perf;
++		struct em_perf_domain *pd;
+ 		struct device *dev;
  
- bool cpufreq_ready_for_eas(const struct cpumask *cpu_mask)
-@@ -3064,7 +3073,7 @@
- 	/* Do not attempt EAS if schedutil is not being used. */
- 	for_each_cpu(cpu, cpu_mask) {
- 		if (!cpufreq_policy_is_good_for_eas(cpu)) {
--			pr_debug("rd %*pbl: schedutil is mandatory for EAS\n",
-+			pr_debug("rd %*pbl: EAS requirements not met\n",
- 				 cpumask_pr_args(cpu_mask));
- 			return false;
- 		}
+ 		if (cpumask_test_cpu(cpu, cpu_done_mask))
+@@ -776,24 +787,7 @@
+ 		cpumask_or(cpu_done_mask, cpu_done_mask,
+ 			   em_span_cpus(pd));
+ 
+-		cpu_capacity = arch_scale_cpu_capacity(cpu);
+-
+-		rcu_read_lock();
+-		table = em_perf_state_from_pd(pd);
+-		em_max_perf = table[pd->nr_perf_states - 1].performance;
+-		rcu_read_unlock();
+-
+-		/*
+-		 * Check if the CPU capacity has been adjusted during boot
+-		 * and trigger the update for new performance values.
+-		 */
+-		if (em_max_perf == cpu_capacity)
+-			continue;
+-
+-		pr_debug("updating cpu%d cpu_cap=%lu old capacity=%lu\n",
+-			 cpu, cpu_capacity, em_max_perf);
+-
+-		em_adjust_new_capacity(dev, pd);
++		em_adjust_new_capacity(cpu, dev, pd);
+ 	}
+ 
+ 	free_cpumask_var(cpu_done_mask);
 
 
 
