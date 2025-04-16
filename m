@@ -1,106 +1,138 @@
-Return-Path: <linux-pm+bounces-25580-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25581-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 173DAA90E99
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 00:27:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8813A90EE1
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 00:49:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9998819045F3
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 22:28:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D38BE16E924
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Apr 2025 22:49:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09D39238D2F;
-	Wed, 16 Apr 2025 22:27:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ljF9mtKp"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F8D1243374;
+	Wed, 16 Apr 2025 22:49:38 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC6C9238C37;
-	Wed, 16 Apr 2025 22:27:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBA26234966;
+	Wed, 16 Apr 2025 22:49:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744842465; cv=none; b=LCIN/OwV3ZTkhvrXho0TZDu9/oTYNxVk9vOu8SmJJqloHmH6X6sakzLN4o7FjyU3VBZAI0b3dexOZsdpZA3ax3RZn+fbQOCKnp9HdqjZRiHS7rs9QBfAdu/xvi/yCTEW1criE13VDFH7pgfhVekHIjNFF4cCrdu+rsGhyndcK1k=
+	t=1744843778; cv=none; b=o7vrgfy1dSjdjyN3+WEqkwxWQaFWGe32nco/A9uo0BMM/tyvU+t7VFtdvSesABYyDjL67dZXZIkIoeBSKn1wg4szLQPL53ZXxj/nnCfAIj6nIy2fX2mkCsE06D24d9KktheF9xSXnh4kf44ocApWvqwTHkh7jrRnoi/mwnkUcKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744842465; c=relaxed/simple;
-	bh=c1YE6Ln7/7gaamvCWhA5mV5HvtaQQs3Gef2ZyksqHjE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Y7KZj+p9F7027fXJTBRQWT9rISy+Hlh50BPfF+U3djF9evo0rd48WOhuiiFcBVOOJTjeH3LtlvTYTTHuMvE8+v9PEang8uY0Dd01lC1K7TKYh85P2GBIPgnAAL+3mDn+QJh3/NQR33xLl/mrTsGGGnphNjbPTX1xPWMe945eUGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ljF9mtKp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ED96C4CEE2;
-	Wed, 16 Apr 2025 22:27:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744842465;
-	bh=c1YE6Ln7/7gaamvCWhA5mV5HvtaQQs3Gef2ZyksqHjE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ljF9mtKp7WgPUHLfBJzn7Oahtqq0dc/nBA/m/8OVFTJPfo/1lpsFsyDufm9zHcX6W
-	 Qk0uSve/xhoyh2Ixo0IPbQSNNR4Y2lHyfztnESEeY/5LD/v2QdkG5g84gYT3dhWg8+
-	 iZvGummtbiyEpXu4E8tnIcQ3Vd5zb7APVtodWZb2pDeaW5YsAb/AioVmxmOFlnebp6
-	 77a47H3OqjZMacLSJpdOAvPe36Zh/S4WuoVaeQUn4aKenydzidT99MnlYyNDAI3GuK
-	 g4RKuMVGxcAi7Er9voVTjraOAjWwCO0DBzqwYeWQ4IZzywVHk8DiFnF6G1TN9h+sT0
-	 +fsihPUzyof/A==
-From: Kees Cook <kees@kernel.org>
-To: Sebastian Reichel <sre@kernel.org>
-Cc: Kees Cook <kees@kernel.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] power: supply: sysfs: Remove duplicate NUL termination
-Date: Wed, 16 Apr 2025 15:27:41 -0700
-Message-Id: <20250416222740.work.569-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1744843778; c=relaxed/simple;
+	bh=oQjnlP2eUw7xkKA3jGOXsy0Wcf06SkIplXIkawEKh5M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SxEGTPZP2IFUkKhvHfq01lDGbQXDI7h/DusjQqCyE1RP0YnX9MD/6B/xYvjKfEy72kTBKxsvclfE/jd5PBKW+l/IAIbpDjvbbK1bznf/9IafCzgFSm/PlfNyPjxzGV9qQ/2T5TugS7+yDONkr5DM7bbrYKlQ8Rc4c2PU5ceq1Ro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E4FCA1515;
+	Wed, 16 Apr 2025 15:49:32 -0700 (PDT)
+Received: from localhost.localdomain (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 53A7F3F66E;
+	Wed, 16 Apr 2025 15:49:33 -0700 (PDT)
+From: Andre Przywara <andre.przywara@arm.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>
+Cc: Boris Brezillon <boris.brezillon@collabora.com>,
+	Steven Price <steven.price@arm.com>,
+	Philippe Simons <simons.philippe@gmail.com>,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	linux-pm@vger.kernel.org
+Subject: [PATCH v2 0/4] arm64: sunxi: h616: Enable Mali GPU
+Date: Wed, 16 Apr 2025 23:48:35 +0100
+Message-ID: <20250416224839.9840-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.46.3
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1940; i=kees@kernel.org; h=from:subject:message-id; bh=c1YE6Ln7/7gaamvCWhA5mV5HvtaQQs3Gef2ZyksqHjE=; b=owGbwMvMwCVmps19z/KJym7G02pJDBkMenfWXPT6r1e5Ybs1V6/DW65LV9Pirs3yXSr61Mze9 fay0KjGjlIWBjEuBlkxRZYgO/c4F4+37eHucxVh5rAygQxh4OIUgIlMPM/wT0vC74lqE9eJN5wn a89f+LhuX+ltxwLBhB4X9ZBUL87KakaGcxffmRtJ8B81nObJ0bFW9Ih11Yv2ecZns4rVTngU2Zn yAgA=
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-GCC 15's new -Wunterminated-string-initialization notices that one of
-the sysfs attr strings would lack the implicit trailing NUL byte during
-initialization:
+Hi,
 
-drivers/power/supply/power_supply_sysfs.c:183:57: warning: initializer-string for array of 'char' truncates NUL terminator but destination lacks 'nonstring' attribute (32 chars into 31 available) [-Wunterminated-string-initialization]
-  183 |         POWER_SUPPLY_ATTR(CHARGE_CONTROL_START_THRESHOLD),
-      |                                                         ^
-drivers/power/supply/power_supply_sysfs.c:36:23: note: in definition of macro '_POWER_SUPPLY_ATTR'
-   36 |         .attr_name = #_name "\0",               \
-      |                       ^~~~~
-drivers/power/supply/power_supply_sysfs.c:183:9: note: in expansion of macro 'POWER_SUPPLY_ATTR'
-  183 |         POWER_SUPPLY_ATTR(CHARGE_CONTROL_START_THRESHOLD),
-      |         ^~~~~~~~~~~~~~~~~
+version 2 is addressing the comments I got from the reviewers (many
+thanks for that!). The list of power domains is now separated from the
+per-SoC data, to avoid going over the list twice. Also the error path
+takes care of removing already registered genpd objects.
+Based on v6.15-rc1, changelog below.
 
-However, the macro used was explicitly adding a trailing NUL byte (which
-is not needed). Remove this to avoid the GCC warning. No binary
-differences are seen after this change (there was always run for a NUL
-byte, it's just that the _second_ NUL byte was getting truncated).
+==========================
+The Allwinner H616/H618/H313/H700 SoCs contain a Mali G32 MP2 GPU. This
+IP is from the Bifrost family and is already supported by the panfrost
+driver, so enabling support for 3D graphics on this SoC is rather
+straight-forward.
+However Allwinner added some bits in the PRCM block, that control the
+power domain for the GPU - on top of its power *supply*.
 
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: Sebastian Reichel <sre@kernel.org>
-Cc: <linux-pm@vger.kernel.org>
----
- drivers/power/supply/power_supply_sysfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This series enables the Mali GPU on those SoCs, by first introducing a
+power domain driver for that SoC (patch 1/4: DT binding, patch 2/4:
+the actual driver). For the Mali GPU to work we literally need to flip a
+single bit (the BSP does this in the bootloader), and this full featured
+power domain driver is admittedly a bit over the top for that purpose.
+However it seems to be the right thing to do architecturally, and while
+at it I added the other power domains (for analogue, PLLs, and the
+management core), even though we won't use them in Linux and they would
+be always on.
 
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index edb058c19c9c..439dd0bf8644 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -33,7 +33,7 @@ struct power_supply_attr {
- [POWER_SUPPLY_PROP_ ## _name] =			\
- {						\
- 	.prop_name = #_name,			\
--	.attr_name = #_name "\0",		\
-+	.attr_name = #_name,			\
- 	.text_values = _text,			\
- 	.text_values_len = _len,		\
- }
+The rest of the patches enable the Mali GPU on the DT side: patch 3/4 adds
+the purely SoC specific DT nodes, for both the power domain and the Mali
+GPU. The final patch 4/4 then enables the GPU on all existing H616-family
+boards.
+
+For this to reliably work, the Panfrost driver needs a tweak to fix the
+order of clock and reset bring-up and tear-down[1], but this is
+technically independent from this series.
+
+Cheers,
+Andre
+
+[1] https://lore.kernel.org/linux-sunxi/20250403055210.54486-1-simons.philippe@gmail.com/
+
+Changelog v1 .. v2:
+- rebase on v6.15-rc1
+- drop already applied Allwinner Mali DT binding patch
+- add review tags
+- move list of power domains into separate structs, use ARRAY_SIZE()
+- remove already registered genpds in error path
+- print correct power domain name in error path
+
+Andre Przywara (4):
+  dt-bindings: power: Add Allwinner H6/H616 PRCM PPU
+  pmdomain: sunxi: add H6 PRCM PPU driver
+  arm64: dts: allwinner: h616: Add Mali GPU node
+  arm64: dts: allwinner: h616: enable Mali GPU for all boards
+
+ .../power/allwinner,sun50i-h6-prcm-ppu.yaml   |  42 ++++
+ .../dts/allwinner/sun50i-h313-tanix-tx1.dts   |   5 +
+ .../sun50i-h616-bigtreetech-cb1.dtsi          |   5 +
+ .../allwinner/sun50i-h616-orangepi-zero.dtsi  |   4 +
+ .../allwinner/sun50i-h616-orangepi-zero2.dts  |   4 +
+ .../dts/allwinner/sun50i-h616-x96-mate.dts    |   5 +
+ .../arm64/boot/dts/allwinner/sun50i-h616.dtsi |  21 ++
+ .../sun50i-h618-longan-module-3h.dtsi         |   5 +
+ .../allwinner/sun50i-h618-orangepi-zero2w.dts |   5 +
+ .../allwinner/sun50i-h618-orangepi-zero3.dts  |   4 +
+ .../sun50i-h618-transpeed-8k618-t.dts         |   5 +
+ .../sun50i-h700-anbernic-rg35xx-2024.dts      |   5 +
+ drivers/pmdomain/sunxi/Kconfig                |  10 +
+ drivers/pmdomain/sunxi/Makefile               |   1 +
+ drivers/pmdomain/sunxi/sun50i-h6-prcm-ppu.c   | 208 ++++++++++++++++++
+ 15 files changed, 329 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/allwinner,sun50i-h6-prcm-ppu.yaml
+ create mode 100644 drivers/pmdomain/sunxi/sun50i-h6-prcm-ppu.c
+
 -- 
-2.34.1
+2.46.3
 
 
