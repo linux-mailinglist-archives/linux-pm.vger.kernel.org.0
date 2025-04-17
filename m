@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-25656-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25660-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B25C9A92469
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 19:53:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 014B1A9247B
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 19:54:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B2567A6A27
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 17:52:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 948081B60815
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 17:54:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE2B9256C61;
-	Thu, 17 Apr 2025 17:53:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5A042580C2;
+	Thu, 17 Apr 2025 17:53:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="s6qexdTj"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="eI5bkfiC"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 501072566C4;
-	Thu, 17 Apr 2025 17:53:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2FDD2571CA;
+	Thu, 17 Apr 2025 17:53:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744912410; cv=none; b=dUx9xcstTSRo2w2f8Sj1iRY3NMQ3vmUcm2Ouv3c2cZBQuE+4p8U8vDHnBSgI/IWJB1fMuxMJucVcOlXr8B8dKQLC+glBYcgnQJZhu4xCB1G3KSqCy/KB0WGvV3mTrF3MJ62nq4Y/fRV8S+FhzqDDEvKGTsZh/OUvkmma2I9a4OE=
+	t=1744912414; cv=none; b=Dp3rf9+wQcNoeLpT0ZFlRBVNPLoCfyGbu0RhiXCc2cB8HcJ3QG6s/wEZ1r14ycTg+K3O+WSPv2iukeKiJbRVFCVSaPuP/C+yY4WiDmkd11DxsZl/iwwRPPoUgcpeuR/pmkkpusgydwo+FJwkeRGNm0GQZwtf0lWru88M0M8olkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744912410; c=relaxed/simple;
-	bh=32EjIPtZXp/rf4ttCzgCwCUDL15K7aMZ0/DvvRvlLKg=;
+	s=arc-20240116; t=1744912414; c=relaxed/simple;
+	bh=7z9+NBdXvgZs8VMPVVMsPGq7ziNHtwhTTOGs0r+Jai0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=opZefkMZOoAtw8d9x3gu5j0QK9IpK8iQcKlatrphiay1eRcsaijsyOuibK6iWVtt6mz3IZk4o08G9pS7wLVukoc3IVpX5BzRbPboG+IelCna0lj51asAguFq5bB6L+jIEG0w3oYDWD3CHEW88b0jOyWClYRCkTIxVeEwPprLMLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=s6qexdTj; arc=none smtp.client-ip=185.138.42.100
+	 MIME-Version:Content-Type; b=Lpr8n7VmJnZk99NLqDcqaLW0wRo9C14Eiy5wEkDevGEX5/EsbDQfvVS7wbWmeYUtilPV5+QIjBzrdCvtEEGFwH7IOv2KPDyfhratZV5bRlgs4GNWeamwzx3GZkJMG1jfEuDZy+PcO0fHHiKLdgWrgINqsqNwQZmQROk8dGoWefM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=eI5bkfiC; arc=none smtp.client-ip=185.138.42.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Received: from localhost.localdomain (unknown [IPv6:2a05:f6c2:511b:0:cbc0:999f:73ad:33bd])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 162552E08699;
-	Thu, 17 Apr 2025 20:53:25 +0300 (EEST)
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 29EA92E088D8;
+	Thu, 17 Apr 2025 20:53:27 +0300 (EEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1744912406;
-	bh=qE5ChC30UpmwauKSNSAaNybCBbXeDCOAvfXA41bKRPY=; h=From:To:Subject;
-	b=s6qexdTjhCKatgbEpPNcZt+QKfvuGAIjJ6e6HmWLMoEtwwSLDwG367iqWqxcSxhOh
-	 8sHW/svc3ouS8x0aQPztmJE69KtXz4fSZLsci/01vBzrvWLqFSuzWh5pirwuJz5zUW
-	 f4ey/CwU/qg71zUe3bC44T1jwfkAp73qtoSgg8lI=
+	s=default; t=1744912409;
+	bh=2oyeEHL5RGXZ13onh6k9JhX2IrdUxRPNzwIc6bpWggA=; h=From:To:Subject;
+	b=eI5bkfiCjE39Na+a+PLeO9hw96UbRO+03N4O8OnmGFoj8RpnUC7uXzPpCbYj/OPOY
+	 GHXmDrAgnCBcOy6QmarNJvHMe6Ntya4ykULOBclqayGGVwZKRBiU3EA25aufGbgiY9
+	 pOJdJ6HU1JWnY/MZf9jAHUpyZyqOjQ6ftzMmqIKQ=
 Authentication-Results: linux1587.grserver.gr;
 	spf=pass (sender IP is 2a05:f6c2:511b:0:cbc0:999f:73ad:33bd) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
 Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
@@ -64,10 +64,10 @@ Cc: linux-hwmon@vger.kernel.org,
 	hdegoede@redhat.com,
 	mario.limonciello@amd.com,
 	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: [PATCH v9 04/15] ABI: testing: sysfs-class-oxp: add missing
+Subject: [PATCH v9 05/15] ABI: testing: sysfs-class-oxp: add tt_led attribute
  documentation
-Date: Thu, 17 Apr 2025 19:52:59 +0200
-Message-ID: <20250417175310.3552671-5-lkml@antheas.dev>
+Date: Thu, 17 Apr 2025 19:53:00 +0200
+Message-ID: <20250417175310.3552671-6-lkml@antheas.dev>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250417175310.3552671-1-lkml@antheas.dev>
 References: <20250417175310.3552671-1-lkml@antheas.dev>
@@ -80,42 +80,41 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-PPP-Message-ID: 
- <174491240664.24883.8188525224180457173@linux1587.grserver.gr>
+ <174491240878.24952.11919427039514044173@linux1587.grserver.gr>
 X-PPP-Vhost: antheas.dev
 X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
 X-Virus-Status: Clean
 
-Add missing documentation about the tt_toggle attribute that was
-added in kernel 6.5.
+Adds documentation about the tt_led attribute of OneXPlayer devices
+to the sysfs-class-oxp ABI documentation.
 
-Fixes: be144ee491272 ("hwmon: (oxp-sensors) Add tt_toggle attribute on supported boards")
 Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
 Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
 Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 ---
- Documentation/ABI/testing/sysfs-platform-oxp | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-platform-oxp
+ Documentation/ABI/testing/sysfs-platform-oxp | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/Documentation/ABI/testing/sysfs-platform-oxp b/Documentation/ABI/testing/sysfs-platform-oxp
-new file mode 100644
-index 0000000000000..091269ab2c8c4
---- /dev/null
+index 091269ab2c8c4..b3f39fc21dfa8 100644
+--- a/Documentation/ABI/testing/sysfs-platform-oxp
 +++ b/Documentation/ABI/testing/sysfs-platform-oxp
-@@ -0,0 +1,13 @@
-+What:		/sys/devices/platform/<platform>/tt_toggle
-+Date:		Jun 2023
-+KernelVersion:	6.5
+@@ -11,3 +11,15 @@ Description:
+ 		shortcut over the AT keyboard of the device. In addition,
+ 		using this setting is a prerequisite for PWM control for most
+ 		newer models (otherwise it NOOPs).
++
++What:		/sys/devices/platform/<platform>/tt_led
++Date:		April 2025
++KernelVersion:	6.16
 +Contact:	"Antheas Kapenekakis" <lkml@antheas.dev>
 +Description:
-+		Takeover TDP controls from the device. OneXPlayer devices have a
-+		turbo button that can be used to switch between two TDP modes
-+		(usually 15W and 25W). By setting this attribute to 1, this
-+		functionality is disabled, handing TDP control over to (Windows)
-+		userspace software and the Turbo button turns into a keyboard
-+		shortcut over the AT keyboard of the device. In addition,
-+		using this setting is a prerequisite for PWM control for most
-+		newer models (otherwise it NOOPs).
++		Some OneXPlayer devices (e.g., X1 series) feature a little LED
++		nested in the Turbo button. This LED is illuminated when the
++		device is in the higher TDP mode (e.g., 25W). Once tt_toggle
++		is engaged, this LED is left dangling to its last state. This
++		attribute allows userspace to control the LED state manually
++		(either with 1 or 0). Only a subset of devices contain this LED.
 -- 
 2.49.0
 
