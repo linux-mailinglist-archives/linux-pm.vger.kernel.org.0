@@ -1,190 +1,224 @@
-Return-Path: <linux-pm+bounces-25646-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25647-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F37EFA91FA0
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 16:28:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 199C5A92152
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 17:22:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C0687B2C04
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 14:27:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F00798A20C1
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 15:21:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA9BA253F15;
-	Thu, 17 Apr 2025 14:25:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88218253928;
+	Thu, 17 Apr 2025 15:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="q/xXi1vh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ipTGDybS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40CF253B60
-	for <linux-pm@vger.kernel.org>; Thu, 17 Apr 2025 14:25:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FC37253326;
+	Thu, 17 Apr 2025 15:21:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744899953; cv=none; b=IGuxDf7iJY19fcGCqc7GWcJxF6rSyRdV3qGFjXF/4Hu4ChKHfu+Oh+44bbyqowp2tJGlCzhTx/lku5+x7P7Z+Pp2edYVC7FRL/KvNatWYokxhlrliTqjCp4cSWBkzpykaL90fPkj4wXXLWCL3fMS4dp/85BDnWdYm9H8s/ovNeA=
+	t=1744903315; cv=none; b=o8doAoImcynKSMpxjJOzJcfaMFg7jQAdkm7ZiDIjHvaZE0c9ETUmx4A+l2W32biGWDd4Vezxx2KYUYo5B3C37MPAanHK1dBmm0VfCrJiiDF9AskU8MIiQfwxSkiQTcfbzSk2UEcEE7e/KsABoE1FneQtEatpt3Nd8hWDN+arU5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744899953; c=relaxed/simple;
-	bh=48SzkSnXlpWKVmmQp8Xqs1VLpprH9LVATX3NaTD9rCM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Pfyc2XwhqEcgr7c0YSoa9wAp1hbx5giNl8EWTKNStQIPpv9dDfKfSCMwnAlDRHCQDC8OFIqD/ZTVuNQpVbtgZ81B6CzqUwA8GUZF5FM5gap6sZtu0RpCnoQmmuf9/Yg8ReeeFsefu0fmfQR+QYMDVUCCIQiSLYD9y8w8R2XeJnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=q/xXi1vh; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-54954fa61c9so1119046e87.1
-        for <linux-pm@vger.kernel.org>; Thu, 17 Apr 2025 07:25:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744899950; x=1745504750; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q4svnLFbJnv3zIx0N7VYQw66/h1rJWDrzgMSBi0aPAY=;
-        b=q/xXi1vhy8qZNIKGxy0KduFJ4Mn6lZAR+KFfwpi9cP4Unjvs4leHFgWkWkPCYS/btJ
-         KziYMUTLjbUPzYtbU0k6NekMsaiLTKPScdlSFa1NaHfkvmwKaQrqE7YXBFnMjlnm8IV8
-         Qi1le9H+d2WyR3Up84Lzoqb52jVzxPqKLFTUHdlvI6iwFmZ4Qbiij2oYgqCq4s29BYx7
-         XEXkxxXHpxl39zp29ZqlSkyD7ys9lrThI7fonwe07XkzBXdkdAZQe+o6WHt/1qDSJ16N
-         zsh5mp86Vz1i0WE4T+FAcJ3RGuh9+lPNoZWuwlSC04XXe4TUDL+KZ4kA3plpntTdPbMr
-         uKfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744899950; x=1745504750;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q4svnLFbJnv3zIx0N7VYQw66/h1rJWDrzgMSBi0aPAY=;
-        b=PcwNIz03sSrks6Z7yPGPsTSyySW09kLgVdkIEOf3/PUqM3A/B163rRcOD10+LEmPH3
-         OIf73pYGqQlDPuDbuzZMNaZD7g+nCwqZFl+zu9OUcXwsaFLd6IbM+h6BxJcQfvFNWBLe
-         9jcCWuViNh9al80Pr7G2w20wbWM/GrghsO7KtEXQ4crF4+s/bcZQiyY95zth/ObueOce
-         Rv0B2yokktNMhKYqw1dkJusaODU4nFGMwQ9cghuS0yest9tgie/GMjOH5PJsTW66Q83f
-         UBCbD0loXAcAfX8HyZ04xcaaJ7yWCeBcZjdUb6WrQZg2hJU+ejMcLftB8WMMmqae8Puc
-         Jn9w==
-X-Forwarded-Encrypted: i=1; AJvYcCXRAcy7xh8OryuZzQUVucmuGyYPtHDlxyr0LbmkS6Zdo9EGiqHoBlGHcCIi9gLgqIAUFn55NE6EKg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzz0LqLXt8H+hMs07pSSQV/IPYYYp+WE75d2bgc1oarMGvseGr4
-	v9KiysxR70C17YRpe6KixNqT5xgXvKpzN4QQcnO/gQdmN7kKvd0sUPrGGOys/fM=
-X-Gm-Gg: ASbGncsuoxtbziXqAOxU/AweSmsOr/Z3RBDte8O0PfQQj83+WNnidgrgsk6XnvUIIwW
-	t3L5k+YnTdIETEiOAE3LtUU5Xau77TiNhTbBFOdX+0mvFjThK3y8+mSwsRrIsVv5CurDjRwV/16
-	O2Uv9VPFjslOqGmSl4MkUucnocmKBnp8nbW1GQbDF2QJAC5/q9Ep4hNXkcy6D+lKOW9vyPGPd4+
-	3Wz46gZoGcORjEnlf7EcIVZv7szhrTjtsuv7AUZTty01m9DvDb3dhdj8nqMH+u+JAdQwFQvv8zR
-	ZgwR6oRfT8tk1NYxdDe/SU8WtjA47fk0IBEJAVSbqQolw03Su2nhQvRmpwF9bUjL7Izojeoex+J
-	5kh7UUIV1VC6ywEc=
-X-Google-Smtp-Source: AGHT+IFLZC+7o/XwKN7xuIyMZVwhsS5rHckZLNTwrcJeTbAwEvd5hmVT1e+JUJqkIv5jp8W5a7Ps7g==
-X-Received: by 2002:a05:6512:2310:b0:54b:117c:1355 with SMTP id 2adb3069b0e04-54d64af41c9mr2069093e87.55.1744899949638;
-        Thu, 17 Apr 2025 07:25:49 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54d65e43647sm370096e87.58.2025.04.17.07.25.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Apr 2025 07:25:49 -0700 (PDT)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Saravana Kannan <saravanak@google.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	linux-pm@vger.kernel.org
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Michael Grzeschik <m.grzeschik@pengutronix.de>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Devarsh Thakkar <devarsht@lewv0571a.ent.ti.com>,
-	Peng Fan <peng.fan@oss.nxp.com>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Johan Hovold <johan@kernel.org>,
-	Maulik Shah <maulik.shah@oss.qualcomm.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 11/11] pmdomain: core: Leave powered-on genpds on until ->sync_state()
-Date: Thu, 17 Apr 2025 16:25:09 +0200
-Message-ID: <20250417142513.312939-12-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250417142513.312939-1-ulf.hansson@linaro.org>
-References: <20250417142513.312939-1-ulf.hansson@linaro.org>
+	s=arc-20240116; t=1744903315; c=relaxed/simple;
+	bh=CJchBNw/TCUjkOAoUrHlrUI9IZCdv307P1cHqFnK9ZE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WpXUoJw2VQc/NGoc8wqbxd7QAd1sVM7gx6MnCwAtEBEvgeWvBPCwoQ6L6PVdr+1JcMyOn4vkkwHtwKeEzsirGOi1Tk6YLwPEbxYLDxg0wCUyYJLBr22cY98kc733hbu+5l0arXuBkZcR2I0GYt6uFVWB1WlnSKNLuoi7Xa7YjeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ipTGDybS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9D22C4CEEC;
+	Thu, 17 Apr 2025 15:21:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744903314;
+	bh=CJchBNw/TCUjkOAoUrHlrUI9IZCdv307P1cHqFnK9ZE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ipTGDybSxj2xZqd2ri+kW9corAb2jL5VjBKQ1l5cq8p+BP8JMODq3GpidPZwGAIwW
+	 M5Ch+WUTRWRS1NMhOICYBHh8S+u7hhAf9mLn4TeWIs+V3BohCqVL4kLWRa2M444mOE
+	 Gc6wqRYA8t3e4lxHdw6iGD9SUEAGgAIuQOYgAoG3bYWc1XTmGm9haFj7EKY1fxDC/s
+	 kcKtLYgLvCJGSvovYjTf1pNEnoGLUzTNiVCd5vgwUcK2oWVbyc26PDrOwIWElkwjf8
+	 wrso0XDd/sKijGArX+KIMEuN4+sjos/tbpxLkn2O3KP5NA5CpELl7PyvISb6+LrcPl
+	 6Mu5IpftZhKlw==
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-2d4f832069bso354771fac.3;
+        Thu, 17 Apr 2025 08:21:54 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUJFrv2BDYIMuC5roBMb51r3grUflhYCD41sTyup7Y5IAY2BAOJgq1cJRJ/J42slJ7ixJ+sIPpnEcUxHx0=@vger.kernel.org, AJvYcCWUs9g+82MHeH8UrceJjifsK8wVsp0939K7Br2eknYmEUEMumk5xuLdCXSxe1lzuN/P6Nl9Aez4elk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVW8mURVrkaQKsPjWsW4zLct9Ux8OPY4kej77ibHGFXR1XzV8U
+	ji/bmmSwLZ+pkqDXna3J3ZHLx+lATNJCJT3kLG1zkqSp51PGvxI0MCl+xVSraap7yeIaA47Ozgi
+	wd8Bpy2gLRKhT91Gxvjjx3W9WvQU=
+X-Google-Smtp-Source: AGHT+IHeb+g2g9s+QuPf/9r+zAo9BJ+HF3XcrAzHYaM47XkbjdOZ0AKG2xPGndtO56+/wHMoTDLrzEMh4h+ee+bCepk=
+X-Received: by 2002:a05:6871:689:b0:2b7:f8d9:d5f7 with SMTP id
+ 586e51a60fabf-2d4d2b7a43emr3753500fac.19.1744903314033; Thu, 17 Apr 2025
+ 08:21:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <4661520.LvFx2qVVIh@rjwysocki.net> <2239639.irdbgypaU6@rjwysocki.net>
+ <1c0c6caa-e56c-454a-a976-81303dee1852@arm.com> <CAJZ5v0g-=DB_W5jkxxCERy22jz9a_V1Tcj8hiVwL6_R+xSM=gQ@mail.gmail.com>
+ <76d5c5ba-6be0-405b-83dd-038f016af12b@arm.com>
+In-Reply-To: <76d5c5ba-6be0-405b-83dd-038f016af12b@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 17 Apr 2025 17:21:42 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hVRg0P+E1Ux9tOkr+g6wF36Bf52UT4f3BEAePMUM85Lw@mail.gmail.com>
+X-Gm-Features: ATxdqUFi105tbnPrAaOWWVsIfFP_B1hAt3lu6Densv5_JVrdiTnEk84bDvay7v0
+Message-ID: <CAJZ5v0hVRg0P+E1Ux9tOkr+g6wF36Bf52UT4f3BEAePMUM85Lw@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] cpuidle: teo: Refine handling of short idle intervals
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
+	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, Doug Smythies <dsmythies@telus.net>, 
+	Aboorva Devarajan <aboorvad@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Powering-off a genpd that was on during boot, before all of its consumer
-devices have been probed, is certainly prone to problems.
+On Thu, Apr 17, 2025 at 1:58=E2=80=AFPM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> On 4/16/25 16:28, Rafael J. Wysocki wrote:
+> > On Wed, Apr 16, 2025 at 5:00=E2=80=AFPM Christian Loehle
+> > <christian.loehle@arm.com> wrote:
+> >>
+> >> On 4/3/25 20:18, Rafael J. Wysocki wrote:
+> >>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>>
+> >>> Make teo take all recent wakeups (both timer and non-timer) into
+> >>> account when looking for a new candidate idle state in the cases
+> >>> when the majority of recent idle intervals are within the
+> >>> LATENCY_THRESHOLD_NS range or the latency limit is within the
+> >>> LATENCY_THRESHOLD_NS range.
+> >>>
+> >>> Since the tick_nohz_get_sleep_length() invocation is likely to be
+> >>> skipped in those cases, timer wakeups should arguably be taken into
+> >>> account somehow in case they are significant while the current code
+> >>> mostly looks at non-timer wakeups under the assumption that frequent
+> >>> timer wakeups are unlikely in the given idle duration range which
+> >>> may or may not be accurate.
+> >>>
+> >>> The most natural way to do that is to add the "hits" metric to the
+> >>> sums used during the new candidate idle state lookup which effectivel=
+y
+> >>> means the above.
+> >>>
+> >>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>
+> >> Hi Rafael,
+> >> I might be missing something so bare with me.
+> >> Quoting the cover-letter too:
+> >> "In those cases, timer wakeups are not taken into account when they ar=
+e
+> >> within the LATENCY_THRESHOLD_NS range and the idle state selection may
+> >> be based entirely on non-timer wakeups which may be rare.  This causes
+> >> the prediction accuracy to be low and too much energy may be used as
+> >> a result.
+> >>
+> >> The first patch is preparatory and it is not expected to make any
+> >> functional difference.
+> >>
+> >> The second patch causes teo to take timer wakeups into account if it
+> >> is about to skip the tick_nohz_get_sleep_length() invocation, so they
+> >> get a chance to influence the idle state selection."
+> >>
+> >> If the timer wakeups are < LATENCY_THRESHOLD_NS we will not do
+> >>
+> >> cpu_data->sleep_length_ns =3D tick_nohz_get_sleep_length(&delta_tick);
+> >>
+> >> but
+> >>
+> >> cpu_data->sleep_length_ns =3D KTIME_MAX;
+> >>
+> >> therefore
+> >> idx_timer =3D drv->state_count - 1
+> >> idx_duration =3D some state with residency < LATENCY_THRESHOLD_NS
+> >>
+> >> For any reasonable system therefore idx_timer !=3D idx_duration
+> >> (i.e. there's an idle state deeper than LATENCY_THRESHOLD_NS).
+> >> So hits will never be incremented?
+> >
+> > Why never?
+> >
+> > First of all, you need to get into the "2 * cpu_data->short_idles >=3D
+> > cpu_data->total" case somehow and this may be through timer wakeups.
+>
+> Okay, maybe I had a too static scenario in mind here.
+> Let me think it through one more time.
 
-Let's fix these problems by preventing these genpds from being powered-off
-until ->sync_state(). Note that, this only works for OF based platform as
-->sync_state() are relying on fw_devlink.
+Well, this is subtle and your question is actually a good one.
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/pmdomain/core.c   | 12 +++++++++++-
- include/linux/pm_domain.h |  1 +
- 2 files changed, 12 insertions(+), 1 deletion(-)
+> >
+> >> How would adding hits then help this case?
+> >
+> > They may be dominant when this condition triggers for the first time.
+>
+> I see.
+>
+> Anything in particular this would help a lot with?
 
-diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-index 695d7d9e5582..a8c56f7a7ba0 100644
---- a/drivers/pmdomain/core.c
-+++ b/drivers/pmdomain/core.c
-@@ -212,6 +212,12 @@ static inline bool irq_safe_dev_in_sleep_domain(struct device *dev,
- 	return ret;
- }
- 
-+#ifdef CONFIG_PM_GENERIC_DOMAINS_OF
-+static bool genpd_may_stay_on(bool on) { return on; }
-+#else
-+static bool genpd_may_stay_on(bool on) { return false; }
-+#endif
-+
- static int genpd_runtime_suspend(struct device *dev);
- 
- /*
-@@ -933,11 +939,12 @@ static void genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
- 	 * The domain is already in the "power off" state.
- 	 * System suspend is in progress.
- 	 * The domain is configured as always on.
-+	 * The domain was on at boot and still need to stay on.
- 	 * The domain has a subdomain being powered on.
- 	 */
- 	if (!genpd_status_on(genpd) || genpd->prepared_count > 0 ||
- 	    genpd_is_always_on(genpd) || genpd_is_rpm_always_on(genpd) ||
--	    atomic_read(&genpd->sd_count) > 0)
-+	    genpd->stay_on || atomic_read(&genpd->sd_count) > 0)
- 		return;
- 
- 	/*
-@@ -2374,6 +2381,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
- 	INIT_WORK(&genpd->power_off_work, genpd_power_off_work_fn);
- 	atomic_set(&genpd->sd_count, 0);
- 	genpd->status = is_off ? GENPD_STATE_OFF : GENPD_STATE_ON;
-+	genpd->stay_on = genpd_may_stay_on(!is_off);
- 	genpd->sync_state = GENPD_SYNC_STATE_OFF;
- 	genpd->device_count = 0;
- 	genpd->provider = NULL;
-@@ -2640,6 +2648,7 @@ void of_genpd_sync_state(struct device *dev)
- 	list_for_each_entry(genpd, &gpd_list, gpd_list_node) {
- 		if (genpd->provider == &np->fwnode) {
- 			genpd_lock(genpd);
-+			genpd->stay_on = false;
- 			genpd_power_off(genpd, false, 0);
- 			genpd_unlock(genpd);
- 		}
-@@ -3486,6 +3495,7 @@ static void genpd_provider_sync_state(struct device *dev)
- 
- 	case GENPD_SYNC_STATE_SIMPLE:
- 		genpd_lock(genpd);
-+		genpd->stay_on = false;
- 		genpd_power_off(genpd, false, 0);
- 		genpd_unlock(genpd);
- 		break;
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index 2185ee9e4f7c..c5358cccacad 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -193,6 +193,7 @@ struct generic_pm_domain {
- 	unsigned int performance_state;	/* Aggregated max performance state */
- 	cpumask_var_t cpus;		/* A cpumask of the attached CPUs */
- 	bool synced_poweroff;		/* A consumer needs a synced poweroff */
-+	bool stay_on;			/* Stay powered-on during boot. */
- 	enum genpd_sync_state sync_state; /* How sync_state is managed. */
- 	int (*power_off)(struct generic_pm_domain *domain);
- 	int (*power_on)(struct generic_pm_domain *domain);
--- 
-2.43.0
+So I've been trying to reproduce my own results using essentially the
+linux-next branch of mine (6.15-rc2 with some material on top) as the
+baseline and so far I've been unable to do that.  There's no
+significant difference from these patches or at least they don't help
+as much as I thought they would.
 
+> There's no noticeable behavior change in my usual tests, which is
+> expected, given we have only WFI in LATENCY_THRESHOLD_NS.
+>
+> I did fake a WFI2 with residency=3D5 latency=3D1, teo-m is mainline, teo
+> is with series applied:
+>
+> device   gov    iter   iops    idles     idle_misses  idle_miss_ratio  be=
+lows   aboves   WFI       WFI2
+> -------  -----  -----  ------  --------  ------------  ----------------  =
+--------  -------  --------  --------
+> nvme0n1  teo    0      80223   8601862   1079609       0.126             =
+918363    161246   205096    4080894
+> nvme0n1  teo    1      78522   8488322   1054171       0.124             =
+890420    163751   208664    4020130
+> nvme0n1  teo    2      77901   8375258   1031275       0.123             =
+878083    153192   194500    3977655
+> nvme0n1  teo    3      77517   8344681   1023423       0.123             =
+869548    153875   195262    3961675
+> nvme0n1  teo    4      77934   8356760   1027556       0.123             =
+876438    151118   191848    3971578
+> nvme0n1  teo    5      77864   8371566   1033686       0.123             =
+877745    155941   197903    3972844
+> nvme0n1  teo    6      78057   8417326   1040512       0.124             =
+881420    159092   201922    3991785
+> nvme0n1  teo    7      78214   8490292   1050379       0.124             =
+884528    165851   210860    4019102
+> nvme0n1  teo    8      78100   8357664   1034487       0.124             =
+882781    151706   192728    3971505
+> nvme0n1  teo    9      76895   8316098   1014695       0.122             =
+861950    152745   193680    3948573
+> nvme0n1  teo-m  0      76729   8261670   1032158       0.125             =
+845247    186911   237147    3877992
+> nvme0n1  teo-m  1      77763   8344526   1053266       0.126             =
+867094    186172   237526    3919320
+> nvme0n1  teo-m  2      76717   8285070   1034706       0.125             =
+848385    186321   236956    3889534
+> nvme0n1  teo-m  3      76920   8270834   1030223       0.125             =
+847490    182733   232081    3887525
+> nvme0n1  teo-m  4      77198   8329578   1044724       0.125             =
+855438    189286   240947    3908194
+> nvme0n1  teo-m  5      77361   8338772   1046903       0.126             =
+857291    189612   241577    3912576
+> nvme0n1  teo-m  6      76827   8346204   1037520       0.124             =
+846008    191512   243167    3914194
+> nvme0n1  teo-m  7      77931   8367212   1053337       0.126             =
+866549    186788   237852    3930510
+> nvme0n1  teo-m  8      77870   8358306   1056011       0.126             =
+867167    188844   240602    3923417
+> nvme0n1  teo-m  9      77405   8338356   1046012       0.125             =
+856605    189407   240694    3913012
+>
+> The difference is small, but it's there even though this isn't
+> a timer-heavy workload at all.
+
+This is interesting, so thanks for doing it, but the goal really was
+to help with the polling state usage on x86 and that doesn't appear to
+be happening, so I'm going to drop these patches at least for now.
 
