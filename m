@@ -1,126 +1,133 @@
-Return-Path: <linux-pm+bounces-25603-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25604-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBF98A914F0
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 09:20:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58128A9150B
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 09:22:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5353619E09B6
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 07:21:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 23AF97A875B
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 07:21:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A4A7217F36;
-	Thu, 17 Apr 2025 07:20:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13E51218EBA;
+	Thu, 17 Apr 2025 07:22:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b7a58EL2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E772147FB;
-	Thu, 17 Apr 2025 07:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0C0217F36;
+	Thu, 17 Apr 2025 07:22:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744874446; cv=none; b=b3F57tG2eALzM3XWRNfVn/CUcO2reWp6aaywlpJV45M94WwPt/EzYzu0dZ1LorUizdUGMZaRWhlN/MKhhukPWxT8aTumMcj37l7YaSpcG4NpzTeocMnDYpK1qZLyGiAPvfbJjauTYLWQCojJyTbSYog7AcpFN3e+D4AOtDlJ2UE=
+	t=1744874562; cv=none; b=GD9SYXd2GGAo3032z7o6+1n3ERdZdA9QCOXakFcfpdKosVumOM/UDyifmmXsiIQjv3qZjhQpxqHSqI2Ya6M0MjPbdIpZEA5qUCB4np8XahseXM1N6IsR+jwl4VvvCmb2AS+Yts+30buldP9NZvmrSUEfWwiKezSWuGZGxPkiCL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744874446; c=relaxed/simple;
-	bh=QyhbxHAbNWI97LfKLS2k+ny8t1SV9wPT6bs06/rAvAU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eY6+DDGUx9JVKfx/0aqZ9d8NrgvpzgCOy/5y/PmgGyyhAzxdD9rXXFY2G9qqqbdZsycBwvf8g6Ws/FE7KsmTCegvgVA2KeCiVQaq27AFvzTIxA7UDbEFzqM4dLL+/uG/ysVb8NehhumSLBpQhrhF/o0KJUP6SQvk47ILnVdXDcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-5242f137a1eso197796e0c.1;
-        Thu, 17 Apr 2025 00:20:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744874441; x=1745479241;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wJlwgfdjlKlj72m9IIHqT+BTPyJAYFDO/iuqVhlAcZU=;
-        b=IxHqa3U5jpTXNvJXMJRi/Gocwu1En/EElXG5hCq8BfFIB28pSR0SkcFe6T51wSY8AA
-         c8XvFkcvWzFIAGTvdiaYh9/f+iGPB//dfMm4v3rlDiMijMdM+qmxs3pvIa/GDaZ9HQLx
-         PDcocScf3BJyeb7v/4wHCqg6j6XA9Jn88l+M9R2slu/TdYP5PxOmqqnMbaeXmNCeZ7Uc
-         eAQ5e8Bb/BWokJ0ApZFPgz99EeN/HVZSYjhWTlgGmb1ofsHYUujqeFa343H8O/0IFig7
-         0xouYGcWxZoFohqnMpi5XXOyBw+Z1IhGgp3UifzEXaIO/jxA2MlIoiZq73VLlYcUt+qu
-         u7fA==
-X-Forwarded-Encrypted: i=1; AJvYcCViSbg4rmmRX/+qyfvCHPU9Q5diI68OaWkJYYEBUZiOIaCb2RKFIvd0etj3jL+i4GRtJBg7oK8xUYE=@vger.kernel.org, AJvYcCWRzjpwwR2LRJ23YZ9L50As40orsQR/D/y6Ic5JIHcUCQlDExHNYRJt6GDNVJ30/PRvtURD0o50Z/HFfgU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGmO+/HsiGWfMcxvX954XLcXoNOjoNsO7GoFRJI80fhYRf3aNL
-	8qIbnEnFFCFeC0/VnJru1ko50yR74md1Ks5BugvL8Hj1qrV6sE8/KBD39cqK
-X-Gm-Gg: ASbGnctE23ExKGBE4t2gn1saA9pwQFSuARyO+UlPA5l/nliunktM1+haiwkFT/26yJ6
-	SYy8tGjocftzMv2zoLUoxI+angaO8yuQaNJ1VZN+Z2qe6+J2POJUSbmuMi2ot3oJ+/FOuhWi4E0
-	VOuXZsXUp0OoO2NoWkQ47hWld3h8+hAycC+6A82u5c7z5xANq5ObmF4YZLiSLFaQiSguaxiHSQ0
-	wPSmA617gU3x1ytRyhqHx9ppxzTSoCqWCyrBYClY5dl7g3taTbGfG6PF2KkDTCYv7b2M4LgTl4N
-	FY8NeVvrWIZmmwZSULxxIITiqCkC/pxCzhlsbsSg7EObwzcl9HXeed3jyAMBuLpvo7KpXIxncY2
-	Xlsk=
-X-Google-Smtp-Source: AGHT+IEVjDeBrfr9Jcm8shhx4xC2+uyxs+Cp1nRsUo6xK/0cGrd/NBqVyAMuJcWAl55aixkFbvDhsQ==
-X-Received: by 2002:a05:6122:2001:b0:528:bd71:8a8e with SMTP id 71dfb90a1353d-5290dfe1882mr3795822e0c.5.1744874440992;
-        Thu, 17 Apr 2025 00:20:40 -0700 (PDT)
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com. [209.85.222.42])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-527abe8d74bsm3459815e0c.35.2025.04.17.00.20.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Apr 2025 00:20:40 -0700 (PDT)
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-86fab198f8eso192592241.1;
-        Thu, 17 Apr 2025 00:20:40 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWUxuElXMAYlGS+/6AYxbHrAwhslz7G7O5wSw3WQiL+DZFjCqykCuYS7EOPaPzLKwPuKHSydVduMEGeeMM=@vger.kernel.org, AJvYcCWl/Grh+AUs/Dpl1L/gW3+ry/Z+EInoYJBxdWmDFChMgOlSHBDEl6k84YWCNJK0HkvtWydURR8QIUI=@vger.kernel.org
-X-Received: by 2002:a05:6102:55d3:b0:4bb:9b46:3f8a with SMTP id
- ada2fe7eead31-4cb591b7d30mr2988752137.2.1744874439951; Thu, 17 Apr 2025
- 00:20:39 -0700 (PDT)
+	s=arc-20240116; t=1744874562; c=relaxed/simple;
+	bh=0S+KpR1ZAK42RiiHVxB5z5tMzy93HJ/YyCYV0Oi7ty0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dz+aL7wVd6feq8VRVtx9fSAgR5QUdvjLLdb5hPlGzitjKrvfL4ot4ARzoc20G09VELlY5sOSP8KapPCAs1Qril0VDe9ZY28gZJKQAKVgqrXjlzXqVwG/TOEd4t7e03ao+zFShYL7jHsGyHRYcqs3WV5L75cFT6oD+JBer0GU7es=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b7a58EL2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD22AC4CEE7;
+	Thu, 17 Apr 2025 07:22:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744874561;
+	bh=0S+KpR1ZAK42RiiHVxB5z5tMzy93HJ/YyCYV0Oi7ty0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=b7a58EL2fd9RmleKNHO/3n0vOEeE2AToG5GTLnbZ+uQDI+I+GAEgnl5fma+849t7E
+	 Wk/SrtOMNdJkJTI0mU7/7NMLONooC7su6n24L+zNIPdB2pb6GmIPzFwUW6AY/ynsM6
+	 MqIfFhyvp3VJSBap/7NrfI2e/P2UiCTbG4HksW1AJQn1gD6xuN/1pRTMIYG0hoAmCE
+	 yM4btPDfx/MOnTswdBGOUX8OqrS6r2LWn7HvigUj0aGJqjwz2oI//fXDUkMW6vakFp
+	 beh08dViYlr3gdkTRyywfLs56wu34GTvdf4R4BJLgYL6LoeknZKKr/qGvp+kvBB8W0
+	 FuuqAPGNVfyzg==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1u5Ja5-000000008O2-1v5L;
+	Thu, 17 Apr 2025 09:22:41 +0200
+Date: Thu, 17 Apr 2025 09:22:41 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Johan Hovold <johan+linaro@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	"Rob Herring (Arm)" <robh@kernel.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] cpufreq: fix compile-test defaults
+Message-ID: <aACsQUADxYHTQDi1@hovoldconsulting.com>
+References: <20250417065535.21358-1-johan+linaro@kernel.org>
+ <a0739b6b-b043-47f1-8044-f6ed68d39f2c@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <tencent_EE27C7D1D6BDB3EE57A2C467CC59A866C405@qq.com>
- <143378b0-5740-4f2b-9a79-f04cf9ef1f77@arm.com> <tencent_C16C813B177E434BEAC73E842C46D872BC09@qq.com>
-In-Reply-To: <tencent_C16C813B177E434BEAC73E842C46D872BC09@qq.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 17 Apr 2025 09:20:27 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVAvMuzmn48aVB-xshMjbENXFc1MmYB=r7iPrMvfDZjDg@mail.gmail.com>
-X-Gm-Features: ATxdqUGiXYh3QJkTgWt9shrcBT3lBi2PArasakP1xODfxivBaBiSHWBEneAs48k
-Message-ID: <CAMuHMdVAvMuzmn48aVB-xshMjbENXFc1MmYB=r7iPrMvfDZjDg@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: EM: Fix potential division-by-zero error in em_compute_costs()
-To: Yaxiong Tian <iambestgod@qq.com>
-Cc: Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Yaxiong Tian <tianyaxiong@kylinos.cn>, rafael@kernel.org, 
-	Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a0739b6b-b043-47f1-8044-f6ed68d39f2c@linaro.org>
 
-Hi Yaxiong,
+On Thu, Apr 17, 2025 at 09:10:09AM +0200, Krzysztof Kozlowski wrote:
+> On 17/04/2025 08:55, Johan Hovold wrote:
+> > Commit 3f66425a4fc8 ("cpufreq: Enable COMPILE_TEST on Arm drivers")
+> > enabled compile testing of most Arm CPUFreq drivers but left the
+> > existing default values unchanged so that many drivers are enabled by
+> > default whenever COMPILE_TEST is selected.
+> > 
+> > This specifically results in the S3C64XX CPUFreq driver being enabled
+> > and initialised during boot of non-S3C64XX platforms with the following
+> > error logged:
+> > 
+> > 	cpufreq: Unable to obtain ARMCLK: -2
+> 
+> But isn't this fixed by my commit (d4f610a9bafd)? How is it possible to
+> reproduce above error when you are NOT test compiling?
 
-On Mon, 14 Apr 2025 at 11:14, Yaxiong Tian <iambestgod@qq.com> wrote:
-> I wasn=E2=80=99t sure whether the new patch should reuse the current Mess=
-age-ID
-> or create a new one, so I checked with ChatGPT and kept the original
-> Message-ID for v2. If a new Message-ID is required, I can resend the
-> email.
+Correct, but this was how I found the issue and motivation for
+backporting the fixes including yours which was not marked for stable.
+ 
+> > Commit d4f610a9bafd ("cpufreq: Do not enable by default during compile
+> > testing") recently fixed most of the default values, but two entries
+> > were missed
+> 
+> That's not really a bug to be fixed. No things got worse by missing two
+> entries, so how this part could be called something needing fixing?
 
-Different (revisions of) patches must have different Message-IDs,
-else they can no longer be distinguished by our tooling.
-Fortunately it seems like you didn't succeed (which is good ;-),
-as all four revisions do have different Message-IDs:
+I'm not saying it's buggy, I'm explaining that the identified issue was
+recently fixed partially.
+ 
+> >  and two could use a more specific default condition.
+> 
+> Two entries for more specific default - before they were ALWAYS default,
+> so again I narrowed it from wide default. Nothing to fix here. You can
+> narrow it further but claiming that my commit made something worse looks
+> like a stretch - and that's a meaning of fixing someone's commit.
 
-https://lore.kernel.org/all/tencent_8478BF8F2549630842D323E7394CB6F49D08@qq=
-.com/
-https://lore.kernel.org/all/tencent_EE27C7D1D6BDB3EE57A2C467CC59A866C405@qq=
-.com/
-https://lore.kernel.org/all/tencent_6D2374392DB66C9D23BF6E2546638A42EC08@qq=
-.com/
-https://lore.kernel.org/all/tencent_2256A7C02F7849F1D89390E488704E826D06@qq=
-.com/
+Relax. I'm not blaming you for doing anything wrong here.
 
-Gr{oetje,eeting}s,
+I sent a fix for the same issues you addressed and Viresh let me know
+that he had already merged a fix for most of the issues:
 
-                        Geert
+	https://lore.kernel.org/lkml/20250416134331.7604-1-johan+linaro@kernel.org/
+ 
+> > Fix the default values for drivers that can be compile tested and that
+> > should be enabled by default when not compile testing.
+> > 
+> > Fixes: 3f66425a4fc8 ("cpufreq: Enable COMPILE_TEST on Arm drivers")
+> 
+> 
+> > Fixes: d4f610a9bafd ("cpufreq: Do not enable by default during compile testing")
+> 
+> That's not correct tag - it introduced no new issues, did not make
+> things worse, so nothing to fix there, if I understand correctly.
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+Fair enough, I could have used dependency notation for this one.
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Let me do that in v3.
+
+> > Changes in v2:
+> >  - rebase on commit d4f610a9bafd ("cpufreq: Do not enable by default
+> >    during compile testing")
+
+Johan
 
