@@ -1,171 +1,124 @@
-Return-Path: <linux-pm+bounces-25590-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25591-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B49A3A911F3
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 05:14:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D860A91234
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 06:25:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1AAE1711C3
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 03:14:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9DF635A1F57
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 04:24:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3A981B393D;
-	Thu, 17 Apr 2025 03:14:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FDF11D5ABA;
+	Thu, 17 Apr 2025 04:25:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Hr7KPjGE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7B6155C82;
-	Thu, 17 Apr 2025 03:14:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A5A19DF9A
+	for <linux-pm@vger.kernel.org>; Thu, 17 Apr 2025 04:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744859680; cv=none; b=uNnBGsjQxAWg/nkmae1bL5pWnxv0etWbOjH87pU1gHcwq6WY3qey8fpMOHGs8A3UvVq8DzmoqyEkqw798suzjI3QiKgi8LzFjVpbm/Ql7//MuSe321R8iqs/bK8qCxJi+YNMOIhkDI4xy+5CcUJ6odOdII19mOlq35kqjiNw0Q4=
+	t=1744863906; cv=none; b=GIVEqKX5/aHx/bOd9iIGKguXps+iglRFOEqklPc2iP+ISdc799cGtF5L/sDsp1dTuefze4gVaUHSoS8Hxb5oIRMiHRJLv19UG+D4we5KBzXaToFSV9/zWC8SrPeAkZvqrVSkOHaN3zxI3kSJBn5XPyvd3jQ7+7zQBo647cJZ9t8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744859680; c=relaxed/simple;
-	bh=RR+y52SUTPzi+E8u5B+AgHaBLqVXGgwSNZgKMma1sBg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uw3j01ouZ4w9y8fIOzUBTYt63E5CLLCWcxZiv4LyJW/5PlrkvjzspIBrbFGeOnleSxYRXcGzvrEttz74koo2Kjvat7W5pewXWnI0qQOwQvWbsGwl1SMzHZBF8Kz/h5GAHZT57a5qOSGun/14wmZt9TNYnDNLloK8h8+2CkcD7xQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-30db1bd3bddso2841151fa.3;
-        Wed, 16 Apr 2025 20:14:38 -0700 (PDT)
+	s=arc-20240116; t=1744863906; c=relaxed/simple;
+	bh=MlMsrIFgwNPUXQlQUeeWv3zwmDoBQ1Ow0x+5qtQ/UTU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YPwA0YqoGp1l53F6aXB0B6K82jFjMkHjwm5OXBQD7mlG2/OAxHz0D2/Lq3Gsw7luBGKoimFPBWMeoz47D0Q688fjj6HWA4or1rxgfmswDj6YmiH7xxiRqBB6tTcxwc0xXI/zTOIVHXinPHMqfM0YUomiiRm1ZHzgsXG7bGVaHuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Hr7KPjGE; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-224100e9a5cso3901785ad.2
+        for <linux-pm@vger.kernel.org>; Wed, 16 Apr 2025 21:25:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1744863903; x=1745468703; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YmiUHUUBKI8PJIWV5sMJoVG3SND4wAcYpi9OlzawyYI=;
+        b=Hr7KPjGEJTHH0n2W34l7jZXH2EXyhNphcZpk+mLeSzGEXR6DZkk28QqgOzOwInBJvB
+         LcUP0VB7PtY4prI79xhNW8tT86NkwPGGyeqeBFEk8im3cF4tPGXexfcFK7S7lrWozOgd
+         4abIpoM7bbD2Ftq1588yT0Tbg3W0tR6W1VFmdaVzNbymQwlB1vncGkJDsPhd94YT5NCc
+         Qgkc9be5z9xocNet+LXnqougjkdb2eh8OmeJy4SqMYL1ZDCpl6tNcaO8vfUlXt66lo0E
+         K1zVcZs+BBMVsKkHj75k8a+Kg+XDFGBpMcUPG90h/3eujjCYi0uKbzRNZHjNJseAWHDD
+         u+YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744859674; x=1745464474;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lEAcyQxjxEddEf75aHlB/SZ9GV/mTO73qRXKgW1f4Hc=;
-        b=Q+hsQbguMkjhnHrUgFG9XaH2T86NOgkDlPrR/e+XMEn42gCk1Q83oBiJ8HwEMHaiQj
-         8/NlurMvYtzRD2R9RHeXwjPkada4heAnNWx2Ajj57wi5sPwrKvHZJ5RVqdVh5W2UIDob
-         n2tM2SgQ6L/+lN0P0w01wKDdRQHpoQdCDHB7O1nATXh4RfNswPeaZyZrTcAjSKDIw1Zp
-         B/CMY44s35DtoHnXlyRuydtUgcqqz7NcxnyOEX1XiqKRaNxqN6eVsQf1X8bbyGJoly0Z
-         U+Q4wNlYtg5lBOZ/MtO2pq8+WJKh19fQOzsgqI4EvX62xl+0+4e6ktBs2nXYcCyNUD8K
-         j90Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWBbdoCU8Q2x9nBXh854fTOm0QBVHcImkpWVAD9v6eNxCRCBAN5CDIUdLEDiDCAio+qLQSf5kEl0jI=@vger.kernel.org, AJvYcCWIzUdCeaxkOiGoURLFB5TTgdbn6Rk4uGJe/2bm8HpC29/X/4w89TRnCt0ADAKHjxXEx8gwFA6toMHC@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxio2Gf/9K+1azjGwoWv1GFDasx5naUFlZeJAlyddy9m0nYPdDy
-	fr1iMehw5lqxVoBNPyHBL/cqYheuTmt2R2ZzF5VI3NFAntjkLtCSsBFnRoNq
-X-Gm-Gg: ASbGncuaviA1zKL1HM/DfFAwH3mcN/u4QVDUo9W9FkKfuKqBVgE0k9HO9+z0+9DMagY
-	jSRB0Obp6nVTQrWc1NqPmVI4gfewMA6LPIs4rFczQVRG1K5mN9M+a1svuoiinO9RFg/lGhg4ibQ
-	eSw617QNNAx9Sz9vgodRCqsmA3TtDIfKfjdSkLdANMKDx0YP/MC9Ht+e14XcjUAn0ZV7MZ34WyE
-	QsqAvMK9Sk4T6IIWKsdFF3sXZlCrlRTUjUpdQeXniMWfBuid9KCgBnGV+J5KpAM84Farsp9fP/T
-	X6sL1JKU4NVAbTv0yM0Zqqevx2uo4QcE0jWTyxdD+aBN2V/l1yso7EPNwZwiTP6FMlEpMTV/hy/
-	KXI5EVGyb
-X-Google-Smtp-Source: AGHT+IHNORkSni0l5QvzQhmP0tEhJ+Kq86XU+re6tw+D2AUVkYq+fj3xODGRSJLfAO32v1+P4Lt1ww==
-X-Received: by 2002:a05:6512:118c:b0:549:b0f3:43a2 with SMTP id 2adb3069b0e04-54d64ae7edfmr1243897e87.40.1744859674099;
-        Wed, 16 Apr 2025 20:14:34 -0700 (PDT)
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54d6799a931sm197703e87.76.2025.04.16.20.14.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Apr 2025 20:14:33 -0700 (PDT)
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-30dd5a93b49so2958131fa.0;
-        Wed, 16 Apr 2025 20:14:33 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU7ezg+L8C1CXE1wsNjN/JYWHu/QsUvlciv+tmyVWFT6DAGYDjSJ6eZvTT9yJllLESG637A0iLTrUQ=@vger.kernel.org, AJvYcCXWarMuUyUxMXYot3i1voc4sFLce9VNDtK/Bsj61EaRwir1rA7GqDcQCBDnF7+qJCoYSvKslE9ub1Xa@vger.kernel.org
-X-Received: by 2002:a05:651c:30c2:b0:30c:3099:13d0 with SMTP id
- 38308e7fff4ca-3107f6ce071mr16267491fa.21.1744859673381; Wed, 16 Apr 2025
- 20:14:33 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1744863903; x=1745468703;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YmiUHUUBKI8PJIWV5sMJoVG3SND4wAcYpi9OlzawyYI=;
+        b=WxZQLEGlf8X1ni1eWDABsTW339OcPOuDSGB45ty09TC7N0VgEBxr41xWTbLtiggZcR
+         DbuKKN2rcAV8bZY8rr7ydiOo7HPHfMyGvrN+PdaVxN0iCx6gTqYVsVWXEXQmxe4XJ75i
+         6ov5BmAmhEQMER1Aafm5ltNbzstI50pb38NEtlkOgWLyf+/4ajEho/acQ4KNRTUX8y6t
+         /zMywqK3eD3bIR6Bo0iDNze+J9C3gBH4XLXBbL9L7/i929eguJTIdKMTPr9TEN+9EuBx
+         EnBm6H7jXN3jQ1sPNWQpakAUgh4p8BeOkrxpIvgE0jv8IQNsqB/E1Sxu23YIFmogKogO
+         EXvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXaUnjQSFwcVDtEJKyqaGobrGiA0hDna7JVajSG2ENtik5+Moqb6i5bh5QnKUtB9nSwMf+1B66Z8A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw++wXQEE8xOrqzYQwRrwFJB/UMkSaZrFkdiwPgIGW+97kkSYdF
+	v+Wco8PLIuWCpIulAw8kmCsK8BpwgP6x4U+GBUrEM/2amHJR/3cgvkoh+OF4K1k=
+X-Gm-Gg: ASbGnctoPkh/3Kd+rxI7twiS7yL1KO68Ok0wd+UXPlCdvKVltjRtVORgRlBpeTlCQaM
+	uNtJ7bfUynVmvVQVRHAvfkF3xN3NAIt5z4oalWLT29LpjpuKJ/JMNVoCyE8VSHLodG/SH60p+Qg
+	ewc09SwgHSo1m22m7qCsudaJ9Mm230nUcmS4yM9Vd1Jhc74JDniC+LmZL1Cdlv17nbXaauJz8X2
+	iFIQnVe4xyqgxJxGGlecQ+ozXPzsjim+whNfJTW+kRNAXvdtQ2huWR/nG5n9mWZS/P1sqEQQK15
+	M+ar/+FyYDGTT5H/1CIuaH76O8Fv5bGOrvIM+kx4SA==
+X-Google-Smtp-Source: AGHT+IG2v69nuDWH4FgYa76B5nKgqy58L4Wid65MFMUFPK5+zr5XnBZE9bRrkKyZECa0wTorHqTLjA==
+X-Received: by 2002:a17:903:1cb:b0:224:721:ed9 with SMTP id d9443c01a7336-22c35981e16mr67570055ad.44.1744863903581;
+        Wed, 16 Apr 2025 21:25:03 -0700 (PDT)
+Received: from localhost ([122.172.83.32])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73bd2333859sm11288413b3a.158.2025.04.16.21.25.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Apr 2025 21:25:02 -0700 (PDT)
+Date: Thu, 17 Apr 2025 09:55:00 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Johan Hovold <johan+linaro@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	"Rob Herring (Arm)" <robh@kernel.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: fix compile-test defaults
+Message-ID: <20250417042500.tbuupp3jdpfkk7kh@vireshk-i7>
+References: <20250416134331.7604-1-johan+linaro@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250416224839.9840-1-andre.przywara@arm.com> <20250416224839.9840-2-andre.przywara@arm.com>
-In-Reply-To: <20250416224839.9840-2-andre.przywara@arm.com>
-Reply-To: wens@csie.org
-From: Chen-Yu Tsai <wens@csie.org>
-Date: Thu, 17 Apr 2025 11:14:21 +0800
-X-Gmail-Original-Message-ID: <CAGb2v67-wqA4A1=NKee0JNEW2+SABdixN0H-HBg8aJjGZjKdJw@mail.gmail.com>
-X-Gm-Features: ATxdqUHs7z3ZrbeWhMV3p3pM4JurppAfWHNtXUVUqdTkjloev5549-NL7E-N6XA
-Message-ID: <CAGb2v67-wqA4A1=NKee0JNEW2+SABdixN0H-HBg8aJjGZjKdJw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: power: Add Allwinner H6/H616 PRCM PPU
-To: Andre Przywara <andre.przywara@arm.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Boris Brezillon <boris.brezillon@collabora.com>, Steven Price <steven.price@arm.com>, 
-	Philippe Simons <simons.philippe@gmail.com>, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250416134331.7604-1-johan+linaro@kernel.org>
 
-On Thu, Apr 17, 2025 at 6:49=E2=80=AFAM Andre Przywara <andre.przywara@arm.=
-com> wrote:
->
-> The Allwinner H6 and some later SoCs contain some bits in the PRCM (Power
-> Reset Clock Management) block that control some power domains.
-> Those power domains include the one for the GPU, the PLLs and some
-> analogue circuits.
->
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+On 16-04-25, 15:43, Johan Hovold wrote:
+> Commit 3f66425a4fc8 ("cpufreq: Enable COMPILE_TEST on Arm drivers")
+> enabled compile testing of most Arm CPUFreq drivers but left the
+> existing default values unchanged so that many drivers are enabled by
+> default whenever COMPILE_TEST is selected.
+> 
+> This specifically results in the S3C64XX CPUFreq driver being enabled
+> and initialised during boot of non-S3C64XX platforms with the following
+> error logged:
+> 
+> 	cpufreq: Unable to obtain ARMCLK: -2
+> 
+> Fix the default values for drivers that can be compile tested and that
+> should be enabled by default when not compile testing.
+> 
+> Fixes: 3f66425a4fc8 ("cpufreq: Enable COMPILE_TEST on Arm drivers")
+> Cc: stable@vger.kernel.org	# 6.12
+> Cc: Rob Herring (Arm) <robh@kernel.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > ---
->  .../power/allwinner,sun50i-h6-prcm-ppu.yaml   | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/allwinner,sun=
-50i-h6-prcm-ppu.yaml
->
-> diff --git a/Documentation/devicetree/bindings/power/allwinner,sun50i-h6-=
-prcm-ppu.yaml b/Documentation/devicetree/bindings/power/allwinner,sun50i-h6=
--prcm-ppu.yaml
-> new file mode 100644
-> index 0000000000000..7eaff9baf7268
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/allwinner,sun50i-h6-prcm-pp=
-u.yaml
-> @@ -0,0 +1,42 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/allwinner,sun50i-h6-prcm-ppu.ya=
-ml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Allwinner SoCs PRCM power domain controller
-> +
-> +maintainers:
-> +  - Andre Przywara <andre.przywara@arm.com>
-> +
-> +description:
-> +  The Allwinner Power Reset Clock Management (PRCM) unit contains bits t=
-o
-> +  control a few power domains.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - allwinner,sun50i-h6-prcm-ppu
-> +      - allwinner,sun50i-h616-prcm-ppu
-> +      - allwinner,sun55i-a523-prcm-ppu
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#power-domain-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#power-domain-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    prcm_ppu: power-controller@7010210 {
+>  drivers/cpufreq/Kconfig.arm | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
 
-This doesn't match the address below.
+I have already applied a similar patch:
 
-ChenYu
+https://lore.kernel.org/all/20250404124006.362723-1-krzysztof.kozlowski@linaro.org/
 
-> +        compatible =3D "allwinner,sun50i-h616-prcm-ppu";
-> +        reg =3D <0x07010250 0x10>;
-> +        #power-domain-cells =3D <1>;
-> +    };
-> --
-> 2.46.3
->
+Can you rebase over that please ?
+
+-- 
+viresh
 
