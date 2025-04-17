@@ -1,115 +1,195 @@
-Return-Path: <linux-pm+bounces-25672-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25673-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 719DBA92C66
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 22:53:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 650B2A92C6D
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 22:56:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2B9007A4BC3
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 20:52:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D31CB1890186
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 20:56:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35A692063C2;
-	Thu, 17 Apr 2025 20:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 836A5207A11;
+	Thu, 17 Apr 2025 20:56:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ATBPhGaE"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HfbTr0Pk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B009199947
-	for <linux-pm@vger.kernel.org>; Thu, 17 Apr 2025 20:53:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5C3C35948
+	for <linux-pm@vger.kernel.org>; Thu, 17 Apr 2025 20:56:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744923204; cv=none; b=l7i9skozgZXPER80Bq3XLs/YJnoiIaJmGeao5h/Wqw8feZEBC210dxnP3Is+kyhkRJ0HcVgQiFJLM2OVy+q8WrWOZ3IMM3cO0/XLe5W50mlKRQNaw+5gpKUKJbYkws5VE40S2WUuUNKFtT7sW0x2LZlT83LMjIyV+B9nELcfbtk=
+	t=1744923386; cv=none; b=pZwZaBF8rmyyibaatb9pVBoxmCkPwIKcRG5nVAdANfx/5LHbxQgvU+7ruFKye3ScxuToExmc5WkOa6D7AxuIiMXpHhdws608YtRRl33n8ljkpfocGSiro7T6fXnntFh8w3fGHMF4xTx28Ug/XziIMmMHNwHvmiRIP1PZAIPoAuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744923204; c=relaxed/simple;
-	bh=dU4K8w2iZUqK1qEwcjzFKZf95JgMH503fYGue1h04/U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ufROpsaZLX4aWa5Ly07DbcXNCZ02QIyn6UUBD85q6+k5VdkZVsdY1QN96MtkcxQ28aEfxpkGYoA5BH/OsoM3UID9Zm8ciQom5ZAds2tP9k0pj21n9mTUgU9Ry7GbRnW9w6Yllk4x3BM5WmhQ2VQJrMrZdBXkz/APLVN8D34wvp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ATBPhGaE; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43cf848528aso9599865e9.2
-        for <linux-pm@vger.kernel.org>; Thu, 17 Apr 2025 13:53:21 -0700 (PDT)
+	s=arc-20240116; t=1744923386; c=relaxed/simple;
+	bh=V7PDpk2GFXR6cXkHRnlnFl27UJzlnxaonCAEGxbDy5g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=be0fv+bnHMFHuuyaNgASCXu1I/aLg4lZVQnLBvrJNx5yiT/8yDYIIwZq4loE5KfcWyDNu8i/2K2k1dNSsLJmIxL2CrjQyqIbWlVUukeNUy5UrnIFNCZFkoTwmhHa/OS54tJVIfYyFvpm/4/xr/hhzFiE5LWVPjL4tM+Vj42fAx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HfbTr0Pk; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-54acc0cd458so1448617e87.0
+        for <linux-pm@vger.kernel.org>; Thu, 17 Apr 2025 13:56:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744923200; x=1745528000; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xDbB859dSDSfvEjPhjet4jsYsLjTq5f/3IKKPbQbhjc=;
-        b=ATBPhGaE921YD+OxmrFJAIF5q1jNXPA8c9QQKqWjM8UOprf7i31rmipI1ohg64JvSL
-         XfACDbNayyuzU+bKe0YDOjMbSTch7sMf9bK1pS5vdpcRUfT0bD5F0hoZXvi8qpfY4FNp
-         7YjE0Se4qINVirmd0RPalDjWOQHDA6k1ZrxrNCHsr/SGWMINDiaVJTBW8XrA7Hk3l5zZ
-         3yrc0k0FIvKuGx3DOYffGqu1FBu+Bk1dHvAgfnH7g6yH28SKJ7Cv5SpLKte1Pm6hqPqd
-         VuJsyL6FVVwQQOGIsr29MrvrAwa8paM7xZHJswJpapmOIjcU25Sjd75vRzxIGRPeh1Fj
-         /4pQ==
+        d=google.com; s=20230601; t=1744923383; x=1745528183; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8Fv+1SPiZIDJMfYYyVTz9JfiGK8xQsdvl6qvFoYBv9E=;
+        b=HfbTr0PkzoLMdpZO4YpL1iyPUywtbZBkIIRNonyTsKFQQWZvs9vdgYNhJU2dWK3so7
+         kzVqQqO1CuqdchSYfAIoKHVjZLbQT6V9x78VLERRzIXtFrw8sk5pMGK4PHZMtaaPdwdm
+         l28UkxLSbMSYhisM7oIjCKf1e0nSaud2aDOm6qREWLCduYRmq8/zU0d6PyG5am4ltNdL
+         jSmoHCh15BGli5AhlyEvFuzny397votXAqEBnmpOe3kStAI1nZxopR3ouLZBDgeWdGMu
+         VJ0hp4o4kjAq1mmnSFmJbY+Ma8RKpNz+UMx3S2et3Oc4HzcsIMTY36ZB/B58qxncDrPq
+         5yQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744923200; x=1745528000;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xDbB859dSDSfvEjPhjet4jsYsLjTq5f/3IKKPbQbhjc=;
-        b=aD8VZuuk9DPt51j59T7RUPa57aHYIeZ3F8vpmuXONEMSZDsw1n12G1p0Hcx+jbn7wR
-         aAOq/Vkwts1DDK9qilmtKE5tCaYrJMXG80cYNLGSNBk3JnSMl/Al2VvexdbeRM0/JJr1
-         3/pAU06lTkbBR8e5vPhuV3CJIjuyYBEopO3b8DNkfIjDVQACigeL8cucfAhZxqDg3ACF
-         qkm3CeXXdjxjXVfvg81+SYQ2BV9xVNrCS3Vyn101CMfWGCzLtEE3lg+aa0GLPjg/kqmj
-         nmsJ+Q43BAW1kprOIr4ikOGIrD3G2EsEi7bzssUmVJEXrJJU4qi++LRconBA4f09ZT4C
-         FE6g==
-X-Forwarded-Encrypted: i=1; AJvYcCWS9ttmdUcYVYstDa4CKhIQLbcEJpkuoZah7y8t7MtYZraMoW2YEnwJTsaF8B3m4xWQ15EbMo4Z1g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5e8lN7I3EgJ6ryJIajHuJgPJ6ZIa7siZ8uIINdNuHuVYtVCmS
-	tijufUH8HvE57rjmWlvCM5mfna67cjrzYX3yT5mSLz+NCgpyEVybb7U2dZdhufQ=
-X-Gm-Gg: ASbGncs9IBXEbObEn5mUDuWOZQlzrrBCd49N56rY+Qt2L+P9hPtsQq5x4AtqUEpDV/R
-	MNdXOiZVn02dd6l5c/uODdJC82HXWA0OvdGj2GN/4lEX6savt7eZCP5tS4uFDxxg1z3IYEvyDJd
-	tLxzcG+FNw7xe51BOVVpiitaqHBh7vRGNfK3fggHnZX+S9/s0Gcwc74xBI17T1Zfh8skznGbSwL
-	ROWlfjCCZZEmis/rABMm+V/FJa70nUUx9y1FnHTh52oqBkn1f9jLE8ZzDS2uVUOrvSHUf/ZI8P0
-	VbDiunvW5EekVZ7X4uGFg3TK6ccbgIPWAdRisQaZQ8Ok5ObX5jokxECVL0W0KounjG9D8Apotxm
-	hl3c=
-X-Google-Smtp-Source: AGHT+IE/Yp64SirhNGNelGiWpri0X2Q09E00vtNFhQsoUcfIVJFu1JQsSDwG5YgCWmsxIzILvvYqcA==
-X-Received: by 2002:a05:600c:b94:b0:43d:fa59:af98 with SMTP id 5b1f17b1804b1-4406ac65474mr2651105e9.33.1744923200468;
-        Thu, 17 Apr 2025 13:53:20 -0700 (PDT)
-Received: from mai.linaro.org (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4406abb640bsm3339605e9.2.2025.04.17.13.53.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Apr 2025 13:53:19 -0700 (PDT)
-Date: Thu, 17 Apr 2025 22:53:18 +0200
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thermal: hisi: Do not enable by default during compile
- testing
-Message-ID: <aAFqPuFBfGEKFb-D@mai.linaro.org>
-References: <20250417074638.81329-1-krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20230601; t=1744923383; x=1745528183;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8Fv+1SPiZIDJMfYYyVTz9JfiGK8xQsdvl6qvFoYBv9E=;
+        b=bqjZmtLUuAhB7cPPA5EGz/0R8FFf7BhS5uhW6RcQ9NjuUSbkg5gN13AXbpFUB3PQ/x
+         tOlgO+OBcK3I/a/dRJJU/i8aY1m2TQmOFXtz92NGgfo8rnzhJL4x3/JR6qImqgcwNimN
+         4pB38sxcH8UAJJEzmm2Fz0sqhTKwmCESQ0CnYo8wjUdq/K9LLAR5jnEkAeTKfkBSwsNU
+         ejVeeA4X22vU+p0QhN0kmf1AQNqpIg9xuNTI7GqatE+EmPDjpCSi0SkXk5zsTnx3JoFU
+         tvyt1Iqw2ZQ4zRW4wm8Nbckrn29aQtjq7s8RTc547E86VAXuP7RrLg/NYTXmIttCTbw5
+         kR5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWCrx566ofkavE+QKtBd7V/R9sKASIncRlmxZjpwcStdLKlg1MeRcSHFDPM7gqHVPjfgPd/ZkjYCw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxV0QwfF9FPGxkKxk4Yjyh7Xwbfxel1bCPdtRHSfVnIiKKOxI23
+	SrSOy9sE4Vt+wN5TOEskBn98o9BkcVmZp+AU2AHa3MpNLHb+1LTFJeRmb9PJqhdeimIq1YJF6Rl
+	pvsup/J+l8pAXQUNxJcpK0CcLTZbZsXnCHm5z
+X-Gm-Gg: ASbGncugIkOJNpgT4/Ipf1ISGZ8MNIWUoXj9UeZIuxclvrvn6BCPFx8FWMCxWsXodio
+	PA3cPYSgV0gzmo1QDREeZ4+M3EX1wLQFFDjy3yYtvYdmeGKmtA38lCHtsjf78Zow3DKmk9t5GdM
+	8A/DBfFNPDEycrPxQrPqbuULKC6cRiUSu41IgepjhJYD4GJoe6XQ==
+X-Google-Smtp-Source: AGHT+IF0A2qLak23h90FXemjjq1QSkYxyUlJpX0SxLY+jGfQkwpWy77tDR0Zm8B6OSQfWtCedekDAXvMVmWnr/eLmso=
+X-Received: by 2002:a05:6512:15aa:b0:545:576:cbca with SMTP id
+ 2adb3069b0e04-54d6e61d361mr87421e87.8.1744923382449; Thu, 17 Apr 2025
+ 13:56:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250417074638.81329-1-krzysztof.kozlowski@linaro.org>
+References: <20250417142513.312939-1-ulf.hansson@linaro.org> <20250417142513.312939-6-ulf.hansson@linaro.org>
+In-Reply-To: <20250417142513.312939-6-ulf.hansson@linaro.org>
+From: Saravana Kannan <saravanak@google.com>
+Date: Thu, 17 Apr 2025 13:55:46 -0700
+X-Gm-Features: ATxdqUFg-9XKLQu-Jp_yqmPhQEY6HN_legQJia2_mCP7a2s8KIX0565-yrMa0hQ
+Message-ID: <CAGETcx9bHGuJ_J6yF14x0NJJXGWgoDn_X_ScBKaGdD4aTBvo5w@mail.gmail.com>
+Subject: Re: [PATCH 05/11] pmdomain: core: Use device_set_node() to assign the
+ fwnode too
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Michael Grzeschik <m.grzeschik@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
+	Abel Vesa <abel.vesa@linaro.org>, Devarsh Thakkar <devarsht@lewv0571a.ent.ti.com>, 
+	Peng Fan <peng.fan@oss.nxp.com>, Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
+	Johan Hovold <johan@kernel.org>, Maulik Shah <maulik.shah@oss.qualcomm.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 17, 2025 at 09:46:37AM +0200, Krzysztof Kozlowski wrote:
-> Enabling the compile test should not cause automatic enabling of all
-> drivers, but only allow to choose to compile them.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
+On Thu, Apr 17, 2025 at 7:25=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.org=
+> wrote:
+>
+> Rather than just assigning the dev->of_node for the genpd's device, let's
+> use device_set_node() to make sure the fwnode gets assigned too. This is
+> needed to allow fw_devlink to work correctly, for example.
+>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 > ---
+>  drivers/pmdomain/core.c | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> index da51a61a974c..3911d3e96626 100644
+> --- a/drivers/pmdomain/core.c
+> +++ b/drivers/pmdomain/core.c
+> @@ -2627,6 +2627,7 @@ static bool genpd_present(const struct generic_pm_d=
+omain *genpd)
+>  int of_genpd_add_provider_simple(struct device_node *np,
+>                                  struct generic_pm_domain *genpd)
+>  {
+> +       struct fwnode_handle *fwnode;
+>         int ret;
+>
+>         if (!np || !genpd)
+> @@ -2635,7 +2636,9 @@ int of_genpd_add_provider_simple(struct device_node=
+ *np,
+>         if (!genpd_present(genpd))
+>                 return -EINVAL;
+>
+> -       genpd->dev.of_node =3D np;
+> +       fwnode =3D &np->fwnode;
 
-Applied, thanks
+Use of_fwnode_handle() please.
 
+> +
+> +       device_set_node(&genpd->dev, fwnode);
+>
+>         /* Parse genpd OPP table */
+>         if (!genpd_is_opp_table_fw(genpd) && genpd->set_performance_state=
+) {
+> @@ -2661,7 +2664,7 @@ int of_genpd_add_provider_simple(struct device_node=
+ *np,
+>                 return ret;
+>         }
+>
+> -       genpd->provider =3D &np->fwnode;
+> +       genpd->provider =3D fwnode;
+>         genpd->has_provider =3D true;
+>
+>         return 0;
+> @@ -2677,6 +2680,7 @@ int of_genpd_add_provider_onecell(struct device_nod=
+e *np,
+>                                   struct genpd_onecell_data *data)
+>  {
+>         struct generic_pm_domain *genpd;
+> +       struct fwnode_handle *fwnode;
+>         unsigned int i;
+>         int ret =3D -EINVAL;
+>
+> @@ -2686,6 +2690,8 @@ int of_genpd_add_provider_onecell(struct device_nod=
+e *np,
+>         if (!data->xlate)
+>                 data->xlate =3D genpd_xlate_onecell;
+>
+> +       fwnode =3D &np->fwnode;
+> +
 
--- 
+Use of_fwnode_handle() please.
 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+-Saravana
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+>         for (i =3D 0; i < data->num_domains; i++) {
+>                 genpd =3D data->domains[i];
+>
+> @@ -2694,7 +2700,7 @@ int of_genpd_add_provider_onecell(struct device_nod=
+e *np,
+>                 if (!genpd_present(genpd))
+>                         goto error;
+>
+> -               genpd->dev.of_node =3D np;
+> +               device_set_node(&genpd->dev, fwnode);
+>
+>                 /* Parse genpd OPP table */
+>                 if (!genpd_is_opp_table_fw(genpd) && genpd->set_performan=
+ce_state) {
+> @@ -2713,7 +2719,7 @@ int of_genpd_add_provider_onecell(struct device_nod=
+e *np,
+>                         WARN_ON(IS_ERR(genpd->opp_table));
+>                 }
+>
+> -               genpd->provider =3D &np->fwnode;
+> +               genpd->provider =3D fwnode;
+>                 genpd->has_provider =3D true;
+>         }
+>
+> --
+> 2.43.0
+>
 
