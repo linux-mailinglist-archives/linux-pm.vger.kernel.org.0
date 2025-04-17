@@ -1,54 +1,63 @@
-Return-Path: <linux-pm+bounces-25621-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25622-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0887A91A30
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 13:12:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4E79A91A49
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 13:14:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B68947AECE0
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 11:11:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 392EA3B4D0D
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 11:13:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 759BF237179;
-	Thu, 17 Apr 2025 11:12:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C120923814A;
+	Thu, 17 Apr 2025 11:14:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="ZIADA/NB"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VqMi5Ok/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C20C23645F;
-	Thu, 17 Apr 2025 11:12:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F6B323771C;
+	Thu, 17 Apr 2025 11:14:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744888345; cv=none; b=S9227j0ssDDFMosFj1z5u3/q2oW9pB/sY8vL4Xsl7GinHmaJt00rrWM4WFCifZjoLgC3A6Lr1uGERavvtv/7vnJigoPhTtozjifZiuSJT1ZhtwbRIZ+DI47ZPZ/m4QJh097o9iHc8zNSCewucGItmiE3EC73j8FSXmhCvCLWDz4=
+	t=1744888442; cv=none; b=oCVoICTS09wgDMcIBr4zbWJvmKleKQG117P2qZhEFvhitiDEENJqDyswSYIwcx7wrr4l3r15rZ1wtT6cV2hJZl0UugfcyKXr3/bFSqOm7wT4gMyeeyYhya//GNfkG7YjDwmR9YgpXJ/eO4r7bVOUGL+n+8iuoOj61R8wr7WG1nM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744888345; c=relaxed/simple;
-	bh=zKR49UWsXQlKIMA1VnL+BkqgO+3iF8iLPVDDfF2KoTE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qJv86Il9HqLtscLyVepF/2S8m/x0VJulXPSa8zvBWZuchr/O4G6UWUyWFznvNE8KjgnwSqRoajoPJpzF2/wy4MpHHYFytP+KKoPa/sfquDczEHSfMFI+RNlieWHMDIr/7cCW3iixL2DS6JcI2oLoGR6XHX/tZxPEdTqhAfK/izs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=ZIADA/NB; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [192.168.7.202] ([71.202.166.45])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53HBB0dU3967739
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Thu, 17 Apr 2025 04:11:01 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53HBB0dU3967739
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025032001; t=1744888264;
-	bh=zKR49UWsXQlKIMA1VnL+BkqgO+3iF8iLPVDDfF2KoTE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZIADA/NBWFdjMUgJTKpv9M9Wy2YG9IZEPFByL8wYabsxbBoRuZfKRlm/KXHCD1Dct
-	 p+vwf14YsIuc+VHp9bDfack/1J0ZEDi3/LMHCo05xDW9TD4JrJ0GM5fVVA/piqxPhD
-	 UyV8JWSU0hR2PMwkuYuHLcqgii53bDcW9KmA0ITTnJZG4RxQYf1Gr8LMHk+DKpR9xo
-	 v/L3GNQ4ChUSYncpwgOQsPYYlB/v/0qZd/JiW4t/kLzx/6ZLdqruZ97wB6zyl1mziC
-	 tKwEE+12hM3fNBR36tO17t9Oq8pShTsP2t1ihwsRhIESP8RHTn9IcCLiPfhw0jeR7+
-	 9wRv9KyfJmA3A==
-Message-ID: <edbeb41d-3c38-4778-9a7c-255edc7cd5fb@zytor.com>
-Date: Thu, 17 Apr 2025 04:10:59 -0700
+	s=arc-20240116; t=1744888442; c=relaxed/simple;
+	bh=2sJ2U0EvpEhTQVG9/JgELJW+WflngxUZnimdDk85700=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=QsC8O5c8Fr2f7MsclZBRgY751TkdJuhCKi5xqVWn0jZgQAB1bMMFNwYVmA+6wQ1UJIJV6uUl8FfcnzujiX+6g3GpzUSkoPNJOfDROfokR/KMl1lyNCxSjCL9eMbqyV2RxS5oPJRr+vyGCezxQfPvyiAmH3E2QTEaeBXVcHdiQZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VqMi5Ok/; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53H5lEqd030241;
+	Thu, 17 Apr 2025 11:13:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	4CpzHXoA1ZnrBpdmd8zZ2QRcSHCIdVQ90m1DIUHy2X4=; b=VqMi5Ok/Agu7ts7n
+	T4oum788hbwqSEvQMEopOaiKjn7hPqIiWRKD+mphPjZF9VJQo8xcdWDEazTfU+H5
+	QCr3RJmF91QPGudhOKZ1S7FS9p8etSqbTRQITAMDMj6I2BgNU4OH9dn1PywLWKNk
+	3obexkgN6xdZuIp2c9xCcs26YWxuzIBE5SeoLEJMWaCGi8hYJJIa3RzJZohEc5ei
+	TPngcH+gDqD0MO+YiCffe1jnlnAYIjjIbaw9wnwnkBWeLEOIrWgLkCpJB+9KaAgL
+	dZdnr0l+Dm4phAvkUCzEYOlhJvNef4AEUpd1XKv1GM6MHxOwKPE9UFgFt9yQfWTf
+	xDS7hg==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45yf69xp9h-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 17 Apr 2025 11:13:57 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53HBDuNQ030878
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 17 Apr 2025 11:13:56 GMT
+Received: from [10.133.33.163] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 17 Apr
+ 2025 04:13:54 -0700
+Message-ID: <bda36907-d7eb-4969-909b-697eebe14941@quicinc.com>
+Date: Thu, 17 Apr 2025 19:13:52 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,80 +65,183 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 13/15] x86/msr: Use the alternatives mechanism to
- read MSR
-To: Francesco Lavra <francescolavra.fl@gmail.com>
-Cc: acme@kernel.org, adrian.hunter@intel.com, ajay.kaher@broadcom.com,
-        alexander.shishkin@linux.intel.com, andrew.cooper3@citrix.com,
-        bcm-kernel-feedback-list@broadcom.com, boris.ostrovsky@oracle.com,
-        bp@alien8.de, bpf@vger.kernel.org, dave.hansen@linux.intel.com,
-        decui@microsoft.com, haiyangz@microsoft.com, hpa@zytor.com,
-        irogers@google.com, jgross@suse.com, jolsa@kernel.org,
-        kan.liang@linux.intel.com, kvm@vger.kernel.org, kys@microsoft.com,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        llvm@lists.linux.dev, luto@kernel.org, mark.rutland@arm.com,
-        mingo@redhat.com, namhyung@kernel.org, pbonzini@redhat.com,
-        peterz@infradead.org, seanjc@google.com, tglx@linutronix.de,
-        tony.luck@intel.com, virtualization@lists.linux.dev,
-        vkuznets@redhat.com, wei.liu@kernel.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org
-References: <0f4f2ed70829fffb2eb816e34e26be22681705a5.camel@gmail.com>
+Subject: Re: [PATCH] interconnect: Replace mutex with rt_mutex
+To: Mike Tipton <quic_mdtipton@quicinc.com>, Georgi Djakov <djakov@kernel.org>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_okukatla@quicinc.com>
+References: <20220906191423.30109-1-quic_mdtipton@quicinc.com>
+ <3c8965c0-3bc0-252e-381d-bd057fd02af5@kernel.org>
+ <20220907145916.GA2368@hu-mdtipton-lv.qualcomm.com>
+From: "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>
 Content-Language: en-US
-From: Xin Li <xin@zytor.com>
-Autocrypt: addr=xin@zytor.com; keydata=
- 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
- l75w1xInsg==
-In-Reply-To: <0f4f2ed70829fffb2eb816e34e26be22681705a5.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20220907145916.GA2368@hu-mdtipton-lv.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: efo0vXhXRsiy9Ndu_quh5Sd20YQJZUEE
+X-Authority-Analysis: v=2.4 cv=JNc7s9Kb c=1 sm=1 tr=0 ts=6800e275 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=COk6AnOGAAAA:8 a=l4kxOWY4hJXouw1xGfoA:9 a=QEXdDO2ut3YA:10
+ a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: efo0vXhXRsiy9Ndu_quh5Sd20YQJZUEE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-17_03,2025-04-15_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ suspectscore=0 mlxlogscore=999 lowpriorityscore=0 bulkscore=0
+ impostorscore=0 clxscore=1011 phishscore=0 adultscore=0 priorityscore=1501
+ spamscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2504170084
 
-On 4/14/2025 10:13 AM, Francesco Lavra wrote:
-> This works only if this function has been called directly (e.g. via
-> `call asm_xen_write_msr`), but doesn't work with alternative call types
-> (like indirect calls). Not sure why one might want to use an indirect
-> call to invoke asm_xen_write_msr, but this creates a hidden coupling
-> between caller and callee.
-> I don't have a suggestion on how to get rid of this coupling, other
-> than setting ipdelta in _ASM_EXTABLE_FUNC_REWIND() to 0 and adjusting
-> the _ASM_EXTABLE_TYPE entries at the call sites to consider the
-> instruction that follows the function call (instead of the call
-> instruction) as the faulting instruction (which seems pretty ugly, at
-> least because what follows the function call could be an instruction
-> that might itself fault). But you may want to make this caveat explicit
-> in the comment.
+On 9/7/2022 10:59 PM, Mike Tipton wrote:
+> On Wed, Sep 07, 2022 at 10:35:26AM +0300, Georgi Djakov wrote:
+>> Hi Mike,
+>>
+>> Thanks for the patch!
+>>
+>> On 6.09.22 22:14, Mike Tipton wrote:
+>>> Replace mutex with rt_mutex to prevent priority inversion between
+>>> clients, which can cause unacceptable delays in some cases.
+>>
+>> It would be nice if you have any numbers to share in the commit text.
+> 
+> I can try to dig up some numbers, but mileage will vary tremendously of
+> course. Improvement is really only seen in certain high-concurrency
+> scenarios.
 
-Good idea, will state that in the comment.
+We need to revisit this thread because the issue has been reported again
+recently.
+Here is the data I can provide regarding the performance issue. Please
+check if it is sufficient for the commit message to understand the change.
+The CFS normal tasks holding the mutex lock were runnable for
+approximately 40ms in a busy load scenario, causing the RT task to wait
+for the mutex for about 40ms, which resulted in the RT task not being
+'real-time' enough and causing janks. Changing the mutex to an RT mutex
+helped the caller of the interface, such as icc_set_bw, to ensure that
+RT tasks can deliver RT priority to the current RT mutex owner quickly,
+thereby improving performance in this scenario.
+
+
+*Before the change the scenario is like:
+ +------------+           +-----------------+
+
+
+  | RT Task A  |           |Normal cfs task B|
+                                                +------------+
++-----------------+
+
+
+                            mutex_lock(&icc_lock)
+
+
+  call icc_set_bw()
+
+
+  wait mutex_unlock(&icc_lock)
+
+
+                            wait other high priority tasks
+
+
+                            mutex_unlock(&icc_lock)
+
+
+  get the lock
+
+
+
+
+
+*After the change the solution will be like:
+
+
+
+
+   +------------+           +-----------------+
+
+
+   | RT Task A  |           |Normal cfs task B|
+
+
+   +------------+           +-----------------+
+
+
+                          rt_mutex_lock(&icc_lock)
+
+
+                           wait other high priority task
+
+
+
+
+
+   call icc_set_bw()
+
+
+   rt_mutex_lock(&icc_lock)
+
+
+   -->boost task_B prio
+
+
+                            Get the chance to run
+
+
+                             -->mutex_unlock(&icc_lock)
+
+
+                             -->deboost task_B prio
+
+
+   get the lock with RT prio
+
+Please comment if more information is needed to apply the current
+similar patch. If there are no objections, we can rebase and upload a
+new patch set accordingly.
+> 
+>>
+>>> Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
+>>> ---
+>>>
+>>> We've run into a number of cases internally and from customers where
+>>> high priority, RT clients (typically display) become blocked for long
+>>> periods of time on lower priority, non-RT clients. Switching to rt_mutex
+>>> has proven to help performance in these cases.
+>>
+>> I am wondering if avoiding the inversion on this specific lock is the right
+>> solution, as there could be other locks that may cause similar issues. Do we
+>> see similar issue with clocks for example or is it just with interconnects?
+
+The current issue has been captured in multiple projects, while it has
+only been reported in interconnects so far. We need to understand
+whether specific mutex locks such as those from clocks, are being called
+by RT tasks in any possible scenarios.
+> 
+> I raised these same concerns internally, since some of the clients
+> experiencing delays also request clocks and regulators. However, I
+> believe they primarily request interconnects in these critical paths and
+> not clocks/regulators. At least not as frequently as they request
+> interconnect. Additionally, I suspect the average interconnect latencies
+> are higher than clock on our platforms, since interconnect will always
+> result in blocking calls to RPM/RPMh. I also wouldn't be surprised if we
+> have more consistent contention on interconnect, since certain clients
+> update DDR BW quite frequently. I suppose at some point the same
+> rt_mutex argument could be made for clock and regulator as well, but
+> to-date we've only needed to change interconnect to see improvement.
+> 
+> I'm not sure what an alternative, generic solution would be. We have
+> many clients requesting many different paths. Some are more
+> latency-sensitive and higher priority than others. If these use cases
+> overlap, then we're subject to these sorts of priority inversion issues.
+> Bumping the priority of all clients to match the highest priority one
+> isn't really possible.
+
+Based on my understanding, rt_mutex is a good API to solve this type of
+issue.
+
+-- 
+Thx and BRs,
+Aiqun(Maria) Yu
 
