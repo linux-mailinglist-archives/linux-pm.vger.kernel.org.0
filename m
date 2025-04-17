@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-25623-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25624-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B245A91B4C
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 13:58:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36A76A91BC8
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 14:19:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2B6719E2FEF
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 11:58:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B5F43B098D
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 12:19:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32F3C24113C;
-	Thu, 17 Apr 2025 11:58:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7CA021C168;
+	Thu, 17 Apr 2025 12:19:45 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B52D62376E6;
-	Thu, 17 Apr 2025 11:58:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EE6B39851;
+	Thu, 17 Apr 2025 12:19:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744891120; cv=none; b=Q6FNhbqlFKVXhYKqe8+wTvA74C6+JX79bJ62z2RV+ZkXlZluxrO+IEuKm8TaCrscIaPRvzN57r9PCQJc+neTLxLGLQTYsX3tgITL+N5xmFC88/JVmWM8UU+1RhUoNz1FhcONk5iNTkCDDkV2BSBWf+7ZDlFKHaoBaQ8guTJHE/0=
+	t=1744892385; cv=none; b=PHGCbuueL/NpYw51tV7Yda/Nsr1HkqiAM3Yy2YhanxcxVP43HaahLpGUYKtaJD+rsIPHE1trBuJ2UBAPis7b52WVngLEwiMJY0v/8FlA9ANREhctCVtOqEgOfOrGiXEjIi0jffV3qJlNnjzGHQay+QeHYCrIDNJEMqZV4D20gA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744891120; c=relaxed/simple;
-	bh=piL7Ml6/tbHsJklUjJbQArZpBnPjXFkZnvXPy3lvvaA=;
+	s=arc-20240116; t=1744892385; c=relaxed/simple;
+	bh=7oGjk65zLyxi8wQEHBBN+pE4ICLq8BTgj4YoVvfc/5Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E6Ix4bV8wsnEULl1QZckHP+/BhckdUaNL0KQ3ocOrV3cXCHy7R9jtTh6mAcCsDsftdQwYXw2KQdT/9JZ60JXN1QJRb4advJS285GVIaJ9nwrbtSK4X9R3O+FLfsb/pR0YIlBNeKjwEz1BL2HixaAVGA1AXtmlzHNmWGTB5cRSOo=
+	 In-Reply-To:Content-Type; b=aWwGsTbknOzKOXWFevqvzFIgi+sfj8Dw55Q2b7b/rRxZ7nnPYsNBp9cSpY9LXbowCsmAvaJOJPUWd90MX9YNzSKe8mQa8T3lXDsQCwap13HPZM01pFBV/1Qop3YBoQvm3GVbO62rXhBZsVJJFESSG7ZC8ocULdbwVEDhhjp3iQc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 326451515;
-	Thu, 17 Apr 2025 04:58:34 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 432E91515;
+	Thu, 17 Apr 2025 05:19:40 -0700 (PDT)
 Received: from [10.1.25.43] (e127648.arm.com [10.1.25.43])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A4F083F694;
-	Thu, 17 Apr 2025 04:58:35 -0700 (PDT)
-Message-ID: <76d5c5ba-6be0-405b-83dd-038f016af12b@arm.com>
-Date: Thu, 17 Apr 2025 12:58:34 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 62BB83F694;
+	Thu, 17 Apr 2025 05:19:41 -0700 (PDT)
+Message-ID: <e439a75c-fe36-4fba-b394-c154adeff15a@arm.com>
+Date: Thu, 17 Apr 2025 13:19:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,128 +42,87 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/2] cpuidle: teo: Refine handling of short idle
- intervals
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
- Doug Smythies <dsmythies@telus.net>,
- Aboorva Devarajan <aboorvad@linux.ibm.com>
-References: <4661520.LvFx2qVVIh@rjwysocki.net>
- <2239639.irdbgypaU6@rjwysocki.net>
- <1c0c6caa-e56c-454a-a976-81303dee1852@arm.com>
- <CAJZ5v0g-=DB_W5jkxxCERy22jz9a_V1Tcj8hiVwL6_R+xSM=gQ@mail.gmail.com>
+Subject: Re: [RFT][PATCH v1 3/8] cpufreq/sched: Allow .setpolicy() cpufreq
+ drivers to enable EAS
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Morten Rasmussen <morten.rasmussen@arm.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+ Pierre Gondois <pierre.gondois@arm.com>
+References: <3344336.aeNJFYEL58@rjwysocki.net>
+ <8554829.NyiUUSuA9g@rjwysocki.net>
 Content-Language: en-US
 From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <CAJZ5v0g-=DB_W5jkxxCERy22jz9a_V1Tcj8hiVwL6_R+xSM=gQ@mail.gmail.com>
+In-Reply-To: <8554829.NyiUUSuA9g@rjwysocki.net>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 4/16/25 16:28, Rafael J. Wysocki wrote:
-> On Wed, Apr 16, 2025 at 5:00 PM Christian Loehle
-> <christian.loehle@arm.com> wrote:
->>
->> On 4/3/25 20:18, Rafael J. Wysocki wrote:
->>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>
->>> Make teo take all recent wakeups (both timer and non-timer) into
->>> account when looking for a new candidate idle state in the cases
->>> when the majority of recent idle intervals are within the
->>> LATENCY_THRESHOLD_NS range or the latency limit is within the
->>> LATENCY_THRESHOLD_NS range.
->>>
->>> Since the tick_nohz_get_sleep_length() invocation is likely to be
->>> skipped in those cases, timer wakeups should arguably be taken into
->>> account somehow in case they are significant while the current code
->>> mostly looks at non-timer wakeups under the assumption that frequent
->>> timer wakeups are unlikely in the given idle duration range which
->>> may or may not be accurate.
->>>
->>> The most natural way to do that is to add the "hits" metric to the
->>> sums used during the new candidate idle state lookup which effectively
->>> means the above.
->>>
->>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>
->> Hi Rafael,
->> I might be missing something so bare with me.
->> Quoting the cover-letter too:
->> "In those cases, timer wakeups are not taken into account when they are
->> within the LATENCY_THRESHOLD_NS range and the idle state selection may
->> be based entirely on non-timer wakeups which may be rare.  This causes
->> the prediction accuracy to be low and too much energy may be used as
->> a result.
->>
->> The first patch is preparatory and it is not expected to make any
->> functional difference.
->>
->> The second patch causes teo to take timer wakeups into account if it
->> is about to skip the tick_nohz_get_sleep_length() invocation, so they
->> get a chance to influence the idle state selection."
->>
->> If the timer wakeups are < LATENCY_THRESHOLD_NS we will not do
->>
->> cpu_data->sleep_length_ns = tick_nohz_get_sleep_length(&delta_tick);
->>
->> but
->>
->> cpu_data->sleep_length_ns = KTIME_MAX;
->>
->> therefore
->> idx_timer = drv->state_count - 1
->> idx_duration = some state with residency < LATENCY_THRESHOLD_NS
->>
->> For any reasonable system therefore idx_timer != idx_duration
->> (i.e. there's an idle state deeper than LATENCY_THRESHOLD_NS).
->> So hits will never be incremented?
+On 4/16/25 19:01, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Why never?
+> Some cpufreq drivers, like intel_pstate, have built-in governors that
+> are used instead of regular cpufreq governors, schedutil in particular,
+> but they can work with EAS just fine, so allow EAS to be used with
+> those drivers.
 > 
-> First of all, you need to get into the "2 * cpu_data->short_idles >=
-> cpu_data->total" case somehow and this may be through timer wakeups.
-
-Okay, maybe I had a too static scenario in mind here.
-Let me think it through one more time.
-
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
 > 
->> How would adding hits then help this case?
+> v0.3 -> v1
+>      * Rebase on top of the new [1-2/8].
+>      * Update the diagnostic message printed if the conditions are not met.
 > 
-> They may be dominant when this condition triggers for the first time.
+> This patch is regarded as a cleanup for 6.16.
+> 
+> ---
+>  drivers/cpufreq/cpufreq.c |   13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+> 
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -3054,7 +3054,16 @@
+>  
+>  	guard(cpufreq_policy_read)(policy);
+>  
+> -	return sugov_is_governor(policy);
+> +	/*
+> +	 * For EAS compatibility, require that either schedutil is the policy
+> +	 * governor or the policy is governed directly by the cpufreq driver.
+> +	 *
+> +	 * In the latter case, it is assumed that EAS can only be enabled by the
+> +	 * cpufreq driver itself which will not enable EAS if it does not meet
+> +	 * the EAS' expectations regarding performance scaling response.
+> +	 */
+> +	return sugov_is_governor(policy) || (!policy->governor &&
+> +		policy->policy != CPUFREQ_POLICY_UNKNOWN);
+>  }
+>  
+>  bool cpufreq_ready_for_eas(const struct cpumask *cpu_mask)
+> @@ -3064,7 +3073,7 @@
+>  	/* Do not attempt EAS if schedutil is not being used. */
+>  	for_each_cpu(cpu, cpu_mask) {
+>  		if (!cpufreq_policy_is_good_for_eas(cpu)) {
+> -			pr_debug("rd %*pbl: schedutil is mandatory for EAS\n",
+> +			pr_debug("rd %*pbl: EAS requirements not met\n",
+>  				 cpumask_pr_args(cpu_mask));
 
-I see.
+I'd prefer to have at least "EAS cpufreq requirements" printed here.
+with that caveat
+Reviewed-by: Christian Loehle <christian.loehle@arm.com>
 
-Anything in particular this would help a lot with?
-There's no noticeable behavior change in my usual tests, which is
-expected, given we have only WFI in LATENCY_THRESHOLD_NS.
+Maybe we should amend the EAS documentation to reflect this?
+(And also emphasise that EAS will make cpufreq assumptions as if sugov
+was the governor regardless.)
 
-I did fake a WFI2 with residency=5 latency=1, teo-m is mainline, teo
-is with series applied:
+>  			return false;
+>  		}
+> 
+> 
+> 
 
-device   gov    iter   iops    idles     idle_misses  idle_miss_ratio  belows   aboves   WFI       WFI2
--------  -----  -----  ------  --------  ------------  ----------------  --------  -------  --------  --------
-nvme0n1  teo    0      80223   8601862   1079609       0.126             918363    161246   205096    4080894
-nvme0n1  teo    1      78522   8488322   1054171       0.124             890420    163751   208664    4020130
-nvme0n1  teo    2      77901   8375258   1031275       0.123             878083    153192   194500    3977655
-nvme0n1  teo    3      77517   8344681   1023423       0.123             869548    153875   195262    3961675
-nvme0n1  teo    4      77934   8356760   1027556       0.123             876438    151118   191848    3971578
-nvme0n1  teo    5      77864   8371566   1033686       0.123             877745    155941   197903    3972844
-nvme0n1  teo    6      78057   8417326   1040512       0.124             881420    159092   201922    3991785
-nvme0n1  teo    7      78214   8490292   1050379       0.124             884528    165851   210860    4019102
-nvme0n1  teo    8      78100   8357664   1034487       0.124             882781    151706   192728    3971505
-nvme0n1  teo    9      76895   8316098   1014695       0.122             861950    152745   193680    3948573
-nvme0n1  teo-m  0      76729   8261670   1032158       0.125             845247    186911   237147    3877992
-nvme0n1  teo-m  1      77763   8344526   1053266       0.126             867094    186172   237526    3919320
-nvme0n1  teo-m  2      76717   8285070   1034706       0.125             848385    186321   236956    3889534
-nvme0n1  teo-m  3      76920   8270834   1030223       0.125             847490    182733   232081    3887525
-nvme0n1  teo-m  4      77198   8329578   1044724       0.125             855438    189286   240947    3908194
-nvme0n1  teo-m  5      77361   8338772   1046903       0.126             857291    189612   241577    3912576
-nvme0n1  teo-m  6      76827   8346204   1037520       0.124             846008    191512   243167    3914194
-nvme0n1  teo-m  7      77931   8367212   1053337       0.126             866549    186788   237852    3930510
-nvme0n1  teo-m  8      77870   8358306   1056011       0.126             867167    188844   240602    3923417
-nvme0n1  teo-m  9      77405   8338356   1046012       0.125             856605    189407   240694    3913012
-
-The difference is small, but it's there even though this isn't
-a timer-heavy workload at all.
 
