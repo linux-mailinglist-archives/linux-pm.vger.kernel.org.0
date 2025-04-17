@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-25660-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25661-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 014B1A9247B
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 19:54:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3E5DA92480
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 19:54:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 948081B60815
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 17:54:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BF9F17B075D
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 17:53:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5A042580C2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B37E52580F1;
 	Thu, 17 Apr 2025 17:53:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="eI5bkfiC"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="nUCn0eye"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2FDD2571CA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA78B257424;
 	Thu, 17 Apr 2025 17:53:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744912414; cv=none; b=Dp3rf9+wQcNoeLpT0ZFlRBVNPLoCfyGbu0RhiXCc2cB8HcJ3QG6s/wEZ1r14ycTg+K3O+WSPv2iukeKiJbRVFCVSaPuP/C+yY4WiDmkd11DxsZl/iwwRPPoUgcpeuR/pmkkpusgydwo+FJwkeRGNm0GQZwtf0lWru88M0M8olkY=
+	t=1744912414; cv=none; b=ewhhu45TpTpfcg/ujXHnCyToWmWJCz0W+C1tMg+rsFeBOdKjLyVyzXKzn8gXEZHQ1QWDDiu8IFsV3zyH06HR2pavyuinPwkr93cEuR+u+26Ly8AVZDm8GVlkksn4IXxwqxFyG8cillStsS790UigDh6ply2anHGQbpOkAHPsr8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1744912414; c=relaxed/simple;
-	bh=7z9+NBdXvgZs8VMPVVMsPGq7ziNHtwhTTOGs0r+Jai0=;
+	bh=yYF43Unru39rskLB6o15FW18gb2pC1rZY8MRgF53hIU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Lpr8n7VmJnZk99NLqDcqaLW0wRo9C14Eiy5wEkDevGEX5/EsbDQfvVS7wbWmeYUtilPV5+QIjBzrdCvtEEGFwH7IOv2KPDyfhratZV5bRlgs4GNWeamwzx3GZkJMG1jfEuDZy+PcO0fHHiKLdgWrgINqsqNwQZmQROk8dGoWefM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=eI5bkfiC; arc=none smtp.client-ip=185.138.42.100
+	 MIME-Version:Content-Type; b=sVS0BmvUFFqascKtBjRJ0oSW9NxgoPSSlpyXGiICMp52GVOaeBxO9IoV67rj/ibVYeP6hx7izCjCNYntZe9qLDLLu1cUnRysccIcaQu/F5wtm7Atja4N0B3jOBhLYeaTz7cPK58eIN7G7ChBJkzZhUyKZ4sHBihZV6Y9cIdnug0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=nUCn0eye; arc=none smtp.client-ip=185.138.42.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Received: from localhost.localdomain (unknown [IPv6:2a05:f6c2:511b:0:cbc0:999f:73ad:33bd])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 29EA92E088D8;
-	Thu, 17 Apr 2025 20:53:27 +0300 (EEST)
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 43D182E08A29;
+	Thu, 17 Apr 2025 20:53:29 +0300 (EEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1744912409;
-	bh=2oyeEHL5RGXZ13onh6k9JhX2IrdUxRPNzwIc6bpWggA=; h=From:To:Subject;
-	b=eI5bkfiCjE39Na+a+PLeO9hw96UbRO+03N4O8OnmGFoj8RpnUC7uXzPpCbYj/OPOY
-	 GHXmDrAgnCBcOy6QmarNJvHMe6Ntya4ykULOBclqayGGVwZKRBiU3EA25aufGbgiY9
-	 pOJdJ6HU1JWnY/MZf9jAHUpyZyqOjQ6ftzMmqIKQ=
+	s=default; t=1744912411;
+	bh=rPiuh34oF+Te4yOv2w+rVAfjfi+m0fUEXD7gGDgXtCU=; h=From:To:Subject;
+	b=nUCn0eye67J9FNVs+biACED7f313IDwmXp2xJqVyEIdWrATWohEkGkXuJ4kS797ei
+	 72WmY0vXlkQent9eFpwK6lBHilmy4elfDnGMN+OUp4P+N16qJoSvnHul1B0xT/tJ1M
+	 GiPOMwVzlCALE9FH5uAP2dlqxNl/qHFzAu+9QPbU=
 Authentication-Results: linux1587.grserver.gr;
 	spf=pass (sender IP is 2a05:f6c2:511b:0:cbc0:999f:73ad:33bd) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
 Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
@@ -64,10 +64,9 @@ Cc: linux-hwmon@vger.kernel.org,
 	hdegoede@redhat.com,
 	mario.limonciello@amd.com,
 	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: [PATCH v9 05/15] ABI: testing: sysfs-class-oxp: add tt_led attribute
- documentation
-Date: Thu, 17 Apr 2025 19:53:00 +0200
-Message-ID: <20250417175310.3552671-6-lkml@antheas.dev>
+Subject: [PATCH v9 06/15] platform/x86: oxpec: Rename ec group to tt_toggle
+Date: Thu, 17 Apr 2025 19:53:01 +0200
+Message-ID: <20250417175310.3552671-7-lkml@antheas.dev>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250417175310.3552671-1-lkml@antheas.dev>
 References: <20250417175310.3552671-1-lkml@antheas.dev>
@@ -80,41 +79,51 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-PPP-Message-ID: 
- <174491240878.24952.11919427039514044173@linux1587.grserver.gr>
+ <174491241084.25014.303836050158476415@linux1587.grserver.gr>
 X-PPP-Vhost: antheas.dev
 X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
 X-Virus-Status: Clean
 
-Adds documentation about the tt_led attribute of OneXPlayer devices
-to the sysfs-class-oxp ABI documentation.
+Currently, the EC group is used for the turbo button. However, the next
+patch in the series adds support for the LED button in X1 devices, which
+is only applicable for X1 devices. Therefore, rename it to prepare for
+adding the second group. And make it const while at it.
 
-Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
 Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
+Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 ---
- Documentation/ABI/testing/sysfs-platform-oxp | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/platform/x86/oxpec.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-platform-oxp b/Documentation/ABI/testing/sysfs-platform-oxp
-index 091269ab2c8c4..b3f39fc21dfa8 100644
---- a/Documentation/ABI/testing/sysfs-platform-oxp
-+++ b/Documentation/ABI/testing/sysfs-platform-oxp
-@@ -11,3 +11,15 @@ Description:
- 		shortcut over the AT keyboard of the device. In addition,
- 		using this setting is a prerequisite for PWM control for most
- 		newer models (otherwise it NOOPs).
-+
-+What:		/sys/devices/platform/<platform>/tt_led
-+Date:		April 2025
-+KernelVersion:	6.16
-+Contact:	"Antheas Kapenekakis" <lkml@antheas.dev>
-+Description:
-+		Some OneXPlayer devices (e.g., X1 series) feature a little LED
-+		nested in the Turbo button. This LED is illuminated when the
-+		device is in the higher TDP mode (e.g., 25W). Once tt_toggle
-+		is engaged, this LED is left dangling to its last state. This
-+		attribute allows userspace to control the LED state manually
-+		(either with 1 or 0). Only a subset of devices contain this LED.
+diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
+index dc3a0871809cd..ee37070ec54fc 100644
+--- a/drivers/platform/x86/oxpec.c
++++ b/drivers/platform/x86/oxpec.c
+@@ -681,18 +681,18 @@ static const struct hwmon_channel_info * const oxp_platform_sensors[] = {
+ 	NULL,
+ };
+ 
+-static struct attribute *oxp_ec_attrs[] = {
++static struct attribute *oxp_tt_toggle_attrs[] = {
+ 	&dev_attr_tt_toggle.attr,
+ 	NULL
+ };
+ 
+-static struct attribute_group oxp_ec_attribute_group = {
++static const struct attribute_group oxp_tt_toggle_attribute_group = {
+ 	.is_visible = tt_toggle_is_visible,
+-	.attrs = oxp_ec_attrs,
++	.attrs = oxp_tt_toggle_attrs,
+ };
+ 
+ static const struct attribute_group *oxp_ec_groups[] = {
+-	&oxp_ec_attribute_group,
++	&oxp_tt_toggle_attribute_group,
+ 	NULL
+ };
+ 
 -- 
 2.49.0
 
