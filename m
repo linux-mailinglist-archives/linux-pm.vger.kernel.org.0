@@ -1,112 +1,162 @@
-Return-Path: <linux-pm+bounces-25628-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25629-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D17ACA91C7E
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 14:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F089BA91C94
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 14:42:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D190188A391
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 12:40:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A9FA19E507B
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 12:42:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0051023F26A;
-	Thu, 17 Apr 2025 12:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TwJiZBMz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71BE024339C;
+	Thu, 17 Apr 2025 12:42:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCCA4433A4;
-	Thu, 17 Apr 2025 12:39:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8961D242917;
+	Thu, 17 Apr 2025 12:42:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744893595; cv=none; b=EaB2QMLpUK9AwUisquFgSUqXQUr6YK9oQH3Q9XNAxdYEwJweTc/PBKOq/LtcvSo/f2XwHmOxuh+HgYzvQwx/wRrbQM7SBin+ixEhcnajD7sPWhdeqjGEdrtf4jljg0nb1QRi/TfYBqbdd67lpp3i4IC5UxwOPoLuedDxGnppTRQ=
+	t=1744893737; cv=none; b=E4QKXrV+T8pasTaaZkknqR96N7xckaUpY359OudqFpnXVwJGLClLIEQy3XPPt4B20Zyg3MtCRqtSoFeUTmRegiBoljHl3MrF9GQqon0sjI2Kp8uRsF/maLJMAYtQIzaVkHSgJWBUoiVXO5Xx0JFg6/uypFjwkc43rn9GP7n0QWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744893595; c=relaxed/simple;
-	bh=eLj7R8phBBElsYRDrQHT8P+l90EZfuo0+Uzh9OS6ikQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gQ9vH4/0hDiZCPe++6VXJWHn/O+i//hIKrMPniLucYm6lwaa4bJHXlNLKO0OfGc0EunNfk+xWEIIeI48ax3Ngk9NibwtngvJerKM1rwjJ0BVk7n8ubei+qd8TBF/cLQMtuO6ifFPvRgF44PXyAj+h9d5AmXYFFTFxHdDJFzTyXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TwJiZBMz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51F56C4CEEB;
-	Thu, 17 Apr 2025 12:39:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744893595;
-	bh=eLj7R8phBBElsYRDrQHT8P+l90EZfuo0+Uzh9OS6ikQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=TwJiZBMzZLnoDSSwd7NBmdOdrKp7Ric5v5Wxmms25sfFS+WP3gebE/K4nMwU+RI7m
-	 khv7vJbjl/zh4yXSv2wiutfPbgtJCvNwGJhRiJIKTKWuoZk4jjZhcLeBll4JeRnbQz
-	 os4QRO7v8Fb8e/Z0V9AfcrQs6byxwb+3zwaX5l2E9C2RdvdFJln0eVfYAh+VSlVeLL
-	 gUik7O+11A9QFfcer4YXzaOJmBi6G8hnT7areJ0pJtJ2sA8Jh4V+lUeFju+VwUW4tu
-	 vY8AG1tfk4KCxTjO9TZeo9Yjt8AKmRseVs0mNn6Kqizyr8cnu1cTEzga2wc+Y8HjG8
-	 yZ9gk2CE4YrBg==
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-72a4793d4e2so439976a34.2;
-        Thu, 17 Apr 2025 05:39:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX6IYdaoDtOOshi74HJ44TkmhpbqE9XxtNHcH6QU2Ym0aRnKZ3fnuodjQaURO4BixaMq78YYUCG/Ck=@vger.kernel.org, AJvYcCXRXbKV2cSVcfiXymPACG3Ke0oAA2kAY87LEX1VUX6fH8/8CLaLxomtGOYpSJdxv+amL96w9Zq8v9ZblaM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3T1DXhkSnL/Sf+7xGMfY6uXnomWYPW+gC+FPAm7NSRDpWKre4
-	8LxznLc1qNPn5VqXMA0fjBcPXbLPQa+n1qRnfa5CqExF6XkZh6kH4iQ05kIm2lAAEpWhA4YQxNG
-	r2cFGgncDiD2GChUG+f6F4/Gp43o=
-X-Google-Smtp-Source: AGHT+IFA8iU1qJvlKUs1pUOZAThmJzcJGxHgdwHwSAcBFkQkXCxuYhMfRqt9sBhJ0CdGMWGQ5G+hhH8sxutROVa4Ids=
-X-Received: by 2002:a05:6871:2083:b0:29e:2da3:3f7b with SMTP id
- 586e51a60fabf-2d4d29d7d61mr3284724fac.7.1744893594640; Thu, 17 Apr 2025
- 05:39:54 -0700 (PDT)
+	s=arc-20240116; t=1744893737; c=relaxed/simple;
+	bh=2SpWKf4ZPt9JumY9RoMh5nejz0XyYw6hMSWrET+8/Ws=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M5kne9djTZg4MgIWeKXDV7GqdC1ffRy2mK+IbtKqAykWZUwtin8pdw3zfW3uDR/7F+N2L/apHHLc/mdd9JV2eTI5CI37SdZ6Pe6zcYPeVY5CF194EMrZTJ2CIgJ5m86rznvxIVxDijXGRwjIXZQQRW2H0aNf3JYEhgWFNX7exsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 48C0E1515;
+	Thu, 17 Apr 2025 05:42:11 -0700 (PDT)
+Received: from [10.1.25.43] (e127648.arm.com [10.1.25.43])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4B9E73F694;
+	Thu, 17 Apr 2025 05:42:12 -0700 (PDT)
+Message-ID: <b8832097-71bd-4e68-918a-1e986457d03b@arm.com>
+Date: Thu, 17 Apr 2025 13:42:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2c788c2ca0cab09a8ef4e384f272af928a880b0e.1744781329.git.viresh.kumar@linaro.org>
- <20250417015424.36487-1-nic.c3.14@gmail.com> <20250417050226.c6kdp2s5du3y3a3j@vireshk-i7>
- <20250417050911.xycjkalehqsg3i6x@vireshk-i7>
-In-Reply-To: <20250417050911.xycjkalehqsg3i6x@vireshk-i7>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 17 Apr 2025 14:39:43 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iO4=nHcATzPyiKiWumdETFRR32C97K_RH=yhD--Tai=g@mail.gmail.com>
-X-Gm-Features: ATxdqUHxL_09M8-Iuvj-KLdobmF2J2sovGq5uwpr4jjnpmSvUwcMl5fpjTRG6PI
-Message-ID: <CAJZ5v0iO4=nHcATzPyiKiWumdETFRR32C97K_RH=yhD--Tai=g@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: acpi: Don't enable boost on policy exit
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Nicholas Chin <nic.c3.14@gmail.com>, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com, rafael@kernel.org, 
-	vincent.guittot@linaro.org, zhenglifeng1@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFT][PATCH v1 7/8] cpufreq: intel_pstate: Align perf domains
+ with L2 cache
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Morten Rasmussen <morten.rasmussen@arm.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+ Pierre Gondois <pierre.gondois@arm.com>,
+ Tim Chen <tim.c.chen@linux.intel.com>
+References: <3344336.aeNJFYEL58@rjwysocki.net>
+ <1964444.taCxCBeP46@rjwysocki.net>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <1964444.taCxCBeP46@rjwysocki.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Apr 17, 2025 at 7:09=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
->
-> Copying more information from Bugzilla here (Nicholas, it would be
-> faster if you can put all your observations here first, more people
-> are looking at emails than bugzilla).
->
-> > Nicholas Chin wrote:
-> > I did some more testing and debugging and it seems like when
-> > cpufreq_online() runs after waking the system, policy->boost_enabled
-> > and cpufreq_boost_enabled() are both 0, so the set_boost() at the end
-> > of that function is never run.
->
-> Right, this is what I wanted to do with the $Subject patch. Don't
-> update boost anymore in suspend/resume
+On 4/16/25 19:10, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> On some hybrid platforms a group of cores (referred to as a module) may
+> share an L2 cache in which case they also share a voltage regulator and
+> always run at the same frequency (while not in idle states).
+> 
+> For this reason, make hybrid_register_perf_domain() in the intel_pstate
+> driver add all CPUs sharing an L2 cache to the same perf domain for EAS.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> New in v1.
+> 
+> ---
+>  drivers/cpufreq/intel_pstate.c |   23 +++++++++++++++++++++--
+>  1 file changed, 21 insertions(+), 2 deletions(-)
+> 
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -999,8 +999,11 @@
+>  {
+>  	static const struct em_data_callback cb
+>  			= EM_ADV_DATA_CB(hybrid_active_power, hybrid_get_cost);
+> +	struct cpu_cacheinfo *cacheinfo = get_cpu_cacheinfo(cpu);
+> +	const struct cpumask *cpumask = cpumask_of(cpu);
+>  	struct cpudata *cpudata = all_cpu_data[cpu];
+>  	struct device *cpu_dev;
+> +	int ret;
+>  
+>  	/*
+>  	 * Registering EM perf domains without enabling asymmetric CPU capacity
+> @@ -1014,9 +1017,25 @@
+>  	if (!cpu_dev)
+>  		return false;
+>  
+> -	if (em_dev_register_perf_domain(cpu_dev, HYBRID_EM_STATE_COUNT, &cb,
+> -					cpumask_of(cpu), false))
+> +	if (cacheinfo) {
+> +		unsigned int i;
+> +
+> +		/* Find the L2 cache and the CPUs sharing it. */
+> +		for (i = 0; i < cacheinfo->num_leaves; i++) {
+> +			if (cacheinfo->info_list[i].level == 2) {
+> +				cpumask = &cacheinfo->info_list[i].shared_cpu_map;
+> +				break;
+> +			}
+> +		}
+> +	}
+> +
+> +	ret = em_dev_register_perf_domain(cpu_dev, HYBRID_EM_STATE_COUNT, &cb,
+> +					  cpumask, false);
+> +	if (ret) {
+> +		cpudata->em_registered = ret == -EEXIST;
+> +
+>  		return false;
+> +	}
+>  
+>  	cpudata->em_registered = true;
+>  
+> 
 
-This is going to work for suspend-to-idle, but not necessarily for S3.
+debugfs already provides a way to retrieve that information, but with more
+complex perf domain constructions like here maybe this would be useful
+(maybe it already is):
 
-BTW, the patch is correct IMV, so I'm not going to drop it, but it
-looks like something more is needed on top of it.
+--->8---
 
-> > cpufreq_boost_enabled() being 0 indicates that the MSR has boosting
-> > disabled, but when I read out that MSR using rdmsr the bit seems to
-> > indicate that it is actually enabled (I am aware of the inverted logic
-> > of that bit). set_boost() seems to be the only place in the kernel
-> > that causes that MSR to be modified, and I didn't see any extra calls
-> > to it in my debug logs, so it seems like something else (outside the
-> > kernel?) is setting that MSR.
->
-> And this is what I feel too, something else in kernel or outside of it
-> is doing something tricky.
+Subject: [PATCH] PM: EM: Print CPUs of perf domains
 
-On a resume from S3, you actually don't know if the platform firmware
-has preserved the configuration from before the suspend transition.
-It may not.
+In preparation for future EAS users who make the relation from CPU
+to perf-domain not strictly based on cpufreq policies print the
+affected CPUs when registering a perf-domain.
+
+Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+---
+ kernel/power/energy_model.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+index 99a1ae324c2d..a202968b2ee9 100644
+--- a/kernel/power/energy_model.c
++++ b/kernel/power/energy_model.c
+@@ -627,7 +627,7 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
+ 	em_cpufreq_update_efficiencies(dev, em_table->state);
+ 
+ 	em_debug_create_pd(dev);
+-	dev_info(dev, "EM: created perf domain\n");
++	dev_info(dev, "EM: created perf domain for CPUs %*pbl\n", cpumask_pr_args(cpus));
+ 
+ unlock:
+ 	mutex_unlock(&em_pd_mutex);
+-- 
+2.34.1
+
 
