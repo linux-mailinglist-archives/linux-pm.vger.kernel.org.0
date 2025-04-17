@@ -1,116 +1,123 @@
-Return-Path: <linux-pm+bounces-25608-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25609-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 127F1A91592
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 09:46:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7D6DA91597
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 09:47:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CEE13BFF80
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 07:46:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C204C17EAD8
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 07:47:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16C951DB37B;
-	Thu, 17 Apr 2025 07:46:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A41EB21D3DC;
+	Thu, 17 Apr 2025 07:46:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EGN6brhj"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NqPwu8O1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAC88A937;
-	Thu, 17 Apr 2025 07:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF2E21C19E
+	for <linux-pm@vger.kernel.org>; Thu, 17 Apr 2025 07:46:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744875983; cv=none; b=oq7lMUh8sBeMDOeBG98HCC3pFruYKq30GkfhmrnCUBRrpjvtA4PF0I5bAVsI1TlhukU6Ikwug4oHQ3KM4KvKPzcKGnHJ8ycZXvqOvryOkjLBGmJ47NkgjxSTzTd4BUPoS4xJ7SgeDmkVQ5aByxJUsQrqcO0gB9kGlYCHlYTNqNA=
+	t=1744876004; cv=none; b=cailWnyN0rxOftIJMvLZ5TNUA3jfoeJWwGpO7WUvwjWNVxBC+lAvE2tg+MhXFMvg965/A/4TbydNqyeKd/BOV/bcjOdzNfxq15Jmu2AN1aEX8ZjfPbOWHAUCghKSMhVAiQqWWKMz2MYxH5vEAZqCzs4pBrlbPZPoYjaTU5nJ0q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744875983; c=relaxed/simple;
-	bh=aVH9/RoovkU8v4WklJXZULaKkSsySrY6Xc4+YksCzr0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d0//buBXPxAFKkRvRc3Y227tH0/qYghsK5weaVquSghdeAlNH5xuUnkPat/Pp86Rv9RgEE/v1FupWYhUd2J27clyHJ/3e9nSATFTcG9eMY/tcvYv4dLXVU5UIVX87t20EY3x/gfDiv3gcxZcCNpqJNF2KQXJyi156yA3/JRLvQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EGN6brhj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48E33C4CEE7;
-	Thu, 17 Apr 2025 07:46:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744875982;
-	bh=aVH9/RoovkU8v4WklJXZULaKkSsySrY6Xc4+YksCzr0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EGN6brhjfp3LgOEiWPYOOUaubua4z6Rr87Qix91C4cn0+ZeKhbehrA36p2YRJOMcU
-	 nPw9J2JjVyFswd5XI1lOe10RAV9sXj1r2E5s82GgPmLUSUxo5qqtk+cYpCuR6oPZyU
-	 ERyQzBpZrZOBNs5P4QpMvCQgRoyfN/yjYPdCDu3lmq7BlGmoBitobBGZfnawRDUWp8
-	 HiPejRvX8Lc4pyRNl4pPFQTRF64LPkG1U9h0+Vk77gSBCKgB5U6DI15LHeqx3hpCxE
-	 0lHBv9uFdbDAoEVdY/Y/d26kDe6GXPcx0YneInAzT739pyHKhyv5SLkm5/zhsnZlu4
-	 dC8rraFQpi++Q==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1u5Jwz-000000000Z9-2KLU;
-	Thu, 17 Apr 2025 09:46:22 +0200
-Date: Thu, 17 Apr 2025 09:46:21 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Johan Hovold <johan+linaro@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	"Rob Herring (Arm)" <robh@kernel.org>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] cpufreq: fix compile-test defaults
-Message-ID: <aACxzWi4KqDdylfj@hovoldconsulting.com>
-References: <20250417065535.21358-1-johan+linaro@kernel.org>
- <a0739b6b-b043-47f1-8044-f6ed68d39f2c@linaro.org>
- <aACsQUADxYHTQDi1@hovoldconsulting.com>
- <f957e366-51e1-4447-982c-93374d0fde2e@linaro.org>
+	s=arc-20240116; t=1744876004; c=relaxed/simple;
+	bh=tMQzWzBnniAx5rk+EeqFSOn4cd/MzHon/bXFCu4cUe8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tIdQjAacXOcjEiPi0F5FDPQds2hWlGsOoclx2NMP+kIAMRaBSW0FS+IIt22bpCD150jXAQcGCnoP1105Gw4fjlutKxOr8G7Py3EWFm1Eyb6gZlFOFXak64pVBzsB0YyGdGBUBoiDi3a6cy0u1swN5O3TswvcG/mGwxIx0xQjq/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NqPwu8O1; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3913290f754so83898f8f.1
+        for <linux-pm@vger.kernel.org>; Thu, 17 Apr 2025 00:46:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1744876000; x=1745480800; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UqFJhe3fk5yFBKlXHJgDCuqjovr9ww4TiQotyaOjXdU=;
+        b=NqPwu8O1ltH0PYNIj5UGuiy+t7C0b5BBvFsPnVmcr56t5KTAISMi3x5a5o5kybTLuR
+         Dom+NU6wRfyaBFmvmZPsEzdHbFZi4Mmg4F04l0kvfbirjcpJOOF1mffqBPxKBiDTIlPO
+         y11s5yiuS6I29+tztgKCLM5SkXypD6fB+B8m+MeVJCfBlM7kGYnneZzTjGWv3ZzNGn98
+         cV7PfT9mf8c18Gg/WdPJG4wzMi+sHeR37MRzwq+kfPtSwz/G2/mvUbBSfPoEX7vezRVv
+         Q+kMEIa0wF1iLqV/w2cSb+rJOAUazNqtbp7Bii2zeYzq+OOKFHTMpsOdsp9LO90Vzs13
+         o4vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744876000; x=1745480800;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UqFJhe3fk5yFBKlXHJgDCuqjovr9ww4TiQotyaOjXdU=;
+        b=eJGqvReYtwvmoeydv9w/Gz99CYVpdn+V5NN1rayz0zSeFBX67HrgLnEf0OGsxxYk8I
+         mJy+wqZIDbifIuwzxhq9lsvoV3r8VH+f9x2lzwilMDmzuZi8r2qmyUrWM+MmhhTYkFC+
+         ymmgosGJ77A8CgzikD53IooOw4CCBHX0PEh75fHp/F7HIgjtcVIcLIwQVikxYG1V3SDL
+         VBdWJerRK3Gl7kAmtp8Mr52n3RO5AEtWpxLoSEIVM4tRkYbVlfc0jtx6aKV1RNt8r4lc
+         55cBN/EYZ7wEBzmDnA1jWXvvC0ZiKs8RIp+/UcddbWYvkGD9GaJ66yR3fuFSUgEnjZGf
+         kbDw==
+X-Forwarded-Encrypted: i=1; AJvYcCUy8fJBGX9j1o5wTlQHSxAOa+TUMGWOvYXCjfnaJ3LEMpj5cVfcEvyIMU/SFLTdm/3cUp7CxhTLCQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyjca3FJVbhDOlKwNHsIfBnqcVJXp6ChRPBj7u8cSNZGBftKp6m
+	2Q57dr4+5AWGwcYiU6LyCgMZcuOpNoPwrj8BR4jY4AnCc/+yXUvGj3XzROZspm0=
+X-Gm-Gg: ASbGncvGtvz/lpjPjKzy59Z1uYLJ84JFp54NlOTQZUMb19Eg9LCaARziLXQrs8vUJB0
+	XHweKL3ed3mkF58FIAtk9zRjzsLyNcDNedJpCBxjKL+ATgW+CIxENvDC8Vq9RJQ+SoLdnAYr9B3
+	fEPMEds5n5+bKhshoDueC0SkO84rIPWiC+xfKbLhDu2iTxHhXfXSIt/J6yeM5i5cVW2oUXmacSF
+	RQlPuirzR57YOyEsyOSz1hIK/R7rqw1LTKQDEd4utAOPKr1jN/YRqsRghYiwIpGWbFO3AtGID6j
+	pljzpVa7CrPe9/YKaacAivznOciqkejUlQQj85PUKkBoYrAKD4IDRj8sBK0EqAh2dp92vMSSggG
+	1ftYd+0tefjcxjKpS
+X-Google-Smtp-Source: AGHT+IGUHnidkuDlHE8kYyTwUeGcsum4lorsxEkRuIAHsC4LRbi3ea/WsFZ1fQruK2QZL3pK0Ycwkw==
+X-Received: by 2002:a05:600c:4f53:b0:439:930a:58a6 with SMTP id 5b1f17b1804b1-44061ece26emr6534575e9.8.1744876000074;
+        Thu, 17 Apr 2025 00:46:40 -0700 (PDT)
+Received: from kuoka.. (46.150.74.144.lvv.nat.volia.net. [46.150.74.144])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4405b53f29fsm42835765e9.37.2025.04.17.00.46.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Apr 2025 00:46:39 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] thermal: hisi: Do not enable by default during compile testing
+Date: Thu, 17 Apr 2025 09:46:37 +0200
+Message-ID: <20250417074638.81329-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f957e366-51e1-4447-982c-93374d0fde2e@linaro.org>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Apr 17, 2025 at 09:28:43AM +0200, Krzysztof Kozlowski wrote:
-> On 17/04/2025 09:22, Johan Hovold wrote:
+Enabling the compile test should not cause automatic enabling of all
+drivers, but only allow to choose to compile them.
 
-> >>> Fix the default values for drivers that can be compile tested and that
-> >>> should be enabled by default when not compile testing.
-> >>>
-> >>> Fixes: 3f66425a4fc8 ("cpufreq: Enable COMPILE_TEST on Arm drivers")
-> >>
-> >>
-> >>> Fixes: d4f610a9bafd ("cpufreq: Do not enable by default during compile testing")
-> >>
-> >> That's not correct tag - it introduced no new issues, did not make
-> >> things worse, so nothing to fix there, if I understand correctly.
-> > 
-> > Fair enough, I could have used dependency notation for this one.
-> > 
-> > Let me do that in v3.
-> 
-> OK. I have doubts that this should be marked as a fix in the first place
-> - even skipping my commit. Some (several?) people were always
-> considering COMPILE_TEST as enable everything, thus for them this was
-> the intention, even if it causes such S3C64xx cpufreq warnings:
-> 
-> https://lore.kernel.org/all/8b6ede05-281a-4fb1-bcdc-457e6f2610ff@roeck-us.net/
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Sounds like you, me and Arnd and least have the same understanding of
-how COMPILE_TEST should work.
+---
 
-I use it all the time when fixing issues that have been reproduced in
-several drivers which I then enable manually. And I usually keep them
-enabled in my development kernels for a while after in case something
-needs to be reworked.
+For longer rationale:
+https://lore.kernel.org/all/191543a8-2e2e-4ac4-9b2b-d253820a0c9f@app.fastmail.com/
+---
+ drivers/thermal/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If you want to compile everything as well you should do an allmodconfig
-build.
+diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+index d3f9686e26e7..510c2b821546 100644
+--- a/drivers/thermal/Kconfig
++++ b/drivers/thermal/Kconfig
+@@ -257,7 +257,7 @@ config HISI_THERMAL
+ 	depends on ARCH_HISI || COMPILE_TEST
+ 	depends on HAS_IOMEM
+ 	depends on OF
+-	default y
++	default ARCH_HISI
+ 	help
+ 	  Enable this to plug hisilicon's thermal sensor driver into the Linux
+ 	  thermal framework. cpufreq is used as the cooling device to throttle
+-- 
+2.45.2
 
-> I had also talks about this in the past that one should never boot
-> compile test kernel.
-
-I have never noticed any issues with that until the other day with the
-cpufreq driver, but yeah, I can imagine that other "default y" entries
-could potentially cause issues.
-
-Johan
 
