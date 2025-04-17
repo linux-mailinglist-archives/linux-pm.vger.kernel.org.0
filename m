@@ -1,87 +1,88 @@
-Return-Path: <linux-pm+bounces-25609-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25610-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7D6DA91597
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 09:47:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 361ABA9159F
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 09:47:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C204C17EAD8
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 07:47:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED71017E658
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 07:47:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A41EB21D3DC;
-	Thu, 17 Apr 2025 07:46:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1268321C176;
+	Thu, 17 Apr 2025 07:46:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NqPwu8O1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Drj80sNg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF2E21C19E
-	for <linux-pm@vger.kernel.org>; Thu, 17 Apr 2025 07:46:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AD6522156A
+	for <linux-pm@vger.kernel.org>; Thu, 17 Apr 2025 07:46:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744876004; cv=none; b=cailWnyN0rxOftIJMvLZ5TNUA3jfoeJWwGpO7WUvwjWNVxBC+lAvE2tg+MhXFMvg965/A/4TbydNqyeKd/BOV/bcjOdzNfxq15Jmu2AN1aEX8ZjfPbOWHAUCghKSMhVAiQqWWKMz2MYxH5vEAZqCzs4pBrlbPZPoYjaTU5nJ0q8=
+	t=1744876011; cv=none; b=iyC+kpqGCEUteof1nU01QdxHYplTeNTs9Iy/9u+wttXKt7jsoHbxSOUMqNnh0VtPTxfnpeXLVcVO189XtbVmEYqEID5sgva58Ijlr0AbTg95uaEEwKTJrkVQDPFxVbichF0+SLc+2f+j1WyHzhvc7NtXXkyBlrdTYVPmor9YyJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744876004; c=relaxed/simple;
-	bh=tMQzWzBnniAx5rk+EeqFSOn4cd/MzHon/bXFCu4cUe8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tIdQjAacXOcjEiPi0F5FDPQds2hWlGsOoclx2NMP+kIAMRaBSW0FS+IIt22bpCD150jXAQcGCnoP1105Gw4fjlutKxOr8G7Py3EWFm1Eyb6gZlFOFXak64pVBzsB0YyGdGBUBoiDi3a6cy0u1swN5O3TswvcG/mGwxIx0xQjq/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NqPwu8O1; arc=none smtp.client-ip=209.85.221.48
+	s=arc-20240116; t=1744876011; c=relaxed/simple;
+	bh=d6IlT9ShC4wilEO6tmmh9Fe1IzuZTHCQ29TmJiiTPPA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Grr7hW5JrhcIlQbME2cOOQHPbPB+BoGWLNgpAWL85Vv/ZZSNkBpIVUvXHcjFEBqFFlGlPlflBiXTCc37G44PCg8gFW/2DRt+H/zeZGXFrXIHond1aTtFsK0SV/QTRu2Mp0/eZZtmCtzWMb7Gd8ATQToFLffGAVSPYSFIbaFPePA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Drj80sNg; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3913290f754so83898f8f.1
-        for <linux-pm@vger.kernel.org>; Thu, 17 Apr 2025 00:46:41 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3913290f754so83916f8f.1
+        for <linux-pm@vger.kernel.org>; Thu, 17 Apr 2025 00:46:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744876000; x=1745480800; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1744876007; x=1745480807; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UqFJhe3fk5yFBKlXHJgDCuqjovr9ww4TiQotyaOjXdU=;
-        b=NqPwu8O1ltH0PYNIj5UGuiy+t7C0b5BBvFsPnVmcr56t5KTAISMi3x5a5o5kybTLuR
-         Dom+NU6wRfyaBFmvmZPsEzdHbFZi4Mmg4F04l0kvfbirjcpJOOF1mffqBPxKBiDTIlPO
-         y11s5yiuS6I29+tztgKCLM5SkXypD6fB+B8m+MeVJCfBlM7kGYnneZzTjGWv3ZzNGn98
-         cV7PfT9mf8c18Gg/WdPJG4wzMi+sHeR37MRzwq+kfPtSwz/G2/mvUbBSfPoEX7vezRVv
-         Q+kMEIa0wF1iLqV/w2cSb+rJOAUazNqtbp7Bii2zeYzq+OOKFHTMpsOdsp9LO90Vzs13
-         o4vg==
+        bh=iufXt7XGPWVnixx75DmjBxxr/EKI8vcJNq5OOoFoztM=;
+        b=Drj80sNgO3vuNmkKhmiy5OI9x859ZXIcJ2Ge/A2acKPPZ3xTtbK8t5qYONqZPKPjmZ
+         fNRduuDF+rRDwNfogxXCCBerq5Kacm8WqmjNhdTQBi6BSq/CKgcF1t5cMYArVRTrFP7T
+         k23GacsS7GAprw6AZDiT8tXMTls+FncI3qqxJA3DBu4jnU7sVyQkcTqjzigmLuh+vlNE
+         kcvbT67HKL8ADGh3m2Vg1HGEyopUSg2VSjYd0feG4aZLe9GSiMiB/MMQEMHfRTWcxfag
+         CoIqGH22ZwxSXrXKeyYCGqVoJ4wEqBVqeHyGHYve+f9attdXhdWyvQsrjtsjYi0DStL5
+         N0zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744876000; x=1745480800;
+        d=1e100.net; s=20230601; t=1744876007; x=1745480807;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UqFJhe3fk5yFBKlXHJgDCuqjovr9ww4TiQotyaOjXdU=;
-        b=eJGqvReYtwvmoeydv9w/Gz99CYVpdn+V5NN1rayz0zSeFBX67HrgLnEf0OGsxxYk8I
-         mJy+wqZIDbifIuwzxhq9lsvoV3r8VH+f9x2lzwilMDmzuZi8r2qmyUrWM+MmhhTYkFC+
-         ymmgosGJ77A8CgzikD53IooOw4CCBHX0PEh75fHp/F7HIgjtcVIcLIwQVikxYG1V3SDL
-         VBdWJerRK3Gl7kAmtp8Mr52n3RO5AEtWpxLoSEIVM4tRkYbVlfc0jtx6aKV1RNt8r4lc
-         55cBN/EYZ7wEBzmDnA1jWXvvC0ZiKs8RIp+/UcddbWYvkGD9GaJ66yR3fuFSUgEnjZGf
-         kbDw==
-X-Forwarded-Encrypted: i=1; AJvYcCUy8fJBGX9j1o5wTlQHSxAOa+TUMGWOvYXCjfnaJ3LEMpj5cVfcEvyIMU/SFLTdm/3cUp7CxhTLCQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyjca3FJVbhDOlKwNHsIfBnqcVJXp6ChRPBj7u8cSNZGBftKp6m
-	2Q57dr4+5AWGwcYiU6LyCgMZcuOpNoPwrj8BR4jY4AnCc/+yXUvGj3XzROZspm0=
-X-Gm-Gg: ASbGncvGtvz/lpjPjKzy59Z1uYLJ84JFp54NlOTQZUMb19Eg9LCaARziLXQrs8vUJB0
-	XHweKL3ed3mkF58FIAtk9zRjzsLyNcDNedJpCBxjKL+ATgW+CIxENvDC8Vq9RJQ+SoLdnAYr9B3
-	fEPMEds5n5+bKhshoDueC0SkO84rIPWiC+xfKbLhDu2iTxHhXfXSIt/J6yeM5i5cVW2oUXmacSF
-	RQlPuirzR57YOyEsyOSz1hIK/R7rqw1LTKQDEd4utAOPKr1jN/YRqsRghYiwIpGWbFO3AtGID6j
-	pljzpVa7CrPe9/YKaacAivznOciqkejUlQQj85PUKkBoYrAKD4IDRj8sBK0EqAh2dp92vMSSggG
-	1ftYd+0tefjcxjKpS
-X-Google-Smtp-Source: AGHT+IGUHnidkuDlHE8kYyTwUeGcsum4lorsxEkRuIAHsC4LRbi3ea/WsFZ1fQruK2QZL3pK0Ycwkw==
-X-Received: by 2002:a05:600c:4f53:b0:439:930a:58a6 with SMTP id 5b1f17b1804b1-44061ece26emr6534575e9.8.1744876000074;
-        Thu, 17 Apr 2025 00:46:40 -0700 (PDT)
+        bh=iufXt7XGPWVnixx75DmjBxxr/EKI8vcJNq5OOoFoztM=;
+        b=DFPLgwcePAXJfX7WNDiAaJtVwy+Kcy0iyM4eEhSQVMea8fh8ItEey/zw7xyRGaQ88Q
+         CHLKoL4C5ZG0FIAr57H7zgUQ7OLTmeqK0+WR7QJFZIe9EUQ7DIjb3BLFFjlHUBfPvhmk
+         3/C4VaODG/gNZn4TMDO/FSwD9+nbcZjtuR7iHUA1FES8XGgfiULqBw/GAhgS08F/iFhh
+         CdF23MA06CJrKdKXePa/FsHeuA/FyGGFtyS7eob5jUtHvy9TDLwZZryttWFvdMaPXtUs
+         BeY9ddE48y6s0EkbSdsjSk/w7Yqo+4RiK9AfiRTO5vbVv3E2/obFV6g8OOw70WoEgPOf
+         YvVg==
+X-Forwarded-Encrypted: i=1; AJvYcCUQmycjda3lpmBNdY+uAN1gVgLw81y+E2IEG+Dl9pQj8XPf9AzrfRtu32dJqwm3180orW79+G9itA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9Ggpo134Eiyj4rhUPnYTjLaHQNAwsYUiYDcY4U4/GpaaTpHOs
+	ii42gXebh2pFptAZnXAQYy+KgORa4PimXu31RQWAuoNmHq59Qy/aMVCeCUVcHac=
+X-Gm-Gg: ASbGncuqfuNJ60m2ULhhhMWBD5BVxsPEbmbvCZMIXRnJnf6aWBtZA/YiRUH6rZ1Ajw0
+	yGLCsFTw4l/3tRVW341pHzis5s8ciXWkdKM/4TZ96T/ZCnDI1riSM7F6K0SAD2ZhkA8ijzau5xW
+	bLgvZN2CtkzOghGx4OiWB7Jh1B4X5EQ823sNYI8DKdZ3xl4YCdEyXQq/2I32Np3bIptSbHYKuo3
+	F8A0nPK7gLk24SPQZAj8ukBpJiEGKjJPW8Z0MOrcA4rneaQHBkGKerbXUvKvonOqzFs8sdXXz9s
+	kQFgZJfXLNvlQLwpJkwySwiDuQM/DW10TGkn8Og5UB9voxW2/96xAGNbGpGPbSHISRUy5IkKOaa
+	diJaQ/w==
+X-Google-Smtp-Source: AGHT+IHN0gCWGlfh6M10BCj9GpPYoIMHd3DPtjGO5OnRlWIDylaeB61eTs5nJuHYx+5YI8rHxxIREA==
+X-Received: by 2002:a5d:584a:0:b0:39a:be16:9f1e with SMTP id ffacd0b85a97d-39ee8fd638cmr684683f8f.12.1744876007476;
+        Thu, 17 Apr 2025 00:46:47 -0700 (PDT)
 Received: from kuoka.. (46.150.74.144.lvv.nat.volia.net. [46.150.74.144])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4405b53f29fsm42835765e9.37.2025.04.17.00.46.38
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4405b4d2ddfsm43130005e9.10.2025.04.17.00.46.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Apr 2025 00:46:39 -0700 (PDT)
+        Thu, 17 Apr 2025 00:46:47 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
+To: Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] thermal: hisi: Do not enable by default during compile testing
-Date: Thu, 17 Apr 2025 09:46:37 +0200
-Message-ID: <20250417074638.81329-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] pmdomain: arm: Do not enable by default during compile testing
+Date: Thu, 17 Apr 2025 09:46:45 +0200
+Message-ID: <20250417074645.81480-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -101,22 +102,40 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 For longer rationale:
 https://lore.kernel.org/all/191543a8-2e2e-4ac4-9b2b-d253820a0c9f@app.fastmail.com/
 ---
- drivers/thermal/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pmdomain/arm/Kconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index d3f9686e26e7..510c2b821546 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -257,7 +257,7 @@ config HISI_THERMAL
- 	depends on ARCH_HISI || COMPILE_TEST
- 	depends on HAS_IOMEM
- 	depends on OF
+diff --git a/drivers/pmdomain/arm/Kconfig b/drivers/pmdomain/arm/Kconfig
+index efa139c34e08..afed10d382ad 100644
+--- a/drivers/pmdomain/arm/Kconfig
++++ b/drivers/pmdomain/arm/Kconfig
+@@ -2,7 +2,7 @@
+ config ARM_SCMI_PERF_DOMAIN
+ 	tristate "SCMI performance domain driver"
+ 	depends on ARM_SCMI_PROTOCOL || (COMPILE_TEST && OF)
 -	default y
-+	default ARCH_HISI
++	default ARM_SCMI_PROTOCOL
+ 	select PM_GENERIC_DOMAINS if PM
  	help
- 	  Enable this to plug hisilicon's thermal sensor driver into the Linux
- 	  thermal framework. cpufreq is used as the cooling device to throttle
+ 	  This enables support for the SCMI performance domains which can be
+@@ -14,7 +14,7 @@ config ARM_SCMI_PERF_DOMAIN
+ config ARM_SCMI_POWER_DOMAIN
+ 	tristate "SCMI power domain driver"
+ 	depends on ARM_SCMI_PROTOCOL || (COMPILE_TEST && OF)
+-	default y
++	default ARM_SCMI_PROTOCOL
+ 	select PM_GENERIC_DOMAINS if PM
+ 	help
+ 	  This enables support for the SCMI power domains which can be
+@@ -27,7 +27,7 @@ config ARM_SCMI_POWER_DOMAIN
+ config ARM_SCPI_POWER_DOMAIN
+ 	tristate "SCPI power domain driver"
+ 	depends on ARM_SCPI_PROTOCOL || (COMPILE_TEST && OF)
+-	default y
++	default ARM_SCPI_PROTOCOL
+ 	select PM_GENERIC_DOMAINS if PM
+ 	help
+ 	  This enables support for the SCPI power domains which can be
 -- 
 2.45.2
 
