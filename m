@@ -1,85 +1,93 @@
-Return-Path: <linux-pm+bounces-25591-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25592-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D860A91234
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 06:25:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A02C2A9123E
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 06:31:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9DF635A1F57
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 04:24:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17A0E5A1D0E
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Apr 2025 04:30:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FDF11D5ABA;
-	Thu, 17 Apr 2025 04:25:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FEC11B6CE5;
+	Thu, 17 Apr 2025 04:31:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Hr7KPjGE"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Sk4wdvgL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A5A19DF9A
-	for <linux-pm@vger.kernel.org>; Thu, 17 Apr 2025 04:25:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C422579F2
+	for <linux-pm@vger.kernel.org>; Thu, 17 Apr 2025 04:31:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744863906; cv=none; b=GIVEqKX5/aHx/bOd9iIGKguXps+iglRFOEqklPc2iP+ISdc799cGtF5L/sDsp1dTuefze4gVaUHSoS8Hxb5oIRMiHRJLv19UG+D4we5KBzXaToFSV9/zWC8SrPeAkZvqrVSkOHaN3zxI3kSJBn5XPyvd3jQ7+7zQBo647cJZ9t8=
+	t=1744864265; cv=none; b=NiyAeAeYWhjUYqe6Q+2XtsfZ83DxmKvdGm/alyTNzy1ZoLyyh1bdXswZZVqCg6D3G9tFd0b14kPDQrYywcZv+LItnRH/eDMuKV2Op1vVmB3xZhC+KvRCMV1v/k7r15FopQDu35GtWvoBfSL7pCFPMt+Bwm0iK38RfR/C3BUNuhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744863906; c=relaxed/simple;
-	bh=MlMsrIFgwNPUXQlQUeeWv3zwmDoBQ1Ow0x+5qtQ/UTU=;
+	s=arc-20240116; t=1744864265; c=relaxed/simple;
+	bh=+sk7hb8P47bWgI1AKQvmM/ONosvVBAHXLTSOV6y0dT8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YPwA0YqoGp1l53F6aXB0B6K82jFjMkHjwm5OXBQD7mlG2/OAxHz0D2/Lq3Gsw7luBGKoimFPBWMeoz47D0Q688fjj6HWA4or1rxgfmswDj6YmiH7xxiRqBB6tTcxwc0xXI/zTOIVHXinPHMqfM0YUomiiRm1ZHzgsXG7bGVaHuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Hr7KPjGE; arc=none smtp.client-ip=209.85.214.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=CeHXKpYf1nZduzc54TY6p+cf96TZRH9q/JVA8cTXEBKK/tWeej6TfsCR/asZ8kPDBJ9Z5WdXqbmGwf5NWPGzfus7n68UailKOwEdhTl4UQ1lECgNrI/SVs3Rgqx3K8HH6nhTDinVXstQrMqIXyCJQSc5ZVn6rzvxXU6v/VZ5Dek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Sk4wdvgL; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-224100e9a5cso3901785ad.2
-        for <linux-pm@vger.kernel.org>; Wed, 16 Apr 2025 21:25:04 -0700 (PDT)
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-736ad42dfd6so242179b3a.3
+        for <linux-pm@vger.kernel.org>; Wed, 16 Apr 2025 21:31:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744863903; x=1745468703; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1744864263; x=1745469063; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YmiUHUUBKI8PJIWV5sMJoVG3SND4wAcYpi9OlzawyYI=;
-        b=Hr7KPjGEJTHH0n2W34l7jZXH2EXyhNphcZpk+mLeSzGEXR6DZkk28QqgOzOwInBJvB
-         LcUP0VB7PtY4prI79xhNW8tT86NkwPGGyeqeBFEk8im3cF4tPGXexfcFK7S7lrWozOgd
-         4abIpoM7bbD2Ftq1588yT0Tbg3W0tR6W1VFmdaVzNbymQwlB1vncGkJDsPhd94YT5NCc
-         Qgkc9be5z9xocNet+LXnqougjkdb2eh8OmeJy4SqMYL1ZDCpl6tNcaO8vfUlXt66lo0E
-         K1zVcZs+BBMVsKkHj75k8a+Kg+XDFGBpMcUPG90h/3eujjCYi0uKbzRNZHjNJseAWHDD
-         u+YQ==
+        bh=ZlaUAntWl+FAG4ssmQ8ExU+LE+kWPisBX4TPYFCKWz8=;
+        b=Sk4wdvgLxh7t8CnDvpPrsGOBwWqDUGeCuhEaERDm0wi+2YMM9Ddou6atk9/CW2vwjs
+         yYsQFzViefx/70pcNDEnWx8s93az7hA24r6uGwr5aj5BdYf5Dx0+pcDANpelOrjzwrSw
+         wByuo35f1in7gBts/M+sebAu4lfHEEO8EQyT8VdIxRTxA6ZdaYxlpnWzbY9IgZrSLs9v
+         wXnhC+v0V0sd6kY5ofbbV6hy+Aw/zhD52xwL2Zq050VYUgxcrtz8L3blXzLvAHQ7MUys
+         GxEQFFXU2lOH9Zgh8e4NM4ROsR6c1tjHGhyPOmH4jeZvqgU3x9+6qMTk22o1kTCJ/vKB
+         KPpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744863903; x=1745468703;
+        d=1e100.net; s=20230601; t=1744864263; x=1745469063;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YmiUHUUBKI8PJIWV5sMJoVG3SND4wAcYpi9OlzawyYI=;
-        b=WxZQLEGlf8X1ni1eWDABsTW339OcPOuDSGB45ty09TC7N0VgEBxr41xWTbLtiggZcR
-         DbuKKN2rcAV8bZY8rr7ydiOo7HPHfMyGvrN+PdaVxN0iCx6gTqYVsVWXEXQmxe4XJ75i
-         6ov5BmAmhEQMER1Aafm5ltNbzstI50pb38NEtlkOgWLyf+/4ajEho/acQ4KNRTUX8y6t
-         /zMywqK3eD3bIR6Bo0iDNze+J9C3gBH4XLXBbL9L7/i929eguJTIdKMTPr9TEN+9EuBx
-         EnBm6H7jXN3jQ1sPNWQpakAUgh4p8BeOkrxpIvgE0jv8IQNsqB/E1Sxu23YIFmogKogO
-         EXvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXaUnjQSFwcVDtEJKyqaGobrGiA0hDna7JVajSG2ENtik5+Moqb6i5bh5QnKUtB9nSwMf+1B66Z8A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw++wXQEE8xOrqzYQwRrwFJB/UMkSaZrFkdiwPgIGW+97kkSYdF
-	v+Wco8PLIuWCpIulAw8kmCsK8BpwgP6x4U+GBUrEM/2amHJR/3cgvkoh+OF4K1k=
-X-Gm-Gg: ASbGnctoPkh/3Kd+rxI7twiS7yL1KO68Ok0wd+UXPlCdvKVltjRtVORgRlBpeTlCQaM
-	uNtJ7bfUynVmvVQVRHAvfkF3xN3NAIt5z4oalWLT29LpjpuKJ/JMNVoCyE8VSHLodG/SH60p+Qg
-	ewc09SwgHSo1m22m7qCsudaJ9Mm230nUcmS4yM9Vd1Jhc74JDniC+LmZL1Cdlv17nbXaauJz8X2
-	iFIQnVe4xyqgxJxGGlecQ+ozXPzsjim+whNfJTW+kRNAXvdtQ2huWR/nG5n9mWZS/P1sqEQQK15
-	M+ar/+FyYDGTT5H/1CIuaH76O8Fv5bGOrvIM+kx4SA==
-X-Google-Smtp-Source: AGHT+IG2v69nuDWH4FgYa76B5nKgqy58L4Wid65MFMUFPK5+zr5XnBZE9bRrkKyZECa0wTorHqTLjA==
-X-Received: by 2002:a17:903:1cb:b0:224:721:ed9 with SMTP id d9443c01a7336-22c35981e16mr67570055ad.44.1744863903581;
-        Wed, 16 Apr 2025 21:25:03 -0700 (PDT)
+        bh=ZlaUAntWl+FAG4ssmQ8ExU+LE+kWPisBX4TPYFCKWz8=;
+        b=H2UvpokbcrGC6JKF0f4umg4MSVqRV0glGJb1M9CFNtnbqe1hHmeSUYJUKe07jEeufP
+         ZNVidbErYrrmXRYBjK0oPrpRPEQznJ2Yxx6+oxYakB190qRElEQWBS8URiMsCTIpdr7g
+         +VIb/ejvoPGZtsXTbgq87JbCO/s1CCavhkdarz2fX1+r6r7t2wcS8OBgHRQPyzRgVNnX
+         I/j41J2lT9slEG5aW7ZBe3eIVy5I4aYDUfZlPUtj+XUH83amljOApZwAZHGssGb1ekNo
+         BkYe7Ez6idegsRADliMqVf60LgMGNBlFUy0aDfqetpyLtsk7XpLcUC93SlmeZGvLwtCR
+         WRSQ==
+X-Gm-Message-State: AOJu0YxKOY/uVvnaj+rmPi5vAfkZrfgBLL0ZxC/yD/t7JRjdc/kIXgau
+	BE2mtFiEYCzfhYDPCy3l1Zf5FQ8Wh85fuSyFObdbob5BwxemMpB66IFJPE7fQh2B0gv/cnr7T6c
+	4
+X-Gm-Gg: ASbGncu8+rxb3VqzAfqCOY3D6aF6AEZfuqc7MXtE9bnyH9/sCW2gGDUwE3Eo2RClzF3
+	C8uU3b863H15QDUora41hl+eQw9ElGrnT1Y3AASuH7e3lFE3OuTs1fxiSepwr2t9/t9+HZMvJ8N
+	Vt9MHqhPgVZ4lEl1GPWH2R/FEWERdB/5Ez6/CCzs28wIXlRC0z4aJQMUczxfWF/dCdrSuyuoEqw
+	su+AR1fDQibYNRK5rFWMdOjueAgC/IvMmjuForUOuR3LVDCH7e1BGFJWnNB4F+XpunzvK5HqZOU
+	jdeFb6qwbiCH6Qxi5vnzA/ci1K/IU6Pz/kMzwmnEfA==
+X-Google-Smtp-Source: AGHT+IEg1IOSKx3TC5x7KXjPRVc1J+SeCE9LoLwfSMtCe4XckXlEc0yAzy5LghooDosu7gaIzIG1lQ==
+X-Received: by 2002:a05:6a00:240c:b0:736:a8db:93bb with SMTP id d2e1a72fcca58-73c266b9927mr6133644b3a.5.1744864262953;
+        Wed, 16 Apr 2025 21:31:02 -0700 (PDT)
 Received: from localhost ([122.172.83.32])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73bd2333859sm11288413b3a.158.2025.04.16.21.25.02
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73bd22f120csm11306099b3a.85.2025.04.16.21.31.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Apr 2025 21:25:02 -0700 (PDT)
-Date: Thu, 17 Apr 2025 09:55:00 +0530
+        Wed, 16 Apr 2025 21:31:02 -0700 (PDT)
+Date: Thu, 17 Apr 2025 10:01:00 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Johan Hovold <johan+linaro@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	"Rob Herring (Arm)" <robh@kernel.org>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: fix compile-test defaults
-Message-ID: <20250417042500.tbuupp3jdpfkk7kh@vireshk-i7>
-References: <20250416134331.7604-1-johan+linaro@kernel.org>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	Christian Loehle <christian.loehle@arm.com>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Sultan Alsawaf <sultan@kerneltoast.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCH v3] cpufreq: Avoid using inconsistent policy->min and
+ policy->max
+Message-ID: <20250417043100.dq6yw4ktbimms2au@vireshk-i7>
+References: <5907080.DvuYhMxLoT@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -88,36 +96,55 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250416134331.7604-1-johan+linaro@kernel.org>
+In-Reply-To: <5907080.DvuYhMxLoT@rjwysocki.net>
 
-On 16-04-25, 15:43, Johan Hovold wrote:
-> Commit 3f66425a4fc8 ("cpufreq: Enable COMPILE_TEST on Arm drivers")
-> enabled compile testing of most Arm CPUFreq drivers but left the
-> existing default values unchanged so that many drivers are enabled by
-> default whenever COMPILE_TEST is selected.
+On 16-04-25, 16:12, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> This specifically results in the S3C64XX CPUFreq driver being enabled
-> and initialised during boot of non-S3C64XX platforms with the following
-> error logged:
+> Since cpufreq_driver_resolve_freq() can run in parallel with
+> cpufreq_set_policy() and there is no synchronization between them,
+> the former may access policy->min and policy->max while the latter
+> is updating them and it may see intermediate values of them due
+> to the way the update is carried out.  Also the compiler is free
+> to apply any optimizations it wants both to the stores in
+> cpufreq_set_policy() and to the loads in cpufreq_driver_resolve_freq()
+> which may result in additional inconsistencies.
 > 
-> 	cpufreq: Unable to obtain ARMCLK: -2
+> To address this, use WRITE_ONCE() when updating policy->min and
+> policy->max in cpufreq_set_policy() and use READ_ONCE() for reading
+> them in cpufreq_driver_resolve_freq().  Moreover, rearrange the update
+> in cpufreq_set_policy() to avoid storing intermediate values in
+> policy->min and policy->max with the help of the observation that
+> their new values are expected to be properly ordered upfront.
 > 
-> Fix the default values for drivers that can be compile tested and that
-> should be enabled by default when not compile testing.
+> Also modify cpufreq_driver_resolve_freq() to take the possible reverse
+> ordering of policy->min and policy->max, which may happen depending on
+> the ordering of operations when this function and cpufreq_set_policy()
+> run concurrently, into account by always honoring the max when it
+> turns out to be less than the min (in case it comes from thermal
+> throttling or similar).
 > 
-> Fixes: 3f66425a4fc8 ("cpufreq: Enable COMPILE_TEST on Arm drivers")
-> Cc: stable@vger.kernel.org	# 6.12
-> Cc: Rob Herring (Arm) <robh@kernel.org>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> Fixes: 151717690694 ("cpufreq: Make policy min/max hard requirements")
+> Cc: 5.16+ <stable@vger.kernel.org> # 5.16+
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->  drivers/cpufreq/Kconfig.arm | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
+> 
+> This replaces the last 3 patches in
+> 
+> https://lore.kernel.org/linux-pm/6171293.lOV4Wx5bFT@rjwysocki.net/
+> 
+> v2 -> v3:
+>    * Fold 3 patches into one.
+>    * Drop an unrelated white space fixup change.
+>    * Fix a typo in a comment (Christian).
+> 
+> v1 -> v2: Cosmetic changes
+> 
+> ---
+>  drivers/cpufreq/cpufreq.c |   32 +++++++++++++++++++++++++-------
+>  1 file changed, 25 insertions(+), 7 deletions(-)
 
-I have already applied a similar patch:
-
-https://lore.kernel.org/all/20250404124006.362723-1-krzysztof.kozlowski@linaro.org/
-
-Can you rebase over that please ?
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
 viresh
