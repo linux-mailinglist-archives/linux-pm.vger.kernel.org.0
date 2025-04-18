@@ -1,424 +1,569 @@
-Return-Path: <linux-pm+bounces-25721-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25722-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CBD5A93962
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 17:16:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BAE1A93983
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 17:20:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C1D68E433C
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 15:15:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2257216D934
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 15:20:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B759521322E;
-	Fri, 18 Apr 2025 15:14:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5C4720A5D2;
+	Fri, 18 Apr 2025 15:20:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="S5a70F6D"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="g60A/K9+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2045.outbound.protection.outlook.com [40.107.21.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2E552135BB;
-	Fri, 18 Apr 2025 15:14:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744989259; cv=none; b=JUjnqpa6laznIyInigdF+743V7m6aRHchPkF8nHncVZMeFsibJLrEdhhcJQNGb2GsR2gWIhS1OLdlY+zqFvblCNpYTzvvOk3v9KcIXiJNHvdQF55+YYw2K/WS6LSsWr9uPinf3Obtof+5t2FznBoLg4VL/AOtZ6Dva5I2AFhxRs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744989259; c=relaxed/simple;
-	bh=Z5eTJqLCVOCXLlGOSr10sW3KiaDMVKUAk3DOAZaomzg=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=M3hx3tB6/G0M2gQf8Ga6w7Pgnhk38aAZ0siNs9UfHGyz8tdtnwpCn5/czcry952JMZORIRWiW8y1YX3XDUGToakSWQRKwVeFxQzJ65lJFMrY9pQuueocaO+ygDXqRLgo7VDlcNa4pu3sVD+odYk0Fqokm2vXpWDyXPXvX77n17k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=S5a70F6D; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53I2cLAm005239;
-	Fri, 18 Apr 2025 15:14:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=xw9wcp2R9eJ8PgvgUrXdyJLc
-	rYNOyl4SqtPIFH3MgPs=; b=S5a70F6D44lowJsL2Hn2nd1WMIR90ItIwbC79atw
-	KtylitvyfrYwFUzVP9+fdABxfORloPMyTEAAvPcRZuJzSMnwjBDWTGKuqHa1+Hzu
-	FOy/OesYdV1FL7n493nyIPpOpDapaiG9NbiHJ6TF0bdQdSDFiNe5VvZkS/CD68DQ
-	54M18PH3Kec0gdALfxnSbld3j97EvcRUuGubfigB1yy6SZ57POGoUUta36v9eSj2
-	fvVENeMQjBmiLL8q1/LdpDyeq5CXJUL+ds3YOM3kcg+wfROnmZmN+PJMH5d02OHh
-	U6RV8YQK8/9Veb9yoID1vclf1NGzKgxB3ASH7qGBwsw6Uw==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45yf6a293c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Apr 2025 15:14:10 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53IFE95k017420
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Apr 2025 15:14:09 GMT
-Received: from hu-ptalari-hyd.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 18 Apr 2025 08:14:02 -0700
-From: Praveen Talari <quic_ptalari@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby
-	<jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski
-	<krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Viresh Kumar
-	<vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd
-	<sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Praveen Talari
-	<quic_ptalari@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-CC: <psodagud@quicinc.com>, <djaggi@quicinc.com>, <quic_msavaliy@quicinc.com>,
-        <quic_vtanuku@quicinc.com>, <quic_arandive@quicinc.com>,
-        <quic_mnaresh@quicinc.com>, <quic_shazhuss@quicinc.com>
-Subject: [PATCH v2 9/9] serial: qcom-geni: Enable Serial on SA8255p Qualcomm platforms
-Date: Fri, 18 Apr 2025 20:42:35 +0530
-Message-ID: <20250418151235.27787-10-quic_ptalari@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20250418151235.27787-1-quic_ptalari@quicinc.com>
-References: <20250418151235.27787-1-quic_ptalari@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6701970823;
+	Fri, 18 Apr 2025 15:20:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.21.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744989650; cv=fail; b=A57kMhBF02gbGdSW4OlLJHyrtcuIjCEx+nk951xoc5qL6lRfT1wL9u+YzLa3e+i+OnP0b6bmrOVb7HIdT8WW6iNrlWwLYNOGohDhryoWzQP7O+KsaakWkaoJD9qFBZyPlEJz/uu6MEVapWkVPHFt+UYhBdXZuRAnxeua/9GDfH4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744989650; c=relaxed/simple;
+	bh=isZxS2Ur0kDh22AVtMdfPSKCFtJMKmP7XZdFOTZzgtY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=XUPpu7wKB3MgPTx7LwmuHt+D1jp6Ncqw9XKDUDEJBcfZiHs5GtfzskRutPGNvMGiOuYMwK7LbA8vZR/GJryHg6zEdtGhWy1RYnZTieyivjmf7ZlqmYW3JQ7+PeBjXs+Qz3BZNumFIy1KFx9nTMIwvukgaaS1viZnvG5/OT1j8P4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=fail (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=g60A/K9+ reason="signature verification failed"; arc=fail smtp.client-ip=40.107.21.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=I2zrVogGG2zZ2G7HfYUBBpvsT0vX/UXJDPYmCvww4UF0NS5AX721Ga9Alvj7JBihokaAeTuumevN2aBVrLBxlw0i77qYVO9JcaIXOFAB0kUtTNcgd/BAs0Q46j4k5OuIXvKgfd8sN0eQSNQAFlSOh75SNsrTK+d+40XeQCE8ddX2Bgq1R+pctoH9cdnj/DIzooECHLB6XR800v/SaDzFNbESGIER2ikrCbeRvGsAM0q2WFHbPaYb1eNyCrTtU3njVKJgD01xChAWp2W2u0r8cm0UxsemoGB2FD5UUU3bGs9LRKoceohC9zwL6kCIPa/D48CAqorT/AVLNYCpH9a+/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4ZxrPbAybKkBtIE6vsJyc2Mf9i5tXM3OBXIGtHcmTlw=;
+ b=eSSn+UAbWx2WRiYKq/s2SXadAX0Y1hKUNdVpXy3q8yiQrZEg+iAAPSq3rpH5Nmk2zyQB+T1aO6yHmc8yDRpFbTqsc93A8O/ISXb0Gta8MXEOTCPzYIRzSXqaV6RDjy7ExkcGcij9xhdD6Y32pAB2JPgp8wYvYV6M+0hUBieJwnicjvvD4EnKYRxiS7ODBnRePvrW/L4Pga4ZROHYdZ633ra11iiy/12Jaw6UfvvgLXwJDPYSENNkQqK64tCydq8Rc7m+yZVB5Fuw+rGSI9Ouv/PR4SoV7KM0S3sv3uHCxalIpZ1O3i1DZGaNeWRJhLRMQZn6UmrXIP86I8q0K5fLsA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4ZxrPbAybKkBtIE6vsJyc2Mf9i5tXM3OBXIGtHcmTlw=;
+ b=g60A/K9+sGoUNGdYf4XlTYaLaG8uOYRPxc4vRG8S3KHwEFlWTnR9MBL/+5Eu67vFRCLn5MAuMhxBWWOZeb1kMUEcOpTE8bVdYNm+u24w/gwUWSSZ6LfQpEHtijwgaatL/OyLpWpoEbhWZJ67IFm5F2fTZvW+FZbttE99SAXEVvntOIgDUH0vnCYUmT5nlrY/8CwZaDiUd1Kolxzco4xLbxYywBlL7PDb89tbSPXGTdkPMyyabaHlQ/7B7A3J4jF14a0coJ/qWmESctnVxuj3KFWIdCt80Gzt3clthj1Yhx5Sv+0l8PxM2PPHn4NbfM9PdRk22X74EkWEoRMu/fvu/g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by VI1PR04MB9762.eurprd04.prod.outlook.com (2603:10a6:800:1d3::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.36; Fri, 18 Apr
+ 2025 15:20:44 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%2]) with mapi id 15.20.8632.043; Fri, 18 Apr 2025
+ 15:20:44 +0000
+Date: Fri, 18 Apr 2025 11:20:35 -0400
+From: Frank Li <Frank.li@nxp.com>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Pengfei Li <pengfei.li_1@nxp.com>,
+	Marco Felsch <m.felsch@pengutronix.de>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	ye.li@nxp.com, joy.zou@nxp.com, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH RESEND v6 2/2] thermal: imx91: Add support for i.MX91
+ thermal monitoring unit
+Message-ID: <aAJtwxBtBX4ofy/o@lizhi-Precision-Tower-5810>
+References: <20250407-imx91tmu-v6-0-e48c2aa3ae44@nxp.com>
+ <20250407-imx91tmu-v6-2-e48c2aa3ae44@nxp.com>
+ <aAIkAF_AHta8_vuS@mai.linaro.org>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aAIkAF_AHta8_vuS@mai.linaro.org>
+X-ClientProxiedBy: PH0PR07CA0013.namprd07.prod.outlook.com
+ (2603:10b6:510:5::18) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 2wJ74QAi8NbEID9VUrh2JTShaNPwLH-T
-X-Authority-Analysis: v=2.4 cv=JNc7s9Kb c=1 sm=1 tr=0 ts=68026c42 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=XR8D0OoHHMoA:10 a=COk6AnOGAAAA:8 a=YJyStIVdxSjxqG8W5N4A:9 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-ORIG-GUID: 2wJ74QAi8NbEID9VUrh2JTShaNPwLH-T
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-18_05,2025-04-17_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- suspectscore=0 mlxlogscore=999 lowpriorityscore=0 bulkscore=0
- impostorscore=0 clxscore=1015 phishscore=0 adultscore=0 priorityscore=1501
- spamscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2504180112
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|VI1PR04MB9762:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4c6f3c76-0a18-4074-7c39-08dd7e8c9652
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|1800799024|52116014|366016|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?iso-8859-1?Q?9fjuC8neLFrpcVyZB7pWUfhXXLpZCkgFshQuhvM74iyaybBXeQrMSMHwEt?=
+ =?iso-8859-1?Q?lBXpX5Gbj2g1W6Gx/f9aKcWuLMZSkVRa6K1J8RiWQUyZDZZKx8OcfxwF4T?=
+ =?iso-8859-1?Q?8EfiYiixgDDxfRqDQScMFPVVci2nFSVk2bk1bZrU14D5+S5LRKDMSomHaf?=
+ =?iso-8859-1?Q?B7I1l6QcAsuVLYI1ZQ2eo9lXnWVNDnLLxcElU6IobKLO91FrdCf76fpGdr?=
+ =?iso-8859-1?Q?5pXHASBM5tScaypSAPH71uQqon7CUlm56mWwYi9QOgSlzpy9Pajkbmp5r8?=
+ =?iso-8859-1?Q?l0sR+nayglpzKXmfOc4KRljQcDdWmwqWuLCvaEdZrAPZlfPsU6xTooV01j?=
+ =?iso-8859-1?Q?/4ObzzNQPWe8S903OFXhkVUyjlyCE4Js0h42IE8xh5BZPsk9w/o8/5bYr4?=
+ =?iso-8859-1?Q?0RhA7ExuNF1EZYq2IaTRBTYjoLcwxArJexGqPyiZv+zPe5DJCiFO4tqT7p?=
+ =?iso-8859-1?Q?6zTiwlD6rz1R9BvYgwfFyTNGkXmStBK+cR+0QTe24QmobXjIXiCWnsD5+E?=
+ =?iso-8859-1?Q?glmCq1vaYAg00KZT4h8f6hoKKxWdi/vKgz+gwPUC8dzD8rAQDtJ5n0hsmw?=
+ =?iso-8859-1?Q?Wm3J+ztxQoBfQ/tHSJm2EwcSmQr7vsJwOAwPiP7hWxCSFZwVyP84Y7F1Bi?=
+ =?iso-8859-1?Q?p30SsMPyVTNrXEzpvfTqevth+tgjsplSDTrs0gHtp8HWTFO3BGkqwKPDB2?=
+ =?iso-8859-1?Q?2fv95s/NzJDARwTyiLkw4uRoNDI1uoKZaT2SZDVq0pMCCY2ernmV42OzxH?=
+ =?iso-8859-1?Q?UZzBOXYPPIT+sWZz4uDBleNVugqWyvBGkhIjgHf3Pgxjt3/my9bZUXYyrj?=
+ =?iso-8859-1?Q?UFP/9O0u0c0EEmCHD2IVSyeKdf5Mddc6/yq6vE9YM895k1E1FXHgOqAA51?=
+ =?iso-8859-1?Q?u47xxDMKf0hYTZc1osMypXb5VEuyf80ZO/ltE2Qaye7taykJ8S9dxYyQX1?=
+ =?iso-8859-1?Q?09tUAkiHm3PTAlqHZCRGnJW7ePekVsC9gD2pSqzGnUdGzhyGuMJz4gT7QF?=
+ =?iso-8859-1?Q?j5NArKQRBg+leQkR+B/0KnQS/Vx81O2+hmZiLN/okE64rqf7ZIpA8Oju7m?=
+ =?iso-8859-1?Q?/z3ISV/aJ1rD0USCkN2MmmVkxdS1El27GswRRS4E7Is3illquHNJKR2WOv?=
+ =?iso-8859-1?Q?UIcQ+Qx7NnsIpVGq20ldcXggCl90t5zagm4ZGr1sWB+ianBiTXq6XMH3dd?=
+ =?iso-8859-1?Q?hVo5aEpbNXHsYr7ZddbOBIQkASXXmbRUQOkudUoB0T6AeZMUtZGLcYdRJV?=
+ =?iso-8859-1?Q?0fsiWHGp3AH0idC+QpkOoDniaz3EsYpPdaF3Bmf07yNhtayawOXNq5JIDn?=
+ =?iso-8859-1?Q?vGiFuXLZfJ21Hf7hynHVzws9GNNlf7wdhJuulFAyAjj4SPIA3KsadUqyCa?=
+ =?iso-8859-1?Q?0TgEoper8RDsaPkBcRVpbQeTsmKxysTRGfkjYcJ4yog1wKPhE/Q5AM1yfa?=
+ =?iso-8859-1?Q?X0XmyC6kbtYYqgiRpI66S4Ok9RaogkC7IRDW3lDoQqarySiFqsgQ85z5po?=
+ =?iso-8859-1?Q?c3HYGwqgzjVrz/LDJqp8CLfpQSi5i5dxQjasrWUHZfqUZD+nPZrHFfHV7a?=
+ =?iso-8859-1?Q?dUcH0pY=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(52116014)(366016)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?iso-8859-1?Q?/n+TALj+DCUjK9X9wsqAIbtC3YSP89eALe+okfdKN5R5vk4YWgu6xwIHcf?=
+ =?iso-8859-1?Q?sPwe1KWg4weqhGSeZAn1S8TcCq6tpOJpG7wuV+DmgzElpkrFZzM6YHYaJj?=
+ =?iso-8859-1?Q?b0nVg5xABLDMmb8/om5od5mLx3RxMcXHJvFgWtvGLn3pAsfn1lpac9TwAS?=
+ =?iso-8859-1?Q?ev4pdyxNPdDobUUO6aF82O4KyTBxB70JIGNKZRXcwbJArbJkVV1Pw4UJCs?=
+ =?iso-8859-1?Q?AjmHZ8ucHX+qzuA2cqo3Qx2itcrwDul65EPzVY3tOqaq8aJ6IshBrQFC27?=
+ =?iso-8859-1?Q?MThJ2Kl1FiWBECWRlLcibWy2RTI2F5nPqlrlimocBbppan+oONE5f4SMfr?=
+ =?iso-8859-1?Q?qh60wbavBleHxypnjkcVSi9oLXUJEvFj3IrWusdYm3PZoK0jv1ZHP1I3rl?=
+ =?iso-8859-1?Q?2GyZVFaoNdB7uysqUZujwaNMDuYbN/V2SpEqezRj0j7PORDKvGkWCHbXUv?=
+ =?iso-8859-1?Q?bncDbAOdnAmx8cjhruBO6bRel+KR+/rlkLH4ymvDPMCDmPfYXa0Z5seYcq?=
+ =?iso-8859-1?Q?51eWwAq+ly/srz70tCk6gqTSyXzrsdd9Sc4Z5zMF3IrNH7m2wgvUP4PjXE?=
+ =?iso-8859-1?Q?TZqnY3orvKGUwwhouYjTkLayz2a7JJpKQKnFKDMonhUUPMqs6nqdXnxmlZ?=
+ =?iso-8859-1?Q?4ovOSJhzGNGhiq3SKSRyMYcUs0bZ7xSfdcBp8wUTjvk+ry+S5xxz7x/jfS?=
+ =?iso-8859-1?Q?x0OfQMITv8cT4iFiFGs8E5u6bgopoiyC726wgp2obxus8eD03JlNBsNYGO?=
+ =?iso-8859-1?Q?V72ueQVWV2Afk0QcPw33Sx9UGDqQzkBFBmQKV7VUy8cmoVG9kNEFA67Cfy?=
+ =?iso-8859-1?Q?d3xjZUDqLRJX0brOl3dYGP9SyxmUzf8UnmUCK7YqqKXmOMlBsHWOBp1uTW?=
+ =?iso-8859-1?Q?IhXhVIbIRZnN47d1VQLW/vlVL72tl7ksgNCmQDFaPau0lkHbHUh6t+RU3x?=
+ =?iso-8859-1?Q?uXkt0FOkxKPyQBmbfyypfd51O7PAjSvTXItSJWHJYU5crysgZZwQq1qNSY?=
+ =?iso-8859-1?Q?e/rjr97DMQALVKWsn1ieBmxP68ExfFLvN+nTzSC5bWPTDEStZzoPIMmCdg?=
+ =?iso-8859-1?Q?KaKESTspeghFZLtqdaHmyWkATyIDhUN2LzI09VIr9pHCTzecdUfsKE4s9G?=
+ =?iso-8859-1?Q?Pumj8O33fRKdu4hTwGADiReRVyFwBklsJ4DOFbRK8b/WPV8tjk/bwwGz+j?=
+ =?iso-8859-1?Q?+s7E/B7CvEeRwxbqw8pUTDHNadjH6NlSyPCUHJkUQTOMdzIZo8z9MAm6YL?=
+ =?iso-8859-1?Q?VXqaIzz+sGEvRCkYNOt5G0XL8nwnrJqlNWSzpzzFJApZHEzwx//mAnj2jn?=
+ =?iso-8859-1?Q?cJd5Oo2gYH5FYYySrHofMWCrZJbFXLJjNEspgtRejuv1U2E6hdCzTk9itT?=
+ =?iso-8859-1?Q?wjkHaXxDnORiM2uoGVv+INF67QRPzGH0sHophzkSTsP5DTNotSY1vTxd6a?=
+ =?iso-8859-1?Q?6envUmZk2omirdKZBCKSnNdGzKEruRs4WKyYI4KxQTK629s3CAFHP0LgNg?=
+ =?iso-8859-1?Q?V/GTEwiv9ZdBbV11RrjDV1koRXy8UN1WQmcA6RlvD5aibhfH6adiw2B49L?=
+ =?iso-8859-1?Q?4rbrb33EXZhVZNBFP9V3LfBIUqrkSlHb9KCSDcn0iRwaotH5YGGWvoBjzx?=
+ =?iso-8859-1?Q?k8ejtfGHZZwqN37e/an+tw0nb5G6Zwhfah?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c6f3c76-0a18-4074-7c39-08dd7e8c9652
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2025 15:20:44.0506
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fMAwh7+X/88S6CT7evt0i3y0OQTu23YVxYL+jL8iKrQtOnJocUsTfzilOY3x2E9z81EIak3pHTNt8Q4FiwaeNQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB9762
 
-The Qualcomm automotive SA8255p SoC relies on firmware to configure
-platform resources, including clocks, interconnects and TLMM.
-The driver requests resources operations over SCMI using power
-and performance protocols.
+On Fri, Apr 18, 2025 at 12:05:52PM +0200, Daniel Lezcano wrote:
+> On Mon, Apr 07, 2025 at 04:05:40PM -0400, Frank Li wrote:
+> > From: Pengfei Li <pengfei.li_1@nxp.com>
+> >
+> > Introduce support for the i.MX91 thermal monitoring unit, which features a
+> > single sensor for the CPU. The register layout differs from other chips,
+> > necessitating the creation of a dedicated file for this.
+> >
+> > This sensor provides a resolution of 1/64°C (6-bit fraction). For actual
+> > accuracy, refer to the datasheet, as it varies depending on the chip grade.
+> > Provide an interrupt for end of measurement and threshold violation and
+> > Contain temperature threshold comparators, in normal and secure address
+> > space, with direction and threshold programmability.
+> >
+> > Datasheet Link: https://www.nxp.com/docs/en/data-sheet/IMX91CEC.pdf
+> >
+> > Signed-off-by: Pengfei Li <pengfei.li_1@nxp.com>
+> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> > ---
+> > Change from v5 to v6
+> > - remove Macro's review tag
+> > - remove mutex lock
+> > - use set_trips callback
+> >
+> > Change from v4 to v5
+> > - add irq support
+> > - use period mode
+> > - Marco, if need drop review tag, let me know
+> >
+> > Change from v3 to v4
+> > - Add Macro's review tag
+> > - Use devm_add_action()
+> > - Move pm_runtim_put before thermal_of_zone_register()
+> >
+> > change from v2 to v3
+> > - add IMX91_TMU_ prefix for register define
+> > - remove unused register define
+> > - fix missed pm_runtime_put() at error path in imx91_tmu_get_temp()
+> > - use dev variable in probe function
+> > - use pm_runtime_set_active() in probe
+> > - move START to imx91_tmu_get_temp()
+> > - use DEFINE_RUNTIME_DEV_PM_OPS()
+> > - keep set reset value because there are not sw "reset" bit in controller,
+> > uboot may change and enable tmu.
+> >
+> > change from v1 to v2
+> > - use low case for hexvalue
+> > - combine struct imx91_tmu and tmu_sensor
+> > - simplify imx91_tmu_start() and imx91_tmu_enable()
+> > - use s16 for imx91_tmu_get_temp(), which may negative value
+> > - use reverse christmas tree style
+> > - use run time pm
+> > - use oneshot to sample temp
+> > - register thermal zone after hardware init
+> > ---
+> >  drivers/thermal/Kconfig         |  10 +
+> >  drivers/thermal/Makefile        |   1 +
+> >  drivers/thermal/imx91_thermal.c | 398 ++++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 409 insertions(+)
+> >
+> > diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> > index d3f9686e26e71..78a05d1030882 100644
+> > --- a/drivers/thermal/Kconfig
+> > +++ b/drivers/thermal/Kconfig
+> > @@ -296,6 +296,16 @@ config IMX8MM_THERMAL
+> >  	  cpufreq is used as the cooling device to throttle CPUs when the passive
+> >  	  trip is crossed.
+> >
+> > +config IMX91_THERMAL
+> > +	tristate "Temperature sensor driver for NXP i.MX91 SoC"
+> > +	depends on ARCH_MXC || COMPILE_TEST
+> > +	depends on OF
+> > +	help
+> > +	  Include one sensor and six comparators. Each of them compares the
+> > +	  temperature value (from the sensor) against the programmable
+> > +	  threshold values. The direction of the comparison is configurable
+> > +	  (greater / lesser than).
+> > +
+> >  config K3_THERMAL
+> >  	tristate "Texas Instruments K3 thermal support"
+> >  	depends on ARCH_K3 || COMPILE_TEST
+> > diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> > index 9abf43a74f2bb..08da241e6a598 100644
+> > --- a/drivers/thermal/Makefile
+> > +++ b/drivers/thermal/Makefile
+> > @@ -50,6 +50,7 @@ obj-$(CONFIG_ARMADA_THERMAL)	+= armada_thermal.o
+> >  obj-$(CONFIG_IMX_THERMAL)	+= imx_thermal.o
+> >  obj-$(CONFIG_IMX_SC_THERMAL)	+= imx_sc_thermal.o
+> >  obj-$(CONFIG_IMX8MM_THERMAL)	+= imx8mm_thermal.o
+> > +obj-$(CONFIG_IMX91_THERMAL)	+= imx91_thermal.o
+> >  obj-$(CONFIG_MAX77620_THERMAL)	+= max77620_thermal.o
+> >  obj-$(CONFIG_QORIQ_THERMAL)	+= qoriq_thermal.o
+> >  obj-$(CONFIG_DA9062_THERMAL)	+= da9062-thermal.o
+> > diff --git a/drivers/thermal/imx91_thermal.c b/drivers/thermal/imx91_thermal.c
+> > new file mode 100644
+> > index 0000000000000..e8deb0b07dc98
+> > --- /dev/null
+> > +++ b/drivers/thermal/imx91_thermal.c
+> > @@ -0,0 +1,398 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright 2025 NXP.
+> > + */
+> > +
+> > +#include <linux/bitfield.h>
+> > +#include <linux/clk.h>
+> > +#include <linux/err.h>
+> > +#include <linux/interrupt.h>
+> > +#include <linux/iopoll.h>
+> > +#include <linux/nvmem-consumer.h>
+> > +#include <linux/module.h>
+> > +#include <linux/of.h>
+> > +#include <linux/of_device.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/pm_runtime.h>
+> > +#include <linux/thermal.h>
+> > +#include <linux/units.h>
+> > +
+> > +#define REG_SET					0x4
+> > +#define REG_CLR					0x8
+> > +#define REG_TOG					0xc
+> > +
+> > +#define IMX91_TMU_CTRL0				0x0
+> > +#define   IMX91_TMU_CTRL0_THR1_IE		BIT(9)
+> > +#define   IMX91_TMU_CTRL0_THR1_MASK		GENMASK(3, 2)
+> > +#define   IMX91_TMU_CTRL0_CLR_FLT1		BIT(21)
+> > +
+> > +#define IMX91_TMU_THR_MODE_LE			0
+> > +#define IMX91_TMU_THR_MODE_GE			1
+> > +
+> > +#define IMX91_TMU_STAT0				0x10
+> > +#define   IMX91_TMU_STAT0_THR1_IF		BIT(9)
+> > +#define   IMX91_TMU_STAT0_THR1_STAT		BIT(13)
+> > +#define   IMX91_TMU_STAT0_DRDY0_IF_MASK		BIT(16)
+> > +
+> > +#define IMX91_TMU_DATA0				0x20
+> > +
+> > +#define IMX91_TMU_CTRL1				0x200
+> > +#define IMX91_TMU_CTRL1_EN			BIT(31)
+> > +#define IMX91_TMU_CTRL1_START			BIT(30)
+> > +#define IMX91_TMU_CTRL1_STOP			BIT(29)
+> > +#define IMX91_TMU_CTRL1_RES_MASK		GENMASK(19, 18)
+> > +#define IMX91_TMU_CTRL1_MEAS_MODE_MASK		GENMASK(25, 24)
+> > +#define   IMX91_TMU_CTRL1_MEAS_MODE_SINGLE	0
+> > +#define   IMX91_TMU_CTRL1_MEAS_MODE_CONTINUES	1
+> > +#define   IMX91_TMU_CTRL1_MEAS_MODE_PERIODIC	2
+> > +
+> > +#define IMX91_TMU_THR_CTRL01			0x30
+> > +#define   IMX91_TMU_THR_CTRL01_THR1_MASK	GENMASK(31, 16)
+> > +
+> > +#define IMX91_TMU_REF_DIV			0x280
+> > +#define IMX91_TMU_DIV_EN			BIT(31)
+> > +#define IMX91_TMU_DIV_MASK			GENMASK(23, 16)
+> > +#define IMX91_TMU_DIV_MAX			255
+> > +
+> > +#define IMX91_TMU_PUD_ST_CTRL			0x2b0
+> > +#define IMX91_TMU_PUDL_MASK			GENMASK(23, 16)
+> > +
+> > +#define IMX91_TMU_TRIM1				0x2e0
+> > +#define IMX91_TMU_TRIM2				0x2f0
+> > +
+> > +#define IMX91_TMU_TEMP_LOW_LIMIT		-40000
+> > +#define IMX91_TMU_TEMP_HIGH_LIMIT		125000
+> > +
+> > +#define IMX91_TMU_DEFAULT_TRIM1_CONFIG		0xb561bc2d
+> > +#define IMX91_TMU_DEFAULT_TRIM2_CONFIG		0x65d4
+> > +
+> > +#define IMX91_TMU_PERIOD_CTRL			0x270
+> > +#define   IMX91_TMU_PERIOD_CTRL_MEAS_MASK	GENMASK(23, 0)
+> > +
+> > +#define IMX91_TMP_FRAC				64
+> > +
+> > +struct imx91_tmu {
+> > +	void __iomem *base;
+> > +	struct clk *clk;
+> > +	struct device *dev;
+> > +	struct thermal_zone_device *tzd;
+> > +	int high;
+> > +	bool enable;
+> > +};
+> > +
+> > +static void imx91_tmu_start(struct imx91_tmu *tmu, bool start)
+> > +{
+> > +	u32 val = start ? IMX91_TMU_CTRL1_START : IMX91_TMU_CTRL1_STOP;
+> > +
+> > +	writel_relaxed(val, tmu->base + IMX91_TMU_CTRL1 + REG_SET);
+> > +}
+> > +
+> > +static void imx91_tmu_enable(struct imx91_tmu *tmu, bool enable)
+> > +{
+> > +	u32 reg = IMX91_TMU_CTRL1;
+> > +
+> > +	reg += enable ? REG_SET : REG_CLR;
+> > +
+> > +	writel_relaxed(IMX91_TMU_CTRL1_EN, tmu->base + reg);
+> > +}
+> > +
+> > +static int imx91_tmu_to_mcelsius(int x)
+> > +{
+> > +	return x * MILLIDEGREE_PER_DEGREE / IMX91_TMP_FRAC;
+> > +}
+> > +
+> > +static int imx91_tmu_from_mcelsius(int x)
+> > +{
+> > +	return x * IMX91_TMP_FRAC / MILLIDEGREE_PER_DEGREE;
+> > +}
+> > +
+> > +static int imx91_tmu_get_temp(struct thermal_zone_device *tz, int *temp)
+> > +{
+> > +	struct imx91_tmu *tmu = thermal_zone_device_priv(tz);
+> > +	s16 data;
+> > +	int ret;
+> > +
+> > +	ret = pm_runtime_resume_and_get(tmu->dev);
+> > +	if (ret < 0)
+> > +		return ret;
+>
+> Why using pm_runtime* all over the place ?
+>
+> It would make sense to have in the probe/remove functions (or in the set_mode -
+> enabled / disabled), suspend / resume but the other place it does not make
+> sense IMO. If the sensor is enabled by the set_mode function and then
+> pm_runtime_get() is called, then the ref is taken during all the time the
+> sensor is in use, so others pm_runtime_get / pm_runtime_put will be helpless,
+> no ?
+>
+>
+> > +	/* DATA0 is 16bit signed number */
+> > +	data = readw_relaxed(tmu->base + IMX91_TMU_DATA0);
+> > +	*temp = imx91_tmu_to_mcelsius(data);
+> > +	if (*temp < IMX91_TMU_TEMP_LOW_LIMIT || *temp > IMX91_TMU_TEMP_HIGH_LIMIT)
+> > +		ret = -EAGAIN;
+>
+> When the measured temperature can be out of limits ?
 
-The SCMI power protocol enables or disables resources like clocks,
-interconnect paths, and TLMM (GPIOs) using runtime PM framework APIs,
-such as resume/suspend, to control power states(on/off).
+It is safety check. It may be caused by incorrect calibration data or some
+glitch at ref voltage.
 
-The SCMI performance protocol manages UART baud rates, with each baud
-rate represented by a performance level. The driver uses the
-dev_pm_opp_set_level() API to request the desired baud rate by
-specifying the performance level.
+>
+> > +	if (*temp <= tmu->high && tmu->enable) {
+>
+> I suggest to provide a change in the thermal core to return -EAGAIN if the
+> thermal zone is not enabled when calling thermal_zone_get_temp() and get rid of the tmu->enable
+>
+> > +		writel_relaxed(IMX91_TMU_STAT0_THR1_IF, tmu->base + IMX91_TMU_STAT0 + REG_CLR);
+> > +		writel_relaxed(IMX91_TMU_CTRL0_THR1_IE, tmu->base + IMX91_TMU_CTRL0 + REG_SET);
+> > +	}
+>
+> For my understanding what are for these REG_CLR and REG_SET in this function?
 
-Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
----
- drivers/tty/serial/qcom_geni_serial.c | 150 +++++++++++++++++++++++---
- 1 file changed, 135 insertions(+), 15 deletions(-)
+REG_CLR\REG_SET is offset 8\4 for each register, which used clear\set only
+some bits without touch other value
 
-diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index 9d698c354510..51036d5c8ea1 100644
---- a/drivers/tty/serial/qcom_geni_serial.c
-+++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -11,6 +11,7 @@
- #include <linux/irq.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/pm_domain.h>
- #include <linux/pm_opp.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
-@@ -99,10 +100,16 @@
- #define DMA_RX_BUF_SIZE		2048
- 
- static DEFINE_IDA(port_ida);
-+#define DOMAIN_IDX_POWER	0
-+#define DOMAIN_IDX_PERF		1
- 
- struct qcom_geni_device_data {
- 	bool console;
- 	enum geni_se_xfer_mode mode;
-+	struct dev_pm_domain_attach_data pd_data;
-+	int (*geni_serial_pwr_rsc_init)(struct uart_port *uport);
-+	int (*geni_serial_set_rate)(struct uart_port *uport, unsigned long clk_freq);
-+	int (*geni_serial_switch_power_state)(struct uart_port *uport, bool state);
- };
- 
- struct qcom_geni_private_data {
-@@ -140,6 +147,7 @@ struct qcom_geni_serial_port {
- 
- 	struct qcom_geni_private_data private_data;
- 	const struct qcom_geni_device_data *dev_data;
-+	struct dev_pm_domain_list *pd_list;
- };
- 
- static const struct uart_ops qcom_geni_console_pops;
-@@ -1331,6 +1339,42 @@ static int geni_serial_set_rate(struct uart_port *uport, unsigned long baud)
- 	return 0;
- }
- 
-+static int geni_serial_set_level(struct uart_port *uport, unsigned long baud)
-+{
-+	struct qcom_geni_serial_port *port = to_dev_port(uport);
-+	struct device *perf_dev = port->pd_list->pd_devs[DOMAIN_IDX_PERF];
-+
-+	/*
-+	 * The performance protocol sets UART communication
-+	 * speeds by selecting different performance levels
-+	 * through the OPP framework.
-+	 *
-+	 * Supported perf levels for baudrates in firmware are below
-+	 * +---------------------+--------------------+
-+	 * |  Perf level value   |  Baudrate values   |
-+	 * +---------------------+--------------------+
-+	 * |      300            |      300           |
-+	 * |      1200           |      1200          |
-+	 * |      2400           |      2400          |
-+	 * |      4800           |      4800          |
-+	 * |      9600           |      9600          |
-+	 * |      19200          |      19200         |
-+	 * |      38400          |      38400         |
-+	 * |      57600          |      57600         |
-+	 * |      115200         |      115200        |
-+	 * |      230400         |      230400        |
-+	 * |      460800         |      460800        |
-+	 * |      921600         |      921600        |
-+	 * |      2000000        |      2000000       |
-+	 * |      3000000        |      3000000       |
-+	 * |      3200000        |      3200000       |
-+	 * |      4000000        |      4000000       |
-+	 * +---------------------+--------------------+
-+	 */
-+
-+	return dev_pm_opp_set_level(perf_dev, baud);
-+}
-+
- static void qcom_geni_serial_set_termios(struct uart_port *uport,
- 					 struct ktermios *termios,
- 					 const struct ktermios *old)
-@@ -1349,7 +1393,7 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
- 	/* baud rate */
- 	baud = uart_get_baud_rate(uport, termios, old, 300, 4000000);
- 
--	ret = geni_serial_set_rate(uport, baud);
-+	ret = port->dev_data->geni_serial_set_rate(uport, baud);
- 	if (ret) {
- 		dev_err(port->se.dev,
- 			"%s: Failed to set baud:%u ret:%d\n",
-@@ -1640,8 +1684,27 @@ static int geni_serial_resources_on(struct uart_port *uport)
- 	return 0;
- }
- 
--static int geni_serial_resource_init(struct qcom_geni_serial_port *port)
-+static int geni_serial_resource_state(struct uart_port *uport, bool power_on)
- {
-+	return power_on ? geni_serial_resources_on(uport) : geni_serial_resources_off(uport);
-+}
-+
-+static int geni_serial_pwr_init(struct uart_port *uport)
-+{
-+	struct qcom_geni_serial_port *port = to_dev_port(uport);
-+	int ret;
-+
-+	ret = dev_pm_domain_attach_list(port->se.dev,
-+					&port->dev_data->pd_data, &port->pd_list);
-+	if (ret <= 0)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int geni_serial_resource_init(struct uart_port *uport)
-+{
-+	struct qcom_geni_serial_port *port = to_dev_port(uport);
- 	int ret;
- 
- 	port->se.clk = devm_clk_get(port->se.dev, "se");
-@@ -1680,7 +1743,6 @@ static int geni_serial_resource_init(struct qcom_geni_serial_port *port)
- static void qcom_geni_serial_pm(struct uart_port *uport,
- 		unsigned int new_state, unsigned int old_state)
- {
--
- 	/* If we've never been called, treat it as off */
- 	if (old_state == UART_PM_STATE_UNDEFINED)
- 		old_state = UART_PM_STATE_OFF;
-@@ -1774,13 +1836,16 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 	port->se.dev = &pdev->dev;
- 	port->se.wrapper = dev_get_drvdata(pdev->dev.parent);
- 
--	ret = geni_serial_resource_init(port);
-+	ret = port->dev_data->geni_serial_pwr_rsc_init(uport);
- 	if (ret)
- 		return ret;
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res)
--		return -EINVAL;
-+	if (!res) {
-+		ret = -EINVAL;
-+		goto error;
-+	}
-+
- 	uport->mapbase = res->start;
- 
- 	port->tx_fifo_depth = DEF_FIFO_DEPTH_WORDS;
-@@ -1790,19 +1855,26 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 	if (!data->console) {
- 		port->rx_buf = devm_kzalloc(uport->dev,
- 					    DMA_RX_BUF_SIZE, GFP_KERNEL);
--		if (!port->rx_buf)
--			return -ENOMEM;
-+		if (!port->rx_buf) {
-+			ret = -ENOMEM;
-+			goto error;
-+		}
- 	}
- 
- 	port->name = devm_kasprintf(uport->dev, GFP_KERNEL,
- 			"qcom_geni_serial_%s%d",
- 			uart_console(uport) ? "console" : "uart", uport->line);
--	if (!port->name)
--		return -ENOMEM;
-+	if (!port->name) {
-+		ret = -ENOMEM;
-+		goto error;
-+	}
- 
- 	irq = platform_get_irq(pdev, 0);
--	if (irq < 0)
--		return irq;
-+	if (irq < 0) {
-+		ret = irq;
-+		goto error;
-+	}
-+
- 	uport->irq = irq;
- 	uport->has_sysrq = IS_ENABLED(CONFIG_SERIAL_QCOM_GENI_CONSOLE);
- 
-@@ -1824,7 +1896,7 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 			IRQF_TRIGGER_HIGH, port->name, uport);
- 	if (ret) {
- 		dev_err(uport->dev, "Failed to get IRQ ret %d\n", ret);
--		return ret;
-+		goto error;
- 	}
- 
- 	pm_runtime_enable(port->se.dev);
-@@ -1849,6 +1921,7 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 
- error:
- 	pm_runtime_disable(port->se.dev);
-+	dev_pm_domain_detach_list(port->pd_list);
- 	return ret;
- }
- 
-@@ -1863,22 +1936,31 @@ static void qcom_geni_serial_remove(struct platform_device *pdev)
- 	ida_free(&port_ida, uport->line);
- 	pm_runtime_disable(port->se.dev);
- 	uart_remove_one_port(drv, &port->uport);
-+	dev_pm_domain_detach_list(port->pd_list);
- }
- 
- static int qcom_geni_serial_runtime_suspend(struct device *dev)
- {
- 	struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
- 	struct uart_port *uport = &port->uport;
-+	int ret = 0;
- 
--	return geni_serial_resources_off(uport);
-+	if (port->dev_data->geni_serial_switch_power_state)
-+		ret = port->dev_data->geni_serial_switch_power_state(uport, false);
-+
-+	return ret;
- };
- 
- static int qcom_geni_serial_runtime_resume(struct device *dev)
- {
- 	struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
- 	struct uart_port *uport = &port->uport;
-+	int ret = 0;
-+
-+	if (port->dev_data->geni_serial_switch_power_state)
-+		ret = port->dev_data->geni_serial_switch_power_state(uport, true);
- 
--	return geni_serial_resources_on(uport);
-+	return ret;
- };
- 
- static int qcom_geni_serial_suspend(struct device *dev)
-@@ -1916,11 +1998,41 @@ static int qcom_geni_serial_resume(struct device *dev)
- static const struct qcom_geni_device_data qcom_geni_console_data = {
- 	.console = true,
- 	.mode = GENI_SE_FIFO,
-+	.geni_serial_pwr_rsc_init = geni_serial_resource_init,
-+	.geni_serial_set_rate = geni_serial_set_rate,
-+	.geni_serial_switch_power_state = geni_serial_resource_state,
- };
- 
- static const struct qcom_geni_device_data qcom_geni_uart_data = {
- 	.console = false,
- 	.mode = GENI_SE_DMA,
-+	.geni_serial_pwr_rsc_init = geni_serial_resource_init,
-+	.geni_serial_set_rate = geni_serial_set_rate,
-+	.geni_serial_switch_power_state = geni_serial_resource_state,
-+};
-+
-+static const struct qcom_geni_device_data sa8255p_qcom_geni_console_data = {
-+	.console = true,
-+	.mode = GENI_SE_FIFO,
-+	.pd_data = {
-+		.pd_flags = PD_FLAG_DEV_LINK_ON,
-+		.pd_names = (const char*[]) { "power", "perf" },
-+		.num_pd_names = 2,
-+	},
-+	.geni_serial_pwr_rsc_init = geni_serial_pwr_init,
-+	.geni_serial_set_rate = geni_serial_set_level,
-+};
-+
-+static const struct qcom_geni_device_data sa8255p_qcom_geni_uart_data = {
-+	.console = false,
-+	.mode = GENI_SE_DMA,
-+	.pd_data = {
-+		.pd_flags = PD_FLAG_DEV_LINK_ON,
-+		.pd_names = (const char*[]) { "power", "perf" },
-+		.num_pd_names = 2,
-+	},
-+	.geni_serial_pwr_rsc_init = geni_serial_pwr_init,
-+	.geni_serial_set_rate = geni_serial_set_level,
- };
- 
- static const struct dev_pm_ops qcom_geni_serial_pm_ops = {
-@@ -1934,10 +2046,18 @@ static const struct of_device_id qcom_geni_serial_match_table[] = {
- 		.compatible = "qcom,geni-debug-uart",
- 		.data = &qcom_geni_console_data,
- 	},
-+	{
-+		.compatible = "qcom,sa8255p-geni-debug-uart",
-+		.data = &sa8255p_qcom_geni_console_data,
-+	},
- 	{
- 		.compatible = "qcom,geni-uart",
- 		.data = &qcom_geni_uart_data,
- 	},
-+	{
-+		.compatible = "qcom,sa8255p-geni-uart",
-+		.data = &sa8255p_qcom_geni_uart_data,
-+	},
- 	{}
- };
- MODULE_DEVICE_TABLE(of, qcom_geni_serial_match_table);
--- 
-2.17.1
+	SET register work as
 
+	val = readl(reg);
+	val |= mask;
+        writel (val, reg);
+
+the benenfit of use CLR/SET register make code simple and it is atomic change
+one bit.
+
+>
+> > +	pm_runtime_put(tmu->dev);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static int imx91_tmu_set_trips(struct thermal_zone_device *tz, int low, int high)
+> > +{
+> > +	struct imx91_tmu *tmu = thermal_zone_device_priv(tz);
+> > +	int val;
+> > +	int ret;
+> > +
+> > +	ret = pm_runtime_resume_and_get(tmu->dev);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	if (high >= IMX91_TMU_TEMP_HIGH_LIMIT)
+> > +		return -EINVAL;
+> > +
+> > +	writel_relaxed(IMX91_TMU_CTRL0_THR1_IE, tmu->base + IMX91_TMU_CTRL0 + REG_CLR);
+> > +
+> > +	/* Comparator1 for temperature threshold */
+> > +	writel_relaxed(IMX91_TMU_THR_CTRL01_THR1_MASK, tmu->base + IMX91_TMU_THR_CTRL01 + REG_CLR);
+> > +	val = FIELD_PREP(IMX91_TMU_THR_CTRL01_THR1_MASK, imx91_tmu_from_mcelsius(high));
+> > +	writel_relaxed(val, tmu->base + IMX91_TMU_THR_CTRL01 + REG_SET);
+> > +
+> > +	writel_relaxed(IMX91_TMU_STAT0_THR1_IF, tmu->base + IMX91_TMU_STAT0 + REG_CLR);
+> > +
+> > +	tmu->high = high;
+>
+> Why is 'high' needed?
+
+Need re-enable irq when tempture below high.
+
+Frank
+>
+> > +
+> > +	writel_relaxed(IMX91_TMU_CTRL0_THR1_IE, tmu->base + IMX91_TMU_CTRL0 + REG_SET);
+> > +	pm_runtime_put(tmu->dev);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int imx91_init_from_nvmem_cells(struct imx91_tmu *tmu)
+> > +{
+> > +	struct device *dev = tmu->dev;
+> > +	u32 trim1, trim2;
+> > +	int ret;
+> > +
+> > +	ret = nvmem_cell_read_u32(dev, "trim1", &trim1);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	ret = nvmem_cell_read_u32(dev, "trim2", &trim2);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	if (trim1 == 0 || trim2 == 0)
+> > +		return -EINVAL;
+> > +
+> > +	writel_relaxed(trim1, tmu->base + IMX91_TMU_TRIM1);
+> > +	writel_relaxed(trim2, tmu->base + IMX91_TMU_TRIM2);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static void imx91_tmu_action_remove(void *data)
+> > +{
+> > +	struct imx91_tmu *tmu = data;
+> > +
+> > +	/* disable tmu */
+> > +	imx91_tmu_enable(tmu, false);
+> > +}
+> > +
+> > +static irqreturn_t imx91_tmu_alarm_irq_thread(int irq, void *dev)
+> > +{
+> > +	struct imx91_tmu *tmu = dev;
+> > +	int val;
+> > +	int ret;
+> > +
+> > +	ret = pm_runtime_resume_and_get(tmu->dev);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	thermal_zone_device_update(tmu->tzd, THERMAL_EVENT_UNSPECIFIED);
+>
+> Ack the IRQ before calling thermal_zone_device_update()
+>
+> > +	val = readl_relaxed(tmu->base + IMX91_TMU_STAT0);
+>
+> One blank line to let the code breath
+>
+> > +	/* Have to use CLR register to clean up w1c bits */
+> > +	writel_relaxed(val, tmu->base + IMX91_TMU_STAT0 + REG_CLR);
+> > +
+> > +	writel_relaxed(IMX91_TMU_CTRL0_THR1_IE, tmu->base + IMX91_TMU_CTRL0 + REG_CLR);
+> > +
+> > +	pm_runtime_put(tmu->dev);
+> > +
+> > +	return IRQ_HANDLED;
+> > +}
+> > +
+> > +static int imx91_tmu_change_mode(struct thermal_zone_device *tz, enum thermal_device_mode mode)
+> > +{
+> > +	struct imx91_tmu *tmu = thermal_zone_device_priv(tz);
+> > +	int ret;
+> > +
+> > +	if (mode == THERMAL_DEVICE_ENABLED) {
+> > +		ret = pm_runtime_get(tmu->dev);
+> > +		if (ret < 0)
+> > +			return ret;
+> > +
+> > +		imx91_tmu_start(tmu, true);
+> > +		writel_relaxed(IMX91_TMU_CTRL0_THR1_IE, tmu->base + IMX91_TMU_CTRL0 + REG_SET);
+> > +		tmu->enable = true;
+> > +	} else {
+> > +		writel_relaxed(IMX91_TMU_CTRL0_THR1_IE, tmu->base + IMX91_TMU_CTRL0 + REG_CLR);
+> > +		imx91_tmu_start(tmu, false);
+> > +		pm_runtime_put(tmu->dev);
+> > +		tmu->enable = false;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static struct thermal_zone_device_ops tmu_tz_ops = {
+> > +	.get_temp = imx91_tmu_get_temp,
+> > +	.change_mode = imx91_tmu_change_mode,
+> > +	.set_trips = imx91_tmu_set_trips,
+> > +};
+> > +
+>
+> [ ... ]
 
