@@ -1,141 +1,196 @@
-Return-Path: <linux-pm+bounces-25678-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25683-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 845CEA92ED4
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 02:33:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77121A92F98
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 04:00:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B2F719E617D
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 00:33:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9AE119E6EA2
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 02:00:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A36242A1BB;
-	Fri, 18 Apr 2025 00:33:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ABC45D477;
+	Fri, 18 Apr 2025 02:00:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="afaS14Z9"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="Tk//MLA5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mail-m19731113.qiye.163.com (mail-m19731113.qiye.163.com [220.197.31.113])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CA870809;
-	Fri, 18 Apr 2025 00:33:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 800872641EC;
+	Fri, 18 Apr 2025 02:00:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744936384; cv=none; b=Z05CWiCK3VcHbjNX1VPDXBkj7A+riT9twDxXDEqzqz0hEwgFx69jogumqjNPr5rq/JQRXftzzZOY3+mdmOpXLIwNAs6UjDJzJuuGgzgGOa1DCG0iwtF1l9sKeVHaqVW9bumF2RQsqRcgxZdNCjBF21HTTpJudIPJ+eg7a1E3FCU=
+	t=1744941619; cv=none; b=jnwkfe0QtQfP9KPPygbZM+LxUDJrS6+MWOUAtPE2dhimLcwgLbv2IB72+tD3dmLTCYz04ts/LJggbfrq3Qen3XY8KyN54IN3Vy7ETOHC9tCb5bWNTdPxK/d7M4yrfJDPwttd08VCSdPT36+6Js/GUCJQSxZs932TkYdTJPqIORk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744936384; c=relaxed/simple;
-	bh=X56rnsjlDCuwL+1MMz+5gWk6fCKSQBrk7LTX893DDIM=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I4mvWoHAkbWDMeeY+VxFrf4XTMf9C3RwzQxiVvas0LGxw/3+ud2A0zPKvH5Q0srjbOPcK6EyvF0XiFuaXlACTGK3ysW6MTpdIjh3SQgnOENo4JVNsbSC0mSB2/XBgx+ivXgime91en9FYu5zL9Gx/FxlJaN7a66JW9OUml7upAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=afaS14Z9; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53HClU2j005239;
-	Fri, 18 Apr 2025 00:32:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=WoKQ1Gf4RTzaW58T3r2Dxthd
-	VjtUH2sR3JuHdtrWZE4=; b=afaS14Z9614nTbLSMnZNvuUcCAZHUbmbgg2oRvJO
-	cS5kg/QrWu4VIEMPhmRlUcWd4kj7sDVHerwgPBBikdgnFKCsHuBbYwBLBLck/GCV
-	apNyPGuT4kpY/o1mgAFSmvAypWHiCZqlmd3aaIuzbDG+sC1gqE2FsUvlj29DmPhG
-	ebmtWRLlef73D5jmYiePSx+6RdQQOBHyGA7j4ibN38e/a9ywSArRrywWipkS4Fz7
-	dz+lj/7jqUV6YNWWz0e6WAiRPxEBkZVfluurofYNariB1eDzHwAzD9JUQnrEhYYd
-	j90AkhwFA1VohHKb0byKtX00RkSZqkcjdPZKz8OkV4sBLA==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45yf6a0jyb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Apr 2025 00:32:58 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53I0WvKh024971
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Apr 2025 00:32:57 GMT
-Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 17 Apr 2025 17:32:57 -0700
-Date: Thu, 17 Apr 2025 17:32:55 -0700
-From: Mike Tipton <quic_mdtipton@quicinc.com>
-To: "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>
-CC: Georgi Djakov <djakov@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_okukatla@quicinc.com>
-Subject: Re: [PATCH] interconnect: Replace mutex with rt_mutex
-Message-ID: <aAGdt7GftthwJ1+6@hu-mdtipton-lv.qualcomm.com>
-References: <20220906191423.30109-1-quic_mdtipton@quicinc.com>
- <3c8965c0-3bc0-252e-381d-bd057fd02af5@kernel.org>
- <20220907145916.GA2368@hu-mdtipton-lv.qualcomm.com>
- <bda36907-d7eb-4969-909b-697eebe14941@quicinc.com>
+	s=arc-20240116; t=1744941619; c=relaxed/simple;
+	bh=1+ScBvG+oLMlHepXE4HuFUNDLPQ6s7vDAMcdM2Q9ubE=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=VqU9kqhKxbQbURvmRDGdwtNRWjJvf1Pqv5iuEVd34kkUb7Rf7wz+m7a2FJURWZJF88HVREm82gDi7mtet4fvcat1GPDmHOeWX7s9KX0Pd8ugswBXLLbl/nChI7IWVIGlor+wqxEVqDmeWLwgkhEiHeCYhFfDD4YPzrXui85lnlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=Tk//MLA5; arc=none smtp.client-ip=220.197.31.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from [172.16.12.129] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 12477934f;
+	Fri, 18 Apr 2025 08:44:31 +0800 (GMT+08:00)
+Message-ID: <c70cef1b-9f37-5a73-faf3-4d1cac6bcdde@rock-chips.com>
+Date: Fri, 18 Apr 2025 08:43:54 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <bda36907-d7eb-4969-909b-697eebe14941@quicinc.com>
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: QBeyfsDkBDkMLU_criEAjohgrjVJMtDZ
-X-Authority-Analysis: v=2.4 cv=JNc7s9Kb c=1 sm=1 tr=0 ts=68019dba cx=c_pps a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=3H110R4YSZwA:10 a=kj9zAlcOel0A:10 a=XR8D0OoHHMoA:10 a=PhClAm8El1gnTNPeiugA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-ORIG-GUID: QBeyfsDkBDkMLU_criEAjohgrjVJMtDZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-17_07,2025-04-17_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- suspectscore=0 mlxlogscore=758 lowpriorityscore=0 bulkscore=0
- impostorscore=0 clxscore=1015 phishscore=0 adultscore=0 priorityscore=1501
- spamscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2504180002
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Cc: shawn.lin@rock-chips.com, Detlev Casanova
+ <detlev.casanova@collabora.com>, linux-pm@vger.kernel.org,
+ linux-mmc@vger.kernel.org,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+ kernel@collabora.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] mmc: sdhci-of-dwcmshc: add PD workaround on RK3576
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Heiko Stuebner <heiko@sntech.de>,
+ Elaine Zhang <zhangqing@rock-chips.com>,
+ Finley Xiao <finley.xiao@rock-chips.com>,
+ Adrian Hunter <adrian.hunter@intel.com>
+References: <20250412-rk3576-emmc-fix-v2-1-830e653ad4f0@collabora.com>
+From: Shawn Lin <shawn.lin@rock-chips.com>
+In-Reply-To: <20250412-rk3576-emmc-fix-v2-1-830e653ad4f0@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQkpITlZNGk9PHRhKT0hNH05WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+X-HM-Tid: 0a96465ab30c09cckunm12477934f
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NiI6Tio5GjJNFhU4Mg8fS0ks
+	NTUwCRBVSlVKTE9PQkhMS0xJQ09IVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQU1KTkk3Bg++
+DKIM-Signature:a=rsa-sha256;
+	b=Tk//MLA56Ghww08hBdr9vFuE8XaqrrlB+sMy2CcuqZJ3Ion+u7E9rGD/rlImMVOzl/RJ1cGe5d/e6fGfqh5LKM5ABl2DSUs6liUiPPBhBSXaeBm77NSls+uwEOj4zX9UlsU1xyrp7rIE+06HHojiLnttWKb5J/whbh7OB6+Tfs0=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
+	bh=Lcb43dSZS3+Y/L9GUNHVrV5chNZ/V2WVLs/FwGaCc1s=;
+	h=date:mime-version:subject:message-id:from;
 
-On Thu, Apr 17, 2025 at 07:13:52PM +0800, Aiqun(Maria) Yu wrote:
-> On 9/7/2022 10:59 PM, Mike Tipton wrote:
-> > On Wed, Sep 07, 2022 at 10:35:26AM +0300, Georgi Djakov wrote:
-> >> Hi Mike,
-> >>
-> >> Thanks for the patch!
-> >>
-> >> On 6.09.22 22:14, Mike Tipton wrote:
-> >>> Replace mutex with rt_mutex to prevent priority inversion between
-> >>> clients, which can cause unacceptable delays in some cases.
-> >>
-> >> It would be nice if you have any numbers to share in the commit text.
-> > 
-> > I can try to dig up some numbers, but mileage will vary tremendously of
-> > course. Improvement is really only seen in certain high-concurrency
-> > scenarios.
+Hi Nicolas,
+
+在 2025/04/13 星期日 4:45, Nicolas Frattaroli 写道:
+> RK3576's power domains have a peculiar problem where the PD_NVM
+> power domain, of which the sdhci controller is a part, seemingly does
+> not have idempotent disable/enable. The end effect is that if PD_NVM
+> gets turned off by the generic power domain logic because all the
+> devices depending on it are suspended, then the next time the sdhci
+> device is unsuspended, it'll hang the SoC as soon as it tries accessing
+> the CQHCI registers.
 > 
-> We need to revisit this thread because the issue has been reported again
-> recently.
-> Here is the data I can provide regarding the performance issue. Please
-> check if it is sufficient for the commit message to understand the change.
-> The CFS normal tasks holding the mutex lock were runnable for
-> approximately 40ms in a busy load scenario, causing the RT task to wait
-> for the mutex for about 40ms, which resulted in the RT task not being
-> 'real-time' enough and causing janks. Changing the mutex to an RT mutex
-> helped the caller of the interface, such as icc_set_bw, to ensure that
-> RT tasks can deliver RT priority to the current RT mutex owner quickly,
-> thereby improving performance in this scenario.
-
-I'll post an updated and rebased version of this patch soon. In addition
-to the display use cases, it was recently reported for certain other GPU
-use cases as well.
-
+> RK3576's UFS support needed a new dev_pm_genpd_rpm_always_on function
+> added to the generic power domains API to handle what appears to be a
+> similar hardware issue.
 > 
-> > 
-> > I'm not sure what an alternative, generic solution would be. We have
-> > many clients requesting many different paths. Some are more
-> > latency-sensitive and higher priority than others. If these use cases
-> > overlap, then we're subject to these sorts of priority inversion issues.
-> > Bumping the priority of all clients to match the highest priority one
-> > isn't really possible.
+> Use this new function to ask for the same treatment in the sdhci
+> controller by giving rk3576 its own platform data with its own postinit
+> function. The benefit of doing this instead of marking the power domains
+> always on in the power domain core is that we only do this if we know
+> the platform we're running on actually uses the sdhci controller. For
+> others, keeping PD_NVM always on would be a waste, as they won't run
+> into this specific issue. The only other IP in PD_NVM that could be
+> affected is FSPI0. If it gets a mainline driver, it will probably want
+> to do the same thing.
 > 
-> Based on my understanding, rt_mutex is a good API to solve this type of
-> issue.
+> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> ---
+> Changes in v2:
+> - Rewrite patch to use dev_pm_genpd_rpm_always_on in sdhci driver
+>    instead, after Ulf Hansson made me aware of its existence
+> - Link to v1: https://lore.kernel.org/r/20250408-rk3576-emmc-fix-v1-1-3009828b1b31@collabora.com
+> ---
+>   drivers/mmc/host/sdhci-of-dwcmshc.c | 39 +++++++++++++++++++++++++++++++++++++
+>   1 file changed, 39 insertions(+)
+> 
+> diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
+> index 09b9ab15e4995f0bddf57dd309c010c849be40d9..a00aec05eff2da8197cc64690ba9665be756e54a 100644
+> --- a/drivers/mmc/host/sdhci-of-dwcmshc.c
+> +++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
+> @@ -17,6 +17,7 @@
+>   #include <linux/module.h>
+>   #include <linux/of.h>
+>   #include <linux/platform_device.h>
+> +#include <linux/pm_domain.h>
+>   #include <linux/pm_runtime.h>
+>   #include <linux/reset.h>
+>   #include <linux/sizes.h>
+> @@ -745,6 +746,28 @@ static void dwcmshc_rk35xx_postinit(struct sdhci_host *host, struct dwcmshc_priv
+>   	}
+>   }
+>   
+> +static void dwcmshc_rk3576_postinit(struct sdhci_host *host, struct dwcmshc_priv *dwc_priv)
+> +{
+> +	struct device *dev = mmc_dev(host->mmc);
+> +	int ret;
+> +
+> +	/*
+> +	 * This works around what appears to be a silicon bug, which makes the
 
-I agree and still don't see any generic solution aside from this.
+After discussion with Finley, we agree with this patch which is
+basically the same way we handle it on vendor tree. But it's not a
+silicon bug to us, so maybe the comments need a bit of adjustment.
+
+
+> +	 * PD_NVM power domain, which the sdhci controller on the RK3576 is in,
+> +	 * never come back the same way once it's turned off once. This can
+> +	 * happen during early kernel boot if no driver is using either PD_NVM
+> +	 * or its child power domain PD_SDGMAC for a short moment, leading to it
+> +	 * being turned off to save power. By keeping it on, sdhci suspending
+> +	 * won't lead to PD_NVM becoming a candidate for getting turned off.
+> +	 */
+> +	ret = dev_pm_genpd_rpm_always_on(dev, true);
+> +	if (ret && ret != -EOPNOTSUPP)
+> +		dev_warn(dev, "failed to set PD rpm always on, SoC may hang later: %pe\n",
+> +			 ERR_PTR(ret));
+> +
+> +	dwcmshc_rk35xx_postinit(host, dwc_priv);
+> +}
+> +
+>   static int th1520_execute_tuning(struct sdhci_host *host, u32 opcode)
+>   {
+>   	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+> @@ -1176,6 +1199,18 @@ static const struct dwcmshc_pltfm_data sdhci_dwcmshc_rk35xx_pdata = {
+>   	.postinit = dwcmshc_rk35xx_postinit,
+>   };
+>   
+> +static const struct dwcmshc_pltfm_data sdhci_dwcmshc_rk3576_pdata = {
+> +	.pdata = {
+> +		.ops = &sdhci_dwcmshc_rk35xx_ops,
+> +		.quirks = SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN |
+> +			  SDHCI_QUIRK_BROKEN_TIMEOUT_VAL,
+> +		.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN |
+> +			   SDHCI_QUIRK2_CLOCK_DIV_ZERO_BROKEN,
+> +	},
+> +	.init = dwcmshc_rk35xx_init,
+> +	.postinit = dwcmshc_rk3576_postinit,
+> +};
+> +
+>   static const struct dwcmshc_pltfm_data sdhci_dwcmshc_th1520_pdata = {
+>   	.pdata = {
+>   		.ops = &sdhci_dwcmshc_th1520_ops,
+> @@ -1274,6 +1309,10 @@ static const struct of_device_id sdhci_dwcmshc_dt_ids[] = {
+>   		.compatible = "rockchip,rk3588-dwcmshc",
+>   		.data = &sdhci_dwcmshc_rk35xx_pdata,
+>   	},
+> +	{
+> +		.compatible = "rockchip,rk3576-dwcmshc",
+> +		.data = &sdhci_dwcmshc_rk3576_pdata,
+> +	},
+>   	{
+>   		.compatible = "rockchip,rk3568-dwcmshc",
+>   		.data = &sdhci_dwcmshc_rk35xx_pdata,
+> 
+> ---
+> base-commit: 64e9fdfc89a76fed38d8ddeed72d42ec71957ed9
+> change-id: 20250317-rk3576-emmc-fix-7dc81a627422
+> 
+> Best regards,
 
