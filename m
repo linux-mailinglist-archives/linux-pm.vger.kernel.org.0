@@ -1,60 +1,60 @@
-Return-Path: <linux-pm+bounces-25714-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25715-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAA15A9393D
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 17:13:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 227B9A93940
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 17:14:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C1051B63284
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 15:13:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 559281B62C3D
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 15:14:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62B3E2116F2;
-	Fri, 18 Apr 2025 15:13:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C51AA21325D;
+	Fri, 18 Apr 2025 15:13:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="j6pt6UQb"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Td9Q2Bb9"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A31E2210198;
-	Fri, 18 Apr 2025 15:13:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18987213227;
+	Fri, 18 Apr 2025 15:13:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744989206; cv=none; b=Ib9DjsJnhKHFnkhM1KM4yXWU62j9H3e9DKJcPoUZl7Y0Jp4s0H2kW1dnkY8RFZ4BbqIxiOpeoj2n9DBgwfbbahT2tvRbSSiwMwoyRdn9ucNlG/HQMSYbYkVwM6rOvYtRmuEeK8KsRzy+fPc/3w27sfn7VcnIC5juQ+5q5IOR88s=
+	t=1744989210; cv=none; b=KCOBRiuNdK3fIxGH3LsJZM/nqqfZwmoPpdx0jHEklltTR9sjccsUuVHWZU4PEiEP9vkH6ksqVzUJT+SBGApRggYn6NGS+x/M6+hDx8a3S5VluamJp3jLWHY9tmCf1IecabR0xqsFq98Fum1MUBRbfJ8Q/JAg8xy+wUxH1NrjMrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744989206; c=relaxed/simple;
-	bh=sMelQSv6MLaQH7yiBjvEZs+btVu6jhfkSdT3Ge71JCA=;
+	s=arc-20240116; t=1744989210; c=relaxed/simple;
+	bh=7cdwl+0UlsD8GFvZpA15i0N5dYWkjLfjtKC73puTCTM=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fzkg9UphaK+75cr1PYYoqNz79lf9gfXUQ2FX17lgMkn1voJQXOnV/lkkWMehShuVXaqxF0bgh8Nja2wtw9U611fGmyxglcdw0R/q6KmtKE6p/NOhsRc7fU4viPRiBBj2yI7kedjMAKTv27/n7uykEESnBnrwLTsVPHLoVihth3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=j6pt6UQb; arc=none smtp.client-ip=205.220.168.131
+	 MIME-Version:Content-Type; b=X1jYWy0VZIQfFZR4UUrZQpk/MIMdiJtA0eCPbGxnoCsgZCqF5ODH7JYK4DxI6wbvO92z0u8E3/C71XwtV0iaM6SXsVixwBA/C/BchNkpmYGegjxEkE7Ar4MxdG30y8Kv8l37fyXUwGG6NvmwicGhpstr7zjgDqh3SWKB4KpTHgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Td9Q2Bb9; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53IEaHO2015328;
-	Fri, 18 Apr 2025 15:13:16 GMT
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53I2vxDG012762;
+	Fri, 18 Apr 2025 15:13:24 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=1a+SzbflGt+w+kxdzdbSeMa4
-	JKhCWyXdF/uxIKNCEMU=; b=j6pt6UQbGY7cIBUgq2YwapnKjB/iy3jBPdvs0d9B
-	SEJYdWibh3NcxxrplFr29ingYQN3aGLaru1XDov5pXQLHlGNuhCt2Jr/bpycYcy9
-	ikdp9HTyAAXL0/bCz4pBF+Bjvld5LWNoCd8z+ld7e3BbiOZt3HbAwLrbNIwy7AAe
-	FWM/OYRtMk+/flcBbGsr2U9yIIAwPWGi9wyr7T33XGx5Yxhu6wWWHnnH+BTjEnGO
-	Q5Az/reCJ7Gn4mNZ6ECnQkcsMeLsx6MQUUAynFt7puUNDhjKDmP4ySvRsGdZn84o
-	GPYwy5otDZF1dHbbBJunRft+IctMUoJF4OrLCDjSUJ3dMQ==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45ygd6tbuy-1
+	:references:subject:to; s=qcppdkim1; bh=+H7rHyckZgRe6H2I63ZTPijv
+	5RKsPq5T0RS3eyDS+8M=; b=Td9Q2Bb9n6pQi9CAqgqvtxrAKKNxScg9m1pXaIhu
+	w5GRqVWxiIJgz3hcHBLjDvuUgTtmyVLX+LGPwQdIjelAFYC73d7FyuHVnH89s5oo
+	bnECZvP8YX066qhYOCyvFwWt8dMo5WpUDxWgsDymcf4XzrTwasKTt6hzQNICZ9z+
+	dAI6hhPGkOAatf3+4Z6fcKw0RS20QXQwXE+mfHYwb3pG9WR8W1j6SpwW86+28yz5
+	OOGhXvCH3fXHZQVabYQzR2TEbHSbPmF1dwGfppxQJXTf31CyfNDPtxjJBWVoyFsT
+	po6jXEadoii4n73Hi6X0luBcViHfsSin1hrAC3un1NU1iQ==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45yf4vtdr0-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Apr 2025 15:13:16 +0000 (GMT)
+	Fri, 18 Apr 2025 15:13:23 +0000 (GMT)
 Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53IFDFZO015949
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53IFDNQq006959
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Apr 2025 15:13:15 GMT
+	Fri, 18 Apr 2025 15:13:23 GMT
 Received: from hu-ptalari-hyd.qualcomm.com (10.80.80.8) by
  nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 18 Apr 2025 08:13:08 -0700
+ 15.2.1544.9; Fri, 18 Apr 2025 08:13:16 -0700
 From: Praveen Talari <quic_ptalari@quicinc.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby
@@ -80,9 +80,9 @@ CC: <psodagud@quicinc.com>, <djaggi@quicinc.com>, <quic_msavaliy@quicinc.com>,
         <quic_mnaresh@quicinc.com>, <quic_shazhuss@quicinc.com>,
         Nikunj Kela
 	<quic_nkela@quicinc.com>
-Subject: [PATCH v2 2/9] dt-bindings: serial: describe SA8255p
-Date: Fri, 18 Apr 2025 20:42:28 +0530
-Message-ID: <20250418151235.27787-3-quic_ptalari@quicinc.com>
+Subject: [PATCH v2 3/9] dt-bindings: qcom: geni-se: describe SA8255p
+Date: Fri, 18 Apr 2025 20:42:29 +0530
+Message-ID: <20250418151235.27787-4-quic_ptalari@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20250418151235.27787-1-quic_ptalari@quicinc.com>
 References: <20250418151235.27787-1-quic_ptalari@quicinc.com>
@@ -97,27 +97,26 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01c.na.qualcomm.com (10.45.79.139)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: qt25gkAs_xH7_ZHrh_3eknULFaB0LxkG
-X-Proofpoint-GUID: qt25gkAs_xH7_ZHrh_3eknULFaB0LxkG
-X-Authority-Analysis: v=2.4 cv=ANaQCy7k c=1 sm=1 tr=0 ts=68026c0c cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=XR8D0OoHHMoA:10 a=gEfo2CItAAAA:8 a=COk6AnOGAAAA:8 a=rjx3OjMNV77wTL7fGyAA:9 a=sptkURWiP4Gy88Gu7hUp:22
+X-Proofpoint-ORIG-GUID: 3NUHNeDOpCiXTFh2Pa4TgWieNCLD4u1f
+X-Authority-Analysis: v=2.4 cv=IZ6HWXqa c=1 sm=1 tr=0 ts=68026c13 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=XR8D0OoHHMoA:10 a=gEfo2CItAAAA:8 a=COk6AnOGAAAA:8 a=v7CWcBsnNxNFVLN3aFYA:9 a=sptkURWiP4Gy88Gu7hUp:22
  a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-GUID: 3NUHNeDOpCiXTFh2Pa4TgWieNCLD4u1f
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-04-18_05,2025-04-17_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- mlxlogscore=999 suspectscore=0 clxscore=1015 lowpriorityscore=0
- phishscore=0 impostorscore=0 spamscore=0 priorityscore=1501 malwarescore=0
- bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 clxscore=1015 malwarescore=0 spamscore=0 adultscore=0
+ mlxlogscore=999 mlxscore=0 bulkscore=0 impostorscore=0 suspectscore=0
+ phishscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
  adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
  definitions=main-2504180112
 
 From: Nikunj Kela <quic_nkela@quicinc.com>
 
-SA8255p platform abstracts resources such as clocks, interconnect and
-GPIO pins configuration in Firmware. SCMI power and perf protocols are
-used to send request for resource configurations.
+SA8255p platform abstracts resources such as clocks, interconnect
+configuration in Firmware.
 
-Add DT bindings for the QUP GENI UART controller on sa8255p platform.
+Add DT bindings for the QUP Wrapper on sa8255p platform.
 
 Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
 Co-developed-by: Praveen Talari <quic_ptalari@quicinc.com>
@@ -125,83 +124,123 @@ Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
 ---
 v1 -> v2
 - reorder sequence of tags in commit text
-- moved reg property after compatible field
-- added interrupt-names property
+- resolved waring errors while encountered in dt binding and dtb check.
 ---
- .../serial/qcom,sa8255p-geni-uart.yaml        | 66 +++++++++++++++++++
- 1 file changed, 66 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/serial/qcom,sa8255p-geni-uart.yaml
+ .../soc/qcom/qcom,sa8255p-geni-se-qup.yaml    | 107 ++++++++++++++++++
+ 1 file changed, 107 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,sa8255p-geni-se-qup.yaml
 
-diff --git a/Documentation/devicetree/bindings/serial/qcom,sa8255p-geni-uart.yaml b/Documentation/devicetree/bindings/serial/qcom,sa8255p-geni-uart.yaml
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,sa8255p-geni-se-qup.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,sa8255p-geni-se-qup.yaml
 new file mode 100644
-index 000000000000..85ee1ecef91e
+index 000000000000..0981635783a9
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/serial/qcom,sa8255p-geni-uart.yaml
-@@ -0,0 +1,66 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,sa8255p-geni-se-qup.yaml
+@@ -0,0 +1,107 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/serial/qcom,sa8255p-geni-uart.yaml#
++$id: http://devicetree.org/schemas/soc/qcom/qcom,sa8255p-geni-se-qup.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Qualcomm Geni based QUP UART interface
++title: GENI Serial Engine QUP Wrapper Controller
 +
 +maintainers:
 +  - Praveen Talari <quic_ptalari@quicinc.com>
 +
-+allOf:
-+  - $ref: /schemas/serial/serial.yaml#
++description:
++  Generic Interface (GENI) based Qualcomm Universal Peripheral (QUP) wrapper
++  is a programmable module for supporting a wide range of serial interfaces
++  like UART, SPI, I2C, I3C, etc. A single QUP module can provide up to 8 Serial
++  Interfaces, using its internal Serial Engines. The GENI Serial Engine QUP
++  Wrapper controller is modeled as a node with zero or more child nodes each
++  representing a serial engine.
 +
 +properties:
 +  compatible:
-+    enum:
-+      - qcom,sa8255p-geni-uart
-+      - qcom,sa8255p-geni-debug-uart
++    const: qcom,sa8255p-geni-se-qup
 +
 +  reg:
++    description: QUP wrapper common register address and length.
 +    maxItems: 1
 +
-+  interrupts:
-+    minItems: 1
-+    items:
-+      - description: UART core irq
-+      - description: Wakeup irq (RX GPIO)
++  "#address-cells":
++    const: 2
 +
-+  interrupt-names:
-+    description:
-+      The UART interrupt and optionally the RX in-band wakeup interrupt.
-+    items:
-+      - const: uart
-+      - const: wakeup
++  "#size-cells":
++    const: 2
 +
-+  power-domains:
-+    minItems: 2
-+    maxItems: 2
++  ranges: true
 +
-+  power-domain-names:
-+    items:
-+      - const: power
-+      - const: perf
++  iommus:
++    maxItems: 1
++
++  dma-coherent: true
 +
 +required:
 +  - compatible
-+  - interrupts
 +  - reg
-+  - power-domains
-+  - power-domain-names
++  - "#address-cells"
++  - "#size-cells"
++  - ranges
 +
-+unevaluatedProperties: false
++patternProperties:
++  "spi@[0-9a-f]+$":
++    type: object
++    description: GENI serial engine based SPI controller. SPI in master mode
++                 supports up to 50MHz, up to four chip selects, programmable
++                 data path from 4 bits to 32 bits and numerous protocol
++                 variants.
++    additionalProperties: true
++
++    properties:
++      compatible:
++        const: qcom,sa8255p-geni-spi
++
++  "i2c@[0-9a-f]+$":
++    type: object
++    description: GENI serial engine based I2C controller.
++    additionalProperties: true
++
++    properties:
++      compatible:
++        const: qcom,sa8255p-geni-i2c
++
++  "serial@[0-9a-f]+$":
++    type: object
++    description: GENI Serial Engine based UART Controller.
++    additionalProperties: true
++
++    properties:
++      compatible:
++        enum:
++          - qcom,sa8255p-geni-uart
++          - qcom,sa8255p-geni-debug-uart
++
++additionalProperties: false
 +
 +examples:
 +  - |
 +    #include <dt-bindings/interrupt-controller/arm-gic.h>
 +
-+    serial@990000 {
-+        compatible = "qcom,sa8255p-geni-uart";
-+        reg = <0x990000 0x4000>;
-+        interrupts = <GIC_SPI 531 IRQ_TYPE_LEVEL_HIGH>;
-+        power-domains = <&scmi0_pd 0>, <&scmi0_dvfs 0>;
-+        power-domain-names = "power", "perf";
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        geniqup@9c0000 {
++            compatible = "qcom,sa8255p-geni-se-qup";
++            reg = <0 0x9c0000 0 0x6000>;
++            #address-cells = <2>;
++            #size-cells = <2>;
++            ranges;
++
++            serial@990000 {
++                compatible = "qcom,sa8255p-geni-uart";
++                reg = <0 0x990000 0 0x4000>;
++                interrupts = <GIC_SPI 531 IRQ_TYPE_LEVEL_HIGH>;
++                power-domains = <&scmi0_pd 0>, <&scmi0_dvfs 0>;
++                power-domain-names = "power", "perf";
++            };
++        };
 +    };
 +...
 -- 
