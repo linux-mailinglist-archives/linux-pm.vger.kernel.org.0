@@ -1,196 +1,197 @@
-Return-Path: <linux-pm+bounces-25683-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25679-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77121A92F98
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 04:00:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45972A92EF1
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 02:51:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9AE119E6EA2
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 02:00:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FDA41896E92
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 00:51:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ABC45D477;
-	Fri, 18 Apr 2025 02:00:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B02091E4A9;
+	Fri, 18 Apr 2025 00:51:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="Tk//MLA5"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="t/c1jUM6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-m19731113.qiye.163.com (mail-m19731113.qiye.163.com [220.197.31.113])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 800872641EC;
-	Fri, 18 Apr 2025 02:00:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE78C8836
+	for <linux-pm@vger.kernel.org>; Fri, 18 Apr 2025 00:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744941619; cv=none; b=jnwkfe0QtQfP9KPPygbZM+LxUDJrS6+MWOUAtPE2dhimLcwgLbv2IB72+tD3dmLTCYz04ts/LJggbfrq3Qen3XY8KyN54IN3Vy7ETOHC9tCb5bWNTdPxK/d7M4yrfJDPwttd08VCSdPT36+6Js/GUCJQSxZs932TkYdTJPqIORk=
+	t=1744937487; cv=none; b=iawD2OezUQrLWzugO9naN46BYdklh1kfNuYno2w2Sc0MORidPOXSu5MKzlBwHjC+apTvdNpzV52B2Y7BNx5ZnurIYn6RXHjaPv4sval26qCJsiJgKq0ldxIomw8XEP9wOAUtN7D0lVz3Y7YnWdQuDsxUnXEpOcYPO4B+jpRWoHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744941619; c=relaxed/simple;
-	bh=1+ScBvG+oLMlHepXE4HuFUNDLPQ6s7vDAMcdM2Q9ubE=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=VqU9kqhKxbQbURvmRDGdwtNRWjJvf1Pqv5iuEVd34kkUb7Rf7wz+m7a2FJURWZJF88HVREm82gDi7mtet4fvcat1GPDmHOeWX7s9KX0Pd8ugswBXLLbl/nChI7IWVIGlor+wqxEVqDmeWLwgkhEiHeCYhFfDD4YPzrXui85lnlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=Tk//MLA5; arc=none smtp.client-ip=220.197.31.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [172.16.12.129] (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 12477934f;
-	Fri, 18 Apr 2025 08:44:31 +0800 (GMT+08:00)
-Message-ID: <c70cef1b-9f37-5a73-faf3-4d1cac6bcdde@rock-chips.com>
-Date: Fri, 18 Apr 2025 08:43:54 +0800
+	s=arc-20240116; t=1744937487; c=relaxed/simple;
+	bh=pmfJz9HOSf1YHC9miy/q7VstUc493X2MClNIJeftUNc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eAF09jgrKJp4lMELyqHJGpYPzVkK7Skb8P/m+GiRie5gyU8c1pQGHap5yHQoE4OPC8e8TG/iDtk3ZdpoApEMjNojCxYpC/fUOocXQm3qrhMopEPWJuvr5EsNGvP5tucrS5etJnkdS0gwqypOdo3W3/JSZJcwjD9v3PpjsXpYmPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=t/c1jUM6; arc=none smtp.client-ip=209.85.208.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-3105ef2a06cso13050461fa.2
+        for <linux-pm@vger.kernel.org>; Thu, 17 Apr 2025 17:51:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1744937484; x=1745542284; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=espvvwCOUsOaiPeW4qBVlqsEGI9VvnOEfzXFD5TrphU=;
+        b=t/c1jUM6bVMTHbMcmmsIMoOd76eAwN31S1nnOr+V4HrcusDb7UPRbA0BGP3dFttHX/
+         D1/IL3/p5FzSG6rTdlUtzC6T9HnBqFBjDi3Zf6sgm5Fg8rpH8pEiBnoWD8w7mWhSX1/s
+         7KYkA2Flf4PLTzn1wAwpA0Ef/bpXdSwdhxNt3lMkoo/elgwPMNVqgeYIRgOGFSz8meHF
+         RegCVUfE7gk4kg9j8CO9+4Dg6iTXBDkBtX3VrYIXQBZSvOmW9P282oVPohZCn8+mcptL
+         uWvartwdU/4J7xZXAOV3JFpt/jJEdpgaguW3vo6GjVOOeDoXzxsYu5jiQUN9PjkOYXbA
+         LzaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744937484; x=1745542284;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=espvvwCOUsOaiPeW4qBVlqsEGI9VvnOEfzXFD5TrphU=;
+        b=g0HDJ6BsnDd6Fdsq+PMbaSLV4VwkQdQsZpfChU8V1/lo7ishM1No7HtZ5mGvgQvN/k
+         uoWdl+bE+aw7nOqWvS0Tz5HLrqLHVN+gJgijbbsIU5f5jPZmXZpgOSnfiQp758ahm56J
+         H81r9wY6cS3qRz4v96mQJJpRwfP3gmJ/VxqCDFJRLiiBmvgeq951k+Er6Usg8NWw3zuM
+         cKxAx2WbQ3HmZVn4EyRwHiEYIbPDVJjjTtWG9EP+zLfTSKKR7Wm5KSmJidMwGAL6CGKf
+         GOmxPOHVX2DDMJQFVi6q2TBJvli6V8um5iE4HX3coAvRS4QWBc6E86sjHud5sIVWK0Bo
+         nngg==
+X-Forwarded-Encrypted: i=1; AJvYcCVZQY/mOP3eY1ty8t5RLHnyYRtP4f6t4pabMQk9CHl+G41nuwdWo0mLGxIZgog7GqX9S8JQcIeufQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMezNfLWmbYDcoe77OTiuDF6tGwHx/+HkrWb2hgy7O65Qcbss/
+	ZqJ7PMCh074NKyIdQPkqaUkuP+FnQViWz9VfcPPZpcYpSBFDnMkKRj1IxMiqVdTDvL4G1o1RKv8
+	WHKQGWWEa7zQqjf/tYxLfNRICQYBn5zl6/HPD
+X-Gm-Gg: ASbGnct06n/EH20EFRdMUZPULzMdnr20K5ago2K1740+rn4eI4D1QBnRYV3Ad8MOtKx
+	fV2Qlru3y/bi2itY9j4Lv1kaB5pYyNAQfKJhLBeFriSbMgiBmiFEnRMFCwG0N0Aje+LNyfEE9lV
+	5ojrjnZ05DaMh6DnM6lWGU0DQZRjv9Y6wck9IhWIjz4ER+Ll8=
+X-Google-Smtp-Source: AGHT+IE/wqWU+kEJ+uNl1lu0U9l4Nd/hTZwOvDN4HtDxpaQCKOIhack1E/1QtP4XZ5jNQUL4f+oT4lDAZLRZaMBAPC4=
+X-Received: by 2002:a2e:bc86:0:b0:30c:40d6:5cdb with SMTP id
+ 38308e7fff4ca-310904dba7cmr3095251fa.11.1744937483536; Thu, 17 Apr 2025
+ 17:51:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Cc: shawn.lin@rock-chips.com, Detlev Casanova
- <detlev.casanova@collabora.com>, linux-pm@vger.kernel.org,
- linux-mmc@vger.kernel.org,
- Sebastian Reichel <sebastian.reichel@collabora.com>,
- linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
- kernel@collabora.com, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2] mmc: sdhci-of-dwcmshc: add PD workaround on RK3576
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Heiko Stuebner <heiko@sntech.de>,
- Elaine Zhang <zhangqing@rock-chips.com>,
- Finley Xiao <finley.xiao@rock-chips.com>,
- Adrian Hunter <adrian.hunter@intel.com>
-References: <20250412-rk3576-emmc-fix-v2-1-830e653ad4f0@collabora.com>
-From: Shawn Lin <shawn.lin@rock-chips.com>
-In-Reply-To: <20250412-rk3576-emmc-fix-v2-1-830e653ad4f0@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQkpITlZNGk9PHRhKT0hNH05WFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
-	hVSktLVUpCS0tZBg++
-X-HM-Tid: 0a96465ab30c09cckunm12477934f
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NiI6Tio5GjJNFhU4Mg8fS0ks
-	NTUwCRBVSlVKTE9PQkhMS0xJQ09IVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
-	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQU1KTkk3Bg++
-DKIM-Signature:a=rsa-sha256;
-	b=Tk//MLA56Ghww08hBdr9vFuE8XaqrrlB+sMy2CcuqZJ3Ion+u7E9rGD/rlImMVOzl/RJ1cGe5d/e6fGfqh5LKM5ABl2DSUs6liUiPPBhBSXaeBm77NSls+uwEOj4zX9UlsU1xyrp7rIE+06HHojiLnttWKb5J/whbh7OB6+Tfs0=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
-	bh=Lcb43dSZS3+Y/L9GUNHVrV5chNZ/V2WVLs/FwGaCc1s=;
-	h=date:mime-version:subject:message-id:from;
+References: <20250417142513.312939-1-ulf.hansson@linaro.org> <20250417142513.312939-12-ulf.hansson@linaro.org>
+In-Reply-To: <20250417142513.312939-12-ulf.hansson@linaro.org>
+From: Saravana Kannan <saravanak@google.com>
+Date: Thu, 17 Apr 2025 17:50:45 -0700
+X-Gm-Features: ATxdqUG3nsZ8r4b4j3azqOjFpPct1ZcFhXbrqEnzX0WXjS0gXoFni5vfKcox8w4
+Message-ID: <CAGETcx_hQRr1hRQD0vyAN9bhZRx+763zfHUG0oBi0sqFUi85pA@mail.gmail.com>
+Subject: Re: [PATCH 11/11] pmdomain: core: Leave powered-on genpds on until ->sync_state()
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Michael Grzeschik <m.grzeschik@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
+	Abel Vesa <abel.vesa@linaro.org>, Devarsh Thakkar <devarsht@lewv0571a.ent.ti.com>, 
+	Peng Fan <peng.fan@oss.nxp.com>, Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
+	Johan Hovold <johan@kernel.org>, Maulik Shah <maulik.shah@oss.qualcomm.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Nicolas,
+On Thu, Apr 17, 2025 at 7:25=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.org=
+> wrote:
+>
+> Powering-off a genpd that was on during boot, before all of its consumer
+> devices have been probed, is certainly prone to problems.
+>
+> Let's fix these problems by preventing these genpds from being powered-of=
+f
+> until ->sync_state(). Note that, this only works for OF based platform as
+> ->sync_state() are relying on fw_devlink.
 
-在 2025/04/13 星期日 4:45, Nicolas Frattaroli 写道:
-> RK3576's power domains have a peculiar problem where the PD_NVM
-> power domain, of which the sdhci controller is a part, seemingly does
-> not have idempotent disable/enable. The end effect is that if PD_NVM
-> gets turned off by the generic power domain logic because all the
-> devices depending on it are suspended, then the next time the sdhci
-> device is unsuspended, it'll hang the SoC as soon as it tries accessing
-> the CQHCI registers.
-> 
-> RK3576's UFS support needed a new dev_pm_genpd_rpm_always_on function
-> added to the generic power domains API to handle what appears to be a
-> similar hardware issue.
-> 
-> Use this new function to ask for the same treatment in the sdhci
-> controller by giving rk3576 its own platform data with its own postinit
-> function. The benefit of doing this instead of marking the power domains
-> always on in the power domain core is that we only do this if we know
-> the platform we're running on actually uses the sdhci controller. For
-> others, keeping PD_NVM always on would be a waste, as they won't run
-> into this specific issue. The only other IP in PD_NVM that could be
-> affected is FSPI0. If it gets a mainline driver, it will probably want
-> to do the same thing.
-> 
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+For non-OF platforms, this will still wait until late_initcall(). So,
+there's at least SOME protection. We could potentially even move that
+to happen after deferred probe timeout expires.
+
+-Saravana
+
+>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 > ---
-> Changes in v2:
-> - Rewrite patch to use dev_pm_genpd_rpm_always_on in sdhci driver
->    instead, after Ulf Hansson made me aware of its existence
-> - Link to v1: https://lore.kernel.org/r/20250408-rk3576-emmc-fix-v1-1-3009828b1b31@collabora.com
-> ---
->   drivers/mmc/host/sdhci-of-dwcmshc.c | 39 +++++++++++++++++++++++++++++++++++++
->   1 file changed, 39 insertions(+)
-> 
-> diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
-> index 09b9ab15e4995f0bddf57dd309c010c849be40d9..a00aec05eff2da8197cc64690ba9665be756e54a 100644
-> --- a/drivers/mmc/host/sdhci-of-dwcmshc.c
-> +++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
-> @@ -17,6 +17,7 @@
->   #include <linux/module.h>
->   #include <linux/of.h>
->   #include <linux/platform_device.h>
-> +#include <linux/pm_domain.h>
->   #include <linux/pm_runtime.h>
->   #include <linux/reset.h>
->   #include <linux/sizes.h>
-> @@ -745,6 +746,28 @@ static void dwcmshc_rk35xx_postinit(struct sdhci_host *host, struct dwcmshc_priv
->   	}
->   }
->   
-> +static void dwcmshc_rk3576_postinit(struct sdhci_host *host, struct dwcmshc_priv *dwc_priv)
-> +{
-> +	struct device *dev = mmc_dev(host->mmc);
-> +	int ret;
+>  drivers/pmdomain/core.c   | 12 +++++++++++-
+>  include/linux/pm_domain.h |  1 +
+>  2 files changed, 12 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> index 695d7d9e5582..a8c56f7a7ba0 100644
+> --- a/drivers/pmdomain/core.c
+> +++ b/drivers/pmdomain/core.c
+> @@ -212,6 +212,12 @@ static inline bool irq_safe_dev_in_sleep_domain(stru=
+ct device *dev,
+>         return ret;
+>  }
+>
+> +#ifdef CONFIG_PM_GENERIC_DOMAINS_OF
+> +static bool genpd_may_stay_on(bool on) { return on; }
+> +#else
+> +static bool genpd_may_stay_on(bool on) { return false; }
+> +#endif
 > +
-> +	/*
-> +	 * This works around what appears to be a silicon bug, which makes the
-
-After discussion with Finley, we agree with this patch which is
-basically the same way we handle it on vendor tree. But it's not a
-silicon bug to us, so maybe the comments need a bit of adjustment.
-
-
-> +	 * PD_NVM power domain, which the sdhci controller on the RK3576 is in,
-> +	 * never come back the same way once it's turned off once. This can
-> +	 * happen during early kernel boot if no driver is using either PD_NVM
-> +	 * or its child power domain PD_SDGMAC for a short moment, leading to it
-> +	 * being turned off to save power. By keeping it on, sdhci suspending
-> +	 * won't lead to PD_NVM becoming a candidate for getting turned off.
-> +	 */
-> +	ret = dev_pm_genpd_rpm_always_on(dev, true);
-> +	if (ret && ret != -EOPNOTSUPP)
-> +		dev_warn(dev, "failed to set PD rpm always on, SoC may hang later: %pe\n",
-> +			 ERR_PTR(ret));
-> +
-> +	dwcmshc_rk35xx_postinit(host, dwc_priv);
-> +}
-> +
->   static int th1520_execute_tuning(struct sdhci_host *host, u32 opcode)
->   {
->   	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> @@ -1176,6 +1199,18 @@ static const struct dwcmshc_pltfm_data sdhci_dwcmshc_rk35xx_pdata = {
->   	.postinit = dwcmshc_rk35xx_postinit,
->   };
->   
-> +static const struct dwcmshc_pltfm_data sdhci_dwcmshc_rk3576_pdata = {
-> +	.pdata = {
-> +		.ops = &sdhci_dwcmshc_rk35xx_ops,
-> +		.quirks = SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN |
-> +			  SDHCI_QUIRK_BROKEN_TIMEOUT_VAL,
-> +		.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN |
-> +			   SDHCI_QUIRK2_CLOCK_DIV_ZERO_BROKEN,
-> +	},
-> +	.init = dwcmshc_rk35xx_init,
-> +	.postinit = dwcmshc_rk3576_postinit,
-> +};
-> +
->   static const struct dwcmshc_pltfm_data sdhci_dwcmshc_th1520_pdata = {
->   	.pdata = {
->   		.ops = &sdhci_dwcmshc_th1520_ops,
-> @@ -1274,6 +1309,10 @@ static const struct of_device_id sdhci_dwcmshc_dt_ids[] = {
->   		.compatible = "rockchip,rk3588-dwcmshc",
->   		.data = &sdhci_dwcmshc_rk35xx_pdata,
->   	},
-> +	{
-> +		.compatible = "rockchip,rk3576-dwcmshc",
-> +		.data = &sdhci_dwcmshc_rk3576_pdata,
-> +	},
->   	{
->   		.compatible = "rockchip,rk3568-dwcmshc",
->   		.data = &sdhci_dwcmshc_rk35xx_pdata,
-> 
-> ---
-> base-commit: 64e9fdfc89a76fed38d8ddeed72d42ec71957ed9
-> change-id: 20250317-rk3576-emmc-fix-7dc81a627422
-> 
-> Best regards,
+>  static int genpd_runtime_suspend(struct device *dev);
+>
+>  /*
+> @@ -933,11 +939,12 @@ static void genpd_power_off(struct generic_pm_domai=
+n *genpd, bool one_dev_on,
+>          * The domain is already in the "power off" state.
+>          * System suspend is in progress.
+>          * The domain is configured as always on.
+> +        * The domain was on at boot and still need to stay on.
+>          * The domain has a subdomain being powered on.
+>          */
+>         if (!genpd_status_on(genpd) || genpd->prepared_count > 0 ||
+>             genpd_is_always_on(genpd) || genpd_is_rpm_always_on(genpd) ||
+> -           atomic_read(&genpd->sd_count) > 0)
+> +           genpd->stay_on || atomic_read(&genpd->sd_count) > 0)
+>                 return;
+>
+>         /*
+> @@ -2374,6 +2381,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+>         INIT_WORK(&genpd->power_off_work, genpd_power_off_work_fn);
+>         atomic_set(&genpd->sd_count, 0);
+>         genpd->status =3D is_off ? GENPD_STATE_OFF : GENPD_STATE_ON;
+> +       genpd->stay_on =3D genpd_may_stay_on(!is_off);
+>         genpd->sync_state =3D GENPD_SYNC_STATE_OFF;
+>         genpd->device_count =3D 0;
+>         genpd->provider =3D NULL;
+> @@ -2640,6 +2648,7 @@ void of_genpd_sync_state(struct device *dev)
+>         list_for_each_entry(genpd, &gpd_list, gpd_list_node) {
+>                 if (genpd->provider =3D=3D &np->fwnode) {
+>                         genpd_lock(genpd);
+> +                       genpd->stay_on =3D false;
+>                         genpd_power_off(genpd, false, 0);
+>                         genpd_unlock(genpd);
+>                 }
+> @@ -3486,6 +3495,7 @@ static void genpd_provider_sync_state(struct device=
+ *dev)
+>
+>         case GENPD_SYNC_STATE_SIMPLE:
+>                 genpd_lock(genpd);
+> +               genpd->stay_on =3D false;
+>                 genpd_power_off(genpd, false, 0);
+>                 genpd_unlock(genpd);
+>                 break;
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index 2185ee9e4f7c..c5358cccacad 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -193,6 +193,7 @@ struct generic_pm_domain {
+>         unsigned int performance_state; /* Aggregated max performance sta=
+te */
+>         cpumask_var_t cpus;             /* A cpumask of the attached CPUs=
+ */
+>         bool synced_poweroff;           /* A consumer needs a synced powe=
+roff */
+> +       bool stay_on;                   /* Stay powered-on during boot. *=
+/
+>         enum genpd_sync_state sync_state; /* How sync_state is managed. *=
+/
+>         int (*power_off)(struct generic_pm_domain *domain);
+>         int (*power_on)(struct generic_pm_domain *domain);
+> --
+> 2.43.0
+>
 
