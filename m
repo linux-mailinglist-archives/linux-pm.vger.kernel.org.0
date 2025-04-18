@@ -1,165 +1,259 @@
-Return-Path: <linux-pm+bounces-25707-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25709-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3DCAA93671
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 13:20:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F787A937F5
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 15:31:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 033B37B147F
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 11:19:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81EF03A6E33
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 13:31:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBA8F270ED0;
-	Fri, 18 Apr 2025 11:20:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49044277029;
+	Fri, 18 Apr 2025 13:31:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b="j8UA000Q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gE4/Cx0d"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0861521ABCD
-	for <linux-pm@vger.kernel.org>; Fri, 18 Apr 2025 11:20:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7038F20767E;
+	Fri, 18 Apr 2025 13:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744975218; cv=none; b=hJ4OFv8MzabcO26Gy9Mv6EaoF7p26k0NlLxdVfwGKHRH5RWRxv0/CAEd0P9sP7chWAv5Tx5o0pkPYbeVXFLVskOf9zslxbr0G3o8rxzsI25jCNy5R9DJCOWu00SMDxpIV1iT6Qqr/Yk/mbsdARVMXvdEOJ6VkfIRIYUp2E3st5k=
+	t=1744983110; cv=none; b=HCS0ZatgnszRnHu4zZif6kfpdVTth+fgtiNuMupozcxSA5p6KLpXB+vBGRc92G3Alwmu+J6MQqeZJQmgMKZCBCIlGG5fr4eXy2aQXLuaPTWrpu7DUrMgi0X8flIBwQhj5o5S1Yy3mpfbIJcLwiBW6hrQ6qJLwspnSZiQyue/AkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744975218; c=relaxed/simple;
-	bh=Sj8X2Lm6wKekaBjcx9Vsfq4exmy8nxBLBwcn+T7xo+U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mwir+Imn99AoKlRRbY+2sMP3y5RTrj/eiwboyTkM7mywUHd7r/TLKkguuEzf365dR7X2HEdOR6lobWCy432kDQMc/LyjKxKlpJY3rTeTSPuqHD583qGoZr8yDxw3j6LfL9/psPUnSaJtfPH2fP4v7Hw20sCHzZMRR6CPOF323t0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com; spf=pass smtp.mailfrom=cloud.com; dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b=j8UA000Q; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloud.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43cf628cb14so21287035e9.1
-        for <linux-pm@vger.kernel.org>; Fri, 18 Apr 2025 04:20:16 -0700 (PDT)
+	s=arc-20240116; t=1744983110; c=relaxed/simple;
+	bh=+ipEq0DN1psmNTdr4XRWkkXLvcwAD4hbAap9lZ1Syy4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NLCP4uzex/vcgGYPRos7HO7ySZ5zUpnVJhYhg22vgT/eroX+zkNrj+8c3pIF37HR1z1viHdU4E2H8MfIg9TVbr3VuBNr0spGIrkqO7xWVgLhM/p6Ez3SdumNdp+E+48KinwhJP2TlVZd1A3eM7uTmm8pnRuQ9DvRi+miNyBQ19Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gE4/Cx0d; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5efe8d9eb12so71279a12.1;
+        Fri, 18 Apr 2025 06:31:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=citrix.com; s=google; t=1744975215; x=1745580015; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZJj8Rfgi9EbV15zm3T8GaXom1YrGzd0C3xNCTSZPHuE=;
-        b=j8UA000QIQkKpdWrRa/axOMJaoNjF3ix6zOsUjvMc+/cg97871DIOvaq4qcthpUoIL
-         dr2bihlN7/wbIWb/Xl5figifHjowTitSWCkFs7G7f0Pb7qP0blE2hQqCbuYbSSrO0r23
-         7q+9wR1hxYkJmh3CjVnuaB3ad1jJMyZhOx5AQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744975215; x=1745580015;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1744983107; x=1745587907; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZJj8Rfgi9EbV15zm3T8GaXom1YrGzd0C3xNCTSZPHuE=;
-        b=VVxxIlFtIUl7eGqqTJTpiqTn/aqvqU7OpoWp1YKNN3gs3RJL622Qo0AqWEAdj6B1w+
-         4eiwm9yKGmhWjssWuzxRO2yOJNxH0NLhJDccSU7AIU+MAkzIf01iHKrH18AsYXDyT14R
-         owglJWH+gHl9Ey9sqtZlI71VyMQPohW06fz77b4oK3jZwpZN4PHZ2jE8n1AC4GYNeVCR
-         817AIyi+sBHJzmrAsmhx3vDWoo7gMlU6vU+8u71L34stQQQB+Smm6hLct5TeNYcEl0yP
-         ANNVFY3DizwW4PgX7XvnQSQBL6o/9+KHQA6YfAP3OTZfm6wEworEB9PlL60SCRMZWybb
-         1+Eg==
-X-Forwarded-Encrypted: i=1; AJvYcCVwP2xPE6pUO3KzWgY3ynlyn8B6OoQFEH2s9mow0vk6b+ncrIvmiolWbV9qR3uehh5T9N44f0+LTg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwS8E0x5EbCjNlEMRJpLKjeSpMrHgMjN3IKZ7XDnLnX9LleQ7rw
-	3UD9vZXOPZjWe25LoZjj+sRWRRbzvGKbzFYWTo6fqCqzbWQnEGj5Ug/Fg8A/F+Q=
-X-Gm-Gg: ASbGncsbjd/VM2EPhQuxr3G13xzYGLLrNKEa0HfTQchUJ1U592bUtP/f9a1rHzEd8I0
-	n5FsFCb9qxswBCb3dLQpPxdVoSq4kXuxR1OIgtdJO/ADPL2GgwNmZJ4hxCecSblCQbipR8EquUa
-	p/2AUpiN92m6vqzkLMrM8qzEEn0tQSpv4E4o8FuTgRrUwpiXXGwptKu8YRZnldsqUpgSnG+pwzX
-	OLBDolNQJjx0O+0AElN6sbdKSYnPWq1UNIZYHEzb8QK1KR1dndp1gEzCz51aCjjGp6ouGXufIm8
-	zKjIVVTjh4laDY0dwLTt8ZNSNCgmCT7x9MCoJhgEtXzfIHKJXzME2kX/vtyMIV36GeyM7SuXZAk
-	oP+VJKA==
-X-Google-Smtp-Source: AGHT+IEH86lkzDB8iD2jcwBv9xObYazBn81tO8e62htfmOl2I85kmXIxDh76Itbbny1GahYRs6qSCQ==
-X-Received: by 2002:a05:6000:184f:b0:39b:f44b:e176 with SMTP id ffacd0b85a97d-39ef9466f36mr2679870f8f.24.1744975215276;
-        Fri, 18 Apr 2025 04:20:15 -0700 (PDT)
-Received: from [192.168.1.183] (host-92-26-98-202.as13285.net. [92.26.98.202])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4406d5cf2easm18698005e9.31.2025.04.18.04.20.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Apr 2025 04:20:14 -0700 (PDT)
-Message-ID: <4fb6d880-3d5f-4d42-8419-dcc697949a10@citrix.com>
-Date: Fri, 18 Apr 2025 12:20:13 +0100
+        bh=VW/r+Xskypu97YYD6KF6jc5zwux2QZnn2gKuuTUWqVE=;
+        b=gE4/Cx0dYk9em6Y0NJOfavwg7aCSmA2Rk/X0hErzcjPsYchSnkXb444UVqpDnIfr/n
+         nyphkiRildA9GTrKlcPgYPzO7QzRABd7dciHPk1uz/6PD97IJbU6W2SO7KtFI9VrN3o3
+         Fff0spJnyQt2afzdgEu/gprbpaaN37t4aAu45Sh1UXKHI7TFCdjW6T7IgHV5y5Knb81l
+         5MkLl9ikM9ODWavwKTyCTt3EaCVjVRYilziOEyuGNYA08wHFFtF5UjgOHRFDs4mI/vsH
+         q6bG4CK2mZTouBJlc1UjSIgGk25eddzAxBsj1Cjovy+k9Dz6at/5cp2NXT8a0JA70WEu
+         Iiqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744983107; x=1745587907;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VW/r+Xskypu97YYD6KF6jc5zwux2QZnn2gKuuTUWqVE=;
+        b=VcfgX+TnAdHxTZ27GuqfHgnw7RSzjAnBng1cNzOwqORJew5nXx1n6eugF4RAJWkGML
+         /lLehEB+VEUun6iU/N68fim00+RYNWhrlOHUgKe69nqvR7HIDmSCiVXzbzuQrx7fXRql
+         sAufGyyXU8Zo9zvoOfB4+IUVc0xJ0EEhnm2Sl2ZK9BIDew8LDR059iA8t3/SlzAmdeR+
+         kbb1+yhGu+0/zovDyYvH1soiZM0UWT70q6X7IO86gdBtrd1mnt8hj7mW2/BAB39db5ds
+         jF3ZWwHsPnqeWLVwgl2Z44mNDn9KL9N2ubwX+PZEfZwkKf057AXXLamwrg2uAJfxfkVd
+         V1Vw==
+X-Forwarded-Encrypted: i=1; AJvYcCVie4nK3AYGvW3LlTSTlQE75qk73IGHipe6J4dq2jZOYEamndGybY/LOEmApGxcP+VYCzg1yFayfNbqwrtXez2o8A8=@vger.kernel.org, AJvYcCWt4i/mhbEn3ySZCSw7gmRDY6SyV12/zQV7OOggWJbQP1fBAdjcbHd0rlJQDQfIPXsCTq2LBVaHu4g=@vger.kernel.org, AJvYcCXIS3jo1qjJ3zlliRveB7qTTh91yewW7opGp9YjCEZLVJ38l6oSRMIoFJ7WW2ARhcYULSOsPpjZZFhGgDU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYbf1UbPoNpE2bhcjeo2m6+BBfkl9fGIcUUfnOA36IgaklSbOH
+	9sIYTa8AP8jB0WYy6tTged5MyPxUx5fb/udCwD8aQu7VY+y2O49JAc49vqRcjSg7kOcPDVRMqd3
+	Op1pkTw5Pqkh4f0biwqUN40Wjr4rm3+5+
+X-Gm-Gg: ASbGncv97miwI7viGXgaSwX5Ee17bMea1GWzKk1J+XdTnQNYiAeLtF4gaP4CEOhc4fb
+	z6CdRuanuqqUGFROoBh3ng2GeKv5aNb+utiRcfGEGAuFCG1NJqa7eCcYdws5qboQilqEKdNRtbo
+	k5IcZK9XQwgvzRA47HxKDJ
+X-Google-Smtp-Source: AGHT+IE+R7I4dVbYwOWf8/dydNM3ras0vM8Hcd1dtJhxh5iLeMMP4/GOg7s0W+7aCQ1EW35HU9YjtmFodyE+MqjWPmY=
+X-Received: by 2002:a17:906:e208:b0:acb:85f2:f032 with SMTP id
+ a640c23a62f3a-acb85f31115mr5753166b.13.1744983106327; Fri, 18 Apr 2025
+ 06:31:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH -tip v2 1/2] x86/boot: Remove semicolon from "rep"
- prefixes
-To: Uros Bizjak <ubizjak@gmail.com>
-Cc: x86@kernel.org, linux-video@atrey.karlin.mff.cuni.cz,
- xen-devel@lists.xenproject.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- Martin Mares <mj@ucw.cz>
-References: <20250418071437.4144391-1-ubizjak@gmail.com>
- <50bf962c-2c9e-46a2-bbac-cba9cf229e79@citrix.com>
- <CAFULd4ZNiRdARn8O98zROQRWoL1ASQ+iPPTTmLRxjo9SGRHyRg@mail.gmail.com>
-Content-Language: en-GB
-From: Andrew Cooper <andrew.cooper3@citrix.com>
-Autocrypt: addr=andrew.cooper3@citrix.com; keydata=
- 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
- 6+ahAA==
-In-Reply-To: <CAFULd4ZNiRdARn8O98zROQRWoL1ASQ+iPPTTmLRxjo9SGRHyRg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20250410063754.5483-1-linux.amoon@gmail.com> <20250410063754.5483-2-linux.amoon@gmail.com>
+ <aAIIH7H1oQH8cf-6@mai.linaro.org>
+In-Reply-To: <aAIIH7H1oQH8cf-6@mai.linaro.org>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Fri, 18 Apr 2025 19:01:29 +0530
+X-Gm-Features: ATxdqUEh1pZaqB8ipWBIif6O9726dyogwx9y_IR39XM-ncpaQF8skGDo78Oz4mw
+Message-ID: <CANAwSgS_OnEv=r7S4CetLkW4vo-QdFAKTbqRK9H-Q0dq5VDYLA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] drivers/thermal/exynos: Refactor clk_sec
+ initialization inside SOC-specific case
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	"open list:SAMSUNG THERMAL DRIVER" <linux-pm@vger.kernel.org>, 
+	"open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>, 
+	"moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" <linux-arm-kernel@lists.infradead.org>, 
+	open list <linux-kernel@vger.kernel.org>, 
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 18/04/2025 12:15 pm, Uros Bizjak wrote:
-> On Fri, Apr 18, 2025 at 12:24 PM Andrew Cooper
-> <andrew.cooper3@citrix.com> wrote:
->> On 18/04/2025 8:13 am, Uros Bizjak wrote:
->>> diff --git a/arch/x86/boot/video.c b/arch/x86/boot/video.c
->>> index f2e96905b3fe..0641c8c46aee 100644
->>> --- a/arch/x86/boot/video.c
->>> +++ b/arch/x86/boot/video.c
->>> @@ -292,7 +292,7 @@ static void restore_screen(void)
->>>                            "shrw %%cx ; "
->>>                            "jnc 1f ; "
->>>                            "stosw \n\t"
->>> -                          "1: rep;stosl ; "
->>> +                          "1: rep stosl ; "
->>>                            "popw %%es"
->> Doesn't this one still need a separator between STOSL and POPW ?
-> ";" is a separator as well.
+Hi Daniel,
 
-Yes, it is.  I've clearly not had enough coffee yet.  Sorry for the noise.
+On Fri, 18 Apr 2025 at 13:36, Daniel Lezcano <daniel.lezcano@linaro.org> wr=
+ote:
+>
+> On Thu, Apr 10, 2025 at 12:07:48PM +0530, Anand Moon wrote:
+> > Refactor the initialization of the clk_sec clock to be inside the
+> > SOC_ARCH_EXYNOS5420_TRIMINFO case. It ensures that the clk_sec clock
+> > is only initialized for the specified SOC and not for other SOCs,
+> > thereby simplifying the code. The clk_sec clock is used by the TMU
+> > for GPU on the Exynos 542x platform.
+> >
+> > Removed redundant IS_ERR() checks for the clk_sec clock since error
+> > handling is already managed internally by clk_unprepare() functions.
+> >
+> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > ---
+> > v5: None
+> > v4: Fix the aligment of code clk for clk_prepare in proper if/else bloc=
+k.
+> >     update the commit for clk_sec used.
+> >     checked to goto clean up all the clks are proper.
+> >     drop IS_ERR() check for clk_sec.
+> > v3: improve the commit message.
+> > ---
+> >  drivers/thermal/samsung/exynos_tmu.c | 37 ++++++++++++++--------------
+> >  1 file changed, 18 insertions(+), 19 deletions(-)
+> >
+> > diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/sam=
+sung/exynos_tmu.c
+> > index 47a99b3c5395..3657920de000 100644
+> > --- a/drivers/thermal/samsung/exynos_tmu.c
+> > +++ b/drivers/thermal/samsung/exynos_tmu.c
+> > @@ -1037,29 +1037,30 @@ static int exynos_tmu_probe(struct platform_dev=
+ice *pdev)
+> >               return ret;
+> >
+> >       data->clk =3D devm_clk_get(dev, "tmu_apbif");
+> > -     if (IS_ERR(data->clk))
+> > +     if (IS_ERR(data->clk)) {
+> >               return dev_err_probe(dev, PTR_ERR(data->clk), "Failed to =
+get clock\n");
+>
+> As this branch returns, the else block can be removed.
+>
+>         if (IS_ERR(data->clk))
+>                 return dev_err_probe(dev, PTR_ERR(data->clk), "Failed to =
+get clock\n");
+>
+>         ret =3D clk_prepare(data->clk);
+>         if (ret) {
+>                 ...
+>         }
+>
+Earlier I got this review comment on this.
+[0] https://patchwork.kernel.org/project/linux-samsung-soc/patch/2025021619=
+5850.5352-2-linux.amoon@gmail.com/
+I will try to fix this in next vrsion.
 
-~Andrew
+> May be worth to group both calls with devm_clk_get_enabled()
+
+Earlier, I attempted to change the clock ABI, but it didn't work.
+
+[1] https://lore.kernel.org/all/20220515064126.1424-2-linux.amoon@gmail.com=
+/
+If you're okay with changing this, I'll update it in the next version.
+
+> > -
+> > -     data->clk_sec =3D devm_clk_get(dev, "tmu_triminfo_apbif");
+> > -     if (IS_ERR(data->clk_sec)) {
+> > -             if (data->soc =3D=3D SOC_ARCH_EXYNOS5420_TRIMINFO)
+> > -                     return dev_err_probe(dev, PTR_ERR(data->clk_sec),
+> > -                                          "Failed to get triminfo cloc=
+k\n");
+> >       } else {
+> > -             ret =3D clk_prepare(data->clk_sec);
+> > +             ret =3D clk_prepare(data->clk);
+> >               if (ret) {
+> >                       dev_err(dev, "Failed to get clock\n");
+> >                       return ret;
+> >               }
+> >       }
+> >
+> > -     ret =3D clk_prepare(data->clk);
+> > -     if (ret) {
+> > -             dev_err(dev, "Failed to get clock\n");
+> > -             goto err_clk_sec;
+> > -     }
+> > -
+> >       switch (data->soc) {
+> > +     case SOC_ARCH_EXYNOS5420_TRIMINFO:
+> > +             data->clk_sec =3D devm_clk_get(dev, "tmu_triminfo_apbif")=
+;
+> > +             if (IS_ERR(data->clk_sec)) {
+> > +                     ret =3D dev_err_probe(dev, PTR_ERR(data->clk_sec)=
+,
+> > +                                         "Failed to get clk_sec clock\=
+n");
+> > +                     goto err_clk;
+> > +             }
+> > +             ret =3D clk_prepare(data->clk_sec);
+>
+> Same comment, devm_clk_get_enabled()
+If you're okay with changing this, I'll update it in the next version.
+>
+> > +             if (ret) {
+> > +                     dev_err(dev, "Failed to prepare clk_sec clock\n")=
+;
+> > +                     goto err_clk_sec;
+> > +             }
+> > +             break;
+> >       case SOC_ARCH_EXYNOS5433:
+> >       case SOC_ARCH_EXYNOS7:
+> >               data->sclk =3D devm_clk_get(dev, "tmu_sclk");
+> > @@ -1112,11 +1113,10 @@ static int exynos_tmu_probe(struct platform_dev=
+ice *pdev)
+> >
+> >  err_sclk:
+> >       clk_disable_unprepare(data->sclk);
+> > +err_clk_sec:
+> > +     clk_unprepare(data->clk_sec);
+> >  err_clk:
+> >       clk_unprepare(data->clk);
+> > -err_clk_sec:
+> > -     if (!IS_ERR(data->clk_sec))
+> > -             clk_unprepare(data->clk_sec);
+>
+> With devm_ variant those labels should go away
+Correct.
+
+Thanks
+-Anand
+>
+> >       return ret;
+> >  }
+> >
+> > @@ -1128,8 +1128,7 @@ static void exynos_tmu_remove(struct platform_dev=
+ice *pdev)
+> >
+> >       clk_disable_unprepare(data->sclk);
+> >       clk_unprepare(data->clk);
+> > -     if (!IS_ERR(data->clk_sec))
+> > -             clk_unprepare(data->clk_sec);
+> > +     clk_unprepare(data->clk_sec);
+> >  }
+> >
+> >  #ifdef CONFIG_PM_SLEEP
+> > --
+> > 2.49.0
+> >
+>
+> --
+>
+>  <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for A=
+RM SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
 
