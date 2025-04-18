@@ -1,330 +1,165 @@
-Return-Path: <linux-pm+bounces-25706-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25707-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 844F1A93668
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 13:19:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3DCAA93671
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 13:20:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16FD47ADE7E
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 11:18:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 033B37B147F
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 11:19:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07BA7270EC3;
-	Fri, 18 Apr 2025 11:19:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBA8F270ED0;
+	Fri, 18 Apr 2025 11:20:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QYoA0iQG"
+	dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b="j8UA000Q"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24842749D1
-	for <linux-pm@vger.kernel.org>; Fri, 18 Apr 2025 11:19:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0861521ABCD
+	for <linux-pm@vger.kernel.org>; Fri, 18 Apr 2025 11:20:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744975148; cv=none; b=IP47dtY/1h5BfESCL8Ht1SyL25iFrgEvYOBILNtNoTLYb+j8wASZwxZ0cU05kFD6JlfB9FhQ87x3hz3JXca8+Hv4/gtcwR56vCtYCBm5t6IlZRaY2zw11R30y8gmIE7Rr3aCXBCdgmy7i+QoQo1/rTyG3jwra+uTXpHySm30E40=
+	t=1744975218; cv=none; b=hJ4OFv8MzabcO26Gy9Mv6EaoF7p26k0NlLxdVfwGKHRH5RWRxv0/CAEd0P9sP7chWAv5Tx5o0pkPYbeVXFLVskOf9zslxbr0G3o8rxzsI25jCNy5R9DJCOWu00SMDxpIV1iT6Qqr/Yk/mbsdARVMXvdEOJ6VkfIRIYUp2E3st5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744975148; c=relaxed/simple;
-	bh=gSs5GssrItXYqiejUmj1Jyjk3xws2Twm+3gJmUYQ1Vg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DmNzVPp4NRrZKxbAGJbfCA300h2H4sR68oUW59w2KxOUVvL95ts2TnBkVmm1UJPIngD15E70QVIygNkySDYYF2UMJjKugPxeNJwl38bMcy6LPwgeAzmsb4WY1S2923jae/AFlcvN2TTzaetQATsIlaXPFd62o+nhDHWq/qvwJpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QYoA0iQG; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43ede096d73so12267855e9.2
-        for <linux-pm@vger.kernel.org>; Fri, 18 Apr 2025 04:19:06 -0700 (PDT)
+	s=arc-20240116; t=1744975218; c=relaxed/simple;
+	bh=Sj8X2Lm6wKekaBjcx9Vsfq4exmy8nxBLBwcn+T7xo+U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mwir+Imn99AoKlRRbY+2sMP3y5RTrj/eiwboyTkM7mywUHd7r/TLKkguuEzf365dR7X2HEdOR6lobWCy432kDQMc/LyjKxKlpJY3rTeTSPuqHD583qGoZr8yDxw3j6LfL9/psPUnSaJtfPH2fP4v7Hw20sCHzZMRR6CPOF323t0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com; spf=pass smtp.mailfrom=cloud.com; dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b=j8UA000Q; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloud.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43cf628cb14so21287035e9.1
+        for <linux-pm@vger.kernel.org>; Fri, 18 Apr 2025 04:20:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744975145; x=1745579945; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QC1W3fWtNRiKUlEQ6dnQPD3aUpjIornXN6JbcJQ149Q=;
-        b=QYoA0iQG/ckaTh9dfeH7U82OECCRiHpwZe3bEgzvJ9Cr0OgRUD8jhHijh28Dtcepdu
-         CeCnywaa7YwuLqHisRe/w/VNZzwTiQjK1jPdbu2pHO/pv9SrH9QTCWZ8z0FgGhEm1KQQ
-         Kyc0T2rYZLTqCmDOdCUco5C2zDjuX13WyuA5b7JRQzJO7oiKfFN5B+JND8bT9LL2tyfj
-         WrB/oq4okrrmsp7PYdIj4PekcE6YXb6ejtXGUNFS0xZwLkgCxa8sf/s9hXDfPozBgNxa
-         QzCzcKRifwDDXbSK4HDvCKPZk2ubPtYBg8XCznjPxW2lWmsyVi46avxztVdPzHTVDJNe
-         qeAA==
+        d=citrix.com; s=google; t=1744975215; x=1745580015; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZJj8Rfgi9EbV15zm3T8GaXom1YrGzd0C3xNCTSZPHuE=;
+        b=j8UA000QIQkKpdWrRa/axOMJaoNjF3ix6zOsUjvMc+/cg97871DIOvaq4qcthpUoIL
+         dr2bihlN7/wbIWb/Xl5figifHjowTitSWCkFs7G7f0Pb7qP0blE2hQqCbuYbSSrO0r23
+         7q+9wR1hxYkJmh3CjVnuaB3ad1jJMyZhOx5AQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744975145; x=1745579945;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QC1W3fWtNRiKUlEQ6dnQPD3aUpjIornXN6JbcJQ149Q=;
-        b=H1hyTIZwhK0NpKiBOG6FPl5hlHUpFx2mSPjeddp+aFtVM6E5D+8b80Xa9xGci7zALT
-         kjqLRCzb7rgdZLIEWk7WEPAXu3B7kgA2ULc8jY7t3fKoNYKrcP84TOTVOsuilgyU8T7H
-         bQZB/0QBjCK+Hy4AvgbENm4O082gewVS0XyI8q6RVGhIuGoerrb+3Kzfu5co0Em7JjQI
-         HjclXzQeGimGQT0mwBwiHPBnA0sjKmHJn9oH8YzzlRquGo38rNDiErmXg6qX/893CP1p
-         CAxFEgZYVaW/ia5jQXnizKCMGmcFjwY5ZrEVFsVQJ2VEWEMLFQ9MwEw+wcIlyAVeqhjC
-         f1dQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVhyWBJ+jPQYQ3qnf04zr6GfAd+i6q3no7mO3KVwKHnamKTKucvVdwMAlloROtE8RRoRQVkr1MxNA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxonUghLUQGqBEPUNQ6udEgqhvvtIbpLFkeOBllcvKIsh4Wxml3
-	KB1tw+qfTJ1MtIS1sTPC1eThf0+RXBL/xqMVmcur7vDPizvbw/Hujemi8h206PM=
-X-Gm-Gg: ASbGncvjCNq6XG8KlFYZrAR7KaeocCpCXBKWTz+3CixUSavXQDOjBsKiYmGWG5DQbUl
-	h/vDpR0fyE9eX/F5J2Iaq0w2ywzteUkqu1Fd9uIQEja2rXirnxauMLoKbpnf0UnBBA4X2nS+tKF
-	L/gmDE7WjJzCfgAQ9Kux7/gOsBAo8da1uNcL6RNRDEZ//GrvmIIB6LrfdC6tE1DKk/Ky55RKUku
-	mdQ0iTvybAUSgQAdIeOgOVJUVHVCkxmU4NrfE0LBg7p5eD49hvxf6vTMG51hsmAne6JCswDPdSr
-	tQlZJDbPLwMkPjAdZE6XRpI6xGeOkuLwImVmNef0flvA6Feg3n1lfvpk8Jsoi7+cOEStZpz52eW
-	IwZ8=
-X-Google-Smtp-Source: AGHT+IExdYAU6Oh5tSrYbpbjA2C4dsLbKfVF/oPwxj7qR9b5UJ9JqRTHgG8WmKn+Hx2vHu3ZeVCyJg==
-X-Received: by 2002:a05:600c:54c7:b0:43d:683:8caa with SMTP id 5b1f17b1804b1-4407076031dmr6899265e9.15.1744975145049;
-        Fri, 18 Apr 2025 04:19:05 -0700 (PDT)
-Received: from mai.linaro.org (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-44034fc8886sm79315865e9.0.2025.04.18.04.19.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Apr 2025 04:19:04 -0700 (PDT)
-Date: Fri, 18 Apr 2025 13:19:02 +0200
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
-Cc: amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
-	rui.zhang@intel.com, lukasz.luba@arm.com,
-	david.collins@oss.qualcomm.com, srinivas.kandagatla@linaro.org,
-	stefan.schmidt@linaro.org, quic_tsoni@quicinc.com,
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dmitry.baryshkov@linaro.org
-Subject: Re: [PATCH v3 4/5 RESEND] thermal: qcom-spmi-temp-alarm: add support
- for GEN2 rev 2 PMIC peripherals
-Message-ID: <aAI1JnQ2yCjtJL9u@mai.linaro.org>
-References: <20250320202408.3940777-1-anjelique.melendez@oss.qualcomm.com>
- <20250320202408.3940777-5-anjelique.melendez@oss.qualcomm.com>
+        d=1e100.net; s=20230601; t=1744975215; x=1745580015;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZJj8Rfgi9EbV15zm3T8GaXom1YrGzd0C3xNCTSZPHuE=;
+        b=VVxxIlFtIUl7eGqqTJTpiqTn/aqvqU7OpoWp1YKNN3gs3RJL622Qo0AqWEAdj6B1w+
+         4eiwm9yKGmhWjssWuzxRO2yOJNxH0NLhJDccSU7AIU+MAkzIf01iHKrH18AsYXDyT14R
+         owglJWH+gHl9Ey9sqtZlI71VyMQPohW06fz77b4oK3jZwpZN4PHZ2jE8n1AC4GYNeVCR
+         817AIyi+sBHJzmrAsmhx3vDWoo7gMlU6vU+8u71L34stQQQB+Smm6hLct5TeNYcEl0yP
+         ANNVFY3DizwW4PgX7XvnQSQBL6o/9+KHQA6YfAP3OTZfm6wEworEB9PlL60SCRMZWybb
+         1+Eg==
+X-Forwarded-Encrypted: i=1; AJvYcCVwP2xPE6pUO3KzWgY3ynlyn8B6OoQFEH2s9mow0vk6b+ncrIvmiolWbV9qR3uehh5T9N44f0+LTg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwS8E0x5EbCjNlEMRJpLKjeSpMrHgMjN3IKZ7XDnLnX9LleQ7rw
+	3UD9vZXOPZjWe25LoZjj+sRWRRbzvGKbzFYWTo6fqCqzbWQnEGj5Ug/Fg8A/F+Q=
+X-Gm-Gg: ASbGncsbjd/VM2EPhQuxr3G13xzYGLLrNKEa0HfTQchUJ1U592bUtP/f9a1rHzEd8I0
+	n5FsFCb9qxswBCb3dLQpPxdVoSq4kXuxR1OIgtdJO/ADPL2GgwNmZJ4hxCecSblCQbipR8EquUa
+	p/2AUpiN92m6vqzkLMrM8qzEEn0tQSpv4E4o8FuTgRrUwpiXXGwptKu8YRZnldsqUpgSnG+pwzX
+	OLBDolNQJjx0O+0AElN6sbdKSYnPWq1UNIZYHEzb8QK1KR1dndp1gEzCz51aCjjGp6ouGXufIm8
+	zKjIVVTjh4laDY0dwLTt8ZNSNCgmCT7x9MCoJhgEtXzfIHKJXzME2kX/vtyMIV36GeyM7SuXZAk
+	oP+VJKA==
+X-Google-Smtp-Source: AGHT+IEH86lkzDB8iD2jcwBv9xObYazBn81tO8e62htfmOl2I85kmXIxDh76Itbbny1GahYRs6qSCQ==
+X-Received: by 2002:a05:6000:184f:b0:39b:f44b:e176 with SMTP id ffacd0b85a97d-39ef9466f36mr2679870f8f.24.1744975215276;
+        Fri, 18 Apr 2025 04:20:15 -0700 (PDT)
+Received: from [192.168.1.183] (host-92-26-98-202.as13285.net. [92.26.98.202])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4406d5cf2easm18698005e9.31.2025.04.18.04.20.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Apr 2025 04:20:14 -0700 (PDT)
+Message-ID: <4fb6d880-3d5f-4d42-8419-dcc697949a10@citrix.com>
+Date: Fri, 18 Apr 2025 12:20:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH -tip v2 1/2] x86/boot: Remove semicolon from "rep"
+ prefixes
+To: Uros Bizjak <ubizjak@gmail.com>
+Cc: x86@kernel.org, linux-video@atrey.karlin.mff.cuni.cz,
+ xen-devel@lists.xenproject.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ Martin Mares <mj@ucw.cz>
+References: <20250418071437.4144391-1-ubizjak@gmail.com>
+ <50bf962c-2c9e-46a2-bbac-cba9cf229e79@citrix.com>
+ <CAFULd4ZNiRdARn8O98zROQRWoL1ASQ+iPPTTmLRxjo9SGRHyRg@mail.gmail.com>
+Content-Language: en-GB
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Autocrypt: addr=andrew.cooper3@citrix.com; keydata=
+ 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
+ 6+ahAA==
+In-Reply-To: <CAFULd4ZNiRdARn8O98zROQRWoL1ASQ+iPPTTmLRxjo9SGRHyRg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250320202408.3940777-5-anjelique.melendez@oss.qualcomm.com>
 
-On Thu, Mar 20, 2025 at 01:24:07PM -0700, Anjelique Melendez wrote:
-> Add support for TEMP_ALARM GEN2 PMIC peripherals with digital major
-> revision 2.  This revision utilizes individual temp DAC registers
-> to set the threshold temperature for over-temperature stages 1,
-> 2, and 3 instead of a single register to specify a set of
-> thresholds.
+On 18/04/2025 12:15 pm, Uros Bizjak wrote:
+> On Fri, Apr 18, 2025 at 12:24 PM Andrew Cooper
+> <andrew.cooper3@citrix.com> wrote:
+>> On 18/04/2025 8:13 am, Uros Bizjak wrote:
+>>> diff --git a/arch/x86/boot/video.c b/arch/x86/boot/video.c
+>>> index f2e96905b3fe..0641c8c46aee 100644
+>>> --- a/arch/x86/boot/video.c
+>>> +++ b/arch/x86/boot/video.c
+>>> @@ -292,7 +292,7 @@ static void restore_screen(void)
+>>>                            "shrw %%cx ; "
+>>>                            "jnc 1f ; "
+>>>                            "stosw \n\t"
+>>> -                          "1: rep;stosl ; "
+>>> +                          "1: rep stosl ; "
+>>>                            "popw %%es"
+>> Doesn't this one still need a separator between STOSL and POPW ?
+> ";" is a separator as well.
 
-Can you elaborate what are the different stages in the QCom semantic ?
- 
-> Signed-off-by: David Collins <david.collins@oss.qualcomm.com>
-> Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
-> ---
->  drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 136 ++++++++++++++++++++
->  1 file changed, 136 insertions(+)
-> 
-> diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> index 514772e94a28..efd2b6534127 100644
-> --- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> +++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> @@ -26,6 +26,11 @@
->  #define QPNP_TM_REG_SHUTDOWN_CTRL1	0x40
->  #define QPNP_TM_REG_ALARM_CTRL		0x46
->  
-> +/* TEMP_DAC_STGx registers are only present for TEMP_GEN2 v2.0 */
-> +#define QPNP_TM_REG_TEMP_DAC_STG1	0x47
-> +#define QPNP_TM_REG_TEMP_DAC_STG2	0x48
-> +#define QPNP_TM_REG_TEMP_DAC_STG3	0x49
-> +
->  #define QPNP_TM_TYPE			0x09
->  #define QPNP_TM_SUBTYPE_GEN1		0x08
->  #define QPNP_TM_SUBTYPE_GEN2		0x09
-> @@ -65,6 +70,25 @@ static const long temp_map_gen2_v1[THRESH_COUNT][STAGE_COUNT] = {
->  
->  #define TEMP_STAGE_HYSTERESIS		2000
->  
-> +/*
-> + * For TEMP_GEN2 v2.0, TEMP_DAC_STG1/2/3 registers are used to set the threshold
-> + * for each stage independently.
-> + * TEMP_DAC_STG* = 0 --> 80 C
-> + * Each 8 step increase in TEMP_DAC_STG* value corresponds to 5 C (5000 mC).
-> + */
-> +#define TEMP_DAC_MIN			80000
-> +#define TEMP_DAC_SCALE_NUM		8
-> +#define TEMP_DAC_SCALE_DEN		5000
-> +
-> +#define TEMP_DAC_TEMP_TO_REG(temp) \
-> +	(((temp) - TEMP_DAC_MIN) * TEMP_DAC_SCALE_NUM / TEMP_DAC_SCALE_DEN)
-> +#define TEMP_DAC_REG_TO_TEMP(reg) \
-> +	(TEMP_DAC_MIN + (reg) * TEMP_DAC_SCALE_DEN / TEMP_DAC_SCALE_NUM)
-> +
-> +static const long temp_dac_max[STAGE_COUNT] = {
-> +	119375, 159375, 159375
-> +};
-> +
->  /* Temperature in Milli Celsius reported during stage 0 if no ADC is present */
->  #define DEFAULT_TEMP			37000
->  
-> @@ -73,6 +97,7 @@ struct qpnp_tm_chip;
->  struct spmi_temp_alarm_data {
->  	const struct thermal_zone_device_ops *ops;
->  	const long (*temp_map)[THRESH_COUNT][STAGE_COUNT];
-> +	int (*setup)(struct qpnp_tm_chip *chip);
->  	int (*get_temp_stage)(struct qpnp_tm_chip *chip);
->  	int (*configure_trip_temps)(struct qpnp_tm_chip *chip);
->  };
-> @@ -88,6 +113,7 @@ struct qpnp_tm_chip {
->  	unsigned int			thresh;
->  	unsigned int			stage;
->  	unsigned int			base;
-> +	unsigned int			ntrips;
->  	/* protects .thresh, .stage and chip registers */
->  	struct mutex			lock;
->  	bool				initialized;
-> @@ -305,6 +331,52 @@ static const struct thermal_zone_device_ops qpnp_tm_sensor_ops = {
->  	.set_trip_temp = qpnp_tm_set_trip_temp,
->  };
->  
-> +static int qpnp_tm_gen2_rev2_set_temp_thresh(struct qpnp_tm_chip *chip, int trip, int temp)
-> +{
-> +	int ret, temp_cfg;
-> +	u8 reg;
-> +
-> +	if (trip < 0 || trip >= STAGE_COUNT) {
-> +		dev_err(chip->dev, "invalid TEMP_DAC trip = %d\n", trip);
-> +		return -EINVAL;
-> +	} else if (temp < TEMP_DAC_MIN || temp > temp_dac_max[trip]) {
-> +		dev_err(chip->dev, "invalid TEMP_DAC temp = %d\n", temp);
-> +		return -EINVAL;
-> +	}
-> +
-> +	reg = TEMP_DAC_TEMP_TO_REG(temp);
-> +	temp_cfg = TEMP_DAC_REG_TO_TEMP(reg);
-> +
-> +	ret = qpnp_tm_write(chip, QPNP_TM_REG_TEMP_DAC_STG1 + trip, reg);
-> +	if (ret < 0) {
-> +		dev_err(chip->dev, "TEMP_DAC_STG write failed, ret=%d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	chip->temp_thresh_map[trip] = temp_cfg;
-> +
-> +	return 0;
-> +}
-> +
-> +static int qpnp_tm_gen2_rev2_set_trip_temp(struct thermal_zone_device *tz,
-> +					   const struct thermal_trip *trip, int temp)
-> +{
-> +	unsigned int trip_index = THERMAL_TRIP_PRIV_TO_INT(trip->priv);
-> +	struct qpnp_tm_chip *chip = thermal_zone_device_priv(tz);
-> +	int ret;
-> +
-> +	mutex_lock(&chip->lock);
-> +	ret = qpnp_tm_gen2_rev2_set_temp_thresh(chip, trip_index, temp);
-> +	mutex_unlock(&chip->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct thermal_zone_device_ops qpnp_tm_gen2_rev2_sensor_ops = {
-> +	.get_temp = qpnp_tm_get_temp,
-> +	.set_trip_temp = qpnp_tm_gen2_rev2_set_trip_temp,
-> +};
-> +
->  static irqreturn_t qpnp_tm_isr(int irq, void *data)
->  {
->  	struct qpnp_tm_chip *chip = data;
-> @@ -329,6 +401,58 @@ static int qpnp_tm_configure_trip_temp(struct qpnp_tm_chip *chip)
->  	return qpnp_tm_update_critical_trip_temp(chip, crit_temp);
->  }
->  
-> +/* Configure TEMP_DAC registers based on DT thermal_zone trips */
-> +static int qpnp_tm_gen2_rev2_configure_trip_temps_cb(struct thermal_trip *trip, void *data)
-> +{
-> +	struct qpnp_tm_chip *chip = data;
-> +	int ret;
-> +
-> +	trip->priv = THERMAL_INT_TO_TRIP_PRIV(chip->ntrips);
-> +	ret = qpnp_tm_gen2_rev2_set_temp_thresh(chip, chip->ntrips, trip->temperature);
-> +	chip->ntrips++;
-> +
-> +	return ret;
-> +}
-> +
-> +static int qpnp_tm_gen2_rev2_configure_trip_temps(struct qpnp_tm_chip *chip)
-> +{
-> +	int ret, i;
-> +
-> +	ret = thermal_zone_for_each_trip(chip->tz_dev,
-> +					 qpnp_tm_gen2_rev2_configure_trip_temps_cb, chip);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Verify that trips are strictly increasing. */
-> +	for (i = 1; i < STAGE_COUNT; i++) {
-> +		if (chip->temp_thresh_map[i] <= chip->temp_thresh_map[i - 1]) {
-> +			dev_err(chip->dev, "Threshold %d=%ld <= threshold %d=%ld\n",
-> +				i, chip->temp_thresh_map[i], i - 1,
-> +				chip->temp_thresh_map[i - 1]);
-> +			return -EINVAL;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +/* Read the hardware default TEMP_DAC stage threshold temperatures */
-> +static int qpnp_tm_gen2_rev2_setup(struct qpnp_tm_chip *chip)
-> +{
-> +	int ret, i;
-> +	u8 reg = 0;
-> +
-> +	for (i = 0; i < STAGE_COUNT; i++) {
-> +		ret = qpnp_tm_read(chip, QPNP_TM_REG_TEMP_DAC_STG1 + i, &reg);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		chip->temp_thresh_map[i] = TEMP_DAC_REG_TO_TEMP(reg);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static const struct spmi_temp_alarm_data spmi_temp_alarm_data = {
->  	.ops = &qpnp_tm_sensor_ops,
->  	.temp_map = &temp_map_gen1,
-> @@ -350,6 +474,13 @@ static const struct spmi_temp_alarm_data spmi_temp_alarm_gen2_rev1_data = {
->  	.get_temp_stage = qpnp_tm_gen2_get_temp_stage,
->  };
->  
-> +static const struct spmi_temp_alarm_data spmi_temp_alarm_gen2_rev2_data = {
-> +	.ops = &qpnp_tm_gen2_rev2_sensor_ops,
-> +	.setup = qpnp_tm_gen2_rev2_setup,
-> +	.configure_trip_temps = qpnp_tm_gen2_rev2_configure_trip_temps,
-> +	.get_temp_stage = qpnp_tm_gen2_get_temp_stage,
-> +};
-> +
->  /*
->   * This function initializes the internal temp value based on only the
->   * current thermal stage and threshold. Setup threshold control and
-> @@ -484,6 +615,8 @@ static int qpnp_tm_probe(struct platform_device *pdev)
->  
->  	if (subtype == QPNP_TM_SUBTYPE_GEN1)
->  		chip->data = &spmi_temp_alarm_data;
-> +	else if (subtype == QPNP_TM_SUBTYPE_GEN2 && dig_major >= 2)
-> +		chip->data = &spmi_temp_alarm_gen2_rev2_data;
->  	else if (subtype == QPNP_TM_SUBTYPE_GEN2 && dig_major >= 1)
->  		chip->data = &spmi_temp_alarm_gen2_rev1_data;
->  	else if (subtype == QPNP_TM_SUBTYPE_GEN2)
-> @@ -491,6 +624,9 @@ static int qpnp_tm_probe(struct platform_device *pdev)
->  	else
->  		return -ENODEV;
->  
-> +	if (chip->data->setup)
-> +		chip->data->setup(chip);
-> +
->  	/*
->  	 * Register the sensor before initializing the hardware to be able to
->  	 * read the trip points. get_temp() returns the default temperature
-> -- 
-> 2.34.1
-> 
+Yes, it is.  I've clearly not had enough coffee yet.  Sorry for the noise.
 
--- 
-
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+~Andrew
 
