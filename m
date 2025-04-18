@@ -1,105 +1,87 @@
-Return-Path: <linux-pm+bounces-25698-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25699-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC169A935D8
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 12:10:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A0E1A935DF
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 12:15:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 241B43AB9CF
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 10:10:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C1B81B61ABC
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 10:15:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8549B26FDA1;
-	Fri, 18 Apr 2025 10:10:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2CCD254AEF;
+	Fri, 18 Apr 2025 10:15:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AeueT/YR"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vtFZUBCw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19ED26F44E
-	for <linux-pm@vger.kernel.org>; Fri, 18 Apr 2025 10:10:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE80C270EBD
+	for <linux-pm@vger.kernel.org>; Fri, 18 Apr 2025 10:15:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744971052; cv=none; b=CAnzkVfbkV3Jj88a/xadfV5/TYQsz95V7JfoZN9EMYc4KX9auttYN9x06NFLzwCJsrkac11fqzjX+KybMBrROw11DINCdDHaMUJpAhQDx15X6IPTw3Dp6dSnemVHaelss/ljRCbk6lDPO1y7yiBAUMSskOVEHRp7SuYoo6NQhPw=
+	t=1744971306; cv=none; b=mxiNkTjdf67AaRNBGnVe4kfLL4v/Mb5CwU4GIYGfKpHOnanK2TRhshhPORy788XNVWbGRCyAF+3ED9PQn2/3QCoCIR7fIbhcFv2EK7J8wlksdqJbIHPjmoyEBPbUq+MDaBWFPFV6HU9Sx8pS7qa1TIhNOdJbUuJ9PFks+3cvp8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744971052; c=relaxed/simple;
-	bh=oxo8zJvG+XexDH4GV9ba7u6yzdBoFEqWEzjIqCoHiyU=;
+	s=arc-20240116; t=1744971306; c=relaxed/simple;
+	bh=FDL0XuqWdCNXKCV6rHzlLDqABeeuPDwzCJF2k8OG2Lw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RUVDvGL9pm0LJ1pqwXS0K3zyTMDFpFbiPDHmE4Yu08YuhyHiIgYO2r/5Y11+3gohr3Vx3QoCtiKwg+GSXTNc4xHOZYOyi81QQZkIR6RcssdqghE5cBTId98Frdc0wT0RxpnMZ00ViNpXSMD5Ht74u+bUp8ZZZ18P7Gsl5tx0s5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AeueT/YR; arc=none smtp.client-ip=209.85.221.51
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nt6i6L5mzi0nc0nTR6/papor/qLgnagKFs4RUsvtwS9tqGaM/MVbK1cXzopxivSQY2FOD7DufgxxkB+oERBajzrRjk4kjivSjPNoo6bGfaoYoZA+fS72CZqc6u8LHNcyToSvpX/yz6NJco3rK8unOEqo/0rHO0MTN0YeivmnhwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vtFZUBCw; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3913958ebf2so1606085f8f.3
-        for <linux-pm@vger.kernel.org>; Fri, 18 Apr 2025 03:10:49 -0700 (PDT)
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43d04ea9d9aso8078545e9.3
+        for <linux-pm@vger.kernel.org>; Fri, 18 Apr 2025 03:15:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744971048; x=1745575848; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1744971303; x=1745576103; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ozue1u0UD/lMowwm+i9KBTDQgenusJImLUvjM+8MVbc=;
-        b=AeueT/YRylIPJ4g7w6ZwgV6AQL7LGieRpYSklr8yT3XahUT6A+CLnlOkEHkhSbQ2tD
-         5w4A/NeCYYu+iFcDCzmuvGGiekZ1mmmj4OC8qGP1PuXUwfMFWCbGqwfoCsfMQQ2KBqQK
-         ScLmUMDtaJgEeuGiMQcA4Gkp/MMXblHmgfCrFfVB1ULR3TShILgPmTURHMZWUCs0SMuJ
-         JIlPM0M3uiCv40EnQ+ySuxnb6evXCm4/vjVLLez95dKtspZhl8yJPQqNY9ifwETSNAS8
-         rFx7Aw+ZkW2uRb4tdoS4vu15aHYOFE8+M4mJGw1427BqruQPTYnuH2dzkrtil+msdrl1
-         f9IA==
+        bh=Brm5STyxzbguEtMeEkkW8xOR3kBb6To3TGxKet6+640=;
+        b=vtFZUBCwab7lW7w367P/fF3aFzK+uRlrsco+e5slPu2ySl0iJ478Wjt+CovRi87a4o
+         R31qOA1CqokQxSdD7V64wtHMaiCSYdMkuma/kcfKNl+j3rTyucX5HRLBK78fwVu3Ztu0
+         hYVnCQklXKdWCaVUip1twl5p07ppKWnn5IzbX51BKH7C+Td8L8vHDbuvncBd77j4Tu3M
+         V4R7HigEfhiMS5KLmqAGs21aXjv8YzK+aVG2YCa8BFwxVruWxm7+jDYk1tQ3O4wYv0Nf
+         7PV54OEx0txN+qA7VO+VunTR6YOP6cl/CaT35aTWz48sbFUW25bAAIGQIITJ0AiEwsES
+         bb7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744971048; x=1745575848;
+        d=1e100.net; s=20230601; t=1744971303; x=1745576103;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ozue1u0UD/lMowwm+i9KBTDQgenusJImLUvjM+8MVbc=;
-        b=mlLVwGdzuASaquD8qZUl21WP3+zznkZ/skqm8TGce8dnWmOTzEDUNkq0zfiWO6nUXC
-         j8ex1Yzj2cdqDViHtpJVL++BGCb+OCJjVl3zsqNbHMYht8ltaF1V2/e0K/ozpGBJu6so
-         Eg6KoNGI9ZXRnoMxSTWHqWlc5Bd0XDwRHxK9550LNLurO+aRFFHp0RIXwCSsow96pUhA
-         k6i6mTzTDx1anGziEvTbmp+tf2H/Ww05DY2NbZCZLg6bXgpoMhaqq0TXrfCWCoFgEYd6
-         mU6H4B8u15RKCN8nEhZqmkoCgDjmKWBFt/DAMHaExjpRt9Log0KkJCLBOZ2WX74AYTaX
-         SBYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUGT597ilKVyxsoNsVNS1EjJNWzKadrw5gJIUtTxBiapER3cP/+UKOID5Me8NWQf/RzJLaWdV1DvA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywf8UC77nBucB9cVyHOYLNQHaufAmACuUmna5KmHeQm4ruY+QL5
-	d0Hw4axlVKaWzl+38qTUqPspbw9YC2QcbUyL2X2S9c95S1Gl8rtFyRAdMH4K84M=
-X-Gm-Gg: ASbGncswibzitbKoOTUQVgpjyW0Tu1cQUhofy5k30GUDApNQQiPcqdSa9vrPRKCSbcz
-	xWP1yn14ofnW/+v+cfFz28hsLE1iRhZ3I2Dw8EKtdq8E3qbRqzfPyXtcRLnu9CxeBXy7Kfffh6H
-	oCXagNkkO+rUqmMmIHmqu+uBOo1thUv2Jvj5XoPTCSZhfsLDUux3HQyTR1IyRRSMpaKIm/3so6m
-	+gJVytjaob7Dg1Dg6xx0ZgDMZzPC4lwSw0W7J10+pEOv+QLCQZ5rEm2E9+V/k3VzBm8P9kugbP3
-	tKwSn44XbeLbKf2fOzv2uzisYY0wSwGxZkQc1emJlVosSDT9FL5fFQp11iN44vACpu4IyR5KlsT
-	Ka44=
-X-Google-Smtp-Source: AGHT+IGMO5NilTQ/i8XjooFiGASJrvfFcSDr2VmmYPyU7LJt3JOcj+Z5vFGa9j6IQlSeom/a+LiTrg==
-X-Received: by 2002:a5d:6da6:0:b0:39d:724f:a8ec with SMTP id ffacd0b85a97d-39efbace5efmr1565326f8f.44.1744971048079;
-        Fri, 18 Apr 2025 03:10:48 -0700 (PDT)
+        bh=Brm5STyxzbguEtMeEkkW8xOR3kBb6To3TGxKet6+640=;
+        b=Pl7z1GGMMAOSPdGcdLks082+HyZpeniwRbTsnuDP2ArlaWvwrv9xHf/hvYw58SEs27
+         SqC+U+og25YYP6wBb5zMXvh+Wh6UnRqByAgVxFSavrNflVrGGJI1BGVIDW5ff476Gfxi
+         iRic5gTV1iPjhM1rNItJ8An/ordRMDO7uVMuPi/RWnedH2qPNROare/FFqPidauMLx12
+         6cjDJTEVMFld3bpAV/m8UF1MbcDxoDuMEfrIv7zQFVGV1mSToJxqpI8Nyje6MjKsD/1i
+         92Vmnf5naSi9m77KhkFmsl17ltluAUwYSICJyMp/DncLHXj0/iKfBhB1XXKhMscviLd7
+         UPDA==
+X-Forwarded-Encrypted: i=1; AJvYcCULnpmHX+yPJ5ZwwxoMrxN10INSPknC+v+Wh/GwUYOXf7NtLr+oQl6huldLYmyHjphyrhMCqLQekQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQ8w8Ut6J9n5Dnef5v9iAkYtFeQJjJ+o+sQMs5Q823BrTvdDWf
+	cXGKORuiuIxRZALHHstZ1BTaOhzCu16awbhjG8QqQzMWKky19Np+vaJPdqRc91Y=
+X-Gm-Gg: ASbGnctfcrgxJfsSVGV1BaP9+Z3Yjd4uDwCMvi4i6jmNSqoiuIbYPFd4mXThKLzBoos
+	7d1O3oLT6vlQeSosjWeHVouIin/v+YG3a6Q5PCEbBbS4p2ghbOj8JtmPIIdt/LKJ5OEmnT2hVGh
+	X0eB1ZphP3X+m+E2C9s140LdXTr1Mftm2AnY8kJLg5+G6vEwAnZcBCtM/WHwkPa5DvHNLCdErIB
+	SGnFgaxRZloUsEAYRDs2J4rhUgfIB20yELvRZK3t5/CpWAOy4ZgdbEAJm2ywXIQlNM4LZodholE
+	H0tn/BcGpIykjbM6p+pZHa/A20Cmz7C08McVbcC7AlOHRsSJDaEPXcjTJhv6N6mshyz931MbRUw
+	Yhrs=
+X-Google-Smtp-Source: AGHT+IEcKk9KGrLL6sDXqR3gMjy5WEdmXo67OfFx7M6ZB2w1ef+PTXxi1HWDOSvixA62VlDaDy3SRw==
+X-Received: by 2002:a05:600c:4e8f:b0:43d:47e:3205 with SMTP id 5b1f17b1804b1-4406ab99521mr16674895e9.11.1744971303184;
+        Fri, 18 Apr 2025 03:15:03 -0700 (PDT)
 Received: from mai.linaro.org (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4406d5d69bbsm16142205e9.34.2025.04.18.03.10.46
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4403605892fsm59513175e9.2.2025.04.18.03.15.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Apr 2025 03:10:47 -0700 (PDT)
-Date: Fri, 18 Apr 2025 12:10:45 +0200
+        Fri, 18 Apr 2025 03:15:02 -0700 (PDT)
+Date: Fri, 18 Apr 2025 12:15:00 +0200
 From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Petr Mladek <pmladek@suse.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Alex Shi <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>,
-	Binbin Zhou <zhoubinbin@loongson.cn>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Liu Ying <victor.liu@nxp.com>, linux-clk@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] vsprintf: remove redundant %pCn format specifier
-Message-ID: <aAIlJaZlBxympZDx@mai.linaro.org>
-References: <20250311-vsprintf-pcn-v2-0-0af40fc7dee4@bootlin.com>
+To: Enrique Isidoro Vazquez Ramos <kike.correo99.f@gmail.com>
+Cc: glaroque@baylibre.com, rafael@kernel.org, rui.zhang@intel.com,
+	lukasz.luba@arm.com, linux-pm@vger.kernel.org,
+	linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thermal: amlogic: Rename Uptat to uptat to follow kernel
+ coding style
+Message-ID: <aAImJGYXFDx_q8D_@mai.linaro.org>
+References: <Z-MEZNMLUmj75uxN@debian.debian>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -108,28 +90,18 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250311-vsprintf-pcn-v2-0-0af40fc7dee4@bootlin.com>
+In-Reply-To: <Z-MEZNMLUmj75uxN@debian.debian>
 
-On Tue, Mar 11, 2025 at 10:21:21AM +0100, Luca Ceresoli wrote:
-> There are two printk format specifiers for clocks: %pC and %pCn, and they
-> print exactly the same string. Geert confirmed the intended reason for
-> having two was that %pC would act as a default, like some (but not all)
-> formats do. However there seem to be no advantage in having two instead of
-> one, especially now that there is no other %pC specifier since commit
-> 666902e42fd8 ("lib/vsprintf: Remove atomic-unsafe support for %pCr").
+On Tue, Mar 25, 2025 at 01:30:44PM -0600, Enrique Isidoro Vazquez Ramos wrote:
+> The variable Uptat uses CamelCase, which violates the kernel's coding
+> style that mandates snake_case for variable names. This is a purely
+> cosmetic change with no functional impact.
 > 
-> Definitely having two without properly documenting they do the same creates
-> misunderstandings [0].
+> Compilation tested with:
+> - checkpatch.pl --strict passed (no new warnings/errors).
 > 
-> Since %pCn is used in a single place, replace it with %pC and remove %pCn
-> to simplify such format specifiers implementation and avoid
-> misunderstandings.
-> 
-> [0] https://lore.kernel.org/dri-devel/f8df2b5e-b005-4ada-8108-159b2b94a72e@nxp.com/
-> 
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> Signed-off-by: Enrique Isidoro Vazquez Ramos <kike.correo99.f@gmail.com>
 > ---
 
 Applied, thanks
-
 
