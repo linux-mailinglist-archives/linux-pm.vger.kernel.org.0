@@ -1,150 +1,141 @@
-Return-Path: <linux-pm+bounces-25677-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25678-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D21EAA92ED0
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 02:30:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 845CEA92ED4
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 02:33:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5AD6C7B4FBE
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 00:29:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B2F719E617D
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 00:33:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ACB12A1D7;
-	Fri, 18 Apr 2025 00:30:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A36242A1BB;
+	Fri, 18 Apr 2025 00:33:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LCb1bS8t"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="afaS14Z9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A93492033A
-	for <linux-pm@vger.kernel.org>; Fri, 18 Apr 2025 00:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CA870809;
+	Fri, 18 Apr 2025 00:33:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744936237; cv=none; b=NUhvauEcKi6O6SdGBJwyjtGVJsljL5+iduixaScNum0/k8HmLX9e0WZFCUzCE5YhYHb680ibCFFniDcnBQBlb2STNmAWKPB5LvNFYL9LmCt2ZtzS9yID2iEODFZwRtE6htmpZHCFfIZI9QPJKRJxu/NoJ2oQUkrt+KGaCCShdcc=
+	t=1744936384; cv=none; b=Z05CWiCK3VcHbjNX1VPDXBkj7A+riT9twDxXDEqzqz0hEwgFx69jogumqjNPr5rq/JQRXftzzZOY3+mdmOpXLIwNAs6UjDJzJuuGgzgGOa1DCG0iwtF1l9sKeVHaqVW9bumF2RQsqRcgxZdNCjBF21HTTpJudIPJ+eg7a1E3FCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744936237; c=relaxed/simple;
-	bh=teAQtIIgrsyG9gqv2XUIXLjFkPTTKS4DNvTftIjPFE4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IQlKd2u8Pi/8czHnHomP9IRTa/3Dw84JeLbvQQXwbCfctJ0hAkKmIh3vHLsIrvCQlcC0eqaSLf9kii6rzClf05Z0exfBFKLCKqda9NU/dEX2bmf7DbkuAZHUXDrEZ6NoGYdN7w5rYZ7Q0MlcZ8mZlpNKFcK+enChHBXs8IbjW7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LCb1bS8t; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-549b159c84cso1738432e87.3
-        for <linux-pm@vger.kernel.org>; Thu, 17 Apr 2025 17:30:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1744936234; x=1745541034; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zRStZ+2egg7DY4RvB22DIQ8mwU20T0KsGY9/et/qm98=;
-        b=LCb1bS8tgBiRvKAEryWHT4+J1Df2wI7B6AA2cCUbV8AZYWoZuF7yA8r2Yzt3igdn1O
-         TGTdxWMoW1Dh17UjqNKT1AP0oizSDYfaJrKd1/eV7nbCiqRsp+kav98wEPSn0hlUmaI1
-         tMAwUUzpj7uYtLluqyiSc9ZZSW7gDp4+bZCHifbibEnMFipYWtwyCH9PtnNZRydCfXes
-         MhDqVozYNssC02JIZupz8wQux/b7YbQVa/B92pHJvO7bL8ji96qOHiphzXs6GthaMNyf
-         xZvEkRVNot7hU4AfYl7OX00AxwSmQBe+8TIN3kKUkL5KDLVplEC1fX2UGLBriIluPqfe
-         xcyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744936234; x=1745541034;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zRStZ+2egg7DY4RvB22DIQ8mwU20T0KsGY9/et/qm98=;
-        b=AtnUj4WUHDWdYB9S0e8934t1AtrHxQfMgIpJs+94tuMz0oFiAhkCMWR0cOMhDDyn7d
-         nmmtrrkzDybNkPN8C+llP+xOd48qaNChr0ruHvpZ3d5FFQ3NBXbnwIRoKSJrgGFvu6Bt
-         a8gHJEfFUvUANJsCLTsiz+dLtpXZ2fkIPD5e0dUA4s4Z19Ax6Cj/7SHLBrsEtI/rd/FX
-         j4RU9oQ+8zVxOp2q0i3F333t3zeMto1zVbJGuEGplqpFLwtn7w4WJFWKd67KNfH6Z4CY
-         DDr1/NwO5kLg/oMakem/rnLrsQKOJSGnoECm7iAGYC6YWqT6KsSA+3vxMK7zRIBXNpri
-         kIXA==
-X-Forwarded-Encrypted: i=1; AJvYcCUuBU9FurkhTqd00FCR0rLS1imuQ+qYPcjCK+WH5aR1FEm8iMoFjXyCQ4i9diZ0hJf07VpSczqA/w==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywv8BnQmTiUlI2uTXAuM+31hU8CdSU03o5aexZgCJj21lVEooMS
-	6melrNl/Fo5cbLSrXLhKmxHaD9jk3bXknfEMTanvt1yR1MpXtl9huUwm0Qjm7XcHwnBcd9E50Oz
-	hfuf08XuwrS8JXTdSPggpPO2IZiAhhXVhNGKH
-X-Gm-Gg: ASbGncu96xDqDd0d+2RbrSUfmsnOgPnQb4xw1a+bQaigx0kvbcR9hJ0ockQ1NtjzD6X
-	MpReiUXSrWuB/XuZwlh55l6BThwow73eXd+xXDaVkzeGCN0qXAcyXnSiNgvgLUAAocOkVQ45Ll8
-	PGwNFg4syLCERbkgk4Bf/XYcRwyQlUdwzD38vHnIyZ46TRAHY=
-X-Google-Smtp-Source: AGHT+IG3XD/xd1L4getjSXyzKhJ/tUmw+zRdL3AduxLLVD1S7dldUsdPHIZT/6KW0n4GYVlVfvABqRfIZjoj9xcApZs=
-X-Received: by 2002:a05:6512:4013:b0:54b:117c:1356 with SMTP id
- 2adb3069b0e04-54d6e66896emr211762e87.56.1744936233589; Thu, 17 Apr 2025
- 17:30:33 -0700 (PDT)
+	s=arc-20240116; t=1744936384; c=relaxed/simple;
+	bh=X56rnsjlDCuwL+1MMz+5gWk6fCKSQBrk7LTX893DDIM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I4mvWoHAkbWDMeeY+VxFrf4XTMf9C3RwzQxiVvas0LGxw/3+ud2A0zPKvH5Q0srjbOPcK6EyvF0XiFuaXlACTGK3ysW6MTpdIjh3SQgnOENo4JVNsbSC0mSB2/XBgx+ivXgime91en9FYu5zL9Gx/FxlJaN7a66JW9OUml7upAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=afaS14Z9; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53HClU2j005239;
+	Fri, 18 Apr 2025 00:32:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=WoKQ1Gf4RTzaW58T3r2Dxthd
+	VjtUH2sR3JuHdtrWZE4=; b=afaS14Z9614nTbLSMnZNvuUcCAZHUbmbgg2oRvJO
+	cS5kg/QrWu4VIEMPhmRlUcWd4kj7sDVHerwgPBBikdgnFKCsHuBbYwBLBLck/GCV
+	apNyPGuT4kpY/o1mgAFSmvAypWHiCZqlmd3aaIuzbDG+sC1gqE2FsUvlj29DmPhG
+	ebmtWRLlef73D5jmYiePSx+6RdQQOBHyGA7j4ibN38e/a9ywSArRrywWipkS4Fz7
+	dz+lj/7jqUV6YNWWz0e6WAiRPxEBkZVfluurofYNariB1eDzHwAzD9JUQnrEhYYd
+	j90AkhwFA1VohHKb0byKtX00RkSZqkcjdPZKz8OkV4sBLA==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45yf6a0jyb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 18 Apr 2025 00:32:58 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53I0WvKh024971
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 18 Apr 2025 00:32:57 GMT
+Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Thu, 17 Apr 2025 17:32:57 -0700
+Date: Thu, 17 Apr 2025 17:32:55 -0700
+From: Mike Tipton <quic_mdtipton@quicinc.com>
+To: "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>
+CC: Georgi Djakov <djakov@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_okukatla@quicinc.com>
+Subject: Re: [PATCH] interconnect: Replace mutex with rt_mutex
+Message-ID: <aAGdt7GftthwJ1+6@hu-mdtipton-lv.qualcomm.com>
+References: <20220906191423.30109-1-quic_mdtipton@quicinc.com>
+ <3c8965c0-3bc0-252e-381d-bd057fd02af5@kernel.org>
+ <20220907145916.GA2368@hu-mdtipton-lv.qualcomm.com>
+ <bda36907-d7eb-4969-909b-697eebe14941@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250417142513.312939-1-ulf.hansson@linaro.org> <20250417142513.312939-11-ulf.hansson@linaro.org>
-In-Reply-To: <20250417142513.312939-11-ulf.hansson@linaro.org>
-From: Saravana Kannan <saravanak@google.com>
-Date: Thu, 17 Apr 2025 17:29:56 -0700
-X-Gm-Features: ATxdqUGpJJVZF3u7FnJNC0M4_7BmLxu5IpIq6-Gcvk5MBvzfHTZtM4vMnuDU8VE
-Message-ID: <CAGETcx8jWtGAb9CyFyBmuXjNx6XPGHQLmyr6+6S2+vyMnA6j7A@mail.gmail.com>
-Subject: Re: [PATCH 10/11] pmdomain: core: Default to use of_genpd_sync_state()
- for genpd providers
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Michael Grzeschik <m.grzeschik@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
-	Abel Vesa <abel.vesa@linaro.org>, Devarsh Thakkar <devarsht@lewv0571a.ent.ti.com>, 
-	Peng Fan <peng.fan@oss.nxp.com>, Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
-	Johan Hovold <johan@kernel.org>, Maulik Shah <maulik.shah@oss.qualcomm.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <bda36907-d7eb-4969-909b-697eebe14941@quicinc.com>
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: QBeyfsDkBDkMLU_criEAjohgrjVJMtDZ
+X-Authority-Analysis: v=2.4 cv=JNc7s9Kb c=1 sm=1 tr=0 ts=68019dba cx=c_pps a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=3H110R4YSZwA:10 a=kj9zAlcOel0A:10 a=XR8D0OoHHMoA:10 a=PhClAm8El1gnTNPeiugA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-ORIG-GUID: QBeyfsDkBDkMLU_criEAjohgrjVJMtDZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-17_07,2025-04-17_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ suspectscore=0 mlxlogscore=758 lowpriorityscore=0 bulkscore=0
+ impostorscore=0 clxscore=1015 phishscore=0 adultscore=0 priorityscore=1501
+ spamscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2504180002
 
-On Thu, Apr 17, 2025 at 7:25=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.org=
-> wrote:
->
-> Unless the typical platform driver that act as genpd provider, has its ow=
-n
-> ->sync_state() callback implemented let's default to use
-> of_genpd_sync_state().
->
-> More precisely, while adding a genpd OF provider let's assign the
-> ->sync_state() callback, in case the fwnode has a device and its driver/b=
-us
-> doesn't have the ->sync_state() set already. In this way the typical
-> platform driver doesn't need to assign ->sync_state(), unless it has some
-> additional things to manage beyond genpds.
->
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
->  drivers/pmdomain/core.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-> index 9c5a77bf59d2..695d7d9e5582 100644
-> --- a/drivers/pmdomain/core.c
-> +++ b/drivers/pmdomain/core.c
-> @@ -2671,6 +2671,8 @@ int of_genpd_add_provider_simple(struct device_node=
- *np,
->
->         if (!dev)
->                 genpd->sync_state =3D GENPD_SYNC_STATE_SIMPLE;
-> +       else if (!dev_has_sync_state(dev))
-> +               dev_set_drv_sync_state(dev, of_genpd_sync_state);
+On Thu, Apr 17, 2025 at 07:13:52PM +0800, Aiqun(Maria) Yu wrote:
+> On 9/7/2022 10:59 PM, Mike Tipton wrote:
+> > On Wed, Sep 07, 2022 at 10:35:26AM +0300, Georgi Djakov wrote:
+> >> Hi Mike,
+> >>
+> >> Thanks for the patch!
+> >>
+> >> On 6.09.22 22:14, Mike Tipton wrote:
+> >>> Replace mutex with rt_mutex to prevent priority inversion between
+> >>> clients, which can cause unacceptable delays in some cases.
+> >>
+> >> It would be nice if you have any numbers to share in the commit text.
+> > 
+> > I can try to dig up some numbers, but mileage will vary tremendously of
+> > course. Improvement is really only seen in certain high-concurrency
+> > scenarios.
+> 
+> We need to revisit this thread because the issue has been reported again
+> recently.
+> Here is the data I can provide regarding the performance issue. Please
+> check if it is sufficient for the commit message to understand the change.
+> The CFS normal tasks holding the mutex lock were runnable for
+> approximately 40ms in a busy load scenario, causing the RT task to wait
+> for the mutex for about 40ms, which resulted in the RT task not being
+> 'real-time' enough and causing janks. Changing the mutex to an RT mutex
+> helped the caller of the interface, such as icc_set_bw, to ensure that
+> RT tasks can deliver RT priority to the current RT mutex owner quickly,
+> thereby improving performance in this scenario.
 
-Do you need the dev_has_sync_state() check? dev_set_drv_sync_state()
-already check for everything under dev and drv. The only think it
-doesn't check is "bus", but if the bus has a sync_state() it should
-call the drv->sync_state() anyway.
+I'll post an updated and rebased version of this patch soon. In addition
+to the display use cases, it was recently reported for certain other GPU
+use cases as well.
 
--Saravana
+> 
+> > 
+> > I'm not sure what an alternative, generic solution would be. We have
+> > many clients requesting many different paths. Some are more
+> > latency-sensitive and higher priority than others. If these use cases
+> > overlap, then we're subject to these sorts of priority inversion issues.
+> > Bumping the priority of all clients to match the highest priority one
+> > isn't really possible.
+> 
+> Based on my understanding, rt_mutex is a good API to solve this type of
+> issue.
 
->         device_set_node(&genpd->dev, fwnode);
->
-> @@ -2740,6 +2742,8 @@ int of_genpd_add_provider_onecell(struct device_nod=
-e *np,
->
->         if (!dev)
->                 sync_state =3D true;
-> +       else if (!dev_has_sync_state(dev))
-> +               dev_set_drv_sync_state(dev, of_genpd_sync_state);
->
->         for (i =3D 0; i < data->num_domains; i++) {
->                 genpd =3D data->domains[i];
-> --
-> 2.43.0
->
+I agree and still don't see any generic solution aside from this.
 
