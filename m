@@ -1,157 +1,219 @@
-Return-Path: <linux-pm+bounces-25702-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25703-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9AEDA935F7
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 12:24:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FDA9A93634
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 12:54:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AD5B87B304D
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 10:23:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C56768A08CC
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Apr 2025 10:54:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3E822222A4;
-	Fri, 18 Apr 2025 10:24:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 813A62741D0;
+	Fri, 18 Apr 2025 10:54:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b="G/1b13db"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nyHS+5cN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA5E270EB0
-	for <linux-pm@vger.kernel.org>; Fri, 18 Apr 2025 10:24:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4138E155C82
+	for <linux-pm@vger.kernel.org>; Fri, 18 Apr 2025 10:54:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744971849; cv=none; b=SeItTCCV8uvqWxY9w7Dv7MKqn+ZCKkW4n4/emKTzEEj3QaOrXGIl9D7p2oLemLI/UB9P6FcXlarjaobIBWF6Y+YmgIH9VcibgXZXCVwHxSsuRfyEpu91zCHu2qWACjJEgTL+mP90LsyOcaIvb4rhMzhilxCFTYlTrf08sS9Jl7g=
+	t=1744973670; cv=none; b=QKH803t9+WZoLD3l16rkGbvW4RLoKFpsLMgpbAOZ+Q6SHZXy9Jq1Guci2HV6VJkSWal62OvqtTAAPaJ2bencsWBRz1686r9KK8jXyTe6tJwHuRJblD0w8Vcrxj0fu+aBYyF8vfPmJprXW65OBk4XC4p2QbGCU66oQQjwqBaMc70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744971849; c=relaxed/simple;
-	bh=atJhdaYKS6mysof7bXhlzakrTennjV1rb/oDep2wowk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Egmf3p259nXBlWHjHifYjjpTYR2IxIpK9yJqbJ8YfnqBOueu3lIyEdEDyxaJIFeYoHX1jetZO89QqpWRcvezqbRyWgGkobYLvChvjyddcaFXBdduPvB9CIrUzvyU2B2BIhpfTU+edfknV4agu8pOAzaeS4hzZP0B1y8c9/aIenQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com; spf=pass smtp.mailfrom=cloud.com; dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b=G/1b13db; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloud.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-391342fc0b5so1418656f8f.3
-        for <linux-pm@vger.kernel.org>; Fri, 18 Apr 2025 03:24:07 -0700 (PDT)
+	s=arc-20240116; t=1744973670; c=relaxed/simple;
+	bh=1/8UG517LA2DgnY4VMkVPhPvNHydcaS9/NaQ2b/Q90M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BN0WvsoRzcgkDqW3ULVr8iqLP+otASAOAYCpvJBZicAgL4F2cnNU/yCWQ6JGeOKWqMd9PKI3KYR3zQhiypIFKnfEo+zUsjTFr+uHHqlZhcOO2ADWNn+YkRDSSyMfTvW8yjv4j7mQH0uH05eVfVAZrkcJ6zG2HAyayBS+awl7sZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nyHS+5cN; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-39141ffa9fcso2134445f8f.0
+        for <linux-pm@vger.kernel.org>; Fri, 18 Apr 2025 03:54:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=citrix.com; s=google; t=1744971846; x=1745576646; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=YJmTDwCr1kPva4b5vrqnHN2+KW5Z+MMvffJ+VbT6Gqg=;
-        b=G/1b13dbFPQ3pVu2wAmR7BitESN2ySJU05KmD8gl/wGhLMAhtHgi4KGdyv6zJx0JmW
-         67mZezflUT28zIgfZByxXwD5AfJF4w9A9maQIUKAa2Ml1kgozLHqicjpC2r+E51lEbUi
-         sJLgYciLUqydjlo/Q1A6HT5vbaLt0vYNeBhSE=
+        d=linaro.org; s=google; t=1744973665; x=1745578465; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=au9euEFgTYdZixK5I9CPSxaI0WV2CLlMT4SQ96By6cs=;
+        b=nyHS+5cNr6eWds5AqONKF1uROf4lcdCEM54KUMdsTKX4uahJ5hQvMDixs2JMIXHm/X
+         P4h4f+H7yKEAw5sdtOc/FIZnI37lZxIBKlvny11mhsE8BoJIhzl9c+miTrHj6ORGFjWy
+         LsNCmmE5E8SG9MsZ38qsmlzxsO6ichgjj98sCE8HeS+ui6KGut4sPi982HyysnHZLClz
+         EfcelFSQ/5gx+yqRNGlbt9GQCE5nkfEeXxHnf3HoRsMqmlg2tjD7hi13vMmBRAxBJW9J
+         SaFXOmMVxMot7/svdsieVlbOai3jIQ3VdYPfQuvGy/k6hJxE7R0Yd3GK4TTnnh9o9a9b
+         cxIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744971846; x=1745576646;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YJmTDwCr1kPva4b5vrqnHN2+KW5Z+MMvffJ+VbT6Gqg=;
-        b=IwYPXwX2eOtJr6cvIXCbRYg08muQzTCpyuO5kdEF7rfa+ztsZkNfEeopEbLSQZh5Bx
-         6jLwe4SF8k1dbVluaoSRMBOH9VJxMIRLDiSD2p62j55YV65cAPX0ouwaqjupPDt2ItIn
-         xp/ZsTDUgczpVX34PqJEcKIjHrsKXNmrHaRL95dycDdubkSgurslD4/Og17QUufxHR/p
-         i3pEajQ0NUEVU3gxbVyb5GMtcuxy/RXyZhK+sWKWq/SwY/qqvi2cEz497DSa1nDcQlXV
-         W6cFTw23y5MCRP/SPkpKuc8v4r1m2qPL+Z3kdn74qiM0dKlq82//d1hnxaC6aHHNoyHc
-         TglQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWBcsywRl4Ztiz1XVYF28PDjXK8SFfrNubMO2kKyipjad1whyZRn3Hgp1lSNytNxviItmXNQh/wHQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyusjGaoB6duCmezEAiyAdVoeLHezgnpRROtPKPW6JSaxKr8mPs
-	hLc/Nh67SxOzdR8Jshj1LiuMzkv8KT6P/BUbcG8D7JMpsE5o4B4Og+XvEiEzyBo=
-X-Gm-Gg: ASbGncsA2RTREWq1d3mbTtGaIRXZjtBjfhxXayqgeMrF3z5avcv/M7AnriFBS/mtE5g
-	3T6G3hGoYtNvdcuobDT1VYAoKphV7F2eL0TxzLDkIs8EYRvKySrEWHEmjBKB6Jq5UB59zwLug3g
-	4GtJV6dEwYMrEKh2rHKxJUQTvbaRXBEGNlaC7gOEt2FLNHsS2s2H6gBF1uSONdIv/ZQEGpwSUSP
-	jmUXZZjg40DfBniPVtZ8c1e45HMlqsd+EPxWPZ32lIBav2gdEb4VZXSS28nxBE5zMtIUYKUGfwV
-	E8RBrh5vagFlKxXgXTN2U30V+d/BwbbOtSM3cG9rEJpI0Z7/qAeAt08Z6HQBDJk0Qi81pML+qQI
-	4f8PChA==
-X-Google-Smtp-Source: AGHT+IHVvlOW/PQKztqdeuYLzZIIyWPEnxfP7TS8Tghjk3gRsyw5XUF1KlSks6byhbOqrb7JpJRwGA==
-X-Received: by 2002:a05:6000:40de:b0:39e:e438:8e32 with SMTP id ffacd0b85a97d-39efbb09208mr1538497f8f.55.1744971845933;
-        Fri, 18 Apr 2025 03:24:05 -0700 (PDT)
-Received: from [192.168.1.183] (host-92-26-98-202.as13285.net. [92.26.98.202])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39efa420683sm2349158f8f.20.2025.04.18.03.24.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Apr 2025 03:24:05 -0700 (PDT)
-Message-ID: <50bf962c-2c9e-46a2-bbac-cba9cf229e79@citrix.com>
-Date: Fri, 18 Apr 2025 11:24:04 +0100
+        d=1e100.net; s=20230601; t=1744973665; x=1745578465;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=au9euEFgTYdZixK5I9CPSxaI0WV2CLlMT4SQ96By6cs=;
+        b=KvXykrqQnZHH3U052H6Kx/l6M9j2QSI0usPgC1buJaTbxjJyjbNP2GB8Xd/GIgHE/J
+         IyvGxpINL2jPddCXd8XRNxtvTexPtMzlxnqdJlisMq++7djlJlrk8inhn/G43P7nzcgC
+         S5yBcJZoGvvgLCwV/yDCDHrulGn69GorxXYiOTqPqOt1gZdGtI/EDGmsmxgiZ8ecLhbm
+         BobdrjbNhnZDRcm6Uy9ZFTIsNQ/crqo4Lkw9kxtW02rCn8NgasHlzWO7CWP+6ErnuZt2
+         VnrVBly5gjshLees0UN3fqU+0hUh6kP6vc1kkMPJ8y8jdjCkZq0Zr3Gxjed54iNBcfaX
+         47+w==
+X-Forwarded-Encrypted: i=1; AJvYcCXFJzcIqUp2sKgM6ZpT5kNTZBxu/GWpHn830/P4+TDptQnW5u5VwE/78w9vlYlH/M67UzZs1i75YQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmSOHQnfFWwq/+LEQSE0DdwREVTw7labXh8ml0KcTUbI8NXvRd
+	2r3u0h04CK+bdG1craZz/JFEITmv9JSFRxuoTIvAdu5g08V+o8LIPzfmYyyS430=
+X-Gm-Gg: ASbGncvBXhPpB2YD4w3FqwdrJUMvJXGvLiRiOKokIG3Ls69ngO7zj0+oqeZ9XYJBvBY
+	dpMtIWCk3wRNcA9NLtyqoJe+VpsoneZE/u0ll0j0GRSaLqWG7jOcuTPcydY/3tWdTtJCN/VBNjU
+	qjMWXxPlC7yoPevB3fPsli/pPgC28v6bZW6GwW7GkCBdtXd9yBMrSm7VSEcFJpKmeHVxQSZfhAk
+	k78a2a4LqtrEKzwbUEuLDVmp7rvO9lPeB1tqZo+oeacNlM3zifqMMIEbGCq1ys9XR+VnlmBG6zm
+	Ffa6/L25TA1aJkBYowTYDxkcxDNvTFR9uBauBaMaeu5q7h0orVL3A0kzYpq7n6IpmB4iK/WVKfg
+	rpmXpvQWGPp32kA==
+X-Google-Smtp-Source: AGHT+IGFn7+MSrW5VzenZnnJ9w528Q6bQtEiGXih7aQhRS/wsl6XbxhTNW3ERnJTPiWNnQMdxNNYxQ==
+X-Received: by 2002:a5d:598b:0:b0:39c:cc7:3c97 with SMTP id ffacd0b85a97d-39efbaf133dmr1825540f8f.50.1744973665370;
+        Fri, 18 Apr 2025 03:54:25 -0700 (PDT)
+Received: from mai.linaro.org (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4406d5acca9sm17735885e9.12.2025.04.18.03.54.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Apr 2025 03:54:24 -0700 (PDT)
+Date: Fri, 18 Apr 2025 12:54:22 +0200
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+To: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+Cc: amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
+	rui.zhang@intel.com, lukasz.luba@arm.com,
+	david.collins@oss.qualcomm.com, srinivas.kandagatla@linaro.org,
+	stefan.schmidt@linaro.org, quic_tsoni@quicinc.com,
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dmitry.baryshkov@linaro.org
+Subject: Re: [PATCH v3 1/5 RESEND] thermal: qcom-spmi-temp-alarm: enable
+ stage 2 shutdown when required
+Message-ID: <aAIvXnAmlPKbcV45@mai.linaro.org>
+References: <20250320202408.3940777-1-anjelique.melendez@oss.qualcomm.com>
+ <20250320202408.3940777-2-anjelique.melendez@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH -tip v2 1/2] x86/boot: Remove semicolon from "rep"
- prefixes
-To: Uros Bizjak <ubizjak@gmail.com>, x86@kernel.org,
- linux-video@atrey.karlin.mff.cuni.cz, xen-devel@lists.xenproject.org,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Martin Mares <mj@ucw.cz>
-References: <20250418071437.4144391-1-ubizjak@gmail.com>
-Content-Language: en-GB
-From: Andrew Cooper <andrew.cooper3@citrix.com>
-Autocrypt: addr=andrew.cooper3@citrix.com; keydata=
- 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
- 6+ahAA==
-In-Reply-To: <20250418071437.4144391-1-ubizjak@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250320202408.3940777-2-anjelique.melendez@oss.qualcomm.com>
 
-On 18/04/2025 8:13 am, Uros Bizjak wrote:
-> diff --git a/arch/x86/boot/video.c b/arch/x86/boot/video.c
-> index f2e96905b3fe..0641c8c46aee 100644
-> --- a/arch/x86/boot/video.c
-> +++ b/arch/x86/boot/video.c
-> @@ -292,7 +292,7 @@ static void restore_screen(void)
->  			     "shrw %%cx ; "
->  			     "jnc 1f ; "
->  			     "stosw \n\t"
-> -			     "1: rep;stosl ; "
-> +			     "1: rep stosl ; "
->  			     "popw %%es"
+On Thu, Mar 20, 2025 at 01:24:04PM -0700, Anjelique Melendez wrote:
+> From: David Collins <david.collins@oss.qualcomm.com>
+> 
+> Certain TEMP_ALARM GEN2 PMIC peripherals need over-temperature
+> stage 2 automatic PMIC partial shutdown to be enabled in order to
+> avoid repeated faults in the event of reaching over-temperature
+> stage 3.  Modify the stage 2 shutdown control logic to ensure that
+> stage 2 shutdown is enabled on all affected PMICs.  Read the
+> digital major and minor revision registers to identify these
+> PMICs.
+> 
+> Signed-off-by: David Collins <david.collins@oss.qualcomm.com>
+> Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+> ---
+>  drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 32 +++++++++++++++++++--
+>  1 file changed, 30 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> index c2d59cbfaea9..b2077ff9fe73 100644
+> --- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> +++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> @@ -1,6 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * Copyright (c) 2011-2015, 2017, 2020, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2024, Qualcomm Innovation Center, Inc. All rights reserved.
+>   */
+>  
+>  #include <linux/bitops.h>
+> @@ -16,6 +17,7 @@
+>  
+>  #include "../thermal_hwmon.h"
+>  
+> +#define QPNP_TM_REG_DIG_MINOR		0x00
+>  #define QPNP_TM_REG_DIG_MAJOR		0x01
+>  #define QPNP_TM_REG_TYPE		0x04
+>  #define QPNP_TM_REG_SUBTYPE		0x05
+> @@ -71,6 +73,7 @@ struct qpnp_tm_chip {
+>  	struct device			*dev;
+>  	struct thermal_zone_device	*tz_dev;
+>  	unsigned int			subtype;
+> +	unsigned int			dig_revision;
+>  	long				temp;
+>  	unsigned int			thresh;
+>  	unsigned int			stage;
+> @@ -78,6 +81,7 @@ struct qpnp_tm_chip {
+>  	/* protects .thresh, .stage and chip registers */
+>  	struct mutex			lock;
+>  	bool				initialized;
+> +	bool				require_s2_shutdown;
+>  
+>  	struct iio_channel		*adc;
+>  	const long			(*temp_map)[THRESH_COUNT][STAGE_COUNT];
+> @@ -255,7 +259,7 @@ static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
+>  
+>  skip:
+>  	reg |= chip->thresh;
+> -	if (disable_s2_shutdown)
+> +	if (disable_s2_shutdown && !chip->require_s2_shutdown)
+>  		reg |= SHUTDOWN_CTRL1_OVERRIDE_S2;
+>  
+>  	return qpnp_tm_write(chip, QPNP_TM_REG_SHUTDOWN_CTRL1, reg);
+> @@ -350,7 +354,7 @@ static int qpnp_tm_probe(struct platform_device *pdev)
+>  {
+>  	struct qpnp_tm_chip *chip;
+>  	struct device_node *node;
+> -	u8 type, subtype, dig_major;
+> +	u8 type, subtype, dig_major, dig_minor;
+>  	u32 res;
+>  	int ret, irq;
+>  
+> @@ -403,6 +407,30 @@ static int qpnp_tm_probe(struct platform_device *pdev)
+>  		return dev_err_probe(&pdev->dev, ret,
+>  				     "could not read dig_major\n");
+>  
+> +	ret = qpnp_tm_read(chip, QPNP_TM_REG_DIG_MINOR, &dig_minor);
+> +	if (ret < 0) {
+> +		dev_err(&pdev->dev, "could not read dig_minor\n");
+> +		return ret;
+> +	}
+> +
+> +	chip->dig_revision = (dig_major << 8) | dig_minor;
 
-Doesn't this one still need a separator between STOSL and POPW ?
+I would move this inside the block below.
 
-~Andrew
+> +	if (chip->subtype == QPNP_TM_SUBTYPE_GEN2) {
+> +		/*
+> +		 * Check if stage 2 automatic partial shutdown must remain
+> +		 * enabled to avoid potential repeated faults upon reaching
+> +		 * over-temperature stage 3.
+> +		 */
+> +		switch (chip->dig_revision) {
+> +		case 0x0001:
+> +		case 0x0002:
+> +		case 0x0100:
+> +		case 0x0101:
+> +			chip->require_s2_shutdown = true;
+> +			break;
+> +		}
+> +	}
+
+And move this block after the test below
+
+> +
+>  	if (type != QPNP_TM_TYPE || (subtype != QPNP_TM_SUBTYPE_GEN1
+>  				     && subtype != QPNP_TM_SUBTYPE_GEN2)) {
+>  		dev_err(&pdev->dev, "invalid type 0x%02x or subtype 0x%02x\n",
+> -- 
+> 2.34.1
+> 
+
+-- 
+
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
