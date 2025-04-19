@@ -1,112 +1,165 @@
-Return-Path: <linux-pm+bounces-25739-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25740-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04306A94121
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Apr 2025 04:50:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CEC8A941FD
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Apr 2025 08:50:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 11108461B6C
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Apr 2025 02:50:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4051C7B029F
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Apr 2025 06:49:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D88E814AD2D;
-	Sat, 19 Apr 2025 02:49:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nKXh/Ejx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3BD319259E;
+	Sat, 19 Apr 2025 06:50:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12C2513C914;
-	Sat, 19 Apr 2025 02:49:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ABA313BC3F;
+	Sat, 19 Apr 2025 06:50:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745030992; cv=none; b=qujSauoReaLvhRyE6+CYghw9U4inhpBJgXV6hgFkhH0S1a5xeKarx/Dn1BfKryZEhaOjHLbTtRJNcWpzRyBm08r27EVjDlNcIF3ksB+iJXoX59w01iefjkfVfbDVxKTiJusH1HGvNVioLYZAoIl6VOWPdpa/hMC9bN+6iGU2g24=
+	t=1745045415; cv=none; b=YMRc7J0LzLv7qhx5kJ1Zkg68mkgQDT2YOd/Xtu2WfO8lqHODQfFUDUhafLGy/c78uLTKQS18S+PM34rvoZKUkRLB1UvFVY7e/JHuxZjo1b6HV28Dc1J7ej34dFZ5uBqHeN2pC+1H4X/eQbG4ne1GmVsjv656AdN1qVvhDfFXrdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745030992; c=relaxed/simple;
-	bh=DWr1M3/1WFJWYL+2i47OY+FQX2kpR5SCGJNTqk1oR3k=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=vD9ai4XQ9eizj53c42+piXGYS9IBZ0e4z4HVw8St1Qvr/1weBo1uK5Vg3SZmroSkQOGUsIYGnrUfWda8cr6XRrD1peAjMwFFo2M6pZIoAjnMCsqOo0q2sraMKxuZaZafo4jUCgpbdqXPd+eHDg4MulHcvU9GLpknO8Ipbh1QMVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nKXh/Ejx; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745030991; x=1776566991;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=DWr1M3/1WFJWYL+2i47OY+FQX2kpR5SCGJNTqk1oR3k=;
-  b=nKXh/EjxEcpS43dcdZVNJLZRUh+dRS4PJzuw5/mUaC4IqOTh3dPgWF8i
-   H7RfBSzM2KLCBKbSxPV/cViFqwb1ypQ/ugv+FZPbq0S7PKnrVQGgJCLmH
-   NToemBaf5WGTuV/Bwzkynh+dHznel2cseeMrlgk4xAJfUIEdzzduCzhCP
-   Ln6mBDnvMAdFbie9WHuNkLdkoHhjYZRimSD/98qIcCZ7RGZR9j8GMwXKS
-   GZ4KDSBYDqWbGglXd7sejGLeF7v5OPWlqn1Ufc4wWM9P4kWyGb1s+MWaX
-   reJ7VeGBG2c3E0O481mZyt7bWqN2nUL838PBDnygn8BwnY8A/Rp/wEK/T
-   Q==;
-X-CSE-ConnectionGUID: bV3Y6dpxR764AwOta1tQEQ==
-X-CSE-MsgGUID: KTonbXOFQ0CzLMOsltbfJw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11407"; a="50490439"
-X-IronPort-AV: E=Sophos;i="6.15,223,1739865600"; 
-   d="scan'208";a="50490439"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2025 19:49:48 -0700
-X-CSE-ConnectionGUID: +P+se+pHR2mdjGxD+q3xQw==
-X-CSE-MsgGUID: ZDB6M73jSYS2ozYNqlusuw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,223,1739865600"; 
-   d="scan'208";a="162308324"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmviesa001.fm.intel.com with ESMTP; 18 Apr 2025 19:49:48 -0700
-From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To: Sudeep Holla <sudeep.holla@arm.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Len Brown <len.brown@intel.com>
-Cc: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Ricardo Neri <ricardo.neri@intel.com>,
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: [PATCH 2/2] cpufreq: intel_pstate: Populate the cpu_capacity sysfs entries
-Date: Fri, 18 Apr 2025 19:55:04 -0700
-Message-Id: <20250419025504.9760-3-ricardo.neri-calderon@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20250419025504.9760-1-ricardo.neri-calderon@linux.intel.com>
-References: <20250419025504.9760-1-ricardo.neri-calderon@linux.intel.com>
+	s=arc-20240116; t=1745045415; c=relaxed/simple;
+	bh=dYEjEpLVejSQy9WYT1mG6oXtegcyLyJSKbMY9fG2hwg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Aak6ffXEo0zwBRbS6qS+QNUFn+WuwsuSxHI5Qv3s//5+575HAu4aMmUNMjgPnr5WlC1LDgcXQvxKQX1FDm/qdMsWxvbLIxNdoQQW+qATfvnnmS/0suuxH2l/BzwEi11yESCTMxLlWrEr84lvYPIhUaTXbGsmjY8DtDgE2KAfDGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4ZfhxR4s9YzHrDM;
+	Sat, 19 Apr 2025 14:46:35 +0800 (CST)
+Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
+	by mail.maildlp.com (Postfix) with ESMTPS id 707E9140259;
+	Sat, 19 Apr 2025 14:50:03 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
+ (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Sat, 19 Apr
+ 2025 14:50:02 +0800
+Message-ID: <616a1273-9f5a-41a5-9761-d50eba37148a@huawei.com>
+Date: Sat, 19 Apr 2025 14:50:01 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 0/8] Add functions for getting and setting registers
+ related to autonomous selection in cppc_acpi
+To: <rafael@kernel.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
+	<viresh.kumar@linaro.org>, <mario.limonciello@amd.com>,
+	<gautham.shenoy@amd.com>, <ray.huang@amd.com>, <perry.yuan@amd.com>,
+	<pierre.gondois@arm.com>, <sumitg@nvidia.com>
+CC: <acpica-devel@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
+	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>,
+	<cenxinghai@h-partners.com>, <hepeng68@huawei.com>
+References: <20250411093855.982491-1-zhenglifeng1@huawei.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <20250411093855.982491-1-zhenglifeng1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemh100008.china.huawei.com (7.202.181.93)
 
-Intel hybrid processors have CPUs of different capacity. Populate the
-interface /sys/devices/system/cpu/cpuN/cpu_capacity.
+Gentle ping.
 
-This interface uses the per-CPU variable `cpu_scale`. On x86 this variable
-has no other use besides feeding the sysfs entries. Initialize it when
-setting CPU capacity for the scheduler and scale-invariant code. Feed it
-with arch_scale_cpu_capacity() as it gives capacity normalized to the
-interval [0, SCHED_CAPACITY_SCALE].
+On 2025/4/11 17:38, Lifeng Zheng wrote:
 
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
----
- drivers/cpufreq/intel_pstate.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 4aad79d26c64..c32312843f19 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -952,6 +952,8 @@ static void hybrid_set_cpu_capacity(struct cpudata *cpu)
- 			      cpu->capacity_perf,
- 			      cpu->pstate.max_pstate_physical);
- 
-+	topology_set_cpu_scale(cpu->cpu, arch_scale_cpu_capacity(cpu->cpu));
-+
- 	pr_debug("CPU%d: perf = %u, max. perf = %u, base perf = %d\n", cpu->cpu,
- 		 cpu->capacity_perf, hybrid_max_perf_cpu->capacity_perf,
- 		 cpu->pstate.max_pstate_physical);
--- 
-2.43.0
+> The patch series is organized in two parts:
+> 
+>  - patch 1-6 refactor out the general CPPC register get and set functions
+>    in cppc_acpi.c
+> 
+>  - patches 7-8 add functions for getting and setting values of auto_sel,
+>    energy_perf and auto_act_window in cppc_acpi.c
+> 
+> Changelog:
+> 
+> v7:
+> 
+>  - Fix some typos
+>  - Add check of null pointer in cppc_get_reg_val(),
+>    cppc_get_auto_act_window() and cppc_get_auto_sel()
+>  - Replace ternary operator with logical expression in cppc_get_reg_val()
+> 
+> v6:
+> 
+>  - Remove the last patch, will resent it in the future after reaching an
+>    agreement with Sumit
+>  - split patch 3 into 2 smaller patches
+>  - Remove the printing of reg_idx in cppc_get_reg_val() and
+>    cppc_set_reg_val()
+>  - Change the logic for determing whether a register is supported in
+>    cppc_get_reg_val() and cppc_set_reg_val()
+> 
+> v5:
+> 
+>  - add more explanation to the commit logs and comments
+>  - change REG_OPTIONAL from bin to hex
+>  - split patch 2 into 3 smaller patches
+>  - remove CPPC_REG_VAL_READ() and CPPC_REG_VAL_WRITE() macros
+>  - move the modification part in patch 5 into a separate patch
+>  - rename the sysfs file from "energy_perf" to
+>    energy_performance_preference_val
+> 
+> v4:
+> 
+>  - add REG_OPTIONAL and IS_OPTIONAL_CPC_REG to judge if a cpc register is
+>    an optional one
+>  - check whether the register is optional before CPC_SUPPORTED check in
+>    cppc_get_reg_val() and cppc_set_reg_val()
+>  - check the register's type in cppc_set_reg_val()
+>  - add macros to generally implement registers getting and setting
+>    functions
+>  - move some logic codes from cppc_cpufreq.c to cppc_acpi.c
+>  - replace cppc_get_auto_sel_caps() by cppc_get_auto_sel()
+> 
+> v3:
+> 
+>  - change cppc_get_reg() and cppc_set_reg() name to cppc_get_reg_val() and
+>    cppc_set_reg_val()
+>  - extract cppc_get_reg_val_in_pcc() and cppc_set_reg_val_in_pcc()
+>  - return the result of cpc_read() in cppc_get_reg_val()
+>  - add pr_debug() in cppc_get_reg_val_in_pcc() when pcc_ss_id < 0
+>  - rename 'cpunum' to 'cpu' in cppc_get_reg_val()
+>  - move some macros from drivers/cpufreq/cppc_cpufreq.c to
+>    include/acpi/cppc_acpi.h with a CPPC_XXX prefix
+> 
+> v2:
+> 
+>  - fix some incorrect placeholder
+>  - change kstrtoul to kstrtobool in store_auto_select
+> 
+> ---
+> Discussions of previous versions:
+> v1: https://lore.kernel.org/all/20241114084816.1128647-1-zhenglifeng1@huawei.com/
+> v2: https://lore.kernel.org/all/20241122062051.3658577-1-zhenglifeng1@huawei.com/
+> v3: https://lore.kernel.org/all/20241216091603.1247644-1-zhenglifeng1@huawei.com/
+> v4: https://lore.kernel.org/all/20250113122104.3870673-1-zhenglifeng1@huawei.com/
+> v5: https://lore.kernel.org/all/20250206131428.3261578-1-zhenglifeng1@huawei.com/
+> v6: https://lore.kernel.org/all/20250409065703.1461867-1-zhenglifeng1@huawei.com/
+> 
+> Lifeng Zheng (8):
+>   ACPI: CPPC: Add IS_OPTIONAL_CPC_REG macro to judge if a cpc_reg is
+>     optional
+>   ACPI: CPPC: Optimize cppc_get_perf()
+>   ACPI: CPPC: Rename cppc_get_perf() to cppc_get_reg_val()
+>   ACPI: CPPC: Extract cppc_get_reg_val_in_pcc()
+>   ACPI: CPPC: Add cppc_set_reg_val()
+>   ACPI: CPPC: Refactor register value get and set ABIs
+>   ACPI: CPPC: Modify cppc_get_auto_sel_caps() to cppc_get_auto_sel()
+>   ACPI: CPPC: Add three functions related to autonomous selection
+> 
+>  drivers/acpi/cppc_acpi.c     | 313 +++++++++++++++++++++--------------
+>  drivers/cpufreq/amd-pstate.c |   3 +-
+>  include/acpi/cppc_acpi.h     |  30 +++-
+>  3 files changed, 219 insertions(+), 127 deletions(-)
+> 
 
 
