@@ -1,33 +1,33 @@
-Return-Path: <linux-pm+bounces-25738-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25739-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EFE3A94120
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Apr 2025 04:50:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04306A94121
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Apr 2025 04:50:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 83D9E8E079F
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Apr 2025 02:49:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 11108461B6C
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Apr 2025 02:50:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78CC014901B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D88E814AD2D;
 	Sat, 19 Apr 2025 02:49:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U4ORdicG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nKXh/Ejx"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C6B3A1CD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12C2513C914;
 	Sat, 19 Apr 2025 02:49:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745030992; cv=none; b=KBNgY+GxhHPYpBaOsVxhbDglHT+vvDSIUdmubqvdcClIByoaZ7DWlsp+Rr9sOnQyw6AvTaEfgr+vdojUJPP0RNk4DKxug9E7WWCQM2lcKGBhhUC9xDDEmi3VjcmXdPli065juJRTQKezhhUNIVaDgGl21/SPkp2FQZkdHfSEOkY=
+	t=1745030992; cv=none; b=qujSauoReaLvhRyE6+CYghw9U4inhpBJgXV6hgFkhH0S1a5xeKarx/Dn1BfKryZEhaOjHLbTtRJNcWpzRyBm08r27EVjDlNcIF3ksB+iJXoX59w01iefjkfVfbDVxKTiJusH1HGvNVioLYZAoIl6VOWPdpa/hMC9bN+6iGU2g24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1745030992; c=relaxed/simple;
-	bh=eR+kUnG/TXslK7OUwK7QkTBJMv1nyJJmD22Aym8QCXQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=m94mhveGvNUpB/LLU8bg2+DUYfdctPyA0TnRfqKRjkbCnOAFSIpoWlhV4pYGhCQ58SExd1Rf7oVvBFMdHAHTFT64nYfKUHe1Z3asyTkWzxnUUPgQwRfg/G7igemXe7Cesssg69wd3XPwJpWrjKClQmGCGA/c1jTWdZNg1P6SMPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U4ORdicG; arc=none smtp.client-ip=192.198.163.12
+	bh=DWr1M3/1WFJWYL+2i47OY+FQX2kpR5SCGJNTqk1oR3k=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=vD9ai4XQ9eizj53c42+piXGYS9IBZ0e4z4HVw8St1Qvr/1weBo1uK5Vg3SZmroSkQOGUsIYGnrUfWda8cr6XRrD1peAjMwFFo2M6pZIoAjnMCsqOo0q2sraMKxuZaZafo4jUCgpbdqXPd+eHDg4MulHcvU9GLpknO8Ipbh1QMVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nKXh/Ejx; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -35,28 +35,28 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1745030991; x=1776566991;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=eR+kUnG/TXslK7OUwK7QkTBJMv1nyJJmD22Aym8QCXQ=;
-  b=U4ORdicGQmQEhvzCszT2ebHFuL/Covkcr1OAQcHwu9+dKx0/CLPBPvjp
-   m38DIZNlFT8W9cHA3OF6Y6RDpG5Ewh8KZSR65dZ6lB5i5XhR58AHk7FvM
-   hx/z6Rn/n+VtC/FT4PeqPUxJTYHlMidm6lWOtA7Z8XCVxDupjAYxNrPtG
-   RXUPOrr/Sjh+OrIOQVJPEyfiUXXr/skIevX4+6Wiexf1puK3ucP8oh4fe
-   NcTHQwsklQ3KJH4hkI0Brn18s1hq6BHEOc22qDGhUs5bnRzzEgOs+Gcea
-   WQiEtB2xpb1BRs7s/pC/yhixxX+isWVn9vvdxLTvNiHfyOjbq7Nnam+1U
+  bh=DWr1M3/1WFJWYL+2i47OY+FQX2kpR5SCGJNTqk1oR3k=;
+  b=nKXh/EjxEcpS43dcdZVNJLZRUh+dRS4PJzuw5/mUaC4IqOTh3dPgWF8i
+   H7RfBSzM2KLCBKbSxPV/cViFqwb1ypQ/ugv+FZPbq0S7PKnrVQGgJCLmH
+   NToemBaf5WGTuV/Bwzkynh+dHznel2cseeMrlgk4xAJfUIEdzzduCzhCP
+   Ln6mBDnvMAdFbie9WHuNkLdkoHhjYZRimSD/98qIcCZ7RGZR9j8GMwXKS
+   GZ4KDSBYDqWbGglXd7sejGLeF7v5OPWlqn1Ufc4wWM9P4kWyGb1s+MWaX
+   reJ7VeGBG2c3E0O481mZyt7bWqN2nUL838PBDnygn8BwnY8A/Rp/wEK/T
    Q==;
-X-CSE-ConnectionGUID: p6GA26juTXesbhzdVJaYgg==
-X-CSE-MsgGUID: UxjZGBD9Rqe5dGi8WDQ1PA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11407"; a="50490436"
+X-CSE-ConnectionGUID: bV3Y6dpxR764AwOta1tQEQ==
+X-CSE-MsgGUID: KTonbXOFQ0CzLMOsltbfJw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11407"; a="50490439"
 X-IronPort-AV: E=Sophos;i="6.15,223,1739865600"; 
-   d="scan'208";a="50490436"
+   d="scan'208";a="50490439"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
   by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2025 19:49:48 -0700
-X-CSE-ConnectionGUID: HiYDBK0GRxWC12ioReK5ew==
-X-CSE-MsgGUID: kmiB1qAUS6Cjbpk9QtpOVQ==
+X-CSE-ConnectionGUID: +P+se+pHR2mdjGxD+q3xQw==
+X-CSE-MsgGUID: ZDB6M73jSYS2ozYNqlusuw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,223,1739865600"; 
-   d="scan'208";a="162308321"
+   d="scan'208";a="162308324"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmviesa001.fm.intel.com with ESMTP; 18 Apr 2025 19:49:47 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 18 Apr 2025 19:49:48 -0700
 From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 To: Sudeep Holla <sudeep.holla@arm.com>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
@@ -67,9 +67,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	Ricardo Neri <ricardo.neri@intel.com>,
 	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: [PATCH 1/2] arch_topology: Relocate cpu_scale to topology.[h|c]
-Date: Fri, 18 Apr 2025 19:55:03 -0700
-Message-Id: <20250419025504.9760-2-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH 2/2] cpufreq: intel_pstate: Populate the cpu_capacity sysfs entries
+Date: Fri, 18 Apr 2025 19:55:04 -0700
+Message-Id: <20250419025504.9760-3-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20250419025504.9760-1-ricardo.neri-calderon@linux.intel.com>
 References: <20250419025504.9760-1-ricardo.neri-calderon@linux.intel.com>
@@ -79,197 +79,33 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 
-arch_topology.c provides functionality to parse and scale CPU capacity. It
-also provides a corresponding sysfs interface. Some architectures parse
-and scale CPU capacity differently as per their own needs. On Intel
-processors, for instance, it is responsibility of the Intel P-state driver.
+Intel hybrid processors have CPUs of different capacity. Populate the
+interface /sys/devices/system/cpu/cpuN/cpu_capacity.
 
-Relocate the implementation of that interface to a common location in
-topology.c. Architectures can use the interface and populate it using their
-own mechanisms.
-
-An alternative approach would be to compile arch_topology.c even if not
-needed only to get this interface. This approach would create duplicated
-and conflicting functionality and data structures.
+This interface uses the per-CPU variable `cpu_scale`. On x86 this variable
+has no other use besides feeding the sysfs entries. Initialize it when
+setting CPU capacity for the scheduler and scale-invariant code. Feed it
+with arch_scale_cpu_capacity() as it gives capacity normalized to the
+interval [0, SCHED_CAPACITY_SCALE].
 
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
- drivers/base/arch_topology.c  | 52 -----------------------------------
- drivers/base/topology.c       | 52 +++++++++++++++++++++++++++++++++++
- include/linux/arch_topology.h |  8 ------
- include/linux/topology.h      |  9 ++++++
- 4 files changed, 61 insertions(+), 60 deletions(-)
+ drivers/cpufreq/intel_pstate.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index af0029d30dbe..1037169abb45 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -154,14 +154,6 @@ void topology_set_freq_scale(const struct cpumask *cpus, unsigned long cur_freq,
- 		per_cpu(arch_freq_scale, i) = scale;
- }
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index 4aad79d26c64..c32312843f19 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -952,6 +952,8 @@ static void hybrid_set_cpu_capacity(struct cpudata *cpu)
+ 			      cpu->capacity_perf,
+ 			      cpu->pstate.max_pstate_physical);
  
--DEFINE_PER_CPU(unsigned long, cpu_scale) = SCHED_CAPACITY_SCALE;
--EXPORT_PER_CPU_SYMBOL_GPL(cpu_scale);
--
--void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity)
--{
--	per_cpu(cpu_scale, cpu) = capacity;
--}
--
- DEFINE_PER_CPU(unsigned long, hw_pressure);
- 
- /**
-@@ -207,53 +199,9 @@ void topology_update_hw_pressure(const struct cpumask *cpus,
- }
- EXPORT_SYMBOL_GPL(topology_update_hw_pressure);
- 
--static ssize_t cpu_capacity_show(struct device *dev,
--				 struct device_attribute *attr,
--				 char *buf)
--{
--	struct cpu *cpu = container_of(dev, struct cpu, dev);
--
--	return sysfs_emit(buf, "%lu\n", topology_get_cpu_scale(cpu->dev.id));
--}
--
- static void update_topology_flags_workfn(struct work_struct *work);
- static DECLARE_WORK(update_topology_flags_work, update_topology_flags_workfn);
- 
--static DEVICE_ATTR_RO(cpu_capacity);
--
--static int cpu_capacity_sysctl_add(unsigned int cpu)
--{
--	struct device *cpu_dev = get_cpu_device(cpu);
--
--	if (!cpu_dev)
--		return -ENOENT;
--
--	device_create_file(cpu_dev, &dev_attr_cpu_capacity);
--
--	return 0;
--}
--
--static int cpu_capacity_sysctl_remove(unsigned int cpu)
--{
--	struct device *cpu_dev = get_cpu_device(cpu);
--
--	if (!cpu_dev)
--		return -ENOENT;
--
--	device_remove_file(cpu_dev, &dev_attr_cpu_capacity);
--
--	return 0;
--}
--
--static int register_cpu_capacity_sysctl(void)
--{
--	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "topology/cpu-capacity",
--			  cpu_capacity_sysctl_add, cpu_capacity_sysctl_remove);
--
--	return 0;
--}
--subsys_initcall(register_cpu_capacity_sysctl);
--
- static int update_topology;
- 
- int topology_update_cpu_topology(void)
-diff --git a/drivers/base/topology.c b/drivers/base/topology.c
-index b962da263eee..8b42df05feff 100644
---- a/drivers/base/topology.c
-+++ b/drivers/base/topology.c
-@@ -208,3 +208,55 @@ static int __init topology_sysfs_init(void)
- }
- 
- device_initcall(topology_sysfs_init);
++	topology_set_cpu_scale(cpu->cpu, arch_scale_cpu_capacity(cpu->cpu));
 +
-+DEFINE_PER_CPU(unsigned long, cpu_scale) = SCHED_CAPACITY_SCALE;
-+EXPORT_PER_CPU_SYMBOL_GPL(cpu_scale);
-+
-+void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity)
-+{
-+	per_cpu(cpu_scale, cpu) = capacity;
-+}
-+
-+static ssize_t cpu_capacity_show(struct device *dev,
-+				 struct device_attribute *attr,
-+				 char *buf)
-+{
-+	struct cpu *cpu = container_of(dev, struct cpu, dev);
-+
-+	return sysfs_emit(buf, "%lu\n", topology_get_cpu_scale(cpu->dev.id));
-+}
-+
-+static DEVICE_ATTR_RO(cpu_capacity);
-+
-+static int cpu_capacity_sysctl_add(unsigned int cpu)
-+{
-+	struct device *cpu_dev = get_cpu_device(cpu);
-+
-+	if (!cpu_dev)
-+		return -ENOENT;
-+
-+	device_create_file(cpu_dev, &dev_attr_cpu_capacity);
-+
-+	return 0;
-+}
-+
-+static int cpu_capacity_sysctl_remove(unsigned int cpu)
-+{
-+	struct device *cpu_dev = get_cpu_device(cpu);
-+
-+	if (!cpu_dev)
-+		return -ENOENT;
-+
-+	device_remove_file(cpu_dev, &dev_attr_cpu_capacity);
-+
-+	return 0;
-+}
-+
-+static int register_cpu_capacity_sysctl(void)
-+{
-+	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "topology/cpu-capacity",
-+			  cpu_capacity_sysctl_add, cpu_capacity_sysctl_remove);
-+
-+	return 0;
-+}
-+subsys_initcall(register_cpu_capacity_sysctl);
-diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-index 2222e8b03ff4..d72d6e5aa200 100644
---- a/include/linux/arch_topology.h
-+++ b/include/linux/arch_topology.h
-@@ -14,14 +14,6 @@ int topology_update_cpu_topology(void);
- struct device_node;
- bool topology_parse_cpu_capacity(struct device_node *cpu_node, int cpu);
- 
--DECLARE_PER_CPU(unsigned long, cpu_scale);
--
--static inline unsigned long topology_get_cpu_scale(int cpu)
--{
--	return per_cpu(cpu_scale, cpu);
--}
--
--void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity);
- 
- DECLARE_PER_CPU(unsigned long, capacity_freq_ref);
- 
-diff --git a/include/linux/topology.h b/include/linux/topology.h
-index 24e715f0f6d2..cd6b4bdc9cfd 100644
---- a/include/linux/topology.h
-+++ b/include/linux/topology.h
-@@ -332,4 +332,13 @@ sched_numa_hop_mask(unsigned int node, unsigned int hops)
- 	     !IS_ERR_OR_NULL(mask);					       \
- 	     __hops++)
- 
-+DECLARE_PER_CPU(unsigned long, cpu_scale);
-+
-+static inline unsigned long topology_get_cpu_scale(int cpu)
-+{
-+	return per_cpu(cpu_scale, cpu);
-+}
-+
-+void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity);
-+
- #endif /* _LINUX_TOPOLOGY_H */
+ 	pr_debug("CPU%d: perf = %u, max. perf = %u, base perf = %d\n", cpu->cpu,
+ 		 cpu->capacity_perf, hybrid_max_perf_cpu->capacity_perf,
+ 		 cpu->pstate.max_pstate_physical);
 -- 
 2.43.0
 
