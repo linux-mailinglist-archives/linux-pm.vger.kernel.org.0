@@ -1,96 +1,82 @@
-Return-Path: <linux-pm+bounces-25754-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25755-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38819A94536
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Apr 2025 21:10:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44061A9462A
+	for <lists+linux-pm@lfdr.de>; Sun, 20 Apr 2025 03:10:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4650F7AA350
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Apr 2025 19:09:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C9571898E83
+	for <lists+linux-pm@lfdr.de>; Sun, 20 Apr 2025 01:10:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FD9C1E1C22;
-	Sat, 19 Apr 2025 19:10:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b="bdbKUuBD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF9BB12E5D;
+	Sun, 20 Apr 2025 01:10:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA4AD1DD866
-	for <linux-pm@vger.kernel.org>; Sat, 19 Apr 2025 19:10:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C10D763B9;
+	Sun, 20 Apr 2025 01:10:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745089803; cv=none; b=cLG2exZ9upwEXJjDRPMYHTUmPKiEk8thQqoDDdX44cjpMtzJ8DAhibYovhAmTznr+eIoE1oSoCWgy984H5d0+6mVOMa/B6QIRlxFLmL8YyEkKIzZbvUze0Uv4TUQ5mpi2yLl4DlFQ3PqQnuTl6/XKvw5j6fY7OsAb7K3SRgk5z4=
+	t=1745111425; cv=none; b=THw5ewrDSBOVj7Mz0oYEGYzDDokUX2Bhi3bO43EI1lhe5jJ+xpwZeSjKjaoPV9HBQQCJjiy3OeaTc66BvMTb6l60B2941X7EoERwiEtF5ZPj8zguL5+RRdX26xCeLHTXXozYdcdTbbz9ghsQ+mXg2X6IdR9Cp3iwhktCPL7P3nU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745089803; c=relaxed/simple;
-	bh=CvUo7ZEVGQkRI/Tl+PNYklXAI1DxJ6GpVsoi7Pb4tIc=;
+	s=arc-20240116; t=1745111425; c=relaxed/simple;
+	bh=ja50x9YSZBiEJzoBeBeZJTWwVHlolA3KqEdNCZcDRmI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pPlFbVWfZfGnEHrUp94zbarKQu3VFuefHG7ZPrCUiZV1a4FSyxYp0Uw5RYeM0zqrokRJKbt70ZF+VMU8Ua7bwkUw2iL8zO4YzDovCnoynwCeP//RkLIM51god7dXwj0wtQfCSzQuLR0MhWzSNC7f2ZOIu5SJZfQvH4xzu4NoTlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com; spf=none smtp.mailfrom=pdp7.com; dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b=bdbKUuBD; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pdp7.com
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-7394945d37eso2292965b3a.3
-        for <linux-pm@vger.kernel.org>; Sat, 19 Apr 2025 12:10:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pdp7-com.20230601.gappssmtp.com; s=20230601; t=1745089800; x=1745694600; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Deyh+kw6etAKus8FLe7WroHoH3C1oetm0Mie3XbPmnk=;
-        b=bdbKUuBDsSWg/MznC+jTbYpxXmuy4oUSs4iSTrcbgRCG4NsinWYtNdCxr+ngxIhcdX
-         bYJ8y+x29GSBmxwXKWKIXqQ9V3M9yADuXD1BtBwUv97zqPdkECZltu8j5yigl08iAulx
-         e2FcnqL50TZlZKOzRGws5bU5+bCj0E4ICwm+LbbqqS/K86K4JqXAWMk9HGGfrillQVTd
-         2iqxQUoeQTlUBUyPToNFBUwSqe/ELiYJjgbjw1yqTjGaJfSv+A+UjhhFqkOUwkyS8ByO
-         GvBQL0uHfkiTiNwlT5a8HrAMbQCIQtbekxyRA7P698XNAvC5VEaCG2WStVKTDrcy0Psi
-         9nRg==
+	 Content-Type:Content-Disposition:In-Reply-To; b=cpNQEtrCpqfo9oKrZRlmq1ZfMwfUMIPptl42HEo3hPEh96V9ff2YdMopYd88in8EPliROC1oXpp/h6/Bv01OT2IUN3byLXG9PK5MfRd36Xm6vNRd0XsQiKHKZ/CHCJsXAh1sghVJVSF8owALWoaybNSQsZDhFnh4d5ehYgaGKw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kerneltoast.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kerneltoast.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-223fb0f619dso33633355ad.1;
+        Sat, 19 Apr 2025 18:10:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745089800; x=1745694600;
+        d=1e100.net; s=20230601; t=1745111423; x=1745716223;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Deyh+kw6etAKus8FLe7WroHoH3C1oetm0Mie3XbPmnk=;
-        b=pX3DE1JktWDwsQsH/Hwrp39NJhS7v5DiUY6U5jlbxqKav0kM6oWvqUMvHJO5D7Lf1B
-         VMws2X3bh4mYv+DEThVJMYDQuemWScjRyEy/bnfvw3dhaXU5RpppbW+cXiLxGFN9/T/M
-         o6xPYWJpHeeoXmpeDzUHlEHdqpM4ow3VqEBXqywqbsWKv9+lE6kFDITXGIntRZtVKyyQ
-         +vp0Mjx7WfvrBlSOLzrZbOFOP/rEBzLKt/TKLiIrBG3uRAMu49GECIswhsSyzV4OiB8S
-         rL22PAny3uWK1kV7hjInGZvoq+mbr+hKWNur/musoO72JUnv7CQE7eniTSqy0VWNyB8A
-         bY4g==
-X-Forwarded-Encrypted: i=1; AJvYcCWfznmdLND78KtrazCDhs2lDNbIEqphZ+jLkwZI5Kl591Lrw6wIOcBV5jIJ4UQGJbjk2IMlHZKvBw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxA7v9AT3F0R37fJ4ujj82xVeBlLI5uUHnIK784B8imUQO9fCdF
-	E/pIfUNCofDwsqMWfUrUkVEpdGjt7271+ZAIr1VFDWsuhEXVwn0zUL1Se7raAck=
-X-Gm-Gg: ASbGncuq1UviuJ5rbSH/MWIFJXfVxrlNm7s2l/UH8fb7I1NkCNjAmC3AfbM/Fi7li/M
-	6wZkj61pbJvoEOi4MnUFaevWmUdEqtkz2RMaUZ+LKpNf+M8A/fcyP2m0/u3+sd6UiX3Gu5Dwy65
-	D4qJX4BwewSjdm8DK7GZnxuWcWDhoFMBK+JUPAcG1fKSZXfDFG30jDRMRJfWj7dZ1PWm17f8pze
-	t5y5p0AVv8smkU+/yQIZGrjeim8sJZGUNhoGM9/Vloyhv3ZQaPCwWJ97nWCfIfBQ/z8zhSus9om
-	FlREXA7MDMhtGqqa66xsb6TN9Cz9MKPp4Zxon+Bu2Ion5Dk=
-X-Google-Smtp-Source: AGHT+IEulD0uH2vbpuR4f4ZA7Mcq0ByRrFg1az3eKDUNZKezFcapWJg4o30Tvo+Xd7BMD278/s2TCg==
-X-Received: by 2002:a05:6a00:9281:b0:736:9f20:a175 with SMTP id d2e1a72fcca58-73dc1442ee6mr9314401b3a.2.1745089799961;
-        Sat, 19 Apr 2025 12:09:59 -0700 (PDT)
-Received: from x1 (97-120-122-6.ptld.qwest.net. [97.120.122.6])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73dbf90d7easm3611489b3a.84.2025.04.19.12.09.59
+        bh=bmtt+iGwGo57tSqQlN6wy7yMxAZqiR8ZZe19BPCcPEg=;
+        b=l/dgHxd8m30kcJU6Ra8ayBs1ns397tHHAk+lrWyLY8A8T4dgDs+A1D3v1PWy4yuqOl
+         4/BCCBBxBGoYr6U65MOP2pFISz3cvtHjf3ZCJW+tJ+qnYcV06js5rrgmsqXdE9TdGKj9
+         NCAOavJ7ZK1mdGYA1AehsdfhvTZ6YIou0VUwZYFFJrTlicHsKDghPVbndQhaszVdPD+0
+         qpGqYdNyVwj4wtljgXg76j6mJmRABfIztmeFLYk6kXrdxE2Po6CsNMDEo6pZlhqS+H91
+         nIsOPIS+4QYe6ynPYn516GB+Uk4OySVRNcgKOvTl0T31okmBNU/AePcjKEfiBOzzS3i1
+         dO6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWs+aO+Qmx4vFk83KPM31xTuOMAC8bFmBLCHsdKsAtANWD1balBl4cin0FJ+p91HnHSarvsVOy0er6HLKA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMDpSQuM5uHLXTPyLO79nn1OugMxGOGylZQCtDpLc4Mtqr329O
+	zOXkGGogln+OTI1tII18GWO4yXc8y/Z9IaQnjrm7JFfoCzshOKldwd35BCQzv8M=
+X-Gm-Gg: ASbGncuMfEKiuMFj4BlmkZVA5P2X3J6xUYV9vkvpjRVM4GPk3bQK/I5M3Lt1uqNMmnp
+	y+Y5Rnfvp6kmr6irzS1x5CnDOWVAwm0hjvQhgbEQOwPnVVtWVSvzPC36wwVq4NKBuuLeuh3gUze
+	rYlH3pItk7HvYwRWUHUumpCep4fFELfkAwzEKj5L9dBcrycz0r0VWZ9jPBFNiD1TtBY185SZ+wF
+	r0wCySbl9iCow59QLni5afzW7zpeYC9JbK+uLH4yDnVjshxC+OCKd+Jyo8sTU+rE33+4TD6u2Fm
+	p+lEtLaD53YTe2wzGz2N7cwh9q7cjYp+MCVO4XghemewO3WGofp8YQTv39vnR+gAKuyokLcfbTT
+	5nGfAmihBtnND9LWLF+W+UGwkKO0j
+X-Google-Smtp-Source: AGHT+IELFEeT36yzUXduH5Fc3nPW03gNNzv3CpJC4KPjiXo9WDn2r/50Tid6nCAnSPzc6LaPnFU9Yg==
+X-Received: by 2002:a17:903:19e3:b0:224:1af1:87f4 with SMTP id d9443c01a7336-22c5358625amr125819405ad.22.1745111422905;
+        Sat, 19 Apr 2025 18:10:22 -0700 (PDT)
+Received: from sultan-box.localdomain (n122-107-215-46.sbr1.nsw.optusnet.com.au. [122.107.215.46])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22c50eb427csm39739665ad.113.2025.04.19.18.10.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Apr 2025 12:09:59 -0700 (PDT)
-Date: Sat, 19 Apr 2025 12:09:57 -0700
-From: Drew Fustini <drew@pdp7.com>
-To: Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, guoren@kernel.org,
-	wefu@redhat.com, jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, frank.binns@imgtec.com,
-	matt.coster@imgtec.com, maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
-	simona@ffwll.ch, ulf.hansson@linaro.org, jszhang@kernel.org,
-	p.zabel@pengutronix.de, m.szyprowski@samsung.com,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 20/21] riscv: dts: thead: Introduce reset controller
- node
-Message-ID: <aAP1BW3RmMb/Irya@x1>
-References: <20250219140239.1378758-1-m.wilczynski@samsung.com>
- <CGME20250219140316eucas1p29a76023868946f090f261bf78d5103e3@eucas1p2.samsung.com>
- <20250219140239.1378758-21-m.wilczynski@samsung.com>
+        Sat, 19 Apr 2025 18:10:22 -0700 (PDT)
+Date: Sun, 20 Apr 2025 11:10:13 +1000
+From: Sultan Alsawaf <sultan@kerneltoast.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Christian Loehle <christian.loehle@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCH v2 1/6] cpufreq/sched: Fix the usage of
+ CPUFREQ_NEED_UPDATE_LIMITS
+Message-ID: <aARJdWE8VtWZPpK7@sultan-box.localdomain>
+References: <6171293.lOV4Wx5bFT@rjwysocki.net>
+ <3010358.e9J7NaK4W3@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -99,55 +85,84 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250219140239.1378758-21-m.wilczynski@samsung.com>
+In-Reply-To: <3010358.e9J7NaK4W3@rjwysocki.net>
 
-On Wed, Feb 19, 2025 at 03:02:38PM +0100, Michal Wilczynski wrote:
-> T-HEAD TH1520 SoC requires to put the GPU out of the reset state as part
-> of the power-up sequence.
+On Tue, Apr 15, 2025 at 11:58:08AM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+> Commit 8e461a1cb43d ("cpufreq: schedutil: Fix superfluous updates caused
+> by need_freq_update") modified sugov_should_update_freq() to set the
+> need_freq_update flag only for drivers with CPUFREQ_NEED_UPDATE_LIMITS
+> set, but that flag generally needs to be set when the policy limits
+> change because the driver callback may need to be invoked for the new
+> limits to take effect.
+> 
+> However, if the return value of cpufreq_driver_resolve_freq() after
+> applying the new limits is still equal to the previously selected
+> frequency, the driver callback needs to be invoked only in the case
+> when CPUFREQ_NEED_UPDATE_LIMITS is set (which means that the driver
+> specifically wants its callback to be invoked every time the policy
+> limits change).
+> 
+> Update the code accordingly to avoid missing policy limits changes for
+> drivers without CPUFREQ_NEED_UPDATE_LIMITS.
+> 
+> Fixes: 8e461a1cb43d ("cpufreq: schedutil: Fix superfluous updates caused by need_freq_update")
+> Closes: https://lore.kernel.org/lkml/Z_Tlc6Qs-tYpxWYb@linaro.org/
+> Reported-by: Stephan Gerhold <stephan.gerhold@linaro.org>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+Thanks for fixing this.
+
+Reviewed-by: Sultan Alsawaf <sultan@kerneltoast.com>
+
 > ---
->  arch/riscv/boot/dts/thead/th1520.dtsi | 7 +++++++
->  1 file changed, 7 insertions(+)
 > 
-> diff --git a/arch/riscv/boot/dts/thead/th1520.dtsi b/arch/riscv/boot/dts/thead/th1520.dtsi
-> index 474f31576a1b..6b34aab4b455 100644
-> --- a/arch/riscv/boot/dts/thead/th1520.dtsi
-> +++ b/arch/riscv/boot/dts/thead/th1520.dtsi
-> @@ -7,6 +7,7 @@
->  #include <dt-bindings/interrupt-controller/irq.h>
->  #include <dt-bindings/clock/thead,th1520-clk-ap.h>
->  #include <dt-bindings/power/thead,th1520-power.h>
-> +#include <dt-bindings/reset/thead,th1520-reset.h>
-
-Are you okay if I omit this hunk? My thead-dt-for-next branch is based
-on 6.15-rc1 but thead,th1520-reset.h only exists in next until the merge
-window.
-
->  
->  / {
->  	compatible = "thead,th1520";
-> @@ -497,6 +498,12 @@ clk: clock-controller@ffef010000 {
->  			#clock-cells = <1>;
->  		};
->  
-> +		rst: reset-controller@ffef528000 {
-> +			compatible = "thead,th1520-reset";
-> +			reg = <0xff 0xef528000 0x0 0x4f>;
-> +			#reset-cells = <1>;
-> +		};
-> +
->  		clk_vo: clock-controller@ffef528050 {
->  			compatible = "thead,th1520-clk-vo";
->  			reg = <0xff 0xef528050 0x0 0xfb0>;
-> -- 
-> 2.34.1
+> v1 -> v2:
+>    * Always set need_freq_update when limits_changed is set.
+>    * Take CPUFREQ_NEED_UPDATE_LIMITS into account in sugov_update_next_freq().
 > 
-
-With the above caveat:
-
-Reviewed-by: Drew Fustini <drew@pdp7.com>
-
-
--Drew
+> ---
+>  kernel/sched/cpufreq_schedutil.c |   18 +++++++++++++++---
+>  1 file changed, 15 insertions(+), 3 deletions(-)
+> 
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -83,7 +83,7 @@
+>  
+>  	if (unlikely(sg_policy->limits_changed)) {
+>  		sg_policy->limits_changed = false;
+> -		sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
+> +		sg_policy->need_freq_update = true;
+>  		return true;
+>  	}
+>  
+> @@ -95,10 +95,22 @@
+>  static bool sugov_update_next_freq(struct sugov_policy *sg_policy, u64 time,
+>  				   unsigned int next_freq)
+>  {
+> -	if (sg_policy->need_freq_update)
+> +	if (sg_policy->need_freq_update) {
+>  		sg_policy->need_freq_update = false;
+> -	else if (sg_policy->next_freq == next_freq)
+> +		/*
+> +		 * The policy limits have changed, but if the return value of
+> +		 * cpufreq_driver_resolve_freq() after applying the new limits
+> +		 * is still equal to the previously selected frequency, the
+> +		 * driver callback need not be invoked unless the driver
+> +		 * specifically wants that to happen on every update of the
+> +		 * policy limits.
+> +		 */
+> +		if (sg_policy->next_freq == next_freq &&
+> +		    !cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS))
+> +			return false;
+> +	} else if (sg_policy->next_freq == next_freq) {
+>  		return false;
+> +	}
+>  
+>  	sg_policy->next_freq = next_freq;
+>  	sg_policy->last_freq_update_time = time;
+> 
+> 
+> 
 
