@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-25818-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25819-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E528A956EA
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 21:52:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B079A957BF
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 23:11:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D4857A7504
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 19:51:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6BB633AFF26
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 21:10:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B4F81EF377;
-	Mon, 21 Apr 2025 19:52:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A697F20FAB2;
+	Mon, 21 Apr 2025 21:11:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="L8k2pEOj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TdqEtx6r"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FC4714EC46;
-	Mon, 21 Apr 2025 19:52:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 539CA20E711;
+	Mon, 21 Apr 2025 21:11:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745265156; cv=none; b=JOi27BbcuL4/7fSs94KlofzAOqVGDUTz59R2iFmPC7xCnYR6Y8rlEPW7vpRPlB/GE/sWwfUfNERQPi5f2aLY6vAKo0/pOwM5Uh2CNDjEpecoXsF88IKo0t1H9toPtpSbg33g0F15qdiBzC5l+SpUeKUxM2Di8Sg4t5XkxK0eabU=
+	t=1745269867; cv=none; b=AGarREpEvObUKP78veipzzqutkrrACTqUimxDaBnbD6JK03OLDP/ksM6Vai3YvZl8oKSpPsnHJxGHmHWuvZQvSrz0IywEJL3duvipu//4n5CmMc2h0WqboAH+tbI2SoAQBiSg9oERBaeTKookben40MVRlQg19CeQR0aBP2EVY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745265156; c=relaxed/simple;
-	bh=CwnKBAr4cUyRwa8J2zXYMHIU8XEWi6UIPWpMk48l28s=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XAl11uC0tabVvI5Alg3UyHnDiY54aHRhKUK77d9Mxs2dv6M620lDH3Xb8yAB4yLLPZMiZnuPp4+VGb0v7pWjg1rmJnB0Ve4yG8COjXEFBN+9j10yeZJkICtZ0O6IAAVFblDd15b1RB7KuLqNgqXi02Kwl1ws/vqg3YpVVfd3Lyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=L8k2pEOj; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53LIgAah029923;
-	Mon, 21 Apr 2025 19:52:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=yOIrzqR+rXq2XrGpFo1MpR
-	tGpckguk0edcRik++A3b0=; b=L8k2pEOjkvSns7jA98WWP3/wQzJ8Lu1T6Hayrw
-	O9k7bolr1zdEm18MAS1gAiD2kns9KfteCvvLxnAEEHXvUglpTcZl7Y+oxRoal1Gc
-	37fyr5ag4+Yqz+HPmvGMWM3h49Kpb7GHAi3vt2t/UTkPmJLxpc/4AAtALxLbVQaG
-	gv7CeO55b5DfI65cmL9CTLuY569TXddt6o5gR3Eczk8RascDunAaPyJdkKS5S1jn
-	F5APOQZU1Erhnj3oqdbZBZWPIjYdfvetG44LimwbCbW44Tgb++h9wy6/otZiWaRa
-	hlwimrisNgsTFAwqtYUHatlAD0eBWcI+9i+gbEa+1TpXS2dg==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46435jd628-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 21 Apr 2025 19:52:20 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53LJqJZ9013101
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 21 Apr 2025 19:52:19 GMT
-Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Mon, 21 Apr 2025 12:52:19 -0700
-From: Mike Tipton <quic_mdtipton@quicinc.com>
-To: Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi
-	<cristian.marussi@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Viresh
- Kumar" <viresh.kumar@linaro.org>
-CC: <arm-scmi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Peng Fan
-	<peng.fan@oss.nxp.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>
-Subject: [PATCH v2] cpufreq: scmi: Skip SCMI devices that aren't used by the CPUs
-Date: Mon, 21 Apr 2025 12:52:06 -0700
-Message-ID: <20250421195206.3736128-1-quic_mdtipton@quicinc.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1745269867; c=relaxed/simple;
+	bh=A+QXCvekbww/SlLYl4ayQjYhJtQtXcwSTl7a1uUUzG0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=CBDZVRE+7eKzzscCM1srC9qaIMUUk6OP7HsH8XAm5XSHE9LUud1dZ805gzi9dI0XIWdAft0eP4MxrQxY5N0F2uJOl24X7QmdaTLjVQvA8oJQpqQ89/6nDr9h7PBvSGaD3gzNgXIL+AyBThn+ROMlXKjeYophWldQpp1ALUXvM0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TdqEtx6r; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745269866; x=1776805866;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=A+QXCvekbww/SlLYl4ayQjYhJtQtXcwSTl7a1uUUzG0=;
+  b=TdqEtx6rqDyPNZljEQSiewD3xzt4S8ORIxCY+XnhLq0zesrurW/Zc219
+   AaXK0z0Tf6Wcy+xie4ej472ifWr4LwxEqvvFDMc9gRWA7bsgObRWtI+9M
+   /CtvNRRzR1jNaD5KPdxSoyyiG/3GSnfT8fhu4aM2XQnOpFjb38U0OT+x3
+   eesCn6pbtwnsRd0f/rxQhzK/Fwr6k8/S58qXUEkTnD6XyDQ0cXkWCbAst
+   NhBUpdcB9QWS47c0eR0pROmaXrYzAHlAGv3JV9Vz9TdmFx+bSoks1j/nr
+   z3Fla2w4Ll3EIu7y6fdCCNSUaT1OZLNEzY4r/yOwi+PDNHix8Sryj5M3y
+   w==;
+X-CSE-ConnectionGUID: bt001XuNQUWwuP84VHCmJQ==
+X-CSE-MsgGUID: FH7LhST1R+WyGmtQYa609g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11410"; a="58189444"
+X-IronPort-AV: E=Sophos;i="6.15,229,1739865600"; 
+   d="scan'208";a="58189444"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2025 14:11:04 -0700
+X-CSE-ConnectionGUID: tAfMQPzDRE+5d6M7o5s2Og==
+X-CSE-MsgGUID: vYTl9OtGRrOyqOPAySOnOg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,229,1739865600"; 
+   d="scan'208";a="136912131"
+Received: from bjrankin-mobl3.amr.corp.intel.com (HELO xpardee-desk.intel.com) ([10.124.220.165])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2025 14:11:02 -0700
+From: Xi Pardee <xi.pardee@linux.intel.com>
+To: xi.pardee@linux.intel.com,
+	irenic.rajneesh@gmail.com,
+	david.e.box@linux.intel.com,
+	hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com,
+	platform-driver-x86@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH v4 0/4] Create Intel PMC SSRAM Telemetry driver
+Date: Mon, 21 Apr 2025 14:10:53 -0700
+Message-ID: <20250421211100.687250-1-xi.pardee@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,93 +77,68 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=EOYG00ZC c=1 sm=1 tr=0 ts=6806a1f4 cx=c_pps a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=3H110R4YSZwA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=z2bt77sjNeVQpZcblNcA:9
- a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: kyF5pzhsMiCIzvRccGShrh7q2I38hOoz
-X-Proofpoint-ORIG-GUID: kyF5pzhsMiCIzvRccGShrh7q2I38hOoz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-21_09,2025-04-21_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 mlxscore=0 clxscore=1015 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 phishscore=0 spamscore=0 adultscore=0 impostorscore=0
- bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2504210155
 
-Currently, all SCMI devices with performance domains attempt to register
-a cpufreq driver, even if their performance domains aren't used to
-control the CPUs. The cpufreq framework only supports registering a
-single driver, so only the first device will succeed. And if that device
-isn't used for the CPUs, then cpufreq will scale the wrong domains.
-
-To avoid this, return early from scmi_cpufreq_probe() if the probing
-SCMI device isn't referenced by the CPU device phandles.
-
-This keeps the existing assumption that all CPUs are controlled by a
-single SCMI device.
-
-Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
----
-Changes in v2:
-- Return -ENODEV instead of 0 for irrelevant devices.
-- Link to v1: https://lore.kernel.org/all/20250411212941.1275572-1-quic_mdtipton@quicinc.com/
-
- drivers/cpufreq/scmi-cpufreq.c | 28 +++++++++++++++++++++++++++-
- 1 file changed, 27 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-index 944e899eb1be..b558f210c342 100644
---- a/drivers/cpufreq/scmi-cpufreq.c
-+++ b/drivers/cpufreq/scmi-cpufreq.c
-@@ -393,6 +393,32 @@ static struct cpufreq_driver scmi_cpufreq_driver = {
- 	.set_boost	= cpufreq_boost_set_sw,
- };
+This patch series removes the SSRAM support from Intel PMC Core driver
+and creates a separate PCI driver for SSRAM device. The new Intel PMC
+SSRAM driver provides the following functionalities:
+1. Search and store the PMC information in a structure, including PWRMBASE
+address and devid for each available PMC. Then Intel PMC Core driver
+achieves the PMC information using the API provided by the new driver.
+2. Search and register Intel Platform Monitoring Techology telemetry
+regions so they would by available for read through sysfs and Intel PMT
+API. Intel PMC Core driver can achieve Low Power Mode requirement
+information from a telemetry region registered by the new driver.
  
-+static bool scmi_dev_used_by_cpus(struct device *scmi_dev)
-+{
-+	struct device_node *scmi_np = scmi_dev->of_node;
-+	struct device_node *np;
-+	struct device *cpu_dev;
-+	int cpu, idx;
-+
-+	for_each_possible_cpu(cpu) {
-+		cpu_dev = get_cpu_device(cpu);
-+		if (!cpu_dev)
-+			continue;
-+
-+		np = cpu_dev->of_node;
-+
-+		if (of_parse_phandle(np, "clocks", 0) == scmi_np)
-+			return true;
-+
-+		idx = of_property_match_string(np, "power-domain-names", "perf");
-+
-+		if (of_parse_phandle(np, "power-domains", idx) == scmi_np)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
- static int scmi_cpufreq_probe(struct scmi_device *sdev)
- {
- 	int ret;
-@@ -401,7 +427,7 @@ static int scmi_cpufreq_probe(struct scmi_device *sdev)
+The above functionalities was previously handled by Intel PMC Core
+driver. Intel PMC Core driver returns -EPROBE_DEFER when trying to read
+data from a telem region that is not available yet. This setup may
+result in an infinite loop of .probe() calls as Intel PMC Core driver
+creates child devices. Creating a separate PCI driver avoids the infinite
+loop possibility.
+
+V4->v3:
+- Remove the first six patches that are accepted.
+- Add a patch to change the return type of intel_vsec_registeri() from
+  void to int.
+- Change the return type of pmc_ssram_telemetry_get_pmc() so the probe
+  function of Intel PMC SSRAM Telemetry driver will fail if
+  intel_vsec_register() fails. The previous implementation hides the
+  failure.
+- Use __free(pci_dev_put) in core.c.
+- Move pmc_ssram_telemetry_get_pmc_info() function comment to c file
+  from h file.
+- Add a patch to improve pmc_core_get_lpm_req() suggested by comment
+  from last version.
+
+v3->v2:
+- Add memory barriers to the new driver to ensure write/read order of
+  device_probed variable.
+- Minor grammar changes: add needed white space and end of life new line.
+- Add patch to move error handling to init function.
+- Remove patch to enable SSRAM support of LNL platforms. This patch will be
+  included in a separate series.
  
- 	handle = sdev->handle;
- 
--	if (!handle)
-+	if (!handle || !scmi_dev_used_by_cpus(dev))
- 		return -ENODEV;
- 
- 	scmi_cpufreq_driver.driver_data = sdev;
+v2->v1:
+- Rearrange and restructure patches completely based on feedback from v1
+
+Xi Pardee (4):
+  platform/x86:intel/vsec: Change return type of intel_vsec_register
+  platform/x86:intel/pmc: Create Intel PMC SSRAM Telemetry driver
+  platform/x86:intel/pmc: Move error handling to init function
+  platform/x86:intel/pmc: Improve pmc_core_get_lpm_req()
+
+ drivers/platform/x86/intel/pmc/Kconfig        |   4 +
+ drivers/platform/x86/intel/pmc/Makefile       |   8 +-
+ drivers/platform/x86/intel/pmc/core.c         | 191 +++++++++++-------
+ drivers/platform/x86/intel/pmc/core.h         |   7 -
+ .../platform/x86/intel/pmc/ssram_telemetry.c  | 147 +++++++++-----
+ .../platform/x86/intel/pmc/ssram_telemetry.h  |  24 +++
+ drivers/platform/x86/intel/vsec.c             |   9 +-
+ include/linux/intel_vsec.h                    |   5 +-
+ 8 files changed, 261 insertions(+), 134 deletions(-)
+ create mode 100644 drivers/platform/x86/intel/pmc/ssram_telemetry.h
+
 -- 
-2.34.1
+2.43.0
 
 
