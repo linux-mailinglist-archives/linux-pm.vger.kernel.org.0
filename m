@@ -1,222 +1,216 @@
-Return-Path: <linux-pm+bounces-25823-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25824-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C2D6A957CC
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 23:11:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CECEA9587A
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 23:54:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 863943B55E5
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 21:11:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5860D16DC9A
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 21:54:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8786E214A77;
-	Mon, 21 Apr 2025 21:11:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E116D219312;
+	Mon, 21 Apr 2025 21:53:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WPTt+w6R"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ugb/cgBn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8688F21420B;
-	Mon, 21 Apr 2025 21:11:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA4E1D95A3;
+	Mon, 21 Apr 2025 21:53:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745269872; cv=none; b=etmb4bxVh2o22ITdHMjxUxHv+XkcyHdpDGpPkjglCsClraLWe9m0sQ6VE5C+eNfrzo+e4A6nYUVSk7F6Nr2ZOgHOqMXHSxpIBrY0J0Goj/jfAMLxOTr+f2Ul1quamLP4zBHq1GM29O4Wzah4ms56K3c+JaZ3lC3ACfErQS+sN4A=
+	t=1745272439; cv=none; b=cbFlcqChQ/0Hleh2sGa3DgTa/E7+062tCkGNqHQLEE9kepWDtGfOx2fu5ysUSS29oKSSDGy4gsTRYKLWzOT6FywsY+ww25W1tDK5N61FEjnkUpBlnX8r4dhqMcYUFpnxXC6qHae5+yS0Nwog6vuNVdaNsKtE++0YEQm3lvsZR0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745269872; c=relaxed/simple;
-	bh=dQTo2auo7YYe6bQD+dMhfbjfL+qqQOgNTyTqgNyA/K8=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=O4UpTLD27ExEUTsgZFyoNdU1JYA3ky2qOc2Hm/xdy9Vct0jTGH+JYUGplRjChz+FGjhpIEf6rPAGM59EZ48IbUN+Z64iKbloVEH4adLmbCbLVZF01b/wl4udU+h/W1Ozj2dijnltW3UbED9G/k3KzYPsFB+LO9V3sM4WUGoh+TQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WPTt+w6R; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745269871; x=1776805871;
-  h=from:to:subject:date:message-id:in-reply-to:references:
-   mime-version:content-transfer-encoding;
-  bh=dQTo2auo7YYe6bQD+dMhfbjfL+qqQOgNTyTqgNyA/K8=;
-  b=WPTt+w6RDkERifuPrKOE4LR0Dcit7LjWAgZm6QGDdR3D1m8KfzEKuQy8
-   eZPdwe15IrHtLcr7zCBY3EA8feshY9IxVyppwDvo1e0GUBJNLeW4gqnNc
-   QXKzmNpjsQPXY8LskQjoSMl462MVnxWIHRBzo8dQWpOAwgk84fvyYdDIW
-   SKwfb0ieUCtbdfehEzqIhrrfdWhe565z/8IMEoefe7QZtlW1MiZ8uQ6PT
-   NBD0nH+4FzyuYnjR/HZ7goxFf1h/9ZjcBFu3y9ZUsYrM9ov38BjBM4x8t
-   PfULMlVfdxkjwDMVyFSuKHe+fc7vHevxTzwHy5q1tZ3zbwlBUJisi8uGi
-   w==;
-X-CSE-ConnectionGUID: f44SpKKpSnOhC6nkVC8VPg==
-X-CSE-MsgGUID: U9pOP4DKQ/G+9O9Aw3K3wg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11410"; a="58189458"
-X-IronPort-AV: E=Sophos;i="6.15,229,1739865600"; 
-   d="scan'208";a="58189458"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2025 14:11:06 -0700
-X-CSE-ConnectionGUID: JcWcA1vhQp2pcmb1nrbeDw==
-X-CSE-MsgGUID: ZI4WE/ckS4aAGDRDxoniVg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,229,1739865600"; 
-   d="scan'208";a="136912174"
-Received: from bjrankin-mobl3.amr.corp.intel.com (HELO xpardee-desk.intel.com) ([10.124.220.165])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2025 14:11:04 -0700
-From: Xi Pardee <xi.pardee@linux.intel.com>
-To: xi.pardee@linux.intel.com,
-	irenic.rajneesh@gmail.com,
-	david.e.box@linux.intel.com,
-	hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com,
-	platform-driver-x86@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH v4 4/4] platform/x86:intel/pmc: Improve pmc_core_get_lpm_req()
-Date: Mon, 21 Apr 2025 14:10:57 -0700
-Message-ID: <20250421211100.687250-5-xi.pardee@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250421211100.687250-1-xi.pardee@linux.intel.com>
-References: <20250421211100.687250-1-xi.pardee@linux.intel.com>
+	s=arc-20240116; t=1745272439; c=relaxed/simple;
+	bh=Vm6Hkxbe37lldY/TsbKzLITo18iBkisy8BO+yd9b7/Y=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=fSBCkU+CnoabH3orYh9mjZAOvHMvEHNSLGDFx8Vua3AVm6hAYH2v277cQZ04n0sh1TZziSHxVINdXcsZz6eo6rrlQl0ny847Xx70xbxuGxefdffKw1fmEX+GgGV6v/Tvxh5o0v+eOwrRHANlIXK9Bb66PLLuPUUhAYBIBLMplrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ugb/cgBn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8FCFC4CEE4;
+	Mon, 21 Apr 2025 21:53:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745272439;
+	bh=Vm6Hkxbe37lldY/TsbKzLITo18iBkisy8BO+yd9b7/Y=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=Ugb/cgBn9+QWTEBsbA4mE3sdjXkL/4OThNwXfUOeiJh8hqn9WlhgAQ/jeECsp/eOD
+	 U/59hlDa72oTvZs241K/6kHa0g0q0rkHf9QgS/UcYIFHKSk8+txKl5VGiseNmlK825
+	 cB9Zj2I8h7wKsZ87RNaeUmj8pgEN2afnoZByYR1t6xfF4BPTrgxeX6YrHTH5d6EPEO
+	 55HBN47bnCd7cN61PYHrjp/00JBQUGNi+JnJF16YBXqcf4RzWri3Nh4DKAZiX4yQRH
+	 3tWYmSnUtGnHAXXD4tDwiq+41DS+K8PvDfujHBxaGk2djSwCceakvjPje54SIPF0vS
+	 E11WaaDo19yHQ==
+Date: Mon, 21 Apr 2025 16:53:57 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+ Alim Akhtar <alim.akhtar@samsung.com>, linux-pm@vger.kernel.org, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Sebastian Reichel <sre@kernel.org>, linux-kernel@vger.kernel.org, 
+ Peter Griffin <peter.griffin@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Dimitri Fedrau <dima.fedrau@gmail.com>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Will Deacon <will@kernel.org>, 
+ devicetree@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>
+To: Thomas Antoine <t.antoine@uclouvain.be>
+In-Reply-To: <20250421-b4-gs101_max77759_fg-v3-0-50cd8caf9017@uclouvain.be>
+References: <20250421-b4-gs101_max77759_fg-v3-0-50cd8caf9017@uclouvain.be>
+Message-Id: <174527239330.2996733.2164044396415620097.robh@kernel.org>
+Subject: Re: [PATCH v3 0/5] Google Pixel 6 (oriole): max77759 fuel gauge
+ enablement and driver support
 
-Minor improvements on pmc_core_get_lpm_req().
-1. Move the long comment to be above the function
-2. Use %pe to print error pointer
-3. Remove unneeded devm_kfree call
 
-These changes improves the code maintainability.
+On Mon, 21 Apr 2025 20:13:31 +0200, Thomas Antoine wrote:
+> The Google Pixel 6 has a Maxim MAX77759 which provides a fuel gauge with
+> an interface with a lot in common with the Maxim max1720x.
+> 
+> Modify the Maxim MAX1720x driver to be compatible with the Maxim MAX77759
+> and enable it for the gs101-oriole board.
+> 
+> The voltage, current, capacity, temperature and charge have all been
+> tested and show coherent results. The charge full design and capacity
+> equal the ones seen on android, the ratio between average charge and
+> average current does predict pretty accurately the time to empty under
+> a constant workload and temperature is coherent with the dynamic state
+> of the device.
+> 
+> Health is not enabled as it always reports overheating. The time to empty
+> is wrong by about a factor 2 and is thus also disabled.
+> 
+> Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
+> 
+> ---
+> Changes in v3:
+> - Update base tree to avoid conflicts
+> - Fix capacity computation for max1720x
+> - Add separate properties for the max7759 to disable non-functional ones
+> - Take TASKPERIOD into account for voltage computation of max77759
+> - Simplify vcell computation (Dimitri Fedrau)
+> - Switch has_nvmem to bool and keep it only in chip_data (Dimitri Fedrau)
+> - Drop the yes_range from the write table (Sebastian Reichel)
+> - Add test_power_supply_properties.sh to cover letter (Sebastian Reichel)
+> - Switch back some changes to binding and actually use allOf:if: to
+>   restrict constraints (Krzysztof Kozlowski)
+> - Fix style errors
+> - Link to v2: https://lore.kernel.org/r/20250102-b4-gs101_max77759_fg-v2-0-87959abeb7ff@uclouvain.be
+> 
+> Changes in v2:
+> - Add fallback for voltage measurement (André Draszik)
+> - Add regmap for the max77759 (André Draszik)
+> - Add chip identification for the max77759 (André Draszik, Peter Griffin)
+> - Move RSense value to a devicetree property shunt-resistor-micro-ohms
+>   (Dimitri Fedrau, André Draszik)
+> - Use allOf:if to narrow binding per variant (Krzysztof Kozlowski)
+> - Remove binding example (Krzysztof Kozlowski)
+> - Change defconfig order to follow savedefconfig (Krzysztof Kozlowski)
+> - Fix style errors
+> - Link to v1: https://lore.kernel.org/r/20241202-b4-gs101_max77759_fg-v1-0-98d2fa7bfe30@uclouvain.be
+> 
+> tools/testing/selftests/power_supply/test_power_supply_properties.sh:
+> ok 1 max77759-fg.exists
+> ok 2 max77759-fg.uevent.NAME
+> ok 3 max77759-fg.sysfs.type
+> ok 4 max77759-fg.uevent.TYPE
+> ok 5 max77759-fg.sysfs.usb_type # SKIP
+> ok 6 max77759-fg.sysfs.online # SKIP
+> ok 7 max77759-fg.sysfs.present
+> ok 8 max77759-fg.sysfs.status # SKIP
+> ok 9 max77759-fg.sysfs.capacity
+> ok 10 max77759-fg.sysfs.capacity_level # SKIP
+> ok 11 max77759-fg.sysfs.model_name
+> ok 12 max77759-fg.sysfs.manufacturer
+> ok 13 max77759-fg.sysfs.serial_number # SKIP
+> ok 14 max77759-fg.sysfs.technology # SKIP
+> ok 15 max77759-fg.sysfs.cycle_count # SKIP
+> ok 16 max77759-fg.sysfs.scope # SKIP
+> ok 17 max77759-fg.sysfs.input_current_limit # SKIP(Dimitri Fedrau)
+> ok 18 max77759-fg.sysfs.input_voltage_limit # SKIP
+> ok 19 max77759-fg.sysfs.voltage_now
+> ok 20 max77759-fg.sysfs.voltage_min # SKIP
+> ok 21 max77759-fg.sysfs.voltage_max # SKIP
+> ok 22 max77759-fg.sysfs.voltage_min_design # SKIP
+> ok 23 max77759-fg.sysfs.voltage_max_design # SKIP
+> ok 24 max77759-fg.sysfs.current_now
+> ok 25 max77759-fg.sysfs.current_max # SKIP
+> ok 26 max77759-fg.sysfs.charge_now # SKIP
+> ok 27 max77759-fg.sysfs.charge_full
+> ok 28 max77759-fg.sysfs.charge_full_design
+> ok 29 max77759-fg.sysfs.power_now # SKIP
+> ok 30 max77759-fg.sysfs.energy_now # SKIP
+> ok 31 max77759-fg.sysfs.energy_full # SKIP
+> ok 32 max77759-fg.sysfs.energy_full_design # SKIP
+> ok 33 max77759-fg.sysfs.energy_full_design # SKIP
+> 
+> ---
+> Thomas Antoine (5):
+>       power: supply: correct capacity computation
+>       power: supply: add support for max77759 fuel gauge
+>       dt-bindings: power: supply: add max77759-fg flavor
+>       arm64: defconfig: enable Maxim max1720x driver
+>       arm64: dts: exynos: gs101-oriole: enable Maxim max77759 fuel gauge
+> 
+>  .../bindings/power/supply/maxim,max17201.yaml      |  34 ++-
+>  .../boot/dts/exynos/google/gs101-pixel-common.dtsi |  10 +
+>  arch/arm64/configs/defconfig                       |   1 +
+>  drivers/power/supply/max1720x_battery.c            | 271 ++++++++++++++++++---
+>  4 files changed, 280 insertions(+), 36 deletions(-)
+> ---
+> base-commit: e48e99b6edf41c69c5528aa7ffb2daf3c59ee105
+> change-id: 20241202-b4-gs101_max77759_fg-402e231a4b33
+> 
+> Best regards,
+> --
+> Thomas Antoine <t.antoine@uclouvain.be>
+> 
+> 
+> 
 
-Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
----
- drivers/platform/x86/intel/pmc/core.c | 91 +++++++++++++--------------
- 1 file changed, 45 insertions(+), 46 deletions(-)
 
-diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
-index e09a97564398..6f092b00b030 100644
---- a/drivers/platform/x86/intel/pmc/core.c
-+++ b/drivers/platform/x86/intel/pmc/core.c
-@@ -1355,6 +1355,50 @@ static u32 pmc_core_find_guid(struct pmc_info *list, const struct pmc_reg_map *m
- 	return 0;
- }
- 
-+/*
-+ * This function retrieves low power mode requirement data from PMC Low
-+ * Power Mode (LPM) table.
-+ *
-+ * In telemetry space, the LPM table contains a 4 byte header followed
-+ * by 8 consecutive mode blocks (one for each LPM mode). Each block
-+ * has a 4 byte header followed by a set of registers that describe the
-+ * IP state requirements for the given mode. The IP mapping is platform
-+ * specific but the same for each block, making for easy analysis.
-+ * Platforms only use a subset of the space to track the requirements
-+ * for their IPs. Callers provide the requirement registers they use as
-+ * a list of indices. Each requirement register is associated with an
-+ * IP map that's maintained by the caller.
-+ *
-+ * Header
-+ * +----+----------------------------+----------------------------+
-+ * |  0 |      REVISION              |      ENABLED MODES         |
-+ * +----+--------------+-------------+-------------+--------------+
-+ *
-+ * Low Power Mode 0 Block
-+ * +----+--------------+-------------+-------------+--------------+
-+ * |  1 |     SUB ID   |     SIZE    |   MAJOR     |   MINOR      |
-+ * +----+--------------+-------------+-------------+--------------+
-+ * |  2 |           LPM0 Requirements 0                           |
-+ * +----+---------------------------------------------------------+
-+ * |    |                  ...                                    |
-+ * +----+---------------------------------------------------------+
-+ * | 29 |           LPM0 Requirements 27                          |
-+ * +----+---------------------------------------------------------+
-+ *
-+ * ...
-+ *
-+ * Low Power Mode 7 Block
-+ * +----+--------------+-------------+-------------+--------------+
-+ * |    |     SUB ID   |     SIZE    |   MAJOR     |   MINOR      |
-+ * +----+--------------+-------------+-------------+--------------+
-+ * | 60 |           LPM7 Requirements 0                           |
-+ * +----+---------------------------------------------------------+
-+ * |    |                  ...                                    |
-+ * +----+---------------------------------------------------------+
-+ * | 87 |           LPM7 Requirements 27                          |
-+ * +----+---------------------------------------------------------+
-+ *
-+ */
- static int pmc_core_get_lpm_req(struct pmc_dev *pmcdev, struct pmc *pmc, struct pci_dev *pcidev)
- {
- 	struct telem_endpoint *ep;
-@@ -1374,8 +1418,7 @@ static int pmc_core_get_lpm_req(struct pmc_dev *pmcdev, struct pmc *pmc, struct
- 
- 	ep = pmt_telem_find_and_register_endpoint(pcidev, guid, 0);
- 	if (IS_ERR(ep)) {
--		dev_dbg(&pmcdev->pdev->dev, "couldn't get telem endpoint %ld",
--			PTR_ERR(ep));
-+		dev_dbg(&pmcdev->pdev->dev, "couldn't get telem endpoint %pe", ep);
- 		return -EPROBE_DEFER;
- 	}
- 
-@@ -1387,49 +1430,6 @@ static int pmc_core_get_lpm_req(struct pmc_dev *pmcdev, struct pmc *pmc, struct
- 		goto unregister_ep;
- 	}
- 
--	/*
--	 * PMC Low Power Mode (LPM) table
--	 *
--	 * In telemetry space, the LPM table contains a 4 byte header followed
--	 * by 8 consecutive mode blocks (one for each LPM mode). Each block
--	 * has a 4 byte header followed by a set of registers that describe the
--	 * IP state requirements for the given mode. The IP mapping is platform
--	 * specific but the same for each block, making for easy analysis.
--	 * Platforms only use a subset of the space to track the requirements
--	 * for their IPs. Callers provide the requirement registers they use as
--	 * a list of indices. Each requirement register is associated with an
--	 * IP map that's maintained by the caller.
--	 *
--	 * Header
--	 * +----+----------------------------+----------------------------+
--	 * |  0 |      REVISION              |      ENABLED MODES         |
--	 * +----+--------------+-------------+-------------+--------------+
--	 *
--	 * Low Power Mode 0 Block
--	 * +----+--------------+-------------+-------------+--------------+
--	 * |  1 |     SUB ID   |     SIZE    |   MAJOR     |   MINOR      |
--	 * +----+--------------+-------------+-------------+--------------+
--	 * |  2 |           LPM0 Requirements 0                           |
--	 * +----+---------------------------------------------------------+
--	 * |    |                  ...                                    |
--	 * +----+---------------------------------------------------------+
--	 * | 29 |           LPM0 Requirements 27                          |
--	 * +----+---------------------------------------------------------+
--	 *
--	 * ...
--	 *
--	 * Low Power Mode 7 Block
--	 * +----+--------------+-------------+-------------+--------------+
--	 * |    |     SUB ID   |     SIZE    |   MAJOR     |   MINOR      |
--	 * +----+--------------+-------------+-------------+--------------+
--	 * | 60 |           LPM7 Requirements 0                           |
--	 * +----+---------------------------------------------------------+
--	 * |    |                  ...                                    |
--	 * +----+---------------------------------------------------------+
--	 * | 87 |           LPM7 Requirements 27                          |
--	 * +----+---------------------------------------------------------+
--	 *
--	 */
- 	mode_offset = LPM_HEADER_OFFSET + LPM_MODE_OFFSET;
- 	pmc_for_each_mode(mode, pmcdev) {
- 		u32 *req_offset = pmc->lpm_req_regs + (mode * num_maps);
-@@ -1442,7 +1442,6 @@ static int pmc_core_get_lpm_req(struct pmc_dev *pmcdev, struct pmc *pmc, struct
- 			if (ret) {
- 				dev_err(&pmcdev->pdev->dev,
- 					"couldn't read Low Power Mode requirements: %d\n", ret);
--				devm_kfree(&pmcdev->pdev->dev, pmc->lpm_req_regs);
- 				goto unregister_ep;
- 			}
- 			++req_offset;
--- 
-2.43.0
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
+
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+This patch series was applied (using b4) to base:
+ Base: using specified base-commit e48e99b6edf41c69c5528aa7ffb2daf3c59ee105
+
+If this is not the correct base, please add 'base-commit' tag
+(or use b4 which does this automatically)
+
+New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/exynos/' for 20250421-b4-gs101_max77759_fg-v3-0-50cd8caf9017@uclouvain.be:
+
+arch/arm64/boot/dts/exynos/google/gs101-raven.dtb: fuel-gauge@36 (maxim,max77759-fg): reg: [[54]] is too short
+	from schema $id: http://devicetree.org/schemas/power/supply/maxim,max17201.yaml#
+arch/arm64/boot/dts/exynos/google/gs101-raven.dtb: fuel-gauge@36 (maxim,max77759-fg): reg-names: ['m5'] is too short
+	from schema $id: http://devicetree.org/schemas/power/supply/maxim,max17201.yaml#
+arch/arm64/boot/dts/exynos/google/gs101-raven.dtb: fuel-gauge@36 (maxim,max77759-fg): Unevaluated properties are not allowed ('reg-names' was unexpected)
+	from schema $id: http://devicetree.org/schemas/power/supply/maxim,max17201.yaml#
+arch/arm64/boot/dts/exynos/google/gs101-oriole.dtb: fuel-gauge@36 (maxim,max77759-fg): reg: [[54]] is too short
+	from schema $id: http://devicetree.org/schemas/power/supply/maxim,max17201.yaml#
+arch/arm64/boot/dts/exynos/google/gs101-oriole.dtb: fuel-gauge@36 (maxim,max77759-fg): reg-names: ['m5'] is too short
+	from schema $id: http://devicetree.org/schemas/power/supply/maxim,max17201.yaml#
+arch/arm64/boot/dts/exynos/google/gs101-oriole.dtb: fuel-gauge@36 (maxim,max77759-fg): Unevaluated properties are not allowed ('reg-names' was unexpected)
+	from schema $id: http://devicetree.org/schemas/power/supply/maxim,max17201.yaml#
+
+
+
+
 
 
