@@ -1,52 +1,53 @@
-Return-Path: <linux-pm+bounces-25806-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25810-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3632A9554C
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 19:34:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADFB8A955BA
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 20:13:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9175B188DE73
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 17:34:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89D483A9531
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 18:13:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5A161E411C;
-	Mon, 21 Apr 2025 17:33:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BDA51E883A;
+	Mon, 21 Apr 2025 18:13:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BiFPa4QF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n7aVrTM4"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA9EC1DE8B6;
-	Mon, 21 Apr 2025 17:33:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC9761A238A;
+	Mon, 21 Apr 2025 18:13:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745256839; cv=none; b=Enmb730jdVvm5NeToOGjBR962rNAB1lkkSu+zXVJUZ1npgWjpc6Bngw5BiGS916olk1DWhKJRgAiXHPyKgVQZg3hjf+vblSDq6H90CcaNSRC6hawK1XqoqJLn7zSnduZD4JTp/cJxEwJJGMDnjgakNFrr/7lDCi/m0vOLpVQ0V0=
+	t=1745259232; cv=none; b=GrgqL8hI4uYoPIfqR0+ypdkhA60vGQRzgn+wo91Mg222AJpg7MK/KKvaq/6f0G5JlNyB3oDA3JpkDzgJt1qxvNfTeDmEAOVq8Tx1MywyrCM3yzB4Fg32kSTw8mLC73lYV9OIcaqysqbMcuvtiS1y6lP2ypTYluNISeArAWObR/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745256839; c=relaxed/simple;
-	bh=MS/k+Ac6wPR5MqzXEad/tDvZpthxXQ3F4JdDJuN1wzM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tJZtb5bBApBIwaBxtG/KEt6sAFP60vtbFJK33H4C38ZjMcBwUM+G660XJ/f25da+dE6jD97duUXrS2Muoh1ej+8q1Wl2Veo876UJ9qick7wouP1SvVovPPkQsWGaGbc8LVUHcR5/Gth8iGsIQkfDNDvkNg3XhwxnPp8/d//OIko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BiFPa4QF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4E9F7C4CEEC;
-	Mon, 21 Apr 2025 17:33:59 +0000 (UTC)
+	s=arc-20240116; t=1745259232; c=relaxed/simple;
+	bh=dhTtr4K5vrV7Ifdau0v9q818igO+jXIFRbDPCub+EH4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ComQHUUBhCCT3ZO9BGG2dGQyZewt9fRSdfGSKQdc4PmazC93OTR8i4rJxsgPyRZ3hE5AVVWYjP+sgUGNE8cmfH55GgjnZYY13sQVBf/qnvBV7BIbJqdcGJzCaf8zB+TprbVgLTKkX6RBES0ECgM0oQ3VaS7HaxNFZTlaAhYlfXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n7aVrTM4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 357B9C4CEE4;
+	Mon, 21 Apr 2025 18:13:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745256839;
-	bh=MS/k+Ac6wPR5MqzXEad/tDvZpthxXQ3F4JdDJuN1wzM=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=BiFPa4QFv1C3PjoIrXKipJNJeUnszXWK91TYJyKiMgaWsI85Rh+D8yDtY8f4zQ34I
-	 h9AsEJAG6CrbCjKbMUJ+NZhZaJcu8dBLMoRbwkpIjd1eksElVgRuOUXqsCW84uhBDW
-	 LBKbSseQCfgNLNYgPnxLjRAVKyzzHG29jYCJ8+Hbi0/1QXuoSI9NLiN8fgj5Uu8vsV
-	 PCPoqeuVs4lgWmn3e+n/xYqfx0m1q3elT3V1YRMQnIZIkBdRi0yYKkKoDOAuxx3IZ+
-	 iI0HwVUC4GhWIuuS7g9+X8pIQNZg2Sd9VciBr24v3OaUDw/xK6alQVa8g457PRgRQ3
-	 dUOr/kGRF3Z6w==
+	s=k20201202; t=1745259232;
+	bh=dhTtr4K5vrV7Ifdau0v9q818igO+jXIFRbDPCub+EH4=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=n7aVrTM4SSiqBQsCcmlfb/iCV95UvM0+xkkUXFNELTCDTATexZEYW5OsonA9k3Ayy
+	 gyAGBk/GHrCItpPeR99EkNRQoXcOH7MH5efrZlJqIQp5C0GKgNo96/lA6m4tnBA6A0
+	 YXc40UzpRGl/ishD6BNxpsBnUj+8AiL+8HbDQu3JrXe0osbN3NlzWTL2PpxlqPF6F9
+	 DVlejcjcY0mlL+UslpOyNiIWDnd7B4Xj8mOWuS3I1cEBMQ9v6ZyWdKCkEv38ZFKsyP
+	 6SgGrkXkw0fdRqerKlbDMAbTWs1JJha1gTeEorYjX0Ixmw+QMQ2uUMpX3bMoBbCGWU
+	 wciqDZZFfhsXg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C1D3C369D7;
-	Mon, 21 Apr 2025 17:33:59 +0000 (UTC)
-From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
-Date: Mon, 21 Apr 2025 12:33:54 -0500
-Subject: [PATCH v3 2/2] cpufreq: tegra124: Allow building as a module
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 252F8C369AB;
+	Mon, 21 Apr 2025 18:13:52 +0000 (UTC)
+From: Thomas Antoine via B4 Relay <devnull+t.antoine.uclouvain.be@kernel.org>
+Subject: [PATCH v3 0/5] Google Pixel 6 (oriole): max77759 fuel gauge
+ enablement and driver support
+Date: Mon, 21 Apr 2025 20:13:31 +0200
+Message-Id: <20250421-b4-gs101_max77759_fg-v3-0-50cd8caf9017@uclouvain.be>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -54,143 +55,135 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250421-tegra124-cpufreq-v3-2-95eaba968467@gmail.com>
-References: <20250421-tegra124-cpufreq-v3-0-95eaba968467@gmail.com>
-In-Reply-To: <20250421-tegra124-cpufreq-v3-0-95eaba968467@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Jonathan Hunter <jonathanh@nvidia.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-tegra@vger.kernel.org, Aaron Kling <webgeek1234@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAMuKBmgC/4XNSwqDMBCA4atI1k3JS2K66j1KkUQnOtBqSWqwi
+ HdvFLoplG4G/oH5ZiERAkIkp2IhARJGHIcc8lCQprdDBxTb3EQwoXge1CnaRc54fbez1ro0te+
+ oYgKE5FY5KUk+fQTwOO/s5Zq7x/gcw2v/kvi2/QMmThk1VSu81c6DZOepuY1TsjgcHZDNTOLjl
+ Iz/dER2Km1KYx047f2Xs67rGzi+m2oDAQAA
+X-Change-ID: 20241202-b4-gs101_max77759_fg-402e231a4b33
+To: Rob Herring <robh@kernel.org>, Peter Griffin <peter.griffin@linaro.org>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Sebastian Reichel <sre@kernel.org>, Dimitri Fedrau <dima.fedrau@gmail.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, Thomas Antoine <t.antoine@uclouvain.be>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1745256838; l=3719;
- i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
- bh=D+kPWHn1qUpp0y6NQcTSF4Kd8P3v3+DDEwXwGP2fPj0=;
- b=sVGuqfppBYiBhvFOlQq305mwF1Ea9z/lFiRV5QQJi0POv22yD251Lgb4iTPOxoul1LuCmKVRd
- YL2/+QMOcmEDCCCmLtVnYw3EM3lvfawlUG4XwoR9Y74cVWYvmc1IFZi
-X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
- pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
-X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
- auth_id=342
-X-Original-From: Aaron Kling <webgeek1234@gmail.com>
-Reply-To: webgeek1234@gmail.com
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1745259219; l=4444;
+ i=t.antoine@uclouvain.be; s=20241202; h=from:subject:message-id;
+ bh=dhTtr4K5vrV7Ifdau0v9q818igO+jXIFRbDPCub+EH4=;
+ b=3CyC063e2T/TqTX5MRwjHsd8hbpR6TjK1Pr6MnLxmcY/r8rh0CIB1UVM+rSZUHbSbmnsg+VHB
+ +tYJgdik7b/Av0XZI4sCgokWmJuekfiYOdQMS3iNVrZba8CINTf6tbK
+X-Developer-Key: i=t.antoine@uclouvain.be; a=ed25519;
+ pk=sw7UYl31W1LTpgWRiX4xIF5x6ok7YWZ6XZnHqy/d3dY=
+X-Endpoint-Received: by B4 Relay for t.antoine@uclouvain.be/20241202 with
+ auth_id=289
+X-Original-From: Thomas Antoine <t.antoine@uclouvain.be>
+Reply-To: t.antoine@uclouvain.be
 
-From: Aaron Kling <webgeek1234@gmail.com>
+The Google Pixel 6 has a Maxim MAX77759 which provides a fuel gauge with
+an interface with a lot in common with the Maxim max1720x.
 
-This requires three changes:
-* A soft dependency on cpufreq-dt as this driver only handles power
-  management and cpufreq-dt does the real operations
-* Adding a remove routine to remove the cpufreq-dt device
-* Adding a exit routine to handle cleaning up the driver
+Modify the Maxim MAX1720x driver to be compatible with the Maxim MAX77759
+and enable it for the gs101-oriole board.
 
-Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+The voltage, current, capacity, temperature and charge have all been
+tested and show coherent results. The charge full design and capacity
+equal the ones seen on android, the ratio between average charge and
+average current does predict pretty accurately the time to empty under
+a constant workload and temperature is coherent with the dynamic state
+of the device.
+
+Health is not enabled as it always reports overheating. The time to empty
+is wrong by about a factor 2 and is thus also disabled.
+
+Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
+
 ---
- drivers/cpufreq/Kconfig.arm        |  2 +-
- drivers/cpufreq/tegra124-cpufreq.c | 41 ++++++++++++++++++++++++++++++++++----
- 2 files changed, 38 insertions(+), 5 deletions(-)
+Changes in v3:
+- Update base tree to avoid conflicts
+- Fix capacity computation for max1720x
+- Add separate properties for the max7759 to disable non-functional ones
+- Take TASKPERIOD into account for voltage computation of max77759
+- Simplify vcell computation (Dimitri Fedrau)
+- Switch has_nvmem to bool and keep it only in chip_data (Dimitri Fedrau)
+- Drop the yes_range from the write table (Sebastian Reichel)
+- Add test_power_supply_properties.sh to cover letter (Sebastian Reichel)
+- Switch back some changes to binding and actually use allOf:if: to
+  restrict constraints (Krzysztof Kozlowski)
+- Fix style errors
+- Link to v2: https://lore.kernel.org/r/20250102-b4-gs101_max77759_fg-v2-0-87959abeb7ff@uclouvain.be
 
-diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-index 4f9cb943d945c244eb2b29f543d14df6cac4e5d4..625f6fbdaaf5fd774e3b0bb996eb7ce980da41ee 100644
---- a/drivers/cpufreq/Kconfig.arm
-+++ b/drivers/cpufreq/Kconfig.arm
-@@ -238,7 +238,7 @@ config ARM_TEGRA20_CPUFREQ
- 	  This adds the CPUFreq driver support for Tegra20/30 SOCs.
- 
- config ARM_TEGRA124_CPUFREQ
--	bool "Tegra124 CPUFreq support"
-+	tristate "Tegra124 CPUFreq support"
- 	depends on ARCH_TEGRA || COMPILE_TEST
- 	depends on CPUFREQ_DT
- 	default y
-diff --git a/drivers/cpufreq/tegra124-cpufreq.c b/drivers/cpufreq/tegra124-cpufreq.c
-index bc0691e8971f9454def37f489e4a3e244100b9f4..b1de59a6bd5009981f4739456e08f5b110f1540f 100644
---- a/drivers/cpufreq/tegra124-cpufreq.c
-+++ b/drivers/cpufreq/tegra124-cpufreq.c
-@@ -16,6 +16,8 @@
- #include <linux/pm_opp.h>
- #include <linux/types.h>
- 
-+static struct platform_device *platform_device;
-+
- struct tegra124_cpufreq_priv {
- 	struct clk *cpu_clk;
- 	struct clk *pllp_clk;
-@@ -176,6 +178,16 @@ static int __maybe_unused tegra124_cpufreq_resume(struct device *dev)
- 	return err;
- }
- 
-+static void tegra124_cpufreq_remove(struct platform_device *pdev)
-+{
-+	struct tegra124_cpufreq_priv *priv = dev_get_drvdata(&pdev->dev);
-+
-+	if (!IS_ERR(priv->cpufreq_dt_pdev)) {
-+		platform_device_unregister(priv->cpufreq_dt_pdev);
-+		priv->cpufreq_dt_pdev = ERR_PTR(-ENODEV);
-+	}
-+}
-+
- static const struct dev_pm_ops tegra124_cpufreq_pm_ops = {
- 	SET_SYSTEM_SLEEP_PM_OPS(tegra124_cpufreq_suspend,
- 				tegra124_cpufreq_resume)
-@@ -185,12 +197,12 @@ static struct platform_driver tegra124_cpufreq_platdrv = {
- 	.driver.name	= "cpufreq-tegra124",
- 	.driver.pm	= &tegra124_cpufreq_pm_ops,
- 	.probe		= tegra124_cpufreq_probe,
-+	.remove		= tegra124_cpufreq_remove,
- };
- 
- static int __init tegra_cpufreq_init(void)
- {
- 	int ret;
--	struct platform_device *pdev;
- 
- 	if (!(of_machine_is_compatible("nvidia,tegra124") ||
- 		of_machine_is_compatible("nvidia,tegra210")))
-@@ -204,15 +216,36 @@ static int __init tegra_cpufreq_init(void)
- 	if (ret)
- 		return ret;
- 
--	pdev = platform_device_register_simple("cpufreq-tegra124", -1, NULL, 0);
--	if (IS_ERR(pdev)) {
-+	platform_device = platform_device_register_simple("cpufreq-tegra124", -1, NULL, 0);
-+	if (IS_ERR(platform_device)) {
- 		platform_driver_unregister(&tegra124_cpufreq_platdrv);
--		return PTR_ERR(pdev);
-+		return PTR_ERR(platform_device);
- 	}
- 
- 	return 0;
- }
- module_init(tegra_cpufreq_init);
- 
-+static void __exit tegra_cpufreq_module_exit(void)
-+{
-+	struct tegra124_cpufreq_priv *priv;
-+
-+	if (platform_device && !IS_ERR(platform_device)) {
-+		priv = dev_get_drvdata(&platform_device->dev);
-+
-+		clk_put(priv->pllp_clk);
-+		clk_put(priv->pllx_clk);
-+		clk_put(priv->dfll_clk);
-+		clk_put(priv->cpu_clk);
-+
-+		platform_device_unregister(platform_device);
-+	}
-+
-+	platform_driver_unregister(&tegra124_cpufreq_platdrv);
-+}
-+module_exit(tegra_cpufreq_module_exit);
-+
-+MODULE_SOFTDEP("pre: cpufreq-dt");
- MODULE_AUTHOR("Tuomas Tynkkynen <ttynkkynen@nvidia.com>");
- MODULE_DESCRIPTION("cpufreq driver for NVIDIA Tegra124");
-+MODULE_LICENSE("GPL");
+Changes in v2:
+- Add fallback for voltage measurement (André Draszik)
+- Add regmap for the max77759 (André Draszik)
+- Add chip identification for the max77759 (André Draszik, Peter Griffin)
+- Move RSense value to a devicetree property shunt-resistor-micro-ohms
+  (Dimitri Fedrau, André Draszik)
+- Use allOf:if to narrow binding per variant (Krzysztof Kozlowski)
+- Remove binding example (Krzysztof Kozlowski)
+- Change defconfig order to follow savedefconfig (Krzysztof Kozlowski)
+- Fix style errors
+- Link to v1: https://lore.kernel.org/r/20241202-b4-gs101_max77759_fg-v1-0-98d2fa7bfe30@uclouvain.be
 
+tools/testing/selftests/power_supply/test_power_supply_properties.sh:
+ok 1 max77759-fg.exists
+ok 2 max77759-fg.uevent.NAME
+ok 3 max77759-fg.sysfs.type
+ok 4 max77759-fg.uevent.TYPE
+ok 5 max77759-fg.sysfs.usb_type # SKIP
+ok 6 max77759-fg.sysfs.online # SKIP
+ok 7 max77759-fg.sysfs.present
+ok 8 max77759-fg.sysfs.status # SKIP
+ok 9 max77759-fg.sysfs.capacity
+ok 10 max77759-fg.sysfs.capacity_level # SKIP
+ok 11 max77759-fg.sysfs.model_name
+ok 12 max77759-fg.sysfs.manufacturer
+ok 13 max77759-fg.sysfs.serial_number # SKIP
+ok 14 max77759-fg.sysfs.technology # SKIP
+ok 15 max77759-fg.sysfs.cycle_count # SKIP
+ok 16 max77759-fg.sysfs.scope # SKIP
+ok 17 max77759-fg.sysfs.input_current_limit # SKIP(Dimitri Fedrau)
+ok 18 max77759-fg.sysfs.input_voltage_limit # SKIP
+ok 19 max77759-fg.sysfs.voltage_now
+ok 20 max77759-fg.sysfs.voltage_min # SKIP
+ok 21 max77759-fg.sysfs.voltage_max # SKIP
+ok 22 max77759-fg.sysfs.voltage_min_design # SKIP
+ok 23 max77759-fg.sysfs.voltage_max_design # SKIP
+ok 24 max77759-fg.sysfs.current_now
+ok 25 max77759-fg.sysfs.current_max # SKIP
+ok 26 max77759-fg.sysfs.charge_now # SKIP
+ok 27 max77759-fg.sysfs.charge_full
+ok 28 max77759-fg.sysfs.charge_full_design
+ok 29 max77759-fg.sysfs.power_now # SKIP
+ok 30 max77759-fg.sysfs.energy_now # SKIP
+ok 31 max77759-fg.sysfs.energy_full # SKIP
+ok 32 max77759-fg.sysfs.energy_full_design # SKIP
+ok 33 max77759-fg.sysfs.energy_full_design # SKIP
+
+---
+Thomas Antoine (5):
+      power: supply: correct capacity computation
+      power: supply: add support for max77759 fuel gauge
+      dt-bindings: power: supply: add max77759-fg flavor
+      arm64: defconfig: enable Maxim max1720x driver
+      arm64: dts: exynos: gs101-oriole: enable Maxim max77759 fuel gauge
+
+ .../bindings/power/supply/maxim,max17201.yaml      |  34 ++-
+ .../boot/dts/exynos/google/gs101-pixel-common.dtsi |  10 +
+ arch/arm64/configs/defconfig                       |   1 +
+ drivers/power/supply/max1720x_battery.c            | 271 ++++++++++++++++++---
+ 4 files changed, 280 insertions(+), 36 deletions(-)
+---
+base-commit: e48e99b6edf41c69c5528aa7ffb2daf3c59ee105
+change-id: 20241202-b4-gs101_max77759_fg-402e231a4b33
+
+Best regards,
 -- 
-2.48.1
+Thomas Antoine <t.antoine@uclouvain.be>
 
 
 
