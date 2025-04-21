@@ -1,183 +1,206 @@
-Return-Path: <linux-pm+bounces-25797-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25798-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54422A94DC4
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 10:13:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B29BEA94E0C
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 10:25:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A7AA188C978
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 08:13:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9D8616F481
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 08:25:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E99720F078;
-	Mon, 21 Apr 2025 08:13:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 878A820E01E;
+	Mon, 21 Apr 2025 08:25:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rN12BBXh"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="YH1+Q21i"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEB041C8620;
-	Mon, 21 Apr 2025 08:13:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BFCF171D2
+	for <linux-pm@vger.kernel.org>; Mon, 21 Apr 2025 08:25:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745223216; cv=none; b=XDDw/agVQc/oidJufTb7wmvfm0uEOHJTGBM5FNoyAA4+EWjXMAspT2JFaSWq6N7/HXpZ3UHd9/ofUWpZfRn6lGB1Hjz7c6XmB5T7pWMVJuauUln7c2ChoLMwWqDa68tJbe39FcS9UNjtZ9aiaGe0gOxkTUzDgLQTxGWJuJdqjN0=
+	t=1745223941; cv=none; b=iLdqVZaAkj9PHmPFc9862T+qk78850dcIy1I3crWNnY/b/L18GPm5XVYrx5A9r7u45jWPFY4DM8gtQW35dgOkHNpZuEP4KkA+Pfhd0PYQbX8ftxy+tDmi2uHeqOD6BNdyJ0OCEFSM2N7w9g3XozLp09quYD5WC5vsBZJfrdBW1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745223216; c=relaxed/simple;
-	bh=Khsa+9i9dRFR5gzrKgEgqqS4rrQzmjrJoestrYRTkHI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=lfjAz2xEOHnz1tHR/drd4006zPUUyIgXLOWhSMOY87dVxL4YPrqICVvFtJdCFyVoR+rUNtYlUnrqYj2j3RJC7aL3Ah37ISXePRE1yc/9J22scXef9SxLwmkjdlll/CVfMHwCyte2wNcijPk7ouPZXK6bv1gBNWu8CEpXzu7a4wQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rN12BBXh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8EF5DC4CEEF;
-	Mon, 21 Apr 2025 08:13:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745223215;
-	bh=Khsa+9i9dRFR5gzrKgEgqqS4rrQzmjrJoestrYRTkHI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=rN12BBXhVtUyI6hDpMajSFaskkKig5wIDW5FHobH+piS++gtMRAQtQaKLCq44ZuWs
-	 yiQkvuwU2/+2Ut9714dyLWR4Mb957znhxIFRY6fYVG3LQ+vSBJVxx0YeQWMJSOUK6Q
-	 b6Sk5CgMtcT3wvi1/E1FOX65FZWBhKecL5YsV9DHKqNS1ttBXvMLy3MhDZ37Sfucvc
-	 lyXfw9qCHK/TBfWEzx4UP5iEVP4w9z8K6AOxq9NCboj43fqEZl6+OAmoU1/Jei77PU
-	 vXbcazGNPCXKYJvqLwUZoqRBWHx9lqEy7ciM3qaKQafsB0j9U7JtftHUtTMS9kJLok
-	 Rc7hC8AbC/EeQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 821DAC369D6;
-	Mon, 21 Apr 2025 08:13:35 +0000 (UTC)
-From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
-Date: Mon, 21 Apr 2025 03:13:32 -0500
-Subject: [PATCH v2 2/2] cpufreq: tegra124: Allow building as a module
+	s=arc-20240116; t=1745223941; c=relaxed/simple;
+	bh=7xJP6Yy/B37Y8apR0mdSnVjJHCFypBW0KXssFokEAmU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D4vQufWmMoUj7SZGw9Zkz57aLgYsNBW0411+2YXvHrMvqiwliWwBLqAK0mWV0edFsXjysop1xH9lwg6fPvcP1pw7B+yfrQ0ctvhhKMbIkfOn/sSYDZ5OvCEsIU74lgDT7SPgB60jb8aWZrOkUBk/futpc9NA0YvFzTeB9i6/VRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=YH1+Q21i; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53KNRoWg028882
+	for <linux-pm@vger.kernel.org>; Mon, 21 Apr 2025 08:25:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=FRb6vmGaZWj66VKHke2gwyzE
+	xYa6h3+rIt/MDpsOeAI=; b=YH1+Q21ixLsZoKOFBaFCve80V8EjcW9WBgn4y8X1
+	CbKmC/skwooMzbudLcoFWR2xDA7v6/fhCvCYPkUa+d7POH29TIrCeNPF6O6dc+Dj
+	SEAdWZXKV2a4+tes+UPcogaQgRrBrE+Ze3rmo3s2g6QgsoWSONjJ6kpdBJWBzR3K
+	zQESnLM38pmIejBjxsDU1UyruF6FI4gRjF+c+l3CbjUJzz2XjNrqPamDiL6ldZpb
+	d1xRgwfEaXroI8sYAevtIDQbD/a1xWyyVsmAnAWmb42VF7pov/oZFN9q2H/B2jat
+	bQJEjy03rJ/SYqQBOJYwGSC7gqjsdN742sDtobFgh3qWPA==
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4644kjbdjb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Mon, 21 Apr 2025 08:25:39 +0000 (GMT)
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-6e916df0d5dso70391106d6.2
+        for <linux-pm@vger.kernel.org>; Mon, 21 Apr 2025 01:25:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745223937; x=1745828737;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FRb6vmGaZWj66VKHke2gwyzExYa6h3+rIt/MDpsOeAI=;
+        b=i4n1QeQ1/Q5NcMpjVhcwEA2Qy1waTZ0QQ3k7Zo1NBlhPVn4BgnEtPO1nORZ7fIj6yl
+         e7hYlJsq+BxC4JZPp7hmXaz6LuunWdzveJxiL+ZsbFX+bRQI0F/2VOlQX3QBdJm3syGo
+         KBkf+QHxFPnrckzAgSL+J1JF9d3KOr/8OwZaSVuwJIvah0edMnUhSYv6aqABSeLJJVP1
+         k73wBHzotByq9lzO8mtMdhVIKN8w8vE/gnn7geTdXgxRUiLhrqY9jjy/aziBjgZ1vuOC
+         g4lvr5VMNrURnxc/PH1tjD9K0syyzAg7Yruv3u47ps1uTYczuhzIhGXQhK/y2PU1Q4p+
+         Um8A==
+X-Forwarded-Encrypted: i=1; AJvYcCUhJgwJinRWRHKw8jsnojFxyZt6nadrOo6qHRCi2zdb1rCuDAk8LrPBWaTJiG2J1a6fwfBHlNDNnA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yya/z/7zpRU8pMw4pqSY7tZa6rX9+bTddMZmUJ3lvac1TlzM0KL
+	O5segmKpoT20eij+HNdewhMPv5jGGpXQFZDT3VBgbbpDrWR0SraGZSl+FxZ9GiorzwFd95RLTF4
+	spVdgkNBfPDmkbq/MdkOgLIz6VIMFG8hXMO8pHlHCxZbyRpVg7wPeNc1LvAMtYE6fhg==
+X-Gm-Gg: ASbGncsNOYUjXXLNASh3Vw3mxFSkwHEm1zEFNyQEkYqaEKP4kDJSd+8y/jiHNW8vBYC
+	lzRYnecsOegBGFIqObChMib/zU5ohucS9qo0PqKLQuVtSv51Q9EMxbcBRgoOriWEBFlpdgq/trP
+	ohJ8MJx9/67KXnqHIrBqf4NMo7OJEtES5XfUE3hi2WiuWkuag7KD5EpnBjJ7/YSEpyhXsMIry4I
+	oOMjfus/+3MCjtMXlTXXEwwKmK8W3/U4iU/iCIZBYfTcDf8JwsRbRBBMkaQIHGLu7rO+rMoFhRf
+	c5zOdDZaVCEHx40UX2WqCFnSJvFi31lCEV7Wg8iKsO0loNoIb6mBkJ0eLVFfZIoavSqeNM+9CjM
+	=
+X-Received: by 2002:ad4:5965:0:b0:6e8:e828:820d with SMTP id 6a1803df08f44-6f2c4655860mr234166366d6.36.1745223937552;
+        Mon, 21 Apr 2025 01:25:37 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGcwFV65OMdQz9ncrfoufy1rJ3V3naoM3eXJeqCGxfS+6c9u1tp+a8GZ25KDTC2huv5liCQYQ==
+X-Received: by 2002:ad4:5965:0:b0:6e8:e828:820d with SMTP id 6a1803df08f44-6f2c4655860mr234166086d6.36.1745223937199;
+        Mon, 21 Apr 2025 01:25:37 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3109075e91bsm10810151fa.1.2025.04.21.01.25.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Apr 2025 01:25:36 -0700 (PDT)
+Date: Mon, 21 Apr 2025 11:25:34 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>, Konrad Dybcio <konradybcio@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>
+Subject: Re: [PATCH v4 5/7] dt-bindings: opp: Add v2-qcom-adreno vendor
+ bindings
+Message-ID: <fvi3cshu253kfxiwreny66g3niff6zjdpv2xwfr3644gbrj4et@ypzjy4naj55f>
+References: <20250109-gpu-acd-v4-0-08a5efaf4a23@quicinc.com>
+ <20250109-gpu-acd-v4-5-08a5efaf4a23@quicinc.com>
+ <0cd538c0-7d1f-44a4-b89d-f285535c0fcb@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250421-tegra124-cpufreq-v2-2-2f148cefa418@gmail.com>
-References: <20250421-tegra124-cpufreq-v2-0-2f148cefa418@gmail.com>
-In-Reply-To: <20250421-tegra124-cpufreq-v2-0-2f148cefa418@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Jonathan Hunter <jonathanh@nvidia.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-tegra@vger.kernel.org, Aaron Kling <webgeek1234@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1745223214; l=3413;
- i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
- bh=vRnmrx8VjMy/a3Ap0/hznM3tiqHp5F21n3zSs/FfWWw=;
- b=Xilx1II1g1/gQpjQeJrfGcr1RM4Pok+g+IjZLN1zHFbU72TalqpReLFhtNLGgcTjMAarsoCfU
- jPuPjFdQVLrBXfMgia0NpPGjZhH1zMrwyoi4GIXMv4jpbMmwoveMqyq
-X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
- pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
-X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
- auth_id=342
-X-Original-From: Aaron Kling <webgeek1234@gmail.com>
-Reply-To: webgeek1234@gmail.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0cd538c0-7d1f-44a4-b89d-f285535c0fcb@quicinc.com>
+X-Proofpoint-GUID: 6uEsmrepfrsl1E9aCvzRSoa4hIKVCVNd
+X-Authority-Analysis: v=2.4 cv=f5pIBPyM c=1 sm=1 tr=0 ts=68060103 cx=c_pps a=UgVkIMxJMSkC9lv97toC5g==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10 a=XR8D0OoHHMoA:10 a=gEfo2CItAAAA:8 a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=COk6AnOGAAAA:8 a=DdzL4o_DZVg8PLORQZwA:9
+ a=CjuIK1q_8ugA:10 a=1HOtulTD9v-eNWfpl4qZ:22 a=sptkURWiP4Gy88Gu7hUp:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: 6uEsmrepfrsl1E9aCvzRSoa4hIKVCVNd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-21_04,2025-04-21_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ mlxlogscore=999 mlxscore=0 impostorscore=0 adultscore=0 priorityscore=1501
+ clxscore=1015 suspectscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0
+ classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2504210064
 
-From: Aaron Kling <webgeek1234@gmail.com>
+On Sat, Apr 19, 2025 at 08:03:35PM +0530, Akhil P Oommen wrote:
+> On 1/9/2025 2:10 AM, Akhil P Oommen wrote:
+> > Add a new schema which extends opp-v2 to support a new vendor specific
+> > property required for Adreno GPUs found in Qualcomm's SoCs. The new
+> > property called "qcom,opp-acd-level" carries a u32 value recommended
+> > for each opp needs to be shared to GMU during runtime.
+> > 
+> > Also, update MAINTAINERS file include the new opp-v2-qcom-adreno.yaml.
+> > 
+> > Cc: Rob Clark <robdclark@gmail.com>
+> > Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+> > ---
+> >  .../bindings/opp/opp-v2-qcom-adreno.yaml           | 97 ++++++++++++++++++++++
+> >  MAINTAINERS                                        |  1 +
+> >  2 files changed, 98 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
+> > new file mode 100644
+> > index 000000000000..de1f7c6c4f0e
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
+> > @@ -0,0 +1,97 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/opp/opp-v2-qcom-adreno.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Qualcomm Adreno compatible OPP supply
+> > +
+> > +description:
+> > +  Adreno GPUs present in Qualcomm's Snapdragon chipsets uses an OPP specific
+> > +  ACD related information tailored for the specific chipset. This binding
+> > +  provides the information needed to describe such a hardware value.
+> > +
+> > +maintainers:
+> > +  - Rob Clark <robdclark@gmail.com>
+> > +
+> > +allOf:
+> > +  - $ref: opp-v2-base.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+> > +      - const: operating-points-v2-adreno
+> > +      - const: operating-points-v2
+> 
+> https://lore.kernel.org/all/173637143564.1057127.5997544431977689674.robh@kernel.org/
+> 
+> Krzysztof, sorry for the late response. I was checking further about the
+> above bot error. AFAIU, we should not include "const:
+> operating-points-v2" here, otherwise all opp tables compatible with
+> "operating-points-v2" get matched with opp-v2-qcom-adreno.yaml during
+> validation. So I am sending the v5 revision with the below fix:
 
-This requires three changes:
-* A soft dependency on cpufreq-dt as this driver only handles power
-  management and cpufreq-dt does the real operations
-* Adding a remove routine to remove the cpufreq-dt device
-* Adding a exit routine to handle cleaning up the driver
+This is not quite correct. The table is compatible with op-v2. Instead
+you should add 'select:' clause which will limit the cases where this
+schema gets selected.
 
-Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
----
- drivers/cpufreq/Kconfig.arm        |  2 +-
- drivers/cpufreq/tegra124-cpufreq.c | 28 ++++++++++++++++++++++++----
- 2 files changed, 25 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-index 4f9cb943d945c244eb2b29f543d14df6cac4e5d4..625f6fbdaaf5fd774e3b0bb996eb7ce980da41ee 100644
---- a/drivers/cpufreq/Kconfig.arm
-+++ b/drivers/cpufreq/Kconfig.arm
-@@ -238,7 +238,7 @@ config ARM_TEGRA20_CPUFREQ
- 	  This adds the CPUFreq driver support for Tegra20/30 SOCs.
- 
- config ARM_TEGRA124_CPUFREQ
--	bool "Tegra124 CPUFreq support"
-+	tristate "Tegra124 CPUFreq support"
- 	depends on ARCH_TEGRA || COMPILE_TEST
- 	depends on CPUFREQ_DT
- 	default y
-diff --git a/drivers/cpufreq/tegra124-cpufreq.c b/drivers/cpufreq/tegra124-cpufreq.c
-index dc83b1631b13ec428f3b6bbea89462448a62adb4..17f51592bf9fe75921ab4fc4125908e5d941e468 100644
---- a/drivers/cpufreq/tegra124-cpufreq.c
-+++ b/drivers/cpufreq/tegra124-cpufreq.c
-@@ -16,6 +16,8 @@
- #include <linux/pm_opp.h>
- #include <linux/types.h>
- 
-+static struct platform_device *platform_device;
-+
- struct tegra124_cpufreq_priv {
- 	struct clk *cpu_clk;
- 	struct clk *pllp_clk;
-@@ -174,6 +176,14 @@ static int __maybe_unused tegra124_cpufreq_resume(struct device *dev)
- 	return err;
- }
- 
-+static void tegra124_cpufreq_remove(struct platform_device *pdev)
-+{
-+	struct tegra124_cpufreq_priv *priv = dev_get_drvdata(&pdev->dev);
-+
-+	if (!IS_ERR(priv->cpufreq_dt_pdev))
-+		platform_device_unregister(priv->cpufreq_dt_pdev);
-+}
-+
- static const struct dev_pm_ops tegra124_cpufreq_pm_ops = {
- 	SET_SYSTEM_SLEEP_PM_OPS(tegra124_cpufreq_suspend,
- 				tegra124_cpufreq_resume)
-@@ -183,12 +193,12 @@ static struct platform_driver tegra124_cpufreq_platdrv = {
- 	.driver.name	= "cpufreq-tegra124",
- 	.driver.pm	= &tegra124_cpufreq_pm_ops,
- 	.probe		= tegra124_cpufreq_probe,
-+	.remove		= tegra124_cpufreq_remove,
- };
- 
- static int __init tegra_cpufreq_init(void)
- {
- 	int ret;
--	struct platform_device *pdev;
- 
- 	if (!(of_machine_is_compatible("nvidia,tegra124") ||
- 		of_machine_is_compatible("nvidia,tegra210")))
-@@ -202,15 +212,25 @@ static int __init tegra_cpufreq_init(void)
- 	if (ret)
- 		return ret;
- 
--	pdev = platform_device_register_simple("cpufreq-tegra124", -1, NULL, 0);
--	if (IS_ERR(pdev)) {
-+	platform_device = platform_device_register_simple("cpufreq-tegra124", -1, NULL, 0);
-+	if (IS_ERR(platform_device)) {
- 		platform_driver_unregister(&tegra124_cpufreq_platdrv);
--		return PTR_ERR(pdev);
-+		return PTR_ERR(platform_device);
- 	}
- 
- 	return 0;
- }
- module_init(tegra_cpufreq_init);
- 
-+static void __exit tegra_cpufreq_module_exit(void)
-+{
-+	if (!IS_ERR(platform_device))
-+		platform_device_unregister(platform_device);
-+	platform_driver_unregister(&tegra124_cpufreq_platdrv);
-+}
-+module_exit(tegra_cpufreq_module_exit);
-+
-+MODULE_SOFTDEP("pre: cpufreq-dt");
- MODULE_AUTHOR("Tuomas Tynkkynen <ttynkkynen@nvidia.com>");
- MODULE_DESCRIPTION("cpufreq driver for NVIDIA Tegra124");
-+MODULE_LICENSE("GPL");
+> 
+> +++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
+> @@ -19,9 +19,8 @@ allOf:
+> 
+>  properties:
+>    compatible:
+> -    items:
+> -      - const: operating-points-v2-adreno
+> -      - const: operating-points-v2
+> +    contains:
+> +      const: operating-points-v2-adreno
+> 
+> -Akhil.
+> 
 
 -- 
-2.48.1
-
-
+With best wishes
+Dmitry
 
