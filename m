@@ -1,39 +1,39 @@
-Return-Path: <linux-pm+bounces-25764-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25765-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4346AA94B4A
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 05:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 85B90A94B4C
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 05:01:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 76EA616FCED
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 03:01:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA28816FF18
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 03:01:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03F8D2580D3;
-	Mon, 21 Apr 2025 03:00:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46701258CD5;
+	Mon, 21 Apr 2025 03:00:34 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB411E9B03;
-	Mon, 21 Apr 2025 03:00:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29000256C6B;
+	Mon, 21 Apr 2025 03:00:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745204432; cv=none; b=ZWyWsUN7xbbeGjfTw157vhbnhqqy+cRkilnfCnIT+SIa+ym1I7znx3yCtAhsFjwPHlFU/O6l5y8CvxpvDE1ti7JFfwP7x8f9UFNyItrxUYP4Fcodfhj73JgLsvjgzTmprbas6IYqTkbjz5/Xhp1Gq493yXMOVRWc9MCzmKboK1k=
+	t=1745204434; cv=none; b=Cf7gGwcbCuYH9bz3XVU1P108WVwVsBtjIHq8WOz6rnUQ2b/9InH0Ptn1Cj1U4hLubnH/nVL+3CR1ZaD+ocXwZ6ZPkFvVHkDpaJoYQJQGpIBAV7cwP7/TXMfiElDl6okzQwvXFi05TqYq7M5Q8jObMZUeRAD1kniTnTKwN0Toqqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745204432; c=relaxed/simple;
-	bh=OqTv1HO/hF/hcOvfmtjmlaf7GztSdHtxh/CKXPMvZ8Y=;
+	s=arc-20240116; t=1745204434; c=relaxed/simple;
+	bh=u+JYZi/yjnuJmHTP3iaEyJF1IcIfGqUCW7J1iGOT5eU=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QM/BCycuYVxvnWY+sHAhe1ONkskXzMywrIf3kHSATRyueNjqA8aIyJ51CroLUe8nzjjI38PZDQR2Pg1TUpl2PPVGnu3IDQIN++TxAq6Enb0cTs/ZKW4z256hXudsmaILOhhx4qYMgz0BYQGEG0k84VqDLdRb6cNjad2fL6668L4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+	 MIME-Version:Content-Type; b=E+xC2klE7ylwlwp7eMIFFJ0UtAsBAPeA6hfK27ap+1ttkPxUMXdVBOXB4MhRbGlPZ1GxjJ9aA3CtSze1+SzSkFzC2JIh4gWCP0ksMQjicrz2E7QiEli4MNziBNARQTSt3S9gD1Piqabw44xiFsSE8ETVLLm0jpIl1Ox/tMcLjwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.234])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4ZgqlV4lTPz2CdFF;
-	Mon, 21 Apr 2025 10:56:54 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4ZgqpR4Spxz1cynL;
+	Mon, 21 Apr 2025 10:59:27 +0800 (CST)
 Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id 03E6F140119;
+	by mail.maildlp.com (Postfix) with ESMTPS id 803FB180472;
 	Mon, 21 Apr 2025 11:00:23 +0800 (CST)
 Received: from localhost.huawei.com (10.50.165.33) by
  kwepemh100008.china.huawei.com (7.202.181.93) with Microsoft SMTP Server
@@ -46,9 +46,9 @@ CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
 	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <yubowen8@huawei.com>,
 	<cenxinghai@h-partners.com>, <zhenglifeng1@huawei.com>
-Subject: [PATCH 3/4] PM / devfreq: Remove redundant devfreq_get_freq_range() calling in devfreq_add_device()
-Date: Mon, 21 Apr 2025 11:00:19 +0800
-Message-ID: <20250421030020.3108405-4-zhenglifeng1@huawei.com>
+Subject: [PATCH 4/4] PM / devfreq: Check governor before using governor->name
+Date: Mon, 21 Apr 2025 11:00:20 +0800
+Message-ID: <20250421030020.3108405-5-zhenglifeng1@huawei.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20250421030020.3108405-1-zhenglifeng1@huawei.com>
 References: <20250421030020.3108405-1-zhenglifeng1@huawei.com>
@@ -63,35 +63,41 @@ Content-Type: text/plain
 X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
  kwepemh100008.china.huawei.com (7.202.181.93)
 
-The calling of devfreq_get_freq_range() in devfreq_add_device() is
-redundant because min_freq and max_freq are never used. Remove it.
+Commit 96ffcdf239de ("PM / devfreq: Remove redundant governor_name from
+struct devfreq") removes governor_name and uses governor->name to replace
+it. But devfreq->governor may be NULL and directly using
+devfreq->governor->name may cause null pointer exception. Move the check of
+governor to before using governor->name.
 
+Fixes: 96ffcdf239de ("PM / devfreq: Remove redundant governor_name from struct devfreq")
 Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
 ---
- drivers/devfreq/devfreq.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/devfreq/devfreq.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 2810c84b9f8a..18e3f7e063a4 100644
+index 18e3f7e063a4..46f3a8053197 100644
 --- a/drivers/devfreq/devfreq.c
 +++ b/drivers/devfreq/devfreq.c
-@@ -804,7 +804,6 @@ struct devfreq *devfreq_add_device(struct device *dev,
- {
- 	struct devfreq *devfreq;
- 	struct devfreq_governor *governor;
--	unsigned long min_freq, max_freq;
- 	int err = 0;
+@@ -1376,15 +1376,11 @@ int devfreq_remove_governor(struct devfreq_governor *governor)
+ 		int ret;
+ 		struct device *dev = devfreq->dev.parent;
  
- 	if (!dev || !profile || !governor_name) {
-@@ -872,8 +871,6 @@ struct devfreq *devfreq_add_device(struct device *dev,
- 		goto err_dev;
- 	}
- 
--	devfreq_get_freq_range(devfreq, &min_freq, &max_freq);
--
- 	devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
- 	devfreq->opp_table = dev_pm_opp_get_opp_table(dev);
- 	if (IS_ERR(devfreq->opp_table))
++		if (!devfreq->governor)
++			continue;
++
+ 		if (!strncmp(devfreq->governor->name, governor->name,
+ 			     DEVFREQ_NAME_LEN)) {
+-			/* we should have a devfreq governor! */
+-			if (!devfreq->governor) {
+-				dev_warn(dev, "%s: Governor %s NOT present\n",
+-					 __func__, governor->name);
+-				continue;
+-				/* Fall through */
+-			}
+ 			ret = devfreq->governor->event_handler(devfreq,
+ 						DEVFREQ_GOV_STOP, NULL);
+ 			if (ret) {
 -- 
 2.33.0
 
