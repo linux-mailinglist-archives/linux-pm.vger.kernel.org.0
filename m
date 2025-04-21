@@ -1,149 +1,118 @@
-Return-Path: <linux-pm+bounces-25790-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25791-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B629CA94D5A
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 09:40:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04CDAA94D73
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 09:45:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61DF618916C7
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 07:40:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A31C17010A
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Apr 2025 07:45:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6161D20F09B;
-	Mon, 21 Apr 2025 07:40:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="p/UBuJYS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A92D220E33A;
+	Mon, 21 Apr 2025 07:45:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9345A20E313
-	for <linux-pm@vger.kernel.org>; Mon, 21 Apr 2025 07:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A984E2B9A8;
+	Mon, 21 Apr 2025 07:45:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745221210; cv=none; b=YlvmkPWZGHzWp/yoh3EQBgkHkMOX4HYZWV6dYt8ZM+xDxfIN0Fn0vrhgw+caqPsxXotNZrLUtzS7qoe0IbR9jofIabhivRcsNFHAYmYWU/VBK8AAB/bhIcGG2V7n9AmnyTgn5D35hdD6vIKAsp+R2JDwmH/WAMWFoNyAPDvSK1k=
+	t=1745221525; cv=none; b=teVfX5s9T6xqDYyDujU8zuryehzejAd8LIjGvwga0PBlwHd4BlcHSnezGNZ0zBgwYzztsbFatspRgnq+M/lEXZypHoyDKI6c8RoTvNYUc8bJHUQsikiPDB5zCusPsLvUD8RlD+lxcO42kDX0WUmVraDk4oE9YEYF6gP4lozg3vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745221210; c=relaxed/simple;
-	bh=PeBXLRAj60k68zJj9ooHApuMSHQU/cTihkyhBpXJI2k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GYVnWpl3GONaami0KSFvxPK2mXCVfYdT8b6z6ogWeefrisovcdc8nIKaHH0wk08y44nbCkHKRt0D6FlT1+C0+lKbB/HCMCi5jPbNzxt3fz/E78Q2dEwGIqBA5MhjRsuSgQNVKNtxADslQGmlvXrb/1qW+aJhOR+YT+SlDYs++I0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=p/UBuJYS; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-227d6b530d8so37086495ad.3
-        for <linux-pm@vger.kernel.org>; Mon, 21 Apr 2025 00:40:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1745221207; x=1745826007; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KPWuv8niOHztMFrbbmt1uYkhWaXjAx35JzxahYfmqQA=;
-        b=p/UBuJYSoz5y0zr2srUZMsmDIJ7ERTrlw4bwx4FF46ZVeFy0odZMqHkqYgVzjbQIEk
-         LIloTkmxTK6jRVnKoNb/OrqURe17x0gWmJudvYao3FuY7GKfD10wl1onyzY50lWhFmE3
-         LttLh3scodjgyE+6UoIyuh3lDIcY9bu9g4ctc5AkCzffjUseu6B0ae4EqMIzim1tSCGD
-         3OLjfaETYT9gY/zBwvuTc/GNE+UbhvL5pMd8xdEg/Kh8MCO/CQGYXdrNvr/5CKG+f7G9
-         Mp9u+K5eC4VZRcgwmoINDIFvw+InKrniQEBk8CGVe+so20xRwQzglLLMiyLnZr/G1uYo
-         4w6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745221207; x=1745826007;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KPWuv8niOHztMFrbbmt1uYkhWaXjAx35JzxahYfmqQA=;
-        b=B9oPs2PMlsgdQ6TLyg1UguvaPOYnV4ewkX2dLU+apKn6cc65+sd1ss3ghGIcb/TOwu
-         TSf4cqs6FbpH2Ga+t+YK32pRy4F74EVVN+OfXAJNUUYDVrgRGu+xkKNs5vklI+1aGmX7
-         ybRztx0bTxdDD2IzusjE+fqQM2Eb6U4gBA9PvPD1+9s5LUY5/o0Zryelm+GDh1VWLNmh
-         GZfo69stgjSPw3/RwXI2v+LYVy47v9TXB049ZsHOoou4ekqbZr99a6iIpxAdsUTnRgly
-         qSShVkFOuIFsbqVtAIDkuoE6xY4bpWvpYJKdpcGN9gJK9mI9IRjVOwv7nqu3Vr7NVQN+
-         UPuw==
-X-Forwarded-Encrypted: i=1; AJvYcCUWMQ+Wohr2OuT/9hsV3A7VmSg9fFwFTddO0zIZiFiVBqq7geExc7nWfyH893xBCLaF8MtX9eB1QQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwiSRfEkvG7osW2HisqaTJSQ3CJoYvtX1tgqBjtnLLYENAjblfm
-	rx13fF6UxXeN537gaEBfkhR/o6OULGFowqSkFL63DzPiqHApgLwYll5+3hjkp68=
-X-Gm-Gg: ASbGncuSUX9JRznL1u4PonUR3Vqbcil3HLZBHPdLNBjbQeiv7FCyIvIM9PzaZEx0zTe
-	2ITzYklrRorFttZg1zFIN6TY2fcJFgfhLDN+RH5RDCjE+kic3+9u2sfZw+9z1AkNE/k98KuqTh0
-	RZzJ9scuXJbwGR+SI0S3IgkjSFxhMa70yUlybhwkI1wpYFBasV6u51rxi7Cndmi76+SRweCt/nK
-	gYz6ThwUJaQslLeToaKbB3V1IyERSc15g5AXGS18IOQyF6qdPvUsDMNdK3B1jEpzfIh2GtalYkg
-	55xDVqyKCaMjWgOK8NUc+bMVwU4r2FNg1tSKMFT0RQ==
-X-Google-Smtp-Source: AGHT+IFEQar7NeS6q6JkNznSin7X+7SGrcyiO8UetGUcotpj5g8KPklv9xVoi2zS1Z22WYAGg4pCjA==
-X-Received: by 2002:a17:902:c40b:b0:221:331:1d46 with SMTP id d9443c01a7336-22c5356e4a8mr129549315ad.2.1745221206749;
-        Mon, 21 Apr 2025 00:40:06 -0700 (PDT)
-Received: from localhost ([122.172.83.32])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22c50bda4d3sm59679655ad.47.2025.04.21.00.40.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Apr 2025 00:40:06 -0700 (PDT)
-Date: Mon, 21 Apr 2025 13:10:04 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Praveen Talari <quic_ptalari@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-pm@vger.kernel.org, psodagud@quicinc.com, djaggi@quicinc.com,
-	quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com,
-	quic_arandive@quicinc.com, quic_mnaresh@quicinc.com,
-	quic_shazhuss@quicinc.com, Nikunj Kela <quic_nkela@quicinc.com>
-Subject: Re: [PATCH v2 1/9] opp: add new helper API dev_pm_opp_set_level()
-Message-ID: <20250421074004.yttb42qq4p5xzi3o@vireshk-i7>
-References: <20250418151235.27787-1-quic_ptalari@quicinc.com>
- <20250418151235.27787-2-quic_ptalari@quicinc.com>
+	s=arc-20240116; t=1745221525; c=relaxed/simple;
+	bh=kIM7s0Aj9UnhmqjU0UyLzWBt4wOoBW79+q3PC305GS8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=SeqRjaFUqdQpY33p6jB3LGxqSW/AbkGOtVH4RRE7q9zeu2aR/2EjMghMbjkRsSSCreBIjAPmJZGmu/Awbfitxhv5vYJ6pSCutPhTEoMA1grAwD5QXSF2NNY+ovWz8PmL/q12blMwuQaGbuqc6lp5ayGEXHyzX4jrRzOpT2yY3iM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.252])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Zgy794xwvz1d03c;
+	Mon, 21 Apr 2025 15:44:21 +0800 (CST)
+Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
+	by mail.maildlp.com (Postfix) with ESMTPS id D18C0180B5A;
+	Mon, 21 Apr 2025 15:45:17 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
+ (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 21 Apr
+ 2025 15:45:17 +0800
+Message-ID: <b135ad48-fa77-4455-b83a-92a6367bfacc@huawei.com>
+Date: Mon, 21 Apr 2025 15:45:16 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250418151235.27787-2-quic_ptalari@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpufreq: acpi: Don't enable boost on policy exit
+To: Viresh Kumar <viresh.kumar@linaro.org>
+CC: "Rafael J. Wysocki" <rafael@kernel.org>, Nicholas Chin
+	<nic.c3.14@gmail.com>, <linux-kernel@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <rafael.j.wysocki@intel.com>,
+	<vincent.guittot@linaro.org>
+References: <20250417015424.36487-1-nic.c3.14@gmail.com>
+ <20250417050226.c6kdp2s5du3y3a3j@vireshk-i7>
+ <20250417050911.xycjkalehqsg3i6x@vireshk-i7>
+ <CAJZ5v0iO4=nHcATzPyiKiWumdETFRR32C97K_RH=yhD--Tai=g@mail.gmail.com>
+ <CAJZ5v0gcf07YykOS9VsQgHwM0DnphBX4yc9dt5cKjNR8G_4mAQ@mail.gmail.com>
+ <CAKohpomN1PYn1NPSsxCxqpMfg-9nYgCRQD6dFGQ30B+76vneQw@mail.gmail.com>
+ <978bc0b7-4dfe-4ca1-9dd5-6c4a9c892be6@gmail.com>
+ <CAJZ5v0iwAsVnvYKjKskLXuu5bDV_SMpgnTTy0zD=7fgnGzHQnA@mail.gmail.com>
+ <CAKohponCr6pwgmK+J0WnvY_VZdDhA738JF18L518A2MKJVQLmw@mail.gmail.com>
+ <c704850d-1fdd-4f25-8251-5bab03f055bb@huawei.com>
+ <20250421062003.lbxdxhlp6ulnjq7f@vireshk-i7>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <20250421062003.lbxdxhlp6ulnjq7f@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemh100008.china.huawei.com (7.202.181.93)
 
-On 18-04-25, 20:42, Praveen Talari wrote:
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 73e9a3b2f29b..a9bca9502f71 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -3151,3 +3151,25 @@ void dev_pm_opp_remove_table(struct device *dev)
->  	dev_pm_opp_put_opp_table(opp_table);
->  }
->  EXPORT_SYMBOL_GPL(dev_pm_opp_remove_table);
-> +
-> +/*
-> + * dev_pm_opp_set_level() - Configure device for a level
-> + * @dev: device for which we do this operation
-> + * @level: level to set to
-> + *
-> + * Return: 0 on success, a negative error number otherwise.
-> + */
-> +int dev_pm_opp_set_level(struct device *dev, unsigned int level)
+On 2025/4/21 14:20, Viresh Kumar wrote:
 
-I would rather move this to pm_opp.h as an inline helper.
+> On 19-04-25, 17:35, zhenglifeng (A) wrote:
+>> Yes, the policy boost will be forcibly set to mirror the global boost. This
+>> indicates that the global boost value is the default value of policy boost
+>> each time the CPU goes online. Otherwise, we'll meet things like:
+>>
+>> 1. The global boost is set to disabled after a CPU going offline but the
+>> policy boost is still be enabled after the CPU going online again.
+>>
+>> 2. The global boost is set to enabled after a CPU going offline and the
+>> rest of the online CPUs are all boost enabled. However, the offline CPU
+>> remains in the boost disabled state after it going online again. Users
+>> have to set its boost state separately.
+> 
+> I agree that both of these are valid issues, but so is retaining state
+> across suspend/resume too.. There is a difference in a user manually
+> removing a CPU (offline) and suspend/resume.
+> 
+> With a manual offline operation, the code in cpufreq_online() is doing
+> the right thing, default to global boost. But the user configuration
+> shouldn't change with just suspend resume.
+> 
+>> IMV, a user set the global boost means "I want all policy boost/unboost",
+>> every CPU going online after that should follow this order. So I think
+>> the code in cpufreq_online() is doing the right thing.
+> 
+> Yes, but any change to policy->boost after that must also be honored.
 
-> +{
-> +	struct dev_pm_opp *opp = dev_pm_opp_find_level_exact(dev, level);
-> +	int ret;
-> +
-> +	if (IS_ERR(opp))
-> +		return -EINVAL;
+I see. Then I think the key is how to distinguish CPU offline/online and
+suspend/resume in cpufreq_online().
 
-Why not reuse the same error value ?
+> 
+>> BTW, I think there is optimization can be done in
+>> cpufreq_boost_trigger_state(). Currently, Nothing will happend if users set
+>> global boost flag to true when this flag is already true. But I think it's
+>> better to set all policies to boost in this situation. It might make more
+>> sense to think of this as a refresh operation. This is just my idea. I'd
+>> like to hear your opinion.
+> 
+> Makes sense.
+> 
 
-> +
-> +	ret = dev_pm_opp_set_opp(dev, opp);
-> +	dev_pm_opp_put(opp);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(dev_pm_opp_set_level);
-
-Make the changes and send it separately (or with the series, your
-choice), I will apply it to the OPP tree. Thanks.
-
--- 
-viresh
 
