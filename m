@@ -1,94 +1,185 @@
-Return-Path: <linux-pm+bounces-25868-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25873-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 129A9A9631F
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 10:56:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2C60A96396
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 11:08:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90A8619E2CEA
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 08:49:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F14D61883551
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 09:00:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FFC82580D0;
-	Tue, 22 Apr 2025 08:43:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ChdFVkhz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77FDA25B676;
+	Tue, 22 Apr 2025 08:57:40 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FC4E239085;
-	Tue, 22 Apr 2025 08:43:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D394B25B664
+	for <linux-pm@vger.kernel.org>; Tue, 22 Apr 2025 08:57:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745311418; cv=none; b=I8cA5HqzCOrt6qVY8Ib9m0ccMgVlp/axZix+oA3OZKNyRK63At25UjKpxhrXspKMqrTxYI7kJDe1mJBy1lPQklNYhsg6QAyBkCEosmkKgwvpSmW1YaPa69tuz+L7T0joZ3SaO/WPzzNsKltPauwez22+dUbMJRhpaPpUAw6kiYU=
+	t=1745312260; cv=none; b=j91WQ2dEIUQd0wgFOjE9wDmFGlKBjr19ct1eZnZYQUllE8b4RPVcSZw4hHUlQTCjRhgzr76i4Y/ERhmCHlXkShO5tV5V/SAnnjmF/jlTatcn96TFzNFeMjtCP67A3XayexAbsOKKAcydkpb0yR4iiRksiMSQ7QMo42TC24wkfso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745311418; c=relaxed/simple;
-	bh=trUwxgkbYocqWQI6MfdxJtzi88omtDraXrFFZ8EFGnE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=onVwZqjSMcHeIckO16C2RX9oeApmG8+UzmUkwZWVQJ+SaPEYW4WwvafS9nXg0cc6/TZwwYuZie9C6SJEg3cDm2dlbsAtaXJAoAMVS04THrM701IdmZpb14g6opaWUV1F0ApYAsca5GWifZbNOFR5hZ0LIJWmSA3DCtkTA+IsNJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ChdFVkhz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5AA7C4CEE9;
-	Tue, 22 Apr 2025 08:43:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745311417;
-	bh=trUwxgkbYocqWQI6MfdxJtzi88omtDraXrFFZ8EFGnE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ChdFVkhzjsXHdkBGYH4gMHe7OCaIptwGjHtQ3BjfZtrrvBmdk91tVrY0tjAxc120c
-	 B7NYiXVNUg6vHjy0Y5LpbI920NOG1XmK7QjkCdTPglkIDgHnDM4XjEBazVRdyHSe7T
-	 zB3NvgKudujC6wvkmgZsdLHTE6YUJqDSHacYqX7uwsvV8Z2X0UOoUQxPS9oyDIb5bu
-	 afpup07WhhdxQp86PDvOU/Ro4N6EQAJZFfTVzS3KsbuY91/xyY1OUgNwauevrYiRuy
-	 d/buaizv/dU77jat3O8Z470nSCkHm1lixgik2Coa5rYdHy5i0DE01DFqsFzmYxtMUY
-	 FjN/ZWIut0prw==
-Date: Tue, 22 Apr 2025 10:43:34 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc: Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Abhinav Kumar <quic_abhinavk@quicinc.com>, 
-	Marijn Suijten <marijn.suijten@somainline.org>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Maya Matuszczyk <maccraft123mc@gmail.com>, 
-	Anthony Ruhier <aruhier@mailbox.org>, Dmitry Baryshkov <lumag@kernel.org>, 
-	linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 5/7] dt-bindings: opp: Add v2-qcom-adreno vendor
- bindings
-Message-ID: <20250422-beneficial-fractal-otter-ebd1d2@kuoka>
-References: <20250419-gpu-acd-v5-0-8dbab23569e0@quicinc.com>
- <20250419-gpu-acd-v5-5-8dbab23569e0@quicinc.com>
+	s=arc-20240116; t=1745312260; c=relaxed/simple;
+	bh=Rbyz2ftNDpvSEMKvn/ADDVhtF8Nex1a0YDAZd9TdBM8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Fjpcd2+O5yQB4668uaG1gmH+DpHzcNFYKFwZjhzLsMbBPYOmwqSradlgjs7xOlS1oXMFu+LDzWOIYOIgKjrpbELtKDqMfXASgQD7QUpeXzSd6LmkL5nNTABczuhgU7AWz3U/ZwiztVayrkB5EUGqMQNWSy4nSHYL8RVKUfsrwDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1u79RQ-0007Tx-3n; Tue, 22 Apr 2025 10:57:20 +0200
+Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1u79RO-001WRB-2g;
+	Tue, 22 Apr 2025 10:57:18 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1u79RO-00Avp3-2P;
+	Tue, 22 Apr 2025 10:57:18 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Sebastian Reichel <sre@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
+	kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	linux-pm@vger.kernel.org,
+	=?UTF-8?q?S=C3=B8ren=20Andersen?= <san@skov.dk>,
+	Guenter Roeck <groeck@chromium.org>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Ahmad Fatoum <a.fatoum@pengutronix.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	chrome-platform@lists.linux.dev
+Subject: [PATCH v9 0/7] Introduction of PSCR Framework and Related Components
+Date: Tue, 22 Apr 2025 10:57:10 +0200
+Message-Id: <20250422085717.2605520-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250419-gpu-acd-v5-5-8dbab23569e0@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-On Sat, Apr 19, 2025 at 08:21:34PM GMT, Akhil P Oommen wrote:
-> Add a new schema which extends opp-v2 to support a new vendor specific
-> property required for Adreno GPUs found in Qualcomm's SoCs. The new
-> property called "qcom,opp-acd-level" carries a u32 value recommended
-> for each opp needs to be shared to GMU during runtime.
-> 
-> Also, update MAINTAINERS file include the new opp-v2-qcom-adreno.yaml.
-> 
-> Cc: Rob Clark <robdclark@gmail.com>
-> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
-> Tested-by: Maya Matuszczyk <maccraft123mc@gmail.com>
-> Tested-by: Anthony Ruhier <aruhier@mailbox.org>
-> ---
->  .../bindings/opp/opp-v2-qcom-adreno.yaml           | 96 ++++++++++++++++++++++
->  MAINTAINERS                                        |  1 +
->  2 files changed, 97 insertions(+)
+changes v9:
+- Remove redundant pr_crit() messages before hw_protection_trigger()
+- Replace psc_reason_to_str() switch with static const string array
+- Mark psc_last_reason as static
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+changes v8:
+- Use DEFINE_GUARD() and guard(g_pscrr) for scoped locking of the global
+  pscrr_core struct
+- Replace manual mutex_lock/unlock with automatic cleanup-based guard()
+  usage
+- Centralize backend and locking state in struct pscrr_core
+- Prepare for future multi-backend support with clean encapsulation
+- Improve sysfs documentation:
+  * Added full enum psc_reason value table
+  * Simplified example comments, removed redundant "may differ" phrasing
+  * Added note that not all values are supported on all systems
+  * Linked value definitions to include/linux/reboot.h
+  * Added clear read/write usage examples for sysfs entries
 
-Best regards,
-Krzysztof
+changes v7:
+- document expected values in sysfs documentation
+- make write support optional
+
+changes v6:
+- add sysfs documentation
+- rebase against latest hw_protection_reboot changes:
+  https://web.git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?h=mm-nonmm-unstable&id=212dd3f6e57f6af8ed3caa23b93adc29334f9652
+- push core part of the reset reason the kernel/reboot.c
+
+changes v5:
+- fix compile with NVMEM=n and potential issues with NVMEM=m
+
+changes v4:
+- fix compile with CONFIG_PSCRR=n
+
+changes v3
+- rework to remove devicetree dependencies
+- extend NVMEM to search devices and cells by names.
+
+changes v2:
+- rename the framework from PSCR to PSCRR (last R is for Recorder)
+- extend power on reason header and use it to show detected reason on
+  system start and in sysfs.
+- remove "unknow" reason
+- rebase on top of v6.8-rc1
+- yaml fixes
+- zero reason state on boot
+
+Hello all,
+
+This patch series introduces the Power State Change Reasons Recording
+(PSCRR) framework and its related components into the kernel. The PSCR
+framework is designed for systems where traditional methods of storing
+power state change reasons, like PMICs or watchdogs, are inadequate. It
+provides a structured way to store reasons for system shutdowns and
+reboots, such as under-voltage or software-triggered events, in
+non-volatile hardware storage.
+
+These changes are critical for systems requiring detailed postmortem
+analysis and where immediate power-down scenarios limit traditional
+storage options. The framework also assists bootloaders and early-stage
+system components in making informed recovery decisions.
+
+
+Oleksij Rempel (7):
+  power: Extend power_on_reason.h for upcoming PSCRR framework
+  reboot: hw_protection_trigger: use standardized numeric
+    shutdown/reboot reasons instead of strings
+  power: reset: Introduce PSCR Recording Framework for Non-Volatile
+    Storage
+  nvmem: provide consumer access to cell size metrics
+  nvmem: add support for device and sysfs-based cell lookups
+  power: reset: add PSCR NVMEM Driver for Recording Power State Change
+    Reasons
+  Documentation: Add sysfs documentation for PSCRR reboot reason
+    tracking
+
+ .../ABI/testing/sysfs-kernel-reboot-pscrr     |  74 ++++
+ drivers/nvmem/core.c                          | 134 ++++++
+ drivers/platform/chrome/cros_ec_lpc.c         |   2 +-
+ drivers/power/reset/Kconfig                   |  47 ++
+ drivers/power/reset/Makefile                  |   2 +
+ drivers/power/reset/pscrr-nvmem.c             | 254 +++++++++++
+ drivers/power/reset/pscrr.c                   | 403 ++++++++++++++++++
+ drivers/regulator/core.c                      |  13 +-
+ drivers/regulator/irq_helpers.c               |   9 +-
+ drivers/thermal/thermal_core.c                |   3 +-
+ include/linux/nvmem-consumer.h                |  25 ++
+ include/linux/power/power_on_reason.h         |   4 +
+ include/linux/pscrr.h                         |  58 +++
+ include/linux/reboot.h                        |  77 +++-
+ kernel/reboot.c                               |  85 +++-
+ 15 files changed, 1168 insertions(+), 22 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-kernel-reboot-pscrr
+ create mode 100644 drivers/power/reset/pscrr-nvmem.c
+ create mode 100644 drivers/power/reset/pscrr.c
+ create mode 100644 include/linux/pscrr.h
+
+--
+2.39.5
 
 
