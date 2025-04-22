@@ -1,207 +1,168 @@
-Return-Path: <linux-pm+bounces-25934-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25935-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15793A9719F
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 17:51:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91443A97356
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 19:07:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 616217AED04
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 15:49:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C4563AAEE7
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 17:07:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BE3028F957;
-	Tue, 22 Apr 2025 15:51:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B50A29617B;
+	Tue, 22 Apr 2025 17:07:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fmdIEcHy"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jEZ+8Lj6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6B4290082;
-	Tue, 22 Apr 2025 15:50:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC5313C3F6;
+	Tue, 22 Apr 2025 17:07:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745337060; cv=none; b=V5GGAAzXkuf6E0mIfBy5wx9UsAL9cuPvteAbf/Uok55PbsXVXHJyE2zW5UVHdjQsRwKa/vz6vILahYlvArLCqPC5bxxroIrvj9zjLcQQNmQAwppeOX0m0UiQtoDqGknG18Lf9O2V+YB6c4LtVCKQQE82LI8+Jkogln1WNlZSGWc=
+	t=1745341664; cv=none; b=Gi9YErjWwCiZdpBB3hx1aVkoFOaPqZSm58iWoCmR3eyCUTIR0BexSnldPEZrRd4bIvRjegpT45I+52yLCvl85XW8+9WZrY98cZWkGD7n3xoApXHn04aSM1b3HKXcbLdcZpql8c7rR+oYFn9aroq0uhJUaY3WuXsbex8CWogjgzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745337060; c=relaxed/simple;
-	bh=/dt0p1OzuOjf3abs0q6cnVxY9+yEPKqJWonGL82r5pk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ESWIMXqdPPbwNbUwf7Km9e8ZhPtObmxwCRmC5ed4uxdeXcF5TfQ3mLuwrk8QYgx3jtV+fjMSqDbKeS7QsLZOvQdvSWSF26FFFIXBhZucf3b29eJTarqg+BCFPW2rPGzcs3SQ35S9cQujt49tjh+1rSml9iefm3VC2ZAycgJLdeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fmdIEcHy; arc=none smtp.client-ip=209.85.219.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6e8f94c2698so25889706d6.0;
-        Tue, 22 Apr 2025 08:50:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745337057; x=1745941857; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7oowU4ubiAR+sY0xZ++0AHuDMpFQG52efmVb/Y2eNfo=;
-        b=fmdIEcHyU8tzsPPSCRp4mbY5iq3Z3PvFYhyHPKIJYeoCf8yn+mIy/ljxqhKQtpK8nQ
-         mcE9qRR0x6B8vC65eXjHIDiYS3m1x3W89FVqSAwHEWznjv1Tw+T0thnKYJ3aHTTuKyWA
-         McEfW36z7PBt7pBFkyn7puL13AStGRTJVzju5J7K/AG3XrfJFq9rK9kvdhI36W6oRbbQ
-         TsGC6Zo9WM5hti9H+nhQd/rHmLAqot3nRM5Xos6qwyTi4EORnDI4NU68HQfarrK/gLps
-         ufqhFpBP9F8AEYCvgt07KfiYGgkFj62P/BFCynauWaF/3UJihrzjQDqs8z9wnD0QksSK
-         iTbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745337057; x=1745941857;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7oowU4ubiAR+sY0xZ++0AHuDMpFQG52efmVb/Y2eNfo=;
-        b=YGWjVebtefQMwm+39RHuPc7vQ06lqjnX5+JVZ+gHbq8JvxfMlfGvNauV8Gs8qosaNs
-         HH0tc8G+BRGc8JFTrdkAvybcr7mCzHpZigzS9aTkqomUr5RU3hSN153vj6+D5PXuo0/9
-         2jW07xGSrBhx1fVSi88vum7bzyfqY3FA0q/Vrv4reYWHNNtrueWhJCzrFiv2bWqeKJJk
-         VYLc+a66QUR3lclCoMvVDxv7qWQ2QYb5hG2NY32LclWZtWOwRGIzXe9uysRUNPJ6OeuK
-         ZLyrmvZMvk3WSmEgXlM2LVPRTxboQhySVYQPDTkRKHQyJLRBFK6d7miX/UHdi5ZduGOp
-         JKOg==
-X-Forwarded-Encrypted: i=1; AJvYcCUX1IppSegkLm6AA8D8w7BK6ItUYqhw65N1o4iaxvhGdTg7l6zKivwrQFJeuTJf1c2GrCGW1eknXgY=@vger.kernel.org, AJvYcCUY9RQG+HtvZG7ePvpVuFD4gv9B3ZaoVGAVn8j9DGMSveP8hG/arG1vijp+Szqyl90mbBz9tnNAfd3cyMkQ@vger.kernel.org, AJvYcCVuudZD7SAlmWaLAvmULwp/RLBEtm1kReLeYs0DYtuXOKudGTSEy5dw5ssv2U2FoaBZH96c8Q1X@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHIB5crUSt5XMmCdAYfnqpH5qYSMKlc/EF1fa08r/sueHLVzb2
-	a0aq/1NLHKZvZeDqzjj4OOa0fBMr2akbIrm+sA7PAcm3+R47RZBJpP9aLb9Tywk30p+swEKSIft
-	qyLGayNTwqDNs1npzWSqHtCaFF6c=
-X-Gm-Gg: ASbGnctHSwjsiSAfQxGJI8ak/HnsFHsKol7qWwKEAccU4Jp9bi6L4d+/JhxrQ2rROIf
-	xiRNRpswg8rGZ45gnveLAA1UVVKK0G/7EFxDkaTCDxcyeqtAljUral129mme21X2ecrEP80Fm5E
-	tVW5PtyhnvfT2Cx3PTQZKBmQ4=
-X-Google-Smtp-Source: AGHT+IFTQJvOfea+03HAmL9GIosZ3IA3k3+2rYzqUw2jPSNa10A/2r2nDWdPOvptn58dV5riuFvJ00P+D2mvRKAx7Is=
-X-Received: by 2002:a05:6214:262c:b0:6e6:5d61:4f01 with SMTP id
- 6a1803df08f44-6f2c45125a4mr324053346d6.8.1745337056905; Tue, 22 Apr 2025
- 08:50:56 -0700 (PDT)
+	s=arc-20240116; t=1745341664; c=relaxed/simple;
+	bh=wP2HHciPUmMSwT9dbn/j099qBVn4wnF7b816IwB20Wk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=BJa2rfRSOeTvw70pcImoN0Jma6wnzSvus3edf/VhIz6hwQ3oKNmaiqYbYSzY7po4uJCvseQIf+sT14wMU73XRmJbaiAnpCtqnWQpOhZzjftSHip4gvE/jgPudW8rNGTzs0lidLFxi0P4WUFU69588MRU+Kg+FehGLm8cTvV+HhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=jEZ+8Lj6; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53MCF4iH023288;
+	Tue, 22 Apr 2025 17:07:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	UxGbEsZ+4E8+fRBWB7/h7y9QN0FggykMGW/XC4EIPhY=; b=jEZ+8Lj6vmtgSKBa
+	Po/Q3MCmIHLU3cO0SVOzLwGhchb6B8orJtwXzVS23NMPr0Zunhg176zP9UE6qFTD
+	7Sd237PCseUfKIVirCvkavT8XGojrIMnOuaMu5z6Q6S72QTUni2nRfFkv5RrPL60
+	PQhrlsQbKqmKPtKGOflfWpZ3UupAMwB0OmW0eMyrklo4TIWnahiuPGQyryN7WxCX
+	BGvG+8IgoOj51iDDEpDytsddjnJwGAon1wn3ZMLK4f6s1/V7b9sRiSFfJrGQvyrm
+	S2Tw1AxUBkGYm7OaAkQrBukNzplGcXO3U6TStRRLOMlijGblrdfSkn0rlbS6+8Bu
+	2AScZA==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4642svgg8k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 22 Apr 2025 17:07:36 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53MH7ZDY028289
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 22 Apr 2025 17:07:35 GMT
+Received: from [10.216.54.177] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 22 Apr
+ 2025 10:07:29 -0700
+Message-ID: <e6e1ee6d-a12f-4e18-b2d7-65d1ccca5308@quicinc.com>
+Date: Tue, 22 Apr 2025 22:37:25 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250407234223.1059191-1-nphamcs@gmail.com> <20250407234223.1059191-4-nphamcs@gmail.com>
- <20250408141555.GA816@cmpxchg.org> <6807ab09.670a0220.152ca3.502fSMTPIN_ADDED_BROKEN@mx.google.com>
-In-Reply-To: <6807ab09.670a0220.152ca3.502fSMTPIN_ADDED_BROKEN@mx.google.com>
-From: Nhat Pham <nphamcs@gmail.com>
-Date: Tue, 22 Apr 2025 08:50:46 -0700
-X-Gm-Features: ATxdqUETwwP-bJUx8AP5nTAO6LFG9MhYiOS8p8tUjdEza2vLaCtWajTH1zIUKgY
-Message-ID: <CAKEwX=Mjx4LYe60ErJasFofkq-uH_R9R0TZD9ROdN1vn4V=Yjw@mail.gmail.com>
-Subject: Re: [RFC PATCH 03/14] mm: swap: add a separate type for physical swap slots
-To: Yosry Ahmed <yosry.ahmed@linux.dev>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, linux-mm@kvack.org, akpm@linux-foundation.org, 
-	hughd@google.com, mhocko@kernel.org, roman.gushchin@linux.dev, 
-	shakeel.butt@linux.dev, muchun.song@linux.dev, len.brown@intel.com, 
-	chengming.zhou@linux.dev, kasong@tencent.com, chrisl@kernel.org, 
-	huang.ying.caritas@gmail.com, ryan.roberts@arm.com, viro@zeniv.linux.org.uk, 
-	baohua@kernel.org, osalvador@suse.de, lorenzo.stoakes@oracle.com, 
-	christophe.leroy@csgroup.eu, pavel@kernel.org, kernel-team@meta.com, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/9] opp: add new helper API dev_pm_opp_set_level()
+To: Viresh Kumar <viresh.kumar@linaro.org>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby
+	<jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Viresh Kumar
+	<vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd
+	<sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <psodagud@quicinc.com>,
+        <djaggi@quicinc.com>, <quic_msavaliy@quicinc.com>,
+        <quic_vtanuku@quicinc.com>, <quic_arandive@quicinc.com>,
+        <quic_mnaresh@quicinc.com>, <quic_shazhuss@quicinc.com>,
+        Nikunj Kela <quic_nkela@quicinc.com>
+References: <20250418151235.27787-1-quic_ptalari@quicinc.com>
+ <20250418151235.27787-2-quic_ptalari@quicinc.com>
+ <20250421074004.yttb42qq4p5xzi3o@vireshk-i7>
+Content-Language: en-US
+From: Praveen Talari <quic_ptalari@quicinc.com>
+In-Reply-To: <20250421074004.yttb42qq4p5xzi3o@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: YyWBJ9dLmEkULWUMr6Ar_Yy3ZGwS2WyF
+X-Proofpoint-ORIG-GUID: YyWBJ9dLmEkULWUMr6Ar_Yy3ZGwS2WyF
+X-Authority-Analysis: v=2.4 cv=QLJoRhLL c=1 sm=1 tr=0 ts=6807ccd8 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=aDFI50vaQ4pevssQf7UA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-22_08,2025-04-22_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ lowpriorityscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 malwarescore=0
+ adultscore=0 phishscore=0 suspectscore=0 impostorscore=0
+ priorityscore=1501 clxscore=1011 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502280000 definitions=main-2504220129
 
-On Tue, Apr 22, 2025 at 7:43=E2=80=AFAM Yosry Ahmed <yosry.ahmed@linux.dev>=
- wrote:
+Thank viresh for review.
+
+On 4/21/2025 1:10 PM, Viresh Kumar wrote:
+> On 18-04-25, 20:42, Praveen Talari wrote:
+>> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+>> index 73e9a3b2f29b..a9bca9502f71 100644
+>> --- a/drivers/opp/core.c
+>> +++ b/drivers/opp/core.c
+>> @@ -3151,3 +3151,25 @@ void dev_pm_opp_remove_table(struct device *dev)
+>>   	dev_pm_opp_put_opp_table(opp_table);
+>>   }
+>>   EXPORT_SYMBOL_GPL(dev_pm_opp_remove_table);
+>> +
+>> +/*
+>> + * dev_pm_opp_set_level() - Configure device for a level
+>> + * @dev: device for which we do this operation
+>> + * @level: level to set to
+>> + *
+>> + * Return: 0 on success, a negative error number otherwise.
+>> + */
+>> +int dev_pm_opp_set_level(struct device *dev, unsigned int level)
+> I would rather move this to pm_opp.h as an inline helper.
+
+most of helper APIs in core.c and even i don't see any helper API in 
+pm_opp.c.
+
+please let me know if you still need to add in pm_opp.h.
+
 >
-> On Tue, Apr 08, 2025 at 10:15:55AM -0400, Johannes Weiner wrote:
-> > On Mon, Apr 07, 2025 at 04:42:04PM -0700, Nhat Pham wrote:
-> > > In preparation for swap virtualization, add a new type to represent t=
-he
-> > > physical swap slots of swapfile. This allows us to separates:
-> > >
-> > > 1. The logical view of the swap entry (i.e what is stored in page tab=
-le
-> > >    entries and used to index into the swap cache), represented by the
-> > >    old swp_entry_t type.
-> > >
-> > > from:
-> > >
-> > > 2. Its physical backing state (i.e the actual backing slot on the swa=
-p
-> > >    device), represented by the new swp_slot_t type.
-> > >
-> > > The functions that operate at the physical level (i.e on the swp_slot=
-_t
-> > > types) are also renamed where appropriate (prefixed with swp_slot_* f=
-or
-> > > e.g). We also take this opportunity to re-arrange the header files
-> > > (include/linux/swap.h and swapops.h), grouping the swap API into the
-> > > following categories:
-> > >
-> > > 1. Virtual swap API (i.e functions on swp_entry_t type).
-> > >
-> > > 2. Swap cache API (mm/swap_state.c)
-> > >
-> > > 3. Swap slot cache API (mm/swap_slots.c)
-> > >
-> > > 4. Physical swap slots and device API (mm/swapfile.c).
-> >
-> > This all makes sense.
-> >
-> > However,
-> >
-> > > @@ -483,50 +503,37 @@ static inline long get_nr_swap_pages(void)
-> > >     return atomic_long_read(&nr_swap_pages);
-> > >  }
-> > >
-> > > -extern void si_swapinfo(struct sysinfo *);
-> > > -swp_entry_t folio_alloc_swap(struct folio *folio);
-> > > -bool folio_free_swap(struct folio *folio);
-> > > -void put_swap_folio(struct folio *folio, swp_entry_t entry);
-> > > -extern swp_entry_t get_swap_page_of_type(int);
-> > > -extern int get_swap_pages(int n, swp_entry_t swp_entries[], int orde=
-r);
-> > > -extern int add_swap_count_continuation(swp_entry_t, gfp_t);
-> > > -extern void swap_shmem_alloc(swp_entry_t, int);
-> > > -extern int swap_duplicate(swp_entry_t);
-> > > -extern int swapcache_prepare(swp_entry_t entry, int nr);
-> > > -extern void swap_free_nr(swp_entry_t entry, int nr_pages);
-> > > -extern void swapcache_free_entries(swp_entry_t *entries, int n);
-> > > -extern void free_swap_and_cache_nr(swp_entry_t entry, int nr);
-> > > +void si_swapinfo(struct sysinfo *);
-> > > +swp_slot_t swap_slot_alloc_of_type(int);
-> > > +int swap_slot_alloc(int n, swp_slot_t swp_slots[], int order);
-> > > +void swap_slot_free_nr(swp_slot_t slot, int nr_pages);
-> > > +void swap_slot_cache_free_slots(swp_slot_t *slots, int n);
-> > >  int swap_type_of(dev_t device, sector_t offset);
-> > > +sector_t swapdev_block(int, pgoff_t);
-> > >  int find_first_swap(dev_t *device);
-> > > -extern unsigned int count_swap_pages(int, int);
-> > > -extern sector_t swapdev_block(int, pgoff_t);
-> > > -extern int __swap_count(swp_entry_t entry);
-> > > -extern int swap_swapcount(struct swap_info_struct *si, swp_entry_t e=
-ntry);
-> > > -extern int swp_swapcount(swp_entry_t entry);
-> > > -struct swap_info_struct *swp_swap_info(swp_entry_t entry);
-> > > +unsigned int count_swap_pages(int, int);
-> > > +struct swap_info_struct *swap_slot_swap_info(swp_slot_t slot);
-> > >  struct backing_dev_info;
-> > > -extern int init_swap_address_space(unsigned int type, unsigned long =
-nr_pages);
-> > > -extern void exit_swap_address_space(unsigned int type);
-> > > -extern struct swap_info_struct *get_swap_device(swp_entry_t entry);
-> > > +struct swap_info_struct *swap_slot_tryget_swap_info(swp_slot_t slot)=
-;
-> > >  sector_t swap_folio_sector(struct folio *folio);
-> >
-> > this is difficult to review.
-> >
-> > Can you please split out:
-> >
-> > 1. Code moves / cut-and-paste
-> >
-> > 2. Renames
-> >
-> > 3. New code
-> >
-> > into three separate steps
+>> +{
+>> +	struct dev_pm_opp *opp = dev_pm_opp_find_level_exact(dev, level);
+>> +	int ret;
+>> +
+>> +	if (IS_ERR(opp))
+>> +		return -EINVAL;
+> Why not reuse the same error value ?
+
+as reference of APIs in core.c, i have used  -EINVAl instead of IS_ERR(opp).
+
+Let me know your thoughts on return value.
+
 >
-> +1, I agree with the fundamental change (and is something that I
-> attempted before), but it's really difficult to parse :)
->
-> Also, weren't the swap slots scheduled for removal or is my brain making
-> stuff up again?
-
-You mean the swap slot cache? That's the one Kairui wants to remove (I
-think he removed a huge chunk of it already).
-
-This "swap slot" is basically just a new type I introduced to separate
-the physical and virtual swap types.
-
+>> +
+>> +	ret = dev_pm_opp_set_opp(dev, opp);
+>> +	dev_pm_opp_put(opp);
+>> +
+>> +	return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(dev_pm_opp_set_level);
+> Make the changes and send it separately (or with the series, your
+> choice), I will apply it to the OPP tree. Thanks.
 >
 
