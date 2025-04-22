@@ -1,149 +1,123 @@
-Return-Path: <linux-pm+bounces-25883-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25884-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBCE3A964F4
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 11:47:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B58D9A9651D
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 11:55:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30CB8178785
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 09:47:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F214617958D
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 09:55:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81A081F2B8D;
-	Tue, 22 Apr 2025 09:47:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB8EE20E703;
+	Tue, 22 Apr 2025 09:54:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j9VE6XQh"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="l9a9vsHB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A25061F0E2D;
-	Tue, 22 Apr 2025 09:47:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA602036FA
+	for <linux-pm@vger.kernel.org>; Tue, 22 Apr 2025 09:54:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745315222; cv=none; b=Sf5Nlnmpx0ICBU76y1aoK1RVdB2vGMmvDLMi4QqdahMsoPwIIAKM00El0pLccoh40Nat2CqRQTkc0AqzsEDpFdKWfYJ3S8/KY4Mo8rQqY84Yc1gaXpAcOeSfXqaqExB6SjZqFBenA/ifHilQXs58thglkXn3pRxYBlqk8SaL3lY=
+	t=1745315646; cv=none; b=Oji7An6Tdg6CINqIPLVPf8szanYCpzhJlIoTbOQhKlaYG2ytZNQ1dsN7fj5Tq6ecbU9LzuUPIJbdImziHi0HuoV0G3ADyX/64Sp2bQXSQxE0KeYwKJcoOhuOYwf0GTkl0JR/LOmlLH9nkFNvdLojDPyfyYXAzQJwm+WlKlX5P9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745315222; c=relaxed/simple;
-	bh=uR4c7TVXy6cIFrfSyaKbGAwXsLX03FHagsh1jUPtnb4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CzVCFPCNoV46U7r8SNF3dN5+rsY5NDkoGtt6k2ke8pn30n4HOCw8OLIud273urYsRDLejwoaqA7GJkoaQ6JJiwlb2Z/IUMf2IUFTEN3lHfDGdlHUE55gu996qgFJiyRH9tmpxMxnZ4+BX6xtCaABfoDx2dQrGtf44dCOhiyxzmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j9VE6XQh; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-39c0dfad22aso3437769f8f.2;
-        Tue, 22 Apr 2025 02:47:00 -0700 (PDT)
+	s=arc-20240116; t=1745315646; c=relaxed/simple;
+	bh=egRR99i9nHWRLJSkLdIOmqIX1zLBqzvayXnVEdpZ92s=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ifyArlwAOCK/VZj3M1PJgObSk4b+x3+kS7NrP7YWdWKTwsQLcpSdt16yEnVeo61SpanBj/W1IgjDsN9pg/fTgENLPizRCpp4rvCYBPCqaGHlkWsQfpWcS3DR2NXym5eiKM7Rfrr3MVCrCl7kJhbH9JCg4+M8cSZ3n1Hw0eJ9b9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=l9a9vsHB; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-aee773df955so4723265a12.1
+        for <linux-pm@vger.kernel.org>; Tue, 22 Apr 2025 02:54:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745315219; x=1745920019; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=f+aH8Vkp+uMKgYBEzeWu9ULP2uz2ukYCauu+HrKitUU=;
-        b=j9VE6XQhmVUO6Vhm/qVkP4iDNHWpjm95tV9M0DlH44P6NGyzvyt7E+6YKZaCc0Rq1F
-         yzq+F/CsJO9Z2fUvxqUqj0y76kIeMA72HtvUvKbsdfsBvlNoxCRSPbSqCovmQo8fI24W
-         pAykjA0xQm/zer/EseAv+vrs7LMn2Nf2NluOPDhu4R/Y4jv+zHW+8TR2LgFmYBHjsTFm
-         chwDt8DTc2vICe5V8+HHyzZ8jnlug1yAbgp/wjdUZVVQpBrfn3B10wqbBJqcxK487WpA
-         iEVXVvlhi3SK2LNgwTPAE+/e/8lOKkofJQ48xZtpEaOAJFDdHfJXGkR6gQ0Qgv8CfDZ+
-         XeGA==
+        d=linaro.org; s=google; t=1745315644; x=1745920444; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iPZNfcaggW8uG4XfjMHFTZr4Y8+XA41YuZRRPWh0lH0=;
+        b=l9a9vsHBElBpk7f9N47KZ/b8UBTiLIrRttfW4lCISTz02sXkE0vrYFxRtkVKCzZte1
+         7xUdMB1oJQGzbtFY9bIhhB9p2wRwlwDi393ec03iqfkdJLWM67RRjxszDk0zo7WHeu1m
+         +d3Of0ugO7UULMP1sxfvKoKvEzJehKUfS2HhXKxs37SdEnhjpJ9HOhUymvsajY5ocXBI
+         smqppvIO9ErQjHRlZFwClTFYs9PPyNaq4rDm6Ja8uaaS+i3cx1wYG4x+PbV7rHyBspdO
+         5Bv9xLp3wU7Gu2WUUCJlGnq8b5CTiAxJOEhQkLmOkmPDBuVNkJKU9eGUxoKqkFGIxPrt
+         nxaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745315219; x=1745920019;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f+aH8Vkp+uMKgYBEzeWu9ULP2uz2ukYCauu+HrKitUU=;
-        b=k7jgztKCqZWZArsYpe3b+UGL5xJtCOWmXccuHD7rovPX2CO/NLFwr17JcXlEbyoIHg
-         srfs+BPM5MRDd1LUFtDEa9uwv94vNrZeMZdnG7LHy58h4eYCX83jvosc7aiibvdC51oP
-         BAwnUjJ99awwv6tkRk3rL6+OFKjOCwOUWCeghvuM1aSxfNCt99qcTddkkaL0S6NlW4II
-         DjnuA3Y0uuUKKSjFHB7YQsCfn9I5UqEswSgYlytWU9xGBL4ikKX9XF+kz1jSXAZ7/0NL
-         heMCESebLXvblt0xZb25tP1cwusXWVpkfqq6s3TV9e57NfPDIhRzo7fKc1TpHpR61kIX
-         8NGA==
-X-Forwarded-Encrypted: i=1; AJvYcCUuVLuZkvy6FBNBfJ/CZWtjy4fx+sN2Y8TF8E0eBn+TZ0iKrOtzHtBL0vXAkFSgnl5chQ6HC7JLS0Y=@vger.kernel.org, AJvYcCVPuA2NFixD/Iuws2U3njSBDTOApYywxO16QVBCJSgq+SH99fdgvxZQ3rQtuMQaJTORwfhj78p7MmIi@vger.kernel.org, AJvYcCWizeJympk1vlqEdRQ7VQywHjNd/XPF0TPEbg32+9S9OswcygL+JxUX1kbtB4GWsmvysv9o9l1D5Bpfcxb/@vger.kernel.org, AJvYcCWniOcrpRz6XapyvHvHfhNrp6/2ZYUkWxU+JIxurb/2nFsbYUjWBKHx2tsrKVoOGU5T3l2YUiPfiQjl3Z/Zymfb5DE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzew+owd3nu0gV4vyvnt2AIDuy0tDWFfnORfv2YdrrOp0H3MgSW
-	pJBXHb/tMWeUDi7QrKzkIWu+nV20eL4OT3hpChzGw5522xirsiKm
-X-Gm-Gg: ASbGncvEW/7TrvpEDDycutJ8iuvTCEHpNZYvjoKZ6ke0W0mKjtFpmi65OnC/RSyTwCN
-	KFftbmrA50H4f2dkGt5FRYFLLrLqfWjQCw/qmOus15ywhLOGvqKI4EqfMz1D0nUa0FE6W5Qcjas
-	TDO3h471/KNXq46dW9SMKFlbDGDmxn5ersu2jCx4WvbG10BAN9qxZogImBS8IqnBNpLOsW5702M
-	WHcJgqVx5/49xOzJNy5iIB5IfQyE5oIHIRVv9nVShVLhG+MAupLMQUdRc4bp6cDEA5NobsGT4Nl
-	zjQoGBubDM8tnQeq4YApTwjPMCjC2U/G6ZtJd4A=
-X-Google-Smtp-Source: AGHT+IEMUuvM8SEPdC7enDvmj1KSIpM8sQDJOmbbZ30nkYK0bXnH8XlvLfXljQ4jhhwjqFCSy8BcVA==
-X-Received: by 2002:a5d:5f93:0:b0:39c:30d8:3290 with SMTP id ffacd0b85a97d-39efba37cebmr12005512f8f.7.1745315218520;
-        Tue, 22 Apr 2025 02:46:58 -0700 (PDT)
-Received: from legfed1 ([2a00:79c0:6a3:c300:22ea:3d6a:5919:85f8])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39efa43d22esm14785563f8f.52.2025.04.22.02.46.57
+        d=1e100.net; s=20230601; t=1745315644; x=1745920444;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iPZNfcaggW8uG4XfjMHFTZr4Y8+XA41YuZRRPWh0lH0=;
+        b=HMQZjJFggd26fsbAHrEpTDTEcFAIT3Il6TbJGujp7lSjwvq7RcWHG/mYgpVARMH/Qt
+         jZRAdt95EZFHo1HPdw/yEVS0Yi2eMwogbVgzYdnRQU1VFU+pWI18baia/I7b10FopszZ
+         GeLnkuyD0zPHfzjrI9sP0CehuFYFTjIjpKZ1Xwd1Hm2weH+LOzphYKTQfWv9JwjNKhYu
+         2cKG0H2Gxw26MUPwWKTjnpJQpaw/Q6jTqr1QO3j8VqddIFi87VBtojnkAbVx/Ybuyi6W
+         x0G4z9Dbp7GVr8EK4YDWj2X4t2XvhhVO4lp8oCtE8oqe4HoVkTpzlDtar+JIefG65wqn
+         nBgQ==
+X-Gm-Message-State: AOJu0YzloxYOKF1TMzzjsT7AYBq84exsAHdDWE+kJjqFfM+Lys0XcKI7
+	itC8oOW6FWsqkOtOwYsPDdj2ZuqukDbXQbBi2QQYIo+KDaCmwTahPkYP+TLzSCc=
+X-Gm-Gg: ASbGncu7VjzynHCwuHHYfMzp21pRV+8e+zb6hF6ZPYDIohgraeA79LmOz0ozSBC+g0N
+	Qyf2i8IzJHaUagmgSZvV7CiazcvJks2dSGMvNO/ERxzKpqYqMG0FbezppgbMdlAHiQSN2mj5jhc
+	TV1yDz2gl3HZ/RSuSwSLXshfqhw0ujNv5NaW107FB8JC1YP0VAyJmlEJvmtYJaFR4tSHLBNBSAm
+	jhk8ciOZNHMP0td1tHBE1BgTsbdrLoE2fACCHxj6MMSF4Au3YJW9MX0W2axd/LaBRoyzkN+B+8g
+	QGA33BOQcZ3LslD16OHKqOX7E3stFZKvumOeiy2+yw==
+X-Google-Smtp-Source: AGHT+IHKou40qiS7674aCZgsNbYQ3NjPMMj46gtqN3TSMH1ZrnQNn1nfjehtyZw5rtQa72SBcl4KYg==
+X-Received: by 2002:a17:903:3c6e:b0:215:ba2b:cd55 with SMTP id d9443c01a7336-22c53e1a157mr219276895ad.2.1745315644374;
+        Tue, 22 Apr 2025 02:54:04 -0700 (PDT)
+Received: from localhost ([122.172.83.32])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22c50eced75sm80823325ad.173.2025.04.22.02.54.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Apr 2025 02:46:58 -0700 (PDT)
-Date: Tue, 22 Apr 2025 11:46:56 +0200
-From: Dimitri Fedrau <dima.fedrau@gmail.com>
-To: t.antoine@uclouvain.be
-Cc: Rob Herring <robh@kernel.org>, Peter Griffin <peter.griffin@linaro.org>,
-	=?utf-8?B?QW5kcsOp?= Draszik <andre.draszik@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Sebastian Reichel <sre@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 1/5] power: supply: correct capacity computation
-Message-ID: <20250422094656.GA159257@legfed1>
-References: <20250421-b4-gs101_max77759_fg-v3-0-50cd8caf9017@uclouvain.be>
- <20250421-b4-gs101_max77759_fg-v3-1-50cd8caf9017@uclouvain.be>
+        Tue, 22 Apr 2025 02:54:03 -0700 (PDT)
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Lifeng Zheng <zhenglifeng1@huawei.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>
+Cc: linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Nicholas Chin <nic.c3.14@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 0/6] cpufreq: Boost related cleanups / fixes
+Date: Tue, 22 Apr 2025 15:23:50 +0530
+Message-Id: <cover.1745315548.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250421-b4-gs101_max77759_fg-v3-1-50cd8caf9017@uclouvain.be>
 
-Hi Thomas,
+Hello,
 
-On Mon, Apr 21, 2025 at 08:13:32PM +0200, Thomas Antoine via B4 Relay wrote:
-> From: Thomas Antoine <t.antoine@uclouvain.be>
-> 
-> From the datasheet of the MAX17201/17205, the LSB should be
-> "5.0μVh/RSENSE". The current computation sets it at 0.5mAh=5.0μVh/10mOhm
-> which does not take into account the value of rsense which can be
-> different from 10mOhm.
-> 
-> Change the computation to fit the specs.
-> 
-> Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
-> ---
->  drivers/power/supply/max1720x_battery.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/power/supply/max1720x_battery.c b/drivers/power/supply/max1720x_battery.c
-> index ea3912fd1de8bfd0d029c16f276316d06e1b105c..cca5f8b5071fb731f9b60420239ea03d46cb1bf3 100644
-> --- a/drivers/power/supply/max1720x_battery.c
-> +++ b/drivers/power/supply/max1720x_battery.c
-> @@ -288,9 +288,10 @@ static int max172xx_voltage_to_ps(unsigned int reg)
->  	return reg * 1250;	/* in uV */
->  }
->  
-> -static int max172xx_capacity_to_ps(unsigned int reg)
-> +static int max172xx_capacity_to_ps(unsigned int reg,
-> +				   struct max1720x_device_info *info)
->  {
-> -	return reg * 500;	/* in uAh */
-> +	return reg * (500000 / info->rsense);	/* in uAh */
->  }
->  
->  /*
-> 
-> -- 
-> 2.49.0
-> 
-> 
-thanks for finding this.
+This series tries to fix boost related issues found recently.
 
-Reviewed-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+The first two patches (hopefully) fixes the boost related breakage
+introduced recently. These should be applied for v6.15-rc4. Nicholas,
+please give the first two patches a try.
 
-Best regards,
-Dimitri Fedrau
+The other four patches are general optimizations and fixes for boost
+handling in general. These can be applied to -rc or next merge window.
+
+--
+Viresh
+
+Viresh Kumar (6):
+  cpufreq: acpi: Don't enable boost on policy exit
+  cpufreq: acpi: Re-sync CPU boost state on system resume
+  cpufreq: Don't unnecessarily call set_boost()
+  cpufreq: Introduce policy_set_boost()
+  cpufreq: Preserve policy's boost state after resume
+  cpufreq: Force sync policy boost with global boost on sysfs update
+
+ drivers/cpufreq/acpi-cpufreq.c | 38 ++++++++++------------
+ drivers/cpufreq/cpufreq.c      | 58 ++++++++++++++++++++--------------
+ 2 files changed, 50 insertions(+), 46 deletions(-)
+
+-- 
+2.31.1.272.g89b43f80a514
+
 
