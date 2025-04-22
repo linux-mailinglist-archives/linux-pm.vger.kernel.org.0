@@ -1,52 +1,53 @@
-Return-Path: <linux-pm+bounces-25827-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25826-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E929A95CF2
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39697A95CF1
 	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 06:27:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFF8C169E22
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 04:27:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25DDA1896A1F
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 04:27:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E762D1A3162;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFF061A314A;
 	Tue, 22 Apr 2025 04:27:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jwxRVvv/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZUYBj4np"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B05BC1A0BC9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B056D19FA93;
 	Tue, 22 Apr 2025 04:27:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745296055; cv=none; b=AMwVGI1MYVwIXZZQNHEhgWo4o4JvP7v2brTH4oJDV+gd/fYaUzX8ZEdZ0wLWeCx+G0mWWaW3ZaQ7f+VoSst0F0ObSBSbbVjtxHo2od7oKh1jhLljckBCfWVlseu6/T58W1JQ4jq0FnS53foZseXUD9kbyHOeyvd3D9928y3jZ4k=
+	t=1745296055; cv=none; b=jFmE9ViVWN61qId8ETyNYhoDBNCySTom5RyW3GMAn+SudBOHbYwgnITpvue6c1UEjD+1j63B2j1Inq09j7eg8RXKTLjDXWJORlwdQoW3uB0ZS3vXcnnnnHF34bMCNR9EksWn6ZwjZjTX2mosjzR4XWckPVgANxrDg2+S9HIdHdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1745296055; c=relaxed/simple;
-	bh=Fq2jiJWeXkpHf9bZrGaOYFjubx/HEzHAg8dgrWDcSb4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=u3AN9FTivbheVpWtDHbeXo2yWLWVkj+flLy/NVGn6DW49RAO39wcoXh9YqIdgb0HbNjrB9/saDAztIhoEcFsCxvy/tqJBfutfG6tadE3he0Pst0YXNbpABO5zYl1E5mDcPP7wVH/ypxy3ebxi9rK1ACSpumNDnrzaMIa3vGfY8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jwxRVvv/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1E6B8C4CEEC;
+	bh=vTaFEnXPtLBilZRMAVM2qU3oBb5SYIUsJMP83Xqz0Zc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=R+P+oUo8Eaww9CsdimfkECp6g7muGfZkGPWqBiSxF2AbVSpqRVL4pgjbcO1WCVrtJt/9WIM1OX/OT5M46vn7jAqi0ZIb3WsKTSx/uGzRFRyl8PBTMZg3oqhC//LGa/Mj4R6+ysxg16dC1cNrlbL9Dpd5oe/MHHxn08M6Mmy3Dzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZUYBj4np; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 26954C4CEED;
 	Tue, 22 Apr 2025 04:27:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1745296055;
-	bh=Fq2jiJWeXkpHf9bZrGaOYFjubx/HEzHAg8dgrWDcSb4=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=jwxRVvv/3VQV090c31ixZiiaa7zEqHQbOifOO8y+hb2Bba86pCI+NsdIa8xoiqGDQ
-	 Ke5/59FRVRdROWFiO0T7qSUU4G+Ile/ae8jZ4krO8an3g9Nmt7MkPnsUcUq9iytbSE
-	 Io+7HUKhDCIHORnpsYS86o/eP4dKqz50zTtlS3xLW9zJfzqsB/xSCOfcKrqCdSX0FG
-	 KVsJYdEPMvTJk9+qoE6A+LZScbr9Qc1zX3lCppVNggJG3eSFErKLiqZa1bm3fzoljf
-	 lFRRcA0kqQv3A4Z9HbUE/H/2vIcIMcbl8YNpPRtDxrxWYHtuo8U2nHVYVtLmL8KJuB
-	 8wWdj2d1dRqcQ==
+	bh=vTaFEnXPtLBilZRMAVM2qU3oBb5SYIUsJMP83Xqz0Zc=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=ZUYBj4npd8tKt5eXpXbfQ7gJnyJj8T8UfrB3aMvOgQ5LN65pAJH9MsxeZxvDQaCdA
+	 JgL9IuZq06wbZjD7MsMlIK/3XHVaWn6ggSeI8r0bJSqIhbpQszJvXkhogY8d0LJQHa
+	 Q197EEZEFL67kGCjTvIH/M7Ab0wC5wdD/osWA9j+sEpizb0vC5pJw/Qg2xOUmFo2Iu
+	 gcvcn76B4ZjzUXB/lbeW5iR9JVm0f2B/PVHVxZgAKbsB7snVrDckSGAV9meqfaPtEk
+	 w6WAeJghnnRTBOVIuFyq1jS/7SXgh068R8dHBVw4fgam/Bh3r/j2G6ULot58lfnS8G
+	 1WNoiS9iBoiow==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02A90C369D7;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13700C369D8;
 	Tue, 22 Apr 2025 04:27:35 +0000 (UTC)
 From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
-Subject: [PATCH 0/2] power: bq24190: Add BQ24193 support
-Date: Mon, 21 Apr 2025 23:27:32 -0500
-Message-Id: <20250421-bq24193-v1-0-f125ef396d24@gmail.com>
+Date: Mon, 21 Apr 2025 23:27:33 -0500
+Subject: [PATCH 1/2] dt-bindings: power: supply: bq24190: Add BQ24193
+ compatible
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -55,21 +56,20 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIALQaB2gC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDEyND3aRCIxNDS2PdZJOk1CQLy6SkJEszJaDqgqLUtMwKsEnRsbW1ABs
- W7d9ZAAAA
-X-Change-ID: 20250421-bq24193-c4beb89bbb96
+Message-Id: <20250421-bq24193-v1-1-f125ef396d24@gmail.com>
+References: <20250421-bq24193-v1-0-f125ef396d24@gmail.com>
+In-Reply-To: <20250421-bq24193-v1-0-f125ef396d24@gmail.com>
 To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>
 Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Aaron Kling <webgeek1234@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1745296054; l=533;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1745296054; l=840;
  i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
- bh=Fq2jiJWeXkpHf9bZrGaOYFjubx/HEzHAg8dgrWDcSb4=;
- b=GRCOGOgn3GfkllHsnZKOdlGAJrKKqIid2EUxM14fCUK0PTQ/+ZVq6zae/WIE7tjoVEC54LCsJ
- ICpJ2zHv9GfCQeKtXF+HLOQ0G4WkcGQChFbaCWO3imAExhWNhMvCq9E
+ bh=qOjayHUiWoIVkR1SIJGiQLJodRWPSQpu8XYOp3kWbAY=;
+ b=ybZ6PARFeANCIx8hbvatk6BWSS9tEWyKaPgfm7I/uNQljR6DONKB9OJtyZx6eFUbNpaO/U28r
+ fsALrh2QtcAA1hPFAleWBrnaYJuQSsiImTNKviTBxRZ3z5mMzHVcAH6
 X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
  pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
 X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
@@ -77,22 +77,31 @@ X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
 X-Original-From: Aaron Kling <webgeek1234@gmail.com>
 Reply-To: webgeek1234@gmail.com
 
+From: Aaron Kling <webgeek1234@gmail.com>
+
+The BQ24193 is most similar to the BQ24192. This is used in many Nvidia
+Tegra devices such as the SHIELD Portable.
+
 Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
 ---
-Aaron Kling (2):
-      dt-bindings: power: supply: bq24190: Add BQ24193 compatible
-      power: bq24190: Add BQ24193 support
+ Documentation/devicetree/bindings/power/supply/bq24190.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
- .../devicetree/bindings/power/supply/bq24190.yaml          |  1 +
- drivers/power/supply/bq24190_charger.c                     | 14 ++++++++++++++
- 2 files changed, 15 insertions(+)
----
-base-commit: a33b5a08cbbdd7aadff95f40cbb45ab86841679e
-change-id: 20250421-bq24193-c4beb89bbb96
+diff --git a/Documentation/devicetree/bindings/power/supply/bq24190.yaml b/Documentation/devicetree/bindings/power/supply/bq24190.yaml
+index 07adf88997b4e3eaa4bd7c6245efdc31fddc9058..307c99c077217ab4b5fac30694a4a316dd51f8e4 100644
+--- a/Documentation/devicetree/bindings/power/supply/bq24190.yaml
++++ b/Documentation/devicetree/bindings/power/supply/bq24190.yaml
+@@ -19,6 +19,7 @@ properties:
+       - ti,bq24190
+       - ti,bq24192
+       - ti,bq24192i
++      - ti,bq24193
+       - ti,bq24196
+       - ti,bq24296
+       - ti,bq24297
 
-Best regards,
 -- 
-Aaron Kling <webgeek1234@gmail.com>
+2.48.1
 
 
 
