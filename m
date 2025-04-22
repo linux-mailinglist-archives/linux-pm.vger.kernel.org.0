@@ -1,298 +1,104 @@
-Return-Path: <linux-pm+bounces-25930-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25931-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41CD3A96F67
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 16:56:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A986CA96FDE
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 17:06:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14C921B62C4F
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 14:56:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E50CF1B682E2
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 15:04:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDCC928EA5D;
-	Tue, 22 Apr 2025 14:56:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02D3728150B;
+	Tue, 22 Apr 2025 15:03:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XVIYRkeR"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I6IV+lrb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C14A7DA66
-	for <linux-pm@vger.kernel.org>; Tue, 22 Apr 2025 14:56:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C052928F92C
+	for <linux-pm@vger.kernel.org>; Tue, 22 Apr 2025 15:03:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745333777; cv=none; b=Ne0PEgMSBGFouS0p3lh9vXor6wtQ4ymf6l+CUoB2hvFDOnN2TcjkLtsYzSNXVwQb2d+39Gt9G4hHCooVfPKFIHBEMgEpplq1sf4u4O/uOCN29O0R0nUTG6Q2Qzszm48f+t9sxxxe7gxUsGtLU+a5RIYVKrDFIVRPcj/Cs6ZIn0A=
+	t=1745334185; cv=none; b=ZpXBGKLU09ATBwTHtGRGcxRLUivi4NTd+4AfQAILHQAhoDhWiM8GqxXnw31pJFNOMQi4brwPCvF3xqHWEyjuM49bT7J3qpVqAzpzmMKeo7jsLKDnSM1K9BvJB42ZSaoQ4jjmRJzSlNpzf7VrD0EHasezX4uXgpOzYdMD6GMukOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745333777; c=relaxed/simple;
-	bh=+J4Ot2uYoqhdMcBpWYJQgmCyvNBmIFihGBbEt1D3Hr0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p3+OguaF+kMz5pU5uB6Uq4mWIX0bjQ5L9rkJoeXnlmpKRWk5+rVW9Q686CQp77QsrC7QctorWJF2e4djS4Td9MLC3Or3fv48lo4CfZMV/XfYrVQ4Mq06gP16Y6AmlMj/gJuZU+4yALnBCCfyR3urqqPkTmOCrT5ejA+3EX4lsqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XVIYRkeR; arc=none smtp.client-ip=95.215.58.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Tue, 22 Apr 2025 07:56:03 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1745333772;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HukUGfyVGRy6pXjxhQLdvDYNG7dXUnK5NwUPnqbXZdk=;
-	b=XVIYRkeRx8+VmylNMxOePvCyqQdMzBfHYja7PaFFS3wuw9UcFScKSi7LXEeu9Lm2wWVz90
-	+S0xDqDiokxHZ49HmXk3Ikz1Trqe/HedTEaB3D35h3W4LsGwYZ9ZhM2nXY7dkE1MoaRnyt
-	qhiuL6n3aS3LqiOR6zDlRtjPIThXkIM=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yosry Ahmed <yosry.ahmed@linux.dev>
-To: Nhat Pham <nphamcs@gmail.com>
-Cc: linux-mm@kvack.org, akpm@linux-foundation.org, hannes@cmpxchg.org,
-	hughd@google.com, mhocko@kernel.org, roman.gushchin@linux.dev,
-	shakeel.butt@linux.dev, muchun.song@linux.dev, len.brown@intel.com,
-	chengming.zhou@linux.dev, kasong@tencent.com, chrisl@kernel.org,
-	huang.ying.caritas@gmail.com, ryan.roberts@arm.com,
-	viro@zeniv.linux.org.uk, baohua@kernel.org, osalvador@suse.de,
-	lorenzo.stoakes@oracle.com, christophe.leroy@csgroup.eu,
-	pavel@kernel.org, kernel-team@meta.com,
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [RFC PATCH 00/14] Virtual Swap Space
-Message-ID: <aAeuAwlST1sNifBs@Asmaa.>
-References: <20250407234223.1059191-1-nphamcs@gmail.com>
+	s=arc-20240116; t=1745334185; c=relaxed/simple;
+	bh=a9oHiuIRd+Lat23wgyOLQVKu0davNOYNyV1lqgu94Hc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=aPqEeTV4eLCudbxLMvU8No/l9810Z+FXTF9QYvvfHuyA7KEoOXi9wcBGzzmzR71S/1ncBcxe9A3hq1cNrFvCF631wvRaCYxVBLSDOO7lqpvAkn8PxRnt2ucoioaiN5IWsXxcjLSqSH8aiG3wwM/yjE2imnJvaDPHz4bYf460UoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=I6IV+lrb; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-306b590faaeso3883607a91.3
+        for <linux-pm@vger.kernel.org>; Tue, 22 Apr 2025 08:03:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1745334183; x=1745938983; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZR743ev6ExzRYE8cINx+AM9cywgAmFfoIc+SqezuNJU=;
+        b=I6IV+lrbYv0t+bvIaiG0TbVyWJT40Lj0vRqcLzc3/x+0dcZml1AnFM8HQY5Ii0wkCK
+         EFI9GLLncA7Nf81PeY4qYgGpbEdk6GQtvjHUrP43uS7sYSItfs/Hp/W+equBtADhN9iR
+         H8kGG/d5XAZylKSAL++q+ioYsECrBM0IYZU7VUdqcrJGhPa3joqiDrIgBusCnfsOOjmZ
+         /a1Dr6t8bvSNSFRCHQvERf4r1hilrZRf/fX4p3Lkj5VzPiie0d1c69yQE2wP4ATTE3E/
+         J6p2quspRGpvtugOYU1sLARWmrmhAeltWiFl33W2BwncgY4q3qCNTdFwpdJXyCO/Kkkj
+         To3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745334183; x=1745938983;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZR743ev6ExzRYE8cINx+AM9cywgAmFfoIc+SqezuNJU=;
+        b=tkGP3QZYh44WfnQ3IyUvHwOhfsgxQIr0icOBN4W7guEhnfYdegiHRK7gB32VE/f6wS
+         Sct7sX+rXYBxnnuufy9tqDl2QB6bxnPvLBMsAXb92Dl6ydCdDnvibEY/2MdZNqD8BNI0
+         toj7st95W1rViJEImSwVATuDie1RjstsJXrpuYWqQsEjI5apQZc7PW77woeMQ4Asw9cG
+         dfekzZ4U9b7vRMtrC//2rfmZriiseLotsXz9uo4MWKCARmHmcm9gLYoXOYFZBEi7ehTs
+         RdqrrsfzGuu5oejU7xdc4LdqfVJo1dHy3N8fN/8nQw2pp5xntdC80BmZqXGo+pkLClnR
+         TCfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWRbWkPw1bVOC9r8TN4WK85jEqGP0VayN7t8dvodd6He/yCqQbkLr+DnR5d/tO2dK1aUYBUaMEOyg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJqPEXM/Zt/fnc+1Q+TBIdyc1NFxSJcpAiPAw/hS348o2qLTlp
+	8xKpfy0RiPRWahSi/tgp/vXJUJ2+6TpeLP7fgm0VIgE55XLSylEchmPPBrA0rQ3xS5zDmAfwFkG
+	vjQ==
+X-Google-Smtp-Source: AGHT+IEIapJZJRM9UWSGs3HX5eEFDXXhucM1QTXJfnPOK/9YTrDfsNmQubNfg9xjcSY4LHTjaYmG0pXn5/g=
+X-Received: from pjbsn11.prod.google.com ([2002:a17:90b:2e8b:b0:308:861f:fddb])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3a0c:b0:2ef:31a9:95c6
+ with SMTP id 98e67ed59e1d1-3087bb56439mr25794718a91.14.1745334182926; Tue, 22
+ Apr 2025 08:03:02 -0700 (PDT)
+Date: Tue, 22 Apr 2025 08:03:01 -0700
+In-Reply-To: <20250422082216.1954310-1-xin@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250407234223.1059191-1-nphamcs@gmail.com>
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+References: <20250422082216.1954310-1-xin@zytor.com>
+Message-ID: <aAevpauKYWwObsB7@google.com>
+Subject: Re: [RFC PATCH v2 00/34] MSR refactor with new MSR instructions support
+From: Sean Christopherson <seanjc@google.com>
+To: "Xin Li (Intel)" <xin@zytor.com>
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org, 
+	virtualization@lists.linux.dev, linux-pm@vger.kernel.org, 
+	linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org, 
+	jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org, 
+	namhyung@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com, 
+	kan.liang@linux.intel.com, wei.liu@kernel.org, ajay.kaher@broadcom.com, 
+	bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com, 
+	pbonzini@redhat.com, vkuznets@redhat.com, luto@kernel.org, 
+	boris.ostrovsky@oracle.com, kys@microsoft.com, haiyangz@microsoft.com, 
+	decui@microsoft.com
+Content-Type: text/plain; charset="us-ascii"
 
-On Mon, Apr 07, 2025 at 04:42:01PM -0700, Nhat Pham wrote:
-> This RFC implements the virtual swap space idea, based on Yosry's
-> proposals at LSFMMBPF 2023 (see [1], [2], [3]), as well as valuable
-> inputs from Johannes Weiner. The same idea (with different
-> implementation details) has been floated by Rik van Riel since at least
-> 2011 (see [8]).
-> 
-> The code attached to this RFC is purely a prototype. It is not 100%
-> merge-ready (see section VI for future work). I do, however, want to show
-> people this prototype/RFC, including all the bells and whistles and a
-> couple of actual use cases, so that folks can see what the end results
-> will look like, and give me early feedback :)
-> 
-> I. Motivation
-> 
-> Currently, when an anon page is swapped out, a slot in a backing swap
-> device is allocated and stored in the page table entries that refer to
-> the original page. This slot is also used as the "key" to find the
-> swapped out content, as well as the index to swap data structures, such
-> as the swap cache, or the swap cgroup mapping. Tying a swap entry to its
-> backing slot in this way is performant and efficient when swap is purely
-> just disk space, and swapoff is rare.
-> 
-> However, the advent of many swap optimizations has exposed major
-> drawbacks of this design. The first problem is that we occupy a physical
-> slot in the swap space, even for pages that are NEVER expected to hit
-> the disk: pages compressed and stored in the zswap pool, zero-filled
-> pages, or pages rejected by both of these optimizations when zswap
-> writeback is disabled. This is the arguably central shortcoming of
-> zswap:
-> * In deployments when no disk space can be afforded for swap (such as
->   mobile and embedded devices), users cannot adopt zswap, and are forced
->   to use zram. This is confusing for users, and creates extra burdens
->   for developers, having to develop and maintain similar features for
->   two separate swap backends (writeback, cgroup charging, THP support,
->   etc.). For instance, see the discussion in [4].
-> * Resource-wise, it is hugely wasteful in terms of disk usage, and
->   limits the memory saving potentials of these optimizations by the
->   static size of the swapfile, especially in high memory systems that
->   can have up to terabytes worth of memory. It also creates significant
->   challenges for users who rely on swap utilization as an early OOM
->   signal.
-> 
-> Another motivation for a swap redesign is to simplify swapoff, which
-> is complicated and expensive in the current design. Tight coupling
-> between a swap entry and its backing storage means that it requires a
-> whole page table walk to update all the page table entries that refer to
-> this swap entry, as well as updating all the associated swap data
-> structures (swap cache, etc.).
-> 
-> 
-> II. High Level Design Overview
-> 
-> To fix the aforementioned issues, we need an abstraction that separates
-> a swap entry from its physical backing storage. IOW, we need to
-> “virtualize” the swap space: swap clients will work with a dynamically
-> allocated virtual swap slot, storing it in page table entries, and
-> using it to index into various swap-related data structures. The
-> backing storage is decoupled from the virtual swap slot, and the newly
-> introduced layer will “resolve” the virtual swap slot to the actual
-> storage. This layer also manages other metadata of the swap entry, such
-> as its lifetime information (swap count), via a dynamically allocated
-> per-swap-entry descriptor:
-> 
-> struct swp_desc {
-> 	swp_entry_t vswap;
-> 	union {
-> 		swp_slot_t slot;
-> 		struct folio *folio;
-> 		struct zswap_entry *zswap_entry;
-> 	};
-> 	struct rcu_head rcu;
-> 
-> 	rwlock_t lock;
-> 	enum swap_type type;
-> 
-> 	atomic_t memcgid;
-> 
-> 	atomic_t in_swapcache;
-> 	struct kref refcnt;
-> 	atomic_t swap_count;
-> };
+On Tue, Apr 22, 2025, Xin Li (Intel) wrote:
+> base-commit: f30a0c0d2b08b355c01392538de8fc872387cb2b
 
-It's exciting to see this proposal materilizing :)
-
-I didn't get a chance to look too closely at the code, but I have a few
-high-level comments.
-
-Do we need separate refcnt and swap_count? I am aware that there are
-cases where we need to hold a reference to prevent the descriptor from
-going away, without an extra page table entry referencing the swap
-descriptor -- but I am wondering if we can get away by just incrementing
-the swap count in these cases too? Would this mess things up?
-
-> 
-> This design allows us to:
-> * Decouple zswap (and zeromapped swap entry) from backing swapfile:
->   simply associate the virtual swap slot with one of the supported
->   backends: a zswap entry, a zero-filled swap page, a slot on the
->   swapfile, or an in-memory page .
-> * Simplify and optimize swapoff: we only have to fault the page in and
->   have the virtual swap slot points to the page instead of the on-disk
->   physical swap slot. No need to perform any page table walking.
-> 
-> Please see the attached patches for implementation details.
-> 
-> Note that I do not remove the old implementation for now. Users can
-> select between the old and the new implementation via the
-> CONFIG_VIRTUAL_SWAP build config. This will also allow us to land the
-> new design, and iteratively optimize upon it (without having to include
-> everything in an even more massive patch series).
-
-I know this is easier, but honestly I'd prefer if we do an incremental
-replacement (if possible) rather than introducing a new implementation
-and slowly deprecating the old one, which historically doesn't seem to
-go well :P
-
-Once the series is organized as Johannes suggested, and we have better
-insights into how this will be integrated with Kairui's work, it should
-be clearer whether it's possible to incrementally update the current
-implemetation rather than add a parallel implementation.
-
-> 
-> III. Future Use Cases
-> 
-> Other than decoupling swap backends and optimizing swapoff, this new
-> design allows us to implement the following more easily and
-> efficiently:
-> 
-> * Multi-tier swapping (as mentioned in [5]), with transparent
->   transferring (promotion/demotion) of pages across tiers (see [8] and
->   [9]). Similar to swapoff, with the old design we would need to
->   perform the expensive page table walk.
-> * Swapfile compaction to alleviate fragmentation (as proposed by Ying
->   Huang in [6]).
-> * Mixed backing THP swapin (see [7]): Once you have pinned down the
->   backing store of THPs, then you can dispatch each range of subpages
->   to appropriate swapin handle.
-> * Swapping a folio out with discontiguous physical swap slots (see [10])
-> 
-> 
-> IV. Potential Issues
-> 
-> Here is a couple of issues I can think of, along with some potential
-> solutions:
-> 
-> 1. Space overhead: we need one swap descriptor per swap entry.
-> * Note that this overhead is dynamic, i.e only incurred when we actually
->   need to swap a page out.
-> * It can be further offset by the reduction of swap map and the
->   elimination of zeromapped bitmap.
-> 
-> 2. Lock contention: since the virtual swap space is dynamic/unbounded,
-> we cannot naively range partition it anymore. This can increase lock
-> contention on swap-related data structures (swap cache, zswap’s xarray,
-> etc.).
-> * The problem is slightly alleviated by the lockless nature of the new
->   reference counting scheme, as well as the per-entry locking for
->   backing store information.
-> * Johannes suggested that I can implement a dynamic partition scheme, in
->   which new partitions (along with associated data structures) are
->   allocated on demand. It is one extra layer of indirection, but global
->   locking will only be done only on partition allocation, rather than on
->   each access. All other accesses only take local (per-partition)
->   locks, or are completely lockless (such as partition lookup).
-> 
-> 
-> V. Benchmarking
-> 
-> As a proof of concept, I run the prototype through some simple
-> benchmarks:
-> 
-> 1. usemem: 16 threads, 2G each, memory.max = 16G
-> 
-> I benchmarked the following usemem commands:
-> 
-> time usemem --init-time -w -O -s 10 -n 16 2g
-> 
-> Baseline:
-> real: 33.96s
-> user: 25.31s
-> sys: 341.09s
-> average throughput: 111295.45 KB/s
-> average free time: 2079258.68 usecs
-> 
-> New Design:
-> real: 35.87s
-> user: 25.15s
-> sys: 373.01s
-> average throughput: 106965.46 KB/s
-> average free time: 3192465.62 usecs
-> 
-> To root cause this regression, I ran perf on the usemem program, as
-> well as on the following stress-ng program:
-> 
-> perf record -ag -e cycles -G perf_cg -- ./stress-ng/stress-ng  --pageswap $(nproc) --pageswap-ops 100000
-> 
-> and observed the (predicted) increase in lock contention on swap cache
-> accesses. This regression is alleviated if I put together the
-> following hack: limit the virtual swap space to a sufficient size for
-> the benchmark, range partition the swap-related data structures (swap
-> cache, zswap tree, etc.) based on the limit, and distribute the
-> allocation of virtual swap slotss among these partitions (on a per-CPU
-> basis):
-> 
-> real: 34.94s
-> user: 25.28s
-> sys: 360.25s
-> average throughput: 108181.15 KB/s
-> average free time: 2680890.24 usecs
-> 
-> As mentioned above, I will implement proper dynamic swap range
-> partitioning in a follow up work.
-
-I thought there would be some improvements with the new design once the
-lock contention is gone, due to the colocation of all swap metadata. Do
-we know why this isn't the case?
-
-Also, one missing key metric in this cover letter is disk space savings.
-It would be useful if you can give a realistic example about how much
-disk space is being provisioned and wasted today to effictively use
-zswap, and how much this can decrease with this design.
-
-I believe the disk space savings are one of the main motivations so
-let's showcase that :)
+This commit doesn't exist in Linus' tree or the tip tree, and the series doesn't
+apply cleanly on any of the "obvious" choices.  Reviewing a 34 patches series
+without being able to apply it is a wee bit difficult...
 
