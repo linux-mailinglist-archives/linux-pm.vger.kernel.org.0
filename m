@@ -1,133 +1,105 @@
-Return-Path: <linux-pm+bounces-25977-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25979-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CAEAA97A0C
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 00:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AFC25A97ADE
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 01:05:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10C613B4C83
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 22:07:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 781695A180B
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Apr 2025 23:05:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5FF92BD59F;
-	Tue, 22 Apr 2025 22:07:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19E861FAC48;
+	Tue, 22 Apr 2025 23:05:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="aYPUA556"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OyDMv2u5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E26832BCF52;
-	Tue, 22 Apr 2025 22:07:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26ADB1D61A3
+	for <linux-pm@vger.kernel.org>; Tue, 22 Apr 2025 23:05:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745359643; cv=none; b=XAB9Vw17iC9mIlspBLZ2nqsWA0+1MT3O4KB3m3EXYYVFkDCO9zOwEaRPrFULwoEACwq/yuywHcLvxPw/vq+5vvxHHG0uQTW9qPUjIJcCA4K1FveYyHxmvvKRyU0kOAgWTIZRHNUkEvIxbxQaRxQg8A1pyNBJwUaFCHe9DBk+kd8=
+	t=1745363146; cv=none; b=JyjOm3j9WOiVFBMfAB+wBLkEYod32Oo9TxQRfE5QAyCWPVE1gsB8DFC9Sn/XDZjqYQlfslj6Z0MuWVTPPNlRN7RQXPmO1lTrKzQGZF+DtyWKfFA204kPMzvtCT4h5qhuEKxrAtrkuOmDbhrEyl1q7jodRHqNtgaiaqSmouYne+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745359643; c=relaxed/simple;
-	bh=HHAqqniu+70PkZcui0L6q6BNnIsbNpEmqB6CAF2ooZs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ufc+2Pyw4senbsog8fF/XdV/me0C+CyriWirFpP9Zxal+SJOt3CidW+YbJUgjQUyDssthwENe7/mE6jo6j4t7Fyw6QydBwJBvWeiQbTRBZCZniaEtKnGF/BUZnCjgxLvaryd0bQOiKF9qkWG39o5KWN/aCeQ0DF/BVF+KDnzNK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=aYPUA556; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
-Received: from [172.20.123.187] (xdsl-87-78-95-159.nc.de [87.78.95.159])
-	by mail.mainlining.org (Postfix) with ESMTPSA id 1EF7FBBAD3;
-	Tue, 22 Apr 2025 22:07:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
-	s=psm; t=1745359633;
+	s=arc-20240116; t=1745363146; c=relaxed/simple;
+	bh=0H0uKZ693mlpOCVqBXLPrlDdTN8NIHveQOdXj53aAW4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A+flMDUHrMjE4NAkPgS3u72tYwZHTJs0JtHD67E8Gm6xU2R/p6hpo/VHJULjxJRJbyvUB6xJc2eShd/1JqA97z7XXvp+DB/soyc2nct7B6mbRgl5bJXGy11fur3duV2SNTFXDVSE6bK1/SPp1MlZKcgL1Ewisgyjar0hSZ3q8cA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OyDMv2u5; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1745363143;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YLEEL3ypzQdRJMrQunu4Ob1ubXvJsyBO7YBIDjBB4wU=;
-	b=aYPUA5566zjczjEjArLW66jjsriNlPgp6SQiT7uVTqwQqgamaiz0k45Auni253BVuHh16S
-	CqN2J4LtKXDGNhiHn3aed4fwkpI/vF+kMaqu4W8lbpkHJ47QdpLuVvtZh1oGE3yhGDRpvI
-	y074nW8X0DpRne03mB1m14dzH0yLP6k+rz/P7sF4XAX6JaZKpFXkvQEWWZaxdfdnuG/uB9
-	gBYioNo9HrCW8TdQY0XNx9EKFK7Zqzkvlu30mbbob+Jr3EeG+gdVSt4GayedAsE76Ln3qb
-	NDsUpLVqYKEobnpwuKMddQcCCUlTjcTQlHXpjGu07eWz2p3SmoB2VlLjKF1s7Q==
-Message-ID: <2ca2b774-fd7f-4612-b38d-f60e32ff6f9a@mainlining.org>
-Date: Wed, 23 Apr 2025 00:07:11 +0200
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=eA2dPJ7kUmIfz4lKYy/AXLtHSVSq2pKZ9vTXMKbDLTg=;
+	b=OyDMv2u5Z+7OQwfuTaBhKgbDfYo9sOZViM/A6DufjVyTiQdW/iAQwoOuWaeULtKHDg+yTL
+	th6iDVkgTun9h6Ew+/XqZjBoNwz1/H2cBSejDhJAsJ3nSFjofzlhG8SJZKRdM3aDIXLWBn
+	VKyzOyJO0mlRsuYJFaPWeEcDMfzStpM=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-342-zFzYHi_wNxSfo9fhPr4raw-1; Tue,
+ 22 Apr 2025 19:05:40 -0400
+X-MC-Unique: zFzYHi_wNxSfo9fhPr4raw-1
+X-Mimecast-MFC-AGG-ID: zFzYHi_wNxSfo9fhPr4raw_1745363139
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C0C3C180048E;
+	Tue, 22 Apr 2025 23:05:39 +0000 (UTC)
+Received: from omen.home.shazbot.org (unknown [10.22.88.22])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3381418001DD;
+	Tue, 22 Apr 2025 23:05:38 +0000 (UTC)
+From: Alex Williamson <alex.williamson@redhat.com>
+To: bhelgaas@google.com,
+	rafael@kernel.org
+Cc: Alex Williamson <alex.williamson@redhat.com>,
+	linux-pci@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] PCI/PM: Elevate PM usage during reset probing
+Date: Tue, 22 Apr 2025 17:05:30 -0600
+Message-ID: <20250422230534.2295291-1-alex.williamson@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/33] Add support for Qualcomm Snapdragon SM7150 SoC and
- Google Pixel 4a
-To: Danila Tikhonov <danila@jiaxyga.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, Rajendra Nayak <quic_rjendra@quicinc.com>,
- Jassi Brar <jassisinghbrar@gmail.com>, Bjorn Andersson
- <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>,
- Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Thomas Gleixner <tglx@linutronix.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Wesley Cheng <quic_wcheng@quicinc.com>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>,
- Souradeep Chowdhury <quic_schowdhu@quicinc.com>, Lee Jones <lee@kernel.org>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Alex Elder <elder@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
- Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>,
- Andy Gross <agross@kernel.org>, Srinivas Kandagatla <srini@kernel.org>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Georgi Djakov <djakov@kernel.org>,
- Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
- <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
- Sibi Sankar <quic_sibis@quicinc.com>, Will Deacon <will@kernel.org>,
- Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
- Imran Shaik <quic_imrashai@quicinc.com>,
- Mathieu Poirier <mathieu.poirier@linaro.org>,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Jessica Zhang <quic_jesszhan@quicinc.com>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
- "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
- David Wronek <david@mainlining.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-mmc@vger.kernel.org,
- netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-crypto@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
- linux-remoteproc@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-hardening@vger.kernel.org, linux@mainlining.org,
- ~postmarketos/upstreaming@lists.sr.ht, Connor Mitchell <c.dog29@hotmail.com>
-References: <20250422-sm7150-upstream-v1-0-bf9a9081631d@jiaxyga.com>
-Content-Language: en-US
-From: Jens Reidel <adrian@mainlining.org>
-In-Reply-To: <20250422-sm7150-upstream-v1-0-bf9a9081631d@jiaxyga.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Hi everyone,
+I encountered a confusing scenario where a device reports NoSoftRst- and
+doesn't have any associated quirks to set PCI_DEV_FLAGS_NO_PM_RESET, but
+it refuses to probe for PM reset support using the sysfs reset_method
+attribute.  The reason turns out to be that we don't increment the usage
+count while probing, the driver has the device in D3, where this system
+seems to support D3cold, and the PM control register is read back as
+0xffff.
 
-apologies for the mess this created. Danila's mail provider ratelimited 
-him halfway through sending the series and the attempt to re-try sending 
-the second half an hour later ended up with a new message ID (I think 
-due to not using --in-reply-to).
-He asked me to let you know that this will be resolved later and the 
-whole series will be re-sent once the problems are resolved.
+The cleanup __free helper seems to be the cleanest solution here, versus
+refactoring to a common exit point or wrappers around reset_fn, but feel
+free to suggest otherwise.  I see a couple potential other use cases for
+this helper in the vfio code.
 
-Best regards,
-Jens
+Please review.  Thanks,
+
+Alex
+
+Alex Williamson (2):
+  PM: runtime: Define pm_runtime_put cleanup helper
+  PCI: Increment PM usage counter when probing reset methods
+
+ drivers/pci/pci-sysfs.c    | 3 +++
+ include/linux/pm_runtime.h | 2 ++
+ 2 files changed, 5 insertions(+)
+
+-- 
+2.48.1
+
 
