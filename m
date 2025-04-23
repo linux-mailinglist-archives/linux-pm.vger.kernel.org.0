@@ -1,160 +1,192 @@
-Return-Path: <linux-pm+bounces-26043-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26044-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1ED1BA98C86
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 16:13:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85E50A98C90
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 16:15:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 064A818993E1
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 14:14:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6FF217B4A1
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 14:15:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5843C2798E3;
-	Wed, 23 Apr 2025 14:13:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFD34279914;
+	Wed, 23 Apr 2025 14:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BWchryqi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fbKle2jl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61BF327933E;
-	Wed, 23 Apr 2025 14:13:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9604C262801;
+	Wed, 23 Apr 2025 14:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745417624; cv=none; b=m9ObI3wF120i2X6RwbVNiTNZ/6unj4LUGJe1nTtXEcrVXA9qFLlwKmgoUCFbwUWFAH252rKH4+6D9+3co7zsSx9NpG0kZ3DLcKHwgYiWlYvRTNDMu8cutFSZyXyUMUeOokOIUAec/LiKI8w2jUamUJU4yNV7zzdoCoygbSI3qGU=
+	t=1745417711; cv=none; b=huqvml/ebFkO/kzofaENYa5o9whPbxwHBNYg1u5gy+0giF1Ztp+WN5EreHpVWqYDSlcEvzX3cCCI9GAVs3pcBVD4i+o2j7ACwjnzF5X7k4f+vrbpuENhpZMMag+J6uidVWJPWsaZ7lH4D6rL7Tm7aqS6VKNdZdJLxrek8lPH7Y0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745417624; c=relaxed/simple;
-	bh=gCdfzP6Rz3QRAiqWb8ICzKaC8k4ViRNpmXNZ7t4kQyU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RwZ0D8Jp2FBQfWk3b6LwZ2iiaoyQwF6vsUuve98rZ0B5HLEdjm2qoF4f4OFSJbUEswMFeF32PgVkh7hkrHMHxxB9GjtkXpXWkrhpXK3PxaTNJiGf7s/0tbFTt2/Rdewe3JbSajPSGU6lpyGI1IkqyESefNRFyR/PVnBbfxLXmkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BWchryqi; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745417622; x=1776953622;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=gCdfzP6Rz3QRAiqWb8ICzKaC8k4ViRNpmXNZ7t4kQyU=;
-  b=BWchryqiGU+LaqA2picB1+Ill1U1/AvbA+gqwF/Z8uAxpStlke8XdgU/
-   08lHXyF31QE6qAJR5TKaF/mTWXsA2LI52Z6LxN7Qj7IBO20Obn5jMhWHj
-   j7UrKAUY/zk0/mUL+x2C0nkPhUS60aqY3OzF8oI7adCZE+zKsdtiIuTJQ
-   +Z1ICSedfHxXS9mclfzofkVTUV420maXCnrn6+LmW/+gF6sOs3ohktlkI
-   P/3uDvUQFm9lEJUvH2BdgJ77AXZssPhf5wCaAb19H7PWFjWiNTb8qNiqB
-   ByuAv8qUO4PDbVXIJixN7vNtS0/+Kr7TuIPvzXp1SUi5emPsCkQnDGBle
-   Q==;
-X-CSE-ConnectionGUID: wd4H7PR9RwOHsyvdME9YIA==
-X-CSE-MsgGUID: rS0O/w18QRa3qrBNOyCnpg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11412"; a="50674124"
-X-IronPort-AV: E=Sophos;i="6.15,233,1739865600"; 
-   d="scan'208";a="50674124"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 07:13:41 -0700
-X-CSE-ConnectionGUID: hN2luxYRRR22QwDVEy73vw==
-X-CSE-MsgGUID: TPuRvEnIRWOtX5fYO79fZg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,233,1739865600"; 
-   d="scan'208";a="137495477"
-Received: from tfalcon-desk.amr.corp.intel.com (HELO [10.124.221.81]) ([10.124.221.81])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 07:13:39 -0700
-Message-ID: <4caedcaf-793a-4371-a8db-50723dcdbad4@intel.com>
-Date: Wed, 23 Apr 2025 07:13:37 -0700
+	s=arc-20240116; t=1745417711; c=relaxed/simple;
+	bh=lZLc+0iQ0egQpFZzpGN61kWRDoQqmUE5Dgwzx88gqNE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dIoGro7eYMKIosRSRQkFWwyrzweKzDWX1ehZ//pw1yXcwcs3ZmYIieUQp5vqwCsyk2uPD8IO0V50ClybZE1WDc2ObS6e/PoqYPxiqAGukQkW+Zca40RWa0mmH9ib8qENeIv4mnjRRE3OoOACwQEfsv2D6/O5tB4VT83fC07XnKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fbKle2jl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3454C4CEEB;
+	Wed, 23 Apr 2025 14:15:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745417710;
+	bh=lZLc+0iQ0egQpFZzpGN61kWRDoQqmUE5Dgwzx88gqNE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=fbKle2jl0QErU8ghTbj3sYn7CPDYSzV7RWs0s1cNIP9d5Q0EtDg2ooaFWjGzVL84t
+	 jnQQJEztSxO5Is0L8uAMdKwBmnQq8BId7lazA1Z3plJM45E29XftxtDGERqrDr/ZTZ
+	 I7kJSea7R1h+Q6db7wlqZlWg+yaHnW8E9TOShNxrjIhrsdJ2/UOCQZfa13ykIq2ZIF
+	 48L0aBklhq4gMXZ4bCrMsehMZvY2rGUZfbc464bbZFyGIxwSoq1xXriOwXeKvZT/eS
+	 8AnvML/cCKW1XcVCVQMJprXIweoiWSf2ORWa+pYxYW66DAgm2gCSGRoOPdH6IIEwfG
+	 kj2+kpEm+2eDQ==
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-2c2dc6c30c2so1741769fac.2;
+        Wed, 23 Apr 2025 07:15:09 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV456AS0enbezTXD/MlTVUeViMfT3+jrg2AL1Qcg6FKxVII1dYJuSc/9vwObuR81pkA9cD03HuHDM8=@vger.kernel.org, AJvYcCWBDxaWP07qgAzq1q5MwWlRQ/NX4+r2avl/OHDKqcqzbcgWcQ9QK4y8lkdGDJ62seHsrv67z0m/X0UEw8c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywa8oiSLiifX1uWBtMLvVDPzI20Mf8dq5UK4QdMrww4AZYjGbJ+
+	vCiHfULRI19IRpk8ztDOFZxOKmWdjiE+5eeiT5SAmMu+v4rRWZuKuXOWMIRwwaqugr8XjWABvKG
+	suZ2yIT+86NqoNiJ0hQs66+JZNsc=
+X-Google-Smtp-Source: AGHT+IFttgT2cMzJ7Q/jyjhyBdMlJ6r4LNKEGwvkEg1MSYOwmaGGPnBPqqiXRNbn1Ybe+h0ttBpAz7iPzOrDBOQ3SUM=
+X-Received: by 2002:a05:6870:451:b0:29e:433f:aa4f with SMTP id
+ 586e51a60fabf-2d526d6952bmr11393439fac.30.1745417709199; Wed, 23 Apr 2025
+ 07:15:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 01/34] x86/msr: Move rdtsc{,_ordered}() to
- <asm/tsc.h>
-To: "Xin Li (Intel)" <xin@zytor.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
- linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
- xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
- linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
- platform-driver-x86@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org,
- jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org,
- namhyung@kernel.org, mark.rutland@arm.com,
- alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
- adrian.hunter@intel.com, kan.liang@linux.intel.com, wei.liu@kernel.org,
- ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
- tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
- seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
- kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com
-References: <20250422082216.1954310-1-xin@zytor.com>
- <20250422082216.1954310-2-xin@zytor.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
- oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
- 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
- ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
- VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
- iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
- c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
- pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
- ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
- QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzUVEYXZpZCBDaHJp
- c3RvcGhlciBIYW5zZW4gKEludGVsIFdvcmsgQWRkcmVzcykgPGRhdmUuaGFuc2VuQGludGVs
- LmNvbT7CwXgEEwECACIFAlQ+9J0CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEGg1
- lTBwyZKwLZUP/0dnbhDc229u2u6WtK1s1cSd9WsflGXGagkR6liJ4um3XCfYWDHvIdkHYC1t
- MNcVHFBwmQkawxsYvgO8kXT3SaFZe4ISfB4K4CL2qp4JO+nJdlFUbZI7cz/Td9z8nHjMcWYF
- IQuTsWOLs/LBMTs+ANumibtw6UkiGVD3dfHJAOPNApjVr+M0P/lVmTeP8w0uVcd2syiaU5jB
- aht9CYATn+ytFGWZnBEEQFnqcibIaOrmoBLu2b3fKJEd8Jp7NHDSIdrvrMjYynmc6sZKUqH2
- I1qOevaa8jUg7wlLJAWGfIqnu85kkqrVOkbNbk4TPub7VOqA6qG5GCNEIv6ZY7HLYd/vAkVY
- E8Plzq/NwLAuOWxvGrOl7OPuwVeR4hBDfcrNb990MFPpjGgACzAZyjdmYoMu8j3/MAEW4P0z
- F5+EYJAOZ+z212y1pchNNauehORXgjrNKsZwxwKpPY9qb84E3O9KYpwfATsqOoQ6tTgr+1BR
- CCwP712H+E9U5HJ0iibN/CDZFVPL1bRerHziuwuQuvE0qWg0+0SChFe9oq0KAwEkVs6ZDMB2
- P16MieEEQ6StQRlvy2YBv80L1TMl3T90Bo1UUn6ARXEpcbFE0/aORH/jEXcRteb+vuik5UGY
- 5TsyLYdPur3TXm7XDBdmmyQVJjnJKYK9AQxj95KlXLVO38lczsFNBFRjzmoBEACyAxbvUEhd
- GDGNg0JhDdezyTdN8C9BFsdxyTLnSH31NRiyp1QtuxvcqGZjb2trDVuCbIzRrgMZLVgo3upr
- MIOx1CXEgmn23Zhh0EpdVHM8IKx9Z7V0r+rrpRWFE8/wQZngKYVi49PGoZj50ZEifEJ5qn/H
- Nsp2+Y+bTUjDdgWMATg9DiFMyv8fvoqgNsNyrrZTnSgoLzdxr89FGHZCoSoAK8gfgFHuO54B
- lI8QOfPDG9WDPJ66HCodjTlBEr/Cwq6GruxS5i2Y33YVqxvFvDa1tUtl+iJ2SWKS9kCai2DR
- 3BwVONJEYSDQaven/EHMlY1q8Vln3lGPsS11vSUK3QcNJjmrgYxH5KsVsf6PNRj9mp8Z1kIG
- qjRx08+nnyStWC0gZH6NrYyS9rpqH3j+hA2WcI7De51L4Rv9pFwzp161mvtc6eC/GxaiUGuH
- BNAVP0PY0fqvIC68p3rLIAW3f97uv4ce2RSQ7LbsPsimOeCo/5vgS6YQsj83E+AipPr09Caj
- 0hloj+hFoqiticNpmsxdWKoOsV0PftcQvBCCYuhKbZV9s5hjt9qn8CE86A5g5KqDf83Fxqm/
- vXKgHNFHE5zgXGZnrmaf6resQzbvJHO0Fb0CcIohzrpPaL3YepcLDoCCgElGMGQjdCcSQ+Ci
- FCRl0Bvyj1YZUql+ZkptgGjikQARAQABwsFfBBgBAgAJBQJUY85qAhsMAAoJEGg1lTBwyZKw
- l4IQAIKHs/9po4spZDFyfDjunimEhVHqlUt7ggR1Hsl/tkvTSze8pI1P6dGp2XW6AnH1iayn
- yRcoyT0ZJ+Zmm4xAH1zqKjWplzqdb/dO28qk0bPso8+1oPO8oDhLm1+tY+cOvufXkBTm+whm
- +AyNTjaCRt6aSMnA/QHVGSJ8grrTJCoACVNhnXg/R0g90g8iV8Q+IBZyDkG0tBThaDdw1B2l
- asInUTeb9EiVfL/Zjdg5VWiF9LL7iS+9hTeVdR09vThQ/DhVbCNxVk+DtyBHsjOKifrVsYep
- WpRGBIAu3bK8eXtyvrw1igWTNs2wazJ71+0z2jMzbclKAyRHKU9JdN6Hkkgr2nPb561yjcB8
- sIq1pFXKyO+nKy6SZYxOvHxCcjk2fkw6UmPU6/j/nQlj2lfOAgNVKuDLothIxzi8pndB8Jju
- KktE5HJqUUMXePkAYIxEQ0mMc8Po7tuXdejgPMwgP7x65xtfEqI0RuzbUioFltsp1jUaRwQZ
- MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
- hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
- vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-In-Reply-To: <20250422082216.1954310-2-xin@zytor.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <cover.1745315548.git.viresh.kumar@linaro.org> <7ce4ffb166beef83cf1bd703a41bf91622011585.1745315548.git.viresh.kumar@linaro.org>
+In-Reply-To: <7ce4ffb166beef83cf1bd703a41bf91622011585.1745315548.git.viresh.kumar@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 23 Apr 2025 16:14:56 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iCrQeKs=4S-x83Fgf-W4u=2JYLA5VmgKPaLCvYAkNpig@mail.gmail.com>
+X-Gm-Features: ATxdqUFjSCZMsgE0COHebVl5-LQCwtzGxnUc_24h28YU6lomS4arrllqkqRn0Wk
+Message-ID: <CAJZ5v0iCrQeKs=4S-x83Fgf-W4u=2JYLA5VmgKPaLCvYAkNpig@mail.gmail.com>
+Subject: Re: [PATCH 1/6] cpufreq: acpi: Don't enable boost on policy exit
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Lifeng Zheng <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Nicholas Chin <nic.c3.14@gmail.com>, 
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/22/25 01:21, Xin Li (Intel) wrote:
-> Relocate rdtsc{,_ordered}() from <asm/msr.h> to <asm/tsc.h>, and
-> subsequently remove the inclusion of <asm/msr.h> in <asm/tsc.h>.
-> Consequently, <asm/msr.h> must be included in several source files
-> that previously did not require it.
+On Tue, Apr 22, 2025 at 11:54=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.=
+org> wrote:
+>
+> The boost-related code in cpufreq has undergone several changes over the
+> years, but this particular piece remained unchanged and is now outdated.
+>
+> The cpufreq core currently manages boost settings during initialization,
+> and only when necessary. As such, there's no longer a need to enable
+> boost explicitly when entering system suspend.
+>
+> Previously, this wasn=E2=80=99t causing issues because boost settings wer=
+e
+> force-updated during policy initialization. However, commit 2b16c631832d
+> ("cpufreq: ACPI: Remove set_boost in acpi_cpufreq_cpu_init()") changed
+> that behavior=E2=80=94correctly=E2=80=94by avoiding unnecessary updates.
+>
+> As a result of this change, if boost was disabled prior to suspend, it
+> remains disabled on resume as expected. But due to the current code
+> forcibly enabling boost at suspend time, the system ends up with boost
+> frequencies enabled after resume, even if the global boost flag was
+> disabled. This contradicts the intended behavior.
+>
+> Don't enable boost on policy exit.
 
-I know it's mildly obvious but could you please add a problem statement
-to these changelogs, even if it's just one little sentence?
+Even after commit 2b16c631832d, the code removed by this patch does a
+useful thing.  Namely, it clears the boost-disable bit in the MSR so
+that the offline CPU doesn't prevent online CPUs from getting the
+boost (in case the boost settings change after it has been taken
+offline).  It doesn't actually touch policy->boost_enabled etc, just
+that particular bit in the MSR.
 
-	For some reason, there are some TSC-related functions in the
-	MSR header even though there is a tsc.h header.
+I'm not sure how this useful thing will be done after the $subject patch.
 
-	Relocate rdtsc{,_ordered}() and	subsequently remove the
-	inclusion of <asm/msr.h> in <asm/tsc.h>. Consequently,
-	<asm/msr.h> must be included in several source files that
-	previously did not require it.
+Moreover, without the $subject patch, the change made by the next one
+will cause the boost setting in the MSR to get back in sync with
+policy->boost_enabled during online AFAICS, so why exactly is the
+$subject patch needed?
 
-But I agree with the concept, so with this fixed:
-
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+> Fixes: 2b16c631832d ("cpufreq: ACPI: Remove set_boost in acpi_cpufreq_cpu=
+_init()")
+> Reported-by: Nicholas Chin <nic.c3.14@gmail.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D220013
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+> This was sent separately earlier. No changes from that.
+>
+>  drivers/cpufreq/acpi-cpufreq.c | 23 +++--------------------
+>  1 file changed, 3 insertions(+), 20 deletions(-)
+>
+> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufre=
+q.c
+> index 924314cdeebc..7002e8de8098 100644
+> --- a/drivers/cpufreq/acpi-cpufreq.c
+> +++ b/drivers/cpufreq/acpi-cpufreq.c
+> @@ -89,8 +89,9 @@ static bool boost_state(unsigned int cpu)
+>         return false;
+>  }
+>
+> -static int boost_set_msr(bool enable)
+> +static void boost_set_msr_each(void *p_en)
+>  {
+> +       bool enable =3D (bool)p_en;
+>         u32 msr_addr;
+>         u64 msr_mask, val;
+>
+> @@ -107,7 +108,7 @@ static int boost_set_msr(bool enable)
+>                 msr_mask =3D MSR_K7_HWCR_CPB_DIS;
+>                 break;
+>         default:
+> -               return -EINVAL;
+> +               return;
+>         }
+>
+>         rdmsrl(msr_addr, val);
+> @@ -118,14 +119,6 @@ static int boost_set_msr(bool enable)
+>                 val |=3D msr_mask;
+>
+>         wrmsrl(msr_addr, val);
+> -       return 0;
+> -}
+> -
+> -static void boost_set_msr_each(void *p_en)
+> -{
+> -       bool enable =3D (bool) p_en;
+> -
+> -       boost_set_msr(enable);
+>  }
+>
+>  static int set_boost(struct cpufreq_policy *policy, int val)
+> @@ -532,15 +525,6 @@ static void free_acpi_perf_data(void)
+>         free_percpu(acpi_perf_data);
+>  }
+>
+> -static int cpufreq_boost_down_prep(unsigned int cpu)
+> -{
+> -       /*
+> -        * Clear the boost-disable bit on the CPU_DOWN path so that
+> -        * this cpu cannot block the remaining ones from boosting.
+> -        */
+> -       return boost_set_msr(1);
+> -}
+> -
+>  /*
+>   * acpi_cpufreq_early_init - initialize ACPI P-States library
+>   *
+> @@ -931,7 +915,6 @@ static void acpi_cpufreq_cpu_exit(struct cpufreq_poli=
+cy *policy)
+>
+>         pr_debug("%s\n", __func__);
+>
+> -       cpufreq_boost_down_prep(policy->cpu);
+>         policy->fast_switch_possible =3D false;
+>         policy->driver_data =3D NULL;
+>         acpi_processor_unregister_performance(data->acpi_perf_cpu);
+> --
+> 2.31.1.272.g89b43f80a514
+>
 
