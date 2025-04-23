@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-25985-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25986-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C9FEA97C45
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 03:47:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63161A97C4A
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 03:47:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 273C27A6210
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 01:46:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8F30189BE05
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 01:47:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1628F2641E8;
-	Wed, 23 Apr 2025 01:47:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D9A5264A86;
+	Wed, 23 Apr 2025 01:47:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KvhKnBTL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eMAzY9Pp"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB1BB2641C3;
-	Wed, 23 Apr 2025 01:47:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D096C264A72;
+	Wed, 23 Apr 2025 01:47:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745372822; cv=none; b=ZssI5fKyFJztJ/U4MARDkiWos5jOmrU00wBkJgjzBOzVOmSKIZZSnq3Q7Y5RGvgMD8ZvjNIsS7BLHLGCtm1qXqPW+xRq1wmr90KRXmUAVSIYMRGostcdk1SSnMn4cR0HxxgrqCzqmTQkDpEX9fqKVAyVidTMMC6RwaJ+eDHJphg=
+	t=1745372823; cv=none; b=gBzi2hOSsKHr6K1ZQZrPl+EKVkXVvJ9nGP063f4Z0Q5TdNRCkcpWtGCA0EI6Sv8xsBRDVKuJTNV8vsMZ4XKorlnAQ3loHkN99oQiMhhlR4N65AF/x5JTAYgxbz/A3TfH0KwKZq2CfRLEEYxJBjnMPXK3McpXYRs97DGZmgagqoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745372822; c=relaxed/simple;
-	bh=GDLiMFYJVSSB/nPwMPmk17jdAFYMoX1EZVp8wXOz79I=;
+	s=arc-20240116; t=1745372823; c=relaxed/simple;
+	bh=UcQq1FFSIkxtUl0R2B0U9yrBSqRLeyIDteqW0GNuh/I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pj8RJwwKgV8ab+EA+fwmdwyIDyJHklGUN2nZDouHhhE6yJrUpEcBmaFgjTXsi3sBRTcV6pNe1ejN/29Tc9QHrEydaAW8ckfMgQBbj+Pscy4CP2BWV74kLRYTs0PqeFCFfIPFfYYs0UAFI4WJod+xrKTiedl4gPwenmDOt1+8ycQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KvhKnBTL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F473C4CEF1;
-	Wed, 23 Apr 2025 01:46:59 +0000 (UTC)
+	 MIME-Version; b=ihgn63tLI92mEmxCgcBF/zu6Kzm7qRFu8MgQg4BL0P7cQ18BF/uRHa4012DvKPN6ql1+pvtMP0oIUb46/NnecnfZ38rJSQJDcwMGdM18a4ngdVqPteR/lRvMQaR66avaSxdINkn45t+XJOMHvrPogz9BdJsP+UwqEzuLtrEgT1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eMAzY9Pp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B990C4CEED;
+	Wed, 23 Apr 2025 01:47:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745372821;
-	bh=GDLiMFYJVSSB/nPwMPmk17jdAFYMoX1EZVp8wXOz79I=;
+	s=k20201202; t=1745372823;
+	bh=UcQq1FFSIkxtUl0R2B0U9yrBSqRLeyIDteqW0GNuh/I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KvhKnBTLXIfOUW2ErBCCRlq2ahUoFUQdMF7I921v2Wz37faHnFfAZ98muH9UTOYMi
-	 fOe52ZROhJd7OGgs0YO20hVPLFwCoIeQ33aTV+SwH6UCvjYiGAJ96l/anyr2W/Sjwu
-	 FpYowurIg6G/LStGfRxRW5L/ebtX5KDSnicQi/wpleyTTrO0kBWKSZyXGicOGlwoaS
-	 igW3aEdVqAKZx50FW9VQXlTG6AMKu58enXqf0K/dDQd8uGuQWOnU2gZvku9ZO9loYM
-	 IqkgM1K8tFwf9Wja70FyAQnQC1i7wjQd/8onZb3/PGkODP2Ole8Ofs195AngQauDs+
-	 PxNYHbaptxH2w==
+	b=eMAzY9Ppey6y7/HLO4nPRmuCxvZhpD465dwB08aAXptGaY90P/3mPUKK8+zUGMYDK
+	 gIhVc3/vzfJxBUSeWzaQ6GzH9RC69vJXzO4eJ7iaC3J5WdTPlZ99TbWLoBUh/EoGMX
+	 hq5X5v6g8qCAhBiq4P+FRTnvy06WdVI7hNrbo9rRyssbNHBNFmW286gRjH/zsCGcbx
+	 8yLXjlIVVxevh38vTqt+mSovpp4Pj1DTYc2fTAu3JrErDaRK6ceK68qMpTDkI27LWu
+	 KisFJrCZt/ExHk59165UxO2MzC1AKJVZUU5g0jgjmuaekWKG85QGmsz9Fo4cuMfVXh
+	 POgWn5yfavniA==
 From: Mario Limonciello <superm1@kernel.org>
 To: Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
@@ -61,9 +61,9 @@ Cc: Mario Limonciello <mario.limonciello@amd.com>,
 	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
 	linux-doc@vger.kernel.org (open list:DOCUMENTATION),
 	linux-pm@vger.kernel.org (open list:AMD PSTATE DRIVER)
-Subject: [PATCH v9 02/13] MAINTAINERS: Add maintainer entry for AMD Hardware Feedback Driver
-Date: Tue, 22 Apr 2025 20:46:20 -0500
-Message-ID: <20250423014631.3224338-3-superm1@kernel.org>
+Subject: [PATCH v9 03/13] x86/msr-index: define AMD heterogeneous CPU related MSR
+Date: Tue, 22 Apr 2025 20:46:21 -0500
+Message-ID: <20250423014631.3224338-4-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250423014631.3224338-1-superm1@kernel.org>
 References: <20250423014631.3224338-1-superm1@kernel.org>
@@ -75,40 +75,35 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: Perry Yuan <perry.yuan@amd.com>
 
-Introduce the `amd_hfi` driver into the MAINTAINERS file.
-The driver will support AMD Heterogeneous Core design which provides
-hardware feedback to the OS scheduler.
+Introduces new MSR registers for AMD hardware feedback support.
+These registers enable the system to provide workload classification
+and configuration capabilities.
 
-Moving forward, Mario will be responsible for the maintenance
-and Perry will assist on review of patches related to this driver.
-
+Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+Signed-off-by: Perry Yuan <perry.yuan@amd.com>
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ arch/x86/include/asm/msr-index.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 74667f36b013f..ad7c9c9d5cb38 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1101,6 +1101,15 @@ F:	arch/x86/include/asm/amd/hsmp.h
- F:	arch/x86/include/uapi/asm/amd_hsmp.h
- F:	drivers/platform/x86/amd/hsmp/
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index ac21dc19dde21..0c761033aa714 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -724,6 +724,11 @@
+ #define MSR_AMD64_PERF_CNTR_GLOBAL_CTL		0xc0000301
+ #define MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR	0xc0000302
  
-+AMD HETERO CORE HARDWARE FEEDBACK DRIVER
-+M:	Mario Limonciello <mario.limonciello@amd.com>
-+R:	Perry Yuan <perry.yuan@amd.com>
-+L:	platform-driver-x86@vger.kernel.org
-+S:	Supported
-+B:	https://gitlab.freedesktop.org/drm/amd/-/issues
-+F:	Documentation/arch/x86/amd-hfi.rst
-+F:	drivers/platform/x86/amd/hfi/
++/* AMD Hardware Feedback Support MSRs */
++#define AMD_WORKLOAD_CLASS_CONFIG      0xc0000500
++#define AMD_WORKLOAD_CLASS_ID          0xc0000501
++#define AMD_WORKLOAD_HRST              0xc0000502
 +
- AMD IOMMU (AMD-VI)
- M:	Joerg Roedel <joro@8bytes.org>
- R:	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+ /* AMD Last Branch Record MSRs */
+ #define MSR_AMD64_LBR_SELECT			0xc000010e
+ 
 -- 
 2.43.0
 
