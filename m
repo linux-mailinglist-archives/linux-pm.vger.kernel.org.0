@@ -1,87 +1,87 @@
-Return-Path: <linux-pm+bounces-26030-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26031-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C089A989C1
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 14:25:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3CE2A98A39
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 15:01:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC36B178760
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 12:25:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 832BB1B65085
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 13:01:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40BA12165E9;
-	Wed, 23 Apr 2025 12:25:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF5EC33F9;
+	Wed, 23 Apr 2025 13:01:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="H9M+wcqI"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="jebbOYq2"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3E67215162
-	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 12:25:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1128720328
+	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 13:01:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745411146; cv=none; b=SRg4mI+VSF0675rsOuZnU0G2vTD58InI46fNNvwx0g9O9sqm+J+1inrS2MsbW+AFLLyse2vTHmiQA7DXQkV7xWaRUfow9C3uB23hOHVGSumxNruRIElQeBbVrpdsqS+rWlFR43oICWi6RC6GNJoW8oMVuJTK5pyOvR+zdROnp2w=
+	t=1745413275; cv=none; b=eEmELn4mNH0kg1wr1BqjvYPn0KkrNOnb0iwWMPRiXJ/pc+aIDTet1gN34Mg1gAB8GljDeKoG8VWWvcv1Xiw1ObeJKtcGpKapLPDPQKzdBuimDCh0RrDKEluk9pokBfhSPCRIrOMlLJSkYppkoj4/CMS5Jut3UTtO2pnecPFl4fE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745411146; c=relaxed/simple;
-	bh=Q2TQQJx49EZoqt+s+UoqOFRUn9Ry2bGHUuUAHKOsrh0=;
+	s=arc-20240116; t=1745413275; c=relaxed/simple;
+	bh=wd9BuDyfY2g+YcmDFO0GJF3WmdKVfVi8IfjkUW9YZzU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bbn/+PUHM3DfFuV/txeqE975kxFeNfE8QGGJe2dZhr1chItyIjf6UGPZ+o9iWyGoWcU00m/YQRNblyo/C5hx0n+hJtQlRDF2pUcDW31d7FpYRd3xaXzxabnOw4BjoI8Qb1+YhFWU2hHMzm1zAzfkkRDnocYEVYNsIE4uOba3nVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=H9M+wcqI; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:Content-Type; b=niqrJKsVgUhm0ylTqAageMsigPh3y0VLSiKkXEweb6Req/IYkUzbukwmHN2GR3gjnxkRO0ULd5P9DqbsYYaoEIQMWIxFhdsFglBoKyC6VnvgOW9RX5djnxsrfSThxDSBsoZYkuLZbQ5shmtdtY8LIYyMGE77f/heANAdsoFIvwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=jebbOYq2; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53NApQ6J016264
-	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 12:25:43 GMT
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53NApQ9h016264
+	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 13:01:13 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	t2kUl9QgvO/uB6b51hcAn/oawqIiVbquzPdGvE1gnSU=; b=H9M+wcqITMErLoAk
-	nCZGjwKmkqvEHEVExGXss+3rF0Imtxhh59d0youCTSamwjbJnF4KWRQ7zUSdrdE1
-	7TFGsNEVGYrvgU7GPSAkBGDhcmdGmW2kf7RFQOwCNIVYuHFB/axONCL/Xpu3mDzY
-	x5Sc7cM/yN+ay62Mt11+v8EWNlxGfYR7Iiyl7WR0pbqkoeRaFRop8CyqcQg0fBUO
-	5rRqoS83uZvcyLewGFkwOjxhZCC5kowdwcsm+9Y2rdMRdGShrSTIn9AuW3YzTmUA
-	SUA75r2+1394TjRCzieHwQ4D8c/GDx0lp7SRa45EexVwMcSepdKPN3d6A+Vaiv/i
-	QCr4cg==
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 466jh3j2vg-1
+	xPikF6CHMtboH8wVgZUcnmTj+ScLp41cXAhI3chWQ6s=; b=jebbOYq2L4NxvuWT
+	OgGT6NlsvwUlxEMsseGJeXf+uSDT3Phwfeia/pLvt2f9Mnd3upe0+fLHgPZxcmYs
+	cSyStGCmznyp94Ooi/KJGUQXCvp4rv/3pmWuXf2Z4yLlAvoZqHOXUdUnOcIBckFf
+	QAMokAIUHz7BXCsvvbKnS195TQ1Uzbpk2Ua2wF4j1BKE3djSoH3htCccvH9nzC25
+	g4E7BSfqA7CoIQvAGQemCJrVKhA3dQJb+cavut9Zp+vK54xBguiVItxHrop4Rf6t
+	Cd4mng7hAS2DtGBoB5+xU1iTO/pqAKxjQkj76N0GNGSWPCWAB4BMFsf4nhzpv3BR
+	65supg==
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 466jh3j5kj-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 12:25:43 +0000 (GMT)
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-6e8ff8c9dcfso16335986d6.3
-        for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 05:25:43 -0700 (PDT)
+	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 13:01:12 +0000 (GMT)
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7c545ac340aso37935285a.1
+        for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 06:01:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745411142; x=1746015942;
+        d=1e100.net; s=20230601; t=1745413272; x=1746018072;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t2kUl9QgvO/uB6b51hcAn/oawqIiVbquzPdGvE1gnSU=;
-        b=SZfBBj8aZQH17/fr9bd33gNUm1KhiawKBThmYbPZUZbkDeD/Yi8l/SSiYPjW5Yj7Pk
-         ZebtESI9WzdsxaCXNxe2ejer37+vgjbnMT8o2M5X1lu6j3b+awyWUH8OBn0DZW3bGsU1
-         uG8A3v5d+vXlWN1X6+umyXrwgz42l/x3B/ZkSO6ZrlnX8WyO7D+2BjvJi4OGEtuCbPn7
-         HuQ2jYrX4+a/oypNXPxUlpSaiaZJYyI3GIQhlvL5GoPVefiHFgUeJ/7ncXs7URMU1Opw
-         7/hssEC6KUJeFN47lwOJ7ZR74B0oHdpsY0OjoAKY6+GW0M/AKfVqMXTmGe196SW5rez8
-         zUDg==
-X-Forwarded-Encrypted: i=1; AJvYcCUhjJ/VYdESu0Bee4UPVld+0rIqVynLZpgjTfGLyv4sBb6cldyX0DdhEBQBnoiC71HQXy/1n+5a8w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPx8JhSOB/3bEOvFT1LeejuSPQbM0ov3h4ACMhHFrbnovH7+/I
-	z2ee6EFIpSD8Hz6SxSRpYhiQCnv+do0J1hk71biV8G4z9NZbkv9dYJVEEUn8g9yT3Ky56JLt6vZ
-	GmwfgvZXLOqgKcORCJaD1sxy/aDmTIjxQnSh/f6F/X/k/Uotcb+AQU7X4og==
-X-Gm-Gg: ASbGncsLbbpDzB6/CDVt4i0ulNPr2iYADvqW9VYAQwzjLy7lXOeYB1BdqZRpbQNY/p9
-	obqPHPZFtDMNyN3GiIzVYJxGrMTdCPrU2IRfLgCkdZzeBRfRHEBAs8s14K3YTC3Fohl2Oe0LB8V
-	n/BBqVO7NFomc6a5Q5SDjyj+XvjpajzaKR+NS+YsuNi7sBjAdcvElPk+Gg9ASCv1yit6oZrseWS
-	cINERHE+XIsdDwd3V9Ky+NsdQu+s7Z9A2vKKsruJP70T5flj9/oewd7MRHleyBu0cUrqRamALCM
-	FMZphA27W2tZ7E59gmBZyQgYSlDGyOZRmVp4PTRuRj+JFyaj6vfpRHlRmCWJ/AWf5G8=
-X-Received: by 2002:ad4:5d68:0:b0:6ed:122c:7daa with SMTP id 6a1803df08f44-6f4b4715783mr16544026d6.4.1745411142444;
-        Wed, 23 Apr 2025 05:25:42 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH8oXZ9JnKtVNQzSjdw+36R1Viqv7RB6F1PrfW3UoImxkzoWPf3HA1/z5215kcW7wchhdalKQ==
-X-Received: by 2002:ad4:5d68:0:b0:6ed:122c:7daa with SMTP id 6a1803df08f44-6f4b4715783mr16543846d6.4.1745411142040;
-        Wed, 23 Apr 2025 05:25:42 -0700 (PDT)
+        bh=xPikF6CHMtboH8wVgZUcnmTj+ScLp41cXAhI3chWQ6s=;
+        b=tq1Zy+5GfZ7s1mn6nlV7gsAez5zA/K74KoH2K0kkO78vhUr1tImBQJVei+QvqBJxXx
+         ZBHtCEUuAabTf1yAjq+phNcUa1k9WehLXXtzfGRv2QmTAoNvxvttcUDbD3+9j7DsHn/z
+         7LFG1Nn5Ig1lAODqcerirBMagCMnwjaOmi2tLTpu2U2htzHdfWD3gCZ1Cw2JYNL9+Zku
+         FS/zdI74APDh2XfX0pNpbCYvc+OLQG8PHBMc8X2+D1URxW6AakccgNv7RVTudI6A3uOw
+         mXFAW/gOa4Ct/q89ddPNGaY2PuAnfdbyScDjorMQLgzgbO6yaln78K+Bi7IRFKK+4J/Y
+         Muzg==
+X-Forwarded-Encrypted: i=1; AJvYcCXE7VeM7c8eLyzKsesPkBAHOwO253KovlrEXYgZjwpB6LeQO9TL1rUPjv9+6yNa9amWBD1RY1OcXA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwvkdD+RCOCob7nHPc4KQ+lE7pD1QWDdXkgL3X1CF64e5lfMbX
+	KlQAy6JD2NtrLGO4LLlw6RTaig9iEhdGQXnsFUMLRx1yADQYyGTNlND5eP06QEm1jKUPiXZ129H
+	5oQPnbnZeZB+b+axaL22P6XZNjypssu+PLq3eEECDbFTJgv0PDEHp6OFulQ==
+X-Gm-Gg: ASbGnctTf+LY9e65zmebo91L4my/o/RZWOGiYBGvOTQAVIMdwH1i4AmFBc8XiudgTRG
+	nlIk4WiomaRJPNhNCCkK8ogkgojMzvxDi7U5kCFm58GsQ4WiOCay68mhTEmoZyCD7Jqa3b3G8gF
+	lOQxKwZXu84H75UPynoxbw8+bnbz+0IIXlQzYlTnQxG8mj2QTscHofYQWCPrsaTkOEQ/JvV8/DG
+	uz7m3+vdlXX1u3HDxj5g9vulb9kE9sKq+dA4a1MidxiNYq/up4nGYc63XE9PZG9wq38Ucd5H7s0
+	/sKLx444OIHkf2mNtVKNJ6+aJYCem2zB2PsLkbik9p/PZrCpk3KNdodZTsnPN1QKza8=
+X-Received: by 2002:a05:620a:2584:b0:7c7:a574:c0ac with SMTP id af79cd13be357-7c94d234d2bmr199585885a.3.1745413271777;
+        Wed, 23 Apr 2025 06:01:11 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEvC0BBlTo+m5g1Fq3RkWdluOAVAwUmBFljOPIeXR01i5VEzyjJw3LAtEQjfmCHpr6YmNfHig==
+X-Received: by 2002:a05:620a:2584:b0:7c7:a574:c0ac with SMTP id af79cd13be357-7c94d234d2bmr199580785a.3.1745413271071;
+        Wed, 23 Apr 2025 06:01:11 -0700 (PDT)
 Received: from [192.168.65.183] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5f6255778b3sm7388108a12.19.2025.04.23.05.25.39
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acb6eefc72fsm809912366b.101.2025.04.23.06.01.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Apr 2025 05:25:41 -0700 (PDT)
-Message-ID: <8671d7f8-0d41-4574-a0de-aa40c1ed3c0b@oss.qualcomm.com>
-Date: Wed, 23 Apr 2025 14:25:38 +0200
+        Wed, 23 Apr 2025 06:01:10 -0700 (PDT)
+Message-ID: <6662b275-6b8e-40be-b62f-c17ae8e63dfa@oss.qualcomm.com>
+Date: Wed, 23 Apr 2025 15:01:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,75 +89,77 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/7] drm/msm/adreno: Add module param to disable ACD
-To: Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Rob Clark
- <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+Subject: Re: [PATCH v2 0/9] Enable QUPs and Serial on SA8255p Qualcomm
+ platforms
+To: Praveen Talari <quic_ptalari@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Conor Dooley
  <conor+dt@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        Anthony Ruhier <aruhier@mailbox.org>,
-        Dmitry Baryshkov <lumag@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-References: <20250419-gpu-acd-v5-0-8dbab23569e0@quicinc.com>
- <20250419-gpu-acd-v5-4-8dbab23569e0@quicinc.com>
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Cc: psodagud@quicinc.com, djaggi@quicinc.com, quic_msavaliy@quicinc.com,
+        quic_vtanuku@quicinc.com, quic_arandive@quicinc.com,
+        quic_mnaresh@quicinc.com, quic_shazhuss@quicinc.com
+References: <20250418151235.27787-1-quic_ptalari@quicinc.com>
 Content-Language: en-US
 From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250419-gpu-acd-v5-4-8dbab23569e0@quicinc.com>
+In-Reply-To: <20250418151235.27787-1-quic_ptalari@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: gN4OhlKmBKlZLOmK8vPfMtBWhHWxTCze
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDIzMDA4NiBTYWx0ZWRfX4Y0+cqnodRkP hMakPBSJksNJJV7Is989jF8NX6fXrnusROuaSmuLRvTFFtUpHJ/ho0I5z3aQCZlwtJINmdJqJZR srbL8tacZK4oODB1QDH1haPtTi7MsbKwcBferV51/OdSf8f5OwZTBgjTCzRU9pMdbgI/KL0Hj9S
- QnBYrKEM1amhOlCXN3EYsXTBgJYMJRF6STG/5AOI9/tjTO9yJklschJhYsqqm5/Qu3eEfvyndPU 81dbNI8UhkVp6jQ1BiqjwyvcdGEBJks0qEqZ8qh1Qfvby1E7yC7G7r9c27dEOXKtTfU44vwk3hi r+wjxZCObY5HCXF9Gd3dSSK+XrcAMarp28yrvmYBT2KTWhnFmIVFlQy2UBKm9+qYbT/gPyUHcvr
- ky+Xr6KSyjTb2TynMBs3Pxl2e7DR6qga/wiWTMVJpRJ5NYDOp0OyCDRpWCe7PjcG8xe/pDNN
-X-Authority-Analysis: v=2.4 cv=ELgG00ZC c=1 sm=1 tr=0 ts=6808dc47 cx=c_pps a=UgVkIMxJMSkC9lv97toC5g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=COk6AnOGAAAA:8 a=pGLkceISAAAA:8 a=b3CbU_ItAAAA:8 a=EUspDBNiAAAA:8
- a=T2YAUAM4dRpUgQIxx5oA:9 a=QEXdDO2ut3YA:10 a=1HOtulTD9v-eNWfpl4qZ:22 a=TjNXssC_j7lpFel5tvFf:22 a=Rv2g8BkzVjQTVhhssdqe:22
-X-Proofpoint-GUID: gN4OhlKmBKlZLOmK8vPfMtBWhHWxTCze
+X-Proofpoint-ORIG-GUID: F2iHgVYpQd8wuNRvDRQPO_Q6vQK8kRG6
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDIzMDA5MSBTYWx0ZWRfX++usNvnOD7wK XATLUKzVmb6Kzek2JiPEpLMgSKQtT/BdQUDZNxgkdN7N9r8u3Z8TxljDvX/hXxJBihPbIoyNL6r 1qbjhxFCeXWWLmF8YKQzGWZcFD6ao8bTnLSeTO1kahv2ZHCZK+suhV0S6KCPUdC7eSkWE+PjUl7
+ 4ywl0O5c70KX0r8RtRB0/ZGf5cblxQRW1FttEQ2L7PoiCzm5CFMGdDAkMCWuBRCol94IAlP3Ldh EMUmGfhPlzMxk69P7EX9/EFYOahPA6Go47UhZvm7rS9J6QcflcGEZKqxQJ55MgFXTbsjGUkj31N 5ovpLR6YRMe30XU2jZLJNzcgRjhU9+jeDAIeyJKbiPi31Qx6pIDRgfBSilLZlY5fyM4t/fQz4J4
+ L2IrDKZSGtiovAUUCMFT/gvMykXQD7KZ+2NkyQ5hhSS6x8gaaijASVgk5uI62iADf6qMrydG
+X-Authority-Analysis: v=2.4 cv=ELgG00ZC c=1 sm=1 tr=0 ts=6808e498 cx=c_pps a=qKBjSQ1v91RyAK45QCPf5w==:117 a=FpWmc02/iXfjRdCD7H54yg==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=NEAV23lmAAAA:8 a=TM_zcG2lH5YfWnRg5aMA:9 a=QEXdDO2ut3YA:10
+ a=NFOGd7dJGGMPyQGDc5-O:22
+X-Proofpoint-GUID: F2iHgVYpQd8wuNRvDRQPO_Q6vQK8kRG6
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.680,FMLib:17.12.80.40
- definitions=2025-04-23_07,2025-04-22_01,2025-02-21_01
+ definitions=2025-04-23_08,2025-04-22_01,2025-02-21_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
  malwarescore=0 clxscore=1015 bulkscore=0 phishscore=0 spamscore=0
  mlxscore=0 lowpriorityscore=0 priorityscore=1501 suspectscore=0
- mlxlogscore=999 classifier=spam authscore=0 authtc=n/a authcc=
+ mlxlogscore=986 classifier=spam authscore=0 authtc=n/a authcc=
  route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2504230086
+ definitions=main-2504230091
 
-On 4/19/25 4:51 PM, Akhil P Oommen wrote:
-> Add a module param to disable ACD which will help to quickly rule it
-> out for any GPU issues.
+On 4/18/25 5:12 PM, Praveen Talari wrote:
+> The Qualcomm automotive SA8255p SoC relies on firmware to configure
+> platform resources, including clocks, interconnects and TLMM. The device
+> drivers request resources operations over SCMI using power and
+> performance protocols.
 > 
-> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
-> Tested-by: Maya Matuszczyk <maccraft123mc@gmail.com>
-> Tested-by: Anthony Ruhier <aruhier@mailbox.org>
-> ---
->  drivers/gpu/drm/msm/adreno/a6xx_gmu.c      | 7 +++++++
->  drivers/gpu/drm/msm/adreno/adreno_device.c | 4 ++++
->  2 files changed, 11 insertions(+)
+> The SCMI power protocol enables or disables resources like clocks,
+> interconnect paths, and TLMM (GPIOs) using runtime PM framework APIs,
+> such as resume/suspend, to control power states(on/off).
 > 
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> index 48b4ca8894ba38176481b62b7fd1406472369df1..38c0f8ef85c3d260864541d83abe43e49c772c52 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> @@ -1670,6 +1670,13 @@ static int a6xx_gmu_acd_probe(struct a6xx_gmu *gmu)
->  	struct adreno_gpu *adreno_gpu = &a6xx_gpu->base;
->  	struct msm_gpu *gpu = &adreno_gpu->base;
->  	int ret, i, cmd_idx = 0;
-> +	extern bool disable_acd;
+> The SCMI performance protocol manages UART baud rates, with each baud
+> rate represented by a performance level. Drivers use the
+> dev_pm_opp_set_level() API to request the desired baud rate by
+> specifying the performance level.
+> 
+> The QUP drivers are SCMI clients, with clocks, interconnects, pinctrl
+> and power-domains abstracted by a SCMI server.
 
-'extern' in local scope is.. rare but sure, why not
+So I recently started working on abstracting away power controls from
+the SE protocol drivers into a single place, among other improvements
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+A snapshot of this work is available here
+
+https://github.com/quic-kdybcio/linux/commits/topic/single_node_genise/
+
+(not yet 100% ready..)
+
+I think it'd make sense to get it done first, so that we can condense
+most of your changes in the common driver, where we'd swap out the clock
+handling for perf level setting instead
 
 Konrad
 
