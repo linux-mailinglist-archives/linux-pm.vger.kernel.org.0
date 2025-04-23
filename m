@@ -1,80 +1,80 @@
-Return-Path: <linux-pm+bounces-25997-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25998-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AB73A97D12
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 04:57:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22F95A97D16
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 04:57:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F07AF3A91BB
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 02:56:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5DF6417D22D
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 02:57:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B23CB263C8C;
-	Wed, 23 Apr 2025 02:56:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABB88264616;
+	Wed, 23 Apr 2025 02:57:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iDhl2yhh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jSmmJD14"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227192E403;
-	Wed, 23 Apr 2025 02:56:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227F2264614;
+	Wed, 23 Apr 2025 02:57:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745377016; cv=none; b=kMilrLahdFXy8CGVSOWsNmrZHPTvKJzMGLRjLKdvgSBYNcGI4FPtBXadj5NZ+G8F0LIOCl8Wn7nYbjARCOq3SI5svYeC3T0JEvTyrXsxJXVgCyVCE/biQRLl6cDbfB7eRuXeavFE9OtVLZyHfCtfoLyU3h+eFvmhizNUSdQRpZI=
+	t=1745377045; cv=none; b=NZtw8UeQ1uLT4xSTo/OH1L8UOeONZCdzJiTABft/Jw8Mq4bALXcEVtkjPMe2u/mFRnWy+x8xJJVHc0nFs0F1LtkAik0WhZ3TuiygCRyA2O1l2DSlpgCRqKdgLdi5B3Wfz9PC8d4pRpyFBtCsz7yarTpRyUjmhE7X9WaJB4FAZJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745377016; c=relaxed/simple;
-	bh=0HEnEiKhFBH7Flm84u46+eSHhyyxIBEQSIMyyrd3BOo=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=HqcAk95f7rAFnvrHS83gcODx8ZUuc1je2xVzMgZVsQInrd15HbMfj4Fu18apS1Tta0JD45KtLYD5yGRMpihL7KFHPGUzZxqgLsBq52hxSreD0EVI9IJnqlQVg5jK2bcctR5NITuoythRHEq6LFNailJXKWU3RahfUjfXLIh5cQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iDhl2yhh; arc=none smtp.client-ip=209.85.210.175
+	s=arc-20240116; t=1745377045; c=relaxed/simple;
+	bh=g/gbn7A6cZ+FC1ptKgjenHq9YU3nzme2+BFBotu9TaE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SAT/E5tIdMOWQliPPIBC5hXrlKMO/D9MSjTfU/Rpk2NVQp7LY6i4wrm5+2VxAhXNaExA4LVgohKdkVKuF/26HG00TViKujx+0zq6tDq4ZBBA20hFNLJNua9DTQo4YxbtXW7Asa1EIam1/o6LQQtPkRoKf/FwEK+0y1l+ZG/WJr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jSmmJD14; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-739b3fe7ce8so4972138b3a.0;
-        Tue, 22 Apr 2025 19:56:54 -0700 (PDT)
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-736c277331eso510809b3a.1;
+        Tue, 22 Apr 2025 19:57:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745377014; x=1745981814; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=T+Wf4+u7uJwlTGwn/zMZrH3GwfDUtebrIzU6/wvzpv0=;
-        b=iDhl2yhhcuJRoo7iv9eYsSy5aqN/L1jgWrPo1Yox1dmFwHXOgOLv6MnsVHn6BK9nJE
-         Xq2gUWye95GF0ZepNjZlPh+n4a7nsJiG6S7UBDkejpEc6cTYg/Y0IQDPm4AroQbzsMuV
-         +y9awDijZex/YWG8n+3QTieg1k50KmmchWW3jfssE0mgjH5JaiB+Yo2BYwcyjFu95BbM
-         K5KZzrwCuaBq0TB8L1+GlKh9m7kQwDpaydve8PkpUEPmM7X9DXfYvI6WHIvyrbKIT66J
-         rPniarez+6SEonY7OsKKpm+PlyTn9emLahSBzbHep6cJvrPJGzCPNY11MItiZKlnS9ST
-         t0Pw==
+        d=gmail.com; s=20230601; t=1745377043; x=1745981843; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yKWchauYEfB2oukRGA1LcQGAR3/VAz4QEa9G/xeNelk=;
+        b=jSmmJD14uk+Exytak/RxfcJpfVhF49Iemf4qR1vD4voCe0Vab9MjIAP7FEF8pAO6aq
+         PXFxodJjbxwODucnt+N0X+cXKH0weKCIsUPauZjVacay+Sxkn5fYYjPI9ihk+VqrbZtx
+         7hSWxR6SZEBM5jBIrx6Qy3t10ybP+BkzErOCmPI2ghf3iG8SsT0kUNrPEseQOLsgQiAb
+         HsxKmVQjrk4EM3r4mQHJwQ9Ev/eu6mfydLzpL6dGVNJ1EqbMWUuRVpmr26pXjE2HbxYC
+         MHrqdPl8Cs7I/KLOHyVi60fVVfwTE6FkbP4LUBYRjgFp0vN620OpFoJ5Kmlq9qw0zw7B
+         0qVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745377014; x=1745981814;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1745377043; x=1745981843;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T+Wf4+u7uJwlTGwn/zMZrH3GwfDUtebrIzU6/wvzpv0=;
-        b=IbfvkOG2pqHjAD6kHyHeDCOeGEuO3E9X+vSeEYajZRzACMyZkCO4MekLEEiCUIB0i7
-         JI5t/fNbub7CAwlQh9SduD8BVWlleilc2pFRPhStpuxSvwkN4OTNTzhs2iWX/iPWR1Zh
-         MHU7kuAfWJMF7OaiMvs8rncX4gi/132Da3NQUo3d5io6xilOipmjhUV6eIaX9ngmVvTx
-         CnLbiE05ZDW8oSnVL4V1rAKf7nsdGtKPlGP5Ho18YKCVW/Ja2fiMNiuSDofWC4FWy38m
-         D91cloXg86EgVWvsPQzocIG1BG4u8KjfEM753LEwq0PjxtDDLJdxnNF1H3SJH+U5bMmQ
-         c/Yw==
-X-Forwarded-Encrypted: i=1; AJvYcCXnmHdLTWIAEjBPRHkaFTPMjp9sgidgXUv8I5OSzyN9rdKSb2VLTyFv6oFmuywovsbfePXrxqM7VZCQ6vc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy23WBUmwgXWfz+l6zqA5PQ39smk5xpDF/ttXRkeb9THEMBzQDF
-	sv9xyBuwcyEs5NWXrYvd6bOocEFUzzdpOr0CXHRCutvCtu9ub80Z
-X-Gm-Gg: ASbGncvnbIMDw7rlHMQkeIxcgl6GJ0HXmd8bqwfdACZnQHh5jzZxgiXeu6F2xXpO9AO
-	c9fUaUagnyoC0vuA4TOh4inONWx+IfjVVk2L9dOxqSY+YRWk+63OBCYTlrWNOp6qynpBYSieIQR
-	BSXxUuFWFGXAr2W8sHykwSSowSSIbAVygVDCcfnrYxBrJLUS8iK4quxBoR77YxgFRcxNvskltFq
-	JSn8WpaC7ScSy0ZWJZv7SauEDINUwHUet+fJg8VLaenPaBvepCAii7nCzRiy2/JaJrzOj/QO42h
-	IOJOJFp00LTDGhCmYrSDSXqdMr7Tp5+Vpkhw5TFvk4jJX/KYKp0g3Q+cc7zmBb/yDFq+mdq7UlT
-	RL5dPw+ZxGLRd
-X-Google-Smtp-Source: AGHT+IFtlJx10XStyHs04nYnbOwtZVNdhMDnFisSj/PB4Ud4wC+SqrNTpeHIwohi2qENORhLFKwgFQ==
-X-Received: by 2002:a05:6a00:179d:b0:736:51a6:78b1 with SMTP id d2e1a72fcca58-73dc14e01bemr22473525b3a.11.1745377014327;
-        Tue, 22 Apr 2025 19:56:54 -0700 (PDT)
+        bh=yKWchauYEfB2oukRGA1LcQGAR3/VAz4QEa9G/xeNelk=;
+        b=qBGMQcTVfEozJdSt9YcdAZUbJZSGyINCkRi60HiksBnF39D/iZ54TpUbuMV1e30ca7
+         7joosY1p539Dv3dCExdNxTNzTfMBMSlyRm+2CbLmXfUFl3aR9EqXnHjORlxu3KIDUADk
+         sgRBOB41FLnbAsgaha7GVAtQp4JubmN6j7t5WkKM3kEzNA7jIs3aCmgKraDW4V3e5lrp
+         8UC05vp5ovyiL08Bo/DsCDNw4/EfQZebUGy1I4EGRlLBpq7GjFO3Sk+7W2tTvKpWBeID
+         Q5x8S60OEDNrZeD75SQe3vAYZ/G0CjeIY+D2rezUDVPf0UTKhgMgJcGJIhRAc0R28QKs
+         BdhA==
+X-Forwarded-Encrypted: i=1; AJvYcCX292DpeMQbWvL/uHHZwFI/TTS5zqllouC6WiLA7a8QNs2iOsL4a7xuhUDIl0KZGn9eg6itBzN8LUVEk6A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWgvQO4Cqkn7PcmCkHPYCc8stEM9RK1A5AK2X0yaR7pIuhLqRk
+	b42g8HMelZY6gHqZtYKHiMG+7Wdfn9uCJ7JV6TpKcnSmsMgDvKtUlRUR3UmC
+X-Gm-Gg: ASbGncsi8AGBLclXsnwmigR0Og0PCNbbdJI0Q1vH1IkREEr/h4y4Hoo9sDwnQ6t++c5
+	PJK5onR05nEn+H2wbwwtgA4qjhvn2tThTOi97IP3/HsHnk4UeALPw+hUCXFVwyi7u5+y6wdHcEB
+	GL70zr3QeHmK7Dc1aAFyLtcSsf/8rHOFxWcaUaow8fctOvpKCIBW28qIOTvAeZKt7g+iuw6U+Xe
+	lEsGAdyz0FEKw9M9WU8PMmIyWlBEGkcxXnvmtj0fWnWV/UkmpGLt0YJmkmRWFiXPkgi5nNJIoiu
+	zg8D+QBHhF3F3G71Zk9y4/OmbVRECfhrCH57vMslrfTSH+sTNNCzAJbzPeSVMb6EI50w+1v18AY
+	IgSZKZm7+Oqih
+X-Google-Smtp-Source: AGHT+IE33MRUAYYmMd33jJ5efewE5f3KJ0s+kNpk5dooQ3cQarABcgDINtWHATMZoSWtmHFLqMfazw==
+X-Received: by 2002:a05:6a21:501a:b0:1f0:e2d0:fb65 with SMTP id adf61e73a8af0-2042e55d3f6mr1235966637.2.1745377043371;
+        Tue, 22 Apr 2025 19:57:23 -0700 (PDT)
 Received: from ?IPV6:2001:56a:f6b2:4a00:7181:6803:4a12:f331? ([2001:56a:f6b2:4a00:7181:6803:4a12:f331])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73dbf90d6c3sm9423992b3a.77.2025.04.22.19.56.53
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73dbf8c023esm9436170b3a.34.2025.04.22.19.57.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Apr 2025 19:56:54 -0700 (PDT)
-Message-ID: <57625894-6c7e-4bb9-9518-96a62b25f29b@gmail.com>
-Date: Tue, 22 Apr 2025 20:56:52 -0600
+        Tue, 22 Apr 2025 19:57:23 -0700 (PDT)
+Message-ID: <1b914523-5b26-4fc0-b5c5-4b2f90ffaa3d@gmail.com>
+Date: Tue, 22 Apr 2025 20:57:22 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,8 +82,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Nicholas Chin <nic.c3.14@gmail.com>
-Subject: Re: [PATCH 1/6] cpufreq: acpi: Don't enable boost on policy exit
+Subject: Re: [PATCH 2/6] cpufreq: acpi: Re-sync CPU boost state on system
+ resume
 To: Viresh Kumar <viresh.kumar@linaro.org>,
  "Rafael J. Wysocki" <rafael@kernel.org>,
  Lifeng Zheng <zhenglifeng1@huawei.com>
@@ -91,108 +91,62 @@ Cc: linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>,
  "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
  linux-kernel@vger.kernel.org
 References: <cover.1745315548.git.viresh.kumar@linaro.org>
- <7ce4ffb166beef83cf1bd703a41bf91622011585.1745315548.git.viresh.kumar@linaro.org>
+ <d8651db6d8687a0e37d527267ebfec05f209b1b7.1745315548.git.viresh.kumar@linaro.org>
 Content-Language: en-US
-In-Reply-To: <7ce4ffb166beef83cf1bd703a41bf91622011585.1745315548.git.viresh.kumar@linaro.org>
+From: Nicholas Chin <nic.c3.14@gmail.com>
+In-Reply-To: <d8651db6d8687a0e37d527267ebfec05f209b1b7.1745315548.git.viresh.kumar@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 2025-04-22 03:53, Viresh Kumar wrote:
-> The boost-related code in cpufreq has undergone several changes over the
-> years, but this particular piece remained unchanged and is now outdated.
+> During suspend/resume cycles, platform firmware may alter the CPU boost
+> state.
 > 
-> The cpufreq core currently manages boost settings during initialization,
-> and only when necessary. As such, there's no longer a need to enable
-> boost explicitly when entering system suspend.
+> If boost is disabled before suspend, it correctly remains off after
+> resume. However, if firmware re-enables boost during suspend, the system
+> may resume with boost frequencies enabled—even when the boost flag was
+> originally disabled. This violates expected behavior.
 > 
-> Previously, this wasn’t causing issues because boost settings were
-> force-updated during policy initialization. However, commit 2b16c631832d
-> ("cpufreq: ACPI: Remove set_boost in acpi_cpufreq_cpu_init()") changed
-> that behavior—correctly—by avoiding unnecessary updates.
-> 
-> As a result of this change, if boost was disabled prior to suspend, it
-> remains disabled on resume as expected. But due to the current code
-> forcibly enabling boost at suspend time, the system ends up with boost
-> frequencies enabled after resume, even if the global boost flag was
-> disabled. This contradicts the intended behavior.
-> 
-> Don't enable boost on policy exit.
+> Ensure the boost state is re-synchronized with the kernel policy during
+> system resume to maintain consistency.
 > 
 > Fixes: 2b16c631832d ("cpufreq: ACPI: Remove set_boost in acpi_cpufreq_cpu_init()")
 > Reported-by: Nicholas Chin <nic.c3.14@gmail.com>
 > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=220013
 > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
-> This was sent separately earlier. No changes from that.
-> 
->  drivers/cpufreq/acpi-cpufreq.c | 23 +++--------------------
->  1 file changed, 3 insertions(+), 20 deletions(-)
+>  drivers/cpufreq/acpi-cpufreq.c | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-> index 924314cdeebc..7002e8de8098 100644
+> index 7002e8de8098..0ffabf740ff5 100644
 > --- a/drivers/cpufreq/acpi-cpufreq.c
 > +++ b/drivers/cpufreq/acpi-cpufreq.c
-> @@ -89,8 +89,9 @@ static bool boost_state(unsigned int cpu)
->  	return false;
->  }
+> @@ -893,8 +893,19 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
+>  	if (perf->states[0].core_frequency * 1000 != freq_table[0].frequency)
+>  		pr_warn(FW_WARN "P-state 0 is not max freq\n");
 >  
-> -static int boost_set_msr(bool enable)
-> +static void boost_set_msr_each(void *p_en)
->  {
-> +	bool enable = (bool)p_en;
->  	u32 msr_addr;
->  	u64 msr_mask, val;
+> -	if (acpi_cpufreq_driver.set_boost)
+> -		policy->boost_supported = true;
+> +	if (acpi_cpufreq_driver.set_boost) {
+> +		if (policy->boost_supported) {
+> +			/*
+> +			 * The firmware may have altered boost state while the
+> +			 * CPU was offline (for example during a suspend-resume
+> +			 * cycle).
+> +			 */
+> +			if (policy->boost_enabled != boost_state(cpu))
+> +				set_boost(policy, policy->boost_enabled);
+> +		} else {
+> +			policy->boost_supported = true;
+> +		}
+> +	}
 >  
-> @@ -107,7 +108,7 @@ static int boost_set_msr(bool enable)
->  		msr_mask = MSR_K7_HWCR_CPB_DIS;
->  		break;
->  	default:
-> -		return -EINVAL;
-> +		return;
->  	}
+>  	return result;
 >  
->  	rdmsrl(msr_addr, val);
-> @@ -118,14 +119,6 @@ static int boost_set_msr(bool enable)
->  		val |= msr_mask;
->  
->  	wrmsrl(msr_addr, val);
-> -	return 0;
-> -}
-> -
-> -static void boost_set_msr_each(void *p_en)
-> -{
-> -	bool enable = (bool) p_en;
-> -
-> -	boost_set_msr(enable);
->  }
->  
->  static int set_boost(struct cpufreq_policy *policy, int val)
-> @@ -532,15 +525,6 @@ static void free_acpi_perf_data(void)
->  	free_percpu(acpi_perf_data);
->  }
->  
-> -static int cpufreq_boost_down_prep(unsigned int cpu)
-> -{
-> -	/*
-> -	 * Clear the boost-disable bit on the CPU_DOWN path so that
-> -	 * this cpu cannot block the remaining ones from boosting.
-> -	 */
-> -	return boost_set_msr(1);
-> -}
-> -
->  /*
->   * acpi_cpufreq_early_init - initialize ACPI P-States library
->   *
-> @@ -931,7 +915,6 @@ static void acpi_cpufreq_cpu_exit(struct cpufreq_policy *policy)
->  
->  	pr_debug("%s\n", __func__);
->  
-> -	cpufreq_boost_down_prep(policy->cpu);
->  	policy->fast_switch_possible = false;
->  	policy->driver_data = NULL;
->  	acpi_processor_unregister_performance(data->acpi_perf_cpu);
 
 The first two patches in this series appear to work as intended. The boost state (both enabled and disabled) persists across a resume from S3 suspend.
 
 Tested-by: Nicholas Chin <nic.c3.14@gmail.com>
+
 
