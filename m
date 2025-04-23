@@ -1,124 +1,150 @@
-Return-Path: <linux-pm+bounces-26050-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26051-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1399FA98D15
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 16:29:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FA88A98D58
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 16:40:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F75417594A
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 14:29:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3498E3A8668
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 14:40:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6098F27F75D;
-	Wed, 23 Apr 2025 14:28:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1541127F73E;
+	Wed, 23 Apr 2025 14:40:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZbhweNAj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jtxE8g1/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2AB9279790
-	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 14:28:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE13827F4F5;
+	Wed, 23 Apr 2025 14:40:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745418525; cv=none; b=fuxDHDQNGXd/uoEI07nPw75Jp+fmY+VCY5duklJiYH7fmtcFZm2gAF4jnpUTVJi+Tan5RB4K6uJpJBwAmgRZkkIcBhjLKUTHIhh/jyIIlz+1fNnvKdFo2QkP+OOBzfLk5WAhbGm9KycJw+uDE0SK540IlN+5lt/ePb5YUCVS3bo=
+	t=1745419220; cv=none; b=WOFulfxmN55nz0/CKlmhfL8KumskDgebDjHdI8UlKHutiT3Ds/+OSM7nV10UKt5MrLJfurTjq8MAPc/R+X9m4bxgmQfi0jmcXmXDTUGMelGIR9szqnDuUxD1oINz1uZfujOqF1o3DoKLtE6isjLBPoO/fW7BE45Hb9DZtsv+OTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745418525; c=relaxed/simple;
-	bh=olgEi8hkKOP25EqBnRGPkbqDG4k0ZvkVsXbAyxVuiMs=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=jymiA+tbH7WKL8AyO5WT+IHmg1Hl2Q7qtxG2CpYYdlerJeq/fbp+HUTyXn19zeh3Deb5HUf5YMkR3AGYmfzfprz+/C0+C3FVs21WnxKboVEp4s1XZfNdBjfCkbynycCoecRiD1wAtkrhCbj6TL4ZDD7fp/Pv47kfqubC3Af1Yhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZbhweNAj; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2ff8a2c7912so903010a91.1
-        for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 07:28:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745418521; x=1746023321; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=40rtvLOwDeuUbiOuCoW1t5olyX8gz8CZJ5ahJ10eU+w=;
-        b=ZbhweNAj3oT2cEITBANR85a+3AC9Kt8YpgVC+0pS/UdzooqO2KwBAg8PnRDG2w+8V8
-         qLox6rQ6BGUGoe3b/N5PTjmCpYwAoHz1scAtDySO/OO++U+IIv/fCY/b2WTSqa4ICql1
-         WiIiDOMpIhKQ3+58D9U7phiYIB7CsXdaZox63CJKsMLu08KEtuOwmEvM+ddRmi5Pjhgh
-         kSOrUE9BxdriaP9tjWEYTWIkAfttmZeIiL0RgKlYphs6LmDQ2TlevtGepgZwoacX5Tx8
-         Egys+nSCqTDinlziB4MkKZqQgUmV+WE37wRkdZq4JtNRtANFxJucZbcim1uDIP9NEFhi
-         FVOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745418521; x=1746023321;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=40rtvLOwDeuUbiOuCoW1t5olyX8gz8CZJ5ahJ10eU+w=;
-        b=WJJhhJ/3i2iG4aJvJotxQPYf+8zkOUSRMYEx+LMEFLWLb0aJRY9su0OTAUtdn3s3to
-         xaBbV0awHUWUnSgm+zFpH8APKSJIOQQ595KFnG2PLInCeP8xhTfpzBf+PZ0YD4wwpFK6
-         lsmw9GJQo0KixtLSdKe6aSH8dYHNUSG3wgcwRL1WUv08HYYq8i+IQhqlQcA/Yi/j9QU2
-         aPwXvbcEw1GQxzSXOX03SqBckbaFNrmJa6nyxnOSflHw7NDuiqhHrD4QPtvXaAeu3WZs
-         qgoJkGbIzmgjMt9jl4adoLahJgPYZ47unAKdCz9gpjGH1UbDW+/6gr9xvvlZU4dnO/HD
-         tC/g==
-X-Forwarded-Encrypted: i=1; AJvYcCVJYVZp3vdbxsDKedvgVCEzQ3cqiqShjcgjIRguEnAm6JlfRYSTQvntA+Nu2Hi5KKX7gSKCm0PRTg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcqkhFpIxnylwwwNTDfXFtDwtsEc3Mo3f//DvIO1UyltPTfEWO
-	dpP7BFqmZg2iZ+96YvD3wSPWp7pJ5aWKUifbYf3CERlSlPL281dJCJcBn08yVWKoZf98YFMuOth
-	veA==
-X-Google-Smtp-Source: AGHT+IEHFWhYz0oAsCQCzYVGgs17eJ2RdOv2pA+CJ/89PxdUza1pyAyGtkAfHJad1QU5DCSNGF6B8Gtgtdo=
-X-Received: from pjxx4.prod.google.com ([2002:a17:90b:58c4:b0:301:1ea9:63b0])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90a:c2cd:b0:2fa:21d3:4332
- with SMTP id 98e67ed59e1d1-309df187b6dmr4574319a91.12.1745418521285; Wed, 23
- Apr 2025 07:28:41 -0700 (PDT)
-Date: Wed, 23 Apr 2025 07:28:39 -0700
-In-Reply-To: <20250422082216.1954310-4-xin@zytor.com>
+	s=arc-20240116; t=1745419220; c=relaxed/simple;
+	bh=iWJGqy5H8iXR0YJhyJq2G9sNh+8Y6FpC+938zCMyJgk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GyKxkyxWqEVoRVHNe6fiYEW0ZKXjpuKTftlnLIreFsvD7U7CR5wVXb1pH2qCzsK5VKbweIlp/tR6Q3pfYejDFvgVsYztA14XTZqr2LIvNRqOB0r+wFK5vtwdOWpS6aIPfEgDKpF9x61DDx7pi7PJSolu/kagUDEUphMFrkrz5to=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jtxE8g1/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D5D9C4CEE3;
+	Wed, 23 Apr 2025 14:40:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745419216;
+	bh=iWJGqy5H8iXR0YJhyJq2G9sNh+8Y6FpC+938zCMyJgk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=jtxE8g1/oO5hR38F+CxvLKzuPXsrTsXFSjtXjOmhsuQpnORR0N0qKVCeudDprn8S/
+	 64XFFZ6mioK/MaFpSeWRh3zYPe0BLKpeXA9TYa4EcGslM0aSeokG+LwbUye2GpW6pf
+	 TlLaEofHu4xlutfGRrMrGu3mLg1OddhqfYA1pu8ghaRUu6se8jTvbyNfYZARU46BBb
+	 hPXQZ0GtjE86uFYAwnCL8qQKid5bIRqsEGMfb3MugVQZzaLQyOriTbt/BuqrYRfj1A
+	 5WJBT/IG3RU75krKLreG1j3aFd7rugC2Dqi0OqbgDwOZXcUnYIyLnPv74ckfFXy8Tn
+	 j9L8RGpDqc83g==
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-2c7f876b320so4224060fac.1;
+        Wed, 23 Apr 2025 07:40:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVpiBUkOY/kDV6paIaeVuZ2VTGONDfpxfOcoX4ujbtRiuGQn6fcr2b5DiJj26Zsi3z+oOovRJoYlrw=@vger.kernel.org, AJvYcCVuFeXYbcNdIjji481UM14gEVnBnFbYWhnSyqjFxwz7tPgaY4/7s2vd0H9bun34IX9UMZS+TYFVp672juY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzt/ef977zCJcD4vC//RXV/xPdBxdRoIzbdcvCAxgCqJAvz0/QZ
+	BYJfuf9UA8/esA7vaZRo6bXRaEoIk/WyQuLmKwLZJu/w4lp4uO6Rx7IJw3pAL080v1bI9/fOgWY
+	AsIvy7r3e+DZQGf5yHjY1pl2Kr1M=
+X-Google-Smtp-Source: AGHT+IH373maOnOzxY9wLz+CtIc4yR18PpNCKS0Q8+anv8KfyRwem1tB6xnC+r0+MOhz10gEPXdffKy/zMvBdXncw9Y=
+X-Received: by 2002:a05:6870:eca2:b0:29e:2594:81e with SMTP id
+ 586e51a60fabf-2d526a2e955mr10845257fac.13.1745419215687; Wed, 23 Apr 2025
+ 07:40:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250422082216.1954310-1-xin@zytor.com> <20250422082216.1954310-4-xin@zytor.com>
-Message-ID: <aAj5F9IZXG7MB0ai@google.com>
-Subject: Re: [RFC PATCH v2 03/34] x86/msr: Rename rdpmcl() to rdpmcq()
-From: Sean Christopherson <seanjc@google.com>
-To: "Xin Li (Intel)" <xin@zytor.com>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org, 
-	virtualization@lists.linux.dev, linux-pm@vger.kernel.org, 
-	linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org, 
-	linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org, 
-	jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org, 
-	namhyung@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
-	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com, 
-	kan.liang@linux.intel.com, wei.liu@kernel.org, ajay.kaher@broadcom.com, 
-	bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com, 
-	pbonzini@redhat.com, vkuznets@redhat.com, luto@kernel.org, 
-	boris.ostrovsky@oracle.com, kys@microsoft.com, haiyangz@microsoft.com, 
-	decui@microsoft.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+References: <cover.1745315548.git.viresh.kumar@linaro.org> <d8651db6d8687a0e37d527267ebfec05f209b1b7.1745315548.git.viresh.kumar@linaro.org>
+ <CAJZ5v0hWUdRdbPL2=qybaEsNfPzAqdxW+xBrjwy4HaBXnTwD0g@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hWUdRdbPL2=qybaEsNfPzAqdxW+xBrjwy4HaBXnTwD0g@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 23 Apr 2025 16:40:04 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jFy9ch4ZcW_zQs6GfvB=LCnzm94d35ifMpdv=VrqTHQA@mail.gmail.com>
+X-Gm-Features: ATxdqUHlWTde2s4t2St_YDL0Wj7nuiDZM0S4dXLseFALgsWoHYbklbzMAhY56ks
+Message-ID: <CAJZ5v0jFy9ch4ZcW_zQs6GfvB=LCnzm94d35ifMpdv=VrqTHQA@mail.gmail.com>
+Subject: Re: [PATCH 2/6] cpufreq: acpi: Re-sync CPU boost state on system resume
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Lifeng Zheng <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Nicholas Chin <nic.c3.14@gmail.com>, 
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 22, 2025, Xin Li (Intel) wrote:
-> Signed-off-by: Xin Li (Intel) <xin@zytor.com>
-> ---
->  arch/x86/events/amd/uncore.c              |  2 +-
->  arch/x86/events/core.c                    |  2 +-
->  arch/x86/events/intel/core.c              |  4 ++--
->  arch/x86/events/intel/ds.c                |  2 +-
->  arch/x86/include/asm/msr.h                |  2 +-
->  arch/x86/include/asm/paravirt.h           |  2 +-
->  arch/x86/kernel/cpu/resctrl/pseudo_lock.c | 12 ++++++------
->  7 files changed, 13 insertions(+), 13 deletions(-)
-> 
-> diff --git a/arch/x86/events/amd/uncore.c b/arch/x86/events/amd/uncore.c
-> index f231e1078e51..b9933ab3116c 100644
-> --- a/arch/x86/events/amd/uncore.c
-> +++ b/arch/x86/events/amd/uncore.c
-> @@ -152,7 +152,7 @@ static void amd_uncore_read(struct perf_event *event)
->  	if (hwc->event_base_rdpmc < 0)
->  		rdmsrq(hwc->event_base, new);
->  	else
-> -		rdpmcl(hwc->event_base_rdpmc, new);
-> +		rdpmcq(hwc->event_base_rdpmc, new);
+On Wed, Apr 23, 2025 at 4:26=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
+>
+> On Tue, Apr 22, 2025 at 11:54=E2=80=AFAM Viresh Kumar <viresh.kumar@linar=
+o.org> wrote:
+> >
+> > During suspend/resume cycles, platform firmware may alter the CPU boost
+> > state.
+> >
+> > If boost is disabled before suspend, it correctly remains off after
+> > resume. However, if firmware re-enables boost during suspend, the syste=
+m
+> > may resume with boost frequencies enabled=E2=80=94even when the boost f=
+lag was
+> > originally disabled. This violates expected behavior.
+> >
+> > Ensure the boost state is re-synchronized with the kernel policy during
+> > system resume to maintain consistency.
+> >
+> > Fixes: 2b16c631832d ("cpufreq: ACPI: Remove set_boost in acpi_cpufreq_c=
+pu_init()")
+> > Reported-by: Nicholas Chin <nic.c3.14@gmail.com>
+> > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D220013
+> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > ---
+> >  drivers/cpufreq/acpi-cpufreq.c | 15 +++++++++++++--
+> >  1 file changed, 13 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpuf=
+req.c
+> > index 7002e8de8098..0ffabf740ff5 100644
+> > --- a/drivers/cpufreq/acpi-cpufreq.c
+> > +++ b/drivers/cpufreq/acpi-cpufreq.c
+> > @@ -893,8 +893,19 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_po=
+licy *policy)
+> >         if (perf->states[0].core_frequency * 1000 !=3D freq_table[0].fr=
+equency)
+> >                 pr_warn(FW_WARN "P-state 0 is not max freq\n");
+> >
+> > -       if (acpi_cpufreq_driver.set_boost)
+> > -               policy->boost_supported =3D true;
+> > +       if (acpi_cpufreq_driver.set_boost) {
+> > +               if (policy->boost_supported) {
+> > +                       /*
+> > +                        * The firmware may have altered boost state wh=
+ile the
+> > +                        * CPU was offline (for example during a suspen=
+d-resume
+> > +                        * cycle).
+> > +                        */
+> > +                       if (policy->boost_enabled !=3D boost_state(cpu)=
+)
+> > +                               set_boost(policy, policy->boost_enabled=
+);
+> > +               } else {
+> > +                       policy->boost_supported =3D true;
+>
+> IIUC policy->boost_enabled is false at this point, so say that
+> boost_state(cpu) returns true and say cpufreq_boost_enabled() returns
+> false.
 
-Now that rdpmc() is gone, i.e. rdpmcl/rdpmcq() is the only helper, why not simply
-rename rdpmcl() => rdpmc()?  I see no point in adding a 'q' qualifier; it doesn't
-disambiguate anything and IMO is pure noise.
+This cannot happen for CPU 0 because of acpi_cpufreq_boost_init() ->
+
+> cpufreq_online() will see policy->boost_enabled =3D=3D
+> cpufreq_boost_enabled(), so it won't do anything regarding boost, and
+> say that this happens for all online CPUs.
+
+-> so if boost_state(0) returns true, policy->boost_enabled will be
+set for all policies to start with due to the code in
+cpufreq_online(), but this is far from obvious.
+
+I would at least say in the changelog that set_boost() need not be
+called directly at the policy initialization time because of the
+above.
 
