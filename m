@@ -1,88 +1,54 @@
-Return-Path: <linux-pm+bounces-26063-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26064-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F096DA99BEE
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 01:20:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05CB1A99BFC
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 01:25:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18C0118992FE
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 23:20:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4FAC5A48D2
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 23:24:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE9F919F137;
-	Wed, 23 Apr 2025 23:20:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7C8822F76F;
+	Wed, 23 Apr 2025 23:25:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="WWtxJWd3"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="g52K7MMR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15C3522AE48
-	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 23:20:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8838A223DC9;
+	Wed, 23 Apr 2025 23:24:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745450408; cv=none; b=K5d1LzDnoPJj2rBdFnS5zl8xOnQUprx3/IXqy/NU39YFle6CaZf7u5dXJu/rMJIq9HowOfgwn/wA5xt42LUaNLJkERpKahbspOFQOhC8NxbATn9IHV9lrKMZDCYI/KBOIbOu0X9kvpG3grKBdYNxrHUAliLS16Qcd8V6wstrQpE=
+	t=1745450701; cv=none; b=hyTgH2V/vJuX9QYVG+arQSvJUxwStbr4L1uUukR+Cp+KqaDYyhYG0b2SjEAmv1VsxFzHOSot4fgNC1DkNF3YeVFOH/Cg4xlIRLkpBtfG9Zlf+1/dIfVS6hc+fpIl0YQX1Zq9N+j5JW+KsQ3ibDJcHyJS5jiqZ7Hrfx2/KLEm5Aw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745450408; c=relaxed/simple;
-	bh=GxZMqnYuxay3VCptew8dlY7FkRAzEVQXjKJd8DhvsBY=;
+	s=arc-20240116; t=1745450701; c=relaxed/simple;
+	bh=yskBEWSEF6FlJkJi4DwqXGby0psHuBX/9ua/oCniJP8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u4/hGef7fbp9sURfidR+UpZ2gGK1kDeNHLINCjHfbyZsmRhyogcmB8tryoJHclshpN2e1yFoZN81tziCT2x08hH+hMyuz3IkZv4jccr611/CrE2z8R5kD8P4qAKl5/3wxY74Cy/NY+jZd4+pfZOU/fVhBt7Ze2bhYeOVWguUTuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=WWtxJWd3; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53NMOMWb023959
-	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 23:20:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	HRyddFgEaNgMLLlYJv03Ma5/jy5fT/40JXHI+meT7zI=; b=WWtxJWd36j8NYqvI
-	XBhvzejX93bevRBIFj37WA/CGSjNRS9VRGVDhluyJPDXIDoHVJMb6IFGLrHGv6I6
-	izIaQWF29lH8ic8VpmuM/KNSg/NReEl6sXXX4cNZ9k7g0TBRSyjr6BPfpp2ARV0K
-	AJOupnCVAqk2HwZHcm0MLE8pO8bmMeBRiKbCjAZN4FjD4BZ0vA+12UDGZr7Hs8Mn
-	vIlgWMzeNe+ObmZe/8Y0Z4KHqLXFepLHC/7sSEfGw+Onyqaroeoyl+QExrqKN9bL
-	jXBSaTYufKYCbohJY9QnfESo9xHsL7qkJgr9FLoaZMNF9faxn2JrEQ7CBkNuvR78
-	ZF2dWg==
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 466jh3bmde-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 23:20:05 +0000 (GMT)
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-3032f4ea8cfso376678a91.3
-        for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 16:20:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745450405; x=1746055205;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HRyddFgEaNgMLLlYJv03Ma5/jy5fT/40JXHI+meT7zI=;
-        b=CtZD9fI8lusWCAO8Al2wqlMiYYwOrgNe89gIcsjOE2PxD7sG7hSEqNWqaR5fmSZ6mI
-         H84doixctMEX+eDC5mWehM/AGg5mkuBr4k579GvUEW6jbejNvyTJ5wYsHdC393XWqj0a
-         FKYg1P5C7VkixhvoSph993k6zyrw7EyNjEqlrq6DsSDhixhwo/DJJqDhLEFdG/K4TCke
-         CAcXynvf22EQINQkIaj8EmXO4cCNyuo2pwMjZvqBRLk/e4IjS27x8BPRs7k3VwiLENBh
-         ZRr76YQOHIdrc8PNtXAW+eENUAEpxDMDNKN6H5f3yBbzKMl7P6ypaWyhLAmUyjOqZhv6
-         6Kdg==
-X-Forwarded-Encrypted: i=1; AJvYcCW5pGvzXujcfvSt+xP1KO0WBhMQAdvuiae7ArEKU601xCLc/ReU73CiZN87IoJALbwkf3Y2sMxCGg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzz3SMPdeph4xggSr2o5UzI6qjWjmMw/MqqGnohKac3FPD3D3rb
-	kKgB4eAJxlqOpSlfrLTVcoFdWQA75H6Oy7uOTFeIScjETaAmCvRKSUDGdFXagr9TrCYbGtBrFfm
-	SDRvhg+mdWfE41BSI5Fvw/yP///RecE4fCH3WfAWDW5BBqUDXipleP1lKZQ==
-X-Gm-Gg: ASbGnctaWY93uCdTSsj9BKgo36N/jMY68OzdzgXG7ZcfUbTziiJWq6FzKHtgNQRrBsU
-	XpZXXNfPq9y6ggEeBQgHwVBwTwgVuViIB6IadU1cnqyNMVBsxs9yZcEa4kuTpQOkxnsVxncKPk4
-	BzBrRdUOHhHoG0gUIVV7dCYSJO9EU3Gh9gzG/U+2urXgDCRmKo1yfqLjLzGnyY4RW6cvauOeIhy
-	+J4ZEYPcpKsSN2WZXtUtJXl21RkdqZg6nSjGREnhHSjdxO7rurxv/zhcpeBSDAHGZphljS5EoDl
-	8NMYfSancIDJbpLNFwg3il0O8iXgA0OC+j1nUWLqBcO9InJatYToQ8FXWaS5DmEnE7ZMICNbhBp
-	8
-X-Received: by 2002:a17:90b:274e:b0:2ff:7b28:a51a with SMTP id 98e67ed59e1d1-309ed298e18mr890133a91.17.1745450405041;
-        Wed, 23 Apr 2025 16:20:05 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHMksh6QUEkA2VrQQYoNS0ljT/n3zsIGL0Yxw9gOlz/DfDxwsL6Jb3yx2E7fX9kIDGRh12+cQ==
-X-Received: by 2002:a17:90b:274e:b0:2ff:7b28:a51a with SMTP id 98e67ed59e1d1-309ed298e18mr890093a91.17.1745450404453;
-        Wed, 23 Apr 2025 16:20:04 -0700 (PDT)
-Received: from [10.71.112.43] (i-global254.qualcomm.com. [199.106.103.254])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-309dfa27059sm2258925a91.26.2025.04.23.16.20.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Apr 2025 16:20:04 -0700 (PDT)
-Message-ID: <d622e3b7-3f62-4009-85fc-8f1d79fbb925@oss.qualcomm.com>
-Date: Wed, 23 Apr 2025 16:20:02 -0700
+	 In-Reply-To:Content-Type; b=BGfXTY3iZ9Dv287qopTGeAFuZgVIrDc8m82KQ/oiLlfn0gsv9XMT7ucLGil1u6izN/iUiE/2SQ6vB/g9lqm4G5KY2yOtKRKaCx+KvtMQP0O7tE+UqWfofsxkZJycIddgpRuvoWzC9jEjRx3jcprOutLYPcJSPvaBZYthxio3O4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=g52K7MMR; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [192.168.7.202] ([71.202.166.45])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53NNNmdO016856
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Wed, 23 Apr 2025 16:23:49 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53NNNmdO016856
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025042001; t=1745450634;
+	bh=3ZRudBcQfUXdEeUGknvRzjxdjhla7ofQa9vhRPg63Iw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=g52K7MMRbWF6yLwDhmY0YU3Om9fpRH0Ut+qyo76sxSZ4NHnyBc98XW5u2s2hVCFUK
+	 PhNe+N15jsjlumb03xkDxJWNBMQ76zGMekkVPvwrCgqXTuVJomLV1T/3YW5TFZ7jZ8
+	 1UmN3Fwk6b31yjBct2QL3ajxMU+0ZhSXqsLtn5qHYLVhfR4vWwV537HB9cU8VSqJHv
+	 6bXyJrePtilh9n0zOlm3jS0UhKtUD+8gXNtFrWLBIVXKpgaPuv0YalLYf+ij4Y2WWd
+	 yrxqlPYGWH/00BTyjqGIOa+LNPKvKGQxRb/Vrh8pulNMK2D75Bck1Sw8zFpVOmUKyD
+	 ftlR5gTTNtHcw==
+Message-ID: <88bcd897-8436-4ebb-ac03-833c8c8045f2@zytor.com>
+Date: Wed, 23 Apr 2025 16:23:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,120 +56,91 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/5 RESEND] thermal: qcom-spmi-temp-alarm: Prepare to
- support additional Temp Alarm subtypes
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
-        rui.zhang@intel.com, lukasz.luba@arm.com,
-        david.collins@oss.qualcomm.com, srinivas.kandagatla@linaro.org,
-        stefan.schmidt@linaro.org, quic_tsoni@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmitry.baryshkov@linaro.org
-References: <20250320202408.3940777-1-anjelique.melendez@oss.qualcomm.com>
- <20250320202408.3940777-4-anjelique.melendez@oss.qualcomm.com>
- <aAI0Zm5M9ba9ehyI@mai.linaro.org>
+Subject: Re: [RFC PATCH v2 08/34] x86/msr: Convert a native_wrmsr() use to
+ native_wrmsrq()
+To: Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
+        peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+        haiyangz@microsoft.com, decui@microsoft.com
+References: <20250422082216.1954310-1-xin@zytor.com>
+ <20250422082216.1954310-9-xin@zytor.com>
+ <2932db03-164a-447e-92cf-1ef6c35c15a4@intel.com>
 Content-Language: en-US
-From: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
-In-Reply-To: <aAI0Zm5M9ba9ehyI@mai.linaro.org>
+From: Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <2932db03-164a-447e-92cf-1ef6c35c15a4@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: hqEFZweJiE9JAcBljR9cRDfpzuXbhYqE
-X-Proofpoint-GUID: hqEFZweJiE9JAcBljR9cRDfpzuXbhYqE
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDIzMDE1NSBTYWx0ZWRfX1kX2cJ/ZaOE8 C4v+u0gvAjhPI09PX5dsEsxXZI17VR8rmMbatDYa4FO/cUk9buDT997b/s1s12GCV0yne/Cez5e OfsWWLfYwDJ+Li+zY63aQkwGwOKJSJ3X2O0rtJ+i2laTWG64JbZU65w8Fjbkv9XvnV2ROwt1v4e
- 5tVfj93wN+v1vp7c7ZizBhZAJbtrX7UCpIq4olhDgm4rQJkZqjidWOaAU2mw6jndfbMY4g4BFRd TCeY/+t1dvIHWyUoCdYZwLRaaVQDqVEPxpscQE1hrUOgTFD1KtQWdh9PQ6BqLDSa104VT9a1WZX UnlBAU8zZmXhzqdtCibFEcofkwNI2qhN9uX9DS0M8KWGPMRaWEbvJJfGqUz9H37nSvTFZ0IXo0B
- vFPCiTNgSTFDc5ZH7nPIJUBl/V7ficpmsnlebARq3T2nNKrOuVbs4FudgYmATdU8iiyI+cru
-X-Authority-Analysis: v=2.4 cv=Mepsu4/f c=1 sm=1 tr=0 ts=680975a6 cx=c_pps a=vVfyC5vLCtgYJKYeQD43oA==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=IMXF3EE_1CwuGGpSq0QA:9 a=QEXdDO2ut3YA:10
- a=rl5im9kqc5Lf4LNbBjHf:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.680,FMLib:17.12.80.40
- definitions=2025-04-23_12,2025-04-22_01,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- adultscore=0 lowpriorityscore=0 spamscore=0 bulkscore=0 malwarescore=0
- priorityscore=1501 mlxscore=0 impostorscore=0 clxscore=1015
- mlxlogscore=999 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2504230155
 
-
-
-On 4/18/2025 4:15 AM, Daniel Lezcano wrote:
-> On Thu, Mar 20, 2025 at 01:24:06PM -0700, Anjelique Melendez wrote:
->> In preparation to support newer temp alarm subtypes, add the "ops" and
->> "configure_trip_temps" references to spmi_temp_alarm_data. This will
->> allow for each Temp Alarm subtype to define its own
->> thermal_zone_device_ops and properly configure thermal trip temperature.
->>
->> Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
->> ---
->>   drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 38 ++++++++++++++-------
->>   1 file changed, 26 insertions(+), 12 deletions(-)
->>
->> diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
->> index 1cc9369ca9e1..514772e94a28 100644
->> --- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
->> +++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
->> @@ -1,7 +1,7 @@
->>   // SPDX-License-Identifier: GPL-2.0-only
->>   /*
->>    * Copyright (c) 2011-2015, 2017, 2020, The Linux Foundation. All rights reserved.
->> - * Copyright (c) 2024, Qualcomm Innovation Center, Inc. All rights reserved.
->> + * Copyright (c) 2024-2025, Qualcomm Innovation Center, Inc. All rights reserved.
->>    */
->>   
->>   #include <linux/bitfield.h>
->> @@ -71,8 +71,10 @@ static const long temp_map_gen2_v1[THRESH_COUNT][STAGE_COUNT] = {
->>   struct qpnp_tm_chip;
->>   
->>   struct spmi_temp_alarm_data {
->> +	const struct thermal_zone_device_ops *ops;
->>   	const long (*temp_map)[THRESH_COUNT][STAGE_COUNT];
->>   	int (*get_temp_stage)(struct qpnp_tm_chip *chip);
->> +	int (*configure_trip_temps)(struct qpnp_tm_chip *chip);
->>   };
->>   
->>   struct qpnp_tm_chip {
->> @@ -312,18 +314,39 @@ static irqreturn_t qpnp_tm_isr(int irq, void *data)
->>   	return IRQ_HANDLED;
+On 4/23/2025 8:51 AM, Dave Hansen wrote:
+> On 4/22/25 01:21, Xin Li (Intel) wrote:
+>>   static __always_inline void sev_es_wr_ghcb_msr(u64 val)
+>>   {
+>> -	u32 low, high;
+>> -
+>> -	low  = (u32)(val);
+>> -	high = (u32)(val >> 32);
+>> -
+>> -	native_wrmsr(MSR_AMD64_SEV_ES_GHCB, low, high);
+>> +	native_wrmsrq(MSR_AMD64_SEV_ES_GHCB, val);
 >>   }
->>   
->> +static int qpnp_tm_configure_trip_temp(struct qpnp_tm_chip *chip)
->> +{
->> +	int crit_temp, ret;
->> +
->> +	mutex_unlock(&chip->lock);
->> +
->> +	ret = thermal_zone_get_crit_temp(chip->tz_dev, &crit_temp);
->> +	if (ret)
->> +		crit_temp = THERMAL_TEMP_INVALID;
->> +
->> +	mutex_lock(&chip->lock);
->> +
->> +	return qpnp_tm_update_critical_trip_temp(chip, crit_temp);
->> +}
 > 
-> The qpnp_tm_configure_trip_temp() is called with the lock held which is really
-> unusual to have this assymetry when dealing with the locks.
-> 
-This change is simply moving these lines from init() into their own 
-configure_trip_temp() function. configure_trip_temp() is only called 
-from within init() so functionally this is the same as what the driver 
-was doing before. As new temp_alarm types are introduced (like in patch 
-4&5) they may need to configure trip temps differently.
+> A note on ordering: Had this been a native_wrmsr()=>__wrmsr()
+> conversion, it could be sucked into the tree easily before the big
+> __wrmsr()=>native_wrmsrq() conversion.
 
-Specifically the mutex_unlock() and mutex_lock() guards were added in 
-this change: 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/thermal/qcom/qcom-spmi-temp-alarm.c?h=v6.15-rc3&id=59edcd91d852f88ef7d208029503f9b5310d0603
+Can't reorder the 2 patches, because __wrmsr() takes two u32 arguments
+and the split has to be done explicitly in sev_es_wr_ghcb_msr().
 
-> In the other side, this code assume it is ok the userspace can change the
-> critical temperature of the board. Is it really a good idea ?
+Thanks!
+     Xin
 
-Sorry, I think I might be a little confused on what you mean from this 
-comment. This driver has supported setting critical temperature from 
-userspace for many years now.. 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/thermal/qcom/qcom-spmi-temp-alarm.c?h=v6.15-rc3#n264. 
-This patch is just reworking driver, there are no functional/behavioral 
-changes.
 
-Thanks,
-Anjelique
 
