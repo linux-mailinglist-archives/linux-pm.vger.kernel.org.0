@@ -1,191 +1,158 @@
-Return-Path: <linux-pm+bounces-25982-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25983-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34320A97BDC
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 02:59:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30725A97C3D
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 03:47:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12BDC189D899
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 00:59:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 957A27A52E3
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 01:45:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E17C11F16B;
-	Wed, 23 Apr 2025 00:59:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B9E6257AC7;
+	Wed, 23 Apr 2025 01:46:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="C73zGgVi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tevmzr8o"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A24C1F153A;
-	Wed, 23 Apr 2025 00:59:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA7B31AB531;
+	Wed, 23 Apr 2025 01:46:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745369945; cv=none; b=jKP3M0BxuzhTsbE6/vj8lfPLLUyDaybic0nT7cY/+udnxq8am+GYe/jeno1rG3i4V0Oy12Y3SxqLOxHBllCsNOIZdkTwm6nbGzS6ugfSFLtd2tKXXkZaIyJqhmyNJr2NciaYax8wJDQaJvmhJYXxpEC1I/Qd9glH6GuQ/CIwcUQ=
+	t=1745372817; cv=none; b=dbkLgRioJzJd+46e8skW1hwKn0bqbavhKR4szFwDUD1ZC/TXS59jx2+rfPyuplZpckWF8J2XwiBTXwcMfDeVQsfRTBxTwOgnTFs+ErY5+QiUZ1kIoDRdvqLf2aZCgTA0JKneNWoe+t3xX8cOGMsaXy5MvaM5eV9FTw2OAD2WyNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745369945; c=relaxed/simple;
-	bh=DCTDogrSoxKGBN3ATHU5x5Q3TtJCYAX3iLA9zD7k14A=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HajiGx1Pl6pfqJICyykA1v2d+niMspH9G56IW8pqwag2VrA88O8IgcGOkx4+UbEXhkq3+zdTrFyMkmdqhOhmnG1YWJtNayz8TRNqaenFwYNw91uSpIMrWh43+j5BTxvyTmvGSmjQUBwOKVqVa42qO4nZM2oeH+ALvYHGPb82GVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=C73zGgVi; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53N0i8OT011379;
-	Wed, 23 Apr 2025 00:58:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=UUNs4qQ4kPZ934MOpZFoWaBO
-	WfztD7AQWxXHIb1NA0M=; b=C73zGgVizfEfb0kEmfmAxwnTZhxzNzBxh5xSnLw+
-	ANBwSMdSP/U8fe4K3zcdj593PLCeUO5VoEQ13jDIthhXCkS+yHReMx/WfucyanPy
-	VtzVXbazVyl8LkeTKHTh0bmcoG+Z9Y6QXj3wJu0UYo6VVPFyKRH8x3XSaYu7xs57
-	KyQ5hd6L3B1NJ25IhsFpBmYJVsLmA962LlNCkfJnMzJ2H72Gu9WUojtCXVrEqEh3
-	MSJ3i40bxaM/oDY8m9KI0G+sGjCVzTyDgs9Ena2spJuTtUfKvX3QYormVgf1JEh3
-	8wKnBg9tc0Tai9MYu6ADbBUbxFP4j4xvj4bsHzxnMbgHkw==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 466jh1gdpx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 23 Apr 2025 00:58:49 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53N0wmnf026549
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 23 Apr 2025 00:58:48 GMT
-Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Tue, 22 Apr 2025 17:58:48 -0700
-Date: Tue, 22 Apr 2025 17:58:47 -0700
-From: Mike Tipton <quic_mdtipton@quicinc.com>
-To: Peng Fan <peng.fan@oss.nxp.com>
-CC: Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi
-	<cristian.marussi@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh
- Kumar <viresh.kumar@linaro.org>, <arm-scmi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] cpufreq: scmi: Skip SCMI devices that aren't used by
- the CPUs
-Message-ID: <aAg7Rz6uyIfF2F/Y@hu-mdtipton-lv.qualcomm.com>
-References: <20250421195206.3736128-1-quic_mdtipton@quicinc.com>
- <20250422085016.GA10830@nxa18884-linux>
+	s=arc-20240116; t=1745372817; c=relaxed/simple;
+	bh=XK3FxcfPRrVzroQ7c0AV9eMTMdqfJkImOgwNNMVGqQc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=H5+B4oDLU232ImAn5SGE3E/AUcshxDbkhdMv/Y7HA+qVUgk6MvGtGznSyRycqFpo8cadvr1W0OyP65eXpwGMMVBpqeEfiseavH1SLiu816UGtADj0/4vfzybv3KIj1RJF5iq/Qh8Ox+iN+HpNRj5iB2KZG+pzoDUOy9X8q/fpwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tevmzr8o; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71275C4CEE9;
+	Wed, 23 Apr 2025 01:46:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745372817;
+	bh=XK3FxcfPRrVzroQ7c0AV9eMTMdqfJkImOgwNNMVGqQc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=tevmzr8okz3O0u6F/0nkeIbleh5PVcswU4rW00i9LcdC02aScSmReCGg/6Yq9JuFo
+	 xpi1Lzu/765KvIyN+GIFhtrjiVjBjMrKztROHpKZsaSo/Sjj4JQMciZnPzGQsoR4KO
+	 c9ZcSPoAncVuNCDZQyzeoZRxBPWdQ2R7oNqzX4dodrv00N6U4vpbIFT418lJi9hJ5X
+	 4qVF/vK8f8F8M9Cb/tGHlF3BxMfOlqOClYEUiI94F16bOTLdWfU4B2uYAvyfISi5FU
+	 vjy1FQXX4LpiSyDaJAPmPwXO3H5Ql964Q1PPJ1Zh7kyPgLLUSwyk5GOBoQ/O0Z4vET
+	 fkGMsy6ISiQFQ==
+From: Mario Limonciello <superm1@kernel.org>
+To: Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Mario Limonciello <mario.limonciello@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Huang Rui <ray.huang@amd.com>,
+	"Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	platform-driver-x86@vger.kernel.org (open list:AMD HETERO CORE HARDWARE FEEDBACK DRIVER),
+	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+	linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+	linux-pm@vger.kernel.org (open list:AMD PSTATE DRIVER)
+Subject: [PATCH v9 00/13] Add support for AMD hardware feedback interface
+Date: Tue, 22 Apr 2025 20:46:18 -0500
+Message-ID: <20250423014631.3224338-1-superm1@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250422085016.GA10830@nxa18884-linux>
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: rTqnfQSj3JE833XboLwVnTrQYZ0yei6X
-X-Proofpoint-ORIG-GUID: rTqnfQSj3JE833XboLwVnTrQYZ0yei6X
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDIzMDAwMyBTYWx0ZWRfX76VmbQBbsOXX 5TPvats4YeCDiXv41iz9B6rwpRa8POmLtHOUmJCOkpXpMRa7z3+L8BjizUtVue3+o+iL/ycsY3R 51/RaEK/1xCkjep2R9FOfojfoOZbdxp3lMqdKoNs6GGQej6GexvcEVhy8lNhUrNkqWwUr30Agwd
- pUwyK28/ve3Z+jKFj0PRAVw+yhgwtmzwPa6v1gVtzFfC9SxDUowKdaKP5jFAtaz7Vmkp+CBahgB jrOwQWebNTwEe8qlJpWCVJvAVUUT3O+lyK8LIAwi6Ovg9HCHQ6NbvTPdI527n3GtSyngZy969Tu tLgtfVaxsY8clvmnVSL//woeKcFcN5XM2oAsarxAxev1lksuCtewKQrgSRCVaZ1krkWPO8L9HCF
- p2eokMymQ64sR5f1imPqF9Gp6B34Ue3YbZra4xLh+xiqWRXTpcriL9RHsD+Z9YUKbjAA2c3u
-X-Authority-Analysis: v=2.4 cv=ZpjtK87G c=1 sm=1 tr=0 ts=68083b49 cx=c_pps a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=3H110R4YSZwA:10 a=kj9zAlcOel0A:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=8AirrxEcAAAA:8
- a=PVLRA3uSskNWJRZvLbwA:9 a=CjuIK1q_8ugA:10 a=TjNXssC_j7lpFel5tvFf:22 a=ST-jHhOKWsTCqRlWije3:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-22_11,2025-04-22_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- lowpriorityscore=0 priorityscore=1501 phishscore=0 clxscore=1015
- bulkscore=0 suspectscore=0 mlxlogscore=999 spamscore=0 impostorscore=0
- mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2504230003
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 22, 2025 at 04:50:16PM +0800, Peng Fan wrote:
-> On Mon, Apr 21, 2025 at 12:52:06PM -0700, Mike Tipton wrote:
-> >Currently, all SCMI devices with performance domains attempt to register
-> >a cpufreq driver, even if their performance domains aren't used to
-> >control the CPUs. The cpufreq framework only supports registering a
-> >single driver, so only the first device will succeed. And if that device
-> >isn't used for the CPUs, then cpufreq will scale the wrong domains.
-> >
-> >To avoid this, return early from scmi_cpufreq_probe() if the probing
-> >SCMI device isn't referenced by the CPU device phandles.
-> >
-> >This keeps the existing assumption that all CPUs are controlled by a
-> >single SCMI device.
-> >
-> >Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
-> >---
-> >Changes in v2:
-> >- Return -ENODEV instead of 0 for irrelevant devices.
-> >- Link to v1: https://lore.kernel.org/all/20250411212941.1275572-1-quic_mdtipton@quicinc.com/
-> >
-> > drivers/cpufreq/scmi-cpufreq.c | 28 +++++++++++++++++++++++++++-
-> > 1 file changed, 27 insertions(+), 1 deletion(-)
-> >
-> >diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-> >index 944e899eb1be..b558f210c342 100644
-> >--- a/drivers/cpufreq/scmi-cpufreq.c
-> >+++ b/drivers/cpufreq/scmi-cpufreq.c
-> >@@ -393,6 +393,32 @@ static struct cpufreq_driver scmi_cpufreq_driver = {
-> > 	.set_boost	= cpufreq_boost_set_sw,
-> > };
-> > 
-> >+static bool scmi_dev_used_by_cpus(struct device *scmi_dev)
-> >+{
-> >+	struct device_node *scmi_np = scmi_dev->of_node;
-> 
-> Nitpick: dev_of_node(scmi_dev->of_node) ?
-> 
-> >+	struct device_node *np;
-> >+	struct device *cpu_dev;
-> >+	int cpu, idx;
-> 
-> 
-> if (!scmi_np)
-> 	return false;
-> 
-> >+
-> >+	for_each_possible_cpu(cpu) {
-> >+		cpu_dev = get_cpu_device(cpu);
-> >+		if (!cpu_dev)
-> >+			continue;
-> >+
-> >+		np = cpu_dev->of_node;
-> 
-> dev_of_node(cpu_dev);
-> 
-> >+
-> >+		if (of_parse_phandle(np, "clocks", 0) == scmi_np)
-> >+			return true;
-> >+
-> >+		idx = of_property_match_string(np, "power-domain-names", "perf");
-> >+
-> >+		if (of_parse_phandle(np, "power-domains", idx) == scmi_np)
-> >+			return true;
-> >+	}
-> >+
-> >+	return false;
-> >+}
-> >+
-> > static int scmi_cpufreq_probe(struct scmi_device *sdev)
-> > {
-> > 	int ret;
-> >@@ -401,7 +427,7 @@ static int scmi_cpufreq_probe(struct scmi_device *sdev)
-> > 
-> > 	handle = sdev->handle;
-> > 
-> >-	if (!handle)
-> >+	if (!handle || !scmi_dev_used_by_cpus(dev))
-> > 		return -ENODEV;
-> > 
-> 
-> With the minor comments addressed, LGTM:
-> 
-> Reviewed-by: Peng Fan <peng.fan@nxp.com>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-I'll make these changes. Thanks for the review!
+The AMD Heterogeneous core design and Hardware Feedback Interface (HFI)
+provide behavioral classification of tasks.
 
-Mike
+Threads are classified during runtime into enumerated classes.
+Currently, the driver supports 3 classes (0 through 2). These classes
+represent thread performance/power characteristics that may benefit from
+special scheduling behaviors. The real-time thread classification is
+consumed by the operating system and is used to inform the scheduler of
+where the thread should be placed for optimal performance or energy efficiency.
+
+The thread classification can be used to helps to select CPU from a ranking table
+that describes an efficiency and performance ranking for each classification from
+two dimensions.
+
+The ranking data provided by the ranking table are numbers ranging from 0 to 255,
+where a higher performance value indicates higher performance capability and a higher
+efficiency value indicates greater efficiency. All the CPU cores are ranked into
+different class IDs. Within each class ranking, the cores may have different ranking
+values. Therefore, picking from each classification ID will later allow the scheduler
+to select the best core while threads are classified into the specified workload class.
+
+This series was originally submitted by Perry Yuan [1] but he is now doing a different
+role and he asked me to take over.
+
+Link: https://lore.kernel.org/all/cover.1724748733.git.perry.yuan@amd.com/
+
+On applicable hardware this series has between a 2% and 5% improvement across various
+benchmarks.
+
+There is however a cost associated with clearing history on the process context switch.
+On average it increases the delay by 119ns, and also has a wider range in delays
+(the standard deviation is 25% greater).
+
+---
+v9
+ * Fix a logic error with mapping APIC entries
+ * Adopt all feedback from v8
+ * Rebase on latest tip/master
+
+Mario Limonciello (5):
+  MAINTAINERS: Add maintainer entry for AMD Hardware Feedback Driver
+  cpufreq/amd-pstate: Disable preferred cores on designs with workload
+    classification
+  platform/x86/amd: hfi: Set ITMT priority from ranking data
+  platform/x86/amd: hfi: Add debugfs support
+  x86/itmt: Add debugfs file to show core priorities
+
+Perry Yuan (8):
+  Documentation: x86: Add AMD Hardware Feedback Interface documentation
+  x86/msr-index: define AMD heterogeneous CPU related MSR
+  platform/x86: hfi: Introduce AMD Hardware Feedback Interface Driver
+  platform/x86: hfi: parse CPU core ranking data from shared memory
+  platform/x86: hfi: init per-cpu scores for each class
+  platform/x86: hfi: add online and offline callback support
+  platform/x86: hfi: add power management callback
+  x86/process: Clear hardware feedback history for AMD processors
+
+ Documentation/arch/x86/amd-hfi.rst    | 133 +++++++
+ Documentation/arch/x86/index.rst      |   1 +
+ MAINTAINERS                           |   9 +
+ arch/x86/include/asm/msr-index.h      |   5 +
+ arch/x86/kernel/itmt.c                |  23 ++
+ arch/x86/kernel/process_64.c          |   4 +
+ drivers/cpufreq/amd-pstate.c          |   6 +
+ drivers/platform/x86/amd/Kconfig      |   1 +
+ drivers/platform/x86/amd/Makefile     |   1 +
+ drivers/platform/x86/amd/hfi/Kconfig  |  18 +
+ drivers/platform/x86/amd/hfi/Makefile |   7 +
+ drivers/platform/x86/amd/hfi/hfi.c    | 550 ++++++++++++++++++++++++++
+ 12 files changed, 758 insertions(+)
+ create mode 100644 Documentation/arch/x86/amd-hfi.rst
+ create mode 100644 drivers/platform/x86/amd/hfi/Kconfig
+ create mode 100644 drivers/platform/x86/amd/hfi/Makefile
+ create mode 100644 drivers/platform/x86/amd/hfi/hfi.c
+
+
+base-commit: 7ab869c799fc0fb22f9b4c2f36aaa603d9c7cc9d
+-- 
+2.43.0
+
 
