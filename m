@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-26025-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26026-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51FDEA98924
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 14:05:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6736FA98934
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 14:09:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F1A5189375B
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 12:05:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00FD21723E9
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 12:09:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37C7D202C58;
-	Wed, 23 Apr 2025 12:05:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F19F207A25;
+	Wed, 23 Apr 2025 12:09:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gZSOgX2A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AWx5hdN5"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E401FAC48;
-	Wed, 23 Apr 2025 12:05:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD68F208A9;
+	Wed, 23 Apr 2025 12:09:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745409937; cv=none; b=aGy/86B+oc/yoiM29Ufx1pqPfhdduON/+4re5ypkrCiiaGgEwYNeEqk43EIcFqp013ZQePh5h9hgELT79sE4FAMAXdmak7yEZFH6AX+Fk1i8cGdZbfE5qLE+zYR6yGp4EwMf3T/gsES1A15gOalivBYSNF/+IfRy2FboW7we9rk=
+	t=1745410146; cv=none; b=QuAGgSvRmdxMYJfx6+8sXRCz0IkStGDT//IyMg4+tR+uTb/olVxjuZiVcj9iotebrz8uDq2zgI5YiDUGd53GjvXxvy6+XLopU9l8gdp0rJV3xEb8ApScco9H97OPqAw89KksW2RGWt80ti0bUpoaHWZNipr0xjDHvnWxrwdOJ5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745409937; c=relaxed/simple;
-	bh=/kvgqZE/r/9J65nWsx0jZLdM7cszgoACFIAVIubFz6g=;
+	s=arc-20240116; t=1745410146; c=relaxed/simple;
+	bh=rBiaqGBPCElmEzZ+5wfIrPrM3AKKyQXofjwr9Aov8cQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CG+BQG5CSwRFvoFcnXmpjubMucHYN+8b9l4pbb8pdMl9EQiTVA26czBYPYA496mfwSUEzEchCQutEWqtnaVe2CuHfmNwNBVDcJLSTdvFvmYOW9UWZTyOJ9oSCaHg2aS62i+TBtk3RoCQzmFecbCQzQh/mAt8ytpNkBZH/qSbclo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gZSOgX2A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0431FC4CEE2;
-	Wed, 23 Apr 2025 12:05:30 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=DUwajJ2PJebExIMM3Y+X7LMEu4qnDPYPaG90ZjLm3Z94Z2Yz2DjCuBG6owErW6V14c1nV8iHM6mZgbCLkZ0a6snfCc9tm9AKcV0YkduM/cyBtxTD4k3wY+iuzY+F1ZV4PAcnlVwyxkfKLyzbtE2bHZFkqMdMv1U8M0yB+z7T1DY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AWx5hdN5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8291AC4CEE2;
+	Wed, 23 Apr 2025 12:09:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745409936;
-	bh=/kvgqZE/r/9J65nWsx0jZLdM7cszgoACFIAVIubFz6g=;
+	s=k20201202; t=1745410146;
+	bh=rBiaqGBPCElmEzZ+5wfIrPrM3AKKyQXofjwr9Aov8cQ=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=gZSOgX2AeGB8+9oCfds03dU+/3CjtDIKs7ApO7jTqWn/6LE6PgbCvcBtze9v635ca
-	 Gdm5wZ68NHC+wYc4odpYaviMxaEMNQB9ECYKjitrPKoMHLBYPasycWpQy5cv84D5zF
-	 P6Iqex/KJSzVPEuR/OHa+m8nXhhO/geMQAvXYpG/ktAGTnHgvvJxCH92GmtAlMIPex
-	 v8sC5CM5c+1NkQTaG7gSy9AlVGRVLi7d0i0BRdLcFhDCFGfFCXxwHOzZNKjc66caEg
-	 771mj5tifrwmGsiuBK3hWjNS5Zz0Eb2HmyFLBBo3HbgTBMzGOcv7uRH0n8RtS08hXM
-	 Ck2fEWXt/rhIA==
-Message-ID: <975c8346-dddc-44ef-ab24-71cadfbce23a@kernel.org>
-Date: Wed, 23 Apr 2025 14:05:29 +0200
+	b=AWx5hdN5dLBfwcSkYmh0RG9fgAXYNiMw+P/n4vyz7mXlRkuWq4jWkF1cMYPSnV4i9
+	 hdaHsFktOi6wX19ZrUoAKn2ZzlInc2BoqFSDeDAh5ibBhfVHkhnBaqFGhZKwOoKuUx
+	 wyfelp5qf7sd9yCta8VhrVQ0rSA30jHf9AIkbeAawLOSTOSfuPpJOhw+8yrMO05/HU
+	 41LiIvb2aCfZPbQ4BZ6sMhZuG0ywJUNYXoG/J891RYs4YakfhRESNYsCgy4x2y4Cz0
+	 BKg8UQd+EYCmYzGYmrXkXqTGXw6CQJNrUjTVNFjc7t/d4RXnsiQ8r7Y4N+if+iFnp9
+	 fMx1MaKwPL6jw==
+Message-ID: <6fc3e178-60f9-4b0f-9c56-6d983e4d1eed@kernel.org>
+Date: Wed, 23 Apr 2025 14:08:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -80,31 +80,17 @@ Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 4/21/25 9:22 AM, Viresh Kumar wrote:
-> Extend the cpufreq abstractions to support driver registration from
-> Rust.
-> 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->   rust/kernel/cpufreq.rs | 490 ++++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 488 insertions(+), 2 deletions(-)
-> 
-> diff --git a/rust/kernel/cpufreq.rs b/rust/kernel/cpufreq.rs
-> index 5e0bfd03fd30..8628f0bada02 100644
-> --- a/rust/kernel/cpufreq.rs
-> +++ b/rust/kernel/cpufreq.rs
+ >
+> +    /// Same as [`Registration::new`], but does not return a [`Registration`] instance.
+> +    ///
+> +    /// Instead the [`Registration`] is owned by [`Devres`] and will be revoked / dropped, once the
+> +    /// device is detached.
+> +    pub fn new_foreign_owned(dev: &Device) -> Result<()> {
+> +        Devres::new_foreign_owned(dev, Self::new()?, GFP_KERNEL)
+> +    }
 
-<snip>
+Btw. if you take it for v6.16-rc1, expect a conflict with [1].
 
-> +    /// Registers a CPU frequency driver with the cpufreq core.
-> +    pub fn new() -> Result<Self> {
-> +        // We can't use `&Self::VTABLE` directly because the cpufreq core modifies some fields in
-> +        // the C `struct cpufreq_driver`, which requires a mutable reference.
-> +        let mut drv = KBox::new(UnsafeCell::new(Self::VTABLE), GFP_KERNEL)?;
-
-Maybe add a comment that it would be desired to make a struct cpufreq_driver 
-capable of being declared as static const in the future.
-
-Either way,
-
-	Reviewed-by: Danilo Krummrich <dakr@kernel.org>
+[1] 
+https://web.git.kernel.org/pub/scm/linux/kernel/git/driver-core/driver-core.git/commit/?h=driver-core-next&id=f720efda2db5e609b32100c25d9cf383f082d945
 
