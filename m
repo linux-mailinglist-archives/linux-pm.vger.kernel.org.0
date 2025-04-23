@@ -1,54 +1,88 @@
-Return-Path: <linux-pm+bounces-26064-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26065-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05CB1A99BFC
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 01:25:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1EEFA99C10
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 01:31:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4FAC5A48D2
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 23:24:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D8AF7A7EEA
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 23:30:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7C8822F76F;
-	Wed, 23 Apr 2025 23:25:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0223D1FC0EA;
+	Wed, 23 Apr 2025 23:31:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="g52K7MMR"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="WqsIJHZY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8838A223DC9;
-	Wed, 23 Apr 2025 23:24:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 547F87F9
+	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 23:31:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745450701; cv=none; b=hyTgH2V/vJuX9QYVG+arQSvJUxwStbr4L1uUukR+Cp+KqaDYyhYG0b2SjEAmv1VsxFzHOSot4fgNC1DkNF3YeVFOH/Cg4xlIRLkpBtfG9Zlf+1/dIfVS6hc+fpIl0YQX1Zq9N+j5JW+KsQ3ibDJcHyJS5jiqZ7Hrfx2/KLEm5Aw=
+	t=1745451084; cv=none; b=fjTuoOIfHmOdIllxNDqZ2Q+V7SKca8D139l7apaBsSzeni2iQLFYYy9G9P3BKk0ew2yNb+Xst8YtUpbEMg8OFQr/m+H1oKjjiQYr6dP/sHLWvVVhXleW79viLRNv92ynA2F4MCkRS+P59XqKDcTEVrRdVzLF0lyvQHpkCE7eZ4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745450701; c=relaxed/simple;
-	bh=yskBEWSEF6FlJkJi4DwqXGby0psHuBX/9ua/oCniJP8=;
+	s=arc-20240116; t=1745451084; c=relaxed/simple;
+	bh=8bj6txe88RrRNnvkhnNcHWHokC6XRjqHx/nVoIunHyI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BGfXTY3iZ9Dv287qopTGeAFuZgVIrDc8m82KQ/oiLlfn0gsv9XMT7ucLGil1u6izN/iUiE/2SQ6vB/g9lqm4G5KY2yOtKRKaCx+KvtMQP0O7tE+UqWfofsxkZJycIddgpRuvoWzC9jEjRx3jcprOutLYPcJSPvaBZYthxio3O4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=g52K7MMR; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [192.168.7.202] ([71.202.166.45])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53NNNmdO016856
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Wed, 23 Apr 2025 16:23:49 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53NNNmdO016856
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025042001; t=1745450634;
-	bh=3ZRudBcQfUXdEeUGknvRzjxdjhla7ofQa9vhRPg63Iw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=g52K7MMRbWF6yLwDhmY0YU3Om9fpRH0Ut+qyo76sxSZ4NHnyBc98XW5u2s2hVCFUK
-	 PhNe+N15jsjlumb03xkDxJWNBMQ76zGMekkVPvwrCgqXTuVJomLV1T/3YW5TFZ7jZ8
-	 1UmN3Fwk6b31yjBct2QL3ajxMU+0ZhSXqsLtn5qHYLVhfR4vWwV537HB9cU8VSqJHv
-	 6bXyJrePtilh9n0zOlm3jS0UhKtUD+8gXNtFrWLBIVXKpgaPuv0YalLYf+ij4Y2WWd
-	 yrxqlPYGWH/00BTyjqGIOa+LNPKvKGQxRb/Vrh8pulNMK2D75Bck1Sw8zFpVOmUKyD
-	 ftlR5gTTNtHcw==
-Message-ID: <88bcd897-8436-4ebb-ac03-833c8c8045f2@zytor.com>
-Date: Wed, 23 Apr 2025 16:23:47 -0700
+	 In-Reply-To:Content-Type; b=POdixwGxMm3TZ8WgNyNI2nVGltB+7p/w1bsJJ8+9dwe1KVB1xVuEoMuZViEO38YM442jVmTML5xQ0W41sEpfxMOMh3HRGy3sVY4E0s5pJ9b4zUVez6HDwEsShwMF6D9P7F6kqpV+CjRszx21NnLOi51QcCIufEKn7IOXQoMJYHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=WqsIJHZY; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53NLHdUr007721
+	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 23:31:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	zNqo2yw+9GHctE0ZAXYaJlAMnBK53myrD4k9IkxFlX0=; b=WqsIJHZYSY0uKeYk
+	XxoFYxTMr8ujWKSvMrxku83Qv/Yb5inJe8cpuHDdt0XlrLMDgxq+jkzyN2BiC4o+
+	aTlf4xpcmPqwGBpwk6vzoCMHEg3pG+LbDV6dF2qOt2ZsEPkEpIjLnKUMT6suR9Tz
+	9RBISoorfGFwNxMjLuFlHTizC+ELNjgqPBKD2ernEY5TYUDNaSjm1MNlZcqK9BLL
+	xngS7kFAsS9qaKplHM2O/W0yO5TBGYbALtvitB8IMGil2cH3aSEq/0K2g/2rtEVa
+	0S/+kT351YYyHSCxna7SBr0WOaV5533jUbIm6EfH/ws9I6fx2NLBUrWsSCia14wm
+	LS9UNQ==
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 466jh5bn44-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 23:31:22 +0000 (GMT)
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-736b431ee0dso224590b3a.0
+        for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 16:31:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745451080; x=1746055880;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zNqo2yw+9GHctE0ZAXYaJlAMnBK53myrD4k9IkxFlX0=;
+        b=LIlJPuN324mJByQz17gl8wb+8V2jSNaXjX2O0+q5VdRXy5bPyboThAts2wuM95B0tO
+         v0fN3dCekRnkjxuEC0HBOqXeNhaP7/cqVVLH/Efmv0ELfFfqQ9VOuriODH9cQBCZIgz+
+         5KUW8rRVV0xfzKe98sG7kgoOR+xeIoBs55nUgOFdxDzIGcvFj6Lmds/3rbiEGXOMBcvP
+         FsP7ZiN0Cuw24hCKXkRPs83mZUAm9vLYb4WoFuAzvbOaImrdzTb+BR9AigbbqRFel2Dv
+         58ovXdJbpoBkJ8ovNGLS1RgZfg90o8v4238FXARJavTouXj5mR87D2aGUBByR34gYxHv
+         ZNXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXFGPXzSCsV/py71L3dHSzkkeiarxc2d2kywFR1np4YyrxzB7GEKL50WHaeV/4vywV3rMx3lll50w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNk2oEs/VzdUhsw6qEr67owrMksGBVzcKkzf16EQ8q5PMDUHVI
+	3gH3rcaZ3QWHOVlnxPD2nlQYkzJrKpu58jrFl22aT07HvHI6gdJnqGrMYUm/03LYm7u0mprY/X7
+	bqF91LRJCrVHC873kPNndByxql6b5Y6eDpMVVddRXWMDCgE8djEhJUcuWzOWBGRoePQ==
+X-Gm-Gg: ASbGncs2zCix+2fv7jgcpGtZf5r+wDO0R0D0MqpciLmiukUiPmwx6R29triNY4BlaXV
+	RMb7BCd0i88Hg2JrN856W6dJY5qBfVF3v7yy8qHNXNxta5Y/y+Fu4eaF7XN1bbh4FYVh86dEKbb
+	JSHeOZ4NMcqH5ZZ9d2D0kbEuUAsgoITMoeuIjs+IIbCNGYB5jO7dZLTMUCLt/nKinBYXVw9klTz
+	aCWm8l6D8XUjyE0O8aWQkZpCyv+qPVTCgUn2Aek1v/MMHc60nMWK8EcLZT2cz6Wj4Ue1qRpv1/P
+	+BVco8U5frl3LS240meHCxY8K1+jYXdqQzOLMhE87h5guo8e7xhLAjBuMA51/lfqzJjfsrJSOTD
+	g
+X-Received: by 2002:a05:6a00:ac0b:b0:736:65c9:9187 with SMTP id d2e1a72fcca58-73e245e4080mr732974b3a.9.1745451080596;
+        Wed, 23 Apr 2025 16:31:20 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEDwwjEzdPvaN6z0apVE7LcGy75yAZV4sL84cdUlyEpqpBfKRQxyAwfdO3tZrKoojwHH7my+A==
+X-Received: by 2002:a05:6a00:ac0b:b0:736:65c9:9187 with SMTP id d2e1a72fcca58-73e245e4080mr732960b3a.9.1745451080266;
+        Wed, 23 Apr 2025 16:31:20 -0700 (PDT)
+Received: from [10.71.112.43] (i-global254.qualcomm.com. [199.106.103.254])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73e25a9a0a6sm141767b3a.138.2025.04.23.16.31.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Apr 2025 16:31:19 -0700 (PDT)
+Message-ID: <6031624c-9c65-4df8-88db-96800d58c910@oss.qualcomm.com>
+Date: Wed, 23 Apr 2025 16:31:18 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,91 +90,64 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 08/34] x86/msr: Convert a native_wrmsr() use to
- native_wrmsrq()
-To: Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
-        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
-        peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
-        wei.liu@kernel.org, ajay.kaher@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
-        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
-        haiyangz@microsoft.com, decui@microsoft.com
-References: <20250422082216.1954310-1-xin@zytor.com>
- <20250422082216.1954310-9-xin@zytor.com>
- <2932db03-164a-447e-92cf-1ef6c35c15a4@intel.com>
+Subject: Re: [PATCH v3 4/5 RESEND] thermal: qcom-spmi-temp-alarm: add support
+ for GEN2 rev 2 PMIC peripherals
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
+        rui.zhang@intel.com, lukasz.luba@arm.com,
+        david.collins@oss.qualcomm.com, srinivas.kandagatla@linaro.org,
+        stefan.schmidt@linaro.org, quic_tsoni@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmitry.baryshkov@linaro.org
+References: <20250320202408.3940777-1-anjelique.melendez@oss.qualcomm.com>
+ <20250320202408.3940777-5-anjelique.melendez@oss.qualcomm.com>
+ <aAI1JnQ2yCjtJL9u@mai.linaro.org>
 Content-Language: en-US
-From: Xin Li <xin@zytor.com>
-Autocrypt: addr=xin@zytor.com; keydata=
- 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
- l75w1xInsg==
-In-Reply-To: <2932db03-164a-447e-92cf-1ef6c35c15a4@intel.com>
+From: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+In-Reply-To: <aAI1JnQ2yCjtJL9u@mai.linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDIzMDE1NyBTYWx0ZWRfX+P1c8ULwPyBU 6SHShv8RRFYlk+dLJR+/HEr3V7+y5Oi7ak0DyDlUCSBytNkyrMR70DaYlgrLBYPF97kISGMogSQ +0N1jll2An/xNdS4ZHjWgH60x6tw3rA6T7y86gNimTIBqDRBRZ6AvVQ7WkTWcX5NRgONkRF1jV5
+ qi3TaPEhaJC7+YBWcNwUz9NddVjlGT/VirWML/Wtf0CJtNt8y9iUZc3Q5Fxx3RunyWWp3j3MIkh i2D01l4xiGuqUnxn1A+AyzLK14O2tM8GFnApRTDamEEb1uCedovpme3G2tT5dMtwyDZiyOYy6t0 jgEJI57mmPsmVn3F3iBI4qFIJuIFOZr1fMQ5OmL3mxb9RZhxcfDEpRN/JKr0r4xBiFNnyrS+K12
+ ManH19yxZo1Jlzz7nbsoP/deJo4BZJQqLlwyitJ700+vUM3pMGCHZOyft2PZSopiE9+Qj2Gd
+X-Proofpoint-GUID: YxL8-QcF_8vveX-o_7_PeBq0OirHOjmT
+X-Authority-Analysis: v=2.4 cv=B/S50PtM c=1 sm=1 tr=0 ts=6809784a cx=c_pps a=WW5sKcV1LcKqjgzy2JUPuA==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=PCcEw_Bt9sndwEor8soA:9 a=QEXdDO2ut3YA:10
+ a=OpyuDcXvxspvyRM73sMx:22
+X-Proofpoint-ORIG-GUID: YxL8-QcF_8vveX-o_7_PeBq0OirHOjmT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.680,FMLib:17.12.80.40
+ definitions=2025-04-23_12,2025-04-22_01,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
+ lowpriorityscore=0 bulkscore=0 impostorscore=0 suspectscore=0 mlxscore=0
+ priorityscore=1501 phishscore=0 malwarescore=0 spamscore=0 clxscore=1015
+ classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2504230157
 
-On 4/23/2025 8:51 AM, Dave Hansen wrote:
-> On 4/22/25 01:21, Xin Li (Intel) wrote:
->>   static __always_inline void sev_es_wr_ghcb_msr(u64 val)
->>   {
->> -	u32 low, high;
->> -
->> -	low  = (u32)(val);
->> -	high = (u32)(val >> 32);
->> -
->> -	native_wrmsr(MSR_AMD64_SEV_ES_GHCB, low, high);
->> +	native_wrmsrq(MSR_AMD64_SEV_ES_GHCB, val);
->>   }
+
+
+On 4/18/2025 4:19 AM, Daniel Lezcano wrote:
+> On Thu, Mar 20, 2025 at 01:24:07PM -0700, Anjelique Melendez wrote:
+>> Add support for TEMP_ALARM GEN2 PMIC peripherals with digital major
+>> revision 2.  This revision utilizes individual temp DAC registers
+>> to set the threshold temperature for over-temperature stages 1,
+>> 2, and 3 instead of a single register to specify a set of
+>> thresholds.
 > 
-> A note on ordering: Had this been a native_wrmsr()=>__wrmsr()
-> conversion, it could be sucked into the tree easily before the big
-> __wrmsr()=>native_wrmsrq() conversion.
+> Can you elaborate what are the different stages in the QCom semantic ?
+>  
+Stage 1: warning
+Stage 2: system shutdown
+Stage 3: emergency shutdown
 
-Can't reorder the 2 patches, because __wrmsr() takes two u32 arguments
-and the split has to be done explicitly in sev_es_wr_ghcb_msr().
+This is the same as was outlined in original driver documentation: 
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/drivers/thermal?h=v5.4.281&id=f1599f9e4cd6f1dd0cad202853fb830854f4e944.
+Will add this info to commit.
 
-Thanks!
-     Xin
-
-
+>> Signed-off-by: David Collins <david.collins@oss.qualcomm.com>
+>> Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+>> ---
+>>   drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 136 ++++++++++++++++++++
+>>   1 file changed, 136 insertions(+)
+>>
 
