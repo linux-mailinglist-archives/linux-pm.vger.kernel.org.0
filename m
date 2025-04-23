@@ -1,137 +1,177 @@
-Return-Path: <linux-pm+bounces-26032-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26033-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50940A98A6B
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 15:06:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D38BA98AFB
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 15:28:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A49D81B66D5B
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 13:05:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F3C116568C
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 13:28:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72A7C143C69;
-	Wed, 23 Apr 2025 13:05:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 723071684AE;
+	Wed, 23 Apr 2025 13:28:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mLGQKjay"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="o8A/Sy+J"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DB6733F9
-	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 13:05:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3614155322
+	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 13:28:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745413508; cv=none; b=DP0R0/fsaf/sRH2Mur4DyJ6T1bwV/ve3hGIvh3gMS8C220OW7zGKno3HENNJ+uoHRvwZvGS0CRk+ZFC8TpozKOX6AXXGA0ZQ6N4SS8ErGIThxG1+snb3zKyxXeyvWbKeRrVXmBvN2XT2+z+QJhcJtgwJGaAvAiJYhMpJQXHQZS0=
+	t=1745414928; cv=none; b=UEDc2WT6CL4npVTA56WvDR4SgZZQJ1uNcdJvjpxD11lD1tcdk6FtXCSEj4kjpRfqQ0Qyz/Ur/4zV0sfv61FlT0620Z0FhTcvG4PYIMWGqge7tZMTVh4kdGEwKGFvxeiGScNo3DYa9ZJ3cA+BS6Rm5cBaQsu+Sq1OECt3JMOKuqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745413508; c=relaxed/simple;
-	bh=5YJ1EzEX4tdXlahfUcZnusIfoLhFoCXWqBQIDb8gXLY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YXObCntY430lEbkguo0sV66kbaPAD46cQQJWqL+7r3yxpp3yxgIc2nSNvEk+ie4eC4MG4oO2lP/scyVqPsW+PHZwrLt+T7EhC7/oTgJZvUKu+4wfE/ASwuFfN/sV2Db5MiJYeui424ErL6KeVUbsoVzVBOQIg0qJZ4PnochFW9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mLGQKjay; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B143C4CEEB
-	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 13:05:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745413508;
-	bh=5YJ1EzEX4tdXlahfUcZnusIfoLhFoCXWqBQIDb8gXLY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=mLGQKjay2qJSZ6fQtDbAnSnQPRj/Z6dpcBfml7J0pWhiMCGBja/EHALSkIG+8Wi0h
-	 uMUg/A2fJVs0IKpJHXbMNdi9+XrVBJw5a1FWwF3H+/gvJNG3Ar+bg1dt9T+K9UZjw+
-	 LqdzqN61tMshN6QMpnJEW830Sdw1rHoL94Dj4qUU3ZhTFWshUMoBRFoGqfqGF+IP5c
-	 jqEHS6+RNv6m0CKxxBteN80/yjr2FcjuaCy9uvLxXdJxsNNX2HrscbgiCoqT0Hg8c/
-	 tuTv3Mi4tBWn8w7irx4TiyNX3T3ElLUsSdYWLSVb1zepLemILQ5pAB5Y65TrbISwno
-	 1Ogh/iSoZXADQ==
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-72bd5f25ea6so1575463a34.1
-        for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 06:05:08 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWDF5r6BnaJpVNfhhoRHWoCg0HG4bbezbQcvnxMiz1D5bsFeT/tkqkMs8OWla87Z5C0hXsZmvpPUQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOCRbauE4ZioEB1nAc8aepfG2v4gGZBkVdf7IQ3/EeaYHPlKdj
-	WYGUavURfcaKC7qOwWJ6QSqg7X5erIhj6JLMPhfsy75arzDPSIXG9t/zmHXPasfgflnOPxiRMNi
-	hWAEhRxOwuSevfxV7tqtBrzmrB4Q=
-X-Google-Smtp-Source: AGHT+IGBE3hDiXUq4vJ31XF825f6u5B7bMdNQIaEPegarjVvXd+ugvbm9LC7BBULTmZda8l1CKsvwdKRFr9Uvv4mN+s=
-X-Received: by 2002:a05:6871:a411:b0:2cc:3530:d313 with SMTP id
- 586e51a60fabf-2d526e52d97mr10759005fac.25.1745413507472; Wed, 23 Apr 2025
- 06:05:07 -0700 (PDT)
+	s=arc-20240116; t=1745414928; c=relaxed/simple;
+	bh=U9OtDZeDCzanLJBDLtmfBqU2PmEPFD3p7Lovsa9a7nY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gvSQZGwKp8I7F8Ici9oSlzZIAQ0mQMGKh2RXDGkvlUC41PvB+ss4yM8qKuu695rX9uudxgBolsZTcMZSRe81PJZt7b2eQthTE7NHrxy7IduN7Jug+dIFGKxneL+0KMqkk9hHd0ubgFuc/l2A9eEk+ExC6uQsRCRS6MvQtIqkZIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=o8A/Sy+J; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53NAkGMA014763
+	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 13:28:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=PB3zeJwysZUF/ByBSq+dhGKR
+	vdPDfw2nxYgcYIOLE7k=; b=o8A/Sy+JMV06jqoMqAEv5+g+6FDVaLsmlIWxloNE
+	eyZ/EllNAnyYMZUJHD7/qcGvvCxNbY1ME4C9kk6kfMRheml5qkIeDP3rVubG4PAA
+	UziHFc8yy16AMPfamL5IOvke+Fk+GhleIfMLJBVwlcwZHzXdSsfhfoWXPaFy5HEQ
+	pyuys0GQ73qgTa1J3xXaPu9/TPENp+Mfpy7RQyZJOYaSj3pqzGmqJzXeGFGuMxHA
+	dsyUxzDaHCrDmKuKy5i8O2VeZX/H/BE7JXFfoFEarVwBhw7chpY7vglyw+ByK0OZ
+	Jz7r2tgbdUcT7JMPxrJqh/7p8DaKWSpx7E0BjYzm3AdHLA==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 466jh0j86s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 13:28:45 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7c54e9f6e00so150836285a.0
+        for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 06:28:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745414925; x=1746019725;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PB3zeJwysZUF/ByBSq+dhGKRvdPDfw2nxYgcYIOLE7k=;
+        b=dRt7tzHkAA9ffnSjZk6GoyepZYGIjI7xtbw7ZmBOJ7em/OwGKe2bAQFMNnitXDMul5
+         Ot4pcv7CV+4DzIgsQ7NjlYVOogl3sukQRQisNzl0j77JbSHw9Vpux7kd5WdfZcGe+Wpn
+         /vh41b3ummXhalzCB3qDcyIN1n/J7PfsXcrSthlIVwYPHPI2Ke/fDQ+sC273Go18UyTs
+         joboBakmoUkwE7LfqKnJFd8Jc6vCImaLJzvcQSly+RcuxgfJZNZ3JLz5j+yo4iMeDeYt
+         PJ3kBz0B3/oHaqfX9vxc3tlMKAeZq7EG45OjrQ3NjAQqY89VFL5R/N8KIM/clFtZUgWF
+         +Vgw==
+X-Forwarded-Encrypted: i=1; AJvYcCVghUZ/hOl1LpGWKG6HQOSU80sw6SXreQ+HBHjUJncRXfl8f0K7GOg6pUwxMEYELvkEy/bH/vasoQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxr4PfyR3IfninrZWzglXOLGhUrzMgvnS2wb6+MC2i9U/bwyg4X
+	xRkjc6HuX7CkeSrB0ANpvdsNopbSioYj6Bu6h6rjeNVjvm3ZAcE5SMbl/sX5JlcWDoGEIsn4984
+	P51CblE183jLY07r893Yar7KekVlkT1WKzHE5mUOBjbro78z2NQjSkNjqHA==
+X-Gm-Gg: ASbGncs2MCbMPeH74hsVtq/kUc2d4GP23pr2TX6izcExo7hG5gZy4qqiWTNJsnplpng
+	R3dz4agIszl3jfNdgm67PNEzmlXd3VUm5WOPLR2yU+YF4frWz+Xwa7/Zy+kTn0bsKJxLgqmiP8N
+	/PZIfOwCQeVqJI0wGn+MXaBGQiJ9Y/ekY2IYEV0pTz/Y6AKJl0G9uULt/+RFmtzAof021bxu96/
+	ZjJx0VrhiYrLZVOAYuz2o/Cdj/cn5zZqv0STX1NVGxbbRFBSSi2+51hfCn4U0CFD3BoOT/XLBbv
+	/e6qeYtotKeudet6rcYsQmEbNTgkusSYbv8dEri7EwJscnq0Dupr0P3Vh8TEj+9WrsD9W059y8M
+	=
+X-Received: by 2002:a05:620a:424e:b0:7c0:b350:820 with SMTP id af79cd13be357-7c94d80df6bmr443623685a.5.1745414924633;
+        Wed, 23 Apr 2025 06:28:44 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFk636fFRRkvuLyPaBe/JMMbB0DmZRi+A72gsKa2vsyQGLytxQjLxNTJxnnRLMfxvaeNdGcxQ==
+X-Received: by 2002:a05:620a:424e:b0:7c0:b350:820 with SMTP id af79cd13be357-7c94d80df6bmr443619285a.5.1745414924226;
+        Wed, 23 Apr 2025 06:28:44 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54d6e5423a2sm1534611e87.101.2025.04.23.06.28.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Apr 2025 06:28:43 -0700 (PDT)
+Date: Wed, 23 Apr 2025 16:28:41 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc: Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Anthony Ruhier <aruhier@mailbox.org>,
+        Dmitry Baryshkov <lumag@kernel.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH v5 3/7] drm/msm: a6x: Rework qmp_get() error handling
+Message-ID: <skrb5hkl66gt6vr6c42tx2ipfn62uuouztd2g37xlhreeq7nqj@r6ohzexpwmy7>
+References: <20250419-gpu-acd-v5-0-8dbab23569e0@quicinc.com>
+ <20250419-gpu-acd-v5-3-8dbab23569e0@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250421073437.u5wfnuvjd2pfqtfr@vireshk-i7>
-In-Reply-To: <20250421073437.u5wfnuvjd2pfqtfr@vireshk-i7>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 23 Apr 2025 15:04:55 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0ga957CH38k4vdjWMjeskODbrww21kxGpg18PUA4Gk6LA@mail.gmail.com>
-X-Gm-Features: ATxdqUEtxg4PaRSvMOPVjcdQel4Pg7J1_q0GhA2zHmjMd64X-LdmDZWY8vPlmnc
-Message-ID: <CAJZ5v0ga957CH38k4vdjWMjeskODbrww21kxGpg18PUA4Gk6LA@mail.gmail.com>
-Subject: Re: [GIT PULL] cpufreq/arm fixes for 6.15-rc
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250419-gpu-acd-v5-3-8dbab23569e0@quicinc.com>
+X-Proofpoint-ORIG-GUID: DexE4MXKnSRD6n6EhCDfAI1_SyXbzkoR
+X-Authority-Analysis: v=2.4 cv=ftfcZE4f c=1 sm=1 tr=0 ts=6808eb0d cx=c_pps a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10 a=XR8D0OoHHMoA:10 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8 a=pGLkceISAAAA:8 a=b3CbU_ItAAAA:8 a=3mVCJS2yw26y67mb1AsA:9
+ a=CjuIK1q_8ugA:10 a=PEH46H7Ffwr30OY-TuGO:22 a=TjNXssC_j7lpFel5tvFf:22 a=Rv2g8BkzVjQTVhhssdqe:22
+X-Proofpoint-GUID: DexE4MXKnSRD6n6EhCDfAI1_SyXbzkoR
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDIzMDA5NCBTYWx0ZWRfXw85iOxcX1ItA E6ZSp0HCscZaaZDOehKjeLS5+EJq0htMWah4/X0PmJSqIJBKJFfunfIXv18Bhw1hn/ZhQxd36FA 6FRCX4hz3gM42y6erAxdElKdKzpExigp6kg+ko/qhYkW2V++6NFEuOv4WwrR28cMZqngBITTTI6
+ 3Npjq6k15BbfjuS4VKRp+s8GTsdGXU3UvGEmVPlxQZweiHO5EboHy9SaQjKcP9q451qoe180HZg GQkLRdKggGWpKVv+SmRxQCcbVzfwq7vJ07b4qBFpRA6tdGnhpBINrBLztIeXUtvjWRG+SG08Uxp mhVxBIq4qGc5DCKQwhFnn498oHLUVPJDH/kCVLHJ1xKXNiL3J5/sWbY3JE1RGdPGz5ha7pvAzoo
+ D1dogQGpncTlEQf+fZFcGxX18in0jEiVUFMrzwQPcSBl+IV3/3K39NjxA2tN33yu+HiQZUPl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.680,FMLib:17.12.80.40
+ definitions=2025-04-23_08,2025-04-22_01,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=999 lowpriorityscore=0 phishscore=0
+ malwarescore=0 impostorscore=0 adultscore=0 spamscore=0 clxscore=1015
+ priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2504230094
 
-On Mon, Apr 21, 2025 at 9:34=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
->
-> The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089a=
-c8:
->
->   Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufr=
-eq-arm-fixes-6.15-rc
->
-> for you to fetch changes up to a374f28700abd20e8a7d026f89aa26f759445918:
->
->   cpufreq: fix compile-test defaults (2025-04-17 13:36:29 +0530)
->
-> ----------------------------------------------------------------
-> ARM cpufreq fixes for 6.15-rc
->
-> - Fix possible out-of-bound / null-ptr-deref in drivers (Andre Przywara
->   and Henry Martin).
->
-> - Fix Kconfig issues with compile-test (Johan Hovold and Krzysztof
->   Kozlowski).
->
-> - Fix invalid return value in .get() (Marc Zyngier).
->
-> - Add SM8650 to cpufreq-dt-platdev blocklist (Pengyu Luo).
->
-> ----------------------------------------------------------------
-> Andre Przywara (1):
->       cpufreq: sun50i: prevent out-of-bounds access
->
-> Henry Martin (3):
->       cpufreq: apple-soc: Fix null-ptr-deref in apple_soc_cpufreq_get_rat=
-e()
->       cpufreq: scmi: Fix null-ptr-deref in scmi_cpufreq_get_rate()
->       cpufreq: scpi: Fix null-ptr-deref in scpi_cpufreq_get_rate()
->
-> Johan Hovold (1):
->       cpufreq: fix compile-test defaults
->
-> Krzysztof Kozlowski (1):
->       cpufreq: Do not enable by default during compile testing
->
-> Marc Zyngier (1):
->       cpufreq: cppc: Fix invalid return value in .get() callback
->
-> Pengyu Luo (1):
->       cpufreq: Add SM8650 to cpufreq-dt-platdev blocklist
->
->  drivers/cpufreq/Kconfig.arm            | 20 ++++++++++----------
->  drivers/cpufreq/apple-soc-cpufreq.c    | 10 ++++++++--
->  drivers/cpufreq/cppc_cpufreq.c         |  2 +-
->  drivers/cpufreq/cpufreq-dt-platdev.c   |  1 +
->  drivers/cpufreq/scmi-cpufreq.c         | 10 ++++++++--
->  drivers/cpufreq/scpi-cpufreq.c         | 13 ++++++++++---
->  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 18 ++++++++++++------
->  7 files changed, 50 insertions(+), 24 deletions(-)
->
-> --
+On Sat, Apr 19, 2025 at 08:21:32PM +0530, Akhil P Oommen wrote:
+> Fix the following for qmp_get() errors:
+> 
+> 1. Correctly handle probe defer for A6x GPUs
+> 2. Ignore other errors because those are okay when GPU ACD is
+> not required. They are checked again during gpu acd probe.
+> 
+> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> Tested-by: Maya Matuszczyk <maccraft123mc@gmail.com>
+> Tested-by: Anthony Ruhier <aruhier@mailbox.org>
+> ---
+>  drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-Pulled and added to linux-pm.git/fixes, thanks!
+If this a fix for the existing commit, it should come first and have a
+proper Fixes: tag. If not, please squash it into the first patch.
+
+> 
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+> index 6bd6d7c67f98b38cb1d23f926b5e6ccbd7f2ec53..48b4ca8894ba38176481b62b7fd1406472369df1 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+> @@ -2043,9 +2043,10 @@ int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node)
+>  		goto detach_cxpd;
+>  	}
+>  
+> +	/* Other errors are handled during GPU ACD probe */
+>  	gmu->qmp = qmp_get(gmu->dev);
+> -	if (IS_ERR(gmu->qmp) && adreno_is_a7xx(adreno_gpu)) {
+> -		ret = PTR_ERR(gmu->qmp);
+> +	if (PTR_ERR_OR_ZERO(gmu->qmp) == -EPROBE_DEFER) {
+> +		ret = -EPROBE_DEFER;
+>  		goto detach_gxpd;
+>  	}
+>  
+> 
+> -- 
+> 2.48.1
+> 
+
+-- 
+With best wishes
+Dmitry
 
