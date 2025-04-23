@@ -1,66 +1,53 @@
-Return-Path: <linux-pm+bounces-26061-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26062-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBA06A9976E
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 20:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CD08AA99A62
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 23:14:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB3714630C4
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 18:02:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA4644404BD
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 21:13:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E56928EA59;
-	Wed, 23 Apr 2025 18:02:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F7A529AB18;
+	Wed, 23 Apr 2025 21:10:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WKzXkeLy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ix8n/6h+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005C528D830
-	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 18:02:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D480E29AB0A;
+	Wed, 23 Apr 2025 21:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745431353; cv=none; b=V4gFG/wb6cFfweJgOhzzAFkczXBU8fmWsb0/tzSQeEThtIC0tQuh4aslJJKphnWcMZPam1LGhPSCtfdKxx6Mprju91Zg+dOqs1BtO1+46kNWiehPNfFDrrYXUcqu2owmwczHgKOqeR62JOdw7POluG8qXyDrEos2W3hnGTr853Q=
+	t=1745442658; cv=none; b=Ovojwipg1PzNkfU0SXw98K2l+Jt17/fIRghy12eesy/a9HN+jD+/ulODrF1ETSCMJ0Xhv8RTuf+FnRh/qw4/GQU17yuiB6Rc6gjaJxJiewUtnwaxksOHBOks3x54KP1QtSWCeDcBc1SAZtrBcfgqgSxWRWFxey0GYNdSLYs5t3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745431353; c=relaxed/simple;
-	bh=BSV2S5axVk3jR2Dj4hy0PRdYG9l3BhCOacRqX+is/5o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jyS0S9GutGrkz+VycJToQlA4RjJJmQXjtZDvnY2N5bvZTIaZeroTjj//VflXSA8X6fgJdVf/bnUSYI0NraXYKtGcN9ic+mPOWF6Hxn6zrc0uQRCQA0dBgKw2Deq/oXqA2knFIPBJrr1lHblyyxdZwFMUZV351Ol7lL+INizzd5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WKzXkeLy; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Wed, 23 Apr 2025 14:02:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1745431337;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8BS6PilBZgvTDPZhVhVWu7ww97sBPTJLkhr1PmWiCpA=;
-	b=WKzXkeLyNYDwk/eCKuYZUCO+ERfNfkrsogpUfK8yviZk5KF8v/jUkJdnJU+r8oZr+ubgz5
-	x6V9oP+fLmYCwLsnSZd82pB9eEkKHjvuhiG4VRWZPCOzP6wYwxgwjmy1iiuNhSzk9iSRcj
-	k8plvwA+ho8NM7aL2D7SLNCO8wUepbA=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org, 
-	"Md. Haris Iqbal" <haris.iqbal@ionos.com>, Jack Wang <jinpu.wang@ionos.com>, Coly Li <colyli@kernel.org>, 
-	Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>, Chris Mason <clm@fb.com>, 
-	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>, 
-	Andreas Gruenbacher <agruenba@redhat.com>, Carlos Maiolino <cem@kernel.org>, 
-	Damien Le Moal <dlemoal@kernel.org>, Naohiro Aota <naohiro.aota@wdc.com>, 
-	Johannes Thumshirn <jth@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, linux-bcache@vger.kernel.org, dm-devel@lists.linux.dev, 
-	linux-btrfs@vger.kernel.org, gfs2@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
-	linux-xfs@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: add more bio helper
-Message-ID: <q53k4x5nshvr2zatrgyhygxouv7ijyepe6cj2pfooemi6gbu4y@lpxxcvozazzu>
-References: <20250422142628.1553523-1-hch@lst.de>
- <jetduw7zshrmp4gl7zfpwqjweycwesxiod7xvtnxqwqekgtvdf@idwnvfzvhgik>
- <20250423093621.GA2578@lst.de>
- <sl4oibdxpjygqfpy6llq237zuckz7ym4fmzcfvxn2raofr37a5@hvevbcgm5trn>
- <20250423160733.GA656@lst.de>
+	s=arc-20240116; t=1745442658; c=relaxed/simple;
+	bh=xmq6MkuqUF6TJZ/43UNV61lf7JZuVR8dHvGHTQZIEPg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=VgLWI2hzTZsIrXXrPUcmQo2YD+K3+uKc/1i4GUKrqqK7HOeQdI2j/i5dH2Om87WMnQLS+Qsgdvs9L5D+cVyVMc3Ew4frtO3rocEzBytiVhsjwTf22Auafw5lE98PRdkCPDMKEiMxAkEvO40NiEz08x3xaO39DRmjSM9NstgM81A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ix8n/6h+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 022BEC4CEF3;
+	Wed, 23 Apr 2025 21:10:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745442657;
+	bh=xmq6MkuqUF6TJZ/43UNV61lf7JZuVR8dHvGHTQZIEPg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=Ix8n/6h+1RXIvMwWGIAZiUGwYk5gjoZn8l90EBNpsKmpnnQTDPFLYGSzhPWNehXu+
+	 u8CRhXA3WXO5Hfa8OMtYu9w6NHVRHUsPK2JGz6e/QV1wfoVQCF5hLMhLgtNtPU24Tx
+	 G5eOFYksMTpY6uIo/RPz4E5u21mfAZ1EBZVGh9S/RAzFP1J6wEiMCiU0yrUAJxmzMH
+	 kAhzQ5jWRgT0PYnk/wXf55+tLkUbbXMzFBGiDJEgPabU54vzTgyNsIGLeEvlEKH+gf
+	 RcBi8SkzG+ETRi0/DQ4AZh+5d07C4aFOYfVe7uMNVpaociWZXlW/G215MrONfD4hei
+	 tjto8d6xCfJUA==
+Date: Wed, 23 Apr 2025 16:10:55 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Alex Williamson <alex.williamson@redhat.com>
+Cc: bhelgaas@google.com, rafael@kernel.org, linux-pci@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] PCI/PM: Elevate PM usage during reset probing
+Message-ID: <20250423211055.GA455833@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -69,81 +56,33 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250423160733.GA656@lst.de>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20250422230534.2295291-1-alex.williamson@redhat.com>
 
-On Wed, Apr 23, 2025 at 06:07:33PM +0200, Christoph Hellwig wrote:
-> On Wed, Apr 23, 2025 at 06:37:41AM -0400, Kent Overstreet wrote:
-> > > It also don't support bio chaining or error handling and requires a
-> > > single bio that is guaranteed to fit the required number of vectors.
-> > 
-> > Why would bio chaining ever be required? The caller allocates both the
-> > buf and the bio, I've never seen an instance where you'd want that; just
-> > allocate a bio with the correct number of vecs, which your
-> > bio_vmalloc_max_vecs() helps with.
+On Tue, Apr 22, 2025 at 05:05:30PM -0600, Alex Williamson wrote:
+> I encountered a confusing scenario where a device reports NoSoftRst- and
+> doesn't have any associated quirks to set PCI_DEV_FLAGS_NO_PM_RESET, but
+> it refuses to probe for PM reset support using the sysfs reset_method
+> attribute.  The reason turns out to be that we don't increment the usage
+> count while probing, the driver has the device in D3, where this system
+> seems to support D3cold, and the PM control register is read back as
+> 0xffff.
 > 
-> If you go beyond 1MB I/O for vmalloc you need it because a single
-> bio can't hold enough page size chunks.  That is unless you want
-> to use your own allocation for it and call bio_init which has various
-> other downsides.
-
-Allocating your own bio doesn't allow you to safely exceed the
-BIO_MAX_VECS limit - there's places in the io path that need to bounce,
-and they all use biosets.
-
-That may be an issue even for non vmalloc bios, unless everything that
-bounces has been converted to bounce to a folio of the same order.
-
-> > The "abstract over vmalloc and normal physically contigious allocations"
-> > bit that bch2_bio_map() does is the important part.
-> > 
-> > It's not uncommon to prefer physically contiguous allocations but have a
-> > vmalloc fallback; bcachefs does, and  xfs does with a clever "try the
-> > big allocation if it's cheap, fall back to vmalloc to avoid waiting on
-> > compaction" that I might steal.
-> > 
-> > is_vmalloc_addr() is also cheap, it's just a pointer comparison (and it
-> > really should be changed to a static inline).
+> The cleanup __free helper seems to be the cleanest solution here, versus
+> refactoring to a common exit point or wrappers around reset_fn, but feel
+> free to suggest otherwise.  I see a couple potential other use cases for
+> this helper in the vfio code.
 > 
-> The problem with transparent vmalloc handling is that it's not possible.
-> The magic handling for virtually indexed caches can be hidden on the
-> submission side, but the completion side also needs to call
-> invalidate_kernel_vmap_range for reads.  Requiring the caller to know
-> they deal vmalloc is a way to at least keep that on the radar.
+> Please review.  Thanks,
+> 
+> Alex
+> 
+> Alex Williamson (2):
+>   PM: runtime: Define pm_runtime_put cleanup helper
+>   PCI: Increment PM usage counter when probing reset methods
+> 
+>  drivers/pci/pci-sysfs.c    | 3 +++
+>  include/linux/pm_runtime.h | 2 ++
+>  2 files changed, 5 insertions(+)
 
-yeesh, that's a landmine.
-
-having a separate bio_add_vmalloc as a hint is still a really bad
-"solution", unfortunately. And since this is something we don't have
-sanitizers or debug code for, and it only shows up on some archs -
-that's nasty.
-
-> The other benefit is that by forcing different calls it is much
-> easier to pick the optimal number of bvecs (1) for the non-vmalloc
-> path, although that is of course also possible without it.
-
-Your bio_vmalloc_max_vecs() could trivially handle both vmalloc and non
-vmalloc addresses.
-
-> Not for a purely synchronous helper we could handle both, but so far
-> I've not seen anything but the xfs log recovery code that needs it,
-> and we'd probably get into needing to pass a bio_set to avoid
-> deadlock when used deeper in the stack, etc.  I can look into that
-> if we have more than a single user, but for now it doesn't seem
-> worth it.
-
-bcache and bcachefs btree buffers can also be vmalloc backed. Possibly
-also the prio_set path in bcache, for reading/writing bucket gens, but
-I'd have to check.
-
-> Having a common helper for vmalloc and the kernel direct mapping
-> is actually how I started, but then I ran into all the issues with
-> it and with the extremely simple helpers for the direct mapping
-> which are used a lot, and the more complicated version for vmalloc
-> which just has a few users instead.
-
-*nod*
-
-What else did you run into? invalidate_kernel_vmap_range() seems like
-the only problematic one, given that is_vmalloc_addr() is cheap.
+Applied to pci/pm for v6.16, thanks, Alex!
 
