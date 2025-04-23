@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-25995-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-25996-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9033A97C6D
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 03:50:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A35CA97C74
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 03:50:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C13BA1B6126A
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 01:50:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F6057AD773
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 01:49:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25DDA267AFB;
-	Wed, 23 Apr 2025 01:47:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E929267F4F;
+	Wed, 23 Apr 2025 01:47:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oLRs32Zy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ujR1UScJ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0CD26773E;
-	Wed, 23 Apr 2025 01:47:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FA43267AE4;
+	Wed, 23 Apr 2025 01:47:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745372842; cv=none; b=RdgNxZi+JPchiOQr1VknrQnSyNpGpu5khhxFzUkhBKhEkr3VZwBIoDWValGruGHumBMOfAmix3lrTfAbszEjM6/ZLSjkOmvdRgKYlTJyIRjj/cEqWrqSrqnEljRb/+eAzvZ8cS4ICOKQ5HoGn6UULwvKU8jYQHX4Su7Rp/mkPlU=
+	t=1745372844; cv=none; b=X1ziPdTRT8bm5A+LGRjqWxBuOwE8ylZPL6/CEa4hGtqiZWeA+4JbqjWG1can/iFf2b+arRzzfsYXhikZk8SZv+dGkBujHblby3aEBmxZpln3xB6g6HnUgC4ZOtr3LpecgUGJCA8sxxQ0Sd/onQX+HwxA9VOz34qegjpnCJBi5UU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745372842; c=relaxed/simple;
-	bh=A/O4Dt67rxVBdlL7XTxTilh3HCgVsRxhzYv/zKTNPow=;
+	s=arc-20240116; t=1745372844; c=relaxed/simple;
+	bh=ccxi92/CdYcFz5SRXc75fcFWq7DUZRAtA96LadU0vMs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lVtyvgepmMrZG3++FyoUtjEAquaugyCc6JxQqQOypyYwsAorhmA15gRYw1ko8kgx8lBXJyD8gBzcbQhwOx0NfOcq2Qk+QfT1M15vcDaQZIcloEAPHCpkUPnksyurdaCWAMCd3CX1BGSXh97nmJbz47LQbsBzpy8vF5spiy1nS/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oLRs32Zy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C0E4C4CEE9;
-	Wed, 23 Apr 2025 01:47:20 +0000 (UTC)
+	 MIME-Version; b=jjXDs3dCXTRX61DMUTtkDQbUXTlrCYtKdO24PdQA9hG0XSkgR0KY75m8JUypu8lAG27761aPf2dV8dC3TqRs5FHPbTGHw0Rd16jAl4fmqCxyR4OqV6hNWoDeEasNa3tLvQKivvFg+k8ooD8/iJ9mtoWKeMcdAVAjiQSGn1y2LhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ujR1UScJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1987BC4CEEE;
+	Wed, 23 Apr 2025 01:47:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745372841;
-	bh=A/O4Dt67rxVBdlL7XTxTilh3HCgVsRxhzYv/zKTNPow=;
+	s=k20201202; t=1745372843;
+	bh=ccxi92/CdYcFz5SRXc75fcFWq7DUZRAtA96LadU0vMs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oLRs32ZyLS0c9xOsFAxPLdjzLZZSDztW9guL4uih2pX/NuPExpHcQpNINiKfNZxCZ
-	 REbDtCglIMzg766BC9NQo/LdIkkmXGiBqiOaYHtyM8SGLKB6cQk9GAMr6Fj6IsoT9U
-	 OSSTCN9EYiY80o6097R9atUeDZQtTzXeXsoS9DrGcqruxYv3tpYSs8jsbn1Sq2c+4p
-	 3FtkLHeTXBXEFhiruAEgo5VOdxcoYrQqfKDTPrPWuZ542FQJiOH6/kFl+ijj7MEIrK
-	 PSZwYS2Tr4mIob0NsUmQaRd9Iw+DQi2+CuGalIUH0aASdxj2i70FmZ3nAHFf6nM/DD
-	 x5xf2soGQ3G7w==
+	b=ujR1UScJejlUs1alli6VXzUXGfUIDyMk9IrMKs1cxV+cMhuf1302e3ybpaVW3/CP4
+	 q+C45d9L9JPn0ValsgWx/aXx+h8/xhDs6OwtLOaEsrLuxm/3pxpgm1abBuYKNlM07K
+	 Si1dQyIzS8XAiGXVpAaL1N3nzfb90A7t982bLeb2x4L4knXyvqAgRPh7FExkIir1/2
+	 7vJiijOxV8idcCvI1lE9Vd5FW7/K1aY/M/isabS/DLFJYCgAfrljoAdF7HxfdbDhmG
+	 u6b4kJw9pUbgVc5RspMxATfTUoI5Q2JEsepYkQLejk3jxrbGoMZMcYSDNNW8xflCTD
+	 vZ+snsINadrQw==
 From: Mario Limonciello <superm1@kernel.org>
 To: Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
@@ -61,9 +61,9 @@ Cc: Mario Limonciello <mario.limonciello@amd.com>,
 	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
 	linux-doc@vger.kernel.org (open list:DOCUMENTATION),
 	linux-pm@vger.kernel.org (open list:AMD PSTATE DRIVER)
-Subject: [PATCH v9 12/13] platform/x86/amd: hfi: Add debugfs support
-Date: Tue, 22 Apr 2025 20:46:30 -0500
-Message-ID: <20250423014631.3224338-13-superm1@kernel.org>
+Subject: [PATCH v9 13/13] x86/itmt: Add debugfs file to show core priorities
+Date: Tue, 22 Apr 2025 20:46:31 -0500
+Message-ID: <20250423014631.3224338-14-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250423014631.3224338-1-superm1@kernel.org>
 References: <20250423014631.3224338-1-superm1@kernel.org>
@@ -77,99 +77,70 @@ Content-Transfer-Encoding: 8bit
 
 From: Mario Limonciello <mario.limonciello@amd.com>
 
-Add a dump of the class and capabilities table to debugfs to assist
-with debugging scheduler issues.
+Multiple drivers can report priorities to ITMT. To aid in debugging
+any issues with the values reported by drivers introduce a debugfs
+file to read out the values.
 
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
-v9:
- * signed->unsigned
----
- drivers/platform/x86/amd/hfi/hfi.c | 35 ++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ arch/x86/kernel/itmt.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/drivers/platform/x86/amd/hfi/hfi.c b/drivers/platform/x86/amd/hfi/hfi.c
-index 22a5bf977daf5..0d6966f138bc6 100644
---- a/drivers/platform/x86/amd/hfi/hfi.c
-+++ b/drivers/platform/x86/amd/hfi/hfi.c
-@@ -13,6 +13,7 @@
- #include <linux/acpi.h>
- #include <linux/cpu.h>
- #include <linux/cpumask.h>
-+#include <linux/debugfs.h>
- #include <linux/gfp.h>
- #include <linux/init.h>
- #include <linux/io.h>
-@@ -73,6 +74,8 @@ struct amd_hfi_data {
- 	void __iomem		*pcc_comm_addr;
- 	struct acpi_subtable_header	*pcct_entry;
- 	struct amd_shmem_info	*shmem;
-+
-+	struct dentry *dbgfs_dir;
- };
- 
- /**
-@@ -237,6 +240,13 @@ static int amd_hfi_alloc_class_data(struct platform_device *pdev)
- 	return 0;
+diff --git a/arch/x86/kernel/itmt.c b/arch/x86/kernel/itmt.c
+index 9cea1fc36c18f..243a769fdd97b 100644
+--- a/arch/x86/kernel/itmt.c
++++ b/arch/x86/kernel/itmt.c
+@@ -59,6 +59,18 @@ static ssize_t sched_itmt_enabled_write(struct file *filp,
+ 	return result;
  }
  
-+static void amd_hfi_remove(struct platform_device *pdev)
++static int sched_core_priority_show(struct seq_file *s, void *unused)
 +{
-+	struct amd_hfi_data *dev = platform_get_drvdata(pdev);
++	int cpu;
 +
-+	debugfs_remove_recursive(dev->dbgfs_dir);
-+}
-+
- static int amd_set_hfi_ipcc_score(struct amd_hfi_cpuinfo *hfi_cpuinfo, int cpu)
- {
- 	for (int i = 0; i < hfi_cpuinfo->nr_class; i++)
-@@ -392,6 +402,26 @@ static int amd_hfi_metadata_parser(struct platform_device *pdev,
- 	return ret;
- }
- 
-+static int class_capabilities_show(struct seq_file *s, void *unused)
-+{
-+	u32 cpu, idx;
-+
-+	seq_puts(s, "CPU #\tWLC\tPerf\tEff\n");
-+	for_each_possible_cpu(cpu) {
-+		struct amd_hfi_cpuinfo *hfi_cpuinfo = per_cpu_ptr(&amd_hfi_cpuinfo, cpu);
-+
-+		seq_printf(s, "%d", cpu);
-+		for (idx = 0; idx < hfi_cpuinfo->nr_class; idx++) {
-+			seq_printf(s, "\t%u\t%u\t%u\n", idx,
-+				   hfi_cpuinfo->amd_hfi_classes[idx].perf,
-+				   hfi_cpuinfo->amd_hfi_classes[idx].eff);
-+		}
-+	}
++	seq_puts(s, "CPU #\tPriority\n");
++	for_each_possible_cpu(cpu)
++		seq_printf(s, "%d\t%d\n", cpu, arch_asym_cpu_priority(cpu));
 +
 +	return 0;
 +}
-+DEFINE_SHOW_ATTRIBUTE(class_capabilities);
++DEFINE_SHOW_ATTRIBUTE(sched_core_priority);
 +
- static int amd_hfi_pm_resume(struct device *dev)
- {
- 	int ret, cpu;
-@@ -468,6 +498,10 @@ static int amd_hfi_probe(struct platform_device *pdev)
- 
- 	schedule_work(&sched_amd_hfi_itmt_work);
- 
-+	amd_hfi_data->dbgfs_dir = debugfs_create_dir("amd_hfi", arch_debugfs_dir);
-+	debugfs_create_file("class_capabilities", 0644, amd_hfi_data->dbgfs_dir, pdev,
-+			    &class_capabilities_fops);
-+
- 	return 0;
- }
- 
-@@ -479,6 +513,7 @@ static struct platform_driver amd_hfi_driver = {
- 		.acpi_match_table = ACPI_PTR(amd_hfi_platform_match),
- 	},
- 	.probe = amd_hfi_probe,
-+	.remove = amd_hfi_remove,
+ static const struct file_operations dfs_sched_itmt_fops = {
+ 	.read =         debugfs_read_file_bool,
+ 	.write =        sched_itmt_enabled_write,
+@@ -67,6 +79,7 @@ static const struct file_operations dfs_sched_itmt_fops = {
  };
  
- static int __init amd_hfi_init(void)
+ static struct dentry *dfs_sched_itmt;
++static struct dentry *dfs_sched_core_prio;
+ 
+ /**
+  * sched_set_itmt_support() - Indicate platform supports ITMT
+@@ -102,6 +115,14 @@ int sched_set_itmt_support(void)
+ 		return -ENOMEM;
+ 	}
+ 
++	dfs_sched_core_prio = debugfs_create_file("sched_core_priority", 0644,
++						  arch_debugfs_dir, NULL,
++						  &sched_core_priority_fops);
++	if (IS_ERR_OR_NULL(dfs_sched_core_prio)) {
++		dfs_sched_core_prio = NULL;
++		return -ENOMEM;
++	}
++
+ 	sched_itmt_capable = true;
+ 
+ 	sysctl_sched_itmt_enabled = 1;
+@@ -133,6 +154,8 @@ void sched_clear_itmt_support(void)
+ 
+ 	debugfs_remove(dfs_sched_itmt);
+ 	dfs_sched_itmt = NULL;
++	debugfs_remove(dfs_sched_core_prio);
++	dfs_sched_core_prio = NULL;
+ 
+ 	if (sysctl_sched_itmt_enabled) {
+ 		/* disable sched_itmt if we are no longer ITMT capable */
 -- 
 2.43.0
 
