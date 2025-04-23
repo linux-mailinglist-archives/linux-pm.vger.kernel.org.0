@@ -1,212 +1,135 @@
-Return-Path: <linux-pm+bounces-26022-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26023-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2453DA9877C
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 12:34:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD6E0A987A4
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 12:38:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93B2E7A8838
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 10:32:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D282C18906A5
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Apr 2025 10:38:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34CED26D4D4;
-	Wed, 23 Apr 2025 10:31:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67B7526A0D6;
+	Wed, 23 Apr 2025 10:38:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="GYQmfbjR"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NZlBfTS0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1AB8275844
-	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 10:31:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7275226C398
+	for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 10:37:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745404292; cv=none; b=M+7pLfm7EUf7DLDEudhhePtIZ6RtV06PYTk1EE+ZVsnWgzR+nMtBcFZvkdY9GBdx62bPieGtmmweYmekJKzH8PZSIBm3ZPNerko2/xxs/TA1RQefv9LDtOWoQMheNNIeg4ytv/4szCO7I0oDKskLAtY4QmNH1QR7bmu5zwuadqg=
+	t=1745404681; cv=none; b=ajnDRsVGjspHOTA87CJ3+r1wqNyBstGT4L50ZCHewRXZPhnGbBQxl8zLP3+MQSPp/LXA2EV/WwUndtWTEORHLFLmLl+DWK8tabLtr/rnyIT2o58sn7Ov34twBf74OfFlXaxfB2FX8KKXR+FEhTbFunmBDuSJNDAqM8rynPNo/TY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745404292; c=relaxed/simple;
-	bh=2MOPD1NtJjgVsrkU9nVN0H7gbMjIGR+VdbWECswCz20=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cU267N7qyyzYBLKevRUiYbxohHpGvnF+forb9+s7SQhQm2ywQfxq26ArPN8fjeUth2s8TwNWL0PjzI7UoWh5wqqR00sxg4n8yfpDHAxEfk0pxJdasoGealWk5vA006OApGzS6EbqzdfhVRu44KubM0xhs23tbeuXtmSYgs7yo44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=GYQmfbjR; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1745404287;
-	bh=2MOPD1NtJjgVsrkU9nVN0H7gbMjIGR+VdbWECswCz20=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=GYQmfbjR6TCGVUI2c8dGCF8FIN7PRJn1iy+yUvHmasoaJbM7hUjT7M+9QxCd4JyTy
-	 NiF2tLE0R7BILbzvHWa/L2uNu30ZiMdF613BgqCqQQdjomjIpoSAyWPj+Yd9P28mp2
-	 1gyXwpUoQz/Khb3EVDPOkhYd4EKlGDXpkYSt5O0kGa3pXAIXNJl/RWDS47VVLHR6rw
-	 ITA9mkU4QjJdhQagldE/OklTC5T2gs+ZQTQdpcYELSfCw9maLHKhksH34ShfU612at
-	 WjHDDhFazs09Rhkmm047l/bQ4D5mz+fWZsSyTl9eA7ac/znxZWKVYYsezb8jIkQZye
-	 3K0gMPSdc9HDQ==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 8F57417E0C10;
-	Wed, 23 Apr 2025 12:31:27 +0200 (CEST)
-Message-ID: <2ddff946-9c4c-4fb5-a8e7-b2fc413ae281@collabora.com>
-Date: Wed, 23 Apr 2025 12:31:26 +0200
+	s=arc-20240116; t=1745404681; c=relaxed/simple;
+	bh=H4yB2VqdHW5Mx37gnKyyS6SHLyLBKUckwyP7mf95yYE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D7MOElLGwU+2HoocaVz6E7NG3GnGd2uZtydKboN0qbltb4lN/j6QhbaYTOfYW9waUUtbeHAJk94HtPWmJCW5gV0OPiCJug34CYpSjTSjETYxuA5fZtu6x8xdKNfyjN3qIyS/gL1GvTFzVXGb9P/dt4Gj9l/McAF6xQ6xNLTR4Yg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NZlBfTS0; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Wed, 23 Apr 2025 06:37:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1745404666;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=h1X705brQVpSptGLrhJRMpaEPjNIn6bUE+IhmWlVE2o=;
+	b=NZlBfTS0IpoVJRDdMvVxxcB/Lpwrab9NO5G3uKZDmuyi8mzIO86I/PUXd88XgzTuZn49ST
+	gLriQ//WfXAV/lq3WsPhVF0GKJr+Bfeylib4vQvVxRXxFayAYBivCT7jC8OAWmtGBUIn4/
+	DcUPlLzvzWL7UaMq94B3xWZYQRWCxS4=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org, 
+	"Md. Haris Iqbal" <haris.iqbal@ionos.com>, Jack Wang <jinpu.wang@ionos.com>, Coly Li <colyli@kernel.org>, 
+	Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>, Chris Mason <clm@fb.com>, 
+	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>, 
+	Andreas Gruenbacher <agruenba@redhat.com>, Carlos Maiolino <cem@kernel.org>, 
+	Damien Le Moal <dlemoal@kernel.org>, Naohiro Aota <naohiro.aota@wdc.com>, 
+	Johannes Thumshirn <jth@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Pavel Machek <pavel@kernel.org>, linux-bcache@vger.kernel.org, dm-devel@lists.linux.dev, 
+	linux-btrfs@vger.kernel.org, gfs2@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
+	linux-xfs@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: add more bio helper
+Message-ID: <sl4oibdxpjygqfpy6llq237zuckz7ym4fmzcfvxn2raofr37a5@hvevbcgm5trn>
+References: <20250422142628.1553523-1-hch@lst.de>
+ <jetduw7zshrmp4gl7zfpwqjweycwesxiod7xvtnxqwqekgtvdf@idwnvfzvhgik>
+ <20250423093621.GA2578@lst.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dts: arm64: mediatek: mt8188: add more thermal trip
- points
-To: Nicolas Pitre <npitre@baylibre.com>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org,
- linux-mediatek@lists.infradead.org
-References: <s2sp5o57-o534-qso0-2733-o0prs6028por@onlyvoer.pbz>
- <dcc62684-0579-4d03-a430-d4a276153ca1@collabora.com>
- <85710oso-p1pp-647q-498p-23583s7nnn45@onlyvoer.pbz>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <85710oso-p1pp-647q-498p-23583s7nnn45@onlyvoer.pbz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250423093621.GA2578@lst.de>
+X-Migadu-Flow: FLOW_OUT
 
-Il 13/03/25 19:30, Nicolas Pitre ha scritto:
-> On Thu, 13 Mar 2025, AngeloGioacchino Del Regno wrote:
+On Wed, Apr 23, 2025 at 11:36:21AM +0200, Christoph Hellwig wrote:
+> On Tue, Apr 22, 2025 at 10:47:03AM -0400, Kent Overstreet wrote:
+> > On Tue, Apr 22, 2025 at 04:26:01PM +0200, Christoph Hellwig wrote:
+> > > Hi all,
+> > > 
+> > > this series adds more block layer helpers to remove boilerplate code when
+> > > adding memory to a bio or to even do the entire synchronous I/O.
+> > > 
+> > > The main aim is to avoid having to convert to a struct page in the caller
+> > > when adding kernel direct mapping or vmalloc memory.
+> > 
+> > have you seen (bch,bch2)_bio_map?
 > 
->> Il 13/03/25 16:43, Nicolas Pitre ha scritto:
->>> Provide the "switch on" thermal trip point to be used by the power
->>> allocator governor.
->>>
->>
->> As far as I know, the power allocation is not supposed to be
->> SoC-global, as that does play with sustainable power values...
->>
->> Sustainable power depends on multiple factors - besides the power that
->> is actually sustainable by intrinsic properties of the silicon, this
->> mostly depends on the PCB that it is soldered to.
->>
->> Translated, this depends on the heat capacity of the copper layer(s)
->> and of the eventual additional passive heatsink, which is a physical
->> property relative to a board and not to the SoC by itself.
->>
->> ....which means.... that those nodes shall go to board specific devicetrees
->> and
->> not to the SoC devicetree :-)
->>
->> Unless I'm wrong - but if I am, please explain why :-)
+> Now I have.
 > 
-> I agree with everything you wrote above.
+> > 
+> > it's a nicer interface than your bio_add_vmalloc(), and also handles the
+> > if (is_vmalloc_addr())
 > 
-> But this patch isn't about power allocation. This is about temperature
-> thresholds. And temperature tolerance is rather SOC specific, no?
+> Can you explain how it's nicer?
 > 
+> For use with non-vmalloc memory it does a lot of extra work
+> and generates less optimal bios using more vecs than required, but
+> maybe that wasn't the point?
 > 
+> For vmalloc it might also build suboptimal bios when using large vmalloc
+> mappings due to the lack of merging, but I don't think anyone does I/O to
+> those yet.
+> 
+> It lacks a API description and it or the callers miss handling for VIVT
+> caches, maybe because of that.
+> 
+> Besides optimizing the direct map case that always needs just one vec
+> that is also one of the reasons why I want the callers to know about
+> vmalloc vs non-vmalloc memory.
 
-Sorry for letting this slip through the cracks - that wasn't intentional.
+Sure, that code predates multipage bvecs - the interface is what I was
+referring to.
 
-Agreed that temperature tolerance is SoC specific, but that's taken care of with
-the other trip points, so that's not a concern here.
+> It also don't support bio chaining or error handling and requires a
+> single bio that is guaranteed to fit the required number of vectors.
 
-On the other hand, it's guaranteed that the SoC can "keep crunching numbers" at
-full power when the CPUs are at 68-70°C without entering any actual danger zone,
-temperature-speaking.
+Why would bio chaining ever be required? The caller allocates both the
+buf and the bio, I've never seen an instance where you'd want that; just
+allocate a bio with the correct number of vecs, which your
+bio_vmalloc_max_vecs() helps with.
 
-Remember that a machine may be designed to keep it at even 70°C for a prolonged
-amount of time - depending on the cooling solution.
+> OTOH for callers where that applies it would be nice to have a
+> helper that loops over bio_add_vmalloc.  I actually had one initially,
+> but given that I only found two obvious users I dropped it for now.
+> If we get more we can add one.
 
-If you're doing this for a specific board, I'm happy to accept the addition to
-the specific board (file) that you're doing this for.
+The "abstract over vmalloc and normal physically contigious allocations"
+bit that bch2_bio_map() does is the important part.
 
-Cheers,
-Angelo
+It's not uncommon to prefer physically contiguous allocations but have a
+vmalloc fallback; bcachefs does, and  xfs does with a clever "try the
+big allocation if it's cheap, fall back to vmalloc to avoid waiting on
+compaction" that I might steal.
 
->>> diff --git a/arch/arm64/boot/dts/mediatek/mt8188.dtsi
->>> b/arch/arm64/boot/dts/mediatek/mt8188.dtsi
->>> index 338120930b..262eab8fd3 100644
->>> --- a/arch/arm64/boot/dts/mediatek/mt8188.dtsi
->>> +++ b/arch/arm64/boot/dts/mediatek/mt8188.dtsi
->>> @@ -472,6 +472,12 @@ cpu-little0-thermal {
->>>       thermal-sensors = <&lvts_mcu MT8188_MCU_LITTLE_CPU0>;
->>>    
->>>    			trips {
->>> +				cpu_little0_switch_on: trip-switch-on {
->>> +					temperature = <68000>;
->>> +					hysteresis = <2000>;
->>> +					type = "passive";
->>> +				};
->>> +
->>>        cpu_little0_alert0: trip-alert0 {
->>>         temperature = <85000>;
->>>         hysteresis = <2000>;
->>> @@ -510,6 +516,12 @@ cpu-little1-thermal {
->>>       thermal-sensors = <&lvts_mcu MT8188_MCU_LITTLE_CPU1>;
->>>    
->>>    			trips {
->>> +				cpu_little1_switch_on: trip-switch-on {
->>> +					temperature = <68000>;
->>> +					hysteresis = <2000>;
->>> +					type = "passive";
->>> +				};
->>> +
->>>        cpu_little1_alert0: trip-alert0 {
->>>         temperature = <85000>;
->>>         hysteresis = <2000>;
->>> @@ -548,6 +560,12 @@ cpu-little2-thermal {
->>>       thermal-sensors = <&lvts_mcu MT8188_MCU_LITTLE_CPU2>;
->>>    
->>>    			trips {
->>> +				cpu_little2_switch_on: trip-switch-on {
->>> +					temperature = <68000>;
->>> +					hysteresis = <2000>;
->>> +					type = "passive";
->>> +				};
->>> +
->>>        cpu_little2_alert0: trip-alert0 {
->>>         temperature = <85000>;
->>>         hysteresis = <2000>;
->>> @@ -586,6 +604,12 @@ cpu-little3-thermal {
->>>       thermal-sensors = <&lvts_mcu MT8188_MCU_LITTLE_CPU3>;
->>>    
->>>    			trips {
->>> +				cpu_little3_switch_on: trip-switch-on {
->>> +					temperature = <68000>;
->>> +					hysteresis = <2000>;
->>> +					type = "passive";
->>> +				};
->>> +
->>>        cpu_little3_alert0: trip-alert0 {
->>>         temperature = <85000>;
->>>         hysteresis = <2000>;
->>> @@ -624,6 +648,12 @@ cpu-big0-thermal {
->>>       thermal-sensors = <&lvts_mcu MT8188_MCU_BIG_CPU0>;
->>>    
->>>    			trips {
->>> +				cpu_big0_switch_on: trip-switch-on {
->>> +					temperature = <68000>;
->>> +					hysteresis = <2000>;
->>> +					type = "passive";
->>> +				};
->>> +
->>>        cpu_big0_alert0: trip-alert0 {
->>>         temperature = <85000>;
->>>         hysteresis = <2000>;
->>> @@ -658,6 +688,12 @@ cpu-big1-thermal {
->>>       thermal-sensors = <&lvts_mcu MT8188_MCU_BIG_CPU1>;
->>>    
->>>    			trips {
->>> +				cpu_big1_switch_on: trip-switch-on {
->>> +					temperature = <68000>;
->>> +					hysteresis = <2000>;
->>> +					type = "passive";
->>> +				};
->>> +
->>>        cpu_big1_alert0: trip-alert0 {
->>>         temperature = <85000>;
->>>         hysteresis = <2000>;
->>
->>
->>
-
+is_vmalloc_addr() is also cheap, it's just a pointer comparison (and it
+really should be changed to a static inline).
 
