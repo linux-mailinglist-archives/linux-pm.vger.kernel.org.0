@@ -1,135 +1,240 @@
-Return-Path: <linux-pm+bounces-26090-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26091-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98E2BA9A230
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 08:32:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7148FA9A25B
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 08:35:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 779357A7ECC
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 06:30:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA20817F97C
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 06:33:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A43591F3FC8;
-	Thu, 24 Apr 2025 06:29:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B0381DE2BF;
+	Thu, 24 Apr 2025 06:33:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hxPM+mhx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d9Tmj1Ln"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 939EC1F3BBC
-	for <linux-pm@vger.kernel.org>; Thu, 24 Apr 2025 06:29:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C0E19CCEA;
+	Thu, 24 Apr 2025 06:33:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745476155; cv=none; b=Vm0jjpFCZdW+gIpi8gUtJK0KkSu+8ZmAyIkUSGrIe7jcwZEvSE11POvUjX7Y1o9WWE9+3pzUcd+NHVgYNhHk2vTUlT7sR1XhZILFkNT3lGGM0YkuQs5rVA1ttxxKKLG1nRgUwKAu+iDuycpq+U8uDteIVuURjswScPOih5/3ifM=
+	t=1745476434; cv=none; b=PckO/jjVo20UONbbDxSVPbxaLHBocQtGQx+hUlTZqKsIUbSte3UoZ65IzaLVDlkoMBcPki6QDUIlhU/Wx3R5DfU02kP7NyJBJ220fScJ9CxiSXHHs56FzvhzZ+q3WXZ7L9CmEle+3HPtQkFQry6JvfW9cZnPwbgnUwdz22RCkvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745476155; c=relaxed/simple;
-	bh=VzNBfcDTVF6ejyO5VLYxI2spzN4W68Bo1JJlXy3O86o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZFUsqcU+hMxccAtYoBxXVK2N+gpRKhm9wzypsLrgWvScisAfJ5HxUc/AId9zNS+ZBy8L3fUC5hpvrHFHBS7Qq+luBiovFrG/0DPo/ZmOuifDlMAIM8WA/EvBW/YRckDsdCj5VyjTbfVU9WMDdzsAgTn+0Zv+MdB186UhiUzcNQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hxPM+mhx; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-22401f4d35aso7518715ad.2
-        for <linux-pm@vger.kernel.org>; Wed, 23 Apr 2025 23:29:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1745476153; x=1746080953; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=prlT14wP1pGTt4ARZ3fH6f2MCxYwQQ9VDBvp9E5OskU=;
-        b=hxPM+mhx3XkalLJEerW2xTB7vY+sMv6DcvKmOyiQV8q1BBdn3WIZ0M7Jp8FVEHF/Mb
-         sYGyswUSFMEMLgask5auSKrRRI+DQZlXdvco3jzJv7jomMYcb5XagCPl00MHLugwAlMz
-         q3lHIBAbGCo/868bZ+AaAxNcJaq9HcOuOn9UlRV0HFVtWw8PwdcRqCfPVGOv6q4o31jr
-         xQmCIASFhNhV0RVnZZ3JKgGZDw9R6jiOm3ItxvHEQfd8URmY2KrQaNceakgbu9X38Q4k
-         2tYzRjJluIDpBt26i5Gixx+Xatyd2lIojtM+rJoY/+b/mhUk8llJYvYdiOamnl4TT19E
-         VwCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745476153; x=1746080953;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=prlT14wP1pGTt4ARZ3fH6f2MCxYwQQ9VDBvp9E5OskU=;
-        b=aqgCQOXP0YxDAFRE+pLnTYirU2U64XLd+4G4Ae6T5CmAKcxmcrz2cjBCyT6f7O267W
-         83PnzYA2jK4k4wKbn/DinL2g7pdtCAlPm4Kj81fZMfvrZuAgfqJHJjYM3Te+eZ3YUa3Z
-         rS1t/QDwlgQ3w32G5ISG70QZuhLX/DrVvJScJdHy0dtudTS93mqS2JpiVokjFrTSonWk
-         ZO99yPY62xfBtK3GS5zBheRv0rx8dZAGZc+m4+6gzPGpSIkrc6fDHpHMnhW1/cabSyiG
-         QSEot5Poyr1SG5TXVw0ujNgFu/GbgeDMOm1HnNn7kxlKq6SoWnd1+9mROjjshNcs0CrN
-         3hEg==
-X-Forwarded-Encrypted: i=1; AJvYcCUCU8iaQgYBATb9g65afLZ6qDi3VHPd6AjZTxyiSNuTeT6e1BG0zfpIYN512FASP7OpPaJzsGTY5w==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywh5n9Yym5L5p8XJ+iQRbPexE6F1XvdfoRo5MpeJN8z06IZkdVX
-	jw+Jm4kWo0YBMatt+LIhrdCC/Z5VI9oubdcyYRxVs5BqwhrqvCsqq7PPp5moQmo=
-X-Gm-Gg: ASbGncvHDT7tYW10TWVbAPwv32Vlh3nOairK2/igR+mRMZ+gDKjo5FZvoOchr3ViGOE
-	Nd12a4dn5yriKtY7xPnksIp1Yjeb78rFPradrlMAeLk6OuXKObcST1Rpu1ZsfD99iqv/R5Hpr6F
-	bicwL91cUjB5iZkQ5XLBGc00ahLJm5VrwBW8P5qEvnyRE2WldRyrQeEQeBrfAoCF4y3Pz6bH2fW
-	IeCnLoHYz0DuI/gS47Be339XIc51Jm/yPSZsalu79X2wA3cQeNBHwc0QNu2sz9ZEtedV59QRiUF
-	j5au/3EeuIsyf/RaaZ5GBYFCIgnFGqdNzeLNkJPUcQ==
-X-Google-Smtp-Source: AGHT+IEzqMdZbqFLHMFvtB332RXvrr8S6rMpD3KuOB1cS9hqVDk7lUxe6pCjWGcu6CgYu10Wj15uvg==
-X-Received: by 2002:a17:902:e883:b0:226:38ff:1d6a with SMTP id d9443c01a7336-22db3baf373mr16890825ad.7.1745476152853;
-        Wed, 23 Apr 2025 23:29:12 -0700 (PDT)
-Received: from localhost ([122.172.83.32])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22db4d76c22sm5346605ad.24.2025.04.23.23.29.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Apr 2025 23:29:12 -0700 (PDT)
-Date: Thu, 24 Apr 2025 11:59:10 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Danilo Krummrich <dakr@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-	rust-for-linux@vger.kernel.org,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
-	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
-	Yury Norov <yury.norov@gmail.com>, Burak Emir <bqe@google.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Russell King <linux@armlinux.org.uk>, linux-clk@vger.kernel.org,
-	Michael Turquette <mturquette@baylibre.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V11 13/15] rust: cpufreq: Extend abstractions for driver
- registration
-Message-ID: <20250424062910.6zk7amxq4gjxtw66@vireshk-i7>
-References: <cover.1745218975.git.viresh.kumar@linaro.org>
- <a14f6927488b5c7d15930c37a3069f46a5c888a2.1745218976.git.viresh.kumar@linaro.org>
- <6fc3e178-60f9-4b0f-9c56-6d983e4d1eed@kernel.org>
+	s=arc-20240116; t=1745476434; c=relaxed/simple;
+	bh=dcxOn/nuTpss+vf24oXBlr34cv3+AgMg/89LV6ad5rM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TguzyjdlRYpyypXyh4QUvrvtNBCfYKkjtbEMK/0nzZUX5u513PJQOkTmS4FuqpjpqMMLcQWvVOAiN5DmhvKBqoB1SXzIwEj1xoXcVVYQzA42EdGavwq3N894EfUsXKQ2ctQa7fwbdwz2vPtLt4uubZNIwIJLHV/KQady6rYldR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d9Tmj1Ln; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745476432; x=1777012432;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dcxOn/nuTpss+vf24oXBlr34cv3+AgMg/89LV6ad5rM=;
+  b=d9Tmj1LnQP9hx66yDS6p8glM4v/kq94XcF1sxC/aAvR91xyy4tJ+J2QP
+   qpEVmOZKrirDlBd0Za96P28j8Q4H2kLk2chbF+PwbPt3u/j5Il0yPnUte
+   WfSjkje9MkPX46sLkjidfG9wEgPo/kJ/aThqvgdRR9RLzQlTQBeH/3iXM
+   Ll7egNGKwyjLOAXGECBHUTgJExXBYpJK3QeEaLcWtg+/hvEmu0yx2a55p
+   yYy1g6OkFMA58JQznGkzpwwwrPmv7ZyHHyosO9TYGQT0/AEWSvVVpMknQ
+   xGZZ1ZeXi66cRiJa2PAsxZXlV0TaYHZDkRpephhm1uYf/1j72MBA6MMKO
+   w==;
+X-CSE-ConnectionGUID: uh33JJM0TIKbNwp+P2uWIQ==
+X-CSE-MsgGUID: 5cQyryPySRKKPU1udgZxkQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11412"; a="47226706"
+X-IronPort-AV: E=Sophos;i="6.15,235,1739865600"; 
+   d="scan'208";a="47226706"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 23:33:51 -0700
+X-CSE-ConnectionGUID: l3lwgHW4RvWGJqWYsXT+Ow==
+X-CSE-MsgGUID: x4fuAgz/TQeaZNeRxG6fQQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,235,1739865600"; 
+   d="scan'208";a="163563116"
+Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.245.128]) ([10.124.245.128])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 23:33:39 -0700
+Message-ID: <7c44da88-72bb-4d1f-9f38-bf0e7e79b7a0@linux.intel.com>
+Date: Thu, 24 Apr 2025 14:33:35 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6fc3e178-60f9-4b0f-9c56-6d983e4d1eed@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 12/34] x86/msr: Remove pmu_msr_{read,write}()
+To: "Xin Li (Intel)" <xin@zytor.com>, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+ linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+ xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org,
+ jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org,
+ namhyung@kernel.org, mark.rutland@arm.com,
+ alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
+ adrian.hunter@intel.com, kan.liang@linux.intel.com, wei.liu@kernel.org,
+ ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+ tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
+ seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
+ kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com
+References: <20250422082216.1954310-1-xin@zytor.com>
+ <20250422082216.1954310-13-xin@zytor.com>
+Content-Language: en-US
+From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
+In-Reply-To: <20250422082216.1954310-13-xin@zytor.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 23-04-25, 14:08, Danilo Krummrich wrote:
-> On 4/21/25 9:22 AM, Viresh Kumar wrote:
-> >
-> > +    /// Same as [`Registration::new`], but does not return a [`Registration`] instance.
-> > +    ///
-> > +    /// Instead the [`Registration`] is owned by [`Devres`] and will be revoked / dropped, once the
-> > +    /// device is detached.
-> > +    pub fn new_foreign_owned(dev: &Device) -> Result<()> {
-> > +        Devres::new_foreign_owned(dev, Self::new()?, GFP_KERNEL)
-> > +    }
-> 
-> Btw. if you take it for v6.16-rc1, expect a conflict with [1].
-> 
-> [1] https://web.git.kernel.org/pub/scm/linux/kernel/git/driver-core/driver-core.git/commit/?h=driver-core-next&id=f720efda2db5e609b32100c25d9cf383f082d945
 
-Thanks for pointing this out. I believe this branch is immutable and
-so I can rebase over f720efda and send my pull request after yours is
-merged ?
+On 4/22/2025 4:21 PM, Xin Li (Intel) wrote:
+> As pmu_msr_{read,write}() are now wrappers of pmu_msr_chk_emulated(),
+> remove them and use pmu_msr_chk_emulated() directly.
+>
+> While at it, convert the data type of MSR index to u32 in functions
+> called in pmu_msr_chk_emulated().
+>
+> Suggested-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> Signed-off-by: Xin Li (Intel) <xin@zytor.com>
+> ---
+>  arch/x86/xen/enlighten_pv.c | 17 ++++++++++-------
+>  arch/x86/xen/pmu.c          | 24 ++++--------------------
+>  arch/x86/xen/xen-ops.h      |  3 +--
+>  3 files changed, 15 insertions(+), 29 deletions(-)
+>
+> diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
+> index 1418758b57ff..b5a8bceb5f56 100644
+> --- a/arch/x86/xen/enlighten_pv.c
+> +++ b/arch/x86/xen/enlighten_pv.c
+> @@ -1089,8 +1089,9 @@ static void xen_write_cr4(unsigned long cr4)
+>  static u64 xen_do_read_msr(unsigned int msr, int *err)
+>  {
+>  	u64 val = 0;	/* Avoid uninitialized value for safe variant. */
+> +	bool emulated;
+>  
+> -	if (pmu_msr_read(msr, &val, err))
+> +	if (pmu_msr_chk_emulated(msr, &val, true, &emulated) && emulated)
 
--- 
-viresh
+ah, here it is.
+
+Could we merge this patch and previous patch into a single patch? It's
+unnecessary to just modify the pmu_msr_read()/pmu_msr_write() in previous
+patch and delete them immediately. It just wastes the effort.
+
+
+>  		return val;
+>  
+>  	if (err)
+> @@ -1133,6 +1134,7 @@ static void xen_do_write_msr(unsigned int msr, unsigned int low,
+>  			     unsigned int high, int *err)
+>  {
+>  	u64 val;
+> +	bool emulated;
+>  
+>  	switch (msr) {
+>  	case MSR_FS_BASE:
+> @@ -1162,12 +1164,13 @@ static void xen_do_write_msr(unsigned int msr, unsigned int low,
+>  	default:
+>  		val = (u64)high << 32 | low;
+>  
+> -		if (!pmu_msr_write(msr, val)) {
+> -			if (err)
+> -				*err = native_write_msr_safe(msr, low, high);
+> -			else
+> -				native_write_msr(msr, low, high);
+> -		}
+> +		if (pmu_msr_chk_emulated(msr, &val, false, &emulated) && emulated)
+> +			return;
+> +
+> +		if (err)
+> +			*err = native_write_msr_safe(msr, low, high);
+> +		else
+> +			native_write_msr(msr, low, high);
+>  	}
+>  }
+>  
+> diff --git a/arch/x86/xen/pmu.c b/arch/x86/xen/pmu.c
+> index 95caae97a394..afb02f43ee3f 100644
+> --- a/arch/x86/xen/pmu.c
+> +++ b/arch/x86/xen/pmu.c
+> @@ -128,7 +128,7 @@ static inline uint32_t get_fam15h_addr(u32 addr)
+>  	return addr;
+>  }
+>  
+> -static inline bool is_amd_pmu_msr(unsigned int msr)
+> +static bool is_amd_pmu_msr(u32 msr)
+>  {
+>  	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
+>  	    boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
+> @@ -194,8 +194,7 @@ static bool is_intel_pmu_msr(u32 msr_index, int *type, int *index)
+>  	}
+>  }
+>  
+> -static bool xen_intel_pmu_emulate(unsigned int msr, u64 *val, int type,
+> -				  int index, bool is_read)
+> +static bool xen_intel_pmu_emulate(u32 msr, u64 *val, int type, int index, bool is_read)
+>  {
+>  	uint64_t *reg = NULL;
+>  	struct xen_pmu_intel_ctxt *ctxt;
+> @@ -257,7 +256,7 @@ static bool xen_intel_pmu_emulate(unsigned int msr, u64 *val, int type,
+>  	return false;
+>  }
+>  
+> -static bool xen_amd_pmu_emulate(unsigned int msr, u64 *val, bool is_read)
+> +static bool xen_amd_pmu_emulate(u32 msr, u64 *val, bool is_read)
+>  {
+>  	uint64_t *reg = NULL;
+>  	int i, off = 0;
+> @@ -298,8 +297,7 @@ static bool xen_amd_pmu_emulate(unsigned int msr, u64 *val, bool is_read)
+>  	return false;
+>  }
+>  
+> -static bool pmu_msr_chk_emulated(unsigned int msr, uint64_t *val, bool is_read,
+> -				 bool *emul)
+> +bool pmu_msr_chk_emulated(u32 msr, u64 *val, bool is_read, bool *emul)
+>  {
+>  	int type, index = 0;
+>  
+> @@ -313,20 +311,6 @@ static bool pmu_msr_chk_emulated(unsigned int msr, uint64_t *val, bool is_read,
+>  	return true;
+>  }
+>  
+> -bool pmu_msr_read(u32 msr, u64 *val)
+> -{
+> -	bool emulated;
+> -
+> -	return pmu_msr_chk_emulated(msr, val, true, &emulated) && emulated;
+> -}
+> -
+> -bool pmu_msr_write(u32 msr, u64 val)
+> -{
+> -	bool emulated;
+> -
+> -	return pmu_msr_chk_emulated(msr, &val, false, &emulated) && emulated;
+> -}
+> -
+>  static u64 xen_amd_read_pmc(int counter)
+>  {
+>  	struct xen_pmu_amd_ctxt *ctxt;
+> diff --git a/arch/x86/xen/xen-ops.h b/arch/x86/xen/xen-ops.h
+> index a1875e10be31..fde9f9d7415f 100644
+> --- a/arch/x86/xen/xen-ops.h
+> +++ b/arch/x86/xen/xen-ops.h
+> @@ -271,8 +271,7 @@ void xen_pmu_finish(int cpu);
+>  static inline void xen_pmu_init(int cpu) {}
+>  static inline void xen_pmu_finish(int cpu) {}
+>  #endif
+> -bool pmu_msr_read(u32 msr, u64 *val);
+> -bool pmu_msr_write(u32 msr, u64 val);
+> +bool pmu_msr_chk_emulated(u32 msr, u64 *val, bool is_read, bool *emul);
+>  int pmu_apic_update(uint32_t reg);
+>  u64 xen_read_pmc(int counter);
+>  
 
