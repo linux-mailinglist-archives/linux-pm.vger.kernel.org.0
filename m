@@ -1,144 +1,131 @@
-Return-Path: <linux-pm+bounces-26121-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26122-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14A46A9ACB6
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 14:01:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74106A9AEB5
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 15:15:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 626F5442840
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 12:01:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC8081744F8
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 13:15:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E05A322C35B;
-	Thu, 24 Apr 2025 12:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="u9gRpvYC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A980022B59C;
+	Thu, 24 Apr 2025 13:15:24 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81CA822B588
-	for <linux-pm@vger.kernel.org>; Thu, 24 Apr 2025 12:01:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87F3B27C14A;
+	Thu, 24 Apr 2025 13:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745496101; cv=none; b=bvXlv3gpp/NjkipmAwDIajRgIQ8fv5pOHpWVnJ9V2K3Xmx9/cYks5hZIlOzeD15BXmTnS8sXb9S6Ag4WwuuDCtsrw7/4z4WbeTsShK27lLSFJFkSH9X6Ge+oG90drV3o69IFNqx1gN6GaANv0tD/vwjK/pFGbqBuJZZ4Nt4Gq/o=
+	t=1745500524; cv=none; b=smGU6lWMjjMd5Q5ygGELCdz5ocKrikgUWtZj2Ygnci7a9pia5Ym9qhaBco+2x0a0ZrY9S5gTNQ7/dTSro978wQaqnG6n4rF3x8g9+MDtLqYSePpTATQN+EO4cI+Y/mfz36eqyFnmPFugjTqn2pkgSSE/JBi+UL6M47T/mfG94Xw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745496101; c=relaxed/simple;
-	bh=RDRKZeNKN55umrzQ5oGHsI+0KYc+ooDByqGf/CbRS4M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lc1zBcB2D1DOIdzlnDPHK2wCBPMUXAvQNF/oQedRq+yXTxSUh7QSAYSJXfI0TveHvTh7sPlTfXIMBAevijd4COV66Nc71f8yQCu1opGGT4aATxAFlnUfWyjbo0nWI5ELHjnQvMaKTx9hac93WU8Q45caJEO13jFkoyEJuPzpsA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=u9gRpvYC; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Thu, 24 Apr 2025 08:01:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1745496087;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=T2MMeEmusMY/E/i/SQKbyFaL7BU6CcGYmFZRFD2drdA=;
-	b=u9gRpvYCA7IkAb0B4poNcSjWcfnEIwKuPsuUltPGgb8dOqhtvOFUuqTpBE1musH7/BVP9b
-	38vbULDjl6NCX/pmhSnebe2rg3ejQKWdffXIWBn1CsORMSUQcA3dgQXk9yIE8/M4BAoo1k
-	1DBuUEL/zkkYq7EeqOTzQe9EbZUJZTQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org, 
-	"Md. Haris Iqbal" <haris.iqbal@ionos.com>, Jack Wang <jinpu.wang@ionos.com>, Coly Li <colyli@kernel.org>, 
-	Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>, Chris Mason <clm@fb.com>, 
-	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>, 
-	Andreas Gruenbacher <agruenba@redhat.com>, Carlos Maiolino <cem@kernel.org>, 
-	Damien Le Moal <dlemoal@kernel.org>, Naohiro Aota <naohiro.aota@wdc.com>, 
-	Johannes Thumshirn <jth@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, linux-bcache@vger.kernel.org, dm-devel@lists.linux.dev, 
-	linux-btrfs@vger.kernel.org, gfs2@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
-	linux-xfs@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: add more bio helper
-Message-ID: <anc2qstnukiwtskc4pd3kqajfswm3dzljxwa3awrxjs7mzppoc@nziz3h4ilqpd>
-References: <20250422142628.1553523-1-hch@lst.de>
- <jetduw7zshrmp4gl7zfpwqjweycwesxiod7xvtnxqwqekgtvdf@idwnvfzvhgik>
- <20250423093621.GA2578@lst.de>
- <sl4oibdxpjygqfpy6llq237zuckz7ym4fmzcfvxn2raofr37a5@hvevbcgm5trn>
- <20250423160733.GA656@lst.de>
- <q53k4x5nshvr2zatrgyhygxouv7ijyepe6cj2pfooemi6gbu4y@lpxxcvozazzu>
- <20250424083740.GA24723@lst.de>
+	s=arc-20240116; t=1745500524; c=relaxed/simple;
+	bh=MNVkVSCEZTSB+cgGONYkHkO3xBVyotsiAWdk0ztyIq0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=KjembB90BrgzIJ65P/nqoRhMwI9M5Kovq1fFbrD+SJhr+zgkRAR2lrr+I2/7kF+zXw1zQOFIyGZqrHjzunneRb+PFVHVBlRI/0RgC9z9pjW3bwlLyp+P3BDG6HPNPEj52FMU5ZJhW9uP347F9oQGOqVa79swAmR/L8EqoO+mL74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4ZjxDq03xJzvWrP;
+	Thu, 24 Apr 2025 21:11:07 +0800 (CST)
+Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
+	by mail.maildlp.com (Postfix) with ESMTPS id A71DA140154;
+	Thu, 24 Apr 2025 21:15:16 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
+ (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 24 Apr
+ 2025 21:15:16 +0800
+Message-ID: <435855f8-7c92-4fc3-be07-8856772e729f@huawei.com>
+Date: Thu, 24 Apr 2025 21:15:15 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250424083740.GA24723@lst.de>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/6] cpufreq: acpi: Don't enable boost on policy exit
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar
+	<viresh.kumar@linaro.org>
+CC: <linux-pm@vger.kernel.org>, Vincent Guittot <vincent.guittot@linaro.org>,
+	Nicholas Chin <nic.c3.14@gmail.com>, "Rafael J. Wysocki"
+	<rafael.j.wysocki@intel.com>, <linux-kernel@vger.kernel.org>
+References: <cover.1745315548.git.viresh.kumar@linaro.org>
+ <7ce4ffb166beef83cf1bd703a41bf91622011585.1745315548.git.viresh.kumar@linaro.org>
+ <CAJZ5v0iCrQeKs=4S-x83Fgf-W4u=2JYLA5VmgKPaLCvYAkNpig@mail.gmail.com>
+ <20250424071503.2uhc4k3jxy7x5mo2@vireshk-i7>
+ <CAJZ5v0hLBE0vLvpw6k8E7KxiUGqXbH7wEZwFhEziJNYqfxJbyA@mail.gmail.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <CAJZ5v0hLBE0vLvpw6k8E7KxiUGqXbH7wEZwFhEziJNYqfxJbyA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemh100008.china.huawei.com (7.202.181.93)
 
-On Thu, Apr 24, 2025 at 10:37:40AM +0200, Christoph Hellwig wrote:
-> On Wed, Apr 23, 2025 at 02:02:11PM -0400, Kent Overstreet wrote:
-> > Allocating your own bio doesn't allow you to safely exceed the
-> > BIO_MAX_VECS limit - there's places in the io path that need to bounce,
-> > and they all use biosets.
+On 2025/4/24 19:26, Rafael J. Wysocki wrote:
+
+> On Thu, Apr 24, 2025 at 9:15 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>>
+>> On 23-04-25, 16:14, Rafael J. Wysocki wrote:
+>>> Even after commit 2b16c631832d, the code removed by this patch does a
+>>> useful thing.  Namely, it clears the boost-disable bit in the MSR so
+>>> that the offline CPU doesn't prevent online CPUs from getting the
+>>> boost (in case the boost settings change after it has been taken
+>>> offline).
+>>
+>> I didn't understand this part earlier (and even now). How does a CPU
+>> with boost-disabled, prevents others from boosting ? I have tried
+>> looking at git logs, and still don't understand it :(
 > 
-> Yes.  Another reason not to do it, which I don't want to anyway.
+> At the HW level, this is certainly possible.
 > 
-> But we do have a few places that do it like squashs which we need to
-> weed out.  And/or finally kill the bounce bufferingreal, which is long
-> overdue.
+> Say two (or more) cores are driven by the same VR.  Boost typically
+> (always?) requires a separate OPP with a higher voltage and this
+> applies to all cores sharing the VR, so if one of them says it doesn't
+> want that (which is what the bit in the boost-disable MSR effectively
+> means), they all won't get it.
+
+IIUC, this means that if one sets unboost to policy A, another core in
+policy B (but sharing the same VR with core in policy A) will not be able
+to achieve boost freq too. Then if policy A goes exit, the core in policy B
+will get back to boost freq (without patch 1). And then core in B will be
+unboosted again after core in A goes online/resume (because of patch 2).
+But in the entire process, the boost flag in policy B is always enabled.
+
+Please tell me I misunderstood because it looks really weird.😥
+
 > 
-> > That may be an issue even for non vmalloc bios, unless everything that
-> > bounces has been converted to bounce to a folio of the same order.
+> They arguably should belong to the same cpufreq policy, but this
+> information is often missing from the ACPI tables, sometimes on
+> purpose (for instance, the firmware may want to be in charge of the
+> frequency coordination between the cores).
 > 
-> Anything that actually hits the bounce buffering is going to
-> cause problems because it hasn't kept up with the evolution of
-> the block layer, and is basically not used for anything relevant.
-
-It's not just block/bounce.c that does bouncing, though.
-
-e.g. bcache has to bounce on a cache miss that will be written to the
-cache - we don't want to wait for the write to the backing device to
-complete before returning the read completion, and we can't write to the
-backing device with the original buffer if it was mapped to userspace.
-
-I'm pretty sure I've seen bouncing in dm and maybe md as well, but it's
-been years.
-
-> > > The problem with transparent vmalloc handling is that it's not possible.
-> > > The magic handling for virtually indexed caches can be hidden on the
-> > > submission side, but the completion side also needs to call
-> > > invalidate_kernel_vmap_range for reads.  Requiring the caller to know
-> > > they deal vmalloc is a way to at least keep that on the radar.
-> > 
-> > yeesh, that's a landmine.
-> > 
-> > having a separate bio_add_vmalloc as a hint is still a really bad
-> > "solution", unfortunately. And since this is something we don't have
-> > sanitizers or debug code for, and it only shows up on some archs -
-> > that's nasty.
+>> Also, IIUC this and the boost-enabling at init() only happens for one
+>> CPU in a policy, as init() and exit() are only called for the first
+>> and last CPU of a policy. So if a policy has multiple CPUs, we aren't
+>> touching boost states of other CPUs at init/exit.
 > 
-> Well, we can't do it in the block stack because that doesn't have the
-> vmalloc address available.  So the caller has to do it, and having a
-> very visible sign is the best we can do.  Yes, signs aren't the
-> best cure for landmines, but they are better than nothing.
-
-Given that only a few architectures need it, maybe sticking the vmalloc
-address in struct bio is something we should think about.
-
-Obviously not worth it if only 2-3 codepaths need it, but if vmalloc
-fallbacks become more common it's something to think about.
-
-> > > Not for a purely synchronous helper we could handle both, but so far
-> > > I've not seen anything but the xfs log recovery code that needs it,
-> > > and we'd probably get into needing to pass a bio_set to avoid
-> > > deadlock when used deeper in the stack, etc.  I can look into that
-> > > if we have more than a single user, but for now it doesn't seem
-> > > worth it.
-> > 
-> > bcache and bcachefs btree buffers can also be vmalloc backed. Possibly
-> > also the prio_set path in bcache, for reading/writing bucket gens, but
-> > I'd have to check.
+> But there may be a policy per CPU.
 > 
-> But do you do synchronous I/O, i.e. using sumit_bio_wait on them?
+>> And yes, this patch isn't mandatory at all for the
+>>
+>>> Moreover, without the $subject patch, the change made by the next one
+>>> will cause the boost setting in the MSR to get back in sync with
+>>> policy->boost_enabled during online AFAICS, so why exactly is the
+>>> $subject patch needed?
+>>
+>> Right, this is merely a cleanup patch and isn't really required for
+>> the next patch to make it work.
+> 
+> So I'd rather not make this change.
+> 
+> Evidently, someone made the effort to put in a comment explaining the
+> purpose of the code in question, so it looks like they had a reason
+> for adding it.
+> 
 
-Most btree node reads are synchronous, but not when we're prefetching.
 
