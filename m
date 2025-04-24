@@ -1,288 +1,132 @@
-Return-Path: <linux-pm+bounces-26102-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26103-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CBBFA9A581
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 10:14:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63ECCA9A653
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 10:39:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C0761B8260D
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 08:14:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98F8746636C
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 08:39:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74642205AB6;
-	Thu, 24 Apr 2025 08:14:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="g5ipNrlQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A9B621D58C;
+	Thu, 24 Apr 2025 08:37:48 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FC71FDA61
-	for <linux-pm@vger.kernel.org>; Thu, 24 Apr 2025 08:14:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7514020E700;
+	Thu, 24 Apr 2025 08:37:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745482467; cv=none; b=VGezeC2TXHmVAosmBC7464IRsAnxMv5j/liyuTAvCCErW9YC5BEWJYM345SkX9AJjPcFDiiPo9m+N1ILWaumse2jQDMRBQ/ojUjiDdej0S5E6ZfFBFOe3BmSN79zrqzigbceQboL5myjpXHSQpgNPd3MVo8yH3ca3Qr3cs2NBHo=
+	t=1745483868; cv=none; b=ipGuBkfbpbuz8wOyMPcw7cWMlJjL9rRdbXLXYTNrylCcbWu9ykVxg39rjUwD+vslyZXN80gn5zn8My71szbhUrkC2tOxKimyC6PSeoSkzSbt/kx5oD8HRH/A4KY0EfxGHGklL24o50zVnJS5AZz6d0Bbp9uMK1Q97XRCokQuxiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745482467; c=relaxed/simple;
-	bh=008EJSG/phqGVPmxi0nDH3NCIHBvP55QLSxmr4tKYHM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W8V9Emy9daREXB+aSzbdGKKmQm2VoVvk5aio7zcTqL+YG5y7mFbhlCzlLm+BQaPvgFe24Jmdk741bdA9sWnuofubJ539lQzuOZTzHFXMhOB23wp9JBokhjxRw+YHntKQaZSFGXbkteFuaqNn+vTOjET42TkmMh0rpsXRBm2LOa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=g5ipNrlQ; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43d07ca6a80so2784605e9.1
-        for <linux-pm@vger.kernel.org>; Thu, 24 Apr 2025 01:14:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1745482463; x=1746087263; darn=vger.kernel.org;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=008EJSG/phqGVPmxi0nDH3NCIHBvP55QLSxmr4tKYHM=;
-        b=g5ipNrlQnbWNQDx5PIdtRQxcoYaTUktowF593eplhxCKnKvGsx8xL5Io9JUFqMREuH
-         uifLo70GGibNxkA8BZJteNwZ6EAF6s3nY8zDad3SPCPDHIW8oJyJtj9ld22kl1EUa7/q
-         Lq1uEOedlXyJ23cirzmv3C2OhC5i7BWJ9jmtvolAe7r3Pk+oDVHQQqFcu1K6F0Ym2RYk
-         XNmFokhCNHR0lp3MdXn/d2pua9jvTf3BLD4icK36KM7xmjCMjXw6Btf/U1t7BPZNU1mu
-         n7zr9HdwCu+uMliMO3ktz7yD82fUwnl47w0KptodS04C/vn7at/8RzvBzNPnfB/xHfev
-         zt8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745482463; x=1746087263;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=008EJSG/phqGVPmxi0nDH3NCIHBvP55QLSxmr4tKYHM=;
-        b=aOVYVYzb+eqlyzAChkc1d+423aK9Us17Salr2TV4HG2mSu13jg7hct6X6ahtA/SUtF
-         uu3Im5KT/qPGZyXwpv3pNAc9VZzcW4EOIIA4q6MMxSILB22/g+lEfqv2CA9rpGdfFLmu
-         pJdwDAaDKFiQHH4KI3tEAZUvng6Yp/JurbK/X6LBsxKZL7a/Cd8O4lSvu+O3q7Neoeqy
-         /W8F5q8j8sBrWekNe2D6B5VL8JhNJtVXSRI2w/a43vYV+zhOtjQZsao4CmMC4v3P3sO8
-         0/G4z1vBeNWzRXEzt3y6/SuoUku4ZRona6NAC3BWLeBZzka+a/PlE1tsx5UON6EaOFtE
-         vFLg==
-X-Forwarded-Encrypted: i=1; AJvYcCVloWuiYVw20ITVilpcE0flPx2DbUG8qYKBeSJQs7723AqXkrQo04v+oyu37+eY1sLrHu3yce8FPw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZBcAZDl6InQjzhrpqIGG22CiuMZ/2To/MlUEfD8UvN1MMi+zB
-	p9Yk9ypreyTlFYQgoat8SeMzrk0c9Kk13P7WNpkk5gyShlp+uOKVzMaW1HPn1Kg=
-X-Gm-Gg: ASbGncva+yxPysZfOlSbIMAM5bZLpR6vzIh0ACwxsA4zgJWSeDfFG7KIPXdwKlErRN9
-	BljGPkGxKQOpbQaB+vIdn52wY5m9UptYGxJHU95I8fyU7TIDzOK6c1BflCOA6ad0rM+MawMXRsi
-	2hpJaJqg3Bl3YNWll4rGPJPs95phHaXWw1LilhDkcVmFIj7jCSsFRIro9pUBRTJmqa5Pj3R5Hsb
-	ZKjan0Zf3NHyahpbiRQEI86vGqMwj0xEeV6erYK+xtSXGOaPDSZNFhbikb8xiaRpxR5/uUY72tf
-	xMhqf7sdFqPIyCeG4iLqApUDJNSE7uTBEDJuWDSJ/R74f1LF8w0oMczpmuMUM1C9l4Gp7YhPprL
-	ndHFhEroPzJzXiIEJoq/nvkpt4nxRtyOGLBbhg94kb3zfY00tN4Pko3tMOGp4K67Sbg==
-X-Google-Smtp-Source: AGHT+IFyv2kCFIwtSgJfhMLoeL4umabM8GMXtTutcFH/tZ4GaYnDHHb5JDeYCLMrA1sChvoEPbh09w==
-X-Received: by 2002:a05:600c:1d03:b0:43d:db5:7b1a with SMTP id 5b1f17b1804b1-4409bd2225dmr12614855e9.12.1745482462951;
-        Thu, 24 Apr 2025 01:14:22 -0700 (PDT)
-Received: from ?IPV6:2003:e5:870f:e000:6c64:75fd:2c51:3fef? (p200300e5870fe0006c6475fd2c513fef.dip0.t-ipconnect.de. [2003:e5:870f:e000:6c64:75fd:2c51:3fef])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4409d2bfa93sm10528525e9.37.2025.04.24.01.14.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Apr 2025 01:14:22 -0700 (PDT)
-Message-ID: <0cdc6e9d-88eb-4ead-8d55-985474257d53@suse.com>
-Date: Thu, 24 Apr 2025 10:14:20 +0200
+	s=arc-20240116; t=1745483868; c=relaxed/simple;
+	bh=uV5SOxe11nIMXSY79Utbf7Y4n7mYRE75YQ+Yie0DOkg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bFPO7KLdSfS91tEtJS/aE6svIe+bYnlSDmBLTrJ/Gi00rlzXxci1FvBF/GaVKbiDKTJlfVdwc8KDpSqpIZLB+4ongYWU1tV0BLEde4YX3CqdMnF8mXnoyunIVgWSPXJaBaDLK4zpGMsFpcUjHnR5z9w2iHj7l8T1qD1japlD++g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 778C567373; Thu, 24 Apr 2025 10:37:40 +0200 (CEST)
+Date: Thu, 24 Apr 2025 10:37:40 +0200
+From: Christoph Hellwig <hch@lst.de>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+	linux-block@vger.kernel.org,
+	"Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+	Jack Wang <jinpu.wang@ionos.com>, Coly Li <colyli@kernel.org>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>, Chris Mason <clm@fb.com>,
+	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
+	Andreas Gruenbacher <agruenba@redhat.com>,
+	Carlos Maiolino <cem@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Naohiro Aota <naohiro.aota@wdc.com>,
+	Johannes Thumshirn <jth@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, linux-bcache@vger.kernel.org,
+	dm-devel@lists.linux.dev, linux-btrfs@vger.kernel.org,
+	gfs2@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-xfs@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: add more bio helper
+Message-ID: <20250424083740.GA24723@lst.de>
+References: <20250422142628.1553523-1-hch@lst.de> <jetduw7zshrmp4gl7zfpwqjweycwesxiod7xvtnxqwqekgtvdf@idwnvfzvhgik> <20250423093621.GA2578@lst.de> <sl4oibdxpjygqfpy6llq237zuckz7ym4fmzcfvxn2raofr37a5@hvevbcgm5trn> <20250423160733.GA656@lst.de> <q53k4x5nshvr2zatrgyhygxouv7ijyepe6cj2pfooemi6gbu4y@lpxxcvozazzu>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 21/34] x86/msr: Utilize the alternatives mechanism
- to write MSR
-To: Xin Li <xin@zytor.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
- linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
- xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
- linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
- platform-driver-x86@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org,
- andrew.cooper3@citrix.com, peterz@infradead.org, namhyung@kernel.org,
- mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
- irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
- wei.liu@kernel.org, ajay.kaher@broadcom.com,
- bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
- pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
- luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
- haiyangz@microsoft.com, decui@microsoft.com
-References: <20250422082216.1954310-1-xin@zytor.com>
- <20250422082216.1954310-22-xin@zytor.com>
- <b2624e84-6fab-44a3-affc-ce0847cd3da4@suse.com>
- <f7198308-e8f8-4cc5-b884-24bc5f408a2a@zytor.com>
- <37c88ea3-dd24-4607-9ee1-0f19025aaef3@suse.com>
- <bb8f6b85-4e7d-440a-a8c3-0e0da45864b8@zytor.com>
-Content-Language: en-US
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-Autocrypt: addr=jgross@suse.com; keydata=
- xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOB
- ycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJve
- dYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJ
- NwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvx
- XP3FAp2pkW0xqG7/377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEB
- AAHNH0p1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT7CwHkEEwECACMFAlOMcK8CGwMH
- CwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAKCRCw3p3WKL8TL8eZB/9G0juS/kDY9LhEXseh
- mE9U+iA1VsLhgDqVbsOtZ/S14LRFHczNd/Lqkn7souCSoyWsBs3/wO+OjPvxf7m+Ef+sMtr0
- G5lCWEWa9wa0IXx5HRPW/ScL+e4AVUbL7rurYMfwCzco+7TfjhMEOkC+va5gzi1KrErgNRHH
- kg3PhlnRY0Udyqx++UYkAsN4TQuEhNN32MvN0Np3WlBJOgKcuXpIElmMM5f1BBzJSKBkW0Jc
- Wy3h2Wy912vHKpPV/Xv7ZwVJ27v7KcuZcErtptDevAljxJtE7aJG6WiBzm+v9EswyWxwMCIO
- RoVBYuiocc51872tRGywc03xaQydB+9R7BHPzsBNBFOMcBYBCADLMfoA44MwGOB9YT1V4KCy
- vAfd7E0BTfaAurbG+Olacciz3yd09QOmejFZC6AnoykydyvTFLAWYcSCdISMr88COmmCbJzn
- sHAogjexXiif6ANUUlHpjxlHCCcELmZUzomNDnEOTxZFeWMTFF9Rf2k2F0Tl4E5kmsNGgtSa
- aMO0rNZoOEiD/7UfPP3dfh8JCQ1VtUUsQtT1sxos8Eb/HmriJhnaTZ7Hp3jtgTVkV0ybpgFg
- w6WMaRkrBh17mV0z2ajjmabB7SJxcouSkR0hcpNl4oM74d2/VqoW4BxxxOD1FcNCObCELfIS
- auZx+XT6s+CE7Qi/c44ibBMR7hyjdzWbABEBAAHCwF8EGAECAAkFAlOMcBYCGwwACgkQsN6d
- 1ii/Ey9D+Af/WFr3q+bg/8v5tCknCtn92d5lyYTBNt7xgWzDZX8G6/pngzKyWfedArllp0Pn
- fgIXtMNV+3t8Li1Tg843EXkP7+2+CQ98MB8XvvPLYAfW8nNDV85TyVgWlldNcgdv7nn1Sq8g
- HwB2BHdIAkYce3hEoDQXt/mKlgEGsLpzJcnLKimtPXQQy9TxUaLBe9PInPd+Ohix0XOlY+Uk
- QFEx50Ki3rSDl2Zt2tnkNYKUCvTJq7jvOlaPd6d/W0tZqpyy7KVay+K4aMobDsodB3dvEAs6
- ScCnh03dDAFgIq5nsB11j3KPKdVoPlfucX2c7kGNH+LUMbzqV6beIENfNexkOfxHfw==
-In-Reply-To: <bb8f6b85-4e7d-440a-a8c3-0e0da45864b8@zytor.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------VMSl19Ws92VaJ19wHUdCoQEK"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <q53k4x5nshvr2zatrgyhygxouv7ijyepe6cj2pfooemi6gbu4y@lpxxcvozazzu>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------VMSl19Ws92VaJ19wHUdCoQEK
-Content-Type: multipart/mixed; boundary="------------0vp5F0mv6hCcRHQUu1aj0a9v";
- protected-headers="v1"
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-To: Xin Li <xin@zytor.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
- linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
- xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
- linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
- platform-driver-x86@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org,
- andrew.cooper3@citrix.com, peterz@infradead.org, namhyung@kernel.org,
- mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
- irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
- wei.liu@kernel.org, ajay.kaher@broadcom.com,
- bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
- pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
- luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
- haiyangz@microsoft.com, decui@microsoft.com
-Message-ID: <0cdc6e9d-88eb-4ead-8d55-985474257d53@suse.com>
-Subject: Re: [RFC PATCH v2 21/34] x86/msr: Utilize the alternatives mechanism
- to write MSR
-References: <20250422082216.1954310-1-xin@zytor.com>
- <20250422082216.1954310-22-xin@zytor.com>
- <b2624e84-6fab-44a3-affc-ce0847cd3da4@suse.com>
- <f7198308-e8f8-4cc5-b884-24bc5f408a2a@zytor.com>
- <37c88ea3-dd24-4607-9ee1-0f19025aaef3@suse.com>
- <bb8f6b85-4e7d-440a-a8c3-0e0da45864b8@zytor.com>
-In-Reply-To: <bb8f6b85-4e7d-440a-a8c3-0e0da45864b8@zytor.com>
+On Wed, Apr 23, 2025 at 02:02:11PM -0400, Kent Overstreet wrote:
+> Allocating your own bio doesn't allow you to safely exceed the
+> BIO_MAX_VECS limit - there's places in the io path that need to bounce,
+> and they all use biosets.
 
---------------0vp5F0mv6hCcRHQUu1aj0a9v
-Content-Type: multipart/mixed; boundary="------------0yeVN4sI0bLxwrBqbg5RE1SY"
+Yes.  Another reason not to do it, which I don't want to anyway.
 
---------------0yeVN4sI0bLxwrBqbg5RE1SY
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+But we do have a few places that do it like squashs which we need to
+weed out.  And/or finally kill the bounce bufferingreal, which is long
+overdue.
 
-T24gMjQuMDQuMjUgMTA6MDYsIFhpbiBMaSB3cm90ZToNCj4gT24gNC8yMy8yMDI1IDk6MDUg
-QU0sIErDvHJnZW4gR3Jvw58gd3JvdGU6DQo+Pj4gSXQncyBub3QgYSBtYWpvciBjaGFuZ2Us
-IGJ1dCB3aGVuIGl0IGlzIHBhdGNoZWQgdG8gdXNlIHRoZSBpbW1lZGlhdGUgZm9ybSBNU1Ig
-DQo+Pj4gd3JpdGUgaW5zdHJ1Y3Rpb24sIGl0J3Mgc3RyYWlnaHRmb3J3YXJkbHkgc3RyZWFt
-bGluZWQuDQo+Pg0KPj4gSXQgc2hvdWxkIGJlIHJhdGhlciBlYXN5IHRvIHN3aXRjaCB0aGUg
-Y3VycmVudCB3cm1zci9yZG1zciBwYXJhdmlydCBwYXRjaGluZw0KPj4gbG9jYXRpb25zIHRv
-IHVzZSB0aGUgcmRtc3Ivd3Jtc3IgaW5zdHJ1Y3Rpb25zIGluc3RlYWQgb2YgZG9pbmcgYSBj
-YWxsIHRvDQo+PiBuYXRpdmVfKm1zcigpLg0KPj4NCj4+IFRoZSBjYXNlIG9mIHRoZSBuZXcg
-aW1tZWRpYXRlIGZvcm0gY291bGQgYmUgaGFuZGxlZCB0aGUgc2FtZSB3YXkuDQo+IA0KPiBB
-Y3R1YWxseSwgdGhhdCBpcyBob3cgd2UgZ2V0IHRoaXMgcGF0Y2ggd2l0aCB0aGUgZXhpc3Rp
-bmcgYWx0ZXJuYXRpdmVzDQo+IGluZnJhc3RydWN0dXJlLsKgIEFuZCB3ZSB0b29rIGEgc3Rl
-cCBmdXJ0aGVyIHRvIGFsc28gcmVtb3ZlIHRoZSBwdl9vcHMNCj4gTVNSIEFQSXMuLi4NCg0K
-QW5kIHRoaXMgaXMgd2hhdCBJJ20gcXVlc3Rpb25pbmcuIElNSE8gdGhpcyBhcHByb2FjaCBp
-cyBhZGRpbmcgbW9yZQ0KY29kZSBieSByZW1vdmluZyB0aGUgcHZfb3BzIE1TUl9BUElzIGp1
-c3QgYmVjYXVzZSAicHZfb3BzIGlzIGJhZCIuIEFuZA0KSSBiZWxpZXZlIG1vc3QgcmVmdXNh
-bCBvZiBwdl9vcHMgaXMgYmFzZWQgb24gbm8gbG9uZ2VyIHZhbGlkIHJlYXNvbmluZy4NCg0K
-PiBJdCBsb29rcyB0byBtZSB0aGF0IHlvdSB3YW50IHRvIGFkZCBhIG5ldyBmYWNpbGl0eSB0
-byB0aGUgYWx0ZXJuYXRpdmVzDQo+IGluZnJhc3RydWN0dXJlIGZpcnN0Pw0KDQpXaHkgd291
-bGQgd2UgbmVlZCBhIG5ldyBmYWNpbGl0eSBpbiB0aGUgYWx0ZXJuYXRpdmVzIGluZnJhc3Ry
-dWN0dXJlPw0KDQoNCkp1ZXJnZW4NCg==
---------------0yeVN4sI0bLxwrBqbg5RE1SY
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+> That may be an issue even for non vmalloc bios, unless everything that
+> bounces has been converted to bounce to a folio of the same order.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+Anything that actually hits the bounce buffering is going to
+cause problems because it hasn't kept up with the evolution of
+the block layer, and is basically not used for anything relevant.
 
-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
-kt+z4drzFUyEjLM1vVvIMjkUoJs=3D
-=3DeeAB
------END PGP PUBLIC KEY BLOCK-----
+> > The problem with transparent vmalloc handling is that it's not possible.
+> > The magic handling for virtually indexed caches can be hidden on the
+> > submission side, but the completion side also needs to call
+> > invalidate_kernel_vmap_range for reads.  Requiring the caller to know
+> > they deal vmalloc is a way to at least keep that on the radar.
+> 
+> yeesh, that's a landmine.
+> 
+> having a separate bio_add_vmalloc as a hint is still a really bad
+> "solution", unfortunately. And since this is something we don't have
+> sanitizers or debug code for, and it only shows up on some archs -
+> that's nasty.
 
---------------0yeVN4sI0bLxwrBqbg5RE1SY--
+Well, we can't do it in the block stack because that doesn't have the
+vmalloc address available.  So the caller has to do it, and having a
+very visible sign is the best we can do.  Yes, signs aren't the
+best cure for landmines, but they are better than nothing.
 
---------------0vp5F0mv6hCcRHQUu1aj0a9v--
+> > Not for a purely synchronous helper we could handle both, but so far
+> > I've not seen anything but the xfs log recovery code that needs it,
+> > and we'd probably get into needing to pass a bio_set to avoid
+> > deadlock when used deeper in the stack, etc.  I can look into that
+> > if we have more than a single user, but for now it doesn't seem
+> > worth it.
+> 
+> bcache and bcachefs btree buffers can also be vmalloc backed. Possibly
+> also the prio_set path in bcache, for reading/writing bucket gens, but
+> I'd have to check.
 
---------------VMSl19Ws92VaJ19wHUdCoQEK
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+But do you do synchronous I/O, i.e. using sumit_bio_wait on them?
 
------BEGIN PGP SIGNATURE-----
+> 
+> > Having a common helper for vmalloc and the kernel direct mapping
+> > is actually how I started, but then I ran into all the issues with
+> > it and with the extremely simple helpers for the direct mapping
+> > which are used a lot, and the more complicated version for vmalloc
+> > which just has a few users instead.
+> 
+> *nod*
+> 
+> What else did you run into? invalidate_kernel_vmap_range() seems like
+> the only problematic one, given that is_vmalloc_addr() is cheap.
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmgJ8twFAwAAAAAACgkQsN6d1ii/Ey8k
-sgf/bXb/yPNEYKqkydqe/bdDkpvmLpSFUpdHMovM4PRMGt6zioNmVWczEr+IQ53jJEK1EgOrz1V5
-CSe5GF6AQ52FukYXR+nsdEhvJ3SQbHcC1jjQ0KBbi7qxCIl5hNUVmyEEjIxdE5u2TPCMWxoot6t1
-yNRYVLJOfCGc+rtLzkqT+DCZhmL5bJV7aHjBV/gGYMQs5mZvFWky2orA31cQd87ZQ01sJsXhSyK5
-kyPT2DLGT2EUSFgkADIATsccYzDmoFGHujoktt1Dvy7KAp5Ij89J1F9z/bJPieoeXbxYM6WgXK6i
-mL8fdLmqdHH+xIxH3Fw7vjbOQPVv3Q5NLHeDBr80mQ==
-=oHe8
------END PGP SIGNATURE-----
-
---------------VMSl19Ws92VaJ19wHUdCoQEK--
+invalidate_kernel_vmap_range is the major issue that can't be
+worked around.  Everything else was mentioned before and can be
+summarized as minor inconveniences.
 
