@@ -1,65 +1,48 @@
-Return-Path: <linux-pm+bounces-26088-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26087-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C13BBA9A232
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 08:32:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD599A9A22C
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 08:32:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 939BE177C8F
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 06:30:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CC06160D20
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 06:30:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E25D20298A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 205A01E3DD0;
 	Thu, 24 Apr 2025 06:26:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="frtjTorX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KE5YnjeL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC3E1DDC21;
-	Thu, 24 Apr 2025 06:26:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD9DB1E0083;
+	Thu, 24 Apr 2025 06:26:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745475970; cv=none; b=qFzSV8mWf6pXHaxl+6szdoc/RyPCdCAwXAI/iTmxa1HyPaoTsLsh2PuZSBqwtG1X6QzOw0q3edysS61U3+GGhlHWlMsNoLD/Wv9zzOAwZkKaKdULVNwMPZsqyDLunQMb7gPVRshThYfQVEzIydUHRl0iWAVCtE0gSLxFAzJuIQ0=
+	t=1745475970; cv=none; b=F+AEFpaiQapUT5kMJiOUTJv8rLp0qYa3QHlymfB9VEw9SDr7n1uVC3RZ5reabLy1/djiH7pnqwYNIwF7s3325EkOeRajQRpGUZNxc6S7nzaGbENjZVejHYwNDkkSaqBLOV7UyMYjGEW5s04r5mBY4sGRQ/ApwFrCfp6o4CCEU6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1745475970; c=relaxed/simple;
-	bh=r9pnF53EyyaRucMwNVgQLeGE6Ab0R4f4MEaSIMBKOXs=;
+	bh=mxSIkGwRgFfWToysHIuZeo9xE0ZCdWZ47rICJOBvA1E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IE2zI/x8j13CcPvtXUwjzDePmkBTb7TjM9rnQOnmIur2rDvdsRBIniA1UgeEM+g2R/sMrElMfkFk9q2R+/KgRnfHzGbSeSyAjynlSKaibPRBgAMaaTmk8QGgiTGzKz4DPkC9eldQmAvl9+FMgkKXNgn7h1D6GG4DxrJ6pGdMJZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=frtjTorX; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745475966; x=1777011966;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=r9pnF53EyyaRucMwNVgQLeGE6Ab0R4f4MEaSIMBKOXs=;
-  b=frtjTorXnnyRNojO/uMNvHpfb8o8jg6AILywkYb0KIv7SI4HsdlatWLi
-   4q79+bYdQluLuCFzEC0Y0QYqjp91xKftuKGiJ3Oq6sb9lwO2fs5WMWjbE
-   29PSOIZf4TBuVUGFe9aSM+s6Y41b5BQuDnfB1uMHuXqxt21pny0n2aHFW
-   u50qo8Rqooqz4I8E9ReYRHLeSQOpPnKZwJuQorYio/u64jEaWxNHf4Lwn
-   aTE8ge/fEdVzPOCMoJ6w0TLR6dHMPkMS6HIKD+aND3du8P72ZLecYoUwj
-   LWsW/ZMh0joA7wL60wBWfChehZi8bj+QlrdADgtiBFTXDH0pM9hTE6Vyt
-   g==;
-X-CSE-ConnectionGUID: Z1dpGu+eQHW25lxJoYL7Aw==
-X-CSE-MsgGUID: 9HrqRHW1RMKp0TVWhdoWtw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11412"; a="47187615"
-X-IronPort-AV: E=Sophos;i="6.15,235,1739865600"; 
-   d="scan'208";a="47187615"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 23:26:05 -0700
-X-CSE-ConnectionGUID: Ejvh0aUHTACVpOK/Jqvr7Q==
-X-CSE-MsgGUID: i3jvGnxIQpSi7EjKCit1UA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,235,1739865600"; 
-   d="scan'208";a="132432771"
-Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.245.128]) ([10.124.245.128])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 23:25:52 -0700
-Message-ID: <20471e53-c228-4cf6-83e6-3ab49f32f19f@linux.intel.com>
-Date: Thu, 24 Apr 2025 14:25:49 +0800
+	 In-Reply-To:Content-Type; b=OiEHnuWfvc1KYpRG+HBno7C/a1A4b3eX7LSxPTgBzDrFfh0t9YVcvAP9KsSrtaI8sjKK/oDR46eai/gPzjfTldqOePHkpzBBCPgw1r+jvNcCWL1i77ujE3Qg4jpUjW5yNL4S2prJJmuA4sv18uRyt3qB5mNzJzw1WvfLvNC1yy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KE5YnjeL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D8DBC4CEEA;
+	Thu, 24 Apr 2025 06:26:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745475969;
+	bh=mxSIkGwRgFfWToysHIuZeo9xE0ZCdWZ47rICJOBvA1E=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=KE5YnjeLr1Ywx1K23We7IaNb6UZ8b8xHtoyL0ELEISg8OnqNhZvRO27X8L3UEM3j1
+	 DyOnTsleuuh3eIFQgGwBK+DfH3oqDBXovipkxt4bX0NP43RYz5uHDAcHWGrPny4kC2
+	 vRlV3MOtbl4NWSIg2dc2l4j8s69kzb8IoYhN1d3unixehSX/LUHufzad9MYE+Nptxb
+	 3iG4yg1SBcAI7fDKnw6t3N//QCuq0Vdaul9/z2pxvQ7ki/YkS6ocZTdF+UfF7jBM1p
+	 RPwTDjU7jpDY95ingWLvIycthRGS4QhivQS8bgGPkr4MUyy5aHa7P60OFyoHSiDfUU
+	 FiloAW9VAqpOg==
+Message-ID: <5221c8c6-d125-4347-98f7-f1fccc0b9eb5@kernel.org>
+Date: Thu, 24 Apr 2025 15:26:05 +0900
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,162 +50,44 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 11/34] x86/msr: Remove calling
- native_{read,write}_msr{,_safe}() in pmu_msr_{read,write}()
-To: "Xin Li (Intel)" <xin@zytor.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
- linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
- xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
- linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
- platform-driver-x86@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org,
- jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org,
- namhyung@kernel.org, mark.rutland@arm.com,
- alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
- adrian.hunter@intel.com, kan.liang@linux.intel.com, wei.liu@kernel.org,
- ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
- tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
- seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
- kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com
-References: <20250422082216.1954310-1-xin@zytor.com>
- <20250422082216.1954310-12-xin@zytor.com>
+Subject: Re: [PATCH 17/17] PM: hibernate: split and simplify hib_submit_io
+To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Cc: linux-block@vger.kernel.org, "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+ Jack Wang <jinpu.wang@ionos.com>, Coly Li <colyli@kernel.org>,
+ Kent Overstreet <kent.overstreet@linux.dev>,
+ Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>,
+ Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+ David Sterba <dsterba@suse.com>, Andreas Gruenbacher <agruenba@redhat.com>,
+ Carlos Maiolino <cem@kernel.org>, Naohiro Aota <naohiro.aota@wdc.com>,
+ Johannes Thumshirn <jth@kernel.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>,
+ linux-bcache@vger.kernel.org, dm-devel@lists.linux.dev,
+ linux-btrfs@vger.kernel.org, gfs2@lists.linux.dev,
+ linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20250422142628.1553523-1-hch@lst.de>
+ <20250422142628.1553523-18-hch@lst.de>
 Content-Language: en-US
-From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
-In-Reply-To: <20250422082216.1954310-12-xin@zytor.com>
+From: Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <20250422142628.1553523-18-hch@lst.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
+On 4/22/25 23:26, Christoph Hellwig wrote:
+> Split hib_submit_io into a sync and async version.  The sync version is
+> a small wrapper around bdev_rw_virt which implements all the logic to
+> add a kernel direct mapping range to a bio and synchronously submits it,
+> while the async version is slightly simplified using the
+> bio_add_virt_nofail for adding the single range.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-On 4/22/2025 4:21 PM, Xin Li (Intel) wrote:
-> hpa found that pmu_msr_write() is actually a completely pointless
-> function [1]: all it does is shuffle some arguments, then calls
-> pmu_msr_chk_emulated() and if it returns true AND the emulated flag
-> is clear then does *exactly the same thing* that the calling code
-> would have done if pmu_msr_write() itself had returned true.  And
-> pmu_msr_read() does the equivalent stupidity.
->
-> Remove the calls to native_{read,write}_msr{,_safe}() within
-> pmu_msr_{read,write}().  Instead reuse the existing calling code
-> that decides whether to call native_{read,write}_msr{,_safe}() based
-> on the return value from pmu_msr_{read,write}().  Consequently,
-> eliminate the need to pass an error pointer to pmu_msr_{read,write}().
->
-> While at it, refactor pmu_msr_write() to take the MSR value as a u64
-> argument, replacing the current dual u32 arguments, because the dual
-> u32 arguments were only used to call native_write_msr{,_safe}(), which
-> has now been removed.
->
-> [1]: https://lore.kernel.org/lkml/0ec48b84-d158-47c6-b14c-3563fd14bcc4@zytor.com/
->
-> Suggested-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-> Sign-off-by: Xin Li (Intel) <xin@zytor.com>
-> ---
->  arch/x86/xen/enlighten_pv.c |  6 +++++-
->  arch/x86/xen/pmu.c          | 27 ++++-----------------------
->  arch/x86/xen/xen-ops.h      |  4 ++--
->  3 files changed, 11 insertions(+), 26 deletions(-)
->
-> diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
-> index 9fbe187aff00..1418758b57ff 100644
-> --- a/arch/x86/xen/enlighten_pv.c
-> +++ b/arch/x86/xen/enlighten_pv.c
-> @@ -1132,6 +1132,8 @@ static void set_seg(unsigned int which, unsigned int low, unsigned int high,
->  static void xen_do_write_msr(unsigned int msr, unsigned int low,
->  			     unsigned int high, int *err)
->  {
-> +	u64 val;
-> +
->  	switch (msr) {
->  	case MSR_FS_BASE:
->  		set_seg(SEGBASE_FS, low, high, err);
-> @@ -1158,7 +1160,9 @@ static void xen_do_write_msr(unsigned int msr, unsigned int low,
->  		break;
->  
->  	default:
-> -		if (!pmu_msr_write(msr, low, high, err)) {
-> +		val = (u64)high << 32 | low;
-> +
-> +		if (!pmu_msr_write(msr, val)) {
->  			if (err)
->  				*err = native_write_msr_safe(msr, low, high);
->  			else
-> diff --git a/arch/x86/xen/pmu.c b/arch/x86/xen/pmu.c
-> index 9c1682af620a..95caae97a394 100644
-> --- a/arch/x86/xen/pmu.c
-> +++ b/arch/x86/xen/pmu.c
-> @@ -313,37 +313,18 @@ static bool pmu_msr_chk_emulated(unsigned int msr, uint64_t *val, bool is_read,
->  	return true;
->  }
->  
-> -bool pmu_msr_read(unsigned int msr, uint64_t *val, int *err)
-> +bool pmu_msr_read(u32 msr, u64 *val)
+Looks OK to me.
 
-The function name is some kind of misleading right now. With the change,
-this function only read PMU MSR's value if it's emulated, otherwise it
-won't really read PMU MSR. How about changing the name to
-"pmu_emulated_msr_read" or something similar?
+Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
 
-
->  {
->  	bool emulated;
->  
-> -	if (!pmu_msr_chk_emulated(msr, val, true, &emulated))
-> -		return false;
-> -
-> -	if (!emulated) {
-> -		*val = err ? native_read_msr_safe(msr, err)
-> -			   : native_read_msr(msr);
-> -	}
-> -
-> -	return true;
-> +	return pmu_msr_chk_emulated(msr, val, true, &emulated) && emulated;
->  }
->  
-> -bool pmu_msr_write(unsigned int msr, uint32_t low, uint32_t high, int *err)
-> +bool pmu_msr_write(u32 msr, u64 val)
-
-ditto.
-
-
->  {
-> -	uint64_t val = ((uint64_t)high << 32) | low;
->  	bool emulated;
->  
-> -	if (!pmu_msr_chk_emulated(msr, &val, false, &emulated))
-> -		return false;
-> -
-> -	if (!emulated) {
-> -		if (err)
-> -			*err = native_write_msr_safe(msr, low, high);
-> -		else
-> -			native_write_msr(msr, low, high);
-> -	}
-> -
-> -	return true;
-> +	return pmu_msr_chk_emulated(msr, &val, false, &emulated) && emulated;
->  }
->  
->  static u64 xen_amd_read_pmc(int counter)
-> diff --git a/arch/x86/xen/xen-ops.h b/arch/x86/xen/xen-ops.h
-> index dc886c3cc24d..a1875e10be31 100644
-> --- a/arch/x86/xen/xen-ops.h
-> +++ b/arch/x86/xen/xen-ops.h
-> @@ -271,8 +271,8 @@ void xen_pmu_finish(int cpu);
->  static inline void xen_pmu_init(int cpu) {}
->  static inline void xen_pmu_finish(int cpu) {}
->  #endif
-> -bool pmu_msr_read(unsigned int msr, uint64_t *val, int *err);
-> -bool pmu_msr_write(unsigned int msr, uint32_t low, uint32_t high, int *err);
-> +bool pmu_msr_read(u32 msr, u64 *val);
-
-The prototype of pmu_msr_read() has been changed, but why there is no
-corresponding change in its caller (xen_do_read_msr())?
-
-
-> +bool pmu_msr_write(u32 msr, u64 val);
->  int pmu_apic_update(uint32_t reg);
->  u64 xen_read_pmc(int counter);
->  
+-- 
+Damien Le Moal
+Western Digital Research
 
