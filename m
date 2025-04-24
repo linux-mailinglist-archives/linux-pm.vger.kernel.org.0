@@ -1,118 +1,144 @@
-Return-Path: <linux-pm+bounces-26120-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26121-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC6D1A9ABB1
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 13:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 14A46A9ACB6
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 14:01:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 304D74A074C
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 11:27:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 626F5442840
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 12:01:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 802981E22FC;
-	Thu, 24 Apr 2025 11:27:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E05A322C35B;
+	Thu, 24 Apr 2025 12:01:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qHkrkaca"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="u9gRpvYC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C3E433A8;
-	Thu, 24 Apr 2025 11:27:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81CA822B588
+	for <linux-pm@vger.kernel.org>; Thu, 24 Apr 2025 12:01:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745494048; cv=none; b=qBrs8LNvZrnsMkVUPnj+m2QA4nlQNkONJRM8lMgKTXK+/HmZEKHQDxO0qOTThnbcOMk48ov47rZPGB8qs8jO/tPXmSE95Su6OcEXK9N2g32sVxQKNdxuj4tCTPYU9YHFue+pWjdBfOjtOhfNsFHQU+1z86qOizVeBoD/dyLcv8A=
+	t=1745496101; cv=none; b=bvXlv3gpp/NjkipmAwDIajRgIQ8fv5pOHpWVnJ9V2K3Xmx9/cYks5hZIlOzeD15BXmTnS8sXb9S6Ag4WwuuDCtsrw7/4z4WbeTsShK27lLSFJFkSH9X6Ge+oG90drV3o69IFNqx1gN6GaANv0tD/vwjK/pFGbqBuJZZ4Nt4Gq/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745494048; c=relaxed/simple;
-	bh=ZKF2QECobulnLVEGQEPeyx3584MvFvZQWdvewYUROlk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tv5FLh44QERrQroBT8wVNM9OCaVIsAVza8VeDDocB8pGesX3AAIxgTqqFd2J/GVvE86F8N7Nag5gwN0HVTDxie+mBgFGzMnY31kiZBDbIFLvZts6+HBVZV3FQvQqWTjJ6IFpiVJWRXVB2+0ByAqQh+b7uQdYp0cXwT5FivMNJfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qHkrkaca; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF609C4AF09;
-	Thu, 24 Apr 2025 11:27:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745494047;
-	bh=ZKF2QECobulnLVEGQEPeyx3584MvFvZQWdvewYUROlk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=qHkrkacay3Bfu+9Ocvc/zxaS/Ggg2n/d3SDkpreLqE0VhZJFPaYAkJng6il8q/7c5
-	 MIIDMK82Qvp0idpCbiKbupsY1D5kYL5rhQ59829bIjlKCQTI4d5QnSHkVd5CJ04hwO
-	 j8RRlGuhmJT094qplQH0ffr66UhzcSPpQ/ueNtLpp1Pk1fZVlAptddLfA1bceXj1Fq
-	 uIzR23PNagCWBILy9icYMedHRzGy6D78d4gxRlAKB+qnOPLUmzmNPFTYicG7CQgGSs
-	 y+yuf+YEBEuRiEJInuKb/vuAsUkr62eySUFpKeOzg9UmF+B/izMYCM28FzFn0MJG68
-	 UuouYj02kanvA==
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-2c12b7af278so711557fac.0;
-        Thu, 24 Apr 2025 04:27:27 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCURhAqnCq9LUCNyPM/QzFH1H0E1B5yr2Iv9c/tp+9vi1On3YUWF1OwL0JPH9o6M5GeqkGgsW0fHUq4=@vger.kernel.org, AJvYcCXU82iH5TlMCSNQgV6j7Lb2M4XYdRNGBEUpvWa0pieskuqTWuQ9yVrlUuY4gnIXQTJxkJz/i0wvDpt4q1Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxthgWlrh1AqF/lRRkZR36mwVPn75fspRGzBKlvv7nMfr6UEh9r
-	HR6fS4sZsPUP8f7JuN27QTrALv353uQ4hohYckPStIkxt9GtcJGR/FaE4NCmNABvXo+1HOd93D1
-	2ppoIoKx5yd+6dXEpQCklN7Zzwao=
-X-Google-Smtp-Source: AGHT+IGoZpN0YNiFTDrLlk6bmcMJEaJw+sl2gozWoaTpEoqU6WTcPRgzvsI81WnKOWJoSnwn7SZi6Q0Perwz/Zh1eok=
-X-Received: by 2002:a05:6871:208c:b0:2d6:8eb:8918 with SMTP id
- 586e51a60fabf-2d973164ae8mr956413fac.7.1745494047162; Thu, 24 Apr 2025
- 04:27:27 -0700 (PDT)
+	s=arc-20240116; t=1745496101; c=relaxed/simple;
+	bh=RDRKZeNKN55umrzQ5oGHsI+0KYc+ooDByqGf/CbRS4M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lc1zBcB2D1DOIdzlnDPHK2wCBPMUXAvQNF/oQedRq+yXTxSUh7QSAYSJXfI0TveHvTh7sPlTfXIMBAevijd4COV66Nc71f8yQCu1opGGT4aATxAFlnUfWyjbo0nWI5ELHjnQvMaKTx9hac93WU8Q45caJEO13jFkoyEJuPzpsA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=u9gRpvYC; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Thu, 24 Apr 2025 08:01:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1745496087;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=T2MMeEmusMY/E/i/SQKbyFaL7BU6CcGYmFZRFD2drdA=;
+	b=u9gRpvYCA7IkAb0B4poNcSjWcfnEIwKuPsuUltPGgb8dOqhtvOFUuqTpBE1musH7/BVP9b
+	38vbULDjl6NCX/pmhSnebe2rg3ejQKWdffXIWBn1CsORMSUQcA3dgQXk9yIE8/M4BAoo1k
+	1DBuUEL/zkkYq7EeqOTzQe9EbZUJZTQ=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org, 
+	"Md. Haris Iqbal" <haris.iqbal@ionos.com>, Jack Wang <jinpu.wang@ionos.com>, Coly Li <colyli@kernel.org>, 
+	Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>, Chris Mason <clm@fb.com>, 
+	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>, 
+	Andreas Gruenbacher <agruenba@redhat.com>, Carlos Maiolino <cem@kernel.org>, 
+	Damien Le Moal <dlemoal@kernel.org>, Naohiro Aota <naohiro.aota@wdc.com>, 
+	Johannes Thumshirn <jth@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Pavel Machek <pavel@kernel.org>, linux-bcache@vger.kernel.org, dm-devel@lists.linux.dev, 
+	linux-btrfs@vger.kernel.org, gfs2@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
+	linux-xfs@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: add more bio helper
+Message-ID: <anc2qstnukiwtskc4pd3kqajfswm3dzljxwa3awrxjs7mzppoc@nziz3h4ilqpd>
+References: <20250422142628.1553523-1-hch@lst.de>
+ <jetduw7zshrmp4gl7zfpwqjweycwesxiod7xvtnxqwqekgtvdf@idwnvfzvhgik>
+ <20250423093621.GA2578@lst.de>
+ <sl4oibdxpjygqfpy6llq237zuckz7ym4fmzcfvxn2raofr37a5@hvevbcgm5trn>
+ <20250423160733.GA656@lst.de>
+ <q53k4x5nshvr2zatrgyhygxouv7ijyepe6cj2pfooemi6gbu4y@lpxxcvozazzu>
+ <20250424083740.GA24723@lst.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1745315548.git.viresh.kumar@linaro.org> <d8651db6d8687a0e37d527267ebfec05f209b1b7.1745315548.git.viresh.kumar@linaro.org>
- <CAJZ5v0hWUdRdbPL2=qybaEsNfPzAqdxW+xBrjwy4HaBXnTwD0g@mail.gmail.com>
- <CAJZ5v0jFy9ch4ZcW_zQs6GfvB=LCnzm94d35ifMpdv=VrqTHQA@mail.gmail.com>
- <CAJZ5v0jenM_pYUkTv-qPV21tok15R+KfT497itPO=fLUywDKqw@mail.gmail.com> <20250424072728.bbcbbcxv7x4cumck@vireshk-i7>
-In-Reply-To: <20250424072728.bbcbbcxv7x4cumck@vireshk-i7>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 24 Apr 2025 13:27:16 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jNFkGJa4TOsqksQg5f9BYQx+D0DA=3=XE_nMByyOxcyg@mail.gmail.com>
-X-Gm-Features: ATxdqUH79ej9JARLMo_gNdXFt3LyKtpM79ZEg3_8dc1pYBe4UAw_UvzlkDWCfbs
-Message-ID: <CAJZ5v0jNFkGJa4TOsqksQg5f9BYQx+D0DA=3=XE_nMByyOxcyg@mail.gmail.com>
-Subject: Re: [PATCH 2/6] cpufreq: acpi: Re-sync CPU boost state on system resume
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Lifeng Zheng <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Nicholas Chin <nic.c3.14@gmail.com>, 
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250424083740.GA24723@lst.de>
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Apr 24, 2025 at 9:27=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
->
-> On 23-04-25, 16:59, Rafael J. Wysocki wrote:
-> > On Wed, Apr 23, 2025 at 4:40=E2=80=AFPM Rafael J. Wysocki <rafael@kerne=
-l.org> wrote:
-> > > > IIUC policy->boost_enabled is false at this point, so say that
-> > > > boost_state(cpu) returns true and say cpufreq_boost_enabled() retur=
-ns
-> > > > false.
-> > >
-> > > This cannot happen for CPU 0 because of acpi_cpufreq_boost_init() ->
->
-> Right.
->
-> > > > cpufreq_online() will see policy->boost_enabled =3D=3D
-> > > > cpufreq_boost_enabled(), so it won't do anything regarding boost, a=
-nd
-> > > > say that this happens for all online CPUs.
-> > >
-> > > -> so if boost_state(0) returns true, policy->boost_enabled will be
-> > > set for all policies to start with due to the code in
-> > > cpufreq_online(), but this is far from obvious.
->
-> > > I would at least say in the changelog that set_boost() need not be
-> > > called directly at the policy initialization time because of the
-> > > above.
->
-> Sure.
->
-> > I also think that acpi_cpufreq_resume() may be a better place for
-> > re-syncing the boost state with policy->boost_enabled because it may
-> > do that for CPU 0 as well as for the non-boot CPUs.
->
-> I thought about that but kept this in acpi_cpufreq_cpu_init() as there
-> are other corner cases too. A simple CPU hotplug (without
-> suspend/resume) for example. In that case exit/init will get called
-> but not resume.
+On Thu, Apr 24, 2025 at 10:37:40AM +0200, Christoph Hellwig wrote:
+> On Wed, Apr 23, 2025 at 02:02:11PM -0400, Kent Overstreet wrote:
+> > Allocating your own bio doesn't allow you to safely exceed the
+> > BIO_MAX_VECS limit - there's places in the io path that need to bounce,
+> > and they all use biosets.
+> 
+> Yes.  Another reason not to do it, which I don't want to anyway.
+> 
+> But we do have a few places that do it like squashs which we need to
+> weed out.  And/or finally kill the bounce bufferingreal, which is long
+> overdue.
+> 
+> > That may be an issue even for non vmalloc bios, unless everything that
+> > bounces has been converted to bounce to a folio of the same order.
+> 
+> Anything that actually hits the bounce buffering is going to
+> cause problems because it hasn't kept up with the evolution of
+> the block layer, and is basically not used for anything relevant.
 
-Fair enough.
+It's not just block/bounce.c that does bouncing, though.
+
+e.g. bcache has to bounce on a cache miss that will be written to the
+cache - we don't want to wait for the write to the backing device to
+complete before returning the read completion, and we can't write to the
+backing device with the original buffer if it was mapped to userspace.
+
+I'm pretty sure I've seen bouncing in dm and maybe md as well, but it's
+been years.
+
+> > > The problem with transparent vmalloc handling is that it's not possible.
+> > > The magic handling for virtually indexed caches can be hidden on the
+> > > submission side, but the completion side also needs to call
+> > > invalidate_kernel_vmap_range for reads.  Requiring the caller to know
+> > > they deal vmalloc is a way to at least keep that on the radar.
+> > 
+> > yeesh, that's a landmine.
+> > 
+> > having a separate bio_add_vmalloc as a hint is still a really bad
+> > "solution", unfortunately. And since this is something we don't have
+> > sanitizers or debug code for, and it only shows up on some archs -
+> > that's nasty.
+> 
+> Well, we can't do it in the block stack because that doesn't have the
+> vmalloc address available.  So the caller has to do it, and having a
+> very visible sign is the best we can do.  Yes, signs aren't the
+> best cure for landmines, but they are better than nothing.
+
+Given that only a few architectures need it, maybe sticking the vmalloc
+address in struct bio is something we should think about.
+
+Obviously not worth it if only 2-3 codepaths need it, but if vmalloc
+fallbacks become more common it's something to think about.
+
+> > > Not for a purely synchronous helper we could handle both, but so far
+> > > I've not seen anything but the xfs log recovery code that needs it,
+> > > and we'd probably get into needing to pass a bio_set to avoid
+> > > deadlock when used deeper in the stack, etc.  I can look into that
+> > > if we have more than a single user, but for now it doesn't seem
+> > > worth it.
+> > 
+> > bcache and bcachefs btree buffers can also be vmalloc backed. Possibly
+> > also the prio_set path in bcache, for reading/writing bucket gens, but
+> > I'd have to check.
+> 
+> But do you do synchronous I/O, i.e. using sumit_bio_wait on them?
+
+Most btree node reads are synchronous, but not when we're prefetching.
 
