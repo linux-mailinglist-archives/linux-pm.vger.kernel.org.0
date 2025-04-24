@@ -1,186 +1,180 @@
-Return-Path: <linux-pm+bounces-26100-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26101-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68512A9A542
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 10:08:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EE8EA9A552
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 10:09:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F7B4443691
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4371A7AACA0
 	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 08:08:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B850D2080C1;
-	Thu, 24 Apr 2025 08:07:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96B71205AB6;
+	Thu, 24 Apr 2025 08:08:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="LUn/Q21e"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aR7isCav"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3F8F1F5841;
-	Thu, 24 Apr 2025 08:07:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BD39205E34
+	for <linux-pm@vger.kernel.org>; Thu, 24 Apr 2025 08:08:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745482072; cv=none; b=E2PasgAo+2FzWdSPyglw9p9fZPBCO97IiU8u+UzkE0gZJmP34THUmqUHjb4WymTq+vKy2bvTbtkzhBRf1IOVUrBsnHpXO4Y94PYkIykf4nK/6vVPEIf/81RrFc/ASg0UCbIvd+UHJKt2r+MTPCatLCXWuIzTyaWHyRAmDcmQoyg=
+	t=1745482120; cv=none; b=TsjUapkaH5LIq/i9ifVsQDfo2pgDiN6plBKgPxxwt4b9ZVi0tzlRzta96T9J5BiLgZgp1D/tZcTWdRAa3Hc0R+oLdKrn29+27bMlJuUBY46spaYEVw8UOnskbIgcRKYSJfB7JyNStB04/yjDJscR4bhX+Y9bRT/1XFpYeUBprFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745482072; c=relaxed/simple;
-	bh=OFVNa/M8demFl5U9urQ5Rsbf4hx01XDASJ/v4Lvme2c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HkHilalbz1yygdhkx02+/uPo/EQ+jmWadLycWj0om+rOrZ++mzRqT06AJaRlgOBO5NMdyJxARUm+sP8vKVjRDOpY9OTFC0hpZXu35xgQTA+YIbxN6IOaCyNhxz3oabfqJqb6l1y6JXUieyi6mCNziToRMDBpGe0erhVkxgLoyb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=LUn/Q21e; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [192.168.7.202] ([71.202.166.45])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53O86uOw731084
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Thu, 24 Apr 2025 01:06:57 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53O86uOw731084
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025042001; t=1745482020;
-	bh=KmEo1ZYQQDPe/eBHeAwtyK6uD2OsimPSMpYKwP9PF0M=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=LUn/Q21ek7qt428VJCVaK7r0J65rS474/tbeyN6jnxDuA4e+VPH4XEfI/OsSLUYBB
-	 BvpRAzADaXbAdlHcAxsKfc87VmEQu4veJ4shAXxl6d+KfdMZGS/rDLljsWBue+tMlb
-	 jvEyu1Yv4F+eoj5cW4qEigccihTAn74hoJfZFM3aAPaGNzM7K5G9tj8QnwXy8c/25/
-	 yT845Q0l6v0MeAUuXA9Fh8iSxmX1i65xs7b1QnacLeCOR9am33RZQnJmKye1tVbACZ
-	 56XAfIsHBaouAtfIE0fwp1tmTpu1+KQweyH6OVB1NQwNJmnyPtnyxqbNHrqwDH/2lO
-	 6Ooz8AMRP9cKQ==
-Message-ID: <bb8f6b85-4e7d-440a-a8c3-0e0da45864b8@zytor.com>
-Date: Thu, 24 Apr 2025 01:06:56 -0700
+	s=arc-20240116; t=1745482120; c=relaxed/simple;
+	bh=7LSwA9/RC1GNwfG+lCcud3yw0cCVDeqP5nGelatoTRg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=f9GaqrHdhzdFskWFmFlVYYm7gMfvS6Rvy8xK09a9zEx58G/t79XKv5Ru0Wn4fZv1DD7bs87TVE4Fg5ggzmy9er+rTwm/AlTpif6GpMpRLEsxzVbJsuWclar0F0CF6riiu2ZphZNG7+Ive5F02Zpz//o9nIWaTZvrccOzSX6vxG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aR7isCav; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1745482116;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SIBcAPIsvRbbtPBYFtUV3aaspfe/f5XOnaHKo0o0ZIA=;
+	b=aR7isCavswchNYFgl2NYf2HbK3GmLFWGoaNh/3qFuZrqstuKz5prQXUP2Tk0oCjIEW3Nr8
+	WjvenkO3CGq4p6RdToby9tKutSw367JYhbLtZxpDTpvlZptCeyku05kezmpWyjdIq2Mg/8
+	kg8K2a1B8OV6AZVAgabjJ5WeYhHcBvg=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-392-h7Oe9b2CN-a2KfflaNWf5w-1; Thu, 24 Apr 2025 04:08:32 -0400
+X-MC-Unique: h7Oe9b2CN-a2KfflaNWf5w-1
+X-Mimecast-MFC-AGG-ID: h7Oe9b2CN-a2KfflaNWf5w_1745482112
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-22647ff3cf5so6796705ad.0
+        for <linux-pm@vger.kernel.org>; Thu, 24 Apr 2025 01:08:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745482112; x=1746086912;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SIBcAPIsvRbbtPBYFtUV3aaspfe/f5XOnaHKo0o0ZIA=;
+        b=FuJCaAVwQPB9sZw+W+fM0/3UGY7wIfO8JGkZsVZW5WT2KGMSoKEF2V7zQEZivBPZgv
+         mAZkywB0330Wf8A/3Zn0HboX2Y29Fe+VDrinftpyRws8z+dr74ZwZL7gKGk/lsKz2lst
+         W8IubzwzjwWrjVJF5IH/IlFdJEsu3YJRhqtT7v3yi9rHmmOkcuT7gLL0KXWUfZp1Z8Xg
+         hgmIKDqEC2x5zgO/piuKQUwYXoIZ/lUYAy70mO+2NkJvSqKKAzRealI/GHVp7CoEidLL
+         dZcfZIpQqyHP4uu0OJfNtTPpNZHDWcKj74/r7hl7wGccWxPI3AHsLiqI+Yim6oTmU3To
+         mSHg==
+X-Forwarded-Encrypted: i=1; AJvYcCUkmY+ZgjNgi/zkX9daGLcOUpxW57J6tgLSxzveRJzYxcDr+nNEJzwPVXcua+EdWxnKYEL9kHTt3A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTvy3CiwR8Rafb5bN0zDXz/WSSwW340yUGhMSAqXrgIB8+q/Fx
+	GpQbnS1Ux7TMiUZmTjVV4Zg6U8krLvN/OgjpBNdh23FsLuPwTzarYfTHJo4vjHbbo0TBDcX7Xpe
+	UwqdkNBi97QXLGw3cqg4sZJMTcVVPnRm+pZ7IudXfVw72bva96osxME8NRBA2kCB+EEIZonOFft
+	4E5Udp7JP6rITihbjJ3GJ43Wg51nCpxpU=
+X-Gm-Gg: ASbGncsii1ZINmFb0w9Fay0qJAzehmFQIV2M36K39HE0Ju99DpswYul7TExg7DyYYxK
+	BGPZ6o27QO3ontu1F2BlxM2MVx0DarSsqVZjwEglx/TIrY0eFURTxsM9doM1PZp+1tUE=
+X-Received: by 2002:a17:903:238e:b0:224:1c1:4aba with SMTP id d9443c01a7336-22db3db0f63mr20382325ad.50.1745482111807;
+        Thu, 24 Apr 2025 01:08:31 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG9QCt1+uWV0hbcvfKshe4MEvAT+8cYmunuoojCcFbrOrf3foAV6szwZqkcwyD4r4JChprCKBZyHc1ES6rtmRM=
+X-Received: by 2002:a17:903:238e:b0:224:1c1:4aba with SMTP id
+ d9443c01a7336-22db3db0f63mr20382045ad.50.1745482111469; Thu, 24 Apr 2025
+ 01:08:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 21/34] x86/msr: Utilize the alternatives mechanism
- to write MSR
-To: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
-        linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, andrew.cooper3@citrix.com, peterz@infradead.org,
-        namhyung@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
-        wei.liu@kernel.org, ajay.kaher@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
-        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
-        haiyangz@microsoft.com, decui@microsoft.com
-References: <20250422082216.1954310-1-xin@zytor.com>
- <20250422082216.1954310-22-xin@zytor.com>
- <b2624e84-6fab-44a3-affc-ce0847cd3da4@suse.com>
- <f7198308-e8f8-4cc5-b884-24bc5f408a2a@zytor.com>
- <37c88ea3-dd24-4607-9ee1-0f19025aaef3@suse.com>
-Content-Language: en-US
-From: Xin Li <xin@zytor.com>
-Autocrypt: addr=xin@zytor.com; keydata=
- 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
- l75w1xInsg==
-In-Reply-To: <37c88ea3-dd24-4607-9ee1-0f19025aaef3@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250422142628.1553523-1-hch@lst.de> <20250422142628.1553523-16-hch@lst.de>
+ <11b02dfa-9f71-48ac-9d20-ba5a6e44f289@kernel.org>
+In-Reply-To: <11b02dfa-9f71-48ac-9d20-ba5a6e44f289@kernel.org>
+From: Andreas Gruenbacher <agruenba@redhat.com>
+Date: Thu, 24 Apr 2025 10:08:19 +0200
+X-Gm-Features: ATxdqUFTuhjv2n6cEKl2JrhrhPyh6bRjf4GKJQJ_KzadIMn25rxqpw5We26zq08
+Message-ID: <CAHc6FU7Y5QKGB1pFL8A0-3VOX2i5LY92d9AYhWqgHMzxL30m4A@mail.gmail.com>
+Subject: Re: [PATCH 15/17] gfs2: use bdev_rw_virt in gfs2_read_super
+To: Damien Le Moal <dlemoal@kernel.org>
+Cc: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org, 
+	"Md. Haris Iqbal" <haris.iqbal@ionos.com>, Jack Wang <jinpu.wang@ionos.com>, 
+	Coly Li <colyli@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>, Chris Mason <clm@fb.com>, 
+	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>, 
+	Carlos Maiolino <cem@kernel.org>, Naohiro Aota <naohiro.aota@wdc.com>, 
+	Johannes Thumshirn <jth@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	linux-bcache@vger.kernel.org, dm-devel@lists.linux.dev, 
+	linux-btrfs@vger.kernel.org, gfs2@lists.linux.dev, 
+	linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/23/2025 9:05 AM, Jürgen Groß wrote:
->> It's not a major change, but when it is patched to use the immediate 
->> form MSR write instruction, it's straightforwardly streamlined.
-> 
-> It should be rather easy to switch the current wrmsr/rdmsr paravirt 
-> patching
-> locations to use the rdmsr/wrmsr instructions instead of doing a call to
-> native_*msr().
-> 
-> The case of the new immediate form could be handled the same way.
+On Thu, Apr 24, 2025 at 8:23=E2=80=AFAM Damien Le Moal <dlemoal@kernel.org>=
+ wrote:
+> On 4/22/25 23:26, Christoph Hellwig wrote:
+> > Switch gfs2_read_super to allocate the superblock buffer using kmalloc
+> > which falls back to the page allocator for PAGE_SIZE allocation but
+> > gives us a kernel virtual address and then use bdev_rw_virt to perform
+> > the synchronous read into it.
+> >
+> > Signed-off-by: Christoph Hellwig <hch@lst.de>
+>
+> Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
+>
+> One nit below.
+>
+> > ---
+> >  fs/gfs2/ops_fstype.c | 24 +++++++++---------------
+> >  1 file changed, 9 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/fs/gfs2/ops_fstype.c b/fs/gfs2/ops_fstype.c
+> > index e83d293c3614..7c1014ba7ac7 100644
+> > --- a/fs/gfs2/ops_fstype.c
+> > +++ b/fs/gfs2/ops_fstype.c
+> > @@ -226,28 +226,22 @@ static void gfs2_sb_in(struct gfs2_sbd *sdp, cons=
+t struct gfs2_sb *str)
+> >
+> >  static int gfs2_read_super(struct gfs2_sbd *sdp, sector_t sector, int =
+silent)
+> >  {
+> > -     struct super_block *sb =3D sdp->sd_vfs;
+> > -     struct page *page;
+> > -     struct bio_vec bvec;
+> > -     struct bio bio;
+> > +     struct gfs2_sb *sb;
+> >       int err;
+> >
+> > -     page =3D alloc_page(GFP_KERNEL);
+> > -     if (unlikely(!page))
+> > +     sb =3D kmalloc(PAGE_SIZE, GFP_KERNEL);
+> > +     if (unlikely(!sb))
+> >               return -ENOMEM;
+> > -
+> > -     bio_init(&bio, sb->s_bdev, &bvec, 1, REQ_OP_READ | REQ_META);
+> > -     bio.bi_iter.bi_sector =3D sector * (sb->s_blocksize >> 9);
+> > -     __bio_add_page(&bio, page, PAGE_SIZE, 0);
+> > -
+> > -     err =3D submit_bio_wait(&bio);
+> > +     err =3D bdev_rw_virt(sdp->sd_vfs->s_bdev,
+> > +                     sector * (sdp->sd_vfs->s_blocksize >> 9), sb, PAG=
+E_SIZE,
+>
+> While at it, use SECTOR_SHIFT here ?
 
-Actually, that is how we get this patch with the existing alternatives
-infrastructure.  And we took a step further to also remove the pv_ops
-MSR APIs...
+This is hardcoded in several places; I can clean it up separately.
 
-It looks to me that you want to add a new facility to the alternatives
-infrastructure first?
+> > +                     REQ_OP_READ | REQ_META);
+> >       if (err) {
+> >               pr_warn("error %d reading superblock\n", err);
+> > -             __free_page(page);
+> > +             kfree(sb);
+> >               return err;
+> >       }
+> > -     gfs2_sb_in(sdp, page_address(page));
+> > -     __free_page(page);
+> > +     gfs2_sb_in(sdp, sb);
+> > +     kfree(sb);
+> >       return gfs2_check_sb(sdp, silent);
+> >  }
+> >
 
+Reviewed-by: Andreas Gruenbacher <agruenba@redhat.com>
 
->>> Only the "paravirt" term has been eliminated.
->>
->> Yes.
->>
->> But a PV guest doesn't operate at the highest privilege level, which
->> means MSR instructions typically result in a #GP fault.  I actually 
->> think the pv_ops MSR APIs are unnecessary because of this inherent
->> limitation.
->>
->> Looking at the Xen MSR code, except PMU and just a few MSRs, it falls
->> back to executes native MSR instructions.  As MSR instructions trigger
->> #GP, Xen takes control and handles them in 2 ways:
->>
->>    1) emulate (or ignore) a MSR operation and skip the guest instruction.
->>
->>    2) inject the #GP back to guest OS and let its #GP handler handle it.
->>       But Linux MSR exception handler just ignores the MSR instruction
->>       (MCE MSR exception will panic).
->>
->> So why not let Xen handle all the details which it already tries to do?
-> 
-> Some MSRs are not handled that way, but via a kernel internal emulation.
-> And those are handled that way mostly due to performance reasons. And some
-> need special treatment.
-> 
->> (Linux w/ such a change may not be able to run on old Xen hypervisors.)
-> 
-> Yes, and this is something to avoid.
-> 
-> And remember that Linux isn't the only PV-mode guest existing.
-> 
->> BTW, if performance is a concern, writes to MSR_KERNEL_GS_BASE and
->> MSR_GS_BASE anyway are hpyercalls into Xen.
-> 
-> Yes, and some other MSR writes are just NOPs with Xen-PV.
-> 
+Thanks,
+Andreas
 
-I will do some cleanup and refactor first.
-
-BTW, at least we can merge the safe() APIs into the non-safe() ones.
-
-Thanks!
-     Xin
 
