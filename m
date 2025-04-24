@@ -1,137 +1,115 @@
-Return-Path: <linux-pm+bounces-26096-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26097-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4E0BA9A3F6
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 09:32:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99899A9A49C
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 09:46:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5010D3BF4F4
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 07:32:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3CC03AC340
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 07:45:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E6E121B183;
-	Thu, 24 Apr 2025 07:27:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5FDC201032;
+	Thu, 24 Apr 2025 07:44:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eciZ3AKC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OB/Wu0p/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F9401F4703
-	for <linux-pm@vger.kernel.org>; Thu, 24 Apr 2025 07:27:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5C61F4CAB;
+	Thu, 24 Apr 2025 07:44:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745479653; cv=none; b=hW/mO2t2HP/D230NZVK1QJPMb4hfXvx8s+hVQyw/8Ie4AA9Xi5+bc2vw7UhKtI1MBr9B1JwXz8W7RBNdwjDQzA+inlJmle0YEuEzJ5zRqdnfTWF7gilfUwmQeiIK2qWS+kfyV84Eaf7ZzDZdlca3DQrXVYsHPHZWUwdlzuoNX5w=
+	t=1745480659; cv=none; b=CfmnSF0m8H64Spn8fwovLxdoCnvMukHyLJ0syxbzi/mL9+JUguDESYt5K0DW7QNOFUJM1bgdqyQpY1n+fmaQ3qEBfEGciUkkfvic42UFjKxlAFXtseuE2+5hFoZvLmsUH0Mu9WOnEsY99YSiRqHQEzAKpPyLG01J0yvZKlKUUn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745479653; c=relaxed/simple;
-	bh=nfS/x7gU72+XZ/1UFNxd1HLffHl8y6g5SuxZxkDA59U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UNNXIzhAbfAGSpDu1J1lRr/qQK1nghTeOhDqBZXi5R0aI1eOcGPl2FOPdKrevkDsEyeMmKSihxR3/raGO2EqwT1DLUhAAD5VTvqv7cDibIzgD+ulDl2OitAjP1zn0HUpPZ27CP8FMSHwQenRuDck8eiZ33cS+cPYfJlNe94eCoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eciZ3AKC; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7396f13b750so708913b3a.1
-        for <linux-pm@vger.kernel.org>; Thu, 24 Apr 2025 00:27:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1745479651; x=1746084451; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xc6Bs3X2UGLyK7xuUxebVRwe8Yuv6ialkBolRwEEth4=;
-        b=eciZ3AKCZNi9nydQQXX83dFrc//SczevNhjo4Pc3xh09twTwV69V1kZz7M9fd6wHzm
-         76CYlDppAdBNJJOnGZr1CISUzcjBvdNYEhRheFR1Gb4yVXFWjJhufVi9TRdUzE96LWYU
-         3oBYfO5ZSDrsKs9r+b4QlBzxLloWuJOoD9q6jc4+1KfoDcbep/tS0tVWccoh/r+A17Bn
-         Cg5JjZ4HvHsY7j/ldA1H+xwYj8ZY1CA7kMD/df2xFInmX0oBmtFdydyHcVojgx2FKg9C
-         34ZKtNKpPubD6KFEYhfR++s/3C8OAxUKLFIOkMZkXGdSt+CFz8dHpM0ErzMc2zXqXov3
-         rjPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745479651; x=1746084451;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xc6Bs3X2UGLyK7xuUxebVRwe8Yuv6ialkBolRwEEth4=;
-        b=rbIwaNnYVfMtrGaHs30VmqPvPfNysjFyJk1QXSLBDyPRBkb//QRNeynJBT3k9q9MQg
-         CtKTH02qrEQ/yjQYCJyM4UFPXCSZZ3HicB1dJ/INjXO+vIYgmHxybOQlE75hFQwUP7l0
-         6mvMqDcUnG/SrcG5Wx8gF0t5cyQGiIJunbjUofpMojTEesy8CulJyMimorId8J+b/UpU
-         yMs88FpNV7mL1JsdSo6r+ArHbvLB8UJfW7VmLtyBR6dGrfILAq8wxMvuvKy9+KtiiWB0
-         yiwkG0uEwDXJO5PdM3ii0BQMZCElzV7NGjtYCpOl9TgzTD7wQXWz4b+ld/VbgMUjx8Rv
-         qMkg==
-X-Forwarded-Encrypted: i=1; AJvYcCWbwgg5UcdQNecRljJupm+EiPbLJzutV17fGKdyjOVffPq4/I4V7DW5CI1TQZoYEbEPRZCbja53/g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKbW9RI7ecB+cL/K8yDuyLscPGE+aEa65SU0U1yWZxsTbQWF6c
-	YgI2VKkvkFXMP8vaErgPLVCnNwQgV6B+8v+IDMM5JfsgHa1j0rXxqCMRYEgNoDA=
-X-Gm-Gg: ASbGncsLZEZQ4j9MpP7FOdOQ9BvQsobsmwFMixCWjf1G6XvN8DiVOmYE5uoJUYLux42
-	7QxX1f4OTUFs9Ij5bwGWaR0WJDePS/UkxK0KFD3reFmRsauJkGrP1u7nnFpQ/zKNKrOknm2DhNT
-	VLFsPt7HUxQpYPnfu/Xa+Afl/dUEHW6UDtf2621zkjSoyzd8Ju0eby2u00XYG5r+ksYHZk7/ZRG
-	OqlAahY+0IVRwFgASfhqu9xPjMYk6wJtvok82Orcx/TQBc+Gaw6b7SWjppx+h9p8PcrDWwKjzm3
-	JUGo798dsC84Pet5lY18RUcXswTrj7tSL/QK46tYCUYqZLlzkT1l
-X-Google-Smtp-Source: AGHT+IFfO2QBFWIVhr5m1hx0gDzPpYf2exm/10n5qGHZbkS4yQ7Df4uixIbTqJipsI6JMV03ToC3DA==
-X-Received: by 2002:a05:6a00:391d:b0:736:6043:69f9 with SMTP id d2e1a72fcca58-73e247d74cfmr2285546b3a.19.1745479650864;
-        Thu, 24 Apr 2025 00:27:30 -0700 (PDT)
-Received: from localhost ([122.172.83.32])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73e25a9a0e5sm751557b3a.132.2025.04.24.00.27.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Apr 2025 00:27:30 -0700 (PDT)
-Date: Thu, 24 Apr 2025 12:57:28 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Lifeng Zheng <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Nicholas Chin <nic.c3.14@gmail.com>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/6] cpufreq: acpi: Re-sync CPU boost state on system
- resume
-Message-ID: <20250424072728.bbcbbcxv7x4cumck@vireshk-i7>
-References: <cover.1745315548.git.viresh.kumar@linaro.org>
- <d8651db6d8687a0e37d527267ebfec05f209b1b7.1745315548.git.viresh.kumar@linaro.org>
- <CAJZ5v0hWUdRdbPL2=qybaEsNfPzAqdxW+xBrjwy4HaBXnTwD0g@mail.gmail.com>
- <CAJZ5v0jFy9ch4ZcW_zQs6GfvB=LCnzm94d35ifMpdv=VrqTHQA@mail.gmail.com>
- <CAJZ5v0jenM_pYUkTv-qPV21tok15R+KfT497itPO=fLUywDKqw@mail.gmail.com>
+	s=arc-20240116; t=1745480659; c=relaxed/simple;
+	bh=VnZ0ZKETltelPggcEVrc3mWHY8TQu/tmfh9OEL4vmMI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=f4v7pq4kj8tHjD7sAlBD5E1TTmVIX7xMQcgW4PbFk2MYHbivdi70e645VoH5KxKhK3KWhrNvv/W2iHGuXSVsNgb6Bpq4RJ/spjmDIdwfoJxEFwnCztrahwR/QA1KyB8MFBapot2HePmbRy7qoHz99xRZFVVhBeW1xnzExEx2Puc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OB/Wu0p/; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745480658; x=1777016658;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=VnZ0ZKETltelPggcEVrc3mWHY8TQu/tmfh9OEL4vmMI=;
+  b=OB/Wu0p/r8d15aebZjNEJntfPO9eWB3D/pZUnPOZv9YQNClfiBNNVzqW
+   KsM/uCZOF5AiVokmGN7VWM41rOCaTzTd3ExwHBFrt8bixmAw7EojDGD8h
+   1YowSpfcLieySl6POEIYeClPzKs0txBlHWnfI6SokzyewlKKrpBnd+Jlz
+   yigZlZQbLsGoEvQzjyhXtdblXT26G0TbuiE+VG/AK1VHAHXLwesW+UNQI
+   yv8e/EA8vCnwjihXWRM6cyqap28mofCr+lCvKXP/JdrIUahwPH9gFzwgV
+   91pB5dh5vqsYiOR43QX3ORlBONnA1qtmS5ivaf9dAduyuVt8m8DYm7oDm
+   g==;
+X-CSE-ConnectionGUID: V2WGM4HkS+aVeKFQFLBK6Q==
+X-CSE-MsgGUID: wxBLYM9lRMGvXLXlRBz0Vw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11412"; a="57741542"
+X-IronPort-AV: E=Sophos;i="6.15,235,1739865600"; 
+   d="scan'208";a="57741542"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2025 00:44:16 -0700
+X-CSE-ConnectionGUID: MELztBFPQQ2RK/E68kIfoA==
+X-CSE-MsgGUID: h1WZ0YKEQFuFYSt/MxBHnQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,235,1739865600"; 
+   d="scan'208";a="132274496"
+Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.245.128]) ([10.124.245.128])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2025 00:43:59 -0700
+Message-ID: <02689dad-a10a-41a8-ad7e-e92d0a8d7e76@linux.intel.com>
+Date: Thu, 24 Apr 2025 15:43:56 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0jenM_pYUkTv-qPV21tok15R+KfT497itPO=fLUywDKqw@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 12/34] x86/msr: Remove pmu_msr_{read,write}()
+To: Xin Li <xin@zytor.com>, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+ linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+ xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org,
+ jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org,
+ namhyung@kernel.org, mark.rutland@arm.com,
+ alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
+ adrian.hunter@intel.com, kan.liang@linux.intel.com, wei.liu@kernel.org,
+ ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+ tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
+ seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
+ kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com
+References: <20250422082216.1954310-1-xin@zytor.com>
+ <20250422082216.1954310-13-xin@zytor.com>
+ <7c44da88-72bb-4d1f-9f38-bf0e7e79b7a0@linux.intel.com>
+ <45f95d01-4b98-457c-8272-c396a52b3844@zytor.com>
+Content-Language: en-US
+From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
+In-Reply-To: <45f95d01-4b98-457c-8272-c396a52b3844@zytor.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 23-04-25, 16:59, Rafael J. Wysocki wrote:
-> On Wed, Apr 23, 2025 at 4:40 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > IIUC policy->boost_enabled is false at this point, so say that
-> > > boost_state(cpu) returns true and say cpufreq_boost_enabled() returns
-> > > false.
-> >
-> > This cannot happen for CPU 0 because of acpi_cpufreq_boost_init() ->
 
-Right.
+On 4/24/2025 3:21 PM, Xin Li wrote:
+> On 4/23/2025 11:33 PM, Mi, Dapeng wrote:
+>> Could we merge this patch and previous patch into a single patch? It's
+>> unnecessary to just modify the pmu_msr_read()/pmu_msr_write() in previous
+>> patch and delete them immediately. It just wastes the effort.
+> No, it's not wasting effort, it's for easier review.
+>
+> Look at this patch, you can easily tell that pmu_msr_read() and
+> pmu_msr_write() are nothing more than pmu_msr_chk_emulated(), and
+> then removing them makes a lot of sense.
 
-> > > cpufreq_online() will see policy->boost_enabled ==
-> > > cpufreq_boost_enabled(), so it won't do anything regarding boost, and
-> > > say that this happens for all online CPUs.
-> >
-> > -> so if boost_state(0) returns true, policy->boost_enabled will be
-> > set for all policies to start with due to the code in
-> > cpufreq_online(), but this is far from obvious.
+These 2 patches are not complicated, it won't be difficult to review if
+merging them into one as long as the commit message mentions it clearly.
+Anyway I'm fine if you hope to keep them into two patches.
 
-> > I would at least say in the changelog that set_boost() need not be
-> > called directly at the policy initialization time because of the
-> > above.
 
-Sure.
-
-> I also think that acpi_cpufreq_resume() may be a better place for
-> re-syncing the boost state with policy->boost_enabled because it may
-> do that for CPU 0 as well as for the non-boot CPUs.
-
-I thought about that but kept this in acpi_cpufreq_cpu_init() as there
-are other corner cases too. A simple CPU hotplug (without
-suspend/resume) for example. In that case exit/init will get called
-but not resume.
-
--- 
-viresh
 
