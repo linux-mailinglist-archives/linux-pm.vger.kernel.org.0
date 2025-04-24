@@ -1,240 +1,135 @@
-Return-Path: <linux-pm+bounces-26091-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26092-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7148FA9A25B
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 08:35:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A7DAAA9A307
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 09:15:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA20817F97C
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 06:33:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE6774410F6
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 07:15:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B0381DE2BF;
-	Thu, 24 Apr 2025 06:33:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6689A1EE7DD;
+	Thu, 24 Apr 2025 07:14:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d9Tmj1Ln"
+	dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b="Xq6UZQzi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C0E19CCEA;
-	Thu, 24 Apr 2025 06:33:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCFF41D8E01
+	for <linux-pm@vger.kernel.org>; Thu, 24 Apr 2025 07:14:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745476434; cv=none; b=PckO/jjVo20UONbbDxSVPbxaLHBocQtGQx+hUlTZqKsIUbSte3UoZ65IzaLVDlkoMBcPki6QDUIlhU/Wx3R5DfU02kP7NyJBJ220fScJ9CxiSXHHs56FzvhzZ+q3WXZ7L9CmEle+3HPtQkFQry6JvfW9cZnPwbgnUwdz22RCkvs=
+	t=1745478898; cv=none; b=AgBarx3zV2v5r+ojDqRYv8NuxrgqOEwh2Q3st6tiufydtQob8YMApp2V6CwjFY8IFK1L++yokRHmn8JGop+ssi0kqFm4NrmhxJyJiyGabn9bqP2XfLccJHvtvojrG514beH2Q6rG1XCPzboqeyMG7+45vJLVHqScXXeR4zIH8fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745476434; c=relaxed/simple;
-	bh=dcxOn/nuTpss+vf24oXBlr34cv3+AgMg/89LV6ad5rM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TguzyjdlRYpyypXyh4QUvrvtNBCfYKkjtbEMK/0nzZUX5u513PJQOkTmS4FuqpjpqMMLcQWvVOAiN5DmhvKBqoB1SXzIwEj1xoXcVVYQzA42EdGavwq3N894EfUsXKQ2ctQa7fwbdwz2vPtLt4uubZNIwIJLHV/KQady6rYldR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d9Tmj1Ln; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745476432; x=1777012432;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dcxOn/nuTpss+vf24oXBlr34cv3+AgMg/89LV6ad5rM=;
-  b=d9Tmj1LnQP9hx66yDS6p8glM4v/kq94XcF1sxC/aAvR91xyy4tJ+J2QP
-   qpEVmOZKrirDlBd0Za96P28j8Q4H2kLk2chbF+PwbPt3u/j5Il0yPnUte
-   WfSjkje9MkPX46sLkjidfG9wEgPo/kJ/aThqvgdRR9RLzQlTQBeH/3iXM
-   Ll7egNGKwyjLOAXGECBHUTgJExXBYpJK3QeEaLcWtg+/hvEmu0yx2a55p
-   yYy1g6OkFMA58JQznGkzpwwwrPmv7ZyHHyosO9TYGQT0/AEWSvVVpMknQ
-   xGZZ1ZeXi66cRiJa2PAsxZXlV0TaYHZDkRpephhm1uYf/1j72MBA6MMKO
-   w==;
-X-CSE-ConnectionGUID: uh33JJM0TIKbNwp+P2uWIQ==
-X-CSE-MsgGUID: 5cQyryPySRKKPU1udgZxkQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11412"; a="47226706"
-X-IronPort-AV: E=Sophos;i="6.15,235,1739865600"; 
-   d="scan'208";a="47226706"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 23:33:51 -0700
-X-CSE-ConnectionGUID: l3lwgHW4RvWGJqWYsXT+Ow==
-X-CSE-MsgGUID: x4fuAgz/TQeaZNeRxG6fQQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,235,1739865600"; 
-   d="scan'208";a="163563116"
-Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.245.128]) ([10.124.245.128])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 23:33:39 -0700
-Message-ID: <7c44da88-72bb-4d1f-9f38-bf0e7e79b7a0@linux.intel.com>
-Date: Thu, 24 Apr 2025 14:33:35 +0800
+	s=arc-20240116; t=1745478898; c=relaxed/simple;
+	bh=6soEZQ4kJUtvIiqK5puOZE2rScJp6QCdTzCCiUGiRxg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CJ6c/d/n4Xvd2tsKk1qxFjkQChR/clrGBJT8giJoFSOeWPUTNRZjDNFTvqH4sYU1JrUzxOWC70pwH02O/58sifU6cRwmTnX/hauPrPFVVtPXxwTM2Q5zF5z2zpYi3AAMGIKT0wSC8Rsy6qltWyXfljflM3Tb5r7T1ELsEqoq+z8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ionos.com; spf=pass smtp.mailfrom=ionos.com; dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b=Xq6UZQzi; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ionos.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ionos.com
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-acb94bf784bso8435966b.0
+        for <linux-pm@vger.kernel.org>; Thu, 24 Apr 2025 00:14:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google; t=1745478894; x=1746083694; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o+B8Lq9RDCcRwOgfM91avCJcgWbWbGSMVAU80sQQPWI=;
+        b=Xq6UZQzibfvGVdnwkYbd7NWgiWC05fNrhf9y/0ZSiM0Z7LQhJg9XZHgrUjy9LPC99j
+         EJQAIft0BEKZ1eMAYzCFRBPZzO3ppYJziFE6SiAKn52n1iYAm5caWnL4YBWtFb6fcqxQ
+         0CfgzwaJuLQHEizVRT/eeN7PaJA+owTom8aEJVlA0wQaPK0NCqNL0aAfwD24Jd/rvSEF
+         HBb3Cbo6qnumJ5mfHEUtLNFmx7Fmzf5Xli+VaQLix7V19h2Rq120bC7nkBVrdT5/wAPf
+         TLYSvFVXw4IuAI1qzXpDXaECS6zheezm/LEyE8700zeehsbQPw3XyXYO4o3KXiQDBtQx
+         VgPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745478894; x=1746083694;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o+B8Lq9RDCcRwOgfM91avCJcgWbWbGSMVAU80sQQPWI=;
+        b=vk8izRdQYTXVHs74nopdSIcfH1vraGvDuAO9lC9uwI5l7S/BvaDUKjTYTz0HpKvQcX
+         89oHmWAPiNfr3Kd8y4fXNYGjD7PtT0XFpqxXm9+9GV1PQG1jOSPIbfrFIUDVJznByn8Y
+         qCcm/8TiVdlsQqw7+iYOWTXVTSiWclf5dkwJQIoPbBScQzM+ej16gkZzHEu8QGypkwGX
+         QGqBGDhR5GF/MU+Wd90JM0tBQYWAyY46a7Dhry0YZJRdThhyzmrcYfvtpcW3Efe9LSPZ
+         hvLIdzaUwzX6nS+z9DofZeZw4M9O/Q/c6ihOSYXFqRZ3Ek6+PxWGnmlwGfcSf/l6KsV0
+         uqbg==
+X-Forwarded-Encrypted: i=1; AJvYcCWgPmkbip/+I3aTgoKuldxeTMFsYV6dG60WJmadqWCQ08ptQKY9QVG/CgeiVac1zJFdpdp8cH93MQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYT8xBZHpFi/5cY9D85PK9tUQF1b7Bo4X4jyYzl9hbvr5Dc1Om
+	dXE5770lC2/K/OQreTHULlpm7S/u0A/Fo+bKx1diX8zwTbdJDf7vOfwPGSjEedS74IYMP4dUjAn
+	qtHny9TpwdzGmC59Y7ARGXCyWG4wGCZWsiMc/FA==
+X-Gm-Gg: ASbGnctzErnl/qG07CDCRFo/rFWqEgYSvQVVHilKrVHXxJ5ipibmNdUW5dllM9/DxZJ
+	NxB+w0o7x1cPO0MQnI54YDELdPvrNUVFAFzODioMph0fkIBPxGP3q/xulGPINC+3CWg44P6+/Hf
+	3PGksN2Nzx3K0aL5iHddcehT0279VKFCvctt7XeqOjWLCPH4jWiHmR43Y=
+X-Google-Smtp-Source: AGHT+IEyAiUyJ2mt3265jGzrXL9ewNYPCotZUNj9QN43I8BqsNkYBnMDkmlm1PZ/N97S/0QtxYx3zQ6j0NbtPT1J4KM=
+X-Received: by 2002:a05:6402:35cd:b0:5ed:9811:dfdc with SMTP id
+ 4fb4d7f45d1cf-5f6ddcf7f9emr548541a12.2.1745478894059; Thu, 24 Apr 2025
+ 00:14:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 12/34] x86/msr: Remove pmu_msr_{read,write}()
-To: "Xin Li (Intel)" <xin@zytor.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
- linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
- xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
- linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
- platform-driver-x86@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org,
- jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org,
- namhyung@kernel.org, mark.rutland@arm.com,
- alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
- adrian.hunter@intel.com, kan.liang@linux.intel.com, wei.liu@kernel.org,
- ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
- tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
- seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
- kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com
-References: <20250422082216.1954310-1-xin@zytor.com>
- <20250422082216.1954310-13-xin@zytor.com>
-Content-Language: en-US
-From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
-In-Reply-To: <20250422082216.1954310-13-xin@zytor.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250422142628.1553523-1-hch@lst.de> <20250422142628.1553523-11-hch@lst.de>
+In-Reply-To: <20250422142628.1553523-11-hch@lst.de>
+From: Jinpu Wang <jinpu.wang@ionos.com>
+Date: Thu, 24 Apr 2025 09:14:43 +0200
+X-Gm-Features: ATxdqUFceKzqfCTaFW1t2hUyaQzIpI3Ey7xNjxMyLwpQpyjJSAnOh5Bm8Qq-E8M
+Message-ID: <CAMGffEmB1Y22T6JosV+aJrTf9NWAabuJqovy65+mMLsOcx1ktQ@mail.gmail.com>
+Subject: Re: [PATCH 10/17] rnbd-srv: use bio_add_virt_nofail
+To: Christoph Hellwig <hch@lst.de>
+Cc: Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org, 
+	"Md. Haris Iqbal" <haris.iqbal@ionos.com>, Coly Li <colyli@kernel.org>, 
+	Kent Overstreet <kent.overstreet@linux.dev>, Mike Snitzer <snitzer@kernel.org>, 
+	Mikulas Patocka <mpatocka@redhat.com>, Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, 
+	David Sterba <dsterba@suse.com>, Andreas Gruenbacher <agruenba@redhat.com>, Carlos Maiolino <cem@kernel.org>, 
+	Damien Le Moal <dlemoal@kernel.org>, Naohiro Aota <naohiro.aota@wdc.com>, 
+	Johannes Thumshirn <jth@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	linux-bcache@vger.kernel.org, dm-devel@lists.linux.dev, 
+	linux-btrfs@vger.kernel.org, gfs2@lists.linux.dev, 
+	linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-On 4/22/2025 4:21 PM, Xin Li (Intel) wrote:
-> As pmu_msr_{read,write}() are now wrappers of pmu_msr_chk_emulated(),
-> remove them and use pmu_msr_chk_emulated() directly.
+On Tue, Apr 22, 2025 at 4:27=E2=80=AFPM Christoph Hellwig <hch@lst.de> wrot=
+e:
 >
-> While at it, convert the data type of MSR index to u32 in functions
-> called in pmu_msr_chk_emulated().
+> Use the bio_add_virt_nofail to add a single kernel virtual address
+> to a bio as that can't fail.
 >
-> Suggested-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-> Signed-off-by: Xin Li (Intel) <xin@zytor.com>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+Acked-by: Jack Wang <jinpu.wang@ionos.com>
 > ---
->  arch/x86/xen/enlighten_pv.c | 17 ++++++++++-------
->  arch/x86/xen/pmu.c          | 24 ++++--------------------
->  arch/x86/xen/xen-ops.h      |  3 +--
->  3 files changed, 15 insertions(+), 29 deletions(-)
+>  drivers/block/rnbd/rnbd-srv.c | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
 >
-> diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
-> index 1418758b57ff..b5a8bceb5f56 100644
-> --- a/arch/x86/xen/enlighten_pv.c
-> +++ b/arch/x86/xen/enlighten_pv.c
-> @@ -1089,8 +1089,9 @@ static void xen_write_cr4(unsigned long cr4)
->  static u64 xen_do_read_msr(unsigned int msr, int *err)
->  {
->  	u64 val = 0;	/* Avoid uninitialized value for safe variant. */
-> +	bool emulated;
->  
-> -	if (pmu_msr_read(msr, &val, err))
-> +	if (pmu_msr_chk_emulated(msr, &val, true, &emulated) && emulated)
-
-ah, here it is.
-
-Could we merge this patch and previous patch into a single patch? It's
-unnecessary to just modify the pmu_msr_read()/pmu_msr_write() in previous
-patch and delete them immediately. It just wastes the effort.
-
-
->  		return val;
->  
->  	if (err)
-> @@ -1133,6 +1134,7 @@ static void xen_do_write_msr(unsigned int msr, unsigned int low,
->  			     unsigned int high, int *err)
->  {
->  	u64 val;
-> +	bool emulated;
->  
->  	switch (msr) {
->  	case MSR_FS_BASE:
-> @@ -1162,12 +1164,13 @@ static void xen_do_write_msr(unsigned int msr, unsigned int low,
->  	default:
->  		val = (u64)high << 32 | low;
->  
-> -		if (!pmu_msr_write(msr, val)) {
-> -			if (err)
-> -				*err = native_write_msr_safe(msr, low, high);
-> -			else
-> -				native_write_msr(msr, low, high);
-> -		}
-> +		if (pmu_msr_chk_emulated(msr, &val, false, &emulated) && emulated)
-> +			return;
-> +
-> +		if (err)
-> +			*err = native_write_msr_safe(msr, low, high);
-> +		else
-> +			native_write_msr(msr, low, high);
->  	}
->  }
->  
-> diff --git a/arch/x86/xen/pmu.c b/arch/x86/xen/pmu.c
-> index 95caae97a394..afb02f43ee3f 100644
-> --- a/arch/x86/xen/pmu.c
-> +++ b/arch/x86/xen/pmu.c
-> @@ -128,7 +128,7 @@ static inline uint32_t get_fam15h_addr(u32 addr)
->  	return addr;
->  }
->  
-> -static inline bool is_amd_pmu_msr(unsigned int msr)
-> +static bool is_amd_pmu_msr(u32 msr)
->  {
->  	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
->  	    boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
-> @@ -194,8 +194,7 @@ static bool is_intel_pmu_msr(u32 msr_index, int *type, int *index)
->  	}
->  }
->  
-> -static bool xen_intel_pmu_emulate(unsigned int msr, u64 *val, int type,
-> -				  int index, bool is_read)
-> +static bool xen_intel_pmu_emulate(u32 msr, u64 *val, int type, int index, bool is_read)
->  {
->  	uint64_t *reg = NULL;
->  	struct xen_pmu_intel_ctxt *ctxt;
-> @@ -257,7 +256,7 @@ static bool xen_intel_pmu_emulate(unsigned int msr, u64 *val, int type,
->  	return false;
->  }
->  
-> -static bool xen_amd_pmu_emulate(unsigned int msr, u64 *val, bool is_read)
-> +static bool xen_amd_pmu_emulate(u32 msr, u64 *val, bool is_read)
->  {
->  	uint64_t *reg = NULL;
->  	int i, off = 0;
-> @@ -298,8 +297,7 @@ static bool xen_amd_pmu_emulate(unsigned int msr, u64 *val, bool is_read)
->  	return false;
->  }
->  
-> -static bool pmu_msr_chk_emulated(unsigned int msr, uint64_t *val, bool is_read,
-> -				 bool *emul)
-> +bool pmu_msr_chk_emulated(u32 msr, u64 *val, bool is_read, bool *emul)
->  {
->  	int type, index = 0;
->  
-> @@ -313,20 +311,6 @@ static bool pmu_msr_chk_emulated(unsigned int msr, uint64_t *val, bool is_read,
->  	return true;
->  }
->  
-> -bool pmu_msr_read(u32 msr, u64 *val)
-> -{
-> -	bool emulated;
-> -
-> -	return pmu_msr_chk_emulated(msr, val, true, &emulated) && emulated;
-> -}
-> -
-> -bool pmu_msr_write(u32 msr, u64 val)
-> -{
-> -	bool emulated;
-> -
-> -	return pmu_msr_chk_emulated(msr, &val, false, &emulated) && emulated;
-> -}
-> -
->  static u64 xen_amd_read_pmc(int counter)
->  {
->  	struct xen_pmu_amd_ctxt *ctxt;
-> diff --git a/arch/x86/xen/xen-ops.h b/arch/x86/xen/xen-ops.h
-> index a1875e10be31..fde9f9d7415f 100644
-> --- a/arch/x86/xen/xen-ops.h
-> +++ b/arch/x86/xen/xen-ops.h
-> @@ -271,8 +271,7 @@ void xen_pmu_finish(int cpu);
->  static inline void xen_pmu_init(int cpu) {}
->  static inline void xen_pmu_finish(int cpu) {}
->  #endif
-> -bool pmu_msr_read(u32 msr, u64 *val);
-> -bool pmu_msr_write(u32 msr, u64 val);
-> +bool pmu_msr_chk_emulated(u32 msr, u64 *val, bool is_read, bool *emul);
->  int pmu_apic_update(uint32_t reg);
->  u64 xen_read_pmc(int counter);
->  
+> diff --git a/drivers/block/rnbd/rnbd-srv.c b/drivers/block/rnbd/rnbd-srv.=
+c
+> index 2ee6e9bd4e28..2df8941a6b14 100644
+> --- a/drivers/block/rnbd/rnbd-srv.c
+> +++ b/drivers/block/rnbd/rnbd-srv.c
+> @@ -147,12 +147,7 @@ static int process_rdma(struct rnbd_srv_session *srv=
+_sess,
+>
+>         bio =3D bio_alloc(file_bdev(sess_dev->bdev_file), 1,
+>                         rnbd_to_bio_flags(le32_to_cpu(msg->rw)), GFP_KERN=
+EL);
+> -       if (bio_add_page(bio, virt_to_page(data), datalen,
+> -                       offset_in_page(data)) !=3D datalen) {
+> -               rnbd_srv_err_rl(sess_dev, "Failed to map data to bio\n");
+> -               err =3D -EINVAL;
+> -               goto bio_put;
+> -       }
+> +       bio_add_virt_nofail(bio, data, datalen);
+>
+>         bio->bi_opf =3D rnbd_to_bio_flags(le32_to_cpu(msg->rw));
+>         if (bio_has_data(bio) &&
+> --
+> 2.47.2
+>
 
