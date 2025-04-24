@@ -1,180 +1,288 @@
-Return-Path: <linux-pm+bounces-26101-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26102-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EE8EA9A552
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 10:09:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CBBFA9A581
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 10:14:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4371A7AACA0
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 08:08:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C0761B8260D
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 08:14:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96B71205AB6;
-	Thu, 24 Apr 2025 08:08:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74642205AB6;
+	Thu, 24 Apr 2025 08:14:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aR7isCav"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="g5ipNrlQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BD39205E34
-	for <linux-pm@vger.kernel.org>; Thu, 24 Apr 2025 08:08:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FC71FDA61
+	for <linux-pm@vger.kernel.org>; Thu, 24 Apr 2025 08:14:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745482120; cv=none; b=TsjUapkaH5LIq/i9ifVsQDfo2pgDiN6plBKgPxxwt4b9ZVi0tzlRzta96T9J5BiLgZgp1D/tZcTWdRAa3Hc0R+oLdKrn29+27bMlJuUBY46spaYEVw8UOnskbIgcRKYSJfB7JyNStB04/yjDJscR4bhX+Y9bRT/1XFpYeUBprFw=
+	t=1745482467; cv=none; b=VGezeC2TXHmVAosmBC7464IRsAnxMv5j/liyuTAvCCErW9YC5BEWJYM345SkX9AJjPcFDiiPo9m+N1ILWaumse2jQDMRBQ/ojUjiDdej0S5E6ZfFBFOe3BmSN79zrqzigbceQboL5myjpXHSQpgNPd3MVo8yH3ca3Qr3cs2NBHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745482120; c=relaxed/simple;
-	bh=7LSwA9/RC1GNwfG+lCcud3yw0cCVDeqP5nGelatoTRg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f9GaqrHdhzdFskWFmFlVYYm7gMfvS6Rvy8xK09a9zEx58G/t79XKv5Ru0Wn4fZv1DD7bs87TVE4Fg5ggzmy9er+rTwm/AlTpif6GpMpRLEsxzVbJsuWclar0F0CF6riiu2ZphZNG7+Ive5F02Zpz//o9nIWaTZvrccOzSX6vxG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aR7isCav; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745482116;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SIBcAPIsvRbbtPBYFtUV3aaspfe/f5XOnaHKo0o0ZIA=;
-	b=aR7isCavswchNYFgl2NYf2HbK3GmLFWGoaNh/3qFuZrqstuKz5prQXUP2Tk0oCjIEW3Nr8
-	WjvenkO3CGq4p6RdToby9tKutSw367JYhbLtZxpDTpvlZptCeyku05kezmpWyjdIq2Mg/8
-	kg8K2a1B8OV6AZVAgabjJ5WeYhHcBvg=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-392-h7Oe9b2CN-a2KfflaNWf5w-1; Thu, 24 Apr 2025 04:08:32 -0400
-X-MC-Unique: h7Oe9b2CN-a2KfflaNWf5w-1
-X-Mimecast-MFC-AGG-ID: h7Oe9b2CN-a2KfflaNWf5w_1745482112
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-22647ff3cf5so6796705ad.0
-        for <linux-pm@vger.kernel.org>; Thu, 24 Apr 2025 01:08:32 -0700 (PDT)
+	s=arc-20240116; t=1745482467; c=relaxed/simple;
+	bh=008EJSG/phqGVPmxi0nDH3NCIHBvP55QLSxmr4tKYHM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W8V9Emy9daREXB+aSzbdGKKmQm2VoVvk5aio7zcTqL+YG5y7mFbhlCzlLm+BQaPvgFe24Jmdk741bdA9sWnuofubJ539lQzuOZTzHFXMhOB23wp9JBokhjxRw+YHntKQaZSFGXbkteFuaqNn+vTOjET42TkmMh0rpsXRBm2LOa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=g5ipNrlQ; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43d07ca6a80so2784605e9.1
+        for <linux-pm@vger.kernel.org>; Thu, 24 Apr 2025 01:14:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1745482463; x=1746087263; darn=vger.kernel.org;
+        h=in-reply-to:autocrypt:from:content-language:references:cc:to
+         :subject:user-agent:mime-version:date:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=008EJSG/phqGVPmxi0nDH3NCIHBvP55QLSxmr4tKYHM=;
+        b=g5ipNrlQnbWNQDx5PIdtRQxcoYaTUktowF593eplhxCKnKvGsx8xL5Io9JUFqMREuH
+         uifLo70GGibNxkA8BZJteNwZ6EAF6s3nY8zDad3SPCPDHIW8oJyJtj9ld22kl1EUa7/q
+         Lq1uEOedlXyJ23cirzmv3C2OhC5i7BWJ9jmtvolAe7r3Pk+oDVHQQqFcu1K6F0Ym2RYk
+         XNmFokhCNHR0lp3MdXn/d2pua9jvTf3BLD4icK36KM7xmjCMjXw6Btf/U1t7BPZNU1mu
+         n7zr9HdwCu+uMliMO3ktz7yD82fUwnl47w0KptodS04C/vn7at/8RzvBzNPnfB/xHfev
+         zt8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745482112; x=1746086912;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SIBcAPIsvRbbtPBYFtUV3aaspfe/f5XOnaHKo0o0ZIA=;
-        b=FuJCaAVwQPB9sZw+W+fM0/3UGY7wIfO8JGkZsVZW5WT2KGMSoKEF2V7zQEZivBPZgv
-         mAZkywB0330Wf8A/3Zn0HboX2Y29Fe+VDrinftpyRws8z+dr74ZwZL7gKGk/lsKz2lst
-         W8IubzwzjwWrjVJF5IH/IlFdJEsu3YJRhqtT7v3yi9rHmmOkcuT7gLL0KXWUfZp1Z8Xg
-         hgmIKDqEC2x5zgO/piuKQUwYXoIZ/lUYAy70mO+2NkJvSqKKAzRealI/GHVp7CoEidLL
-         dZcfZIpQqyHP4uu0OJfNtTPpNZHDWcKj74/r7hl7wGccWxPI3AHsLiqI+Yim6oTmU3To
-         mSHg==
-X-Forwarded-Encrypted: i=1; AJvYcCUkmY+ZgjNgi/zkX9daGLcOUpxW57J6tgLSxzveRJzYxcDr+nNEJzwPVXcua+EdWxnKYEL9kHTt3A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTvy3CiwR8Rafb5bN0zDXz/WSSwW340yUGhMSAqXrgIB8+q/Fx
-	GpQbnS1Ux7TMiUZmTjVV4Zg6U8krLvN/OgjpBNdh23FsLuPwTzarYfTHJo4vjHbbo0TBDcX7Xpe
-	UwqdkNBi97QXLGw3cqg4sZJMTcVVPnRm+pZ7IudXfVw72bva96osxME8NRBA2kCB+EEIZonOFft
-	4E5Udp7JP6rITihbjJ3GJ43Wg51nCpxpU=
-X-Gm-Gg: ASbGncsii1ZINmFb0w9Fay0qJAzehmFQIV2M36K39HE0Ju99DpswYul7TExg7DyYYxK
-	BGPZ6o27QO3ontu1F2BlxM2MVx0DarSsqVZjwEglx/TIrY0eFURTxsM9doM1PZp+1tUE=
-X-Received: by 2002:a17:903:238e:b0:224:1c1:4aba with SMTP id d9443c01a7336-22db3db0f63mr20382325ad.50.1745482111807;
-        Thu, 24 Apr 2025 01:08:31 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG9QCt1+uWV0hbcvfKshe4MEvAT+8cYmunuoojCcFbrOrf3foAV6szwZqkcwyD4r4JChprCKBZyHc1ES6rtmRM=
-X-Received: by 2002:a17:903:238e:b0:224:1c1:4aba with SMTP id
- d9443c01a7336-22db3db0f63mr20382045ad.50.1745482111469; Thu, 24 Apr 2025
- 01:08:31 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1745482463; x=1746087263;
+        h=in-reply-to:autocrypt:from:content-language:references:cc:to
+         :subject:user-agent:mime-version:date:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=008EJSG/phqGVPmxi0nDH3NCIHBvP55QLSxmr4tKYHM=;
+        b=aOVYVYzb+eqlyzAChkc1d+423aK9Us17Salr2TV4HG2mSu13jg7hct6X6ahtA/SUtF
+         uu3Im5KT/qPGZyXwpv3pNAc9VZzcW4EOIIA4q6MMxSILB22/g+lEfqv2CA9rpGdfFLmu
+         pJdwDAaDKFiQHH4KI3tEAZUvng6Yp/JurbK/X6LBsxKZL7a/Cd8O4lSvu+O3q7Neoeqy
+         /W8F5q8j8sBrWekNe2D6B5VL8JhNJtVXSRI2w/a43vYV+zhOtjQZsao4CmMC4v3P3sO8
+         0/G4z1vBeNWzRXEzt3y6/SuoUku4ZRona6NAC3BWLeBZzka+a/PlE1tsx5UON6EaOFtE
+         vFLg==
+X-Forwarded-Encrypted: i=1; AJvYcCVloWuiYVw20ITVilpcE0flPx2DbUG8qYKBeSJQs7723AqXkrQo04v+oyu37+eY1sLrHu3yce8FPw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZBcAZDl6InQjzhrpqIGG22CiuMZ/2To/MlUEfD8UvN1MMi+zB
+	p9Yk9ypreyTlFYQgoat8SeMzrk0c9Kk13P7WNpkk5gyShlp+uOKVzMaW1HPn1Kg=
+X-Gm-Gg: ASbGncva+yxPysZfOlSbIMAM5bZLpR6vzIh0ACwxsA4zgJWSeDfFG7KIPXdwKlErRN9
+	BljGPkGxKQOpbQaB+vIdn52wY5m9UptYGxJHU95I8fyU7TIDzOK6c1BflCOA6ad0rM+MawMXRsi
+	2hpJaJqg3Bl3YNWll4rGPJPs95phHaXWw1LilhDkcVmFIj7jCSsFRIro9pUBRTJmqa5Pj3R5Hsb
+	ZKjan0Zf3NHyahpbiRQEI86vGqMwj0xEeV6erYK+xtSXGOaPDSZNFhbikb8xiaRpxR5/uUY72tf
+	xMhqf7sdFqPIyCeG4iLqApUDJNSE7uTBEDJuWDSJ/R74f1LF8w0oMczpmuMUM1C9l4Gp7YhPprL
+	ndHFhEroPzJzXiIEJoq/nvkpt4nxRtyOGLBbhg94kb3zfY00tN4Pko3tMOGp4K67Sbg==
+X-Google-Smtp-Source: AGHT+IFyv2kCFIwtSgJfhMLoeL4umabM8GMXtTutcFH/tZ4GaYnDHHb5JDeYCLMrA1sChvoEPbh09w==
+X-Received: by 2002:a05:600c:1d03:b0:43d:db5:7b1a with SMTP id 5b1f17b1804b1-4409bd2225dmr12614855e9.12.1745482462951;
+        Thu, 24 Apr 2025 01:14:22 -0700 (PDT)
+Received: from ?IPV6:2003:e5:870f:e000:6c64:75fd:2c51:3fef? (p200300e5870fe0006c6475fd2c513fef.dip0.t-ipconnect.de. [2003:e5:870f:e000:6c64:75fd:2c51:3fef])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4409d2bfa93sm10528525e9.37.2025.04.24.01.14.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Apr 2025 01:14:22 -0700 (PDT)
+Message-ID: <0cdc6e9d-88eb-4ead-8d55-985474257d53@suse.com>
+Date: Thu, 24 Apr 2025 10:14:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250422142628.1553523-1-hch@lst.de> <20250422142628.1553523-16-hch@lst.de>
- <11b02dfa-9f71-48ac-9d20-ba5a6e44f289@kernel.org>
-In-Reply-To: <11b02dfa-9f71-48ac-9d20-ba5a6e44f289@kernel.org>
-From: Andreas Gruenbacher <agruenba@redhat.com>
-Date: Thu, 24 Apr 2025 10:08:19 +0200
-X-Gm-Features: ATxdqUFTuhjv2n6cEKl2JrhrhPyh6bRjf4GKJQJ_KzadIMn25rxqpw5We26zq08
-Message-ID: <CAHc6FU7Y5QKGB1pFL8A0-3VOX2i5LY92d9AYhWqgHMzxL30m4A@mail.gmail.com>
-Subject: Re: [PATCH 15/17] gfs2: use bdev_rw_virt in gfs2_read_super
-To: Damien Le Moal <dlemoal@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org, 
-	"Md. Haris Iqbal" <haris.iqbal@ionos.com>, Jack Wang <jinpu.wang@ionos.com>, 
-	Coly Li <colyli@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, 
-	Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>, Chris Mason <clm@fb.com>, 
-	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>, 
-	Carlos Maiolino <cem@kernel.org>, Naohiro Aota <naohiro.aota@wdc.com>, 
-	Johannes Thumshirn <jth@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	linux-bcache@vger.kernel.org, dm-devel@lists.linux.dev, 
-	linux-btrfs@vger.kernel.org, gfs2@lists.linux.dev, 
-	linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 21/34] x86/msr: Utilize the alternatives mechanism
+ to write MSR
+To: Xin Li <xin@zytor.com>, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+ linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+ xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org,
+ andrew.cooper3@citrix.com, peterz@infradead.org, namhyung@kernel.org,
+ mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+ irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+ wei.liu@kernel.org, ajay.kaher@broadcom.com,
+ bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+ pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+ luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+ haiyangz@microsoft.com, decui@microsoft.com
+References: <20250422082216.1954310-1-xin@zytor.com>
+ <20250422082216.1954310-22-xin@zytor.com>
+ <b2624e84-6fab-44a3-affc-ce0847cd3da4@suse.com>
+ <f7198308-e8f8-4cc5-b884-24bc5f408a2a@zytor.com>
+ <37c88ea3-dd24-4607-9ee1-0f19025aaef3@suse.com>
+ <bb8f6b85-4e7d-440a-a8c3-0e0da45864b8@zytor.com>
+Content-Language: en-US
+From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
+Autocrypt: addr=jgross@suse.com; keydata=
+ xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOB
+ ycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJve
+ dYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJ
+ NwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvx
+ XP3FAp2pkW0xqG7/377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEB
+ AAHNH0p1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT7CwHkEEwECACMFAlOMcK8CGwMH
+ CwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAKCRCw3p3WKL8TL8eZB/9G0juS/kDY9LhEXseh
+ mE9U+iA1VsLhgDqVbsOtZ/S14LRFHczNd/Lqkn7souCSoyWsBs3/wO+OjPvxf7m+Ef+sMtr0
+ G5lCWEWa9wa0IXx5HRPW/ScL+e4AVUbL7rurYMfwCzco+7TfjhMEOkC+va5gzi1KrErgNRHH
+ kg3PhlnRY0Udyqx++UYkAsN4TQuEhNN32MvN0Np3WlBJOgKcuXpIElmMM5f1BBzJSKBkW0Jc
+ Wy3h2Wy912vHKpPV/Xv7ZwVJ27v7KcuZcErtptDevAljxJtE7aJG6WiBzm+v9EswyWxwMCIO
+ RoVBYuiocc51872tRGywc03xaQydB+9R7BHPzsBNBFOMcBYBCADLMfoA44MwGOB9YT1V4KCy
+ vAfd7E0BTfaAurbG+Olacciz3yd09QOmejFZC6AnoykydyvTFLAWYcSCdISMr88COmmCbJzn
+ sHAogjexXiif6ANUUlHpjxlHCCcELmZUzomNDnEOTxZFeWMTFF9Rf2k2F0Tl4E5kmsNGgtSa
+ aMO0rNZoOEiD/7UfPP3dfh8JCQ1VtUUsQtT1sxos8Eb/HmriJhnaTZ7Hp3jtgTVkV0ybpgFg
+ w6WMaRkrBh17mV0z2ajjmabB7SJxcouSkR0hcpNl4oM74d2/VqoW4BxxxOD1FcNCObCELfIS
+ auZx+XT6s+CE7Qi/c44ibBMR7hyjdzWbABEBAAHCwF8EGAECAAkFAlOMcBYCGwwACgkQsN6d
+ 1ii/Ey9D+Af/WFr3q+bg/8v5tCknCtn92d5lyYTBNt7xgWzDZX8G6/pngzKyWfedArllp0Pn
+ fgIXtMNV+3t8Li1Tg843EXkP7+2+CQ98MB8XvvPLYAfW8nNDV85TyVgWlldNcgdv7nn1Sq8g
+ HwB2BHdIAkYce3hEoDQXt/mKlgEGsLpzJcnLKimtPXQQy9TxUaLBe9PInPd+Ohix0XOlY+Uk
+ QFEx50Ki3rSDl2Zt2tnkNYKUCvTJq7jvOlaPd6d/W0tZqpyy7KVay+K4aMobDsodB3dvEAs6
+ ScCnh03dDAFgIq5nsB11j3KPKdVoPlfucX2c7kGNH+LUMbzqV6beIENfNexkOfxHfw==
+In-Reply-To: <bb8f6b85-4e7d-440a-a8c3-0e0da45864b8@zytor.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------VMSl19Ws92VaJ19wHUdCoQEK"
+
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------VMSl19Ws92VaJ19wHUdCoQEK
+Content-Type: multipart/mixed; boundary="------------0vp5F0mv6hCcRHQUu1aj0a9v";
+ protected-headers="v1"
+From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
+To: Xin Li <xin@zytor.com>, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+ linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+ xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org,
+ andrew.cooper3@citrix.com, peterz@infradead.org, namhyung@kernel.org,
+ mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+ irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+ wei.liu@kernel.org, ajay.kaher@broadcom.com,
+ bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+ pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+ luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+ haiyangz@microsoft.com, decui@microsoft.com
+Message-ID: <0cdc6e9d-88eb-4ead-8d55-985474257d53@suse.com>
+Subject: Re: [RFC PATCH v2 21/34] x86/msr: Utilize the alternatives mechanism
+ to write MSR
+References: <20250422082216.1954310-1-xin@zytor.com>
+ <20250422082216.1954310-22-xin@zytor.com>
+ <b2624e84-6fab-44a3-affc-ce0847cd3da4@suse.com>
+ <f7198308-e8f8-4cc5-b884-24bc5f408a2a@zytor.com>
+ <37c88ea3-dd24-4607-9ee1-0f19025aaef3@suse.com>
+ <bb8f6b85-4e7d-440a-a8c3-0e0da45864b8@zytor.com>
+In-Reply-To: <bb8f6b85-4e7d-440a-a8c3-0e0da45864b8@zytor.com>
+
+--------------0vp5F0mv6hCcRHQUu1aj0a9v
+Content-Type: multipart/mixed; boundary="------------0yeVN4sI0bLxwrBqbg5RE1SY"
+
+--------------0yeVN4sI0bLxwrBqbg5RE1SY
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+T24gMjQuMDQuMjUgMTA6MDYsIFhpbiBMaSB3cm90ZToNCj4gT24gNC8yMy8yMDI1IDk6MDUg
+QU0sIErDvHJnZW4gR3Jvw58gd3JvdGU6DQo+Pj4gSXQncyBub3QgYSBtYWpvciBjaGFuZ2Us
+IGJ1dCB3aGVuIGl0IGlzIHBhdGNoZWQgdG8gdXNlIHRoZSBpbW1lZGlhdGUgZm9ybSBNU1Ig
+DQo+Pj4gd3JpdGUgaW5zdHJ1Y3Rpb24sIGl0J3Mgc3RyYWlnaHRmb3J3YXJkbHkgc3RyZWFt
+bGluZWQuDQo+Pg0KPj4gSXQgc2hvdWxkIGJlIHJhdGhlciBlYXN5IHRvIHN3aXRjaCB0aGUg
+Y3VycmVudCB3cm1zci9yZG1zciBwYXJhdmlydCBwYXRjaGluZw0KPj4gbG9jYXRpb25zIHRv
+IHVzZSB0aGUgcmRtc3Ivd3Jtc3IgaW5zdHJ1Y3Rpb25zIGluc3RlYWQgb2YgZG9pbmcgYSBj
+YWxsIHRvDQo+PiBuYXRpdmVfKm1zcigpLg0KPj4NCj4+IFRoZSBjYXNlIG9mIHRoZSBuZXcg
+aW1tZWRpYXRlIGZvcm0gY291bGQgYmUgaGFuZGxlZCB0aGUgc2FtZSB3YXkuDQo+IA0KPiBB
+Y3R1YWxseSwgdGhhdCBpcyBob3cgd2UgZ2V0IHRoaXMgcGF0Y2ggd2l0aCB0aGUgZXhpc3Rp
+bmcgYWx0ZXJuYXRpdmVzDQo+IGluZnJhc3RydWN0dXJlLsKgIEFuZCB3ZSB0b29rIGEgc3Rl
+cCBmdXJ0aGVyIHRvIGFsc28gcmVtb3ZlIHRoZSBwdl9vcHMNCj4gTVNSIEFQSXMuLi4NCg0K
+QW5kIHRoaXMgaXMgd2hhdCBJJ20gcXVlc3Rpb25pbmcuIElNSE8gdGhpcyBhcHByb2FjaCBp
+cyBhZGRpbmcgbW9yZQ0KY29kZSBieSByZW1vdmluZyB0aGUgcHZfb3BzIE1TUl9BUElzIGp1
+c3QgYmVjYXVzZSAicHZfb3BzIGlzIGJhZCIuIEFuZA0KSSBiZWxpZXZlIG1vc3QgcmVmdXNh
+bCBvZiBwdl9vcHMgaXMgYmFzZWQgb24gbm8gbG9uZ2VyIHZhbGlkIHJlYXNvbmluZy4NCg0K
+PiBJdCBsb29rcyB0byBtZSB0aGF0IHlvdSB3YW50IHRvIGFkZCBhIG5ldyBmYWNpbGl0eSB0
+byB0aGUgYWx0ZXJuYXRpdmVzDQo+IGluZnJhc3RydWN0dXJlIGZpcnN0Pw0KDQpXaHkgd291
+bGQgd2UgbmVlZCBhIG5ldyBmYWNpbGl0eSBpbiB0aGUgYWx0ZXJuYXRpdmVzIGluZnJhc3Ry
+dWN0dXJlPw0KDQoNCkp1ZXJnZW4NCg==
+--------------0yeVN4sI0bLxwrBqbg5RE1SY
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 24, 2025 at 8:23=E2=80=AFAM Damien Le Moal <dlemoal@kernel.org>=
- wrote:
-> On 4/22/25 23:26, Christoph Hellwig wrote:
-> > Switch gfs2_read_super to allocate the superblock buffer using kmalloc
-> > which falls back to the page allocator for PAGE_SIZE allocation but
-> > gives us a kernel virtual address and then use bdev_rw_virt to perform
-> > the synchronous read into it.
-> >
-> > Signed-off-by: Christoph Hellwig <hch@lst.de>
->
-> Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
->
-> One nit below.
->
-> > ---
-> >  fs/gfs2/ops_fstype.c | 24 +++++++++---------------
-> >  1 file changed, 9 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/fs/gfs2/ops_fstype.c b/fs/gfs2/ops_fstype.c
-> > index e83d293c3614..7c1014ba7ac7 100644
-> > --- a/fs/gfs2/ops_fstype.c
-> > +++ b/fs/gfs2/ops_fstype.c
-> > @@ -226,28 +226,22 @@ static void gfs2_sb_in(struct gfs2_sbd *sdp, cons=
-t struct gfs2_sb *str)
-> >
-> >  static int gfs2_read_super(struct gfs2_sbd *sdp, sector_t sector, int =
-silent)
-> >  {
-> > -     struct super_block *sb =3D sdp->sd_vfs;
-> > -     struct page *page;
-> > -     struct bio_vec bvec;
-> > -     struct bio bio;
-> > +     struct gfs2_sb *sb;
-> >       int err;
-> >
-> > -     page =3D alloc_page(GFP_KERNEL);
-> > -     if (unlikely(!page))
-> > +     sb =3D kmalloc(PAGE_SIZE, GFP_KERNEL);
-> > +     if (unlikely(!sb))
-> >               return -ENOMEM;
-> > -
-> > -     bio_init(&bio, sb->s_bdev, &bvec, 1, REQ_OP_READ | REQ_META);
-> > -     bio.bi_iter.bi_sector =3D sector * (sb->s_blocksize >> 9);
-> > -     __bio_add_page(&bio, page, PAGE_SIZE, 0);
-> > -
-> > -     err =3D submit_bio_wait(&bio);
-> > +     err =3D bdev_rw_virt(sdp->sd_vfs->s_bdev,
-> > +                     sector * (sdp->sd_vfs->s_blocksize >> 9), sb, PAG=
-E_SIZE,
->
-> While at it, use SECTOR_SHIFT here ?
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-This is hardcoded in several places; I can clean it up separately.
+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
+kt+z4drzFUyEjLM1vVvIMjkUoJs=3D
+=3DeeAB
+-----END PGP PUBLIC KEY BLOCK-----
 
-> > +                     REQ_OP_READ | REQ_META);
-> >       if (err) {
-> >               pr_warn("error %d reading superblock\n", err);
-> > -             __free_page(page);
-> > +             kfree(sb);
-> >               return err;
-> >       }
-> > -     gfs2_sb_in(sdp, page_address(page));
-> > -     __free_page(page);
-> > +     gfs2_sb_in(sdp, sb);
-> > +     kfree(sb);
-> >       return gfs2_check_sb(sdp, silent);
-> >  }
-> >
+--------------0yeVN4sI0bLxwrBqbg5RE1SY--
 
-Reviewed-by: Andreas Gruenbacher <agruenba@redhat.com>
+--------------0vp5F0mv6hCcRHQUu1aj0a9v--
 
-Thanks,
-Andreas
+--------------VMSl19Ws92VaJ19wHUdCoQEK
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmgJ8twFAwAAAAAACgkQsN6d1ii/Ey8k
+sgf/bXb/yPNEYKqkydqe/bdDkpvmLpSFUpdHMovM4PRMGt6zioNmVWczEr+IQ53jJEK1EgOrz1V5
+CSe5GF6AQ52FukYXR+nsdEhvJ3SQbHcC1jjQ0KBbi7qxCIl5hNUVmyEEjIxdE5u2TPCMWxoot6t1
+yNRYVLJOfCGc+rtLzkqT+DCZhmL5bJV7aHjBV/gGYMQs5mZvFWky2orA31cQd87ZQ01sJsXhSyK5
+kyPT2DLGT2EUSFgkADIATsccYzDmoFGHujoktt1Dvy7KAp5Ij89J1F9z/bJPieoeXbxYM6WgXK6i
+mL8fdLmqdHH+xIxH3Fw7vjbOQPVv3Q5NLHeDBr80mQ==
+=oHe8
+-----END PGP SIGNATURE-----
+
+--------------VMSl19Ws92VaJ19wHUdCoQEK--
 
