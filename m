@@ -1,121 +1,190 @@
-Return-Path: <linux-pm+bounces-26143-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26144-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24E54A9B4D0
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 18:58:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 214B2A9B584
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 19:39:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B91154A5DFC
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 16:58:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B9E4927F9A
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Apr 2025 17:38:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F87728CF4C;
-	Thu, 24 Apr 2025 16:58:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="a+ZCHHLM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95321290086;
+	Thu, 24 Apr 2025 17:38:02 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80FFA28C5DB
-	for <linux-pm@vger.kernel.org>; Thu, 24 Apr 2025 16:58:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08CE28E60A;
+	Thu, 24 Apr 2025 17:37:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745513889; cv=none; b=fFRRZdV3BK/Ci8BjJ+zxBpuQVpLHsIXobIaQ9AjylZmVdmaMZLYro0Fcz0J7lxfAcViqmHJHuyYs0qeG9pLUU68CinkDK4RoKt/bNe0fmFEB6R/fpHiZfiCGhtMyGt9ztXMky+l2Mj/OgzRBbiTzuASLt2jKXzZ4bhBPAjsJtE8=
+	t=1745516282; cv=none; b=O1mNDEEiIlwcc022kCTHHbsq+2+lRjNOCOQyscUp91qv/n7+3Pb6gGKwPSHidAozu1ee2TdRdOBElVYAzEOStTqgqmYhoy/Co5YGExNm9uqYq/Ffe18SA7cmOYpr4IR4QS3lQZiyoiwlTTIb9DOlxsqS7K0w1X1ZJmylOW4wGw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745513889; c=relaxed/simple;
-	bh=rtAVqmNrB9xPnZ5FHhbSAWb5+zNZyKeSQ6jXrEjO+Vw=;
+	s=arc-20240116; t=1745516282; c=relaxed/simple;
+	bh=l9GwqA6moC5o44LoO/P/z4Eal0AfURGG0Z3kI4uyrIQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ukhZahPJILYhg7g+uE8ylPrkEtmlbMjGWM71czKSraWUwfv7XQ4sfD/8QwbZQ+rC3BKZ9Ug2yr26sXhRVxCR2oVG3ToWvsMo6GyfS4lne0Ko/SsYz7tGPN0Q3y8NlWZznMGexATLNqc3ARgMG1lOViYyOJByQpsy8srIxpCrLkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=a+ZCHHLM; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-702628e34f2so12121257b3.0
-        for <linux-pm@vger.kernel.org>; Thu, 24 Apr 2025 09:58:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1745513886; x=1746118686; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9NMqKoMnNFSWTlyWhn3Q/XhiI0OW2ljHDhbH5AG9KlM=;
-        b=a+ZCHHLMzITh7sbbShkpgZe/DlJiKlxYtvE7EyrqvclbZGLz38eZkY3+p9oRhL65Ai
-         U/cNtsf1jPvDE+RuzPuLQHve9gC4lY+sf/G6X5qxRJWOKkjUCKDugU5qm3CLrQUCR0Ax
-         CVsDBKr6y+Zekyi1Pw1V09+plKECNsmbORuy/ym2ndAF6fOGFJg3Kbp+d7h9rifm98p2
-         uQFwZ9KQVZLc8Dbic2ymIgQYdFtgE/DfPCRs53nB0X1rL9taiy1fkgmx6e4ScUgHd/lh
-         8sdA2Ci0mnZUFEtEgDFSxclx38J2qBzZ4I1lsaEGME7NO7lU3ePOxAemfpgoyZYkRHwy
-         KESg==
+	 To:Cc:Content-Type; b=TSWjojDZJPgfaQx0oivfajKivAUymO+nxwWGOBHsocaTuQN1PPTLXchG29bw2ct98/U8bzg8eAdKMkQlzGaOUBXdM586JmIsUBZgI1BUiSGrPrQEn54yeUgoch0YTaxnqUc5oREKYNcdwMxgrn1FhAG6qXZhX8tTmHT48iA8Ly4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-30beedb99c9so12587341fa.3;
+        Thu, 24 Apr 2025 10:37:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745513886; x=1746118686;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9NMqKoMnNFSWTlyWhn3Q/XhiI0OW2ljHDhbH5AG9KlM=;
-        b=WuIApd2NysAtj51Swhg8Y4ahVwOC2uO3dW/oKymXaaX8kR+ev/khT0dko4zmqOpAcT
-         IKsvz7FV6yAs/19jG6JeR+nA/iEriGLfs2f19gb2dzg4kfLYsyQ2PebNLXQjPPqHnv3L
-         NPGPqdk9fkmz8i7CDRqc6KxDaKRhU245aL5POLiH7kGNcKkXjRVYSUkIywAvoTmgeNFU
-         qAfRlo2G95hHPcOO+cD83uqP/LIaO1c7Dt4figz538rHACA1SUUIpmekPf+E8W5W+nYJ
-         bgWJ6SxqkqD3Mfr3lnmlbkyJfCwfatJb8VcajuWcjHJJV/xfuFzR+GPhjgOTPnshq/Wn
-         XDjg==
-X-Forwarded-Encrypted: i=1; AJvYcCUC00I55nsNNzRYSk3+qwjM3smu18hvtMqz4TdUarJuvaRLtkoBJ/2oHnMRJlDvwC9Nwe/ixoG0yQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJZ2xeNPTvCGdJKvDn5UVkNCwa3SaILWJGYyVuXHvDEivWjsgV
-	pfx8sc8+eU9PjTa14i3t5zY8+mYFSPrCbpf6TMNlPBENQwcqzzi2BPr/igqbf6g2U5X+YdkazK2
-	KPKFM0IpXwtSw0ZQp9JO+w+5d76gW9Hq9ZL7kXQ==
-X-Gm-Gg: ASbGncsEczMTcwdOhoMNgnSZ9GUzMIP6nALYx1ghjx2KPu5fNKgCHt/0PypTRytxaWQ
-	24QTgFD4MfXvx7yTGPLAe8zPY2uS6GI5ePPGg5l1rwt3ouzJA2YbdMg1lYdZgNcixswqDw5JKnU
-	LBEO9PiR8VerQs1pJx1OVbI40=
-X-Google-Smtp-Source: AGHT+IGzISjUKJ+K5wuOJsTYSGvusY6lT3HrRtCkiM9BkAiKkPUr9XSSPqqT2FqaoFnPU3+9MubV6/YFgwTUN+PxwOk=
-X-Received: by 2002:a05:690c:1e:b0:705:edab:f36d with SMTP id
- 00721157ae682-708419d2878mr40115147b3.16.1745513886578; Thu, 24 Apr 2025
- 09:58:06 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1745516275; x=1746121075;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CiowPURGN4de6Iry0e1Jc5BJ/71dYd20vAslI7Guwu8=;
+        b=EIDYuBd1VmUyvYVtK4NniGQcIm0bQCTQxM+wN0PaZZ7ng85RzIYPvjJhVlYHWxdQDN
+         9zi1TGzZGx1o9NswGycHKzFbS45rYU7f6T57dOgzsyABoDhCgvmg83KEdAM8ieqXXARL
+         mVBRKMulvyxxKtk+5SyM03MGbQ5MX/ULcnY92lbnudCbE3crzbelFvMHjcvQ76v9C/Ss
+         tKjqSlRpw9QQdWnirFmiDM3bpn3VhVJjXQXvHmqTv3PrkhK2maDsxodhF9uSmhvNbTXL
+         f+XJPjuvUIXuP0MNGamJgOa+L9u82IkYwS2ln1Tnu3swwUQa531oVsUeC4QAdzXso14k
+         cO7w==
+X-Forwarded-Encrypted: i=1; AJvYcCUgzoQZY4fjuAdOcnHrZuWk5U5kspa0jyPdmTwJOnF3zcKW9ZXEoVdFuyQu+4xsUtUU2eJWTxxl2VyL@vger.kernel.org, AJvYcCWvy0TkWtjQj0q8uCQiTNWlBahUdfdO2dH3W1KtM6caW+ol7mw3hJWY+c2024oT1mCMb6lZNktBYiM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJvduhBNUOp30ivRKK7MY+5PeduZKkpp5xqAnCSDbQQ1NaSW2M
+	/Lhs12Q/stgdhTFCCYdc3/FES+z+Z9mZ6RHyk251scGer9y3c2C32ofjV4r5
+X-Gm-Gg: ASbGnctJQIacmf5EmvCUi1fhTIyw1huWC7tyxlJfYuR/J5A0/sKxEAPZCgCx6lA32cD
+	yfLEWXR6KMgAk6RBHhV2OaGVR9fE5mKPVpHoDDq00ivnmWyR1f36IIgIfREvzLDL8ggqPBdkndu
+	+SshwT6rwpIj8qEZxfbS3z2uGSdAIhbFj9BnHa1nQAa6TOkbAyLvc+YQ12eSxYn+b6PPXUa4Rbz
+	91YHAw6EWm1nv4HUVbwNIIcyN3YdnA8C2dn820fgdYh9I7X1h64XhCB7IK+Tdu+agVjZadG9IyU
+	ZqvjvsL5XQJJInKZdVUvaBM8kByGhwmykxOisj7Y3Pwp9Fb3FLtXaGtyr2t85z7ODSgD5O7TCA=
+	=
+X-Google-Smtp-Source: AGHT+IHkXE9oO6onuat3Bn9tTQSvD7S8M9h5v/CZgM4SipzDEkABZ9gc1bOyCR/svSwOE7uSVWzfmQ==
+X-Received: by 2002:a2e:a58b:0:b0:30b:d0d5:1fee with SMTP id 38308e7fff4ca-3179bc5a05dmr15050861fa.0.1745516274564;
+        Thu, 24 Apr 2025 10:37:54 -0700 (PDT)
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-317d16a831esm3535831fa.68.2025.04.24.10.37.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Apr 2025 10:37:54 -0700 (PDT)
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-30bef9b04adso14147091fa.1;
+        Thu, 24 Apr 2025 10:37:54 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVJHhiYvBboLcExmsbPNQRsW2mN1AEPcWoLGLRmiTpLjUGLPP1pV/BOFM4hlwFRsl/9Cigu4banUgM=@vger.kernel.org, AJvYcCWcMq2r5M0b41K15mNx7cX80GEfSmFZN3K37ATqZUqHUst1EJ4PUAoDuucZ4ltwDmRpwt3Qg1H2mw2a@vger.kernel.org
+X-Received: by 2002:a2e:a9a0:0:b0:30d:b49d:7fb7 with SMTP id
+ 38308e7fff4ca-3179e5e518fmr13777371fa.16.1745516274006; Thu, 24 Apr 2025
+ 10:37:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250417-sm4450_rpmhpd-v1-0-361846750d3a@quicinc.com>
-In-Reply-To: <20250417-sm4450_rpmhpd-v1-0-361846750d3a@quicinc.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 24 Apr 2025 18:57:30 +0200
-X-Gm-Features: ATxdqUFyM7393hfMEevst8AZRjE_r2_H3CHFnzETCGV2jO5dz39_5GL4UZtVF3k
-Message-ID: <CAPDyKFqD6DSad8Jfq=qhZ9GOdx76mrKJPWdS62A5O6uRSCS+qw@mail.gmail.com>
-Subject: Re: [PATCH 0/3] pmdomain: qcom: rpmhpd: Add SM4450 power domains
-To: Ajit Pandey <quic_ajipan@quicinc.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Imran Shaik <quic_imrashai@quicinc.com>, 
-	Taniya Das <quic_tdas@quicinc.com>, Jagadeesh Kona <quic_jkona@quicinc.com>, 
-	Satya Priya Kakitapalli <quic_skakitap@quicinc.com>, linux-arm-msm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+References: <20250416224839.9840-1-andre.przywara@arm.com> <20250416224839.9840-2-andre.przywara@arm.com>
+ <CAPDyKFop9gAUq3kG4-hs358y=N48rLQSvJaRveXo_ebVTf8gEg@mail.gmail.com>
+In-Reply-To: <CAPDyKFop9gAUq3kG4-hs358y=N48rLQSvJaRveXo_ebVTf8gEg@mail.gmail.com>
+Reply-To: wens@csie.org
+From: Chen-Yu Tsai <wens@csie.org>
+Date: Fri, 25 Apr 2025 01:37:42 +0800
+X-Gmail-Original-Message-ID: <CAGb2v66w-tD=--zwDBOG8qJbwBR=s9mJ32c65W88P1eazDKLhQ@mail.gmail.com>
+X-Gm-Features: ATxdqUHvL4W44GNl5WKefwtfRdBLLoloQmPwAjVhg3bD1KPveNWGmCRztikltk4
+Message-ID: <CAGb2v66w-tD=--zwDBOG8qJbwBR=s9mJ32c65W88P1eazDKLhQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: power: Add Allwinner H6/H616 PRCM PPU
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Andre Przywara <andre.przywara@arm.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	Boris Brezillon <boris.brezillon@collabora.com>, Steven Price <steven.price@arm.com>, 
+	Philippe Simons <simons.philippe@gmail.com>, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
 	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 17 Apr 2025 at 19:08, Ajit Pandey <quic_ajipan@quicinc.com> wrote:
+On Fri, Apr 25, 2025 at 12:58=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.or=
+g> wrote:
 >
-> This series add power domains exposed by RPMh in the Qualcomm SM4450 platform.
+> On Thu, 17 Apr 2025 at 00:49, Andre Przywara <andre.przywara@arm.com> wro=
+te:
+> >
+> > The Allwinner H6 and some later SoCs contain some bits in the PRCM (Pow=
+er
+> > Reset Clock Management) block that control some power domains.
+> > Those power domains include the one for the GPU, the PLLs and some
+> > analogue circuits.
+> >
+> > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> > Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 >
-> Signed-off-by: Ajit Pandey <quic_ajipan@quicinc.com>
-> ---
-> Ajit Pandey (3):
->       dt-bindings: power: qcom,rpmpd: Add SM4450 compatible
->       pmdomain: qcom: rpmhpd: Add SM4450 power domains
->       arm64: dts: qcom: sm4450: Add RPMh power domains support
+> Applied for next by amending the example according to ChenYu's comment, t=
+hanks!
 >
->  .../devicetree/bindings/power/qcom,rpmpd.yaml      |  1 +
->  arch/arm64/boot/dts/qcom/sm4450.dtsi               | 68 ++++++++++++++++++++++
->  drivers/pmdomain/qcom/rpmhpd.c                     | 16 +++++
->  3 files changed, 85 insertions(+)
-> ---
-> base-commit: f660850bc246fef15ba78c81f686860324396628
-> change-id: 20250417-sm4450_rpmhpd-6a74794d0cab
->
-> Best regards,
-> --
-> Ajit Pandey <quic_ajipan@quicinc.com>
->
+> Note this patch is also available on the immutable dt branch, for SoC
+> maintainers to pull.
 
-Patch 1 and 2 applied for next, thanks!
+Thanks! I don't think there's a need if it's just the YAML files though.
+As long as everything comes together in linux-next, folks are happy.
 
-Kind regards
-Uffe
+
+ChenYu
+
+> Kind regards
+> Uffe
+>
+>
+>
+> > ---
+> >  .../power/allwinner,sun50i-h6-prcm-ppu.yaml   | 42 +++++++++++++++++++
+> >  1 file changed, 42 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/power/allwinner,s=
+un50i-h6-prcm-ppu.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/power/allwinner,sun50i-h=
+6-prcm-ppu.yaml b/Documentation/devicetree/bindings/power/allwinner,sun50i-=
+h6-prcm-ppu.yaml
+> > new file mode 100644
+> > index 0000000000000..7eaff9baf7268
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/power/allwinner,sun50i-h6-prcm-=
+ppu.yaml
+> > @@ -0,0 +1,42 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/power/allwinner,sun50i-h6-prcm-ppu.=
+yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Allwinner SoCs PRCM power domain controller
+> > +
+> > +maintainers:
+> > +  - Andre Przywara <andre.przywara@arm.com>
+> > +
+> > +description:
+> > +  The Allwinner Power Reset Clock Management (PRCM) unit contains bits=
+ to
+> > +  control a few power domains.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - allwinner,sun50i-h6-prcm-ppu
+> > +      - allwinner,sun50i-h616-prcm-ppu
+> > +      - allwinner,sun55i-a523-prcm-ppu
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  '#power-domain-cells':
+> > +    const: 1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - '#power-domain-cells'
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    prcm_ppu: power-controller@7010210 {
+> > +        compatible =3D "allwinner,sun50i-h616-prcm-ppu";
+> > +        reg =3D <0x07010250 0x10>;
+> > +        #power-domain-cells =3D <1>;
+> > +    };
+> > --
+> > 2.46.3
+> >
+>
 
