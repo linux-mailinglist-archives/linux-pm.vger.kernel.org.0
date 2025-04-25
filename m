@@ -1,317 +1,400 @@
-Return-Path: <linux-pm+bounces-26190-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26191-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1672A9C6A3
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 13:04:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68F29A9C6AA
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 13:05:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D017C4C4CF2
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 11:04:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77D591BC11F5
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 11:05:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F8CF219305;
-	Fri, 25 Apr 2025 11:03:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D35E23F28B;
+	Fri, 25 Apr 2025 11:05:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oByanJhM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RXdu0Vhv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AADC23E235;
-	Fri, 25 Apr 2025 11:03:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF3023373B;
+	Fri, 25 Apr 2025 11:05:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745579014; cv=none; b=GhjfOCPL1wT1LrXkzapGTwpzaJsjsWigNpAydfeqZyKCt5T9GBk56c0G6jg6/ilfYf3QKcNNB5wc2C/vPUO1GwqqVNrBSLYat/GS+/kRBsD5gbW2imPlQ40MzlB0G/dV8DiJ/FemcmPZMIJ6IL8eIcZpg0J8P9NmqZbqa7ZWX10=
+	t=1745579128; cv=none; b=rBvJ0V5hQ6Y2FHkUeB96V6czz7Kfs0EcIBpd2bB2EeW7crsBiYqHG6iWxktWkp4r5cl+Mqg3Sa0uZvJaZeqYOJM2EZ//LLcFbpXR7ljsyghyxLEIbPCvPogpxoTBSpAASgi3YjNz+198O0sv7zDuHClpWzL9DWtm+A8Y8xwgU0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745579014; c=relaxed/simple;
-	bh=53F6fAKEqiAEBwV0oYCLetHRtRnA9Hp2t7gbv8+IcH4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CRA5yTvaf1+6UiHQctz//lQ2P+wmfUYQKPUZu603sXCnSPWWAT1wrnxW754D53aR3R34xp7c6oaHoS2wN4QSoaOozIZpErdCiJCiN1DVTf6Zyy2MmUK5z99zimEQPUWUtz4me/IVkSVgPDWzsLO7Ga/JQqgo5nfkBYI3bKrCNgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oByanJhM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 775DDC4CEEF;
-	Fri, 25 Apr 2025 11:03:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745579013;
-	bh=53F6fAKEqiAEBwV0oYCLetHRtRnA9Hp2t7gbv8+IcH4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=oByanJhMS/MqzXwI6xVMvTQ2gpY5dT1UdRqHhnPFMuYDWlrGfAXUvbsfsaXKYU6xY
-	 bx19V2vSLb8LWOWdPxeFO1Ba6po1geOvIfB7Nmf4tjTo3tJWz7dYqu8NvacqYbE9MP
-	 Z1DEBNZeIA/oMgCyx49fsXNCi3qrl0hDvJmRefs5/7ZtG09dShhevwtfb/o3Ai6BDh
-	 I6jAvb0JnjULZlouO/b0kbFKy3DQY1lozlZ7E4ho5aeu1gVSN22FN6zV8EPU8qx2Zp
-	 27BhWjjm7vlUn5ArlbLdm2IXkUfFGfXgbYgG1vRu3qV75dYfn8PAvT/uewf7wk4tkf
-	 TJ0J/+jwydiQA==
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-2cc57330163so1428339fac.2;
-        Fri, 25 Apr 2025 04:03:33 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVypDyEfucNEhF+kxrkyOxsRaCpdfiXAeDYR39ugveJCzIJEPdBCFWoh/MUHELvM3L+S+7+HKCaxms8hGA=@vger.kernel.org, AJvYcCXzZXAhv6hARQAArU70zcqzxiBkkHP0T9L1lH3cjHmGbcAs5qpMsMSGxhnUb75sR74Wf39OArCu2GU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyv2v/3wUO2wlEEvJ55qOF/h8/fV079U9cI4CDfMR1pQG53iNqi
-	BIm5JY++0HUhpuNgi5Gyk9yX9nqSXJFNrtiKR2Qg+hLZ7jkNqAjjvrPeZa5GmMB2MoAc1DkVDPZ
-	Zuxd+HAfZtD/XGvVt1Cu5EEG3nIo=
-X-Google-Smtp-Source: AGHT+IHrcrYjE1ggxwUYvjR9ha03ZKu+8Bsgk/bdz1CrmUYmRwOt7sEsQPl8gIa/4t3Ye5EJGa3Ye57mC87sUMoO4DE=
-X-Received: by 2002:a05:6871:5807:b0:29d:c85f:bc8c with SMTP id
- 586e51a60fabf-2d9a3575ca3mr954235fac.36.1745579012693; Fri, 25 Apr 2025
- 04:03:32 -0700 (PDT)
+	s=arc-20240116; t=1745579128; c=relaxed/simple;
+	bh=YpqP70C3h3hK64vKubewZtLum1drWQcRIC0SIq5nfXQ=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=Dv7TeAcjzKq4+RQtrm8AauDtUgjpJMSr1p4Ig8Vdu1Ux8Vu3TtHfyXe3CsI6R26uZEpLYROLAeLrpXDnuDLsnNJd/1Imx9MUTPJjyifzX9kAIyBGluZknSGYfWyobQATwxX7cxbmVMfY6tBXV8AmX5Jk6wrhYgq7D4S48cS2c1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RXdu0Vhv; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745579126; x=1777115126;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=YpqP70C3h3hK64vKubewZtLum1drWQcRIC0SIq5nfXQ=;
+  b=RXdu0VhvUbK6qWugH8vxtexdLkcuhBS4FpB0cLL/ytg4BH7IV1+sgmHB
+   R5mwhwp4PPXlokADlabP3yD7wG6r/cnrga7nmPom9KkijM4eNqzTVI6Hc
+   RespTyP/yF0YUlxBvCp70tP0TtVX3HTfBChc6UcZSSpUHEWoD1ytcR2Hy
+   xd1rq+NpC06zhbwENsZo9BZzcC/B7Dm86aFLKEZJebNEVxhGb/0KPLz02
+   q4VZTAtnGWlSZXSPA2wYAUoCx7jfRHtNerpfFhy+tO3AjKAmlGKV0IY9W
+   tjNNrklYDm3p4cGmcZ2L68OT9aIv4N60OaR+DtsMBmKP49SQA/+5/GyZk
+   w==;
+X-CSE-ConnectionGUID: To32BRnTQaeQknd8h7hujQ==
+X-CSE-MsgGUID: 2xB24WUySzqPHrCDccREeQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11413"; a="47122786"
+X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
+   d="scan'208";a="47122786"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2025 04:05:25 -0700
+X-CSE-ConnectionGUID: fDL2LiscTfCwM1vqjg2lig==
+X-CSE-MsgGUID: kcyAqKSJTZ+izEBgt72wCw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
+   d="scan'208";a="170098556"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.154])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2025 04:05:18 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 25 Apr 2025 14:05:14 +0300 (EEST)
+To: Antheas Kapenekakis <lkml@antheas.dev>
+cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+    linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, 
+    Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>, 
+    Jonathan Corbet <corbet@lwn.net>, 
+    Joaquin Ignacio Aramendia <samsagax@gmail.com>, 
+    Derek J Clark <derekjohn.clark@gmail.com>, 
+    Kevin Greenberg <kdgreenberg234@protonmail.com>, 
+    Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>, 
+    Eileen <eileen@one-netbook.com>, LKML <linux-kernel@vger.kernel.org>, 
+    sre@kernel.org, linux@weissschuh.net, Hans de Goede <hdegoede@redhat.com>, 
+    mario.limonciello@amd.com
+Subject: Re: [PATCH v9 14/15] platform/x86: oxpec: Add charge threshold and
+ behaviour to OneXPlayer
+In-Reply-To: <CAGwozwEmiUtFndi3KaGKN_8MocpJj1R21ENbnjEeyBco8P3KSg@mail.gmail.com>
+Message-ID: <6193cf3a-f5a3-2e91-50d0-ef980cad334d@linux.intel.com>
+References: <20250417175310.3552671-1-lkml@antheas.dev> <20250417175310.3552671-15-lkml@antheas.dev> <5423a653-01ac-95d2-fa52-31d849df65ef@linux.intel.com> <CAGwozwEmiUtFndi3KaGKN_8MocpJj1R21ENbnjEeyBco8P3KSg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <5907080.DvuYhMxLoT@rjwysocki.net> <aAplED3IA_J0eZN0@linaro.org>
- <CAJZ5v0i7-LuBX5VCwn_LhyT=RkmQMn6qv3duc+RViXxJBwk2LA@mail.gmail.com> <12665363.O9o76ZdvQC@rjwysocki.net>
-In-Reply-To: <12665363.O9o76ZdvQC@rjwysocki.net>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 25 Apr 2025 13:03:21 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0icLndnA=mQEDabMtxRn942PiRthV3u12PB4eorTCLjDg@mail.gmail.com>
-X-Gm-Features: ATxdqUGOyTC_-puYKqRGPCiWoUPzRa0Z1dchrr3piVjbjYhRop7C8qldP09Ntuk
-Message-ID: <CAJZ5v0icLndnA=mQEDabMtxRn942PiRthV3u12PB4eorTCLjDg@mail.gmail.com>
-Subject: Re: [PATCH v3] cpufreq: Avoid using inconsistent policy->min and policy->max
-To: Stephan Gerhold <stephan.gerhold@linaro.org>, Linux PM <linux-pm@vger.kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Christian Loehle <christian.loehle@arm.com>, 
-	LKML <linux-kernel@vger.kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Mario Limonciello <mario.limonciello@amd.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Sultan Alsawaf <sultan@kerneltoast.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Valentin Schneider <vschneid@redhat.com>, Ingo Molnar <mingo@redhat.com>, regressions@lists.linux.dev, 
-	Johan Hovold <johan@kernel.org>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="8323328-1201764611-1745579114=:950"
 
-On Thu, Apr 24, 2025 at 9:36=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.ne=
-t> wrote:
->
-> On Thursday, April 24, 2025 6:37:46 PM CEST Rafael J. Wysocki wrote:
-> > Hi,
-> >
-> > On Thu, Apr 24, 2025 at 6:21=E2=80=AFPM Stephan Gerhold
-> > <stephan.gerhold@linaro.org> wrote:
-> > >
-> > > Hi Rafael,
-> > >
-> > > On Wed, Apr 16, 2025 at 04:12:37PM +0200, Rafael J. Wysocki wrote:
-> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > >
-> > > > Since cpufreq_driver_resolve_freq() can run in parallel with
-> > > > cpufreq_set_policy() and there is no synchronization between them,
-> > > > the former may access policy->min and policy->max while the latter
-> > > > is updating them and it may see intermediate values of them due
-> > > > to the way the update is carried out.  Also the compiler is free
-> > > > to apply any optimizations it wants both to the stores in
-> > > > cpufreq_set_policy() and to the loads in cpufreq_driver_resolve_fre=
-q()
-> > > > which may result in additional inconsistencies.
-> > > >
-> > > > To address this, use WRITE_ONCE() when updating policy->min and
-> > > > policy->max in cpufreq_set_policy() and use READ_ONCE() for reading
-> > > > them in cpufreq_driver_resolve_freq().  Moreover, rearrange the upd=
-ate
-> > > > in cpufreq_set_policy() to avoid storing intermediate values in
-> > > > policy->min and policy->max with the help of the observation that
-> > > > their new values are expected to be properly ordered upfront.
-> > > >
-> > > > Also modify cpufreq_driver_resolve_freq() to take the possible reve=
-rse
-> > > > ordering of policy->min and policy->max, which may happen depending=
- on
-> > > > the ordering of operations when this function and cpufreq_set_polic=
-y()
-> > > > run concurrently, into account by always honoring the max when it
-> > > > turns out to be less than the min (in case it comes from thermal
-> > > > throttling or similar).
-> > > >
-> > > > Fixes: 151717690694 ("cpufreq: Make policy min/max hard requirement=
-s")
-> > > > Cc: 5.16+ <stable@vger.kernel.org> # 5.16+
-> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > ---
-> > > >
-> > > > This replaces the last 3 patches in
-> > > >
-> > > > https://lore.kernel.org/linux-pm/6171293.lOV4Wx5bFT@rjwysocki.net/
-> > > >
-> > > > v2 -> v3:
-> > > >    * Fold 3 patches into one.
-> > > >    * Drop an unrelated white space fixup change.
-> > > >    * Fix a typo in a comment (Christian).
-> > > >
-> > > > v1 -> v2: Cosmetic changes
-> > > >
-> > > > ---
-> > > >  drivers/cpufreq/cpufreq.c |   32 +++++++++++++++++++++++++-------
-> > > >  1 file changed, 25 insertions(+), 7 deletions(-)
-> > > >
-> > > > --- a/drivers/cpufreq/cpufreq.c
-> > > > +++ b/drivers/cpufreq/cpufreq.c
-> > > > @@ -495,8 +495,6 @@
-> > > >  {
-> > > >       unsigned int idx;
-> > > >
-> > > > -     target_freq =3D clamp_val(target_freq, policy->min, policy->m=
-ax);
-> > > > -
-> > > >       if (!policy->freq_table)
-> > > >               return target_freq;
-> > > >
-> > > > @@ -520,7 +518,22 @@
-> > > >  unsigned int cpufreq_driver_resolve_freq(struct cpufreq_policy *po=
-licy,
-> > > >                                        unsigned int target_freq)
-> > > >  {
-> > > > -     return __resolve_freq(policy, target_freq, CPUFREQ_RELATION_L=
-E);
-> > > > +     unsigned int min =3D READ_ONCE(policy->min);
-> > > > +     unsigned int max =3D READ_ONCE(policy->max);
-> > > > +
-> > > > +     /*
-> > > > +      * If this function runs in parallel with cpufreq_set_policy(=
-), it may
-> > > > +      * read policy->min before the update and policy->max after t=
-he update
-> > > > +      * or the other way around, so there is no ordering guarantee=
-.
-> > > > +      *
-> > > > +      * Resolve this by always honoring the max (in case it comes =
-from
-> > > > +      * thermal throttling or similar).
-> > > > +      */
-> > > > +     if (unlikely(min > max))
-> > > > +             min =3D max;
-> > > > +
-> > > > +     return __resolve_freq(policy, clamp_val(target_freq, min, max=
-),
-> > > > +                           CPUFREQ_RELATION_LE);
-> > > >  }
-> > > >  EXPORT_SYMBOL_GPL(cpufreq_driver_resolve_freq);
-> > > >
-> > > > @@ -2338,6 +2351,7 @@
-> > > >       if (cpufreq_disabled())
-> > > >               return -ENODEV;
-> > > >
-> > > > +     target_freq =3D clamp_val(target_freq, policy->min, policy->m=
-ax);
-> > > >       target_freq =3D __resolve_freq(policy, target_freq, relation)=
-;
-> > > >
-> > > >       pr_debug("target for CPU %u: %u kHz, relation %u, requested %=
-u kHz\n",
-> > > > @@ -2631,11 +2645,15 @@
-> > > >        * Resolve policy min/max to available frequencies. It ensure=
-s
-> > > >        * no frequency resolution will neither overshoot the request=
-ed maximum
-> > > >        * nor undershoot the requested minimum.
-> > > > +      *
-> > > > +      * Avoid storing intermediate values in policy->max or policy=
-->min and
-> > > > +      * compiler optimizations around them because they may be acc=
-essed
-> > > > +      * concurrently by cpufreq_driver_resolve_freq() during the u=
-pdate.
-> > > >        */
-> > > > -     policy->min =3D new_data.min;
-> > > > -     policy->max =3D new_data.max;
-> > > > -     policy->min =3D __resolve_freq(policy, policy->min, CPUFREQ_R=
-ELATION_L);
-> > > > -     policy->max =3D __resolve_freq(policy, policy->max, CPUFREQ_R=
-ELATION_H);
-> > > > +     WRITE_ONCE(policy->max, __resolve_freq(policy, new_data.max, =
-CPUFREQ_RELATION_H));
-> > > > +     new_data.min =3D __resolve_freq(policy, new_data.min, CPUFREQ=
-_RELATION_L);
-> > > > +     WRITE_ONCE(policy->min, new_data.min > policy->max ? policy->=
-max : new_data.min);
-> > >
-> > > I've tested the cpufreq throttling again in 6.15-rc3 to check your fi=
-x
-> > > for the schedutil CPUFREQ_NEED_UPDATE_LIMITS regression I reported [1=
-].
-> > > The CPU frequency is now being throttled correctly when reaching high
-> > > temperatures. Thanks for fixing this!
-> > >
-> > > Unfortunately, the opposite case has now regressed with this patch:
-> > > After the CPU frequency has been throttled due to high temperature an=
-d
-> > > the device cools down again, the CPU frequency is stuck at minimum un=
-til
-> > > you reboot. policy->max will never restore to the maximum frequency.
-> > >
-> > > I've confirmed that this causes unexpected slowness after temperature
-> > > throttling on a Qualcomm X1E laptop, and Johan has confirmed that e.g=
-.
-> > > the ThinkPad X13s is also affected. I would expect that most devices
-> > > using cpufreq cooling in the kernel are affected.
-> > >
-> > > Looking at the code, I think the problem is that __resolve_freq() ->
-> > > cpufreq_frequency_table_target() -> cpufreq_table_find_index*() and
-> > > cpufreq_is_in_limits() are still using the old policy->min/max value.
-> > > In this patch, you have only moved the clamp_val() usage directly in
-> > > __resolve_freq().
-> >
-> > You are right, that's the problem.
-> >
-> > The fix is basically straightforward, pass min and max to
-> > cpufreq_frequency_table_target() and propagate downward, but making
-> > that change may be somewhat error-prone.
-> >
-> > I'll try to cut a patch to test tomorrow.
->
-> Actually, I have it already, so please find appended.
->
-> Please give it a go as soon as you reasonably can.
->
-> Thanks!
->
-> ---
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Subject: [PATCH v1] cpufreq: Fix setting policy limits when frequency tab=
-les are used
->
-> Commit 7491cdf46b5c ("cpufreq: Avoid using inconsistent policy->min and
-> policy->max") overlooked the fact that policy->min and policy->max were
-> accessed directly in cpufreq_frequency_table_target() and in the
-> functions called by it and the changes made by that commit led to
-> problems with setting policy limits.
->
-> Address this by passing the target frequency limits to __resolve_freq()
-> and cpufreq_frequency_table_target() and propagating them to the
-> functions called by the latter.
->
-> Fixes: 7491cdf46b5c ("cpufreq: Avoid using inconsistent policy->min and p=
-olicy->max")
-> Reported-by: Stephan Gerhold <stephan.gerhold@linaro.org>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/cpufreq/cpufreq.c          |   22 ++++++----
->  drivers/cpufreq/cpufreq_ondemand.c |    3 -
->  drivers/cpufreq/freq_table.c       |    6 +-
->  include/linux/cpufreq.h            |   81 ++++++++++++++++++++++++------=
--------
->  4 files changed, 72 insertions(+), 40 deletions(-)
->
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -491,14 +491,18 @@
->  EXPORT_SYMBOL_GPL(cpufreq_disable_fast_switch);
->
->  static unsigned int __resolve_freq(struct cpufreq_policy *policy,
-> -               unsigned int target_freq, unsigned int relation)
-> +                                  unsigned int target_freq,
-> +                                  unsigned int min, unsigned int max,
-> +                                  unsigned int relation)
->  {
->         unsigned int idx;
->
->         if (!policy->freq_table)
->                 return target_freq;
->
-> -       idx =3D cpufreq_frequency_table_target(policy, target_freq, relat=
-ion);
-> +       target_freq =3D clamp_val(target_freq, min, max);
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-This needs to be done before the freq_table check above or drivers
-without freq tables will have a problem.
+--8323328-1201764611-1745579114=:950
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-I'll send an update of this patch shortly.
+On Thu, 24 Apr 2025, Antheas Kapenekakis wrote:
 
-Thanks!
+> On Thu, 24 Apr 2025 at 15:49, Ilpo J=C3=A4rvinen
+> <ilpo.jarvinen@linux.intel.com> wrote:
+> >
+> > On Thu, 17 Apr 2025, Antheas Kapenekakis wrote:
+> >
+> > > With the X1 (AMD), OneXPlayer added a charge limit and charge inhibit
+> > > feature to their devices. Charge limit allows for choosing an arbitra=
+ry
+> > > battery charge setpoint in percentages. Charge ihibit allows to instr=
+uct
+> > > the device to stop charging either when it is awake or always.
+> > >
+> > > This feature was then extended for the F1Pro as well. OneXPlayer also
+> > > released BIOS updates for the X1 Mini, X1 (Intel), and F1 devices tha=
+t
+> > > add support for this feature. Therefore, enable it for all F1 and
+> > > X1 devices.
+> > >
+> > > Reviewed-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> > > Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
+> > > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+> > > ---
+> > >  drivers/platform/x86/Kconfig |   1 +
+> > >  drivers/platform/x86/oxpec.c | 155 +++++++++++++++++++++++++++++++++=
++-
+> > >  2 files changed, 155 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kcon=
+fig
+> > > index 739740c4bb535..6c9e64a03aaef 100644
+> > > --- a/drivers/platform/x86/Kconfig
+> > > +++ b/drivers/platform/x86/Kconfig
+> > > @@ -1204,6 +1204,7 @@ config SEL3350_PLATFORM
+> > >  config OXP_EC
+> > >       tristate "OneXPlayer EC platform control"
+> > >       depends on ACPI_EC
+> > > +     depends on ACPI_BATTERY
+> > >       depends on HWMON
+> > >       depends on X86
+> > >       help
+> > > diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpe=
+c.c
+> > > index f0b9fff704de2..ce20bf70027df 100644
+> > > --- a/drivers/platform/x86/oxpec.c
+> > > +++ b/drivers/platform/x86/oxpec.c
+> > > @@ -24,6 +24,7 @@
+> > >  #include <linux/module.h>
+> > >  #include <linux/platform_device.h>
+> > >  #include <linux/processor.h>
+> > > +#include <acpi/battery.h>
+> > >
+> > >  /* Handle ACPI lock mechanism */
+> > >  static u32 oxp_mutex;
+> > > @@ -60,6 +61,7 @@ enum oxp_board {
+> > >  };
+> > >
+> > >  static enum oxp_board board;
+> > > +static struct device *oxp_dev;
+> > >
+> > >  /* Fan reading and PWM */
+> > >  #define OXP_SENSOR_FAN_REG             0x76 /* Fan reading is 2 regi=
+sters long */
+> > > @@ -93,6 +95,23 @@ static enum oxp_board board;
+> > >  #define OXP_X1_TURBO_LED_OFF           0x01
+> > >  #define OXP_X1_TURBO_LED_ON            0x02
+> > >
+> > > +/* Battery extension settings */
+> > > +#define EC_CHARGE_CONTROL_BEHAVIOURS (BIT(POWER_SUPPLY_CHARGE_BEHAVI=
+OUR_AUTO)             | \
+> > > +                                      BIT(POWER_SUPPLY_CHARGE_BEHAVI=
+OUR_INHIBIT_CHARGE)    | \
+> >
+> > Please change the endings to:
+> >
+> > ...) | <tabs>\
+> >
+> > > +                                      BIT(POWER_SUPPLY_CHARGE_BEHAVI=
+OUR_INHIBIT_CHARGE_AWAKE))
+> > > +
+> > > +#define OXP_X1_CHARGE_LIMIT_REG      0xA3 /* X1 charge limit (%) */
+> > > +#define OXP_X1_CHARGE_INHIBIT_REG     0xA4 /* X1 bypass charging */
+> >
+> > Please use tabs for aligning the values (there were a few other defines
+> > in the earlier patches with spaces too). (I know the earlier ones used
+> > space but they don't seem to be in the same group so lets just move to
+> > tabs with new stuff, optionally, you can add a patch to change also the
+> > pre-existing ones to use space).
+> >
+> > > +
+> > > +#define OXP_X1_CHARGE_INHIBIT_MASK_AWAKE 0x01
+> > > +/*
+> > > + * X1 Mask is 0x0A, OneXFly F1Pro is just 0x02
+> > > + * but the extra bit on the X1 does nothing.
+> >
+> > Reflow to fill 80 chars.
+> >
+> > > + */
+> > > +#define OXP_X1_CHARGE_INHIBIT_MASK_OFF 0x02
+> > > +#define OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS (OXP_X1_CHARGE_INHIBIT_MAS=
+K_AWAKE | \
+> > > +     OXP_X1_CHARGE_INHIBIT_MASK_OFF)
+> >
+> > Align to (.
+>=20
+> I made the corrections.
+>=20
+> Should I send a revision now or wait?
+
+Just send a new version please so I can apply these, I think people have=20
+had enough time to comment on them. :-) (I was basically applying these=20
+while I noticed those issues and some of them were a little awkward to=20
+change/tweak while applying so I left the updating in your hands instead).
+
+--=20
+ i.
+
+>=20
+> Antheas
+>=20
+> > --
+> >  i.
+> >
+> > > +
+> > >  static const struct dmi_system_id dmi_table[] =3D {
+> > >       {
+> > >               .matches =3D {
+> > > @@ -507,6 +526,129 @@ static ssize_t tt_led_show(struct device *dev,
+> > >
+> > >  static DEVICE_ATTR_RW(tt_led);
+> > >
+> > > +/* Callbacks for charge behaviour attributes */
+> > > +static bool oxp_psy_ext_supported(void)
+> > > +{
+> > > +     switch (board) {
+> > > +     case oxp_x1:
+> > > +     case oxp_fly:
+> > > +             return true;
+> > > +     default:
+> > > +             break;
+> > > +     }
+> > > +     return false;
+> > > +}
+> > > +
+> > > +static int oxp_psy_ext_get_prop(struct power_supply *psy,
+> > > +                                    const struct power_supply_ext *e=
+xt,
+> > > +                                    void *data,
+> > > +                                    enum power_supply_property psp,
+> > > +                                    union power_supply_propval *val)
+> > > +{
+> > > +     long raw_val;
+> > > +     int ret;
+> > > +
+> > > +     switch (psp) {
+> > > +     case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
+> > > +             ret =3D read_from_ec(OXP_X1_CHARGE_LIMIT_REG, 1, &raw_v=
+al);
+> > > +             if (ret)
+> > > +                     return ret;
+> > > +             if (raw_val < 0 || raw_val > 100)
+> > > +                     return -EINVAL;
+> > > +             val->intval =3D raw_val;
+> > > +             return 0;
+> > > +     case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
+> > > +             ret =3D read_from_ec(OXP_X1_CHARGE_INHIBIT_REG, 1, &raw=
+_val);
+> > > +             if (ret)
+> > > +                     return ret;
+> > > +             if ((raw_val & OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS) =3D=
+=3D
+> > > +                 OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS)
+> > > +                     val->intval =3D POWER_SUPPLY_CHARGE_BEHAVIOUR_I=
+NHIBIT_CHARGE;
+> > > +             else if ((raw_val & OXP_X1_CHARGE_INHIBIT_MASK_AWAKE) =
+=3D=3D
+> > > +                      OXP_X1_CHARGE_INHIBIT_MASK_AWAKE)
+> > > +                     val->intval =3D POWER_SUPPLY_CHARGE_BEHAVIOUR_I=
+NHIBIT_CHARGE_AWAKE;
+> > > +             else
+> > > +                     val->intval =3D POWER_SUPPLY_CHARGE_BEHAVIOUR_A=
+UTO;
+> > > +             return 0;
+> > > +     default:
+> > > +             return -EINVAL;
+> > > +     }
+> > > +}
+> > > +
+> > > +static int oxp_psy_ext_set_prop(struct power_supply *psy,
+> > > +                                    const struct power_supply_ext *e=
+xt,
+> > > +                                    void *data,
+> > > +                                    enum power_supply_property psp,
+> > > +                                    const union power_supply_propval=
+ *val)
+> > > +{
+> > > +     long raw_val;
+> > > +
+> > > +     switch (psp) {
+> > > +     case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
+> > > +             if (val->intval > 100)
+> > > +                     return -EINVAL;
+> > > +             return write_to_ec(OXP_X1_CHARGE_LIMIT_REG, val->intval=
+);
+> > > +     case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
+> > > +             switch (val->intval) {
+> > > +             case POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO:
+> > > +                     raw_val =3D 0;
+> > > +                     break;
+> > > +             case POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE=
+:
+> > > +                     raw_val =3D OXP_X1_CHARGE_INHIBIT_MASK_AWAKE;
+> > > +                     break;
+> > > +             case POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE:
+> > > +                     raw_val =3D OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS;
+> > > +                     break;
+> > > +             default:
+> > > +                     return -EINVAL;
+> > > +             }
+> > > +
+> > > +             return write_to_ec(OXP_X1_CHARGE_INHIBIT_REG, raw_val);
+> > > +     default:
+> > > +             return -EINVAL;
+> > > +     }
+> > > +}
+> > > +
+> > > +static int oxp_psy_prop_is_writeable(struct power_supply *psy,
+> > > +                                         const struct power_supply_e=
+xt *ext,
+> > > +                                         void *data,
+> > > +                                         enum power_supply_property =
+psp)
+> > > +{
+> > > +     return true;
+> > > +}
+> > > +
+> > > +static const enum power_supply_property oxp_psy_ext_props[] =3D {
+> > > +     POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
+> > > +     POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD,
+> > > +};
+> > > +
+> > > +static const struct power_supply_ext oxp_psy_ext =3D {
+> > > +     .name                   =3D "oxp-charge-control",
+> > > +     .properties             =3D oxp_psy_ext_props,
+> > > +     .num_properties         =3D ARRAY_SIZE(oxp_psy_ext_props),
+> > > +     .charge_behaviours      =3D EC_CHARGE_CONTROL_BEHAVIOURS,
+> > > +     .get_property           =3D oxp_psy_ext_get_prop,
+> > > +     .set_property           =3D oxp_psy_ext_set_prop,
+> > > +     .property_is_writeable  =3D oxp_psy_prop_is_writeable,
+> > > +};
+> > > +
+> > > +static int oxp_add_battery(struct power_supply *battery, struct acpi=
+_battery_hook *hook)
+> > > +{
+> > > +     return power_supply_register_extension(battery, &oxp_psy_ext, o=
+xp_dev, NULL);
+> > > +}
+> > > +
+> > > +static int oxp_remove_battery(struct power_supply *battery, struct a=
+cpi_battery_hook *hook)
+> > > +{
+> > > +     power_supply_unregister_extension(battery, &oxp_psy_ext);
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static struct acpi_battery_hook battery_hook =3D {
+> > > +     .add_battery    =3D oxp_add_battery,
+> > > +     .remove_battery =3D oxp_remove_battery,
+> > > +     .name           =3D "OneXPlayer Battery",
+> > > +};
+> > > +
+> > >  /* PWM enable/disable functions */
+> > >  static int oxp_pwm_enable(void)
+> > >  {
+> > > @@ -847,11 +989,22 @@ static int oxp_platform_probe(struct platform_d=
+evice *pdev)
+> > >  {
+> > >       struct device *dev =3D &pdev->dev;
+> > >       struct device *hwdev;
+> > > +     int ret;
+> > >
+> > > +     oxp_dev =3D dev;
+> > >       hwdev =3D devm_hwmon_device_register_with_info(dev, "oxp_ec", N=
+ULL,
+> > >                                                    &oxp_ec_chip_info,=
+ NULL);
+> > >
+> > > -     return PTR_ERR_OR_ZERO(hwdev);
+> > > +     if (IS_ERR(hwdev))
+> > > +             return PTR_ERR(hwdev);
+> > > +
+> > > +     if (oxp_psy_ext_supported()) {
+> > > +             ret =3D devm_battery_hook_register(dev, &battery_hook);
+> > > +             if (ret)
+> > > +                     return ret;
+> > > +     }
+> > > +
+> > > +     return 0;
+> > >  }
+> > >
+> > >  static struct platform_driver oxp_platform_driver =3D {
+> > >
+>=20
+--8323328-1201764611-1745579114=:950--
 
