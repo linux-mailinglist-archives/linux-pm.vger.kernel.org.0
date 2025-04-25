@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-26183-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26184-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC53CA9C4E6
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 12:13:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E853FA9C503
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 12:16:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FC9C1BC2145
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 10:13:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1E213AA7B9
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 10:15:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5820823E25B;
-	Fri, 25 Apr 2025 10:12:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3076C23A9BD;
+	Fri, 25 Apr 2025 10:16:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sYnmDWWR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iij5v1k3"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2130523D28D;
-	Fri, 25 Apr 2025 10:12:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9D7221540;
+	Fri, 25 Apr 2025 10:16:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745575966; cv=none; b=m0YUsFS4o+WywAXs9nXJxEO0pvPRNMiI2I+jvpLa36tMmbWPGOefsOzgodJH0SKKqN90tk0yH/kJzLvSUt4Rj20WkPRnQM13iZ8BUIuOSuKnUq2mPvesAcVgbjOzG1e4U//EXFDSoghvSLfW6n7lUQqkXrTsvG1BQgghTMKwd/w=
+	t=1745576165; cv=none; b=hTX3xl8bIjYhpXIdR3cipAqBYuROAihuh8BVqrGkdBZML9wgojUy6WM/mVA5InNfqRWOQrIJwaMzQYr7ovfDz5xUKDkb4GoapT9CKbxPNa/JS1p2Ioa48VHBkiU6/BHUJuGZdX+fwkRsSz+vHa4uJ7hDn227YFAbZKSWGNdmNtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745575966; c=relaxed/simple;
-	bh=w/YbtN447aSdBmfIlYkAFSSQSAj3xU7PmAeeakRoArs=;
+	s=arc-20240116; t=1745576165; c=relaxed/simple;
+	bh=SIrtiLIaeQGQ3nKXsSkidzhM/Umt2ybR0YFHiB429cg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tSp14drbP4fo7x7BwzNDWZez68UVcpwJt/ll5BQ3knL/waG4OBRTE0jTgKz1Lu6+YOAR9sWey4QyRRaBoBh+f3a1mSP7jOnauO2OHfcXMEP3K40iAZXdYqxiMPhFLWFEXoO5YFdjWjxbKKHjMHjGHlTGUpKsxN9o08smlDPhB1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sYnmDWWR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3724C4CEE4;
-	Fri, 25 Apr 2025 10:12:44 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=l36eiY+5FQDPkK2y5IpBsIhFpaIV62zLjngM1r156Yqu1XYepmdtFETcuMoCfa54C/2vMt4XoKQlDHdxJlNNNHO/wZFULpCC0+4reUDqIqdgShIQTyYJCCdiUZQCe3GAoqBG6rvMl4HS/CxxAkK/rahwLjidJuTMDxgUeEr55lE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iij5v1k3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2F26C4CEE4;
+	Fri, 25 Apr 2025 10:16:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745575965;
-	bh=w/YbtN447aSdBmfIlYkAFSSQSAj3xU7PmAeeakRoArs=;
+	s=k20201202; t=1745576164;
+	bh=SIrtiLIaeQGQ3nKXsSkidzhM/Umt2ybR0YFHiB429cg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sYnmDWWRLrPoavB8wphVdQEsj7fYyH8NujFRmjLDA0Kyiu06rOKGg5D0UGDdznkhd
-	 gaVtlNt0UwB9pd0TbOWN433kG6dBIEl3mEPlL7G9GBocMKEoJzmby1ZwKyjTk6drP9
-	 EMyNVYFQ/NGo3rKBbuVHnXOFG/1mXREcczvoBl6Ak18ZdMziZfgsUKeXNEeUHyRDay
-	 NlQ6z8lO8XAKwoM/yhHosad3MVreqoWIgMPgN44oTGWMI7+EvGz3d2ap5PIk+IWk0T
-	 /EOvR1EO5dhB9jOtUNE3U1AxnCSkxjdWgoD0nRKO1ur5P6qaVbqU0igHIpZGkEujJH
-	 jn2DoPP3feELA==
-Date: Fri, 25 Apr 2025 12:12:43 +0200
+	b=iij5v1k3+0LXiksOf1Rzl14G1724AnOcitFOjpSnu94e/Txg5VPqUFD20bbz8yfAq
+	 HZEsehSnHhG2aXi0Jf4KE+4ltM7g/T/yWdBWh+ixsSQJIooTP1wWz0jZUfgZhjGpa2
+	 VRyvoOzDuapvHc//HYAsMOSksGUx25y36vHB5w51VdNJMn0QtMB9R3cGLmgYI9yOM6
+	 LUTGzh96Z4DKlDoQADZI92GqPpg4dMhysvfTv8Y7D8VJM8sSBMtXarIVYqIJJoforD
+	 G9iGc3OmRI3drnJC+Al6/x7HQZNF5Mb9kTZVorMWe8dNx+WRv9gXtgLKYZg7NPOypG
+	 66LwyalH3lsDQ==
+Date: Fri, 25 Apr 2025 12:16:02 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Praveen Talari <quic_ptalari@quicinc.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -54,10 +54,10 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	psodagud@quicinc.com, djaggi@quicinc.com, quic_msavaliy@quicinc.com, 
 	quic_vtanuku@quicinc.com, quic_arandive@quicinc.com, quic_mnaresh@quicinc.com, 
 	quic_shazhuss@quicinc.com, Nikunj Kela <quic_nkela@quicinc.com>
-Subject: Re: [PATCH v2 2/9] dt-bindings: serial: describe SA8255p
-Message-ID: <20250425-graceful-psychedelic-leopard-0da7fe@kuoka>
+Subject: Re: [PATCH v2 3/9] dt-bindings: qcom: geni-se: describe SA8255p
+Message-ID: <20250425-grumpy-dainty-pillbug-be2145@kuoka>
 References: <20250418151235.27787-1-quic_ptalari@quicinc.com>
- <20250418151235.27787-3-quic_ptalari@quicinc.com>
+ <20250418151235.27787-4-quic_ptalari@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,43 +66,35 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250418151235.27787-3-quic_ptalari@quicinc.com>
+In-Reply-To: <20250418151235.27787-4-quic_ptalari@quicinc.com>
 
-On Fri, Apr 18, 2025 at 08:42:28PM GMT, Praveen Talari wrote:
-> +  interrupts:
-> +    minItems: 1
-> +    items:
-> +      - description: UART core irq
-> +      - description: Wakeup irq (RX GPIO)
+On Fri, Apr 18, 2025 at 08:42:29PM GMT, Praveen Talari wrote:
+> +  "#size-cells":
+> +    const: 2
 > +
-> +  interrupt-names:
-> +    description:
-> +      The UART interrupt and optionally the RX in-band wakeup interrupt.
-
-Drop description. It is not even accurate because you do not allow
-wakeup to be optional.
-
-> +    items:
-> +      - const: uart
-> +      - const: wakeup
-
+> +  ranges: true
 > +
-> +  power-domains:
-> +    minItems: 2
-> +    maxItems: 2
+> +  iommus:
+> +    maxItems: 1
 > +
-> +  power-domain-names:
-> +    items:
-> +      - const: power
-> +      - const: perf
+> +  dma-coherent: true
 > +
 > +required:
-> +  - compatible
-> +  - interrupts
-> +  - reg
 
-Keep the same order as in properties. You already got comment about
-placement of 'reg'.
+required: block goes after properties and patternproperties. I guess you
+copied it from the existing geni binding, but new bindings can improve.
+
+> +  - compatible
+> +  - reg
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +  - ranges
+> +
+> +patternProperties:
+
+Rest looks good so with this reordering:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
