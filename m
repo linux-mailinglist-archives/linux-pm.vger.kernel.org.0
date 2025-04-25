@@ -1,383 +1,390 @@
-Return-Path: <linux-pm+bounces-26175-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26178-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A449AA9C1A0
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 10:41:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8B86A9C213
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 10:51:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E5031BC00A7
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 08:40:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94E08172F77
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 08:51:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 906B12512C9;
-	Fri, 25 Apr 2025 08:35:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69375235341;
+	Fri, 25 Apr 2025 08:51:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="f0nyTqFF"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hVkobYMX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9596024BD04;
-	Fri, 25 Apr 2025 08:35:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 566C321D5B7
+	for <linux-pm@vger.kernel.org>; Fri, 25 Apr 2025 08:51:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745570152; cv=none; b=oFvzlDva33YeQs1ZUtDMCmCUyNyPnjQ80Ha6xPqjIM2hKs54r7gvLwY4Vt01DMzHchl4cOgL6CbqCpGY3TzyMrttzmDzKXYKj+CWS3Bl4QtlkdXUD9wSw7b3cikSBAQoYsKhNc2521jn0HfR4dS4QF6sGsP8HGoIBHebDU2ZbFE=
+	t=1745571075; cv=none; b=pTmWCseUhuT3uSoNqvl2tMy4g+ohPSpKOOvvm5731QktKcoY4Q/KgDtfRDrNkk7de8Ev20H5Y12mZFU4UnjvsRNK1B6+Kx03x7gbUrkYfQ2SRIisB62Nvo2f1tXP837T0oMhbflYn6TO3G1lnJDh/+A8j5CF2P4GdyRAFsI3HXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745570152; c=relaxed/simple;
-	bh=08js4cQ/tImzBbVAnRy9C56aMzYPY9aXKTSZAA+hU0A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=m53XFDggppMOVUfAIf7Auu4eoiksKorET0Ih0xl7SzfzJ3UB/9pUC5YbExMCBJcE7W1QPW3pnHj9kfGHq0Vq8/vY16FCGhcX2VmfvQxuhBFuTUOOKCZ2/TYeRV68keegMHiM02AGcoYF1GlUJfSJkc9b3BwQJWe8TnIpSNzJzb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=f0nyTqFF; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from terminus.zytor.com (terminus.zytor.com [IPv6:2607:7c80:54:3:0:0:0:136])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53P8Yg5c2390085
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-	Fri, 25 Apr 2025 01:35:16 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53P8Yg5c2390085
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025042001; t=1745570118;
-	bh=PGgDVUVp5WEsZGmkrE1cE9ZmxybTvIy441YCsSnZyG8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=f0nyTqFFxoNNT5zdxXz0wAG2oDnQQHR2TITjrl4/WZHGQrZGNiF1OZYbax0C2iuIx
-	 CH2XXrL5uYNMptan27zhYOojgtxgK72O5RWOTmV95xgIIpIT3kSr62AOOXra9uRF6E
-	 kTbsurThw7Iy4DVFR1xhvN89VcU9gmp1/l4hhWaLt3TSW9XbKcovRa9h+mP/NfqMQv
-	 Pry2fZZ/3lQkv2R/rt1kUSU/HD8Pxr3Y+EPze/8OS2f48IUTb7v1i2RJSfxC9aW9TR
-	 2obaMyl6yz37n/hRq5aMI5eGmJZogK/gHDlJVsHJ/MBZRP2hgoN7z0zm+fw0egbklR
-	 7ZKW0NW9geX6g==
-From: "Xin Li (Intel)" <xin@zytor.com>
-To: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
-        linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
-        peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
-        wei.liu@kernel.org, ajay.kaher@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
-        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
-        haiyangz@microsoft.com, decui@microsoft.com,
-        dapeng1.mi@linux.intel.com
-Subject: [PATCH v3 14/14] x86/msr: Change the function type of native_read_msr_safe()
-Date: Fri, 25 Apr 2025 01:34:37 -0700
-Message-ID: <20250425083442.2390017-15-xin@zytor.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250425083442.2390017-1-xin@zytor.com>
-References: <20250425083442.2390017-1-xin@zytor.com>
+	s=arc-20240116; t=1745571075; c=relaxed/simple;
+	bh=FZWopE76g0GdqxKuvbnNQTyrmos3s+r/hLBaM//0J34=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lzsN8++V02xamkpVV9fqBxCsbeKuckPbEtSh02CnZzRO9iOTDVMa1iInr6GdIYvlDsaC96z34aYlEWwX/Qxvw7rgwUPF/swHIkl2SImYy12RI2pp6qiJAJ+W1Qr/JkoQvm2mc/GuG1IV48GmrlfL2iG3kj02lEHA2RnR1OeC6VA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hVkobYMX; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-70814384238so19319157b3.0
+        for <linux-pm@vger.kernel.org>; Fri, 25 Apr 2025 01:51:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1745571072; x=1746175872; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9GQfk+3zeIIKzUeHjqMJCPYPGJndG19Wjdr7pJZStAA=;
+        b=hVkobYMXDPiGMDjrjO7scyTWDArd2qmoCtMyq2jqguhhyfh+TBehTlYtGX5nBdP9gZ
+         5tvSaZ2xv/pT1UjquWN3DYTemJeA18gxIJIDe8xe7w4u5rPF8eiVpLsysBSm9mkxWozI
+         YScMuxZul5uxgnY1aCDP/W9Wb6v6tL5fGAveneUsjxQrm8V0oF/Kui6K307JIi6zIw+S
+         wfOdn5t06jqvhqasacc866HygSRwE1XtPI7UbjwYMH56riZEbsu9XKO4q3HS3R7z9eAd
+         rV4zjFNcgX4w7rlr3OHLM2l4N1pEUa1xVhAzCZTJGwf7dvnDvo7sew44GXoi50Qbo/EX
+         LSmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745571072; x=1746175872;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9GQfk+3zeIIKzUeHjqMJCPYPGJndG19Wjdr7pJZStAA=;
+        b=B5FK0iRxBDHf5DtMQbQw5f1RhaGPW1nkk3t1RO7xCp0XfaB1Y3rGrAFp5DENTVKagy
+         fcwpTyL36V9lEUkapSzdNJ7GjK6EVzp8GnLhC0LdLWaQoU+1yH3QoJqd8CpHd60uoZKO
+         /TZByNgDICnkJKQtyH/5PQUpihIfSDhjvuEu73rlTHQ5MSSPl7GkN7x6atRLd0cJJFEI
+         C9s3zLtcTKM/PHkrvfxHdvNkt0EadGQVaUJH6hFrxA96t0+L4ih5LLnwlGo2hd3sVSBR
+         nq9qFS2/1pXYR9Qf7ZpzWlRJLWjlIOvSZDQ17xYMLscPjxydIrXkMezxxfjDBtXiOldr
+         SuSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVNRd3NhDfpS0O9v3/LE2lbsAsHBlsKXZrd3LwlVDPpVKBX9xcGZ6AaZZjU7+DD5yePW3rh7bjctw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YySN/lwQcVb75kv7Tr7z/wb+0nAZQkVu/Bo972PQD90ibAYe0FG
+	cHxLSVH4aFxWuFwLR8YdnOm0yqw9FfQ+H/JfcMA2RtUewneqNY8CqXg+itNE6pe4wcmcL3PC3Pv
+	b9KR6GrgYv5041uSC5MmtlLoErq+tsI+gExLbug==
+X-Gm-Gg: ASbGncv5AOqyAovxu+7Afy/xGkhcIJyiJwV2DAL7Z5w+Ifs6uXvW0LMPwc79xyfeCf2
+	i8TUZ/++XsV1um+8mPJbIrOzi+uMUEG+IDiuO3hlQHjoQXDQTX32ILLVo2r6VU/PRKQFpIuhmrJ
+	LuoWXy4gOMsVMNK3BwLuYXnDc=
+X-Google-Smtp-Source: AGHT+IE4B65BDpklwFJDxIOPbJ0Hzq8wAs89aXC+F3ZxVBmeN5cyfnzySlvgMFu/NcYkSePA20evRaUlepPFtsP+koI=
+X-Received: by 2002:a05:6902:2807:b0:e72:8658:5839 with SMTP id
+ 3f1490d57ef6-e7316881e05mr2063821276.32.1745571072238; Fri, 25 Apr 2025
+ 01:51:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CGME20250414185316eucas1p2c2dbd33788d9141773546f7a479ac288@eucas1p2.samsung.com>
+ <20250414-apr_14_for_sending-v2-0-70c5af2af96c@samsung.com> <20250414-apr_14_for_sending-v2-3-70c5af2af96c@samsung.com>
+In-Reply-To: <20250414-apr_14_for_sending-v2-3-70c5af2af96c@samsung.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 25 Apr 2025 10:50:35 +0200
+X-Gm-Features: ATxdqUExFbuTIHs9dJyH7CbSVLWAZOfs6hMxjA5h2peJwwEgi8V0avo5M5kQ388
+Message-ID: <CAPDyKFqX5cjQe3-MX3W9wMoQW3gzwSvb0QMf-_sTJuq_TeGsCg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] pmdomain: thead: Add GPU-specific clock and reset
+ handling for TH1520
+To: Michal Wilczynski <m.wilczynski@samsung.com>, Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Frank Binns <frank.binns@imgtec.com>, 
+	Matt Coster <matt.coster@imgtec.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	m.szyprowski@samsung.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 
-Modify the function type of native_read_msr_safe() to:
++ Bartosz
 
-    int native_read_msr_safe(u32 msr, u64 *val)
+On Mon, 14 Apr 2025 at 20:53, Michal Wilczynski
+<m.wilczynski@samsung.com> wrote:
+>
+> Extend the TH1520 power domain driver to manage GPU related clocks and
+> resets via generic PM domain start/stop callbacks.
+>
+> The TH1520 GPU requires a special sequence to correctly initialize:
+> - Enable the GPU clocks
+> - Deassert the GPU clkgen reset
+> - Delay for a few cycles to satisfy hardware requirements
+> - Deassert the GPU core reset
+>
+> This sequence is SoC-specific and must be abstracted away from the
+> Imagination GPU driver, which expects only a standard single reset
+> interface. Following discussions with kernel maintainers [1], this
+> logic is placed inside a PM domain, rather than polluting the clock or
+> reset frameworks, or the GPU driver itself.
 
-This change makes the function return an error code instead of the
-MSR value, aligning it with the type of native_write_msr_safe().
-Consequently, their callers can check the results in the same way.
+Speaking about special sequences for power-on/off devices like this
+one, that's a known common problem. We actually have a generic
+subsystem for this now, drivers/power/sequencing/*.
 
-While at it, convert leftover MSR data type "unsigned int" to u32.
+Perhaps it's worth having a look at that, it should allow us to
+abstract things, so the GPU driver can stay more portable.
 
-Signed-off-by: Xin Li (Intel) <xin@zytor.com>
----
- arch/x86/include/asm/msr.h            | 21 +++++++++++----------
- arch/x86/include/asm/paravirt.h       | 19 ++++++++-----------
- arch/x86/include/asm/paravirt_types.h |  6 +++---
- arch/x86/kvm/svm/svm.c                | 19 +++++++------------
- arch/x86/xen/enlighten_pv.c           | 13 ++++++++-----
- arch/x86/xen/pmu.c                    | 14 ++++++++------
- 6 files changed, 45 insertions(+), 47 deletions(-)
+Kind regards
+Uffe
 
-diff --git a/arch/x86/include/asm/msr.h b/arch/x86/include/asm/msr.h
-index 0392b9596107..e7ee51ccd82e 100644
---- a/arch/x86/include/asm/msr.h
-+++ b/arch/x86/include/asm/msr.h
-@@ -130,18 +130,22 @@ static inline u64 native_read_msr(u32 msr)
- 	return val;
- }
- 
--static inline u64 native_read_msr_safe(u32 msr, int *err)
-+static inline int native_read_msr_safe(u32 msr, u64 *p)
- {
-+	int err;
- 	DECLARE_ARGS(val, low, high);
- 
- 	asm volatile("1: rdmsr ; xor %[err],%[err]\n"
- 		     "2:\n\t"
- 		     _ASM_EXTABLE_TYPE_REG(1b, 2b, EX_TYPE_RDMSR_SAFE, %[err])
--		     : [err] "=r" (*err), EAX_EDX_RET(val, low, high)
-+		     : [err] "=r" (err), EAX_EDX_RET(val, low, high)
- 		     : "c" (msr));
- 	if (tracepoint_enabled(read_msr))
--		do_trace_read_msr(msr, EAX_EDX_VAL(val, low, high), *err);
--	return EAX_EDX_VAL(val, low, high);
-+		do_trace_read_msr(msr, EAX_EDX_VAL(val, low, high), err);
-+
-+	*p = EAX_EDX_VAL(val, low, high);
-+
-+	return err;
- }
- 
- /* Can be uninlined because referenced by paravirt */
-@@ -221,8 +225,8 @@ static inline int wrmsrq_safe(u32 msr, u64 val)
- /* rdmsr with exception handling */
- #define rdmsr_safe(msr, low, high)				\
- ({								\
--	int __err;						\
--	u64 __val = native_read_msr_safe((msr), &__err);	\
-+	u64 __val;						\
-+	int __err = native_read_msr_safe((msr), &__val);	\
- 	(*low) = (u32)__val;					\
- 	(*high) = (u32)(__val >> 32);				\
- 	__err;							\
-@@ -230,10 +234,7 @@ static inline int wrmsrq_safe(u32 msr, u64 val)
- 
- static inline int rdmsrq_safe(u32 msr, u64 *p)
- {
--	int err;
--
--	*p = native_read_msr_safe(msr, &err);
--	return err;
-+	return native_read_msr_safe(msr, p);
- }
- 
- static __always_inline u64 rdpmc(int counter)
-diff --git a/arch/x86/include/asm/paravirt.h b/arch/x86/include/asm/paravirt.h
-index edf23bde367e..03f680d1057a 100644
---- a/arch/x86/include/asm/paravirt.h
-+++ b/arch/x86/include/asm/paravirt.h
-@@ -175,7 +175,7 @@ static inline void __write_cr4(unsigned long x)
- 	PVOP_VCALL1(cpu.write_cr4, x);
- }
- 
--static inline u64 paravirt_read_msr(unsigned msr)
-+static inline u64 paravirt_read_msr(u32 msr)
- {
- 	return PVOP_CALL1(u64, cpu.read_msr, msr);
- }
-@@ -185,9 +185,9 @@ static inline void paravirt_write_msr(u32 msr, u64 val)
- 	PVOP_VCALL2(cpu.write_msr, msr, val);
- }
- 
--static inline u64 paravirt_read_msr_safe(unsigned msr, int *err)
-+static inline int paravirt_read_msr_safe(u32 msr, u64 *val)
- {
--	return PVOP_CALL2(u64, cpu.read_msr_safe, msr, err);
-+	return PVOP_CALL2(int, cpu.read_msr_safe, msr, val);
- }
- 
- static inline int paravirt_write_msr_safe(u32 msr, u64 val)
-@@ -225,19 +225,16 @@ static inline int wrmsrq_safe(u32 msr, u64 val)
- /* rdmsr with exception handling */
- #define rdmsr_safe(msr, a, b)				\
- ({							\
--	int _err;					\
--	u64 _l = paravirt_read_msr_safe(msr, &_err);	\
-+	u64 _l;						\
-+	int _err = paravirt_read_msr_safe((msr), &_l);	\
- 	(*a) = (u32)_l;					\
--	(*b) = _l >> 32;				\
-+	(*b) = (u32)(_l >> 32);				\
- 	_err;						\
- })
- 
--static inline int rdmsrq_safe(unsigned msr, u64 *p)
-+static __always_inline int rdmsrq_safe(u32 msr, u64 *p)
- {
--	int err;
--
--	*p = paravirt_read_msr_safe(msr, &err);
--	return err;
-+	return paravirt_read_msr_safe(msr, p);
- }
- 
- static __always_inline u64 rdpmc(int counter)
-diff --git a/arch/x86/include/asm/paravirt_types.h b/arch/x86/include/asm/paravirt_types.h
-index 78777b78da12..b08b9d3122d6 100644
---- a/arch/x86/include/asm/paravirt_types.h
-+++ b/arch/x86/include/asm/paravirt_types.h
-@@ -91,14 +91,14 @@ struct pv_cpu_ops {
- 		      unsigned int *ecx, unsigned int *edx);
- 
- 	/* Unsafe MSR operations.  These will warn or panic on failure. */
--	u64 (*read_msr)(unsigned int msr);
-+	u64 (*read_msr)(u32 msr);
- 	void (*write_msr)(u32 msr, u64 val);
- 
- 	/*
- 	 * Safe MSR operations.
--	 * read sets err to 0 or -EIO.  write returns 0 or -EIO.
-+	 * Returns 0 or -EIO.
- 	 */
--	u64 (*read_msr_safe)(unsigned int msr, int *err);
-+	int (*read_msr_safe)(u32 msr, u64 *val);
- 	int (*write_msr_safe)(u32 msr, u64 val);
- 
- 	u64 (*read_pmc)(int counter);
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 4ef9978dce70..838606f784c9 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -475,15 +475,13 @@ static void svm_inject_exception(struct kvm_vcpu *vcpu)
- 
- static void svm_init_erratum_383(void)
- {
--	int err;
- 	u64 val;
- 
- 	if (!static_cpu_has_bug(X86_BUG_AMD_TLB_MMATCH))
- 		return;
- 
- 	/* Use _safe variants to not break nested virtualization */
--	val = native_read_msr_safe(MSR_AMD64_DC_CFG, &err);
--	if (err)
-+	if (native_read_msr_safe(MSR_AMD64_DC_CFG, &val))
- 		return;
- 
- 	val |= (1ULL << 47);
-@@ -648,13 +646,12 @@ static int svm_enable_virtualization_cpu(void)
- 	 * erratum is present everywhere).
- 	 */
- 	if (cpu_has(&boot_cpu_data, X86_FEATURE_OSVW)) {
--		uint64_t len, status = 0;
-+		u64 len, status = 0;
- 		int err;
- 
--		len = native_read_msr_safe(MSR_AMD64_OSVW_ID_LENGTH, &err);
-+		err = native_read_msr_safe(MSR_AMD64_OSVW_ID_LENGTH, &len);
- 		if (!err)
--			status = native_read_msr_safe(MSR_AMD64_OSVW_STATUS,
--						      &err);
-+			err = native_read_msr_safe(MSR_AMD64_OSVW_STATUS, &status);
- 
- 		if (err)
- 			osvw_status = osvw_len = 0;
-@@ -2145,14 +2142,13 @@ static int ac_interception(struct kvm_vcpu *vcpu)
- 
- static bool is_erratum_383(void)
- {
--	int err, i;
-+	int i;
- 	u64 value;
- 
- 	if (!erratum_383_found)
- 		return false;
- 
--	value = native_read_msr_safe(MSR_IA32_MC0_STATUS, &err);
--	if (err)
-+	if (native_read_msr_safe(MSR_IA32_MC0_STATUS, &value))
- 		return false;
- 
- 	/* Bit 62 may or may not be set for this mce */
-@@ -2165,8 +2161,7 @@ static bool is_erratum_383(void)
- 	for (i = 0; i < 6; ++i)
- 		native_write_msr_safe(MSR_IA32_MCx_STATUS(i), 0);
- 
--	value = native_read_msr_safe(MSR_IA32_MCG_STATUS, &err);
--	if (!err) {
-+	if (!native_read_msr_safe(MSR_IA32_MCG_STATUS, &value)) {
- 		value &= ~(1ULL << 2);
- 		native_write_msr_safe(MSR_IA32_MCG_STATUS, value);
- 	}
-diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
-index c067d1e8a39c..0b2f5e679026 100644
---- a/arch/x86/xen/enlighten_pv.c
-+++ b/arch/x86/xen/enlighten_pv.c
-@@ -1086,7 +1086,7 @@ static void xen_write_cr4(unsigned long cr4)
- 	native_write_cr4(cr4);
- }
- 
--static u64 xen_do_read_msr(unsigned int msr, int *err)
-+static u64 xen_do_read_msr(u32 msr, int *err)
- {
- 	u64 val = 0;	/* Avoid uninitialized value for safe variant. */
- 
-@@ -1094,7 +1094,7 @@ static u64 xen_do_read_msr(unsigned int msr, int *err)
- 		return val;
- 
- 	if (err)
--		val = native_read_msr_safe(msr, err);
-+		*err = native_read_msr_safe(msr, &val);
- 	else
- 		val = native_read_msr(msr);
- 
-@@ -1159,9 +1159,12 @@ static void xen_do_write_msr(u32 msr, u64 val, int *err)
- 	}
- }
- 
--static u64 xen_read_msr_safe(unsigned int msr, int *err)
-+static int xen_read_msr_safe(u32 msr, u64 *val)
- {
--	return xen_do_read_msr(msr, err);
-+	int err;
-+
-+	*val = xen_do_read_msr(msr, &err);
-+	return err;
- }
- 
- static int xen_write_msr_safe(u32 msr, u64 val)
-@@ -1173,7 +1176,7 @@ static int xen_write_msr_safe(u32 msr, u64 val)
- 	return err;
- }
- 
--static u64 xen_read_msr(unsigned int msr)
-+static u64 xen_read_msr(u32 msr)
- {
- 	int err;
- 
-diff --git a/arch/x86/xen/pmu.c b/arch/x86/xen/pmu.c
-index 6bee83018694..3e704094c97c 100644
---- a/arch/x86/xen/pmu.c
-+++ b/arch/x86/xen/pmu.c
-@@ -317,11 +317,12 @@ static u64 xen_amd_read_pmc(int counter)
- 	uint8_t xenpmu_flags = get_xenpmu_flags();
- 
- 	if (!xenpmu_data || !(xenpmu_flags & XENPMU_IRQ_PROCESSING)) {
--		uint32_t msr;
--		int err;
-+		u32 msr;
-+		u64 val;
- 
- 		msr = amd_counters_base + (counter * amd_msr_step);
--		return native_read_msr_safe(msr, &err);
-+		native_read_msr_safe(msr, &val);
-+		return val;
- 	}
- 
- 	ctxt = &xenpmu_data->pmu.c.amd;
-@@ -338,15 +339,16 @@ static u64 xen_intel_read_pmc(int counter)
- 	uint8_t xenpmu_flags = get_xenpmu_flags();
- 
- 	if (!xenpmu_data || !(xenpmu_flags & XENPMU_IRQ_PROCESSING)) {
--		uint32_t msr;
--		int err;
-+		u32 msr;
-+		u64 val;
- 
- 		if (counter & (1 << INTEL_PMC_TYPE_SHIFT))
- 			msr = MSR_CORE_PERF_FIXED_CTR0 + (counter & 0xffff);
- 		else
- 			msr = MSR_IA32_PERFCTR0 + counter;
- 
--		return native_read_msr_safe(msr, &err);
-+		native_read_msr_safe(msr, &val);
-+		return val;
- 	}
- 
- 	ctxt = &xenpmu_data->pmu.c.intel;
--- 
-2.49.0
-
+>
+> To support this, the TH1520 PM domain implements `attach_dev` and
+> `detach_dev` callbacks, allowing it to dynamically acquire clock and
+> reset resources from the GPU device tree node at runtime. This allows to
+> maintain the separation between generic drivers and SoC-specific
+> integration logic.
+>
+> As a result, the PM domain not only handles power sequencing but also
+> effectively acts as the SoC specific "glue driver" for the GPU device,
+> encapsulating all TH1520-specific clock and reset management.
+>
+> This approach improves maintainability and aligns with the broader
+> direction of treating PM domains as lightweight SoC-specific power
+> management drivers [2].
+>
+> [1] - https://lore.kernel.org/all/CAPDyKFqsJaTrF0tBSY-TjpqdVt5=6aPQHYfnDebtphfRZSU=-Q@mail.gmail.com/
+> [2] - https://osseu2024.sched.com/event/1ej38/the-case-for-an-soc-power-management-driver-stephen-boyd-google
+>
+> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+> ---
+>  drivers/pmdomain/thead/th1520-pm-domains.c | 199 +++++++++++++++++++++++++++++
+>  1 file changed, 199 insertions(+)
+>
+> diff --git a/drivers/pmdomain/thead/th1520-pm-domains.c b/drivers/pmdomain/thead/th1520-pm-domains.c
+> index f702e20306f469aeb0ed15e54bd4f8309f28018c..75412efb195eb534c2e8ff10ced65ed4c4d2452c 100644
+> --- a/drivers/pmdomain/thead/th1520-pm-domains.c
+> +++ b/drivers/pmdomain/thead/th1520-pm-domains.c
+> @@ -5,10 +5,13 @@
+>   * Author: Michal Wilczynski <m.wilczynski@samsung.com>
+>   */
+>
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+>  #include <linux/firmware/thead/thead,th1520-aon.h>
+>  #include <linux/slab.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_domain.h>
+> +#include <linux/reset.h>
+>
+>  #include <dt-bindings/power/thead,th1520-power.h>
+>
+> @@ -16,6 +19,15 @@ struct th1520_power_domain {
+>         struct th1520_aon_chan *aon_chan;
+>         struct generic_pm_domain genpd;
+>         u32 rsrc;
+> +
+> +       /* PM-owned reset */
+> +       struct reset_control *clkgen_reset;
+> +
+> +       /* Device-specific resources */
+> +       struct device *attached_dev;
+> +       struct clk_bulk_data *clks;
+> +       int num_clks;
+> +       struct reset_control *gpu_reset;
+>  };
+>
+>  struct th1520_power_info {
+> @@ -61,6 +73,177 @@ static int th1520_pd_power_off(struct generic_pm_domain *domain)
+>         return th1520_aon_power_update(pd->aon_chan, pd->rsrc, false);
+>  }
+>
+> +static int th1520_gpu_init_consumer_clocks(struct device *dev,
+> +                                          struct th1520_power_domain *pd)
+> +{
+> +       static const char *const clk_names[] = { "core", "sys" };
+> +       int i, ret;
+> +
+> +       pd->num_clks = ARRAY_SIZE(clk_names);
+> +       pd->clks = devm_kcalloc(dev, pd->num_clks, sizeof(*pd->clks), GFP_KERNEL);
+> +       if (!pd->clks)
+> +               return -ENOMEM;
+> +
+> +       for (i = 0; i < pd->num_clks; i++)
+> +               pd->clks[i].id = clk_names[i];
+> +
+> +       ret = devm_clk_bulk_get(dev, pd->num_clks, pd->clks);
+> +       if (ret)
+> +               return dev_err_probe(dev, ret, "Failed to get GPU clocks\n");
+> +
+> +       return 0;
+> +}
+> +
+> +static int th1520_gpu_init_consumer_reset(struct device *dev,
+> +                                         struct th1520_power_domain *pd)
+> +{
+> +       int ret;
+> +
+> +       pd->gpu_reset = reset_control_get_exclusive(dev, NULL);
+> +       if (IS_ERR(pd->gpu_reset)) {
+> +               ret = PTR_ERR(pd->gpu_reset);
+> +               pd->gpu_reset = NULL;
+> +               return dev_err_probe(dev, ret, "Failed to get GPU reset\n");
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static int th1520_gpu_init_pm_reset(struct device *dev,
+> +                                   struct th1520_power_domain *pd)
+> +{
+> +       pd->clkgen_reset = devm_reset_control_get_exclusive(dev, "gpu-clkgen");
+> +       if (IS_ERR(pd->clkgen_reset))
+> +               return dev_err_probe(dev, PTR_ERR(pd->clkgen_reset),
+> +                                    "Failed to get GPU clkgen reset\n");
+> +
+> +       return 0;
+> +}
+> +
+> +static int th1520_gpu_domain_attach_dev(struct generic_pm_domain *genpd,
+> +                                       struct device *dev)
+> +{
+> +       struct th1520_power_domain *pd = to_th1520_power_domain(genpd);
+> +       int ret;
+> +
+> +       /* Enforce 1:1 mapping - only one device can be attached. */
+> +       if (pd->attached_dev)
+> +               return -EBUSY;
+> +
+> +       /* Initialize clocks using the consumer device */
+> +       ret = th1520_gpu_init_consumer_clocks(dev, pd);
+> +       if (ret)
+> +               return ret;
+> +
+> +       /* Initialize consumer reset using the consumer device */
+> +       ret = th1520_gpu_init_consumer_reset(dev, pd);
+> +       if (ret) {
+> +               if (pd->clks) {
+> +                       clk_bulk_put(pd->num_clks, pd->clks);
+> +                       kfree(pd->clks);
+> +                       pd->clks = NULL;
+> +                       pd->num_clks = 0;
+> +               }
+> +               return ret;
+> +       }
+> +
+> +       /* Mark device as platform PM driver managed */
+> +       device_platform_resources_set_pm_managed(dev, true);
+> +       pd->attached_dev = dev;
+> +
+> +       return 0;
+> +}
+> +
+> +static void th1520_gpu_domain_detach_dev(struct generic_pm_domain *genpd,
+> +                                        struct device *dev)
+> +{
+> +       struct th1520_power_domain *pd = to_th1520_power_domain(genpd);
+> +
+> +       /* Ensure this is the device we have attached */
+> +       if (pd->attached_dev != dev) {
+> +               dev_warn(dev,
+> +                        "tried to detach from GPU domain but not attached\n");
+> +               return;
+> +       }
+> +
+> +       /* Remove PM managed flag when detaching */
+> +       device_platform_resources_set_pm_managed(dev, false);
+> +
+> +       /* Clean up the consumer-owned resources */
+> +       if (pd->gpu_reset) {
+> +               reset_control_put(pd->gpu_reset);
+> +               pd->gpu_reset = NULL;
+> +       }
+> +
+> +       if (pd->clks) {
+> +               clk_bulk_put(pd->num_clks, pd->clks);
+> +               kfree(pd->clks);
+> +               pd->clks = NULL;
+> +               pd->num_clks = 0;
+> +       }
+> +
+> +       pd->attached_dev = NULL;
+> +}
+> +
+> +static int th1520_gpu_domain_start(struct device *dev)
+> +{
+> +       struct generic_pm_domain *genpd = pd_to_genpd(dev->pm_domain);
+> +       struct th1520_power_domain *pd = to_th1520_power_domain(genpd);
+> +       int ret;
+> +
+> +       /* Check if we have all required resources */
+> +       if (pd->attached_dev != dev || !pd->clks || !pd->gpu_reset ||
+> +           !pd->clkgen_reset)
+> +               return -ENODEV;
+> +
+> +       ret = clk_bulk_prepare_enable(pd->num_clks, pd->clks);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = reset_control_deassert(pd->clkgen_reset);
+> +       if (ret)
+> +               goto err_disable_clks;
+> +
+> +       /*
+> +        * According to the hardware manual, a delay of at least 32 clock
+> +        * cycles is required between de-asserting the clkgen reset and
+> +        * de-asserting the GPU reset. Assuming a worst-case scenario with
+> +        * a very high GPU clock frequency, a delay of 1 microsecond is
+> +        * sufficient to ensure this requirement is met across all
+> +        * feasible GPU clock speeds.
+> +        */
+> +       udelay(1);
+> +
+> +       ret = reset_control_deassert(pd->gpu_reset);
+> +       if (ret)
+> +               goto err_assert_clkgen;
+> +
+> +       return 0;
+> +
+> +err_assert_clkgen:
+> +       reset_control_assert(pd->clkgen_reset);
+> +err_disable_clks:
+> +       clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
+> +       return ret;
+> +}
+> +
+> +static int th1520_gpu_domain_stop(struct device *dev)
+> +{
+> +       struct generic_pm_domain *genpd = pd_to_genpd(dev->pm_domain);
+> +       struct th1520_power_domain *pd = to_th1520_power_domain(genpd);
+> +
+> +       /* Check if we have all required resources and if this is the attached device */
+> +       if (pd->attached_dev != dev || !pd->clks || !pd->gpu_reset ||
+> +           !pd->clkgen_reset)
+> +               return -ENODEV;
+> +
+> +       reset_control_assert(pd->gpu_reset);
+> +       reset_control_assert(pd->clkgen_reset);
+> +       clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
+> +
+> +       return 0;
+> +}
+> +
+>  static struct generic_pm_domain *th1520_pd_xlate(const struct of_phandle_args *spec,
+>                                                  void *data)
+>  {
+> @@ -99,6 +282,22 @@ th1520_add_pm_domain(struct device *dev, const struct th1520_power_info *pi)
+>         pd->genpd.power_off = th1520_pd_power_off;
+>         pd->genpd.name = pi->name;
+>
+> +       /* there are special callbacks for the GPU */
+> +       if (pi == &th1520_pd_ranges[TH1520_GPU_PD]) {
+> +               /* Initialize the PM-owned reset */
+> +               ret = th1520_gpu_init_pm_reset(dev, pd);
+> +               if (ret)
+> +                       return ERR_PTR(ret);
+> +
+> +               /* No device attached yet */
+> +               pd->attached_dev = NULL;
+> +
+> +               pd->genpd.dev_ops.start = th1520_gpu_domain_start;
+> +               pd->genpd.dev_ops.stop = th1520_gpu_domain_stop;
+> +               pd->genpd.attach_dev = th1520_gpu_domain_attach_dev;
+> +               pd->genpd.detach_dev = th1520_gpu_domain_detach_dev;
+> +       }
+> +
+>         ret = pm_genpd_init(&pd->genpd, NULL, true);
+>         if (ret)
+>                 return ERR_PTR(ret);
+>
+> --
+> 2.34.1
+>
 
