@@ -1,335 +1,274 @@
-Return-Path: <linux-pm+bounces-26181-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26182-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F13FA9C4C2
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 12:09:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0D64A9C4D5
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 12:11:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A03A4664EF
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 10:09:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63035188C8C9
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 10:11:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC39223C8BE;
-	Fri, 25 Apr 2025 10:08:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1931E23CEFF;
+	Fri, 25 Apr 2025 10:11:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TgxQPfbF"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aCHlm4IM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E4B236A9C
-	for <linux-pm@vger.kernel.org>; Fri, 25 Apr 2025 10:08:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D622397B0
+	for <linux-pm@vger.kernel.org>; Fri, 25 Apr 2025 10:11:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745575722; cv=none; b=Gg/4R94PR3Uq2g1mPkWkmF9xwGWwGZJEZ2ls0hlTiTbQgZQI3V7Ab32FYoOMB/+gdHI9MNIb9GtouSPS1Cl/I62TuHPrIHP/ZHkFTyRVn9oB3WN1brzr51cHdhY/JCcDtFm1e4dAan+RHEemEF+Y91rOpS/g5xwBkE6NF7kmBuY=
+	t=1745575884; cv=none; b=EKV7QfkH1ihsyWWWxUB5r4E9i3lqMDh6TnWUHBk/1vKnzXU5UBQepWALGS3y1hoi1q1oTy4paWXc9zi739fRaU5gXjKjzo+7zWxnvXZz2EB/rt1SDGtUaTufNhj+wMD6B7z8/ZuwPjnX72g8UTUlrwMEoEIGuiV0n4jwWhDEmQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745575722; c=relaxed/simple;
-	bh=xQKK3OcwSXAQmSMxY7ZPonWOs2FqcDKLKCnyPwhUYyM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iyx3r/eBsdCTgZplfIbr2DK7n7LsUg8aXDXKyxHUol9ObRlUnPY7+t8yXvk1877sfVstRbWQbuPZ0yYHb3vC0h/+m2YdU5O7V5k0GDZeSDpUfX5Sruf7n+Y+1Jn3eMwQNAC9TaapgbKNoCCPLekpYIo/4Cq23nGw9BfKWG/JwmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TgxQPfbF; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3913958ebf2so1586037f8f.3
-        for <linux-pm@vger.kernel.org>; Fri, 25 Apr 2025 03:08:40 -0700 (PDT)
+	s=arc-20240116; t=1745575884; c=relaxed/simple;
+	bh=2XTlxLm6HhjD5NksRt/hceGdAq7tvii4hFXdGKcaMBY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KjlykyzRP863Ty4JfyQ2gYqh2ai23cS8OtwbZGMR4A+O2jKnKOPi6xwjTpuZ8o4roTOL6d8Bxa1RkU9wYIHKbhrK97nJEuLImoG65g74Z8io7alRq00ld/rmZz9yWPBlUxhBt0/Y7fUPGCQ+4znjM1UaF3nblxzTDc+ds/Da2PI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aCHlm4IM; arc=none smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-6fead317874so18539357b3.0
+        for <linux-pm@vger.kernel.org>; Fri, 25 Apr 2025 03:11:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1745575719; x=1746180519; darn=vger.kernel.org;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xQKK3OcwSXAQmSMxY7ZPonWOs2FqcDKLKCnyPwhUYyM=;
-        b=TgxQPfbF28tRJMXoFKH5A8ir6WWi+7nCCvttZp7tMUGkZpZx/Y6bg6644H419/TO+R
-         xrV5XoJFI3B2wEXAVXm7lbBo1XBJiA9hFK91HnNh/GIT+NS2HpyyfOKvu/6n1sZX6TqI
-         D1uYqkM/q6Tsg91I7uC6u1irD9C0Jg/DysSNauXqXS9zNunH/WzlW9dg4M4XrvL7HU/l
-         J3M92qrVIUJEUAc8aIGBF6hRj4aOBq0CW+yInNXq1zpYSWKGk775mz5rs/4udZt51KA4
-         RjLnkdlNuGV/V2bwFN3ySdtl5D0HkN6zvtGdSS+gt654Nk1FxUifmziB3KQzOF9n5wk+
-         wMwA==
+        d=linaro.org; s=google; t=1745575881; x=1746180681; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M6prVsylQnKDMIBjZXP4uOELttil8ar/HvFRq0ET36k=;
+        b=aCHlm4IMPVCU77HKh0v3RVgGxG4PsL8OzUM50d5cTV7RZBnscQxBgJcXx+ZcO/Rzx2
+         NhE211gq/gGrWZIi4uc3cjJWftgjuAwyTL9PilRgj/dCiz0awYSZXtzHuiWIb+DAtTn/
+         3ZgCbF7Dfl0rHl8mMGpFC/eJ/CZuepH6hB/kSCz70V7/ahq8eaH93FIglY/pGJ6m+dvX
+         l3ikh1X4up5ZqMRTi1AssyX1hcsb7mZDusH9JMH+QtVIZOKukPXHEqrSFKqyX/bbnhIL
+         rpph2iAk7Pih9gHQz+0jWh2bX1lzzh/MK9hb9hx2Bj+6TTGsQCYvJlv9leUBbhmtWbmP
+         oH0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745575719; x=1746180519;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xQKK3OcwSXAQmSMxY7ZPonWOs2FqcDKLKCnyPwhUYyM=;
-        b=M1jxOrP+AyRIRn8hUwW88wMv6uDTnZ7RIVkWWv3ZSc0nlKPYDgCVJGgRQVlx6kYPIx
-         AFlMftBtfQjOrB06/a+q9sReeRiRvDg04Fo6rmK5vJpu6yfI20+a/O9FDUzpns9Mv299
-         ApaRT3fYYSEFQ1zb73kErNkjcXNRHBfZMOPlsbfxuXTsUqmsoBy8UxsQ4jk/hK6oGYVw
-         8sPZCBPCHs4zq1CGZlav6X7n74x8DlzJdsVK3WL6aCyrKFl6YBb6W6xLK18buWgw8MdS
-         gX9/mG45uyHTuMEqpsRLAiS8jJUH3bUxHjvXuKjyUfz9e6chjFLvXknRVEoV/2qmHgnt
-         NaOg==
-X-Forwarded-Encrypted: i=1; AJvYcCVwlK6utMt07elbfrulvkqzYM+BDMcdp6WbbGRAKFTsZRHA02wV5KxOlxwG7xWvvY5voJsAF3IGYw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxr4v+gRjzvRtNQnbMiVdQoC32HNkHHCIZL0jhjCA/Axd03lSVh
-	olLpX3Z3d+Qd8iUEn8qlemnlVtPG1hNUUoy/a+WAb+gjlWk9TTYjVXUqaBOU+l4Km45chXTqbga
-	ILB67wg==
-X-Gm-Gg: ASbGncsq6rKUCWZ0phidK8kW0yk0//5OWigMKu6wtFzSGRfD42Sn7q/KUjIr037DG/h
-	80Ac/cWHaT7qfeVRsJKojq877STLo4sorShND/XtI+vNAMJRrzGdY5KSfGfGdh0mnSB6CaIbluP
-	baRg5qtnqMjWWdv14maYGD6qFnA8mqQSMdoJxmssYIg9rPM0bfB1A0KrdeneRqpNrycqJlROjnU
-	0obiwZtu1lPvOSNzmLrdY5CYFn1w0PubftSfVBfuJ6qOI3c5JfSGMbxhe+ARdgTGoaCeyvCbP0g
-	Zbw2kJ4wlwsYYkrpD6Tv8fLSJUNow2+hg1W+vlcR7wccCjDSsncXvtpiPBj2w+UvaA77C5+vnKo
-	eej634mwt6mkpWwCoiCwWXmLwZbRF10izGWK3MRlmVXZtq4NlkYIROHq+Xo7QGBVKeA==
-X-Google-Smtp-Source: AGHT+IGU4Q9aZFuS4tqffof5bxE63Nbzc5rbtd1cNrTdh+MkKy2ZMlM5eLt2/NojanWJQonzlqjKcw==
-X-Received: by 2002:a5d:64eb:0:b0:390:fbdd:994d with SMTP id ffacd0b85a97d-3a074e37904mr1398442f8f.27.1745575718780;
-        Fri, 25 Apr 2025 03:08:38 -0700 (PDT)
-Received: from ?IPV6:2003:e5:870f:e000:6c64:75fd:2c51:3fef? (p200300e5870fe0006c6475fd2c513fef.dip0.t-ipconnect.de. [2003:e5:870f:e000:6c64:75fd:2c51:3fef])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-440a53874a9sm19482305e9.34.2025.04.25.03.08.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Apr 2025 03:08:38 -0700 (PDT)
-Message-ID: <04d47f21-6183-42d5-bc18-f23a8c3c2009@suse.com>
-Date: Fri, 25 Apr 2025 12:08:36 +0200
+        d=1e100.net; s=20230601; t=1745575881; x=1746180681;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M6prVsylQnKDMIBjZXP4uOELttil8ar/HvFRq0ET36k=;
+        b=ERMIOmd8b2pShsLe69m5bNJvnG5LB247b+OsF3LFl5aRaNBIse4Y+XTg55CXTFjVls
+         eWdT9zcQCQwv7y9isees2UYmDn38OqXOJ0R1bH4nAdK+B79rR/3Np71CuAbp4C2QKT/W
+         yeDxt6DNVtmW8qs1fQ1DHFs7g7aSWVovsJwwMDLdeSW0+Vk3bdcE2liruRXlG9PY6nRN
+         J2h7bZ8/21QqBbZ+dHxxyMNyB5REkI0fPPB6w8yd5hnT6IJLPcXRCb55lf6t69uH311Z
+         VZ6BgpM6asXwk/TGHk3wcMsouZAYRdfZ/ZCFCHIQo6HR8H0jnEBdFTz0xOEU+VyNCZ7r
+         cMow==
+X-Forwarded-Encrypted: i=1; AJvYcCW8BOuqfYpp4YK01RyZPpmtePlCv7zDGtEeEVIbqeifWnrFlj1WfE59AYduVILH3pZKtoIq7PZx+Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIoetYRhD4sjUtr46XBLOtQAJM/UGyh6UelIh761cNPcs92jxL
+	qvQVDl2sDbxg+31uEODTsfU56ajB/Cph5/lvjZ497uuOxNNZ4kAUA21iYQzWQLPPrD/QlGJ15mZ
+	RtEm2IoPg3m6U2gBlub8IILV4lnZljZ+z3ctF6g==
+X-Gm-Gg: ASbGncsvTlYfri9LN15y01nHKFbgBx67Fqtrz4sNgb0fYl7siRoNHdNIhoigToZELJi
+	tr7lSpN4I8xc9vK38EFhFxcleTnvLnKX8VKoUU4Y/61W07UAweXP+led6mS4IKmjhl1YMDUg/tH
+	easSbdZDTYsY8EaHpXbQfEWtI=
+X-Google-Smtp-Source: AGHT+IGurFHGYwar2TKD3VtJNgOfTgLYu73UwsY3fMeiKx/80V1BEROWuydsOdDJ1TKv9Y5NtKhSq17Sa7k73YOZM/k=
+X-Received: by 2002:a05:690c:4b0a:b0:708:3a47:3d2c with SMTP id
+ 00721157ae682-70854107cf6mr20217487b3.13.1745575881129; Fri, 25 Apr 2025
+ 03:11:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 10/14] x86/xen/msr: Remove pmu_msr_{read,write}()
-To: "Xin Li (Intel)" <xin@zytor.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
- linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
- xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
- linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
- platform-driver-x86@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org,
- andrew.cooper3@citrix.com, peterz@infradead.org, namhyung@kernel.org,
- mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
- irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
- wei.liu@kernel.org, ajay.kaher@broadcom.com,
- bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
- pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
- luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
- haiyangz@microsoft.com, decui@microsoft.com, dapeng1.mi@linux.intel.com
-References: <20250425083442.2390017-1-xin@zytor.com>
- <20250425083442.2390017-11-xin@zytor.com>
-Content-Language: en-US
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-Autocrypt: addr=jgross@suse.com; keydata=
- xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOB
- ycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJve
- dYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJ
- NwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvx
- XP3FAp2pkW0xqG7/377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEB
- AAHNH0p1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT7CwHkEEwECACMFAlOMcK8CGwMH
- CwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAKCRCw3p3WKL8TL8eZB/9G0juS/kDY9LhEXseh
- mE9U+iA1VsLhgDqVbsOtZ/S14LRFHczNd/Lqkn7souCSoyWsBs3/wO+OjPvxf7m+Ef+sMtr0
- G5lCWEWa9wa0IXx5HRPW/ScL+e4AVUbL7rurYMfwCzco+7TfjhMEOkC+va5gzi1KrErgNRHH
- kg3PhlnRY0Udyqx++UYkAsN4TQuEhNN32MvN0Np3WlBJOgKcuXpIElmMM5f1BBzJSKBkW0Jc
- Wy3h2Wy912vHKpPV/Xv7ZwVJ27v7KcuZcErtptDevAljxJtE7aJG6WiBzm+v9EswyWxwMCIO
- RoVBYuiocc51872tRGywc03xaQydB+9R7BHPzsBNBFOMcBYBCADLMfoA44MwGOB9YT1V4KCy
- vAfd7E0BTfaAurbG+Olacciz3yd09QOmejFZC6AnoykydyvTFLAWYcSCdISMr88COmmCbJzn
- sHAogjexXiif6ANUUlHpjxlHCCcELmZUzomNDnEOTxZFeWMTFF9Rf2k2F0Tl4E5kmsNGgtSa
- aMO0rNZoOEiD/7UfPP3dfh8JCQ1VtUUsQtT1sxos8Eb/HmriJhnaTZ7Hp3jtgTVkV0ybpgFg
- w6WMaRkrBh17mV0z2ajjmabB7SJxcouSkR0hcpNl4oM74d2/VqoW4BxxxOD1FcNCObCELfIS
- auZx+XT6s+CE7Qi/c44ibBMR7hyjdzWbABEBAAHCwF8EGAECAAkFAlOMcBYCGwwACgkQsN6d
- 1ii/Ey9D+Af/WFr3q+bg/8v5tCknCtn92d5lyYTBNt7xgWzDZX8G6/pngzKyWfedArllp0Pn
- fgIXtMNV+3t8Li1Tg843EXkP7+2+CQ98MB8XvvPLYAfW8nNDV85TyVgWlldNcgdv7nn1Sq8g
- HwB2BHdIAkYce3hEoDQXt/mKlgEGsLpzJcnLKimtPXQQy9TxUaLBe9PInPd+Ohix0XOlY+Uk
- QFEx50Ki3rSDl2Zt2tnkNYKUCvTJq7jvOlaPd6d/W0tZqpyy7KVay+K4aMobDsodB3dvEAs6
- ScCnh03dDAFgIq5nsB11j3KPKdVoPlfucX2c7kGNH+LUMbzqV6beIENfNexkOfxHfw==
-In-Reply-To: <20250425083442.2390017-11-xin@zytor.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------VB6ybu8aisKH0gV6QqOmM4vy"
-
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------VB6ybu8aisKH0gV6QqOmM4vy
-Content-Type: multipart/mixed; boundary="------------ogFHbfX7pVv3PgDj6x3UIh47";
- protected-headers="v1"
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-To: "Xin Li (Intel)" <xin@zytor.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
- linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
- xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
- linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
- platform-driver-x86@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org,
- andrew.cooper3@citrix.com, peterz@infradead.org, namhyung@kernel.org,
- mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
- irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
- wei.liu@kernel.org, ajay.kaher@broadcom.com,
- bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
- pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
- luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
- haiyangz@microsoft.com, decui@microsoft.com, dapeng1.mi@linux.intel.com
-Message-ID: <04d47f21-6183-42d5-bc18-f23a8c3c2009@suse.com>
-Subject: Re: [PATCH v3 10/14] x86/xen/msr: Remove pmu_msr_{read,write}()
-References: <20250425083442.2390017-1-xin@zytor.com>
- <20250425083442.2390017-11-xin@zytor.com>
-In-Reply-To: <20250425083442.2390017-11-xin@zytor.com>
-
---------------ogFHbfX7pVv3PgDj6x3UIh47
-Content-Type: multipart/mixed; boundary="------------6P0PQ6a4l4W0NIdcsPcChB8C"
-
---------------6P0PQ6a4l4W0NIdcsPcChB8C
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-T24gMjUuMDQuMjUgMTA6MzQsIFhpbiBMaSAoSW50ZWwpIHdyb3RlOg0KPiBBcyBwbXVfbXNy
-X3tyZWFkLHdyaXRlfSgpIGFyZSBub3cgd3JhcHBlcnMgb2YgcG11X21zcl9jaGtfZW11bGF0
-ZWQoKSwNCj4gcmVtb3ZlIHRoZW0gYW5kIHVzZSBwbXVfbXNyX2Noa19lbXVsYXRlZCgpIGRp
-cmVjdGx5Lg0KPiANCj4gQXMgcG11X21zcl9jaGtfZW11bGF0ZWQoKSBjb3VsZCBlYXNpbHkg
-cmV0dXJuIGZhbHNlIGluIHRoZSBjYXNlcyB3aGVyZQ0KPiBpdCB3b3VsZCBzZXQgKmVtdWwg
-dG8gZmFsc2UsIHJlbW92ZSB0aGUgImVtdWwiIGFyZ3VtZW50IGFuZCB1c2UgdGhlDQo+IHJl
-dHVybiB2YWx1ZSBpbnN0ZWFkLg0KPiANCj4gV2hpbGUgYXQgaXQsIGNvbnZlcnQgdGhlIGRh
-dGEgdHlwZSBvZiBNU1IgaW5kZXggdG8gdTMyIGluIGZ1bmN0aW9ucw0KPiBjYWxsZWQgaW4g
-cG11X21zcl9jaGtfZW11bGF0ZWQoKS4NCj4gDQo+IFN1Z2dlc3RlZC1ieTogSC4gUGV0ZXIg
-QW52aW4gKEludGVsKSA8aHBhQHp5dG9yLmNvbT4NCj4gU3VnZ2VzdGVkLWJ5OiBKdWVyZ2Vu
-IEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQo+IFNpZ25lZC1vZmYtYnk6IFhpbiBMaSAoSW50
-ZWwpIDx4aW5Aenl0b3IuY29tPg0KPiAtLS0NCj4gDQo+IENoYW5nZSBpbiB2MzoNCj4gKikg
-UmVtb3ZlIHRoZSAiZW11bCIgYXJndW1lbnQgb2YgcG11X21zcl9jaGtfZW11bGF0ZWQoKSAo
-SnVlcmdlbiBHcm9zcykuDQo+IC0tLQ0KPiAgIGFyY2gveDg2L3hlbi9lbmxpZ2h0ZW5fcHYu
-YyB8IDE1ICsrKysrKysrLS0tLS0tLQ0KPiAgIGFyY2gveDg2L3hlbi9wbXUuYyAgICAgICAg
-ICB8IDMwICsrKysrKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiAgIGFyY2gveDg2L3hl
-bi94ZW4tb3BzLmggICAgICB8ICAzICstLQ0KPiAgIDMgZmlsZXMgY2hhbmdlZCwgMTUgaW5z
-ZXJ0aW9ucygrKSwgMzMgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC94
-ODYveGVuL2VubGlnaHRlbl9wdi5jIGIvYXJjaC94ODYveGVuL2VubGlnaHRlbl9wdi5jDQo+
-IGluZGV4IDYxZTUxYTk3MGYzYy4uNTI4YTJmNGRmMDUwIDEwMDY0NA0KPiAtLS0gYS9hcmNo
-L3g4Ni94ZW4vZW5saWdodGVuX3B2LmMNCj4gKysrIGIvYXJjaC94ODYveGVuL2VubGlnaHRl
-bl9wdi5jDQo+IEBAIC0xMDkwLDcgKzEwOTAsNyBAQCBzdGF0aWMgdTY0IHhlbl9kb19yZWFk
-X21zcih1bnNpZ25lZCBpbnQgbXNyLCBpbnQgKmVycikNCj4gICB7DQo+ICAgCXU2NCB2YWwg
-PSAwOwkvKiBBdm9pZCB1bmluaXRpYWxpemVkIHZhbHVlIGZvciBzYWZlIHZhcmlhbnQuICov
-DQo+ICAgDQo+IC0JaWYgKHBtdV9tc3JfcmVhZF9lbXVsYXRlZChtc3IsICZ2YWwpKQ0KPiAr
-CWlmIChwbXVfbXNyX2Noa19lbXVsYXRlZChtc3IsICZ2YWwsIHRydWUpKQ0KPiAgIAkJcmV0
-dXJuIHZhbDsNCj4gICANCj4gICAJaWYgKGVycikNCj4gQEAgLTExNjIsMTIgKzExNjIsMTMg
-QEAgc3RhdGljIHZvaWQgeGVuX2RvX3dyaXRlX21zcih1bnNpZ25lZCBpbnQgbXNyLCB1bnNp
-Z25lZCBpbnQgbG93LA0KPiAgIAlkZWZhdWx0Og0KPiAgIAkJdmFsID0gKHU2NCloaWdoIDw8
-IDMyIHwgbG93Ow0KPiAgIA0KPiAtCQlpZiAoIXBtdV9tc3Jfd3JpdGVfZW11bGF0ZWQobXNy
-LCB2YWwpKSB7DQo+IC0JCQlpZiAoZXJyKQ0KPiAtCQkJCSplcnIgPSBuYXRpdmVfd3JpdGVf
-bXNyX3NhZmUobXNyLCBsb3csIGhpZ2gpOw0KPiAtCQkJZWxzZQ0KPiAtCQkJCW5hdGl2ZV93
-cml0ZV9tc3IobXNyLCBsb3csIGhpZ2gpOw0KPiAtCQl9DQo+ICsJCWlmIChwbXVfbXNyX2No
-a19lbXVsYXRlZChtc3IsICZ2YWwsIGZhbHNlKSkNCj4gKwkJCXJldHVybjsNCj4gKw0KPiAr
-CQlpZiAoZXJyKQ0KPiArCQkJKmVyciA9IG5hdGl2ZV93cml0ZV9tc3Jfc2FmZShtc3IsIGxv
-dywgaGlnaCk7DQo+ICsJCWVsc2UNCj4gKwkJCW5hdGl2ZV93cml0ZV9tc3IobXNyLCBsb3cs
-IGhpZ2gpOw0KPiAgIAl9DQo+ICAgfQ0KPiAgIA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYv
-eGVuL3BtdS5jIGIvYXJjaC94ODYveGVuL3BtdS5jDQo+IGluZGV4IGI2NTU3ZjJkMWEyZS4u
-NmJlZTgzMDE4Njk0IDEwMDY0NA0KPiAtLS0gYS9hcmNoL3g4Ni94ZW4vcG11LmMNCj4gKysr
-IGIvYXJjaC94ODYveGVuL3BtdS5jDQo+IEBAIC0xMjgsNyArMTI4LDcgQEAgc3RhdGljIGlu
-bGluZSB1aW50MzJfdCBnZXRfZmFtMTVoX2FkZHIodTMyIGFkZHIpDQo+ICAgCXJldHVybiBh
-ZGRyOw0KPiAgIH0NCj4gICANCj4gLXN0YXRpYyBpbmxpbmUgYm9vbCBpc19hbWRfcG11X21z
-cih1bnNpZ25lZCBpbnQgbXNyKQ0KPiArc3RhdGljIGJvb2wgaXNfYW1kX3BtdV9tc3IodTMy
-IG1zcikNCj4gICB7DQo+ICAgCWlmIChib290X2NwdV9kYXRhLng4Nl92ZW5kb3IgIT0gWDg2
-X1ZFTkRPUl9BTUQgJiYNCj4gICAJICAgIGJvb3RfY3B1X2RhdGEueDg2X3ZlbmRvciAhPSBY
-ODZfVkVORE9SX0hZR09OKQ0KPiBAQCAtMTk0LDggKzE5NCw3IEBAIHN0YXRpYyBib29sIGlz
-X2ludGVsX3BtdV9tc3IodTMyIG1zcl9pbmRleCwgaW50ICp0eXBlLCBpbnQgKmluZGV4KQ0K
-PiAgIAl9DQo+ICAgfQ0KPiAgIA0KPiAtc3RhdGljIGJvb2wgeGVuX2ludGVsX3BtdV9lbXVs
-YXRlKHVuc2lnbmVkIGludCBtc3IsIHU2NCAqdmFsLCBpbnQgdHlwZSwNCj4gLQkJCQkgIGlu
-dCBpbmRleCwgYm9vbCBpc19yZWFkKQ0KPiArc3RhdGljIGJvb2wgeGVuX2ludGVsX3BtdV9l
-bXVsYXRlKHUzMiBtc3IsIHU2NCAqdmFsLCBpbnQgdHlwZSwgaW50IGluZGV4LCBib29sIGlz
-X3JlYWQpDQo+ICAgew0KPiAgIAl1aW50NjRfdCAqcmVnID0gTlVMTDsNCj4gICAJc3RydWN0
-IHhlbl9wbXVfaW50ZWxfY3R4dCAqY3R4dDsNCj4gQEAgLTI1Nyw3ICsyNTYsNyBAQCBzdGF0
-aWMgYm9vbCB4ZW5faW50ZWxfcG11X2VtdWxhdGUodW5zaWduZWQgaW50IG1zciwgdTY0ICp2
-YWwsIGludCB0eXBlLA0KPiAgIAlyZXR1cm4gZmFsc2U7DQo+ICAgfQ0KPiAgIA0KPiAtc3Rh
-dGljIGJvb2wgeGVuX2FtZF9wbXVfZW11bGF0ZSh1bnNpZ25lZCBpbnQgbXNyLCB1NjQgKnZh
-bCwgYm9vbCBpc19yZWFkKQ0KPiArc3RhdGljIGJvb2wgeGVuX2FtZF9wbXVfZW11bGF0ZSh1
-MzIgbXNyLCB1NjQgKnZhbCwgYm9vbCBpc19yZWFkKQ0KPiAgIHsNCj4gICAJdWludDY0X3Qg
-KnJlZyA9IE5VTEw7DQo+ICAgCWludCBpLCBvZmYgPSAwOw0KPiBAQCAtMjk4LDMzICsyOTcs
-MTYgQEAgc3RhdGljIGJvb2wgeGVuX2FtZF9wbXVfZW11bGF0ZSh1bnNpZ25lZCBpbnQgbXNy
-LCB1NjQgKnZhbCwgYm9vbCBpc19yZWFkKQ0KPiAgIAlyZXR1cm4gZmFsc2U7DQo+ICAgfQ0K
-PiAgIA0KPiAtc3RhdGljIGJvb2wgcG11X21zcl9jaGtfZW11bGF0ZWQodW5zaWduZWQgaW50
-IG1zciwgdWludDY0X3QgKnZhbCwgYm9vbCBpc19yZWFkLA0KPiAtCQkJCSBib29sICplbXVs
-KQ0KPiArYm9vbCBwbXVfbXNyX2Noa19lbXVsYXRlZCh1MzIgbXNyLCB1NjQgKnZhbCwgYm9v
-bCBpc19yZWFkKQ0KPiAgIHsNCj4gICAJaW50IHR5cGUsIGluZGV4ID0gMDsNCj4gICANCj4g
-ICAJaWYgKGlzX2FtZF9wbXVfbXNyKG1zcikpDQo+IC0JCSplbXVsID0geGVuX2FtZF9wbXVf
-ZW11bGF0ZShtc3IsIHZhbCwgaXNfcmVhZCk7DQo+ICsJCXJldHVybiB4ZW5fYW1kX3BtdV9l
-bXVsYXRlKG1zciwgdmFsLCBpc19yZWFkKTsNCj4gICAJZWxzZSBpZiAoaXNfaW50ZWxfcG11
-X21zcihtc3IsICZ0eXBlLCAmaW5kZXgpKQ0KPiAtCQkqZW11bCA9IHhlbl9pbnRlbF9wbXVf
-ZW11bGF0ZShtc3IsIHZhbCwgdHlwZSwgaW5kZXgsIGlzX3JlYWQpOw0KPiArCQlyZXR1cm4g
-eGVuX2ludGVsX3BtdV9lbXVsYXRlKG1zciwgdmFsLCB0eXBlLCBpbmRleCwgaXNfcmVhZCk7
-DQo+ICAgCWVsc2UNCg0KQ2FuIHlvdSBwbGVhc2UgcmVtb3ZlIHRoZSB0d28gImVsc2UiIGlu
-c3RhbmNlcyBhYm92ZT8gV2l0aCBkaXJlY3RseSByZXR1cm5pbmcNCmZvcm0gdGhlICJpZiIg
-Y2xhdXNlIHRoZXkgYXJlIG5vIGxvbmdlciBuZWVkZWQuDQoNCldpdGggdGhhdCB5b3UgY2Fu
-IGFkZCBteToNCg0KUmV2aWV3ZWQtYnk6IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNv
-bT4NCg0KDQpKdWVyZ2VuDQo=
---------------6P0PQ6a4l4W0NIdcsPcChB8C
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
+References: <CGME20250414185314eucas1p1ae57b937773a2ed4ce8d52d5598eb028@eucas1p1.samsung.com>
+ <20250414-apr_14_for_sending-v2-0-70c5af2af96c@samsung.com>
+ <20250414-apr_14_for_sending-v2-1-70c5af2af96c@samsung.com>
+ <CAJZ5v0irRq8_p35vf41_ZgomW0X=KZN+0HqwU2K9PvPRm8iZQA@mail.gmail.com>
+ <b9c4182d-38c2-4173-a35a-0e1773c8f2ed@samsung.com> <CAJZ5v0gE0anjW_mDSwNXY8xoZ_0=bDDxiSbUq1GP7-NycDojrQ@mail.gmail.com>
+ <cbf20469-02ab-403a-8db7-2b66e9936b4f@samsung.com> <CAPDyKFqND2JrH8nLUzAqwWgHkwia6M9XOJoY6AqxtR0t120JUA@mail.gmail.com>
+ <20250425-lumpy-marmot-of-popularity-cdbbcd@houat>
+In-Reply-To: <20250425-lumpy-marmot-of-popularity-cdbbcd@houat>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 25 Apr 2025 12:10:45 +0200
+X-Gm-Features: ATxdqUE_JbjUe45S3EVZ15Z84FoHvfu8q4ysbH-yq1WIOchBVAmKx33KA3qSxvM
+Message-ID: <CAPDyKFp-Bguqukn0my9mVDdSyG2eQ3EPP+diD-BBg-P_E8S9=A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] PM: device: Introduce platform_resources_managed flag
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Michal Wilczynski <m.wilczynski@samsung.com>, Stephen Boyd <sboyd@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Frank Binns <frank.binns@imgtec.com>, 
+	Matt Coster <matt.coster@imgtec.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, m.szyprowski@samsung.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+On Fri, 25 Apr 2025 at 09:09, Maxime Ripard <mripard@kernel.org> wrote:
+>
+> Hi,
+>
+> On Thu, Apr 24, 2025 at 06:51:00PM +0200, Ulf Hansson wrote:
+> > On Thu, 17 Apr 2025 at 18:19, Michal Wilczynski
+> > <m.wilczynski@samsung.com> wrote:
+> > > On 4/16/25 16:48, Rafael J. Wysocki wrote:
+> > > > On Wed, Apr 16, 2025 at 3:32=E2=80=AFPM Michal Wilczynski
+> > > > <m.wilczynski@samsung.com> wrote:
+> > > >>
+> > > >> On 4/15/25 18:42, Rafael J. Wysocki wrote:
+> > > >>> On Mon, Apr 14, 2025 at 8:53=E2=80=AFPM Michal Wilczynski
+> > > >>> <m.wilczynski@samsung.com> wrote:
+> > > >>>>
+> > > >>>> Introduce a new dev_pm_info flag - platform_resources_managed, t=
+o
+> > > >>>> indicate whether platform PM resources such as clocks or resets =
+are
+> > > >>>> managed externally (e.g. by a generic power domain driver) inste=
+ad of
+> > > >>>> directly by the consumer device driver.
+> > > >>>
+> > > >>> I think that this is genpd-specific and so I don't think it belon=
+gs in
+> > > >>> struct dev_pm_info.
+> > > >>>
+> > > >>> There is dev->power.subsys_data->domain_data, why not use it for =
+this?
+> > > >>
+> > > >> Hi Rafael,
+> > > >>
+> > > >> Thanks for the feedback.
+> > > >>
+> > > >> You're right =E2=80=94 this behavior is specific to genpd, so embe=
+dding the flag
+> > > >> directly in struct dev_pm_info may not be the best choice. Using
+> > > >> dev->power.subsys_data->domain_data makes more sense and avoids bl=
+oating
+> > > >> the core PM structure.
+> > > >>
+> > > >>>
+> > > >>> Also, it should be documented way more comprehensively IMV.
+> > > >>>
+> > > >>> Who is supposed to set it and when?  What does it mean when it is=
+ set?
+> > > >>
+> > > >> To clarify the intended usage, I would propose adding the followin=
+g
+> > > >> explanation to the commit message:
+> > > >>
+> > > >> "This flag is intended to be set by a generic PM domain driver (e.=
+g.,
+> > > >> from within its attach_dev callback) to indicate that it will mana=
+ge
+> > > >> platform specific runtime power management resources =E2=80=94 suc=
+h as clocks
+> > > >> and resets =E2=80=94 on behalf of the consumer device. This implie=
+s a delegation
+> > > >> of runtime PM control to the PM domain, typically implemented thro=
+ugh
+> > > >> its start and stop callbacks.
+> > > >>
+> > > >> When this flag is set, the consumer driver (e.g., drm/imagination)=
+ can
+> > > >> check it and skip managing such resources in its runtime PM callba=
+cks
+> > > >> (runtime_suspend, runtime_resume), avoiding conflicts or redundant
+> > > >> operations."
+> > > >
+> > > > This sounds good and I would also put it into a code comment somewh=
+ere.
+> > > >
+> > > > I guess you'll need helpers for setting and testing this flag, so
+> > > > their kerneldoc comments can be used for that.
+> > > >
+> > > >> This could also be included as a code comment near the flag defini=
+tion
+> > > >> if you think that=E2=80=99s appropriate.
+> > > >>
+> > > >> Also, as discussed earlier with Maxime and Matt [1], this is not a=
+bout
+> > > >> full "resource ownership," but more about delegating runtime contr=
+ol of
+> > > >> PM resources like clocks/resets to the genpd. That nuance may be w=
+orth
+> > > >> reflecting in the flag name as well, I would rename it to let's sa=
+y
+> > > >> 'runtime_pm_platform_res_delegated', or more concise
+> > > >> 'runtime_pm_delegated'.
+> > > >
+> > > > Or just "rpm_delegated" I suppose.
+> > > >
+> > > > But if the genpd driver is going to set that flag, it will rather m=
+ean
+> > > > that this driver will now control the resources in question, so the
+> > > > driver should not attempt to manipulate them directly.  Is my
+> > > > understanding correct?
+> > >
+> > > Yes, your understanding is correct =E2=80=94 with one minor clarifica=
+tion.
+> > >
+> > > When the genpd driver sets the flag, it indicates that it will take o=
+ver
+> > > control of the relevant PM resources in the context of runtime PM, i.=
+e.,
+> > > via its start() and stop() callbacks. As a result, the device driver
+> > > should not manipulate those resources from within its RUNTIME_PM_OPS
+> > > (e.g., runtime_suspend, runtime_resume) to avoid conflicts.
+> > >
+> > > However, outside of the runtime PM callbacks, the consumer device dri=
+ver
+> > > may still access or use those resources if needed e.g for devfreq.
+> > >
+> > > >
+> > > > Assuming that it is correct, how is the device driver going to know
+> > > > which resources in particular are now controlled by the genpd drive=
+r?
+> > >
+> > > Good question =E2=80=94 to allow finer-grained control, we could repl=
+ace the
+> > > current single boolean flag with a u32 bitmask field. Each bit would
+> > > correspond to a specific category of platform managed resources. For
+> > > example:
+> > >
+> > > #define RPM_TAKEOVER_CLK        BIT(0)
+> > > #define RPM_TAKEOVER_RESET      BIT(1)
+> > >
+> > > This would allow a PM domain driver to selectively declare which
+> > > resources it is taking over and let the consumer driver query only th=
+e
+> > > relevant parts.
+> >
+> > Assuming we are targeting device specific resources for runtime PM;
+> > why would we want the driver to be responsible for some resources and
+> > the genpd provider for some others? I would assume we want to handle
+> > all these RPM-resources from the genpd provider, if/when possible,
+> > right?
+> >
+> > The tricky part though (maybe Stephen had some ideas in his talk [a]
+> > at OSS), is to teach the genpd provider about what resources it should
+> > handle. In principle the genpd provider will need some kind of device
+> > specific knowledge, perhaps based on the device's compatible-string
+> > and description in DT.
+> >
+> > My point is, using a bitmask doesn't scale as it would end up having
+> > one bit for each clock (a device may have multiple clocks), regulator,
+> > pinctrl, phy, etc. In principle, reflecting the description in DT.
+>
+> My understanding is that it's to address a situation where a "generic"
+> driver interacts with some platform specific code. I think it's tied to
+> the discussion with the imagination GPU driver handling his clocks, and
+> the platform genpd clocks overlapping a bit.
+>
+> But then, my question is: does it matter? clocks are refcounted, and
+> resets are as well iirc, so why do we need a transition at all? Can't we
+> just let the platform genpd code take a reference on the clock, the GPU
+> driver take one as well, and it's all good, right?
 
-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
-kt+z4drzFUyEjLM1vVvIMjkUoJs=3D
-=3DeeAB
------END PGP PUBLIC KEY BLOCK-----
+The problem is the power-sequencing that is needed to initialize the
+GPU. Have a look at patch3's commit message - and I think it will be
+clearer what is needed.
 
---------------6P0PQ6a4l4W0NIdcsPcChB8C--
+In my last reply for patch 3/4, I am suggesting this whole thing may
+be better modeled as a real power-sequence, using the new subsystem in
+drivers/power/sequencing/*
 
---------------ogFHbfX7pVv3PgDj6x3UIh47--
-
---------------VB6ybu8aisKH0gV6QqOmM4vy
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmgLXyQFAwAAAAAACgkQsN6d1ii/Ey8v
-Ogf+PRONHNGahmTCtDNZUX2Gy8abeuTUJJJHJyMlfT5cFckV+yhsYr1a7HlE3mRB56O40BZEoRa7
-4+zHMaGgxXGReFHM9DxKSLkx9hQy0W7rzotkqHZB5RRTn5m318O+uj7xLL6FyOiDhMPR3sPfgcZx
-m5zC6g63Xyz3HifjOtijdeAfFXfQ+rHqOVdDIRWTUy+rc3IasXWgnDXUAZqaVIK52giYpbkPqp3W
-Wi63p54rGIvcSfHDzlSOSCabI8B3zRMM/35sJfAhmp+qlHn2tGpORVQuy/tW+GiwNnp2SXYQd6eW
-kQF7lCDZKP9ldTY1cfMpxuqOuG670Z/7W8osbuh07w==
-=5xyU
------END PGP SIGNATURE-----
-
---------------VB6ybu8aisKH0gV6QqOmM4vy--
+Kind regards
+Uffe
 
