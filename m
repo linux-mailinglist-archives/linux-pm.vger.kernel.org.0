@@ -1,302 +1,169 @@
-Return-Path: <linux-pm+bounces-26227-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26228-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D894EA9CCB6
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 17:20:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85A81A9CCE5
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 17:29:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E78C05A0393
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 15:18:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E93C0464F27
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 15:29:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4396927C84B;
-	Fri, 25 Apr 2025 15:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47E7028468B;
+	Fri, 25 Apr 2025 15:29:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b="W/Df1jB+"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="e8sSKlOE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from devianza.investici.org (devianza.investici.org [198.167.222.108])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C919428936E
-	for <linux-pm@vger.kernel.org>; Fri, 25 Apr 2025 15:17:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.167.222.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AFFE26B953;
+	Fri, 25 Apr 2025 15:29:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745594266; cv=none; b=ljsfc7LvEQwHmCtCRf209ogWj/1Kgmaq2lT66E/DPqE/BjUTZ7l1CnqJWyyVjIw4yi5u1eW4CzYGHqLVr5rvesHri0vcCfiN5enO/fjAh/vYarU7uinyLuTkJCd7I4CipOOnY1WsWyXEwpe7khpk2znIH3zbSXaRRg9qn0n502o=
+	t=1745594945; cv=none; b=LdOKxIsUPSORAyXAcIPs1XlBhaLn8CAxMCtkrM4e3KeSW0orrRDq5z7jXvsDhmd90w1uDliUYtPXpPnfP1hTrAHmVMuR+7jdAGKLNhhBcPTMLuRmOX0ElapeP5gQoBISMWuzb/Mxi3xxDMVeWpvHZzyXbcs6MgEwlERDdKA1TtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745594266; c=relaxed/simple;
-	bh=4UJbLs8wJ2jpwA8/n7MYDq7a6fnTp9XwPe/eAdPzD90=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uOoS59Je2TncHtNSsZluKptmqOmWL6+oTR39phlk6I1uHnghWZnpjJsaX5+lETsWNPSyUT/h9eZkaI6jOXwII4CSn3TtxO3jlOz7jf108b90kuDHdVB7Fe34Oo9OctFzni1k/S7Mx4InGLJ36bkqTRWWv4g65uz0VcY8HelyRa0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org; spf=pass smtp.mailfrom=paranoici.org; dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b=W/Df1jB+; arc=none smtp.client-ip=198.167.222.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paranoici.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paranoici.org;
-	s=stigmate; t=1745593864;
-	bh=vliWNp12i1GVnUx5gT7vZ3wTYMwe3RgbbYRjuQS7AHA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=W/Df1jB+Hajda/4M/OoLPgT/c+u/86wyTbELJX3atkO8wY7AchyDICgd7lckuzUdW
-	 mrCtpfaR/+fsJ2tF4j+qT5Q/socX0vRAN2rBB7zN/5hQX7WqUVLSonXFhiSMAWqDfl
-	 JeHRLBh1cpHI+JSa9UbD/V8qQ5/mx2KucYZ9E+3g=
-Received: from mx2.investici.org (unknown [127.0.0.1])
-	by devianza.investici.org (Postfix) with ESMTP id 4Zkbrm4kQMz6vNp;
-	Fri, 25 Apr 2025 15:11:04 +0000 (UTC)
-Received: from [198.167.222.108] (mx2.investici.org [198.167.222.108]) (Authenticated sender: invernomuto@paranoici.org) by localhost (Postfix) with ESMTPSA id 4Zkbrm3zQpz6vNc;
-	Fri, 25 Apr 2025 15:11:04 +0000 (UTC)
-Received: from frx by crunch with local (Exim 4.98.2)
-	(envelope-from <invernomuto@paranoici.org>)
-	id 1u8Khj-00000000Vph-0waI;
-	Fri, 25 Apr 2025 17:11:03 +0200
-From: "Francesco Poli (wintermute)" <invernomuto@paranoici.org>
-To: linux-pm list <linux-pm@vger.kernel.org>
-Cc: Francesco Poli <invernomuto@paranoici.org>,
-	Thomas Renninger <trenn@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"John B. Wyatt IV" <jwyatt@redhat.com>,
-	John Kacur <jkacur@redhat.com>
-Subject: [PATCH v2] cpupower: add a systemd service to run cpupower
-Date: Fri, 25 Apr 2025 17:07:31 +0200
-Message-ID: <20250425151024.121630-1-invernomuto@paranoici.org>
-X-Mailer: git-send-email 2.47.2
+	s=arc-20240116; t=1745594945; c=relaxed/simple;
+	bh=VXq1PHnajmb8IhmTG7In4mFZ7EewzJEbGitlsKd4G50=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=NAaBJ/F2ChQdHs7i2a9wtBfnc6mGczTvH7E9J3Mjx15xoxrs3lJ6sHJzCHGTyIluUnvG/9LJF8Fym96/35xffhUOVu4k2vMOEXZjqwRp5oLoMed71Xa32o3VYJ0kLujH4ZHFLKTsAEx9ODz+9NoLuWKcsoB937ihViUuozqmMD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=e8sSKlOE; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [127.0.0.1] ([76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53PFSG7j2879055
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 25 Apr 2025 08:28:18 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53PFSG7j2879055
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025042001; t=1745594899;
+	bh=VXq1PHnajmb8IhmTG7In4mFZ7EewzJEbGitlsKd4G50=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=e8sSKlOE29QVRsUNwa5Glun405WCr1ZH8x+o/lM1uZO65MH8ZxHfRZ9Vpxe5VnEA+
+	 exbTNWCfO9mqnsVBdWqxPuN5ymfnVoRJTE6z+MBGn61/u3Qm2DjxXhiGfR2jMZhqHr
+	 TVyHxknF9aW5yNQDR1IeB4wNDPkNeqbiDL9Y9B0Tf3kbrU9Cizj1ktB/G9v+xJzUqp
+	 CHyGasv5e/2REjIUjeW5ato0YPXhMP5OYJMXpoIgD7CMZRrKMKSc6nMzj9uhQk4uBg
+	 IJzYx36Il8whoA9nZiKMg7YdPVo4z5Ujq2ijkY4iAHziVAchpEmHBwdMKS7/pwXclD
+	 IBJVqUYnPG0ng==
+Date: Fri, 25 Apr 2025 08:28:14 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: =?ISO-8859-1?Q?J=FCrgen_Gro=DF?= <jgross@suse.com>, Xin Li <xin@zytor.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org
+CC: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, acme@kernel.org,
+        andrew.cooper3@citrix.com, peterz@infradead.org, namhyung@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        kan.liang@linux.intel.com, wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+        haiyangz@microsoft.com, decui@microsoft.com
+Subject: =?US-ASCII?Q?Re=3A_=5BRFC_PATCH_v2_21/34=5D_x86/msr=3A_Utiliz?=
+ =?US-ASCII?Q?e_the_alternatives_mechanism_to_write_MSR?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <6ef898f7-c8a3-4326-96ab-42aa90c48e1c@suse.com>
+References: <20250422082216.1954310-1-xin@zytor.com> <20250422082216.1954310-22-xin@zytor.com> <b2624e84-6fab-44a3-affc-ce0847cd3da4@suse.com> <f7198308-e8f8-4cc5-b884-24bc5f408a2a@zytor.com> <37c88ea3-dd24-4607-9ee1-0f19025aaef3@suse.com> <bb8f6b85-4e7d-440a-a8c3-0e0da45864b8@zytor.com> <0cdc6e9d-88eb-4ead-8d55-985474257d53@suse.com> <483eb20c-7302-4733-a15f-21d140396919@zytor.com> <72516271-5b28-434a-838b-d8532e1b4fc1@zytor.com> <6ef898f7-c8a3-4326-96ab-42aa90c48e1c@suse.com>
+Message-ID: <D7218B8B-B9D6-46F8-9397-C44398E24253@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-One of the most typical use cases of the 'cpupower' utility works as
-follows: run 'cpupower' at boot with the desired command-line options
-and then forget about it.
+On April 25, 2025 12:01:29 AM PDT, "J=C3=BCrgen Gro=C3=9F" <jgross@suse=2Ec=
+om> wrote:
+>On 25=2E04=2E25 05:44, H=2E Peter Anvin wrote:
+>> On 4/24/25 18:15, H=2E Peter Anvin wrote:
+>>> On 4/24/25 01:14, J=C3=BCrgen Gro=C3=9F wrote:
+>>>>>=20
+>>>>> Actually, that is how we get this patch with the existing alternativ=
+es
+>>>>> infrastructure=2E=C2=A0 And we took a step further to also remove th=
+e pv_ops
+>>>>> MSR APIs=2E=2E=2E
+>>>>=20
+>>>> And this is what I'm questioning=2E IMHO this approach is adding more
+>>>> code by removing the pv_ops MSR_APIs just because "pv_ops is bad"=2E =
+And
+>>>> I believe most refusal of pv_ops is based on no longer valid reasonin=
+g=2E
+>>>>=20
+>>>=20
+>>> pvops are a headache because it is effectively a secondary alternative=
+s infrastructure that is incompatible with the alternatives one=2E=2E=2E
+>>>=20
+>>>>> It looks to me that you want to add a new facility to the alternativ=
+es
+>>>>> infrastructure first?
+>>>>=20
+>>>> Why would we need a new facility in the alternatives infrastructure?
+>>>=20
+>>> I'm not sure what Xin means with "facility", but a key motivation for =
+this is to:
+>>>=20
+>>> a=2E Avoid using the pvops for MSRs when on the only remaining user th=
+ereof (Xen) is only using it for a very small subset of MSRs and for the re=
+st it is just overhead, even for Xen;
+>>>=20
+>>> b=2E Being able to do wrmsrns immediate/wrmsrns/wrmsr and rdmsr immedi=
+ate/ rdmsr alternatives=2E
+>>>=20
+>>> Of these, (b) is by far the biggest motivation=2E The architectural di=
+rection for supervisor states is to avoid ad hoc and XSAVES ISA and instead=
+ use MSRs=2E The immediate forms are expected to be significantly faster, b=
+ecause they make the MSR index available at the very beginning of the pipel=
+ine instead of at a relatively late stage=2E
+>>>=20
+>>=20
+>> Note that to support the immediate forms, we *must* do these inline, or=
+ the const-ness of the MSR index -- which applies to by far the vast majori=
+ty of MSR references -- gets lost=2E pvops does exactly that=2E
+>>=20
+>> Furthermore, the MSR immediate instructions take a 64-bit number in a s=
+ingle register; as these instructions are by necessity relatively long, it =
+makes sense for the alternative sequence to accept a 64-bit input register =
+and do the %eax/ %edx shuffle in the legacy fallback code=2E=2E=2E we did a=
+ bunch of experiments to see what made most sense=2E
+>
+>Yes, I understand that=2E
+>
+>And I'm totally in favor of Xin's rework of the MSR low level functions=
+=2E
+>
+>Inlining the MSR access instructions with pv_ops should not be very
+>complicated=2E We do that with other instructions (STI/CLI, PTE accesses)
+>today, so this is no new kind of functionality=2E
+>
+>I could have a try writing a patch achieving that, but I would only start
+>that work in case you might consider taking it instead of Xin's patch
+>removing the pv_ops usage for rdmsr/wrmsr=2E In case it turns out that my
+>version results in more code changes than Xin's patch, I'd be fine to dro=
+p
+>my patch, of course=2E
+>
+>
+>Juergen
 
-Add a systemd service (disabled by default) that automates this use
-case (for environments where the initialization system is 'systemd'),
-by running 'cpupower' at boot with the settings read from a default
-configuration file.
+The wrapper in question is painfully opaque, but if it is much simpler, th=
+en I'm certainly willing to consider it=2E=2E=2E but I don't really see how=
+ it would be possible given among other things the need for trap points for=
+ the safe MSRs=2E
 
-The systemd service, the associated support script and the
-corresponding default configuration file are derived from what is
-provided by the Arch Linux package (under "GPL-2.0-or-later" terms),
-modernized and enhanced in various ways (the script has also been
-checked with 'shellcheck').
+Keep in mind this needs to work even without PV enabled!
 
-Link: https://gitlab.archlinux.org/archlinux/packaging/packages/linux-tools/-/tree/dd2e2a311e05413d0d87a0346ffce8c7e98d6d2b
-
-Signed-off-by: Francesco Poli (wintermute) <invernomuto@paranoici.org>
----
- tools/power/cpupower/Makefile            | 15 +++++++++++++
- tools/power/cpupower/README              | 19 ++++++++++++++++
- tools/power/cpupower/cpupower.default    | 28 ++++++++++++++++++++++++
- tools/power/cpupower/cpupower.service.in | 16 ++++++++++++++
- tools/power/cpupower/cpupower.sh         | 26 ++++++++++++++++++++++
- 5 files changed, 104 insertions(+)
- create mode 100644 tools/power/cpupower/cpupower.default
- create mode 100644 tools/power/cpupower/cpupower.service.in
- create mode 100644 tools/power/cpupower/cpupower.sh
-
-Patch changelog:
- * Clarified documentation (what should be edited in the default file)
- * Enhanced the comments in the default file
- * Added 'systemctl daemon-reload' to make uninstall, as well
- * Rebased on the tip of the master branch
-
-diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-index 835123add0ed..9c2b5f71fee1 100644
---- a/tools/power/cpupower/Makefile
-+++ b/tools/power/cpupower/Makefile
-@@ -2,6 +2,7 @@
- # Makefile for cpupower
- #
- # Copyright (C) 2005,2006 Dominik Brodowski <linux@dominikbrodowski.net>
-+# Copyright (C) 2025      Francesco Poli <invernomuto@paranoici.org>
- #
- # Based largely on the Makefile for udev by:
- #
-@@ -71,6 +72,7 @@ bindir ?=	/usr/bin
- sbindir ?=	/usr/sbin
- mandir ?=	/usr/man
- libdir ?=	/usr/lib
-+libexecdir ?=	/usr/libexec
- includedir ?=	/usr/include
- localedir ?=	/usr/share/locale
- docdir ?=       /usr/share/doc/packages/cpupower
-@@ -83,6 +85,7 @@ CP = cp -fpR
- INSTALL = /usr/bin/install -c
- INSTALL_PROGRAM = ${INSTALL}
- INSTALL_DATA  = ${INSTALL} -m 644
-+SETPERM_DATA  = chmod 644
- #bash completion scripts get sourced and so they should be rw only.
- INSTALL_SCRIPT = ${INSTALL} -m 644
- 
-@@ -302,6 +305,14 @@ install-tools: $(OUTPUT)cpupower
- 	$(INSTALL_PROGRAM) $(OUTPUT)cpupower $(DESTDIR)${bindir}
- 	$(INSTALL) -d $(DESTDIR)${bash_completion_dir}
- 	$(INSTALL_SCRIPT) cpupower-completion.sh '$(DESTDIR)${bash_completion_dir}/cpupower'
-+	$(INSTALL) -d $(DESTDIR)${confdir}default
-+	$(INSTALL_DATA) cpupower.default '$(DESTDIR)${confdir}default/cpupower'
-+	$(INSTALL) -d $(DESTDIR)${libexecdir}
-+	$(INSTALL_PROGRAM) cpupower.sh '$(DESTDIR)${libexecdir}/cpupower'
-+	$(INSTALL) -d $(DESTDIR)${libdir}/systemd/system
-+	sed 's|___CDIR___|$(DESTDIR)${confdir}|; s|___LDIR___|$(DESTDIR)${libexecdir}|' cpupower.service.in > '$(DESTDIR)${libdir}/systemd/system/cpupower.service'
-+	$(SETPERM_DATA) '$(DESTDIR)${libdir}/systemd/system/cpupower.service'
-+	if test -d /run/systemd/system; then systemctl daemon-reload; fi
- 
- install-man:
- 	$(INSTALL_DATA) -D man/cpupower.1 $(DESTDIR)${mandir}/man1/cpupower.1
-@@ -336,6 +347,9 @@ uninstall:
- 	- rm -f $(DESTDIR)${includedir}/cpufreq.h
- 	- rm -f $(DESTDIR)${includedir}/cpuidle.h
- 	- rm -f $(DESTDIR)${bindir}/utils/cpupower
-+	- rm -f $(DESTDIR)${confdir}default/cpupower
-+	- rm -f $(DESTDIR)${libexecdir}/cpupower
-+	- rm -f $(DESTDIR)${libdir}/systemd/system/cpupower.service
- 	- rm -f $(DESTDIR)${mandir}/man1/cpupower.1
- 	- rm -f $(DESTDIR)${mandir}/man1/cpupower-frequency-set.1
- 	- rm -f $(DESTDIR)${mandir}/man1/cpupower-frequency-info.1
-@@ -346,6 +360,7 @@ uninstall:
- 	- for HLANG in $(LANGUAGES); do \
- 		rm -f $(DESTDIR)${localedir}/$$HLANG/LC_MESSAGES/cpupower.mo; \
- 	  done;
-+	- if test -d /run/systemd/system; then systemctl daemon-reload; fi
- 
- help:
- 	@echo  'Building targets:'
-diff --git a/tools/power/cpupower/README b/tools/power/cpupower/README
-index 2678ed81d311..e6ae7c1e0a0d 100644
---- a/tools/power/cpupower/README
-+++ b/tools/power/cpupower/README
-@@ -59,6 +59,10 @@ $ sudo make install
- -----------------------------------------------------------------------
- | man pages              | /usr/man                                   |
- -----------------------------------------------------------------------
-+| systemd service        | /usr/lib                                   |
-+-----------------------------------------------------------------------
-+| systemd support script | /usr/libexec                               |
-+-----------------------------------------------------------------------
- 
- To put it in other words it makes build results available system-wide,
- enabling any user to simply start using it without any additional steps
-@@ -109,6 +113,10 @@ The files will be installed to the following dirs:
- -----------------------------------------------------------------------
- | man pages              | ${DESTDIR}/usr/man                         |
- -----------------------------------------------------------------------
-+| systemd service        | ${DESTDIR}/usr/lib                         |
-+-----------------------------------------------------------------------
-+| systemd support script | ${DESTDIR}/usr/libexec                     |
-+-----------------------------------------------------------------------
- 
- If you look at the table for the default 'make' output dirs you will
- notice that the only difference with the non-default case is the
-@@ -173,6 +181,17 @@ The issue is that binary cannot find the 'libcpupower' library. So, we
- shall point to the lib dir:
- sudo LD_LIBRARY_PATH=lib64/ ./bin/cpupower
- 
-+systemd service
-+---------------
-+
-+A systemd service is also provided to run the cpupower utility at boot with
-+settings read from a configuration file. In order to enable this systemd
-+service, edit '${DESTDIR}/etc/default/cpupower' (uncommenting at least one of
-+the options, depending on your preferences) and then issue the following
-+command:
-+
-+$ sudo systemctl enable --now cpupower.service
-+
- 
- THANKS
- ------
-diff --git a/tools/power/cpupower/cpupower.default b/tools/power/cpupower/cpupower.default
-new file mode 100644
-index 000000000000..376ca40fe5a6
---- /dev/null
-+++ b/tools/power/cpupower/cpupower.default
-@@ -0,0 +1,28 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+# Copyright (C) 2012, Sébastien Luttringer
-+# Copyright (C) 2024-2025, Francesco Poli <invernomuto@paranoici.org>
-+
-+# Default file for linux-cpupower
-+
-+# --- CPU clock frequency ---
-+
-+# Define CPU governor
-+# Valid governors: ondemand, performance, powersave, conservative, userspace
-+#GOVERNOR='ondemand'
-+
-+# Limit frequency range
-+# Valid suffixes: Hz, kHz (default), MHz, GHz, THz
-+#MIN_FREQ="2.25GHz"
-+#MAX_FREQ="3GHz"
-+
-+# Specific frequency to be set.
-+# Requires userspace governor to be available.
-+# If this option is set, all the previous frequency options are ignored
-+#FREQ=
-+
-+# --- CPU policy ---
-+
-+# Sets a register on supported Intel processore which allows software to convey
-+# its policy for the relative importance of performance versus energy savings to
-+# the processor. See man CPUPOWER-SET(1) for additional details
-+#PERF_BIAS=
-diff --git a/tools/power/cpupower/cpupower.service.in b/tools/power/cpupower/cpupower.service.in
-new file mode 100644
-index 000000000000..f91eaed03872
---- /dev/null
-+++ b/tools/power/cpupower/cpupower.service.in
-@@ -0,0 +1,16 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+# Copyright (C) 2012-2020, Sébastien Luttringer
-+# Copyright (C) 2024, Francesco Poli <invernomuto@paranoici.org>
-+
-+[Unit]
-+Description=Apply cpupower configuration
-+ConditionVirtualization=!container
-+
-+[Service]
-+Type=oneshot
-+EnvironmentFile=-___CDIR___default/cpupower
-+ExecStart=___LDIR___/cpupower
-+RemainAfterExit=yes
-+
-+[Install]
-+WantedBy=multi-user.target
-diff --git a/tools/power/cpupower/cpupower.sh b/tools/power/cpupower/cpupower.sh
-new file mode 100644
-index 000000000000..a37dd4cfdb2b
---- /dev/null
-+++ b/tools/power/cpupower/cpupower.sh
-@@ -0,0 +1,26 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+# Copyright (C) 2012, Sébastien Luttringer
-+# Copyright (C) 2024, Francesco Poli <invernomuto@paranoici.org>
-+
-+ESTATUS=0
-+
-+# apply CPU clock frequency options
-+if test -n "$FREQ"
-+then
-+    cpupower frequency-set -f "$FREQ" > /dev/null || ESTATUS=1
-+elif test -n "${GOVERNOR}${MIN_FREQ}${MAX_FREQ}"
-+then
-+    cpupower frequency-set \
-+      ${GOVERNOR:+ -g "$GOVERNOR"} \
-+      ${MIN_FREQ:+ -d "$MIN_FREQ"} ${MAX_FREQ:+ -u "$MAX_FREQ"} \
-+      > /dev/null || ESTATUS=1
-+fi
-+
-+# apply CPU policy options
-+if test -n "$PERF_BIAS"
-+then
-+    cpupower set -b "$PERF_BIAS" > /dev/null || ESTATUS=1
-+fi
-+
-+exit $ESTATUS
-
-base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
--- 
-2.47.2
-
+Note that Andrew encouraged us to pursue the pvops removal for MSRs=2E Not=
+e that Xen benefits pretty heavily because it can dispatch the proper path =
+of the few that are left for the common case of fixed MSRs=2E
 
