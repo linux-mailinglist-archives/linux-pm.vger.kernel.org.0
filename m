@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-26260-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26263-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDBACA9D61B
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Apr 2025 01:15:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EE59A9D626
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Apr 2025 01:16:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E32D31BC868C
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 23:16:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF184920155
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 23:16:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18D35297A5D;
-	Fri, 25 Apr 2025 23:15:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3376229899A;
+	Fri, 25 Apr 2025 23:15:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="eIP9t2hU"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="GmhBLh9y"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB2B7297A51;
-	Fri, 25 Apr 2025 23:15:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D49462973C9;
+	Fri, 25 Apr 2025 23:15:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745622933; cv=none; b=bSJm16E0HJDBkYyxYv1BJBUtUh9aD598HyxTCHx+C7KEIooA2O7nYoFuPXPBPWzGDPUCP1xixQoqyQ2skv119GJrIoxl6AOZmEfhZliIFZ6TQhtb/6FgEatudBJwj2RerAPnd4NBR0HzspIbaviKZT//k8OBlu46ZOWimulcNZU=
+	t=1745622942; cv=none; b=E5GaI6TOiBWj/ETrqcs8s8cni91AW9cyA3ptC5Qm/qgHRjqjGmSdGw5jy2D3MCOHU5dPUFf0/XT4jMbukgBYYiPMiNSDa35k4YkkmpAeaB8WDtYYYzEwLbvy2SEXDHnyFnAB4+FSHEoD/0Q3VnH6/nYCQxLHn3vhbCLQJczc5N8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745622933; c=relaxed/simple;
-	bh=B1bGCnb0p0EausLCfNDFBg5v1GfoFoL2EjWsSCjsRyY=;
+	s=arc-20240116; t=1745622942; c=relaxed/simple;
+	bh=2G13UdckMVoNWyQ2KkNbIsqMt2eJ/selT3Q4mTX/i9M=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CZDAiMwcBpe93LFNsoqV75i2++XpNlL6Gabp0F5atOPSUZ/HArTlXoDOE34XxYuTRTh1bzKlOIo9KEaDOc2NWYn6SBnlMhV5Av5iER1quiBlRc5q2i3ZALM9x5o+eE8xucjSYuxI3L5xfSchRW71AfUlIxb9iAMX1GdASIuwnuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=eIP9t2hU; arc=none smtp.client-ip=212.227.15.19
+	 MIME-Version; b=Wjfnw/pr3S20WTTMozBklNs4vtT072nrgiqLVR9zN2XXYYRUCdmMBXWSOgQ4bYSSbQ9jr8FhRnUCwQffa9E1GqUTUSz6CtRCVH6/L0Zydnx0en5oU9H9twfqbj/uJWIrZRIMWZ/oGMWbrceu0kCzlfhe8KmUR/0TuJtteDQYzPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=GmhBLh9y; arc=none smtp.client-ip=212.227.15.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1745622927; x=1746227727; i=w_armin@gmx.de;
-	bh=kp0fA/Y9blrQcx5RK3lNRwlX0u7H+VQ9eRNUaAdnd9g=;
+	s=s31663417; t=1745622929; x=1746227729; i=w_armin@gmx.de;
+	bh=g9WnqqVjdggWi2YjHHXf4QuvT/xttrq0L//6veEdl2w=;
 	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=eIP9t2hUoMJDGMFP4Mweih39u53yweFXcvQQsh6kfaOrh/uNjUjEbZiaqwrOrjNk
-	 hVGh50cJi6if9zMKVu1vkyiBOhB0tS2pRoAXj5deW7PMnq5rUSAySkVBMBuZWaJ8o
-	 hymv2miMbUSFiXRHaJ5SggK06N0exQ3msTmM/8XMfodb7dro7ibdT88LNADt7IL6m
-	 uGfDSKQoe3mN9zvRWLviaLc6zh37XJiORYSCTlhknIZuD3RtYdXIZgmg9JQH0oY+5
-	 9PVfiAENM4xBHquxVq82CZAMFljiLnsPLRdlSm9zV0OE+dt+NAxbq16+7cNTSV7Zx
-	 ylw2vrlQ65XpHfOXFQ==
+	b=GmhBLh9y+Lx4LXXZmffR61yna+dFhQw7Y7nS10sBrobSMmq4OAfo8nsWRUg9rSU6
+	 JzmikJTjrFbM49VECjkIrLYXS8ajHY/ctDP0qVdhXqTCqAyE+1euVeyXKlTFlUv80
+	 +Qa/ji7xx+e+F7uNrzyM1BNyX5AoXfkJbl+dKy8l0Ssfqy6hFJCCbG+qWIs/V71UC
+	 hd5O/8+FdNs8C7/0a7xTu3k2qZ2RrDwmjSw57iTESyd4LIHLFuIR3ek6manZlDe4+
+	 GgEpTFbjtTaJdyXqlyPwVYPPyUpotgLwWx//pRvMAx7m+1gzQ18gG4a55Wkoch2G/
+	 R747PtQPAegnkv4Fkg==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from mx-amd-b650.fritz.box ([87.177.78.219]) by mail.gmx.net
  (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MPGW7-1uRU3O2Io9-00S0V5; Sat, 26 Apr 2025 01:15:27 +0200
+ 1M72sP-1uAMbm0Y6Z-00AtPm; Sat, 26 Apr 2025 01:15:29 +0200
 From: Armin Wolf <W_Armin@gmx.de>
 To: hdegoede@redhat.com,
 	ilpo.jarvinen@linux.intel.com
@@ -55,9 +55,9 @@ Cc: sre@kernel.org,
 	platform-driver-x86@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] platform/x86: dell-ddv: Implement the battery matching algorithm
-Date: Sat, 26 Apr 2025 01:15:16 +0200
-Message-Id: <20250425231518.16125-2-W_Armin@gmx.de>
+Subject: [PATCH 3/4] platform/x86: dell-ddv: Expose the battery manufacture date to userspace
+Date: Sat, 26 Apr 2025 01:15:17 +0200
+Message-Id: <20250425231518.16125-3-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250425231518.16125-1-W_Armin@gmx.de>
 References: <20250425231518.16125-1-W_Armin@gmx.de>
@@ -68,298 +68,193 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:lbGfmQUP8rggWftFOjnne6fH8S9YfhL6ebzupkQOu/NmCxe+GgQ
- CPB7AadMCnQheG3GnVvUztFFv3omYDbnV70IS8ODPRMAQc8UaGtrD/FJV8YdIvpDZPFed+a
- cO9ZlTD5RG+t1yG990KyZjlP76y3iUkgVGJmMKQepvlP32V70SWqqQsXFF4ZQeBDuaT2INo
- cl/6LXEfgOlWC2w/ayZ/A==
+X-Provags-ID: V03:K1:9Fl5XihV7tB/KzPDEMJfnthSOvmMjmbqtsEJYWwJpnRoGwbxeQV
+ jbt/krKFD6nIRqYhcmg8T0h8Kkh0xt26J8q2YoZkVZxtEqD8oeb/uzk/fh3jRnmLFgzG0eE
+ RqqxRvUAXNTOcpgo0AWd7FBz5sZBP+9cyUjVDKSg+WFIIN4706I+vfQiFxTQjVeB7A83Afe
+ Gkl76k49XqsIWH399K+qA==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:83YDHOblOio=;u8YmvK2AiwStFlcdr8K+LeXk8iR
- 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
+UI-OutboundReport: notjunk:1;M01:P0:LZQ3ipiIRCY=;/u8YtIKroiqxdGz3C58soq7gwSI
+ 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
+ xSO+7GFk+WQZj7t41Q35/Hd2qGbNoY/c2U
 
-Since commit db0a507cb24d ("ACPICA: Update integer-to-hex-string
-conversions") the battery serial number is no longer distorted,
-allowing us to finally implement the battery matching algorithm.
+The manufacture date of a given battery is exposed over the Dell DDV
+WMI interface using the "BatteryManufactureDate" WMI method. The
+resulting data contains the manufacture date of the battery encoded
+inside a 16-bit value as described in the Smart Battery Data
+Specification.
 
-The battery matchign algorithm is necessary when translating between
-ACPI batteries and the associated indices used by the WMI interface
-based on the battery serial number. Since this serial number can only
-be retrieved when the battery is present we cannot perform the initial
-translation inside dell_wmi_ddv_add_battery() because the ACPI battery
-might be absent at this point in time.
-
-Introduce dell_wmi_ddv_battery_translate() which implements the
-battery matching algorithm and replaces dell_wmi_ddv_battery_index().
-Also implement a translation cache for caching previous translations
-between ACPI batteries and indices. This is necessary because
-performing a translation can be very expensive.
+Expose this value to userspace using the power supply extension
+interface.
 
 Tested on a Dell Inspiron 3505.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- Documentation/wmi/devices/dell-wmi-ddv.rst |   8 --
- drivers/platform/x86/dell/dell-wmi-ddv.c   | 101 ++++++++++++++++++---
- 2 files changed, 88 insertions(+), 21 deletions(-)
+ Documentation/wmi/devices/dell-wmi-ddv.rst |  3 --
+ drivers/platform/x86/dell/dell-wmi-ddv.c   | 58 ++++++++++++++++++++++
+ 2 files changed, 58 insertions(+), 3 deletions(-)
 
 diff --git a/Documentation/wmi/devices/dell-wmi-ddv.rst b/Documentation/wm=
 i/devices/dell-wmi-ddv.rst
-index e0c20af30948..f10a623acca1 100644
+index f10a623acca1..41c553d5c77d 100644
 =2D-- a/Documentation/wmi/devices/dell-wmi-ddv.rst
 +++ b/Documentation/wmi/devices/dell-wmi-ddv.rst
-@@ -260,14 +260,6 @@ Some machines like the Dell Inspiron 3505 only suppor=
-t a single battery and thus
- ignore the battery index. Because of this the driver depends on the ACPI =
-battery
- hook mechanism to discover batteries.
+@@ -118,9 +118,6 @@ The date is encoded in the following manner:
+ - bits 5 to 8 contain the manufacture month.
+ - bits 9 to 15 contain the manufacture year biased by 1980.
 =20
 -.. note::
--   The ACPI battery matching algorithm currently used inside the driver i=
-s
--   outdated and does not match the algorithm described above. The reasons=
- for
--   this are differences in the handling of the ToHexString() ACPI opcode =
-between
--   Linux and Windows, which distorts the serial number of ACPI batteries =
-on many
--   machines. Until this issue is resolved, the driver cannot use the abov=
-e
--   algorithm.
+-   The data format needs to be verified on more machines.
 -
- Reverse-Engineering the DDV WMI interface
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ WMI method BatterySerialNumber()
+ --------------------------------
 =20
 diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x=
 86/dell/dell-wmi-ddv.c
-index f27739da380f..711639001be4 100644
+index 711639001be4..8bd3ff76bb91 100644
 =2D-- a/drivers/platform/x86/dell/dell-wmi-ddv.c
 +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
-@@ -39,6 +39,9 @@
- #define DELL_DDV_SUPPORTED_VERSION_MAX	3
- #define DELL_DDV_GUID	"8A42EA14-4F2A-FD45-6422-0087F7A7E608"
+@@ -8,6 +8,7 @@
+ #define pr_format(fmt) KBUILD_MODNAME ": " fmt
 =20
-+/* Battery indices 1, 2 and 3 */
-+#define DELL_DDV_NUM_BATTERIES		3
+ #include <linux/acpi.h>
++#include <linux/bitfield.h>
+ #include <linux/debugfs.h>
+ #include <linux/device.h>
+ #include <linux/device/driver.h>
+@@ -42,6 +43,10 @@
+ /* Battery indices 1, 2 and 3 */
+ #define DELL_DDV_NUM_BATTERIES		3
+=20
++#define SBS_MANUFACTURE_YEAR_MASK	GENMASK(15, 9)
++#define SBS_MANUFACTURE_MONTH_MASK	GENMASK(8, 5)
++#define SBS_MANUFACTURE_DAY_MASK	GENMASK(4, 0)
 +
  #define DELL_EPPID_LENGTH	20
  #define DELL_EPPID_EXT_LENGTH	23
 =20
-@@ -105,6 +108,8 @@ struct dell_wmi_ddv_sensors {
- struct dell_wmi_ddv_data {
- 	struct acpi_battery_hook hook;
- 	struct device_attribute eppid_attr;
-+	struct mutex translation_cache_lock;	/* Protects the translation cache *=
-/
-+	struct power_supply *translation_cache[DELL_DDV_NUM_BATTERIES];
- 	struct dell_wmi_ddv_sensors fans;
- 	struct dell_wmi_ddv_sensors temps;
- 	struct wmi_device *wdev;
-@@ -639,15 +644,78 @@ static int dell_wmi_ddv_hwmon_add(struct dell_wmi_dd=
-v_data *data)
+@@ -744,6 +749,52 @@ static ssize_t eppid_show(struct device *dev, struct =
+device_attribute *attr, cha
  	return ret;
  }
 =20
--static int dell_wmi_ddv_battery_index(struct acpi_device *acpi_dev, u32 *=
-index)
-+static int dell_wmi_ddv_battery_translate(struct dell_wmi_ddv_data *data,
-+					  struct power_supply *battery, u32 *index)
- {
--	const char *uid_str;
-+	u32 serial_dec, serial_hex, serial;
-+	union power_supply_propval val;
++static int dell_wmi_ddv_get_manufacture_date(struct dell_wmi_ddv_data *da=
+ta, u32 index,
++					     enum power_supply_property psp,
++					     union power_supply_propval *val)
++{
++	u16 year, month, day;
++	u32 value;
 +	int ret;
 +
-+	guard(mutex)(&data->translation_cache_lock);
++	ret =3D dell_wmi_ddv_query_integer(data->wdev, DELL_DDV_BATTERY_MANUFACT=
+URE_DATE,
++					 index, &value);
 +
-+	for (int i =3D 0; i < ARRAY_SIZE(data->translation_cache); i++) {
-+		if (data->translation_cache[i] =3D=3D battery) {
-+			dev_dbg(&data->wdev->dev, "Translation cache hit for battery index %u\=
-n",
-+				i + 1);
-+			*index =3D i + 1;
-+			return 0;
-+		}
-+	}
-+
-+	dev_dbg(&data->wdev->dev, "Translation cache miss\n");
-+
-+	/* Perform a translation between a ACPI battery and a battery index */
-+
-+	ret =3D power_supply_get_property(battery, POWER_SUPPLY_PROP_SERIAL_NUMB=
-ER, &val);
 +	if (ret < 0)
 +		return ret;
 +
++	if (value > U16_MAX)
++		return -ENXIO;
++
 +	/*
-+	 * Some devices display the serial number of the ACPI battery (string!) =
-as a decimal
-+	 * number while other devices display it as a hexadecimal number. Becaus=
-e of this we
-+	 * have to check both cases.
++	 * Some devices report a invalid manufacture date value
++	 * like 0.0.1980. Because of this we have to check the
++	 * whole value before exposing parts of it to user space.
 +	 */
-+	ret =3D kstrtou32(val.strval, 16, &serial_hex);
-+	if (ret < 0)
-+		return ret;	/* Should never fail */
++	year =3D FIELD_GET(SBS_MANUFACTURE_YEAR_MASK, value) + 1980;
++	month =3D FIELD_GET(SBS_MANUFACTURE_MONTH_MASK, value);
++	if (month < 1 || month > 12)
++		return -ENODATA;
 +
-+	ret =3D kstrtou32(val.strval, 10, &serial_dec);
-+	if (ret < 0)
-+		serial_dec =3D 0; /* Can fail, thus we only mark serial_dec as invalid =
-*/
++	day =3D FIELD_GET(SBS_MANUFACTURE_DAY_MASK, value);
++	if (day < 1 || day > 31)
++		return -ENODATA;
 +
-+	for (int i =3D 0; i < ARRAY_SIZE(data->translation_cache); i++) {
-+		ret =3D dell_wmi_ddv_query_integer(data->wdev, DELL_DDV_BATTERY_SERIAL_=
-NUMBER, i + 1,
-+						 &serial);
-+		if (ret < 0)
-+			return ret;
-=20
--	uid_str =3D acpi_device_uid(acpi_dev);
--	if (!uid_str)
--		return -ENODEV;
-+		/* A serial number of 0 signals that this index is not associated with =
-a battery */
-+		if (!serial)
-+			continue;
-=20
--	return kstrtou32(uid_str, 10, index);
-+		if (serial =3D=3D serial_dec || serial =3D=3D serial_hex) {
-+			dev_dbg(&data->wdev->dev, "Translation cache update for battery index =
-%u\n",
-+				i + 1);
-+			data->translation_cache[i] =3D battery;
-+			*index =3D i + 1;
-+			return 0;
-+		}
++	switch (psp) {
++	case POWER_SUPPLY_PROP_MANUFACTURE_YEAR:
++		val->intval =3D year;
++		return 0;
++	case POWER_SUPPLY_PROP_MANUFACTURE_MONTH:
++		val->intval =3D month;
++		return 0;
++	case POWER_SUPPLY_PROP_MANUFACTURE_DAY:
++		val->intval =3D day;
++		return 0;
++	default:
++		return -EINVAL;
 +	}
-+
-+	return -ENODEV;
 +}
 +
-+static void dell_wmi_battery_invalidate(struct dell_wmi_ddv_data *data,
-+					struct power_supply *battery)
-+{
-+	guard(mutex)(&data->translation_cache_lock);
-+
-+	for (int i =3D 0; i < ARRAY_SIZE(data->translation_cache); i++) {
-+		if (data->translation_cache[i] =3D=3D battery) {
-+			data->translation_cache[i] =3D NULL;
-+			return;
-+		}
-+	}
- }
-=20
- static ssize_t eppid_show(struct device *dev, struct device_attribute *at=
-tr, char *buf)
-@@ -657,7 +725,7 @@ static ssize_t eppid_show(struct device *dev, struct d=
-evice_attribute *attr, cha
- 	u32 index;
- 	int ret;
-=20
--	ret =3D dell_wmi_ddv_battery_index(to_acpi_device(dev->parent), &index);
-+	ret =3D dell_wmi_ddv_battery_translate(data, to_power_supply(dev), &inde=
-x);
- 	if (ret < 0)
- 		return ret;
-=20
-@@ -684,7 +752,7 @@ static int dell_wmi_ddv_get_property(struct power_supp=
+ static int dell_wmi_ddv_get_property(struct power_supply *psy, const stru=
+ct power_supply_ext *ext,
+ 				     void *drvdata, enum power_supply_property psp,
+ 				     union power_supply_propval *val)
+@@ -768,6 +819,10 @@ static int dell_wmi_ddv_get_property(struct power_sup=
+ply *psy, const struct powe
+ 		 */
+ 		val->intval =3D value - 2732;
+ 		return 0;
++	case POWER_SUPPLY_PROP_MANUFACTURE_YEAR:
++	case POWER_SUPPLY_PROP_MANUFACTURE_MONTH:
++	case POWER_SUPPLY_PROP_MANUFACTURE_DAY:
++		return dell_wmi_ddv_get_manufacture_date(data, index, psp, val);
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -775,6 +830,9 @@ static int dell_wmi_ddv_get_property(struct power_supp=
 ly *psy, const struct powe
- 	u32 index, value;
- 	int ret;
 =20
--	ret =3D dell_wmi_ddv_battery_index(to_acpi_device(psy->dev.parent), &ind=
-ex);
-+	ret =3D dell_wmi_ddv_battery_translate(data, psy, &index);
- 	if (ret < 0)
- 		return ret;
+ static const enum power_supply_property dell_wmi_ddv_properties[] =3D {
+ 	POWER_SUPPLY_PROP_TEMP,
++	POWER_SUPPLY_PROP_MANUFACTURE_YEAR,
++	POWER_SUPPLY_PROP_MANUFACTURE_MONTH,
++	POWER_SUPPLY_PROP_MANUFACTURE_DAY,
+ };
 =20
-@@ -719,13 +787,12 @@ static const struct power_supply_ext dell_wmi_ddv_ex=
-tension =3D {
- static int dell_wmi_ddv_add_battery(struct power_supply *battery, struct =
-acpi_battery_hook *hook)
- {
- 	struct dell_wmi_ddv_data *data =3D container_of(hook, struct dell_wmi_dd=
-v_data, hook);
--	u32 index;
- 	int ret;
-=20
--	/* Return 0 instead of error to avoid being unloaded */
--	ret =3D dell_wmi_ddv_battery_index(to_acpi_device(battery->dev.parent), =
-&index);
--	if (ret < 0)
--		return 0;
-+	/*
-+	 * We cannot do the battery matching here since the battery might be abs=
-ent, preventing
-+	 * us from reading the serial number.
-+	 */
-=20
- 	ret =3D device_create_file(&battery->dev, &data->eppid_attr);
- 	if (ret < 0)
-@@ -749,11 +816,19 @@ static int dell_wmi_ddv_remove_battery(struct power_=
-supply *battery, struct acpi
- 	device_remove_file(&battery->dev, &data->eppid_attr);
- 	power_supply_unregister_extension(battery, &dell_wmi_ddv_extension);
-=20
-+	dell_wmi_battery_invalidate(data, battery);
-+
- 	return 0;
- }
-=20
- static int dell_wmi_ddv_battery_add(struct dell_wmi_ddv_data *data)
- {
-+	int ret;
-+
-+	ret =3D devm_mutex_init(&data->wdev->dev, &data->translation_cache_lock)=
-;
-+	if (ret < 0)
-+		return ret;
-+
- 	data->hook.name =3D "Dell DDV Battery Extension";
- 	data->hook.add_battery =3D dell_wmi_ddv_add_battery;
- 	data->hook.remove_battery =3D dell_wmi_ddv_remove_battery;
+ static const struct power_supply_ext dell_wmi_ddv_extension =3D {
 =2D-=20
 2.39.5
 
