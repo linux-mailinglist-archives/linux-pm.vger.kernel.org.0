@@ -1,149 +1,153 @@
-Return-Path: <linux-pm+bounces-26187-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26188-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7D87A9C544
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 12:22:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAD08A9C678
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 13:01:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 894181884058
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 10:21:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E012817A7B7
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 11:01:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F30623D2A0;
-	Fri, 25 Apr 2025 10:21:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A995823DEB6;
+	Fri, 25 Apr 2025 11:01:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eUUMkiTT"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="FpTzZ+fk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBF923D289
-	for <linux-pm@vger.kernel.org>; Fri, 25 Apr 2025 10:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A3317A2FD;
+	Fri, 25 Apr 2025 11:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745576483; cv=none; b=X195jibCVi16U+M68ydhweUv1BlayAcTi+18jJs7b/VRWxSbV9puiMW09zksUJA6qRk/hN+Ht5i+99y9M6g8PH7g+3RqL2tIV92QRa6t2UcWgxbAydS/Wu1cXho2/6npYG/TLrhCeBNYyt5+ZnfEwtGTOGtSrq5D4jwlQ5EBBKA=
+	t=1745578861; cv=none; b=UlJANrctFM88ffOC7DzW0IOICN6EbWH+fkIZX8vcVbKO1feM2Ik7DmoojiA5JVzJ9fgYh4baQLT/aIbWDsm6q+5XDHOwXj6rJLZN2Covsp2JOwPcwn0cxjFq7svPA37AQUSYjDN/vo0JyPhWGLd8HTS+5sKh4ifHUgv+u/HY3lQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745576483; c=relaxed/simple;
-	bh=5aRIMiRABy1PGTOKgctdnys84VTQ4AhqhUvl/MwXJMQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=REzkqFfVPYuQ52wrxmGkuP5wAlnsG19DgLehMa3RmNqZ9evKUcIMx9dTY7s4ogxqQO/Cfr7EZUc+qGCjxgb7IanpyzO1izcydsHoGwDX5rIUeYsTAok56lMIx64yORjXN71KZGiPLbHhfwyTr8c7Zvh+ZgHS3BI86HXw12Ph5Dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eUUMkiTT; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-70825de932bso28314747b3.0
-        for <linux-pm@vger.kernel.org>; Fri, 25 Apr 2025 03:21:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1745576480; x=1746181280; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2dy23SZTpPz/OtRsVa67VPlSbZbxd200TTdg7Zq9HNk=;
-        b=eUUMkiTT/TJ72ObG/86gWFM8lydzff2WEWBNYCnp9i2KLqJSzd1XNyi4o8FPHIR1Z8
-         TBoOmY0v8/aR+QTbvXqYDtNqZ9672nvlc87pm5kXASo3CVlE6jiSG0eprxUmtUdQP/Th
-         SjBivRuzB5mSxsZqVeZKUd46M/yQm8sbgk09skKzlf5CJwWjrK8zXkDOw4gLR37Xf11q
-         FTcBdQG0lLom1m31goeTJU9EJTLeCtrrkDa+kQch2y2WFXqEW/yl8OgDdxai4vI5qbAN
-         8VR7Uzg1pJW0MzI3/RixThuZkSF7cledK6IdIUyInQAn0jDe8qgJDxaUCuJ6Eo/1/KDO
-         IL0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745576480; x=1746181280;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2dy23SZTpPz/OtRsVa67VPlSbZbxd200TTdg7Zq9HNk=;
-        b=wTYyAsPIpD1OJGO6Sem49gndqgiNvbf27gqe4NIGxucMoa1ywgHYo1JumwsLHdEX/1
-         Qd27SoVVR9dkfVwtTnAhEoaWJneo4coa61itE+zsnEfuTJb0LxPLK+4ES7PSQ5n+zZTS
-         ySMv8u3cNLVeKs7GcLTTbCJoyIL5dEQxNs2nfd+GxPOG6tnwv5Lefw9sbg7by7BWhuuP
-         v4tpQfDSvHUjb8o828SPq00J0h4XX8G/CxytAwpOQ+s9IZs4T+PlZQ5GtsSX6dcqg2eW
-         cF5CpP0+SsntQTnjF7of9iJqqiF33Av62aXsi/TtMmwuS3wDR/SreLSeRGZ9VWx6Pu1N
-         209g==
-X-Forwarded-Encrypted: i=1; AJvYcCVknd5aO8iKiUwgSiskejtqlxhFK5sU3puXbVCNYVJ8AdzBRdJNgAO7/DvxwzhtTPR4UAcu5hWSUg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2rPDjezd50B7oaazm+N6qYba/6cWWpQmH7HvsC9gPuK5p7Xwh
-	AmHnnV733irp3z7fDtqPb0BEQDiYqsluEpIlmvVGcpbcwYXBoi//B76Ylb0jMsN6R7VJzpyQwGk
-	NwBadMzs7Feaj4/ZiIm5L6chUo5k5sAAIytGIYA==
-X-Gm-Gg: ASbGncun8IIIJrszMOV0wPNxhd1E+boyF2LDpiZOzZDe8fjRXRihCh1Eu1zBJcYe0eA
-	/d9Csox3MuiUMprfWx55GtRkfZRxWO96EiaozOzHu+q87uT4Wt/hsCVOQCWcJMIW2ah7NwKm9ZJ
-	rJS8MvbZcSQn6lF4r0krsEQpg=
-X-Google-Smtp-Source: AGHT+IGCkeBYkL01Ob0/q+cYVVyOOQUT9d0JdZJ2RLVPcS+2b1wB0bERA+PHNQouav0l20rXKN6j1bHrWfsqVHaUuzI=
-X-Received: by 2002:a05:690c:61c8:b0:705:6afe:4580 with SMTP id
- 00721157ae682-708544de4demr18549377b3.19.1745576480517; Fri, 25 Apr 2025
- 03:21:20 -0700 (PDT)
+	s=arc-20240116; t=1745578861; c=relaxed/simple;
+	bh=LmT4q4cwDV8dqZ1OVA1AkX67exgzoLa7vYuRF6U/m60=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=gFIwELWe1xv+MofyEDDsewtkfOFkUclEy+rGAG2syvvArXUiniN72Dj5AmTn7V3GLHuGpUx2NEQ7emTpG/lYNOWykldcG31tFfbceSF0pvaBPMUnQR65qCdYw/H5GDWKb6xYaJhUTLnHHl3rJSUyvhm8WOVL6bcikOVh7mWvJ+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=FpTzZ+fk; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53P8TBPQ007414;
+	Fri, 25 Apr 2025 11:00:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	nQJY9KYdG5qh5BZa8CmmZUhQl5LCgH6lXJHDaFC6Oyc=; b=FpTzZ+fki45hfJwI
+	ytOX//LUllzYLh5ehmqLobp7D9T4DCqPHrpyyTGswEFcb3Ro9E+Npr03lWIJDSPY
+	qJD4QJ8l976cQY3KaRkrpZhkm5x+nxDmCGdZdMovDPkp5oTTDlRjCbeU44L3pgB9
+	Y1f9LNwF3qeOVV85FPe48lmp8oVMcBWmodMC1br//Mj/WamZ5VMQQ4txpILrfRyj
+	601hIU25SrP4K7tPVK9qiZOW1gxpzorlLHvwMhdSaj037c/dwK/XcVuigd/IaofZ
+	GC0vhI2RxAcaI0F2IBYXCial7KJ8cMzI5RYscvMzJbp8T85i87An15t3BfCGcDHh
+	34zprg==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 466jh0rn2w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 25 Apr 2025 11:00:48 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53PB0kn6031671
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 25 Apr 2025 11:00:47 GMT
+Received: from [10.216.10.223] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 25 Apr
+ 2025 04:00:39 -0700
+Message-ID: <34fa001f-4667-4e6d-89e5-263f6151b783@quicinc.com>
+Date: Fri, 25 Apr 2025 16:30:36 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250421090951.395467-1-wenst@chromium.org>
-In-Reply-To: <20250421090951.395467-1-wenst@chromium.org>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Fri, 25 Apr 2025 12:20:44 +0200
-X-Gm-Features: ATxdqUFyawKWbJKKMCdA_eJxPR8YeUvlb5__azoGszdJwBU8e_s7VHYVEWsbp3g
-Message-ID: <CAPDyKFroHJt7u6CzmPLnWv6rii4+adsFNDgoVqA-2AvN6S911g@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: mediatek: Add error messages for missing regmaps
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/9] dt-bindings: qcom: geni-se: describe SA8255p
+To: Krzysztof Kozlowski <krzk@kernel.org>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby
+	<jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Viresh Kumar
+	<vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd
+	<sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <psodagud@quicinc.com>,
+        <djaggi@quicinc.com>, <quic_msavaliy@quicinc.com>,
+        <quic_vtanuku@quicinc.com>, <quic_arandive@quicinc.com>,
+        <quic_mnaresh@quicinc.com>, <quic_shazhuss@quicinc.com>,
+        Nikunj Kela <quic_nkela@quicinc.com>
+References: <20250418151235.27787-1-quic_ptalari@quicinc.com>
+ <20250418151235.27787-4-quic_ptalari@quicinc.com>
+ <20250425-grumpy-dainty-pillbug-be2145@kuoka>
+Content-Language: en-US
+From: Praveen Talari <quic_ptalari@quicinc.com>
+In-Reply-To: <20250425-grumpy-dainty-pillbug-be2145@kuoka>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: vkz5ygL9-ZZ7YqrVDoCPryuqHr493GTy
+X-Authority-Analysis: v=2.4 cv=ftfcZE4f c=1 sm=1 tr=0 ts=680b6b60 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=KKAkSRfTAAAA:8 a=t6IQHlIZoQGcUKZoLJwA:9 a=QEXdDO2ut3YA:10
+ a=cvBusfyB2V15izCimMoJ:22
+X-Proofpoint-GUID: vkz5ygL9-ZZ7YqrVDoCPryuqHr493GTy
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDI1MDA4MCBTYWx0ZWRfX4cRPjnjFtdsA F2uINQahiOgoktXHokbyDUlVnpp23LPH2sJfJ3vHBBbC3sIOTMDnChDU3pLkhZFUX3rmv4wB70y ATFqq60qGZ2K1MZko15GInw1R8cnKYnRtgB7HP+MDCb1Azo8szt0Zqp7AU1YbwI3vYptQXhLdAv
+ ux97hSmd1K1QhK6fcVQHIxj2JZxyM5+GfCa4zdeocSRMIOtfVfhM6OPTIBinqTETU/CzLIs8HVO 4LAfnmw7Dn14UHtLWGl8XmX5H7HI8APAmMWl7KQWapxEdr91mdsXWMxRev2GAozEZ9I3gznLONU vvOgYZCgTL8W97frMUDHrQmUIz59niiDKHEdRMocY5L3Xt13JyJzGfcnXv0bao3VNYYkq//NW5a
+ afK1qEi9yt+kv21CAGYyEbYe+PNbQcQN5nzhB8/Z6CZ+n4m+j5CK7fRg/JTznyMeJXV9V/19
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-04-25_03,2025-04-24_02,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=999 lowpriorityscore=0 phishscore=0
+ malwarescore=0 impostorscore=0 adultscore=0 spamscore=0 clxscore=1011
+ priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2504250080
 
-On Mon, 21 Apr 2025 at 11:09, Chen-Yu Tsai <wenst@chromium.org> wrote:
->
-> A recent change to the syscon regmap API caused the MediaTek power
-> controller drivers to fail, as the required regmap could no longer be
-> retrieved. The error did not have an accompanying message, making the
-> failure less obvious. The aforementioned change has since been reverted.
->
-> Add error messages to all the regmap retrievals, thereby making all
-> error paths in scpsys_add_one_domain() have visible error messages.
->
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+Hi
 
-Applied for next, thanks!
-
-Kind regards
-Uffe
-
-
-> ---
->  drivers/pmdomain/mediatek/mtk-pm-domains.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
+On 4/25/2025 3:46 PM, Krzysztof Kozlowski wrote:
+> On Fri, Apr 18, 2025 at 08:42:29PM GMT, Praveen Talari wrote:
+>> +  "#size-cells":
+>> +    const: 2
+>> +
+>> +  ranges: true
+>> +
+>> +  iommus:
+>> +    maxItems: 1
+>> +
+>> +  dma-coherent: true
+>> +
+>> +required:
+> required: block goes after properties and patternproperties. I guess you
+> copied it from the existing geni binding, but new bindings can improve.
+Sure, will update in next version.
 >
-> diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> index b866b006af69..22cdd34ed008 100644
-> --- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> +++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> @@ -397,20 +397,26 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
+>> +  - compatible
+>> +  - reg
+>> +  - "#address-cells"
+>> +  - "#size-cells"
+>> +  - ranges
+>> +
+>> +patternProperties:
+> Rest looks good so with this reordering:
 >
->         pd->infracfg = syscon_regmap_lookup_by_phandle_optional(node, "mediatek,infracfg");
->         if (IS_ERR(pd->infracfg))
-> -               return ERR_CAST(pd->infracfg);
-> +               return dev_err_cast_probe(scpsys->dev, pd->infracfg,
-> +                                         "%pOF: failed to get infracfg regmap\n",
-> +                                         node);
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 >
->         smi_node = of_parse_phandle(node, "mediatek,smi", 0);
->         if (smi_node) {
->                 pd->smi = device_node_to_regmap(smi_node);
->                 of_node_put(smi_node);
->                 if (IS_ERR(pd->smi))
-> -                       return ERR_CAST(pd->smi);
-> +                       return dev_err_cast_probe(scpsys->dev, pd->smi,
-> +                                                 "%pOF: failed to get SMI regmap\n",
-> +                                                 node);
->         }
->
->         if (MTK_SCPD_CAPS(pd, MTK_SCPD_HAS_INFRA_NAO)) {
->                 pd->infracfg_nao = syscon_regmap_lookup_by_phandle(node, "mediatek,infracfg-nao");
->                 if (IS_ERR(pd->infracfg_nao))
-> -                       return ERR_CAST(pd->infracfg_nao);
-> +                       return dev_err_cast_probe(scpsys->dev, pd->infracfg_nao,
-> +                                                 "%pOF: failed to get infracfg-nao regmap\n",
-> +                                                 node);
->         } else {
->                 pd->infracfg_nao = NULL;
->         }
-> --
-> 2.49.0.805.g082f7c87e0-goog
+> Best regards,
+> Krzysztof
 >
 
