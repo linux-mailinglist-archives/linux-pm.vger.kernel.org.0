@@ -1,107 +1,146 @@
-Return-Path: <linux-pm+bounces-26232-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26233-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CFEAA9CDF9
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 18:23:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69804A9CE2B
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 18:30:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0808E1BC01B0
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 16:22:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB0A54C5EB9
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 16:30:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52EF819CD01;
-	Fri, 25 Apr 2025 16:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 901B1194C86;
+	Fri, 25 Apr 2025 16:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TOfzTKB2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0191F4A24
-	for <linux-pm@vger.kernel.org>; Fri, 25 Apr 2025 16:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.78.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68320146D6A;
+	Fri, 25 Apr 2025 16:30:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745598138; cv=none; b=QDVa1zJxWtV6e3EOTWvGvRRXJu4rn4mXeUYAMotSJG6ZHF2SUlGpq66oU/CLVz2VNE+xY5DgUhnD1amIHeZ2S/sEb+aWetuGtP7/XVz54nHC4vIRtLjiNcodyRnRsVLqkuZDxJgIYgf7kFZo2g63O7w1kDUPmunSobclKofBwgA=
+	t=1745598648; cv=none; b=G/V+UEDNmwucNnkr0Lhhjgv7EcWIU9JOSz7RWzKSfd017ZnTntafT6//CnVjfZezLuUTYIUfj7nxFQ1Ncta/NcleqI2swyNBpt+0uFTvbaE8EDz3Al+Tbxu4nPsfYsqGWhhZw29Vta4mIWgR2vQ9zPaK9VSgtObPkSCv3fvTI7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745598138; c=relaxed/simple;
-	bh=Lwl/ZpYN3ZShr7xLd2q+gTATHtLxFH5YaBYsLh28L3Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rPCfJCpB0vFG+cFr6+yfIHVKDY/RAVv6TzcVzhBlraJnJRdYm/YVO6j10T9dD/l8m3Fo9RaKOgLitADrfDCRndt8QBrfd5Vk94Q8iwK/35gxdy7el9PLm2vPucUZEjURHfIJgQdKvaNcd3gmeimkYIbqiq2t3bjhj8HZ/6wuKHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.78.240
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout2.hostsharing.net (Postfix) with ESMTPS id 16D30200A44B;
-	Fri, 25 Apr 2025 18:21:37 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id A4B8DB1FCB; Fri, 25 Apr 2025 18:22:05 +0200 (CEST)
-Date: Fri, 25 Apr 2025 18:22:05 +0200
-From: Lukas Wunner <lukas@wunner.de>
-To: James Dutton <james.dutton@gmail.com>
-Cc: Linux PM mailing list <linux-pm@vger.kernel.org>
-Subject: Re: USB4 thunderbolt device suspend/resume problems. Unplug during
- suspend.
-Message-ID: <aAu2reEG9RHjRjL9@wunner.de>
-References: <CAAMvbhGRBhdz2RnReoGxDRM=bTws6s4qe5kh2nUqQDMRDYBh6Q@mail.gmail.com>
- <Z9NDz7TUIEflQeee@wunner.de>
- <CAAMvbhEOLmSm97rzLKgjNV=7Uy8UspPAS1vc4W3xv5F_b6PNaQ@mail.gmail.com>
+	s=arc-20240116; t=1745598648; c=relaxed/simple;
+	bh=ZVOH0fGJ+NNMBDhLqyv661QsoghbN4nluN8aYFDUn3o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IFMRaBO5cd6Ptuj9JzPMSvHPULvxxqj2sDkBvLnz1JFnACp4ZGnoxDiOeu/BH0XJhO1vWc/M/2oybbBfNbyD3CWohjP5In6D9j5gdtft2fuSc4ZBWBIYe+rXLflM64kkH+xMmZ5ngaupUdTSfQKyFj5Nbs8FNwzMYdACJ08x45c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TOfzTKB2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3A45C4CEE8;
+	Fri, 25 Apr 2025 16:30:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745598647;
+	bh=ZVOH0fGJ+NNMBDhLqyv661QsoghbN4nluN8aYFDUn3o=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=TOfzTKB2E/ncXeGCdcTniBwqJXhvGy+Zda87lmuRV9ujRJ1yUwrf+PKm3uQVz0OrV
+	 4HcCaqlq1GSnSn/YUCHwIkSrawS6KIVuwDu8dg1WGNHVanNfaEGm933paX8yNAoV4x
+	 ES9/dNf4rcSZ5sGKReNMxRa6stiU2OjlyRbnCnDkwDxYJOtRcDHBQL1/pWDJjJd5jp
+	 hSVLknGVq+JqAIjD02qee2EgaVJIgKvwjhmQFcYEwaiiCQX3k8B7GYoqXWLn6aG7cj
+	 z2ZZbzf37JrjX4V4Z10VVk9gQ5diPOzsEk6m/ZE8zydicfw3gVcXhCylLodwE6Oa60
+	 oZVzQV/jVjy4A==
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-401e77e5443so1534096b6e.3;
+        Fri, 25 Apr 2025 09:30:47 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUhuTy+fFPnAyO7afR3Decebupa9snveVsm3xfXZkHNtDtPjEmIcvqtYjkS8RbfGqcTCHghYEeGFPM=@vger.kernel.org, AJvYcCVBMnN+GYawl+VM3VBHJsidCz11yntvPhKiv5fVWrXV/AhfSlynm7UxLbCK39O3+67MykDIUbuS0BtaSJg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7J9gP3Ddsq/+/1iKvupiofhlPCMxJ+bD0oZm7rZuAssUcWXuU
+	rI2UKXgjeKIrGalVDtpRZqjlo1wSA0L96lvsaxeh54HNsUCD42X1549XStIj1hsEVDF1B79HSIz
+	tYI5w2zSSriwZpRb1YwosyEFU3/0=
+X-Google-Smtp-Source: AGHT+IHIIywKL5CeFQsvH24NdW1NI0V/XAkgf7084BRpxorSkIfA89Z5n/cX/UPU3V8arOottYtsMIvsy1kXs+mVaxU=
+X-Received: by 2002:a05:6870:b156:b0:2d4:ef88:97bb with SMTP id
+ 586e51a60fabf-2d99d7520c7mr1872783fac.1.1745598647182; Fri, 25 Apr 2025
+ 09:30:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAMvbhEOLmSm97rzLKgjNV=7Uy8UspPAS1vc4W3xv5F_b6PNaQ@mail.gmail.com>
+References: <cover.1745511526.git.viresh.kumar@linaro.org> <9c7de55fb06015c1b77e7dafd564b659838864e0.1745511526.git.viresh.kumar@linaro.org>
+In-Reply-To: <9c7de55fb06015c1b77e7dafd564b659838864e0.1745511526.git.viresh.kumar@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 25 Apr 2025 18:30:35 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jW+ivsWjMgwaQKmhNxxz2wByYuLQL7i-hRamjH2We+8g@mail.gmail.com>
+X-Gm-Features: ATxdqUFKf17uuUP6FxDVeRUPULk3MU-swqAjg0ZkDyVNq3xjwkmwUX6IuG3OyJg
+Message-ID: <CAJZ5v0jW+ivsWjMgwaQKmhNxxz2wByYuLQL7i-hRamjH2We+8g@mail.gmail.com>
+Subject: Re: [PATCH V2 1/5] cpufreq: acpi: Re-sync CPU boost state on system resume
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Lifeng Zheng <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Nicholas Chin <nic.c3.14@gmail.com>, 
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Mar 22, 2025 at 01:38:34PM +0000, James Dutton wrote:
-> > On Mon, Feb 17, 2025 at 08:44:19PM +0000, James Dutton wrote:
-> > > I have a thunderbolt / usb4 10Gbps ethernet adapter.
-> > > While plugged in, it appears to handle suspend and resume OK.
-> > > The problem is the following:
-> > > 1) Thunderbolt device plugged in. Device appears in "lscpi".
-> > > 2) Suspend Laptop
-> > > 3) Unplug the device while it is asleep.
-> > > 4) Resume the Laptop
-> > > 5) Laptop locks up, no stack trace, nothing output.
-> 
-> I found something that worked for me.
-> I found an infinite loop and adding a timeout to it fixed my problem:
-> E.g.
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -6840,8 +6841,16 @@ void napi_disable(struct napi_struct *n)
->         do {
->                 while (val & (NAPIF_STATE_SCHED | NAPIF_STATE_NPSVC)) {
->                         usleep_range(20, 200);
-> +                       loop_counter++;
-> +                       if (loop_counter > 625) {
-> +                               break;
-> +                       }
->                         val = READ_ONCE(n->state);
->                 }
-> +               if (loop_counter > 625) {
-> +                       pr_warn("dev.c:napi_disable() timed out\n");
-> +                       break;
+On Thu, Apr 24, 2025 at 6:20=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
+>
+> During CPU hotunplug events (such as those occurring during
+> suspend/resume cycles), platform firmware may modify the CPU boost
+> state.
+>
+> If boost was disabled prior to CPU removal, it correctly remains
+> disabled upon re-plug. However, if firmware re-enables boost while the
+> CPU is offline, the CPU may return with boost enabled=E2=80=94even if it =
+was
+> originally disabled=E2=80=94once it is hotplugged back in. This leads to
+> inconsistent behavior and violates user or kernel policy expectations.
+>
+> To maintain consistency, ensure the boost state is re-synchronized with
+> the kernel policy when a CPU is hotplugged back in.
+>
+> Note: This re-synchronization is not necessary during the initial call
+> to ->init() for a CPU, as the cpufreq core handles it via
+> cpufreq_online(). At that point, acpi_cpufreq_driver.boost_enabled is
+> initialized to the value returned by boost_state(0).
+>
+> Fixes: 2b16c631832d ("cpufreq: ACPI: Remove set_boost in acpi_cpufreq_cpu=
+_init()")
+> Reported-by: Nicholas Chin <nic.c3.14@gmail.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D220013
+> Tested-by: Nicholas Chin <nic.c3.14@gmail.com>
+> Reviewed-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+
+I gather that this patch is for 6.15 and the rest of the series is for
+6.16, so applied accordingly.
+
+> ---
+>  drivers/cpufreq/acpi-cpufreq.c | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufre=
+q.c
+> index 924314cdeebc..d26b610e4f24 100644
+> --- a/drivers/cpufreq/acpi-cpufreq.c
+> +++ b/drivers/cpufreq/acpi-cpufreq.c
+> @@ -909,8 +909,19 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_poli=
+cy *policy)
+>         if (perf->states[0].core_frequency * 1000 !=3D freq_table[0].freq=
+uency)
+>                 pr_warn(FW_WARN "P-state 0 is not max freq\n");
+>
+> -       if (acpi_cpufreq_driver.set_boost)
+> -               policy->boost_supported =3D true;
+> +       if (acpi_cpufreq_driver.set_boost) {
+> +               if (policy->boost_supported) {
+> +                       /*
+> +                        * The firmware may have altered boost state whil=
+e the
+> +                        * CPU was offline (for example during a suspend-=
+resume
+> +                        * cycle).
+> +                        */
+> +                       if (policy->boost_enabled !=3D boost_state(cpu))
+> +                               set_boost(policy, policy->boost_enabled);
+> +               } else {
+> +                       policy->boost_supported =3D true;
 > +               }
-> 
->                 new = val | NAPIF_STATE_SCHED | NAPIF_STATE_NPSVC;
->                 new &= ~(NAPIF_STATE_THREADED | NAPIF_STATE_PREFER_BUSY_POLL);
-
-I'm afraid that's a hack, not a proper fix.  You can insert a call
-to "dump_stack();" before the "break;" to see where the call to
-napi_disable() is coming from.
-
-It seems the driver of the network adapter built into the dock
-gets confused if the adapter is no longer present on resume.
-It would be good if you could report this to the maintainers of that
-driver and/or netdev maintainers, as well as netdev@vger.kernel.org.
-
-Thanks,
-
-Lukas
+> +       }
+>
+>         return result;
+>
+> --
+> 2.31.1.272.g89b43f80a514
+>
 
