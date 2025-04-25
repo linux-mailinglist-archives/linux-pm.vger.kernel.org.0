@@ -1,247 +1,137 @@
-Return-Path: <linux-pm+bounces-26161-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26162-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E85C0A9BF5A
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 09:12:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C719A9BF71
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 09:15:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D43539A2ABE
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 07:11:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA6D2161089
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 07:14:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F018422FE0C;
-	Fri, 25 Apr 2025 07:09:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED808235BF3;
+	Fri, 25 Apr 2025 07:12:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WfgEML46"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Qw+6HPRA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24A122D4DC;
-	Fri, 25 Apr 2025 07:09:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A9362356D9;
+	Fri, 25 Apr 2025 07:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745564958; cv=none; b=k1blH5TxLtWiLeXfcD0GWRIILT+puVCiPmq96pMyp+RmoBA0AL2FYx9Ea4LBBP0/B70eqkjgDZDileNr+dDbuxVEp+fSc7DQ25tq5VQiCdVv84/r5ocstFlwmFW4lA1lZk/edXckAZTUSLl68BomY1KJTsCfVyIfC/eV4CNnvZU=
+	t=1745565141; cv=none; b=rdEf51y4XLVbSjws7iS//a1rs3UsVytgwaKSdxksWsCMNsl2ehcE8oXdq9JsoZDqaOXPWC1+Z6S7IFwJ6fZTMAwtiXZbHhtFtG0Xgy5lKFy2j/53JcXjZNM7yS4V6mQEYgKBMPdyWaGwRoy2JIcfUQo65iVQBOkcQ1nASDGKCgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745564958; c=relaxed/simple;
-	bh=XRJaobu20wNxHoup9s4R3YDQJkYv5i9HIMk9O25Dr6k=;
+	s=arc-20240116; t=1745565141; c=relaxed/simple;
+	bh=OWCgD4c53AWzLHmGkJc92XOEsxdbIrlrlIzldWXKc9c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gUPVdwd65aq/AdAe4L598+Ip8yRxYfTerbHqwp5usmyCDCYE+pYZvndFzClr2g6br8OQEaDHEsli9OMuraX/6cPA51P1dqyjCBXeZyCyR2N/9cyfpgrv0JFbHKlwdZ/MQ3rZIUmYhaqkt0UojvERFX9LE8TQ5kTuOoQqsBVTvr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WfgEML46; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B205AC4CEE4;
-	Fri, 25 Apr 2025 07:09:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745564958;
-	bh=XRJaobu20wNxHoup9s4R3YDQJkYv5i9HIMk9O25Dr6k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WfgEML463b0+bWtPIloy53Rqep5I1ojunbyxFP+bzc9GS2sAG8LRFar6fOcW3siuO
-	 IgP7K5EsZ6MZphcoA07kXQzRZG8ouQRTz9x1UlLLGL9Dy8KrEWrGdfsV01I8QjXWlm
-	 FErYl8AxCDHubZU1yT+tw3NHF9OveIHBZkpmYiIKVxsQkAMDqoU0BPZW/fLePr3Dpb
-	 JH+SnSZAIbQ3bSNGeGpOwudvdgH6b8FmITLdvJKt7L88ybptMF2UYs3N/bRXnEZ2n8
-	 e8pBVM32tAJLS1iedQXy1EGxWOOJtqFV/4Zhla839fffv+QnMDOjaIDiRjAtkYN1uG
-	 +KO9/gzMUiDZA==
-Date: Fri, 25 Apr 2025 09:09:15 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Michal Wilczynski <m.wilczynski@samsung.com>, 
-	Stephen Boyd <sboyd@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Pavel Machek <pavel@kernel.org>, Drew Fustini <drew@pdp7.com>, 
-	Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Frank Binns <frank.binns@imgtec.com>, 
-	Matt Coster <matt.coster@imgtec.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, m.szyprowski@samsung.com, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 1/4] PM: device: Introduce platform_resources_managed
- flag
-Message-ID: <20250425-lumpy-marmot-of-popularity-cdbbcd@houat>
-References: <CGME20250414185314eucas1p1ae57b937773a2ed4ce8d52d5598eb028@eucas1p1.samsung.com>
- <20250414-apr_14_for_sending-v2-0-70c5af2af96c@samsung.com>
- <20250414-apr_14_for_sending-v2-1-70c5af2af96c@samsung.com>
- <CAJZ5v0irRq8_p35vf41_ZgomW0X=KZN+0HqwU2K9PvPRm8iZQA@mail.gmail.com>
- <b9c4182d-38c2-4173-a35a-0e1773c8f2ed@samsung.com>
- <CAJZ5v0gE0anjW_mDSwNXY8xoZ_0=bDDxiSbUq1GP7-NycDojrQ@mail.gmail.com>
- <cbf20469-02ab-403a-8db7-2b66e9936b4f@samsung.com>
- <CAPDyKFqND2JrH8nLUzAqwWgHkwia6M9XOJoY6AqxtR0t120JUA@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=eMEJ03S67yG/8dxLqUPgWwAK44aMYEAu+MiKPOV4SJrRD0yFA4Km8F/oNk6s1QuZoBKlfrOK3nqTAYJIv9ahzCCz2QsD2pWOzRWLBVhaBiXYjvJ/DdO8aKHMZDYQJEUqTfg+SEIj0dmm4VW5GUEhdaaUjMvpIjBMMhH8EzLj0mc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Qw+6HPRA; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=/gz49BzCJiWld7uM47beLEzscI0nDdN8PKFhZbH8k1o=; b=Qw+6HPRAw2GLZXmgq20QS8wt0C
+	txn/mVTO91ykn5tuFL/uuYfAuUYz48Q+lrxxQKWB2g9D74CKa+ah99c2oA9gm4GaeNVuoBaXtLVTE
+	EIQdRwY5DRRXVVw52ts12pvJLUE9HqBbfk09qveKUwveCLkKx6mpx/Pt92hCzjodDWEFS+AyI99lE
+	XynTiM71ri22QAuhPkA1dOyMyrvoIpydTtDNIbY90QgKhPVFKkLiMxiJwtrCmY2XuUv18oexVkyGa
+	K2Yz5b9lN+AeV19kdukXXE8nn2xl4BF0X2TDbsW+JRVY+YdM++E1hfKHpu8kf3a1t1S5TXUufej/G
+	ZpKgJFCw==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
+	id 1u8DE6-0000000BzpF-0oO3;
+	Fri, 25 Apr 2025 07:11:58 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 9C8B63003C4; Fri, 25 Apr 2025 09:11:57 +0200 (CEST)
+Date: Fri, 25 Apr 2025 09:11:57 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: =?iso-8859-1?Q?J=FCrgen_Gro=DF?= <jgross@suse.com>
+Cc: "Xin Li (Intel)" <xin@zytor.com>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+	linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+	xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org, tglx@linutronix.de,
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, acme@kernel.org,
+	andrew.cooper3@citrix.com, namhyung@kernel.org,
+	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+	kan.liang@linux.intel.com, wei.liu@kernel.org,
+	ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+	tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
+	seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
+	kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com
+Subject: Re: [RFC PATCH v2 21/34] x86/msr: Utilize the alternatives mechanism
+ to write MSR
+Message-ID: <20250425071157.GI18306@noisy.programming.kicks-ass.net>
+References: <20250422082216.1954310-1-xin@zytor.com>
+ <20250422082216.1954310-22-xin@zytor.com>
+ <b2624e84-6fab-44a3-affc-ce0847cd3da4@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="vw35xu6fptfqmd4m"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="xy1v71s9LdcW622N"
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFqND2JrH8nLUzAqwWgHkwia6M9XOJoY6AqxtR0t120JUA@mail.gmail.com>
+In-Reply-To: <b2624e84-6fab-44a3-affc-ce0847cd3da4@suse.com>
 
 
---vw35xu6fptfqmd4m
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
+--xy1v71s9LdcW622N
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 1/4] PM: device: Introduce platform_resources_managed
- flag
-MIME-Version: 1.0
 
-Hi,
+On Tue, Apr 22, 2025 at 11:57:01AM +0200, J=FCrgen Gro=DF wrote:
+> On 22.04.25 10:22, Xin Li (Intel) wrote:
 
-On Thu, Apr 24, 2025 at 06:51:00PM +0200, Ulf Hansson wrote:
-> On Thu, 17 Apr 2025 at 18:19, Michal Wilczynski
-> <m.wilczynski@samsung.com> wrote:
-> > On 4/16/25 16:48, Rafael J. Wysocki wrote:
-> > > On Wed, Apr 16, 2025 at 3:32=E2=80=AFPM Michal Wilczynski
-> > > <m.wilczynski@samsung.com> wrote:
-> > >>
-> > >> On 4/15/25 18:42, Rafael J. Wysocki wrote:
-> > >>> On Mon, Apr 14, 2025 at 8:53=E2=80=AFPM Michal Wilczynski
-> > >>> <m.wilczynski@samsung.com> wrote:
-> > >>>>
-> > >>>> Introduce a new dev_pm_info flag - platform_resources_managed, to
-> > >>>> indicate whether platform PM resources such as clocks or resets are
-> > >>>> managed externally (e.g. by a generic power domain driver) instead=
- of
-> > >>>> directly by the consumer device driver.
-> > >>>
-> > >>> I think that this is genpd-specific and so I don't think it belongs=
- in
-> > >>> struct dev_pm_info.
-> > >>>
-> > >>> There is dev->power.subsys_data->domain_data, why not use it for th=
-is?
-> > >>
-> > >> Hi Rafael,
-> > >>
-> > >> Thanks for the feedback.
-> > >>
-> > >> You're right =E2=80=94 this behavior is specific to genpd, so embedd=
-ing the flag
-> > >> directly in struct dev_pm_info may not be the best choice. Using
-> > >> dev->power.subsys_data->domain_data makes more sense and avoids bloa=
-ting
-> > >> the core PM structure.
-> > >>
-> > >>>
-> > >>> Also, it should be documented way more comprehensively IMV.
-> > >>>
-> > >>> Who is supposed to set it and when?  What does it mean when it is s=
-et?
-> > >>
-> > >> To clarify the intended usage, I would propose adding the following
-> > >> explanation to the commit message:
-> > >>
-> > >> "This flag is intended to be set by a generic PM domain driver (e.g.,
-> > >> from within its attach_dev callback) to indicate that it will manage
-> > >> platform specific runtime power management resources =E2=80=94 such =
-as clocks
-> > >> and resets =E2=80=94 on behalf of the consumer device. This implies =
-a delegation
-> > >> of runtime PM control to the PM domain, typically implemented through
-> > >> its start and stop callbacks.
-> > >>
-> > >> When this flag is set, the consumer driver (e.g., drm/imagination) c=
-an
-> > >> check it and skip managing such resources in its runtime PM callbacks
-> > >> (runtime_suspend, runtime_resume), avoiding conflicts or redundant
-> > >> operations."
-> > >
-> > > This sounds good and I would also put it into a code comment somewher=
-e.
-> > >
-> > > I guess you'll need helpers for setting and testing this flag, so
-> > > their kerneldoc comments can be used for that.
-> > >
-> > >> This could also be included as a code comment near the flag definiti=
-on
-> > >> if you think that=E2=80=99s appropriate.
-> > >>
-> > >> Also, as discussed earlier with Maxime and Matt [1], this is not abo=
-ut
-> > >> full "resource ownership," but more about delegating runtime control=
- of
-> > >> PM resources like clocks/resets to the genpd. That nuance may be wor=
-th
-> > >> reflecting in the flag name as well, I would rename it to let's say
-> > >> 'runtime_pm_platform_res_delegated', or more concise
-> > >> 'runtime_pm_delegated'.
-> > >
-> > > Or just "rpm_delegated" I suppose.
-> > >
-> > > But if the genpd driver is going to set that flag, it will rather mean
-> > > that this driver will now control the resources in question, so the
-> > > driver should not attempt to manipulate them directly.  Is my
-> > > understanding correct?
-> >
-> > Yes, your understanding is correct =E2=80=94 with one minor clarificati=
-on.
-> >
-> > When the genpd driver sets the flag, it indicates that it will take over
-> > control of the relevant PM resources in the context of runtime PM, i.e.,
-> > via its start() and stop() callbacks. As a result, the device driver
-> > should not manipulate those resources from within its RUNTIME_PM_OPS
-> > (e.g., runtime_suspend, runtime_resume) to avoid conflicts.
-> >
-> > However, outside of the runtime PM callbacks, the consumer device driver
-> > may still access or use those resources if needed e.g for devfreq.
-> >
-> > >
-> > > Assuming that it is correct, how is the device driver going to know
-> > > which resources in particular are now controlled by the genpd driver?
-> >
-> > Good question =E2=80=94 to allow finer-grained control, we could replac=
-e the
-> > current single boolean flag with a u32 bitmask field. Each bit would
-> > correspond to a specific category of platform managed resources. For
-> > example:
-> >
-> > #define RPM_TAKEOVER_CLK        BIT(0)
-> > #define RPM_TAKEOVER_RESET      BIT(1)
-> >
-> > This would allow a PM domain driver to selectively declare which
-> > resources it is taking over and let the consumer driver query only the
-> > relevant parts.
+> >    This becomes even more silly for trivial instructions like STI/CLI
+> >    or in the worst case paravirt_nop().
 >=20
-> Assuming we are targeting device specific resources for runtime PM;
-> why would we want the driver to be responsible for some resources and
-> the genpd provider for some others? I would assume we want to handle
-> all these RPM-resources from the genpd provider, if/when possible,
-> right?
->=20
-> The tricky part though (maybe Stephen had some ideas in his talk [a]
-> at OSS), is to teach the genpd provider about what resources it should
-> handle. In principle the genpd provider will need some kind of device
-> specific knowledge, perhaps based on the device's compatible-string
-> and description in DT.
->=20
-> My point is, using a bitmask doesn't scale as it would end up having
-> one bit for each clock (a device may have multiple clocks), regulator,
-> pinctrl, phy, etc. In principle, reflecting the description in DT.
+> This is nonsense.
 
-My understanding is that it's to address a situation where a "generic"
-driver interacts with some platform specific code. I think it's tied to
-the discussion with the imagination GPU driver handling his clocks, and
-the platform genpd clocks overlapping a bit.
+What Jurgen says. Someone hasn't done their homework.
 
-But then, my question is: does it matter? clocks are refcounted, and
-resets are as well iirc, so why do we need a transition at all? Can't we
-just let the platform genpd code take a reference on the clock, the GPU
-driver take one as well, and it's all good, right?
+static __always_inline void arch_local_irq_disable(void)
+{
+        PVOP_ALT_VCALLEE0(irq.irq_disable, "cli;", ALT_NOT_XEN);
+}
 
-Maxime
+static __always_inline void arch_local_irq_enable(void)
+{
+        PVOP_ALT_VCALLEE0(irq.irq_enable, "sti;", ALT_NOT_XEN);
+}
 
---vw35xu6fptfqmd4m
+That very much patches in STI/CLI directly when not Xen.
+
+
+--xy1v71s9LdcW622N
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCaAs1GwAKCRAnX84Zoj2+
-do8sAX9FbcAEu04m80R/QWM9SUbClB57KbU/Zbb/SrxS41bJSYzLDFQbballhRWa
-UWhmg2YBfRcskqou4btHfDm4ChKCQ7giQfUQ0IOm9WRVcNZTCKQJvrz64wvKsA7C
-NKJ4T4yLqA==
-=loki
+iQIzBAABCgAdFiEEv3OU3/byMaA0LqWJdkfhpEvA5LoFAmgLNbQACgkQdkfhpEvA
+5LoeWg/8D6ZI5w51DgwY+CTaX5PthgVGKgELCKDw5kBtAe3UxeF/H12T6L6a4XhK
+iSGZ9nZg17P5b2kv9cfXnslz/BqlOUjFfT+cuY64cIDvGXPqjbEcWxhHp/O7e34u
+L1wOXvlh5ZnWkVUPbeIFgLxCqPqOnGBpsq0LrQwaCxbEzkB5wKqS57h2ooqsrloQ
+V4WBwabMJ/lp704zpEgcqzWhM8zWydjPgfGuCZUTbVlvc4pgAGAwktnRd7ot+D4x
+n9UbVvBHSzW53t3RpsrzcQkVDGirtlcIipDUbPeIyTs+ArR+xfBiEl7QvXz1liAg
+GiJ7aNB/6PybXktHZBkEoRd/3sPBavWiOc1TMriCjWit/pNE+GJjUUozds3kRe/v
+pwMTYEbXlPYsgYv121YZpFaaz1ihVlIpnDj/6aqMTe+KQhAziId4CtU8pfSHYZi3
+EgC+1PUUySs0LV4TkieDsk1zmfG1lDvWNe5UKyuFYKQ/A99Kg3BacBJHc+PrZDMq
+X7MfWZLRG++yhbcBPfHasl6Vg++GagMpoJLKp5zC9QaTUjRdvYm36SR0NvOC+BAt
+NPIq3H7qbBLYR0JBaJrgNSqe+1rPgJooo5PYg1Ozmv4q50Umlai3coKqls3pnTIe
+zwUVnBTjAszAW1zI3BcSrm5Ol912qJXA7AzxV+FRiKDC+kIRaU4=
+=t7cf
 -----END PGP SIGNATURE-----
 
---vw35xu6fptfqmd4m--
+--xy1v71s9LdcW622N--
 
