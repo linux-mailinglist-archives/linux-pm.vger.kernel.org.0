@@ -1,155 +1,371 @@
-Return-Path: <linux-pm+bounces-26211-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26212-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75E85A9C75F
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 13:23:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A81C3A9C7BA
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 13:36:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93E7A7A1A3A
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 11:22:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD56A9A285D
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 11:36:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9886243367;
-	Fri, 25 Apr 2025 11:20:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E04723E32D;
+	Fri, 25 Apr 2025 11:36:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="QVSZywrF"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="Xh1Wztcr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 138742288D5;
-	Fri, 25 Apr 2025 11:20:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0DF41C7019;
+	Fri, 25 Apr 2025 11:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745580024; cv=none; b=Z8ebfHmCCgsPNE0gCXuqY0WHSJWWldOJCGIjjdbSQHPsXtOXlFV5MJ9iBIPSywsSnEe8VZggmNeeFk0k45m1GmQxYvPPZwYemz0OgYN3Q1neNqeXnEwCxVBtcMtXnxcngeOA5FITsZuUHilUC+CU7jITLFytxiTYsDVeV/macLQ=
+	t=1745580987; cv=none; b=s2tzPjw8sDiL9mAKBCUQNtyr2y1Uk3aPq5bRaBn+59L0HAzoMt/WITmOPTCmi2APX/bPLj2QYHix65amv+agW5UmJUSbS4WLayZks76y625E6aNoy271qHRgTQsJ64yxiD+HzgtNs2HwkVUvc6UWzfSUsnHmN8BhxyM+S1Bd5R0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745580024; c=relaxed/simple;
-	bh=TJZh81SjEZBDNhoT9ldG/mkGWaLykL+jklT1+eZXI38=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Vi5rkVEIYV31iQOZVyAZ7VPyvn4hurccjKFMmY87Dx89NH4usTUWbhHCpaWfzmr4TqBLc+9+2Fc/VbU5jfGYkOtPFWvL90EOiB7nQhWHCWoMsjXyAr+qsv3QQeLOd+FAdrTHCwVygK5QXVoCt+WWrdtgXMyUSU0rEoUcBbq8MGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QVSZywrF; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53P8T9H6023852;
-	Fri, 25 Apr 2025 11:20:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	oQSr+itK2RuL/7zySkrXmf0a0tlBOxk8aa7gHC44CDQ=; b=QVSZywrFH8vDP09C
-	FZJS+L6X2WhQKKHhy0dek5Ijh6TZVr2AHUKJfxsgWcDcpholwQUAnFxcvRne+aWd
-	Fh7einHAmDWzyAd29q2qjkLl5aXEQ6f9qKey1n9fGHiffYib1d+wVbfbDhqu7gF3
-	vY3R4OwBzHyeXegoMS5HXy9NFniwG1SsQBwvBwNPGlZsM78ZlbObpt+1KP+Qx4VV
-	jpuM03rLeLb0LtS1862BPG6307f9Trm7KRuMFP3xs322Q90jPRO+n0NltYwBr+dL
-	bsMSdWKuvoAXU0qjnop6SE4SGqKYYjlxQPeN841uDDzuZ1CEn3gP9gL9wqId+ZZm
-	XUhvdA==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 466jh1rtgu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 25 Apr 2025 11:20:15 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53PBKE4K016706
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 25 Apr 2025 11:20:14 GMT
-Received: from [10.253.74.112] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 25 Apr
- 2025 04:20:12 -0700
-Message-ID: <fe68d36d-f8b2-42ac-88d9-aeabf3499fd0@quicinc.com>
-Date: Fri, 25 Apr 2025 19:20:10 +0800
+	s=arc-20240116; t=1745580987; c=relaxed/simple;
+	bh=DiVgONnmv/ugt2vXgBHByfcgfOzKwAvtnmcDLB08c48=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=C9uFnbXl/U3S47ig+kQ+VFWiKWW0XCOcAraNHnfoIs/Hy2U4dqO1p2+6CacVYJjDm8CYAOc1UMytr1ioOxjsk6e/MBmltAImmYakqSSC+SkeR+vDbLeftXVBy/+tDC6XwdkVKO8UtbVOQuKjX/4nep8WlNdBZ+ayXz9IbyImLHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=Xh1Wztcr; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from kreacher.localnet (unknown [217.114.34.19])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id BC4F366335E;
+	Fri, 25 Apr 2025 13:36:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1745580982;
+	bh=DiVgONnmv/ugt2vXgBHByfcgfOzKwAvtnmcDLB08c48=;
+	h=From:Subject:Date;
+	b=Xh1WztcrBn6Z0N8rI9ujPfXHzoBBMnammm5dJBa4+ukPiiJzt0UC9Ds+3wB1PbL0c
+	 bW28ctLiJFDK+TXtLy6jaH6HRNqkLgS4pQSBz6VVSlasdQsNTqpDaCdb1+SN9pBSIN
+	 WrColXPuEijNtoY74JuvWIglayPwXJMhUA+KD44z89XPzZVvdtkp1IRnSHmCCaR3BB
+	 tedRW1xOZFtUl/FKiY0cH6IEdGUMfccKaSrAdVaa3CQc045/qJLf3k0NfMt1Q/IZWZ
+	 NlTJAo8mr3R8YYmEbwOmzlsn0GqPm32nl4fHGrbRDxrPQjr3uhkh8WK5cv8pZsjW/b
+	 dnIedOPccElcg==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: Christian Loehle <christian.loehle@arm.com>,
+ LKML <linux-kernel@vger.kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Sultan Alsawaf <sultan@kerneltoast.com>,
+ Stephan Gerhold <stephan.gerhold@linaro.org>,
+ "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject:
+ [PATCH v2] cpufreq: Fix setting policy limits when frequency tables are used
+Date: Fri, 25 Apr 2025 13:36:21 +0200
+Message-ID: <5896780.DvuYhMxLoT@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] PM: QoS: Add support for CPU affinity mask-based CPUs
- latency QoS
-To: Christian Loehle <christian.loehle@arm.com>, <rafael@kernel.org>,
-        <pavel@kernel.org>, <len.brown@intel.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20250424095228.1112558-1-quic_zhonhan@quicinc.com>
- <31742ec7-c1c5-4cb9-8c13-a30b7a6033be@arm.com>
-Content-Language: en-US
-From: Zhongqiu Han <quic_zhonhan@quicinc.com>
-In-Reply-To: <31742ec7-c1c5-4cb9-8c13-a30b7a6033be@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: sJBj20LxjBKR4w6FHmX0sxSMdrn_TBP6
-X-Proofpoint-ORIG-GUID: sJBj20LxjBKR4w6FHmX0sxSMdrn_TBP6
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDI1MDA4MSBTYWx0ZWRfX7uMFVfnMRP86 01wl2i3UKngLMqRlCt6Kei0vc4MMQ/773ieLUqrNMVyv+3EH/AShz3lHSjQ9sqzZfRjYdlXfdbM AZcqCltUVMB8Kis+PEHg2WXtfmyNgwLejyuToEyVaZlCb+WvlVobuTA5er/Pv+yqiy9K8FVGlIR
- whNqFfYea6c1gay74pTq2kLIIOLJ+tFuMChXP4vIdRn4IbIjJ2mZuTTJ8hNUUQPxgiNO4Rj1T9m 913PF80C/J1CYDCN2EQ40MAHQCAlJ7ip2vRmPpCnEGJcx3MCqf/CcGTq5i7j8S72U2mbD/s5lV0 vx34Qc2jGt3U0bwv8R6GVd9nJRzdSDGYZVovjj6hYaUp3sPUg4/tvjlExFgJ6LVP7i0mcmMFUjU
- 6P6R5FuDnGWvsn3ZQgbhNoK/lvSc9V55NolnYjEObNVjicUKmul92o7DR7vkNnpaG8kh2cgM
-X-Authority-Analysis: v=2.4 cv=ZpjtK87G c=1 sm=1 tr=0 ts=680b6fef cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=COk6AnOGAAAA:8 a=aQTRFtgv6h2UHWNZ-SkA:9 a=QEXdDO2ut3YA:10
- a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-04-25_03,2025-04-24_02,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- lowpriorityscore=0 priorityscore=1501 phishscore=0 clxscore=1015
- bulkscore=0 suspectscore=0 mlxlogscore=955 spamscore=0 impostorscore=0
- mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2504250081
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 217.114.34.19
+X-CLIENT-HOSTNAME: 217.114.34.19
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvhedvvdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddujedruddugedrfeegrdduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudejrdduudegrdefgedrudelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeelpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheptghhrhhishhtihgrnhdrlhhovghhlhgvsegrrhhmrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvhhirhgvshhhrdhkuhhmrghrsehlihhnrghrohdrohhrghdprhgtphhtthhopehsrhh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9 Fuz2=9
 
-On 4/24/2025 6:25 PM, Christian Loehle wrote:
-> On 4/24/25 10:52, Zhongqiu Han wrote:
->> Currently, the PM QoS framework supports global CPU latency QoS and
->> per-device CPU latency QoS requests. An example of using global CPU
->> latency QoS is a commit 2777e73fc154 ("scsi: ufs: core: Add CPU latency
->> QoS support for UFS driver") that improved random io performance by 15%
->> for ufs on specific device platform.
->>
->> However, this prevents all CPUs in the system from entering C states.
->> Typically, some threads or drivers know which specific CPUs they are
->> interested in. For example, drivers with IRQ affinity only want interrupts
->> to wake up and be handled on specific CPUs. Similarly, kernel thread bound
->> to specific CPUs through affinity only care about the latency of those
->> particular CPUs.
->>
->> This patch introduces support for partial CPUs PM QoS using a CPU affinity
->> mask, allowing flexible and more precise latency QoS settings for specific
->> CPUs. This can help save power, especially on heterogeneous platforms with
->> big and little cores, as well as some power-conscious embedded systems for
->> example:
->>
->>                    driver A       rt kthread B      module C
->> QoS cpu mask:       0-3              2-5              6-7
->> target latency:     20               30               50
->>                      |                |                |
->>                      v                v                v
->>                      +---------------------------------+
->>                      |        PM  QoS  Framework       |
->>                      +---------------------------------+
->>                      |                |                |
->>                      v                v                v
->> cpu mask:          0-3            2-3,4-5            6-7
->> actual latency:    20             20, 30             50
->>
->> Implement this support based on per-device CPU latency PM QoS.
->>
->> Signed-off-by: Zhongqiu Han <quic_zhonhan@quicinc.com>
-> 
-> I like the idea!
-> The interface does need an in-tree user, why not convert the UFS driver?
-> 
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Thanks Christian for the review.
+Commit 7491cdf46b5c ("cpufreq: Avoid using inconsistent policy->min and
+policy->max") overlooked the fact that policy->min and policy->max were
+accessed directly in cpufreq_frequency_table_target() and in the
+functions called by it.  Consequently, the changes made by that commit
+led to problems with setting policy limits.
 
-As far as I know, the UFS IRQ affinity varies across different
-platforms, so a universal solution is needed (we need to investigate
-whether there is already a solution or add parameters like intr_mask to
-represent the IRQ affinity mask). Let me investigate it, or raise other
-user patches as a patch series in PATCH v2 as soon as possible. Thanks
+Address this by passing the target frequency limits to __resolve_freq()
+and cpufreq_frequency_table_target() and propagating them to the
+functions called by the latter.
+
+Fixes: 7491cdf46b5c ("cpufreq: Avoid using inconsistent policy->min and policy->max")
+Link: https://lore.kernel.org/linux-pm/aAplED3IA_J0eZN0@linaro.org/
+Reported-by: Stephan Gerhold <stephan.gerhold@linaro.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+The v1 is here: https://lore.kernel.org/linux-pm/12665363.O9o76ZdvQC@rjwysocki.net/
+
+v1 -> v2:
+   * Do clamp_val(target_freq, min, max) before checking freq_table against
+     NULL in __resolve_freq().
+   * Update comment in cpufreq_frequency_table_target() to match the new code.
+
+---
+ drivers/cpufreq/cpufreq.c          |   22 ++++++---
+ drivers/cpufreq/cpufreq_ondemand.c |    3 -
+ drivers/cpufreq/freq_table.c       |    6 +-
+ include/linux/cpufreq.h            |   83 ++++++++++++++++++++++++-------------
+ 4 files changed, 73 insertions(+), 41 deletions(-)
+
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -491,14 +491,18 @@
+ EXPORT_SYMBOL_GPL(cpufreq_disable_fast_switch);
+ 
+ static unsigned int __resolve_freq(struct cpufreq_policy *policy,
+-		unsigned int target_freq, unsigned int relation)
++				   unsigned int target_freq,
++				   unsigned int min, unsigned int max,
++				   unsigned int relation)
+ {
+ 	unsigned int idx;
+ 
++	target_freq = clamp_val(target_freq, min, max);
++
+ 	if (!policy->freq_table)
+ 		return target_freq;
+ 
+-	idx = cpufreq_frequency_table_target(policy, target_freq, relation);
++	idx = cpufreq_frequency_table_target(policy, target_freq, min, max, relation);
+ 	policy->cached_resolved_idx = idx;
+ 	policy->cached_target_freq = target_freq;
+ 	return policy->freq_table[idx].frequency;
+@@ -532,8 +536,7 @@
+ 	if (unlikely(min > max))
+ 		min = max;
+ 
+-	return __resolve_freq(policy, clamp_val(target_freq, min, max),
+-			      CPUFREQ_RELATION_LE);
++	return __resolve_freq(policy, target_freq, min, max, CPUFREQ_RELATION_LE);
+ }
+ EXPORT_SYMBOL_GPL(cpufreq_driver_resolve_freq);
+ 
+@@ -2351,8 +2354,8 @@
+ 	if (cpufreq_disabled())
+ 		return -ENODEV;
+ 
+-	target_freq = clamp_val(target_freq, policy->min, policy->max);
+-	target_freq = __resolve_freq(policy, target_freq, relation);
++	target_freq = __resolve_freq(policy, target_freq, policy->min,
++				     policy->max, relation);
+ 
+ 	pr_debug("target for CPU %u: %u kHz, relation %u, requested %u kHz\n",
+ 		 policy->cpu, target_freq, relation, old_target_freq);
+@@ -2650,8 +2653,11 @@
+ 	 * compiler optimizations around them because they may be accessed
+ 	 * concurrently by cpufreq_driver_resolve_freq() during the update.
+ 	 */
+-	WRITE_ONCE(policy->max, __resolve_freq(policy, new_data.max, CPUFREQ_RELATION_H));
+-	new_data.min = __resolve_freq(policy, new_data.min, CPUFREQ_RELATION_L);
++	WRITE_ONCE(policy->max, __resolve_freq(policy, new_data.max,
++					       new_data.min, new_data.max,
++					       CPUFREQ_RELATION_H));
++	new_data.min = __resolve_freq(policy, new_data.min, new_data.min,
++				      new_data.max, CPUFREQ_RELATION_L);
+ 	WRITE_ONCE(policy->min, new_data.min > policy->max ? policy->max : new_data.min);
+ 
+ 	trace_cpu_frequency_limits(policy);
+--- a/drivers/cpufreq/cpufreq_ondemand.c
++++ b/drivers/cpufreq/cpufreq_ondemand.c
+@@ -76,7 +76,8 @@
+ 		return freq_next;
+ 	}
+ 
+-	index = cpufreq_frequency_table_target(policy, freq_next, relation);
++	index = cpufreq_frequency_table_target(policy, freq_next, policy->min,
++					       policy->max, relation);
+ 	freq_req = freq_table[index].frequency;
+ 	freq_reduc = freq_req * od_tuners->powersave_bias / 1000;
+ 	freq_avg = freq_req - freq_reduc;
+--- a/drivers/cpufreq/freq_table.c
++++ b/drivers/cpufreq/freq_table.c
+@@ -115,8 +115,8 @@
+ EXPORT_SYMBOL_GPL(cpufreq_generic_frequency_table_verify);
+ 
+ int cpufreq_table_index_unsorted(struct cpufreq_policy *policy,
+-				 unsigned int target_freq,
+-				 unsigned int relation)
++				 unsigned int target_freq, unsigned int min,
++				 unsigned int max, unsigned int relation)
+ {
+ 	struct cpufreq_frequency_table optimal = {
+ 		.driver_data = ~0,
+@@ -147,7 +147,7 @@
+ 	cpufreq_for_each_valid_entry_idx(pos, table, i) {
+ 		freq = pos->frequency;
+ 
+-		if ((freq < policy->min) || (freq > policy->max))
++		if (freq < min || freq > max)
+ 			continue;
+ 		if (freq == target_freq) {
+ 			optimal.driver_data = i;
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -788,8 +788,8 @@
+ int cpufreq_generic_frequency_table_verify(struct cpufreq_policy_data *policy);
+ 
+ int cpufreq_table_index_unsorted(struct cpufreq_policy *policy,
+-				 unsigned int target_freq,
+-				 unsigned int relation);
++				 unsigned int target_freq, unsigned int min,
++				 unsigned int max, unsigned int relation);
+ int cpufreq_frequency_table_get_index(struct cpufreq_policy *policy,
+ 		unsigned int freq);
+ 
+@@ -852,12 +852,12 @@
+ 	return best;
+ }
+ 
+-/* Works only on sorted freq-tables */
+-static inline int cpufreq_table_find_index_l(struct cpufreq_policy *policy,
+-					     unsigned int target_freq,
+-					     bool efficiencies)
++static inline int find_index_l(struct cpufreq_policy *policy,
++			       unsigned int target_freq,
++			       unsigned int min, unsigned int max,
++			       bool efficiencies)
+ {
+-	target_freq = clamp_val(target_freq, policy->min, policy->max);
++	target_freq = clamp_val(target_freq, min, max);
+ 
+ 	if (policy->freq_table_sorted == CPUFREQ_TABLE_SORTED_ASCENDING)
+ 		return cpufreq_table_find_index_al(policy, target_freq,
+@@ -867,6 +867,14 @@
+ 						   efficiencies);
+ }
+ 
++/* Works only on sorted freq-tables */
++static inline int cpufreq_table_find_index_l(struct cpufreq_policy *policy,
++					     unsigned int target_freq,
++					     bool efficiencies)
++{
++	return find_index_l(policy, target_freq, policy->min, policy->max, efficiencies);
++}
++
+ /* Find highest freq at or below target in a table in ascending order */
+ static inline int cpufreq_table_find_index_ah(struct cpufreq_policy *policy,
+ 					      unsigned int target_freq,
+@@ -920,12 +928,12 @@
+ 	return best;
+ }
+ 
+-/* Works only on sorted freq-tables */
+-static inline int cpufreq_table_find_index_h(struct cpufreq_policy *policy,
+-					     unsigned int target_freq,
+-					     bool efficiencies)
++static inline int find_index_h(struct cpufreq_policy *policy,
++			       unsigned int target_freq,
++			       unsigned int min, unsigned int max,
++			       bool efficiencies)
+ {
+-	target_freq = clamp_val(target_freq, policy->min, policy->max);
++	target_freq = clamp_val(target_freq, min, max);
+ 
+ 	if (policy->freq_table_sorted == CPUFREQ_TABLE_SORTED_ASCENDING)
+ 		return cpufreq_table_find_index_ah(policy, target_freq,
+@@ -935,6 +943,14 @@
+ 						   efficiencies);
+ }
+ 
++/* Works only on sorted freq-tables */
++static inline int cpufreq_table_find_index_h(struct cpufreq_policy *policy,
++					     unsigned int target_freq,
++					     bool efficiencies)
++{
++	return find_index_h(policy, target_freq, policy->min, policy->max, efficiencies);
++}
++
+ /* Find closest freq to target in a table in ascending order */
+ static inline int cpufreq_table_find_index_ac(struct cpufreq_policy *policy,
+ 					      unsigned int target_freq,
+@@ -1005,12 +1021,12 @@
+ 	return best;
+ }
+ 
+-/* Works only on sorted freq-tables */
+-static inline int cpufreq_table_find_index_c(struct cpufreq_policy *policy,
+-					     unsigned int target_freq,
+-					     bool efficiencies)
++static inline int find_index_c(struct cpufreq_policy *policy,
++			       unsigned int target_freq,
++			       unsigned int min, unsigned int max,
++			       bool efficiencies)
+ {
+-	target_freq = clamp_val(target_freq, policy->min, policy->max);
++	target_freq = clamp_val(target_freq, min, max);
+ 
+ 	if (policy->freq_table_sorted == CPUFREQ_TABLE_SORTED_ASCENDING)
+ 		return cpufreq_table_find_index_ac(policy, target_freq,
+@@ -1020,7 +1036,17 @@
+ 						   efficiencies);
+ }
+ 
+-static inline bool cpufreq_is_in_limits(struct cpufreq_policy *policy, int idx)
++/* Works only on sorted freq-tables */
++static inline int cpufreq_table_find_index_c(struct cpufreq_policy *policy,
++					     unsigned int target_freq,
++					     bool efficiencies)
++{
++	return find_index_c(policy, target_freq, policy->min, policy->max, efficiencies);
++}
++
++static inline bool cpufreq_is_in_limits(struct cpufreq_policy *policy,
++					unsigned int min, unsigned int max,
++					int idx)
+ {
+ 	unsigned int freq;
+ 
+@@ -1029,11 +1055,13 @@
+ 
+ 	freq = policy->freq_table[idx].frequency;
+ 
+-	return freq == clamp_val(freq, policy->min, policy->max);
++	return freq == clamp_val(freq, min, max);
+ }
+ 
+ static inline int cpufreq_frequency_table_target(struct cpufreq_policy *policy,
+ 						 unsigned int target_freq,
++						 unsigned int min,
++						 unsigned int max,
+ 						 unsigned int relation)
+ {
+ 	bool efficiencies = policy->efficiencies_available &&
+@@ -1044,29 +1072,26 @@
+ 	relation &= ~CPUFREQ_RELATION_E;
+ 
+ 	if (unlikely(policy->freq_table_sorted == CPUFREQ_TABLE_UNSORTED))
+-		return cpufreq_table_index_unsorted(policy, target_freq,
+-						    relation);
++		return cpufreq_table_index_unsorted(policy, target_freq, min,
++						    max, relation);
+ retry:
+ 	switch (relation) {
+ 	case CPUFREQ_RELATION_L:
+-		idx = cpufreq_table_find_index_l(policy, target_freq,
+-						 efficiencies);
++		idx = find_index_l(policy, target_freq, min, max, efficiencies);
+ 		break;
+ 	case CPUFREQ_RELATION_H:
+-		idx = cpufreq_table_find_index_h(policy, target_freq,
+-						 efficiencies);
++		idx = find_index_h(policy, target_freq, min, max, efficiencies);
+ 		break;
+ 	case CPUFREQ_RELATION_C:
+-		idx = cpufreq_table_find_index_c(policy, target_freq,
+-						 efficiencies);
++		idx = find_index_c(policy, target_freq, min, max, efficiencies);
+ 		break;
+ 	default:
+ 		WARN_ON_ONCE(1);
+ 		return 0;
+ 	}
+ 
+-	/* Limit frequency index to honor policy->min/max */
+-	if (!cpufreq_is_in_limits(policy, idx) && efficiencies) {
++	/* Limit frequency index to honor min and max */
++	if (!cpufreq_is_in_limits(policy, min, max, idx) && efficiencies) {
+ 		efficiencies = false;
+ 		goto retry;
+ 	}
 
 
--- 
-Thx and BRs,
-Zhongqiu Han
+
 
