@@ -1,78 +1,113 @@
-Return-Path: <linux-pm+bounces-26255-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26256-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15989A9D299
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 22:01:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C31C9A9D2BF
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 22:14:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 65B0516EAC2
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 20:01:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AB379E6E84
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 20:13:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0179B21ADC6;
-	Fri, 25 Apr 2025 20:01:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B099221D83;
+	Fri, 25 Apr 2025 20:14:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HAMR8O0x"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="LoudM2O5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C976720F09A;
-	Fri, 25 Apr 2025 20:01:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF7018DB02;
+	Fri, 25 Apr 2025 20:14:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745611304; cv=none; b=ewFk5/aMxGIVq0IfkBbQbwgeIjcAMLSgS+ACJ5ZkW+ayMlEcTOjf8sYhKE53sO5VWRcfvLKpya0l4W9ZP/hX+vLTFS0qkTZW5HVA8/qwAgz23pVJFQUJi7majITUn8kbaT3SFSAGDNz+RgYwqimVP8akBfEZnxmx0N7g36cna3Y=
+	t=1745612044; cv=none; b=sp91BArNqj6Phs9RWqq1MVLvwgfgUHUJ4KqFkOmKpLEUbAkITnWByLNJz6YiCTxjKGE6I4buakGEE1x8oO6XJPBHsI4wk6rE/QETq/FCSmm1Q7SUHYpkr45s6xS2nvM0Kv81p/v0i0NfL8yLNeVqeBUVx92rAgrwNj6eKEJmii0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745611304; c=relaxed/simple;
-	bh=CWqSbvP1vf5fJCq2fhgrtKNZ8y989GEEweum4GdrVKY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WUocDhhpryVXpHrOLizVrofm+etlMo/nQQhWjuwBmgKYnNshDqySz2JUDMWhLwyAAB/GeHSH7WCMcwXdgF+Fx0fwK6V+xyF/vb0mgZV/GDnIMh3u4Uhdl5mnaGOUfZqEL/uNoJXMOdPtGAP6VdW8nklpDLDS8F5hqIvb7OLR1cU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HAMR8O0x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17E43C4CEE4;
-	Fri, 25 Apr 2025 20:01:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745611304;
-	bh=CWqSbvP1vf5fJCq2fhgrtKNZ8y989GEEweum4GdrVKY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HAMR8O0xrVbupS8hLjfFN9xyhZgLd/Utq6N4B81O0miq6yDPUHZZ3WKJLJVyW4bGe
-	 NeFhNd2aWKiu51u4E5wBGK+Hv3nP2vPdi5BAjl4fSdOzDNPIj+0kpSkeiLqNaxKQ1+
-	 ecupFY8zEPk/AonsQEqoGMmY9ZvV9FquTy23KmWEqIU7zimSS8EG/rs4gM8hwJmR4n
-	 1KhBLrIxHMl7HA3CONYnc1O1IPuLO03djvzGp4KO18jBLPyVZQ+JolfzSNwx/AexKu
-	 jesHDXjs/NdfhIcnTLUkmskeCJ13+if+XTk2UHQ31huDRpmXOxGvpEUZS50Na1YOd6
-	 3qXgvm2aDhYJA==
-Date: Fri, 25 Apr 2025 15:01:42 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Aaron Kling <webgeek1234@gmail.com>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-pm@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: power: supply: bq24190: Add BQ24193
- compatible
-Message-ID: <174561130148.2899068.1124212461285963962.robh@kernel.org>
-References: <20250421-bq24193-v1-0-f125ef396d24@gmail.com>
- <20250421-bq24193-v1-1-f125ef396d24@gmail.com>
+	s=arc-20240116; t=1745612044; c=relaxed/simple;
+	bh=Pgn/TZ1ujuuwbnzguLrmQLLDyPec5k7g882M+f0Gsi8=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=M9+r+P3gfZZetmZPbQhgWB/kwEhQGCGOHh6DMLbBvuv28JJuzmumxl9PNeMdB0spGiXuGhjl55np4YEU91C1+fiudletsi2dNvqfI4/I0LQHK7DAkDRM+XiIbBUTghzGQUMTt+PIEkszl1ft79YZ0NKgeLvpx8STCVscfwmNI/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=LoudM2O5; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [127.0.0.1] ([76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53PKCYWU3252234
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 25 Apr 2025 13:12:35 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53PKCYWU3252234
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025042001; t=1745611957;
+	bh=Pgn/TZ1ujuuwbnzguLrmQLLDyPec5k7g882M+f0Gsi8=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=LoudM2O5Ggb8UKAE6BloQQgcPc3DDE93Uie4tiM2kEIfkYTDiUipcf8Neu/KvASRD
+	 bE9VD4R7oFqzmvtHTCFXcREprEax191bGlgx7zIbx5omdo51jLm5RkfhQX4yDbIVRa
+	 GVL5VijALlpGtEZskIkKxZJvEBt7FnMylbJIzjd/5nwjnzxaNo83Yy1fNK7XF6PF8t
+	 DnRu+iOKDqlUdSjj+DZ7GCvEpBZIZH9XdMoGw1VbkegsrdCwgEQlt1Pl2oarHuisPj
+	 gl4+pko/7dDkS+MuVeY76Vou/tfvTznub+Ylyb0SFF25MRCp2uGdpU5pdOUWL4jNE7
+	 1qvVj2z6FqDTA==
+Date: Fri, 25 Apr 2025 13:12:33 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: =?ISO-8859-1?Q?J=FCrgen_Gro=DF?= <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>
+CC: Xin Li <xin@zytor.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, acme@kernel.org,
+        andrew.cooper3@citrix.com, namhyung@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+        haiyangz@microsoft.com, decui@microsoft.com
+Subject: =?US-ASCII?Q?Re=3A_=5BRFC_PATCH_v2_21/34=5D_x86/msr=3A_Utiliz?=
+ =?US-ASCII?Q?e_the_alternatives_mechanism_to_write_MSR?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <35979102-2eb2-4566-b32a-f2b02ded8ae6@suse.com>
+References: <20250422082216.1954310-1-xin@zytor.com> <20250422082216.1954310-22-xin@zytor.com> <b2624e84-6fab-44a3-affc-ce0847cd3da4@suse.com> <f7198308-e8f8-4cc5-b884-24bc5f408a2a@zytor.com> <37c88ea3-dd24-4607-9ee1-0f19025aaef3@suse.com> <20250425123317.GB22125@noisy.programming.kicks-ass.net> <35979102-2eb2-4566-b32a-f2b02ded8ae6@suse.com>
+Message-ID: <D4ADDBA5-D9B8-4DD5-8D83-8CD482700E71@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250421-bq24193-v1-1-f125ef396d24@gmail.com>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
+On April 25, 2025 5:51:27 AM PDT, "J=C3=BCrgen Gro=C3=9F" <jgross@suse=2Eco=
+m> wrote:
+>On 25=2E04=2E25 14:33, Peter Zijlstra wrote:
+>> On Wed, Apr 23, 2025 at 06:05:19PM +0200, J=C3=BCrgen Gro=C3=9F wrote:
+>>=20
+>>>> It's not a major change, but when it is patched to use the immediate
+>>>> form MSR write instruction, it's straightforwardly streamlined=2E
+>>>=20
+>>> It should be rather easy to switch the current wrmsr/rdmsr paravirt pa=
+tching
+>>> locations to use the rdmsr/wrmsr instructions instead of doing a call =
+to
+>>> native_*msr()=2E
+>>=20
+>> Right, just make the Xen functions asm stubs that expect the instructio=
+n
+>> registers instead of C-abi and ALT_NOT_XEN the thing=2E
+>>=20
+>> Shouldn't be hard at all=2E
+>
+>Correct=2E And for the new immediate form we can use ALTERNATIVE_3()=2E
+>
+>
+>Juergen
 
-On Mon, 21 Apr 2025 23:27:33 -0500, Aaron Kling wrote:
-> The BQ24193 is most similar to the BQ24192. This is used in many Nvidia
-> Tegra devices such as the SHIELD Portable.
-> 
-> Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
-> ---
->  Documentation/devicetree/bindings/power/supply/bq24190.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
-
+Yes; in the ultimate case there are *four* alternatives, but the concept i=
+s the same and again we have it implemented already=2E
 
