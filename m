@@ -1,143 +1,131 @@
-Return-Path: <linux-pm+bounces-26218-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26219-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80F2DA9C8EE
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 14:29:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4F16A9C8F7
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 14:33:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B55C81BC0083
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 12:29:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 442009C5C34
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 12:33:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46ECF248879;
-	Fri, 25 Apr 2025 12:28:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E064E24BC07;
+	Fri, 25 Apr 2025 12:33:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="dQLZS1vH";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="n9Yspg5x"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="n62i0DvK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C728B248176;
-	Fri, 25 Apr 2025 12:28:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A5B712CD8B;
+	Fri, 25 Apr 2025 12:33:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745584138; cv=none; b=IQirjfiLjW5l8l1z+G/pJRsDJjDOvOMt0NWzjga1USjOHBdCLQ3H0c+Z/9e+gWDx/h+CHu/qs8KjUPnVvP4MxDhQtxVlPgjOMR7fE7mUgHidWgp8F+W13M9srFcgaK12VQtIb0DjdoRCLH09uQwO4FvW1W4vdIM4SeR4PIbX1l0=
+	t=1745584410; cv=none; b=KDuUWVafjitUa4Y/UJJ1zJiCcxCd/PqDHll+eJYK1s2coJTqJBMnZu0mLh9+Nu2gbUw9l15Woc750oI61mrNqp9v3pH+L0doAjPNRid1HcTYy7tkvwUefvAePNSPbQ8S0m0my1OTTyhUKwG0q8t4xB/ybo7j4drg3RoeIyskebw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745584138; c=relaxed/simple;
-	bh=5t7yNPr1CWOau0RMYcrRFsXe9MPaeyzZjGY5BgZV1o4=;
+	s=arc-20240116; t=1745584410; c=relaxed/simple;
+	bh=z0kssRXr0Jmr2iLuPqygq8fHDe3P+7Q6+7xMZ7CRFpA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l75oOdqMA721OVWix1TkWWHc47L2zNT4uPyR/HV4P1KaMVd3IY+6ZAT48kUbyTZLRanpV/w+sSERzbi4dMClq3ZLd8GLE3sQAuF5uSIMF+9Mm9y4XUhVgfycJrSNIscdMUOhHWRFksnOsexiPykNT+SP7nZJVflCGd2oFNb/vQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=dQLZS1vH; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=n9Yspg5x; arc=none smtp.client-ip=202.12.124.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
-	by mailfout.stl.internal (Postfix) with ESMTP id 76B3D114021B;
-	Fri, 25 Apr 2025 08:28:53 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-12.internal (MEProxy); Fri, 25 Apr 2025 08:28:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1745584133; x=
-	1745670533; bh=oDNpPryBrsrLI6MNT652iy7u9ZryJF8wQVHOnmOUp+k=; b=d
-	QLZS1vHt7XLg7laxQNs3/RSjp2nYQx2mnXx61t4OGwllZ2Yk1qGJb2IrDw1LlhIN
-	nwzrGSD2LxB+pDkOxUKrppjFqtHvYzMWPN0VXHScOfh7L5VXWUAGa9nlNDoKm9uK
-	/xPjCvnNu9zwVwu268/FYsOdS/h1J/QOo7Gjw/JNAPmTX453++t21Hn+94mXZuNI
-	1fPywjoctp8apcCcNQ8pTAWepIrpit/LFpG9kR49XRdbSQpVgLa1ZngkxRYI07J3
-	Mmfqvowwz8LxXp2J06/Uoh9Drclbsn749kjx9OZgGnlgN0Ico0Wrl/j/tS2HJcyo
-	l6AJHuPvDnNihSt+U9vEw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1745584133; x=1745670533; bh=oDNpPryBrsrLI6MNT652iy7u9ZryJF8wQVH
-	OnmOUp+k=; b=n9Yspg5xZCHkbVLlFEM7+UfoJiUJLX6/+6E3pB6Xyfcxef89b4b
-	/19hzcDppt3Oh0582KczHBgO5sb8G+e4DP83k7KshsNZ51K9Tvg5O+gw8dRhvfrv
-	MCUOGeXa67ZlAp2oIuFXoQTsKdfAE6N/sYeVY6sruLfubmlWvEcGA0D4aLbIXTiN
-	Kzt72b8nrE9mwqemVsLD8ZZBQn8JeGjO+eYo0Et/Bo3ANzYgCqsXj+i7gpdUrv37
-	saRJ9fkIBSJ5lUdIi9Nm+Mxi5R2aBq1oupUQHrbNeau2HgEQgrGApGnciD/ZAyni
-	qkJ8IgcnxsEgV5vWvWaZQjAXYllHvH3JItA==
-X-ME-Sender: <xms:BIALaBwbI7RNIZkzSUkRqcF85j_JdkpB3AoGf95xIZEBHEukpWIPcg>
-    <xme:BIALaBTPE8uTm3KMrreJFpdrRGn1jwWnOftSVWsQBYSF52rrVmu0S5Sh255EoLm9_
-    QYYm-oFz4svhZpFaXU>
-X-ME-Received: <xmr:BIALaLV7S3lw3nKMDYt44ugtBzMjG8qkD8u6OfJNd7RGnR4icilx01iecleA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvhedvfeegucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtrodttddt
-    jeenucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshihsh
-    hnrghilhdrnhgvtheqnecuggftrfgrthhtvghrnhepjeekleevleekfefgueehveejueek
-    vdehvdeugedvkeelgefhleegieevffdtuedunecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhn
-    sggprhgtphhtthhopedutddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohephhgvrh
-    gsvghrthesghhonhguohhrrdgrphgrnhgrrdhorhhgrdgruhdprhgtphhtthhopehlihhn
-    uhigqdgtrhihphhtohesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrih
-    gthhgrrhgusehnohgurdgrthdprhgtphhtthhopegthhgvnhhgiihhihhhrghoudeshhhu
-    rgifvghirdgtohhmpdhrtghpthhtoheplhhinhhugidqmhhtugeslhhishhtshdrihhnfh
-    hrrgguvggrugdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhg
-    pdhrtghpthhtohepphgrvhgvlhesuhgtfidrtgiipdhrtghpthhtoheplhhinhhugidqph
-    hmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhtvghffhgvnhdrkhhl
-    rghsshgvrhhtsehsvggtuhhnvghtrdgtohhm
-X-ME-Proxy: <xmx:BIALaDi2B7zCD1xIfS789Vp3Zl0ypkFSvqJIl-8By3nbbu5P5m-frg>
-    <xmx:BIALaDCq4sTkjFppwq-q_GGh3p_n4BYrxCYASJhM18McRJx-5UgMIA>
-    <xmx:BIALaMIykH5GVHTlYxktpiQyupiQobkz4UHdkomjPKwmTqsMpX1low>
-    <xmx:BIALaCB6deqlUAKFo3DHVX-0ixnnUqO6_mMpdkeaqJ8-2_pct678fw>
-    <xmx:BYALaJIvyXovcrkjbdwJKw4DsG-aXUoG53dlaE-zhb-I9gLORb42TQHu>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 25 Apr 2025 08:28:51 -0400 (EDT)
-Date: Fri, 25 Apr 2025 14:28:49 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-	Richard Weinberger <richard@nod.at>,
-	Zhihao Cheng <chengzhihao1@huawei.com>,
-	linux-mtd@lists.infradead.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	netdev@vger.kernel.org
-Subject: Re: [v5 PATCH 11/14] xfrm: ipcomp: Use crypto_acomp interface
-Message-ID: <aAuAAVOvfcTeZJbY@krikkit>
-References: <cover.1742034499.git.herbert@gondor.apana.org.au>
- <d7bccafdf38259c2b820be79763f66bfaad1497e.1742034499.git.herbert@gondor.apana.org.au>
- <aAt8AIiFWZZwgCyj@krikkit>
- <aAt-GiUloeLEfu7O@gondor.apana.org.au>
+	 Content-Type:Content-Disposition:In-Reply-To; b=iX53u3wdIfTBtEkqns/iG4Lwz2tVMr4O/O21tpOKpAYFU2ekZ3cdc88hoL8MQ4IbqvRnCbdC6ot+uXqi/4DpNwsaHfPjYeOeZEWcR4IWY7DqtxDxio96djbklEjs/6OR91X1ABUC5ewlWBB0+fE0d8dH9CN+H6T5h+E37NJmYCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=n62i0DvK; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=z0kssRXr0Jmr2iLuPqygq8fHDe3P+7Q6+7xMZ7CRFpA=; b=n62i0DvKUkkS19M6Grw/IA6BJM
+	6eax7WEzMDhdsLLdBaVpyql0sL3uwAA/S4ABBYyHfp8Tx/iU0ee0EuTw7NJfGf9EI8UsjXrlSl0sS
+	02tBYqSgzmjI/Kny3gI739/JKlgl+9wGdEidVTiMFctgk47RLsTlqNTkCUR+iW8cVDyF62mXAMwh5
+	XkywTMBNuRYpIwM9+ushQW73ekmtzH4pzyRk9psYN+bzsnJD1auXiTevc+ivI+Y1ZKlYKr7ewsVRG
+	jovxOw3NEqLfi+p+LosTspxc/ZhCArckwjJxCRVQhZyFjxgfcqmpAHeIJnZG6UgRJMQ7uJJh6ZqZe
+	G7VOYhcg==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
+	id 1u8IF4-0000000C2S5-1fLP;
+	Fri, 25 Apr 2025 12:33:18 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id DA9983003C4; Fri, 25 Apr 2025 14:33:17 +0200 (CEST)
+Date: Fri, 25 Apr 2025 14:33:17 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: =?iso-8859-1?Q?J=FCrgen_Gro=DF?= <jgross@suse.com>
+Cc: Xin Li <xin@zytor.com>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+	linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+	xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org, tglx@linutronix.de,
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, acme@kernel.org,
+	andrew.cooper3@citrix.com, namhyung@kernel.org,
+	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+	kan.liang@linux.intel.com, wei.liu@kernel.org,
+	ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+	tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
+	seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
+	kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com
+Subject: Re: [RFC PATCH v2 21/34] x86/msr: Utilize the alternatives mechanism
+ to write MSR
+Message-ID: <20250425123317.GB22125@noisy.programming.kicks-ass.net>
+References: <20250422082216.1954310-1-xin@zytor.com>
+ <20250422082216.1954310-22-xin@zytor.com>
+ <b2624e84-6fab-44a3-affc-ce0847cd3da4@suse.com>
+ <f7198308-e8f8-4cc5-b884-24bc5f408a2a@zytor.com>
+ <37c88ea3-dd24-4607-9ee1-0f19025aaef3@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="/MHZas7e8A04P/yf"
 Content-Disposition: inline
-In-Reply-To: <aAt-GiUloeLEfu7O@gondor.apana.org.au>
+In-Reply-To: <37c88ea3-dd24-4607-9ee1-0f19025aaef3@suse.com>
 
-2025-04-25, 20:20:42 +0800, Herbert Xu wrote:
-> On Fri, Apr 25, 2025 at 02:11:44PM +0200, Sabrina Dubroca wrote:
-> >
-> > The splat goes away with
-> > 
-> >  	/* Only update truesize on input. */
-> >  	if (!hlen)
-> > -		skb->truesize += dlen - plen;
-> > +		skb->truesize += dlen;
-> >  	skb->data_len = dlen;
-> >  	skb->len += dlen;
-> > 
-> > pskb_trim_unique ends up calling skb_condense, which seems to adjust
-> > the truesize to account for all frags being dropped.
-> > 
-> > Does that look like the right fix to you?
-> 
-> You're right.  I must've missed the truesize update in skb_condense
-> when writing this.
 
-Ok, I'll submit the patch in a bit. Thanks.
+--/MHZas7e8A04P/yf
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Sabrina
+On Wed, Apr 23, 2025 at 06:05:19PM +0200, J=FCrgen Gro=DF wrote:
+
+> > It's not a major change, but when it is patched to use the immediate
+> > form MSR write instruction, it's straightforwardly streamlined.
+>=20
+> It should be rather easy to switch the current wrmsr/rdmsr paravirt patch=
+ing
+> locations to use the rdmsr/wrmsr instructions instead of doing a call to
+> native_*msr().
+
+Right, just make the Xen functions asm stubs that expect the instruction
+registers instead of C-abi and ALT_NOT_XEN the thing.
+
+Shouldn't be hard at all.
+
+--/MHZas7e8A04P/yf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEv3OU3/byMaA0LqWJdkfhpEvA5LoFAmgLgQUACgkQdkfhpEvA
+5LqJKRAAkGelIfMDPEkg613aLM0RL5GIPigFIL9+IaLhypRMpJMp1rKIwy8kLaRd
+NwdJ0yX6iqAzFF/AHn3KvVp7MxNCeDWNTXTcCpxuCSB8NoKfph2JduGzhUylWdg3
+AhemoMrgzBgwkVVk2mDD2kvewJ0Axr2isfs+ugJLAo+GvKhnV+qJRvSE/FB0V7XV
+LC+r1B6ZXIcUBjvYOW2JbRYPW/UDT/LS9CZDWr2pu+A3jJ8vmlOwAb0Yeh3/2yKB
+/LdGM2PIII/0x66JaVvZawFSLjeUT18HxLAAh8MDDLgWCiwp+Uk3RzgrnaSj9oC0
+6uV/J7czytoK4haaV70zPcWqzZPIurtpgcG9AynaG05VjJ5ARgEG6EFJd91NnbM+
+7dZWXM6y1PI6IFuh1ldUJUD3YnEd3VuXAWaYE4aBr63rXaUYuVpAKRUY0NFZmxHw
+KGaVmss4AtUGeDBTPMvYyx+d1BTxPiYVeVbLzodtjl/mQPfpne5vlQomBolxd/0a
+fkeL0zUZoVgLfndRNVN+dIa2cPWo+BHNNM8tI92aFQ0YrxaTpdSjrOJ0bobnBUch
+deYEsdgKUEpUcFZqcp/ox1cc73kPeJ9365RwavrAN8sZIUSs+vvtu36/WIVI12eK
+qw6upySrPM0KLVTItTbNxKmS5uvFrc2fDPMAoru3P2Y5VkKPa2Q=
+=6Oyb
+-----END PGP SIGNATURE-----
+
+--/MHZas7e8A04P/yf--
 
