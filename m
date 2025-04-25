@@ -1,114 +1,147 @@
-Return-Path: <linux-pm+bounces-26223-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26224-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6A4DA9CA65
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 15:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 30D90A9CADA
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 15:51:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A55407B8A68
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 13:31:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D8917B4CAA
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 13:50:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D584253949;
-	Fri, 25 Apr 2025 13:30:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFC8F22D4DA;
+	Fri, 25 Apr 2025 13:51:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ml3E6Zhb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZAVPoJQL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7311253348;
-	Fri, 25 Apr 2025 13:30:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B4471747;
+	Fri, 25 Apr 2025 13:51:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745587857; cv=none; b=tthDlGFseaUxRZs+sRzR6E+T0VPkau+L2MHuRxd0Uv7rqbGBP3GvVvh2LbUcayC+8mFBO7jI1Je/W0triJ7BkZ3YoZGuruSyCFCaRCwFxIjvYcX91lsn6dYgRbpb1L+WdekgXwZOOQlVJaQFGZxEi8YYHikWEik0HjnVmRF3u3Y=
+	t=1745589072; cv=none; b=QZf7ZHWSrjWcNcYSevLMWVqYrUR5VrhKvh6K4uHnNbJsWhTF9iFZjQTvcuWVyf1btXGwMH5Anc2HoovfTIrr9iD9gLcfT/33NCTItSEKdY8vWc4NA0vfjpyB5fT+00GYRraifdc0+aYPWttIR3i7Iz16Gg4ZrMZHPRBiGoLMZLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745587857; c=relaxed/simple;
-	bh=sNj2A/EDw7ZdmP8BVMc/ZzHXMFD2k+M3BHMDaypuwYE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W2hednFAAD81SegHkKiMRik1wAGOrX+vYIJ/rd4ZRLnlhFeI8UnfB5+8beoxttNtUDd6KalmgXB/lRMCHtKENB7KKOqNdx1l0O79WDHg2H3oC1Cisj8dbeVPaohKfb5WuBXZU8DAwnnlu7l0LC++DpcMJypy4p5kV0IpsI3N38o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ml3E6Zhb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47FEBC4CEEF;
-	Fri, 25 Apr 2025 13:30:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745587857;
-	bh=sNj2A/EDw7ZdmP8BVMc/ZzHXMFD2k+M3BHMDaypuwYE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ml3E6Zhb2SotU8E+L+dkC+ZLsqSjNI1f8GjwEMBr7zcmbwDWSdkUPhXvX2fRE05kt
-	 Ip7/Octstq7/Dv4FRaSXKuXzv9OX58jf9U6BumewoOQl81Ru5msYJmt2S4ZphRzryj
-	 Ccb2kH+eN6GnnxjkmHsnJnvGaQz7dQaMvh4G9fDFbTDyyVP4ysmJILMVx/fvOagOGj
-	 vhb2NlOpjy7SW17yaNOY5Gsq7Du4irAB0AI7Gcau7NzONRULG2sqMfdVuQrfD9NWY7
-	 zEbVVpPwUBpBQn/78lC8T+DmF4+b1PeP3JP3Fu0g1HDz6LnBLSvc5WHgsfToeTl78d
-	 k9RUdHEGa304w==
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-2b8e2606a58so1306902fac.0;
-        Fri, 25 Apr 2025 06:30:57 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVVgGwidqHtwCwuv98pXaioA36TKglVs1GMlE6B0BLFxlEGaNvubBzy6+V4zvbjmhDmfdRPLbNKzbw=@vger.kernel.org, AJvYcCWiY1qBBNWUr7240EyGeeKYAmabs99wg3u/hRsNp8W/DlGK7cN+spCGo2hSYM+DNB07S/HxfkWfrsGty1c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywpeb4uVbgEtnEIDYp5XfeGTdaCSQhta2tdJKK7bXAs88NxvzUn
-	EU3ep5JxSBivQ/WG6Za7nN2FO5AxvNqY6xwRXRaCmZZBgF/NIfCzO5Xr+CFRxDqjCqPs+JuOYtS
-	beVKqq6bdlbS2JNJufLTJfbwkYt4=
-X-Google-Smtp-Source: AGHT+IGnRgdYGPtbfq0nkjJq0Qn1QIsVI2ProDoVmuhcH47kNRjWvmxksxDMVtDTcaL4/8Q/DAY63T1o6tTuFhv20/o=
-X-Received: by 2002:a05:6870:d686:b0:2b7:d3d2:ba53 with SMTP id
- 586e51a60fabf-2d9a33102eemr1121477fac.12.1745587856587; Fri, 25 Apr 2025
- 06:30:56 -0700 (PDT)
+	s=arc-20240116; t=1745589072; c=relaxed/simple;
+	bh=OhZMVslTMFHk1PYXUziNNqXZhgpB08GxxfE5qfU9SMk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Y3uBEwUTz1y/AdR/MWlV+Z2dbkK/10ijvrcSykTek4CawjFz1m1L2ctc99MM2TdlIuQrtTYKJcz96JOf3/Az5Gx1iJHdSI8BB+6GdhcD0BvOo/TpVuKSB9dLWh/nOfFKYYkhAfocgk/esZxa+bBmEa2dHLCt6D2/yDXPthqCsm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZAVPoJQL; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745589071; x=1777125071;
+  h=from:to:cc:in-reply-to:references:subject:message-id:
+   date:mime-version:content-transfer-encoding;
+  bh=OhZMVslTMFHk1PYXUziNNqXZhgpB08GxxfE5qfU9SMk=;
+  b=ZAVPoJQLRHhmJ2advrNRsFva3K7C9aGDvJBcxDwNlg+1oy7u8BxdV3iV
+   ybh5VxV0CLWl9/xtMTZtIqzd0ZSiFwtWOoVgDCyq5xceJaIg3YBY5gGBR
+   lQMvOWAL7iBjXty/8NYXaERN4JP/YuHePGMj9TNoV2U0KKJDa2saMP6FW
+   do4WbVV1WKdF3okTErJndahHzNSeUV0Zrze7hH/huN2MUsYLm+BxzDqyJ
+   xAXsFjMcsWfqW7Fg3MqjoD01ehx+7Y+W3czuE8Pivq2J0dcaygtF+LB5t
+   OnCBELDIre0ITrFmVAK197LB1DJudSVWlmiUKi+pPJOlU17YdL0kcs1Xc
+   w==;
+X-CSE-ConnectionGUID: 77xyvPGySFi2WBKZPmBQ9w==
+X-CSE-MsgGUID: aj6lyNgmT9ubvaAOL7uahA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11414"; a="50917497"
+X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
+   d="scan'208";a="50917497"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2025 06:51:10 -0700
+X-CSE-ConnectionGUID: bD/JDR3LQ9yWdeM3F6uVBA==
+X-CSE-MsgGUID: VK6mzkL+SLKFFR+xFJka7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
+   d="scan'208";a="137722441"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.154])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2025 06:51:04 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: platform-driver-x86@vger.kernel.org, 
+ Antheas Kapenekakis <lkml@antheas.dev>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-pm@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>, 
+ Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Joaquin Ignacio Aramendia <samsagax@gmail.com>, 
+ Derek J Clark <derekjohn.clark@gmail.com>, 
+ Kevin Greenberg <kdgreenberg234@protonmail.com>, 
+ Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>, 
+ Eileen <eileen@one-netbook.com>, linux-kernel@vger.kernel.org, 
+ sre@kernel.org, linux@weissschuh.net, hdegoede@redhat.com, 
+ mario.limonciello@amd.com
+In-Reply-To: <20250425111821.88746-1-lkml@antheas.dev>
+References: <20250425111821.88746-1-lkml@antheas.dev>
+Subject: Re: [PATCH v10 00/16] hwmon: (oxpsensors) Add devices, features,
+ fix ABI and move to platform/x86
+Message-Id: <174558905993.2965.3080490340204327476.b4-ty@linux.intel.com>
+Date: Fri, 25 Apr 2025 16:50:59 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <5896780.DvuYhMxLoT@rjwysocki.net> <aAuMVMQjdEqegT8n@linaro.org>
-In-Reply-To: <aAuMVMQjdEqegT8n@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 25 Apr 2025 15:30:44 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hS9BEAQLUxf983EMgA53euOY837BD4nb2bKE=2htPOWQ@mail.gmail.com>
-X-Gm-Features: ATxdqUF9CfayYo9hmCWb8y1bN1A5FPEN2zs8yWFELZN0J33Q5fYsuzI_rtlpcL8
-Message-ID: <CAJZ5v0hS9BEAQLUxf983EMgA53euOY837BD4nb2bKE=2htPOWQ@mail.gmail.com>
-Subject: Re: [PATCH v2] cpufreq: Fix setting policy limits when frequency
- tables are used
-To: Stephan Gerhold <stephan.gerhold@linaro.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	Christian Loehle <christian.loehle@arm.com>, LKML <linux-kernel@vger.kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Mario Limonciello <mario.limonciello@amd.com>, Sultan Alsawaf <sultan@kerneltoast.com>, 
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Johan Hovold <johan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
 
-On Fri, Apr 25, 2025 at 3:21=E2=80=AFPM Stephan Gerhold
-<stephan.gerhold@linaro.org> wrote:
->
-> On Fri, Apr 25, 2025 at 01:36:21PM +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Commit 7491cdf46b5c ("cpufreq: Avoid using inconsistent policy->min and
-> > policy->max") overlooked the fact that policy->min and policy->max were
-> > accessed directly in cpufreq_frequency_table_target() and in the
-> > functions called by it.  Consequently, the changes made by that commit
-> > led to problems with setting policy limits.
-> >
-> > Address this by passing the target frequency limits to __resolve_freq()
-> > and cpufreq_frequency_table_target() and propagating them to the
-> > functions called by the latter.
-> >
-> > Fixes: 7491cdf46b5c ("cpufreq: Avoid using inconsistent policy->min and=
- policy->max")
-> > Link: https://lore.kernel.org/linux-pm/aAplED3IA_J0eZN0@linaro.org/
-> > Reported-by: Stephan Gerhold <stephan.gerhold@linaro.org>
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> Thanks a lot for the quick fix! It works for me. After the CPU frequency
-> was throttled due to high temperature and the device has cooled down,
-> the CPU frequency goes back to maximum again.
->
-> Tested-by: Stephan Gerhold <stephan.gerhold@linaro.org>
+On Fri, 25 Apr 2025 13:18:05 +0200, Antheas Kapenekakis wrote:
 
-Thanks for the quick turnaround!
+> This four part series updates the oxpsensors module to bring it in line
+> with its Windows OneXPlayer counterpart. First, it adds support for all
+> 2024, 2025 OneXPlayer handhelds and their special variants. Then, it moves
+> the module to platform/x86 to allow for including more EC features.
+> 
+> Then, it adds the new charge limiting and bypass features that were first
+> introduced in the X1 and retrofit to older OneXFly variants and for
+> controlling the turbo led found in the X1 models. For Bypass, it adds a new
+> charge_behaviour variant called inhibit-charge-s0.
+> 
+> [...]
 
-I want it to spend at least a couple of days in linux-next and I'd
-like to give people a chance to review it in case something is still
-missing, so my current plan is to push it for -rc5.
 
-Thank you!
+Thank you for your contribution, it has been applied to my local
+review-ilpo-next branch. Note it will show up in the public
+platform-drivers-x86/review-ilpo-next branch only once I've pushed my
+local branch there, which might take a while.
+
+The list of commits applied:
+[01/16] hwmon: (oxp-sensors) Distinguish the X1 variants
+        commit: 217d55ca13d22ba6af7e96ac2d28c2ef6927fc54
+[02/16] hwmon: (oxp-sensors) Add all OneXFly variants
+        commit: 9f4c9ec158fa8fa4afcdbcbff9c9a9a900dc9c2f
+[03/16] platform/x86: oxpec: Move hwmon/oxp-sensors to platform/x86
+        commit: fe812896e55d0d8e2a45bcf994cadc80fe912fb5
+[04/16] ABI: testing: sysfs-class-oxp: add missing documentation
+        commit: 05f8e5928bfd37416380e8e0994c5f4fd1b615c8
+[05/16] ABI: testing: sysfs-class-oxp: add tt_led attribute documentation
+        commit: 7ba14e4eec62985ae2021ef7e06d537b8e4c8712
+[06/16] platform/x86: oxpec: Rename ec group to tt_toggle
+        commit: 8e1963b9d84a3db10cdd2a807dc3fe401837d228
+[07/16] platform/x86: oxpec: Add turbo led support to X1 devices
+        commit: 5485a80150ff03b6784bfbb194858244ae5f991d
+[08/16] platform/x86: oxpec: Move pwm_enable read to its own function
+        commit: aa682cff3097dfa2370298ecebd33ff1fb64bab8
+[09/16] platform/x86: oxpec: Move pwm value read/write to separate functions
+        commit: 0ba0d67b0608c15b407491712af1c2a3d5140492
+[10/16] platform/x86: oxpec: Move fan speed read to separate function
+        commit: 653feeccdd2eb1dfe44923f4c0bbf50a948c7a07
+[11/16] platform/x86: oxpec: Adhere to sysfs-class-hwmon and enable pwm on 2
+        commit: 7dea472a8b2814013213f4fed290f5f86c6cc7cb
+[12/16] platform/x86: oxpec: Follow reverse xmas convention for tt_toggle
+        commit: bb9854e9819ae5c29602d4985313cde2d07f6847
+[13/16] power: supply: add inhibit-charge-awake to charge_behaviour
+        commit: 468182a839f88fecab915792cbb98ad7328be266
+[14/16] platform/x86: oxpec: Add charge threshold and behaviour to OneXPlayer
+        commit: 202593d1e86bf3ccb1c1091713760b6f44641718
+[15/16] platform/x86: oxpec: Rename rval to ret in tt_toggle
+        commit: 57c775a990a742f7cc2650a5cbfc103d6b4a015d
+[16/16] platform/x86: oxpec: Convert defines to using tabs
+        commit: f5612600314bcce86934318601501e2d8301176d
+
+--
+ i.
+
 
