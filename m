@@ -1,137 +1,107 @@
-Return-Path: <linux-pm+bounces-26231-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26232-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB046A9CDE1
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 18:16:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CFEAA9CDF9
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 18:23:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F45716AA3C
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 16:17:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0808E1BC01B0
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Apr 2025 16:22:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D082718DF93;
-	Fri, 25 Apr 2025 16:16:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iUzN27iE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52EF819CD01;
+	Fri, 25 Apr 2025 16:22:18 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C9046447;
-	Fri, 25 Apr 2025 16:16:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0191F4A24
+	for <linux-pm@vger.kernel.org>; Fri, 25 Apr 2025 16:22:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.78.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745597815; cv=none; b=UHTqTWF4iumwVhjz/+HPOUF9OVb7Fp4DS0MEyz9YKpV6PEvalapukNChoixZrF2QNiKjzunS5aeOyQQf6zIM/wmoKtBPAeoD1f6lgTJeszB/Qae+Q9N8fpjEXnaS2Sjm9OTjQU0IvVTzC8WMI1CncSbC1fJsb2Yj2OHgRuz30eU=
+	t=1745598138; cv=none; b=QDVa1zJxWtV6e3EOTWvGvRRXJu4rn4mXeUYAMotSJG6ZHF2SUlGpq66oU/CLVz2VNE+xY5DgUhnD1amIHeZ2S/sEb+aWetuGtP7/XVz54nHC4vIRtLjiNcodyRnRsVLqkuZDxJgIYgf7kFZo2g63O7w1kDUPmunSobclKofBwgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745597815; c=relaxed/simple;
-	bh=8JW2vZqTEBXcaeQjmDTLoCd9QWwIOsH1ErInhCxEcUA=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=kOuNfv9BG20RBpIrg8DYZuoQSqYgjYg6baiuX4wD8UjbFD2uWBX8CGRC3GZh/b3ApUNv5S/BbQNG5AX7CaQHpYqPwvsbJDKisoUU0jNHlCVOM86hqEYrkfyzoYGvk8EhvbELmw9N8JVrJa9Gy33yOsCPv+Xf10tHMYASaYCqD0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iUzN27iE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12F8FC4CEE8;
-	Fri, 25 Apr 2025 16:16:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745597815;
-	bh=8JW2vZqTEBXcaeQjmDTLoCd9QWwIOsH1ErInhCxEcUA=;
-	h=From:Date:Subject:To:Cc:From;
-	b=iUzN27iEOLxf1h2S7k9dlxUS5jEzFerSbgJRM8GTBOVJqIk982S7a7Siw+4AYW7Qe
-	 LpNC3VpjXPqFL5Nz0dUnZ26dvMPSJbXnZB3UqSbv7ysXSAVDd+wOKR5d9SSj9IvymE
-	 FpMe3wWIdMdb1jSljtcGNwiVwArqC/NrJwTHi9vhwWufxUGsgOShVlGFZ6PPeuAwQO
-	 NzT8yWDEQuNVZOE60ByRGqVrhJCjNYBVTzc81XdBLmyHuhdRRr260HKVp/2OimE22A
-	 rHfI0Vw2KxBka/iWHwzLSb6/ZLZx3kNnJ5ofVBUafa+1+7yJiCa2xPSr+TAwis/F5g
-	 kLnF4ttwWErRQ==
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-72c47631b4cso1556707a34.1;
-        Fri, 25 Apr 2025 09:16:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUifHwTYh7BM69UOctX1z/Ardbig1ECfTVsZPhCzD3U0VimRGtnmigR1SHJYzFUXDZ6pAYjs4uYWF5LIMPo@vger.kernel.org, AJvYcCXBtOvCLllT3NuGmM/HIrMAw+tbZnFSYng923QtKIjy+Tf/vVWUmbGdjgHFSbolMU/XtJsm6h6mfOQQ@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWMacX6N/7fUhKmTSkLgqAayTETedJQUn1gyaeKbEmzvDIVECJ
-	GKM5hnYouLE65q2NzFpKBo3dQky/Pz377foneIajBikxTebVaUtmUkJOoLVTqxB/CicnHdpKVj7
-	OjfmI7Y1tga7efRC4MwjNLU6ffjQ=
-X-Google-Smtp-Source: AGHT+IEBTIyD7hhcKfoRUs9/MQH7opvPv05v33Y84BtrwnX+9H+cIU3lhNAPJSRsmKXrT6aeBC4jDmq+aAkw085da2w=
-X-Received: by 2002:a05:6870:a7a5:b0:2bc:7d6f:fa86 with SMTP id
- 586e51a60fabf-2d99de7e336mr1850172fac.35.1745597814257; Fri, 25 Apr 2025
- 09:16:54 -0700 (PDT)
+	s=arc-20240116; t=1745598138; c=relaxed/simple;
+	bh=Lwl/ZpYN3ZShr7xLd2q+gTATHtLxFH5YaBYsLh28L3Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rPCfJCpB0vFG+cFr6+yfIHVKDY/RAVv6TzcVzhBlraJnJRdYm/YVO6j10T9dD/l8m3Fo9RaKOgLitADrfDCRndt8QBrfd5Vk94Q8iwK/35gxdy7el9PLm2vPucUZEjURHfIJgQdKvaNcd3gmeimkYIbqiq2t3bjhj8HZ/6wuKHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.78.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout2.hostsharing.net (Postfix) with ESMTPS id 16D30200A44B;
+	Fri, 25 Apr 2025 18:21:37 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id A4B8DB1FCB; Fri, 25 Apr 2025 18:22:05 +0200 (CEST)
+Date: Fri, 25 Apr 2025 18:22:05 +0200
+From: Lukas Wunner <lukas@wunner.de>
+To: James Dutton <james.dutton@gmail.com>
+Cc: Linux PM mailing list <linux-pm@vger.kernel.org>
+Subject: Re: USB4 thunderbolt device suspend/resume problems. Unplug during
+ suspend.
+Message-ID: <aAu2reEG9RHjRjL9@wunner.de>
+References: <CAAMvbhGRBhdz2RnReoGxDRM=bTws6s4qe5kh2nUqQDMRDYBh6Q@mail.gmail.com>
+ <Z9NDz7TUIEflQeee@wunner.de>
+ <CAAMvbhEOLmSm97rzLKgjNV=7Uy8UspPAS1vc4W3xv5F_b6PNaQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 25 Apr 2025 18:16:43 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0i3STvUcv15K4RhpNa9t7hZQ8nJGFfFD77WU-3-4X0zog@mail.gmail.com>
-X-Gm-Features: ATxdqUG7WiELpCNi397MpmWhtNNmYphz9oOLJTgR9dpSMMaRmT2a3pq0xF4xajY
-Message-ID: <CAJZ5v0i3STvUcv15K4RhpNa9t7hZQ8nJGFfFD77WU-3-4X0zog@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v6.15-rc4
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAMvbhEOLmSm97rzLKgjNV=7Uy8UspPAS1vc4W3xv5F_b6PNaQ@mail.gmail.com>
 
-Hi Linus,
+On Sat, Mar 22, 2025 at 01:38:34PM +0000, James Dutton wrote:
+> > On Mon, Feb 17, 2025 at 08:44:19PM +0000, James Dutton wrote:
+> > > I have a thunderbolt / usb4 10Gbps ethernet adapter.
+> > > While plugged in, it appears to handle suspend and resume OK.
+> > > The problem is the following:
+> > > 1) Thunderbolt device plugged in. Device appears in "lscpi".
+> > > 2) Suspend Laptop
+> > > 3) Unplug the device while it is asleep.
+> > > 4) Resume the Laptop
+> > > 5) Laptop locks up, no stack trace, nothing output.
+> 
+> I found something that worked for me.
+> I found an infinite loop and adding a timeout to it fixed my problem:
+> E.g.
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -6840,8 +6841,16 @@ void napi_disable(struct napi_struct *n)
+>         do {
+>                 while (val & (NAPIF_STATE_SCHED | NAPIF_STATE_NPSVC)) {
+>                         usleep_range(20, 200);
+> +                       loop_counter++;
+> +                       if (loop_counter > 625) {
+> +                               break;
+> +                       }
+>                         val = READ_ONCE(n->state);
+>                 }
+> +               if (loop_counter > 625) {
+> +                       pr_warn("dev.c:napi_disable() timed out\n");
+> +                       break;
+> +               }
+> 
+>                 new = val | NAPIF_STATE_SCHED | NAPIF_STATE_NPSVC;
+>                 new &= ~(NAPIF_STATE_THREADED | NAPIF_STATE_PREFER_BUSY_POLL);
 
-Please pull from the tag
+I'm afraid that's a hack, not a proper fix.  You can insert a call
+to "dump_stack();" before the "break;" to see where the call to
+napi_disable() is coming from.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.15-rc4
+It seems the driver of the network adapter built into the dock
+gets confused if the adapter is no longer present on resume.
+It would be good if you could report this to the maintainers of that
+driver and/or netdev maintainers, as well as netdev@vger.kernel.org.
 
-with top-most commit 5786ef8ad8d4222fdc2e7cf65337880695cef60e
+Thanks,
 
- Merge tag 'cpufreq-arm-fixes-6.15-rc' of
-git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm
-
-on top of commit 9d7a0577c9db35c4cc52db90bc415ea248446472
-
- gcc-15: disable '-Wunterminated-string-initialization' entirely for now
-
-to receive power management fixes for 6.15-rc4.
-
-These are cpufreq driver fixes addressing multiple assorted issues:
-
- - Fix possible out-of-bound / NULL-ptr-deref in cpufreq drivers (Henry
-   Martin, Andre Przywara).
-
- - Fix Kconfig issues with compile-test in cpufreq drivers (Krzysztof
-   Kozlowski, Johan Hovold).
-
- - Fix invalid return value in .get() in the CPPC cpufreq driver (Marc
-   Zyngier).
-
- - Add SM8650 to cpufreq-dt-platdev blocklist (Pengyu Luo).
-
-Thanks!
-
-
----------------
-
-Andre Przywara (1):
-      cpufreq: sun50i: prevent out-of-bounds access
-
-Henry Martin (3):
-      cpufreq: apple-soc: Fix null-ptr-deref in apple_soc_cpufreq_get_rate()
-      cpufreq: scmi: Fix null-ptr-deref in scmi_cpufreq_get_rate()
-      cpufreq: scpi: Fix null-ptr-deref in scpi_cpufreq_get_rate()
-
-Johan Hovold (1):
-      cpufreq: fix compile-test defaults
-
-Krzysztof Kozlowski (1):
-      cpufreq: Do not enable by default during compile testing
-
-Marc Zyngier (1):
-      cpufreq: cppc: Fix invalid return value in .get() callback
-
-Pengyu Luo (1):
-      cpufreq: Add SM8650 to cpufreq-dt-platdev blocklist
-
----------------
-
- drivers/cpufreq/Kconfig.arm            | 20 ++++++++++----------
- drivers/cpufreq/apple-soc-cpufreq.c    | 10 ++++++++--
- drivers/cpufreq/cppc_cpufreq.c         |  2 +-
- drivers/cpufreq/cpufreq-dt-platdev.c   |  1 +
- drivers/cpufreq/scmi-cpufreq.c         | 10 ++++++++--
- drivers/cpufreq/scpi-cpufreq.c         | 13 ++++++++++---
- drivers/cpufreq/sun50i-cpufreq-nvmem.c | 18 ++++++++++++------
- 7 files changed, 50 insertions(+), 24 deletions(-)
+Lukas
 
