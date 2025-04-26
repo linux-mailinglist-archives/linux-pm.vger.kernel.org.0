@@ -1,216 +1,189 @@
-Return-Path: <linux-pm+bounces-26272-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26273-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F889A9DB3F
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Apr 2025 15:45:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72464A9DD29
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Apr 2025 22:57:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF0D11BA698A
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Apr 2025 13:46:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7BED01B6742D
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Apr 2025 20:57:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 630E41DE4FC;
-	Sat, 26 Apr 2025 13:45:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 886701F5838;
+	Sat, 26 Apr 2025 20:57:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FL73MtPT"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="PZDOouGS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3714223C9;
-	Sat, 26 Apr 2025 13:45:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745675146; cv=none; b=SCKtN3FU1DTzlZSmN0aTJKqG3/Usn6prS6t4s5oy5Xq76UmhKx52aTNzDzHm1Pd5hzmAFNInSCARSSS69dge7tYx7Mc/Vqy6daDXv7MULv91H5rUBol82nSd0Jw8/HLyVYtjbICvyWtPqh5TxJQazeGOFK6iWWbkfCwXxO2O10U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745675146; c=relaxed/simple;
-	bh=I4nsA4r/Iu57UddEcOKuVuHTuSSaO7yRpZoDOY/Qp2U=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=f6jE//5dGP+yujZDygBhxI12zfBvjAiiIrmsxv8F+/qVvJWSwkEDnJXcMj8isOy+aqgiKuXi7bsGIRTqJzOSGW+jKWbYdrDP8oBUy6IWpAoMJFHcvXaaL+IrJKMNeZxoixKhKLAFnoyhqFAUNNjURaGIpUGUw/+2LWdOinTXh80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FL73MtPT; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745675144; x=1777211144;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=I4nsA4r/Iu57UddEcOKuVuHTuSSaO7yRpZoDOY/Qp2U=;
-  b=FL73MtPTIblP+GDB0e3HutmxvspsnScb1Q8MgkOg+0FgCJk83LlQX37D
-   D6O2VEiAd3ZnGAPuMeiC1p+lOxC0BUoWn/yv9KlVf4JTDVYVqfnzXA+OR
-   DutgC9PHVari3dsAVurAxj8alSC47O3w3xRUAYEaHX8vKl6xSDeiXOV5u
-   8+fXOtcF1Mufp5d7nAAGzqNA6s/EWO5tUHxoKF/tApwjc8U0b5Odl1lhr
-   5XkdHiDtLbON22C2c1d62RcP6zLnpMSStEIY8p39MDCuaMuh/sz5NYt7M
-   stq1CpRZD+QdAxMzxnx04nXmArVvLbd97t0xzFj351KRhqDSXG/JM5O9T
-   A==;
-X-CSE-ConnectionGUID: rluqqy2OT+ujeyTWTOU9Mg==
-X-CSE-MsgGUID: +oYvne6NRzqCTuyzNKfqzw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11415"; a="47229772"
-X-IronPort-AV: E=Sophos;i="6.15,241,1739865600"; 
-   d="scan'208";a="47229772"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2025 06:45:43 -0700
-X-CSE-ConnectionGUID: WMbNce1ORpCDbJZHWjGjpw==
-X-CSE-MsgGUID: UaIR2HdjTjK095toUEDbGQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,241,1739865600"; 
-   d="scan'208";a="138223278"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.235])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2025 06:45:29 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Sat, 26 Apr 2025 16:45:26 +0300 (EEST)
-To: Xin Li <xin@zytor.com>
-cc: LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org, 
-    linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org, 
-    virtualization@lists.linux.dev, linux-pm@vger.kernel.org, 
-    linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org, 
-    linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-    Netdev <netdev@vger.kernel.org>, platform-driver-x86@vger.kernel.org, 
-    tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-    dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-    acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com, 
-    peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com, 
-    alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com, 
-    adrian.hunter@intel.com, kan.liang@linux.intel.com, wei.liu@kernel.org, 
-    ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com, 
-    tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com, 
-    seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com, 
-    kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com, 
-    dapeng1.mi@linux.intel.com
-Subject: Re: [PATCH v3 01/14] x86/msr: Move rdtsc{,_ordered}() to
- <asm/tsc.h>
-In-Reply-To: <e62b81f3-1952-43e6-85fd-18c6f37d531d@zytor.com>
-Message-ID: <f8a5b080-b2a8-06f0-3d2d-d232ef0887a4@linux.intel.com>
-References: <20250425083442.2390017-1-xin@zytor.com> <20250425083442.2390017-2-xin@zytor.com> <42dc90e1-df2a-2324-d28c-d75fb525e4a2@linux.intel.com> <e62b81f3-1952-43e6-85fd-18c6f37d531d@zytor.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57EB71F3D45;
+	Sat, 26 Apr 2025 20:57:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1745701058; cv=pass; b=KCtvy788N+eA6pdlobCiyqer+tk47o704rwxq4IExcLMrUkcgfw7UFPpFAhyASUFYXYcTzbmwS+LPX8GV2HZj0gmrcCGZyxIarwmM7J3GOXH07ob73xWq7bKHziJWUf44tl4YuQfmEyCXvopVzWHSYsta3bljhX/dK2ks6X7nvk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1745701058; c=relaxed/simple;
+	bh=p0BZViD/yOTJLjUeoWQCI8234JU2GTuhrpX40eCaEFA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GkaQ8HwPpFzHnlcO8VvrUHeNXUkgxG7ie9N4C4DBWjk6KDWlPjIYdxYxhCZg2sS5cxpQd8d2RAOy87IEAp+f5P9TKKFXPh4bujeUAHxjDG0BoJxTI7xZBr/35sQPLcdf7Bz5HgWpugqZM+VLIPWPQDEQq+GWScygWioeWEsfptM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=PZDOouGS; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1745701030; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=kY8x2uGSh2Jlnn13Q7cIzSmnWqtv4xd7Z4SjbnhFP0KScN2GeQI4K3LT0eKY117HSjFkxmb6B8PXRmk15LEE70tM0J10XGxtaN2+7kjsu3igRs02sXAaMDBh+W3ufRNPlKTm/IDDfFw3gYA5ESoozPgt7J6xMSbzfe6stEiJVeQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1745701030; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=d5RUawyA0HZ8iOrYQ/UIr7PD1runCe3i/3feWl3o2dw=; 
+	b=CA5u7SYQvsCIFJgMNKhE8vA7o0/3vWx/lkh77k3OctLSvLkOHz8w1LPyYFXnjRrm3k5FLtxc+tdnBfB6IU/C/aT0hhN34NWI4A0OYR7Wt5PJd4f6Q+KQYBLKxOKO9VUrA1DEFua5BSrMeP5LVhi69/4i/rEkfPfsTXL4Sf8w/to=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1745701030;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+	bh=d5RUawyA0HZ8iOrYQ/UIr7PD1runCe3i/3feWl3o2dw=;
+	b=PZDOouGSbvvhbt4Z2xQnoXSSwlqd8WH3rsALrYFcBDvKFIi9OU1ItkP8MjHc0oFr
+	soAxiGgeWJPgYt4WnNFQrg7I25OX4fveMjP4B8/U8wkEWtUntFNSvmgY8N6V/arlmlQ
+	A8FW1sTCRkKxTSTSZag8nR/gOW5q2NNfJng6Ahdk=
+Received: by mx.zohomail.com with SMTPS id 1745701030129397.68583282935344;
+	Sat, 26 Apr 2025 13:57:10 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Heiko Stuebner <heiko@sntech.de>, Jonas Karlman <jonas@kwiboo.se>,
+ Diederik de Haas <didi.debian@cknow.org>
+Cc: devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+ kernel@collabora.com, linux-arm-kernel@lists.infradead.org
+Subject:
+ Re: [PATCH v5 5/7] thermal: rockchip: support reading trim values from OTP
+Date: Sat, 26 Apr 2025 22:57:04 +0200
+Message-ID: <2891736.iZASKD2KPV@workhorse>
+In-Reply-To: <D9GH5V09WW47.358SY1F7LJ9ZV@cknow.org>
+References:
+ <20250425-rk3576-tsadc-upstream-v5-0-0c840b99c30e@collabora.com>
+ <20250425-rk3576-tsadc-upstream-v5-5-0c840b99c30e@collabora.com>
+ <D9GH5V09WW47.358SY1F7LJ9ZV@cknow.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-589040720-1745675126=:944"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Saturday, 26 April 2025 11:49:13 Central European Summer Time Diederik de Haas wrote:
+> Hi Nicolas,
+> 
+> On Fri Apr 25, 2025 at 9:34 PM CEST, Nicolas Frattaroli wrote:
+> > Many of the Rockchip SoCs support storing trim values for the sensors in
+> > factory programmable memory. These values specify a fixed offset from
+> > the sensor's returned temperature to get a more accurate picture of what
+> > temperature the silicon is actually at.
+> >
+> > The way this is implemented is with various OTP cells, which may be
+> > absent. There may both be whole-TSADC trim values, as well as per-sensor
+> > trim values.
+> >
+> > In the downstream driver, whole-chip trim values override the per-sensor
+> > trim values. This rewrite of the functionality changes the semantics to
+> > something I see as slightly more useful: allow the whole-chip trim
+> > values to serve as a fallback for lacking per-sensor trim values,
+> > instead of overriding already present sensor trim values.
+> >
+> > Additionally, the chip may specify an offset (trim_base, trim_base_frac)
+> > in degrees celsius and degrees decicelsius respectively which defines
+> > what the basis is from which the trim, if any, should be calculated
+> > from. By default, this is 30 degrees Celsius, but the chip can once
+> > again specify a different value through OTP cells.
+> 
+> Would it be useful to define all the values in the same unit?
+> Having celsius and decicelsius and millicelsius sounds like a recipe for
+> (future) off-by-10/-100/-1000 errors.
 
---8323328-589040720-1745675126=:944
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+No. It is not possible to redefine the unit of these, because the values are 
+factory programmed into these one-time programmable cells.
 
-On Sat, 26 Apr 2025, Xin Li wrote:
+> And possibly define-ing the '30' so people don't need this commit
+> message to figure out where that magic number comes from?
 
-> On 4/25/2025 8:45 AM, Ilpo J=C3=A4rvinen wrote:
-> > To me this looks really a random set of source files, maybe it helped s=
-ome
-> > build success but it's hard for me to review this because there are sti=
-ll
-> > cases that depend on indirect include chains.
-> >=20
-> > Could you just look into solving all missing msr.h includes instead
-> > as clearly some are still missing after 3 pre-existing ones and you add=
-ing
-> > it into 3 files:
-> >=20
-> > $ git grep -e rdmsr -e wrmsr -l drivers/platform/x86/
-> > drivers/platform/x86/intel/ifs/core.c
-> > drivers/platform/x86/intel/ifs/load.c
-> > drivers/platform/x86/intel/ifs/runtest.c
-> > drivers/platform/x86/intel/pmc/cnp.c
-> > drivers/platform/x86/intel/pmc/core.c
-> > drivers/platform/x86/intel/speed_select_if/isst_if_common.c
-> > drivers/platform/x86/intel/speed_select_if/isst_if_mbox_msr.c
-> > drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c
-> > drivers/platform/x86/intel/tpmi_power_domains.c
-> > drivers/platform/x86/intel/turbo_max_3.c
-> > drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
-> > drivers/platform/x86/intel_ips.c
-> >=20
-> > $ git grep -e 'msr.h' -l drivers/platform/x86/
-> > drivers/platform/x86/intel/pmc/core.c
-> > drivers/platform/x86/intel/tpmi_power_domains.c
-> > drivers/platform/x86/intel_ips.c
->=20
-> I think you want me to add all necessary direct inclusions, right?
+There is no constant of 30 in the code to define anywhere. This is what the
+factory programmed values are referenced against.
 
-For asm/msr.h yes, as it seems you're altering the inclusion paths and all=
-=20
-non-direct includes have a chance of breaking so it seems prudent to just=
-=20
-convert them into direct includes.
+> And also the '923' for ``.trim_slope``?
 
-> This is the right thing to do, and I did try it but gave up later.
->=20
-> I will do it in the next iteration as you asked.  But I want to make my
-> points:
->=20
-> 1) It's not just two patterns {rd,wr}msr, there are a lot of definitions
->    in <asm/msr.h> and we need to cover all of them:
+.trim_slope is an SoC specific value that does not need to be defined a second
+time in a different place, it lives in the SoC data for that reason, much like
+the code tables and which functions the driver should use for this chip. There
+is nothing to be gained here from the indirection.
 
-I know and I don't expect you to get it 100% perfect, but taking a major=20
-step into the right direction would be way better than build testing one=20
-configuration and see what blows up and fix only those.
+> 
+> > The implementation of these trim calculations have been tested
+> > extensively on an RK3576, where it was confirmed to get rid of pesky 1.8
+> > degree Celsius offsets between certain sensors.
+> >
+> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> > ---
+> >  drivers/thermal/rockchip_thermal.c | 221 +++++++++++++++++++++++++++++++++----
+> >  1 file changed, 202 insertions(+), 19 deletions(-)
+> >
+> > diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
+> > index 89e3180667e2a8f0ef5542b0db4d9e19a21a24d3..3beff9b6fac3abe8948b56132b618ff1bed57217 100644
+> > --- a/drivers/thermal/rockchip_thermal.c
+> > +++ b/drivers/thermal/rockchip_thermal.c
+> > @@ -9,6 +9,7 @@
+> >  #include <linux/interrupt.h>
+> >  #include <linux/io.h>
+> >  #include <linux/module.h>
+> > +#include <linux/nvmem-consumer.h>
+> >  #include <linux/of.h>
+> >  #include <linux/of_address.h>
+> >  #include <linux/of_irq.h>
+> > @@ -69,16 +70,18 @@ struct chip_tsadc_table {
+> >   * struct rockchip_tsadc_chip - hold the private data of tsadc chip
+> >   * @chn_offset: the channel offset of the first channel
+> >   * @chn_num: the channel number of tsadc chip
+> > - * @tshut_temp: the hardware-controlled shutdown temperature value
+> > + * @trim_slope: used to convert the trim code to a temperature in millicelsius
+> > + * @tshut_temp: the hardware-controlled shutdown temperature value, with no trim
+> 
+> Having the same units used everywhere would also avoid possible
+> confusion here as ``trim_slope`` explicitly mentions millicelsius, but
+> ``tshut_temp`` does not, but AFAIK it's also in millicelsius.
 
-In this particular case, the amount of includes seemed really subpar with=
-=20
-many users lacking the include.
+That seems like an additional change out of scope for this series, and does not
+need to hold up this patch series for a v6.
 
->       struct msr_info
->       struct msr_regs_info
->       struct saved_msr
->       struct saved_msrs
+> 
+> Cheers,
+>   Diederik
+> 
+> >   * @tshut_mode: the hardware-controlled shutdown mode (0:CRU 1:GPIO)
+> >   * @tshut_polarity: the hardware-controlled active polarity (0:LOW 1:HIGH)
+> >   * @initialize: SoC special initialize tsadc controller method
+> >   * @irq_ack: clear the interrupt
+> >   * @control: enable/disable method for the tsadc controller
+> > - * @get_temp: get the temperature
+> > + * @get_temp: get the raw temperature, unadjusted by trim
+> >   * @set_alarm_temp: set the high temperature interrupt
+> >   * @set_tshut_temp: set the hardware-controlled shutdown temperature
+> >   * @set_tshut_mode: set the hardware-controlled shutdown mode
+> > + * @get_trim_code: convert a hardware temperature code to one adjusted for by trim
+> >   * @table: the chip-specific conversion table
+> >   */
+> >  struct rockchip_tsadc_chip {
+> > @@ -86,6 +89,9 @@ struct rockchip_tsadc_chip {
+> 
 
-Could be shortened to -e 'struct msr' -e 'struct saved_msr'.
 
->       {read,write}_msr
->       rdpmc
->       .*msr.*_on_cpu
 
-Well, my pattern already caught rdmsr.*on_cpu and wrmsr.*on_cpu.
 
-For the other patterns, I don't see those at all under=20
-drivers/platform/x86/ but I think when one typically implies the=20
-others tend appear as well so this might not be as hard as it seems.
-
-> 2) Once all necessary direct inclusions are in place, it's easy to
->    overlook adding a header inclusion in practice, especially if the
->    build passes.  Besides we often forget to remove a header when a
->    definition is removed.  In other words, direct inclusion is hard to
->    maintain.
-
-This is true as well but we should still try to move towards the right=20
-state affairs even if we will not get it near 100% until there's a real=20
-tool that relentlessly keeps exposing such human oversight.
-
-And do I try to check also includes whenever I remember while reviewing=20
-patches (which requires some effort as they are not visible in the code=20
-context and might not appear in a patch at all).
-
-> 3) Some random kernel configuration combinations can cause the current
->    kernel build to fail.  I hit one in x86 UML.
-
-Yes, which why direct including is much better than relying on fragile=20
-indirects.
-
-> We all know Ingo is the best person to discuss this with :).  While my
-> understanding of the header inclusion issue may be inaccurate or
-> outdated.
->=20
-> So for me, using "make allyesconfig" is a practical method for a quick
-> local build check, plus I always send my patches to Intel LKP.
-
-Even with LKP, randconfig builds may still require many tests to find=20
-issues.
-
-> There probably wants a script that identifies all files that reference a
-> definition in a header thus need to include it explicitly.  And indirect
-> includes should be zapped.
-
-Sadly, the clang based include-what-you-use tool is not yet there for=20
-the kernel AFAIK.
-
---=20
- i.
-
---8323328-589040720-1745675126=:944--
 
