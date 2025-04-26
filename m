@@ -1,87 +1,79 @@
-Return-Path: <linux-pm+bounces-26268-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26269-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2605EA9DA5A
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Apr 2025 13:09:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3A96A9DB02
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Apr 2025 15:16:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A64D176AF7
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Apr 2025 11:09:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E29E11891927
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Apr 2025 13:17:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 352F1226865;
-	Sat, 26 Apr 2025 11:09:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EFDE13A88A;
+	Sat, 26 Apr 2025 13:16:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RsiZSbbD"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="j7abyu2H"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8222253A5
-	for <linux-pm@vger.kernel.org>; Sat, 26 Apr 2025 11:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15E9C39ACC
+	for <linux-pm@vger.kernel.org>; Sat, 26 Apr 2025 13:16:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745665753; cv=none; b=FePAuEmrEAO76EbFs7VgHZPVcORPqAdf4qEXn/OtmH7G+0Ym1mxfXRWmw6zhGJcAXiHa6kdBFuPdJzbKxJjubWrgTthCyeBjnBSlRtyVXmJoWtndCzTUDffPCcwDC91JoiApfCasfmn58Bn7CfoP9CIrGKAHSzS93H1jJdsedWc=
+	t=1745673408; cv=none; b=aZuUHWWf0ZXb4SnYuJxbBz0CDQXCg2Q1A91zsUtug+Jqw4zf5TiS7rTcWF87hFU0I7m8LRSZuokkHj6pIkENK+cPIAI5TDpnwRMhIiMwth1ZYwUj8m6awxyhlT8z48gjSSL8irVoHhxM403FRb50DRINTVsEMwhgNBIINbWutDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745665753; c=relaxed/simple;
-	bh=UXxl8hSK1TuouiYf7DKLdc3mMGzmwoJ1FsBGNK4PyuM=;
+	s=arc-20240116; t=1745673408; c=relaxed/simple;
+	bh=A2QesqpKFd5HugAJmo85A8ZYC0ForBZg6/ap+WMdLRU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bJzyTUA8krsR7AAtmARgbvN9MikRWYF5U52s9IHrSBclOZyOfSMxiMxOrQH84YHS0pDIcSbTNbZV+j2WE3L23bBhUQ40SnPrnK31BCCpWK/utGd/B0s1jHKgBaNH27fIfgejvqWb/VIcogDM1++74LKvJULpxJErehzagPByvW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RsiZSbbD; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745665748;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7z4dFzfvb8ySvV/gweWyi1fm2nrOtc44d4j9ssf1utg=;
-	b=RsiZSbbDfhVyDbsStdCJyeVHozvXuGGpGmjxLMlkiNsw4B8ZdqufgsKeiBmczVOXIeeCoV
-	5SWoO8l0vr5/xgsDjoBKT94WWrzEqqJlBTsoDRnvN4F/eqle300h4AmWS7sxxUknAHIfyA
-	bDuZxSoP71ElLY8+4UmCE4o5y48jcLM=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-156-Ld0R7-0EMpS8vQQ5zKAe_w-1; Sat, 26 Apr 2025 07:09:06 -0400
-X-MC-Unique: Ld0R7-0EMpS8vQQ5zKAe_w-1
-X-Mimecast-MFC-AGG-ID: Ld0R7-0EMpS8vQQ5zKAe_w_1745665745
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-acb5a03afdcso260138766b.3
-        for <linux-pm@vger.kernel.org>; Sat, 26 Apr 2025 04:09:05 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=rUDXf+wYnkBKAMYSq+GRtLyJwqMzao+wxjSBbaqArs3GwxRE2pMfMIMio677cf63f+UxC9trOn9B48rTpULPvKbMc0C8kwlLNP6uMk2+hT/iqq8Sme1LeCQncpcwPe4vRnf8n8Fu7SRc9qVKh1owfkhJUXO0nMEBKJDkLyEOmTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=j7abyu2H; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43cfe63c592so32211515e9.2
+        for <linux-pm@vger.kernel.org>; Sat, 26 Apr 2025 06:16:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1745673404; x=1746278204; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J407mJFXHjtMTMAmHlJN1cKIkBEdqNJvnzIbzWuD3a0=;
+        b=j7abyu2HrxbXpboRgy0NBBnlSfFX84wfbkU0qgv/XAs4UxiZ2YdxYex6i2VgG9vN3C
+         bAJc5fbkiaRNzDtThI7WVtEUbCYkcpklADzwsmu2bJUzpdy5c10EnnXlRq5+UnS44yuO
+         LTYQRTmsmEQcfl1mZIzXCcPAjXBw5hvKh+0DD6Bl5i53VWCawmFCOHzwy3oVHC9G16+m
+         Hw6p9XNbQFvUcWVA4ZBjb8cR8pfpE/Lkxfki0AhGNe5dyk29JsVR2abs8KZmSkmaKdD0
+         t5m/C2STAWpJVJM+eFISjOkq2GcYcaVQB+xwKMI4lFfm6UNYc3VCD1Baa6iL99Mx8/np
+         9w5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745665744; x=1746270544;
-        h=content-transfer-encoding:in-reply-to:from:content-language
+        d=1e100.net; s=20230601; t=1745673404; x=1746278204;
+        h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7z4dFzfvb8ySvV/gweWyi1fm2nrOtc44d4j9ssf1utg=;
-        b=JYjXFS7HHQh0z2XbHK5XpMhMW9BZ6bSCJXZNOPwUgcvp7M+T8lquBCN7/nWEhbH6LA
-         9xBCayyr4N3HWmXp5PC5caOx15OCOUwmPlVu/T1az79EYff/0DcK8im1e3r1skiUfxiN
-         GynR6XIocMoSSGihgpKvn/ZsPWpqfZCor2JCbw1TW7ipSIxBdIMpyXixD+fwkvz+Qkux
-         goH5G8FbpEFi6t41fWKSs44cD3Az3620LcUmTO/R+yec1rdqwYWlwz0DKdZTjEpycs+o
-         sbjVufXhCisJoeaSHZi8EJUKEHZrfqxfulIw5x+lNBeUO2VxtApTagESw8MhTzutaCrG
-         IIeg==
-X-Forwarded-Encrypted: i=1; AJvYcCVB6S933xzB/JOvh/6tKqEERfdGI60CV5IHFvkumPyqtdNC9jYFvxX2PfX6bXGcpIVceIhrQXFflw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnR9EDyqR8QFHwo01L/ZDilWJdqhwjUqwBbES3Fv+VPjMepCcq
-	6xSn2ei3zw0psPO2wKYseJLPpe4y7c7F5QgnueXWx7c8j27ODOdvv5N64ak5u3e51enR3d6LQfR
-	n6mdj0n6tZA+n/e90fcZXdUr/wC1fmAGwIFsberlf/ma2H/OnmsrNXRtOYydkK4Ae
-X-Gm-Gg: ASbGncsmjqq0DMjkRwb1Jl4nmL7vCkSjDm8kRlkrgV5/c7ago0zm5vGQNuFRVcrZfNa
-	hwQXN5cxHNn8Z1QOAMGBc5fQw38cSZeKsVk6XIwHcyhOsznZBAqXbiVvTDAe3oUycLE73/ECl8T
-	C9aq6tZ0X8InRrExR0/Z7Ls7GHXHD8sf2M+W7SNPYVSaHzi5pS8JegI4dE+jGj6WWP5ASWyZu4v
-	DrKRsADX7WBWJQX6QXMDJTFBXPF70adcwMYqem38BRSjWA4Pqgl21L+TKV7nTlg3STdLLxK9bSG
-	mg/yMTNSpoIvH4nWq29q6KnZ/y6in7Ym+onIVZw5lQtANQ/5iV8G5eaeO0oQEhGWUW+N7iYogvp
-	6PtpzfY6jtTWr9XqoAfVlYvNgSLKzT7pko/NHLTaxPVV2vZI+Qwtev95zhauSNg==
-X-Received: by 2002:a17:907:1c0d:b0:aca:aeb4:9bd6 with SMTP id a640c23a62f3a-ace710377dcmr612317866b.10.1745665744220;
-        Sat, 26 Apr 2025 04:09:04 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE95r6Let4oOwnqtqnjgeYXA8WWJGEN2ecsznKI9AM0hby5iwzoaxzLW2oJKFj9DYTm2B3v4A==
-X-Received: by 2002:a17:907:1c0d:b0:aca:aeb4:9bd6 with SMTP id a640c23a62f3a-ace710377dcmr612315766b.10.1745665743805;
-        Sat, 26 Apr 2025 04:09:03 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6e4e7326sm279049266b.62.2025.04.26.04.09.02
+        bh=J407mJFXHjtMTMAmHlJN1cKIkBEdqNJvnzIbzWuD3a0=;
+        b=iqcVswm1QPcZoaE9lMpGn4z82fUS7FMhsPLuBd7UFB+Dwq135K1jEB8Dxz4FdfjJPz
+         YWluElNzHIBbZCO20Y5s2DAP5bNHv6im4Rthr1bsCZQxb0nFnKJniXdhFp/IQ22zZyxI
+         zshj52VtBn2wj71kJIzm8shKH1v2wAauC/UugYE1MzuZePKJSD5dA/JTDEIyacLww41t
+         OPQkWPm9SfP9Zb5Wgkg+sl6vJUUo4kZI2P8FDdEJDjqM5qcLDLe12k2p+MI9yFrzGo41
+         DWraGuzEKikNHmpcY9eofcenK3fe8S5rmqc4IPOBH/irGTRvk+/keVK2jqj8Lf3INtl8
+         Qh2A==
+X-Forwarded-Encrypted: i=1; AJvYcCWDULcZf/KEYzoB/cmW0E0fLMCS9irFCtEGEdP5snUCHOrqsiqzRk26JkBn9TuudeCGW9UI82RZTA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YziBCr6wq5zX5FWG3GgC4JpR0U59R1KuzhjSmjiwEHkwYK4fxVy
+	ddhNRW0wLvTakkbr42/s8YWahVLN7gYZRaJKbORmwxS1A79/l7LjJ6tbsgq0Oi4=
+X-Gm-Gg: ASbGnctFq4FIE7+5TVAAZW/1ySVwoNePdnDUqu4Q1WbbfIJZQUGdwq+EwMFdZuGS6xp
+	WzjUabdzU3/PTUwNLLLeCDaCQ6WW9niXFQXO119SdTNfEFZ0ZAHaXAWwtmwlFHOk9J7oy2Q+b4p
+	5WUY/tdFUr+/7gewEvKT/ACf0X2arkjn9M3feGSQ04rD5WPDzMW67zEicnpLYQzxtET3XPnqt9m
+	uUxBdyNQw2b3XXTEZkHBul28e/c/9EuKfp7I6dQHdoXDJXumPU4Q9b0dWKJInWuLYldvlYnUxeN
+	lXxikFGYNRMUHamH+TxxUIcy55BWtcvl8y1EzS28PKJqUE1CNg==
+X-Google-Smtp-Source: AGHT+IFEdPhvnEPF2IPYYIjIlVAxjiyxZPBsePtMycDc8OXoHjZ80eyhmbO/+g2anWdvGqYyjM32vw==
+X-Received: by 2002:a05:600c:3548:b0:43c:e8a5:87a with SMTP id 5b1f17b1804b1-440a65fe6ebmr57418595e9.16.1745673404131;
+        Sat, 26 Apr 2025 06:16:44 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.145])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073e5e1c6sm5649133f8f.98.2025.04.26.06.16.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Apr 2025 04:09:03 -0700 (PDT)
-Message-ID: <25b88c26-3141-433a-8dc7-59ea47615509@redhat.com>
-Date: Sat, 26 Apr 2025 13:09:02 +0200
+        Sat, 26 Apr 2025 06:16:43 -0700 (PDT)
+Message-ID: <79d1211f-6d4b-4f1f-8d94-3bb717025f05@tuxon.dev>
+Date: Sat, 26 Apr 2025 16:16:41 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,182 +81,67 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/1] power: supply: support charge_types in extensions
-To: Jelle van der Waa <jvanderwaa@redhat.com>,
- Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Cc: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-References: <20250414131840.382756-1-jvanderwaa@redhat.com>
- <20250414131840.382756-2-jvanderwaa@redhat.com>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20250414131840.382756-2-jvanderwaa@redhat.com>
+Subject: Re: [PATCH v5 10/11] ARM: dts: microchip: sama7d65: Add RTT and GPBR
+ Support for sama7d65 SoC
+To: Ryan.Wanner@microchip.com, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, nicolas.ferre@microchip.com,
+ alexandre.belloni@bootlin.com, lee@kernel.org, sre@kernel.org,
+ p.zabel@pengutronix.de
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-rtc@vger.kernel.org
+References: <cover.1744666011.git.Ryan.Wanner@microchip.com>
+ <e8868ef06102241b47883ba10edaed751831be6d.1744666011.git.Ryan.Wanner@microchip.com>
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Content-Language: en-US
+In-Reply-To: <e8868ef06102241b47883ba10edaed751831be6d.1744666011.git.Ryan.Wanner@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi,
+Hi, Ryan,
 
-On 14-Apr-25 3:18 PM, Jelle van der Waa wrote:
-> Similar to charge_behaviour, charge_types is an enum option where
-> reading the property shows the supported values, with the active value
-> surrounded by brackets. To be able to use it with a power_supply
-> extension a bitmask with the supported charge_Types values has to be
-> added to power_supply_ext.
+On 15.04.2025 00:41, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
 > 
-> Signed-off-by: Jelle van der Waa <jvanderwaa@redhat.com>
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-FWIW my Reviewed-by is still valid for this version.
-
-Sebastian, can you pick this one up, or are you waiting for
-the first power-supply extension driver which actually uses
-this to show up ?
-
-Because I think that Jelle might be waiting with posting
-the first power-supply extension driver which actually uses
-this until this is merged, which would be sort of a deadlock ...
-
-Regards,
-
-Hans
-
-
-
-
-> ---
-> V1->V2: clarified commit message, fix small logic error discovered by
-> -Wparentheses and changed example charge_types to use Long
-> Life/Standard.
-> ---
->  drivers/power/supply/power_supply_sysfs.c | 23 ++++++++++++++++++++++-
->  drivers/power/supply/test_power.c         | 20 ++++++++++++++++++--
->  include/linux/power_supply.h              |  1 +
->  3 files changed, 41 insertions(+), 3 deletions(-)
+> Add RTT support for SAMA7D65 SoC. The GPBR is added so the SoC is able
+> to store the RTT time data.
 > 
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-> index edb058c19c9c..6d80640511b5 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -321,6 +321,27 @@ static ssize_t power_supply_show_charge_behaviour(struct device *dev,
->  						  value->intval, buf);
->  }
+> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+> ---
+>  arch/arm/boot/dts/microchip/sama7d65.dtsi | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/microchip/sama7d65.dtsi b/arch/arm/boot/dts/microchip/sama7d65.dtsi
+> index 8439c6a9e9f2..bec70164a75c 100644
+> --- a/arch/arm/boot/dts/microchip/sama7d65.dtsi
+> +++ b/arch/arm/boot/dts/microchip/sama7d65.dtsi
+> @@ -132,6 +132,13 @@ shdwc: poweroff@e001d200 {
+>  			status = "disabled";
+>  		};
 >  
-> +static ssize_t power_supply_show_charge_types(struct device *dev,
-> +					      struct power_supply *psy,
-> +					      enum power_supply_charge_type current_type,
-> +					      char *buf)
-> +{
-> +	struct power_supply_ext_registration *reg;
+> +		rtt: rtc@e001d300 {
+> +			compatible = "microchip,sama7d65-rtt", "atmel,at91sam9260-rtt";
+> +			reg = <0xe001d300 0x30>;
+> +			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&clk32k 0>;
+> +		};
 > +
-> +	scoped_guard(rwsem_read, &psy->extensions_sem) {
-> +		power_supply_for_each_extension(reg, psy) {
-> +			if (power_supply_ext_has_property(reg->ext,
-> +							  POWER_SUPPLY_PROP_CHARGE_TYPES))
-> +				return power_supply_charge_types_show(dev,
-> +						reg->ext->charge_types,
-> +						current_type, buf);
-> +		}
-> +	}
+>  		clk32k: clock-controller@e001d500 {
+>  			compatible = "microchip,sama7d65-sckc", "microchip,sam9x60-sckc";
+>  			reg = <0xe001d500 0x4>;
+> @@ -146,6 +153,11 @@ rtc: rtc@e001d800 {
+>  			clocks = <&clk32k 1>;
+>  		};
+>  
+> +		gpbr: syscon@e001d700 {
+> +			compatible = "microchip,sama7d65-gpbr", "syscon";
+> +			reg = <0xe001d700 0x48>;
+> +		};
 > +
-> +	return power_supply_charge_types_show(dev, psy->desc->charge_types,
-> +						  current_type, buf);
-> +}
-> +
->  static ssize_t power_supply_format_property(struct device *dev,
->  					    bool uevent,
->  					    struct device_attribute *attr,
-> @@ -365,7 +386,7 @@ static ssize_t power_supply_format_property(struct device *dev,
->  	case POWER_SUPPLY_PROP_CHARGE_TYPES:
->  		if (uevent) /* no possible values in uevents */
->  			goto default_format;
-> -		ret = power_supply_charge_types_show(dev, psy->desc->charge_types,
-> +		ret = power_supply_show_charge_types(dev, psy,
->  						     value.intval, buf);
->  		break;
->  	case POWER_SUPPLY_PROP_MODEL_NAME ... POWER_SUPPLY_PROP_SERIAL_NUMBER:
-> diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
-> index 2a975a110f48..b5f148081c51 100644
-> --- a/drivers/power/supply/test_power.c
-> +++ b/drivers/power/supply/test_power.c
-> @@ -37,6 +37,8 @@ static int battery_charge_counter	= -1000;
->  static int battery_current		= -1600;
->  static enum power_supply_charge_behaviour battery_charge_behaviour =
->  	POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO;
-> +static enum power_supply_charge_type battery_charge_types =
-> +	POWER_SUPPLY_CHARGE_TYPE_STANDARD;
->  static bool battery_extension;
->  
->  static bool module_initialized;
-> @@ -87,7 +89,7 @@ static int test_power_get_battery_property(struct power_supply *psy,
->  		val->intval = battery_status;
->  		break;
->  	case POWER_SUPPLY_PROP_CHARGE_TYPE:
-> -		val->intval = POWER_SUPPLY_CHARGE_TYPE_FAST;
-> +		val->intval = battery_charge_types;
->  		break;
->  	case POWER_SUPPLY_PROP_HEALTH:
->  		val->intval = battery_health;
-> @@ -129,6 +131,9 @@ static int test_power_get_battery_property(struct power_supply *psy,
->  	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
->  		val->intval = battery_charge_behaviour;
->  		break;
-> +	case POWER_SUPPLY_PROP_CHARGE_TYPES:
-> +		val->intval = battery_charge_types;
-> +		break;
->  	default:
->  		pr_info("%s: some properties deliberately report errors.\n",
->  			__func__);
-> @@ -140,7 +145,7 @@ static int test_power_get_battery_property(struct power_supply *psy,
->  static int test_power_battery_property_is_writeable(struct power_supply *psy,
->  						    enum power_supply_property psp)
->  {
-> -	return psp == POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR;
-> +	return psp == POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR || psp == POWER_SUPPLY_PROP_CHARGE_TYPES;
->  }
->  
->  static int test_power_set_battery_property(struct power_supply *psy,
-> @@ -156,6 +161,14 @@ static int test_power_set_battery_property(struct power_supply *psy,
->  		}
->  		battery_charge_behaviour = val->intval;
->  		break;
-> +	case POWER_SUPPLY_PROP_CHARGE_TYPES:
-> +		if (val->intval < 0 ||
-> +		    val->intval >= BITS_PER_TYPE(typeof(psy->desc->charge_types)) ||
-> +		    !(BIT(val->intval) & psy->desc->charge_types)) {
-> +			return -EINVAL;
-> +		}
-> +		battery_charge_types = val->intval;
-> +		break;
->  	default:
->  		return -EINVAL;
->  	}
-> @@ -188,6 +201,7 @@ static enum power_supply_property test_power_battery_props[] = {
->  	POWER_SUPPLY_PROP_CURRENT_AVG,
->  	POWER_SUPPLY_PROP_CURRENT_NOW,
->  	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
-> +	POWER_SUPPLY_PROP_CHARGE_TYPES,
->  };
->  
->  static char *test_power_ac_supplied_to[] = {
-> @@ -215,6 +229,8 @@ static const struct power_supply_desc test_power_desc[] = {
->  		.charge_behaviours = BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO)
->  				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)
->  				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE),
-> +		.charge_types = BIT(POWER_SUPPLY_CHARGE_TYPE_STANDARD)
-> +				   | BIT(POWER_SUPPLY_CHARGE_TYPE_LONGLIFE)
->  	},
->  	[TEST_USB] = {
->  		.name = "test_usb",
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index 888824592953..c4cb854971f5 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -288,6 +288,7 @@ struct power_supply_desc {
->  struct power_supply_ext {
->  	const char *const name;
->  	u8 charge_behaviours;
-> +	u32 charge_types;
->  	const enum power_supply_property *properties;
->  	size_t num_properties;
->  
 
+This should go before rtc node to keep the nodes sorted by their address.
+I'll adjust while applying.
+
+Thank you,
+Claudiu
 
