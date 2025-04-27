@@ -1,141 +1,382 @@
-Return-Path: <linux-pm+bounces-26274-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26275-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C65EEA9DD61
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Apr 2025 23:51:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7E49A9DEA5
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Apr 2025 04:26:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 19ADC1B6351A
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Apr 2025 21:51:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F289E17F3AE
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Apr 2025 02:26:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E08D1FC7CA;
-	Sat, 26 Apr 2025 21:51:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="Sye5YV7N"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E34391DDA0C;
+	Sun, 27 Apr 2025 02:26:05 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740B51DE883;
-	Sat, 26 Apr 2025 21:51:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04CF10E0;
+	Sun, 27 Apr 2025 02:26:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745704273; cv=none; b=tP1su37K6+Defp5GcLBcYo8zRLLJCnJH00HnG4LN0TJMtzFa7e7O/EoqJRZ2kMtSZhQeIBLibSqRw1oeXrVyQLg+91B/MYqVKzy+FQhUedUBFC/uNZlxXbkYmI6tG/PnBZfHd7GOzOuzbVBwyOocBsUTmsSG9cM3MVBBRfg9zaA=
+	t=1745720765; cv=none; b=bAkB7swza1DJmh1BEbcHxN9HZXLAyj2VBHOH0aO6n2DsNoD0V9nfHKY1nvlBIOsnyDV0g3QgLh6QbD/LCHf7u/mJYwk4LUs4CI/OICd8iol+GwfV2Vqry0FQk9kP/TTPYxecXhTchaATVevEivfaNUwob/jxxna3dxWHH2xnVMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745704273; c=relaxed/simple;
-	bh=vU7rQ3ql5ZcEjD49ZOsILjzztWdn9rLW5kD/8m1EG64=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QHPCIZWGk/7ic8vV/WSsc7JPf6QZdvmG2igVGKVUt5BX3YDJxP4WHSD3AfHzQ+JY1ZxZreWNmayP3KMzw/61GAjPNUZvarEOVgYNSVPWyNWPbczgesp2xkDZkQStrUXMhvkWIrSBODhe9a4DsEEngdpRPcJIXAshoG2hwqXmIzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=Sye5YV7N; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=gsIFs9lsBStWNO+SAUv4QwVqUpvjBQFP3/IMyXHCh3E=; b=Sye5YV7NL9CEcB/oGe1RyoXudx
-	aQYeOWLye+efnOo9sycbe8k309HBPzOVgvdQeo7HNweqWmNTst6ZB+Irt2iOpJ8H/1NEffnDdZR7y
-	TgLUNbnl1tGVC9edgLpJsjdDVz9KATV22vbIJusuOkzh1BWrOv7meFHgBVd8ujMMJ+0j7j8QOsMFT
-	EaVNMgrPlDgJ5350yiF+vMLKUHddKZe2QwTRTqSExdrfjcOz00BjshTrcn2E3x+2zTVtu8CGZOGJ8
-	IWKhx20FVgecrDUhL9+p2gnRdZPAeOCOKgn7rscJFg5hpC/ZUW15rDktJhz+soODfF7KqtIQUePdJ
-	PSy0q48w==;
-Received: from i53875aba.versanet.de ([83.135.90.186] helo=phil..)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1u8nLv-0001OR-UY; Sat, 26 Apr 2025 23:46:28 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Conor Dooley <conor@kernel.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Steen Hegelund <Steen.Hegelund@microchip.com>,
-	Daniel Machon <daniel.machon@microchip.com>,
-	UNGLinuxDriver@microchip.com,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Andy Gross <agross@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	zhouyanjie@wanyeetech.com,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Stephan Gerhold <stephan.gerhold@linaro.org>,
-	"Rob Herring (Arm)" <robh@kernel.org>
-Cc: Heiko Stuebner <heiko@sntech.de>,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-rockchip@lists.infradead.org,
-	linux-amlogic@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	Andre Przywara <andre.przywara@arm.com>,
-	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: (subset) [PATCH v2 00/17] Arm cpu schema clean-ups
-Date: Sat, 26 Apr 2025 23:46:17 +0200
-Message-ID: <174570370139.31943.759075106630349490.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
-References: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
+	s=arc-20240116; t=1745720765; c=relaxed/simple;
+	bh=JfXk/alqfrcjxubAb2a6ESHPILt3F6ELPNr5qDAl92g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=XsFjiGd34UILlr0zxyWxluDbkGbcbDs8qJIpnDLYF0INPV8C93CbcUlP2yNAL2ooGDIvn0sy8o6Q1GdUyLLcMuN7R/BOucwfLeusZsog12hiKaPqwnaqIUOLfUULH3HLzJJcWMDWexI0zY8rQ/zV3Rrkx5/NmoYHGZrr/Spl7dY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.194])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4ZlVlj2MLwz13Kcd;
+	Sun, 27 Apr 2025 10:24:49 +0800 (CST)
+Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
+	by mail.maildlp.com (Postfix) with ESMTPS id 1CD431402D0;
+	Sun, 27 Apr 2025 10:25:53 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
+ (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Sun, 27 Apr
+ 2025 10:25:52 +0800
+Message-ID: <2fd8c27d-7206-4af6-b30b-d8f786827d94@huawei.com>
+Date: Sun, 27 Apr 2025 10:25:51 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] cpufreq: Fix setting policy limits when frequency
+ tables are used
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+CC: Linux PM <linux-pm@vger.kernel.org>, Christian Loehle
+	<christian.loehle@arm.com>, LKML <linux-kernel@vger.kernel.org>, Viresh Kumar
+	<viresh.kumar@linaro.org>, Srinivas Pandruvada
+	<srinivas.pandruvada@linux.intel.com>, Mario Limonciello
+	<mario.limonciello@amd.com>, Sultan Alsawaf <sultan@kerneltoast.com>, Stephan
+ Gerhold <stephan.gerhold@linaro.org>, "Rafael J. Wysocki"
+	<rafael.j.wysocki@intel.com>
+References: <5896780.DvuYhMxLoT@rjwysocki.net>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <5896780.DvuYhMxLoT@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemh100008.china.huawei.com (7.202.181.93)
 
+On 2025/4/25 19:36, Rafael J. Wysocki wrote:
 
-On Thu, 10 Apr 2025 10:47:21 -0500, Rob Herring (Arm) wrote:
-> The Arm cpu.yaml schema fails to restrict allowed properties in 'cpu'
-> nodes. The result, not surprisely, is a number of additional properties
-> and errors in .dts files. This series resolves those issues.
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> There's still more properties in arm32 DTS files which I have not
-> documented. Mostly yet more supply names and "fsl,soc-operating-points".
-> What's a few more warnings on the 10000s of warnings...
+> Commit 7491cdf46b5c ("cpufreq: Avoid using inconsistent policy->min and
+> policy->max") overlooked the fact that policy->min and policy->max were
+> accessed directly in cpufreq_frequency_table_target() and in the
+> functions called by it.  Consequently, the changes made by that commit
+> led to problems with setting policy limits.
 > 
-> [...]
+> Address this by passing the target frequency limits to __resolve_freq()
+> and cpufreq_frequency_table_target() and propagating them to the
+> functions called by the latter.
+> 
+> Fixes: 7491cdf46b5c ("cpufreq: Avoid using inconsistent policy->min and policy->max")
+> Link: https://lore.kernel.org/linux-pm/aAplED3IA_J0eZN0@linaro.org/
+> Reported-by: Stephan Gerhold <stephan.gerhold@linaro.org>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> The v1 is here: https://lore.kernel.org/linux-pm/12665363.O9o76ZdvQC@rjwysocki.net/
+> 
+> v1 -> v2:
+>    * Do clamp_val(target_freq, min, max) before checking freq_table against
+>      NULL in __resolve_freq().
+>    * Update comment in cpufreq_frequency_table_target() to match the new code.
+> 
+> ---
+>  drivers/cpufreq/cpufreq.c          |   22 ++++++---
+>  drivers/cpufreq/cpufreq_ondemand.c |    3 -
+>  drivers/cpufreq/freq_table.c       |    6 +-
+>  include/linux/cpufreq.h            |   83 ++++++++++++++++++++++++-------------
+>  4 files changed, 73 insertions(+), 41 deletions(-)
+> 
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -491,14 +491,18 @@
+>  EXPORT_SYMBOL_GPL(cpufreq_disable_fast_switch);
+>  
+>  static unsigned int __resolve_freq(struct cpufreq_policy *policy,
+> -		unsigned int target_freq, unsigned int relation)
+> +				   unsigned int target_freq,
+> +				   unsigned int min, unsigned int max,
+> +				   unsigned int relation)
+>  {
+>  	unsigned int idx;
+>  
+> +	target_freq = clamp_val(target_freq, min, max);
+> +
+>  	if (!policy->freq_table)
+>  		return target_freq;
+>  
+> -	idx = cpufreq_frequency_table_target(policy, target_freq, relation);
+> +	idx = cpufreq_frequency_table_target(policy, target_freq, min, max, relation);
+>  	policy->cached_resolved_idx = idx;
+>  	policy->cached_target_freq = target_freq;
+>  	return policy->freq_table[idx].frequency;
+> @@ -532,8 +536,7 @@
+>  	if (unlikely(min > max))
+>  		min = max;
+>  
+> -	return __resolve_freq(policy, clamp_val(target_freq, min, max),
+> -			      CPUFREQ_RELATION_LE);
+> +	return __resolve_freq(policy, target_freq, min, max, CPUFREQ_RELATION_LE);
+>  }
+>  EXPORT_SYMBOL_GPL(cpufreq_driver_resolve_freq);
+>  
+> @@ -2351,8 +2354,8 @@
+>  	if (cpufreq_disabled())
+>  		return -ENODEV;
+>  
+> -	target_freq = clamp_val(target_freq, policy->min, policy->max);
+> -	target_freq = __resolve_freq(policy, target_freq, relation);
+> +	target_freq = __resolve_freq(policy, target_freq, policy->min,
+> +				     policy->max, relation);
+>  
+>  	pr_debug("target for CPU %u: %u kHz, relation %u, requested %u kHz\n",
+>  		 policy->cpu, target_freq, relation, old_target_freq);
+> @@ -2650,8 +2653,11 @@
+>  	 * compiler optimizations around them because they may be accessed
+>  	 * concurrently by cpufreq_driver_resolve_freq() during the update.
+>  	 */
+> -	WRITE_ONCE(policy->max, __resolve_freq(policy, new_data.max, CPUFREQ_RELATION_H));
+> -	new_data.min = __resolve_freq(policy, new_data.min, CPUFREQ_RELATION_L);
+> +	WRITE_ONCE(policy->max, __resolve_freq(policy, new_data.max,
+> +					       new_data.min, new_data.max,
+> +					       CPUFREQ_RELATION_H));
+> +	new_data.min = __resolve_freq(policy, new_data.min, new_data.min,
+> +				      new_data.max, CPUFREQ_RELATION_L);
+>  	WRITE_ONCE(policy->min, new_data.min > policy->max ? policy->max : new_data.min);
 
-Applied, thanks!
+It might be better like:
 
-[10/17] arm: dts: rockchip: Drop redundant CPU "clock-latency"
-        commit: 709a25f7a433d53dc9f0daf7cf5657f0671c5026
+-	WRITE_ONCE(policy->max, __resolve_freq(policy, new_data.max, CPUFREQ_RELATION_H));
+-	new_data.min = __resolve_freq(policy, new_data.min, CPUFREQ_RELATION_L);
+- 	WRITE_ONCE(policy->min, new_data.min > policy->max ? policy->max : new_data.min);
++	WRITE_ONCE(policy->max, __resolve_freq(policy, new_data.max,
++					       new_data.min, new_data.max,
++					       CPUFREQ_RELATION_H));
++	WRITE_ONCE(policy->min, __resolve_freq(policy, new_data.min,
++					       new_data.min, policy->max,
++					       CPUFREQ_RELATION_L));
 
-Best regards,
--- 
-Heiko Stuebner <heiko@sntech.de>
+>  
+>  	trace_cpu_frequency_limits(policy);
+> --- a/drivers/cpufreq/cpufreq_ondemand.c
+> +++ b/drivers/cpufreq/cpufreq_ondemand.c
+> @@ -76,7 +76,8 @@
+>  		return freq_next;
+>  	}
+>  
+> -	index = cpufreq_frequency_table_target(policy, freq_next, relation);
+> +	index = cpufreq_frequency_table_target(policy, freq_next, policy->min,
+> +					       policy->max, relation);
+>  	freq_req = freq_table[index].frequency;
+>  	freq_reduc = freq_req * od_tuners->powersave_bias / 1000;
+>  	freq_avg = freq_req - freq_reduc;
+> --- a/drivers/cpufreq/freq_table.c
+> +++ b/drivers/cpufreq/freq_table.c
+> @@ -115,8 +115,8 @@
+>  EXPORT_SYMBOL_GPL(cpufreq_generic_frequency_table_verify);
+>  
+>  int cpufreq_table_index_unsorted(struct cpufreq_policy *policy,
+> -				 unsigned int target_freq,
+> -				 unsigned int relation)
+> +				 unsigned int target_freq, unsigned int min,
+> +				 unsigned int max, unsigned int relation)
+>  {
+>  	struct cpufreq_frequency_table optimal = {
+>  		.driver_data = ~0,
+> @@ -147,7 +147,7 @@
+>  	cpufreq_for_each_valid_entry_idx(pos, table, i) {
+>  		freq = pos->frequency;
+>  
+> -		if ((freq < policy->min) || (freq > policy->max))
+> +		if (freq < min || freq > max)
+>  			continue;
+>  		if (freq == target_freq) {
+>  			optimal.driver_data = i;
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -788,8 +788,8 @@
+>  int cpufreq_generic_frequency_table_verify(struct cpufreq_policy_data *policy);
+>  
+>  int cpufreq_table_index_unsorted(struct cpufreq_policy *policy,
+> -				 unsigned int target_freq,
+> -				 unsigned int relation);
+> +				 unsigned int target_freq, unsigned int min,
+> +				 unsigned int max, unsigned int relation);
+>  int cpufreq_frequency_table_get_index(struct cpufreq_policy *policy,
+>  		unsigned int freq);
+>  
+> @@ -852,12 +852,12 @@
+>  	return best;
+>  }
+>  
+> -/* Works only on sorted freq-tables */
+> -static inline int cpufreq_table_find_index_l(struct cpufreq_policy *policy,
+> -					     unsigned int target_freq,
+> -					     bool efficiencies)
+> +static inline int find_index_l(struct cpufreq_policy *policy,
+> +			       unsigned int target_freq,
+> +			       unsigned int min, unsigned int max,
+> +			       bool efficiencies)
+>  {
+> -	target_freq = clamp_val(target_freq, policy->min, policy->max);
+> +	target_freq = clamp_val(target_freq, min, max);
+>  
+>  	if (policy->freq_table_sorted == CPUFREQ_TABLE_SORTED_ASCENDING)
+>  		return cpufreq_table_find_index_al(policy, target_freq,
+> @@ -867,6 +867,14 @@
+>  						   efficiencies);
+>  }
+>  
+> +/* Works only on sorted freq-tables */
+> +static inline int cpufreq_table_find_index_l(struct cpufreq_policy *policy,
+> +					     unsigned int target_freq,
+> +					     bool efficiencies)
+> +{
+> +	return find_index_l(policy, target_freq, policy->min, policy->max, efficiencies);
+> +}
+> +
+>  /* Find highest freq at or below target in a table in ascending order */
+>  static inline int cpufreq_table_find_index_ah(struct cpufreq_policy *policy,
+>  					      unsigned int target_freq,
+> @@ -920,12 +928,12 @@
+>  	return best;
+>  }
+>  
+> -/* Works only on sorted freq-tables */
+> -static inline int cpufreq_table_find_index_h(struct cpufreq_policy *policy,
+> -					     unsigned int target_freq,
+> -					     bool efficiencies)
+> +static inline int find_index_h(struct cpufreq_policy *policy,
+> +			       unsigned int target_freq,
+> +			       unsigned int min, unsigned int max,
+> +			       bool efficiencies)
+>  {
+> -	target_freq = clamp_val(target_freq, policy->min, policy->max);
+> +	target_freq = clamp_val(target_freq, min, max);
+>  
+>  	if (policy->freq_table_sorted == CPUFREQ_TABLE_SORTED_ASCENDING)
+>  		return cpufreq_table_find_index_ah(policy, target_freq,
+> @@ -935,6 +943,14 @@
+>  						   efficiencies);
+>  }
+>  
+> +/* Works only on sorted freq-tables */
+> +static inline int cpufreq_table_find_index_h(struct cpufreq_policy *policy,
+> +					     unsigned int target_freq,
+> +					     bool efficiencies)
+> +{
+> +	return find_index_h(policy, target_freq, policy->min, policy->max, efficiencies);
+> +}
+> +
+>  /* Find closest freq to target in a table in ascending order */
+>  static inline int cpufreq_table_find_index_ac(struct cpufreq_policy *policy,
+>  					      unsigned int target_freq,
+> @@ -1005,12 +1021,12 @@
+>  	return best;
+>  }
+>  
+> -/* Works only on sorted freq-tables */
+> -static inline int cpufreq_table_find_index_c(struct cpufreq_policy *policy,
+> -					     unsigned int target_freq,
+> -					     bool efficiencies)
+> +static inline int find_index_c(struct cpufreq_policy *policy,
+> +			       unsigned int target_freq,
+> +			       unsigned int min, unsigned int max,
+> +			       bool efficiencies)
+>  {
+> -	target_freq = clamp_val(target_freq, policy->min, policy->max);
+> +	target_freq = clamp_val(target_freq, min, max);
+>  
+>  	if (policy->freq_table_sorted == CPUFREQ_TABLE_SORTED_ASCENDING)
+>  		return cpufreq_table_find_index_ac(policy, target_freq,
+> @@ -1020,7 +1036,17 @@
+>  						   efficiencies);
+>  }
+>  
+> -static inline bool cpufreq_is_in_limits(struct cpufreq_policy *policy, int idx)
+> +/* Works only on sorted freq-tables */
+> +static inline int cpufreq_table_find_index_c(struct cpufreq_policy *policy,
+> +					     unsigned int target_freq,
+> +					     bool efficiencies)
+> +{
+> +	return find_index_c(policy, target_freq, policy->min, policy->max, efficiencies);
+> +}
+> +
+> +static inline bool cpufreq_is_in_limits(struct cpufreq_policy *policy,
+> +					unsigned int min, unsigned int max,
+> +					int idx)
+>  {
+>  	unsigned int freq;
+>  
+> @@ -1029,11 +1055,13 @@
+>  
+>  	freq = policy->freq_table[idx].frequency;
+>  
+> -	return freq == clamp_val(freq, policy->min, policy->max);
+> +	return freq == clamp_val(freq, min, max);
+>  }
+>  
+>  static inline int cpufreq_frequency_table_target(struct cpufreq_policy *policy,
+>  						 unsigned int target_freq,
+> +						 unsigned int min,
+> +						 unsigned int max,
+>  						 unsigned int relation)
+>  {
+>  	bool efficiencies = policy->efficiencies_available &&
+> @@ -1044,29 +1072,26 @@
+>  	relation &= ~CPUFREQ_RELATION_E;
+>  
+>  	if (unlikely(policy->freq_table_sorted == CPUFREQ_TABLE_UNSORTED))
+> -		return cpufreq_table_index_unsorted(policy, target_freq,
+> -						    relation);
+> +		return cpufreq_table_index_unsorted(policy, target_freq, min,
+> +						    max, relation);
+>  retry:
+>  	switch (relation) {
+>  	case CPUFREQ_RELATION_L:
+> -		idx = cpufreq_table_find_index_l(policy, target_freq,
+> -						 efficiencies);
+> +		idx = find_index_l(policy, target_freq, min, max, efficiencies);
+>  		break;
+>  	case CPUFREQ_RELATION_H:
+> -		idx = cpufreq_table_find_index_h(policy, target_freq,
+> -						 efficiencies);
+> +		idx = find_index_h(policy, target_freq, min, max, efficiencies);
+>  		break;
+>  	case CPUFREQ_RELATION_C:
+> -		idx = cpufreq_table_find_index_c(policy, target_freq,
+> -						 efficiencies);
+> +		idx = find_index_c(policy, target_freq, min, max, efficiencies);
+>  		break;
+>  	default:
+>  		WARN_ON_ONCE(1);
+>  		return 0;
+>  	}
+>  
+> -	/* Limit frequency index to honor policy->min/max */
+> -	if (!cpufreq_is_in_limits(policy, idx) && efficiencies) {
+> +	/* Limit frequency index to honor min and max */
+> +	if (!cpufreq_is_in_limits(policy, min, max, idx) && efficiencies) {
+>  		efficiencies = false;
+>  		goto retry;
+>  	}
+> 
+> 
+> 
+> 
+> 
+
 
