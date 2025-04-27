@@ -1,315 +1,212 @@
-Return-Path: <linux-pm+bounces-26277-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26281-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AF3AA9DF5D
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Apr 2025 08:23:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B825EA9E19B
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Apr 2025 11:23:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EA21A7A2CEB
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Apr 2025 06:22:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D68C83B6799
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Apr 2025 09:22:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FCAB23E34F;
-	Sun, 27 Apr 2025 06:23:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4A7C2528F3;
+	Sun, 27 Apr 2025 09:21:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="KGPKbjRG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C39B23E330;
-	Sun, 27 Apr 2025 06:23:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E4122D4FF;
+	Sun, 27 Apr 2025 09:21:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745735006; cv=none; b=ZJ5WD36OEQbIQm2nTYyOEdqVH50JlRX+7/wtg9c2hGXajb/u+mlpyugE4SDTk59UJzFyl+ov03M6uDwGNqzn9IwEST8vAtbx9PaDsfO+ewKe/EB0jVhdm+0t4Jd/5BPFbKULeFoNd5AY+SQVnx3DenGUZN0jRL1bLxxhYF1a5hY=
+	t=1745745694; cv=none; b=JPkmomVfWl2skuId5/fVAMz8jDYE9Pmjx0h1kOJACpReBvWRGAINW0//gUHxwofon/8oVGYGx5BpHx8l9tYB3WqRb10b9Ktm5KsU4iJlyZZzLvak5DG8TVh90l7M0AbrCx0JuixbZKQhgpLd6IXN3OK6kdDsx3IoypM3gcEYvYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745735006; c=relaxed/simple;
-	bh=PsJwfKh7z0kRElqiu9ELReZb9uQW6UxDynhUxlVP8r8=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=sgUhF87QPjnEJ5Qs418XnKDHyxgJbbrhR7QjPTZK8tz+MWyOPIaU78pqudut7/aHSP0ouoyj8nd+QYLEi5t1gqE6dz2kzg0kl9mKSql1eMqgV+5utrCRtXoo1KWd9BLJfAE25PGWC0jG5+9DdL5chG2T8PjTEpSFbuGHJp20eZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4ZlbyL3vzJz5vMx;
-	Sun, 27 Apr 2025 14:19:22 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id 922D418007F;
-	Sun, 27 Apr 2025 14:23:15 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Sun, 27 Apr
- 2025 14:23:14 +0800
-Message-ID: <d12a2ee3-0ea0-48bf-9f75-b29fc0039d9e@huawei.com>
-Date: Sun, 27 Apr 2025 14:23:14 +0800
+	s=arc-20240116; t=1745745694; c=relaxed/simple;
+	bh=sAwmHzM5BuZaF2+SHHsnyyh62JrNU6fREWCA/ZhKmV8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lTHC9iF/c7HURUkq2JmhYs2wkxV2XC9iYFJRULkVi/FkhQXbQo5cffa/C8h+bdbC9/HkBwsysYlWm764XapjbeKeGp6Po7o+57VxXWStqhpXOxoKnCgt0cj3EfVOd9lPsnJhADr3XmXY3BML4+LflMHlUUWcTqz9iba0sOm8dBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=KGPKbjRG; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from terminus.zytor.com (terminus.zytor.com [IPv6:2607:7c80:54:3:0:0:0:136])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53R9KRRv1598826
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+	Sun, 27 Apr 2025 02:20:31 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53R9KRRv1598826
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025042001; t=1745745633;
+	bh=qSfXCrg4qMgrCCN/nBzwbznIDzcGPiftIKltZswFgIE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=KGPKbjRGgpHgFU0cY/ACUzxlHFjWDOeiPp9By/ChtzbJZIweuQ+iTo89wAU0iNihQ
+	 SKEyvJHImJNQXBkUZWIdvyDCu6QoEPA8rITFD0DzOFnJQDU+Kzfi3F/wVVPJtaasOz
+	 tp9WXAiFowdLbVcAn52sxpFAE0019Qh9Ohma3zzykO4s2ncruEhapesrBun7C7nbu/
+	 4XCH6DGZYk0OeujJJD/cl152iPZUttGL/t3z+ARRTRK4pCAey7AUYR4wEKwxvjBg97
+	 nHT/eL7JBioWUo9OkjJnkhRi5NlEgkrstADaj6ZDGDUs2C9E+9FUj4IM8BNmXhLIe2
+	 IL5Z9UXy1PO/Q==
+From: "Xin Li (Intel)" <xin@zytor.com>
+To: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
+        peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+        haiyangz@microsoft.com, decui@microsoft.com,
+        dapeng1.mi@linux.intel.com, ilpo.jarvinen@linux.intel.com
+Subject: [PATCH v4 00/15] MSR code cleanup part one
+Date: Sun, 27 Apr 2025 02:20:12 -0700
+Message-ID: <20250427092027.1598740-1-xin@zytor.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Patch 0/5] Support Autonomous Selection mode in cppc_cpufreq
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-To: Sumit Gupta <sumitg@nvidia.com>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar
-	<viresh.kumar@linaro.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
-	<corbet@lwn.net>, <linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <acpica-devel@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-	<treding@nvidia.com>, <jonathanh@nvidia.com>, <sashal@nvidia.com>,
-	<vsethi@nvidia.com>, <ksitaraman@nvidia.com>, <sanjayc@nvidia.com>,
-	<bbasu@nvidia.com>
-References: <20250211103737.447704-1-sumitg@nvidia.com>
- <20250211104428.dibsnxmkiluzixvz@vireshk-i7>
- <b45d0d81-e4f7-474e-a146-0075a6145cc2@huawei.com>
- <868d4c2a-583a-4cbb-a572-d884090a7134@nvidia.com>
- <8d5e0035-d8fe-49ef-bda5-f5881ff96657@huawei.com>
- <94bdab73-adc4-4b43-9037-5639f23e3d1e@nvidia.com>
- <CAJZ5v0iAg6HFROHctYQwW=V9XiV8p3XVYgeKUcX4qBgfwQK6Ow@mail.gmail.com>
- <e58a20f8-e8bf-409c-a878-af2bd3c7d243@nvidia.com>
- <73fbf483-7afa-4cd2-84d1-6ace36549c53@huawei.com>
- <f0f1b31b-a0fc-4d21-8b79-c896833dae35@nvidia.com>
- <4a87269d-542e-4d4d-9c46-780f9eb55193@huawei.com>
- <00c0f7af-2e1a-41d5-9e56-abf5ef4a2704@huawei.com>
-In-Reply-To: <00c0f7af-2e1a-41d5-9e56-abf5ef4a2704@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemh100008.china.huawei.com (7.202.181.93)
 
-On 2025/4/19 15:44, zhenglifeng (A) wrote:
+This patch set is the first part of the patch set:
 
-> Hi Sumit,
-> 
-> May I resend the patch 8 in [1] first? Because I really need this new
-> feature.
-> 
-> After that patch being merged, you can resend this series base on that,
-> change the paths of the sysfs files, add a new cppc_cpufreq instance or do
-> anything in that series. Then we can continue this discussion.
-> 
-> Is that all right?
+  MSR refactor with new MSR instructions support
 
-Hi Sumit,
+@ https://lore.kernel.org/lkml/20250422082216.1954310-1-xin@zytor.com/T/#m5a34be7d4ed55f0baca965cb65452a08e9ad7c8a
 
-Please let me know if you are OK with it.
 
-> 
-> On 2025/4/1 21:56, zhenglifeng (A) wrote:
-> 
->> Sorry for the delay.
->>
->> On 2025/3/14 20:48, Sumit Gupta wrote:
->>>
->>>
->>>>>>
->>>>>> There seems to be some quite fundamental disagreement on how this
->>>>>> should be done, so I'm afraid I cannot do much about it ATM.
->>>>>>
->>>>>> Please agree on a common approach and come back to me when you are ready.
->>>>>>
->>>>>> Sending two concurrent patchsets under confusingly similar names again
->>>>>> and again isn't particularly helpful.
->>>>>>
->>>>>> Thanks!
->>>>>
->>>>> Hi Rafael,
->>>>>
->>>>> Thank you for looking into this.
->>>>>
->>>>> Hi Lifeng,
->>>>>
->>>>> As per the discussion, we can make the driver future extensible and
->>>>> also can optimize the register read/write access.
->>>>>
->>>>> I gave some thought and below is my proposal.
->>>>>
->>>>> 1) Pick 'Patch 1-7' from your patch series [1] which optimize API's
->>>>>     to read/write a cpc register.
->>>>>
->>>>> 2) Pick my patches in [2]:
->>>>>     - Patch 1-4: Keep all cpc registers together under acpi_cppc sysfs.
->>>>>                  Also, update existing API's to read/write regs in batch.
->>>>>     - Patch 5: Creates 'cppc_cpufreq_epp_driver' instance for booting
->>>>>       all CPU's in Auto mode and set registers with right values.
->>>>>       They can be updated after boot from sysfs to change hints to HW.
->>>>>       I can use the optimized API's from [1] where required in [2].
->>>>>
->>>>> Let me know if you are okay with this proposal.
->>>>> I can also send an updated patch series with all the patches combined?
->>>>>
->>>>> [1] https://lore.kernel.org/all/20250206131428.3261578-1-zhenglifeng1@huawei.com/
->>>>> [2] https://lore.kernel.org/lkml/20250211103737.447704-1-sumitg@nvidia.com/
->>>>>
->>>>> Regards,
->>>>> Sumit Gupta
->>>>>
->>>>
->>>> Hi Sumit,
->>>>
->>>> Over the past few days, I've been thinking about your proposal and
->>>> scenario.
->>>>
->>>> I think we both agree that PATCH 1-7 in [1] doesn't conflicts with [2], so
->>>> the rest of the discussion focuses on the differences between [2] and the
->>>> PATCH 8 in [1].
->>>>
->>>> We both tried to support autonomous selection mode in cppc_cpufreq but on
->>>> different ways. I think the differences between these two approaches can be
->>>> summarized into three questions:
->>>>
->>>> 1. Which sysfs files to expose? I think this is not a problem, we can keep
->>>> all of them.
->>>>
->>>> 2. Where to expose these sysfs files? I understand your willing to keep all
->>>> cpc registers together under acpi_cppc sysfs. But in my opinion, it is more
->>>> suitable to expose them under cppc_cpufreq_attr, for these reasons:
->>>>
->>>>    1) It may probably introduce concurrency and data consistency issues, as
->>>> I mentioned before.
->>>>
->>>
->>> As explained in previous reply, this will be solved with the ifdef
->>> check to enable the attributes for only those CPUFREQ drivers which want
->>> to use the generic nodes.
->>>  e.g: '#ifdef CONFIG_ACPI_CPPC_CPUFREQ' for 'cppc_cpufreq'.
->>>            
->>> These CPC register read/write sysfs nodes are generic as per the ACPI
->>> specification and without any vendor specific logic.
->>> So, adding them in the lib file 'cppc_acpi.c'(CONFIG_ACPI_CPPC_LIB) will
->>> avoid code duplication if a different or new ACPI based CPUFREQ driver
->>> also wants to use them just by adding their macro check. Such ifdef check is also used in other places for attributes creation like below.
->>> So, don't look like a problem.
->>>  $ grep -A4 "acpi_cpufreq_attr\[" drivers/cpufreq/acpi-cpufreq.c
->>>  static struct freq_attr *acpi_cpufreq_attr[] = {
->>>     &freqdomain_cpus,
->>>  #ifdef CONFIG_X86_ACPI_CPUFREQ_CPB
->>>     &cpb,
->>>  #endif
->>
->> So in the future, we will see:
->>
->> static struct attribute *cppc_attrs[] = {
->> 	...
->> #ifdef CONFIG_XXX
->> 	&xxx.attr,
->> 	&xxx.attr,
->> #endif
->> #ifdef CONFIG_XXX
->> 	&xxx.attr,
->> #endif
->> #ifdef CONFIG_XXX
->> 	&xxx.attr,
->> 	...
->> };
->>
->> I think you are making things more complicated.
->>
->>>
->>>>    2) The store functions call cpufreq_cpu_get() to get policy and update
->>>> the driver_data which is a cppc_cpudata. Only the driver_data in
->>>> cppc_cpufreq's policy is a cppc_cpudata! These operations are inappropriate
->>>> in cppc_acpi. This file currently provides interfaces for cpufreq drivers
->>>> to use. Reverse calls might mess up call relationships, break code
->>>> structures, and cause problems that are hard to pinpoint the root cause!
->>>>
->>>
->>> If we don't want to update the cpufreq policy from 'cppc_acpi.c' and only update it from within the cpufreq,    then this could be one valid
->>> point to not add the write syfs nodes in 'cppc_acpi.c' lib file.
->>>
->>> @Rafael, @Viresh : Do you have any comments on this?
->>
->> I think updating cpufreq policy from 'cppc_acpi.c' should be forbidden.
->>
->>>
->>>>    3) Difficult to extend. Different cpufreq drivers may have different
->>>> processing logic when reading from and writing to these CPC registers.
->>>> Limiting all sysfs here makes it difficult for each cpufreq driver to
->>>> extend. I think this is why there are only read-only interfaces under
->>>> cppc_attrs before.
->>>>
->>>
->>> We are updating the CPC registers as per the generic ACPI specification.
->>> So, any ACPI based CPUFREQ driver can use these generic nodes to
->>> read/write reg's until they have a vendor specific requirement or
->>> implementation.
->>> As explained above, If someone wants to update in different way and use
->>> their own CPUFREQ driver then these generic attributes won't be created
->>> due to the CPUFREQ driver macro check.
->>> I think AMD and Intel are doing more than just reading/updating the registers. That's why they needed their driver specific implementations.
->>>
->>>> Adding a 'ifdef' is not a good way to solve these problems. Defining this
->>>> config does not necessarily mean that the cpufreq driver is cppc_cpufreq.
->>>>
->>>
->>> It means that only.
->>>  ./drivers/cpufreq/Makefile:obj-$(CONFIG_ACPI_CPPC_CPUFREQ) += cppc_cpufreq.o
->>
->> Compile this file does not mean that the cpufreq driver is cppc_cpufreq.
->> Driver registration may fail, and the actually loaded driver may be
->> another. It'll be dangerous to expose these sysfs files for users to update
->> registers' value in this case.
->>
->>>
->>>> 3. Is it necessary to add a new driver instance? [1] exposed the sysfs
->>>> files to support users dynamically change the auto selection mode of each
->>>> policy. Each policy can be operated seperately. It seems to me that if you
->>>> want to boot all CPUs in auto mode, it should be sufficient to set all
->>>> relevant registers to the correct values at boot time. I can't see why the
->>>> new instance is necessary unless you explain it further. Could you explain
->>>> more about why you add a new instance starting from answer these questions:
->>>>
->>>> For a specific CPU, what is the difference between using the two instances
->>>> when auto_sel is 1? And what is the difference when auto_sel is 0?
->>>>
->>>
->>> Explained this in previous reply. Let me elaborate more.
->>>
->>> For hundred's of CPU's, we don't need to explicitly set multiple sysfs
->>> after boot to enable and configure Auto mode with right params. That's why an easy option is to pass boot argument or module param for enabling
->>> and configuration.
->>> A separate instance 'cppc_cpufreq_epp' of the 'cppc_cpufreq' driver is
->>> added because policy min/max need to be updated to the min/max_perf
->>> and not nominal/lowest nonlinear perf which is done by the default
->>> init hook. Min_perf value can be lower than lowest nonlinear perf and Max_perf can be higher than nominal perf.
->>> If some CPU is booted with epp instance and later the auto mode is disabled or min/max_perf is changed from sysfs then also the policy
->>> min/max need to be updated accordingly.
->>>
->>> Another is that in Autonomous mode the freq selection and setting is
->>> done by HW. So, cpufreq_driver->target() hook is not needed.
->>> These are few reasons which I am aware of as of now.
->>> I think in future there can be more. Having a separate instance
->>> reflecting a HW based Autonomous frequency selection will make it easy
->>> for any future changes.
->>
->> So CPUs will act totally differently under these two instance. But what if
->> I want part of the CPUs in HW mode and others in SW mode? Should I boot on
->> HW mode and set some policies' auto_set to false or the other way? It seems
->> like the effects of theses two approaches are completely different. In my
->> opinion, this new instance is more like a completely different driver than
->> cppc_cpufreq.
->>
->>>
->>>> If it turns out that the new instance is necessary, I think we can reach a
->>>> common approach by adding this new cpufreq driver instance and place the
->>>> attributes in 'cppc_cpufreq_epp_attr', like amd-pstate did.
->>>>
->>>> What do you think?
->>>
->>> I initially thought about this but there was a problem.
->>> What if we boot with non-epp instance which doesn't have these attributes and later want to enable Auto mode for few CPU's from sysfs.
->>
->> That's the problem. CPUs can be set to Auto mode with or without this new
->> instance. So what's the point of it?
->>
->>>
->>>
->>> Best Regards,
->>> Sumit Gupta
->>
->>
->>
-> 
-> 
+It's getting *WAY* too big, and whether to zap the pv_ops MSR APIs is
+still under argument.  Dave Hansen suggested to focus on rename stuff
+first, most of which he acked.
+
+Jürgen Groß also gave his RBs to the Xen MSR cleanup patches.
+
+So here comes the first MSR cleanup patch set with version 4.
+
+
+Changes in v4:
+1) Add missing includes in a different patch (Ilpo Järvinen).
+2) Add all necessary direct inclusions for msr.h (Ilpo Järvinen).
+3) Remove two "else" that no longer make sense (Juergen Gross).
+4) Collect RBs from Jürgen Groß and ABs from Peter Zijlstra.
+
+
+Link to the previous v3 patch set:
+https://lore.kernel.org/lkml/20250425083442.2390017-1-xin@zytor.com/
+
+
+This patch series is based on:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/msr
+
+
+Xin Li (Intel) (15):
+  x86/msr: Add missing includes of <asm/msr.h>
+  x86/msr: Move rdtsc{,_ordered}() to <asm/tsc.h>
+  x86/msr: Remove rdpmc()
+  x86/msr: Rename rdpmcl() to rdpmc()
+  x86/msr: Convert the rdpmc() macro into an always inline function
+  x86/xen/msr: Return u64 consistently in Xen PMC read functions
+  x86/msr: Convert __wrmsr() uses to native_wrmsr{,q}() uses
+  x86/msr: Add the native_rdmsrq() helper
+  x86/msr: Convert __rdmsr() uses to native_rdmsrq() uses
+  x86/xen/msr: Remove calling native_{read,write}_msr{,_safe}() in
+    pmu_msr_{read,write}()
+  x86/xen/msr: Remove pmu_msr_{read,write}()
+  x86/xen/msr: Remove the error pointer argument from set_seg()
+  x86/pvops/msr: refactor pv_cpu_ops.write_msr{,_safe}()
+  x86/msr: Replace wrmsr(msr, low, 0) with wrmsrq(msr, low)
+  x86/msr: Change the function type of native_read_msr_safe()
+
+ arch/x86/coco/sev/core.c                      |   2 +-
+ arch/x86/events/amd/brs.c                     |   4 +-
+ arch/x86/events/amd/uncore.c                  |   2 +-
+ arch/x86/events/core.c                        |   2 +-
+ arch/x86/events/intel/core.c                  |   4 +-
+ arch/x86/events/intel/ds.c                    |   2 +-
+ arch/x86/events/msr.c                         |   3 +
+ arch/x86/events/perf_event.h                  |   1 +
+ arch/x86/events/probe.c                       |   2 +
+ arch/x86/hyperv/hv_apic.c                     |   6 +-
+ arch/x86/hyperv/hv_vtl.c                      |   4 +-
+ arch/x86/hyperv/ivm.c                         |   3 +-
+ arch/x86/include/asm/apic.h                   |   4 +-
+ arch/x86/include/asm/fred.h                   |   1 +
+ arch/x86/include/asm/microcode.h              |   2 +
+ arch/x86/include/asm/mshyperv.h               |   3 +-
+ arch/x86/include/asm/msr.h                    | 130 +++++-------------
+ arch/x86/include/asm/paravirt.h               |  57 ++++----
+ arch/x86/include/asm/paravirt_types.h         |  10 +-
+ arch/x86/include/asm/suspend_32.h             |   1 +
+ arch/x86/include/asm/suspend_64.h             |   1 +
+ arch/x86/include/asm/switch_to.h              |   4 +-
+ arch/x86/include/asm/tsc.h                    |  76 +++++++++-
+ arch/x86/kernel/cpu/amd.c                     |   2 +-
+ arch/x86/kernel/cpu/common.c                  |  10 +-
+ arch/x86/kernel/cpu/mce/core.c                |   6 +-
+ arch/x86/kernel/cpu/resctrl/pseudo_lock.c     |  25 ++--
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c        |   2 +-
+ arch/x86/kernel/cpu/umwait.c                  |   4 +-
+ arch/x86/kernel/fpu/xstate.h                  |   1 +
+ arch/x86/kernel/hpet.c                        |   1 +
+ arch/x86/kernel/kvm.c                         |   2 +-
+ arch/x86/kernel/kvmclock.c                    |   2 +-
+ arch/x86/kernel/process_64.c                  |   1 +
+ arch/x86/kernel/trace_clock.c                 |   2 +-
+ arch/x86/kernel/tsc_sync.c                    |   1 +
+ arch/x86/kvm/svm/svm.c                        |  34 ++---
+ arch/x86/kvm/vmx/vmx.c                        |   4 +-
+ arch/x86/lib/kaslr.c                          |   2 +-
+ arch/x86/mm/mem_encrypt_identity.c            |   5 +-
+ arch/x86/realmode/init.c                      |   1 +
+ arch/x86/xen/enlighten_pv.c                   |  58 ++++----
+ arch/x86/xen/pmu.c                            |  72 +++-------
+ arch/x86/xen/xen-ops.h                        |   5 +-
+ drivers/acpi/acpi_extlog.c                    |   1 +
+ drivers/acpi/processor_perflib.c              |   1 +
+ drivers/acpi/processor_throttling.c           |   3 +-
+ drivers/char/agp/nvidia-agp.c                 |   1 +
+ drivers/cpufreq/amd-pstate-ut.c               |   2 +
+ drivers/crypto/ccp/sev-dev.c                  |   1 +
+ drivers/edac/amd64_edac.c                     |   1 +
+ drivers/edac/ie31200_edac.c                   |   1 +
+ drivers/edac/mce_amd.c                        |   1 +
+ drivers/hwmon/hwmon-vid.c                     |   4 +
+ drivers/idle/intel_idle.c                     |   1 +
+ drivers/misc/cs5535-mfgpt.c                   |   1 +
+ drivers/net/vmxnet3/vmxnet3_drv.c             |   4 +
+ drivers/platform/x86/intel/ifs/core.c         |   1 +
+ drivers/platform/x86/intel/ifs/load.c         |   1 +
+ drivers/platform/x86/intel/ifs/runtest.c      |   1 +
+ drivers/platform/x86/intel/pmc/cnp.c          |   1 +
+ .../intel/speed_select_if/isst_if_common.c    |   1 +
+ .../intel/speed_select_if/isst_if_mbox_msr.c  |   1 +
+ .../intel/speed_select_if/isst_tpmi_core.c    |   1 +
+ drivers/platform/x86/intel/turbo_max_3.c      |   1 +
+ .../intel/uncore-frequency/uncore-frequency.c |   1 +
+ drivers/powercap/intel_rapl_common.c          |   1 +
+ drivers/powercap/intel_rapl_msr.c             |   1 +
+ .../processor_thermal_device.c                |   1 +
+ drivers/thermal/intel/intel_tcc_cooling.c     |   1 +
+ drivers/thermal/intel/x86_pkg_temp_thermal.c  |   1 +
+ drivers/video/fbdev/geode/display_gx.c        |   1 +
+ drivers/video/fbdev/geode/gxfb_core.c         |   1 +
+ drivers/video/fbdev/geode/lxfb_ops.c          |   1 +
+ 74 files changed, 308 insertions(+), 295 deletions(-)
+
+
+base-commit: a5447e92e169dafaf02fd653500105c7186d7128
+-- 
+2.49.0
 
 
