@@ -1,109 +1,192 @@
-Return-Path: <linux-pm+bounces-26321-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26322-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 973B9A9EFD9
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Apr 2025 13:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0706AA9F249
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Apr 2025 15:26:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB1C23BE789
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Apr 2025 11:56:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8220F3B149A
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Apr 2025 13:25:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7689263F52;
-	Mon, 28 Apr 2025 11:56:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC72826A091;
+	Mon, 28 Apr 2025 13:25:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JGh3sS0D"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gauss.telenet-ops.be (gauss.telenet-ops.be [195.130.132.49])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF3B1CD213
-	for <linux-pm@vger.kernel.org>; Mon, 28 Apr 2025 11:56:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0F4925E81D;
+	Mon, 28 Apr 2025 13:25:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745841414; cv=none; b=sjUE6CirqC77km+Syc+0zkn3yFc6ru0PgA0m1EyXBOrWjskMciVmC7DYyaBUbSmqhfKK3QV1HzOr+4U07pc1t6yJRMIkGHj+3D5WEQY6YpDjlsG1l0jTs3Bl7DjqsxsUJovFFd/4ePtauX8udoAknygHL1ORTC+qin49uRxNkkM=
+	t=1745846726; cv=none; b=C8/kaqfY37+kFGzRCnW0rayo2DJUXLBfq5GFV60LchJKAokmXSbwvM28rp6cqZ/U6m+LTN0LQq7/SKGaWqvJMkNLDsFHH+38XOjQDUAIVfd9UXQDvnyvRbTM/tPt0M8bjNaJomAWXjKUPF0GOPDNxK/NSZhmrx7VckeZs+2vIJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745841414; c=relaxed/simple;
-	bh=1j9Q9kgQUWse/o+zJq0jmjKW3JS0XwJpa9IMv5SRAVE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RyOzhbZw8tUmzmfbjGDqG0vI5rMctAE2dRBO7FCIIK6KwcVG/3oydmAX3AewGx+or55DOep3+U6FZMHT9Jd5Sx3Y/doRAEjovcdMRMKwiFEkvechTE8W65raM46/lmxZNDxeG2Av+YECGmesAB6tCg3Ckcpfy8qstoJXDJCIAlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-	by gauss.telenet-ops.be (Postfix) with ESMTPS id 4ZmMP90hzkz4x3ks
-	for <linux-pm@vger.kernel.org>; Mon, 28 Apr 2025 13:56:45 +0200 (CEST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:b9c4:1670:abc0:a1fc])
-	by michel.telenet-ops.be with cmsmtp
-	id ibwc2E0084Aed8c06bwco7; Mon, 28 Apr 2025 13:56:36 +0200
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.97)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1u9N6B-00000000F7P-0oNs;
-	Mon, 28 Apr 2025 13:56:36 +0200
-Received: from geert by rox.of.borg with local (Exim 4.97)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1u9Mxl-00000006xAj-2x3k;
-	Mon, 28 Apr 2025 13:47:53 +0200
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: Ulf Hansson <ulf.hansson@linaro.org>,
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: linux-renesas-soc@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] pmdomain: renesas: rcar: Remove obsolete nullify checks
-Date: Mon, 28 Apr 2025 13:47:52 +0200
-Message-ID: <107f2bf9f13b29f0f623d2959a5347ec151fb089.1745840768.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1745846726; c=relaxed/simple;
+	bh=Q5epIT9vkC2ffUHrmbmnekIOUXkIx6JfZPoEscs9+uc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dJ065xyzuvLz6Xp/8tXDwDDgWdMcxdFXbkoeW1kiWoHtJ3H+Gws2Xv3V+wASQlIcpRLY681TBba0aaNUOrEt93EspQmFWtABOUXJQnvCMcPzGVZD3R6M3gxknJbVgyHYvM2a0dAqW1Osvf+tkUQEHmoInd/D0hD+Qii1P+tXKJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JGh3sS0D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EB9FC4AF0F;
+	Mon, 28 Apr 2025 13:25:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745846726;
+	bh=Q5epIT9vkC2ffUHrmbmnekIOUXkIx6JfZPoEscs9+uc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=JGh3sS0DYPTOEsAAb5z6YqdEk10MOsTYiw+aGr8e6Z1FcPxhklU7RTBklJ2EA+Huk
+	 AmD0Jp36G7R1ghBag5iq8xSIgnNPzn5ka5KfqXHd2WKTeD23H/M0vKRstOEoCnwWwi
+	 FWqFlMPw7ILU2WW0imCpV6lugGBUIj5bB/VHyz67RbhQ3KSQIfUp7WLqQP75kAsjl1
+	 +GYpS2zMSw0RekI4m+vi1Fm/5K5QqBBSv+ulo53suvIz3jQesuK8ev+fKdFu9ClmWU
+	 ZCva3OrFzSoGdnlBSMSOcL+T0bAMiAq0cSnsoDOYEt/BUScAHpThQVLoFHFo4Z5IN0
+	 uX7tDSBMkkW6g==
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-72fffa03ac6so3722927a34.3;
+        Mon, 28 Apr 2025 06:25:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWpp92gcC2UQIa1n7YQT5eUi8tldigACxJAIkhhdCaGVhHQ7MmJ1TeeGJPc3kmZRTbuG6ZOeyiB2jzr3PM=@vger.kernel.org, AJvYcCWt1UJHrXYaZURlemp3ntJFaWLU19UdiAFLXU0mFQwDYX9uXSZQp5ZIEssan1z24Dw/KN0dbfwtNPo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxjam/91N+r10zG4/s5EiQN1C3n5+0k7eYQez+QsqHKqiSQgrsY
+	8lvZ8I8IDoWECNOsFDRYsNxQldxJUs0keA8kwozNRmRQVAaRlE58UriE/MFlgPzvszSVe7049OY
+	sA3+wXOjcfiqBjyr7LB0wclprFrk=
+X-Google-Smtp-Source: AGHT+IHR4NEN3o+J4MxeKYIU+Wtc4tI7CeCDDEHAZRAaJ/veNsm+AmNtDEK/VbELg9D6XvQZRn7g3s0k2D0BRVh9e2E=
+X-Received: by 2002:a05:6870:241d:b0:2a3:832e:5492 with SMTP id
+ 586e51a60fabf-2d9a34ed851mr6471027fac.25.1745846725508; Mon, 28 Apr 2025
+ 06:25:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250428043356.3169-1-ImanDevel@gmail.com>
+In-Reply-To: <20250428043356.3169-1-ImanDevel@gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 28 Apr 2025 15:25:11 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0j8PvDdAc5WdFV-AM8V7srhsOdD3ACv=g0rhWhhbX19aA@mail.gmail.com>
+X-Gm-Features: ATxdqUFRHRvv741ADdl4ebFkKnvfNwLZOQE6WiitTlvhX3LhTfSKWf3lEJL9gNY
+Message-ID: <CAJZ5v0j8PvDdAc5WdFV-AM8V7srhsOdD3ACv=g0rhWhhbX19aA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: fix locking order in store_local_boost to
+ prevent deadlock
+To: Seyediman Seyedarab <imandevel@gmail.com>
+Cc: rafael@kernel.org, viresh.kumar@linaro.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, 
+	linux-kernel-mentees@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-All nullify users and helpers were removed, but the R-Car SYSC drivers
-still checked for nullified domains.  Remove the obsolete checks.
+On Mon, Apr 28, 2025 at 6:31=E2=80=AFAM Seyediman Seyedarab <imandevel@gmai=
+l.com> wrote:
+>
+> Lockdep reports a possible circular locking dependency[1] when
+> writing to /sys/devices/system/cpu/cpufreq/policyN/boost,
+> triggered by power-profiles-daemon at boot.
+>
+> store_local_boost() acquires cpu_hotplug_lock *AFTER* policy->rwsem
+> has already been taken by the store() handler. However, the expected
+> locking hierarchy is to acquire cpu_hotplug_lock before policy->rwsem.
+> This inverted lock order creates a *theoretical* deadlock possibility.
+>
+> Take cpu_hotplug_lock in the store() before down_write(&policy->rwsem),
+> and remove the internal cpus_read_lock/unlock pair
+> inside store_local_boost().
 
-Fixes: c8d87704444a8ac7 ("pmdomain: renesas: rcar-sysc: Remove rcar_sysc_nullify() helper")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/pmdomain/renesas/rcar-gen4-sysc.c | 5 -----
- drivers/pmdomain/renesas/rcar-sysc.c      | 5 -----
- 2 files changed, 10 deletions(-)
+The patch does more than this, though.  It adds CPU offline/online
+locking to multiple cpufreq sysfs attributes where it is not needed.
 
-diff --git a/drivers/pmdomain/renesas/rcar-gen4-sysc.c b/drivers/pmdomain/renesas/rcar-gen4-sysc.c
-index 66409cff2083fcd8..e001b5c25bed0051 100644
---- a/drivers/pmdomain/renesas/rcar-gen4-sysc.c
-+++ b/drivers/pmdomain/renesas/rcar-gen4-sysc.c
-@@ -338,11 +338,6 @@ static int __init rcar_gen4_sysc_pd_init(void)
- 		struct rcar_gen4_sysc_pd *pd;
- 		size_t n;
- 
--		if (!area->name) {
--			/* Skip NULLified area */
--			continue;
--		}
--
- 		n = strlen(area->name) + 1;
- 		pd = kzalloc(sizeof(*pd) + n, GFP_KERNEL);
- 		if (!pd) {
-diff --git a/drivers/pmdomain/renesas/rcar-sysc.c b/drivers/pmdomain/renesas/rcar-sysc.c
-index dce1a6d37e80127d..047495f54e8adc0d 100644
---- a/drivers/pmdomain/renesas/rcar-sysc.c
-+++ b/drivers/pmdomain/renesas/rcar-sysc.c
-@@ -396,11 +396,6 @@ static int __init rcar_sysc_pd_init(void)
- 		struct rcar_sysc_pd *pd;
- 		size_t n;
- 
--		if (!area->name) {
--			/* Skip NULLified area */
--			continue;
--		}
--
- 		n = strlen(area->name) + 1;
- 		pd = kzalloc(sizeof(*pd) + n, GFP_KERNEL);
- 		if (!pd) {
--- 
-2.43.0
+>
+>  [1]
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+>  WARNING: possible circular locking dependency detected
+>  6.15.0-rc3-debug #28 Not tainted
+>  ------------------------------------------------------
+>  power-profiles-/596 is trying to acquire lock:
+>  ffffffffb147e910 (cpu_hotplug_lock){++++}-{0:0}, at: store_local_boost+0=
+x6a/0xd0
+>
+>  but task is already holding lock:
+>  ffff9eaa48377b80 (&policy->rwsem){++++}-{4:4}, at: store+0x37/0x90
+>
+>  which lock already depends on the new lock.
+>
+>  the existing dependency chain (in reverse order) is:
+>
+>  -> #2 (&policy->rwsem){++++}-{4:4}:
+>         down_write+0x29/0xb0
+>         cpufreq_online+0x841/0xa00
+>         cpufreq_add_dev+0x71/0x80
+>         subsys_interface_register+0x14b/0x170
+>         cpufreq_register_driver+0x154/0x250
+>         amd_pstate_register_driver+0x36/0x70
+>         amd_pstate_init+0x1e7/0x270
+>         do_one_initcall+0x67/0x2c0
+>         kernel_init_freeable+0x230/0x270
+>         kernel_init+0x15/0x130
+>         ret_from_fork+0x2c/0x50
+>         ret_from_fork_asm+0x11/0x20
+>
+>  -> #1 (subsys mutex#3){+.+.}-{4:4}:
+>         __mutex_lock+0xc2/0x930
+>         subsys_interface_register+0x83/0x170
+>         cpufreq_register_driver+0x154/0x250
+>         amd_pstate_register_driver+0x36/0x70
+>         amd_pstate_init+0x1e7/0x270
+>         do_one_initcall+0x67/0x2c0
+>         kernel_init_freeable+0x230/0x270
+>         kernel_init+0x15/0x130
+>         ret_from_fork+0x2c/0x50
+>         ret_from_fork_asm+0x11/0x20
+>
+>  -> #0 (cpu_hotplug_lock){++++}-{0:0}:
+>         __lock_acquire+0x1087/0x17e0
+>         lock_acquire.part.0+0x66/0x1b0
+>         cpus_read_lock+0x2a/0xc0
+>         store_local_boost+0x6a/0xd0
+>         store+0x50/0x90
+>         kernfs_fop_write_iter+0x135/0x200
+>         vfs_write+0x2ab/0x540
+>         ksys_write+0x6c/0xe0
+>         do_syscall_64+0xbb/0x1d0
+>         entry_SYSCALL_64_after_hwframe+0x56/0x5e
+>
+> Signed-off-by: Seyediman Seyedarab <ImanDevel@gmail.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index acf19b004..6e672dcba 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -653,10 +653,7 @@ static ssize_t store_local_boost(struct cpufreq_poli=
+cy *policy,
+>
+>         policy->boost_enabled =3D enable;
+>
+> -       cpus_read_lock();
+>         ret =3D cpufreq_driver->set_boost(policy, enable);
+> -       cpus_read_unlock();
+> -
+>         if (ret) {
+>                 policy->boost_enabled =3D !policy->boost_enabled;
+>                 return ret;
+> @@ -1045,10 +1042,12 @@ static ssize_t store(struct kobject *kobj, struct=
+ attribute *attr,
+>         if (!fattr->store)
+>                 return -EIO;
+>
+> +       cpus_read_lock();
+>         down_write(&policy->rwsem);
+>         if (likely(!policy_is_inactive(policy)))
+>                 ret =3D fattr->store(policy, buf, count);
+>         up_write(&policy->rwsem);
+> +       cpus_read_unlock();
 
+So you'd need to do this for local_boost only, not for all attributes
+using store().
+
+>
+>         return ret;
+>  }
+> --
 
