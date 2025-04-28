@@ -1,76 +1,77 @@
-Return-Path: <linux-pm+bounces-26351-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26352-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 202D9A9FEE7
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 03:19:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09E21A9FEE8
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 03:19:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 049C1467ABD
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 01:19:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17FA15A5883
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 01:19:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 296F213B58B;
-	Tue, 29 Apr 2025 01:19:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4785219A28D;
+	Tue, 29 Apr 2025 01:19:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ImVVA5Sv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IhF8RQcR"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BAF6433C4;
-	Tue, 29 Apr 2025 01:19:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 341B4188006;
+	Tue, 29 Apr 2025 01:19:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745889573; cv=none; b=Fk5fFQ7HWHuWMajNqJpN9X7sRYMPPSyBcciOzssY+Vsom45lWfTt19hu+xjpHHkCMmZ1qv53OoXKQ7FMDLZT5vNKY7FedZAZTZSJKtIx/+7AQkl7L7109A4doIvtn623x2yr7sGvnM1sG+W+CaZajcxDJZrbp3gEuwXWN1qbKuE=
+	t=1745889575; cv=none; b=mK9wgkm0G/jW68ZiPgKaE4Pz/Oxr9gAThnDZxLu3/bsK+j+jpcqOcAEf8wIkzJADOloTF8aUA3uGYYLTs3QMq987k5AVIKB75n7EgVNuOWsO8qNKllFLXFtdZjb1u+GhCiXhweDxpG7rzVhX8262UNfYh5M9PS/hjSZOzmWcdJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745889573; c=relaxed/simple;
-	bh=Ig6rBPtJSH8iA/rKKNMYpbEYMMPT9H1HG6g552xirrA=;
+	s=arc-20240116; t=1745889575; c=relaxed/simple;
+	bh=qFqS07C21iG42LTejRUq51BjuyBgmJ+Qv3iR2LFVNWE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tkf6bktgYoiYhr9O10pEVfA0SM/BBsqz/HWI4dGh2aMDsPZ7qxpDwiJYTBLqI2BTCMpJiM2cuK3gw56AhkFHL/Id5Uxr6uXYdPQUso6DYmjfURI3zY2LfTwlGS7cLLPiPVEU3BxJZQmQPYpoQvYsv7CsMwA0gzikWQHuuX62fSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ImVVA5Sv; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=BLQdDU5n7JZ9FF5SMI6r5NVb+QXG0WTt0azZPaxWu3F2MBXno5ETd0S6eoFn7O/S6belB8YAtKj4Bz9zPZLCYa5w16/NZzppGRErxM6JYueET3VPT2TJnwi4gOkxeKNl6mxR1Q/OSfNj9Zx1XIe73IWo5Zc6h+whUc27+hydHQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IhF8RQcR; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745889571; x=1777425571;
+  t=1745889573; x=1777425573;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Ig6rBPtJSH8iA/rKKNMYpbEYMMPT9H1HG6g552xirrA=;
-  b=ImVVA5Sv5N0kyH5bSrwsggC89PycUww573KFtopDbDXm5FR3WahWWP/b
-   4O5PP1bN/App8JUnOnzV5KAa6VsNFyKxNmCSjauREiFqHVUFvMUGq+E3L
-   0uGjuljoFQSgbe+lyDnOiQaRUMYYi9tQvs5w3zJ0st8U731zuxS5alvSF
-   fUk1sK4c+hz1OMiDzannD5AfYLnZP8cUYE01s7NS6Bt0TG1GDpSYWI7Bk
-   eOaPlln8d2u0qYcfJ0WG1y/6Owrodi556LxMW7jIbJUHvD3Adcl6wYj8X
-   5xxcq2CB9JDzUi+2FTQ5ngpnWz8nlhopMMlTSV2/QbQJH3buww/6NdHMy
-   Q==;
-X-CSE-ConnectionGUID: XoBu5ceZRV6wlEDKYiQcwQ==
-X-CSE-MsgGUID: 2R3bYiKKQEWTgOvoyRsTNg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11417"; a="72874007"
+  bh=qFqS07C21iG42LTejRUq51BjuyBgmJ+Qv3iR2LFVNWE=;
+  b=IhF8RQcRf/MyTJhfepFdv5+BDP9MuSe+VC66VHdjSy5nnQqSjuWASrOW
+   Lg99aIa5smKkicXL3mm45M4XSgS2//iUSofU6skHoQbl++xBc7qj37W0S
+   bNm4lFNNZwcFjvkQeS+q/TCBTrq0HgmpI04O2C56ontNu9T8DPI238cr1
+   jnfF4b39twcXBR1bKYuG8OuWhehK5v+UKh79FnT6TnlG4bNT1NDEp4FMK
+   6C81cEYseWnh2B5gHg1ntNgp1vR15R+zDPPfY+GsVOkzf5OvWL/3qoJ4a
+   nnK9QvRbPRa2nFZcyt6Fsd+h5PEbj54uusOBqzPP56yEm2sL7yYYV4/Lw
+   g==;
+X-CSE-ConnectionGUID: ov8L6nNgQkijkOlAty6BMg==
+X-CSE-MsgGUID: 1VhwixP1Rg6Ja12TI2hPjQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11417"; a="72874009"
 X-IronPort-AV: E=Sophos;i="6.15,247,1739865600"; 
-   d="scan'208";a="72874007"
+   d="scan'208";a="72874009"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2025 18:19:30 -0700
-X-CSE-ConnectionGUID: r77JBzqSTnuIYgcATmIDgQ==
-X-CSE-MsgGUID: N/AslonpRyWcRq2J0NQ1WQ==
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2025 18:19:31 -0700
+X-CSE-ConnectionGUID: 55lpcPONSgyUiCQ2sa4E6A==
+X-CSE-MsgGUID: omqvoasxT+Sk60XLylKEVA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,247,1739865600"; 
-   d="scan'208";a="133581475"
+   d="scan'208";a="133581488"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
   by orviesa010.jf.intel.com with ESMTP; 28 Apr 2025 18:19:28 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u9Zd7-00001g-27;
+	id 1u9Zd7-00001j-2B;
 	Tue, 29 Apr 2025 01:19:25 +0000
-Date: Tue, 29 Apr 2025 02:57:29 +0800
+Date: Tue, 29 Apr 2025 05:02:25 +0800
 From: kernel test robot <lkp@intel.com>
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, "Rafael J. Wysocki" <rafael@kernel.org>,
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
 	Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Subject: Re: [rft, PATCH v1 1/1] PM: Don't use "proxy" headers
-Message-ID: <202504290212.e8iXOU2x-lkp@intel.com>
+Message-ID: <202504290454.QoNM6l5v-lkp@intel.com>
 References: <20250428071922.3264455-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -96,25 +97,122 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/PM-Don-t-
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
 patch link:    https://lore.kernel.org/r/20250428071922.3264455-1-andriy.shevchenko%40linux.intel.com
 patch subject: [rft, PATCH v1 1/1] PM: Don't use "proxy" headers
-config: sh-randconfig-001-20250428 (https://download.01.org/0day-ci/archive/20250429/202504290212.e8iXOU2x-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 10.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250429/202504290212.e8iXOU2x-lkp@intel.com/reproduce)
+config: riscv-randconfig-002-20250428 (https://download.01.org/0day-ci/archive/20250429/202504290454.QoNM6l5v-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250429/202504290454.QoNM6l5v-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504290212.e8iXOU2x-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504290454.QoNM6l5v-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/sh/kernel/reboot.c:2:
->> include/linux/pm.h:690:18: error: field 'suspend_timer' has incomplete type
-     690 |  struct hrtimer  suspend_timer;
-         |                  ^~~~~~~~~~~~~
-   cc1: note: unrecognized command-line option '-Wno-unterminated-string-initialization' may have been intended to silence earlier diagnostics
+   In file included from drivers/ssb/pcihost_wrapper.c:14:
+>> include/linux/pm.h:690:18: error: field has incomplete type 'struct hrtimer'
+     690 |         struct hrtimer          suspend_timer;
+         |                                 ^
+   include/linux/pm.h:690:9: note: forward declaration of 'struct hrtimer'
+     690 |         struct hrtimer          suspend_timer;
+         |                ^
+   In file included from drivers/ssb/pcihost_wrapper.c:15:
+   In file included from include/linux/pci.h:37:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/riscv/include/asm/elf.h:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:34:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/ssb/pcihost_wrapper.c:15:
+   In file included from include/linux/pci.h:37:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/riscv/include/asm/elf.h:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:34:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/ssb/pcihost_wrapper.c:15:
+   In file included from include/linux/pci.h:37:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/riscv/include/asm/elf.h:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:34:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      99 |                         set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/ssb/pcihost_wrapper.c:15:
+   In file included from include/linux/pci.h:37:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/riscv/include/asm/elf.h:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:34:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     101 |                 return (set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/ssb/pcihost_wrapper.c:15:
+   In file included from include/linux/pci.h:37:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/riscv/include/asm/elf.h:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:34:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/ssb/pcihost_wrapper.c:15:
+   In file included from include/linux/pci.h:37:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
 
 
-vim +/suspend_timer +690 include/linux/pm.h
+vim +690 include/linux/pm.h
 
 08810a4119aaeb Rafael J. Wysocki 2017-10-25  660  
 1eede070a59e1c Rafael J. Wysocki 2008-05-20  661  struct dev_pm_info {
