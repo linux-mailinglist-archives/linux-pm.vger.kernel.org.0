@@ -1,67 +1,69 @@
-Return-Path: <linux-pm+bounces-26335-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26336-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB470A9FDAD
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 01:25:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B6CBA9FDBF
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 01:30:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B4581A86509
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Apr 2025 23:25:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 295105A6B1E
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Apr 2025 23:30:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78DF9212D8A;
-	Mon, 28 Apr 2025 23:25:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DAEC212F94;
+	Mon, 28 Apr 2025 23:30:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="KoryJbu0"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="dDJXJJjE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from sender3-op-o12.zoho.com (sender3-op-o12.zoho.com [136.143.184.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D046932C85;
-	Mon, 28 Apr 2025 23:25:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC811DED48;
+	Mon, 28 Apr 2025 23:30:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.184.12
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745882711; cv=pass; b=fCzvv2qTSTxZeqQVySVdFhGATlPKlnXms/Gx920mXfEQASDrIlPE8zj29xeM3qHewQNiiFwctP5hk1g8ZWCRgolozGe05IMx+c6Ptrlsw5PCtkAuew5duILwKaFcufdta81tLEMW/xiqsAhy4yZ+IK1YxiIAe2E9PGQO0WZ62/I=
+	t=1745883033; cv=pass; b=CkuGkWgatyfzff10RIpCFkrTzqUk12k32pv9saIH7NGk608czVN81DYtawRU5YD3d81p51Gs104al+U5aVb1Dp1oeqUmVG8A8YLTLbs129SfaSmxkYAUrw9ryUhQQx9yWwzgw7FxR0CcrP1TH/ljn+ZmcDBp0ugvxvJ9FfECsLQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745882711; c=relaxed/simple;
-	bh=9swaiTY6yV/zG0GpHuMdlUbuRjORf82CYkhdSDQ4y34=;
+	s=arc-20240116; t=1745883033; c=relaxed/simple;
+	bh=O6TPStm2nOrcDnu+w5Rr+t19zLQeRzy7IwA1STuIHV4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=peWqRGAqlJNVeHdwnz5GIN6Nue09s3jtNCWjayVPzCyRYgTn20d0d4dEm6QNP00XeYEvCsN/BPuQFmIo8miGWckGMjfWn+GI+USP6d3P+T/TB59AKmWkimzkhTAJgRcT6GPY/LTTWQOZyeTS0PPfRTXpt5j5xn1sM512JxzRTF0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=KoryJbu0; arc=pass smtp.client-ip=136.143.188.112
+	 Content-Type:Content-Disposition:In-Reply-To; b=PUGfYbZPFSWz3Gk6z6tEmCN61vVLX+brJXh7UVMx0/dOQCwJI0rWWtefoQMiyotMbXl4Ra73e5je7HEYMD0ocsxh2Dv2OE99BuX1wyACm1TjfQWx8Ngu00ALJRxnqDEnufGAwcHzaBqEzTeUemtiRRmM/8ySbeG7Z7VwDmhTJeU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=dDJXJJjE; arc=pass smtp.client-ip=136.143.184.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1745882702; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1745883021; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=W8fljC7hgj9FYJ6hxkH/a2hOb0r7W8XNN1SlLVPn60/EXS8XBBQ9DCWfK9yNDY20ygAe5uDGd4gsmV0zdD0NNej8og2MWxJu1JO6pwLJiHK2fZgCwb3UduIkZxwjb3sB+gEJ32UA/KfB/tUKi9H9biGqGNAeYlk/OLs3rzGAlMs=
+	b=QMefSWqrz0WMRpteB/neO3plLuQLnh/7XM/16MzNmK7VnLPiFJDwHL2S0GiBCA1YT11QB/7xNkfNLFlMT9IZKYCrPalxjDFBwpinES8Sc9u9jJfCdtgJ3qgTsVutTGKRACDWXizOCyvI8DrhIrDNXbOKfOVt2/bwByQE4fM1dNM=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1745882702; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=TV+1WXDql3Yy0rUyeqOIIEEZCuNdt8kcb49LSNvsIbA=; 
-	b=l7QbZ6NMr6YpNvCx7hhhDXe8IUZsNBQvIlQW+I0DXv86UextXiYYO9b7BR4EAt5Yr95ar02VZlHCh0HXTjWwid8kP66597X7uArYd79+0jLRpd6QCQ7of3/xZPsGkKmfx3WoAFHOjPnqy8zHZIFAbgkLnqNz2PbhT4n/rH2qPxg=
+	t=1745883021; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=6N8N+l9aBoxIQo5ns2ycjJui7zLY02fuI8jJd3GzBBw=; 
+	b=XPmrlYVLDBf0eKhTQfhlof6Awcbpz0xzmkiqYaELxMD3HeW7q1YjrdpP96d4v2IbUPNVqy58AbfEt1x8IsQ55BDbn1gIHuQBoz84an5DRjNF7wVU9bVhMX9s2yiD0p3Aj/ylbHtsmezjU4pCYOzXjXkGMYEWN4pmzFK1wCPCb88=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
 	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1745882702;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1745883021;
 	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
 	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=TV+1WXDql3Yy0rUyeqOIIEEZCuNdt8kcb49LSNvsIbA=;
-	b=KoryJbu059VxG+ppyJ0uyJNV8z+hFiH5zAZu/wwvJln7TmzD+TvdtSSAWxLad/wj
-	D3Gr8jUCQScxts8289VUO5jp9rAsm+yz15BDSWxXOXWXsBIGvPe/EUGhk1BV0Pa2m6+
-	1xJKXxN19s4ePS9mUX/y3gSEQxndLApstLjs1f4A=
-Received: by mx.zohomail.com with SMTPS id 1745882700740725.2340711569357;
-	Mon, 28 Apr 2025 16:25:00 -0700 (PDT)
+	bh=6N8N+l9aBoxIQo5ns2ycjJui7zLY02fuI8jJd3GzBBw=;
+	b=dDJXJJjE7OI1459iHRWwcygIOctA42joWb66KoMAOv1MPWURwetZgCGWxWRitaco
+	qEgtt6SC9oinGyWNjYXSr8WWvfV6caRz/DFlNmk61aAHceAPoTaozXYsXyZMe664SCk
+	QTxBOqnbFYpAfctOcLDngTQAgrOgJado6hBLj7fk=
+Received: by mx.zohomail.com with SMTPS id 17458830184651020.0428225871558;
+	Mon, 28 Apr 2025 16:30:18 -0700 (PDT)
 Received: by venus (Postfix, from userid 1000)
-	id 382C61806F3; Tue, 29 Apr 2025 01:24:58 +0200 (CEST)
-Date: Tue, 29 Apr 2025 01:24:58 +0200
+	id 16D6A1806F3; Tue, 29 Apr 2025 01:30:16 +0200 (CEST)
+Date: Tue, 29 Apr 2025 01:30:16 +0200
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com, 
-	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] power: supply: core: Add additional health status
- values
-Message-ID: <3nrolexijte4c2bax5soumid5hb7easvpmvcnzx55p5un33xmu@dxo3xecgt355>
-References: <20250425231518.16125-1-W_Armin@gmx.de>
+To: Dzmitry Sankouski <dsankouski@gmail.com>, 
+	Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: (subset) [PATCH 0/2] power: supply: max77705: Fix two static
+ checker issues
+Message-ID: <x73k5kkoforly65u7dfdbpqi2miutdierhyta5i2x6l4akijsd@fnxxjjm7m466>
+References: <94f55158-1776-4f2f-9296-e307e83d569a@stanley.mountain>
+ <174587872324.18440.10820410998197235199.b4-ty@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -69,82 +71,71 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fhg3kgndsc3rfmji"
+	protocol="application/pgp-signature"; boundary="hhdr2cjoqcsxpcyb"
 Content-Disposition: inline
-In-Reply-To: <20250425231518.16125-1-W_Armin@gmx.de>
+In-Reply-To: <174587872324.18440.10820410998197235199.b4-ty@collabora.com>
 X-Zoho-Virus-Status: 1
 X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.2/244.214.33
+X-Zoho-AV-Stamp: zmail-av-1.4.2/245.863.17
 X-ZohoMailClient: External
 
 
---fhg3kgndsc3rfmji
+--hhdr2cjoqcsxpcyb
 Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 1/4] power: supply: core: Add additional health status
- values
+Subject: Re: (subset) [PATCH 0/2] power: supply: max77705: Fix two static
+ checker issues
 MIME-Version: 1.0
 
 Hi,
 
-On Sat, Apr 26, 2025 at 01:15:15AM +0200, Armin Wolf wrote:
-> Some batteries can signal when an internal fuse was blown. In such a
-> case POWER_SUPPLY_HEALTH_DEAD is too vague for userspace applications
-> to perform meaningful diagnostics.
+On Tue, Apr 29, 2025 at 12:18:43AM +0200, Sebastian Reichel wrote:
+> On Fri, 21 Mar 2025 17:34:00 +0300, Dan Carpenter wrote:
+> > Fix some error handling and an error code bug.
+> >=20
+> > Dan Carpenter (2):
+> >   power: supply: max77705: Fix workqueue error handling in probe
+> >   power: supply: max77705: Fix error code in max77705_get_health()
+> >=20
+> > drivers/power/supply/max77705_charger.c | 22 +++++++++++++++-------
+> >  1 file changed, 15 insertions(+), 7 deletions(-)
+> >=20
+> > [...]
 >=20
-> Additionally some batteries can also signal when some of their
-> internal cells are imbalanced. In such a case returning
-> POWER_SUPPLY_HEALTH_UNSPEC_FAILURE is again too vague for userspace
-> applications to perform meaningful diagnostics.
->
-> Add new health status values for both cases.
+> Applied, thanks!
 >=20
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> ---
->  Documentation/ABI/testing/sysfs-class-power | 2 +-
->  drivers/power/supply/power_supply_sysfs.c   | 2 ++
->  include/linux/power_supply.h                | 2 ++
->  3 files changed, 5 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/=
-ABI/testing/sysfs-class-power
-> index 2a5c1a09a28f..e84a7349f55f 100644
-> --- a/Documentation/ABI/testing/sysfs-class-power
-> +++ b/Documentation/ABI/testing/sysfs-class-power
-> @@ -456,7 +456,7 @@ Description:
->  			      "Over voltage", "Under voltage", "Unspecified failure", "Cold",
->  			      "Watchdog timer expire", "Safety timer expire",
->  			      "Over current", "Calibration required", "Warm",
-> -			      "Cool", "Hot", "No battery"
-> +			      "Cool", "Hot", "No battery", "Fuse blown", "Cell imbalanced"
+> [1/2] power: supply: max77705: Fix workqueue error handling in probe
+>       commit: 11741b8e382d34b13277497ab91123d8b0b5c2db
 
-I think it would be better to have it named "Blown fuse" and "Cell
-imbalance" (without the d) or "Imbalanced cells". Otherwise LGTM.
+I've queued it, since it improves the driver. But the workqueue also
+needs to be released when the module is removed. So I think the
+destroy_workqueue() should happen via devm_add_action_or_reset()
+instead of what this patch is doing.
 
 Greetings,
 
 -- Sebastian
 
---fhg3kgndsc3rfmji
+--hhdr2cjoqcsxpcyb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmgQDkYACgkQ2O7X88g7
-+pqQhA//cb78/0QH5CFOuHSYr8xizlHUnU4EILB62hhkRRv+jAQqkVsIKyJQ0G1x
-MGYIwLaTsJQnHW4ilQq2HGQXg5QGRTJuHM8BJzC9365T+xhN/Xs2oB+gzGmu1w9H
-VFZqQEumajBkW9J06s732bRvo7VLaeL54yrC3uuwOU4WV9nAKz4K6OOG01GoIU21
-N4haRg2E/n21HheEADHjKXUqtJjae5Z/UI0m0Asj573ZNxlgdYMdZ8tlPDJTDlST
-KqZ0aLLfSSFuZ4PKD/p/T0gOvifY13lF6pOQObX91SvgOoGooZdLMQJYROZ1ucRp
-6GPugT7BsJ1yonzJbphRQjvI9p2SkLaqN7O4Bqa2aooXV7h+DC98qxknDl013yuC
-agfhiCOnxr46K7dKaVnt27f6RsfZofBugAIz7zUaPYd6GrUfa6cf20Niw9kSfCTj
-9Ax5knhh4lnJjW1OoUFvx5dT9jD5RLp5GET83d0039qrM5kLuPZeGlPpUp2NnLzZ
-fB8VBNqAIRjEwiHETN/W3Z/ngmO9FKQIEs6aXPebfB5hZYkOOyMOeR1cbila0YdZ
-C9ZqyoyOTtLO83udUDD23BwtSI0givdBOuBjD9qS3soHaRKSib4gor8i4SSq6KFa
-+NPs1K1/ofUiQQSlA3Q7NVCwyggr3m/wMQ1fiUPStG0/Cilxdbw=
-=RVGI
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmgQD4cACgkQ2O7X88g7
++proUA/7BYpCQZd2y0qsMbueYVIhaAHCQ4SNhO1y901Qgjb2a3jkwXPMlm9VDVpk
+eC9W/IJzSM0pMnorPYmTBf8Z/94xGH7VPYB54XVzgzVR8ChlphDW7DFjGTcwl79I
+o5DyFIOHxFFKVgvxY/MRiS2I6RMDlw63IKHpTs3YiNTFQavCh3XEPOPMsYDI+G/o
+Hh9bFQDEqKVvO0fw53zM8jRBcV93Tf18cKa0mpW62CQUOBe+9E8LxbmmMNuZ40pG
+p9veUkvA/2MTF5nlt4hQOGLws3FaF3GsTKRULEbjZpPugXNk5ER8mLRqFXBY2W9x
+idJWJneaKhVPGj9VSbugzpfpsvnvYJPLtDaNPhRZI1+WkQG2KQS5mHjE/b12PCrp
+Ka6iZAWaBSaNTorcUtP6ITooMLIoe4pS1RpQLlVdp13Gq5bE8vtl5nLdWIObd6lZ
+VMi0kA33FRvCTWyd4S9fkW9izL/Od0IBMf66tPQnfmMNvH8s6NTVLyMncW2VQf5Y
+233tryPifwKqwuDn6SAqe2M7Gc+go0o7xQDPFOIDY1j7WNAm+pDFC3SUqTvvo2pL
+E2zrVS8tY5wqmPsA6qN7qdLpbAEf0AQqTCT0wtz3Rg21uMGj8r0AJVRs76ndWgdJ
+Em4wnFteblTPKR2MvK2ARrgdenuUlCW0zDm8eJjYzKBGR+0q6go=
+=qaI9
 -----END PGP SIGNATURE-----
 
---fhg3kgndsc3rfmji--
+--hhdr2cjoqcsxpcyb--
 
