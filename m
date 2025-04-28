@@ -1,107 +1,219 @@
-Return-Path: <linux-pm+bounces-26330-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26331-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69498A9F98E
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Apr 2025 21:33:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D4F8A9F9EA
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Apr 2025 21:50:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C7D8E179D65
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Apr 2025 19:33:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A4701A865F9
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Apr 2025 19:50:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB0761B423B;
-	Mon, 28 Apr 2025 19:33:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D58D12951B5;
+	Mon, 28 Apr 2025 19:50:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QSoMrtCG"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="MKzT0PgA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646038C1E;
-	Mon, 28 Apr 2025 19:33:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 481837083A;
+	Mon, 28 Apr 2025 19:50:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745868812; cv=none; b=jKsrYSt44mkI38jNNLXnNvUYbm8W33XowRPGzp1XCR2EMVifnEzRGkj8j32vZaIRHWtg5x98GukbE+6FrEHPxLdz5vtpq5JBby1GbDe84Z37ufajBiP9fjiT5b3cprV+6FuWou32YTNQO9v0ljD0NUtgiYLahIPj3QlssiSHQCk=
+	t=1745869822; cv=none; b=TQU/8IXcI0uRdby+/RNOUsPDgaBIMqEWDQDtJ1AyKOlrYoYjMV0slZYaquS/D0GZ9NgqGdObZhyXv7GwSWECFqExfxJXWnuodkev9RULvShmyo/ElZbRxbFpUDk+NgpDcrvbotwTbADS3/IMM3unJqSdo/vG6Cxc9bUjQHAqVU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745868812; c=relaxed/simple;
-	bh=fX3wJzMvCpmppQx9eX7xDgMDyv3PO2lJW4kBkq2APOo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KH9t1BHsIYcH2SaBRsm6jbpqCWGxlsjBHvCQdZOY5NVrRL3QrYCYvsTk6syRzwkhxxRjds5iAYyCjRfD6mYS2G1dfXA07NCTlF/c9OSKhedpGzl0GctEDV+B0cMAjFkiUZ4y3WOy7QVwpWM0OmNCMBHtOvWOvf2u4LeVNuyWJOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QSoMrtCG; arc=none smtp.client-ip=209.85.160.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-2cc57330163so3446007fac.2;
-        Mon, 28 Apr 2025 12:33:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745868810; x=1746473610; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fX3wJzMvCpmppQx9eX7xDgMDyv3PO2lJW4kBkq2APOo=;
-        b=QSoMrtCGNdtBduhY3i7WilJQWhs4BW8XVZBTg8CaMrpPTyk9xnluZMpPECzEc6HKPn
-         Y/CtmXS1CYqT69jk4CfyH0Voob6JsvluS2l8kA7cKnkL7IJT8LWTbAnXB6TGm89r5F3b
-         B8bW7X65/7Gcs81GFTNXMa7Nsu8xSOHn+5U0AXdv2r/JcPKRtO+WJZgKhbXccr6L3mCY
-         Sff3+bByKaw1kHnSFTHKXO1dwcLtW1sDAbIaW7OhF/8rbYMRKuywunLAXKZHmQ5ihp6t
-         B9ZniXwl7E2TWhNTX+vO5QiLOX26+yJt7ubi9+9buXoso58dA+MMkhVUNB8zvLm7/7nv
-         SZDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745868810; x=1746473610;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fX3wJzMvCpmppQx9eX7xDgMDyv3PO2lJW4kBkq2APOo=;
-        b=bu7shPUZfKS+EQn7LIruBAmu3JYJAb2od1E3QyzkfRW6ZSjjtblbPI4rmkwSvXaA4a
-         X64L9vKgrprNT/lu3PMl7SN1Eoprt95BGklYXCXhcuyCyjawQxMuDaucSBPeR3wr9Fds
-         XGX70E8kMxKv6x6Ir703Nd6a0fH78ksM1746qA9TFN8HsiSSOihwHYkI0y5XVQYmLh62
-         6iLgKvDFCZCz2pZ9RmjROtB/w8uR04GNxUhOtyUeljw5IhJd6JBZagFTWrPxFu3nLYyC
-         ng8y14XEQ/x6+wBprKBMbS/s1esSPhLJVipfQbVECKZ9/3Yy/atLtd/uWbNMGiw8hOui
-         2Tpg==
-X-Forwarded-Encrypted: i=1; AJvYcCUusY3tlHe82ITnDvm6uNLnGdfADzXcBTSWbiyzVlyZiFcgOmUdbE4AC1l9nk4i8NED/KRPqZQY/ws=@vger.kernel.org, AJvYcCXQQWtScJM1c+xCQg0CgxrWhSr0x2ThiRWg9DMNDeEGF7drYzbAzlBO8D+jt2CbNISvpXZUHDsaL4gVOTM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywp9OLSrvZZsX+RZz2K21sj3DP+ncD1Y82uyNWyAzmuG67cHlFF
-	+tJ2UGnLRG4oHQR01Gsvc+I9DzPSQ9WLsPBNTVBGm6Uu2h1+b44x1K5J9g==
-X-Gm-Gg: ASbGncsuBbWPUAQT/t2fL37Z8lH/y2n8V/T/Dl61cP8RSckju+LPdvfOTY9iWQ1ewBu
-	WMWuHxvYmH5z58oSi0xR+VYT60vBgtfTMYIK0LRIxZKmAzDollofoQrggpCxqA/kBPqNp1wYtJc
-	Y34XqdaOLXpbhnYD/x0ajachFYFC0rOCUvg7LQFJ9CR2pq/uBPbC6Hhef+b65LaSly5C36CR+LE
-	Sd/CDsqMj1obq1o2Ny6OmI5pChozqvxbuxUCMBzMBCYsmpyOab06y1hVuYZ9IeOfVOk2bNfNW51
-	+RPfgRd67TE24eJmSCkjFgURA0002N9LTAgBpm9RtA==
-X-Google-Smtp-Source: AGHT+IFucS+go6LKq+JUwgvoDuptmo8PyOjo7aYF+zk9OasgwvP/cfm1kll04Xv8npNY6Lsr5M4vWA==
-X-Received: by 2002:a05:6871:33a0:b0:2d4:d820:6d82 with SMTP id 586e51a60fabf-2da486a7c1bmr53271fac.26.1745868809865;
-        Mon, 28 Apr 2025 12:33:29 -0700 (PDT)
-Received: from debian ([200.92.175.161])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2d973736065sm2447490fac.16.2025.04.28.12.33.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Apr 2025 12:33:29 -0700 (PDT)
-Date: Mon, 28 Apr 2025 13:34:01 -0600
-From: Your Name <kike.correo99.f@gmail.com>
-To: daniel.lezcano@linaro.org
-Cc: glaroque@baylibre.com, rafael@kernel.org, rui.zhang@intel.com,
-	lukasz.luba@arm.com, linux-pm@vger.kernel.org,
-	linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RESEND][PATCH] thermal: amlogic: Rename Uptat to uptat to follow
- kernel coding style
-Message-ID: <aA_YKeU45ZTXYUes@debian.debian>
+	s=arc-20240116; t=1745869822; c=relaxed/simple;
+	bh=rH7/HZOg7f1c+2LCP+NbsDn3L5NWlRBCV/YsyucQqgI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Um0mqmw31vOhI55PQkw8+yOYgZEpwyLvHcz9AbMwunk3IWTyhYFpa8BVcMADk+brycP4rr6RiOuUeKqmCGH0inhNPrYM5K23cQlgvXlibvhmX2wgvn5zbTHKAyr1qyEPImYiOKs3dFyWa5iFZJdGUkRbR6mA67xztd7azwdWAUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=MKzT0PgA; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from kreacher.localnet (unknown [217.114.34.19])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 75F5566509C;
+	Mon, 28 Apr 2025 21:50:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1745869808;
+	bh=rH7/HZOg7f1c+2LCP+NbsDn3L5NWlRBCV/YsyucQqgI=;
+	h=From:Subject:Date;
+	b=MKzT0PgAJ4hSY2XBtf0JmfdNzpA2j45RxysfZm5APE3hZnytAkmhOHdcLUfeNemcK
+	 F4Pspqp+cYmoNxklzy1VFoNdXpMLmH2yJw3YV0rGa+dqM4Jkw4+gFf9eF/uhPCPydP
+	 2fPbNIlWaQRzfnyxKeQnxXZMl4OSZHrW2ixuIoYPGx1llq1C/tjFwJQ0nSVX+gGBFV
+	 Lf/MR7BQvW42lyTh4IBWp8EcFd4BSao9HL1zHFllyT3Oc98uF/mS1nuSrfXlMcBFVK
+	 aUCe/rOzGw5OvgtCc0cTVLwfrs9D9Yh4lFudwWHgdnYmQpB7drtpr87YYV1u+2LHdb
+	 GuRX9PVGGtJeA==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Vinod Koul <vkoul@kernel.org>,
+ Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+ Bard Liao <yung-chuan.liao@linux.intel.com>,
+ Sanyog Kale <sanyog.r.kale@intel.com>, linux-sound@vger.kernel.org
+Subject:
+ [PATCH v2] soundwire: intel_auxdevice: Fix system suspend/resume handling
+Date: Mon, 28 Apr 2025 21:50:07 +0200
+Message-ID: <12680420.O9o76ZdvQC@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 217.114.34.19
+X-CLIENT-HOSTNAME: 217.114.34.19
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddviedukeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppedvudejrdduudegrdefgedrudelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddujedruddugedrfeegrdduledphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepjedprhgtphhtthhopehvkhhouhhlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehpihgvrhhrvgdqlhhouhhishdrsghoshhsrghrtheslhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopeihuhhnghdqtghhuhgrnhdrlhhirghosehlihhnuhigrdh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
 
-Hi Daniel,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Apologies for my previous email being sent in an incorrect format.
-Thank you for applying my patch! I’m trying to verify where it was merged.
-Could you confirm if my commit below was merged into the `staging-testing` branch or another tree?
+Before commit bca84a7b93fd ("PM: sleep: Use DPM_FLAG_SMART_SUSPEND
+conditionally") the runtime PM status of the device in intel_resume()
+had always been RPM_ACTIVE because setting DPM_FLAG_SMART_SUSPEND had
+caused the core to call pm_runtime_set_active() for that device during
+the "noirq" resume phase.  For this reason, the pm_runtime_suspended()
+check in intel_resume() had never triggered and the code depending on
+it had never run.  That had not caused any observable functional issues
+to appear, so effectively the code in question had never been needed.
 
-Commit hash: 84fe0cc6fddb6afcdca838d80756080f84cf9ecd
+After commit bca84a7b93fd the core does not call pm_runtime_set_active()
+for all devices with DPM_FLAG_SMART_SUSPEND set any more and the code
+depending on the pm_runtime_suspended() check in intel_resume() runs if
+the device is runtime-suspended prior to a system-wide suspend
+transition.  Unfortunately, when it runs, it breaks things due to the
+attempt to runtime-resume bus->dev which most likely is not ready for a
+runtime resume at that point.
 
-Best regards,
-Enrique Vazquez
+It also does other more-or-less questionable things.  Namely, it
+calls pm_runtime_idle() for a device with a nonzero runtime PM usage
+counter which has no effect (all devices have nonzero runtime PM
+usage counters during system-wide suspend and resume).  It also calls
+pm_runtime_mark_last_busy() for the device even though devices cannot
+runtime-suspend during system-wide suspend and resume (because their
+runtime PM usage counters are nonzero) and an analogous call is made
+in the same function later.  Moreover, it sets the runtime PM status
+of the device to RPM_ACTIVE before activating it.
+
+For the reasons listed above, remove that code altogether.
+
+On top of that, add a pm_runtime_disable() call to intel_suspend() to
+prevent the device from being runtime-resumed at any point after
+intel_suspend() has started to manipulate it because the changes
+made by that function would be undone by a runtime-suspend of the
+device.
+
+Next, once runtime PM has been disabled, the runtime PM status of the
+device cannot change, so pm_runtime_status_suspended() can be used
+instead of pm_runtime_suspended() in intel_suspend().
+
+Finally, make intel_resume() call pm_runtime_set_active() at the end to
+set the runtime PM status of the device to "active" because it has just
+been activated and re-enable runtime PM for it after that.
+
+Additionally, drop the setting of DPM_FLAG_SMART_SUSPEND from the
+driver because it has no effect on devices handled by it.
+
+Fixes: bca84a7b93fd ("PM: sleep: Use DPM_FLAG_SMART_SUSPEND conditionally")
+Reported-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+Tested-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+v1 -> v2: New changelog
+
+Since it fixes a recent regression in 6.15-rc, I can route it through the
+PM tree unless that would be a major concern.
 
 ---
-Signed-off-by: Enrique Vazquez <tu-correo@gmail.com>
+ drivers/soundwire/intel_auxdevice.c |   36 +++++++++++++-----------------------
+ 1 file changed, 13 insertions(+), 23 deletions(-)
+
+--- a/drivers/soundwire/intel_auxdevice.c
++++ b/drivers/soundwire/intel_auxdevice.c
+@@ -353,9 +353,6 @@
+ 	/* use generic bandwidth allocation algorithm */
+ 	sdw->cdns.bus.compute_params = sdw_compute_params;
+ 
+-	/* avoid resuming from pm_runtime suspend if it's not required */
+-	dev_pm_set_driver_flags(dev, DPM_FLAG_SMART_SUSPEND);
+-
+ 	ret = sdw_bus_master_add(bus, dev, dev->fwnode);
+ 	if (ret) {
+ 		dev_err(dev, "sdw_bus_master_add fail: %d\n", ret);
+@@ -640,7 +637,10 @@
+ 		return 0;
+ 	}
+ 
+-	if (pm_runtime_suspended(dev)) {
++	/* Prevent runtime PM from racing with the code below. */
++	pm_runtime_disable(dev);
++
++	if (pm_runtime_status_suspended(dev)) {
+ 		dev_dbg(dev, "pm_runtime status: suspended\n");
+ 
+ 		clock_stop_quirks = sdw->link_res->clock_stop_quirks;
+@@ -648,7 +648,7 @@
+ 		if ((clock_stop_quirks & SDW_INTEL_CLK_STOP_BUS_RESET) ||
+ 		    !clock_stop_quirks) {
+ 
+-			if (pm_runtime_suspended(dev->parent)) {
++			if (pm_runtime_status_suspended(dev->parent)) {
+ 				/*
+ 				 * paranoia check: this should not happen with the .prepare
+ 				 * resume to full power
+@@ -715,7 +715,6 @@
+ 	struct sdw_cdns *cdns = dev_get_drvdata(dev);
+ 	struct sdw_intel *sdw = cdns_to_intel(cdns);
+ 	struct sdw_bus *bus = &cdns->bus;
+-	int link_flags;
+ 	int ret;
+ 
+ 	if (bus->prop.hw_disabled || !sdw->startup_done) {
+@@ -724,23 +723,6 @@
+ 		return 0;
+ 	}
+ 
+-	if (pm_runtime_suspended(dev)) {
+-		dev_dbg(dev, "pm_runtime status was suspended, forcing active\n");
+-
+-		/* follow required sequence from runtime_pm.rst */
+-		pm_runtime_disable(dev);
+-		pm_runtime_set_active(dev);
+-		pm_runtime_mark_last_busy(dev);
+-		pm_runtime_enable(dev);
+-
+-		pm_runtime_resume(bus->dev);
+-
+-		link_flags = md_flags >> (bus->link_id * 8);
+-
+-		if (!(link_flags & SDW_INTEL_MASTER_DISABLE_PM_RUNTIME_IDLE))
+-			pm_runtime_idle(dev);
+-	}
+-
+ 	ret = sdw_intel_link_power_up(sdw);
+ 	if (ret) {
+ 		dev_err(dev, "%s failed: %d\n", __func__, ret);
+@@ -761,6 +743,14 @@
+ 	}
+ 
+ 	/*
++	 * Runtime PM has been disabled in intel_suspend(), so set the status
++	 * to active because the device has just been resumed and re-enable
++	 * runtime PM.
++	 */
++	pm_runtime_set_active(dev);
++	pm_runtime_enable(dev);
++
++	/*
+ 	 * after system resume, the pm_runtime suspend() may kick in
+ 	 * during the enumeration, before any children device force the
+ 	 * master device to remain active.  Using pm_runtime_get()
+
+
+
 
