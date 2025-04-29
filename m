@@ -1,227 +1,224 @@
-Return-Path: <linux-pm+bounces-26363-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26364-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 690E7AA07AC
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 11:47:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0075AA080C
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 12:06:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CEFD3B29F9
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 09:46:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 306844617E8
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 10:06:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F12052BE7A5;
-	Tue, 29 Apr 2025 09:46:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BFC32BE7D7;
+	Tue, 29 Apr 2025 10:06:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KhEkgs3Z"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ob2whYRQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B78132750ED;
-	Tue, 29 Apr 2025 09:46:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 509E52BE7C5
+	for <linux-pm@vger.kernel.org>; Tue, 29 Apr 2025 10:06:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745919968; cv=none; b=a1/Y7er53mi0bVLoxAyX8YQdD9DnKoavjyp8hUvCSVVMkG8mUUuugUszd6HZQF/bfJLqeMl7eThf7FVkL9cc29fImiSyJVZsWZ5hfIv2umcrepRnROHJJ1J/ZbKsLd+ioxUd48QAViGSs4x5ZQ8oFcVnhA4kuAC2D3JFevcodM0=
+	t=1745921215; cv=none; b=hWqejJEl5LNTM3Y6PCLAmSDbsYk6XXsk6HkWl2ilflIN7Ckp/OpgJHNRA65PDqdmvomWkHYh6pmMnEdp3PNvKDjLo7g98c+5fMK1RBsRfdiigx8vLo0frEeB6hfQDcJd4bgm1NSH8r2vqFdsi9M8ZlzzqjNJ7fWBHAcUxS63TH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745919968; c=relaxed/simple;
-	bh=OEmsROS2dzbLzqVvteqA+LjMNAwHbDGb3LITSHjMruA=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=Emgtv/gMe8St7UkcENtZv3YP4C3bsW6bZP0FKsGeS9U1BnqUjnJNZbnZpBbPYaqf5kryfkN+/tEaJYtwi4K+j+U/qRm+KlwPYB0QDqUiQEgBYfYiwi91+Wkmi/tUOtgTIFRj6nyQpWbf5tTKZhqvDps63zrbTXyaR88wDjjZJ/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KhEkgs3Z; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745919967; x=1777455967;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=OEmsROS2dzbLzqVvteqA+LjMNAwHbDGb3LITSHjMruA=;
-  b=KhEkgs3ZllIg5zGgsQX8fqOMXknpgK69caY27Orl6Lxtw7NSWSLkG1w4
-   g2DW8+YFG9+XROlrqXraqLm0YeKWEEPWfiozJNYG7NTjY9Ybfsx3fLYkC
-   y8vtWOJIfBcuRSbazfZUYhXJKkjZZzmLz+muojM6CKnLobXStCbTRw9bt
-   bVEcs9nbLpqe00aqkAN6nG2rckC7k2KlnNzn8lwvKgBJHm7fasoExIpQ2
-   Jpakh/f/zv4EkmnPEU3vWprM8wNHG6yIZRy3Hb/xzhlHzWUISTWFmsr4c
-   /lOfdyDSIpXKM0elxe1+HRCwKDWNyXDlQ7xWGHaMQuoIH+jRXpCTKCWob
-   Q==;
-X-CSE-ConnectionGUID: Z6lDBEttR7i/lsUKBkcN2Q==
-X-CSE-MsgGUID: JtsTc6SLS9m+bLDZyPwX+A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11417"; a="35143891"
-X-IronPort-AV: E=Sophos;i="6.15,248,1739865600"; 
-   d="scan'208";a="35143891"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 02:46:06 -0700
-X-CSE-ConnectionGUID: chXqGONbRG+KNhUajc2ULw==
-X-CSE-MsgGUID: 8lVzqi8rRgSKGWTaNKThpQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,248,1739865600"; 
-   d="scan'208";a="133495412"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.205])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 02:45:52 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Tue, 29 Apr 2025 12:45:49 +0300 (EEST)
-To: "Xin Li (Intel)" <xin@zytor.com>
-cc: LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org, 
-    linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org, 
-    virtualization@lists.linux.dev, linux-pm@vger.kernel.org, 
-    linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org, 
-    linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-    Netdev <netdev@vger.kernel.org>, platform-driver-x86@vger.kernel.org, 
-    tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-    dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-    acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com, 
-    peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com, 
-    alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com, 
-    adrian.hunter@intel.com, kan.liang@linux.intel.com, wei.liu@kernel.org, 
-    ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com, 
-    tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com, 
-    seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com, 
-    kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com, 
-    dapeng1.mi@linux.intel.com
-Subject: Re: [PATCH v4 01/15] x86/msr: Add missing includes of <asm/msr.h>
-In-Reply-To: <20250427092027.1598740-2-xin@zytor.com>
-Message-ID: <a1917b37-e41e-d303-749b-4007cda01605@linux.intel.com>
-References: <20250427092027.1598740-1-xin@zytor.com> <20250427092027.1598740-2-xin@zytor.com>
+	s=arc-20240116; t=1745921215; c=relaxed/simple;
+	bh=U1IL5hommBa2Wv+FExNOtEc9rkh+55OUse5MfWOqQog=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FRvmrcFPNOPQMgwOVXn87inLpgGhLhJMQ/AB1nNOdRPyJcdAjM201cAEJSFhDWGPclsZKyyFett9+o2LL/OJUfDk1+BUJI/0KJlEkuuVt4NVKZxxrcPyO+bAlJvewS9WHTDqyNk3K1irs1uhE5NM/B4CH3PpSkI4qhAvMxLgyCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ob2whYRQ; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-7082ce1e47cso48523197b3.2
+        for <linux-pm@vger.kernel.org>; Tue, 29 Apr 2025 03:06:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1745921212; x=1746526012; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jjQQ1gbntdrSbZtDquO40Eje9JxI9rUu3v+V9iiuKlU=;
+        b=Ob2whYRQtHGuz040o1Ucs8I8eAspDDPbj4vLhNA0FLx/Y/oiYV96VC0mttv0FjUNPZ
+         3Ipo6SFq0eqtLtXCgioDx+cMcqYGw/tu56WRVC73K/Wl2HOl2ODxQyht1qSB//AQFYUi
+         N1T9lShMlKig3y7P43jcySKN/6Dzrkk1R8NRwN1FzcW72ixhZrn0QFVkdbofN0ssNW51
+         FpEOivK/XytpwPNQnSReEtYDC0eZ/nPM7AVeG+A1qHNiKgUyOSjeuSv+O5bl8M1lr/Kw
+         Bi70atzAWO3lV9svYeWGT7KOwJgEXF5VPX70n2faYnA2Th9wF9/KXUjhhlaj4SW4Nb+G
+         kQCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745921212; x=1746526012;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jjQQ1gbntdrSbZtDquO40Eje9JxI9rUu3v+V9iiuKlU=;
+        b=vGD+KqCS4rxViQNcwaDxv4mNcZUZGMHNE74z6efWg1ZkYONpslk8NTjHbIJ2YbxsQd
+         P1qC37BkYaXf1ium8oQPikOPVwVYRrVqOeAx5qTMGJfX6kl3goXOTPbdRgpe9N8eZptt
+         y4rUgGve4fF9n8h8pcFu7xcNyE8O3jyC+crRnAJ4PMriF9u4dY6ixeAMVN82t/f3fvO7
+         XxIM0Fmm28PDHkBQfJC4McfqFy3U93M8jIE4+LbGaylWTolwpSHoW9LwpA3utI0ixkKv
+         4peU/M3TspLaTsMK6oAp+3s3BZeTpHSeaE4O1TaTJMbMboTgm1v6HeVWQJWGIUpDpNE6
+         5FqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUJlmxX70ioM7KkFCBmpcGF+7v0y8u2s1AdfJ+ax7dffqhxzNZXmJYShiAwQwVF0dlHT2GnnJvbyQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTzYxQ/7KqIa0a9h+AySvoXpLN6saCCGLkgoZHqY1REVs52HaV
+	prrgpcKp1HXJthaAl/JY3N/ZOl+uIaUrIRur6L3XpCV5hWDEWgh85TuTIeN6Q6wyuAD+vDBb3Pd
+	6R1VNkUxoX8yNJgqwAKLYcYzCyfXSPUpRCt8eng==
+X-Gm-Gg: ASbGnctFOOTSMHxePmvK56/lOmV0S5Vrq2zfhebplEY2ZGKbsFckfpRB49oQruW5wyV
+	iaO2MRU7Zq/N51t63pFvZRIiZzxu47NRC5l/ixA5ibEn2PL0h2+RyZsMCcdb5PDmLhtjYwYXm3m
+	1ShvYFxH0NipY0vY7zMsorkrk=
+X-Google-Smtp-Source: AGHT+IG6WmWyhSGVmxVC3f3XCypyrDEpbVGX6ioUnUsJtVsCpx9/EXtlcANtXZwlnV6IGsG9Jd4CkmBcfsgDrtEzaaQ=
+X-Received: by 2002:a05:690c:3506:b0:703:b8f4:5b0e with SMTP id
+ 00721157ae682-7085f236277mr162475347b3.28.1745921212260; Tue, 29 Apr 2025
+ 03:06:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-666243473-1745919726=:938"
-Content-ID: <1b5519eb-241d-dec5-af5a-fc9378cf96ec@linux.intel.com>
+References: <20250423-rk3576-emmc-fix-v3-1-0bf80e29967f@collabora.com>
+In-Reply-To: <20250423-rk3576-emmc-fix-v3-1-0bf80e29967f@collabora.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 29 Apr 2025 12:06:16 +0200
+X-Gm-Features: ATxdqUGRQt2dS-dYXQNUSdM9bjw6NNZW_Ep_w3cK8lN-p_Z_PHKTCdtR2wWOe8s
+Message-ID: <CAPDyKFp5N23KCZwOTba6vGyk9eaS1-SjSqY52FfPDng-bahn6g@mail.gmail.com>
+Subject: Re: [PATCH v3] mmc: sdhci-of-dwcmshc: add PD workaround on RK3576
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Cc: Shawn Lin <shawn.lin@rock-chips.com>, Heiko Stuebner <heiko@sntech.de>, 
+	Elaine Zhang <zhangqing@rock-chips.com>, Finley Xiao <finley.xiao@rock-chips.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, 
+	Sebastian Reichel <sebastian.reichel@collabora.com>, 
+	Detlev Casanova <detlev.casanova@collabora.com>, kernel@collabora.com, 
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Wed, 23 Apr 2025 at 09:54, Nicolas Frattaroli
+<nicolas.frattaroli@collabora.com> wrote:
+>
+> RK3576's power domains have a peculiar design where the PD_NVM power
+> domain, of which the sdhci controller is a part, seemingly does not have
+> idempotent runtime disable/enable. The end effect is that if PD_NVM gets
+> turned off by the generic power domain logic because all the devices
+> depending on it are suspended, then the next time the sdhci device is
+> unsuspended, it'll hang the SoC as soon as it tries accessing the CQHCI
+> registers.
+>
+> RK3576's UFS support needed a new dev_pm_genpd_rpm_always_on function
+> added to the generic power domains API to handle what appears to be a
+> similar hardware design.
+>
+> Use this new function to ask for the same treatment in the sdhci
+> controller by giving rk3576 its own platform data with its own postinit
+> function. The benefit of doing this instead of marking the power domains
+> always on in the power domain core is that we only do this if we know
+> the platform we're running on actually uses the sdhci controller. For
+> others, keeping PD_NVM always on would be a waste, as they won't run
+> into this specific issue. The only other IP in PD_NVM that could be
+> affected is FSPI0. If it gets a mainline driver, it will probably want
+> to do the same thing.
+>
+> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 
---8323328-666243473-1745919726=:938
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <6ad7f337-7709-3cca-3ccd-80f11d3e8d38@linux.intel.com>
+Applied for next, thanks!
 
-On Sun, 27 Apr 2025, Xin Li (Intel) wrote:
+Kind regards
+Uffe
 
-> For some reason, there are some TSC-related functions in the MSR
-> header even though there is a tsc.h header.
->=20
-> To facilitate the relocation of rdtsc{,_ordered}() from <asm/msr.h>
-> to <asm/tsc.h> and to eventually eliminate the inclusion of
-> <asm/msr.h> in <asm/tsc.h>, add <asm/msr.h> to the source files that
-> reference definitions from <asm/msr.h>.
->=20
-> Signed-off-by: Xin Li (Intel) <xin@zytor.com>
-> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
 > ---
->=20
-> Change in v4:
-> *) Add missing includes in a different patch (Ilpo J=E4rvinen).
-> *) Add all necessary direct inclusions for msr.h (Ilpo J=E4rvinen).
->=20
-> Change in v3:
-> * Add a problem statement to the changelog (Dave Hansen).
+> Changes in v3:
+> - Reword comment and commit message to correct that this is not a
+>   silicon bug, but seemingly intentional design with regards to runtime
+>   power management.
+> - Link to v2: https://lore.kernel.org/r/20250412-rk3576-emmc-fix-v2-1-830e653ad4f0@collabora.com
+>
+> Changes in v2:
+> - Rewrite patch to use dev_pm_genpd_rpm_always_on in sdhci driver
+>   instead, after Ulf Hansson made me aware of its existence
+> - Link to v1: https://lore.kernel.org/r/20250408-rk3576-emmc-fix-v1-1-3009828b1b31@collabora.com
 > ---
->  arch/x86/events/msr.c                                         | 3 +++
->  arch/x86/events/perf_event.h                                  | 1 +
->  arch/x86/events/probe.c                                       | 2 ++
-
-Under arch/x86/events/ a few files seem to be missing the include?
-
->  arch/x86/hyperv/ivm.c                                         | 1 +
-
-Also under hyperv/ not all files are covered but I'm a bit hesitant to=20
-suggest a change there since I'm not sure if they (hypervisors) do=20
-something special w.r.t. msr.
-
->  arch/x86/include/asm/fred.h                                   | 1 +
->  arch/x86/include/asm/microcode.h                              | 2 ++
->  arch/x86/include/asm/mshyperv.h                               | 1 +
->  arch/x86/include/asm/msr.h                                    | 1 +
->  arch/x86/include/asm/suspend_32.h                             | 1 +
->  arch/x86/include/asm/suspend_64.h                             | 1 +
->  arch/x86/include/asm/switch_to.h                              | 2 ++
-
-arch/x86/kernel/acpi/ ?
-acrh/x86/kernel/cet.c ?
-=2E..
-
-There seem to be quite many under arch/x86/ that still don't have it, I=20
-didn't list them all as there were so many after this point.
-
-But that's up to x86 maintainers how throughout they want you to be.
-
-This command may be helpful to exclude the files which already have the=20
-include so you can focus on the ones that may still be missing it:
-
-git grep -l -e rdmsr -e wrmsr | grep -v -f <(git grep -l -e 'asm/msr\.h')
-
->  arch/x86/kernel/cpu/resctrl/pseudo_lock.c                     | 1 +
->  arch/x86/kernel/fpu/xstate.h                                  | 1 +
->  arch/x86/kernel/hpet.c                                        | 1 +
->  arch/x86/kernel/process_64.c                                  | 1 +
->  arch/x86/kernel/trace_clock.c                                 | 2 +-
->  arch/x86/kernel/tsc_sync.c                                    | 1 +
->  arch/x86/lib/kaslr.c                                          | 2 +-
->  arch/x86/mm/mem_encrypt_identity.c                            | 1 +
->  arch/x86/realmode/init.c                                      | 1 +
->  drivers/acpi/acpi_extlog.c                                    | 1 +
->  drivers/acpi/processor_perflib.c                              | 1 +
->  drivers/acpi/processor_throttling.c                           | 3 ++-
->  drivers/char/agp/nvidia-agp.c                                 | 1 +
->  drivers/cpufreq/amd-pstate-ut.c                               | 2 ++
->  drivers/crypto/ccp/sev-dev.c                                  | 1 +
->  drivers/edac/amd64_edac.c                                     | 1 +
->  drivers/edac/ie31200_edac.c                                   | 1 +
->  drivers/edac/mce_amd.c                                        | 1 +
->  drivers/hwmon/hwmon-vid.c                                     | 4 ++++
->  drivers/idle/intel_idle.c                                     | 1 +
->  drivers/misc/cs5535-mfgpt.c                                   | 1 +
->  drivers/net/vmxnet3/vmxnet3_drv.c                             | 4 ++++
->  drivers/platform/x86/intel/ifs/core.c                         | 1 +
->  drivers/platform/x86/intel/ifs/load.c                         | 1 +
->  drivers/platform/x86/intel/ifs/runtest.c                      | 1 +
->  drivers/platform/x86/intel/pmc/cnp.c                          | 1 +
->  drivers/platform/x86/intel/speed_select_if/isst_if_common.c   | 1 +
->  drivers/platform/x86/intel/speed_select_if/isst_if_mbox_msr.c | 1 +
->  drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c   | 1 +
->  drivers/platform/x86/intel/turbo_max_3.c                      | 1 +
->  .../platform/x86/intel/uncore-frequency/uncore-frequency.c    | 1 +
->  drivers/powercap/intel_rapl_common.c                          | 1 +
->  drivers/powercap/intel_rapl_msr.c                             | 1 +
->  .../thermal/intel/int340x_thermal/processor_thermal_device.c  | 1 +
->  drivers/thermal/intel/intel_tcc_cooling.c                     | 1 +
->  drivers/thermal/intel/x86_pkg_temp_thermal.c                  | 1 +
->  drivers/video/fbdev/geode/display_gx.c                        | 1 +
->  drivers/video/fbdev/geode/gxfb_core.c                         | 1 +
->  drivers/video/fbdev/geode/lxfb_ops.c                          | 1 +
-
-Under drivers/ this looked pretty complete. Nice work.
-
-Acked-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com> # for pdx86
-
-I also noticed these files might not need to include msr.h:
-
-drivers/cpufreq/elanfreq.c
-drivers/cpufreq/sc520_freq.c
-drivers/accel/habanalabs/common/habanalabs_ioctl.c
-
-=2E..so if you want, you may consider optionally adding a cleanup patch to=
-=20
-remove the include from them.
-
-> --- a/drivers/video/fbdev/geode/gxfb_core.c
-> +++ b/drivers/video/fbdev/geode/gxfb_core.c
-> @@ -30,6 +30,7 @@
->  #include <linux/cs5535.h>
-> =20
->  #include <asm/olpc.h>
-> +#include <asm/msr.h>
-
-In wrong order.
-> =20
->  #include "gxfb.h"
-
---
- i.
---8323328-666243473-1745919726=:938--
+>  drivers/mmc/host/sdhci-of-dwcmshc.c | 40 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>
+> diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
+> index 09b9ab15e4995f0bddf57dd309c010c849be40d9..a20d03fdd6a93ecc5229c71f825bade5ac730370 100644
+> --- a/drivers/mmc/host/sdhci-of-dwcmshc.c
+> +++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/pm_domain.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/reset.h>
+>  #include <linux/sizes.h>
+> @@ -745,6 +746,29 @@ static void dwcmshc_rk35xx_postinit(struct sdhci_host *host, struct dwcmshc_priv
+>         }
+>  }
+>
+> +static void dwcmshc_rk3576_postinit(struct sdhci_host *host, struct dwcmshc_priv *dwc_priv)
+> +{
+> +       struct device *dev = mmc_dev(host->mmc);
+> +       int ret;
+> +
+> +       /*
+> +        * This works around the design of the RK3576's power domains, which
+> +        * makes the PD_NVM power domain, which the sdhci controller on the
+> +        * RK3576 is in, never come back the same way once it's run-time
+> +        * suspended once. This can happen during early kernel boot if no driver
+> +        * is using either PD_NVM or its child power domain PD_SDGMAC for a
+> +        * short moment, leading to it being turned off to save power. By
+> +        * keeping it on, sdhci suspending won't lead to PD_NVM becoming a
+> +        * candidate for getting turned off.
+> +        */
+> +       ret = dev_pm_genpd_rpm_always_on(dev, true);
+> +       if (ret && ret != -EOPNOTSUPP)
+> +               dev_warn(dev, "failed to set PD rpm always on, SoC may hang later: %pe\n",
+> +                        ERR_PTR(ret));
+> +
+> +       dwcmshc_rk35xx_postinit(host, dwc_priv);
+> +}
+> +
+>  static int th1520_execute_tuning(struct sdhci_host *host, u32 opcode)
+>  {
+>         struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+> @@ -1176,6 +1200,18 @@ static const struct dwcmshc_pltfm_data sdhci_dwcmshc_rk35xx_pdata = {
+>         .postinit = dwcmshc_rk35xx_postinit,
+>  };
+>
+> +static const struct dwcmshc_pltfm_data sdhci_dwcmshc_rk3576_pdata = {
+> +       .pdata = {
+> +               .ops = &sdhci_dwcmshc_rk35xx_ops,
+> +               .quirks = SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN |
+> +                         SDHCI_QUIRK_BROKEN_TIMEOUT_VAL,
+> +               .quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN |
+> +                          SDHCI_QUIRK2_CLOCK_DIV_ZERO_BROKEN,
+> +       },
+> +       .init = dwcmshc_rk35xx_init,
+> +       .postinit = dwcmshc_rk3576_postinit,
+> +};
+> +
+>  static const struct dwcmshc_pltfm_data sdhci_dwcmshc_th1520_pdata = {
+>         .pdata = {
+>                 .ops = &sdhci_dwcmshc_th1520_ops,
+> @@ -1274,6 +1310,10 @@ static const struct of_device_id sdhci_dwcmshc_dt_ids[] = {
+>                 .compatible = "rockchip,rk3588-dwcmshc",
+>                 .data = &sdhci_dwcmshc_rk35xx_pdata,
+>         },
+> +       {
+> +               .compatible = "rockchip,rk3576-dwcmshc",
+> +               .data = &sdhci_dwcmshc_rk3576_pdata,
+> +       },
+>         {
+>                 .compatible = "rockchip,rk3568-dwcmshc",
+>                 .data = &sdhci_dwcmshc_rk35xx_pdata,
+>
+> ---
+> base-commit: f34da179a4517854b2ffbe4bce8c3405bd9be04e
+> change-id: 20250317-rk3576-emmc-fix-7dc81a627422
+>
+> Best regards,
+> --
+> Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+>
 
