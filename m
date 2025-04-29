@@ -1,126 +1,132 @@
-Return-Path: <linux-pm+bounces-26388-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26389-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEE8BAA1B51
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 21:25:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84985AA1BC3
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 22:03:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE7F83B0B71
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 19:25:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B11E7A260F
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 20:02:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4940F25F78A;
-	Tue, 29 Apr 2025 19:25:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 142E525E821;
+	Tue, 29 Apr 2025 20:03:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="X1Gp4j+j"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T/3rIbRl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5AB24C083;
-	Tue, 29 Apr 2025 19:25:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9DB9254B19;
+	Tue, 29 Apr 2025 20:03:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745954726; cv=none; b=XCXBEyA0r25W9dNLEuO3BpbSzPmA2OF8sbGuTjD9kmaXSKQ2wTzmHG6t3qvLWF8jV+L1E74kLXxm3pXgvn3EGefNbSTL2T0ZXYHvUesTyreYftpGMuMJaAlnYKNJjnLBUA1YNHNkfdFMiFKsuh/gyaoJONPbUCfFu+//JuoI+Cg=
+	t=1745957026; cv=none; b=VM+xIrveotyBi0b0l/Ym/M/bA5jgR+yY+/F8bqW0OmFozPnbTztYGxIV8NeQlhO9Ec0MoVLw8VX/I4yiAVsZUs1tuDjmgyI86/S5sacOSOHyLotqb89/YOmLQ/WnjRkIkBwzibfy5txnlmreiRglftY7ojtjdPy+yXsacjJNzEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745954726; c=relaxed/simple;
-	bh=mUFSIbOh0ZERHVxEyLTbjHnLuloD8xCAXL6STo3jemc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UqtD0Ig0zCQVhxK7mXNtO3br9G53FchYEbG9YoNc3wcD53/ypv1KNbIKK0EQpBlgn/uVoWn7W4hIkheaEMMTNz0Ocwcdof1I4g2uJuH8x7y/9rvjYLzSI+TmU5z54uJ9nNU38uuZprM9u4LPIU4/YNEeeE9NLbvXXZoM3UFzHps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=X1Gp4j+j; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1745954719;
-	bh=mUFSIbOh0ZERHVxEyLTbjHnLuloD8xCAXL6STo3jemc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=X1Gp4j+jtE+7s/Ln2koM142muoh0/5BNh7S7VjLubaJbjhYFz7qx9Vc79AJv9GTVS
-	 xj/uwv6z5jntVBafphaqZpQ9NCXAH168NHBgQr4aeicnwW0q9Fs150smmJXz16UsI5
-	 1xP/Hj2jkzBPaeRwfqkISrL/D7wyExEknEssH7Io=
-Date: Tue, 29 Apr 2025 21:25:18 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Benson Leung <bleung@chromium.org>, 
-	Guenter Roeck <groeck@chromium.org>, Sebastian Reichel <sre@kernel.org>, 
-	chrome-platform@lists.linux.dev, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	s=arc-20240116; t=1745957026; c=relaxed/simple;
+	bh=OcNmXWcVfN2D2A9bVDTuH9ng9jsYPZRLKck1S3I/5wY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=EB7f1axxXs4KuDig0gV9ZkR+0hLuIoy+EasoEzVqcyTepiXcbr4+GgIbZ+IxMeD2nkXPSGYy4YBcE/oY2ifhj0guZyPQ/TSsgXCQ70nm6FZuHEIIWfbtlsOZy7PIa2inrkFwy0qU/1BYvxu/YOiS4i9+J+VZF7cVNSMBaJMxfaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T/3rIbRl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14BB7C4CEE3;
+	Tue, 29 Apr 2025 20:03:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745957025;
+	bh=OcNmXWcVfN2D2A9bVDTuH9ng9jsYPZRLKck1S3I/5wY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=T/3rIbRlMtLhstfSA8xy2NAdq1w+elubtky19lTsnOqKFaZgoJKRKfq+ohnrpg+LW
+	 MTbPH9bE1P5f/8e4oc6Yd0uozAe+24FN5apRFu0gRKEzzVkRRPFRhdSnlC5x6Qa8pv
+	 A2l9lyuFd7s5M1HRhjKykKIOtvV5cVV24rbFXmIHKRnmWiDE31mKZWke0zrjwkkWbu
+	 66ze56nA3UN13NTz8//KPzcSIZImRJnvmFJMJ9UA7GmBXvKL/ZBMd6TuCA3S3b+lvX
+	 4huVx6JBFG4M43bGuRmHr7E4U/jFoIBZWd2x/U4qxL5aiDl35QfG0fTW5Zg/cHK5ws
+	 yu7er2ll2Fm4g==
+Date: Tue, 29 Apr 2025 14:03:40 -0600
+From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Benson Leung <bleung@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Sebastian Reichel <sre@kernel.org>
+Cc: chrome-platform@lists.linux.dev, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] power: supply: cros_charge-control: Avoid
+Subject: [PATCH v2][next] power: supply: cros_charge-control: Avoid
  -Wflex-array-member-not-at-end warning
-Message-ID: <084dfe42-8aa7-415f-8435-f1310be89747@t-8ch.de>
-References: <aBEmk6ixfrQ2XpTw@kspp>
+Message-ID: <aBEwnKtUOTYzS7C3@kspp>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <aBEmk6ixfrQ2XpTw@kspp>
+Content-Transfer-Encoding: 8bit
 
-On 2025-04-29 13:20:51-0600, Gustavo A. R. Silva wrote:
-> -Wflex-array-member-not-at-end was introduced in GCC-14, and we are
-> getting ready to enable it, globally.
-> 
-> Use the `DEFINE_RAW_FLEX()` helper for an on-stack definition of a
-> flexible structure where the size of the flexible-array member
-> is known at compile-time, and refactor the rest of the code,
-> accordingly.
-> 
-> So, with these changes, fix the following warning:
-> 
-> drivers/power/supply/cros_charge-control.c:57:40: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
-> 
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> ---
->  drivers/power/supply/cros_charge-control.c | 26 +++++++++-------------
->  1 file changed, 10 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/power/supply/cros_charge-control.c b/drivers/power/supply/cros_charge-control.c
-> index 02d5bdbe2e8d..e33bc4c55bcc 100644
-> --- a/drivers/power/supply/cros_charge-control.c
-> +++ b/drivers/power/supply/cros_charge-control.c
-> @@ -53,23 +53,17 @@ static int cros_chctl_send_charge_control_cmd(struct cros_ec_device *cros_ec,
->  		[3] = sizeof(struct ec_params_charge_control),
->  	};
->  
-> -	struct {
-> -		struct cros_ec_command msg;
-> -		union {
-> -			struct ec_params_charge_control req;
-> -			struct ec_response_charge_control resp;
-> -		} __packed data;
-> -	} __packed buf = {
-> -		.msg = {
-> -			.command = EC_CMD_CHARGE_CONTROL,
-> -			.version = cmd_version,
-> -			.insize  = 0,
-> -			.outsize = outsizes[cmd_version],
-> -		},
-> -		.data.req = *req,
-> -	};
-> +	DEFINE_RAW_FLEX(struct cros_ec_command, msg, data,
-> +			MAX(sizeof(struct ec_params_charge_control),
-> +			    sizeof(struct ec_response_charge_control)));
-> +
-> +	msg->command = EC_CMD_CHARGE_CONTROL;
-> +	msg->version = cmd_version;
-> +	msg->insize  = 0;
-> +	msg->outsize = outsizes[cmd_version];
-> +	*(struct ec_params_charge_control *)msg->data = *req;
+-Wflex-array-member-not-at-end was introduced in GCC-14, and we are
+getting ready to enable it, globally.
 
-Please use cros_ec_cmd() like the LED driver.
+Replace an on-stack definition of a flexible structure with a call
+to utility function cros_ec_cmd().
 
-https://lore.kernel.org/lkml/Z-rKcgFjsyKvd58q@kspp/
+So, with these changes, fix the following warning:
 
->  
-> -	return cros_ec_cmd_xfer_status(cros_ec, &buf.msg);
-> +	return cros_ec_cmd_xfer_status(cros_ec, msg);
->  }
->  
->  static int cros_chctl_configure_ec(struct cros_chctl_priv *priv)
-> -- 
-> 2.43.0
-> 
+drivers/power/supply/cros_charge-control.c:57:40: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
+
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+Changes in v2:
+ - Use utility function cros_ec_cmd() instead of DEFINE_RAW_FLEX(). (Thomas Weiﬂschuh)
+
+v1:
+ - Link: https://lore.kernel.org/linux-hardening/aBEmk6ixfrQ2XpTw@kspp/
+
+ drivers/power/supply/cros_charge-control.c | 23 +++++++---------------
+ 1 file changed, 7 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/power/supply/cros_charge-control.c b/drivers/power/supply/cros_charge-control.c
+index 02d5bdbe2e8d..53e6a77e03fc 100644
+--- a/drivers/power/supply/cros_charge-control.c
++++ b/drivers/power/supply/cros_charge-control.c
+@@ -47,29 +47,20 @@ struct cros_chctl_priv {
+ static int cros_chctl_send_charge_control_cmd(struct cros_ec_device *cros_ec,
+ 					      u8 cmd_version, struct ec_params_charge_control *req)
+ {
++	int ret;
+ 	static const u8 outsizes[] = {
+ 		[1] = offsetof(struct ec_params_charge_control, cmd),
+ 		[2] = sizeof(struct ec_params_charge_control),
+ 		[3] = sizeof(struct ec_params_charge_control),
+ 	};
+ 
+-	struct {
+-		struct cros_ec_command msg;
+-		union {
+-			struct ec_params_charge_control req;
+-			struct ec_response_charge_control resp;
+-		} __packed data;
+-	} __packed buf = {
+-		.msg = {
+-			.command = EC_CMD_CHARGE_CONTROL,
+-			.version = cmd_version,
+-			.insize  = 0,
+-			.outsize = outsizes[cmd_version],
+-		},
+-		.data.req = *req,
+-	};
++	ret = cros_ec_cmd(cros_ec, cmd_version, EC_CMD_CHARGE_CONTROL, req,
++			  outsizes[cmd_version], NULL, 0);
++
++	if (ret < 0)
++		return ret;
+ 
+-	return cros_ec_cmd_xfer_status(cros_ec, &buf.msg);
++	return 0;
+ }
+ 
+ static int cros_chctl_configure_ec(struct cros_chctl_priv *priv)
+-- 
+2.43.0
+
 
