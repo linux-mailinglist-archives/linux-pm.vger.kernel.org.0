@@ -1,181 +1,139 @@
-Return-Path: <linux-pm+bounces-26391-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26392-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74F51AA1C6B
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 22:47:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BAB2AA1C92
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 22:59:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D5A09C07FF
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 20:47:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 068E14C4F69
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 20:59:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE1612522A7;
-	Tue, 29 Apr 2025 20:47:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1DA32586EB;
+	Tue, 29 Apr 2025 20:59:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="N8N0/0pD"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f73tmMEM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC83E259CA9
-	for <linux-pm@vger.kernel.org>; Tue, 29 Apr 2025 20:47:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC8B21D3F4
+	for <linux-pm@vger.kernel.org>; Tue, 29 Apr 2025 20:59:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745959646; cv=none; b=YSqm8nxs8OXZ/sWpECa+RTMNV6Hj49iBuWaTKQT7zodTW+zqUH/CW5Gbpoop78jWtKVuZVzHPq8NNYgM81eoGKw/ZTaH+zPWnlWbTV6Yne88u8I8LuW/HuYDEHdGI0HpMNMGQqBmzt2eRk5jowHAkxrznrWhBAK7H7NrtpA49CM=
+	t=1745960352; cv=none; b=bTnwB7oym5slPUZJsofJ5qK3RlvoGmjW6wzl5zH8x+la+Xz0OZLElDLQGQl+OMdh+XDpJqGPWs20Mmd7PB1DnMxu3AXnc1xVgBuCAbIKitvegb0cZJNDrNAWB2xulW3AtKLBNrmHNo45FBMC570likphohh6lIObX7+wXJEWF4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745959646; c=relaxed/simple;
-	bh=QqcOdSbUWOmQ7xOdiF9jBdi+WEKBOn4XoknseksIirU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iybq5j5SwiRyUFUtQSZQlZ2rq9jJFePZL+0vqw9LDTpoOYDqmKc06SQvpU/Lxqxn5DKeSwSezQKz0yyaOlKc5jauCeHcXnqw2+U7BYw7dc8aIPvTBUhzzGSF6ePI+YwKOUQh74e5BmfHndY2LUiSfRXpnmgXQwblz9k9jFnNC4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=N8N0/0pD; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1745960352; c=relaxed/simple;
+	bh=2foY8aJkUqXuzy5/740zw/k5H8Z8Qx7GC1j+qef3k30=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CCx/kc4ioSh1LFJ7hlDVeNBAwJYZLOjj41bwuqDOBb8RS+um+vXrtVo8F8EZpAK4CiivpBcZibHmJFKkefnaZgz0HQ1vxjVbddXVpnbRvHZCPmvOxpUO1zKWSvHwR9IS2u8p17jfn5ZeBu1M+EG7LPsKAm4Sj3nxXuoQPOiWOh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f73tmMEM; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745959643;
+	s=mimecast20190719; t=1745960349;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=9tDl4SM9LTrmRbXGWLMTTVmXyOXWasgXqOfwSbZ29mg=;
-	b=N8N0/0pDwaGq/M2JuBgvd7QDGOWgqtFBGXoL5TMcNTd4jr4mrIAxXmPKnb3LlrluGJkYWp
-	HM2xmDDe4EFI/ZpxOOiaCC5bbQyWT1ra5QrqjRSqV+pK+C0LXI6hnCyD5VseiNconexpDR
-	3qIYFb8p7vNqV1/Q/P0elonyOftO+c4=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5RhYr/UyCLS/XEsTQgp+7mb2ke0gGzsz5aTxylR9M4s=;
+	b=f73tmMEMX5Bp2GmcivAKUDkOCe8k93NfoZHCRvcX3N59Jg+TUW93MV3f8gqB9pNw1P03xg
+	xTW5AbJzZwd3a4VuSHuEvxuFUWLnp0gOUj+KPzSCkCTEoHMBUswFE3sGaLr+tEyE4zfNcP
+	H7HED8mSqCZPzT6TR8xInE9R3GUWE/I=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-274-DkDqkMqkMKGOVubLxeWVgQ-1; Tue, 29 Apr 2025 16:47:22 -0400
-X-MC-Unique: DkDqkMqkMKGOVubLxeWVgQ-1
-X-Mimecast-MFC-AGG-ID: DkDqkMqkMKGOVubLxeWVgQ_1745959641
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7c95e424b62so52899285a.1
-        for <linux-pm@vger.kernel.org>; Tue, 29 Apr 2025 13:47:22 -0700 (PDT)
+ us-mta-275-dL6sQ9SLPQu_7AN7rrR48A-1; Tue, 29 Apr 2025 16:59:07 -0400
+X-MC-Unique: dL6sQ9SLPQu_7AN7rrR48A-1
+X-Mimecast-MFC-AGG-ID: dL6sQ9SLPQu_7AN7rrR48A_1745960347
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7c5c9abdbd3so600787285a.1
+        for <linux-pm@vger.kernel.org>; Tue, 29 Apr 2025 13:59:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745959641; x=1746564441;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9tDl4SM9LTrmRbXGWLMTTVmXyOXWasgXqOfwSbZ29mg=;
-        b=tQkuhulN8YO9jOZlVdb3Fh/nUihSBTA0FEd06L7cWjXiSOkUEMmD+0GFVKhEZjgtmR
-         UTQbEbYXFq+yRV9oZqzHSbjjp3EhhAjP7MJKRigWUk38pF5C9Zsjm0ubnypvMBDGXWOQ
-         gqiOD24mEDSnj0TMfmy1L48IxIrN0GCAv6NadBwC4BEAwJQ8Ysvk1RHdQn+hfvjrV3st
-         FNmTvrlUJVOCI5gce7ERpEqYXFuXQcWiJaCEpl5+rZnotZAs1KDBVkl5D+Om1Fv874Xv
-         HSM31r94ZO8CO4d2VqdULCy6u2hCc4t+rAe4uiyG0SQlG6psa63wlIyxzRopWJxz1cbe
-         akkw==
-X-Forwarded-Encrypted: i=1; AJvYcCXCHGVxFhe35WHvlfNfvsab584GBdQPzzBbU8oHdntkVm/yQJn8+Evf0ZKVBzgF7R+y+IhyKtJQVw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyo2IK5W6RzmBkveMQuuPl3EjxQ+qC8sPRRqpB4eu2PNEKuTmFo
-	3tKtfq4TYXT8iFBlkgXxMyr2XTYbN3OOUftsy97gDpR+HN6z+BPH4UeUmyK2yMsKrbTWRr9YhFG
-	2EDo5S96/0M8Mmsxnk1X1t88UuvQ4nELj466KVEq4eWlYWgc7sbCxJhru
-X-Gm-Gg: ASbGncv+y2FTu3e/HoTXxkldPp6tUzg77N+5QUPySmLq0v5aLRTAsRaF6lFSkcfuhTx
-	kR56IRxladoaDSh7WLvshzqQkdSStWO9e+s6N9Tt3f90Xsk+F9owb0QuE3RXP59vjL37veNZVVF
-	sMtTOVcVB/esMD+fK74DHOGLeRCwWizNgRP8b69Q99oJxczml7z/ny2ux8Fr0532GCmHdWMP1zu
-	WRMfDg9fZo+X7xArw5QLOIw+I+8WREckCaW2phUvvZINhF8ON1ew5UBKcgWkweglU3wq/LMTyFY
-	WjVQb1qrDLv0Z6rVeaVvrD4=
-X-Received: by 2002:a05:622a:1f17:b0:474:e033:3efb with SMTP id d75a77b69052e-489cdce6198mr4990041cf.24.1745959641649;
-        Tue, 29 Apr 2025 13:47:21 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEB3zISEyNjnBvW374QL/ZY8r3V947KW/q/mBmF4gL3xZQoL9JsizIXWMEpRnC+4bSdQAo5dA==
-X-Received: by 2002:a05:622a:1f17:b0:474:e033:3efb with SMTP id d75a77b69052e-489cdce6198mr4989631cf.24.1745959641208;
-        Tue, 29 Apr 2025 13:47:21 -0700 (PDT)
-Received: from thinkpad2024.redhat.com ([71.217.50.205])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-47e9f1cfc4asm83668531cf.31.2025.04.29.13.47.20
+        d=1e100.net; s=20230601; t=1745960347; x=1746565147;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5RhYr/UyCLS/XEsTQgp+7mb2ke0gGzsz5aTxylR9M4s=;
+        b=dERxp/wENXezrajkEiydCVedH++viFcKsyNOgSEtErX7O0Y3iszh5jM7u5LbsMBt0a
+         QJD+xbJJ8MFNxI2lcGopUjl9PT8m/awwrYufZ/8XUrFL7/NAPBnftAHqg3F9y2JQ9CS9
+         mlTN9xSkxsy1GZO7KbHBBY05EgqYOQZ5cqLmpchfO979ew2nJDDocG1PIqk6dIp6IhiG
+         3rcPRhrcEJzubqbO2Vn5Y5MbvIw19zuD69+t3yWsSTnrPgCnoFWpf0fkdExT3TrsmMAl
+         6H71F/paW40GrqkGyOVRnueoKgHLy/u/xaUNuZM9kuDXG/lO8s/Ud00Rc6s7wA7WNG2j
+         oupA==
+X-Gm-Message-State: AOJu0Yy8DguHCI82e+m48U06fYY2i7oJ22EA0qXD7V8iTLN5Bs+5yqbC
+	O/GiokX5VyUXWDs7VS2zjXg5DHJEQQGytDrYEcKAATiXzfSE8pLU9Zj/VLHVjiEwYgh3GTmd0kz
+	s8lqSpClq6cxaHhL0zaz+1T/X+MVKEiZJuz+kNMqAGoOk43eaGsZjL+6o
+X-Gm-Gg: ASbGncsSRfX9qTww9NZPJoT9kWmc5uKWHXa5OAHajBAFNJg75MZAUfuwka8M2z6eFtv
+	D4qOK1EaL+zusQbqkaKsz5hpZFuUEGIUF5HjL/riHxMd8SeX4su2+Bbwhd6VVX508bkBXZzMFno
+	PrjYX9WSRAKSe3vtQD2Z/t4SnNWHqaw5FN8LHCsLPy7uBEzGo3d2B10a8jjEUSTUVfeWJoxeTDQ
+	FSUeFa7sPyIUXKf1SrRQM5ynMzzd/a4AC5eem02OJld0uv6R7DpBCz6LZ9b/Q8fJNEWA5Lgb3K7
+	HK2S0dAK
+X-Received: by 2002:a05:620a:4546:b0:7c5:642f:b22f with SMTP id af79cd13be357-7cac760a931mr92023185a.18.1745960347397;
+        Tue, 29 Apr 2025 13:59:07 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF3Jp+sfoDg4/YvtqNqY+3qnmF4j/fslcRIu7CqyIY73tOjVob+6SaGYhk/jsbTUA+NJpJqIw==
+X-Received: by 2002:a05:620a:4546:b0:7c5:642f:b22f with SMTP id af79cd13be357-7cac760a931mr92020785a.18.1745960347113;
+        Tue, 29 Apr 2025 13:59:07 -0700 (PDT)
+Received: from thinkpad2024 ([71.217.50.205])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c958eb5550sm774859785a.116.2025.04.29.13.59.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Apr 2025 13:47:20 -0700 (PDT)
+        Tue, 29 Apr 2025 13:59:06 -0700 (PDT)
+Date: Tue, 29 Apr 2025 16:59:03 -0400
 From: "John B. Wyatt IV" <jwyatt@redhat.com>
-To: Shuah Khan <skhan@linuxfoundation.org>,
-	Thomas Renninger <trenn@suse.com>
-Cc: "John B. Wyatt IV" <jwyatt@redhat.com>,
-	linux-pm@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	John Kacur <jkacur@redhat.com>,
-	"John B. Wyatt IV" <sageofredondo@gmail.com>,
-	Wander Lairson Costa <wander@redhat.com>
-Subject: [PATCH] cpupower: change binding's makefile to use -lcpupower
-Date: Tue, 29 Apr 2025 16:47:10 -0400
-Message-ID: <20250429204711.127274-1-jwyatt@redhat.com>
-X-Mailer: git-send-email 2.49.0
+To: "Francesco Poli (wintermute)" <invernomuto@paranoici.org>
+Cc: linux-pm list <linux-pm@vger.kernel.org>,
+	Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
+	John Kacur <jkacur@redhat.com>
+Subject: Re: [PATCH v2] cpupower: add a systemd service to run cpupower
+Message-ID: <aBE9ly7vP0eryfMO@thinkpad2024>
+References: <20250425151024.121630-1-invernomuto@paranoici.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250425151024.121630-1-invernomuto@paranoici.org>
 
-Originally I believed I needed the .o files to make the bindings. The
-linking failed due to a missing .so link in Fedora or by using make
-install-lib from the cpupower directory. Amend the makefile and the
-README.
+On Fri, Apr 25, 2025 at 05:07:31PM +0200, Francesco Poli (wintermute) wrote:
+> One of the most typical use cases of the 'cpupower' utility works as
+> follows: run 'cpupower' at boot with the desired command-line options
+> and then forget about it.
+> 
+> Add a systemd service (disabled by default) that automates this use
+> case (for environments where the initialization system is 'systemd'),
+> by running 'cpupower' at boot with the settings read from a default
+> configuration file.
+> 
+> The systemd service, the associated support script and the
+> corresponding default configuration file are derived from what is
+> provided by the Arch Linux package (under "GPL-2.0-or-later" terms),
+> modernized and enhanced in various ways (the script has also been
+> checked with 'shellcheck').
+> 
+> Link: https://gitlab.archlinux.org/archlinux/packaging/packages/linux-tools/-/tree/dd2e2a311e05413d0d87a0346ffce8c7e98d6d2b
+> 
+> Signed-off-by: Francesco Poli (wintermute) <invernomuto@paranoici.org>
 
-Big thanks to Wander Lairson Costa <wander@redhat.com> for the help.
+Tested by installing the new systemd files, amending the
+cpupower.default file and trying out the governor and frequency options.
+I did encounter the systemd service exiting on boot after setting
+performance options. The service set my options mostly correctly; my
+machine has a limited number of cpu governors. This may have been my error and
+I will need to test more when I have time.
 
-Signed-off-by: "John B. Wyatt IV" <jwyatt@redhat.com>
-Signed-off-by: "John B. Wyatt IV" <sageofredondo@gmail.com>
----
- tools/power/cpupower/bindings/python/Makefile |  8 +++-----
- tools/power/cpupower/bindings/python/README   | 13 ++++++++-----
- 2 files changed, 11 insertions(+), 10 deletions(-)
+Adding my tags.
 
-diff --git a/tools/power/cpupower/bindings/python/Makefile b/tools/power/cpupower/bindings/python/Makefile
-index 741f21477432..81db39a03efb 100644
---- a/tools/power/cpupower/bindings/python/Makefile
-+++ b/tools/power/cpupower/bindings/python/Makefile
-@@ -1,22 +1,20 @@
- # SPDX-License-Identifier: GPL-2.0-only
- # Makefile for libcpupower's Python bindings
- #
--# This Makefile expects you have already run the makefile for cpupower to build
--# the .o files in the lib directory for the bindings to be created.
-+# This Makefile expects you have already run `make install-lib` in the lib
-+# directory for the bindings to be created.
- 
- CC := gcc
- HAVE_SWIG := $(shell if which swig >/dev/null 2>&1; then echo 1; else echo 0; fi)
- HAVE_PYCONFIG := $(shell if which python-config >/dev/null 2>&1; then echo 1; else echo 0; fi)
- 
--LIB_DIR := ../../lib
- PY_INCLUDE = $(firstword $(shell python-config --includes))
--OBJECTS_LIB = $(wildcard $(LIB_DIR)/*.o)
- INSTALL_DIR = $(shell python3 -c "import site; print(site.getsitepackages()[0])")
- 
- all: _raw_pylibcpupower.so
- 
- _raw_pylibcpupower.so: raw_pylibcpupower_wrap.o
--	$(CC) -shared $(OBJECTS_LIB) raw_pylibcpupower_wrap.o -o _raw_pylibcpupower.so
-+	$(CC) -shared -lcpupower raw_pylibcpupower_wrap.o -o _raw_pylibcpupower.so
- 
- raw_pylibcpupower_wrap.o: raw_pylibcpupower_wrap.c
- 	$(CC) -fPIC -c raw_pylibcpupower_wrap.c $(PY_INCLUDE)
-diff --git a/tools/power/cpupower/bindings/python/README b/tools/power/cpupower/bindings/python/README
-index 952e2e02fd32..2a4896b648b7 100644
---- a/tools/power/cpupower/bindings/python/README
-+++ b/tools/power/cpupower/bindings/python/README
-@@ -5,18 +5,21 @@ libcpupower (aside from the libcpupower object files).
- requirements
- ------------
- 
--* You need the object files in the libcpupower directory compiled by
--cpupower's makefile.
-+* If you are building completely from upstream; please install libcpupower by
-+running `make install-lib` within the cpupower directory. This installs the
-+libcpupower.so file and symlinks needed. Otherwise, please make sure a symlink
-+to libcpupower.so exists in your library path from your distribution's
-+packages.
- * The SWIG program must be installed.
--* The Python's development libraries installed.
-+* The Python's development libraries must be installed.
- 
- Please check that your version of SWIG is compatible with the version of Python
- installed on your machine by checking the SWIG changelog on their website.
- https://swig.org/
- 
- Note that while SWIG itself is GPL v3+ licensed; the resulting output,
--the bindings code: is permissively licensed + the license of libcpupower's .o
--files. For these bindings that means GPL v2.
-+the bindings code: is permissively licensed + the license of libcpupower's
-+library files. For these bindings that means GPL v2.
- 
- Please see https://swig.org/legal.html and the discussion [1] for more details.
- 
+Reviewed-by: John B. Wyatt IV <jwyatt@redhat.com>
+Reviewed-by: John B. Wyatt IV <sageofredondo@gmail.com>
+Tested-by: John B. Wyatt IV <jwyatt@redhat.com>
+Tested-by: John B. Wyatt IV <sageofredondo@gmail.com>
+
 -- 
-2.49.0
+Sincerely,
+John Wyatt
+Software Engineer, Core Kernel
+Red Hat
 
 
