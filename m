@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-26345-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26346-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A92AA9FE70
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 02:40:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C04BFA9FE7B
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 02:41:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 861EE18922E1
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 00:40:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 539D74609FB
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 00:40:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3D141925A2;
-	Tue, 29 Apr 2025 00:36:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 682CC1BB6BA;
+	Tue, 29 Apr 2025 00:36:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="BX6q7Z8k"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="bsKvdV1x"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68BE11494C3;
-	Tue, 29 Apr 2025 00:36:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF7C1B0430;
+	Tue, 29 Apr 2025 00:36:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745886989; cv=none; b=KVcva/JT57Rxs3P4ODt2f0K3ZvG8+979bxhCw5F/iuSJa5OSFGy85JzrI6eW+bSRS1yfiFCtlZuy38nxfHn7QIdL0Z3Mw9mE/2BAbSQcZSkGULcH/Ieh6C1PWKVdrEEKta3Dr66gElpSrjh71cPGhDenuj9XC1b11HUEQC50Ucw=
+	t=1745886999; cv=none; b=O+NZfaVvz6UZMgEmgF9mcd5kHHClIOjkktDuyIx9BIAKw1k/8BQXtPm9kKOfJgf/2oloY+tU/TBj6i8YZAL1szWCLfXp03AtyoklboGtcfakszwA/mwpHADZCmemAuTBDJr9g2pTe+o1LzP+OvoyYN+kxgLIlsIlG2AQm8Movf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745886989; c=relaxed/simple;
-	bh=2G13UdckMVoNWyQ2KkNbIsqMt2eJ/selT3Q4mTX/i9M=;
+	s=arc-20240116; t=1745886999; c=relaxed/simple;
+	bh=VyAaQCwVTKyodHJbWRjjuyUH6q3W1KuHvM58oNnwBqY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=AM2kveJzBuppfm21RsSowwApoCRKJqRmCfh5AvV96Brhb8+M4CJrd83EStEPEeSvRSJ2WejZ8zkFdZYSyjrrOoA8UnWe6VOvs9h4wdWLC2iDnfdcprc1iPEUuUTxxHEF5RMrl2VwHfRVwGmS6oPaYxfbteFMiolP6AnA0jxxBxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=BX6q7Z8k; arc=none smtp.client-ip=212.227.17.20
+	 MIME-Version; b=I4iq/PdqRz2elQAUZuu8Vfbhar1gEMWhbqRfixluCwFmz7e/5hUrdl4FufXvpaBugyPumeK7V3g/XwfKlhR3RToCM/Dm9Q7L7UKmgvNY9wIH/p49zrkwxnVkVXTGKAJHhhSrIaHcTHgTmt10iSISCEFi7MMRfEy++Rk1yJki8ig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=bsKvdV1x; arc=none smtp.client-ip=212.227.17.22
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1745886982; x=1746491782; i=w_armin@gmx.de;
-	bh=g9WnqqVjdggWi2YjHHXf4QuvT/xttrq0L//6veEdl2w=;
+	s=s31663417; t=1745886985; x=1746491785; i=w_armin@gmx.de;
+	bh=9Y2WQZ77zZCI4KFEbSyvqglWHM2SvgIsYOScYy2OBxs=;
 	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=BX6q7Z8kDr+SCLb41wsd4I3BYXCnrqb4BwWXbf4x3IIBUMUVDU50fit91K5j3ODO
-	 ik+iEMsWQKmDkodV/q7bABKj/AI/QeS+afKXmo8AsiyccTIyxXv6odUFtz6KymsJr
-	 ZohNYwIKlxxG6IbiHrvMTrmiVeiB5Cp7rJf6A40RYdakseIHXmzRIg1z4aFjC/LGr
-	 eos4rqalYFRKZ5yPz7/z344Zb68EosP0VwwYlwtaqeJS44HddC8aSeLUymKhEirHT
-	 ZJOAVDAiLQwo0fm0Z1n+Z3gPcQei247dxNNWqMrkdqyUQXeC0+lMoYk460jUqz7LE
-	 DUw06e/VGTcYY8FLQw==
+	b=bsKvdV1xY0ERV8GTqjS2/I7Rv2vXX2rqt+GAoCJA05Lt+vocH0MryefS8Xwu6BbZ
+	 Q3Sx/wGWsOnjdK0l8Bn+NaqSeUcvNxy6MYO+Xtuxg6ftW8wxzPZICl0Ok7vSCJaT3
+	 I/v+Am0xpD6+jzsbY9MzTTUS8JQ4L7Ki5+WyKVeCKZ1QVL3E6ReN+YY6hlgTP+/wC
+	 fsE6JsP8L6bsGDvJhk6wJ9HaGyLk53rzNszAvKmTRwmlPNuDL7lQ3ztOe0fTuZ64r
+	 yK1FeXO7iXQzkCw6E/KhaModpVLG6d2v+d6YsG5XEOHD5i11hIX5R8qTFN/GR21nk
+	 uMTL7q53//Ha4kL4Fw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from mx-amd-b650.fritz.box ([87.177.78.219]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MrhQC-1uoPZ40VXw-00fQIe; Tue, 29 Apr 2025 02:36:22 +0200
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MGyxX-1uEnlb2rUh-00AUOd; Tue, 29 Apr 2025 02:36:24 +0200
 From: Armin Wolf <W_Armin@gmx.de>
 To: hdegoede@redhat.com,
 	ilpo.jarvinen@linux.intel.com
@@ -55,9 +55,9 @@ Cc: sre@kernel.org,
 	platform-driver-x86@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/4] platform/x86: dell-ddv: Expose the battery manufacture date to userspace
-Date: Tue, 29 Apr 2025 02:36:05 +0200
-Message-Id: <20250429003606.303870-3-W_Armin@gmx.de>
+Subject: [PATCH v2 4/4] platform/x86: dell-ddv: Expose the battery health to userspace
+Date: Tue, 29 Apr 2025 02:36:06 +0200
+Message-Id: <20250429003606.303870-4-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250429003606.303870-1-W_Armin@gmx.de>
 References: <20250429003606.303870-1-W_Armin@gmx.de>
@@ -68,63 +68,61 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:CCotywXhA+GsZBcrnSnFt/W7RmxOkIa/WOrFgZautWT24o3gXwL
- BLv37ohB2N17uQ7/tF6h+do+QVBJxvP04n2ycPpquGOE/TeR+UNF+sabsviBhhzg+qUt4Yw
- TnFAX2C8VJsmiX5QEmIW/PFPIWk2NF9RLSvifIu/bfEgNWvzRS1BQNKbx4f+5GjDHcjY0NZ
- eX4BkziUAIJBYKyYXkZxg==
+X-Provags-ID: V03:K1:QDUPF2bWhumT0YXmQVYjFCcbqylL2H/aMBOY5pvk+5mgRilIw4R
+ T1Gs9KeKKNbOXTT6lABMCGHIe6LYFjBDBZTrJQvVSuQej+mVoNKkBl42Ef3tIs9shAjdBDL
+ zpVY076K+KaAyoqQumSzrutJvN31noTnpwwDK8Ekww9QojvdpFXI/NyExGswjBX0D6jJimp
+ yjWmIfUd5n8qp/4HpJz2Q==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:crD9Uq+VSbA=;DzW8CM6+StTN8TuQep4LqBlLrMC
- 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
- mrek=
+UI-OutboundReport: notjunk:1;M01:P0:odmEQe451D4=;qBGKT834AgQ51PkQU9kdOhBWDbZ
+ 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
 
-The manufacture date of a given battery is exposed over the Dell DDV
-WMI interface using the "BatteryManufactureDate" WMI method. The
-resulting data contains the manufacture date of the battery encoded
-inside a 16-bit value as described in the Smart Battery Data
-Specification.
+The health of a given battery is exposed over the Dell DDV WMI
+interface using the "BatteryManufactureAceess" WMI method. The
+resulting data contains, among other data, the health status of
+the battery.
 
 Expose this value to userspace using the power supply extension
 interface.
@@ -133,129 +131,190 @@ Tested on a Dell Inspiron 3505.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- Documentation/wmi/devices/dell-wmi-ddv.rst |  3 --
- drivers/platform/x86/dell/dell-wmi-ddv.c   | 58 ++++++++++++++++++++++
- 2 files changed, 58 insertions(+), 3 deletions(-)
+ Documentation/wmi/devices/dell-wmi-ddv.rst | 35 ++++++++-
+ drivers/platform/x86/dell/dell-wmi-ddv.c   | 89 ++++++++++++++++++++++
+ 2 files changed, 123 insertions(+), 1 deletion(-)
 
 diff --git a/Documentation/wmi/devices/dell-wmi-ddv.rst b/Documentation/wm=
 i/devices/dell-wmi-ddv.rst
-index f10a623acca1..41c553d5c77d 100644
+index 41c553d5c77d..109d4c5c922e 100644
 =2D-- a/Documentation/wmi/devices/dell-wmi-ddv.rst
 +++ b/Documentation/wmi/devices/dell-wmi-ddv.rst
-@@ -118,9 +118,6 @@ The date is encoded in the following manner:
- - bits 5 to 8 contain the manufacture month.
- - bits 9 to 15 contain the manufacture year biased by 1980.
+@@ -150,7 +150,40 @@ Returns the voltage flow of the battery in mV as an u=
+16.
+ WMI method BatteryManufactureAccess()
+ -------------------------------------
 =20
--.. note::
--   The data format needs to be verified on more machines.
--
- WMI method BatterySerialNumber()
- --------------------------------
+-Returns a manufacture-defined value as an u16.
++Returns the health status of the battery as a u16.
++The health status encoded in the following manner:
++
++ - the third nibble contains the general failure mode
++ - the fourth nibble contains the specific failure code
++
++Valid failure modes are:
++
++ - permanent failure (``0x9``)
++ - overheat failure (``0xa``)
++ - overcurrent failure (``0xb``)
++
++All other failure modes are to be considered normal.
++
++The following failure codes are valid for a permanent failure:
++
++ - fuse blown (``0x0``)
++ - cell imbalance (``0x1``)
++ - overvoltage (``0x2``)
++ - fet failure (``0x3``)
++
++The last two bits of the failure code are to be ignored when the battery
++signals a permanent failure.
++
++The following failure codes a valid for a overheat failure:
++
++ - overheat at start of charging (``0x5``)
++ - overheat during charging (``0x7``)
++ - overheat during discharging (``0x8``)
++
++The following failure codes are valid for a overcurrent failure:
++
++ - overcurrent during charging (``0x6``)
++ - overcurrent during discharging (``0xb``)
 =20
+ WMI method BatteryRelativeStateOfCharge()
+ -----------------------------------------
 diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x=
 86/dell/dell-wmi-ddv.c
-index 711639001be4..8bd3ff76bb91 100644
+index 8bd3ff76bb91..cb4e0c1b908e 100644
 =2D-- a/drivers/platform/x86/dell/dell-wmi-ddv.c
 +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
-@@ -8,6 +8,7 @@
- #define pr_format(fmt) KBUILD_MODNAME ": " fmt
+@@ -47,6 +47,26 @@
+ #define SBS_MANUFACTURE_MONTH_MASK	GENMASK(8, 5)
+ #define SBS_MANUFACTURE_DAY_MASK	GENMASK(4, 0)
 =20
- #include <linux/acpi.h>
-+#include <linux/bitfield.h>
- #include <linux/debugfs.h>
- #include <linux/device.h>
- #include <linux/device/driver.h>
-@@ -42,6 +43,10 @@
- /* Battery indices 1, 2 and 3 */
- #define DELL_DDV_NUM_BATTERIES		3
-=20
-+#define SBS_MANUFACTURE_YEAR_MASK	GENMASK(15, 9)
-+#define SBS_MANUFACTURE_MONTH_MASK	GENMASK(8, 5)
-+#define SBS_MANUFACTURE_DAY_MASK	GENMASK(4, 0)
++#define MA_FAILURE_MODE_MASK			GENMASK(11, 8)
++#define MA_FAILURE_MODE_PERMANENT		0x9
++#define MA_FAILURE_MODE_OVERHEAT		0xA
++#define MA_FAILURE_MODE_OVERCURRENT		0xB
++
++#define MA_PERMANENT_FAILURE_CODE_MASK		GENMASK(13, 12)
++#define MA_PERMANENT_FAILURE_FUSE_BLOWN		0x0
++#define MA_PERMANENT_FAILURE_CELL_IMBALANCE	0x1
++#define MA_PERMANENT_FAILURE_OVERVOLTAGE	0x2
++#define MA_PERMANENT_FAILURE_FET_FAILURE	0x3
++
++#define MA_OVERHEAT_FAILURE_CODE_MASK		GENMASK(15, 12)
++#define MA_OVERHEAT_FAILURE_START		0x5
++#define MA_OVERHEAT_FAILURE_CHARGING		0x7
++#define MA_OVERHEAT_FAILURE_DISCHARGING		0x8
++
++#define MA_OVERCURRENT_FAILURE_CODE_MASK	GENMASK(15, 12)
++#define MA_OVERCURRENT_FAILURE_CHARGING		0x6
++#define MA_OVERCURRENT_FAILURE_DISCHARGING	0xB
 +
  #define DELL_EPPID_LENGTH	20
  #define DELL_EPPID_EXT_LENGTH	23
 =20
-@@ -744,6 +749,52 @@ static ssize_t eppid_show(struct device *dev, struct =
+@@ -749,6 +769,72 @@ static ssize_t eppid_show(struct device *dev, struct =
 device_attribute *attr, cha
  	return ret;
  }
 =20
-+static int dell_wmi_ddv_get_manufacture_date(struct dell_wmi_ddv_data *da=
-ta, u32 index,
-+					     enum power_supply_property psp,
-+					     union power_supply_propval *val)
++static int dell_wmi_ddv_get_health(struct dell_wmi_ddv_data *data, u32 in=
+dex,
++				   union power_supply_propval *val)
 +{
-+	u16 year, month, day;
-+	u32 value;
++	u32 value, code;
 +	int ret;
 +
 +	ret =3D dell_wmi_ddv_query_integer(data->wdev, DELL_DDV_BATTERY_MANUFACT=
-URE_DATE,
-+					 index, &value);
-+
+URER_ACCESS, index,
++					 &value);
 +	if (ret < 0)
 +		return ret;
 +
-+	if (value > U16_MAX)
-+		return -ENXIO;
-+
-+	/*
-+	 * Some devices report a invalid manufacture date value
-+	 * like 0.0.1980. Because of this we have to check the
-+	 * whole value before exposing parts of it to user space.
-+	 */
-+	year =3D FIELD_GET(SBS_MANUFACTURE_YEAR_MASK, value) + 1980;
-+	month =3D FIELD_GET(SBS_MANUFACTURE_MONTH_MASK, value);
-+	if (month < 1 || month > 12)
-+		return -ENODATA;
-+
-+	day =3D FIELD_GET(SBS_MANUFACTURE_DAY_MASK, value);
-+	if (day < 1 || day > 31)
-+		return -ENODATA;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_MANUFACTURE_YEAR:
-+		val->intval =3D year;
-+		return 0;
-+	case POWER_SUPPLY_PROP_MANUFACTURE_MONTH:
-+		val->intval =3D month;
-+		return 0;
-+	case POWER_SUPPLY_PROP_MANUFACTURE_DAY:
-+		val->intval =3D day;
-+		return 0;
++	switch (FIELD_GET(MA_FAILURE_MODE_MASK, value)) {
++	case MA_FAILURE_MODE_PERMANENT:
++		code =3D FIELD_GET(MA_PERMANENT_FAILURE_CODE_MASK, value);
++		switch (code) {
++		case MA_PERMANENT_FAILURE_FUSE_BLOWN:
++			val->intval =3D POWER_SUPPLY_HEALTH_BLOWN_FUSE;
++			return 0;
++		case MA_PERMANENT_FAILURE_CELL_IMBALANCE:
++			val->intval =3D POWER_SUPPLY_HEALTH_CELL_IMBALANCE;
++			return 0;
++		case MA_PERMANENT_FAILURE_OVERVOLTAGE:
++			val->intval =3D POWER_SUPPLY_HEALTH_OVERVOLTAGE;
++			return 0;
++		case MA_PERMANENT_FAILURE_FET_FAILURE:
++			val->intval =3D POWER_SUPPLY_HEALTH_DEAD;
++			return 0;
++		default:
++			dev_notice_once(&data->wdev->dev, "Unknown permanent failure code %u\n=
+",
++					code);
++			val->intval =3D POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
++			return 0;
++		}
++	case MA_FAILURE_MODE_OVERHEAT:
++		code =3D FIELD_GET(MA_OVERHEAT_FAILURE_CODE_MASK, value);
++		switch (code) {
++		case MA_OVERHEAT_FAILURE_START:
++		case MA_OVERHEAT_FAILURE_CHARGING:
++		case MA_OVERHEAT_FAILURE_DISCHARGING:
++			val->intval =3D POWER_SUPPLY_HEALTH_OVERHEAT;
++			return 0;
++		default:
++			dev_notice_once(&data->wdev->dev, "Unknown overheat failure code %u\n"=
+,
++					code);
++			val->intval =3D POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
++			return 0;
++		}
++	case MA_FAILURE_MODE_OVERCURRENT:
++		code =3D FIELD_GET(MA_OVERCURRENT_FAILURE_CODE_MASK, value);
++		switch (code) {
++		case MA_OVERCURRENT_FAILURE_CHARGING:
++		case MA_OVERCURRENT_FAILURE_DISCHARGING:
++			val->intval =3D POWER_SUPPLY_HEALTH_OVERCURRENT;
++			return 0;
++		default:
++			dev_notice_once(&data->wdev->dev, "Unknown overcurrent failure code %u=
+\n",
++					code);
++			val->intval =3D POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
++			return 0;
++		}
 +	default:
-+		return -EINVAL;
++		val->intval =3D POWER_SUPPLY_HEALTH_GOOD;
++		return 0;
 +	}
 +}
 +
- static int dell_wmi_ddv_get_property(struct power_supply *psy, const stru=
-ct power_supply_ext *ext,
- 				     void *drvdata, enum power_supply_property psp,
- 				     union power_supply_propval *val)
-@@ -768,6 +819,10 @@ static int dell_wmi_ddv_get_property(struct power_sup=
-ply *psy, const struct powe
- 		 */
- 		val->intval =3D value - 2732;
- 		return 0;
-+	case POWER_SUPPLY_PROP_MANUFACTURE_YEAR:
-+	case POWER_SUPPLY_PROP_MANUFACTURE_MONTH:
-+	case POWER_SUPPLY_PROP_MANUFACTURE_DAY:
-+		return dell_wmi_ddv_get_manufacture_date(data, index, psp, val);
- 	default:
- 		return -EINVAL;
- 	}
-@@ -775,6 +830,9 @@ static int dell_wmi_ddv_get_property(struct power_supp=
+ static int dell_wmi_ddv_get_manufacture_date(struct dell_wmi_ddv_data *da=
+ta, u32 index,
+ 					     enum power_supply_property psp,
+ 					     union power_supply_propval *val)
+@@ -808,6 +894,8 @@ static int dell_wmi_ddv_get_property(struct power_supp=
 ly *psy, const struct powe
+ 		return ret;
+=20
+ 	switch (psp) {
++	case POWER_SUPPLY_PROP_HEALTH:
++		return dell_wmi_ddv_get_health(data, index, val);
+ 	case POWER_SUPPLY_PROP_TEMP:
+ 		ret =3D dell_wmi_ddv_query_integer(data->wdev, DELL_DDV_BATTERY_TEMPERA=
+TURE, index,
+ 						 &value);
+@@ -829,6 +917,7 @@ static int dell_wmi_ddv_get_property(struct power_supp=
+ly *psy, const struct powe
+ }
 =20
  static const enum power_supply_property dell_wmi_ddv_properties[] =3D {
++	POWER_SUPPLY_PROP_HEALTH,
  	POWER_SUPPLY_PROP_TEMP,
-+	POWER_SUPPLY_PROP_MANUFACTURE_YEAR,
-+	POWER_SUPPLY_PROP_MANUFACTURE_MONTH,
-+	POWER_SUPPLY_PROP_MANUFACTURE_DAY,
- };
-=20
- static const struct power_supply_ext dell_wmi_ddv_extension =3D {
+ 	POWER_SUPPLY_PROP_MANUFACTURE_YEAR,
+ 	POWER_SUPPLY_PROP_MANUFACTURE_MONTH,
 =2D-=20
 2.39.5
 
