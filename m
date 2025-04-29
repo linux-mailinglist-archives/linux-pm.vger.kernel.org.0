@@ -1,109 +1,179 @@
-Return-Path: <linux-pm+bounces-26368-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26369-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27047AA0943
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 13:09:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98EA0AA094D
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 13:11:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E714171BD8
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 11:09:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 249F31894F08
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 11:11:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 814B21FCFC0;
-	Tue, 29 Apr 2025 11:09:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52C0B2BEC43;
+	Tue, 29 Apr 2025 11:11:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kJoNtR21"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TEaDg9TL"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54DAA1E766F;
-	Tue, 29 Apr 2025 11:09:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CABC2BE7C8
+	for <linux-pm@vger.kernel.org>; Tue, 29 Apr 2025 11:11:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745924944; cv=none; b=MBDkaIBxHtL6JnsJBaeNf6UaLbzU48AWxlhhU66+YJ2n9n0c6yG8V98bBCFqKvoRuz/LBZSjXbAvMFYX8mSNlCIARdWMiujjMJey7opeJwNdSubaBpH77S8fWM1SZvnDc1isk+iBhsrXwREtS7Lc09IvH+AMsTXJdXSiyBccL40=
+	t=1745925073; cv=none; b=JjT8D2NVKozRWWToeKVG7kqUVBSZSvlmMFev8krjx2TIXg4exs2P9jFm1K2Ic++kRN66c0qt1Qo7MDwrObirV6LX1xrTA5i4+wW3nNdPNrRVXX/hHwNRnJQWYMi4lDSZwPgpZCqxudcOy1fnlnIQeL5ffJ7MlPOx5mtkODdzZXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745924944; c=relaxed/simple;
-	bh=6W5bZ7kV+SEAo1aKDYzV8iQ9Oc96d7635w7XhaN2yN0=;
+	s=arc-20240116; t=1745925073; c=relaxed/simple;
+	bh=D2BOPQmKj7TwsAsDqa8iaY61DYLGG7MTVKcZ7HNQsKU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FGu4VDmrytwEsR2HqvbA4TMvZJTW+TYlaM/gKXpklfrU0xkcZFA+DJAL5WXHxUI/91cOngSfggMxf5LiYoclYxpi+Y1biuzwORtz0vyAwdz+mNhShdr9SSMTRe7/AEMy+CRxSRZe5Tb6VP6mDVV75Osx0SYUHPF/ai61KxYK9/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kJoNtR21; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0FECC4AF0C;
-	Tue, 29 Apr 2025 11:09:03 +0000 (UTC)
+	 To:Cc:Content-Type; b=exmysm25h3CAbRU505s8Q/bqs51w2ts7+iD3MFDX7BQmcTkOCKVlu5wtxDP2cciI1cFoZ1QMmMNWkfiNNrrLhwQVfjJONGIpjQGrKMFluPzLuCTUgH3NxzAMtwKUvST8UGFrsFCu9eYnZdWx5ha+xJ/sL4BXZq9i5lBOWiqU/zg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TEaDg9TL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A629CC4CEEE
+	for <linux-pm@vger.kernel.org>; Tue, 29 Apr 2025 11:11:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745924943;
-	bh=6W5bZ7kV+SEAo1aKDYzV8iQ9Oc96d7635w7XhaN2yN0=;
+	s=k20201202; t=1745925072;
+	bh=D2BOPQmKj7TwsAsDqa8iaY61DYLGG7MTVKcZ7HNQsKU=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=kJoNtR21vvtiSK5I4AhujhMcNV+jG3JNu8FI7oxh5yfbV+ZGNOJAcf70SZ6ZSbSSh
-	 WBA6V6p0QtkKVHNdfpf78MPtWIqpmwUBJlYJTzrZvhAcslEg+Ok3J8Th6QnSWh8qvV
-	 10U4NKBGv5e21OLZCs4VfN9DALwLzye40muCMeiO6cNaIXV7O6k77LyqZA0oBKafXN
-	 qVziuIj7I6gsva59f529qRXh9gygYQYEzDjUdqla68igWIwRnbbirGlzXeO2cbCs9r
-	 PYgmQ9Ww/z9N3j3sDgyS4MQc7ykvmUy+DCcAa6TahzHBHr9YBfpaSxLoPgOHYximNo
-	 7L0asRTv1pDAg==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-2da3c5729fcso646430fac.0;
-        Tue, 29 Apr 2025 04:09:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUHV1BWex9W/CZ/9MRrEIffWgutpHrgPtD8P1h+dEj+d4O+kaHn1dzYqXjjipIKSigvIfGmVwVZ+8mjq10=@vger.kernel.org, AJvYcCUrGPX+pqDFJPv5is1z9q+cfizHJFIgKuiXKKk0X0u+YT8TmZDOmHOIA9u49UK41KgoQxyK05ydyOU=@vger.kernel.org, AJvYcCWcmwdSjP/HAgry7FvLnBMoWffnohSwJpGsBXfjjNbWYIKRXwxXzVHZbcskzac9AqDJBh7OHEwUSH4T@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7k3Qc2V1mVq9G+g2wWzU7j7iut1GSOJY11TBdd56oBFVUgGkR
-	tgj3AVtPDUX0UQ0rRzyqCMuQiDmTR1AthS5pIwBNY145nO+HKJA5iCRGR6oQasoCeOKzs2Wco0n
-	Y6TnK2QEFyTkKBwMQXxLAL6a7QWw=
-X-Google-Smtp-Source: AGHT+IFY4i+B3pR5hn7A2kqkAlnBnbb/HDJe+RY21qXj4tISAk0tiDxufLtwdDVT//wBwk48KcRpyo3+ep5C+qD0nl0=
-X-Received: by 2002:a05:6871:2886:b0:2c3:f8e3:bdb9 with SMTP id
- 586e51a60fabf-2da486a7a9amr1047877fac.28.1745924943157; Tue, 29 Apr 2025
- 04:09:03 -0700 (PDT)
+	b=TEaDg9TLt7H7H9tlrB5xxBqCZKNH161nHuy9PLHIwSEiHuS8CbkghUe1AZnMDgk4D
+	 7tZvcezf43gsd8iMM1+66LUe0dEtABzAVklTvtRvnEvpc+DKN3bg650FeD/8/Q9d2a
+	 LchXrab2dQAcmH7bOl+Z5P2V9tsmPH2OCzvLBIfnbqwXJxmGasMt4wy3n92FDe2ArT
+	 Cdw8+UL/wArCSFzcWMJbKcKPg+rxa5gB78GG12P61pZ7epORWJ52EkQgSRGtlMLinD
+	 IqQgx4xjw43WV18F61EIXsCxu6rPc5GNAhzP33/eSqmaKPyXVTXnurIjnDOigd/p6R
+	 na778P9tigXkQ==
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-72ec926e828so1614185a34.0
+        for <linux-pm@vger.kernel.org>; Tue, 29 Apr 2025 04:11:12 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwbcehibGgs0nGWszb6pzwoUWr29Vo+fY+mOLkgQytiXfTvBZKi
+	BXz9AVSK14quk1ds7w4kcP72Cd64xgcHx8HTwVt3oyWsjza1lj4Epef6l2L3MNfYt1YYbdC2HTB
+	SaIFk8P14e+BUDDtzcAep6uAONHA=
+X-Google-Smtp-Source: AGHT+IE5kBugbGMufTjbQPSW0io8Y1pj0vSD8gtbNo3FGhjA2ipznUQ+lFBePzgjBe5qmhABIV2jBVMerUaDeVVgCQg=
+X-Received: by 2002:a05:6870:4595:b0:29e:503a:7ea3 with SMTP id
+ 586e51a60fabf-2d9be8f1b56mr6404504fac.36.1745925071953; Tue, 29 Apr 2025
+ 04:11:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250327195928.680771-2-csokas.bence@prolan.hu>
- <20250327195928.680771-3-csokas.bence@prolan.hu> <CAJZ5v0jmuzvo-xzGBDhGVBbY7svbrqEdi-SeJrx5BG=qtN6ZiQ@mail.gmail.com>
- <b38b27d4-c3d3-450c-8634-2e07f393a76c@prolan.hu>
-In-Reply-To: <b38b27d4-c3d3-450c-8634-2e07f393a76c@prolan.hu>
+References: <20250410153106.4146265-1-sakari.ailus@linux.intel.com>
+In-Reply-To: <20250410153106.4146265-1-sakari.ailus@linux.intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 29 Apr 2025 13:08:51 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hRsXw45utNMEhLB=i56tsJDz8AvYfV2stPbtRHh09HUg@mail.gmail.com>
-X-Gm-Features: ATxdqUES0FmjmyEqrlOpgBYB8t6ofrTgX8zGFUf5SN2x5tU_vCgg6l81l9wKEDc
-Message-ID: <CAJZ5v0hRsXw45utNMEhLB=i56tsJDz8AvYfV2stPbtRHh09HUg@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] pm: runtime: Add new devm functions
-To: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 
-	Varshini Rajendran <varshini.rajendran@microchip.com>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
-	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, Len Brown <len.brown@intel.com>, 
-	Pavel Machek <pavel@ucw.cz>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Alexander Dahl <ada@thorsis.com>, 
-	Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Pavel Machek <pavel@kernel.org>
+Date: Tue, 29 Apr 2025 13:10:59 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iSNwPLLjvoHdgZRUG6_=EEZUrs6tvrfKAymRD8PH9-4g@mail.gmail.com>
+X-Gm-Features: ATxdqUGCFmrTPn68QJSVhD2xWfcqVtF5WZwc1zlf42by5Dpu1aPgjng2J05bBFQ
+Message-ID: <CAJZ5v0iSNwPLLjvoHdgZRUG6_=EEZUrs6tvrfKAymRD8PH9-4g@mail.gmail.com>
+Subject: Re: [PATCH 0/7] Update last busy timestamp in Runtime PM autosuspend callbacks
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>, 
+	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 28, 2025 at 10:44=E2=80=AFAM Cs=C3=B3k=C3=A1s Bence <csokas.ben=
-ce@prolan.hu> wrote:
->
-> Hi,
->
-> On 2025. 04. 09. 19:43, Rafael J. Wysocki wrote:
-> > On Thu, Mar 27, 2025 at 8:59=E2=80=AFPM Bence Cs=C3=B3k=C3=A1s <csokas.=
-bence@prolan.hu> wrote:
-> >>
-> >> Add `devm_pm_runtime_set_active_enabled()` and
-> >> `devm_pm_runtime_get_noresume()` for simplifying common cases in drive=
-rs.
-> >>
-> >> Signed-off-by: Bence Cs=C3=B3k=C3=A1s <csokas.bence@prolan.hu>
-> >
-> > I can apply this one alone if you want me to do that, but I could also
-> > apply the other patch in the series if it got an ACK from the driver
-> > maintainer.
->
-> Did this end up being applied?
+Hi,
 
-Just applied as 6.16 material, I'll let you know when the tag to pull
-from is ready.
+On Thu, Apr 10, 2025 at 5:31=E2=80=AFPM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
+>
+> Folks,
+>
+> The original plan for adding pm_runtime_mark_last_busy() calls to
+> functions dealing with Runtime PM autosuspend originally included a few
+> intermediate steps of driver conversion, including the use of recently
+> added __pm_runtime_put_autosuspend(). The review of the set converting th=
+e
+> users first to __pm_runtime_put_autosuspend() concluded this wasn't
+> necessary. See
+> <URL:https://lore.kernel.org/all/20241004094101.113349-1-sakari.ailus@lin=
+ux.intel.com/>.
+>
+> This set extends the inclusion of the pm_runtime_mark_last_busy() call to
+> the _autosuspend() variants of the Runtime PM functions dealing with
+> suspending devices, i.e. pm_runtime_put_autosuspend(),
+> pm_runtime_put_sync_autosuspend(), pm_runtime_autosuspend() and
+> pm_request_autosuspend(). This will introduce, for a brief amount of time=
+,
+> unnecessary calls to pm_runtime_mark_last_busy() but this wasn't seen as
+> an issue. Also, all users of these functions, including those that did no=
+t
+> call pm_runtime_mark_last_busy(), will now include that call. Presumably
+> in the vast majority of the cases a missing call would have been a bug.
+>
+> Once this set is merged, I'll post further patches to remove the extra
+> pm_runtime_mark_last_busy() calls. The current set of these patches is
+> here
+> <URL:https://git.kernel.org/pub/scm/linux/kernel/git/sailus/linux-next.gi=
+t/log/?h=3Dpm-direct-on-next>.
+>
+> It'd be best to have all merged within the same cycle.
+>
+> The changes in the patches to remove the pm_runtime_mark_last_busy() call=
+s
+> have been generated using the following Coccinelle spatch:
+>
+> @@
+> expression E;
+> identifier label, rval;
+> @@
+> - pm_runtime_mark_last_busy(E);
+> ...
+> (
+>   label:
+> |
+> )
+> ...
+> (
+>   pm_runtime_put_autosuspend(E);
+> |
+>   pm_runtime_put_sync_autosuspend(E);
+> |
+>   pm_runtime_autosuspend(E);
+> |
+>   pm_request_autosuspend(E);
+> |
+>   (void)pm_runtime_put_autosuspend(E);
+> |
+>   (void)pm_runtime_put_sync_autosuspend(E);
+> |
+>   (void)pm_runtime_autosuspend(E);
+> |
+>   (void)pm_request_autosuspend(E);
+> |
+>   return pm_runtime_put_autosuspend(E);
+> |
+>   return pm_runtime_put_sync_autosuspend(E);
+> |
+>   return pm_runtime_autosuspend(E);
+> |
+>   return pm_request_autosuspend(E);
+> |
+>   rval =3D pm_runtime_put_autosuspend(E);
+> |
+>   rval =3D pm_runtime_put_sync_autosuspend(E);
+> |
+>   rval =3D pm_runtime_autosuspend(E);
+> |
+>   rval =3D pm_request_autosuspend(E);
+> )
+>
+> Sakari Ailus (7):
+>   Documentation: pm: runtime: Fix a reference to
+>     pm_runtime_autosuspend()
+>   pm: runtime: Document return values of suspend related API functions
+>   pm: runtime: Mark last busy stamp in pm_runtime_put_autosuspend()
+>   pm: runtime: Mark last busy stamp in pm_runtime_put_sync_autosuspend()
+>   pm: runtime: Mark last busy stamp in pm_runtime_autosuspend()
+>   pm: runtime: Mark last busy stamp in pm_request_autosuspend()
+>   Documentation: PM: *_autosuspend() functions update last busy time
+>
+>  Documentation/power/runtime_pm.rst |  50 ++++----
+>  include/linux/pm_runtime.h         | 187 +++++++++++++++++++++++++----
+>  2 files changed, 186 insertions(+), 51 deletions(-)
+>
+> --
+
+Am I correctly expecting a v2 of this series to be posted?
 
 Thanks!
 
