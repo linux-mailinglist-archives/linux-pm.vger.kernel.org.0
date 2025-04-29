@@ -1,161 +1,109 @@
-Return-Path: <linux-pm+bounces-26426-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26427-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D28E4AA3D89
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 02:01:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAE09AA3D9E
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 02:03:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6125480806
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 00:00:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD71E7A6F52
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 00:01:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 895712882DB;
-	Tue, 29 Apr 2025 23:51:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6140F29373D;
+	Tue, 29 Apr 2025 23:51:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vQPkJjl3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cnOSxA+l"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CECD259CB4;
-	Tue, 29 Apr 2025 23:51:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3BF52DAF8E;
+	Tue, 29 Apr 2025 23:51:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745970689; cv=none; b=sPudJq52qW4JsO/ElDiuv0nMg74h+TVEi/l2t+Tr5grjRMbqxe9lgyrbxo1mtRzcV5rXIy/AmphM/3KSIMMES6eil5tzYfdOQnPauftD4MNFUxrLEw7qk2qC93018+7DODFHXezG2RtSxWqQ/r7+MdPdM7HREJ+nbxxaP0lFIK0=
+	t=1745970709; cv=none; b=f3fbUuD4B7OXtD7Y+W1BCgkHrAwdPjvn30DvXrVl8yFhX38DLQHpY2JjVdGgsdAs79CM6+vHgWFhfoXVuVYcEjhwhEbDkP333frUstq0xgZ+f6jBBbRV+0uJBenn75qz/fMtLip6lSkYSDfWtaguvqNXRQw9vAF+Brms3DmIfYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745970689; c=relaxed/simple;
-	bh=5Z0Lc1jqCPJytzaKfzQW4GTMGLBfE6pBD24mBrYp8hQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=A2FvmkotF/NGaLpIs9EPKfyyQKDrnkIaPn8mginPA+RSOWNtCbITacX8pD/Bj4tu50u4kxaeVK6b09+Trb+elTSlkMWqHeDhkUWB35BNKrhd5IYWJ+Ps5DSldhuQND5zcLRQCP8u5y7XXMpTAQGax4Lc/A7zTc8mHVwazRsLKmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vQPkJjl3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5132DC4CEED;
-	Tue, 29 Apr 2025 23:51:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745970689;
-	bh=5Z0Lc1jqCPJytzaKfzQW4GTMGLBfE6pBD24mBrYp8hQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=vQPkJjl39LSp7DzJngMS1u5U3/npPgq/xxxsZhTqWcMjG4u89mlh3fSibMvrP4CkO
-	 8tD0jMe5A8DHyIoTc4IduJa3Pa6eN3WDiXnC0t7AlevFTZB46BF25nKJOM51VEi7GZ
-	 HZwebvIwftE/RhQrR9nJN2nUkSTrOFtiCojudeNdL+lD6HoypVqhzWn3odms0jNS8b
-	 F9rzLoH4vyTsiqTQjA+0tuF1sZk2FeKm6FFPE6IPBNtSaTLKlaCaeVOLHT2TkEpEV7
-	 razdoHHWTFnoE2mJyLXOpFCg1I9wNsm2ecu/xp7QOkILmG/p1qRGQtoIOIEYEdIieh
-	 fFaDL6bw0PX6g==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Sasha Levin <sashal@kernel.org>,
-	rafael@kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 02/37] cpufreq: Do not enable by default during compile testing
-Date: Tue, 29 Apr 2025 19:50:47 -0400
-Message-Id: <20250429235122.537321-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250429235122.537321-1-sashal@kernel.org>
-References: <20250429235122.537321-1-sashal@kernel.org>
+	s=arc-20240116; t=1745970709; c=relaxed/simple;
+	bh=sBCCEu0PzXtD/z8CcTyLp+IK0B/An2GSO48BkbxRwVI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=poDhDl02zEMJZLdJoGDQwFQhzF5gkAesSsB4x3qNulA66JwiRmq6Xl9PJziTTVb/e+gpKmIasHT1W14+SHTeXaA8hb108PuumGyKCq08C89sOWMuOiMHEODCfYmYdHDIy16BbfrJmbq9xdzTMdx7yBkWqSkWCoO5gU50YBfWetA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cnOSxA+l; arc=none smtp.client-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6ecfbf1c7cbso115828206d6.2;
+        Tue, 29 Apr 2025 16:51:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745970706; x=1746575506; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VgJMhFJq4ZUTkLgK4HQ4HBKsoTPMcSmHP2uL7gp3E7o=;
+        b=cnOSxA+ls6kKEJaC93TvLN0JWzzOIBXoHKHvScVB92DVH28cOwuMaIuw4dP9c9SBfa
+         gJZdipbscE6MV0gH6qrpW95t8HehrxC3dH3xYuviVhm6Tw+SOX7k/0RlIgOcXE0ZbQBY
+         cTpdlfarjZpRAP2C0LFyxo97MX58FGuJHEmLgb8oz6cGnqOwupet8ueAfbOOfVbGb08b
+         j0v1qXVjPRKBmUi1bUzRI2ficZ4/LGbGalGvsOphzd/5ksKvclg+tqdOPKG1RIJK1zj5
+         dwRokShTdngaQhmeJXNFxVhlDbz5DX/mdQzbXzd2l8yriCoI2tdvSxuOeWI2+LCYSbUL
+         nOOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745970706; x=1746575506;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VgJMhFJq4ZUTkLgK4HQ4HBKsoTPMcSmHP2uL7gp3E7o=;
+        b=Pr63Kt7S8MP3sKY7+8T4aJqaaZ75pO8w6nkk+ZcVfdmQ+nQJb0XWZMDzQ0L4S9tGBM
+         0BgdP4is5sND84VOGZ9bacrR4O8WKjIlHLSOtNE+88NYHJ8wbrHECd9qiOsVEaGW4I7h
+         ex3J0S02ErEUbec+d2Jt8RjaLnD/fgOwNK/4Ea3/7xrLL7iJyW8HWhcgLeXfv81S7qPB
+         F9x41hxrsQx1Pjut+o+hYuvitrwz0+8aOtOCAsnCV+RTIgRT5wakKCQGQ/QS7atMLUPG
+         w1CjGBV9ACdCiZld+4fZooG0+Z+s2Kxv9i0zPeozrj7QIXtGW7hr7KR+o1emDg6SKcwP
+         0l9w==
+X-Forwarded-Encrypted: i=1; AJvYcCV0n7FsWxvbHtTl7d6rNwnPp8SgRTa7KOumowBcNJgDvtEW0Qu1xMriqkifw2/pFct6mTzzowNKKVg=@vger.kernel.org, AJvYcCWrDWLzhk6SYnUZUQDGL2bC4iMhljubzCvK0ZilnMUT0KmuPGdV2sep4pSrIDUgc43KRYTF6/CX@vger.kernel.org, AJvYcCXwQV51vzWGTeKCoJ/ePVtypLmrpDRUD2eLSYF9qzCs1a24hTDUpA5msuVuGnc1faKuslu91qXC9tCFr1KH@vger.kernel.org
+X-Gm-Message-State: AOJu0YyF0QPnWW/W19o/WSSKeqW+n0MIngQfrFHNIUBiE+052ClQHHgA
+	mrsG8f1PLJJ0Pkucel5N/Vg6MZHC09QhsxKMtm+w/OKhCzrDmFpAHxoKtqyvjK78BgI60p5xOpy
+	qjbYTGUyTUlNHt73JlVXLmTwcrwg=
+X-Gm-Gg: ASbGncskSh6TXjkT6+umpp7gPOVTEQA1K48PYyie2I/OjP9ueWcPeEk9OO1G/TEkaMZ
+	Cn6WbVWHAdAr7UmX5aqbiDawxiGayMXlBaMlguALZKpTIqqcIUSCMcGPiCEtLXZHp1AoIxKIr78
+	I0hT9GLal3DHgDxOAHEeI15ek=
+X-Google-Smtp-Source: AGHT+IHJjRFYguZCAOSMReICx0ON6O2vFOn6ON1tzk8HouhAX8NRmwnFIUzqGziJ7hrTHn025vdSyMxaH0CInlVPqOs=
+X-Received: by 2002:a05:6214:130d:b0:6e8:9b26:8c5 with SMTP id
+ 6a1803df08f44-6f4fe053011mr13808786d6.10.1745970706693; Tue, 29 Apr 2025
+ 16:51:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.25
-Content-Transfer-Encoding: 8bit
+References: <20250429233848.3093350-1-nphamcs@gmail.com>
+In-Reply-To: <20250429233848.3093350-1-nphamcs@gmail.com>
+From: Nhat Pham <nphamcs@gmail.com>
+Date: Tue, 29 Apr 2025 16:51:36 -0700
+X-Gm-Features: ATxdqUGzJf3hFqFjw1dvxBqFD4iyh4yJTKCB2ByesYnjFgCzf21p8iLoeNdCFmM
+Message-ID: <CAKEwX=Mea5V6CKcGuQrYfCQAKErgbje1s0fThjkgCwZXgF-d2A@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 00/18] Virtual Swap Space
+To: linux-mm@kvack.org
+Cc: akpm@linux-foundation.org, hannes@cmpxchg.org, hughd@google.com, 
+	yosry.ahmed@linux.dev, mhocko@kernel.org, roman.gushchin@linux.dev, 
+	shakeel.butt@linux.dev, muchun.song@linux.dev, len.brown@intel.com, 
+	chengming.zhou@linux.dev, kasong@tencent.com, chrisl@kernel.org, 
+	huang.ying.caritas@gmail.com, ryan.roberts@arm.com, viro@zeniv.linux.org.uk, 
+	baohua@kernel.org, osalvador@suse.de, lorenzo.stoakes@oracle.com, 
+	christophe.leroy@csgroup.eu, pavel@kernel.org, kernel-team@meta.com, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	linux-pm@vger.kernel.org, peterx@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Tue, Apr 29, 2025 at 4:38=E2=80=AFPM Nhat Pham <nphamcs@gmail.com> wrote=
+:
+>
+> Changelog:
+> * v2:
+>         * Use a single atomic type (swap_refs) for reference counting
+>           purpose. This brings the size of the swap descriptor from 64 KB
+>           down to 48 KB (25% reduction). Suggested by Yosry Ahmed.
 
-[ Upstream commit d4f610a9bafdec8e3210789aa19335367da696ea ]
+bytes, not kilobytes. 48KB would be an INSANE overhead :)
 
-Enabling the compile test should not cause automatic enabling of all
-drivers.
-
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/cpufreq/Kconfig.arm | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-index e67b2326671c9..f6e6066e2e64b 100644
---- a/drivers/cpufreq/Kconfig.arm
-+++ b/drivers/cpufreq/Kconfig.arm
-@@ -67,7 +67,7 @@ config ARM_VEXPRESS_SPC_CPUFREQ
- config ARM_BRCMSTB_AVS_CPUFREQ
- 	tristate "Broadcom STB AVS CPUfreq driver"
- 	depends on (ARCH_BRCMSTB && !ARM_SCMI_CPUFREQ) || COMPILE_TEST
--	default y
-+	default ARCH_BRCMSTB
- 	help
- 	  Some Broadcom STB SoCs use a co-processor running proprietary firmware
- 	  ("AVS") to handle voltage and frequency scaling. This driver provides
-@@ -172,7 +172,7 @@ config ARM_RASPBERRYPI_CPUFREQ
- config ARM_S3C64XX_CPUFREQ
- 	bool "Samsung S3C64XX"
- 	depends on CPU_S3C6410 || COMPILE_TEST
--	default y
-+	default CPU_S3C6410
- 	help
- 	  This adds the CPUFreq driver for Samsung S3C6410 SoC.
- 
-@@ -181,7 +181,7 @@ config ARM_S3C64XX_CPUFREQ
- config ARM_S5PV210_CPUFREQ
- 	bool "Samsung S5PV210 and S5PC110"
- 	depends on CPU_S5PV210 || COMPILE_TEST
--	default y
-+	default CPU_S5PV210
- 	help
- 	  This adds the CPUFreq driver for Samsung S5PV210 and
- 	  S5PC110 SoCs.
-@@ -205,7 +205,7 @@ config ARM_SCMI_CPUFREQ
- config ARM_SPEAR_CPUFREQ
- 	bool "SPEAr CPUFreq support"
- 	depends on PLAT_SPEAR || COMPILE_TEST
--	default y
-+	default PLAT_SPEAR
- 	help
- 	  This adds the CPUFreq driver support for SPEAr SOCs.
- 
-@@ -224,7 +224,7 @@ config ARM_TEGRA20_CPUFREQ
- 	tristate "Tegra20/30 CPUFreq support"
- 	depends on ARCH_TEGRA || COMPILE_TEST
- 	depends on CPUFREQ_DT
--	default y
-+	default ARCH_TEGRA
- 	help
- 	  This adds the CPUFreq driver support for Tegra20/30 SOCs.
- 
-@@ -232,7 +232,7 @@ config ARM_TEGRA124_CPUFREQ
- 	bool "Tegra124 CPUFreq support"
- 	depends on ARCH_TEGRA || COMPILE_TEST
- 	depends on CPUFREQ_DT
--	default y
-+	default ARCH_TEGRA
- 	help
- 	  This adds the CPUFreq driver support for Tegra124 SOCs.
- 
-@@ -247,14 +247,14 @@ config ARM_TEGRA194_CPUFREQ
- 	tristate "Tegra194 CPUFreq support"
- 	depends on ARCH_TEGRA_194_SOC || ARCH_TEGRA_234_SOC || (64BIT && COMPILE_TEST)
- 	depends on TEGRA_BPMP
--	default y
-+	default ARCH_TEGRA
- 	help
- 	  This adds CPU frequency driver support for Tegra194 SOCs.
- 
- config ARM_TI_CPUFREQ
- 	bool "Texas Instruments CPUFreq support"
- 	depends on ARCH_OMAP2PLUS || ARCH_K3 || COMPILE_TEST
--	default y
-+	default ARCH_OMAP2PLUS || ARCH_K3
- 	help
- 	  This driver enables valid OPPs on the running platform based on
- 	  values contained within the SoC in use. Enable this in order to
--- 
-2.39.5
-
+Apologies for the brainfart.
 
