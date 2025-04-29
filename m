@@ -1,139 +1,130 @@
-Return-Path: <linux-pm+bounces-26392-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26393-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BAB2AA1C92
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 22:59:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F1F5AA1CA9
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 23:08:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 068E14C4F69
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 20:59:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DE411899BDB
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 21:07:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1DA32586EB;
-	Tue, 29 Apr 2025 20:59:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD19126B2B1;
+	Tue, 29 Apr 2025 21:07:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f73tmMEM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NZNev/tF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC8B21D3F4
-	for <linux-pm@vger.kernel.org>; Tue, 29 Apr 2025 20:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B2926A1CF;
+	Tue, 29 Apr 2025 21:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745960352; cv=none; b=bTnwB7oym5slPUZJsofJ5qK3RlvoGmjW6wzl5zH8x+la+Xz0OZLElDLQGQl+OMdh+XDpJqGPWs20Mmd7PB1DnMxu3AXnc1xVgBuCAbIKitvegb0cZJNDrNAWB2xulW3AtKLBNrmHNo45FBMC570likphohh6lIObX7+wXJEWF4U=
+	t=1745960835; cv=none; b=TtKFnxs0g2viV65QBUF32Vp28OFaHVtozOcO8sfvKK4//9ZiZulp55I/uFalEWN4aM65bUVohB8VmI29os/fhcasJ5xBj3vyK3PgBSlxFtJSZ2QHk1LvzTZUW9DoYjz3HR0gHofsPNA6kS9e5Be/1h4xCNCa/7SZmCvHyD+LmH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745960352; c=relaxed/simple;
-	bh=2foY8aJkUqXuzy5/740zw/k5H8Z8Qx7GC1j+qef3k30=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CCx/kc4ioSh1LFJ7hlDVeNBAwJYZLOjj41bwuqDOBb8RS+um+vXrtVo8F8EZpAK4CiivpBcZibHmJFKkefnaZgz0HQ1vxjVbddXVpnbRvHZCPmvOxpUO1zKWSvHwR9IS2u8p17jfn5ZeBu1M+EG7LPsKAm4Sj3nxXuoQPOiWOh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f73tmMEM; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745960349;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5RhYr/UyCLS/XEsTQgp+7mb2ke0gGzsz5aTxylR9M4s=;
-	b=f73tmMEMX5Bp2GmcivAKUDkOCe8k93NfoZHCRvcX3N59Jg+TUW93MV3f8gqB9pNw1P03xg
-	xTW5AbJzZwd3a4VuSHuEvxuFUWLnp0gOUj+KPzSCkCTEoHMBUswFE3sGaLr+tEyE4zfNcP
-	H7HED8mSqCZPzT6TR8xInE9R3GUWE/I=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-275-dL6sQ9SLPQu_7AN7rrR48A-1; Tue, 29 Apr 2025 16:59:07 -0400
-X-MC-Unique: dL6sQ9SLPQu_7AN7rrR48A-1
-X-Mimecast-MFC-AGG-ID: dL6sQ9SLPQu_7AN7rrR48A_1745960347
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7c5c9abdbd3so600787285a.1
-        for <linux-pm@vger.kernel.org>; Tue, 29 Apr 2025 13:59:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745960347; x=1746565147;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5RhYr/UyCLS/XEsTQgp+7mb2ke0gGzsz5aTxylR9M4s=;
-        b=dERxp/wENXezrajkEiydCVedH++viFcKsyNOgSEtErX7O0Y3iszh5jM7u5LbsMBt0a
-         QJD+xbJJ8MFNxI2lcGopUjl9PT8m/awwrYufZ/8XUrFL7/NAPBnftAHqg3F9y2JQ9CS9
-         mlTN9xSkxsy1GZO7KbHBBY05EgqYOQZ5cqLmpchfO979ew2nJDDocG1PIqk6dIp6IhiG
-         3rcPRhrcEJzubqbO2Vn5Y5MbvIw19zuD69+t3yWsSTnrPgCnoFWpf0fkdExT3TrsmMAl
-         6H71F/paW40GrqkGyOVRnueoKgHLy/u/xaUNuZM9kuDXG/lO8s/Ud00Rc6s7wA7WNG2j
-         oupA==
-X-Gm-Message-State: AOJu0Yy8DguHCI82e+m48U06fYY2i7oJ22EA0qXD7V8iTLN5Bs+5yqbC
-	O/GiokX5VyUXWDs7VS2zjXg5DHJEQQGytDrYEcKAATiXzfSE8pLU9Zj/VLHVjiEwYgh3GTmd0kz
-	s8lqSpClq6cxaHhL0zaz+1T/X+MVKEiZJuz+kNMqAGoOk43eaGsZjL+6o
-X-Gm-Gg: ASbGncsSRfX9qTww9NZPJoT9kWmc5uKWHXa5OAHajBAFNJg75MZAUfuwka8M2z6eFtv
-	D4qOK1EaL+zusQbqkaKsz5hpZFuUEGIUF5HjL/riHxMd8SeX4su2+Bbwhd6VVX508bkBXZzMFno
-	PrjYX9WSRAKSe3vtQD2Z/t4SnNWHqaw5FN8LHCsLPy7uBEzGo3d2B10a8jjEUSTUVfeWJoxeTDQ
-	FSUeFa7sPyIUXKf1SrRQM5ynMzzd/a4AC5eem02OJld0uv6R7DpBCz6LZ9b/Q8fJNEWA5Lgb3K7
-	HK2S0dAK
-X-Received: by 2002:a05:620a:4546:b0:7c5:642f:b22f with SMTP id af79cd13be357-7cac760a931mr92023185a.18.1745960347397;
-        Tue, 29 Apr 2025 13:59:07 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF3Jp+sfoDg4/YvtqNqY+3qnmF4j/fslcRIu7CqyIY73tOjVob+6SaGYhk/jsbTUA+NJpJqIw==
-X-Received: by 2002:a05:620a:4546:b0:7c5:642f:b22f with SMTP id af79cd13be357-7cac760a931mr92020785a.18.1745960347113;
-        Tue, 29 Apr 2025 13:59:07 -0700 (PDT)
-Received: from thinkpad2024 ([71.217.50.205])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c958eb5550sm774859785a.116.2025.04.29.13.59.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Apr 2025 13:59:06 -0700 (PDT)
-Date: Tue, 29 Apr 2025 16:59:03 -0400
-From: "John B. Wyatt IV" <jwyatt@redhat.com>
-To: "Francesco Poli (wintermute)" <invernomuto@paranoici.org>
-Cc: linux-pm list <linux-pm@vger.kernel.org>,
-	Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
-	John Kacur <jkacur@redhat.com>
-Subject: Re: [PATCH v2] cpupower: add a systemd service to run cpupower
-Message-ID: <aBE9ly7vP0eryfMO@thinkpad2024>
-References: <20250425151024.121630-1-invernomuto@paranoici.org>
+	s=arc-20240116; t=1745960835; c=relaxed/simple;
+	bh=h4MHEOtVAPe0EKg+ia3xAD0U97c9p61TQFT9WGEXj3A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QXKlTHfxGXwzqj7Gvp6mPolDBoTmidpCmyMPakhxw8vpZNOF6dVuPSTZcF4f9QFwtFr1uIl7RnJkjC+oTXRUjHjq9x45eCqukzYodC4l1edPBxwnxUzSElH+hbiOcfXMghGo41ZTm2IY/LjI8YkONgltxtBJwfaK/4LJo7lbeL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NZNev/tF; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745960833; x=1777496833;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=h4MHEOtVAPe0EKg+ia3xAD0U97c9p61TQFT9WGEXj3A=;
+  b=NZNev/tFO12qk6QLVabcuu0HqCdkVxhW745MFxytRqnttoyXeF2n1gKb
+   HDzMIQYMJR0dq63HH2c6qYSpwbNh6t4AtSZIWJmf7y4sBxEatqpmatfCe
+   kpQk6/dPtROTEdawRnRjMZXApoEZofdmWCLEvlxBi+cwSDthfNXLH1SmY
+   f53aIkXW8HT0eJ+a6bKNSq5uJggQsvy0gqM329uGnlzE+X1Y+FmwkoeRv
+   u+9q5irlkLU90+TRozJhb5SumfLL9LlgJr+IoW4N8HqUSAUNHGhWLTD00
+   4yDuPsMc/TRdPFtnjEoAQvp/3s5pGtQouGo5FVb8D4l2WezX/x+KhzQCa
+   Q==;
+X-CSE-ConnectionGUID: 8qSY/Xf0QXOld/3+D+A9aQ==
+X-CSE-MsgGUID: GHK8nw0YRDmctabP4prZZw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11418"; a="50260959"
+X-IronPort-AV: E=Sophos;i="6.15,250,1739865600"; 
+   d="scan'208";a="50260959"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 14:07:12 -0700
+X-CSE-ConnectionGUID: YklolNELTnWcT0QB1z6VkQ==
+X-CSE-MsgGUID: r7aJJeZ6Q72Oy+gmLUqqQQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,250,1739865600"; 
+   d="scan'208";a="134925019"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.16])
+  by orviesa008.jf.intel.com with ESMTP; 29 Apr 2025 14:07:13 -0700
+From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To: rafael@kernel.org,
+	viresh.kumar@linaro.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] cpufreq: intel_pstate: Unchecked MSR aceess in legacy mode
+Date: Tue, 29 Apr 2025 14:07:11 -0700
+Message-ID: <20250429210711.255185-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250425151024.121630-1-invernomuto@paranoici.org>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Apr 25, 2025 at 05:07:31PM +0200, Francesco Poli (wintermute) wrote:
-> One of the most typical use cases of the 'cpupower' utility works as
-> follows: run 'cpupower' at boot with the desired command-line options
-> and then forget about it.
-> 
-> Add a systemd service (disabled by default) that automates this use
-> case (for environments where the initialization system is 'systemd'),
-> by running 'cpupower' at boot with the settings read from a default
-> configuration file.
-> 
-> The systemd service, the associated support script and the
-> corresponding default configuration file are derived from what is
-> provided by the Arch Linux package (under "GPL-2.0-or-later" terms),
-> modernized and enhanced in various ways (the script has also been
-> checked with 'shellcheck').
-> 
-> Link: https://gitlab.archlinux.org/archlinux/packaging/packages/linux-tools/-/tree/dd2e2a311e05413d0d87a0346ffce8c7e98d6d2b
-> 
-> Signed-off-by: Francesco Poli (wintermute) <invernomuto@paranoici.org>
+When turbo mode is unavailable on a Skylake-X system, executing the
+command:
+"echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo"
+results in an unchecked MSR access error: WRMSR to 0x199
+(attempted to write 0x0000000100001300).
 
-Tested by installing the new systemd files, amending the
-cpupower.default file and trying out the governor and frequency options.
-I did encounter the systemd service exiting on boot after setting
-performance options. The service set my options mostly correctly; my
-machine has a limited number of cpu governors. This may have been my error and
-I will need to test more when I have time.
+This issue was reproduced on an OEM (Original Equipment Manufacturer)
+system and is not a common problem across all Skylake-X systems.
 
-Adding my tags.
+This error occurs because the MSR 0x199 Turbo Engage Bit (bit 32) is set
+when turbo mode is disabled. The issue arises when intel_pstate fails to
+detect that turbo mode is disabled. Here intel_pstate relies on
+MSR_IA32_MISC_ENABLE bit 38 to determine the status of turbo mode.
+However, on this system, bit 38 is not set even when turbo mode is
+disabled.
 
-Reviewed-by: John B. Wyatt IV <jwyatt@redhat.com>
-Reviewed-by: John B. Wyatt IV <sageofredondo@gmail.com>
-Tested-by: John B. Wyatt IV <jwyatt@redhat.com>
-Tested-by: John B. Wyatt IV <sageofredondo@gmail.com>
+According to the Intel Software Developer's Manual (SDM), the BIOS sets
+this bit during platform initialization to enable or disable
+opportunistic processor performance operations. Logically, this bit
+should be set in such cases. However, the SDM also specifies that "OS and
+applications must use CPUID leaf 06H to detect processors with
+opportunistic processor performance operations enabled."
 
+Therefore, in addition to checking MSR_IA32_MISC_ENABLE bit 38, verify
+that CPUID.06H:EAX[1] is 0 to accurately determine if turbo mode is
+disabled.
+
+Fixes: 4521e1a0ce17 ("cpufreq: intel_pstate: Reflect current no_turbo state correctly")
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: stable@vger.kernel.org
+---
+ drivers/cpufreq/intel_pstate.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index f41ed0b9e610..ba9bf06f1c77 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -598,6 +598,9 @@ static bool turbo_is_disabled(void)
+ {
+ 	u64 misc_en;
+ 
++	if (!cpu_feature_enabled(X86_FEATURE_IDA))
++		return true;
++
+ 	rdmsrl(MSR_IA32_MISC_ENABLE, misc_en);
+ 
+ 	return !!(misc_en & MSR_IA32_MISC_ENABLE_TURBO_DISABLE);
 -- 
-Sincerely,
-John Wyatt
-Software Engineer, Core Kernel
-Red Hat
+2.48.1
 
 
