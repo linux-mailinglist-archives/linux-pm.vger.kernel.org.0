@@ -1,39 +1,40 @@
-Return-Path: <linux-pm+bounces-26399-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26402-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9230AA3BC6
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 00:55:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 907C4AA3BCD
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 00:56:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0714A462E9C
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 22:55:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A35341B68A22
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 22:56:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E6752BCF7E;
-	Tue, 29 Apr 2025 22:55:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9FAC2BF3E7;
+	Tue, 29 Apr 2025 22:55:10 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D10E29E07F;
-	Tue, 29 Apr 2025 22:55:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4602BF3D8;
+	Tue, 29 Apr 2025 22:55:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745967308; cv=none; b=k1zC7Zmr7M+r9DWM2pjISckDD2L2KXoMJKxUd9aIqrCs0K+KeoIZDb2FxIndb13N6zk52nfVdenYzfzPkWe/qsRo24Ne8HMJZIPRq0VwayJgD08Sc+6faBKAHxpt1YRyJDT+WHdyuH6/pMySmQt29xC+sOUDs9UMX0b5JNw4Nw8=
+	t=1745967310; cv=none; b=l+CnNroYYIDHW6QeS/ryjBAO9BhzOoqRjrhzgVSHcrOWolc02GGZTyTX7HnwFwTdURSU9gy8YuLV3nIgFVmMFirZXD71Z+SWvZbmwtrWVonNqvfJUH6vKos8PVxYplIxtRrcla8bTAMxkH/PRdtSA5o2nTacN1MEzFeHZQRtwUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745967308; c=relaxed/simple;
-	bh=IJzS5fR5PlviP1nSPIds1VEEtL+e1C05VsYij93xy0A=;
+	s=arc-20240116; t=1745967310; c=relaxed/simple;
+	bh=QCJ6iYp20NqIOjw/5OGJ6nPJ1tBnqyJTLxoCDobBKRw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tT6PhwVGFgFeHcoyKWmUrRz3e6vlIWOIBtrVD+6dxm5f2h5GmH/KzjA+Yg4n4teIcEEDmdotfdTeES59jAH0ly+yIlxNQQT9rU2TXu59VxHhAJeCePV74xKepbns1tgfVmQi/Rh+EcXO/+M6JsG0LffOx4ENtaDsTquvqNa2SPU=
+	 In-Reply-To:To:Cc; b=ok4mjz9FujNApXT39tSWYCacCjf6kih7ZFwikgInwNxN7eCRJC5aw/YiAHSMOxEbffCYW4uOP0Zx/GtUARrtYYRmC977AuQ+qqR9lM/4jM11Zzi4u7rtdZSB6Rl7f5+d/rDyeXgZkikhnUxz+9lGdRB++8+70DXIhgMqCRmnv0M=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B884C4CEEE;
-	Tue, 29 Apr 2025 22:55:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA5DCC4CEEF;
+	Tue, 29 Apr 2025 22:55:09 +0000 (UTC)
 Received: by venus (Postfix, from userid 1000)
-	id 9E671180F49; Wed, 30 Apr 2025 00:55:05 +0200 (CEST)
+	id 9FB04180F4D; Wed, 30 Apr 2025 00:55:05 +0200 (CEST)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-Date: Wed, 30 Apr 2025 00:54:26 +0200
-Subject: [PATCH v2 4/5] power: supply: core: convert to fwnnode
+Date: Wed, 30 Apr 2025 00:54:27 +0200
+Subject: [PATCH v2 5/5] power: supply: core: rename
+ power_supply_get_by_phandle to power_supply_get_by_reference
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,7 +43,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250430-psy-core-convert-to-fwnode-v2-4-f9643b958677@collabora.com>
+Message-Id: <20250430-psy-core-convert-to-fwnode-v2-5-f9643b958677@collabora.com>
 References: <20250430-psy-core-convert-to-fwnode-v2-0-f9643b958677@collabora.com>
 In-Reply-To: <20250430-psy-core-convert-to-fwnode-v2-0-f9643b958677@collabora.com>
 To: Sebastian Reichel <sre@kernel.org>, Mark Brown <broonie@kernel.org>, 
@@ -60,240 +61,169 @@ Cc: Liam Girdwood <lgirdwood@gmail.com>, Vinod Koul <vkoul@kernel.org>,
  linux-phy@vger.kernel.org, 
  Sebastian Reichel <sebastian.reichel@collabora.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7944;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6652;
  i=sebastian.reichel@collabora.com; h=from:subject:message-id;
- bh=IJzS5fR5PlviP1nSPIds1VEEtL+e1C05VsYij93xy0A=;
- b=owEBbQKS/ZANAwAKAdju1/PIO/qaAcsmYgBoEVjIYyXpmHCZ1YHwatEvvi1avU7aKgxy2B6oD
- EYzqNkkjGmJAjMEAAEKAB0WIQTvZg0HRj+Lcmp5VBPY7tfzyDv6mgUCaBFYyAAKCRDY7tfzyDv6
- mqUOD/oCsdHoipnan5iyIl3im160f6GTokCnqTMsfSiqnbeguVi+eGqB06r0fExy3sRvFANpC5s
- PyohQBXGDWoPZAovG3Ebp6YR5TcchNHI8bm0b93f8owLeMVr8VuPF177P/Z/HRlXiQD50eZa3op
- 8ZDLmnbGTQ/MKdYLW+OzUGKIBwIBNjTjHpbBohGKv0eoulxJc3XW1OCwDRYXvxYHQht1Ronzg8p
- hi+7aiJQAO7EQquInpi73lKWX1fAfn/1iJ4LRnTuJquGryycmA71yfBELVubXqY79n4ZqgTfmGr
- jEGnYxN049YAYqDCV+l9Cd+FejzmSJ6VT9x7cMKR0BylxAb8OEx+iDUSlw8ptkIircH6H531cHz
- z6eVi9JV+e2zZKMsthUeJkZNblompPVKJGoxFg9VkkFjjNuxKxHDTIMPl10jeKdAUq07MUwETHg
- JOKiVEurWM+GeA1NVHTC1zTsjJK+YY+c9VyM4Q8kpcxmtAH015y5TMiElvGg1qwTd2+yTDXV0p+
- mjAolCJ+Q4oBe75qpffk4mW2JnOrTcTqG1tKE46rYF0Ha+nKwGUVTcxn73S7+G42e3GFzz/Aycb
- lDeTqSMOcrsQtEpERqIjH0Yf1yRdDiT1Ce2h0iFUs8E+y1Z/2Dco35zBZV6mFcgbb9RkrHkpDRA
- duDY6LDi4IwxGnw==
+ bh=QCJ6iYp20NqIOjw/5OGJ6nPJ1tBnqyJTLxoCDobBKRw=;
+ b=owEBbQKS/ZANAwAKAdju1/PIO/qaAcsmYgBoEVjJpX1UmjvjOF0iMgntcGqelQSYOvUFrG93Q
+ WpCpFWGtcSJAjMEAAEKAB0WIQTvZg0HRj+Lcmp5VBPY7tfzyDv6mgUCaBFYyQAKCRDY7tfzyDv6
+ mu1OD/4pl7iQ24/sd8C6sHQIcDbnP/beMQiThkWKCe5430ZMYjCW7jBKdzLbngDpKsGgLTiiHr3
+ jVBQ6VNViOZ9QiRkEP6FSUHdFUHlZs7dGBJwotx4/Xl2GQ4gkKkf39UGiNudlbcp0wOu9b4sd16
+ et50HbgnQCxnunFRJVJpyvHyNvaXEZR0KP21Gj23jnzj1u7yD2J9zpQIq6fpdT2s71mz+ZIOTs/
+ 37Tho4hsKIh9evuRW9FLznvK8zj48g83PJD5eZYdgmpLnCePP2w0fkEpALpNQCUp47iCfFUX0uZ
+ NTodYD6JWfFa6AJjm1W6pLG1nj7iSAJhYCOWLqYiNynoYpwn9IsT7d6h9Z0IkiT0LTLV81tsj41
+ xLEQzYGEUxzSb7WhOKxi5pKnOzysN501Z3HzbB9/z6EXSt/m3N3LyvVmpT+RoNDe/7FS2siUGqx
+ CA1JK+3gqPzLj2N/9omQxiqk0JKgbuj2H4a/L+rXyYyDgve/1WttG6Qac1w3KMt5+MX2JkE6Enp
+ sjWp9G7SsakQkPykzYS5vigMzBBkqBPigtbOsWZbgSsV29R+AcTa76HkuUBdPqw134oF7Tor6M5
+ 1NUo2YKtQDTZe4R1Iy5Cq2izD5sF3zfbBbYNkkOPQlDFETit9RKK1Lj+t+A7DKR7eyhtXqNTOAN
+ PWHoOJR0Z9Nyr0g==
 X-Developer-Key: i=sebastian.reichel@collabora.com; a=openpgp;
  fpr=EF660D07463F8B726A795413D8EED7F3C83BFA9A
 
-Replace any DT specific code with fwnode in the power-supply
-core.
+(devm_)power_supply_get_by_phandle now internally uses fwnode and are no
+longer DT specific. Thus drop the ifdef check for CONFIG_OF and rename
+to (devm_)power_supply_get_by_reference to avoid the DT terminology.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
+ drivers/phy/allwinner/phy-sun4i-usb.c    |  2 +-
  drivers/power/supply/bq2415x_charger.c   |  2 +-
- drivers/power/supply/power_supply_core.c | 65 ++++++++++++++++----------------
- include/linux/power_supply.h             |  2 +-
- 3 files changed, 34 insertions(+), 35 deletions(-)
+ drivers/power/supply/power_supply_core.c | 22 ++++++++++------------
+ include/linux/power_supply.h             | 15 +++------------
+ 4 files changed, 15 insertions(+), 26 deletions(-)
 
+diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c b/drivers/phy/allwinner/phy-sun4i-usb.c
+index 29b8fd4b935113f3e4790ee7f78141226048492d..8873aed3a52aa3f26564b6b2e576110c4069d28c 100644
+--- a/drivers/phy/allwinner/phy-sun4i-usb.c
++++ b/drivers/phy/allwinner/phy-sun4i-usb.c
+@@ -754,7 +754,7 @@ static int sun4i_usb_phy_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	if (of_property_present(np, "usb0_vbus_power-supply")) {
+-		data->vbus_power_supply = devm_power_supply_get_by_phandle(dev,
++		data->vbus_power_supply = devm_power_supply_get_by_reference(dev,
+ 						     "usb0_vbus_power-supply");
+ 		if (IS_ERR(data->vbus_power_supply)) {
+ 			dev_err(dev, "Couldn't get the VBUS power supply\n");
 diff --git a/drivers/power/supply/bq2415x_charger.c b/drivers/power/supply/bq2415x_charger.c
-index 9e3b9181ee76a4f473228bba022917677acce256..1ecbca510bba99ee7abcda33a719035adfceeb5f 100644
+index 1ecbca510bba99ee7abcda33a719035adfceeb5f..917c26ee56bc9f9da2f95f75a7d7f1afb0cea8d8 100644
 --- a/drivers/power/supply/bq2415x_charger.c
 +++ b/drivers/power/supply/bq2415x_charger.c
 @@ -1674,7 +1674,7 @@ static int bq2415x_probe(struct i2c_client *client)
  	/* Query for initial reported_mode and set it */
  	if (bq->nb.notifier_call) {
  		if (np) {
--			notify_psy = power_supply_get_by_phandle(np,
-+			notify_psy = power_supply_get_by_phandle(of_fwnode_handle(np),
+-			notify_psy = power_supply_get_by_phandle(of_fwnode_handle(np),
++			notify_psy = power_supply_get_by_reference(of_fwnode_handle(np),
  						"ti,usb-charger-detection");
  			if (IS_ERR(notify_psy))
  				notify_psy = NULL;
 diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-index a8d1fe66e2486a833ccaa3ed77b861c6e52c5760..1d53ceaa8fd161e7e72b90befabb9380393c99f2 100644
+index 1d53ceaa8fd161e7e72b90befabb9380393c99f2..37b9fa48faab27754d14d8379ed40d9bdda098ef 100644
 --- a/drivers/power/supply/power_supply_core.c
 +++ b/drivers/power/supply/power_supply_core.c
-@@ -18,7 +18,6 @@
- #include <linux/device.h>
- #include <linux/notifier.h>
- #include <linux/err.h>
--#include <linux/of.h>
- #include <linux/power_supply.h>
- #include <linux/property.h>
- #include <linux/thermal.h>
-@@ -196,24 +195,24 @@ static int __power_supply_populate_supplied_from(struct power_supply *epsy,
- 						 void *data)
- {
- 	struct power_supply *psy = data;
--	struct device_node *np;
-+	struct fwnode_handle *np;
- 	int i = 0;
- 
- 	do {
--		np = of_parse_phandle(psy->dev.of_node, "power-supplies", i++);
--		if (!np)
-+		np = fwnode_find_reference(psy->dev.fwnode, "power-supplies", i++);
-+		if (IS_ERR(np))
- 			break;
- 
--		if (np == epsy->dev.of_node) {
-+		if (np == epsy->dev.fwnode) {
- 			dev_dbg(&psy->dev, "%s: Found supply : %s\n",
- 				psy->desc->name, epsy->desc->name);
- 			psy->supplied_from[i-1] = (char *)epsy->desc->name;
- 			psy->num_supplies++;
--			of_node_put(np);
-+			fwnode_handle_put(np);
- 			break;
- 		}
--		of_node_put(np);
--	} while (np);
-+		fwnode_handle_put(np);
-+	} while (!IS_ERR(np));
- 
- 	return 0;
+@@ -496,14 +496,13 @@ void power_supply_put(struct power_supply *psy)
  }
-@@ -232,16 +231,16 @@ static int power_supply_populate_supplied_from(struct power_supply *psy)
- static int  __power_supply_find_supply_from_node(struct power_supply *epsy,
- 						 void *data)
- {
--	struct device_node *np = data;
-+	struct fwnode_handle *fwnode = data;
- 
- 	/* returning non-zero breaks out of power_supply_for_each_psy loop */
--	if (epsy->dev.of_node == np)
-+	if (epsy->dev.fwnode == fwnode)
- 		return 1;
- 
- 	return 0;
- }
- 
--static int power_supply_find_supply_from_node(struct device_node *supply_node)
-+static int power_supply_find_supply_from_fwnode(struct fwnode_handle *supply_node)
- {
- 	int error;
- 
-@@ -249,7 +248,7 @@ static int power_supply_find_supply_from_node(struct device_node *supply_node)
- 	 * power_supply_for_each_psy() either returns its own errors or values
- 	 * returned by __power_supply_find_supply_from_node().
- 	 *
--	 * __power_supply_find_supply_from_node() will return 0 (no match)
-+	 * __power_supply_find_supply_from_fwnode() will return 0 (no match)
- 	 * or 1 (match).
- 	 *
- 	 * We return 0 if power_supply_for_each_psy() returned 1, -EPROBE_DEFER if
-@@ -262,7 +261,7 @@ static int power_supply_find_supply_from_node(struct device_node *supply_node)
- 
- static int power_supply_check_supplies(struct power_supply *psy)
- {
--	struct device_node *np;
-+	struct fwnode_handle *np;
- 	int cnt = 0;
- 
- 	/* If there is already a list honor it */
-@@ -270,24 +269,24 @@ static int power_supply_check_supplies(struct power_supply *psy)
- 		return 0;
- 
- 	/* No device node found, nothing to do */
--	if (!psy->dev.of_node)
-+	if (!psy->dev.fwnode)
- 		return 0;
- 
- 	do {
- 		int ret;
- 
--		np = of_parse_phandle(psy->dev.of_node, "power-supplies", cnt++);
--		if (!np)
-+		np = fwnode_find_reference(psy->dev.fwnode, "power-supplies", cnt++);
-+		if (IS_ERR(np))
- 			break;
- 
--		ret = power_supply_find_supply_from_node(np);
--		of_node_put(np);
-+		ret = power_supply_find_supply_from_fwnode(np);
-+		fwnode_handle_put(np);
- 
- 		if (ret) {
- 			dev_dbg(&psy->dev, "Failed to find supply!\n");
- 			return ret;
- 		}
--	} while (np);
-+	} while (!IS_ERR(np));
- 
- 	/* Missing valid "power-supplies" entries */
- 	if (cnt == 1)
-@@ -498,14 +497,14 @@ void power_supply_put(struct power_supply *psy)
  EXPORT_SYMBOL_GPL(power_supply_put);
  
- #ifdef CONFIG_OF
--static int power_supply_match_device_node(struct device *dev, const void *data)
-+static int power_supply_match_device_fwnode(struct device *dev, const void *data)
+-#ifdef CONFIG_OF
+ static int power_supply_match_device_fwnode(struct device *dev, const void *data)
  {
--	return dev->parent && dev->parent->of_node == data;
-+	return dev->parent && dev_fwnode(dev->parent) == data;
+ 	return dev->parent && dev_fwnode(dev->parent) == data;
  }
  
  /**
-  * power_supply_get_by_phandle() - Search for a power supply and returns its ref
-- * @np: Pointer to device node holding phandle property
-+ * @fwnode: Pointer to fwnode holding phandle property
+- * power_supply_get_by_phandle() - Search for a power supply and returns its ref
++ * power_supply_get_by_reference() - Search for a power supply and returns its ref
+  * @fwnode: Pointer to fwnode holding phandle property
   * @property: Name of property holding a power supply name
   *
-  * If power supply was found, it increases reference count for the
-@@ -515,21 +514,21 @@ static int power_supply_match_device_node(struct device *dev, const void *data)
+@@ -514,8 +513,8 @@ static int power_supply_match_device_fwnode(struct device *dev, const void *data
   * Return: On success returns a reference to a power supply with
   * matching name equals to value under @property, NULL or ERR_PTR otherwise.
   */
--struct power_supply *power_supply_get_by_phandle(struct device_node *np,
--							const char *property)
-+struct power_supply *power_supply_get_by_phandle(struct fwnode_handle *fwnode,
-+						 const char *property)
+-struct power_supply *power_supply_get_by_phandle(struct fwnode_handle *fwnode,
+-						 const char *property)
++struct power_supply *power_supply_get_by_reference(struct fwnode_handle *fwnode,
++						   const char *property)
  {
--	struct device_node *power_supply_np;
-+	struct fwnode_handle *power_supply_fwnode;
+ 	struct fwnode_handle *power_supply_fwnode;
  	struct power_supply *psy = NULL;
- 	struct device *dev;
+@@ -537,7 +536,7 @@ struct power_supply *power_supply_get_by_phandle(struct fwnode_handle *fwnode,
  
--	power_supply_np = of_parse_phandle(np, property, 0);
--	if (!power_supply_np)
--		return ERR_PTR(-ENODEV);
-+	power_supply_fwnode = fwnode_find_reference(fwnode, property, 0);
-+	if (IS_ERR(power_supply_fwnode))
-+		return ERR_CAST(power_supply_fwnode);
+ 	return psy;
+ }
+-EXPORT_SYMBOL_GPL(power_supply_get_by_phandle);
++EXPORT_SYMBOL_GPL(power_supply_get_by_reference);
  
--	dev = class_find_device(&power_supply_class, NULL, power_supply_np,
--				power_supply_match_device_node);
-+	dev = class_find_device(&power_supply_class, NULL, power_supply_fwnode,
-+				power_supply_match_device_fwnode);
+ static void devm_power_supply_put(struct device *dev, void *res)
+ {
+@@ -547,16 +546,16 @@ static void devm_power_supply_put(struct device *dev, void *res)
+ }
  
--	of_node_put(power_supply_np);
-+	fwnode_handle_put(power_supply_fwnode);
- 
- 	if (dev) {
- 		psy = dev_to_psy(dev);
-@@ -561,14 +560,14 @@ struct power_supply *devm_power_supply_get_by_phandle(struct device *dev,
+ /**
+- * devm_power_supply_get_by_phandle() - Resource managed version of
+- *  power_supply_get_by_phandle()
++ * devm_power_supply_get_by_reference() - Resource managed version of
++ *  power_supply_get_by_reference()
+  * @dev: Pointer to device holding phandle property
+  * @property: Name of property holding a power supply phandle
+  *
+  * Return: On success returns a reference to a power supply with
+  * matching name equals to value under @property, NULL or ERR_PTR otherwise.
+  */
+-struct power_supply *devm_power_supply_get_by_phandle(struct device *dev,
+-						      const char *property)
++struct power_supply *devm_power_supply_get_by_reference(struct device *dev,
++							const char *property)
  {
  	struct power_supply **ptr, *psy;
  
--	if (!dev->of_node)
-+	if (!dev_fwnode(dev))
- 		return ERR_PTR(-ENODEV);
- 
- 	ptr = devres_alloc(devm_power_supply_put, sizeof(*ptr), GFP_KERNEL);
+@@ -567,7 +566,7 @@ struct power_supply *devm_power_supply_get_by_phandle(struct device *dev,
  	if (!ptr)
  		return ERR_PTR(-ENOMEM);
  
--	psy = power_supply_get_by_phandle(dev->of_node, property);
-+	psy = power_supply_get_by_phandle(dev_fwnode(dev), property);
+-	psy = power_supply_get_by_phandle(dev_fwnode(dev), property);
++	psy = power_supply_get_by_reference(dev_fwnode(dev), property);
  	if (IS_ERR_OR_NULL(psy)) {
  		devres_free(ptr);
  	} else {
+@@ -576,8 +575,7 @@ struct power_supply *devm_power_supply_get_by_phandle(struct device *dev,
+ 	}
+ 	return psy;
+ }
+-EXPORT_SYMBOL_GPL(devm_power_supply_get_by_phandle);
+-#endif /* CONFIG_OF */
++EXPORT_SYMBOL_GPL(devm_power_supply_get_by_reference);
+ 
+ int power_supply_get_battery_info(struct power_supply *psy,
+ 				  struct power_supply_battery_info **info_out)
 diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index b6eb31a23c878aa9ed8ad7bcb02a13721354e1cb..c95f098374cbdeafe8cddb52da3903f4f0e0f0fc 100644
+index c95f098374cbdeafe8cddb52da3903f4f0e0f0fc..158227e86cfcb91b0fae7b1f9c944c5c395969ca 100644
 --- a/include/linux/power_supply.h
 +++ b/include/linux/power_supply.h
-@@ -805,7 +805,7 @@ static inline struct power_supply *power_supply_get_by_name(const char *name)
+@@ -804,19 +804,10 @@ static inline void power_supply_put(struct power_supply *psy) {}
+ static inline struct power_supply *power_supply_get_by_name(const char *name)
  { return NULL; }
  #endif
- #ifdef CONFIG_OF
--extern struct power_supply *power_supply_get_by_phandle(struct device_node *np,
-+extern struct power_supply *power_supply_get_by_phandle(struct fwnode_handle *fwnode,
- 							const char *property);
- extern struct power_supply *devm_power_supply_get_by_phandle(
+-#ifdef CONFIG_OF
+-extern struct power_supply *power_supply_get_by_phandle(struct fwnode_handle *fwnode,
+-							const char *property);
+-extern struct power_supply *devm_power_supply_get_by_phandle(
++extern struct power_supply *power_supply_get_by_reference(struct fwnode_handle *fwnode,
++							  const char *property);
++extern struct power_supply *devm_power_supply_get_by_reference(
  				    struct device *dev, const char *property);
+-#else /* !CONFIG_OF */
+-static inline struct power_supply *
+-power_supply_get_by_phandle(struct device_node *np, const char *property)
+-{ return NULL; }
+-static inline struct power_supply *
+-devm_power_supply_get_by_phandle(struct device *dev, const char *property)
+-{ return NULL; }
+-#endif /* CONFIG_OF */
+ 
+ extern const enum power_supply_property power_supply_battery_info_properties[];
+ extern const size_t power_supply_battery_info_properties_size;
 
 -- 
 2.47.2
