@@ -1,141 +1,134 @@
-Return-Path: <linux-pm+bounces-26396-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26400-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 601FDAA3AFB
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 00:06:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49F77AA3BC5
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 00:55:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C0E7E4C277D
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 22:06:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8A11462491
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Apr 2025 22:55:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2B3426B972;
-	Tue, 29 Apr 2025 22:06:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="GPpnDA0r"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E5422BCF7C;
+	Tue, 29 Apr 2025 22:55:08 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B565D26B0B6;
-	Tue, 29 Apr 2025 22:06:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745964379; cv=pass; b=SzRB64MqdTpmevq8q1YaWAbq/5wIRu5A85LMOTficgrclHAGBYm7fzZ+AYvmQ6ekYSL9H6TpGOiIazu8FgP1O9bosUYXfxaOAsN55jfuxqnT5hFXJ2VxjhraOFKudasm/Zns/CW1jglM6vD2PlluFi86fYOueeTlbTxr+tYInjE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745964379; c=relaxed/simple;
-	bh=MbaXHLoJxArsHCdBOfQEu9DXbsHyT1rVLuVB1Qx+Wt0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WJmiU8MSxG8xa+ciNnWtr+E8dco4LWTFHkamZSHUn6VnJQitHHJopLkj3a9iBkMSclwec54OplOAfCV2wzLixGuZv2nJjKFtgHij704hGE0OcsiRuYNM7FmLoc2cax+TYy4EyN6B7bmpTv6NK75qdXBv9B6wRANuVd9dCHo65ZE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=GPpnDA0r; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1745964350; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=CxH5FmnYt3jz34p54uFpXpdabkd4YQ//oGr+UBOlF91tdO8gTrTfIZHHiQIDp92s2zi7FSDOKe725JtGQWVaIow/R+X0fseqw27HKAo9Jblqj1/s/nUv2LQB3gRiH+kAQNrXjHXiZ6a+FAaBmOVd500S3DbhCzvddqNlOx2++3A=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1745964350; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=KdFbTJ+DPzwXoDMuxfaNe7+vTjaQwFbN5rPgO6uNUDQ=; 
-	b=gsjx/NXrH5THERaLwleLVBMeR1l0csvylt2I28yZyggmN+vWLaYEwBAxw20zf0Prcu/5s0K3tU/K5N0h2UzZXDWy50S5S38YzFs+gy9324Uq8YtMDyAIeAG3qpUTZESJIvjkpw3+LILBINOp890No81Rygv5VehlPIb76EHutYg=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1745964350;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=KdFbTJ+DPzwXoDMuxfaNe7+vTjaQwFbN5rPgO6uNUDQ=;
-	b=GPpnDA0rt1h6eg8FfBWhcMkPCLCwP7qHhWz0tDSeDhKDa6J/P/BxfKn4QpJj9eDs
-	qjKb9mReeyULz1OYiSSbVKFbdpNRhRB6BWBC8v/6YogjX7PdjqHUtrWz3KqCFRGbs2a
-	3/HIvCbrr90LXCYcaXGzPVNcMzG2K0WSBLU4yJLE=
-Received: by mx.zohomail.com with SMTPS id 1745964348503182.07787205987552;
-	Tue, 29 Apr 2025 15:05:48 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1DA2BCF59;
+	Tue, 29 Apr 2025 22:55:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1745967308; cv=none; b=DEYjCkLCNWK4yenZpHSMtvqu8r73H6pGr/I4eY3Onu9lpdDrfCbMHJao0FJ7F6s6Rtw/CW3obcpvSjGWKhWkvJIO63mHuHaBbBcRlXWINZPhyuB0GXALtXBJ2sbr7ZftUF5SMWZqRkttSoLpS2KeVMEjgCcXbfbgAd4Kpn7gxy4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1745967308; c=relaxed/simple;
+	bh=Qg7dbWo30d2R/S/bXavA5Q5cFMZ+5uXYXTvq8MvcP/I=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=YgH6muboJ4YS48iS3iu5o+OeEDSDm77XEL68czts/JeBZAuIRBVg5QVcaOdMNq/djxGZimHzwdOTOF42Qdip+HAB1gIGq8eNY/ViaeqsDEzQ+/lFI1313wT5irVHmUIJ3RkRe8MJ+Z5FnpAnAiAiV7Hyk+a+/tY0MKrWzlXCIeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FB37C4AF09;
+	Tue, 29 Apr 2025 22:55:07 +0000 (UTC)
 Received: by venus (Postfix, from userid 1000)
-	id AF3A5180D2B; Wed, 30 Apr 2025 00:05:43 +0200 (CEST)
-Date: Wed, 30 Apr 2025 00:05:43 +0200
+	id 98054180E71; Wed, 30 Apr 2025 00:55:05 +0200 (CEST)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>, Aradhya Bhatia <a-bhatia1@ti.com>, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] power: supply: Add driver for Pegatron Chagall
- battery
-Message-ID: <uem7xcvoqaezqdagp5afdahpkbadyt2xplzq2vgj7rtkb3o2ty@stxwmj5rlhsc>
-References: <20250429061803.9581-1-clamor95@gmail.com>
- <20250429061803.9581-4-clamor95@gmail.com>
+Subject: [PATCH v2 0/5] power: supply: core: convert to fwnode
+Date: Wed, 30 Apr 2025 00:54:22 +0200
+Message-Id: <20250430-psy-core-convert-to-fwnode-v2-0-f9643b958677@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="derrf7u7tiethnp7"
-Content-Disposition: inline
-In-Reply-To: <20250429061803.9581-4-clamor95@gmail.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.2/245.962.17
-X-ZohoMailClient: External
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJ5YEWgC/33NwQqDMAzG8VeRnJeh1QrutPcYHmpNZ8E1I5VuI
+ r77OmHXXQL/HH7fBpHEU4RLsYFQ8tFzyKFOBdjJhDuhH3ODKpUularwGVe0LJRPSCQLLozuFXg
+ kHLXRTaOcrV0HGXgKOf8+8Fufe/JxYVmPrVR9vz9W/2NThWW2qanbrqvbYbhanmczsJiz5Qf0+
+ 75/AJ0ysxnIAAAA
+X-Change-ID: 20250221-psy-core-convert-to-fwnode-d5a5442fc3f9
+To: Sebastian Reichel <sre@kernel.org>, Mark Brown <broonie@kernel.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Hans de Goede <hdegoede@redhat.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Vinod Koul <vkoul@kernel.org>, 
+ Kishon Vijay Abraham I <kishon@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>, 
+ Matti Vaittinen <mazziesaccount@gmail.com>, 
+ =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-phy@vger.kernel.org, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2174;
+ i=sebastian.reichel@collabora.com; h=from:subject:message-id;
+ bh=Qg7dbWo30d2R/S/bXavA5Q5cFMZ+5uXYXTvq8MvcP/I=;
+ b=owEBbQKS/ZANAwAKAdju1/PIO/qaAcsmYgBoEVjHHm+QZt24518eVkCGiIkUGogfduz7bAMMN
+ yvsyzZuGiqJAjMEAAEKAB0WIQTvZg0HRj+Lcmp5VBPY7tfzyDv6mgUCaBFYxwAKCRDY7tfzyDv6
+ mrbED/9hlVlNL6cchpUTF8R47pd72Q/GXJxNpiukcKuEVW7zkhSwEwkxtnFH3gTUhmWO3oVO/GG
+ AinO9drL7hN4N+j9sGDkp1Y8szwd4Cb0r9qS+bKnKOQFEIWB2z+y3Kp97QRCkvpbCwmS1wymK7S
+ 3nupzUOda5hk/CKGadQi/aroM+UmUMhD5Pk5arlqtRaF8uuhxto3kFe6S1Qn3kGOw5O9GjsbRxe
+ j7rp8fkYtckUHR47ozkFHnl5RO1YaAHXfegxtHSoGM74BLZ15kEtRJvcbdKnU1I+6VgNnaefQ6b
+ FI/gtWbrVx+H3AeMWdGEZ6eSPx9Gq41NGrIid7aLdvQYgpPaIAuxTor1Ds/kzNC/uVVX5QJUamX
+ EjZqKUD6lqW0uj04aTzcS2tsrBYT+dTvofKxyOR8szCqn6CvrNJMQqRZbgUbRAcYMEpNgCCCjiQ
+ r/eOlTd0zfLYmZ/7RvpUEIN+xdhWvCWkJ15ZPzyW7hMAF/4QPobdwEEBWLNIyysGccwE7bahFbd
+ En8cNoMFe8tGwEHLp1jDM1sIG3oaVcuR5iYX0TtK1+ENh5QIy/hGJdkKeU6BHGPPBs8oYd/J92a
+ oE1sT0gjY04CQ5VNq76W7GdgL3H0T2xThU7EmlpwdutuOu0wcXEX/YBxUXLxxYVJ4MZXQLZVwS8
+ NC9cM/Jg+bxyM8A==
+X-Developer-Key: i=sebastian.reichel@collabora.com; a=openpgp;
+ fpr=EF660D07463F8B726A795413D8EED7F3C83BFA9A
 
+The goal of this series is to replace any OF specific code in the
+power-supply core with more generic fwnode code.
 
---derrf7u7tiethnp7
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v3 3/4] power: supply: Add driver for Pegatron Chagall
- battery
-MIME-Version: 1.0
+The first 2 patches of this series mostly take care of removing .of_node
+from power_supply_config in favor of using the existing .fwnode.
 
-Hi,
+Patch 3 replaces the OF specific logic in battery-info. This will
+hopefully also allow Hans de Goede reusing the code with his Intel
+Dollar Cove TI CC battery driver series.
 
-On Tue, Apr 29, 2025 at 09:18:01AM +0300, Svyatoslav Ryhel wrote:
-> The Pegatron Chagall is an Android tablet utilizing a customized Cypress
-> CG7153AM microcontroller (MCU) as its battery fuel gauge. It supports a
-> single-cell battery and features a dual-color charging LED.
->=20
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> ---
->
-> [...]
->
-> +	cg->white_led.name =3D "power::white";
-> +	cg->white_led.max_brightness =3D 1;
-> +	cg->white_led.flags =3D LED_CORE_SUSPENDRESUME;
-> +	cg->white_led.brightness_set =3D chagall_led_set_brightness_white;
-> +	cg->amber_led.default_trigger =3D "chagall-battery-full";
+Patch 4 replaces the OF phandle code with fwnode to have everything
+converted.
 
-^^^ I fixed up the typo while applying.
+Finally patch 5 renames some functions to remove the OF terminology
+and allows using them without CONFIG_OF being enabled.
 
-> [...]
+Note, that I do not own a single device making use of the
+"ocv-capacity-celsius" and "resistance-temp-table", which means patch 3
+is basically untested. I would really appreciate if somebody gives this
+series a test run on an affected device.
 
-Greetings,
+Changes in PATCHv2:
+- Link to v1: https://lore.kernel.org/r/20250225-psy-core-convert-to-fwnode-v1-0-d5e4369936bb@collabora.com
+- drop merged patches
+- add new patch renaming power_supply_get_by_phandle to power_supply_get_by_reference
+- rebase to latest power-supply for-next branch
+- collected Reviewed-by
+- rewrite cover letter accordingly
 
--- Sebastian
+---
+Sebastian Reichel (5):
+      regulator: act8865-regulator: switch psy_cfg from of_node to fwnode
+      power: supply: core: remove of_node from power_supply_config
+      power: supply: core: battery-info: fully switch to fwnode
+      power: supply: core: convert to fwnnode
+      power: supply: core: rename power_supply_get_by_phandle to power_supply_get_by_reference
 
---derrf7u7tiethnp7
-Content-Type: application/pgp-signature; name="signature.asc"
+ drivers/phy/allwinner/phy-sun4i-usb.c    |   2 +-
+ drivers/power/supply/bq2415x_charger.c   |   2 +-
+ drivers/power/supply/power_supply_core.c | 193 +++++++++++++++++--------------
+ drivers/regulator/act8865-regulator.c    |   2 +-
+ include/linux/power_supply.h             |  16 +--
+ 5 files changed, 109 insertions(+), 106 deletions(-)
+---
+base-commit: fbc1d056d3f3d417bc9df521cb45a0f51758b64a
+change-id: 20250221-psy-core-convert-to-fwnode-d5a5442fc3f9
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+-- 
+Sebastian Reichel <sebastian.reichel@collabora.com>
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmgRTSwACgkQ2O7X88g7
-+pqEhw/+IwFRgtxVJelx1FT74sLgxKIYg2FTtDpPy/NaeX2hYC7hLAHKX/DGf5BJ
-po+IXI3KVaSEfRgq/QoIvvjIqTDuQYF9EuQpjhZghr+V0lHNRmOoDAaGSofRdHP4
-LznDh3ITORxtTz4yYTZVR/Z+uN+R++LPoKxCbaX2u1+aqnJDZzI4C+56yfhGyubG
-E9KOCCVkXxMmEqTkZJ8yviX3pead/oGBaKi4e1EdB4FaLgBWam766D/dbKhIHZ2F
-K/JKaj1llKip6jByFXadPlskdXhYUDu1kqgZNMylD7eC6olauWvKsaMmYSnkoNfP
-nTp1EWHCDnkcdTRmOWsvX4071Y5y1y64+MIK3vFP3ptjNIsdFFvLS/X8Opf4itJE
-z5dmXDI0TYY6i0wrpvw5eD61kqvDDwfzANZQ8AOS6k26tzmBSrhDDADCIuyJaEqL
-7Buj2zryA1tlutViQ7W35KmS7bs8sy6YNQBUa0N2iF4MHb9194d/OY43E6AgNlmK
-/aRPEHTzsG0k4ex1hSQBmh2kgVUOif4L+vFzcVN5pac+DexyeEcmBcKsp9zzzQcI
-ZWbirKXypRJjCFz8AgC7Rn9YnkW2d/OM/NrkNhTtaFN+bQmrmIB9UrowVbv+Ma5d
-wMON2BI9alM7jeGLH8n5V/f26DeN4s3PxbGm8/c//Hz7/Ov8pzY=
-=okJ9
------END PGP SIGNATURE-----
-
---derrf7u7tiethnp7--
 
