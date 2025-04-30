@@ -1,233 +1,139 @@
-Return-Path: <linux-pm+bounces-26469-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26470-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8DFBAA512E
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 18:07:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2B56AA51C9
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 18:39:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12EFD3BCE5B
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 16:07:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E806B9E180E
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 16:38:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B90926137F;
-	Wed, 30 Apr 2025 16:07:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B115A264636;
+	Wed, 30 Apr 2025 16:38:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bi3QaiUr"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CKkIitfA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B07F17A2F5;
-	Wed, 30 Apr 2025 16:07:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B832620E4
+	for <linux-pm@vger.kernel.org>; Wed, 30 Apr 2025 16:38:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746029243; cv=none; b=rB+ud7VajlbJDHx44chIkEDkOxlRwE2XsOPDgOouVEXcN/KFlUVcC63U5fpNzAEYs6zy8+GynMkpJcc2T2cH11UhnM8JFDlejrAMzfbndaWfrsCkDChbZCwkaay1dnOOVr101CltnIaOO0WNdOFjYilW3U4e/a16byf7AAUooz8=
+	t=1746031126; cv=none; b=sBLmygOtFL+2KwpetLCCFr37Pc0NUHRZh2fdnjeHeHoM1ryKNWqeTEkTmxGBqIGbq5S0XN+3zeCTj+G8uvpYKKbWooNzOuXHU0bZzrT1B9+9OVvzplBw61E/vGNwyNCyOQ5WHCraOlSXF1HnxlMgRpswnNsAALvFlItG+jvfiwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746029243; c=relaxed/simple;
-	bh=2d0e5iaIZu3pd5474EGx6dQUABlZaX2gxnnAruiiSSU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HJXku4JkvOl3E5PYl75tyV4CnBK0CPCxbvls6OdAbxl9qOu1wWEBx7JuLRudG1MTk5TqHPLOtYkbA9iIEgQbEiQzjWl4Ye3pW4+TRpxbJc2322bhC1KITLKrKw1pAIBqageW9q4VCOT2cLAdxhYCP4vLPCuN6w3nwkAJZB1bQKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bi3QaiUr; arc=none smtp.client-ip=209.85.219.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6ecfa716ec1so830696d6.2;
-        Wed, 30 Apr 2025 09:07:21 -0700 (PDT)
+	s=arc-20240116; t=1746031126; c=relaxed/simple;
+	bh=a+aS3VH0fFr3wLv+ziZGwPORQcPz6cZRwZ8j2YP4ds0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IskmNphf461kPKUjfmioPoHsUCOPiFL9j4qsjNga0/ZK2JCWjwCr6FWeHfPCs0GaAA0UY7I1W6XybniVnPfpkfC14SvuAKvyWo1Nn1kRB4ZUGW4zBazyfBrgwmkYp1vbsBm53SQI7Y2KstWk85nBg7QNSkF651mb4xZLHI3ue2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CKkIitfA; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-440685d6afcso156915e9.0
+        for <linux-pm@vger.kernel.org>; Wed, 30 Apr 2025 09:38:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746029240; x=1746634040; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wEs4/vMxiR7hq6sbXkpfoC4TKgbs/ANlioALa5x6i50=;
-        b=Bi3QaiUrgpwMFFWZhGrj6LN4SWGSwjZQuicRNuNlzAxUy4hHSPrFoFgyTDQ4DVjEeM
-         XSv7qXr5mhNOXWGdLYkP89sDp7KEOXevi12B+GIcbUfINYnllG7Gce4WXIWHxPs6K6NC
-         AiUjL46AQB0kR2DDVfMs+JCSJWu8geXWpuXIhrf0R8hhC8jirk+tjf5dqL8LJ/kangbK
-         7B/2ytrpf8LlUdx9BDsAQK8ojc0GmLOIQjf+8hIfGv7Q3dRFMxvP8Jhn9THoqb83A5KY
-         mRDleklSwp/7AoShbyM17hpLU0lQ/M0qFnFuCGw4WcUt3LPAIbujcTqU+IVPGB44WVZi
-         MR+Q==
+        d=linaro.org; s=google; t=1746031122; x=1746635922; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ImSfHGGDXmae3/biQUrc2P/URlkNlj76LbgQ/xlJH98=;
+        b=CKkIitfADxBdSqGUCWMkOThE1jTrvFSJZuyRABPLGn2aS7dnws+eH3W6XLQ1qG5gjO
+         Gr5IYJK5FNFHumMYGdFv0aXyPy5xPczbI/uVN3/YOn1Ea34z0SrhbMqGNnClh/vskurO
+         diEbki/F5X/gj6o9T9Kzp6S3+zQsUvSg6gmqWr3P6n7YFddQACB8b2UWqSR031MphRGp
+         eXVhTEXnGkI4166ayB6JWPH9dtDDBP2b3TyHNJS0Qoyl8T2/8Hfu3zdxRbbYd9XefVwn
+         ZMl/pZ9f2W70BukkG0sop+BWefRIs44Ej03vfrk5JjswxqVlIGBJDghrvaM3SiBgNkdk
+         kjuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746029240; x=1746634040;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wEs4/vMxiR7hq6sbXkpfoC4TKgbs/ANlioALa5x6i50=;
-        b=KReDD8mlvZ/LAkunHgr51limMzuJDF3yqX1n5Eup4aeC3T6396y9LzsgIXh/UdzCkT
-         UJz1vxb4AlH1hIYLlG91CXqVCkxdkzU1dN/N1YveBMMuatdjtmNvMzc9l1FnkN4abyp2
-         16Y280SDSu7hC2kXjmKWZTUXww5P44BTRegJG1RTGba5GtEpmfdx1kYQkEy4gYZZyf6Y
-         SvMFwXIOiBNKxc7UqI1kMQZbEQxGC25YWClofK+5xtokdXaPBnujKlrxMf+aYThpGsKg
-         SJ8Lw9PoF91h/yNKl/rPqXqzkvpcahBmOcfgi9DGzp+8HG6/JbS0hjTyZvoHqmYhdliA
-         v8Ng==
-X-Forwarded-Encrypted: i=1; AJvYcCVE7TsEKFHTzZgKQsaaKRHT3mnE4wokva+J/30KmgCfrijl5+RuHhBNrrE90buHCZEo2wjgDBBfIdRN5OA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZG2mbGO1iHUHvU4sV3QHDZ4YJyCii03aEXGx+pDX/zmAN8wQ7
-	I0z5FPIsdVZW7Bs+HY+yTX6X70AfEEj5vtWaeKs0xUrGsDm8GJW/
-X-Gm-Gg: ASbGncuj3XYZmVMccXPBCIVwEYnELAXJPQVNlostssAHUmOdepJUNHaku+MR9wc5ZjL
-	dxWVEdiJrr2HB8QwDpD84ba1INjo5WqX1kvELT/3tdxZpze9mVJBB3j8HfKE2oKccSt4Ag/LiPK
-	F5FMr4apuF2MsuatXWvEvVWjT2itaDL3KnanzBAZbRVCL7kD4YrUqt2rODg7AXEaMs287DyyAQQ
-	pjHK3xCmSNF2400EQj1huEk/hXpzXzDCGZ44Ide693D0iD9jSRWLirFyQwe3BBcgrgWwR2EZOSv
-	13IexP671pj66v5wJ+p34u3rjYIC6vOuKn0hJaf2R1yzKtap/O2u/vfDu5Io0PIIK/L/v4RIL7W
-	6CWMptChDK0U1PVILjcEl3x7W0XXmdIo=
-X-Google-Smtp-Source: AGHT+IGtWqa/7iXk55bAaDAa5NjVIWxZ7j7iN/jx6/jq0IYRfZtaHIIpY9sDStNQ1FvhYdcBEbQmew==
-X-Received: by 2002:ad4:5d61:0:b0:6e4:4274:aaf8 with SMTP id 6a1803df08f44-6f4fe055990mr53152656d6.17.1746029239964;
-        Wed, 30 Apr 2025 09:07:19 -0700 (PDT)
-Received: from iman-pc.home (bras-base-bitnon2805w-grc-06-184-148-73-125.dsl.bell.ca. [184.148.73.125])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6f4fe6ad6a8sm9803796d6.4.2025.04.30.09.07.19
+        d=1e100.net; s=20230601; t=1746031122; x=1746635922;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ImSfHGGDXmae3/biQUrc2P/URlkNlj76LbgQ/xlJH98=;
+        b=lNqma7Njnd9KgXNb4P/RhTU2+s/Uy8hwpV9giaUNke8+g+V3k6dgsse4KfF37peuTU
+         UyhXVUHhvb9Y5Rbp30pTmjJ6XdsuKPIo6e2sS3Cg+ZNN8f9LuXpUp/0HJndDx2a3EZNM
+         yjzeXI842fFFDLu2wkGbfH0kQudBZK3O1++8Pq0+BckHqUvwis7c/a41mWcR2KLjqdxF
+         cGZ5gEFIR/ts0oTJ+4xRDh2iDkjowvLpPp0Uhf6ICBmRCWx7+2h4ZRq/a2qYvhSM6gdQ
+         2MZyzFDN9icAsrC1tzASi6WQ7X+9U/3brbDiWTSl1ttmLRXBb6kwDGKtgFV+x7jjz3Ic
+         8s7w==
+X-Forwarded-Encrypted: i=1; AJvYcCX0OQwwhYeUKzbF9RpAHuy2qlkbFBpWQsCYsNG6UVW3qs5V26GI5ADozvtH2jeEg43KPfAhrTR64Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJ4xCagywUGzkYCSi7u9CB9MvDezTBfLQfv+VvAn66FiM9vAWs
+	akLAKWRXL6xqIsxut5ERFc1GkGU7r77RPoObMjMlUD/73onSYraiaWLdAeVMHxg=
+X-Gm-Gg: ASbGncuzF8SoaYel5xttsxkllqviLKVwpZkxy/s5Xzl6vYuuKzfAcb3YO6METXEgSgY
+	ba8/d7HIIqBfmu5cGH+5P/TMoGrBpXB6UAhFW4VDZESfcZhVtvFZbQJmEoomyNPu6wqyS6SF20e
+	5+kOV1yWyzIawnLoZzFV1EWaPg5FEgtTHBvkyj1Z8tyq78stHN8OZpfmry7pnaxxUoBgT4kSAuV
+	y/3auDxR038og4lf8FF1k+OJS2y0IIp5eFYlDO3NcjzGOH9wd3nTF1nr2FchA3qA/+i3cPLjSKZ
+	Y3wuu/COgV4pwZRCrbXprpTYz+ZEvYXCN/0RBrAJSyDJ2fMmagR64W2bCrr8H6DQcxcJoH2+rru
+	fwZs=
+X-Google-Smtp-Source: AGHT+IEKy3F4uYVmzfjaV7eUGAdjznhecYK7JE8sAsW9F6Cog3MaZ4CfTM6KaWY5hOefQKaGuojVAA==
+X-Received: by 2002:a05:600c:1e12:b0:43d:b85:1831 with SMTP id 5b1f17b1804b1-441b25dd779mr37480605e9.0.1746031121822;
+        Wed, 30 Apr 2025 09:38:41 -0700 (PDT)
+Received: from mai.linaro.org (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-441b2af2a5fsm31756385e9.20.2025.04.30.09.38.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Apr 2025 09:07:19 -0700 (PDT)
-From: Seyediman Seyedarab <imandevel@gmail.com>
-X-Google-Original-From: Seyediman Seyedarab <ImanDevel@gmail.com>
-To: rafael@kernel.org,
-	viresh.kumar@linaro.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linux.dev,
-	Seyediman Seyedarab <ImanDevel@gmail.com>
-Subject: [PATCH v3] cpufreq: fix locking order in store_local_boost to prevent deadlock
-Date: Wed, 30 Apr 2025 12:09:43 -0400
-Message-ID: <20250430160943.2836-1-ImanDevel@gmail.com>
-X-Mailer: git-send-email 2.49.0
+        Wed, 30 Apr 2025 09:38:41 -0700 (PDT)
+Date: Wed, 30 Apr 2025 18:38:39 +0200
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+To: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+Cc: amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
+	rui.zhang@intel.com, lukasz.luba@arm.com,
+	david.collins@oss.qualcomm.com, srinivas.kandagatla@linaro.org,
+	stefan.schmidt@linaro.org, quic_tsoni@quicinc.com,
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dmitry.baryshkov@linaro.org
+Subject: Re: [PATCH v3 4/5 RESEND] thermal: qcom-spmi-temp-alarm: add support
+ for GEN2 rev 2 PMIC peripherals
+Message-ID: <aBJSDwZg6Sr7t4bZ@mai.linaro.org>
+References: <20250320202408.3940777-1-anjelique.melendez@oss.qualcomm.com>
+ <20250320202408.3940777-5-anjelique.melendez@oss.qualcomm.com>
+ <aAI1JnQ2yCjtJL9u@mai.linaro.org>
+ <6031624c-9c65-4df8-88db-96800d58c910@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <6031624c-9c65-4df8-88db-96800d58c910@oss.qualcomm.com>
 
-Lockdep reports a possible circular locking dependency[1] when
-writing to /sys/devices/system/cpu/cpufreq/policyN/boost,
-triggered by power-profiles-daemon at boot.
+On Wed, Apr 23, 2025 at 04:31:18PM -0700, Anjelique Melendez wrote:
+> 
+> 
+> On 4/18/2025 4:19 AM, Daniel Lezcano wrote:
+> > On Thu, Mar 20, 2025 at 01:24:07PM -0700, Anjelique Melendez wrote:
+> > > Add support for TEMP_ALARM GEN2 PMIC peripherals with digital major
+> > > revision 2.  This revision utilizes individual temp DAC registers
+> > > to set the threshold temperature for over-temperature stages 1,
+> > > 2, and 3 instead of a single register to specify a set of
+> > > thresholds.
+> > 
+> > Can you elaborate what are the different stages in the QCom semantic ?
+> Stage 1: warning
+> Stage 2: system shutdown
+> Stage 3: emergency shutdown
+> 
+> This is the same as was outlined in original driver documentation:
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/drivers/thermal?h=v5.4.281&id=f1599f9e4cd6f1dd0cad202853fb830854f4e944.
+> Will add this info to commit.
 
-store_local_boost() used to acquire cpu_hotplug_lock *after*
-the policy lock had already been taken by the store() handler.
-However, the expected locking hierarchy is to acquire
-cpu_hotplug_lock before the policy guard. This inverted lock order
-creates a *theoretical* deadlock possibility.
+Thanks for the pointer and the clarification
 
-Acquire cpu_hotplug_lock in the store() handler *only* for the
-local_boost attribute, before entering the policy guard block,
-and remove the cpus_read_lock/unlock() calls from store_local_boost().
-Also switch from guard() to scoped_guard() to allow explicitly wrapping
-the policy guard inside the cpu_hotplug_lock critical section.
+> > > Signed-off-by: David Collins <david.collins@oss.qualcomm.com>
+> > > Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+> > > ---
+> > >   drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 136 ++++++++++++++++++++
+> > >   1 file changed, 136 insertions(+)
+> > > 
 
- [1]
- ======================================================
- WARNING: possible circular locking dependency detected
- 6.15.0-rc4-debug #28 Not tainted
- ------------------------------------------------------
- power-profiles-/596 is trying to acquire lock:
- ffffffffb147e910 (cpu_hotplug_lock){++++}-{0:0}, at: store_local_boost+0x6a/0xd0
-
- but task is already holding lock:
- ffff9eaa48377b80 (&policy->rwsem){++++}-{4:4}, at: store+0x37/0x90
-
- which lock already depends on the new lock.
-
- the existing dependency chain (in reverse order) is:
-
- -> #2 (&policy->rwsem){++++}-{4:4}:
-        down_write+0x29/0xb0
-        cpufreq_online+0x841/0xa00
-        cpufreq_add_dev+0x71/0x80
-        subsys_interface_register+0x14b/0x170
-        cpufreq_register_driver+0x154/0x250
-        amd_pstate_register_driver+0x36/0x70
-        amd_pstate_init+0x1e7/0x270
-        do_one_initcall+0x67/0x2c0
-        kernel_init_freeable+0x230/0x270
-        kernel_init+0x15/0x130
-        ret_from_fork+0x2c/0x50
-        ret_from_fork_asm+0x11/0x20
-
- -> #1 (subsys mutex#3){+.+.}-{4:4}:
-        __mutex_lock+0xc2/0x930
-        subsys_interface_register+0x83/0x170
-        cpufreq_register_driver+0x154/0x250
-        amd_pstate_register_driver+0x36/0x70
-        amd_pstate_init+0x1e7/0x270
-        do_one_initcall+0x67/0x2c0
-        kernel_init_freeable+0x230/0x270
-        kernel_init+0x15/0x130
-        ret_from_fork+0x2c/0x50
-        ret_from_fork_asm+0x11/0x20
-
- -> #0 (cpu_hotplug_lock){++++}-{0:0}:
-        __lock_acquire+0x1087/0x17e0
-        lock_acquire.part.0+0x66/0x1b0
-        cpus_read_lock+0x2a/0xc0
-        store_local_boost+0x6a/0xd0
-        store+0x50/0x90
-        kernfs_fop_write_iter+0x135/0x200
-        vfs_write+0x2ab/0x540
-        ksys_write+0x6c/0xe0
-        do_syscall_64+0xbb/0x1d0
-        entry_SYSCALL_64_after_hwframe+0x56/0x5e
-
-Signed-off-by: Seyediman Seyedarab <ImanDevel@gmail.com>
----
-Changes in v3:
- - Rebased over PM tree's linux-next branch
- - Added a comment to explain why this piece of code is required
- - Switched from guard() to scoped_guard() to allow explicitly wrapping
-   the policy guard inside the cpu_hotplug_lock critical section.
-
-Changes in v2:
- - Restrict cpu_hotplug_lock acquisition to only
-   the local_boost attribute in store() handler.
-
-Regards,
-Seyediman
-
- drivers/cpufreq/cpufreq.c | 23 ++++++++++++++++-------
- 1 file changed, 16 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 21fa733a2..b349adbeb 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -622,10 +622,7 @@ static ssize_t store_local_boost(struct cpufreq_policy *policy,
- 	if (!policy->boost_supported)
- 		return -EINVAL;
- 
--	cpus_read_lock();
- 	ret = policy_set_boost(policy, enable);
--	cpus_read_unlock();
--
- 	if (!ret)
- 		return count;
- 
-@@ -1006,16 +1003,28 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
- {
- 	struct cpufreq_policy *policy = to_policy(kobj);
- 	struct freq_attr *fattr = to_attr(attr);
-+	int ret = -EBUSY;
- 
- 	if (!fattr->store)
- 		return -EIO;
- 
--	guard(cpufreq_policy_write)(policy);
-+	/*
-+	 * store_local_boost() requires cpu_hotplug_lock to be held, and must be
-+	 * called with that lock acquired *before* taking policy->rwsem to avoid
-+	 * lock ordering violations.
-+	 */
-+	if (fattr == &local_boost)
-+		cpus_read_lock();
- 
--	if (likely(!policy_is_inactive(policy)))
--		return fattr->store(policy, buf, count);
-+	scoped_guard(cpufreq_policy_write, policy) {
-+		if (likely(!policy_is_inactive(policy)))
-+			ret = fattr->store(policy, buf, count);
-+	}
- 
--	return -EBUSY;
-+	if (fattr == &local_boost)
-+		cpus_read_unlock();
-+
-+	return ret;
- }
- 
- static void cpufreq_sysfs_release(struct kobject *kobj)
 -- 
-2.49.0
 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
