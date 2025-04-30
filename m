@@ -1,43 +1,52 @@
-Return-Path: <linux-pm+bounces-26497-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26498-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8A79AA580A
-	for <lists+linux-pm@lfdr.de>; Thu,  1 May 2025 00:43:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBAB3AA580C
+	for <lists+linux-pm@lfdr.de>; Thu,  1 May 2025 00:43:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52D091B679B8
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 22:43:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E9819A534D
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 22:43:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB8F0225A3C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B99E7226161;
 	Wed, 30 Apr 2025 22:43:16 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F6B7225A2C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F65322541B;
 	Wed, 30 Apr 2025 22:43:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746052996; cv=none; b=uqobfXvMN2OUQEIn9RQAJ+Rit+Rd3pZ6B4Kak8llPZUXZ60LhngI9gHEKOgCRxwf+/xjJYDQsJGZsf889jLPQAmFDdrNIETUyp2NzBetpbwUSxg5s5EKfrtx5cgXj3XAuPiUGrH59wOhKpLJCDUvuk1RzZs6uBw1JcNYWmCKKmo=
+	t=1746052996; cv=none; b=l0tqKSnCbRfrgwzZrkB8L1c4e6nAEFeIin+nkybLic7T+jXvBuR6b/ctWXv3AtUJgSthct71PZY+yvUfbq84dJ/isz2RAHIJUWS7N5eBwGv7lhD0NMe6Mmndn7ptTHDBrlz0ebXjpaGrMmoIv50dVUrXW5gyLGryWC8hA6Mqxow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1746052996; c=relaxed/simple;
-	bh=SK2RTSSfYtSO/2020H+TsGTL2elMuGrrGYZGbJOK5pc=;
+	bh=pIwNlWtaVBN17takgzJoWXc8K61/U+c3hvfD6D2p0Wo=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=FyE8//FS6BOEPbcGn4/9jNMUevdqQ8uL3eXjSOiMcfmmfDWSv2TlwVtpB1EDFyRZ+pkcLghJbwzKExsJBZOUQwtK0/ExnZWLeaOQF+RNUlOpQ308ucjDjMWkb33LFM8IvF7FTFndM9BMteT/5mNOURlVE93WE/munJD8UhwFgd8=
+	 MIME-Version:Content-Type; b=LLl5LNWFOnv7Cj58o/JkngNkXFmNJ0q/MZkHfsqfw3kXd5ZPgb740fr8pnhYGQIeyvrGGoi1nby5xs+ArSXnM9iXrp7ynCzDLuM5BjPy6mIZU05QtvufdWpI9JYEnaRFBWg9JjvgmW9GSjYGm4h7I8jlEwa1vCglDms8OsyXlrA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E71B4C4CEE7;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9321C4CEE9;
 	Wed, 30 Apr 2025 22:43:15 +0000 (UTC)
 Received: by venus (Postfix, from userid 1000)
-	id C7B3D180F68; Thu, 01 May 2025 00:43:13 +0200 (CEST)
+	id D2547180F6A; Thu, 01 May 2025 00:43:13 +0200 (CEST)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Sebastian Reichel <sre@kernel.org>, Pengyu Luo <mitltlatltl@gmail.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20250313103437.108772-1-mitltlatltl@gmail.com>
-References: <20250313103437.108772-1-mitltlatltl@gmail.com>
-Subject: Re: [PATCH v8] power: supply: add Huawei Matebook E Go psy driver
-Message-Id: <174605299379.111219.8938968253291292335.b4-ty@collabora.com>
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+Cc: Peter Griffin <peter.griffin@linaro.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-samsung-soc@vger.kernel.org
+In-Reply-To: <20250401-syscon-reboot-reset-mode-v5-0-5b9357442363@linaro.org>
+References: <20250401-syscon-reboot-reset-mode-v5-0-5b9357442363@linaro.org>
+Subject: Re: [PATCH v5 0/2] support Linux reboot modes in syscon-reboot on
+ gs101 (Google Pixel)
+Message-Id: <174605299385.111219.3051568976508089270.b4-ty@collabora.com>
 Date: Thu, 01 May 2025 00:43:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -46,27 +55,26 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Mailer: b4 0.14.2
 
 
-On Thu, 13 Mar 2025 18:34:35 +0800, Pengyu Luo wrote:
-> On the Huawei Matebook E Go tablet the EC provides access to the adapter
-> and battery status. Add the driver to read power supply status on the
-> tablet.
+On Tue, 01 Apr 2025 11:11:01 +0100, André Draszik wrote:
+> This series updates syscon-reboot to support warm/soft and cold/hard
+> reboot on gs101-based boards (Google Pixel 6 and Pixel 6 Pro).
 > 
-> This driver is inspired by the following drivers:
->         drivers/power/supply/lenovo_yoga_c630_battery.c
->         drivers/platform/arm64/acer-aspire1-ec.c
->         drivers/acpi/battery.c
->         drivers/acpi/ac.c
+> Linux supports a couple different reboot modes, but syscon-reboot
+> doesn't distinguish between them and issues the same syscon register
+> write irrespective of the reboot mode requested by the kernel.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] power: supply: add Huawei Matebook E Go psy driver
-      commit: cfe769670e82c2bdd1cd8b6e4dbe8614b6429211
+[1/2] dt-bindings: reset: syscon-reboot: add google,gs101-reboot
+      commit: 1495c1aa4447f64c1e2209a95b201cb6452bb775
+[2/2] power: reset: syscon-reboot: add gs101-specific reset
+      commit: 8c7cf0fc8cf5f5dee66d767655e06e190e6f2881
 
 Best regards,
 -- 
