@@ -1,228 +1,192 @@
-Return-Path: <linux-pm+bounces-26475-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26476-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB323AA54AC
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 21:29:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0A68AA554C
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 22:07:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1559E173DB6
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 19:29:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 626A81C254F8
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 20:07:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B40D265616;
-	Wed, 30 Apr 2025 19:29:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 110D229CB22;
+	Wed, 30 Apr 2025 20:03:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uaBaAUtw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sGXtdOIs"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F47D1C8FB5;
-	Wed, 30 Apr 2025 19:29:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D82F829C341;
+	Wed, 30 Apr 2025 20:03:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746041358; cv=none; b=UNp29BNfnBKNqZJR4oV8aOsxeSo5DnbwhdYhS7CxSlCcXCaj+0LDpgldkDYn0v363RvXFEuxPvMhZwAdwmkUMQE64wcL76xJ3PTJBHGK/nIrviQFUrWAkv9JAZCVPPBR9oTV9dQu58ygceQv7S4DRg+AmvI/0m1ODdU3Ej9ZKgE=
+	t=1746043402; cv=none; b=fjWx7GatKQTLf7u1jsryPzIeTJb4XMN79EtHFa1wOs0Vf77qNfHAooX6VdYhRjOcGYNCxgkMdcFabSa/5mOfVzGyUySaDRjj72gwntuieYaxRyMgh6QWwZ4vmffIiQ/d9xw36KMOwFQtDMPihd/M4Sc0A0ZeeKILq7lUSU18kBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746041358; c=relaxed/simple;
-	bh=TSQzzbl3EsKBukopuvv7KXmmhLFWkYUsMHgSZYkoJ5Y=;
+	s=arc-20240116; t=1746043402; c=relaxed/simple;
+	bh=NwkGTVS0PocVVimFJdrGAK87WACDEWoHwAWZ4ywRzNo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Mr3z0NvKnM+CbNG1AuoXqfCU8P0lfQ61nUhrdGEILgzTXs3pFXLGS/xftnh1U9Q2HNlrCO/HlGQwq6+IcbRqQhnxwk96W6O5YcT5HWldQYV2b+VFvWBCJPZ99194/CeCLIrnXH9QoCgeNYSOt8dBDf9HO6pYiP+2gvqqwIVF1Q4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uaBaAUtw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1F66C4CEE7;
-	Wed, 30 Apr 2025 19:29:17 +0000 (UTC)
+	 To:Cc:Content-Type; b=aSeyjcbDgTRtwsw6FA1iASS+TW6inVcbDVATTZAGubWIrORCIDBtEAo6wlxQsEFYZ+8cbl3x7uRM7BnBMSKYsTRUwzemTrkNedleGa3MmznAWUt6dBCJvBWrjXDGMalHi9lzLjshmNTRaGroeV5eBPMqOEFUldkyyQnuJ9N85IY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sGXtdOIs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 694E4C4CEF5;
+	Wed, 30 Apr 2025 20:03:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746041357;
-	bh=TSQzzbl3EsKBukopuvv7KXmmhLFWkYUsMHgSZYkoJ5Y=;
+	s=k20201202; t=1746043401;
+	bh=NwkGTVS0PocVVimFJdrGAK87WACDEWoHwAWZ4ywRzNo=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=uaBaAUtwofPpbz/CI1LETtyvLTZRHy313M+gwo5LvqHZNvWvz21K1AIp2jqqdE0hQ
-	 e0CoyoWMfZgz5Pm5krVijRw/DGoCNmufZ3Qmz9tGGolBtLir0ChWZA35oKUa2pXt8G
-	 C8uFhKbwPai8tFn7USoXeH1Lq8Hq2SA6GsLHLxAwVObQ8fadPe16UkL42G1RiLfEpX
-	 i2Sy80I9oKifKYBx81nC1AEcDXWDFHCfJgReERy9gKWlKydWTBqA4wMGRVFL7LzXDx
-	 RLcuFcVApW1qBbFMza1A3tyz7O84mF7jlqOiQik9DWig50Bf/1rPGa05AH1wGnp1fX
-	 QtdveJlk7C9ww==
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-60658e1fedfso86182eaf.2;
-        Wed, 30 Apr 2025 12:29:17 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU08VRQfgsEMBr9CSpeJUgxW4kUaws87BOi+4htlBc4d1pBJabYMZ5Jqs9YMHppm9tJRVZbDWYXf8U7lhs=@vger.kernel.org, AJvYcCXg0hJGp5od8kn4cynJCDIJXzw70GNsELVF3+xd8Qas4kc0tm80KL8TOB607IceFhFu4yuLpmVGIfc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPLAZ/e1OyJ/dPK09uLdEtMD+D2DatqrDxTIgNOtKBkfXqe3U8
-	SFShfOOg2FtriejPUtWs98fM3U23tqvlwXxdUlIAtv038F9mQ5RYtM4C3ceS/M9RUuo2dtt7PUK
-	ep8YJpraqb1NYeJ9aq9jTleH8Duw=
-X-Google-Smtp-Source: AGHT+IGISJUV2jpLcM2+2GyXFPp+2NbPz0XfmZEs2LzbFKHFbUrTlMI0gMVlFY3xzLFLilCvXqPlK271k4dfipxZfU4=
-X-Received: by 2002:a05:6870:b010:b0:2d4:d07c:7cb6 with SMTP id
- 586e51a60fabf-2da69d10088mr2314347fac.1.1746041357018; Wed, 30 Apr 2025
- 12:29:17 -0700 (PDT)
+	b=sGXtdOIsh95cJHlMJ2UvMYNq00VI1k0tUOUT8o+jwmfNBOiBD5Hz43nN12KbD+z1A
+	 WJh8s/CwSa4vKwQyieZf4GpmaGw1DibvLQyYrAcawmxZ5u8T9z5fpOhnCVUKDx5+dZ
+	 VUCHdTS+Xporl7tISdbYNDtETZHm0ffNF9LD5pjz/oMQW9U6LiiJb/wzo4r2Kzxpqm
+	 96whW6qML7A3aFOUj2zlxPbO44i2YU1VeyrmWycr39pjqvd9y977mil+s0iCQeOyIJ
+	 iI3//MkPerjXdl6K5HHd+Jya+nDST2Apv8BzB1DtdRIwJPsdiyloj4TM/MC5VYojRW
+	 cTkLNGVDCXIag==
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-2da3c5729fcso211955fac.0;
+        Wed, 30 Apr 2025 13:03:21 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU4gRMLN3RKOl6JxnQF+6oEqfrLQeYE1g/a2B3AwNQxLggkJR1NGTrj6xGH7NYf6wITxZ3pPu9evqgH@vger.kernel.org, AJvYcCWRvkUqRnLu6EsX44PE187A2zAUlwGlQeyTSirJw+Ygdd6IoruO0FV3LWE5TN2hlfESb94KSb02+8k=@vger.kernel.org, AJvYcCXLReoQTGWoiYwA0kyOl6+SzSvDWCHCq62P3FeciJWN0aETxhVmgem5Xomtue9Tm5PGlNZ0fgaQ0qxAzfqh@vger.kernel.org
+X-Gm-Message-State: AOJu0YyntJUcnLxZM5FPAD90ULFTkLOFu1wRWxwrDuM3rUo6nWr7Ib+a
+	570SwIAdc+WtlQsBNd48PkLQWfmnpRm8J2v8ODO9OvlEyT/s9X37Rbpl7z859cglO+cQ+Ehe7v1
+	WQg6fTzfyJynX5lDkt+/cI474XQI=
+X-Google-Smtp-Source: AGHT+IGhmLyBRn0IZdPfK6KM97JS9uw2zTeIkkXouEb91STcAV8rAa4Gk6jixae6PbBFOGyZRuGtQUMmrj+NP/8P2CA=
+X-Received: by 2002:a05:6870:71cb:b0:2b3:55b3:e38 with SMTP id
+ 586e51a60fabf-2da69f21b34mr2403838fac.21.1746043400613; Wed, 30 Apr 2025
+ 13:03:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <3344336.aeNJFYEL58@rjwysocki.net> <1964444.taCxCBeP46@rjwysocki.net>
- <a8f11abd-758e-4e5e-bf78-419b95100918@arm.com>
-In-Reply-To: <a8f11abd-758e-4e5e-bf78-419b95100918@arm.com>
+References: <20250411093855.982491-1-zhenglifeng1@huawei.com> <f6904bb1-f41f-4be9-92bb-92fec509a821@amd.com>
+In-Reply-To: <f6904bb1-f41f-4be9-92bb-92fec509a821@amd.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 30 Apr 2025 21:29:05 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0g+pRw4H39-BNKKD9KhtRm78y9Q9a3K+yjjK1jskcbJnw@mail.gmail.com>
-X-Gm-Features: ATxdqUE7jnQrQB_qNd2gwjLYX4xS2wxQi29rcxmuLElBWeI__c5V-_HKbZuWxp8
-Message-ID: <CAJZ5v0g+pRw4H39-BNKKD9KhtRm78y9Q9a3K+yjjK1jskcbJnw@mail.gmail.com>
-Subject: Re: [RFT][PATCH v1 7/8] cpufreq: intel_pstate: Align perf domains
- with L2 cache
-To: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Peter Zijlstra <peterz@infradead.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Morten Rasmussen <morten.rasmussen@arm.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>, 
-	Pierre Gondois <pierre.gondois@arm.com>, Christian Loehle <christian.loehle@arm.com>, 
-	Tim Chen <tim.c.chen@linux.intel.com>
+Date: Wed, 30 Apr 2025 22:03:09 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gNZsv+sJ8OweGYE6bFTqD48g3JUJn_kL2m17Q2QX6p1w@mail.gmail.com>
+X-Gm-Features: ATxdqUFlzi9fK4g3MpOxGzQvjbOGdDgFxNB6hIBF5J0ky9zNPfIg6Ulnwvdr2WA
+Message-ID: <CAJZ5v0gNZsv+sJ8OweGYE6bFTqD48g3JUJn_kL2m17Q2QX6p1w@mail.gmail.com>
+Subject: Re: [PATCH v7 0/8] Add functions for getting and setting registers
+ related to autonomous selection in cppc_acpi
+To: Mario Limonciello <mario.limonciello@amd.com>, Lifeng Zheng <zhenglifeng1@huawei.com>
+Cc: lenb@kernel.org, robert.moore@intel.com, viresh.kumar@linaro.org, 
+	gautham.shenoy@amd.com, ray.huang@amd.com, perry.yuan@amd.com, 
+	pierre.gondois@arm.com, sumitg@nvidia.com, acpica-devel@lists.linux.dev, 
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linuxarm@huawei.com, jonathan.cameron@huawei.com, 
+	zhanjie9@hisilicon.com, lihuisong@huawei.com, cenxinghai@h-partners.com, 
+	hepeng68@huawei.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Apr 27, 2025 at 6:23=E2=80=AFPM Dietmar Eggemann
-<dietmar.eggemann@arm.com> wrote:
+On Fri, Apr 11, 2025 at 8:18=E2=80=AFPM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
 >
-> On 16/04/2025 20:10, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> On 4/11/2025 4:38 AM, Lifeng Zheng wrote:
+> > The patch series is organized in two parts:
 > >
-> > On some hybrid platforms a group of cores (referred to as a module) may
-> > share an L2 cache in which case they also share a voltage regulator and
-> > always run at the same frequency (while not in idle states).
+> >   - patch 1-6 refactor out the general CPPC register get and set functi=
+ons
+> >     in cppc_acpi.c
 > >
-> > For this reason, make hybrid_register_perf_domain() in the intel_pstate
-> > driver add all CPUs sharing an L2 cache to the same perf domain for EAS=
-.
+> >   - patches 7-8 add functions for getting and setting values of auto_se=
+l,
+> >     energy_perf and auto_act_window in cppc_acpi.c
 > >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Changelog:
+> >
+> > v7:
+> >
+> >   - Fix some typos
+> >   - Add check of null pointer in cppc_get_reg_val(),
+> >     cppc_get_auto_act_window() and cppc_get_auto_sel()
+> >   - Replace ternary operator with logical expression in cppc_get_reg_va=
+l()
+> >
+> > v6:
+> >
+> >   - Remove the last patch, will resent it in the future after reaching =
+an
+> >     agreement with Sumit
+> >   - split patch 3 into 2 smaller patches
+> >   - Remove the printing of reg_idx in cppc_get_reg_val() and
+> >     cppc_set_reg_val()
+> >   - Change the logic for determing whether a register is supported in
+> >     cppc_get_reg_val() and cppc_set_reg_val()
+> >
+> > v5:
+> >
+> >   - add more explanation to the commit logs and comments
+> >   - change REG_OPTIONAL from bin to hex
+> >   - split patch 2 into 3 smaller patches
+> >   - remove CPPC_REG_VAL_READ() and CPPC_REG_VAL_WRITE() macros
+> >   - move the modification part in patch 5 into a separate patch
+> >   - rename the sysfs file from "energy_perf" to
+> >     energy_performance_preference_val
+> >
+> > v4:
+> >
+> >   - add REG_OPTIONAL and IS_OPTIONAL_CPC_REG to judge if a cpc register=
+ is
+> >     an optional one
+> >   - check whether the register is optional before CPC_SUPPORTED check i=
+n
+> >     cppc_get_reg_val() and cppc_set_reg_val()
+> >   - check the register's type in cppc_set_reg_val()
+> >   - add macros to generally implement registers getting and setting
+> >     functions
+> >   - move some logic codes from cppc_cpufreq.c to cppc_acpi.c
+> >   - replace cppc_get_auto_sel_caps() by cppc_get_auto_sel()
+> >
+> > v3:
+> >
+> >   - change cppc_get_reg() and cppc_set_reg() name to cppc_get_reg_val()=
+ and
+> >     cppc_set_reg_val()
+> >   - extract cppc_get_reg_val_in_pcc() and cppc_set_reg_val_in_pcc()
+> >   - return the result of cpc_read() in cppc_get_reg_val()
+> >   - add pr_debug() in cppc_get_reg_val_in_pcc() when pcc_ss_id < 0
+> >   - rename 'cpunum' to 'cpu' in cppc_get_reg_val()
+> >   - move some macros from drivers/cpufreq/cppc_cpufreq.c to
+> >     include/acpi/cppc_acpi.h with a CPPC_XXX prefix
+> >
+> > v2:
+> >
+> >   - fix some incorrect placeholder
+> >   - change kstrtoul to kstrtobool in store_auto_select
+> >
 > > ---
+> > Discussions of previous versions:
+> > v1: https://lore.kernel.org/all/20241114084816.1128647-1-zhenglifeng1@h=
+uawei.com/
+> > v2: https://lore.kernel.org/all/20241122062051.3658577-1-zhenglifeng1@h=
+uawei.com/
+> > v3: https://lore.kernel.org/all/20241216091603.1247644-1-zhenglifeng1@h=
+uawei.com/
+> > v4: https://lore.kernel.org/all/20250113122104.3870673-1-zhenglifeng1@h=
+uawei.com/
+> > v5: https://lore.kernel.org/all/20250206131428.3261578-1-zhenglifeng1@h=
+uawei.com/
+> > v6: https://lore.kernel.org/all/20250409065703.1461867-1-zhenglifeng1@h=
+uawei.com/
 > >
-> > New in v1.
+> > Lifeng Zheng (8):
+> >    ACPI: CPPC: Add IS_OPTIONAL_CPC_REG macro to judge if a cpc_reg is
+> >      optional
+> >    ACPI: CPPC: Optimize cppc_get_perf()
+> >    ACPI: CPPC: Rename cppc_get_perf() to cppc_get_reg_val()
+> >    ACPI: CPPC: Extract cppc_get_reg_val_in_pcc()
+> >    ACPI: CPPC: Add cppc_set_reg_val()
+> >    ACPI: CPPC: Refactor register value get and set ABIs
+> >    ACPI: CPPC: Modify cppc_get_auto_sel_caps() to cppc_get_auto_sel()
+> >    ACPI: CPPC: Add three functions related to autonomous selection
 > >
-> > ---
-> >  drivers/cpufreq/intel_pstate.c |   23 +++++++++++++++++++++--
-> >  1 file changed, 21 insertions(+), 2 deletions(-)
+> >   drivers/acpi/cppc_acpi.c     | 313 +++++++++++++++++++++-------------=
+-
+> >   drivers/cpufreq/amd-pstate.c |   3 +-
+> >   include/acpi/cppc_acpi.h     |  30 +++-
+> >   3 files changed, 219 insertions(+), 127 deletions(-)
 > >
-> > --- a/drivers/cpufreq/intel_pstate.c
-> > +++ b/drivers/cpufreq/intel_pstate.c
-> > @@ -999,8 +999,11 @@
-> >  {
-> >       static const struct em_data_callback cb
-> >                       =3D EM_ADV_DATA_CB(hybrid_active_power, hybrid_ge=
-t_cost);
-> > +     struct cpu_cacheinfo *cacheinfo =3D get_cpu_cacheinfo(cpu);
-> > +     const struct cpumask *cpumask =3D cpumask_of(cpu);
-> >       struct cpudata *cpudata =3D all_cpu_data[cpu];
-> >       struct device *cpu_dev;
-> > +     int ret;
-> >
-> >       /*
-> >        * Registering EM perf domains without enabling asymmetric CPU ca=
-pacity
-> > @@ -1014,9 +1017,25 @@
-> >       if (!cpu_dev)
-> >               return false;
-> >
-> > -     if (em_dev_register_perf_domain(cpu_dev, HYBRID_EM_STATE_COUNT, &=
-cb,
-> > -                                     cpumask_of(cpu), false))
-> > +     if (cacheinfo) {
-> > +             unsigned int i;
-> > +
-> > +             /* Find the L2 cache and the CPUs sharing it. */
-> > +             for (i =3D 0; i < cacheinfo->num_leaves; i++) {
-> > +                     if (cacheinfo->info_list[i].level =3D=3D 2) {
-> > +                             cpumask =3D &cacheinfo->info_list[i].shar=
-ed_cpu_map;
-> > +                             break;
-> > +                     }
-> > +             }
-> > +     }
-> > +
-> > +     ret =3D em_dev_register_perf_domain(cpu_dev, HYBRID_EM_STATE_COUN=
-T, &cb,
-> > +                                       cpumask, false);
-> > +     if (ret) {
-> > +             cpudata->em_registered =3D ret =3D=3D -EEXIST;
-> > +
-> >               return false;
-> > +     }
-> >
-> >       cpudata->em_registered =3D true;
 >
-> There seems to be an issue with late CPU-hotplug-in and this alignment
-> on L2 cache boundaries.
->
-> Example:
->
-> i7-13700K [P-cores: [0,2,4,6,8,10,12,14] E-cores: [16-23] w/ 'nosmt' and
-> 'maxcpus=3D12', [16-19] & [20-23] share L2 cache.
->
-> root:/sys/kernel/debug/energy_model# cat cpu*/cpus
-> 0
-> 10
-> 12
-> 14
-> 16-19
-> 2
-> 4
-> 6
-> 8
->
-> # echo 1 > /sys/devices/system/cpu/cpu20/online
->
-> ...
-> [  496.616050] root_domain 0,2,4,6,8,10,12,14,16-20: pd20:{ cpus=3D20
-> nr_pstate=3D4 } pd16:{ cpus=3D16-19 nr_pstate=3D4 } pd14:{ cpus=3D14 nr_p=
-state=3D4
-> } pd12:{ cpus=3D12 nr_pstate=3D4 } pd10:{ cpus=3D10 nr_pstate=3D4 } pd8:{=
- cpus=3D8
-> nr_pstate=3D4 } pd6:{ cpus=3D6 nr_pstate=3D4 } pd4:{ cpus=3D4 nr_pstate=
-=3D4 }
-> pd2:{ cpus=3D2 nr_pstate=3D4 } pd0:{ cpus=3D0 nr_pstate=3D4 }
-> ...
->
-> root:/sys/kernel/debug/energy_model# cat cpu*/cpus
-> 0
-> 10
-> 12
-> 14
-> 16-19
-> 20
-> 2
-> 4
-> 6
-> 8
->
-> # echo 1 > /sys/devices/system/cpu/cpu21/online
->
-> ...
-> [  589.001256] root domain span: 0,2,4,6,8,10,12,14,16-21
-> [  589.001265] pd_init: no EM found for CPU21
-> [  589.001266] sched_energy_set: stopping EAS
-> ...
->
-> root:/sys/kernel/debug/energy_model# cat cpu*/cpus
-> 0
-> 10
-> 12
-> 14
-> 16-19
-> 20
-> 2
-> 4
-> 6
-> 8
+> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 
-I see.
-
-What happens is that cpu_cacheinfo hides information on offline CPUs,
-so when CPU20 goes online, it doesn't see any other CPUs sharing the
-L2 with it.  Accordingly, a PD is created just for itself.
-
-When CPU21 goes online, it sees that CPU20 shares the L2 with it, so
-the code attempts to create a PD for them both which fails.
-
-This could be addressed, but the code would need to be a bit more
-complex and the current hardware seems to do better with a PD per CPU,
-so I'll drop the $subject patch for now.
+All patches in the series applied as 6.16 material, thanks!
 
