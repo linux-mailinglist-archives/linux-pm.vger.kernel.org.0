@@ -1,156 +1,133 @@
-Return-Path: <linux-pm+bounces-26443-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26444-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78103AA45C0
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 10:43:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 829A5AA45D9
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 10:47:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1328C1B64AB1
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 08:42:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59CAD98695B
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 08:46:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 543A0219302;
-	Wed, 30 Apr 2025 08:42:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D6BB219A7D;
+	Wed, 30 Apr 2025 08:47:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="RJT6OmDA"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="z8fxuge+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56719213E85;
-	Wed, 30 Apr 2025 08:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD7F2DC78E
+	for <linux-pm@vger.kernel.org>; Wed, 30 Apr 2025 08:47:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746002530; cv=none; b=inDGjJeOW0iuFqDkoRJjAtUPOzMU4XjN0bT44DEkvw+nM48O6s/LuZXFIdwXTvK6Mi49J8K7xr17CHD82cyzjIZIbBJRDI2eWql6X2cOmRTZkQ+o1ZxLEbfMjGsZxSpsrboE9BlqsekuBeZAe1CUFbLVOeQdpcaAGkJEbN2f6IY=
+	t=1746002822; cv=none; b=oFJQPh99a4KpGVKMXIngUJ9fnDncgd6fUGag/NhDxjuWV0S/Du/u6hsw1nkHLDaO1d7t0hdQkI/vD/6IUh0CRcaddHHof+8ismiND5WCVlH2GmnPxQWGKCds1Pa4wJ08AP23HSRu67KENOWRt2tFDnItHU/EMfxx5Hg2zR0uTzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746002530; c=relaxed/simple;
-	bh=opIdtlH9FxubqDCmTmFXZCwSpsZlw8Xv63oX88tUBpI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aryEQfYEQh31biNJ/NJEkuP44U6yyLLWcgphbERSlc4KDGZH7p2mSAoXaZzfNqV0K235mgtkO54Jh7vD4k+yzmtvyrEtiTdhmC5h6Tr5Mnbcdj1eYwNsAxek4qzNtnYdWKTxTEpSuaQzneMNLaiPnEm6he8b7wo1zHcwEumMFo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=RJT6OmDA; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [192.168.7.202] ([71.202.166.45])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53U8f73s812541
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Wed, 30 Apr 2025 01:41:07 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53U8f73s812541
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025042001; t=1746002472;
-	bh=2/QHRN+D8/djEoWuIZIlllhMwAZHSg2wUWQdlu6s4Ik=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RJT6OmDAoNn/cc5MacwB1vC5wQ1M64qGWRanjOVN66rVpkGlXaLeGE7PE7eD7mISD
-	 /dIdmza3K+wfDZyQexgmDwpxPQNN4+/Fbw41fhxlT3K0uT/PJjyGzdwaAn+yyr9k0A
-	 CWJPVsS03uahIX8JX2uLwg3Z3hye2BZ7LId8jWJUQAdh/it1N65JzEiy3LsHYL9aJT
-	 C68Y5ccPbfaA9gH+J9F27HnzlVWkht45bvdBotMjohzZpoa3XaE99KXAA3Fc4+U100
-	 OtHQ9EQb/i6ZeoBsZ7v43PfIbFra7Pd1cFeKQ0RpDx0DYLCFE4fbEUVwSoFN8jeJCO
-	 fS0vj6MT1+Cdw==
-Message-ID: <c16677bd-ee63-4032-8825-7d2789dd7555@zytor.com>
-Date: Wed, 30 Apr 2025 01:41:06 -0700
+	s=arc-20240116; t=1746002822; c=relaxed/simple;
+	bh=Y9EbBv9uhTQU/4WYy7VxL5xhYLllbFHdTeX3Z/LCSbw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N6yCyRodOO/DeD3/Fx8wXDrsUiokeNFq/AuB9CRn8JvxvHnDe9bqbedAEqcG55uM3NhHOAg6VTB8w8QgbBNJ7w3TyovPZ+Lff4BVzgebE61mZhF7cb/zZuSqzvV2vCtTdZzWI74wD589YFip7gmCERkPK4mkY2Ld2TTkyg8OXhY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=z8fxuge+; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-301918a4e1bso5738603a91.1
+        for <linux-pm@vger.kernel.org>; Wed, 30 Apr 2025 01:47:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1746002820; x=1746607620; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ps/GlO1XvNY/W7BO10G7AD+oWxCe2mK1nHWx1SJsW+4=;
+        b=z8fxuge+hR2OVuksWIz7AdhAMDMc9PyK93b7VA4uTYAQ2D5gL6SaoaoK8NnCutElXT
+         cd+Gu4ofvdGXSUOXXXhyCsNIvMZ+8oa4NCRtwBxG1hDMWBov1VaDO32gRGeVfdvGAJS6
+         rNJLy76dkqS/Ms+Kug+U+06OxPmuDlQcEWJMHSiG8P4ZmnDGQ5KKZdSVbwIDbS5xsvoB
+         M0h9ho5EgMS2vmpp7OgQ1GgJKcyp2NMCDUIxPjCFdEfiVhCOkWH3NhlbmfUHIW8YHiCf
+         imRFfXRWkRdobA9lM7ac5Rq1aigs7yFLYqHzwSmWjiNa9tGT0Q6sCHjFxAcpyuEQ9Uxf
+         qjXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746002820; x=1746607620;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ps/GlO1XvNY/W7BO10G7AD+oWxCe2mK1nHWx1SJsW+4=;
+        b=KUpGcxWCw1fkwgejsjF5qhEkG7KIRQMj2r0Xzzc7egVEFMpnSwC9Tq6pcK12IcBESI
+         nBTzGE6bfX0i//550XR8Z5bo4XvytglDIPa8rlw5VpebQ3BpKtD1Jupkb1dDgl2m+qHb
+         w5XSW4ZMmQM8+gG7dkXZAK2ZC6KHVYQyrlDCcdFHbziU+hWtUyTGk89OZ2AfCsoYPZb+
+         qXgWrb5FvxVFCfJK1WJflRkPyfR/5cHMiaoACY+YhCdYGcIO/YYQT4IDa/krT50sNT65
+         LxhMVTqYtyrcNOWlJNWM/QuqsTrNFKEKUmuv9cbLhQL0R36B5XvkbP3WYosXu02hKe9d
+         9T0A==
+X-Forwarded-Encrypted: i=1; AJvYcCWP5Hsg01XfhAAOE+r3Tcgxte53zoo7lFjuLw5akdOBjPCOaNSF3b4+5lznjD7/eCVfxgZ9Af0Rsw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yytn+369nMmCiJ7TG0UrnEc4Tm3Z+wfL8Z6arh9KRO8TXqEwyHr
+	KvMcK+7Yeg4ymPt8PC8diycjlA6TY5nTXwqOwfKRYmMhWxZYL+7OiFlK6K1sRm8=
+X-Gm-Gg: ASbGncvk+8pnJnLjyzyarCLo61+ojHHcntM4cb5+1iVoNb1TgA4r5A1ciW/gg2TH0uk
+	XlCwDXhmdo7PInI2cHVl5pt7hrkn6M1DV4hGK4RmvnKCU3mtrIs/TXIlp8UI29nAwph7wNOHx7X
+	osW/hS/1hNWx93XTYhujwsgZ4Df+mnXCyIqpJC8HClAJ+AD8MWiwZOd78x/tq/i+aG1/0sibFeK
+	y5w6XxLgSRWHDrUrDIsaeHsbA0+RTCZ+4yJkDhHOKBvp8dzfFTUh6ASoV6GgR7+YiQcbkX+9JIi
+	p5yFyCb1o6n18PHzvK/9iO5uFhtKeh1/UI/PZr5o8g==
+X-Google-Smtp-Source: AGHT+IE71Ft93uGd7KPOG74PkFqMkkrdRnPcFWUsK9xk65jelbG+5UbR6p6ZpkO97gGUVEbhaAbNzg==
+X-Received: by 2002:a17:90b:2747:b0:308:5273:4dee with SMTP id 98e67ed59e1d1-30a3330d535mr3768179a91.15.1746002819741;
+        Wed, 30 Apr 2025 01:46:59 -0700 (PDT)
+Received: from localhost ([122.172.83.32])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30a349fff9bsm1023758a91.18.2025.04.30.01.46.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Apr 2025 01:46:59 -0700 (PDT)
+Date: Wed, 30 Apr 2025 14:16:56 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH next] OPP: core: Fix loop in dev_pm_opp_sync_regulators()
+Message-ID: <20250430084656.otga5l6nv3u5frug@vireshk-i7>
+References: <aBHaOOE8xHTsMap2@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 01/15] x86/msr: Add missing includes of <asm/msr.h>
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
-        linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Netdev <netdev@vger.kernel.org>, platform-driver-x86@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
-        peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
-        wei.liu@kernel.org, ajay.kaher@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
-        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
-        haiyangz@microsoft.com, decui@microsoft.com,
-        dapeng1.mi@linux.intel.com
-References: <20250427092027.1598740-1-xin@zytor.com>
- <20250427092027.1598740-2-xin@zytor.com>
- <a1917b37-e41e-d303-749b-4007cda01605@linux.intel.com>
-Content-Language: en-US
-From: Xin Li <xin@zytor.com>
-Autocrypt: addr=xin@zytor.com; keydata=
- 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
- l75w1xInsg==
-In-Reply-To: <a1917b37-e41e-d303-749b-4007cda01605@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aBHaOOE8xHTsMap2@stanley.mountain>
 
-On 4/29/2025 2:45 AM, Ilpo Järvinen wrote:
->>   arch/x86/events/msr.c                                         | 3 +++
->>   arch/x86/events/perf_event.h                                  | 1 +
->>   arch/x86/events/probe.c                                       | 2 ++
-> Under arch/x86/events/ a few files seem to be missing the include?
+On 30-04-25, 11:07, Dan Carpenter wrote:
+> We accidentally deleted the if statement in this loop during a cleanup.
+> Add it back.
+> 
+> Fixes: 5330d0dab736 ("OPP: Define and use scope-based cleanup helpers")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+> ---
+>  drivers/opp/core.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index fc9874946453..f56ddae35ef2 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -2889,7 +2889,7 @@ int dev_pm_opp_sync_regulators(struct device *dev)
+>  {
+>  	struct opp_table *opp_table __free(put_opp_table);
+>  	struct regulator *reg;
+> -	int i;
+> +	int i, ret;
+>  
+>  	/* Device may not have OPP table */
+>  	opp_table = _find_opp_table(dev);
+> @@ -2906,7 +2906,9 @@ int dev_pm_opp_sync_regulators(struct device *dev)
+>  
+>  	for (i = 0; i < opp_table->regulator_count; i++) {
+>  		reg = opp_table->regulators[i];
+> -		return regulator_sync_voltage(reg);
+> +		ret = regulator_sync_voltage(reg);
+> +		if (ret)
+> +			return ret;
+>  	}
+>  
+>  	return 0;
 
+Ahh, thanks for the fix Dan. I have folded this in the original patch
+itself.
 
-Most C files in arch/x86/events/ include arch/x86/events/perf_event.h,
-thus they don't need to include <asm/msr.h> directly once
-arch/x86/events/perf_event.h includes <asm/msr.h>, and this patch does
-that.
-
-
-The following files include arch/x86/events/intel/uncore.h which 
-includes arch/x86/events/perf_event.h, thus no change needed:
-     arch/x86/events/intel/uncore.c
-     arch/x86/events/intel/uncore_discovery.c
-     arch/x86/events/intel/uncore_nhmex.c
-     arch/x86/events/intel/uncore_snb.c
-     arch/x86/events/intel/uncore_snbep.c
-
-The following 2 files don't include arch/x86/events/perf_event.h so they
-include <asm/msr.h> directly with this patch:
-     arch/x86/events/msr.c
-     arch/x86/events/probe.c
-
-arch/x86/events/amd/uncore.c doesn't include
-arch/x86/events/perf_event.h but includes <asm/msr.h> already.
-
-
-So we are good in this directory, but it should be a separate patch with
-the above explanation then.
-
-
+-- 
+viresh
 
