@@ -1,193 +1,142 @@
-Return-Path: <linux-pm+bounces-26471-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26472-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8B14AA526B
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 19:15:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 477FAAA52AC
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 19:36:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 389D94663F6
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 17:15:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 887C44E23D6
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Apr 2025 17:36:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BEA2264F99;
-	Wed, 30 Apr 2025 17:15:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B8CE264F9D;
+	Wed, 30 Apr 2025 17:36:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="5B7i+NFK"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="YBirQRGs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2076.outbound.protection.outlook.com [40.107.101.76])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA492609D1;
-	Wed, 30 Apr 2025 17:15:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.76
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746033303; cv=fail; b=Ue4w4/z8ywdkCGgNNVFCvQVUuOUKPDVTlSMcGs4HU82Henxd4LlX+CD/1xyCRnEsYLIl13XAELCyLo8H5h2k2yyWP3vGYcWz7OB1Y7C+TvfNyUC9k/0nnsfU4MSVRxrPyn0Ufs972fze85ZAxE7h9K1pEm7Ae5wxNNo0TS8Utd4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746033303; c=relaxed/simple;
-	bh=CB264QTP0aXxIIRF/00d5JIm9ix7C7Tq6t9VuCPMLcg=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=r4H6HctRijxmNhz89Gs87sk5yfgjek+ydys2WU9O9hn1PfA9elrkfXBi8yUIzRDypVkys1lUWYOAPAqHiM2it4h4RV/XHy0OOFoGFk2tlBEbP3AnqhKMSAgwiesAr+r/PAXvmgCcX18Tu/XSlppRgkJ88LQnQii9DM9Mo0xsHtg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=5B7i+NFK; arc=fail smtp.client-ip=40.107.101.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RORiuh6hIMs7Zo05XrgRtXFCaTWug4JoIZSNO6N1TC6dE3zkbv7akrfisZKvfi9q3RwQca42up06ipWHi7yZGVO0vAK7Wzo8nbkpM31ClL5P03s5OTbn3H4ywekZEnXLEkJqkNW7qoP9tIuKW8q5Qw3xsaBJphvnOoLAK4EKOebm4m2Ns8NZmBAiEE2D1QXi0VbomIs35s7YknRIj0X/osqTMkAt5mdcgVAuXFd5mcuXQbuX2Lx40WXlj23FRxUQiwVQyUIsWxLoGZi/Odk7kXi7eqbYrWfX7YG/HUfIrAdHPkKVIorkstSDP5W/IQbu6iw2cKYbUcpL7VhhAZES+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=05VS0uXcuMNGxVdUPrdCwaumCtMQE+MJBy4wJ3tTbRg=;
- b=KiMnAN1rojcI1neniP4+vK1MMphpsVeFhsZSoE2KucjxFchXDsdkk6gPjI/485t+00bbCGzTZvPxyYGqERe2WhC7jfLZ/ki1IkQ3QdTa8Q8LNRtwF18zsPB2qEZhFu+Yy4R1sbSFqmH6k2H+wEcBpc/xkU6vTApUmTn7JZLEXqdnf00SwStDwhowLx/nzv/BdKKq+PabwoGqhPG+CB5LNmlZ93TJVfnvPUaP1qDE+B3RK4t4qJGCOupcQWiOHsFNFoMEJWI4iG2RDTujRmt6p+u8TmraEESSWabkH1uILhouZ47Qk3tpwKnLnky9RteFCMSlXZ3sC/nx8iEL0lt3DQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=05VS0uXcuMNGxVdUPrdCwaumCtMQE+MJBy4wJ3tTbRg=;
- b=5B7i+NFK/Su4K+ilfrtvNw9FhGQtpdAKI7T4HKOc4Z4e5EmKRIZU/OeJ/56lSEvBH+W2HScItsE09ovhLtESJjTvpmARLujfrdTtBxxXxLLWAF+oRv3A+nPPBH4kuqX0VqIrUuAoHVa2tOBmOW77/QBO1ZbqeJ5QRPtaId/FRzs=
-Received: from BN9PR03CA0256.namprd03.prod.outlook.com (2603:10b6:408:ff::21)
- by CH3PR12MB9218.namprd12.prod.outlook.com (2603:10b6:610:19f::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.34; Wed, 30 Apr
- 2025 17:14:55 +0000
-Received: from BN1PEPF00004687.namprd05.prod.outlook.com
- (2603:10b6:408:ff:cafe::f6) by BN9PR03CA0256.outlook.office365.com
- (2603:10b6:408:ff::21) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.41 via Frontend Transport; Wed,
- 30 Apr 2025 17:14:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN1PEPF00004687.mail.protection.outlook.com (10.167.243.132) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8699.20 via Frontend Transport; Wed, 30 Apr 2025 17:14:55 +0000
-Received: from tapi.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 30 Apr
- 2025 12:14:51 -0500
-From: Swapnil Sapkal <swapnil.sapkal@amd.com>
-To: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <shuah@kernel.org>
-CC: <gautham.shenoy@amd.com>, <narasimhan.v@amd.com>,
-	<linux-pm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Swapnil Sapkal <swapnil.sapkal@amd.com>
-Subject: [PATCH] selftests/cpufreq: Fix cpufreq basic read and update testcases
-Date: Wed, 30 Apr 2025 17:14:33 +0000
-Message-ID: <20250430171433.10866-1-swapnil.sapkal@amd.com>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8192B7FBA2;
+	Wed, 30 Apr 2025 17:36:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746034574; cv=none; b=jOlxR9oZu3dm5v0fVyBcKPCMMIcbJBX7aIf2qVYPFB99uUv+jjMpPUKiBYB4Rm33sq+0X0AXv7khlSn/xzQ5h1xIXqlXm61zqM3cV9+Ok3O1GiQlqbqWsEs2m7jNr4JLPLJu7+bkAM9WFcjMB9MXMvVxwuEyPyaYNpT4VbySGNg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746034574; c=relaxed/simple;
+	bh=ak9YUCFArsM5aUPhK2jd2yrJ29Vauu0uJrHsSTZ9vhQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pa1PHyFZHxlogZ6XMMnuHvQdHgAPB0bPbFDGvvT+31Hqn+IxN5EVrgbQwaas65CSPcDZE5mBtkMlbulT/xjKNVtvQ0nzPTOkzGlw6IRajMZA+xhq8pfNt1cWso7LcbNTDV3kPYFjDslBpzrInBDsYTVzOsMBE04NcrtgGmjp3Xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=YBirQRGs; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [192.168.7.202] ([71.202.166.45])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53UHYglH994677
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Wed, 30 Apr 2025 10:34:43 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53UHYglH994677
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025042001; t=1746034492;
+	bh=MVcFuH6LQX3Y3pUhS9pDt2jTv3OOuhGgVjMgZBwFQbU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=YBirQRGsh/eKhYCU46jEVunfYnCZZLGJwrkUur+AVnLfZOgM2knIRNzrZbf9yWCo9
+	 juTOLbfakM++FVNYbWI7VMM61OBGpjeTocu/tJJcKM4G8I/1t6+b+PzT4AnPvVbz0h
+	 BbdU7/90+cjC0oKiyPmbG4DiLeYyIE6yfLjoMHDwWuBzrqeLRRM4YyYJ5f9/sXGXHU
+	 egrQpYb03Y9EciKRAdv2n6yXgLPSMuEFconn56YWuD3tYuPf6WIqsEFB7eR6/ZBS7g
+	 hYXTVsGSsffm09JBcLUTgarngUDGWX8wE0EpOGSInhMhUwDxstW72Csx0RoTmWX5Jv
+	 fG5/w1SY9Cpug==
+Message-ID: <480f6bf5-20ea-47a0-a1be-3f3cf15227b6@zytor.com>
+Date: Wed, 30 Apr 2025 10:34:42 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 01/15] x86/msr: Add missing includes of <asm/msr.h>
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Netdev <netdev@vger.kernel.org>, platform-driver-x86@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
+        peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+        haiyangz@microsoft.com, decui@microsoft.com,
+        dapeng1.mi@linux.intel.com
+References: <20250427092027.1598740-1-xin@zytor.com>
+ <20250427092027.1598740-2-xin@zytor.com>
+ <a1917b37-e41e-d303-749b-4007cda01605@linux.intel.com>
+ <c16677bd-ee63-4032-8825-7d2789dd7555@zytor.com>
+ <d1bf0657-1cc5-b6ec-5601-f31efefacd9a@linux.intel.com>
+Content-Language: en-US
+From: Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <d1bf0657-1cc5-b6ec-5601-f31efefacd9a@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN1PEPF00004687:EE_|CH3PR12MB9218:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3fcbdc78-8030-425f-fe52-08dd880a86f7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|1800799024|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?m3Td5Tvf0Ru0vLuCH4Sv03PtPRShDNjFVvWqe5euFuuBT+pxzul4sUJuunBl?=
- =?us-ascii?Q?Xlk4XUOti8m6+dls0wKyhU8B2rgkNuZyWVIYmHhCZm3dVoRTGZhn22rT2gCB?=
- =?us-ascii?Q?Fxu0+WcPwtnGocNQsuxGoQvFmc1xfpo/nluPTRlDGGzWXsS2RNica8NYF1H6?=
- =?us-ascii?Q?w37PZA1qz+gUCh+XglSfHcEJpJQzJ/WhOACWLcOxXAi821fPKjHdlwLxFGGY?=
- =?us-ascii?Q?W4JmIQYrW8u1L8ar2l47nb3kQKHecag17I/xRFbI/rNsuRrhlOpijky4GlpZ?=
- =?us-ascii?Q?wfRGNQ1dY7jMONuXF4uRr+MNtPZSaQRagtaTSZrVYzgfiwM1bkrXqPMCQsYY?=
- =?us-ascii?Q?sfMTsLkJoCZgArw9GYdUzI7qT4Rt86LL52bieARdwq9z9jvcVKCEAffKD1wA?=
- =?us-ascii?Q?v+zpLXr+b5U6qseROh5KADw+VDb9hzh8B3Wbx0p4NY/yYtrwoiUEqy0aQ4kD?=
- =?us-ascii?Q?Os3if4e+atCy4/HGtkWwO+vzZpFLb8QMuIVPJqp6jwfoaL0yhkqBsC1vjfgj?=
- =?us-ascii?Q?7FroqlaTEfX6cqhHDCvQdrWHaUxEnSaNA7U/Wod58ieB7kIi1dBkUitXjvZz?=
- =?us-ascii?Q?d1jqlxGqvU081G09uGj9AYcJ7zLU5TLWqnX2DzDFig1+WL7H+xhmN5DPFY7V?=
- =?us-ascii?Q?fI5N3sWkBaLuORthHZudAkz8AzxCMXbSZ6jXCTEEzobQPH6Zx07c0u2qzY0f?=
- =?us-ascii?Q?bKhznybGOmaTgF4iyYRN24ahFcXv8QA/DLHQOrUZ/ItPNmTaPU/mEJqDFOmT?=
- =?us-ascii?Q?9hLPVlNCSGrm9wbK9u5dEgWCTqa0WnhEncCdNPdS7kyb3xhUZg3rqNJGrhwp?=
- =?us-ascii?Q?5fUuRr26MvcR9swZhuMdx9aDT3mBRg0YxhJCBkLFTF4ddTdvHK6QngWGC5PH?=
- =?us-ascii?Q?jQLzkOJqCqEdnRccftO9rcXS5RCyUPke7JEde40zZwo0B6knqwUL7kwry1vj?=
- =?us-ascii?Q?rk1rKA+LB3KsGlmLXGLYXV4UWcntBRztfAiwSsBuytB3A18wvIC4driBYKQM?=
- =?us-ascii?Q?qnGDsoI6k+Yz27rx6E/SyQmgxXBx7cjmLua8LGlMpVH8hbxro5kNh7y6Rfji?=
- =?us-ascii?Q?UYfuwEQ/uFwYTHKCJcaJl4Z29RdlpdxA06pNCi3m6weVTECPzYMlcjLc8lbu?=
- =?us-ascii?Q?lE71yHTAf9KQCWzZ3KxTOC18MSnb4ZjYT8ql/kckfY7u9jL+6FptYqcMAC50?=
- =?us-ascii?Q?BPpPA97JctJWes4i3TMvtXWDzNZnr5jTpVInqM6uC+bUpFRy6gVaH1vh51RL?=
- =?us-ascii?Q?mo/PGL4YLR2q/2kMkaewODMTJSxZdliNOj/mEYr3e2pIc/SL/ObTGfm11h9a?=
- =?us-ascii?Q?6b19W9lvSkrf/Bxrq8wPgcyaAumiLIvdVam5wm53I4aJtw9Z8VmRFJTzmYtA?=
- =?us-ascii?Q?y0S2qXLJXdFEznx9o16pEF5x21S8aBvSUjXQHuVDSiOaHjsNYbUplnQrVR0u?=
- =?us-ascii?Q?uglDp3PeETkqwCmK7l/YRL86oX5mN3KS+iIZoenaer7adiT7fXsx3AIFlr63?=
- =?us-ascii?Q?FfOx9yL76MbZs0z1vyU9iYvQPKEthKUjUHLu?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2025 17:14:55.1506
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3fcbdc78-8030-425f-fe52-08dd880a86f7
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN1PEPF00004687.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9218
 
-In cpufreq basic selftests, one of the testcases is to read all cpufreq
-sysfs files and print the values. This testcase assumes all the cpufreq
-sysfs files have read permissions. However certain cpufreq sysfs files
-(eg. stats/reset) are write only files and this testcase errors out
-when it is not able to read the file.
-Similarily, there is one more testcase which reads the cpufreq sysfs
-file data and write it back to same file. This testcase also errors out
-for sysfs files without read permission.
-Fix these testcases by adding proper read permission checks.
+On 4/30/2025 2:17 AM, Ilpo Järvinen wrote:
+> While this is not my subsystem so don't have the final say here, you had
+> to explain quite much to prove that (and reviewer would have to go through
+> the same places to check). Wouldn't it be much simpler for all if all
+> those .c files would just include <asm/msr.h> directly? No need to explain
+> anything then.
+> 
+> Also, similar to what you're doing for some tsc related things in this
+> series, somebody could in the future decide that hey, these static inline
+> functions (that use .*msr.*) belong to some other file, allowing msr.h to
+> be removed from arch/x86/events/perf_event.h. Again, we'd need to add
+> asm/msr.h into more .c files. This is the problem with relying on indirect
+> includes, they create hard to track dependencies for #includes done in .h
+> files. If we actively encourage to depend on indirect #include
+> dependencies like that, it makes it very hard to_remove_ any #include
+> from a header file (as you have yourself discovered).
 
-Reported-by: Narasimhan V <narasimhan.v@amd.com>
-Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
----
- tools/testing/selftests/cpufreq/cpufreq.sh | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/cpufreq/cpufreq.sh b/tools/testing/selftests/cpufreq/cpufreq.sh
-index e350c521b467..3484fa34e8d8 100755
---- a/tools/testing/selftests/cpufreq/cpufreq.sh
-+++ b/tools/testing/selftests/cpufreq/cpufreq.sh
-@@ -52,7 +52,14 @@ read_cpufreq_files_in_dir()
- 	for file in $files; do
- 		if [ -f $1/$file ]; then
- 			printf "$file:"
--			cat $1/$file
-+			#file is readable ?
-+			local rfile=$(ls -l $1/$file | awk '$1 ~ /^.*r.*/ { print $NF; }')
-+
-+			if [ ! -z $rfile ]; then
-+				cat $1/$file
-+			else
-+				printf "$file is not readable\n"
-+			fi
- 		else
- 			printf "\n"
- 			read_cpufreq_files_in_dir "$1/$file"
-@@ -83,10 +90,10 @@ update_cpufreq_files_in_dir()
- 
- 	for file in $files; do
- 		if [ -f $1/$file ]; then
--			# file is writable ?
--			local wfile=$(ls -l $1/$file | awk '$1 ~ /^.*w.*/ { print $NF; }')
-+			# file is readable and writable ?
-+			local rwfile=$(ls -l $1/$file | awk '$1 ~ /^.*rw.*/ { print $NF; }')
- 
--			if [ ! -z $wfile ]; then
-+			if [ ! -z $rwfile ]; then
- 				# scaling_setspeed is a special file and we
- 				# should skip updating it
- 				if [ $file != "scaling_setspeed" ]; then
--- 
-2.43.0
-
+You're right, it makes a lot of sense from maintenance point of view.
 
