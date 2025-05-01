@@ -1,59 +1,59 @@
-Return-Path: <linux-pm+bounces-26518-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26519-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBA04AA64F9
-	for <lists+linux-pm@lfdr.de>; Thu,  1 May 2025 22:56:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA1B1AA64FE
+	for <lists+linux-pm@lfdr.de>; Thu,  1 May 2025 22:59:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70CFF3B0853
-	for <lists+linux-pm@lfdr.de>; Thu,  1 May 2025 20:56:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5CA491898392
+	for <lists+linux-pm@lfdr.de>; Thu,  1 May 2025 21:00:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A55A25334B;
-	Thu,  1 May 2025 20:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5B4A257436;
+	Thu,  1 May 2025 20:59:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="SvZDX8gz"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="a8jxLWq2"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 800807083A;
-	Thu,  1 May 2025 20:56:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE1D256C6F;
+	Thu,  1 May 2025 20:59:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746132986; cv=pass; b=q84Jr4b191sBhC6Vp7o0ZYl1Docrh9v4rm0FB0a/5SovQFQA7T6FLPBnIzl2rtRVVycgU3WDWz/ggB6jbTSiH90EI4nemyolHJAzdbAhyG2cBJRH6IIpk8fOq8roq5o+6lTPs8T6PUKI0IHYXlpHFE+ytA7Rpbu3JCEodIoPjvY=
+	t=1746133184; cv=pass; b=px+lYuGHH9WVdY9+l/gIp4DKCmRnhcwYH9A83qTHTFJy4byNlAJZGCcXquJeZO8UP+95BOsw6ajRKGUEe/NCT3eSLnV36VE6rxx+IgIteD3cR5qsEeOEEcoMn5rAgjVfG+nD7NWAi1ai1my1ej+H4p56xOnsCuwSGZDOr7H8reU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746132986; c=relaxed/simple;
-	bh=AR2u9y7Zv7hlFqpjIItjRa1RagopaWPRRRrh8lVvNpU=;
+	s=arc-20240116; t=1746133184; c=relaxed/simple;
+	bh=Tj4FkkrZvsB2maiC806EUMjK7SnDEzY/91hRnDmXD/o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=guVYYAneETTuNDMi4mxAyiEnLYQybbYGeqZeOqiNhewJT1oMKeYRIlD+WURdcVns3QMmXCcOmbp3UXe47tNqXIuHCzBVSHIe5TP9Z9JiEoCf4cs+CWlCrbaAjGiDlsZboiaOPWlvvFT4y6Dh2ljESnrz+QC6W8sMAzTnxeXDCmI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=SvZDX8gz; arc=pass smtp.client-ip=136.143.188.112
+	 Content-Type:Content-Disposition:In-Reply-To; b=AVhYfpYTtxEkgdzuCVHCfAlXzDe26dyoqEuWkws4Jy638v8k7E24FexAx/ZQjOmeOOvs0+vjky8rAmYkWp6zRsTcqJ0EfLCVryIodXt1OzTo++vGmd8AVnbCwflS5fWeKvwHE/el8M38bAJBNq2XaFfjvVUN9MC0ZxsGitvmX0U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=a8jxLWq2; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1746132968; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1746133166; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=XyBwA2cWdi1P70N+md17Q742vFmDU5KMChNzmxKcQ5uGvMeO2r3LqNip1zfGwyqPKVxkczMFjOOqWbROPWJqYyzhuECJYFnPbG/CjaFnCzB8QnIPTDwtUSIpuE6tWVIrI8wJ3hfvBO3TR9nYKT9vioQB5j+pvCM73OjWBkbV15g=
+	b=lCcbmb+W2Tie3QctiCvTewK6zzhTBwBr9d8rZdx56zXsV2wnaT3NL0ECFf2+v3BgdiUQmoBGHo2QOjpcFDRViVDKgjPA0ScklgQHfQFDDaZdP0Oy/saISqh3TgHjdJLq/hKprKrvg6IkTXYm1m68ELNuM6YZO8rHBeeCihiZZu4=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1746132968; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=dem3C+jxF8AzWRWAu3zu7Fy2SHhp8Gs9jIjyJ3leCHA=; 
-	b=hzkFncqyJGzfk5w7bi3Flu0fNMfHGOrPTrSKb38CiuZmKWSvkJIZ2PXlD28iJ4I/kPfpVd0gT5JXcN1/c4BKlp7k3tbeN2+/ibUdhxqsd9r8AS3gtN819s1OTk6ymaEoRLTSmXvCDwrDxba3u6alpwe/hoQwBKJMN0qI76Tru2k=
+	t=1746133166; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=KBLoDZx40etsHxiD6+f4YnG0HqAxRojVOyVHXmA7Y1Q=; 
+	b=boDiSkMVwFhiVQEgZhWtflbfZIGdmPEdifwe5bZfHRVb/MdO/bNVQf6yuWFxDsRsBO4oqtRFCm8zN6g2HN8X3VIfNfIs67XPlhzBX/5j/QFF0m+YFrXDkY+WrJeeL5+zOzQDw0+BrO9NiH0ZU1ek2Exg7Zc8cuivpXRidoB8ykg=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
 	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1746132968;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1746133166;
 	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
 	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=dem3C+jxF8AzWRWAu3zu7Fy2SHhp8Gs9jIjyJ3leCHA=;
-	b=SvZDX8gz4I7J691UmxZFxCeT4qZJJAaPkS47PzrIdQCqxeavihxI8e0diwYMOa0D
-	MfNN8C3Jw+/UV7/yAiq4v3XKEDnHA6TOEjyFinfz1m7f86ZZv3jn0RekfsK5xm13YEC
-	yky7xLzQbjYzd3prz8Ee/bTTVpdVBk7rVF/3Kalk=
-Received: by mx.zohomail.com with SMTPS id 1746132965654478.26179095762257;
-	Thu, 1 May 2025 13:56:05 -0700 (PDT)
+	bh=KBLoDZx40etsHxiD6+f4YnG0HqAxRojVOyVHXmA7Y1Q=;
+	b=a8jxLWq24ACRpbiOiS/VirPsYzmXpIvodwiGGaY0rUUcW8NrKVyF0ONECrWWwmIf
+	Ub2hcuLeqxQwsegs6r6I23pFUaviup7gjad9joH28H00LoYhqJo4uuty7iEBFnSkIBn
+	RqoXlwa0N2h/TWvR7K1RTVgTFCWNFCaXdNqmjn5I=
+Received: by mx.zohomail.com with SMTPS id 1746133165242855.708041863016;
+	Thu, 1 May 2025 13:59:25 -0700 (PDT)
 Received: by venus (Postfix, from userid 1000)
-	id C1253180F5C; Thu, 01 May 2025 22:55:59 +0200 (CEST)
-Date: Thu, 1 May 2025 22:55:59 +0200
+	id B3E63180F5C; Thu, 01 May 2025 22:59:19 +0200 (CEST)
+Date: Thu, 1 May 2025 22:59:19 +0200
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 To: Oleksij Rempel <o.rempel@pengutronix.de>
 Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
@@ -65,11 +65,11 @@ Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
 	=?utf-8?B?U8O4cmVu?= Andersen <san@skov.dk>, Guenter Roeck <groeck@chromium.org>, 
 	Matti Vaittinen <mazziesaccount@gmail.com>, Ahmad Fatoum <a.fatoum@pengutronix.de>, 
 	Andrew Morton <akpm@linux-foundation.org>, chrome-platform@lists.linux.dev
-Subject: Re: [PATCH v9 1/7] power: Extend power_on_reason.h for upcoming
- PSCRR framework
-Message-ID: <rru5zkm7mp3zk43oobf2opljqts5hhp2lszlci4cjlnijcdb5w@ws2ibs7bi5zm>
+Subject: Re: [PATCH v9 4/7] nvmem: provide consumer access to cell size
+ metrics
+Message-ID: <dixmyhyj6b66vyizfotpqw6yzaavi2o2mauloa5x6zn3qgk5ub@huoal5ucdd44>
 References: <20250422085717.2605520-1-o.rempel@pengutronix.de>
- <20250422085717.2605520-2-o.rempel@pengutronix.de>
+ <20250422085717.2605520-5-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,86 +77,149 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="f3qpswvixtgt5nq6"
+	protocol="application/pgp-signature"; boundary="txcrry3e57y7fctt"
 Content-Disposition: inline
-In-Reply-To: <20250422085717.2605520-2-o.rempel@pengutronix.de>
+In-Reply-To: <20250422085717.2605520-5-o.rempel@pengutronix.de>
 X-Zoho-Virus-Status: 1
 X-Zoho-Virus-Status: 1
 X-Zoho-AV-Stamp: zmail-av-1.4.2/246.120.57
 X-ZohoMailClient: External
 
 
---f3qpswvixtgt5nq6
+--txcrry3e57y7fctt
 Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v9 1/7] power: Extend power_on_reason.h for upcoming
- PSCRR framework
+Subject: Re: [PATCH v9 4/7] nvmem: provide consumer access to cell size
+ metrics
 MIME-Version: 1.0
 
 Hi,
 
-On Tue, Apr 22, 2025 at 10:57:11AM +0200, Oleksij Rempel wrote:
-> Prepare for the introduction of the Power State Change Reason Recorder
-> (PSCRR)  framework by expanding the power_on_reason.h header. This
-> extension includes new power-on reasons:
-> - POWER_ON_REASON_OVER_CURRENT for over-current conditions.
-> - POWER_ON_REASON_REGULATOR_FAILURE for regulator failures.
-> - POWER_ON_REASON_OVER_TEMPERATURE for over temperature situations.
-> - POWER_ON_REASON_EC_PANIC for EC panics
+On Tue, Apr 22, 2025 at 10:57:14AM +0200, Oleksij Rempel wrote:
+> Add nvmem_cell_get_size() function to provide access to cell size
+> metrics. In some cases we may get cell size less as consumer would
+> expect it. So, nvmem_cell_write() would fail with incorrect buffer size.
 >=20
 > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 > ---
+> changes v6:
+> - update function comment for nvmem_cell_get_size()
+> ---
+
+This is also needed for the following patch:
+
+https://lore.kernel.org/linux-pm/20250321161449.1175473-1-jberring@redhat.c=
+om/
 
 Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
 -- Sebastian
 
-> changes v6:
-> - add POWER_ON_REASON_EC_PANIC
-> - s/POWER_ON_REASON_OVERTEMPERATURE/POWER_ON_REASON_OVER_TEMPERATURE
-> ---
->  include/linux/power/power_on_reason.h | 4 ++++
->  1 file changed, 4 insertions(+)
+>  drivers/nvmem/core.c           | 29 +++++++++++++++++++++++++++++
+>  include/linux/nvmem-consumer.h |  7 +++++++
+>  2 files changed, 36 insertions(+)
 >=20
-> diff --git a/include/linux/power/power_on_reason.h b/include/linux/power/=
-power_on_reason.h
-> index 95a1ec0c403c..bf9501792696 100644
-> --- a/include/linux/power/power_on_reason.h
-> +++ b/include/linux/power/power_on_reason.h
-> @@ -15,5 +15,9 @@
->  #define POWER_ON_REASON_XTAL_FAIL "crystal oscillator failure"
->  #define POWER_ON_REASON_BROWN_OUT "brown-out reset"
->  #define POWER_ON_REASON_UNKNOWN "unknown reason"
-> +#define POWER_ON_REASON_OVER_CURRENT "over current"
-> +#define POWER_ON_REASON_REGULATOR_FAILURE "regulator failure"
-> +#define POWER_ON_REASON_OVER_TEMPERATURE "over temperature"
-> +#define POWER_ON_REASON_EC_PANIC "EC panic"
+> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> index fff85bbf0ecd..754a9448c39d 100644
+> --- a/drivers/nvmem/core.c
+> +++ b/drivers/nvmem/core.c
+> @@ -1828,6 +1828,35 @@ int nvmem_cell_write(struct nvmem_cell *cell, void=
+ *buf, size_t len)
 > =20
->  #endif /* POWER_ON_REASON_H */
+>  EXPORT_SYMBOL_GPL(nvmem_cell_write);
+> =20
+> +/**
+> + * nvmem_cell_get_size() - Retrieve the storage size of an NVMEM cell.
+> + * @cell: Pointer to the NVMEM cell structure.
+> + * @bytes: Optional pointer to store the cell size in bytes (can be NULL=
+).
+> + * @bits: Optional pointer to store the cell size in bits (can be NULL).
+> + *
+> + * This function allows consumers to retrieve the size of a specific NVM=
+EM
+> + * cell before performing read/write operations. It is useful for valida=
+ting
+> + * buffer sizes to prevent mismatched writes.
+> + *
+> + * Return: 0 on success or negative on failure.
+> + */
+> +int nvmem_cell_get_size(struct nvmem_cell *cell, size_t *bytes, size_t *=
+bits)
+> +{
+> +	struct nvmem_cell_entry *entry =3D cell->entry;
+> +
+> +	if (!entry->nvmem)
+> +		return -EINVAL;
+> +
+> +	if (bytes)
+> +		*bytes =3D entry->bytes;
+> +
+> +	if (bits)
+> +		*bits =3D entry->nbits;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(nvmem_cell_get_size);
+> +
+>  static int nvmem_cell_read_common(struct device *dev, const char *cell_i=
+d,
+>  				  void *val, size_t count)
+>  {
+> diff --git a/include/linux/nvmem-consumer.h b/include/linux/nvmem-consume=
+r.h
+> index 34c0e58dfa26..bcb0e17e415d 100644
+> --- a/include/linux/nvmem-consumer.h
+> +++ b/include/linux/nvmem-consumer.h
+> @@ -56,6 +56,7 @@ void nvmem_cell_put(struct nvmem_cell *cell);
+>  void devm_nvmem_cell_put(struct device *dev, struct nvmem_cell *cell);
+>  void *nvmem_cell_read(struct nvmem_cell *cell, size_t *len);
+>  int nvmem_cell_write(struct nvmem_cell *cell, void *buf, size_t len);
+> +int nvmem_cell_get_size(struct nvmem_cell *cell, size_t *bytes, size_t *=
+bits);
+>  int nvmem_cell_read_u8(struct device *dev, const char *cell_id, u8 *val);
+>  int nvmem_cell_read_u16(struct device *dev, const char *cell_id, u16 *va=
+l);
+>  int nvmem_cell_read_u32(struct device *dev, const char *cell_id, u32 *va=
+l);
+> @@ -128,6 +129,12 @@ static inline int nvmem_cell_write(struct nvmem_cell=
+ *cell,
+>  	return -EOPNOTSUPP;
+>  }
+> =20
+> +static inline int nvmem_cell_get_size(struct nvmem_cell *cell, size_t *b=
+ytes,
+> +				      size_t *bits)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+>  static inline int nvmem_cell_read_u8(struct device *dev,
+>  				     const char *cell_id, u8 *val)
+>  {
 > --=20
 > 2.39.5
 >=20
 
---f3qpswvixtgt5nq6
+--txcrry3e57y7fctt
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmgT398ACgkQ2O7X88g7
-+poODA/+P7FvkFQQd5YQ0EFcybmyfdJYNfvG/Q+i4Zy5OHDoI/L97Qk+DbbO64Ps
-Crvia5WKqP3sW2P9B3EgmMJyTd1nQ0NP8R8sL0IVjEmOiGbmfq1onltvBhNuO+66
-uoCxL470Ouicmkfkpi1ho5uCEM9hePuwtnTEe+zfegzyC7vYz+n3wL5Z+c3xJpO2
-NYj8QVb4CMwtbIYUScHITbcW2LYY9xYFRgJKIgP+Xk7ELAXOiG+vUvmScCshhJQR
-AE9uzIek1snK1qPoTllWRA+cGwIU+NPnMrTgTTPctKJyAmM640zm9XPE8pw1m989
-LFpOZAsDdSU/lkCESvqoLJ303u+ZuqbyH1nQopyqrJ6kGlmlbY0S+clkq7khMfkJ
-sgzlK9ArG2MKsnaNAF5FUeLbUhUW7giRgJ9BHldMfjBClhnuptGjkYPN8ZSV705q
-NtaBhTAIbMu9Bv//Y5D8CrDkfx+/ifNgPFbRDt1qUkp/S2Ze3tBPXo5V4lqyk7l+
-4x7tNaocMh/WGRhz9TAuNRCVj8c/4sHiWjz5bXvhnCCDY25+Zs9rjh3QmsuMxXV4
-MygeatSC78KO7HXy292UgNbumhJiQ8uVI8zwI9WscMugWEobzhjXkLoJ+5VsIHOQ
-IXGYzSSpSbN7pInOsScdHgMp6LJ06s09h6Y/0Segk7FMY0/0i5g=
-=CFUI
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmgT4KcACgkQ2O7X88g7
++priChAAhBa2jS9PNKKJX4SU92UX/skvv6BYd12ckO6cGpe5H44x3q8fZq4S41Kn
++IKmI0Lp5BM9IPMAuiC+p5GeeLhWlHbq5HPR/tlhj8IxGSIlTr7xgxEs4WsaGw20
+skKZIKS6d4UhEIxI5W1SvbvdbLe/VUgSLg/AHAr9MQt+hHjX2lnCjBqvX9IhMP8I
+CQouDIr/bYwIimnQICrHhlhgQAo7TiKxaw9rXDNui757iU7PrLPhilF9YvL8rJSP
+KBeSVpGoCmW0Wg9i+at+vDG0xpcugLm6UFt3cNP9eqrXa2pMO9kfjn7MUJ8AowKB
+BtKtK9Sw7/HvMadW6zWS0pd/5GvxVkPJIWYsnh16crnu9eX/v0uYnblZW6qyu7cO
+lIMBdLErio97FaaXGD9bloDj+brOwYw13ZJfQ7ZaJftlDWcV+ru0LgCrMbiIp05V
+S92NZUyEKLpIGXdiYHPz08pI+qMJjvb8FuCSlSUieW6Ea7zUKOOLIGb95i8Yg+wA
+EjnIbXB3UHxVQb+UGMQ1yjsTmE2LGQy3T/y3tqDXryHV8sVMeZRanM/OpnkVKMve
+mlHaGEa+zGXamMN6OT7jHVbfgNmMbZVFWQ+Il3UOkdcTufl6b0OOoDmIPu6v6EY8
+cSIltAGqZfUgmKtxDZbjBRkMjPNwGuLgz9MifrBKZL++OvDlvdE=
+=FfKc
 -----END PGP SIGNATURE-----
 
---f3qpswvixtgt5nq6--
+--txcrry3e57y7fctt--
 
