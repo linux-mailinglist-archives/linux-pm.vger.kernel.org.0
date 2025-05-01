@@ -1,202 +1,93 @@
-Return-Path: <linux-pm+bounces-26524-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26525-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7979AA65DB
-	for <lists+linux-pm@lfdr.de>; Thu,  1 May 2025 23:56:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B82DBAA65E2
+	for <lists+linux-pm@lfdr.de>; Thu,  1 May 2025 23:58:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54C309A1B1E
-	for <lists+linux-pm@lfdr.de>; Thu,  1 May 2025 21:55:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 27FF24C5651
+	for <lists+linux-pm@lfdr.de>; Thu,  1 May 2025 21:58:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2BCB2609F5;
-	Thu,  1 May 2025 21:55:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E39621FF2F;
+	Thu,  1 May 2025 21:58:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="npRNF0Pp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Npp8aFSx"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1F8D1A38E1;
-	Thu,  1 May 2025 21:55:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C561A38E1
+	for <linux-pm@vger.kernel.org>; Thu,  1 May 2025 21:58:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746136555; cv=none; b=l0sSbPNed9aGvEzhQV0miH6q/j5CRJQiI5kd1y+XUopDU/r3ve+VaG0lQJWcxBRQ7wrTYQFjmZFPvg3Ww0StOLQZ9HqbFhsOvsiobW1qEEnWW5kSCb+OGNWDZaF/pW/9hkP+wTjwaa0ALpqnJ78j89FtGBY11YKjldMokDJVf40=
+	t=1746136729; cv=none; b=LUiqdJljPwmjTepqSbZlw13UcYEEYYeSd83+0LfJrKc1bvSgB74XIbJCvjmDBeOCdk87OQ4nF6y8o9YpmByleu+paJTx8piUfq8OKrA/NAEnIUiCGmUQutvXMKEriVMc3adsiSi5LGNfBoJMTmm6UuW2bIxovaVPzadU0r5x3s4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746136555; c=relaxed/simple;
-	bh=OpVGOOkuH9HXmfX+AhfIKK2CBjHEJP+az618HOIiJnI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S9v48hM7qNGwNyEn3LBvwFX8I+Lt1P7ek6XpvXEHOTdqCqn2OB2+2kvM0BaIYrDJS2p0IiWYy+/9xOvhhnuFnq6shBR2KVAK3ukJZ92pliJtB/IX/V/kenlJVG2RDa8Vyb0ZTUDUlFjCfI2nQL/sNiEuhubQVKIfwqNv+DrrLsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=npRNF0Pp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6982BC4CEE4;
-	Thu,  1 May 2025 21:55:54 +0000 (UTC)
+	s=arc-20240116; t=1746136729; c=relaxed/simple;
+	bh=8ECWJYWGjdt/dGsBcOpJtCQQgT68tQXYYPd6w5b+bms=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QVgj8+zr4wMSd9h5s6F8GwL4lT8vZ8+6PDQKuYpruVEfShwW8dNwL0UC37Ir+XJXGQu5k0dVhNxYqxVNKzFeVJD1/XcAO92xlCl6271SUyACNrzlAMmu4Ckfyov2S7BrtP4p0jzF2tUz1BD3WvUmy7PC766ijHAJVUPf3vmQkFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Npp8aFSx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 188D1C4CEE3;
+	Thu,  1 May 2025 21:58:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746136555;
-	bh=OpVGOOkuH9HXmfX+AhfIKK2CBjHEJP+az618HOIiJnI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=npRNF0Pp3q1qiDjY13OuiCbkpHdnKQMovftpEatfooNh1bfolkyOJywAz80Ht4PR9
-	 qL/b2oQZpLoVVTIc4g0x1WNlOO15IA6l3jeeXlmz9Kko/MxfC/PqbQSxdx/VZGrQVQ
-	 AmnU5W3sSqYafNCtx2w8pC9e6eCl1/8YGabaVpeiXeEF9li8H6/lEMU3aPHAF8QIsb
-	 OMww+e/tdoH6vd+Ogp2zCyXRFhtADCkUnH+OXsxvlpZcYumighXiw57MOZDtObFJ9X
-	 4v9XXs42h1ymVaFlkMItp7kdih0HOkpeMMlW9IJi7moyfzLYFjXGlmoD+wkPZLr/Mk
-	 pvYGgUTGSWTYw==
-Message-ID: <28f24040-ca37-47df-a4c3-b457f0218f3e@kernel.org>
-Date: Thu, 1 May 2025 16:55:52 -0500
+	s=k20201202; t=1746136728;
+	bh=8ECWJYWGjdt/dGsBcOpJtCQQgT68tQXYYPd6w5b+bms=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Npp8aFSx/uqaxLVu5Vm8+5Vi/Z/reY1b0PwfNOoIT/Y4y+O6j5PXyZACHnpA8vbt3
+	 Pc/P/BeuJkwBP1CFjnkOaowqIHmym0PNwi+pWbfHt04ZZOE+zHtIE6znscyui7J62m
+	 bYCQOiYeXPxvb+lKvyuWG9EJpzvxo5ntxvdRPRGrh47ibxDX+V2g8eEdTPuu6pSvGI
+	 N14GtQlW4uy/ZH+nL2gqtre92kk1pGID+TkpIUQsZ1JLUTodowg9yD3Akswh2o/BxY
+	 RjYpEXma3d7/DwzeqNMja+MgeIvflOWx6R4jgPNgoVaoDZz2tDPGHsg686b4ENpHJZ
+	 uZcJVNgsS76wQ==
+From: Mario Limonciello <superm1@kernel.org>
+To: mario.limonciello@amd.com,
+	rafael@kernel.org,
+	len.brown@intel.com,
+	pavel@kernel.org
+Cc: linux-pm@vger.kernel.org
+Subject: [PATCH] PM: hibernate: Explicitly set PM_SUSPEND_MAX at hibernate entry
+Date: Thu,  1 May 2025 16:58:36 -0500
+Message-ID: <20250501215838.2501827-1-superm1@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] pinctrl: amd: Fix hibernation support with
- CONFIG_SUSPEND unset
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux ACPI <linux-acpi@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
- Linus Walleij <linus.walleij@linaro.org>, linux-gpio@vger.kernel.org,
- Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
- Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-References: <5889368.DvuYhMxLoT@rjwysocki.net>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <5889368.DvuYhMxLoT@rjwysocki.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 4/30/2025 1:27 PM, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> After recent changes, pinctrl-amd will not support hibernation when
-> CONFIG_HIBERNATION is set and CONFIG_SUSPEND isn't because it will not
-> register amd_gpio_pm_ops then.
-> 
-> Address this by restoring dependencies on CONFIG_PM_SLEEP where
-> necessary for hibernation support.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> Mario, this is on top of:
-> 
-> https://patchwork.kernel.org/project/linux-acpi/patch/20250414203551.779320-1-superm1@kernel.org/
-> 
-> which is currently in my bleeding-edge branch only.
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-Thanks!  This makes sense now why there was CONFIG_PM_SLEEP in the first 
-place. 🤦
+This allows pm_debug_messages to work properly for hibernate.
 
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> 
-> ---
->   drivers/pinctrl/pinctrl-amd.c |   63 ++++++++++++++++++++++++------------------
->   1 file changed, 36 insertions(+), 27 deletions(-)
-> 
-> --- a/drivers/pinctrl/pinctrl-amd.c
-> +++ b/drivers/pinctrl/pinctrl-amd.c
-> @@ -894,26 +894,7 @@
->   	}
->   }
->   
-> -#ifdef CONFIG_SUSPEND
-> -static bool amd_gpio_should_save(struct amd_gpio *gpio_dev, unsigned int pin)
-> -{
-> -	const struct pin_desc *pd = pin_desc_get(gpio_dev->pctrl, pin);
-> -
-> -	if (!pd)
-> -		return false;
-> -
-> -	/*
-> -	 * Only restore the pin if it is actually in use by the kernel (or
-> -	 * by userspace).
-> -	 */
-> -	if (pd->mux_owner || pd->gpio_owner ||
-> -	    gpiochip_line_is_irq(&gpio_dev->gc, pin))
-> -		return true;
-> -
-> -	return false;
-> -}
-> -
-> -#ifdef CONFIG_ACPI
-> +#if defined(CONFIG_SUSPEND) && defined(CONFIG_ACPI)
->   static void amd_gpio_check_pending(void)
->   {
->   	struct amd_gpio *gpio_dev = pinctrl_dev;
-> @@ -936,8 +917,40 @@
->   static struct acpi_s2idle_dev_ops pinctrl_amd_s2idle_dev_ops = {
->   	.check = amd_gpio_check_pending,
->   };
-> +
-> +static void amd_gpio_register_s2idle_ops(void)
-> +{
-> +	acpi_register_lps0_dev(&pinctrl_amd_s2idle_dev_ops);
-> +}
-> +
-> +static void amd_gpio_unregister_s2idle_ops(void)
-> +{
-> +	acpi_unregister_lps0_dev(&pinctrl_amd_s2idle_dev_ops);
-> +}
-> +#else
-> +static inline void amd_gpio_register_s2idle_ops(void) {}
-> +static inline void amd_gpio_unregister_s2idle_ops(void) {}
->   #endif
->   
-> +#ifdef CONFIG_PM_SLEEP
-> +static bool amd_gpio_should_save(struct amd_gpio *gpio_dev, unsigned int pin)
-> +{
-> +	const struct pin_desc *pd = pin_desc_get(gpio_dev->pctrl, pin);
-> +
-> +	if (!pd)
-> +		return false;
-> +
-> +	/*
-> +	 * Only restore the pin if it is actually in use by the kernel (or
-> +	 * by userspace).
-> +	 */
-> +	if (pd->mux_owner || pd->gpio_owner ||
-> +	    gpiochip_line_is_irq(&gpio_dev->gc, pin))
-> +		return true;
-> +
-> +	return false;
-> +}
-> +
->   static int amd_gpio_suspend_hibernate_common(struct device *dev, bool is_suspend)
->   {
->   	struct amd_gpio *gpio_dev = dev_get_drvdata(dev);
-> @@ -1211,9 +1224,7 @@
->   
->   	platform_set_drvdata(pdev, gpio_dev);
->   	acpi_register_wakeup_handler(gpio_dev->irq, amd_gpio_check_wake, gpio_dev);
-> -#if defined(CONFIG_ACPI) && defined(CONFIG_SUSPEND)
-> -	acpi_register_lps0_dev(&pinctrl_amd_s2idle_dev_ops);
-> -#endif
-> +	amd_gpio_register_s2idle_ops();
->   
->   	dev_dbg(&pdev->dev, "amd gpio driver loaded\n");
->   	return ret;
-> @@ -1232,9 +1243,7 @@
->   
->   	gpiochip_remove(&gpio_dev->gc);
->   	acpi_unregister_wakeup_handler(amd_gpio_check_wake, gpio_dev);
-> -#if defined(CONFIG_ACPI) && defined(CONFIG_SUSPEND)
-> -	acpi_unregister_lps0_dev(&pinctrl_amd_s2idle_dev_ops);
-> -#endif
-> +	amd_gpio_unregister_s2idle_ops();
->   }
->   
->   #ifdef CONFIG_ACPI
-> @@ -1251,7 +1260,7 @@
->   	.driver		= {
->   		.name	= "amd_gpio",
->   		.acpi_match_table = ACPI_PTR(amd_gpio_acpi_match),
-> -#ifdef CONFIG_SUSPEND
-> +#ifdef CONFIG_PM_SLEEP
->   		.pm	= &amd_gpio_pm_ops,
->   #endif
->   	},
-> 
-> 
-> 
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+ kernel/power/hibernate.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index 23c0f4e6cb2ff..443002fd680de 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -772,6 +772,7 @@ int hibernate(void)
+ 	}
+ 
+ 	pr_info("hibernation entry\n");
++	pm_suspend_target_state = PM_SUSPEND_MAX;
+ 	pm_prepare_console();
+ 	error = pm_notifier_call_chain_robust(PM_HIBERNATION_PREPARE, PM_POST_HIBERNATION);
+ 	if (error)
+@@ -852,6 +853,7 @@ int hibernate(void)
+ 	hibernate_release();
+  Unlock:
+ 	unlock_system_sleep(sleep_flags);
++	pm_suspend_target_state = PM_SUSPEND_ON;
+ 	pr_info("hibernation exit\n");
+ 
+ 	return error;
+-- 
+2.43.0
 
 
