@@ -1,252 +1,251 @@
-Return-Path: <linux-pm+bounces-26502-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26503-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF448AA5C67
-	for <lists+linux-pm@lfdr.de>; Thu,  1 May 2025 10:57:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0660FAA5CC3
+	for <lists+linux-pm@lfdr.de>; Thu,  1 May 2025 11:51:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F7511BC4770
-	for <lists+linux-pm@lfdr.de>; Thu,  1 May 2025 08:58:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9EE9E3B7F8A
+	for <lists+linux-pm@lfdr.de>; Thu,  1 May 2025 09:51:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A05221A928;
-	Thu,  1 May 2025 08:57:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 958DE211A1E;
+	Thu,  1 May 2025 09:51:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="GFYUrU6P"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BF2B20E01A;
-	Thu,  1 May 2025 08:57:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746089856; cv=none; b=aUTxKrRUimmt22+WhxU14JaMGeLlsp+aMPb6Ef2nY4729+mPdAHLx9JTan++w9Ys7/MPIgikXbT60Yh4zw4g+SA6MwSPiDoI49CXra9/mTsdn4Tkn241RuNi2JdhQtvXeWrX3wjSYrTGh5TAaJ0YQmqnOs7L6UbHeQGpEtmPVyg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746089856; c=relaxed/simple;
-	bh=ScajGTXlGH6KflV+V5P2kODwduXGixhrigoQvS0rQZk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pg/5T5TDiOl+C2YHVdimt/cOnMtG08ysdwcCZbq+lmTm7CKC6k8/NgRcRa1i42VV8Q53Gr9dkT9XgeeBGOX41wcQgUd+g1mY3CrNvojadqgderiMcGYA2WERu9Yw9YjQ4kBgy+05QhOqskrovmgYu/J92Szu9/8IK+QQ5YdoA/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1FB1F2B;
-	Thu,  1 May 2025 01:57:24 -0700 (PDT)
-Received: from [10.1.36.61] (unknown [10.1.36.61])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1DC323F5A1;
-	Thu,  1 May 2025 01:57:29 -0700 (PDT)
-Message-ID: <507cc05d-0b66-4b05-afcd-21f088f51b53@arm.com>
-Date: Thu, 1 May 2025 09:57:27 +0100
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2089.outbound.protection.outlook.com [40.107.220.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1267126C05;
+	Thu,  1 May 2025 09:51:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.89
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746093090; cv=fail; b=s6muc7LiQztPWkxpQE8umN1wJh5Y7BfiAHqny5tb/Xe5w7JMCM2d83sNMQlmA/hFZd/xQ23/5OiiYAUh2fB6zj0SOuGUztsNXBrz5YRPBNHcPjffCRgueSoxlhcDm+KeIYLNUahGYzty6FoaeFuELi/rM9hXvJbWzFT/WUwQQrk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746093090; c=relaxed/simple;
+	bh=9ClBtFhdQOUKajPygRJnNqr8gkKmJMwXeuvG8CYgOQY=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=pDccC+1glSeRUh4kcMcHO94S634YA8lorVnNeqVR3AsxsbAryXto/pMV4T3Q28yiHtieeIDdef32eon97c7JVrspwk0oZIF7hSxc6YTbGm8Wy7NV1e3Ec6k6wbO4OI+3kaa6MLXAUQFrXULmzgqmQ8UYDSCm1e1lyRdDXt4P8HM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=GFYUrU6P; arc=fail smtp.client-ip=40.107.220.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=QjvoZSY1KUpDgtKZhoprjgdNsbcVdIq4JAShQTFt8s2fCR4cUABRbe2NDD2MjIrCGXylVG9uCKpL3CMlumzlVVXfjRucGrXo9gI4IAB27+uQE/9FcJjfR6DMGzAgrxJ+yYlBhVybhkg55g9Aj7zlJGoVIIJXdEywjO1xoTqNChNSK5FAXyKbC5ILBvm7NkGLRaOzJMMP0zt2BCA43Zf9JkwyD+3uKI2phwJDIPOKAtZepRbk8IA/tN0kCUMXfeRPXYpV2rmv5qUTsoZPEyTvd5j31N9auKQfyc9qphP+jJ+o+bdW4+pkShn+zWAgA9iLvTKHZx8lhkKFZcsrOuhrpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Jh2hd5H6hd4bQmTobYfAzlKPeojmUN7DU6RyvdwyCSQ=;
+ b=fCL8EQHUjImhd+NNvrE0YO9ec30LoUjRuSHg/cJcoJ5wBp2MiWhEnItSJAzkOw3y+gTKDUv5hvq2LByePdfL81KF8wcDd6iYdRHFl49KerSoJ9kNF5bzRMNAhLFKmFNr2UxtIlKxMt3EHZaYcQ3BTCCSEl/R1E80JVX0fcRCKSNsLa5yHIqc3es9RSDMrL2yN+dC6zRPmiWrT0ZeNgLXtR6O04I8xi3PWlMlNjuKi1/mR/M8W9xvfjfwK/+Eg15W+uYjft9tubU/Sr39O7BCxitb+Q7Uu431ZlhlWd23MLB2ns5NkicAhnK7Ree38uY0SQMLpDsrXr61OeeBLh6jMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Jh2hd5H6hd4bQmTobYfAzlKPeojmUN7DU6RyvdwyCSQ=;
+ b=GFYUrU6PJuJOEwprK0KXAQAAJkKL4nHpxRgLG+LevaebVUCKAc7GqoJjEKWbME2A9Gt7SyxXCj2fC4wsMxtOPPd/dsm7X7ns2JsT5FA+6JV4TMnQfAWyu6zYq0pIbQzn1FPdyGkpQWSQGqq8v+LczTb4GVskTgk9tyoyXTvHPDmPaQYWQjtZYw1LrkGBQdKAkX/k9iMe9xYvYSb8TotKjKjd7WBVxx/2+1uY3lJVlDbPjnXtbiT7H9tAd4vy5ffjUe05UuKBiSP8JUJOhIp/Z3ogRNv5amAicCzkRSS8f0SBjjBhuoJOrRbSlGGDc4vm2lXYp+vb9p8pvqrWCaoqwQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SJ2PR12MB8784.namprd12.prod.outlook.com (2603:10b6:a03:4d0::11)
+ by CY3PR12MB9577.namprd12.prod.outlook.com (2603:10b6:930:109::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.34; Thu, 1 May
+ 2025 09:51:24 +0000
+Received: from SJ2PR12MB8784.namprd12.prod.outlook.com
+ ([fe80::1660:3173:eef6:6cd9]) by SJ2PR12MB8784.namprd12.prod.outlook.com
+ ([fe80::1660:3173:eef6:6cd9%3]) with mapi id 15.20.8678.028; Thu, 1 May 2025
+ 09:51:24 +0000
+Message-ID: <c6cd714b-b0eb-42fc-b9b5-4f5f396fb4ec@nvidia.com>
+Date: Thu, 1 May 2025 10:51:19 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/5] PM: sleep: Resume children after resuming the
+ parent
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson
+ <ulf.hansson@linaro.org>, Johan Hovold <johan@kernel.org>,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Saravana Kannan <saravanak@google.com>,
+ "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <10629535.nUPlyArG6x@rjwysocki.net>
+ <22630663.EfDdHjke4D@rjwysocki.net>
+From: Jon Hunter <jonathanh@nvidia.com>
+Content-Language: en-US
+In-Reply-To: <22630663.EfDdHjke4D@rjwysocki.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0551.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:319::19) To SJ2PR12MB8784.namprd12.prod.outlook.com
+ (2603:10b6:a03:4d0::11)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [linus:master] [cpuidle] 38f83090f5: fsmark.files_per_sec 5.1%
- regression
-To: kernel test robot <oliver.sang@intel.com>
-Cc: oe-lkp@lists.linux.dev, lkp@intel.com, linux-kernel@vger.kernel.org,
- "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org
-References: <202504241314.fe89a536-lkp@intel.com>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <202504241314.fe89a536-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ2PR12MB8784:EE_|CY3PR12MB9577:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0644b1ae-419f-40e9-d609-08dd8895bbd9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?SzlZSFNMRW5iTHlPL2d5MlB1c2hNWFZPTkxuM2NWQm1qZm5rNWVheFBobWFE?=
+ =?utf-8?B?aWNRY1dDTE4reVVDTGNQNEZzS0tMNmJIaDF3d0M4RjRKNkNRYVVoMzFRa3d0?=
+ =?utf-8?B?bFduaHFNbHNhYktiTkFHVUFGQ1ZjWXF2NVZacTgwUmU4SUJTSEp3S3BqTjRI?=
+ =?utf-8?B?QUlvZ3FjOU5EUjBNTnRYZUJUUmVvT3NTRGF5SDNPWXhiNmJhcDJsRThlYnR5?=
+ =?utf-8?B?TUxsUTZyRGUwWE5NSXZnejJkTXRHQ2d6MEJIT0NvbHFsZzNIV0pjcm1wTWFS?=
+ =?utf-8?B?MVNMVXhoMVZUTlg0WEorTjNvZ3NOQS9qK0llaWwzZHE1cTErUlBhdms4N0JY?=
+ =?utf-8?B?eEtjWVJodzRvN0JtZ0MxSFRoaTF5eW93aGNFZGxET1YyZ1ZMdnF6ZTFxRnZT?=
+ =?utf-8?B?aU01bHAyNFVpUTJTdGJ1TXIxMXUzWEc5Ny9nK1o5ZHJaQ0I0cUhDT2s3bjhS?=
+ =?utf-8?B?Nm5xdzQrdUNTKy85aGM0L2NYNlhVdVN5cWNVU0hIUWhlSHZYdmhkZVRwN1Q3?=
+ =?utf-8?B?QjdjTDFKdnBwM3J1M0V0S2RzeGJJbSt4MG1FWGJQRkp4VFRRdHEwTW1UM25p?=
+ =?utf-8?B?Q1BldWk2WUwwVnN6TkdQdTRDRyt3SU1xUlYyQVN3NDR0NFhRa0pNejBTTjNR?=
+ =?utf-8?B?ZVBKSFZTZE9OVVA4UHFhK3lHS011MUFsTWV1RGpuaDNzV1czVGtsV2ZVTmJQ?=
+ =?utf-8?B?N3gyeC9BU0gyT3VVcXE5ODJzZXNDcDZjakd6cjhXT0dWQjh0YWlJSXdMSFlY?=
+ =?utf-8?B?MFI5elZOa2IwN3o2amdvS0NCakJONXB5TzN3WFlVZjZvWkUwbWoyZkl1T0VD?=
+ =?utf-8?B?emxTOTRqVitqS3N0Z1hGOFZ5VDBvY2tPU293aUxmdE8wek1TMVRPNzVVdDc1?=
+ =?utf-8?B?eUQvQlpreUw5STNZZEhXWi9nc3FYOVc5cVdxNEhUaWlBV0Q2d0xnVWZwbXJy?=
+ =?utf-8?B?WWxPSGE0RkgrSVVDVnRzZDBsZFBFUnE2Zy9VNXk3UnM4UTJpZzc0Undmb3hs?=
+ =?utf-8?B?QktSK0lyYkVSKytBbkQvcXg0WFVlTGM0UGw0VStWVmtoQTFEbzkvVmpHWjY3?=
+ =?utf-8?B?aEx6aGhrb3h2ZlZidGJJQmxYRG8wZXlubnZoa3QxblFaOWZEckVOMUhnRFBy?=
+ =?utf-8?B?SjNxRmd0SkhqVitqTHhNUGI0UlExRFBwb21MOWtQTVV6VkplS0lpcmtRVWk0?=
+ =?utf-8?B?RkJUd3ZxVkhoVW11RzFEc3hYcjh5NFhSWGwrNG1JVzgzNlBaN0x1VmNBNHZC?=
+ =?utf-8?B?MWRLeDVjMEZmUzUvVk4rV3JBN2FmWE0vQ29TRW1USHBSS0ErSTVXbHp5V3cy?=
+ =?utf-8?B?VWVPZUdJOXp1Wk1nMTdEdDRnZXNENG52ekN3Z1BJUXJhbUNndkl0cU1WK21E?=
+ =?utf-8?B?Um9uNWwzeUFsclpSbFgyV3NUT0dOUEkwcUtLWVJZVmZ3RDE3bERMWXJnbnRI?=
+ =?utf-8?B?Tm5OQWNObnpzNnFtRlI5MU1mQk04TlFVdjdDbnNvNkpjMGZKOUlhMkJoekt2?=
+ =?utf-8?B?MVN0MmZQRzZTaVhBMDltWFNFTU5SR2tKYTR5bG94WWRZTzBIUHUzWWU1R0hj?=
+ =?utf-8?B?QVVwTVZVNk95YVUzQU5WcWhTd1BPcDFKVHp4QzYyMU5tU2NPOFFDZ0pVUko4?=
+ =?utf-8?B?VFpRSWQ2RnBYK0pScU81a3NETjZCbDZCak92OWVlYkgycnRsaUJ6K01KS1F5?=
+ =?utf-8?B?RE9IVjAxUURMc3QyQWhIMjhoUldvK3ZsQ3NHNlM5V05SQnM2RTRZemE4Qnhm?=
+ =?utf-8?B?NHRKS3lXZjF4bHp4dlVvc3dtOXVmWk0rd05hTU5IVVFYTjgrcjJmL3IvWnpD?=
+ =?utf-8?B?ZkZzWWVhTGxJNDh6amFmd0lMMFBrNlY4dm5SdjBkTXMxa2lPWDJFMThvV1pm?=
+ =?utf-8?B?QWtNQmdPLy9JSUgzbUZWN0ZjNFJ4TlcxQXpxSm9OWGNQd2s0VXZjdE9CT2da?=
+ =?utf-8?Q?4ONgBgY3884=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8784.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?R1l4azNZS1JKS3RjTjltN0VaVklUZ2swSGRNdFoyN1ptbWtpR1FuN3NuUlAv?=
+ =?utf-8?B?a3UzZ0lKbXlzNUpoWnpBSURBSTF0TllxWGdVczRULzJQRlJ0YzB3NGpZbTJj?=
+ =?utf-8?B?ZktRU3JhY0V1L3EzMFB5QWFxRjVrT1ZyeUZxak1HUnhzcThZSWRBRkNHS1dL?=
+ =?utf-8?B?dW9Ub1ZDaTZkRzdMVHBNVWM3M2xJUmgwS2NUM2tRWHptRUVPdnVrTURsOHRP?=
+ =?utf-8?B?bGdVYWo4RVMwM1RHR2lpU3poczNpRjduSzVrMFdQejBvN0pXd2ZuMDVITW01?=
+ =?utf-8?B?cnRhTU1EamV5Z2Z6d3pVOFVzVDdERzYwV2cvL1VOVmhrK01jRmQ5QzZUd2Jr?=
+ =?utf-8?B?bFZTWFg2TUNFMCtXTDVXN0UvdVRZOGZRU1pkMWc3a0xqNmFuZzRVMjhyb00r?=
+ =?utf-8?B?M0xTcGhJVFFlL0VWeklGNkZwUWFINHJ1WXhxV1dOaHNiQ1FPZjJuUTVwS3pV?=
+ =?utf-8?B?YXVmTG9KQXl3VDJiVXVKL3RZcGFrMXRvTFlNVFdRa1hraFcxS1VDY1lDc3JX?=
+ =?utf-8?B?ZUVQRkZxYktyZDNBWWlhYXdwZExteE11aWtIUDAxN2w0Wko2VWxHL2Z2WW41?=
+ =?utf-8?B?VDU2SFo3c2U4cWZ6bXVuY0pOdW5OTHgzSVkrcFpoU1RhQThraFdhZWFDMW14?=
+ =?utf-8?B?QkNFVWY2ekFaYjk4TWpJazliYTV0VTNtYUVUNUIwcTdtcEhFb3NhajZLb3A0?=
+ =?utf-8?B?eEx4VVppczR6UnIwSUR0TW5pR3g5T3dsekZ5OGsyME9wb1lsWHFZQzNJcHRE?=
+ =?utf-8?B?RUFMdUdQaWFobVhHZitxcEFEeHV6YVpTT3JteUp1WGlhdDJUdTc3dkRVZXN4?=
+ =?utf-8?B?Uit1U2x5REQ0bm4wU0duTFh1M1dvVzNzZHdVemdwVTlNQ2xPYmR0ckhIU2tk?=
+ =?utf-8?B?YWM2MVVDSFg5RWRXTWRZT2IzdnVCYUFnSjM2K1laRStlb2pkRllnUHc5V3lr?=
+ =?utf-8?B?TmU4VUxZa3ovRFNvMEY3NnNPTmp5TUxyZTZqeDhkOTdsMXVwNFlmbWRYcTgz?=
+ =?utf-8?B?OE5MQmJVUWpwODcwUkF2NGZKMzJ1L1RzcmNtK2dnenU5dE1NVFdGcTJybVVU?=
+ =?utf-8?B?b2tMZlVrU2czSGFMcUNQRUhISU9ZNVFJa0IvVEhpdUs5cnpJNmdTbys0VE1S?=
+ =?utf-8?B?L0srRXdzVnJQa25iU3Jrb0ZvSWVmSkIvcTVpOHI1bko2bk84VkZST2hRWVgw?=
+ =?utf-8?B?UFNQdnFNR2ZZRXZlN3IrUTBSMXl4Z0NoR2FDTnFhVkRUYU9oN2xmVlJQM3Fm?=
+ =?utf-8?B?NllTV0xrOEdVQjNldnU2R1RKM2VXcWJHMm9iY2h6VmNTOVcvVFpaZkJxZ04z?=
+ =?utf-8?B?Umx1NWJ5eUhNS2kvaDlDc3EwVC80eGlCU3pjcFlUS2tTZUxSUDFqSTc2NXlG?=
+ =?utf-8?B?RWp6V1VxRkJFRmF4K1F4UFc2OE1qdGp6bFJoN2ZZUW9nVGhnekM4TFI2S280?=
+ =?utf-8?B?aUpSTTVXRG44RU1ObTdGVGZQUVdDVnV6L3hWTFM4OXB0Z3I5VEMwUHVMcUNL?=
+ =?utf-8?B?K281M1VHY0ZzZ2RQam4rYjcyYUhNcitPVjBaNnk2VjZ6UWtNcy9tMDBBNkNN?=
+ =?utf-8?B?dnFtUENhaUhsT2kzR2Z6RHE5b244bkJLcUxERlNySm5uRHp4aUwzWUVaSXNw?=
+ =?utf-8?B?UWRUU25ta0FDSlE5TFk5c3BmSXB4bnoxdFFTK0JDeEk5d3pRTFNRa0htVnRa?=
+ =?utf-8?B?NGphVnd4WU5tQUtGV0hkU2xBMXQrcEpVVm95SVJkM1loekFoNHRNRnVvVUxl?=
+ =?utf-8?B?QTF5M0hqeEFvd1V6UDJsc2prMTV0VFgrT1dmaG5MNzNXL0F5d2hvRE43cmJ1?=
+ =?utf-8?B?cEowZkFtUCtvbkhyUXd1MjFLTGxScUtmeFJ3TE0zMGpXdnhRZXF2NFlsOTh4?=
+ =?utf-8?B?MVZsZ0VKbVllNDd3WmJOT2dqTTdOQ2RxVUFyNjJMRm56dHkwR1hnbWtkeDNa?=
+ =?utf-8?B?QUtjMGlMMm5COEluY2hTdnhsT1hRLzhWb0I3d3kwWUhWMWtiYXBMOGtNWEov?=
+ =?utf-8?B?eFByaDdadmNOV1NPVjZtQWZrdDVLRERaODRCMktRRlloT3gwSHFCaGRtRDFW?=
+ =?utf-8?B?YVNCNksxbFdLckFSYUFob05NMjIzOVdoNWR6MTdod0pPNjh6K2dTRitPMUhY?=
+ =?utf-8?Q?lcSlgCvKj3TU7O6PoPbXwUGqJ?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0644b1ae-419f-40e9-d609-08dd8895bbd9
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8784.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2025 09:51:24.0987
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rcOrT1HVV0U3td5DjXwP2V2m+aVqoGWqO1VjkYsTVBUqtk2JdKbSHDpLa/nSBpIR1OOVDvRXgNA/jXz4hJWzxw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY3PR12MB9577
 
-Hi Oliver,
+Hi Rafael,
 
-On 4/24/25 06:49, kernel test robot wrote:
+On 14/03/2025 12:50, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Hello,
+> According to [1], the handling of device suspend and resume, and
+> particularly the latter, involves unnecessary overhead related to
+> starting new async work items for devices that cannot make progress
+> right away because they have to wait for other devices.
 > 
-> back in last Oct, we reported
-> "[linux-next:master] [cpuidle]  38f83090f5:  fsmark.app_overhead 51.9% regression"
-> (https://lore.kernel.org/all/202410072214.11d18a3c-oliver.sang@intel.com/)
-> but there is no obvious fsmark.files_per_sec difference at that time.
+> To reduce this problem in the resume path, use the observation that
+> starting the async resume of the children of a device after resuming
+> the parent is likely to produce less scheduling and memory management
+> noise than starting it upfront while at the same time it should not
+> increase the resume duration substantially.
 > 
-> now on a different platform and with different fsmark parameters, we notice
-> a small regression of fsmark.files_per_sec. but no obvious fsmark.app_overhead
-> difference this time (so does not show in below detail table).
+> Accordingly, modify the code to start the async resume of the device's
+> children when the processing of the parent has been completed in each
+> stage of device resume and only start async resume upfront for devices
+> without parents.
+> 
+> Also make it check if a given device can be resumed asynchronously
+> before starting the synchronous resume of it in case it will have to
+> wait for another that is already resuming asynchronously.
+> 
+> In addition to making the async resume of devices more friendly to
+> systems with relatively less computing resources, this change is also
+> preliminary for analogous changes in the suspend path.
+> 
+> On the systems where it has been tested, this change by itself does
+> not affect the overall system resume duration in a measurable way.
+> 
+> Link: https://lore.kernel.org/linux-pm/20241114220921.2529905-1-saravanak@google.com/ [1]
+> Suggested-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Any idea what's different on it in terms of cpuidle?
-There's a good chance 85975daeaa4d ("cpuidle: menu: Avoid discarding useful information")
-is more useful than iowait metrics for such a workload, worth a try anyway.
-Any chance you could try that?
-With the governor infrastructure you could just checkout menu at parent/38f83090f5
-and mainline, renaming the governor and then switching between the two at runtime.
-Or I can send a patch for mainline checking out menu of parent/38f83090f5.
 
+I have noticed a suspend regression with -next on a couple of our Tegra 
+boards. Bisect was pointing to the following merge commit ...
 
-> 
-> last Oct report seems cause some confusion. so for this one, we try to rebuild
-> kernels and run more times to confirm the configs are same for parent/38f83090f5
-> and data is stable.
-> 
-> just FYI what we observed in our tests.
-> 
-> 
-> kernel test robot noticed a 5.1% regression of fsmark.files_per_sec on:
-> 
-> 
-> commit: 38f83090f515b4b5d59382dfada1e7457f19aa47 ("cpuidle: menu: Remove iowait influence")
-> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-> 
-> [test failed on linus/master      6fea5fabd3323cd27b2ab5143263f37ff29550cb]
-> [test failed on linux-next/master bc8aa6cdadcc00862f2b5720e5de2e17f696a081]
-> 
-> testcase: fsmark
-> config: x86_64-rhel-9.4
-> compiler: gcc-12
-> test machine: 224 threads 2 sockets Intel(R) Xeon(R) Platinum 8480CTDX (Sapphire Rapids) with 512G memory
-> parameters:
-> 
-> 	iterations: 8
-> 	disk: 1SSD
-> 	nr_threads: 4
-> 	fs: btrfs
-> 	filesize: 9B
-> 	test_size: 16G
-> 	sync_method: fsyncBeforeClose
-> 	nr_directories: 16d
-> 	nr_files_per_directory: 256fpd
-> 	cpufreq_governor: performance
-> 
-> 
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <oliver.sang@intel.com>
-> | Closes: https://lore.kernel.org/oe-lkp/202504241314.fe89a536-lkp@intel.com
-> 
-> 
-> Details are as below:
-> -------------------------------------------------------------------------------------------------->
-> 
-> 
-> The kernel config and materials to reproduce are available at:
-> https://download.01.org/0day-ci/archive/20250424/202504241314.fe89a536-lkp@intel.com
-> 
-> =========================================================================================
-> compiler/cpufreq_governor/disk/filesize/fs/iterations/kconfig/nr_directories/nr_files_per_directory/nr_threads/rootfs/sync_method/tbox_group/test_size/testcase:
->   gcc-12/performance/1SSD/9B/btrfs/8/x86_64-rhel-9.4/16d/256fpd/4/debian-12-x86_64-20240206.cgz/fsyncBeforeClose/lkp-spr-2sp4/16G/fsmark
-> 
-> commit: 
->   v6.12-rc1
->   38f83090f5 ("cpuidle: menu: Remove iowait influence")
-> 
->        v6.12-rc1 38f83090f515b4b5d59382dfada 
-> ---------------- --------------------------- 
->          %stddev     %change         %stddev
->              \          |                \  
->       0.12 ±  4%      +0.0        0.14 ±  2%  mpstat.cpu.all.iowait%
->     940771            +2.8%     967141        proc-vmstat.pgfault
->     120077            -5.7%     113267        vmstat.system.cs
->      72197 ±  2%     -14.2%      61965 ±  2%  vmstat.system.in
->      20496            -5.1%      19456        fsmark.files_per_sec
->     219.58            +5.0%     230.50        fsmark.time.elapsed_time
->     219.58            +5.0%     230.50        fsmark.time.elapsed_time.max
->       0.02 ±  9%     +22.5%       0.03 ± 10%  perf-sched.wait_and_delay.avg.ms.wait_log_commit.btrfs_sync_log.btrfs_sync_file.do_fsync
->      15676 ±  9%     -25.2%      11732 ± 14%  perf-sched.wait_and_delay.count.btrfs_sync_log.btrfs_sync_file.do_fsync.__x64_sys_fsync
->     130219 ±  7%     -14.8%     110942 ±  8%  perf-sched.wait_and_delay.count.schedule_preempt_disabled.rwsem_down_read_slowpath.down_read.btrfs_tree_read_lock_nested
->       0.02 ± 10%     +27.8%       0.02 ± 12%  perf-sched.wait_time.avg.ms.wait_log_commit.btrfs_sync_log.btrfs_sync_file.do_fsync
->  1.457e+09            -4.4%  1.393e+09        perf-stat.i.branch-instructions
->   14767792            -4.6%   14093766        perf-stat.i.branch-misses
->   71872875            -3.4%   69406875        perf-stat.i.cache-references
->     121769            -5.8%     114744        perf-stat.i.context-switches
->  8.574e+09            -7.2%   7.96e+09        perf-stat.i.cpu-cycles
->  7.979e+09            -3.6%  7.691e+09        perf-stat.i.instructions
->       3773            -2.0%       3697        perf-stat.i.minor-faults
->       3773            -2.0%       3697        perf-stat.i.page-faults
->   1.45e+09            -4.4%  1.386e+09        perf-stat.ps.branch-instructions
->   14670086            -4.5%   14003599        perf-stat.ps.branch-misses
->   71521482            -3.4%   69080547        perf-stat.ps.cache-references
->     121170            -5.7%     114204        perf-stat.ps.context-switches
->  8.537e+09            -7.2%  7.925e+09        perf-stat.ps.cpu-cycles
->  7.938e+09            -3.6%  7.654e+09        perf-stat.ps.instructions
->       3717            -1.9%       3645        perf-stat.ps.minor-faults
->       3717            -1.9%       3645        perf-stat.ps.page-faults
->       9.65 ± 14%      -9.4        0.22 ±123%  perf-profile.calltrace.cycles-pp.poll_idle.cpuidle_enter_state.cpuidle_enter.cpuidle_idle_call.do_idle
->      18.61 ±  6%      -4.7       13.95 ±  6%  perf-profile.calltrace.cycles-pp.cpuidle_enter_state.cpuidle_enter.cpuidle_idle_call.do_idle.cpu_startup_entry
->      18.05 ±  7%      -4.5       13.51 ±  7%  perf-profile.calltrace.cycles-pp.cpuidle_enter.cpuidle_idle_call.do_idle.cpu_startup_entry.start_secondary
->      18.73 ±  7%      -4.5       14.22 ±  7%  perf-profile.calltrace.cycles-pp.cpuidle_idle_call.do_idle.cpu_startup_entry.start_secondary.common_startup_64
->      22.60 ±  4%      -4.5       18.11 ±  3%  perf-profile.calltrace.cycles-pp.common_startup_64
->      21.55 ±  5%      -4.5       17.08 ±  4%  perf-profile.calltrace.cycles-pp.do_idle.cpu_startup_entry.start_secondary.common_startup_64
->      21.57 ±  5%      -4.5       17.11 ±  4%  perf-profile.calltrace.cycles-pp.cpu_startup_entry.start_secondary.common_startup_64
->      21.58 ±  5%      -4.5       17.12 ±  4%  perf-profile.calltrace.cycles-pp.start_secondary.common_startup_64
->       2.39 ±  6%      -0.6        1.78 ±  7%  perf-profile.calltrace.cycles-pp.btrfs_clone_write_end_io.blk_mq_end_request_batch.nvme_irq.__handle_irq_event_percpu.handle_irq_event
->       2.32 ±  7%      -0.6        1.72 ±  7%  perf-profile.calltrace.cycles-pp.btrfs_orig_write_end_io.btrfs_clone_write_end_io.blk_mq_end_request_batch.nvme_irq.__handle_irq_event_percpu
->       2.21 ±  7%      -0.6        1.64 ±  7%  perf-profile.calltrace.cycles-pp.end_bbio_meta_write.btrfs_orig_write_end_io.btrfs_clone_write_end_io.blk_mq_end_request_batch.nvme_irq
->       0.52 ± 27%      +0.1        0.63 ±  6%  perf-profile.calltrace.cycles-pp.__blk_flush_plug.blk_finish_plug.btrfs_sync_log.btrfs_sync_file.do_fsync
->       0.52 ± 27%      +0.1        0.63 ±  6%  perf-profile.calltrace.cycles-pp.blk_finish_plug.btrfs_sync_log.btrfs_sync_file.do_fsync.__x64_sys_fsync
->       0.95 ±  6%      +0.2        1.10 ±  7%  perf-profile.calltrace.cycles-pp.__btrfs_wait_marked_extents.btrfs_wait_tree_log_extents.btrfs_sync_log.btrfs_sync_file.do_fsync
->       1.04 ±  6%      +0.2        1.21 ±  7%  perf-profile.calltrace.cycles-pp.btrfs_wait_tree_log_extents.btrfs_sync_log.btrfs_sync_file.do_fsync.__x64_sys_fsync
->       0.51 ± 27%      +0.2        0.68 ±  5%  perf-profile.calltrace.cycles-pp.asm_sysvec_apic_timer_interrupt.cpuidle_enter_state.cpuidle_enter.cpuidle_idle_call.do_idle
->       0.36 ± 70%      +0.3        0.62 ±  6%  perf-profile.calltrace.cycles-pp.btrfs_free_tree_block.btrfs_force_cow_block.btrfs_cow_block.btrfs_search_slot.btrfs_insert_empty_items
->       0.36 ± 70%      +0.3        0.65 ±  5%  perf-profile.calltrace.cycles-pp.sysvec_apic_timer_interrupt.asm_sysvec_apic_timer_interrupt.cpuidle_enter_state.cpuidle_enter.cpuidle_idle_call
->       2.20 ±  8%      +0.6        2.77 ± 11%  perf-profile.calltrace.cycles-pp.copy_extent_buffer_full.btrfs_force_cow_block.btrfs_cow_block.btrfs_search_slot.btrfs_insert_empty_items
->       0.00            +0.8        0.76 ± 10%  perf-profile.calltrace.cycles-pp.folio_end_writeback.end_bbio_meta_write.btrfs_orig_write_end_io.blk_mq_end_request_batch.nvme_irq
->       0.00            +0.8        0.85 ±  9%  perf-profile.calltrace.cycles-pp.end_bbio_meta_write.btrfs_orig_write_end_io.blk_mq_end_request_batch.nvme_irq.__handle_irq_event_percpu
->       0.00            +0.9        0.89 ±  9%  perf-profile.calltrace.cycles-pp.btrfs_orig_write_end_io.blk_mq_end_request_batch.nvme_irq.__handle_irq_event_percpu.handle_irq_event
->       7.54 ±  5%      +1.1        8.69 ±  4%  perf-profile.calltrace.cycles-pp.btrfs_force_cow_block.btrfs_cow_block.btrfs_search_slot.btrfs_insert_empty_items.copy_items
->       7.56 ±  5%      +1.1        8.71 ±  4%  perf-profile.calltrace.cycles-pp.btrfs_cow_block.btrfs_search_slot.btrfs_insert_empty_items.copy_items.copy_inode_items_to_log
->       3.57 ±  5%      +1.3        4.87 ±  7%  perf-profile.calltrace.cycles-pp.intel_idle.cpuidle_enter_state.cpuidle_enter.cpuidle_idle_call.do_idle
->       1.99 ± 13%      +2.8        4.76 ± 10%  perf-profile.calltrace.cycles-pp.handle_edge_irq.__sysvec_posted_msi_notification.sysvec_posted_msi_notification.asm_sysvec_posted_msi_notification.cpuidle_enter_state
->       2.25 ± 14%      +2.9        5.16 ± 11%  perf-profile.calltrace.cycles-pp.__sysvec_posted_msi_notification.sysvec_posted_msi_notification.asm_sysvec_posted_msi_notification.cpuidle_enter_state.cpuidle_enter
->       2.35 ± 14%      +3.0        5.32 ± 11%  perf-profile.calltrace.cycles-pp.sysvec_posted_msi_notification.asm_sysvec_posted_msi_notification.cpuidle_enter_state.cpuidle_enter.cpuidle_idle_call
->       2.51 ± 15%      +3.1        5.60 ± 11%  perf-profile.calltrace.cycles-pp.asm_sysvec_posted_msi_notification.cpuidle_enter_state.cpuidle_enter.cpuidle_idle_call.do_idle
->      50.39 ±  2%      +4.4       54.84 ±  2%  perf-profile.calltrace.cycles-pp.__x64_sys_fsync.do_syscall_64.entry_SYSCALL_64_after_hwframe.fsync
->      50.38 ±  2%      +4.4       54.82 ±  2%  perf-profile.calltrace.cycles-pp.do_fsync.__x64_sys_fsync.do_syscall_64.entry_SYSCALL_64_after_hwframe.fsync
->      50.35 ±  2%      +4.4       54.80 ±  2%  perf-profile.calltrace.cycles-pp.btrfs_sync_file.do_fsync.__x64_sys_fsync.do_syscall_64.entry_SYSCALL_64_after_hwframe
->      50.84 ±  2%      +4.5       55.30        perf-profile.calltrace.cycles-pp.fsync
->      50.57 ±  2%      +4.5       55.03 ±  2%  perf-profile.calltrace.cycles-pp.entry_SYSCALL_64_after_hwframe.fsync
->      50.57 ±  2%      +4.5       55.03 ±  2%  perf-profile.calltrace.cycles-pp.do_syscall_64.entry_SYSCALL_64_after_hwframe.fsync
->       9.92 ± 13%      -9.4        0.52 ± 12%  perf-profile.children.cycles-pp.poll_idle
->      18.84 ±  7%      -4.6       14.26 ±  6%  perf-profile.children.cycles-pp.cpuidle_enter_state
->      18.85 ±  7%      -4.6       14.27 ±  6%  perf-profile.children.cycles-pp.cpuidle_enter
->      19.59 ±  6%      -4.5       15.04 ±  6%  perf-profile.children.cycles-pp.cpuidle_idle_call
->      22.60 ±  4%      -4.5       18.11 ±  3%  perf-profile.children.cycles-pp.common_startup_64
->      22.60 ±  4%      -4.5       18.11 ±  3%  perf-profile.children.cycles-pp.cpu_startup_entry
->      22.58 ±  4%      -4.5       18.09 ±  3%  perf-profile.children.cycles-pp.do_idle
->      21.58 ±  5%      -4.5       17.12 ±  4%  perf-profile.children.cycles-pp.start_secondary
->       2.46 ±  6%      -0.6        1.86 ±  7%  perf-profile.children.cycles-pp.btrfs_clone_write_end_io
->       0.12 ± 13%      -0.1        0.06 ± 15%  perf-profile.children.cycles-pp.local_clock_noinstr
->       0.22 ±  8%      +0.1        0.28 ±  6%  perf-profile.children.cycles-pp.__xa_set_mark
->       0.57 ±  5%      +0.1        0.64 ±  5%  perf-profile.children.cycles-pp.blk_finish_plug
->       0.59 ±  5%      +0.1        0.67 ±  5%  perf-profile.children.cycles-pp.__blk_flush_plug
->       0.77 ±  5%      +0.1        0.87 ±  4%  perf-profile.children.cycles-pp.__folio_start_writeback
->       0.60 ±  6%      +0.1        0.70 ±  6%  perf-profile.children.cycles-pp.pin_down_extent
->       0.75 ±  6%      +0.1        0.88 ±  7%  perf-profile.children.cycles-pp.btrfs_free_tree_block
->       0.96 ±  5%      +0.1        1.11 ±  7%  perf-profile.children.cycles-pp.__btrfs_wait_marked_extents
->       1.11 ±  6%      +0.2        1.29 ±  6%  perf-profile.children.cycles-pp.set_extent_bit
->       1.21 ±  5%      +0.2        1.38 ±  6%  perf-profile.children.cycles-pp.__set_extent_bit
->       0.83 ±  5%      +0.2        1.01 ±  6%  perf-profile.children.cycles-pp.__folio_mark_dirty
->       1.25 ±  6%      +0.2        1.47 ±  6%  perf-profile.children.cycles-pp.__folio_end_writeback
->       2.28 ±  4%      +0.3        2.56 ±  4%  perf-profile.children.cycles-pp.__write_extent_buffer
->       3.81 ±  5%      +0.5        4.34 ±  6%  perf-profile.children.cycles-pp.btrfs_alloc_tree_block
->       3.73 ±  6%      +0.7        4.42 ±  8%  perf-profile.children.cycles-pp.copy_extent_buffer_full
->       5.21 ±  4%      +0.8        5.97 ±  6%  perf-profile.children.cycles-pp.__memcpy
->       3.62 ±  4%      +1.3        4.92 ±  7%  perf-profile.children.cycles-pp.intel_idle
->      10.48 ±  4%      +1.5       11.94 ±  4%  perf-profile.children.cycles-pp.btrfs_force_cow_block
->      10.51 ±  4%      +1.5       11.97 ±  4%  perf-profile.children.cycles-pp.btrfs_cow_block
->      50.40 ±  2%      +4.4       54.84 ±  2%  perf-profile.children.cycles-pp.__x64_sys_fsync
->      50.38 ±  2%      +4.4       54.83 ±  2%  perf-profile.children.cycles-pp.do_fsync
->      50.36 ±  2%      +4.4       54.81 ±  2%  perf-profile.children.cycles-pp.btrfs_sync_file
->      50.86 ±  2%      +4.5       55.32        perf-profile.children.cycles-pp.fsync
->      69.02 ±  2%      +4.6       73.66        perf-profile.children.cycles-pp.do_syscall_64
->      69.05 ±  2%      +4.6       73.69        perf-profile.children.cycles-pp.entry_SYSCALL_64_after_hwframe
->       6.48 ± 13%      -6.0        0.48 ± 12%  perf-profile.self.cycles-pp.poll_idle
->       0.32 ±  8%      +0.1        0.39 ± 11%  perf-profile.self.cycles-pp.folio_mark_accessed
->       5.10 ±  4%      +0.7        5.84 ±  6%  perf-profile.self.cycles-pp.__memcpy
->       3.62 ±  4%      +1.3        4.92 ±  7%  perf-profile.self.cycles-pp.intel_idle
-> 
-> 
-> 
-> Disclaimer:
-> Results have been estimated based on internal Intel analysis and are provided
-> for informational purposes only. Any difference in system hardware or software
-> design or configuration may affect actual performance.
-> 
-> 
+# first bad commit: [218a7bbf861f83398ac9767620e91983e36eac05] Merge 
+branch 'pm-sleep' into linux-next
+
+On top of next-20250429 I found that by reverting the following changes 
+that suspend is working again ...
+
+Revert "PM: sleep: Resume children after resuming the parent"
+Revert "PM: sleep: Suspend async parents after suspending children"
+Revert "PM: sleep: Make suspend of devices more asynchronous"
+
+I have been looking into this a bit more to see what device is failing 
+and by adding a bit of debug I found that entry to suspend was failing 
+on the Tegra194 Jetson AGX Xavier (tegra194-p2972-0000.dts) platform 
+when one of the I2C controllers (i2c@c240000) was being suspended.
+
+I found that if I disable only this I2C controller in device-tree 
+suspend worked again on top of -next. This I2C controller has 3 devices 
+on the platform; two ina3221 devices and one Cypress Type-C controller. 
+I then found that removing only the two ina3221 devices (in 
+tegra194-p2888.dtsi) also allows suspend to work.
+
+At this point, I am still unclear why this is now failing.  If you have 
+any thoughts or things I can try please let me know.
+
+Thanks!
+Jon
+
+-- 
+nvpublic
 
 
