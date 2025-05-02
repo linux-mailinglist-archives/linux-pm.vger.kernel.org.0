@@ -1,224 +1,233 @@
-Return-Path: <linux-pm+bounces-26541-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26542-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0945AA698A
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 05:50:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 888B3AA6A0B
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 07:07:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 59E027ADA5A
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 03:48:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6704E1BA208B
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 05:07:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 366BE18FDBE;
-	Fri,  2 May 2025 03:49:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02C6E1B3935;
+	Fri,  2 May 2025 05:06:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="J2+h4eJp"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YSnf0PGN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A013527718;
-	Fri,  2 May 2025 03:49:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E66BD4C8E
+	for <linux-pm@vger.kernel.org>; Fri,  2 May 2025 05:06:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746157798; cv=none; b=nhWljYYbSFxsk1kAUXRUxAfmWOpjfefNcZPlv/0/hDHlHnMV0epR3JSXE/wlFmfXXqkh/5fco3GzJBwUBWiZgycQpfK5WFyH8t9YK89N0mb3TDkEQekCtNgMMuFFM4IkodY0ehiIeju3rvUXp17OGDRVOdOO9KQym2COZT+0GLQ=
+	t=1746162405; cv=none; b=LhJRr8a/RJA8uOQnrxWR9Q7i4gQbbQa4UzGdbwi+MSJUrtxUqUlYgl8gb47cFQHIHhGoO3Imk836XpVpmRs9vR9GQy+cVT6fgzwKtYsJX49rM8sXAOY99SKFfDUYP10q7IRx1H81vYtyP/rv7DhP98eEUusR/kdXT7abc78W5RY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746157798; c=relaxed/simple;
-	bh=U5mdhGYsJQIu31ah8zFEE1prb3PTq8AzmT9FnTheryc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=WnnER7C5wKiIHGZXmq5DqDa+nLiiQFZK6JP9+KMV5ZClqUtYBXrqNaec0x6EdGhDGxgX0/+u9r50Jo5kV8W2DrzthQlQGKg4uXWacF6TfEKDjqKMkyR/daj26yei13FIf8vdABoOUigltWCnm44IMWviPar4hcIYvHDkoSS+rBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=J2+h4eJp; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5421MvsN001947;
-	Fri, 2 May 2025 03:49:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	8aIn+HhV0I+UOqU2s77LSnK4rEAaF/YhK6sj5oV1cl4=; b=J2+h4eJpvRYGzO7e
-	iERM1hAZT85zLkLdfJQODWCDkBf63UG1AUC8HG7RK+O5UhqUK/fCjSmCOzufUpea
-	LlwFQHFcRllvbq3vfbPlDCDi2FdBIfkoIjnh11HrMVl+/Y9QOm+tqtECEnmnSwuQ
-	oPT02WvE18jDW3aqRYphSM5EeTUaR50f196izV/hAeWY/1vGRJoLq6UhhkZcchL8
-	8mL6qHddxJpOqW9no7Ja7okt7XELeTbEyvHw6t5OE3o4W4kqOE34JurpgetgkNc5
-	5iMPIgcL/ux1Qfaaoo3q6EJchtmSehbIOdMKD9GBqViqMdOUXi052Mm+NqXwqIMP
-	Y1MdUA==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46b6u7771a-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 02 May 2025 03:49:51 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5423npWo026585
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 2 May 2025 03:49:51 GMT
-Received: from [10.110.24.115] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 1 May 2025
- 20:49:50 -0700
-Message-ID: <d7c53dac-790a-490f-b757-fa2bc86b5276@quicinc.com>
-Date: Thu, 1 May 2025 20:49:49 -0700
+	s=arc-20240116; t=1746162405; c=relaxed/simple;
+	bh=9ZiB3IL38HWldjWT5LqovTTFiCQgbLC+OMOMx6NpS40=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qrr8J4OeGnJWyeE1bNEoVdGM6EFz5Fo/IcztzNI/ESW/OAxVZzHSeVCuRAohvCiP1/9LWO8sLGm2eYwp5xfw6TV99xyB+eZmTRVXKA8LnK5ANbAYqTtIfw1qX/UP3SxH3cPNdzCqTt4YE8G4gNz7Dnm/CCv28epZ2pdToJHEDf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YSnf0PGN; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7369ce5d323so1582423b3a.1
+        for <linux-pm@vger.kernel.org>; Thu, 01 May 2025 22:06:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1746162402; x=1746767202; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/grUUpAeYIKlzRvakzNU+F1AJvJq3WlXjsn/sgH48DI=;
+        b=YSnf0PGNskAGFezRtFrPbvSdT93W/5CaykNQb64PKloeleNxW/MAp0CnGQFlvD7khb
+         v2+sKSEiYlO1iM5243Ip5BrD14k4BlbSRCR3nMjPo2uXnoUMxh427H0Z00KxfzKc8U1c
+         RTNS8dTNoXTZ9UYFpyVZLYVl21JncgF1la47axq0k/ACy42BofqurmaY3aTMDnWm8K0D
+         JJYbfBBF6oclNPzyWBVcL5w6ccU/Zg1n8XA+YOLAxnaSZ8lzBmf9cp4wOH+eXBlJhQtp
+         bmPGuFPYq+KMlDCP5XneBGSfiR0CMDyvLqZpf3j20cKIHT+oilvszb5r0ZRrSMsMSZsS
+         A5eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746162402; x=1746767202;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/grUUpAeYIKlzRvakzNU+F1AJvJq3WlXjsn/sgH48DI=;
+        b=ihLTyKZiRGbi163PcSaEeN7K9LivRkfXYLLXkSmwBOjadqUlxMVivgak3qYsWMyuAQ
+         q6loRZnsT8t7EQdpAnNW3ePcXMgex3ckdj94/ZUtcVhWSbBiVvZF7R+RyGWnxR++QKru
+         ZKpT/Fu3tnyPWUG7rr744Q1vaSLmkDupvj6aDiUNtiRJDX2/UQqrRr7nPWKuaKVEgCID
+         cDMZbScXR4XgpTTd7vifFcXBqpFbDFyxrWolFEof+YiQK0UJinKfTcZ2fS76zEM5A6EU
+         BBLb1VkEq3qLGuNGNIeGsBC/L11l+4WR9YPPAsc4E/f4eQPZCfUhMpdwkvXJ5Y7y1KHm
+         t73A==
+X-Forwarded-Encrypted: i=1; AJvYcCU81HsD+oW1YyuBZ4sx4Itv1lUEK9nKWnxlHtGskme/tjaoauqYE8m0TmLGKH6/vyNgJJyaj0H7qQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YypzgzpsbktCXkWed2iQEPedBCXTiucuxnagB1LAY10ipRmtbwm
+	EmChaz+w+NLEt7islGVUtQ1Xk1qm4gMPA9x9hpTpjsu15ohS4wAZXY9XqsAzmqs=
+X-Gm-Gg: ASbGncu8S4M7TF9vrztIXvmwrWLieF3ug5BVEP+dqxZ0uA+qly5kFWi1zhqaOqOgq/c
+	J6oCcqTLrn6Ni0oTSHEF2uCuLPOuHu2OhRMY42WFqHkBi3hxH00ug1BxfYeiTXxF4BTRexvHU4y
+	BRC4y231QxXz+kdSmY8QgMn5IgQkfbI3p+U9i4shm+k+SpiAv5eQDe7TuBvhYHhYLIhOpVJDk5F
+	Qg0fb2rMq9eGZv54HlXdWfQVRDgDo8ypL5yE31j8YQ7oYhVgVljqon95DDXLJ25sN+6nV4aVn3f
+	EAglzSYS+b+AD1aWYtefKrUZvofJeD+2NBpd2EmMxA==
+X-Google-Smtp-Source: AGHT+IEOJiAVSKAjJMccaJnGL2AgSp42k41Qardkh/MDnhjWK4eld/C+RTrDT33wzYWavJoELEolJw==
+X-Received: by 2002:a05:6a21:3514:b0:1f5:a577:dd24 with SMTP id adf61e73a8af0-20cdee3f3dcmr2337675637.25.1746162402149;
+        Thu, 01 May 2025 22:06:42 -0700 (PDT)
+Received: from localhost ([122.172.83.32])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b1fa85e4e27sm537304a12.60.2025.05.01.22.06.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 May 2025 22:06:41 -0700 (PDT)
+Date: Fri, 2 May 2025 10:36:39 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Seyediman Seyedarab <imandevel@gmail.com>
+Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
+	linux-kernel-mentees@lists.linux.dev
+Subject: Re: [PATCH v3] cpufreq: fix locking order in store_local_boost to
+ prevent deadlock
+Message-ID: <20250502050639.2a4mbdav4mdlhbp2@vireshk-i7>
+References: <20250430160943.2836-1-ImanDevel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/9] dt-bindings: serial: describe SA8255p
-To: Praveen Talari <quic_ptalari@quicinc.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon
-	<nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki"
-	<rafael@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-CC: <psodagud@quicinc.com>, <djaggi@quicinc.com>, <quic_msavaliy@quicinc.com>,
-        <quic_vtanuku@quicinc.com>, <quic_arandive@quicinc.com>,
-        <quic_mnaresh@quicinc.com>, <quic_shazhuss@quicinc.com>,
-        Nikunj Kela
-	<quic_nkela@quicinc.com>
-References: <20250502031018.1292-1-quic_ptalari@quicinc.com>
- <20250502031018.1292-3-quic_ptalari@quicinc.com>
-Content-Language: en-US
-From: Trilok Soni <quic_tsoni@quicinc.com>
-In-Reply-To: <20250502031018.1292-3-quic_ptalari@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTAyMDAyNiBTYWx0ZWRfXxQtudpHRtV6Z NMesxL05INmoHCNBtBocmmmOi/PvKeRLaEUr/FGPHJSx+8ty7qdmBpCWkP09klyS9A4UtstyLSN HZiefs1H8B/0MtGmZ/zypGJo8myeg0jcmE7pcpiLPa6if4A4eFj1zmxKhZefHspw/r1P9idi4I8
- B5GpgauU78RfOyejBUMtVHptoiufkX0pWdxngR6Ay8gpFPnfpwGEbev4La4lNOyafK5v08ZUD9+ G30oK/2b438q+2f+z11Q4kYAqsEjuoWPr7k2OkeHgWswxgTBKNwNKD2v+wiGJq3/Nsg/K00gMCa 7tRKwZ7N2vjnaQD7cq5kUYa0wCkx/7Ivi+AL4wLx3dPglclMJoaIaJ2pRD+B1BGUm4N7QA8rV9k
- Wck+k5vMG81hgTv7t9vsTmr0UzKRk/FwVWXO3DEaXuYhSQmSN2gDxCoXhOhLv2lONl2bAQyw
-X-Proofpoint-GUID: z9yNTtQf08yRmmdQ-iyaXiJIvG2XhYYt
-X-Authority-Analysis: v=2.4 cv=W404VQWk c=1 sm=1 tr=0 ts=681440df cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=gEfo2CItAAAA:8 a=COk6AnOGAAAA:8 a=i1IpkjnnKvMeRn0L5gEA:9
- a=QEXdDO2ut3YA:10 a=sptkURWiP4Gy88Gu7hUp:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-ORIG-GUID: z9yNTtQf08yRmmdQ-iyaXiJIvG2XhYYt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-01_06,2025-04-24_02,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 priorityscore=1501 mlxscore=0 bulkscore=0 spamscore=0
- clxscore=1015 phishscore=0 impostorscore=0 mlxlogscore=999 malwarescore=0
- suspectscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2505020026
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250430160943.2836-1-ImanDevel@gmail.com>
 
-On 5/1/2025 8:10 PM, Praveen Talari wrote:
-> From: Nikunj Kela <quic_nkela@quicinc.com>
+On 30-04-25, 12:09, Seyediman Seyedarab wrote:
+> Lockdep reports a possible circular locking dependency[1] when
+> writing to /sys/devices/system/cpu/cpufreq/policyN/boost,
+> triggered by power-profiles-daemon at boot.
 > 
-> SA8255p platform abstracts resources such as clocks, interconnect and
-> GPIO pins configuration in Firmware. SCMI power and perf protocols are
-> used to send request for resource configurations.
+> store_local_boost() used to acquire cpu_hotplug_lock *after*
+> the policy lock had already been taken by the store() handler.
+> However, the expected locking hierarchy is to acquire
+> cpu_hotplug_lock before the policy guard. This inverted lock order
+> creates a *theoretical* deadlock possibility.
 > 
-> Add DT bindings for the QUP GENI UART controller on sa8255p platform.
+> Acquire cpu_hotplug_lock in the store() handler *only* for the
+> local_boost attribute, before entering the policy guard block,
+> and remove the cpus_read_lock/unlock() calls from store_local_boost().
+> Also switch from guard() to scoped_guard() to allow explicitly wrapping
+> the policy guard inside the cpu_hotplug_lock critical section.
 > 
-> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
-> Co-developed-by: Praveen Talari <quic_ptalari@quicinc.com>
-> Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
+>  [1]
+>  ======================================================
+>  WARNING: possible circular locking dependency detected
+>  6.15.0-rc4-debug #28 Not tainted
+>  ------------------------------------------------------
+>  power-profiles-/596 is trying to acquire lock:
+>  ffffffffb147e910 (cpu_hotplug_lock){++++}-{0:0}, at: store_local_boost+0x6a/0xd0
 > 
-> v2 -> v3
-> - dropped description for interrupt-names
-> - rebased reg property order in required option
+>  but task is already holding lock:
+>  ffff9eaa48377b80 (&policy->rwsem){++++}-{4:4}, at: store+0x37/0x90
 > 
-> v1 -> v2
-> - reorder sequence of tags in commit text
-> - moved reg property after compatible field
-> - added interrupt-names property
-
-Please fix all the patches. 
-
+>  which lock already depends on the new lock.
+> 
+>  the existing dependency chain (in reverse order) is:
+> 
+>  -> #2 (&policy->rwsem){++++}-{4:4}:
+>         down_write+0x29/0xb0
+>         cpufreq_online+0x841/0xa00
+>         cpufreq_add_dev+0x71/0x80
+>         subsys_interface_register+0x14b/0x170
+>         cpufreq_register_driver+0x154/0x250
+>         amd_pstate_register_driver+0x36/0x70
+>         amd_pstate_init+0x1e7/0x270
+>         do_one_initcall+0x67/0x2c0
+>         kernel_init_freeable+0x230/0x270
+>         kernel_init+0x15/0x130
+>         ret_from_fork+0x2c/0x50
+>         ret_from_fork_asm+0x11/0x20
+> 
+>  -> #1 (subsys mutex#3){+.+.}-{4:4}:
+>         __mutex_lock+0xc2/0x930
+>         subsys_interface_register+0x83/0x170
+>         cpufreq_register_driver+0x154/0x250
+>         amd_pstate_register_driver+0x36/0x70
+>         amd_pstate_init+0x1e7/0x270
+>         do_one_initcall+0x67/0x2c0
+>         kernel_init_freeable+0x230/0x270
+>         kernel_init+0x15/0x130
+>         ret_from_fork+0x2c/0x50
+>         ret_from_fork_asm+0x11/0x20
+> 
+>  -> #0 (cpu_hotplug_lock){++++}-{0:0}:
+>         __lock_acquire+0x1087/0x17e0
+>         lock_acquire.part.0+0x66/0x1b0
+>         cpus_read_lock+0x2a/0xc0
+>         store_local_boost+0x6a/0xd0
+>         store+0x50/0x90
+>         kernfs_fop_write_iter+0x135/0x200
+>         vfs_write+0x2ab/0x540
+>         ksys_write+0x6c/0xe0
+>         do_syscall_64+0xbb/0x1d0
+>         entry_SYSCALL_64_after_hwframe+0x56/0x5e
+> 
+> Signed-off-by: Seyediman Seyedarab <ImanDevel@gmail.com>
 > ---
->  .../serial/qcom,sa8255p-geni-uart.yaml        | 64 +++++++++++++++++++
->  1 file changed, 64 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/serial/qcom,sa8255p-geni-uart.yaml
+> Changes in v3:
+>  - Rebased over PM tree's linux-next branch
+>  - Added a comment to explain why this piece of code is required
+>  - Switched from guard() to scoped_guard() to allow explicitly wrapping
+>    the policy guard inside the cpu_hotplug_lock critical section.
 > 
-> diff --git a/Documentation/devicetree/bindings/serial/qcom,sa8255p-geni-uart.yaml b/Documentation/devicetree/bindings/serial/qcom,sa8255p-geni-uart.yaml
-> new file mode 100644
-> index 000000000000..85b1d7c05079
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/serial/qcom,sa8255p-geni-uart.yaml
-> @@ -0,0 +1,64 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/serial/qcom,sa8255p-geni-uart.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> Changes in v2:
+>  - Restrict cpu_hotplug_lock acquisition to only
+>    the local_boost attribute in store() handler.
+> 
+> Regards,
+> Seyediman
+> 
+>  drivers/cpufreq/cpufreq.c | 23 ++++++++++++++++-------
+>  1 file changed, 16 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 21fa733a2..b349adbeb 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -622,10 +622,7 @@ static ssize_t store_local_boost(struct cpufreq_policy *policy,
+>  	if (!policy->boost_supported)
+>  		return -EINVAL;
+>  
+> -	cpus_read_lock();
+>  	ret = policy_set_boost(policy, enable);
+> -	cpus_read_unlock();
+> -
+>  	if (!ret)
+>  		return count;
+>  
+> @@ -1006,16 +1003,28 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
+>  {
+>  	struct cpufreq_policy *policy = to_policy(kobj);
+>  	struct freq_attr *fattr = to_attr(attr);
+> +	int ret = -EBUSY;
+>  
+>  	if (!fattr->store)
+>  		return -EIO;
+>  
+> -	guard(cpufreq_policy_write)(policy);
+> +	/*
+> +	 * store_local_boost() requires cpu_hotplug_lock to be held, and must be
+> +	 * called with that lock acquired *before* taking policy->rwsem to avoid
+> +	 * lock ordering violations.
+> +	 */
+> +	if (fattr == &local_boost)
+> +		cpus_read_lock();
+>  
+> -	if (likely(!policy_is_inactive(policy)))
+> -		return fattr->store(policy, buf, count);
+> +	scoped_guard(cpufreq_policy_write, policy) {
+> +		if (likely(!policy_is_inactive(policy)))
+> +			ret = fattr->store(policy, buf, count);
+> +	}
+>  
+> -	return -EBUSY;
+> +	if (fattr == &local_boost)
+> +		cpus_read_unlock();
 > +
-> +title: Qualcomm Geni based QUP UART interface
-> +
-> +maintainers:
-> +  - Praveen Talari <quic_ptalari@quicinc.com>
-> +
-> +allOf:
-> +  - $ref: /schemas/serial/serial.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,sa8255p-geni-uart
-> +      - qcom,sa8255p-geni-debug-uart
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    minItems: 1
-> +    items:
-> +      - description: UART core irq
-> +      - description: Wakeup irq (RX GPIO)
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: uart
-> +      - const: wakeup
-> +
-> +  power-domains:
-> +    minItems: 2
-> +    maxItems: 2
-> +
-> +  power-domain-names:
-> +    items:
-> +      - const: power
-> +      - const: perf
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - power-domains
-> +  - power-domain-names
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    serial@990000 {
-> +        compatible = "qcom,sa8255p-geni-uart";
-> +        reg = <0x990000 0x4000>;
-> +        interrupts = <GIC_SPI 531 IRQ_TYPE_LEVEL_HIGH>;
-> +        power-domains = <&scmi0_pd 0>, <&scmi0_dvfs 0>;
-> +        power-domain-names = "power", "perf";
-> +    };
-> +...
+> +	return ret;
+>  }
 
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
----Trilok Soni
+viresh
 
