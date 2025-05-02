@@ -1,126 +1,155 @@
-Return-Path: <linux-pm+bounces-26529-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26530-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDD22AA685D
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 03:29:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81DDDAA6904
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 05:10:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 891D01BC6010
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 01:29:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BC353A9DFE
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 03:10:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2339E2E403;
-	Fri,  2 May 2025 01:29:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F34051922ED;
+	Fri,  2 May 2025 03:10:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="EvZmyMp+"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="EWdeWvjm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0968D1EA90;
-	Fri,  2 May 2025 01:28:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE3FC1714B4;
+	Fri,  2 May 2025 03:10:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746149342; cv=none; b=WY+QYqDu8gylSgrlSLKgv4eoLRpC1nyWP+AnZiDMCZQRcHcbLep+KEpVMJt99Pv1gAOV6ya+Vs9L+2EpMOSr5MBxGRFk0nFe6LO8v6/QvTcUuzoEWk3zVDKGft+1Hi6EYKSVscVFhRim7qMUNM2Su4paVu6pE6ozL+N4mHQqNSI=
+	t=1746155453; cv=none; b=spwGkbWVVw5qMdJuAacFu3lF8W14Uhf+CJxZdX8alCxn+4w7QvtVp6L9WFfT4gkVG3l9564gZGfZTQKAg/Fa6ENnSRS6dF1Q1EYVvTcnOHgg9LlAlAY0ELEXZGErGd0FDdjJLTxMhhGgfC5q7SfsnUG13nqVYOr3KpibQxtPUg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746149342; c=relaxed/simple;
-	bh=fJWJT35IUWPGEYm2Dlk1TyNhqD36PQtGiuKeHvfRaOY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oOIVIIwe9mfXcUEs5bB7TwVK3kpWKCXVrkWJpKAAsjLaIBXNYKZIrAwIaSIWJ9f67xnevzvXsd0S7C6tSyQgsZrfJflHqFbnlNB3EKVMb2fmZOSJunNpnHg0xote33Pu8+PcBIvsngvzllX+Mw6qjYp2rn9j0KzFuYWZtmPQ4so=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=EvZmyMp+; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=tUavYtvPrR+gGbX3pyNVUrqdQnleNkRAQhp8GoXCfO8=; b=EvZmyMp+Jl+5exMXUwDkmx9wSc
-	UUJbyF4hnk9i/8PkzoaNkvpLbx4EKKrmDeup+SQV8+FZUbSLKV1nNq05+lNh4qZac148O4ZXwSlXA
-	cxvOQB2SlosTJSuohzuINJ4/W+kuOlchCEYRy45BjILhBa0wZqyXziCryPgEsd01dJYHHi9rOkZ/w
-	dyzOkffINlo80in+ft5jmNlEpU15L8VFagTi1aSEISc66i36R76J7/ngBoe44VJ9ME0Hys6D0zO/Q
-	XYYhoW4WqTQWg9ktYa6xa6qEboiLIDVFMkkRFUF/qFJxEIt3HaG8sXv56E71Qa5cymNmaGOC5y4OB
-	cKMY2now==;
-Received: from [50.39.124.201] (helo=[192.168.254.17])
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uAfCe-0000000GgWT-1u0u;
-	Fri, 02 May 2025 01:28:38 +0000
-Message-ID: <f5402d7e-78d0-4efe-bc35-c30dcdf9f98a@infradead.org>
-Date: Thu, 1 May 2025 18:28:15 -0700
+	s=arc-20240116; t=1746155453; c=relaxed/simple;
+	bh=bl5qynhdWxFK/RpAjgZJYwfWPOV3G7lJsrmkECNavss=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SAN2fRJAkEm54fM/ldaRDzM0A7+lLrISsRUsmr+2fRMHyv6HaoYo3iKPOXeaUvfuPrQA7Qd5ZHALLY1tevzgbdRjNk8mrvWKpj9sa970xyYsPhTVwsIN2IZG4xCAVIrYTBHNikUDFzR10Cd9Jr/7vh3zEvthoGwO7/YGI9RkMs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=EWdeWvjm; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5421MsoC009017;
+	Fri, 2 May 2025 03:10:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:message-id:mime-version:subject:to; s=
+	qcppdkim1; bh=Me/glNDe9Ztvj4qCJZinvmABv/1xv6EjGZ1uqRhDnYA=; b=EW
+	deWvjmwdxFUQRNRciZH3w6HqwXUrlC40FIzeizNlNWeibdwJXxs5gHLc6Cs84mDM
+	vZZvisjCjh009GYaq2hoRFNL08Il/Pb3Kx0kePtlx6y+Tz/7UAgQ9aOU1MYAOuEg
+	IRatYFHkAoEwbgLgIxplosqbiE98Jn/F4XNj/PLcMkROAf7L5APi1bTf1Ycdmt4O
+	H2n/GUPfpFYCQkrDV2gW3qcg/toYJdx6jYZRSLKI6+mquBAthlf5+bByQwkYqMWP
+	zH/7A/1E8uunJV3BHClfCwRWSfLiU5WNAf0q2naBNYScWV3Pgj4nkH/JX1/pe/o3
+	X0tObQT9nipm7P3L1CkQ==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46b6ubq4js-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 02 May 2025 03:10:44 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5423AhYu004645
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 2 May 2025 03:10:43 GMT
+Received: from hu-ptalari-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Thu, 1 May 2025 20:10:37 -0700
+From: Praveen Talari <quic_ptalari@quicinc.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby
+	<jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Viresh Kumar
+	<vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd
+	<sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Praveen Talari
+	<quic_ptalari@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+CC: <psodagud@quicinc.com>, <djaggi@quicinc.com>, <quic_msavaliy@quicinc.com>,
+        <quic_vtanuku@quicinc.com>, <quic_arandive@quicinc.com>,
+        <quic_mnaresh@quicinc.com>, <quic_shazhuss@quicinc.com>
+Subject: [PATCH v3 0/9] Enable QUPs and Serial on SA8255p Qualcomm platforms
+Date: Fri, 2 May 2025 08:40:09 +0530
+Message-ID: <20250502031018.1292-1-quic_ptalari@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kernel.h: add comments for system_states
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
- Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>
-References: <20241129045750.456251-1-rdunlap@infradead.org>
- <CAJZ5v0gnsFM7YcBqO8Mbkr72ipQxT8nJ=i94z74Q0XM1csnTYw@mail.gmail.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAJZ5v0gnsFM7YcBqO8Mbkr72ipQxT8nJ=i94z74Q0XM1csnTYw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: _-lmHo7leyDMkGL3pyu_tMaG4Kn1Grv4
+X-Authority-Analysis: v=2.4 cv=bsxMBFai c=1 sm=1 tr=0 ts=681437b4 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=dt9VzEwgFbYA:10 a=PJPe4VJEnk0T-WqaMxcA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTAyMDAyMSBTYWx0ZWRfX6Wbx/MeLSsl4 u9qeG5HRK2yP1giXxLCxSarkzmKJJrL1lbqLJg1Ft/h5/PuPAwwwEuDHJzrZ9S5EW2DvDsDnPJZ s3d1ijfJfogRM59rCMWk+4AvlIuHoc4dJQmpFQIvw4+nESYzrqN7aRfyLmOUhgZlbfOUDgqFcXk
+ 1AKQOXwiHgXTSegdGEYalVOq0fuxZMad4LS3B6rPZpwR9nygYFX7eJ3tc5dbR46H2ll5wYEHz0O 87QqvrsnYYSrDJ3yPWrYm1WH+losfHxbBKldnzZkG5E7m6EBuwM+G19eAVMCpclN9nNYSc/ihzv ONLSxWrAA+Dl5DQI9wb6hEwI6lkq+Knxz4aQta+nzEVgXppC+YuD5ryjQMHEAxZKBAIu7wvUIwx
+ AphP7ElW9pcgpJOzExY23nYcyaaIgdMQniX+gbLgcNhgWYOYcPLB61KSucqdYt92oEIDuzN3
+X-Proofpoint-ORIG-GUID: _-lmHo7leyDMkGL3pyu_tMaG4Kn1Grv4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-01_06,2025-04-24_02,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ clxscore=1015 mlxscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0
+ adultscore=0 malwarescore=0 bulkscore=0 suspectscore=0 mlxlogscore=990
+ classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2505020021
+
+The Qualcomm automotive SA8255p SoC relies on firmware to configure
+platform resources, including clocks, interconnects and TLMM. The device
+drivers request resources operations over SCMI using power and
+performance protocols.
+
+The SCMI power protocol enables or disables resources like clocks,
+interconnect paths, and TLMM (GPIOs) using runtime PM framework APIs,
+such as resume/suspend, to control power states(on/off).
+
+The SCMI performance protocol manages UART baud rates, with each baud
+rate represented by a performance level. Drivers use the
+dev_pm_opp_set_level() API to request the desired baud rate by
+specifying the performance level.
+
+The QUP drivers are SCMI clients, with clocks, interconnects, pinctrl
+and power-domains abstracted by a SCMI server.
+
+Nikunj Kela (2):
+  dt-bindings: serial: describe SA8255p
+  dt-bindings: qcom: geni-se: describe SA8255p
+
+Praveen Talari (7):
+  opp: add new helper API dev_pm_opp_set_level()
+  soc: qcom: geni-se: Enable QUPs on SA8255p Qualcomm platforms
+  serial: qcom-geni: move resource initialization to separate function
+  serial: qcom-geni: move resource control logic to separate functions
+  serial: qcom-geni: move clock-rate logic to separate function
+  serial: qcom-geni: Enable PM runtime for serial driver
+  serial: qcom-geni: Enable Serial on SA8255p Qualcomm platforms
+
+ .../serial/qcom,sa8255p-geni-uart.yaml        |  64 ++++
+ .../soc/qcom/qcom,sa8255p-geni-se-qup.yaml    | 107 ++++++
+ drivers/soc/qcom/qcom-geni-se.c               |  77 ++--
+ drivers/tty/serial/qcom_geni_serial.c         | 351 ++++++++++++++----
+ include/linux/pm_opp.h                        |  27 ++
+ 5 files changed, 525 insertions(+), 101 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/serial/qcom,sa8255p-geni-uart.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,sa8255p-geni-se-qup.yaml
 
 
-
-On 12/10/24 10:55 AM, Rafael J. Wysocki wrote:
-> On Fri, Nov 29, 2024 at 5:57 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->>
->> Provide some basic comments about the system_states and what they imply.
->> Also convert the comments to kernel-doc format.
->>
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
->> Cc: Pavel Machek <pavel@ucw.cz>
->> Cc: Len Brown <len.brown@intel.com>
->> Cc: linux-pm@vger.kernel.org
->> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-> 
-> Fine by me.
-> 
-> Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-> 
-
-Please merge...
-Thanks.
-
->> ---
->>  include/linux/kernel.h |   14 ++++++++++++--
->>  1 file changed, 12 insertions(+), 2 deletions(-)
->>
->> --- linux-next-20241125.orig/include/linux/kernel.h
->> +++ linux-next-20241125/include/linux/kernel.h
->> @@ -176,9 +176,19 @@ extern int root_mountflags;
->>
->>  extern bool early_boot_irqs_disabled;
->>
->> -/*
->> - * Values used for system_state. Ordering of the states must not be changed
->> +/**
->> + * enum system_states - Values used for system_state.
->> + * Ordering of the states must not be changed
->>   * as code checks for <, <=, >, >= STATE.
->> + *
->> + * @SYSTEM_BOOTING:    %0, no init needed
->> + * @SYSTEM_SCHEDULING: system is ready for scheduling; OK to use RCU
->> + * @SYSTEM_FREEING_INITMEM: system is freeing all of initmem; almost running
->> + * @SYSTEM_RUNNING:    system is up and running
->> + * @SYSTEM_HALT:       system entered clean system halt state
->> + * @SYSTEM_POWER_OFF:  system entered shutdown/clean power off state
->> + * @SYSTEM_RESTART:    system entered emergency power off or normal restart
->> + * @SYSTEM_SUSPEND:    system entered suspend or hibernate state
->>   */
->>  extern enum system_states {
->>         SYSTEM_BOOTING,
->>
-
+base-commit: 3e039dcc9c1320c0d33ddd51c372dcc91d3ea3c7
 -- 
-~Randy
+2.17.1
 
 
