@@ -1,72 +1,88 @@
-Return-Path: <linux-pm+bounces-26558-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26559-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EC29AA6C81
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 10:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DD132AA6CF3
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 10:52:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E70989C13FB
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 08:30:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8102F980C91
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 08:52:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 858F122A4F8;
-	Fri,  2 May 2025 08:30:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CsCcumy8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AC3322B8B3;
+	Fri,  2 May 2025 08:52:33 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DDEB19D891;
-	Fri,  2 May 2025 08:30:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 935B922AE7A;
+	Fri,  2 May 2025 08:52:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746174623; cv=none; b=KZBlj1XRBYAKyhRy/UsblUD+hbUp/l27NPZEvgK8I0in3verkqk9BRxL0PsNtWGMx+P7R7gAUSvMwSzL9qvxH/NE3zyKGe136hlgeTE0MbRK5o1yz0AU62eAdPiHF+if8qjxsJXyDJifkuZqc2EJy/qgy79c+rPfAzIbUD7R9jI=
+	t=1746175953; cv=none; b=GWjR54RynvVs+2EBPMPDsZ+YyW9cOPIRPjEwwdFlHwGsWjig3/ylxvhhwfT1di2ADa2AdrEKsrjPTsGE0F53jwMnsR5wjZgPckAEQR0TO+yHJD4QgcC3Z1BFDWqrPwTmHlkYM0fh+ZHk3U1YAZJMR/UHZS1AGQSuNU7wBe4kusk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746174623; c=relaxed/simple;
-	bh=XJ/fOLSZPcDhzbn7SBomjY3ra1ercNwGTwdTApCpr4M=;
+	s=arc-20240116; t=1746175953; c=relaxed/simple;
+	bh=h1UF7RGtB1Pbog0NUMV8tDJBLwjc+mTRVhKiphrplxs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=brY3400eAxSuk/zowbNfnpHI3c9CVRv2qjSxRPEMq4fTPbLU6RsYvl+a5++wwLNj+WdQvAl4VxiKFs1pF8meCC1zsjD49yNmZdXtCjaNlxyiLCDmajVAE4wk35YjzCpRIZ9qNlzUCO9AOw1ziIDqX7aEfzUjlp6h7kmETpo2UJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CsCcumy8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88BD6C4CEEE;
-	Fri,  2 May 2025 08:30:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746174621;
-	bh=XJ/fOLSZPcDhzbn7SBomjY3ra1ercNwGTwdTApCpr4M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CsCcumy8yvL+I8c/Q+4FCgid3SiZumzGsXHXwXMdYu5Pb//5a+dPYvjCYyRD0S7xR
-	 8OsobySDrVsqsSztegV67tmw+EzZy4UOm+uiwwLSOqz/aq7BngmEF9jCSpd5akyoGf
-	 jMaLyfr2RqTyi2jyDa2H7KelSZY5d/1QPDkg1pXrmQa9gQSSLPwb/gIIrSfO435Of0
-	 0gqTeWxKfMi1jh6+Z8xUkVFzHKvRcUa/gyVx5VK12AAAxHeKAUA7qDytqmewnPFkw4
-	 90zUASti8CLXJfv7JW3XsRHfW5jf8FmECPis1Q3MnBN6EE6TFStJAALK1mkZJmFN08
-	 ftBTm+oNzkoJA==
-Date: Fri, 2 May 2025 10:30:11 +0200
-From: Ingo Molnar <mingo@kernel.org>
-To: "Xin Li (Intel)" <xin@zytor.com>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
-	linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
-	linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
-	peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com,
-	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-	irogers@google.com, adrian.hunter@intel.com,
-	kan.liang@linux.intel.com, wei.liu@kernel.org,
-	ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-	tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
-	seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
-	kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
-	dapeng1.mi@linux.intel.com, ilpo.jarvinen@linux.intel.com
-Subject: Re: [PATCH v4 10/15] x86/xen/msr: Remove calling
- native_{read,write}_msr{,_safe}() in pmu_msr_{read,write}()
-Message-ID: <aBSCk5phiMYO_B6T@gmail.com>
-References: <20250427092027.1598740-1-xin@zytor.com>
- <20250427092027.1598740-11-xin@zytor.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=e70hCsKxCT/6qv9KvZ15dH6lsCIGzp09j5JKu96ArG1RDP58QI6nMVJR+Bzju0fTgQN8odtKJii0mm/M1J1QK/luiW1OjQd+axPH2JgIGumTCDm5sa243STLkp0snapsIInlakQqYFqSYvkD/uNbJ660Fr3oso73S5grtrf59Po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-39c1ee0fd43so1792597f8f.0;
+        Fri, 02 May 2025 01:52:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746175950; x=1746780750;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h1UF7RGtB1Pbog0NUMV8tDJBLwjc+mTRVhKiphrplxs=;
+        b=V92Mfe/ryL1SIDnzyfS71eHWeqWlNUNg7HT8EtpHwKg2R68k0ykt9gxON+SE5aEaxd
+         qLUJvEig5JCGFzaoMFy/rEScC9oyTbx06VNgYWLNbabceh/tTEoa2I5a6U0LYLkLP3tN
+         hB10QjgRr4RDhCNs00pX2x9BzLw6sOZ6dF5T0LNpr8z4bbfnYmotU630YiOBuJjib2U2
+         K2EwLYhpYGy2NwDV9s2Emlch1s2ZSCude1LQn4Zux3rJGkrKF6rMhH43XuoZOqPVxclO
+         /jZZ+OkYHjOft4QZEVg7/Q5TxCY0DoM2PArrr9NKxfMPyLYBc8aEEMDfNFXxWg53L8WI
+         ApSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUt7x8WO93z73ttIKJKxPdGOQcYf55S9/VqW0bQ76nY3zwCN080viEJNyragneSEMfu5/Bp4otD4x/+VMc=@vger.kernel.org, AJvYcCV7R+bPPrduhay/4fQeZSKzs6uUREI57vNmk37HouFMc6wFXs+BAZCKuumhxWK8tx+P+pqYhnXziuE=@vger.kernel.org, AJvYcCVCYlUM5lFJvUzwRR5efRk0pv8zSpveaszdOIcQLuG+dCWMngE5dKzcqMFub41aFgoqXvjojm+5D5fgVds=@vger.kernel.org, AJvYcCWthcTkh+9PCw8XNmbqXBvi1OTlbjUxCmc9V0ntnS8pVFNAdOTmJj4EfAGUGuZfo8GuyfTobJ+wdYaM0yk=@vger.kernel.org, AJvYcCX2yk0Bmlv/sn8ihRMNB1PmbsR8cg2iMiUAQ7m/HNF/z1bq9ld6CgWFMdJ5FbNVQUWH3BW9re8wgceHvngidg==@vger.kernel.org, AJvYcCXYvRq81fE67CRWOYgqXxNaBOHgfOh7TwNoNJW3qhJsZdGYYYtIchkOdGGJbhCFpCorLBI4y83vMsWr@vger.kernel.org
+X-Gm-Message-State: AOJu0YyplMvmbXZfEKntnktZzgEaRrWk317G/SzpJcHRyM0Frz877zD2
+	wEQTTJXURJAEAYkqTBlpVaHJKpp44kI6+tpFZXjht/2WFXz3WBd2
+X-Gm-Gg: ASbGncssTJi36BZcne2KD/oXPKLQXYxGkr6pDvULYxsM6cnTX+rfi262tayFqYIXRQ1
+	pjhyabt9hwCbP+f5eTXvfDDfQ94j8xwCxd836+Eh8hKXs/EpHeE+P2DkE1c12r7H+eEPH9iTyOV
+	y5AxSACmJBl/gZ5s4EV+KZR4KfzS3PvQgy1oxL5U44oGo698wjKRTnCX+ZWATQ/71H1BG43ROLA
+	KRRsjlAWECLcjtRfno5jvBj58GC9PKC9wCnYwdKQeH8mRMd7v1Ck3Rh2T+z3xeSxyz5x3zsC41V
+	4eyo46lOdEjeZ9+TNhNksG2+Fjqsh1w0Vj3SymHyGiekfj0xRu9Ekom3pA==
+X-Google-Smtp-Source: AGHT+IE9669DK67oKwLOAlAwcYfBBqCESjIKom6hvx2QNNfYlaOOfYtClSN42SPBuE8wsJXFDXbvEQ==
+X-Received: by 2002:a05:6000:2209:b0:3a0:82f2:3094 with SMTP id ffacd0b85a97d-3a099af1a8dmr947113f8f.50.1746175949770;
+        Fri, 02 May 2025 01:52:29 -0700 (PDT)
+Received: from fedora (p54ad9a78.dip0.t-ipconnect.de. [84.173.154.120])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a099b172b3sm1535001f8f.90.2025.05.02.01.52.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 May 2025 01:52:29 -0700 (PDT)
+Date: Fri, 2 May 2025 10:52:26 +0200
+From: Johannes Thumshirn <jth@kernel.org>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+	"Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+	Jack Wang <jinpu.wang@ionos.com>, Coly Li <colyli@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>, Chris Mason <clm@fb.com>,
+	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
+	Andreas Gruenbacher <agruenba@redhat.com>,
+	Carlos Maiolino <cem@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Naohiro Aota <naohiro.aota@wdc.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, slava@dubeyko.com,
+	glaubitz@physik.fu-berlin.de, frank.li@vivo.com,
+	linux-bcache@vger.kernel.org, dm-devel@lists.linux.dev,
+	linux-btrfs@vger.kernel.org, gfs2@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH 07/19] block: simplify bio_map_kern
+Message-ID: <aBSHykx-sNMJEenF@fedora>
+References: <20250430212159.2865803-1-hch@lst.de>
+ <20250430212159.2865803-8-hch@lst.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -75,37 +91,8 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250427092027.1598740-11-xin@zytor.com>
+In-Reply-To: <20250430212159.2865803-8-hch@lst.de>
 
-
-* Xin Li (Intel) <xin@zytor.com> wrote:
-
-> hpa found that pmu_msr_write() is actually a completely pointless
-> function [1]: all it does is shuffle some arguments, then calls
-> pmu_msr_chk_emulated() and if it returns true AND the emulated flag
-> is clear then does *exactly the same thing* that the calling code
-> would have done if pmu_msr_write() itself had returned true.  And
-> pmu_msr_read() does the equivalent stupidity.
-> 
-> Remove the calls to native_{read,write}_msr{,_safe}() within
-> pmu_msr_{read,write}().  Instead reuse the existing calling code
-> that decides whether to call native_{read,write}_msr{,_safe}() based
-> on the return value from pmu_msr_{read,write}().  Consequently,
-> eliminate the need to pass an error pointer to pmu_msr_{read,write}().
-> 
-> While at it, refactor pmu_msr_write() to take the MSR value as a u64
-> argument, replacing the current dual u32 arguments, because the dual
-> u32 arguments were only used to call native_write_msr{,_safe}(), which
-> has now been removed.
-> 
-> [1]: https://lore.kernel.org/lkml/0ec48b84-d158-47c6-b14c-3563fd14bcc4@zytor.com/
-> 
-> Suggested-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-> Sign-off-by: Xin Li (Intel) <xin@zytor.com>
-
-'Sign-off-by' is not a proper SOB tag, I've changed it to Signed-off-by.
-
-Thanks,
-
-	Ingo
+Looks good,
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 
