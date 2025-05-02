@@ -1,98 +1,170 @@
-Return-Path: <linux-pm+bounces-26561-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26562-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FA39AA6DD8
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 11:17:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD585AA6DE3
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 11:19:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC4054A182D
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 09:17:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2214A7A3D83
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 09:18:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08BCF212B2B;
-	Fri,  2 May 2025 09:17:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A6A520F085;
+	Fri,  2 May 2025 09:19:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TrDZoCOm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B6038DF9;
-	Fri,  2 May 2025 09:17:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE4952581;
+	Fri,  2 May 2025 09:19:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746177424; cv=none; b=ieAnSnafXPWuel3vDzRSR1Xzc4LseonJm36JM0eCTycJdI6RNUFptjEVwmkPkO6Lp6OBX/JP03rAtp1LDyyfTGLxXlaYtsCFiWhrIJ6kJMBVVHFMg8fLAULVFcYsYYZJ7me7MvHGeFHMPjz+AOBIhQoVurxTwGUaHQPKa8uKfTI=
+	t=1746177554; cv=none; b=Rl6GXmSm+m6qlqzOh6+rbmxXcBDqwAbiKgEoyGzeVbdBv9G5MT1TIE95s2VPSZBxjUXtFoCKGZcAClVTUdYaHTYyXhRs9qkcIQKdgX8VL/lQ8erL3iBchLP0yRbHlucCWRvePD6a9OhumxFh+9xJ8G63U/sgOJ3pDZjrElAiEks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746177424; c=relaxed/simple;
-	bh=h1UF7RGtB1Pbog0NUMV8tDJBLwjc+mTRVhKiphrplxs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tDkjXstuT77a4lWUssZvqjf2w81fms7jmuX3odxf5kCx3+Uz70Ej1i62Msc2tDeb+jMKXF7uL1wXdeCy3HBIWBHyq6rlZJtoqJYPTUXUC3uUke+ePefZz13RoMQuozcA3o7Y9hD+AddpsjZBEx3xVLvEzrPVjrR9Ls5axu81f+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-39c0dfba946so1317450f8f.3;
-        Fri, 02 May 2025 02:17:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746177422; x=1746782222;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h1UF7RGtB1Pbog0NUMV8tDJBLwjc+mTRVhKiphrplxs=;
-        b=PFw/QktCSKVBMbpVIL2TnysML0Be6TpgKTERDqDRMYPkMXd8oTqbKoULbwsQlVr5it
-         HVUHvlxdbno74HGMWZrdAHSz3maWVpEtsy2vP6SULvDtMo3S0Q+QfqClCKyLT5vt+GZ+
-         VJyoxvHj3TAsgf/3u8xOqN9Z4CzSAVGj7gLhFJx38TtYO5sK3N58oggiS8dnOH0C27/A
-         aBTTKgGKevYeIzcuDhKArR5lDk+kxrzIbfiTFGt0r3Jk/1/7iKQ2/7ARsHwrkp9gh81l
-         9tByTASJbmUSrFT7m+SaQ8KG0WC0KrbV+DtpLfTXun3U3E8vdCPRY+Ysk1akf/VWVsjg
-         6c/w==
-X-Forwarded-Encrypted: i=1; AJvYcCUDLUQgkzZBxOc21l4Azy4B5Ulf8P6OphA1sMGDNFrUa1zdXHXSMH3/pWaJo+Df/Lu6TSTIX0q92uHFjFQ=@vger.kernel.org, AJvYcCVasYz2iZKTcwJZRH4cmOwIAqXo6A6V5TLDcQBHgrYVwU+pLxwQmU+zNTEV0n82IdoI39dyiAeP4bm8q2A=@vger.kernel.org, AJvYcCVsSh+juvu4+QLwoYkW4m9aCKeNBtEQEAip4y/P6WD+xmuu3E/qKV/U8D9LLA2jAUafgBTUvHpwhTQ=@vger.kernel.org, AJvYcCWtI+g4fWLiIiqP4VAuWdYf8PsfH8Fh342i8d8ytbHpiUqWw1MOyt+017pWY9V0jI9xnwR91qBm7xWzRZA=@vger.kernel.org, AJvYcCXcUmVYfuJHOglt04f7SUA74nkBW35dwqOlAZquF+o/ClBO7q2YksFy3eOgWTnkxtWJCdrtBkDksCUm@vger.kernel.org, AJvYcCXyl3jPw0FAJyzgfDXEyqlv7LPs8JDsBrlHjwcbFhSLOiQeUCYe7XmdMmyBpwJxyts7GXQXkHAZhHhmoRxVFw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+r7gpcVuguxGsRCzzH7S87D9PozlRA1upGUh4O2spWjURzRQA
-	xtJEIRcPBMNbooSs75sihOdIlsaD8xKoA+qEV0iRG/83/b83nXTZ
-X-Gm-Gg: ASbGncsFkhWrYMQTPyCQ6Al753Q82xaluIOvKG8YKz4qThK69lKt/7zZtTW//woyKK/
-	CzGck2P3DCA7C/PRxAYa9IMDWN8VG4sWK1sFa6B6r4GSblT9b3WTP4Vyv6JaraSOkAWPgjL6EgR
-	RaZXgodupCjduMfCX/IVoFsftjAJmnvuSZvRa1nAEFiGxmYAdLzIkUq2WC2rzoENneDjJk5Q2UR
-	Yb/8O+ZlCXXzH5ByHfCuGzgaxr+jGheCkGIJKv+pSmO7XNFd8vFpJq5Otr7eUroGk3j4YNHRccd
-	qixcLEVlCTVQGBcZEP4Vn3YpbVXDDjDfsqgcmT79O9frYt0U8iqxtIMfO2dguqcYhpRF
-X-Google-Smtp-Source: AGHT+IEHr91C4bNBb8k+B1Z8eJ4KnpjI8/kk3tpJZFK7ufLvYFKZ3M3NwP1v7B2vBEKWAwYg88p13w==
-X-Received: by 2002:a5d:64a3:0:b0:3a0:8acc:4c5 with SMTP id ffacd0b85a97d-3a099ad27afmr1522259f8f.9.1746177421620;
-        Fri, 02 May 2025 02:17:01 -0700 (PDT)
-Received: from fedora (p54ad9a78.dip0.t-ipconnect.de. [84.173.154.120])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a099ae3441sm1553880f8f.26.2025.05.02.02.17.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 May 2025 02:17:01 -0700 (PDT)
-Date: Fri, 2 May 2025 11:16:58 +0200
-From: Johannes Thumshirn <jth@kernel.org>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-	"Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-	Jack Wang <jinpu.wang@ionos.com>, Coly Li <colyli@kernel.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>, Chris Mason <clm@fb.com>,
-	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
-	Andreas Gruenbacher <agruenba@redhat.com>,
-	Carlos Maiolino <cem@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Naohiro Aota <naohiro.aota@wdc.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, slava@dubeyko.com,
-	glaubitz@physik.fu-berlin.de, frank.li@vivo.com,
-	linux-bcache@vger.kernel.org, dm-devel@lists.linux.dev,
-	linux-btrfs@vger.kernel.org, gfs2@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH 03/19] block: add a bio_add_max_vecs helper
-Message-ID: <aBSNirClYlLrY-fN@fedora>
-References: <20250430212159.2865803-1-hch@lst.de>
- <20250430212159.2865803-4-hch@lst.de>
+	s=arc-20240116; t=1746177554; c=relaxed/simple;
+	bh=MFpxA82+s0xDYFhqNWYy4401pZNByCJq1VYxaSbaCDY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hAwBraBz8xmKWGgLLaw3bav2vKvbgoh0HaSnYtAkzHkSykx/GloyGj7ISJvpHxOEAr2zSGXaO9dYbIpwBj51yqBxYgHWBP2kXKP20r3n8lDiVBJ5mmoqxthbL9DPELJLksBg6r8wl6GGmruisFdZSiOn9cH73uRCV6LVAWovV8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TrDZoCOm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8141DC4CEE4;
+	Fri,  2 May 2025 09:19:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746177553;
+	bh=MFpxA82+s0xDYFhqNWYy4401pZNByCJq1VYxaSbaCDY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=TrDZoCOmRCpk7nxiyJBMG1RLedCB3iaScef4VBEnLYC49Ysz6ZwvYJ+XHaS7YKSBu
+	 ulgM3sW4Kc6cOUxCP6O2Ht3pFbN0FbOHbcAqGiWe6M2O5Cq7C9U0kzC/bHuSBR6HcV
+	 PdwkKLjQtkMhyH3l23IahYw9RAnjIYf6Um0rVFIk1xE8MXumNMdltLAE+UXiGVdSJR
+	 lHA09fl5nnOK0YVAxrpFFjX4gLJQZCQmIrXW44txTQdXrYZB+nfp4oAD2WZO9lVhWj
+	 Qgcpb500DJzlC/L2LuUrMN0lTr3/guxuk2hpBaTIyA4ZabQOymwrKMg3Qo1YQ6VkKp
+	 v5oAPF3k/p6jQ==
+Date: Fri, 2 May 2025 10:19:07 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
+ <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+ <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-iio@vger.kernel.org
+Subject: Re: [PATCH v5 1/1] thermal: thermal-generic-adc: add temperature
+ sensor channel
+Message-ID: <20250502101907.6350fa25@jic23-huawei>
+In-Reply-To: <20250430055807.11805-2-clamor95@gmail.com>
+References: <20250430055807.11805-1-clamor95@gmail.com>
+	<20250430055807.11805-2-clamor95@gmail.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250430212159.2865803-4-hch@lst.de>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Looks good,
-Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+On Wed, 30 Apr 2025 08:58:07 +0300
+Svyatoslav Ryhel <clamor95@gmail.com> wrote:
+
+> To avoid duplicating sensor functionality and conversion tables, this
+> design allows converting an ADC IIO channel's output directly into a
+> temperature IIO channel. This is particularly useful for devices where
+> hwmon isn't suitable or where temperature data must be accessible through
+> IIO.
+> 
+> One such device is, for example, the MAX17040 fuel gauge.
+> 
+> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+Looks good to me.
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
++CC linux-iio for info and maybe some more eyes.
+
+> ---
+>  drivers/thermal/thermal-generic-adc.c | 55 ++++++++++++++++++++++++++-
+>  1 file changed, 54 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/thermal-generic-adc.c b/drivers/thermal/thermal-generic-adc.c
+> index ee3d0aa31406..7c844589b153 100644
+> --- a/drivers/thermal/thermal-generic-adc.c
+> +++ b/drivers/thermal/thermal-generic-adc.c
+> @@ -7,6 +7,7 @@
+>   * Author: Laxman Dewangan <ldewangan@nvidia.com>
+>   */
+>  #include <linux/iio/consumer.h>
+> +#include <linux/iio/iio.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+> @@ -73,6 +74,58 @@ static const struct thermal_zone_device_ops gadc_thermal_ops = {
+>  	.get_temp = gadc_thermal_get_temp,
+>  };
+>  
+> +static const struct iio_chan_spec gadc_thermal_iio_channels[] = {
+> +	{
+> +		.type = IIO_TEMP,
+> +		.info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED),
+> +	}
+> +};
+> +
+> +static int gadc_thermal_read_raw(struct iio_dev *indio_dev,
+> +				 struct iio_chan_spec const *chan,
+> +				 int *val, int *val2, long mask)
+> +{
+> +	struct gadc_thermal_info *gtinfo = iio_priv(indio_dev);
+> +	int ret;
+> +
+> +	switch (mask) {
+> +	case IIO_CHAN_INFO_PROCESSED:
+> +		ret = gadc_thermal_get_temp(gtinfo->tz_dev, val);
+> +		if (ret)
+> +			return ret;
+> +
+> +		return IIO_VAL_INT;
+> +
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static const struct iio_info gadc_thermal_iio_info = {
+> +	.read_raw = gadc_thermal_read_raw,
+> +};
+> +
+> +static int gadc_iio_register(struct device *dev, struct gadc_thermal_info *gti)
+> +{
+> +	struct gadc_thermal_info *gtinfo;
+> +	struct iio_dev *indio_dev;
+> +
+> +	indio_dev = devm_iio_device_alloc(dev, sizeof(*gtinfo));
+> +	if (!indio_dev)
+> +		return -ENOMEM;
+> +
+> +	gtinfo = iio_priv(indio_dev);
+> +	memcpy(gtinfo, gti, sizeof(*gtinfo));
+> +
+> +	indio_dev->name = dev_name(dev);
+> +	indio_dev->info = &gadc_thermal_iio_info;
+> +	indio_dev->modes = INDIO_DIRECT_MODE;
+> +	indio_dev->channels = gadc_thermal_iio_channels;
+> +	indio_dev->num_channels = ARRAY_SIZE(gadc_thermal_iio_channels);
+> +
+> +	return devm_iio_device_register(dev, indio_dev);
+> +}
+> +
+>  static int gadc_thermal_read_linear_lookup_table(struct device *dev,
+>  						 struct gadc_thermal_info *gti)
+>  {
+> @@ -153,7 +206,7 @@ static int gadc_thermal_probe(struct platform_device *pdev)
+>  
+>  	devm_thermal_add_hwmon_sysfs(dev, gti->tz_dev);
+>  
+> -	return 0;
+> +	return gadc_iio_register(&pdev->dev, gti);
+>  }
+>  
+>  static const struct of_device_id of_adc_thermal_match[] = {
+
 
