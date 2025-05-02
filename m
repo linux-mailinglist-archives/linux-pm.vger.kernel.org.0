@@ -1,60 +1,60 @@
-Return-Path: <linux-pm+bounces-26535-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26536-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 914ECAA691B
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 05:12:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A404AA6923
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 05:13:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21FC21B6352D
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 03:12:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4AE1D9A0BE2
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 03:12:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AE4E1A0BD0;
-	Fri,  2 May 2025 03:11:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EED8F1C8629;
+	Fri,  2 May 2025 03:11:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="C8HrqXYV"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="D5SUgeUf"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5492D19E806;
-	Fri,  2 May 2025 03:11:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 552E419E806;
+	Fri,  2 May 2025 03:11:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746155493; cv=none; b=NzVnShr8e9Upp5/S9tbPNmfPIBvRJiRDkw9M9Ve+QD19u8gUWphtBMTtDFGMzivdH/QWZe6gT9aa+PO7XS0uwSi0UqB4jLfnaVoy8a0JC9UX/GbPsTXy8QR71wVSVUG6PR/PVlfag38WeXXU02B0wFyHnMo0iZj/bfJZ8jE8qS0=
+	t=1746155499; cv=none; b=r4rVJ3oPVTxAeKumfleP/w7V6WdKVuxoNjkmqgb9qKq+rdVXr2fsMSLM9Gv4Bb2AAKbnX9XoJaSyWxIgXL/Otsw8Sl94uVbbptZjBh/AQKuqrk8Tijiui4fU2IuWZQY5EP0nLh+sBHVb0yHQNXVNd/0aNm6S0K5xjWFyTkrV1Pw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746155493; c=relaxed/simple;
-	bh=0q8c+/HJj+l7hqN9z7zOsZVNEj7caWQIsdeyEXfwS3c=;
+	s=arc-20240116; t=1746155499; c=relaxed/simple;
+	bh=usYZPjq0hNQw1kKDQ6oot2oJ0BdufAj8NZXFLcL70L8=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SM79bK5Dqm9hrIxBpIgF0NBpeUw7bvRsAd/5rBf4z5gGpKUtYi8bftKl7O/iD0b2RQtdc1suoxUTUCzJvA/JAPdoC48inoxVrPYURjmExIyUtmwx8S6axGOAs2X+ge3iEnibZjX7km8HZ3ST68PDxUOCJe5VvRBXZsF4lu6ZL3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=C8HrqXYV; arc=none smtp.client-ip=205.220.180.131
+	 MIME-Version:Content-Type; b=u/zyGlibf//xOobtnFQmS+4eyk3by2rhkJHe510TKeZtqdxORU7NXGzklEsntODv5Phh1X0MqekdxwoT8J/MFq8ocNMmU3ZNScHJQFY+SyFwRyI7ck6EIgzizvi9KN8/Opinfq3I9xCh2TpUITrdCkwjlH6ne3wXFB+DSIncfq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=D5SUgeUf; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5421MwXs015322;
-	Fri, 2 May 2025 03:11:26 GMT
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5421MuhS015007;
+	Fri, 2 May 2025 03:11:34 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=VUhCS5vxrZsX8E4UKZKgT8hF
-	wdnJsNHc67mGI8WQSD8=; b=C8HrqXYVcAasi6Q3TwzoFAzXWzJ2T3sVjvTw0taD
-	1CMQDZo88WqXhB2j0CZc9AFrBhrAnAaCMzET6EUgZ3IcPGujEiI1frmYWGEm2Nk9
-	msbg/USswBmmd0Tc4vtY+rz/2wMzu0i5i/e5zz1R1AHYZHhTQ9mxUogIh3NPKXqY
-	dgYqAL+HZSe2aNric+HFdC2Iic9aOPnDt8LQ8xb25+hkHu8lW+8XTVo1zbhb4mKV
-	M+whkF8bCwajCERf/dbwi3KPG+VaD2y2xIndj3Rg2/23kBBdWpgUnbVmt8qytAql
-	9SohdqDM2/+VdYC3LTvA0IZEEmqIS5DMZkl3PHENqSPehg==
+	:references:subject:to; s=qcppdkim1; bh=w2aaF/Cso8fKokDGiONWxbou
+	8kmAEKBVzYd5xiLj2xI=; b=D5SUgeUfbgHUI/0aQDrNcfPJNuKjC5p5MJ7JuH6+
+	qoQAcIB9dVLxurTtYzaTh+duJ8Eobe72BqVzOl5BJvED1LaTTEd4fI0U5JADAgdV
+	LimTbjwJjfnEr21vuTGetpKUucdkKZHDRtmcOAl6m6wqqQzqVc0DmKhpTsM/cio6
+	CYC7TbRKopyw7a1kB9Dq7RgZf/kuoZFqAtdrQxuzq/RnFwp4vhukDRwFy6tm0N6W
+	MT8HFKiyF9+stecME9iVt3EWEpGpeBEAOfZLNW8HFMg97vi1SlfmcJ6rIRUzbu6C
+	xLVpYqLEMSAqOZdGLHm19KZ3kxX3vizpg2D+UZBmJySdSw==
 Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46b6u1y454-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46b6uay140-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 02 May 2025 03:11:26 +0000 (GMT)
+	Fri, 02 May 2025 03:11:34 +0000 (GMT)
 Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5423BPRp013939
+	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5423BXne014052
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 2 May 2025 03:11:25 GMT
+	Fri, 2 May 2025 03:11:33 GMT
 Received: from hu-ptalari-hyd.qualcomm.com (10.80.80.8) by
  nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 1 May 2025 20:11:18 -0700
+ 15.2.1544.9; Thu, 1 May 2025 20:11:26 -0700
 From: Praveen Talari <quic_ptalari@quicinc.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby
@@ -78,9 +78,9 @@ To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 CC: <psodagud@quicinc.com>, <djaggi@quicinc.com>, <quic_msavaliy@quicinc.com>,
         <quic_vtanuku@quicinc.com>, <quic_arandive@quicinc.com>,
         <quic_mnaresh@quicinc.com>, <quic_shazhuss@quicinc.com>
-Subject: [PATCH v3 5/9] serial: qcom-geni: move resource initialization to separate function
-Date: Fri, 2 May 2025 08:40:14 +0530
-Message-ID: <20250502031018.1292-6-quic_ptalari@quicinc.com>
+Subject: [PATCH v3 6/9] serial: qcom-geni: move resource control logic to separate functions
+Date: Fri, 2 May 2025 08:40:15 +0530
+Message-ID: <20250502031018.1292-7-quic_ptalari@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20250502031018.1292-1-quic_ptalari@quicinc.com>
 References: <20250502031018.1292-1-quic_ptalari@quicinc.com>
@@ -95,136 +95,116 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01c.na.qualcomm.com (10.45.79.139)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=G5AcE8k5 c=1 sm=1 tr=0 ts=681437de cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=dt9VzEwgFbYA:10 a=COk6AnOGAAAA:8 a=0DDkC8yEFXPSaA7UoRYA:9 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTAyMDAyMSBTYWx0ZWRfX0We2Tel0D1Pd ++XXjXGxvHVYD+Wb+pWuS+ZRkqCqDln2F+AzDDHu4jCwc5cN9m4myqAd5C+LYMCwAar3JXfe1vD hDuA96hGfvnTDb+zglXoYhQ9iyn2o5nkAdHJbxK7cBuIfJ05cBDdDREJj0IP3ikBmgMtLIfVYmT
- YBZWqN6aodvVZyRjMWijg5tSu6JqjNOGTT5acQ12i4vAoW3oJnber/hxA+mfZ2VzIR+E8r94iJy w1O86Od/kyLFHYg0PtNELmtrDkb11fHdbVZyKeWmRhsNVfG/NeZW6TarTTnlRGdLdqOSkUubo8i 1MauD3seh+ysDMj9OgCoD/2MCoMhkuUYyc+HvcSj551a+Blj7lPzFzyX0hOH2g+8ZLlWDWCnq3A
- obp/0zea3Ba10DhuOYJd072Ilw9MDN8giqsOgyfM+6xukU5tIv6Los1IUdkIj4+gafgJIuGh
-X-Proofpoint-GUID: iaCLMEQoJhqmBjewcFnLOdJTPxh8VRFl
-X-Proofpoint-ORIG-GUID: iaCLMEQoJhqmBjewcFnLOdJTPxh8VRFl
+X-Proofpoint-GUID: thKxI7YUZl82a0gbshDQSokxjw9maEBE
+X-Authority-Analysis: v=2.4 cv=KtlN2XWN c=1 sm=1 tr=0 ts=681437e6 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=dt9VzEwgFbYA:10 a=COk6AnOGAAAA:8 a=HYIVWE9JnHk2aDURxZAA:9 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: thKxI7YUZl82a0gbshDQSokxjw9maEBE
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTAyMDAyMSBTYWx0ZWRfX0xqSING3WFbN s+DcXICa5smJl7D+JXCGBGInCBFVH9sPY2uWooifz30O1dg+4y+XOX1rUgtRXId7gpAPnOZ7BFu YUaejTjB6gg1pMtqBEpFbPRNrJv8vOXhM42Hu0jch4cAtFxYmhpaguHkWTrklSHgvIvAjFv2/iY
+ vLBV5R4R1zWYNlxSGg79BBKPWUxKRL/FmaHJp6uEmF+j3pmZ1g1T1znm6R5h4LqUQoqe19Wtw7O G1CCnrWtGPiE2S6oYlz2pWtrLHLUv75qWeF3TN1H3MpPsZLJAcYNQiOFxvAU3zye3UN2pI7TJO1 ri1zZWIzxvia40VhGjhTXL7cQsEtzyoRUs2RPcNL2bizBr1xvbIvDPTaCjxalBDriTq8YbxMV8J
+ AR1Aar7F5pJkh/KXB/C4KKPIwyiL2VfveodDB16KY30lh+wOIbDeRAZtaOZRyFyq+gJquezE
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
  definitions=2025-05-01_06,2025-04-24_02,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 impostorscore=0 phishscore=0 mlxlogscore=999
- lowpriorityscore=0 adultscore=0 mlxscore=0 malwarescore=0 suspectscore=0
- clxscore=1015 bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ lowpriorityscore=0 phishscore=0 adultscore=0 priorityscore=1501
+ malwarescore=0 mlxscore=0 bulkscore=0 mlxlogscore=999 spamscore=0
+ impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
  route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
  definitions=main-2505020021
 
-Enhances code readability and future modifications within the new API.
+Supports use in PM system/runtime frameworks, helping to
+distinguish new resource control mechanisms and facilitate
+future modifications within the new API.
 
-Move the code that handles the actual initialization of resources
-like clock and ICC paths to a separate function, making the
-probe function cleaner.
+The code that handles the actual enable or disable of resources
+like clock and ICC paths to a separate function
+(geni_serial_resources_on() and geni_serial_resources_off()) which
+enhances code readability.
 
 Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
 
 v1 -> v2
-- updated subject description.
-- added a new line after function end
+- returned 0 instead of ret variable
 ---
- drivers/tty/serial/qcom_geni_serial.c | 66 ++++++++++++++++-----------
- 1 file changed, 40 insertions(+), 26 deletions(-)
+ drivers/tty/serial/qcom_geni_serial.c | 54 +++++++++++++++++++++------
+ 1 file changed, 42 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index 0293b6210aa6..6ad759146f71 100644
+index 6ad759146f71..2cd2085473f3 100644
 --- a/drivers/tty/serial/qcom_geni_serial.c
 +++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -1588,6 +1588,43 @@ static struct uart_driver qcom_geni_uart_driver = {
+@@ -1588,6 +1588,42 @@ static struct uart_driver qcom_geni_uart_driver = {
  	.nr =  GENI_UART_PORTS,
  };
  
-+static int geni_serial_resource_init(struct qcom_geni_serial_port *port)
++static int geni_serial_resources_off(struct uart_port *uport)
 +{
++	struct qcom_geni_serial_port *port = to_dev_port(uport);
 +	int ret;
 +
-+	port->se.clk = devm_clk_get(port->se.dev, "se");
-+	if (IS_ERR(port->se.clk)) {
-+		ret = PTR_ERR(port->se.clk);
-+		dev_err(port->se.dev, "Err getting SE Core clk %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = geni_icc_get(&port->se, NULL);
++	dev_pm_opp_set_rate(uport->dev, 0);
++	ret = geni_se_resources_off(&port->se);
 +	if (ret)
 +		return ret;
 +
-+	port->se.icc_paths[GENI_TO_CORE].avg_bw = GENI_DEFAULT_BW;
-+	port->se.icc_paths[CPU_TO_GENI].avg_bw = GENI_DEFAULT_BW;
-+
-+	/* Set BW for register access */
-+	ret = geni_icc_set_bw(&port->se);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_pm_opp_set_clkname(port->se.dev, "se");
-+	if (ret)
-+		return ret;
-+
-+	/* OPP table is optional */
-+	ret = devm_pm_opp_of_add_table(port->se.dev);
-+	if (ret && ret != -ENODEV) {
-+		dev_err(port->se.dev, "invalid OPP table in device tree\n");
-+		return ret;
-+	}
++	geni_icc_disable(&port->se);
 +
 +	return 0;
 +}
 +
++static int geni_serial_resources_on(struct uart_port *uport)
++{
++	struct qcom_geni_serial_port *port = to_dev_port(uport);
++	int ret;
++
++	ret = geni_icc_enable(&port->se);
++	if (ret)
++		return ret;
++
++	ret = geni_se_resources_on(&port->se);
++	if (ret) {
++		geni_icc_disable(&port->se);
++		return ret;
++	}
++
++	if (port->clk_rate)
++		dev_pm_opp_set_rate(uport->dev, port->clk_rate);
++
++	return 0;
++}
++
+ static int geni_serial_resource_init(struct qcom_geni_serial_port *port)
+ {
+ 	int ret;
+@@ -1628,23 +1664,17 @@ static int geni_serial_resource_init(struct qcom_geni_serial_port *port)
  static void qcom_geni_serial_pm(struct uart_port *uport,
  		unsigned int new_state, unsigned int old_state)
  {
-@@ -1690,12 +1727,10 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 	port->dev_data = data;
- 	port->se.dev = &pdev->dev;
- 	port->se.wrapper = dev_get_drvdata(pdev->dev.parent);
--	port->se.clk = devm_clk_get(&pdev->dev, "se");
--	if (IS_ERR(port->se.clk)) {
--		ret = PTR_ERR(port->se.clk);
--		dev_err(&pdev->dev, "Err getting SE Core clk %d\n", ret);
+-	struct qcom_geni_serial_port *port = to_dev_port(uport);
+ 
+ 	/* If we've never been called, treat it as off */
+ 	if (old_state == UART_PM_STATE_UNDEFINED)
+ 		old_state = UART_PM_STATE_OFF;
+ 
+-	if (new_state == UART_PM_STATE_ON && old_state == UART_PM_STATE_OFF) {
+-		geni_icc_enable(&port->se);
+-		if (port->clk_rate)
+-			dev_pm_opp_set_rate(uport->dev, port->clk_rate);
+-		geni_se_resources_on(&port->se);
+-	} else if (new_state == UART_PM_STATE_OFF &&
+-			old_state == UART_PM_STATE_ON) {
+-		geni_se_resources_off(&port->se);
+-		dev_pm_opp_set_rate(uport->dev, 0);
+-		geni_icc_disable(&port->se);
+-	}
++	if (new_state == UART_PM_STATE_ON && old_state == UART_PM_STATE_OFF)
++		geni_serial_resources_on(uport);
++	else if (new_state == UART_PM_STATE_OFF &&
++			old_state == UART_PM_STATE_ON)
++		geni_serial_resources_off(uport);
 +
-+	ret = geni_serial_resource_init(port);
-+	if (ret)
- 		return ret;
--	}
+ }
  
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	if (!res)
-@@ -1713,17 +1748,6 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 			return -ENOMEM;
- 	}
- 
--	ret = geni_icc_get(&port->se, NULL);
--	if (ret)
--		return ret;
--	port->se.icc_paths[GENI_TO_CORE].avg_bw = GENI_DEFAULT_BW;
--	port->se.icc_paths[CPU_TO_GENI].avg_bw = GENI_DEFAULT_BW;
--
--	/* Set BW for register access */
--	ret = geni_icc_set_bw(&port->se);
--	if (ret)
--		return ret;
--
- 	port->name = devm_kasprintf(uport->dev, GFP_KERNEL,
- 			"qcom_geni_serial_%s%d",
- 			uart_console(uport) ? "console" : "uart", uport->line);
-@@ -1745,16 +1769,6 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 	if (of_property_read_bool(pdev->dev.of_node, "cts-rts-swap"))
- 		port->cts_rts_swap = true;
- 
--	ret = devm_pm_opp_set_clkname(&pdev->dev, "se");
--	if (ret)
--		return ret;
--	/* OPP table is optional */
--	ret = devm_pm_opp_of_add_table(&pdev->dev);
--	if (ret && ret != -ENODEV) {
--		dev_err(&pdev->dev, "invalid OPP table in device tree\n");
--		return ret;
--	}
--
- 	port->private_data.drv = drv;
- 	uport->private_data = &port->private_data;
- 	platform_set_drvdata(pdev, port);
+ static const struct uart_ops qcom_geni_console_pops = {
 -- 
 2.17.1
 
