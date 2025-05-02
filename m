@@ -1,173 +1,121 @@
-Return-Path: <linux-pm+bounces-26591-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26594-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E937FAA7928
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 20:10:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69C90AA79BB
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 21:00:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D09E1C04809
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 18:10:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4250D7A8BF0
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 18:59:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3CAC267B87;
-	Fri,  2 May 2025 18:10:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57F721EF0BB;
+	Fri,  2 May 2025 19:00:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="Ik1PM2pU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A1hAeUd3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A04342A87;
-	Fri,  2 May 2025 18:10:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188A817A31D;
+	Fri,  2 May 2025 19:00:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746209422; cv=none; b=dZVLpDk76MBLh0Y9538xO/s7EchN8drZWbme7de1lrtIOwoFostyl5TNUAU5HB9r72hGQs8CYT/LgkXxHlgcMGBlo+Q6b0CWY/3I6hEmwhOsCYNAENukaYkkMTOql43BCAOWEKzYZAV10BK1+mdwY2n6NjJuFN/9+zJEW2ZwJ7k=
+	t=1746212445; cv=none; b=DthoJ4zZZehktimG5ITOBNa+qOoyZ6nVWjs3yd1kwRxo8uwpTjSe2NBFW1AYkB3Z5gewdmQkjQz7JfQo+aF3YuutWNESYE32TTDN0PdnPQr45KuwYwAlCkWnHVINf4PVKo06axMZr8vepSl1noK7sIDdrzcwrIJgflDLri7/U48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746209422; c=relaxed/simple;
-	bh=1wXTTHb5bXBrdK2EgccYQYFHa4IE2A2pICCNASrvymc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=euZt8aldPEb5N55H7c294NmxxViMoxWJ6UOWTkaftKyTYLaHxL31j7yWohnBw8U9U4ZvtZuoDwY+aOsxa9uSLCRgqaIuJZr2RF/DcwSsWTsnmx5NjXR5+si++hnEEsgxm7Af6169i78ef80yDXFiNG6IGa80VgeW3TGbouIfNKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=Ik1PM2pU; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [192.168.7.202] ([71.202.166.45])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 542I9URm2109765
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Fri, 2 May 2025 11:09:30 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 542I9URm2109765
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025042001; t=1746209374;
-	bh=vq/A29GwC24q+yBRNQofOThRodhc2pHOhalxWP8yF44=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Ik1PM2pUOLDwsjM0pqh49zNwLFsJWsVvCOj193iIxEYzWbmWmPkLOpNjbPdzrjX3v
-	 011IuXpNubhbptoPBokYY/dElyxPQHBCRBjU3Lulkb2yxO4epZ6XSk5+/VuLkmyTKm
-	 0Ud2Zan/4XorBw9nLxr1az3pZ8UdL1JipoDA4C6q89BQQ1lor7RIvGuJ3g6OnfiFiz
-	 CnEXvlTclGzLsYNkl8D2WwBsbJipZUTOsHbneDfOJuaejckEKDSBWeybOIBPjijOO0
-	 KGDNLUtdX+eqbIB7ygYhUbhkhUiAb06+5ytRj+5jyUF4CBn/8fUyg6Mi66qsYtwZ4H
-	 VoszEMjA20uGw==
-Message-ID: <2cbb468c-188e-4e6b-9b17-b60a66208c7a@zytor.com>
-Date: Fri, 2 May 2025 11:09:29 -0700
+	s=arc-20240116; t=1746212445; c=relaxed/simple;
+	bh=so9xiW1S4t/puW+TSopXdW0I81Cxz+S5s0PV6OPTll8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FO3qJ5vZlPgxpfoHQubaLgxLZT7SXCpPFLeJpdwdQvEarACAJPS1GGbJbP5NjnTKngVeZfbtEvMHb6vjCYxdhF7oUhdz6hAvdY7etSEnjCbB6dI+xlziwA9hVfmgKvbmEd0s1P7TTgsaSDaO7QdN/I7H/HN/DI9/0flQ4xELgOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A1hAeUd3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 89DCCC4CEE4;
+	Fri,  2 May 2025 19:00:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746212444;
+	bh=so9xiW1S4t/puW+TSopXdW0I81Cxz+S5s0PV6OPTll8=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=A1hAeUd3OZWDQZh+v+j/tLjigeBAAgfsVPmHdHY8EDt3JMMfApOESVmoaFjjwuR1Z
+	 oUQRB+lpXb/XiHVCa+UaVm501Fsk7kbCxg6KM48AyKJ26LDsUH8juSc4fprdJBkVSr
+	 YPP3svc3Zc0g+ZAq91TGh7B+kNObQm/Rhu5ax2nt/LyV7giLDTI+Idae5kK5/B7J75
+	 0w/2JNPBtYAOEMCey9k+fcxhDjLFgNgliCHXvj74TR/F7+nMOXrug6fgM3cz0MxxpS
+	 3Kly3J4rTlgKG/JG6n8aKigpHbJbJQiOYbvFbVJ1yQ6WQ5Hx0W3m9E8oP14JqJjETe
+	 te8B7/BBa2v8Q==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EC20C3ABAC;
+	Fri,  2 May 2025 19:00:44 +0000 (UTC)
+From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
+Subject: [PATCH v3 0/4] PCI: tegra: Allow building as a module
+Date: Fri, 02 May 2025 14:00:28 -0500
+Message-Id: <20250502-pci-tegra-module-v3-0-556a49732d70@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 02/15] x86/msr: Move rdtsc{,_ordered}() to <asm/tsc.h>
-To: Ingo Molnar <mingo@kernel.org>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
-        linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
-        peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
-        wei.liu@kernel.org, ajay.kaher@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
-        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
-        haiyangz@microsoft.com, decui@microsoft.com,
-        dapeng1.mi@linux.intel.com, ilpo.jarvinen@linux.intel.com
-References: <20250427092027.1598740-1-xin@zytor.com>
- <20250427092027.1598740-3-xin@zytor.com> <aBR8EoYkxaFHwZN2@gmail.com>
-Content-Language: en-US
-From: Xin Li <xin@zytor.com>
-Autocrypt: addr=xin@zytor.com; keydata=
- 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
- l75w1xInsg==
-In-Reply-To: <aBR8EoYkxaFHwZN2@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEwWFWgC/23NQQ6CMBCF4auQrq3plCLIynsYF6UMMAlQ0mKjI
+ dzdghsSXf6TzPcW5tERelYmC3MYyJMdY6SnhJlOjy1yqmMzKWQmUkj5ZIjP2DrNB1s/e+S5qWo
+ wGeZCNyy+TQ4beu3k/RG7Iz9b994XAmzXL6ak+MUCcMGN0NAUcSxT+tYOmvqzsQPbsCCPQPEHk
+ BsAoFV1BanU5Qis6/oBPXKM7PEAAAA=
+X-Change-ID: 20250313-pci-tegra-module-7cbd1c5e70af
+To: Thomas Gleixner <tglx@linutronix.de>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+ Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+ Thierry Reding <thierry.reding@gmail.com>, 
+ Jonathan Hunter <jonathanh@nvidia.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
+ linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org, 
+ Aaron Kling <webgeek1234@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1746212443; l=1155;
+ i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
+ bh=so9xiW1S4t/puW+TSopXdW0I81Cxz+S5s0PV6OPTll8=;
+ b=jzbeQQRcoQ48RuQVHs8LZsVlZt97xOuoIiLY7mWldxO2XwgDv7bAYx6iCFKObhSCmBYyE5M51
+ sYUM+fvmnBcAY+OCeefnCILMrYh42bVKd5IoTmfeBmEnRt7bSZRAahy
+X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
+ pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
+X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
+ auth_id=342
+X-Original-From: Aaron Kling <webgeek1234@gmail.com>
+Reply-To: webgeek1234@gmail.com
 
-On 5/2/2025 1:02 AM, Ingo Molnar wrote:
-> 
-> * Xin Li (Intel) <xin@zytor.com> wrote:
-> 
->> index 94408a784c8e..13335a130edf 100644
->> --- a/arch/x86/include/asm/tsc.h
->> +++ b/arch/x86/include/asm/tsc.h
->> @@ -7,7 +7,81 @@
->>   
->>   #include <asm/cpufeature.h>
->>   #include <asm/processor.h>
->> -#include <asm/msr.h>
->> +
->> +/*
->> + * both i386 and x86_64 returns 64-bit value in edx:eax, but gcc's "A"
->> + * constraint has different meanings. For i386, "A" means exactly
->> + * edx:eax, while for x86_64 it doesn't mean rdx:rax or edx:eax. Instead,
->> + * it means rax *or* rdx.
->> + */
->> +#ifdef CONFIG_X86_64
->> +/* Using 64-bit values saves one instruction clearing the high half of low */
->> +#define DECLARE_ARGS(val, low, high)	unsigned long low, high
->> +#define EAX_EDX_VAL(val, low, high)	((low) | (high) << 32)
->> +#define EAX_EDX_RET(val, low, high)	"=a" (low), "=d" (high)
->> +#else
->> +#define DECLARE_ARGS(val, low, high)	u64 val
->> +#define EAX_EDX_VAL(val, low, high)	(val)
->> +#define EAX_EDX_RET(val, low, high)	"=A" (val)
->> +#endif
-> 
-> Meh, this patch creates a duplicate copy of DECLARE_ARGS() et al in
-> <asm/tsc.h> now:
-> 
->   arch/x86/include/asm/msr.h:#define DECLARE_ARGS(val, low, high) unsigned long low, high
->   arch/x86/include/asm/msr.h:#define DECLARE_ARGS(val, low, high) u64 val
->   arch/x86/include/asm/msr.h:     DECLARE_ARGS(val, low, high);
->   arch/x86/include/asm/msr.h:     DECLARE_ARGS(val, low, high);
->   arch/x86/include/asm/msr.h:     DECLARE_ARGS(val, low, high);
->   arch/x86/include/asm/tsc.h:#define DECLARE_ARGS(val, low, high) unsigned long low, high
->   arch/x86/include/asm/tsc.h:#define DECLARE_ARGS(val, low, high) u64 val
->   arch/x86/include/asm/tsc.h:     DECLARE_ARGS(val, low, high);
->   arch/x86/include/asm/tsc.h:     DECLARE_ARGS(val, low, high);
->   arch/x86/include/asm/tsc.h:#undef DECLARE_ARGS
-> 
-> Which was both an undeclared change, bloats the code, causes various
-> problems, and is totally unnecessary to boot.
-> 
-> Please don't do that ...
+Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+---
+Changes in v3:
+- Add patch to drop remove callback, per request
+- Link to v2: https://lore.kernel.org/r/20250428-pci-tegra-module-v2-0-c11a4b912446@gmail.com
 
-Learned!
+Changes in v2:
+- Add patch to export tegra_cpuidle_pcie_irqs_in_use as required when
+  building pci-tegra as a module for arm
+- Drop module exit to prevent module unloading, as requested
+- Link to v1: https://lore.kernel.org/r/20250420-pci-tegra-module-v1-0-c0a1f831354a@gmail.com
 
-Especially that every change needs to explicitly called out.
+---
+Aaron Kling (4):
+      irqdomain: Export irq_domain_free_irqs
+      cpuidle: tegra: Export tegra_cpuidle_pcie_irqs_in_use
+      PCI: tegra: Allow building as a module
+      PCI: tegra: Drop unused remove callback
+
+ drivers/cpuidle/cpuidle-tegra.c    |  1 +
+ drivers/pci/controller/Kconfig     |  2 +-
+ drivers/pci/controller/pci-tegra.c | 24 ++++++------------------
+ kernel/irq/irqdomain.c             |  1 +
+ 4 files changed, 9 insertions(+), 19 deletions(-)
+---
+base-commit: 18352e73612d60b81790d2437845276ae499b64a
+change-id: 20250313-pci-tegra-module-7cbd1c5e70af
+
+Best regards,
+-- 
+Aaron Kling <webgeek1234@gmail.com>
+
+
 
