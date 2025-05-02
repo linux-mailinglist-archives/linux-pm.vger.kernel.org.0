@@ -1,100 +1,71 @@
-Return-Path: <linux-pm+bounces-26556-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26557-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03758AA6C5C
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 10:14:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0855AA6C66
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 10:18:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1DC23BABB4
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 08:13:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8975E9A1CCC
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 08:18:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CA09268C75;
-	Fri,  2 May 2025 08:14:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1223A223316;
+	Fri,  2 May 2025 08:18:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cyowpTXs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U/TX4Mf5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C601D267B84
-	for <linux-pm@vger.kernel.org>; Fri,  2 May 2025 08:14:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD0BA8828;
+	Fri,  2 May 2025 08:18:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746173647; cv=none; b=tmUzanjqd514FI6XWw+7dOxKJEg42j2hOs1ESO1NoSCwo2Ad47T28+A8SjA5CXU6nFIYJEiouMPZUMNoC6PBcsuFLKKRqwKP4pupJJK0QUByr0XiUXsg0CnJu9QdXQvVy56wcW51ufI/ilrRi5oevuoh+rrGBVPsmNKtiRzvbXU=
+	t=1746173922; cv=none; b=c7spS0+srjKBstkuctxbUFp3w05HUXca4BapjUSeMvqPQ/nM7lWHQdT46DL7FrKr3unKamw31D2scID3DNYV2qlAFrGO2YENLQE0XX7VBWtqbZxvMQTJ/kJimFn2Wj0Fj84a8p3ByDT2HSrR3mRC5M2xp+k7SCn1YEZtPTf84dM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746173647; c=relaxed/simple;
-	bh=Jn4eWjXxwsoqBV85M6GsL2+wR4fJEbwSADRw9jJ+1DY=;
+	s=arc-20240116; t=1746173922; c=relaxed/simple;
+	bh=cceIUw9EX6CJ615GNdppXNrElVMTPwJztPtsbm/5hy8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hlqIPYnA1OES3EWd8KBSzfTLmX9GnrgI7Elt9Ftxem1Jo33uTjLGgZt4LhZ0xMhJpOhdVcMe74itbz4Od2EJC5mV/UBqIl35eGOmAINU0YjxUF77ADBju8YGV4q9DFlUClxaw2RZjm/E9E6czlTpQaLLGVWeeA1dbTiAxcbNQOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cyowpTXs; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-22c33677183so19660535ad.2
-        for <linux-pm@vger.kernel.org>; Fri, 02 May 2025 01:14:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1746173645; x=1746778445; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=h9CBhyGDLFpnb+f5rsG3NlbjD1cjKYpOIM2q4JdOS8g=;
-        b=cyowpTXsjL2zxgXj1XI9wFYIcQbYM50MxhVTzyX8NC0B+biSwUCQoEw/2/7PU7gmmT
-         ulfpw+sw3Ksga/mX6qR488sb9jAWWjSjzsCR/HhV7RJZrDceLrm70nGFXJcqu1+aqc4N
-         EyzE8iETxmM+ltSUuE1Z1IVFyUdO9Vb33q5S08qujdsISd+SCvKoh17ShR+vLDM8FB2a
-         J85AdBGX3BQ62EKhn0g+NKVAAenOd9JKh/FwaSm61XGWX6ZsKZExqaxa7RufTWop1iHA
-         ltXBlO38NIPjT3/X3nvWtwHbsBc39MzxfZTEquBG+HLixgGqRtNonldsuXPWi+wDx6Jk
-         Ne/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746173645; x=1746778445;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h9CBhyGDLFpnb+f5rsG3NlbjD1cjKYpOIM2q4JdOS8g=;
-        b=ssZMTTYWVG2lTs0DF+U4UtlNlIyWAioXtUCmjFrmXsU5HI8l7nx5LKrTsq4GQvrayF
-         I61Ou2BJZcFBdshCvMrj9wd+r0JynXdENvG23OK9oo5TNSbQ5LNB94AgEVHXOusHXWWC
-         G5J2T+Ubpqe7fBRFTwqs9JB+2uVRCpyHtvfke3wIIL84nHuZpF66kCsQkbDGk3wsdP0f
-         5tXADDAriTWGj78PpJ7hEPlWucnr3BJ8l+pM5aoPdPISPf8bamIRR/vuZQpGBhSLNMqS
-         DUqkfsRk9FgnR1eTLvILKWC2HqOOa5xzm4zYawyI/kRIg1PwvmDRg9IRUVkEL6iosPF6
-         cmoA==
-X-Forwarded-Encrypted: i=1; AJvYcCXUXL6BXloOXztQvM9HzNiZPB8TBRcMQjmexN5WN4luqSsbt2YzyNPdY2WmYQRhXM55tb8okqLlVg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwUt72fpjaNmHfBKd8K/bluo3UkcPVS8+5490eOF0zqE1i9U9v
-	/VO2S1HvuzVTX2rXiktdTtz7OMfwaW0G1VXThmPX4y6+rW3Jhbn95iVnQx94QaY=
-X-Gm-Gg: ASbGncvNE5p/D2XcbQL5ygyOxZZIYpbQhi6LYCTQwdu/a4F54lBPfbk9LwjiblXNqTH
-	k44hEPCeEpkvPJWoELeR8ZEojgPUbq/ixutnKANN0uaOjvLLusM7bxzquBT5tra6K/+2rNKCA6f
-	t/tSqhKsFlmDfgRVzYuPfI0/mTtkTv1YddktEj+hPMS8w2C7jRMdkTtfN6MfxV0fySYhIAW79YN
-	srhQdvwN1tKX9sZaQOC0/LXjUWYYDMm2SPeiJV0vnz9ZaAXsBWaQbUef4DlX3UxBUfAinLIFSZ0
-	mh3Ci/ZeoHqSLzwnlu/Vwa9BH4LlNNl5azGERbCvZr7/CkkHw/Ay
-X-Google-Smtp-Source: AGHT+IE8k2uHCd5vOWDOxwC36pkdJWkb0CZOrK041eLixQ2GEf6iz7bejpQdIdbRQPU3r3GiD0ut2w==
-X-Received: by 2002:a17:903:3bc7:b0:223:f9a4:3fa8 with SMTP id d9443c01a7336-22e103571b1mr31592105ad.19.1746173645117;
-        Fri, 02 May 2025 01:14:05 -0700 (PDT)
-Received: from localhost ([122.172.83.32])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22e15232224sm1644065ad.253.2025.05.02.01.14.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 May 2025 01:14:04 -0700 (PDT)
-Date: Fri, 2 May 2025 13:44:02 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Praveen Talari <quic_ptalari@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-pm@vger.kernel.org, psodagud@quicinc.com, djaggi@quicinc.com,
-	quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com,
-	quic_arandive@quicinc.com, quic_mnaresh@quicinc.com,
-	quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v3 1/9] opp: add new helper API dev_pm_opp_set_level()
-Message-ID: <20250502081402.yjagnnjrfva7u4cb@vireshk-i7>
-References: <20250502031018.1292-1-quic_ptalari@quicinc.com>
- <20250502031018.1292-2-quic_ptalari@quicinc.com>
- <20250502053758.utawzhq6famwenc2@vireshk-i7>
- <8ba02745-378b-4264-883a-b99764701d0b@quicinc.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vt7Jc/sIw8Fqc2xhbOrNLzkm5euA3Z4bFUVAjgY7NxG72qDQVoJf3NW9EC7+Z+h0s8qq3nrY/2JBhLolVntT14n2AOxgOvCXGUuNDPPk3Ui3DNcDkRl0YutnCDiA/jTRN1TY68VIjZSTeDHDT91VV8rwvF6i2n/j4np4evQcfkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U/TX4Mf5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3FCDC4CEE9;
+	Fri,  2 May 2025 08:18:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746173921;
+	bh=cceIUw9EX6CJ615GNdppXNrElVMTPwJztPtsbm/5hy8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=U/TX4Mf5qkn+d5eWIgqv7vIk75zfM6yrIPmHLSfaOvilB1TMJCOwX6UxaLi3/4ntF
+	 CTdvcW24sQjGFvj/AXsOJGncvakw6Z4p8ZclsEDe2hknFU+ckPt2/qHvdPIyk59xbo
+	 rV1pq8QWA/qTkpUObp899r1foJ9LRWGoqI6CTS1V0Cu+JCa9JAJtB9a+QLyuX858V2
+	 70a22IBVEVB0MRp2wD32EPcEnvbH3GYXu7Ra0oeU+V0Ro/eudlwhxrpwk5f5KAdfqv
+	 vheM2b3e+KJz5ez4AHrUsoRTaS6WvSOsjRrAmUB93Bp+mNMmxeQYuTcRVRzY5U5RIz
+	 AD+AuPXxVZ3PA==
+Date: Fri, 2 May 2025 10:18:30 +0200
+From: Ingo Molnar <mingo@kernel.org>
+To: "Xin Li (Intel)" <xin@zytor.com>
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
+	linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
+	linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
+	peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+	irogers@google.com, adrian.hunter@intel.com,
+	kan.liang@linux.intel.com, wei.liu@kernel.org,
+	ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+	tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
+	seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
+	kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
+	dapeng1.mi@linux.intel.com, ilpo.jarvinen@linux.intel.com
+Subject: Re: [PATCH v4 02/15] x86/msr: Move rdtsc{,_ordered}() to <asm/tsc.h>
+Message-ID: <aBR_1oQN-gKCREBD@gmail.com>
+References: <20250427092027.1598740-1-xin@zytor.com>
+ <20250427092027.1598740-3-xin@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -103,13 +74,29 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8ba02745-378b-4264-883a-b99764701d0b@quicinc.com>
+In-Reply-To: <20250427092027.1598740-3-xin@zytor.com>
 
-On 02-05-25, 13:31, Praveen Talari wrote:
-> Shall i keep commit as you suggested with your SIB.
 
-I already applied it to my tree. You can drop it from your series now.
+* Xin Li (Intel) <xin@zytor.com> wrote:
 
--- 
-viresh
+> For some reason, there are some TSC-related functions in the MSR
+  ^^^^^^^^^^^^^^^
+> header even though there is a tsc.h header.
+
+The real reason is that the rdtsc{,_ordered}() methods use the 
+EAX_EDX_*() macros to optimize their EDX/EAX assembly accessors, which 
+is why these methods were in <asm/msr.h>.
+
+Your followup patch tacitly acknowledges this by silently creating 
+duplicate copies of these facilities in both headers ...
+
+I've cleaned it all up in tip:x86/msr via these preparatory patches:
+
+  x86/msr: Improve the comments of the DECLARE_ARGS()/EAX_EDX_VAL()/EAX_EDX_RET() facility
+  x86/msr: Rename DECLARE_ARGS() to EAX_EDX_DECLARE_ARGS
+  x86/msr: Move the EAX_EDX_*() methods from <asm/msr.h> to <asm/asm.h>
+
+Thanks,
+
+	Ingo
 
