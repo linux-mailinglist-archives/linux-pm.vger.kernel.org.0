@@ -1,143 +1,128 @@
-Return-Path: <linux-pm+bounces-26592-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26597-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27B5EAA79B1
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 21:00:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70007AA7A6E
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 21:55:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C77B27A857F
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 18:59:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1EC33B1A18
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 19:55:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 477381EBA1E;
-	Fri,  2 May 2025 19:00:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 551421F2B8D;
+	Fri,  2 May 2025 19:55:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RVCxA7Fi"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ARfc+u5N"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188182F2E;
-	Fri,  2 May 2025 19:00:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179AC376
+	for <linux-pm@vger.kernel.org>; Fri,  2 May 2025 19:55:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746212445; cv=none; b=fgxG3H3ktHYjAd0FkPuzlxEJOJZLwNrNpx/lwXSbWZw+Cgs/uO0VqGGlQXGgns6zLocC5KP5FPaVKQwi0Tk1P74PLzDY5itTtUarg33k9XRwv1VBf0GuACf0D0kdDB0aCFSUkBfrRQ8kJfA/x94yrRbPtbpThN8hdxLn8isb0pQ=
+	t=1746215754; cv=none; b=Eyrwlf5MbjPg6TtDu9Jek+jnBtyaXQ0dHV3WkTbZ9llg2bXx72plm/zV5OcGwAe+9B0Squhbv/dQc1rkB4A6cpInQfCpKXTAoqDTtudUOqP95lSYTNCXJwH4h3cDnhW5auqHJIXush22VDXzz5KQ50tW2Yi8z6FlR2L0ElKT5q4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746212445; c=relaxed/simple;
-	bh=LRTzkroHpUqBBS66F+/5iJ/bP7dLfCm5QyQ+g9hrpLk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jYP+IdN6Q26kLppO/T7rNO3fOTLbw7jqXpSXFG0SpGCqI3pWyIGR2+F5xW1q1GXrJAH6lCoMmcfmbHPJ7+3ePZyfgg+BGlhfx+RT49+W+OIdIfi5wA7GbCcwlWARbBnIKTy4SDVVypqaS+ssHgbzXD6lhhL1dXgABO678qWUR/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RVCxA7Fi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BE755C4AF0D;
-	Fri,  2 May 2025 19:00:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746212444;
-	bh=LRTzkroHpUqBBS66F+/5iJ/bP7dLfCm5QyQ+g9hrpLk=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=RVCxA7Fi2kC70zTldFhPrK12iBLCevvXON41AsQDhiT1fNWYAKJzGGtG2vHmHgeQz
-	 kjELgmD5yS/RwhIz6ZsP4qOmmrnBCBAI42KTEdcI36beuHzh6rrohOww0jH7VCepXq
-	 niPchHhpAF6xaYAvHHj71qbjmogoNEPbk5PS/ZTMFIQPFLJc1/b/7cjvbZq5TS1z3B
-	 raweVQ0sMEm2uUVth8Puo6kpl5vNGooYCbCs5hfBrUX4Am9pMc3eK51s2xuQPhU2Df
-	 W7P1tgBzpvX8TxFZ3rsLRfHw6ga1iEdjKpHK53zdXnOwsfm3v+nNaelfk5T9Es7/1Z
-	 iyvrzzxvfnmKA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B00CDC3ABAC;
-	Fri,  2 May 2025 19:00:44 +0000 (UTC)
-From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
-Date: Fri, 02 May 2025 14:00:32 -0500
-Subject: [PATCH v3 4/4] PCI: tegra: Drop unused remove callback
+	s=arc-20240116; t=1746215754; c=relaxed/simple;
+	bh=VtPlKWFy8dLyv40NHTCnooyrWiuzHaBD47um/SalBkg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RBKKx4G7+uChAu3T7KxE5QceRaHK2QQwrvsW5sj6GVHjY61FNXy93hWUbt8b986bSVykLzcwNd3MTgWr0jCRdbCEEbOvmYgw8a145uFclVP4KSaEfB6vrCAtgge2o8fycmnVmnXuNzaZRaLzNhuMngWw1AoVnvFt0dEsMU3+DrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ARfc+u5N; arc=none smtp.client-ip=209.85.166.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-861b1f04b99so98645939f.0
+        for <linux-pm@vger.kernel.org>; Fri, 02 May 2025 12:55:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1746215751; x=1746820551; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EdHVSx+/Zv4EI0oT8E/EyFlV1rhKfQaBAkeD7BezElw=;
+        b=ARfc+u5NvVvPOHVu+IugwK6Or345/xzYbPiUXGMv9Yt67+wLFSXiuffKDOWwRn0mvd
+         PMACnFFNdiWHTtRBUq1ktqWUdWns1sMqBDbuF8zGjaXMpDOE1/lsncpfcCmW/+haNfqM
+         QeLjmmIBe6+AsBS1EtuVv9JkvqQr4qY6cXh2w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746215751; x=1746820551;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EdHVSx+/Zv4EI0oT8E/EyFlV1rhKfQaBAkeD7BezElw=;
+        b=gI2qryoESLlotuXwXEMS63NVsyAf+qRBVhgzQBoNHlHrtoIkhEb9lDyZt7oTjwYGfi
+         vdSXjBq/IFZNvF+RekLneKTgxIAP2zjMQhjj55zPwW1Ns3wQNiOOfLEs4RW/1GmSoXCL
+         W/5C609lDb58efeirCpBjH6yr97F+XWM8QFRvk4w32TKRV/PnEvrJ1dgf/UlGyNqnThk
+         axwTA9POgAvsv+kdf8gRiAavmsKoiHO9ykGtsiM7TfNpeGCiM+48sJTxHGFjLfwbZt5s
+         7Y0RycjBm7BV4Jr4+Nd7igAudnE6rS+txGVPLfcHEfrFKigMQbsOr28pAysQ00AjK24X
+         QIDA==
+X-Gm-Message-State: AOJu0Yz5AHd4AxG8DVT6eMjCqBOFCTmLtxb5vMJ5ThNM60SQq+7TK0KJ
+	/EKJwhWC3r28DXiQEeWdErO61UsVvUtahDEA06nflguWT6Qzs0/emPU20PoKkb8=
+X-Gm-Gg: ASbGnctDscxaVhWDTpGTYk/UPUP053PrALSVvXN84s7ARUbR4FrDBhLziWDjiGVh83J
+	oB6UzzBlfseFND7/NK41hwFoKRiVbhtNMVtGi9sK4pZXavqHCUH9XXRjFpMyd82EmSCln9y+4JS
+	9ugT2cTyeonKAeryg5E90AUxYvJ5kFODFbo57wu0wvUQrPGFNZz8/NRZqI6rndUhOIAKaTt1sEP
+	zpz6wwl4WVkmKQEwwEo0hs8Swk96XvBjB31SmnIW54DSR9iETQiIqIzeRaiRE5P4rzWVcbQqv2m
+	ODXzrzno54AUy2mo1+8/+MRBWwR+1To22nw3V+uvaEuGkx0dcMY=
+X-Google-Smtp-Source: AGHT+IHz40ezoPkpw4ypsNSC/ftFEhx2VVCiTDcFlni2O4E7NekFGHZP7j3c7uAHylH7D+25Kz6pnA==
+X-Received: by 2002:a05:6602:358c:b0:864:58a2:1f0a with SMTP id ca18e2360f4ac-866b349adf6mr545650839f.10.1746215751025;
+        Fri, 02 May 2025 12:55:51 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-864aa585a1fsm66852639f.44.2025.05.02.12.55.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 May 2025 12:55:50 -0700 (PDT)
+Message-ID: <bb5bb612-e98f-49ce-9082-5a883068977d@linuxfoundation.org>
+Date: Fri, 2 May 2025 13:55:49 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] cpupower: add a systemd service to run cpupower
+To: Francesco Poli <invernomuto@paranoici.org>,
+ "John B. Wyatt IV" <jwyatt@redhat.com>
+Cc: linux-pm list <linux-pm@vger.kernel.org>,
+ Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
+ John Kacur <jkacur@redhat.com>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20250425151024.121630-1-invernomuto@paranoici.org>
+ <aBE9ly7vP0eryfMO@thinkpad2024>
+ <20250502175309.05e66d43fc2654afb01721fc@paranoici.org>
+ <bdc10540-2e4a-4f97-9007-e4b70db04c64@linuxfoundation.org>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <bdc10540-2e4a-4f97-9007-e4b70db04c64@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250502-pci-tegra-module-v3-4-556a49732d70@gmail.com>
-References: <20250502-pci-tegra-module-v3-0-556a49732d70@gmail.com>
-In-Reply-To: <20250502-pci-tegra-module-v3-0-556a49732d70@gmail.com>
-To: Thomas Gleixner <tglx@linutronix.de>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
- Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Jonathan Hunter <jonathanh@nvidia.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
- linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org, 
- Aaron Kling <webgeek1234@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1746212443; l=1781;
- i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
- bh=miAFNHWEF9RJxGC8gWXehC/2+WRlc/Ou80W+mmEfiFc=;
- b=Waqua4Tb7qWUjc1jh0Wel81cwJ28ZdHn3RtzwEJsCdSru2Wde97OIA4t1VBCcM2Gt/PaW64r4
- m3PfBEnaE9fCLOlIe+Ks563X1TV6HHbYThvPTaXeCeMIL7ObcY64WHr
-X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
- pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
-X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
- auth_id=342
-X-Original-From: Aaron Kling <webgeek1234@gmail.com>
-Reply-To: webgeek1234@gmail.com
 
-From: Aaron Kling <webgeek1234@gmail.com>
+On 5/2/25 10:41, Shuah Khan wrote:
+> On 5/2/25 09:53, Francesco Poli wrote:
+>> On Tue, 29 Apr 2025 16:59:03 -0400 John B. Wyatt IV wrote:
+>>
+>> [...]
+>>> Adding my tags.
+>>>
+>>> Reviewed-by: John B. Wyatt IV <jwyatt@redhat.com>
+>>> Reviewed-by: John B. Wyatt IV <sageofredondo@gmail.com>
+>>> Tested-by: John B. Wyatt IV <jwyatt@redhat.com>
+>>> Tested-by: John B. Wyatt IV <sageofredondo@gmail.com>
+>>
+>> Thanks a lot for reviewing and testing my patch!
+>>
+>> Do I need to resend the patch (without any change) with these tags
+>> added to the commit message?
+>> Or is it pointless?
+>>
+>>
+> 
+> No need to resend. I will apply this later on today.
+> 
+> thanks,
+> -- Shuah
 
-Debugfs cleanup is moved to a new shutdown callback to ensure the
-debugfs nodes are properly cleaned up on shutdown and reboot.
+Applied now for Linux 6.16-rc1 - will be included in pull request to
+PM maintainer.
 
-Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
----
- drivers/pci/controller/pci-tegra.c | 19 ++-----------------
- 1 file changed, 2 insertions(+), 17 deletions(-)
+https://web.git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git/log/?h=cpupower
 
-diff --git a/drivers/pci/controller/pci-tegra.c b/drivers/pci/controller/pci-tegra.c
-index 1539d172d708c11c3d085721ab9416be3dea6b12..cc9ca4305ea2072b7395ee1f1e979c24fdea3433 100644
---- a/drivers/pci/controller/pci-tegra.c
-+++ b/drivers/pci/controller/pci-tegra.c
-@@ -2674,27 +2674,12 @@ static int tegra_pcie_probe(struct platform_device *pdev)
- 	return err;
- }
- 
--static void tegra_pcie_remove(struct platform_device *pdev)
-+static void tegra_pcie_shutdown(struct platform_device *pdev)
- {
- 	struct tegra_pcie *pcie = platform_get_drvdata(pdev);
--	struct pci_host_bridge *host = pci_host_bridge_from_priv(pcie);
--	struct tegra_pcie_port *port, *tmp;
- 
- 	if (IS_ENABLED(CONFIG_DEBUG_FS))
- 		tegra_pcie_debugfs_exit(pcie);
--
--	pci_stop_root_bus(host->bus);
--	pci_remove_root_bus(host->bus);
--	pm_runtime_put_sync(pcie->dev);
--	pm_runtime_disable(pcie->dev);
--
--	if (IS_ENABLED(CONFIG_PCI_MSI))
--		tegra_pcie_msi_teardown(pcie);
--
--	tegra_pcie_put_resources(pcie);
--
--	list_for_each_entry_safe(port, tmp, &pcie->ports, list)
--		tegra_pcie_port_free(port);
- }
- 
- static int tegra_pcie_pm_suspend(struct device *dev)
-@@ -2800,7 +2785,7 @@ static struct platform_driver tegra_pcie_driver = {
- 		.pm = &tegra_pcie_pm_ops,
- 	},
- 	.probe = tegra_pcie_probe,
--	.remove = tegra_pcie_remove,
-+	.shutdown = tegra_pcie_shutdown,
- };
- builtin_platform_driver(tegra_pcie_driver);
- MODULE_AUTHOR("Thierry Reding <treding@nvidia.com>");
-
--- 
-2.48.1
-
-
+thanks,
+-- Shuah
 
