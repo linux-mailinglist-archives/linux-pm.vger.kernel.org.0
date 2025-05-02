@@ -1,116 +1,134 @@
-Return-Path: <linux-pm+bounces-26598-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26599-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32B7DAA7A6F
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 21:56:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4891AA7AD6
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 22:24:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFD2A1C00F70
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 19:56:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F8E14E27AF
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 20:24:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B5C71F3BA4;
-	Fri,  2 May 2025 19:56:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FAF51F8AD3;
+	Fri,  2 May 2025 20:24:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XfZ+AO1f"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a1wNx7XB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0102A1F1301
-	for <linux-pm@vger.kernel.org>; Fri,  2 May 2025 19:56:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4481F4C89;
+	Fri,  2 May 2025 20:24:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746215780; cv=none; b=MKsYyrEzIKfvAVrPKJ1Lc7Ia3KD4YEPnPkzlW+/0cZwzbCzI+fuxcSAL+Wj6tBlzCOo+THkf2v3mV9N37kW9rnI080/0AGLOypDHKgf1/DKCqL183l0yjIAFbTdCp3Qjv6uRB4MQO8nxQBX3Q41Nzv1deGGDkSX8LC6iynX3jX0=
+	t=1746217479; cv=none; b=ochwn6ZcSwE+6x/6kcfO7yOa3I8CB5SuXJG6GvrQhB5/scqabFhUxJPh2G+Dl4i6fOFyKRehcoSrBSny+Q6CvSECCh50ih8H1Hm4Zj8IDyoXn1lln3EW+XHog4xyYGqyV61FsQ3Y2CODHLPerIfxKm+JtMi4Df6VtpwFihgEPqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746215780; c=relaxed/simple;
-	bh=xlSMk+igEoGqHGelwCpnP9t9X+QTloJPu6JprECcilw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aNopRaI166jRomlWQFkogxCLvrArORIXiRtOpYB6V9R90vuKRT1E3QzMjkWcOtY8Ad0irkUXeFjxaMFk1IbG++l8gh0cLUW9U1brTRielHoWrHNDqgWglR+yiU2ChcBa6j28jgWpUf30a/kikvHtHI1weQNbyhLHzoSK2bP9CAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XfZ+AO1f; arc=none smtp.client-ip=209.85.166.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-86142446f3fso69480639f.2
-        for <linux-pm@vger.kernel.org>; Fri, 02 May 2025 12:56:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1746215777; x=1746820577; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jdhliYzbvYtKg2qoeYrELdpCfzAzWomz8eFEQHj8K7c=;
-        b=XfZ+AO1f4ez6ALp8GcTgAiaIc1H9vFsjs751wMwfg6RX/2EWpmcJ7YWLa8DkAXaPcD
-         SJ64j25HiASZQdRC5qDCY3ENNC+Pq5YkZO40GS5DnC3XSMQXSpvkqonnznKXHQLSQU/z
-         SXp/2ejL0b9GCXsjC1WS5JkCxTkKJ4/2KhnJI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746215777; x=1746820577;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jdhliYzbvYtKg2qoeYrELdpCfzAzWomz8eFEQHj8K7c=;
-        b=wxaGVO3SZeiTwd2Xy8QeTeE0g9hd0puj02bnP7N2uXWU63DA2Ji7aTT/xpJQULKuBf
-         v1olf6ohS9YOqPN2oLH+8sgaoSygrJtIzrpi2Z6DiNyuNFLfti2tSedQt8eQGyxq8eeb
-         VlfmGtpizzbINdfM4D7CWdJQunnyx9b8sxt454h005Q0MPAviZzoCMgC3Rb0AlNe+rlb
-         Tn+rFgVfl8x+01Io3YMF0530bnofN+L/fQlkLnzZHSvrwwQ4cuMvfGaV9jBYg+PV3wQd
-         WyT8yjzh5uXPz3Tb/cIfE5zaxQ0ETgTZMU5Pa4Dq3l93cmNIqT9zqKg98x2pmE4VjoCv
-         HSQA==
-X-Gm-Message-State: AOJu0YwpiyNvg3f1DpqCu5DVfSvk/PeOmHC54SRCjd7oPL4QUmkSm1VB
-	V1cXDHns/DMkYzA9S5it7m7IZjMWI+D/ah5wUG78CPIKtfD+GCxoAoKx3ZrziAc=
-X-Gm-Gg: ASbGnctQ9mwvmMIeWRTXqDWk0VhS/mRtYTWXcpQPqjlG5VJZRi8RQKNSASb5V8keSgN
-	2puZk9jMk8E83qJgU4eNhd+xiNRC36u9ZdtdF9PtObwjE5AFdLdvD9N+NT8DvI5okcZoGgVB6+2
-	WkpbxfSz38SGZOJArlkNpL5O49GrZMzD8k9qSAORIrgVb14hw9TMHi9MjgXRFCMdBYAIZEHVu20
-	/Amccp0nn/pc9hEvsQGZrU7eSS/7yAXy8tvqZIXsYmBInHvWmQ7wcna2+y4npi9tmiWk4EIwy71
-	i6LpvWL4QKLwnfDabJZsqNIqSuK5k5FFfrkVX+y352H0rZymYrg=
-X-Google-Smtp-Source: AGHT+IEXHipGEkbZab0i8/+Zk388KeIbvolMM/RcaYRIZEy+vdl66HVXkkYvwY1yLUPCONHL39+beA==
-X-Received: by 2002:a05:6602:3a15:b0:85e:1879:c708 with SMTP id ca18e2360f4ac-8669fb07f5emr529485439f.1.1746215777004;
-        Fri, 02 May 2025 12:56:17 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f88a8c8cdesm540615173.17.2025.05.02.12.56.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 May 2025 12:56:16 -0700 (PDT)
-Message-ID: <91e934ef-5bb5-4e67-b6dd-7f0308d4ee49@linuxfoundation.org>
-Date: Fri, 2 May 2025 13:56:15 -0600
+	s=arc-20240116; t=1746217479; c=relaxed/simple;
+	bh=CKdQwCNtbgJmOIJdgIkwnIPv7ivHg8H3tUDDNRilhu4=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=BXbpaPsOjpBM9gfCGX5QLAcpc65SVBvkeNlz3rC/g5qdYqr+SAGA9ProcAQfrL8lVQfdO+lcpi4ahKC+T6BYxYnld/bzk45zAVdTqFHGNyZpUtqN/fpi/XwoX4Kqme+BawVLO4s/v80zgV7wliKisGxK/gf8Dle4DW6FbTM+aa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a1wNx7XB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C05CC4CEE4;
+	Fri,  2 May 2025 20:24:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746217479;
+	bh=CKdQwCNtbgJmOIJdgIkwnIPv7ivHg8H3tUDDNRilhu4=;
+	h=From:Date:Subject:To:Cc:From;
+	b=a1wNx7XBYkalEtykc+Z3OIRyoeklvF1OsUyMWqQ7tLoDzpUJEJkJrDjxn2n4UBwcR
+	 IG2hJ6SNfpxB+1J+/kxzx1XkKfWv5wagnDAgnfM2+5YCevhPAyqzXm2lUnOkLf2XrB
+	 jnzX/G1JYVoX/2mz/6TzvwLH2gCwLitzohNAyXIwPWtz3+dIt/XGSn9PbZGgj0pdjU
+	 SMIc8N5C++K/PaJkb5HhNJmJjbSovRsZERJh/EurZz0g+lL/JOSPavJD7DO6cfzbb1
+	 7Hwil1UKnztT6xv2xrQMJRtne5jsMtG9cDEWgTKhE+S9lPzYz4vASddzAgF1DOeK9c
+	 Y8CuYmFaELy4g==
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-2cc82edcf49so695215fac.1;
+        Fri, 02 May 2025 13:24:39 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVign9eNtLrLzktYhgWzVQS2aFx8YKIP902pWBvsWYF4DWtOzkUm2NVL8Qv5TfEoBaKcTf137ERBQlQJRI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwiBZiUWJyMDM+BvPi+yj5I7tSkpOHuDY/3Xm+ZHRFo3hZJ5UOJ
+	5QJlYzEdjux+f/WSCpPdJVgZa+u8DnN9mRmgwiD7n1u+DjiJcFbQHZ/UQ0x98i6FRCcE+kkop0L
+	poZUIBXnT1fONILabp/06AMeTWII=
+X-Google-Smtp-Source: AGHT+IG5MVEHG99bUGtq3hQ19odxMAg5CRQLYjohAVivNoibLMq0qjwzbzNNUYD6uB86bNDQBOlkQi+1l88Rpk6G25k=
+X-Received: by 2002:a05:6870:b004:b0:29f:97af:a1a0 with SMTP id
+ 586e51a60fabf-2dab3301a9cmr2305480fac.24.1746217478465; Fri, 02 May 2025
+ 13:24:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpupower: change binding's makefile to use -lcpupower
-To: "John B. Wyatt IV" <jwyatt@redhat.com>, Thomas Renninger <trenn@suse.com>
-Cc: linux-pm@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org,
- John Kacur <jkacur@redhat.com>, "John B. Wyatt IV"
- <sageofredondo@gmail.com>, Wander Lairson Costa <wander@redhat.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250429204711.127274-1-jwyatt@redhat.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250429204711.127274-1-jwyatt@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 2 May 2025 22:24:27 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hWHUokQz-cU=W7+wY4-ZRWKnz4PvUSk17vsDoPb9oqXQ@mail.gmail.com>
+X-Gm-Features: ATxdqUFktImLQLMCCikDmTaLIzO0CrxcayCGg_H2QrHFELmRJvkGgat7NTIo1G8
+Message-ID: <CAJZ5v0hWHUokQz-cU=W7+wY4-ZRWKnz4PvUSk17vsDoPb9oqXQ@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v6.15-rc5
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Bard Liao <yung-chuan.liao@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 4/29/25 14:47, John B. Wyatt IV wrote:
-> Originally I believed I needed the .o files to make the bindings. The
-> linking failed due to a missing .so link in Fedora or by using make
-> install-lib from the cpupower directory. Amend the makefile and the
-> README.
-> 
-> Big thanks to Wander Lairson Costa <wander@redhat.com> for the help.
-> 
-> Signed-off-by: "John B. Wyatt IV" <jwyatt@redhat.com>
-> Signed-off-by: "John B. Wyatt IV" <sageofredondo@gmail.com>
-> ---
->   tools/power/cpupower/bindings/python/Makefile |  8 +++-----
->   tools/power/cpupower/bindings/python/README   | 13 ++++++++-----
->   2 files changed, 11 insertions(+), 10 deletions(-)
+Hi Linus,
 
-Applied now for Linux 6.16-rc1 - will be included in pull request to
-PM maintainer.
+Please pull from the tag
 
-https://web.git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git/log/?h=cpupower
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.15-rc5
 
-thanks,
--- Shuah
+with top-most commit 23203ed263f0701368468952d5004e320e5af6db
+
+ Merge branch 'pm-cpufreq'
+
+on top of commit b4432656b36e5cc1d50a1f2dc15357543add530e
+
+ Linux 6.15-rc4
+
+to receive power management fixes for 6.15-rc5.
+
+These fix three recent regressions, two in cpufreq and one in the Intel
+Soundwire driver, and an unchecked MSR access in the intel_pstate
+driver:
+
+ - Fix a recent regression causing systems where frequency tables are
+   used by cpufreq to have issues with setting frequency limits (Rafael
+   Wysocki).
+
+ - Fix a recent regression causing frequency boost settings to become
+   out-of-sync if platform firmware updates the registers associated
+   with frequency boost during system resume (Viresh Kumar).
+
+ - Fix a recent regression causing resume failures to occur in the
+   Intel Soundwire driver if the device handled by it is in runtime
+   suspend before a system-wide suspend (Rafael Wysocki).
+
+ - Fix an unchecked MSR access in the intel_pstate driver occurring when
+   CPUID indicates no turbo, but the driver attempts to enable turbo
+   frequencies due to a misleading value read from an MSR (Srinivas
+   Pandruvada).
+
+Thanks!
+
+
+---------------
+
+Rafael J. Wysocki (2):
+      cpufreq: Fix setting policy limits when frequency tables are used
+      soundwire: intel_auxdevice: Fix system suspend/resume handling
+
+Srinivas Pandruvada (1):
+      cpufreq: intel_pstate: Unchecked MSR access in legacy mode
+
+Viresh Kumar (1):
+      cpufreq: ACPI: Re-sync CPU boost state on system resume
+
+---------------
+
+ drivers/cpufreq/acpi-cpufreq.c      | 15 ++++++-
+ drivers/cpufreq/cpufreq.c           | 22 ++++++----
+ drivers/cpufreq/cpufreq_ondemand.c  |  3 +-
+ drivers/cpufreq/freq_table.c        |  6 +--
+ drivers/cpufreq/intel_pstate.c      |  3 ++
+ drivers/soundwire/intel_auxdevice.c | 36 ++++++----------
+ include/linux/cpufreq.h             | 83 ++++++++++++++++++++++++-------------
+ 7 files changed, 102 insertions(+), 66 deletions(-)
 
