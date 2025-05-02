@@ -1,148 +1,225 @@
-Return-Path: <linux-pm+bounces-26574-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26575-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 801B8AA752B
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 16:40:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F44EAA754D
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 16:47:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5BF357B7903
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 14:38:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2A4518963CC
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 14:48:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92FE4256C81;
-	Fri,  2 May 2025 14:40:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54A2135950;
+	Fri,  2 May 2025 14:47:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="UW+T+1O7"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="q0IDJ6QT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2049.outbound.protection.outlook.com [40.107.243.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEE792561AA;
-	Fri,  2 May 2025 14:40:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746196802; cv=none; b=kf2z8QYJ7wX948OgUP+ytMAYUq0viqnqSl4P25CLi5eagwKOCrTUEgS9ViP6yOkVTut0du28rRhIHXYTh4zYCeKW84lkOBswldWtXqGFZzhhogjpNKnRbV+NNtuFWz+AU7MMkhMkj80TyEUSHgUIIB5lA0t4PzBpsTPe3MmzS5o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746196802; c=relaxed/simple;
-	bh=QsPpiaBLB1aFFmt/jJN2Nv++3refqGj4VMkze5Zx/mY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=GOJveoTDEF088SbeBLyGKl1RSLJbAT1WW1UehinijofxFzIgGEnsgAyYTmdJHR1A2WmlnOJKZSr8KB1/l+9GLb5qz3C0KjIzb/WqcGH8ChqAtO287WwYc4FMi294mYBv1FHiJ4pz75QCtBJ4agFxyHamFCC1Ueo/q4BkNyL0YBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=UW+T+1O7; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 542DXQl8023283;
-	Fri, 2 May 2025 14:39:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	ihUAnzGKyPDiDhSe0ZCJJ88GnAc85VGkvMyX1QaWv7o=; b=UW+T+1O78hQ2Z0Wz
-	tRR1GvCiB/ZVLs/WH2YCC5R9VhRpLVC00wZfKxjp73xIsHaV/HRW+podzmY/Kw8G
-	3ZMJ87riRJIwomHf/EhXaazuOVqDd0dlbRsWYM2EXdJfeDArJvgiyaYHzzxAwTnh
-	Nd8SHnD5SZBNpYCTh+gaWY4I3EDCb2sFI9kZVfca91yO1/OwqNglfzR23PBuU92D
-	fEwM5a3iVx6tud93/Z/Ok4V7x/FxO2S7kFyAd2LAKpmdB29PlYLXks5xq51zV86j
-	3r46hx+jHZaz1mwk42ivn4fxDqwVmO27J/648V8fwf66GrhsNCAHpg63PM7Fg6NY
-	9KM5Eg==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46b6u80kyw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 02 May 2025 14:39:55 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 542Eds6V020371
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 2 May 2025 14:39:54 GMT
-Received: from [10.216.18.87] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 2 May 2025
- 07:39:47 -0700
-Message-ID: <cc17c3d2-f882-4729-a676-476705a203bc@quicinc.com>
-Date: Fri, 2 May 2025 20:09:44 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6121523A563
+	for <linux-pm@vger.kernel.org>; Fri,  2 May 2025 14:47:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746197272; cv=fail; b=X1/Z6aNqmuGkCnv9Db9EcT0ldqPoyax2nASBruS+d7wO5/EgotGw+CfsaibG47GB4sCrUVx3SznNnqxCwdoyXj9vYeitfJYn5KjmqH9auVQFv5W54AQ0rn816QghRj3JiK1I4XpNromKeAsLuaACYuMivkhnlaCZpIabz06Stqc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746197272; c=relaxed/simple;
+	bh=+cAMx4Ccg964kMmFnt7VBsPym4LKgi+twn807NvGwuM=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=E8jfEjYoEkXSqKon2qS1gvl6QfTyJqjNmpWmOEeuvOe8AiMDjKAjKXXEwXCeOsB29OEIAKsBHUYUaov1QMpViephD1Rt5+5xA1OfiiY9wbwVtCtksOD9IoI5cIVOIKSHxx2qIY7U8f1+iMwU5HwO/8H3T+JqHDVLJYbsrol8lwU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=q0IDJ6QT; arc=fail smtp.client-ip=40.107.243.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=MF1zdvu86d1yXePmrSBjwndFtibrRRZMLazquZt+AqykbYck/w+YBPGPl7Dxprwb36ifmuwoOhfzmAIgWJXNHuE0Ce9xB7iyHFCNsa9/cxCvuPRDHRScZuUkRudnDBoDKZ8CYwKd69sXIrPQiZLt+gLeJkZDENuW/JL1MtH2HmD+Y7OrGuVBiZxvmFBTFa5G1RUBI0sJ1AggpgKnSH/SgryppiOlk4JPygvxdz7S5WMqm+dqpAY7L5cyy7G46PpoB7mcLaxeVOAUUOhktcwXd/3anxegAhYl6XOyuNTuquK+TAfMZo4gY6JVTysvlPpWbkO2mAsIQXUwVoZt2WXnFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qkum6hfArGg/3GbExY482sp3keD+gk/VrY+aQIHoDzU=;
+ b=tX5DpYGYJ938FNasf8/TDQyg7o1MfsKBdFHs9h6wg1LSHZjz4b48fYjxFH7nryb9/0FR1jNPp3e2kKqiCQimeXhkVyQMLmHVb5hW9I6/8t5nWSg9oy3sNjYUhG9G21w7iMmFNSzZUHXAvBjEVjopNQHzIoM4+mwP7bc1J8E7KRkjCIKN/lJjwna8EtmXmd9SJS0UuB7XIcTzScSWC39ydi0O0bbNwIj4KIYugQc/v7hYR/2uqnT7cs0lllju8DCPs6+C0Am6XJmsdqJP2h6X25lJIFNc1jS9616duAWahCA0vUOEAW7g7E3PLP5X/Tdhi80b2sRee0v5KC6nfJXLBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qkum6hfArGg/3GbExY482sp3keD+gk/VrY+aQIHoDzU=;
+ b=q0IDJ6QT1kbrcFq2wC7vgjeqTyhB0t2VRcT1Mr1NKBif4D8PIUoMbLtg/d/udICau+tRPZDg7LOdxp2A91srahFxminaBQawewW5mMXW6DqsFGLKvZJ1duv0QFrV62W3eiO1Cb04UdBFSyHImJ3zT5sqvcgcYAtfTpYheXQhDt0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
+ by CH3PR12MB8483.namprd12.prod.outlook.com (2603:10b6:610:15c::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.21; Fri, 2 May
+ 2025 14:47:47 +0000
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::46fb:96f2:7667:7ca5]) by PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::46fb:96f2:7667:7ca5%7]) with mapi id 15.20.8678.028; Fri, 2 May 2025
+ 14:47:47 +0000
+Message-ID: <0c097223-ff2f-4f1a-843d-5feb94ce3c40@amd.com>
+Date: Fri, 2 May 2025 16:47:42 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC 0/2] Evict VRAM after processes are frozen
+To: Mario Limonciello <superm1@kernel.org>,
+ Alex Deucher <alexander.deucher@amd.com>,
+ "Rafael J . Wysocki" <rafael@kernel.org>
+Cc: "open list:RADEON and AMDGPU DRM DRIVERS"
+ <amd-gfx@lists.freedesktop.org>,
+ "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+ "open list:HIBERNATION (aka Software Suspend, aka swsusp)"
+ <linux-pm@vger.kernel.org>, Mario Limonciello <mario.limonciello@amd.com>
+References: <20250501211734.2434369-1-superm1@kernel.org>
+Content-Language: en-US
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20250501211734.2434369-1-superm1@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BL1PR13CA0188.namprd13.prod.outlook.com
+ (2603:10b6:208:2be::13) To PH7PR12MB5685.namprd12.prod.outlook.com
+ (2603:10b6:510:13c::22)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/9] opp: add new helper API dev_pm_opp_set_level()
-To: Viresh Kumar <viresh.kumar@linaro.org>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby
-	<jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski
-	<krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Viresh Kumar
-	<vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd
-	<sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <psodagud@quicinc.com>,
-        <djaggi@quicinc.com>, <quic_msavaliy@quicinc.com>,
-        <quic_vtanuku@quicinc.com>, <quic_arandive@quicinc.com>,
-        <quic_mnaresh@quicinc.com>, <quic_shazhuss@quicinc.com>
-References: <20250502031018.1292-1-quic_ptalari@quicinc.com>
- <20250502031018.1292-2-quic_ptalari@quicinc.com>
- <20250502053758.utawzhq6famwenc2@vireshk-i7>
- <8ba02745-378b-4264-883a-b99764701d0b@quicinc.com>
- <20250502081402.yjagnnjrfva7u4cb@vireshk-i7>
- <e1b2029b-2461-4cfc-a6b3-acdf5e01c289@quicinc.com>
- <CAKohpondRqdfqC3CFSJibL2om8_Bbds8k5Dfu8fcZDksNxQUwg@mail.gmail.com>
-Content-Language: en-US
-From: Praveen Talari <quic_ptalari@quicinc.com>
-In-Reply-To: <CAKohpondRqdfqC3CFSJibL2om8_Bbds8k5Dfu8fcZDksNxQUwg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=Ldc86ifi c=1 sm=1 tr=0 ts=6814d93b cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=COk6AnOGAAAA:8 a=B5uisSGkWXMBVcHgxMUA:9 a=QEXdDO2ut3YA:10
- a=zZCYzV9kfG8A:10 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: BLC-XjugQWvpu8IIlQHOHrm1McJkrgrl
-X-Proofpoint-ORIG-GUID: BLC-XjugQWvpu8IIlQHOHrm1McJkrgrl
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTAyMDExNiBTYWx0ZWRfX7+mQQSkd3Vij kNKshKwPex+efq4MBATgc6zx5ntseOs3rwNAFlnqJSRR3N8wLqihBeNFZa6YP7BwnwP1kyDq+5f oh12CHUkexUllb6CAKrOsXfMp3uW3PQHqyX1ErEiO3IfoyQrPV+zdP6P1GpPuH6bJoH/bnAS2Yi
- 1UzUhsGPIbBXN+crOaPFtBvTlIFLKPAQ4weTST0s7q3ZId42J9Tk03tlT4lzF0AIjRhu8dhMbeu QXDgVt/VEQd+F7rMcMf5nokFnr59T9teFCB3UilfCDyfOZxBblp8XhvUfK66oic6b8Lvpw/u23F oXCXgv37OVKa82BsSFY0+H+9CzMfcLEMA0Pasw4kGyL+OoqTUGcIG5ggCzq5YX4WvRqJDLHXtcX
- 00iUnMJ7kX980Xe6KrgsiX3jSsnlqqZBhnXbu/wLFW4QAAGIsSNWgvBnwj4oEFfJ8MhUlW/l
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-02_02,2025-04-30_01,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 phishscore=0 impostorscore=0 clxscore=1015 spamscore=0
- bulkscore=0 mlxlogscore=950 malwarescore=0 mlxscore=0 suspectscore=0
- adultscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2505020116
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|CH3PR12MB8483:EE_
+X-MS-Office365-Filtering-Correlation-Id: 907bbe95-20a0-4d27-39b5-08dd89884dcf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?cE1hZ2xaeURGckgyUXJnTkM3Z0Q3SUVWUWk3UWlDN0dHYkVlcWFDa3dKb0xZ?=
+ =?utf-8?B?bEIvUXpBTUpsUVA3cE5YRCtlaGlvUk1jOGRyUzF0L2ZsZ0FHeVNYTzBrRFJK?=
+ =?utf-8?B?ZVB3RXU0cXhqRlhJTy9MZm16V3dSd0RFSklKLzNmTk5UdXJlTmRwYlBDUnl0?=
+ =?utf-8?B?MHowUGhYWk1UWTFOQnE1RHpUNmFCVE5BNmlLejROYUZsa3RxSnNCUkxKSTJW?=
+ =?utf-8?B?NVFXeGFRcytBWWUvQmdIS2RSajZ2RElkbDlaelhiZFVtY2lqcFFOaithOHEy?=
+ =?utf-8?B?cWkzaW9OQWFrVXU0c0tIZnZZYStWNFNqcVFFSGRLMmxDRVBteDVOYnFJVXJ2?=
+ =?utf-8?B?clJOVHBjeERYSU5NbkxUeGJZSk1OMUJBYVQrb2tHU3k3YzVqVlgwQnpyR04y?=
+ =?utf-8?B?T2hKdS9TQXd6OERoRFlwaDlwTHVJVSthZXBteXNWenRNU2xwNEZQUnVPRlll?=
+ =?utf-8?B?Wm5sVWlDMEd2eFBhdnIvcFB4UkU1SmZ5SWNZdnZ4ZDhnRjA5NklnMEc3RWZG?=
+ =?utf-8?B?TDJYeHZXN2JlMFFJRGM0NXhuYldyQzBFRTlSeXFyVW1HMnlZZGZITDU3ai9v?=
+ =?utf-8?B?UmlrUUNjNmxPZWZJbkpsQnJlY2hUeWJ0eEZDbDFxNllsQUpVU0I1aVZUU2dB?=
+ =?utf-8?B?QmVMM0YrRWpCc1lpaUFwSHlSZ2tCTFIvdmRSaFRXVTRoRU5mbVNHZnZWV0dJ?=
+ =?utf-8?B?MXVHeW1YMUhMaCtWVXg3Y1V4RHkzSWtJWU1uS3M4NU9vcldMNFJXbWNDQXRa?=
+ =?utf-8?B?ZTVzdVVlV2dYYnhISFF5aE9LYUhmblhQVzJhcFRYWmFaUFA1Q3pwbkovV1c3?=
+ =?utf-8?B?U29LWXVqejhGRWxQVVFTbDVFZWZ6T000dEdLS0hxZUxLaVpnbDJjQXZSa3hR?=
+ =?utf-8?B?amRYbEM5K3dRMFNlRTZkUUpLbmlkR1Z2b3R3enUycmZDdnF5QmI1N3lvcVFu?=
+ =?utf-8?B?U2s0YktuaVhPZWFWVUsxTU95Nml5bUplcHpzclFyYno0cnhsK1BIWjMzbzEx?=
+ =?utf-8?B?Z292VzQ4b0lhdnA4bmlWL3ZCckNMa2JXQUdFWFQ1aUd4MVpNYzlud3BwejZV?=
+ =?utf-8?B?YnVZNU5rb2NRZTZqS0ZvVXhQdXNZTUJjc3hhRVVwMlhkT2xsTUhmbnNhdHFW?=
+ =?utf-8?B?emhndG03MTJCeUNNdTZDN1JlZDkzSnd4UmxqdytuZnRQVUlRZkxHYXZZVFNR?=
+ =?utf-8?B?WHJEMHd3NjJReGVUSnBQNHYvT2Nucm9TV3FqMHhwZjlXS1NGd24yV0NlSERC?=
+ =?utf-8?B?UXltVmxjUVRzY09DVURZVGd1MUI3RSt1VTNrVFFUSWhYL0JYd09QeDhRSy9P?=
+ =?utf-8?B?bWg3RVUwSlB3UmNzMTh6akV1cndjN1lONjl3aENuRHRlQnBvL3M2K0dLTlNF?=
+ =?utf-8?B?eERkdW9WZ0RzTXNkbVRHdU11SlpyMEhpSExBQlhOYjVwWTh4MVRjQWsvZGZw?=
+ =?utf-8?B?cmUyemxFVzhoWXpHU1JhcDZhWnhCSmJmSVc1d1E2YkhGbnRoY3VHbzhiaE9T?=
+ =?utf-8?B?WENNcWlmQUQ3NXFibytOVXZjcFZCcVByVVlRK0I5U1pKbzNPODVDNlp4WW9I?=
+ =?utf-8?B?NjVRSStpekdMc3hHVk0xa3l4dHFZa2JldkpsWVMvRE1UbExKbDU5OGFUNFhP?=
+ =?utf-8?B?TldIQjJLY3ZGMHlQMFk1VnFRWDRURzMzdnA2aTRQbE5XQ0VwbG9Odk1GVFQ0?=
+ =?utf-8?B?N0ZiZUFwN0x2ZExRNG14aXNSWlRuVjhNRm44V3BqS3Z2b1dXcDdwc2JvbG11?=
+ =?utf-8?B?ODJqSUF6T2tsc3QzK3k4Wlc2ekU4TzZSRk83SHFFcFJtMUVSTzRlRUZwNGpH?=
+ =?utf-8?B?ZzFuaXVDeUMxSjJoSjVnU3MrL0VaY3FnYXpEOE9xbENVNFYvMTJ6aTA2RmR3?=
+ =?utf-8?B?cjFVY3FTZW1JczN2Yk1sL29kbzBoNnZ1dWxrampqSzgvZTNHKzlLdWdkSndN?=
+ =?utf-8?Q?EVSDyQjWal8=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?R1VhSHNuTEFrdnk4UlgwTDMweFBpeU1yWXEydmNmeW9Wbkl5U25PM0pZMmF6?=
+ =?utf-8?B?RkRDc2xzblByQjE0RHI5NU8xc0lCaXpqVW1OdHY2ZjB6YUxhYUIyU0Ywcjgy?=
+ =?utf-8?B?WGZuNldJQmRqVkhsRGZ2QlAzUW56ZnFxYmMrWVpOaU1aRkVYRFNhMG5zNHdm?=
+ =?utf-8?B?bXVCKytFckRBSVpPRWRRM2xwaE1reHYxRHM3cithZ1Z0dldLbGg0U01ReXpy?=
+ =?utf-8?B?NEN6SkpKRW0wZGxRd2pjeHgxcnAvb2F1N2YwbEFQSjQ0Q3BhWm9ZOVo5NnVB?=
+ =?utf-8?B?eUtBZnROZ0VIYThVZG1vcHRsMHQ0dzdsNHZJSkpEVCtKSStXUFoxQ1B0Z2RN?=
+ =?utf-8?B?Wkl6cTNNcmR2TG4vbmhmUTRDKzd2eUxyNk5xQ1psU0tEOUd6S1ZrM01MUEFO?=
+ =?utf-8?B?anRCZmRyMytIN2t3ME15SU43MWdoOUFZYnFoL3JKYktRRDYyTzJKY015eFJM?=
+ =?utf-8?B?M0tGVWp2Ti90bDByaVFNYjVGVWYxMElYMUwxZ0ZjNEQzQ0FxcEU3dnYvUjRB?=
+ =?utf-8?B?TGNxZHNEblI3ZlB4WmJ4dWRiTXN4VUFHbmVxRVZJVDBydTJaaHNjZHFRQW1D?=
+ =?utf-8?B?MllQaTJuRHhPd3owMjA3eE1mZ1R5bUJyOWNYSWloSTRxbStRdXFFN3BKclBU?=
+ =?utf-8?B?Umh0VWF4OHV3NTFZN3hjL2V0VUs1TzZnREVxVGlsVlYxbnZseU5RTjdyVi93?=
+ =?utf-8?B?NHI5MVhORFFaTVdPQllSZzFwSk9ES1RnZC9NZU90Q0dVaFF4N083UEZmcGJs?=
+ =?utf-8?B?K29NcDllWG81b0d3MFg0OUlCbi9vZ0FBdmJ4T0RQSFh5L2NuZW1iSXJ0OUww?=
+ =?utf-8?B?WWRjbFRVNVJKYy85dDNOK3Z6VzAzekh4UU9zZUdqa1htZFd2cGVyRS9UNWZm?=
+ =?utf-8?B?am5Bb3lFM29nZGlxN2Q1T09XVHhuYXh3bkNKTUZtempPQjBmQUNkbGN2M2Ns?=
+ =?utf-8?B?M3luNjc1L1dtaHpoTStvUngwVS9qa0lUOC8vMjlEckFVWDk2N1BBREZqV2ZJ?=
+ =?utf-8?B?VTVsMnljbkdmWU1hMTljd29sSHc3VEd2N2lFTG8zWmdHNitaNnJmQ295Mm9u?=
+ =?utf-8?B?Tk5wcFM0Tll0c1F3Qis4Yno2NEhUdFNtNDQwdjZCYmVPa2E0b3V6NnIrZ0JD?=
+ =?utf-8?B?a2U0OEwrM2ZScFVadUtrZGhFUDFzN3VZSG9PUFZkQkJpZnlWRnRNMGpPcGw4?=
+ =?utf-8?B?M3lBLzZ0eU5pYWNkTUtkcDQwVk5XSC9RcmJkLzQ4WUJiMW9QVFJ0QUZvMGZ6?=
+ =?utf-8?B?ZHZXdXhMYkNxSXRQOGdtN3VpZzI2cURMN091WWovdTBXOEQ4bGJUR3lyOVAx?=
+ =?utf-8?B?K0xRMDlDcFlORWpQNlZ0UURSM3BsS2hUcnExUlhXaUlRcXVoajh0L3dWQ09K?=
+ =?utf-8?B?NW5SVjhzamNOOHk2UWEvQmpJUlI2VTRJdVBkMXBheVJseENnZmsvbjk1Y0N5?=
+ =?utf-8?B?V1Y0aXp0czlQclJ1d1FSZTJ3SHF5dXJuNStWaEhZOTZ6NjJNVnVKOHZCc3U0?=
+ =?utf-8?B?WTRJTldseW5tcjI0WFhqU0o0ZFh1N0ZOUE1DNDUrT3loSDBYbC9oUXVPcGE2?=
+ =?utf-8?B?ekl1dkRYZVdjQWlyMVlZM20yVmZaVXlLbkRRU3pIMVVXS3dJekZFUjVKRGpY?=
+ =?utf-8?B?cSs4eVpnRlNXQzJIcmJpS1UvS3IrbzVrRm5SYllKSEk2WjJOTHpKRzArWW8v?=
+ =?utf-8?B?d2F6aGJxcVdZZzJrdUpiRk50VzBOcUpxTjI5ZnpHeEVhU1kzaGZ6a1B3L09r?=
+ =?utf-8?B?SGh0Y1pHRmt1ZnFjZnRzYzJKbTljWmwxQ3hCRmhQK0NTcnJQVmdFN3A0UkZo?=
+ =?utf-8?B?SXN6cW5nQjV1K3BDdS9pd2RlMzk2RFNCVFBzcmxKZi9VVmp5N2Fybm5mZ203?=
+ =?utf-8?B?S1JiNDRhUWQ0c2VDdndmVDBEdlNQdUNnVUJFcTQ1UW1zNzYwYzF1a2FkOTZO?=
+ =?utf-8?B?WDdjakZZRjV0OXVUS3lJYVlOR3hZMlRNeDVuYTFnRWs5Q2d6c0lCNGQxaFIr?=
+ =?utf-8?B?Q1hSWHR2YkZncFBFKzBXSFdXOGhXdjZGMmlEMS9wTTJyaDhDZlMzbXY5ZGVV?=
+ =?utf-8?B?UGFqM1hKZFpQaWQwV1lhQW4xcXp0V0t5TG1XWHQ0aFRIYU02eWxvV0ZOenNa?=
+ =?utf-8?Q?dXWIY4cC+egBA/s9ja/o47NA1?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 907bbe95-20a0-4d27-39b5-08dd89884dcf
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2025 14:47:47.2289
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: H2+mN5u8GHOulrc7ZFi79XNDvfixDZFoep1hGkuyQiHoQAGn0cpKALYax/SqFQdj
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8483
 
-Hi
+On 5/1/25 23:17, Mario Limonciello wrote:
+> From: Mario Limonciello <mario.limonciello@amd.com>
+> 
+> As part of the suspend and hibernate sequences devices supported
+> by amdgpu will have VRAM evicted.  This has been littered with problems
+> in the past, and now it is called strategically at multiple times
+> during power management sequences.
+> 
+> Most recently there were a number of issues reported that were root caused
+> to physical memory pressure at suspend time where VRAM couldn't be evicted.
+> A new call was introduced using a PM notifier before swap was turned off
+> so that even if there are physical memory pressures VRAM could still be
+> evicted into swap.
+> 
+> This helped, but users using older systemd noted that this could lead to a
+> deadlock.  This is because user processes aren't frozen by older versions
+> of systemd and thus if a game is running it could potentially be creating
+> BOs during the eviction thus preventing eviction from ever completing.
+> 
+> This isn't an issue with newer systemd because it uses cgroup freezing
+> to freeze user processes. Nonetheless this isn't a good behavior to rely
+> upon for userspace, so this series aims to solve the problem in another way.
+> 
+> Introduce new PM notifier calls after "prepare" notifier is done AND after
+> tasks have been frozen.  amdgpu listens to these PM notifier calls and
+> will run the first eviction at this time.
 
-On 5/2/2025 7:41 PM, Viresh Kumar wrote:
-> On Fri, 2 May 2025 at 19:32, Praveen Talari <quic_ptalari@quicinc.com> wrote:
->> now i can push V4 right and will not face errors on my series w.r.t this
->> API.
-> Not fully sure what you meant, but you can send a V4 of the series,
+Sounds totally sane to me, but I'm really not deep enough in the PM code to fully judge the implementation.
 
-i mean one of the patch from series is depended on patch-1, that i have 
-removed from series now
+Feel free to add Acked-by: Christian König <christian.koenig@amd.com> to the patches.
 
-so will i face any issue like kernel bot
+Regards,
+Christian.
 
-Thanks,
+> 
+> Mario Limonciello (2):
+>   PM: Add suspend and hibernate notifications for after freeze
+>   drm/amd: Use suspend and hibernate post freeze notifications
+> 
+>  Documentation/driver-api/pm/notifiers.rst  | 19 ++++++++++++++++---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  4 ++--
+>  include/linux/suspend.h                    | 14 ++++++++------
+>  kernel/power/hibernate.c                   |  9 +++++++--
+>  kernel/power/suspend.c                     | 13 +++++++++----
+>  5 files changed, 42 insertions(+), 17 deletions(-)
+> 
 
-Praveen Talari
-
-> without the first patch. Please mention it as an dependency in the
-> cover letter and that it is applied in the OPP tree's linux-next branch.
->
-> The one who applies your series needs to apply the series over the commit
-> in my branch to avoid breakage (if your series is going in 6.16-rc1).
->
-> --
-> Viresh
 
