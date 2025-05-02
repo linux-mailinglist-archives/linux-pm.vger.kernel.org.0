@@ -1,71 +1,88 @@
-Return-Path: <linux-pm+bounces-26560-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26561-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 085D2AA6CFB
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 10:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FA39AA6DD8
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 11:17:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45D944A5B3B
-	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 08:52:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC4054A182D
+	for <lists+linux-pm@lfdr.de>; Fri,  2 May 2025 09:17:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96DFB22DF9A;
-	Fri,  2 May 2025 08:52:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CJ1UtPGa"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08BCF212B2B;
+	Fri,  2 May 2025 09:17:05 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4589522D789;
-	Fri,  2 May 2025 08:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B6038DF9;
+	Fri,  2 May 2025 09:17:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746175957; cv=none; b=SS2R6N7HECSKz1Wecb2THWN6pjD/cIiDk3D0lQCV42RQ0eSTvagUAda3lh61L7CCY30GSU3aDqmxiJQj4EPJV0WpoCdvvdPT3HEqoVZO3GcsgewpBdaTbjinvJnhtV121s+mcQf20pePoueALSm9GscBGvZ+881A+3UYoHssZ+I=
+	t=1746177424; cv=none; b=ieAnSnafXPWuel3vDzRSR1Xzc4LseonJm36JM0eCTycJdI6RNUFptjEVwmkPkO6Lp6OBX/JP03rAtp1LDyyfTGLxXlaYtsCFiWhrIJ6kJMBVVHFMg8fLAULVFcYsYYZJ7me7MvHGeFHMPjz+AOBIhQoVurxTwGUaHQPKa8uKfTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746175957; c=relaxed/simple;
-	bh=SxBjkp/J5NNckAueMrQukPtaJ3IgnM76Ll+NdIUNXIk=;
+	s=arc-20240116; t=1746177424; c=relaxed/simple;
+	bh=h1UF7RGtB1Pbog0NUMV8tDJBLwjc+mTRVhKiphrplxs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nfSRfmC+stH6QESYjsTOt9lSx0tYRU2wUa7Dw4EvtuigoHYt96TzL5Rz4xapizo/oNFprUNWsU9vzoqaNIs7e/mhk/Zgm9Qib+bouqLmRjXMG9/eKrBA7XWEgQUmNywaMJpkUT1cZlvqEd1mSpiHc9Rez3g2lmChG0jKUr4ESys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CJ1UtPGa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CD4BC4CEE4;
-	Fri,  2 May 2025 08:52:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746175956;
-	bh=SxBjkp/J5NNckAueMrQukPtaJ3IgnM76Ll+NdIUNXIk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CJ1UtPGazPk6ZEG0HwcxHRuFOiH/JR3XBtmKJLiHP/jshRcy9Arm4mvyGtimOvgTy
-	 OmBKdXEFyjZ8BZMwd8D5Yrhyf1bz+OVbfKouNV2DcQM8RRSV+d8/qkqc9y00t15W+1
-	 79vLoiUJcrIIg1H9/yghIFiGnP5DFIedHMd4MJHdsNaPcS8RGk10pBZFuSDnIKldZI
-	 i66CAPb8L+3qEo576w8fnUHJl5uZTEiJZdpOmBXZziTwORlH5NpUwvvKUbp9Waeu+E
-	 Y/YctucrsKzRC6TBuMOLWKYkj+excCXHWTN55BMKpApl0iGcZF2wL5SK+lxFB1I13T
-	 UP3Jz5dY9bM3g==
-Date: Fri, 2 May 2025 10:52:26 +0200
-From: Ingo Molnar <mingo@kernel.org>
-To: "Xin Li (Intel)" <xin@zytor.com>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
-	linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
-	linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
-	peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com,
-	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-	irogers@google.com, adrian.hunter@intel.com,
-	kan.liang@linux.intel.com, wei.liu@kernel.org,
-	ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-	tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
-	seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
-	kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
-	dapeng1.mi@linux.intel.com, ilpo.jarvinen@linux.intel.com
-Subject: Re: [PATCH v4 02/15] x86/msr: Move rdtsc{,_ordered}() to <asm/tsc.h>
-Message-ID: <aBSHyo-pu7K_CfpI@gmail.com>
-References: <20250427092027.1598740-1-xin@zytor.com>
- <20250427092027.1598740-3-xin@zytor.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tDkjXstuT77a4lWUssZvqjf2w81fms7jmuX3odxf5kCx3+Uz70Ej1i62Msc2tDeb+jMKXF7uL1wXdeCy3HBIWBHyq6rlZJtoqJYPTUXUC3uUke+ePefZz13RoMQuozcA3o7Y9hD+AddpsjZBEx3xVLvEzrPVjrR9Ls5axu81f+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-39c0dfba946so1317450f8f.3;
+        Fri, 02 May 2025 02:17:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746177422; x=1746782222;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h1UF7RGtB1Pbog0NUMV8tDJBLwjc+mTRVhKiphrplxs=;
+        b=PFw/QktCSKVBMbpVIL2TnysML0Be6TpgKTERDqDRMYPkMXd8oTqbKoULbwsQlVr5it
+         HVUHvlxdbno74HGMWZrdAHSz3maWVpEtsy2vP6SULvDtMo3S0Q+QfqClCKyLT5vt+GZ+
+         VJyoxvHj3TAsgf/3u8xOqN9Z4CzSAVGj7gLhFJx38TtYO5sK3N58oggiS8dnOH0C27/A
+         aBTTKgGKevYeIzcuDhKArR5lDk+kxrzIbfiTFGt0r3Jk/1/7iKQ2/7ARsHwrkp9gh81l
+         9tByTASJbmUSrFT7m+SaQ8KG0WC0KrbV+DtpLfTXun3U3E8vdCPRY+Ysk1akf/VWVsjg
+         6c/w==
+X-Forwarded-Encrypted: i=1; AJvYcCUDLUQgkzZBxOc21l4Azy4B5Ulf8P6OphA1sMGDNFrUa1zdXHXSMH3/pWaJo+Df/Lu6TSTIX0q92uHFjFQ=@vger.kernel.org, AJvYcCVasYz2iZKTcwJZRH4cmOwIAqXo6A6V5TLDcQBHgrYVwU+pLxwQmU+zNTEV0n82IdoI39dyiAeP4bm8q2A=@vger.kernel.org, AJvYcCVsSh+juvu4+QLwoYkW4m9aCKeNBtEQEAip4y/P6WD+xmuu3E/qKV/U8D9LLA2jAUafgBTUvHpwhTQ=@vger.kernel.org, AJvYcCWtI+g4fWLiIiqP4VAuWdYf8PsfH8Fh342i8d8ytbHpiUqWw1MOyt+017pWY9V0jI9xnwR91qBm7xWzRZA=@vger.kernel.org, AJvYcCXcUmVYfuJHOglt04f7SUA74nkBW35dwqOlAZquF+o/ClBO7q2YksFy3eOgWTnkxtWJCdrtBkDksCUm@vger.kernel.org, AJvYcCXyl3jPw0FAJyzgfDXEyqlv7LPs8JDsBrlHjwcbFhSLOiQeUCYe7XmdMmyBpwJxyts7GXQXkHAZhHhmoRxVFw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+r7gpcVuguxGsRCzzH7S87D9PozlRA1upGUh4O2spWjURzRQA
+	xtJEIRcPBMNbooSs75sihOdIlsaD8xKoA+qEV0iRG/83/b83nXTZ
+X-Gm-Gg: ASbGncsFkhWrYMQTPyCQ6Al753Q82xaluIOvKG8YKz4qThK69lKt/7zZtTW//woyKK/
+	CzGck2P3DCA7C/PRxAYa9IMDWN8VG4sWK1sFa6B6r4GSblT9b3WTP4Vyv6JaraSOkAWPgjL6EgR
+	RaZXgodupCjduMfCX/IVoFsftjAJmnvuSZvRa1nAEFiGxmYAdLzIkUq2WC2rzoENneDjJk5Q2UR
+	Yb/8O+ZlCXXzH5ByHfCuGzgaxr+jGheCkGIJKv+pSmO7XNFd8vFpJq5Otr7eUroGk3j4YNHRccd
+	qixcLEVlCTVQGBcZEP4Vn3YpbVXDDjDfsqgcmT79O9frYt0U8iqxtIMfO2dguqcYhpRF
+X-Google-Smtp-Source: AGHT+IEHr91C4bNBb8k+B1Z8eJ4KnpjI8/kk3tpJZFK7ufLvYFKZ3M3NwP1v7B2vBEKWAwYg88p13w==
+X-Received: by 2002:a5d:64a3:0:b0:3a0:8acc:4c5 with SMTP id ffacd0b85a97d-3a099ad27afmr1522259f8f.9.1746177421620;
+        Fri, 02 May 2025 02:17:01 -0700 (PDT)
+Received: from fedora (p54ad9a78.dip0.t-ipconnect.de. [84.173.154.120])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a099ae3441sm1553880f8f.26.2025.05.02.02.17.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 May 2025 02:17:01 -0700 (PDT)
+Date: Fri, 2 May 2025 11:16:58 +0200
+From: Johannes Thumshirn <jth@kernel.org>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+	"Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+	Jack Wang <jinpu.wang@ionos.com>, Coly Li <colyli@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>, Chris Mason <clm@fb.com>,
+	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
+	Andreas Gruenbacher <agruenba@redhat.com>,
+	Carlos Maiolino <cem@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Naohiro Aota <naohiro.aota@wdc.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, slava@dubeyko.com,
+	glaubitz@physik.fu-berlin.de, frank.li@vivo.com,
+	linux-bcache@vger.kernel.org, dm-devel@lists.linux.dev,
+	linux-btrfs@vger.kernel.org, gfs2@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH 03/19] block: add a bio_add_max_vecs helper
+Message-ID: <aBSNirClYlLrY-fN@fedora>
+References: <20250430212159.2865803-1-hch@lst.de>
+ <20250430212159.2865803-4-hch@lst.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -74,36 +91,8 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250427092027.1598740-3-xin@zytor.com>
+In-Reply-To: <20250430212159.2865803-4-hch@lst.de>
 
-
-* Xin Li (Intel) <xin@zytor.com> wrote:
-
-> For some reason, there are some TSC-related functions in the MSR
-> header even though there is a tsc.h header.
-> 
-> Relocate rdtsc{,_ordered}() from <asm/msr.h> to <asm/tsc.h>, and
-> subsequently remove the inclusion of <asm/msr.h> in <asm/tsc.h>.
-> 
-> Signed-off-by: Xin Li (Intel) <xin@zytor.com>
-> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-
-> --- a/arch/x86/include/asm/tsc.h
-> +++ b/arch/x86/include/asm/tsc.h
-> @@ -7,7 +7,81 @@
->  
->  #include <asm/cpufeature.h>
->  #include <asm/processor.h>
-> -#include <asm/msr.h>
-
-Note that in the tip:x86/msr commit I've applied today I've 
-intentionally delayed the removal of this header dependency, to reduce 
-the probability of breaking -next today or in the near future.
-
-We can remove that now superfluous header dependency in a future patch.
-
-Thanks,
-
-	Ingo
+Looks good,
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 
