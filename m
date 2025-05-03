@@ -1,64 +1,64 @@
-Return-Path: <linux-pm+bounces-26606-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26608-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAC9CAA7EF3
-	for <lists+linux-pm@lfdr.de>; Sat,  3 May 2025 09:05:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 774CEAA7EF9
+	for <lists+linux-pm@lfdr.de>; Sat,  3 May 2025 09:05:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A8EC9A0EC1
-	for <lists+linux-pm@lfdr.de>; Sat,  3 May 2025 07:05:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD68B4A4536
+	for <lists+linux-pm@lfdr.de>; Sat,  3 May 2025 07:05:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C34C11A83E2;
-	Sat,  3 May 2025 07:04:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62D211ACEBB;
+	Sat,  3 May 2025 07:05:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="RChbdqal"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="YvAeFDt3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A2751A5B99;
-	Sat,  3 May 2025 07:04:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9DE31AA1D2;
+	Sat,  3 May 2025 07:05:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746255888; cv=none; b=V9YdfPiHVtnvrhoOaXQ0ziTAtc+rSzsF+PlPtYMQeMdUjuJi8ytRurXBJt9cIHQDza2BJgYuA+DQ8nkDNsD09QNVxpHoxA0WfgVYTfn1EQ+RZ627pGaXeLCyzaBKStpD9PG92FNlXgkH2GGT4WNkqaIQlmIK4npO4jlIjnzNals=
+	t=1746255902; cv=none; b=uljFqC1trNWWcXN04Y1emK1SOfcmyuPp+spsScCWWsihGcV+llRP9FPVx6mzTRSO9dZhyQ78IxiE7HdIH2YTj8luFltJJapSNeYmSq1FFoB0qDZonYeIAyZiwxk81Z7CuLm/R49xKAOUKvkgcJxSDq6IDPi+FXMXTxrhBnTDox8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746255888; c=relaxed/simple;
-	bh=jr0Y/L0dOm7lfH0gAj8Y2O+9pG6wFEgDooYF+zi4ocw=;
+	s=arc-20240116; t=1746255902; c=relaxed/simple;
+	bh=44E01bjnWusTnG6MhHB+xFx1Vb3V469PnIPdoBUnVeg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=Btr/cQkw3l5UAFZlBAaJd3otlb833XmdNZDSZa+fb9BYEx3M8o9SMdhV2GEPSoTbDnPXDxEcK070TpJYuhbRqyiFTyi7pBK3srrAWZ0srhI3V9SJ4zDtsIFG45InhTWJSym4rZoz2FU2dRBNUOJt3gM/fHKgCWq3Dkhtkdbwhjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=RChbdqal; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:To:CC; b=aELf+NQjbNlef6QJcloswurvHpVigximaZonNXVr6buuagY26gzxZpmjLj97im1/RLEIfMnR7kEwk3qa5LBznzMmGogiSsZFBByRHHFn2SpikJJ1bx0gBttJbrM1qG6tdW5PdJox1hBZobq2opTxz8Et0k01QrgX21CT7jkq4tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=YvAeFDt3; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5435e56Y002850;
-	Sat, 3 May 2025 07:04:23 GMT
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5436pgFn031056;
+	Sat, 3 May 2025 07:04:29 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	JAOjHQD3QRiLKU8blYUYonCb38YgA1WLs6mujj0U9Sg=; b=RChbdqalXWjX8EXO
-	I+1b9PpF9lBVkdxcU3/5FAt6wj9PBrSV00Zw9NgpsbyC3C4fNmDu++UQrXcOdgnn
-	iLc39b+POb/TYtD3k/E4T+PKSTj++GnDzz9yDygN/yFHSBzb4sJILQTHxZeNMw6x
-	HlLXx+EOPcbkOY8jU4vaiDOgjr+OmE6ope5gbFSFi3M7D3ttT/JDg7OU1X9P4ENI
-	729LOgBdcCzLkv18MDuc4X5Mvv9Yj0CRCbfkyCTFSz0V/bwZqjdpm0N0LLghSrOI
-	4PV6jJSuy0qUw9w90LP5RzmVePD17RDusAKRT5xyoF3BzyB78gZaZgthnLr39xyl
-	Qkszfw==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46daqxg8ca-1
+	f2qeULFLiJ0bP7dUf9gDhamCmgR3MsEK1Ai2tpricv0=; b=YvAeFDt3kII8IhLG
+	Wn3kilGc8V8yRxqRJO0P7Y18fhtvoL6yrXCHlq6JrDalUn3bt8WPiJ+58XAVzwQG
+	2xizyWblqoyhUvdlfZ3woc6SOTHph0I+gQnyCdrnIwcNQ0cnN0h2PJDljWaqHjp7
+	W6c+mllLtiyxSge5AZnKgC0fzG3p5tmtQB9XSqlnKvt9U0/ai4OVLmsljhVTaimX
+	OjNjPGpuQBhHH8LBQ/bHz2VBt7TR9EflR/RhHFVL5oJ6Lyu6PXsY7Dja6QFdV0s9
+	rctMWYySaOOErqXqEl9qHbB4Bb3UO3cFmCXm5/IAeGclDWsUKJpLVc7ncmDuv9o/
+	au1l0w==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46d9nkrb7v-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 03 May 2025 07:04:23 +0000 (GMT)
+	Sat, 03 May 2025 07:04:29 +0000 (GMT)
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 54374LTl020449
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 54374Sx5002313
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 3 May 2025 07:04:21 GMT
+	Sat, 3 May 2025 07:04:28 GMT
 Received: from [10.213.111.143] (10.80.80.8) by nalasex01a.na.qualcomm.com
  (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sat, 3 May 2025
- 00:04:15 -0700
+ 00:04:22 -0700
 From: Akhil P Oommen <quic_akhilpo@quicinc.com>
-Date: Sat, 3 May 2025 12:33:34 +0530
-Subject: [PATCH v6 3/7] drm/msm: a6x: Rework qmp_get() error handling
+Date: Sat, 3 May 2025 12:33:35 +0530
+Subject: [PATCH v6 4/7] drm/msm/adreno: Add module param to disable ACD
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,7 +67,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250503-gpu-acd-v6-3-ab1b52866c64@quicinc.com>
+Message-ID: <20250503-gpu-acd-v6-4-ab1b52866c64@quicinc.com>
 References: <20250503-gpu-acd-v6-0-ab1b52866c64@quicinc.com>
 In-Reply-To: <20250503-gpu-acd-v6-0-ab1b52866c64@quicinc.com>
 To: Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
@@ -97,72 +97,86 @@ CC: <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
         Konrad Dybcio
 	<konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1746255835; l=1244;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1746255835; l=1987;
  i=quic_akhilpo@quicinc.com; s=20240726; h=from:subject:message-id;
- bh=jr0Y/L0dOm7lfH0gAj8Y2O+9pG6wFEgDooYF+zi4ocw=;
- b=Q3xK1xwEp9Zd8W+LoHM8oIemJgnZkwg+lJ/GiAqnfi+XerHam3K8aYN4NcQbrSqBse6Eo9RBm
- ghla3Zxwhn4BDIOx+/49NndbTGT517ZO8ioeQriRSIWoo4DLYFD+Yt9
+ bh=44E01bjnWusTnG6MhHB+xFx1Vb3V469PnIPdoBUnVeg=;
+ b=hp5me4ORF1twA1HzIzupwhVXRDAhADTk1vzB3Mptlz7bGyRhzE78F0KQj+l/KsR3FF6t1VmfI
+ Zn99Oj1URCQDIUjTsdzRHQPOXLW+t8dDP6GyDSJ7XAu/N7KuHrJLCUZ
 X-Developer-Key: i=quic_akhilpo@quicinc.com; a=ed25519;
  pk=lmVtttSHmAUYFnJsQHX80IIRmYmXA4+CzpGcWOOsfKA=
 X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Hn9-R7ttS-yo3kccjBgMZTW6TKuke7DP
-X-Proofpoint-ORIG-GUID: Hn9-R7ttS-yo3kccjBgMZTW6TKuke7DP
-X-Authority-Analysis: v=2.4 cv=baZrUPPB c=1 sm=1 tr=0 ts=6815bff7 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTAzMDA1OSBTYWx0ZWRfX+sb+dI1EvwR2
+ LA+l7H292DctUw9FT780ydVCMy9fqpmIFu6xLZfxC4BkJVLMmEWf1bsYnOiZ/3aXt+SaNWuKKrp
+ U/ajzeR0NR1yZ0Xq7NAAsOk25eOvbgbLtyUhpTP8j6dVAmlM6v9u2j2S1BErNDfkxkYUV9w2Y1/
+ C5pDeVfm33eOk2pxX/wyv0cpqA+0DhY5UT1I5bRrKp0GfvdpldL47YbnVN9zDV58UrgpGF2RUZH
+ 9vaz5G8SS1OKN3wCQt3CFC0XOS00taOMcSg9y3gJnsENNFmLkS7NncBNDm5IomVEazQcNvxUrVF
+ qh/Apqjmv0nqOB15+YHqpt3EbW/Bk/9oeqEJtWWMMfOnpMxXW8aQ4qasPji7JlgGmmmhaaTzVRg
+ ZinG559QXgPYcUjACgVljie9VPqCYvTul4TVqlrbsD2/RxAXn5Q4C2dK4SK23B16th6mj+dP
+X-Proofpoint-GUID: ORltK2tnST75yFwsRy6JRWxJHZT4ofWx
+X-Authority-Analysis: v=2.4 cv=LpeSymdc c=1 sm=1 tr=0 ts=6815bffd cx=c_pps
  a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=EUspDBNiAAAA:8
- a=pGLkceISAAAA:8 a=b3CbU_ItAAAA:8 a=COk6AnOGAAAA:8 a=Q2ddA9Psw6g7R4ygXckA:9
+ a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=pGLkceISAAAA:8
+ a=b3CbU_ItAAAA:8 a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8 a=adu2xZl7kSneRhG-aSEA:9
  a=QEXdDO2ut3YA:10 a=Rv2g8BkzVjQTVhhssdqe:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTAzMDA1OSBTYWx0ZWRfXwjIil6sGbKA6
- 225+Hk6ASnfSO8rZH+eRufHSsBXVJTDCe5+GsrLWXApWlPKizilW2us81IrQPY7nCbFPu/hMcs3
- Wn/FK7Tc3UWLnT7sCPdhlF6YkixwJ2LoTJgg2vKJnMqMSlkUpoH52SLrLppoY0rQPzO5RdssqT+
- +Z7QscBLI5LHeVuSkp4qWZ3hAuZsfFcnoI1GePnWEXzlDm0x5/p0tXslED1QqOH13Ve6aeS9zgS
- KAwz5XaR6mX41fpOYKGwn/3ZEcF3XUFvDVZvG3+jIFQj1p+JWUW3JpjKeSMOZ9NeW7CKanTkvru
- 3SLDARaX1I3+P9phhgUIWSU1ZLb11WsgGGh5oAAW/k1m/QPEHFh7rczR2BR/jb9fczNDz0M7z1M
- k1BZEYkEIc8KnGJUZCCq9bZqnODr9aK6OIb+WxF4h5uyYtlGrCUDnIKKTWaD5hI36FMYYI8w
+X-Proofpoint-ORIG-GUID: ORltK2tnST75yFwsRy6JRWxJHZT4ofWx
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
  definitions=2025-05-03_03,2025-04-30_01,2025-02-21_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 priorityscore=1501 impostorscore=0 bulkscore=0 phishscore=0
- mlxlogscore=999 clxscore=1015 suspectscore=0 spamscore=0 adultscore=0
- mlxscore=0 lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ mlxlogscore=999 adultscore=0 lowpriorityscore=0 impostorscore=0 mlxscore=0
+ spamscore=0 malwarescore=0 priorityscore=1501 clxscore=1015 phishscore=0
+ bulkscore=0 suspectscore=0 classifier=spam authscore=0 authtc=n/a authcc=
  route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
  definitions=main-2505030059
 
-Fix the following for qmp_get() errors:
+Add a module param to disable ACD which will help to quickly rule it
+out for any GPU issues.
 
-1. Correctly handle probe defer for A6x GPUs
-2. Ignore other errors because those are okay when GPU ACD is
-not required. They are checked again during gpu acd probe.
-
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 Tested-by: Maya Matuszczyk <maccraft123mc@gmail.com>
 Tested-by: Anthony Ruhier <aruhier@mailbox.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
 ---
- drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c      | 7 +++++++
+ drivers/gpu/drm/msm/adreno/adreno_device.c | 4 ++++
+ 2 files changed, 11 insertions(+)
 
 diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-index 6bd6d7c67f98b38cb1d23f926b5e6ccbd7f2ec53..48b4ca8894ba38176481b62b7fd1406472369df1 100644
+index 48b4ca8894ba38176481b62b7fd1406472369df1..38c0f8ef85c3d260864541d83abe43e49c772c52 100644
 --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
 +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-@@ -2043,9 +2043,10 @@ int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node)
- 		goto detach_cxpd;
- 	}
+@@ -1670,6 +1670,13 @@ static int a6xx_gmu_acd_probe(struct a6xx_gmu *gmu)
+ 	struct adreno_gpu *adreno_gpu = &a6xx_gpu->base;
+ 	struct msm_gpu *gpu = &adreno_gpu->base;
+ 	int ret, i, cmd_idx = 0;
++	extern bool disable_acd;
++
++	/* Skip ACD probe if requested via module param */
++	if (disable_acd) {
++		DRM_DEV_ERROR(gmu->dev, "Skipping GPU ACD probe\n");
++		return 0;
++	}
  
-+	/* Other errors are handled during GPU ACD probe */
- 	gmu->qmp = qmp_get(gmu->dev);
--	if (IS_ERR(gmu->qmp) && adreno_is_a7xx(adreno_gpu)) {
--		ret = PTR_ERR(gmu->qmp);
-+	if (PTR_ERR_OR_ZERO(gmu->qmp) == -EPROBE_DEFER) {
-+		ret = -EPROBE_DEFER;
- 		goto detach_gxpd;
- 	}
+ 	cmd->version = 1;
+ 	cmd->stride = 1;
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+index 236b25c094cd5d462f4b6653de7b7910985cccb6..f5e1490d07c1868fa21cddb38de44c28af5ca0d5 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_device.c
++++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+@@ -24,6 +24,10 @@ int enable_preemption = -1;
+ MODULE_PARM_DESC(enable_preemption, "Enable preemption (A7xx only) (1=on , 0=disable, -1=auto (default))");
+ module_param(enable_preemption, int, 0600);
  
++bool disable_acd;
++MODULE_PARM_DESC(disable_acd, "Forcefully disable GPU ACD");
++module_param_unsafe(disable_acd, bool, 0400);
++
+ extern const struct adreno_gpulist a2xx_gpulist;
+ extern const struct adreno_gpulist a3xx_gpulist;
+ extern const struct adreno_gpulist a4xx_gpulist;
 
 -- 
 2.48.1
