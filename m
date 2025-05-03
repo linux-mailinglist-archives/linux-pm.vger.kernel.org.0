@@ -1,146 +1,123 @@
-Return-Path: <linux-pm+bounces-26621-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26622-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADECCAA7FF8
-	for <lists+linux-pm@lfdr.de>; Sat,  3 May 2025 12:08:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FA0EAA8030
+	for <lists+linux-pm@lfdr.de>; Sat,  3 May 2025 13:09:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B637982F66
-	for <lists+linux-pm@lfdr.de>; Sat,  3 May 2025 10:07:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 75E161BA15C1
+	for <lists+linux-pm@lfdr.de>; Sat,  3 May 2025 11:09:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 249E31EE03D;
-	Sat,  3 May 2025 10:07:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C8061DEFDB;
+	Sat,  3 May 2025 11:09:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BogwD8M7"
+	dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b="MbRwzdHO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from confino.investici.org (confino.investici.org [93.190.126.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7B5A1E633C;
-	Sat,  3 May 2025 10:07:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F5F1B0413
+	for <linux-pm@vger.kernel.org>; Sat,  3 May 2025 11:09:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.190.126.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746266836; cv=none; b=YsPeueGyRqZ3vxZz7ZtEm/sV7wnt//QUP/FczCazI1N0IiDwlEeFJNCm836BDo1yCWMgQvaN52OcDTHk7nUtoy3sCPozeCNAIO0WNmBKRXtDu1XfpWGlIPYSuCgCcicGs07DxqGuiJjKdatJ2TsKYoPqvQ1hrU+Wi69wR3rGWXE=
+	t=1746270572; cv=none; b=tRGMrYE563EzrXkCWiJn5r3XIY+OLANld76t2mItWOA4oGVVQwg5iL2JlAvBW4ZY5Cy3DBf3GS5AIiISDzEIXlZAqzKd+PGAJq/0qnjXOteaXwM+64rZPQDZSHZaDL+eGhsud5bC/s0IG87p8tXH0IQWtqOs1kmYptrHJ+RJRk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746266836; c=relaxed/simple;
-	bh=wtZXovpm5BhGJm95IGnSaS5EDCcED8O/F+H6LBoX7x4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=si/SG26Yj425tZHeyV8Qcoe6knxoTAM7eHwwPj8sxeQwEH9DZo0MRG3A0kjnLGoP3Js8JJm1HP9AD4aggNGP9V0b7okN8qtn8+deeMwunR594LIfAfa7H+RhEFadtmBcdOKfNiu/izKrGaUs1pvQBLRKBu/C7IiCq+2lqkFxpWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BogwD8M7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 28433C116B1;
-	Sat,  3 May 2025 10:07:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746266836;
-	bh=wtZXovpm5BhGJm95IGnSaS5EDCcED8O/F+H6LBoX7x4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=BogwD8M7HMB/x7SVFn1jYO+cavA321UBBoBa/l+GLpcW+okTS1MP+FG1YVaz0OB7Z
-	 xqqAV1XWt8j10H+ZnxybsDD3JZBB3Y7GofsiCx5KkPaLXJQXZq1atriVefLwRWMIML
-	 ytgN1yZPer4HTlm6mQjReOm1NXN7B4ehmHSyAlphGPxrG1cA8DSy4VsDEFkqXlaROy
-	 oOqn/dPQOPFM5Jc1WiWoUynpAMYQvPZR1otb3k2A4V/8Hu2gq8UqgxM1wTA+cS8XU6
-	 76Asfd1iuyW+DoacH/d34AkjMWolnASr2M1a8D31BniwUu07z2Dl5mXVh5MvOBPVlJ
-	 To4n0O5+ZPQUw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20A6FC3ABB0;
-	Sat,  3 May 2025 10:07:16 +0000 (UTC)
-From: Sven Peter via B4 Relay <devnull+sven.svenpeter.dev@kernel.org>
-Date: Sat, 03 May 2025 10:06:56 +0000
-Subject: [PATCH v4 9/9] arm64: dts: apple: t600x: Add SMC node
+	s=arc-20240116; t=1746270572; c=relaxed/simple;
+	bh=4EQ+o8a+b0ILRiwPfoJGEMvrvSmYlaBrV+hO8dMCEtk=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=E5VJljTHEpOG8ArA4iI6XwwD+hHDUmodG63kgYu8YZh1hBy0ZgMgSbRLMwECjyxGtFkqxTs1ZgTLT6hxONmBbhfr/pK9cdnATO03Wq9lG82vTzjFa8FHPVQwg1372rQPmQI7fYzK/LQOhwxpIJPjN+CTQrdXrenKPSo73q801qs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org; spf=pass smtp.mailfrom=paranoici.org; dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b=MbRwzdHO; arc=none smtp.client-ip=93.190.126.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paranoici.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paranoici.org;
+	s=stigmate; t=1746269986;
+	bh=d/8V2Jicqb1v6KoJDyEubBn1ST8w6xVX4XanVZw7U00=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=MbRwzdHOsruaJ8guCNDdiAAGT/bayn5pH2b2G/FVaW5r++BR17d11d3lSB4p3pIw9
+	 hVs8/Rnsz60heHdz+m0s2kAnUF44hqAdqTdb8QeXhixRwh5ACw49riQNUk7RFFywpZ
+	 uaeQ6WqMErJqnBfjM9H3klZnBLeUiv6upH+0Jd6w=
+Received: from mx1.investici.org (unknown [127.0.0.1])
+	by confino.investici.org (Postfix) with ESMTP id 4ZqPv66Lglz111g;
+	Sat,  3 May 2025 10:59:46 +0000 (UTC)
+Received: from [93.190.126.19] (mx1.investici.org [93.190.126.19]) (Authenticated sender: invernomuto@paranoici.org) by localhost (Postfix) with ESMTPSA id 4ZqPv65gCsz10ww;
+	Sat,  3 May 2025 10:59:46 +0000 (UTC)
+Received: from frx by crunch with local (Exim 4.98.2)
+	(envelope-from <invernomuto@paranoici.org>)
+	id 1uBAav-000000004Ld-3I5Z;
+	Sat, 03 May 2025 12:59:45 +0200
+Date: Sat, 3 May 2025 12:59:39 +0200
+From: Francesco Poli <invernomuto@paranoici.org>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: "John B. Wyatt IV" <jwyatt@redhat.com>, linux-pm list
+ <linux-pm@vger.kernel.org>, Thomas Renninger <trenn@suse.com>, Shuah Khan
+ <shuah@kernel.org>, John Kacur <jkacur@redhat.com>
+Subject: Re: [PATCH v2] cpupower: add a systemd service to run cpupower
+Message-Id: <20250503125939.06195e2eb96651b524721449@paranoici.org>
+In-Reply-To: <bb5bb612-e98f-49ce-9082-5a883068977d@linuxfoundation.org>
+References: <20250425151024.121630-1-invernomuto@paranoici.org>
+	<aBE9ly7vP0eryfMO@thinkpad2024>
+	<20250502175309.05e66d43fc2654afb01721fc@paranoici.org>
+	<bdc10540-2e4a-4f97-9007-e4b70db04c64@linuxfoundation.org>
+	<bb5bb612-e98f-49ce-9082-5a883068977d@linuxfoundation.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250503-smc-6-15-v4-9-500b9b6546fc@svenpeter.dev>
-References: <20250503-smc-6-15-v4-0-500b9b6546fc@svenpeter.dev>
-In-Reply-To: <20250503-smc-6-15-v4-0-500b9b6546fc@svenpeter.dev>
-To: Sven Peter <sven@svenpeter.dev>, Janne Grunau <j@jannau.net>, 
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
- Hector Martin <marcan@marcan.st>, Linus Walleij <linus.walleij@linaro.org>, 
- Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
- Lee Jones <lee@kernel.org>, Marc Zyngier <maz@kernel.org>, 
- "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1851; i=sven@svenpeter.dev;
- h=from:subject:message-id;
- bh=asgFHWE+Y4/VDiSrToyfl0Yn74umJgKBLDT/bgdqN0Y=;
- b=owGbwMvMwCHmIlirolUq95LxtFoSQ4boqwv9W1hXrXl85egORZ91dt9vt2mWbwp2t1jwcpbQo
- iZtZbvlHaUsDGIcDLJiiizb99ubPnn4RnDppkvvYeawMoEMYeDiFICJ7E1h+O/0KJ1lw8S3t4Sn
- nIqs/utTsnt9fvKpI6eui0U/2xy7WW4Kwz/lCyVLRDfu6pJbtsBpXnWb75mKshP8apu79c7MOjk
- 7fCoHAA==
-X-Developer-Key: i=sven@svenpeter.dev; a=openpgp;
- fpr=A1E3E34A2B3C820DBC4955E5993B08092F131F93
-X-Endpoint-Received: by B4 Relay for sven@svenpeter.dev/default with
- auth_id=167
-X-Original-From: Sven Peter <sven@svenpeter.dev>
-Reply-To: sven@svenpeter.dev
+Mime-Version: 1.0
+Content-Type: multipart/signed; protocol="application/pgp-signature";
+ micalg="PGP-SHA512";
+ boundary="Signature=_Sat__3_May_2025_12_59_39_+0200_WeU6_p7c5b3/Mt4="
 
-From: Hector Martin <marcan@marcan.st>
+--Signature=_Sat__3_May_2025_12_59_39_+0200_WeU6_p7c5b3/Mt4=
+Content-Type: text/plain; charset=US-ASCII
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Hector Martin <marcan@marcan.st>
-Signed-off-by: Sven Peter <sven@svenpeter.dev>
----
- arch/arm64/boot/dts/apple/t600x-die0.dtsi | 35 +++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+On Fri, 2 May 2025 13:55:49 -0600 Shuah Khan wrote:
 
-diff --git a/arch/arm64/boot/dts/apple/t600x-die0.dtsi b/arch/arm64/boot/dts/apple/t600x-die0.dtsi
-index 110bc6719512e334e04b496fb157cb4368679957..4993a8ace87b2fc7e645b08c19fcd9b0c21896aa 100644
---- a/arch/arm64/boot/dts/apple/t600x-die0.dtsi
-+++ b/arch/arm64/boot/dts/apple/t600x-die0.dtsi
-@@ -24,6 +24,41 @@ aic: interrupt-controller@28e100000 {
- 		power-domains = <&ps_aic>;
- 	};
- 
-+	smc: smc@290400000 {
-+		compatible = "apple,t6000-smc", "apple,smc";
-+		reg = <0x2 0x90400000 0x0 0x4000>,
-+			<0x2 0x91e00000 0x0 0x100000>;
-+		reg-names = "smc", "sram";
-+		mboxes = <&smc_mbox>;
-+
-+		smc_gpio: gpio {
-+			compatible = "apple,smc-gpio";
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+		};
-+
-+		smc_reboot: reboot {
-+			compatible = "apple,smc-reboot";
-+			nvmem-cells = <&shutdown_flag>, <&boot_stage>,
-+				<&boot_error_count>, <&panic_count>, <&pm_setting>;
-+			nvmem-cell-names = "shutdown_flag", "boot_stage",
-+				"boot_error_count", "panic_count", "pm_setting";
-+		};
-+	};
-+
-+	smc_mbox: mbox@290408000 {
-+		compatible = "apple,t6000-asc-mailbox", "apple,asc-mailbox-v4";
-+		reg = <0x2 0x90408000 0x0 0x4000>;
-+		interrupt-parent = <&aic>;
-+		interrupts = <AIC_IRQ 0 754 IRQ_TYPE_LEVEL_HIGH>,
-+			<AIC_IRQ 0 755 IRQ_TYPE_LEVEL_HIGH>,
-+			<AIC_IRQ 0 756 IRQ_TYPE_LEVEL_HIGH>,
-+			<AIC_IRQ 0 757 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-names = "send-empty", "send-not-empty",
-+			"recv-empty", "recv-not-empty";
-+		#mbox-cells = <0>;
-+	};
-+
- 	pinctrl_smc: pinctrl@290820000 {
- 		compatible = "apple,t6000-pinctrl", "apple,pinctrl";
- 		reg = <0x2 0x90820000 0x0 0x4000>;
+[...]
+> Applied now for Linux 6.16-rc1 - will be included in pull request to
+> PM maintainer.
+>=20
+> https://web.git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git/log/?=
+h=3Dcpupower
+>=20
+> thanks,
 
--- 
-2.34.1
+Thanks to you!   :-)
+
+Have a nice weekend.
 
 
+--=20
+ http://www.inventati.org/frx/
+ There's not a second to spare! To the laboratory!
+..................................................... Francesco Poli .
+ GnuPG key fpr =3D=3D CA01 1147 9CD2 EFDF FB82  3925 3E1C 27E1 1F69 BFFE
+
+--Signature=_Sat__3_May_2025_12_59_39_+0200_WeU6_p7c5b3/Mt4=
+Content-Type: application/pgp-signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEygERR5zS79/7gjklPhwn4R9pv/4FAmgV9xsACgkQPhwn4R9p
+v/5GyxAAki5U0lVqylrCz/o2agGBe/JsTu03J9Q3aDUcHU9VeIgVIEaPBotkvkkh
+3ra9Qfw5s8NYLH18vObIHe24YOTLkJUja9fs8L5ZJI8H6Uh/a0CEJp7+OwmEabYF
+VTjzY9iJsGcgMBcPNJ/TZAJSfDRcFfYgfQXem4+Xrl1MbhPOeJcWRKEbfEXcfg7T
+zYkH4u2p0JwXISryXyyhwbOe18RxodYldPZFDVrM8btv7Wgm/R3jimQ6HDdWDA0W
+qn7ncZttVniUgCKq8dpJVv5LxqaQw7XlPAZDOgJT8LzDcmmOfCOWhptrqGTQRO/x
+XmrpA3y8sbXYbitYrm5XtqBgSxc4Dt+b3dBMNJUfvMzpoeNlJhq/XLB54dzPMhTo
+XgY60aSVvldSdXL5idn2X71yk61Vy2JFo1yL5N+kfLZ69YZsB/GZb+jOspazGdI3
+H5V1K14WkourFwKlbjv43WL4/NcfZklYoQpn0nX4emjToF7g/R3Alm2fpn7nylx/
+e6O3yKgtqUPFL8i4vvQhdFHk60LzkDgwA7Rb05/wLFiSepcReID8lSyn5sSUEal7
+Hdb2r5ex7IVJJ29Nf8SN7wrVuV0U0062EjTXxS6hTvlOhRzxav6bX7DJGpR4YUHP
+wzCtGEy2gfdSnwmi4ZXuPpao4MvN9fcIpjdM0v5bra3JpidKDb4=
+=D18l
+-----END PGP SIGNATURE-----
+
+--Signature=_Sat__3_May_2025_12_59_39_+0200_WeU6_p7c5b3/Mt4=--
 
