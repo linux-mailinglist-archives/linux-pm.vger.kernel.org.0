@@ -1,128 +1,109 @@
-Return-Path: <linux-pm+bounces-26683-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26677-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2B1DAAA897
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 02:57:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECF3EAAA664
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 02:12:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E9AF178EAF
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 00:57:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66F713B28E5
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 00:07:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04B1A351813;
-	Mon,  5 May 2025 22:40:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75DF9322AB3;
+	Mon,  5 May 2025 22:33:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RjYEPcKn"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YNbJQ11E";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="f+q9z70S"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D009D35180C;
-	Mon,  5 May 2025 22:40:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA3B322A90;
+	Mon,  5 May 2025 22:33:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746484835; cv=none; b=qshetWeJFrGoIrH2iJg6nRjQxiRHF42eP0mXYVXxht0e0Sx/fdZGM8SZrcsTuj3zMd3FlMCx+ibkg/8d6LJ0EBItysrTnOKkcB5/GUJmQyHq3vGO4f3Eh+uyT37WREMhRHlxXZnZE8LpGc+wwc3FmZNcezQhtIfzEma8bhM9Mws=
+	t=1746484416; cv=none; b=aTOJVV3ws5dd+jVSuuHJR/ngkA4WR9NavmtGtdcwKYqUUJlsoLcGk/em0qqFED/8z+X/o55QdNsuLZBBRWeXzXdi29sObLT3v42cbGqUMXKyH0NNP56rPd1rUMkse394vJRA7+pQPJ6yqvz5feG6JiVa0MDYGtBBC8Hjme9ULT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746484835; c=relaxed/simple;
-	bh=XGuv68T7aVBqmN9aFUmsC0uDVOK4ein5VyoTAEl3hjg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=bhiJY8g2hfipT+qoW54leTLue+5pxtBBTtTBUGL+JHXiDLqXdkj+oY9XfNoCcfc6re9rFQPjRSUUIehhCkeDXmQ21+mVtz0uV2wVVshoGemGAmQlqJENl/nOcXZqLiv6NxvSc7hHa34T3j9mMEKhP/SvYYJhneFkpLRisbE8x8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RjYEPcKn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76E16C4CEE4;
-	Mon,  5 May 2025 22:40:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746484835;
-	bh=XGuv68T7aVBqmN9aFUmsC0uDVOK4ein5VyoTAEl3hjg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RjYEPcKndtnbXYgSdo+IXCN0T5jzPkqr/WRqi3dATsDkjr4UrGt9vRv1hJleE+k9I
-	 QcNWQ/agxXDXWRDO79qITOJpdGKoS0uEAYNXruSiiQpUrZtErYtN2uWckVXgxqbsmG
-	 FQjWQqfCboNnG/9zUARNSBotImub+ziPrGtB6B7EySUnAGgQA+MR1+LeL/OW2ilepN
-	 /qCJ3JYpyil1se4x1eHmRO6NOzlUEZMWUQgGtOVJfU2+UNWvCs3xoyjuAKioJKRZL6
-	 Xzm/u6qKC09rX6r0qLKogmJHBKMH3351L8DQrWxCJF8Rc6wmK5ddipa3UUtREKj5rA
-	 AX1NE2sEd3r2A==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Alice Guo <alice.guo@nxp.com>,
-	Frank Li <Frank.Li@nxp.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Sasha Levin <sashal@kernel.org>,
-	rafael@kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 038/486] thermal/drivers/qoriq: Power down TMU on system suspend
-Date: Mon,  5 May 2025 18:31:54 -0400
-Message-Id: <20250505223922.2682012-38-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505223922.2682012-1-sashal@kernel.org>
-References: <20250505223922.2682012-1-sashal@kernel.org>
+	s=arc-20240116; t=1746484416; c=relaxed/simple;
+	bh=HatdA9k8dTOZzoALiSAOatm15PguKG74mPF5yaTmjXw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=U0qO5mjDr1ymM6fSu9543fhK0DnvIDuYpO+O5xKq7kb7Hoejp6Oy05BnV2yTQmkp+z21aQ8T9xu+7kMUkVW8uEVRUtz1WUnm6U7aZi1/+PuFVIJ0ZenLObGx/7X9+2PNLcLNkOLXmZ34Xr/tSaKgOmhzCrVGJQUc/tP8Sr/VMnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YNbJQ11E; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=f+q9z70S; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1746484411;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ar+nYY6YvS1JDsf3WZ/fGQw2E8KQPNJ8g1OwVIgR+aM=;
+	b=YNbJQ11E0VmO8C+gqyhlukX676Aov3AgM0pJVFAc4FJgNaleYvU1mCt+jSrgTy00xjZdcY
+	lw5g1mEGYYy2t9gmxGgFkVEo5Xn9LxICd16cbLXdLhaH+lo5UkL7bt28USzil0HKrq15fy
+	zW8p3peJv8DIfogSabh+6tPhKL76cJj2HgNcuMVpP1yL9LQyOUKglw3H7FKhsJTSP9E8l9
+	sN2XkT9RQb5nl4RDyj3Z3u23EuIxjuQfrGqKC6+T0KUkFhQJJN4y4Nub4mO3SUdCRrLJYs
+	qK9CQ+vVfaZ9RSzBw8uYllWzYms2soUc2mGoN5DWyToCHSXwaCnnyaoZ2sMnlA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1746484411;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ar+nYY6YvS1JDsf3WZ/fGQw2E8KQPNJ8g1OwVIgR+aM=;
+	b=f+q9z70Smk3vOT60407tVIz6Ss+kDH8S/UNUpUYoaE8+VjeoW6/KIMuK5eDqOnEyyebr9T
+	HeK2bY8XrvJ2t6Bg==
+To: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, Krzysztof =?utf-8?Q?Wilczy?=
+ =?utf-8?Q?=C5=84ski?=
+ <kw@linux.com>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter
+ <jonathanh@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Daniel
+ Lezcano <daniel.lezcano@linaro.org>
+Cc: linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org, Aaron Kling
+ <webgeek1234@gmail.com>
+Subject: Re: [PATCH v4 1/4] irqdomain: Export irq_domain_free_irqs
+In-Reply-To: <20250505-pci-tegra-module-v4-1-088b552c4b1a@gmail.com>
+References: <20250505-pci-tegra-module-v4-0-088b552c4b1a@gmail.com>
+ <20250505-pci-tegra-module-v4-1-088b552c4b1a@gmail.com>
+Date: Tue, 06 May 2025 00:33:30 +0200
+Message-ID: <87o6w6ofgl.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.26
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-From: Alice Guo <alice.guo@nxp.com>
+On Mon, May 05 2025 at 09:58, Aaron Kling via wrote:
+> From: Aaron Kling <webgeek1234@gmail.com>
+>
+> Add export for irq_domain_free_irqs() so that drivers like pci-tegra can
+> be loaded as a module.
+>
+> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 
-[ Upstream commit 229f3feb4b0442835b27d519679168bea2de96c2 ]
+Seriously?
 
-Enable power-down of TMU (Thermal Management Unit) for TMU version 2 during
-system suspend to save power. Save approximately 4.3mW on VDD_ANA_1P8 on
-i.MX93 platforms.
+Did you actually sit down for a couple of seconds to read and understand what I
+asked you to do in that initial review and then again:
 
-Signed-off-by: Alice Guo <alice.guo@nxp.com>
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
-Link: https://lore.kernel.org/r/20241209164859.3758906-2-Frank.Li@nxp.com
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/thermal/qoriq_thermal.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+    https://lore.kernel.org/all/877c33qxss.ffs@tglx
 
-diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
-index 52e26be8c53df..aed2729f63d06 100644
---- a/drivers/thermal/qoriq_thermal.c
-+++ b/drivers/thermal/qoriq_thermal.c
-@@ -18,6 +18,7 @@
- #define SITES_MAX		16
- #define TMR_DISABLE		0x0
- #define TMR_ME			0x80000000
-+#define TMR_CMD			BIT(29)
- #define TMR_ALPF		0x0c000000
- #define TMR_ALPF_V2		0x03000000
- #define TMTMIR_DEFAULT	0x0000000f
-@@ -356,6 +357,12 @@ static int qoriq_tmu_suspend(struct device *dev)
- 	if (ret)
- 		return ret;
- 
-+	if (data->ver > TMU_VER1) {
-+		ret = regmap_set_bits(data->regmap, REGS_TMR, TMR_CMD);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	clk_disable_unprepare(data->clk);
- 
- 	return 0;
-@@ -370,6 +377,12 @@ static int qoriq_tmu_resume(struct device *dev)
- 	if (ret)
- 		return ret;
- 
-+	if (data->ver > TMU_VER1) {
-+		ret = regmap_clear_bits(data->regmap, REGS_TMR, TMR_CMD);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	/* Enable monitoring */
- 	return regmap_update_bits(data->regmap, REGS_TMR, TMR_ME, TMR_ME);
- }
--- 
-2.39.5
+I appreciate your dedication to get this sorted, but please take your
+time to read more than just the _two_ lines which you think to be
+relevant.
 
+Please don't come back and waste your breath on telling me you are so
+sorry as last time:
+
+    https://lore.kernel.org/all/CALHNRZ_ctL1fJGO5752B6XEEXHwRe-a-Ofv+_=qtdq1WWXLLjw@mail.gmail.com
+
+Just get your act together and do it right.
+
+Thanks,
+
+        tglx
 
