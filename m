@@ -1,113 +1,118 @@
-Return-Path: <linux-pm+bounces-26645-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26646-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D43DDAA9474
-	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 15:25:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFCD8AA969C
+	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 16:57:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB5F93BC2E1
-	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 13:24:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B10531887005
+	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 14:56:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 644CA25C803;
-	Mon,  5 May 2025 13:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B571266F14;
+	Mon,  5 May 2025 14:49:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Aa1aXxax"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WqCVN/gC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB812561DC;
-	Mon,  5 May 2025 13:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5F625DAF7;
+	Mon,  5 May 2025 14:49:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746451440; cv=none; b=j4gm8lnj3phIWukzAlyHto51WzTwNFtgLJpWXyfC1G9TuboNDkvXryFa8YIr3Kg7YZC1uRye+MGe0tuWsovrQ9BLgZJW2AB/7hyUx+C3oUi+oJXJb74cQlPbI7nFzCVrqiBuWB7pRyV1rD4EFJQBwRjSUjy+yLVfnP9gIU28k7E=
+	t=1746456574; cv=none; b=jl/GbSFf+ZC+2KFxWjMP5iVzWXtNd0YO2VWG9ZFdzUUKw3OMIwYdTmJUDy6abnIjo/vQKr9+FJv/g5wZ7A93Np9if9rEFUVwLAPLvYkBCeGs5jUkEU7VCTsKSejhZttia+o3ibUg86MtMtWCy1ETy4Z2J226r1B1zxK3B3DmM7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746451440; c=relaxed/simple;
-	bh=7O9MG4jLgcmyrOt4F5nMHZqam/0Tzlc42nAmvdBjKHI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XcBEzHMJ+2YtoV9bNjXjZ4aqn5xAc4RB6EcR5MtJX9PPXJ/5X16kRKi1xuBJqa5Tto9EuiykY7eqobd4Zj6u5GOQb5YjAkV9ziSWOlRwgv4H388C+MHvBqz4touINFPFVpIcQGTW4cDIGDSnpRNvlRcJhpbypTKzYQHubacKUAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Aa1aXxax; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1746451436;
-	bh=7O9MG4jLgcmyrOt4F5nMHZqam/0Tzlc42nAmvdBjKHI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Aa1aXxaxIfsv5TclC5/Rdb0MizLcJFGWmTAHN0twVD93jt5+aN6GGAbcZ/FVdmTPl
-	 Riz9oMEZncSfgg2VAOS89wpuZ4OtBtU463bG7b6DGsL49OR/ZK/GxjoWpP8EK4jUD9
-	 kCTVP6LtlpwqIcmnZAz2LRojLmw/kgpf434REwIRLXeT9+Vqu4JQiW2fGSblEcrEd9
-	 ajy8LtZzl+HMWLeMgv4E5WfRBv4k3fS6VeHpYW8vHPq7ThP9tXEoGX17xrNiQ4tTu6
-	 6d2croLDHEXTHMg1APvs2mQuZWU4eFguCg+/44hRzinCQhsTZa0sD7xXER4jS0WFJS
-	 jF91XSa5pUsPw==
-Received: from apertis-1.home (2a01cb0892F2D600C8f85CF092d4aF51.ipv6.abo.wanadoo.fr [IPv6:2a01:cb08:92f2:d600:c8f8:5cf0:92d4:af51])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jmassot)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 9954E17E1504;
-	Mon,  5 May 2025 15:23:55 +0200 (CEST)
-From: Julien Massot <julien.massot@collabora.com>
-Date: Mon, 05 May 2025 15:23:40 +0200
-Subject: [PATCH 4/4] arm64: dts: mt6359: Rename RTC node to match binding
- expectations
+	s=arc-20240116; t=1746456574; c=relaxed/simple;
+	bh=LJjgk1ByHDk3YIGGFpQ4kDf+gqIVdRbQZOZxTDiZ9P8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nW27aJ5lld9Pb+ySkZrI6Zqwalk/rI2YtVZNoub8tLklinuBEzgZU0c2otVdk6XVQYixHgkwTlEMaLDfoEnPE21C3Gtoa/GvQ1WVCyt28flcgTywNNkzjir52xLb9xnnA/4Z+vfLqyzBU+Au6zhkqp7dB+2Qf7mISfBbh4CSFHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WqCVN/gC; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-549b159c84cso4958030e87.3;
+        Mon, 05 May 2025 07:49:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746456570; x=1747061370; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gWghhPwRQnyBjM4WKGjObPR/MsMSgq7gL+g14y5zD+w=;
+        b=WqCVN/gCOqu6z3E9HZu6xQUgjlsEAHO2CCwLwqwuizOlXfPbrt3EC0t3672gcrfeEJ
+         xRiYZMdiGPlBOHQdstweHp5XKQ6AGFo7RpCXHKvjoSfZAw00Gwbwd3S8UAPonH/RnHoP
+         NSX7+i6rtYu62J2pBxQqV/dVkV74HL/RdRU5ff3CnivuhTDe7PwyHiclzLjdvRGb9oRB
+         Y1iw+Aul0r8/i5dGqz90wF1BBaxJ+H+jqmd4mrO3qyx5oLEdVZPbV1pMQFoGZsCQLb5X
+         46Ol0ywQyDSWlhnJiUcM9pTEg7ZpHpOWV508GKxS3kebZGtS92cCGPxHcyOnpQrHViLg
+         FGHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746456570; x=1747061370;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gWghhPwRQnyBjM4WKGjObPR/MsMSgq7gL+g14y5zD+w=;
+        b=s9y4sXvlNiUX0ucq+kI87T4GDg21u62gGe3uQD8ZQv5WyD6nVmASpaF+Vd02My7J8e
+         ul0OG4+OF6SNdXgvY5fYunZW4zlbkovIXFABFcrCHIphSCGZToHRUUCK953mV8f03YnJ
+         QJu54uAFoS6v1nkxpe1oYOZtkYDFxFEiXR+FRiHX1SjQ3O3rm3ZnON3bssAmbEMypSdC
+         XXEKdb6GSPLjj14+3xdSrgDYZrmb9UKv0RTLpztjr0n76LjqWdHa3x70sodenlwh/hdl
+         PxClk7m+LIjRH4EC7VDLDXP0aLe4ZbHscnkbM3ZbGKMUeLcc4blPUPJvQzPImmvxUbti
+         7CIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUPtts+JuXW6/lr9phD3swfPQKWjX5HRuEXoC1c6W13mBRVptBDYeU83hUnFKYzBzuaP+I7UX+Civ58@vger.kernel.org, AJvYcCUbQYdZ22u1gooz23hhXsM+EInmrsrp3l2YUJwqpaBqq+TpK5sD01PUODogpitfYT5MCZEIdpBQcOhyLI0=@vger.kernel.org, AJvYcCVaS9PMK5n9ar5mdlY+S3qWV9q7FKsOe6QUr7y6cpTWGZdScwh+C4xEfD+Rzk4i+fdLOb8Fp0ggr4Ezng0=@vger.kernel.org, AJvYcCWO/fTTKMg7FmxJ7ugTRQp2/OOJ1ZrQftwrZNgTqAj7BZ9AtI0c3VEjj0Tgnep7uLGZiCaKc+7HmXY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyuJhHxIajyGydYgNR9X6c0B9g4sj6U/cYbbt0rPuBuT8nlScrS
+	KsDT/yT8riFQCCXbgVlxCfX0RL5dvHFswyU8sg68aAQIR7p3XnXrrrqS0Fqk3G87zGTJ4AOgNxa
+	gVPNwYsH/WTxo+JSmFXjZOYeM8TI=
+X-Gm-Gg: ASbGncuFh7Pa5LF/U5Rfh/gGMRmxEEsoy/BkF3iS3iElb4pU0ofhsoORBpnWCO8yDXY
+	KlmaWunJq8CnoPC43N3E2iIVuYhbgcVb3fmL3U56t1cWTAu7MLi+UVEjSbYp9P/Fo+ME4H91wyv
+	91U+IaKkE+T2Zgnt/KH9bktA==
+X-Google-Smtp-Source: AGHT+IEgAt9FbQ8bV5flz7Ihpl/0mM8m1B6xfuh4imni31bOSXReD6mr2ZGM91dyNgPK44dVEOZubQ9FH5vIvJsQ+Bg=
+X-Received: by 2002:a05:6512:3b9f:b0:549:903a:1bf with SMTP id
+ 2adb3069b0e04-54fa4f96b5bmr1878098e87.48.1746456569476; Mon, 05 May 2025
+ 07:49:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250505-mt8395-dtb-errors-v1-4-9c4714dcdcdb@collabora.com>
-References: <20250505-mt8395-dtb-errors-v1-0-9c4714dcdcdb@collabora.com>
-In-Reply-To: <20250505-mt8395-dtb-errors-v1-0-9c4714dcdcdb@collabora.com>
-To: kernel@collabora.com, Sen Chu <sen.chu@mediatek.com>, 
- Sean Wang <sean.wang@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>, 
- Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>, 
- Hui Liu <hui.liu@mediatek.com>, Yong Wu <yong.wu@mediatek.com>, 
- Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
- Robin Murphy <robin.murphy@arm.com>, 
- Tinghan Shen <tinghan.shen@mediatek.com>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-mediatek@lists.infradead.org, iommu@lists.linux.dev, 
- Julien Massot <julien.massot@collabora.com>
-X-Mailer: b4 0.14.2
+References: <20250502-pci-tegra-module-v3-0-556a49732d70@gmail.com>
+ <20250502-pci-tegra-module-v3-1-556a49732d70@gmail.com> <87tt5znqrj.ffs@tglx>
+In-Reply-To: <87tt5znqrj.ffs@tglx>
+From: Aaron Kling <webgeek1234@gmail.com>
+Date: Mon, 5 May 2025 09:49:16 -0500
+X-Gm-Features: ATxdqUHyohcc7LbeWorAjva_83S_kXGUOo2fo1bPnsNYPXfQukKYy0nLKhMjXH4
+Message-ID: <CALHNRZ_ctL1fJGO5752B6XEEXHwRe-a-Ofv+_=qtdq1WWXLLjw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] irqdomain: Export irq_domain_free_irqs
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Rob Herring <robh@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, linux-kernel@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Rename the node 'mt6359rtc' to 'rtc', as required by the binding.
+On Mon, May 5, 2025 at 8:14=E2=80=AFAM Thomas Gleixner <tglx@linutronix.de>=
+ wrote:
+>
+> On Fri, May 02 2025 at 14:00, Aaron Kling via wrote:
+>
+> > From: Aaron Kling <webgeek1234@gmail.com>
+> >
+> > Add export for irq_domain_free_irqs() so that we can allow drivers like
+> > the pci-tegra driver to be loadable as a module.
+> >
+> > Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+>
+>   https://lore.kernel.org/all/877c33qxss.ffs@tglx
+>
+> Is it that hard to address review comments?
 
-Fix the following dtb-check error:
+Sorry, this review comment completely slipped my mind when I went to
+work on the others for this series. Will fix.
 
-mediatek/mt8395-radxa-nio-12l.dtb: pmic: 'mt6359rtc' do not match
-any of the regexes: 'pinctrl-[0-9]+'
-
-Fixes: 3b7d143be4b7 ("arm64: dts: mt6359: add PMIC MT6359 related nodes")
----
- arch/arm64/boot/dts/mediatek/mt6359.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/mediatek/mt6359.dtsi b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
-index 0c479404b3fe3adc9789386e34bda4dc580b5abd..467d8a4c2aa7f16ade92a287ecdeed5089302045 100644
---- a/arch/arm64/boot/dts/mediatek/mt6359.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
-@@ -300,7 +300,7 @@ mt6359_vsram_others_sshub_ldo: ldo_vsram_others_sshub {
- 			};
- 		};
- 
--		mt6359rtc: mt6359rtc {
-+		mt6359rtc: rtc {
- 			compatible = "mediatek,mt6358-rtc";
- 		};
- 	};
-
--- 
-2.49.0
-
+Sincerely,
+Aaron Kling
 
