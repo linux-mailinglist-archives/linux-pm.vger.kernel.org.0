@@ -1,60 +1,59 @@
-Return-Path: <linux-pm+bounces-26674-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26675-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6AE2AAA4BB
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 01:34:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BC20AAA54D
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 01:47:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A06B9464DBD
-	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 23:34:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D165B188619F
+	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 23:44:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D61CC304F6F;
-	Mon,  5 May 2025 22:27:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2806828BA89;
+	Mon,  5 May 2025 22:29:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DAYT66Nr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W19ZMqdW"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD96D304F6B;
-	Mon,  5 May 2025 22:27:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDD6230D7B9;
+	Mon,  5 May 2025 22:29:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746484063; cv=none; b=Jlw3IzMYzFAx/i2VEhietJlZdiN/KfJXjhy9674MKxkddOpv8esVLw+k9DUxIRyc/1gnkjxsQ1nvQVt+zngCOotCVBAv4LFjf0A+f9U/AH+lubaY4CtfmWMXAKQ1eXTW+slaaabysvlMU+MZzL0o68nlEjeDSGOfGpon0RG0+jA=
+	t=1746484146; cv=none; b=IM36nfBfDnDcNRt3jJ5t8OSovB1NG7/wpQ/EjZtZp4mxPskP+BcKmgefcutJzGItZbF/+AKwQdYFDMfkPrR03Tkl80HNe8ca+NxYFcGFej3qmNiaV+heMRz5sUTcbIdWs2TKSQ/PULeehthtzVIaoQvudQEg9aFez70c6s4Fyao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746484063; c=relaxed/simple;
-	bh=yNqRLWlSnxE1gC6qIpVA6q2rf6dDAIT0DQ5/9OXE2Ic=;
+	s=arc-20240116; t=1746484146; c=relaxed/simple;
+	bh=ii8lWzCDYfqW2VGlgqGQlo4e6TjzlUJNmYQBU3nufho=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WSivIJalW+aB1aFsuMfyDEbRfIH4yksvkDr5Qrqv8jG/IKZeHjXQYbKGVz5k7NYN5JXLhK0hRi2yD2Lx6IjDSUp9wbm6T8tBMaQUgVrNJlSDhlWKhTc7i/3u7C9cMZG+58YN1O+jZKxcrTn5Q3ys6gxLjmjhxNxmjq+yExyIg+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DAYT66Nr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28E66C4CEE4;
-	Mon,  5 May 2025 22:27:42 +0000 (UTC)
+	 MIME-Version; b=AcqzhXa08fZGh8TCgKSdzIv2tqxa/QVjSelzB+Mf7drPT/mp3oW20+TSMzRReuixfexqQZYNHoOKOzv5j9H+DVIBz/1rjEZoATQJmm0wu00VwUOFCArV87nfsC/Gaogf4Sg5oe7DGro8KOHzlDR1XKMo2ujTkh1a5aiHDED27dI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W19ZMqdW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69843C4CEEF;
+	Mon,  5 May 2025 22:29:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746484063;
-	bh=yNqRLWlSnxE1gC6qIpVA6q2rf6dDAIT0DQ5/9OXE2Ic=;
+	s=k20201202; t=1746484145;
+	bh=ii8lWzCDYfqW2VGlgqGQlo4e6TjzlUJNmYQBU3nufho=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DAYT66Nr6cCr8aKnCTGOco5vPQ8mUMnf/dPcZ8M81lSHefdYX15VJq8SSyxqvy4P/
-	 x+Dygp83dQ7W37TlQmYomsshzPPJ7wKNnfg5TjQgls+br1XYXfICljkxAkS6Syg+hL
-	 bSADUtGDov2bC5e+YYrQDjB8an/LjTOroNy/wSfQlgnC58hK5UN6GkAzQVisRY04lj
-	 wx1kTHHmbiJHa0TZ/EXsO9k6G1ESGstXh9ult3q1XDK8wPtdSOcVaHjqdJp4XiDe1d
-	 gyit3bLwjE8I7V8HK8eyKJ/VG6fYFvGkitx1XrAd20KmNUnoKFoivLC4pYqj5nNgJ6
-	 8G+yJsGwGNZVA==
+	b=W19ZMqdW2+jn4w5jQ46GTeRDjdMi3y0vWCvyoqsxMTkEHj0Bcy5z49UinLavsvonD
+	 wGbMi/q1YjNUwr63U2EeNTJ11H5POznhazoTZBK7uA4Ce34yj9tUAxF0bMiFC61uiD
+	 ctQRnTJlUfptrVPQ0PdPhml2go6Y6KI5kCNRcKkcMBY8FVENiTzdtLVi4vno04uyQ/
+	 Bj9OVgVh09JYvZicesBYbPcVTyt/b7SANZQ0ckpgHk5ytgbBM8DpwO/WvwJFvK4CJ6
+	 E1f6K8rHkgFFE0U5RkMYZJGgZgaVIDH9zzrebXdyhL8+WKqb3Fn+hm1zamLv6wCDWp
+	 xTZ+FelM6AroA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-	Christian Loehle <christian.loehle@arm.com>,
-	Aboorva Devarajan <aboorvad@linux.ibm.com>,
+Cc: Chris Morgan <macromorgan@hotmail.com>,
+	Philippe Simons <simons.philippe@gmail.com>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
 	Sasha Levin <sashal@kernel.org>,
-	rafael@kernel.org,
-	daniel.lezcano@linaro.org,
+	sre@kernel.org,
+	wens@csie.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 332/642] cpuidle: menu: Avoid discarding useful information
-Date: Mon,  5 May 2025 18:09:08 -0400
-Message-Id: <20250505221419.2672473-332-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.14 373/642] power: supply: axp20x_battery: Update temp sensor for AXP717 from device tree
+Date: Mon,  5 May 2025 18:09:49 -0400
+Message-Id: <20250505221419.2672473-373-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250505221419.2672473-1-sashal@kernel.org>
 References: <20250505221419.2672473-1-sashal@kernel.org>
@@ -69,63 +68,70 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.14.5
 Content-Transfer-Encoding: 8bit
 
-From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+From: Chris Morgan <macromorgan@hotmail.com>
 
-[ Upstream commit 85975daeaa4d6ec560bfcd354fc9c08ad7f38888 ]
+[ Upstream commit bbcfe510ecd47f2db4c8653c7dfa9dc7a55b1583 ]
 
-When giving up on making a high-confidence prediction,
-get_typical_interval() always returns UINT_MAX which means that the
-next idle interval prediction will be based entirely on the time till
-the next timer.  However, the information represented by the most
-recent intervals may not be completely useless in those cases.
+Allow a boolean property of "x-powers,no-thermistor" to specify devices
+where the ts pin is not connected to anything. This works around an
+issue found with some devices where the efuse is not programmed
+correctly from the factory or when the register gets set erroneously.
 
-Namely, the largest recent idle interval is an upper bound on the
-recently observed idle duration, so it is reasonable to assume that
-the next idle duration is unlikely to exceed it.  Moreover, this is
-still true after eliminating the suspected outliers if the sample
-set still under consideration is at least as large as 50% of the
-maximum sample set size.
-
-Accordingly, make get_typical_interval() return the current maximum
-recent interval value in that case instead of UINT_MAX.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reported-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Tested-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Reviewed-by: Christian Loehle <christian.loehle@arm.com>
-Tested-by: Christian Loehle <christian.loehle@arm.com>
-Tested-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
-Link: https://patch.msgid.link/7770672.EvYhyI6sBW@rjwysocki.net
+Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+Tested-by: Philippe Simons <simons.philippe@gmail.com>
+Link: https://lore.kernel.org/r/20250204155835.161973-4-macroalpha82@gmail.com
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpuidle/governors/menu.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ drivers/power/supply/axp20x_battery.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors/menu.c
-index 28363bfa3e4c9..42b77d820d0fb 100644
---- a/drivers/cpuidle/governors/menu.c
-+++ b/drivers/cpuidle/governors/menu.c
-@@ -192,8 +192,19 @@ static unsigned int get_typical_interval(struct menu_device *data)
- 	 * This can deal with workloads that have long pauses interspersed
- 	 * with sporadic activity with a bunch of short pauses.
- 	 */
--	if ((divisor * 4) <= INTERVALS * 3)
-+	if (divisor * 4 <= INTERVALS * 3) {
-+		/*
-+		 * If there are sufficiently many data points still under
-+		 * consideration after the outliers have been eliminated,
-+		 * returning without a prediction would be a mistake because it
-+		 * is likely that the next interval will not exceed the current
-+		 * maximum, so return the latter in that case.
-+		 */
-+		if (divisor >= INTERVALS / 2)
-+			return max;
-+
- 		return UINT_MAX;
-+	}
+diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
+index 3c3158f31a484..f4cf129a0b683 100644
+--- a/drivers/power/supply/axp20x_battery.c
++++ b/drivers/power/supply/axp20x_battery.c
+@@ -89,6 +89,8 @@
+ #define AXP717_BAT_CC_MIN_UA		0
+ #define AXP717_BAT_CC_MAX_UA		3008000
  
- 	thresh = max - 1;
- 	goto again;
++#define AXP717_TS_PIN_DISABLE		BIT(4)
++
+ struct axp20x_batt_ps;
+ 
+ struct axp_data {
+@@ -117,6 +119,7 @@ struct axp20x_batt_ps {
+ 	/* Maximum constant charge current */
+ 	unsigned int max_ccc;
+ 	const struct axp_data	*data;
++	bool ts_disable;
+ };
+ 
+ static int axp20x_battery_get_max_voltage(struct axp20x_batt_ps *axp20x_batt,
+@@ -984,6 +987,24 @@ static void axp717_set_battery_info(struct platform_device *pdev,
+ 	int ccc = info->constant_charge_current_max_ua;
+ 	int val;
+ 
++	axp_batt->ts_disable = (device_property_read_bool(axp_batt->dev,
++							  "x-powers,no-thermistor"));
++
++	/*
++	 * Under rare conditions an incorrectly programmed efuse for
++	 * the temp sensor on the PMIC may trigger a fault condition.
++	 * Allow users to hard-code if the ts pin is not used to work
++	 * around this problem. Note that this requires the battery
++	 * be correctly defined in the device tree with a monitored
++	 * battery node.
++	 */
++	if (axp_batt->ts_disable) {
++		regmap_update_bits(axp_batt->regmap,
++				   AXP717_TS_PIN_CFG,
++				   AXP717_TS_PIN_DISABLE,
++				   AXP717_TS_PIN_DISABLE);
++	}
++
+ 	if (vmin > 0 && axp717_set_voltage_min_design(axp_batt, vmin))
+ 		dev_err(&pdev->dev,
+ 			"couldn't set voltage_min_design\n");
 -- 
 2.39.5
 
