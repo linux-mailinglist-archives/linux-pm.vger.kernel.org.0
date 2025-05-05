@@ -1,208 +1,111 @@
-Return-Path: <linux-pm+bounces-26634-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26635-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAB5AAA8EA6
-	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 10:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 43084AA8ED8
+	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 11:06:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A73C93ABE7E
-	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 08:56:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 830993A6271
+	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 09:05:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B69661F473C;
-	Mon,  5 May 2025 08:56:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 422EA1E5219;
+	Mon,  5 May 2025 09:05:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IKH0kldk"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MlL7nBW/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2B251F1921
-	for <linux-pm@vger.kernel.org>; Mon,  5 May 2025 08:56:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF901DED40
+	for <linux-pm@vger.kernel.org>; Mon,  5 May 2025 09:05:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746435403; cv=none; b=FTZx2V6EWBSoNtJIsOzU6Mcctf2z69DKAj27qboUQq3WJqLAUavJRhvzt6VRj6o32/TVm8TYDSbEkMl+uIh34V0QXTcBK+LEBBckf13P0am1HEPQX+14+eYXWJ05Tx95Rzf4iXyJ3lc7h6mzbtxffwkhwFtm2ULQL+7eLjX+Fyg=
+	t=1746435955; cv=none; b=PDdAvawul6BvLhSup9YIJPF/nSXwKeVDCtwe8MIzqLV9gk9kWscr3yXRL2nCb0PM/rvVUcfvpZna+mfO6XqIKa59prvtVtf80VaQjTkI7T7KfhMfLuo7w/g1zYe/sJ3w9z4Y0AZQdtGvVwTv4/Z9kIaIjAe9BL9N3MKp4bm3LSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746435403; c=relaxed/simple;
-	bh=SmMCH697xC8Jvds5eQIi5w8fCsVUUCW9mlghMxxm3kg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BD+I+GV0SVb5I+Z5XSmxKdI71KnP4peHCxsDlwbf1UI/w0rdujMSeppnFEZ8ciKC37EeIpnciEDIBhk11MNcmXTPUsZs8CnVACPzMEb75RJUeBmongBPeL0S4CZxOFnAspuBTrmAkElMn7gIq5/q1prgBROKJ7fTXn29ytNm1aM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IKH0kldk; arc=none smtp.client-ip=209.85.221.44
+	s=arc-20240116; t=1746435955; c=relaxed/simple;
+	bh=jaVB3sx5ejThu8wEUg5nUqvMM3/yIkqZP4MpKH/Gvus=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rkZ9t8t5T8jxSjaXkomraYAB3sVW66l2S6St5waIMOMFT5sT9oYT8D+3Io+unnE1L/e67JdFf0IchKm0amwkynX/arTTtTg2NSJ0pcXV1umrigTaBfLVy8y4NKlqZ2NPBkltKPAKUFX9b9fuqsmx4erJBStINusqRSdiRK7gncE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MlL7nBW/; arc=none smtp.client-ip=209.85.167.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-39ac9aea656so4479594f8f.3
-        for <linux-pm@vger.kernel.org>; Mon, 05 May 2025 01:56:39 -0700 (PDT)
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5499659e669so4881141e87.3
+        for <linux-pm@vger.kernel.org>; Mon, 05 May 2025 02:05:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1746435398; x=1747040198; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Sv1fXA/kXVQWR1mgUjAfLmrac7SzbmHKcHFUSyKNyaM=;
-        b=IKH0kldkiw8v07nDcr/TjCCgcz7Xu2sbfPrRhwzumT91UcwMsJNgwHnIA/TUICMucP
-         BehgQou9jvh5B/77GNKxVO7vP4tOvK/FRIxiTnKPAT3Zn+Ux0e7zJUllNja6PqDmx+kz
-         RjllalaoMWwzmOg3p3mVMDablpM1X1mlPxIM7tg5N6zgdj26Hqd3SIElyxERgiJBAnCJ
-         GltrGw31BUmiXXLWqQMM3Uk3t+yCcIp1FkxfCAiiaAO9hmvTCsVnz3P6+p0hnpr3tfIC
-         83jhyqct2oBRBpWXoJH8FszqfZcQCMbjIj3t6/vQpSQ/9GBjaDilyidcEp701FT+71yx
-         fgMA==
+        d=linaro.org; s=google; t=1746435951; x=1747040751; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jaVB3sx5ejThu8wEUg5nUqvMM3/yIkqZP4MpKH/Gvus=;
+        b=MlL7nBW/px4/CIrOcDVdTNLRXOHn8yS4tkl8gahouAGayJGPJqKG7TovPRz6OZflQ7
+         HrxkSxMMF2EGr29W1/2JgxnxPb/qX9uIb23pv7gXw8tqn0fB/SaqXK1Lp+p0Vk2xU23l
+         LZZRy5uq+6LmDkYfAOtc4U3E8P4ZaMU0hFF6m9aX03TaP3+twc2rXMw+f83YhOABl0S3
+         hB0EUgKimx8KloaODdiVeQ0hw9ejIGmwvHM23m4Jy6jqECJthkTg9Nq4OFj7UcJIREOw
+         ZJUDneEhIBtERekDd9C4bih9FI56DBBCMu2BDfDBp9vbmYYAurypYzemB/N3Co+b9dlc
+         +E7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746435398; x=1747040198;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sv1fXA/kXVQWR1mgUjAfLmrac7SzbmHKcHFUSyKNyaM=;
-        b=V6VylEciLYWC98dZy907+kCWXGFKoGTfW5G9u2uaDoj3jkWx4UiBRpH9R5DHA4jeWG
-         nbcHCSjH4rNeVaoS0LfVtJyheUTzwL7m9IYzGEqRw6HW3sqG425fG/RF6Z+XQxpLzM0a
-         OOmbjXqywfP5WDRP+GSrMB50OMZbCtfCwgn3+jg/MnCUGLxBpKSUq4p6MAm+demM2vKj
-         gaedFWC+/vQ2t1IXctOcOZfKqDHSmtpTqUcB15poxLowWyf529yIaZYJ2+rxKQRbleuQ
-         0EvYZu4Q2ALie4kFKqchbm3ZmGi9VFmRxt/nXfsnQeGietp4MMncXf5Bks6SBgcQ2nWC
-         BJ5A==
-X-Forwarded-Encrypted: i=1; AJvYcCW1IlWkXS2vj1F5FS7s1HC5z+agwp3SLF1Mwu0cNwAr9XzYxr9EYHtf02Ro/IUULk68OS3F7gFQEw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3NNtPzmpU05q3d2aHvLV33fTyUBgUENP+p3hqxWxXeIbcS0Ae
-	qsYbD1GpcHI0v/BEo/5CtbZJmQmxmfbXBTzz9NNCCWPfvwbl1536v9y5QDXvFr4=
-X-Gm-Gg: ASbGncti+tguGn/bjNtWbkpPojtjLdO5EktuCV8lOLpSRyLII1keEkZ1dqW+hP0mmg9
-	d8w0Atl6Nt/7zpK6Wzs2Mne/Fo+gO0RCob+5iHA5itZEMAL/hlaVZMk7EURSDv+bP7yvv+EUtYQ
-	btPB4awrvKgyk6eFk3eNnyk1OOOxpdqBKCQeBQxyBGN0JqD5/BP9xqr+gCa8iztQC8HN7T2N+o2
-	hnfceii3i3fxq1yd/96gSoVIgTYT9b7FC9zAAeLlEjg1Qq8k6sv0QLo/MGdYQ6RPDgD3RuJRXOn
-	AZkZSfUCbfyr2YZ22d7ur9wlA+G4lXbfaXej2zzp/mg+pjDPYPAk8mh+xtDBOAxtBzyQWrA57kr
-	+Z6E=
-X-Google-Smtp-Source: AGHT+IGfImCYDlojSB1Sb4V6Dn940fvmK1LybNwwBa7WbdE2kVT+4CXyDuAT8T7krErERsIUODmGCw==
-X-Received: by 2002:a5d:64e8:0:b0:38f:2766:759f with SMTP id ffacd0b85a97d-3a09fdbf30cmr4610206f8f.41.1746435398100;
-        Mon, 05 May 2025 01:56:38 -0700 (PDT)
-Received: from mai.linaro.org (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a099b172a8sm9880997f8f.91.2025.05.05.01.56.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 May 2025 01:56:37 -0700 (PDT)
-Date: Mon, 5 May 2025 10:56:35 +0200
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Jonathan Cameron <jic23@kernel.org>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/1] thermal: thermal-generic-adc: add temperature
- sensor channel
-Message-ID: <aBh9Q8zr2MtfVJtq@mai.linaro.org>
-References: <20250430055807.11805-1-clamor95@gmail.com>
- <20250430055807.11805-2-clamor95@gmail.com>
+        d=1e100.net; s=20230601; t=1746435951; x=1747040751;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jaVB3sx5ejThu8wEUg5nUqvMM3/yIkqZP4MpKH/Gvus=;
+        b=e6M3TBQirx8GP0wzjCLkws0DgPAEOxTwcBkLBz6pidbG/DGPEBsk5WNvCyMWKX5zcZ
+         OT1ld99wk1n6MWSsnzORG2ucqEPb66XENezag+XpTKTeOcpeLtKpEPRgSjx1uooxL3xf
+         AW0aZsSNszdIr78DphK6BEy/V0HsUE2n6ZuvhefLdcSONehPyaJKAA3U1lMArfmvN2w3
+         PlzPa6QelMkjatmonJr3Qy5sLksUhs0D30CKoY0nkHW4QbSRwJsBPC8u92V/u/EnaIQM
+         Xj/6Re9tPOOjG55setunpR037mIWR553E0u2TYt1221NzNcNTtHpA58j7KLBkeE9qvXZ
+         HfjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUqO7c3w7KYVo9T+1AvZ6pGvuCCX3A8rML/XyldojArwf3G6OQqWzF19+vWmwfu/qMwrMI9e/mpZw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yynp41AZvpvRe8BMaYQq4L2T0EgFDwsIdC+X3YgnqBxgEz8DDF/
+	rGmjZPyB7dUBt9AlDZRaY7tHOq4D8jQpSuahN1Vj+Gcb8U9ETnphOhh56M5OBvJoPzj9LfXGx2g
+	zQFuWi90nl0bihLxM+s4BIvOioFPA31sbQRfVYg==
+X-Gm-Gg: ASbGncs6C2fBx71RHhZbHhpCVTzP9IAjwCV05cmjysuOuuCNs38ETMb+2zm9SkdogTp
+	YlR2mPjG1V1hDo3kRAOrPq2IEyHKWLT5U1GPJC66gDcO1FhPPHjDVJPeIgbM9NYMmKsxfLvu6in
+	9qtVm0lU43X8Sui32rBzJdrw==
+X-Google-Smtp-Source: AGHT+IG1Gg4cqaY2027Xkt9vszcojc1RUUWP69uzjNjCzPb0+lNxfxbfad5R/RgzScrc0f+PobFDAQA8A6a3BcrID1g=
+X-Received: by 2002:a05:6512:118d:b0:54a:f76a:6f83 with SMTP id
+ 2adb3069b0e04-54eac200d31mr3042013e87.13.1746435951218; Mon, 05 May 2025
+ 02:05:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250430055807.11805-2-clamor95@gmail.com>
+References: <20250503-smc-6-15-v4-0-500b9b6546fc@svenpeter.dev> <20250503-smc-6-15-v4-1-500b9b6546fc@svenpeter.dev>
+In-Reply-To: <20250503-smc-6-15-v4-1-500b9b6546fc@svenpeter.dev>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Mon, 5 May 2025 11:05:40 +0200
+X-Gm-Features: ATxdqUG40K92Q6cLhA-jiK9adWrE64up9leFqXIiQtBvPLIG9_nqRk1Z9BFEJZw
+Message-ID: <CACRpkdbCfUEZd06yeZTNecGFPwBgJkpMH3hqkvJw4J+iSENG=Q@mail.gmail.com>
+Subject: Re: [PATCH v4 1/9] dt-bindings: gpio: Add Apple Mac SMC GPIO block
+To: sven@svenpeter.dev
+Cc: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
+	Hector Martin <marcan@marcan.st>, Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, asahi@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 30, 2025 at 08:58:07AM +0300, Svyatoslav Ryhel wrote:
-> To avoid duplicating sensor functionality and conversion tables, this
-> design allows converting an ADC IIO channel's output directly into a
-> temperature IIO channel. This is particularly useful for devices where
-> hwmon isn't suitable or where temperature data must be accessible through
-> IIO.
-> 
-> One such device is, for example, the MAX17040 fuel gauge.
-> 
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> ---
->  drivers/thermal/thermal-generic-adc.c | 55 ++++++++++++++++++++++++++-
->  1 file changed, 54 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/thermal-generic-adc.c b/drivers/thermal/thermal-generic-adc.c
-> index ee3d0aa31406..7c844589b153 100644
-> --- a/drivers/thermal/thermal-generic-adc.c
-> +++ b/drivers/thermal/thermal-generic-adc.c
-> @@ -7,6 +7,7 @@
->   * Author: Laxman Dewangan <ldewangan@nvidia.com>
->   */
->  #include <linux/iio/consumer.h>
-> +#include <linux/iio/iio.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
-> @@ -73,6 +74,58 @@ static const struct thermal_zone_device_ops gadc_thermal_ops = {
->  	.get_temp = gadc_thermal_get_temp,
->  };
->  
-> +static const struct iio_chan_spec gadc_thermal_iio_channels[] = {
-> +	{
-> +		.type = IIO_TEMP,
-> +		.info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED),
-> +	}
-> +};
-> +
-> +static int gadc_thermal_read_raw(struct iio_dev *indio_dev,
-> +				 struct iio_chan_spec const *chan,
-> +				 int *val, int *val2, long mask)
-> +{
-> +	struct gadc_thermal_info *gtinfo = iio_priv(indio_dev);
-> +	int ret;
-> +
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_PROCESSED:
-> +		ret = gadc_thermal_get_temp(gtinfo->tz_dev, val);
-> +		if (ret)
-> +			return ret;
-> +
-> +		return IIO_VAL_INT;
-> +
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +static const struct iio_info gadc_thermal_iio_info = {
-> +	.read_raw = gadc_thermal_read_raw,
-> +};
-> +
-> +static int gadc_iio_register(struct device *dev, struct gadc_thermal_info *gti)
-> +{
-> +	struct gadc_thermal_info *gtinfo;
-> +	struct iio_dev *indio_dev;
-> +
-> +	indio_dev = devm_iio_device_alloc(dev, sizeof(*gtinfo));
-> +	if (!indio_dev)
-> +		return -ENOMEM;
-> +
-> +	gtinfo = iio_priv(indio_dev);
-> +	memcpy(gtinfo, gti, sizeof(*gtinfo));
+On Sat, May 3, 2025 at 12:07=E2=80=AFPM Sven Peter via B4 Relay
+<devnull+sven.svenpeter.dev@kernel.org> wrote:
 
-Why copy the structure ?
+> From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+>
+> Add the DT binding for the Apple Mac System Management Controller GPIOs.
+>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
 
-Copying the thermal zone device pointer should be enough, no ?
+LGTM
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-> +	indio_dev->name = dev_name(dev);
-> +	indio_dev->info = &gadc_thermal_iio_info;
-> +	indio_dev->modes = INDIO_DIRECT_MODE;
-> +	indio_dev->channels = gadc_thermal_iio_channels;
-> +	indio_dev->num_channels = ARRAY_SIZE(gadc_thermal_iio_channels);
-> +
-> +	return devm_iio_device_register(dev, indio_dev);
-> +}
-> +
->  static int gadc_thermal_read_linear_lookup_table(struct device *dev,
->  						 struct gadc_thermal_info *gti)
->  {
-> @@ -153,7 +206,7 @@ static int gadc_thermal_probe(struct platform_device *pdev)
->  
->  	devm_thermal_add_hwmon_sysfs(dev, gti->tz_dev);
->  
-> -	return 0;
-> +	return gadc_iio_register(&pdev->dev, gti);
->  }
->  
->  static const struct of_device_id of_adc_thermal_match[] = {
-> -- 
-> 2.48.1
-> 
-
--- 
-
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Yours,
+Linus Walleij
 
