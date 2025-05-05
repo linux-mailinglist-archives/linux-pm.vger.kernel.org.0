@@ -1,117 +1,102 @@
-Return-Path: <linux-pm+bounces-26631-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26632-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D461CAA8971
-	for <lists+linux-pm@lfdr.de>; Sun,  4 May 2025 23:32:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83F9AAA8BA1
+	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 07:25:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43F38170E83
-	for <lists+linux-pm@lfdr.de>; Sun,  4 May 2025 21:32:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EBCED17182C
+	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 05:25:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89D4244C77;
-	Sun,  4 May 2025 21:32:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70E8A19F115;
+	Mon,  5 May 2025 05:25:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="LtZTOSCs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KfPU20/b"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ACF917F7;
-	Sun,  4 May 2025 21:32:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46A3D78F26;
+	Mon,  5 May 2025 05:25:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746394367; cv=none; b=bqD9RmUn8tU44BIVlggde1ZVoCmnQtiuoR8n/Z9wOaIGEHRxRpkXh2nsx9EVhBCrW9WbEQDDGoGyp59g6LKI/EYPOR+zQpzz23S+1PvoljzE5iBLzUZ9JPXFjP7V/9I4i4GOTkxOPl5P2cdllUBYOfAu+6qgB+6yi3hAKG7kqt4=
+	t=1746422708; cv=none; b=anpcoTbXc1zu9Udjc36tFGNiu4YE3UrwC520bmIpNet7zSGMjEGQKappZKXU6ENgJ1gHRsxOrSFDJpcAtvuNFihSbugaFHqwDn+VnShIph7/jYhD1hCaNKl3DFTWkbuIu7uxB8umbEdup55rLRD5xBT2Q1krMBXWlIYDew7LqDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746394367; c=relaxed/simple;
-	bh=gJ2HmiGarirPqxN24oNBY9CnoSDSrrG6jmTGGopJ774=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PZmu2r/HI2I+7vFCmWHvW385juMKLBRaO0DsfWq661x2R2wWgyni3LooBVW42jc/KylBE6BlyfXPdoaYUN8ifjFaXFhFlWqhRh4d7+oz1ZLyWknq/yXoMccViGeJ+59GOw6LsU5P5K3xuONLsBpJy65JShv2pPMe4h8BmtE13rQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=LtZTOSCs; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-22e033a3a07so38000065ad.0;
-        Sun, 04 May 2025 14:32:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20230601; t=1746394365; x=1746999165; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q7jhF8o/D6lmk3tfJaXQJC7Uck51GK/MCbYz8uYsAmw=;
-        b=LtZTOSCsKLMoSrGAUp0p5ZsqHZCAZa4EcjwO7JvMYMjjCVimtBMslUIQMSb2Fv6Nqe
-         0qlxZdgWkfQpvjQb3zEAREiloEwTYs+KsvqhFNx/Ib0ALlCJuVzzgjIOsO9fsKkj37qx
-         +g0uusegjsT5yYnuGELNAG9BB/0ALbL752LR94xRpLH7a7ntpz6pu0/8cY9GzvFvvHSU
-         kP6pZBy02+3xHILeOXICJEvNYgtLVfrR3X9EXR55BWtib1q9B530akALo03uxn9ZTN/j
-         Kr06/EvLektDvQpcOftfW0YSDYnGvslIyz/GKeji0S76txqKhaeorNGJd9dHTEngdUb3
-         5Kdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746394365; x=1746999165;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q7jhF8o/D6lmk3tfJaXQJC7Uck51GK/MCbYz8uYsAmw=;
-        b=o9bLJn/w+t7E4lejJ7A++Z8JnipMWqPtvouJNAHypnv4tJeLwIoIStgHeMGalVAJ4Z
-         HafBXwgc3HpEr0fc/OGF+Y3f/D1LGryiZKxuA05Wyr8/XVc0Jxldwh1kTP2d4umYPF8T
-         oyBwSILEKn1GiQ+KChxFIMJYJTi42Nf7u02unPKobVbaWfAVfMGJLgCeLRWtsv0DocnZ
-         vgwd8a3Nn0NprPrFACw8So6z4NzCfgempJunRaDLljtXyw2U/bW9Z/EAbK7FizC9+63z
-         F2HE/xlfy9MopVWfr0ku9hWEj0wOJ63Qk1E1/4pA2fSdAtinUGu+GbjHac+zUef+L+Mf
-         kSdw==
-X-Forwarded-Encrypted: i=1; AJvYcCVjjT2HBtApQ1WHLOmkkHOLvfYYYVbfg7UokJTttuUNEd8df4l3IP8sB5Fle6JZCTVHkfLPZt0pkYA=@vger.kernel.org, AJvYcCWzIrULWEKk3o+sDgHjF9d1T5Y41wdVIGNxbykKwtMjA5x1sR4NUH09PZm0wAoLQakyj9Ei0GbypndutRBmQjk=@vger.kernel.org, AJvYcCX3YvH0JLEdT7xB51g1u/VRzly4lzvm5L3TwaSf8vC4Rxr/Fd02gkkUjTKQ93IMhzhjBa8RDBXcNfOWqTRe@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZ3dNUuDgnQw9Ux6Lsc/BiMnWaosLQI+tkNitM8lBU5NND14tt
-	0ZLiqo3fknNxuEEXsENRzScsnK0h/JgPNM7q6oEUpqt2VZD+If1QP6SuELRrYN9CJpUXU8orMWX
-	5OVB9HswaCIUzIQrqkEyEOMkmXc4=
-X-Gm-Gg: ASbGncszFCdynoSIcSRSISU2q9wZq1PUX4v+stQ9j+CJmLLsB+BUflikH3sVGm3bpeK
-	FQpWwgVMKCdmpkccPFh2BwujfqfRHlpVh+pMS/TYm0kQOzS7KTnS/6n7KDSu5STIf047A0Nj6sC
-	iFhwESKhMKOVU8EJXdBb67vPYTN6QJaArsJvRmQWZA5b1uZ4YshcAC6F8=
-X-Google-Smtp-Source: AGHT+IHH/nfY7aawda+5dqP8fu9k5FCWHizevZPZQCYz7HUea62/Pz9JW8anHy4Qa9uOMj4WeQphD+IA9QE9XTMVDwQ=
-X-Received: by 2002:a17:902:d2c7:b0:220:ff3f:6cc0 with SMTP id
- d9443c01a7336-22e18c377c5mr110852105ad.38.1746394365180; Sun, 04 May 2025
- 14:32:45 -0700 (PDT)
+	s=arc-20240116; t=1746422708; c=relaxed/simple;
+	bh=gqLQSv5UjOL9/2FaltDUuXflgvx0PDLFqookN2zeQ0U=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YalTSj0tH83xG+oX+SOC18TVqIfv03KZA9FAAAjeT008FXYIU0z4i2Op3WB0xaRBeStJZitFHYiRPlNmLJeOcnzqlDMTvhm3npJD/J20B+IDbiVUApPvO4f8R/03bKajmzyGrTr/Jo89dSwDi8ep0UK+BJvO5vUXXyP8Rf4U+48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KfPU20/b; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB3A5C4CEE4;
+	Mon,  5 May 2025 05:25:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746422707;
+	bh=gqLQSv5UjOL9/2FaltDUuXflgvx0PDLFqookN2zeQ0U=;
+	h=From:To:Cc:Subject:Date:From;
+	b=KfPU20/bIFUy43MnrFC1/6MQmcMePl0M4g8tf2tB09i+iI6iLslBvqfHGWAyCOfy+
+	 NnFSdwLwmqwfEIIVEHDmvvy/MtvTiYKtdKgOsfFo0Bi/XQ2r0Z+mJ2T5k8yPIJPUNV
+	 CGEeLokoNqcv5cyXTqQIaJ4EUO2DecXmHjy+AQ6CLajDaMr8QMxTDxVlh1hVUg89o/
+	 YNZXJdiuXNJvUQW7v0opmcFFkfus6+6IWLYd29xpcAYquSsk+MaS7CE4MmtN1R3bLL
+	 Jr3xs3Cv/jBrQBmmfhJKYTllogvriNA/p9Ufg9KDrzusfibir9v/hooEhaRGH6q1Fg
+	 sZAr+s+Nmx9Dw==
+From: Arnd Bergmann <arnd@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Chen-Yu Tsai <wenst@chromium.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Julien Panis <jpanis@baylibre.com>,
+	=?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= <nfraprado@collabora.com>,
+	Nicolas Pitre <npitre@baylibre.com>,
+	Colin Ian King <colin.i.king@gmail.com>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: [PATCH] thermal/drivers/mediatek/lvts: remove unused lvts_debugfs_exit
+Date: Mon,  5 May 2025 07:24:52 +0200
+Message-Id: <20250505052502.1812867-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <edc560afe2a8763c93341d161daeb8b33ba606c6.1746199917.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <edc560afe2a8763c93341d161daeb8b33ba606c6.1746199917.git.christophe.jaillet@wanadoo.fr>
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date: Sun, 4 May 2025 23:32:34 +0200
-X-Gm-Features: ATxdqUHqROfRe8ULU08R_OGbVQNLhxSobV1JquQn41JtqjzAQCz4SzZnaHeJ7Fo
-Message-ID: <CAFBinCC04F0PVd_wn2NmaTBn3WTLYDQEoRShU0mhrTiL0MfPCg@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: amlogic: Constify some structures
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-amlogic@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 2, 2025 at 5:32=E2=80=AFPM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> Most structures in this driver are not modified.
->
-> Constifying these structures moves some data to a read-only section, so
-> increase overall security, especially when the structure holds some
-> function pointers. (This is the case for see meson_ee_pwrc_domain_desc)
->
-> On a x86_64, with allmodconfig, as an example:
-> Before:
-> =3D=3D=3D=3D=3D=3D
->    text    data     bss     dec     hex filename
->    8924    3832       0   12756    31d4 drivers/pmdomain/amlogic/meson-ee=
--pwrc.o
->
-> After:
-> =3D=3D=3D=3D=3D
->    text    data     bss     dec     hex filename
->   12396     336       0   12732    31bc drivers/pmdomain/amlogic/meson-ee=
--pwrc.o
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+From: Arnd Bergmann <arnd@arndb.de>
+
+When debugfs is disabled, the function has no reference any more:
+
+drivers/thermal/mediatek/lvts_thermal.c:266:13: error: 'lvts_debugfs_exit' defined but not used [-Werror=unused-function]
+  266 | static void lvts_debugfs_exit(struct lvts_domain *lvts_td) { }
+      |             ^~~~~~~~~~~~~~~~~
+
+Fixes: ef280c17a840 ("thermal/drivers/mediatek/lvts: Fix debugfs unregister on failure")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/thermal/mediatek/lvts_thermal.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+index c0be4ca55c7b..985925147ac0 100644
+--- a/drivers/thermal/mediatek/lvts_thermal.c
++++ b/drivers/thermal/mediatek/lvts_thermal.c
+@@ -263,8 +263,6 @@ static inline int lvts_debugfs_init(struct device *dev,
+ 	return 0;
+ }
+ 
+-static void lvts_debugfs_exit(struct lvts_domain *lvts_td) { }
+-
+ #endif
+ 
+ static int lvts_raw_to_temp(u32 raw_temp, int temp_factor)
+-- 
+2.39.5
+
 
