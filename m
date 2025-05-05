@@ -1,63 +1,68 @@
-Return-Path: <linux-pm+bounces-26701-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26702-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 930FBAAB690
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 07:53:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D003AAB6EE
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 08:00:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 027693ABC1E
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 05:48:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E1B8189505B
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 05:57:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43F524222E6;
-	Tue,  6 May 2025 00:29:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A002D218AB4;
+	Tue,  6 May 2025 00:36:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tS/afUhk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h5EumBaV"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748122D6420;
-	Mon,  5 May 2025 22:54:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738B22DFA4F;
+	Mon,  5 May 2025 23:02:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746485681; cv=none; b=SXQj9+3ufJ3ccYX1bKLw3Kzmhc2WDThAVfvefinyHaNhjZPK+MLD9pg/coIibKDD247//snwm7OcDneYZnEyw7YxkBnlcl7P9ilhza00RhRoV5u77IjHWnrM3aAh++IkZ+uAj4cf7g5J/mlewy6I3aqKYHide24u8Fiw15N7Cvk=
+	t=1746486179; cv=none; b=XbO6TPhF6ySR5x3FxzGT3Ie7qHumFgrRTkouinKP1fijn95NgaW2GyK37ZV+ACypFOYYwDJUap8yM+epLiXM8nKrx7IMKts+N5eIN6Bo0p3N5v/6r97Paiw88ecPBskp5uLA+5nxJwvo7HEECRSmPEfKdqdL13Lo00kVpq5+rIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746485681; c=relaxed/simple;
-	bh=M99ajY+gRd/zYONgX/3GChhp/+oj3XzSD9eZVEY1q0I=;
+	s=arc-20240116; t=1746486179; c=relaxed/simple;
+	bh=YF4sqYUsi/wUGYdPp1hwG53Z8+TWL3CmgslUzgxjWwc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=RfcvtjblOhkHU1/wAs9hzJoohf4kyhBIrw+lEK5TWPVBTYxK5clRaRy1F2KO9nFGgUTri+JFEFC+rgjbwxW7PlYGTFWXnUIkKsz0fHtvtuu+DYKAHKksydfB1YUtPuVN2wZGZ67ZmuPgJvAEo7MeKMOHqI9ViQJq3Ld3/IG46no=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tS/afUhk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44440C4CEE4;
-	Mon,  5 May 2025 22:54:39 +0000 (UTC)
+	 MIME-Version; b=Lpp2Rdws0ElvKfNIPwa3puhTnKzF7EC3m4BItpDW0TGzYDzvLUgyLcOmn2aQMh8A/FQYJU/qfOHTa/zrb++jHu9VFdi37dNYqg+rwRGx/U/MZVccJ6Zx7x6rT4LZA19n6zL0LPV9gt+hpVy48tCNGSzcvEOf3cLoJ9qRRAduwHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h5EumBaV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3E69C4CEE4;
+	Mon,  5 May 2025 23:02:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746485680;
-	bh=M99ajY+gRd/zYONgX/3GChhp/+oj3XzSD9eZVEY1q0I=;
+	s=k20201202; t=1746486178;
+	bh=YF4sqYUsi/wUGYdPp1hwG53Z8+TWL3CmgslUzgxjWwc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tS/afUhkDo5c5mAtnr7uVcMDoTHEVRHT8q9/A09yvaRmwi4Gh2jPIsviFr58f9b3i
-	 ro810zOyc8zt1YRtjN09hBHaiAeKiyqJmVwcAva1+qIpYU4JaGoI4TFJuJYqlArRC+
-	 xOAK6iYZvIQ55Xr/ienczvVOWKi2zi6xveFswAjCQgj5FCrDyrq3x8A/6d6FuIdSlK
-	 9RYxka998DrfHBcfIYu/59xVj5fjX3Wgr4q1lAMdMifLBf1knCkNmBsATw+u7Lpv85
-	 ozVRbWr4PJBKg07MEGt6lm5AuLszQ5p1lXrB2KBnRnfb8FBCJb8gmWfOSl0n2haqsd
-	 HK5OFMHIP5Zgw==
+	b=h5EumBaVcd3F2WTnvQQ4G1OkjH3isWLmfXhAXk6rh1NE8UTxpifDY8D9EpFfdrv5o
+	 QZ1JuLgyKC5RbS6xeaxL+rDna2UZGhVMZFphryNc0uukLycmFxSy32Pidxa8TlWlZ7
+	 r4OnjJtR0DBWtlsvn+sBV3C+rL5mg8rY2EoXo4yGL70y4AJc7pYcD+0RjQ1H8pqXiO
+	 P9cMxktrpOpbnMurEVRKhk4DZKKaYvyCZ08R4Op69QVEdhg5ysLaupMSdg1nj9Jou6
+	 XyOSBG8xZ0DWOaeBYTUzBypmLzChdYAszDfYRTXcDa2+1HN+Df/BXMmOU+j2zWTNpY
+	 1c3w971Fthmrg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
+Cc: Ahmad Fatoum <a.fatoum@pengutronix.de>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
 	Sasha Levin <sashal@kernel.org>,
-	ray.huang@amd.com,
-	gautham.shenoy@amd.com,
-	rafael@kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 423/486] cpufreq: amd-pstate: Remove unnecessary driver_lock in set_boost
-Date: Mon,  5 May 2025 18:38:19 -0400
-Message-Id: <20250505223922.2682012-423-sashal@kernel.org>
+	shawnguo@kernel.org,
+	shengjiu.wang@nxp.com,
+	dario.binacchi@amarulasolutions.com,
+	peng.fan@nxp.com,
+	michael@amarulasolutions.com,
+	krzysztof.kozlowski@linaro.org,
+	joe@pf.is.s.u-tokyo.ac.jp,
+	linux-pm@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.6 188/294] pmdomain: imx: gpcv2: use proper helper for property detection
+Date: Mon,  5 May 2025 18:54:48 -0400
+Message-Id: <20250505225634.2688578-188-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505223922.2682012-1-sashal@kernel.org>
-References: <20250505223922.2682012-1-sashal@kernel.org>
+In-Reply-To: <20250505225634.2688578-1-sashal@kernel.org>
+References: <20250505225634.2688578-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,38 +71,41 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.26
+X-stable-base: Linux 6.6.89
 Content-Transfer-Encoding: 8bit
 
-From: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
+From: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-[ Upstream commit db1cafc77aaaf871509da06f4a864e9af6d6791f ]
+[ Upstream commit 6568cb40e73163fa25e2779f7234b169b2e1a32e ]
 
-set_boost is a per-policy function call, hence a driver wide lock is
-unnecessary. Also this mutex_acquire can collide with the mutex_acquire
-from the mode-switch path in status_store(), which can lead to a
-deadlock. So, remove it.
+Starting with commit c141ecc3cecd7 ("of: Warn when of_property_read_bool()
+is used on non-boolean properties"), probing the gpcv2 device on i.MX8M
+SoCs leads to warnings when LOCKDEP is enabled.
 
-Signed-off-by: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
-Acked-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Fix this by checking property presence with of_property_present as
+intended.
+
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Link: https://lore.kernel.org/r/20250218-gpcv2-of-property-present-v1-1-3bb1a9789654@pengutronix.de
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpufreq/amd-pstate.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/pmdomain/imx/gpcv2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 9db5354fdb027..7a16d19322286 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -696,7 +696,6 @@ static int amd_pstate_set_boost(struct cpufreq_policy *policy, int state)
- 		pr_err("Boost mode is not supported by this processor or SBIOS\n");
- 		return -EOPNOTSUPP;
+diff --git a/drivers/pmdomain/imx/gpcv2.c b/drivers/pmdomain/imx/gpcv2.c
+index 13fce2b134f60..84d68c805cac8 100644
+--- a/drivers/pmdomain/imx/gpcv2.c
++++ b/drivers/pmdomain/imx/gpcv2.c
+@@ -1350,7 +1350,7 @@ static int imx_pgc_domain_probe(struct platform_device *pdev)
  	}
--	guard(mutex)(&amd_pstate_driver_lock);
  
- 	ret = amd_pstate_cpu_boost_update(policy, state);
- 	WRITE_ONCE(cpudata->boost_state, !ret ? state : false);
+ 	if (IS_ENABLED(CONFIG_LOCKDEP) &&
+-	    of_property_read_bool(domain->dev->of_node, "power-domains"))
++	    of_property_present(domain->dev->of_node, "power-domains"))
+ 		lockdep_set_subclass(&domain->genpd.mlock, 1);
+ 
+ 	ret = of_genpd_add_provider_simple(domain->dev->of_node,
 -- 
 2.39.5
 
