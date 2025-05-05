@@ -1,111 +1,115 @@
-Return-Path: <linux-pm+bounces-26635-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26636-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43084AA8ED8
-	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 11:06:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E469AA8F8A
+	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 11:27:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 830993A6271
-	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 09:05:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 392691756B2
+	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 09:27:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 422EA1E5219;
-	Mon,  5 May 2025 09:05:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0472157A6B;
+	Mon,  5 May 2025 09:27:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MlL7nBW/"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="GjA/xLbq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from outbound.mr.icloud.com (p-west2-cluster4-host1-snip4-10.eps.apple.com [57.103.69.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF901DED40
-	for <linux-pm@vger.kernel.org>; Mon,  5 May 2025 09:05:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 657611F5434
+	for <linux-pm@vger.kernel.org>; Mon,  5 May 2025 09:27:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.69.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746435955; cv=none; b=PDdAvawul6BvLhSup9YIJPF/nSXwKeVDCtwe8MIzqLV9gk9kWscr3yXRL2nCb0PM/rvVUcfvpZna+mfO6XqIKa59prvtVtf80VaQjTkI7T7KfhMfLuo7w/g1zYe/sJ3w9z4Y0AZQdtGvVwTv4/Z9kIaIjAe9BL9N3MKp4bm3LSA=
+	t=1746437234; cv=none; b=pCOWCqz1N9M+qxEytWCIL614kG//CtKkah7NdHaipHEVRk4cg6zKYAYhIBb+ytMghxzidmfLHngG7jHuIelVcLqFnB3J9ZNdrtT8rn1YNQtSQ+KJ9/CrmVGJ70F5Kx6gJB8FiUG3SLUZye/LmGRGxdFqWAHZ5V7ZzRkdYCF65Ss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746435955; c=relaxed/simple;
-	bh=jaVB3sx5ejThu8wEUg5nUqvMM3/yIkqZP4MpKH/Gvus=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rkZ9t8t5T8jxSjaXkomraYAB3sVW66l2S6St5waIMOMFT5sT9oYT8D+3Io+unnE1L/e67JdFf0IchKm0amwkynX/arTTtTg2NSJ0pcXV1umrigTaBfLVy8y4NKlqZ2NPBkltKPAKUFX9b9fuqsmx4erJBStINusqRSdiRK7gncE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MlL7nBW/; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5499659e669so4881141e87.3
-        for <linux-pm@vger.kernel.org>; Mon, 05 May 2025 02:05:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1746435951; x=1747040751; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jaVB3sx5ejThu8wEUg5nUqvMM3/yIkqZP4MpKH/Gvus=;
-        b=MlL7nBW/px4/CIrOcDVdTNLRXOHn8yS4tkl8gahouAGayJGPJqKG7TovPRz6OZflQ7
-         HrxkSxMMF2EGr29W1/2JgxnxPb/qX9uIb23pv7gXw8tqn0fB/SaqXK1Lp+p0Vk2xU23l
-         LZZRy5uq+6LmDkYfAOtc4U3E8P4ZaMU0hFF6m9aX03TaP3+twc2rXMw+f83YhOABl0S3
-         hB0EUgKimx8KloaODdiVeQ0hw9ejIGmwvHM23m4Jy6jqECJthkTg9Nq4OFj7UcJIREOw
-         ZJUDneEhIBtERekDd9C4bih9FI56DBBCMu2BDfDBp9vbmYYAurypYzemB/N3Co+b9dlc
-         +E7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746435951; x=1747040751;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jaVB3sx5ejThu8wEUg5nUqvMM3/yIkqZP4MpKH/Gvus=;
-        b=e6M3TBQirx8GP0wzjCLkws0DgPAEOxTwcBkLBz6pidbG/DGPEBsk5WNvCyMWKX5zcZ
-         OT1ld99wk1n6MWSsnzORG2ucqEPb66XENezag+XpTKTeOcpeLtKpEPRgSjx1uooxL3xf
-         AW0aZsSNszdIr78DphK6BEy/V0HsUE2n6ZuvhefLdcSONehPyaJKAA3U1lMArfmvN2w3
-         PlzPa6QelMkjatmonJr3Qy5sLksUhs0D30CKoY0nkHW4QbSRwJsBPC8u92V/u/EnaIQM
-         Xj/6Re9tPOOjG55setunpR037mIWR553E0u2TYt1221NzNcNTtHpA58j7KLBkeE9qvXZ
-         HfjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUqO7c3w7KYVo9T+1AvZ6pGvuCCX3A8rML/XyldojArwf3G6OQqWzF19+vWmwfu/qMwrMI9e/mpZw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yynp41AZvpvRe8BMaYQq4L2T0EgFDwsIdC+X3YgnqBxgEz8DDF/
-	rGmjZPyB7dUBt9AlDZRaY7tHOq4D8jQpSuahN1Vj+Gcb8U9ETnphOhh56M5OBvJoPzj9LfXGx2g
-	zQFuWi90nl0bihLxM+s4BIvOioFPA31sbQRfVYg==
-X-Gm-Gg: ASbGncs6C2fBx71RHhZbHhpCVTzP9IAjwCV05cmjysuOuuCNs38ETMb+2zm9SkdogTp
-	YlR2mPjG1V1hDo3kRAOrPq2IEyHKWLT5U1GPJC66gDcO1FhPPHjDVJPeIgbM9NYMmKsxfLvu6in
-	9qtVm0lU43X8Sui32rBzJdrw==
-X-Google-Smtp-Source: AGHT+IG1Gg4cqaY2027Xkt9vszcojc1RUUWP69uzjNjCzPb0+lNxfxbfad5R/RgzScrc0f+PobFDAQA8A6a3BcrID1g=
-X-Received: by 2002:a05:6512:118d:b0:54a:f76a:6f83 with SMTP id
- 2adb3069b0e04-54eac200d31mr3042013e87.13.1746435951218; Mon, 05 May 2025
- 02:05:51 -0700 (PDT)
+	s=arc-20240116; t=1746437234; c=relaxed/simple;
+	bh=pZyvOLFBKuApBznDeYImuouwzRpCU3KDlc0PkMx5eSc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=H8w3CXrff5qdg1MAHS2qWyHtJQbqn+k26OZqZoPHomqjy1+jSX/FAty6hbY7940Lv1sQ0JKFGmDMUYFcpccIhMuzRXqsLLAQCvjt+/LIBQbcWD81kOWHEgFQqXBZrXiOESEiqyYZqKKHgsmvXNMubUt9Gicep9/BRvr5ckRlnGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=GjA/xLbq; arc=none smtp.client-ip=57.103.69.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; bh=+bNZg9fhVqFS5rCqRU6rBW1/wv3PMXLvMLVWs2j/KyM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:x-icloud-hme;
+	b=GjA/xLbqdr/I9oJV3mGDLUAJadgDR/S8G9EDCoyT/8nPPwYExbovI4c7aMVbfcrrr
+	 D6ZFYTx5ZfGxjPljqwFizpGvZbUF2ojCbSepJdd9Sx2s0uEEC82o+vVY9Xk6gtIPau
+	 x5l+0YCkFq/2m/Fp3azm5BRjdUNEwgInBeAxR29IMZ63WHMgcE4st3Jm9Zpng9j0+8
+	 Q36S8leE/evJ4GvSmJDOsQ/8602YAkgYHdmrEryAyTXiUbaEPghWBB0Sggi5KS5LLO
+	 XvALObq55jXvNqMv8XmG40nUzZHTp1mcgankt83K9Lq+59EnWy4ZkSUi7NZqjGsylR
+	 OyR8Y1W3gljiA==
+Received: from [192.168.1.26] (unknown [17.57.152.38])
+	by outbound.mr.icloud.com (Postfix) with ESMTPSA id D06521800175;
+	Mon,  5 May 2025 09:27:07 +0000 (UTC)
+From: Zijun Hu <zijun_hu@icloud.com>
+Date: Mon, 05 May 2025 17:26:51 +0800
+Subject: [PATCH] PM: wakeup: Delete space in the end of string shown by
+ pm_show_wakelocks()
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250503-smc-6-15-v4-0-500b9b6546fc@svenpeter.dev> <20250503-smc-6-15-v4-1-500b9b6546fc@svenpeter.dev>
-In-Reply-To: <20250503-smc-6-15-v4-1-500b9b6546fc@svenpeter.dev>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Mon, 5 May 2025 11:05:40 +0200
-X-Gm-Features: ATxdqUG40K92Q6cLhA-jiK9adWrE64up9leFqXIiQtBvPLIG9_nqRk1Z9BFEJZw
-Message-ID: <CACRpkdbCfUEZd06yeZTNecGFPwBgJkpMH3hqkvJw4J+iSENG=Q@mail.gmail.com>
-Subject: Re: [PATCH v4 1/9] dt-bindings: gpio: Add Apple Mac SMC GPIO block
-To: sven@svenpeter.dev
-Cc: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
-	Hector Martin <marcan@marcan.st>, Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>, Marc Zyngier <maz@kernel.org>, 
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, asahi@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250505-fix_power-v1-1-0f7f2c2f338c@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAFqEGGgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDINRNy6yIL8gvTy3STTQxMU42TDQxtrRMUwKqLyhKBUqCzYqOra0FAOa
+ qtVRbAAAA
+X-Change-ID: 20250505-fix_power-a443c1a4399f
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Zijun Hu <zijun_hu@icloud.com>, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
+X-Mailer: b4 0.14.2
+X-Proofpoint-ORIG-GUID: E-w5mm_cnpnXz-v57WN_7T6JAalSQppo
+X-Proofpoint-GUID: E-w5mm_cnpnXz-v57WN_7T6JAalSQppo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-05_04,2025-04-30_01,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 clxscore=1015
+ phishscore=0 malwarescore=0 spamscore=0 suspectscore=0 adultscore=0
+ bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2505050089
 
-On Sat, May 3, 2025 at 12:07=E2=80=AFPM Sven Peter via B4 Relay
-<devnull+sven.svenpeter.dev@kernel.org> wrote:
+From: Zijun Hu <quic_zijuhu@quicinc.com>
 
-> From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
->
-> Add the DT binding for the Apple Mac System Management Controller GPIOs.
->
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+pm_show_wakelocks() is called to generate a string when showing attributes
+/sys/power/wake_(lock|unlock), but the string ends with an unwanted space
+the space was added back by mistake by commit c9d967b2ce40
+("PM: wakeup: simplify the output logic of pm_show_wakelocks()").
 
-LGTM
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Remove the unwanted space.
 
-Yours,
-Linus Walleij
+Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+---
+ kernel/power/wakelock.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/kernel/power/wakelock.c b/kernel/power/wakelock.c
+index 52571dcad768b988eaadbd3ce98a4ac42dd2f7dd..4e941999a53ba69410f4526d5d55c32312c36140 100644
+--- a/kernel/power/wakelock.c
++++ b/kernel/power/wakelock.c
+@@ -49,6 +49,9 @@ ssize_t pm_show_wakelocks(char *buf, bool show_active)
+ 			len += sysfs_emit_at(buf, len, "%s ", wl->name);
+ 	}
+ 
++	if (len > 0)
++		--len;
++
+ 	len += sysfs_emit_at(buf, len, "\n");
+ 
+ 	mutex_unlock(&wakelocks_lock);
+
+---
+base-commit: 393d0c54cae31317deaa9043320c5fd9454deabc
+change-id: 20250505-fix_power-a443c1a4399f
+
+Best regards,
+-- 
+Zijun Hu <quic_zijuhu@quicinc.com>
+
 
