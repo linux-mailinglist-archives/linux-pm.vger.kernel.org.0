@@ -1,173 +1,120 @@
-Return-Path: <linux-pm+bounces-26637-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26638-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2AC6AA90B3
-	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 12:16:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BB4BAA90C0
+	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 12:17:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD3B23B7C24
-	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 10:16:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8055F1897681
+	for <lists+linux-pm@lfdr.de>; Mon,  5 May 2025 10:17:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA04F1F4261;
-	Mon,  5 May 2025 10:16:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62CDE17C21E;
+	Mon,  5 May 2025 10:17:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wrdSdj5N"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="pkX+gdLm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from outbound.pv.icloud.com (p-west1-cluster1-host9-snip4-9.eps.apple.com [57.103.64.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57DBE17C21E
-	for <linux-pm@vger.kernel.org>; Mon,  5 May 2025 10:16:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046941FF7B0
+	for <linux-pm@vger.kernel.org>; Mon,  5 May 2025 10:17:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.64.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746440214; cv=none; b=Azkue5Wx/DD7F0e+pV1XIeLdtpKR9wn+BLlFi6V8WIVeltM8PHXO9Rl0vmVlH9UXDe8gvVlUQdO9RgHfy8LqK7O00I3YkW+Oou8/iB6/4C3dUFOOn6p1PRxkTMeo42vDUldCg3/GqVLfIiWhoJrExvU+wOnXLyfNnYVm0GofOh8=
+	t=1746440244; cv=none; b=RwmPIVcQqvTPrrBh3698HEZj0wvzPXXwOyT0tgsB0+KYNcIFg/My2NleH9hgN7F9xu+Qc96sawXwqyJ8zB9x/OhJRhs0KWYcbCuMK6oIxez6SnitDy9pI9RlJfZ55+Fa0eIorAIGqqVvTIKDAsF/4AdzOEJaN65ym6uWkSsviwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746440214; c=relaxed/simple;
-	bh=mevWuU4xNwiUirBkvdaNf+/+QiabGjfTbLpHvUrs9FQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HVbJ8VInx9tMzBM8LsGh0vogsNvjRN8pmXfX3va60Yf2aH0HKUC14GLLKhlfR2kf1u+SugGG45M6x4bvqKSZEbTfAvU7vOafClWxHXfg+2KYiQfKWTHt5s2+jTCJN6neC3T58gTyU4Mvuzf0rPGqi3Wr4JlzTjWUtAvcxINGdLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wrdSdj5N; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <43d7374f-dc89-4137-bb7d-39b9b1a1dd63@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1746440200;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=k9oeIjP/XK15ndT9uH90YP5m53JwmFwFM7/2OTSeJIY=;
-	b=wrdSdj5Nz0QcfudccPsOjQ8nWkhyqQ41MCdvQKMr4Mz0I7OyXzNlTsRiI/I8J3hZ4xY6CP
-	QZH/AqHwyWs51D48n/jcJHd1cjPMISGkQfstkxbL/7+V5kp3KezE04O/DBHq3KjuO2WGex
-	anxBLHoNZs8or2MqNWUwp8ywmgw4ngg=
-Date: Mon, 5 May 2025 12:16:37 +0200
+	s=arc-20240116; t=1746440244; c=relaxed/simple;
+	bh=GUGFiV9TE85rK6IJCno2tLTGn6CA49p2TSUwh7TGSUA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=r/UhHPkX0CYcILjpraVOcEQwnhxSVZDnP5E+uoofdBT4qcb6EuFrvYlklxwl5omkqyRX4/QKOqT90ZYlHZCVYt7iZB0ChGLt2yMkT6LlVkyYZ9euVAopk/mf3g8jqoLnm9EF4gCsMMWrZrTALuu+rF4XcVjXebL+0dyKa0i9hz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=pkX+gdLm; arc=none smtp.client-ip=57.103.64.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; bh=TpUqnDjaGq9gtGHHOd6VeHOE8qsCo3MZ6iZzx1E1rwk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:x-icloud-hme;
+	b=pkX+gdLmYCa9UXAzCbE4wSZrAWRiKwFVotAeE4fYEFmgdf5LaWnxAVRAgJEc+yaUL
+	 xEJaghCX2u19oIymLyIQXYbc0/Os0z7y7qoFyURYNKeKVAygDsGKKQ74qvEC52jcyo
+	 BY8dSrObbmQLMphzXeEjAOJlhFQzYtwrSfC4JrV6VT1NP7yyJWL0RPu4Nse2BxxhHQ
+	 G3k2HAtc0h1c/zj4j1XDw0UAoobVR5u+y0lu0ZQ3BrXAmV/acK1tjmft+BQNWQxcOG
+	 Y5PBs3sh/vJMw8T/ZfKckCX/fepP1C6vmb/BTeyUeN1NXRwZoaVCiEIRWxYZ7PBWAi
+	 7/y/p8blwU0dQ==
+Received: from [192.168.1.26] (pv-asmtp-me-k8s.p00.prod.me.com [17.56.9.36])
+	by outbound.pv.icloud.com (Postfix) with ESMTPSA id 79888180022B;
+	Mon,  5 May 2025 10:17:18 +0000 (UTC)
+From: Zijun Hu <zijun_hu@icloud.com>
+Date: Mon, 05 May 2025 18:17:04 +0800
+Subject: [PATCH] PM: wakeup: Add missing wakeup source attribute
+ relax_count
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v1] soundwire: intel_auxdevice: Fix system suspend/resume
- handling
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Vinod Koul <vkoul@kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
- Bard Liao <yung-chuan.liao@linux.intel.com>, linux-sound@vger.kernel.org
-References: <5891540.DvuYhMxLoT@rjwysocki.net>
- <30acf520-c137-4b49-8b69-08e35a7c5969@linux.dev>
- <CAJZ5v0iCsd8fdXRdicT7mqsRte39WC+SVjgfz2NHS9QpvSnDdw@mail.gmail.com>
- <CAJZ5v0iFPf=WT3CjNqtioUoiX9jc5nmZLJnAkQOhBTmGq_ioAw@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>
-In-Reply-To: <CAJZ5v0iFPf=WT3CjNqtioUoiX9jc5nmZLJnAkQOhBTmGq_ioAw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250505-add_power_attrs-v1-1-10bc3c73c320@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAB+QGGgC/x2MywqAIBAAfyX2nGDSA/qVCDFday8aq1QQ/nsSc
+ 5rDzAsJmTDB3LzAeFGiGKp0bQP2MGFHQa46KKkGWRHGOX3GG1mbnDkJv03Wj5vrLSqo1cno6fm
+ Py1rKB5l+RRthAAAA
+X-Change-ID: 20250505-add_power_attrs-fb7cf6bd4ce2
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Danilo Krummrich <dakr@kernel.org>
+Cc: Zijun Hu <zijun_hu@icloud.com>, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
+X-Mailer: b4 0.14.2
+X-Proofpoint-ORIG-GUID: CNjtgK9LB8I1L7anSHyGRHuoN9xVDyl6
+X-Proofpoint-GUID: CNjtgK9LB8I1L7anSHyGRHuoN9xVDyl6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-05_05,2025-04-30_01,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015 mlxlogscore=999
+ bulkscore=0 adultscore=0 malwarescore=0 phishscore=0 spamscore=0
+ mlxscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2505050098
 
+From: Zijun Hu <quic_zijuhu@quicinc.com>
 
+There is wakeup source attribute 'active_count', but its counterpart
+attribute 'relax_count' is missing.
 
-On 4/25/25 13:43, Rafael J. Wysocki wrote:
-> On Fri, Apr 25, 2025 at 8:10 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->>
->> On Fri, Apr 25, 2025 at 7:14 PM Pierre-Louis Bossart
->> <pierre-louis.bossart@linux.dev> wrote:
->>>
->>> On 4/24/25 20:13, Rafael J. Wysocki wrote:
->>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>>
->>>> The code in intel_suspend() and intel_resume() needs to be properly
->>>> synchronized with runtime PM which is not the case currently, so fix
->>>> it.
->>>>
->>>> First of all, prevent runtime PM from triggering after intel_suspend()
->>>> has started because the changes made by it to the device might be
->>>> undone by a runtime resume of the device.  For this purpose, add a
->>>> pm_runtime_disable() call to intel_suspend().
->>>
->>> Allow me to push back on this, because we have to be very careful with a hidden state transition that needs to happen.
->>>
->>> If a controller was suspended by pm_runtime, it will enter the clock stop mode.
->>>
->>> If the system needs to suspend, the controller has to be forced to exit the clock stop mode and the bus has to restart before we can suspend it, and that's why we had those pm_runtime_resume().
->>>
->>> Disabling pm_runtime when entering system suspend would be problematic for Intel hardware, it's a known can of worms.
->>
->> No, it wouldn't AFAICS.
+Add missing 'relax_count' for integrality.
 
-I was referring to the SoundWire controller. The states are different 
-between pm_runtime suspend (clock is stopped but external wakes are 
-supported) and system suspend (external wakes are not supported).
+Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+---
+ drivers/base/power/wakeup_stats.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-If the system suspend is entered while the device is already in 
-pm_runtime suspend, then we have to perform a full resume before the 
-system suspend.
+diff --git a/drivers/base/power/wakeup_stats.c b/drivers/base/power/wakeup_stats.c
+index 6732ed2869f9f38a272faab0044b6eb3edc051f2..3ffd427248e8eebae3c05b5165bd4200a0668339 100644
+--- a/drivers/base/power/wakeup_stats.c
++++ b/drivers/base/power/wakeup_stats.c
+@@ -34,6 +34,7 @@ wakeup_attr(active_count);
+ wakeup_attr(event_count);
+ wakeup_attr(wakeup_count);
+ wakeup_attr(expire_count);
++wakeup_attr(relax_count);
+ 
+ static ssize_t active_time_ms_show(struct device *dev,
+ 				   struct device_attribute *attr, char *buf)
+@@ -119,6 +120,7 @@ static struct attribute *wakeup_source_attrs[] = {
+ 	&dev_attr_event_count.attr,
+ 	&dev_attr_wakeup_count.attr,
+ 	&dev_attr_expire_count.attr,
++	&dev_attr_relax_count.attr,
+ 	&dev_attr_active_time_ms.attr,
+ 	&dev_attr_total_time_ms.attr,
+ 	&dev_attr_max_time_ms.attr,
 
-I am not going to argue on how to perform this resume, just that it's 
-required. The direction transition from pm_runtime suspend to system 
-suspend is not supported.
+---
+base-commit: 393d0c54cae31317deaa9043320c5fd9454deabc
+change-id: 20250505-add_power_attrs-fb7cf6bd4ce2
 
->>> It's quite possible that some of the code in intel_suspend() is no longer required because the .prepare will resume the bus properly, but I wanted to make sure this state transition out of clock-stop is known and taken into consideration.
->>
->> This patch doesn't change the functionality in intel_suspend(), it
->> just prevents runtime resume running in parallel with it or after it
->> from messing up with the hardware.
->>
->> I don't see why it would be unsafe to do and please feel free to prove me wrong.
-> 
-> Or just tell me what I'm missing in the reasoning below.
-> 
-> This code:
-> 
-> -    if (pm_runtime_suspended(dev)) {
-> -        dev_dbg(dev, "pm_runtime status was suspended, forcing active\n");
-> -
-> -        /* follow required sequence from runtime_pm.rst */
-> -        pm_runtime_disable(dev);
-> -        pm_runtime_set_active(dev);
-> -        pm_runtime_mark_last_busy(dev);
-> -        pm_runtime_enable(dev);
-> -
-> -        pm_runtime_resume(bus->dev);
-> -
-> -        link_flags = md_flags >> (bus->link_id * 8);
-> -
-> -        if (!(link_flags & SDW_INTEL_MASTER_DISABLE_PM_RUNTIME_IDLE))
-> -            pm_runtime_idle(dev);
-> -    }
-> 
-> that is being removed by my patch (because it is invalid - more about
-> that later) had never run before commit bca84a7b93fd ("PM: sleep: Use
-> DPM_FLAG_SMART_SUSPEND conditionally") because setting
-> DPM_FLAG_SMART_SUSPEND had caused the core to call
-> pm_runtime_set_active() on the device in the noirq resume phase, so it
-> had never been seen as runtime-suspended in intel_resume().  After
-> commit bca84a7b93fd the core doesn't do that any more, so if the
-> device has been runtime-suspended before intel_suspend() runs,
-> intel_resume() will see that its status is RPM_SUSPENDED.  The code in
-> question will run and it will crash and burn if
-> SDW_INTEL_MASTER_DISABLE_PM_RUNTIME_IDLE is set in the link flags.
-> 
-> The reason why that code is invalid is because the
-> pm_runtime_set_active() call in it causes the status to change to
-> RPM_ACTIVE, but it doesn't actually change the state of the device
-> (that is still physically suspended).  The subsequent
-> pm_runtime_resume() sees that the status is RPM_ACTIVE and it doesn't
-> do anything.  At this point, the device is still physically suspended,
-> but its runtime PM status is RPM_ACTIVE, so if pm_runtime_idle() runs,
-> it will trigger an attempt to suspend and that will break because the
-> device is already suspended.
-> 
-> So this code had never run before and it demonstrably doesn't work, so
-> I don't see why removing it could be incorrect.
-
-I don't have enough knowledge to counter your arguments :-). I think we 
-misread the documentation in runtime_pm.pst, this sort of sequence is 
-mentioned but on system resume, and we applied it for system suspend as 
-well.
-
-
+Best regards,
+-- 
+Zijun Hu <quic_zijuhu@quicinc.com>
 
 
