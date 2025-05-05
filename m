@@ -1,109 +1,128 @@
-Return-Path: <linux-pm+bounces-26680-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26684-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73828AAA751
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 02:30:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C046FAAAA8E
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 03:40:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0981C3B7B48
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 00:26:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3067E3B3B15
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 01:35:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC7003344F3;
-	Mon,  5 May 2025 22:36:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D47AD2DDD0E;
+	Mon,  5 May 2025 23:01:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="KODD3dnU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g7QBW3+T"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8456B2C086E;
-	Mon,  5 May 2025 22:36:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1313B36E08B;
+	Mon,  5 May 2025 22:57:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746484583; cv=none; b=YTMCMujevoUD2R+YRSK+U60c48+vSif4YjckTx6v4g5Mof+XgvVrF17d5H8vDjCiWilFw5so/zGknmnTVIhVwmvuRn8ozZFhwRUlgHCsz+Wgcgn9tJit7qCDKml+X+QBCCbJojlaWMJsNOUh2V5MdMzsnLF+9n1rRYjkMLPCjow=
+	t=1746485848; cv=none; b=tj9sIuenph2Jm2eMdWBEt/5Xz9LT3CP1NUwM61YPtURyLSOJtlK3SV9inLcF29sUjb3Tbf9KhVvnEOBNGbpjTtxKZF8WyMkcVAV7PyTy9dR/mziCa5ER+V3FpgEZ4839li5389ngOAQu/spEWmrK+LdeWX5zl3lbm0JObWEgutE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746484583; c=relaxed/simple;
-	bh=V/as8NAbScpAc7r0jNSjRHgZ4ii7oO7JrW99rb0nMJI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KBSD+MgkyX7mLRblRRhfxE0FsyLidXyYwvyhm1GYrzORRnmoNvPIdzN6s3HTFahAe1OoY0MBWQ9a2h8VgM9TQ5NDKVWm1DOm0M+TG8OlO0roNlKhZS4Jp5AeDQrd9CxuuVMs0LrQpueTH5Rvj8ZeHeIVbPUETV0jqgLUY04aT4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=KODD3dnU; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-	bh=wjv/3kkg8ER8GtdmsC4OfpctOuq/Lbu60oSY4NqUSV4=; b=KODD3dnUFam1+/IYyLJc/CXSLs
-	Gw9rntN2BqtvuXlFEaZG6JhJA6URM/jLipCXwPYSr/YFlP9n4gLuYF2daWvE2rDCC7/vAkm6s0nuN
-	QXiS6iKN3ofsx7PLEDDx6y9jUN9RXgITzSCI4Tsoj5PUIYa/DJBvbFIJhCstkDKqUwbc02C12msB4
-	n2FHQzzYVeE56cAlg2pjy1u1CuD8oPlQuosvbOI+scszXsJeP/LLq1vjB8RGKxpTUp6AmIV81HpQg
-	DIBWC0kfOdO3g7lB20nmxiiE6+K7HJbBWhLw45OAmxaH5ayGw5kNEpepcvcpoKjN9NZz0O6a1JQdr
-	06dZq0rw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uC4Q3-000000073Pb-3xQP;
-	Mon, 05 May 2025 22:36:15 +0000
-Date: Mon, 5 May 2025 23:36:15 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Yunseong Kim <ysk@kzalloc.com>
-Cc: Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>,
-	byungchul@sk.com, max.byungchul.park@gmail.com,
-	linux-fsdevel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs: Prevent panic from NULL dereference in
- alloc_fs_context() during do_exit()
-Message-ID: <20250505223615.GK2023217@ZenIV>
-References: <20250505203801.83699-2-ysk@kzalloc.com>
+	s=arc-20240116; t=1746485848; c=relaxed/simple;
+	bh=gAz+aUFuLUPxRXt58pKLDYqHkb8l7aAmg0L0zi/3UnM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=s2GCkdlORtqkX9eS2RPvV7IY1dr9605YoZEtfzLpX6ikKcwPHK7yQGOFa3+ioAc3HCTWuABCGGX37lW50CtwrW6zmpVJSRv7iKQ5YqkNSmIBAUxhwzOndPRMzK9jN07JqY7dTHqj210SwS+OG0VYVgFSKk67g8xP5xtTEm5iAfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g7QBW3+T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ECC4C4CEF2;
+	Mon,  5 May 2025 22:57:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746485846;
+	bh=gAz+aUFuLUPxRXt58pKLDYqHkb8l7aAmg0L0zi/3UnM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=g7QBW3+TwTZMUqHW/c8gGyuKfbb6YZtyGvMEvIp3KUJ+89nLo2bAm4KcqtvPSoE4V
+	 nEwJucXccWEi3uONuOTg2M/SnxrSfKaBvAObHmFTK1BJ0WftUyG9Kw7Yo4tIT45EZF
+	 p/XiOMYHgzxN5QVg6O4Q5BCBdZkNA601fzPcRavBe+LR1DWTuLRu7yeUa6fcUp9HOF
+	 b53u1LhL/gs86ORUraJdosmw2CRPc/G92ojjw+haRBn+yIGlGYN5pSPjJgzHMyt5ft
+	 MZmha5RrsOzxd39oi7iy+NkHpqKf9EoemBB+FouNS4lHIJdc/5EPKlld4ChJmVflIm
+	 IKpZGdWzp34fQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Alice Guo <alice.guo@nxp.com>,
+	Frank Li <Frank.Li@nxp.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Sasha Levin <sashal@kernel.org>,
+	rafael@kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.6 026/294] thermal/drivers/qoriq: Power down TMU on system suspend
+Date: Mon,  5 May 2025 18:52:06 -0400
+Message-Id: <20250505225634.2688578-26-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250505225634.2688578-1-sashal@kernel.org>
+References: <20250505225634.2688578-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.6.89
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250505203801.83699-2-ysk@kzalloc.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Tue, May 06, 2025 at 05:38:02AM +0900, Yunseong Kim wrote:
-> The function alloc_fs_context() assumes that current->nsproxy and its
-> net_ns field are valid. However, this assumption can be violated in
-> cases such as task teardown during do_exit(), where current->nsproxy can
-> be NULL or already cleared.
-> 
-> This issue was triggered during stress-ng's kernel-coverage.sh testing,
-> Since alloc_fs_context() can be invoked in various contexts — including
-> from asynchronous or teardown paths like do_exit() — it's difficult to
-> guarantee that its input arguments are always valid.
-> 
-> A follow-up patch will improve the granularity of this fix by moving the
-> check closer to the actual mount trigger(e.g., in efivarfs_pm_notify()).
+From: Alice Guo <alice.guo@nxp.com>
 
-UGH.
+[ Upstream commit 229f3feb4b0442835b27d519679168bea2de96c2 ]
 
-> diff --git a/fs/fs_context.c b/fs/fs_context.c
-> index 582d33e81117..529de43b8b5e 100644
-> --- a/fs/fs_context.c
-> +++ b/fs/fs_context.c
-> @@ -282,6 +282,9 @@ static struct fs_context *alloc_fs_context(struct file_system_type *fs_type,
->  	struct fs_context *fc;
->  	int ret = -ENOMEM;
->  
-> +	if (!current->nsproxy || !current->nsproxy->net_ns)
-> +		return ERR_PTR(-EINVAL);
-> +
->  	fc = kzalloc(sizeof(struct fs_context), GFP_KERNEL_ACCOUNT);
->  	if (!fc)
->  		return ERR_PTR(-ENOMEM);
+Enable power-down of TMU (Thermal Management Unit) for TMU version 2 during
+system suspend to save power. Save approximately 4.3mW on VDD_ANA_1P8 on
+i.MX93 platforms.
 
-That might paper over the oops, but I very much doubt that this will be
-a correct fix...  Note that in efivarfs_pm_notify() we have other
-fun issues when run from such context - have task_work_add() fail in
-fput() and if delayed_fput() runs right afterwards and
-        efivar_init(efivarfs_check_missing, sfi->sb, false);
-in there might end up with UAF...
+Signed-off-by: Alice Guo <alice.guo@nxp.com>
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+Link: https://lore.kernel.org/r/20241209164859.3758906-2-Frank.Li@nxp.com
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/thermal/qoriq_thermal.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
+index 404f01cca4dab..ff8657afb31d3 100644
+--- a/drivers/thermal/qoriq_thermal.c
++++ b/drivers/thermal/qoriq_thermal.c
+@@ -18,6 +18,7 @@
+ #define SITES_MAX		16
+ #define TMR_DISABLE		0x0
+ #define TMR_ME			0x80000000
++#define TMR_CMD			BIT(29)
+ #define TMR_ALPF		0x0c000000
+ #define TMR_ALPF_V2		0x03000000
+ #define TMTMIR_DEFAULT	0x0000000f
+@@ -356,6 +357,12 @@ static int __maybe_unused qoriq_tmu_suspend(struct device *dev)
+ 	if (ret)
+ 		return ret;
+ 
++	if (data->ver > TMU_VER1) {
++		ret = regmap_set_bits(data->regmap, REGS_TMR, TMR_CMD);
++		if (ret)
++			return ret;
++	}
++
+ 	clk_disable_unprepare(data->clk);
+ 
+ 	return 0;
+@@ -370,6 +377,12 @@ static int __maybe_unused qoriq_tmu_resume(struct device *dev)
+ 	if (ret)
+ 		return ret;
+ 
++	if (data->ver > TMU_VER1) {
++		ret = regmap_clear_bits(data->regmap, REGS_TMR, TMR_CMD);
++		if (ret)
++			return ret;
++	}
++
+ 	/* Enable monitoring */
+ 	return regmap_update_bits(data->regmap, REGS_TMR, TMR_ME, TMR_ME);
+ }
+-- 
+2.39.5
+
 
