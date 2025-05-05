@@ -1,109 +1,109 @@
-Return-Path: <linux-pm+bounces-26677-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26680-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECF3EAAA664
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 02:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 73828AAA751
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 02:30:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66F713B28E5
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 00:07:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0981C3B7B48
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 00:26:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75DF9322AB3;
-	Mon,  5 May 2025 22:33:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC7003344F3;
+	Mon,  5 May 2025 22:36:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YNbJQ11E";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="f+q9z70S"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="KODD3dnU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA3B322A90;
-	Mon,  5 May 2025 22:33:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8456B2C086E;
+	Mon,  5 May 2025 22:36:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746484416; cv=none; b=aTOJVV3ws5dd+jVSuuHJR/ngkA4WR9NavmtGtdcwKYqUUJlsoLcGk/em0qqFED/8z+X/o55QdNsuLZBBRWeXzXdi29sObLT3v42cbGqUMXKyH0NNP56rPd1rUMkse394vJRA7+pQPJ6yqvz5feG6JiVa0MDYGtBBC8Hjme9ULT0=
+	t=1746484583; cv=none; b=YTMCMujevoUD2R+YRSK+U60c48+vSif4YjckTx6v4g5Mof+XgvVrF17d5H8vDjCiWilFw5so/zGknmnTVIhVwmvuRn8ozZFhwRUlgHCsz+Wgcgn9tJit7qCDKml+X+QBCCbJojlaWMJsNOUh2V5MdMzsnLF+9n1rRYjkMLPCjow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746484416; c=relaxed/simple;
-	bh=HatdA9k8dTOZzoALiSAOatm15PguKG74mPF5yaTmjXw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=U0qO5mjDr1ymM6fSu9543fhK0DnvIDuYpO+O5xKq7kb7Hoejp6Oy05BnV2yTQmkp+z21aQ8T9xu+7kMUkVW8uEVRUtz1WUnm6U7aZi1/+PuFVIJ0ZenLObGx/7X9+2PNLcLNkOLXmZ34Xr/tSaKgOmhzCrVGJQUc/tP8Sr/VMnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YNbJQ11E; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=f+q9z70S; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1746484411;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ar+nYY6YvS1JDsf3WZ/fGQw2E8KQPNJ8g1OwVIgR+aM=;
-	b=YNbJQ11E0VmO8C+gqyhlukX676Aov3AgM0pJVFAc4FJgNaleYvU1mCt+jSrgTy00xjZdcY
-	lw5g1mEGYYy2t9gmxGgFkVEo5Xn9LxICd16cbLXdLhaH+lo5UkL7bt28USzil0HKrq15fy
-	zW8p3peJv8DIfogSabh+6tPhKL76cJj2HgNcuMVpP1yL9LQyOUKglw3H7FKhsJTSP9E8l9
-	sN2XkT9RQb5nl4RDyj3Z3u23EuIxjuQfrGqKC6+T0KUkFhQJJN4y4Nub4mO3SUdCRrLJYs
-	qK9CQ+vVfaZ9RSzBw8uYllWzYms2soUc2mGoN5DWyToCHSXwaCnnyaoZ2sMnlA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1746484411;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ar+nYY6YvS1JDsf3WZ/fGQw2E8KQPNJ8g1OwVIgR+aM=;
-	b=f+q9z70Smk3vOT60407tVIz6Ss+kDH8S/UNUpUYoaE8+VjeoW6/KIMuK5eDqOnEyyebr9T
-	HeK2bY8XrvJ2t6Bg==
-To: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>, Krzysztof =?utf-8?Q?Wilczy?=
- =?utf-8?Q?=C5=84ski?=
- <kw@linux.com>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
- Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter
- <jonathanh@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Daniel
- Lezcano <daniel.lezcano@linaro.org>
-Cc: linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org, Aaron Kling
- <webgeek1234@gmail.com>
-Subject: Re: [PATCH v4 1/4] irqdomain: Export irq_domain_free_irqs
-In-Reply-To: <20250505-pci-tegra-module-v4-1-088b552c4b1a@gmail.com>
-References: <20250505-pci-tegra-module-v4-0-088b552c4b1a@gmail.com>
- <20250505-pci-tegra-module-v4-1-088b552c4b1a@gmail.com>
-Date: Tue, 06 May 2025 00:33:30 +0200
-Message-ID: <87o6w6ofgl.ffs@tglx>
+	s=arc-20240116; t=1746484583; c=relaxed/simple;
+	bh=V/as8NAbScpAc7r0jNSjRHgZ4ii7oO7JrW99rb0nMJI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KBSD+MgkyX7mLRblRRhfxE0FsyLidXyYwvyhm1GYrzORRnmoNvPIdzN6s3HTFahAe1OoY0MBWQ9a2h8VgM9TQ5NDKVWm1DOm0M+TG8OlO0roNlKhZS4Jp5AeDQrd9CxuuVMs0LrQpueTH5Rvj8ZeHeIVbPUETV0jqgLUY04aT4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=KODD3dnU; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+	bh=wjv/3kkg8ER8GtdmsC4OfpctOuq/Lbu60oSY4NqUSV4=; b=KODD3dnUFam1+/IYyLJc/CXSLs
+	Gw9rntN2BqtvuXlFEaZG6JhJA6URM/jLipCXwPYSr/YFlP9n4gLuYF2daWvE2rDCC7/vAkm6s0nuN
+	QXiS6iKN3ofsx7PLEDDx6y9jUN9RXgITzSCI4Tsoj5PUIYa/DJBvbFIJhCstkDKqUwbc02C12msB4
+	n2FHQzzYVeE56cAlg2pjy1u1CuD8oPlQuosvbOI+scszXsJeP/LLq1vjB8RGKxpTUp6AmIV81HpQg
+	DIBWC0kfOdO3g7lB20nmxiiE6+K7HJbBWhLw45OAmxaH5ayGw5kNEpepcvcpoKjN9NZz0O6a1JQdr
+	06dZq0rw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uC4Q3-000000073Pb-3xQP;
+	Mon, 05 May 2025 22:36:15 +0000
+Date: Mon, 5 May 2025 23:36:15 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Yunseong Kim <ysk@kzalloc.com>
+Cc: Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>,
+	byungchul@sk.com, max.byungchul.park@gmail.com,
+	linux-fsdevel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fs: Prevent panic from NULL dereference in
+ alloc_fs_context() during do_exit()
+Message-ID: <20250505223615.GK2023217@ZenIV>
+References: <20250505203801.83699-2-ysk@kzalloc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250505203801.83699-2-ysk@kzalloc.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Mon, May 05 2025 at 09:58, Aaron Kling via wrote:
-> From: Aaron Kling <webgeek1234@gmail.com>
->
-> Add export for irq_domain_free_irqs() so that drivers like pci-tegra can
-> be loaded as a module.
->
-> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+On Tue, May 06, 2025 at 05:38:02AM +0900, Yunseong Kim wrote:
+> The function alloc_fs_context() assumes that current->nsproxy and its
+> net_ns field are valid. However, this assumption can be violated in
+> cases such as task teardown during do_exit(), where current->nsproxy can
+> be NULL or already cleared.
+> 
+> This issue was triggered during stress-ng's kernel-coverage.sh testing,
+> Since alloc_fs_context() can be invoked in various contexts — including
+> from asynchronous or teardown paths like do_exit() — it's difficult to
+> guarantee that its input arguments are always valid.
+> 
+> A follow-up patch will improve the granularity of this fix by moving the
+> check closer to the actual mount trigger(e.g., in efivarfs_pm_notify()).
 
-Seriously?
+UGH.
 
-Did you actually sit down for a couple of seconds to read and understand what I
-asked you to do in that initial review and then again:
+> diff --git a/fs/fs_context.c b/fs/fs_context.c
+> index 582d33e81117..529de43b8b5e 100644
+> --- a/fs/fs_context.c
+> +++ b/fs/fs_context.c
+> @@ -282,6 +282,9 @@ static struct fs_context *alloc_fs_context(struct file_system_type *fs_type,
+>  	struct fs_context *fc;
+>  	int ret = -ENOMEM;
+>  
+> +	if (!current->nsproxy || !current->nsproxy->net_ns)
+> +		return ERR_PTR(-EINVAL);
+> +
+>  	fc = kzalloc(sizeof(struct fs_context), GFP_KERNEL_ACCOUNT);
+>  	if (!fc)
+>  		return ERR_PTR(-ENOMEM);
 
-    https://lore.kernel.org/all/877c33qxss.ffs@tglx
-
-I appreciate your dedication to get this sorted, but please take your
-time to read more than just the _two_ lines which you think to be
-relevant.
-
-Please don't come back and waste your breath on telling me you are so
-sorry as last time:
-
-    https://lore.kernel.org/all/CALHNRZ_ctL1fJGO5752B6XEEXHwRe-a-Ofv+_=qtdq1WWXLLjw@mail.gmail.com
-
-Just get your act together and do it right.
-
-Thanks,
-
-        tglx
+That might paper over the oops, but I very much doubt that this will be
+a correct fix...  Note that in efivarfs_pm_notify() we have other
+fun issues when run from such context - have task_work_add() fail in
+fput() and if delayed_fput() runs right afterwards and
+        efivar_init(efivarfs_check_missing, sfi->sb, false);
+in there might end up with UAF...
 
