@@ -1,108 +1,125 @@
-Return-Path: <linux-pm+bounces-26724-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26725-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C1A7AABD9A
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 10:45:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65943AABFD8
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 11:38:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C6CD1C22DB2
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 08:45:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5C637B4C4F
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 09:37:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9BDB25DD06;
-	Tue,  6 May 2025 08:45:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2042B274FF9;
+	Tue,  6 May 2025 09:37:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qcC8lBvF"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NffFA/7L"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB02E24FBE7;
-	Tue,  6 May 2025 08:45:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8D832701B4
+	for <linux-pm@vger.kernel.org>; Tue,  6 May 2025 09:37:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746521127; cv=none; b=ivnXnj7ApWK7Pz32WpZAmLmK8gO7G5UgoEHMRbYbBQbXH2E1OWCe9uYBNGTHwcChyTlzurin9Ai/Tm+/JH0CJ9+kNsoTyFoanYxglacpvp/J6iblIs0sNCL3Yd6sodLDG4FBE6vE+6lQpjd+f//2iPbyQ7aDyfAZoToAuR6V4aE=
+	t=1746524225; cv=none; b=a+h658RC/1A3o+TCSAWGIm/Qg5yP9LamAAKa3mcuwI3sUXVzl42nk/ZdwyK6R+23hNqd8ZoU1nqfwuRqmk14YeaF4oHMXl5E8pNsHKHWCfgSO4BNHIr1IKYZ0QlNHXltlxEvXbDJvgmId943P4YTxVYnvmFQNrY/MqhWbX7/kow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746521127; c=relaxed/simple;
-	bh=IEMRExOPF7Vp+ar6JIpFYEDCf7kGx3fzTEEPhvJ1EeQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y0xOrMKmFj3ii24uc10+kgYEdBvIcDNwQnztEDcENAp+MUojSTDVeishBuztyjTh2EArhUrtGbaZ6NZ6JK1SUvUAZ02oK7aU0W4vo0+QRqpzZuC+lqhnU1DbBCdKLxfAv6EfNSqIgYEgtLmlZmDyz4K18nC3oXq1vOe7tjW67yM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qcC8lBvF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAE31C4CEE4;
-	Tue,  6 May 2025 08:45:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746521127;
-	bh=IEMRExOPF7Vp+ar6JIpFYEDCf7kGx3fzTEEPhvJ1EeQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qcC8lBvF+kjjhPKC6nCzecuoDuECcD6LlSKkfS7u+xY2PKBBek1xgrmerA6UtgFTw
-	 BEtSsfwOSWLFQ0qQby0zvUu96+Q++JJTm5omuwJJv43oN+oN3ofolRlC5QNtP69KiT
-	 1ctv86iVXmqG8E9XCRXM8OBCUjTWW6Hcmoo4WyFIVBJS9C8L/5y8R2nUAE6aHbCN7b
-	 x6RJ3nOqsdG9Ij0hdbH8yhnY0XFAL5P8l6UB7SyfTvf0nvNZwsa3lSXAb0T11RAMiD
-	 UuvHzvV1+iITI3j+oFkegxT3Uyb46wVW8c97XPaMHGWStkvollXpQ7mC1rBWb3Phk9
-	 EttuM/0kCzqtQ==
-Date: Tue, 6 May 2025 10:45:22 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Yunseong Kim <ysk@kzalloc.com>, Jan Kara <jack@suse.cz>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
-	byungchul@sk.com, max.byungchul.park@gmail.com, linux-fsdevel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs: Prevent panic from NULL dereference in
- alloc_fs_context() during do_exit()
-Message-ID: <20250506-hochphase-kicken-7fa895216c2a@brauner>
-References: <20250505203801.83699-2-ysk@kzalloc.com>
- <20250505223615.GK2023217@ZenIV>
+	s=arc-20240116; t=1746524225; c=relaxed/simple;
+	bh=qOiexQ/2jI3FvkKxeohCrO+0mQDIzwCnfLrg1HFKBdI=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=mn0EcRzDCFFDYsT4dYqm2gaFutcl2yebIK1dkE0q4pFr0w90Xzq0el5g1XWgGyYxqjG0ukTAj2hDiQI/EZacSNUvgOk4EhJSFCb/XXHmEhysIYR6GUGDZ+8cglSJ8MAwHnCgKjIkondyPaRtH7q+h9TyzV737fqVEjQrEdTV8IM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NffFA/7L; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1746524220;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UAL94wTpvtO/Lxptme/YwkD4oR3pyZDYuyoU5rE6q7w=;
+	b=NffFA/7LUmxcfqAHQwddZzztl7XA9lypJaXKG1fbahGfSl89YfhPPM11FeeyXrnUp2iUwM
+	ajd6y2pBVEcNhCJXOdkiX3u9lxIsuHL2aIMa8tVF/8+43pARz4UaoPtjfubfFpSP14wZkA
+	7ChOosw945dy47YrTQ4F+EkDgOzEG64=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-677-3EIRxZwJPc-7FI1rkdaFGQ-1; Tue,
+ 06 May 2025 05:36:57 -0400
+X-MC-Unique: 3EIRxZwJPc-7FI1rkdaFGQ-1
+X-Mimecast-MFC-AGG-ID: 3EIRxZwJPc-7FI1rkdaFGQ_1746524214
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 11AD218009A4;
+	Tue,  6 May 2025 09:36:54 +0000 (UTC)
+Received: from [10.22.80.45] (unknown [10.22.80.45])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D07601956096;
+	Tue,  6 May 2025 09:36:45 +0000 (UTC)
+Date: Tue, 6 May 2025 11:36:39 +0200 (CEST)
+From: Mikulas Patocka <mpatocka@redhat.com>
+To: Christoph Hellwig <hch@lst.de>
+cc: Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org, 
+    "Md. Haris Iqbal" <haris.iqbal@ionos.com>, 
+    Jack Wang <jinpu.wang@ionos.com>, Coly Li <colyli@kernel.org>, 
+    Kent Overstreet <kent.overstreet@linux.dev>, 
+    Mike Snitzer <snitzer@kernel.org>, Chris Mason <clm@fb.com>, 
+    Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>, 
+    Andreas Gruenbacher <agruenba@redhat.com>, 
+    Carlos Maiolino <cem@kernel.org>, Damien Le Moal <dlemoal@kernel.org>, 
+    Naohiro Aota <naohiro.aota@wdc.com>, Johannes Thumshirn <jth@kernel.org>, 
+    "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+    slava@dubeyko.com, glaubitz@physik.fu-berlin.de, frank.li@vivo.com, 
+    linux-bcache@vger.kernel.org, dm-devel@lists.linux.dev, 
+    linux-btrfs@vger.kernel.org, gfs2@lists.linux.dev, 
+    linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org, 
+    linux-pm@vger.kernel.org, Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Subject: Re: [PATCH 13/19] dm-bufio: use bio_add_virt_nofail
+In-Reply-To: <20250430212159.2865803-14-hch@lst.de>
+Message-ID: <c3120875-2f14-19ec-504b-4ea55279a386@redhat.com>
+References: <20250430212159.2865803-1-hch@lst.de> <20250430212159.2865803-14-hch@lst.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250505223615.GK2023217@ZenIV>
+Content-Type: text/plain; charset=US-ASCII
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On Mon, May 05, 2025 at 11:36:15PM +0100, Al Viro wrote:
-> On Tue, May 06, 2025 at 05:38:02AM +0900, Yunseong Kim wrote:
-> > The function alloc_fs_context() assumes that current->nsproxy and its
-> > net_ns field are valid. However, this assumption can be violated in
-> > cases such as task teardown during do_exit(), where current->nsproxy can
-> > be NULL or already cleared.
-> > 
-> > This issue was triggered during stress-ng's kernel-coverage.sh testing,
-> > Since alloc_fs_context() can be invoked in various contexts — including
-> > from asynchronous or teardown paths like do_exit() — it's difficult to
-> > guarantee that its input arguments are always valid.
-> > 
-> > A follow-up patch will improve the granularity of this fix by moving the
-> > check closer to the actual mount trigger(e.g., in efivarfs_pm_notify()).
-> 
-> UGH.
-> 
-> > diff --git a/fs/fs_context.c b/fs/fs_context.c
-> > index 582d33e81117..529de43b8b5e 100644
-> > --- a/fs/fs_context.c
-> > +++ b/fs/fs_context.c
-> > @@ -282,6 +282,9 @@ static struct fs_context *alloc_fs_context(struct file_system_type *fs_type,
-> >  	struct fs_context *fc;
-> >  	int ret = -ENOMEM;
-> >  
-> > +	if (!current->nsproxy || !current->nsproxy->net_ns)
-> > +		return ERR_PTR(-EINVAL);
-> > +
-> >  	fc = kzalloc(sizeof(struct fs_context), GFP_KERNEL_ACCOUNT);
-> >  	if (!fc)
-> >  		return ERR_PTR(-ENOMEM);
-> 
-> That might paper over the oops, but I very much doubt that this will be
-> a correct fix...  Note that in efivarfs_pm_notify() we have other
-> fun issues when run from such context - have task_work_add() fail in
-> fput() and if delayed_fput() runs right afterwards and
->         efivar_init(efivarfs_check_missing, sfi->sb, false);
-> in there might end up with UAF...
 
-We've already accepted a patch that removes the need for
-vfs_kern_mount() from efivarfs completely.
+
+On Wed, 30 Apr 2025, Christoph Hellwig wrote:
+
+> Convert the __bio_add_page(..., virt_to_page(), ...) pattern to the
+> bio_add_virt_nofail helper implementing it.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
+> Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+
+Acked-by: Mikulas Patocka <mpatocka@redhat.com>
+
+> ---
+>  drivers/md/dm-bufio.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/md/dm-bufio.c b/drivers/md/dm-bufio.c
+> index 9c8ed65cd87e..e82cd5dc83ce 100644
+> --- a/drivers/md/dm-bufio.c
+> +++ b/drivers/md/dm-bufio.c
+> @@ -1362,7 +1362,7 @@ static void use_bio(struct dm_buffer *b, enum req_op op, sector_t sector,
+>  	ptr = (char *)b->data + offset;
+>  	len = n_sectors << SECTOR_SHIFT;
+>  
+> -	__bio_add_page(bio, virt_to_page(ptr), len, offset_in_page(ptr));
+> +	bio_add_virt_nofail(bio, ptr, len);
+>  
+>  	submit_bio(bio);
+>  }
+> -- 
+> 2.47.2
+> 
+> 
+
 
