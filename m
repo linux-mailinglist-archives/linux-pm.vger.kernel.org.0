@@ -1,223 +1,132 @@
-Return-Path: <linux-pm+bounces-26733-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26734-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97110AAC124
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 12:16:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6351AAC134
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 12:20:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A17EC3B1981
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 10:16:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0584E1C27BBF
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 10:21:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98018275114;
-	Tue,  6 May 2025 10:16:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFFF42750F8;
+	Tue,  6 May 2025 10:20:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b="ZJkhctv9";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OKahMCMy"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Oic6ZbqM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8208026560B;
-	Tue,  6 May 2025 10:16:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79EDD212B04;
+	Tue,  6 May 2025 10:20:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746526593; cv=none; b=fy9yEN4RVObpO9e2iQCBhHRkAdXcNt0n8OPcJnWZt0RmeOQeECPSzO/j/W0ARi/NoGFGXaj+J/JWxVRg9HJ50brWavuu0NmKdfykLj9guZnl4w6HxZdfeDOFdkzPs4/QxbyKOQq9ogjKM7hG41x4iTQzpCQK86t/hX58CD6NNe8=
+	t=1746526852; cv=none; b=taEsuezdJZAc2pWt3/kplIEQxwMZUJj+q0QGg4C1z8jy8CT+jfGK9s4rLXDQ/6nRiUu47u4tq6vyquqPcuBF5OWUt1K+vUTx+yPP6z/gd1bMEHT0PARwYdyJuQUHf7ENBrCn6OT7nBZYc3OSEkcz2jc0cGWcEkBsRYpMgh7Ze+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746526593; c=relaxed/simple;
-	bh=tfJE/xsquhVWWbSfVNtxd7mxkKLpuW/Q3MoXdBzWEbw=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=q4NmBhMZYbZkhQdxxEwac7WQxOTJzva+9iSHYIYATaTb/lqSvyswiKRFqDjgj4E/VNiEd3V+QBzFBM4Xd/rcCaDcIn/eIsfLFLx1u5jUAe2hF0yC7hz90IbobXoSgK/ai0O30w9cev9UpsDZKIObMZTQ6QCiwG/j8OInesIPU1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev; spf=pass smtp.mailfrom=svenpeter.dev; dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b=ZJkhctv9; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OKahMCMy; arc=none smtp.client-ip=103.168.172.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=svenpeter.dev
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id 7375C1381006;
-	Tue,  6 May 2025 06:16:28 -0400 (EDT)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-04.internal (MEProxy); Tue, 06 May 2025 06:16:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:subject:subject:to:to; s=fm1;
-	 t=1746526588; x=1746612988; bh=u4ZHetn6p+gj8N2CA7NvMJ9GHPYdTeEK
-	pJ3GrEZD+ck=; b=ZJkhctv9B2NAQMglgaUYteeHtV1edBTOoePYfTVKqlvifJy0
-	fJWCLZRQRtgNkvYhrsUnxw3VqEcSnH2mjGmYQIchOI+R5o/+J6h4vyI1DiJ0y7Bt
-	fPCugGbW+1MaVK678SxNSuqA4i8+hHJEM2dA3ZGEfSxwKvThgD4X1Yv44hj8vZs7
-	/GK3JDaonKVlrfnBuw8cJZVKvTNkPnDDX+2L+DiZL8Pf6Ew7IIN+1/71m6jcYaH9
-	OVd5EizdKJH7Vx3xzAmKy/iZCDEo78QEUXFKjbVonWfMsju39Jy4BjJgA41r/H6D
-	P6iK5l++JlKC5rqChIDW5zophjWsnZzP0zIqww==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1746526588; x=
-	1746612988; bh=u4ZHetn6p+gj8N2CA7NvMJ9GHPYdTeEKpJ3GrEZD+ck=; b=O
-	KahMCMyBsg8bRfkAg2P/TMCEqXjthOylc6NFspaoD0MYT1xQJvAUfAhfcZUzDGVd
-	rsZfAfHuTu5U3jV+ODyWoOvOEughel86KZbeTbyMtg/aP0gEq5NO6lTE2vUqk6Up
-	4ASIE6vox5B5Bm0UP9a0UgpKyKycQWN5ZI0rwjqbyhd2+P3FgxeYg85DBYhPpuAU
-	XjEu0s9r08MxEiGcvtoYKioR0QYfJR6pk5OBSxbrRWcIHN1fte0ITDLU3Z6QBCcx
-	mICb8y7b7e6P4bh6Ya3DMlPnIT6dVSsgmqKFNorw1KwfuKOC8xkYYe55D9VBzNVD
-	m2ocg6mvOl9qvklVmxmYg==
-X-ME-Sender: <xms:euEZaILVJBwWtr2baaSB6TlmAJNm3cUe58sBzaajE2dmvLpKKd7aBg>
-    <xme:euEZaILQT-tTxNY6TK56P6NoH0nxCGZCxl_kIB_UkElbpiG4r9G0iKv2zz70efbwF
-    kvIN86fbQIpNsFlk1o>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkeefjeduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertder
-    tdejnecuhfhrohhmpedfufhvvghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvth
-    gvrhdruggvvheqnecuggftrfgrthhtvghrnhepgeegheelffdujeduffevfefhieekgeef
-    fedukedtvdduhfffjeehleekfeehhfdtnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvghtvghrrdguvghvpdhnsggp
-    rhgtphhtthhopeduledpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprhhmkhdokh
-    gvrhhnvghlsegrrhhmlhhinhhugidrohhrghdruhhkpdhrtghpthhtohepsghrghhlsegs
-    ghguvghvrdhplhdprhgtphhtthhopehnvggrlhesghhomhhprgdruggvvhdprhgtphhtth
-    hopehjsehjrghnnhgruhdrnhgvthdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhn
-    vghlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtoheplhgvvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgriieskhgvrhhn
-    vghlrdhorhhgpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:euEZaIvriNGIwfgefP8pMni-k1-Mi8CzIMaLsYfTRdaK95nv6DwF1g>
-    <xmx:euEZaFaY8i2dz8F74MNuvedfSCa6MYKKfa_p8CUuZr-bmsVlA8p48A>
-    <xmx:euEZaPbks8S8RUfwkDzDMPwXPEs_Tznk-Kz1GYritVFxYQeFZUnpUw>
-    <xmx:euEZaBAd_EfcQkYFXQgIpZRq4wMgV1jcVqubCESpNsKhAaP1bFfF6A>
-    <xmx:fOEZaN4m4sWqe_fgyAZMrGAsSCzeZTmjg9ceuj_brIetONwj2TczbF81>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id A6BA31C20069; Tue,  6 May 2025 06:16:26 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1746526852; c=relaxed/simple;
+	bh=cTlctsLV2/rm79eOqeotyVv+FV9QLw5D/EGMnFgswkQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mpFC406pM3S7YJS6JfS3AigIVAHbHXpd4n8dF8btdsMq+ZKztG7NP92EW8XCtxkhVAfY32TNNciqoYGEAnllqZ29fxRC9Y+/KwJKgHFAqPV5dJvoWHSE66CGuWVwsRNC6YkQ5/DX8SnK0FJilwdRQr1n9W8ND2oeTyrhRyK81TE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Oic6ZbqM; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1746526848;
+	bh=cTlctsLV2/rm79eOqeotyVv+FV9QLw5D/EGMnFgswkQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Oic6ZbqMxNknj0hcfe+ZvNlfYvKMruLwQGy/idLjU5+wHNR2dqVkJ+YfCmH1IK6WP
+	 bkuqQJLdrFtkcvwYnNM/MJ+GEBjIlpCFFalEaVWlq/x9f/EQNdTH8gJwtZOeWdCGHk
+	 iAL7PuEQ2kl1x6OLuV3IQVGDmRzUFEZ8K7kJSQU4wI7tOUGhNmpkxFWwV3WRIfCU4i
+	 YQDbrbhm99KAbgZQQLZ2RoZsRevMRvMiMUmC26hB0OsJMyPxrzbgKMcAi6b5B/s1b/
+	 S16uKYZkLIj1dZGqinA4nvSK2rOyrdiBGUiUryzeZtmOxpMPkOJ5obOpVtCVdkrer2
+	 PjxX9fcWQ7OrA==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 62EEB17E088B;
+	Tue,  6 May 2025 12:20:47 +0200 (CEST)
+Message-ID: <c8bb938d-5a43-47a2-b7de-695f95b077ad@collabora.com>
+Date: Tue, 6 May 2025 12:20:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T90a118147f15bbe7
-Date: Tue, 06 May 2025 12:16:06 +0200
-From: "Sven Peter" <sven@svenpeter.dev>
-To: "Bartosz Golaszewski" <brgl@bgdev.pl>
-Cc: "Janne Grunau" <j@jannau.net>, "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
- "Neal Gompa" <neal@gompa.dev>, "Hector Martin" <marcan@marcan.st>,
- "Linus Walleij" <linus.walleij@linaro.org>, "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>, "Sebastian Reichel" <sre@kernel.org>,
- "Lee Jones" <lee@kernel.org>, "Marc Zyngier" <maz@kernel.org>,
- "Russell King" <rmk+kernel@armlinux.org.uk>, asahi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-Message-Id: <b96bd2d6-98f7-44da-9293-816daeac80d0@app.fastmail.com>
-In-Reply-To: 
- <CAMRc=MebFf-DBh_=H0J4ORStaxBYhOnfY+jSk2d4UpdyS=m1LA@mail.gmail.com>
-References: <20250503-smc-6-15-v4-0-500b9b6546fc@svenpeter.dev>
- <20250503-smc-6-15-v4-5-500b9b6546fc@svenpeter.dev>
- <CAMRc=MebFf-DBh_=H0J4ORStaxBYhOnfY+jSk2d4UpdyS=m1LA@mail.gmail.com>
-Subject: Re: [PATCH v4 5/9] gpio: Add new gpio-macsmc driver for Apple Macs
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/4] dt-bindings: iommu: mediatek: mt8195 Accept up to 5
+ interrupts
+To: Julien Massot <julien.massot@collabora.com>, kernel@collabora.com,
+ Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>,
+ Macpaul Lin <macpaul.lin@mediatek.com>, Lee Jones <lee@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+ <matthias.bgg@gmail.com>, =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?=
+ <nfraprado@collabora.com>, Hui Liu <hui.liu@mediatek.com>,
+ Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+ Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+ Tinghan Shen <tinghan.shen@mediatek.com>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, iommu@lists.linux.dev
+References: <20250505-mt8395-dtb-errors-v1-0-9c4714dcdcdb@collabora.com>
+ <20250505-mt8395-dtb-errors-v1-2-9c4714dcdcdb@collabora.com>
+ <cb715936-3a44-4002-8d64-565f8d31820c@collabora.com>
+ <2d3a8e55105526c999b490a2e92dd448c099faab.camel@collabora.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <2d3a8e55105526c999b490a2e92dd448c099faab.camel@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi,
-
-
-On Tue, May 6, 2025, at 10:07, Bartosz Golaszewski wrote:
-> On Sat, May 3, 2025 at 12:07=E2=80=AFPM Sven Peter via B4 Relay
-> <devnull+sven.svenpeter.dev@kernel.org> wrote:
+Il 06/05/25 12:03, Julien Massot ha scritto:
+> Hi Angelo,
+> 
+> On Tue, 2025-05-06 at 10:34 +0200, AngeloGioacchino Del Regno wrote:
+>> Il 05/05/25 15:23, Julien Massot ha scritto:
+>>> Some Mediatek IOMMU can have up to five interrupts so increase
+>>> the 'maxItems' to 5.
+>>>
+>>> Fix the following dtb-check error:
+>>>
+>>> mediatek/mt8395-radxa-nio-12l.dtb: infra-iommu@10315000: interrupts:
+>>> [[0, 795, 4, 0], [0, 796, 4, 0], [0, 797, 4, 0], [0, 798, 4, 0], [0, 799, 4, 0]] is too long
+>>>
+>>> Fixes: 3b5838d1d82e3 ("arm64: dts: mt8195: Add iommu and smi nodes")
+>>> Signed-off-by: Julien Massot <julien.massot@collabora.com>
+>>> ---
+>>>    Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml | 3 ++-
+>>>    1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+>>> b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+>>> index 75750c64157c868725c087500ac81be4e282c829..035941c2db32170e9a69a5363d8c05ef767bb251 100644
+>>> --- a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+>>> +++ b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+>>> @@ -97,7 +97,8 @@ properties:
+>>>        maxItems: 1
+>>>    
+>>>      interrupts:
+>>> -    maxItems: 1
+>>> +    minItems: 1
 >>
->> From: Hector Martin <marcan@marcan.st>
+>> Isn't minItems already implicitly 1? :-)
 >>
->> This driver implements the GPIO service on top of the SMC framework
->> on Apple Mac machines. In particular, these are the GPIOs present in =
-the
->> PMU IC which are used to control power to certain on-board devices.
->>
->> Although the underlying hardware supports various pin config settings
->> (input/output, open drain, etc.), this driver does not implement that
->> functionality and leaves it up to the firmware to configure things
->> properly. We also don't yet support interrupts/events. This is
->> sufficient for device power control, which is the only thing we need =
-to
->> support at this point. More features will be implemented when needed.
->>
->> To our knowledge, only Apple Silicon Macs implement this SMC feature.
->>
->> Signed-off-by: Hector Martin <marcan@marcan.st>
->> Reviewed-by: Bartosz Golaszewski <brgl@bgdev.pl>
->> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->> Reviewed-by: Sven Peter <sven@svenpeter.dev>
->> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
->> Signed-off-by: Sven Peter <sven@svenpeter.dev>
->> ---
->
-> [snip]
->
->> +
->> +       smcgp->gc.label =3D "macsmc-pmu-gpio";
->> +       smcgp->gc.owner =3D THIS_MODULE;
->> +       smcgp->gc.get =3D macsmc_gpio_get;
->> +       smcgp->gc.set =3D macsmc_gpio_set;
->
-> I must have given my Reviewed-by under this driver before we started
-> the conversion to the new GPIO driver setters. Could you please
-> replace this with set_rv() as the old set() is now deprecated?
+>> Looks not, from my understanding if 'minItems' is omitted then
+> dt-schema is setting it to 'maxItems'.
+> https://github.com/devicetree-org/dt-schema/blob/v2025.02/dtschema/fixups.py#L129
+> 
+> And you will have an error for a one item interrupts:
+> Documentation/devicetree/bindings/iommu/mediatek,iommu.example.dtb: iommu@10205000: interrupts: [[0,
+> 139, 8]] is too short
+> 
 
-Probably, the last version I took from the ML is from November 2022 :-(
-Will do that for the next version, I can just pass through the return va=
-lue
-we get from apple_smc_write_u32 anyway.
+Whoops, you're right.
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 
-Thanks,
-
-
-Sven
-
-
--- >8 --
-Subject: [PATCH] fixup! gpio: Add new gpio-macsmc driver for Apple Macs
-
----
- drivers/gpio/gpio-macsmc.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpio/gpio-macsmc.c b/drivers/gpio/gpio-macsmc.c
-index 289be4268f63..a68676239718 100644
---- a/drivers/gpio/gpio-macsmc.c
-+++ b/drivers/gpio/gpio-macsmc.c
-@@ -135,7 +135,7 @@ static int macsmc_gpio_get(struct gpio_chip *gc, uns=
-igned int offset)
- 	return val ? 1 : 0;
- }
-
--static void macsmc_gpio_set(struct gpio_chip *gc, unsigned int offset, =
-int value)
-+static int macsmc_gpio_set(struct gpio_chip *gc, unsigned int offset, i=
-nt value)
- {
- 	struct macsmc_gpio *smcgp =3D gpiochip_get_data(gc);
- 	smc_key key =3D macsmc_gpio_key(offset);
-@@ -146,6 +146,8 @@ static void macsmc_gpio_set(struct gpio_chip *gc, un=
-signed int offset, int value
- 	if (ret < 0)
- 		dev_err(smcgp->dev, "GPIO set failed %p4ch =3D 0x%x\n",
- 			&key, value);
-+
-+	return ret;
- }
-
- static int macsmc_gpio_init_valid_mask(struct gpio_chip *gc,
-@@ -214,7 +216,7 @@ static int macsmc_gpio_probe(struct platform_device =
-*pdev)
- 	smcgp->gc.label =3D "macsmc-pmu-gpio";
- 	smcgp->gc.owner =3D THIS_MODULE;
- 	smcgp->gc.get =3D macsmc_gpio_get;
--	smcgp->gc.set =3D macsmc_gpio_set;
-+	smcgp->gc.set_rv =3D macsmc_gpio_set;
- 	smcgp->gc.get_direction =3D macsmc_gpio_get_direction;
- 	smcgp->gc.init_valid_mask =3D macsmc_gpio_init_valid_mask;
- 	smcgp->gc.can_sleep =3D true;
---
-2.34.1
 
