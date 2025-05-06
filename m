@@ -1,128 +1,272 @@
-Return-Path: <linux-pm+bounces-26738-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26739-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE989AAC62C
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 15:32:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB3B3AAC8C3
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 16:53:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 173D54A310A
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 13:30:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B9D8980A03
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 14:52:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23F71280CD5;
-	Tue,  6 May 2025 13:23:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7731328151F;
+	Tue,  6 May 2025 14:52:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nkY85565"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="a+5JjxOv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF3727AC41;
-	Tue,  6 May 2025 13:23:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8422F280006;
+	Tue,  6 May 2025 14:52:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746537785; cv=none; b=S7LbWxnUOZTCjgD6Nw5A7w4gIGVrZh7YZQGAXag17+JG2095LvEayhvSHYPMu15GuqhY3c1chmXQnZuXfkWnLoS/IISwEah35hnhBn0cD8fXqaq823snN8TwkVFlImo7ZHOo7A7OUf8UWZIejonltBZdTeXJKUPac6hV/PF9nRA=
+	t=1746543139; cv=none; b=Masmr7QFlsuaFO2pVxbf+DhOmYY4ViEeN+862/RgZuYxB5oSLNC/3ZmajsFqbm1MKakdwJvHUF4UR9m4T5+L+FDcDY2NE4rZif6C6VdUU2jHixWRIdeHzZPGuvQwIr4Yw4+GQv5t3PMldYyR6b9QrHA5dr/kn8juB/Z/UltjYt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746537785; c=relaxed/simple;
-	bh=SdTbQRmvxVkDHJ0Zmj3+GRgE9uEvKkYZ4qhq+hZjXfc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Bb+oRr5vC4PV+yfctuQTlmX4fddFc/76uCWMk1pOKcfwl//Gw9hM9mMzGBPEkW9yFLmsq1Qm8ArsUullQsWu1tqrRZTLqHXsMw+RDv0oTbOUF/yRfZ3iqsXcJGnUCtBYMIfbE3QumyTD23TJf/NX212CSDvugt7ImS/F67PeiJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nkY85565; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-ac2bb7ca40bso972673766b.3;
-        Tue, 06 May 2025 06:23:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746537781; x=1747142581; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ychOGS0fwVtT0GZZg8j7lVAB5ILds60YZKRJT8XDlKg=;
-        b=nkY85565eoc04yRbeWzquGhf9hVs65ZDUnSKzAlrHzhQ6HvEFWYcG2ooEQk3ra+P7s
-         ftU9CG9THchi7yCkIWO6m2YYJuv0XqQScoLHtnE6S/1IHNwI6hbNMjjzUnztaY/03eE0
-         Oi24PKaiGEzsByQexXuOcOQeit0Jp4T7Jw/dNy3O8QhsECswWtU7zoMHVoEupqLTaEky
-         ovm9qB4a6ZjOBwrde7NCVqmiG6ug+zRRC0XP4vd/CPZGvVmlUxhgzILP1YrHHY+x863u
-         Wu17oJABnLQR5KRwdhcKM8fZRl78OHw4HhSEJ18TpJs79FYHZEfOfnDH+8CV7ms2AKET
-         R0Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746537781; x=1747142581;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ychOGS0fwVtT0GZZg8j7lVAB5ILds60YZKRJT8XDlKg=;
-        b=NcK8z2V4H551OzB+h486/BGlmxratAkL5LxDUXoOgsuId2USU6b+o1k4hIsDtb+xD0
-         lq1FCI/yWTcFkqaclMXspkzDHgvHDR/FhHFF0N1BEn7bs4o+su28DUAZ9GcPH6EP6nRz
-         iHbvemJJA9BhcxXuBADtUItBY1unXkDtg3bUMo11RXQVKc8EXbJI0XfcNmwZ4hwUf0CX
-         fEzNjwlNFKpLmqzwWC/XyHFzSscS7N8CVwkfEeQiUwI7oBwh//O7SY3QUL/BZI2IUiL8
-         NK2whkX76hLWQlviZ+bIfSWkx/bNdi01HKn7qHyzz81QuqXBRpxpJTvNxwYm0WYNouTi
-         FZSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXieyDaNm6vPs7ppA6le+3s5keS3dgSUtHkFVLddV8ujItk+895vTABA/yqJaQEldExlpqGrsHER2syfj4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygrqUVEztZ6rCQlUuswATPd7ea59jw5E+wsvTS7tD4znx9hkvP
-	lfnb9avpImVn/uaqws151EL7PD0S34KIfQnfKubJ3vRayv/Vu+FY
-X-Gm-Gg: ASbGncuyY9gx9vuFQIaNkg80rFNyIa6ekPgFLOtGs3a5k6RBnE9yuVosdC9OwiYW2YO
-	IFAKhlmOlyZx92USyr5mvMQmRhP/S179P/Abohkr8nGTKP7rVJX5ywWmu8X4DQbK/2W0Po2jXQC
-	p2gRIPfqQZZLnaO7FgIZGniqFSAj1L98LK6fwrHDTKl49OG3VSlByB41+tedpBSiIWekYxeZq0t
-	7Bfq0B9BhgI/O/OSQcw9M/SUrSjhj3w7NXcqf+LrqEWkAEAEvv+qrJlp7jQJH8sts+jC869EsZl
-	GkhRXYyaHq3ZoCNxvbFDXJDPFMQror573DJk7V1Al7KgxVMs59D4em2RDsTxTC2uwa/OQ8u9G/m
-	mJQRTP4sQySGgWKF/lQiRZGvDb0+nvBt5WNc=
-X-Google-Smtp-Source: AGHT+IG+BsbWupjoQzskKZOgAx9L65nh+d6RPW44BjEcFwPpA/8TXeD1ngr7i7XpwoAfFBy+3NeFmw==
-X-Received: by 2002:a17:906:7952:b0:aca:c38d:fef0 with SMTP id a640c23a62f3a-ad17b249c58mr1412115266b.0.1746537781283;
-        Tue, 06 May 2025 06:23:01 -0700 (PDT)
-Received: from [10.0.0.176] (248.201.173.83.static.wline.lns.sme.cust.swisscom.ch. [83.173.201.248])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad189147431sm705332566b.8.2025.05.06.06.23.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 May 2025 06:23:00 -0700 (PDT)
-Message-ID: <091539c4-8ed1-46a4-aab5-8eb0e62a9027@gmail.com>
-Date: Tue, 6 May 2025 15:23:00 +0200
+	s=arc-20240116; t=1746543139; c=relaxed/simple;
+	bh=Xc8uV93DtLs7S8IMFtDcMlDXGM60gIa3A536pCU0bWA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OEOmDgpuJAINsimJEcMyN/v3qr4eVexOchjpxo6ttz8AsnQp72hIOM+MnKMBnDDJlHQjZMhBLySudrtguKyyjQGu6IS1QTG1sxsVL09+H9i3IW6S0OhMMNdgjn4mwWNVWMOIB8LuihhKsxAwihr2qEBTXubnR9PeV69Q5oude88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=a+5JjxOv; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5468e2fb014186;
+	Tue, 6 May 2025 14:52:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=XEcBsARco6QpGU97OKN38n
+	oBlqXGcNH/7Y9jiSHXa3w=; b=a+5JjxOvgmw0IAJ+T9ro7IfwK6ukRB0Q9MFhxK
+	eXfReiOk7JUOTOwUSuSnlxMk+BE4ux7rmNmePzBDvWnfAhNFOOBIxlJqAPTtStdC
+	oM1j5lCE/jwODeBWpLCRGIDdXlErJvcsseQa9G0Le7IYgu0boupVn6xEgbPSVz7V
+	J7Na+Va492LnHIYjT0OVyPjIZxNVV06VR12e94olaiq9a0LL1TpA3v6XaMgbEfH7
+	r/PAUi10X2iZEYNqSep/7ciUVJt/UdnF3OosAtXForrdhDElUgQ/aE6fHu/+6wkp
+	3PEL/injLqt6yaGcm6HMPLuR29IoxkavM9sOop7YliXmbcmw==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46f5u42pc6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 06 May 2025 14:52:13 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 546EqCgU016570
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 6 May 2025 14:52:12 GMT
+Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Tue, 6 May 2025 07:52:12 -0700
+From: Mike Tipton <quic_mdtipton@quicinc.com>
+To: Georgi Djakov <djakov@kernel.org>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_aiquny@quicinc.com>, <quic_okukatla@quicinc.com>,
+        Mike Tipton
+	<quic_mdtipton@quicinc.com>
+Subject: [PATCH v2] interconnect: Use rt_mutex for icc_bw_lock
+Date: Tue, 6 May 2025 07:51:59 -0700
+Message-ID: <20250506145159.1951159-1-quic_mdtipton@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] power: reset: POWER_RESET_TORADEX_EC should depend on
- ARCH_MXC
-To: Geert Uytterhoeven <geert+renesas@glider.be>,
- Sebastian Reichel <sre@kernel.org>,
- Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
- Francesco Dolcini <francesco.dolcini@toradex.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1ef0beb1e09bf914650f9f9885a33af06772540d.1746536287.git.geert+renesas@glider.be>
-Content-Language: en-US
-From: Emanuele Ghidoli <ghidoliemanuele@gmail.com>
-In-Reply-To: <1ef0beb1e09bf914650f9f9885a33af06772540d.1746536287.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Authority-Analysis: v=2.4 cv=KcfSsRYD c=1 sm=1 tr=0 ts=681a221d cx=c_pps
+ a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=3H110R4YSZwA:10 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=1XWaLZrsAAAA:8
+ a=COk6AnOGAAAA:8 a=KKAgPzKmHZGUr0HHQOcA:9 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-GUID: E99k0zjUfBrwcWG18iapbR3Gj7wivgLU
+X-Proofpoint-ORIG-GUID: E99k0zjUfBrwcWG18iapbR3Gj7wivgLU
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA2MDE0MyBTYWx0ZWRfX4uA8awaLCExb
+ b12WrXAvTy9fpA13NSJL1IRBEGEFA9NjicJ+pggjcxobmA2byqFS2hZ7CvIcUyDin78zfqKszRP
+ i7cUJL7ND45wSlzbAZZh7Thuw6LBRPmdlWCIDSY3L6Qd4PYTokehb2s24wl7Yza4uGSGfI7MKsi
+ F0zUmFcZaHkgjpPj8CILO0antMfE7a8kbpnZg4JdE6mCXH0rJwSxHMX0JdXLfclZGvzZxAwZv7P
+ esafO3lC6DeIxm8hag9Tftzm0PcKMZIInDQWaeq1Mg6HeLdV9eZcGir+xikuh2pxQMiDBzl2yMQ
+ Li7cuanvEiXlaErWb5QDZlZYFKaN9hOFiiaH0TDXplaZQva6OE0CiPIwu5xDyOeNKlm4t/H+Um4
+ kmZvYYEhx3h9CWRigPwkJ4tDmjC3k33I3rpMY+WQtNFioxsIcl+Cy/MsQOyS/FR6bRcSEVHj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-06_06,2025-05-05_01,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 spamscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999
+ phishscore=0 impostorscore=0 priorityscore=1501 malwarescore=0 adultscore=0
+ clxscore=1015 mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2505060143
 
-On 06/05/2025 15:01, Geert Uytterhoeven wrote:
-> The Toradex Embedded Controller is currently only present on Toradex
-> SMARC iMX8MP and iMX95 SoMs.  Hence add a dependency on ARCH_MXC, to
-> prevent asking the user about this driver when configuring a kernel
-> without NXP i.MX SoC family support.
-> 
-> Fixes: 18672fe12367ed44 ("power: reset: add Toradex Embedded Controller")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  drivers/power/reset/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index 5ce402ff71964f59..1a17c5192818de1e 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-> @@ -218,6 +218,7 @@ config POWER_RESET_ST
->  
->  config POWER_RESET_TORADEX_EC
->  	tristate "Toradex Embedded Controller power-off and reset driver"
-> +	depends on ARCH_MXC || COMPILE_TEST
->  	depends on I2C
->  	select REGMAP_I2C
->  	help
+The icc_set_bw() function is often used in latency sensitive paths to
+scale BW on a per-frame basis by high priority clients such as GPU and
+display. However, there are many low priority clients of icc_set_bw() as
+well. This can lead to priority inversion and unacceptable delays for
+the high priority clients. Which in the case of GPU and display can
+result in frame drops and visual glitches.
 
-The default is 'N', and the EC is just an I2C device, unrelated to ARCH_MXC.
-Is it really annoying if the user is asked about this driver during
-configuration? Or is it just normal?
-Wouldn't there be a better way to handle this?
+To prevent this priority inversion, switch to using rt_mutex for
+icc_bw_lock. This isn't needed for icc_lock since that's not used in the
+critical, latency-sensitive voting paths.
+
+Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
+---
+
+Since the original patch was posted a couple years ago, we've continued
+to hit this for display and now for GPU as well. How frequently depends
+heavily on the specific chip, product, and use case. Different
+configurations hit it easier than others. But for both cases it results
+in obvious visual glitches.
+
+The paths being voted for (primarily DDR) are fundamentally shared
+between clients of all types and priority levels. We can't control their
+priorities, so aside from having those priorities inherited we're always
+subject to these sorts of inversions.
+
+The motivation isn't really for general performance improvement, but
+instead to fix the rare cases of visual glitches and artifacts.
+
+A similar patch was posted last year [1] to address similar problems.
+
+[1] https://lore.kernel.org/all/20240220074300.10805-1-wangrumeng@xiaomi.corp-partner.google.com/
+
+Changes in v2:
+- Rebase onto linux-next.
+- Select RT_MUTEXES in Kconfig.
+- Only use rt_mutex for icc_bw_lock since now there are separate locks
+  and icc_lock isn't in the critical path.
+- Reword commit text.
+- Link to v1: https://lore.kernel.org/all/20220906191423.30109-1-quic_mdtipton@quicinc.com/
+
+ drivers/interconnect/Kconfig |  1 +
+ drivers/interconnect/core.c  | 23 ++++++++++++-----------
+ 2 files changed, 13 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/interconnect/Kconfig b/drivers/interconnect/Kconfig
+index f2e49bd97d31..f6fd5f2d7d40 100644
+--- a/drivers/interconnect/Kconfig
++++ b/drivers/interconnect/Kconfig
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ menuconfig INTERCONNECT
+ 	bool "On-Chip Interconnect management support"
++	select RT_MUTEXES
+ 	help
+ 	  Support for management of the on-chip interconnects.
+ 
+diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+index 1a41e59c77f8..2e86a3c95d1a 100644
+--- a/drivers/interconnect/core.c
++++ b/drivers/interconnect/core.c
+@@ -14,6 +14,7 @@
+ #include <linux/interconnect-provider.h>
+ #include <linux/list.h>
+ #include <linux/mutex.h>
++#include <linux/rtmutex.h>
+ #include <linux/slab.h>
+ #include <linux/of.h>
+ #include <linux/overflow.h>
+@@ -30,7 +31,7 @@ static LIST_HEAD(icc_providers);
+ static int providers_count;
+ static bool synced_state;
+ static DEFINE_MUTEX(icc_lock);
+-static DEFINE_MUTEX(icc_bw_lock);
++static DEFINE_RT_MUTEX(icc_bw_lock);
+ static struct dentry *icc_debugfs_dir;
+ 
+ static void icc_summary_show_one(struct seq_file *s, struct icc_node *n)
+@@ -178,7 +179,7 @@ static struct icc_path *path_init(struct device *dev, struct icc_node *dst,
+ 
+ 	path->num_nodes = num_nodes;
+ 
+-	mutex_lock(&icc_bw_lock);
++	rt_mutex_lock(&icc_bw_lock);
+ 
+ 	for (i = num_nodes - 1; i >= 0; i--) {
+ 		node->provider->users++;
+@@ -190,7 +191,7 @@ static struct icc_path *path_init(struct device *dev, struct icc_node *dst,
+ 		node = node->reverse;
+ 	}
+ 
+-	mutex_unlock(&icc_bw_lock);
++	rt_mutex_unlock(&icc_bw_lock);
+ 
+ 	return path;
+ }
+@@ -704,7 +705,7 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+ 	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
+ 		return -EINVAL;
+ 
+-	mutex_lock(&icc_bw_lock);
++	rt_mutex_lock(&icc_bw_lock);
+ 
+ 	old_avg = path->reqs[0].avg_bw;
+ 	old_peak = path->reqs[0].peak_bw;
+@@ -736,7 +737,7 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+ 		apply_constraints(path);
+ 	}
+ 
+-	mutex_unlock(&icc_bw_lock);
++	rt_mutex_unlock(&icc_bw_lock);
+ 
+ 	trace_icc_set_bw_end(path, ret);
+ 
+@@ -798,7 +799,7 @@ void icc_put(struct icc_path *path)
+ 		pr_err("%s: error (%d)\n", __func__, ret);
+ 
+ 	mutex_lock(&icc_lock);
+-	mutex_lock(&icc_bw_lock);
++	rt_mutex_lock(&icc_bw_lock);
+ 
+ 	for (i = 0; i < path->num_nodes; i++) {
+ 		node = path->reqs[i].node;
+@@ -807,7 +808,7 @@ void icc_put(struct icc_path *path)
+ 			node->provider->users--;
+ 	}
+ 
+-	mutex_unlock(&icc_bw_lock);
++	rt_mutex_unlock(&icc_bw_lock);
+ 	mutex_unlock(&icc_lock);
+ 
+ 	kfree(path->name);
+@@ -1023,7 +1024,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
+ 		return;
+ 
+ 	mutex_lock(&icc_lock);
+-	mutex_lock(&icc_bw_lock);
++	rt_mutex_lock(&icc_bw_lock);
+ 
+ 	node->provider = provider;
+ 	list_add_tail(&node->node_list, &provider->nodes);
+@@ -1056,7 +1057,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
+ 	node->avg_bw = 0;
+ 	node->peak_bw = 0;
+ 
+-	mutex_unlock(&icc_bw_lock);
++	rt_mutex_unlock(&icc_bw_lock);
+ 	mutex_unlock(&icc_lock);
+ }
+ EXPORT_SYMBOL_GPL(icc_node_add);
+@@ -1182,7 +1183,7 @@ void icc_sync_state(struct device *dev)
+ 		return;
+ 
+ 	mutex_lock(&icc_lock);
+-	mutex_lock(&icc_bw_lock);
++	rt_mutex_lock(&icc_bw_lock);
+ 	synced_state = true;
+ 	list_for_each_entry(p, &icc_providers, provider_list) {
+ 		dev_dbg(p->dev, "interconnect provider is in synced state\n");
+@@ -1195,7 +1196,7 @@ void icc_sync_state(struct device *dev)
+ 			}
+ 		}
+ 	}
+-	mutex_unlock(&icc_bw_lock);
++	rt_mutex_unlock(&icc_bw_lock);
+ 	mutex_unlock(&icc_lock);
+ }
+ EXPORT_SYMBOL_GPL(icc_sync_state);
+-- 
+2.34.1
+
 
