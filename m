@@ -1,198 +1,220 @@
-Return-Path: <linux-pm+bounces-26713-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26714-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04DADAABA50
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 09:17:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DE7DAABAC5
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 09:27:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12E661BA4B8F
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 07:12:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A6D53B9976
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 07:12:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 790BE227E8A;
-	Tue,  6 May 2025 04:43:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B92CE1FFC7B;
+	Tue,  6 May 2025 04:45:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="F9WSzIdm"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="ctClDiCY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11013044.outbound.protection.outlook.com [52.101.127.44])
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93CD2505CE;
-	Tue,  6 May 2025 04:39:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746506374; cv=fail; b=cGBjEOg73PuB3/kixRnnWYoV7FyH0EfA0d+da8gHakpIaMAylafwpT+dm82H7tUwpZzivH0QiOGGmeqDIY2fYs+tMqgdWvnMFDgatbNEPOmCEYymeAA2LaoFvDtFrgwk/zv0UU6pBnzaj9U2m91VOu+oASMJ7ZOtJuvegbpWXSE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746506374; c=relaxed/simple;
-	bh=gX4Wgft9usfSaXxspipyYfrhVmDQBwPa/yxvsVGrvmM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Ae6eSXfO87rDLjnjn8XDNaYrZIFPCzodw0x3c2vsKz5zM37HaoOwB/IT1qbOiY4Sk97SOrr3TIK18pETU9QvKBlRCPWdqmsELxJeZswAgIthKmLJc4aK//d2VvYoUalFyiFU12C2yTsIvLIMSfH3MdHpruB7HwJgunllJ1fUkUw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=F9WSzIdm; arc=fail smtp.client-ip=52.101.127.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=v66arFDX3uI7znTtYGZMBAU3GRCwfRBdT+hMIPmp7SYPDT2cGi7MdnH7RRpWSkwfkHBZh8/XxOqRwWc+CXfW2+Q+ri+iwjHoFhWCEpGSzZacZBPeA+4Zji1Wm2zX/WEuSFgiDJC2SBYba7QtNfXXKvYTpRzjC73jBIbJUyJeET1Xbvsz0to20aPvPYmzhN6AN4AusOEYvVouYWIntWcpTLt85Q9gG4H3ZLLOkQcmSAoSrZLtKYHBjlv6HgCfQhdllxeT83+A8aXFCi9BNuywMMiZ4KguLbuQZzUHm5eOG/DJNdfjcV779GukXgjCUNZ+Tg4ViRsPT1KEqJWPaBgKuQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gX4Wgft9usfSaXxspipyYfrhVmDQBwPa/yxvsVGrvmM=;
- b=tM9vrMROACThX2k4QV8HYR5kI2443V6QKsRTxcPAXB3w4TyHMpW8H77UgsAYAdXUex7Ou4WxKyo/kePMnBmapNg+WjNU9EP6SzCWo4FehQ5TQmxyvxNzaCP9jvDPxrqhzJrj8+Sj4rb+Zo3VxbN3BZ2boG+Puar3gbevq2EIPoh6RcD8hEO+hvUqVqx4RSACX18XkbzinwVsl/drQ/hS8YbKylcnWETxmPH6V4Fp+BKU5CrRbogFz7g7AQBhhZeG0PXko7fUYUWaWsz6hE//Z386woq/wyXJiSJDKTDX8IewPKXZCmCGA2wpB3SqQChdURfgsL+9yreTlLSuCOUXvg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gX4Wgft9usfSaXxspipyYfrhVmDQBwPa/yxvsVGrvmM=;
- b=F9WSzIdmC3mtS4Rc6BN8/eb3Lkdka6Y9cUA9hCGrgHJGHvCivlGhMgff9mBZx0BoIFzGMXcw7Y7oIX+2nzs21fkHoxLpgHWZDgbtvl9fhCHSX+VO+vKHWwnKOQSxibyg0TsMusfbpdzCcBUlXB7oOVixSm/AFBGKcH6c/VVEAGBSa+fpF+SlGF35TGloFIcdwGFp9MyLvjjVgZJ/bdOyIihKXX+t8G//ARxOjsjam66nWXM4mbhVC3MFV5AA5nC7JxZNwBxmaX5S2PnfN8E1EVHzUus7FC/s9IRfOdl0lxIgNd/CJaJoFU+lyXwBKwCKXWgIua2ORxSoVv6Nkcpkjg==
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SEZPR06MB6139.apcprd06.prod.outlook.com (2603:1096:101:ea::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.25; Tue, 6 May
- 2025 04:39:26 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::8c74:6703:81f7:9535]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::8c74:6703:81f7:9535%4]) with mapi id 15.20.8699.021; Tue, 6 May 2025
- 04:39:25 +0000
-From: =?gb2312?B?wO7R7+i6?= <frank.li@vivo.com>
-To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-CC: "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>, "Md. Haris
- Iqbal" <haris.iqbal@ionos.com>, Jack Wang <jinpu.wang@ionos.com>, Coly Li
-	<colyli@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, Mike
- Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>, Chris
- Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, David Sterba
-	<dsterba@suse.com>, Andreas Gruenbacher <agruenba@redhat.com>, Carlos
- Maiolino <cem@kernel.org>, Damien Le Moal <dlemoal@kernel.org>, Naohiro Aota
-	<naohiro.aota@wdc.com>, Johannes Thumshirn <jth@kernel.org>, "Rafael J.
- Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>,
-	"slava@dubeyko.com" <slava@dubeyko.com>, "glaubitz@physik.fu-berlin.de"
-	<glaubitz@physik.fu-berlin.de>, "linux-bcache@vger.kernel.org"
-	<linux-bcache@vger.kernel.org>, "dm-devel@lists.linux.dev"
-	<dm-devel@lists.linux.dev>, "linux-btrfs@vger.kernel.org"
-	<linux-btrfs@vger.kernel.org>, "gfs2@lists.linux.dev" <gfs2@lists.linux.dev>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, Johannes Thumshirn
-	<johannes.thumshirn@wdc.com>
-Subject:
- =?gb2312?B?u9i4tDogW1BBVENIIDE5LzE5XSBoZnNwbHVzOiB1c2UgYmRldl9yd192aXJ0?=
- =?gb2312?B?IGluIGhmc3BsdXNfc3VibWl0X2Jpbw==?=
-Thread-Topic: [PATCH 19/19] hfsplus: use bdev_rw_virt in hfsplus_submit_bio
-Thread-Index: AQHbuhYRDNJlPWw5UECiKvCJdMfVCrPFCobQ
-Date: Tue, 6 May 2025 04:39:25 +0000
-Message-ID:
- <SEZPR06MB526957D0F35531E2D9B9EA2BE8892@SEZPR06MB5269.apcprd06.prod.outlook.com>
-References: <20250430212159.2865803-1-hch@lst.de>
- <20250430212159.2865803-20-hch@lst.de>
-In-Reply-To: <20250430212159.2865803-20-hch@lst.de>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SEZPR06MB5269:EE_|SEZPR06MB6139:EE_
-x-ms-office365-filtering-correlation-id: 0367c651-41e7-459b-af18-08dd8c57fae2
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|7416014|376014|38070700018;
-x-microsoft-antispam-message-info:
- =?gb2312?B?NGFTK2lKNUxLNkN4VTA1TG9HVlBTd3RnNnpsbkZEeWxJU1Vwdk9RNVVVek9T?=
- =?gb2312?B?ZzYvdk41YkVWNzM0WFZML1dRSExkODIvVFdIdVVzeHhIM1Fxa0paOEhTVDgy?=
- =?gb2312?B?Y3BVQ01RVVhSaEgzS1hRSzVhdDZpcnh5blFoMldYL0szeHhZTUFsaVhyQU1m?=
- =?gb2312?B?dlpSRkl5UlNmdFozcEdnL2RoREdVV0JoZ25EWUFiNUFIRjArbFRXQnRQRGxK?=
- =?gb2312?B?Y2ZpOUlXNFBNQ1BIUmpWWFRUc2poZHNneG85NjRVcDMzTG4yN1BqTTAyRkFV?=
- =?gb2312?B?RHRJT3E2d0QwZmtYaCswWUlGb2svK2FmWjl3L2RSeVplV21oV0tnQXcrMktP?=
- =?gb2312?B?S0UzTWNEZm5HYmVWUWszdyttaU1XU0lIRmVVcjRtSG5EVm5ycERDWkczUXM0?=
- =?gb2312?B?cWVoaGFFMjk4Z0hDMDJpT2I3MTVncVhqR2tOejdpTllxT1pPM1BhNVQ2cFNN?=
- =?gb2312?B?ZTlWSXJnNjlYUjdTMVJRRVNYajEwc0VuOGNWWW9WYWJPdWxlK3Jubm9pMWZx?=
- =?gb2312?B?bk5XT1B4N2dMMUhPRXYvR3J5eU9sNmJmeDdHQS9nelBFa05KWnk0ODNlZ3cr?=
- =?gb2312?B?N2dkSXJiN20wMnBjWENNSmViWW9nZ1FZTU1FWHNmcXRZUlY3dXdsNFBvaFQ5?=
- =?gb2312?B?K0w1Y0JpcWNkTVFBMmdpU2Nra3JlZWU1OHFvWVNGMTByU2pnUG0vNDBiL2tx?=
- =?gb2312?B?dHNXTmU5UFZqaEY3QWRXUTR3VHUzc0NmUEFuSzV0ak41T1ZKdGNQYStGM0hh?=
- =?gb2312?B?anFxTFFFdVZjOVZiWlhjektVTlRPSkV0Y2paUEJBMTBuNWxVM3R4R2N0SWsz?=
- =?gb2312?B?dkFKb3MvM2x6Rlh6VEk5ajJSWHBiR0twL3FsZ3FyUmQ3ZXFiK1hsaG10QkZw?=
- =?gb2312?B?U3ZWbTh6UzFycmZ3SjlGVlJxSU5lQW96RVAxZ2lRdXE2c2hkcDcyY053THg3?=
- =?gb2312?B?YnFXYWhZaktCUFV1S1p6TE8rWk5MTS9hU2p4K3JjMy9nSDQ3UUJnb202NkMr?=
- =?gb2312?B?SnowMDJtdE43Nlg0MS8wN0pra0R0T1Z4QmlHRGVJTjljZGc2eXhPNkNrMUZa?=
- =?gb2312?B?N2RKVzBPSFpwZ0dkbkkwVmV2L0MrTXVGOGYvUitwK01HTFdvVXpzUnppajAy?=
- =?gb2312?B?MW1Gck5BWDlodEZwUlEydU1rWHlyeGQ3OFZPM2FKZmFvUVRuaDZXRHorOWM2?=
- =?gb2312?B?Z2tNUXM1eEhiK1lJWFR4RGVKdlZ5MTk4cjBLZFRpa2wxRzlsRmg4YkR3cTY2?=
- =?gb2312?B?RzJWQ0FMSC84bS9UWlVjaGIwSGcwZ1I5VXlUYnRJdm9vRHdXcCtsaytxcWQw?=
- =?gb2312?B?YlRYUEFEWW9OVmNWYnRFeGtqV1UvRGVXQTg1VDVhbFBZMlJMbVQ2WEdrS0wy?=
- =?gb2312?B?dnk1N0loZTV3WXgyUVFXeTJjWFJtZmZPYTFNcS9NdlRUY3JnV2xhUGJLa2s3?=
- =?gb2312?B?YTQ3S1F3a01mS2xpSkxBS0orVmk0Yy9BWXVYK0MyY3U1RDRXMmljT1JBTzl4?=
- =?gb2312?B?blo2Y3N5elVWdXo2NkhuVmNIWmYyMmhxd3YyMTJicTFrMFRQVnBKNy9Ba201?=
- =?gb2312?B?NUc5S1pUTGg1MzJGRU9haUFHa29KOFNSanFRdU41bGpFSEtMdm1NUDNxYTlY?=
- =?gb2312?B?bXdiRkJqcW1kNUQwdUZnNkM2Ky9lTU53YUtlZis3SGY3bE5EUHpMNktQVkM2?=
- =?gb2312?B?Ulpya1p0TmJkR1NiSC83a2k0b0J1R0pMYWlFSkpSZ0N5SWRQUmd5anQ3YnVZ?=
- =?gb2312?B?NXZpY2k4d2dXdVRrN1F2aEJFYkdSckkvdHhhUEJ3em4vTHdFNmVyZVUrTWMw?=
- =?gb2312?B?bmxiYkFOdHZlNXB1NnA2Mm11STZIYWJnQnlWcjNkUWhuS3BOSWptcWQ4Q0Vj?=
- =?gb2312?B?ektScE56RXVFUVBzS09Oa0VMbVhMajdJTGN0eVh3Q0JtYVJDeTErSGh6Q1pB?=
- =?gb2312?B?Zm5YMnNmNlVKb3g2Z2ZraE9QSnZnaTAzclFlK294ZktJZ0Rid2gzbE9Cd0NP?=
- =?gb2312?B?WlNrdGozM3FRPT0=?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:zh-cn;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?gb2312?B?UmQvVUpJcCtZNnpjdlZtdkNFY1h4bStiTzFFbE5XWkpnUThUUmlrTms2M1NX?=
- =?gb2312?B?aUUxRDNJaWJaUTB0bGxpVjBobEFIZG9zaWNIemRHSTVhTE9maU04N1dSeDdl?=
- =?gb2312?B?Y1FiWjc2R3o2NDRMaWdaZ0lIejloSmViRitsUkxLYTRCRk8ydVdKS3RWaXZz?=
- =?gb2312?B?VEhlQkx3ejM1ZFFMQ2ppNzJHYlhLaGQrL0h3NEU2eEJ1RDZxZEFhNS9mQVBG?=
- =?gb2312?B?Z2k3eUszNi83cXREYnZPZTg4azBSdHNtK1V0NUxYWkxyT21kT0NsdlRxUUpL?=
- =?gb2312?B?YkNoYnRUR2huOHVKVjFVQnJNOVIxSmsveVRJVURqdFNCekhTc2YxTWxwWFY0?=
- =?gb2312?B?YWFWcE56SDY4L3lpRTJjRWpQalJOSjQrTEtOZDR3WlNvbGVQUE5TYjlrSWJF?=
- =?gb2312?B?bVlQcy84SkpzVnVIMGFZLzdHcFlud2V3Q1ltcDJGNmdCTU5BYXAvR1dUdkxy?=
- =?gb2312?B?SmNNMjd4UkxpOEF0eFAzTTBqVlNxTnF0VFYxbzRJU3RGYnFvdW4rNVEwQklU?=
- =?gb2312?B?b3FFVHJIUDNrNVZxR0xrMXY3SWhjbWpXdlFheHM4MHhvem5LR1gyUmUrQ3dO?=
- =?gb2312?B?dm84WlRaUk1TQUNMNFQ1Q0lnbXZwQkNaMnVxN0g0RHNlOWN1SHVUQ3k3U0Zy?=
- =?gb2312?B?VU92Ky9wTStSNFJ0TDY5TXFSejlyNjExdWM4VEwvM2pSU2dCaWFoYTJGRUxw?=
- =?gb2312?B?dVJFS1U3M09wYXhnMngzSVp0QXVBSFljWmFScnFETmw3SGtHdG90R3UrN1B2?=
- =?gb2312?B?UUhyUlVUcy9SUjEyNjFIRnlDMGxVTWhsVHV2Ulc1TW9RYXg3cG02dGlCQ1k3?=
- =?gb2312?B?UHN6bmVxMHIxQ01NUHNUaUhSUjdDOFRPRHRRNkdRZ1lhVnpkMklQbHlDOGhs?=
- =?gb2312?B?Mit6dzhZdnUrcmZtNFRvVy94eE92R3BBK0t2NndlZDBVb1FvYTB5UGRqWDZI?=
- =?gb2312?B?cnlmNlM1TkY0blRlZGdzcktGUEEvTVYwajJUY1hqT0g2UHgyMUVJdGdRUUZH?=
- =?gb2312?B?WXh4bGhCL2FGMDUvYS8xVFA5NmRSc040dTZWSTFVZENKQW92d2pBenVnS2d1?=
- =?gb2312?B?Q0hQMVBaQUlTMkQzczlaWEx3RjJBeXBHWThVeTJtSkdZSjJULy94blNMMFJK?=
- =?gb2312?B?V0lZb0d0NERVdUk2ZU1ud1pucCsyWVVCUHdYYisyUFhlU1c5L0FBSTUrbXY1?=
- =?gb2312?B?VWNXaDdJaEI4bmxWSlJ1aUhUZjRCNkY5YWFBY1BIS0kvQ09OVjhvekZ1Y0dD?=
- =?gb2312?B?dFNUTis4clZmQ0ZnaFpqUTBOT1BwaEVtcWZCMHhvYzZlWjV2eFM4ZnAyOFds?=
- =?gb2312?B?S3AwOWwzY0hFQ1hhQ2N5dnhMVDFvVVUzRzg2eDVjMXB4cjFpckdBZm9JK095?=
- =?gb2312?B?Sm5rckFPaGdTczZJd0JaMWlFcENqSUZPSG1waEhLbDJBYkc5bVJ3UERFWERu?=
- =?gb2312?B?amtoMmpud2xxY2ZzWlZXUlhGZ2tLb2RMWU5kNDVPSFdWYnJsdUVUbkk4T1dl?=
- =?gb2312?B?Yjh3cngxcWN0clk0MHoyL3dSbGwwZy9zamU3TVpQNzltQm9haXM4MnhDVDI4?=
- =?gb2312?B?QjV3cEpWYko3QWVzQk5rZkI2c3RYV2NpNitGcW00UnpvMkFuZ05peDdKalR4?=
- =?gb2312?B?SDBxc0NJOENTbzBadDFLYytzU3JZLytESFhyVkFJcXM5UC9EZ3JvWkhRTVA5?=
- =?gb2312?B?MFAwdSs1eW94QXlYVjlNSzdLVjJxNEVuNzNkeitCU3hwMHhzaExESms4dXkr?=
- =?gb2312?B?L0VGem5DTktMY0VUc3huNHBvTkZieVdJRDU3TFZDVSs1L0N4b0IxOUgzUkJ6?=
- =?gb2312?B?emRHUTB4US9SMlphQVdieUhoYWFQT1V5QWVBRTA1SGt4SENFNjg4citrQ3dI?=
- =?gb2312?B?cjExZFArL25VelpkSkRnKyt4RUNEMjltcmtiQURWTm1Ic2JrN2VQbjBPanU0?=
- =?gb2312?B?aE1GeHBwVnBlUDFvVVRJRUpsQkNiOUx0dGFTVHdLejRkUU9DMjBhNCtpM1pT?=
- =?gb2312?B?eDhQdEtNUEV6OG1YbVIrcWlDK1h4SFBaNjE0MWhNbW9WTTF4OGRUWlZ6dTdp?=
- =?gb2312?B?cStYQm9EWW9mazRrOGVIZjhYZitJd2NHQzR2eW82VnZpWm53WjlWbEpKcGgz?=
- =?gb2312?Q?LgRU=3D?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C5A21A445
+	for <linux-pm@vger.kernel.org>; Tue,  6 May 2025 04:40:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746506446; cv=none; b=HHvjkAiJ3WdGhzCnLR87WKudFaVzouC/34bYdHdX84m+WxYumP6l1SAluuCIgN6r33olXArydV2Ys7/DFoAQ8ysX2/cnXxEC55wMQgR/Zc/FGFhEKHxG+9Cb+DdPx4du6aPI7bGInUOQruLKYYYxP4gHNrOoO3YPkP4h9e0P5QM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746506446; c=relaxed/simple;
+	bh=MpJtj2k90/R/ZOoHP69VoxpHyRxw/wX2WoCFPoZVpbQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QDsnbeu3T6bCuwoBbYp4SnThouKd1nE4hcrLbWylRzHA5gHtQPZ852DaTvLppoOIiF5+lOIiklo7Jbmz6DunkoGDT1HQBIvAdJ432L1bpX9jXsahMlwZi0ZFgwBftLAZ98U7CIj5DXPuCqd3h5/UD2ronspUCxtVvQcL+s+t0Ss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=ctClDiCY; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=oxQVnNs9YZqPrPyfH/jZOPEmVtQcKWJk/VJMzNWni3E=; t=1746506443;
+	x=1746938443; b=ctClDiCYirA8Kp5dhaxjBxW1hSsd9q8/Esi48pkdErfsS2QGHct4OG2th9A+/
+	8ZZsXS9uwC6NIyBS1fBFlO5uhS7LCsUmUxsFRlkMFbOS06r64wPrTmiSDX32IO4Rqnwb5OOKj5TTL
+	3x9J1ltSst2wTLYXu8fXJyn9FZBIzlYbl6ppv27HsxL5NYtVDutOmwqkQBppLvoUIyYBKKOHAKnck
+	QE4j+AZxb0129a28Ta4t5NQo0/sgH0y3vvl5SdCB6e5JVBToDybYKCgaf4iN7XEJ82x+mpVzGD3O9
+	jl4NSJXZPzZOHCeGhqqFooVl7lZ43PyOrw9RXAZDZkm5GXwTFg==;
+Received: from [2a02:8108:8984:1d00:a0cf:1912:4be:477f]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
+	id 1uCA6j-00BxgU-1T;
+	Tue, 06 May 2025 06:40:41 +0200
+Message-ID: <4c3542ad-0476-4f65-a4f9-0bb874eac207@leemhuis.info>
+Date: Tue, 6 May 2025 06:40:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0367c651-41e7-459b-af18-08dd8c57fae2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 May 2025 04:39:25.5639
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 2d+AJjpXIAzIifOltkCoWJgZBtzp1MTw2wp/ELfBgSXv42k3IgA9E/IYKs/+pz1e9EMDSNaP3RQ67S9EyrxiRA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB6139
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] cpupower: add a systemd service to run cpupower
+To: Francesco Poli <invernomuto@paranoici.org>
+Cc: Shuah Khan <shuah@kernel.org>, linux-pm list <linux-pm@vger.kernel.org>,
+ Thomas Renninger <trenn@suse.com>, "John B. Wyatt IV" <jwyatt@redhat.com>,
+ John Kacur <jkacur@redhat.com>, Justin Forbes <jforbes@redhat.com>
+References: <20250425151024.121630-1-invernomuto@paranoici.org>
+ <d06fb5d6-b8fe-4c4f-9ee9-6710c05cc51e@leemhuis.info>
+ <20250505225545.7ed30f420ea8d1b6f3d9b0ce@paranoici.org>
+From: Thorsten Leemhuis <linux@leemhuis.info>
+Content-Language: de-DE, en-US
+Autocrypt: addr=linux@leemhuis.info; keydata=
+ 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 n7RI
+In-Reply-To: <20250505225545.7ed30f420ea8d1b6f3d9b0ce@paranoici.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1746506443;31364a0e;
+X-HE-SMSGID: 1uCA6j-00BxgU-1T
 
-TEdUTSwNCg0KQWNrZWQtYnk6IFlhbmd0YW8gTGkgPGZyYW5rLmxpQHZpdm8uY29tPg0KDQpUaHgs
-DQpZYW5ndGFvDQo=
+On 05.05.25 22:55, Francesco Poli wrote:
+> On Mon, 5 May 2025 18:06:30 +0200 Thorsten Leemhuis wrote:
+>> On 25.04.25 17:07, Francesco Poli (wintermute) wrote:
+>>> Signed-off-by: Francesco Poli (wintermute) <invernomuto@paranoici.org>
+>> Lo! I'm wondering if the the DESTDIR usage in this patch is wrong, as it
+>> caused trouble for me today when it showed up in -next. During debugging
+>> I furthermore found a related problem.
+> I am sorry for the trouble that my patch caused, [...]
+
+np, happens :-D
+
+>>> diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
+>>> index 835123add0ed..9c2b5f71fee1 100644
+>>> --- a/tools/power/cpupower/Makefile
+>>> +++ b/tools/power/cpupower/Makefile
+>>> @@ -2,6 +2,7 @@
+>>>  # Makefile for cpupower
+> [...]
+>>> +	sed 's|___CDIR___|$(DESTDIR)${confdir}|; s|___LDIR___|$(DESTDIR)${libexecdir}|' cpupower.service.in > '$(DESTDIR)${libdir}/systemd/system/cpupower.service'
+>>
+>> While building -next kernel RPMS for Fedora the above line lead to the
+>> this build error today:
+>>
+>> """
+>> /builddir/build/BUILD/kernel-6.15.0-build/BUILDROOT/usr/lib64/systemd/system/cpupower.service
+>> Found '/builddir/build/BUILD/kernel-6.15.0-build/BUILDROOT' in installed
+>> files; aborting
+>> """
+>>
+>> This somewhat cryptic error message means that the path
+>> "/builddir/build/BUILD/kernel-6.15.0-build/BUILDROOT/" ended up in the
+>> file "cpupower.service"; RPM noticed that and rightfully aborts the
+>> build, as that path should not end up there. It's inserted by the sed
+>> call in the last line quoted above.
+> 
+> Yes, that seems to be exactly what happened.
+> 
+>>
+>> I could easily fix this up in the RPM spec file with another sed call,
+>> but wonder if that path should end up there in the first place. Not
+>> quite sure, but I guess it should not (removing the first two
+>> "$(DESTDIR)" in the line with the quoted sed call would fix that).
+> 
+> I probably misunderstood the purpose of DESTDIR.
+> 
+> I thought it was intended to define a custom final destination for the
+> installed files (as in "I want the whole thing to be installed there!").
+> 
+> But maybe it is instead intended to define a custom temporary
+> destination for the installed files, which will be later relocated to
+> the root directory / 
+
+Yes, that seems to be the case:
+https://www.gnu.org/prep/standards/html_node/DESTDIR.html
+
+[Looked this up yesterday a few hours after sending my mail]
+
+> I can prepare a fix for this issue, if others confirm that the intended
+> purpose of DESTDIR is to help package builds.
+> 
+> By the way, should I prepare a v3 patch, or a new patch on top of the
+> origin/cpupower git branch?
+
+Shuah has to answer this, but from what I see the vast majority of the
+maintainers prefer a patch on top of patch already applied to a tree
+that is in next. And even if not it's often not that hard for them to
+fold one in the earlier version.
+
+> [...]
+>>> +	$(SETPERM_DATA) '$(DESTDIR)${libdir}/systemd/system/cpupower.service'
+>>> +	if test -d /run/systemd/system; then systemctl daemon-reload; fi
+>>
+>> While investigating the issue I did a manual local build using
+>> "make DESTDIR=~/tmp/out libdir=/usr/lib64 CPUFREQ_BENCH=false install"
+>> to take a closer look. That make call then made systemd ask me for the
+>> root password, which I found odd. Turns out that happens due to that "if
+>> test -d" command quoted above.
+> 
+> Yes, this is another aspect that seemed tricky to me.
+> 
+> I thought that the "systemctl daemon-reload" should be automated
+> through the Makefile, but I agree that issuing this command is not
+> always useful or desired.
+> 
+> If the "make install" call writes the 'cpupower.service' file to a
+> location where systemd does not look at all, then reloading the systemd
+> daemon is pointless. Also, if the EUID is not root, reloading the
+> systemd daemon is probably not what you want to (or can) do.
+
++1
+
+> Maybe it's better if I drop the "systemd daemon-reload" command
+> entirely, and add something to the 'README' file 
+
+No strong opinion there, but I'd say that is the right thing to do, as I
+assume most other software on install does not do that either (but it's
+just a guess, so I might be wrong there).
+
+> And thank you again for reviewing these aspects of my patch!   :-)
+
+yw! And thank you for your work on this!
+
+Have a nice week, ciao, Thorsten
 
