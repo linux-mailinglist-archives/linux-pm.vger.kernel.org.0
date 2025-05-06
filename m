@@ -1,97 +1,103 @@
-Return-Path: <linux-pm+bounces-26722-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26723-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52F48AABD5F
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 10:35:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DADC3AABD8D
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 10:43:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 66B8A1C22EEC
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 08:36:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DE553A9A29
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 08:43:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED9BB248F4E;
-	Tue,  6 May 2025 08:35:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B10A2512C8;
+	Tue,  6 May 2025 08:42:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="fAcvtaRC"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Rv++PX5Y"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2F2248884;
-	Tue,  6 May 2025 08:35:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858AA24C075;
+	Tue,  6 May 2025 08:42:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746520530; cv=none; b=O0KmyD2jtZ+tEhliNUoblAkhmr69nzFrtW5QgBau3Fu9wka2aUkku1Fu5LUT2b0JBrr8eWqscR3qFp1vszJTpoF5X83o2XsR+VYth9knB3OJj44nQersu+o07Ha9v6+++6Yvd3jKrDWySnbCmiIzH/P0dY+IZpoLwJCPH6lWcQM=
+	t=1746520978; cv=none; b=VhEzWqSKj1HqV0xZG/goXeJHssyARPRJZZwRCOD5vAMLx1u09baX2NA/IraNugvJHbEUr9VIYKMR618Z9N4qyFmNPefukbu6B+KW1F1BZLy31Dcu+yqsQ8dR7fBE/mKiKSxBAVW9wb0vm1vM/R/U4LGua3vXQ2T6qukCUO+/RJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746520530; c=relaxed/simple;
-	bh=BA1uB0bqEJgSDP4rtIOcxMMJ4yxs1wrJep5UBsDDoZk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PkaE9voTQCF46VjKBStxgtcDfi8cfP0d9+LTtQjRBKT0w5y6EkpekBK2TP/4QhtSwuLB1MjB0/UCkPjFQztENLRjdRrIItvKu5Oc2MxGNqx8cUXER2aD1bVv9n28o92+CCNcgQalYgmxAQQpTjH40I6v9q3EfRyfIfGP0nd77g0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=fAcvtaRC; arc=none smtp.client-ip=148.251.105.195
+	s=arc-20240116; t=1746520978; c=relaxed/simple;
+	bh=F3dtZtfd8sl1XZfT8M5NMHOnj5cKiMAgsEOR1aqdr6U=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=O3I6GJwnKKvpAgv2pALq4tOXaXtwHfOFcttdPxYgFN7nlN8vZlQ6jpHtoYMZfPax2iRn4PzAusAJ9AhviykTAULyRPPg3KEYc/tFgsk+Ib6aTJjzuPxBfBdVcLZTMUYZG2+3jDGW7/X6dYELl26W3x5SJZ3KkQr90iBY0wQSKog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Rv++PX5Y; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1746520527;
-	bh=BA1uB0bqEJgSDP4rtIOcxMMJ4yxs1wrJep5UBsDDoZk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fAcvtaRCqtpxu1jAL/i2hRAchnLINaS+Q7R2UxugAPYhY4gG1E8uJuu+Y+Ow/qGMz
-	 2yB3KnpFgVNo1HkRDFeYwcknuf6JQ2IQPt1IaW5OzBRnLCLQ9HV3H+1yWHnwLoUels
-	 h56Yhj3uhKjHJXaXHDB19SX9Z4CyDpg6j3Q8iLJJxxmcYdzj3wO6V6YJibv84vm20W
-	 EFH1x+3iGZOHszLIYacT3lmDZwn0I5SNVIrTbwIn5/0Awv1WURIxh2iS+VNtHqa6be
-	 fyR59LYaJDY3lhWX5AC6WmdH8u0cci6w6pKijSRkSb+uWFYxt1YtGm5QCoRvViicah
-	 YLkzWNhp9lZ7g==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	s=mail; t=1746520974;
+	bh=F3dtZtfd8sl1XZfT8M5NMHOnj5cKiMAgsEOR1aqdr6U=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=Rv++PX5YnRbe1dXiOufvraYla5D0NWb/6s+6JD5AA3B6FoN/SegaGrRC6IHGdxVD0
+	 TNIsIj0OE9zu65/1Qpmjhpj8lhBjHCcLa+ceewQZFQ1CgK0CHjob1zBMDC25c17rIc
+	 pzod58fsLIUPj6W/LkxLNKrVmY6r29JBY+BDKT/xslesJ9oS0EMgswwM1vmbKdJujI
+	 fDN2xvIH2Jpey+9r1zRx1jfA5TZAcvIegh5NyubUmaohozZ00Utw9tzE6KcdSDuFBQ
+	 juSiKrI+o82NKlLKgqWUo2C3qe98W0abkcAxWDsfz3DNrcIYGP35Y1W4nFd5/TQb+0
+	 dPg2LT6M9+17Q==
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 5EC5F17E09BE;
-	Tue,  6 May 2025 10:35:26 +0200 (CEST)
-Message-ID: <f0f7c044-c8ee-4712-94db-882cdf894653@collabora.com>
-Date: Tue, 6 May 2025 10:35:25 +0200
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 75C2C17E153D;
+	Tue,  6 May 2025 10:42:53 +0200 (CEST)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: kernel@collabora.com, Sen Chu <sen.chu@mediatek.com>, 
+ Sean Wang <sean.wang@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>, 
+ Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>, 
+ Hui Liu <hui.liu@mediatek.com>, Yong Wu <yong.wu@mediatek.com>, 
+ Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
+ Robin Murphy <robin.murphy@arm.com>, 
+ Tinghan Shen <tinghan.shen@mediatek.com>, 
+ Julien Massot <julien.massot@collabora.com>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-mediatek@lists.infradead.org, iommu@lists.linux.dev
+In-Reply-To: <20250505-mt8395-dtb-errors-v1-0-9c4714dcdcdb@collabora.com>
+References: <20250505-mt8395-dtb-errors-v1-0-9c4714dcdcdb@collabora.com>
+Subject: Re: (subset) [PATCH 0/4] mt8395/mt6359: Fix several dtb-check
+ errors
+Message-Id: <174652097340.119919.13115180921625978268.b4-ty@collabora.com>
+Date: Tue, 06 May 2025 10:42:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] dt-bindings: mfd: mediatek: mt6397: Add
- #sound-dai-cells property
-To: Julien Massot <julien.massot@collabora.com>, kernel@collabora.com,
- Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>,
- Macpaul Lin <macpaul.lin@mediatek.com>, Lee Jones <lee@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
- <matthias.bgg@gmail.com>, =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?=
- <nfraprado@collabora.com>, Hui Liu <hui.liu@mediatek.com>,
- Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
- Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
- Tinghan Shen <tinghan.shen@mediatek.com>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, iommu@lists.linux.dev
-References: <20250505-mt8395-dtb-errors-v1-0-9c4714dcdcdb@collabora.com>
- <20250505-mt8395-dtb-errors-v1-1-9c4714dcdcdb@collabora.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20250505-mt8395-dtb-errors-v1-1-9c4714dcdcdb@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.2
 
-Il 05/05/25 15:23, Julien Massot ha scritto:
-> The 'mt6359.dtsi' file already uses the '#sound-dai-cells' property.
-> Add the corresponding property to the binding to fix the following
-> dtb-check error:
+On Mon, 05 May 2025 15:23:36 +0200, Julien Massot wrote:
+> This patch series addresses several dtb-check errors reported for the mt8395-genio-1200-evk.dtb and mt8395-radxa-nio-12l.dtb device trees.
 > 
-> mediatek/mt8395-radxa-nio-12l.dtb: pmic: '#sound-dai-cells', 'mt6359rtc' do not match any of the regexes: 'pinctrl-[0-9]+'
-> from schema $id: http://devicetree.org/schemas/mfd/mediatek,mt6397.yaml#
+> The fixes include:
+> - Adding the missing #sound-dai-cells property in the mt6397 binding.
+> - Allowing up to 5 interrupts in the MediaTek IOMMU binding to support MT8395 properly.
+> - Defining the required compatible property in the regulators node of the mt6359.dtsi.
+> - Renaming the rtc node to match expected schema naming.
 > 
-> Fixes: 9bc8353be720 ("arm64: dts: mt6359: Add #sound-dai-cells property")
-> Signed-off-by: Julien Massot <julien.massot@collabora.com>
+> [...]
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Applied to v6.15-next/dts64, thanks!
+
+[3/4] arm64: dts: mt6359: Add missing 'compatible' property to regulators node
+      commit: 1fe38d2a19950fa6dbc384ee8967c057aef9faf4
+
+Cheers,
+Angelo
 
 
 
