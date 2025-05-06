@@ -1,166 +1,142 @@
-Return-Path: <linux-pm+bounces-26745-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26746-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D8C7AACE59
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 21:46:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55ED7AACE84
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 22:02:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04E5B1C20EAC
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 19:47:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C6C61BC05F9
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 20:02:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C5891DED60;
-	Tue,  6 May 2025 19:46:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94327481B6;
+	Tue,  6 May 2025 20:02:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iWWSZcFb"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Q0M2fJwz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40FDF1DE3BB;
-	Tue,  6 May 2025 19:46:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BEAD182D0;
+	Tue,  6 May 2025 20:02:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746560798; cv=none; b=PRVegGy7okUaRHBkFMNRwbZyOyV9r54yFTGgLRNh+BIclKDSB8eh4886DjTli3sDm9dRH/u4M7om+jm7EkZAAjkZiKYMmxUUEqYmBLZcHBGaptqPvCmy+td9Ypf4MxhdURAMmrZCbEG8+YUaCcrHfR3vypIPV0guyD9bonz+7wE=
+	t=1746561740; cv=none; b=tFbZgznhpbgS1G2v/1oUdFCTyFCpeOylcoS32Oxfhc1svzanzbd5QlaNsxPzsxoBxO+9hiIiozk91lgfMkaIeXRQA9bWMxTC+1Dj0hpyYjsL5J7XuS9pFhIKzXDCdagWAn8wbA4Jyjd9EJ05ODjA1Rgqaj3WvIIOLfWdiKRCyNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746560798; c=relaxed/simple;
-	bh=D5/4BigWPz9BglOJiAiQj7LfSv7VYWCIRc4N44WMdJs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YE1GGUGTh+ZqlGTxDZZwaKq/4eNWd+yHr/lBUgBQ2mtw+KDVlHHSxCOgzQNeLH9kGl2pb71EjYXWDqI68RLnBpjRMng+aBySAe/pQuxR4ycivYjKIJaFi/TaMvW0rwlGuf/fTkDXt/F+rdeyvN3Mgg6MiCMTN/VBbM2LM1YzbV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iWWSZcFb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B283BC4CEF3;
-	Tue,  6 May 2025 19:46:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746560797;
-	bh=D5/4BigWPz9BglOJiAiQj7LfSv7VYWCIRc4N44WMdJs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=iWWSZcFbriF1s8UD5jPepUW5jD16vLwS6wybMCk1r03dh1eY7vkqeBYbpWTHmZ13V
-	 mvB5TZchhLf0zvEEzS/EI2xO1RTTzHLWU/e3HeIO4D6/c1n42HNvQYf5ETIj1lj1ir
-	 RmA1zvIyBOwCatk44nZ28oDm5Ysh36J+AE/LbE54aRgNEdq+kSEc7XWjZShSBE2NVT
-	 7Hh8LB6tlQrmoRcubK3Wb1E5va3ZKUuFcfQ+iD5HRT00E3K30XKzhJRJ/xPMdCL8R/
-	 LrS+cTciwjvz3PbEyECvi9LhZ9o6+X7fINJZuX5wwqeW9JpHnMaOMRH4Dkj6KvaytT
-	 aS4fzqVKHpgkw==
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7376e311086so8764737b3a.3;
-        Tue, 06 May 2025 12:46:37 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUGb0+ADaeSr2Wpn51D8Bg9KvcvX28QmG64LF6ZJdOPPjLxLgIYqlSZbW8eTFO+pcsjN6A1+f93alg=@vger.kernel.org, AJvYcCUnM6nlIPJWSRVucw2YmjD+nTu9r09XEmMgvF1V5EMG+jCYKascBUKODzqzl9nm33z/MdOMJGB6x1y7Khs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyj/FmTd28zyUdKW7mfHzSJ03jnWO0Jg7S/akwsG5ewrXQNag27
-	QNAXCPAgwHi5DnVvdEly/Snm71CquROGlXJBaqBpw3+ByaimOhg6ceySgeBfnIN3DofLIdwjJ75
-	cL+AKRgNYsH3/0PrAcN08rdd6i4g=
-X-Google-Smtp-Source: AGHT+IEMrGifCd6r/lmGcJKGIUFBrAJcb296B/ZNI+T9laifC7QMV3tnRRZKDPMYfPY/mmULzzuBQtAozE6A1YEXsCg=
-X-Received: by 2002:a05:6870:4593:b0:2c1:6948:d57c with SMTP id
- 586e51a60fabf-2db5c0d1fc8mr339058fac.28.1746560786792; Tue, 06 May 2025
- 12:46:26 -0700 (PDT)
+	s=arc-20240116; t=1746561740; c=relaxed/simple;
+	bh=VFpsjQswqN7WRkOQQiXqntDWdIecEJS9KiXG5Wv2OtM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=tOBYqu+peP9OdbsrHomgdwr6m1UouGFTLCqCLpoBfr//3xp4jeI+776dBBTTjav8DOtc8ZBUkb/xNy7CpHEbnWk9jMJdpRoqzGTSlolDbRJSsaNFZaVzXSg2DXXO184xuQi90ynQJGB+whawV6+MOJkfitOdqbCoQnG/gaSwM2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Q0M2fJwz; arc=none smtp.client-ip=198.47.23.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 546K1g5v609667
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 6 May 2025 15:01:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1746561702;
+	bh=W42cyLUdol+oUsgXG96Kh1xhxA3DvcRncFoVbahX4AI=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=Q0M2fJwzd5R5U8NnigZDb+vyIv7sTySh9pvRo9zOOPOrY+RD2VCW+uYI7OhS/cLfN
+	 mgonkL2aoWgrOu14yE5+uitN7t+6zFK1TrMJy01vLJgCSLngNSuSgJkfUQIeQ2TjbI
+	 7NdvDzYzQw+bvbmE7FZP8yLrToeByKM9ZT30el2o=
+Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 546K1gpr110583
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 6 May 2025 15:01:42 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 6
+ May 2025 15:01:41 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 6 May 2025 15:01:41 -0500
+Received: from [128.247.81.105] (judy-hp.dhcp.ti.com [128.247.81.105])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 546K1fPh040642;
+	Tue, 6 May 2025 15:01:41 -0500
+Message-ID: <4e014361-65ec-4b6e-839d-bfeb995262c6@ti.com>
+Date: Tue, 6 May 2025 15:01:41 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <3344336.aeNJFYEL58@rjwysocki.net> <2649447.Lt9SDvczpP@rjwysocki.net>
- <61cd69f5-6790-4480-8fe7-77ef763ed82b@arm.com> <CAJZ5v0h=wR464YqDEesnm3QscJ4UBy8CX0ixZV6QsY0DS22E8A@mail.gmail.com>
- <c3eda6eb-3e01-4d9c-bcbc-348e5f5552cc@arm.com>
-In-Reply-To: <c3eda6eb-3e01-4d9c-bcbc-348e5f5552cc@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 6 May 2025 21:46:15 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jrnF+k81nCHEKvHa-SQp8J_iUkvW+jFo8ZHsj3AcG2vg@mail.gmail.com>
-X-Gm-Features: ATxdqUFmcDfm9yUUGIkJvLiYZlbrTCfYu0uJYy7InsgHXE4HR3wSXeok4L_zM18
-Message-ID: <CAJZ5v0jrnF+k81nCHEKvHa-SQp8J_iUkvW+jFo8ZHsj3AcG2vg@mail.gmail.com>
-Subject: Re: [RFT][PATCH v1 5/8] PM: EM: Introduce em_adjust_cpu_capacity()
-To: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Morten Rasmussen <morten.rasmussen@arm.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>, 
-	Pierre Gondois <pierre.gondois@arm.com>, Christian Loehle <christian.loehle@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/4] PM: TI: AM335x: PM STANDBY fixes
+To: Sukrut Bellary <sbellary@baylibre.com>,
+        Kevin Hilman
+	<khilman@baylibre.com>, Nishanth Menon <nm@ti.com>,
+        Ulf Hansson
+	<ulf.hansson@linaro.org>
+CC: Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Andreas Kemnade
+	<andreas@kemnade.info>,
+        Roger Quadros <rogerq@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Bajjuri
+ Praneeth <praneeth@ti.com>,
+        Raghavendra Vignesh <vigneshr@ti.com>, Bin Liu
+	<b-liu@ti.com>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-omap@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, Russell King
+	<linux@armlinux.org.uk>,
+        Rob Herring <robh@kernel.org>, Tony Lindgren
+	<tony@atomide.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+References: <20250318230042.3138542-1-sbellary@baylibre.com>
+Content-Language: en-US
+From: Judith Mendez <jm@ti.com>
+In-Reply-To: <20250318230042.3138542-1-sbellary@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On Thu, May 1, 2025 at 2:30=E2=80=AFPM Dietmar Eggemann
-<dietmar.eggemann@arm.com> wrote:
->
-> On 30/04/2025 21:23, Rafael J. Wysocki wrote:
-> > On Sun, Apr 27, 2025 at 4:07=E2=80=AFPM Dietmar Eggemann
-> > <dietmar.eggemann@arm.com> wrote:
-> >>
-> >> On 16/04/2025 20:06, Rafael J. Wysocki wrote:
-> >>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> [...]
->
-> >>> +     if (!(pd->flags & EM_PERF_DOMAIN_ARTIFICIAL)) {
-> >>
-> >> This looks weird to me. How can an artificial EM ever have a non-ZERO
-> >> em_data_callback here?
-> >>
-> >> There is already EM_PERF_DOMAIN_ARTIFICIAL specific handling in
-> >> em_compute_costs(). Which probably works well for the
-> >> em_create_perf_table() call-site.
-> >
-> > Yes, but that one doesn't pass a NULL cb pointer to it.
-> >
-> >> Will there be cases for Hybrid CPU EM's in which 'em_max_perf !=3D
-> >> cpu_capacity':
-> >
-> > When the capacity is updated, the EM needs to be updated accordingly,
-> > which is why the new function is being added.
-> >
-> >> em_adjust_new_capacity()
-> >>
-> >>   if (em_max_perf =3D=3D cpu_capacity)
-> >>     return
-> >>
-> >>   em_recalc_and_update()
-> >>     em_compute_costs()
-> >>
-> >> so that em_compute_costs() might be called?
-> >>
-> >> Maybe:
-> >>
-> >> @@ -233,11 +237,17 @@ static int em_compute_costs(struct device *dev,
-> >> struct em_perf_state *table,
-> >>         unsigned long prev_cost =3D ULONG_MAX;
-> >>         int i, ret;
-> >>
-> >> +       if (!cb && (flags & EM_PERF_DOMAIN_ARTIFICIAL))
-> >> +               return 0;
-> >>
-> >> is somehow clearer in this case?
-> >
-> > This would work, but I prefer my version because it does one check
-> > less and it does the check directly in em_recalc_and_update(), so it
-> > is clear that this doesn't call em_compute_costs() for artificial PDs
-> > at all.
->
-> OK, but checking it inside em_compute_costs() would also avoid this 'cb
-> =3D NULL' crash for an artificial EM in:
->
-> int em_dev_compute_costs(struct device *dev, struct em_perf_state
->                          *table, int nr_states)
-> {
->         return em_compute_costs(dev, table, NULL, nr_states, 0);
-> }
+Hello Sukrut, Keven, Ulf,
 
-This is unused currently, so no worries, but you have a point.  It
-should return -EINVAL for artificial perf domains.
+On 3/18/25 6:00 PM, Sukrut Bellary wrote:
+> This patch series fixes the Power management issues on TI's am335x soc.
+> 
+> on AM335x, the wakeup doesn't work in the case of STANDBY.
+> 
+> 1. Since CM3 PM FW [1](ti-v4.1.y) doesn't enable l4ls clockdomain upon
+> wakeup, it fails to wakeup the MPU.
+> To fix this, don't turn off the l4ls clk domain in the STANDBY transition
+> in MPU.
+> 
+> 2. Also Per AM335x TRM [2](section 8.1.4.3 Power mode), in case of STANDBY,
+> PER domain should be ON. So fix PER power domain handling for
+> standby. l4ls is a part of the PER domain.
+> 
+> Since we are not turning off the l4ls clockdomain on STANDBY in MPU,
+> PER power domain would remain ON. But still, explicitly handle this
+> to be in sync with the STANDBY requirement.
+> 
+> 3. On am335x evm[1], UART0 - (UART1-HW) has a wakeup capability.
+> Set the wakeup-source property in DT for AM335x.
+> 
+> 4. Enable PM configs for AM335x.
+> 
+> [1] https://git.ti.com/cgit/processor-firmware/ti-amx3-cm3-pm-firmware/
+> [2] https://www.ti.com/lit/ug/spruh73q/spruh73q.pdf
+> [3] https://www.ti.com/tool/TMDXEVM3358
+> 
+> Test log:
+> https://gist.github.com/sukrutb/bdbfd1220fe8578a9decf87d0bac6796
+> 
 
->
-> BTW, there is this:
->
-> #define em_is_artificial(em) ((em)->flags & EM_PERF_DOMAIN_ARTIFICIAL)
->
-> (I guess s/em/pd ?) which lets you check this when you have the perf
-> domain. So far it's used in dtpm, cpu- and devfreq cooling.
+Thanks for the patches, Sukrut.
 
-Thanks for letting me know about it, I'll use it in that check.
+I was able to test this series on am335x EVM, baseline being rc5 next
+branch: https://gist.github.com/jmenti/cda1675b5fc5844b6f065376e98026f5
 
-> Anyway, you can add my:
->
-> Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
->
-> for the entire set.
+Tested-by: Judith Mendez <jm@ti.com>
 
-Thank you!
+regards,
+~ Judith
 
