@@ -1,132 +1,165 @@
-Return-Path: <linux-pm+bounces-26729-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26730-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9B84AAC0C8
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 12:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 69139AAC0D1
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 12:05:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B0A437BBBBF
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 10:03:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 137D07BC2B5
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 10:04:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 616C7278158;
-	Tue,  6 May 2025 10:03:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEEEA14A639;
+	Tue,  6 May 2025 10:05:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="EkpS9PDJ"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="nwj6ZlrZ";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="QlUFc5M7";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="3OW/QdYO";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="7pkniqqj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2597D274641;
-	Tue,  6 May 2025 10:03:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9577F266B44
+	for <linux-pm@vger.kernel.org>; Tue,  6 May 2025 10:05:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746525833; cv=none; b=QLY4o6sgWtjTm02XpYWntCl3EMwh1Wc8xu0hx/tMLgXyQEhbj3T9MSznD7g+nqmAWF4wbhLjHrT020WM/TiBH/5/c0x7fXHhDCiu2ZjXe8x8MGo5OYgFN+ZiLrIYh+F1YrpYgFwjIdcq3Ui9XYhNJsWm9RSdNw9CSmk3lTgXGec=
+	t=1746525907; cv=none; b=J9B41IAjoVax8kf5aGXXIBWPVr3aClwMcxpK80Tn+sgVNT2cJxSNHJVByHIgmJqyLffpKFawX9ckkQB4dtp2G3OBuXXXUjL3/y+Lgf+XwuFV7+PmFahTvxe3Pimm4uSPHf8p5aRK3xuldofZRjCZUXkgPptgzyunqwxBThqFfW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746525833; c=relaxed/simple;
-	bh=bJyJ7jyIeAMfkphkSNgQEG8wgYNfIHi+6aTP9xuWgv8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fbyWd55+KHOGvS/dQedTLWXAHYrmhTG4SyhA1w+2VZ4JtlrA02ISsSnBTI9qr5h+RNgYGGKrjdSs7Q13xiXM1spoNWYLAXztRPZe8z3wbEEalpioUiYUBWs/deXOMaUO0TsU6apVfoFFBOLtc8lHN8Ri0S8+H6XrApT08pvUuRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=EkpS9PDJ; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1746525829;
-	bh=bJyJ7jyIeAMfkphkSNgQEG8wgYNfIHi+6aTP9xuWgv8=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=EkpS9PDJ/Fh5iHdAM4qMNFDGXu/z7Y4zulpt9PekKugbvg3VZ8WDRGbRC0xh9cH0l
-	 q3YBP51512gdwfgnKnbqw1XTN9XeeI1zU1F6NNitqWHFrwzeAJDpbgxsTSep5PccBh
-	 PfPd2vWVkH749k/4LmdKmEdZqB6fefI5xFphAw9LzCxRvaQcSkeHXU6R7j2PGMHZUt
-	 En6duHN3Sl7zcS94fCuXe1/4ddC91gp5rC7lQ9ABa9CzSOpDVFJFeIqiNZVAaTEejf
-	 2ui1sci/X+Fisxkdz4DH751jEIBRLqcJDfgXtXkiGRFm5WDzfh2OxIAgAXegJiLqaP
-	 WKpnPFPKFzWCA==
-Received: from apertis-1.home (2a01cb0892f2D600c8F85cf092D4aF51.ipv6.abo.wanadoo.fr [IPv6:2a01:cb08:92f2:d600:c8f8:5cf0:92d4:af51])
+	s=arc-20240116; t=1746525907; c=relaxed/simple;
+	bh=NYYPUTt20O2TPocnUB7Huf4QETUChDygy6WWv8pAHHA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z4U6vV8CHZ4Oswsap/l2JhcP1CXGvkF/dqbPgqnMqlChyZ3S2Qv7Ar1LzI+lO8JtdyI50H+fVqpVDXR/7+1GGUo8nV5EQcR0Yg9Mlc4wDsXJhewIh2RdUR4AopbHFUNntM/x5BTB1JfPLvr/3xegilNxleNBAE76w0cD1DRxyOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=nwj6ZlrZ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=QlUFc5M7; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=3OW/QdYO; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=7pkniqqj; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: jmassot)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2793117E088B;
-	Tue,  6 May 2025 12:03:48 +0200 (CEST)
-Message-ID: <2d3a8e55105526c999b490a2e92dd448c099faab.camel@collabora.com>
-Subject: Re: [PATCH 2/4] dt-bindings: iommu: mediatek: mt8195 Accept up to 5
- interrupts
-From: Julien Massot <julien.massot@collabora.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	kernel@collabora.com, Sen Chu <sen.chu@mediatek.com>, Sean Wang	
- <sean.wang@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>, Lee Jones
-	 <lee@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski	
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Matthias Brugger	
- <matthias.bgg@gmail.com>, =?ISO-8859-1?Q?N=EDcolas?= "F. R. A. Prado"	
- <nfraprado@collabora.com>, Hui Liu <hui.liu@mediatek.com>, Yong Wu	
- <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>, Will Deacon	
- <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, Tinghan Shen	
- <tinghan.shen@mediatek.com>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, iommu@lists.linux.dev
-Date: Tue, 06 May 2025 12:03:47 +0200
-In-Reply-To: <cb715936-3a44-4002-8d64-565f8d31820c@collabora.com>
-References: <20250505-mt8395-dtb-errors-v1-0-9c4714dcdcdb@collabora.com>
-	 <20250505-mt8395-dtb-errors-v1-2-9c4714dcdcdb@collabora.com>
-	 <cb715936-3a44-4002-8d64-565f8d31820c@collabora.com>
-Organization: Collabora Ltd.
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1 (3.56.1-1.fc42) 
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 8EDC81F441;
+	Tue,  6 May 2025 10:05:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1746525903;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zk0fDN+7PJwjKDDJ2t6a08GL5EW0lCf5wZyG/z+TpX0=;
+	b=nwj6ZlrZcRjlCYdYReDfiy1eA0rokC3eC7qMNjEzo6jZoP5RYGmCpmqTXYSz+gYSHdcBct
+	1fQ8VGOSfmPR5GUJ3SjIgFC+FmaB6dnOwp3j1YObZqC5vMQp2Gq3UtLJzGZZUm+cO3/6al
+	GgjxAZxybGEM732anF1sYDwIE+KC5qw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1746525903;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zk0fDN+7PJwjKDDJ2t6a08GL5EW0lCf5wZyG/z+TpX0=;
+	b=QlUFc5M7P2UMRTf5b8sMNOvsNWpV3EKID+TC1Ny1SOjRGv9mK8BD8XFGHZVSSgbMVHA+e0
+	yZAzBiZGErpa+HCQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1746525902;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zk0fDN+7PJwjKDDJ2t6a08GL5EW0lCf5wZyG/z+TpX0=;
+	b=3OW/QdYOX0c1xiiAgUgDKH2AcQ7BDVzfTjnX3yBpkGJhMqnt3PY4oT8nBSRc3gigMJWnco
+	XxtBxQtK+j03L3mhgVDyfYkrDkoqyJg4Gfl5zHs1fQzyEJ4AZ/EsldoecJVF9js0IXMSor
+	jEWK1qgIsbJZ7rr6c604gjs56bE4T2k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1746525902;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zk0fDN+7PJwjKDDJ2t6a08GL5EW0lCf5wZyG/z+TpX0=;
+	b=7pkniqqj3sMt7dDjl4jgK30iZTiYX4ZtHQwoF9Zs7NawwyLpJYWEWz2IaTq8DDbxyN0L9U
+	R2K4cBWvwD5vRkDQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 574EA13687;
+	Tue,  6 May 2025 10:05:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id sv0WFc7eGWjjegAAD6G6ig
+	(envelope-from <dsterba@suse.cz>); Tue, 06 May 2025 10:05:02 +0000
+Date: Tue, 6 May 2025 12:05:01 +0200
+From: David Sterba <dsterba@suse.cz>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+	"Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+	Jack Wang <jinpu.wang@ionos.com>, Coly Li <colyli@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>, Chris Mason <clm@fb.com>,
+	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
+	Andreas Gruenbacher <agruenba@redhat.com>,
+	Carlos Maiolino <cem@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Naohiro Aota <naohiro.aota@wdc.com>,
+	Johannes Thumshirn <jth@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, slava@dubeyko.com,
+	glaubitz@physik.fu-berlin.de, frank.li@vivo.com,
+	linux-bcache@vger.kernel.org, dm-devel@lists.linux.dev,
+	linux-btrfs@vger.kernel.org, gfs2@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+	Qu Wenruo <wqu@suse.com>
+Subject: Re: [PATCH 18/19] btrfs: use bdev_rw_virt in scrub_one_super
+Message-ID: <20250506100500.GC9140@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <20250430212159.2865803-1-hch@lst.de>
+ <20250430212159.2865803-19-hch@lst.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250430212159.2865803-19-hch@lst.de>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.00 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	HAS_REPLYTO(0.30)[dsterba@suse.cz];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	R_RATELIMIT(0.00)[to_ip_from(RLndmnr811gycae4b5bcnms9ur)];
+	RCPT_COUNT_TWELVE(0.00)[31];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	REPLYTO_ADDR_EQ_FROM(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,twin.jikos.cz:mid,suse.com:email,lst.de:email,wdc.com:email,suse.cz:replyto];
+	URIBL_BLOCKED(0.00)[suse.com:email];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[]
+X-Spam-Score: -4.00
+X-Spam-Flag: NO
 
-Hi Angelo,
+On Wed, Apr 30, 2025 at 04:21:48PM -0500, Christoph Hellwig wrote:
+> Replace the code building a bio from a kernel direct map address and
+> submitting it synchronously with the bdev_rw_virt helper.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
+> Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+> Reviewed-by: Qu Wenruo <wqu@suse.com>
 
-On Tue, 2025-05-06 at 10:34 +0200, AngeloGioacchino Del Regno wrote:
-> Il 05/05/25 15:23, Julien Massot ha scritto:
-> > Some Mediatek IOMMU can have up to five interrupts so increase
-> > the 'maxItems' to 5.
-> >=20
-> > Fix the following dtb-check error:
-> >=20
-> > mediatek/mt8395-radxa-nio-12l.dtb: infra-iommu@10315000: interrupts:
-> > [[0, 795, 4, 0], [0, 796, 4, 0], [0, 797, 4, 0], [0, 798, 4, 0], [0, 79=
-9, 4, 0]] is too long
-> >=20
-> > Fixes: 3b5838d1d82e3 ("arm64: dts: mt8195: Add iommu and smi nodes")
-> > Signed-off-by: Julien Massot <julien.massot@collabora.com>
-> > ---
-> > =C2=A0 Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml | 3 =
-++-
-> > =C2=A0 1 file changed, 2 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yam=
-l
-> > b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-> > index 75750c64157c868725c087500ac81be4e282c829..035941c2db32170e9a69a53=
-63d8c05ef767bb251 100644
-> > --- a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-> > +++ b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-> > @@ -97,7 +97,8 @@ properties:
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > =C2=A0=20
-> > =C2=A0=C2=A0=C2=A0 interrupts:
-> > -=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > +=C2=A0=C2=A0=C2=A0 minItems: 1
->=20
-> Isn't minItems already implicitly 1? :-)
->=20
-> Looks not, from my understanding if 'minItems' is omitted then
-dt-schema is setting it to 'maxItems'.
-https://github.com/devicetree-org/dt-schema/blob/v2025.02/dtschema/fixups.p=
-y#L129
-
-And you will have an error for a one item interrupts:
-Documentation/devicetree/bindings/iommu/mediatek,iommu.example.dtb: iommu@1=
-0205000: interrupts: [[0,
-139, 8]] is too short
-
-Regards,
-Julien
+Acked-by: David Sterba <dsterba@suse.com>
 
