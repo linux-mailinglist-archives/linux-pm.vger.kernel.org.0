@@ -1,132 +1,124 @@
-Return-Path: <linux-pm+bounces-26734-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26735-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6351AAC134
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 12:20:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADD82AAC14E
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 12:25:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0584E1C27BBF
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 10:21:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CACF63B4552
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 10:25:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFFF42750F8;
-	Tue,  6 May 2025 10:20:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E11727703B;
+	Tue,  6 May 2025 10:25:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Oic6ZbqM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iDA0NV/b"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79EDD212B04;
-	Tue,  6 May 2025 10:20:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2767275869;
+	Tue,  6 May 2025 10:25:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746526852; cv=none; b=taEsuezdJZAc2pWt3/kplIEQxwMZUJj+q0QGg4C1z8jy8CT+jfGK9s4rLXDQ/6nRiUu47u4tq6vyquqPcuBF5OWUt1K+vUTx+yPP6z/gd1bMEHT0PARwYdyJuQUHf7ENBrCn6OT7nBZYc3OSEkcz2jc0cGWcEkBsRYpMgh7Ze+M=
+	t=1746527120; cv=none; b=tcDY8M69WKE8AN06gYpAx59dbjKMwUh9E9WmlJAb+VesJy28bI5uV+zbLRzXBW4qTjKN7ZSswwDbow2FD8UgQxJgkqfHiDsyFiJoyYwGCFy5GHd86XSW8cXUtuKAq28LKlSg4uxgwsT8KlC65I1bPvgqUVon6CZG9QZ00aNQcLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746526852; c=relaxed/simple;
-	bh=cTlctsLV2/rm79eOqeotyVv+FV9QLw5D/EGMnFgswkQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mpFC406pM3S7YJS6JfS3AigIVAHbHXpd4n8dF8btdsMq+ZKztG7NP92EW8XCtxkhVAfY32TNNciqoYGEAnllqZ29fxRC9Y+/KwJKgHFAqPV5dJvoWHSE66CGuWVwsRNC6YkQ5/DX8SnK0FJilwdRQr1n9W8ND2oeTyrhRyK81TE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Oic6ZbqM; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1746526848;
-	bh=cTlctsLV2/rm79eOqeotyVv+FV9QLw5D/EGMnFgswkQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Oic6ZbqMxNknj0hcfe+ZvNlfYvKMruLwQGy/idLjU5+wHNR2dqVkJ+YfCmH1IK6WP
-	 bkuqQJLdrFtkcvwYnNM/MJ+GEBjIlpCFFalEaVWlq/x9f/EQNdTH8gJwtZOeWdCGHk
-	 iAL7PuEQ2kl1x6OLuV3IQVGDmRzUFEZ8K7kJSQU4wI7tOUGhNmpkxFWwV3WRIfCU4i
-	 YQDbrbhm99KAbgZQQLZ2RoZsRevMRvMiMUmC26hB0OsJMyPxrzbgKMcAi6b5B/s1b/
-	 S16uKYZkLIj1dZGqinA4nvSK2rOyrdiBGUiUryzeZtmOxpMPkOJ5obOpVtCVdkrer2
-	 PjxX9fcWQ7OrA==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 62EEB17E088B;
-	Tue,  6 May 2025 12:20:47 +0200 (CEST)
-Message-ID: <c8bb938d-5a43-47a2-b7de-695f95b077ad@collabora.com>
-Date: Tue, 6 May 2025 12:20:46 +0200
+	s=arc-20240116; t=1746527120; c=relaxed/simple;
+	bh=HNvpa2Eo7tSdFILDlxkSiMCU0KdDUbo+UdR+rUM8044=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YvwKVt9IeUvAEhdqwyhnlBYTSdSD9PH/ng7jNoU7YtwV1tsinVlXCf9sCS0LV6mt/t+9yGQPRrAb4ddslPaT9sTCDH0oVSljjuguZs5BidsDGQlPVftrO3wy/sdW2pKv9PtNbB7cf+7/bKDr2qnXlsHTRTFaoare7pRYZFO/AL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iDA0NV/b; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-22e163543ceso7085365ad.2;
+        Tue, 06 May 2025 03:25:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746527116; x=1747131916; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jyLB1z+Ve3MGzRF3v4MVgA5J4WLWRyi2thiBODDNnGI=;
+        b=iDA0NV/b4ro1k7hrotlHG5Mzj3DMdNUw/DLb49o2/ts/xgD8zwLin6YTA9Ma2clmfP
+         kfWSKsz0PJZ5OHOsQGj7XnSweSP5f/iGqMNUanA3SHWtVYM5nenf9Bi9N/HHMIiVBmet
+         hduErkTSWxMGFCEeVfRjYQgw9jEbwg59nHcul5HIgat+yP+5n8q1QQCM/z9nQu+TbZ7V
+         WF2aCmJgvx8k5N17kQV4ERzD77gRmAQX+oVqdTYBO/iCgKvq0ix6PN+wOY4Iv6ORRERX
+         YLmEk7ZsltuAvPY+wwS9iPLDR7kX5RtgOM+/Dq32Chj5GLRt3vdT3JNzrQkhkDHShBa6
+         U2dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746527116; x=1747131916;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jyLB1z+Ve3MGzRF3v4MVgA5J4WLWRyi2thiBODDNnGI=;
+        b=O331przK0fDUnYdAuMiBroAED/HzNgdJ6PqD7YWAvuexYT4eJCt8SUlzjO7pKWQxw8
+         Zo/kJjHVK3RvdA1X1nOO2P57GurZPFoUfB4B97R0ZiWoUaNWHAfYTEcCP5VvRIuFgh1i
+         MnnzUhFV3LhY84D9Z7K3oMf0f9kVCkE584pcchPkD3soErzLadtuisvoj5n8eCmE4QnU
+         MYF2zBK8p5RikbOA10JF9EPi+Z7dvPiC0Bd9gJJFNUvLYGzcicDXDJbp3cd/fC6A0y3H
+         IX5iH0GDLK48C8a84iOmbM5tyEBaFNT2dp/yDlav05OAFZA29XyI88nBN2vs3IfvvwKY
+         X1wA==
+X-Forwarded-Encrypted: i=1; AJvYcCURt9/NEG5nN3vuivc3/LBG6i9FOAiMTz9z/BvaNfJpSY2rosS4AHgDkW/D/MeUmbdn1O6vKqGDMOo=@vger.kernel.org, AJvYcCUbVd0jORib3Y2LHcwEvNZnvgb3VIEcXuIjcEtWFdCvnkWCsSun2WcsIWke5oA1v215wrtAJS7A3H4=@vger.kernel.org, AJvYcCWhH6+D6JoAUUMj7f9jH0szL9DUIDUkGY0eouniujtLH/oZecgjsjWfG7/wuTqCH8OLEsSKC8HGubcXQrHk@vger.kernel.org, AJvYcCXHF/Yntajpi8Qfd5m3Th64+OVRqUfDXbE5yN01xd+BFWfD7vcsZIke8ic+C4iyZlxSK4BRLyxpuslVXdTATl4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxWD0IxwcGNB06DWARReYtZNbw3uaTP128bDTHakNM9zqgoKlg
+	fZF8c29Wmg6fbQ184MFEklXZUIpguVMMsYM5X+kSmUrn+grAD9meIfHxtVTbfRHoKD9OwnOJiDx
+	AJD1HzJo6mhTtUnkWcNGV68F06cc=
+X-Gm-Gg: ASbGncvfZseA5d5opOOpGks3BBvAIKMZyBBMN4dZMWGybs6OF7nu1k1Ngj66XrWFOD2
+	TLkTp1deAV1wiCyW7ywLTk9gJ8ioXT6/O0dR+JrLpTGlJInm7PMkNt162s/1SXHML33a/gUE1bJ
+	UskxfEj63ZY3rKA0yTPnf/GA==
+X-Google-Smtp-Source: AGHT+IH3m7O/vizvz4Yjf3dvbJP0kjxJWIh7mJkDG9BEGHYUFYbe+8VcCoCLLDrkr4DxhpzlPe0JKXuS7u5vwajwLBg=
+X-Received: by 2002:a17:902:d4c4:b0:224:e0e:e08b with SMTP id
+ d9443c01a7336-22e1022be16mr98720805ad.0.1746527116173; Tue, 06 May 2025
+ 03:25:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] dt-bindings: iommu: mediatek: mt8195 Accept up to 5
- interrupts
-To: Julien Massot <julien.massot@collabora.com>, kernel@collabora.com,
- Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>,
- Macpaul Lin <macpaul.lin@mediatek.com>, Lee Jones <lee@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
- <matthias.bgg@gmail.com>, =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?=
- <nfraprado@collabora.com>, Hui Liu <hui.liu@mediatek.com>,
- Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
- Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
- Tinghan Shen <tinghan.shen@mediatek.com>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, iommu@lists.linux.dev
-References: <20250505-mt8395-dtb-errors-v1-0-9c4714dcdcdb@collabora.com>
- <20250505-mt8395-dtb-errors-v1-2-9c4714dcdcdb@collabora.com>
- <cb715936-3a44-4002-8d64-565f8d31820c@collabora.com>
- <2d3a8e55105526c999b490a2e92dd448c099faab.camel@collabora.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <2d3a8e55105526c999b490a2e92dd448c099faab.camel@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250502070109.inpes2ou3rxx2fxp@vireshk-i7> <20250506101311.142475-1-andrewjballance@gmail.com>
+In-Reply-To: <20250506101311.142475-1-andrewjballance@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 6 May 2025 12:25:03 +0200
+X-Gm-Features: ATxdqUFhj6qDR92HHk-3C4iXl6O_UDQOpyfYBJ4TQjYOBDXAz_1ZQp_UBtw0_e0
+Message-ID: <CANiq72k3ozKkLMinTLQwvkyg9K=BeRxs1oYZSKhJHY-veEyZdg@mail.gmail.com>
+Subject: Re: [PATCH V11 00/15] Rust abstractions for clk, cpumask, cpufreq, OPP
+To: Andrew Ballance <andrewjballance@gmail.com>
+Cc: viresh.kumar@linaro.org, a.hindborg@kernel.org, alex.bennee@linaro.org, 
+	alex.gaynor@gmail.com, aliceryhl@google.com, anisse@astier.eu, 
+	benno.lossin@proton.me, bjorn3_gh@protonmail.com, boqun.feng@gmail.com, 
+	bqe@google.com, dakr@kernel.org, dakr@redhat.com, 
+	daniel.almeida@collabora.com, gary@garyguo.net, joakim.bech@linaro.org, 
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux@armlinux.org.uk, linux@rasmusvillemoes.dk, 
+	manos.pitsidianakis@linaro.org, mturquette@baylibre.com, nm@ti.com, 
+	ojeda@kernel.org, peterz@infradead.org, rafael@kernel.org, robh@kernel.org, 
+	rust-for-linux@vger.kernel.org, sboyd@kernel.org, tglx@linutronix.de, 
+	tmgross@umich.edu, vincent.guittot@linaro.org, vireshk@kernel.org, 
+	yury.norov@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Il 06/05/25 12:03, Julien Massot ha scritto:
-> Hi Angelo,
-> 
-> On Tue, 2025-05-06 at 10:34 +0200, AngeloGioacchino Del Regno wrote:
->> Il 05/05/25 15:23, Julien Massot ha scritto:
->>> Some Mediatek IOMMU can have up to five interrupts so increase
->>> the 'maxItems' to 5.
->>>
->>> Fix the following dtb-check error:
->>>
->>> mediatek/mt8395-radxa-nio-12l.dtb: infra-iommu@10315000: interrupts:
->>> [[0, 795, 4, 0], [0, 796, 4, 0], [0, 797, 4, 0], [0, 798, 4, 0], [0, 799, 4, 0]] is too long
->>>
->>> Fixes: 3b5838d1d82e3 ("arm64: dts: mt8195: Add iommu and smi nodes")
->>> Signed-off-by: Julien Massot <julien.massot@collabora.com>
->>> ---
->>>    Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml | 3 ++-
->>>    1 file changed, 2 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
->>> b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
->>> index 75750c64157c868725c087500ac81be4e282c829..035941c2db32170e9a69a5363d8c05ef767bb251 100644
->>> --- a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
->>> +++ b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
->>> @@ -97,7 +97,8 @@ properties:
->>>        maxItems: 1
->>>    
->>>      interrupts:
->>> -    maxItems: 1
->>> +    minItems: 1
->>
->> Isn't minItems already implicitly 1? :-)
->>
->> Looks not, from my understanding if 'minItems' is omitted then
-> dt-schema is setting it to 'maxItems'.
-> https://github.com/devicetree-org/dt-schema/blob/v2025.02/dtschema/fixups.py#L129
-> 
-> And you will have an error for a one item interrupts:
-> Documentation/devicetree/bindings/iommu/mediatek,iommu.example.dtb: iommu@10205000: interrupts: [[0,
-> 139, 8]] is too short
-> 
+On Tue, May 6, 2025 at 12:15=E2=80=AFPM Andrew Ballance
+<andrewjballance@gmail.com> wrote:
+>
+> I have tried building the latest linux-next and I think that this
+> patch series causes a build error with the defconfig for x86_64.
 
-Whoops, you're right.
+Yeah, I also see it in the latest `linux-next` runs.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+And in arm64, it builds, but I see a doctest failure too:
 
+[    1.014106]     # rust_doctest_kernel_cpumask_rs_0.location:
+rust/kernel/cpumask.rs:180
+[    1.015226]     # rust_doctest_kernel_cpumask_rs_0: ASSERTION
+FAILED at rust/kernel/cpumask.rs:190
+[    1.015226]     Expected mask.weight() =3D=3D 2 to be true, but is false
+[    1.017326]     not ok 40 rust_doctest_kernel_cpumask_rs_0
 
+Viresh: could you please make sure `defconfig`s (and `allmodconfig`s)
+are clean? (including with debug assertions and doctests enabled) We
+will very soon be putting more things into next for the merge window.
+Thanks!
+
+Cheers,
+Miguel
 
