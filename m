@@ -1,142 +1,147 @@
-Return-Path: <linux-pm+bounces-26746-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26754-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55ED7AACE84
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 22:02:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F27AEAACEFD
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 22:50:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C6C61BC05F9
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 20:02:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19B86982652
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 20:50:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94327481B6;
-	Tue,  6 May 2025 20:02:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B1771FF61E;
+	Tue,  6 May 2025 20:49:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Q0M2fJwz"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="o8ZiNbMj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BEAD182D0;
-	Tue,  6 May 2025 20:02:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45FC21EB5DD;
+	Tue,  6 May 2025 20:49:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746561740; cv=none; b=tFbZgznhpbgS1G2v/1oUdFCTyFCpeOylcoS32Oxfhc1svzanzbd5QlaNsxPzsxoBxO+9hiIiozk91lgfMkaIeXRQA9bWMxTC+1Dj0hpyYjsL5J7XuS9pFhIKzXDCdagWAn8wbA4Jyjd9EJ05ODjA1Rgqaj3WvIIOLfWdiKRCyNQ=
+	t=1746564587; cv=none; b=RcfdfIUgH+Zv/WsULU/7ncKolSV+3rOVemQaxOwUqGrc7G5zdM8n6BPpAKBAE7eWvRp+xCIpc8JV3uYAsXrvFlH/4GTwJCUtTbNy0ZqJjitmeOUwRdOVWUY4FqVht0/yOY8e+gukl5OG90Ram6qZhFwmwqvBLdFaHOvaigvgHZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746561740; c=relaxed/simple;
-	bh=VFpsjQswqN7WRkOQQiXqntDWdIecEJS9KiXG5Wv2OtM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=tOBYqu+peP9OdbsrHomgdwr6m1UouGFTLCqCLpoBfr//3xp4jeI+776dBBTTjav8DOtc8ZBUkb/xNy7CpHEbnWk9jMJdpRoqzGTSlolDbRJSsaNFZaVzXSg2DXXO184xuQi90ynQJGB+whawV6+MOJkfitOdqbCoQnG/gaSwM2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Q0M2fJwz; arc=none smtp.client-ip=198.47.23.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 546K1g5v609667
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 6 May 2025 15:01:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1746561702;
-	bh=W42cyLUdol+oUsgXG96Kh1xhxA3DvcRncFoVbahX4AI=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=Q0M2fJwzd5R5U8NnigZDb+vyIv7sTySh9pvRo9zOOPOrY+RD2VCW+uYI7OhS/cLfN
-	 mgonkL2aoWgrOu14yE5+uitN7t+6zFK1TrMJy01vLJgCSLngNSuSgJkfUQIeQ2TjbI
-	 7NdvDzYzQw+bvbmE7FZP8yLrToeByKM9ZT30el2o=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 546K1gpr110583
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 6 May 2025 15:01:42 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 6
- May 2025 15:01:41 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 6 May 2025 15:01:41 -0500
-Received: from [128.247.81.105] (judy-hp.dhcp.ti.com [128.247.81.105])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 546K1fPh040642;
-	Tue, 6 May 2025 15:01:41 -0500
-Message-ID: <4e014361-65ec-4b6e-839d-bfeb995262c6@ti.com>
-Date: Tue, 6 May 2025 15:01:41 -0500
+	s=arc-20240116; t=1746564587; c=relaxed/simple;
+	bh=3ifhBa8IsbFHOoBX5X+2uisAdJUzd51bhh3lYFD8pJo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JblbrVMRDy8yfIH4B6OCRp+wRmNlInHm6c8xfO+3dVE0dW3ijtto3IJBnYWm+zSFQEBTZjExQQBE87cRBnihc0DY7KXpDCBYcE/70HM1vWulQtDv0kD7lRPLj7N9NbGkrKBTB8EAlEi/j27rDwsjH2K08f5OQor3aVnLHPW7iB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=o8ZiNbMj; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from kreacher.localnet (unknown [217.114.34.19])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 26541666BB5;
+	Tue,  6 May 2025 22:49:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1746564578;
+	bh=3ifhBa8IsbFHOoBX5X+2uisAdJUzd51bhh3lYFD8pJo=;
+	h=From:Subject:Date;
+	b=o8ZiNbMjd2E/slvetW65vMCFZpkGwqOyrGH5a//PblFJiZ537EZtZZUGe/u2RGjZM
+	 ey1JoaC+viV+QoHlmdKI5/dojbiWBMxqlzuED699t2qDrpnLTV+c8y+9pUt5WFi2gc
+	 MjCCkHPQKGOPBvkJzfhS9FAZA9z8FwzajbKdtOaiQFnI/Lbs1DIFddDKVvcw7oIP4J
+	 bk80rvpFJh1gGyEYsiWjv9eKE+f3uOnTtNiYoaTEbuSXLGci3Vgj7mPFY3VrKfsQ+h
+	 pzYBYuF4+Y3p7hV9fB71yFAyeEaB/pvZXqbepwG1+8b5l7dSMt16dqrVF6wIHNetLn
+	 CVcmgpQvRf72g==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Morten Rasmussen <morten.rasmussen@arm.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+ Pierre Gondois <pierre.gondois@arm.com>,
+ Christian Loehle <christian.loehle@arm.com>
+Subject:
+ [PATCH v2 0/7] cpufreq: intel_pstate: Enable EAS on hybrid platforms without
+ SMT
+Date: Tue, 06 May 2025 22:32:47 +0200
+Message-ID: <2999205.e9J7NaK4W3@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/4] PM: TI: AM335x: PM STANDBY fixes
-To: Sukrut Bellary <sbellary@baylibre.com>,
-        Kevin Hilman
-	<khilman@baylibre.com>, Nishanth Menon <nm@ti.com>,
-        Ulf Hansson
-	<ulf.hansson@linaro.org>
-CC: Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Andreas Kemnade
-	<andreas@kemnade.info>,
-        Roger Quadros <rogerq@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Bajjuri
- Praneeth <praneeth@ti.com>,
-        Raghavendra Vignesh <vigneshr@ti.com>, Bin Liu
-	<b-liu@ti.com>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-omap@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, Russell King
-	<linux@armlinux.org.uk>,
-        Rob Herring <robh@kernel.org>, Tony Lindgren
-	<tony@atomide.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-References: <20250318230042.3138542-1-sbellary@baylibre.com>
-Content-Language: en-US
-From: Judith Mendez <jm@ti.com>
-In-Reply-To: <20250318230042.3138542-1-sbellary@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 217.114.34.19
+X-CLIENT-HOSTNAME: 217.114.34.19
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkeegleekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddujedruddugedrfeegrdduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudejrdduudegrdefgedrudelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeduuddprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=11 Fuz1=11 Fuz2=11
 
-Hello Sukrut, Keven, Ulf,
+Hi Everyone,
 
-On 3/18/25 6:00 PM, Sukrut Bellary wrote:
-> This patch series fixes the Power management issues on TI's am335x soc.
-> 
-> on AM335x, the wakeup doesn't work in the case of STANDBY.
-> 
-> 1. Since CM3 PM FW [1](ti-v4.1.y) doesn't enable l4ls clockdomain upon
-> wakeup, it fails to wakeup the MPU.
-> To fix this, don't turn off the l4ls clk domain in the STANDBY transition
-> in MPU.
-> 
-> 2. Also Per AM335x TRM [2](section 8.1.4.3 Power mode), in case of STANDBY,
-> PER domain should be ON. So fix PER power domain handling for
-> standby. l4ls is a part of the PER domain.
-> 
-> Since we are not turning off the l4ls clockdomain on STANDBY in MPU,
-> PER power domain would remain ON. But still, explicitly handle this
-> to be in sync with the STANDBY requirement.
-> 
-> 3. On am335x evm[1], UART0 - (UART1-HW) has a wakeup capability.
-> Set the wakeup-source property in DT for AM335x.
-> 
-> 4. Enable PM configs for AM335x.
-> 
-> [1] https://git.ti.com/cgit/processor-firmware/ti-amx3-cm3-pm-firmware/
-> [2] https://www.ti.com/lit/ug/spruh73q/spruh73q.pdf
-> [3] https://www.ti.com/tool/TMDXEVM3358
-> 
-> Test log:
-> https://gist.github.com/sukrutb/bdbfd1220fe8578a9decf87d0bac6796
-> 
+This is a new (and most likely final) version of
 
-Thanks for the patches, Sukrut.
+https://lore.kernel.org/linux-pm/3344336.aeNJFYEL58@rjwysocki.net/
 
-I was able to test this series on am335x EVM, baseline being rc5 next
-branch: https://gist.github.com/jmenti/cda1675b5fc5844b6f065376e98026f5
+The most significant difference between it and the above is that schedutil is
+now required for EAS to be enabled, like on the other platforms using EAS,
+which means that intel_pstate needs to operate in the passive mode in order
+to use it (the most straightforward way to switch it over to the passive mode
+is to write "passive" to /sys/devices/system/cpu/intel_pstate/status).
 
-Tested-by: Judith Mendez <jm@ti.com>
+Accordingly, the changes that were needed for EAS to work without schedutil are
+not needed any more, so there is one patch less in the series because of that
+and patch [5/7] is simpler than its previous version because some changes made
+by it are not necessary any more.
 
-regards,
-~ Judith
+Another patch that has been dropped is
+
+https://lore.kernel.org/linux-pm/1964444.taCxCBeP46@rjwysocki.net/
+
+because it didn't take CPU online into account properly and it is not essential
+for the current hardware anyway.
+
+There is a new patch, [7/7], which adds CAS/EAS/hybrid support description to
+the intel_pstate admin-guide documentation.
+
+The following paragraph from the original cover letter still applies:
+
+"The underlying observation is that on the platforms targeted by these changes,
+Lunar Lake at the time of this writing, the "small" CPUs (E-cores), when run at
+the same performance level, are always more energy-efficient than the "big" or
+"performance" CPUs (P-cores).  This means that, regardless of the scale-
+invariant utilization of a task, as long as there is enough spare capacity on
+E-cores, the relative cost of running it there is always lower."
+
+The first 2 patches depend on the current cpufreq material queued up for 6.16
+in linux-pm.git/linux-next (and in linux-next proper) and are not really
+depended on by the rest of the series, but I've decided to include them into
+this series because they have been slightly updated since the previous version,
+mostly to take review feedback into account (I'm going to queue them up for
+6.16 shortly because they don't appear to be objectionable).
+
+The next 2 patches (Energy Model code changes) were reviewed previously, but
+they are only needed because of patch [5/7].
+
+Patch [5/7] has not changed much except that some changes made by the previous
+version have been dropped from it.  Also its changelog has been updated.  It
+causes perf domains to be registered per CPU and in addition to the primary cost
+component, which is related to the CPU type, there is a small component
+proportional to performance whose role is to help balance the load between CPUs
+of the same type.
+
+The expected effect is still that the CPUs of the "low-cost" type will be
+preferred so long as there is enough spare capacity on any of them.
+
+Patch [6/7] has been updated to walk all of the cache leaves and look for
+the ones with level equal to 3 because the check used in the previous version
+does not always work.
+
+The documentation patch, [7/7], is new.
+
+Please refer to the individual patch changelogs for details.
+
+Thanks!
+
+
+
 
