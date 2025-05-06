@@ -1,173 +1,223 @@
-Return-Path: <linux-pm+bounces-26732-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26733-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDAF4AAC11A
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 12:15:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97110AAC124
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 12:16:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40B5050311B
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 10:15:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A17EC3B1981
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 10:16:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D1BD27816A;
-	Tue,  6 May 2025 10:15:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98018275114;
+	Tue,  6 May 2025 10:16:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CY6oH42E"
+	dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b="ZJkhctv9";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OKahMCMy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EA5277036;
-	Tue,  6 May 2025 10:15:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8208026560B;
+	Tue,  6 May 2025 10:16:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746526512; cv=none; b=qDvxu9CCcoHXg5kpTnWeZRBr24W4YLavDeWKTqklc+2IVs1RQM9m85khE4+I08xFRUwmsguXQcCZSLENUJtkSpWycByr6pNJD+LA7TGe0D78M+Ujmh2UMmZ3wuxWtWNWlE9KlOn1VoxPF5X7mlvxRkFJKicHDljiHANl6DzpnUc=
+	t=1746526593; cv=none; b=fy9yEN4RVObpO9e2iQCBhHRkAdXcNt0n8OPcJnWZt0RmeOQeECPSzO/j/W0ARi/NoGFGXaj+J/JWxVRg9HJ50brWavuu0NmKdfykLj9guZnl4w6HxZdfeDOFdkzPs4/QxbyKOQq9ogjKM7hG41x4iTQzpCQK86t/hX58CD6NNe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746526512; c=relaxed/simple;
-	bh=H3fLQxygZC6XKdNmeZEZ2FzeMvkZHRYPXqX08psAQ6s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=N4l5A2vPQU2mVg6LWyQxH/3HOvfnvhu3bc1bzBAkNKREZuUQEJQsqgNZ8HDVG5W7GUtZL8teCWnbRIA8F2oeTll1Z30RFP5j/ZrIoFmd4K+CPVQHTAt6LQCgFHQ8Y8Su9SzTpsBnQh7MF9bW49irGpqw4fLRkZTtrY8LJzZB0JI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CY6oH42E; arc=none smtp.client-ip=209.85.167.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-40337dd3847so2996774b6e.0;
-        Tue, 06 May 2025 03:15:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746526508; x=1747131308; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xKR53B3qPFijXew46vboZyZL5TEINx3Tkrkttdk5rDA=;
-        b=CY6oH42E+cITuANaDNBxhcIp6x0aB9LX9HvhOf2zCx/nIKrLwMQIMGUWew89Cmn2T3
-         hYK/OpK/fZgadoX0d4m+fGGb71oFv4q/SNOT/cqCTrOGYmvIAkIa+Qrsi3CKV5CBz8rR
-         1mwCP9iqcyTMKvz9h0KaPuohQ3K5qurTvJR35/e750VHpC2x55vEMFFOkhLl8hTTymUt
-         rGjBdk242WCwkc5HS7EdEJmWOU18MNlZKMSAAajV4Pgw77NXp7D0I2F15/IJNQfPJQ7E
-         IHSpof3Ot+LkErh8Y10v1IxmzOAxGEqMwLDuEo44FrH0dEewEPjMTSG3MxNL5ze0JD6a
-         jRQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746526508; x=1747131308;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xKR53B3qPFijXew46vboZyZL5TEINx3Tkrkttdk5rDA=;
-        b=kOUS2XQCT0helJ5Omwl9xbu4xgQCOtVvsEzSYsFvDZUwESd9vKj1Quqh6Hpxv8DQoa
-         4AefvFjCor10dYmke9SdJQ2K41XfZLMuW1UrqjofVZzJ0KYBxIjwnUagu5CZAv1WjpXy
-         Kf+azi1Ayzdu3mCIek51eJyZFaZXKYQLI0H4JrATl5e+LJsUHu09yinJ0YpRvX8m9uD1
-         h2r7vVA7xnJIKf+2RPthNnPLpb2ROa2RKhediaZdPhmr9QCdKLaVlqoZiUJhdlVYmb7U
-         S8DrRZoOl4PIJ3tz7EVUjJ9XPMAVJZRTqmXGFTmsPNR9t+42NAtCH4dJDHOhEwEFHGAb
-         nzeg==
-X-Forwarded-Encrypted: i=1; AJvYcCU88Ic4rrMDiesPPdufJgMEA5tKsDgFQ1LxPMa4AQmw9qHzqc7PfLg7f9SavObtWYRY4ZvMA+aeX8Y=@vger.kernel.org, AJvYcCVfI5aFptHrDF/EX6VCoOo1pObYRsWLCwqUDCWGwkBt65IqtV1ln1rDCpS8qSfJTER1xuNPUrh7knXZKZGn@vger.kernel.org, AJvYcCVrXxvlf7WrLlnIg0yklX1TZQY2dceNDbFxaf3Qr9kgo5rpCVHJIbvimyKjt5rowiOsNGjNXCV5kOA=@vger.kernel.org, AJvYcCXIszgkY4l/dUX01NSnUDeUMDgFsotMMtJDzXc1jLh7GDupoWPmCOwUjdFSjYXztJ8KqpkB1n6Woy5liv7zcCA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywrbh+Jn73X5hiZ8WiWdMQl1PcaqcLZiFI+2CMzgN+02wpr8OKp
-	9o0cFZp+w1uo1AECeHW1j+Apz1DRzGdkGSHETsqPEnUwoMM3D8nW
-X-Gm-Gg: ASbGnctUJVUzmm+F225uwsO3dRUBsINAyOdDxw6m41PrDrvaT5BNi4JmolQDsnUDsYX
-	Xxz3Bo5cHHtrpSDEeAcvmzaWl13H/1b9cAbT7DQRGDtOIi7PixUg+7EMHW0MRFR5Uyc6xZsYCY/
-	YKs3gjYGCXXbX9sZvDo0s6wUar9Y9e0avfM5mAZo0fwDMqLFdBY+eNaeDMesYNX2iZMMgNLYbE/
-	TnG0/tiL+jC+5VdvtQyl70VPJb79KSewbEd758/MvfQQeXZvbNo1b1SEpjh+DyNFzzTCX4GKcSX
-	noy862e42bu15QSkQ8LfLrCUeThCvzn9ywWXqYOfRW+PAwB9pT7VWjy12FNom14ZCKgESceJIOv
-	er9lTPmpCZGKtKQd7Xc2KM10=
-X-Google-Smtp-Source: AGHT+IHE8caFW7rhcABhjbpxTvjrWJ3oASf6F/4xoBjVlsPODe2HL2MtdDc5iad7lX+dv3sdRNkD1g==
-X-Received: by 2002:a05:6808:3008:b0:3f9:36ec:dab3 with SMTP id 5614622812f47-40368ca72d7mr1345277b6e.14.1746526508421;
-        Tue, 06 May 2025 03:15:08 -0700 (PDT)
-Received: from my-computer.lan (c-73-76-29-249.hsd1.tx.comcast.net. [73.76.29.249])
-        by smtp.googlemail.com with ESMTPSA id 5614622812f47-4033dae726dsm2390904b6e.30.2025.05.06.03.14.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 May 2025 03:15:07 -0700 (PDT)
-From: Andrew Ballance <andrewjballance@gmail.com>
-To: viresh.kumar@linaro.org
-Cc: a.hindborg@kernel.org,
-	alex.bennee@linaro.org,
-	alex.gaynor@gmail.com,
-	aliceryhl@google.com,
-	anisse@astier.eu,
-	benno.lossin@proton.me,
-	bjorn3_gh@protonmail.com,
-	boqun.feng@gmail.com,
-	bqe@google.com,
-	dakr@kernel.org,
-	dakr@redhat.com,
-	daniel.almeida@collabora.com,
-	gary@garyguo.net,
-	joakim.bech@linaro.org,
-	linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux@armlinux.org.uk,
-	linux@rasmusvillemoes.dk,
-	manos.pitsidianakis@linaro.org,
-	miguel.ojeda.sandonis@gmail.com,
-	mturquette@baylibre.com,
-	nm@ti.com,
-	ojeda@kernel.org,
-	peterz@infradead.org,
-	rafael@kernel.org,
-	robh@kernel.org,
-	rust-for-linux@vger.kernel.org,
-	sboyd@kernel.org,
-	tglx@linutronix.de,
-	tmgross@umich.edu,
-	vincent.guittot@linaro.org,
-	vireshk@kernel.org,
-	yury.norov@gmail.com
-Subject: Re: [PATCH V11 00/15] Rust abstractions for clk, cpumask, cpufreq, OPP
-Date: Tue,  6 May 2025 05:13:11 -0500
-Message-ID: <20250506101311.142475-1-andrewjballance@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250502070109.inpes2ou3rxx2fxp@vireshk-i7>
-References: <20250502070109.inpes2ou3rxx2fxp@vireshk-i7>
+	s=arc-20240116; t=1746526593; c=relaxed/simple;
+	bh=tfJE/xsquhVWWbSfVNtxd7mxkKLpuW/Q3MoXdBzWEbw=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=q4NmBhMZYbZkhQdxxEwac7WQxOTJzva+9iSHYIYATaTb/lqSvyswiKRFqDjgj4E/VNiEd3V+QBzFBM4Xd/rcCaDcIn/eIsfLFLx1u5jUAe2hF0yC7hz90IbobXoSgK/ai0O30w9cev9UpsDZKIObMZTQ6QCiwG/j8OInesIPU1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev; spf=pass smtp.mailfrom=svenpeter.dev; dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b=ZJkhctv9; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OKahMCMy; arc=none smtp.client-ip=103.168.172.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=svenpeter.dev
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id 7375C1381006;
+	Tue,  6 May 2025 06:16:28 -0400 (EDT)
+Received: from phl-imap-12 ([10.202.2.86])
+  by phl-compute-04.internal (MEProxy); Tue, 06 May 2025 06:16:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm1;
+	 t=1746526588; x=1746612988; bh=u4ZHetn6p+gj8N2CA7NvMJ9GHPYdTeEK
+	pJ3GrEZD+ck=; b=ZJkhctv9B2NAQMglgaUYteeHtV1edBTOoePYfTVKqlvifJy0
+	fJWCLZRQRtgNkvYhrsUnxw3VqEcSnH2mjGmYQIchOI+R5o/+J6h4vyI1DiJ0y7Bt
+	fPCugGbW+1MaVK678SxNSuqA4i8+hHJEM2dA3ZGEfSxwKvThgD4X1Yv44hj8vZs7
+	/GK3JDaonKVlrfnBuw8cJZVKvTNkPnDDX+2L+DiZL8Pf6Ew7IIN+1/71m6jcYaH9
+	OVd5EizdKJH7Vx3xzAmKy/iZCDEo78QEUXFKjbVonWfMsju39Jy4BjJgA41r/H6D
+	P6iK5l++JlKC5rqChIDW5zophjWsnZzP0zIqww==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1746526588; x=
+	1746612988; bh=u4ZHetn6p+gj8N2CA7NvMJ9GHPYdTeEKpJ3GrEZD+ck=; b=O
+	KahMCMyBsg8bRfkAg2P/TMCEqXjthOylc6NFspaoD0MYT1xQJvAUfAhfcZUzDGVd
+	rsZfAfHuTu5U3jV+ODyWoOvOEughel86KZbeTbyMtg/aP0gEq5NO6lTE2vUqk6Up
+	4ASIE6vox5B5Bm0UP9a0UgpKyKycQWN5ZI0rwjqbyhd2+P3FgxeYg85DBYhPpuAU
+	XjEu0s9r08MxEiGcvtoYKioR0QYfJR6pk5OBSxbrRWcIHN1fte0ITDLU3Z6QBCcx
+	mICb8y7b7e6P4bh6Ya3DMlPnIT6dVSsgmqKFNorw1KwfuKOC8xkYYe55D9VBzNVD
+	m2ocg6mvOl9qvklVmxmYg==
+X-ME-Sender: <xms:euEZaILVJBwWtr2baaSB6TlmAJNm3cUe58sBzaajE2dmvLpKKd7aBg>
+    <xme:euEZaILQT-tTxNY6TK56P6NoH0nxCGZCxl_kIB_UkElbpiG4r9G0iKv2zz70efbwF
+    kvIN86fbQIpNsFlk1o>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkeefjeduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertder
+    tdejnecuhfhrohhmpedfufhvvghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvth
+    gvrhdruggvvheqnecuggftrfgrthhtvghrnhepgeegheelffdujeduffevfefhieekgeef
+    fedukedtvdduhfffjeehleekfeehhfdtnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvghtvghrrdguvghvpdhnsggp
+    rhgtphhtthhopeduledpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprhhmkhdokh
+    gvrhhnvghlsegrrhhmlhhinhhugidrohhrghdruhhkpdhrtghpthhtohepsghrghhlsegs
+    ghguvghvrdhplhdprhgtphhtthhopehnvggrlhesghhomhhprgdruggvvhdprhgtphhtth
+    hopehjsehjrghnnhgruhdrnhgvthdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhn
+    vghlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhgpdhrtg
+    hpthhtoheplhgvvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgriieskhgvrhhn
+    vghlrdhorhhgpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:euEZaIvriNGIwfgefP8pMni-k1-Mi8CzIMaLsYfTRdaK95nv6DwF1g>
+    <xmx:euEZaFaY8i2dz8F74MNuvedfSCa6MYKKfa_p8CUuZr-bmsVlA8p48A>
+    <xmx:euEZaPbks8S8RUfwkDzDMPwXPEs_Tznk-Kz1GYritVFxYQeFZUnpUw>
+    <xmx:euEZaBAd_EfcQkYFXQgIpZRq4wMgV1jcVqubCESpNsKhAaP1bFfF6A>
+    <xmx:fOEZaN4m4sWqe_fgyAZMrGAsSCzeZTmjg9ceuj_brIetONwj2TczbF81>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id A6BA31C20069; Tue,  6 May 2025 06:16:26 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-
-On Fri, May 02, 2025 at 12:31:09PM +0530, Viresh Kumar wrote:
-> Applied to the cpufreq tree few days back and is now included in
-> linux-next:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/log/?h=cpufreq/arm/linux-next
-> 
-> Will send it for v6.16-rc1 (unless there are any objections).
-> 
-> -- 
-> viresh
+X-ThreadId: T90a118147f15bbe7
+Date: Tue, 06 May 2025 12:16:06 +0200
+From: "Sven Peter" <sven@svenpeter.dev>
+To: "Bartosz Golaszewski" <brgl@bgdev.pl>
+Cc: "Janne Grunau" <j@jannau.net>, "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+ "Neal Gompa" <neal@gompa.dev>, "Hector Martin" <marcan@marcan.st>,
+ "Linus Walleij" <linus.walleij@linaro.org>, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, "Sebastian Reichel" <sre@kernel.org>,
+ "Lee Jones" <lee@kernel.org>, "Marc Zyngier" <maz@kernel.org>,
+ "Russell King" <rmk+kernel@armlinux.org.uk>, asahi@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Message-Id: <b96bd2d6-98f7-44da-9293-816daeac80d0@app.fastmail.com>
+In-Reply-To: 
+ <CAMRc=MebFf-DBh_=H0J4ORStaxBYhOnfY+jSk2d4UpdyS=m1LA@mail.gmail.com>
+References: <20250503-smc-6-15-v4-0-500b9b6546fc@svenpeter.dev>
+ <20250503-smc-6-15-v4-5-500b9b6546fc@svenpeter.dev>
+ <CAMRc=MebFf-DBh_=H0J4ORStaxBYhOnfY+jSk2d4UpdyS=m1LA@mail.gmail.com>
+Subject: Re: [PATCH v4 5/9] gpio: Add new gpio-macsmc driver for Apple Macs
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-I have tried building the latest linux-next and I think that this
-patch series causes a build error with the defconfig for x86_64.
 
-commit: 407f60a151df3c44397e5afc0111eb9b026c38d3
+On Tue, May 6, 2025, at 10:07, Bartosz Golaszewski wrote:
+> On Sat, May 3, 2025 at 12:07=E2=80=AFPM Sven Peter via B4 Relay
+> <devnull+sven.svenpeter.dev@kernel.org> wrote:
+>>
+>> From: Hector Martin <marcan@marcan.st>
+>>
+>> This driver implements the GPIO service on top of the SMC framework
+>> on Apple Mac machines. In particular, these are the GPIOs present in =
+the
+>> PMU IC which are used to control power to certain on-board devices.
+>>
+>> Although the underlying hardware supports various pin config settings
+>> (input/output, open drain, etc.), this driver does not implement that
+>> functionality and leaves it up to the firmware to configure things
+>> properly. We also don't yet support interrupts/events. This is
+>> sufficient for device power control, which is the only thing we need =
+to
+>> support at this point. More features will be implemented when needed.
+>>
+>> To our knowledge, only Apple Silicon Macs implement this SMC feature.
+>>
+>> Signed-off-by: Hector Martin <marcan@marcan.st>
+>> Reviewed-by: Bartosz Golaszewski <brgl@bgdev.pl>
+>> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>> Reviewed-by: Sven Peter <sven@svenpeter.dev>
+>> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+>> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+>> ---
+>
+> [snip]
+>
+>> +
+>> +       smcgp->gc.label =3D "macsmc-pmu-gpio";
+>> +       smcgp->gc.owner =3D THIS_MODULE;
+>> +       smcgp->gc.get =3D macsmc_gpio_get;
+>> +       smcgp->gc.set =3D macsmc_gpio_set;
+>
+> I must have given my Reviewed-by under this driver before we started
+> the conversion to the new GPIO driver setters. Could you please
+> replace this with set_rv() as the old set() is now deprecated?
 
-steps to reproduce:
-    make LLVM=1 defconfig
-    make LLVM=1 rust.config
-    make LLVM=1
+Probably, the last version I took from the ML is from November 2022 :-(
+Will do that for the next version, I can just pass through the return va=
+lue
+we get from apple_smc_write_u32 anyway.
 
-build error message:
-    error[E0432]: unresolved import `crate::clk`
-      --> rust/kernel/cpufreq.rs:12:5
-       |
-    12 |     clk::{Clk, Hertz},
-       |     ^^^ could not find `clk` in the crate root
-       |
-    note: found an item that was configured out
-      --> rust/kernel/lib.rs:48:9
-       |
-    48 | pub mod clk;
-       |         ^^^
-    note: the item is gated here
-      --> rust/kernel/lib.rs:47:1
-       |
-    47 | #[cfg(CONFIG_COMMON_CLK)]
-       | ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    error: aborting due to 1 previous error
+Thanks,
 
-it looks like this occurs when CONFIG_COMMON_CLK=n and CONFIG_CPU_FREQ=y.
 
-Best regards,
-Andrew Ballance
+Sven
+
+
+-- >8 --
+Subject: [PATCH] fixup! gpio: Add new gpio-macsmc driver for Apple Macs
+
+---
+ drivers/gpio/gpio-macsmc.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpio/gpio-macsmc.c b/drivers/gpio/gpio-macsmc.c
+index 289be4268f63..a68676239718 100644
+--- a/drivers/gpio/gpio-macsmc.c
++++ b/drivers/gpio/gpio-macsmc.c
+@@ -135,7 +135,7 @@ static int macsmc_gpio_get(struct gpio_chip *gc, uns=
+igned int offset)
+ 	return val ? 1 : 0;
+ }
+
+-static void macsmc_gpio_set(struct gpio_chip *gc, unsigned int offset, =
+int value)
++static int macsmc_gpio_set(struct gpio_chip *gc, unsigned int offset, i=
+nt value)
+ {
+ 	struct macsmc_gpio *smcgp =3D gpiochip_get_data(gc);
+ 	smc_key key =3D macsmc_gpio_key(offset);
+@@ -146,6 +146,8 @@ static void macsmc_gpio_set(struct gpio_chip *gc, un=
+signed int offset, int value
+ 	if (ret < 0)
+ 		dev_err(smcgp->dev, "GPIO set failed %p4ch =3D 0x%x\n",
+ 			&key, value);
++
++	return ret;
+ }
+
+ static int macsmc_gpio_init_valid_mask(struct gpio_chip *gc,
+@@ -214,7 +216,7 @@ static int macsmc_gpio_probe(struct platform_device =
+*pdev)
+ 	smcgp->gc.label =3D "macsmc-pmu-gpio";
+ 	smcgp->gc.owner =3D THIS_MODULE;
+ 	smcgp->gc.get =3D macsmc_gpio_get;
+-	smcgp->gc.set =3D macsmc_gpio_set;
++	smcgp->gc.set_rv =3D macsmc_gpio_set;
+ 	smcgp->gc.get_direction =3D macsmc_gpio_get_direction;
+ 	smcgp->gc.init_valid_mask =3D macsmc_gpio_init_valid_mask;
+ 	smcgp->gc.can_sleep =3D true;
+--
+2.34.1
 
