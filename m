@@ -1,272 +1,185 @@
-Return-Path: <linux-pm+bounces-26739-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26740-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB3B3AAC8C3
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 16:53:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C31F5AAC95A
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 17:23:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B9D8980A03
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 14:52:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91B741C2749D
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 15:23:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7731328151F;
-	Tue,  6 May 2025 14:52:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59C8C2857FC;
+	Tue,  6 May 2025 15:21:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="a+5JjxOv"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UJ8pQsTh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8422F280006;
-	Tue,  6 May 2025 14:52:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5EB6284696
+	for <linux-pm@vger.kernel.org>; Tue,  6 May 2025 15:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746543139; cv=none; b=Masmr7QFlsuaFO2pVxbf+DhOmYY4ViEeN+862/RgZuYxB5oSLNC/3ZmajsFqbm1MKakdwJvHUF4UR9m4T5+L+FDcDY2NE4rZif6C6VdUU2jHixWRIdeHzZPGuvQwIr4Yw4+GQv5t3PMldYyR6b9QrHA5dr/kn8juB/Z/UltjYt0=
+	t=1746544900; cv=none; b=hbxWB4ckUIRG1RIxYO5brvcooesW8RcKmZ26aSeHX/TaQMNI7o91YiQp3xHjkMTPSumGJ1bHOStm8+PbRcKEJ3ZYq9+i2XfmkgvRmzeLulbZ32Ui4t/bWvkLAk1Np5VetHBrFLlMHhD6HWf6tU3pRd+W5DjNuKziHpHPKLhVWDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746543139; c=relaxed/simple;
-	bh=Xc8uV93DtLs7S8IMFtDcMlDXGM60gIa3A536pCU0bWA=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OEOmDgpuJAINsimJEcMyN/v3qr4eVexOchjpxo6ttz8AsnQp72hIOM+MnKMBnDDJlHQjZMhBLySudrtguKyyjQGu6IS1QTG1sxsVL09+H9i3IW6S0OhMMNdgjn4mwWNVWMOIB8LuihhKsxAwihr2qEBTXubnR9PeV69Q5oude88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=a+5JjxOv; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5468e2fb014186;
-	Tue, 6 May 2025 14:52:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=XEcBsARco6QpGU97OKN38n
-	oBlqXGcNH/7Y9jiSHXa3w=; b=a+5JjxOvgmw0IAJ+T9ro7IfwK6ukRB0Q9MFhxK
-	eXfReiOk7JUOTOwUSuSnlxMk+BE4ux7rmNmePzBDvWnfAhNFOOBIxlJqAPTtStdC
-	oM1j5lCE/jwODeBWpLCRGIDdXlErJvcsseQa9G0Le7IYgu0boupVn6xEgbPSVz7V
-	J7Na+Va492LnHIYjT0OVyPjIZxNVV06VR12e94olaiq9a0LL1TpA3v6XaMgbEfH7
-	r/PAUi10X2iZEYNqSep/7ciUVJt/UdnF3OosAtXForrdhDElUgQ/aE6fHu/+6wkp
-	3PEL/injLqt6yaGcm6HMPLuR29IoxkavM9sOop7YliXmbcmw==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46f5u42pc6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 06 May 2025 14:52:13 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 546EqCgU016570
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 6 May 2025 14:52:12 GMT
-Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Tue, 6 May 2025 07:52:12 -0700
-From: Mike Tipton <quic_mdtipton@quicinc.com>
-To: Georgi Djakov <djakov@kernel.org>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_aiquny@quicinc.com>, <quic_okukatla@quicinc.com>,
-        Mike Tipton
-	<quic_mdtipton@quicinc.com>
-Subject: [PATCH v2] interconnect: Use rt_mutex for icc_bw_lock
-Date: Tue, 6 May 2025 07:51:59 -0700
-Message-ID: <20250506145159.1951159-1-quic_mdtipton@quicinc.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1746544900; c=relaxed/simple;
+	bh=RrFCrLCDb2vVGDp7qDTtvDgB7VhO8TX1bChwTPYRekQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f34C4pX4oxM/n7jsybnZVJzhzeicfvMR9KEVSg0oow7cReUZ13gq/8+n7iezinV4+PsaUzpAGfYEtFLOM+oOz7Rrue6Ko2n0eIWUDzv4ae9+EYMsU3VRhtoSMjIBEm6KSBU6rLZ+zbExA37XDduta3jUYCVMpRz2NYxjEcN2HrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UJ8pQsTh; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-22438c356c8so58127735ad.1
+        for <linux-pm@vger.kernel.org>; Tue, 06 May 2025 08:21:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1746544897; x=1747149697; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LUMMAqzLfeU2BhLtLW4k1zZhIkqrr7YldwnF+3gqRqE=;
+        b=UJ8pQsThEqTqAkNZ7+wvythibhM6QLHad1B5K0qbZotRMUU9Er+gvGohjeMEZN6iq2
+         y/+Pno2UB+mNvg70PK5nSJuN4Dayhcn5eQCoeO7iLIr2PLudktmaY1EF9VTKBJqjmv2H
+         Egh65+L0t2Lomwbu2fJ3S8qqvoB338zUaCGsx/O9eS1kAsC2IYbcn30TQST+A8/jgKrU
+         xkE5WVEYRmGUKDp0VVdciWsANguEYGzqrVnstf3+DXAnt0+tfo9g1lodhWgR4TcstmvV
+         KFGObojl0fiMczJHycmx3HFOzJEQfcZ0QtQHWStSIcO75UFLu/+rUxV86gL1G6YkIFpM
+         v/jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746544897; x=1747149697;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LUMMAqzLfeU2BhLtLW4k1zZhIkqrr7YldwnF+3gqRqE=;
+        b=hmPQ9cSOdQ7IOctEJWd6aYDXL0y/95f/8q8i84AS/F9yHQN/ag5FOUP8o3RDqf09tn
+         +qMpm7kvQbv0mdct8//3Mtw3qt3a6box/8/xwWjRFaUHWJVNCO4N2BdaRgrlxvXNzHSz
+         dvpCn/8Nf6tyj2yGjlOyajHp5tqs93fZLCsbxaLLr7hE3plOuHqIhOqISNw8wv2FSV3q
+         kJ/VJXuCvbbM/y44m1uhzZLTUzJgTsoSqVJs6nraf1u74bmgEVyNQ1pko5Aty6X5hXuO
+         2JGLlRLg9XSuMFVy7kmHCaGDSueJMzpkM2pG7Hk1JdZlMMkxaq5P8jzg5zl4zw2ltCv8
+         wtCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXKXz/qwb4Pg2K9s/haorhCgszI0qwJt4fDTEz4qAQo8z5yUD7jKBKMU53DO01kve0X2RFwxK2uEg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFtGVQq/bVN1Sgkco2Brjs+esJviIclfAa0vR+lVMXkHM7guTZ
+	0xLqx59V2rHBbDftnH+xIedUAe5CfCa/OTwRYSbI/7pUMptaGSM+LTfmu5N5ahKrglXTeg9NUxG
+	Z
+X-Gm-Gg: ASbGncsr/obPARU9CYPLjZPZBNOU7qV3uCZc5YRP83J1fLO3ionFqU8SfUkPsMfALO6
+	h4nLVmgqXFDV1d1cFb86pu8BNqMtN38vydqT4OpYus0XS3otAN3DFiLdl88t5jRxX8AEQuSgXRs
+	8QENqmsTy4lv3pMIb0O7ACrK85fjn8NCa6rAQxV/sVm9VLsYcTRg93tXQYBzUiw2ccGCyiHgr11
+	wuhYTL1F1gwdPbT5gdQGJ42Kpgh93Lnzrc3sk2Um8iRzvfwNcFYNk6qTsYjPiXniDsf3Pf0rbCE
+	zVS0wuUFA2M1jasg1LZ+NGrOS3Jv8axAC9M5QBCq6Q==
+X-Google-Smtp-Source: AGHT+IG9qR+Bw2uygv8xQSXKT77iYKR8E4JwPxPN+b6XzkhfQ8z4EFuMOu2q9YdcGCpJtb1y5nY+aw==
+X-Received: by 2002:a17:902:d40b:b0:22e:4a2e:8ae7 with SMTP id d9443c01a7336-22e4a2e9073mr19297995ad.22.1746544897093;
+        Tue, 06 May 2025 08:21:37 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:fc7c:b927:d229:c0])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22e15232224sm75295875ad.253.2025.05.06.08.21.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 May 2025 08:21:36 -0700 (PDT)
+Date: Tue, 6 May 2025 09:21:34 -0600
+From: Mathieu Poirier <mathieu.poirier@linaro.org>
+To: Hiago De Franco <hiagofranco@gmail.com>
+Cc: Peng Fan <peng.fan@oss.nxp.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Hiago De Franco <hiago.franco@toradex.com>, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	daniel.baluta@nxp.com, iuliana.prodan@oss.nxp.com,
+	Fabio Estevam <festevam@gmail.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: [PATCH 1/3] remoteproc: imx_rproc: skip clock enable when M-core
+ is managed by the SCU
+Message-ID: <aBoo_p1KlmOieJ50@p14s>
+References: <20250505154849.64889-1-hiagofranco@gmail.com>
+ <20250505154849.64889-2-hiagofranco@gmail.com>
+ <20250506043835.GB24259@nxa18884-linux>
+ <20250506123619.egobussm6b74imso@hiago-nb>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=KcfSsRYD c=1 sm=1 tr=0 ts=681a221d cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=3H110R4YSZwA:10 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=1XWaLZrsAAAA:8
- a=COk6AnOGAAAA:8 a=KKAgPzKmHZGUr0HHQOcA:9 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: E99k0zjUfBrwcWG18iapbR3Gj7wivgLU
-X-Proofpoint-ORIG-GUID: E99k0zjUfBrwcWG18iapbR3Gj7wivgLU
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA2MDE0MyBTYWx0ZWRfX4uA8awaLCExb
- b12WrXAvTy9fpA13NSJL1IRBEGEFA9NjicJ+pggjcxobmA2byqFS2hZ7CvIcUyDin78zfqKszRP
- i7cUJL7ND45wSlzbAZZh7Thuw6LBRPmdlWCIDSY3L6Qd4PYTokehb2s24wl7Yza4uGSGfI7MKsi
- F0zUmFcZaHkgjpPj8CILO0antMfE7a8kbpnZg4JdE6mCXH0rJwSxHMX0JdXLfclZGvzZxAwZv7P
- esafO3lC6DeIxm8hag9Tftzm0PcKMZIInDQWaeq1Mg6HeLdV9eZcGir+xikuh2pxQMiDBzl2yMQ
- Li7cuanvEiXlaErWb5QDZlZYFKaN9hOFiiaH0TDXplaZQva6OE0CiPIwu5xDyOeNKlm4t/H+Um4
- kmZvYYEhx3h9CWRigPwkJ4tDmjC3k33I3rpMY+WQtNFioxsIcl+Cy/MsQOyS/FR6bRcSEVHj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-06_06,2025-05-05_01,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 spamscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999
- phishscore=0 impostorscore=0 priorityscore=1501 malwarescore=0 adultscore=0
- clxscore=1015 mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2505060143
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250506123619.egobussm6b74imso@hiago-nb>
 
-The icc_set_bw() function is often used in latency sensitive paths to
-scale BW on a per-frame basis by high priority clients such as GPU and
-display. However, there are many low priority clients of icc_set_bw() as
-well. This can lead to priority inversion and unacceptable delays for
-the high priority clients. Which in the case of GPU and display can
-result in frame drops and visual glitches.
+On Tue, May 06, 2025 at 09:36:19AM -0300, Hiago De Franco wrote:
+> Hi Peng,
+> 
+> On Tue, May 06, 2025 at 12:38:35PM +0800, Peng Fan wrote:
+> > On Mon, May 05, 2025 at 12:48:47PM -0300, Hiago De Franco wrote:
+> > >From: Hiago De Franco <hiago.franco@toradex.com>
+> > >
+> > >For the i.MX8X and i.MX8 family SoCs, when the M-core is powered up
+> > >before Linux starts (e.g., by the bootloader) and it is being managed by
+> > >the SCU, the SCFW will not allow the kernel to enable the clock again.
+> > >This currently causes an SCU fault reset when the M-core is up and
+> > >running and the kernel boots, resetting the system.
+> > >
+> > >Therefore, add a check in the clock enable function to not execute it if
+> > >the M-core is being managed by the SCU.
+> > >
+> > >This change affects only the i.MX8X and i.MX8 family SoCs, as this is
+> > >under the IMX_RPROC_SCU_API method.
+> > 
+> > I would rewrite as below: "
+> > 
+> > For the i.MX8X and i.MX8 family SoCs, when the M-core is powered up
+> > by the bootloader, M-core and Linux are in same SCFW(System Controller
+> > Firmware) partition, so linux has permission to control M-core.
+> > 
+> > But when M-core is started, the SCFW will automatically enable the clock
+> > and configure the rate, and any users that wanna to enable the clock
+> > will get error 'LOCKED' from SCFW. So current imx_rproc.c probe function
+> > gets failure because clk_prepare_enable returns failure. Then
+> > the power domain of M-core is powered off when M-core is still running,
+> > SCU(System Controller Unit) will get a fault reset, and system restarts.
+> > 
+> > To address the issue, ignore handling the clk for i.MX8X and i.MX8 M-core,
+> > because SCFW automatically enables and configures the clock.
+> > "
+> > 
+> > You may update if you wanna.
+> > 
+> > >
+> > >Signed-off-by: Hiago De Franco <hiago.franco@toradex.com>
+> > >Suggested-by: Peng Fan <peng.fan@oss.nxp.com>
+> > 
+> > -> peng.fan@nxp.com
+> 
+> Thanks for the review, I will update the suggestions on a v2. Meanwhile,
+> I will wait a little bit for other feedbacks.
+>
 
-To prevent this priority inversion, switch to using rt_mutex for
-icc_bw_lock. This isn't needed for icc_lock since that's not used in the
-critical, latency-sensitive voting paths.
+I suggest you go ahead with a v2 - I have a fair amount of patches to review and
+my time to do so is currently very limited.
 
-Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
----
-
-Since the original patch was posted a couple years ago, we've continued
-to hit this for display and now for GPU as well. How frequently depends
-heavily on the specific chip, product, and use case. Different
-configurations hit it easier than others. But for both cases it results
-in obvious visual glitches.
-
-The paths being voted for (primarily DDR) are fundamentally shared
-between clients of all types and priority levels. We can't control their
-priorities, so aside from having those priorities inherited we're always
-subject to these sorts of inversions.
-
-The motivation isn't really for general performance improvement, but
-instead to fix the rare cases of visual glitches and artifacts.
-
-A similar patch was posted last year [1] to address similar problems.
-
-[1] https://lore.kernel.org/all/20240220074300.10805-1-wangrumeng@xiaomi.corp-partner.google.com/
-
-Changes in v2:
-- Rebase onto linux-next.
-- Select RT_MUTEXES in Kconfig.
-- Only use rt_mutex for icc_bw_lock since now there are separate locks
-  and icc_lock isn't in the critical path.
-- Reword commit text.
-- Link to v1: https://lore.kernel.org/all/20220906191423.30109-1-quic_mdtipton@quicinc.com/
-
- drivers/interconnect/Kconfig |  1 +
- drivers/interconnect/core.c  | 23 ++++++++++++-----------
- 2 files changed, 13 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/interconnect/Kconfig b/drivers/interconnect/Kconfig
-index f2e49bd97d31..f6fd5f2d7d40 100644
---- a/drivers/interconnect/Kconfig
-+++ b/drivers/interconnect/Kconfig
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- menuconfig INTERCONNECT
- 	bool "On-Chip Interconnect management support"
-+	select RT_MUTEXES
- 	help
- 	  Support for management of the on-chip interconnects.
- 
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index 1a41e59c77f8..2e86a3c95d1a 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -14,6 +14,7 @@
- #include <linux/interconnect-provider.h>
- #include <linux/list.h>
- #include <linux/mutex.h>
-+#include <linux/rtmutex.h>
- #include <linux/slab.h>
- #include <linux/of.h>
- #include <linux/overflow.h>
-@@ -30,7 +31,7 @@ static LIST_HEAD(icc_providers);
- static int providers_count;
- static bool synced_state;
- static DEFINE_MUTEX(icc_lock);
--static DEFINE_MUTEX(icc_bw_lock);
-+static DEFINE_RT_MUTEX(icc_bw_lock);
- static struct dentry *icc_debugfs_dir;
- 
- static void icc_summary_show_one(struct seq_file *s, struct icc_node *n)
-@@ -178,7 +179,7 @@ static struct icc_path *path_init(struct device *dev, struct icc_node *dst,
- 
- 	path->num_nodes = num_nodes;
- 
--	mutex_lock(&icc_bw_lock);
-+	rt_mutex_lock(&icc_bw_lock);
- 
- 	for (i = num_nodes - 1; i >= 0; i--) {
- 		node->provider->users++;
-@@ -190,7 +191,7 @@ static struct icc_path *path_init(struct device *dev, struct icc_node *dst,
- 		node = node->reverse;
- 	}
- 
--	mutex_unlock(&icc_bw_lock);
-+	rt_mutex_unlock(&icc_bw_lock);
- 
- 	return path;
- }
-@@ -704,7 +705,7 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
- 	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
- 		return -EINVAL;
- 
--	mutex_lock(&icc_bw_lock);
-+	rt_mutex_lock(&icc_bw_lock);
- 
- 	old_avg = path->reqs[0].avg_bw;
- 	old_peak = path->reqs[0].peak_bw;
-@@ -736,7 +737,7 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
- 		apply_constraints(path);
- 	}
- 
--	mutex_unlock(&icc_bw_lock);
-+	rt_mutex_unlock(&icc_bw_lock);
- 
- 	trace_icc_set_bw_end(path, ret);
- 
-@@ -798,7 +799,7 @@ void icc_put(struct icc_path *path)
- 		pr_err("%s: error (%d)\n", __func__, ret);
- 
- 	mutex_lock(&icc_lock);
--	mutex_lock(&icc_bw_lock);
-+	rt_mutex_lock(&icc_bw_lock);
- 
- 	for (i = 0; i < path->num_nodes; i++) {
- 		node = path->reqs[i].node;
-@@ -807,7 +808,7 @@ void icc_put(struct icc_path *path)
- 			node->provider->users--;
- 	}
- 
--	mutex_unlock(&icc_bw_lock);
-+	rt_mutex_unlock(&icc_bw_lock);
- 	mutex_unlock(&icc_lock);
- 
- 	kfree(path->name);
-@@ -1023,7 +1024,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
- 		return;
- 
- 	mutex_lock(&icc_lock);
--	mutex_lock(&icc_bw_lock);
-+	rt_mutex_lock(&icc_bw_lock);
- 
- 	node->provider = provider;
- 	list_add_tail(&node->node_list, &provider->nodes);
-@@ -1056,7 +1057,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
- 	node->avg_bw = 0;
- 	node->peak_bw = 0;
- 
--	mutex_unlock(&icc_bw_lock);
-+	rt_mutex_unlock(&icc_bw_lock);
- 	mutex_unlock(&icc_lock);
- }
- EXPORT_SYMBOL_GPL(icc_node_add);
-@@ -1182,7 +1183,7 @@ void icc_sync_state(struct device *dev)
- 		return;
- 
- 	mutex_lock(&icc_lock);
--	mutex_lock(&icc_bw_lock);
-+	rt_mutex_lock(&icc_bw_lock);
- 	synced_state = true;
- 	list_for_each_entry(p, &icc_providers, provider_list) {
- 		dev_dbg(p->dev, "interconnect provider is in synced state\n");
-@@ -1195,7 +1196,7 @@ void icc_sync_state(struct device *dev)
- 			}
- 		}
- 	}
--	mutex_unlock(&icc_bw_lock);
-+	rt_mutex_unlock(&icc_bw_lock);
- 	mutex_unlock(&icc_lock);
- }
- EXPORT_SYMBOL_GPL(icc_sync_state);
--- 
-2.34.1
-
+> > 
+> > Thanks,
+> > Peng
+> > 
+> > >---
+> > > drivers/remoteproc/imx_rproc.c | 4 ++--
+> > > 1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > >diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+> > >index 74299af1d7f1..627e57a88db2 100644
+> > >--- a/drivers/remoteproc/imx_rproc.c
+> > >+++ b/drivers/remoteproc/imx_rproc.c
+> > >@@ -1029,8 +1029,8 @@ static int imx_rproc_clk_enable(struct imx_rproc *priv)
+> > > 	struct device *dev = priv->dev;
+> > > 	int ret;
+> > > 
+> > >-	/* Remote core is not under control of Linux */
+> > >-	if (dcfg->method == IMX_RPROC_NONE)
+> > >+	/* Remote core is not under control of Linux or it is managed by SCU API */
+> > >+	if (dcfg->method == IMX_RPROC_NONE || dcfg->method == IMX_RPROC_SCU_API)
+> > > 		return 0;
+> > > 
+> > > 	priv->clk = devm_clk_get(dev, NULL);
+> > >-- 
+> > >2.39.5
+> > >
+> 
+> Cheers,
+> Hiago.
 
