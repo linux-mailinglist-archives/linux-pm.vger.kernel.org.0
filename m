@@ -1,120 +1,104 @@
-Return-Path: <linux-pm+bounces-26742-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26743-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80A1BAACA62
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 18:02:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CEDBAACA87
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 18:11:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE5AB5250E6
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 16:02:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68F473BDADA
+	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 16:10:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4991283FDB;
-	Tue,  6 May 2025 16:02:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA7B228135C;
+	Tue,  6 May 2025 16:11:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WCOMCUnS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G/s2Uqgx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328C927FD6F;
-	Tue,  6 May 2025 16:02:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14D78280008
+	for <linux-pm@vger.kernel.org>; Tue,  6 May 2025 16:11:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746547367; cv=none; b=qRD0KhG9901gFYQ6vdDZ7bnY19LI4WvVij/utrtZ3xs2ELO1wOU7k/QP58D8kweZ1cuUbCQwVET/0MPVK9Pvxv93p+roQ12CTRFv497O6Hba7wOoVqUTZolbvWzzxfccAm0YTU5URrlqw20pu7zrOg05zkJG5Xkp+XwVA/m18eM=
+	t=1746547862; cv=none; b=qTITbN6ragldtcycg4Tku7hT9NJzSbHB2ypvOKHr2uDsGRKkZmYi6JzJJQEKHmUce72Pg0ZW9lNNuas7wslnLpM8tVuOnwPGO5TIaCysDU/8O4CLCyA0bz4t0vfFxPC5sXIQkHpxNNjfsowRsXLHKyQHeBYi7zdwtQxG+8eA97s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746547367; c=relaxed/simple;
-	bh=qv10xryQ+mAog3l4VvbVHJ0HbMIQA75QU5IkGTZPA3E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HaDRH8D4G3J8aac8dvSgSvuoGSiVyJKCmerUScrYTUuTR3mFPCKSXJ/OJZacj1PzncDU0mDq7D94rmZWAqQ/NJEd+opUbBalNb4yZq3ioXBngBv/Qco1jntbafp1mRYV82Qewwn8EPgIifr4c2KKZlm3/IGXWtYJ9hBdDjW43og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WCOMCUnS; arc=none smtp.client-ip=209.85.216.53
+	s=arc-20240116; t=1746547862; c=relaxed/simple;
+	bh=KuRWlruPmbd3WxzHGHv6kBVrCb8OWCj3oQ+K80TpeQk=;
+	h=Message-ID:Subject:From:To:Date:Content-Type:MIME-Version; b=gHuviwrtHGCrJiC3nrhQDzA1n8b2JC3gguvcrD1DqTB2leca9rZI+H0bzk02WQdAHikbo2Y4sNL9JNbMOs6kk9WpdLxiIocNEhF2MRD38DYNMOmAfG3UE7S06i9YFfTrxo/1ma/mnB7INRrbOpOBdW+Gt88MP8GC3LMeZqP0/Ps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G/s2Uqgx; arc=none smtp.client-ip=209.85.208.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-30a89c31ae7so1085964a91.2;
-        Tue, 06 May 2025 09:02:45 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5e5deb6482cso12288a12.1
+        for <linux-pm@vger.kernel.org>; Tue, 06 May 2025 09:11:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746547365; x=1747152165; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UxqQI7I56Bh3kt4m+ML+aSANba97iFsyz6IRsFIn500=;
-        b=WCOMCUnSglpj+1OMRc3c//01ybXU+np3fhMbod2RBBCxCxdn06b+7bsWKMVeQAgrny
-         IVsCICzw3bFmJbvwhAKrcv4SN4PhP1G5wr7NJkzRsfd7JaoM4Vb+6+ViAvRHyyHxjVEb
-         9sKiajRRL9wnYVvYsb6SW/YpMag022LYwtQ8AU8ROSpJfTqyMA4Ftkjkq+feUWmmc/uS
-         L5cPjyY7PXIPlZqVzi0Fhc0pSAfslSvZYRXWKYv2t2+wl2VJ6Iw+Z/P4My9h1wwFK0U7
-         MvWjCLE/46jTBWZo0y+qZNH2fqx6Ixj2vKDLVWYeS6zeqt4oinrrXpN+i8Wz8P4QMt3h
-         CM2Q==
+        d=gmail.com; s=20230601; t=1746547859; x=1747152659; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:date:to:reply-to
+         :from:subject:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=KuRWlruPmbd3WxzHGHv6kBVrCb8OWCj3oQ+K80TpeQk=;
+        b=G/s2UqgxavYpvH43BqWHx4japkMqaISWvs8dmUC5bOjYQikRgnUm+DHAKZD9HZ8/i1
+         SgQV2qQ/J0IGH4ew3eyjm3dsuQ04KqTtokWI0O+zH+9IKOTrQraEL+Aw17+pZqd97k9N
+         4zA0My5fGZhRpa2VbOwc0OuXeybbdunYiHrEiGo1o86MelDCrr6HRadG5NFZru8QGFh1
+         HL1OutxHeUSNU9z/BUuHTkVPsONkZZTE8iuuSD9OPrASSaNbO6gwqEf1cQAEMR3ScFOe
+         WtgAs+Kct9H3JXuA8mVoKcrrnytt4J8maMUsS+HhQGlBf7aT7bNlmq2EwOW57aODeaju
+         VWdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746547365; x=1747152165;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UxqQI7I56Bh3kt4m+ML+aSANba97iFsyz6IRsFIn500=;
-        b=b/coxJkqNUOx/c+Hwhr6bl1eZIWDwkhjR1oeL8jx63XP+4e5jkaxPdao6HjgZnRVN6
-         v8wXG5cv0aBcvXxo38bOt9IZRQuHNgN0dBlKz7SGNyEUuZtvfZ5IqToPFPgKkd+8shuK
-         s5fpKEKVji4qLElIrnGBVXB5OLcxeiTygTx3OUfobTs4q9zx/3+lzGdGw2p6YLn/Cw7D
-         a9EtnXobOGlBhwN0+HqOojIdB69y/+Gi3MDkQhHMsdkugO+4sA3M/ueJpbKQ+6i2OSjT
-         ACOmDYmne3TLEWTYkoP8jjpweOf5wypJklnV2e2DBFQ89MpYVOa2GdpOvPFueohCH7ay
-         cWGg==
-X-Forwarded-Encrypted: i=1; AJvYcCULfVmXLqjm20zOYcymBOslP8zXHI0ov7l6OiwQHPN2thyrzRogktlLYKtQTtITAd+CU7iTulprTY0=@vger.kernel.org, AJvYcCUjdJuzmhthWDKwgYisqbEtU7nVV951Yd4/+ckCytRaWoP+iZRMLOvl0bV2NbDquQB/bUHp8mB8QAwDqPY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQPjIV2qoNyUyISJpVFu9lMer49dPCDh4S9Gi/3GAXwOy+Os1h
-	MPBykp4rVimDlMLFsdCjpCYecZGRop7YkuowqCHAqP3SsdkxrW6O
-X-Gm-Gg: ASbGncsYllLbT/6yDQ9PZ3lfQkAJDdZolaVoURkn3Bnugjp8X53yCJ4Ss2QPkH+u/lQ
-	L5ylMPrkgFbkwDVzRAySFvnj+CjRPIw8/CZZrHzQuuiT4xFZYZEu8r0iH43OLM+uVmi9a0MSf1G
-	GTxtNlLgRrhEeTqCFOeP6yx18WQWlquhjyJBVUqKhtGenmBDRgXoQ83IZcZWecTPsZc1rTelN4c
-	XxMQGbVupqa8nLFMjX+urMF5WbSqcGyZXko5Gu8qTE3WVC3G5DT4aHDp4OJ91gn6FC4E9AT3Wng
-	3W1RyYOk8AEDtq/GIqcY1HnwwBULyAvbSelkCLV6Fd3XcUZ5+DhUKS6bhTIiZr9/V0J0WE4fSYV
-	vHIX5SNekAn34yViM+sq0RUyQL2OoIfLocnI=
-X-Google-Smtp-Source: AGHT+IFevtUyWuSHvitYA7wFMvLwVik5JEG9Cmh0lTuhNVyWsmzQmvCZvPNXnXAFKtjlJybF/J+4yg==
-X-Received: by 2002:a17:90b:3c0b:b0:2ff:58e1:2bb1 with SMTP id 98e67ed59e1d1-30a61a6f700mr15118582a91.32.1746547363134;
-        Tue, 06 May 2025 09:02:43 -0700 (PDT)
-Received: from server-kernel.moonheelee.internal (d173-180-147-14.bchsia.telus.net. [173.180.147.14])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22e3b56576fsm15996285ad.47.2025.05.06.09.02.42
+        d=1e100.net; s=20230601; t=1746547859; x=1747152659;
+        h=mime-version:user-agent:content-transfer-encoding:date:to:reply-to
+         :from:subject:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KuRWlruPmbd3WxzHGHv6kBVrCb8OWCj3oQ+K80TpeQk=;
+        b=Gj3benKCuPv7vAwai1IjJ0l54XT3jbYVD/SPyLDfABla9V/7UTA0oWOsvDTB6M07jo
+         KfYs9Y5JbwmRDHiy91Zl4KCMtDwls2luAjKKFUKZd9NgEXmB6QigOjS3wXKURcZ02jNM
+         wucIyIXXGyiqlXuyoiq8cjsAOeUOWltP2bhjW837ksnfOCaeKRAbF2OxwIscon98zKd4
+         TuBvsTouE409B9TlNkHTK7GRD09i/F4cr1YcPgbL5+/808aVcMB1BIHFAGFwRF88+SPc
+         5Pmv3mxNjZhG2qeBcgjcPPnFKSLYJ9pTtltEVr2azjrmsD3ey0NUOsPixw6Q86ZgkX91
+         +GtA==
+X-Gm-Message-State: AOJu0YyP8UIvZybnSTDYRMUTWH/kfzvk+JxWETAFzS+Z48vbpadvj8yA
+	IZ0xDKL4dBF/YCpgFEUFfU3nE3mDJqB4iMCE+p9fwO3Qn4RrbdK667A6RyO+
+X-Gm-Gg: ASbGnctwKXtEIngqGdSnMjM8yPb1vF+iCGafUatXVZeWkjl9gfTP/JVaJYrcHjsHYPM
+	UIMGmkjx5rm1Xrzpyu7MYGcABqWnxrN9DgC9JcQpjNYBSRlDT/oIKTWHl5clREmzWFNFV4XWea8
+	rM1R0uiF/Zc0xPh4/56D4DU21xIRWYcV6GqmeqsFugGQjmBVwP9Bzm8O6dxXYWFiUiv2E4FF2a3
+	lTZdA0ftHWacEM0C9yTbopNv06Onpehrq2ilcv/59jP05zSQMIPGRPNc1/36XD+/tZ4T4ntFbC1
+	fxXGR4jlYgjDYC3d7ynzeoEm1itTv58okwcvSQEITCzL2RRl/DHM9bvsByufemWnRuC8/g==
+X-Google-Smtp-Source: AGHT+IETEWNz4XYITTWiBrq1BqMwtaqgZA0kFSd53iT1oUeJI8DB6oLkubMYavI5OisL4TJPq3fsLQ==
+X-Received: by 2002:a17:907:9707:b0:acb:23fc:d766 with SMTP id a640c23a62f3a-ad1e7e17ba6mr28842966b.28.1746547858948;
+        Tue, 06 May 2025 09:10:58 -0700 (PDT)
+Received: from abityuts-desk1.ger.corp.intel.com ([134.191.196.183])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad1891ee1f2sm722750166b.75.2025.05.06.09.10.57
+        for <linux-pm@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 May 2025 09:02:42 -0700 (PDT)
-From: Moon Hee Lee <moonhee.lee.ca@gmail.com>
-To: lukasz.luba@arm.com,
-	rafael@kernel.org
-Cc: len.brown@intel.com,
-	pavel@kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linux.dev,
-	Moon Hee Lee <moonhee.lee.ca@gmail.com>
-Subject: [PATCH] docs: fix typo in energy-model.rst
-Date: Tue,  6 May 2025 09:02:29 -0700
-Message-ID: <20250506160229.3720-1-moonhee.lee.ca@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Tue, 06 May 2025 09:10:58 -0700 (PDT)
+Message-ID: <a20552766f8c193abd00ff4004f28afc66e464d9.camel@gmail.com>
+Subject: Sharing a couple of docs related to PM
+From: Artem Bityutskiy <dedekind1@gmail.com>
+Reply-To: dedekind1@gmail.com
+To: linux-pm@vger.kernel.org
+Date: Tue, 06 May 2025 19:10:56 +0300
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Fixes a grammar issue ("than" -> "then") and changes "re-use" to
-"reuse" for consistency with modern spelling.
+Hi Linux PM Community,
 
-Signed-off-by: Moon Hee Lee <moonhee.lee.ca@gmail.com>
----
- Documentation/power/energy-model.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I've added two new documents to the Pepc project repository:
 
-diff --git a/Documentation/power/energy-model.rst b/Documentation/power/energy-model.rst
-index ada4938c37e5..490ddd483f46 100644
---- a/Documentation/power/energy-model.rst
-+++ b/Documentation/power/energy-model.rst
-@@ -230,7 +230,7 @@ Drivers must provide a pointer to the allocated and initialized new EM
- and will be visible to other sub-systems in the kernel (thermal, powercap).
- The main design goal for this API is to be fast and avoid extra calculations
- or memory allocations at runtime. When pre-computed EMs are available in the
--device driver, than it should be possible to simply re-use them with low
-+device driver, then it should be possible to simply reuse them with low
- performance overhead.
- 
- In order to free the EM, provided earlier by the driver (e.g. when the module
--- 
-2.43.0
+1. C-State Namespaces: Useful for those working with Intel platforms and C-
+states. Link:
+https://github.com/intel/pepc/blob/main/docs/misc-cstate-namespaces.md
 
+2. MSR Scope: Relevant for those dealing with PM Model Specific Registers o=
+n
+Intel platforms. Link:
+https://github.com/intel/pepc/blob/main/docs/misc-msr-scope.md
+
+Thanks,
+Artem.
 
