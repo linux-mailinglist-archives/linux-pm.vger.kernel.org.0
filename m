@@ -1,113 +1,156 @@
-Return-Path: <linux-pm+bounces-26820-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26821-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFBEBAAE3AE
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 16:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F2FB4AAE504
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 17:39:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C86F2981A15
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 14:58:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F216D9A2449
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 15:39:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B19F1224FD;
-	Wed,  7 May 2025 14:59:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B09F628AAFC;
+	Wed,  7 May 2025 15:39:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s3H2ve6k"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iM6KmSgS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E103289E1F
-	for <linux-pm@vger.kernel.org>; Wed,  7 May 2025 14:59:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7EE8748D
+	for <linux-pm@vger.kernel.org>; Wed,  7 May 2025 15:39:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746629951; cv=none; b=ZgR/KYiM4jwbE8el/qXj/1qVQJETEr75H6ZCSvIKEwE0NtL4XfmR2zlUI4BsegfVqkytq7G8AloWyFIrGC5FS0IxiRUHIqCFZNr/TQUVxyf+o5qVZ/WmF2nP7btgEu7BqdyPUSAx+2QSk6Vr2lSC5vG6ljIKWE64VpW+mrrMBV4=
+	t=1746632374; cv=none; b=eQFwJXqBSknmuzHbPH3ROr5EXbfztLW1L2P+MCljbBbgIxVo+TjioRk8quSC2e0hrIis7CjPSiAGNS7fuBTTuH+QEsiEqy6N4YQn/qF4QsLq6yOUd/alrDEmOlsBHp/0vukkPE+v0HxTx3Ekvp+CXNn+kozG402S6GloMK7ajRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746629951; c=relaxed/simple;
-	bh=pQ4rrrkQyrsJSu1Oydj2YpRuvmf+BczNVPtiyO2iXYo=;
+	s=arc-20240116; t=1746632374; c=relaxed/simple;
+	bh=17d1KkqkFnjgiB4XE80ZvS8SIM/DtM9+avsi95yhHsc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BeUZWYyCHgOLIiANuSISMzh3NC/7IqwVSrnU50slINOm6jHkxwvF9wydx/eFWiIDAQhVMG3lzk+KDrLfjH3zgs+5o2e44pL/H8+vtDWNrGEYxk95gmgc33EYel8coFHh0ebbC8H/UrsdWlLTjWn277vYu3LJkVYxkKnJp46gcDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s3H2ve6k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08904C4CEE9
-	for <linux-pm@vger.kernel.org>; Wed,  7 May 2025 14:59:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746629951;
-	bh=pQ4rrrkQyrsJSu1Oydj2YpRuvmf+BczNVPtiyO2iXYo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=s3H2ve6k4f+hC3dQll7XS94s25l3LrkcKV20kEM2WMDhI3NI1ut2kRyZy7kpcKIJn
-	 +DX04WjFQZ8FfDsBRkbY+6N9cEYALHXc1TyPzJbLeM40SLeti2BBsbWZToPewhG73r
-	 ccEdD6KyTXjyt8htRkb7f0UO50dlfIcfp/u/IVCXA4FWgVIzkEaDa/KaIPbj83pTqv
-	 ipzEFWd3LDnVXaU6XmiisFCNRMcUnSOGC3HVpx32HOdWO1WzlPZlNxEHV9D5VN2sFA
-	 wSQuC903cFZoNQcrEWPQXProFSMyYu5f7MAmKvHfTwQD0wYH1U+s/RKMM2dppf3MuW
-	 hQLnTinG7XPig==
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-72c14235af3so4397698a34.3
-        for <linux-pm@vger.kernel.org>; Wed, 07 May 2025 07:59:11 -0700 (PDT)
-X-Gm-Message-State: AOJu0YwxLe6QHcYkq/KNbt8lAnC0XSWr+TL2BlUts98SJOCHXkaJufSs
-	N4yRppsrdYt9eLykmGOFmz0uV4Ubs8VJzavQM4Sxm6UdJai3mlM7HwsLiPmBrfmCxftuGn14Fvt
-	GfInniQCGvxJx3PilBIjAfZhbZW8=
-X-Google-Smtp-Source: AGHT+IG2jGg4Gw+mtrHimLnBHtTZnvgaDxMj6vzJiI/LGSl3ouIsD5werw44EnBCTNLYLshLXj8g6uQd4mXH4v505pU=
-X-Received: by 2002:a05:6871:29a:b0:2d4:ce45:6985 with SMTP id
- 586e51a60fabf-2db5be28b4dmr2084181fac.11.1746629940117; Wed, 07 May 2025
- 07:59:00 -0700 (PDT)
+	 To:Cc:Content-Type; b=aCPaFZbUW9RSarvYhc+H+kX01OGfE9jgS8PhiYI3p0r3fg/K6uANfHDUIV3nYuhwPdOz03ktgQ+DTOqlmYhHSzqQYHQN/RpqtI6UB7FhJ2MGZFKxKUUwaz4kEPIEx1GUEUc+Vc4pgpS1aILHZoaXTOYezjmFaIkC/6MGJ7Vp5JE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iM6KmSgS; arc=none smtp.client-ip=209.85.219.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e756416045bso11772276.2
+        for <linux-pm@vger.kernel.org>; Wed, 07 May 2025 08:39:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1746632371; x=1747237171; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KUaFNJP87BHH/Bw6m4JMEgvEp0MBArNEe9xjuJyEGA8=;
+        b=iM6KmSgSZiroQcYGYCsE4TKiGYN+6U3ZhEOGBJRGpI9sJFYxAElbUqQClUFcrUU+fS
+         4hX/2Xogm1HYdBzH7WdXe0iSRVZucRJhA1PfwQSvZgvxIY5fXuMd11fByf9szoX6gshF
+         l2ATiR3OlvUIXYDx54tAG+5J6fR+BGhw9d49puVt2h23IeCq0DucEP6RFHxni+aFPqhb
+         sEoi8A01/HB8WeSXHHDHPwz1aLTFxlTpybpDbBVZvxziQqqRygY1Zq3LxfO8mo5jqWVM
+         46ddCiLk/PoPkAv4R4zDaWX7xmpfbLxReyWbJbkow4QcDtAdp8gGevfB2Iuj+943d945
+         uQmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746632371; x=1747237171;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KUaFNJP87BHH/Bw6m4JMEgvEp0MBArNEe9xjuJyEGA8=;
+        b=qtzoMyBq7pkRzKJutkUlMhq4JfwDX876oMp4h3N4c1aRWKg+6tlZ9sd/gpB4NCeFQh
+         RNY//tBoumoiTZMuGLUSPzoSnr3jPaBEHhU/Eduv87hGt5TrDLG/VGpeUOBfAYXRc/fy
+         r0GOH258FskIRV4Niz3WhvuqIDxE3a3u0oJx7B8BxcWL3ozkVg01Fq9ZFHlGz4tR523z
+         7bg2gqgR0jb7/CUsY/8q4pNaOgMzpIPpM/XMNr3AIIe5U9PFjB2wbojh0srTy5MniATr
+         38TglYkfWdfIrW8SPrpyW/bnxZRmTaIhbmaya/Hn2qn1nTETrPvF+MTcskXcV2DTFj6X
+         M5sw==
+X-Gm-Message-State: AOJu0YyOkZ8VLOTAACJ5F0ieHgzrmbRLqrnvcoWAb+rWhLndeWc3mNqe
+	EJLonjclrAqoqoJTeZF2fkbC2Qr08gWbHfXxXNAt/KzStWj7tTw08UMuxg2eMipUF1w+RY8xVqj
+	H1+sUAs5e1vMn12AGub1xN1eIU+gZ7UzlCsc6KFbmL3t3pYP0
+X-Gm-Gg: ASbGncvooD3KKnFI0i+IyW92uwqy/5i9yQyf3sxGB7vPHrglCwMdqW/518y0OjG2uYK
+	rkWH1hhTzAxttKNvyyj4EUjuD/CDC+wlQvu6T/aJpZmIaCS0kebdQYphsdFqdfGLNM9h4ICvpyC
+	TLToZsrW42FoQ+YpGjl53AnnA=
+X-Google-Smtp-Source: AGHT+IF9tPa8GbcrKOeIVgTLn4flQMyG+LAp86lN9JQlhuMq209YYQoDzpR+zMRtGPpSalHSBTctwfBP2N4FaOqIM70=
+X-Received: by 2002:a05:6902:15c7:b0:e60:7d3b:1e18 with SMTP id
+ 3f1490d57ef6-e78821fd184mr5050846276.40.1746632371526; Wed, 07 May 2025
+ 08:39:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250502140119.2578909-1-sudeep.holla@arm.com> <20250507-crouching-lovely-wrasse-f85e90@sudeepholla>
-In-Reply-To: <20250507-crouching-lovely-wrasse-f85e90@sudeepholla>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 7 May 2025 16:58:48 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jhQwbQqbDOz2ADeZWvBzA71XdLxhRJzCYL28fMM2DBiA@mail.gmail.com>
-X-Gm-Features: ATxdqUGCI4AILRNC-HP-Tp3AOF4fDO-fl4F8YA3AQMgVbwTj7A5RwxA6JJAusF4
-Message-ID: <CAJZ5v0jhQwbQqbDOz2ADeZWvBzA71XdLxhRJzCYL28fMM2DBiA@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: psci: Avoid initializing faux device if no DT
- idle states are present
-To: Sudeep Holla <sudeep.holla@arm.com>
-Cc: linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Jon Hunter <jonathanh@nvidia.com>
+References: <12677254.O9o76ZdvQC@rjwysocki.net>
+In-Reply-To: <12677254.O9o76ZdvQC@rjwysocki.net>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 7 May 2025 17:38:54 +0200
+X-Gm-Features: ATxdqUH1CUr6fuhuzl2HziQB0l1TdiOvfKKTtfkdtk-QErj0L6uEDcfmgLnrmo4
+Message-ID: <CAPDyKFoWVgGQ3KvGqw=6TcndosFo-2kTCHOMSRCL_rNvjj86zw@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: sysfs: Move debug runtime PM attributes to runtime_attrs[]
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Sudeep Holla <sudeep.holla@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Sudeep,
-
-On Wed, May 7, 2025 at 3:56=E2=80=AFPM Sudeep Holla <sudeep.holla@arm.com> =
-wrote:
+On Wed, 7 May 2025 at 16:29, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
 >
-> Hi Rafael,
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 >
-> On Fri, May 02, 2025 at 03:01:19PM +0100, Sudeep Holla wrote:
-> > Commit af5376a77e87 ("cpuidle: psci: Transition to the faux device inte=
-rface")
-> > transitioned the PSCI cpuidle driver from using a platform device to th=
-e
-> > faux device framework. However, unlike platform devices, the faux devic=
-e
-> > infrastructure logs an error when the probe function fails, even if the
-> > failure is intentional or expected.
-> >
-> > To prevent unnecessary error logs, we can skip creating the faux device
-> > entirely if there are no PSCI idle states defined in the device tree.
-> > Introduce a check for DT idle states during initialization and avoid
-> > setting up the device if none are found.
-> >
-> > This ensures cleaner logs and avoids misleading probe failure messages
-> > when PSCI idle support is intentionally not described in DT.
-> >
+> Some of the debug sysfs attributes for runtime PM are located
+> in the power_attrs[] table, so they are exposed even in the
+> pm_runtime_has_no_callbacks() case, unlike the other non-debug
+> sysfs attributes for runtime PM, which may be confusing.
 >
-> As you pointed out in another similar fix that exist only in the linux-ne=
-xt,
-> I have also missed to point out that fact here. This is only present in
-> the next. Let me know if you want me to drop the commit hash reference
-> and repost it with -next prefix which I generally do and somehow clearly
-> missed here. Sorry for that.
+> Moreover, dev_attr_runtime_status.attr appears in two
+> places, which effectively causes it to be always exposed if
+> CONFIG_PM_ADVANCED_DEBUG is set, but otherwise it is exposed
+> only when pm_runtime_has_no_callbacks() returns 'false'.
+>
+> Address this by putting all sysfs attributes for runtime PM into
+> runtime_attrs[].
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-No worries.
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-The cpuidle branch hasn't changed, so this is applicable with no changes.
+Kind regards
+Uffe
 
-Applied now, thanks!
+> ---
+>  drivers/base/power/sysfs.c |   15 ++++++---------
+>  1 file changed, 6 insertions(+), 9 deletions(-)
+>
+> --- a/drivers/base/power/sysfs.c
+> +++ b/drivers/base/power/sysfs.c
+> @@ -611,15 +611,9 @@
+>  #endif /* CONFIG_PM_ADVANCED_DEBUG */
+>
+>  static struct attribute *power_attrs[] = {
+> -#ifdef CONFIG_PM_ADVANCED_DEBUG
+> -#ifdef CONFIG_PM_SLEEP
+> +#if defined(CONFIG_PM_ADVANCED_DEBUG) && defined(CONFIG_PM_SLEEP)
+>         &dev_attr_async.attr,
+>  #endif
+> -       &dev_attr_runtime_status.attr,
+> -       &dev_attr_runtime_usage.attr,
+> -       &dev_attr_runtime_active_kids.attr,
+> -       &dev_attr_runtime_enabled.attr,
+> -#endif /* CONFIG_PM_ADVANCED_DEBUG */
+>         NULL,
+>  };
+>  static const struct attribute_group pm_attr_group = {
+> @@ -650,13 +644,16 @@
+>  };
+>
+>  static struct attribute *runtime_attrs[] = {
+> -#ifndef CONFIG_PM_ADVANCED_DEBUG
+>         &dev_attr_runtime_status.attr,
+> -#endif
+>         &dev_attr_control.attr,
+>         &dev_attr_runtime_suspended_time.attr,
+>         &dev_attr_runtime_active_time.attr,
+>         &dev_attr_autosuspend_delay_ms.attr,
+> +#ifdef CONFIG_PM_ADVANCED_DEBUG
+> +       &dev_attr_runtime_usage.attr,
+> +       &dev_attr_runtime_active_kids.attr,
+> +       &dev_attr_runtime_enabled.attr,
+> +#endif
+>         NULL,
+>  };
+>  static const struct attribute_group pm_runtime_attr_group = {
+>
+>
+>
 
