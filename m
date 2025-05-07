@@ -1,145 +1,279 @@
-Return-Path: <linux-pm+bounces-26768-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26769-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E82F5AAD3AA
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 04:58:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42E29AAD3FE
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 05:20:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2131B1BA10A2
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 02:59:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EAC577AF317
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 03:18:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2220F1A9B53;
-	Wed,  7 May 2025 02:58:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA1CC1AF0B4;
+	Wed,  7 May 2025 03:19:54 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB59B134A8;
-	Wed,  7 May 2025 02:58:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351EF78C9C;
+	Wed,  7 May 2025 03:19:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746586731; cv=none; b=YaFYa4We5q50S/+rUdCk7p+pafAXXnJZNZFvkA82KspgoYjeHXWcegC1Lb3MlHKqWJoReYkZvPhDkO0yq7T0rTEnQvHr8g09zznXcXHPbIxy8svdj7Li8p3o16n8YlMSlPCbcRTo86DqouEAsEF63hn8L5y+Jo859IyIbIJ5+D4=
+	t=1746587994; cv=none; b=txSxd/R5LAfC8BI4PKZ7JN/GBztqGfpvynsA8gcN33yiF2S3rlyIMwZA1a5AfhZoRiLJQ2Sy5yQywML65VoN4nIuyVpby15VXL0uIWaEDQfbA1lGRUpjvha57ZpAWC9ECTpob9az14P47708V6E4pOXBgUTrP7GVSZ1AM7BIDzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746586731; c=relaxed/simple;
-	bh=MmUPH4ARy9/vAzjyU9ahx/w7xXUYQgpi4F73R0SBSnA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Jxt9/XMvybFRRAl9nS9nBpu1UkyLSI96f6qC0R8Tfw9eGFaW9AW2z2KE4pbVYxvPBDoZyz08w0XuhveAKo3W7ACHV0VHE5LT+5U2GSEvSJv8/6LVGBZoU6a8mEMgVTu38twHHbAOxFYkJU4s8dG1EMKj5Ye6qBY+J+NSA8OScL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 2c49f9162aef11f0b29709d653e92f7d-20250507
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:fc6c30e8-57af-4dbe-b9c6-6dd9fc0d9916,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-META: VersionHash:6493067,CLOUDID:848f288d76073cecd9c059e60a8b1d35,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:nil,UR
-	L:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
-	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 2c49f9162aef11f0b29709d653e92f7d-20250507
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1047783727; Wed, 07 May 2025 10:58:37 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 7A81AE006100;
-	Wed,  7 May 2025 10:58:37 +0800 (CST)
-X-ns-mid: postfix-681ACC5D-342742475
-Received: from localhost.localdomain (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 24B1BE0080FF;
-	Wed,  7 May 2025 10:58:34 +0800 (CST)
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-To: corbet@lwn.net,
-	rafael@kernel.org,
-	len.brown@intel.com,
-	pavel@kernel.org,
-	akpm@linux-foundation.org,
-	paulmck@kernel.org,
-	rostedt@goodmis.org,
-	thuth@redhat.com,
-	bp@alien8.de,
-	ardb@kernel.org,
-	gregkh@linuxfoundation.org
-Cc: linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Zihuan Zhang <zhangzihuan@kylinos.cn>
-Subject: [PATCH v1] PM / sleep: add configurable delay for pm_test
-Date: Wed,  7 May 2025 10:57:06 +0800
-Message-Id: <20250507025706.311686-1-zhangzihuan@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1746587994; c=relaxed/simple;
+	bh=gjTSE8TwjXFd7R7STL4/axrDCulEZEZIXFeZ/4lbO6w=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Hr7daHTeVvZUkdw3igne+cPOSKFAB1aCxxzf0733TasS4pZaOr6/6iDvptlf6wFKLidG5V2wDrHHj0FJX/a4ZiEtuKsEqTRk2aofDhi4ZY+zUhitsgPmgO8EVKR5H0ZKhEdzSQ/uUtUr89Sx01yLuDHE/aIeUuSHDsqX1ifZDFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.214])
+	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4ZsgTl75PlzsTJb;
+	Wed,  7 May 2025 11:19:07 +0800 (CST)
+Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
+	by mail.maildlp.com (Postfix) with ESMTPS id BDD301A016C;
+	Wed,  7 May 2025 11:19:42 +0800 (CST)
+Received: from localhost.huawei.com (10.50.165.33) by
+ kwepemh100008.china.huawei.com (7.202.181.93) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Wed, 7 May 2025 11:19:41 +0800
+From: Lifeng Zheng <zhenglifeng1@huawei.com>
+To: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <pierre.gondois@arm.com>,
+	<sumitg@nvidia.com>
+CC: <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linuxarm@huawei.com>, <mario.limonciello@amd.com>,
+	<yumpusamongus@gmail.com>, <srinivas.pandruvada@linux.intel.com>,
+	<jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
+	<lihuisong@huawei.com>, <cenxinghai@h-partners.com>, <yubowen8@huawei.com>,
+	<zhenglifeng1@huawei.com>, <hepeng68@huawei.com>
+Subject: [PATCH] cpufreq: CPPC: Support for autonomous selection in cppc_cpufreq
+Date: Wed, 7 May 2025 11:19:41 +0800
+Message-ID: <20250507031941.2812701-1-zhenglifeng1@huawei.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemh100008.china.huawei.com (7.202.181.93)
 
-This patch turns this 5 second delay into a configurable module
-parameter, so users can determine how long to wait in this
-pseudo-hibernate state before resuming the system.
+Add sysfs interfaces for CPPC autonomous selection in the cppc_cpufreq
+driver.
 
-The configurable delay parameter has been added to suspend and
-synchronized to hibernate.
-
-Example (wait 30 seconds);
-
-  # echo 30 > /sys/module/hibernate/parameters/pm_test_delay
-  # echo core > /sys/power/pm_test
-
-Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
 ---
- Documentation/admin-guide/kernel-parameters.txt | 7 +++++++
- kernel/power/hibernate.c                        | 9 +++++++--
- 2 files changed, 14 insertions(+), 2 deletions(-)
+Hi Rafael,
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentat=
-ion/admin-guide/kernel-parameters.txt
-index d9fd26b95b34..082a697a3e95 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6998,6 +6998,13 @@
- 			/sys/power/pm_test). Only available when CONFIG_PM_DEBUG
- 			is set. Default value is 5.
-=20
-+	hibernate.pm_test_delay=3D
-+			[hibernate]
-+			Sets the number of seconds to remain in a suspend test
-+			mode before resuming the system (see
-+			/sys/power/pm_test). Only available when CONFIG_PM_DEBUG
-+			is set. Default value is 5.
+This patch is the 8th patch in [1]. After the discussion in [2], Sumit
+is OK with adding sysfs entries under cpufreq sysfs node, so I resend
+this patch. He will later send his updated patch after.
+
+Any comments appreciated!
+
+Lifeng
+
+[1] https://lore.kernel.org/all/20250206131428.3261578-1-zhenglifeng1@huawei.com/
+[2] https://lore.kernel.org/all/20250211103737.447704-1-sumitg@nvidia.com/
+
+ .../ABI/testing/sysfs-devices-system-cpu      |  54 +++++++++
+ drivers/cpufreq/cppc_cpufreq.c                | 109 ++++++++++++++++++
+ 2 files changed, 163 insertions(+)
+
+diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+index 206079d3bd5b..37065e1b8ebc 100644
+--- a/Documentation/ABI/testing/sysfs-devices-system-cpu
++++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+@@ -268,6 +268,60 @@ Description:	Discover CPUs in the same CPU frequency coordination domain
+ 		This file is only present if the acpi-cpufreq or the cppc-cpufreq
+ 		drivers are in use.
+ 
++What:		/sys/devices/system/cpu/cpuX/cpufreq/auto_select
++Date:		May 2025
++Contact:	linux-pm@vger.kernel.org
++Description:	Autonomous selection enable
 +
- 	svm=3D		[PPC]
- 			Format: { on | off | y | n | 1 | 0 }
- 			This parameter controls use of the Protected
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 23c0f4e6cb2f..da7533aab8d1 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -133,10 +133,15 @@ bool system_entering_hibernation(void)
- EXPORT_SYMBOL(system_entering_hibernation);
-=20
- #ifdef CONFIG_PM_DEBUG
-+static unsigned int pm_test_delay =3D 5;
-+module_param(pm_test_delay, uint, 0644);
-+MODULE_PARM_DESC(pm_test_delay,
-+		 "Number of seconds to wait before resuming from hibernate test");
- static void hibernation_debug_sleep(void)
- {
--	pr_info("debug: Waiting for 5 seconds.\n");
--	mdelay(5000);
-+	pr_info("hibernation debug: Waiting for %d second(s).\n",
-+			pm_test_delay);
-+	mdelay(pm_test_delay * 1000);
++		Read/write interface to control autonomous selection enable
++			Read returns autonomous selection status:
++				0: autonomous selection is disabled
++				1: autonomous selection is enabled
++
++			Write 'y' or '1' or 'on' to enable autonomous selection.
++			Write 'n' or '0' or 'off' to disable autonomous selection.
++
++		This file is only present if the cppc-cpufreq driver is in use.
++
++What:		/sys/devices/system/cpu/cpuX/cpufreq/auto_act_window
++Date:		May 2025
++Contact:	linux-pm@vger.kernel.org
++Description:	Autonomous activity window
++
++		This file indicates a moving utilization sensitivity window to
++		the platform's autonomous selection policy.
++
++		Read/write an integer represents autonomous activity window (in
++		microseconds) from/to this file. The max value to write is
++		1270000000 but the max significand is 127. This means that if 128
++		is written to this file, 127 will be stored. If the value is
++		greater than 130, only the first two digits will be saved as
++		significand.
++
++		Writing a zero value to this file enable the platform to
++		determine an appropriate Activity Window depending on the workload.
++
++		Writing to this file only has meaning when Autonomous Selection is
++		enabled.
++
++		This file is only present if the cppc-cpufreq driver is in use.
++
++What:		/sys/devices/system/cpu/cpuX/cpufreq/energy_performance_preference_val
++Date:		May 2025
++Contact:	linux-pm@vger.kernel.org
++Description:	Energy performance preference
++
++		Read/write an 8-bit integer from/to this file. This file
++		represents a range of values from 0 (performance preference) to
++		0xFF (energy efficiency preference) that influences the rate of
++		performance increase/decrease and the result of the hardware's
++		energy efficiency and performance optimization policies.
++
++		Writing to this file only has meaning when Autonomous Selection is
++		enabled.
++
++		This file is only present if the cppc-cpufreq driver is in use.
++
+ 
+ What:		/sys/devices/system/cpu/cpu*/cache/index3/cache_disable_{0,1}
+ Date:		August 2008
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index b3d74f9adcf0..3c3d00cec298 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -808,10 +808,119 @@ static ssize_t show_freqdomain_cpus(struct cpufreq_policy *policy, char *buf)
+ 
+ 	return cpufreq_show_cpus(cpu_data->shared_cpu_map, buf);
  }
-=20
- static int hibernation_test(int level)
---=20
-2.25.1
++
++static ssize_t show_auto_select(struct cpufreq_policy *policy, char *buf)
++{
++	bool val;
++	int ret;
++
++	ret = cppc_get_auto_sel(policy->cpu, &val);
++
++	/* show "<unsupported>" when this register is not supported by cpc */
++	if (ret == -EOPNOTSUPP)
++		return sysfs_emit(buf, "<unsupported>\n");
++
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "%d\n", val);
++}
++
++static ssize_t store_auto_select(struct cpufreq_policy *policy,
++				 const char *buf, size_t count)
++{
++	bool val;
++	int ret;
++
++	ret = kstrtobool(buf, &val);
++	if (ret)
++		return ret;
++
++	ret = cppc_set_auto_sel(policy->cpu, val);
++	if (ret)
++		return ret;
++
++	return count;
++}
++
++static ssize_t show_auto_act_window(struct cpufreq_policy *policy, char *buf)
++{
++	u64 val;
++	int ret;
++
++	ret = cppc_get_auto_act_window(policy->cpu, &val);
++
++	/* show "<unsupported>" when this register is not supported by cpc */
++	if (ret == -EOPNOTSUPP)
++		return sysfs_emit(buf, "<unsupported>\n");
++
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "%llu\n", val);
++}
++
++static ssize_t store_auto_act_window(struct cpufreq_policy *policy,
++				     const char *buf, size_t count)
++{
++	u64 usec;
++	int ret;
++
++	ret = kstrtou64(buf, 0, &usec);
++	if (ret)
++		return ret;
++
++	ret = cppc_set_auto_act_window(policy->cpu, usec);
++	if (ret)
++		return ret;
++
++	return count;
++}
++
++static ssize_t show_energy_performance_preference_val(struct cpufreq_policy *policy, char *buf)
++{
++	u64 val;
++	int ret;
++
++	ret = cppc_get_epp_perf(policy->cpu, &val);
++
++	/* show "<unsupported>" when this register is not supported by cpc */
++	if (ret == -EOPNOTSUPP)
++		return sysfs_emit(buf, "<unsupported>\n");
++
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "%llu\n", val);
++}
++
++static ssize_t store_energy_performance_preference_val(struct cpufreq_policy *policy,
++						       const char *buf, size_t count)
++{
++	u64 val;
++	int ret;
++
++	ret = kstrtou64(buf, 0, &val);
++	if (ret)
++		return ret;
++
++	ret = cppc_set_epp(policy->cpu, val);
++	if (ret)
++		return ret;
++
++	return count;
++}
++
+ cpufreq_freq_attr_ro(freqdomain_cpus);
++cpufreq_freq_attr_rw(auto_select);
++cpufreq_freq_attr_rw(auto_act_window);
++cpufreq_freq_attr_rw(energy_performance_preference_val);
+ 
+ static struct freq_attr *cppc_cpufreq_attr[] = {
+ 	&freqdomain_cpus,
++	&auto_select,
++	&auto_act_window,
++	&energy_performance_preference_val,
+ 	NULL,
+ };
+ 
+-- 
+2.33.0
 
 
