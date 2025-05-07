@@ -1,155 +1,130 @@
-Return-Path: <linux-pm+bounces-26828-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26829-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEB2BAAE60B
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 18:08:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43329AAE68E
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 18:26:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C66B3ADC5F
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 16:03:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF2AA525520
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 16:23:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CE5828C856;
-	Wed,  7 May 2025 16:02:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76123215197;
+	Wed,  7 May 2025 16:23:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hbm9vQil"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QKQjP0u7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 939D828C860;
-	Wed,  7 May 2025 16:02:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EAAE156237
+	for <linux-pm@vger.kernel.org>; Wed,  7 May 2025 16:23:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746633724; cv=none; b=h2wECPe4rqYLtCSYWL1tGGaOFFysSSIX0fpwPrlE/BwurzTeo8w8WH6dJKCZ7JFRmpjMFgtHKBGI3aNzgGhUn4X2L0LKhSSPQRcy08u6pinsqfvbiiQGPhYjCCALZB7L2sk+x/nk/kJmU8+c1rbudfMJFiy8cSwlQXCEFillbH8=
+	t=1746635030; cv=none; b=f9Pf2aDAjMb+3qx2mnwJhlzEgF2zNKr82Ju7pkeOyQWdMhmil1W5iulQANXoc7wxTnrOPWeORhZ4QqUd+UyOkYcp9GC3kaUVlwtldS9SI97iNZfNYPWaU36Fyb+jfUyvvlj1wS2IOkNH81Lt0qVvJ6+0uNiy1O6dQST/P2Aq4zk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746633724; c=relaxed/simple;
-	bh=cTjBmIVvQ5tleYSwTnurFm1RmNLCa4KLJfhfwkC+sdY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=sZw5qH+z0wxtwJPW0Eux/ful0fWddDJe3y4WZWNjEDTH4rGxEILt95laPns6gGwWqV/vkQcfjtvTiXj2/sIj6UJd4BDlfk6eUTFTy0y7bDVWSdm2E+ye5AdjR4I1Wks+K6jLDqMOS+QA0LWsZSQdhNl1IDXOcvWPlBEcgzWQvAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hbm9vQil; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-af59c920d32so4763524a12.0;
-        Wed, 07 May 2025 09:02:02 -0700 (PDT)
+	s=arc-20240116; t=1746635030; c=relaxed/simple;
+	bh=GVDVeBab869aYBvCQlDw416oEjXOoR2zkFp+c7adIZk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=knwP/7ZamPUrMXGCSsckizLPyPC1k4aFvYgjlXqRH25wCQIO3rRUyNnzusXG3oZPeCqm1soUShhZLNjgoeRdMAKr1yjUFSx+ggMpEoaJmGzYSWgqisls7awU2V2S6QyKxpPraP4d7X3IsMc4+fRWGkDnwbaTKx/r/K75n4tZSgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QKQjP0u7; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43d0c18e84eso296855e9.3
+        for <linux-pm@vger.kernel.org>; Wed, 07 May 2025 09:23:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746633722; x=1747238522; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RO45tkjbLYjYtv/CvK6w8KfE5OYOXfvwguuZ43NCctQ=;
-        b=Hbm9vQilPEa+VlB/pvMaWXSKs+pzefdn789bdlQoPrynftgAi882rRgKvfGxzSPIzf
-         YAi4MoEpR+ivUAjJhlS1I74IP/Z7vSkxVYRqmckM6p/gZ/mMwqW1fX4VlNL3rqfmx503
-         8iNLLblGSG1YbD30Mra+SQDRAaK+aO9rjjGKj0u/4OcoBfqT5mvZmWQw3rbKto71ZXec
-         ERv+hZD3IvnVt7ifUpr7JZF85Al9E5CrUV2BqVKSX/Nvt8iOlzdkcTiFhMzgiCWmVY21
-         IK9GkjaFGaefdGkgkFEBpQwscfvzpxM1RBe+SILiadSgG8FwERpw19Sw10Ea3AIDymnP
-         +DLw==
+        d=linaro.org; s=google; t=1746635027; x=1747239827; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NdgRnYflnPlN6KlJOaYP1q0InGmD8pNNwfuxpkTXEio=;
+        b=QKQjP0u7j6tV0U62Bbj/W89PJ8hwqtbNlR8DMr8z2ONWvT1O0/64dta2QE7V7FuqyI
+         uDHgMDgT8xPZS8BIJnrN/Y1Ua/QGjY+hhyPWMJGv9aCP9ZTvrNkRCuVyjHYvcB8pv5QW
+         niB7ougtqQmCmuoNC2jYr1/P87vE1STe8RUlhNez8VQ+ECG+61a4z29ltD0B6GtPC8uj
+         XqZMBCF1ijGJVds1W4vsIuHV6BlzAjfAW2RT/MHxW40Y9C4tuuPJm4PRR5FmfTQ4Zv06
+         qKp36Kl99XH01i0N0DRo8e/emXChWby2Z9U6GnVOjPk5TA5ceTEMqzLmFgUadQsNXhJz
+         3VSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746633722; x=1747238522;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RO45tkjbLYjYtv/CvK6w8KfE5OYOXfvwguuZ43NCctQ=;
-        b=vTbZ+Cqs40syhEgEztERuCEeZ+NAR5uk9JZ+z41/FOug82xjSyLeT8D47f+kZAVtr8
-         6wzLPiq61l0qMyO2K0MVcUlaefLu363TeW8ymu2NPMu14lUbA/IpgFTiV4ltPQdrnf9t
-         xNI7u+5Vfsgb4F8aRhQqz+X/oicHDxUFnJDzoEK+TkGNja9s5zAnQtF/CKwozmbnDNSY
-         IND6WFOSneaJSASBiuFSnb/APf8YsVbeek5bLWn80rLDdnF9AMcZGBulcrUiWkE0t1Jp
-         /jFbRtNiDChmegkdPCV9U1TaSjXbPJNhNIuEz2lEf6kmzHJnfCJd8lCD+NF0ncVZLtz6
-         co2g==
-X-Forwarded-Encrypted: i=1; AJvYcCUp7fQQKcTqe27QihimGBdKBwbLaLOjskPWHkSjQl3Lc+pQhK3mvvk1i+C7KvOETIW0A5TCRe1148M=@vger.kernel.org, AJvYcCXFo6jtnvs89xoUG2yNXGq2iYZjwRAM1834e6m8hhiNQUyjb+dKYxmjxFLqRDSg716qHA1xl0JLd9BU2dA=@vger.kernel.org, AJvYcCXqF9zIFxhnZVKAZwvKUovw6dEbrroPyzKA385kORN+UxWgrwutGkITQj6QMpgUX0zJx8zeJlMgVVNdwTiDDncvVw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzl1FowFeZvFig1ylXOccWV1EeDK/08M5U2Pf6IJY0NLlIO7pjQ
-	ra+LoRTS6ggGFmAX6eqLLqUZJVsKweiFK6TU/WHlbZDNj9caxwFV
-X-Gm-Gg: ASbGnctStF0o6MMH3I5iIf7NU8rosjyUKRDAAPF4mwUsv89hwjiaH9eni3yC9FWQWdg
-	8aEdAo+p01OXaKWKxKhbF0AfsB9/NuReNvIBxHbHjZhUhbDJMDyHl6WnxRVSm3+bNduc7AQIZHG
-	WwVefI+PSTuhgMNFAWP+SFGDQMnmLl4ywqz9Brb5LdKKaTvafYnV1EIW70zRZrDpE8Kgktf6XsS
-	g9y8dPZgScvOQbn07IuWm71vk+1idlYs8G38jTgvlC6T0QL3ipxjBhAh3mV30FTysuTQ4YDOLZQ
-	MLO08p4/pHNV/ERuiSd1s2Vbdn8+n0wTOwyPsg5tefihtdb+WYylQMBM5gK2JbM=
-X-Google-Smtp-Source: AGHT+IEmJOhnycByNLVKMR/CtrELFdJfDJP1ErBRH92r56MtV1Kyb3oVdVNaoaxWV8fLKFKyiXWbdQ==
-X-Received: by 2002:a17:90b:554e:b0:2ff:6e72:b8e9 with SMTP id 98e67ed59e1d1-30aac2837bcmr6500291a91.25.1746633721722;
-        Wed, 07 May 2025 09:02:01 -0700 (PDT)
-Received: from hiagof-nb.corp.toradex.com ([67.159.246.222])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30ad4f82b86sm327242a91.44.2025.05.07.09.01.57
+        d=1e100.net; s=20230601; t=1746635027; x=1747239827;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NdgRnYflnPlN6KlJOaYP1q0InGmD8pNNwfuxpkTXEio=;
+        b=ofw2NYaBCvcOlJRL/7JdzfkJ8Z0XF4WXsYF0uQH9KLKJee49OnO+iIZnqlq3AeC0WL
+         xQNJ4SpmVfSi1EP7U2OSnF5ShQ5eOoD3GXl5w80jHyyBHjlkHhnI4ewr64cE7+4HQwvz
+         m7aNa3MThWfVFsKitEYbqC5hhIytFeARyABUuYHt5oieTYF5Gz+NOJo8CR55foyTgoQe
+         hLYFyg978wuzDGCSiFyBnjjBLgDKVRLt46lJ+16vrlfacXXY09KSRN27oZLIGCJ56MM0
+         GQnRiSY1pxRV6tn7UMJqzMXSZb7/3XirhmYGM2z5XU8M4Ywa4cnWId0B1POEpOz6urt+
+         tR7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWnwZEbmVjmz3A4cdJAV/QBs2KdXFmvPbvWK4KKvNz6OMCfql+mZpkqoD12j0QM8+0mEhts3uaWxw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUm8O5bO37JE8+j7wuoDeJuzA2GcgtcvBSojRhgh/Df86iMUpr
+	S5GRmh7/qJbr23tLFY9LtvG0AW9kDgRcJAKhm+wXjrrfoP4oPP9j0vdSUTsAERg=
+X-Gm-Gg: ASbGncsE2HPxBxMzLXvOGXwoNqVmeQW0SzL9NRbT9XPXo8vtlPbDqkqRwgBe8b4PSVG
+	KN+M0yyp83LseH9dBdwRsOzmLZ4lgYdtZK9NsilaQJbvlh6O6CMR41jHQy7q4c8IWqu0syDq4N9
+	sSdWvpFVyToku2jhZ4QIMsgxTk7syO6n21UXhU06pu1mPhFHQdfrtRuoaaZzx6/BVPxDa4Rwoj3
+	G0O92//DpdZInwt4/yLDxtiFy/Ko01ORiDxlbss5WNQvmR6DWLhuV9VVsyLV6F5xkFId7NYYJtZ
+	FvQ8f6mm2dKrtJ52bsMKmeRqZ2O50t0m+DDqYpW6me4bzA==
+X-Google-Smtp-Source: AGHT+IE6y0LlIV4IlIooPu6OJTNcYKnkqYqnx0WCylTRROLNd4cSZyHpQkJmtgiFMm+bT9j1cn2H6g==
+X-Received: by 2002:a05:600c:4e47:b0:43d:36c:f24 with SMTP id 5b1f17b1804b1-442d02ed455mr1853855e9.13.1746635026951;
+        Wed, 07 May 2025 09:23:46 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-442cd32f0easm5943165e9.12.2025.05.07.09.23.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 May 2025 09:02:01 -0700 (PDT)
-From: Hiago De Franco <hiagofranco@gmail.com>
-To: Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-pm@vger.kernel.org,
-	linux-remoteproc@vger.kernel.org
-Cc: Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
+        Wed, 07 May 2025 09:23:46 -0700 (PDT)
+Date: Wed, 7 May 2025 19:23:43 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Saravana Kannan <saravanak@google.com>, Stephen Boyd <sboyd@kernel.org>,
+	linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rafael@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Michael Grzeschik <m.grzeschik@pengutronix.de>,
 	Bjorn Andersson <andersson@kernel.org>,
-	Hiago De Franco <hiago.franco@toradex.com>,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Devarsh Thakkar <devarsht@lewv0571a.ent.ti.com>,
 	Peng Fan <peng.fan@oss.nxp.com>,
-	daniel.baluta@nxp.com,
-	iuliana.prodan@oss.nxp.com,
-	Fabio Estevam <festevam@gmail.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH v2 3/3] remoteproc: imx_rproc: add power mode check for remote core attachment
-Date: Wed,  7 May 2025 13:00:56 -0300
-Message-Id: <20250507160056.11876-4-hiagofranco@gmail.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250507160056.11876-1-hiagofranco@gmail.com>
-References: <20250507160056.11876-1-hiagofranco@gmail.com>
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Johan Hovold <johan@kernel.org>,
+	Maulik Shah <maulik.shah@oss.qualcomm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/11] pmdomain: core: Export a common ->sync_state()
+ helper for genpd providers
+Message-ID: <aBuJD1izaMqKUJ_s@stanley.mountain>
+References: <20250417142513.312939-1-ulf.hansson@linaro.org>
+ <20250417142513.312939-8-ulf.hansson@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250417142513.312939-8-ulf.hansson@linaro.org>
 
-From: Hiago De Franco <hiago.franco@toradex.com>
+On Thu, Apr 17, 2025 at 04:25:05PM +0200, Ulf Hansson wrote:
+> +void of_genpd_sync_state(struct device *dev)
+> +{
+> +	struct device_node *np = dev->of_node;
+> +	struct generic_pm_domain *genpd;
+> +
+> +	if (!np)
+> +		return;
+> +
+> +	mutex_lock(&gpd_list_lock);
+> +	list_for_each_entry(genpd, &gpd_list, gpd_list_node) {
+> +		if (genpd->provider == &np->fwnode) {
 
-When the remote core is started before Linux boots (e.g., by the
-bootloader), the driver currently is not able to attach because it only
-checks for cores running in different partitions. If the core was kicked
-by the bootloader, it is in the same partition as Linux and it is
-already up and running.
+Presumably this would be "== of_fwnode_handle(np)) {" as well...
 
-This adds power mode verification through the SCU interface, enabling
-the driver to detect when the remote core is already running and
-properly attach to it.
+regards,
+dan carpenter
 
-Signed-off-by: Hiago De Franco <hiago.franco@toradex.com>
-Suggested-by: Peng Fan <peng.fan@nxp.com>
----
-v2: Dropped unecessary include. Removed the imx_rproc_is_on function, as
-suggested.
----
- drivers/remoteproc/imx_rproc.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-index 627e57a88db2..9b6e9e41b7fc 100644
---- a/drivers/remoteproc/imx_rproc.c
-+++ b/drivers/remoteproc/imx_rproc.c
-@@ -949,6 +949,19 @@ static int imx_rproc_detect_mode(struct imx_rproc *priv)
- 			if (of_property_read_u32(dev->of_node, "fsl,entry-address", &priv->entry))
- 				return -EINVAL;
- 
-+			/*
-+			 * If remote core is already running (e.g. kicked by
-+			 * the bootloader), attach to it.
-+			 */
-+			ret = imx_sc_pm_get_resource_power_mode(priv->ipc_handle,
-+								priv->rsrc_id);
-+			if (ret < 0)
-+				dev_err(dev, "failed to get power resource %d mode, ret %d\n",
-+					priv->rsrc_id, ret);
-+
-+			if (ret == IMX_SC_PM_PW_MODE_ON)
-+				priv->rproc->state = RPROC_DETACHED;
-+
- 			return imx_rproc_attach_pd(priv);
- 		}
- 
--- 
-2.39.5
+> +			genpd_lock(genpd);
+> +			genpd_power_off(genpd, false, 0);
+> +			genpd_unlock(genpd);
+> +		}
+> +	}
+> +	mutex_unlock(&gpd_list_lock);
+> +}
 
 
