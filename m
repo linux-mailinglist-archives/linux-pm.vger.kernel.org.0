@@ -1,147 +1,142 @@
-Return-Path: <linux-pm+bounces-26823-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26824-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 410F7AAE583
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 17:54:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BEB3AAE58B
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 17:54:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 151DB1889BE6
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 15:52:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FBC8170800
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 15:54:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00F2A28D829;
-	Wed,  7 May 2025 15:49:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E441E28B7E2;
+	Wed,  7 May 2025 15:52:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="HbNhBWWt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ml4cKsdE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9847A28C861;
-	Wed,  7 May 2025 15:49:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7362A28B7E0;
+	Wed,  7 May 2025 15:52:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746632986; cv=none; b=e1YXQK7O0Gk6chNLQ6C8ZyloDGxg/1XqsdgLCPw/j6B6dhYc+617Pi5JjRRz/cnNlFqOZgGRXBNRAXz09ZtFmuw9t3G35eo7ozSXabN++jVqOaP6Ayogw1ity2As9Wb8AfAf3w9+jBlAhQ04YUhgSEpr+0gLkIF/WkbOjPZ+hzE=
+	t=1746633153; cv=none; b=QamYurzR9RhYPdN4DoBzSbdozZVU+4ma9iBccaxvkBjhHMN54NkGBMlf1f3bVUj5IUnFWZKI+4wzbfp7R/CPBEIpDXWN2SpSQnCNHgUeHQR8i7TQXklDdchbkVyISixdaxTrCs8wLsvZeQ+W0v+LvrRqCRW/A5vo77UXedw6GDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746632986; c=relaxed/simple;
-	bh=nNzHKx96NKIWwmqZT773FwQ0tJHihDbRn8PZQIr1ypk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SUyjJV8xYlN58G2zdR7swQ8zrzH7WZZDPjoHzEw3XGHwSAeMJEg4HMlDAqJmHAuLLlkaEbJddx+4MNo5vxVW3EKrAgAiagVqy0iDwpXOSYyp8KCa/zWo8MsUKfwWfm0C0oOR/vu/EUCWpsn0yzil73y8mR8kFG5LC6wIQKxas7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=HbNhBWWt; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=XrB6lkb4kjYGUyvVTgh7sRxO8qkr0KQ3qTvgnKF9Guw=; b=HbNhBWWte43Fv5kuCqbpHhn/3b
-	ozaiWNEm+7ZeZNWHs+UA7boIngxYZAk+/TS10Y4z7uT/jCw70n8HHsqeWCagYiShZhZDTYpR4PhMV
-	aYPFXltC2a6pIm+LHQBJfQ1PD4qsYVvSkuOqgjqOolmgriTNE1Q7LsohaUPPldbXtiCrqcUJhO3QA
-	dRkhpzH1n+45qZqRV4J/B9qwvErE51DQU5inkKyzMa7uis2XE95F3vOob2At1B4tvktlDGp225045
-	QIBqKW82DhqYGR+U3B7g0zFFTvmm6X/zDO3Q2aDcq7KRjH0t5UN7mSAMmb1zf3F37guGuosLxZ3tR
-	JSNrqzYg==;
-Received: from [50.39.124.201] (helo=[192.168.254.17])
-	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
-	id 1uCh1T-0000000FsKa-0PVQ;
-	Wed, 07 May 2025 15:49:27 +0000
-Message-ID: <06bcea82-11d5-4dcf-8331-c073e6d9078f@infradead.org>
-Date: Wed, 7 May 2025 08:49:20 -0700
+	s=arc-20240116; t=1746633153; c=relaxed/simple;
+	bh=sCmXTEs9MesTHuPpFJ/NvOgzXDUn8ZZ+zdOFzC8r5lA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FGyy5eXwijAq/NaB2LNbOChHaU5ZNwFWKLEc4xxLZLnGNBkLnOoGqzfnusRwA0aD8v7jSTCNpFH+Zvb8oOum7LQ9YyvEoPnwhBMNGzIc4VRmPulC47RxNJxRncXOYW9EeiEh+zfe8m+yElyxo1PVXlfn9qCvH4myTopV9WsnpRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ml4cKsdE; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-22e7eff58a0so319995ad.3;
+        Wed, 07 May 2025 08:52:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746633151; x=1747237951; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sCmXTEs9MesTHuPpFJ/NvOgzXDUn8ZZ+zdOFzC8r5lA=;
+        b=ml4cKsdEHJVaXESB7AuKMXmkK8VWMEtdmWvFdedzaRACbqXnV2uXUhVvdZFXDYceX1
+         Win6vssg9nWTdoi2NrWb3TCe7fChEsBfiWXa/Io8MKBHQTFpJOMTbIhL8iYWu1PgeAoc
+         wBMpMPbhsaZsI9UHoR04DTbWCpc2sZTYrjpYqnYuukaFtWMWxBRLbqlydce/IVX59PUj
+         oAFdkq5aM08pAtJFg0wdTkQMMBsthK/q3kBWA8fE0+1NMl+r9ObDijV1WWxpmx5tV66B
+         w3SZpomXBx4M9KdIJXEn/1VnWTCIqu7SoZEfsoxCgvZ7M1KvVnZJCp07mUlDB8mhWCxk
+         z3/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746633151; x=1747237951;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sCmXTEs9MesTHuPpFJ/NvOgzXDUn8ZZ+zdOFzC8r5lA=;
+        b=Du9gf8ZHW7TxS8wfv9M6XIm3pPdVk9BgW4PXXS6DnoyrBJga6rQwWPMod2e6GCzgIA
+         W6w/tDnyDL51JAZeH2WgtP9MENSgm+Z5P60qZaKy4eo+yOV+gjs2t8T2RevEvr7YuIn6
+         t3aKTL8rxoGhwK1OLK3UB2kNGSwqGUSl2NomM40aDsg4Aue4zplVkEgApsJNhAZ6Yrx1
+         P2wx/lygYA1jxZRKzaUgFheC/7yBvSlS8cA2eo2Zt5EnMdYqY1Lg43yjFZmrV9GxP6w9
+         9DPQa9IR5cGbaymLrhSoELBUiXizJ5GCQfo7qUwJzG2WnsKlEWKGvIRNkCc2hfh4GmL1
+         Fh1g==
+X-Forwarded-Encrypted: i=1; AJvYcCUrcDvnZq/JPIfvV1kiF7Fe0YC1u/RyCTjjfrTWVXMarOdmfgQByWW/qS6b4hMSGjScFmyMdBiqJQU=@vger.kernel.org, AJvYcCWXqz+9lm6/9vocqsWYsJgnnHv2vEindeCDG0ajjjV9EgMYCuhnMt2F6RUhIoH1bcx1W1ugzzEokuUA17o=@vger.kernel.org, AJvYcCWrHUQnrxjfIemVLfMmKLETQgKzFUV7zSfh4Xi+XYgMO/ygY01rKmSIFChSnnxMIJevzww+vGSauTDZLkFvUJRS+Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLUDyykNk8u/k5uFmoE2kEXGXhN4M1UwY15IJJNWI/lCDBtASQ
+	bQpzN3n3Sl7Xyw9eOX8n2m6ZA1hfnmDg81TnTTAJNOvsEXNYwLyO
+X-Gm-Gg: ASbGncvEaQozJr+TZ1P95ISJvg0hjZykgtxBp76/pgf21hBYDcoRCgBjWbG7TQzkrT2
+	SJz5Eq0HCFLi1oSnUbfvs342UoJ6eiNywIAqEPsAgri8vTc4SVedUBi79ofZukWYtgUN00yoopP
+	qw8G3rZrdxUvpJxFOWhGxCvLvqJqUKaT+4xKB0BCIunHmudwUpHFEUyavN2bbn6s9gYql4TZ2n5
+	r7FZ/QQpdWQhMTc9MhmqG7CWsoq3p+Cl8Vox6d9nJSoCBDe3PTqRm5BrLTt3msRGYNT61fLfyW4
+	GKXDERfhzaZiJZxbtu/DocE4DQe2pJOReNTMIfQ=
+X-Google-Smtp-Source: AGHT+IGIeRiD//5aB3Lp0GTAmkUq9HKBWgvRug2zQlreh3HMZNf0lXvR6y+wTe0PX9iANCSO8Ya92Q==
+X-Received: by 2002:a17:902:d2d0:b0:224:2175:b0cd with SMTP id d9443c01a7336-22e5ecade46mr51329175ad.26.1746633150657;
+        Wed, 07 May 2025 08:52:30 -0700 (PDT)
+Received: from hiago-nb ([67.159.246.222])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22e15228f62sm95204515ad.168.2025.05.07.08.52.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 May 2025 08:52:29 -0700 (PDT)
+Date: Wed, 7 May 2025 12:52:24 -0300
+From: Hiago De Franco <hiagofranco@gmail.com>
+To: Peng Fan <peng.fan@oss.nxp.com>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+	linux-remoteproc@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Hiago De Franco <hiago.franco@toradex.com>, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	daniel.baluta@nxp.com, iuliana.prodan@oss.nxp.com,
+	Fabio Estevam <festevam@gmail.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: [PATCH 2/3] firmware: imx: move get power mode function from
+ scu-pd.c to misc.c
+Message-ID: <20250507155224.uoxabve2qxncioqh@hiago-nb>
+References: <20250505154849.64889-1-hiagofranco@gmail.com>
+ <20250505154849.64889-3-hiagofranco@gmail.com>
+ <20250506044618.GC24259@nxa18884-linux>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] PM / sleep: add configurable delay for pm_test
-To: Zihuan Zhang <zhangzihuan@kylinos.cn>, corbet@lwn.net, rafael@kernel.org,
- len.brown@intel.com, pavel@kernel.org, akpm@linux-foundation.org,
- paulmck@kernel.org, rostedt@goodmis.org, thuth@redhat.com, bp@alien8.de,
- ardb@kernel.org, gregkh@linuxfoundation.org
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20250507063520.419635-1-zhangzihuan@kylinos.cn>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250507063520.419635-1-zhangzihuan@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250506044618.GC24259@nxa18884-linux>
 
+Hi Peng,
 
+On Tue, May 06, 2025 at 12:46:18PM +0800, Peng Fan wrote:
+> On Mon, May 05, 2025 at 12:48:48PM -0300, Hiago De Franco wrote:
+> >From: Hiago De Franco <hiago.franco@toradex.com>
+> >
+> >Move imx_sc_get_pd_power() from pmdomain/imx/scu-pd.c to
+> >firmware/imx/misc.c and rename it to imx_sc_pm_get_resource_power_mode()
+> >to maintain the same naming logic with other functions in misc.c.
+> >
+> >This makes the API available for other use cases. For example,
+> >remoteproc/imx_rproc.c can now use this function to check the power mode
+> >of the remote core.
+>
+> Better put this patch at the first I think.
 
-On 5/6/25 11:35 PM, Zihuan Zhang wrote:
-> This patch turns this 5 second delay into a configurable module
-> parameter, so users can determine how long to wait in this
-> pseudo-hibernate state before resuming the system.
-> 
-> The configurable delay parameter has been added to suspend and
-> synchronized to hibernation.
-> 
-> Example (wait 30 seconds);
-> 
->   # echo 30 > /sys/module/hibernate/parameters/pm_test_delay
->   # echo core > /sys/power/pm_test
-> 
-> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Ok, I will do that.
 
-Looks good. Thanks.
+>
+> To be simple, I think just export
+> imx_sc_get_pd_power in drivers/pmdomain/imx/scu-pd.c.
+> And add the function declaration in include/linux/firmware/imx/sci.h.
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+I do not think this is correct, since it is specific to the scu-pd.c
+driver and none of the functions there are exported. I believe the
+correct implementation is moving to misc.c and export it there, just
+like the other SCU API functions.
 
-> ---
-> v3:
->  - Fix the location of the hibernate.pm_test_delay parameter in
->    kernel-parameters.txt.
->  - Update ‘[hibernate]’ to ‘[HIBERNATION]’
-> v2:
->  - Fix typos.
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 7 +++++++
->  kernel/power/hibernate.c                        | 9 +++++++--
->  2 files changed, 14 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index d9fd26b95b34..a110cbb37f20 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -1828,6 +1828,13 @@
->  				lz4: Select LZ4 compression algorithm to
->  				compress/decompress hibernation image.
->  
-> +	hibernate.pm_test_delay=
-> +			[HIBERNATION]
-> +			Sets the number of seconds to remain in a hibernation test
-> +			mode before resuming the system (see
-> +			/sys/power/pm_test). Only available when CONFIG_PM_DEBUG
-> +			is set. Default value is 5.
-> +
->  	highmem=nn[KMG]	[KNL,BOOT,EARLY] forces the highmem zone to have an exact
->  			size of <nn>. This works even on boxes that have no
->  			highmem otherwise. This also works to reduce highmem
-> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> index 23c0f4e6cb2f..485133af884d 100644
-> --- a/kernel/power/hibernate.c
-> +++ b/kernel/power/hibernate.c
-> @@ -133,10 +133,15 @@ bool system_entering_hibernation(void)
->  EXPORT_SYMBOL(system_entering_hibernation);
->  
->  #ifdef CONFIG_PM_DEBUG
-> +static unsigned int pm_test_delay = 5;
-> +module_param(pm_test_delay, uint, 0644);
-> +MODULE_PARM_DESC(pm_test_delay,
-> +		 "Number of seconds to wait before resuming from hibernation test");
->  static void hibernation_debug_sleep(void)
->  {
-> -	pr_info("debug: Waiting for 5 seconds.\n");
-> -	mdelay(5000);
-> +	pr_info("hibernation debug: Waiting for %d second(s).\n",
-> +		pm_test_delay);
-> +	mdelay(pm_test_delay * 1000);
->  }
->  
->  static int hibernation_test(int level)
+I will send a v2 today with the comments adressed, thanks.
 
--- 
-~Randy
+>
+> Not sure Ulf or Shawn is good with it.
+>
+> Regards,
+> Peng
+>
+
+Cheers,
+Hiago.
 
