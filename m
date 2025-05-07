@@ -1,77 +1,90 @@
-Return-Path: <linux-pm+bounces-26776-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26777-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 217E1AAD918
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 09:54:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D52A1AAD99E
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 10:08:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BBA29A09F5
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 07:49:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F7FF4E60CE
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 08:08:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E1A9224258;
-	Wed,  7 May 2025 07:45:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DE90223715;
+	Wed,  7 May 2025 07:59:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W6QpABJK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FHNBUs5m"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884A6223DE7
-	for <linux-pm@vger.kernel.org>; Wed,  7 May 2025 07:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53455222568;
+	Wed,  7 May 2025 07:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746603907; cv=none; b=n1C7rACUJxZ75HLjVWq2rXlWhkcKa3sQkvGXFzFXPjTzF/Gx6r5wzvLzk40WIwahBILdIOF6mXwoVvU+FqvskuS6WbKc42SCs/FxK5Uye96cVmYiaQUsTYiRaBJZpQgtGXm8aKWZ5aU8EPsBuhn5SdWzsMIFoXzNP4x8shA+R5k=
+	t=1746604744; cv=none; b=TYatBW7tNDsltKNtc23pU1w3/WFYrDkYgT8VCP0xJ9rZDZ7NeBNHIKxTx3lVdMYtpAkOTyNFrFgmBUEbW0h1ZgpddBsWvWSKTNjxhzmSzTBCB3xQIKv7beEGxfHwEV+bUoD0Lctb5/dFg/iHBeEGPvlSk2QTKoKpYKysE65X908=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746603907; c=relaxed/simple;
-	bh=i3iNoejldEwfu1pudT27J8wiNZ81ZODfSVYRzrrKNjg=;
+	s=arc-20240116; t=1746604744; c=relaxed/simple;
+	bh=cJVc8vDwwV6eG3WvH6uiIoTnL+2Yb4/F1G4OnVH37bo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YKVvSIx386tK1l46eYk8XzXDP4vNMNeBFeY3wA7aZn3IPPwD0gGGQCnTsJdVqkFIW90trVmG84HsWGr1+vsxZFUpWXQ82XANKBalBwlk0BuwnXY9OMBLnOVrfMFh/AvwdNbJr2ikHn+E0OU+E6iNmnNVAzHadNZOLAm61dw6q3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W6QpABJK; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=G0TsRwNIhWoZG5gMWL6UpD+FPQ56K2lovAG+HygHLlankl5y/VzPWmSEY1e8qiEZbg3MhektabdcBJG92YZu2ZZJMxHcUu1cVbVyeqfT4MxPxVXrURVPPvWtz1Dv5P9H2GcN93k0GhW2e9iRNl0ODMsmj1xEjzf58khI+cqX5r4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FHNBUs5m; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746603906; x=1778139906;
+  t=1746604743; x=1778140743;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=i3iNoejldEwfu1pudT27J8wiNZ81ZODfSVYRzrrKNjg=;
-  b=W6QpABJKDToV/b3mcrNm9QEkK4zuK3nxtyCkB9GpsigHnkcOdtJiZ/oe
-   1+yIsSIqr/XBL/CAtjURO2bbyaBWdXgHyqfH0Ey2bdqXzcLiSGkVYXn8F
-   r9I5kspkDJzzML0Ls8OMBf5qP+FIpu4sIM1JaDW5w07RudsOWInn3cRKG
-   0BLViWDrglr60BTfLDkGiJwbUn8afJtVomTiqudmvYaWGIB2ldTDySMyn
-   yEs45hJnYflahDDOSlbCa3XBO0hJBen20+Iokg6gieD1h0pSyv5xTJiK0
-   TsiBUYVrXjIKR/3VySrwbxwk77Fk3mjbTQY46rTvQEAQlAjsA4XKll42A
-   w==;
-X-CSE-ConnectionGUID: koTFWPavRC2baLIoKHlo6A==
-X-CSE-MsgGUID: 1V90AYHET46R08CIs4M+Fg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11425"; a="52133198"
+  bh=cJVc8vDwwV6eG3WvH6uiIoTnL+2Yb4/F1G4OnVH37bo=;
+  b=FHNBUs5mDrvEsxe9oKHXAckoUDjW+E+nwv9OduaOoLleq4nr+NivnNRU
+   axX8QACXSFiReYugRQaqILIQNVM/2WTB+6ovi+vcyO7kK8ZB19G+2GntJ
+   Vc/sgfR9J3TOPA1qa9xon9Ftpc6PNAlRbErEvswo5MwtGdhEbhGNk7OsH
+   t6zVBYkkf4BtiKm1PTHShoIUi82o1hIE9xZY9YJmfYWnpW6PkoYqjukJQ
+   c9I6QOgZLmm+A4RnwxH8oh2ctGR29pVKzxMObWUeCpJcG2ZpC671lTYIX
+   l6nSiJxqVViXh5LoBCczU9CRvlDFrqVBDJESmpRrsYWtZm8/1Zt4pXBwc
+   Q==;
+X-CSE-ConnectionGUID: 6quq6gNZQQ6YUoBqs1saBg==
+X-CSE-MsgGUID: S1scbWBCTpOo7xheNtEUtA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11425"; a="51969535"
 X-IronPort-AV: E=Sophos;i="6.15,268,1739865600"; 
-   d="scan'208";a="52133198"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 00:45:03 -0700
-X-CSE-ConnectionGUID: wbFxOg/ZReaIggV/UXRZwg==
-X-CSE-MsgGUID: FGKt83fsS+24ZPRJt8PinQ==
+   d="scan'208";a="51969535"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 00:59:02 -0700
+X-CSE-ConnectionGUID: i3OY1f7dSP6kowPaS9EQDw==
+X-CSE-MsgGUID: XJ5A9IlWRxamSWSXFFzBUw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,268,1739865600"; 
-   d="scan'208";a="135875088"
+   d="scan'208";a="159175153"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 07 May 2025 00:44:52 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 07 May 2025 00:58:57 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uCZST-0007LP-3C;
-	Wed, 07 May 2025 07:44:49 +0000
-Date: Wed, 7 May 2025 15:44:27 +0800
+	id 1uCZg6-0007Mx-21;
+	Wed, 07 May 2025 07:58:54 +0000
+Date: Wed, 7 May 2025 15:58:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <superm1@kernel.org>, mario.limonciello@amd.com,
-	rafael@kernel.org, len.brown@intel.com, pavel@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+To: Praveen Talari <quic_ptalari@quicinc.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Subject: Re: [PATCH] PM: hibernate: Explicitly set PM_SUSPEND_MAX at
- hibernate entry
-Message-ID: <202505071516.juQNugSC-lkp@intel.com>
-References: <20250501215838.2501827-1-superm1@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, psodagud@quicinc.com, djaggi@quicinc.com,
+	quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com,
+	quic_arandive@quicinc.com, quic_mnaresh@quicinc.com,
+	quic_shazhuss@quicinc.com
+Subject: Re: [PATCH v3 8/9] serial: qcom-geni: Enable PM runtime for serial
+ driver
+Message-ID: <202505071523.FhPMXslL-lkp@intel.com>
+References: <20250502031018.1292-9-quic_ptalari@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -80,165 +93,56 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250501215838.2501827-1-superm1@kernel.org>
+In-Reply-To: <20250502031018.1292-9-quic_ptalari@quicinc.com>
 
-Hi Mario,
+Hi Praveen,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on amd-pstate/linux-next]
-[also build test ERROR on amd-pstate/bleeding-edge linus/master v6.15-rc5 next-20250506]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 3e039dcc9c1320c0d33ddd51c372dcc91d3ea3c7]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/PM-hibernate-Explicitly-set-PM_SUSPEND_MAX-at-hibernate-entry/20250502-060011
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git linux-next
-patch link:    https://lore.kernel.org/r/20250501215838.2501827-1-superm1%40kernel.org
-patch subject: [PATCH] PM: hibernate: Explicitly set PM_SUSPEND_MAX at hibernate entry
-config: x86_64-randconfig-071-20250502 (https://download.01.org/0day-ci/archive/20250507/202505071516.juQNugSC-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505071516.juQNugSC-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Praveen-Talari/opp-add-new-helper-API-dev_pm_opp_set_level/20250502-111540
+base:   3e039dcc9c1320c0d33ddd51c372dcc91d3ea3c7
+patch link:    https://lore.kernel.org/r/20250502031018.1292-9-quic_ptalari%40quicinc.com
+patch subject: [PATCH v3 8/9] serial: qcom-geni: Enable PM runtime for serial driver
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20250507/202505071523.FhPMXslL-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505071523.FhPMXslL-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505071516.juQNugSC-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505071523.FhPMXslL-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> kernel/power/hibernate.c:775:26: error: expression is not assignable
-     775 |         pm_suspend_target_state = PM_SUSPEND_MAX;
-         |         ~~~~~~~~~~~~~~~~~~~~~~~ ^
-   kernel/power/hibernate.c:856:26: error: expression is not assignable
-     856 |         pm_suspend_target_state = PM_SUSPEND_ON;
-         |         ~~~~~~~~~~~~~~~~~~~~~~~ ^
-   2 errors generated.
+>> drivers/tty/serial/qcom_geni_serial.c:1876:12: warning: 'qcom_geni_serial_runtime_resume' defined but not used [-Wunused-function]
+    1876 | static int qcom_geni_serial_runtime_resume(struct device *dev)
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/tty/serial/qcom_geni_serial.c:1868:12: warning: 'qcom_geni_serial_runtime_suspend' defined but not used [-Wunused-function]
+    1868 | static int qcom_geni_serial_runtime_suspend(struct device *dev)
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-vim +775 kernel/power/hibernate.c
+vim +/qcom_geni_serial_runtime_resume +1876 drivers/tty/serial/qcom_geni_serial.c
 
-   741	
-   742	/**
-   743	 * hibernate - Carry out system hibernation, including saving the image.
-   744	 */
-   745	int hibernate(void)
-   746	{
-   747		bool snapshot_test = false;
-   748		unsigned int sleep_flags;
-   749		int error;
-   750	
-   751		if (!hibernation_available()) {
-   752			pm_pr_dbg("Hibernation not available.\n");
-   753			return -EPERM;
-   754		}
-   755	
-   756		/*
-   757		 * Query for the compression algorithm support if compression is enabled.
-   758		 */
-   759		if (!nocompress) {
-   760			strscpy(hib_comp_algo, hibernate_compressor, sizeof(hib_comp_algo));
-   761			if (!crypto_has_acomp(hib_comp_algo, 0, CRYPTO_ALG_ASYNC)) {
-   762				pr_err("%s compression is not available\n", hib_comp_algo);
-   763				return -EOPNOTSUPP;
-   764			}
-   765		}
-   766	
-   767		sleep_flags = lock_system_sleep();
-   768		/* The snapshot device should not be opened while we're running */
-   769		if (!hibernate_acquire()) {
-   770			error = -EBUSY;
-   771			goto Unlock;
-   772		}
-   773	
-   774		pr_info("hibernation entry\n");
- > 775		pm_suspend_target_state = PM_SUSPEND_MAX;
-   776		pm_prepare_console();
-   777		error = pm_notifier_call_chain_robust(PM_HIBERNATION_PREPARE, PM_POST_HIBERNATION);
-   778		if (error)
-   779			goto Restore;
-   780	
-   781		ksys_sync_helper();
-   782	
-   783		error = freeze_processes();
-   784		if (error)
-   785			goto Exit;
-   786	
-   787		lock_device_hotplug();
-   788		/* Allocate memory management structures */
-   789		error = create_basic_memory_bitmaps();
-   790		if (error)
-   791			goto Thaw;
-   792	
-   793		error = hibernation_snapshot(hibernation_mode == HIBERNATION_PLATFORM);
-   794		if (error || freezer_test_done)
-   795			goto Free_bitmaps;
-   796	
-   797		if (in_suspend) {
-   798			unsigned int flags = 0;
-   799	
-   800			if (hibernation_mode == HIBERNATION_PLATFORM)
-   801				flags |= SF_PLATFORM_MODE;
-   802			if (nocompress) {
-   803				flags |= SF_NOCOMPRESS_MODE;
-   804			} else {
-   805			        flags |= SF_CRC32_MODE;
-   806	
-   807				/*
-   808				 * By default, LZO compression is enabled. Use SF_COMPRESSION_ALG_LZ4
-   809				 * to override this behaviour and use LZ4.
-   810				 *
-   811				 * Refer kernel/power/power.h for more details
-   812				 */
-   813	
-   814				if (!strcmp(hib_comp_algo, COMPRESSION_ALGO_LZ4))
-   815					flags |= SF_COMPRESSION_ALG_LZ4;
-   816				else
-   817					flags |= SF_COMPRESSION_ALG_LZO;
-   818			}
-   819	
-   820			pm_pr_dbg("Writing hibernation image.\n");
-   821			error = swsusp_write(flags);
-   822			swsusp_free();
-   823			if (!error) {
-   824				if (hibernation_mode == HIBERNATION_TEST_RESUME)
-   825					snapshot_test = true;
-   826				else
-   827					power_down();
-   828			}
-   829			in_suspend = 0;
-   830			pm_restore_gfp_mask();
-   831		} else {
-   832			pm_pr_dbg("Hibernation image restored successfully.\n");
-   833		}
-   834	
-   835	 Free_bitmaps:
-   836		free_basic_memory_bitmaps();
-   837	 Thaw:
-   838		unlock_device_hotplug();
-   839		if (snapshot_test) {
-   840			pm_pr_dbg("Checking hibernation image\n");
-   841			error = swsusp_check(false);
-   842			if (!error)
-   843				error = load_image_and_restore();
-   844		}
-   845		thaw_processes();
-   846	
-   847		/* Don't bother checking whether freezer_test_done is true */
-   848		freezer_test_done = false;
-   849	 Exit:
-   850		pm_notifier_call_chain(PM_POST_HIBERNATION);
-   851	 Restore:
-   852		pm_restore_console();
-   853		hibernate_release();
-   854	 Unlock:
-   855		unlock_system_sleep(sleep_flags);
-   856		pm_suspend_target_state = PM_SUSPEND_ON;
-   857		pr_info("hibernation exit\n");
-   858	
-   859		return error;
-   860	}
-   861	
+  1867	
+> 1868	static int qcom_geni_serial_runtime_suspend(struct device *dev)
+  1869	{
+  1870		struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
+  1871		struct uart_port *uport = &port->uport;
+  1872	
+  1873		return geni_serial_resources_off(uport);
+  1874	};
+  1875	
+> 1876	static int qcom_geni_serial_runtime_resume(struct device *dev)
+  1877	{
+  1878		struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
+  1879		struct uart_port *uport = &port->uport;
+  1880	
+  1881		return geni_serial_resources_on(uport);
+  1882	};
+  1883	
 
 -- 
 0-DAY CI Kernel Test Service
