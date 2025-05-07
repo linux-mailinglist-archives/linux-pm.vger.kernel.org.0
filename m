@@ -1,165 +1,116 @@
-Return-Path: <linux-pm+bounces-26779-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26780-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91F43AADA08
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 10:22:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3593FAADA84
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 10:51:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3375B3B2984
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 08:22:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 536211BC47A5
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 08:52:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADECB221708;
-	Wed,  7 May 2025 08:22:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79AF91FC109;
+	Wed,  7 May 2025 08:51:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="WvRWxpmd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZZux7i0V"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED053273F9;
-	Wed,  7 May 2025 08:22:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6CD81E3DFD;
+	Wed,  7 May 2025 08:51:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746606163; cv=none; b=QluZ4P1QKVQ5FYGDkABnEYTI2qe+NBgWSLmyKS6VlgsVPSnCjUYjM3dKD7YVAWbRvrXIkMw1/L70pZACk5TfzySvIJSD6XhyNJTpXK2oSZXV7XultoahwFpVmBvrQZKpL4dKnlk4kN8vNhJuv+iTOJcOjDN1y6TymF+krYuN0m4=
+	t=1746607903; cv=none; b=BwY1B6FARMapoeeJJgQhBO5t/pScNcRPZBDUOivvs2e32kVXwAXrnJ5CYq4XhMJAU/bPvqHObYRDlIyUj/C3Fcub4Xim8RgTfqO4wcaiYK3ryAqD0VHICc+hD4mQ5+nS1hPmUkvWG9gzyxS3aFaytoS+t6zL6zyKfJbkjogPGwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746606163; c=relaxed/simple;
-	bh=pm/x4yL4ynHqji5f94ZWEII9oNZb9GpYQx4Qg6pHT/0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M42wWx6SmkQyl35tJ2nAaJjq7nhB7IF1ra6yjPxDMOMABetY7DZd/GJ5g+QELh4FQT7SXhKFtjB20QtwzAhxKqzEnOK5U3jkVo2mX+8nbh98229f+dgTdvYuaw+LjBEoZb80RAaQ7+mJ+gLdS3V2mGW8EZsstqRWGoTvmtQFxig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=WvRWxpmd; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=dZYqAlHezITuF/Jo/pYWYXAIRG3sFn0xWBaAQsF1gug=; b=WvRWxpmdFQwb7Y8W2h0NSxfsEL
-	UWuCjylwSxWE4S3uF5d6bftzRw9LMfYxyHMpa193wXJzmLv11yd5cu3T9W3gWFU36XJCXsL0kJnmM
-	NKBCnHY2NZcfgRStd2Zk7dw/1FTdNnJIficcCFz7ESA7R5+XkXBd62b8sxRW2LLOMBpeZDpa2s5aQ
-	2TRD+MGG+Kpu2RE5jFIUVqIHWkYlSbq3jID2qJLRrLB2ELd53QFo0T9wnAHMM94n+4vFSR4UTQBo3
-	D5viJw6wGtHnBXYwer75H2S+OiOSrmVT74MogNJ309Kt60Cq3FtWwxTVPo3ELXFaZ4b9D4ilPw+kU
-	LZupus0Q==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
-	id 1uCa2i-0000000FoF4-3Rza;
-	Wed, 07 May 2025 08:22:17 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 66035300780; Wed,  7 May 2025 10:22:16 +0200 (CEST)
-Date: Wed, 7 May 2025 10:22:16 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Sohil Mehta <sohil.mehta@intel.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, Xin Li <xin@zytor.com>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Tony Luck <tony.luck@intel.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Brian Gerst <brgerst@gmail.com>,
-	Andrew Cooper <andrew.cooper3@citrix.com>,
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-	Jacob Pan <jacob.pan@linux.microsoft.com>,
-	Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	linux-perf-users@vger.kernel.org, linux-edac@vger.kernel.org,
-	kvm@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 4/9] x86/nmi: Assign and register NMI-source vectors
-Message-ID: <20250507082216.GA4439@noisy.programming.kicks-ass.net>
-References: <20250507012145.2998143-1-sohil.mehta@intel.com>
- <20250507012145.2998143-5-sohil.mehta@intel.com>
+	s=arc-20240116; t=1746607903; c=relaxed/simple;
+	bh=ZRGbU16EbvLnN1mbcnVMGiKhfTvveYDWrA+XdW/F9ag=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EG1Lqqk/kr5i4eoAREq9PCBQ0/6HvIZcEaH5M0eQWHawld1McYHlPpTMNluO0K/cYxoubZNqu3WUzg9Y1JfcbRr6lyFQmScT4mgBsqwNeXqmfZyZaHl/Zu9euhls2TZlfMY6fm0pO5ceuzfLmQVeLxDNrNDKkmqeCmKTVj0xtjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZZux7i0V; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746607902; x=1778143902;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ZRGbU16EbvLnN1mbcnVMGiKhfTvveYDWrA+XdW/F9ag=;
+  b=ZZux7i0V4caVjSoAGZbGly6568nQcIuklKPUoZpqUNChrx8ULFLvm2td
+   xQlskQSS/CHozvQdgFxugLud7X5BmxncbC9xf1Jo/pqxS/rewBhc15ng2
+   Q9SooLhncYX30szHXY9GTGF3G+qWiYTb2UUtcXzE/j0krOotEuaOirBDx
+   8QDKegDwBVhXPip9ITWOmkj0pxvMB41m4jCT1U9ZkQJxXmskaHUSAsU5+
+   bhRA2sPyMef2N400G428G/arn9ZyNOc5Ho4OL0dj/eqcloDy5OMiX18bN
+   7R4UTWexZQVkUxatGyNxvE8LtVLwuHAd5ZWxDeFZj2qYLjUNtqTexEeE4
+   A==;
+X-CSE-ConnectionGUID: EE5cua3SQ16CMAgr86aIIg==
+X-CSE-MsgGUID: QznCW1lnQ/Gj5k0liUG7ZQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11425"; a="48458801"
+X-IronPort-AV: E=Sophos;i="6.15,268,1739865600"; 
+   d="scan'208";a="48458801"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 01:51:41 -0700
+X-CSE-ConnectionGUID: EtXsSu9LQe6T33TJsof/7g==
+X-CSE-MsgGUID: UT0T4aFTS862wyvBzJ35Xg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,268,1739865600"; 
+   d="scan'208";a="135611044"
+Received: from yungchua-mobl2.ccr.corp.intel.com (HELO [10.246.105.120]) ([10.246.105.120])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 01:51:38 -0700
+Message-ID: <eff651df-bc2a-45bf-a629-5adb4f8f398c@linux.intel.com>
+Date: Wed, 7 May 2025 16:51:35 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250507012145.2998143-5-sohil.mehta@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] soundwire: intel_auxdevice: Fix system suspend/resume
+ handling
+To: Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>,
+ "Rafael J. Wysocki" <rjw@rjwysocki.net>, Vinod Koul <vkoul@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+ Sanyog Kale <sanyog.r.kale@intel.com>, linux-sound@vger.kernel.org,
+ bard.liao@intel.com
+References: <5891540.DvuYhMxLoT@rjwysocki.net>
+ <30acf520-c137-4b49-8b69-08e35a7c5969@linux.dev>
+Content-Language: en-US
+From: "Liao, Bard" <yung-chuan.liao@linux.intel.com>
+In-Reply-To: <30acf520-c137-4b49-8b69-08e35a7c5969@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, May 06, 2025 at 06:21:40PM -0700, Sohil Mehta wrote:
 
-> diff --git a/arch/x86/include/asm/nmi.h b/arch/x86/include/asm/nmi.h
-> index f0a577bf7bba..b9beb216f2d0 100644
-> --- a/arch/x86/include/asm/nmi.h
-> +++ b/arch/x86/include/asm/nmi.h
-> @@ -57,6 +57,38 @@ struct nmiaction {
->  	u8			source_vector;
->  };
->  
-> +/**
-> + * NMI-source vectors are used to identify the origin of an NMI and to
-> + * route the NMI directly to the appropriate handler.
-> + *
-> + * On CPUs that support NMI-source reporting with FRED, receiving an NMI
-> + * with a valid vector sets the corresponding bit in the NMI-source
-> + * bitmap. The bitmap is delivered as FRED event data on the stack.
-> + * Multiple NMIs are coalesced in the NMI-source bitmap until the next
-> + * NMI delivery.
-> + *
-> + * If an NMI is received without a vector or beyond the defined range,
-> + * the CPU sets bit 0 of the NMI-source bitmap.
-> + *
-> + * Vector 2 is reserved for external NMIs related to the Local APIC -
-> + * LINT1. Some third-party chipsets may send NMI messages with a
-> + * hardcoded vector of 2, which would result in bit 2 being set in the
-> + * NMI-source bitmap.
-> + *
-> + * The vectors are in no particular priority order. Add new vector
-> + * assignments sequentially in the list below.
-> + */
-> +#define NMIS_VECTOR_NONE	0	/* Reserved - Set for all unidentified sources */
-> +#define NMIS_VECTOR_TEST	1	/* NMI selftest */
-> +#define NMIS_VECTOR_EXTERNAL	2	/* Reserved - Match External NMI vector 2 */
-> +#define NMIS_VECTOR_SMP_STOP	3	/* Panic stop CPU */
-> +#define NMIS_VECTOR_BT		4	/* CPU backtrace */
-> +#define NMIS_VECTOR_KGDB	5	/* Kernel debugger */
-> +#define NMIS_VECTOR_MCE		6	/* MCE injection */
-> +#define NMIS_VECTOR_PMI		7	/* PerfMon counters */
-> +
-> +#define NMIS_VECTORS_MAX	16	/* Maximum number of NMI-source vectors */
 
-Are these really independent NMI vectors, or simply NMI source reporting bits?
+On 4/26/2025 1:12 AM, Pierre-Louis Bossart wrote:
+> On 4/24/25 20:13, Rafael J. Wysocki wrote:
+>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>
+>> The code in intel_suspend() and intel_resume() needs to be properly
+>> synchronized with runtime PM which is not the case currently, so fix
+>> it.
+>>
+>> First of all, prevent runtime PM from triggering after intel_suspend()
+>> has started because the changes made by it to the device might be
+>> undone by a runtime resume of the device.  For this purpose, add a
+>> pm_runtime_disable() call to intel_suspend().
+> 
+> Allow me to push back on this, because we have to be very careful with a hidden state transition that needs to happen.
+> 
+> If a controller was suspended by pm_runtime, it will enter the clock stop mode.
+> 
+> If the system needs to suspend, the controller has to be forced to exit the clock stop mode and the bus has to restart before we can suspend it, and that's why we had those pm_runtime_resume().
+> 
+> Disabling pm_runtime when entering system suspend would be problematic for Intel hardware, it's a known can of worms.
+> 
+> It's quite possible that some of the code in intel_suspend() is no longer required because the .prepare will resume the bus properly, but I wanted to make sure this state transition out of clock-stop is known and taken into consideration.
+> 
+> Bard, is this a configuration you've tested?
 
-Because if they are not NMI vectors, naming them such is confusing.
 
-Specifically, is there a latch per source?
+Sorry for the late reply. Yes, I tested jack detection in runtime
+suspended. Also, the CI test is passed.
 
-> diff --git a/arch/x86/kernel/nmi.c b/arch/x86/kernel/nmi.c
-> index be93ec7255bf..a1d672dcb6f0 100644
-> --- a/arch/x86/kernel/nmi.c
-> +++ b/arch/x86/kernel/nmi.c
-> @@ -184,6 +184,11 @@ int __register_nmi_handler(unsigned int type, struct nmiaction *action)
->  
->  	raw_spin_lock_irqsave(&desc->lock, flags);
->  
-> +	WARN_ON_ONCE(action->source_vector >= NMIS_VECTORS_MAX);
-> +
-> +	if (!cpu_feature_enabled(X86_FEATURE_NMI_SOURCE) || type != NMI_LOCAL)
-> +		action->source_vector = 0;
-
-How about:
-
-	WARN_ON_ONCE(type != NMI_LOCAL && action->source_vector);
-
-instead?
 
