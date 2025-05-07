@@ -1,154 +1,192 @@
-Return-Path: <linux-pm+bounces-26774-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26775-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 753DBAAD631
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 08:35:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2C15AAD811
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 09:30:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF2D8985A30
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 06:35:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 419DC1C216C2
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 07:30:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 089FC210186;
-	Wed,  7 May 2025 06:35:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78DEF21FF2B;
+	Wed,  7 May 2025 07:29:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lqcX8HWj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8285F21019E;
-	Wed,  7 May 2025 06:35:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C812135CB
+	for <linux-pm@vger.kernel.org>; Wed,  7 May 2025 07:29:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746599739; cv=none; b=IlyBbO9cj89PXHREcnWnycgU0eONewdev6fqz81Z800RY+r6/as9njbIATQp8VWjorqAYp966umBl6kS7kSSH5x6ZokXmi8NkgWT7YFu1qIOur9AEgNiokKeH9Okt/SMhxYgsXJN1iEQSPqEeoo/G2P8D6vRlqZfDIBglTROBUE=
+	t=1746602971; cv=none; b=b7PuNrHG9OXdMOgwfSr4xlc1j2JjasSrW2uOYLWDwBRripUdpp5PHWB13jczcqWulD7WHj4tp+Gyo7yZSE2kPrFwV/lEosyNAdKgrUlFs0Iz5B80a3p+flx9wpl6DL4uMFSzz7SgbjINpJRu2BO8GjBApxlIw7FlPYhBHkSdfaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746599739; c=relaxed/simple;
-	bh=EunsBZu+dPFyFx+so1aikErZNXrHK15H5QeG0WGOHis=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=A9w8eLx3Jvg+eSOrlak9UgZGf3KxWKen/zNDBb8sfe56ug3OHikmK2fm0ZMsDJ1OgZYA6SMq5zLTNMsKIOEhujVbOeLiEA6iNGFXBMHDIt+6hLkZPkclfrqJOcI8CidA7MhQHu4VskYmsyFLCJzRNZs1vE5dLET6wqEsPLLI9V0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 77aa34ac2b0d11f0b29709d653e92f7d-20250507
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:01f278ff-13a4-4f34-8fda-6627e63156e8,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-META: VersionHash:6493067,CLOUDID:957d935d78f12afb161e3c7259de899b,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:nil,UR
-	L:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
-	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 77aa34ac2b0d11f0b29709d653e92f7d-20250507
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 507086601; Wed, 07 May 2025 14:35:29 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id C72F0E006100;
-	Wed,  7 May 2025 14:35:28 +0800 (CST)
-X-ns-mid: postfix-681AFF30-651625104
-Received: from localhost.localdomain (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 3AE54E0080FF;
-	Wed,  7 May 2025 14:35:25 +0800 (CST)
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-To: corbet@lwn.net,
-	rafael@kernel.org,
-	len.brown@intel.com,
-	pavel@kernel.org,
-	akpm@linux-foundation.org,
-	paulmck@kernel.org,
-	rostedt@goodmis.org,
-	thuth@redhat.com,
-	bp@alien8.de,
-	ardb@kernel.org,
-	gregkh@linuxfoundation.org
-Cc: linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Zihuan Zhang <zhangzihuan@kylinos.cn>
-Subject: [PATCH v3] PM / sleep: add configurable delay for pm_test
-Date: Wed,  7 May 2025 14:35:20 +0800
-Message-Id: <20250507063520.419635-1-zhangzihuan@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1746602971; c=relaxed/simple;
+	bh=3ofFTovtnJvX5M/xuhvl18Z0GfLNgQGP2MJvinEcTik=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CpeODfDuzNZ3dFOp5X7QPqpq2lI0rsNpX7mh+7Dbuv9E+Oan+gEtOHPZmnAjJjXmF3w23aOTHHG7jHJxucSa0H3alhKls8AQmPJ02g0BxpMsGtgXUAMKsVcQ42iSL4NWAFZqawl62D5TT9mOcOOCHogAmQK25rXPMSX6o46E3Ds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lqcX8HWj; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-39c1efc4577so3366319f8f.0
+        for <linux-pm@vger.kernel.org>; Wed, 07 May 2025 00:29:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1746602968; x=1747207768; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=exh3b5R7L77rlGB9XDLUTNFBk7LtXN6j6kHQ/wrFppg=;
+        b=lqcX8HWjoX36WHrfdPUWIjNj0BPu4jxR/vDN0sjAWhBJQ7QMdXwwwRn20Na67XyaNs
+         zHRWU9RdQEm52VDinC1WP3zhufhSSap2ix1APn4UVW706vlBGsTTSr7E1kOYi/Z0yrHb
+         TTYmpP3N0NXBHnieEZKmqSuC9UsAvDTniQz82qqKpTkd+wKP8fiHBBQR3gWkSjKtXjaE
+         u1K0iGAv7JdeeqgIYPqdeTRQ2q6VfzsWxDU1vLI/y+pkJZ5YicQstZdEmoPGpih70KZ5
+         IpzulRQDCE2YGYLBW6+NN+uJmfQmESsHDdaVmVMcnOWUgDLz7gFX//YoL6mv3zx4Q++8
+         9xoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746602968; x=1747207768;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=exh3b5R7L77rlGB9XDLUTNFBk7LtXN6j6kHQ/wrFppg=;
+        b=bkQKkvyrKYD1BNjKr0HvrNpHFxqg2xGQK0proWrei44q6SPcNPWrORzH2HOBhvc0U1
+         EUxFiBNGTrbe3m/vPmJOq2gu52Z1peMIN8tu7UJsEb61Mn+pmYotBNInEQOIpysScMot
+         kaCxv3NCesdz/N5vqwxDnhBrH4jQckRhY5hIgt8A9s3W5XnEZgBPvGWlOFgCshVZk6kG
+         mAbj9jnTcJa0x4uUdoPMJybHpz+SyEbex28Vz7itnorL3hzoMyfSSnbpaOs2P1bwDb6/
+         g9gubWNPqwfjoTVfgqvzljsZbQyfr5YTxceW/L3dMjoe2FqNEY+fOtFVOh5opwWcHrQO
+         IT3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVQIAVYFPNX6TlRXuoGCl0IpFv8t3RN14uVaU00OWCw7M009NMLKTP1XiH3o1JCmn2tfQy9R2FuAw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywosz2NaBiMZSQHaF1ctmu+GDb/UtJ0T2YWIfX4KLcdElJpJg22
+	WE3sqAz4QpT1CMkZPsjBwXACySkFqSn1Jr4HoVw+G6Yvbmcv9GyqOHKpBEiinBA=
+X-Gm-Gg: ASbGncvRN+ARZ3K4rviwssDwcjMID5jEKtc2cBfu2MXap1EnYY5csGWBz91xLq6FFVX
+	Q9+BFwiwQpVjlHBpHoltunzQtDrAEiEeSRiE3OGkFjSr1ID9twS64hKT8Nq3q50b4s01Dlg5hRk
+	dY7VFognnMLOrI6A2ACTMRfH7L+x4OrRn4SzH/mU4wQsuK6OCfFTwX5u5mGBn4A1NMBgdHLI9Zm
+	78fl/pYejlAccwKxXRE1/RrC9S51XxtcFG4dgiQzE3DfwFgtWKOzTo0k9IpkEB2kJyoUP3Kf53n
+	J1bU2l8OfeINYQYd1I80bVdINQsYfhkDqb489sUCJ0/vW636NUJRcJ/tmWtqKEQof1Tavd5AF1J
+	xVtRa
+X-Google-Smtp-Source: AGHT+IEH+UhigDV51ycf06z5unZsxUS1KzhCHNWdikOd5Jo+ShmTKo/P+eDgWolx1p8pfsovDvmOIg==
+X-Received: by 2002:a5d:64e7:0:b0:38d:b325:471f with SMTP id ffacd0b85a97d-3a0b4a16497mr2004847f8f.15.1746602967790;
+        Wed, 07 May 2025 00:29:27 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3a0b350f604sm2547973f8f.21.2025.05.07.00.29.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 May 2025 00:29:27 -0700 (PDT)
+Message-ID: <c0e9a395-41d1-4edc-a759-f958ea10387a@linaro.org>
+Date: Wed, 7 May 2025 09:29:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/2] thermal: Add support for Airoha EN7581 thermal
+ sensor
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250226003608.8973-1-ansuelsmth@gmail.com>
+ <20250226003608.8973-2-ansuelsmth@gmail.com>
+ <a9f58437-5992-4042-85cd-b9150c4855ff@linaro.org>
+ <6814de0d.7b0a0220.2add1a.0689@mx.google.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <6814de0d.7b0a0220.2add1a.0689@mx.google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-This patch turns this 5 second delay into a configurable module
-parameter, so users can determine how long to wait in this
-pseudo-hibernate state before resuming the system.
+On 02/05/2025 17:00, Christian Marangi wrote:
+> On Fri, May 02, 2025 at 03:30:56PM +0200, Daniel Lezcano wrote:
 
-The configurable delay parameter has been added to suspend and
-synchronized to hibernation.
+[ ... ]
 
-Example (wait 30 seconds);
+>>> +static int airoha_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+>>> +{
+>>> +	struct airoha_thermal_priv *priv = thermal_zone_device_priv(tz);
+>>> +	int min, max, avg_temp, temp_adc;
+>>> +	int i;
+>>> +
+>>> +	/* Get the starting temp */
+>>> +	temp_adc = airoha_get_thermal_ADC(priv);
+>>> +	min = temp_adc;
+>>> +	max = temp_adc;
+>>> +	avg_temp = temp_adc;
+>>> +
+>>> +	/* Make 5 more measurement and average the temp ADC difference */
+>>> +	for (i = 0; i < 5; i++) {
+>>> +		temp_adc = airoha_get_thermal_ADC(priv);
+>>> +		avg_temp += temp_adc;
+>>> +		if (temp_adc > max)
+>>> +			max = temp_adc;
+>>> +		if (temp_adc < min)
+>>> +			min = temp_adc;
+>>> +	}
+>>> +	avg_temp = avg_temp - max - min;
+>>> +	avg_temp /= 4;
 
-  # echo 30 > /sys/module/hibernate/parameters/pm_test_delay
-  # echo core > /sys/power/pm_test
+Why 4 ? There is 5 samples no ? one before the loop and 4 with the loop
 
-Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
----
-v3:
- - Fix the location of the hibernate.pm_test_delay parameter in
-   kernel-parameters.txt.
- - Update =E2=80=98[hibernate]=E2=80=99 to =E2=80=98[HIBERNATION]=E2=80=99
-v2:
- - Fix typos.
----
- Documentation/admin-guide/kernel-parameters.txt | 7 +++++++
- kernel/power/hibernate.c                        | 9 +++++++--
- 2 files changed, 14 insertions(+), 2 deletions(-)
+>>> +	*temp = RAW_TO_TEMP(priv, avg_temp);
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentat=
-ion/admin-guide/kernel-parameters.txt
-index d9fd26b95b34..a110cbb37f20 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -1828,6 +1828,13 @@
- 				lz4: Select LZ4 compression algorithm to
- 				compress/decompress hibernation image.
-=20
-+	hibernate.pm_test_delay=3D
-+			[HIBERNATION]
-+			Sets the number of seconds to remain in a hibernation test
-+			mode before resuming the system (see
-+			/sys/power/pm_test). Only available when CONFIG_PM_DEBUG
-+			is set. Default value is 5.
-+
- 	highmem=3Dnn[KMG]	[KNL,BOOT,EARLY] forces the highmem zone to have an e=
-xact
- 			size of <nn>. This works even on boxes that have no
- 			highmem otherwise. This also works to reduce highmem
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 23c0f4e6cb2f..485133af884d 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -133,10 +133,15 @@ bool system_entering_hibernation(void)
- EXPORT_SYMBOL(system_entering_hibernation);
-=20
- #ifdef CONFIG_PM_DEBUG
-+static unsigned int pm_test_delay =3D 5;
-+module_param(pm_test_delay, uint, 0644);
-+MODULE_PARM_DESC(pm_test_delay,
-+		 "Number of seconds to wait before resuming from hibernation test");
- static void hibernation_debug_sleep(void)
- {
--	pr_info("debug: Waiting for 5 seconds.\n");
--	mdelay(5000);
-+	pr_info("hibernation debug: Waiting for %d second(s).\n",
-+		pm_test_delay);
-+	mdelay(pm_test_delay * 1000);
- }
-=20
- static int hibernation_test(int level)
---=20
-2.25.1
+Does RAW_TO_TEMP() on a average raw adc value report the same value as 
+an average of the temperature after their conversion ?
 
+>>> +	return 0;
+>>> +}
+
+The routine is a bit confusing because of the initial adc read.
+
+avg_value = 0;
+min_value = INT_MAX;
+max_value = INT_MIN;
+
+for (i = 0; i < AIROHA_MAX_SAMPLES; i++) {
+	value = airoha_get_thermal_ADC(priv);
+	min_value = min(value, min_value);
+	max_value = max(value, max_value);
+	avg_value += value;
+}
+
+avg_value -= (min_value + max_value);
+avg_value /= AIROHA_MAX_SAMPLES;
+
+>> Does this chip support the averaging with the filtered mode which prevent to
+>> do this expensive calls when getting the temperature ?
+>>
+> 
+> If you notice in this function we read directly from the ADC sensor to
+> have a more precise and realtime temperature.
+> 
+> Yes the thermal module support averaging (and this is what is set for
+> the critical temperature monitor) but since we base everything on
+> interrupt the expensive call is called only when the user poll the
+> temperature with sysfs.
+
+When the temperature reaches the threshold, the interrupt is fired which 
+in turn calls thermal_zone_device_update(). This lead to a polling from 
+the kernel at a higher rate with the governor taking cooling decision.
+
+> Do you prefer to use the thermal module entirely?
+
+It is up to you. I would say if the sensor has a hardware assistance to 
+compute the averaging while the CPU does something else it is better. 
+But if the filtered mode has the same issues than the LVTS, then it is 
+probably not worth it.
+
+
+[ ... ]
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
