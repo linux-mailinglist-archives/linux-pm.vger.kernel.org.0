@@ -1,92 +1,93 @@
-Return-Path: <linux-pm+bounces-26781-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26782-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 393ECAADB3A
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 11:20:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87453AADB51
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 11:22:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E460E16FCF3
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 09:19:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B25FE9A4272
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 09:19:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 059BD23BD1B;
-	Wed,  7 May 2025 09:15:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D195424C668;
+	Wed,  7 May 2025 09:15:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="F4nSP2Fz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eC38VwAx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36BB23C4E1;
-	Wed,  7 May 2025 09:15:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293A424A07C;
+	Wed,  7 May 2025 09:15:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746609303; cv=none; b=sRk69KjBgJB6Q9Hy9TlUo1q3ZiH1++bRTqig8FS96g932xjZSDjlx81uTPyAF4Y+OhOpy+HgFtvyIVCvc7sZU5Er0Fysyfp6DR0QijtL1dq98m3Cs2fK8LNvZlAnEULUnEMSD8oVcD1gjqaJmIYDN2mn7c01TFZyIrGyFMGd45w=
+	t=1746609358; cv=none; b=YdxeWNDvNC06IYGAikK3lRkDGP8f8HhFDr/YY/OahCBVzrCs/s7E4De2F5Z578zs0s/A38iIx8kVBSum85dmHU2sy/Q0t9M3wisVO1lyXWBhCG78+Izt5iCJRc4Rz7p0vhnBmi0A4wlWYUyA//sJnX/6xoUAiF4QhsVUazmGgVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746609303; c=relaxed/simple;
-	bh=8bzrdEFI6hGktiNjZu3XxSN3Ansccky9WP6hM1uEFvU=;
+	s=arc-20240116; t=1746609358; c=relaxed/simple;
+	bh=bOOav56FZimzUhF24N2AXUX+5EB9KykWAEnTyUrSAiQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VSwKHAj/FgKjMq7eKydUBWXbD90gsvy9/cametHrZDGOaGE8C7SNmS+nWUUxDFT3RAqqMZippYLmM7clPGwz/9KC+U7jFczQSJdTaUsZdxPo4eADea/QrbR/22Rxj3b6Lbgt50APondy/ctQ74xzD+POLe7C4Wuwqu616BRBGpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=F4nSP2Fz; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=N6hxa7ktAI16FThLApG5BUFDutIZOY100z1nEuVdsWU=; b=F4nSP2FzZ8rKSWMhBjzEjDSXfc
-	z0A3zK1IOTGReBK/EpHD0aBhmsW2oNP7kbHRgPHTTUtnt2kktsrF0yOEe9ra4dEXCAT6KXzpP2uYR
-	Jg7RfQ5RUR9fBMXgRHAHWTHyhL612ZYnAnxFuYwPGXKLjWNlE7hym93yt0n6z+e953H8AFlgNea9a
-	myU1RrJLqJdpzCqyrZ//9TIuXE/t4qfzOgfQQordbCIfzKm/FPAHg7E3lDASVhcvEKnCVLFLag3Zf
-	N3Jfo8TXjFZ2GG1cmRMpkskB3h0cpZq3nLpZS97h6EU4nb3/arJfY4jA5mP0vK2K4rW9oPj1WAjq8
-	f6/K3HEA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
-	id 1uCarT-0000000FogU-247e;
-	Wed, 07 May 2025 09:14:43 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id C9D82300780; Wed,  7 May 2025 11:14:42 +0200 (CEST)
-Date: Wed, 7 May 2025 11:14:42 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Sohil Mehta <sohil.mehta@intel.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, Xin Li <xin@zytor.com>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Tony Luck <tony.luck@intel.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=pdFCCw1uPvevfHHqwDLPo/u0y1jj2Zmk9cm7X9WZuy8L6FseBZEZQwBRQh0berybD3/cUMu/MlgL5PQghjOVZS9S493KtqUcWx8K9QxCmJMPiX3mTYoWcupSxSwYlC4HMGwz7zaW45BETETq0LWqXtJ6jt3Yz+ZYk5hPJk/ZgCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eC38VwAx; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746609357; x=1778145357;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bOOav56FZimzUhF24N2AXUX+5EB9KykWAEnTyUrSAiQ=;
+  b=eC38VwAxbTRbBNSTzjfPVL+IU709Kda8Zh1y8CYHFTYVCuMcCvZAtisJ
+   AA2gX1zs4WnIaH0IfO2kC8WsxpNaMhKTtacWZZK46Vv++hQtB49ciFk7n
+   zAT4OEzkziQsQXkKcZuqmsMaTWOyqkzB75BjJWBoR6D5IAdpEwMjyVF9P
+   NXNyv4CqksNXPSKdZ5yO/ZASk5S/oAn1BAYHMTF5e0exChyK7f3X0wkxn
+   0KLpRf6BcPWRpRyPdCYRFWuf5CQqzDUPgLkS1n1S2RqoNzkzhXfTgugnA
+   5v4wczplPhQ13cNeRWVb6yIzFrwVHEeLtpus5ouvOXnhHF1pn20uBu0DC
+   w==;
+X-CSE-ConnectionGUID: Zqf7zyAAQLW+QEktQRh2/A==
+X-CSE-MsgGUID: QscKwT8WRVa3dvmqWg1XKA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11425"; a="47426892"
+X-IronPort-AV: E=Sophos;i="6.15,268,1739865600"; 
+   d="scan'208";a="47426892"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 02:15:57 -0700
+X-CSE-ConnectionGUID: iTH8TkjZQm2HDsMx/ybclw==
+X-CSE-MsgGUID: sO8jQgj7R8+sMnKf1/+BBQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,268,1739865600"; 
+   d="scan'208";a="140739232"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 07 May 2025 02:15:51 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uCasX-0007U1-0K;
+	Wed, 07 May 2025 09:15:49 +0000
+Date: Wed, 7 May 2025 17:15:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Oleksij Rempel <o.rempel@pengutronix.de>,
+	Sebastian Reichel <sre@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: oe-kbuild-all@lists.linux.dev, Oleksij Rempel <o.rempel@pengutronix.de>,
+	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Matti Vaittinen <mazziesaccount@gmail.com>, kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
 	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Brian Gerst <brgerst@gmail.com>,
-	Andrew Cooper <andrew.cooper3@citrix.com>,
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-	Jacob Pan <jacob.pan@linux.microsoft.com>,
-	Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	linux-perf-users@vger.kernel.org, linux-edac@vger.kernel.org,
-	kvm@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 5/9] x86/nmi: Add support to handle NMIs with source
- information
-Message-ID: <20250507091442.GB4439@noisy.programming.kicks-ass.net>
-References: <20250507012145.2998143-1-sohil.mehta@intel.com>
- <20250507012145.2998143-6-sohil.mehta@intel.com>
+	linux-pm@vger.kernel.org,
+	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>,
+	Guenter Roeck <groeck@chromium.org>,
+	Ahmad Fatoum <a.fatoum@pengutronix.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	chrome-platform@lists.linux.dev
+Subject: Re: [PATCH v9 3/7] power: reset: Introduce PSCR Recording Framework
+ for Non-Volatile Storage
+Message-ID: <202505071649.g96zqzTU-lkp@intel.com>
+References: <20250422085717.2605520-4-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -95,105 +96,49 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250507012145.2998143-6-sohil.mehta@intel.com>
+In-Reply-To: <20250422085717.2605520-4-o.rempel@pengutronix.de>
 
-On Tue, May 06, 2025 at 06:21:41PM -0700, Sohil Mehta wrote:
-> The NMI-source bitmap is delivered as FRED event data to the kernel.
-> When available, use NMI-source based filtering to determine the exact
-> handlers to run.
-> 
-> Activate NMI-source based filtering only for Local NMIs. While handling
-> platform NMI types (such as SERR and IOCHK), do not use the source
-> bitmap. They have only one handler registered per type, so there is no
-> need to disambiguate between multiple handlers.
-> 
-> Some third-party chipsets may send NMI messages with a hardcoded vector
-> of 2, which would result in bit 2 being set in the NMI-source bitmap.
-> Skip the local NMI handlers in this situation.
-> 
-> Bit 0 of the source bitmap is set by the hardware whenever a source
-> vector was not used while generating an NMI, or the originator could not
-> be reliably identified. Poll all the registered handlers in that case.
-> 
-> When multiple handlers need to be executed, adhere to the existing
-> priority scheme and execute the handlers registered with NMI_FLAG_FIRST
-> before others.
-> 
-> The logic for handling legacy NMIs is unaffected since the source bitmap
-> would always be zero.
-> 
-> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
-> ---
-> v5: Significantly simplify NMI-source handling logic.
->     Get rid of a separate lookup table for NMI-source vectors.
->     Adhere to existing priority scheme for handling NMIs.
-> ---
->  arch/x86/kernel/nmi.c | 40 ++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 40 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/nmi.c b/arch/x86/kernel/nmi.c
-> index a1d672dcb6f0..183e3e717326 100644
-> --- a/arch/x86/kernel/nmi.c
-> +++ b/arch/x86/kernel/nmi.c
+Hi Oleksij,
 
->  static int nmi_handle(unsigned int type, struct pt_regs *regs)
->  {
->  	struct nmi_desc *desc = nmi_to_desc(type);
-> +	unsigned long source_bitmap = 0;
+kernel test robot noticed the following build warnings:
 
-	unsigned long source = ~0UL;
+[auto build test WARNING on sre-power-supply/for-next]
+[also build test WARNING on broonie-regulator/for-next chrome-platform/for-next chrome-platform/for-firmware-next linus/master v6.15-rc5 next-20250507]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->  	nmi_handler_t ehandler;
->  	struct nmiaction *a;
->  	int handled=0;
-> @@ -148,16 +164,40 @@ static int nmi_handle(unsigned int type, struct pt_regs *regs)
->  
->  	rcu_read_lock();
->  
-> +	/*
-> +	 * Activate NMI source-based filtering only for Local NMIs.
-> +	 *
-> +	 * Platform NMI types (such as SERR and IOCHK) have only one
-> +	 * handler registered per type, so there is no need to
-> +	 * disambiguate between multiple handlers.
-> +	 *
-> +	 * Also, if a platform source ends up setting bit 2 in the
-> +	 * source bitmap, the local NMI handlers would be skipped since
-> +	 * none of them use this reserved vector.
-> +	 *
-> +	 * For Unknown NMIs, avoid using the source bitmap to ensure all
-> +	 * potential handlers have a chance to claim responsibility.
-> +	 */
-> +	if (cpu_feature_enabled(X86_FEATURE_NMI_SOURCE) && type == NMI_LOCAL)
-> +		source_bitmap = fred_event_data(regs);
+url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/power-Extend-power_on_reason-h-for-upcoming-PSCRR-framework/20250422-170711
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/20250422085717.2605520-4-o.rempel%40pengutronix.de
+patch subject: [PATCH v9 3/7] power: reset: Introduce PSCR Recording Framework for Non-Volatile Storage
+config: hexagon-randconfig-r113-20250426 (https://download.01.org/0day-ci/archive/20250507/202505071649.g96zqzTU-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce: (https://download.01.org/0day-ci/archive/20250507/202505071649.g96zqzTU-lkp@intel.com/reproduce)
 
-	if (cpu_feature_enabled(X86_FEATURE_NMI_SOURCE) && type == NMI_LOCAL) {
-		source = fred_event_data(regs);
-		if (source & BIT(0))
-			source = ~0UL;
-	}
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505071649.g96zqzTU-lkp@intel.com/
 
->  	/*
->  	 * NMIs are edge-triggered, which means if you have enough
->  	 * of them concurrently, you can lose some because only one
->  	 * can be latched at any given time.  Walk the whole list
->  	 * to handle those situations.
-> +	 *
-> +	 * However, NMI-source reporting does not have this limitation.
-> +	 * When NMI-source information is available, only run the
-> +	 * handlers that match the reported vectors.
->  	 */
->  	list_for_each_entry_rcu(a, &desc->head, list) {
->  		int thishandled;
->  		u64 delta;
->  
-> +		if (source_bitmap && !match_nmi_source(source_bitmap, a))
-> +			continue;
+sparse warnings: (new ones prefixed by >>)
+>> drivers/power/reset/pscrr.c:81:3: sparse: sparse: symbol 'g_pscrr' was not declared. Should it be static?
 
-		if (!(souce & BIT(a->source_vector)))
-			continue;
+vim +/g_pscrr +81 drivers/power/reset/pscrr.c
 
->  		delta = sched_clock();
->  		thishandled = a->handler(type, regs);
->  		handled += thishandled;
+    74	
+    75	struct pscrr_core {
+    76		struct mutex lock;
+    77		struct pscrr_backend *backend;
+    78		/* Kobject for sysfs */
+    79		struct kobject *kobj;
+    80		struct notifier_block reboot_nb;
+  > 81	} g_pscrr = {
+    82		.lock = __MUTEX_INITIALIZER(g_pscrr.lock),
+    83	};
+    84	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
