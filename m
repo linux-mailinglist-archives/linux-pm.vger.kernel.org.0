@@ -1,124 +1,154 @@
-Return-Path: <linux-pm+bounces-26772-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26774-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C82BAAD581
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 07:50:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 753DBAAD631
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 08:35:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 241937A3862
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 05:48:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF2D8985A30
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 06:35:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A49C202C2B;
-	Wed,  7 May 2025 05:49:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jXwqnIC0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 089FC210186;
+	Wed,  7 May 2025 06:35:40 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39AB11FDE3D;
-	Wed,  7 May 2025 05:49:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8285F21019E;
+	Wed,  7 May 2025 06:35:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746596996; cv=none; b=W0/Hd8Z5fN8xMOZOnSG6drYaWa3SGXZ0ns/rKMyiAWv3mOX80c0ezEnlBWUKbmDy11/9SbmicATmjiwYzcgoTFni24p+qwWS5TmOo2ibFolzMoEqR5lUI0g0XXvsjpsShXLMP1u4RsE+01UIpduK61ijMCknTdkYv22P0pXKJ1U=
+	t=1746599739; cv=none; b=IlyBbO9cj89PXHREcnWnycgU0eONewdev6fqz81Z800RY+r6/as9njbIATQp8VWjorqAYp966umBl6kS7kSSH5x6ZokXmi8NkgWT7YFu1qIOur9AEgNiokKeH9Okt/SMhxYgsXJN1iEQSPqEeoo/G2P8D6vRlqZfDIBglTROBUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746596996; c=relaxed/simple;
-	bh=gMWKuqiccB/vdz3+zeg5KDOgnOnUHr7QCke6tYWkzNo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TqwUSADVvC4x9jFHoB5okG118ghZvHrmrg0l3l3VdZAu7dOTSnXmkD8xdzyGS0CbwRlU2Tler3qDO38GeABEW+v9/eLij+VaTgaTRbjXXCf9ev07XSuC0IWMGMCwhw8A/cAF5dYEXhloVpVEB82+Y/WJFNgN/OvvKTsQn4ixd8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jXwqnIC0; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746596995; x=1778132995;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gMWKuqiccB/vdz3+zeg5KDOgnOnUHr7QCke6tYWkzNo=;
-  b=jXwqnIC0wApU3zanhUvbLY4fTgQ0TDXwaqh/Eyw1NZELALRY0IDSkLBe
-   hUGYvY2skOvCQx7JJb6cbXxix7//BJhnRqDnILMhWUYvMUJmx1vD4G0+r
-   6TtFm8FlOCyJtQ/kULkSz9F4pF7i49wpmZRjs0iMsaXbcvbmWfXPL67Vs
-   tf1CLpuY1y/6y9rMXcAuUOudOb/pg9tlx2zvZx5FIaim7H+veNaKaxOUM
-   hvT6WAJxcmaWBa2dMZNvLU7Ri5Lju4wr7ZHJRucXGGjkKo/3dRPOCmV5C
-   WUu0raPBw6Ug/THsffUzckGWHXQBAraLjXl8i4FAn7kePgRbpkvpRT0QU
-   g==;
-X-CSE-ConnectionGUID: kNBOOjn7T+msxKcJRZe8kw==
-X-CSE-MsgGUID: mWI2RPv+QGO0XTlA4REeQg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11425"; a="52120539"
-X-IronPort-AV: E=Sophos;i="6.15,268,1739865600"; 
-   d="scan'208";a="52120539"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2025 22:49:54 -0700
-X-CSE-ConnectionGUID: Dng6zhbARaqwORnXV3pdkg==
-X-CSE-MsgGUID: o/PsYAEDSKS8dWxiGvu4sw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,268,1739865600"; 
-   d="scan'208";a="140580415"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 06 May 2025 22:49:49 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uCXf8-00077Q-1d;
-	Wed, 07 May 2025 05:49:46 +0000
-Date: Wed, 7 May 2025 13:49:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Praveen Talari <quic_ptalari@quicinc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, psodagud@quicinc.com, djaggi@quicinc.com,
-	quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com,
-	quic_arandive@quicinc.com, quic_mnaresh@quicinc.com,
-	quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v3 4/9] soc: qcom: geni-se: Enable QUPs on SA8255p
- Qualcomm platforms
-Message-ID: <202505071326.jjvv4tTv-lkp@intel.com>
-References: <20250502031018.1292-5-quic_ptalari@quicinc.com>
+	s=arc-20240116; t=1746599739; c=relaxed/simple;
+	bh=EunsBZu+dPFyFx+so1aikErZNXrHK15H5QeG0WGOHis=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=A9w8eLx3Jvg+eSOrlak9UgZGf3KxWKen/zNDBb8sfe56ug3OHikmK2fm0ZMsDJ1OgZYA6SMq5zLTNMsKIOEhujVbOeLiEA6iNGFXBMHDIt+6hLkZPkclfrqJOcI8CidA7MhQHu4VskYmsyFLCJzRNZs1vE5dLET6wqEsPLLI9V0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 77aa34ac2b0d11f0b29709d653e92f7d-20250507
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:01f278ff-13a4-4f34-8fda-6627e63156e8,IP:0,U
+	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-META: VersionHash:6493067,CLOUDID:957d935d78f12afb161e3c7259de899b,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:nil,UR
+	L:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
+	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 77aa34ac2b0d11f0b29709d653e92f7d-20250507
+Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 507086601; Wed, 07 May 2025 14:35:29 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id C72F0E006100;
+	Wed,  7 May 2025 14:35:28 +0800 (CST)
+X-ns-mid: postfix-681AFF30-651625104
+Received: from localhost.localdomain (unknown [172.25.120.24])
+	by mail.kylinos.cn (NSMail) with ESMTPA id 3AE54E0080FF;
+	Wed,  7 May 2025 14:35:25 +0800 (CST)
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+To: corbet@lwn.net,
+	rafael@kernel.org,
+	len.brown@intel.com,
+	pavel@kernel.org,
+	akpm@linux-foundation.org,
+	paulmck@kernel.org,
+	rostedt@goodmis.org,
+	thuth@redhat.com,
+	bp@alien8.de,
+	ardb@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Zihuan Zhang <zhangzihuan@kylinos.cn>
+Subject: [PATCH v3] PM / sleep: add configurable delay for pm_test
+Date: Wed,  7 May 2025 14:35:20 +0800
+Message-Id: <20250507063520.419635-1-zhangzihuan@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250502031018.1292-5-quic_ptalari@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Praveen,
+This patch turns this 5 second delay into a configurable module
+parameter, so users can determine how long to wait in this
+pseudo-hibernate state before resuming the system.
 
-kernel test robot noticed the following build warnings:
+The configurable delay parameter has been added to suspend and
+synchronized to hibernation.
 
-[auto build test WARNING on 3e039dcc9c1320c0d33ddd51c372dcc91d3ea3c7]
+Example (wait 30 seconds);
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Praveen-Talari/opp-add-new-helper-API-dev_pm_opp_set_level/20250502-111540
-base:   3e039dcc9c1320c0d33ddd51c372dcc91d3ea3c7
-patch link:    https://lore.kernel.org/r/20250502031018.1292-5-quic_ptalari%40quicinc.com
-patch subject: [PATCH v3 4/9] soc: qcom: geni-se: Enable QUPs on SA8255p Qualcomm platforms
-config: arc-randconfig-002-20250502 (https://download.01.org/0day-ci/archive/20250507/202505071326.jjvv4tTv-lkp@intel.com/config)
-compiler: arc-linux-gcc (GCC) 12.4.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505071326.jjvv4tTv-lkp@intel.com/reproduce)
+  # echo 30 > /sys/module/hibernate/parameters/pm_test_delay
+  # echo core > /sys/power/pm_test
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505071326.jjvv4tTv-lkp@intel.com/
+Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
+---
+v3:
+ - Fix the location of the hibernate.pm_test_delay parameter in
+   kernel-parameters.txt.
+ - Update =E2=80=98[hibernate]=E2=80=99 to =E2=80=98[HIBERNATION]=E2=80=99
+v2:
+ - Fix typos.
+---
+ Documentation/admin-guide/kernel-parameters.txt | 7 +++++++
+ kernel/power/hibernate.c                        | 9 +++++++--
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
-All warnings (new ones prefixed by >>):
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentat=
+ion/admin-guide/kernel-parameters.txt
+index d9fd26b95b34..a110cbb37f20 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -1828,6 +1828,13 @@
+ 				lz4: Select LZ4 compression algorithm to
+ 				compress/decompress hibernation image.
+=20
++	hibernate.pm_test_delay=3D
++			[HIBERNATION]
++			Sets the number of seconds to remain in a hibernation test
++			mode before resuming the system (see
++			/sys/power/pm_test). Only available when CONFIG_PM_DEBUG
++			is set. Default value is 5.
++
+ 	highmem=3Dnn[KMG]	[KNL,BOOT,EARLY] forces the highmem zone to have an e=
+xact
+ 			size of <nn>. This works even on boxes that have no
+ 			highmem otherwise. This also works to reduce highmem
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index 23c0f4e6cb2f..485133af884d 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -133,10 +133,15 @@ bool system_entering_hibernation(void)
+ EXPORT_SYMBOL(system_entering_hibernation);
+=20
+ #ifdef CONFIG_PM_DEBUG
++static unsigned int pm_test_delay =3D 5;
++module_param(pm_test_delay, uint, 0644);
++MODULE_PARM_DESC(pm_test_delay,
++		 "Number of seconds to wait before resuming from hibernation test");
+ static void hibernation_debug_sleep(void)
+ {
+-	pr_info("debug: Waiting for 5 seconds.\n");
+-	mdelay(5000);
++	pr_info("hibernation debug: Waiting for %d second(s).\n",
++		pm_test_delay);
++	mdelay(pm_test_delay * 1000);
+ }
+=20
+ static int hibernation_test(int level)
+--=20
+2.25.1
 
->> Warning: drivers/soc/qcom/qcom-geni-se.c:109 struct member 'geni_se_rsc_init' not described in 'geni_se_desc'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
