@@ -1,154 +1,145 @@
-Return-Path: <linux-pm+bounces-26767-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26768-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD68AAAD2EE
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 03:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E82F5AAD3AA
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 04:58:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EAE431BC33AD
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 01:48:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2131B1BA10A2
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 02:59:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C120E18DB03;
-	Wed,  7 May 2025 01:47:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="WhzpZPi3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2220F1A9B53;
+	Wed,  7 May 2025 02:58:51 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFD53183CCA;
-	Wed,  7 May 2025 01:47:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB59B134A8;
+	Wed,  7 May 2025 02:58:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746582471; cv=none; b=CJhfFxqLlORIvYC6RKmINe5JDoEGzOEW9Cm7hLd8RHFu7IrdSG1lF75yXJY0Dmw9Ae2YVuZDURGrTed2m1F5yiBG5xuIwgaFmgTuuDVM1Tq9fkeIIzU9FK7mjSWRPnSWhwTTqLQ5j4S8VhNIanY0IwWS/QldqucrPZFxyxRt2pU=
+	t=1746586731; cv=none; b=YaFYa4We5q50S/+rUdCk7p+pafAXXnJZNZFvkA82KspgoYjeHXWcegC1Lb3MlHKqWJoReYkZvPhDkO0yq7T0rTEnQvHr8g09zznXcXHPbIxy8svdj7Li8p3o16n8YlMSlPCbcRTo86DqouEAsEF63hn8L5y+Jo859IyIbIJ5+D4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746582471; c=relaxed/simple;
-	bh=P7JM0gIyoU74Uu8KloyAc1LYlSsNM9mutpET32qMuRs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hmNUc7oAbS2FNGSwI68gJXlgncnbn0BAsmigPs3DNsyGtUSUjzbl4olPxkJ802eTEs9Nfdb9iLpM4ECiECzpdXVZcu3vNhfALObHSMm9DVe9lyxkUwDw4QqE2uOPHz2NDoNCnHsGsUVletuA3vdfNv0DE85nB8SlDtoEycSLujE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=WhzpZPi3; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
-	Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=pDb/PNle/XHSh3qkVS0xhpcBiGspbid8CIPz1xypFW4=; b=WhzpZPi3Qp01t9ERXtnXig9A2I
-	iyiPcIQLy+2GL2vrmGWpMg0BAIzFLDenlx0sbie6rQxdiT/xXfiGlJxA2CF4j0GlrXAeaRiFAjfq7
-	wEoTTrs7cprp+hlLnujqUU1Kav/hrnIddPizlYx6yLaVyBn/Qh02djJ8b5qkm7M/E51ZCBa3dd+nw
-	F4dqfjd4QKbZoS6M1qXLk3JXlIB1cSiaTmOvYaGo93f9sKy7sWRCWQMLqc3uqWX8MqjmJJ8fyZifa
-	xQmfL+zlb0KxoAvKPK3GzXni6sJCDEOEHnedG6aVYk9gb/Qs/gHUPlcDg0vrAeCwV+6MkfIiPUJVp
-	PxKfSAmQ==;
-Received: from [58.29.143.236] (helo=localhost)
-	by fanzine2.igalia.com with utf8esmtpsa 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1uCTp7-004UH1-H7; Wed, 07 May 2025 03:47:36 +0200
-From: Changwoo Min <changwoo@igalia.com>
-To: lukasz.luba@arm.com,
+	s=arc-20240116; t=1746586731; c=relaxed/simple;
+	bh=MmUPH4ARy9/vAzjyU9ahx/w7xXUYQgpi4F73R0SBSnA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Jxt9/XMvybFRRAl9nS9nBpu1UkyLSI96f6qC0R8Tfw9eGFaW9AW2z2KE4pbVYxvPBDoZyz08w0XuhveAKo3W7ACHV0VHE5LT+5U2GSEvSJv8/6LVGBZoU6a8mEMgVTu38twHHbAOxFYkJU4s8dG1EMKj5Ye6qBY+J+NSA8OScL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 2c49f9162aef11f0b29709d653e92f7d-20250507
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:fc6c30e8-57af-4dbe-b9c6-6dd9fc0d9916,IP:0,U
+	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-META: VersionHash:6493067,CLOUDID:848f288d76073cecd9c059e60a8b1d35,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:nil,UR
+	L:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
+	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 2c49f9162aef11f0b29709d653e92f7d-20250507
+Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 1047783727; Wed, 07 May 2025 10:58:37 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id 7A81AE006100;
+	Wed,  7 May 2025 10:58:37 +0800 (CST)
+X-ns-mid: postfix-681ACC5D-342742475
+Received: from localhost.localdomain (unknown [172.25.120.24])
+	by mail.kylinos.cn (NSMail) with ESMTPA id 24B1BE0080FF;
+	Wed,  7 May 2025 10:58:34 +0800 (CST)
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+To: corbet@lwn.net,
 	rafael@kernel.org,
 	len.brown@intel.com,
-	pavel@kernel.org
-Cc: christian.loehle@arm.com,
-	tj@kernel.org,
-	kernel-dev@igalia.com,
-	linux-pm@vger.kernel.org,
+	pavel@kernel.org,
+	akpm@linux-foundation.org,
+	paulmck@kernel.org,
+	rostedt@goodmis.org,
+	thuth@redhat.com,
+	bp@alien8.de,
+	ardb@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Changwoo Min <changwoo@igalia.com>
-Subject: [PATCH v2] PM: EM: Add inotify support when the energy model is updated.
-Date: Wed,  7 May 2025 10:47:28 +0900
-Message-ID: <20250507014728.6094-1-changwoo@igalia.com>
-X-Mailer: git-send-email 2.49.0
+	linux-pm@vger.kernel.org,
+	Zihuan Zhang <zhangzihuan@kylinos.cn>
+Subject: [PATCH v1] PM / sleep: add configurable delay for pm_test
+Date: Wed,  7 May 2025 10:57:06 +0800
+Message-Id: <20250507025706.311686-1-zhangzihuan@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 
-The sched_ext schedulers [1] currently access the energy model through the
-debugfs to make energy-aware scheduling decisions [2]. The userspace part
-of a sched_ext scheduler feeds the necessary (post-processed) energy-model
-information to the BPF part of the scheduler.
+This patch turns this 5 second delay into a configurable module
+parameter, so users can determine how long to wait in this
+pseudo-hibernate state before resuming the system.
 
-However, there is a limitation in the current debugfs support of the energy
-model. When the energy model is updated (em_dev_update_perf_domain), there
-is no way for the userspace part to know such changes (besides polling the
-debugfs files).
+The configurable delay parameter has been added to suspend and
+synchronized to hibernate.
 
-Therefore, add inotify support (IN_MODIFY) when the energy model is updated.
-With this inotify support, the directory of an updated performance domain
-(e.g., /sys/kernel/debug/energy_model/cpu0) and its parent directory (e.g.,
-/sys/kernel/debug/energy_model) are inotified. Therefore, a sched_ext
-scheduler (or any userspace application) monitors the energy model change
-in userspace using the regular inotify interface.
+Example (wait 30 seconds);
 
-Note that accessing the energy model information from userspace has many
-advantages over other alternatives, especially adding new BPF kfuncs. The
-userspace has much more freedom than the BPF code (e.g., using external
-libraries and floating point arithmetics), which may be infeasible (if not
-impossible) in the BPF/kernel code.
+  # echo 30 > /sys/module/hibernate/parameters/pm_test_delay
+  # echo core > /sys/power/pm_test
 
-[1] https://lwn.net/Articles/922405/
-[2] https://github.com/sched-ext/scx/pull/1624
-
-Signed-off-by: Changwoo Min <changwoo@igalia.com>
+Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
 ---
+ Documentation/admin-guide/kernel-parameters.txt | 7 +++++++
+ kernel/power/hibernate.c                        | 9 +++++++--
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
-ChangeLog v1 -> v2:
-  - Change em_debug_update() to only inotify the directory of an updated
-    performance domain (and its parent directory).
-  - Move the em_debug_update() call outside of the mutex lock.
-  - Update the commit message to clarify its motivation and what will be
-    inotified when updated. 
-
- kernel/power/energy_model.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-index d9b7e2b38c7a..590e90e8cb66 100644
---- a/kernel/power/energy_model.c
-+++ b/kernel/power/energy_model.c
-@@ -14,6 +14,7 @@
- #include <linux/cpumask.h>
- #include <linux/debugfs.h>
- #include <linux/energy_model.h>
-+#include <linux/fsnotify.h>
- #include <linux/sched/topology.h>
- #include <linux/slab.h>
- 
-@@ -156,9 +157,18 @@ static int __init em_debug_init(void)
- 	return 0;
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentat=
+ion/admin-guide/kernel-parameters.txt
+index d9fd26b95b34..082a697a3e95 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -6998,6 +6998,13 @@
+ 			/sys/power/pm_test). Only available when CONFIG_PM_DEBUG
+ 			is set. Default value is 5.
+=20
++	hibernate.pm_test_delay=3D
++			[hibernate]
++			Sets the number of seconds to remain in a suspend test
++			mode before resuming the system (see
++			/sys/power/pm_test). Only available when CONFIG_PM_DEBUG
++			is set. Default value is 5.
++
+ 	svm=3D		[PPC]
+ 			Format: { on | off | y | n | 1 | 0 }
+ 			This parameter controls use of the Protected
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index 23c0f4e6cb2f..da7533aab8d1 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -133,10 +133,15 @@ bool system_entering_hibernation(void)
+ EXPORT_SYMBOL(system_entering_hibernation);
+=20
+ #ifdef CONFIG_PM_DEBUG
++static unsigned int pm_test_delay =3D 5;
++module_param(pm_test_delay, uint, 0644);
++MODULE_PARM_DESC(pm_test_delay,
++		 "Number of seconds to wait before resuming from hibernate test");
+ static void hibernation_debug_sleep(void)
+ {
+-	pr_info("debug: Waiting for 5 seconds.\n");
+-	mdelay(5000);
++	pr_info("hibernation debug: Waiting for %d second(s).\n",
++			pm_test_delay);
++	mdelay(pm_test_delay * 1000);
  }
- fs_initcall(em_debug_init);
-+
-+static void em_debug_update(struct device *dev)
-+{
-+	struct dentry *d;
-+
-+	d = debugfs_lookup(dev_name(dev), rootdir);
-+	fsnotify_dentry(d, FS_MODIFY);
-+}
- #else /* CONFIG_DEBUG_FS */
- static void em_debug_create_pd(struct device *dev) {}
- static void em_debug_remove_pd(struct device *dev) {}
-+static void em_debug_update(struct device *dev) {}
- #endif
- 
- static void em_release_table_kref(struct kref *kref)
-@@ -324,6 +334,8 @@ int em_dev_update_perf_domain(struct device *dev,
- 	em_table_free(old_table);
- 
- 	mutex_unlock(&em_pd_mutex);
-+
-+	em_debug_update(dev);
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(em_dev_update_perf_domain);
--- 
-2.49.0
+=20
+ static int hibernation_test(int level)
+--=20
+2.25.1
 
 
