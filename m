@@ -1,92 +1,52 @@
-Return-Path: <linux-pm+bounces-26783-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26784-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8F25AADB56
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 11:22:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A1EFAADDEB
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 14:00:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1DFC29A3443
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 09:20:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62F683AE455
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 12:00:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2765321C188;
-	Wed,  7 May 2025 09:17:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ZaQwk9zx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6984225A33E;
+	Wed,  7 May 2025 12:00:00 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D2C2148832;
-	Wed,  7 May 2025 09:17:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8A6D233145;
+	Wed,  7 May 2025 11:59:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746609459; cv=none; b=aSkfDnjInBLTY4qwoSEa6dpvtC6PkfBLPbph1ehydaOzj/ROt4ziyNyxNMc+4kxjGMPmb/HPX2fNJoxdD2ypRUZXx3cb3OBGpPvKfd4Tcqr7YV2GpmcuMLxYgQ+in5i6Blo6Tk4fx76lya3CMwqL8xQa4bqoZleujPdnt8QIXhE=
+	t=1746619200; cv=none; b=qNgB3/vAmNt4x5hhzHYn9dix16faj3Z7XerLiL9wcvBWpfHBerYb7JCGatFjuMYpwu8c41RztdaBv3z4BWoLL+5bQPwZLaiPbaSy5Jd2A05qipfYcvcUmGKS74pZ+jNSDgCg4xWtkYXa++WOU2x71Rbx0YskB6cCtjZ04AYprf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746609459; c=relaxed/simple;
-	bh=ykltQ9huLE0r8rln1hz74oZpmC0expnXFTghDd8zakY=;
+	s=arc-20240116; t=1746619200; c=relaxed/simple;
+	bh=8RO7qb8A2o2/SWPKRVHIg+XW346Qu4M2ikcfzJXF/Nw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A/xHKujZx+wXq3Xv3xcDOzj21iNgc8FNstTwrLxp4//Li7bKLrxS00HtHFSlicW/u4+4mr43yIK/Q/dEpK+FO3vuZfKPV5I411bB5W3Ngs9rLYnYvpAFwWekJNTWIsDA8ilYmYtX2JRDmUmgX4i5cDTIzszvG3qytSs+CA5L8ns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ZaQwk9zx; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=HqrE5RjgXWImFxmKS250rNaTgk4WttiwOVrF0xe9MXw=; b=ZaQwk9zxEbTKBGtOWN53DLzGRq
-	xHT9z066aC/eoSE/s7yqlD6A/Ga4KA0rmybAx9Upg5QY3eQ+hz83cgqxibsE4AlDV/V4b87BjC58L
-	xUSpU5riVmhqqjuaWjP4o8dM8SZSCQEqNCjm9x+oMgzPhld32iKX18F0/YnkMGWYGsHXS/1QLJM+p
-	aNSEjBYRdJHjjFaxuJDX72UQkVjpK2nvMbfe92HFXCr3ICDQxETns9h3PQ75f8VDP9tMeHtQG7UD8
-	rGH2k7mJcBJWbtAnxOiiKQdypI65Mg5MMJzS1L3fIubxLv0AzsZW4z3YbsaRgsl4prOYDIy5Yxxkq
-	0H+YCyVg==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
-	id 1uCau3-0000000Foi8-1z5i;
-	Wed, 07 May 2025 09:17:24 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 0BC04300780; Wed,  7 May 2025 11:17:23 +0200 (CEST)
-Date: Wed, 7 May 2025 11:17:22 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Sohil Mehta <sohil.mehta@intel.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, Xin Li <xin@zytor.com>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Tony Luck <tony.luck@intel.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=C2wEOUei0Cu7GSYxID4w0Qxx62sjiAoP2weRd0iRaicBae5eW6Q7iLYdGFN2ElpAqdKvd8bm4BSFEtl4dCJuABVmB+0uwfU88naQXshtR/4ML0SYoC8/PoDHphwfk4tMamnnF/QyALXI7lgMEchSZ5yhZzOpn+L/KnJF9sF20rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B3C6339;
+	Wed,  7 May 2025 04:59:46 -0700 (PDT)
+Received: from pluto (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 476B23F5A1;
+	Wed,  7 May 2025 04:59:54 -0700 (PDT)
+Date: Wed, 7 May 2025 12:59:45 +0100
+From: Cristian Marussi <cristian.marussi@arm.com>
+To: Mike Tipton <quic_mdtipton@quicinc.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>,
 	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Brian Gerst <brgerst@gmail.com>,
-	Andrew Cooper <andrew.cooper3@citrix.com>,
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-	Jacob Pan <jacob.pan@linux.microsoft.com>,
-	Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	linux-perf-users@vger.kernel.org, linux-edac@vger.kernel.org,
-	kvm@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 6/9] x86/nmi: Prepare for the new NMI-source vector
- encoding
-Message-ID: <20250507091722.GC4439@noisy.programming.kicks-ass.net>
-References: <20250507012145.2998143-1-sohil.mehta@intel.com>
- <20250507012145.2998143-7-sohil.mehta@intel.com>
+	Viresh Kumar <viresh.kumar@linaro.org>, arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Peng Fan <peng.fan@oss.nxp.com>,
+	Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH v3] cpufreq: scmi: Skip SCMI devices that aren't used by
+ the CPUs
+Message-ID: <aBtLMYqcnwacGJuy@pluto>
+References: <20250428144728.871404-1-quic_mdtipton@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -95,40 +55,106 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250507012145.2998143-7-sohil.mehta@intel.com>
+In-Reply-To: <20250428144728.871404-1-quic_mdtipton@quicinc.com>
 
-On Tue, May 06, 2025 at 06:21:42PM -0700, Sohil Mehta wrote:
+On Mon, Apr 28, 2025 at 07:47:28AM -0700, Mike Tipton wrote:
+> Currently, all SCMI devices with performance domains attempt to register
+> a cpufreq driver, even if their performance domains aren't used to
+> control the CPUs. The cpufreq framework only supports registering a
+> single driver, so only the first device will succeed. And if that device
+> isn't used for the CPUs, then cpufreq will scale the wrong domains.
+> 
 
-> +/*
-> + * Prepare the delivery mode and vector for the ICR.
-> + *
-> + * NMI-source vectors have the NMI delivery mode encoded within them to
-> + * differentiate them from the IDT vectors. IDT vector 0x2 (NMI_VECTOR)
-> + * is treated as an NMI request but without any NMI-source information.
-> + */
-> +static inline u16 __prepare_ICR_DM_vector(u16 dm_vector)
+Hi,
+
+bit of lagging behind, my bad.
+
+
+> To avoid this, return early from scmi_cpufreq_probe() if the probing
+> SCMI device isn't referenced by the CPU device phandles.
+> 
+> This keeps the existing assumption that all CPUs are controlled by a
+> single SCMI device.
+> 
+> Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
+> Reviewed-by: Peng Fan <peng.fan@nxp.com>
+> ---
+> Changes in v3:
+> - Use dev_of_node(dev) instead of dev->of_node.
+> - Sanity check scmi_np.
+> - Pick up Reviewed-by from Peng.
+> - Link to v2: https://lore.kernel.org/all/20250421195206.3736128-1-quic_mdtipton@quicinc.com/
+> 
+> Changes in v2:
+> - Return -ENODEV instead of 0 for irrelevant devices.
+> - Link to v1: https://lore.kernel.org/all/20250411212941.1275572-1-quic_mdtipton@quicinc.com/
+> 
+>  drivers/cpufreq/scmi-cpufreq.c | 31 ++++++++++++++++++++++++++++++-
+>  1 file changed, 30 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+> index 944e899eb1be..b63992de9fc7 100644
+> --- a/drivers/cpufreq/scmi-cpufreq.c
+> +++ b/drivers/cpufreq/scmi-cpufreq.c
+> @@ -393,6 +393,35 @@ static struct cpufreq_driver scmi_cpufreq_driver = {
+>  	.set_boost	= cpufreq_boost_set_sw,
+>  };
+>  
+> +static bool scmi_dev_used_by_cpus(struct device *scmi_dev)
 > +{
-> +	u16 vector = dm_vector & APIC_VECTOR_MASK;
-> +	u16 dm = dm_vector & APIC_DM_MASK;
+> +	struct device_node *scmi_np = dev_of_node(scmi_dev);
+> +	struct device_node *np;
+> +	struct device *cpu_dev;
+> +	int cpu, idx;
 > +
-> +	if (dm == APIC_DM_NMI) {
-> +		/*
-> +		 * Pre-FRED, the actual vector is ignored for NMIs, but
-> +		 * zero it if NMI-source reporting is not supported to
-> +		 * avoid breakage on misbehaving hardware or hypervisors.
-> +		 */
-> +		if (!cpu_feature_enabled(X86_FEATURE_NMI_SOURCE))
-> +			vector = 0;
+> +	if (!scmi_np)
+> +		return false;
 > +
-> +		return dm | vector;
+> +	for_each_possible_cpu(cpu) {
+> +		cpu_dev = get_cpu_device(cpu);
+> +		if (!cpu_dev)
+> +			continue;
+> +
+> +		np = dev_of_node(cpu_dev);
+> +
+> +		if (of_parse_phandle(np, "clocks", 0) == scmi_np)
+
+Shouldn't this, on Success, be released by an of_node_put() (or, BETTER,
+by some OF-related cleanup.h magic...)
+
+> +			return true;
+> +
+> +		idx = of_property_match_string(np, "power-domain-names", "perf");
+> +
+> +		if (of_parse_phandle(np, "power-domains", idx) == scmi_np)
+
+Same.
+
+> +			return true;
 > +	}
 > +
-> +	if (vector == NMI_VECTOR)
-> +		return APIC_DM_NMI;
-> +	else
-
-Please drop that else, that's pointless.
-
-> +		return APIC_DM_FIXED | vector;
+> +	return false;
 > +}
+> +
+>  static int scmi_cpufreq_probe(struct scmi_device *sdev)
+>  {
+>  	int ret;
+> @@ -401,7 +430,7 @@ static int scmi_cpufreq_probe(struct scmi_device *sdev)
+>  
+>  	handle = sdev->handle;
+>  
+> -	if (!handle)
+> +	if (!handle || !scmi_dev_used_by_cpus(dev))
+>  		return -ENODEV;
+>  
+>  	scmi_cpufreq_driver.driver_data = sdev;
+
+Other than the above glitches, LGTM.
+(I gave it a go on JUNO and some emulated setup..)
+
+Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
+Tested-by: Cristian Marussi <cristian.marussi@arm.com>
+
+Thanks,
+Cristian
 
