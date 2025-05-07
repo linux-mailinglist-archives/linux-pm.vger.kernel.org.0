@@ -1,142 +1,152 @@
-Return-Path: <linux-pm+bounces-26824-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26825-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BEB3AAE58B
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 17:54:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 193E4AAE5DD
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 18:03:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FBC8170800
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 15:54:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 706AD4C45A6
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 16:03:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E441E28B7E2;
-	Wed,  7 May 2025 15:52:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B6C928C006;
+	Wed,  7 May 2025 16:01:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ml4cKsdE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ez4UrsDX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7362A28B7E0;
-	Wed,  7 May 2025 15:52:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECE928BAA2;
+	Wed,  7 May 2025 16:01:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746633153; cv=none; b=QamYurzR9RhYPdN4DoBzSbdozZVU+4ma9iBccaxvkBjhHMN54NkGBMlf1f3bVUj5IUnFWZKI+4wzbfp7R/CPBEIpDXWN2SpSQnCNHgUeHQR8i7TQXklDdchbkVyISixdaxTrCs8wLsvZeQ+W0v+LvrRqCRW/A5vo77UXedw6GDg=
+	t=1746633711; cv=none; b=JygvX2iABYw6IOJFzDdnxA9JkKDhYPWzJcBqz/u4ExBPSMSaa4igG/im91Xtu6VaYyCcTZRd39z/s/XFgv0qVzWOIKG9njmo+UgeT/HutYHP+PJ5YHa9NpRS89UlE7nr1EL+bm+ycQt6LWXIYnHLBNDwlshs+03zTQbAkYYF7g4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746633153; c=relaxed/simple;
-	bh=sCmXTEs9MesTHuPpFJ/NvOgzXDUn8ZZ+zdOFzC8r5lA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FGyy5eXwijAq/NaB2LNbOChHaU5ZNwFWKLEc4xxLZLnGNBkLnOoGqzfnusRwA0aD8v7jSTCNpFH+Zvb8oOum7LQ9YyvEoPnwhBMNGzIc4VRmPulC47RxNJxRncXOYW9EeiEh+zfe8m+yElyxo1PVXlfn9qCvH4myTopV9WsnpRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ml4cKsdE; arc=none smtp.client-ip=209.85.214.175
+	s=arc-20240116; t=1746633711; c=relaxed/simple;
+	bh=rrN21HlGP0Ki2awKpcTuqZWM5E98/Tgd/DrojYNhTmM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=FYvgmf9ynJbOLBEV2tzmcwE2M1etdDWaTUKBDzJ+lwzSaoY5XdFrUz4g1KUT3pdExyLrD0GBLH8QUAEPuJ53348dV6f1kp+WJtxhs9gUVy0l+VCXzxpk3sCJ6YSDxxODI5oGkfaTxIf3Pr7/f+yml1bnxHYNNXH5gqGbfzR2O2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ez4UrsDX; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-22e7eff58a0so319995ad.3;
-        Wed, 07 May 2025 08:52:31 -0700 (PDT)
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-30a8cbddca4so81384a91.3;
+        Wed, 07 May 2025 09:01:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746633151; x=1747237951; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sCmXTEs9MesTHuPpFJ/NvOgzXDUn8ZZ+zdOFzC8r5lA=;
-        b=ml4cKsdEHJVaXESB7AuKMXmkK8VWMEtdmWvFdedzaRACbqXnV2uXUhVvdZFXDYceX1
-         Win6vssg9nWTdoi2NrWb3TCe7fChEsBfiWXa/Io8MKBHQTFpJOMTbIhL8iYWu1PgeAoc
-         wBMpMPbhsaZsI9UHoR04DTbWCpc2sZTYrjpYqnYuukaFtWMWxBRLbqlydce/IVX59PUj
-         oAFdkq5aM08pAtJFg0wdTkQMMBsthK/q3kBWA8fE0+1NMl+r9ObDijV1WWxpmx5tV66B
-         w3SZpomXBx4M9KdIJXEn/1VnWTCIqu7SoZEfsoxCgvZ7M1KvVnZJCp07mUlDB8mhWCxk
-         z3/Q==
+        d=gmail.com; s=20230601; t=1746633709; x=1747238509; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lcz+l8Co0SDC/cHtMO2vcFW8EyYc7hvrzUdAF6/dLuY=;
+        b=ez4UrsDXaNU9OsEoHiU5p/TdAibM57Fni5kSWTS8LON8oeBBxgIV8mcnf0ZKMgLe3B
+         DWg6JlQIyHqNLnCLLnGWXNelwNGVdpndAz0YieixuTQ1aSOPqCC7QEDOxTI4Y7rg84Jp
+         HF20Omko0OnKu7adG27beJ7z389bx8Vjcocx9mlTNtUZ2kJhEpAFxjZVbVs7VK/d3RR2
+         1uN1xuBOyOvUh5vXaVlp/sshc43AUBVMDMgxtKn2YtJJVaQZXtXg7SO0E6eih763bu93
+         SDv7iWo4tdBQ+HKxhOzZtvHEeodm44QtoTHjG9DvjLMl8PyMmS2ciFwza6qt+A8s0Ryv
+         iV4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746633151; x=1747237951;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sCmXTEs9MesTHuPpFJ/NvOgzXDUn8ZZ+zdOFzC8r5lA=;
-        b=Du9gf8ZHW7TxS8wfv9M6XIm3pPdVk9BgW4PXXS6DnoyrBJga6rQwWPMod2e6GCzgIA
-         W6w/tDnyDL51JAZeH2WgtP9MENSgm+Z5P60qZaKy4eo+yOV+gjs2t8T2RevEvr7YuIn6
-         t3aKTL8rxoGhwK1OLK3UB2kNGSwqGUSl2NomM40aDsg4Aue4zplVkEgApsJNhAZ6Yrx1
-         P2wx/lygYA1jxZRKzaUgFheC/7yBvSlS8cA2eo2Zt5EnMdYqY1Lg43yjFZmrV9GxP6w9
-         9DPQa9IR5cGbaymLrhSoELBUiXizJ5GCQfo7qUwJzG2WnsKlEWKGvIRNkCc2hfh4GmL1
-         Fh1g==
-X-Forwarded-Encrypted: i=1; AJvYcCUrcDvnZq/JPIfvV1kiF7Fe0YC1u/RyCTjjfrTWVXMarOdmfgQByWW/qS6b4hMSGjScFmyMdBiqJQU=@vger.kernel.org, AJvYcCWXqz+9lm6/9vocqsWYsJgnnHv2vEindeCDG0ajjjV9EgMYCuhnMt2F6RUhIoH1bcx1W1ugzzEokuUA17o=@vger.kernel.org, AJvYcCWrHUQnrxjfIemVLfMmKLETQgKzFUV7zSfh4Xi+XYgMO/ygY01rKmSIFChSnnxMIJevzww+vGSauTDZLkFvUJRS+Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLUDyykNk8u/k5uFmoE2kEXGXhN4M1UwY15IJJNWI/lCDBtASQ
-	bQpzN3n3Sl7Xyw9eOX8n2m6ZA1hfnmDg81TnTTAJNOvsEXNYwLyO
-X-Gm-Gg: ASbGncvEaQozJr+TZ1P95ISJvg0hjZykgtxBp76/pgf21hBYDcoRCgBjWbG7TQzkrT2
-	SJz5Eq0HCFLi1oSnUbfvs342UoJ6eiNywIAqEPsAgri8vTc4SVedUBi79ofZukWYtgUN00yoopP
-	qw8G3rZrdxUvpJxFOWhGxCvLvqJqUKaT+4xKB0BCIunHmudwUpHFEUyavN2bbn6s9gYql4TZ2n5
-	r7FZ/QQpdWQhMTc9MhmqG7CWsoq3p+Cl8Vox6d9nJSoCBDe3PTqRm5BrLTt3msRGYNT61fLfyW4
-	GKXDERfhzaZiJZxbtu/DocE4DQe2pJOReNTMIfQ=
-X-Google-Smtp-Source: AGHT+IGIeRiD//5aB3Lp0GTAmkUq9HKBWgvRug2zQlreh3HMZNf0lXvR6y+wTe0PX9iANCSO8Ya92Q==
-X-Received: by 2002:a17:902:d2d0:b0:224:2175:b0cd with SMTP id d9443c01a7336-22e5ecade46mr51329175ad.26.1746633150657;
-        Wed, 07 May 2025 08:52:30 -0700 (PDT)
-Received: from hiago-nb ([67.159.246.222])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22e15228f62sm95204515ad.168.2025.05.07.08.52.26
+        d=1e100.net; s=20230601; t=1746633709; x=1747238509;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Lcz+l8Co0SDC/cHtMO2vcFW8EyYc7hvrzUdAF6/dLuY=;
+        b=uPaCPkNgKArvkOjO+imKJWmzEFnKPG4mw3cmzrwRIiGKiRS/o1gS6Cg/pOheqUCBLo
+         6vgh5VTWHKhjwzny1wbWraCGWLCLMwqnUAlGSs9UoA8ZbcFNrXrcOaSvOP0mNIXA10G6
+         KI2eatooQFWu1/s1bu3NqOsPYngvNt4qA5pXmdEoE0sUlNItpE0zwEngjxn0CIfCKFra
+         X8HK+3cSIk/E1ueIWzP4b/ZI/T58q4vox74PiqBhRP3LA0MtVMks/oVkoURj+GpuSeAo
+         CvRufXsdmH4kD2Ke8x2husX4UdcviyB0ClPbnzpNNyGwjA5beMm/fkXRVUZBBLx8txCA
+         3YPA==
+X-Forwarded-Encrypted: i=1; AJvYcCUKLp9jc5wN2KysMcYizWaQMF9WiujrN6ENL+57wehHI+hqlkkbTiQynvt6hZ6A2vcNMTaxp7LDNuaM5nFQ4fgqyg==@vger.kernel.org, AJvYcCUdJycEZqfwYbmEzpL6zZCR91HR8cMv5JZKQG/+Zla6mJKrqMnR7KjgzjqxmoMZVQL8oujo9zgNWXY=@vger.kernel.org, AJvYcCWUiVJkiPvRXD9s9qZXJ5kcDjqrnPJL/LW7pAyiywdDFKtaMVYulEzuAb2BPfkdTcIk9rnsLbfXjMEQRxo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxr4QCpHhMBXYBqsooTLJNYtebSHffEZVtPA9osGbMHMF5rKaMC
+	XCcSgNryDki0aQkb0KLpNGG5dUKF9lgYivHF3HAV0Rhemr2SbBG7
+X-Gm-Gg: ASbGncs+wTAMKO4TYDqMh3RcTkRTqPQEpzkHSGyrFLXAbJDBWXKDtborub0SViWdD4G
+	FmCzObHXSurvVouVIZe1eIwugDXO9bcTKRsNLHJcODxb9FF8vGrNuKaJEaPgXP8BsmhC1h01+Gf
+	KorG4hwVw8smTkST8PbMQ/TBhDQeP+mqMVgE/erjqTZeQXkAEf6Z4o7U4Uu1tL8FLOBYTl8badI
+	yx8nBdnJ88s77kdWcpjK1f/lHcVVtdxMgozqeMmTpv8nsUY5QQLIsYySXkeeVKS0WCfV4+H+gKv
+	tfeR+gS7Sx/AMcWKR6s4Q6txf1GeaOm/T1CShe9WlTiHW4wcA0S8PPZgm5T3QdE=
+X-Google-Smtp-Source: AGHT+IHtf5ETBNi0g7KPKcGrpppl4GxmbE0GaRV9AigEcRMrHyTDtjao1tx6BacGw5smVf9EeZkAGg==
+X-Received: by 2002:a17:90b:278e:b0:309:fd87:820e with SMTP id 98e67ed59e1d1-30aac1f04edmr5636711a91.26.1746633708633;
+        Wed, 07 May 2025 09:01:48 -0700 (PDT)
+Received: from hiagof-nb.corp.toradex.com ([67.159.246.222])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30ad4f82b86sm327242a91.44.2025.05.07.09.01.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 May 2025 08:52:29 -0700 (PDT)
-Date: Wed, 7 May 2025 12:52:24 -0300
+        Wed, 07 May 2025 09:01:47 -0700 (PDT)
 From: Hiago De Franco <hiagofranco@gmail.com>
-To: Peng Fan <peng.fan@oss.nxp.com>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
-	linux-remoteproc@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+To: Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-pm@vger.kernel.org,
+	linux-remoteproc@vger.kernel.org
+Cc: Shawn Guo <shawnguo@kernel.org>,
 	Sascha Hauer <s.hauer@pengutronix.de>,
 	Bjorn Andersson <andersson@kernel.org>,
-	Hiago De Franco <hiago.franco@toradex.com>, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	daniel.baluta@nxp.com, iuliana.prodan@oss.nxp.com,
+	Hiago De Franco <hiago.franco@toradex.com>,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Peng Fan <peng.fan@oss.nxp.com>,
+	daniel.baluta@nxp.com,
+	iuliana.prodan@oss.nxp.com,
 	Fabio Estevam <festevam@gmail.com>,
 	Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: Re: [PATCH 2/3] firmware: imx: move get power mode function from
- scu-pd.c to misc.c
-Message-ID: <20250507155224.uoxabve2qxncioqh@hiago-nb>
-References: <20250505154849.64889-1-hiagofranco@gmail.com>
- <20250505154849.64889-3-hiagofranco@gmail.com>
- <20250506044618.GC24259@nxa18884-linux>
+Subject: [PATCH v2 0/3] remoteproc: imx_rproc: allow attaching to running core kicked by the bootloader
+Date: Wed,  7 May 2025 13:00:53 -0300
+Message-Id: <20250507160056.11876-1-hiagofranco@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250506044618.GC24259@nxa18884-linux>
+Content-Transfer-Encoding: 8bit
 
-Hi Peng,
+From: Hiago De Franco <hiago.franco@toradex.com>
 
-On Tue, May 06, 2025 at 12:46:18PM +0800, Peng Fan wrote:
-> On Mon, May 05, 2025 at 12:48:48PM -0300, Hiago De Franco wrote:
-> >From: Hiago De Franco <hiago.franco@toradex.com>
-> >
-> >Move imx_sc_get_pd_power() from pmdomain/imx/scu-pd.c to
-> >firmware/imx/misc.c and rename it to imx_sc_pm_get_resource_power_mode()
-> >to maintain the same naming logic with other functions in misc.c.
-> >
-> >This makes the API available for other use cases. For example,
-> >remoteproc/imx_rproc.c can now use this function to check the power mode
-> >of the remote core.
->
-> Better put this patch at the first I think.
+For the i.MX8X and i.MX8 family SoCs, currently when the remotecore is
+started by the bootloader and the M core and A core are in the same
+partition, the driver is not capable to detect the remote core and
+report the correct state of it.
 
-Ok, I will do that.
+This series of patches implement an API call to the SCU which will
+return the power mode of a given resource (M core in this case) and if
+it is already powered on, the driver will attach to it. This SCU API was
+already being used inside pmdomain/imx/scu-pd.c driver, therefore it has
+been moved to firmware/imx/misc.c so it can be accessed by imx_rproc
+driver.
 
->
-> To be simple, I think just export
-> imx_sc_get_pd_power in drivers/pmdomain/imx/scu-pd.c.
-> And add the function declaration in include/linux/firmware/imx/sci.h.
+Finally, the imx_rproc_clk_enable() function was also changed to make it
+return before dev_clk_get() is called, as it currently generates an SCU
+fault reset if the remote core is already running and the kernel tries
+to enable the clock again. These changes are a follow up from a v1 sent
+to imx_rproc [1] and from a reported regression [2].
 
-I do not think this is correct, since it is specific to the scu-pd.c
-driver and none of the functions there are exported. I believe the
-correct implementation is moving to misc.c and export it there, just
-like the other SCU API functions.
+[1] https://lore.kernel.org/lkml/20250423155131.101473-1-hiagofranco@gmail.com/
+[2] https://lore.kernel.org/lkml/20250404141713.ac2ntcsjsf7epdfa@hiago-nb/
 
-I will send a v2 today with the comments adressed, thanks.
+v2:
+- Order of commits changed, now "firmware: imx: move get power mode
+  function from scu-pd.c to misc.c" comes at first.
+- Updated commit description of "remoteproc: imx_rproc: skip clock
+  enable when M-core is managed by the SCU" as suggested by Peng.
+- Removed "imx_rproc_is_on" function and dropped unnecessary include as
+  suggested by Peng.
+- Email corrected: peng.fan@oss.nxp.com -> peng.fan@nxp.com
 
->
-> Not sure Ulf or Shawn is good with it.
->
-> Regards,
-> Peng
->
+v1:
+- https://lore.kernel.org/lkml/20250505154849.64889-1-hiagofranco@gmail.com/
 
-Cheers,
-Hiago.
+Hiago De Franco (3):
+  firmware: imx: move get power mode function from scu-pd.c to misc.c
+  remoteproc: imx_rproc: skip clock enable when M-core is managed by the
+    SCU
+  remoteproc: imx_rproc: add power mode check for remote core attachment
+
+ drivers/firmware/imx/misc.c           | 47 +++++++++++++++++++++++++++
+ drivers/pmdomain/imx/scu-pd.c         | 29 ++++-------------
+ drivers/remoteproc/imx_rproc.c        | 17 ++++++++--
+ include/linux/firmware/imx/svc/misc.h |  8 +++++
+ 4 files changed, 77 insertions(+), 24 deletions(-)
+
+-- 
+2.39.5
+
 
