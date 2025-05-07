@@ -1,89 +1,108 @@
-Return-Path: <linux-pm+bounces-26755-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26756-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1AFEAAD0AE
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 00:02:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7BF4AAD29D
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 03:21:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 599114A1C71
-	for <lists+linux-pm@lfdr.de>; Tue,  6 May 2025 22:02:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCA601C0369D
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 01:21:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DCDB21ABAD;
-	Tue,  6 May 2025 22:01:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF9A4143C61;
+	Wed,  7 May 2025 01:21:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OkkVivCL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iA/Z5IJf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0052219EB6;
-	Tue,  6 May 2025 22:01:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BEAB4B1E4A;
+	Wed,  7 May 2025 01:21:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746568862; cv=none; b=Lzdla03UFuSsQaO1NEYVXeIw9bc8vLRQ2iHHy/hyLLGXK0zGeFUInDCgUBIzqFoQGsFeo8wAiq+pWIoCv1WnR9OKMRfL0RSPFy0OC3u0jMfuvRFOOK7EI/MWHtW3nFChyya6sY1p9xxkdtxV8MFhBdIP2wXhMZ77oIrVNxTJh6o=
+	t=1746580885; cv=none; b=YjilfjTkSbmrO8oby8i3Sg2SBk4aIFYjhdCzVftxF7oxsJeNumltRlzEO+7dLcoqBgWg7w+JfK3WWRzjnfLZe9SzwIKSGb+hMzvQ/uGBN/xU3QPvby2brTS96CGAQOLEYbjlIBSgz8GoNHOkjZWk0Ri2B7Zjnw1FzlHJo4gQHjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746568862; c=relaxed/simple;
-	bh=LV0ruNcHRpMJi2vfvfpRfLtobecYu0JIoRgAf4DBbYU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eMZBiQnyPggh1FVPUbKFTM5sdmM4F1IjH3LnCFDVxfzN1dLb6kr8VScyRsD5UoNcXVc3P2QwXrB5CtjmjA4vO5a19zW6Lw+D05CP/AvA7crut45XoexdAZQcPonT5mFFmxDTIHSK/F6k143z35XDwUMiKnX6TejpMCV0iqCrQUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OkkVivCL; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-22e4db05fe8so11072595ad.0;
-        Tue, 06 May 2025 15:01:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746568860; x=1747173660; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+rDcZ92GkQmefn+4rDVGL9lHZUyx4g109kWVrq63bKg=;
-        b=OkkVivCLY0i5AqV+/Cg9TYSPg0MVC2BsseD5YsQ3CGgGNJ7vGKStuOlGW38CWA+Wyw
-         OKu9p2+Htb0YPuconR+hDzXobRmTmUBx+bw7yVbJkOOYV3zDMmOxG6X3wQlrT5DUEJ7A
-         ft1Sz2S5DyyVarAB8enXq8KKH0DW31UHq2uD0R54rBOHl+jXbj4t44v88vT7ZhwgPkS8
-         W4O3Hl4RN/1rgvUtirbozHwdf6VKaBq/lozs2zPSefcq+JGUVzPKazZi17h54vo0W00b
-         CDvQCsyeYn1GJwJwAI9ztcagvC6LAK/Q+tttwWg4pVd6gEGVm0kNMnmxZGysARmIOXwA
-         Yjug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746568860; x=1747173660;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+rDcZ92GkQmefn+4rDVGL9lHZUyx4g109kWVrq63bKg=;
-        b=frU+thAFOHGo8I52jlxUfmSxaPPH8nHibWSd3mdiIVqBkovooJpeqZX5ou+apKED4c
-         3JbicnM2FCyxNFBKbg3zxgPwj2GbBtB+yjBtZFZscNJSYbFyh7lVFy+66N8Mie3HwzwD
-         9+yntWzBzTBk5pDRqlMokaY8bZBg1XPojFJcalCGBLTehUt5HvX3cM2xzM6Le7V/Bdd0
-         3cBTAIUcqjS0k6MQZb07Hzx+Vn9ZLvCvKnj9wWDPy+IaBqIiuAT/C1sD7WZEp7j2W3zF
-         edsLd6pKwZ7O+YDfCtdEiXxyXyiK/DavW1mMhrD+d0jifprO0iwvimB7aBV3zujXU9IT
-         Tl2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVC2bhpn3waLTC1pWR6QOsbhcG/LZqKR9S4m/mmqmJJaNIFkNDPltLG8Gjoy0k8L9FuSicrEtrIGWqLje0=@vger.kernel.org, AJvYcCVmfomg1w2j4Lt7fkirhu8pXrW0ck+VF/xaSZO/OmCgEv9d6fpXz5B6k0LOMb1ieTovUmzg7q4/Jcc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCzZUC9q4pPHCOu54vtmmZBKkoNjzt2tyYly9kDO3xouC6r/BG
-	ee9tJyueEUVCbdyY5GILlVqqj6FZYQDFn2bvrqIqf62t97cXHrjU
-X-Gm-Gg: ASbGncu5bZ8cQLo2Rg6cHv0mzY0ANXbU3trzKuHidT7BcC1MeGmsPwoz09FEKwsqYhg
-	FZRSC11Ki07l8tSyr9EloDo2GQ1oNWAYZwhefM5mWa0bZV1Abz4vnl6oz/jb+u04bxL5E3JbeyG
-	Y9twMk+9uYMlLk4mNj883QpR6UH9wwKSYcAF1FD7M9FWqzL7jZamZ9DB48wW4xvZSIlxTwBqEUO
-	f3y4GcjLMTjhYEGWxsYk+ynTereh2E5ZC7A7ohywdQNovlAjDvC4LY26Jz1SnfJG0IoroUb1HR2
-	1A/Ua2Z2mgoFYgxQ3kAxBPiNcLT0H8AgJznjxDlK4jv4NB3sNXpZsFuXxdHUvyt3iy8BJ1RP5Mb
-	goNspzoCeGbkuPw3Abxwcnszi0vfNWv0/lxk=
-X-Google-Smtp-Source: AGHT+IENa9/kGarw9mxc/t5RKacJDRPAwdfKQlLEIUah+OKX/huZhyAfxQFY94dTpj+9W/i6cXNtxw==
-X-Received: by 2002:a17:902:e743:b0:21f:61a9:be7d with SMTP id d9443c01a7336-22e5edfa34bmr10893105ad.49.1746568859875;
-        Tue, 06 May 2025 15:00:59 -0700 (PDT)
-Received: from server-kernel.moonheelee.internal (d173-180-147-14.bchsia.telus.net. [173.180.147.14])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22e1521fb3esm78746415ad.121.2025.05.06.15.00.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 May 2025 15:00:59 -0700 (PDT)
-From: Moon Hee Lee <moonhee.lee.ca@gmail.com>
-To: lukasz.luba@arm.com,
-	rafael@kernel.org
-Cc: len.brown@intel.com,
-	pavel@kernel.org,
+	s=arc-20240116; t=1746580885; c=relaxed/simple;
+	bh=/lb3FGJmSYv11H6gc91EmfFIcEdAfBMEor2yOP8f4kQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ad9gHBXqcYDsm8BCmDtm356hstl5UVvgEmnHR9P0DN0BT/nVEqFujn5LVsbJ7BFz6nxYkWpSrk6AJRXjbAh0c97aV4HU7vg54YblCz0vjf5Tyi3RG6k7w1Zjz6jL66jWsf+R2f99Lwe7o0wcFOEQeXjNaeHTwb6APgfHItST5cA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iA/Z5IJf; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746580883; x=1778116883;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/lb3FGJmSYv11H6gc91EmfFIcEdAfBMEor2yOP8f4kQ=;
+  b=iA/Z5IJfTTl93tFG72dojgq5mDcvabymTR7dqrPgdZIBMQnbU4AS7sI2
+   W6tO+M6rhzRVTF+ybMg9d4SjTS/SMmj7fMvFR5OESR2oWJnZra56hAB3K
+   iVagxOSoFQWT4TgYLw6JUhahRZFRl44wrWI3crNx9hvWXsziBy0mHKHHr
+   EyWaGcp7fhoegGWsv9/lYUpfle4wpZjAixodExpHT6goEaA+gYn/IjYnA
+   GFcotDXVgrKFX728IGoFscZSyYQQJSCjnE4kwbXzhj7GNH7pu4nBf9sds
+   0pIFcrZvDG3qXolsYp7VcCKHoC993CJ/78BmyC9R1tWJnDum0a4EJGS/a
+   w==;
+X-CSE-ConnectionGUID: 46wdAy0aTVWxhBSfz60t8g==
+X-CSE-MsgGUID: Y0spb0IcTeW6FgywdcrFyQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11425"; a="47383880"
+X-IronPort-AV: E=Sophos;i="6.15,268,1739865600"; 
+   d="scan'208";a="47383880"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2025 18:21:21 -0700
+X-CSE-ConnectionGUID: b18LCGHVSNiUPo+e119PPw==
+X-CSE-MsgGUID: egZtneK8TLGHbV8WqcwvEQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,268,1739865600"; 
+   d="scan'208";a="136808735"
+Received: from sohilmeh.sc.intel.com ([172.25.103.65])
+  by fmviesa009.fm.intel.com with ESMTP; 06 May 2025 18:21:20 -0700
+From: Sohil Mehta <sohil.mehta@intel.com>
+To: x86@kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Xin Li <xin@zytor.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Tony Luck <tony.luck@intel.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Sohil Mehta <sohil.mehta@intel.com>,
+	Brian Gerst <brgerst@gmail.com>,
+	Andrew Cooper <andrew.cooper3@citrix.com>,
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Andi Kleen <ak@linux.intel.com>,
+	Kai Huang <kai.huang@intel.com>,
+	Nikolay Borisov <nik.borisov@suse.com>,
+	linux-perf-users@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	kvm@vger.kernel.org,
 	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linux.dev,
-	Moon Hee Lee <moonhee.lee.ca@gmail.com>
-Subject: [PATCH v2] docs: fix typo in energy-model.rst
-Date: Tue,  6 May 2025 15:00:57 -0700
-Message-ID: <20250506220057.5589-1-moonhee.lee.ca@gmail.com>
+	linux-trace-kernel@vger.kernel.org
+Subject: [PATCH v5 0/9] x86: Add support for NMI-source reporting with FRED
+Date: Tue,  6 May 2025 18:21:36 -0700
+Message-ID: <20250507012145.2998143-1-sohil.mehta@intel.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -93,33 +112,179 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fixes a grammar issue ("than" -> "then") and changes "re-use" to
-"reuse" for consistency with modern spelling.
+Introduction
+============
+NMI-source reporting with FRED [1] provides a new mechanism for
+identifying the source of NMIs. As part of the FRED event delivery
+framework, a 16-bit vector bitmap is provided that identifies one or
+more sources that caused the NMI.
 
-Changes since v1:
-- Limited scope to .rst files excluding translations, using:
-  find Documentation/ \
-    -path Documentation/translations -prune -o \
-    -name '*.rst' -print | xargs codespell
+Using the source bitmap, the kernel can precisely run the relevant NMI
+handlers instead of polling the entire NMI handler list. Additionally,
+the source information would be invaluable for debugging misbehaving
+handlers and unknown NMIs.
 
-Signed-off-by: Moon Hee Lee <moonhee.lee.ca@gmail.com>
----
- Documentation/power/energy-model.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes since the last version
+==============================
+v4: https://lore.kernel.org/lkml/20240709143906.1040477-1-jacob.jun.pan@linux.intel.com/
 
-diff --git a/Documentation/power/energy-model.rst b/Documentation/power/energy-model.rst
-index ada4938c37e5..490ddd483f46 100644
---- a/Documentation/power/energy-model.rst
-+++ b/Documentation/power/energy-model.rst
-@@ -230,7 +230,7 @@ Drivers must provide a pointer to the allocated and initialized new EM
- and will be visible to other sub-systems in the kernel (thermal, powercap).
- The main design goal for this API is to be fast and avoid extra calculations
- or memory allocations at runtime. When pre-computed EMs are available in the
--device driver, than it should be possible to simply re-use them with low
-+device driver, then it should be possible to simply reuse them with low
- performance overhead.
- 
- In order to free the EM, provided earlier by the driver (e.g. when the module
+Apart from the change of personnel, the patches include the following major
+changes:
+
+ * Reorder the patches to have the infrastructure changes precede the
+   feature addition. (Sean)
+ * Use a simplified encoding mechanism for NMI-source vectors. (Sean)
+ * Get rid of the alternate NMI vector priority scheme. (below)
+ * Simplify NMI handling logic with source bitmap. (below)
+
+Existing NMI handling code already has a priority mechanism for the NMI
+handlers, with CPU-specific (NMI_LOCAL) handlers executed first followed
+by platform NMI handlers and unknown NMI (NMI_UNKNOWN) handlers being
+last. Within each of these NMI types, the handlers registered with
+NMI_FLAG_FIRST are given priority.
+
+It is essential that new NMI-source handling follows the same scheme to
+maintain consistent behavior with and without NMI-source. If there is a
+need for a more granular priority scheme, it should be introduced at the
+generic NMI handler level instead of assigning priorities to NMI-source
+vectors.
+
+This design choice leads to a simplification in the NMI handling logic
+as well. It is now possible to get rid of the complexity introduced by a
+new handler lookup table as well as the partial bitmap handling logic.
+The updated code (patch 5) is significantly less intrusive and easier to
+maintain.
+
+Day in the life of an NMI-source vector
+=======================================
+A brief overview of how NMI-source vectors are used:
+
+// Allocate a static source vector at compile time
+#define NMIS_VECTOR_TEST	1
+
+// Register an NMI handler with the vector
+register_nmi_handler(NMI_LOCAL, test_handler, 0, "nmi_test", NMIS_VECTOR_TEST);
+
+// Generate an NMI with the source vector using NMI encoded delivery
+__apic_send_IPI_mask(cpumask, APIC_DM_NMI | NMIS_VECTOR_TEST);
+
+// Handle an NMI with or without the source information (oversimplified)
+source_bitmap = fred_event_data(regs);
+if (!source_bitmap || (source_bitmap & BIT(NMIS_VECTOR_TEST)))
+        test_handler();
+
+// Unregister handler along with the vector
+unregister_nmi_handler(NMI_LOCAL, "nmi_test");
+
+Patch structure
+===============
+The patches are based on tip:x86/nmi because they depend on the NMI
+cleanup series merged earlier [2].
+
+Patch 1-2: Prepare FRED/KVM and enumerate NMI-source reporting
+Patch 3-5: Register and handle NMI-source vectors 
+Patch 6-8: APIC changes to generate NMIs with vectors
+Patch   9: Improve trace and debug with NMI-source information
+
+Many thanks to Sean Christopherson, Xin Li, H. Peter Anvin, Andi Kleen,
+Tony Luck, Kan Liang, Jacob Pan Jun, Zeng Guang and others for their
+contributions, reviews and feedback.
+
+Future work / Opens
+===================
+I am considering a few additional changes that would be valuable for
+enhancing NMI handling support. Any feedback, preferences or suggestions
+on the following would be helpful.
+
+Assigning more NMI-source vectors
+---------------------------------
+The current patches assign NMI vectors to a limited number of sources.
+The microcode rendezvous and crash reboot code use NMI but do not go
+through the typical register_nmi_handler() path. Their handling is
+special-cased in exc_nmi(). To isolate blame and improve debugging, it
+would be useful to assign vectors to them, even if the vectors are
+ignored during handling.
+
+Other NMI sources, such as GHES and Platform NMIs, can also be assigned
+vectors to speed up their NMI handling and improve isolation. However,
+this would require a software/hardware agreement on vector reservation
+and usage. Such an endeavor is likely not worth the effort.
+
+Explicitly enabling NMIs
+------------------------
+HPA brought up the idea [3] of explicitly enabling NMIs only when the
+kernel is ready to take them. With FRED, if we enter the kernel with
+NMIs disabled, they could remain disabled until returning back to
+userspace.
+
+DebugFS support
+---------------
+Currently, the kernel has counters for unknown NMIs, swallowed NMIs and
+other NMI handling data. However, there is no easy way to access that.
+To identify issues that happen over a longer timeframe, it might be
+useful to add DebugFS support for NMI statistics.
+
+KVM support
+-----------
+The NMI-source feature can be useful for perf users and other NMI use
+cases in guest VMs. Exposing NMI-source to guests once FRED support is
+in place should be relatively easier. The prototype code for this is
+under evaluation.
+
+Links
+=====
+[1]: Chapter 9, https://www.intel.com/content/www/us/en/content-details/819481/flexible-return-and-event-delivery-fred-specification.html
+[2]: https://lore.kernel.org/lkml/20250327234629.3953536-1-sohil.mehta@intel.com/
+[3]: https://lore.kernel.org/lkml/F5D36889-A868-46D2-A678-8EE26E28556D@zytor.com/
+
+Jacob Pan (1):
+  perf/x86: Enable NMI-source reporting for perfmon
+
+Sohil Mehta (7):
+  x86/cpufeatures: Add the CPUID feature bit for NMI-source reporting
+  x86/nmi: Extend the registration interface to include the NMI-source
+    vector
+  x86/nmi: Assign and register NMI-source vectors
+  x86/nmi: Add support to handle NMIs with source information
+  x86/nmi: Prepare for the new NMI-source vector encoding
+  x86/nmi: Enable NMI-source for IPIs delivered as NMIs
+  x86/nmi: Include NMI-source information in tracepoint and debug prints
+
+Zeng Guang (1):
+  x86/fred, KVM: VMX: Pass event data to the FRED entry point from KVM
+
+ arch/x86/entry/entry_64_fred.S      |  2 +-
+ arch/x86/events/amd/ibs.c           |  2 +-
+ arch/x86/events/core.c              |  6 ++--
+ arch/x86/events/intel/core.c        |  6 ++--
+ arch/x86/include/asm/apic.h         | 38 ++++++++++++++++++++++
+ arch/x86/include/asm/apicdef.h      |  2 +-
+ arch/x86/include/asm/cpufeatures.h  |  1 +
+ arch/x86/include/asm/fred.h         |  9 +++---
+ arch/x86/include/asm/nmi.h          | 37 ++++++++++++++++++++-
+ arch/x86/kernel/apic/hw_nmi.c       |  5 ++-
+ arch/x86/kernel/apic/ipi.c          |  4 +--
+ arch/x86/kernel/apic/local.h        | 24 +++++++-------
+ arch/x86/kernel/cpu/cpuid-deps.c    |  1 +
+ arch/x86/kernel/cpu/mce/inject.c    |  4 +--
+ arch/x86/kernel/cpu/mshyperv.c      |  3 +-
+ arch/x86/kernel/kgdb.c              |  8 ++---
+ arch/x86/kernel/kvm.c               |  9 +-----
+ arch/x86/kernel/nmi.c               | 50 ++++++++++++++++++++++++++++-
+ arch/x86/kernel/nmi_selftest.c      |  9 +++---
+ arch/x86/kernel/smp.c               |  6 ++--
+ arch/x86/kvm/vmx/vmx.c              |  5 +--
+ arch/x86/platform/uv/uv_nmi.c       |  4 +--
+ drivers/acpi/apei/ghes.c            |  2 +-
+ drivers/char/ipmi/ipmi_watchdog.c   |  3 +-
+ drivers/edac/igen6_edac.c           |  3 +-
+ drivers/thermal/intel/therm_throt.c |  2 +-
+ drivers/watchdog/hpwdt.c            |  6 ++--
+ include/trace/events/nmi.h          | 13 +++++---
+ 28 files changed, 190 insertions(+), 74 deletions(-)
+
+
+base-commit: f2e01dcf6df2d12e86c363ea9c37d53994d89dd6
 -- 
 2.43.0
 
