@@ -1,162 +1,146 @@
-Return-Path: <linux-pm+bounces-26818-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26819-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1040FAAE39F
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 16:57:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 386E2AAE3AC
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 16:59:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 861BC1892303
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 14:56:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4BB8B1889B98
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 14:59:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D26C289E0B;
-	Wed,  7 May 2025 14:56:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FCB1289E1B;
+	Wed,  7 May 2025 14:58:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jU6dTXEI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QgDScMEe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F20286D7A;
-	Wed,  7 May 2025 14:56:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F3FD2139D2
+	for <linux-pm@vger.kernel.org>; Wed,  7 May 2025 14:58:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746629796; cv=none; b=SlAozlG9C2HdRPe+OproKxvceiR59A2P6hBpS0D+RD+yj5Dt3JyWHM3WWC/eiiAX4kKwJF3gMG/X0bwAJqgfRXfV5Fi5XtPfsCJURsnFHWCdRLk/4rH7b9VluS/VBxoeTW5hxEyvpfNuFpqsoOlGzc8jgVoi29PpphC4KVHSiKg=
+	t=1746629939; cv=none; b=TcXlqvC58TuoHSUSRs7gvCiagwC0vVnZyGkeWyzI8Krqz5YfekDAZvi+9KfD1X5/u1x4KOJxalOD1h0oxq38jlsL7zno6NpiHPu2iUPbD6YvNtXntZGow+8w6Gt6MXckVCFWRPLxFvNRfAqM5LPM94As4orcT/BU9YOP9k0ycxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746629796; c=relaxed/simple;
-	bh=iR3+pPyHy41ZeZVnOn5rv4RaR3wxqUlhFY2EECiUbXk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h7xkyd195SH+W4IbWIBQEvJThPXXSve+j6GaaC+YWoQvg3qQqtm/qaed/X+PL5OBvorqRbNqkgMXjTrIHG9fQy4DNjEOVfDcF8dbupHm9fVgP/TOa+SJ0dDFrnf3lWOU3b0OWGJtl7hvKJKYg2o7qm7XtheKkAyeFA0uP3+uVIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jU6dTXEI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAEB3C4CEEE;
-	Wed,  7 May 2025 14:56:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746629795;
-	bh=iR3+pPyHy41ZeZVnOn5rv4RaR3wxqUlhFY2EECiUbXk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=jU6dTXEIQVMc827z7kgqKuav90ToTqf60EvIpnBOzK/Mc9a73bykC1jr+DICq+B2P
-	 E62D3RgiUplBrdI73FXc84QgECM0JBQO9Axut+LN2vKQGpbw147sm3CkVqZM80etxo
-	 NifP+AwCidiFt5k2ZnLoNs9Dn+UxccgOF8wtKCYX18/2A4fesPpruAvu5ucgMnhXZW
-	 Jo7+gNAAjTTmPfsvi81PY2tixj6FZSjs8E9/5siTsF3R44QiEIgu34LNQPbxtpnHlM
-	 pJBJAHCmfS/B4OmGHY5x0eyTWyJCGU1hLPm/YUlN95iiyCIu8AmkFWUCBl8uqNGbcP
-	 SWADUfed6dGcQ==
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-2c2ada8264aso5667323fac.2;
-        Wed, 07 May 2025 07:56:35 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUDUcpeQL7RRY2hUHVDaw6nQApnZKx7Rq/6y2NF/6NBBLDZ2MMU7WWsvgXJBCN/PGN285g8Szgaaaj9Rh0=@vger.kernel.org, AJvYcCUPT1LxTu3RJAuKV9RUXOFHGcYWFLVb0Q8kUiBEoHdTnHFwHtTztLHMVicpoXU2iIqphu/FPP/vHs4=@vger.kernel.org, AJvYcCV/6kkRluMfkKfEiMQWYLFzCZB/flSA/GeTF1KzICMVZEOKAXuT6cmXKMeTx+ywrxchBS3YR3F+/auEd0g=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywa3Igk1LgHsvCe5cQU2uzO3AimqjZ4Gnb9C2GQ8oYKzN875UM7
-	3MKUcn3LY8Q1T+BmuxRIpTAz+zVuPKL13t2T0tFQh41x+IR5VD1CuH0/jzlxX6Gh5j9vGINjXn8
-	sPDTtlHAkChhaYOwMG/qsF8H0df0=
-X-Google-Smtp-Source: AGHT+IGudK8BYiwNYGu4ohVqJM5tiVLI5ldUeTtWGQTiAMjmIpjqWC1GYXLvzHMYY9hWCYIOoKyMW5g4wmc2N+ZJ3gg=
-X-Received: by 2002:a05:6870:1590:b0:2d4:d9d6:c8d2 with SMTP id
- 586e51a60fabf-2db5c16ad18mr2234594fac.35.1746629794947; Wed, 07 May 2025
- 07:56:34 -0700 (PDT)
+	s=arc-20240116; t=1746629939; c=relaxed/simple;
+	bh=IGXdX2BAsVgNBRGGF2TMG5ojhGH82DlFpzKBv3/jxOc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=UTt3gSH0a+FeFyLWxU34jXAlCrToMez2STzg8P4QHTOKg73z9Wb4izWCp7sfzaS6gyM8Rxew4M13IkqQ0HPPPrpBMqzIUCc2beDtNnb7SbsUQ7Dg39jLXcSM0wNO/Okn9WRhuSkTyDZol6ZaRbL4rDzuSvcgDmQOfeFDAVZg1yE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QgDScMEe; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746629937; x=1778165937;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IGXdX2BAsVgNBRGGF2TMG5ojhGH82DlFpzKBv3/jxOc=;
+  b=QgDScMEeiq/bt2oFfZnIBPqHF+JDNXETEvQRYINfrbWV3NkUlUGjSLEF
+   O7xs49Nd7sOpizlXy+Wa+2TgUTdVcv3N3FyQM5rkn56zol3Cth3Z4NW22
+   jWP91tF45gSfIyPvLH/nQYhFliS3XcIuA3qTh/+tlQ9K15/u7yYltwXW1
+   ELbp7XTRCSWBzynUnN4sotK26rebfLTeEbVJYlPhIUz6GHpzxNoJ2RzVf
+   TLeYmLHkoonHxBB8wB0rztZiwqF5733eSqiFvTXF0fO4oc9njjvuLY8ae
+   9s6kEfg0gxf3QeaIjhWTsbIlRTGy27K+qtO2bjDnJNLyySUcy8Ocmvb4r
+   g==;
+X-CSE-ConnectionGUID: GRzIy6UFRWiqHQtEwLe3sA==
+X-CSE-MsgGUID: N6P+XKhxT6WchCLsL33kUQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="59763566"
+X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
+   d="scan'208";a="59763566"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 07:58:56 -0700
+X-CSE-ConnectionGUID: kHFGRZmVQ4GYY7YmSJJ7Ig==
+X-CSE-MsgGUID: wWg7FOTsRPm2FOd/BWMkfA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
+   d="scan'208";a="140827650"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 07 May 2025 07:58:55 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uCgEX-000825-0N;
+	Wed, 07 May 2025 14:58:53 +0000
+Date: Wed, 7 May 2025 22:58:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jie Zhan <zhanjie9@hisilicon.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Lifeng Zheng <zhenglifeng1@huawei.com>
+Subject: [chanwoo:devfreq-testing 5/5] include/linux/cpumask.h:880:26:
+ warning: return discards 'const' qualifier from pointer target type
+Message-ID: <202505072207.bsjJiSl8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <10629535.nUPlyArG6x@rjwysocki.net> <22630663.EfDdHjke4D@rjwysocki.net>
- <c6cd714b-b0eb-42fc-b9b5-4f5f396fb4ec@nvidia.com> <CAJZ5v0jWTtaQEcx0p+onU3eujgAJpF_V57wzZCuYv2NVnEb7VQ@mail.gmail.com>
- <7c970b02-7b58-4d15-b5f6-18bbfd883ccd@nvidia.com> <CAJZ5v0jcWQ3QKx=2nzDpnYPyGuYfT4TModwdAreWZu4d0hXmoA@mail.gmail.com>
- <CAJZ5v0jG+54uKiY-uSc6B+8JuA6eU1j8tGM5d=XsrT0EmabMeQ@mail.gmail.com> <563657c5-5529-45fd-96fa-bab68ca992a9@nvidia.com>
-In-Reply-To: <563657c5-5529-45fd-96fa-bab68ca992a9@nvidia.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 7 May 2025 16:56:23 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jVOG_u=F36aOVh=qu4Ef-5QFAmC+5-fmF_mU8NSr_LnA@mail.gmail.com>
-X-Gm-Features: ATxdqUEcOF86Nme0hytRK5-B0QGEeP-m3_CkCwqx73YWJM7ZH8pajY7lMxQxKns
-Message-ID: <CAJZ5v0jVOG_u=F36aOVh=qu4Ef-5QFAmC+5-fmF_mU8NSr_LnA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] PM: sleep: Resume children after resuming the parent
-To: Jon Hunter <jonathanh@nvidia.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Johan Hovold <johan@kernel.org>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
-	Saravana Kannan <saravanak@google.com>, 
-	"linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, May 7, 2025 at 4:39=E2=80=AFPM Jon Hunter <jonathanh@nvidia.com> wr=
-ote:
->
->
-> On 07/05/2025 15:25, Rafael J. Wysocki wrote:
->
-> ...
->
-> >>>> So are the devices in question "async"?  To check this, please see t=
-he
-> >>>> "async" attribute in the "power" subdirectory of the sysfs device
-> >>>> directory for each of them.
-> >>>
-> >>> I checked for both the I2C controller and ina3221 and don't see any
-> >>> 'async' files ...
-> >>>
-> >>> $ ls /sys/class/i2c-dev/i2c-2/device/2-0040/power/
-> >>> autosuspend_delay_ms  runtime_active_time  runtime_suspended_time
-> >>> control               runtime_status
-> >>> $ ls /sys/class/i2c-dev/i2c-2/device/2-0041/power/
-> >>> autosuspend_delay_ms  runtime_active_time  runtime_suspended_time
-> >>> control               runtime_status
-> >>> $ ls /sys/class/i2c-dev/i2c-2/power/
-> >>> autosuspend_delay_ms  runtime_active_time  runtime_suspended_time
-> >>> control               runtime_status
-> >>
-> >> You need to set CONFIG_PM_ADVANCED_DEBUG to see those (and other debug
-> >> attributes).
-> >>
-> >>>> If they are "async", you can write "disable" to this attribute to tu=
-rn
-> >>>> them into "sync" devices.  I'd do this and see what happens.
-> >>
-> >> You may also turn off async suspend altogether:
-> >>
-> >> # echo 0 > /sys/power/pm_async
-> >>
-> >> and see if this helps.
->
-> This does indeed help!
->
-> >>>> Overall, it looks like some dependencies aren't properly represented
-> >>>> by device links on this platform.
-> >>>
-> >>> Yes that would appear to be the case, but at the moment, I don't see
-> >>> what it is. The ina3221 devices appear to suspend fine AFAICT, but ha=
-ngs
-> >>> when suspending I2C controller. Exactly where is still a mystery.
-> >
-> > I checked in the meantime and found that the i2c subsystem enables
-> > async suspend/resume for all devices, clients and controllers, so the
-> > devices in question are "async" AFAICS.
->
-> So that would make sense given that the above works.
->
-> When it fails it appears to hang in dpm_wait_for_subordinate() when
-> calling dpm_wait_for_children() from what I can tell.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-testing
+head:   a0983893e344a836747449e1d20f5273761d39fa
+commit: a0983893e344a836747449e1d20f5273761d39fa [5/5] PM / devfreq: Add HiSilicon uncore frequency scaling driver
+config: openrisc-allyesconfig (https://download.01.org/0day-ci/archive/20250507/202505072207.bsjJiSl8-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505072207.bsjJiSl8-lkp@intel.com/reproduce)
 
-So apparently one of the children has not been suspended yet when this
-happens.  That's fine because it should be suspended at one point and
-the parent suspend should be unblocked, so it looks like the child
-suspend doesn't complete for some reason.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505072207.bsjJiSl8-lkp@intel.com/
 
-> I will enable the PM_ADVANCED_DEBUG and confirm that making the I2C
-> itself non-async works.
+All warnings (new ones prefixed by >>):
 
-What probably happens is that after the "PM: sleep: Suspend async
-parents after suspending children" , the i2c clients are suspended
-upfront (because they have no children) and when one of them has
-suspended, it triggers a parent suspend.  The parent suspend then
-waits for the other client to complete suspending, but that cannot
-make progress for some reason.
+   In file included from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/spinlock.h:63,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:7,
+                    from include/linux/slab.h:16,
+                    from include/linux/resource_ext.h:11,
+                    from include/linux/acpi.h:13,
+                    from drivers/devfreq/hisi_uncore_freq.c:8:
+   drivers/devfreq/hisi_uncore_freq.c: In function 'get_package_cpumask':
+>> include/linux/cpumask.h:880:26: warning: return discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     880 | #define cpumask_of(cpu) (get_cpu_mask(cpu))
+         |                         ~^~~~~~~~~~~~~~~~~~
+   include/linux/topology.h:221:49: note: in expansion of macro 'cpumask_of'
+     221 | #define topology_core_cpumask(cpu)              cpumask_of(cpu)
+         |                                                 ^~~~~~~~~~
+   drivers/devfreq/hisi_uncore_freq.c:552:16: note: in expansion of macro 'topology_core_cpumask'
+     552 |         return topology_core_cpumask(cpu);
+         |                ^~~~~~~~~~~~~~~~~~~~~
+   drivers/devfreq/hisi_uncore_freq.c: In function 'get_cluster_cpumask':
+>> include/linux/cpumask.h:880:26: warning: return discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     880 | #define cpumask_of(cpu) (get_cpu_mask(cpu))
+         |                         ~^~~~~~~~~~~~~~~~~~
+   include/linux/topology.h:224:49: note: in expansion of macro 'cpumask_of'
+     224 | #define topology_cluster_cpumask(cpu)           cpumask_of(cpu)
+         |                                                 ^~~~~~~~~~
+   drivers/devfreq/hisi_uncore_freq.c:562:16: note: in expansion of macro 'topology_cluster_cpumask'
+     562 |         return topology_cluster_cpumask(cpu);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~
 
-Before that patch, the i2c clients would have suspended only after all
-of the "sync" devices following them in dpm_list had been suspended
-(the list is processed in the reverse order during suspend), so it
-looks like there is a hidden dependency between one of the i2c clients
-and a "sync" device.
 
-If the above supposition is right, flagging the i2c client as "sync"
-will make the problem go away.
+vim +/const +880 include/linux/cpumask.h
+
+2d3854a37e8b76 Rusty Russell 2008-11-05  875  
+cd83e42c6b0413 Rusty Russell 2008-11-07  876  /**
+cd83e42c6b0413 Rusty Russell 2008-11-07  877   * cpumask_of - the cpumask containing just a given cpu
+cd83e42c6b0413 Rusty Russell 2008-11-07  878   * @cpu: the cpu (<= nr_cpu_ids)
+cd83e42c6b0413 Rusty Russell 2008-11-07  879   */
+cd83e42c6b0413 Rusty Russell 2008-11-07 @880  #define cpumask_of(cpu) (get_cpu_mask(cpu))
+cd83e42c6b0413 Rusty Russell 2008-11-07  881  
+
+:::::: The code at line 880 was first introduced by commit
+:::::: cd83e42c6b0413dcbb548c2ead799111ff7e6a13 cpumask: new API, v2
+
+:::::: TO: Rusty Russell <rusty@rustcorp.com.au>
+:::::: CC: Ingo Molnar <mingo@elte.hu>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
