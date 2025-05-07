@@ -1,108 +1,138 @@
-Return-Path: <linux-pm+bounces-26845-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26846-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02852AAEDAD
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 23:14:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDB74AAEE02
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 23:48:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B28797B56FB
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 21:12:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1648B17BA52
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 21:48:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F55E28FABA;
-	Wed,  7 May 2025 21:13:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gpzYs8Nn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83508242D66;
+	Wed,  7 May 2025 21:48:03 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C46C1E4AB;
-	Wed,  7 May 2025 21:13:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50AD3DDC3;
+	Wed,  7 May 2025 21:48:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746652418; cv=none; b=Q7HnTKrRep2Qhp4gSWkYSPiK34jNw17JXITz5YRE+yLXXBr2KVQfXaimXzxkvjxy09FMGVt8x+PeYfLp8sHuobHWvEuMhMMErlrktQhlNFIcqb+5tLuEDIH1x63JZsPei05sE/ZClqHw1AMaumklZmewjtIEUdoo7CJM+rzTrxg=
+	t=1746654483; cv=none; b=rGFDjUuzdEoOBJKm9Hg3QKgH2SWux9JTKJ/1Ay6LTD1M8Hk+S/+O8O/EgIzK+pwoXwUQx1wtCltfhBTyb/jVA57EILXisOlLG/8GzXKIYnf2G+YJxqMaANh8mWNqHioZMe0xguViS8WpDkMG/H+vI01PcpmG7rcM1g7kd9mbPzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746652418; c=relaxed/simple;
-	bh=6fHhnpXDAQhZV2ukVhtrbZkclB2lIGfri+PqEM2Fm2Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TGoQJmTJiDPJdfvzWt/DAcZsKaGfhoWfXYKMnTzw9FAyQkfGTM7gY1ef0GKpUBIdmIW97ptnC++45E2qzHyyGx95xcQi6eWTrEQh1JJwsu1Vbg0KQRWcJ/VOnEL9w2YxthJ7JDn5UomFm0oe1FQ2xnP9iDyz0kBwfVLQrgUsKN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gpzYs8Nn; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746652416; x=1778188416;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6fHhnpXDAQhZV2ukVhtrbZkclB2lIGfri+PqEM2Fm2Y=;
-  b=gpzYs8NnNYJun60RN0wUh0e44nWITo4mF36YAPX2Z7kUhwZnRaCNRf+U
-   lQJvUKtdczG48K6tmfUbwhJDTyFwuh87KBhF8quFfFdZkQgAT9g3eLPrC
-   zgOddsZzTv/GpQ5qkacUaz9uY51FsE7/b9O/mODjTrzGSNDqAASocazWh
-   f79+kd2iGCguRFa6NilbiM52WpHDeRJFenPYqSatZLjBavDFmahDxpQ09
-   PWx4KtQETypDbYu4QQheoHJuPInpJ7TaScc0mZjveen8lfseenkqG8TcT
-   0BbSVUvRsmjKjQ+QkI5bfLRqEKeNoXSa2/oDQgpQgefenLbbYUfAvTb/z
-   g==;
-X-CSE-ConnectionGUID: /oxPP0Q3Q86lfS20i55usQ==
-X-CSE-MsgGUID: Xtk0LUy6QUeIJIOmb8OkCg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="48278115"
-X-IronPort-AV: E=Sophos;i="6.15,270,1739865600"; 
-   d="scan'208";a="48278115"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 14:13:36 -0700
-X-CSE-ConnectionGUID: MuRt1wA4S3e57hSpg6hFOw==
-X-CSE-MsgGUID: BblFTQLDR/eNk/uhw3Rj5A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,270,1739865600"; 
-   d="scan'208";a="136593394"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 14:13:35 -0700
-Date: Wed, 7 May 2025 14:18:41 -0700
-From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Len Brown <len.brown@intel.com>, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, Ricardo Neri <ricardo.neri@intel.com>
-Subject: Re: [PATCH 1/2] arch_topology: Relocate cpu_scale to topology.[h|c]
-Message-ID: <20250507211841.GA28763@ranerica-svr.sc.intel.com>
-References: <20250419025504.9760-1-ricardo.neri-calderon@linux.intel.com>
- <20250419025504.9760-2-ricardo.neri-calderon@linux.intel.com>
- <7c583e2e-14b6-40e5-8e12-01584b817e4c@arm.com>
+	s=arc-20240116; t=1746654483; c=relaxed/simple;
+	bh=nfqBh82m0tQXIWKaHq3eRRzESiJPd4iCDQ+UVW1fl5E=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jX7tgegHmsg0Qf0QHAnRw2U3fO/9f1j8zAn6hDSgCq9dKVZEPmZDfctjKJ/R7OApGFoNpceeNv4TOLouNBHL6QsSByKWbyzFu6KwjShOWCOweLawYkjzKsTKoMi4FMx6LgvnwPiNAzIx7qWcUWGvuXq5rAbJT0CLkpXLuTT1IMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 881F5C4CEE2;
+	Wed,  7 May 2025 21:47:58 +0000 (UTC)
+Date: Wed, 7 May 2025 17:48:09 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Sohil Mehta <sohil.mehta@intel.com>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, Xin Li <xin@zytor.com>, "H
+ . Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Thomas
+ Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav
+ Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, Peter
+ Zijlstra <peterz@infradead.org>, Sean Christopherson <seanjc@google.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
+ <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander
+ Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
+ <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, Adrian Hunter
+ <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, Tony Luck
+ <tony.luck@intel.com>, Paolo Bonzini <pbonzini@redhat.com>, Vitaly
+ Kuznetsov <vkuznets@redhat.com>, "Rafael J . Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui
+ <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Brian Gerst <brgerst@gmail.com>, Andrew Cooper <andrew.cooper3@citrix.com>,
+ "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Jacob Pan
+ <jacob.pan@linux.microsoft.com>, Andi Kleen <ak@linux.intel.com>, Kai Huang
+ <kai.huang@intel.com>, Nikolay Borisov <nik.borisov@suse.com>,
+ linux-perf-users@vger.kernel.org, linux-edac@vger.kernel.org,
+ kvm@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 9/9] x86/nmi: Include NMI-source information in
+ tracepoint and debug prints
+Message-ID: <20250507174809.10cfc5ac@gandalf.local.home>
+In-Reply-To: <20250507012145.2998143-10-sohil.mehta@intel.com>
+References: <20250507012145.2998143-1-sohil.mehta@intel.com>
+	<20250507012145.2998143-10-sohil.mehta@intel.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7c583e2e-14b6-40e5-8e12-01584b817e4c@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Apr 25, 2025 at 05:31:01PM +0100, Christian Loehle wrote:
-> On 4/19/25 03:55, Ricardo Neri wrote:
-> > arch_topology.c provides functionality to parse and scale CPU capacity. It
-> > also provides a corresponding sysfs interface. Some architectures parse
-> > and scale CPU capacity differently as per their own needs. On Intel
-> > processors, for instance, it is responsibility of the Intel P-state driver.
-> > 
-> > Relocate the implementation of that interface to a common location in
-> > topology.c. Architectures can use the interface and populate it using their
-> > own mechanisms.
-> > 
-> > An alternative approach would be to compile arch_topology.c even if not
-> > needed only to get this interface. This approach would create duplicated
-> > and conflicting functionality and data structures.
-> > 
-> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> 
-> Maybe an FYI for the non-x86 folks, this doesn't break anything on the
-> usual arm64 setup:
-> Tested-by: Christian Loehle <christian.loehle@arm.com>
+On Tue,  6 May 2025 18:21:45 -0700
+Sohil Mehta <sohil.mehta@intel.com> wrote:
 
-Thanks for testing these patches!
+> diff --git a/include/trace/events/nmi.h b/include/trace/events/nmi.h
+> index 18e0411398ba..6e4a1ff70a44 100644
+> --- a/include/trace/events/nmi.h
+> +++ b/include/trace/events/nmi.h
+> @@ -10,29 +10,32 @@
+>  
+>  TRACE_EVENT(nmi_handler,
+>  
+> -	TP_PROTO(void *handler, s64 delta_ns, int handled),
+> +	TP_PROTO(void *handler, s64 delta_ns, int handled, unsigned long source_bitmap),
+
+Even though x86 is currently the only architecture using the nmi
+tracepoint, this "source_bitmap" makes it become very x86 specific.
+
+This file should be moved into arch/x86/include/asm/trace/
+
+And that would require adding to the Makefile:
+
+CFLAGS_nmi.o := -I $(src)/../include/asm/trace
+
+>  
+> -	TP_ARGS(handler, delta_ns, handled),
+> +	TP_ARGS(handler, delta_ns, handled, source_bitmap),
+>  
+>  	TP_STRUCT__entry(
+>  		__field(	void *,		handler	)
+>  		__field(	s64,		delta_ns)
+>  		__field(	int,		handled	)
+> +		__field(	unsigned long,	source_bitmap)
+>  	),
+>  
+>  	TP_fast_assign(
+>  		__entry->handler = handler;
+>  		__entry->delta_ns = delta_ns;
+>  		__entry->handled = handled;
+> +		__entry->source_bitmap = source_bitmap;
+>  	),
+>  
+> -	TP_printk("%ps() delta_ns: %lld handled: %d",
+> +	TP_printk("%ps() delta_ns: %lld handled: %d source_bitmap: 0x%lx",
+>  		__entry->handler,
+>  		__entry->delta_ns,
+> -		__entry->handled)
+> +		__entry->handled,
+> +		__entry->source_bitmap)
+>  );
+>  
+>  #endif /* _TRACE_NMI_H */
+>  
+> -/* This part ust be outside protection */
+> +/* This part must be outside protection */
+
+And this would need to have:
+
+#undef TRACE_INCLUDE_PATH
+#undef TRACE_INCLUDE_FILE
+#define TRACE_INCLUDE_PATH .
+#define TRACE_INCLUDE_FILE nmi
+
+-- Steve
+
+>  #include <trace/define_trace.h>
 
