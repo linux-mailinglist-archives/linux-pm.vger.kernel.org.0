@@ -1,160 +1,132 @@
-Return-Path: <linux-pm+bounces-26784-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26785-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A1EFAADDEB
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 14:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E34E4AADE06
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 14:05:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62F683AE455
-	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 12:00:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6A973BC254
+	for <lists+linux-pm@lfdr.de>; Wed,  7 May 2025 12:04:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6984225A33E;
-	Wed,  7 May 2025 12:00:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7C06258CC8;
+	Wed,  7 May 2025 12:04:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="A9TWos8G"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8A6D233145;
-	Wed,  7 May 2025 11:59:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 375931FF7B4;
+	Wed,  7 May 2025 12:04:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746619200; cv=none; b=qNgB3/vAmNt4x5hhzHYn9dix16faj3Z7XerLiL9wcvBWpfHBerYb7JCGatFjuMYpwu8c41RztdaBv3z4BWoLL+5bQPwZLaiPbaSy5Jd2A05qipfYcvcUmGKS74pZ+jNSDgCg4xWtkYXa++WOU2x71Rbx0YskB6cCtjZ04AYprf0=
+	t=1746619497; cv=none; b=RsdeOCfsd4EoiVeRIEwvKvv+q50A4guYt9KvNtBnQzbOpUsONNWbLTKoUbcEVb2ypKeTES6caPo0y5ESGuth1hVyZSUOkPxoxY0d2c1RWe5nxnB1FaXMK2NMKHzS0dv4RTFX2KdX+C1HcgfEi3ZZQ1smH3kzgkBktEIAWMSZc+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746619200; c=relaxed/simple;
-	bh=8RO7qb8A2o2/SWPKRVHIg+XW346Qu4M2ikcfzJXF/Nw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C2wEOUei0Cu7GSYxID4w0Qxx62sjiAoP2weRd0iRaicBae5eW6Q7iLYdGFN2ElpAqdKvd8bm4BSFEtl4dCJuABVmB+0uwfU88naQXshtR/4ML0SYoC8/PoDHphwfk4tMamnnF/QyALXI7lgMEchSZ5yhZzOpn+L/KnJF9sF20rw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B3C6339;
-	Wed,  7 May 2025 04:59:46 -0700 (PDT)
-Received: from pluto (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 476B23F5A1;
-	Wed,  7 May 2025 04:59:54 -0700 (PDT)
-Date: Wed, 7 May 2025 12:59:45 +0100
-From: Cristian Marussi <cristian.marussi@arm.com>
-To: Mike Tipton <quic_mdtipton@quicinc.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>, arm-scmi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Peng Fan <peng.fan@oss.nxp.com>,
-	Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH v3] cpufreq: scmi: Skip SCMI devices that aren't used by
- the CPUs
-Message-ID: <aBtLMYqcnwacGJuy@pluto>
-References: <20250428144728.871404-1-quic_mdtipton@quicinc.com>
+	s=arc-20240116; t=1746619497; c=relaxed/simple;
+	bh=S7C0i6guyQUxOmCmzpSvqnFdBd5hRF8ZNROLA+/7kxY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JRFPh7arbif3yah10F5m9BZHqHASvXad6V40pn1Ls/3hESoAuO4lj5QNf9COL6944mnXn4otRhfgEzQQJEBGnvMiAhGOa0Nfp0g040VSpVB1bwjoqX99DsHmYaf4nuJlcQIpvcJWu48TXUXBubV92upi7et1tIltHO5bZoXkD2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=A9TWos8G; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=taTa50vCOqf4qXYa/4iG8HTZJGZUASEUn4x1pmkgTG0=; b=A9TWos8GWPhEHAZOpDq5FqK2Ni
+	wmHmUL7vq5tnXVsJAPlg2Fd3H9Lyc3vEC3ayp0PZ0pQcxwbZCyOUYrBt9eNGl/RAPXFBg0bRkKXi0
+	iuL8IqEVadvqhfYRBsbbPGCTeb0Ab3N3iyFYBp9Ai/eJNUYqN0kDTYTzEQCEWgIeDf5khCiE+MA6R
+	O52BIR//+QAbHZXgMEJ6gb6UG9lhMnh8/PT5xZXP13vn0u2Q5R4GnOhLAV3yZKjntb2cM18o8EksU
+	Vv7KVXVQt+ANVEI5gW15AkwboYZR+caE7YC8AWsetDxrPZQQUzxg2rlSd+H1f3HZfmvhXoQYfoxMj
+	wacMh52w==;
+Received: from [2001:4bb8:2cc:5a47:1fe7:c9d0:5f76:7c02] (helo=localhost)
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uCdW9-0000000FJ3e-424a;
+	Wed, 07 May 2025 12:04:54 +0000
+From: Christoph Hellwig <hch@lst.de>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: linux-block@vger.kernel.org,
+	"Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+	Jack Wang <jinpu.wang@ionos.com>,
+	Coly Li <colyli@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Chris Mason <clm@fb.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	David Sterba <dsterba@suse.com>,
+	Andreas Gruenbacher <agruenba@redhat.com>,
+	Carlos Maiolino <cem@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Naohiro Aota <naohiro.aota@wdc.com>,
+	Johannes Thumshirn <jth@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>,
+	slava@dubeyko.com,
+	glaubitz@physik.fu-berlin.de,
+	frank.li@vivo.com,
+	linux-bcache@vger.kernel.org,
+	dm-devel@lists.linux.dev,
+	linux-btrfs@vger.kernel.org,
+	gfs2@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-xfs@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: add more bio helpers v3
+Date: Wed,  7 May 2025 14:04:24 +0200
+Message-ID: <20250507120451.4000627-1-hch@lst.de>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250428144728.871404-1-quic_mdtipton@quicinc.com>
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Mon, Apr 28, 2025 at 07:47:28AM -0700, Mike Tipton wrote:
-> Currently, all SCMI devices with performance domains attempt to register
-> a cpufreq driver, even if their performance domains aren't used to
-> control the CPUs. The cpufreq framework only supports registering a
-> single driver, so only the first device will succeed. And if that device
-> isn't used for the CPUs, then cpufreq will scale the wrong domains.
-> 
+Hi all,
 
-Hi,
+this series adds more block layer helpers to remove boilerplate code when
+adding memory to a bio or to even do the entire synchronous I/O.
 
-bit of lagging behind, my bad.
+The main aim is to avoid having to convert to a struct page in the caller
+when adding kernel direct mapping or vmalloc memory.
 
+Changes since v2:
+ - rebase on top of the latest block for-next branch to resolve
+   conflicts with the bonuce buffering removal
 
-> To avoid this, return early from scmi_cpufreq_probe() if the probing
-> SCMI device isn't referenced by the CPU device phandles.
-> 
-> This keeps the existing assumption that all CPUs are controlled by a
-> single SCMI device.
-> 
-> Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
-> Reviewed-by: Peng Fan <peng.fan@nxp.com>
-> ---
-> Changes in v3:
-> - Use dev_of_node(dev) instead of dev->of_node.
-> - Sanity check scmi_np.
-> - Pick up Reviewed-by from Peng.
-> - Link to v2: https://lore.kernel.org/all/20250421195206.3736128-1-quic_mdtipton@quicinc.com/
-> 
-> Changes in v2:
-> - Return -ENODEV instead of 0 for irrelevant devices.
-> - Link to v1: https://lore.kernel.org/all/20250411212941.1275572-1-quic_mdtipton@quicinc.com/
-> 
->  drivers/cpufreq/scmi-cpufreq.c | 31 ++++++++++++++++++++++++++++++-
->  1 file changed, 30 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-> index 944e899eb1be..b63992de9fc7 100644
-> --- a/drivers/cpufreq/scmi-cpufreq.c
-> +++ b/drivers/cpufreq/scmi-cpufreq.c
-> @@ -393,6 +393,35 @@ static struct cpufreq_driver scmi_cpufreq_driver = {
->  	.set_boost	= cpufreq_boost_set_sw,
->  };
->  
-> +static bool scmi_dev_used_by_cpus(struct device *scmi_dev)
-> +{
-> +	struct device_node *scmi_np = dev_of_node(scmi_dev);
-> +	struct device_node *np;
-> +	struct device *cpu_dev;
-> +	int cpu, idx;
-> +
-> +	if (!scmi_np)
-> +		return false;
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		cpu_dev = get_cpu_device(cpu);
-> +		if (!cpu_dev)
-> +			continue;
-> +
-> +		np = dev_of_node(cpu_dev);
-> +
-> +		if (of_parse_phandle(np, "clocks", 0) == scmi_np)
+Changes since v1:
+ - typo fixes
+ - improve commit messages and kerneldoc comments
+ - move bio_add_virt_nofail out of line
+ - make the number of bio_vecs calculation helper more generic
+ - add another vmalloc helper for the common case
 
-Shouldn't this, on Success, be released by an of_node_put() (or, BETTER,
-by some OF-related cleanup.h magic...)
-
-> +			return true;
-> +
-> +		idx = of_property_match_string(np, "power-domain-names", "perf");
-> +
-> +		if (of_parse_phandle(np, "power-domains", idx) == scmi_np)
-
-Same.
-
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
->  static int scmi_cpufreq_probe(struct scmi_device *sdev)
->  {
->  	int ret;
-> @@ -401,7 +430,7 @@ static int scmi_cpufreq_probe(struct scmi_device *sdev)
->  
->  	handle = sdev->handle;
->  
-> -	if (!handle)
-> +	if (!handle || !scmi_dev_used_by_cpus(dev))
->  		return -ENODEV;
->  
->  	scmi_cpufreq_driver.driver_data = sdev;
-
-Other than the above glitches, LGTM.
-(I gave it a go on JUNO and some emulated setup..)
-
-Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
-Tested-by: Cristian Marussi <cristian.marussi@arm.com>
-
-Thanks,
-Cristian
+Diffstat:
+ block/bio.c                   |  101 +++++++++++++++++++++++++++++++++++++++++
+ block/blk-map.c               |   92 +++++++++----------------------------
+ drivers/block/pktcdvd.c       |    2 
+ drivers/block/rnbd/rnbd-srv.c |    7 --
+ drivers/block/ublk_drv.c      |    3 -
+ drivers/block/virtio_blk.c    |    4 -
+ drivers/md/bcache/super.c     |    3 -
+ drivers/md/dm-bufio.c         |    2 
+ drivers/md/dm-integrity.c     |   16 ++----
+ drivers/nvme/host/core.c      |    2 
+ drivers/scsi/scsi_ioctl.c     |    2 
+ drivers/scsi/scsi_lib.c       |    3 -
+ fs/btrfs/scrub.c              |   10 ----
+ fs/gfs2/ops_fstype.c          |   24 +++------
+ fs/hfsplus/wrapper.c          |   46 +++---------------
+ fs/xfs/xfs_bio_io.c           |   30 ++++--------
+ fs/xfs/xfs_buf.c              |   43 +++--------------
+ fs/xfs/xfs_log.c              |   32 ++-----------
+ fs/zonefs/super.c             |   34 ++++---------
+ include/linux/bio.h           |   25 +++++++++-
+ include/linux/blk-mq.h        |    4 -
+ kernel/power/swap.c           |  103 ++++++++++++++++++------------------------
+ 22 files changed, 270 insertions(+), 318 deletions(-)
 
