@@ -1,141 +1,157 @@
-Return-Path: <linux-pm+bounces-26892-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26893-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62D0FAAFAF1
-	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 15:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 59823AAFB07
+	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 15:14:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C9A946172F
-	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 13:10:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE3E81609DA
+	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 13:14:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB80D22CBFA;
-	Thu,  8 May 2025 13:10:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AB1122AE4E;
+	Thu,  8 May 2025 13:14:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="Tkl66Hd6"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="ULhribNO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F420222AE5D
-	for <linux-pm@vger.kernel.org>; Thu,  8 May 2025 13:10:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBCEE22A7E8
+	for <linux-pm@vger.kernel.org>; Thu,  8 May 2025 13:14:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746709819; cv=none; b=TBoMnscRW+FMYBgyLbDoipyIsxZbG6I7Ar27HcVmY7yK43PxLP5u/8HERxG0i+IA0CBelVTyA2m6N99UK/AauTIlyky3djvQ7cMUmhF/dpFJOEvB6ZGugzAe/t/L1EE6mqAwe41E1m7ETYlR4dvJAj4QKRj9oMbksmbAT8Q7B1o=
+	t=1746710051; cv=none; b=MMAI2PNQx3DCUXHEpj/tSwR+f7f2RoSz4AvcuIx1gC4BoaiAwG1FkbFSrMm7tsEo0a0dwnZSJd4ARUUL8xU1ns4kvM4KRzX74nE/eEuHj62Jq51bfx3DRLebixdh91/yg83JzMrwB0NnSpEEbq/PDJJhe7n3IBES9qD1JMYnmO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746709819; c=relaxed/simple;
-	bh=p3igjo1WeQ4ei3xNoOb2bq7IvOmv4IUIwEwUY8QYhsA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FbWcWPi1ql5J1pZANjI5TEK3vyV85zb4LxgyMRurxsy2+OOAzlNPjDZF24Efw1KM453MjGefS6iN2Q+2CD76lztiWNiN6nzOaNe/i9VyattlKPyh/igKYZ/sdNrTcyqHNrdBy688FaHO30ZJKjUJughuXF8NiabDBg169tZcj1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=Tkl66Hd6; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7c53b9d66fdso132794085a.3
-        for <linux-pm@vger.kernel.org>; Thu, 08 May 2025 06:10:17 -0700 (PDT)
+	s=arc-20240116; t=1746710051; c=relaxed/simple;
+	bh=9mXvjbwW8ofidBphHEKQjhYR9ffb1wijcx8qRAM1zG0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=f+LKjXP3XUDKjrAwfy7z7DvDke7SrF/3VP3THRQFwDAkHejQwP8/ab2Ao6DlJ2exs+f9I+ghMa3y4W4lC40yiR5zjYoOkJe9fb40qvA8id4bqD5SwrOMpbfp4NvXAE7HMAQo6WYkRHgdw98EVbVkm59VMyZgJbXLQiHZxJoW/YQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=ULhribNO; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-7376dd56eccso1023676b3a.0
+        for <linux-pm@vger.kernel.org>; Thu, 08 May 2025 06:14:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1746709817; x=1747314617; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XTDtbe4K12xhEpViDB+3A6qWj2g+MO64MrS+vZvyuzM=;
-        b=Tkl66Hd6oKryphc9p8kkr1Mg5prsFBFUR3n6KnVt3T6ymlULM+JMCOV+Owzs8+hsFw
-         VUEYc2HIjCByzjBSZHZUwAlqRKGNXlMMtaIHboI5dlOnnGkq+YAd8P3czzQbDIBol2fA
-         zPYOsW/OcbdMNO158HzzUoozg5OxjfVAjduUsVOeHvHggdeezkilJ9h3zB+v8bUpPArO
-         HAs5LbIatDvTh0HBkZwmJuMXmWzxpRA7e1pldYtwxRoDweXv/Oj9fhfOc3faJynREGTw
-         5FhrlXY2ifjcb9esxqWwBW0kLa4DgX45VVS/6VQsS+r8ZBagKfp5Zk570XvJr4SsObBY
-         FFQQ==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1746710049; x=1747314849; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=W0ynFZEEXAjIagoyl65aQJ9Sy+zKGYCNgLUwmb5k0MA=;
+        b=ULhribNOHgS+4z/WEc7xhhmKIDRR6VIBr1EEOjDNxPbEkAeMWSEp9M+NnfUays2k/+
+         POuE4Py6xtJPh2MeEVaIzgqCgUL3+ZQv23FFZrG+7XvPPQ36jG7+9JheUTrL3kvqXzTm
+         rTGIv+JVBPIxmBmey0cpOnKPL3H7y+Q/Owz9H4w4rbt8JmSgpcMiyw6zXt8JCGWRDmSz
+         AQ7Jed6CBHSaFiTTsgajOo/wPxOUlc8u6FBCYXqg36dkKpQfS+V8A4MOcK7PDo8qil0P
+         Qm5Ut2UXoJ0FNYxjsU3zmnAVwouDDG6fUP4fws/zvnWLax1JDoSnYavqSdryaaeBFSSw
+         2uWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746709817; x=1747314617;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XTDtbe4K12xhEpViDB+3A6qWj2g+MO64MrS+vZvyuzM=;
-        b=YVVq3CpdwLyYi4T3MfT7G4gtia5g2w8NsuY+70fQAgOnv9JL8KbYEusMjLcHGEQvVO
-         7PoxmfOAHaSdIeTLEIpFKN0DdeScuoQRVMN3RcfPHdCT5CrDEY478KXYP8uT52TF6nvY
-         /qiIO5HtEsvZkGJuEfSvuzFgiz3+mcFi0lwlIApPGvgLO6ExhvHAUQR3HuQti94Fqzma
-         WxAKhAmLCkOJZrU5xcpujTwvMUo6nHqkkjXmbTN3pjMKCSp84UUuK75AP+Np0m6lVS/6
-         Fhy94kxnb89UmHJqmcrdyJCqu/ABjheRLtrysrDJ0Sc/g6DX8dePMd2OdhW+r1e9KVzw
-         NerQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW9k3NrFf8BoXN0iEM+1XSALVZlqVozbAsmZKGlfBU9zQPltp+l2vZ5QrsLysj24GDvfaz1brCPFQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxt9oxRN/A3Ah02gfDoIExh6eIHzsIbj3K87rE9HW18NmG6sIih
-	y7ODEK6EMTjPk4m0wb8R7AlXd/sTQAafmrVt88Dd+d39C1ayiiuOc7djNQvZGTvZAzh8iIoL3U9
-	J
-X-Gm-Gg: ASbGncsyNNtqvXIPDf/SIjn0mhu6XNn62kqAXYoqVxIheVxnOEo3VdouyXKt3V66zP2
-	Iizl8Yj9APIvquIO9F5bE0wH5bILDlOJOfcPioGeX6rMBoUwVDdNt7PBeKPS7laX/rqwXaxLkRi
-	yF9kan89YNLITtqKBQXVv/Otx2rgBpFv79i+deniPCzodLwW0fCAW17zSojM09YKIYFxk0aSgR4
-	gD9rouCalMG++ku/hZvCPgWs1u8g3UWXXWjTu8vvlF0s4ra2Imy7DQnWGPJ8O/Z0miCGcVTR2XO
-	efJoOsL68+bAe+PJHqgjJKz8EKa4/NBVF6Ej
-X-Google-Smtp-Source: AGHT+IFc67B3rj29wLwGe5b9hNdUhbBaJDAFmOrgjOa9uQdS/eOlhjhIK4I5PRu/Z5lCJQDbW0IFWg==
-X-Received: by 2002:a05:6e02:12ef:b0:3d4:6ff4:261e with SMTP id e9e14a558f8ab-3da73867d6fmr68904585ab.0.1746709805765;
-        Thu, 08 May 2025 06:10:05 -0700 (PDT)
-Received: from [192.168.1.116] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f88a945471sm3173148173.70.2025.05.08.06.10.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 May 2025 06:10:05 -0700 (PDT)
-Message-ID: <0df727b4-c0fb-4051-9169-3bd11035d3e0@kernel.dk>
-Date: Thu, 8 May 2025 07:10:03 -0600
+        d=1e100.net; s=20230601; t=1746710049; x=1747314849;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W0ynFZEEXAjIagoyl65aQJ9Sy+zKGYCNgLUwmb5k0MA=;
+        b=GmFNbENKh9QJ2e05hzZgWkvnDiw9zr60FHUAyGlHYtZf7RPStQG4pjSwrlBColR2lQ
+         h2ks4xDCluGlvk2mBD8t8ErdjmrG64IPbrjhDUTm+LAkgaSrZSyBMO4bB9iIpEiw0gQF
+         fOAdYU6Ss8Be1t/FFPdvzNoWcSX7KfYXTb6R4KeY7wsZ3R+PGoy4rCO2UQ7v+YK05Dap
+         nczbKqV2i8HfhvAO8IbwY3mZXMVR3zI8FD67vNo6bNNpQP7Dgchx2TqrXo3LFQiwCyOq
+         DAic4OpDFRDs0JAp321eUvJWsCJHihxU4JzAU+aCFShFbVJ0Ly0NMsJX2OFEYyo+V6rK
+         stow==
+X-Forwarded-Encrypted: i=1; AJvYcCXukYwR3G2sJ+Qq6skNbjrQJK2rlAJTu12rvxP75R++cdGebyUv5wM+MPTW6s86dYPr+lmjWZK/Rg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2jJb/pMMLsVBpb7GeAQiFEPN7NfxnRpYrEvMrz8nrpWSSr4Y6
+	q1gkNEgp/qzxCOHCXUkEaRcqEQsdMUu9whObh0sKgZKM0swMbvH/OP8aozW6eqA=
+X-Gm-Gg: ASbGnctpJE8zoHKCDB/jgMJKAKqrLDFRGfy1N+K5VlImuT1AsmvGdqiacj2GAqXMEDw
+	SYQ6x9VvpD8BbH9OgXRdirswMnI1owNsxwz7XkGeEcqUeJu1CNk4SXtfIFzsHEHnAZDZxdhkzz5
+	T9L4MLT1F/6OIjOAxl10pis/PLISWGPfuuQTg42ASouUq9RqY80lG2xXumbei9xu9+dkNES7RK+
+	wpmxCPNPD8QK1GY8lPUK0ljdCf876+GsuF+lVIAUlJOJoWX2KdHHUCu53XW0W1SaCPDS0MMXZSe
+	CVkyQ1lAFUVOT286TUgqEJ1gJ3S7n43OKfCagJQ=
+X-Google-Smtp-Source: AGHT+IFA5bdAR+g+8jas/pp/moZKFd/5kEN1qQAf++05eckooX+tTxGDVWyNcpdJrbek7kiTWc5H5g==
+X-Received: by 2002:a05:6a00:2887:b0:736:73ad:365b with SMTP id d2e1a72fcca58-740a99b3b98mr5056194b3a.14.1746710048945;
+        Thu, 08 May 2025 06:14:08 -0700 (PDT)
+Received: from localhost ([97.126.182.119])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7405905d067sm13158112b3a.126.2025.05.08.06.14.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 May 2025 06:14:08 -0700 (PDT)
+From: Kevin Hilman <khilman@baylibre.com>
+To: Sukrut Bellary <sbellary@baylibre.com>, Russell King
+ <linux@armlinux.org.uk>, Rob Herring <robh@kernel.org>, Tony Lindgren
+ <tony@atomide.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Nishanth
+ Menon <nm@ti.com>, Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Sukrut Bellary <sbellary@baylibre.com>, Aaro Koskinen
+ <aaro.koskinen@iki.fi>, Andreas Kemnade <andreas@kemnade.info>, Roger
+ Quadros <rogerq@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Santosh
+ Shilimkar <ssantosh@kernel.org>, Bajjuri Praneeth <praneeth@ti.com>,
+ Raghavendra Vignesh <vigneshr@ti.com>, Bin Liu <b-liu@ti.com>,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/4] pmdomain: ti: Fix STANDBY handling of PER power domain
+In-Reply-To: <20250318230042.3138542-3-sbellary@baylibre.com>
+References: <20250318230042.3138542-1-sbellary@baylibre.com>
+ <20250318230042.3138542-3-sbellary@baylibre.com>
+Date: Thu, 08 May 2025 06:14:07 -0700
+Message-ID: <7hjz6rtfc0.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/19] block: add a bdev_rw_virt helper
-To: Matthew Wilcox <willy@infradead.org>
-Cc: Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org,
- "Md. Haris Iqbal" <haris.iqbal@ionos.com>, Jack Wang <jinpu.wang@ionos.com>,
- Coly Li <colyli@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>,
- Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>,
- Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
- David Sterba <dsterba@suse.com>, Andreas Gruenbacher <agruenba@redhat.com>,
- Carlos Maiolino <cem@kernel.org>, Damien Le Moal <dlemoal@kernel.org>,
- Naohiro Aota <naohiro.aota@wdc.com>, Johannes Thumshirn <jth@kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>,
- slava@dubeyko.com, glaubitz@physik.fu-berlin.de, frank.li@vivo.com,
- linux-bcache@vger.kernel.org, dm-devel@lists.linux.dev,
- linux-btrfs@vger.kernel.org, gfs2@lists.linux.dev,
- linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
- linux-pm@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
- Johannes Thumshirn <johannes.thumshirn@wdc.com>
-References: <20250507120451.4000627-1-hch@lst.de>
- <20250507120451.4000627-3-hch@lst.de>
- <a789a0bd-3eaf-46de-9349-f19a3712a37c@kernel.dk>
- <aBypK_nunRy92bi5@casper.infradead.org>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <aBypK_nunRy92bi5@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 5/8/25 6:52 AM, Matthew Wilcox wrote:
-> On Wed, May 07, 2025 at 08:01:52AM -0600, Jens Axboe wrote:
->> On 5/7/25 6:04 AM, Christoph Hellwig wrote:
->>> +int bdev_rw_virt(struct block_device *bdev, sector_t sector, void *data,
->>> +		size_t len, enum req_op op)
->>
->> I applied the series, but did notice a lot of these - I know some parts
->> like to use the 2-tab approach, but I still very much like to line these
->> up. Just a style note for future patches, let's please have it remain
->> consistent and not drift towards that.
-> 
-> The problem with "line it up" is that if we want to make it return
-> void or add __must_check to it or ... then we either have to reindent
-> (and possibly reflow) all trailing lines which makes the patch review
-> harder than it needs to be.  Or the trailing arguments then don't line
-> up the paren, getting to the situation we don't want.
+Sukrut Bellary <sbellary@baylibre.com> writes:
 
-Yeah I'm well aware of why people like the 2 tab approach, I just don't
-like to look at it aesthetically. And I've been dealing that kind of
-reflowing for decades, never been a big deal.
+> Per AM335x TRM[1](section 8.1.4.3 Power mode), in case of STANDBY,
+> PER domain should be ON. So, fix the PER power domain handling on standby.
+>
+> [1] https://www.ti.com/lit/ug/spruh73q/spruh73q.pdf
+>
+> Signed-off-by: Sukrut Bellary <sbellary@baylibre.com>
 
-> I can't wait until we're using rust and the argument goes away because
-> it's just "whatever rustfmt says".
+Reviewed-by: Kevin Hilman <khilman@baylibre.com>
 
-Heh one can hope, but I suspect hoping for a generic style for the whole
-kernel across sub-systems is a tad naive ;-)
+Ulf, this series has been tested now.  Go ahead and take this patch.
 
--- 
-Jens Axboe
+Thanks,
+
+Kevin
+
+
+> ---
+>  drivers/pmdomain/ti/omap_prm.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/pmdomain/ti/omap_prm.c b/drivers/pmdomain/ti/omap_prm.c
+> index b8ceb3c2b81c..7e36e675a8c6 100644
+> --- a/drivers/pmdomain/ti/omap_prm.c
+> +++ b/drivers/pmdomain/ti/omap_prm.c
+> @@ -18,7 +18,9 @@
+>  #include <linux/pm_domain.h>
+>  #include <linux/reset-controller.h>
+>  #include <linux/delay.h>
+> -
+> +#if IS_ENABLED(CONFIG_SUSPEND)
+> +#include <linux/suspend.h>
+> +#endif
+>  #include <linux/platform_data/ti-prm.h>
+>  
+>  enum omap_prm_domain_mode {
+> @@ -88,6 +90,7 @@ struct omap_reset_data {
+>  #define OMAP_PRM_HAS_RSTST	BIT(1)
+>  #define OMAP_PRM_HAS_NO_CLKDM	BIT(2)
+>  #define OMAP_PRM_RET_WHEN_IDLE	BIT(3)
+> +#define OMAP_PRM_ON_WHEN_STANDBY	BIT(4)
+>  
+>  #define OMAP_PRM_HAS_RESETS	(OMAP_PRM_HAS_RSTCTRL | OMAP_PRM_HAS_RSTST)
+>  
+> @@ -404,7 +407,8 @@ static const struct omap_prm_data am3_prm_data[] = {
+>  		.name = "per", .base = 0x44e00c00,
+>  		.pwrstctrl = 0xc, .pwrstst = 0x8, .dmap = &omap_prm_noinact,
+>  		.rstctrl = 0x0, .rstmap = am3_per_rst_map,
+> -		.flags = OMAP_PRM_HAS_RSTCTRL, .clkdm_name = "pruss_ocp"
+> +		.flags = OMAP_PRM_HAS_RSTCTRL | OMAP_PRM_ON_WHEN_STANDBY,
+> +		.clkdm_name = "pruss_ocp",
+>  	},
+>  	{
+>  		.name = "wkup", .base = 0x44e00d00,
+> -- 
+> 2.34.1
 
