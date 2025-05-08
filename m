@@ -1,296 +1,192 @@
-Return-Path: <linux-pm+bounces-26856-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26857-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 938FFAAF071
-	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 03:03:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B231AAF0C2
+	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 03:52:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82D589882BA
-	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 01:03:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 76CE94E4656
+	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 01:52:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CC371B4F0A;
-	Thu,  8 May 2025 01:02:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E44D15687D;
+	Thu,  8 May 2025 01:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R8VuVxEY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fu7tIxBW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F57D19EED3;
-	Thu,  8 May 2025 01:02:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA7828F4
+	for <linux-pm@vger.kernel.org>; Thu,  8 May 2025 01:52:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746666156; cv=none; b=RpQ/LwKTXZoak+zmiMOSjZuVFEuf5tJ1CF1qOnjfTkjlozoKU5XXJOSzjfsEn3rNIzNd4hb1WMaxAnon7ZIoY8CJPEA2uj42G9mcDI64ZlMQIyrEcBDLYKD6lCSOEvCABFi7dO4eET3ujNa+FGV9wr7hcOmXAnIgyJK3vqj1nf8=
+	t=1746669146; cv=none; b=mYFY5fYU74HvgE11SiboZNS9C/sbE9AYXQKf/cp/r0jfODZlExiAMrcK0HzNU0MlGFsUfVA1SuVw7yUblybvJ0suj4QWHcAnccMkB/yqEfx5AHlcOr+pmY9qr2izW8bc8NENF64hfmYohQQ33JF9JfbriLGVxaa3VzvNcdreWHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746666156; c=relaxed/simple;
-	bh=+STG5ShdUtz33BaUGXhezEcq64LbHRhrK4VC6uqXvy0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jb5I6WBLkh+irN0JAHGcwIND5E9JS02F0oJieGYR86VObV2A/9k4oK7BeNzyPpkCbz4w9zrpX/UTGLiHiNmedQME0PZ3xTqarmBcDQ4rq5PASx1TJQ6bAyfyrgPNKSs/H9JPE/p2wSOuI1z0O/h+xojLKl+Lx1RTlghGboPUnwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R8VuVxEY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5C8BCC4CEFD;
-	Thu,  8 May 2025 01:02:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746666155;
-	bh=+STG5ShdUtz33BaUGXhezEcq64LbHRhrK4VC6uqXvy0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=R8VuVxEY+SmkzM8vw2JS/+on9tDO+FzU8wO72hJfGHZSHkSRN/llSWkFAnYG97P+l
-	 R0qMqeQl2b/qvKbH2lnXtnGlNRiq38qOqfd96GC6bPGoOjttasniR30yzRtvN39Kd3
-	 g5JBoGnLFN1VlPNu3p+Q9hgg8Y5fyrolm3LjwrIOBPqsljiLF+BiNAFhi8tZx9PliR
-	 qoRa1pawWBgMoaIvLa8LIuNQjvIMRT3tMmFQPOAGyHps5Q69SUsybrBTVlTF/ciG4+
-	 ya5lEDfitlx6WvHfjnBG2CbxZqyTYWzJmC/NmjI/qTFtnroUSWWzWOshzV0jEydTg5
-	 joBtTOrbKB1Sw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5422AC3ABCA;
-	Thu,  8 May 2025 01:02:35 +0000 (UTC)
-From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
-Date: Wed, 07 May 2025 18:00:26 -0700
-Subject: [PATCH v2 5/5] usb: typec: tcpm: Add support for Battery Cap
- response message
+	s=arc-20240116; t=1746669146; c=relaxed/simple;
+	bh=24ghQa19A1EcV9ME36/5Dl2LfBou9I9iG1yg+h4IOe4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Z9ay33VBl+pggS26au5Z9FEQdp1DBE+c0Qp1F0G0KggpZGsBwsIwEGd2wY9lhSf4+ts3rXxEuP4uvs6t7POJOGDQG2J50UpPIS/MfD1h84cXGBSPjrB24miOc1p9bOMw1cwSItVgp80ewuj2621yEJxUmMcFecGKg8mGHRoATx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fu7tIxBW; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746669144; x=1778205144;
+  h=date:from:to:cc:subject:message-id;
+  bh=24ghQa19A1EcV9ME36/5Dl2LfBou9I9iG1yg+h4IOe4=;
+  b=fu7tIxBWC2Rr/d6f8hQldLb/HGZA3Jk+rLCX2g4haNMz4gCqPMIxz/vz
+   RHDNk+aGyYac/wvLRMbLhrw8RMdZgXjzN1IQogRU78iGkzCtKZT6OjQtR
+   vqnDKx17R+W7FhVmVQHroPl1WKNzEapC7sl8sjLddJijSuJomJJNAG4NP
+   4bj9pM/YGmY0Gh0YoZpMEnvWQvMaAH/YVFfd9L7/rhO1Y02HsUBitTRWD
+   WJBrRCFNU6OBxIxTp/oPiNnr8NztaBOviWyTmtNm/UL3C30cGrNBhzP82
+   kT8xVzMu8juKIjkoPHlBqyKLepAIq3OAIV6ZetTkKarkOFkpmNSNnD9MU
+   g==;
+X-CSE-ConnectionGUID: 5niXGIPgScSZ/gw4iInVpg==
+X-CSE-MsgGUID: ChsL/f78T56LfuZ4TJ9T0A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="65846789"
+X-IronPort-AV: E=Sophos;i="6.15,271,1739865600"; 
+   d="scan'208";a="65846789"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 18:52:24 -0700
+X-CSE-ConnectionGUID: njB3SpNJQVqPzk8NDcAPAg==
+X-CSE-MsgGUID: woSyYGJ6QS2SwSnnhSM7Ew==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,271,1739865600"; 
+   d="scan'208";a="137134521"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 07 May 2025 18:48:49 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uCqNT-0009Cl-1S;
+	Thu, 08 May 2025 01:48:47 +0000
+Date: Thu, 08 May 2025 09:47:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: linux-pm@vger.kernel.org
+Subject: [amd-pstate:bleeding-edge] BUILD SUCCESS
+ d26d16438bc5fd5524121244cc133f9872a63210
+Message-ID: <202505080942.ikgsmHoi-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250507-batt_ops-v2-5-8d06130bffe6@google.com>
-References: <20250507-batt_ops-v2-0-8d06130bffe6@google.com>
-In-Reply-To: <20250507-batt_ops-v2-0-8d06130bffe6@google.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Badhri Jagan Sridharan <badhri@google.com>, 
- Sebastian Reichel <sre@kernel.org>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, 
- Pavel Machek <pavel@kernel.org>
-Cc: Kyle Tso <kyletso@google.com>, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
- linux-pm@vger.kernel.org, Amit Sunil Dhamne <amitsd@google.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1746666154; l=6782;
- i=amitsd@google.com; s=20241031; h=from:subject:message-id;
- bh=B5Z1TgNEutKpwFmhUKlqLMwh2csQDHuFOD4jLxln/2I=;
- b=aJc/rEl2IzAJabyp4WcVnvPNkacPjz5hhoAO38TwyUp386o6LnogwRsEycR5NxPDx/tq9Jpip
- 4vzR/FQ7YWAA/tem+HTZiQyBanjk83x6bwtzOj5Fn988g9X5wZMYgTw
-X-Developer-Key: i=amitsd@google.com; a=ed25519;
- pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
-X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
- auth_id=262
-X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
-Reply-To: amitsd@google.com
 
-From: Amit Sunil Dhamne <amitsd@google.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git bleeding-edge
+branch HEAD: d26d16438bc5fd5524121244cc133f9872a63210  amd-pstate-ut: Reset amd-pstate driver mode after running selftests
 
-Add support for responding to Get_Battery_Cap (extended) request with a
-a Battery_Capabilities (extended) msg. The requester will request
-Battery Cap for a specific battery using an index in Get_Battery_Cap. In
-case of failure to identify battery, TCPM shall reply with an
-appropriate message indicating so.
+elapsed time: 3308m
 
-Support has been added only for fixed batteries and not hot swappable
-ones.
+configs tested: 99
+configs skipped: 1
 
-As the Battery Cap Data Block size is 9 Bytes (lesser than
-MaxExtendedMsgChunkLen of 26B), only a single chunk is required to
-complete the AMS.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Support for Battery_Capabilities message is required for sinks that
-contain battery as specified in USB PD Rev3.1 v1.8
-("Applicability of Data Messages" section).
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-14.2.0
+arc                               allnoconfig    gcc-14.2.0
+arc                              allyesconfig    gcc-14.2.0
+arc                   randconfig-001-20250506    gcc-8.5.0
+arc                   randconfig-002-20250506    gcc-12.4.0
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-21
+arm                              allyesconfig    gcc-14.2.0
+arm                   randconfig-001-20250506    clang-21
+arm                   randconfig-002-20250506    clang-21
+arm                   randconfig-003-20250506    clang-17
+arm                   randconfig-004-20250506    clang-21
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20250506    clang-21
+arm64                 randconfig-002-20250506    gcc-8.5.0
+arm64                 randconfig-003-20250506    clang-21
+arm64                 randconfig-004-20250506    gcc-8.5.0
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20250506    gcc-14.2.0
+csky                  randconfig-002-20250506    gcc-14.2.0
+hexagon                          allmodconfig    clang-17
+hexagon                           allnoconfig    clang-21
+hexagon                          allyesconfig    clang-21
+hexagon               randconfig-001-20250506    clang-21
+hexagon               randconfig-002-20250506    clang-21
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250506    clang-20
+i386        buildonly-randconfig-002-20250506    clang-20
+i386        buildonly-randconfig-003-20250506    clang-20
+i386        buildonly-randconfig-004-20250506    gcc-12
+i386        buildonly-randconfig-005-20250506    clang-20
+i386        buildonly-randconfig-006-20250506    clang-20
+i386                                defconfig    clang-20
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch             randconfig-001-20250506    gcc-14.2.0
+loongarch             randconfig-002-20250506    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20250506    gcc-8.5.0
+nios2                 randconfig-002-20250506    gcc-6.5.0
+openrisc                          allnoconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                randconfig-001-20250506    gcc-11.5.0
+parisc                randconfig-002-20250506    gcc-5.5.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc               randconfig-001-20250506    clang-21
+powerpc               randconfig-002-20250506    gcc-8.5.0
+powerpc               randconfig-003-20250506    gcc-8.5.0
+powerpc64             randconfig-001-20250506    clang-20
+powerpc64             randconfig-002-20250506    gcc-8.5.0
+powerpc64             randconfig-003-20250506    clang-18
+riscv                             allnoconfig    gcc-14.2.0
+riscv                 randconfig-001-20250506    clang-19
+riscv                 randconfig-002-20250506    clang-21
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-21
+s390                             allyesconfig    gcc-14.2.0
+s390                  randconfig-001-20250506    gcc-9.3.0
+s390                  randconfig-002-20250506    clang-21
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                    randconfig-001-20250506    gcc-12.4.0
+sh                    randconfig-002-20250506    gcc-12.4.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250506    gcc-11.5.0
+sparc                 randconfig-002-20250506    gcc-6.5.0
+sparc64               randconfig-001-20250506    gcc-7.5.0
+sparc64               randconfig-002-20250506    gcc-5.5.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-21
+um                               allyesconfig    gcc-12
+um                    randconfig-001-20250506    clang-17
+um                    randconfig-002-20250506    clang-21
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250506    clang-20
+x86_64      buildonly-randconfig-002-20250506    gcc-12
+x86_64      buildonly-randconfig-003-20250506    gcc-12
+x86_64      buildonly-randconfig-004-20250506    clang-20
+x86_64      buildonly-randconfig-005-20250506    clang-20
+x86_64      buildonly-randconfig-006-20250506    gcc-12
+x86_64                              defconfig    gcc-11
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                randconfig-001-20250506    gcc-13.3.0
+xtensa                randconfig-002-20250506    gcc-9.3.0
 
-Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
-Reviewed-by: Kyle Tso <kyletso@google.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 96 +++++++++++++++++++++++++++++++++++++++++--
- include/linux/usb/pd.h        | 31 ++++++++++++++
- 2 files changed, 123 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 98df0c7ce00e43f6c95ab49237a414e1b4413369..4731126fbf19a50178be0cf8867b3fe08595724c 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -228,7 +228,8 @@ enum pd_msg_request {
- 	PD_MSG_DATA_SINK_CAP,
- 	PD_MSG_DATA_SOURCE_CAP,
- 	PD_MSG_DATA_REV,
--	PD_MSG_DATA_BATT_STATUS
-+	PD_MSG_DATA_BATT_STATUS,
-+	PD_MSG_EXT_BATT_CAP,
- };
- 
- enum adev_actions {
-@@ -597,8 +598,8 @@ struct tcpm_port {
- 	u8 fixed_batt_cnt;
- 
- 	/*
--	 * Variable used to store battery_ref from the Get_Battery_Status
--	 * request to process Battery_Status messages.
-+	 * Variable used to store battery_ref from the Get_Battery_Status &
-+	 * Get_Battery_Caps request to process Battery_Status messages.
- 	 */
- 	u8 batt_request;
- #ifdef CONFIG_DEBUG_FS
-@@ -1414,6 +1415,81 @@ static int tcpm_pd_send_batt_status(struct tcpm_port *port)
- 	return tcpm_pd_transmit(port, TCPC_TX_SOP, &msg);
- }
- 
-+static int tcpm_pd_send_batt_cap(struct tcpm_port *port)
-+{
-+	struct pd_message msg;
-+	struct power_supply *batt;
-+	struct batt_cap_ext_msg bcdb;
-+	u32 batt_id = port->batt_request;
-+	int ret;
-+	union power_supply_propval val;
-+	bool batt_present = false;
-+	u16 batt_design_cap = BATTERY_PROPERTY_UNKNOWN;
-+	u16 batt_charge_cap = BATTERY_PROPERTY_UNKNOWN;
-+	u8 data_obj_cnt;
-+	/*
-+	 * As per USB PD Rev3.1 v1.8, if battery reference is incorrect,
-+	 * then set the VID field to 0xffff.
-+	 * If VID field is set to 0xffff, always set the PID field to
-+	 * 0x0000.
-+	 */
-+	u16 vid = BATTERY_PROPERTY_UNKNOWN;
-+	u16 pid = 0x0;
-+
-+	memset(&msg, 0, sizeof(msg));
-+
-+	if (batt_id < MAX_NUM_FIXED_BATT && port->fixed_batt[batt_id]) {
-+		batt_present = true;
-+		batt = port->fixed_batt[batt_id];
-+		ret = power_supply_get_property(batt,
-+						POWER_SUPPLY_PROP_USBIF_VENDOR_ID,
-+						&val);
-+		if (!ret)
-+			vid = val.intval;
-+
-+		if (vid != BATTERY_PROPERTY_UNKNOWN) {
-+			ret = power_supply_get_property(batt,
-+							POWER_SUPPLY_PROP_USBIF_PRODUCT_ID,
-+							&val);
-+			if (!ret)
-+				pid = val.intval;
-+		}
-+
-+		ret = power_supply_get_property(batt,
-+						POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN,
-+						&val);
-+		if (!ret)
-+			batt_design_cap = (u16)UWH_TO_WH(val.intval * 10);
-+
-+		ret = power_supply_get_property(batt,
-+						POWER_SUPPLY_PROP_ENERGY_FULL,
-+						&val);
-+		if (!ret)
-+			batt_charge_cap = (u16)UWH_TO_WH(val.intval * 10);
-+	}
-+
-+	bcdb.vid = cpu_to_le16(vid);
-+	bcdb.pid = cpu_to_le16(pid);
-+	bcdb.batt_design_cap = cpu_to_le16(batt_design_cap);
-+	bcdb.batt_last_chg_cap = cpu_to_le16(batt_charge_cap);
-+	bcdb.batt_type = !batt_present ? BATT_CAP_BATT_TYPE_INVALID_REF : 0;
-+	memcpy(msg.ext_msg.data, &bcdb, sizeof(bcdb));
-+	msg.ext_msg.header = PD_EXT_HDR_LE(sizeof(bcdb),
-+					   0, /* Denotes if request chunk */
-+					   0, /* Chunk number */
-+					   1  /* Chunked */);
-+
-+	data_obj_cnt = count_chunked_data_objs(sizeof(bcdb));
-+	msg.header = cpu_to_le16(PD_HEADER(PD_EXT_BATT_CAP,
-+					   port->pwr_role,
-+					   port->data_role,
-+					   port->negotiated_rev,
-+					   port->message_id,
-+					   data_obj_cnt,
-+					   1 /* Denotes if ext header */));
-+	return tcpm_pd_transmit(port, TCPC_TX_SOP, &msg);
-+}
-+
- static void mod_tcpm_delayed_work(struct tcpm_port *port, unsigned int delay_ms)
- {
- 	if (delay_ms) {
-@@ -3711,8 +3787,12 @@ static void tcpm_pd_ext_msg_request(struct tcpm_port *port,
- 		tcpm_pd_handle_msg(port, PD_MSG_DATA_BATT_STATUS,
- 				   GETTING_BATTERY_STATUS);
- 		break;
--	case PD_EXT_SOURCE_CAP_EXT:
- 	case PD_EXT_GET_BATT_CAP:
-+		port->batt_request = ext_msg->data[0];
-+		tcpm_pd_handle_msg(port, PD_MSG_EXT_BATT_CAP,
-+				   GETTING_BATTERY_CAPABILITIES);
-+		break;
-+	case PD_EXT_SOURCE_CAP_EXT:
- 	case PD_EXT_BATT_CAP:
- 	case PD_EXT_GET_MANUFACTURER_INFO:
- 	case PD_EXT_MANUFACTURER_INFO:
-@@ -3921,6 +4001,14 @@ static bool tcpm_send_queued_message(struct tcpm_port *port)
- 					 ret);
- 			tcpm_ams_finish(port);
- 			break;
-+		case PD_MSG_EXT_BATT_CAP:
-+			ret = tcpm_pd_send_batt_cap(port);
-+			if (ret)
-+				tcpm_log(port,
-+					 "Failed to send battery cap ret=%d",
-+					 ret);
-+			tcpm_ams_finish(port);
-+			break;
- 		default:
- 			break;
- 		}
-diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
-index 4efa7bfd9863915dfc8048da264116d9b05a447b..c89594177da57f4398b75c89c1991b4937614a70 100644
---- a/include/linux/usb/pd.h
-+++ b/include/linux/usb/pd.h
-@@ -204,6 +204,37 @@ struct pd_message {
- 	};
- } __packed;
- 
-+/*
-+ * count_chunked_data_objs: Helper to calculate number of Data Objects on a 4
-+ *   byte boundary.
-+ * @size: Size of data block for extended message. Should *not* include extended
-+ *   header size.
-+ */
-+static inline u8 count_chunked_data_objs(u32 size)
-+{
-+	size += offsetof(struct pd_chunked_ext_message_data, data);
-+	return ((size / 4) + (size % 4 ? 1 : 0));
-+}
-+
-+/**
-+ * batt_cap_ext_msg - Battery capability extended PD message
-+ * @vid: Battery Vendor ID (assigned by USB-IF)
-+ * @pid: Battery Product ID (assigned by battery or device vendor)
-+ * @batt_design_cap: Battery design capacity in 0.1Wh
-+ * @batt_last_chg_cap: Battery last full charge capacity in 0.1Wh
-+ * @batt_type: Battery Type. bit0 when set indicates invalid battery reference.
-+ *             Rest of the bits are reserved.
-+ */
-+struct batt_cap_ext_msg {
-+	__le16 vid;
-+	__le16 pid;
-+	__le16 batt_design_cap;
-+	__le16 batt_last_chg_cap;
-+	u8 batt_type;
-+} __packed;
-+
-+#define BATT_CAP_BATT_TYPE_INVALID_REF			BIT(0)
-+
- /* PDO: Power Data Object */
- #define PDO_MAX_OBJECTS		7
- 
-
--- 
-2.49.0.987.g0cc8ee98dc-goog
-
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
