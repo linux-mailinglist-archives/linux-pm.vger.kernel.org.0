@@ -1,149 +1,159 @@
-Return-Path: <linux-pm+bounces-26879-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26880-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 908FCAAF5E7
-	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 10:40:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D678AAF75E
+	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 12:04:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC8999C6E1D
-	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 08:40:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 711751BC3E9D
+	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 10:04:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BFD22620CA;
-	Thu,  8 May 2025 08:40:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 614DA1C8612;
+	Thu,  8 May 2025 10:04:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MLLFxppV"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FAOKJki6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62FCF262FC9;
-	Thu,  8 May 2025 08:40:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A02471C5D59
+	for <linux-pm@vger.kernel.org>; Thu,  8 May 2025 10:04:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746693627; cv=none; b=n0QiVvg1za2aT/bcl7zqpi8kEgLAGSuKiQTCLm7XhJLT+AQd6BIED0tky1FyFc6fRH7ffn6k/Bc84HY77T9yMEwhziajs3c+HyksJMKIwuElW/N96jI+6lc4uPsKEe++zrhk5wfWJGDdMnlqn0Q6xpHxhZ1m8B4sbaO0DZ+4ovU=
+	t=1746698653; cv=none; b=j9P+fryZ6WdE03oFsX42MpF53GXjapaw8akKGYhoEbS1v9sEkEPnCmoPTYFB761QLu1jNYY55XxYCdE28RZb4bvrbWD2egYu3v92o6TIBKW/nJOF81sqsENPdJxVw4Cdew8/aC3JR5Y0y5AIpQa9uZ37ENuVcRe2uaoBuooXllw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746693627; c=relaxed/simple;
-	bh=biF9LbNbWIVmr1lu/SJD7jTVvIudv3FbyuuHOOWKLi4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d6b0A0gvFrhZE9oobfydzJ3kJ4GhHIrXKOpB95xK4b0a1Ye3g8PPEJPQlHWU3fucmmVsJKz6eLjU9JZcWKehjd7SbUFsScHvrZsw62X1Fn7WY8MXUziDBCoKL5Jj+IvQMkFpKrlMgF6HYmOyIzu89MkkixXt2I4e3eiXXIkEdZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MLLFxppV; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43cf257158fso4637625e9.2;
-        Thu, 08 May 2025 01:40:25 -0700 (PDT)
+	s=arc-20240116; t=1746698653; c=relaxed/simple;
+	bh=nQWMS8zLodxQjA2tkoVMA2V3++BSV8DfYZl9qCc12q4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=c9DJEeEcyI+ZWzfYxqJ3ne30Ft6/0FkYjlZ56EInrXRqjtQg1pvzuK+3ZuzS6y1szS3cyfYlDo3/g7ojoVbvrV+T/L2QgGcnpE2pMnGey2PJc5VOQfl6P6OPw5PCCKwqNBY6TvOGNXBnJDI3HXkA2CCaoQGTjS5BR7r/5DJFigM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FAOKJki6; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e7311e66a8eso811548276.2
+        for <linux-pm@vger.kernel.org>; Thu, 08 May 2025 03:04:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746693624; x=1747298424; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=biF9LbNbWIVmr1lu/SJD7jTVvIudv3FbyuuHOOWKLi4=;
-        b=MLLFxppVu1Z0fZCHsJnWTjnvDTIw3cde5GFAXARa+qgb3AZ67y33Lhp/ZLV0ZvN3Iw
-         j324BoPhy2FYNFkWFusFLuflfj31F+wnTEMf4C58Cur43EgK9kKenkI2gYznRujom65c
-         A/5sdSxLgu20/Mfh3cy2xQqD7RfJy/7eQa/8tW/ZGKMnNWZtxhvFUjYkXfXOAYIOYLBk
-         YFJ8zHcLAHMaNkub1Yk2qrR0v6cp0oyY0qPhyAVdJrr9vKMKqdHZyt2cOdimesjWFHqn
-         7uazVsP0Sdn84ecrqskkev+8focgYyXYyL1n/B40qZZsxo9tF1sNFcW5TvGsH6iy6baq
-         ROKw==
+        d=linaro.org; s=google; t=1746698649; x=1747303449; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+OMCAEKXt9Na5TVEs/wllXz+LY/w4SZyrDL1epmaZEU=;
+        b=FAOKJki6OBNOt28NYq+dOT0TCHWF0fCAIikha134jsYRFKMNvLFwu7bLmsDcBNq/0/
+         9JqUwi7qNK1yhW0QJiRh/+ri7vJ3BiP3y+tdBGmo8SESjHMpgvvponj7S+N12v3gPNLk
+         gxEnVSv6TwDiNYPiPRC9EaHSI6PCIKeimerfJQ2AGzNZ+w3yaww/TpfC5OOzzic+qAJD
+         1cm1bZd3lcTlWXu+gJeruukumXyJ/ecOlk8zOnyzdzfVL2I7znRXRNS0Sh0rokKONP9F
+         U2uFCuzZlwMNF31d1lWLdEh8322hCFFrmsV4U3B+j1eQukVXfvFGurI7vCG/Ek50zlMr
+         xxrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746693624; x=1747298424;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=biF9LbNbWIVmr1lu/SJD7jTVvIudv3FbyuuHOOWKLi4=;
-        b=XJrASmoDUA6EKYEWO2XaAOM4H4Lvz43Ca2VOHDI1SDQ6EOEaeCXTb+XwLb6Z6NWwg0
-         XE0+zKU2cORKSu+BiGP7591JGOIYjOLquX828QFQgX9GA9xS7xst+Y9oKtMkBdtXfU7+
-         JvP7wP64mo/kAYh6sn4QWFAe6FsVy5CZzqF68iEpt1tvSg7xMWfJDvGPX8NBtoLnPTFX
-         QwcchI/fdk7vVjq7AQ3Qxukv7i1iFCNZU+dgKs6n7yeCjtNYHYUrJoW9bdQf6SBNwvoz
-         Cr8rR4rg5x1os/PnQSZXGAE+INgplQe0qnqy27AWUY3eXG8M5Z/ABcAE5fvNf/u5P296
-         P4JQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUW/WriAW1RNg8vl6dUBIHKBLNBMG/u6CiNqRm5beIRRRAL/myplRk5Wsok/W2BRw8Mk+n4ThJ1CyfERNw=@vger.kernel.org, AJvYcCWH6diyIMnfH1dPbtGBD4LeMoX6xrFiWXDoA8py8B87e/gP/huRSZ0q7GbkSTZhVlt/esiRGlT9hSQ/@vger.kernel.org, AJvYcCXRRnXxoIesHyrn+YqnMRUcgZiGBH9Vjuk2ZZeJE6MQqoosksQ0zlBqGTFo73w7qB0XhHNPkjt4E4M=@vger.kernel.org, AJvYcCXkD7ULxGp95fWE63H1Gya1bXmhixhjeGTUJBT4JRLYvthvjS/xsm5ohrWOUbTri+OdieJj3Djrbax7Ir0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwrwwWbMqIfx+xvvmI+Mh/v6KSYkXB0qS2osz9cEfzGiHeYf23V
-	TjkAvhp7/FyK7za7j6n62RdNQ0bN1yjflwNpRx0I979Jv50pOBpm
-X-Gm-Gg: ASbGncvMUxEuTps28m+E8JB3KD4wLyhdVwJEnCK0r3zNbqY2M3EhBcFmER24si0IqoB
-	pfvUf7HGQoTJ2Fid12w2sulIZ4EAAuesbRYgBCy2LLfHHIGIPGYewULReyemzNsD7UYXVUPZLhe
-	jjXQwILx2QBfK+GbaraQCNmZs0sluR94uRmCS+oBvGOARgUJHKGChz2gsmvrjh2QcUm6ATI1Abq
-	crsX+7jwy0C/S9dXM9O5i+pKJwoSS9wRNbCHGjgo19Zqw90+TiWuATvNy3OMqJy5waEpwgokzyn
-	iPrXv4/cbLS+GisaMglUD1p4hiVmo9CHXl92FJAGIB2TYhHifyhNIutCTbkicz86qRZ1WLPFrX3
-	Oe9Wwlgep/Bg7NgktVE+NNSut+7k=
-X-Google-Smtp-Source: AGHT+IE9uqNT3gs5cTTSDhRlYuFC4GTWbpWQezWktgdQ2wds9Sy/hE9+Jxp8jSBAj09Y6gpoG60aQw==
-X-Received: by 2002:a05:600c:1c03:b0:43c:f85d:1245 with SMTP id 5b1f17b1804b1-441d44c7c41mr58471955e9.17.1746693623489;
-        Thu, 08 May 2025 01:40:23 -0700 (PDT)
-Received: from orome (p200300e41f281b00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f28:1b00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442cd35f40asm28526745e9.27.2025.05.08.01.40.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 May 2025 01:40:22 -0700 (PDT)
-Date: Thu, 8 May 2025 10:40:20 +0200
-From: Thierry Reding <thierry.reding@gmail.com>
-To: webgeek1234@gmail.com
-Cc: Thomas Gleixner <tglx@linutronix.de>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Rob Herring <robh@kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v6 3/3] PCI: tegra: Allow building as a module
-Message-ID: <w2ertcizgmtu27kcike3lpw5dvhvqi2b4c6amqzwdfs2xtebfy@itrpen3oblhs>
-References: <20250507-pci-tegra-module-v6-0-5fe363eaa302@gmail.com>
- <20250507-pci-tegra-module-v6-3-5fe363eaa302@gmail.com>
+        d=1e100.net; s=20230601; t=1746698649; x=1747303449;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+OMCAEKXt9Na5TVEs/wllXz+LY/w4SZyrDL1epmaZEU=;
+        b=SqodkkYwgFgyKmmp0MGAowJ2p+X+UsQ1ULqp47ZccPILb0Ax3XiNUlrdbK/8hkHHP6
+         CYpXY6QnGD8QfejPiW5h3oAxE2ZpmI/sjZin8r2CFGFDoXytBHyFuSLAIWEwnxoQDzlc
+         11JG1ezN5tvOJ1/6mrozX7HRcXrWRywxA7y2qWoLJcu9LtlavJA6v7ugoZnTDVIX0o8G
+         dcirAmCNMFWB5+9iR44hpTzgSHVoeFLdzaAXoEimEcK1/R0l1D21H9hQg+EGOhUYswfJ
+         kt/1q9NV8jwUY9ubN7+N0dKqYnSFAgvu073vu6PiKpb+m2/6GXZjYBd6T9hbJO9jq1In
+         1A/A==
+X-Forwarded-Encrypted: i=1; AJvYcCUMzlsjkJ9w1w+RrmAhuQSZkhqJqxbV571aYN++DUEX2Ilk1pL6Rmz4tnokLusbuXz0mUJCd/M7cw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBF9mxER29nOt1Pbd/9a09o6d+dR/W7uUZ9aMKsYoWTFqiRQv4
+	h4yRXMcQ2x7j68Ri6yD7uz7dzNqHaz4JD5JsKDOLdII6MsOdFd2o9PfZDrwR4do5tIdAj5xJLa9
+	l0BcJFmD2nNYVvJnrMWs726B3KzCswg+rahekDg==
+X-Gm-Gg: ASbGncs0RCGf7LYBdvcVbFHMdVwE4KzEmTm/DLVPXgALgp9TGwdKNCgh3e6S0PHfadh
+	R7x5Swj8BcaVU/zEhTmKBYAxAXav6VnhFueaHei9aP5lkxKxxeYoCRQL4bMUMfEKsKf8nT4vDVc
+	+5NFM99wM06y/tvcQb0a7sftU=
+X-Google-Smtp-Source: AGHT+IEe4zp5EUGAPH2midu3NVbyBycrHIpRT+XUkbdIdzvQqiRxX8Kp0ZBPTG8H9R5eDjAreGEn66s7Qu9eZSe/884=
+X-Received: by 2002:a05:6902:2b0d:b0:e78:f1e2:8f25 with SMTP id
+ 3f1490d57ef6-e78f1e2907amr1705899276.0.1746698649338; Thu, 08 May 2025
+ 03:04:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="5kggnoviwlppqn34"
-Content-Disposition: inline
-In-Reply-To: <20250507-pci-tegra-module-v6-3-5fe363eaa302@gmail.com>
+References: <20250507160056.11876-1-hiagofranco@gmail.com> <20250507160056.11876-4-hiagofranco@gmail.com>
+In-Reply-To: <20250507160056.11876-4-hiagofranco@gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 8 May 2025 12:03:33 +0200
+X-Gm-Features: ATxdqUFUvDJo4SEFGQh5UV_w7ICgnExMVykRp0SMxPXtgTPPo6OOJoK0tLhcWVM
+Message-ID: <CAPDyKFrHD1hVCfOK-JV5FJM+Cd9DoKKZGKcC94fxx6_9Bsri1g@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] remoteproc: imx_rproc: add power mode check for
+ remote core attachment
+To: Hiago De Franco <hiagofranco@gmail.com>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-remoteproc@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
+	Hiago De Franco <hiago.franco@toradex.com>, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Peng Fan <peng.fan@oss.nxp.com>, daniel.baluta@nxp.com, iuliana.prodan@oss.nxp.com, 
+	Fabio Estevam <festevam@gmail.com>, Pengutronix Kernel Team <kernel@pengutronix.de>, Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
 
+On Wed, 7 May 2025 at 18:02, Hiago De Franco <hiagofranco@gmail.com> wrote:
+>
+> From: Hiago De Franco <hiago.franco@toradex.com>
+>
+> When the remote core is started before Linux boots (e.g., by the
+> bootloader), the driver currently is not able to attach because it only
+> checks for cores running in different partitions. If the core was kicked
+> by the bootloader, it is in the same partition as Linux and it is
+> already up and running.
+>
+> This adds power mode verification through the SCU interface, enabling
+> the driver to detect when the remote core is already running and
+> properly attach to it.
+>
+> Signed-off-by: Hiago De Franco <hiago.franco@toradex.com>
+> Suggested-by: Peng Fan <peng.fan@nxp.com>
+> ---
+> v2: Dropped unecessary include. Removed the imx_rproc_is_on function, as
+> suggested.
+> ---
+>  drivers/remoteproc/imx_rproc.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+>
+> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+> index 627e57a88db2..9b6e9e41b7fc 100644
+> --- a/drivers/remoteproc/imx_rproc.c
+> +++ b/drivers/remoteproc/imx_rproc.c
+> @@ -949,6 +949,19 @@ static int imx_rproc_detect_mode(struct imx_rproc *priv)
+>                         if (of_property_read_u32(dev->of_node, "fsl,entry-address", &priv->entry))
+>                                 return -EINVAL;
+>
+> +                       /*
+> +                        * If remote core is already running (e.g. kicked by
+> +                        * the bootloader), attach to it.
+> +                        */
+> +                       ret = imx_sc_pm_get_resource_power_mode(priv->ipc_handle,
+> +                                                               priv->rsrc_id);
+> +                       if (ret < 0)
+> +                               dev_err(dev, "failed to get power resource %d mode, ret %d\n",
+> +                                       priv->rsrc_id, ret);
+> +
+> +                       if (ret == IMX_SC_PM_PW_MODE_ON)
+> +                               priv->rproc->state = RPROC_DETACHED;
+> +
+>                         return imx_rproc_attach_pd(priv);
 
---5kggnoviwlppqn34
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v6 3/3] PCI: tegra: Allow building as a module
-MIME-Version: 1.0
+Why is it important to potentially set "priv->rproc->state =
+RPROC_DETACHED" before calling imx_rproc_attach_pd()?
 
-On Wed, May 07, 2025 at 10:25:54PM -0500, Aaron Kling via B4 Relay wrote:
-> From: Aaron Kling <webgeek1234@gmail.com>
->=20
-> This changes the module macro back to builtin, which does not define an
-> exit function. This will prevent the module from being unloaded. There
-> are concerns with modules not cleaning up IRQs on unload, thus this
-> needs specifically disallowed. The remove callback is also dropped as it
-> is unused.
+Would it be possible to do it the other way around? First calling
+imx_rproc_attach_pd() then get the power-mode to know if
+RPROC_DETACHED should be set or not?
 
-What exactly are these concerns? I haven't done this lately, but I'm
-pretty sure that unbinding the PCI controller is something that I
-extensively tested back when this code was introduced. PCI is designed
-to be hot-pluggable, so there shouldn't be a need to prevent unloading
-of the controller.
+The main reason why I ask, is because of how we handle the single PM
+domain case. In that case, the PM domain has already been attached
+(and powered-on) before we reach this point.
 
-Rather than just forcing this to be always there, can we not fix any
-issues and keep this unloadable?
+>                 }
+>
+> --
+> 2.39.5
+>
 
-Thierry
-
---5kggnoviwlppqn34
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmgcbfAACgkQ3SOs138+
-s6Fz+A/8C7VaC4JinitRsZHtP4F8qGpgtEyHU0xDilJjzE9nyNjUuZ9JzEjmRmk9
-2LBWYKOWNKou1WycC86QEOKiP4QTBVVtS7SuTctUmm1q5CMRA3EmwQg5Grm6aIXA
-0ke8RS+ycqpoOxfp21HAX+06ZmcSNfXGvwd0lRTIDASygkNPU+SYrWrXptpJJEzl
-G/plwuuN0guIQGlJbi4N0Hy1WA4tz9/A89vdmmqoTP9lgpeGVyy0OHIRlUpVHjX+
-SLTAvvrCWdwcMPFbY+1Pn05SpwDfsDZFWzmQQIJw6nVWxPSsl8lr78h6SEZNMb0p
-WsEDQ9hiu0umMdgAt72kspcXRrXYyxFZlkc6mfMTlluOYaGmxIV0giKD34P9jKME
-QxgTXokluvh4Upy1R3xdOVtQlfGC3hFRkk9Kl64Lho6v9KM+6L3/vH9Ckl1KP3pu
-I3Dbxj+MGbIPv6+b5Zxpa7VTUbvzgWg0vkUVhByJZ4OizdDYMpKBahF9gSCrJoFK
-lr5GxmqFPV5ebkddsavHQIM4oLq4nLbnyclgqNRqNP2dpxRnnJkmOK+lkIBz5cX/
-uSagR6ocrkuc5xKNLMNdgxWDD87FoowGa+Tkagx+qrtF90chIpGAj1YJaufbVqOH
-79EUtQCPydxK6SJV5I93R+zQZ+UFmLJjS44g7Rcqn0A8hVXrmI4=
-=QGvC
------END PGP SIGNATURE-----
-
---5kggnoviwlppqn34--
+Kind regards
+Uffe
 
