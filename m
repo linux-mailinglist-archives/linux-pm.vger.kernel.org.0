@@ -1,179 +1,186 @@
-Return-Path: <linux-pm+bounces-26900-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26901-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56E48AB0498
-	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 22:27:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DF2CAB049F
+	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 22:28:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C048E4C6C9B
-	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 20:27:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46CAC1C0020C
+	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 20:28:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4525028BA9F;
-	Thu,  8 May 2025 20:27:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6371228BA91;
+	Thu,  8 May 2025 20:28:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="KptbE85o"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d16MN9ga"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from terminus.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com [209.85.221.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F4A1E1E1D;
-	Thu,  8 May 2025 20:27:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0F671E1E1D;
+	Thu,  8 May 2025 20:28:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746736057; cv=none; b=Zfd4xuawLLQr/trrACYbUSOHWtu+EsRRgQDFOOYCECUQxzIlcCY5IyBouvVp/lJCBskZM8gdR/Z9PplUeSSN6vnHNHPEiKdoeZZI/yYLsowRxYsDLQeu3MiEOTO5JuidiXfbByFX67EYpV1ioppJvzQTdprkOJiczj41LjOL/vc=
+	t=1746736116; cv=none; b=pLBBJ76oZ2yIwjAPIn8H4L3+a2OfTCZ52n0lOH2g+76wbhXRi3XDdvheKvJRPraScRgKPpv/iOUe6Sa9cRo1RPJ6Kmb+h3PL9NrMmiGs7FKGNOgdI4Lvd4NrmCXVCry9flWOq7dGHFpPCbzxTSkzT7GOOeW9CAlgfO24NrLREkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746736057; c=relaxed/simple;
-	bh=Xft22+cWZ2gtYua59jdnOFdwhCdFN+oButPRI8uZPUs=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=fkbYTkFpIP31NB/A/+VHDIrkcYmBD1fs80hHQs3wtULB1DuWpuq02CYgswX3M0vpzZIiYytiuh14FUka6EuDqV3XxvuQuBtkOVObVntaEHQ32xyKiFS0AQd+w3f44cFsZnWzW0pMrv5QOwE9XMIGkyU8VV28kS3oTWp6za03X/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=KptbE85o; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [127.0.0.1] ([76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 548KN6bY2104994
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Thu, 8 May 2025 13:23:06 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 548KN6bY2104994
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025042001; t=1746735788;
-	bh=+NDA9AH+UV+1Djye1mB+qrw8jYKjbpRJSZagnaRFOyg=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=KptbE85oTPsvevZzt5/TglVYhLw7U9YJ8OrPuHzmc1aO9ddCs7dvwUPH6RZFy0fWv
-	 bXcQFoEWU13PbUtqo7Er7VbdK0SryqgSp7UoewJsHh7UqntiAp5FX+b9dL2C8meu7F
-	 AnDrJkcF2f2aoSONbvSWJv7db/YnHTUwglxIUZ6vNI61IHdmDlmry0gcSdyp0hicL2
-	 jsWvA6PzUYI6oOdfNWgCX9n5q3qYb5MkTM1sNGbAhsh2o1cdPEyX7LWSFiamKOZqzc
-	 XqSrQmcGDRPPd1SY6R+85COcvEK/9Rx6myWBbtEmOOQg5/p+ppXG8lzeFmAQI2TGu5
-	 5JIOQS+cN4YLQ==
-Date: Thu, 08 May 2025 13:23:04 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Peter Zijlstra <peterz@infradead.org>, Sohil Mehta <sohil.mehta@intel.com>
-CC: x86@kernel.org, linux-kernel@vger.kernel.org, Xin Li <xin@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>, Tony Luck <tony.luck@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Jacob Pan <jacob.pan@linux.microsoft.com>,
-        Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>,
-        Nikolay Borisov <nik.borisov@suse.com>,
-        linux-perf-users@vger.kernel.org, linux-edac@vger.kernel.org,
-        kvm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v5_5/9=5D_x86/nmi=3A_Add_support?=
- =?US-ASCII?Q?_to_handle_NMIs_with_source_information?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20250508121544.GH4439@noisy.programming.kicks-ass.net>
-References: <20250507012145.2998143-1-sohil.mehta@intel.com> <20250507012145.2998143-6-sohil.mehta@intel.com> <20250507091442.GB4439@noisy.programming.kicks-ass.net> <55527575-e3b8-4cf6-b09c-b81437e0c892@intel.com> <20250508121544.GH4439@noisy.programming.kicks-ass.net>
-Message-ID: <D368D488-6D4E-4590-8E98-A7D7CD5E7F20@zytor.com>
+	s=arc-20240116; t=1746736116; c=relaxed/simple;
+	bh=glI2QyA2V4kwUucOfsrEIYTyDYNwfxLg42DzzZgissg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GUU8sQ9JWgU10vEHUrjSKhNjUFLejzrsZQ//Qz5cBLiWqRg2jN9RMTfF78DdgcpaOlJINRiNqAlJQPAq2YJuskyhgFhKBViSuGnDzvloTjoHfvgum2A2N0mUkB+mCmXe7ENwtsagclbAdFUvzMaUGJ8jdIEqhasuZibGCzXSAIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d16MN9ga; arc=none smtp.client-ip=209.85.221.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-525b44ec88aso445024e0c.3;
+        Thu, 08 May 2025 13:28:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746736113; x=1747340913; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/pc5D2wBbh6n4AHAVGKAJlI6vZAzUWJsMh1/Yq1dDS0=;
+        b=d16MN9gavssuSj3PnohD0slnV7NEBM1B81vgUy12FUnL0pyEmzz8csoO+SmKf/PLai
+         KM+sCS9pQij8rIf0a+oDq3xUcFgEw6cyCen8LAJ5sqQd+aowAdgJaS4jMRAmwkpX0vb8
+         HrLU7sXY5QhEYHQt7HhUcmHERbqhneO74wYVLOSyqsMoudPx9PLdHWhA0pM82xCe9OZ1
+         f/7jhUBMEn2G8ZHNYjZFgSY0KvklAftlWXlSfdG9Gm1kmqkIXEXhhKDhLSb3BCgB1ykq
+         r9ygBXAhHV8Q960mZmn1abbw+5XneEPqbBw9QCNDvnsjiTQ6/YYaC/0eVciCW0lG+/sP
+         fukg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746736113; x=1747340913;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/pc5D2wBbh6n4AHAVGKAJlI6vZAzUWJsMh1/Yq1dDS0=;
+        b=OBPuMgS84CFXXrQ04c4IgmPdWB327ZaT2p81wnDz/ucHsI7s+zv4whfRjpXwafnbeH
+         G8MohrSq5EjpJdvVv78T3+aDaefRQqU9IlfAMBWlZhqtcvvTy5DoaoArrCCWLQt12AIm
+         qA4mwvA5g+fferUAJt8gEi06+gI3OWdBHFM2HGig9zjSKyNOGXuJu67npucPa9j4olTb
+         PjYc5+BL35iTcf1/KNHVsdYoO3XJxn/ITGsL2s5jFJ0GzK4jJv38P7qCAFK754K84QNS
+         67y2Qz/W2oHHAqWyGwy9JaWBao9ujcvVd1Y0BNdy8vQreMHYjc5Z53/MfTJlfwy5pcGU
+         n+cg==
+X-Forwarded-Encrypted: i=1; AJvYcCVeezngOw/nG9ZUOKL1+BvhVXUqxORZoCHeC0vYqSVsawSuLkNTwnBvU9E4ST8uQcmING2nYiMYBcQ=@vger.kernel.org, AJvYcCWgaEIIoW1Bp5CA8n8aQjUCga7BIww/c1ujalR4D+r+wBMR6LV9RqOHWEDwdHOBo/SmF7C7v7MgPZjXl3o=@vger.kernel.org, AJvYcCXiSoM/0PETq9KGEcXPNzOMVzjr7SGNc4aSZ2rwsS8s+S4/1rubvQq1qupgovbqlet9Sj8/0xe4rgzMX0CBE+MnCQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwISI3m+AaLz7BzRZSYBVj5PZF824VsE1IraZwfUOOh+bgN71er
+	k84q7ZrvtXtjwuOLaHWmqsQ0SBMye+IJCYSw2umhaJGOtuAm7evh
+X-Gm-Gg: ASbGncsGQwWoGYiaKZXLsUDx5IqetFaQVWgVcwiqRTRjsYiWZ4o17p5oiZT3FiFIXU+
+	HEg1TvPt6o55KiRvHJYjn1ZBox4X125yfKhliiBBQNiP7vn9w3GJtvBINHK2O0TSi/a8B7qA1vm
+	2nfOVBd/zMj23LXdDOHc3G57yAWFPx21b4ex8YS24lnrBNiXZJKz2VkMlDSTRsupKa0Y12g36aO
+	FzD3S301MmwVERzGgjUKFeKShJmyUYAyaUxswQa2FgYXFHrNcWlwK1m5EdwqjB+p/camo8EAlA7
+	Hv9a6BpjMfHS9wCU9P90XiQm4T3Jz73sVNve8UAe
+X-Google-Smtp-Source: AGHT+IHH8Hb44S2pUrzpBoAuMzG/VFUuedek3qnL1aKjilRrz2XuP3PUIZdV2EDPHQ1l0mwZVNw7hQ==
+X-Received: by 2002:a05:6122:828d:b0:523:9ee7:7f8e with SMTP id 71dfb90a1353d-52c53c68f4amr1351138e0c.4.1746736113471;
+        Thu, 08 May 2025 13:28:33 -0700 (PDT)
+Received: from hiago-nb ([2804:1b3:a7c0:6030:ff91:5999:3ab5:5caf])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-52c5375bcdcsm217781e0c.25.2025.05.08.13.28.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 May 2025 13:28:32 -0700 (PDT)
+Date: Thu, 8 May 2025 17:28:26 -0300
+From: Hiago De Franco <hiagofranco@gmail.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>, linux-pm@vger.kernel.org,
+	linux-remoteproc@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Hiago De Franco <hiago.franco@toradex.com>, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Peng Fan <peng.fan@oss.nxp.com>, daniel.baluta@nxp.com,
+	iuliana.prodan@oss.nxp.com, Fabio Estevam <festevam@gmail.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH v2 3/3] remoteproc: imx_rproc: add power mode check for
+ remote core attachment
+Message-ID: <20250508202826.33bke6atcvqdkfa4@hiago-nb>
+References: <20250507160056.11876-1-hiagofranco@gmail.com>
+ <20250507160056.11876-4-hiagofranco@gmail.com>
+ <CAPDyKFrHD1hVCfOK-JV5FJM+Cd9DoKKZGKcC94fxx6_9Bsri1g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFrHD1hVCfOK-JV5FJM+Cd9DoKKZGKcC94fxx6_9Bsri1g@mail.gmail.com>
 
-On May 8, 2025 5:15:44 AM PDT, Peter Zijlstra <peterz@infradead=2Eorg> wrot=
-e:
->On Wed, May 07, 2025 at 02:48:34PM -0700, Sohil Mehta wrote:
->> On 5/7/2025 2:14 AM, Peter Zijlstra wrote:
->> > On Tue, May 06, 2025 at 06:21:41PM -0700, Sohil Mehta wrote:
->> >>
->> >> diff --git a/arch/x86/kernel/nmi=2Ec b/arch/x86/kernel/nmi=2Ec
->> >> index a1d672dcb6f0=2E=2E183e3e717326 100644
->> >> --- a/arch/x86/kernel/nmi=2Ec
->> >> +++ b/arch/x86/kernel/nmi=2Ec
->> >=20
->> >>  static int nmi_handle(unsigned int type, struct pt_regs *regs)
->> >>  {
->> >>  	struct nmi_desc *desc =3D nmi_to_desc(type);
->> >> +	unsigned long source_bitmap =3D 0;
->> >=20
->> > 	unsigned long source =3D ~0UL;
->> >=20
->>=20
->> Thanks! This makes the logic even simpler by getting rid of
->> match_nmi_source()=2E A minor change described further down=2E
->>=20
->> Also, do you prefer "source" over "source_bitmap"? I had it as such to
->> avoid confusion between source_vector and source_bitmap=2E
->
->Yeah, I was lazy typing=2E Perhaps just call it bitmap then?
->
->> >>  	nmi_handler_t ehandler;
->> >>  	struct nmiaction *a;
->> >>  	int handled=3D0;
->> >> @@ -148,16 +164,40 @@ static int nmi_handle(unsigned int type, struc=
-t pt_regs *regs)
->> >> =20
->> >>  	rcu_read_lock();
->> >> =20
->> >> +	/*
->> >> +	 * Activate NMI source-based filtering only for Local NMIs=2E
->> >> +	 *
->> >> +	 * Platform NMI types (such as SERR and IOCHK) have only one
->> >> +	 * handler registered per type, so there is no need to
->> >> +	 * disambiguate between multiple handlers=2E
->> >> +	 *
->> >> +	 * Also, if a platform source ends up setting bit 2 in the
->> >> +	 * source bitmap, the local NMI handlers would be skipped since
->> >> +	 * none of them use this reserved vector=2E
->> >> +	 *
->> >> +	 * For Unknown NMIs, avoid using the source bitmap to ensure all
->> >> +	 * potential handlers have a chance to claim responsibility=2E
->> >> +	 */
->> >> +	if (cpu_feature_enabled(X86_FEATURE_NMI_SOURCE) && type =3D=3D NMI=
-_LOCAL)
->> >> +		source_bitmap =3D fred_event_data(regs);
->> >=20
->> > 	if (cpu_feature_enabled(X86_FEATURE_NMI_SOURCE) && type =3D=3D NMI_L=
-OCAL) {
->> > 		source =3D fred_event_data(regs);
->> > 		if (source & BIT(0))
->> > 			source =3D ~0UL;
->> > 	}
->> >=20
->>=20
->> Looks good, except when fred_event_data() returns 0=2E I don't expect i=
-t
->> to happen in practice=2E But, maybe with new hardware and eventually
->> different hypervisors being involved, it is a possibility=2E
->>=20
->> We can either call it a bug that an NMI happened without source
->> information=2E Or be extra nice and do this:
->>=20
->> if (cpu_feature_enabled(X86_FEATURE_NMI_SOURCE) && type =3D=3D NMI_LOCA=
-L) {
->> 	source =3D fred_event_data(regs);
->> 	if (!source || (source & BIT(0)))
->> 		source =3D ~0UL;
->> }
->
->Perhaps also WARN about the !source case?
+Hello,
 
-A 0 should be interpreted such that NMI source is not available, e=2Eg=2E =
-due to a broken hypervisor or similar=2E
+On Thu, May 08, 2025 at 12:03:33PM +0200, Ulf Hansson wrote:
+> On Wed, 7 May 2025 at 18:02, Hiago De Franco <hiagofranco@gmail.com> wrote:
+> >
+> > From: Hiago De Franco <hiago.franco@toradex.com>
+> >
+> > When the remote core is started before Linux boots (e.g., by the
+> > bootloader), the driver currently is not able to attach because it only
+> > checks for cores running in different partitions. If the core was kicked
+> > by the bootloader, it is in the same partition as Linux and it is
+> > already up and running.
+> >
+> > This adds power mode verification through the SCU interface, enabling
+> > the driver to detect when the remote core is already running and
+> > properly attach to it.
+> >
+> > Signed-off-by: Hiago De Franco <hiago.franco@toradex.com>
+> > Suggested-by: Peng Fan <peng.fan@nxp.com>
+> > ---
+> > v2: Dropped unecessary include. Removed the imx_rproc_is_on function, as
+> > suggested.
+> > ---
+> >  drivers/remoteproc/imx_rproc.c | 13 +++++++++++++
+> >  1 file changed, 13 insertions(+)
+> >
+> > diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+> > index 627e57a88db2..9b6e9e41b7fc 100644
+> > --- a/drivers/remoteproc/imx_rproc.c
+> > +++ b/drivers/remoteproc/imx_rproc.c
+> > @@ -949,6 +949,19 @@ static int imx_rproc_detect_mode(struct imx_rproc *priv)
+> >                         if (of_property_read_u32(dev->of_node, "fsl,entry-address", &priv->entry))
+> >                                 return -EINVAL;
+> >
+> > +                       /*
+> > +                        * If remote core is already running (e.g. kicked by
+> > +                        * the bootloader), attach to it.
+> > +                        */
+> > +                       ret = imx_sc_pm_get_resource_power_mode(priv->ipc_handle,
+> > +                                                               priv->rsrc_id);
+> > +                       if (ret < 0)
+> > +                               dev_err(dev, "failed to get power resource %d mode, ret %d\n",
+> > +                                       priv->rsrc_id, ret);
+> > +
+> > +                       if (ret == IMX_SC_PM_PW_MODE_ON)
+> > +                               priv->rproc->state = RPROC_DETACHED;
+> > +
+> >                         return imx_rproc_attach_pd(priv);
+> 
+> Why is it important to potentially set "priv->rproc->state =
+> RPROC_DETACHED" before calling imx_rproc_attach_pd()?
+> 
+> Would it be possible to do it the other way around? First calling
+> imx_rproc_attach_pd() then get the power-mode to know if
+> RPROC_DETACHED should be set or not?
+> 
+> The main reason why I ask, is because of how we handle the single PM
+> domain case. In that case, the PM domain has already been attached
+> (and powered-on) before we reach this point.
+
+I am not sure if I understood correcly, let me know if I missed
+something. From my understanding in this case it does not matter, since
+the RPROC_DETACHED will only be a flag to trigger the attach callback
+from rproc_validate(), when rproc_add() is called inside
+remoteproc_core.c.
+
+With that we can correcly attach to the remote core running, which was
+not possible before, where the function returns at "return
+imx_rproc_attach_pd(priv);" with the RPROC_OFFLINE state to
+rproc_validate().
+
+> 
+> >                 }
+> >
+> > --
+> > 2.39.5
+> >
+> 
+> Kind regards
+> Uffe
+
+Best Regards,
+Hiago.
 
