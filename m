@@ -1,176 +1,115 @@
-Return-Path: <linux-pm+bounces-26866-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26867-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6803AAF195
-	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 05:26:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E362FAAF2A0
+	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 07:11:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BF9D1C02A55
-	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 03:26:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03E2C1BA6704
+	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 05:12:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFC1E20012B;
-	Thu,  8 May 2025 03:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B35F02135A4;
+	Thu,  8 May 2025 05:11:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ViGvOYdE"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uusqgq85"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A28411F6694;
-	Thu,  8 May 2025 03:25:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93DD20D4E7
+	for <linux-pm@vger.kernel.org>; Thu,  8 May 2025 05:11:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746674754; cv=none; b=m0FLHP9e+t1M8uYl32ib2Tt6yHLYmVLHyE/W9fJCaebrfOdIuKIZlTbhjYD5PevoQSbY+lqOKHMq82fv/oY06U924pmRHnv0ch5qd2NRUWptgk1HrnrA7gft+Ocx15z+VTSOn1JC61vM8b6YicYCWe48lF9+vyB001ZKIHBPjD0=
+	t=1746681103; cv=none; b=TB9b7yzhahlXHSabIHSol47IzaxWEivKV5yRolDLZMhcEC/0jGwn+2eyAgaiKQOqCux8ot1Ol7gTTymaJ0J1vBn7RiAkVHWn+pJp6orMP6kcq1IHFFkMF4pgikC9iGUXsMwZ50sPX5Y21Swz6ziIKg6UBX8OmsBFz69olhl8gvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746674754; c=relaxed/simple;
-	bh=GzDz9cR5SrtBbqbUWibsnN39s607NfNtC5D1DtPjxYo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=T3sAYVCgnmSy4upc/7qIlZMVuO2SPRqdEg3SRkdEIZBgylGTH8GBdeJJw5d5AWxut8RpK+m2FOfh+9XDXeOOzi2bbCqb+5kR/VCAVrTBCsk9AVJmylXya1y9TdyeVYDYhBnEiG6KXp9o1FtZAKas72sE6xGPXVqeAtmZWUznIA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ViGvOYdE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2EF48C4CEF1;
-	Thu,  8 May 2025 03:25:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746674754;
-	bh=GzDz9cR5SrtBbqbUWibsnN39s607NfNtC5D1DtPjxYo=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=ViGvOYdEFcCG6ym5ojCHbV2tgVV3jjOdu76Bd65apWj0H5LfQh28N5JFMQY1BcFCb
-	 UKZwITNt1Hh7njKcfvmqneHHErZnPLnBniyCL8UXvGbXnFNNaqvIE/X68FB8YUBCTB
-	 DjnT6g8ki2nl92OJMA99fRYE3j8P0SqKovE8QTCHZQhiwwEjh1UqRANoZclYgCYxHj
-	 LCPRh9eBpd1+ZGyLPloxFQPMFdsFqGbD/bTj8rc8TF/V9O6aoogcdRXseWTS9Bo6jI
-	 eUzq+SzF8Y2+pw7ZzZBV8uA3hctVVHGoF48pBmSFZ8FBKDU4Wu5L4BUsXPRmz6N6kV
-	 C5rEPNyQefmqg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 222B0C3ABC6;
-	Thu,  8 May 2025 03:25:54 +0000 (UTC)
-From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
-Date: Wed, 07 May 2025 22:25:54 -0500
-Subject: [PATCH v6 3/3] PCI: tegra: Allow building as a module
+	s=arc-20240116; t=1746681103; c=relaxed/simple;
+	bh=AQuEWPjekhThkflJFV9dZKxAkJmiFPkZ+D9N7nJgnOY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=STnoEk8BSXCT7Uxng0bfMoKW8YelL8n3FLQPaTsEBGmaahfRQit9e538PjFveMh2fcgZr7kG7Dbe4JRgvkUxFVg9e/V+AhWxAGY4qaAaB+suHUu6CevywY0kK4uImbXsZQDKeN0rgKbZJKbtP8uV2N5/EMB62kTjX3BX5WX4oYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--amitsd.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uusqgq85; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--amitsd.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-30ab450d918so995197a91.2
+        for <linux-pm@vger.kernel.org>; Wed, 07 May 2025 22:11:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1746681100; x=1747285900; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=+objnduDEdA6XgtoHIMnhtVVZlrAlpTMhfHb5uGFsAo=;
+        b=uusqgq85fZK7YMtOQd/EhhX5EO6PRytOwuUo4QpRjxRrFI/ItckZ3M0RYZmwwwR7xj
+         DbQfrKNX6oZXxbMjBdBbtp1FtK57uZzvY74KiLMW1dfrHyU1yPjBOETGxLqVAg/dqZtE
+         duurueQyr9IAHkypH3UrjD+i4LeHVMUbREFnfgnSQtqJXxkvksWCKD5SY4YXNwHcueE/
+         rHsQw3LeAy4f3kiJA7ec+CfbAONW9PK+7l8dDDyoc59sgA04mtXjGfabuktn58VsVfpI
+         BZt3Xj3kShFjLwcsxhbhI94DiEzpYfvyPGapJ3JVnc1/O/4+3j0TDdnr51NJauvwyg1H
+         3LMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746681100; x=1747285900;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+objnduDEdA6XgtoHIMnhtVVZlrAlpTMhfHb5uGFsAo=;
+        b=Y5XGGf3cWvqyrxN98ekYXQTQaEbnTqT+TJXDImFvd37XQnK1W+wXrT5WC711njWsrf
+         HJyDMVCi5IRA9/Bw4i0quFf1wSlWcoasbIcOxVg/K83kaIpYIxWjClBM/YEGb+l3lNFu
+         JBBf4J4fGFRbujwzi46hRW7px5UL0TYH6pWRc/Xl1sFgJ2VeXVCC3QAsbOg8UP/Tt0Zk
+         0zEl39aUBI1Jd46Y5VkZU908N1xyIs9porpwtE/1qusTrA6gfRyPJbIbs4eko8FFZoCW
+         cZCAyqcf013Si3nHMmjgMvuCpLMObtaCIWyHy9u2vrMB+PtF/DOrxzfaHkgsxTmlIdQ8
+         A5YA==
+X-Forwarded-Encrypted: i=1; AJvYcCVcg5OXD/RA/J4+g640Q7jZZIRMnfBJtCS9B1OJajIDwTDx1FaclQIufmX9V9H5sPZBps0L9mqezQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwnDZFm7cLk9QuvCUfVVI+nDIKvXqe8Gc4WGIw7DKQ6ih+XkxR
+	sR1qr98U1rawEEtZh/O7lWFGqyCK3IRkhEp/IVsg1X4VIr4sNr6zaZQ9/pPMkBaUPr4v+VoJMa9
+	FSw==
+X-Google-Smtp-Source: AGHT+IGGonQAPWDxdBzLe2Ueqgy+uFD50vWf7E5zkm1R2s+R8YnCic3HHOe1DuE+B2Hm8cJPIF79XW+rfBQ=
+X-Received: from pjj15.prod.google.com ([2002:a17:90b:554f:b0:2ef:95f4:4619])
+ (user=amitsd job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4a89:b0:309:fd87:820e
+ with SMTP id 98e67ed59e1d1-30b3a6d7b70mr2372936a91.26.1746681100133; Wed, 07
+ May 2025 22:11:40 -0700 (PDT)
+Date: Wed,  7 May 2025 22:08:50 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250507-pci-tegra-module-v6-3-5fe363eaa302@gmail.com>
-References: <20250507-pci-tegra-module-v6-0-5fe363eaa302@gmail.com>
-In-Reply-To: <20250507-pci-tegra-module-v6-0-5fe363eaa302@gmail.com>
-To: Thomas Gleixner <tglx@linutronix.de>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
- Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Jonathan Hunter <jonathanh@nvidia.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
- linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org, 
- Aaron Kling <webgeek1234@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1746674753; l=2980;
- i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
- bh=tWH6XnYSJoKkGmqKp04RuLk3D4LqSklOTfArIboe1ug=;
- b=of4e30l6Q5p6L2vyQe1n44ANBVQOEv1tT4Zvbhb4bdV9bB16+KqpcfevsAoHq7s9Mm512MqkZ
- jZJ0dsZSmCSDZ6kKdTNI/ccqUKvlBXpZBgunztzBhuuC7RrwHmP/vGV
-X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
- pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
-X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
- auth_id=342
-X-Original-From: Aaron Kling <webgeek1234@gmail.com>
-Reply-To: webgeek1234@gmail.com
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.49.0.987.g0cc8ee98dc-goog
+Message-ID: <20250508050856.674782-1-amitsd@google.com>
+Subject: [PATCH v1 0/2] Add graph connections between tcpc & fg for Pixel 6
+From: Amit Sunil Dhamne <amitsd@google.com>
+To: sre@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	peter.griffin@linaro.org
+Cc: andre.draszik@linaro.org, badhri@google.com, tudor.ambarus@linaro.org, 
+	alim.akhtar@samsung.com, dima.fedrau@gmail.com, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	Amit Sunil Dhamne <amitsd@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Aaron Kling <webgeek1234@gmail.com>
+max77759 Type-C controller supplies VBUS into & out of (depending on the
+charging mode) the battery in Pixel 6. In order to represent this
+relationship, we use graph to connect tcpc & fuel gauge.
 
-This changes the module macro back to builtin, which does not define an
-exit function. This will prevent the module from being unloaded. There
-are concerns with modules not cleaning up IRQs on unload, thus this
-needs specifically disallowed. The remove callback is also dropped as it
-is unused.
+Link to USB connector binding that this patchset uses:
+ - https://lore.kernel.org/all/20250507-batt_ops-v2-1-8d06130bffe6@google.com/
 
-Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
----
- drivers/pci/controller/Kconfig     |  2 +-
- drivers/pci/controller/pci-tegra.c | 35 ++++-------------------------------
- 2 files changed, 5 insertions(+), 32 deletions(-)
+This patchset depends on the following:
+ - https://lore.kernel.org/all/20250421-b4-gs101_max77759_fg-v3-0-50cd8caf9017@uclouvain.be/
 
-diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
-index 9800b768105402d6dd1ba4b134c2ec23da6e4201..a9164dd2eccaead5ae9348c24a5ad75fcb40f507 100644
---- a/drivers/pci/controller/Kconfig
-+++ b/drivers/pci/controller/Kconfig
-@@ -224,7 +224,7 @@ config PCI_HYPERV_INTERFACE
- 	  driver.
- 
- config PCI_TEGRA
--	bool "NVIDIA Tegra PCIe controller"
-+	tristate "NVIDIA Tegra PCIe controller"
- 	depends on ARCH_TEGRA || COMPILE_TEST
- 	depends on PCI_MSI
- 	help
-diff --git a/drivers/pci/controller/pci-tegra.c b/drivers/pci/controller/pci-tegra.c
-index b3cdbc5927de3742161310610dc5dcb836f5dd69..b902c696f63310f8f70651976d0fa2d9337134a2 100644
---- a/drivers/pci/controller/pci-tegra.c
-+++ b/drivers/pci/controller/pci-tegra.c
-@@ -2595,12 +2595,6 @@ static const struct seq_operations tegra_pcie_ports_sops = {
- 
- DEFINE_SEQ_ATTRIBUTE(tegra_pcie_ports);
- 
--static void tegra_pcie_debugfs_exit(struct tegra_pcie *pcie)
--{
--	debugfs_remove_recursive(pcie->debugfs);
--	pcie->debugfs = NULL;
--}
--
- static void tegra_pcie_debugfs_init(struct tegra_pcie *pcie)
- {
- 	pcie->debugfs = debugfs_create_dir("pcie", NULL);
-@@ -2674,29 +2668,6 @@ static int tegra_pcie_probe(struct platform_device *pdev)
- 	return err;
- }
- 
--static void tegra_pcie_remove(struct platform_device *pdev)
--{
--	struct tegra_pcie *pcie = platform_get_drvdata(pdev);
--	struct pci_host_bridge *host = pci_host_bridge_from_priv(pcie);
--	struct tegra_pcie_port *port, *tmp;
--
--	if (IS_ENABLED(CONFIG_DEBUG_FS))
--		tegra_pcie_debugfs_exit(pcie);
--
--	pci_stop_root_bus(host->bus);
--	pci_remove_root_bus(host->bus);
--	pm_runtime_put_sync(pcie->dev);
--	pm_runtime_disable(pcie->dev);
--
--	if (IS_ENABLED(CONFIG_PCI_MSI))
--		tegra_pcie_msi_teardown(pcie);
--
--	tegra_pcie_put_resources(pcie);
--
--	list_for_each_entry_safe(port, tmp, &pcie->ports, list)
--		tegra_pcie_port_free(port);
--}
--
- static int tegra_pcie_pm_suspend(struct device *dev)
- {
- 	struct tegra_pcie *pcie = dev_get_drvdata(dev);
-@@ -2800,6 +2771,8 @@ static struct platform_driver tegra_pcie_driver = {
- 		.pm = &tegra_pcie_pm_ops,
- 	},
- 	.probe = tegra_pcie_probe,
--	.remove = tegra_pcie_remove,
- };
--module_platform_driver(tegra_pcie_driver);
-+builtin_platform_driver(tegra_pcie_driver);
-+MODULE_AUTHOR("Thierry Reding <treding@nvidia.com>");
-+MODULE_DESCRIPTION("NVIDIA PCI host controller driver");
-+MODULE_LICENSE("GPL");
+Amit Sunil Dhamne (2):
+  dt-bindings: power: supply: max17201: add port property
+  arm64: dts: exynos: gs101-pixel-common: add graph property to connect
+    tcpc & fg
 
+ .../bindings/power/supply/maxim,max17201.yaml      |  5 +++++
+ .../boot/dts/exynos/google/gs101-pixel-common.dtsi | 14 ++++++++++++++
+ 2 files changed, 19 insertions(+)
+
+
+base-commit: 92a09c47464d040866cf2b4cd052bc60555185fb
+prerequisite-patch-id: 74aa0a6fc4a5c56d870bb15375fad1fe41ffc1e9
+prerequisite-patch-id: 46f968300dcf5442e12d882ca23168494249d378
+prerequisite-patch-id: 3ad83a2782819bca215bb267d36a1ff04fe557b2
+prerequisite-patch-id: 86b5207d8f44255c36b1e600ecdf4f948c5da685
+prerequisite-patch-id: a15532888ff2572696d9fa6a14775e8ebf590391
 -- 
-2.48.1
-
+2.49.0.987.g0cc8ee98dc-goog
 
 
