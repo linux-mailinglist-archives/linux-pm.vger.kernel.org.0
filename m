@@ -1,120 +1,149 @@
-Return-Path: <linux-pm+bounces-26878-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26879-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3A6EAAF5C1
-	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 10:34:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 908FCAAF5E7
+	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 10:40:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 156131BA6AA5
-	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 08:35:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC8999C6E1D
+	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 08:40:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC1A261596;
-	Thu,  8 May 2025 08:34:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BFD22620CA;
+	Thu,  8 May 2025 08:40:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="lvHX6Jfr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MLLFxppV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8124B21D011;
-	Thu,  8 May 2025 08:34:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62FCF262FC9;
+	Thu,  8 May 2025 08:40:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746693292; cv=none; b=aWjN+SMyXZNRiLO1MApFm8dexQ/0+TaxJ2TWkLfZZOhboslJNe9c69E5sVAhb4yWGUW9nK5IGBZtzVeyBu3LNA6+mtuAHKCZfS+vk4CsjihkdorMhagCwDOidNKzhKInnoPtED++3iyDYHuNcncYy7i+As35c6mqz9blo5/Cv7g=
+	t=1746693627; cv=none; b=n0QiVvg1za2aT/bcl7zqpi8kEgLAGSuKiQTCLm7XhJLT+AQd6BIED0tky1FyFc6fRH7ffn6k/Bc84HY77T9yMEwhziajs3c+HyksJMKIwuElW/N96jI+6lc4uPsKEe++zrhk5wfWJGDdMnlqn0Q6xpHxhZ1m8B4sbaO0DZ+4ovU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746693292; c=relaxed/simple;
-	bh=/yn0vOBSqs1gT1qgFskCzgf8UxOw44a5QvWI6DwYPmM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XqWjmCZcuSebtqHMqKckFs06lt6i6PKcKSxl3wPCqr6zMjCCc9VQQVrIxkkqlmmQ3tmBViN7W3xVL9AFmc369pFVotNstvU2wWUcRqGJL2YNgN1XqmtajIIVCsFwr5+HqZNq2zJd5XA3Px8KO5EiCNtThPoQdxXsbpCV64LzQEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=lvHX6Jfr; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1746693287;
-	bh=/yn0vOBSqs1gT1qgFskCzgf8UxOw44a5QvWI6DwYPmM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lvHX6Jfr7OJ3b9RU2pr9vKKmVzcczO72O3biC5VnlBbkLBYBi4j80YJi2EahlHN1c
-	 6I9FwWK2rI9vTlfgY0vX59fGYaiqUGpGcxReA8po/KwPkXIJBEPYgbVoK27U8P4nkQ
-	 X4QD/QaGCH6DAVicsxmX8fpMRCdFt6D/fag3nmUd43PN/6uB7xi1I6h2Cgt/WTqLpq
-	 SZEaWRHihGqfwPDfI/lIhJzyu9FoTR2A8LrpgfmZCRkdBpb7sSHMCQ9F4OpeDxNYKz
-	 VId7swgQvxQGPbEbgdeQEvtYfy088uRJpCZWNsQMmZX2KRcEXgt4abxmz6xz2/sV+O
-	 wA2RMcDIF2HaA==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 62D3417E02BE;
-	Thu,  8 May 2025 10:34:46 +0200 (CEST)
-Message-ID: <ff8da58b-9e87-46d9-b4d2-4059ef05780d@collabora.com>
-Date: Thu, 8 May 2025 10:34:45 +0200
+	s=arc-20240116; t=1746693627; c=relaxed/simple;
+	bh=biF9LbNbWIVmr1lu/SJD7jTVvIudv3FbyuuHOOWKLi4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d6b0A0gvFrhZE9oobfydzJ3kJ4GhHIrXKOpB95xK4b0a1Ye3g8PPEJPQlHWU3fucmmVsJKz6eLjU9JZcWKehjd7SbUFsScHvrZsw62X1Fn7WY8MXUziDBCoKL5Jj+IvQMkFpKrlMgF6HYmOyIzu89MkkixXt2I4e3eiXXIkEdZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MLLFxppV; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43cf257158fso4637625e9.2;
+        Thu, 08 May 2025 01:40:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746693624; x=1747298424; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=biF9LbNbWIVmr1lu/SJD7jTVvIudv3FbyuuHOOWKLi4=;
+        b=MLLFxppVu1Z0fZCHsJnWTjnvDTIw3cde5GFAXARa+qgb3AZ67y33Lhp/ZLV0ZvN3Iw
+         j324BoPhy2FYNFkWFusFLuflfj31F+wnTEMf4C58Cur43EgK9kKenkI2gYznRujom65c
+         A/5sdSxLgu20/Mfh3cy2xQqD7RfJy/7eQa/8tW/ZGKMnNWZtxhvFUjYkXfXOAYIOYLBk
+         YFJ8zHcLAHMaNkub1Yk2qrR0v6cp0oyY0qPhyAVdJrr9vKMKqdHZyt2cOdimesjWFHqn
+         7uazVsP0Sdn84ecrqskkev+8focgYyXYyL1n/B40qZZsxo9tF1sNFcW5TvGsH6iy6baq
+         ROKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746693624; x=1747298424;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=biF9LbNbWIVmr1lu/SJD7jTVvIudv3FbyuuHOOWKLi4=;
+        b=XJrASmoDUA6EKYEWO2XaAOM4H4Lvz43Ca2VOHDI1SDQ6EOEaeCXTb+XwLb6Z6NWwg0
+         XE0+zKU2cORKSu+BiGP7591JGOIYjOLquX828QFQgX9GA9xS7xst+Y9oKtMkBdtXfU7+
+         JvP7wP64mo/kAYh6sn4QWFAe6FsVy5CZzqF68iEpt1tvSg7xMWfJDvGPX8NBtoLnPTFX
+         QwcchI/fdk7vVjq7AQ3Qxukv7i1iFCNZU+dgKs6n7yeCjtNYHYUrJoW9bdQf6SBNwvoz
+         Cr8rR4rg5x1os/PnQSZXGAE+INgplQe0qnqy27AWUY3eXG8M5Z/ABcAE5fvNf/u5P296
+         P4JQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUW/WriAW1RNg8vl6dUBIHKBLNBMG/u6CiNqRm5beIRRRAL/myplRk5Wsok/W2BRw8Mk+n4ThJ1CyfERNw=@vger.kernel.org, AJvYcCWH6diyIMnfH1dPbtGBD4LeMoX6xrFiWXDoA8py8B87e/gP/huRSZ0q7GbkSTZhVlt/esiRGlT9hSQ/@vger.kernel.org, AJvYcCXRRnXxoIesHyrn+YqnMRUcgZiGBH9Vjuk2ZZeJE6MQqoosksQ0zlBqGTFo73w7qB0XhHNPkjt4E4M=@vger.kernel.org, AJvYcCXkD7ULxGp95fWE63H1Gya1bXmhixhjeGTUJBT4JRLYvthvjS/xsm5ohrWOUbTri+OdieJj3Djrbax7Ir0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrwwWbMqIfx+xvvmI+Mh/v6KSYkXB0qS2osz9cEfzGiHeYf23V
+	TjkAvhp7/FyK7za7j6n62RdNQ0bN1yjflwNpRx0I979Jv50pOBpm
+X-Gm-Gg: ASbGncvMUxEuTps28m+E8JB3KD4wLyhdVwJEnCK0r3zNbqY2M3EhBcFmER24si0IqoB
+	pfvUf7HGQoTJ2Fid12w2sulIZ4EAAuesbRYgBCy2LLfHHIGIPGYewULReyemzNsD7UYXVUPZLhe
+	jjXQwILx2QBfK+GbaraQCNmZs0sluR94uRmCS+oBvGOARgUJHKGChz2gsmvrjh2QcUm6ATI1Abq
+	crsX+7jwy0C/S9dXM9O5i+pKJwoSS9wRNbCHGjgo19Zqw90+TiWuATvNy3OMqJy5waEpwgokzyn
+	iPrXv4/cbLS+GisaMglUD1p4hiVmo9CHXl92FJAGIB2TYhHifyhNIutCTbkicz86qRZ1WLPFrX3
+	Oe9Wwlgep/Bg7NgktVE+NNSut+7k=
+X-Google-Smtp-Source: AGHT+IE9uqNT3gs5cTTSDhRlYuFC4GTWbpWQezWktgdQ2wds9Sy/hE9+Jxp8jSBAj09Y6gpoG60aQw==
+X-Received: by 2002:a05:600c:1c03:b0:43c:f85d:1245 with SMTP id 5b1f17b1804b1-441d44c7c41mr58471955e9.17.1746693623489;
+        Thu, 08 May 2025 01:40:23 -0700 (PDT)
+Received: from orome (p200300e41f281b00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f28:1b00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442cd35f40asm28526745e9.27.2025.05.08.01.40.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 May 2025 01:40:22 -0700 (PDT)
+Date: Thu, 8 May 2025 10:40:20 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
+To: webgeek1234@gmail.com
+Cc: Thomas Gleixner <tglx@linutronix.de>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Rob Herring <robh@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v6 3/3] PCI: tegra: Allow building as a module
+Message-ID: <w2ertcizgmtu27kcike3lpw5dvhvqi2b4c6amqzwdfs2xtebfy@itrpen3oblhs>
+References: <20250507-pci-tegra-module-v6-0-5fe363eaa302@gmail.com>
+ <20250507-pci-tegra-module-v6-3-5fe363eaa302@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] dt-bindings: iommu: mediatek: mt8195 Accept up to 5
- interrupts
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Julien Massot <julien.massot@collabora.com>, kernel@collabora.com,
- Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>,
- Macpaul Lin <macpaul.lin@mediatek.com>, Lee Jones <lee@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
- <matthias.bgg@gmail.com>, =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?=
- <nfraprado@collabora.com>, Hui Liu <hui.liu@mediatek.com>,
- Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
- Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
- Tinghan Shen <tinghan.shen@mediatek.com>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, iommu@lists.linux.dev
-References: <20250505-mt8395-dtb-errors-v1-0-9c4714dcdcdb@collabora.com>
- <20250505-mt8395-dtb-errors-v1-2-9c4714dcdcdb@collabora.com>
- <baeae909-4d12-4cbd-a063-7ad165304b96@kernel.org>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <baeae909-4d12-4cbd-a063-7ad165304b96@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="5kggnoviwlppqn34"
+Content-Disposition: inline
+In-Reply-To: <20250507-pci-tegra-module-v6-3-5fe363eaa302@gmail.com>
 
-Il 08/05/25 08:03, Krzysztof Kozlowski ha scritto:
-> On 05/05/2025 15:23, Julien Massot wrote:
->>
->> Fixes: 3b5838d1d82e3 ("arm64: dts: mt8195: Add iommu and smi nodes")
->> Signed-off-by: Julien Massot <julien.massot@collabora.com>
->> ---
->>   Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
->> index 75750c64157c868725c087500ac81be4e282c829..035941c2db32170e9a69a5363d8c05ef767bb251 100644
->> --- a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
->> +++ b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
->> @@ -97,7 +97,8 @@ properties:
->>       maxItems: 1
->>   
->>     interrupts:
->> -    maxItems: 1
->> +    minItems: 1
->> +    maxItems: 5
->>   
-> Every iommu or just some (as described in commit msg) can have 5
-> interrupts? Looks you miss here proper constraints per variant.
-> 
-Technically, all of the IOMMUs can have more than one interrupt - but it's not
-clear which one and why, as documentation is lacking.
 
-Let's restrict this discussion to MT8195 anyway, as it's the only one declaring
-those 5 interrupts...
-...all of the IOMMUs declare just one, and mediatek,mt8195-iommu-infra declares 5.
+--5kggnoviwlppqn34
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v6 3/3] PCI: tegra: Allow building as a module
+MIME-Version: 1.0
 
-P.S.: Nice catch!
+On Wed, May 07, 2025 at 10:25:54PM -0500, Aaron Kling via B4 Relay wrote:
+> From: Aaron Kling <webgeek1234@gmail.com>
+>=20
+> This changes the module macro back to builtin, which does not define an
+> exit function. This will prevent the module from being unloaded. There
+> are concerns with modules not cleaning up IRQs on unload, thus this
+> needs specifically disallowed. The remove callback is also dropped as it
+> is unused.
 
-Cheers,
-Angelo
+What exactly are these concerns? I haven't done this lately, but I'm
+pretty sure that unbinding the PCI controller is something that I
+extensively tested back when this code was introduced. PCI is designed
+to be hot-pluggable, so there shouldn't be a need to prevent unloading
+of the controller.
+
+Rather than just forcing this to be always there, can we not fix any
+issues and keep this unloadable?
+
+Thierry
+
+--5kggnoviwlppqn34
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmgcbfAACgkQ3SOs138+
+s6Fz+A/8C7VaC4JinitRsZHtP4F8qGpgtEyHU0xDilJjzE9nyNjUuZ9JzEjmRmk9
+2LBWYKOWNKou1WycC86QEOKiP4QTBVVtS7SuTctUmm1q5CMRA3EmwQg5Grm6aIXA
+0ke8RS+ycqpoOxfp21HAX+06ZmcSNfXGvwd0lRTIDASygkNPU+SYrWrXptpJJEzl
+G/plwuuN0guIQGlJbi4N0Hy1WA4tz9/A89vdmmqoTP9lgpeGVyy0OHIRlUpVHjX+
+SLTAvvrCWdwcMPFbY+1Pn05SpwDfsDZFWzmQQIJw6nVWxPSsl8lr78h6SEZNMb0p
+WsEDQ9hiu0umMdgAt72kspcXRrXYyxFZlkc6mfMTlluOYaGmxIV0giKD34P9jKME
+QxgTXokluvh4Upy1R3xdOVtQlfGC3hFRkk9Kl64Lho6v9KM+6L3/vH9Ckl1KP3pu
+I3Dbxj+MGbIPv6+b5Zxpa7VTUbvzgWg0vkUVhByJZ4OizdDYMpKBahF9gSCrJoFK
+lr5GxmqFPV5ebkddsavHQIM4oLq4nLbnyclgqNRqNP2dpxRnnJkmOK+lkIBz5cX/
+uSagR6ocrkuc5xKNLMNdgxWDD87FoowGa+Tkagx+qrtF90chIpGAj1YJaufbVqOH
+79EUtQCPydxK6SJV5I93R+zQZ+UFmLJjS44g7Rcqn0A8hVXrmI4=
+=QGvC
+-----END PGP SIGNATURE-----
+
+--5kggnoviwlppqn34--
 
