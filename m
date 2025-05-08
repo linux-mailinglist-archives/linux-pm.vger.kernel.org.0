@@ -1,168 +1,161 @@
-Return-Path: <linux-pm+bounces-26898-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26899-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AEB3AB0057
-	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 18:23:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C8AAAB0223
+	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 20:06:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 017C77A684C
-	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 16:22:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B38DD4607FC
+	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 18:06:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F544280A5E;
-	Thu,  8 May 2025 16:23:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B0502253E0;
+	Thu,  8 May 2025 18:06:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Mf8+PqQV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LM6VZUEW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9846526FD88
-	for <linux-pm@vger.kernel.org>; Thu,  8 May 2025 16:23:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCF5038384;
+	Thu,  8 May 2025 18:06:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746721403; cv=none; b=c41LmfPyDWo7aSOAiGCctRIyAEJRjSBmzx/tz9xxlV/wrlPt7zj9+uQFDlJ2Fy02s9SuWj0Fns7GLlaHd9FfIah8pjuUjCCHLtDMxq9SOAYFs8mUQuSM42UfCFD9aLozHw+uIRexF7FwOIOKe7uHFI87kM1HSt9wcYHyh3ro/ks=
+	t=1746727605; cv=none; b=pe05krgheRuRky32vZNVm/x4gTjTJhh1Z+jQJaUUrSk1pA5jgOGZDO/U0M6k4zpf6opTvp7nQp3Cbh/299Q/j2JlJ7ORoQqd1M852bC5oydt4xZbErek1/GMGEaFd2BgUr7iXWVNLnWnv9Bv3qmX7AwyXD5K7rrNgLRqTxK7PeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746721403; c=relaxed/simple;
-	bh=Bxi3jK7hjkP+UIRNZ1hN9gUVnl0yDp7q1TkT41ugEhY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rNtYiq5a8j8NcvfLFUvqjA1nccPyza3fwK7r1vaCt213ldW6Ilf854epnrbFkmEFruqhCafg0dg1Sj8CndlQivvJgji/53jZFXZcmQFwQZVU/kmHNHDi+obVk1lfg25nqFPU1fxF+oy6Mu+823ij5KjVbGnWa50Gt9OtdtlLEoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Mf8+PqQV; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746721400;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wJX4DMTSZqe1XJz7zQgtAPGngWPUrdqF5xo7achpeek=;
-	b=Mf8+PqQVZHH5FdS02JCcG51Pk6ZAzuyRZyUG5b2VYha26H4t3FEd9js/2Bl6iR4ZMP8uzr
-	5zlaAFfUwrf4V4s6Ae9Oso3hz6yrJOiCjXH8BCupktodfKd1p1easWhCiHQrVl/PcQa0NX
-	N89n+W/3ifM6hwkw/WO0khzpW8RHoRA=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-166-IjTU0-WTMqC9cOST2__XOg-1; Thu, 08 May 2025 12:23:19 -0400
-X-MC-Unique: IjTU0-WTMqC9cOST2__XOg-1
-X-Mimecast-MFC-AGG-ID: IjTU0-WTMqC9cOST2__XOg_1746721399
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7c5d608e6f5so282552585a.0
-        for <linux-pm@vger.kernel.org>; Thu, 08 May 2025 09:23:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746721398; x=1747326198;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wJX4DMTSZqe1XJz7zQgtAPGngWPUrdqF5xo7achpeek=;
-        b=h7o+t2MZzkL9heg0Vn7daJ3PH5TnjGjLSJFO8bKHtCTDztRkw5GcN82cs+HQ7cDDzX
-         O/NVWXfIPPT9B004b06GW4xFFI7SzrMe36xBBLGIymA20xeUPzUPn3PS/G1fFGx6KcOE
-         M3WUCVNK6eupPbhsieeym3v/vj7VpoKmcJxekPnnZQKwzwxrXbtBTB8jS/0seNsD1TSO
-         1e+ycTfikP7qEERAZ8eknwcmcZx/DX07vj9tnxNhpDGmfUNbFWDOTww+Vkd61YOwdVpN
-         jZ14sZF+kJLBwX9FBVfkdhEjf0DF3FQOABV7TXLuR6PB4HnuJrqFjDW1Js7TVlqgq0W9
-         /XQA==
-X-Forwarded-Encrypted: i=1; AJvYcCVunUw7yaZf0ntG+FZsOpT5COPjrfDGVK8Ap/8jk9R3pjsvGLyUzt7WiSAK9ZO1bB0cZwFAC/0ZPQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywgzq+wm8F/IBxSjXTEy0Sra7pXw/lnCIwlGpgdpZtKUbBifo6H
-	tMfrRlPCf+a69ARFNx7LerAIlyqx0+4Robu8zmMgyGm+SxBb2ThHLRYQ13ex2mD9nDgeyW1uyak
-	2tdpVlRVLyscbTSPE9GxjO6y3hrfwBxSinS5AmrB4eQ5BG9su4qqB1zBQOmYnthDVL7s=
-X-Gm-Gg: ASbGncvRO1wtEXQAciwyQg+wmhRNXH8qbEiycdp087YR8v90iA0BPzxqXI+ELd+frz2
-	T3oxmeH53QStn9lVOPdLGYtx74gLCo/SlahD5/rSOtpmMUkmJzve/o3Cwe6yDCsWg75m6kW089c
-	rSUHaDbINdER/z0vUZAGU6pYG8582KvUxaYX5i8FsKfZjC7kbS4e82wTp580aBqe0CAvcnZ4j7q
-	mgojscDDUoYVNGGtCh1H3OTSrcMDKMzsTvZRFgpCfxhtFT4EhDOkUpgF3lYa+dhUEE5Nwmb0ubn
-	Cq9kRf/I
-X-Received: by 2002:ac8:7f45:0:b0:476:74de:81e2 with SMTP id d75a77b69052e-4922786613amr119301761cf.43.1746721387351;
-        Thu, 08 May 2025 09:23:07 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFZUvAevPpesan+hnIM3V1iwmsa595S7pWlmOKoS5fbhEOSwBSPKWL5ZUmE4ZsfX/7+ftGXPg==
-X-Received: by 2002:a05:620a:4713:b0:7c7:827b:46bf with SMTP id af79cd13be357-7cd01157860mr39652585a.39.1746721376066;
-        Thu, 08 May 2025 09:22:56 -0700 (PDT)
-Received: from thinkpad2024 ([71.217.63.131])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4945259bd7bsm112291cf.65.2025.05.08.09.22.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 May 2025 09:22:55 -0700 (PDT)
-Date: Thu, 8 May 2025 12:22:54 -0400
-From: "John B. Wyatt IV" <jwyatt@redhat.com>
-To: Francesco Poli <invernomuto@paranoici.org>
-Cc: Thorsten Leemhuis <linux@leemhuis.info>,
-	linux-pm list <linux-pm@vger.kernel.org>,
-	Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
-	John Kacur <jkacur@redhat.com>
-Subject: Re: [PATCH v2] cpupower: add a systemd service to run cpupower
-Message-ID: <aBzaXqz4TQkHxJjV@thinkpad2024>
-References: <20250425151024.121630-1-invernomuto@paranoici.org>
- <b36a5385-dea0-48bc-8555-e073f62cb6dc@leemhuis.info>
- <20250508001857.ef90d07f43868b2b12c2f432@paranoici.org>
+	s=arc-20240116; t=1746727605; c=relaxed/simple;
+	bh=AT673/beXh1Iw+NWSwcYovpba3fg3Uqn/BBz/hPfvEY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=T4CMU4CNkUwJyXsKYkWBerzjqTAuWWT6h+fm3GZdZvxgzfqomCSHdmdaXT8DLxWPc7BVwVDiYMiV4Ahq0OzcnG/FsNLPWyWHKfnYteUsHrQr4L4EJRyyBppYcEffocI83Rp4TiVMAekfJUbsdRMygOT0lAaWxGtKOCWogxbra60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LM6VZUEW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43C5AC4CEF0;
+	Thu,  8 May 2025 18:06:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746727603;
+	bh=AT673/beXh1Iw+NWSwcYovpba3fg3Uqn/BBz/hPfvEY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=LM6VZUEWarLOmvN11dUkHIZAVIRR/0lBT50i3B1BtVuiDSmPm1OT9Rabd6WeQ4+9c
+	 9QPtezlfycYZ9n+i7REbZT1XkgVLcGk/GmkUeg5tT5vOQ+B+TG0axzlz6pTBvzzNTx
+	 ekxvjrSzTLcjJZRJxZ5MP06aoKfcpdnB92Sd8X9kmlwF1giUYCf4PU46za9CZ7XA9d
+	 aDcumzZReTpJ34Sj6yh5SePTPm8PYXTKYc03PmovpyzcGuAMeXLQlpH88MrmtKvLYd
+	 dxXGpgwlgR5SqqpfTpHTlV99XUuC0uLInnDbAlc/Tegij5Hjeeyiz0sN8bkxci92Ze
+	 Azgy5tcKacFsQ==
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-72ecc30903cso732473a34.0;
+        Thu, 08 May 2025 11:06:43 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUX/41teIuvMQM3gTa2C9f2DSgRXtABUMYk1NsAt/9/3nhmt9o0i05mJuELmN0aTgtR685HdmF07pQ=@vger.kernel.org, AJvYcCUfGGbPtt66lkqcZxRItBU394iNuxA1KWVvaMUknai6AdDV6RnLZRWAahdEq0OebAcZ+u+g6jjGBdu0CLU=@vger.kernel.org, AJvYcCWFuQYY27zMonAGqF1/am1c3megWxNVN80uRrlw8dZdDBZBtBJNNLp/Zbne4pQ3VLWn7F26K5Ue/3hkqko=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJKEzZ2Vf1aU1oo3hod8W1rAYkgEm0cvET0RGN7F7CIycO4+Zd
+	zfVY9z9J6EvZnZpNJRoqDuVzp4UZTUdjjaoASR2ANTwtyBQYGIe9I/GQbPipvnLTvGQLaRhGRDq
+	IBWxeJ97ikkrvsFqyJZibGCltRKo=
+X-Google-Smtp-Source: AGHT+IGzS7QNq7+HaeTooVtJmyLUF32qMz67Rfq0dA/F8YUy3BlapHyOdQ18btj/Rts/39j11fm208hRejH3SNsO2F0=
+X-Received: by 2002:a05:6870:e243:b0:2bc:716c:4622 with SMTP id
+ 586e51a60fabf-2dba455ac8bmr279543fac.38.1746727602527; Thu, 08 May 2025
+ 11:06:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250508001857.ef90d07f43868b2b12c2f432@paranoici.org>
+References: <10629535.nUPlyArG6x@rjwysocki.net> <22630663.EfDdHjke4D@rjwysocki.net>
+ <c6cd714b-b0eb-42fc-b9b5-4f5f396fb4ec@nvidia.com> <CAJZ5v0jWTtaQEcx0p+onU3eujgAJpF_V57wzZCuYv2NVnEb7VQ@mail.gmail.com>
+ <7c970b02-7b58-4d15-b5f6-18bbfd883ccd@nvidia.com> <CAJZ5v0jcWQ3QKx=2nzDpnYPyGuYfT4TModwdAreWZu4d0hXmoA@mail.gmail.com>
+ <CAJZ5v0jG+54uKiY-uSc6B+8JuA6eU1j8tGM5d=XsrT0EmabMeQ@mail.gmail.com>
+ <563657c5-5529-45fd-96fa-bab68ca992a9@nvidia.com> <CAJZ5v0jVOG_u=F36aOVh=qu4Ef-5QFAmC+5-fmF_mU8NSr_LnA@mail.gmail.com>
+ <b17469ee-0d8c-49ff-8fc8-a3c3cc9964dd@nvidia.com> <CAJZ5v0gMHU71drwOYatFhUcDFKXb9=vTo=JFFYfDabYBdrqWLg@mail.gmail.com>
+ <0f7a3738-0b94-4361-a277-c3a90d87aebc@nvidia.com>
+In-Reply-To: <0f7a3738-0b94-4361-a277-c3a90d87aebc@nvidia.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 8 May 2025 20:06:30 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jSr1t=bEkOO9HJKmxFVf4oY+ij77aHsBeKgL+NpDfmnQ@mail.gmail.com>
+X-Gm-Features: ATxdqUHZQwekIOa610qRcHGjQBASmlDhweBXeumeyI6_7h0NqIavIVDj9frv7O8
+Message-ID: <CAJZ5v0jSr1t=bEkOO9HJKmxFVf4oY+ij77aHsBeKgL+NpDfmnQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/5] PM: sleep: Resume children after resuming the parent
+To: Jon Hunter <jonathanh@nvidia.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
+	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Johan Hovold <johan@kernel.org>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+	Saravana Kannan <saravanak@google.com>, 
+	"linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 08, 2025 at 12:18:57AM +0200, Francesco Poli wrote:
-> On Wed, 7 May 2025 10:07:33 +0200 Thorsten Leemhuis wrote:
-> > /etc/default/ is to the best of my knowledge (everyone: please correct
-> > me if I'm wrong!) a Debianism and on rarely used (or maybe not at all,
-> > not sure) in distros unrelated to Debian.
-> 
-> I thought that /etc/default was used in other distros, as well, not
-> only on Debian-derivatives...
-> 
-> For instance on [RedHat] Enterprise Linux and (consequently) on [Rocky]
-> Linux for [GRUB], for [useradd], and so forth...
-> 
-> [RedHat]: <https://access.redhat.com/solutions/3185891>
-> [GRUB]: <https://docs.rockylinux.org/books/admin_guide/10-boot/#the-grub2-bootloader>
-> [useradd]: <https://docs.rockylinux.org/books/admin_guide/06-users/#default-value-for-user-creation>
-> 
-> What do others think?
+On Thu, May 8, 2025 at 3:38=E2=80=AFPM Jon Hunter <jonathanh@nvidia.com> wr=
+ote:
+>
+>
+> On 07/05/2025 17:43, Rafael J. Wysocki wrote:
+>
+> ...
+>
+> >> Setting all these to 'disabled' fixes the problem. However, also just
+> >> setting the 'cypd4226' device to 'sync' fixes the problem (the ina3221
+> >> devices seem to be fine being async). The 'cypd4226' device is
+> >> interesting, because this one is a USB Type-C controller and there is =
+a
+> >> circular dependency between the Type-C and USB PHY (see
+> >> arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts).
+> >
+> > Circular dependencies are problematic for suspend/resume in general.
+> > I wonder if fw_devlink can resolve this?
+>
+> I booted with fw_devlink=3Don, but this did not resolve the problem :-(
 
-You are correct about it not being Debian family specific.
+I see, but thanks for checking.
 
-My Fedora install has the following: google-chrome  grub  pcscd  useradd
+> >> If I make the following change then this does fix it ...
+> >>
+> >> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> >> b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> >> index f01e4ef6619d..e9a9df1431af 100644
+> >> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> >> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> >> @@ -1483,6 +1483,8 @@ static int ucsi_ccg_probe(struct i2c_client *cli=
+ent)
+> >>
+> >>           i2c_set_clientdata(client, uc);
+> >>
+> >> +       device_disable_async_suspend(uc->dev);
+> >> +
+> >>           pm_runtime_set_active(uc->dev);
+> >>           pm_runtime_enable(uc->dev);
+> >>           pm_runtime_use_autosuspend(uc->dev);
+> >>
+> >> Is this the right fix for this?
+> >
+> > At least as a stop-gap, yes.
+> >
+> > In order to enable async suspend for a device, one needs to at least
+> > assume with sufficiently high confidence that it will be safe to
+> > reorder it with respect to any other device in the system except for
+> > the devices having known dependencies on the device in question.
+> > Those known dependencies either are parent-child connections or they
+> > need to be represented by device links.
+> >
+> > In this particular case, it is painfully clear that the suspend of the
+> > device in question cannot be reordered with respect to at least one
+> > other device where the dependency is not known in the above sense.
+> >
+> > Thus the device in question should not be allowed to suspend asynchrono=
+usly.
+> >
+> > Would it be better to represent the dependency in question via a
+> > device link?  Yes, it would, but until that happens, disabling async
+> > suspend is the right thing to do IMV.
+>
+> OK so it is not clear to me if the PM core should be handling this for
+> us.
 
-Citing RHEL 7 or a clone of RHEL 8 is outdated information fyi. RHEL will
-usually follow it's upstream, which is Fedora.
+No, it can't because dependency information is missing.
 
-> 
-> > So I'd say it's a bad choice
-> > to place that file. Why not put it simply straight into /etc/ ?
-> 
-> Because /etc/cpupower.conf makes me think it's a configuration file for
-> cpupower, rather than for the cpupower.service that runs cpupower at
-> boot.
+> Is that what you are implying/suggesting?
 
-Despite reviewing it, in retrospect, it makes me think the name of the
-file should be different instead; perhaps cpupower-service.conf ?
+No.
 
-Trying not to do bike shedding [1] for you as a new contributor, but
-I do feel changing the filename would make it much more clear at a
-glance, especially if it is moved to /etc.
+Async suspend needs to be disabled for this device for now I'm afraid
+and I don't think that it will make suspend/resume take much more
+time.
 
-[1] https://en.wikipedia.org/wiki/Law_of_triviality
-
-If packagers would like to keep /etc/default clean I do not see a reason
-not to. Not sure where else it would go besides /etc or /etc/cpupower; 
-/etc/systemd/system seems specific for systemd unit files.
-
-> 
-> > Side node: the config file is also basically a template, which makes me
-> > wonder if it should land in /usr/share/doc or something like that anyway
-> > so users take a look at adjust it to their needs. But it's just a
-> > thought, I have no strong opinions with regards to this.
-
-> Well, I would prefer to have a configuration file in the right
-> location, ready to be edited by the sysadmin.
-
-Agreed. Also, that seems to be for readonly info and this file is
-intended to be modified to have any effect. Plenty of programs place a
-default configuration file in /etc or a subdirectory.
-
--- 
-Sincerely,
-John Wyatt
-Software Engineer, Core Kernel
-Red Hat
-
+Thanks!
 
