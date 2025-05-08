@@ -1,171 +1,168 @@
-Return-Path: <linux-pm+bounces-26897-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26898-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF45FAAFD85
-	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 16:44:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AEB3AB0057
+	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 18:23:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 411457BD347
-	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 14:41:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 017C77A684C
+	for <lists+linux-pm@lfdr.de>; Thu,  8 May 2025 16:22:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EA2C275115;
-	Thu,  8 May 2025 14:42:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F544280A5E;
+	Thu,  8 May 2025 16:23:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BBlbgbQr"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Mf8+PqQV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4B626FA52;
-	Thu,  8 May 2025 14:42:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9846526FD88
+	for <linux-pm@vger.kernel.org>; Thu,  8 May 2025 16:23:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746715333; cv=none; b=YsoLJih8m1QHzGwwQmO+4eR4qRRLQCn/fUU1EdAWMTaCDAWvRly0/+bs62hkV92y6nf8vBKpf41ktHsa1fUVQzmfBR6gkUxGVOkVQyJKuXNs8HcdjCs2/2imNA4AqW94EW+waMUrT9JZ9G5XEIj1blb9hPL5VI+0x6Pvad78cU4=
+	t=1746721403; cv=none; b=c41LmfPyDWo7aSOAiGCctRIyAEJRjSBmzx/tz9xxlV/wrlPt7zj9+uQFDlJ2Fy02s9SuWj0Fns7GLlaHd9FfIah8pjuUjCCHLtDMxq9SOAYFs8mUQuSM42UfCFD9aLozHw+uIRexF7FwOIOKe7uHFI87kM1HSt9wcYHyh3ro/ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746715333; c=relaxed/simple;
-	bh=8zV6u8tx07CqcHqmDmKrAtlHNIv/lQZc4E1pyw9imxY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Mg7iaQwZI2UZGKAFuJyZeOnXy8woPn2p9xnFPFQRI9MZ/64dpPjY+osVyTqQmnl4tvv0jsYGz9IftRMb3EjoVKrCSJza5hya7Y3eOCMctIwIfh/erMYuqZZhbEatJxls/T/Z1EU2P0DUaOkwin6c+C4qMtKntIwilh+4x1Ug0BI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BBlbgbQr; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746715331; x=1778251331;
-  h=date:from:to:cc:subject:message-id;
-  bh=8zV6u8tx07CqcHqmDmKrAtlHNIv/lQZc4E1pyw9imxY=;
-  b=BBlbgbQryvxCPXW+MPv6ffE3PfNzQ4682y+gjz4fES6KdSGygWJiR2zb
-   lRvBeCvhoYBHvwFG2wK/9ivhQYSHqV4Oa/LtOny8Ur1g9LcmPp1OChewk
-   8pBNz2wnmGyiED8lGa0rOpci8/5NYQD0A5lh6eRFGzqJaCZSkW7b0ULWT
-   jP66Av/Zjc/+4LrvfwadmbU8GGsXXCld2NJtRulQslv1pJyRI/7LTMB0Y
-   t89TmTqSdMb6Yo8b1EJamhjFKcB3traZwDeJDrgp8xgHCz9gaQgjkChEJ
-   NRbMtGVr8/dl4EfQ+G4n2YDIzVPIx8MHPL5/NxTLvlg5ltlRz1rUgSCTK
-   w==;
-X-CSE-ConnectionGUID: Bhl6ZFLUQDi2YJ+fFKKObQ==
-X-CSE-MsgGUID: flcnDz45Qeesv9XdGcC9zw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="48370731"
-X-IronPort-AV: E=Sophos;i="6.15,272,1739865600"; 
-   d="scan'208";a="48370731"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2025 07:42:09 -0700
-X-CSE-ConnectionGUID: E8dgZIx7RF+dVU8qnKh9OQ==
-X-CSE-MsgGUID: OH363qekQ0q+NR4M979XPQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,272,1739865600"; 
-   d="scan'208";a="167260732"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 08 May 2025 07:42:08 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uD2Rp-000B44-2b;
-	Thu, 08 May 2025 14:42:05 +0000
-Date: Thu, 08 May 2025 22:41:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 60952b6fc7ad90c84cc9b02f0ffa67c39ea5250b
-Message-ID: <202505082214.c1qS551x-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1746721403; c=relaxed/simple;
+	bh=Bxi3jK7hjkP+UIRNZ1hN9gUVnl0yDp7q1TkT41ugEhY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rNtYiq5a8j8NcvfLFUvqjA1nccPyza3fwK7r1vaCt213ldW6Ilf854epnrbFkmEFruqhCafg0dg1Sj8CndlQivvJgji/53jZFXZcmQFwQZVU/kmHNHDi+obVk1lfg25nqFPU1fxF+oy6Mu+823ij5KjVbGnWa50Gt9OtdtlLEoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Mf8+PqQV; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1746721400;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wJX4DMTSZqe1XJz7zQgtAPGngWPUrdqF5xo7achpeek=;
+	b=Mf8+PqQVZHH5FdS02JCcG51Pk6ZAzuyRZyUG5b2VYha26H4t3FEd9js/2Bl6iR4ZMP8uzr
+	5zlaAFfUwrf4V4s6Ae9Oso3hz6yrJOiCjXH8BCupktodfKd1p1easWhCiHQrVl/PcQa0NX
+	N89n+W/3ifM6hwkw/WO0khzpW8RHoRA=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-166-IjTU0-WTMqC9cOST2__XOg-1; Thu, 08 May 2025 12:23:19 -0400
+X-MC-Unique: IjTU0-WTMqC9cOST2__XOg-1
+X-Mimecast-MFC-AGG-ID: IjTU0-WTMqC9cOST2__XOg_1746721399
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7c5d608e6f5so282552585a.0
+        for <linux-pm@vger.kernel.org>; Thu, 08 May 2025 09:23:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746721398; x=1747326198;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wJX4DMTSZqe1XJz7zQgtAPGngWPUrdqF5xo7achpeek=;
+        b=h7o+t2MZzkL9heg0Vn7daJ3PH5TnjGjLSJFO8bKHtCTDztRkw5GcN82cs+HQ7cDDzX
+         O/NVWXfIPPT9B004b06GW4xFFI7SzrMe36xBBLGIymA20xeUPzUPn3PS/G1fFGx6KcOE
+         M3WUCVNK6eupPbhsieeym3v/vj7VpoKmcJxekPnnZQKwzwxrXbtBTB8jS/0seNsD1TSO
+         1e+ycTfikP7qEERAZ8eknwcmcZx/DX07vj9tnxNhpDGmfUNbFWDOTww+Vkd61YOwdVpN
+         jZ14sZF+kJLBwX9FBVfkdhEjf0DF3FQOABV7TXLuR6PB4HnuJrqFjDW1Js7TVlqgq0W9
+         /XQA==
+X-Forwarded-Encrypted: i=1; AJvYcCVunUw7yaZf0ntG+FZsOpT5COPjrfDGVK8Ap/8jk9R3pjsvGLyUzt7WiSAK9ZO1bB0cZwFAC/0ZPQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywgzq+wm8F/IBxSjXTEy0Sra7pXw/lnCIwlGpgdpZtKUbBifo6H
+	tMfrRlPCf+a69ARFNx7LerAIlyqx0+4Robu8zmMgyGm+SxBb2ThHLRYQ13ex2mD9nDgeyW1uyak
+	2tdpVlRVLyscbTSPE9GxjO6y3hrfwBxSinS5AmrB4eQ5BG9su4qqB1zBQOmYnthDVL7s=
+X-Gm-Gg: ASbGncvRO1wtEXQAciwyQg+wmhRNXH8qbEiycdp087YR8v90iA0BPzxqXI+ELd+frz2
+	T3oxmeH53QStn9lVOPdLGYtx74gLCo/SlahD5/rSOtpmMUkmJzve/o3Cwe6yDCsWg75m6kW089c
+	rSUHaDbINdER/z0vUZAGU6pYG8582KvUxaYX5i8FsKfZjC7kbS4e82wTp580aBqe0CAvcnZ4j7q
+	mgojscDDUoYVNGGtCh1H3OTSrcMDKMzsTvZRFgpCfxhtFT4EhDOkUpgF3lYa+dhUEE5Nwmb0ubn
+	Cq9kRf/I
+X-Received: by 2002:ac8:7f45:0:b0:476:74de:81e2 with SMTP id d75a77b69052e-4922786613amr119301761cf.43.1746721387351;
+        Thu, 08 May 2025 09:23:07 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFZUvAevPpesan+hnIM3V1iwmsa595S7pWlmOKoS5fbhEOSwBSPKWL5ZUmE4ZsfX/7+ftGXPg==
+X-Received: by 2002:a05:620a:4713:b0:7c7:827b:46bf with SMTP id af79cd13be357-7cd01157860mr39652585a.39.1746721376066;
+        Thu, 08 May 2025 09:22:56 -0700 (PDT)
+Received: from thinkpad2024 ([71.217.63.131])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4945259bd7bsm112291cf.65.2025.05.08.09.22.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 May 2025 09:22:55 -0700 (PDT)
+Date: Thu, 8 May 2025 12:22:54 -0400
+From: "John B. Wyatt IV" <jwyatt@redhat.com>
+To: Francesco Poli <invernomuto@paranoici.org>
+Cc: Thorsten Leemhuis <linux@leemhuis.info>,
+	linux-pm list <linux-pm@vger.kernel.org>,
+	Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
+	John Kacur <jkacur@redhat.com>
+Subject: Re: [PATCH v2] cpupower: add a systemd service to run cpupower
+Message-ID: <aBzaXqz4TQkHxJjV@thinkpad2024>
+References: <20250425151024.121630-1-invernomuto@paranoici.org>
+ <b36a5385-dea0-48bc-8555-e073f62cb6dc@leemhuis.info>
+ <20250508001857.ef90d07f43868b2b12c2f432@paranoici.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250508001857.ef90d07f43868b2b12c2f432@paranoici.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 60952b6fc7ad90c84cc9b02f0ffa67c39ea5250b  Merge branch 'acpi-tables' into bleeding-edge
+On Thu, May 08, 2025 at 12:18:57AM +0200, Francesco Poli wrote:
+> On Wed, 7 May 2025 10:07:33 +0200 Thorsten Leemhuis wrote:
+> > /etc/default/ is to the best of my knowledge (everyone: please correct
+> > me if I'm wrong!) a Debianism and on rarely used (or maybe not at all,
+> > not sure) in distros unrelated to Debian.
+> 
+> I thought that /etc/default was used in other distros, as well, not
+> only on Debian-derivatives...
+> 
+> For instance on [RedHat] Enterprise Linux and (consequently) on [Rocky]
+> Linux for [GRUB], for [useradd], and so forth...
+> 
+> [RedHat]: <https://access.redhat.com/solutions/3185891>
+> [GRUB]: <https://docs.rockylinux.org/books/admin_guide/10-boot/#the-grub2-bootloader>
+> [useradd]: <https://docs.rockylinux.org/books/admin_guide/06-users/#default-value-for-user-creation>
+> 
+> What do others think?
 
-elapsed time: 1072m
+You are correct about it not being Debian family specific.
 
-configs tested: 77
-configs skipped: 2
+My Fedora install has the following: google-chrome  grub  pcscd  useradd
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Citing RHEL 7 or a clone of RHEL 8 is outdated information fyi. RHEL will
+usually follow it's upstream, which is Fedora.
 
-tested configs:
-alpha          allnoconfig    gcc-14.2.0
-alpha         allyesconfig    clang-19
-alpha            defconfig    gcc-14.2.0
-arc           allmodconfig    clang-19
-arc            allnoconfig    gcc-14.2.0
-arc           allyesconfig    clang-19
-arc              defconfig    gcc-14.2.0
-arm           allmodconfig    clang-19
-arm            allnoconfig    clang-21
-arm            allnoconfig    gcc-14.2.0
-arm           allyesconfig    clang-19
-arm              defconfig    gcc-14.2.0
-arm64         allmodconfig    clang-19
-arm64          allnoconfig    gcc-14.2.0
-arm64            defconfig    gcc-14.2.0
-csky           allnoconfig    gcc-14.2.0
-csky             defconfig    gcc-14.2.0
-hexagon       allmodconfig    clang-19
-hexagon        allnoconfig    clang-21
-hexagon        allnoconfig    gcc-14.2.0
-hexagon       allyesconfig    clang-19
-hexagon          defconfig    gcc-14.2.0
-i386          allmodconfig    clang-20
-i386           allnoconfig    clang-20
-i386          allyesconfig    clang-20
-i386             defconfig    clang-20
-loongarch     allmodconfig    gcc-14.2.0
-loongarch      allnoconfig    gcc-14.2.0
-loongarch        defconfig    gcc-14.2.0
-m68k          allmodconfig    gcc-14.2.0
-m68k           allnoconfig    gcc-14.2.0
-m68k          allyesconfig    gcc-14.2.0
-m68k             defconfig    gcc-14.2.0
-microblaze    allmodconfig    gcc-14.2.0
-microblaze     allnoconfig    gcc-14.2.0
-microblaze    allyesconfig    gcc-14.2.0
-microblaze       defconfig    gcc-14.2.0
-mips           allnoconfig    gcc-14.2.0
-nios2          allnoconfig    gcc-14.2.0
-nios2            defconfig    gcc-14.2.0
-openrisc       allnoconfig    clang-21
-openrisc       allnoconfig    gcc-14.2.0
-openrisc      allyesconfig    gcc-14.2.0
-parisc        allmodconfig    gcc-14.2.0
-parisc         allnoconfig    clang-21
-parisc         allnoconfig    gcc-14.2.0
-parisc        allyesconfig    gcc-14.2.0
-parisc64         defconfig    gcc-14.2.0
-powerpc       allmodconfig    gcc-14.2.0
-powerpc        allnoconfig    clang-21
-powerpc        allnoconfig    gcc-14.2.0
-powerpc       allyesconfig    gcc-14.2.0
-riscv         allmodconfig    gcc-14.2.0
-riscv          allnoconfig    clang-21
-riscv          allnoconfig    gcc-14.2.0
-riscv         allyesconfig    gcc-14.2.0
-s390          allmodconfig    gcc-14.2.0
-s390           allnoconfig    clang-21
-s390          allyesconfig    gcc-14.2.0
-sh            allmodconfig    gcc-14.2.0
-sh             allnoconfig    gcc-14.2.0
-sh            allyesconfig    gcc-14.2.0
-sparc         allmodconfig    gcc-14.2.0
-sparc          allnoconfig    gcc-14.2.0
-um            allmodconfig    clang-19
-um             allnoconfig    clang-21
-um            allyesconfig    clang-19
-x86_64         allnoconfig    clang-20
-x86_64        allyesconfig    clang-20
-x86_64           defconfig    clang-20
-x86_64               kexec    clang-20
-x86_64            rhel-9.4    clang-20
-x86_64        rhel-9.4-bpf    gcc-12
-x86_64      rhel-9.4-kunit    gcc-12
-x86_64        rhel-9.4-ltp    gcc-12
-x86_64       rhel-9.4-rust    clang-20
-xtensa         allnoconfig    gcc-14.2.0
+> 
+> > So I'd say it's a bad choice
+> > to place that file. Why not put it simply straight into /etc/ ?
+> 
+> Because /etc/cpupower.conf makes me think it's a configuration file for
+> cpupower, rather than for the cpupower.service that runs cpupower at
+> boot.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Despite reviewing it, in retrospect, it makes me think the name of the
+file should be different instead; perhaps cpupower-service.conf ?
+
+Trying not to do bike shedding [1] for you as a new contributor, but
+I do feel changing the filename would make it much more clear at a
+glance, especially if it is moved to /etc.
+
+[1] https://en.wikipedia.org/wiki/Law_of_triviality
+
+If packagers would like to keep /etc/default clean I do not see a reason
+not to. Not sure where else it would go besides /etc or /etc/cpupower; 
+/etc/systemd/system seems specific for systemd unit files.
+
+> 
+> > Side node: the config file is also basically a template, which makes me
+> > wonder if it should land in /usr/share/doc or something like that anyway
+> > so users take a look at adjust it to their needs. But it's just a
+> > thought, I have no strong opinions with regards to this.
+
+> Well, I would prefer to have a configuration file in the right
+> location, ready to be edited by the sysadmin.
+
+Agreed. Also, that seems to be for readonly info and this file is
+intended to be modified to have any effect. Plenty of programs place a
+default configuration file in /etc or a subdirectory.
+
+-- 
+Sincerely,
+John Wyatt
+Software Engineer, Core Kernel
+Red Hat
+
 
