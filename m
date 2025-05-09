@@ -1,160 +1,358 @@
-Return-Path: <linux-pm+bounces-26976-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26977-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BD9CAB1FC4
-	for <lists+linux-pm@lfdr.de>; Sat, 10 May 2025 00:13:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 151D8AB2055
+	for <lists+linux-pm@lfdr.de>; Sat, 10 May 2025 01:49:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 777263B31B8
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 22:13:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 134631BC713A
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 23:49:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68ECD262FED;
-	Fri,  9 May 2025 22:13:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E10B5264626;
+	Fri,  9 May 2025 23:49:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IYKV3aNs"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="lRQyn2Df"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3C83261565;
-	Fri,  9 May 2025 22:13:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F11972641EE
+	for <linux-pm@vger.kernel.org>; Fri,  9 May 2025 23:49:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746828817; cv=none; b=YDFZ0pGErLwGJLhJ/LSfHLRVM3XfzkR8lT03RmKoqlxwZySE4eUwUU+nie+gvAVp7e+FRDLPUHcPSSN4INqbXBlxBmhZgHExtUeQy98hXMDrRfx6IASFxSTymrN7z5XN6K346FZipInFEJ231U6xmv2IxqhikbTTRc1xNHWXZKo=
+	t=1746834567; cv=none; b=B2iV7KvJ1qjmS/lmferpeI4MDqqHwADtAAyqvnCBzDamuG6lSSX24VHE6L20bBJDqyL8USYQZhqye5c7PqIADAuKrrt/14wGWCHpmmrFI1OGS9TYpvUipZSfAzYCTCrafFX5kYAWlrPNdqWG1bgQw8xsgANTGm+RtRPuJenux74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746828817; c=relaxed/simple;
-	bh=JEtojtxozBeZKb4L4slRczK0pe/giC0x9qDchrNk1q8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DMEZicljxU4WleBdeNhhJlfDS5+SiICeb0rhebwqK3gwI8QV05POED5l11jsjITj966Kw1MdswzGyyfmKqy7XiUrvfjRJbAgKlnw+2AcMyKLfBL3F1636/0eQvZb9ebwsu/hOkJQ5mUHePloSwt1BK+Mx8QHL4vgy+2lL8Nklvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IYKV3aNs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 862ABC4CEEE;
-	Fri,  9 May 2025 22:13:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746828816;
-	bh=JEtojtxozBeZKb4L4slRczK0pe/giC0x9qDchrNk1q8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IYKV3aNsMm0whQPXKjXlBEOn2trCbtazdDfHlO5yPtdyE5J3GweuFhzrUbr7Snoww
-	 qqZF7RYOoIR380q1jSD71Ck0351FOW3wBU334Ik2Q8iw6QLTEG3x62c0dOEubnlHGU
-	 uDwQ2z3vTuJcEfDVgiuuK7uYNS+RlyuRpoFTmbRRkVTsb++SFB42yPStgJALge6Uh1
-	 iF8eehmqqX8IawRvuD2N01tJxqP6opnaPgKie0o23LHTLxL8bziAXGZWya9r08SVRj
-	 YaudW4inWVVWlif6YhdroDU16ct+tjyIvqBrqpaI4K+X8q6bXBgXXjr35mKh6wnh0W
-	 8QSTtY9VxavPA==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Amit Kucheria <amitk@kernel.org>,
-	Thara Gopinath <thara.gopinath@gmail.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-	Lee Jones <lee@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alex Elder <elder@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	Andy Gross <agross@kernel.org>,
-	Srinivas Kandagatla <srini@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Georgi Djakov <djakov@kernel.org>,
-	Loic Poulain <loic.poulain@oss.qualcomm.com>,
-	Robert Foss <rfoss@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Taniya Das <quic_tdas@quicinc.com>,
-	Sibi Sankar <quic_sibis@quicinc.com>,
-	Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Joerg Roedel <joro@8bytes.org>,
-	Imran Shaik <quic_imrashai@quicinc.com>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Jessica Zhang <quic_jesszhan@quicinc.com>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Kees Cook <kees@kernel.org>,
-	Tony Luck <tony.luck@intel.com>,
-	"Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-	David Wronek <david@mainlining.org>,
-	Jens Reidel <adrian@mainlining.org>,
-	Danila Tikhonov <danila@jiaxyga.com>
-Cc: devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-phy@lists.infradead.org,
-	linux-mmc@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	dmaengine@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	iommu@lists.linux.dev,
-	linux-remoteproc@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linux-hardening@vger.kernel.org,
-	linux@mainlining.org,
-	~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: (subset) [PATCH 17/33] dt-bindings: nvmem: qfprom: Add the SM7150 compatible
-Date: Fri,  9 May 2025 17:13:23 -0500
-Message-ID: <174682880484.49052.7211478690993150122.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250422213137.80366-1-danila@jiaxyga.com>
-References: <20250422213137.80366-1-danila@jiaxyga.com>
+	s=arc-20240116; t=1746834567; c=relaxed/simple;
+	bh=shpgDE2lINRgE7DnUkVakT/XB1hZRKtpk8GLWd57xUI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=qB01hfc5CeMVJdtKn8GG2asLdt1JiFCB1Dtc5IOJsPVJHXbjdiJL+BYFecZSKZ5JONn5eKvhVA+1xIAhMc67rk+cFcStkc1SmTkVxBWvtL05ztEWt/qCYULJlYLbQwqIhXgHz15E4mg1uEhW5rduufMXd+MVTKcHzXnJk+RSEIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=lRQyn2Df; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250509234916euoutp02099f00fd80432277e89c944c6c687b09~_AMYjUjIZ1289412894euoutp02W
+	for <linux-pm@vger.kernel.org>; Fri,  9 May 2025 23:49:16 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250509234916euoutp02099f00fd80432277e89c944c6c687b09~_AMYjUjIZ1289412894euoutp02W
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1746834556;
+	bh=DKnXcDaqBiRzpDhf+r/dUwH+L1omQz+yCSfgd20SJXc=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=lRQyn2DfpbEn/n9uJnEIQ82FijPiJ8ncn1FOLTcATNBM56iLjCA09TuCq/JOoGjR8
+	 tbyJRxMP3iJMerm4izxNZMy6HauF7pFBF1TcJCqEcoTek+3MZWtiX/pb29yOYHHfkO
+	 RWCGIZhIt1qjW5Tdw8znUGPfGy1R6sP3lm8gpiVw=
+Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20250509234915eucas1p2846ecef88f268d78ab2e96d4a67002b0~_AMX6JDE42776827768eucas1p2Z;
+	Fri,  9 May 2025 23:49:15 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250509234913eusmtip1bdcfc7a72d28354fcfe1d78cfac2309c~_AMWMc7rN2442324423eusmtip1B;
+	Fri,  9 May 2025 23:49:13 +0000 (GMT)
+Message-ID: <1bf3df62-0641-459f-99fc-fd511e564b84@samsung.com>
+Date: Sat, 10 May 2025 01:49:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/7] cpufreq/sched: Move cpufreq-specific EAS checks
+ to cpufreq
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM
+	<linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>, Srinivas Pandruvada
+	<srinivas.pandruvada@linux.intel.com>, Dietmar Eggemann
+	<dietmar.eggemann@arm.com>, Morten Rasmussen <morten.rasmussen@arm.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>, Ricardo Neri
+	<ricardo.neri-calderon@linux.intel.com>, Pierre Gondois
+	<pierre.gondois@arm.com>, Christian Loehle <christian.loehle@arm.com>
+Content-Language: en-US
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <2317800.iZASKD2KPV@rjwysocki.net>
 Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20250509234915eucas1p2846ecef88f268d78ab2e96d4a67002b0
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250509234915eucas1p2846ecef88f268d78ab2e96d4a67002b0
+X-EPHeader: CA
+X-CMS-RootMailID: 20250509234915eucas1p2846ecef88f268d78ab2e96d4a67002b0
+References: <2999205.e9J7NaK4W3@rjwysocki.net>
+	<2317800.iZASKD2KPV@rjwysocki.net>
+	<CGME20250509234915eucas1p2846ecef88f268d78ab2e96d4a67002b0@eucas1p2.samsung.com>
+
+On 06.05.2025 22:37, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Doing cpufreq-specific EAS checks that require accessing policy
+> internals directly from sched_is_eas_possible() is a bit unfortunate,
+> so introduce cpufreq_ready_for_eas() in cpufreq, move those checks
+> into that new function and make sched_is_eas_possible() call it.
+>
+> While at it, address a possible race between the EAS governor check
+> and governor change by doing the former under the policy rwsem.
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Reviewed-by: Christian Loehle <christian.loehle@arm.com>
+> Tested-by: Christian Loehle <christian.loehle@arm.com>
+> Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+
+In my tests I've noticed that this patch, merged as commit 4854649b1fb4 
+("cpufreq/sched: Move cpufreq-specific EAS checks to cpufreq"), causes a 
+regression on ARM64 Amlogic Meson SoC based OdroidN2 board. The board 
+finally lockups. Reverting $subject on top of next-20250509 fixes this 
+issue. Here is the lockdep warning observed before the lockup:
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.15.0-rc5-next-20250509-dirty #10335 Tainted: G         C
+cpufreq: cpufreq_policy_online: CPU2: Running at unlisted initial 
+frequency: 999999 kHz, changing to: 1000000 kHz
+------------------------------------------------------
+kworker/3:1/79 is trying to acquire lock:
+ffff00000494b380 (&policy->rwsem){++++}-{4:4}, at: 
+cpufreq_ready_for_eas+0x60/0xbc
+
+but task is already holding lock:
+ffff8000832887a0 (sched_domains_mutex){+.+.}-{4:4}, at: 
+partition_sched_domains+0x54/0x938
+
+which lock already depends on the new lock.
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (sched_domains_mutex){+.+.}-{4:4}:
+        __mutex_lock+0xa8/0x598
+        mutex_lock_nested+0x24/0x30
+        partition_sched_domains+0x54/0x938
+        rebuild_sched_domains_locked+0x2d4/0x900
+        rebuild_sched_domains+0x2c/0x48
+        rebuild_sched_domains_energy+0x3c/0x58
+        rebuild_sd_workfn+0x10/0x1c
+        process_one_work+0x208/0x604
+        worker_thread+0x244/0x388
+        kthread+0x150/0x228
+        ret_from_fork+0x10/0x20
+
+-> #1 (cpuset_mutex){+.+.}-{4:4}:
+        __mutex_lock+0xa8/0x598
+        mutex_lock_nested+0x24/0x30
+        cpuset_lock+0x1c/0x28
+        __sched_setscheduler+0x31c/0x830
+        sched_setattr_nocheck+0x18/0x24
+        sugov_init+0x1b4/0x388
+        cpufreq_init_governor.part.0+0x58/0xd4
+        cpufreq_set_policy+0x2c8/0x3ec
+        cpufreq_online+0x520/0xb20
+        cpufreq_add_dev+0x80/0x98
+        subsys_interface_register+0xfc/0x118
+        cpufreq_register_driver+0x150/0x238
+        dt_cpufreq_probe+0x148/0x488
+        platform_probe+0x68/0xdc
+        really_probe+0xbc/0x298
+        __driver_probe_device+0x78/0x12c
+        driver_probe_device+0xdc/0x164
+        __device_attach_driver+0xb8/0x138
+        bus_for_each_drv+0x80/0xdc
+        __device_attach+0xa8/0x1b0
+        device_initial_probe+0x14/0x20
+        bus_probe_device+0xb0/0xb4
+        deferred_probe_work_func+0x8c/0xc8
+        process_one_work+0x208/0x604
+        worker_thread+0x244/0x388
+        kthread+0x150/0x228
+        ret_from_fork+0x10/0x20
+
+-> #0 (&policy->rwsem){++++}-{4:4}:
+        __lock_acquire+0x1408/0x2254
+        lock_acquire+0x1c8/0x354
+        down_read+0x60/0x180
+        cpufreq_ready_for_eas+0x60/0xbc
+        sched_is_eas_possible+0x144/0x170
+        partition_sched_domains+0x504/0x938
+        rebuild_sched_domains_locked+0x2d4/0x900
+        rebuild_sched_domains+0x2c/0x48
+        rebuild_sched_domains_energy+0x3c/0x58
+        rebuild_sd_workfn+0x10/0x1c
+        process_one_work+0x208/0x604
+        worker_thread+0x244/0x388
+        kthread+0x150/0x228
+        ret_from_fork+0x10/0x20
+
+other info that might help us debug this:
+
+Chain exists of:
+   &policy->rwsem --> cpuset_mutex --> sched_domains_mutex
+
+  Possible unsafe locking scenario:
+
+        CPU0                    CPU1
+        ----                    ----
+   lock(sched_domains_mutex);
+                                lock(cpuset_mutex);
+                                lock(sched_domains_mutex);
+   rlock(&policy->rwsem);
+
+  *** DEADLOCK ***
+
+6 locks held by kworker/3:1/79:
+  #0: ffff00000000a748 ((wq_completion)events){+.+.}-{0:0}, at: 
+process_one_work+0x18c/0x604
+  #1: ffff800084a83dd0 (rebuild_sd_work){+.+.}-{0:0}, at: 
+process_one_work+0x1b4/0x604
+  #2: ffff800083288908 (sched_energy_mutex){+.+.}-{4:4}, at: 
+rebuild_sched_domains_energy+0x30/0x58
+  #3: ffff80008327c2d8 (cpu_hotplug_lock){++++}-{0:0}, at: 
+cpus_read_lock+0x10/0x1c
+  #4: ffff80008331b098 (cpuset_mutex){+.+.}-{4:4}, at: 
+rebuild_sched_domains+0x28/0x48
+  #5: ffff8000832887a0 (sched_domains_mutex){+.+.}-{4:4}, at: 
+partition_sched_domains+0x54/0x938
+
+stack backtrace:
+CPU: 3 UID: 0 PID: 79 Comm: kworker/3:1 Tainted: G C          
+6.15.0-rc5-next-20250509-dirty #10335 PREEMPT
+Tainted: [C]=CRAP
+Hardware name: Hardkernel ODROID-N2 (DT)
+Workqueue: events rebuild_sd_workfn
+Call trace:
+  show_stack+0x18/0x24 (C)
+  dump_stack_lvl+0x90/0xd0
+  dump_stack+0x18/0x24
+  print_circular_bug+0x298/0x37c
+  check_noncircular+0x15c/0x170
+  __lock_acquire+0x1408/0x2254
+  lock_acquire+0x1c8/0x354
+  down_read+0x60/0x180
+  cpufreq_ready_for_eas+0x60/0xbc
+  sched_is_eas_possible+0x144/0x170
+  partition_sched_domains+0x504/0x938
+  rebuild_sched_domains_locked+0x2d4/0x900
+  rebuild_sched_domains+0x2c/0x48
+  rebuild_sched_domains_energy+0x3c/0x58
+  rebuild_sd_workfn+0x10/0x1c
+  process_one_work+0x208/0x604
+  worker_thread+0x244/0x388
+  kthread+0x150/0x228
+  ret_from_fork+0x10/0x20
 
 
-On Wed, 23 Apr 2025 00:31:21 +0300, Danila Tikhonov wrote:
-> Document QFPROM compatible for SM7150.
-> 
-> 
-
-Applied, thanks!
-
-[31/33] dt-bindings: arm: qcom: Add SM7150 Google Pixel 4a
-        commit: bd4718d97d308fdc20ddcd471444b3e398ce877d
-
-Best regards,
+> ---
+>
+> v1 -> v2:
+>     * Add missing newline characters in two places (Christian).
+>     * Pick up tags.
+>
+> ---
+>   drivers/cpufreq/cpufreq.c |   32 ++++++++++++++++++++++++++++++++
+>   include/linux/cpufreq.h   |    2 ++
+>   kernel/sched/topology.c   |   25 +++++--------------------
+>   3 files changed, 39 insertions(+), 20 deletions(-)
+>
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -3056,6 +3056,38 @@
+>   
+>   	return 0;
+>   }
+> +
+> +static bool cpufreq_policy_is_good_for_eas(unsigned int cpu)
+> +{
+> +	struct cpufreq_policy *policy __free(put_cpufreq_policy);
+> +
+> +	policy = cpufreq_cpu_get(cpu);
+> +	if (!policy) {
+> +		pr_debug("cpufreq policy not set for CPU: %d\n", cpu);
+> +		return false;
+> +	}
+> +
+> +	guard(cpufreq_policy_read)(policy);
+> +
+> +	return sugov_is_governor(policy);
+> +}
+> +
+> +bool cpufreq_ready_for_eas(const struct cpumask *cpu_mask)
+> +{
+> +	unsigned int cpu;
+> +
+> +	/* Do not attempt EAS if schedutil is not being used. */
+> +	for_each_cpu(cpu, cpu_mask) {
+> +		if (!cpufreq_policy_is_good_for_eas(cpu)) {
+> +			pr_debug("rd %*pbl: schedutil is mandatory for EAS\n",
+> +				 cpumask_pr_args(cpu_mask));
+> +			return false;
+> +		}
+> +	}
+> +
+> +	return true;
+> +}
+> +
+>   module_param(off, int, 0444);
+>   module_param_string(default_governor, default_governor, CPUFREQ_NAME_LEN, 0444);
+>   core_initcall(cpufreq_core_init);
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -1237,6 +1237,8 @@
+>   		struct cpufreq_frequency_table *table,
+>   		unsigned int transition_latency);
+>   
+> +bool cpufreq_ready_for_eas(const struct cpumask *cpu_mask);
+> +
+>   static inline void cpufreq_register_em_with_opp(struct cpufreq_policy *policy)
+>   {
+>   	dev_pm_opp_of_register_em(get_cpu_device(policy->cpu),
+> --- a/kernel/sched/topology.c
+> +++ b/kernel/sched/topology.c
+> @@ -212,8 +212,6 @@
+>   static bool sched_is_eas_possible(const struct cpumask *cpu_mask)
+>   {
+>   	bool any_asym_capacity = false;
+> -	struct cpufreq_policy *policy;
+> -	bool policy_is_ready;
+>   	int i;
+>   
+>   	/* EAS is enabled for asymmetric CPU capacity topologies. */
+> @@ -248,25 +246,12 @@
+>   		return false;
+>   	}
+>   
+> -	/* Do not attempt EAS if schedutil is not being used. */
+> -	for_each_cpu(i, cpu_mask) {
+> -		policy = cpufreq_cpu_get(i);
+> -		if (!policy) {
+> -			if (sched_debug()) {
+> -				pr_info("rd %*pbl: Checking EAS, cpufreq policy not set for CPU: %d",
+> -					cpumask_pr_args(cpu_mask), i);
+> -			}
+> -			return false;
+> -		}
+> -		policy_is_ready = sugov_is_governor(policy);
+> -		cpufreq_cpu_put(policy);
+> -		if (!policy_is_ready) {
+> -			if (sched_debug()) {
+> -				pr_info("rd %*pbl: Checking EAS, schedutil is mandatory\n",
+> -					cpumask_pr_args(cpu_mask));
+> -			}
+> -			return false;
+> +	if (!cpufreq_ready_for_eas(cpu_mask)) {
+> +		if (sched_debug()) {
+> +			pr_info("rd %*pbl: Checking EAS: cpufreq is not ready\n",
+> +				cpumask_pr_args(cpu_mask));
+>   		}
+> +		return false;
+>   	}
+>   
+>   	return true;
+>
+>
+>
+>
+Best regards
 -- 
-Bjorn Andersson <andersson@kernel.org>
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
 
