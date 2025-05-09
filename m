@@ -1,243 +1,156 @@
-Return-Path: <linux-pm+bounces-26971-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26972-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 464FAAB1B30
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 19:04:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80944AB1B42
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 19:06:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3897189C2DE
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 17:04:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3ED50A077B7
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 17:05:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8CC823026D;
-	Fri,  9 May 2025 17:04:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64432238166;
+	Fri,  9 May 2025 17:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cGESCjhp"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="fa8OpSNk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFCD1228CB0;
-	Fri,  9 May 2025 17:04:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DF5623373D
+	for <linux-pm@vger.kernel.org>; Fri,  9 May 2025 17:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746810241; cv=none; b=i8VoJSZNmQyvMj16AXrxGqRt86f1HY31ALDhb+ZLpU79tDa7JHnYU8nSsI1jQfjy+xUWg2rE3b+DL3ifkTZhl9BwUxSicYCgl+N8rKRffVgCKE18HFYs7n5F6tMRxnEIMU1SaTFE25j+DxUg9Dw/x1FC1yOiFJjJ41iG0H8pveM=
+	t=1746810356; cv=none; b=DRFpLrL1Mvs/xPeZfTGBi6xWxIwItK7m7IHwUswQyxozbLOtZRZI0b83z4bUvIcArqAyFQp61vFhMEegZE4AFJWSijkBqsizEKAtmXWaHTWqvt9h5upp9dCzyt6Zy3Tr0MHil+g+kFsatup9bBs1zDkRsaBcH5NO6NSWJpPjXC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746810241; c=relaxed/simple;
-	bh=cxOuPrTubtaM2OWU2dmQeoVyLD36Fn4cYNvgvQMHmWU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gPgOmJrfc5xLF5g9DgEMvslo4i6lGY/vzeYoRE/kDGX4fIAUpgTqWcVjE5v6DXGAyYPfPl0E7cimv/+YW3iabjd7EnXPH693MpDriXWrettFwjFTOy7+NoQRJcY2a83XOKKUrk+xHKddYZWjXfJtjDpJNzWnI7whTyn8MwFa9Pk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cGESCjhp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 363A9C4CEE4;
-	Fri,  9 May 2025 17:04:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746810241;
-	bh=cxOuPrTubtaM2OWU2dmQeoVyLD36Fn4cYNvgvQMHmWU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=cGESCjhphBC1HXCg4XvWaInawGSQdzvW3Lxes/DTenTv97ppIGUfrNfxYbEE8tDID
-	 q/D4dg6of2DY9B1m6jNhqgnJvD3vs4ww1filylZzgCpYJSGHUds8NH8d3eX3egu8FT
-	 R8QSYcKGVFgt/z1IeKqIg7WKaPVKDhPC8Oq+xgQekTZI1Oxo8C8C9mq1RDTNdxwSh2
-	 T6BygRm1I6QFVp8zu2k3CkNfTHq2TmyllzFOOUhrggviTctialBRM0wCOjqA9vvuBw
-	 g3Lp5LF22AzoxkzzNm6nNYcSIqpxY942FPNw2+sYEyybqdbedZxPIQYZ02zI5qfYgl
-	 UrMkgjpQTvr5w==
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-601b6146b9cso1265744eaf.0;
-        Fri, 09 May 2025 10:04:01 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVcMR7ULu6O+tiTzg2/KzntkJVrfI2xgbGXugLGT7RuxFeRYW6QdNmKFf420v7oKecE69RM0gnsomOHLbs=@vger.kernel.org, AJvYcCW+ZCrAqiDcWxF4Odqa67oPfmccaYmSBVU4qdGMND9iUCYm8uaR64lilSJxvntdw1C/cNRF8UtyKT4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyN3S/X1E0bTRNceRxeOj9/ydJMRP3EDZQ7VLcCdZpGM/70NnLx
-	4qqeDLpUQLKaIGXm8IOEux83zrKh2+Q9jGptGwT/tcNn45jUwA1UbEbAxIubQqDq3A65rOgzFz1
-	UwwIeY4XioA3RpaYqBZjTnobLMyo=
-X-Google-Smtp-Source: AGHT+IEuJ3UyJU2Ke571Dvw0ehpoP2qMb7YoHey7MtgBT4f3jUmYaxRmXBS6WsvDgsKz3hRnlqfMZOwu30053cxbSkk=
-X-Received: by 2002:a05:6820:1e16:b0:606:107a:ebd8 with SMTP id
- 006d021491bc7-6084b64f985mr2203296eaf.5.1746810240473; Fri, 09 May 2025
- 10:04:00 -0700 (PDT)
+	s=arc-20240116; t=1746810356; c=relaxed/simple;
+	bh=r0m0UW+PEU5BgL2NqVdok8cHtVoDL41wqAjRR1VyHgQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EzN4di8043SQKAQaebhWNTT2Blo2NF+wSQ6u0NO/514Qdh9Z2hJLJt2s4v1Fq6NnUWkQNxwmEYudDTm2jviruyEqRcIdoH8YbL+LBmKVgiYTSrGQalH6YdZ3R3JJdW4IAZy4MG/buyfXRp/Mcn+thdiXAG0hYoBKy+SML1ECHQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=fa8OpSNk; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 549AaUas014401
+	for <linux-pm@vger.kernel.org>; Fri, 9 May 2025 17:05:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	bYZFtTpQ2K5+1pV5SB83yilhOw8IrH8U9j0WoHmd6qg=; b=fa8OpSNk2ZXlXsKe
+	XASyk+9t77O0nPWWfpPX3oIH7QD4tWzx26SShdjm5jDHdirNDGKgzJqmfEr3Isiy
+	Vo87v3AxkR2wmD1BbYTEuiktxnDvYUgWXgBRV1PwvKAQPyxHm4hypCLiVYqkHJb6
+	fQnt/jEAwyp4+RFheRMt1ILP/TMGXv3MADpwe+pPYtmMpmBHc0pzNmu4S7FkZeiY
+	vv971hbuON/33iCIixZ4nFFrfomtPm8nHtfYdP+hftVFWELlHR4d9H2knvSCF3zb
+	akgC3CkRgqn49bAEh2RRmujymXT3k1iHaDrLR6eMyOCBxFCSxL1WaG9JFGMjrXP6
+	fy61Mg==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46gnp4ncg5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 09 May 2025 17:05:53 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7c5ad42d6bcso56782785a.2
+        for <linux-pm@vger.kernel.org>; Fri, 09 May 2025 10:05:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746810352; x=1747415152;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bYZFtTpQ2K5+1pV5SB83yilhOw8IrH8U9j0WoHmd6qg=;
+        b=SWa0ydksWI7tU5foA+bROqrEXG5idgPKWKSPbmSLpTrvaimJfzKI2fEU9p7CQQ3UnO
+         H5ZIXDq2oklgsi2wcKuYh7BnDi/11M1hI+4Z/JBSvq54f7ByXvKOpbgH98zA2/AYSKTe
+         HkcTovsTDkGEacbxL81oGDGcpZ5PGVY23gL4GA8j0+Vq3W1kr0q/hJwkleibF8SiFEku
+         RKe3uhLASu4mROm1e5Tw8Q1neLPhCT/FAGSo+9H+nrCVd/gHZ00tJ9ZDxECK+leUEUuf
+         mmWpPMqGAbD4vbNSExOcfAXhoi/0Lav8+0tdVpd8q969OO+8JgmLWSamQdP29BsH3el8
+         mEvg==
+X-Forwarded-Encrypted: i=1; AJvYcCXidYMNhVR43OZZ6bfvIbZJE2X2k+seVv2KqfTq4Ix98CjFQedAnMJ4FyOZLNUPJpmnBWg0AGz7zA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNu1hQYWXwa5UcWyMHxD1ZKrURXf8EJHiwNeLtPb/ZJMZewNoA
+	wQYvEujbI0NC5Sp/lMoirzZN1lnvmKmEjFN4PcAPNGTPtCvo7CKpjMwYaDplzY5dO01LqFCLn9H
+	ovRQ2z/QoOeQj5yUBXIgVCxBjTgSWqpHeaSi3YQWq8BVU3g1rssAVohi+GA==
+X-Gm-Gg: ASbGncvYhSfT4adl91+8wAjdwBh/Ti9RD2Cs+tG1hzr7J3Z27ikc5qoZ8/zmv9rMTU2
+	n82yIzpF26hYa8xsRMNxFWtadya0hfP3vs0LbwMLkZIWrSmyPml0hXZtCFUeo2W6YMHXOsagMaD
+	euYka7wZEPqM5m+uGTfiK98hc/Hu14zmlt0fEljBv3XrEFH7iF/dksqJHkn/ZlNFAkuMs9kUy0V
+	fur+ndnqE5wuM6hNLdPmkZ2B6vnWC9t7GfBvgUeDF2ujfOVzZ+QlfS8mk99q7g8lOwVPHv0vx1v
+	BOVGLPBbf8pcPNTYkBb16/e3s3qXG+iGevqVfIC+CTlw7eFsNnLrfV0XZTpqkrpDedU=
+X-Received: by 2002:a05:620a:318e:b0:7c0:9dc9:754b with SMTP id af79cd13be357-7cd01138c43mr237839185a.0.1746810352547;
+        Fri, 09 May 2025 10:05:52 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFbRp4cqQeIx22c94yzN7HcBSLTFgM40PIl1UVIm+gxSUeSDFOZOAzyxFmgxbh2fxCrwm5SDQ==
+X-Received: by 2002:a05:620a:318e:b0:7c0:9dc9:754b with SMTP id af79cd13be357-7cd01138c43mr237836785a.0.1746810351945;
+        Fri, 09 May 2025 10:05:51 -0700 (PDT)
+Received: from [192.168.65.105] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad2192c8ac2sm176736566b.27.2025.05.09.10.05.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 May 2025 10:05:50 -0700 (PDT)
+Message-ID: <249fa3ea-4b0d-475d-8851-5a31795f3b11@oss.qualcomm.com>
+Date: Fri, 9 May 2025 19:05:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250430160943.2836-1-ImanDevel@gmail.com> <20250502050639.2a4mbdav4mdlhbp2@vireshk-i7>
- <6nfpd4jvx7dmpl5hqk5nokxprxbcccah66x2mptgwxtyxmb74r@qiosxhaw3tew>
-In-Reply-To: <6nfpd4jvx7dmpl5hqk5nokxprxbcccah66x2mptgwxtyxmb74r@qiosxhaw3tew>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 9 May 2025 19:03:49 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gf00GoUUraqY75M5G9bxPkJ5WQ30m5tnksVvA=kTnabg@mail.gmail.com>
-X-Gm-Features: ATxdqUF9bTxyJDcbykjFd9xwRiJOtL6Pu5qGcvVG2O320-Jmf9UpGQ-n4HiL_Ys
-Message-ID: <CAJZ5v0gf00GoUUraqY75M5G9bxPkJ5WQ30m5tnksVvA=kTnabg@mail.gmail.com>
-Subject: Re: [PATCH v3] cpufreq: fix locking order in store_local_boost to
- prevent deadlock
-To: Seyediman Seyedarab <imandevel@gmail.com>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>, rafael@kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, 
-	linux-kernel-mentees@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 2/7] drm/msm/a6xx: Increase HFI response timeout
+To: Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Rob Clark
+ <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Anthony Ruhier <aruhier@mailbox.org>,
+        Dmitry Baryshkov <lumag@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+References: <20250503-gpu-acd-v6-0-ab1b52866c64@quicinc.com>
+ <20250503-gpu-acd-v6-2-ab1b52866c64@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250503-gpu-acd-v6-2-ab1b52866c64@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: HO-uNGbArTluZHrchxRKlc_37cVjHn1E
+X-Authority-Analysis: v=2.4 cv=E5XNpbdl c=1 sm=1 tr=0 ts=681e35f1 cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=pGLkceISAAAA:8 a=b3CbU_ItAAAA:8
+ a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8 a=qaMJGrL2tkxVvb42h3kA:9 a=QEXdDO2ut3YA:10
+ a=bTQJ7kPSJx9SKPbeHEYW:22 a=Rv2g8BkzVjQTVhhssdqe:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA5MDE2OSBTYWx0ZWRfX0kLFU7npgbwH
+ g8MZddat/xWxTzBOmNYhJ1res/NCuMR2tuCUpatK185nZQ3fmPYa5g4ujTPIKIsh+skQuZpdOAU
+ m6j695AJlIDUNl5vMYdqBnAXNxrofnjsK7GaUC9Uci4X9x2t+Q3KPvf2vtys/qeuaTqBblMahEm
+ h3VTpiEcnLa9feY28DCZMEjzSx6fAVg+XMC6pMSHNEMxHI+SK6Tu8b+ad0ZB43Te/Q0bHWCpsLW
+ /K45COX31aIfQkejnLQhjM8l9abDonof6CxffQ5WapZzq2FVoVa/r2BWPaAw38ThjVaRAGr70uH
+ UZCiRJF2Lc0wLyXLSnDiUqbFBoTTyqOk9TW0LgU8JJj9vyVD/nbE6w4ZC0RKjFGn7rkmnCA+nQ9
+ GherBZ1UpJMBdrsEugy+Rsnd3aCmCBeUAgD/FtSjPlf8mPt8fKL8WxNenXz5LfpixKZJqCmx
+X-Proofpoint-ORIG-GUID: HO-uNGbArTluZHrchxRKlc_37cVjHn1E
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-09_06,2025-05-09_01,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 suspectscore=0 adultscore=0 mlxscore=0 malwarescore=0
+ bulkscore=0 phishscore=0 spamscore=0 priorityscore=1501 mlxlogscore=999
+ lowpriorityscore=0 impostorscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2504070000 definitions=main-2505090169
 
-On Fri, May 9, 2025 at 7:29=E2=80=AFAM Seyediman Seyedarab <imandevel@gmail=
-.com> wrote:
->
-> On 25/05/02 10:36AM, Viresh Kumar wrote:
-> > On 30-04-25, 12:09, Seyediman Seyedarab wrote:
-> > > Lockdep reports a possible circular locking dependency[1] when
-> > > writing to /sys/devices/system/cpu/cpufreq/policyN/boost,
-> > > triggered by power-profiles-daemon at boot.
-> > >
-> > > store_local_boost() used to acquire cpu_hotplug_lock *after*
-> > > the policy lock had already been taken by the store() handler.
-> > > However, the expected locking hierarchy is to acquire
-> > > cpu_hotplug_lock before the policy guard. This inverted lock order
-> > > creates a *theoretical* deadlock possibility.
-> > >
-> > > Acquire cpu_hotplug_lock in the store() handler *only* for the
-> > > local_boost attribute, before entering the policy guard block,
-> > > and remove the cpus_read_lock/unlock() calls from store_local_boost()=
-.
-> > > Also switch from guard() to scoped_guard() to allow explicitly wrappi=
-ng
-> > > the policy guard inside the cpu_hotplug_lock critical section.
-> > >
-> > >  [1]
-> > >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D
-> > >  WARNING: possible circular locking dependency detected
-> > >  6.15.0-rc4-debug #28 Not tainted
-> > >  ------------------------------------------------------
-> > >  power-profiles-/596 is trying to acquire lock:
-> > >  ffffffffb147e910 (cpu_hotplug_lock){++++}-{0:0}, at: store_local_boo=
-st+0x6a/0xd0
-> > >
-> > >  but task is already holding lock:
-> > >  ffff9eaa48377b80 (&policy->rwsem){++++}-{4:4}, at: store+0x37/0x90
-> > >
-> > >  which lock already depends on the new lock.
-> > >
-> > >  the existing dependency chain (in reverse order) is:
-> > >
-> > >  -> #2 (&policy->rwsem){++++}-{4:4}:
-> > >         down_write+0x29/0xb0
-> > >         cpufreq_online+0x841/0xa00
-> > >         cpufreq_add_dev+0x71/0x80
-> > >         subsys_interface_register+0x14b/0x170
-> > >         cpufreq_register_driver+0x154/0x250
-> > >         amd_pstate_register_driver+0x36/0x70
-> > >         amd_pstate_init+0x1e7/0x270
-> > >         do_one_initcall+0x67/0x2c0
-> > >         kernel_init_freeable+0x230/0x270
-> > >         kernel_init+0x15/0x130
-> > >         ret_from_fork+0x2c/0x50
-> > >         ret_from_fork_asm+0x11/0x20
-> > >
-> > >  -> #1 (subsys mutex#3){+.+.}-{4:4}:
-> > >         __mutex_lock+0xc2/0x930
-> > >         subsys_interface_register+0x83/0x170
-> > >         cpufreq_register_driver+0x154/0x250
-> > >         amd_pstate_register_driver+0x36/0x70
-> > >         amd_pstate_init+0x1e7/0x270
-> > >         do_one_initcall+0x67/0x2c0
-> > >         kernel_init_freeable+0x230/0x270
-> > >         kernel_init+0x15/0x130
-> > >         ret_from_fork+0x2c/0x50
-> > >         ret_from_fork_asm+0x11/0x20
-> > >
-> > >  -> #0 (cpu_hotplug_lock){++++}-{0:0}:
-> > >         __lock_acquire+0x1087/0x17e0
-> > >         lock_acquire.part.0+0x66/0x1b0
-> > >         cpus_read_lock+0x2a/0xc0
-> > >         store_local_boost+0x6a/0xd0
-> > >         store+0x50/0x90
-> > >         kernfs_fop_write_iter+0x135/0x200
-> > >         vfs_write+0x2ab/0x540
-> > >         ksys_write+0x6c/0xe0
-> > >         do_syscall_64+0xbb/0x1d0
-> > >         entry_SYSCALL_64_after_hwframe+0x56/0x5e
-> > >
-> > > Signed-off-by: Seyediman Seyedarab <ImanDevel@gmail.com>
-> > > ---
-> > > Changes in v3:
-> > >  - Rebased over PM tree's linux-next branch
-> > >  - Added a comment to explain why this piece of code is required
-> > >  - Switched from guard() to scoped_guard() to allow explicitly wrappi=
-ng
-> > >    the policy guard inside the cpu_hotplug_lock critical section.
-> > >
-> > > Changes in v2:
-> > >  - Restrict cpu_hotplug_lock acquisition to only
-> > >    the local_boost attribute in store() handler.
-> > >
-> > > Regards,
-> > > Seyediman
-> > >
-> > >  drivers/cpufreq/cpufreq.c | 23 ++++++++++++++++-------
-> > >  1 file changed, 16 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > > index 21fa733a2..b349adbeb 100644
-> > > --- a/drivers/cpufreq/cpufreq.c
-> > > +++ b/drivers/cpufreq/cpufreq.c
-> > > @@ -622,10 +622,7 @@ static ssize_t store_local_boost(struct cpufreq_=
-policy *policy,
-> > >     if (!policy->boost_supported)
-> > >             return -EINVAL;
-> > >
-> > > -   cpus_read_lock();
-> > >     ret =3D policy_set_boost(policy, enable);
-> > > -   cpus_read_unlock();
-> > > -
-> > >     if (!ret)
-> > >             return count;
-> > >
-> > > @@ -1006,16 +1003,28 @@ static ssize_t store(struct kobject *kobj, st=
-ruct attribute *attr,
-> > >  {
-> > >     struct cpufreq_policy *policy =3D to_policy(kobj);
-> > >     struct freq_attr *fattr =3D to_attr(attr);
-> > > +   int ret =3D -EBUSY;
-> > >
-> > >     if (!fattr->store)
-> > >             return -EIO;
-> > >
-> > > -   guard(cpufreq_policy_write)(policy);
-> > > +   /*
-> > > +    * store_local_boost() requires cpu_hotplug_lock to be held, and =
-must be
-> > > +    * called with that lock acquired *before* taking policy->rwsem t=
-o avoid
-> > > +    * lock ordering violations.
-> > > +    */
-> > > +   if (fattr =3D=3D &local_boost)
-> > > +           cpus_read_lock();
-> > >
-> > > -   if (likely(!policy_is_inactive(policy)))
-> > > -           return fattr->store(policy, buf, count);
-> > > +   scoped_guard(cpufreq_policy_write, policy) {
-> > > +           if (likely(!policy_is_inactive(policy)))
-> > > +                   ret =3D fattr->store(policy, buf, count);
-> > > +   }
-> > >
-> > > -   return -EBUSY;
-> > > +   if (fattr =3D=3D &local_boost)
-> > > +           cpus_read_unlock();
-> > > +
-> > > +   return ret;
-> > >  }
-> >
-> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> >
-> > --
-> > viresh
->
-> Hi there,
->
-> Just following up to see if there's anything you'd like me to
-> change or address in the patch before it can move forward.
-> Please let me know if any updates are needed.
+On 5/3/25 9:03 AM, Akhil P Oommen wrote:
+> When ACD feature is enabled, it triggers some internal calibrations
+> which result in a pretty long delay during the first HFI perf vote.
+> So, increase the HFI response timeout to match the downstream driver.
+> 
+> Tested-by: Maya Matuszczyk <maccraft123mc@gmail.com>
+> Tested-by: Anthony Ruhier <aruhier@mailbox.org>
+> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+> ---
 
-I'm kind of wondering why local_boost needs cpus_read_lock() at all.
-Holding the policy rwsem blocks CPU online/offline already for this
-policy.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-Is that because ->set_boost() may need to synchronize with the other polici=
-es?
+Konrad
 
