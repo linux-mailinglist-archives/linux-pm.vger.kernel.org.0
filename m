@@ -1,219 +1,287 @@
-Return-Path: <linux-pm+bounces-26920-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26921-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E019BAB116D
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 13:04:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D988AAB11B5
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 13:10:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A94FF3AD804
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 11:04:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4EFF1C05F56
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 11:10:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B69BB28ECE9;
-	Fri,  9 May 2025 11:04:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBAFF28F93E;
+	Fri,  9 May 2025 11:10:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="CVC6ANTj"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="DEQadB0W"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2084.outbound.protection.outlook.com [40.107.244.84])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D7A228C99;
-	Fri,  9 May 2025 11:04:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.84
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746788654; cv=fail; b=rhjf1XKZpuzfht1XiDzha27z0c50/7HyptaQtaTXWsuJli4jVorB6g+2XbW1ngor/shqA46tGgntHmMWwP5CMu5A5PkoMvwFinUiu63qm4JCIbgR7/q2L4nbTxxOzXUl1MrnZUforrSrgYAjY1lw6BtvmVQv3eVg95T9Q4GW58M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746788654; c=relaxed/simple;
-	bh=/7ZtilYnMm82F/PZMNcDcxm0skF8pHU3JNJIFuzWHjc=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=ofgsVJZsYvWdMHgyMifyDfKHeegGRCI+CV26YGymLafU+bRtM6ERZxXWOtkQCmLTZF8E8JDdOmP493g09EB9CxEUqU1jwXC2P/Q7+f3YjHuHjkZCTQfmiwoxok5t4kFVzlakXuGA8oOI6ECvs9VoTrFLuyNuJo0Yiydt04g1Kds=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=CVC6ANTj; arc=fail smtp.client-ip=40.107.244.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bIo0d08LZqCEPjucBQqPdzC+WmXwbITUmkw49VhJThIBmVHxEXLv79KIBzeVt+zsgyBD4Z8uCWnnTJtkuTfd6w1jlGAc98HktPLwUdsvW9uBgpvDzLUev8rq7s2rSDxjdEg94M+mVPjJOkm06QraPcavAswx3WP/QoC+/eaVHwi870+lNfjjfSIiG4guc1FK4Mum40LtHIgUBifKGRNlQe8O6ZLXlVZNKZvOn5Ea/KEi0dPVJoxUhprA7iYYGETQ5SA7PGgb7gIJfGUw9vnEMfmRz2rpvLkh6M2mPO9z7SYw9aeIYVGn+UL9uI9g26He3eGnEDCdC0owmuDG0K+Bzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8hO0xdNL/xoWJDfzHqMUvDgZc4Fa5B938nMK+WWCLa8=;
- b=GpPwWIn0rC7B4tzHqEUKNLmj8apl2fm3OEZgVnBLuCSk24eTzcJELJtKjFRmbZ9dz+Wbg4ZzYZ8aMyGeFcbwqAQz5Peonlr+EwAkgOJ710TAmnF6dugEyIjvBZwCD6uzniMV5qErVZbfQHvhTboKfjfBhG7k8InhQPwOVjbUajhNwTWjhT1sGn8R8U7Pz/mgu9sZlRH+rxSGss7BhugbyuclGEPw6mTo9C5KwCl+RJyDNaJk7/m7qd1Cg4HX8VHdbEGLVRDgTEbz17JoRkz9UPDGGv7fDhkbeMP8SDI7ow0bEPsNzKTToNBlnZ9yQnzNj9hwA4CAwGTMtB/L48xHhg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8hO0xdNL/xoWJDfzHqMUvDgZc4Fa5B938nMK+WWCLa8=;
- b=CVC6ANTjGbbK57Q7+lu133J/uw+fM84a5EtDHYok8+sqzU+B+aDgI16qWjbw+GqwU/LIRNtxZ6Wla3Rkt3NeAUkd3rVIk1FPiQNYQ/0Syvytho8hl7yarS9xxboY0Rk6ecZVQFD8p62hYc60rVnMn6svzfq84LTa9/UtaWZkHuy4Sst6/E9TwLgC6QhKPCMMfGkh8AvWUv0fxidL/afPjH3pKsq/Al0ijKrxW5854GuhtG6fVpmJenSKn4D61kEmuVNk3VnjK5hnGcoBl/Yd6Ih0TiW3DztzvuCNiFKkQlDLflli7PHRiUXL10SZuYAYFwNP2/oBljVB5KBcjHs0MA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SJ2PR12MB8784.namprd12.prod.outlook.com (2603:10b6:a03:4d0::11)
- by PH8PR12MB7304.namprd12.prod.outlook.com (2603:10b6:510:217::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.26; Fri, 9 May
- 2025 11:04:09 +0000
-Received: from SJ2PR12MB8784.namprd12.prod.outlook.com
- ([fe80::1660:3173:eef6:6cd9]) by SJ2PR12MB8784.namprd12.prod.outlook.com
- ([fe80::1660:3173:eef6:6cd9%3]) with mapi id 15.20.8699.022; Fri, 9 May 2025
- 11:04:09 +0000
-Message-ID: <040b0d8b-e862-48dd-9b77-9266a5194f99@nvidia.com>
-Date: Fri, 9 May 2025 12:04:05 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] cpufreq: tegra124: Remove use of disable_cpufreq
-To: webgeek1234@gmail.com, "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Thierry Reding <thierry.reding@gmail.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-tegra@vger.kernel.org
-References: <20250508-tegra124-cpufreq-v4-0-d142bcbd0234@gmail.com>
- <20250508-tegra124-cpufreq-v4-1-d142bcbd0234@gmail.com>
-Content-Language: en-US
-From: Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20250508-tegra124-cpufreq-v4-1-d142bcbd0234@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P265CA0142.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2c4::16) To SJ2PR12MB8784.namprd12.prod.outlook.com
- (2603:10b6:a03:4d0::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13BEB28F936
+	for <linux-pm@vger.kernel.org>; Fri,  9 May 2025 11:10:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746789027; cv=none; b=Aup2KETtFOAYpYD6bSjzdQHHDDxWDXLyNiHUdHda8EmxPO+lnaQtENepfVT3jZxp0gD2aTWGElkvcrkxhInlf4VX5Bbl9wzLEbg88O0Yv3oyRLineUhP9iwm+ybirHs99LRpRzViZDAjWeZbpxuiXAUi0b4yRkAzgowhfAZLPVo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746789027; c=relaxed/simple;
+	bh=7dfdnysPwBMKS+82Clp896n3dU2RRsYEI+dYVYgZi0I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tVZVFZ2tQRCuXFWxf+Pu7TqvdhZ5vtItfYILzptVfaqJ8s+jMPDLUhACYSc1aNw5586v8noWvyPxtfj1V7HRla4ct5SVA6RROJ+NwSimpmIrtbU/ZSfW+2VouM06WvD/OgeEuaAPhIrok4HvTpIsRsHsWGLzbcaZD0xLQnBXffU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=DEQadB0W; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54939NKH002148
+	for <linux-pm@vger.kernel.org>; Fri, 9 May 2025 11:10:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=WChW6NT2y3bT2Dd/AmO3BGrFqcOhrO0ctaK
+	cTuAnPQ0=; b=DEQadB0Wx4paKl+O0rMDd+e5PkqMSktpxSPzcNt/mHl3boUJZ53
+	X8MpcQFpM3kI4Amx2zppnN2ALw6wj2tDhHmf9t0kSE/NrxEsJ1RnFguC8fX+a8/e
+	TaTCrkQjYe3KoZ+Vb59sOW96igq9eFMQXoQaXKhhMnxP2rpZmZ7EraDnpAcT1s7N
+	KSy3CBtMHZfptPf3tvU1uOeKcvA+W6E2gQB2NGJnCPXLdhq//Cpq+DrJPl+MXdvX
+	5yY8LajqNzU+F4IptUys9BWvEvIRUpGBnzL9xkTA+O47D1zppNDMp8ztAXW2sIep
+	7Grcd0Xn66ldTlLaPKAfK3ctVKDbJgOTmPg==
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46gnp5cd9y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 09 May 2025 11:10:22 +0000 (GMT)
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-736b5f9279cso2060391b3a.2
+        for <linux-pm@vger.kernel.org>; Fri, 09 May 2025 04:10:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746789021; x=1747393821;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WChW6NT2y3bT2Dd/AmO3BGrFqcOhrO0ctaKcTuAnPQ0=;
+        b=e/LWw0tC2YLO2LQPIzth8g/TBG/Tt+AzRTG01AGhNw4FvSoRopFDouxOOQeRjnFfBS
+         bFuP7TJWhgYbiu/RJleXcShvCybzX3UHJW47AP3FuxGRCu5QYsquTpjFlmYD/qfGI2qS
+         hu8n7CrPiwcIO5VGk3/YZxrYF8flaGRaKULRNGbnMGpT7e9Xw25GvhNH6wzqR5n6H6X2
+         QEovN5m63yIqpG+Xl/kWC3wQAvj0OnhpdGrgMKwHg9xDc8Vp45XHVyub7fWjknLPTFig
+         1m+tihNO9hLmCUeu6xGR1lZqkk2YjvNdWOOZMDxl8RuuRnMRZD7PUOjJyS6QXkNg7wXc
+         1zEg==
+X-Forwarded-Encrypted: i=1; AJvYcCXA3Aqgxlpp4s63PHyK9mPlHMDwdwdXg0ruyWN/Ja1KoeKqtS987Ngo/CiXsZvtj73EB0k2JX3rXg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtR2DXseDFbvM6OPJVJnL6D8YfbtewT62g80uq16iQXtFECG5V
+	0dKgSd64nbhOYfhjH+4AMBceGAIWx53lTrEPd2qqh0/4GTCHUmI16xII1oQCXaBG6JmhG/e4EXq
+	6RpbkgWSDEBAw55ZvJcSJrVr3MKBZY+V9jH32fyrn6j1ircJpkuM7hVh1TQ==
+X-Gm-Gg: ASbGncuRcs9NEItKaPrxs2XXuHFOW82uzWa3WnAI6HyOIqCtrpbyeZcjwCPAloloW9a
+	A7bgjXZyYzjvUl/2kP3TpjZ/sB4z/xrePM9s6yLySBcVOSqbOGeVRI5q82tchWPIEzv8Kk1NHYr
+	rUybuawug2Wfruc0glbGkEgWDtdoU8hGYqTtS+1nWQhdffer8GLz75kZdaOFnYWncpMzLsXEHTE
+	UVmouVLTVX+qhwxur6SEaV2BPQP3Atv34h0onQzWE6zVIuDlipYDOolaKFEaAoy3nIWm0+u32Du
+	MG1d1ECIfkQ6J81V63HdkSpAO5Hvx5d4P1x8S7qnYpYgJ5E=
+X-Received: by 2002:a05:6a00:1488:b0:736:5438:ccc with SMTP id d2e1a72fcca58-7423be886d6mr3590863b3a.9.1746789021321;
+        Fri, 09 May 2025 04:10:21 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF6B4hUPZkyN0EguRbayUTn9kR7wQ+X/PQBVDr7XZ2boU57acIR/MEr3SR0hxpbREh4Zp5GUg==
+X-Received: by 2002:a05:6a00:1488:b0:736:5438:ccc with SMTP id d2e1a72fcca58-7423be886d6mr3590816b3a.9.1746789020855;
+        Fri, 09 May 2025 04:10:20 -0700 (PDT)
+Received: from hu-jprakash-hyd.qualcomm.com ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74237734c4asm1556223b3a.57.2025.05.09.04.10.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 May 2025 04:10:20 -0700 (PDT)
+From: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+To: jic23@kernel.org, robh@kernel.org, krzysztof.kozlowski@linaro.org,
+        krzk+dt@kernel.org, conor+dt@kernel.org, agross@kernel.org,
+        andersson@kernel.org, lumag@kernel.org,
+        dmitry.baryshkov@oss.qualcomm.com, konradybcio@kernel.org,
+        daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org,
+        thara.gopinath@gmail.com, lee@kernel.org, rafael@kernel.org,
+        subbaraman.narayanamurthy@oss.qualcomm.com,
+        david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
+        quic_kamalw@quicinc.com
+Cc: rui.zhang@intel.com, lukasz.luba@arm.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        cros-qcom-dts-watchers@chromium.org, jishnu.prakash@oss.qualcomm.com,
+        quic_skakitap@quicinc.com, neil.armstrong@linaro.org,
+        stephan.gerhold@linaro.org
+Subject: [PATCH V6 0/5] Add support for QCOM SPMI PMIC5 Gen3 ADC
+Date: Fri,  9 May 2025 16:39:54 +0530
+Message-Id: <20250509110959.3384306-1-jishnu.prakash@oss.qualcomm.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR12MB8784:EE_|PH8PR12MB7304:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1092d255-9707-465c-951b-08dd8ee938f9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|10070799003|376014|1800799024|366016|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?VzhicWpLTVJTemxjTTZORHR2UERkRk5qY3lPUXBkOExHSk5yL01MQ0hvT0pN?=
- =?utf-8?B?SStsVk5Mak9BOUJRNUZKYmpFaVdYU0tGc1RzRWtVeHc5SlNoK3c5d01VZkgy?=
- =?utf-8?B?bGM0Sy80Snl2NXcrdVlXQnY0S2pvUS8yR1ZFaFgwRHRWNXd5REl3SE84Vngz?=
- =?utf-8?B?c2NKVDlGT3p5VlEvQjZnMURZV3FZNW92K3g4R1NGbmpaSjM3M28zTFlnUnc0?=
- =?utf-8?B?dENkMmtVVWM5bFZnNFB0N3RtU3hLdFFhaURmMEsyb3d5UmFXWHlNVTY1Z0Mz?=
- =?utf-8?B?L1NVTTgzVVNnQUxJMnhZRkREc2xBUStBWmN5RW9JN01UK3UxWWxMc29sV2ly?=
- =?utf-8?B?MTFrS0lmajM0ZnFpN2R6T080aWtIcThncVhHQVJDeHJVUVE4MFlGNnVyVWlt?=
- =?utf-8?B?QnFEenpYWTU2bUROWHFSY2k4UVlSLy9xejZIYVI1Z2gyT0sySExHelk5czc5?=
- =?utf-8?B?Ym5MMEpKRldZZVZ6bmxjN3cxVWt0eTRaT2VNRm1GL0FYcUQ5Rjlnb2VRSXd3?=
- =?utf-8?B?QkJhd2NXYVp5aDhwSC9LNHpEQUZtMjZieVQ4NzRnS2dZL09HVlBTMXZUTEZu?=
- =?utf-8?B?Z0ZER1hiNVNTNGdTbnRlSUY3UTRUSVZDQmlPWnpjeGs2S3lOUXh1WmtRVlps?=
- =?utf-8?B?MXljZ1B1MjhaVnFkUEdoNVBQRHBzdHZ4WDduellaZUhUMmxFTkVtbVdIWDNQ?=
- =?utf-8?B?NXAvTytYeWRjWXRYS2FMcFI3b0M1VzEySENSZmNZZkJzOUlUU1ZzZWlOaXph?=
- =?utf-8?B?MWZwb1o1TFRzem42NUNkRUdVeFdhcW9KNkVhQ3hzNktCcG8wRnBEZWFiSi9s?=
- =?utf-8?B?bzF3OEROUERFL0I1eS9MQTMvWlo4ZEoyL3dVdHYyc3NmK1M4M3JvVUF0OFly?=
- =?utf-8?B?YjFFaFE3UFpId2t3U1FZUlV3OFFlMVdLcForWFJrc0o4b3FjQ1p6Q1UySXBj?=
- =?utf-8?B?M2duenVpZ0ljVzNoVjdLNk9tRUJVa25sYVltWnp4R1h2cmtDUHhiaUdFMnE2?=
- =?utf-8?B?dHRXRWh1Y1ZjbjVQMStkT1JFcUl1eUMxTFhwaHcxaTkrcEVkN2tNNldNZWh2?=
- =?utf-8?B?MTZUQUFmTDFtNXE3T3RJMXE2TXdpc29XZWlpRG14TmhRTFg1RTNsTzgzTTRz?=
- =?utf-8?B?Nm9EZ016MGlFd2lTbDFYTlFSVlNxT2R2NFh0Rng0VGU1bFZ5bDlzcS9yek9m?=
- =?utf-8?B?aC95dUhoV3d6d1FTZVFweUd6bE8vVDd0d1BYTVo5cUhJSTR3a1hiZVpMclBh?=
- =?utf-8?B?eXVUYms5OFh6Zzd2Y0R2ZVU4UHBGc2JURkk3UDM3bGVNRjZpSUc3dkZNbi94?=
- =?utf-8?B?S1BjOWpHZ0VCczBna3NYeHNiaWZMcDRESkFGNDk2WVgrTXI3STRXMWdxcjJX?=
- =?utf-8?B?NUoxc3dLRHNCN0xMZXpOR1RGeHlQY0FaZytpK1FPYmpJRnNoN1VQNG40MHFG?=
- =?utf-8?B?ZmNKZzVicFhoOGhhUC9zYU5vaUJZM3dCRzZEdTRkcGNZWFp3ZXdvQWYzVGZj?=
- =?utf-8?B?eTd4WklpVmsrZkxubk9VRWdwTFJYOEIxTjlydUxCZ0VzWDZQd0VqNWpHOHRz?=
- =?utf-8?B?N0ppU1lHTWQzK2lBZTV1U2JDeG9hclptUVFxb0pmazJhNTAwblN2VE1ySHRM?=
- =?utf-8?B?endpYlVoSTQzczZaWUNCR2NGSDNhaEpGbHFuUmltcTBJcHdKZU5XRVlSdjVw?=
- =?utf-8?B?ckJud3ZoeWZaM0wwNDFPS3BlV3BqT2UvV1FZL1FWS1RoaHMrNlhQNlMraVpS?=
- =?utf-8?B?NnBLc3VqaElSL09CQ1RIUitheE01N21Cc0krTHZmU3Rod0RhK0pNS0hJM3pZ?=
- =?utf-8?B?RDQvYmllaXlJaUlVMi9pL1g5bUlNR1RKTmZTY2tUNlFWUGFWM1ZJbC9aeCtM?=
- =?utf-8?B?WlI5TVZCZjM3Mk1SU1djV2trMHJ6Mzg3b3krZFZLVStuVzhTQy9GY2cwU3Bk?=
- =?utf-8?Q?RJYXCMlu/V0=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8784.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(376014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SUUrNXZhYW5BTEhYaUxsK1ZqYUJDcGdPc2lEYUZOTEVpRFlLL0o4WU5CeW5U?=
- =?utf-8?B?UFlWbmZLZ3dleEhpOEJ3elJvWXNpM3hCMjNrWGNvSUwrVUs1YlljdEhaSWRI?=
- =?utf-8?B?WVh5eEZzVVBZU01Yc1MySXk2RENTOGxqOHpzT1doUDVQZzdLUUpHNkhkcnBY?=
- =?utf-8?B?L09UMGZ1UmdBUlREbFlLa3BoZXNqaFczbitibjh2WmNLV0VlN2lRTlY5cnY2?=
- =?utf-8?B?cWN3N1gyZ0RxTzVpN1dBN05RM1pucU1rVTNFZldxVW5mdmtIMjFRdkJWVHVh?=
- =?utf-8?B?VDhGY3RnTXNib0xpSDFtd1hxWUxVNFZVRis0M25FMmROTzVOS05SdE5TNXlz?=
- =?utf-8?B?Y1pncm1kaXRLOTBHeVNqSlpxWG4zbFdQT29MMkxvN2xOanFxb1BVbW1rQ01i?=
- =?utf-8?B?YTE0OUpxLzN1YjViQUdGeTA5eW1BdUFZVzc1OVNYalc3WFUwMCttTXpMRkkv?=
- =?utf-8?B?UFRJY0RjOEV3SWYxb1pGeWdpazVQODhaUVFxSjR5ajEyWU5FdE9HYnVkOFBU?=
- =?utf-8?B?YnJiSkRWRU5zeXdueEE5MmRGeFJNS0lDblBZMUp6QzBJWjBqYTRJTUNlTVBj?=
- =?utf-8?B?aEJOaHB2dzYwcmN3MmhkclY1N2ZVdnlNcWg1dkJZbGYwZ1Nqb1kwMnl1RE4z?=
- =?utf-8?B?TlJ3T2d0WjNVQnY3K3d3MFpJU3kxUTlyd2NZTDVSTlp0SmNnRW11TjRtMTVQ?=
- =?utf-8?B?VnhIZFJESzRtSGxYUW4rM1F2djgyOGdwK3VYRE1XUlN2QnJTdDFMQWRTVjB5?=
- =?utf-8?B?VW0yNEVpRTFGRy8rWkpxdFdQS2EvTDZPRm9kNDhFVDVOY3VISHF1THdqNHJp?=
- =?utf-8?B?ZG5sOEFEY3g5N3o2SGpsVnNmdllNandMRXRISWRBRmVpZ1M4WkhSVmxEaUhQ?=
- =?utf-8?B?Z2YvbGlGcW1qNENtbWVjRUE4QXFVbnMwUnFXWVppaFovdEpxUkFlZnQxRGpM?=
- =?utf-8?B?SmwwNGVkT3hsZENLb2U1TWFjSUhHZVpVY1VzbkVhM2tHSEtjd01HeGIvVjYy?=
- =?utf-8?B?N2VxZVlySXVNQ0VQY243OU53aDhmZ1FzMnAzcGducW1lVi9LWTI2cWhLTXVT?=
- =?utf-8?B?N1hSc1FRVHJGWGVnSlNQNXVMWVJRK1ZXWExTd3h5SVNkUzVjM2hUdHF3ZnNZ?=
- =?utf-8?B?eVh2emRCT0FYN0RHRHRYZ0taa3lZeGd2ZGZpNkV1N0liTUxaK0VYd05nSHZk?=
- =?utf-8?B?SENPR0NQNkNOd3RoZXhiRjdHcDhpeTBTdlVSMDFLTlRpUElCL2N5RTJnSEpN?=
- =?utf-8?B?K1VvQ2RBTnRGZUlqMjFvVEpoVEx6UllqczY0LzlEUTl1bGFhajcxWkhzY3Nx?=
- =?utf-8?B?SDBPUkRublJ2ZU01MDRWcnM2bjhvS2w5UDNTcngvc0hhRXJXc0dBMkpDaktm?=
- =?utf-8?B?d3EwWjR2UEpsemlGclpZSEg1Q3Z1a0N1RmxTaWpsbUFhMDZMaTc4N2VkOGwy?=
- =?utf-8?B?Y1hmdU5CajJPT0I0UTVhQXYrR1dndmNrRHdmckduVEU1MEsxSVpEUmpmb21G?=
- =?utf-8?B?bm5MNmtyZEZBMzNZNUhlZWtoeUhpd3dBTURFSklxOTZvM25BNVQwQ3hSd1pH?=
- =?utf-8?B?cldWVCtGTExKQ09ZWVl6eHdRSXUvUTczTmtiYlkxMFFveTdoN0x2Q0FZQ3dK?=
- =?utf-8?B?Mk1MY3BWRzEyNVM0YllrZzJRME5qTVBIelV1VUpxcEFvM2xOSTQ5bitUa3l3?=
- =?utf-8?B?NGZkclNxVWIxaFJjSEdkeStXWldIaXpEc01VdjlITHFueTlQNFFHWUNTTlM0?=
- =?utf-8?B?OHBpMFRCMjl2bXk0VDVFWm9kNzdDSUdyZHI2YXl5Q0lYYnNXUXdaRUZSajNw?=
- =?utf-8?B?VGVsNUx0MExqQnFlWXprNDJ0R2xLV1dVMVZzT1dJSTN4aWQ2N2hUQlZrUGF6?=
- =?utf-8?B?aHBGZ3NSNmF2S09EM2xheUFTbE5VY3FjWURPTDRxNXBucDM0eUVxaGg5NytF?=
- =?utf-8?B?VnRLeGQ4VmF0aGpvaTRQeHU4T2IrcUwyck1BZDNiMnVyQ2tkNWZQN3lmWnN1?=
- =?utf-8?B?cGx5Zm9ibTk1SVpBRDJOTFlYZXlBV2syM2gzaTIxcGZneWM5LzBOekxULzZz?=
- =?utf-8?B?R2ZmY2JDNndrNU1xbUt6eHU5cmw3djFxamJDcW1kOXVaZTdJSjdTTW5VVFo3?=
- =?utf-8?B?cFNxZ1FremkybUtRNzlmcUFYRUVlazh5TWp5SDRVaTJxU2g4dU5waXVCdCtx?=
- =?utf-8?Q?zyz2T1XWPqY3gQmWupBpMlnTX2KPCmFUuaaasjexhRGX?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1092d255-9707-465c-951b-08dd8ee938f9
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8784.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2025 11:04:09.3604
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SuryGozCqAxwlTvDf300dU3AkFT+4FQjt/UZI5oH63FBRshGLvRnKX3yACO+wV8DhdMnDxQgNjs5uHOC86nhBw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7304
+Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=XL0wSRhE c=1 sm=1 tr=0 ts=681de29e cx=c_pps
+ a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8
+ a=N0aDCOoQtnTZPCUHnXIA:9 a=zc0IvFSfCIW2DFIPzwfm:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-GUID: 6fV-CiAfkcvF23AuI0zBTtqJ9z63Lt6Z
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA5MDEwNyBTYWx0ZWRfX0TPBROG26YGz
+ khRJIKFA9MwZlDrub5BSHJokAraYvJb1HuhmAQ4lqLLE5YjY+N7QiSBbvSvqgN1fdK0YOuMAfWe
+ KxFqgzMT2lPTjz9Ck0FanO190F1iNszKMPzT69tRwGo4U3yrjiqJyud8QCqc60pb+S01a8hZhi4
+ NU5VTzyuKhj/hhS83OP0CmFK0UjIY598a/XrQzwoTxa+kD/1tdHZ4PiwYecpiH6SZ0rSq9LRTST
+ wZpMCDGmqQE7bltVesUmjtWU8T7oBMCd0f3q9rwD4X5gGcl3E9oD4/QRpOhZcKW7qpJLkGsNjwU
+ wAQ8cKBaTSZOsB9CuBuwqJcRktnkEjYgKFPPnND7GVBoG7Sym3F0tICdG1MOSzmNXXzbLrEJ+0+
+ CPh92d60/StpfuqZ7XJ7VXE9QC1j/LnzRiZ4yuACeamJYLMepd1X+rRV+A9PCGs7HkdZIdkS
+X-Proofpoint-ORIG-GUID: 6fV-CiAfkcvF23AuI0zBTtqJ9z63Lt6Z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-09_04,2025-05-08_04,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0 suspectscore=0
+ mlxlogscore=999 malwarescore=0 adultscore=0 priorityscore=1501 bulkscore=0
+ spamscore=0 phishscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2505090107
+
+PMIC5 Gen3 has a similar ADC architecture to that on PMIC5 Gen2,
+with all SW communication to ADC going through PMK8550 which
+communicates with other PMICs through PBS. The major difference is
+that the register interface used here is that of an SDAM present on
+PMK8550, rather than a dedicated ADC peripheral. There may be more than one
+SDAM used for ADC5 Gen3. Each ADC SDAM has eight channels, each of which may
+be used for either immediate reads (same functionality as previous PMIC5 and
+PMIC5 Gen2 ADC peripherals) or recurring measurements (same as PMIC5 and PMIC5
+Gen2 ADC_TM functionality). In this case, we have VADC and ADC_TM functionality
+combined into the same driver.
+
+Patch 1 is a cleanup, to move the QCOM ADC dt-bindings files from
+dt-bindings/iio to dt-bindings/iio/adc folder, as they are
+specifically for ADC devices. It also fixes all compilation errors
+with this change in driver and devicetree files and similar errors
+in documentation for dtbinding check.
+
+Patch 2 splits out the common ADC channel properties used on older
+VADC devices, which would also be reused on ADC5 Gen3.
+
+Patch 3 adds bindings for ADC5 Gen3 peripheral.
+
+Patch 4 adds the main driver for ADC5 Gen3.
+
+Patch 5 adds the auxiliary thermal driver which supports the ADC_TM
+functionality of ADC5 Gen3.
+
+Changes since v5:
+- Addressed some reviewer comments in documentation and driver patches.
+- Link to v5: https://lore.kernel.org/all/20250131183242.3653595-1-jishnu.prakash@oss.qualcomm.com/
+
+Changes since v4:
+- Split common ADC channel properties out into a separate file to use as 
+  ref for ADC5 Gen3 and moved ADC5 Gen3 documentation into a separate
+  file as suggested by reviewers.
+- Addressed few reviewer comments in driver patches.
+- Link to v4: https://lore.kernel.org/all/20241030185854.4015348-1-quic_jprakash@quicinc.com/
+
+Changes since v3:
+- Updated files affected by adc file path change in /arch/arm folder,
+  which were missed earlier.
+- Added ADC5 Gen3 documentation changes in existing qcom,spmi-vadc.yaml file
+  instead of adding separate file and addressed reviewer comments for all bindings.
+- Addressed review comments in driver patch. Split out TM functionality into
+  auxiliary driver in separate patch and added required changes in main driver.
+- Link to v3: https://lore.kernel.org/all/20231231171237.3322376-1-quic_jprakash@quicinc.com/
+
+Changes since v2:
+- Reordered patches to keep cleanup change for ADC files first.
+- Moved ADC5 Gen3 documentation into a separate file
+
+Changes since v1:
+- Dropped patches 1-5 for changing 'ADC7' peripheral name to 'ADC5 Gen2'.
+- Addressed reviewer comments for binding and driver patches for ADC5 Gen3.
+- Combined patches 8-11 into a single patch as requested by reviewers to make
+  the change clearer and made all fixes required in same patch.
+
+Jishnu Prakash (5):
+  dt-bindings: iio/adc: Move QCOM ADC bindings to iio/adc folder
+  dt-bindings: iio: adc: Split out QCOM VADC channel properties
+  dt-bindings: iio: adc: Add support for QCOM PMIC5 Gen3 ADC
+  iio: adc: Add support for QCOM PMIC5 Gen3 ADC
+  thermal: qcom: add support for PMIC5 Gen3 ADC thermal monitoring
+
+ .../bindings/iio/adc/qcom,spmi-adc5-gen3.yaml | 155 ++++
+ .../iio/adc/qcom,spmi-vadc-common.yaml        |  87 ++
+ .../bindings/iio/adc/qcom,spmi-vadc.yaml      |  81 +-
+ .../bindings/mfd/qcom,spmi-pmic.yaml          |   2 +-
+ .../bindings/thermal/qcom-spmi-adc-tm-hc.yaml |   2 +-
+ .../bindings/thermal/qcom-spmi-adc-tm5.yaml   |   6 +-
+ arch/arm/boot/dts/qcom/pm8226.dtsi            |   2 +-
+ arch/arm/boot/dts/qcom/pm8941.dtsi            |   2 +-
+ arch/arm/boot/dts/qcom/pma8084.dtsi           |   2 +-
+ arch/arm/boot/dts/qcom/pmx55.dtsi             |   2 +-
+ arch/arm64/boot/dts/qcom/pm4125.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm6125.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm6150.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm6150l.dtsi         |   2 +-
+ arch/arm64/boot/dts/qcom/pm660.dtsi           |   2 +-
+ arch/arm64/boot/dts/qcom/pm660l.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm7250b.dtsi         |   2 +-
+ arch/arm64/boot/dts/qcom/pm8150.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm8150b.dtsi         |   2 +-
+ arch/arm64/boot/dts/qcom/pm8150l.dtsi         |   2 +-
+ arch/arm64/boot/dts/qcom/pm8916.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm8937.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm8950.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm8953.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm8994.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm8998.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pmi632.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pmi8950.dtsi         |   2 +-
+ arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi     |   2 +-
+ arch/arm64/boot/dts/qcom/pmp8074.dtsi         |   2 +-
+ arch/arm64/boot/dts/qcom/pms405.dtsi          |   2 +-
+ .../boot/dts/qcom/qcm6490-fairphone-fp5.dts   |   4 +-
+ .../boot/dts/qcom/qcm6490-shift-otter.dts     |   4 +-
+ arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts  |   4 +-
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts       |   2 +-
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi      |   2 +-
+ arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi    |   4 +-
+ arch/arm64/boot/dts/qcom/sc8180x-pmics.dtsi   |   2 +-
+ .../boot/dts/qcom/sc8280xp-huawei-gaokun3.dts |   2 +-
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    |   2 +-
+ .../dts/qcom/sc8280xp-microsoft-blackrock.dts |   2 +-
+ arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi  |   6 +-
+ .../boot/dts/qcom/sm7225-fairphone-fp4.dts    |   2 +-
+ .../boot/dts/qcom/sm7325-nothing-spacewar.dts |   6 +-
+ arch/arm64/boot/dts/qcom/sm8450-hdk.dts       |   8 +-
+ drivers/iio/adc/Kconfig                       |  30 +
+ drivers/iio/adc/Makefile                      |   2 +
+ drivers/iio/adc/qcom-adc5-gen3-common.c       | 104 +++
+ drivers/iio/adc/qcom-spmi-adc5-gen3.c         | 763 ++++++++++++++++++
+ drivers/iio/adc/qcom-spmi-adc5.c              |   2 +-
+ drivers/iio/adc/qcom-spmi-vadc.c              |   2 +-
+ drivers/thermal/qcom/Kconfig                  |   9 +
+ drivers/thermal/qcom/Makefile                 |   1 +
+ drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c | 531 ++++++++++++
+ .../iio/adc/qcom,pm8550-adc5-gen3.h           |  46 ++
+ .../iio/adc/qcom,pm8550b-adc5-gen3.h          |  85 ++
+ .../iio/adc/qcom,pm8550vx-adc5-gen3.h         |  22 +
+ .../iio/adc/qcom,pmk8550-adc5-gen3.h          |  52 ++
+ .../iio/{ => adc}/qcom,spmi-adc7-pm7325.h     |   2 +-
+ .../iio/{ => adc}/qcom,spmi-adc7-pm8350.h     |   2 +-
+ .../iio/{ => adc}/qcom,spmi-adc7-pm8350b.h    |   2 +-
+ .../iio/{ => adc}/qcom,spmi-adc7-pmk8350.h    |   2 +-
+ .../iio/{ => adc}/qcom,spmi-adc7-pmr735a.h    |   2 +-
+ .../iio/{ => adc}/qcom,spmi-adc7-pmr735b.h    |   2 +-
+ .../iio/{ => adc}/qcom,spmi-adc7-smb139x.h    |   2 +-
+ .../iio/{ => adc}/qcom,spmi-vadc.h            |  81 ++
+ include/linux/iio/adc/qcom-adc5-gen3-common.h | 193 +++++
+ 67 files changed, 2231 insertions(+), 139 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/qcom,spmi-adc5-gen3.yaml
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc-common.yaml
+ create mode 100644 drivers/iio/adc/qcom-adc5-gen3-common.c
+ create mode 100644 drivers/iio/adc/qcom-spmi-adc5-gen3.c
+ create mode 100644 drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
+ create mode 100644 include/dt-bindings/iio/adc/qcom,pm8550-adc5-gen3.h
+ create mode 100644 include/dt-bindings/iio/adc/qcom,pm8550b-adc5-gen3.h
+ create mode 100644 include/dt-bindings/iio/adc/qcom,pm8550vx-adc5-gen3.h
+ create mode 100644 include/dt-bindings/iio/adc/qcom,pmk8550-adc5-gen3.h
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm7325.h (98%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm8350.h (98%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm8350b.h (99%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmk8350.h (97%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmr735a.h (95%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmr735b.h (95%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-smb139x.h (93%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-vadc.h (77%)
+ create mode 100644 include/linux/iio/adc/qcom-adc5-gen3-common.h
 
 
-
-On 09/05/2025 01:04, Aaron Kling via B4 Relay wrote:
-> From: Aaron Kling <webgeek1234@gmail.com>
-> 
-> Instead, unregister the cpufreq device for this fatal fail case.
-
-This is not a complete sentence. Seems to be a continuation of the 
-subject which is not clear to the reader (at least not to me). No 
-mention of why or what this is fixing, if anything?
-
-> 
-> Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
-> ---
->   drivers/cpufreq/tegra124-cpufreq.c | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/tegra124-cpufreq.c b/drivers/cpufreq/tegra124-cpufreq.c
-> index 514146d98bca2d8aa59980a14dff3487cd8045f6..bc0691e8971f9454def37f489e4a3e244100b9f4 100644
-> --- a/drivers/cpufreq/tegra124-cpufreq.c
-> +++ b/drivers/cpufreq/tegra124-cpufreq.c
-> @@ -168,7 +168,10 @@ static int __maybe_unused tegra124_cpufreq_resume(struct device *dev)
->   disable_dfll:
->   	clk_disable_unprepare(priv->dfll_clk);
->   disable_cpufreq:
-> -	disable_cpufreq();
-> +	if (!IS_ERR(priv->cpufreq_dt_pdev)) {
-> +		platform_device_unregister(priv->cpufreq_dt_pdev);
-> +		priv->cpufreq_dt_pdev = ERR_PTR(-ENODEV);
-> +	}
-
-So you are proposing to unregister the device in resume? That seems odd. 
-I see there is no remove for this driver, but I really don't see the 
-value in this.
-
-Jon
-
+base-commit: 393d0c54cae31317deaa9043320c5fd9454deabc
 -- 
-nvpublic
+2.25.1
 
 
