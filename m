@@ -1,82 +1,82 @@
-Return-Path: <linux-pm+bounces-26955-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26956-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3B9EAB178D
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 16:36:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F270AAB1853
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 17:22:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ADE9D98796E
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 14:35:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5AE2D520AF6
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 15:22:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 010C5225A3E;
-	Fri,  9 May 2025 14:35:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA80622F777;
+	Fri,  9 May 2025 15:22:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RAKdA479"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="F0iYFZuA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 434F622539F
-	for <linux-pm@vger.kernel.org>; Fri,  9 May 2025 14:35:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD5422F76E
+	for <linux-pm@vger.kernel.org>; Fri,  9 May 2025 15:22:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746801352; cv=none; b=Qmdt9q4qETznIxRB7pRFBwfvXQ74dc1eIyZUR6cz/oIT6TTTFvNAcYzOPFgt1EPZYW+9wVwjxhoXwljtl/yd7vV2jpgyr4Lz9PX/dpmCvjJUvly/5EBKCrs+DselBS3To+ARsnNFQVdZEWqEildEDPVVZFYbDZyAlRCMCGNn6RY=
+	t=1746804125; cv=none; b=kxfjFe5jV1ICZmJPtr1gJuwcUhFRgTmEUaRCP4h0YxjIbMh0qR23dXuF9PRT+ZgLOEAA6SynYPPYa1Kys/Oa/IYHq+zBjKW15OXIqxe8zSD860Iqab77FNXJiTLP2jeDRVbuw6YUh9oxvxrXr3bYBNdCLVnl/fUSCqyEqzFARf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746801352; c=relaxed/simple;
-	bh=aceWHAVBJfxRTj11YLdK2aK0D497kVDPFJNfXfja/7g=;
+	s=arc-20240116; t=1746804125; c=relaxed/simple;
+	bh=+WHalSMzlc5ByNhANwnMr4TypuUB1eQ8dWrbkZc2gpE=;
 	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=TAWH4rLnSdlddSU/+0e1ZfxkPMk0RnAeJlc4ZP/M0erTZ6HaIPGhmpQVCc+Etwrqfn0jhqsorR894QU4MgVzjhb8Mnpybfes0e4CNbmryZVsbBJNrlP5xrA0OxKAyFsn7P9OC01HgEFeHjnIusb80AMzPVzQ3E51u88vJjjifIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RAKdA479; arc=none smtp.client-ip=209.85.221.54
+	 In-Reply-To:Content-Type; b=nxMFLp7xp3IpACo1sb9IG55BvJ5JMO6tZnn8AzV5RVJW/1q5//fo3dAuMmN5NyrJC61lfxeBmZaoajwu3gOg73RHMbBh3IjccsioaU1pTv4ESJGJ6zNl2yZqp1C6i5khKPx3nojWm0GgNlusZziDbxff9+F+h5v5rTSC4CvRi/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=F0iYFZuA; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3a1f8c85562so527328f8f.1
-        for <linux-pm@vger.kernel.org>; Fri, 09 May 2025 07:35:49 -0700 (PDT)
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-43cf06eabdaso22491245e9.2
+        for <linux-pm@vger.kernel.org>; Fri, 09 May 2025 08:22:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1746801347; x=1747406147; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1746804120; x=1747408920; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:references:cc:to:subject:reply-to:from:user-agent
          :mime-version:date:message-id:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qiIJegG0MiY9Mwil1ByXpZ97BLf/qEs17io1yqZRm3M=;
-        b=RAKdA479KVcfHGo8qvQLirA5MwXCU+NBK+6huIB3yqhjd7P2flb90CTLSzLOE2TVW2
-         CFYzVPno+6FWke7NqVSr1uwNB0ghTHV+JRq20SObK1mf1IiCyVD2QIr0ESPqImsoCTWf
-         +qVtD6FgOy2qlrOHjkkXPoaF0Yty49UWwxXBrFICx4Bz0DIM39qkZ1WsiOTkw3k76cDo
-         PhSbS0dxS8SLFfmcRdPfPeATF6ulfMNMWis/g8x2tiMW92aVoICU2RUkYfoGxkQP03nA
-         wGD3apWBrkMa7PJBXxqC7sIhTqK/TGE0GBAi9Hw2JkRTOz8ty23tu4ReHXZdAjTEs/qS
-         1hcg==
+        bh=ZL2JF/eXj6uybiw8e53yc51O9q1S7RgldQ8Ed9nQAao=;
+        b=F0iYFZuAJVVSiHB977kIqZAjmdlrmoNs10WQrTF/ar5FlkkeX2Z+bxAsx9OPGiGoWi
+         u7q1aUYmXHHnwWNUrUkNh+Qx7sG9rdv2YGza7zs3SIx4G/x8kUOLTH76H2lPgTFHqrbs
+         tUdCAseJQ4LCUX8LN2BtdWt3kkZqhaSgXwXgKsXTtvGdym/+uBWuLrVtsADvyzEmcv86
+         ZHXaOMQ3NuY1Xiz+UVpeU4PmWy/fVgVQHdYPKNiJO+CRU+g3tvBPZen+ie/EZdTMGVbJ
+         +ZjFY9Upvq4CCw9KlnUcdRMy9mVLSZ68NKzXAmyrnSt6MWGvgpnSEhvXy04QHVg8XTEN
+         6ogw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746801347; x=1747406147;
+        d=1e100.net; s=20230601; t=1746804120; x=1747408920;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:references:cc:to:subject:reply-to:from:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=qiIJegG0MiY9Mwil1ByXpZ97BLf/qEs17io1yqZRm3M=;
-        b=bxpQpu8x+fWX78coXbCfXOgMe2TqRbgOD6qI2qRapxvYPkIi6VomT9n6XHsRATLlSG
-         q/VN7k0kYz3FqruXl0WAG7bIwaSzWld6mOCKRf82ZpFaDYi70DknEZEeXZYEYlx+6C/o
-         TkZVkgDEF8FbRkfv9K/VGkeliYTzhEUBHgV5TYK4B8IzZo61GMvlSaECG4xAzJZb1Wel
-         H+rMSdwJpshnPgtrQccu5oIw56nDVmfyweJleXcpxsAkn5e8/EbEJGZog4B9Bmi7S/HR
-         E1Gamb1+fxPWT1rwH24HzO6ypMV/6L4TZ9u4TiINOxHaPnxgSG9qL4MRvU47POFaCXE7
-         Oheg==
-X-Forwarded-Encrypted: i=1; AJvYcCWY/nqKsCcAZWDHO00qzdC2jKz9Ct6U8YZzdIHFtjUbgOnJGrkFwk8aYIlExvZJGoPHhI4/Tv4fFA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxXk9flgkPE7B1/bmLFqs4c0Bb3SWeUPmhNF2mP7mr9Xy/vIDq
-	8OTKt0VYLRk/PCTToc2AlEkP8NHdEHf4WrLq1bu3DSHYUvuake7fElsF+XgMKx4=
-X-Gm-Gg: ASbGnctjIMC8zJzK6hDaYJH3x2LXf9mIR5LpcaSD2KGlfWO20wlQcv7Q1N3u5jUDAdb
-	ap9OO6GbC9pDMUQTwMQV7qeNjyNVVqbYAAepUx1PkVDJwGwuuKt/VymOTtPP7bTjfheeGMnPgi/
-	RI0/o9supNLTkozK+EsxRLugABuvaI7qX15wZGiETZ1khcDSnteS1XwHJlpygnAVRNTu/nqliVz
-	zy3yOfRTQFjWF+0V71ucImBiUlX8tR8Z2dxZca+qJna13STCN66UdJHrdnaTWO85IbEFhQTgTQN
-	bVMCUDuPnG6Yi1f7PQzhsmf4TF9arOZHDuxkkoV/4xN3MYk1TX9Vu0q2DimIorMRpXdg30OFC34
-	dV19xmdEC5Mpi8BI=
-X-Google-Smtp-Source: AGHT+IGms7B5elNBtCqBYNt4NfjvLePAFifL8WbwLZLXK+7kj5sY1Mu2X/iDoZ0/S5ygmLkcMYI3lw==
-X-Received: by 2002:a05:6000:200d:b0:3a0:6f92:ef7c with SMTP id ffacd0b85a97d-3a1f64314c7mr3391869f8f.17.1746801347370;
-        Fri, 09 May 2025 07:35:47 -0700 (PDT)
+        bh=ZL2JF/eXj6uybiw8e53yc51O9q1S7RgldQ8Ed9nQAao=;
+        b=t5VnKnpSy1N077keaImvITo9rXwL6EN06jKHefkt3BBaB/aIA1Keyfm7OdOEW2trkf
+         nNGfX8S5CAlpUYHTo37PpnqlFHEa5nX3qUJW7s5Hy7GgfAHPUsp1aWpoT31f4VrDTCC2
+         ieJ/O7HcLqdeB69SeZl0b5kdC724jJ6j3uO2iwFCeRs3Mby1iwguVoG3a5KyYdjG7wn2
+         IgCCJ7Rs8LvLvjqPYSLqXPPeub65r/6CEnR+imLhWyBqmceZ2+ct+UYuDqNYqnkiwAc4
+         JEvznkuL39EpvQUHwVAcjsMYj6AnXG8eYBMfoUKr4Wl5zMnr4+42mFzU+YocW3/YBF5L
+         +53A==
+X-Forwarded-Encrypted: i=1; AJvYcCV1Z2p19J0O38lAd6h6RBkGxaisKNJQX6eCOIzwJ9k5xNso1XKwtuZjgIdZy+qZy6NlPH1gPLxdSQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzj+kKJ9mydH4TUvwSLyWm2IJ8q4rUksCHMmSXQmboa7EujmCI7
+	2YmTajux6aiAcTTfQdWg0Y6XMwWOpo/6mW34ZytBYOuEQ5BXZdUHzU1g8JDeH1Q=
+X-Gm-Gg: ASbGncvPpoa52J3Mx89XZbsgWGyRKstWqMImca5iRsK0/ppuS5Mlqq/DiUzBn55d+xv
+	mSfGvcFWzUHWmXM8PHI0oKkyF+ro1bmz3vxDEFndukE95/L494YN1K0rrvUHlGJjmdgjNwslRQC
+	WxNEQWhXSoavig+5HVbHi6qjr3EZ98YqExdi/h57KYCmvTOG4Br3zS4INmXkRIYkzwFOiBM4dNA
+	pFvFKlR09xAa/47xjmBMsFM/Iq36ZPUn+2RqIjydm0qO72uiwEV8+DN082uvgteVZKxavVjk5Ny
+	U9x4obfnpFO8HcsIFc1N2QiODEoMwHs/aX0KvbFUkzmHQ1p+kh9kjuHbYtvh0yba4AABgi3KPXr
+	anFSHqbRm6iYlFqM=
+X-Google-Smtp-Source: AGHT+IHFLbSn29+RsHpXUjmYjGQbthFKxkcA9A5AICCOToxLf2lQjrjEcH0JjOCUIQvNg1R3OoCe1w==
+X-Received: by 2002:a05:600c:83ca:b0:43c:fb95:c752 with SMTP id 5b1f17b1804b1-442d6d18b68mr38114645e9.3.1746804120289;
+        Fri, 09 May 2025 08:22:00 -0700 (PDT)
 Received: from ?IPV6:2a01:e0a:3d9:2080:22d7:71a:9f62:f7e2? ([2a01:e0a:3d9:2080:22d7:71a:9f62:f7e2])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a1f5a2d37fsm3464468f8f.68.2025.05.09.07.35.46
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442d67ebee9sm32607405e9.17.2025.05.09.08.21.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 May 2025 07:35:46 -0700 (PDT)
-Message-ID: <8736dea0-2a5b-49d8-8445-239e5d11174e@linaro.org>
-Date: Fri, 9 May 2025 16:35:45 +0200
+        Fri, 09 May 2025 08:21:59 -0700 (PDT)
+Message-ID: <15175863-327b-47fc-bce0-e558583c594b@linaro.org>
+Date: Fri, 9 May 2025 17:21:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -86,8 +86,8 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: neil.armstrong@linaro.org
 Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH V6 3/5] dt-bindings: iio: adc: Add support for QCOM PMIC5
- Gen3 ADC
+Subject: Re: [PATCH V6 5/5] thermal: qcom: add support for PMIC5 Gen3 ADC
+ thermal monitoring
 To: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>, jic23@kernel.org,
  robh@kernel.org, krzysztof.kozlowski@linaro.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
@@ -102,7 +102,7 @@ Cc: rui.zhang@intel.com, lukasz.luba@arm.com, devicetree@vger.kernel.org,
  cros-qcom-dts-watchers@chromium.org, quic_skakitap@quicinc.com,
  stephan.gerhold@linaro.org
 References: <20250509110959.3384306-1-jishnu.prakash@oss.qualcomm.com>
- <20250509110959.3384306-4-jishnu.prakash@oss.qualcomm.com>
+ <20250509110959.3384306-6-jishnu.prakash@oss.qualcomm.com>
 Content-Language: en-US, fr
 Autocrypt: addr=neil.armstrong@linaro.org; keydata=
  xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
@@ -129,608 +129,610 @@ Autocrypt: addr=neil.armstrong@linaro.org; keydata=
  4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
  QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
 Organization: Linaro
-In-Reply-To: <20250509110959.3384306-4-jishnu.prakash@oss.qualcomm.com>
+In-Reply-To: <20250509110959.3384306-6-jishnu.prakash@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-
-Hi,
 On 09/05/2025 13:09, Jishnu Prakash wrote:
-> For the PMIC5-Gen3 type PMICs, ADC peripheral is present in HW for the
-> following PMICs: PMK8550, PM8550, PM8550B and PM8550VX PMICs.
+> Add support for ADC_TM part of PMIC5 Gen3.
 > 
-> It is similar to PMIC5-Gen2, with SW communication to ADCs on all PMICs
-> going through PBS(Programmable Boot Sequence) firmware through a single
-> register interface. This interface is implemented on SDAM (Shared
-> Direct Access Memory) peripherals on the master PMIC PMK8550 rather
-> than a dedicated ADC peripheral.
-> 
-> Add documentation for PMIC5 Gen3 ADC and macro definitions for ADC
-> channels and virtual channels (combination of ADC channel number and
-> PMIC SID number) per PMIC, to be used by clients of this device.
-
-The following is missing to allow it to be a qcom,spmi-pmic subnode:
-
-=========================><================================================
-diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-index 11da55644262..b97f0e7b269e 100644
---- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-+++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-@@ -127,6 +127,7 @@ patternProperties:
-    "^adc@[0-9a-f]+$":
-      type: object
-      oneOf:
-+      - $ref: /schemas/iio/adc/qcom,spmi-adc5-gen3.yaml#
-        - $ref: /schemas/iio/adc/qcom,spmi-iadc.yaml#
-        - $ref: /schemas/iio/adc/qcom,spmi-rradc.yaml#
-        - $ref: /schemas/iio/adc/qcom,spmi-vadc.yaml#
-=========================><================================================
-
-Thanks,
-Neil
-
+> This is an auxiliary driver under the Gen3 ADC driver, which implements the
+> threshold setting and interrupt generating functionalities of QCOM ADC_TM
+> drivers, used to support thermal trip points.
 > 
 > Signed-off-by: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
 > ---
 > Changes since v5:
-> - Added more details in binding description explaining how number
->    of SDAM peripherals used for ADC is allocated per SoC.
-> - Renamed per-PMIC binding files listing ADC channel macro names
->    and addressed other reviewer comments.
+> - Addressed reviewer comments related to kernel-doc formatting and other changes.
 > 
 > Changes since v4:
-> - Added ADC5 Gen3 documentation in a separate new file to avoid complicating
->    existing VADC documentation file further to accomodate this device, as
->    suggested by reviewer.
+> - Fixed a compilation error and updated dependencies in config as suggested
+>    by reviewer.
 > 
-> Changes since v3:
-> - Added ADC5 Gen3 documentation changes in existing qcom,spmi-vadc.yaml file
->    instead of adding separate file and updated top-level constraints in documentation
->    file based on discussion with reviewers.
-> - Dropped default SID definitions.
-> - Addressed other reviewer comments.
+>   drivers/thermal/qcom/Kconfig                  |   9 +
+>   drivers/thermal/qcom/Makefile                 |   1 +
+>   drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c | 531 ++++++++++++++++++
+>   3 files changed, 541 insertions(+)
+>   create mode 100644 drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
 > 
-> Changes since v2:
-> - Moved ADC5 Gen3 documentation into a separate new file.
-> 
-> Changes since v1:
-> - Updated properties separately for all compatibles to clarify usage
->    of new properties and updates in usage of old properties for ADC5 Gen3.
-> - Avoided updating 'adc7' name to 'adc5 gen2' and just left a comment
->    mentioning this convention.
-> - Used predefined channel IDs in individual PMIC channel definitions
->    instead of numeric IDs.
-> - Addressed other comments from reviewers.
-> 
->   .../bindings/iio/adc/qcom,spmi-adc5-gen3.yaml | 155 ++++++++++++++++++
->   .../iio/adc/qcom,spmi-vadc-common.yaml        |   4 +-
->   .../bindings/iio/adc/qcom,spmi-vadc.yaml      |   2 +
->   .../iio/adc/qcom,pm8550-adc5-gen3.h           |  46 ++++++
->   .../iio/adc/qcom,pm8550b-adc5-gen3.h          |  85 ++++++++++
->   .../iio/adc/qcom,pm8550vx-adc5-gen3.h         |  22 +++
->   .../iio/adc/qcom,pmk8550-adc5-gen3.h          |  52 ++++++
->   include/dt-bindings/iio/adc/qcom,spmi-vadc.h  |  81 +++++++++
->   8 files changed, 445 insertions(+), 2 deletions(-)
->   create mode 100644 Documentation/devicetree/bindings/iio/adc/qcom,spmi-adc5-gen3.yaml
->   create mode 100644 include/dt-bindings/iio/adc/qcom,pm8550-adc5-gen3.h
->   create mode 100644 include/dt-bindings/iio/adc/qcom,pm8550b-adc5-gen3.h
->   create mode 100644 include/dt-bindings/iio/adc/qcom,pm8550vx-adc5-gen3.h
->   create mode 100644 include/dt-bindings/iio/adc/qcom,pmk8550-adc5-gen3.h
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-adc5-gen3.yaml b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-adc5-gen3.yaml
-> new file mode 100644
-> index 000000000000..40eb20b9d9de
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-adc5-gen3.yaml
-> @@ -0,0 +1,155 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/iio/adc/qcom,spmi-adc5-gen3.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm's SPMI PMIC ADC5 Gen3
-> +
-> +maintainers:
-> +  - Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
-> +
-> +description: |
-> +  SPMI PMIC5 Gen3 voltage ADC (ADC) provides interface to clients to read
-> +  voltage. It is a 16-bit sigma-delta ADC. It also performs the same thermal
-> +  monitoring function as the existing ADC_TM devices.
-> +
-> +  The interface is implemented on SDAM (Shared Direct Access Memory) peripherals
-> +  on the master PMIC rather than a dedicated ADC peripheral. The number of PMIC
-> +  SDAM peripherals allocated for ADC is not correlated with the PMIC used, it is
-> +  programmed in FW (PBS) and is fixed per SOC, based on the SOC requirements.
-> +  All boards using a particular (SOC + master PMIC) combination will have the
-> +  same number of ADC SDAMs supported on that PMIC.
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,spmi-adc5-gen3
-> +
-> +  reg:
-> +    items:
-> +      - description: SDAM0 base address in the SPMI PMIC register map
-> +      - description: SDAM1 base address
-> +    minItems: 1
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +  '#io-channel-cells':
-> +    const: 1
-> +
-> +  "#thermal-sensor-cells":
-> +    const: 1
-> +
-> +  interrupts:
-> +    items:
-> +      - description: SDAM0 end of conversion (EOC) interrupt
-> +      - description: SDAM1 EOC interrupt
-> +    minItems: 1
-> +
-> +patternProperties:
-> +  "^channel@[0-9a-f]+$":
-> +    type: object
-> +    unevaluatedProperties: false
-> +    $ref: /schemas/iio/adc/qcom,spmi-vadc-common.yaml
-> +    description:
-> +      Represents the external channels which are connected to the ADC.
-> +
-> +    properties:
-> +      qcom,decimation:
-> +        enum: [ 85, 340, 1360 ]
-> +        default: 1360
-> +
-> +      qcom,hw-settle-time:
-> +        enum: [ 15, 100, 200, 300, 400, 500, 600, 700,
-> +                1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000 ]
-> +        default: 15
-> +
-> +      qcom,avg-samples:
-> +        enum: [ 1, 2, 4, 8, 16 ]
-> +        default: 1
-> +
-> +      qcom,adc-tm:
-> +        description:
-> +          ADC_TM is a threshold monitoring feature in HW which can be enabled
-> +          on any ADC channel, to trigger an IRQ for threshold violation. In
-> +          earlier ADC generations, it was implemented in a separate device
-> +          (documented in Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml.)
-> +          In Gen3, this feature can be enabled in the same ADC device for any
-> +          channel and threshold monitoring and IRQ triggering are handled in FW
-> +          (PBS) instead of another dedicated HW block.
-> +          This property indicates ADC_TM monitoring is done on this channel.
-> +        type: boolean
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#address-cells'
-> +  - '#size-cells'
-> +  - '#io-channel-cells'
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/iio/adc/qcom,pmk8550-adc5-gen3.h>
-> +    #include <dt-bindings/iio/adc/qcom,pm8550-adc5-gen3.h>
-> +    #include <dt-bindings/iio/adc/qcom,pm8550b-adc5-gen3.h>
-> +    #include <dt-bindings/iio/adc/qcom,pm8550vx-adc5-gen3.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    pmic {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      adc@9000 {
-> +        compatible = "qcom,spmi-adc5-gen3";
-> +        reg = <0x9000>, <0x9100>;
-> +        interrupts = <0x0 0x90 0x1 IRQ_TYPE_EDGE_RISING>,
-> +                      <0x0 0x91 0x1 IRQ_TYPE_EDGE_RISING>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        #io-channel-cells = <1>;
-> +        #thermal-sensor-cells = <1>;
-> +
-> +        /* PMK8550 Channel nodes */
-> +        channel@3 {
-> +          reg = <PMK8550_ADC5_GEN3_DIE_TEMP(0)>;
-> +          label = "pmk8550_die_temp";
-> +          qcom,pre-scaling = <1 1>;
-> +        };
-> +
-> +        channel@44 {
-> +          reg = <PMK8550_ADC5_GEN3_AMUX_THM1_XO_THERM_100K_PU(0)>;
-> +          label = "pmk8550_xo_therm";
-> +          qcom,pre-scaling = <1 1>;
-> +          qcom,ratiometric;
-> +          qcom,hw-settle-time = <200>;
-> +          qcom,adc-tm;
-> +        };
-> +
-> +        /* PM8550 Channel nodes */
-> +        channel@103 {
-> +          reg = <PM8550_ADC5_GEN3_DIE_TEMP(1)>;
-> +          label = "pm8550_die_temp";
-> +          qcom,pre-scaling = <1 1>;
-> +        };
-> +
-> +        /* PM8550B Channel nodes */
-> +        channel@78f {
-> +          reg = <PM8550B_ADC5_GEN3_VBAT_SNS_QBG(7)>;
-> +          label = "pm8550b_vbat_sns_qbg";
-> +          qcom,pre-scaling = <1 3>;
-> +        };
-> +
-> +        /* PM8550VS_C Channel nodes */
-> +        channel@203 {
-> +          reg = <PM8550VS_ADC5_GEN3_DIE_TEMP(2)>;
-> +          label = "pm8550vs_c_die_temp";
-> +          qcom,pre-scaling = <1 1>;
-> +        };
-> +      };
-> +    };
-> diff --git a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc-common.yaml b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc-common.yaml
-> index cd087911ee88..1531153e6ea8 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc-common.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc-common.yaml
-> @@ -17,8 +17,8 @@ properties:
->       description:
->         ADC channel number.
->         See include/dt-bindings/iio/adc/qcom,spmi-vadc.h
-> -      For PMIC7 ADC, the channel numbers are specified separately per PMIC
-> -      in the PMIC-specific files in include/dt-bindings/iio/adc.
-> +      For PMIC7 ADC and PMIC5 Gen3 ADC, the channel numbers are specified
-> +      separately per PMIC in the PMIC-specific files in include/dt-bindings/iio/adc.
->       maxItems: 1
+> diff --git a/drivers/thermal/qcom/Kconfig b/drivers/thermal/qcom/Kconfig
+> index 2c7f3f9a26eb..f9baadbbf598 100644
+> --- a/drivers/thermal/qcom/Kconfig
+> +++ b/drivers/thermal/qcom/Kconfig
+> @@ -21,6 +21,15 @@ config QCOM_SPMI_ADC_TM5
+>   	  Thermal client sets threshold temperature for both warm and cool and
+>   	  gets updated when a threshold is reached.
 >   
->     label:
-> diff --git a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
-> index b0ccad00c1a6..b77af38440fe 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
-> @@ -15,6 +15,8 @@ description: |
->     voltage. The VADC is a 15-bit sigma-delta ADC.
->     SPMI PMIC5/PMIC7 voltage ADC (ADC) provides interface to clients to read
->     voltage. The VADC is a 16-bit sigma-delta ADC.
-> +  Note that PMIC7 ADC is the generation between PMIC5 and PMIC5 Gen3 ADC,
-> +  it can be considered like PMIC5 Gen2.
->   
->   properties:
->     compatible:
-> diff --git a/include/dt-bindings/iio/adc/qcom,pm8550-adc5-gen3.h b/include/dt-bindings/iio/adc/qcom,pm8550-adc5-gen3.h
+> +config QCOM_SPMI_ADC_TM5_GEN3
+> +	tristate "Qualcomm SPMI PMIC Thermal Monitor ADC5 Gen3"
+> +	depends on QCOM_SPMI_ADC5_GEN3
+> +	help
+> +	  This enables the auxiliary thermal driver for the ADC5 Gen3 thermal
+> +	  monitoring device. It shows up as a thermal zone with multiple trip points.
+> +	  Thermal client sets threshold temperature for both warm and cool and
+> +	  gets updated when a threshold is reached.
+> +
+>   config QCOM_SPMI_TEMP_ALARM
+>   	tristate "Qualcomm SPMI PMIC Temperature Alarm"
+>   	depends on OF && SPMI && IIO
+> diff --git a/drivers/thermal/qcom/Makefile b/drivers/thermal/qcom/Makefile
+> index 0fa2512042e7..828d9e7bc797 100644
+> --- a/drivers/thermal/qcom/Makefile
+> +++ b/drivers/thermal/qcom/Makefile
+> @@ -4,5 +4,6 @@ obj-$(CONFIG_QCOM_TSENS)	+= qcom_tsens.o
+>   qcom_tsens-y			+= tsens.o tsens-v2.o tsens-v1.o tsens-v0_1.o \
+>   				   tsens-8960.o
+>   obj-$(CONFIG_QCOM_SPMI_ADC_TM5)	+= qcom-spmi-adc-tm5.o
+> +obj-$(CONFIG_QCOM_SPMI_ADC_TM5_GEN3)	+= qcom-spmi-adc-tm5-gen3.o
+>   obj-$(CONFIG_QCOM_SPMI_TEMP_ALARM)	+= qcom-spmi-temp-alarm.o
+>   obj-$(CONFIG_QCOM_LMH)		+= lmh.o
+> diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
 > new file mode 100644
-> index 000000000000..9940715683b4
+> index 000000000000..c63822635f10
 > --- /dev/null
-> +++ b/include/dt-bindings/iio/adc/qcom,pm8550-adc5-gen3.h
-> @@ -0,0 +1,46 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
+> @@ -0,0 +1,531 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
 > +/*
-> + * Copyright (c) 2025, Qualcomm Innovation Center, Inc. All rights reserved.
+> + * Copyright (c) 2025 Qualcomm Innovation Center, Inc. All rights reserved.
 > + */
 > +
-> +#ifndef _DT_BINDINGS_QCOM_SPMI_VADC_PM8550_H
-> +#define _DT_BINDINGS_QCOM_SPMI_VADC_PM8550_H
+> +#include <linux/bitfield.h>
+> +#include <linux/iio/adc/qcom-adc5-gen3-common.h>
+> +#include <linux/iio/consumer.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/thermal.h>
+> +#include <linux/unaligned.h>
 > +
-> +#include <dt-bindings/iio/adc/qcom,spmi-vadc.h>
+> +#include "../thermal_hwmon.h"
 > +
-> +/* ADC channels for PM8550_ADC for PMIC5 Gen3 */
-> +#define PM8550_ADC5_GEN3_REF_GND(sid)			((sid) << 8 | ADC5_GEN3_REF_GND)
-> +#define PM8550_ADC5_GEN3_1P25VREF(sid)			((sid) << 8 | ADC5_GEN3_1P25VREF)
-> +#define PM8550_ADC5_GEN3_VREF_VADC(sid)			((sid) << 8 | ADC5_GEN3_VREF_VADC)
-> +#define PM8550_ADC5_GEN3_DIE_TEMP(sid)			((sid) << 8 | ADC5_GEN3_DIE_TEMP)
+> +struct adc_tm5_gen3_chip;
 > +
-> +#define PM8550_ADC5_GEN3_AMUX_THM1(sid)			((sid) << 8 | ADC5_GEN3_AMUX1_THM)
-> +#define PM8550_ADC5_GEN3_AMUX_THM2(sid)			((sid) << 8 | ADC5_GEN3_AMUX2_THM)
-> +#define PM8550_ADC5_GEN3_AMUX_THM3(sid)			((sid) << 8 | ADC5_GEN3_AMUX3_THM)
-> +#define PM8550_ADC5_GEN3_AMUX_THM4(sid)			((sid) << 8 | ADC5_GEN3_AMUX4_THM)
-> +#define PM8550_ADC5_GEN3_AMUX_THM5(sid)			((sid) << 8 | ADC5_GEN3_AMUX5_THM)
-> +#define PM8550_ADC5_GEN3_AMUX_THM6_GPIO2(sid)		((sid) << 8 | ADC5_GEN3_AMUX6_THM)
-> +#define PM8550_ADC5_GEN3_AMUX1_GPIO3(sid)		((sid) << 8 | ADC5_GEN3_AMUX1_GPIO)
-> +#define PM8550_ADC5_GEN3_AMUX2_GPIO4(sid)		((sid) << 8 | ADC5_GEN3_AMUX2_GPIO)
-> +#define PM8550_ADC5_GEN3_AMUX3_GPIO7(sid)		((sid) << 8 | ADC5_GEN3_AMUX3_GPIO)
-> +#define PM8550_ADC5_GEN3_AMUX4_GPIO12(sid)		((sid) << 8 | ADC5_GEN3_AMUX4_GPIO)
-> +
-> +/* 100k pull-up */
-> +#define PM8550_ADC5_GEN3_AMUX_THM1_100K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX1_THM_100K_PU)
-> +#define PM8550_ADC5_GEN3_AMUX_THM2_100K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX2_THM_100K_PU)
-> +#define PM8550_ADC5_GEN3_AMUX_THM3_100K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX3_THM_100K_PU)
-> +#define PM8550_ADC5_GEN3_AMUX_THM4_100K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX4_THM_100K_PU)
-> +#define PM8550_ADC5_GEN3_AMUX_THM5_100K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX5_THM_100K_PU)
-> +#define PM8550_ADC5_GEN3_AMUX_THM6_GPIO2_100K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX6_THM_100K_PU)
-> +#define PM8550_ADC5_GEN3_AMUX1_GPIO3_100K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX1_GPIO_100K_PU)
-> +#define PM8550_ADC5_GEN3_AMUX2_GPIO4_100K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX2_GPIO_100K_PU)
-> +#define PM8550_ADC5_GEN3_AMUX3_GPIO7_100K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX3_GPIO_100K_PU)
-> +#define PM8550_ADC5_GEN3_AMUX4_GPIO12_100K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX4_GPIO_100K_PU)
-> +
-> +/* 1/3 Divider */
-> +#define PM8550_ADC5_GEN3_AMUX3_GPIO7_DIV3(sid)		((sid) << 8 | ADC5_GEN3_AMUX3_GPIO_DIV3)
-> +#define PM8550_ADC5_GEN3_AMUX4_GPIO12_DIV3(sid)		((sid) << 8 | ADC5_GEN3_AMUX4_GPIO_DIV3)
-> +
-> +#define PM8550_ADC5_GEN3_VPH_PWR(sid)			((sid) << 8 | ADC5_GEN3_VPH_PWR)
-> +
-> +#endif /* _DT_BINDINGS_QCOM_SPMI_VADC_PM8550_H */
-> diff --git a/include/dt-bindings/iio/adc/qcom,pm8550b-adc5-gen3.h b/include/dt-bindings/iio/adc/qcom,pm8550b-adc5-gen3.h
-> new file mode 100644
-> index 000000000000..1226597c02a7
-> --- /dev/null
-> +++ b/include/dt-bindings/iio/adc/qcom,pm8550b-adc5-gen3.h
-> @@ -0,0 +1,85 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +/*
-> + * Copyright (c) 2025, Qualcomm Innovation Center, Inc. All rights reserved.
+> +/**
+> + * struct adc_tm5_gen3_channel_props - ADC_TM channel structure
+> + * @timer: time period of recurring TM measurement.
+> + * @tm_chan_index: TM channel number used (ranging from 1-7).
+> + * @sdam_index: SDAM on which this TM channel lies.
+> + * @common_props: structure withcommon  ADC channel properties.
+> + * @high_thr_en: TM high threshold crossing detection enabled.
+> + * @low_thr_en: TM low threshold crossing detection enabled.
+> + * @chip: ADC TM device.
+> + * @tzd: pointer to thermal device corresponding to TM channel.
+> + * @last_temp: last temperature that caused threshold violation,
+> + *	or a thermal TM channel.
+> + * @last_temp_set: indicates if last_temp is stored.
 > + */
+> +struct adc_tm5_gen3_channel_props {
+> +	unsigned int timer;
+> +	unsigned int tm_chan_index;
+> +	unsigned int sdam_index;
+> +	struct adc5_channel_common_prop common_props;
+> +	bool high_thr_en;
+> +	bool low_thr_en;
+> +	struct adc_tm5_gen3_chip *chip;
+> +	struct thermal_zone_device *tzd;
+> +	int last_temp;
+> +	bool last_temp_set;
+> +};
 > +
-> +#ifndef _DT_BINDINGS_QCOM_SPMI_VADC_PM8550B_H
-> +#define _DT_BINDINGS_QCOM_SPMI_VADC_PM8550B_H
-> +
-> +#include <dt-bindings/iio/adc/qcom,spmi-vadc.h>
-> +
-> +/* ADC channels for PM8550B_ADC for PMIC5 Gen3 */
-> +#define PM8550B_ADC5_GEN3_REF_GND(sid)			((sid) << 8 | ADC5_GEN3_REF_GND)
-> +#define PM8550B_ADC5_GEN3_1P25VREF(sid)			((sid) << 8 | ADC5_GEN3_1P25VREF)
-> +#define PM8550B_ADC5_GEN3_VREF_VADC(sid)		((sid) << 8 | ADC5_GEN3_VREF_VADC)
-> +#define PM8550B_ADC5_GEN3_DIE_TEMP(sid)			((sid) << 8 | ADC5_GEN3_DIE_TEMP)
-> +
-> +#define PM8550B_ADC5_GEN3_AMUX_THM1_BATT_THERM(sid)	((sid) << 8 | ADC5_GEN3_AMUX1_THM)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM2_BATT_ID(sid)	((sid) << 8 | ADC5_GEN3_AMUX2_THM)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM3_SMB_TEMP_V(sid)	((sid) << 8 | ADC5_GEN3_AMUX3_THM)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM4_USB_THERM(sid)	((sid) << 8 | ADC5_GEN3_AMUX4_THM)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM5_OPTION(sid)		((sid) << 8 | ADC5_GEN3_AMUX5_THM)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM6_GPIO10(sid)		((sid) << 8 | ADC5_GEN3_AMUX6_THM)
-> +#define PM8550B_ADC5_GEN3_AMUX1_GPIO1(sid)		((sid) << 8 | ADC5_GEN3_AMUX1_GPIO)
-> +#define PM8550B_ADC5_GEN3_AMUX2_GPIO5(sid)		((sid) << 8 | ADC5_GEN3_AMUX2_GPIO)
-> +#define PM8550B_ADC5_GEN3_AMUX3_GPIO6(sid)		((sid) << 8 | ADC5_GEN3_AMUX3_GPIO)
-> +#define PM8550B_ADC5_GEN3_AMUX4_GPIO12(sid)		((sid) << 8 | ADC5_GEN3_AMUX4_GPIO)
-> +
-> +#define PM8550B_ADC5_GEN3_CHG_TEMP(sid)			((sid) << 8 | ADC5_GEN3_CHG_TEMP)
-> +#define PM8550B_ADC5_GEN3_USB_SNS_V_16(sid)		((sid) << 8 | ADC5_GEN3_USB_SNS_V_16)
-> +#define PM8550B_ADC5_GEN3_VIN_DIV16_MUX(sid)		((sid) << 8 | ADC5_GEN3_VIN_DIV16_MUX)
-> +#define PM8550B_ADC5_GEN3_VREF_BAT_THERM(sid)		((sid) << 8 | ADC5_GEN3_VREF_BAT_THERM)
-> +#define PM8550B_ADC5_GEN3_IIN_FB(sid)			((sid) << 8 | ADC5_GEN3_IIN_FB)
-> +#define PM8550B_ADC5_GEN3_TEMP_ALARM_LITE(sid)		((sid) << 8 | ADC5_GEN3_TEMP_ALARM_LITE)
-> +#define PM8550B_ADC5_GEN3_SMB_IIN(sid)			((sid) << 8 | ADC5_GEN3_IIN_SMB)
-> +#define PM8550B_ADC5_GEN3_SMB_ICHG(sid)			((sid) << 8 | ADC5_GEN3_ICHG_SMB)
-> +#define PM8550B_ADC5_GEN3_ICHG_FB(sid)			((sid) << 8 | ADC5_GEN3_ICHG_FB)
-> +
-> +/* 30k pull-up */
-> +#define PM8550B_ADC5_GEN3_AMUX_THM1_BATT_THERM_30K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX1_THM_30K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM2_BATT_ID_30K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX2_THM_30K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM3_SMB_TEMP_V_30K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX3_THM_30K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM4_USB_THERM_30K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX4_THM_30K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM5_OPTION_30K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX5_THM_30K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM6_GPIO10_30K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX6_THM_30K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX1_GPIO1_30K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX1_GPIO_30K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX2_GPIO5_30K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX2_GPIO_30K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX3_GPIO6_30K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX3_GPIO_30K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX4_GPIO12_30K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX4_GPIO_30K_PU)
-> +
-> +/* 100k pull-up */
-> +#define PM8550B_ADC5_GEN3_AMUX_THM1_BATT_THERM_100K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX1_THM_100K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM2_BATT_ID_100K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX2_THM_100K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM3_SMB_TEMP_V_100K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX3_THM_100K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM4_USB_THERM_100K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX4_THM_100K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM5_OPTION_100K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX5_THM_100K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM6_GPIO10_100K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX6_THM_100K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX1_GPIO1_100K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX1_GPIO_100K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX2_GPIO5_100K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX2_GPIO_100K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX3_GPIO6_100K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX3_GPIO_100K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX4_GPIO12_100K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX4_GPIO_100K_PU)
-> +
-> +/* 400k pull-up */
-> +#define PM8550B_ADC5_GEN3_AMUX_THM1_BATT_THERM_400K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX1_THM_400K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM2_BATT_ID_400K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX2_THM_400K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM3_SMB_TEMP_V_400K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX3_THM_400K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM4_USB_THERM_400K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX4_THM_400K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM5_OPTION_400K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX5_THM_400K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX_THM6_GPIO10_400K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX6_THM_400K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX1_GPIO1_400K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX1_GPIO_400K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX2_GPIO5_400K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX2_GPIO_400K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX3_GPIO6_400K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX3_GPIO_400K_PU)
-> +#define PM8550B_ADC5_GEN3_AMUX4_GPIO12_400K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX4_GPIO_400K_PU)
-> +
-> +/* 1/3 Divider */
-> +#define PM8550B_ADC5_GEN3_AMUX1_GPIO1_DIV3(sid)		((sid) << 8 | ADC5_GEN3_AMUX1_GPIO_DIV3)
-> +#define PM8550B_ADC5_GEN3_AMUX2_GPIO5_DIV3(sid)		((sid) << 8 | ADC5_GEN3_AMUX2_GPIO_DIV3)
-> +#define PM8550B_ADC5_GEN3_AMUX3_GPIO6_DIV3(sid)		((sid) << 8 | ADC5_GEN3_AMUX3_GPIO_DIV3)
-> +
-> +#define PM8550B_ADC5_GEN3_VPH_PWR(sid)			((sid) << 8 | ADC5_GEN3_VPH_PWR)
-> +#define PM8550B_ADC5_GEN3_VBAT_SNS_QBG(sid)		((sid) << 8 | ADC5_GEN3_VBAT_SNS_QBG)
-> +#define PM8550B_ADC5_GEN3_VBAT_SNS_CHGR(sid)		((sid) << 8 | ADC5_GEN3_VBAT_SNS_CHGR)
-> +#define PM8550B_ADC5_GEN3_VBAT_2S_MID_QBG(sid)		((sid) << 8 | ADC5_GEN3_VBAT_2S_MID_QBG)
-> +#define PM8550B_ADC5_GEN3_VBAT_2S_MID_CHGR(sid)		((sid) << 8 | ADC5_GEN3_VBAT_2S_MID_CHGR)
-> +
-> +#endif /* _DT_BINDINGS_QCOM_SPMI_VADC_PM8550B_H */
-> diff --git a/include/dt-bindings/iio/adc/qcom,pm8550vx-adc5-gen3.h b/include/dt-bindings/iio/adc/qcom,pm8550vx-adc5-gen3.h
-> new file mode 100644
-> index 000000000000..03a353440325
-> --- /dev/null
-> +++ b/include/dt-bindings/iio/adc/qcom,pm8550vx-adc5-gen3.h
-> @@ -0,0 +1,22 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +/*
-> + * Copyright (c) 2025, Qualcomm Innovation Center, Inc. All rights reserved.
+> +/**
+> + * struct adc_tm5_gen3_chip - ADC Thermal Monitoring device structure
+> + * @dev_data: Top-level ADC device data.
+> + * @chan_props: Array of ADC_TM channel structures.
+> + * @nchannels: number of TM channels allocated
+> + * @dev: SPMI ADC5 Gen3 device.
+> + * @tm_handler_work: handler for TM interrupt for threshold violation.
 > + */
+> +struct adc_tm5_gen3_chip {
+> +	struct adc5_device_data *dev_data;
+> +	struct adc_tm5_gen3_channel_props *chan_props;
+> +	unsigned int nchannels;
+> +	struct device *dev;
+> +	struct work_struct tm_handler_work;
+> +};
 > +
-> +#ifndef _DT_BINDINGS_QCOM_SPMI_VADC_PM8550VX_H
-> +#define _DT_BINDINGS_QCOM_SPMI_VADC_PM8550VX_H
+> +static int get_sdam_from_irq(struct adc_tm5_gen3_chip *adc_tm5, int irq)
+> +{
+> +	int i;
 > +
-> +#include <dt-bindings/iio/adc/qcom,spmi-vadc.h>
+> +	for (i = 0; i < adc_tm5->dev_data->num_sdams; i++) {
+> +		if (adc_tm5->dev_data->base[i].irq == irq)
+> +			return i;
+> +	}
+> +	return -ENOENT;
+> +}
 > +
-> +/* ADC channels for PM8550VX_ADC for PMIC5 Gen3 */
-> +#define PM8550VS_ADC5_GEN3_REF_GND(sid)			((sid) << 8 | ADC5_GEN3_REF_GND)
-> +#define PM8550VS_ADC5_GEN3_1P25VREF(sid)			((sid) << 8 | ADC5_GEN3_1P25VREF)
-> +#define PM8550VS_ADC5_GEN3_VREF_VADC(sid)			((sid) << 8 | ADC5_GEN3_VREF_VADC)
-> +#define PM8550VS_ADC5_GEN3_DIE_TEMP(sid)			((sid) << 8 | ADC5_GEN3_DIE_TEMP)
+> +static irqreturn_t adctm5_gen3_isr(int irq, void *dev_id)
+> +{
+> +	struct adc_tm5_gen3_chip *adc_tm5 = dev_id;
+> +	u8 status, tm_status[2], val;
+> +	int ret, sdam_num;
 > +
-> +#define PM8550VE_ADC5_GEN3_OFFSET_REF(sid)			((sid) << 8 | ADC5_GEN3_REF_GND)
-> +#define PM8550VE_ADC5_GEN3_1P25VREF(sid)			((sid) << 8 | ADC5_GEN3_1P25VREF)
-> +#define PM8550VE_ADC5_GEN3_VREF_VADC(sid)			((sid) << 8 | ADC5_GEN3_VREF_VADC)
-> +#define PM8550VE_ADC5_GEN3_DIE_TEMP(sid)		((sid) << 8 | ADC5_GEN3_DIE_TEMP)
+> +	sdam_num = get_sdam_from_irq(adc_tm5, irq);
+> +	if (sdam_num < 0) {
+> +		dev_err(adc_tm5->dev, "adc irq %d not associated with an sdam\n",
+> +			irq);
+> +		return IRQ_HANDLED;
+> +	}
 > +
-> +#endif /* _DT_BINDINGS_QCOM_SPMI_VADC_PM8550VX_H */
-> diff --git a/include/dt-bindings/iio/adc/qcom,pmk8550-adc5-gen3.h b/include/dt-bindings/iio/adc/qcom,pmk8550-adc5-gen3.h
-> new file mode 100644
-> index 000000000000..88fed365cc9e
-> --- /dev/null
-> +++ b/include/dt-bindings/iio/adc/qcom,pmk8550-adc5-gen3.h
-> @@ -0,0 +1,52 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +/*
-> + * Copyright (c) 2025, Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
+> +	ret = adc5_gen3_read(adc_tm5->dev_data, sdam_num, ADC5_GEN3_STATUS1,
+> +			     &status, sizeof(status));
+> +	if (ret) {
+> +		dev_err(adc_tm5->dev, "adc read status1 failed with %d\n", ret);
+> +		return IRQ_HANDLED;
+> +	}
 > +
-> +#ifndef _DT_BINDINGS_QCOM_SPMI_VADC_PMK8550_H
-> +#define _DT_BINDINGS_QCOM_SPMI_VADC_PMK8550_H
+> +	if (status & ADC5_GEN3_STATUS1_CONV_FAULT) {
+> +		dev_err_ratelimited(adc_tm5->dev,
+> +				    "Unexpected conversion fault, status:%#x\n",
+> +				    status);
+> +		val = ADC5_GEN3_CONV_ERR_CLR_REQ;
+> +		adc5_gen3_status_clear(adc_tm5->dev_data, sdam_num,
+> +				       ADC5_GEN3_CONV_ERR_CLR, &val, 1);
+> +		return IRQ_HANDLED;
+> +	}
 > +
-> +#include <dt-bindings/iio/adc/qcom,spmi-vadc.h>
+> +	ret = adc5_gen3_read(adc_tm5->dev_data, sdam_num, ADC5_GEN3_TM_HIGH_STS,
+> +			     tm_status, sizeof(tm_status));
+> +	if (ret) {
+> +		dev_err(adc_tm5->dev, "adc read TM status failed with %d\n", ret);
+> +		return IRQ_HANDLED;
+> +	}
 > +
-> +/* ADC channels for PMK8550_ADC for PMIC5 Gen3 */
-> +#define PMK8550_ADC5_GEN3_REF_GND(sid)			((sid) << 8 | ADC5_GEN3_REF_GND)
-> +#define PMK8550_ADC5_GEN3_1P25VREF(sid)			((sid) << 8 | ADC5_GEN3_1P25VREF)
-> +#define PMK8550_ADC5_GEN3_VREF_VADC(sid)		((sid) << 8 | ADC5_GEN3_VREF_VADC)
-> +#define PMK8550_ADC5_GEN3_DIE_TEMP(sid)			((sid) << 8 | ADC5_GEN3_DIE_TEMP)
+> +	if (tm_status[0] || tm_status[1])
+> +		schedule_work(&adc_tm5->tm_handler_work);
 > +
-> +#define PMK8550_ADC5_GEN3_AMUX_THM1_XO_THERM(sid)	((sid) << 8 | ADC5_GEN3_AMUX1_THM)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM2_GPIO1(sid)		((sid) << 8 | ADC5_GEN3_AMUX2_THM)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM3_GPIO2(sid)		((sid) << 8 | ADC5_GEN3_AMUX3_THM)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM4_GPIO3(sid)		((sid) << 8 | ADC5_GEN3_AMUX4_THM)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM5_GPIO4(sid)		((sid) << 8 | ADC5_GEN3_AMUX5_THM)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM6_GPIO5(sid)		((sid) << 8 | ADC5_GEN3_AMUX6_THM)
-> +#define PMK8550_ADC5_GEN3_AMUX1_GPIO6(sid)		((sid) << 8 | ADC5_GEN3_AMUX1_GPIO)
+> +	dev_dbg(adc_tm5->dev, "Interrupt status:%#x, high:%#x, low:%#x\n",
+> +		status, tm_status[0], tm_status[1]);
 > +
-> +/* 30k pull-up */
-> +#define PMK8550_ADC5_GEN3_AMUX_THM1_XO_THERM_30K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX1_THM_30K_PU)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM2_GPIO1_30K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX2_THM_30K_PU)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM3_GPIO2_30K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX3_THM_30K_PU)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM4_GPIO3_30K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX4_THM_30K_PU)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM5_GPIO4_30K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX5_THM_30K_PU)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM6_GPIO5_30K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX6_THM_30K_PU)
-> +#define PMK8550_ADC5_GEN3_AMUX1_GPIO6_30K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX1_GPIO_30K_PU)
+> +	return IRQ_HANDLED;
+> +}
 > +
-> +/* 100k pull-up */
-> +#define PMK8550_ADC5_GEN3_AMUX_THM1_XO_THERM_100K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX1_THM_100K_PU)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM2_GPIO1_100K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX2_THM_100K_PU)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM3_GPIO2_100K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX3_THM_100K_PU)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM4_GPIO3_100K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX4_THM_100K_PU)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM5_GPIO4_100K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX5_THM_100K_PU)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM6_GPIO5_100K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX6_THM_100K_PU)
-> +#define PMK8550_ADC5_GEN3_AMUX1_GPIO6_100K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX1_GPIO_100K_PU)
+> +static int adc5_gen3_tm_status_check(struct adc_tm5_gen3_chip *adc_tm5,
+> +				     int sdam_index, u8 *tm_status, u8 *buf)
+> +{
+> +	int ret;
 > +
-> +/* 400k pull-up */
-> +#define PMK8550_ADC5_GEN3_AMUX_THM1_XO_THERM_400K_PU(sid)	((sid) << 8 | ADC5_GEN3_AMUX1_THM_400K_PU)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM2_GPIO1_400K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX2_THM_400K_PU)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM3_GPIO2_400K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX3_THM_400K_PU)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM4_GPIO3_400K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX4_THM_400K_PU)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM5_GPIO4_400K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX5_THM_400K_PU)
-> +#define PMK8550_ADC5_GEN3_AMUX_THM6_GPIO5_400K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX6_THM_400K_PU)
-> +#define PMK8550_ADC5_GEN3_AMUX1_GPIO6_400K_PU(sid)		((sid) << 8 | ADC5_GEN3_AMUX1_GPIO_400K_PU)
+> +	ret = adc5_gen3_read(adc_tm5->dev_data, sdam_index, ADC5_GEN3_TM_HIGH_STS,
+> +			     tm_status, 2);
+> +	if (ret) {
+> +		dev_err(adc_tm5->dev, "adc read TM status failed with %d\n", ret);
+> +		return ret;
+> +	}
 > +
-> +#endif /* _DT_BINDINGS_QCOM_SPMI_VADC_PMK8550_H */
-> diff --git a/include/dt-bindings/iio/adc/qcom,spmi-vadc.h b/include/dt-bindings/iio/adc/qcom,spmi-vadc.h
-> index ef07ecd4d585..73efd8fda4b2 100644
-> --- a/include/dt-bindings/iio/adc/qcom,spmi-vadc.h
-> +++ b/include/dt-bindings/iio/adc/qcom,spmi-vadc.h
-> @@ -1,6 +1,8 @@
->   /* SPDX-License-Identifier: GPL-2.0 */
->   /*
->    * Copyright (c) 2012-2014,2018,2020 The Linux Foundation. All rights reserved.
-> + *
-> + * Copyright (c) 2025, Qualcomm Innovation Center, Inc. All rights reserved.
->    */
->   
->   #ifndef _DT_BINDINGS_QCOM_SPMI_VADC_H
-> @@ -300,4 +302,83 @@
->   #define ADC7_SBUx				0x94
->   #define ADC7_VBAT_2S_MID			0x96
->   
-> +/* ADC channels for PMIC5 Gen3 */
+> +	ret = adc5_gen3_status_clear(adc_tm5->dev_data, sdam_index, ADC5_GEN3_TM_HIGH_STS_CLR,
+> +				     tm_status, 2);
+> +	if (ret) {
+> +		dev_err(adc_tm5->dev, "adc status clear conv_req failed with %d\n",
+> +			ret);
+> +		return ret;
+> +	}
 > +
-> +#define ADC5_GEN3_REF_GND			0x00
-> +#define ADC5_GEN3_1P25VREF			0x01
-> +#define ADC5_GEN3_VREF_VADC			0x02
-> +#define ADC5_GEN3_DIE_TEMP			0x03
+> +	ret = adc5_gen3_read(adc_tm5->dev_data, sdam_index, ADC5_GEN3_CH_DATA0(0),
+> +			     buf, 16);
+> +	if (ret)
+> +		dev_err(adc_tm5->dev, "adc read data failed with %d\n", ret);
 > +
-> +#define ADC5_GEN3_AMUX1_THM			0x04
-> +#define ADC5_GEN3_AMUX2_THM			0x05
-> +#define ADC5_GEN3_AMUX3_THM			0x06
-> +#define ADC5_GEN3_AMUX4_THM			0x07
-> +#define ADC5_GEN3_AMUX5_THM			0x08
-> +#define ADC5_GEN3_AMUX6_THM			0x09
-> +#define ADC5_GEN3_AMUX1_GPIO			0x0a
-> +#define ADC5_GEN3_AMUX2_GPIO			0x0b
-> +#define ADC5_GEN3_AMUX3_GPIO			0x0c
-> +#define ADC5_GEN3_AMUX4_GPIO			0x0d
+> +	return ret;
+> +}
 > +
-> +#define ADC5_GEN3_CHG_TEMP			0x10
-> +#define ADC5_GEN3_USB_SNS_V_16			0x11
-> +#define ADC5_GEN3_VIN_DIV16_MUX			0x12
-> +#define ADC5_GEN3_VREF_BAT_THERM		0x15
-> +#define ADC5_GEN3_IIN_FB			0x17
-> +#define ADC5_GEN3_TEMP_ALARM_LITE		0x18
-> +#define ADC5_GEN3_IIN_SMB			0x19
-> +#define ADC5_GEN3_ICHG_SMB			0x1b
-> +#define ADC5_GEN3_ICHG_FB			0xa1
+> +static void tm_handler_work(struct work_struct *work)
+> +{
+> +	struct adc_tm5_gen3_chip *adc_tm5 = container_of(work, struct adc_tm5_gen3_chip,
+> +							 tm_handler_work);
+> +	struct adc_tm5_gen3_channel_props *chan_prop;
+> +	u8 tm_status[2] = {0};
+> +	u8 buf[16] = {0};
+> +	int i, ret = 0, sdam_index = -1;
 > +
-> +/* 30k pull-up1 */
-> +#define ADC5_GEN3_AMUX1_THM_30K_PU		0x24
-> +#define ADC5_GEN3_AMUX2_THM_30K_PU		0x25
-> +#define ADC5_GEN3_AMUX3_THM_30K_PU		0x26
-> +#define ADC5_GEN3_AMUX4_THM_30K_PU		0x27
-> +#define ADC5_GEN3_AMUX5_THM_30K_PU		0x28
-> +#define ADC5_GEN3_AMUX6_THM_30K_PU		0x29
-> +#define ADC5_GEN3_AMUX1_GPIO_30K_PU		0x2a
-> +#define ADC5_GEN3_AMUX2_GPIO_30K_PU		0x2b
-> +#define ADC5_GEN3_AMUX3_GPIO_30K_PU		0x2c
-> +#define ADC5_GEN3_AMUX4_GPIO_30K_PU		0x2d
+> +	for (i = 0; i < adc_tm5->nchannels; i++) {
+> +		bool upper_set = false, lower_set = false;
+> +		int temp, offset;
+> +		u16 code = 0;
 > +
-> +/* 100k pull-up2 */
-> +#define ADC5_GEN3_AMUX1_THM_100K_PU		0x44
-> +#define ADC5_GEN3_AMUX2_THM_100K_PU		0x45
-> +#define ADC5_GEN3_AMUX3_THM_100K_PU		0x46
-> +#define ADC5_GEN3_AMUX4_THM_100K_PU		0x47
-> +#define ADC5_GEN3_AMUX5_THM_100K_PU		0x48
-> +#define ADC5_GEN3_AMUX6_THM_100K_PU		0x49
-> +#define ADC5_GEN3_AMUX1_GPIO_100K_PU		0x4a
-> +#define ADC5_GEN3_AMUX2_GPIO_100K_PU		0x4b
-> +#define ADC5_GEN3_AMUX3_GPIO_100K_PU		0x4c
-> +#define ADC5_GEN3_AMUX4_GPIO_100K_PU		0x4d
+> +		chan_prop = &adc_tm5->chan_props[i];
+> +		offset = chan_prop->tm_chan_index;
 > +
-> +/* 400k pull-up3 */
-> +#define ADC5_GEN3_AMUX1_THM_400K_PU		0x64
-> +#define ADC5_GEN3_AMUX2_THM_400K_PU		0x65
-> +#define ADC5_GEN3_AMUX3_THM_400K_PU		0x66
-> +#define ADC5_GEN3_AMUX4_THM_400K_PU		0x67
-> +#define ADC5_GEN3_AMUX5_THM_400K_PU		0x68
-> +#define ADC5_GEN3_AMUX6_THM_400K_PU		0x69
-> +#define ADC5_GEN3_AMUX1_GPIO_400K_PU		0x6a
-> +#define ADC5_GEN3_AMUX2_GPIO_400K_PU		0x6b
-> +#define ADC5_GEN3_AMUX3_GPIO_400K_PU		0x6c
-> +#define ADC5_GEN3_AMUX4_GPIO_400K_PU		0x6d
+> +		adc5_gen3_mutex_lock(adc_tm5->dev);
+> +		if (chan_prop->sdam_index != sdam_index) {
+> +			sdam_index = chan_prop->sdam_index;
+> +			ret = adc5_gen3_tm_status_check(adc_tm5, sdam_index,
+> +							tm_status, buf);
+> +			if (ret) {
+> +				adc5_gen3_mutex_unlock(adc_tm5->dev);
+> +				break;
+> +			}
+> +		}
 > +
-> +/* 1/3 Divider */
-> +#define ADC5_GEN3_AMUX1_GPIO_DIV3		0x8a
-> +#define ADC5_GEN3_AMUX2_GPIO_DIV3		0x8b
-> +#define ADC5_GEN3_AMUX3_GPIO_DIV3		0x8c
-> +#define ADC5_GEN3_AMUX4_GPIO_DIV3		0x8d
+> +		if ((tm_status[0] & BIT(offset)) && chan_prop->high_thr_en)
+> +			upper_set = true;
 > +
-> +#define ADC5_GEN3_VPH_PWR			0x8e
-> +#define ADC5_GEN3_VBAT_SNS_QBG			0x8f
+> +		if ((tm_status[1] & BIT(offset)) && chan_prop->low_thr_en)
+> +			lower_set = true;
+> +		adc5_gen3_mutex_unlock(adc_tm5->dev);
 > +
-> +#define ADC5_GEN3_VBAT_SNS_CHGR			0x94
-> +#define ADC5_GEN3_VBAT_2S_MID_QBG		0x96
-> +#define ADC5_GEN3_VBAT_2S_MID_CHGR		0x9d
+> +		if (!(upper_set || lower_set))
+> +			continue;
 > +
-> +#define ADC5_GEN3_OFFSET_EXT2			0xf8
+> +		code = get_unaligned_le16(&buf[2 * offset]);
+> +		pr_debug("ADC_TM threshold code:%#x\n", code);
 > +
->   #endif /* _DT_BINDINGS_QCOM_SPMI_VADC_H */
+> +		ret = adc5_gen3_therm_code_to_temp(adc_tm5->dev,
+> +						   &chan_prop->common_props,
+> +						   code, &temp);
+> +		if (ret) {
+> +			dev_err(adc_tm5->dev,
+> +				"Invalid temperature reading, ret = %d, code=%#x\n",
+> +				ret, code);
+> +			continue;
+> +		}
+> +
+> +		chan_prop->last_temp = temp;
+> +		chan_prop->last_temp_set = true;
+> +		thermal_zone_device_update(chan_prop->tzd, THERMAL_TRIP_VIOLATED);
+> +	}
+> +}
+> +
+> +static int adc_tm5_gen3_get_temp(struct thermal_zone_device *tz, int *temp)
+> +{
+> +	struct adc_tm5_gen3_channel_props *prop = thermal_zone_device_priv(tz);
+> +	struct adc_tm5_gen3_chip *adc_tm5;
+> +
+> +	if (!prop || !prop->chip)
+> +		return -EINVAL;
+> +
+> +	adc_tm5 = prop->chip;
+> +
+> +	if (prop->last_temp_set) {
+> +		pr_debug("last_temp: %d\n", prop->last_temp);
+> +		prop->last_temp_set = false;
+> +		*temp = prop->last_temp;
+> +		return 0;
+> +	}
+> +
+> +	return adc5_gen3_get_scaled_reading(adc_tm5->dev, &prop->common_props,
+> +					    temp);
+> +}
+> +
+> +static int _adc_tm5_gen3_disable_channel(struct adc_tm5_gen3_channel_props *prop)
+> +{
+> +	struct adc_tm5_gen3_chip *adc_tm5 = prop->chip;
+> +	int ret;
+> +	u8 val;
+> +
+> +	prop->high_thr_en = false;
+> +	prop->low_thr_en = false;
+> +
+> +	ret = adc5_gen3_poll_wait_hs(adc_tm5->dev_data, prop->sdam_index);
+> +	if (ret)
+> +		return ret;
+> +
+> +	val = BIT(prop->tm_chan_index);
+> +	ret = adc5_gen3_write(adc_tm5->dev_data, prop->sdam_index,
+> +			      ADC5_GEN3_TM_HIGH_STS_CLR, &val, sizeof(val));
+> +	if (ret)
+> +		return ret;
+> +
+> +	val = MEAS_INT_DISABLE;
+> +	ret = adc5_gen3_write(adc_tm5->dev_data, prop->sdam_index,
+> +			      ADC5_GEN3_TIMER_SEL, &val, sizeof(val));
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* To indicate there is an actual conversion request */
+> +	val = ADC5_GEN3_CHAN_CONV_REQ | prop->tm_chan_index;
+> +	ret = adc5_gen3_write(adc_tm5->dev_data, prop->sdam_index,
+> +			      ADC5_GEN3_PERPH_CH, &val, sizeof(val));
+> +	if (ret)
+> +		return ret;
+> +
+> +	val = ADC5_GEN3_CONV_REQ_REQ;
+> +	return adc5_gen3_write(adc_tm5->dev_data, prop->sdam_index,
+> +			       ADC5_GEN3_CONV_REQ, &val, sizeof(val));
+> +}
+> +
+> +static int adc_tm5_gen3_disable_channel(struct adc_tm5_gen3_channel_props *prop)
+> +{
+> +	return _adc_tm5_gen3_disable_channel(prop);
+> +}
+> +
+> +# define ADC_TM5_GEN3_CONFIG_REGS 12
+> +
+> +static int adc_tm5_gen3_configure(struct adc_tm5_gen3_channel_props *prop,
+> +				  int low_temp, int high_temp)
+> +{
+> +	struct adc_tm5_gen3_chip *adc_tm5 = prop->chip;
+> +	u8 conv_req = 0, buf[ADC_TM5_GEN3_CONFIG_REGS];
+> +	u16 adc_code;
+> +	int ret;
+> +
+> +	ret = adc5_gen3_poll_wait_hs(adc_tm5->dev_data, prop->sdam_index);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = adc5_gen3_read(adc_tm5->dev_data, prop->sdam_index,
+> +			     ADC5_GEN3_SID, buf, sizeof(buf));
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Write SID */
+> +	buf[0] = FIELD_PREP(ADC5_GEN3_SID_MASK, prop->common_props.sid);
+> +
+> +	/*
+> +	 * Select TM channel and indicate there is an actual
+> +	 * conversion request
+> +	 */
+> +	buf[1] = ADC5_GEN3_CHAN_CONV_REQ | prop->tm_chan_index;
+> +
+> +	buf[2] = prop->timer;
+> +
+> +	/* Digital param selection */
+> +	adc5_gen3_update_dig_param(&prop->common_props, &buf[3]);
+> +
+> +	/* Update fast average sample value */
+> +	buf[4] &= ~ADC5_GEN3_FAST_AVG_CTL_SAMPLES_MASK;
+> +	buf[4] |= prop->common_props.avg_samples | ADC5_GEN3_FAST_AVG_CTL_EN;
+> +
+> +	/* Select ADC channel */
+> +	buf[5] = prop->common_props.channel;
+> +
+> +	/* Select HW settle delay for channel */
+> +	buf[6] = FIELD_PREP(ADC5_GEN3_HW_SETTLE_DELAY_MASK,
+> +			    prop->common_props.hw_settle_time_us);
+> +
+> +	/* High temperature corresponds to low voltage threshold */
+> +	if (high_temp != INT_MAX) {
+> +		prop->low_thr_en = true;
+> +		adc_code = qcom_adc_tm5_gen2_temp_res_scale(high_temp);
+> +		put_unaligned_le16(adc_code, &buf[8]);
+> +	} else {
+> +		prop->low_thr_en = false;
+> +	}
+> +
+> +	/* Low temperature corresponds to high voltage threshold */
+> +	if (low_temp != -INT_MAX) {
+> +		prop->high_thr_en = true;
+> +		adc_code = qcom_adc_tm5_gen2_temp_res_scale(low_temp);
+> +		put_unaligned_le16(adc_code, &buf[10]);
+> +	} else {
+> +		prop->high_thr_en = false;
+> +	}
+> +
+> +	buf[7] = 0;
+> +	if (prop->high_thr_en)
+> +		buf[7] |= ADC5_GEN3_HIGH_THR_INT_EN;
+> +	if (prop->low_thr_en)
+> +		buf[7] |= ADC5_GEN3_LOW_THR_INT_EN;
+> +
+> +	ret = adc5_gen3_write(adc_tm5->dev_data, prop->sdam_index, ADC5_GEN3_SID,
+> +			      buf, sizeof(buf));
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	conv_req = ADC5_GEN3_CONV_REQ_REQ;
+> +	return adc5_gen3_write(adc_tm5->dev_data, prop->sdam_index,
+> +			       ADC5_GEN3_CONV_REQ, &conv_req, sizeof(conv_req));
+> +}
+> +
+> +static int adc_tm5_gen3_set_trip_temp(struct thermal_zone_device *tz,
+> +				      int low_temp, int high_temp)
+> +{
+> +	struct adc_tm5_gen3_channel_props *prop = thermal_zone_device_priv(tz);
+> +	struct adc_tm5_gen3_chip *adc_tm5;
+> +	int ret;
+> +
+> +	if (!prop || !prop->chip)
+> +		return -EINVAL;
+> +
+> +	adc_tm5 = prop->chip;
+> +
+> +	dev_dbg(adc_tm5->dev, "channel:%s, low_temp(mdegC):%d, high_temp(mdegC):%d\n",
+> +		prop->common_props.label, low_temp, high_temp);
+> +
+> +	adc5_gen3_mutex_lock(adc_tm5->dev);
+> +	if (high_temp == INT_MAX && low_temp <= -INT_MAX)
+> +		ret = adc_tm5_gen3_disable_channel(prop);
+> +	else
+> +		ret = adc_tm5_gen3_configure(prop, low_temp, high_temp);
+> +	adc5_gen3_mutex_unlock(adc_tm5->dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct thermal_zone_device_ops adc_tm_ops = {
+> +	.get_temp = adc_tm5_gen3_get_temp,
+> +	.set_trips = adc_tm5_gen3_set_trip_temp,
+> +};
+> +
+> +static int adc_tm5_register_tzd(struct adc_tm5_gen3_chip *adc_tm5)
+> +{
+> +	unsigned int i, channel;
+> +	struct thermal_zone_device *tzd;
+> +
+> +	for (i = 0; i < adc_tm5->nchannels; i++) {
+> +		channel = V_CHAN(adc_tm5->chan_props[i].common_props);
+> +		tzd = devm_thermal_of_zone_register(adc_tm5->dev, channel,
+> +						    &adc_tm5->chan_props[i],
+> +						    &adc_tm_ops);
+> +
+> +		if (IS_ERR(tzd)) {
+> +			if (PTR_ERR(tzd) == -ENODEV) {
+> +				dev_warn(adc_tm5->dev,
+> +					 "thermal sensor on channel %d is not used\n",
+> +					 channel);
+> +				continue;
+> +			}
+> +			return dev_err_probe(adc_tm5->dev, PTR_ERR(tzd),
+> +					     "Error registering TZ zone:%ld for channel:%d\n",
+> +					     PTR_ERR(tzd), channel);
+> +		}
+> +		adc_tm5->chan_props[i].tzd = tzd;
+> +		devm_thermal_add_hwmon_sysfs(adc_tm5->dev, tzd);
+> +	}
+> +	return 0;
+> +}
+> +
+> +static void adc5_gen3_clear_work(void *data)
+> +{
+> +	struct adc_tm5_gen3_chip *adc_tm5 = data;
+> +
+> +	cancel_work_sync(&adc_tm5->tm_handler_work);
+> +}
+> +
+> +static void adc5_gen3_disable(void *data)
+> +{
+> +	struct adc_tm5_gen3_chip *adc_tm5 = data;
+> +	int i;
+> +
+> +	adc5_gen3_mutex_lock(adc_tm5->dev);
+> +	/* Disable all available TM channels */
+> +	for (i = 0; i < adc_tm5->nchannels; i++)
+> +		_adc_tm5_gen3_disable_channel(&adc_tm5->chan_props[i]);
+> +
+> +	adc5_gen3_mutex_unlock(adc_tm5->dev);
+> +}
+> +
+> +static void adctm_event_handler(struct auxiliary_device *adev)
+> +{
+> +	struct adc_tm5_gen3_chip *adc_tm5 = auxiliary_get_drvdata(adev);
+> +
+> +	schedule_work(&adc_tm5->tm_handler_work);
+> +}
+> +
+> +static int adc_tm5_probe(struct auxiliary_device *aux_dev,
+> +			 const struct auxiliary_device_id *id)
+> +{
+> +	struct adc_tm5_gen3_chip *adc_tm5;
+> +	struct tm5_aux_dev_wrapper *aux_dev_wrapper;
+> +	struct device *dev = &aux_dev->dev;
+> +	int i, ret;
+> +
+> +	adc_tm5 = devm_kzalloc(&aux_dev->dev, sizeof(*adc_tm5), GFP_KERNEL);
+> +	if (!adc_tm5)
+> +		return -ENOMEM;
+> +
+> +	aux_dev_wrapper = container_of(aux_dev, struct tm5_aux_dev_wrapper,
+> +				       aux_dev);
+> +
+> +	adc_tm5->dev = dev;
+> +	adc_tm5->dev_data = aux_dev_wrapper->dev_data;
+> +	adc_tm5->nchannels = aux_dev_wrapper->n_tm_channels;
+> +	adc_tm5->chan_props = devm_kcalloc(adc_tm5->dev, aux_dev_wrapper->n_tm_channels,
+> +					   sizeof(*adc_tm5->chan_props), GFP_KERNEL);
+> +	if (!adc_tm5->chan_props)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < adc_tm5->nchannels; i++) {
+> +		adc_tm5->chan_props[i].common_props = aux_dev_wrapper->tm_props[i];
+> +		adc_tm5->chan_props[i].timer = MEAS_INT_1S;
+> +		adc_tm5->chan_props[i].sdam_index = (i + 1) / 8;
+> +		adc_tm5->chan_props[i].tm_chan_index = (i + 1) % 8;
+> +		adc_tm5->chan_props[i].chip = adc_tm5;
+> +	}
+> +
+> +	ret = devm_add_action_or_reset(adc_tm5->dev, adc5_gen3_disable, adc_tm5);
+> +	if (ret)
+> +		return ret;
+> +
+> +	INIT_WORK(&adc_tm5->tm_handler_work, tm_handler_work);
+> +
+> +	/*
+> +	 * Skipping first SDAM IRQ as it is requested in parent driver.
+> +	 * If there is a TM violation on that IRQ, the parent driver calls
+> +	 * the notifier (tm_event_notify) exposed from this driver to handle it.
+> +	 */
+> +	for (i = 1; i < adc_tm5->dev_data->num_sdams; i++) {
+> +		ret = devm_request_threaded_irq(adc_tm5->dev,
+> +						adc_tm5->dev_data->base[i].irq,
+> +						NULL, adctm5_gen3_isr, IRQF_ONESHOT,
+> +						adc_tm5->dev_data->base[i].irq_name,
+> +						adc_tm5);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+> +	/*
+> +	 * This drvdata is only used in the function (adctm_event_handler)
+> +	 * called by parent ADC driver in case of TM violation on the first SDAM.
+> +	 */
+> +	auxiliary_set_drvdata(aux_dev, adc_tm5);
+> +
+> +	ret = devm_add_action(adc_tm5->dev, adc5_gen3_clear_work, adc_tm5);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = adc_tm5_register_tzd(adc_tm5);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct auxiliary_device_id adctm5_auxiliary_id_table[] = {
+> +	{ .name = "qcom_spmi_adc5_gen3.adc5_tm_gen3", },
+> +	{}
+> +};
+> +
+> +MODULE_DEVICE_TABLE(auxiliary, adctm5_auxiliary_id_table);
+> +
+> +static struct adc_tm5_auxiliary_drv adctm5gen3_auxiliary_drv = {
+> +	.adrv = {
+> +		.id_table = adctm5_auxiliary_id_table,
+> +		.probe = adc_tm5_probe,
+> +	},
+> +	.tm_event_notify = adctm_event_handler,
+> +};
+> +
+> +static int __init adctm5_init_module(void)
+> +{
+> +	return auxiliary_driver_register(&adctm5gen3_auxiliary_drv.adrv);
+> +}
+> +
+> +static void __exit adctm5_exit_module(void)
+> +{
+> +	auxiliary_driver_unregister(&adctm5gen3_auxiliary_drv.adrv);
+> +}
+> +
+> +module_init(adctm5_init_module);
+> +module_exit(adctm5_exit_module);
+> +
+> +MODULE_DESCRIPTION("SPMI PMIC Thermal Monitor ADC driver");
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS("QCOM_SPMI_ADC5_GEN3");
 
+
+Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8550-QRD
+Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8550-HDK
+Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8650-QRD
+Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8650-HDK
+
+With the following DT change:
+https://git.codelinaro.org/neil.armstrong/linux/-/commit/0776fd6eeaf08c568674bacfe075f3a26c840356
+
+Thanks,
+Neil
 
