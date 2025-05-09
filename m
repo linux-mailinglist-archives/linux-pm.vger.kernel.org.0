@@ -1,283 +1,125 @@
-Return-Path: <linux-pm+bounces-26913-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26914-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A658AB0D15
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 10:23:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00D15AB0DB1
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 10:48:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B178B9E08C4
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 08:22:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E2291C25C91
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 08:47:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA273270559;
-	Fri,  9 May 2025 08:22:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 712E5275874;
+	Fri,  9 May 2025 08:43:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M11fC+79"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RMJXFD7i"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504452741A2
-	for <linux-pm@vger.kernel.org>; Fri,  9 May 2025 08:22:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C8227586B;
+	Fri,  9 May 2025 08:43:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746778969; cv=none; b=rOaWT+REYXMJz8Fc7GR5CDNYyJT9W6GYrIx9pEQhpLGmusTNQRCmyKhN+Z9LLTd5E1z7G03YIZ2+/RMWVrRbfBNv8t3RMLCSVtL/V6fci3qUEF2ut8vnKiMCpCDODM/+XmObAkGF0HIHQM6TRcAR5aibwdEGxY+e1Syp+9kTgcI=
+	t=1746780226; cv=none; b=gLsDhS8EuKJInHUC8qs8fIwCHq7e5dxTCMGbB2LLYYtq0DFy+dieuT6Qsg15v1jRUge8/nLi+wBZeAW/2X6ijrNH6/+MIAPxcaLaSyDhB29WKE+zb1emDz2Z3dVNaM0PI271VcOQRl7rIKoy1lbX7/rmDcJc87bPBnF0lU9BlyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746778969; c=relaxed/simple;
-	bh=J2TFGJagph/ta7MoJmHwiVacD4SN5gx283HD/y3mKqY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=APHReLLpmlWJ2eYdMrr1Xff/V91ZSv+48pxX1fdXRsX93ptza6ovqOB8ZgXDbdqjjGaNWxmgt+Xi4Xj7+JXkBWXuTvAtCq7WR59+6rFLFZXssp4+T+20DO6bhjDWkyvCn4O5qddsPT/IIdpTtO04ZNOEYmO9Bw8T1gFdQnRbPrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M11fC+79; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746778967; x=1778314967;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=J2TFGJagph/ta7MoJmHwiVacD4SN5gx283HD/y3mKqY=;
-  b=M11fC+790rn+MCXCCwUq0Q1yMt64ncp8Eq0FmxIHwRi1KzcMAw5785+X
-   cVKwAvjR02kmEnUpthVc6Ab1YRx5DVedgnTI1A/JnY36raauZeXlJ2WZY
-   Rqd9cLiEUmmUP3Rqkc9x6+KDOexAsuCPC8y7sbdQyhTpYOCvGWdp/oO1F
-   j/P/i4Tt2KWDIKVov8Nxl3W1MFE+ImqTmGJgh0hfxSd7L/Bkb86EeD4QT
-   ePwmkJcJP6FrlrBPvWHplNfXg7u2xEqGG6jLOy8TKSsHV3t7DKyJ0TH98
-   W5wmSk0AsvRqDS2VDjdNUsy7S414djZxejjUts5/g/mvVk0X6/6nd5tcQ
-   Q==;
-X-CSE-ConnectionGUID: FY9L64gqRh2jjtlsgVb+NQ==
-X-CSE-MsgGUID: AQM68sRvQM+gBTKYVYJ95w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="48712603"
-X-IronPort-AV: E=Sophos;i="6.15,274,1739865600"; 
-   d="scan'208";a="48712603"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2025 01:22:46 -0700
-X-CSE-ConnectionGUID: NVHTGny5TAiqKijxBMtofQ==
-X-CSE-MsgGUID: zejCw9eqRNapVYavtfyugQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,274,1739865600"; 
-   d="scan'208";a="136439359"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 09 May 2025 01:22:45 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uDJ0E-000Bod-0p;
-	Fri, 09 May 2025 08:22:42 +0000
-Date: Fri, 9 May 2025 16:22:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <superm1@kernel.org>, mario.limonciello@amd.com,
-	rafael@kernel.org, pavel@kernel.org, len.brown@intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2] PM: hibernate: Explicitly set `PM_SUSPEND_MAX` at
- hibernate entry
-Message-ID: <202505091658.9UZSCXpa-lkp@intel.com>
-References: <20250508211822.2698678-1-superm1@kernel.org>
+	s=arc-20240116; t=1746780226; c=relaxed/simple;
+	bh=D+Z3MPOOomLStRJL1NiuAWmq/XdQJ45mhJewSQu6uSs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Rwea1stYNHMpfu+MaPP6C4RkEkVaunQzn8rYmTSnVP0RSS2dINNvIubQrWsZB/Ebka5lQdPzRKGy1aAZZHwJQk6yw40g2sEzQ/lCQTr9ZW04fZnwwsXCVFGpW0u99ksa8juJYc8B/fOehKIp0j9Ul3NsH+mx+up5yqMNoETnOsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RMJXFD7i; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-22e1597a5abso2870175ad.0;
+        Fri, 09 May 2025 01:43:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746780223; x=1747385023; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D+Z3MPOOomLStRJL1NiuAWmq/XdQJ45mhJewSQu6uSs=;
+        b=RMJXFD7ijQWGBpHWufRoc7MieAPslSTryiZ/REJWFYnricDnpv9lTG071wK1DVYoSn
+         pe9VgQ/BtEjMDB+zkLlOcOg7IrLeXK0sAktMDCiTVH+MUwP8PIhEqq4UqFUIgcJ7TnaC
+         jvptc8GN1beSgf2K+J34t9mSREORt0IA2/H8dXRWvNb5vcOsf1wKFwDt3uEN3C577w/K
+         ZO8RsBO4KKj58iLD/hH3IcZBa4PzuGMUmHNY+zRyDR1E/sZ06m9hDakUyJVa0Ue2p7iB
+         YUIibXf2HLZbD6UGqHiAwLoYL0HS21KlZbHXFcXpU1zZFOxabtA0rL/DBGvSh2mWL+Py
+         8TuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746780223; x=1747385023;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D+Z3MPOOomLStRJL1NiuAWmq/XdQJ45mhJewSQu6uSs=;
+        b=EeB5DaV5RCyOt3id9zm1mSnmowcquYJTlTbQqKPi5R66GINopTVGNJZ0qUQ2gt6YSz
+         YC2lLh1nxJ0+UtsBKZ71a5H6Qa2fdC98/ESOJH9mAFp3sG5f91CXa2kqH7ECxAARvgBD
+         HNUQkrmzlKxFv2YjL/FO4u9ZVkbF0PMsAQgf4/vQcqPcsNQiRyoxYHsuKxCUworEMNAQ
+         i5t+PAaQRfvPDGnQXXRvyHFKpsAQL5JIPaUqPl98avU2M0LCXQPZO2y7WCFpINesuclb
+         dTOoU4odNfFuZdUBqy7A2EWi698mu0SOrTDZOaQ7t7uAKQtNbuhMovAva5LeIeENRELr
+         Mrqw==
+X-Forwarded-Encrypted: i=1; AJvYcCUgrC5yKvkXZ7LdexIzg4TbDLNOcSbHuOx36QAHCsmHXHafy0XVAnvRSQg1o9aaWsaEHSKaQ6D4F8ihqgCa@vger.kernel.org, AJvYcCUrrDaVvi96hzlMbMn27F6PUhqE5QWPCHZ4ZDYTlk8dlNReV61ygPY+RgpLTEKEf8N6ojYXlFk/ZfY=@vger.kernel.org, AJvYcCVg+8QMZYTwaSmqDDhrgSRX2ibqWd/1GWkU7EkRiVNbR2xCI/5hZDfpxctZS9J/7U+pNfQTi1UoZV4=@vger.kernel.org, AJvYcCWN2XEDhdo7W8FF2Pl6d6PSeoiuSSVrMNikZdWpIq5OBeDHLJKLzFbE7btYMtxBPlMT5bwFvq1NMrWFeb8knw8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMKveKz5CriEX/rOcBmBO9ECDj/Bdm9Qe5R+wCDfSyITh/xv0N
+	T1i28pPPUmalyIIhui/BmEznTjdwLdUeAlu7v1rWI1vPZE/H3/qh4NcUH/NXITcx4bpqj2hqhC2
+	F124fXvFNVs0QngCQlP4Oz5HVD5U=
+X-Gm-Gg: ASbGncseyCAdX6YeP7CgMUCmM10x6mNxvgogUUemomtdF+eZvP1bE6EHodE2JQsmDcx
+	283lOiMYD9CMCYze9/0zPEyIM9zI4g7oImP7YoVMuBJoAAzat7Def3acWkdxZLYFre5ZTAX24tB
+	N02WTS8UvlSDkSst5nXIF8Tw==
+X-Google-Smtp-Source: AGHT+IEJ5b65Q0v/CP2S0OTkUGvauUws7VombfalBDLX8YTyGJdmjd6kE+QjHM7Qv0bMlOEC/TCXzyk6KW7sbDKSNtw=
+X-Received: by 2002:a17:902:e54f:b0:22f:b00d:fe59 with SMTP id
+ d9443c01a7336-22fc8d98a69mr14263115ad.9.1746780223105; Fri, 09 May 2025
+ 01:43:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250508211822.2698678-1-superm1@kernel.org>
+References: <20250502070109.inpes2ou3rxx2fxp@vireshk-i7> <20250506101311.142475-1-andrewjballance@gmail.com>
+ <CANiq72k3ozKkLMinTLQwvkyg9K=BeRxs1oYZSKhJHY-veEyZdg@mail.gmail.com> <CAKohponbEEP4_weUuKkOGLRj5-1oOsoL_Zu_7W_SxB61hjsSCw@mail.gmail.com>
+In-Reply-To: <CAKohponbEEP4_weUuKkOGLRj5-1oOsoL_Zu_7W_SxB61hjsSCw@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 9 May 2025 10:43:30 +0200
+X-Gm-Features: AX0GCFtvP7qV0uyKskrVkXxx4K1dOjHrcNE79kiWKdjUal4cdNNd8gXeg84r6B4
+Message-ID: <CANiq72mSDEwDQx6ePq20SRi40aCs95mwo6fShZ0WCK9rmiWVVQ@mail.gmail.com>
+Subject: Re: [PATCH V11 00/15] Rust abstractions for clk, cpumask, cpufreq, OPP
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Philip Li <philip.li@intel.com>, kbuild test robot <lkp@intel.com>, 
+	Andrew Ballance <andrewjballance@gmail.com>, a.hindborg@kernel.org, alex.bennee@linaro.org, 
+	alex.gaynor@gmail.com, aliceryhl@google.com, anisse@astier.eu, 
+	benno.lossin@proton.me, bjorn3_gh@protonmail.com, boqun.feng@gmail.com, 
+	bqe@google.com, dakr@kernel.org, dakr@redhat.com, 
+	daniel.almeida@collabora.com, gary@garyguo.net, joakim.bech@linaro.org, 
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux@armlinux.org.uk, linux@rasmusvillemoes.dk, 
+	manos.pitsidianakis@linaro.org, mturquette@baylibre.com, nm@ti.com, 
+	ojeda@kernel.org, peterz@infradead.org, rafael@kernel.org, robh@kernel.org, 
+	rust-for-linux@vger.kernel.org, sboyd@kernel.org, tglx@linutronix.de, 
+	tmgross@umich.edu, vincent.guittot@linaro.org, vireshk@kernel.org, 
+	yury.norov@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Mario,
+On Thu, May 8, 2025 at 4:10=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
+g> wrote:
+>
+> That's strange. I have tested this earlier and made sure such issues
+> weren't there. I tried "next-20250507" now for arm64 (with qemu)
+> with and without CONFIG_CPUMASK_OFFSTACK and still don't
+> see these issues.
+>
+> Anything apart from this ?
+>
+> CONFIG_RUST_KERNEL_DOCTESTS=3Dy
+>
+> Sorry for the trouble, I thought this is all covered already
+> (apart from x86 failure).
 
-kernel test robot noticed the following build errors:
+No worries, it happens!
 
-[auto build test ERROR on amd-pstate/linux-next]
-[also build test ERROR on amd-pstate/bleeding-edge linus/master v6.15-rc5 next-20250508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I can still reproduce it on next-20250508 with defconfig RUST=3Dy
+KUNIT=3Dy RUST_KERNEL_DOCTESTS=3Dy and then running in QEMU with e.g.
+`-machine virt -cpu cortex-a53`.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/PM-hibernate-Explicitly-set-PM_SUSPEND_MAX-at-hibernate-entry/20250509-051901
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git linux-next
-patch link:    https://lore.kernel.org/r/20250508211822.2698678-1-superm1%40kernel.org
-patch subject: [PATCH v2] PM: hibernate: Explicitly set `PM_SUSPEND_MAX` at hibernate entry
-config: i386-buildonly-randconfig-004-20250509 (https://download.01.org/0day-ci/archive/20250509/202505091658.9UZSCXpa-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250509/202505091658.9UZSCXpa-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505091658.9UZSCXpa-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/power/main.c:23:17: error: expected ')'
-      23 | suspend_state_t pm_suspend_target_state;
-         |                 ^
-   include/linux/suspend.h:148:34: note: expanded from macro 'pm_suspend_target_state'
-     148 | #define pm_suspend_target_state (PM_SUSPEND_ON)
-         |                                  ^
-   include/linux/suspend.h:36:51: note: expanded from macro 'PM_SUSPEND_ON'
-      36 | #define PM_SUSPEND_ON           ((__force suspend_state_t) 0)
-         |                                                            ^
-   kernel/power/main.c:23:17: note: to match this '('
-   include/linux/suspend.h:148:34: note: expanded from macro 'pm_suspend_target_state'
-     148 | #define pm_suspend_target_state (PM_SUSPEND_ON)
-         |                                  ^
-   include/linux/suspend.h:36:24: note: expanded from macro 'PM_SUSPEND_ON'
-      36 | #define PM_SUSPEND_ON           ((__force suspend_state_t) 0)
-         |                                 ^
->> kernel/power/main.c:23:17: error: redefinition of 'suspend_state_t' as different kind of symbol
-      23 | suspend_state_t pm_suspend_target_state;
-         |                 ^
-   include/linux/suspend.h:148:34: note: expanded from macro 'pm_suspend_target_state'
-     148 | #define pm_suspend_target_state (PM_SUSPEND_ON)
-         |                                  ^
-   include/linux/suspend.h:36:34: note: expanded from macro 'PM_SUSPEND_ON'
-      36 | #define PM_SUSPEND_ON           ((__force suspend_state_t) 0)
-         |                                           ^
-   include/linux/suspend.h:34:23: note: previous definition is here
-      34 | typedef int __bitwise suspend_state_t;
-         |                       ^
-   kernel/power/main.c:24:19: error: expected ')'
-      24 | EXPORT_SYMBOL_GPL(pm_suspend_target_state);
-         |                   ^
-   include/linux/suspend.h:148:34: note: expanded from macro 'pm_suspend_target_state'
-     148 | #define pm_suspend_target_state (PM_SUSPEND_ON)
-         |                                  ^
-   include/linux/suspend.h:36:51: note: expanded from macro 'PM_SUSPEND_ON'
-      36 | #define PM_SUSPEND_ON           ((__force suspend_state_t) 0)
-         |                                                            ^
-   kernel/power/main.c:24:19: note: to match this '('
-   include/linux/suspend.h:148:34: note: expanded from macro 'pm_suspend_target_state'
-     148 | #define pm_suspend_target_state (PM_SUSPEND_ON)
-         |                                  ^
-   include/linux/suspend.h:36:24: note: expanded from macro 'PM_SUSPEND_ON'
-      36 | #define PM_SUSPEND_ON           ((__force suspend_state_t) 0)
-         |                                 ^
-   kernel/power/main.c:24:19: error: redefinition of 'suspend_state_t' as different kind of symbol
-      24 | EXPORT_SYMBOL_GPL(pm_suspend_target_state);
-         |                   ^
-   include/linux/suspend.h:148:34: note: expanded from macro 'pm_suspend_target_state'
-     148 | #define pm_suspend_target_state (PM_SUSPEND_ON)
-         |                                  ^
-   include/linux/suspend.h:36:34: note: expanded from macro 'PM_SUSPEND_ON'
-      36 | #define PM_SUSPEND_ON           ((__force suspend_state_t) 0)
-         |                                           ^
-   include/linux/suspend.h:34:23: note: previous definition is here
-      34 | typedef int __bitwise suspend_state_t;
-         |                       ^
->> kernel/power/main.c:24:1: error: pasting formed '__addressable_(', an invalid preprocessing token
-      24 | EXPORT_SYMBOL_GPL(pm_suspend_target_state);
-         | ^
-   include/linux/export.h:84:33: note: expanded from macro 'EXPORT_SYMBOL_GPL'
-      84 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
-         |                                         ^
-   include/linux/export.h:80:38: note: expanded from macro '_EXPORT_SYMBOL'
-      80 | #define _EXPORT_SYMBOL(sym, license)    __EXPORT_SYMBOL(sym, license, "")
-         |                                         ^
-   include/linux/export.h:71:2: note: expanded from macro '__EXPORT_SYMBOL'
-      71 |         __ADDRESSABLE(sym)                                      \
-         |         ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler.h:286:14: note: expanded from macro '___ADDRESSABLE'
-     286 |         __UNIQUE_ID(__PASTE(__addressable_,sym)) = (void *)(uintptr_t)&sym;
-         |                     ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-      84 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:83:24: note: expanded from macro '___PASTE'
-      83 | #define ___PASTE(a,b) a##b
-         |                        ^
-   kernel/power/main.c:24:19: error: expected ')'
-      24 | EXPORT_SYMBOL_GPL(pm_suspend_target_state);
-         |                   ^
-   include/linux/suspend.h:148:34: note: expanded from macro 'pm_suspend_target_state'
-     148 | #define pm_suspend_target_state (PM_SUSPEND_ON)
-         |                                  ^
-   include/linux/suspend.h:36:51: note: expanded from macro 'PM_SUSPEND_ON'
-      36 | #define PM_SUSPEND_ON           ((__force suspend_state_t) 0)
-         |                                                            ^
-   kernel/power/main.c:24:19: note: to match this '('
-   include/linux/suspend.h:148:34: note: expanded from macro 'pm_suspend_target_state'
-     148 | #define pm_suspend_target_state (PM_SUSPEND_ON)
-         |                                  ^
-   include/linux/suspend.h:36:24: note: expanded from macro 'PM_SUSPEND_ON'
-      36 | #define PM_SUSPEND_ON           ((__force suspend_state_t) 0)
-         |                                 ^
->> kernel/power/main.c:24:1: error: pasting formed ')417', an invalid preprocessing token
-      24 | EXPORT_SYMBOL_GPL(pm_suspend_target_state);
-         | ^
-   include/linux/export.h:84:33: note: expanded from macro 'EXPORT_SYMBOL_GPL'
-      84 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
-         |                                         ^
-   include/linux/export.h:80:38: note: expanded from macro '_EXPORT_SYMBOL'
-      80 | #define _EXPORT_SYMBOL(sym, license)    __EXPORT_SYMBOL(sym, license, "")
-         |                                         ^
-   include/linux/export.h:71:2: note: expanded from macro '__EXPORT_SYMBOL'
-      71 |         __ADDRESSABLE(sym)                                      \
-         |         ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
-     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-         |                             ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-      84 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:83:24: note: expanded from macro '___PASTE'
-      83 | #define ___PASTE(a,b) a##b
-         |                        ^
->> kernel/power/main.c:24:19: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-      24 | EXPORT_SYMBOL_GPL(pm_suspend_target_state);
-         |                   ^
-   include/linux/suspend.h:148:34: note: expanded from macro 'pm_suspend_target_state'
-     148 | #define pm_suspend_target_state (PM_SUSPEND_ON)
-         |                                  ^
-   include/linux/suspend.h:36:34: note: expanded from macro 'PM_SUSPEND_ON'
-      36 | #define PM_SUSPEND_ON           ((__force suspend_state_t) 0)
-         |                                           ^
->> kernel/power/main.c:24:1: error: expected function body after function declarator
-      24 | EXPORT_SYMBOL_GPL(pm_suspend_target_state);
-         | ^
-   include/linux/export.h:84:33: note: expanded from macro 'EXPORT_SYMBOL_GPL'
-      84 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
-         |                                         ^
-   include/linux/export.h:80:38: note: expanded from macro '_EXPORT_SYMBOL'
-      80 | #define _EXPORT_SYMBOL(sym, license)    __EXPORT_SYMBOL(sym, license, "")
-         |                                         ^
-   include/linux/export.h:71:2: note: expanded from macro '__EXPORT_SYMBOL'
-      71 |         __ADDRESSABLE(sym)                                      \
-         |         ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler.h:286:2: note: expanded from macro '___ADDRESSABLE'
-     286 |         __UNIQUE_ID(__PASTE(__addressable_,sym)) = (void *)(uintptr_t)&sym;
-         |         ^
-   include/linux/compiler.h:166:68: note: expanded from macro '__UNIQUE_ID'
-     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-         |                                                                    ^
-   <scratch space>:210:1: note: expanded from here
-     210 | 417
-         | ^
->> kernel/power/main.c:24:1: error: pasting formed '__export_symbol_(', an invalid preprocessing token
-   include/linux/export.h:84:33: note: expanded from macro 'EXPORT_SYMBOL_GPL'
-      84 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
-         |                                         ^
-   include/linux/export.h:80:38: note: expanded from macro '_EXPORT_SYMBOL'
-      80 | #define _EXPORT_SYMBOL(sym, license)    __EXPORT_SYMBOL(sym, license, "")
-         |                                         ^
-   include/linux/export.h:73:18: note: expanded from macro '__EXPORT_SYMBOL'
-      73 |         asm(__stringify(___EXPORT_SYMBOL(sym, license, ns)))
-         |                         ^
-   include/linux/export.h:29:18: note: expanded from macro '___EXPORT_SYMBOL'
-      29 |         __export_symbol_##sym:                  ASM_NL  \
-         |                         ^
-   10 errors generated.
-
-
-vim +23 kernel/power/main.c
-
-    22	
-  > 23	suspend_state_t pm_suspend_target_state;
-  > 24	EXPORT_SYMBOL_GPL(pm_suspend_target_state);
-    25	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
 
