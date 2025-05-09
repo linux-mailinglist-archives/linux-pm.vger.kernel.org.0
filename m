@@ -1,64 +1,59 @@
-Return-Path: <linux-pm+bounces-26930-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26929-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFD64AB144A
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 15:04:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F015FAB1450
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 15:04:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 206ED1B61498
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 13:04:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE8DA9E7913
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 13:03:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F765291171;
-	Fri,  9 May 2025 13:04:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FB7B28EA45;
+	Fri,  9 May 2025 13:04:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="FuouKjOx"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="F0doOWJy"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9E9015E96;
-	Fri,  9 May 2025 13:04:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1482741A8;
+	Fri,  9 May 2025 13:04:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746795854; cv=none; b=ZysvIzWY3cSBIhgaRdF1m3cfjMX6mXwlHzaj6ndLqX1XnUjbUCCk1MEF2OiUmqhND1AbbVrNgTysT0DMBpX0unxtpWaTKS4cAZmoEDqp+mux9wa+k5zU0jwiNHSkZucsVsMAmpA6YZo301L7OtE5H0rJ6qDUfDNq3fcY1XI1q9g=
+	t=1746795853; cv=none; b=MtAarzN9m8IXwgl9/x+2QMqQgZxEeDurAoK3sxWFI7ZIgjolYWxHcnFvNrfcbEgbH6wEhLfDuzdQlUzozGY3nxTQAzmUxoRim8ZDX3rdNPbGX9qpJd9SlkIfc8+uQZ5iqbXZYElwi3o5W1iHng2fujGeatvV0nhoHaYn2aQODr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746795854; c=relaxed/simple;
-	bh=nnWev/U6mk3QsQ2rja9jL5cKPG13InXpkNQFhMAK3iE=;
+	s=arc-20240116; t=1746795853; c=relaxed/simple;
+	bh=n3GbyjqvH6eUEQXmvL7MngGXNkXMiP0nukbieFj06og=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=e4mmivIoXpuRH0A14d+bYCibHwpQ0RniDQOq/+LCIORZWF3sAS7Ee2z5qHMxp2SOtMgntRrIpL4k83WytECvm1vSPBUcyD3nU7UPBNG7wNs8YiK6KIrLAruyvL+aZy9iyKgdqVKMj3hZcQf+1vd7EjGRXoBL6ptvMctNJWIv6mY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=FuouKjOx; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=CdoItQ1R9k7F7HNVQX6kN28GIAE52p5XSSlx/h+QCSuJvsLurfo9CN+FN0CvsgKlZ35COM8GJieIfW7jircgIaWWvEN7TgOMSO6qVXHJpFb8jZQStOi2Y+/JdijlyC+IxMKX2tZA23DejauEAVJyGz5ivCIkxjBybUxUa9/CbaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=F0doOWJy; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from kreacher.localnet (unknown [217.114.34.19])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 69C06666CB4;
-	Fri,  9 May 2025 15:04:03 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 7A975666CB1;
+	Fri,  9 May 2025 15:04:02 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1746795843;
-	bh=nnWev/U6mk3QsQ2rja9jL5cKPG13InXpkNQFhMAK3iE=;
+	s=dkim; t=1746795842;
+	bh=n3GbyjqvH6eUEQXmvL7MngGXNkXMiP0nukbieFj06og=;
 	h=From:Subject:Date;
-	b=FuouKjOxm3JvSM8LnUfSs8dI44/XTTirlRNwQoSkt3RjKp+01YCUvTrtXg3C44OGb
-	 2WZcZ1CinJ1U/vvo1uTjEJRfnzH7LuXx8bd1bSYxqpAm87uhDv/AkbNxn6PE478CwM
-	 kXUvGR8XaCSzCB3/TQ9FC/2QcRvYxO1DeBIPH1cQ0v4UWz0XONONQrZZ2n2IW+xFoV
-	 wI0DLsMKoTgNV8K4gmBbi9e1kF3eP3EvlunvZxoXjqX10w8nDXQHqnN+uP0eAxsqtZ
-	 iFC3UBEwjAorh5nJ38TLz+Zec1AbUJWjhhHEhmCPIQCy9Ryaq2nzXWE6xGYaTUar7x
-	 KGTHzOe5oWXEw==
+	b=F0doOWJydsKRkr6eqs4z5XmMlJLAj/UBisjjuoDhetgXyooixdhHLsqXgrZ11IBQj
+	 wHwToovqunsnDJR1iFfYSetcJ+vt46QHyfeq1YvKlQrbYJtvdNKOoLM29IyQVM5cGH
+	 IuBmxjAkbr3TE2rVhpg3D2MiDaJNwQnL1uhlsaDEQ4ciWZKRICtn+KV0qIwTceP0i+
+	 2VjbZbIeSD/meBIk3NLW8mLtPuyWX5Oz7tWj7C09we9GEoV8kEw4D7+IhNiOWc8PWs
+	 CfcnjTj5qj1D75pnv4xJ1cQXmQ/Pg8md1XJNF/qK/NhB8ncfmid6GFc891MV0lwFG0
+	 S5TPaPBdQ0TOw==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Bjorn Helgaas <helgaas@kernel.org>, Linux PCI <linux-pci@vger.kernel.org>,
- x86 Maintainers <x86@kernel.org>, intel-xe@lists.freedesktop.org,
- Lucas De Marchi <lucas.demarchi@intel.com>,
- Thomas =?ISO-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>
-Subject: [PATCH v1 2/3] PM: sleep: Introduce pm_suspend_in_progress()
-Date: Fri, 09 May 2025 15:02:27 +0200
-Message-ID: <2020901.PYKUYFuaPT@rjwysocki.net>
+ Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v1 3/3] PM: sleep: Introduce pm_sleep_transition_in_progress()
+Date: Fri, 09 May 2025 15:03:35 +0200
+Message-ID: <7820474.EvYhyI6sBW@rjwysocki.net>
 In-Reply-To: <5903743.DvuYhMxLoT@rjwysocki.net>
 References: <5903743.DvuYhMxLoT@rjwysocki.net>
 Precedence: bulk
@@ -72,96 +67,73 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 217.114.34.19
 X-CLIENT-HOSTNAME: 217.114.34.19
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvledvieelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppedvudejrdduudegrdefgedrudelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddujedruddugedrfeegrdduledphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepuddtpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrrhhiohdrlhhimhhonhgtihgvlhhlohesrghmugdrtghomhdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhptghisehvghgvrhdrkhgvrhhnvghlrdh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=10 Fuz1=10 Fuz2=10
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvledvieelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppedvudejrdduudegrdefgedrudelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddujedruddugedrfeegrdduledphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepfedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghrihhordhlihhmohhntghivghllhhosegrmhgurdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Introduce pm_suspend_in_progress() to be used for checking if a system-
-wide suspend or resume transition is in progress, instead of comparing
-pm_suspend_target_state directly to PM_SUSPEND_ON, and use it where
-applicable.
-
-No intentional functional impact.
+The "suspend in progress" check in device_wakeup_enable() does not
+cover hibernation, but arguably it should do that, so introduce 
+pm_sleep_transition_in_progress() covering transitions during both
+system suspend and hibernation to use in there and use it also in
+pm_debug_messages_should_print().
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
-
-The only change in this patch that depends in the [1/3] is in
-kernel/power/main.c and it is not relevant for PCI/x86 and xe.
-
----
- arch/x86/pci/fixup.c        |    4 ++--
  drivers/base/power/wakeup.c |    2 +-
- drivers/gpu/drm/xe/xe_pm.c  |    2 +-
- include/linux/suspend.h     |    5 +++++
- kernel/power/main.c         |    4 ++--
- 5 files changed, 11 insertions(+), 6 deletions(-)
+ include/linux/suspend.h     |    4 ++++
+ kernel/power/main.c         |    8 ++++++--
+ 3 files changed, 11 insertions(+), 3 deletions(-)
 
---- a/arch/x86/pci/fixup.c
-+++ b/arch/x86/pci/fixup.c
-@@ -970,13 +970,13 @@
- 	struct pci_dev *rp;
- 
- 	/*
--	 * PM_SUSPEND_ON means we're doing runtime suspend, which means
-+	 * If system suspend is not in progress, we're doing runtime suspend, so
- 	 * amd-pmc will not be involved so PMEs during D3 work as advertised.
- 	 *
- 	 * The PMEs *do* work if amd-pmc doesn't put the SoC in the hardware
- 	 * sleep state, but we assume amd-pmc is always present.
- 	 */
--	if (pm_suspend_target_state == PM_SUSPEND_ON)
-+	if (!pm_suspend_in_progress())
- 		return;
- 
- 	rp = pcie_find_root_port(dev);
 --- a/drivers/base/power/wakeup.c
 +++ b/drivers/base/power/wakeup.c
 @@ -337,7 +337,7 @@
  	if (!dev || !dev->power.can_wakeup)
  		return -EINVAL;
  
--	if (pm_suspend_target_state != PM_SUSPEND_ON)
-+	if (pm_suspend_in_progress())
+-	if (pm_suspend_in_progress())
++	if (pm_sleep_transition_in_progress())
  		dev_dbg(dev, "Suspicious %s() during system transition!\n", __func__);
  
  	ws = wakeup_source_register(dev, dev_name(dev));
---- a/drivers/gpu/drm/xe/xe_pm.c
-+++ b/drivers/gpu/drm/xe/xe_pm.c
-@@ -641,7 +641,7 @@
- 
- 	return dev->power.runtime_status == RPM_SUSPENDING ||
- 		dev->power.runtime_status == RPM_RESUMING ||
--		pm_suspend_target_state != PM_SUSPEND_ON;
-+		pm_suspend_in_progress();
- #else
- 	return false;
- #endif
 --- a/include/linux/suspend.h
 +++ b/include/linux/suspend.h
-@@ -298,6 +298,11 @@
- static inline void s2idle_wake(void) {}
- #endif /* !CONFIG_SUSPEND */
+@@ -475,6 +475,8 @@
+ extern unsigned int lock_system_sleep(void);
+ extern void unlock_system_sleep(unsigned int);
  
-+static inline bool pm_suspend_in_progress(void)
-+{
-+	return pm_suspend_target_state != PM_SUSPEND_ON;
-+}
++extern bool pm_sleep_transition_in_progress(void);
 +
- /* struct pbe is used for creating lists of pages that should be restored
-  * atomically during the resume from disk, because the page frames they have
-  * occupied before the suspend are in use.
+ #else /* !CONFIG_PM_SLEEP */
+ 
+ static inline int register_pm_notifier(struct notifier_block *nb)
+@@ -503,6 +505,8 @@
+ static inline unsigned int lock_system_sleep(void) { return 0; }
+ static inline void unlock_system_sleep(unsigned int flags) {}
+ 
++static inline bool pm_sleep_transition_in_progress(void) { return false; }
++
+ #endif /* !CONFIG_PM_SLEEP */
+ 
+ #ifdef CONFIG_PM_SLEEP_DEBUG
 --- a/kernel/power/main.c
 +++ b/kernel/power/main.c
-@@ -613,8 +613,8 @@
+@@ -609,12 +609,16 @@
+ 
+ power_attr_ro(pm_wakeup_irq);
+ 
++bool pm_sleep_transition_in_progress(void)
++{
++	return pm_suspend_in_progress() || hibernation_in_progress();
++}
++
+ bool pm_debug_messages_on __read_mostly;
  
  bool pm_debug_messages_should_print(void)
  {
--	return pm_debug_messages_on && (hibernation_in_progress() ||
--		pm_suspend_target_state != PM_SUSPEND_ON);
-+	return pm_debug_messages_on && (pm_suspend_in_progress() ||
-+		hibernation_in_progress());
+-	return pm_debug_messages_on && (pm_suspend_in_progress() ||
+-		hibernation_in_progress());
++	return pm_debug_messages_on && pm_sleep_transition_in_progress();
  }
  EXPORT_SYMBOL_GPL(pm_debug_messages_should_print);
  
