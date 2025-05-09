@@ -1,79 +1,71 @@
-Return-Path: <linux-pm+bounces-26965-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26966-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23F81AB1A5E
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 18:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A2DFAB1A63
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 18:24:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BBB09E1BA6
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 16:20:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EED4D3BD834
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 16:21:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A741B2367B1;
-	Fri,  9 May 2025 16:21:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EE642367DD;
+	Fri,  9 May 2025 16:22:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="npDu+qte"
+	dkim=pass (2048-bit key) header.d=rosenzweig.io header.i=@rosenzweig.io header.b="yJbb5Pv2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43A02356D9;
-	Fri,  9 May 2025 16:21:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A72122CBEA;
+	Fri,  9 May 2025 16:21:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746807667; cv=none; b=E9O4kj8zOgTbqFndumuOWNk3gqsI04zaNP4ISzAksQcmtGh4rlgFbp/mhgmVAQYvanZFgUr4y6Ld+rehQeiwpinpJUnsOzAVBQ+rqQPlqIanD4tHopAYGkzB8+fz+LC8861+GV7jq4o8IR0mFiOCsdx1hezmDby4PsEbMsjC+4o=
+	t=1746807721; cv=none; b=gGNoSMJLHcOhn61ceBIRtYflDNZdcwv5w+6Y6w6fkpLN+wNoeIiJAspb4vKJIyPaN4E/at/S1totnedKJbr3vPgEWO1H6/v1+JqSsAUA0UmkeS5OLO0fm2+js7pTWV8L6H6r4edcZ7joxpjxafghlqSeDgFtymIVYwAdMBAAZJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746807667; c=relaxed/simple;
-	bh=dL7KD/TlJeCv74sI23DpTJADqUEeXDYITiCPLXNsLjY=;
+	s=arc-20240116; t=1746807721; c=relaxed/simple;
+	bh=rEj6hWkcGPaha1zLvnzaxpRj8FK8vW30ghmy4w7SLfQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=omV2wCcacX+qtFOHKTsoBW+tFK0KWPHO4iX/PT0U1kh0bdCRh+VYv6OmT9UCyEPPxVSJpsoa1XwC7XNbY9hYC/WpO/tJQ92HFKUGzyAMADbhTNTXrtBkDjQ88GAy+xeTXK5VyigR21qLjhgQwW+DePIBWKZ/FFSX+MSgYExs0oM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=npDu+qte; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746807666; x=1778343666;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dL7KD/TlJeCv74sI23DpTJADqUEeXDYITiCPLXNsLjY=;
-  b=npDu+qtevgylzG1Rk+3h0Bmq8a1+Cy8UhMcXq5KsfHXTpV3QTCIjvsTb
-   59fBwn6v4FnGmOjDA4PIGU2JkHwjRiRjb6cwcFlSSCBsDLmgRQsZE8yz/
-   RyjDpzc8zIITSb6LImwSXb4HqDY7Y3Xi8CGhEvRM/I3R4c8KhDwxmH9I6
-   UJQ5ajGEd8jGPUeQjqxX/1ngHsDDcgOlnliJbGvkwvrL+x1K8CUK98M4G
-   YbWvRuMapi/o6F2TKVQ9CzF5nySRfXDMBTXIqrmqx8tQRGAHTtT8AfueY
-   Q+iy2GC4qcfXNswYhV80AhtJgMQdqC0o6d+dfQysbxJviawg932MVcrfa
-   w==;
-X-CSE-ConnectionGUID: Gyl0z5usTnybaw9ZY1XWDw==
-X-CSE-MsgGUID: jbZO14siRFODurXvRM4vjQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="48339790"
-X-IronPort-AV: E=Sophos;i="6.15,275,1739865600"; 
-   d="scan'208";a="48339790"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2025 09:21:06 -0700
-X-CSE-ConnectionGUID: zXuMQpltQAKA3+Ng8M/phg==
-X-CSE-MsgGUID: dUIDlxakSoyMHg85kq6Wrg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,275,1739865600"; 
-   d="scan'208";a="140724147"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2025 09:21:02 -0700
-Date: Fri, 9 May 2025 19:20:59 +0300
-From: Raag Jadav <raag.jadav@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Linux PCI <linux-pci@vger.kernel.org>,
-	x86 Maintainers <x86@kernel.org>, intel-xe@lists.freedesktop.org,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>
-Subject: Re: [PATCH v1 2/3] PM: sleep: Introduce pm_suspend_in_progress()
-Message-ID: <aB4ra4BsLu5Rv5ea@black.fi.intel.com>
-References: <5903743.DvuYhMxLoT@rjwysocki.net>
- <2020901.PYKUYFuaPT@rjwysocki.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=k95EoIvvM6qRVwZkq21pqXANNkHWCIbuj2ZR0nJ35Tfeaq2F+RGgBiCjXHuQhfLCLeuF/HClkGHigN8kiRxINphX4zSWklFtdgrYG2BKj0d286B7K0qiDfuGuwxB4u40SET/PJT2yvZmT5Xx6xF9/owkfDHnYInjzPSSLbFWHP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rosenzweig.io; spf=pass smtp.mailfrom=rosenzweig.io; dkim=pass (2048-bit key) header.d=rosenzweig.io header.i=@rosenzweig.io header.b=yJbb5Pv2; arc=none smtp.client-ip=95.215.58.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rosenzweig.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rosenzweig.io
+Date: Fri, 9 May 2025 12:21:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rosenzweig.io;
+	s=key1; t=1746807707;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oCay4j7C41YPfPP4dRmjz27ecUbg9JIQQ0y/wWYi3Yk=;
+	b=yJbb5Pv23OL+WAcAvl05L189sakxNU2wSigqZjyKPBKo6TN/zVF3XYwjSGhv/nOUsiEjL/
+	Tp8tSHES30I1yjcQmteNELFrqGV/wMzPapMmE2mcb5VxV89kHpNkfAWq0W5a43dR7bQeR3
+	tj08z9iGNCbD3M+FVqOr5t9j3yQAw8MY5HnYsz+l2fxXFwkjNx4XLdsQjaR13NvfRce8d1
+	NmvMvyE+Cg/sJgIBOCWV6X1i6kZ5PwdUwMWq5Wr7lzoRGnFI38esKrtfgKKKRoJSgurIpD
+	ac11fOF5/1DfHQHvguwizyJTVaY0X11phlrinCUlPVjjthsGKDpUWi0jK4cwVw==
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Alyssa Rosenzweig <alyssa@rosenzweig.io>
+To: Sven Peter <sven@svenpeter.dev>
+Cc: Janne Grunau <j@jannau.net>, Neal Gompa <neal@gompa.dev>,
+	Hector Martin <marcan@marcan.st>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Russell King <rmk+kernel@armlinux.org.uk>, asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 6/9] power: reset: macsmc-reboot: Add driver for
+ rebooting via Apple SMC
+Message-ID: <aB4rliBFrUWWuNQ2@blossom>
+References: <20250503-smc-6-15-v4-0-500b9b6546fc@svenpeter.dev>
+ <20250503-smc-6-15-v4-6-500b9b6546fc@svenpeter.dev>
+ <aB39iJm9759RYAKW@blossom>
+ <196f84ea-6567-4fe3-9bee-743bb289223e@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,19 +74,26 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2020901.PYKUYFuaPT@rjwysocki.net>
+In-Reply-To: <196f84ea-6567-4fe3-9bee-743bb289223e@app.fastmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, May 09, 2025 at 03:02:27PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> >> +		mdelay(100);
+> >> +		WARN_ON(1);
+> >
+> > ...What?
 > 
-> Introduce pm_suspend_in_progress() to be used for checking if a system-
-> wide suspend or resume transition is in progress, instead of comparing
-> pm_suspend_target_state directly to PM_SUSPEND_ON, and use it where
-> applicable.
+> This is done in a few drivers in drivers/power/reboot. If we haven't
+> rebooted after 100ms something's wrong with SMC. I'll add a comment.
 > 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> drivers/power/reset/tps65086-restart.c:	WARN_ON(1);
+> drivers/power/reset/atc260x-poweroff.c:	WARN_ONCE(1, "Unable to power off system\n");
+> drivers/power/reset/mt6323-poweroff.c:	WARN_ONCE(1, "Unable to power off system\n");
+> drivers/power/reset/gpio-restart.c:	WARN_ON(1);
+> drivers/power/reset/regulator-poweroff.c:	WARN_ON(1);
 
-Reviewed-by: Raag Jadav <raag.jadav@intel.com>
+Ohh, duh, ok. Cute.
+
+Can we do the WARN_ONCE(1, "Unable ...") pattern? Then we don't need a
+comment since the warn message makes it obvious.
 
