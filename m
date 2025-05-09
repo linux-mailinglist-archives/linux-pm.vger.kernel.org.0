@@ -1,144 +1,243 @@
-Return-Path: <linux-pm+bounces-26970-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26971-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40351AB1B1E
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 18:58:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 464FAAB1B30
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 19:04:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9169FA0217A
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 16:57:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3897189C2DE
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 17:04:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 919662356B1;
-	Fri,  9 May 2025 16:57:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8CC823026D;
+	Fri,  9 May 2025 17:04:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Np91o4oi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cGESCjhp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C156120C030;
-	Fri,  9 May 2025 16:57:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFCD1228CB0;
+	Fri,  9 May 2025 17:04:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746809857; cv=none; b=kyonxcCjdmwdDxrcIgcl/zNOtZTf0qoTZE2t1jEJQI8FIs7U/QUHDCXihbEyTstF3vheo2/4Ma5kOtCwzUZdsg1V+pxJIY0nJfJ66O8D7YnJNCQSKScGw1CYs1eY+G8dYx4pl4n1EflXhI1r6DxvOl/k4oc1qbC0lNYkT1/xzhQ=
+	t=1746810241; cv=none; b=i8VoJSZNmQyvMj16AXrxGqRt86f1HY31ALDhb+ZLpU79tDa7JHnYU8nSsI1jQfjy+xUWg2rE3b+DL3ifkTZhl9BwUxSicYCgl+N8rKRffVgCKE18HFYs7n5F6tMRxnEIMU1SaTFE25j+DxUg9Dw/x1FC1yOiFJjJ41iG0H8pveM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746809857; c=relaxed/simple;
-	bh=f+HzxQPWwken1azUW8kFJMFBZlKUu3T4KQof9pysA/8=;
+	s=arc-20240116; t=1746810241; c=relaxed/simple;
+	bh=cxOuPrTubtaM2OWU2dmQeoVyLD36Fn4cYNvgvQMHmWU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DaQGLdkBOLjznH/c215g9lCwtlzXmsHiBMgZ+MimkVNzAKY71aisvr8pczA7mOE3W4DmBiqX+USl7a0iybqR5j1IboAhXq1NvNgy8skau50/HHsGWfMB/j06LbQlOsIYMMMlOfXlfRReJzXalyaFW9dmRK5j5LhFs3qtt6VJAv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Np91o4oi; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-326b9930730so12700821fa.0;
-        Fri, 09 May 2025 09:57:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746809854; x=1747414654; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HG/qN/B1wwOujzXnr45jOXtdzYz6t+IOg1u2LQ5o1Xs=;
-        b=Np91o4oiUXIEBSIlVkzhgGN7TVH2L6yGhMKE+P0uv5gP0OMLmx3z3subOW663c/PmJ
-         WAYuc4r5g88Rf5eHqnNkZS9ddG7fnZjx0whNBpO+H2oJRU2brptQaJfAqN5ho0sMsy9n
-         +zA9VfELxl7d0Df+xzQJ2h1ZHkqI+ui+bATDAthbl8SrsTK7vmJ44VoY9JYARxGWucz+
-         enr+GZNuiXuPszqwAosf52TzIPFsJBWK/iGXgcqZNRQLnq9XDuLWNwA+8HMF8nx73UU2
-         /0Kxup4QecXG4HFSUet0Di931mmRfKAKutBaITbiZ02kYy6+BtpeEZkJYtwmaZsn0ajz
-         fEYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746809854; x=1747414654;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HG/qN/B1wwOujzXnr45jOXtdzYz6t+IOg1u2LQ5o1Xs=;
-        b=Pm+9kg0ChOjEF6iKkr4Ao3Bh2XBpbWiwC+D3ALf1w1PYJ1Tnilk341WsW3ZLhNdMh/
-         2nsOp6cFwXrCN+YS3HOT7W7IfGFj9AweT5RsWdtXzaEfNHThRuTnukOaFt3PeLhlvo0e
-         c4OiaDUwl/zRaAWtwglr/xF7/RD6Kmi7e6Mc/+EYsuTfp83zkcc2aAQlNl7wvsWHGHBE
-         PJm9xlnkZWhW0LlP4Vo/zmyVesluMO3AJQB5/1HO4hFN/Yc0SEdOFMu1WfhfqTfVKQ5z
-         QXm0LOxm82/naJlEJYzq7nTRKxlQTzjNRHL3pjLaMsuiGKwFgzSLeIqlunNhTpgzLLh+
-         DfKA==
-X-Forwarded-Encrypted: i=1; AJvYcCWXSHIFg7Mmepl6yY9zUQxaI2FITEBpRax2/BXp10pbr+seU2Y4xNjHgGJ4+qzPZxqWOckewvoqQyGzB8I=@vger.kernel.org, AJvYcCWcoQ8/tLscqAUhWpcajSQ1CqfEFo909Og2Dgw41UqTk0lxXflljhABmdI+Jo8OJhBVxrJIdG6+Rh/he6k=@vger.kernel.org, AJvYcCXkL64f+Gq15dGD/IGm9QMm7pGSM/xkpFEcbz3m7h6GuTkS0R5m/izv0aVvPD7/ZuLplfXYj52sQPo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5B3exjUsCsZGh1vMurSa+ikfpHdbh6l7t0iibhhKVuUhnGV26
-	Kqz/FGm1r08fzrmCPEjWK3jn98wBbSswuT1aFGiB0J3Qx0eBozMse8Q0s7rNJWwajs+Ci21y4fI
-	0GGXPtaDEXcxmUHGdaTxLC3a9XRw=
-X-Gm-Gg: ASbGncsg7ACsaYj0XE3kClrdId6pZX8jxLxJSu9B4ioHqSzXklrpKD0pf7FwYkLX3fX
-	SC188S1gfpR7O5w+rKyjyA4SgknZ4BXa+cvuQYOvUji0pt9+CVMJqq5zJMA3XO46DsVpRnuElkH
-	gbO+YXP56wuHxcwiRRnpgd23c=
-X-Google-Smtp-Source: AGHT+IFi0cF1V2iQpXTJCR3ehLfO/KkBUNbi40rI+b+xnbSC/u9nzRUrq6I2aH8N0QpOvZtq/8HaO2OBzNmgALN9d6c=
-X-Received: by 2002:a05:651c:146a:b0:30b:c22d:83b3 with SMTP id
- 38308e7fff4ca-326c45d5a16mr15986021fa.15.1746809853513; Fri, 09 May 2025
- 09:57:33 -0700 (PDT)
+	 To:Cc:Content-Type; b=gPgOmJrfc5xLF5g9DgEMvslo4i6lGY/vzeYoRE/kDGX4fIAUpgTqWcVjE5v6DXGAyYPfPl0E7cimv/+YW3iabjd7EnXPH693MpDriXWrettFwjFTOy7+NoQRJcY2a83XOKKUrk+xHKddYZWjXfJtjDpJNzWnI7whTyn8MwFa9Pk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cGESCjhp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 363A9C4CEE4;
+	Fri,  9 May 2025 17:04:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746810241;
+	bh=cxOuPrTubtaM2OWU2dmQeoVyLD36Fn4cYNvgvQMHmWU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=cGESCjhphBC1HXCg4XvWaInawGSQdzvW3Lxes/DTenTv97ppIGUfrNfxYbEE8tDID
+	 q/D4dg6of2DY9B1m6jNhqgnJvD3vs4ww1filylZzgCpYJSGHUds8NH8d3eX3egu8FT
+	 R8QSYcKGVFgt/z1IeKqIg7WKaPVKDhPC8Oq+xgQekTZI1Oxo8C8C9mq1RDTNdxwSh2
+	 T6BygRm1I6QFVp8zu2k3CkNfTHq2TmyllzFOOUhrggviTctialBRM0wCOjqA9vvuBw
+	 g3Lp5LF22AzoxkzzNm6nNYcSIqpxY942FPNw2+sYEyybqdbedZxPIQYZ02zI5qfYgl
+	 UrMkgjpQTvr5w==
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-601b6146b9cso1265744eaf.0;
+        Fri, 09 May 2025 10:04:01 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVcMR7ULu6O+tiTzg2/KzntkJVrfI2xgbGXugLGT7RuxFeRYW6QdNmKFf420v7oKecE69RM0gnsomOHLbs=@vger.kernel.org, AJvYcCW+ZCrAqiDcWxF4Odqa67oPfmccaYmSBVU4qdGMND9iUCYm8uaR64lilSJxvntdw1C/cNRF8UtyKT4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyN3S/X1E0bTRNceRxeOj9/ydJMRP3EDZQ7VLcCdZpGM/70NnLx
+	4qqeDLpUQLKaIGXm8IOEux83zrKh2+Q9jGptGwT/tcNn45jUwA1UbEbAxIubQqDq3A65rOgzFz1
+	UwwIeY4XioA3RpaYqBZjTnobLMyo=
+X-Google-Smtp-Source: AGHT+IEuJ3UyJU2Ke571Dvw0ehpoP2qMb7YoHey7MtgBT4f3jUmYaxRmXBS6WsvDgsKz3hRnlqfMZOwu30053cxbSkk=
+X-Received: by 2002:a05:6820:1e16:b0:606:107a:ebd8 with SMTP id
+ 006d021491bc7-6084b64f985mr2203296eaf.5.1746810240473; Fri, 09 May 2025
+ 10:04:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250508-tegra124-cpufreq-v4-0-d142bcbd0234@gmail.com>
- <20250508-tegra124-cpufreq-v4-1-d142bcbd0234@gmail.com> <040b0d8b-e862-48dd-9b77-9266a5194f99@nvidia.com>
-In-Reply-To: <040b0d8b-e862-48dd-9b77-9266a5194f99@nvidia.com>
-From: Aaron Kling <webgeek1234@gmail.com>
-Date: Fri, 9 May 2025 11:57:20 -0500
-X-Gm-Features: AX0GCFuVMPqFC7B8B51EiIFyIqN0yLO5E4GUOE7AbDBM_ioXLvtK80spl4zANbI
-Message-ID: <CALHNRZ_AH-OkDak_RDoA3FB6EVO78r5G=5zosiJEXk4UGLH=fQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] cpufreq: tegra124: Remove use of disable_cpufreq
-To: Jon Hunter <jonathanh@nvidia.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20250430160943.2836-1-ImanDevel@gmail.com> <20250502050639.2a4mbdav4mdlhbp2@vireshk-i7>
+ <6nfpd4jvx7dmpl5hqk5nokxprxbcccah66x2mptgwxtyxmb74r@qiosxhaw3tew>
+In-Reply-To: <6nfpd4jvx7dmpl5hqk5nokxprxbcccah66x2mptgwxtyxmb74r@qiosxhaw3tew>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 9 May 2025 19:03:49 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gf00GoUUraqY75M5G9bxPkJ5WQ30m5tnksVvA=kTnabg@mail.gmail.com>
+X-Gm-Features: ATxdqUF9bTxyJDcbykjFd9xwRiJOtL6Pu5qGcvVG2O320-Jmf9UpGQ-n4HiL_Ys
+Message-ID: <CAJZ5v0gf00GoUUraqY75M5G9bxPkJ5WQ30m5tnksVvA=kTnabg@mail.gmail.com>
+Subject: Re: [PATCH v3] cpufreq: fix locking order in store_local_boost to
+ prevent deadlock
+To: Seyediman Seyedarab <imandevel@gmail.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, rafael@kernel.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, 
+	linux-kernel-mentees@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 9, 2025 at 6:04=E2=80=AFAM Jon Hunter <jonathanh@nvidia.com> wr=
-ote:
+On Fri, May 9, 2025 at 7:29=E2=80=AFAM Seyediman Seyedarab <imandevel@gmail=
+.com> wrote:
 >
->
->
-> On 09/05/2025 01:04, Aaron Kling via B4 Relay wrote:
-> > From: Aaron Kling <webgeek1234@gmail.com>
+> On 25/05/02 10:36AM, Viresh Kumar wrote:
+> > On 30-04-25, 12:09, Seyediman Seyedarab wrote:
+> > > Lockdep reports a possible circular locking dependency[1] when
+> > > writing to /sys/devices/system/cpu/cpufreq/policyN/boost,
+> > > triggered by power-profiles-daemon at boot.
+> > >
+> > > store_local_boost() used to acquire cpu_hotplug_lock *after*
+> > > the policy lock had already been taken by the store() handler.
+> > > However, the expected locking hierarchy is to acquire
+> > > cpu_hotplug_lock before the policy guard. This inverted lock order
+> > > creates a *theoretical* deadlock possibility.
+> > >
+> > > Acquire cpu_hotplug_lock in the store() handler *only* for the
+> > > local_boost attribute, before entering the policy guard block,
+> > > and remove the cpus_read_lock/unlock() calls from store_local_boost()=
+.
+> > > Also switch from guard() to scoped_guard() to allow explicitly wrappi=
+ng
+> > > the policy guard inside the cpu_hotplug_lock critical section.
+> > >
+> > >  [1]
+> > >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D
+> > >  WARNING: possible circular locking dependency detected
+> > >  6.15.0-rc4-debug #28 Not tainted
+> > >  ------------------------------------------------------
+> > >  power-profiles-/596 is trying to acquire lock:
+> > >  ffffffffb147e910 (cpu_hotplug_lock){++++}-{0:0}, at: store_local_boo=
+st+0x6a/0xd0
+> > >
+> > >  but task is already holding lock:
+> > >  ffff9eaa48377b80 (&policy->rwsem){++++}-{4:4}, at: store+0x37/0x90
+> > >
+> > >  which lock already depends on the new lock.
+> > >
+> > >  the existing dependency chain (in reverse order) is:
+> > >
+> > >  -> #2 (&policy->rwsem){++++}-{4:4}:
+> > >         down_write+0x29/0xb0
+> > >         cpufreq_online+0x841/0xa00
+> > >         cpufreq_add_dev+0x71/0x80
+> > >         subsys_interface_register+0x14b/0x170
+> > >         cpufreq_register_driver+0x154/0x250
+> > >         amd_pstate_register_driver+0x36/0x70
+> > >         amd_pstate_init+0x1e7/0x270
+> > >         do_one_initcall+0x67/0x2c0
+> > >         kernel_init_freeable+0x230/0x270
+> > >         kernel_init+0x15/0x130
+> > >         ret_from_fork+0x2c/0x50
+> > >         ret_from_fork_asm+0x11/0x20
+> > >
+> > >  -> #1 (subsys mutex#3){+.+.}-{4:4}:
+> > >         __mutex_lock+0xc2/0x930
+> > >         subsys_interface_register+0x83/0x170
+> > >         cpufreq_register_driver+0x154/0x250
+> > >         amd_pstate_register_driver+0x36/0x70
+> > >         amd_pstate_init+0x1e7/0x270
+> > >         do_one_initcall+0x67/0x2c0
+> > >         kernel_init_freeable+0x230/0x270
+> > >         kernel_init+0x15/0x130
+> > >         ret_from_fork+0x2c/0x50
+> > >         ret_from_fork_asm+0x11/0x20
+> > >
+> > >  -> #0 (cpu_hotplug_lock){++++}-{0:0}:
+> > >         __lock_acquire+0x1087/0x17e0
+> > >         lock_acquire.part.0+0x66/0x1b0
+> > >         cpus_read_lock+0x2a/0xc0
+> > >         store_local_boost+0x6a/0xd0
+> > >         store+0x50/0x90
+> > >         kernfs_fop_write_iter+0x135/0x200
+> > >         vfs_write+0x2ab/0x540
+> > >         ksys_write+0x6c/0xe0
+> > >         do_syscall_64+0xbb/0x1d0
+> > >         entry_SYSCALL_64_after_hwframe+0x56/0x5e
+> > >
+> > > Signed-off-by: Seyediman Seyedarab <ImanDevel@gmail.com>
+> > > ---
+> > > Changes in v3:
+> > >  - Rebased over PM tree's linux-next branch
+> > >  - Added a comment to explain why this piece of code is required
+> > >  - Switched from guard() to scoped_guard() to allow explicitly wrappi=
+ng
+> > >    the policy guard inside the cpu_hotplug_lock critical section.
+> > >
+> > > Changes in v2:
+> > >  - Restrict cpu_hotplug_lock acquisition to only
+> > >    the local_boost attribute in store() handler.
+> > >
+> > > Regards,
+> > > Seyediman
+> > >
+> > >  drivers/cpufreq/cpufreq.c | 23 ++++++++++++++++-------
+> > >  1 file changed, 16 insertions(+), 7 deletions(-)
+> > >
+> > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > > index 21fa733a2..b349adbeb 100644
+> > > --- a/drivers/cpufreq/cpufreq.c
+> > > +++ b/drivers/cpufreq/cpufreq.c
+> > > @@ -622,10 +622,7 @@ static ssize_t store_local_boost(struct cpufreq_=
+policy *policy,
+> > >     if (!policy->boost_supported)
+> > >             return -EINVAL;
+> > >
+> > > -   cpus_read_lock();
+> > >     ret =3D policy_set_boost(policy, enable);
+> > > -   cpus_read_unlock();
+> > > -
+> > >     if (!ret)
+> > >             return count;
+> > >
+> > > @@ -1006,16 +1003,28 @@ static ssize_t store(struct kobject *kobj, st=
+ruct attribute *attr,
+> > >  {
+> > >     struct cpufreq_policy *policy =3D to_policy(kobj);
+> > >     struct freq_attr *fattr =3D to_attr(attr);
+> > > +   int ret =3D -EBUSY;
+> > >
+> > >     if (!fattr->store)
+> > >             return -EIO;
+> > >
+> > > -   guard(cpufreq_policy_write)(policy);
+> > > +   /*
+> > > +    * store_local_boost() requires cpu_hotplug_lock to be held, and =
+must be
+> > > +    * called with that lock acquired *before* taking policy->rwsem t=
+o avoid
+> > > +    * lock ordering violations.
+> > > +    */
+> > > +   if (fattr =3D=3D &local_boost)
+> > > +           cpus_read_lock();
+> > >
+> > > -   if (likely(!policy_is_inactive(policy)))
+> > > -           return fattr->store(policy, buf, count);
+> > > +   scoped_guard(cpufreq_policy_write, policy) {
+> > > +           if (likely(!policy_is_inactive(policy)))
+> > > +                   ret =3D fattr->store(policy, buf, count);
+> > > +   }
+> > >
+> > > -   return -EBUSY;
+> > > +   if (fattr =3D=3D &local_boost)
+> > > +           cpus_read_unlock();
+> > > +
+> > > +   return ret;
+> > >  }
 > >
-> > Instead, unregister the cpufreq device for this fatal fail case.
->
-> This is not a complete sentence. Seems to be a continuation of the
-> subject which is not clear to the reader (at least not to me). No
-> mention of why or what this is fixing, if anything?
-
-I can clean up the subject and message in a new revision. More on the
-reasoning below.
-
+> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 > >
-> > Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
-> > ---
-> >   drivers/cpufreq/tegra124-cpufreq.c | 5 ++++-
-> >   1 file changed, 4 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/cpufreq/tegra124-cpufreq.c b/drivers/cpufreq/tegra=
-124-cpufreq.c
-> > index 514146d98bca2d8aa59980a14dff3487cd8045f6..bc0691e8971f9454def37f4=
-89e4a3e244100b9f4 100644
-> > --- a/drivers/cpufreq/tegra124-cpufreq.c
-> > +++ b/drivers/cpufreq/tegra124-cpufreq.c
-> > @@ -168,7 +168,10 @@ static int __maybe_unused tegra124_cpufreq_resume(=
-struct device *dev)
-> >   disable_dfll:
-> >       clk_disable_unprepare(priv->dfll_clk);
-> >   disable_cpufreq:
-> > -     disable_cpufreq();
-> > +     if (!IS_ERR(priv->cpufreq_dt_pdev)) {
-> > +             platform_device_unregister(priv->cpufreq_dt_pdev);
-> > +             priv->cpufreq_dt_pdev =3D ERR_PTR(-ENODEV);
-> > +     }
+> > --
+> > viresh
 >
-> So you are proposing to unregister the device in resume? That seems odd.
-> I see there is no remove for this driver, but I really don't see the
-> value in this.
+> Hi there,
+>
+> Just following up to see if there's anything you'd like me to
+> change or address in the patch before it can move forward.
+> Please let me know if any updates are needed.
 
-This was suggested by Viresh in v1 [0] to replace the call to
-disable_cpufreq, which is not currently an exported function. I'm open
-to other suggestions.
+I'm kind of wondering why local_boost needs cpus_read_lock() at all.
+Holding the policy rwsem blocks CPU online/offline already for this
+policy.
 
-Sincerely,
-Aaron
-
-[0] https://lore.kernel.org/all/20250421054452.fdlrrhtsimyucbup@vireshk-i7/
+Is that because ->set_boost() may need to synchronize with the other polici=
+es?
 
