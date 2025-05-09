@@ -1,288 +1,190 @@
-Return-Path: <linux-pm+bounces-26927-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26928-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65B3EAB1292
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 13:53:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 864B8AB13AB
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 14:43:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71CDB7B93E5
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 11:51:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 861483BFDFB
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 12:43:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1B28290DAC;
-	Fri,  9 May 2025 11:51:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D896290BCB;
+	Fri,  9 May 2025 12:43:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="rRT6by3M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IYDWnQWM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EDA178F34
-	for <linux-pm@vger.kernel.org>; Fri,  9 May 2025 11:51:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 085BC2900B7
+	for <linux-pm@vger.kernel.org>; Fri,  9 May 2025 12:43:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746791505; cv=none; b=u0sl6IJwdZw7I9OclzqU/inkE/3Vv/XnpsnXJ+VULV2Xh4LRQ1FGwlEnLu8dcLWzh5hp59TudjdZpLM/ckGiIw8fJa7xXCiyeAMuGAOjK8EsK3ZjPFYMLruVAu9HClAYPnV57Zbou5r7mabVOQiR/X0w9AREqDTqSsZig812MVc=
+	t=1746794618; cv=none; b=ZPGsFnoGdbkWrxD1K17vJNEdvoOqgizVEsRsFjiJHtKzfBGH/3Y2oBgksY0bPI651Mbud8ag5fr7+1QpIII7L6CvcPVadoAVirRniuSHKohXIanFvPRm5iR1OaTZUo5fgbEYfPCSQ5bePFkXRE7OYtRGZZEWvSHU29Ya8AIDuso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746791505; c=relaxed/simple;
-	bh=94hSLVwahZL6uSGp/GCIw7ak3VmONi+Q3s+hjbITQj8=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=CuEksQ0Ie+wbe6qzk+DT0x142Dky407LRX62QVIBQbXm5gbq0d8E4Tl4vH7kHM8u1KDa+HMxaiCMbmCYbL44Jvaqn2U5OgtjfZ1413nIuTeSusQ/R6uNDxgnbFnbEQ47LSHfYKDOFER6e2QCt+DISqY3dMuFSDGgxROyFbDwR3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=rRT6by3M; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-ac2c663a3daso393841166b.2
-        for <linux-pm@vger.kernel.org>; Fri, 09 May 2025 04:51:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1746791500; x=1747396300; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=HcCUAVth4/4X0ivCD1jla215xTKz2P8JDpUcQkYuzX4=;
-        b=rRT6by3MuduwkSN/H4fHg3R3x+qWcNizG+URaLmW2ISNy7GYhh1fpzPFZ2G9ffPYyG
-         izXnmui2iSTjI7TCX9BMj3pUeYywAHM/XTvh6qShsaZv7ZCfu5a9LmdeEdkWdQqHieBL
-         885NsSYTtAVhqY4H/WcTuZLEhEu2Hs8NH69GoHtqgg9WVluFkkvlEjNo8US434zLjjE3
-         9b9lUJByaoj/bm96D6m7jyu11BYEwGfxmkreqcvheUE1HT6/3KG89LlLTNICJ9ZSBMup
-         vyXtV3ld8DkwKMs3j1IEaG9tbV8pTI6UDmLVZzJcr6fAofr+FdURv02Ky4LCzDjHihrF
-         rgJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746791500; x=1747396300;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HcCUAVth4/4X0ivCD1jla215xTKz2P8JDpUcQkYuzX4=;
-        b=qdsaxL/Dukr7lBo5M4p9YoI881HsCTEuSHXxt70I74KPpLba7Ba/jqxyen98r+T8Ly
-         iQfwp3oyLiEsZouCi7Vx3kRDjPZzY3376uQUpcc6zqfQs8tHHI8/pRzaP99C7c/ehGGV
-         RU2slOTW17P4HdQptJBZjoEVVzOSMDQd0QDKnGWVaDnrUI1rKs8utxDSVdVxNzKEpHXi
-         p1us1ApUpUbB5VPq1X5Z/MmXrlJUZ2sU/YTM2NZNVwNSbXGuZx0kwxleWbGQDnspkv6J
-         dxFdX6kFgPaTa0AGJXLMfnYk60KU0KxSqIT5m0jZ9eUyQHhwUlUIcaz6z8MmTbK6LdKA
-         +jLw==
-X-Forwarded-Encrypted: i=1; AJvYcCXAi+Xk4lYcd7BBFtySU+ynfbo33ynFLXS/kZaupSPXYHsvMLTvqahMwL5dJVTTwUY4dkxskx1pPA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyY+bY7n0F7bEPjtFohI1UOccfC1KaD2/h4Y7cp6O2NTwP7bFsB
-	4dFlukxRi6en4jKZvi2lb0H0N48ZNxeWwmFskA++inMDRxHvlArsHHN78DqxmHA=
-X-Gm-Gg: ASbGncuH9nuCPGjsOD70ei8G0+3xl4kNzrLzzzr2UPZibZ+pSWySY+Um13zyb1nuZe8
-	t+2n9iG1cKklOluhKdSgqoIiVRPR2VKRycDkef0zVdXE4s4k3mluMUtlFlZDPK4fyA61qnhmXyd
-	Qeo0XQ0MBps4uXpsR5km8Jsc5cJ0bPZBSBCfiFSKvX7Ah4zy3VPz/5DEOu76GXt+bXlGKCZ4Gyt
-	UTrFDqL7O+hjzPleIq81xeph4Pl2PLzeoWd8G8tFk+Cyaz5kfpJOzptclmNThjy9ieU0LNwD/GO
-	G46smAoG6THuqlcK+qlTeT6RdMr6uyaUMXLNP8pMYD+VabZi
-X-Google-Smtp-Source: AGHT+IFrGDRXG6FAVEd4uSESGaBsfaTJHvGQG8PV98kRwmaQFMuRJod0R5mnXx5DDPecf/kyISoRWw==
-X-Received: by 2002:a17:907:97d2:b0:ad1:77aa:503 with SMTP id a640c23a62f3a-ad219124207mr305429066b.36.1746791500229;
-        Fri, 09 May 2025 04:51:40 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.50])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad2197bdd63sm138709266b.154.2025.05.09.04.51.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 May 2025 04:51:39 -0700 (PDT)
-Message-ID: <95f5923f-7a8f-4947-b588-419525930bcb@tuxon.dev>
-Date: Fri, 9 May 2025 14:51:38 +0300
+	s=arc-20240116; t=1746794618; c=relaxed/simple;
+	bh=Vbz7G42PirpbKBD77o5ENfHxbXLMEorCXEdJM/isWt8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sKDBwWGhG3gQjnXkiSjZ9JAtDqQmFwewM7L2g6LgaUZp/poKNehKLVcNdZHK+kpX5l29bzUQdrqiK97dhpSL2qRMGiC76uef1SLGT0nVY9N14W4tvJsNVp5fTjymD5D97eA8xt6FoBqTKfqJBnBv/uhSdTshbjOFjCBVe9lcopc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IYDWnQWM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75E96C4AF0B
+	for <linux-pm@vger.kernel.org>; Fri,  9 May 2025 12:43:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746794617;
+	bh=Vbz7G42PirpbKBD77o5ENfHxbXLMEorCXEdJM/isWt8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=IYDWnQWMI3158jM+Z1AK67kgYFUk2and3/O6hegYyFzeblFFUeZbO7x+I8BvyRpMR
+	 gSGdSBxh6q+n+se+U0WWOuM2eCtnRC9QdpqX49cGdBURyaGqsmnGPIIDHJU9htzb/s
+	 0WousJLIQvWuoYEWh8TprMXgpnc0SqXezqOkTzCjmQUS3Fgbx124GbW4qiInnCdVz/
+	 +8fYjOaU+oLMyeyFVGH9CGyZI2/dyI+/KIEyGNzjqJmA7W1ocqoS8mSDZ8GPJ0Wa88
+	 ZZr8JIeYyCvQGjnM7JKq0Rk2gGWQRHZDuprSMlPbHVTu6LfBXg3EXDnqp8IShuhuIh
+	 2EVyssQw2QwIw==
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-2d0920ce388so1137592fac.0
+        for <linux-pm@vger.kernel.org>; Fri, 09 May 2025 05:43:37 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVvlzdVKwj9N7bhJ9Y/VkHUbZtlMuURFgdOwvGzEe0sTtDn95+/C5Y50Mql/HRzFCTV37O3PfRZ5A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsTuhX3DZMIKCeasrGF/UxonN4YOBgyqnM2OOThu2BMMSRK5fC
+	h7YmXY22Nq05ovBnAlsehMaCJwIJjLvWaWMFQBkM1HuSPA30sGX3o3XAgKwokzlI0507T70Afs/
+	TtW8y9zvsCuRhv6ibYhqRYzcgrHA=
+X-Google-Smtp-Source: AGHT+IF+IbGQMc4CsTbZ/CT8sCjC8oVH+fQBWY/V3OyWVbM+8gC1zoDl34U1OW0RddwsglJ/2x6Pt+pD8gBgsfs8QTQ=
+X-Received: by 2002:a05:6870:e2cf:b0:2bc:7007:5145 with SMTP id
+ 586e51a60fabf-2dba42a0a61mr1980034fac.9.1746794616731; Fri, 09 May 2025
+ 05:43:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] driver core: platform: Use devres group to free driver
- probe resources
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-To: Jonathan Cameron <jic23@kernel.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, dakr@kernel.org,
- ulf.hansson@linaro.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- geert@linux-m68k.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-iio@vger.kernel.org,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>
-References: <20250215130849.227812-1-claudiu.beznea.uj@bp.renesas.com>
- <2025021539-untrained-prompter-a48f@gregkh>
- <4bf01946-90e3-4169-91fa-10d9f90310e9@tuxon.dev>
- <8d83ea72-bb81-4c63-bf69-28cf5848ae20@tuxon.dev>
- <20250305140309.744866b2@jic23-huawei> <Z8k8lDxA53gUJa0n@google.com>
- <f74085be-7b14-4551-a0a7-779318a5dc70@tuxon.dev>
- <20250330163129.02f24afb@jic23-huawei>
- <5bca6dfd-fe03-4c44-acf4-a51673124338@tuxon.dev>
-Content-Language: en-US
-In-Reply-To: <5bca6dfd-fe03-4c44-acf4-a51673124338@tuxon.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250508211822.2698678-1-superm1@kernel.org>
+In-Reply-To: <20250508211822.2698678-1-superm1@kernel.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 9 May 2025 14:43:25 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iYDeukd+=c0hEwZZSB4sUtLi+XrSjqxDPnrZNR+jvMnw@mail.gmail.com>
+X-Gm-Features: ATxdqUGYh9-y71S0sk77YG8b3FzeZLFxGyxSB3Zz--hpA_Q7OBrD9zapu5PeBio
+Message-ID: <CAJZ5v0iYDeukd+=c0hEwZZSB4sUtLi+XrSjqxDPnrZNR+jvMnw@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: hibernate: Explicitly set `PM_SUSPEND_MAX` at
+ hibernate entry
+To: Mario Limonciello <superm1@kernel.org>
+Cc: mario.limonciello@amd.com, rafael@kernel.org, pavel@kernel.org, 
+	len.brown@intel.com, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi, Rafael, Ulf, PM list,
+On Thu, May 8, 2025 at 11:18=E2=80=AFPM Mario Limonciello <superm1@kernel.o=
+rg> wrote:
+>
+> From: Mario Limonciello <mario.limonciello@amd.com>
+>
+> `pm_debug_messages` only works at suspend time, not hibernate. This is
+> because during hibernate the `pm_suspend_target_state` is not set.
+>
+> Explicitly set pm_suspend_target_state at hibernate time. Since the symbo=
+l
+> is only enabled under `CONFIG_SUSPEND`, adjust symbol location and allow =
+it
+> under `CONFIG_HIBERNATION` too.
 
+No, this is not the right fix.
 
-On 09.04.2025 19:12, Claudiu Beznea wrote:
-> Hi, Rafael,
-> 
-> On 30.03.2025 18:31, Jonathan Cameron wrote:
->> On Thu, 27 Mar 2025 18:47:53 +0200
->> Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
->>
->>> Hi, Rafael,
->>>
->>> On 06.03.2025 08:11, Dmitry Torokhov wrote:
->>>> On Wed, Mar 05, 2025 at 02:03:09PM +0000, Jonathan Cameron wrote:  
->>>>> On Wed, 19 Feb 2025 14:45:07 +0200
->>>>> Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
->>>>>  
->>>>>> Hi, Daniel, Jonathan,
->>>>>>
->>>>>> On 15.02.2025 15:51, Claudiu Beznea wrote:  
->>>>>>> Hi, Greg,
->>>>>>>
->>>>>>> On 15.02.2025 15:25, Greg KH wrote:    
->>>>>>>> On Sat, Feb 15, 2025 at 03:08:49PM +0200, Claudiu wrote:    
->>>>>>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>>>>>>>>
->>>>>>>>> On the Renesas RZ/G3S (and other Renesas SoCs, e.g., RZ/G2{L, LC, UL}),
->>>>>>>>> clocks are managed through PM domains. These PM domains, registered on
->>>>>>>>> behalf of the clock controller driver, are configured with
->>>>>>>>> GENPD_FLAG_PM_CLK. In most of the Renesas drivers used by RZ SoCs, the
->>>>>>>>> clocks are enabled/disabled using runtime PM APIs. The power domains may
->>>>>>>>> also have power_on/power_off support implemented. After the device PM
->>>>>>>>> domain is powered off any CPU accesses to these domains leads to system
->>>>>>>>> aborts.
->>>>>>>>>
->>>>>>>>> During probe, devices are attached to the PM domain controlling their
->>>>>>>>> clocks and power. Similarly, during removal, devices are detached from the
->>>>>>>>> PM domain.
->>>>>>>>>
->>>>>>>>> The detachment call stack is as follows:
->>>>>>>>>
->>>>>>>>> device_driver_detach() ->
->>>>>>>>>   device_release_driver_internal() ->
->>>>>>>>>     __device_release_driver() ->
->>>>>>>>>       device_remove() ->
->>>>>>>>>         platform_remove() ->
->>>>>>>>> 	  dev_pm_domain_detach()
->>>>>>>>>
->>>>>>>>> During driver unbind, after the device is detached from its PM domain,
->>>>>>>>> the device_unbind_cleanup() function is called, which subsequently invokes
->>>>>>>>> devres_release_all(). This function handles devres resource cleanup.
->>>>>>>>>
->>>>>>>>> If runtime PM is enabled in driver probe via devm_pm_runtime_enable(), the
->>>>>>>>> cleanup process triggers the action or reset function for disabling runtime
->>>>>>>>> PM. This function is pm_runtime_disable_action(), which leads to the
->>>>>>>>> following call stack of interest when called:
->>>>>>>>>
->>>>>>>>> pm_runtime_disable_action() ->
->>>>>>>>>   pm_runtime_dont_use_autosuspend() ->
->>>>>>>>>     __pm_runtime_use_autosuspend() ->
->>>>>>>>>       update_autosuspend() ->
->>>>>>>>>         rpm_idle()
->>>>>>>>>
->>>>>>>>> The rpm_idle() function attempts to resume the device at runtime. However,
->>>>>>>>> at the point it is called, the device is no longer part of a PM domain
->>>>>>>>> (which manages clocks and power states). If the driver implements its own
->>>>>>>>> runtime PM APIs for specific functionalities - such as the rzg2l_adc
->>>>>>>>> driver - while also relying on the power domain subsystem for power
->>>>>>>>> management, rpm_idle() will invoke the driver's runtime PM API. However,
->>>>>>>>> since the device is no longer part of a PM domain at this point, the PM
->>>>>>>>> domain's runtime PM APIs will not be called. This leads to system aborts on
->>>>>>>>> Renesas SoCs.
->>>>>>>>>
->>>>>>>>> Another identified case is when a subsystem performs various cleanups
->>>>>>>>> using device_unbind_cleanup(), calling driver-specific APIs in the process.
->>>>>>>>> A known example is the thermal subsystem, which may call driver-specific
->>>>>>>>> APIs to disable the thermal device. The relevant call stack in this case
->>>>>>>>> is:
->>>>>>>>>
->>>>>>>>> device_driver_detach() ->
->>>>>>>>>   device_release_driver_internal() ->
->>>>>>>>>     device_unbind_cleanup() ->
->>>>>>>>>       devres_release_all() ->
->>>>>>>>>         devm_thermal_of_zone_release() ->
->>>>>>>>> 	  thermal_zone_device_disable() ->
->>>>>>>>> 	    thermal_zone_device_set_mode() ->
->>>>>>>>> 	      struct thermal_zone_device_ops::change_mode()
->>>>>>>>>
->>>>>>>>> At the moment the driver-specific change_mode() API is called, the device
->>>>>>>>> is no longer part of its PM domain. Accessing its registers without proper
->>>>>>>>> power management leads to system aborts.
->>>>>>>>>
->>>>>>>>> Open a devres group before calling the driver probe, and close it
->>>>>>>>> immediately after the driver remove function is called and before
->>>>>>>>> dev_pm_domain_detach(). This ensures that driver-specific devm actions or
->>>>>>>>> reset functions are executed immediately after the driver remove function
->>>>>>>>> completes. Additionally, it prevents driver-specific runtime PM APIs from
->>>>>>>>> being called when the device is no longer part of its power domain.
->>>>>>>>>
->>>>>>>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>>>>>>>> ---
->>>>>>>>>
->>>>>>>>> Hi,  
->>>>>
->>>>> Hi Claudiu, Greg,
->>>>>
->>>>> Sorry, I missed this thread whilst travelling and only saw it because
->>>>> of reference from the in driver solution.
->>>>>  
->>>>>>>>>
->>>>>>>>> Although Ulf gave its green light for the approaches on both IIO [1],
->>>>>>>>> [2] and thermal subsystems [3], Jonathan considered unacceptable the
->>>>>>>>> approaches in [1], [2] as he considered it may lead to dificult to
->>>>>>>>> maintain code and code opened to subtle bugs (due to the potential of
->>>>>>>>> mixing devres and non-devres calls). He pointed out a similar approach
->>>>>>>>> that was done for the I2C bus [4], [5].
->>>>>>>>>
->>>>>>>>> As the discussions in [1], [2] stopped w/o a clear conclusion, this
->>>>>>>>> patch tries to revive it by proposing a similar approach that was done
->>>>>>>>> for the I2C bus.
->>>>>>>>>
->>>>>>>>> Please let me know you input.    
->>>>>>>>
->>>>>>>> I'm with Jonathan here, the devres stuff is getting crazy here and you
->>>>>>>> have drivers mixing them and side affects happening and lots of
->>>>>>>> confusion.  Your change here is only going to make it even more
->>>>>>>> confusing, and shouldn't actually solve it for other busses (i.e. what
->>>>>>>> about iio devices NOT on the platform bus?)    
->>>>>
->>>>> In some cases they are already carrying the support as per the link
->>>>> above covering all i2c drivers.  I'd like to see a generic solution and
->>>>> I suspect pushing it to the device drivers rather than the bus code
->>>>> will explode badly and leave us with subtle bugs where people don't
->>>>> realise it is necessary. 
->>>>>
->>>>> https://lore.kernel.org/all/20250224120608.1769039-1-claudiu.beznea.uj@bp.renesas.com/
->>>>> is a lot nastier looking than what we have here. I'll review that in a minute
->>>>> to show that it need not be that bad, but none the less not pleasant.
->>>>>
->>>>> +CC linux-iio to join up threads and Dmitry wrt to i2c case (and HID that does
->>>>> similar)  
->>>>
->>>> We should not expect individual drivers handle this, because this is a
->>>> layering violation: they need to know implementation details of the bus
->>>> code to know if the bus is using non-devres managed resources, and
->>>> adjust their behavior. Moving this into driver core is also not
->>>> feasible, as not all buses need it. So IMO this should belong to
->>>> individual bus code.
->>>>
->>>> Instead of using devres group a bus may opt to use
->>>> devm_add_action_or_reset() and other devm APIs to make sure bus'
->>>> resource unwinding is carried in the correct order relative to freeing
->>>> driver-owned resources.  
->>>
->>> Can you please let us know your input on the approach proposed in this
->>> patch? Or if you would prefer devm_add_action_or_reset() as suggested by
->>> Dmitry? Or if you consider another approach would fit better?
->>>
->>> Currently there were issues identified with the rzg2l-adc driver (driver
->>> based solution proposed in [1]) and with the rzg3s thermal driver (solved
->>> by function rzg3s_thermal_probe() from [2]).
->>>
->>> As expressed previously by Jonathan and Dimitry this is a common problem
->>> and as the issue is due to a call in the bus driver, would be better and
->>> simpler to handle it in the bus driver. Otherwise, individual drivers would
->>> have to be adjusted in a similar way.
->>>
->>
->> Rafael,
->>
->> Greg suggested we ask for your input on the right option:
->>
->> https://lore.kernel.org/all/2025032703-genre-excitable-9473@gregkh/
->> (that thread has the other option).
-> 
-> Can you please let us know your opinion on this?
-Can you please let us know if you have any suggestions for this?
+Apart from the build issue introduced by it as reported by 0-day,
+pm_suspend_target_state is suspend-only and setting it during
+hibernation is almost guaranteed to confuse things somewhere.
 
-Thank you,
-Claudiu
+Hibernation  needs to be covered in a different way.
+
+I'll post my fix shortly (along with some other changes on top of it).
+
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v2:
+>  * Fix for lkp robot failure where no CONFIG_SUSPEND
+> ---
+>  include/linux/suspend.h  | 9 ++++++---
+>  kernel/power/hibernate.c | 2 ++
+>  kernel/power/main.c      | 3 +++
+>  kernel/power/suspend.c   | 2 --
+>  4 files changed, 11 insertions(+), 5 deletions(-)
+>
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index da6ebca3ff774..b66be47ef5282 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -142,8 +142,13 @@ struct platform_s2idle_ops {
+>         void (*end)(void);
+>  };
+>
+> -#ifdef CONFIG_SUSPEND
+> +#if defined(CONFIG_SUSPEND) || defined(CONFIG_HIBERNATION)
+>  extern suspend_state_t pm_suspend_target_state;
+> +#else
+> +#define pm_suspend_target_state        (PM_SUSPEND_ON)
+> +#endif
+> +
+> +#ifdef CONFIG_SUSPEND
+>  extern suspend_state_t mem_sleep_current;
+>  extern suspend_state_t mem_sleep_default;
+>
+> @@ -279,8 +284,6 @@ extern bool sync_on_suspend_enabled;
+>  #else /* !CONFIG_SUSPEND */
+>  #define suspend_valid_only_mem NULL
+>
+> -#define pm_suspend_target_state        (PM_SUSPEND_ON)
+> -
+>  static inline void pm_suspend_clear_flags(void) {}
+>  static inline void pm_set_suspend_via_firmware(void) {}
+>  static inline void pm_set_resume_via_firmware(void) {}
+> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> index f0db9d1896e80..8fb82a62b85f1 100644
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -772,6 +772,7 @@ int hibernate(void)
+>         }
+>
+>         pr_info("hibernation entry\n");
+> +       pm_suspend_target_state =3D PM_SUSPEND_MAX;
+>         pm_prepare_console();
+>         error =3D pm_notifier_call_chain_robust(PM_HIBERNATION_PREPARE, P=
+M_POST_HIBERNATION);
+>         if (error)
+> @@ -852,6 +853,7 @@ int hibernate(void)
+>         hibernate_release();
+>   Unlock:
+>         unlock_system_sleep(sleep_flags);
+> +       pm_suspend_target_state =3D PM_SUSPEND_ON;
+>         pr_info("hibernation exit\n");
+>
+>         return error;
+> diff --git a/kernel/power/main.c b/kernel/power/main.c
+> index 97746f08b762b..0440644695c76 100644
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
+> @@ -20,6 +20,9 @@
+>
+>  #include "power.h"
+>
+> +suspend_state_t pm_suspend_target_state;
+> +EXPORT_SYMBOL_GPL(pm_suspend_target_state);
+> +
+>  #ifdef CONFIG_PM_SLEEP
+>  /*
+>   * The following functions are used by the suspend/hibernate code to tem=
+porarily
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index 8eaec4ab121d4..08cb71991795d 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -48,8 +48,6 @@ const char *mem_sleep_states[PM_SUSPEND_MAX];
+>
+>  suspend_state_t mem_sleep_current =3D PM_SUSPEND_TO_IDLE;
+>  suspend_state_t mem_sleep_default =3D PM_SUSPEND_MAX;
+> -suspend_state_t pm_suspend_target_state;
+> -EXPORT_SYMBOL_GPL(pm_suspend_target_state);
+>
+>  unsigned int pm_suspend_global_flags;
+>  EXPORT_SYMBOL_GPL(pm_suspend_global_flags);
+> --
+> 2.43.0
+>
 
