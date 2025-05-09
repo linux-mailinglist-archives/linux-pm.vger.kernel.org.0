@@ -1,182 +1,120 @@
-Return-Path: <linux-pm+bounces-26943-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26944-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 395DDAB14E0
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 15:22:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1632DAB151F
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 15:30:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0318C4A6AC8
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 13:20:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCAED189E07F
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 13:26:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BDA5290BB5;
-	Fri,  9 May 2025 13:15:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1AA729189B;
+	Fri,  9 May 2025 13:25:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rosenzweig.io header.i=@rosenzweig.io header.b="wPSI/vr3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ea3R4BAv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BD2821E0BA;
-	Fri,  9 May 2025 13:15:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767FC291899
+	for <linux-pm@vger.kernel.org>; Fri,  9 May 2025 13:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746796539; cv=none; b=Fc49O8LDVtJSZjFBlYC8mviTXcJZPBOtEmnLzoieO+ijT+cJwckjCMzcqbdf/vcZ+b5yXvqv6cD34VqJP/TewIWBBm55Cwvvlc39gJDR1SpnbFQpSHepbre8xHrRXollI8RyWr/5oi8NvWeTm/ATNXEUKrjd5ZFxLB+w5I+4jfc=
+	t=1746797125; cv=none; b=PvN5AGDZk8ORf+CD+94Q0uFLOh1PFSw3Mq+mVgVt/uEDYGac/blJl6dcRJ71PWIjEzUNuVS0ph77QkoYEysinNjxDUzgdjlm/IQzjGwKZXTmL1N0mLcplq7meocw8RRoOGCJAlQnDGgU6E8ejfqqclszx0HFx+uzpDjJ71Vl7oE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746796539; c=relaxed/simple;
-	bh=UXyzzDpdehczTMF4+3xLIH5vpakhzPYgYGKSHcHP8YU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ec4d6pDWr7lUE4t0CfCXbUCOb7sASn6JuLz/oiZF7foPlKTf1YMwH9QrylUn+sdh+/uSzEKKwk06Cv3dzgKST3aeRnQWcm7fVe3l0OyFmOAmykaLeL6tlDIEa9+0vowV85M1lxLNk0EEJ4MuAVY7erbryzM8PVSMaM+Ebly2PHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rosenzweig.io; spf=pass smtp.mailfrom=rosenzweig.io; dkim=pass (2048-bit key) header.d=rosenzweig.io header.i=@rosenzweig.io header.b=wPSI/vr3; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rosenzweig.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rosenzweig.io
-Date: Fri, 9 May 2025 09:15:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rosenzweig.io;
-	s=key1; t=1746796534;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/fUy2yKh/RPLz65MGjD30fnH1nOIBpirqiwEvJyIpAQ=;
-	b=wPSI/vr3u7SF6YoZXAxqTcCV3vNyXtHP702KgSsJfIP001Re4QxA4KKir7k+2xF8WKhEtR
-	MxLxGF26N6mm9JyRJVvLPSHOt3usxmKhfqCNPUlYvJupgrNNo1kHOVb62VqGkQ9JL2Pl+v
-	8vhrbDHt/9MdIfWxF2vK6khuTnnV9AYsi28eYyt+i0t+Il8YbKvw6KPW5A8IgnRr4UU5QJ
-	IBvq4amg/uhS+5fEQsQ7Us10in8UzaccSCMTCAwSO4UlHozBHx3N1dfFbPSmJyWm1x3P2V
-	hey2AhkAnmGGJzT11fgVKNicTlm6tXcPwM5WXn5fAb8S3UdIb8f/ZTSTyz12CA==
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Alyssa Rosenzweig <alyssa@rosenzweig.io>
-To: sven@svenpeter.dev
-Cc: Janne Grunau <j@jannau.net>, Neal Gompa <neal@gompa.dev>,
-	Hector Martin <marcan@marcan.st>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-	Marc Zyngier <maz@kernel.org>,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v4 0/9] Apple Mac System Management Controller
-Message-ID: <aB3_8QidjfNRPmOG@blossom>
-References: <20250503-smc-6-15-v4-0-500b9b6546fc@svenpeter.dev>
+	s=arc-20240116; t=1746797125; c=relaxed/simple;
+	bh=PCJ2NA79JSKUQsjDG0PDOEoE6D6p5/xYWBudELjBPw8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GFQiCOSODS9tIlYoWY5XiYIEbr3wPyRSxtMSlRAR4WhUTDx9o0XgtXJHNxjaIGtVeLFHoXD614aWmC/mTCM7nSi33wiNC771E4cYVIie7PcYaikS90WTuYSeROH3gAd87lx1Y/sof7QLNdbdWLxSgjliKAqyCrobsGWpYZF9+h0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ea3R4BAv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2C3AC4CEE4
+	for <linux-pm@vger.kernel.org>; Fri,  9 May 2025 13:25:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746797124;
+	bh=PCJ2NA79JSKUQsjDG0PDOEoE6D6p5/xYWBudELjBPw8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Ea3R4BAv3VR94Qk3OAG6kwcaiKC5pVWu8IIPL44Dyuf9SBpc1mcSmskEf391ryglE
+	 4T7z6MMF3SYah1psD4t+yBT6Z7OD18P2EukuSLQp7W6jCx8gqCxlaG4gd+3r1dj+EI
+	 VrBZ0JBPC/T1DoVfvoXKOrWSfwHPGvws8JjD+rsDykddux5vAhoZkjYcI45sQo6DsX
+	 N3SrSiydNyXXz+zVXr1JxN1XFJRAVN+Bsb+2iPwzxnuQjC0NV8xsjGmgKSsEFmVO+q
+	 kJyjAkh9nzOjvCNuDJ1WHLt2iUGL2YiFugygj2K6aqGnl3vSFccK957madTU743Gjv
+	 7VsuZnRpRkDLg==
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-401c43671ecso1245330b6e.0
+        for <linux-pm@vger.kernel.org>; Fri, 09 May 2025 06:25:24 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUWtoSGPf4Sc9G53Mub7S4trv+so6XPL+nRjIDcqaQTj8BK6eI/U23FN+nTQY6J+AT7oa/uKdsVZA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyU8oxQmpm/RvQnrnH9AjRhjdcQYaL4znPXLzJNmln737WQ08hX
+	uoSesKaomBgei0dFyvlmxcFPJsoftemNKB0wTQ1Av0uS35Pn/5DNKae4IN5+0f4BChIqJ600bBU
+	fGCV/BmsHfjKoLCbAMA3ZLF/oYNA=
+X-Google-Smtp-Source: AGHT+IFcwjuXv5BQWusvPtLznol3Zdz7ZENSyJuUSpHfIJhbikQN3tt7De1ItA1Z9GpogRuicd2BGuNbyVRIMjr0XwY=
+X-Received: by 2002:a05:6808:2107:b0:401:bb42:700c with SMTP id
+ 5614622812f47-40377a09173mr4390221b6e.19.1746797124222; Fri, 09 May 2025
+ 06:25:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250503-smc-6-15-v4-0-500b9b6546fc@svenpeter.dev>
-X-Migadu-Flow: FLOW_OUT
+References: <5524b46b-88c4-46f6-ab12-96c6a10d84dc@kernel.org>
+In-Reply-To: <5524b46b-88c4-46f6-ab12-96c6a10d84dc@kernel.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 9 May 2025 15:25:13 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gpcE6PoJ0QSW2sVSHPnxBw2GSzncP7xtMYDi4JSG5CTA@mail.gmail.com>
+X-Gm-Features: ATxdqUH7ZfGWDwCU44yHrquLBC_p6-15s5KMDY4LVycgvNGVMIozFjbVZmdj7fI
+Message-ID: <CAJZ5v0gpcE6PoJ0QSW2sVSHPnxBw2GSzncP7xtMYDi4JSG5CTA@mail.gmail.com>
+Subject: Re: [GIT PULL] amd-pstate content for 6.16 (5/8/25)
+To: Mario Limonciello <superm1@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Sven,
+On Thu, May 8, 2025 at 11:23=E2=80=AFPM Mario Limonciello <superm1@kernel.o=
+rg> wrote:
+>
+> The following changes since commit 9c32cda43eb78f78c73aee4aa344b777714e25=
+9b:
+>
+>    Linux 6.15-rc3 (2025-04-20 13:43:47 -0700)
+>
+> are available in the Git repository at:
+>
+>
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git
+> tags/amd-pstate-v6.16-2025-05-08
+>
+> for you to fetch changes up to d26d16438bc5fd5524121244cc133f9872a63210:
+>
+>    amd-pstate-ut: Reset amd-pstate driver mode after running selftests
+> (2025-05-05 12:07:42 -0500)
+>
+> ----------------------------------------------------------------
+> amd-pstate content for 6.16 (5/8/25)
+>
+> Add support for a new feature on some BIOS that allows setting
+> "lowest CPU minimum frequency".
+>
+> Fix the amd-pstate-ut unit tests to restore system settings when done.
+>
+> ----------------------------------------------------------------
+> Dhananjay Ugwekar (3):
+>        cpufreq/amd-pstate: Move max_perf limiting in amd_pstate_update
+>        cpufreq/amd-pstate: Add offline, online and suspend callbacks for
+> amd_pstate_driver
+>        cpufreq/amd-pstate: Add support for the "Requested CPU Min
+> frequency" BIOS option
+>
+> Swapnil Sapkal (1):
+>        amd-pstate-ut: Reset amd-pstate driver mode after running selftest=
+s
+>
+>   drivers/cpufreq/amd-pstate-ut.c |  19 ++++++++++++-------
+>   drivers/cpufreq/amd-pstate.c    | 113
+> +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
++++++++++++++++-------------------------
+>   drivers/cpufreq/amd-pstate.h    |   3 +++
+>   3 files changed, 103 insertions(+), 32 deletions(-)
 
-Everything here looks good to me. I left a few minor comments through
-out but overall nothing scary here to me :)
-
-Cheers,
-Alyssa
-
-Le Sat, May 03, 2025 at 10:06:47AM +0000, Sven Peter via B4 Relay a écrit :
-> Hi,
-> 
-> It's been quite a while (end of 2022) since the last version of this
-> series was sent by Russel. I'd like to pick this up again and get SMC
-> upstream.
-> 
-> I've taken the last version from the ML and worked in the review
-> comments and some other changed:
-> 
->   - Added documentation for all functions and structs
->   - Fixed dt-bindings and re-ordered commits so that the mfd one comes
->     last and can include the gpio subdevice
->   - Added the reset driver and corresponding bindings
->   - Reworked the atomic mode inside SMC since the previous implementation
->     called mutex_lock from atomic context
->   - Removed the backend split for now which lead to a quite intense discussion
->     for the previous versions which hadn't been solved as far as I could tell
->     from the old threads.
->     It's also been 2+ years and I haven't heard of any backend implementation
->     for T2 or even older macs. It's also unclear to me which sub-devices
->     are actually useful there because at least GPIO and shutdown/reboot
->     from this series will not work as-is there.
->     I'd rather have this initial version which only supports M1+ macs upstream
->     and then iterate there if any other backend is developed.
->     I'll gladly help to re-introduce backend support if it's ever required.
-> 
-> Dependencies:
-> The code and dt-bindings themselves apply cleanly to 6.15-rc1 but
-> the device tree changes require the already merged SPMI controller
-> and SPMI NVMEM series which will be part of 6.16.
-> The series is also using the printf format specifiers which will
-> land in 6.16 via the drm-misc tree.
-> A tree with all dependencies for testing is available at
-> https://github.com/AsahiLinux/linux/commits/sven/smc-v4/.
-> 
-> Merging:
-> The dt-binding patches all depend on each other such that they all
-> should probably go together with the mfd device itself.
-> The following commits also depend on mfd due to the new header file and
-> will either have to go through the mfd tree as well or we'll need an
-> immutable branch there.
-> I'll take the device tree updates through our tree which also has the
-> previous device tree updates these depend on.
-> 
-> v3: https://lore.kernel.org/asahi/Y2qEpgIdpRTzTQbN@shell.armlinux.org.uk/
-> v2: https://lore.kernel.org/asahi/YxdInl2qzQWM+3bs@shell.armlinux.org.uk/
-> v1: https://lore.kernel.org/asahi/YxC5eZjGgd8xguDr@shell.armlinux.org.uk/
-> 
-> Best,
-> 
-> Sven
-> 
-> ---
-> Hector Martin (5):
->       gpio: Add new gpio-macsmc driver for Apple Macs
->       power: reset: macsmc-reboot: Add driver for rebooting via Apple SMC
->       arm64: dts: apple: t8103: Add SMC node
->       arm64: dts: apple: t8112: Add SMC node
->       arm64: dts: apple: t600x: Add SMC node
-> 
-> Russell King (Oracle) (2):
->       dt-bindings: gpio: Add Apple Mac SMC GPIO block
->       dt-bindings: mfd: Add Apple Mac System Management Controller
-> 
-> Sven Peter (2):
->       dt-bindings: power: reboot: Add Apple Mac SMC Reboot Controller
->       mfd: Add Apple Silicon System Management Controller
-> 
->  .../devicetree/bindings/gpio/apple,smc-gpio.yaml   |  37 ++
->  .../devicetree/bindings/mfd/apple,smc.yaml         |  71 +++
->  .../bindings/power/reset/apple,smc-reboot.yaml     |  52 ++
->  MAINTAINERS                                        |   7 +
->  arch/arm64/boot/dts/apple/t600x-die0.dtsi          |  35 ++
->  arch/arm64/boot/dts/apple/t8103.dtsi               |  35 ++
->  arch/arm64/boot/dts/apple/t8112.dtsi               |  35 ++
->  drivers/gpio/Kconfig                               |  10 +
->  drivers/gpio/Makefile                              |   1 +
->  drivers/gpio/gpio-macsmc.c                         | 246 ++++++++
->  drivers/mfd/Kconfig                                |  15 +
->  drivers/mfd/Makefile                               |   1 +
->  drivers/mfd/macsmc.c                               | 657 +++++++++++++++++++++
->  drivers/power/reset/Kconfig                        |  11 +
->  drivers/power/reset/Makefile                       |   1 +
->  drivers/power/reset/macsmc-reboot.c                | 362 ++++++++++++
->  include/linux/mfd/macsmc.h                         | 337 +++++++++++
->  17 files changed, 1913 insertions(+)
-> ---
-> base-commit: 8b7e6734e2231a549a23943678ee3452bd19a1fe
-> change-id: 20250304-smc-6-15-f0ed619e31d4
-> 
-> Best regards,
-> -- 
-> Sven Peter <sven@svenpeter.dev>
-> 
-> 
+Pulled and added to linux-pm.git/linux-next, thanks!
 
