@@ -1,115 +1,111 @@
-Return-Path: <linux-pm+bounces-26948-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-26949-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CD3DAB1573
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 15:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CF32AB15C0
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 15:50:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EF81B7BEA12
-	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 13:41:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 75A8C7AA3C8
+	for <lists+linux-pm@lfdr.de>; Fri,  9 May 2025 13:49:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B09229189C;
-	Fri,  9 May 2025 13:43:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B488429189C;
+	Fri,  9 May 2025 13:49:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iem9mMlG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fcLfg91L"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F18F2900AE;
-	Fri,  9 May 2025 13:43:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4D08632C;
+	Fri,  9 May 2025 13:49:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746798184; cv=none; b=GCtx49FUpWVNRRhNgaaqZ6lh7QVrLgOYBiV2NAMKKqdyCZ+173goXLfUM/G1UEnaQaJEpWGYTeTpw0OxWSJ3nqnSBi9JnAHUhK/Ty9n/Zpu6fU/GkoFsbX1q8haHifCvmmm2o/KzU0T8PNl83JRHLmkYdGzMITnORBsXFMpML/I=
+	t=1746798590; cv=none; b=m2QoQU05mOxYcb8mxqnrkh9KKvRxum+MQduWUlUWj7XSi1Ea4VPiFnbFxhXGbd7vgHd+9X64wedCMhvkMXBJoHLw4+0dA7+0qrCd9v8WpJoryoPE9rn902nW4EnJgVAIK8wLq1p534sJJ2DEEKV0UTxF7QkeLkb51bYMWdDjGqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746798184; c=relaxed/simple;
-	bh=TQd5Vp1kLt4MGHAQMKGIWYORUesqGeQtaKXFyKSJ5LQ=;
+	s=arc-20240116; t=1746798590; c=relaxed/simple;
+	bh=6bZ+vf6SEbbcD54k3LpukEwQykUSzOHjLk3LAB6BAVY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ln0N+oNKxBu59+wc/lUvWCdxJItIzDoOo3p7l/X7P5/ROlPNd09khoSXf+QVlRtvXM4K++jLir0wtNIzt73BPYKl+ddqyWRFQHvq75y6dNmFmsA6xhmt3wUZg+pmCIFNmkkwqQ5fwqOu24kr+7IfjJJNMDBRcp2WEO2yu0S+NFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iem9mMlG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A998BC4AF0B;
-	Fri,  9 May 2025 13:43:03 +0000 (UTC)
+	 To:Cc:Content-Type; b=P2gk2i+ECXNWm1aoFDUndAqyB9gxdYR2XuJcjyXAr1NmtU7P2RlwA3InxTxIPfLL+T6PvaB2+dKWu2dNE1JUW6DjnnjG3YJmVfW87nAq8kY1keJjZTvfTa5e7H54Y4SXU3UVuq9IbdweNre/9njeWmmuAt2w0GkTIGRv1KrDDRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fcLfg91L; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D37D5C4CEEB;
+	Fri,  9 May 2025 13:49:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746798183;
-	bh=TQd5Vp1kLt4MGHAQMKGIWYORUesqGeQtaKXFyKSJ5LQ=;
+	s=k20201202; t=1746798589;
+	bh=6bZ+vf6SEbbcD54k3LpukEwQykUSzOHjLk3LAB6BAVY=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=iem9mMlG2xUFvWPyWbMeGri9MKEZjolgqzHjYaF2+40q5zU3OaZJkcp61ptRp2bnz
-	 eYqRsCADEVBtr8QFJsL1ZvRc5fdAW2tzJQA1vOjBHpJ0AJ6m0Kyw6B0qOv10d4+xG+
-	 y7qlla6gG8RiwzgTWNZaUps7IQPm64bhPvF4FRW5f010pl6vGa3WhcDA1CXm4PC1Rb
-	 +hlznebl2hnHNbhm0yZhEpt/R8QARnFfpX82GivA9tD3n9ZvBTeZ1R6yyhuaJBeUQf
-	 awxLUHOPMR8ENmPlAItyIdSqukhja0oiUI7e/7XTocbmjVs/dP78F/Y/ITQ5Qmo35V
-	 mUd3T8cxupLbQ==
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-2c76a1b574cso820686fac.2;
-        Fri, 09 May 2025 06:43:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU88P3VcyXvZQvZpCmhTwCz7q/uyvRkprjP+GQFOSr+v198tsWUK5jxE79UJc9h891UM/Dw40RxtpM=@vger.kernel.org, AJvYcCV+qLNPepDBsF/yQOwljLh92r1G26eJUmySDE80YoM4OjcICKR4pJ69eV2Qfq55N7uQGSWJGY9/D+oZ5ks=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQZI/OFXTi8kULBjBiyfbckkjvgVC20/IhBkq07xFYDduy2AHG
-	n/bhgNafN1yxGl0ZvF/Ph5lONpPl0UipApWDT3LRgzU5xQWBvw/yeJ6moGe1Y9UJKGnNVYyeNCV
-	j33rjQ5MGajYdp15PTwUXGOC7/Dc=
-X-Google-Smtp-Source: AGHT+IFp2vFzobKkZvJWbgDXQd3AMuJzFnrgvSIB605nw5ZNTJ6Clt6kYHT7HCnP+Yopo060EnfUOMyRdq5LYNj+obQ=
-X-Received: by 2002:a05:6870:2104:b0:2d4:ef88:97c3 with SMTP id
- 586e51a60fabf-2dba44e48ecmr2062868fac.27.1746798182998; Fri, 09 May 2025
- 06:43:02 -0700 (PDT)
+	b=fcLfg91LGpTLIQZEPPwf8pV0V6BUAplVsYR6gpfWHr6th9yXjZ3TbBJYYT3IrPDD2
+	 CUCmYJzWVxMShkaHi4S4GHv9F9LHeWFwN1sXaxT8uXRexeju3VMY074TjncNf2dKG6
+	 4dFq+FVkGD0iT22BM8rdhK0rCYLQtd1Fl2TA2Z8wzwBoWV9e/t73FjQDk2lvxtCuYB
+	 U60StW+iMWdA7vApxv8rZp9yljvKvEMlhyO4mHyJNPeJLkeSkNxAwNFZCjvwsEwLs5
+	 x6m8teVO538pjSqMls0ILlHWZ+BQcKe/iZ4S1MFjFCM5a1M2ocvPaQWvqRbBbsXj6i
+	 ecjjZmzdQhW8Q==
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-2c2c754af3cso2002386fac.3;
+        Fri, 09 May 2025 06:49:49 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW+BGUFy347FsUEbSln07CNi9F+IaC2k0c6Zc9svBXTtKU+qN8XBe4qAVs8smEXklX0ol28f7wlWNs9VwY=@vger.kernel.org, AJvYcCWtH5BJ9JoNCJ7//dSJnXK2soO5IregKaFHx0QqfxerNS2j+MHsV13wQS7RFRvoKvNmTzmp6704v5A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVbl0SN/MultHTuUtDjMTh74wVZBI9amchxYqBBhATsBBQLtFs
+	6zVmcI/LRLYwo1kw3irqJsKIvDIikmrG4lXBkVVaSdKWgnkDRTYF2IPYDYygu3dWdHw2FUsneQa
+	RZgyvQ4tGqNgFTvD9bdoKZv1O1/g=
+X-Google-Smtp-Source: AGHT+IEQu7O66imBb1XCgR/7r44Byx2SHH/bX8IUTBLO+SQS6K3b/qN3CU2FJ7QEKF17DuQilWKuLOF2r3T4qgpDg9w=
+X-Received: by 2002:a05:6871:ea8c:b0:2c1:7289:d62a with SMTP id
+ 586e51a60fabf-2dba455cef4mr2223647fac.36.1746798589193; Fri, 09 May 2025
+ 06:49:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250505-add_power_attrs-v1-1-10bc3c73c320@quicinc.com>
-In-Reply-To: <20250505-add_power_attrs-v1-1-10bc3c73c320@quicinc.com>
+References: <20250505-fix_power-v1-1-0f7f2c2f338c@quicinc.com>
+In-Reply-To: <20250505-fix_power-v1-1-0f7f2c2f338c@quicinc.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 9 May 2025 15:42:51 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0he_7jmpafGcSUDhtXcwSBi1RSP=AQYr9QBr4UNzdw+Gw@mail.gmail.com>
-X-Gm-Features: ATxdqUHbIr1bmvPzJAWIL6c0rB-Zxzj7NF4fl8Pnfo7tR6hvo2d1UhsfFk2Ity8
-Message-ID: <CAJZ5v0he_7jmpafGcSUDhtXcwSBi1RSP=AQYr9QBr4UNzdw+Gw@mail.gmail.com>
-Subject: Re: [PATCH] PM: wakeup: Add missing wakeup source attribute relax_count
+Date: Fri, 9 May 2025 15:49:37 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0ihdg3S0--73OjdMjCxkE1NaEmBEEOc-gDS-u64gC0+rA@mail.gmail.com>
+X-Gm-Features: ATxdqUG40BLfKieLCPtixT71HD9NmxJnsUih7D-2BBRvIjqTb--i7CDoi6Z2k-8
+Message-ID: <CAJZ5v0ihdg3S0--73OjdMjCxkE1NaEmBEEOc-gDS-u64gC0+rA@mail.gmail.com>
+Subject: Re: [PATCH] PM: wakeup: Delete space in the end of string shown by pm_show_wakelocks()
 To: Zijun Hu <zijun_hu@icloud.com>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, linux-pm@vger.kernel.org, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-pm@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 5, 2025 at 12:17=E2=80=AFPM Zijun Hu <zijun_hu@icloud.com> wrot=
+On Mon, May 5, 2025 at 11:27=E2=80=AFAM Zijun Hu <zijun_hu@icloud.com> wrot=
 e:
 >
 > From: Zijun Hu <quic_zijuhu@quicinc.com>
 >
-> There is wakeup source attribute 'active_count', but its counterpart
-> attribute 'relax_count' is missing.
+> pm_show_wakelocks() is called to generate a string when showing attribute=
+s
+> /sys/power/wake_(lock|unlock), but the string ends with an unwanted space
+> the space was added back by mistake by commit c9d967b2ce40
+> ("PM: wakeup: simplify the output logic of pm_show_wakelocks()").
 >
-> Add missing 'relax_count' for integrality.
+> Remove the unwanted space.
 >
 > Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
 > ---
->  drivers/base/power/wakeup_stats.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  kernel/power/wakelock.c | 3 +++
+>  1 file changed, 3 insertions(+)
 >
-> diff --git a/drivers/base/power/wakeup_stats.c b/drivers/base/power/wakeu=
-p_stats.c
-> index 6732ed2869f9f38a272faab0044b6eb3edc051f2..3ffd427248e8eebae3c05b516=
-5bd4200a0668339 100644
-> --- a/drivers/base/power/wakeup_stats.c
-> +++ b/drivers/base/power/wakeup_stats.c
-> @@ -34,6 +34,7 @@ wakeup_attr(active_count);
->  wakeup_attr(event_count);
->  wakeup_attr(wakeup_count);
->  wakeup_attr(expire_count);
-> +wakeup_attr(relax_count);
+> diff --git a/kernel/power/wakelock.c b/kernel/power/wakelock.c
+> index 52571dcad768b988eaadbd3ce98a4ac42dd2f7dd..4e941999a53ba69410f4526d5=
+d55c32312c36140 100644
+> --- a/kernel/power/wakelock.c
+> +++ b/kernel/power/wakelock.c
+> @@ -49,6 +49,9 @@ ssize_t pm_show_wakelocks(char *buf, bool show_active)
+>                         len +=3D sysfs_emit_at(buf, len, "%s ", wl->name)=
+;
+>         }
 >
->  static ssize_t active_time_ms_show(struct device *dev,
->                                    struct device_attribute *attr, char *b=
-uf)
-> @@ -119,6 +120,7 @@ static struct attribute *wakeup_source_attrs[] =3D {
->         &dev_attr_event_count.attr,
->         &dev_attr_wakeup_count.attr,
->         &dev_attr_expire_count.attr,
-> +       &dev_attr_relax_count.attr,
->         &dev_attr_active_time_ms.attr,
->         &dev_attr_total_time_ms.attr,
->         &dev_attr_max_time_ms.attr,
+> +       if (len > 0)
+> +               --len;
+> +
+>         len +=3D sysfs_emit_at(buf, len, "\n");
+>
+>         mutex_unlock(&wakelocks_lock);
 >
 > ---
 
