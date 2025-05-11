@@ -1,86 +1,110 @@
-Return-Path: <linux-pm+bounces-27022-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27023-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F3CAAB29BC
-	for <lists+linux-pm@lfdr.de>; Sun, 11 May 2025 18:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 86411AB2A19
+	for <lists+linux-pm@lfdr.de>; Sun, 11 May 2025 19:47:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF9983A3FB9
-	for <lists+linux-pm@lfdr.de>; Sun, 11 May 2025 16:51:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 131793B50FF
+	for <lists+linux-pm@lfdr.de>; Sun, 11 May 2025 17:47:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45EE225D1F6;
-	Sun, 11 May 2025 16:51:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rosenzweig.io header.i=@rosenzweig.io header.b="wgL3cOyp"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F353F25CC64;
+	Sun, 11 May 2025 17:47:34 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 591921F92E
-	for <linux-pm@vger.kernel.org>; Sun, 11 May 2025 16:51:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBF8943172;
+	Sun, 11 May 2025 17:47:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746982282; cv=none; b=TN2WgR56zz3LXSqM3ACd0Slb7iYioqlCvbGZoTDdU/VS93/wUNrBM0flpdtJwHCETsXU6julQMk21qCF3qULcBuUqQkmgs4/Hv3VicQJ2HcTeMC5WxSKB12NplGjz56J7WxwU/JDkxDwYzGB3S5ahlx4lsXyLeZDAsX29RMJBpM=
+	t=1746985654; cv=none; b=EIISmMaFvag2JMqfixyBBbSBlLEQHFIKaNVaKjVEcCgNlk7tvtA/h4cRVi0Dpqk9e85eteMeSG5C2ZsXf8KJ30Y875LLne+xNx+LEUvhRlNJLZZ6UR7q/AlSvG5NaPF81eYbYBq68WHBu3bhIO0LreuERzM+0hvCIeXwftURoUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746982282; c=relaxed/simple;
-	bh=hp0V2rHp0AnNag69pcoABnJEQYAZl8UmFSF2rOTR0Rc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G4f5mrG2TLmz6dHNfc+v4TkbffK84pTUeX2uQsZNeglXQizB4mhuHk09tth3gUj3/SYhD4qeDjm5gC1DfUcGKmtlGGpwigmRKXnIiDlGWSO3zKOQBkwFU2ZXIzrkPc2l45ZI7PngYq8utroWHlfEkrUB3z/0hcjgG8TvT1U69J0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rosenzweig.io; spf=pass smtp.mailfrom=rosenzweig.io; dkim=pass (2048-bit key) header.d=rosenzweig.io header.i=@rosenzweig.io header.b=wgL3cOyp; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rosenzweig.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rosenzweig.io
-Date: Sun, 11 May 2025 12:51:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rosenzweig.io;
-	s=key1; t=1746982277;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SeoAHDIH23gFXGyKcKHI7nDG1fKj5EZdsLV0fsLEv9Y=;
-	b=wgL3cOypWMiXkr9it1pxC/4m9VSuGKQURmq2hX4dI9imvGcAa+rZft30xDqz7Uvuctg6aw
-	iSXHNE1QQcYQ7qQ0jJ05KEvtUsQcqtUGne6LjZFNr1BpbuGZ/4/3he38YxPL3u6eAQTXU7
-	7SWBd4GpKwuayuXzWonj6gESUbJ6+Dno/VHdlSIGnrmbtzqUa21VYWohtCYgNWMgLIDqH1
-	nC1CtYQ2QGWPh+BkYFhGwYr0NZrH/RxikGTCnefEoNwrUPEFzCigkafaBQuTMfpe/WrtIH
-	P4QzBQ2UagN1QTDpbrQcoyQuZ7IxtE4LMsWkcuPwzi6vr5CFC+cUX/F24YUSXQ==
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Alyssa Rosenzweig <alyssa@rosenzweig.io>
-To: sven@svenpeter.dev
-Cc: Janne Grunau <j@jannau.net>, Neal Gompa <neal@gompa.dev>,
-	Hector Martin <marcan@marcan.st>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-	Marc Zyngier <maz@kernel.org>,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 05/10] mfd: Add Apple Silicon System Management
- Controller
-Message-ID: <aCDVgI4_LtE6OfO-@blossom>
-References: <20250511-smc-6-15-v5-0-f5980bdb18bd@svenpeter.dev>
- <20250511-smc-6-15-v5-5-f5980bdb18bd@svenpeter.dev>
+	s=arc-20240116; t=1746985654; c=relaxed/simple;
+	bh=BusRFZ5sgIuDTxLkz0Uc4Lb7dUVAgQ/2zwaOtXTQbVk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CVpDn5GYrTAdTAGLqZz9VcSTAXM5g404vxq+W6rt6MYFlZOPX8TUixqGuMQ1J8pw8elpvHhSX2MU6i7bVSxW5aF1JAy4YThqkEPjlztIfVa0xFw8N/1EvVJ0swCPT4aq+MKJ8/4jARrLzPdTyF4nSl3oGFDZQbrHk+Qlm2Tr2UI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from abreu.speedport.ip (p57bd968f.dip0.t-ipconnect.de [87.189.150.143])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 433D661E647B1;
+	Sun, 11 May 2025 19:46:59 +0200 (CEST)
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>,
+	Len Brown <len.brown@intel.com>
+Cc: Paul Menzel <pmenzel@molgen.mpg.de>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] PM: thaw_processes: Rewrite restarting tasks log to remove stray *done.*
+Date: Sun, 11 May 2025 19:46:47 +0200
+Message-ID: <20250511174648.950430-1-pmenzel@molgen.mpg.de>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250511-smc-6-15-v5-5-f5980bdb18bd@svenpeter.dev>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-> +struct apple_smc_key_info {
-> +	u8 size;
-> +	u32 type_code;
-> +	u8 flags;
-> +};
+`pr_cont()` unfortunately does not work here, as other parts of the
+Linux kernel log between the two log lines:
 
-This still has the padding problem from v4. With that fixed,
+    [18445.295056] r8152-cfgselector 4-1.1.3: USB disconnect, device number 5
+    [18445.295112] OOM killer enabled.
+    [18445.295115] Restarting tasks ...
+    [18445.295185] usb 3-1: USB disconnect, device number 2
+    [18445.295193] usb 3-1.1: USB disconnect, device number 3
+    [18445.296262] usb 3-1.5: USB disconnect, device number 4
+    [18445.297017] done.
+    [18445.297029] random: crng reseeded on system resumption
 
-Reviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
+`pr_cont()` also uses the default log level, normally warning, if the
+corresponding log line is interrupted.
+
+Therefore, replace the `pr_cont()`, and explicitly log it as a separate
+line with log level info:
+
+    Restarting tasks: Starting
+    […]
+    Restarting tasks: Done
+
+Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+---
+ kernel/power/process.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/power/process.c b/kernel/power/process.c
+index 66ac067d9ae6..1938fafa9172 100644
+--- a/kernel/power/process.c
++++ b/kernel/power/process.c
+@@ -189,7 +189,7 @@ void thaw_processes(void)
+ 
+ 	oom_killer_enable();
+ 
+-	pr_info("Restarting tasks ... ");
++	pr_info("Restarting tasks: Starting\n");
+ 
+ 	__usermodehelper_set_disable_depth(UMH_FREEZING);
+ 	thaw_workqueues();
+@@ -208,7 +208,7 @@ void thaw_processes(void)
+ 	usermodehelper_enable();
+ 
+ 	schedule();
+-	pr_cont("done.\n");
++	pr_info("Restarting tasks: Done\n");
+ 	trace_suspend_resume(TPS("thaw_processes"), 0, false);
+ }
+ 
+-- 
+2.49.0
+
 
