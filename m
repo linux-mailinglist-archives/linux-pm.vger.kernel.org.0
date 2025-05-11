@@ -1,288 +1,148 @@
-Return-Path: <linux-pm+bounces-27005-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27006-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 367B4AB279A
-	for <lists+linux-pm@lfdr.de>; Sun, 11 May 2025 12:07:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67049AB27A2
+	for <lists+linux-pm@lfdr.de>; Sun, 11 May 2025 12:15:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A3E0E176050
-	for <lists+linux-pm@lfdr.de>; Sun, 11 May 2025 10:07:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88A073B38C8
+	for <lists+linux-pm@lfdr.de>; Sun, 11 May 2025 10:14:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B705D1BD517;
-	Sun, 11 May 2025 10:07:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAC331D5CFE;
+	Sun, 11 May 2025 10:15:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="WF48+tIE"
+	dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b="dBVe67lX";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="eARh53/i"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94524D8D1;
-	Sun, 11 May 2025 10:07:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85BC41C862B;
+	Sun, 11 May 2025 10:15:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746958054; cv=none; b=AJz+MZYT9jJSKbFNhaKE/6gG0AR73ToEKF81GhfdsIp/4HZ6/Xz9mK/oeruEYPADQ3gvdxLfXbeV8q1neZDiNaPdLIEQ5PU9+ssHoe8qT5j8VMgCeoX1napEdUHZpWqZog5M9mCBExgV2EFAMRcr/mdcxxee3Auo8FQTC5K8cUE=
+	t=1746958513; cv=none; b=pZVNy2p/S4W+GUg4rZtN5l2iu7S2txmsg73HlOXYh79o0Mp84e4EVs6mK37IbeVzQ67y3vYnhrFlVhRRNrYNl3bwFijEuQVLLqU2KmdH96eeOdVPSyCV1VWyUUNta7n7YJV8sc0GsjhgJHiod9db/V/YRQ3L2aohWmCjjYy5qys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746958054; c=relaxed/simple;
-	bh=V1jNPYr/TZyRJN0kAHvxyfDu0yvFkpnF9UQE83zxJkU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tixUkP0LKpYgfFtDJHs9bBLb53AJt//VL1r00oIUV4d0FoFqGBjWbFdXMMiZkAwvULxahPoY3SyDb2fl3bk141U6oo/b5AmYl5yjYLL1n3paHXJrtSomnTE5DgE1SgYgsQudDNULbxQExgVhbXShTJIlqEJYqDpv+u7QCyWjiR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=WF48+tIE; arc=none smtp.client-ip=212.227.15.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1746958049; x=1747562849; i=wahrenst@gmx.net;
-	bh=CN0O5V+IZ0q5N1/S2ZaMh6s5R0LVHxEQYL797WECSaA=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=WF48+tIE5DgO07f0Pf3a2wrnwmRkzKaMUwdUN2XUFFfMMQNQojCgdhtweo+6r49N
-	 QDQ2OpuJ2NUZZkcmejqZoRiYOazrG/33dpF1Ube7m7yP+CqEHH9vn2spOdyRheW3e
-	 8zHqcwErqUvsXoHwwsg3Wh5F39/le9ob/XzdieeEpA8mgd5qcWuBDL2iMpjx4TNwj
-	 yTm/vo4pLj86FB1E67wqJIbewr/D1rM8hItw2BrcNXuo2VnIypjT66GM6K3eB8wFK
-	 GnQwDRrWOBunzLMewcwvzq1Vy+XXtD1LIBpeRbh7y49fvmKgIMIaM9AY51NTk0/cn
-	 FDbdxiiFaSmNy7H7aA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.104] ([91.41.216.208]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MplXz-1umWKa1gPF-00o6TN; Sun, 11
- May 2025 12:07:29 +0200
-Message-ID: <678528db-67bc-4bb7-a866-7b8aeb4f4510@gmx.net>
-Date: Sun, 11 May 2025 12:07:27 +0200
+	s=arc-20240116; t=1746958513; c=relaxed/simple;
+	bh=tCmDfNwDsZk/3rZfK3h1oUOzUlRnrxuzRcHS6LPaiQ0=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=fpOgo0uX6fC5i2K5mygKVwH6b4yRKjs1FRsTFa0DyHhA2C+Hj/jaSjmgVgkotUWtBhuKvB/g2BXhjSQgZvO9hSAbQsJd7r1LMX+Kx3Uzvkl2X8hUSRoxQStiyFS7bXrwVgBs5hYMzCAYHQ4Fn1UHluaA3bAtqtYdhyXtfV6Cbnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev; spf=pass smtp.mailfrom=svenpeter.dev; dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b=dBVe67lX; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=eARh53/i; arc=none smtp.client-ip=202.12.124.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=svenpeter.dev
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id 0E41911400F6;
+	Sun, 11 May 2025 06:15:10 -0400 (EDT)
+Received: from phl-imap-12 ([10.202.2.86])
+  by phl-compute-04.internal (MEProxy); Sun, 11 May 2025 06:15:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm1;
+	 t=1746958509; x=1747044909; bh=cV+CqJ2sR58/2GW2HDcotcUwO0tRQwcr
+	M95nei+5RVc=; b=dBVe67lXrNSWSmfmKAbaBz4/sqEcMnCBISmSB32wPnaJBdj4
+	+G1pyzvsyCnhq10UP92fVtGmjM5ueVoNOmp+uu9utLnTTiYWlvFkZVdnwnTBIfkz
+	Ji+pUNNmgQK3OWgVD6DD3iuqWh7ftAi22kGaX4Yq4faOlglSSwvfHy3sI/DWP75j
+	0kgxc6feGAVxTVBPDNcCDjhB9ukrkzd6bYtRcfsj5jmx6IvNbvTgfJAu6pnkN+Rv
+	/mFB/UpIwJzK975Jhb71VMshgWMuJbw+q1vELE9Iv0UB9jCSk6Q3veU229zUwVte
+	XmkmTnbPJknwv85vaikliZ6tfWXYZEwumAVdtA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1746958509; x=
+	1747044909; bh=cV+CqJ2sR58/2GW2HDcotcUwO0tRQwcrM95nei+5RVc=; b=e
+	ARh53/ipxqudoE7Kx5TComMShvZsuDuvuIpZkzKavyOXP4VFgRtuu8gQLZaiCRMc
+	8VxIQID21/kk/nJlTYkSmIDgAIYRnXNKe3VrMHftnhFEXSsOA2dF8w8Wnz48MHOw
+	JGe76DkS21VozvW1xTmDLUzXdjI5Q9iXdkkO9EtbInxemgifibhY3gCjItBSeYNx
+	rBVr12iTq2l6lcNmfZxzVM5H0RZpxsOSi5swvV+om/IpeuORqVpccY6xDTdUX3EH
+	MHFTJVJevXsO2mccsa6Nmif0u4WaFda3IKPA7CvRAjbTQC+uGZPlf0ZJ2urGA/PY
+	NgL2PGYT6THdVlJDzzMew==
+X-ME-Sender: <xms:q3ggaO0qrEf7AfPcxgAhV_4QTRZrwThYeSBOtnpoBPpOvAZ-djIx6w>
+    <xme:q3ggaBFRUZMDlh9ceevrv2RCzzXyDaO7FceMfX6QVhfKB5NF-WjiICVU1HuE7nmWe
+    VQByCJnWafxEhZdVt0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvleekudduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
+    tddtnecuhfhrohhmpedfufhvvghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvth
+    gvrhdruggvvheqnecuggftrfgrthhtvghrnhepleefteeugeduudeuudeuhfefheegveek
+    ueefffdvffektdffffelveffvddvueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvghtvghrrdguvghvpdhnsggp
+    rhgtphhtthhopedvtddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprhhmkhdokh
+    gvrhhnvghlsegrrhhmlhhinhhugidrohhrghdruhhkpdhrtghpthhtohepsghrghhlsegs
+    ghguvghvrdhplhdprhgtphhtthhopeifrghhrhgvnhhsthesghhmgidrnhgvthdprhgtph
+    htthhopehnvggrlhesghhomhhprgdruggvvhdprhgtphhtthhopehjsehjrghnnhgruhdr
+    nhgvthdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpth
+    htohepkhhriihkodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhgvvgeskhgv
+    rhhnvghlrdhorhhgpdhrtghpthhtohepmhgriieskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:q3ggaG4igTnPWHT2ytCAlkCxt2qsSTjbTCgVlWXLGA2Aap9ZBRFtQA>
+    <xmx:q3ggaP3oNedhlr9WMSbKBbbZoOQ-Zp7jU6WhxYL_XZLzcw3tRkv6gQ>
+    <xmx:q3ggaBFGx0ys088vMTLjsa5tvs94U616_aItSTuxW3lYg5tokEOYfw>
+    <xmx:q3ggaI-3XpB95lGxgwa76HNTTGouranUQEu9Qq6z9lPDtp7Ipmtq_Q>
+    <xmx:rXggaLfR6dFUBzPlbcQeP94Q1N4fjgXUnLJzjJef-Tf-n02itAHvXc7c>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id B3EA41C20067; Sun, 11 May 2025 06:15:07 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 07/10] power: reset: macsmc-reboot: Add driver for
- rebooting via Apple SMC
-To: sven@svenpeter.dev, Janne Grunau <j@jannau.net>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>,
- Hector Martin <marcan@marcan.st>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Lee Jones <lee@kernel.org>, Marc Zyngier <maz@kernel.org>,
- "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+X-ThreadId: Tee5e6786d5fc82a3
+Date: Sun, 11 May 2025 12:14:46 +0200
+From: "Sven Peter" <sven@svenpeter.dev>
+To: "Stefan Wahren" <wahrenst@gmx.net>
+Cc: "Janne Grunau" <j@jannau.net>, "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+ "Neal Gompa" <neal@gompa.dev>, "Hector Martin" <marcan@marcan.st>,
+ "Linus Walleij" <linus.walleij@linaro.org>,
+ "Bartosz Golaszewski" <brgl@bgdev.pl>, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, "Sebastian Reichel" <sre@kernel.org>,
+ "Lee Jones" <lee@kernel.org>, "Marc Zyngier" <maz@kernel.org>,
+ "Russell King" <rmk+kernel@armlinux.org.uk>, asahi@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Message-Id: <5a0263f4-1073-45a8-a8aa-76028a2d0b6e@app.fastmail.com>
+In-Reply-To: <678528db-67bc-4bb7-a866-7b8aeb4f4510@gmx.net>
 References: <20250511-smc-6-15-v5-0-f5980bdb18bd@svenpeter.dev>
  <20250511-smc-6-15-v5-7-f5980bdb18bd@svenpeter.dev>
-Content-Language: en-US
-From: Stefan Wahren <wahrenst@gmx.net>
-Autocrypt: addr=wahrenst@gmx.net; keydata=
- xjMEZ1dOJBYJKwYBBAHaRw8BAQdA7H2MMG3q8FV7kAPko5vOAeaa4UA1I0hMgga1j5iYTTvN
- IFN0ZWZhbiBXYWhyZW4gPHdhaHJlbnN0QGdteC5uZXQ+wo8EExYIADcWIQT3FXg+ApsOhPDN
- NNFuwvLLwiAwigUCZ1dOJAUJB4TOAAIbAwQLCQgHBRUICQoLBRYCAwEAAAoJEG7C8svCIDCK
- JQ4BAP4Y9uuHAxbAhHSQf6UZ+hl5BDznsZVBJvH8cZe2dSZ6AQCNgoc1Lxw1tvPscuC1Jd1C
- TZomrGfQI47OiiJ3vGktBc44BGdXTiQSCisGAQQBl1UBBQEBB0B5M0B2E2XxySUQhU6emMYx
- f5QR/BrEK0hs3bLT6Hb9WgMBCAfCfgQYFggAJhYhBPcVeD4Cmw6E8M000W7C8svCIDCKBQJn
- V04kBQkHhM4AAhsMAAoJEG7C8svCIDCKJxoA/i+kqD5bphZEucrJHw77ujnOQbiKY2rLb0pE
- aHMQoiECAQDVbj827W1Yai/0XEABIr8Ci6a+/qZ8Vz6MZzL5GJosAA==
-In-Reply-To: <20250511-smc-6-15-v5-7-f5980bdb18bd@svenpeter.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Z8FPqSBn0iAN+Jp67wKOEpFqtfhamLrhOFm81Yp8T3if6bMooSD
- DZ5TtUwyguT5Eu1lxG/b+xzBZYSQPJhEdqZA3DdQKgzS+xOcY/2aPl3BVkiNqOjWUvGvPTr
- GJI1YIyUr6PXi6Bavv+oh+f1SGQa4bU8rzDHL5BH2O2bw3n/BCGBbaqUKjnWEucPhsVxRI1
- WjDuFZ7u5fgnm1aVwNAkQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:eUVeXrlNwho=;qLOTI09OeU4/WUdYhgQd5zVTy3u
- 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
+ <678528db-67bc-4bb7-a866-7b8aeb4f4510@gmx.net>
+Subject: Re: [PATCH v5 07/10] power: reset: macsmc-reboot: Add driver for rebooting via
+ Apple SMC
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi Sven,
+Hi Stefan,
 
-Am 11.05.25 um 10:18 schrieb Sven Peter via B4 Relay:
-> From: Hector Martin <marcan@marcan.st>
+On Sun, May 11, 2025, at 12:07, Stefan Wahren wrote:
+> Hi Sven,
 >
-> This driver implements the reboot/shutdown support exposed by the SMC
-> on Apple Silicon machines, such as Apple M1 Macs.
->
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> ---
->   MAINTAINERS                         |   1 +
->   drivers/power/reset/Kconfig         |  11 ++
->   drivers/power/reset/Makefile        |   1 +
->   drivers/power/reset/macsmc-reboot.c | 363 ++++++++++++++++++++++++++++=
-++++++++
->   4 files changed, 376 insertions(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index fa3a5f9ee40446bcc725c9eac2a36651e6bc7553..84f7a730eb2260b7c1e0487d=
-18c8eb3de82f5206 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2303,6 +2303,7 @@ F:	drivers/mfd/macsmc.c
->   F:	drivers/nvme/host/apple.c
->   F:	drivers/nvmem/apple-efuses.c
->   F:	drivers/pinctrl/pinctrl-apple-gpio.c
-> +F:	drivers/power/reset/macsmc-reboot.c
->   F:	drivers/pwm/pwm-apple.c
->   F:	drivers/soc/apple/*
->   F:	drivers/spi/spi-apple.c
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index 60bf0ca64cf395cd18238fc626611c74d29844ee..6e8dfff64fdc001d09b6c006=
-30cd8b7e2fafdd8e 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-> @@ -128,6 +128,17 @@ config POWER_RESET_LINKSTATION
->  =20
->   	  Say Y here if you have a Buffalo LinkStation LS421D/E.
->  =20
-> +config POWER_RESET_MACSMC
-> +	tristate "Apple SMC reset/power-off driver"
-> +	depends on ARCH_APPLE || COMPILE_TEST
-> +	depends on MFD_MACSMC
-> +	depends on OF
-> +	help
-> +	  This driver supports reset and power-off on Apple Mac machines
-> +	  that implement this functionality via the SMC.
-> +
-> +	  Say Y here if you have an Apple Silicon Mac.
-> +
->   config POWER_RESET_MSM
->   	bool "Qualcomm MSM power-off driver"
->   	depends on ARCH_QCOM
-> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-> index 10782d32e1da39f4b8b4566e8a885f2e13f65130..887dd9e49b7293b69b9429dd=
-c0c1571194a153cf 100644
-> --- a/drivers/power/reset/Makefile
-> +++ b/drivers/power/reset/Makefile
-> @@ -13,6 +13,7 @@ obj-$(CONFIG_POWER_RESET_GPIO) +=3D gpio-poweroff.o
->   obj-$(CONFIG_POWER_RESET_GPIO_RESTART) +=3D gpio-restart.o
->   obj-$(CONFIG_POWER_RESET_HISI) +=3D hisi-reboot.o
->   obj-$(CONFIG_POWER_RESET_LINKSTATION) +=3D linkstation-poweroff.o
-> +obj-$(CONFIG_POWER_RESET_MACSMC) +=3D macsmc-reboot.o
->   obj-$(CONFIG_POWER_RESET_MSM) +=3D msm-poweroff.o
->   obj-$(CONFIG_POWER_RESET_MT6323) +=3D mt6323-poweroff.o
->   obj-$(CONFIG_POWER_RESET_QCOM_PON) +=3D qcom-pon.o
-> diff --git a/drivers/power/reset/macsmc-reboot.c b/drivers/power/reset/m=
-acsmc-reboot.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..d82339e427886667be4ad2de=
-0d1d5c04d2383059
-> --- /dev/null
-> +++ b/drivers/power/reset/macsmc-reboot.c
-> @@ -0,0 +1,363 @@
-> +// SPDX-License-Identifier: GPL-2.0-only OR MIT
-> +/*
-> + * Apple SMC Reboot/Poweroff Handler
-> + * Copyright The Asahi Linux Contributors
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/mfd/macsmc.h>
-> +#include <linux/module.h>
-> +#include <linux/nvmem-consumer.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reboot.h>
-> +#include <linux/slab.h>
-> +
-> +struct macsmc_reboot_nvmem {
-> +	struct nvmem_cell *shutdown_flag;
-> +	struct nvmem_cell *pm_setting;
-> +	struct nvmem_cell *boot_stage;
-> +	struct nvmem_cell *boot_error_count;
-> +	struct nvmem_cell *panic_count;
-> +};
-> +
-> +static const char * const nvmem_names[] =3D {
-> +	"shutdown_flag",
-> +	"pm_setting",
-> +	"boot_stage",
-> +	"boot_error_count",
-> +	"panic_count",
-> +};
-> +
-> +enum boot_stage {
-> +	BOOT_STAGE_SHUTDOWN		=3D 0x00, /* Clean shutdown */
-> +	BOOT_STAGE_IBOOT_DONE		=3D 0x2f, /* Last stage of bootloader */
-> +	BOOT_STAGE_KERNEL_STARTED	=3D 0x30, /* Normal OS booting */
-> +};
-> +
-> +enum pm_setting {
-> +	PM_SETTING_AC_POWER_RESTORE	=3D 0x02,
-> +	PM_SETTING_AC_POWER_OFF		=3D 0x03,
-> +};
-> +
-> +static const char * const ac_power_modes[] =3D { "off", "restore" };
-> +
-> +static int ac_power_mode_map[] =3D {
-> +	PM_SETTING_AC_POWER_OFF,
-> +	PM_SETTING_AC_POWER_RESTORE,
-> +};
-> +
-> +struct macsmc_reboot {
-> +	struct device *dev;
-> +	struct apple_smc *smc;
-> +	struct notifier_block reboot_notify;
-> +
-> +	union {
-> +		struct macsmc_reboot_nvmem nvm;
-> +		struct nvmem_cell *nvm_cells[ARRAY_SIZE(nvmem_names)];
-> +	};
-> +};
-> +
-> +/* Helpers to read/write a u8 given a struct nvmem_cell */
-> +static int nvmem_cell_get_u8(struct nvmem_cell *cell)
-> +{
-> +	size_t len;
-> +	u8 val;
-> +	void *ret =3D nvmem_cell_read(cell, &len);
-in case this series needs a respin, please rename the pointer (e.g.=20
-buf). This is very unusual, because ret is usually of type int.
+> Am 11.05.25 um 10:18 schrieb Sven Peter via B4 Relay:
 
-Regards
+[...]
+
+>> +/* Helpers to read/write a u8 given a struct nvmem_cell */
+>> +static int nvmem_cell_get_u8(struct nvmem_cell *cell)
+>> +{
+>> +	size_t len;
+>> +	u8 val;
+>> +	void *ret = nvmem_cell_read(cell, &len);
+> in case this series needs a respin, please rename the pointer (e.g. 
+> buf). This is very unusual, because ret is usually of type int.
+
+That's indeed odd, I'll rename it.
+
+
+Thanks,
+
+
+Sven
 
