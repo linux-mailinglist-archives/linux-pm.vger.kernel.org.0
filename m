@@ -1,232 +1,163 @@
-Return-Path: <linux-pm+bounces-27015-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27016-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDF5FAB2852
-	for <lists+linux-pm@lfdr.de>; Sun, 11 May 2025 15:11:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CE0DAB293F
+	for <lists+linux-pm@lfdr.de>; Sun, 11 May 2025 16:53:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C1D53AD525
-	for <lists+linux-pm@lfdr.de>; Sun, 11 May 2025 13:11:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E84933B7A0D
+	for <lists+linux-pm@lfdr.de>; Sun, 11 May 2025 14:53:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6C03256C9F;
-	Sun, 11 May 2025 13:11:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 671841B6CE3;
+	Sun, 11 May 2025 14:53:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CiiZ4j+P"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ot6a00a+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7A986344;
-	Sun, 11 May 2025 13:11:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AAA22907;
+	Sun, 11 May 2025 14:53:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746969093; cv=none; b=TLN5d2ojHs8bJjP+7dcb37Azsv3KkXnY3svAY2MpBW+RqYuEgfo6JyFXvw6M8Ce09v0hfqIBLpMQMH9Xa5LJ1MvM+FMqwJQy99kdSL2RFQUnt4M+HexZIPvI3e4zZ7aqukSIheHxytI1x35Yew3Dvx+UWv8He3zKL9gX5zfCnbY=
+	t=1746975212; cv=none; b=Y1W8flClrPoYKowwmfpEzzlk4c2ScIlWfONQWKe/OPODUDNUx+DRhjNBE8Hw7Sz0SRYrt6DsqOyztom6lvv3rNVW1jIBifLUsjW8v7b4U8r8HDdqwmx67SYPscWiAxzG4kb6YxePoBe69+wvCQaIawcqnKEJB7fBr9PDueaMcUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746969093; c=relaxed/simple;
-	bh=M9OR5ZiUK3Fib7rUpLHTME7xYEsacjwm0GZp+YtVLFI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sPcdSa1pY3m7+3JUOQcLshsbulgIaRhun5nNq+6d82cLUXcPJlYJZpIvyOOBwBaSWBqRS/8otkB6+SpOLb+bSabubCfCGXdKu86ao3qp6HH/FDlIEXqoevpOnVh+JmWLvyClad8tf6wd2ezDHJ9l1ZQRlrbIpSB/bLmvAIuO4JE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CiiZ4j+P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBF56C4CEE4;
-	Sun, 11 May 2025 13:11:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746969093;
-	bh=M9OR5ZiUK3Fib7rUpLHTME7xYEsacjwm0GZp+YtVLFI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=CiiZ4j+Pm5nln0qCzGDKhaytmCTZsXccEXxLEmQEKPpDb7xSQ8F+W5QpWsLJDFCUz
-	 lq7o4AorDi/Mu3qRKT3oQkdZQQM+XVlvu78hc6WZ4b1+TDGmSpwln2wjb+jlfPNweR
-	 rlV4CkZEdi+8u4Elxyt8q+A94qH/Fbzw16egmX/qdFzSdiHP42RXG3foA38j06JdyM
-	 72qsM9KSkadcy/mcehhofSi4Pao7Ha2+epeeGFX7c57ulv5zfMam4T+Q+BnLmE/AZl
-	 YlxeY9FI5ko2c975zIa6diCTE7+OT7g154ppt+orpKddY8yc+AEtUgs1NKNH09toGA
-	 RNcJeFbhjMluA==
-Date: Sun, 11 May 2025 14:11:20 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
-Cc: robh@kernel.org, krzysztof.kozlowski@linaro.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
- lumag@kernel.org, dmitry.baryshkov@oss.qualcomm.com,
- konradybcio@kernel.org, daniel.lezcano@linaro.org, sboyd@kernel.org,
- amitk@kernel.org, thara.gopinath@gmail.com, lee@kernel.org,
- rafael@kernel.org, subbaraman.narayanamurthy@oss.qualcomm.com,
- david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
- quic_kamalw@quicinc.com, rui.zhang@intel.com, lukasz.luba@arm.com,
- devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, cros-qcom-dts-watchers@chromium.org,
- quic_skakitap@quicinc.com, neil.armstrong@linaro.org,
- stephan.gerhold@linaro.org
-Subject: Re: [PATCH V6 5/5] thermal: qcom: add support for PMIC5 Gen3 ADC
- thermal monitoring
-Message-ID: <20250511141120.58941a45@jic23-huawei>
-In-Reply-To: <20250509110959.3384306-6-jishnu.prakash@oss.qualcomm.com>
-References: <20250509110959.3384306-1-jishnu.prakash@oss.qualcomm.com>
-	<20250509110959.3384306-6-jishnu.prakash@oss.qualcomm.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1746975212; c=relaxed/simple;
+	bh=0NU8uplAjo4GOERxUeXyP2g2dEIPieHAx2aUymbRIeQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mrl+qORwVXKBXnIGRrTUZZVXSi6kEW6rAXb8J2aqtgkDJ6BapSpCLBEo7HK65Jnq9c/DfRXH42LvHfzImY9zzAfSTvaNBw4X2i7GLrAQ7f1cNnBZa7Yq251vUgy29n/TsJAYvnk2aBKKc2k2pcBsCbPPp7VdmFgtToxwkj1fe6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ot6a00a+; arc=none smtp.client-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-3105ef2a071so41344091fa.1;
+        Sun, 11 May 2025 07:53:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746975208; x=1747580008; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k+SNn9MtbqikaPdKk5wtAAM3FI1+8eVlKOTCGSspdmU=;
+        b=Ot6a00a+k8qGkVBxmIITktKwfDrx+HtgH3maiX/APHtnEEHx2pyNsVHbeo2giNV0Wx
+         edmn2FFaEt1UvDSL+qRRJJ/8cgbjcRZ3vd91aXyRkS+tN+slgp+54NUh0nnjdHY18dqJ
+         vO4g9FxY0BPhiTWELqWLW9WT60p1rrBwIROHxdui+gHrofpwSoAEQgL+FIhNjm9Af81G
+         8/j8CDIyTuA+LqDHFedKZQYXuInt4Mlzv/qr6lDo2XAWa/+1Knu9mfc4EnWjSrtoUZY6
+         28S2OF7YUqFg/LuYO+Vv40n4rUvv7pS2j6pcvDXYFKx7mlMBsRvLGqJqg8RjUbdGZ37G
+         dl6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746975208; x=1747580008;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k+SNn9MtbqikaPdKk5wtAAM3FI1+8eVlKOTCGSspdmU=;
+        b=LWYXWUCkyIiYx5PfTH9wz8MoXOtzNyBJB3/dc5gHNSertjEGVlRLEPN5/OWG/mTLxr
+         +m/+LHO3HdTw7V1uL/zKo1/ZuntTDWv1wbpQ3Dosy6BFMXiH7srj8m06fKw9JbinHM7K
+         0O560CaT8rU7jA4SCBN+YXqxcP51s8J2yEp/txDo5qRkaJXM0bMQ5ube4QvIHOwaqJ3o
+         ySVeFZFrOoGTlXt6gNnhVPJF3o0h2DFmk1ez9g0nAAlZZ92P6crIC90nQZysMbzt1exP
+         fCOihJ8UY3GFcTO9ezlg/7MFZb89uxkOwpV+S9KplNbXQkx7eSjeZWBBB4NJxszKoWBT
+         ctng==
+X-Forwarded-Encrypted: i=1; AJvYcCU06QlD/cfml08HP3mx3citftoOsH02D8GAJCxBYNEwO8YCSaEoSdHHh29ZfSYYYS5bpmlefZZX91E=@vger.kernel.org, AJvYcCURcRic6I5sy15Sm4+YhyunWD0gmoK7UcVwBwNiHE4Z+9FgAH0UB4tsB4FNtvnppgEtbeAKHXTi120G@vger.kernel.org, AJvYcCV9H6wwXI6MnQVGSz3sKqW2gJxDOif5nvoENKTsP28ELnzDztFHcn6iOK937FuEdmnTXn0gF8QemBf7e+w=@vger.kernel.org, AJvYcCXJrp0+Xq68VMT/4mlh70Z458+jHp/KVYnCYaq3l1bVXCgpvWVkGRjJWyfGer8sZK0wwx8xblHoF956NNk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJc1UObKdvfCsRFcP/SsHu4kWpNxGGkvsVjCia8qocZegz0yfS
+	2rJwPnMwc0ISy6dv0ZtRSDpH+kMLD3VDvOqAJe4djL2xiEsBoZZLFOSMelw6Ngu1rqbIrZQH2to
+	gmA2kpM3h9HCTppi6Tw8htIuyLD8=
+X-Gm-Gg: ASbGncsyUq9EY2mFMFoahNk99svheonUg4B1zpd0IrriGMQbGkPFivPgEzAhc+Ex/6h
+	m2wPFvoloDOdQ9xfGu18ndr2sYqGqjEg7w3VndGj5i9fHJHhItJlyVGv/LPXSncSrERdBuAEbKs
+	ojd0O4Sq5GVCj+hCEaZm9HuodejI8cK/EV
+X-Google-Smtp-Source: AGHT+IEW2M3t9r376LdN00E7nRVrPqLJdblkVY1e1M8Lu+r3rQ6L8tocf5XoHcoGI5voVVL5e9HLMLf0oZGyxIKDbaM=
+X-Received: by 2002:a2e:a541:0:b0:30b:ce0a:3e63 with SMTP id
+ 38308e7fff4ca-326c459a4c5mr39892771fa.7.1746975208267; Sun, 11 May 2025
+ 07:53:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20250505-pci-tegra-module-v4-0-088b552c4b1a@gmail.com>
+ <20250505-pci-tegra-module-v4-4-088b552c4b1a@gmail.com> <idddypjxxtiie3tllfk47krcydlno4lnhbkik4wakekcyu7c2d@iurtu6bjzeey>
+ <CALHNRZ88VaS6zmmnkQg_WrBVPjMT4e2uPUPEQUj8ARL1TieZPg@mail.gmail.com>
+ <gxbuvopbhum3v622gf4olzfspgihxt3dm4z3rsj4gquaabt2c4@peemxrxshjuu>
+ <CALHNRZ9DHApwS_W22aD0uOFJKBk8WkucFo04_vjLRpnRjP4WCg@mail.gmail.com> <nsldcdzdf7xazzm3dlb4jrjkehgt3hjlar7uc62twpkwocrer3@u5kirzyify4n>
+In-Reply-To: <nsldcdzdf7xazzm3dlb4jrjkehgt3hjlar7uc62twpkwocrer3@u5kirzyify4n>
+From: Aaron Kling <webgeek1234@gmail.com>
+Date: Sun, 11 May 2025 09:53:05 -0500
+X-Gm-Features: AX0GCFuYOPYdeDB4aKbOtH-_GwGqt75BeJmtEnem2ldfw3E7EAu1DKFq3T6g3Yw
+Message-ID: <CALHNRZ84EmZ3reCns9c4s1DavZLYsPvdNtm0wstAiF-CbD=d4w@mail.gmail.com>
+Subject: Re: [PATCH v4 4/4] PCI: tegra: Drop unused remove callback
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri,  9 May 2025 16:39:59 +0530
-Jishnu Prakash <jishnu.prakash@oss.qualcomm.com> wrote:
+On Sat, May 10, 2025 at 1:24=E2=80=AFAM Manivannan Sadhasivam
+<manivannan.sadhasivam@linaro.org> wrote:
+>
+> On Mon, May 05, 2025 at 11:59:27AM -0500, Aaron Kling wrote:
+> > On Mon, May 5, 2025 at 11:48=E2=80=AFAM Manivannan Sadhasivam
+> > <manivannan.sadhasivam@linaro.org> wrote:
+> > >
+> > > On Mon, May 05, 2025 at 11:43:26AM -0500, Aaron Kling wrote:
+> > > > On Mon, May 5, 2025 at 11:32=E2=80=AFAM Manivannan Sadhasivam
+> > > > <manivannan.sadhasivam@linaro.org> wrote:
+> > > > >
+> > > > > On Mon, May 05, 2025 at 09:59:01AM -0500, Aaron Kling via B4 Rela=
+y wrote:
+> > > > > > From: Aaron Kling <webgeek1234@gmail.com>
+> > > > > >
+> > > > > > Debugfs cleanup is moved to a new shutdown callback to ensure t=
+he
+> > > > > > debugfs nodes are properly cleaned up on shutdown and reboot.
+> > > > > >
+> > > > >
+> > > > > Both are separate changes. You should remove the .remove() callba=
+ck in the
+> > > > > previous patch itself and add .shutdown() callback in this patch.
+> > > > >
+> > > > > And the shutdown callback should quiesce the device by putting it=
+ in L2/L3 state
+> > > > > and turn off the supplies. It is not intended to perform resource=
+ cleanup.
+> > > >
+> > > > Then where would resource cleanup go?
+> > > >
+> > >
+> > > .remove(), but it is not useful here since the driver is not getting =
+removed.
+> >
+> > I may be misunderstanding how stuff works, but don't those resources
+> > still need cleaned up on shutdown/reboot even if the driver can't be
+> > unloaded? I recall seeing shutdown errors in the past when higher
+> > level debugfs nodes tried to clean themselves up, but bad drivers had
+> > left their nodes behind.
+> >
+>
+> Each callback has its own purpose. The cleanup is only performed by the
+> .remove() callback, but it will only get called when the driver gets remo=
+ved.
+>
+> > In any case, do you want me to just not add .shutdown() at all, or try
+> > to set the proper power state? Prior to the half-baked attempt to make
+> > this driver a loadable module several years ago, there was no such
+> > cleanup.
+> >
+>
+> As a first step, you can ignore .shutdown() callback and just remove the
+> .remove(). Shutdown callback implementation should follow the steps I men=
+tioned
+> above, so it can be done later.
 
-> Add support for ADC_TM part of PMIC5 Gen3.
-> 
-> This is an auxiliary driver under the Gen3 ADC driver, which implements the
-> threshold setting and interrupt generating functionalities of QCOM ADC_TM
-> drivers, used to support thermal trip points.
-> 
-> Signed-off-by: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
-Hi Jishnu,
+This has already been done in v6 [0].
 
-A few minor things inline.
+Sincerely,
+Aaron
 
-Jonathan
-
-> diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
-> new file mode 100644
-> index 000000000000..c63822635f10
-> --- /dev/null
-> +++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
-
-> +static int adc_tm5_register_tzd(struct adc_tm5_gen3_chip *adc_tm5)
-> +{
-> +	unsigned int i, channel;
-> +	struct thermal_zone_device *tzd;
-> +
-> +	for (i = 0; i < adc_tm5->nchannels; i++) {
-> +		channel = V_CHAN(adc_tm5->chan_props[i].common_props);
-> +		tzd = devm_thermal_of_zone_register(adc_tm5->dev, channel,
-> +						    &adc_tm5->chan_props[i],
-> +						    &adc_tm_ops);
-> +
-> +		if (IS_ERR(tzd)) {
-> +			if (PTR_ERR(tzd) == -ENODEV) {
-> +				dev_warn(adc_tm5->dev,
-> +					 "thermal sensor on channel %d is not used\n",
-> +					 channel);
-> +				continue;
-> +			}
-> +			return dev_err_probe(adc_tm5->dev, PTR_ERR(tzd),
-> +					     "Error registering TZ zone:%ld for channel:%d\n",
-> +					     PTR_ERR(tzd), channel);
-> +		}
-> +		adc_tm5->chan_props[i].tzd = tzd;
-> +		devm_thermal_add_hwmon_sysfs(adc_tm5->dev, tzd);
-
-Can fail so unusual not to see an error check.  Add a comment if intended.
-
-> +	}
-> +	return 0;
-> +}
-
-> +
-> +static int adc_tm5_probe(struct auxiliary_device *aux_dev,
-> +			 const struct auxiliary_device_id *id)
-> +{
-> +	struct adc_tm5_gen3_chip *adc_tm5;
-> +	struct tm5_aux_dev_wrapper *aux_dev_wrapper;
-> +	struct device *dev = &aux_dev->dev;
-> +	int i, ret;
-> +
-> +	adc_tm5 = devm_kzalloc(&aux_dev->dev, sizeof(*adc_tm5), GFP_KERNEL);
-
-Use dev
-
-> +	if (!adc_tm5)
-> +		return -ENOMEM;
-> +
-> +	aux_dev_wrapper = container_of(aux_dev, struct tm5_aux_dev_wrapper,
-> +				       aux_dev);
-> +
-> +	adc_tm5->dev = dev;
-> +	adc_tm5->dev_data = aux_dev_wrapper->dev_data;
-> +	adc_tm5->nchannels = aux_dev_wrapper->n_tm_channels;
-> +	adc_tm5->chan_props = devm_kcalloc(adc_tm5->dev, aux_dev_wrapper->n_tm_channels,
-
-Might as well use dev here too.
-
-> +					   sizeof(*adc_tm5->chan_props), GFP_KERNEL);
-> +	if (!adc_tm5->chan_props)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0; i < adc_tm5->nchannels; i++) {
-> +		adc_tm5->chan_props[i].common_props = aux_dev_wrapper->tm_props[i];
-> +		adc_tm5->chan_props[i].timer = MEAS_INT_1S;
-> +		adc_tm5->chan_props[i].sdam_index = (i + 1) / 8;
-> +		adc_tm5->chan_props[i].tm_chan_index = (i + 1) % 8;
-> +		adc_tm5->chan_props[i].chip = adc_tm5;
-> +	}
-> +
-> +	ret = devm_add_action_or_reset(adc_tm5->dev, adc5_gen3_disable, adc_tm5);
-> +	if (ret)
-> +		return ret;
-> +
-> +	INIT_WORK(&adc_tm5->tm_handler_work, tm_handler_work);
-> +
-> +	/*
-> +	 * Skipping first SDAM IRQ as it is requested in parent driver.
-> +	 * If there is a TM violation on that IRQ, the parent driver calls
-> +	 * the notifier (tm_event_notify) exposed from this driver to handle it.
-> +	 */
-> +	for (i = 1; i < adc_tm5->dev_data->num_sdams; i++) {
-> +		ret = devm_request_threaded_irq(adc_tm5->dev,
-> +						adc_tm5->dev_data->base[i].irq,
-> +						NULL, adctm5_gen3_isr, IRQF_ONESHOT,
-> +						adc_tm5->dev_data->base[i].irq_name,
-> +						adc_tm5);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
-> +	/*
-> +	 * This drvdata is only used in the function (adctm_event_handler)
-> +	 * called by parent ADC driver in case of TM violation on the first SDAM.
-> +	 */
-> +	auxiliary_set_drvdata(aux_dev, adc_tm5);
-> +
-> +	ret = devm_add_action(adc_tm5->dev, adc5_gen3_clear_work, adc_tm5);
-
-I'd add a comment on what this is undoing as normally devm clean up matches
-something being started and there is no obvious sign of what that is here.
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = adc_tm5_register_tzd(adc_tm5);
-
-return adc_tm5...
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-
-> +static int __init adctm5_init_module(void)
-> +{
-> +	return auxiliary_driver_register(&adctm5gen3_auxiliary_drv.adrv);
-> +}
-> +
-> +static void __exit adctm5_exit_module(void)
-> +{
-> +	auxiliary_driver_unregister(&adctm5gen3_auxiliary_drv.adrv);
-> +}
-> +
-> +module_init(adctm5_init_module);
-> +module_exit(adctm5_exit_module);
-
-module_auxiliary_driver() not work for some reason?
-
-> +
-> +MODULE_DESCRIPTION("SPMI PMIC Thermal Monitor ADC driver");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS("QCOM_SPMI_ADC5_GEN3");
-
+[0]  https://lore.kernel.org/r/20250507-pci-tegra-module-v6-0-5fe363eaa302@=
+gmail.com
 
