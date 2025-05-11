@@ -1,116 +1,196 @@
-Return-Path: <linux-pm+bounces-27011-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27012-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 470E6AB2833
-	for <lists+linux-pm@lfdr.de>; Sun, 11 May 2025 14:31:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B0BBAB283D
+	for <lists+linux-pm@lfdr.de>; Sun, 11 May 2025 14:39:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC276189386B
-	for <lists+linux-pm@lfdr.de>; Sun, 11 May 2025 12:31:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 818601895E6E
+	for <lists+linux-pm@lfdr.de>; Sun, 11 May 2025 12:39:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2C2F256C61;
-	Sun, 11 May 2025 12:31:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 256AE1519B8;
+	Sun, 11 May 2025 12:39:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZSCaQuJ0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HVdMeWgS"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F824A32;
-	Sun, 11 May 2025 12:31:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C3C19C54F
+	for <linux-pm@vger.kernel.org>; Sun, 11 May 2025 12:39:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746966670; cv=none; b=FkSJKujrc28+5ST9Udp+XjV9gvU+m1SOaz16knyOIzSIs/AlHg2gP35be61H/g7g1UB4KHcOSPng27Hc6gcOqFbzdA9BQOpBcvO222FHY47gbUXHiP1K3zyf6mWSFawyA7KC4AYxloVG1JuA39/5kMqqzY7aNkMP9qvtNqfjKL8=
+	t=1746967155; cv=none; b=RUmiWscOlmbTPjWNWN7xGlUzGs0tYxbYcbl8ga90/+Iwrx16b+FbfIGc1BvMGd2oFOlEkih8oPycigcAJEPQfGmf357LH4SdMmZHnEpaCkrtw6ia527lbXnbawm02ioJ64fAPb7W3+uiGw+g8NAweOj/hYHYANodlaWSt9U6lHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746966670; c=relaxed/simple;
-	bh=VSz21wUvN2aP6s/5btPI9FEniypUewFNORjJoSRIo7A=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sXfMBckOwSzHZUjyUp+yQ7pHBhHKByA/aa2O8XY9ZenwE8w9cxrAWQXMreAFNiPeb+1JuL+QX7GnQpZiQFpIW/qVkySwuYCO0TP5nFTNnDg6A4kBgXRL2JZmvkkl3hHO/d+jPvwzr4E8yhNuduFpZD2LCcbY22QNDjJrrYmpUCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZSCaQuJ0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4C1EC4CEE4;
-	Sun, 11 May 2025 12:30:59 +0000 (UTC)
+	s=arc-20240116; t=1746967155; c=relaxed/simple;
+	bh=jhQ5SAEJJF3qUfy6D5IHr1j1BdMfMHXPzSP1qRil+xg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PiILTjL4KNbyzlQFLHkZcaIhSTnHFF2tu44QH+CYGQcQXY3HEaqJ8QAeyEb6vho/BDxSisckt51ngWeYWcseyCxyK1TGRfSTrZOnpUY35CvwAMIXC+wZYMa1QHe+/ZSz02z+vE0umIzjm5JVd5k9I/wFdNObXQ9at4YuLfRP9SA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HVdMeWgS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62D3EC4CEEF
+	for <linux-pm@vger.kernel.org>; Sun, 11 May 2025 12:39:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746966669;
-	bh=VSz21wUvN2aP6s/5btPI9FEniypUewFNORjJoSRIo7A=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ZSCaQuJ0/MUpfUzd7QxOEEn0mGYPMDciCACql8otHm7xQ7GbDhBJ0XhwaWy9D81rQ
-	 QG85NN1RwGEaqByCq9d8jsZ5LlSxaqzd6JaZMSxtpuRQeAv9vdSmgZtgjf/Y6pUnjJ
-	 +72nLbg0GR6lGgun3Qpz7lrBbVC36dX7P6nduwP2hKxRo+HlR01K1dhVboKVAkQV6X
-	 iQnJqSbCRcQq9WtjAYOjaTtplSuVnpNr6Vq87AvVaE8/kptzV/ZlerfVIp3dVa73Jd
-	 gGB4doQCdEHQoVwyfFTR4121tz45MQY8PNV21Ka4CzJLmxE8R7lYuNFV0No+lVYW8O
-	 YJucwlWuSyfZA==
-Date: Sun, 11 May 2025 13:30:55 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
-Cc: robh@kernel.org, krzysztof.kozlowski@linaro.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
- lumag@kernel.org, dmitry.baryshkov@oss.qualcomm.com,
- konradybcio@kernel.org, daniel.lezcano@linaro.org, sboyd@kernel.org,
- amitk@kernel.org, thara.gopinath@gmail.com, lee@kernel.org,
- rafael@kernel.org, subbaraman.narayanamurthy@oss.qualcomm.com,
- david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
- quic_kamalw@quicinc.com, rui.zhang@intel.com, lukasz.luba@arm.com,
- devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, cros-qcom-dts-watchers@chromium.org,
- quic_skakitap@quicinc.com, neil.armstrong@linaro.org,
- stephan.gerhold@linaro.org
-Subject: Re: [PATCH V6 3/5] dt-bindings: iio: adc: Add support for QCOM
- PMIC5 Gen3 ADC
-Message-ID: <20250511133055.54869b61@jic23-huawei>
-In-Reply-To: <20250509110959.3384306-4-jishnu.prakash@oss.qualcomm.com>
-References: <20250509110959.3384306-1-jishnu.prakash@oss.qualcomm.com>
-	<20250509110959.3384306-4-jishnu.prakash@oss.qualcomm.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-pc-linux-gnu)
+	s=k20201202; t=1746967154;
+	bh=jhQ5SAEJJF3qUfy6D5IHr1j1BdMfMHXPzSP1qRil+xg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=HVdMeWgSodlOQnOyxyn/G6NScVBNK/Y1Wmovg68lrItlJZEt+ZD59ixdXwNYivUPT
+	 pI091Rmly570u4l5qTu5g8xKK23ttB2HJWyXZdemlZ8PQ3xLbAjsqKVv6Ql73MoGpq
+	 Et/z8yHbPMnuC9L0EXtP8PYt8tGVKt8+J7tgC8epvbKtsGqTtDwpa8+OI4ScYKnnlw
+	 vP7+Owk8Ywfm/Tgh9zsBzGsZwjWJZ0nQFVXInDh+pV1T7vP1lhK8FU1gGQVy6njI31
+	 57fi3/yLUAFcueDt40I5TuMwUsz9NcaPBvL0DBPCy9/54KK2UmwxoKKWjaDBbCJfXS
+	 jTtWMqAL6/qcw==
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-400fa6eafa9so2568335b6e.1
+        for <linux-pm@vger.kernel.org>; Sun, 11 May 2025 05:39:14 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWxRP2PAPFLN0XVi+/2eZ5Fj4Uyp+jrzHE/FGqBUmOcE1Jy1PTpTSlFSlyirZJhBufXVYpTR3dmEg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMnQJ9H+Lum/ofCPbWo4X7wBv3ZDCabLy4cIIlTeuixTL3o8pB
+	T99c2X9D/DiOqoZxjuKreAytMzLezAjrLh14zIDHNagjnGfkgDv+5BwcWZU3+FnaXHDN/l0wgy7
+	XrLrSxf0lwIwJnY3f7DmPO+vSLi0=
+X-Google-Smtp-Source: AGHT+IF7frhH9fByp3nqkp8f/ToldoQoeo1EQiod3AeYHymrByNbZlMh+WjPHSM8WDiv77VlPQFYxVdDFh6afTzXars=
+X-Received: by 2002:a05:6808:80c7:b0:401:e6c0:3112 with SMTP id
+ 5614622812f47-4037fe3b729mr6449007b6e.15.1746967153770; Sun, 11 May 2025
+ 05:39:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20241111112237.336310-2-u.kleine-koenig@baylibre.com>
+In-Reply-To: <20241111112237.336310-2-u.kleine-koenig@baylibre.com>
+From: Chanwoo Choi <chanwoo@kernel.org>
+Date: Sun, 11 May 2025 21:38:36 +0900
+X-Gmail-Original-Message-ID: <CAGTfZH1qMMO3ou4cxwaUoah7jS18nu7Y9kgYyraZ9e7jfjrp_A@mail.gmail.com>
+X-Gm-Features: AX0GCFubjq5u_HzT96chHqqtsl5Hck05kSg1tAuxI0qgXnWh6f_KB3_n-4XXW9o
+Message-ID: <CAGTfZH1qMMO3ou4cxwaUoah7jS18nu7Y9kgYyraZ9e7jfjrp_A@mail.gmail.com>
+Subject: Re: [PATCH] PM / devfreq: sun8i-a33-mbus: Simplify by using more devm functions
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: MyungJoo Ham <myungjoo.ham@samsung.com>, Kyungmin Park <kyungmin.park@samsung.com>, 
+	Chanwoo Choi <cw00.choi@samsung.com>, Chen-Yu Tsai <wens@csie.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, linux-pm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri,  9 May 2025 16:39:57 +0530
-Jishnu Prakash <jishnu.prakash@oss.qualcomm.com> wrote:
+Hi,
 
-> For the PMIC5-Gen3 type PMICs, ADC peripheral is present in HW for the
-> following PMICs: PMK8550, PM8550, PM8550B and PM8550VX PMICs.
-> 
-> It is similar to PMIC5-Gen2, with SW communication to ADCs on all PMICs
-> going through PBS(Programmable Boot Sequence) firmware through a single
-> register interface. This interface is implemented on SDAM (Shared
-> Direct Access Memory) peripherals on the master PMIC PMK8550 rather
-> than a dedicated ADC peripheral.
-> 
-> Add documentation for PMIC5 Gen3 ADC and macro definitions for ADC
-> channels and virtual channels (combination of ADC channel number and
-> PMIC SID number) per PMIC, to be used by clients of this device.
-> 
-> Signed-off-by: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+Applied it. I'm sorry for late reply
 
-This looks fine to me.  The dependencies on previous two patches
-make this a little tricky to handle though. I don't like splitting the
-path the binding and the driver take to upstream but in this case
-we probably either have to merge them in different cycles or this
-needs to go with those code movement patches.  It looked like an
-immutable branch would be very messy given additions that the 1st patch
-touches probably mean an immutable would have to include a lot of
-stuff that is queued up in the Qualcomm SoC tree.
+Thanks.
 
-If the rest of the necessary reviews turn up this cycle to get everything
-in this cycle merge (seems unlikely) then I don't thing routing this
-via the SoC tree will be a problem.
+On Mon, Nov 11, 2024 at 8:25=E2=80=AFPM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@baylibre.com> wrote:
+>
+> Use devm allocators for enabling the bus clock and
+> clk_rate_exclusive_get(). This simplifies error handling and the remove
+> callback.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@baylibre.com>
+> ---
+>  drivers/devfreq/sun8i-a33-mbus.c | 38 ++++++++------------------------
+>  1 file changed, 9 insertions(+), 29 deletions(-)
+>
+> diff --git a/drivers/devfreq/sun8i-a33-mbus.c b/drivers/devfreq/sun8i-a33=
+-mbus.c
+> index bcf654f4ff96..5b630c6e602e 100644
+> --- a/drivers/devfreq/sun8i-a33-mbus.c
+> +++ b/drivers/devfreq/sun8i-a33-mbus.c
+> @@ -360,7 +360,7 @@ static int sun8i_a33_mbus_probe(struct platform_devic=
+e *pdev)
+>         if (IS_ERR(priv->reg_mbus))
+>                 return PTR_ERR(priv->reg_mbus);
+>
+> -       priv->clk_bus =3D devm_clk_get(dev, "bus");
+> +       priv->clk_bus =3D devm_clk_get_enabled(dev, "bus");
+>         if (IS_ERR(priv->clk_bus))
+>                 return dev_err_probe(dev, PTR_ERR(priv->clk_bus),
+>                                      "failed to get bus clock\n");
+> @@ -375,24 +375,15 @@ static int sun8i_a33_mbus_probe(struct platform_dev=
+ice *pdev)
+>                 return dev_err_probe(dev, PTR_ERR(priv->clk_mbus),
+>                                      "failed to get mbus clock\n");
+>
+> -       ret =3D clk_prepare_enable(priv->clk_bus);
+> -       if (ret)
+> -               return dev_err_probe(dev, ret,
+> -                                    "failed to enable bus clock\n");
+> -
+>         /* Lock the DRAM clock rate to keep priv->nominal_bw in sync. */
+> -       ret =3D clk_rate_exclusive_get(priv->clk_dram);
+> -       if (ret) {
+> -               err =3D "failed to lock dram clock rate\n";
+> -               goto err_disable_bus;
+> -       }
+> +       ret =3D devm_clk_rate_exclusive_get(dev, priv->clk_dram);
+> +       if (ret)
+> +               return dev_err_probe(dev, ret, "failed to lock dram clock=
+ rate\n");
+>
+>         /* Lock the MBUS clock rate to keep MBUS_TMR_PERIOD in sync. */
+> -       ret =3D clk_rate_exclusive_get(priv->clk_mbus);
+> -       if (ret) {
+> -               err =3D "failed to lock mbus clock rate\n";
+> -               goto err_unlock_dram;
+> -       }
+> +       ret =3D devm_clk_rate_exclusive_get(priv->clk_mbus);
+> +       if (ret)
+> +               return dev_err_probe(dev, ret, "failed to lock mbus clock=
+ rate\n");
+>
+>         priv->gov_data.upthreshold      =3D 10;
+>         priv->gov_data.downdifferential =3D  5;
+> @@ -405,10 +396,8 @@ static int sun8i_a33_mbus_probe(struct platform_devi=
+ce *pdev)
+>         priv->profile.max_state         =3D max_state;
+>
+>         ret =3D devm_pm_opp_set_clkname(dev, "dram");
+> -       if (ret) {
+> -               err =3D "failed to add OPP table\n";
+> -               goto err_unlock_mbus;
+> -       }
+> +       if (ret)
+> +               return dev_err_probe(dev, ret, "failed to add OPP table\n=
+");
+>
+>         base_freq =3D clk_get_rate(clk_get_parent(priv->clk_dram));
+>         for (i =3D 0; i < max_state; ++i) {
+> @@ -448,12 +437,6 @@ static int sun8i_a33_mbus_probe(struct platform_devi=
+ce *pdev)
+>
+>  err_remove_opps:
+>         dev_pm_opp_remove_all_dynamic(dev);
+> -err_unlock_mbus:
+> -       clk_rate_exclusive_put(priv->clk_mbus);
+> -err_unlock_dram:
+> -       clk_rate_exclusive_put(priv->clk_dram);
+> -err_disable_bus:
+> -       clk_disable_unprepare(priv->clk_bus);
+>
+>         return dev_err_probe(dev, ret, err);
+>  }
+> @@ -472,9 +455,6 @@ static void sun8i_a33_mbus_remove(struct platform_dev=
+ice *pdev)
+>                 dev_warn(dev, "failed to restore DRAM frequency: %d\n", r=
+et);
+>
+>         dev_pm_opp_remove_all_dynamic(dev);
+> -       clk_rate_exclusive_put(priv->clk_mbus);
+> -       clk_rate_exclusive_put(priv->clk_dram);
+> -       clk_disable_unprepare(priv->clk_bus);
+>  }
+>
+>  static const struct sun8i_a33_mbus_variant sun50i_a64_mbus =3D {
+>
+> base-commit: 6d59cab07b8d74d0f0422b750038123334f6ecc2
+> --
+> 2.45.2
+>
+>
 
-To enable that
 
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-I suspect given timing best we can hope for is patches 1 and 2 go
-via the SoC tree asap and we deal with the rest at start of next cycle
-but I like to be optimistic :)
-
-Jonathan
+--=20
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
 
