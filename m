@@ -1,147 +1,115 @@
-Return-Path: <linux-pm+bounces-27040-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27041-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECEA0AB35CD
-	for <lists+linux-pm@lfdr.de>; Mon, 12 May 2025 13:19:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B676AB36B9
+	for <lists+linux-pm@lfdr.de>; Mon, 12 May 2025 14:09:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C85F7A2456
-	for <lists+linux-pm@lfdr.de>; Mon, 12 May 2025 11:17:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 437A0189FDBE
+	for <lists+linux-pm@lfdr.de>; Mon, 12 May 2025 12:09:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6BAE291166;
-	Mon, 12 May 2025 11:18:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A2E6292932;
+	Mon, 12 May 2025 12:09:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b="ZEZoO2tC";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="o71VIvkb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RGOHXBEy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0B92900BE;
-	Mon, 12 May 2025 11:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E62D255E20;
+	Mon, 12 May 2025 12:09:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747048735; cv=none; b=WkWmsUM4CihpXsxBEM1QXnKYqXXJwWWI19EQ+P3sg9H22Z8s6P5Di2reOWi+akuRVMx87pBj+Ohvdbwi8gS4ppi1OEJia1iG+sQp3zYLyqP5x/qkCsgjW06zPPATmU5jHfcz+hP0klDiIpDRFJ+SfjmiPRwM7DZpUKdg4MIN91o=
+	t=1747051771; cv=none; b=TltW6+7X0xDFVGluHGYJ7/V/1PBrcTMOJ+caKOoNvoXfeULc/796IDvX4EQflAh8I0c02Gbc6V6myrBvGw68A3v5G9jIMap9/oyqkpSQAhVdqNrdE/eHEW7fwy7XrVeTsJRkdB3c5to1IeRjvhEeAeTaEGQdtTF1gbYNwdRNRXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747048735; c=relaxed/simple;
-	bh=jBZdiSf1gf5BKRqqB+Fpy8grw8nZle3zN8U9da1iFnI=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=W/jr+hocfti/oAuHA1vLyvIPr8YQHxfRHSai+mfEe4z3HKKc+goY8o+SBTjt5VWJKHNjjkmOQyE6AOVdZkULENophmsn+xH2HBQzdKmTEcBNhRHxioxMgaUALiyx0FhTkiUjHC8W7zEE5/z4vFQzpUCZy9QXoeT/9KSzGiw0qvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev; spf=pass smtp.mailfrom=svenpeter.dev; dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b=ZEZoO2tC; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=o71VIvkb; arc=none smtp.client-ip=103.168.172.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=svenpeter.dev
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id EE918114012E;
-	Mon, 12 May 2025 07:18:51 -0400 (EDT)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-04.internal (MEProxy); Mon, 12 May 2025 07:18:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:subject:subject:to:to; s=fm1;
-	 t=1747048731; x=1747135131; bh=8R1AryTPhNH6vqIqKW5/6ef09cTbxqCZ
-	txeiuNj7wb0=; b=ZEZoO2tCNmwSdnwnJxE/d1l9NlLFeCFYdL0qlb6qL6xIlCPf
-	hF2iarJizQyLFm8x2KzLfRavW+65RwLZHkD2macXXgtP6ZkCR07kM0AsMWAp4mP5
-	b1eHvSoBA+6Y1KRtwiiXn1clD7x2diHeX+E3o0yc5ySfTSSL5vLIoE/gmVtSk1ja
-	O+2RKLohnsiXP8AftrNWX5Df2sNZ78C9D8Mx8vx1N27ZNQ9mclwYCS5j1KNa5y0C
-	WqCsmTLdTq/BdKv00MQha/vAZFHY62liGcGHS4aPPjj7oKo0bApwiTeKYHgDElX/
-	PKUzBACRUNmz8yku5JBHwNrVOlPEndAcwsBcZQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1747048731; x=
-	1747135131; bh=8R1AryTPhNH6vqIqKW5/6ef09cTbxqCZtxeiuNj7wb0=; b=o
-	71VIvkbuLT3kGsowGOJJcwdT42sXnEfrYjJ481iyRenFZs/DjdVBy1erScpkFt89
-	V1mJO2Qawd1M/+e5lOfWEMYqfjig2Ouw6Wa8HDebNGC43Bgrq3nNLDGrY6DZMCaB
-	MgbEcqwwLuVMnKkI6hmhYUxjAhvJeAQbxxwe4tYjfYYVEl4m4aqY7SOzrEmiqcJA
-	YCG99UzfVsP3WUWe3s4550bBnG3SRs23K1+XUeFuSDlm7UZvXsuPVvfCLfispM03
-	QbC+S0LuaBVPM+MmzRmbSHUseByDwzim/FBz3QN6b93bmoLvzY/SEZzShopzdecr
-	TSXuPMMCQI3EZ8C36Grbw==
-X-ME-Sender: <xms:GtkhaMuxhIixs7p21gBf1a0Z3lGaLN01jbE7aoEXMUjV0ATKxr3m1g>
-    <xme:GtkhaJcxVpGSL22cNbzohzJd4xiwMe3KVqA6nHUL9mZ1CDii7lQHmbNRdtxEZHq54
-    BeKmKBo9M8LPqBzbKE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeftdduuddvucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
-    tddtnecuhfhrohhmpedfufhvvghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvth
-    gvrhdruggvvheqnecuggftrfgrthhtvghrnhepleefteeugeduudeuudeuhfefheegveek
-    ueefffdvffektdffffelveffvddvueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvghtvghrrdguvghvpdhnsggp
-    rhgtphhtthhopeduledpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprhhmkhdokh
-    gvrhhnvghlsegrrhhmlhhinhhugidrohhrghdruhhkpdhrtghpthhtohepsghrghhlsegs
-    ghguvghvrdhplhdprhgtphhtthhopehnvggrlhesghhomhhprgdruggvvhdprhgtphhtth
-    hopehjsehjrghnnhgruhdrnhgvthdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhn
-    vghlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtoheplhgvvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgriieskhgvrhhn
-    vghlrdhorhhgpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:GtkhaHwf1fLs4ujDzYRV9p3oA3Lt4JG2bsbNc20DSXmw_eocXzmFsg>
-    <xmx:GtkhaPM7O7JUWdN5Wd4NEAF-FcE-62VNd7UGjUafuz50M1xr5tBgQg>
-    <xmx:GtkhaM-cXFV8dPcEYGmRkbX2dgNTmYprkObOHjphG973E1qh_XFlPA>
-    <xmx:GtkhaHVaCx-SAYUC_qxcEr6LGzVJp6dM-85d--eaFsj7mQ3c6yV6JQ>
-    <xmx:G9khaM_l9MfNgcxlpMCOrs9zCtzwYcG-SDIeitwMfLz4Wlb9mB0NWHtw>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 0A6521C20067; Mon, 12 May 2025 07:18:50 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1747051771; c=relaxed/simple;
+	bh=xE99g38G05kWVWQVsEMeTHQ9yIJhHcnUagPODqbgZOg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=hvRnfKlZdLpqRm3V5bz+u346iP7vp0u83/CJXSKXKxDrxRmzdSaJsHy13d/kDhNKe2B8uUYBrcn4mYo9YXaODTfdZ5k8ypwSr53PPjy2/PLPxhf+RjKsa5Np4j32td8h2oapcZ2TaC3qXXHIq3GdlvZjlql//FjgGOBnsPdp0nM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RGOHXBEy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E736C4CEE7;
+	Mon, 12 May 2025 12:09:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747051770;
+	bh=xE99g38G05kWVWQVsEMeTHQ9yIJhHcnUagPODqbgZOg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=RGOHXBEyhlL/RenWdnEwRHp4GPMF3l/O7Myx9N6q/RAyYvnDMHr8sQI2RJI442eAD
+	 zElNcSxvAYgxHpdDUiZqLoE1Ym+qXiAlCvIugJeCGqXhzXGfn/bcIXAuHdW5dJL8+s
+	 npsLsnrHI29OzhIwCAh0EEuRd+doMgd33N80EHT52lX5QBApwHrr77yInbLITnt8VC
+	 304GObjTuHaR62aYAc08rfb9dmlWwBVeIuohv2A2DInmB7v6is4GxdSXnBsBm/U3my
+	 yuZnC69785WoPNilRc8RMyv25iVqQGbd8IjrbtFl3iKq49YHw+BOXeQAYqaCtK5Yr/
+	 MxWp8lP1iAhgw==
+From: Mark Brown <broonie@kernel.org>
+To: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Varshini Rajendran <varshini.rajendran@microchip.com>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, linux-spi@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, 
+ =?utf-8?q?Bence_Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Danilo Krummrich <dakr@kernel.org>, Alexander Dahl <ada@thorsis.com>, 
+ Nicolas Ferre <nicolas.ferre@microchip.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <20250327195928.680771-2-csokas.bence@prolan.hu>
+References: <20250327195928.680771-2-csokas.bence@prolan.hu>
+Subject: Re: [PATCH v6 0/2] Add more devm_ functions to fix PM imbalance in
+ spi/atmel-quadspi.c
+Message-Id: <174705176600.71095.8384606721205945217.b4-ty@kernel.org>
+Date: Mon, 12 May 2025 21:09:26 +0900
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T54af4484963dacde
-Date: Mon, 12 May 2025 13:18:29 +0200
-From: "Sven Peter" <sven@svenpeter.dev>
-To: "Alyssa Rosenzweig" <alyssa@rosenzweig.io>
-Cc: "Janne Grunau" <j@jannau.net>, "Neal Gompa" <neal@gompa.dev>,
- "Hector Martin" <marcan@marcan.st>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- "Bartosz Golaszewski" <brgl@bgdev.pl>, "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>, "Sebastian Reichel" <sre@kernel.org>,
- "Lee Jones" <lee@kernel.org>, "Marc Zyngier" <maz@kernel.org>,
- "Russell King" <rmk+kernel@armlinux.org.uk>, asahi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-Message-Id: <50f35475-958e-481a-83f8-f19fc2259191@app.fastmail.com>
-In-Reply-To: <aCDVgI4_LtE6OfO-@blossom>
-References: <20250511-smc-6-15-v5-0-f5980bdb18bd@svenpeter.dev>
- <20250511-smc-6-15-v5-5-f5980bdb18bd@svenpeter.dev>
- <aCDVgI4_LtE6OfO-@blossom>
-Subject: Re: [PATCH v5 05/10] mfd: Add Apple Silicon System Management Controller
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.15-dev-c25d1
 
-Hi,
+On Thu, 27 Mar 2025 20:59:25 +0100, Bence Csókás wrote:
+> The probe() function of the atmel-quadspi driver got quite convoluted,
+> especially since the addition of SAMA7G5 support, that was forward-ported
+> from an older vendor kernel. During the port, a bug was introduced, where
+> the PM get() and put() calls were imbalanced. To alleivate this - and
+> similar problems in the future - an effort was made to migrate as many
+> functions as possible, to their devm_ managed counterparts. The few
+> functions, which did not yet have a devm_ variant, are added in patch 1 of
+> this series. Patch 2 then uses these APIs to fix the probe() function.
+> 
+> [...]
 
+Applied to
 
-On Sun, May 11, 2025, at 18:51, Alyssa Rosenzweig wrote:
->> +struct apple_smc_key_info {
->> +	u8 size;
->> +	u32 type_code;
->> +	u8 flags;
->> +};
->
-> This still has the padding problem from v4. With that fixed,
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-I somehow managed to drop two !fixup commits before sending this out :-(
-One of them was moving type_code to the beginning and the other some cosmetic
-changes (mainly starting descriptions with uppercase letters) to macsmc.h.
-Will be fixed for the next version for real this time.
+Thanks!
 
+[1/2] pm: runtime: Add new devm functions
+      (no commit info)
+[2/2] spi: atmel-quadspi: Fix unbalanced pm_runtime by using devm_ API
+      commit: 8856eafcc05ecf54d6dd2b6c67804fefd276472c
 
->
-> Reviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
+Mark
 
-
-Sven
 
