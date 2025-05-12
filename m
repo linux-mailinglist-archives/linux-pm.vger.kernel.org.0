@@ -1,75 +1,81 @@
-Return-Path: <linux-pm+bounces-27050-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27051-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6352EAB3E17
-	for <lists+linux-pm@lfdr.de>; Mon, 12 May 2025 18:52:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27586AB3E36
+	for <lists+linux-pm@lfdr.de>; Mon, 12 May 2025 18:55:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D78F6188F823
-	for <lists+linux-pm@lfdr.de>; Mon, 12 May 2025 16:52:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FEF0463FB2
+	for <lists+linux-pm@lfdr.de>; Mon, 12 May 2025 16:55:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF8FB25335E;
-	Mon, 12 May 2025 16:52:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HVYuGRhz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 987272676D5;
+	Mon, 12 May 2025 16:54:46 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA6A86352;
-	Mon, 12 May 2025 16:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30DC225A2C7;
+	Mon, 12 May 2025 16:54:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747068757; cv=none; b=k+72m3EYnh0YakPEKblWqk0ZEV+lAdCYdRJji1YdD0O8/GQDOUJwa+QxJ+75PbplgogRE3V5mQsBu0PL0YBVvBSyGwhT7Apri/3hZy9Z9OlUZpCX8031dvvCvAsNS5cfKZ2V9yl9EDmgYLjRiZNBJ/0DmA4YXGjiuEIDapl84nc=
+	t=1747068886; cv=none; b=gNNFWj6AnUW+n8BfJtVDLe9VdQp5Pv3F2eYbi+zyEMV2bBngfs1QdD2vv01wrQ3ElRcbntLhxMUUayv+C31Ct4MKEqHK8e5BSHm98GYrFIISHYM6Dj8dqWGgXg1SktidNW097xTIAXYJ1bttu4B0Bq20ekJyuBkWfxLxbGiiX54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747068757; c=relaxed/simple;
-	bh=zJdYMJvHAhiYNICNPNsqH0wboKMQjcSXHu6LIl5OWXM=;
+	s=arc-20240116; t=1747068886; c=relaxed/simple;
+	bh=GHfBzMz6hvOT4FNqopeQP9A6JOY7MLEh312/qsRWIQc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BvikDwo/Y8KhQM5ICkNVdQLJGctLgOgv0XnnopY7xKTzOF3dKEU3D8V3+lVvhQ+BZQ5DK1K+KgG/OxV3YeruUayH9z2SeWXtfTJiPfoVAluBjtV2pSlIQ9q3ymsNCUyUt/I6n4tH41UhsXpzMOxeqVwcDJvTgyCeW5J8UM1CpCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HVYuGRhz; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747068756; x=1778604756;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=zJdYMJvHAhiYNICNPNsqH0wboKMQjcSXHu6LIl5OWXM=;
-  b=HVYuGRhzzNMl5Vmet90ynDOG8GQWtYn0dDOM0tSnbLdVpMmJ7eSsqKbH
-   yvtIdKv20wUhk5vSBvZG7n8CRcsoru3ftu8wJiyEQveKlWnK8/2cai0h1
-   jXsupKK2jgljBJrJtn8AN9frHve8m/171mkiGqRaWKkdw/LyPdE738g1c
-   ZC2c2DR3A+nUluTMwnczMpPgJ1MnRvkSQ06Vr/QVgqL/WSnq5NisD+gXz
-   yOs8/rvxkPE9KDDxLvrYOtI07psKnx7nmUlavjYOrxzgwQjjVU15RYyk2
-   Naiz0pfM9/YRykan6N4emlRJolfQ/4o+DXuF/7MQwduAqA1Mm5exHlUHT
-   A==;
-X-CSE-ConnectionGUID: j/U7GCE2RB6B1V7ZLD4Mfg==
-X-CSE-MsgGUID: QtItMCc4SoKW7969fIKcig==
-X-IronPort-AV: E=McAfee;i="6700,10204,11431"; a="48746422"
-X-IronPort-AV: E=Sophos;i="6.15,282,1739865600"; 
-   d="scan'208";a="48746422"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2025 09:52:35 -0700
-X-CSE-ConnectionGUID: EZtLRt6xQlWRKBPzEUstcA==
-X-CSE-MsgGUID: EStaK6KASbaX2HgLRFV9VA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,282,1739865600"; 
-   d="scan'208";a="137941382"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2025 09:52:33 -0700
-Date: Mon, 12 May 2025 19:52:29 +0300
-From: Raag Jadav <raag.jadav@intel.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: mahesh@linux.ibm.com, oohall@gmail.com, bhelgaas@google.com,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	ilpo.jarvinen@linux.intel.com, lukas@wunner.de,
-	aravind.iddamsetty@linux.intel.com, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3] PCI: Prevent power state transition of erroneous
- device
-Message-ID: <aCInTU5BmL0botSd@black.fi.intel.com>
-References: <20250504090444.3347952-1-raag.jadav@intel.com>
- <CAJZ5v0hgpq0VmO_rDnEjDQniUiLJP3yo3-Rpy1NNxA_k8VAS2A@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qaLWhraFrr2QZyd1mkAQStejcCw2GGOniGUG+Cie5HWijvECIklSw4E9wDuS9uoboGFB9N/JSCae7dhcIoiPbxh4v+5szCS8LUj4C6vkNzlyemRLh+WRepX8PiSf1OyJUrR6p/BK4kxr6Hc67mR9YQzedwPwZSaHAgFZLssBXOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F219FC4CEE7;
+	Mon, 12 May 2025 16:54:44 +0000 (UTC)
+Date: Mon, 12 May 2025 18:54:43 +0200
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Danila Tikhonov <danila@jiaxyga.com>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Rajendra Nayak <quic_rjendra@quicinc.com>, Jassi Brar <jassisinghbrar@gmail.com>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
+	Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Souradeep Chowdhury <quic_schowdhu@quicinc.com>, 
+	Lee Jones <lee@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alex Elder <elder@kernel.org>, 
+	Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>, 
+	Bart Van Assche <bvanassche@acm.org>, Andy Gross <agross@kernel.org>, 
+	Srinivas Kandagatla <srini@kernel.org>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Georgi Djakov <djakov@kernel.org>, Loic Poulain <loic.poulain@oss.qualcomm.com>, 
+	Robert Foss <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Taniya Das <quic_tdas@quicinc.com>, Sibi Sankar <quic_sibis@quicinc.com>, 
+	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
+	Joerg Roedel <joro@8bytes.org>, Imran Shaik <quic_imrashai@quicinc.com>, 
+	Mathieu Poirier <mathieu.poirier@linaro.org>, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Jessica Zhang <quic_jesszhan@quicinc.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>, 
+	"Guilherme G . Piccoli" <gpiccoli@igalia.com>, David Wronek <david@mainlining.org>, 
+	Jens Reidel <adrian@mainlining.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-phy@lists.infradead.org, linux-mmc@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-scsi@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-i2c@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev, linux-remoteproc@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-hardening@vger.kernel.org, linux@mainlining.org, 
+	~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH 20/33] dt-bindings: i2c: qcom-cci: Add the SM7150
+ compatible
+Message-ID: <20250512-incredible-radiant-jackrabbit-d0c77b@kuoka>
+References: <20250422213137.80366-1-danila@jiaxyga.com>
+ <20250422213137.80366-4-danila@jiaxyga.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,116 +84,19 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0hgpq0VmO_rDnEjDQniUiLJP3yo3-Rpy1NNxA_k8VAS2A@mail.gmail.com>
+In-Reply-To: <20250422213137.80366-4-danila@jiaxyga.com>
 
-On Mon, May 12, 2025 at 01:56:06PM +0200, Rafael J. Wysocki wrote:
-> On Sun, May 4, 2025 at 11:06 AM Raag Jadav <raag.jadav@intel.com> wrote:
-> >
-> > If error flags are set on an AER capable device, most likely either the
-> > device recovery is in progress or has already failed. Neither of the
-> > cases are well suited for power state transition of the device, since
-> > this can lead to unpredictable consequences like resume failure, or in
-> > worst case the device is lost because of it. Leave the device in its
-> > existing power state to avoid such issues.
-> >
-> > Signed-off-by: Raag Jadav <raag.jadav@intel.com>
-> > ---
-> >
-> > v2: Synchronize AER handling with PCI PM (Rafael)
-> > v3: Move pci_aer_in_progress() to pci_set_low_power_state() (Rafael)
-> >     Elaborate "why" (Bjorn)
+On Wed, Apr 23, 2025 at 12:31:24AM GMT, Danila Tikhonov wrote:
+> Add the SM7150 CCI device string compatible.
 > 
-> I think this is reasonable, so
-> 
-> Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Thank you!
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> (and you might as well CC it to linux-pm@vger.kernel.org>).
+Best regards,
+Krzysztof
 
-Cc'ing linux-pm list as requested by Rafael.
-
-> > More discussion on [1].
-> > [1] https://lore.kernel.org/all/CAJZ5v0g-aJXfVH+Uc=9eRPuW08t-6PwzdyMXsC6FZRKYJtY03Q@mail.gmail.com/
-> >
-> >  drivers/pci/pci.c      | 12 ++++++++++++
-> >  drivers/pci/pcie/aer.c | 11 +++++++++++
-> >  include/linux/aer.h    |  2 ++
-> >  3 files changed, 25 insertions(+)
-> >
-> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > index 4d7c9f64ea24..25b2df34336c 100644
-> > --- a/drivers/pci/pci.c
-> > +++ b/drivers/pci/pci.c
-> > @@ -9,6 +9,7 @@
-> >   */
-> >
-> >  #include <linux/acpi.h>
-> > +#include <linux/aer.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/delay.h>
-> >  #include <linux/dmi.h>
-> > @@ -1539,6 +1540,17 @@ static int pci_set_low_power_state(struct pci_dev *dev, pci_power_t state, bool
-> >            || (state == PCI_D2 && !dev->d2_support))
-> >                 return -EIO;
-> >
-> > +       /*
-> > +        * If error flags are set on an AER capable device, most likely either
-> > +        * the device recovery is in progress or has already failed. Neither of
-> > +        * the cases are well suited for power state transition of the device,
-> > +        * since this can lead to unpredictable consequences like resume
-> > +        * failure, or in worst case the device is lost because of it. Leave the
-> > +        * device in its existing power state to avoid such issues.
-> > +        */
-> > +       if (pci_aer_in_progress(dev))
-> > +               return -EIO;
-> > +
-> >         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> >         if (PCI_POSSIBLE_ERROR(pmcsr)) {
-> >                 pci_err(dev, "Unable to change power state from %s to %s, device inaccessible\n",
-> > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> > index a1cf8c7ef628..4040770df4f0 100644
-> > --- a/drivers/pci/pcie/aer.c
-> > +++ b/drivers/pci/pcie/aer.c
-> > @@ -237,6 +237,17 @@ int pcie_aer_is_native(struct pci_dev *dev)
-> >  }
-> >  EXPORT_SYMBOL_NS_GPL(pcie_aer_is_native, "CXL");
-> >
-> > +bool pci_aer_in_progress(struct pci_dev *dev)
-> > +{
-> > +       u16 reg16;
-> > +
-> > +       if (!pcie_aer_is_native(dev))
-> > +               return false;
-> > +
-> > +       pcie_capability_read_word(dev, PCI_EXP_DEVSTA, &reg16);
-> > +       return !!(reg16 & PCI_EXP_AER_FLAGS);
-> > +}
-> > +
-> >  static int pci_enable_pcie_error_reporting(struct pci_dev *dev)
-> >  {
-> >         int rc;
-> > diff --git a/include/linux/aer.h b/include/linux/aer.h
-> > index 02940be66324..e6a380bb2e68 100644
-> > --- a/include/linux/aer.h
-> > +++ b/include/linux/aer.h
-> > @@ -56,12 +56,14 @@ struct aer_capability_regs {
-> >  #if defined(CONFIG_PCIEAER)
-> >  int pci_aer_clear_nonfatal_status(struct pci_dev *dev);
-> >  int pcie_aer_is_native(struct pci_dev *dev);
-> > +bool pci_aer_in_progress(struct pci_dev *dev);
-> >  #else
-> >  static inline int pci_aer_clear_nonfatal_status(struct pci_dev *dev)
-> >  {
-> >         return -EINVAL;
-> >  }
-> >  static inline int pcie_aer_is_native(struct pci_dev *dev) { return 0; }
-> > +static inline bool pci_aer_in_progress(struct pci_dev *dev) { return false; }
-> >  #endif
-> >
-> >  void pci_print_aer(struct pci_dev *dev, int aer_severity,
-> > --
-> > 2.34.1
-> >
 
