@@ -1,224 +1,130 @@
-Return-Path: <linux-pm+bounces-27038-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27039-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2755AB300A
-	for <lists+linux-pm@lfdr.de>; Mon, 12 May 2025 08:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 441ACAB31A7
+	for <lists+linux-pm@lfdr.de>; Mon, 12 May 2025 10:29:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 725E016A8E8
-	for <lists+linux-pm@lfdr.de>; Mon, 12 May 2025 06:49:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C331E177E31
+	for <lists+linux-pm@lfdr.de>; Mon, 12 May 2025 08:29:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD66125525C;
-	Mon, 12 May 2025 06:48:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 154D1847B;
+	Mon, 12 May 2025 08:29:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="OgUgEmMS"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="d5LM0G3O"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561AE2B9A4
-	for <linux-pm@vger.kernel.org>; Mon, 12 May 2025 06:48:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98733257436
+	for <linux-pm@vger.kernel.org>; Mon, 12 May 2025 08:29:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747032539; cv=none; b=ennMFKhOq5c9e6TWCGvUn1Hdgd3/gW3LWwVUinQyzAwU3SLR9AeazMSj3md/ejlrmOUSXO6b6RoMvHoc5S7prrVIercIFpj0RvlR+nL3LTK5ZySlAKWhm8lXAiNpu1sYcLdsfT6X6MZmOi0waWL0g582GOy564V/8fzWXl61sjo=
+	t=1747038591; cv=none; b=WCbdxp48guPJgYfqK2Nq//UDltabRpYFfIntp/YTZQ8FbBmkxUsub9C7//oaRLnLOXhZOwFAOProeNdjiKFDkGNPVXL1Hqyges5RlRA4a2RJAX93DODFU1TIC1JlCIuJNZG9M2PqU7jfasjqLs3W9OgYw76YPZWly8SdiT0GEAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747032539; c=relaxed/simple;
-	bh=3hWNywDm1rmDL3n5pqpD/ttJsvAhh/MKDQWNxinnzr8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=e0l9hokOKzlVFNgv/sdG1hC/4RDeAwdSs+TA2UI579c2gCRXHLIx9TJ+ita1KtbHfXlFeVt0BoKZtkPYhm1UibaodFoUnOimHr8RwP0KoDzQO34rFxpVdkPJv2Q6r7PhXitan52m6I9WItx0KLywSP8oCCw7OpuBRFb6uPQYWdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=OgUgEmMS; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250512064848euoutp029da921298e8f6019752b750ae82ecae9~_tNQhg1AN0204202042euoutp02j
-	for <linux-pm@vger.kernel.org>; Mon, 12 May 2025 06:48:48 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250512064848euoutp029da921298e8f6019752b750ae82ecae9~_tNQhg1AN0204202042euoutp02j
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1747032528;
-	bh=xk2dkJToJKLhJspcQw7pjNVsjfwwtKPzo+HUohnIT6M=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=OgUgEmMSNCxMAJbxUvdPOZfQTIFZvL+QDxB9S3nWErrYh1jqy5apScBOxr7grJKyQ
-	 lgy2so3X7k8FxN1AXf5s5nHOOJRKK5wAK1mQ/AsDYfGKYHlEHWx3F2oNur25pAOoKS
-	 kBzadlvILnNb59zJkptnRS6tXnz0/c5+eGXbz87Q=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250512064848eucas1p14e6a595306293484fdfe4be546ba48a0~_tNQNSiEw1439814398eucas1p1E;
-	Mon, 12 May 2025 06:48:48 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250512064847eusmtip1dc87bbb74bd18adbf01a8797b75f3e88~_tNPlHGIz0641506415eusmtip1O;
-	Mon, 12 May 2025 06:48:47 +0000 (GMT)
-Message-ID: <c00ec721-1193-4cfb-87ec-fd98f215720e@samsung.com>
-Date: Mon, 12 May 2025 08:48:47 +0200
+	s=arc-20240116; t=1747038591; c=relaxed/simple;
+	bh=nsQ1fQPsHSZmJleoO7Mt48MPFFf+ROc5x7XavMNRl9c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Hyw7MkfMAKtRB4ek1YLnLfSM8SWd/1SyPsV9itjl8cbsLMgwF6vADfwW/jT4lVD2CrnaRQFBBqwuzACbObGtqS8Wz5ifZDiBej+af3ZQiS5zhh4U7HUjdskwy6F38xmu5W5/Zk2RURQtok2hARgsWHFKoUStRNe0+Zgvo5wzsaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=d5LM0G3O; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3a0b9625662so3348018f8f.3
+        for <linux-pm@vger.kernel.org>; Mon, 12 May 2025 01:29:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1747038585; x=1747643385; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oKf9j4izYTToqxyJBnoPFJwtfX8Vyf7TI0IyG8+OfBo=;
+        b=d5LM0G3Ouh8VnQzUwS5gVmwihAGbM9Ck+5YG56xgRZpNP5AzzMyEyokhW4AeGBgPGH
+         YvlW1AFLrjZw0QYwe2bi8FsFtYbfZR6x02dzKOBhbIQIuBu9appThCXj9dNfSn5iyvPS
+         3xVF2upYP93ZZ1ADNYHvNFErdLKP9HJuYVqiTCfu/Mk45TlCPqKaEg6DHV5vnCu/iwkJ
+         bW8NzD8YyhPDkU9wGkA+zqk/NndrZcsDcmMnvXKmuUVMWljwONSJB6CyOH5K1i3y4oWW
+         nlChYZGwW6Hvm39uvvMGldM3lUiIa3Fgbu049XdTg7az6Kh2j4DFJLUW4Cr6iHoFv96t
+         GvyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747038585; x=1747643385;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oKf9j4izYTToqxyJBnoPFJwtfX8Vyf7TI0IyG8+OfBo=;
+        b=orN/TrpjldKxnjzVtk38PpIT33SHwrBHbHD+y2M/yzgii/hXQnpkWqnzDCP0B4NkhJ
+         FwhuZno8DLDys4EF1NgK7liLs6CgoMUKXLmO+PKbYx93WYuB7EP+gQfgrHLfv4u4Bs0l
+         jXG42hFWtrW2nGd3K4Rz4LCF21b1w9bgsfj8MtRjG3b6tdGBjI6svYx0A3nPYhYPzV4F
+         v9CZTPE4LvLC/Ad/odSVutL7obkTa4ztIalZxSyT93gyCD2hcGw82waWvdqlr4FKLZS+
+         3ztIgMdeuHXWfb4JqP7z2m6aHof3P0DQQQoePfwJ4mmFIeUpoShKpblHzEjNNnc7eK4L
+         2ODg==
+X-Gm-Message-State: AOJu0YwBhnK0xfXk+DPl7snX6Uz1dS1Peu/0omnKdc+a1RLxehiXlm59
+	oH+vqd9Xhkx1cAaVIPz1yQmgmUCZ/Hi188df2ezsJTP+NzkXUZV6xgOqWpmLxzA=
+X-Gm-Gg: ASbGncsIOiiKTazHaLmb+O98hxUrPiMY1++MVWhPWN7l7JJiXYmPaxiDb2mBqX1VD6/
+	WCiSfxcZbnzvR5+kmSqt45NnZcGXhHhdMg1NuTvRAVawzbP++d5Ev37cM64imHd/0A2crnp+KSS
+	WcKjuNIDKyNf9tFTNZgYZ+ADfve0CCZ3W17iZFdJ/QXuUgub7nG+xY41KSlYzc+15wzaeN5RhF3
+	6KXNU7SGS0Z8qfC9wW0yc4NYpvBQMxN74/pVtpoIOjCe4MJBZgKqaRK2tAMjeMQQBaRdUzCvxCu
+	3djDEl6CRi9PVsfeBTmeHZXLyCtq1qkOys7w7VedBqIqbHRg14lhtOzpD6s1Xe8wzcJdqe1mDPb
+	i5R6ioOrEwvNJZbm2ug==
+X-Google-Smtp-Source: AGHT+IGjXf4Unrsm51GneUC4EPZLhzeiZxLlsfKl0xT/3O5OvpeiW/E4y6GXvGgQgbxcg2NnnSkTSw==
+X-Received: by 2002:a05:6000:2dc4:b0:3a0:7b07:157 with SMTP id ffacd0b85a97d-3a1f643a5b4mr9645069f8f.9.1747038584869;
+        Mon, 12 May 2025 01:29:44 -0700 (PDT)
+Received: from localhost (p200300f65f00780800000000000001b9.dip0.t-ipconnect.de. [2003:f6:5f00:7808::1b9])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3a1f5a4c78fsm11763007f8f.97.2025.05.12.01.29.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 May 2025 01:29:44 -0700 (PDT)
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>
+Cc: linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] PM / devfreq: sun8i-a33-mbus: Fix misconversion to devm_clk_rate_exclusive_get()
+Date: Mon, 12 May 2025 10:29:37 +0200
+Message-ID: <20250512082938.97110-2-u.kleine-koenig@baylibre.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/7] cpufreq/sched: Move cpufreq-specific EAS checks
- to cpufreq
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM
-	<linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, Lukasz Luba
-	<lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, Srinivas
-	Pandruvada <srinivas.pandruvada@linux.intel.com>, Dietmar Eggemann
-	<dietmar.eggemann@arm.com>, Morten Rasmussen <morten.rasmussen@arm.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>, Ricardo Neri
-	<ricardo.neri-calderon@linux.intel.com>, Pierre Gondois
-	<pierre.gondois@arm.com>, Christian Loehle <christian.loehle@arm.com>
-Content-Language: en-US
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <CAJZ5v0j_fFk=EX0Z9_w1twQH-FpntHJvr4d0WSMBM6PevfEqNg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1235; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=nsQ1fQPsHSZmJleoO7Mt48MPFFf+ROc5x7XavMNRl9c=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBoIbFyhHzB+aUSUSLbeEfCi7zZNiGMzqylXq1y6 BZtbx09WSaJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCaCGxcgAKCRCPgPtYfRL+ TjvxCACXb0Ra2nxVT2aRbH4y33njLOk77dLGEOKSuZuC6RvYPXBRJaYPERDFCcN8ThbkctuNlcB 8MzqXk64dU729rhg9d3XRtlK8VVh979WSWXCBdoOQDvYkql6JPq+kvKedRHNWQdqBQ5l+9ZTWGO rqLBa/EzAjtJmrqVKUyiwRgZXCeQapTIvA3sBZh9pDq9WPZKdohivdRkiJ9572ecLjtOAKpnunI feKUi0eYyknRJf/pSh7PMO5sablBeN0xTRGlHaFJwIK2Gb6PpyCjuGQTxIfzcx294uLUdyAopWr NinBeJr4sSRu6NxXB7DatG/3cZGftmm94Nn5KjdyGAIQw12T
+X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20250512064848eucas1p14e6a595306293484fdfe4be546ba48a0
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250509234915eucas1p2846ecef88f268d78ab2e96d4a67002b0
-X-EPHeader: CA
-X-CMS-RootMailID: 20250509234915eucas1p2846ecef88f268d78ab2e96d4a67002b0
-References: <2999205.e9J7NaK4W3@rjwysocki.net>
-	<CGME20250509234915eucas1p2846ecef88f268d78ab2e96d4a67002b0@eucas1p2.samsung.com>
-	<2317800.iZASKD2KPV@rjwysocki.net>
-	<1bf3df62-0641-459f-99fc-fd511e564b84@samsung.com>
-	<CAJZ5v0j_fFk=EX0Z9_w1twQH-FpntHJvr4d0WSMBM6PevfEqNg@mail.gmail.com>
 
-On 10.05.2025 13:31, Rafael J. Wysocki wrote:
-> On Sat, May 10, 2025 at 1:49 AM Marek Szyprowski
-> <m.szyprowski@samsung.com> wrote:
->> On 06.05.2025 22:37, Rafael J. Wysocki wrote:
->>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>
->>> Doing cpufreq-specific EAS checks that require accessing policy
->>> internals directly from sched_is_eas_possible() is a bit unfortunate,
->>> so introduce cpufreq_ready_for_eas() in cpufreq, move those checks
->>> into that new function and make sched_is_eas_possible() call it.
->>>
->>> While at it, address a possible race between the EAS governor check
->>> and governor change by doing the former under the policy rwsem.
->>>
->>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>> Reviewed-by: Christian Loehle <christian.loehle@arm.com>
->>> Tested-by: Christian Loehle <christian.loehle@arm.com>
->>> Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
->> In my tests I've noticed that this patch, merged as commit 4854649b1fb4
->> ("cpufreq/sched: Move cpufreq-specific EAS checks to cpufreq"), causes a
->> regression on ARM64 Amlogic Meson SoC based OdroidN2 board. The board
->> finally lockups. Reverting $subject on top of next-20250509 fixes this
->> issue. Here is the lockdep warning observed before the lockup:
-> Thanks for the report!
->
->> ======================================================
->> WARNING: possible circular locking dependency detected
->> 6.15.0-rc5-next-20250509-dirty #10335 Tainted: G         C
->> cpufreq: cpufreq_policy_online: CPU2: Running at unlisted initial
->> frequency: 999999 kHz, changing to: 1000000 kHz
->> ------------------------------------------------------
->> kworker/3:1/79 is trying to acquire lock:
->> ffff00000494b380 (&policy->rwsem){++++}-{4:4}, at:
->> cpufreq_ready_for_eas+0x60/0xbc
->>
->> but task is already holding lock:
->> ffff8000832887a0 (sched_domains_mutex){+.+.}-{4:4}, at:
->> partition_sched_domains+0x54/0x938
->>
->> which lock already depends on the new lock.
->>
->> the existing dependency chain (in reverse order) is:
->>
->> -> #2 (sched_domains_mutex){+.+.}-{4:4}:
->>          __mutex_lock+0xa8/0x598
->>          mutex_lock_nested+0x24/0x30
->>          partition_sched_domains+0x54/0x938
->>          rebuild_sched_domains_locked+0x2d4/0x900
->>          rebuild_sched_domains+0x2c/0x48
->>          rebuild_sched_domains_energy+0x3c/0x58
->>          rebuild_sd_workfn+0x10/0x1c
->>          process_one_work+0x208/0x604
->>          worker_thread+0x244/0x388
->>          kthread+0x150/0x228
->>          ret_from_fork+0x10/0x20
->>
->> -> #1 (cpuset_mutex){+.+.}-{4:4}:
->>          __mutex_lock+0xa8/0x598
->>          mutex_lock_nested+0x24/0x30
->>          cpuset_lock+0x1c/0x28
->>          __sched_setscheduler+0x31c/0x830
->>          sched_setattr_nocheck+0x18/0x24
->>          sugov_init+0x1b4/0x388
->>          cpufreq_init_governor.part.0+0x58/0xd4
->>          cpufreq_set_policy+0x2c8/0x3ec
->>          cpufreq_online+0x520/0xb20
->>          cpufreq_add_dev+0x80/0x98
->>          subsys_interface_register+0xfc/0x118
->>          cpufreq_register_driver+0x150/0x238
->>          dt_cpufreq_probe+0x148/0x488
->>          platform_probe+0x68/0xdc
->>          really_probe+0xbc/0x298
->>          __driver_probe_device+0x78/0x12c
->>          driver_probe_device+0xdc/0x164
->>          __device_attach_driver+0xb8/0x138
->>          bus_for_each_drv+0x80/0xdc
->>          __device_attach+0xa8/0x1b0
->>          device_initial_probe+0x14/0x20
->>          bus_probe_device+0xb0/0xb4
->>          deferred_probe_work_func+0x8c/0xc8
->>          process_one_work+0x208/0x604
->>          worker_thread+0x244/0x388
->>          kthread+0x150/0x228
->>          ret_from_fork+0x10/0x20
->>
->> -> #0 (&policy->rwsem){++++}-{4:4}:
->>          __lock_acquire+0x1408/0x2254
->>          lock_acquire+0x1c8/0x354
->>          down_read+0x60/0x180
->>          cpufreq_ready_for_eas+0x60/0xbc
->>          sched_is_eas_possible+0x144/0x170
->>          partition_sched_domains+0x504/0x938
->>          rebuild_sched_domains_locked+0x2d4/0x900
->>          rebuild_sched_domains+0x2c/0x48
->>          rebuild_sched_domains_energy+0x3c/0x58
->>          rebuild_sd_workfn+0x10/0x1c
->>          process_one_work+0x208/0x604
->>          worker_thread+0x244/0x388
->>          kthread+0x150/0x228
->>          ret_from_fork+0x10/0x20
->>
->> other info that might help us debug this:
->>
->> Chain exists of:
->>     &policy->rwsem --> cpuset_mutex --> sched_domains_mutex
->>
->>    Possible unsafe locking scenario:
->>
->>          CPU0                    CPU1
->>          ----                    ----
->>     lock(sched_domains_mutex);
->>                                  lock(cpuset_mutex);
->>                                  lock(sched_domains_mutex);
->>     rlock(&policy->rwsem);
->>
->>    *** DEADLOCK ***
-> Well, it turns out that trying to acquire policy->rwsem under
-> sched_domains_mutex is a bad idea.  It was added to
-> cpufreq_policy_is_good_for_eas() to address a theoretical race, so it
-> can be dropped safely.  A theoretical race is better than a real
-> deadlock.
->
-> Please test the attached patch.
+The patch converting the driver to make more use of devm functions got
+one conversion wrong making the driver not compilable any more. I have
+no excuse, mea culpa!
 
-This fixed the observed issue. Thanks!
+Fix this by adding the needed device parameter.
 
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/all/202412070231.MzXdNrLv-lkp@intel.com
+Fixes: bc253b28a365 ("PM / devfreq: sun8i-a33-mbus: Simplify by using more devm functions")
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
+---
+ drivers/devfreq/sun8i-a33-mbus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-Best regards
+diff --git a/drivers/devfreq/sun8i-a33-mbus.c b/drivers/devfreq/sun8i-a33-mbus.c
+index f99af530211d..4bd5657558d6 100644
+--- a/drivers/devfreq/sun8i-a33-mbus.c
++++ b/drivers/devfreq/sun8i-a33-mbus.c
+@@ -381,7 +381,7 @@ static int sun8i_a33_mbus_probe(struct platform_device *pdev)
+ 		return dev_err_probe(dev, ret, "failed to lock dram clock rate\n");
+ 
+ 	/* Lock the MBUS clock rate to keep MBUS_TMR_PERIOD in sync. */
+-	ret = devm_clk_rate_exclusive_get(priv->clk_mbus);
++	ret = devm_clk_rate_exclusive_get(dev, priv->clk_mbus);
+ 	if (ret)
+ 		return dev_err_probe(dev, ret, "failed to lock mbus clock rate\n");
+ 
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+2.47.2
 
 
