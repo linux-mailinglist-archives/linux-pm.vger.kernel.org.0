@@ -1,241 +1,193 @@
-Return-Path: <linux-pm+bounces-27049-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27050-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD2A8AB3C6F
-	for <lists+linux-pm@lfdr.de>; Mon, 12 May 2025 17:42:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6352EAB3E17
+	for <lists+linux-pm@lfdr.de>; Mon, 12 May 2025 18:52:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99DC917E4E2
-	for <lists+linux-pm@lfdr.de>; Mon, 12 May 2025 15:42:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D78F6188F823
+	for <lists+linux-pm@lfdr.de>; Mon, 12 May 2025 16:52:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D210223C4FB;
-	Mon, 12 May 2025 15:41:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF8FB25335E;
+	Mon, 12 May 2025 16:52:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b="jL8JZhYU";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="pxC6oBya"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HVYuGRhz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fhigh-b1-smtp.messagingengine.com (fhigh-b1-smtp.messagingengine.com [202.12.124.152])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A627239567;
-	Mon, 12 May 2025 15:41:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA6A86352;
+	Mon, 12 May 2025 16:52:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747064519; cv=none; b=QXpvn5FvUhMTCFldLCxe6fRf9gd4oEwgz+jAP4uycjqlBhqjulkJiUCn+WoNd6Za8eUFcXtrkSiksHIz+q/IZofPnZ7buFxlIj8hx/xHFLDp/P5uU0sWOjzUtd0UmiW+Vn7fpehElMQ1iILtZpDKmNjOcVh2KrP7mCnUdcHLFeA=
+	t=1747068757; cv=none; b=k+72m3EYnh0YakPEKblWqk0ZEV+lAdCYdRJji1YdD0O8/GQDOUJwa+QxJ+75PbplgogRE3V5mQsBu0PL0YBVvBSyGwhT7Apri/3hZy9Z9OlUZpCX8031dvvCvAsNS5cfKZ2V9yl9EDmgYLjRiZNBJ/0DmA4YXGjiuEIDapl84nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747064519; c=relaxed/simple;
-	bh=+4oLiO4GFHU12kRH/cBJ0soX/a+bXHdHYP8wcVfW7ZU=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=l+PEBVXQmkLJfLGUf24CsopV1+vaUVJ+I57XlgqASaeeXToURAYDwvYfYmbhE/qZuW+YYkYmOQ3FYscryCI0hMgP33re58d5v+yjZnpAJx/feY2NyWEoWuoR3hE2YRmVvJOjPuVNrTHffwWgzdONGopLyqS7jSp3nj3U7tT8ngU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev; spf=pass smtp.mailfrom=svenpeter.dev; dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b=jL8JZhYU; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=pxC6oBya; arc=none smtp.client-ip=202.12.124.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=svenpeter.dev
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 21A5925400D8;
-	Mon, 12 May 2025 11:41:54 -0400 (EDT)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-04.internal (MEProxy); Mon, 12 May 2025 11:41:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:subject:subject:to:to; s=fm1;
-	 t=1747064513; x=1747150913; bh=A/ri/6ZjxW7RCFovjRl8X2bDl9rq/UBN
-	CApnh0pl15I=; b=jL8JZhYU/eNhS1Dbxm8P0HfZ5uJ0f9c89R1Xokb5AT19RPm5
-	+UMawNHN9e+gdyVjzbmeX0UKUI35c234NQmPyK/mQN1vlgMpkP+3fQ+z7WYvLzUG
-	sceVXAUgUxkf5tiVfvmbw4vMxinru9KcJcufIOr8wRBYK0VIpTg7cCnCpCXG63Oh
-	vRv1TLt6VN54bh03c1nN2wI8LocK8MRenPos2cZSlGgVs0sErjULY+GDJ7MKSHHr
-	MDBkG0xm/dhyS/UpDBDXBJbUcXF6tYYybOXiIpQERyDgr5NDKJVU6fdAOl8WkyH8
-	3uRz2iYtOXuvSg6H7fpRdeXvD8iDbLPr8R4dyQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1747064513; x=
-	1747150913; bh=A/ri/6ZjxW7RCFovjRl8X2bDl9rq/UBNCApnh0pl15I=; b=p
-	xC6oByaTqzWJwlrUULPV7S5tdE3lUUlVajj+ozI2sdYQCKWMgpFqxhnNp6sQ/y3Y
-	p8bnDHQOwqQ/WqZdvo8+vkHIsA/pUzAxfOWQGRR/Q9tRWYXCfq/j+OiIDeBLGjhh
-	FMWtTGLYAZ7nbIeleqlohvHNw1IbFxAGLbJ3fIDKY8rUEoV1BOx2+vDkyBtq5QAM
-	O2wvUDSEmgPxFwTiea0QShiLok1j9VwG5slUFcddocxg18gYxzdxeDIiDJtd/lNa
-	KyTyG0FwUBWoJY3cwKOADqIRnwYgcZvdbmg3E3j2hGR7cK1GVhqQec4Ws4V2Zwk9
-	RT1cigP76djJ9Yz+g6hHg==
-X-ME-Sender: <xms:wBYiaFNvahD2L0uAISA-4GNPY-XHMqVkfJCBRUPL7Uvkv83DCo0tOA>
-    <xme:wBYiaH8U0H8aSWHE257TqtISn56uYU87w7rZURaBjDJPUK09AVw70q4qCmQh_L5Oj
-    b1V3uXVnZJoZL6QUHI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeftdduieegucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
-    tddtnecuhfhrohhmpedfufhvvghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvth
-    gvrhdruggvvheqnecuggftrfgrthhtvghrnhepleefteeugeduudeuudeuhfefheegveek
-    ueefffdvffektdffffelveffvddvueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvghtvghrrdguvghvpdhnsggp
-    rhgtphhtthhopeduledpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprhhmkhdokh
-    gvrhhnvghlsegrrhhmlhhinhhugidrohhrghdruhhkpdhrtghpthhtohepsghrghhlsegs
-    ghguvghvrdhplhdprhgtphhtthhopehsvggsrghsthhirghnrdhrvghitghhvghlsegtoh
-    hllhgrsghorhgrrdgtohhmpdhrtghpthhtohepnhgvrghlsehgohhmphgrrdguvghvpdhr
-    tghpthhtohepjhesjhgrnhhnrghurdhnvghtpdhrtghpthhtoheptghonhhorhdoughtse
-    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrhiikhdoughtsehkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopehlvggvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrgiise
-    hkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:wBYiaEQsd1xvdtdJJ1WfCDmYgfhkFuWZm0lxil1__WEgKGWQUR0-5A>
-    <xmx:wBYiaBtdFny8lKddpw7XUOJHW7bSUw9R_n012ooBLLVM6JlUq0Nj3A>
-    <xmx:wBYiaNeqU2j49KazqgorE4hyn67K84YsrCQN126k-JyVdi2Ck_kauQ>
-    <xmx:wBYiaN2DNwhMgAxOfYxgOmMN8aQfZCmK0CIhYyyTJgzfnV1YBPVl9A>
-    <xmx:wRYiaDO07QpmSUH25G9IVJMjlkEKU2glNIRaTFN6QHOUrCApyau3cbWu>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id B65281C20067; Mon, 12 May 2025 11:41:52 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1747068757; c=relaxed/simple;
+	bh=zJdYMJvHAhiYNICNPNsqH0wboKMQjcSXHu6LIl5OWXM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BvikDwo/Y8KhQM5ICkNVdQLJGctLgOgv0XnnopY7xKTzOF3dKEU3D8V3+lVvhQ+BZQ5DK1K+KgG/OxV3YeruUayH9z2SeWXtfTJiPfoVAluBjtV2pSlIQ9q3ymsNCUyUt/I6n4tH41UhsXpzMOxeqVwcDJvTgyCeW5J8UM1CpCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HVYuGRhz; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747068756; x=1778604756;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=zJdYMJvHAhiYNICNPNsqH0wboKMQjcSXHu6LIl5OWXM=;
+  b=HVYuGRhzzNMl5Vmet90ynDOG8GQWtYn0dDOM0tSnbLdVpMmJ7eSsqKbH
+   yvtIdKv20wUhk5vSBvZG7n8CRcsoru3ftu8wJiyEQveKlWnK8/2cai0h1
+   jXsupKK2jgljBJrJtn8AN9frHve8m/171mkiGqRaWKkdw/LyPdE738g1c
+   ZC2c2DR3A+nUluTMwnczMpPgJ1MnRvkSQ06Vr/QVgqL/WSnq5NisD+gXz
+   yOs8/rvxkPE9KDDxLvrYOtI07psKnx7nmUlavjYOrxzgwQjjVU15RYyk2
+   Naiz0pfM9/YRykan6N4emlRJolfQ/4o+DXuF/7MQwduAqA1Mm5exHlUHT
+   A==;
+X-CSE-ConnectionGUID: j/U7GCE2RB6B1V7ZLD4Mfg==
+X-CSE-MsgGUID: QtItMCc4SoKW7969fIKcig==
+X-IronPort-AV: E=McAfee;i="6700,10204,11431"; a="48746422"
+X-IronPort-AV: E=Sophos;i="6.15,282,1739865600"; 
+   d="scan'208";a="48746422"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2025 09:52:35 -0700
+X-CSE-ConnectionGUID: EZtLRt6xQlWRKBPzEUstcA==
+X-CSE-MsgGUID: EStaK6KASbaX2HgLRFV9VA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,282,1739865600"; 
+   d="scan'208";a="137941382"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2025 09:52:33 -0700
+Date: Mon, 12 May 2025 19:52:29 +0300
+From: Raag Jadav <raag.jadav@intel.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: mahesh@linux.ibm.com, oohall@gmail.com, bhelgaas@google.com,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	ilpo.jarvinen@linux.intel.com, lukas@wunner.de,
+	aravind.iddamsetty@linux.intel.com, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3] PCI: Prevent power state transition of erroneous
+ device
+Message-ID: <aCInTU5BmL0botSd@black.fi.intel.com>
+References: <20250504090444.3347952-1-raag.jadav@intel.com>
+ <CAJZ5v0hgpq0VmO_rDnEjDQniUiLJP3yo3-Rpy1NNxA_k8VAS2A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: Tee5e6786d5fc82a3
-Date: Mon, 12 May 2025 17:41:32 +0200
-From: "Sven Peter" <sven@svenpeter.dev>
-To: "Sebastian Reichel" <sebastian.reichel@collabora.com>
-Cc: "Janne Grunau" <j@jannau.net>, "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
- "Neal Gompa" <neal@gompa.dev>, "Hector Martin" <marcan@marcan.st>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- "Bartosz Golaszewski" <brgl@bgdev.pl>, "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>, "Lee Jones" <lee@kernel.org>,
- "Marc Zyngier" <maz@kernel.org>, "Russell King" <rmk+kernel@armlinux.org.uk>,
- asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-Message-Id: <438dc401-a531-4b07-b77c-92748acadf85@app.fastmail.com>
-In-Reply-To: 
- <2mhqiy6twurcidtwe7rhtobq5mivb2meoq6ik3dt45zwerkwrd@ebudw64trryq>
-References: <20250511-smc-6-15-v5-0-f5980bdb18bd@svenpeter.dev>
- <20250511-smc-6-15-v5-7-f5980bdb18bd@svenpeter.dev>
- <2mhqiy6twurcidtwe7rhtobq5mivb2meoq6ik3dt45zwerkwrd@ebudw64trryq>
-Subject: Re: [PATCH v5 07/10] power: reset: macsmc-reboot: Add driver for rebooting via
- Apple SMC
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0hgpq0VmO_rDnEjDQniUiLJP3yo3-Rpy1NNxA_k8VAS2A@mail.gmail.com>
 
-Hi Sebastian,
+On Mon, May 12, 2025 at 01:56:06PM +0200, Rafael J. Wysocki wrote:
+> On Sun, May 4, 2025 at 11:06 AM Raag Jadav <raag.jadav@intel.com> wrote:
+> >
+> > If error flags are set on an AER capable device, most likely either the
+> > device recovery is in progress or has already failed. Neither of the
+> > cases are well suited for power state transition of the device, since
+> > this can lead to unpredictable consequences like resume failure, or in
+> > worst case the device is lost because of it. Leave the device in its
+> > existing power state to avoid such issues.
+> >
+> > Signed-off-by: Raag Jadav <raag.jadav@intel.com>
+> > ---
+> >
+> > v2: Synchronize AER handling with PCI PM (Rafael)
+> > v3: Move pci_aer_in_progress() to pci_set_low_power_state() (Rafael)
+> >     Elaborate "why" (Bjorn)
+> 
+> I think this is reasonable, so
+> 
+> Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-thanks for the review!
+Thank you!
 
-On Mon, May 12, 2025, at 00:16, Sebastian Reichel wrote:
-> Hi,
->
-> On Sun, May 11, 2025 at 08:18:42AM +0000, Sven Peter via B4 Relay wrote:
->> From: Hector Martin <marcan@marcan.st>
->> 
->> This driver implements the reboot/shutdown support exposed by the SMC
->> on Apple Silicon machines, such as Apple M1 Macs.
->> 
->> Signed-off-by: Hector Martin <marcan@marcan.st>
->> Signed-off-by: Sven Peter <sven@svenpeter.dev>
->> ---
->>  MAINTAINERS                         |   1 +
->>  drivers/power/reset/Kconfig         |  11 ++
->>  drivers/power/reset/Makefile        |   1 +
->>  drivers/power/reset/macsmc-reboot.c | 363 ++++++++++++++++++++++++++++++++++++
->>  4 files changed, 376 insertions(+)
->> 
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index fa3a5f9ee40446bcc725c9eac2a36651e6bc7553..84f7a730eb2260b7c1e0487d18c8eb3de82f5206 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -2303,6 +2303,7 @@ F:	drivers/mfd/macsmc.c
->>  F:	drivers/nvme/host/apple.c
->>  F:	drivers/nvmem/apple-efuses.c
->>  F:	drivers/pinctrl/pinctrl-apple-gpio.c
->> +F:	drivers/power/reset/macsmc-reboot.c
->>  F:	drivers/pwm/pwm-apple.c
->>  F:	drivers/soc/apple/*
->>  F:	drivers/spi/spi-apple.c
->> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
->> index 60bf0ca64cf395cd18238fc626611c74d29844ee..6e8dfff64fdc001d09b6c00630cd8b7e2fafdd8e 100644
->> --- a/drivers/power/reset/Kconfig
->> +++ b/drivers/power/reset/Kconfig
->> @@ -128,6 +128,17 @@ config POWER_RESET_LINKSTATION
->>  
->>  	  Say Y here if you have a Buffalo LinkStation LS421D/E.
->>  
->> +config POWER_RESET_MACSMC
->> +	tristate "Apple SMC reset/power-off driver"
->> +	depends on ARCH_APPLE || COMPILE_TEST
->> +	depends on MFD_MACSMC
->> +	depends on OF
->
-> This can also be 'OF || COMPILE_TEST'. But I would expect this
-> driver to just have 'depends on MFD_MACSMC' and then manage the
-> checks for ARCH_APPLE and OF in the MFD Kconfig.
+> (and you might as well CC it to linux-pm@vger.kernel.org>).
 
-Makes sense, it'll just depend on MFD_MACSMC then and I'll move the ARCH_APPLE,
-OF, etc. depends to the MFD Kconfig.
+Cc'ing linux-pm list as requested by Rafael.
 
->
-[...]
->> +#include <linux/delay.h>
->> +#include <linux/mfd/core.h>
->> +#include <linux/mfd/macsmc.h>
->> +#include <linux/module.h>
->> +#include <linux/nvmem-consumer.h>
->> +#include <linux/of.h>
->
-> Once of_get_child_by_name() is no lnger used the correct include for
-> the remaining 'struct of_device_id' is <linux/mod_devicetable.h>
-> instead of <linux/of.h>.
-
-Fixed.
-
->
-[...]
->> +
->> +	pdev->dev.of_node = of_get_child_by_name(pdev->dev.parent->of_node, "reboot");
->
-> Why is this needed? The of_node should already be set correctly when
-> probed via the of_match_table.
-
-Leftovers from a previous version that didn't use of_match_table.
-I'll remove it.
-
->
-[...]
->> +
->> +	if (device_create_file(&pdev->dev, &dev_attr_ac_power_mode))
->> +		dev_warn(&pdev->dev, "could not create sysfs file\n");
->
-> custom sysfs files must be documented in Documentation/ABI.
-
-This sysfs file allows to configure if the system reboots automatically after
-power loss. But now that I'm looking at this again I'm not sure this driver
-is even the proper place for this (the nvmem cell is kinda unrelated to SMC)
-or if we need this at all in the kernel since the nvmem cell is already
-exposed to sysfs just with a less convenient interface at 
-/sys/bus/nvmem/devices/spmi_nvmem0/cells/pm-setting@d001,0.
-
-I'm going to drop it for now and revisit this later.
-
-
->
->> +
-[...]
->> +MODULE_LICENSE("Dual MIT/GPL");
->> +MODULE_DESCRIPTION("Apple SMC reboot/poweroff driver");
->> +MODULE_AUTHOR("Hector Martin <marcan@marcan.st>");
->> +MODULE_ALIAS("platform:macsmc-reboot");
->
-> Why is the MODULE_ALIAS needed?
-
-No idea, my best guess is it was copy/pasted without a good reason.
-I'll drop it.
-
-
-Thanks,
-
-
-Sven
+> > More discussion on [1].
+> > [1] https://lore.kernel.org/all/CAJZ5v0g-aJXfVH+Uc=9eRPuW08t-6PwzdyMXsC6FZRKYJtY03Q@mail.gmail.com/
+> >
+> >  drivers/pci/pci.c      | 12 ++++++++++++
+> >  drivers/pci/pcie/aer.c | 11 +++++++++++
+> >  include/linux/aer.h    |  2 ++
+> >  3 files changed, 25 insertions(+)
+> >
+> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > index 4d7c9f64ea24..25b2df34336c 100644
+> > --- a/drivers/pci/pci.c
+> > +++ b/drivers/pci/pci.c
+> > @@ -9,6 +9,7 @@
+> >   */
+> >
+> >  #include <linux/acpi.h>
+> > +#include <linux/aer.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/delay.h>
+> >  #include <linux/dmi.h>
+> > @@ -1539,6 +1540,17 @@ static int pci_set_low_power_state(struct pci_dev *dev, pci_power_t state, bool
+> >            || (state == PCI_D2 && !dev->d2_support))
+> >                 return -EIO;
+> >
+> > +       /*
+> > +        * If error flags are set on an AER capable device, most likely either
+> > +        * the device recovery is in progress or has already failed. Neither of
+> > +        * the cases are well suited for power state transition of the device,
+> > +        * since this can lead to unpredictable consequences like resume
+> > +        * failure, or in worst case the device is lost because of it. Leave the
+> > +        * device in its existing power state to avoid such issues.
+> > +        */
+> > +       if (pci_aer_in_progress(dev))
+> > +               return -EIO;
+> > +
+> >         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+> >         if (PCI_POSSIBLE_ERROR(pmcsr)) {
+> >                 pci_err(dev, "Unable to change power state from %s to %s, device inaccessible\n",
+> > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> > index a1cf8c7ef628..4040770df4f0 100644
+> > --- a/drivers/pci/pcie/aer.c
+> > +++ b/drivers/pci/pcie/aer.c
+> > @@ -237,6 +237,17 @@ int pcie_aer_is_native(struct pci_dev *dev)
+> >  }
+> >  EXPORT_SYMBOL_NS_GPL(pcie_aer_is_native, "CXL");
+> >
+> > +bool pci_aer_in_progress(struct pci_dev *dev)
+> > +{
+> > +       u16 reg16;
+> > +
+> > +       if (!pcie_aer_is_native(dev))
+> > +               return false;
+> > +
+> > +       pcie_capability_read_word(dev, PCI_EXP_DEVSTA, &reg16);
+> > +       return !!(reg16 & PCI_EXP_AER_FLAGS);
+> > +}
+> > +
+> >  static int pci_enable_pcie_error_reporting(struct pci_dev *dev)
+> >  {
+> >         int rc;
+> > diff --git a/include/linux/aer.h b/include/linux/aer.h
+> > index 02940be66324..e6a380bb2e68 100644
+> > --- a/include/linux/aer.h
+> > +++ b/include/linux/aer.h
+> > @@ -56,12 +56,14 @@ struct aer_capability_regs {
+> >  #if defined(CONFIG_PCIEAER)
+> >  int pci_aer_clear_nonfatal_status(struct pci_dev *dev);
+> >  int pcie_aer_is_native(struct pci_dev *dev);
+> > +bool pci_aer_in_progress(struct pci_dev *dev);
+> >  #else
+> >  static inline int pci_aer_clear_nonfatal_status(struct pci_dev *dev)
+> >  {
+> >         return -EINVAL;
+> >  }
+> >  static inline int pcie_aer_is_native(struct pci_dev *dev) { return 0; }
+> > +static inline bool pci_aer_in_progress(struct pci_dev *dev) { return false; }
+> >  #endif
+> >
+> >  void pci_print_aer(struct pci_dev *dev, int aer_severity,
+> > --
+> > 2.34.1
+> >
 
