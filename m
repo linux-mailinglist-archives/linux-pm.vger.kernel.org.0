@@ -1,140 +1,219 @@
-Return-Path: <linux-pm+bounces-27080-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27081-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A69AAB5719
-	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 16:27:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2183BAB5743
+	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 16:35:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D96C21892CCE
-	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 14:28:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 681D13A3A35
+	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 14:35:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 036AE2BDC18;
-	Tue, 13 May 2025 14:27:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D1C61AF0A7;
+	Tue, 13 May 2025 14:35:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="TL9bA5j1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Gzmr4Iex"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C7E269D1B;
-	Tue, 13 May 2025 14:27:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747146464; cv=pass; b=RnDFoEvPgP1Pw9CubvlWQ/xf89uNUude9NfFjnzuY3rlE8bzVFidpNhvKibNqJdh5JYZuyw4nYlgVo4TGQ5aIHanVTjCB8i4lquvoGXNn5akiKoEDuEOLYw42EA4ngTs7LRd0+Yn/GCz1AtKGk360rvseDs+mEbgOBxvOhXEO5k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747146464; c=relaxed/simple;
-	bh=qrm7iQ0BdPOTxoVtofacn+8/rrDJ538eLVyyVWrv16g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sh+SfAv1XG0ILVEmQw/V+E8/U4e/DNOeRF9S/uEt6/eAMieCVepQaUaxo7frGqXPC2uO/U9egUk4RgzZ4agZy30WNQoPGcn6E6y4eVg8xzZ/ki81P6aKcFn6G1078h/o9jppaaxRt7Yzgg4GizIhBqKXYfOOBu9GHcJXOyQrfMI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=TL9bA5j1; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1747146434; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=ANqNFwZEb+ZFYow3aFAQoyO/1Ud2AXpFUIBSle0bCo8FVYBcNiP+i1HJVeS9GxYppl7HJpmC+qZl37HtRPkZXcPEOXkDBCQ/zrr8dgKo5uei6H47cW+QVV7ZXJHw8+jUnBeKS3gYXF9OXPTulAsAQCmtDNFdp0Tbw/DhN5W4wsg=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1747146434; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=S8HvFU+C7sIo5Yzd4dl6ojrhAT/ghV8MpikwHZzYzPM=; 
-	b=juo7qhHanaIrojtSIzpy4DRVsL0LxCZof/Ml9fpsJ0EWTj5tH9ljTvKL658u060IhnGxO0kOeBj1jr4KDs4a0RM2Ff4rELQ6Xo0dB7Amhs30S12gFTnGp+viG8MZG4T5h0EJuFWABukZ5OjIvp4EG54KMCC1prBrdmXWOVtR1t0=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1747146434;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-	bh=S8HvFU+C7sIo5Yzd4dl6ojrhAT/ghV8MpikwHZzYzPM=;
-	b=TL9bA5j1wnQEzElGt0exkEIhE0Vo7i6xr6vp0qX6xbOLsv8oU234w/eH/ZX6PJJ4
-	goH3Vq90j1+kAQio1s0ScSTAfdctQvB99CVnqDrQkokNPU2LuRPEm7T3kvOY7xyhf0T
-	oVg9Lwl4xwFaLP7+KQ2QJZqRJPmFWFuGHhXf4uT8=
-Received: by mx.zohomail.com with SMTPS id 1747146427338952.0201359300785;
-	Tue, 13 May 2025 07:27:07 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Shawn Lin <shawn.lin@rock-chips.com>, Heiko Stuebner <heiko@sntech.de>,
- Elaine Zhang <zhangqing@rock-chips.com>,
- Finley Xiao <finley.xiao@rock-chips.com>,
- Adrian Hunter <adrian.hunter@intel.com>,
- Sebastian Reichel <sebastian.reichel@collabora.com>,
- Detlev Casanova <detlev.casanova@collabora.com>, kernel@collabora.com,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-mmc@vger.kernel.org
-Subject: Re: [PATCH v3] mmc: sdhci-of-dwcmshc: add PD workaround on RK3576
-Date: Tue, 13 May 2025 16:27:02 +0200
-Message-ID: <6154950.lOV4Wx5bFT@workhorse>
-In-Reply-To:
- <CAPDyKFp5N23KCZwOTba6vGyk9eaS1-SjSqY52FfPDng-bahn6g@mail.gmail.com>
-References:
- <20250423-rk3576-emmc-fix-v3-1-0bf80e29967f@collabora.com>
- <CAPDyKFp5N23KCZwOTba6vGyk9eaS1-SjSqY52FfPDng-bahn6g@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD59A1A01CC
+	for <linux-pm@vger.kernel.org>; Tue, 13 May 2025 14:35:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747146930; cv=none; b=ZAlklcvc2HZlkGy9j2HPG+pN5Km6OSQweQZHYvs6umrF9+BJQZaPZeLTlAG8DJC0ckMGFxJ7qeXoZ4ka/o/IbSxuoPEo8pisIEsB2yLg7sVjpT0eGea0FrssYJU6KO0pAjZp8EXUK+KrAgZRtrK5W/v/s6Pus1dW38OTzRn6c1A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747146930; c=relaxed/simple;
+	bh=FwZKRCw8iT8978ldsjaRlYdpJhgTsERdkb+N3lNjX/U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=O9c8YSmlbX/UvplfYdmWY6OR+trsSeOuBU7TxUCeqmekxAMvWMRArUlITzh4nAwp+aNAmv+PynwU9Rlcvqz/Izaxi2iCv5MYboRmSf13y6y8bRPOCH6atPlVSylL5+Mw4i0s75MWiV6uD9t6xRHWbBL/ujuFozNYOvTtA9mmt6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Gzmr4Iex; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3a0adcc3e54so3491339f8f.1
+        for <linux-pm@vger.kernel.org>; Tue, 13 May 2025 07:35:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1747146926; x=1747751726; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=28KEA+cf7exzULPtaOdve61V0mLdHEa4yWh1byFce8Y=;
+        b=Gzmr4IexHibaGNeRLobY/qWP7SOnrda5PL2cVJM57/FISwUiDMgB5cXnGduc7GC+eF
+         rpes8XEhKRTwYfBpCgrMFlHedjSBeMfxyQlKqm7RrlHkyWOtd8aeL/YGuhzQgPp4z5xc
+         NwDKUlLmbEJogXXT7zL5az3K/eQtYqt5pqcXTqV/FA2SuRN7ypPTXu57e8B5qsSDTmb+
+         DUjwk1xvi2HSWNW1h/I69u0/9R7nVO0XLCQ3eXDIXz30vz/Qbo4tlbmSqft3UYcLC6Y5
+         LvpDEzNvnHKVV36XiHUeko7iyxRL1pO8gB0am3+vnZe5TSALNsPqO36rwoWqeDTjUweg
+         9daw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747146926; x=1747751726;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=28KEA+cf7exzULPtaOdve61V0mLdHEa4yWh1byFce8Y=;
+        b=U3pOiUZj07KF2badop9WyyA/t94viN6ncl6+2yWZS3HELE/wJuEZyB2OBsvV07hcbT
+         wFn+HOF6NGHXRuZinzgJCJaokvrP1EUgkUjpkoFVaxbGqV5dv67fVSef7XzOZrtf4bJ4
+         31LZ0IGslD454BvhHf85y+7zX/J4Cmj2atoga4GLTFNIBqhXcfLVCKVMxZJDhKyGPS7G
+         jrDF7L9fDs0oCJXXoI2cFXAEhR7z7DXQacm3Nrgo/HTGwLikWKV7mdG9NjXm7aVqOxNs
+         8E3sh4j09usgManJzM0kElX3LNCCIzPPoVHuyOR3XiAhdCuFkW3mr1NncEOTRGU2Gc9d
+         elIA==
+X-Forwarded-Encrypted: i=1; AJvYcCUP+WJh0MBslx74X+R/VslH7BtMs1blhav+iiQGhvlU4T0jtQDop8cag4+lSdeJPeutk5UVIeU8fA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0w9y4tHzkl+Ua16T8nu/GQjyh6Mv8wQRjJr4We3woMxEZmXwG
+	jbVLoaM5mDvuXMFY7WtQaueilP2Jd1j+zkdjLs1MwGc6cNzsgdlYBFysIFtM7+M=
+X-Gm-Gg: ASbGnctkH8vNCMiviD61RHT+Sa1Urjw82qXEymKIkROuuK54wrDyOknr7++eEG1fIXV
+	zjExtE3NA/j4U3PfGpzod4cf2nGJ//WGcbRxX64qLRACcAQpZjSTy6yPPZYUsmhUch98x6FdUcq
+	Ufc1TeoGe7Gy4jcm3+IHWaXjH3zxtMg6F285/zRajmdmr7MlAkKDplGieLJ3EBIjVPiPqqIPqH+
+	sG9ALDIb0IvkKXMSKw9McQlv2rigT8vwE4Bzvc2iN3J/VygCAIEMFrgwjKh4U5LYsMKy+Wlqf0I
+	9B/Wf796D9BZ5m8TnmcnQD+WGFlpYpO0zligk2rlEA49ckAPBnCsjUXeBhvb0N0fVH9rIuuj14k
+	1GVocmLZzBRLJelop
+X-Google-Smtp-Source: AGHT+IGjGaxb3ZPnyECShzGCSghtyGYFdfWofCholoJMn/DMDkmH2hwI57MfaiVucMPpyvK0jvNZ9w==
+X-Received: by 2002:adf:ed92:0:b0:3a1:fcd4:eada with SMTP id ffacd0b85a97d-3a1fcd4ecdemr10094236f8f.4.1747146926088;
+        Tue, 13 May 2025 07:35:26 -0700 (PDT)
+Received: from localhost (110.8.30.213.rev.vodafone.pt. [213.30.8.110])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a1f58ed0a5sm16231692f8f.21.2025.05.13.07.35.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 May 2025 07:35:25 -0700 (PDT)
+Date: Tue, 13 May 2025 17:35:24 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: oe-kbuild@lists.linux.dev, Zaid Alali <zaidal@os.amperecomputing.com>
+Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Ira Weiny <ira.weiny@intel.com>
+Subject: [rafael-pm:bleeding-edge 135/136] drivers/acpi/apei/einj-core.c:769
+ einj_probe() warn: missing unwind goto?
+Message-ID: <0899a8f6-5880-49dc-b699-e369719280e1@suswa.mountain>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tuesday, 29 April 2025 12:06:16 Central European Summer Time Ulf Hansson wrote:
-> On Wed, 23 Apr 2025 at 09:54, Nicolas Frattaroli
-> <nicolas.frattaroli@collabora.com> wrote:
-> >
-> > RK3576's power domains have a peculiar design where the PD_NVM power
-> > domain, of which the sdhci controller is a part, seemingly does not have
-> > idempotent runtime disable/enable. The end effect is that if PD_NVM gets
-> > turned off by the generic power domain logic because all the devices
-> > depending on it are suspended, then the next time the sdhci device is
-> > unsuspended, it'll hang the SoC as soon as it tries accessing the CQHCI
-> > registers.
-> >
-> > RK3576's UFS support needed a new dev_pm_genpd_rpm_always_on function
-> > added to the generic power domains API to handle what appears to be a
-> > similar hardware design.
-> >
-> > Use this new function to ask for the same treatment in the sdhci
-> > controller by giving rk3576 its own platform data with its own postinit
-> > function. The benefit of doing this instead of marking the power domains
-> > always on in the power domain core is that we only do this if we know
-> > the platform we're running on actually uses the sdhci controller. For
-> > others, keeping PD_NVM always on would be a waste, as they won't run
-> > into this specific issue. The only other IP in PD_NVM that could be
-> > affected is FSPI0. If it gets a mainline driver, it will probably want
-> > to do the same thing.
-> >
-> > Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> 
-> Applied for next, thanks!
-> 
-> Kind regards
-> Uffe
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   9148437b5790361af63c5ffb89112c380fda2472
+commit: e54b1dc1c4f083cb66a70d8ccc866de47fc36d7a [135/136] ACPI: APEI: EINJ: Remove redundant calls to einj_get_available_error_type()
+config: x86_64-randconfig-161-20250510 (https://download.01.org/0day-ci/archive/20250511/202505110745.UJtyemor-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
 
-Hi Uffe,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202505110745.UJtyemor-lkp@intel.com/
 
-I was wondering whether we can get this into 6.15 as a fix as well, as 6.15
-should already have the genpd API additions this requires AFAIU.
+smatch warnings:
+drivers/acpi/apei/einj-core.c:769 einj_probe() warn: missing unwind goto?
 
-Fixes tag could be something like:
+vim +769 drivers/acpi/apei/einj-core.c
 
-  Fixes: cfee1b507758 ("pmdomain: rockchip: Add support for RK3576 SoC")
+6cb9441bfe8dd7f drivers/acpi/apei/einj-core.c Sudeep Holla       2025-03-17  744  static int __init einj_probe(struct faux_device *fdev)
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  745  {
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  746  	int rc;
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  747  	acpi_status status;
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  748  	struct apei_exec_context ctx;
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  749  
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  750  	status = acpi_get_table(ACPI_SIG_EINJ, 0,
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  751  				(struct acpi_table_header **)&einj_tab);
+dba648300e890fb drivers/acpi/apei/einj.c      Borislav Petkov    2016-05-23  752  	if (status == AE_NOT_FOUND) {
+5621fafaac0031e drivers/acpi/apei/einj.c      Ben Cheatham       2024-03-11  753  		pr_debug("EINJ table not found.\n");
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  754  		return -ENODEV;
+37ea9693869627d drivers/acpi/apei/einj.c      Jay Lu             2022-12-06  755  	} else if (ACPI_FAILURE(status)) {
+dba648300e890fb drivers/acpi/apei/einj.c      Borislav Petkov    2016-05-23  756  		pr_err("Failed to get EINJ table: %s\n",
+dba648300e890fb drivers/acpi/apei/einj.c      Borislav Petkov    2016-05-23  757  				acpi_format_exception(status));
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  758  		return -EINVAL;
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  759  	}
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  760  
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  761  	rc = einj_check_table(einj_tab);
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  762  	if (rc) {
+d222678426faa5b drivers/acpi/apei/einj.c      Colin Ian King     2017-01-17  763  		pr_warn(FW_BUG "Invalid EINJ table.\n");
+541156a38fd01d9 drivers/acpi/apei/einj.c      Hanjun Guo         2020-05-07  764  		goto err_put_table;
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  765  	}
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  766  
+e54b1dc1c4f083c drivers/acpi/apei/einj-core.c Zaid Alali         2025-05-06  767  	rc = einj_get_available_error_type(&available_error_type);
+e54b1dc1c4f083c drivers/acpi/apei/einj-core.c Zaid Alali         2025-05-06  768  	if (rc)
+e54b1dc1c4f083c drivers/acpi/apei/einj-core.c Zaid Alali         2025-05-06 @769  		return rc;
 
-but may need some more flavorings to keep the stable robot overlords from
-trying to apply it to 6.14 and earlier and then starting the robot uprising
-in your inbox when they notice the API is missing.
+Should be "goto err_put_table;"
 
-I originally left out the Fixes tag on the rewrite of this using the new
-API because I wanted to avoid those awkward backport scenarios for a fairly
-freshly supported SoC, but it'd be great to have this in 6.15 because that
-will be with us for a full release cycle to come.
+e54b1dc1c4f083c drivers/acpi/apei/einj-core.c Zaid Alali         2025-05-06  770  
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  771  	rc = -ENOMEM;
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  772  	einj_debug_dir = debugfs_create_dir("einj", apei_get_debugfs_dir());
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  773  
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  774  	debugfs_create_file("available_error_type", S_IRUSR, einj_debug_dir,
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  775  			    NULL, &available_error_type_fops);
+dcaed592b2fc9ca drivers/acpi/apei/einj.c      Rafael J. Wysocki  2019-03-04  776  	debugfs_create_file_unsafe("error_type", 0600, einj_debug_dir,
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  777  				   NULL, &error_type_fops);
+dcaed592b2fc9ca drivers/acpi/apei/einj.c      Rafael J. Wysocki  2019-03-04  778  	debugfs_create_file_unsafe("error_inject", 0200, einj_debug_dir,
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  779  				   NULL, &error_inject_fops);
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  780  
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  781  	apei_resources_init(&einj_resources);
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  782  	einj_exec_ctx_init(&ctx);
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  783  	rc = apei_exec_collect_resources(&ctx, &einj_resources);
+dba648300e890fb drivers/acpi/apei/einj.c      Borislav Petkov    2016-05-23  784  	if (rc) {
+dba648300e890fb drivers/acpi/apei/einj.c      Borislav Petkov    2016-05-23  785  		pr_err("Error collecting EINJ resources.\n");
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  786  		goto err_fini;
+dba648300e890fb drivers/acpi/apei/einj.c      Borislav Petkov    2016-05-23  787  	}
+dba648300e890fb drivers/acpi/apei/einj.c      Borislav Petkov    2016-05-23  788  
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  789  	rc = apei_resources_request(&einj_resources, "APEI EINJ");
+dba648300e890fb drivers/acpi/apei/einj.c      Borislav Petkov    2016-05-23  790  	if (rc) {
+dba648300e890fb drivers/acpi/apei/einj.c      Borislav Petkov    2016-05-23  791  		pr_err("Error requesting memory/port resources.\n");
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  792  		goto err_fini;
+dba648300e890fb drivers/acpi/apei/einj.c      Borislav Petkov    2016-05-23  793  	}
+dba648300e890fb drivers/acpi/apei/einj.c      Borislav Petkov    2016-05-23  794  
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  795  	rc = apei_exec_pre_map_gars(&ctx);
+dba648300e890fb drivers/acpi/apei/einj.c      Borislav Petkov    2016-05-23  796  	if (rc) {
+dba648300e890fb drivers/acpi/apei/einj.c      Borislav Petkov    2016-05-23  797  		pr_err("Error pre-mapping GARs.\n");
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  798  		goto err_release;
+dba648300e890fb drivers/acpi/apei/einj.c      Borislav Petkov    2016-05-23  799  	}
+c130bd6f82e5dda drivers/acpi/apei/einj.c      Tony Luck          2012-01-17  800  
+c130bd6f82e5dda drivers/acpi/apei/einj.c      Tony Luck          2012-01-17  801  	einj_param = einj_get_parameter_address();
+c130bd6f82e5dda drivers/acpi/apei/einj.c      Tony Luck          2012-01-17  802  	if ((param_extension || acpi5) && einj_param) {
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  803  		debugfs_create_x32("flags", S_IRUSR | S_IWUSR, einj_debug_dir,
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  804  				   &error_flags);
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  805  		debugfs_create_x64("param1", S_IRUSR | S_IWUSR, einj_debug_dir,
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  806  				   &error_param1);
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  807  		debugfs_create_x64("param2", S_IRUSR | S_IWUSR, einj_debug_dir,
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  808  				   &error_param2);
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  809  		debugfs_create_x64("param3", S_IRUSR | S_IWUSR, einj_debug_dir,
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  810  				   &error_param3);
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  811  		debugfs_create_x64("param4", S_IRUSR | S_IWUSR, einj_debug_dir,
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  812  				   &error_param4);
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  813  		debugfs_create_x32("notrigger", S_IRUSR | S_IWUSR,
+ee49089dc7d9fc7 drivers/acpi/apei/einj.c      Chen Gong          2012-03-15  814  				   einj_debug_dir, &notrigger);
+c130bd6f82e5dda drivers/acpi/apei/einj.c      Tony Luck          2012-01-17  815  	}
+c130bd6f82e5dda drivers/acpi/apei/einj.c      Tony Luck          2012-01-17  816  
+c130bd6f82e5dda drivers/acpi/apei/einj.c      Tony Luck          2012-01-17  817  	if (vendor_dev[0]) {
+c130bd6f82e5dda drivers/acpi/apei/einj.c      Tony Luck          2012-01-17  818  		vendor_blob.data = vendor_dev;
+c130bd6f82e5dda drivers/acpi/apei/einj.c      Tony Luck          2012-01-17  819  		vendor_blob.size = strlen(vendor_dev);
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  820  		debugfs_create_blob("vendor", S_IRUSR, einj_debug_dir,
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  821  				    &vendor_blob);
+9ec6dbfbdc0ade8 drivers/acpi/apei/einj.c      Greg Kroah-Hartman 2019-01-22  822  		debugfs_create_x32("vendor_flags", S_IRUSR | S_IWUSR,
+c130bd6f82e5dda drivers/acpi/apei/einj.c      Tony Luck          2012-01-17  823  				   einj_debug_dir, &vendor_flags);
+6e320ec1d98f9eb drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  824  	}
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  825  
+22fca621bd1bbc5 drivers/acpi/apei/einj.c      Avadhut Naik       2023-11-16  826  	if (vendor_errors.size)
+22fca621bd1bbc5 drivers/acpi/apei/einj.c      Avadhut Naik       2023-11-16  827  		debugfs_create_blob("oem_error", 0600, einj_debug_dir,
+22fca621bd1bbc5 drivers/acpi/apei/einj.c      Avadhut Naik       2023-11-16  828  				    &vendor_errors);
+22fca621bd1bbc5 drivers/acpi/apei/einj.c      Avadhut Naik       2023-11-16  829  
+b2f740baa421525 drivers/acpi/apei/einj.c      Borislav Petkov    2016-05-23  830  	pr_info("Error INJection is initialized.\n");
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  831  
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  832  	return 0;
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  833  
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  834  err_release:
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  835  	apei_resources_release(&einj_resources);
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  836  err_fini:
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  837  	apei_resources_fini(&einj_resources);
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  838  	debugfs_remove_recursive(einj_debug_dir);
+541156a38fd01d9 drivers/acpi/apei/einj.c      Hanjun Guo         2020-05-07  839  err_put_table:
+541156a38fd01d9 drivers/acpi/apei/einj.c      Hanjun Guo         2020-05-07  840  	acpi_put_table((struct acpi_table_header *)einj_tab);
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  841  
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  842  	return rc;
+e40213450b53157 drivers/acpi/apei/einj.c      Ying Huang         2010-05-18  843  }
 
-Kind regards,
-Nicolas Frattaroli
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
 
