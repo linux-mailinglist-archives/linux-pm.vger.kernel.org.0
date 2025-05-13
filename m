@@ -1,210 +1,140 @@
-Return-Path: <linux-pm+bounces-27079-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27080-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ADA8AB56A9
-	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 16:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A69AAB5719
+	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 16:27:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9E361B46F90
-	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 14:01:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D96C21892CCE
+	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 14:28:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79C3A28DF3E;
-	Tue, 13 May 2025 14:01:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 036AE2BDC18;
+	Tue, 13 May 2025 14:27:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EZxQtcR4"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="TL9bA5j1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4AB27FB39;
-	Tue, 13 May 2025 14:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747144883; cv=none; b=YRyEccW/i88J1BRd8SHsR9/U4Q3jtvtuPVl8E76+W8QyfEomdms/O/FeskDjRAA7rfSig1YnYKBu61Ydo8tnXiVcAWeRBXKQaLCFTTw4gHPeH69dnrC/Sc6Ldva0wNn/TX3Y7fTYZ8bqHT3A0aOU+x2V1hbwAB3dlGj8GSxolcM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747144883; c=relaxed/simple;
-	bh=v6Rm2EsNBVuAl6TS+dj1EgQWTYT0Iby5wb5SCwSNQ9g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=vCLxCP6L1vGHMfu0DJDK+P8PtgDXfpi1vCbMXGSWMF49/Cdfg9fiXOC7lxrVtl8vy9CSytdatNDpA9tyxHqwzaBQa8ysOgkKgGRz5pgnwY7YJ5d66ol2uXsq/7yZNwOghN/ehn2QXll3u0HHznK2CzCxVTWKbaF1FUGjNNBXPgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EZxQtcR4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C02A9C4CEE9;
-	Tue, 13 May 2025 14:01:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747144882;
-	bh=v6Rm2EsNBVuAl6TS+dj1EgQWTYT0Iby5wb5SCwSNQ9g=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=EZxQtcR4ph0vkw7ikUX3c3CAB6v+eQVzr3qIDlvRDcziv2s5bBkhhaoVnOuRfzJyj
-	 S5Hci/qa0OoTL7/D/roCg6VR3Q+ligKXGIWR5wEOQ97EvKhweh8dQ4+5aEgL17iqMP
-	 3fBIGP0LJ3fHhZY4bTB+g3VSyEmNDiUksrO3ODKpcHn2dEg4ToQjCtHjErpQjUkuKd
-	 OtZup+TjT1kBkRZ3mRVJWT6OIzYeUlOPlxt+sfpS4otUX5RrTxJqoUzUBH+4bAKk+Z
-	 NRkEXmePxe8PD7QLY6aumvcmpebFTCyhlxWww/N7yLkzJT2NFM1HcPoOfvzGM5vJsA
-	 +MmfoZaP0nfmA==
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-2d071fcd89bso2022182fac.3;
-        Tue, 13 May 2025 07:01:22 -0700 (PDT)
-X-Gm-Message-State: AOJu0YxFDJV+UxcSRc/kOnRBdck1b0hiPuNPjZAGIJaCTXJrisWB/YE2
-	M7vTo+T4OiASfcSBPsKNE+DXQajaC31QsK3+AUT7ylc6H/UqGa5nlAq6Pzn8rbxDJUDyB9MBdpM
-	jUe98c6KbtmtcGxrzV1r5KY5IWOY=
-X-Google-Smtp-Source: AGHT+IH7Fv0nO3ps9l44Deuibp7LvKppm8chuSm6AFepZ8q20wlIH8lneFlf9aFpFkWUm78CukuKszd9bhPMZzk5MJI=
-X-Received: by 2002:a05:6870:ac11:b0:2d5:1894:8c29 with SMTP id
- 586e51a60fabf-2dba435d651mr8383878fac.23.1747144880719; Tue, 13 May 2025
- 07:01:20 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C7E269D1B;
+	Tue, 13 May 2025 14:27:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747146464; cv=pass; b=RnDFoEvPgP1Pw9CubvlWQ/xf89uNUude9NfFjnzuY3rlE8bzVFidpNhvKibNqJdh5JYZuyw4nYlgVo4TGQ5aIHanVTjCB8i4lquvoGXNn5akiKoEDuEOLYw42EA4ngTs7LRd0+Yn/GCz1AtKGk360rvseDs+mEbgOBxvOhXEO5k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747146464; c=relaxed/simple;
+	bh=qrm7iQ0BdPOTxoVtofacn+8/rrDJ538eLVyyVWrv16g=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sh+SfAv1XG0ILVEmQw/V+E8/U4e/DNOeRF9S/uEt6/eAMieCVepQaUaxo7frGqXPC2uO/U9egUk4RgzZ4agZy30WNQoPGcn6E6y4eVg8xzZ/ki81P6aKcFn6G1078h/o9jppaaxRt7Yzgg4GizIhBqKXYfOOBu9GHcJXOyQrfMI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=TL9bA5j1; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1747146434; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=ANqNFwZEb+ZFYow3aFAQoyO/1Ud2AXpFUIBSle0bCo8FVYBcNiP+i1HJVeS9GxYppl7HJpmC+qZl37HtRPkZXcPEOXkDBCQ/zrr8dgKo5uei6H47cW+QVV7ZXJHw8+jUnBeKS3gYXF9OXPTulAsAQCmtDNFdp0Tbw/DhN5W4wsg=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1747146434; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=S8HvFU+C7sIo5Yzd4dl6ojrhAT/ghV8MpikwHZzYzPM=; 
+	b=juo7qhHanaIrojtSIzpy4DRVsL0LxCZof/Ml9fpsJ0EWTj5tH9ljTvKL658u060IhnGxO0kOeBj1jr4KDs4a0RM2Ff4rELQ6Xo0dB7Amhs30S12gFTnGp+viG8MZG4T5h0EJuFWABukZ5OjIvp4EG54KMCC1prBrdmXWOVtR1t0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1747146434;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+	bh=S8HvFU+C7sIo5Yzd4dl6ojrhAT/ghV8MpikwHZzYzPM=;
+	b=TL9bA5j1wnQEzElGt0exkEIhE0Vo7i6xr6vp0qX6xbOLsv8oU234w/eH/ZX6PJJ4
+	goH3Vq90j1+kAQio1s0ScSTAfdctQvB99CVnqDrQkokNPU2LuRPEm7T3kvOY7xyhf0T
+	oVg9Lwl4xwFaLP7+KQ2QJZqRJPmFWFuGHhXf4uT8=
+Received: by mx.zohomail.com with SMTPS id 1747146427338952.0201359300785;
+	Tue, 13 May 2025 07:27:07 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Shawn Lin <shawn.lin@rock-chips.com>, Heiko Stuebner <heiko@sntech.de>,
+ Elaine Zhang <zhangqing@rock-chips.com>,
+ Finley Xiao <finley.xiao@rock-chips.com>,
+ Adrian Hunter <adrian.hunter@intel.com>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Detlev Casanova <detlev.casanova@collabora.com>, kernel@collabora.com,
+ linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-mmc@vger.kernel.org
+Subject: Re: [PATCH v3] mmc: sdhci-of-dwcmshc: add PD workaround on RK3576
+Date: Tue, 13 May 2025 16:27:02 +0200
+Message-ID: <6154950.lOV4Wx5bFT@workhorse>
+In-Reply-To:
+ <CAPDyKFp5N23KCZwOTba6vGyk9eaS1-SjSqY52FfPDng-bahn6g@mail.gmail.com>
+References:
+ <20250423-rk3576-emmc-fix-v3-1-0bf80e29967f@collabora.com>
+ <CAPDyKFp5N23KCZwOTba6vGyk9eaS1-SjSqY52FfPDng-bahn6g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2999205.e9J7NaK4W3@rjwysocki.net> <CAJZ5v0jLpKEgAodWx8G0k127vMUe-J1rGkCEreRP7a1dQXT2vA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jLpKEgAodWx8G0k127vMUe-J1rGkCEreRP7a1dQXT2vA@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 13 May 2025 16:01:08 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gcgMJ-qihgc3_OF4djxAy8K0i-cmnjRe4AQrc_YEu4DQ@mail.gmail.com>
-X-Gm-Features: AX0GCFtctmpLuypFLtk5Ny2JrEMqafth8YnYP7vVwtioEKYPgbRKcct9jYOiFec
-Message-ID: <CAJZ5v0gcgMJ-qihgc3_OF4djxAy8K0i-cmnjRe4AQrc_YEu4DQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/7] cpufreq: intel_pstate: Enable EAS on hybrid
- platforms without SMT
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Peter Zijlstra <peterz@infradead.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Morten Rasmussen <morten.rasmussen@arm.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, 
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>, 
-	Pierre Gondois <pierre.gondois@arm.com>, Christian Loehle <christian.loehle@arm.com>, 
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-On Tue, May 13, 2025 at 2:51=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
->
-> On Tue, May 6, 2025 at 10:49=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.=
-net> wrote:
+On Tuesday, 29 April 2025 12:06:16 Central European Summer Time Ulf Hansson wrote:
+> On Wed, 23 Apr 2025 at 09:54, Nicolas Frattaroli
+> <nicolas.frattaroli@collabora.com> wrote:
 > >
-> > Hi Everyone,
+> > RK3576's power domains have a peculiar design where the PD_NVM power
+> > domain, of which the sdhci controller is a part, seemingly does not have
+> > idempotent runtime disable/enable. The end effect is that if PD_NVM gets
+> > turned off by the generic power domain logic because all the devices
+> > depending on it are suspended, then the next time the sdhci device is
+> > unsuspended, it'll hang the SoC as soon as it tries accessing the CQHCI
+> > registers.
 > >
-> > This is a new (and most likely final) version of
+> > RK3576's UFS support needed a new dev_pm_genpd_rpm_always_on function
+> > added to the generic power domains API to handle what appears to be a
+> > similar hardware design.
 > >
-> > https://lore.kernel.org/linux-pm/3344336.aeNJFYEL58@rjwysocki.net/
+> > Use this new function to ask for the same treatment in the sdhci
+> > controller by giving rk3576 its own platform data with its own postinit
+> > function. The benefit of doing this instead of marking the power domains
+> > always on in the power domain core is that we only do this if we know
+> > the platform we're running on actually uses the sdhci controller. For
+> > others, keeping PD_NVM always on would be a waste, as they won't run
+> > into this specific issue. The only other IP in PD_NVM that could be
+> > affected is FSPI0. If it gets a mainline driver, it will probably want
+> > to do the same thing.
 > >
-> > The most significant difference between it and the above is that schedu=
-til is
-> > now required for EAS to be enabled, like on the other platforms using E=
-AS,
-> > which means that intel_pstate needs to operate in the passive mode in o=
-rder
-> > to use it (the most straightforward way to switch it over to the passiv=
-e mode
-> > is to write "passive" to /sys/devices/system/cpu/intel_pstate/status).
-> >
-> > Accordingly, the changes that were needed for EAS to work without sched=
-util are
-> > not needed any more, so there is one patch less in the series because o=
-f that
-> > and patch [5/7] is simpler than its previous version because some chang=
-es made
-> > by it are not necessary any more.
-> >
-> > Another patch that has been dropped is
-> >
-> > https://lore.kernel.org/linux-pm/1964444.taCxCBeP46@rjwysocki.net/
-> >
-> > because it didn't take CPU online into account properly and it is not e=
-ssential
-> > for the current hardware anyway.
-> >
-> > There is a new patch, [7/7], which adds CAS/EAS/hybrid support descript=
-ion to
-> > the intel_pstate admin-guide documentation.
-> >
-> > The following paragraph from the original cover letter still applies:
-> >
-> > "The underlying observation is that on the platforms targeted by these =
-changes,
-> > Lunar Lake at the time of this writing, the "small" CPUs (E-cores), whe=
-n run at
-> > the same performance level, are always more energy-efficient than the "=
-big" or
-> > "performance" CPUs (P-cores).  This means that, regardless of the scale=
--
-> > invariant utilization of a task, as long as there is enough spare capac=
-ity on
-> > E-cores, the relative cost of running it there is always lower."
-> >
-> > The first 2 patches depend on the current cpufreq material queued up fo=
-r 6.16
-> > in linux-pm.git/linux-next (and in linux-next proper) and are not reall=
-y
-> > depended on by the rest of the series, but I've decided to include them=
- into
-> > this series because they have been slightly updated since the previous =
-version,
-> > mostly to take review feedback into account (I'm going to queue them up=
- for
-> > 6.16 shortly because they don't appear to be objectionable).
-> >
-> > The next 2 patches (Energy Model code changes) were reviewed previously=
-, but
-> > they are only needed because of patch [5/7].
-> >
-> > Patch [5/7] has not changed much except that some changes made by the p=
-revious
-> > version have been dropped from it.  Also its changelog has been updated=
-.  It
-> > causes perf domains to be registered per CPU and in addition to the pri=
-mary cost
-> > component, which is related to the CPU type, there is a small component
-> > proportional to performance whose role is to help balance the load betw=
-een CPUs
-> > of the same type.
-> >
-> > The expected effect is still that the CPUs of the "low-cost" type will =
-be
-> > preferred so long as there is enough spare capacity on any of them.
-> >
-> > Patch [6/7] has been updated to walk all of the cache leaves and look f=
-or
-> > the ones with level equal to 3 because the check used in the previous v=
-ersion
-> > does not always work.
-> >
-> > The documentation patch, [7/7], is new.
-> >
-> > Please refer to the individual patch changelogs for details.
->
-> This series along with the fix at
->
-> https://lore.kernel.org/linux-pm/2806514.mvXUDI8C0e@rjwysocki.net/
->
-> is now present in the experimental/intel_pstate/eas-final brangh in
-> linux-pm.git:
->
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/l=
-og/?h=3Dexperimental/intel_pstate/eas-final
->
-> and it has been added to the bleeding-edge branch for 0-day build testing=
-.
+> > Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> 
+> Applied for next, thanks!
+> 
+> Kind regards
+> Uffe
+> 
 
-In order to test it, the kernel needs to be compiled with
-CONFIG_ENERGY_MODEL set.
+Hi Uffe,
 
-If at least some cores in the system are SMT-capable, SMT needs to be
-turned off (either in the BIOS setup or by passing nosmt to the kernel
-in the command line).
+I was wondering whether we can get this into 6.15 as a fix as well, as 6.15
+should already have the genpd API additions this requires AFAIU.
 
-Finally, schedutil needs to be the cpufreq governor which requires
-intel_pstate to operate in the passive mode (schedutil is the default
-governor in that case).  The most straightforward way to switch it
-into the passive mode is to write "passive" to
-/sys/devices/system/cpu/intel_pstate/status (it may also be started in
-the passive mode as described in
-https://www.kernel.org/doc/html/latest/admin-guide/pm/intel_pstate.html).
+Fixes tag could be something like:
 
-Note that you can compare the default non-EAS configuration of
-intel_pstate to the one with EAS enabled by switching it between the
-"active" and "passive" modes via sysfs (no reboots needed).
+  Fixes: cfee1b507758 ("pmdomain: rockchip: Add support for RK3576 SoC")
 
-Thanks!
+but may need some more flavorings to keep the stable robot overlords from
+trying to apply it to 6.14 and earlier and then starting the robot uprising
+in your inbox when they notice the API is missing.
+
+I originally left out the Fixes tag on the rewrite of this using the new
+API because I wanted to avoid those awkward backport scenarios for a fairly
+freshly supported SoC, but it'd be great to have this in 6.15 because that
+will be with us for a full release cycle to come.
+
+Kind regards,
+Nicolas Frattaroli
+
+
+
 
