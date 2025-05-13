@@ -1,149 +1,267 @@
-Return-Path: <linux-pm+bounces-27096-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27097-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0749AB5D8C
-	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 22:11:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9383AB5DBB
+	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 22:38:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D8723A6B1E
-	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 20:11:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F41419E20D6
+	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 20:38:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4EA32BF3FE;
-	Tue, 13 May 2025 20:11:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 009D61F3B97;
+	Tue, 13 May 2025 20:37:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kKLYzYmV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VFO1h/ZY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 112151CD0C;
-	Tue, 13 May 2025 20:11:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBE81BC3F;
+	Tue, 13 May 2025 20:37:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747167079; cv=none; b=BGG2YmzQez497e1m4Y3TFZAswYa/vo1qxu9NTgNiVYNLciVd20K7KjBLJCWiJZhkmzhlEytALj6gwij/hZasp7Jd68YZuvV2+OYJ/jVUD2JLBNuThb9qFsQ4B5m+W2e6c++0EF9cEVwEk7fMO8yj60eeY2ABdS8/Xoeb5eBYYko=
+	t=1747168678; cv=none; b=eF7gNDCaOLpqKmiQlHINCORzjKhxOwLSCgFNEMFL5p919O89WzWdaOx8p1wQ54gxIthxinBdZSInMewJ7mCinQQbxcjZcaciUOzzxOm7C3p8u2Tx3jJWCqDUxHHS7zDLeTPOo5zJ6rNA+pSArwjxkDRxgN0nk/H29UR4NNvI9vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747167079; c=relaxed/simple;
-	bh=gjUgppDr+4DpgDh8u28iizTAHW2k0i9Nc6jDwMykpqM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D7aRhtiNJZwRz/mcu+qsYcfQJW1cQZ71TWF+OB/ZwpHBt4w6vkKXOhcWXA54jg+LLcnueX9FI68BW1vLtUwISvy1Jas/0M8MtbJU1lkQClgxr5Ud0VQg0tmGGJdyfBjbMfbrueqKkT0Ej1Mbsv0LaxCHjYXuNmLlaUQEh9jPeBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kKLYzYmV; arc=none smtp.client-ip=209.85.219.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6f54bba3e54so62327776d6.0;
-        Tue, 13 May 2025 13:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747167075; x=1747771875; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tF5j1rQdmb4dVKBXTK19MRRgnhCEFWZEWB8e/76g+FA=;
-        b=kKLYzYmVCOejjygbEGD/6oJfWSqsvI66MELBgjMyQ07CiLwSRT6WVO6TVYywvS0lWv
-         EzAqUNO86z4OwSok3zEdsHZCsmzLLlTOYMWKc+IZMqqqsqt7Isq0ywofYBPPQcMTdErq
-         cggJeMKT/PKrusQGrmg4sPpZlTutU/D1PMThjndduHeBk3pINV+RbJN2w6IzkLxhdysc
-         /YS98zgIr+Zd+4w1a6aAvD1/hRxti4oixgWaPnj1/FB2DxS6DKBW/Anqv5+2SN9Pu2/J
-         kT7tWZVYVVf9XEYkWEvMGA6Q7DAZZUibwVVipzrr1RMC+600X+ND4t02w++BYzQ9jrUf
-         TPGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747167075; x=1747771875;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tF5j1rQdmb4dVKBXTK19MRRgnhCEFWZEWB8e/76g+FA=;
-        b=HeZvFxfGF14Z//6ng7xLS2Yabfx429cjL+OnuKMsLfvN1tVbWOgOeO1KPwlRWA/J2f
-         kpUxPQKxffOPjCS2ewrTLEP4jy/OMpJWfzHZdPISq76WbfsOfrV/uulHPp2zzLp7M856
-         EVZA+bLqTIl9/DqQTIO0Z6Bvb3vAuZXP5ufCFX1ChkV2K4z7vuKJOJ9nWN9lwMdh5P2L
-         lfBELZXRTePjrPoduDkyd9yM/b429RE3fTrdJfLwFj2tYRz3jGWJbHhTcfVao1pnwoog
-         xTYPYWE4dO02InXahrtIELwQgGt0Arz4ZCdQTfhEM1fGT2htw4+FVUMchOsfXWx4er/D
-         dkxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWnG31Mr8wOK/2ViCoJR03yX6kpGLZcD/Qse8pONX/z+mNQeyAGrjaMkDtOrdhyR+T5ZoLVwEu4io8=@vger.kernel.org, AJvYcCWoS+tqJ1pNRHNMWMta2vdO2pEOfpgrvrKWy+Sa7QbMOG5s7OM2S1b2einOlt80V97omxxZj14SZZMT@vger.kernel.org, AJvYcCXlQjja093/l3DNH7QvunuqkIcblStJ+gWF7pX5sXKUivxaszwChAuf5h47WiL1pDCZ4ZCumiRsRcg+D0MS@vger.kernel.org
-X-Gm-Message-State: AOJu0YwA11H14eoHrvyjg4zdsoI8BS7S+KwAlZ4updBk3j+lsEeV5J3v
-	jnhaJa0Ao+IfNtJTpD3zq5s/sJPWKHQMLb3n19iHDlRm3Y8Fby9M8iMWiKIh6zFjDVCkHUPIxU1
-	bFq3I8kW0Wgm3LNrq14Zdp1wT7R4=
-X-Gm-Gg: ASbGncsniEw8gWInTOz5ur0/ix2B8ChRgdb/klVBmV/p87HK7wKpD8HQWJ5GZQ7NjZL
-	FRI0pv4/1STVmOIq57y1ZkQgB9jSNCpPaLMQdLzpJZijqTyBOkosgEpeXXZKy+B8hIG7HHlS7rB
-	NwuGQnj0keD0iPDsX+t0zQ9Xe7+DmS5Ho=
-X-Google-Smtp-Source: AGHT+IFAXj8ieeEB8HV91rcVj1ko9QjNssRLChXSoKZxjbSN4sXJhngxOyj6TOZMni4KsqSfr7eK6jqZHoNRu9CLwvQ=
-X-Received: by 2002:a05:6214:519b:b0:6e6:6c39:cb71 with SMTP id
- 6a1803df08f44-6f896ef6c59mr11442306d6.45.1747167074815; Tue, 13 May 2025
- 13:11:14 -0700 (PDT)
+	s=arc-20240116; t=1747168678; c=relaxed/simple;
+	bh=iledouXHe57iRPBcypmDJ7inmxqQ1E9J+7ME0uM8qbM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MmkTFV1tjx+mW2slg3ep1mRiR5yembWpLdPlRRxAiMags5m06tKgJ1jrv8UjhKZoBP2UYkr8PyLOD7/Ha+hF6NZpSGk4JfYUHKjaVAY2s5K4SS2ROuMp5iClaZwpVyPqec3qiOqVvqrJaFHiq1YkJd6MNHif37dTMae6S6F7RGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VFO1h/ZY; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747168677; x=1778704677;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iledouXHe57iRPBcypmDJ7inmxqQ1E9J+7ME0uM8qbM=;
+  b=VFO1h/ZY2SFe6aKfe/aJDYQuoiLbsepLyrkcpxclmZafYKUnQuFHpkSY
+   g2YF6xDLtOujjlT8eSVc1+dL+U0TZUoTQiAd0DAicMlofdaowcgSiBLSc
+   L9kjiHbUv6GuFNlO0/aZho75BCp0TNy7C3f5nfzfvWBI7scXGNEhG6EDX
+   PCcrSWdmeme2SQ1JeuI8jgLKf8915FqYOE4DNYq+b5pOp3oJs1aLUGP9w
+   AXMUc7Fy4becNhtN6RCAsxHiODDW6EB5PeQNu9AvhlSjFvRdYPSDdm9xQ
+   mV43W369N2nJabuwxDsJhtbEdwG1Q5fgSMMGE2aWRSIM1xVbA9Q8oNpR2
+   Q==;
+X-CSE-ConnectionGUID: 2hGg2gNqRn+oMu/z1gjRLw==
+X-CSE-MsgGUID: weNzSQ0nR9Sw72LRSU3Axw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11432"; a="49160385"
+X-IronPort-AV: E=Sophos;i="6.15,286,1739865600"; 
+   d="scan'208";a="49160385"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2025 13:37:56 -0700
+X-CSE-ConnectionGUID: lKSujK11Tuqza5QWUjLgyA==
+X-CSE-MsgGUID: cyraYM2EQ8K8c1BLePI4EA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,286,1739865600"; 
+   d="scan'208";a="138241709"
+Received: from sohilmeh.sc.intel.com ([172.25.103.65])
+  by fmviesa008.fm.intel.com with ESMTP; 13 May 2025 13:37:55 -0700
+From: Sohil Mehta <sohil.mehta@intel.com>
+To: x86@kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Xin Li <xin@zytor.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Tony Luck <tony.luck@intel.com>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Sohil Mehta <sohil.mehta@intel.com>,
+	Andrew Cooper <andrew.cooper3@citrix.com>,
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Andi Kleen <ak@linux.intel.com>,
+	Kai Huang <kai.huang@intel.com>,
+	Sandipan Das <sandipan.das@amd.com>,
+	linux-perf-users@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: [PATCH v6 0/9] x86: Add support for NMI-source reporting with FRED
+Date: Tue, 13 May 2025 13:37:54 -0700
+Message-ID: <20250513203803.2636561-1-sohil.mehta@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250510172509.2547273-1-ansuelsmth@gmail.com>
- <20250510172509.2547273-2-ansuelsmth@gmail.com> <084240c5-48aa-406a-9bbe-2f349f9c2509@oracle.com>
-In-Reply-To: <084240c5-48aa-406a-9bbe-2f349f9c2509@oracle.com>
-From: "Christian Marangi (Ansuel)" <ansuelsmth@gmail.com>
-Date: Tue, 13 May 2025 22:11:03 +0200
-X-Gm-Features: AX0GCFvqn1cVWBQbmoNskROEKnfBH2QCcLULy5fheXZiMdztNaMOcmZyFMrn8EU
-Message-ID: <CA+_ehUy+WSzRre+64KxeJKtOb_Et8HO=oMV+fNrGF5HHLzh3MA@mail.gmail.com>
-Subject: Re: [PATCH v6 2/2] thermal: Add support for Airoha EN7581 thermal sensor
-To: ALOK TIWARI <alok.a.tiwari@oracle.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Il giorno mar 13 mag 2025 alle ore 21:50 ALOK TIWARI
-<alok.a.tiwari@oracle.com> ha scritto:
->
-> > + * the same addr is used for ADC volt and valid reading.
-> > + * In such case, VALID ADDR is used and volt addr is ignored.
-> > + */
-> > +#define   EN7581_RD_CTRL_DIFF                        BIT(0)
-> > +#define EN7581_TEMPADCVALIDMASK                      0x884
-> > +#define   EN7581_ADV_RD_VALID_POLARITY               BIT(5)
-> > +#define   EN7581_ADV_RD_VALID_POS            GENMASK(4, 0)
-> > +#define EN7581_TEMPADCVOLTAGESHIFT           0x888
-> > +#define   EN7581_ADC_VOLTAGE_SHIFT           GENMASK(4, 0)
-> > +/*
-> > + * Same values for each CTL.
-> > + * Can operate in:
-> > + * - 1 sample
-> > + * - 2 sample and make average of them
-> > + * - 4,6,10,16 sample, drop max and min and make avgerage of them
->
-> typo avgerage -> average
->
-> [...]
-> > +}
-> > +
-> > +static void airoha_thermal_setup_monitor(struct airoha_thermal_priv *priv)
-> > +{
-> > +     /* Set measure mode */
-> > +     writel(FIELD_PREP(EN7581_MSRCTL0, EN7581_MSRCTL_6SAMPLE_MAX_MIX_AVG4),
-> > +            priv->base + EN7581_TEMPMSRCTL0);
-> > +
-> > +     /*
-> > +      * Configure ADC valid reading addr
-> > +      * The AHB temp monitor system doesn't have direct access to the
-> > +      * thermal sensor. It does instead work by providing all kind of
-> > +      * address to configure how to access and setup an ADC for the
-> > +      * sensor. EN7581 supports only one sensor hence the
-> > +      * implementation is greatly simplified but the AHB supports
-> > +      * up to 4 different sensor from the same ADC that can be
->
-> "all kind of address" ->  "various addresses"
-> 4 different sensor -> 4 different sensors
->
-> > +      * switched by tuning the ADC mux or wiriting address.
->
-> typo wiriting -> writing
->
-> > +      *
-> > +      * We set valid instead of volt as we don't enable valid/volt
-> > +      * split reading and AHB read valid addr in such case.
-> > +      */
-> > +     writel(priv->scu_adc_res.start + EN7581_DOUT_TADC,
-> > +            priv->base + EN7581_TEMPADCVALIDADDR);
-> > +
->
+Introduction
+============
+NMI-source reporting with FRED [1] provides a new mechanism for
+identifying the source of NMIs. As part of the FRED event delivery
+framework, a 16-bit vector bitmap is provided that identifies one or
+more sources that caused the NMI.
 
-Thanks a lot for the spelling check. I can send a follow-up or resend this...
+Using the source bitmap, the kernel can precisely run the relevant NMI
+handlers instead of polling the entire NMI handler list. Additionally,
+the source information would be invaluable for debugging misbehaving
+handlers and unknown NMIs.
 
-Don't know what Daniel prefers.
+Changes since v5
+================
+This series mainly implements PeterZ's suggestions in patches 4,5,6:
+
+ * Simplify NMI handling by always setting and using the source bitmap.
+ * Add runtime warnings for unexpected values.
+ * Fix a compile issue in apic.h with a specific config.
+ * Drop the tracepoint changes for now (include it with the DebugFS series).
+ * Pick-up Sandipan's tested-by for the perf patch.
+
+The previous posting included a major simplification compared to the
+series posted last year[2]. Refer the v5 cover letter for details.
+v5: https://lore.kernel.org/lkml/20250507012145.2998143-1-sohil.mehta@intel.com/
+
+Overview of NMI-source usage
+============================
+Code snippets:
+
+// Allocate a static source vector at compile time
+#define NMIS_VECTOR_TEST	1
+
+// Register an NMI handler with the vector
+register_nmi_handler(NMI_LOCAL, test_handler, 0, "nmi_test", NMIS_VECTOR_TEST);
+
+// Generate an NMI with the source vector using NMI encoded delivery
+__apic_send_IPI_mask(cpumask, APIC_DM_NMI | NMIS_VECTOR_TEST);
+
+// Handle an NMI with or without the source information (oversimplified)
+source_bitmap = fred_event_data(regs);
+if (!source_bitmap || (source_bitmap & BIT(NMIS_VECTOR_TEST)))
+        test_handler();
+
+// Unregister handler along with the vector
+unregister_nmi_handler(NMI_LOCAL, "nmi_test");
+
+Patch structure
+===============
+The patches are based on tip:x86/nmi because they depend on the NMI
+cleanup series merged earlier [3].
+
+Patch 1-2: Prepare FRED/KVM and enumerate NMI-source reporting
+Patch 3-5: Register and handle NMI-source vectors 
+Patch 6-8: APIC changes to generate NMIs with vectors
+Patch   9: Improve debug print with NMI-source information
+
+Many thanks to Sean Christopherson, Xin Li, H. Peter Anvin, Andi Kleen,
+Tony Luck, Kan Liang, Jacob Pan Jun, Zeng Guang, Peter Zijlstra,
+Sandipan Das, Steven Rostedt and others for their contributions, reviews
+and feedback.
+
+Future work / Opens
+===================
+I am considering a few additional changes that would be valuable for
+enhancing NMI handling support. Any feedback, preferences or suggestions
+on the following would be helpful.
+
+Assigning more NMI-source vectors
+---------------------------------
+The current patches assign NMI vectors to a limited number of sources.
+The microcode rendezvous and crash reboot code use NMI but do not go
+through the typical register_nmi_handler() path. Their handling is
+special-cased in exc_nmi(). To isolate blame and improve debugging, it
+would be useful to assign vectors to them, even if the vectors are
+ignored during handling.
+
+Other NMI sources, such as GHES and Platform NMIs, can also be assigned
+vectors to speed up their NMI handling and improve isolation. However,
+this would require a software/hardware agreement on vector reservation
+and usage. Such an endeavor is likely not worth the effort.
+
+Explicitly enabling NMIs
+------------------------
+HPA brought up the idea [4] of explicitly enabling NMIs only when the
+kernel is ready to take them. With FRED, if we enter the kernel with
+NMIs disabled, they could remain disabled until returning back to
+userspace. I am evaluating the request and related code changes.
+
+Debug support (Tracing and DebugFS)
+-----------------------
+NMI-source information can help identify issues when multiple NMIs occur
+simultaneously or if certain NMI handlers consistently misbehave. Based
+on feedback from Steven Rostedt[5], the plan is to move the trace event
+to arch/x86 and then add source_bitmap to the nmi_handler() trace event.
+
+Currently, the kernel has counters for unknown NMIs, swallowed NMIs and
+other NMI handling data. However, there is no easy way to access that.
+To identify issues that happen over a longer timeframe, it might be
+useful to add DebugFS support for NMI statistics.
+
+KVM support
+-----------
+The NMI-source feature can be useful for perf users and other NMI use
+cases in guest VMs. Exposing NMI-source to guests once FRED support is
+in place should be relatively easier. The prototype code for this is
+under evaluation.
+
+Links
+=====
+[1]: Chapter 9, https://www.intel.com/content/www/us/en/content-details/819481/flexible-return-and-event-delivery-fred-specification.html
+[2]: https://lore.kernel.org/lkml/20240709143906.1040477-1-jacob.jun.pan@linux.intel.com/
+[3]: https://lore.kernel.org/lkml/20250327234629.3953536-1-sohil.mehta@intel.com/
+[4]: https://lore.kernel.org/lkml/F5D36889-A868-46D2-A678-8EE26E28556D@zytor.com/
+[5]: https://lore.kernel.org/lkml/20250507174809.10cfc5ac@gandalf.local.home/
+
+Jacob Pan (1):
+  perf/x86: Enable NMI-source reporting for perfmon
+
+Sohil Mehta (7):
+  x86/cpufeatures: Add the CPUID feature bit for NMI-source reporting
+  x86/nmi: Extend the registration interface to include the NMI-source
+    vector
+  x86/nmi: Assign and register NMI-source vectors
+  x86/nmi: Add support to handle NMIs with source information
+  x86/nmi: Prepare for the new NMI-source vector encoding
+  x86/nmi: Enable NMI-source for IPIs delivered as NMIs
+  x86/nmi: Print source information with the unknown NMI console message
+
+Zeng Guang (1):
+  x86/fred, KVM: VMX: Pass event data to the FRED entry point from KVM
+
+ arch/x86/entry/entry_64_fred.S      |  2 +-
+ arch/x86/events/amd/ibs.c           |  2 +-
+ arch/x86/events/core.c              |  6 ++---
+ arch/x86/events/intel/core.c        |  6 ++---
+ arch/x86/include/asm/apic.h         | 39 +++++++++++++++++++++++++++++
+ arch/x86/include/asm/apicdef.h      |  2 +-
+ arch/x86/include/asm/cpufeatures.h  |  1 +
+ arch/x86/include/asm/fred.h         |  9 ++++---
+ arch/x86/include/asm/nmi.h          | 37 ++++++++++++++++++++++++++-
+ arch/x86/kernel/apic/hw_nmi.c       |  5 ++--
+ arch/x86/kernel/apic/ipi.c          |  4 +--
+ arch/x86/kernel/apic/local.h        | 24 ++++++++++--------
+ arch/x86/kernel/cpu/cpuid-deps.c    |  1 +
+ arch/x86/kernel/cpu/mce/inject.c    |  4 +--
+ arch/x86/kernel/cpu/mshyperv.c      |  3 +--
+ arch/x86/kernel/kgdb.c              |  8 +++---
+ arch/x86/kernel/kvm.c               |  9 +------
+ arch/x86/kernel/nmi.c               | 37 +++++++++++++++++++++++++++
+ arch/x86/kernel/nmi_selftest.c      |  9 +++----
+ arch/x86/kernel/smp.c               |  6 ++---
+ arch/x86/kvm/vmx/vmx.c              |  5 ++--
+ arch/x86/platform/uv/uv_nmi.c       |  4 +--
+ drivers/acpi/apei/ghes.c            |  2 +-
+ drivers/char/ipmi/ipmi_watchdog.c   |  3 +--
+ drivers/edac/igen6_edac.c           |  3 +--
+ drivers/thermal/intel/therm_throt.c |  2 +-
+ drivers/watchdog/hpwdt.c            |  6 ++---
+ 27 files changed, 171 insertions(+), 68 deletions(-)
+
+
+base-commit: f2e01dcf6df2d12e86c363ea9c37d53994d89dd6
+-- 
+2.43.0
+
 
