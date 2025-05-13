@@ -1,197 +1,158 @@
-Return-Path: <linux-pm+bounces-27088-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27090-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C593AB5A97
-	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 18:55:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C194AB5AA2
+	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 19:00:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE3C43A6104
-	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 16:55:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 677FF189C38D
+	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 17:00:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D0341E22FC;
-	Tue, 13 May 2025 16:55:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A40852BF3D5;
+	Tue, 13 May 2025 16:59:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b="Bq0wx4my"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VtnKMIj9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from latitanza.investici.org (latitanza.investici.org [82.94.249.234])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7D1B1DE3CB
-	for <linux-pm@vger.kernel.org>; Tue, 13 May 2025 16:55:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.94.249.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED552BE7A8;
+	Tue, 13 May 2025 16:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747155328; cv=none; b=fKDdaIHTzEjVyjCfnQaXLNiiq40TpdZV+aa0Y/N6TZFPxh4v2L1XtWgQAXVSyV++Hjy1CVOTUAcpJNq9Yz2V/nPSyVAad6ucF2ih8RG95YzRxIha4hCuGrpJv0nSNIuwuxN6zdjbeZtpugtuH1iJwypPnf0nHbweA3QHBKE7rFE=
+	t=1747155584; cv=none; b=Pzo9MjxVaOujBWXfo7c1HZ7jxlzZeha5f+I87Q2Op/CjhyoYqYCt0QrOHhAtmEFtePVUR1ojktqnsIfa9zN9lqE67vljeH3HVwhJ805F3SEHoCra7IcNeXvZo+9JQN3YcG/1GeCTp89XjpqwID27R6et8HZdtGWUOf45zhgHv5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747155328; c=relaxed/simple;
-	bh=idjcXr4AW3aS5sRNjH54SgoDueyDr5MtWOE5jKs+qeM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ju0fJ6vT2fIO8sAFUv0LDIvJi+cK1slishTEykxUD60jgIKll59i9h/qNL6Y+rtoD0Ix08sREzhmtU4aEeTeVD4okTVNVSiieKkx8s7hfp5jINBIZmDROwf15/c/appOX85KFBQdI1+iI0tbvkm/QRCyoGjHU1Dxe0r9FuLQJVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org; spf=pass smtp.mailfrom=paranoici.org; dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b=Bq0wx4my; arc=none smtp.client-ip=82.94.249.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paranoici.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paranoici.org;
-	s=stigmate; t=1747154745;
-	bh=eWztpAAb/Kqcm5/81RQihc6lDynmpXfknEZ8NEXt4rc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Bq0wx4mynAhBqvAw29Qxow05SpdXGj1WwfQJa6TFySo0c18xN+UU6uz/zTZCpJbH9
-	 CTXeK1tnOvr/0jrkqha7nZHwJ852j1q/7dhPomK9N4uvrZAfzn4St2V0xaZAYogmOe
-	 M0OOkLBpdAZ9LNZ7Lj5yZ9Znh5HZcSl2vXfQmyjo=
-Received: from mx3.investici.org (unknown [127.0.0.1])
-	by latitanza.investici.org (Postfix) with ESMTP id 4Zxj5j048DzGp8X;
-	Tue, 13 May 2025 16:45:45 +0000 (UTC)
-Received: from [82.94.249.234] (mx3.investici.org [82.94.249.234]) (Authenticated sender: invernomuto@paranoici.org) by localhost (Postfix) with ESMTPSA id 4Zxj5h6x8NzGp8R;
-	Tue, 13 May 2025 16:45:44 +0000 (UTC)
-Received: from frx by crunch with local (Exim 4.98.2)
-	(envelope-from <invernomuto@paranoici.org>)
-	id 1uEslE-00000000Goo-0CwT;
-	Tue, 13 May 2025 18:45:44 +0200
-From: "Francesco Poli (wintermute)" <invernomuto@paranoici.org>
-To: linux-pm list <linux-pm@vger.kernel.org>
-Cc: Francesco Poli <invernomuto@paranoici.org>,
-	Thomas Renninger <trenn@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"John B. Wyatt IV" <jwyatt@redhat.com>,
-	John Kacur <jkacur@redhat.com>,
-	Thorsten Leemhuis <linux@leemhuis.info>,
-	Justin Forbes <jforbes@redhat.com>
-Subject: [PATCH 3/3] cpupower: do not install files to /etc/default/
-Date: Tue, 13 May 2025 18:29:33 +0200
-Message-ID: <20250513163937.61062-5-invernomuto@paranoici.org>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250513163937.61062-2-invernomuto@paranoici.org>
-References: <20250513163937.61062-2-invernomuto@paranoici.org>
+	s=arc-20240116; t=1747155584; c=relaxed/simple;
+	bh=wT1jIMhAfxAIuR2cDTICkJPnwZnAngY5iWaiZPeA23k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=umrbV1eZjQvfagYQPRIm6tBDEhil0jG60cx6EJU8mw7yPOoX+rTp6Y8NyqT+PxNWhEr++5ZheQFJRWwdyBRz2tabaTgdqO6zofB1L7ryJdcNr9so/cYhFZfZbWNZQwqulq/PbenXWi8x90HpytLvlRajN/7APsiuh4B/7qU54IU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VtnKMIj9; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747155582; x=1778691582;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wT1jIMhAfxAIuR2cDTICkJPnwZnAngY5iWaiZPeA23k=;
+  b=VtnKMIj9ruIXcnLCmnC7zVl8HjwKIa0Bs59xyKcmxR0UpWFrJxmITueU
+   g/82ooNp0kSJ9ztHhLQoHE4GUHnBn3Liqj9YXyJg+ftDnjKzDyYTF2sgV
+   2+WN0nTN5Xw8VhvihbBu4cdc090z64phSKFBuuHgoMoWwKNb9PBouW0Hw
+   9hykegJBYEhDtZeWVzH5ECAwZAObs+MVNJ3dTnJ4Vg0sRO7eL3+ZxKK8w
+   xj+QjsDJx31Me/YcFYGbmmxTRbO7aj7Ur21phdLd22Q4yUymAs6Wj3RZ/
+   R0WM339jOFv3gUYFYb7nfRQv7p7b0N2GpGjU6YojCXoQFbgzI7JDHvaNh
+   A==;
+X-CSE-ConnectionGUID: 3adJXAPSTN+BakvQbuaAbA==
+X-CSE-MsgGUID: FfuvJmcjRIGYxXFZ7KL1DQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11432"; a="49004968"
+X-IronPort-AV: E=Sophos;i="6.15,285,1739865600"; 
+   d="scan'208";a="49004968"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2025 09:59:42 -0700
+X-CSE-ConnectionGUID: LqCGDER2TQKzQBomicmxjA==
+X-CSE-MsgGUID: tIAkwncLTMKMayszpT6oWA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,285,1739865600"; 
+   d="scan'208";a="138739643"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 13 May 2025 09:59:39 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uEsye-000GFT-2d;
+	Tue, 13 May 2025 16:59:36 +0000
+Date: Wed, 14 May 2025 00:59:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian Marangi <ansuelsmth@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v6 2/2] thermal: Add support for Airoha EN7581 thermal
+ sensor
+Message-ID: <202505132238.CSoMFWV9-lkp@intel.com>
+References: <20250510172509.2547273-2-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250510172509.2547273-2-ansuelsmth@gmail.com>
 
-Improve the installation procedure for the systemd service unit
-'cpupower.service', to be more distro-agnostic. Do not install the
-service unit configuration file to /etc/default/ (a directory that
-is used by Debian and Debian-derivatives and only rarely by other
-distros).
+Hi Christian,
 
-Also, clarify the role of the configuration file in its own comments.
+kernel test robot noticed the following build errors:
 
-Link: https://lore.kernel.org/linux-pm/20250509002206.bd2519ba52035d47c3c32aa6@paranoici.org/T/#ma8a3fa80acc4036af6c754e8ecabacc55b288ad1
+[auto build test ERROR on rafael-pm/thermal]
+[also build test ERROR on linus/master v6.15-rc6 next-20250513]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Fixes: 9c70b779ad91 ("cpupower: add a systemd service to run cpupower")
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/thermal-Add-support-for-Airoha-EN7581-thermal-sensor/20250511-012647
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20250510172509.2547273-2-ansuelsmth%40gmail.com
+patch subject: [PATCH v6 2/2] thermal: Add support for Airoha EN7581 thermal sensor
+config: microblaze-randconfig-r073-20250513 (https://download.01.org/0day-ci/archive/20250513/202505132238.CSoMFWV9-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 10.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250513/202505132238.CSoMFWV9-lkp@intel.com/reproduce)
 
-Signed-off-by: Francesco Poli (wintermute) <invernomuto@paranoici.org>
----
- tools/power/cpupower/Makefile                          |  6 +++---
- tools/power/cpupower/README                            |  6 +++---
- .../{cpupower.default => cpupower-service.conf}        | 10 +++++++---
- tools/power/cpupower/cpupower.service.in               |  4 ++--
- 4 files changed, 15 insertions(+), 11 deletions(-)
- rename tools/power/cpupower/{cpupower.default => cpupower-service.conf} (67%)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505132238.CSoMFWV9-lkp@intel.com/
 
-diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-index 7cec2c30f98a..be8dfac14076 100644
---- a/tools/power/cpupower/Makefile
-+++ b/tools/power/cpupower/Makefile
-@@ -305,8 +305,8 @@ install-tools: $(OUTPUT)cpupower
- 	$(INSTALL_PROGRAM) $(OUTPUT)cpupower $(DESTDIR)${bindir}
- 	$(INSTALL) -d $(DESTDIR)${bash_completion_dir}
- 	$(INSTALL_SCRIPT) cpupower-completion.sh '$(DESTDIR)${bash_completion_dir}/cpupower'
--	$(INSTALL) -d $(DESTDIR)${confdir}default
--	$(INSTALL_DATA) cpupower.default '$(DESTDIR)${confdir}default/cpupower'
-+	$(INSTALL) -d $(DESTDIR)${confdir}
-+	$(INSTALL_DATA) cpupower-service.conf '$(DESTDIR)${confdir}'
- 	$(INSTALL) -d $(DESTDIR)${libexecdir}
- 	$(INSTALL_PROGRAM) cpupower.sh '$(DESTDIR)${libexecdir}/cpupower'
- 	$(INSTALL) -d $(DESTDIR)${libdir}/systemd/system
-@@ -346,7 +346,7 @@ uninstall:
- 	- rm -f $(DESTDIR)${includedir}/cpufreq.h
- 	- rm -f $(DESTDIR)${includedir}/cpuidle.h
- 	- rm -f $(DESTDIR)${bindir}/utils/cpupower
--	- rm -f $(DESTDIR)${confdir}default/cpupower
-+	- rm -f $(DESTDIR)${confdir}cpupower-service.conf
- 	- rm -f $(DESTDIR)${libexecdir}/cpupower
- 	- rm -f $(DESTDIR)${libdir}/systemd/system/cpupower.service
- 	- rm -f $(DESTDIR)${mandir}/man1/cpupower.1
-diff --git a/tools/power/cpupower/README b/tools/power/cpupower/README
-index 494104de1540..9de449469568 100644
---- a/tools/power/cpupower/README
-+++ b/tools/power/cpupower/README
-@@ -195,9 +195,9 @@ command:
- 
- $ sudo systemctl daemon-reload
- 
--If you want to enable this systemd service, edit
--'${DESTDIR}/etc/default/cpupower' (uncommenting at least one of the options,
--depending on your preferences) and then issue the following command:
-+If you want to enable this systemd service, edit '/etc/cpupower-service.conf'
-+(uncommenting at least one of the options, depending on your preferences)
-+and then issue the following command:
- 
- $ sudo systemctl enable --now cpupower.service
- 
-diff --git a/tools/power/cpupower/cpupower.default b/tools/power/cpupower/cpupower-service.conf
-similarity index 67%
-rename from tools/power/cpupower/cpupower.default
-rename to tools/power/cpupower/cpupower-service.conf
-index 376ca40fe5a6..02eabe8e3614 100644
---- a/tools/power/cpupower/cpupower.default
-+++ b/tools/power/cpupower/cpupower-service.conf
-@@ -2,7 +2,11 @@
- # Copyright (C) 2012, Sébastien Luttringer
- # Copyright (C) 2024-2025, Francesco Poli <invernomuto@paranoici.org>
- 
--# Default file for linux-cpupower
-+# Configuration file for cpupower.service systemd service unit
-+#
-+# Edit this file (uncommenting at least one of the options, depending on
-+# your preferences) and then enable cpupower.service, if you want cpupower
-+# to run at boot with these settings.
- 
- # --- CPU clock frequency ---
- 
-@@ -15,14 +19,14 @@
- #MIN_FREQ="2.25GHz"
- #MAX_FREQ="3GHz"
- 
--# Specific frequency to be set.
-+# Set a specific frequency
- # Requires userspace governor to be available.
- # If this option is set, all the previous frequency options are ignored
- #FREQ=
- 
- # --- CPU policy ---
- 
--# Sets a register on supported Intel processore which allows software to convey
-+# Set a register on supported Intel processore which allows software to convey
- # its policy for the relative importance of performance versus energy savings to
- # the processor. See man CPUPOWER-SET(1) for additional details
- #PERF_BIAS=
-diff --git a/tools/power/cpupower/cpupower.service.in b/tools/power/cpupower/cpupower.service.in
-index f91eaed03872..fbd5b8c14270 100644
---- a/tools/power/cpupower/cpupower.service.in
-+++ b/tools/power/cpupower/cpupower.service.in
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-or-later
- # Copyright (C) 2012-2020, Sébastien Luttringer
--# Copyright (C) 2024, Francesco Poli <invernomuto@paranoici.org>
-+# Copyright (C) 2024-2025, Francesco Poli <invernomuto@paranoici.org>
- 
- [Unit]
- Description=Apply cpupower configuration
-@@ -8,7 +8,7 @@ ConditionVirtualization=!container
- 
- [Service]
- Type=oneshot
--EnvironmentFile=-___CDIR___default/cpupower
-+EnvironmentFile=-___CDIR___cpupower-service.conf
- ExecStart=___LDIR___/cpupower
- RemainAfterExit=yes
- 
+All errors (new ones prefixed by >>):
+
+   drivers/thermal/airoha_thermal.c: In function 'airoha_thermal_irq':
+>> drivers/thermal/airoha_thermal.c:316:2: error: label at end of compound statement
+     316 |  default:
+         |  ^~~~~~~
+
+
+vim +316 drivers/thermal/airoha_thermal.c
+
+   297	
+   298	static irqreturn_t airoha_thermal_irq(int irq, void *data)
+   299	{
+   300		struct airoha_thermal_priv *priv = data;
+   301		enum thermal_notify_event event;
+   302		bool update = false;
+   303		u32 status;
+   304	
+   305		status = readl(priv->base + EN7581_TEMPMONINTSTS);
+   306		switch (status & (EN7581_HOFSINTSTS0 | EN7581_LOFSINTSTS0)) {
+   307		case EN7581_HOFSINTSTS0:
+   308			event = THERMAL_TRIP_VIOLATED;
+   309			update = true;
+   310			break;
+   311		case EN7581_LOFSINTSTS0:
+   312			event = THERMAL_EVENT_UNSPECIFIED;
+   313			update = true;
+   314			break;
+   315		/* Should be impossible as we enable only these interrupt */
+ > 316		default:
+   317		}
+   318	
+   319		/* reset interrupt */
+   320		writel(status, priv->base + EN7581_TEMPMONINTSTS);
+   321	
+   322		if (update)
+   323			thermal_zone_device_update(priv->tz, event);
+   324	
+   325		return IRQ_HANDLED;
+   326	}
+   327	
+
 -- 
-2.47.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
