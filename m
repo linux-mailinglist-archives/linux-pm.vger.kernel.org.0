@@ -1,225 +1,181 @@
-Return-Path: <linux-pm+bounces-27066-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27067-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2565AB4A78
-	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 06:27:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 194F2AB4AC4
+	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 07:10:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 765CB467DCE
-	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 04:27:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 698103A824C
+	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 05:10:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3792D1DFD86;
-	Tue, 13 May 2025 04:26:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C86701E500C;
+	Tue, 13 May 2025 05:10:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SyK0rhsD"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ksygQgw1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7C920EB;
-	Tue, 13 May 2025 04:26:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47AD91DFD8B
+	for <linux-pm@vger.kernel.org>; Tue, 13 May 2025 05:10:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747110419; cv=none; b=PLBbkq02pjb0zXTa6DsCZlpV7DZcWnFH7gamYso8DlCDXZ85uEX1ibvnWfAZSbEpvvKby5IqSXQvGxmS3f4AVyhAAbDd0zh0TAG7ov2GfSPu+kLv6tSPUQsQjrixSKs6NoNcHLLs7MIqAna8fOK3mXmSxCRE+784tllKa4OPL50=
+	t=1747113013; cv=none; b=FZSHcxS/DdPUhCGnWk1hXzALOyyOSVgI8DWgGy1zmEx2oSsQbp4beiLBGt/elK8ORQvTBzNWl8Kj6wua0loGz5svZSEodiDS/wxKbmp6ACQJRIA43ybUglWANa6jdcRSENVdIXoQKoPzkSPRcl9yDjwUGkjEtSyZGxTGEwqduG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747110419; c=relaxed/simple;
-	bh=af7Baj+S+DgCiLw0BGGHcWfA+XOAp5qWaTgrQzEL3Lg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PVLZA1Q/G9qjD+WEfGsRObecqXVfz0kRkdIfRAfuto3HfMazeR6Iz2ApIUuEYYiPTJEvhXGfhgWgFz/PSQmFtkd2vS9QlIGv4n6xqXt5y1+LVRbVzYmHh0i8bKD2yFfKkOETBP0hRcxZEf6dDg2dag2TqxwJyejCqlvblt6fEL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SyK0rhsD; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-326c1795b8bso49790251fa.1;
-        Mon, 12 May 2025 21:26:56 -0700 (PDT)
+	s=arc-20240116; t=1747113013; c=relaxed/simple;
+	bh=cxqjrBx3kTpOHbacDXp/Fe0LkjauDwSUf53IzM3RIHM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CJhrq+VAE+j4DsJ6pe4XFOoNuzWHqDZgpOPyfzpsuxO+V5koaw7MK4PXWpjBU/1KPVkomAAgTN5f1uhgKWZTrzsVOtIkNaBYxFU9vEIJMQZXGuFH8EHa8heVPqAIRBoHc0gXV23KTkVyvKe84spScDwmTXoMsLZzA41vPbF9aaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ksygQgw1; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-afc857702d1so4469831a12.3
+        for <linux-pm@vger.kernel.org>; Mon, 12 May 2025 22:10:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747110415; x=1747715215; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KU20Hbb1WKgUlV8DXhGNS93f8Is7l5IDr6gro/J7Sdk=;
-        b=SyK0rhsDPXkaEtq1MO/EEkYXmSTOdQsLwRZKucJ7Usu6gD0FECQM1d+Oew5kM6hdT0
-         MHhr4WtsQwNE4iGaAvw3n6kBlxNrMIlGEdIHudn7L3jCe6GNwCldVhr8jogqjfekoKDH
-         ibB44+MTtbrce8/j29OdBQ4oZ8LmIzkKPHLa3JZ7ybVveX4cdTPUsrCJ3znWJcfKlqXr
-         AnxeBCtfp/JQUtW60yKTBINiTyCaE2d22PW9oVSRdk6oJDn8r3OFT8K0QPV0euIBQtmp
-         ErfsyXILr0CI5TT/f8MvfSEN4K2T7N8AuxjivA2iTnbjZ6e07ojMQuaGTDca3iA7vgtF
-         0Jdg==
+        d=google.com; s=20230601; t=1747113010; x=1747717810; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=81hnT5JYAGOLBlSsNMic7sDzKs20VH/V/TIv7YvaGSs=;
+        b=ksygQgw1+2CEWLR/9hyvr9MEND03eeP5drRyK6cN0tk5ciG5MwJ9RU52hp1h+lCllW
+         jhQ2c65wQa20sTroWLD6y0YhdvO2m0IkHKX0VJbL6T6A0w6p8sV47F4PHWRcO78BNBrw
+         KHxrs6FjToatxWxhLgiluitqj4ExQo8hzpCcyAG0o7WaWFh1pGkITKAdYvIV2iX+BGhb
+         2oGxtjA4KLDe3jwD05vED9s1AR8Yg9YFfRcqQZPhehzpcHNDPQNTJQi5Snw+1hJjgXYH
+         oAqUduZYE5D1/ZqMgqIxPSV5ZCVC7FZeDUIkU7P9zyqq0rms9/210rzFf7TjlFR70LaW
+         DOgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747110415; x=1747715215;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KU20Hbb1WKgUlV8DXhGNS93f8Is7l5IDr6gro/J7Sdk=;
-        b=a/ZVVaBZ5CusdW0EMFt0QZtazw39Uh6+M2TkLYTwbbGXof404k8UVIa89k4GK8Y1Ov
-         xoz0wx3PpLV09KuUcYFufkzbx+5it8Z/G1Ks/3POzvZLO/4QFGkAHh9SLauAIvmPloVk
-         tyD/6I6J7Mrd6tNKCPJyaL6T2OdiRjN1Du23Lal8sNnxjZ6s95vKX7hKjdlyzIDdYPhR
-         ZqtL8DgPua/1XYRSZL7z3R3ptc9tOWp3Eb6MpJyAW5LDBqoXjXbtCvaDaJiqxnEOnBtv
-         49nJNya9xvZjmXejqfvaMtivxmtc6Wt4dJCMdqik2e+KbHFnkp9cJ+shcf54HrDMGCvB
-         yLsA==
-X-Forwarded-Encrypted: i=1; AJvYcCUIWK3i7oZHad44oxxd07nHGm5poF+qn5u/JEpb4hqSgAUpsuuQccdN7yC9I0MFF/cvGRq085WPbW/wIoQ=@vger.kernel.org, AJvYcCUrL/Db0nKV8oKHQlbJQdX9JNu4z3Ws7ubCkvMab1nG3euXQG/j1LtEQIqFqpxqaIhZ5DuhtnMzig8=@vger.kernel.org, AJvYcCXmyAtqzjRI6X1/RgedgdPTfwRZmOVH7sHu5YISUxTGW6AXfzbeGDTjKaqVa5YbbTRv+87qqZ/JZ0Ph55U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPZymm3QVRBqZeO3ZCmALeo1YaGMw2hqBykEJb11HxEXjN0+f0
-	pN/j8cOh9yBKEni7cFkkaTJ/KJIJTlG/WZugMxI9UEVNxUuWvSC2/MyWGiEPNoFQc9JKabeVdJS
-	WjzIgGWOpRffJXERHyIdsOU6Fyb8=
-X-Gm-Gg: ASbGncuMCO6N73zI0q5cOlgT2mL8XZet1G7L/6yqZ69dspW/quRQeVOEI3jMbZgip9a
-	9eUiOUO7XMlH+QDTvZXY+q50XPQYG1Wr4FM646uL4QmS542G2fii08el96gtJDqOrbCDTAMlNKl
-	4o8r+Y4jikvHci2OBiuYTFEsMyYyY55FSrfHUWyt2WhR3f
-X-Google-Smtp-Source: AGHT+IHvB5AnxDgnzbMpmLUg9F0SuXDXuIHXVrVZso/DSN5qTNo2FxOl3dTZi+6I/ot5W4rQi0SJo3IPejNZGA7bNpc=
-X-Received: by 2002:a2e:a589:0:b0:30b:9793:c1f6 with SMTP id
- 38308e7fff4ca-327e137d694mr6115961fa.17.1747110414921; Mon, 12 May 2025
- 21:26:54 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1747113010; x=1747717810;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=81hnT5JYAGOLBlSsNMic7sDzKs20VH/V/TIv7YvaGSs=;
+        b=K+tvXx09j+f2ze2tJW5HT6p3bt6TmOFLhjmZxiUq5X/XETq3eqgL3aZPpCKxP1TZqR
+         zJiqgjIiD49Nlpz2PSIgXhuYcfiRlQOFfbELudGPBBwg8m4Eo8NMfgyOpwpuwhC6gq5i
+         NivkbbFu9G7oE7nQnQmN+oFDd1bkWvMfE/O4ntE8Qxj/CLhVI46V5acMnt11+Z29PJas
+         C7BSgCLZyq4GiwruUHcagDV6lBHqzdl4/LDQ56THlvD+ScsY/ACeRwr6craEDBPjrVcT
+         5rLjBPZv1AICCoc9TnUDxVJaIkcxGnyt04mfYNEg9rpbqIqOV1XvFImWvdZLDag9aDqV
+         Y67Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXCe35iL5vd9yQiwDP/8BT02HJexDaZOXHP1Mh1wLbQr8o6Rwii+KYyhEIy8bSGq9yiEn2h1vpekA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFYgiC4Vm5NR/1eZ3Yp9qlIDZoNbD2/w1kgl/ugLX1bEhtC8By
+	wODgfGb2c5GkE8priZSIYyekS+b9yKP6f96jtNEW+6HUdJVJDpX0C5SpQ6qy0A==
+X-Gm-Gg: ASbGnctUqLxzr2o2h2n6k1NionJfkYWA3eqI+QJRtnxtAv7I+buEfMZozoNqcCq5jN/
+	kw4sNqRBUo6yAMEefr0q6PRUPEhCgJd5MmD4MlwEEMyHR2dL8gBE2iNawcEF23XWxIEJvyv3SS3
+	4zpMXKw85q1dRIi6ESPMp0jeSNoEOqdXBUNbTde41iUD2eLDm6TOi2qwoLR2y0YwqHxQFr7diWX
+	kxV9Pdd6Y7d4d3XRHnj6RK/4S57GqmWbwKhcZBmlWtS74Kjg0JfqguBlrzsaCExsq1S3/tzZxiM
+	0PLKS3C6MdD4YqRiD/hZmMr9XMoE2qE7z1PpPqIVo781TXV9qXwW0cR3A/AGVEtWowI6MFOAtRU
+	n9NWdw0ThnpFHjfMESs4y
+X-Google-Smtp-Source: AGHT+IGfy5kPpmg1u05cDB23GMn6/iiBBg2PQjgjfT2slhmZBcXNsZ9nNvlTSHiycu8Z5JpPXl9tnw==
+X-Received: by 2002:a17:903:3bc7:b0:22f:a5ff:ec67 with SMTP id d9443c01a7336-22fc8b3399cmr209564955ad.17.1747113010228;
+        Mon, 12 May 2025 22:10:10 -0700 (PDT)
+Received: from ?IPV6:2600:1700:4570:89a0:d077:eefe:6c8:eb65? ([2600:1700:4570:89a0:d077:eefe:6c8:eb65])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22fc7549200sm71543555ad.10.2025.05.12.22.10.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 May 2025 22:10:09 -0700 (PDT)
+Message-ID: <bae35813-74fc-4a7f-bbad-a4744826bcdf@google.com>
+Date: Mon, 12 May 2025 22:10:07 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250508-tegra124-cpufreq-v4-0-d142bcbd0234@gmail.com>
- <20250508-tegra124-cpufreq-v4-2-d142bcbd0234@gmail.com> <cd801698-d7cf-4e9e-aa01-5525f8687ab0@nvidia.com>
-In-Reply-To: <cd801698-d7cf-4e9e-aa01-5525f8687ab0@nvidia.com>
-From: Aaron Kling <webgeek1234@gmail.com>
-Date: Mon, 12 May 2025 23:26:41 -0500
-X-Gm-Features: AX0GCFsdcu25FDknux4VTkGzA3aWtstvuBGFGtw0cI2YptWpGHP6FrGLDLgOiAo
-Message-ID: <CALHNRZ_9tMi5iihyTsEuU4T72=oTQM6-rVhqozzLf9DiB_TpcA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] cpufreq: tegra124: Allow building as a module
-To: Jon Hunter <jonathanh@nvidia.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/5] dt-bindings: connector: extend ports property to
+ model power connections
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Len Brown <len.brown@intel.com>, Kyle Tso <kyletso@google.com>,
+ linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+ devicetree@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+ Badhri Jagan Sridharan <badhri@google.com>, Pavel Machek <pavel@kernel.org>
+References: <20250507-batt_ops-v2-0-8d06130bffe6@google.com>
+ <20250507-batt_ops-v2-1-8d06130bffe6@google.com>
+ <174667008518.3134866.16860556665392127379.robh@kernel.org>
+From: Amit Sunil Dhamne <amitsd@google.com>
+Content-Language: en-US
+In-Reply-To: <174667008518.3134866.16860556665392127379.robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 9, 2025 at 8:38=E2=80=AFAM Jon Hunter <jonathanh@nvidia.com> wr=
-ote:
->
->
->
-> On 09/05/2025 01:04, Aaron Kling via B4 Relay wrote:
-> > From: Aaron Kling <webgeek1234@gmail.com>
-> >
-> > This requires three changes:
-> > * A soft dependency on cpufreq-dt as this driver only handles power
-> >    management and cpufreq-dt does the real operations
->
-> Hmmm .. how is this handled for other drivers using the cpufreq-dt
-> driver? I see the imx driver has a dependency on this.
+Hi Rob,
 
-A hard dependency would likely make more sense here. I can update this
-in a new revision. When I first set the soft dependency, I wasn't
-certain how the driver worked, so I was trying to be less intrusive.
-
-> > * Adding a remove routine to remove the cpufreq-dt device
-> > * Adding a exit routine to handle cleaning up the driver
-> >
-> > Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
-> > ---
-> >   drivers/cpufreq/Kconfig.arm        |  2 +-
-> >   drivers/cpufreq/tegra124-cpufreq.c | 36 +++++++++++++++++++++++++++++=
-+++----
-> >   2 files changed, 33 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-> > index 4f9cb943d945c244eb2b29f543d14df6cac4e5d4..625f6fbdaaf5fd774e3b0bb=
-996eb7ce980da41ee 100644
-> > --- a/drivers/cpufreq/Kconfig.arm
-> > +++ b/drivers/cpufreq/Kconfig.arm
-> > @@ -238,7 +238,7 @@ config ARM_TEGRA20_CPUFREQ
-> >         This adds the CPUFreq driver support for Tegra20/30 SOCs.
-> >
-> >   config ARM_TEGRA124_CPUFREQ
-> > -     bool "Tegra124 CPUFreq support"
-> > +     tristate "Tegra124 CPUFreq support"
-> >       depends on ARCH_TEGRA || COMPILE_TEST
-> >       depends on CPUFREQ_DT
-> >       default y
-> > diff --git a/drivers/cpufreq/tegra124-cpufreq.c b/drivers/cpufreq/tegra=
-124-cpufreq.c
-> > index bc0691e8971f9454def37f489e4a3e244100b9f4..b6059c91f2474c56809c403=
-eca94eacf51df734f 100644
-> > --- a/drivers/cpufreq/tegra124-cpufreq.c
-> > +++ b/drivers/cpufreq/tegra124-cpufreq.c
-> > @@ -16,6 +16,8 @@
-> >   #include <linux/pm_opp.h>
-> >   #include <linux/types.h>
-> >
-> > +static struct platform_device *platform_device;
+On 5/7/25 7:08 PM, Rob Herring (Arm) wrote:
+> On Wed, 07 May 2025 18:00:22 -0700, Amit Sunil Dhamne wrote:
+>> Extend ports property to model power lines going between connector to
+>> charger or battery/batteries. As an example, connector VBUS can supply
+>> power in & out of the battery for a DRP.
+>>
+>> Additionally, add ports property to maxim,max33359 controller example.
+>>
+>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+>> ---
+>>  .../bindings/connector/usb-connector.yaml          | 20 +++++++++++------
+>>  .../devicetree/bindings/usb/maxim,max33359.yaml    | 25 ++++++++++++++++++++++
+>>  2 files changed, 38 insertions(+), 7 deletions(-)
+>>
+> My bot found errors running 'make dt_binding_check' on your patch:
 >
-> Do we need this?
+> yamllint warnings/errors:
+I ran this and didn't see any errors on my side.
+> dtschema/dtc warnings/errors:
 >
-> > +
-> >   struct tegra124_cpufreq_priv {
-> >       struct clk *cpu_clk;
-> >       struct clk *pllp_clk;
-> > @@ -176,6 +178,21 @@ static int __maybe_unused tegra124_cpufreq_resume(=
-struct device *dev)
-> >       return err;
-> >   }
-> >
-> > +static void tegra124_cpufreq_remove(struct platform_device *pdev)
-> > +{
-> > +     struct tegra124_cpufreq_priv *priv =3D dev_get_drvdata(&pdev->dev=
-);
-> > +
-> > +     if (!IS_ERR(priv->cpufreq_dt_pdev)) {
-> > +             platform_device_unregister(priv->cpufreq_dt_pdev);
-> > +             priv->cpufreq_dt_pdev =3D ERR_PTR(-ENODEV);
-> > +     }
-> > +
-> > +     clk_put(priv->pllp_clk);
-> > +     clk_put(priv->pllx_clk);
-> > +     clk_put(priv->dfll_clk);
-> > +     clk_put(priv->cpu_clk);
-> > +}
-> > +
-> >   static const struct dev_pm_ops tegra124_cpufreq_pm_ops =3D {
-> >       SET_SYSTEM_SLEEP_PM_OPS(tegra124_cpufreq_suspend,
-> >                               tegra124_cpufreq_resume)
-> > @@ -185,12 +202,12 @@ static struct platform_driver tegra124_cpufreq_pl=
-atdrv =3D {
-> >       .driver.name    =3D "cpufreq-tegra124",
-> >       .driver.pm      =3D &tegra124_cpufreq_pm_ops,
-> >       .probe          =3D tegra124_cpufreq_probe,
-> > +     .remove         =3D tegra124_cpufreq_remove,
-> >   };
-> >
-> >   static int __init tegra_cpufreq_init(void)
-> >   {
-> >       int ret;
-> > -     struct platform_device *pdev;
-> >
-> >       if (!(of_machine_is_compatible("nvidia,tegra124") ||
-> >               of_machine_is_compatible("nvidia,tegra210")))
-> > @@ -204,15 +221,26 @@ static int __init tegra_cpufreq_init(void)
-> >       if (ret)
-> >               return ret;
-> >
-> > -     pdev =3D platform_device_register_simple("cpufreq-tegra124", -1, =
-NULL, 0);
-> > -     if (IS_ERR(pdev)) {
-> > +     platform_device =3D platform_device_register_simple("cpufreq-tegr=
-a124", -1, NULL, 0);
-> > +     if (IS_ERR(platform_device)) {
-> >               platform_driver_unregister(&tegra124_cpufreq_platdrv);
-> > -             return PTR_ERR(pdev);
-> > +             return PTR_ERR(platform_device);
-> >       }
-> >
-> >       return 0;
-> >   }
-> >   module_init(tegra_cpufreq_init);
-> >
-> > +static void __exit tegra_cpufreq_module_exit(void)
-> > +{
-> > +     if (platform_device && !IS_ERR(platform_device))
-> > +             platform_device_unregister(platform_device);
 >
-> The device is unregistered in the remove. Why do we need this?
+> doc reference errors (make refcheckdocs):
+>
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250507-batt_ops-v2-1-8d06130bffe6@google.com
+Even the build logs don't show any error log.
+>
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
 
-These are separate things, aren't they? What's unregistered in the
-remove is the cpufreq-dt device. And what's unregistered here is the
-tegra124-cpufreq device. Not the same thing, unless I'm really missing
-something.
+My patchset is based on v6.14-rc6 and I tested it on that.
 
-Sincerely,
-Aaron
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+>
+> pip3 install dtschema --upgrade
+>
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
+>
+I did all of the above but make dt_binding_check still passes.
+
+(.venv) amitsd@amitsd-gti:~/linaro-p6-image/src/linux$ make
+dt_binding_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/connector/usb-connector.yaml
+  SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+/usr/local/google/home/amitsd/linaro-p6-image/src/linux/Documentation/devicetree/bindings/net/snps,dwmac.yaml:
+mac-mode: missing type definition
+
+^ This is not newly introduced jfyi.
+
+  CHKDT   ./Documentation/devicetree/bindings
+  LINT    ./Documentation/devicetree/bindings
+  DTEX   
+Documentation/devicetree/bindings/connector/usb-connector.example.dts
+  DTC [C]
+Documentation/devicetree/bindings/connector/usb-connector.example.dtb
+
+(.venv) amitsd@amitsd-gti:~/linaro-p6-image/src/linux$ make
+dt_binding_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/usb/maxim,max33359.yaml
+  CHKDT   ./Documentation/devicetree/bindings
+  LINT    ./Documentation/devicetree/bindings
+  DTEX    Documentation/devicetree/bindings/usb/maxim,max33359.example.dts
+  DTC [C] Documentation/devicetree/bindings/usb/maxim,max33359.example.dtb
+
+Please can you advise on what I may be missing?
+
+Thanks,
+
+Amit
+
 
