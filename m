@@ -1,170 +1,119 @@
-Return-Path: <linux-pm+bounces-27134-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27135-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAE97AB6BA3
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 14:43:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 671EAAB6C6F
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 15:16:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52178160484
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 12:44:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E1B43ADF35
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 13:16:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3D6927814B;
-	Wed, 14 May 2025 12:43:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FCC2145B25;
+	Wed, 14 May 2025 13:16:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oMTcc+ea"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TrPqLSEB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAE7427780B;
-	Wed, 14 May 2025 12:43:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A95825634
+	for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 13:16:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747226634; cv=none; b=TbnoSHEPYCEKrqKif1afVCCNwWw4DjoDm+dXvuOWB9Jotb4gvPTDluqb1de1lVA9bJHGpuCOVwIva2Mt1LI7+DPhQc5fwF1aedFvgK780/DmgUUMLNzsbIk9fkMs3Jlw6a3KQJRv9Y2XqrJNn1QKyTGLCjOhSImbQZH9lWpItVg=
+	t=1747228598; cv=none; b=QnePp5w2Xms0xUmcnTzvSo93+0yDtEaPfZ1qYXgzKwFXVk5U0oZt2B4fdYugDZIzfayZqKhG7w2WvZkaauyemcX08Zf3jkyekFUfY3ApEErDkUn0VgIxuxz4BvhRM6GjoHJxTm3NklJ5gLdARgsLBDqLFflDH8sqW/rRdjL2acc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747226634; c=relaxed/simple;
-	bh=RkK5HYfym0mSKygNHtg7/x99esDPYM69w7wrfurgeaY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p3oxIVvLOpFxrQwqbgdI4fgvn9iiiIigx2kNghn8f0WxlwtKzBLRq+gsCnYDxqEMHjInhmkkymQSG7gKoi3jr3xVCZyoQ4P+QcSj5jWRcS15zUtUoy8jSM+HEZplODkivHyD/u63N5bxQV/XXpQIOw2dyWa8FDsiw9axCFytQTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oMTcc+ea; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32264C4AF09;
-	Wed, 14 May 2025 12:43:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747226634;
-	bh=RkK5HYfym0mSKygNHtg7/x99esDPYM69w7wrfurgeaY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=oMTcc+eaTWI1qALlf6gg0aDwGjDJbshwil0B+5L/0/BQOkZe1ykiWiQTz+XsPqwbv
-	 aToVfbgy0odLjMzK60nqvZhwsRBUIJZj+mWWrbR0mtaQILxD9RiEbjOySXZmQ+Flav
-	 7qK+csjYV4WqBwIH6KxOnugnek4uXLKuLDcVmW8tJ/8yQeaTiJaPUpeUHlDLVJySbn
-	 omur8hyCk954p4yJztocT19oTbci7VRfyuecJc9HExJxpOBDt8GwwDxO6xNSJetg+X
-	 1Sz26ZQwisoJoSYjCh5vCw9S/tSMQ5eVwPHG3vROuB26qgNqg22XUjh2SIqhXxaTwT
-	 AtBDNW2VT0mbw==
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-604f0d27c24so3384301eaf.2;
-        Wed, 14 May 2025 05:43:54 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUm6S2ouCT8Il9a7rd0SwmLfabs3aX3QFSCR+tqCB7itQO4pxbdqZxBrsFi1AqCZZsjjD0lb2lKljKZwgo=@vger.kernel.org, AJvYcCXR/h6yMfPMn+LI6MGDJV8pIyLQZGu9ICoFMuLl+cxyNRyAFyT0IsqzSuiKKAAgWDKdVl878lnyYgU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyiPH0vG/duLzQjpbTU4FSJhjBYnm0SN5soHlKmd7MLhfjEC8Dh
-	vZlHcy81XRi8f2WqyQbGUqO8niLDvL2uD/2wo3LaZSiMRRAYasgex0psoEDktFD5twhXljxAgBP
-	RnqGAD56+StmanbAoRT0pDkkOR3o=
-X-Google-Smtp-Source: AGHT+IFLPiLLdFHgnurhnXU+t42N4mH7EOXOgwJUCUxANYYKeRbm6LctYuTcImfBsxEDZo9qcxyNJ1w7cOf5a/dWweg=
-X-Received: by 2002:a05:6820:1b09:b0:609:de23:cfbb with SMTP id
- 006d021491bc7-609df2560c5mr1452035eaf.8.1747226633512; Wed, 14 May 2025
- 05:43:53 -0700 (PDT)
+	s=arc-20240116; t=1747228598; c=relaxed/simple;
+	bh=3mdJiBencSNxta3dyF8z2OWbBuH6yjWb2HaJ34mgkI8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NAAeXAYuFBZvx640pxv1AYwoUwAhyiY1LQLHKGV7t8i11IReMWombwAUF1IHX6yLncSfKYhAZtB7JJRkTwFjtBAOc4ur+AGQ33lPgVZmVepdEr8sVpyBPskFjRlOU4AjwYT53qsNNs5uNs2Y+zHbRVlTx+cBeZaGlyBK2LYbjVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TrPqLSEB; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43d0618746bso52825375e9.2
+        for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 06:16:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747228594; x=1747833394; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6Tc/4nqMXEbm8d6EyQQLonLFnqiRqlfA73rzExd6DXQ=;
+        b=TrPqLSEB1ulzx5H2IqgUjA1s0dE/rAadVtYSdnOlCFe4HF0YtMp4e03nReGdflnwMF
+         CKJK/ZAQgqutgtchySjvsESFvqFLuSFykcSRpeWCfDbRjZY/29CaclNEwphx5b2ivnBs
+         Frz6wIPR6Epna1PrrkmJ5j7j1enJWyLtKTVvaAHFZHBOOKCZbW45v9avFSWq//3V7Uxc
+         WzDntQAs7m1XqNRvc4M8OZqx7+b+aCnkmv8RBvCHkbizS2q9qD+9y7wu1cmVzscdsBc5
+         RdGD0vvge38IRjk1co4jELpYHmRo5RvlF3ELgjEYUx6Fdi/Qpjyo5jp2kPNsmiAo0xFh
+         8vpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747228594; x=1747833394;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Tc/4nqMXEbm8d6EyQQLonLFnqiRqlfA73rzExd6DXQ=;
+        b=emt9Jli1yxFSOsSDeVc/OKIbg6j92YJ3wdwaP7gw7nVnZkI3YW4V/Pf201Ekt9btiE
+         QcUw/xsA+B/uQvZDhmUHsjGTtC1tK4w3rfWFEpfEQvdNwme6wjjvgYVj43SVDSa3JBCX
+         E/REdbAd9HmlOwu5KCVQodIgV1FsinnHpD6OdFycJdjpBGjOcokiFO/zTHz2+kxOcTgg
+         Q8H4ThSQD7AqGWvN0+LAcmXpUySwNlg1YEYRc+M+uUgS4V2CUvnL6oMk6ems3hLW8gEK
+         gUwOFzLoDUDjy5mvIViVQbXR3TNoluBMq/YjTd/AFz9YMAmQkK4UQPbfxjghS4z3Live
+         mpfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWCsDpwakonoKJBTvMQ7BUMPxvfvWL8aFc1FoJf/IwH6IQBkyiOPuT4O96ytdgTPW0KrQToen/wgg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOlcNIVEE4znCHUXD9uOxYNEtZSGeBQt5URGwwpUzwsjAA6Jr3
+	n20R8DWvCw0iaQebtt+8sS0KgQkOS+TlBU5VPXCPO6oqAodLeS94Lh6BaA==
+X-Gm-Gg: ASbGncvra62RjiBQrddOfk2Pg7rcPGFAnKM6KwFvczusv2XV5GgsqOMkZKZ5JILFlwO
+	jUbvgU9244QyzBNIcnnx81ZOMzjv66Tw8IfrQX6yqqrYleoj9qeuLbdW8hMejKYq+kNTlN0sKvf
+	yz/lpWiirWg5fW8PhdsyVho2SdFfb3DypUUbSs2lFM4cz8zNosclzulzayL7s8wuHR16Nb8w6gE
+	6VO4qanD+5Nn8tJ5Evbz/LyL888+yN6QNQqLDJLivK4M8bfjpb8M6M29HwXyV9XFWOFZJQM50LB
+	gUT857qtQJ8QSAsCHbdMHr06V+4aEECic6or91Ycavaej6pZpGQ=
+X-Google-Smtp-Source: AGHT+IE8pnOYRJ/c4cfBs063yTkYwwC4PzsQ7cS9MN+l+gs9yIacFQxXiJfgdSPWX+aNftsTNP45Cw==
+X-Received: by 2002:a05:600c:524c:b0:442:e9eb:1b48 with SMTP id 5b1f17b1804b1-442f215f1cbmr26898775e9.24.1747228594244;
+        Wed, 14 May 2025 06:16:34 -0700 (PDT)
+Received: from Red ([2a01:cb1d:898:ab00:4a02:2aff:fe07:1efc])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-442f3979275sm30575305e9.34.2025.05.14.06.16.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 May 2025 06:16:33 -0700 (PDT)
+Date: Wed, 14 May 2025 15:16:31 +0200
+From: Corentin Labbe <clabbe.montjoie@gmail.com>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Chanwoo Choi <chanwoo@kernel.org>,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>, linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] PM / devfreq: sun8i-a33-mbus: Simplify by using more
+ devm functions
+Message-ID: <aCSXr-Hdisg-7jEd@Red>
+References: <20250513203908.205060-2-u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250513015726.1497-1-ImanDevel@gmail.com>
-In-Reply-To: <20250513015726.1497-1-ImanDevel@gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 14 May 2025 14:43:42 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gS72-yJ2=EwEb4qz2m47RAhU1Va+UnGNJAjTsT1AJiQQ@mail.gmail.com>
-X-Gm-Features: AX0GCFuiZGmk5nUYxUtq4FjjEGITyDcDkkHk819fqPtLOpfSDIUh6xmwxhv1ANQ
-Message-ID: <CAJZ5v0gS72-yJ2=EwEb4qz2m47RAhU1Va+UnGNJAjTsT1AJiQQ@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: drop redundant cpus_read_lock() from store_local_boost()
-To: Seyediman Seyedarab <imandevel@gmail.com>
-Cc: rafael@kernel.org, viresh.kumar@linaro.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, 
-	linux-kernel-mentees@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250513203908.205060-2-u.kleine-koenig@baylibre.com>
 
-On Tue, May 13, 2025 at 3:55=E2=80=AFAM Seyediman Seyedarab <imandevel@gmai=
-l.com> wrote:
->
-> Lockdep reports a possible circular locking dependency[1] when
-> cpu_hotplug_lock is acquired inside store_local_boost(), after
-> policy->rwsem has already been taken by store().
->
-> However, the boost update is strictly per-policy and does not
-> access shared state or iterate over all policies. Since policy->rwsem
-> is already held, this is enough to serialize against concurrent
-> topology changes for the current policy.
->
-> Remove the cpus_read_lock() to resolve the lockdep warning and
-> avoid unnecessary locking.
->
->  [1]
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
->  WARNING: possible circular locking dependency detected
->  6.15.0-rc6-debug-gb01fc4eca73c #1 Not tainted
->  ------------------------------------------------------
->  power-profiles-/588 is trying to acquire lock:
->  ffffffffb3a7d910 (cpu_hotplug_lock){++++}-{0:0}, at: store_local_boost+0=
-x56/0xd0
->
->  but task is already holding lock:
->  ffff8b6e5a12c380 (&policy->rwsem){++++}-{4:4}, at: store+0x37/0x90
->
->  which lock already depends on the new lock.
->
->  the existing dependency chain (in reverse order) is:
->
->  -> #2 (&policy->rwsem){++++}-{4:4}:
->         down_write+0x29/0xb0
->         cpufreq_online+0x7e8/0xa40
->         cpufreq_add_dev+0x82/0xa0
->         subsys_interface_register+0x148/0x160
->         cpufreq_register_driver+0x15d/0x260
->         amd_pstate_register_driver+0x36/0x90
->         amd_pstate_init+0x1e7/0x270
->         do_one_initcall+0x68/0x2b0
->         kernel_init_freeable+0x231/0x270
->         kernel_init+0x15/0x130
->         ret_from_fork+0x2c/0x50
->         ret_from_fork_asm+0x11/0x20
->
->  -> #1 (subsys mutex#3){+.+.}-{4:4}:
->         __mutex_lock+0xc2/0x930
->         subsys_interface_register+0x7f/0x160
->         cpufreq_register_driver+0x15d/0x260
->         amd_pstate_register_driver+0x36/0x90
->         amd_pstate_init+0x1e7/0x270
->         do_one_initcall+0x68/0x2b0
->         kernel_init_freeable+0x231/0x270
->         kernel_init+0x15/0x130
->         ret_from_fork+0x2c/0x50
->         ret_from_fork_asm+0x11/0x20
->
->  -> #0 (cpu_hotplug_lock){++++}-{0:0}:
->         __lock_acquire+0x10ed/0x1850
->         lock_acquire.part.0+0x69/0x1b0
->         cpus_read_lock+0x2a/0xc0
->         store_local_boost+0x56/0xd0
->         store+0x50/0x90
->         kernfs_fop_write_iter+0x132/0x200
->         vfs_write+0x2b3/0x590
->         ksys_write+0x74/0xf0
->         do_syscall_64+0xbb/0x1d0
->         entry_SYSCALL_64_after_hwframe+0x56/0x5e
->
-> Signed-off-by: Seyediman Seyedarab <ImanDevel@gmail.com>
+Le Tue, May 13, 2025 at 10:39:02PM +0200, Uwe Kleine-König a écrit :
+> MIME-Version: 1.0
+> Content-Type: text/plain; charset=UTF-8
+> Content-Transfer-Encoding: 8bit
+> 
+> Use devm allocators for enabling the bus clock and
+> clk_rate_exclusive_get(). This simplifies error handling and the remove
+> callback.
+> 
+> Reviewed-by: Chen-Yu Tsai <wens@csie.org>
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
 > ---
->  drivers/cpufreq/cpufreq.c | 3 ---
->  1 file changed, 3 deletions(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 731ecfc17..759dd178a 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -622,10 +622,7 @@ static ssize_t store_local_boost(struct cpufreq_poli=
-cy *policy,
->         if (!policy->boost_supported)
->                 return -EINVAL;
->
-> -       cpus_read_lock();
->         ret =3D policy_set_boost(policy, enable);
-> -       cpus_read_unlock();
-> -
->         if (!ret)
->                 return count;
->
-> --
 
-Applied as 6.16 material, thanks!
+Tested-by: Corentin LABBE <clabbe.montjoie@gmail.com>
+Tested-on: sun8i-a33-olinuxino
+
+Thanks
+Regards
 
