@@ -1,280 +1,233 @@
-Return-Path: <linux-pm+bounces-27112-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27113-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC85EAB610C
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 05:01:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1D47AB630C
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 08:28:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 789204674D1
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 03:01:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 821E119E5FFB
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 06:28:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24126156C69;
-	Wed, 14 May 2025 03:01:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B75E1FC7E7;
+	Wed, 14 May 2025 06:28:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="mQFl2rLD"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ROzCPoX0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2049.outbound.protection.outlook.com [40.107.220.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54F621B6CF1
-	for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 03:01:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747191679; cv=none; b=SouvA+1IzKTPlylABfJnIvS+Zt3GDzDc3PFBj4B5uaOvVEoQLioZYnpMkwvW1vRprPXa/Yz+pH+Nbk8fykhDYzLAksUxRmOmKoPh/X/BZgwEUIe2MjFbUWjFzt/PXFfa1169U0numDHmZ4jrQogAOseZun5/jbGgSbl94CRLEdY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747191679; c=relaxed/simple;
-	bh=q+2sQbEnkkz6ubrx/V3Keq5TtZ78G6typl9G3jGZZf8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=H71h2Z/3X8UJ1XYI46JXyWBqcSw50Z07cP1UgnmAbepEaEnRWnAX2nXLz1bwWmkBAFOQqKzlYsk354Zuf36y7/Tad+kmfioVjaSW3h0Yomnn8Z46a0JviNmP9h0uJH/oYPaMvLpLK9n8hX4xg86qtE1BbbFtmX1tUQ+02fjg/nw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=mQFl2rLD; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54DIRebn006109;
-	Wed, 14 May 2025 03:01:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	jtLmbjfkE+5SV8op12luh0aM0bpVzDFyDslM1fh17jg=; b=mQFl2rLDppTI2EC+
-	eEVydKkKzk312Swt0mVBvZVj+L6QTYAkGFB5T5nUJnE46LxPtaXRqkuMW580uR4M
-	wvrKz9injYBThrhlLkcOB/9JL7BDyd5hM+6pfVgo72AYatitYmlX7sNs7dxXtnf3
-	BSRDp3f30uXbS6dXpuJSaYoGUT9bmDwQ/bOrfd6ZplURnwFQZGGI+l2feKPi0+Ht
-	gcnMOgPrrAZy+m6zAAyCcmaG3Y0DfLpnQC9EClXvSDozD31iLiJqBK9D9JXbTlja
-	qJjStBtR04WXf47LkLpfS7bxZfeFODBb6vzoyt7OW+9xoKOuLUkmECLHWTC2oAGf
-	8aDKbA==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46mbcns4v6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 May 2025 03:01:08 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 54E317Sk002083
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 May 2025 03:01:07 GMT
-Received: from [10.216.1.117] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 13 May
- 2025 20:01:02 -0700
-Message-ID: <5cb72bb7-7393-6d3f-d003-e20a21bd607f@quicinc.com>
-Date: Wed, 14 May 2025 08:30:58 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C8A013D539;
+	Wed, 14 May 2025 06:28:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747204084; cv=fail; b=f5o1VlipL0+ICu5dWOHLwTFNyjawodtg9tMUZSDt7wloKK5JCtSTLUz01jOajj7CIiMYhCZFu0YN8u2nbsxtOTK75Lv0NNRBmshU9kuIi7Z2NscWMpF+I4H39/hNHZWC41/O4NSoKGUg7L7jOCCL33uTvSEB+8m5CG0OD63AJ7c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747204084; c=relaxed/simple;
+	bh=jkko+dSxlA3vu2foAHJTl6PspEMXghYR7EKmFVggUDI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=P7cuMZ4ype0W4hBHW8c39fmXHM046rpzoW9QuasZnArfoWyTvjdJQYHhOP+iSS0K++mtLBrv3B0mozs6QUK+oYsvbjGas+bg1kOH6e16o9RWyRMnVuLFoddSuSiBwC0ginPgea728qNC0Ud7tnbIaff+F+dqJFaPfLOYpIfkGRk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ROzCPoX0; arc=fail smtp.client-ip=40.107.220.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hGCH8uoUZ0aS4Znjt7Ga58OMnySk/4DCAG0l+L92mXfO5p8Soa6xsOc1K8ZXsmVQW4w9zMKw8l0mN2XnaezApAF0CQstXBWD3NSp1V2cZp5OTM4P6dXc3b6Bj/QJUGwwR2y7TYUT2SezSnl4LK2Y+v/DUPxYwxgLba0018jTSQkPfcUYSSDl76BjIIJtZDVofZtWnt5yVxQW2dCwmmfpvsaVhjKOadIXy7PFV/exu9dtVSTKE0Dg9CtIrE6UsAEsfJDC1x+FtErNm/437qoJLjOcNsURQwBa/jzAuG1X7LlYLJ72Ic7ysxl3VYsxjCFWh33NUkCwu4JiFGJbdAULAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aNz3cMNZ3ElbEyfvYMkG7IbScQP2YRAHZ/MKAr3/a8M=;
+ b=r0qejjBYcMAkZF/MMZZHwkyTjAQBP6TO2y+Qc3YQ6FlLA/rLYOlGG5I6m0P8sAE5jgZVUu2dZ/WJGXwjnp34KvkK5odmM5vJBGJSnTSpePrRwzL2DWrh7iWyoQixu/0kUH6RwThEK8fXVXYtOMeh4jmmiFRPob4R6PEKIpxf/pB3AA/rnjKlo8TuE4XNYRdAvaDUCF0irM5GYeOo9Ko9HCLxeVdC020zywjb8wAjL9JfDR8kkmnNEzSJ6ZXUfx4az4Bj2fBgNTiKaXE/Zi5l3c52X0vzJjE7Nh9nTbVT4cAnlbDfOw4Yh/ajd5iJM32/WQAnqZOK1DWzhMt2t9EkFw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linutronix.de smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aNz3cMNZ3ElbEyfvYMkG7IbScQP2YRAHZ/MKAr3/a8M=;
+ b=ROzCPoX0R+lOYBFAyXTvZTEyiyx8SWfIS9mcxa8IVqEHNutahNHikoJOpegdp9u1M+qaEyRMNNZYQTvIvo2ekAW+vCDZLG/XwxI2JLqT/3hqWWmc9gv1Ys8gZ9ygT4jsOvQaNCCoE5f9op+pFgFOsoquUvY4EUHiAMuMBVL8lxo=
+Received: from SN7PR04CA0047.namprd04.prod.outlook.com (2603:10b6:806:120::22)
+ by IA1PR12MB7519.namprd12.prod.outlook.com (2603:10b6:208:418::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.29; Wed, 14 May
+ 2025 06:27:58 +0000
+Received: from SA2PEPF00003AE6.namprd02.prod.outlook.com
+ (2603:10b6:806:120:cafe::6d) by SN7PR04CA0047.outlook.office365.com
+ (2603:10b6:806:120::22) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8699.31 via Frontend Transport; Wed,
+ 14 May 2025 06:27:58 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SA2PEPF00003AE6.mail.protection.outlook.com (10.167.248.6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8722.18 via Frontend Transport; Wed, 14 May 2025 06:27:58 +0000
+Received: from kaveri.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 14 May
+ 2025 01:27:51 -0500
+From: Shivank Garg <shivankg@amd.com>
+To: <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+	<dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+	<luto@kernel.org>, <peterz@infradead.org>, <rafael@kernel.org>,
+	<pavel@kernel.org>, <akpm@linux-foundation.org>
+CC: <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<shivankg@amd.com>, <sohil.mehta@intel.com>, <rui.zhang@intel.com>,
+	<yuntao.wang@linux.dev>, <kai.huang@intel.com>, <xiaoyao.li@intel.com>,
+	<peterx@redhat.com>, <sandipan.das@amd.com>, <ak@linux.intel.com>,
+	<rostedt@goodmis.org>
+Subject: [PATCH RESEND 1/4] x86/mm: pgtable: Fix W=1 build kernel-doc warnings
+Date: Wed, 14 May 2025 06:26:36 +0000
+Message-ID: <20250514062637.3287779-1-shivankg@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] mmc: sdhc: Add PM QoS support for mmc driver
-Content-Language: en-US
-To: Ulf Hansson <ulf.hansson@linaro.org>,
-        Madhusudhan Sana
-	<quic_msana@quicinc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-CC: <quic_cang@quicinc.com>, <quic_nguyenb@quicinc.com>,
-        <quic_bhaskarv@quicinc.com>, <quic_mapa@quicinc.com>,
-        <quic_narepall@quicinc.com>, <quic_nitirawa@quicinc.com>,
-        <quic_sachgupt@quicinc.com>, <quic_sartgarg@quicinc.com>,
-        Linux PM list
-	<linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <20241101024421.26679-1-quic_msana@quicinc.com>
- <1e47ee3e-7439-4dc4-aef6-0ad2f82ee341@intel.com>
- <CAPDyKFrku7pEPz0xNbtJetK1XhUmhgsN9Sx9Ea8=tNNhTkxa7w@mail.gmail.com>
-From: Ram Prakash Gupta <quic_rampraka@quicinc.com>
-In-Reply-To: <CAPDyKFrku7pEPz0xNbtJetK1XhUmhgsN9Sx9Ea8=tNNhTkxa7w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: EyvgPlTf5AOUxv2B4W5dwsg1dpQdmhz2
-X-Proofpoint-ORIG-GUID: EyvgPlTf5AOUxv2B4W5dwsg1dpQdmhz2
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTE0MDAyMyBTYWx0ZWRfX/obH56WET+rg
- I/+HfZ43K5DAIG+lq4je8lRcVgH4w7WT5jwQY3tqku63Wg+bBIxZX9OQX0WbPfe+Hw3NuGyly54
- vewkrWhXGsfOI5xY8ug8I1vPSXhU7bZRmudJSbYIXBgQSCn1563Q7vvHRruySAWzc8R1GQaBM4M
- ZHN1vCq0NG6EY887Ye+NF7ykgJOr5uLQkSSuON0e6f9KAQ6F7TsD/eaObKIfSZrki6uUwFLEHRq
- U8bUJ3JS0YybvrOvPWHpEBpBg8/gOmIIJFwhgIqnpavGFV9H9YRYMejP/Tt3Bb5Tdmd419rU/DS
- CzVchs7d1XvfDvT0MFp0SyZg3glUoVsw5NEJDQiYGrFdp4uufeYIBRAc4jfiT1vwPIHrKHkiXgP
- TaO1wJcidh/WwzXGUBG6hGIgiKTTiCG5hkR0LPLpadlOC+/rjyC1ZjMCFiuozrL9yaFfZ0wH
-X-Authority-Analysis: v=2.4 cv=Gp9C+l1C c=1 sm=1 tr=0 ts=68240774 cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8
- a=COk6AnOGAAAA:8 a=QyXUC8HyAAAA:8 a=rkOx34ob1f9j6TDfATwA:9 a=QEXdDO2ut3YA:10
- a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-14_01,2025-05-09_01,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 clxscore=1011 spamscore=0 lowpriorityscore=0 impostorscore=0
- bulkscore=0 adultscore=0 suspectscore=0 priorityscore=1501 mlxscore=0
- malwarescore=0 mlxlogscore=999 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505070000
- definitions=main-2505140023
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF00003AE6:EE_|IA1PR12MB7519:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0feb86a3-0b7a-4aba-853f-08dd92b077fd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|36860700013|1800799024|82310400026|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?UrpqlpFNwEQNGl6mPme+JaUbe9PPn3+qdUfj779afdVhsNJ2tXLwRxaLyo/K?=
+ =?us-ascii?Q?PgXPImePmKp3SumsQgyMtjV9AO/UzqGEWJYrd5ud7iqryCs/wpN+4ot/Vhjh?=
+ =?us-ascii?Q?Ff522AJUntRZRLF0jT3b3EWOYeh2sK+ClJJxpmFt1vp90cuIKOkBCCruZt4d?=
+ =?us-ascii?Q?/3z0wXMGBljhx8NPe9AxVQ5yXna9T3EeNH9WIBvslfqmmoxaBrrNXAVaJw7H?=
+ =?us-ascii?Q?KJ3BqXxTGKyiD30wk8nbBgxFrLthiaYU00ukL9IyX0jleu+wIkNWqpwDp/g3?=
+ =?us-ascii?Q?PXavD/qS1UXlB0yc+dwjuU8R4HYlaACaSecoWTfBqgx/O3XDgp61ZAcNQSNU?=
+ =?us-ascii?Q?KRLMU9kPbuMEXIsHcw7oE+fWwKjIy3t4da8JgSV7nPB0BsOr/+S0BnJtSy1m?=
+ =?us-ascii?Q?avIqAEXqv4MM16n/Uval/Wl2yWxuX9xtW2fALzUVgoKpThvYaVDfxY9AjSAE?=
+ =?us-ascii?Q?+Xtourk6kf/P3k6VKRiQZk6wjhW2JczEVEKYqKBaJuxNvDfZoJgEf9Dzrubc?=
+ =?us-ascii?Q?n1wPbZt9UTaE5RgjgpBcFP3nvSZ6I8RJnnxsTXHqK5mDeS/frUTibbRjyl1x?=
+ =?us-ascii?Q?gSAqJcSnUVoVxIM32Y/TncMqD3rYybWjoar41/IIljUbNlsEIGGgNfrA2QCM?=
+ =?us-ascii?Q?+up6spFJARi5cWImq7cQMF/lfvgil9r9HHr5c46Okazdx4HU803RDWYzvga5?=
+ =?us-ascii?Q?nv0qWUu2P/o1V5GhJCgofE6aTkFBsGNsgqUlCw6e00xmmo7MW22U1KqF3MEK?=
+ =?us-ascii?Q?p5KRLiSKwLZx+2cm0Jj2DaZNZBQ43uUT3OKc2zMLMdGfJIVQ4L0QbOP1jOJ0?=
+ =?us-ascii?Q?WSn0GfR01DNxLZ92APVVW30ccL+s0Ky17B5u/smoAxFAtfLzJRdLap0RqXuM?=
+ =?us-ascii?Q?aBXqdMd47J45Q1pscWXD7KB4lZkKYIXjWDBcHCQR+RUqbdXGg+TgHEYp+0tW?=
+ =?us-ascii?Q?7c8nmdoTBBIAwD+uJUCpvbwNNh0zl/jAjjVpDvlCR3PazluFbT8MTXZCJLvS?=
+ =?us-ascii?Q?zngfK294f7iGJKvzIphfuP3nrk/l2PGgqk6GOApQXrNISutOnUOok49maKSO?=
+ =?us-ascii?Q?giujgcorvNZgObKiaCob6AXdhw7QJ+KovQkILr5ALoIQFHpTby0htJc8hBQF?=
+ =?us-ascii?Q?UpfDSPFy3UdiIhtoSatS9oI4m9+5LfaPrABSh1gf285ba0Lg0XNx8rZv38N3?=
+ =?us-ascii?Q?NddS31yOfWyTPvnZHZhbY8S+lD3mePrEQJGScgkXMWoLEdMENOxOp3IG+0GW?=
+ =?us-ascii?Q?Im1HlRfMtH19P06hAHq+XgIK+H99shamgDYVQI08K6iDXxNdIsKPmYVYFnsH?=
+ =?us-ascii?Q?SyL6E9K5WjES4Lx845yh26feKnrnCe2OSC1Dv9KeBuItQIEkdWjIHAZrDj7R?=
+ =?us-ascii?Q?8x/y5oEdjDvRqFuK7MOfVFZbrVhKL80DPEe2KnNnhAhE4o2QXwNZ08acVE0V?=
+ =?us-ascii?Q?N1CPqcLGAfSfmVgpR9G8g/vAf6jaAY5YwWpnJ8jxSKiE//R9J/wx+Do7IsYE?=
+ =?us-ascii?Q?GPVcay7VwX28AMPkO+KPeNAi+G00dt9S//JAggj6+iiru9WCslIOmGJVgA?=
+ =?us-ascii?Q?=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(36860700013)(1800799024)(82310400026)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2025 06:27:58.0797
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0feb86a3-0b7a-4aba-853f-08dd92b077fd
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SA2PEPF00003AE6.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7519
 
-Thanks a lot Adrian and Uffe for your review and comment. The Qualcomm
-engineer who initiated this work, is no longer working on this and I am
-taking up the responsibility to continue on this work.
+Warnings generated with 'make W=1':
+arch/x86/mm/pgtable.c:623: warning: Function parameter or struct member 'reserve' not described in 'reserve_top_address'
+arch/x86/mm/pgtable.c:672: warning: Function parameter or struct member 'p4d' not described in 'p4d_set_huge'
+arch/x86/mm/pgtable.c:672: warning: Function parameter or struct member 'addr' not described in 'p4d_set_huge'
+... so on
 
+Add missing parameter documentation in page table functions to
+fix kernel-doc warnings.
 
-On 11/12/2024 8:38 PM, Ulf Hansson wrote:
-> On Fri, 8 Nov 2024 at 15:43, Adrian Hunter <adrian.hunter@intel.com> wrote:
->> On 1/11/24 04:44, Madhusudhan Sana wrote:
->>> Register mmc driver to CPU latency PM QoS framework to improve
->>> mmc device io performance.
->> Not sure host controller drivers should really be manipulating
->> cpu_latency_qos in order to squeeze a bit more I/O performance.
-> I fully agree, this type of boosting doesn't belong in a low level
-> storage driver, as it is simply not capable of understanding the
-> use-case. Note that the cpu_latency_qos can also be managed from
-> user-space.
->
-> Moreover, I guess there are use cases where it would make sense to
-> have some in-kernel governor to boost too for some conditions. But as
-> far as I can tell, we don't have a common way to do this, but rather
-> platform specific hacks via devfreq drivers for example.
->
-> Kind regards
-> Uffe
+Signed-off-by: Shivank Garg <shivankg@amd.com>
+---
+ arch/x86/mm/pgtable.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-Hi Uffe/Adrian,
+diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
+index f7ae44d3dd9e..8a5bc4545ad3 100644
+--- a/arch/x86/mm/pgtable.c
++++ b/arch/x86/mm/pgtable.c
+@@ -614,7 +614,7 @@ pud_t pudp_invalidate(struct vm_area_struct *vma, unsigned long address,
+ 
+ /**
+  * reserve_top_address - reserves a hole in the top of kernel address space
+- * @reserve - size of hole to reserve
++ * @reserve: Size of hole to reserve.
+  *
+  * Can be used to relocate the fixmap area and poke a hole in the top
+  * of kernel address space to make room for a hypervisor.
+@@ -665,6 +665,9 @@ void native_set_fixmap(unsigned /* enum fixed_addresses */ idx,
+ #ifdef CONFIG_X86_5LEVEL
+ /**
+  * p4d_set_huge - setup kernel P4D mapping
++ * @p4d: Pointer to a p4d entry.
++ * @addr: Virtual Address associated with p4d.
++ * @prot: Protection bits to use.
+  *
+  * No 512GB pages yet -- always return 0
+  */
+@@ -675,8 +678,9 @@ int p4d_set_huge(p4d_t *p4d, phys_addr_t addr, pgprot_t prot)
+ 
+ /**
+  * p4d_clear_huge - clear kernel P4D mapping when it is set
++ * @p4d: Pointer to the p4d entry to clear.
+  *
+- * No 512GB pages yet -- always return 0
++ * No 512GB pages yet -- do nothing
+  */
+ void p4d_clear_huge(p4d_t *p4d)
+ {
+@@ -685,6 +689,9 @@ void p4d_clear_huge(p4d_t *p4d)
+ 
+ /**
+  * pud_set_huge - setup kernel PUD mapping
++ * @pud: Pointer to a pud entry.
++ * @addr: Virtual Address associated with pud.
++ * @prot: Protection bits to use.
+  *
+  * MTRRs can override PAT memory types with 4KiB granularity. Therefore, this
+  * function sets up a huge page only if the complete range has the same MTRR
+@@ -716,6 +723,9 @@ int pud_set_huge(pud_t *pud, phys_addr_t addr, pgprot_t prot)
+ 
+ /**
+  * pmd_set_huge - setup kernel PMD mapping
++ * @pmd: Pointer to a pmd entry.
++ * @addr: Virtual Address associated with pmd.
++ * @prot: Protection bits to use.
+  *
+  * See text over pud_set_huge() above.
+  *
+@@ -745,6 +755,7 @@ int pmd_set_huge(pmd_t *pmd, phys_addr_t addr, pgprot_t prot)
+ 
+ /**
+  * pud_clear_huge - clear kernel PUD mapping when it is set
++ * @pud: Pointer to the pud entry to clear.
+  *
+  * Returns 1 on success and 0 on failure (no PUD map is found).
+  */
+@@ -760,6 +771,7 @@ int pud_clear_huge(pud_t *pud)
+ 
+ /**
+  * pmd_clear_huge - clear kernel PMD mapping when it is set
++ * @pmd: Pointer to the pmd entry to clear.
+  *
+  * Returns 1 on success and 0 on failure (no PMD map is found).
+  */
+-- 
+2.34.1
 
-In my opinion, many use case owners might not opt to control qos and
-may not use qos to gain better performance, and similar work was done
-in other driver eg.
-https://patchwork.kernel.org/project/linux-mediatek/patch/20231219123706.6463-2-quic_mnaresh@quicinc.com/
-
-Earlier this was done in Qualcomm specific file but later community
-suggested to make it into core driver, so that it applies for everyone.
-Having this thought in mind, here also this was made it into core driver.
-If this still doesn't fit here in mmc context, would like to refactor and
-move into Qualcomm specific file sdhci-msm.c please share your opinion.
-
-Thanks,
-Ram
-
->
->>> Signed-off-by: Madhusudhan Sana <quic_msana@quicinc.com>
->>> ---
->>>  drivers/mmc/host/sdhci.c | 47 ++++++++++++++++++++++++++++++++++++++++
->>>  drivers/mmc/host/sdhci.h |  4 ++++
->>>  2 files changed, 51 insertions(+)
->>>
->>> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
->>> index f4a7733a8ad2..ffcc9544a3df 100644
->>> --- a/drivers/mmc/host/sdhci.c
->>> +++ b/drivers/mmc/host/sdhci.c
->>> @@ -359,6 +359,46 @@ static void sdhci_config_dma(struct sdhci_host *host)
->>>       sdhci_writeb(host, ctrl, SDHCI_HOST_CONTROL);
->>>  }
->>>
->>> +/*
->>> + * sdhci_pm_qos_init - initialize PM QoS request
->>> + */
->>> +void sdhci_pm_qos_init(struct sdhci_host *host)
->>> +{
->>> +     if (host->pm_qos_enable)
->>> +             return;
->>> +
->>> +     cpu_latency_qos_add_request(&host->pm_qos_req, PM_QOS_DEFAULT_VALUE);
->>> +
->>> +     if (cpu_latency_qos_request_active(&host->pm_qos_req))
->>> +             host->pm_qos_enable = true;
->>> +}
->>> +
->>> +/*
->>> + * sdhci_pm_qos_exit - remove request from PM QoS
->>> + */
->>> +void sdhci_pm_qos_exit(struct sdhci_host *host)
->>> +{
->>> +     if (!host->pm_qos_enable)
->>> +             return;
->>> +
->>> +     cpu_latency_qos_remove_request(&host->pm_qos_req);
->>> +     host->pm_qos_enable = false;
->>> +}
->>> +
->>> +/*
->>> + * sdhci_pm_qos_update - update PM QoS request
->>> + * @on - True, vote for perf PM QoS mode
->>> + *     - False, vote for power save mode.
->>> + */
->>> +static void sdhci_pm_qos_update(struct sdhci_host *host, bool on)
->>> +{
->>> +     if (!host->pm_qos_enable)
->>> +             return;
->>> +
->>> +     cpu_latency_qos_update_request(&host->pm_qos_req, on ?
->>> +                                             0 : PM_QOS_DEFAULT_VALUE);
->>> +}
->>> +
->>>  static void sdhci_init(struct sdhci_host *host, int soft)
->>>  {
->>>       struct mmc_host *mmc = host->mmc;
->>> @@ -384,6 +424,9 @@ static void sdhci_init(struct sdhci_host *host, int soft)
->>>               host->reinit_uhs = true;
->>>               mmc->ops->set_ios(mmc, &mmc->ios);
->>>       }
->>> +
->>> +     sdhci_pm_qos_init(host);
->>> +     sdhci_pm_qos_update(host, true);
->>>  }
->>>
->>>  static void sdhci_reinit(struct sdhci_host *host)
->>> @@ -2072,6 +2115,7 @@ void sdhci_set_clock(struct sdhci_host *host, unsigned int clock)
->>>
->>>       clk = sdhci_calc_clk(host, clock, &host->mmc->actual_clock);
->>>       sdhci_enable_clk(host, clk);
->>> +     sdhci_pm_qos_update(host, true);
->>>  }
->>>  EXPORT_SYMBOL_GPL(sdhci_set_clock);
->>>
->>> @@ -3811,6 +3855,7 @@ int sdhci_suspend_host(struct sdhci_host *host)
->>>               sdhci_writel(host, 0, SDHCI_SIGNAL_ENABLE);
->>>               free_irq(host->irq, host);
->>>       }
->>> +     sdhci_pm_qos_update(host, false);
->>>
->>>       return 0;
->>>  }
->>> @@ -3873,6 +3918,7 @@ int sdhci_runtime_suspend_host(struct sdhci_host *host)
->>>       spin_lock_irqsave(&host->lock, flags);
->>>       host->runtime_suspended = true;
->>>       spin_unlock_irqrestore(&host->lock, flags);
->>> +     sdhci_pm_qos_update(host, false);
->>>
->>>       return 0;
->>>  }
->>> @@ -4987,6 +5033,7 @@ void sdhci_remove_host(struct sdhci_host *host, int dead)
->>>       if (host->use_external_dma)
->>>               sdhci_external_dma_release(host);
->>>
->>> +     sdhci_pm_qos_exit(host);
->>>       host->adma_table = NULL;
->>>       host->align_buffer = NULL;
->>>  }
->>> diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
->>> index cd0e35a80542..685036ed888b 100644
->>> --- a/drivers/mmc/host/sdhci.h
->>> +++ b/drivers/mmc/host/sdhci.h
->>> @@ -16,6 +16,7 @@
->>>  #include <linux/io.h>
->>>  #include <linux/leds.h>
->>>  #include <linux/interrupt.h>
->>> +#include <linux/devfreq.h>
->>>
->>>  #include <linux/mmc/host.h>
->>>
->>> @@ -675,6 +676,9 @@ struct sdhci_host {
->>>
->>>       u64                     data_timeout;
->>>
->>> +     struct pm_qos_request pm_qos_req;       /* PM QoS request handle */
->>> +     bool pm_qos_enable;                     /* flag to check PM QoS is enable */
->>> +
->>>       unsigned long private[] ____cacheline_aligned;
->>>  };
->>>
 
