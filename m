@@ -1,169 +1,153 @@
-Return-Path: <linux-pm+bounces-27132-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27133-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D929CAB69BC
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 13:24:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA71BAB6B97
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 14:41:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 881AF1732D6
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 11:24:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D108C3AE7BD
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 12:41:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6696527466E;
-	Wed, 14 May 2025 11:23:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91E5F2777F9;
+	Wed, 14 May 2025 12:41:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CifpsKCr"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="qiLK1m4s"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EADAF221721
-	for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 11:23:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C4C2581
+	for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 12:41:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747221838; cv=none; b=Ze5IVSCjOdkbjbwqwdRZdMfnCHjdDnFqOnlIJwlNvbxgc4IiK6dOlDlybHxo2tx6NvTd5qeDCq95ISOjY5AOPl1uM6jOExy7tTdy24dgCtXDPu9FSH6jq7uSPZbtEIXTJrmdOieLGbWC8VeXdO41DXrZgoo82aG8ACFojFezYYA=
+	t=1747226507; cv=none; b=by+N27jSkpu6Q4ONoi9Hevo8b157i/snvm0H4lGFh8PFYHqu3cVKpErf5eJJHlFrRl7Yct9i1h5KQQawJwTuFm8XV0sj9t3rlL5fxsV1Fmt+hHj7DqxR0sMiVXXFbDWIRRTcR6+3Tf2Ggtu7JjTuOgWGSi0SSTF7kIeBAarl5qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747221838; c=relaxed/simple;
-	bh=tx8YzHNBUj2kXpeOe64RZVIheqYx8JBL48xF8A/l0Vg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o9ZKp/M98ih1N+5p7ZDV0KFqimbHCBekX2PiaoazHvwvf0Hn2gcI/UaElgoKnafnB/O6aS9mMqwVGpnkTZu2H1jZ0M1vxnboZ49nhr/s5uCVLQv12nuIz0r8xhSZOhBYJYJzy6jb9KlXCqJwN3b7xJEJLn8UWN4bjyC8N9EK0x8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CifpsKCr; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3a1fb18420aso4751943f8f.1
-        for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 04:23:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747221834; x=1747826634; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PqwsD7WCcNuEv2WTK4iZPHlU9QaOgxXWeL2peqyTOEE=;
-        b=CifpsKCrJBJiAVrvwso4NA8fFFwDFo94V+mnbRYznzJ0XoIprLJ3N+y5ht9jkHDViL
-         KctlCTvlv/BRnU5y1fyffDWoztowmALzV6dvBaQCs3yNX4RxGnNxM6htFnY8QQKitUEG
-         ElTRImyLAkKA6rNQpXNSbkRKw7TnQ+/3NkKvqVAMvaszbRIN/NpSVpilrE9uAaAOkARH
-         W4LN8LXN/px+KEaPkKBWJKV4n7amQcffOZpbiZQWH/QHC2sBY99SA1NLtnVlq8/SIN7d
-         Cjx1xxltAYRc8U08Ji3DK1wAi5qaM+KKL3eAi5QdK3ZIOKdGT4glG5FCVssKPjt0E+JK
-         JEXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747221834; x=1747826634;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PqwsD7WCcNuEv2WTK4iZPHlU9QaOgxXWeL2peqyTOEE=;
-        b=uqnJIj5kvup4Bc0yMb8FYfJ1jIgdf9aZmK6foMuzX7EmI3vMtbdlzM8iPOxJGkJzRM
-         Bsk5TaUDUVklptZG1EbP/H+/GTKVseAr+nk1/qIokEaLPOaMmv0+pbTaT1ftHu855Q6z
-         ue3M+DUrjT6+3z4KWj39Q/VJT3m95k/y6w3vyZbGJGz0YqxmTK3ILe6NGl/43s4kOtCq
-         ovvo0qWhq5GSr8WqL2HSmPcCeLg+BBA/50HpPZOTSj9YFGkY6t+WlEwzaosnJRdwWT2i
-         h5HcsLKJGKrjUR/erjpC2PICC2Vq9Bg8Al3X7gfjmcjpDFyx3mAfJTbx+2hMeaFhS4dB
-         FnNg==
-X-Forwarded-Encrypted: i=1; AJvYcCVHxGcHGnVWXm6P5fcArVdn1igd4P8NHAMdIcEWyurHsnDxiAQj+a//YtnU7wTmV0KXuhfJgOWtvA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6kl3DTgU5XEOJUvbAKVS0Ev5aD9qUMpK2yi4tWvk3zlHUn3ld
-	aq/FKu1PVFYXDzQ2fV/MyOak4gZ98RP3gxZDAL+IeaD9wvtvIaPU47RspYKWp/w=
-X-Gm-Gg: ASbGnct6sggtFKoOnaXj5WlDNUKRU0B+pbmuKSptm+crJJdXA5nq1R22jr9G+a7x/e3
-	eN0auww9i2x8bUVeB7dMWojNZ1s/m+ybr3v+2PSlgShF4UOAg1HFhpshKzJeb9Iw3POed4YsX7M
-	i/CAyfr5KImSUldwHjkGYPXTWsTvzkndXjWj8kItTVmmZy11GLsMam1KFKJwvUEZuMGnzLJVuWv
-	mI9GxeyGZTvlQMBK9epVUZWKm/EW8lOVCiQIcwK3umzdl9ll8jEoGxhBzApz0pnPcJBVCybzAIO
-	BRoLBHjHaek7bGFP14ay9K53aBcJPTRMswqh2wGxWDq94MJesFcQc8vZ38fyPME/O0V/Xu4rTo4
-	ZwCXkK4qKkzfgtw==
-X-Google-Smtp-Source: AGHT+IHd28mYJHFkZ2YC/3FfmJfsWok8nxf/8sbB3FWwSEaJKR0MYxIrlFfEdGODFNdqer26tUf9qA==
-X-Received: by 2002:a05:6000:2506:b0:39c:13f5:dba0 with SMTP id ffacd0b85a97d-3a3496a48a7mr1875484f8f.13.1747221834230;
-        Wed, 14 May 2025 04:23:54 -0700 (PDT)
-Received: from mai.linaro.org (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a1f58f2b02sm19714077f8f.51.2025.05.14.04.23.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 May 2025 04:23:53 -0700 (PDT)
-Date: Wed, 14 May 2025 13:23:51 +0200
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: Anand Moon <linux.amoon@gmail.com>
-Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	"open list:SAMSUNG THERMAL DRIVER" <linux-pm@vger.kernel.org>,
-	"open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>,
-	"moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" <linux-arm-kernel@lists.infradead.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Subject: Re: [PATCH v6 0/4] Exynos Thermal code improvement
-Message-ID: <aCR9RzGMWEuI0pxS@mai.linaro.org>
-References: <20250430123306.15072-1-linux.amoon@gmail.com>
+	s=arc-20240116; t=1747226507; c=relaxed/simple;
+	bh=BR82Y9+anBomWhKwv5/WAtPvwSrVSNmXPTQ2dwpLKsk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bTu+WPjGRRhdycSOoxIMwvaD2Xcuv9XesbtyPy6Xr6piylstSn9VEW9MTgL3etE8hsZ8lNyFgEJxP6+YBrSEyrlE5VG7R7VhIZ1urXkSAKaYkwD3NkfXDswO4TsWPDyJVQ7hNjCWEMIArBF/QWvUc0U1ur/oOrxunhQ3+GVzEKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=qiLK1m4s; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=yb2lqr7PLYKWyEOfnrhWjzAYft/hEPqQTGMWP3sZWjI=; t=1747226505;
+	x=1747658505; b=qiLK1m4sfJuF2eCwumo8gxgvNNYWvkz4rWU+2slX1LnVyPPvEyl20nbBGv9M9
+	eTgrItTscSUttkEjbiwqaxGhRGBcJDtqSCTy8YZ/wynJgKV5CR7nsaJJtB/rGYUBCLH28xL2BDV1e
+	O0OB5r/w/VrEUzn78sxsckjfBHqkGmcVJ77bs4FPoWjCDZaEdXLM71f1ztWZBOW9AsmX6oC4gjepa
+	LtEtzJ2M1q3qG4BnWuu+axxLWrAUW18UWjAfVXzOtjzS/a+DBdvxywcD+DufcPiNv4sTrtnbrnBVx
+	ofb+aQTxyWNgltfOzpEge1tAIFmEk5NtnPJNTdakgjh+4X/Snw==;
+Received: from [2a02:8108:8984:1d00:a0cf:1912:4be:477f]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
+	id 1uFBQX-00HYzv-1a;
+	Wed, 14 May 2025 14:41:37 +0200
+Message-ID: <16ad2364-0161-4724-90e1-b57559168843@leemhuis.info>
+Date: Wed, 14 May 2025 14:41:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250430123306.15072-1-linux.amoon@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] cpupower: add a systemd service to run cpupower
+To: "Francesco Poli (wintermute)" <invernomuto@paranoici.org>,
+ linux-pm list <linux-pm@vger.kernel.org>
+Cc: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
+ "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>
+References: <20250425151024.121630-1-invernomuto@paranoici.org>
+From: Thorsten Leemhuis <linux@leemhuis.info>
+Content-Language: de-DE, en-US
+Autocrypt: addr=linux@leemhuis.info; keydata=
+ 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 n7RI
+In-Reply-To: <20250425151024.121630-1-invernomuto@paranoici.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1747226505;42da7a73;
+X-HE-SMSGID: 1uFBQX-00HYzv-1a
 
-On Wed, Apr 30, 2025 at 06:02:56PM +0530, Anand Moon wrote:
-> Hi All,
+Hi Francesco! Many thx for addressing the issues I brought up earlier
+which now landed in -next, much appreciated.
 
-Hi Anand,
+Sadly with those fixes in I noticed another issue I missed earlier. One
+from the "small differences between different Linux distributions that
+make all our lives hard". :-/
 
-if the goal of the changes is to do cleanups, I recommend to rework
-how the code is organized. Instead of having the data->soc check all
-around the functions, write per platform functions and store them in
-struct of_device_id data field instead of the soc version.
+On 25.04.25 17:07, Francesco Poli (wintermute) wrote:
+> One of the most typical use cases of the 'cpupower' utility works as
+> follows: run 'cpupower' at boot with the desired command-line options
+> and then forget about it.
 
-Basically get rid of exynos_map_dt_data by settings the different ops
-in a per platform structure.
+> diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
+> index 835123add0ed..9c2b5f71fee1 100644
+> [...]
+> @@ -302,6 +305,14 @@ install-tools: $(OUTPUT)cpupower
+>  	$(INSTALL_PROGRAM) $(OUTPUT)cpupower $(DESTDIR)${bindir}
+>  	$(INSTALL) -d $(DESTDIR)${bash_completion_dir}
+>  	$(INSTALL_SCRIPT) cpupower-completion.sh '$(DESTDIR)${bash_completion_dir}/cpupower'
+> +	$(INSTALL) -d $(DESTDIR)${confdir}default
+> +	$(INSTALL_DATA) cpupower.default '$(DESTDIR)${confdir}default/cpupower'
+> +	$(INSTALL) -d $(DESTDIR)${libexecdir}
+> +	$(INSTALL_PROGRAM) cpupower.sh '$(DESTDIR)${libexecdir}/cpupower'
+> +	$(INSTALL) -d $(DESTDIR)${libdir}/systemd/system
 
-Then the initialization routine would be simpler to clean.
+That last line to the best of my knowledge is wrong on distributions
+like Fedora, where ${libdir} expands to /usr/lib64/ -- which is the
+right path for libraries, but the wrong one for systemd units, as they
+are always stored in /usr/lib/systemd/system (at least on Fedora). Not
+sure what the right fix it, it might be something like defining
 
-> This patch series is a rework of my previous patch series [1],
-> where the code changes were not adequately justified.
-> 
-> In this new series, I have improved the commit subject
-> and commit message to better explain the changes.
-> 
-> v6: Add new patch to use devm_clk_get_enabled
->     and Fix few typo in subject as suggested by Daniel.
-> v5: Drop the guard mutex patch
-> v4: Tried to address Lukasz review comments.
-> 
-> Tested on Odroid U3 amd XU4 SoC boards.
-> Build with clang with W=1 enable.
-> 
-> [4] https://lore.kernel.org/all/20250410063754.5483-2-linux.amoon@gmail.com/
-> [3] https://lore.kernel.org/all/20250310143450.8276-2-linux.amoon@gmail.com/
-> [2] https://lore.kernel.org/all/20250216195850.5352-2-linux.amoon@gmail.com/
-> [1] https://lore.kernel.org/all/20220515064126.1424-1-linux.amoon@gmail.com/
-> [0] https://lore.kernel.org/lkml/CANAwSgS=08fVsqn95WHzSF71WTTyD2-=K2C6-BEz0tY0t6A1-g@mail.gmail.com/T/#m77e57120d230d57f34c29e1422d7fc5f5587ac30
-> 
-> Thanks
-> -Anand
-> 
-> Anand Moon (4):
->   thermal/drivers/exynos: Refactor clk_sec initialization inside
->     SOC-specific case
->   thermal/drivers/exynos: Use devm_clk_get_enabled() helpers
->   thermal/drivers/exynos: Remove redundant IS_ERR() checks for clk_sec
->     clock
->   thermal/drivers/exynos: Fixed the efuse min max value for exynos5422
-> 
->  drivers/thermal/samsung/exynos_tmu.c | 100 ++++++++++-----------------
->  1 file changed, 35 insertions(+), 65 deletions(-)
-> 
-> 
-> base-commit: b6ea1680d0ac0e45157a819c41b46565f4616186
-> -- 
-> 2.49.0
-> 
+unitdir ?= /usr/lib/systemd/system
 
--- 
+earlier in the Makefile and then using it in the last quoted line above.
 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Ciao, Thorsten
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+
 
