@@ -1,89 +1,98 @@
-Return-Path: <linux-pm+bounces-27131-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27132-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CD0AAB6911
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 12:44:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D929CAB69BC
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 13:24:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3FB881B64AAB
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 10:44:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 881AF1732D6
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 11:24:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 259E72741B0;
-	Wed, 14 May 2025 10:43:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6696527466E;
+	Wed, 14 May 2025 11:23:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ee+kKI1V"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CifpsKCr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E2002741A2
-	for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 10:43:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EADAF221721
+	for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 11:23:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747219412; cv=none; b=bLnFbdLfDSp19dxLPq6VR+jMF0V7e7lR5uQmwjpCY9v6uWi73nhBiIjGvAbobRVbIHGIryQjP3ArbCVvAF3chQ8ny1umAnslxfhbHV3EAZ+D/M8zhtHzcYRlTfMx0f06qXLyXSPhOxw5OXjCj+lh+lFdEGerznwyFIQkYHtaMqQ=
+	t=1747221838; cv=none; b=Ze5IVSCjOdkbjbwqwdRZdMfnCHjdDnFqOnlIJwlNvbxgc4IiK6dOlDlybHxo2tx6NvTd5qeDCq95ISOjY5AOPl1uM6jOExy7tTdy24dgCtXDPu9FSH6jq7uSPZbtEIXTJrmdOieLGbWC8VeXdO41DXrZgoo82aG8ACFojFezYYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747219412; c=relaxed/simple;
-	bh=icczPrIZYGv2B6Fk9mhsXabLOVp132e36d3tOVpTinM=;
+	s=arc-20240116; t=1747221838; c=relaxed/simple;
+	bh=tx8YzHNBUj2kXpeOe64RZVIheqYx8JBL48xF8A/l0Vg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pN2VKXPvBiX7GOR9tfJRnH4s5ZmWEcweFAAd/X7w6jdJ4/j+1L5QlZHuSDIXfic2rhsZmrjbe4zUIJegUx4ASF9eyqcjWxzo7WPAzufO0QluVfMKCKBz/hbajwAGCZy60t1qJuqAu83qtJP0XuC5Xv2fX+qaGo7XnBD05l1Ai80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ee+kKI1V; arc=none smtp.client-ip=209.85.128.47
+	 Content-Type:Content-Disposition:In-Reply-To; b=o9ZKp/M98ih1N+5p7ZDV0KFqimbHCBekX2PiaoazHvwvf0Hn2gcI/UaElgoKnafnB/O6aS9mMqwVGpnkTZu2H1jZ0M1vxnboZ49nhr/s5uCVLQv12nuIz0r8xhSZOhBYJYJzy6jb9KlXCqJwN3b7xJEJLn8UWN4bjyC8N9EK0x8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CifpsKCr; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-442eb5d143eso15988045e9.0
-        for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 03:43:29 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3a1fb18420aso4751943f8f.1
+        for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 04:23:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747219408; x=1747824208; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1747221834; x=1747826634; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=0KB+309i4RxjvcykFikT0JnK/+6UeZWOdqeF0dxsBa8=;
-        b=Ee+kKI1V8Ie7cwPlwgEgEXL8958RQNtMbuyDHfqDse4KK6A5TNQEdv9YRspPThzwbo
-         2wyt+ExFSSHFlp26WXuB0daF/T5Td9Yat50Ut799M3HY0h4FblDxfDW/RAzbqZgF+59o
-         uvWhYocUNrif9iGnUKlcYPHqkYfXLqmNQ8axGx+nRYUABgP4j2kLdD1bdbVdJELzM1cq
-         lMKvbcPvLWzFGMyrf5pEV+HmpIoXhwJktNBSHmzyBxUoUX79D7vFJjc47VN2tfy6D6sM
-         GTT/lJoUlvMbNPwMB2+F3jy4eXkNWxJisFLhyXOBYd37pEXHqwbYjsjUSUWyQM8DO45B
-         zH4A==
+        bh=PqwsD7WCcNuEv2WTK4iZPHlU9QaOgxXWeL2peqyTOEE=;
+        b=CifpsKCrJBJiAVrvwso4NA8fFFwDFo94V+mnbRYznzJ0XoIprLJ3N+y5ht9jkHDViL
+         KctlCTvlv/BRnU5y1fyffDWoztowmALzV6dvBaQCs3yNX4RxGnNxM6htFnY8QQKitUEG
+         ElTRImyLAkKA6rNQpXNSbkRKw7TnQ+/3NkKvqVAMvaszbRIN/NpSVpilrE9uAaAOkARH
+         W4LN8LXN/px+KEaPkKBWJKV4n7amQcffOZpbiZQWH/QHC2sBY99SA1NLtnVlq8/SIN7d
+         Cjx1xxltAYRc8U08Ji3DK1wAi5qaM+KKL3eAi5QdK3ZIOKdGT4glG5FCVssKPjt0E+JK
+         JEXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747219408; x=1747824208;
+        d=1e100.net; s=20230601; t=1747221834; x=1747826634;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0KB+309i4RxjvcykFikT0JnK/+6UeZWOdqeF0dxsBa8=;
-        b=OjHhBvL0j5OZlCqYkOI9nLde96/HkpS4R3VrMS0aEh8Lddy10T4HfP2G/Gv6+c7/hY
-         BZ7y8ygijT7wNEbNPFl4SPKXGypS6Tfi0VV5nz1Eh4zqKheaXmDjsLsolTO/mYxjgi+Q
-         k+IpCUBZMB7R9ynT9zNHRM5vvfO4qPKigNPaMYwMiVC6n12+oIsdN8m754j4/zQuo3JG
-         734o17Eep3HHEH9wdKrWIn08Cjghjil8VabXUeuE6THzu4tH+21US+6XmxhfW0hATo/E
-         u0X+6qF7r5TEdMdT0eNc/m2G+5BDCcGVB1Bisqbum6R5TYW289DpCJfvLlnHYVk9cx40
-         EFfw==
-X-Forwarded-Encrypted: i=1; AJvYcCU3vQ9iGevsW+3VnTw21UF6Z+pH530Uh6HHSt+VxXhmA/VS0TCUhi+6Vve6nYDdEbKANQLk5xq8eQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLjbUocH8H6XLWbMR9E/CHNsV5xmssKIY+JuLd7I/3vL4AGhp2
-	ulC+KxO1Z137DSWFE6PGMOx+rgQNlx4BIdMKacpVNZlMBrpHkq1RxPDYVwDrdQc=
-X-Gm-Gg: ASbGncutF0wW+gIJJ+7XdxWGKoT19j/c1o/C3K+gAMYNjuwsOnvM+k/GLQzZG9iIaKh
-	apkbMyRZ7ofKJEY3Md1tH9/QyLAc5J/tdFIGKH/C6Oyew3IYs8nPCKAhM3Zu+43SZgDHegNo3Lx
-	gbq3ft1NryXfxKBhFPaMK0zLvfcfhRSk4xQnYIHaxkWnqcwqNXYTvPMMMy/6biy8CPCOXpdVsJG
-	aTh627hwdvtwgyUgfcCfVDQk8gir88vGWVc+5/inCFY0l7n4k+UrKiPTFhIvp5dsnoCWw+D5YKC
-	nB26VmvgS9HcHFr1xeg6WmNZbomM0aluv8QAlVYEEiiPMYQHDQkKdEc6qm2aZ6EyS4ezxzhe2c9
-	xAnssiOYvIuDSMw7xHKPrTlOH
-X-Google-Smtp-Source: AGHT+IGDzh2lHF9+tgixSkp4osRxuBf88vHe1okOKr+0ee4IX09GyQKbdwfBSUBsbvD4311dkhuxWg==
-X-Received: by 2002:a05:600c:1553:b0:43d:45a:8fbb with SMTP id 5b1f17b1804b1-442f2168bd3mr17922085e9.22.1747219408117;
-        Wed, 14 May 2025 03:43:28 -0700 (PDT)
+        bh=PqwsD7WCcNuEv2WTK4iZPHlU9QaOgxXWeL2peqyTOEE=;
+        b=uqnJIj5kvup4Bc0yMb8FYfJ1jIgdf9aZmK6foMuzX7EmI3vMtbdlzM8iPOxJGkJzRM
+         Bsk5TaUDUVklptZG1EbP/H+/GTKVseAr+nk1/qIokEaLPOaMmv0+pbTaT1ftHu855Q6z
+         ue3M+DUrjT6+3z4KWj39Q/VJT3m95k/y6w3vyZbGJGz0YqxmTK3ILe6NGl/43s4kOtCq
+         ovvo0qWhq5GSr8WqL2HSmPcCeLg+BBA/50HpPZOTSj9YFGkY6t+WlEwzaosnJRdwWT2i
+         h5HcsLKJGKrjUR/erjpC2PICC2Vq9Bg8Al3X7gfjmcjpDFyx3mAfJTbx+2hMeaFhS4dB
+         FnNg==
+X-Forwarded-Encrypted: i=1; AJvYcCVHxGcHGnVWXm6P5fcArVdn1igd4P8NHAMdIcEWyurHsnDxiAQj+a//YtnU7wTmV0KXuhfJgOWtvA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6kl3DTgU5XEOJUvbAKVS0Ev5aD9qUMpK2yi4tWvk3zlHUn3ld
+	aq/FKu1PVFYXDzQ2fV/MyOak4gZ98RP3gxZDAL+IeaD9wvtvIaPU47RspYKWp/w=
+X-Gm-Gg: ASbGnct6sggtFKoOnaXj5WlDNUKRU0B+pbmuKSptm+crJJdXA5nq1R22jr9G+a7x/e3
+	eN0auww9i2x8bUVeB7dMWojNZ1s/m+ybr3v+2PSlgShF4UOAg1HFhpshKzJeb9Iw3POed4YsX7M
+	i/CAyfr5KImSUldwHjkGYPXTWsTvzkndXjWj8kItTVmmZy11GLsMam1KFKJwvUEZuMGnzLJVuWv
+	mI9GxeyGZTvlQMBK9epVUZWKm/EW8lOVCiQIcwK3umzdl9ll8jEoGxhBzApz0pnPcJBVCybzAIO
+	BRoLBHjHaek7bGFP14ay9K53aBcJPTRMswqh2wGxWDq94MJesFcQc8vZ38fyPME/O0V/Xu4rTo4
+	ZwCXkK4qKkzfgtw==
+X-Google-Smtp-Source: AGHT+IHd28mYJHFkZ2YC/3FfmJfsWok8nxf/8sbB3FWwSEaJKR0MYxIrlFfEdGODFNdqer26tUf9qA==
+X-Received: by 2002:a05:6000:2506:b0:39c:13f5:dba0 with SMTP id ffacd0b85a97d-3a3496a48a7mr1875484f8f.13.1747221834230;
+        Wed, 14 May 2025 04:23:54 -0700 (PDT)
 Received: from mai.linaro.org (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442f397b6fbsm24822375e9.39.2025.05.14.03.43.27
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a1f58f2b02sm19714077f8f.51.2025.05.14.04.23.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 May 2025 03:43:27 -0700 (PDT)
-Date: Wed, 14 May 2025 12:43:25 +0200
+        Wed, 14 May 2025 04:23:53 -0700 (PDT)
+Date: Wed, 14 May 2025 13:23:51 +0200
 From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: George Moussalem <george.moussalem@outlook.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, rafael@kernel.org, amitk@kernel.org,
-	thara.gopinath@gmail.com, dmitry.baryshkov@linaro.org,
-	robh@kernel.org, krzk+dt@kernel.org, quic_srichara@quicinc.com
-Subject: Re: [PATCH v9 0/6] Add support for IPQ5018 tsens
-Message-ID: <aCRzzXkd_qWuN3Fo@mai.linaro.org>
-References: <20250228051521.138214-1-george.moussalem@outlook.com>
- <DS7PR19MB88836DC6965515E12D70BB2C9DCC2@DS7PR19MB8883.namprd19.prod.outlook.com>
+To: Anand Moon <linux.amoon@gmail.com>
+Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	"open list:SAMSUNG THERMAL DRIVER" <linux-pm@vger.kernel.org>,
+	"open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>,
+	"moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" <linux-arm-kernel@lists.infradead.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Subject: Re: [PATCH v6 0/4] Exynos Thermal code improvement
+Message-ID: <aCR9RzGMWEuI0pxS@mai.linaro.org>
+References: <20250430123306.15072-1-linux.amoon@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -93,23 +102,62 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <DS7PR19MB88836DC6965515E12D70BB2C9DCC2@DS7PR19MB8883.namprd19.prod.outlook.com>
+In-Reply-To: <20250430123306.15072-1-linux.amoon@gmail.com>
 
-On Fri, Feb 28, 2025 at 09:11:33AM +0400, George Moussalem wrote:
-> IPQ5018 has tsens V1.0 IP with 5 sensors, of which 4 are in use,
-> and 1 interrupt. There is no RPM present in the soc to do tsens early
-> enable. Adding support for the same here.
+On Wed, Apr 30, 2025 at 06:02:56PM +0530, Anand Moon wrote:
+> Hi All,
+
+Hi Anand,
+
+if the goal of the changes is to do cleanups, I recommend to rework
+how the code is organized. Instead of having the data->soc check all
+around the functions, write per platform functions and store them in
+struct of_device_id data field instead of the soc version.
+
+Basically get rid of exynos_map_dt_data by settings the different ops
+in a per platform structure.
+
+Then the initialization routine would be simpler to clean.
+
+> This patch series is a rework of my previous patch series [1],
+> where the code changes were not adequately justified.
 > 
-> Last patch series sent by Qualcomm dates back to Sep 22, 2023.
-> Since I'm working on OpenWrt support for IPQ5018 based boards (routers)
-> and Sricharan Ramabadhran <quic_srichara@quicinc.com> in below email
-> confirmed this SoC is still active, I'm continuing the efforts to send
-> patches upstream for Linux kernel support.
-> https://lore.kernel.org/all/63dc4054-b1e2-4e7a-94e7-643beb26a6f3@quicinc.com/
-
-Applied, patches 2,3,4,5
-
-Thanks!
+> In this new series, I have improved the commit subject
+> and commit message to better explain the changes.
+> 
+> v6: Add new patch to use devm_clk_get_enabled
+>     and Fix few typo in subject as suggested by Daniel.
+> v5: Drop the guard mutex patch
+> v4: Tried to address Lukasz review comments.
+> 
+> Tested on Odroid U3 amd XU4 SoC boards.
+> Build with clang with W=1 enable.
+> 
+> [4] https://lore.kernel.org/all/20250410063754.5483-2-linux.amoon@gmail.com/
+> [3] https://lore.kernel.org/all/20250310143450.8276-2-linux.amoon@gmail.com/
+> [2] https://lore.kernel.org/all/20250216195850.5352-2-linux.amoon@gmail.com/
+> [1] https://lore.kernel.org/all/20220515064126.1424-1-linux.amoon@gmail.com/
+> [0] https://lore.kernel.org/lkml/CANAwSgS=08fVsqn95WHzSF71WTTyD2-=K2C6-BEz0tY0t6A1-g@mail.gmail.com/T/#m77e57120d230d57f34c29e1422d7fc5f5587ac30
+> 
+> Thanks
+> -Anand
+> 
+> Anand Moon (4):
+>   thermal/drivers/exynos: Refactor clk_sec initialization inside
+>     SOC-specific case
+>   thermal/drivers/exynos: Use devm_clk_get_enabled() helpers
+>   thermal/drivers/exynos: Remove redundant IS_ERR() checks for clk_sec
+>     clock
+>   thermal/drivers/exynos: Fixed the efuse min max value for exynos5422
+> 
+>  drivers/thermal/samsung/exynos_tmu.c | 100 ++++++++++-----------------
+>  1 file changed, 35 insertions(+), 65 deletions(-)
+> 
+> 
+> base-commit: b6ea1680d0ac0e45157a819c41b46565f4616186
+> -- 
+> 2.49.0
+> 
 
 -- 
 
