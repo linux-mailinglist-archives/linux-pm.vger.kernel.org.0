@@ -1,200 +1,169 @@
-Return-Path: <linux-pm+bounces-27155-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27156-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 646B7AB7626
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 21:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D591AB7635
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 21:54:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25D568667F5
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 19:49:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC38D3B41F8
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 19:53:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62E0D27BF6D;
-	Wed, 14 May 2025 19:49:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 256AF28CF73;
+	Wed, 14 May 2025 19:54:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="iU4/9UrV"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="do+TrsiD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9684F156C6F
-	for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 19:49:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3EAE29208E
+	for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 19:53:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747252156; cv=none; b=uO99QG+YzWXHZk8w0T/4IzkD1F3epkOiQ2vpj+cVSQBQyhc0BqWTDp2q+OEAcaTtjRWJkUxnlWrTMAQewPPiIXFXyaB8u+ZQIy7f9mNFdLy+Gxa5SYnsUGJL7j/gX5GggHupidbCOZStRcM+aF0K/0N03l37oiXJakJ0TCzcSAE=
+	t=1747252441; cv=none; b=cocqdPV4v7Vu0KsAacEjmcut4sQts31JG+7ddG9CrasbVv6jOh2IS2MmD87I1kNY30yTrvp1QX0g2Z4WPfOcKs02vYgoorTWBfbJuOVs6kGOsCQf7A+Knm+Ga6gEbEf297IvxFltfVdKZFcrOgU/Hqhd3fz+AwfjP8OFE7f2+C8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747252156; c=relaxed/simple;
-	bh=tu3E+VpQhbIEijZggilmf8ohmLQphkPrIyuMiy2Iyn4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gqKLKdsRF8SJhKCwE+tfFHu3ksudp9KoFs/u8ifbQ7xFshFJQqabX+5nGxIfP8xrvWJ62ExRVqI2an3ATglWD61XCPBumJ9SrZws+ttKVRpN6+4JK/S+0P8doiLpMH0P42RuQXa7pV/F4BRO5FJ3U5IpPGTDaJSibc6RkkoBJ3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=iU4/9UrV; arc=none smtp.client-ip=209.85.210.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-72bc3987a05so185862a34.1
-        for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 12:49:14 -0700 (PDT)
+	s=arc-20240116; t=1747252441; c=relaxed/simple;
+	bh=TiuJIqeQPLPdM7MV5DHSFrrCGNzg1U0NfsIusO3DWzw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lxG+RTInJggNCgjmqB52erHUcJ8AKkUFdIwCcVL7K/tMbH0t/WT8Yz5ecRGkodmLn6bpP5JDpasKRGH6PoZkKZqx3DGggn2jW0cmMZxqW1uFOmCoSvwrqWiqze8asvroVme3erqtCJf4lPcSx1VI2+v+f0IKrlT3RrqKPjUXBxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=do+TrsiD; arc=none smtp.client-ip=209.85.166.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-86192b6946eso4290339f.1
+        for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 12:53:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1747252153; x=1747856953; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oZkh8g9me+Nykm0HQx0KLgmoG9EtGGARK97CTcvbJUE=;
-        b=iU4/9UrVFjLLmv260Co+IbJFtnWMh6EXrpgdQ0cAouWMc+EP5ELfEuGELXzksl9P4k
-         u6JDGcJG7L39WoSCBnaWSFefD9m/gV0Rn/5TXhv1raiO4XSWZCqFnMXvstH/bi+Ium7J
-         gJdX8sLbL/t9LAH/yOMnisP4hoLRMQD1Kyqs8=
+        d=linuxfoundation.org; s=google; t=1747252438; x=1747857238; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rqFC7XclFM6HmznNg5RpQqMdlIL+E3U4uiILOAOVAFs=;
+        b=do+TrsiDxIuLHSLCDwRo/JE8/ze5+EEReEonbbZbZz/uGvGHVHVyIWu53w9onN5QYv
+         jbtkur+E+v+F0FFBKxK91FcHL9vellkRsQs4AspsZtKuLh+dyvOAIquM1TVhMNCE+9LJ
+         SZ4XzDf4ftBnBNVxaQmEtTop4E2aytebx8JR0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747252153; x=1747856953;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oZkh8g9me+Nykm0HQx0KLgmoG9EtGGARK97CTcvbJUE=;
-        b=IaWq2G5db5LKm7R0ccUwnwP41inmgVZLSie9FME+J7G7Z7WTRr8dBOrDORxXl75ZGJ
-         gdqTt63otCO0TR1rJ/QaUKPh9etkDlsxYly5BfXEZyrwpUYhAF5qjaeKugYU4UPgCJ+y
-         0kZNxmyvbh85kbIeOQjgA+HtJYfTvuDq42FVU/tQK9Gwa3BjsBTGdPfZZaG4HIC4GMeB
-         FUoiZOd1Vw5zu9m7tkNlZvQs4d3l+55Mr5dc1jsxuHTPLjwSdb/WtwaffL/wcO5JBjpc
-         kmXL1H3CqXQnsk1NLauv9RGta6ZaJaI/9p9chtBQ6MMAMFEoxc5JPMio7mDgPSSWFRHT
-         vdbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXjeYl2nr7roStEaj2UERxdxEkyustDaibVzzk/nASyrNQ0FN9tRjvvaEZB4Xdg629wfERwYbU1Fw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz83LoQKX1KajL8NM4wO2lv5ixTgGjZ45pmhnZmuWnwlnOago14
-	mEuVzxiqqRzdbx+Ng4XHRiXcgV0J21UQB/73K54bmppN3OOMJCVWpjZm7oPwSqUhX+weKDYgE19
-	sqhE3HKUnh6KxLlvzXB1rIOH6TCWnoFL4bYMe
-X-Gm-Gg: ASbGnct0Z5YzG/WOArqipGkYwXvcejj0DyNW0Susr1Pk9gaO98YezErXPYuXIYBQUHn
-	PzxE8x8raDSwHvBNqZQ/k15/MY3VxdU7yx+lS0Mv6b6DupG1qNdHsdwyu7OsQ9hCdETTlXGTlP+
-	wJOKlj/RRgcQvtLerGwR0stvS/5DH4vYX9I/HsFMT71lCKR8Jcfk8AzckEmiYDuw==
-X-Google-Smtp-Source: AGHT+IFCJSg8hIfl+Y+fxKZiYgrSWqqDLysVmocjXAAcg6uBcAFRx9APEaATMEgkLVcMFoVK/5iaOwFvZXjnUM20XV4=
-X-Received: by 2002:a05:6830:3814:b0:72b:8593:d3eb with SMTP id
- 46e09a7af769-734ec6bf6bcmr531328a34.2.1747252153472; Wed, 14 May 2025
- 12:49:13 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1747252438; x=1747857238;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rqFC7XclFM6HmznNg5RpQqMdlIL+E3U4uiILOAOVAFs=;
+        b=dxOObF87CY0HJtstmjeaehRojvEUoAc10Pz3xhzSnKdXOBrQCwiKV3E+E3qAHHRxnU
+         ZYI/ajqwq4gYMVzmwp5ifmmPanszmFLj8ZLMcH5I1IFUb0BVzUd1afmm2bTIzJqG1h+Y
+         Bke3rMrONhOkRag8pB2OZhTGgSHaOrSkMwAJwHrjbnDNVf04Yy529Y+ngra5AhEYJVor
+         IG5pkIP3Lz7yxHpW/XBzJPbx0xQKm3RiiPag62JdXKLOZQDZLF/GU4IXgOWp/6zTxTRN
+         jGNlqVM3iXeR0ycecrUiEVEdRD88ZkV2bTIlgGMsmXzmByXFoK9HCmu8nCpOVXNvTZRI
+         /8UA==
+X-Forwarded-Encrypted: i=1; AJvYcCVNLJlL5jRCi/NM/SKzWrVz7F7TFqqWbiKpi/AQUU4rErABTMrZslg40VbMkAlSj1juRgiqkjD0Uw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxK7zgFPW3/P0RC+HEBEtZYjSzpQHH2VYz8vDsrSmwW8fOvTByN
+	rOIMBVnGz3XxlAs+FZ3dnK1kp43kGRMYLiuHFHkNuCNCbidCCOi4U+hlivoFYQOlnEdpDwOuAQ2
+	h
+X-Gm-Gg: ASbGncuuXJNSspjako3SIK4wxKZgHp4pFCoJ/CM86NHUx1JeJljHCytOC3LzvSMQKH2
+	A++ZLulzNYZLmPbjYwDaeht5dBPNkU1fp8YS1LFtj8yc4KXnJ4jw6GL0SUYRZaBEJHnADiozNnK
+	eltlhHTGaCkrCpo5xddbpClU8Ftt1O6IM/ddakhPF4gifN79kgy1seDO0suwts6EuzWZlqnBksB
+	0GkwtVeR/vylTAiAgvB/c/zKv2awiT9t6VEQYRGh6vkUis3DFUlAA3b5Cnf01aAaOtgiwF7q+Fi
+	Tbgv3cM7rvhHWDXZxnz5CGgHKj68UZTlMaYRQxRKDorYke5MFNtptrT8gAmDEA==
+X-Google-Smtp-Source: AGHT+IFuhdhs1GZ17AJuuecrmu3II0fZTAN+vGnkqRWbS3S0XvQHj8BZNypViK3Lagb/zZFIppEymQ==
+X-Received: by 2002:a05:6602:3a8a:b0:867:6631:d5cb with SMTP id ca18e2360f4ac-86a08dd377bmr647811939f.5.1747252437851;
+        Wed, 14 May 2025 12:53:57 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-8676356c768sm291043439f.10.2025.05.14.12.53.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 May 2025 12:53:57 -0700 (PDT)
+Message-ID: <53a4d88a-e84d-4cc6-a041-93476f9df75d@linuxfoundation.org>
+Date: Wed, 14 May 2025 13:53:56 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240410000730.628043-1-treapking@chromium.org>
- <9c5aa4fb-a83c-470e-acf8-dd31303e50c2@collabora.com> <77c4437f2643475de495733d7840421198b78f49.camel@mediatek.com>
-In-Reply-To: <77c4437f2643475de495733d7840421198b78f49.camel@mediatek.com>
-From: Pin-yen Lin <treapking@chromium.org>
-Date: Wed, 14 May 2025 15:49:02 -0400
-X-Gm-Features: AX0GCFtecwOi8CEP2jK1ekxhH3Moa-nChPFzhyIRNlzu-0bbcdPxgTRcYXfWwSA
-Message-ID: <CAEXTbpdNxFd7-RMXyvYraqC5cj_BgycAO6JWdNUo50DVn+yntw@mail.gmail.com>
-Subject: Re: [PATCH] thermal/drivers/mediatek/lvts_thermal: Remove redundant
- code in lvts_ctrl_configure
-To: =?UTF-8?B?Q2hhbmctWWkgTGluICjmnpfplbflhIQp?= <ds_chang-yi.lin@mediatek.com>
-Cc: "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>, "nico@fluxnic.net" <nico@fluxnic.net>, 
-	"rafael@kernel.org" <rafael@kernel.org>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	"rui.zhang@intel.com" <rui.zhang@intel.com>, "lukasz.luba@arm.com" <lukasz.luba@arm.com>, 
-	"matthias.bgg@gmail.com" <matthias.bgg@gmail.com>, "duminjie@vivo.com" <duminjie@vivo.com>, 
-	Alexandre Mergnat <amergnat@baylibre.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"bchihi@baylibre.com" <bchihi@baylibre.com>, "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
-	"linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>, 
-	Nicolas Prado <nfraprado@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] tools/powercap: Implement powercap_set_enabled()
+To: Suchit K <suchitkarunakaran@gmail.com>
+Cc: trenn@suse.com, shuah@kernel.org, jwyatt@redhat.com, jkacur@redhat.com,
+ linux-pm@vger.kernel.org, linux-kernel-mentees@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20250510184709.44935-1-suchitkarunakaran@gmail.com>
+ <09c7ad5e-4061-4c0b-b097-fa575c12a244@linuxfoundation.org>
+ <CAO9wTFjyEngVR10ixYj=G8udRBeKaxAQquPCdi0V638t3WqQfA@mail.gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <CAO9wTFjyEngVR10ixYj=G8udRBeKaxAQquPCdi0V638t3WqQfA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Chang-Yi,
+On 5/13/25 19:20, Suchit K wrote:
+> Thanks for the suggestion, Shuah. And I did compile the kernel after
+> making the changes.
+> 
+> 
 
-On Wed, Apr 30, 2025 at 4:26=E2=80=AFAM Chang-Yi Lin (=E6=9E=97=E9=95=B7=E5=
-=84=84)
-<ds_chang-yi.lin@mediatek.com> wrote:
->
-> On Wed, 2024-04-10 at 11:55 +0200, AngeloGioacchino Del Regno wrote:
-> > Il 10/04/24 02:07, Pin-yen Lin ha scritto:
-> > > The removed variable assignment is never written to the register,
-> > > so it
-> > > has no effect on the device behavior.  Mediatek has confirmed that
-> > > it
-> > > is not required to initialize this register for current platforms,
-> > > so
-> > > remove this segment to avoid confusion.
-> > >
-> > > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-> > >
-> >
-> > Added Nicolas Pitre to the loop;
-> >
-> > Nicolas, since you're pushing support for those, can you please check
-> > if CALSCALE
-> > is used/useful/necessary on MT8186/88 before I give a R-b to this
-> > commit?
-> >
-> > P.S.: Can anyone from MediaTek please confirm if the 0x300 value is
-> > right for this
-> >        register? I'd still like Linux to properly initialize the
-> > registers, even if
-> >        this could technically be a default value.
-> >
-> >
-> > > ---
-> > >
-> > >   drivers/thermal/mediatek/lvts_thermal.c | 6 ------
-> > >   1 file changed, 6 deletions(-)
-> > >
-> > > diff --git a/drivers/thermal/mediatek/lvts_thermal.c
-> > > b/drivers/thermal/mediatek/lvts_thermal.c
-> > > index fd4bd650c77a..48d2f8ba3f18 100644
-> > > --- a/drivers/thermal/mediatek/lvts_thermal.c
-> > > +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> > > @@ -985,12 +985,6 @@ static int lvts_ctrl_configure(struct device
-> > > *dev, struct lvts_ctrl *lvts_ctrl)
-> > >   value =3D LVTS_TSSEL_CONF;
-> > >   writel(value, LVTS_TSSEL(lvts_ctrl->base));
-> > >
-> > > -/*
-> > > - * LVTS_CALSCALE : ADC voltage round
-> > > - */
-> > > -value =3D 0x300;
-> > > -value =3D LVTS_CALSCALE_CONF;
-> >
-> > As a side note, I believe that the original author wanted to write,
-> > instead...
-> >
-> > value =3D LVTS_CALSCALE_CONF;
-> > writel(value, LVTS_CALSCALE(lvts_ctrl->base);
-> >
-> > Cheers,
-> > Angelo
-> >
-> > > -
-> > >   /*
-> > >    * LVTS_MSRCTL0 : Sensor filtering strategy
-> > >    *
-> >
-> >
-> Base on xiaojun.zheng
->      The register is for PTP function, and in MT8192 it's not required
-> to do such setting any more
+Please don't top post in kernel patch responses.
 
-This driver is now also used by mt7988, mt8188, and mt8195. Could you
-confirm if the PTP function are not required for all these SoCs, so we
-are safe to remove this?
+> On Wed, 14 May 2025 at 03:33, Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>
+>> On 5/10/25 12:47, Suchit Karunakaran wrote:
+>>> The powercap_set_enabled() function previously returned a dummy value
+>>> and was marked with a TODO comment. This patch implements the function
+>>> by writing the desired mode (0 or 1) to /sys/class/powercap/intel-rapl/enabled
+>>
+>> The short summary should say cpupower: Implement powercap_set_enabled()
 
-As a side note, Mediatek explained PTP in an offline discussion with us:
-PTPOD stands for PTP (Performance Thermal Power) OD (Overdrive).
-PTPOD is a technique to let the HW runs at the same frequency but with
-lower operating voltage to save power.
+I am not clear on how this can be used. Can you elaborate on the use-case
+for the set?
 
-Regards,
-Pin-yen
->
->
-> ************* MEDIATEK Confidentiality Notice
->  ********************
-> The information contained in this e-mail message (including any
-> attachments) may be confidential, proprietary, privileged, or otherwise
-> exempt from disclosure under applicable laws. It is intended to be
-> conveyed only to the designated recipient(s). Any use, dissemination,
-> distribution, printing, retaining or copying of this e-mail (including it=
-s
-> attachments) by unintended recipient(s) is strictly prohibited and may
-> be unlawful. If you are not an intended recipient of this e-mail, or beli=
-eve
->
-> that you have received this e-mail in error, please notify the sender
-> immediately (by replying to this e-mail), delete any and all copies of
-> this e-mail (including any attachments) from your system, and do not
-> disclose the content of this e-mail to any other person. Thank you!
+Send me v2 fixing the change log.
+
+>>>
+>>> Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+>>> ---
+>>>    tools/power/cpupower/lib/powercap.c | 22 ++++++++++++++++++----
+>>>    1 file changed, 18 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/tools/power/cpupower/lib/powercap.c b/tools/power/cpupower/lib/powercap.c
+>>> index 94a0c69e55ef..7947b9809239 100644
+>>> --- a/tools/power/cpupower/lib/powercap.c
+>>> +++ b/tools/power/cpupower/lib/powercap.c
+>>> @@ -70,6 +70,22 @@ static int sysfs_get_enabled(char *path, int *mode)
+>>>        return ret;
+>>>    }
+>>>
+>>> +static int sysfs_set_enabled(const char *path, int mode)
+>>> +{
+>>> +     int fd;
+>>> +     char buf[2] = { mode ? '1' : '0', '\n' };
+>>> +     ssize_t ret;
+>>> +
+>>> +     fd = open(path, O_WRONLY);
+>>> +     if (fd == -1)
+>>> +             return -1;
+>>> +
+>>> +     ret = write(fd, buf, sizeof(buf));
+>>> +     close(fd);
+>>> +
+>>> +     return ret == sizeof(buf) ? 0 : -1;
+>>> +}
+>>> +
+>>>    int powercap_get_enabled(int *mode)
+>>>    {
+>>>        char path[SYSFS_PATH_MAX] = PATH_TO_POWERCAP "/intel-rapl/enabled";
+>>> @@ -77,12 +93,10 @@ int powercap_get_enabled(int *mode)
+>>>        return sysfs_get_enabled(path, mode);
+>>>    }
+>>>
+>>> -/*
+>>> - * TODO: implement function. Returns dummy 0 for now.
+>>> - */
+>>>    int powercap_set_enabled(int mode)
+>>>    {
+>>> -     return 0;
+>>> +     char path[SYSFS_PATH_MAX] = PATH_TO_POWERCAP "/intel-rapl/enabled";
+>>> +     return sysfs_set_enabled(path, mode);
+>>
+>> Did you compile this?
+>>
+>> thanks,
+>> -- Shuah
+
 
