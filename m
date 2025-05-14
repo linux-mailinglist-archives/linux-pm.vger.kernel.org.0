@@ -1,153 +1,170 @@
-Return-Path: <linux-pm+bounces-27133-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27134-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA71BAB6B97
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 14:41:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAE97AB6BA3
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 14:43:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D108C3AE7BD
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 12:41:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52178160484
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 12:44:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91E5F2777F9;
-	Wed, 14 May 2025 12:41:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3D6927814B;
+	Wed, 14 May 2025 12:43:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="qiLK1m4s"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oMTcc+ea"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C4C2581
-	for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 12:41:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAE7427780B;
+	Wed, 14 May 2025 12:43:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747226507; cv=none; b=by+N27jSkpu6Q4ONoi9Hevo8b157i/snvm0H4lGFh8PFYHqu3cVKpErf5eJJHlFrRl7Yct9i1h5KQQawJwTuFm8XV0sj9t3rlL5fxsV1Fmt+hHj7DqxR0sMiVXXFbDWIRRTcR6+3Tf2Ggtu7JjTuOgWGSi0SSTF7kIeBAarl5qg=
+	t=1747226634; cv=none; b=TbnoSHEPYCEKrqKif1afVCCNwWw4DjoDm+dXvuOWB9Jotb4gvPTDluqb1de1lVA9bJHGpuCOVwIva2Mt1LI7+DPhQc5fwF1aedFvgK780/DmgUUMLNzsbIk9fkMs3Jlw6a3KQJRv9Y2XqrJNn1QKyTGLCjOhSImbQZH9lWpItVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747226507; c=relaxed/simple;
-	bh=BR82Y9+anBomWhKwv5/WAtPvwSrVSNmXPTQ2dwpLKsk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bTu+WPjGRRhdycSOoxIMwvaD2Xcuv9XesbtyPy6Xr6piylstSn9VEW9MTgL3etE8hsZ8lNyFgEJxP6+YBrSEyrlE5VG7R7VhIZ1urXkSAKaYkwD3NkfXDswO4TsWPDyJVQ7hNjCWEMIArBF/QWvUc0U1ur/oOrxunhQ3+GVzEKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=qiLK1m4s; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=yb2lqr7PLYKWyEOfnrhWjzAYft/hEPqQTGMWP3sZWjI=; t=1747226505;
-	x=1747658505; b=qiLK1m4sfJuF2eCwumo8gxgvNNYWvkz4rWU+2slX1LnVyPPvEyl20nbBGv9M9
-	eTgrItTscSUttkEjbiwqaxGhRGBcJDtqSCTy8YZ/wynJgKV5CR7nsaJJtB/rGYUBCLH28xL2BDV1e
-	O0OB5r/w/VrEUzn78sxsckjfBHqkGmcVJ77bs4FPoWjCDZaEdXLM71f1ztWZBOW9AsmX6oC4gjepa
-	LtEtzJ2M1q3qG4BnWuu+axxLWrAUW18UWjAfVXzOtjzS/a+DBdvxywcD+DufcPiNv4sTrtnbrnBVx
-	ofb+aQTxyWNgltfOzpEge1tAIFmEk5NtnPJNTdakgjh+4X/Snw==;
-Received: from [2a02:8108:8984:1d00:a0cf:1912:4be:477f]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-	id 1uFBQX-00HYzv-1a;
-	Wed, 14 May 2025 14:41:37 +0200
-Message-ID: <16ad2364-0161-4724-90e1-b57559168843@leemhuis.info>
-Date: Wed, 14 May 2025 14:41:35 +0200
+	s=arc-20240116; t=1747226634; c=relaxed/simple;
+	bh=RkK5HYfym0mSKygNHtg7/x99esDPYM69w7wrfurgeaY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p3oxIVvLOpFxrQwqbgdI4fgvn9iiiIigx2kNghn8f0WxlwtKzBLRq+gsCnYDxqEMHjInhmkkymQSG7gKoi3jr3xVCZyoQ4P+QcSj5jWRcS15zUtUoy8jSM+HEZplODkivHyD/u63N5bxQV/XXpQIOw2dyWa8FDsiw9axCFytQTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oMTcc+ea; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32264C4AF09;
+	Wed, 14 May 2025 12:43:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747226634;
+	bh=RkK5HYfym0mSKygNHtg7/x99esDPYM69w7wrfurgeaY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=oMTcc+eaTWI1qALlf6gg0aDwGjDJbshwil0B+5L/0/BQOkZe1ykiWiQTz+XsPqwbv
+	 aToVfbgy0odLjMzK60nqvZhwsRBUIJZj+mWWrbR0mtaQILxD9RiEbjOySXZmQ+Flav
+	 7qK+csjYV4WqBwIH6KxOnugnek4uXLKuLDcVmW8tJ/8yQeaTiJaPUpeUHlDLVJySbn
+	 omur8hyCk954p4yJztocT19oTbci7VRfyuecJc9HExJxpOBDt8GwwDxO6xNSJetg+X
+	 1Sz26ZQwisoJoSYjCh5vCw9S/tSMQ5eVwPHG3vROuB26qgNqg22XUjh2SIqhXxaTwT
+	 AtBDNW2VT0mbw==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-604f0d27c24so3384301eaf.2;
+        Wed, 14 May 2025 05:43:54 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUm6S2ouCT8Il9a7rd0SwmLfabs3aX3QFSCR+tqCB7itQO4pxbdqZxBrsFi1AqCZZsjjD0lb2lKljKZwgo=@vger.kernel.org, AJvYcCXR/h6yMfPMn+LI6MGDJV8pIyLQZGu9ICoFMuLl+cxyNRyAFyT0IsqzSuiKKAAgWDKdVl878lnyYgU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiPH0vG/duLzQjpbTU4FSJhjBYnm0SN5soHlKmd7MLhfjEC8Dh
+	vZlHcy81XRi8f2WqyQbGUqO8niLDvL2uD/2wo3LaZSiMRRAYasgex0psoEDktFD5twhXljxAgBP
+	RnqGAD56+StmanbAoRT0pDkkOR3o=
+X-Google-Smtp-Source: AGHT+IFLPiLLdFHgnurhnXU+t42N4mH7EOXOgwJUCUxANYYKeRbm6LctYuTcImfBsxEDZo9qcxyNJ1w7cOf5a/dWweg=
+X-Received: by 2002:a05:6820:1b09:b0:609:de23:cfbb with SMTP id
+ 006d021491bc7-609df2560c5mr1452035eaf.8.1747226633512; Wed, 14 May 2025
+ 05:43:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] cpupower: add a systemd service to run cpupower
-To: "Francesco Poli (wintermute)" <invernomuto@paranoici.org>,
- linux-pm list <linux-pm@vger.kernel.org>
-Cc: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
- "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>
-References: <20250425151024.121630-1-invernomuto@paranoici.org>
-From: Thorsten Leemhuis <linux@leemhuis.info>
-Content-Language: de-DE, en-US
-Autocrypt: addr=linux@leemhuis.info; keydata=
- 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 n7RI
-In-Reply-To: <20250425151024.121630-1-invernomuto@paranoici.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1747226505;42da7a73;
-X-HE-SMSGID: 1uFBQX-00HYzv-1a
+References: <20250513015726.1497-1-ImanDevel@gmail.com>
+In-Reply-To: <20250513015726.1497-1-ImanDevel@gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 14 May 2025 14:43:42 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gS72-yJ2=EwEb4qz2m47RAhU1Va+UnGNJAjTsT1AJiQQ@mail.gmail.com>
+X-Gm-Features: AX0GCFuiZGmk5nUYxUtq4FjjEGITyDcDkkHk819fqPtLOpfSDIUh6xmwxhv1ANQ
+Message-ID: <CAJZ5v0gS72-yJ2=EwEb4qz2m47RAhU1Va+UnGNJAjTsT1AJiQQ@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: drop redundant cpus_read_lock() from store_local_boost()
+To: Seyediman Seyedarab <imandevel@gmail.com>
+Cc: rafael@kernel.org, viresh.kumar@linaro.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, 
+	linux-kernel-mentees@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Francesco! Many thx for addressing the issues I brought up earlier
-which now landed in -next, much appreciated.
+On Tue, May 13, 2025 at 3:55=E2=80=AFAM Seyediman Seyedarab <imandevel@gmai=
+l.com> wrote:
+>
+> Lockdep reports a possible circular locking dependency[1] when
+> cpu_hotplug_lock is acquired inside store_local_boost(), after
+> policy->rwsem has already been taken by store().
+>
+> However, the boost update is strictly per-policy and does not
+> access shared state or iterate over all policies. Since policy->rwsem
+> is already held, this is enough to serialize against concurrent
+> topology changes for the current policy.
+>
+> Remove the cpus_read_lock() to resolve the lockdep warning and
+> avoid unnecessary locking.
+>
+>  [1]
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+>  WARNING: possible circular locking dependency detected
+>  6.15.0-rc6-debug-gb01fc4eca73c #1 Not tainted
+>  ------------------------------------------------------
+>  power-profiles-/588 is trying to acquire lock:
+>  ffffffffb3a7d910 (cpu_hotplug_lock){++++}-{0:0}, at: store_local_boost+0=
+x56/0xd0
+>
+>  but task is already holding lock:
+>  ffff8b6e5a12c380 (&policy->rwsem){++++}-{4:4}, at: store+0x37/0x90
+>
+>  which lock already depends on the new lock.
+>
+>  the existing dependency chain (in reverse order) is:
+>
+>  -> #2 (&policy->rwsem){++++}-{4:4}:
+>         down_write+0x29/0xb0
+>         cpufreq_online+0x7e8/0xa40
+>         cpufreq_add_dev+0x82/0xa0
+>         subsys_interface_register+0x148/0x160
+>         cpufreq_register_driver+0x15d/0x260
+>         amd_pstate_register_driver+0x36/0x90
+>         amd_pstate_init+0x1e7/0x270
+>         do_one_initcall+0x68/0x2b0
+>         kernel_init_freeable+0x231/0x270
+>         kernel_init+0x15/0x130
+>         ret_from_fork+0x2c/0x50
+>         ret_from_fork_asm+0x11/0x20
+>
+>  -> #1 (subsys mutex#3){+.+.}-{4:4}:
+>         __mutex_lock+0xc2/0x930
+>         subsys_interface_register+0x7f/0x160
+>         cpufreq_register_driver+0x15d/0x260
+>         amd_pstate_register_driver+0x36/0x90
+>         amd_pstate_init+0x1e7/0x270
+>         do_one_initcall+0x68/0x2b0
+>         kernel_init_freeable+0x231/0x270
+>         kernel_init+0x15/0x130
+>         ret_from_fork+0x2c/0x50
+>         ret_from_fork_asm+0x11/0x20
+>
+>  -> #0 (cpu_hotplug_lock){++++}-{0:0}:
+>         __lock_acquire+0x10ed/0x1850
+>         lock_acquire.part.0+0x69/0x1b0
+>         cpus_read_lock+0x2a/0xc0
+>         store_local_boost+0x56/0xd0
+>         store+0x50/0x90
+>         kernfs_fop_write_iter+0x132/0x200
+>         vfs_write+0x2b3/0x590
+>         ksys_write+0x74/0xf0
+>         do_syscall_64+0xbb/0x1d0
+>         entry_SYSCALL_64_after_hwframe+0x56/0x5e
+>
+> Signed-off-by: Seyediman Seyedarab <ImanDevel@gmail.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 3 ---
+>  1 file changed, 3 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 731ecfc17..759dd178a 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -622,10 +622,7 @@ static ssize_t store_local_boost(struct cpufreq_poli=
+cy *policy,
+>         if (!policy->boost_supported)
+>                 return -EINVAL;
+>
+> -       cpus_read_lock();
+>         ret =3D policy_set_boost(policy, enable);
+> -       cpus_read_unlock();
+> -
+>         if (!ret)
+>                 return count;
+>
+> --
 
-Sadly with those fixes in I noticed another issue I missed earlier. One
-from the "small differences between different Linux distributions that
-make all our lives hard". :-/
-
-On 25.04.25 17:07, Francesco Poli (wintermute) wrote:
-> One of the most typical use cases of the 'cpupower' utility works as
-> follows: run 'cpupower' at boot with the desired command-line options
-> and then forget about it.
-
-> diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-> index 835123add0ed..9c2b5f71fee1 100644
-> [...]
-> @@ -302,6 +305,14 @@ install-tools: $(OUTPUT)cpupower
->  	$(INSTALL_PROGRAM) $(OUTPUT)cpupower $(DESTDIR)${bindir}
->  	$(INSTALL) -d $(DESTDIR)${bash_completion_dir}
->  	$(INSTALL_SCRIPT) cpupower-completion.sh '$(DESTDIR)${bash_completion_dir}/cpupower'
-> +	$(INSTALL) -d $(DESTDIR)${confdir}default
-> +	$(INSTALL_DATA) cpupower.default '$(DESTDIR)${confdir}default/cpupower'
-> +	$(INSTALL) -d $(DESTDIR)${libexecdir}
-> +	$(INSTALL_PROGRAM) cpupower.sh '$(DESTDIR)${libexecdir}/cpupower'
-> +	$(INSTALL) -d $(DESTDIR)${libdir}/systemd/system
-
-That last line to the best of my knowledge is wrong on distributions
-like Fedora, where ${libdir} expands to /usr/lib64/ -- which is the
-right path for libraries, but the wrong one for systemd units, as they
-are always stored in /usr/lib/systemd/system (at least on Fedora). Not
-sure what the right fix it, it might be something like defining
-
-unitdir ?= /usr/lib/systemd/system
-
-earlier in the Makefile and then using it in the last quoted line above.
-
-Ciao, Thorsten
-
-
+Applied as 6.16 material, thanks!
 
