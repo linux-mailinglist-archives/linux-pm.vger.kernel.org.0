@@ -1,116 +1,151 @@
-Return-Path: <linux-pm+bounces-27110-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27111-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46829AB5F09
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 00:09:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9D82AB606C
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 03:20:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81A858C029D
-	for <lists+linux-pm@lfdr.de>; Tue, 13 May 2025 22:09:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F3EB19E70D0
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 01:20:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3F571F4190;
-	Tue, 13 May 2025 22:09:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F8EA15ADB4;
+	Wed, 14 May 2025 01:20:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YB0HUSJC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bfX7moft"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C089AB672
-	for <linux-pm@vger.kernel.org>; Tue, 13 May 2025 22:09:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913DE151990;
+	Wed, 14 May 2025 01:20:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747174162; cv=none; b=WyfrORrzS2Wbu8/Z2x5zpVtA82sGdF7Ra8RauczSoKEZpRxBEtfXJTGkTEn6IrLlK1zrZEQk6SoSoG6Zbzj2mp9EHTondV6Tp8PacpfdUg1oEm/U+w4bwK7K8C+DBdibyuJGqxKiRSQ3ob1Y9rtPEQd9uq2L0t9IMZpaerNFbKM=
+	t=1747185621; cv=none; b=Fj5KZTON8y5MVo+C39jlZ5B8RJjd0nsbK8fSTuO6cbmoM0hB2S9XW5b1m5lpV6yA/kGt2tddy4qxvcg8OVtqa7WHcl6Net3YmVQLQQHnWh6nFn7oYLO5UdTGU78X21r7VXz+0RG5Z7ByaCs6jc73npb29V/WuDDCKX0xalPmEn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747174162; c=relaxed/simple;
-	bh=jNGodkxVsaP6SYycu5iFPUnVWpqXmm8JQWM2ww3OVRE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JiRvW9soqsUuhfiSA4xVOXL/IceDqPFC1ZrXZKxLrj0d3OptD+MSNKFoc6yZBlSK3CQireilBRPCtG1NP8EX6vk3KISDl/kYDwI2Fqk+e9uF3SCrcf/aYI4iwatmS6aIpph8KCQyO2gZbKxvFb93n9nhApHyFCVI9ijye56voqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YB0HUSJC; arc=none smtp.client-ip=209.85.166.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-86135ac9542so14166839f.1
-        for <linux-pm@vger.kernel.org>; Tue, 13 May 2025 15:09:19 -0700 (PDT)
+	s=arc-20240116; t=1747185621; c=relaxed/simple;
+	bh=6TH+CfOf8nH8p092bYaPHuPFIDKQno5bG+ApPzD2hCE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=T8a81Edfq8zKBl5J4kzM1Hlep6U+vjIadLHlb1ULH2kMHUcXVbjfeZqJohvQeEM7o/ie/cHyH1A8A4MhCsQ3imZJMZDGegJpcxOWpZm/9ecMneLK5mpPWsKM+Hgphw9HugsDQwIZW2F5sqqSfKF99C9sGFNwmuVsWFO+gXLvY4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bfX7moft; arc=none smtp.client-ip=209.85.210.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-72c14138668so1612089a34.2;
+        Tue, 13 May 2025 18:20:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1747174159; x=1747778959; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RWO/l3NJzTnRU8kpSCqjvCgWkktFPjXwi12a9cTi4wo=;
-        b=YB0HUSJCmjfbuUv1x+C6yM6P0/yFnfu13CyNhr2G7ePWhWIoSX/KO/nRuczynJyxPf
-         c+zMfzJyesmbY3Vk0X/mteWAahrB6ZvcmTnUvXiexZ3YGYNx97LTH9wK2YdQY6D2uXXf
-         hBDuez8TmnBp2xsM3iT2ww7lySOozG53y+Chk=
+        d=gmail.com; s=20230601; t=1747185617; x=1747790417; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kjhw+8R2L2eVYt9u5Zf9479vJ3/o77t8mJ9Bz83DtoQ=;
+        b=bfX7moftQbj4hAbiGEsEFqZK1HNmygwOkTebz/QvQV1GANNaOD5M+EA4hxaZtrpec0
+         1VQHB7om3PCvpMWY9+ktWfPIf3JZ44c0PpAd1mxwzO8KP6kahWC4NeGGNDShxfBZS/Zk
+         9iSqFtYY26Sj/36tgI4ba7GbZ2PB8uGuSKo+5OMKWc9rIU7fZxp9/Bk/F230cGeQgMYZ
+         BM/KnE9az4ornikZ/8pE09D+br7MTVBW+ztB4c0d9DiXpDznNDHgDNakJ/U7bmkcKESp
+         PCEbNO+WuXlY8xQoeljtHccJC02jrEqw18NLjC7rr7xgwGJPUtHOfildtRRCkFyv++HD
+         svug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747174159; x=1747778959;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RWO/l3NJzTnRU8kpSCqjvCgWkktFPjXwi12a9cTi4wo=;
-        b=LAEXC7I1hWQvQXuAksOI+4isZYdLBgSJ4i9W2tdx9f3UDYb0UJH+SOPiEydzEVqUrO
-         1By+3yYlbAk403195DBo0x49BR8ybeMrt0XmYHCS0PQcTtpmD4SquzFpleeaNVmionos
-         nr4Pv8bkKjcTnov2UogT0AZhgBRiGGgKujb/lTEYFqrpn8uNUkOAhyjSk4qR8iQXON3P
-         Qei5hF50fRwMTh6eKrg6ShWqsC/JWyk6M2lp32m+tFgv2VFkEiXLWNAGyxXHc3wbJ0kl
-         wB7kxqr1ojPyz8ZmIMx0KwC69ZJJ9DKKdUsCo4lvwvYQSTvfM4DRJNypMaXu7P3/jjqe
-         jtSg==
-X-Forwarded-Encrypted: i=1; AJvYcCWwIwZCt0yqaD+MyT5fQXJfjIgPG31nLYAox8uUfK28yCk+TwVT4vcYRnPXkQu3Y0LEHB+W5aaq0Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzy2CKB+zXN//eAaUoc0vHxYT4w3Qf1erw53822sLNiZBLsoYWc
-	WgcLhDWnvP+GrcKVIv0e/wawfEt96LsuytPdzGwoA8N3yYXd75kCJAGltgH/SiZAeQSNQWVW7ao
-	W
-X-Gm-Gg: ASbGncvHhOqhRJlpeLnfxk5NwL01h8iotpAF6tcTyJXXhQt6vH9A3XfO/mpEgwOHncR
-	uTUC0YI5gV38S3pxH0oqXGnmND9Ekb+1HR278c2CH7EoAD+PSfKMs4hr+FA02QEKd2YZprZprmP
-	fLs7Ve8Ky2j5Zl3FG4tTJgz+TsW0zQua9XXxF6NH4DXU5qrxPsswCWTIFm4RtBshEHTn/Mrtiy/
-	JnvYhEhgGFOFLxUALi1PYl7o+Fek7+UEdpmvQqCyVo4D9MBKxsJxgeW0FlgvArJx2DTkrfCTUjI
-	oTcws3Flzl+LKwSsSm+BlSfTtvXMUbalzkkH1/zpUwBbhxrueeJ6TKLncrsFtA==
-X-Google-Smtp-Source: AGHT+IFYLb/9YylnsTJr3jX+GEPJeWtsUySTuxFWiiHm3CLRYIhVBFlqFBSUC2SxqtxlPq5PCr439A==
-X-Received: by 2002:a6b:f703:0:b0:85e:73da:c56a with SMTP id ca18e2360f4ac-869f96fc510mr543194639f.3.1747174158781;
-        Tue, 13 May 2025 15:09:18 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4fb7abf256csm495248173.92.2025.05.13.15.09.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 May 2025 15:09:18 -0700 (PDT)
-Message-ID: <c120f005-5c4c-421b-8395-2d10870c7a8c@linuxfoundation.org>
-Date: Tue, 13 May 2025 16:09:17 -0600
+        d=1e100.net; s=20230601; t=1747185617; x=1747790417;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kjhw+8R2L2eVYt9u5Zf9479vJ3/o77t8mJ9Bz83DtoQ=;
+        b=EC7E5bW80OzdXAOG+xHHhji+pETFXnhJPaF1BFMM7l54h2L1JeBSXToDEgP1hQUUbH
+         w8SH2R93ZTqlpM/1ZX2L/kL9c4yX+zEbFVzTk4OhCAa0jjv+HgLqAaYFxmCVLGD3RmrG
+         peera0stKBlV9Idq8Thwgqb/724Hem6Lp9qyGgL1DLZ8rfinvKcRqIW6Wyv1cC+jRJr4
+         ZDAIJeBvZB3wv2k5TXPwt7rWej8GVhXRWmgY8FcRit2eIfuEYQP0ll8qDC8+AqRao7dj
+         2aHdQEfPvDEVx7Nh1IO8OPGtnaRwJHrNjJHrC0BO6u0JRrKUQZ+b1TaOUJfQLzHZ+GSm
+         XA7A==
+X-Forwarded-Encrypted: i=1; AJvYcCWK99Yv6OhLnDmIxytRA5js+I70YswnIPMB5Zx3vhbaF4SIRccpmOF3iT+gK8rQ56B9tvl285LHpMTC9z8=@vger.kernel.org, AJvYcCXUGg20IGU2BdSah6CVexCUBVH0S5ISrA5KVLjm1aXsXbN50NTKwm0Sx7zngZLHTW91833BHiFEwnQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDm7wBQIG8h+hJ4bHm9KuBl3dScJ+aEhyj+vdKxsgbY55ovql2
+	/nc2kuHu3f5ziYY6o2jXOr8OpY+lK3ZHt4Xys1lnWJqTRsxH94lDN+eE0ET+KwP4envYlFAY2yZ
+	UFF46wUjzS81z4Qc0Q4l12CXEUTj2Wfm3KN4=
+X-Gm-Gg: ASbGncsIIp2NH42Q7Uiypu31+1b4EQHodGzvuWRLUB3QuIHM+9GbLVC8fbrHSWPJLhO
+	/EFXYcIUZDeSFtd7fsKqtmbaHQkVxrgkI+caK4MV4CFpqgtSbTEkFaiw4cdWrmNVpnMG03Dkg1x
+	g6IuRZFKOU9DZkSEeX65eoluXr+Ey+LToGET2LM3zCE1TeyC1Hu/ddqZj3mut5T8zT0Q==
+X-Google-Smtp-Source: AGHT+IHkZ/hgevBC9dQiqQ7Y9K8Hy5o5zbMHYNDgVh2fgORnUsRO27N4/XTRi5pSH9FtbfVkATvj1JiZs9S+RGqo4q8=
+X-Received: by 2002:a05:6870:71cb:b0:2d4:d07c:7cb2 with SMTP id
+ 586e51a60fabf-2e32b1366a7mr696824fac.11.1747185617429; Tue, 13 May 2025
+ 18:20:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] cpupower: fixes for cpupower.service
-To: "Francesco Poli (wintermute)" <invernomuto@paranoici.org>,
- linux-pm list <linux-pm@vger.kernel.org>
-Cc: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
- "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>,
- Thorsten Leemhuis <linux@leemhuis.info>, Justin Forbes <jforbes@redhat.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250513163937.61062-2-invernomuto@paranoici.org>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250513163937.61062-2-invernomuto@paranoici.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250510184709.44935-1-suchitkarunakaran@gmail.com> <09c7ad5e-4061-4c0b-b097-fa575c12a244@linuxfoundation.org>
+In-Reply-To: <09c7ad5e-4061-4c0b-b097-fa575c12a244@linuxfoundation.org>
+From: Suchit K <suchitkarunakaran@gmail.com>
+Date: Wed, 14 May 2025 06:50:06 +0530
+X-Gm-Features: AX0GCFtYZvMyu3LNA6tisPv-kVuwpVvfEoES84vyI6pfnQg2CB3GgUX9A07nmkk
+Message-ID: <CAO9wTFjyEngVR10ixYj=G8udRBeKaxAQquPCdi0V638t3WqQfA@mail.gmail.com>
+Subject: Re: [PATCH] tools/powercap: Implement powercap_set_enabled()
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: trenn@suse.com, shuah@kernel.org, jwyatt@redhat.com, jkacur@redhat.com, 
+	linux-pm@vger.kernel.org, linux-kernel-mentees@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 5/13/25 10:29, Francesco Poli (wintermute) wrote:
-> 
-> Hello!
-> 
-> I prepared a patch series to address the issues reported about my
-> previous patch by Thorsten Leemhuis.
-> 
-> The patch series has been created against the tip of the
-> 'origin/cpupower' git branch.
-> I hope it can be applied soon, if you agree with the fixes.
-> 
-> Thanks for your time!
-> Bye.
+Thanks for the suggestion, Shuah. And I did compile the kernel after
+making the changes.
 
-I applied the series for my next pr to Rafael.
 
-https://web.git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git/log/?h=cpupower
-
-thanks,
--- Shuah
+On Wed, 14 May 2025 at 03:33, Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> On 5/10/25 12:47, Suchit Karunakaran wrote:
+> > The powercap_set_enabled() function previously returned a dummy value
+> > and was marked with a TODO comment. This patch implements the function
+> > by writing the desired mode (0 or 1) to /sys/class/powercap/intel-rapl/enabled
+>
+> The short summary should say cpupower: Implement powercap_set_enabled()
+> >
+> > Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+> > ---
+> >   tools/power/cpupower/lib/powercap.c | 22 ++++++++++++++++++----
+> >   1 file changed, 18 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/tools/power/cpupower/lib/powercap.c b/tools/power/cpupower/lib/powercap.c
+> > index 94a0c69e55ef..7947b9809239 100644
+> > --- a/tools/power/cpupower/lib/powercap.c
+> > +++ b/tools/power/cpupower/lib/powercap.c
+> > @@ -70,6 +70,22 @@ static int sysfs_get_enabled(char *path, int *mode)
+> >       return ret;
+> >   }
+> >
+> > +static int sysfs_set_enabled(const char *path, int mode)
+> > +{
+> > +     int fd;
+> > +     char buf[2] = { mode ? '1' : '0', '\n' };
+> > +     ssize_t ret;
+> > +
+> > +     fd = open(path, O_WRONLY);
+> > +     if (fd == -1)
+> > +             return -1;
+> > +
+> > +     ret = write(fd, buf, sizeof(buf));
+> > +     close(fd);
+> > +
+> > +     return ret == sizeof(buf) ? 0 : -1;
+> > +}
+> > +
+> >   int powercap_get_enabled(int *mode)
+> >   {
+> >       char path[SYSFS_PATH_MAX] = PATH_TO_POWERCAP "/intel-rapl/enabled";
+> > @@ -77,12 +93,10 @@ int powercap_get_enabled(int *mode)
+> >       return sysfs_get_enabled(path, mode);
+> >   }
+> >
+> > -/*
+> > - * TODO: implement function. Returns dummy 0 for now.
+> > - */
+> >   int powercap_set_enabled(int mode)
+> >   {
+> > -     return 0;
+> > +     char path[SYSFS_PATH_MAX] = PATH_TO_POWERCAP "/intel-rapl/enabled";
+> > +     return sysfs_set_enabled(path, mode);
+>
+> Did you compile this?
+>
+> thanks,
+> -- Shuah
 
