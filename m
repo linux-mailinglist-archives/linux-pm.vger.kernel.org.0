@@ -1,63 +1,64 @@
-Return-Path: <linux-pm+bounces-27157-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27158-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C22EAB76FF
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 22:26:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 469D8AB7731
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 22:39:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 32BB97B191E
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 20:24:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63554864F13
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 20:39:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E79A2213259;
-	Wed, 14 May 2025 20:23:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C84C82951D2;
+	Wed, 14 May 2025 20:39:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b="WSTuGYOD"
+	dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b="ZtG8OBVx"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from confino.investici.org (confino.investici.org [93.190.126.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63F95296710
-	for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 20:23:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 075FD295511
+	for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 20:39:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.190.126.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747254233; cv=none; b=Mb1FYc+6Q5as7FklToUtYNwyozRr8A3W6KK+KyJwZ+MC/BRVMogXeQSf2oxX7f8PbNi6KysMKacftxBAi2iIKiqANGPkydLzWWaOAlg6P1G3/QVf+24Dq1uvo04JcD83K8VdFQvPpIkOLNxsxMCauEG3mnnueoicRR/pJNW9v4k=
+	t=1747255165; cv=none; b=f/kOLbcAy1Te8L0v+iCLQbyXZtAxBsNyLPHsMRfn2RF7iJH1V7w+qUBZIN9pG5sucKeXMMphz4ztfXhirjbjrWifr6u6BilAnaPeJJJH/rjN04bDIFQkgTpr6RbeL6a+eEQVh1daThrZuJDYuoqDJSVN3T4GBf3sHN1WKu7r1FQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747254233; c=relaxed/simple;
-	bh=Po7jr/1zCSd4x7B7pGDnL5ir+QdIxdf4bG70sm0tlvA=;
+	s=arc-20240116; t=1747255165; c=relaxed/simple;
+	bh=iYWHmSCg8uppFDBxbIurmJ48ngdDVxb6gy3gbopBRYY=;
 	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=ee1YXeaIIWGE05e+lo9Mhs3i7BuZuV36cYMf6jczkD53ll6VRO/7bSJfe0TbHn+GhYruPk1RVw4zYD6GdD5xRRuX+cpKknmxo4CdrxHaQLBLuQjAroqfu9KeCnDA0c+7kanNdTM6skQM0RMrejO7LbEmLJTrN5q3dxYKajyv2hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org; spf=pass smtp.mailfrom=paranoici.org; dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b=WSTuGYOD; arc=none smtp.client-ip=93.190.126.19
+	 Mime-Version:Content-Type; b=XGP9Bx1CXzAsWNRgCnvV589pXqK2xbpQu5jWRdPD4XOycSxOemNYgFzefqWqTWlNXQzP932Tk8QXhMzqw1UeZ71z0a1A694JY/4/3zTEAGwf0M2+Oc+RDMjkBZuNMB38PgC3FJFqpF3aKW0NBZspXlzvwWm9MYa+3PjX1NtDsuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org; spf=pass smtp.mailfrom=paranoici.org; dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b=ZtG8OBVx; arc=none smtp.client-ip=93.190.126.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paranoici.org
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paranoici.org;
-	s=stigmate; t=1747254221;
-	bh=7oJOXd1npiG89z9BvKOpvd0I++0tGACIlN9CtdKjnTE=;
+	s=stigmate; t=1747255160;
+	bh=gmivtzF4wdESZjrZIeqtGON4XgLnVJLEX5CXGpHDQYw=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=WSTuGYOD3RZ7NvH+tsfvyMcJwRmzKcXZjPmdbe+UZxnPAdRBEe8yts7BrSepCy7pe
-	 F+kH99wNGjWszFw14NbdAyA8CWaCOnCveWDKYYY4GjLZ+HQqgTw+yCgMkLwDHmq/qB
-	 5CddE2Y8IXN3aqH7tFcRhpBBhzjBMHVz1tT8tD1E=
+	b=ZtG8OBVx7rl9c2qm1BSio8ATp0kf0qr4AJXyRXCaHbNGQ7dric6/I8Ob3tdsEGhBy
+	 KT6tmP7m7Yrax3nKLl8OdprrE8HHlGdb4j0dG9ZqjOtcE1FvtTGa3ZwH+/WOhjvVq1
+	 TQcGqdTdR/kDjueUs5sE8JARiJYtrJtjZpci1VHI=
 Received: from mx1.investici.org (unknown [127.0.0.1])
-	by confino.investici.org (Postfix) with ESMTP id 4ZyPtj2spPz11Bl;
-	Wed, 14 May 2025 20:23:41 +0000 (UTC)
-Received: from [93.190.126.19] (mx1.investici.org [93.190.126.19]) (Authenticated sender: invernomuto@paranoici.org) by localhost (Postfix) with ESMTPSA id 4ZyPtj140vz11BP;
-	Wed, 14 May 2025 20:23:41 +0000 (UTC)
+	by confino.investici.org (Postfix) with ESMTP id 4ZyQDm6VYVz11FW;
+	Wed, 14 May 2025 20:39:20 +0000 (UTC)
+Received: from [93.190.126.19] (mx1.investici.org [93.190.126.19]) (Authenticated sender: invernomuto@paranoici.org) by localhost (Postfix) with ESMTPSA id 4ZyQDm5kpqz11FP;
+	Wed, 14 May 2025 20:39:20 +0000 (UTC)
 Received: from frx by crunch with local (Exim 4.98.2)
 	(envelope-from <invernomuto@paranoici.org>)
-	id 1uFIdg-00000000IVE-1Dz4;
-	Wed, 14 May 2025 22:23:40 +0200
-Date: Wed, 14 May 2025 22:23:29 +0200
+	id 1uFIsp-00000000JQA-490S;
+	Wed, 14 May 2025 22:39:19 +0200
+Date: Wed, 14 May 2025 22:39:02 +0200
 From: Francesco Poli <invernomuto@paranoici.org>
-To: Thorsten Leemhuis <linux@leemhuis.info>
-Cc: linux-pm list <linux-pm@vger.kernel.org>, Thomas Renninger
- <trenn@suse.com>, Shuah Khan <shuah@kernel.org>, "John B. Wyatt IV"
- <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>
+To: "John B. Wyatt IV" <jwyatt@redhat.com>
+Cc: Thorsten Leemhuis <linux@leemhuis.info>, linux-pm list
+ <linux-pm@vger.kernel.org>, Thomas Renninger <trenn@suse.com>, Shuah Khan
+ <shuah@kernel.org>, John Kacur <jkacur@redhat.com>
 Subject: Re: [PATCH v2] cpupower: add a systemd service to run cpupower
-Message-Id: <20250514222329.2db4ac81fccd10661d763ee4@paranoici.org>
-In-Reply-To: <16ad2364-0161-4724-90e1-b57559168843@leemhuis.info>
+Message-Id: <20250514223902.fe58651168d7289bf0923281@paranoici.org>
+In-Reply-To: <aCTYhzqYFNX6D9Vm@thinkpad2024>
 References: <20250425151024.121630-1-invernomuto@paranoici.org>
 	<16ad2364-0161-4724-90e1-b57559168843@leemhuis.info>
+	<aCTYhzqYFNX6D9Vm@thinkpad2024>
 X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -67,76 +68,52 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pgp-signature";
  micalg="PGP-SHA512";
- boundary="Signature=_Wed__14_May_2025_22_23_29_+0200_llX3Y0S0RykOpWsP"
+ boundary="Signature=_Wed__14_May_2025_22_39_02_+0200_gfZaFiKfTBrf9fAT"
 
---Signature=_Wed__14_May_2025_22_23_29_+0200_llX3Y0S0RykOpWsP
-Content-Type: text/plain; charset=UTF-8
+--Signature=_Wed__14_May_2025_22_39_02_+0200_gfZaFiKfTBrf9fAT
+Content-Type: text/plain; charset=US-ASCII
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, 14 May 2025 14:41:35 +0200 Thorsten Leemhuis wrote:
+On Wed, 14 May 2025 13:53:11 -0400 John B. Wyatt IV wrote:
 
-> Hi Francesco!
-
-Hello Thorsten!
-
-> Many thx for addressing the issues I brought up earlier
-> which now landed in -next, much appreciated.
-
-You're welcome, I am glad you appreciated it.
-
+[...]
+> Checked the Arch pkgs and my Ubuntu 22.04 install.
 >=20
-> Sadly with those fixes in I noticed another issue I missed earlier. One
-> from the "small differences between different Linux distributions that
-> make all our lives hard". :-/
+> Both of them copy service files to that folder as well.
 
-OK, the fix is simple: all other distros should be more similar to
-Debian!   ;-)
+Yes, systemd.unit(5) man page (on my Debian trixie installation) says
+that
 
-...just kidding, of course!   :p
+  /usr/lib/systemd/system/*
 
+is on the System Unit Search Path.
+
+> The Debian package
+> is difficult to read at a glance.
 >=20
-> On 25.04.25 17:07, Francesco Poli (wintermute) wrote:
-> > One of the most typical use cases of the 'cpupower' utility works as
-> > follows: run 'cpupower' at boot with the desired command-line options
-> > and then forget about it.
->=20
-> > diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makef=
-ile
-> > index 835123add0ed..9c2b5f71fee1 100644
-> > [...]
-> > @@ -302,6 +305,14 @@ install-tools: $(OUTPUT)cpupower
-> >  	$(INSTALL_PROGRAM) $(OUTPUT)cpupower $(DESTDIR)${bindir}
-> >  	$(INSTALL) -d $(DESTDIR)${bash_completion_dir}
-> >  	$(INSTALL_SCRIPT) cpupower-completion.sh '$(DESTDIR)${bash_completion=
-_dir}/cpupower'
-> > +	$(INSTALL) -d $(DESTDIR)${confdir}default
-> > +	$(INSTALL_DATA) cpupower.default '$(DESTDIR)${confdir}default/cpupowe=
-r'
-> > +	$(INSTALL) -d $(DESTDIR)${libexecdir}
-> > +	$(INSTALL_PROGRAM) cpupower.sh '$(DESTDIR)${libexecdir}/cpupower'
-> > +	$(INSTALL) -d $(DESTDIR)${libdir}/systemd/system
->=20
-> That last line to the best of my knowledge is wrong on distributions
-> like Fedora, where ${libdir} expands to /usr/lib64/ -- which is the
-> right path for libraries, but the wrong one for systemd units, as they
-> are always stored in /usr/lib/systemd/system (at least on Fedora). Not
-> sure what the right fix it, it might be something like defining
->=20
-> unitdir ?=3D /usr/lib/systemd/system
->=20
-> earlier in the Makefile and then using it in the last quoted line above.
+> The problem is that Fedora installs libraries to lib64; Arch and Ubuntu
+> (22.04 & likely Debian) do not from what I can tell.
 
-This could be the right fix, I think.
-And it would improve the flexibility of the Makefile, as well.
+I confirm that, on Debian, the libraries do not go to lib64 .
+The following is the list of files shipped by the 'libcpupower1' binary
+package (on my Debian trixie installation):
 
-If nobody raises objections, I will prepare another patch to address
-this issue.
-
->=20
-> Ciao, Thorsten
-
-Tsch=C3=BCss!
+  $ dpkg -L libcpupower1
+  /.
+  /usr
+  /usr/lib
+  /usr/lib/x86_64-linux-gnu
+  /usr/lib/x86_64-linux-gnu/libcpupower.so.0.0.1
+  /usr/share
+  /usr/share/doc
+  /usr/share/doc/libcpupower1
+  /usr/share/doc/libcpupower1/changelog.Debian.gz
+  /usr/share/doc/libcpupower1/copyright
+  /usr/share/lintian
+  /usr/share/lintian/overrides
+  /usr/share/lintian/overrides/libcpupower1
+  /usr/lib/x86_64-linux-gnu/libcpupower.so.1
 
 
 --=20
@@ -145,25 +122,25 @@ Tsch=C3=BCss!
 ..................................................... Francesco Poli .
  GnuPG key fpr =3D=3D CA01 1147 9CD2 EFDF FB82  3925 3E1C 27E1 1F69 BFFE
 
---Signature=_Wed__14_May_2025_22_23_29_+0200_llX3Y0S0RykOpWsP
+--Signature=_Wed__14_May_2025_22_39_02_+0200_gfZaFiKfTBrf9fAT
 Content-Type: application/pgp-signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEEygERR5zS79/7gjklPhwn4R9pv/4FAmgk+8EACgkQPhwn4R9p
-v/5oIg/+JUZTeyyOSeWVjsz7zDb3FeQRQOnqNq3JPsVS8LFjwIQeVDG06hqvdtW2
-0NePEUxue96jQEVJEI341VwbZKf9MgTEETNPdpalsxZ5SbkkQsnXAWRTDwkaG+of
-aUpf8mdYB1/bigwmzV5INkRRVtVlW74yIK+pEkYDqfBZyu8K1IFS0aWNiOVv9sVu
-0AVxIXsc0e0dHNPXI+dVoii3iq3he7pl/83sQMSFqPzxqDxCMx4g6C6yVoGoQQ35
-kiAwhr44b87aZeETzjQi80XCnN3REmMeomlRSH5FIj45xI9mSPT0Hjy29hxwlJR+
-7NDzj0H1oDVbdLeQ8tDlMv9zRMYTBPAGNM9W1eHOwkMMfwIHZHezslWpVgPDr1Hz
-2IXCcGtXkfHcd9aiV9uvsj2ViZvddsNeVfCi1ZqxarbVuusstsrPgqgZbC+ZvkCL
-is+c0DNs6PrbxSPOeDNNhsbblQgp4bY8urFdI0RH3T4mOByUFWazGD+lh6r4P7xz
-C20Y2fkF2i93Bcd5hg3V/mQt3UocpCYxyCRCFfXMhtK1XSsiFqYpu6qGUWILqOwC
-1sUdJjTQw3hoQsuVYK4k3Lnl/gDlfqgcZOchaVSVEU1vNmk7si7i7NMN277EQFqO
-+Qt2JhsFpb4uxWi30jh6IXqyTVJoZC1Yh7ZPH462P+IA/D8uieQ=
-=cZw8
+iQIzBAEBCgAdFiEEygERR5zS79/7gjklPhwn4R9pv/4FAmgk/2YACgkQPhwn4R9p
+v/7XRA//Ynm6nMbPmENTm0HTlNUrHmn3b3L2xSEkvn+X1uu2piI+OQ4P4+7d5Hl0
+jmteH1zVnPyhd3GvtEhaqm6w7o2+tnVQqBU6yxwtKmhWbQFu6A7Rokq3g0IljNDC
+3wt9aFvHX5EDYmT4w30NC0xH5ynwlG9oPi8I31kMYQ/jKpsOjchD3ih8hjfIFsl5
+z1pgMim/ob8eZiCIqEOYo4qtPF73QmdT5y2U6YkcOnA6R1GLmgL9cnXZ17bDbEBz
+DvGzQAr3z3DX4Usv535CVe2zRaU7W4WOev+Wk9DKTyeFnHHl5AMfQY1fdYGp74Cl
++cK4Uhxvu71UGpV9v5DTylN9QMxYKK/bHMh9RxnxJTlO5X895NN95tBvd8FZbXi1
+saXt/M9hSeMsZcxN/+X4MaOygNOznQVihbroh2Y5HOVIiNYa/9Q2u8QOghmLe8U0
+7GEGeIWEBXwurmXc8dcPCOv0KsguaIXXEkyY23URUTtbNiw237XIneWZD20Ny5Lu
+MyJ0wty/Yq5nvAIvL63O6d1M0YP5WRAmW24mxkWqsYhnqpYQbMhamy2PU/U9X0zi
+bR4O3xzhStGZdRw+GWiSRSE7ep14NMt2vfOLBQFpMB07ycHQC4ZDALXP3YQ1vXAi
+ZCkLHkKczSWrMAHCjhy0JynuxPK+2GwPyq6qugyB8QzvD9FXL7I=
+=m7JS
 -----END PGP SIGNATURE-----
 
---Signature=_Wed__14_May_2025_22_23_29_+0200_llX3Y0S0RykOpWsP--
+--Signature=_Wed__14_May_2025_22_39_02_+0200_gfZaFiKfTBrf9fAT--
 
