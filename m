@@ -1,227 +1,160 @@
-Return-Path: <linux-pm+bounces-27142-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27143-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15174AB7100
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 18:17:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 115C9AB714A
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 18:26:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 91BBF7B543C
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 16:14:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58E0C1B68536
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 16:26:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE94627C152;
-	Wed, 14 May 2025 16:15:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC66727A139;
+	Wed, 14 May 2025 16:26:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VwMlMM78"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DPjDmFdg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA81A27BF6D
-	for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 16:15:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E06EC17A31F;
+	Wed, 14 May 2025 16:26:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747239302; cv=none; b=WD89L45ZjYJwsw5tfqwqG70mSHjuDVGAZvp3X97hLKJpzUKWty5uum8JftwAUIG0CEVr6MXFw1ATsQPKMHY8D9EZFJF8sUITbvfuwUWIEyCG56Kms/sK7ctHTH4PBg0EriO5ZdqByKRDTyW4n/PDVt/171LbGJv8SSyOIwNqi9E=
+	t=1747239982; cv=none; b=mw1xvBpep6/fJW1HaKmrsnoojzakCEDikd2R+PRcNsP/MbpWW48pIN3+QJXLoWbtPSco1Cxke7DNRdrQDvO3XqsWOe1H/ScKzagYQ1vJzWcKNbPYryEzszpd3hOOrBhNIjTS/IYU1pv/jSsP54z8IwgDQCIRnThLaB37FfJldTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747239302; c=relaxed/simple;
-	bh=HCOMnFCtczRVgbfqUPOyCzqQcaNUh9WXzukH82q+WMI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mhtycQxWkBFEsZAuO7/S9yzXwmGtGrkfP7EBn8r6HVwWDRmM7Gj5vviZuEXP6OFhIr4841ULIT8/3i9tVS883pcQ1mc1IxCO1Zs8Mp2XY+XqJJjhM+Rq1ISCW9dLwujAGfZDOmpsTrVujBZK42o2lfiQ8HXqFtbRbfm1I5JhkOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VwMlMM78; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE07C4CEE3;
-	Wed, 14 May 2025 16:15:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747239302;
-	bh=HCOMnFCtczRVgbfqUPOyCzqQcaNUh9WXzukH82q+WMI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VwMlMM78GllGgw8rTPs4u6AaOX6Eg3LNBWJlLOV79ZRHJQLgkipthUOu6O64ARKyU
-	 s9WDGLTUXaa5RzWk9gE6+oXcw03jEGaKy7UzWLPgspLb2iqjTBJiC+FqVD5lcgI+0D
-	 ZOui4CMNlgEjEPkrTvCCOKPHcInnhh1Hb5hMVIJGw1LGaJ1x/90SZn8zkzdYqH1HtR
-	 6XXi5h88ZSHf2I2Vwd1wUoRYZ+q5dFkrqIRQIe42Xe3qChgklfMS1+K5r9s+nLNaRB
-	 6fBGyXryI0gqUaLL64GB+CEexpqnZRG9/pzmKgr5snn8YULwVgGajzt41t+A3OlnJm
-	 LSPUtUHMwrn3g==
-Message-ID: <e3aa4d7d-e854-4ee2-aa5d-6371e8aa4ed8@kernel.org>
-Date: Wed, 14 May 2025 11:15:00 -0500
+	s=arc-20240116; t=1747239982; c=relaxed/simple;
+	bh=GIESU+iUZJaPMI+zA9vfT9gZW6/Sx15SV7jAG8TtOP8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uWQyxSbu8A1u3ta0bKAUFChHWnuLSLxeziCTLutsV4aNkawIIk6H8WLjo0nXy4CPHP5NZRSlXknmPCekCzbBLF5ieq2jYCi8dTI/8jEJkTz0XYfOZ6LSHgb5LAZSRSKfbGIZSia8lZIA0rUn5O5A0u6Yg/63Nlr4Qejuup4VcYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DPjDmFdg; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-326d823304fso37166071fa.0;
+        Wed, 14 May 2025 09:26:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747239979; x=1747844779; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wMNBvOAelRf/aEmSOjmnBt5f4s2CUzlEA7lgWB9KPa4=;
+        b=DPjDmFdgVbiY1uD1LFx8Eq0a5p6PM7RpUqMZUHqER5Io3FYJC2Ff+zEnPVH9R1BzEz
+         CTtFbfsK2cMAjwL0yTMda09d7hqFqEJBev9msTC+byRDqhrRJXViuaztEg3lYg8gqodg
+         uFkOqgsZF0wdzp+Y8Z5LOJUwrpJeZzD+iAieuqTISCMH/zsQ+W1o0bWDmz4wXk3JCbw5
+         U0ODjnc641O4/Rq5sEyilEBBa5G6hkRtegozY1A8my9mQTIq2FuAfQ7zxuwJfxFmYpkz
+         Ae9mQ3i4IumyHsRENabOh7ZRo66PEuxUCADgLdHAlwvp3gYqOGWaiuECvR5/6a1jV8If
+         qe7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747239979; x=1747844779;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wMNBvOAelRf/aEmSOjmnBt5f4s2CUzlEA7lgWB9KPa4=;
+        b=IzS6j0HIdr/K8B49uIMmFXQs/PIhmE2eTw/HXFBIVpiMMPpz7Z88oXI4Z/BjhBZOKi
+         rK9XsloreLXBEJimfouH2fAN8fKfEYp9QefxEaCBmbef8VDx1OrDQjztbfVuOcuriaD6
+         aOCKk2QJaqhrAzofV7BGIhWsxtzXDb5vGOosbweC/R4J+d9KNOOOUcKaFBJv3SOgG5zw
+         7WZnCUxNFbob/noSI7/PPKwsI1h3bnCC0K3O1BtxK6KSKeWAeDg1D14Q0bvDEnuCM4rO
+         aphfmuvoMWvwfzUHkOYYtO4778djaXZYPSSLWZvwOiScNCDfqPMbiTTm1e6sOo1FUhOI
+         GaJA==
+X-Forwarded-Encrypted: i=1; AJvYcCUV8Ht7YbiNE6qbP1MccXyl1dQghMuLXQ1mPMkGfgvQkDiYycLdXHoaMUApMOlpr7YBsg5pu+998CMt+Lg=@vger.kernel.org, AJvYcCWCTwvMO8enLrEW3N6ozQdPZkE+SEyw13og577mDaU34IsTdULA5tYtBbnMEnrY1pGXf3mzWP2VQ6dtbrQ=@vger.kernel.org, AJvYcCWNN/QXjE1RJxsdwuybwHpEnBs97Ye7hS5+ibX1V0mkEnjYNZwP98775mILNtHXI2SnkG6vip1MF84=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNGrbgbu0iwoMh2mAXfhvHvkX/6Vn3tGkKSnvMZ4v96DHX4h+r
+	BK6svyvCDdP+9GCHEywVBSCjEimpfIIflRyacSiLdszER/EDK/FdutSwzS1RjzE1PL+LraushgK
+	d2gwSidLnOyXZL+K3l8R/+5NZWFo=
+X-Gm-Gg: ASbGnctkEMseMXJayK8fLt+mCcqdS0sEebUvTv4Q79AeGSgTPMGuPOf97Iam32wAu7/
+	IKHqP2gPLqDIhwV08kWZsQLjgEhLxp9fQxA5jG0UveohMxCt63Ycnln01iT8ze92hsoFOaf0Rou
+	Hm1BQ3xS/FYJ6yml0C7h/pU6i5HBa115bvMw==
+X-Google-Smtp-Source: AGHT+IEuGSm3mBr75lUKxAMiFBWmCn7dZDNntjwFzklEiUcmiYMNyrKwOHaq+huwYB9vJJqB47JrALQJlga5dT+Q07E=
+X-Received: by 2002:a2e:bc08:0:b0:30b:e3d9:37e5 with SMTP id
+ 38308e7fff4ca-327ed0d72ccmr15714531fa.13.1747239978632; Wed, 14 May 2025
+ 09:26:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] PM: Use hibernate flows for system power off
-To: Denis Benato <benato.denis96@gmail.com>, mario.limonciello@amd.com,
- rafael@kernel.org, len.brown@intel.com, pavel@kernel.org,
- gregkh@linuxfoundation.org, dakr@kernel.org
-Cc: AceLan Kao <acelan.kao@canonical.com>, Kai-Heng Feng
- <kaihengf@nvidia.com>, Mark Pearson <mpearson-lenovo@squebb.ca>,
- =?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>,
- linux-pm@vger.kernel.org
-References: <20250512212628.2539193-1-superm1@kernel.org>
- <6cc4caa4-ca75-4b32-83a9-1dea761046ef@gmail.com>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <6cc4caa4-ca75-4b32-83a9-1dea761046ef@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250508-tegra124-cpufreq-v4-0-d142bcbd0234@gmail.com>
+ <20250508-tegra124-cpufreq-v4-1-d142bcbd0234@gmail.com> <040b0d8b-e862-48dd-9b77-9266a5194f99@nvidia.com>
+ <CALHNRZ_AH-OkDak_RDoA3FB6EVO78r5G=5zosiJEXk4UGLH=fQ@mail.gmail.com>
+In-Reply-To: <CALHNRZ_AH-OkDak_RDoA3FB6EVO78r5G=5zosiJEXk4UGLH=fQ@mail.gmail.com>
+From: Aaron Kling <webgeek1234@gmail.com>
+Date: Wed, 14 May 2025 11:26:06 -0500
+X-Gm-Features: AX0GCFuHlyC0-Iz38p3CLXOkhiqmbRzxA0tQ5KfR89ZAPRMKo0iCPoXGbUHFpN8
+Message-ID: <CALHNRZ8Ri4sv7JkFj6t8b3VT=LU9ZS0Wc_8US2b3xGimLY6P6g@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] cpufreq: tegra124: Remove use of disable_cpufreq
+To: Jon Hunter <jonathanh@nvidia.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Thierry Reding <thierry.reding@gmail.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/14/2025 10:45 AM, Denis Benato wrote:
->> From: Mario Limonciello <mario.limonciello@amd.com>
->>
->> When the system is powered off the kernel will call device_shutdown()
->> which will issue callbacks into PCI core to wake up a device and call
->> it's shutdown() callback.  This will leave devices in ACPI D0 which can
->> cause some devices to misbehave with spurious wakeups and also leave some
->> devices on which will consume power needlessly.
->>
->> The issue won't happen if the device is in D3 before system shutdown, so
->> putting device to low power state before shutdown solves the issue.
->>
->> ACPI Spec 6.5, "7.4.2.5 System \_S4 State" says "Devices states are
->> compatible with the current Power Resource states. In other words, all
->> devices are in the D3 state when the system state is S4."
->>
->> The following "7.4.2.6 System \_S5 State (Soft Off)" states "The S5
->> state is similar to the S4 state except that OSPM does not save any
->> context." so it's safe to assume devices should be at D3 for S5.
->>
->> To accomplish this, modify the PM core to call all the device hibernate
->> callbacks when turning off the system. To avoid issues when the kernel
->> is compiled without hibernate support introduce a new internal PM message
->> type "SHUTDOWN" which points to all the same callbacks as hibernate would.
->>
->> Cc: AceLan Kao <acelan.kao@canonical.com>
->> Cc: Kai-Heng Feng <kaihengf@nvidia.com>
->> Cc: Mark Pearson <mpearson-lenovo@squebb.ca>
->> Cc: Denis Benato <benato.denis96@gmail.com>
->> Cc: Merthan Karakaş <m3rthn.k@gmail.com>
->> Link: https://lore.kernel.org/linux-pci/20231213182656.6165-1-mario.limonciello@amd.com/
->> Link: https://lore.kernel.org/linux-pci/20250506041934.1409302-1-superm1@kernel.org/
->> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> Hello,
-> 
-> As for the previous version this patch makes my laptop shutdown cleanly very quickly
-> and I could not link to any regressions or change in behavior while laptop is on.
-> 
-> Tested-by: Denis Benato <benato.denis96@gmail.com>
+On Fri, May 9, 2025 at 11:57=E2=80=AFAM Aaron Kling <webgeek1234@gmail.com>=
+ wrote:
+>
+> On Fri, May 9, 2025 at 6:04=E2=80=AFAM Jon Hunter <jonathanh@nvidia.com> =
+wrote:
+> >
+> >
+> >
+> > On 09/05/2025 01:04, Aaron Kling via B4 Relay wrote:
+> > > From: Aaron Kling <webgeek1234@gmail.com>
+> > >
+> > > Instead, unregister the cpufreq device for this fatal fail case.
+> >
+> > This is not a complete sentence. Seems to be a continuation of the
+> > subject which is not clear to the reader (at least not to me). No
+> > mention of why or what this is fixing, if anything?
+>
+> I can clean up the subject and message in a new revision. More on the
+> reasoning below.
+>
+> > >
+> > > Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+> > > ---
+> > >   drivers/cpufreq/tegra124-cpufreq.c | 5 ++++-
+> > >   1 file changed, 4 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/cpufreq/tegra124-cpufreq.c b/drivers/cpufreq/teg=
+ra124-cpufreq.c
+> > > index 514146d98bca2d8aa59980a14dff3487cd8045f6..bc0691e8971f9454def37=
+f489e4a3e244100b9f4 100644
+> > > --- a/drivers/cpufreq/tegra124-cpufreq.c
+> > > +++ b/drivers/cpufreq/tegra124-cpufreq.c
+> > > @@ -168,7 +168,10 @@ static int __maybe_unused tegra124_cpufreq_resum=
+e(struct device *dev)
+> > >   disable_dfll:
+> > >       clk_disable_unprepare(priv->dfll_clk);
+> > >   disable_cpufreq:
+> > > -     disable_cpufreq();
+> > > +     if (!IS_ERR(priv->cpufreq_dt_pdev)) {
+> > > +             platform_device_unregister(priv->cpufreq_dt_pdev);
+> > > +             priv->cpufreq_dt_pdev =3D ERR_PTR(-ENODEV);
+> > > +     }
+> >
+> > So you are proposing to unregister the device in resume? That seems odd=
+.
+> > I see there is no remove for this driver, but I really don't see the
+> > value in this.
+>
+> This was suggested by Viresh in v1 [0] to replace the call to
+> disable_cpufreq, which is not currently an exported function. I'm open
+> to other suggestions.
+>
+> Sincerely,
+> Aaron
+>
+> [0] https://lore.kernel.org/all/20250421054452.fdlrrhtsimyucbup@vireshk-i=
+7/
 
-Thanks Denis, that's great news to hear.
+Viresh, could you comment here please? As you were the one that
+suggested replacing disable_cpufreq with an unregister instead of
+exporting said function. I can make the code changes and verify they
+work as intended, but I'm not familiar enough with this subsystem to
+know what a good option here is. Are there any other cpufreq drivers
+that have to handle a resume failure like this?
 
-FTR I noticed that this needs some error handling in case the hibernate 
-flows fail, so assuming Rafael is generally amenable to this direction 
-the next spin I'll add something like this instead to fall back to the 
-previous shutdown flow if that happens.
-
-+#ifdef CONFIG_PM_SLEEP
-+       if (dpm_suspend_start(PMSG_SHUTDOWN))
-+               goto resume_devices;
-+       if (dpm_suspend_end(PMSG_SHUTDOWN))
-+               goto resume_devices;
-+       return;
-+
-+resume_devices:
-+       pr_emerg("Failed to power off devices, using shutdown instead.\n");
-+       dpm_resume_end(PMSG_RESTORE);
-+#endif
-	device_shutdown();
-
->> ---
->> This is the spiritual successor to "PCI/PM: Put devices to low power
->> state on shutdown" as well as "Improvements to system power consumption
->> at S5"
->> ---
->>   drivers/base/power/main.c | 6 ++++++
->>   include/linux/pm.h        | 5 +++++
->>   kernel/reboot.c           | 6 ++++++
->>   3 files changed, 17 insertions(+)
->>
->> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
->> index 29561f7346d93..58adedc4dab23 100644
->> --- a/drivers/base/power/main.c
->> +++ b/drivers/base/power/main.c
->> @@ -363,6 +363,8 @@ static pm_callback_t pm_op(const struct dev_pm_ops *ops, pm_message_t state)
->>   	case PM_EVENT_RESTORE:
->>   		return ops->restore;
->>   #endif /* CONFIG_HIBERNATE_CALLBACKS */
->> +	case PM_EVENT_SHUTDOWN:
->> +		return ops->poweroff;
->>   	}
->>   
->>   	return NULL;
->> @@ -397,6 +399,8 @@ static pm_callback_t pm_late_early_op(const struct dev_pm_ops *ops,
->>   	case PM_EVENT_RESTORE:
->>   		return ops->restore_early;
->>   #endif /* CONFIG_HIBERNATE_CALLBACKS */
->> +	case PM_EVENT_SHUTDOWN:
->> +		return ops->poweroff_late;
->>   	}
->>   
->>   	return NULL;
->> @@ -431,6 +435,8 @@ static pm_callback_t pm_noirq_op(const struct dev_pm_ops *ops, pm_message_t stat
->>   	case PM_EVENT_RESTORE:
->>   		return ops->restore_noirq;
->>   #endif /* CONFIG_HIBERNATE_CALLBACKS */
->> +	case PM_EVENT_SHUTDOWN:
->> +		return ops->poweroff_noirq;
->>   	}
->>   
->>   	return NULL;
->> diff --git a/include/linux/pm.h b/include/linux/pm.h
->> index f0bd8fbae4f2c..536defa771716 100644
->> --- a/include/linux/pm.h
->> +++ b/include/linux/pm.h
->> @@ -490,6 +490,9 @@ const struct dev_pm_ops name = { \
->>    * HIBERNATE	Hibernation image has been saved, call ->prepare() and
->>    *		->poweroff() for all devices.
->>    *
->> + * SHUTDOWN	System is going to shut down, call ->prepare() and ->poweroff()
->> + * 		for all devices.
->> + *
->>    * QUIESCE	Contents of main memory are going to be restored from a (loaded)
->>    *		hibernation image, call ->prepare() and ->freeze() for all
->>    *		devices.
->> @@ -536,6 +539,7 @@ const struct dev_pm_ops name = { \
->>   #define PM_EVENT_USER		0x0100
->>   #define PM_EVENT_REMOTE		0x0200
->>   #define PM_EVENT_AUTO		0x0400
->> +#define PM_EVENT_SHUTDOWN	0x0800
->>   
->>   #define PM_EVENT_SLEEP		(PM_EVENT_SUSPEND | PM_EVENT_HIBERNATE)
->>   #define PM_EVENT_USER_SUSPEND	(PM_EVENT_USER | PM_EVENT_SUSPEND)
->> @@ -550,6 +554,7 @@ const struct dev_pm_ops name = { \
->>   #define PMSG_QUIESCE	((struct pm_message){ .event = PM_EVENT_QUIESCE, })
->>   #define PMSG_SUSPEND	((struct pm_message){ .event = PM_EVENT_SUSPEND, })
->>   #define PMSG_HIBERNATE	((struct pm_message){ .event = PM_EVENT_HIBERNATE, })
->> +#define PMSG_SHUTDOWN	((struct pm_message){ .event = PM_EVENT_SHUTDOWN, })
->>   #define PMSG_RESUME	((struct pm_message){ .event = PM_EVENT_RESUME, })
->>   #define PMSG_THAW	((struct pm_message){ .event = PM_EVENT_THAW, })
->>   #define PMSG_RESTORE	((struct pm_message){ .event = PM_EVENT_RESTORE, })
->> diff --git a/kernel/reboot.c b/kernel/reboot.c
->> index ec087827c85cd..083c143f99e40 100644
->> --- a/kernel/reboot.c
->> +++ b/kernel/reboot.c
->> @@ -13,6 +13,7 @@
->>   #include <linux/kexec.h>
->>   #include <linux/kmod.h>
->>   #include <linux/kmsg_dump.h>
->> +#include <linux/pm.h>
->>   #include <linux/reboot.h>
->>   #include <linux/suspend.h>
->>   #include <linux/syscalls.h>
->> @@ -305,7 +306,12 @@ static void kernel_shutdown_prepare(enum system_states state)
->>   		(state == SYSTEM_HALT) ? SYS_HALT : SYS_POWER_OFF, NULL);
->>   	system_state = state;
->>   	usermodehelper_disable();
->> +#ifdef CONFIG_PM_SLEEP
->> +	dpm_suspend_start(PMSG_SHUTDOWN);
->> +	dpm_suspend_end(PMSG_SHUTDOWN);
->> +#else
->>   	device_shutdown();
->> +#endif
->>   }
->>   /**
->>    *	kernel_halt - halt the system
-> 
-
+Sincerely,
+Aaron
 
