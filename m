@@ -1,113 +1,200 @@
-Return-Path: <linux-pm+bounces-27154-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27155-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 965AEAB7610
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 21:42:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 646B7AB7626
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 21:49:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 287594A7D0D
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 19:42:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25D568667F5
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 19:49:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F825292915;
-	Wed, 14 May 2025 19:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62E0D27BF6D;
+	Wed, 14 May 2025 19:49:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g0sSOneI"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="iU4/9UrV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D7C038DD8;
-	Wed, 14 May 2025 19:42:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9684F156C6F
+	for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 19:49:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747251772; cv=none; b=EGc4+CwQC25mIXMRRk2eVZ05WYT/lYXL8J0ZP/KF37+zKehl6CGZ2W3caNf5Ke8hsnez3OANVOk0SKQkl54T1+svk6zNQNKxJ25lrbMGXM5Sptv7+WWZeH6GwjS3JtaureMQ7OcAZSwQ2z8MXnEKuaydTnv6gEI3BZOWxG+d/5s=
+	t=1747252156; cv=none; b=uO99QG+YzWXHZk8w0T/4IzkD1F3epkOiQ2vpj+cVSQBQyhc0BqWTDp2q+OEAcaTtjRWJkUxnlWrTMAQewPPiIXFXyaB8u+ZQIy7f9mNFdLy+Gxa5SYnsUGJL7j/gX5GggHupidbCOZStRcM+aF0K/0N03l37oiXJakJ0TCzcSAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747251772; c=relaxed/simple;
-	bh=yWmJMSlaQvXI0wKYuylDSdZXkla4rjdIyeqAqSXswGY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kNnQrV2SfS3+qGD+oC/zFmI9FggtOf2RvleFigtV3inO2dPVETBrMrACi8Xg0BD4iu2uHQXQbBhfXXqghy/cV+qB7kC4NbywbUyOQpZJMGJ+xiTaeizfgig+O0cTHVd6vb9/3bI17ImtZ+YAlth1QIXzE+PZopiAND4OVh7+Vg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g0sSOneI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3244C4CEE3;
-	Wed, 14 May 2025 19:42:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747251771;
-	bh=yWmJMSlaQvXI0wKYuylDSdZXkla4rjdIyeqAqSXswGY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=g0sSOneIB/yT7Ra+DuX3Cl4V7LqjMXAFrh4oy/pgvSSOiunAGBn4yDO+xZpmtTMan
-	 /f/JPRl9B0nHukXiIJgpv7DwsvqUuIjApdrz21HvU1XNR7NA60XLpAc8vLRUpazqcQ
-	 61GQVdhF+jWSO8AUytkQK68mVgeTcNi6611lywYzaFTdxhj9bE4pqgPdw9Dmn9Ok63
-	 mUCSsoi5dVKHvWwZwc678fxJ1Rly49y5HG3oTBj57U4qCCc/oxqBQfb3Dj58Nna9N4
-	 2rIodqOnVOZbgw/Hsdscl5LfLeo1QmHkLy7KBsGv0F2jdobNw18hNTxeIUlTgMCetv
-	 YiMmOmk8UY4CA==
-Date: Wed, 14 May 2025 14:42:49 -0500
-From: Rob Herring <robh@kernel.org>
-To: Amit Sunil Dhamne <amitsd@google.com>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	Sebastian Reichel <sre@kernel.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>,
-	Kyle Tso <kyletso@google.com>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] dt-bindings: connector: extend ports property to
- model power connections
-Message-ID: <20250514194249.GA2881453-robh@kernel.org>
-References: <20250507-batt_ops-v2-0-8d06130bffe6@google.com>
- <20250507-batt_ops-v2-1-8d06130bffe6@google.com>
+	s=arc-20240116; t=1747252156; c=relaxed/simple;
+	bh=tu3E+VpQhbIEijZggilmf8ohmLQphkPrIyuMiy2Iyn4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gqKLKdsRF8SJhKCwE+tfFHu3ksudp9KoFs/u8ifbQ7xFshFJQqabX+5nGxIfP8xrvWJ62ExRVqI2an3ATglWD61XCPBumJ9SrZws+ttKVRpN6+4JK/S+0P8doiLpMH0P42RuQXa7pV/F4BRO5FJ3U5IpPGTDaJSibc6RkkoBJ3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=iU4/9UrV; arc=none smtp.client-ip=209.85.210.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-72bc3987a05so185862a34.1
+        for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 12:49:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1747252153; x=1747856953; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oZkh8g9me+Nykm0HQx0KLgmoG9EtGGARK97CTcvbJUE=;
+        b=iU4/9UrVFjLLmv260Co+IbJFtnWMh6EXrpgdQ0cAouWMc+EP5ELfEuGELXzksl9P4k
+         u6JDGcJG7L39WoSCBnaWSFefD9m/gV0Rn/5TXhv1raiO4XSWZCqFnMXvstH/bi+Ium7J
+         gJdX8sLbL/t9LAH/yOMnisP4hoLRMQD1Kyqs8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747252153; x=1747856953;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oZkh8g9me+Nykm0HQx0KLgmoG9EtGGARK97CTcvbJUE=;
+        b=IaWq2G5db5LKm7R0ccUwnwP41inmgVZLSie9FME+J7G7Z7WTRr8dBOrDORxXl75ZGJ
+         gdqTt63otCO0TR1rJ/QaUKPh9etkDlsxYly5BfXEZyrwpUYhAF5qjaeKugYU4UPgCJ+y
+         0kZNxmyvbh85kbIeOQjgA+HtJYfTvuDq42FVU/tQK9Gwa3BjsBTGdPfZZaG4HIC4GMeB
+         FUoiZOd1Vw5zu9m7tkNlZvQs4d3l+55Mr5dc1jsxuHTPLjwSdb/WtwaffL/wcO5JBjpc
+         kmXL1H3CqXQnsk1NLauv9RGta6ZaJaI/9p9chtBQ6MMAMFEoxc5JPMio7mDgPSSWFRHT
+         vdbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXjeYl2nr7roStEaj2UERxdxEkyustDaibVzzk/nASyrNQ0FN9tRjvvaEZB4Xdg629wfERwYbU1Fw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz83LoQKX1KajL8NM4wO2lv5ixTgGjZ45pmhnZmuWnwlnOago14
+	mEuVzxiqqRzdbx+Ng4XHRiXcgV0J21UQB/73K54bmppN3OOMJCVWpjZm7oPwSqUhX+weKDYgE19
+	sqhE3HKUnh6KxLlvzXB1rIOH6TCWnoFL4bYMe
+X-Gm-Gg: ASbGnct0Z5YzG/WOArqipGkYwXvcejj0DyNW0Susr1Pk9gaO98YezErXPYuXIYBQUHn
+	PzxE8x8raDSwHvBNqZQ/k15/MY3VxdU7yx+lS0Mv6b6DupG1qNdHsdwyu7OsQ9hCdETTlXGTlP+
+	wJOKlj/RRgcQvtLerGwR0stvS/5DH4vYX9I/HsFMT71lCKR8Jcfk8AzckEmiYDuw==
+X-Google-Smtp-Source: AGHT+IFCJSg8hIfl+Y+fxKZiYgrSWqqDLysVmocjXAAcg6uBcAFRx9APEaATMEgkLVcMFoVK/5iaOwFvZXjnUM20XV4=
+X-Received: by 2002:a05:6830:3814:b0:72b:8593:d3eb with SMTP id
+ 46e09a7af769-734ec6bf6bcmr531328a34.2.1747252153472; Wed, 14 May 2025
+ 12:49:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250507-batt_ops-v2-1-8d06130bffe6@google.com>
+References: <20240410000730.628043-1-treapking@chromium.org>
+ <9c5aa4fb-a83c-470e-acf8-dd31303e50c2@collabora.com> <77c4437f2643475de495733d7840421198b78f49.camel@mediatek.com>
+In-Reply-To: <77c4437f2643475de495733d7840421198b78f49.camel@mediatek.com>
+From: Pin-yen Lin <treapking@chromium.org>
+Date: Wed, 14 May 2025 15:49:02 -0400
+X-Gm-Features: AX0GCFtecwOi8CEP2jK1ekxhH3Moa-nChPFzhyIRNlzu-0bbcdPxgTRcYXfWwSA
+Message-ID: <CAEXTbpdNxFd7-RMXyvYraqC5cj_BgycAO6JWdNUo50DVn+yntw@mail.gmail.com>
+Subject: Re: [PATCH] thermal/drivers/mediatek/lvts_thermal: Remove redundant
+ code in lvts_ctrl_configure
+To: =?UTF-8?B?Q2hhbmctWWkgTGluICjmnpfplbflhIQp?= <ds_chang-yi.lin@mediatek.com>
+Cc: "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>, "nico@fluxnic.net" <nico@fluxnic.net>, 
+	"rafael@kernel.org" <rafael@kernel.org>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	"rui.zhang@intel.com" <rui.zhang@intel.com>, "lukasz.luba@arm.com" <lukasz.luba@arm.com>, 
+	"matthias.bgg@gmail.com" <matthias.bgg@gmail.com>, "duminjie@vivo.com" <duminjie@vivo.com>, 
+	Alexandre Mergnat <amergnat@baylibre.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"bchihi@baylibre.com" <bchihi@baylibre.com>, "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	"linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>, 
+	Nicolas Prado <nfraprado@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 07, 2025 at 06:00:22PM -0700, Amit Sunil Dhamne wrote:
-> Extend ports property to model power lines going between connector to
-> charger or battery/batteries. As an example, connector VBUS can supply
-> power in & out of the battery for a DRP.
-> 
-> Additionally, add ports property to maxim,max33359 controller example.
-> 
-> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-> ---
->  .../bindings/connector/usb-connector.yaml          | 20 +++++++++++------
->  .../devicetree/bindings/usb/maxim,max33359.yaml    | 25 ++++++++++++++++++++++
->  2 files changed, 38 insertions(+), 7 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> index 11e40d225b9f3a0d0aeea7bf764f1c00a719d615..706094f890026d324e6ece8b0c1e831d04d51eb7 100644
-> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> @@ -181,16 +181,16 @@ properties:
->  
->    port:
->      $ref: /schemas/graph.yaml#/properties/port
-> -    description: OF graph bindings modeling a data bus to the connector, e.g.
-> -      there is a single High Speed (HS) port present in this connector. If there
-> -      is more than one bus (several port, with 'reg' property), they can be grouped
-> -      under 'ports'.
-> +    description: OF graph binding to model a logical connection between a device
-> +      and connector. This connection may represent a data bus or power line. For
-> +      e.g. a High Speed (HS) data port present in this connector or VBUS line.
-> +      If there is more than one connection (several port, with 'reg' property),
-> +      they can be grouped under 'ports'.
+Hi Chang-Yi,
 
-'port' and 'port@0' are equivalent. So you can't be changing its 
-definition.
+On Wed, Apr 30, 2025 at 4:26=E2=80=AFAM Chang-Yi Lin (=E6=9E=97=E9=95=B7=E5=
+=84=84)
+<ds_chang-yi.lin@mediatek.com> wrote:
+>
+> On Wed, 2024-04-10 at 11:55 +0200, AngeloGioacchino Del Regno wrote:
+> > Il 10/04/24 02:07, Pin-yen Lin ha scritto:
+> > > The removed variable assignment is never written to the register,
+> > > so it
+> > > has no effect on the device behavior.  Mediatek has confirmed that
+> > > it
+> > > is not required to initialize this register for current platforms,
+> > > so
+> > > remove this segment to avoid confusion.
+> > >
+> > > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> > >
+> >
+> > Added Nicolas Pitre to the loop;
+> >
+> > Nicolas, since you're pushing support for those, can you please check
+> > if CALSCALE
+> > is used/useful/necessary on MT8186/88 before I give a R-b to this
+> > commit?
+> >
+> > P.S.: Can anyone from MediaTek please confirm if the 0x300 value is
+> > right for this
+> >        register? I'd still like Linux to properly initialize the
+> > registers, even if
+> >        this could technically be a default value.
+> >
+> >
+> > > ---
+> > >
+> > >   drivers/thermal/mediatek/lvts_thermal.c | 6 ------
+> > >   1 file changed, 6 deletions(-)
+> > >
+> > > diff --git a/drivers/thermal/mediatek/lvts_thermal.c
+> > > b/drivers/thermal/mediatek/lvts_thermal.c
+> > > index fd4bd650c77a..48d2f8ba3f18 100644
+> > > --- a/drivers/thermal/mediatek/lvts_thermal.c
+> > > +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> > > @@ -985,12 +985,6 @@ static int lvts_ctrl_configure(struct device
+> > > *dev, struct lvts_ctrl *lvts_ctrl)
+> > >   value =3D LVTS_TSSEL_CONF;
+> > >   writel(value, LVTS_TSSEL(lvts_ctrl->base));
+> > >
+> > > -/*
+> > > - * LVTS_CALSCALE : ADC voltage round
+> > > - */
+> > > -value =3D 0x300;
+> > > -value =3D LVTS_CALSCALE_CONF;
+> >
+> > As a side note, I believe that the original author wanted to write,
+> > instead...
+> >
+> > value =3D LVTS_CALSCALE_CONF;
+> > writel(value, LVTS_CALSCALE(lvts_ctrl->base);
+> >
+> > Cheers,
+> > Angelo
+> >
+> > > -
+> > >   /*
+> > >    * LVTS_MSRCTL0 : Sensor filtering strategy
+> > >    *
+> >
+> >
+> Base on xiaojun.zheng
+>      The register is for PTP function, and in MT8192 it's not required
+> to do such setting any more
 
-I'm not sure showing a power connection with the graph is the right 
-approach. We have a binding for that already with the regulator binding. 
-Perhaps the connector needs to be a supply. It's already using that 
-binding in the supplying power to the connector case.
+This driver is now also used by mt7988, mt8188, and mt8195. Could you
+confirm if the PTP function are not required for all these SoCs, so we
+are safe to remove this?
 
-Rob
+As a side note, Mediatek explained PTP in an offline discussion with us:
+PTPOD stands for PTP (Performance Thermal Power) OD (Overdrive).
+PTPOD is a technique to let the HW runs at the same frequency but with
+lower operating voltage to save power.
+
+Regards,
+Pin-yen
+>
+>
+> ************* MEDIATEK Confidentiality Notice
+>  ********************
+> The information contained in this e-mail message (including any
+> attachments) may be confidential, proprietary, privileged, or otherwise
+> exempt from disclosure under applicable laws. It is intended to be
+> conveyed only to the designated recipient(s). Any use, dissemination,
+> distribution, printing, retaining or copying of this e-mail (including it=
+s
+> attachments) by unintended recipient(s) is strictly prohibited and may
+> be unlawful. If you are not an intended recipient of this e-mail, or beli=
+eve
+>
+> that you have received this e-mail in error, please notify the sender
+> immediately (by replying to this e-mail), delete any and all copies of
+> this e-mail (including any attachments) from your system, and do not
+> disclose the content of this e-mail to any other person. Thank you!
 
