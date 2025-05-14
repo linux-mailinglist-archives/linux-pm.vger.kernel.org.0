@@ -1,226 +1,166 @@
-Return-Path: <linux-pm+bounces-27139-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27140-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43D6AAB6DE4
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 16:15:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF5B1AB6F7B
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 17:19:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6EDB686002E
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 14:15:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 489A317E00D
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 15:15:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D80D6188587;
-	Wed, 14 May 2025 14:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 516EC27A929;
+	Wed, 14 May 2025 15:13:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b9dQZtUd"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="U6hhd98V"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC818F6E
-	for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 14:15:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9B027A905
+	for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 15:13:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747232151; cv=none; b=kZKLhoXAgtjAs917ktoriCnIg1eDKw17MKQkX6sN5Fq4GIlR19JXsCoTGoJ/vkm9UYS2x1eidfTPTas00b/6P4GCNhQTtEqUVwj1F1DRVqW5GgognWUWSnqe8JFgSWqL1s6C3C2VKY1ZhlRXKgSqZc7YXBi07SofxBxGKviBvvg=
+	t=1747235603; cv=none; b=jG2n/cLudSTFamGCMztVXairXScbnakcFUZ2lVv7uw1+pfdAOaCvy/mUzuniB0XjoYxvAj8e9vLoXW2H+Pejtjq6Vf9/r1OpTb1AYVKLtEZ2agFrzm4NC/nf0WpmbHoAL0rqjRRpZkNnA4324KbWfQHM5Ubhkcx3eqe26iTOSoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747232151; c=relaxed/simple;
-	bh=Vni+4rSFtgKkhj4M9hes19xnkZVVVh6560vIbrsuwcs=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=XjfqMeTZYG+b0MWNsfYI2UAFbs8aXEfk+uqwG3nemv8I5fOYbjNCK4N6QFATUUSMe1C5NVeS9RnOK9GY9FznPsAY4X1cqojvae7JRuFPavru0Kjq5UbrQurxCpBf+PzfRQD2nn0S9yVtNwefKHaKTEqkoIUJRY0ovAwWZFDNT3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b9dQZtUd; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-22fad174900so8454965ad.1
-        for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 07:15:49 -0700 (PDT)
+	s=arc-20240116; t=1747235603; c=relaxed/simple;
+	bh=zMHHBnI6m3mo0ePFTe0uKSZzTUP9WZHZ7T2iGlRV0+Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Jl5eJbBAL1DRMb7jsUiEbZLrmDs+Gd8JIC/7VNp3t02+4e4HfDdPJOqi7ZRCuxawh8YAUG7+YrBRUoswPx9EgypQCSru3PTuX+9UxOBfCW5bVT/kkhH5RujpLk7GksnPqez6Fa8Jt/0nqxfEOoL9gJBpkkROGXYYdqi0rLbpKAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=U6hhd98V; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e73e9e18556so1038987276.0
+        for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 08:13:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747232149; x=1747836949; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=t7ibtTN1MnsJc6E1eBxUxx8I+Mw5Swe/fTJWwFyUmjo=;
-        b=b9dQZtUdVp761zGXUN1GOvgKa6cUUwdVurdewUUUiRSa2084aZ8YRXSnFRhlEZEAYs
-         e3Y/B3kHN2Z9CUhtxiDCYY7TQENsrAgzWB2UsixUjkwtvrxSa9kOxEA/kxm17FzTF3Kd
-         MnIBqJnd2AuRHOQ3VCYIVOzkgjT/ueiquMoM9iQGrXhUMYRb35veN5k8smQyApM0kL4Q
-         66UUIuCOzuFIBcf/RhIBY56JehE6RArmn8nHwTPxcR4out09W/p78FNgpK6pKsWtatl7
-         qjZp9iH/6ffDh72kjOLGO/bERGnuha1nLlSv5pykERnb3AXSUIEMh2FSUAEbwutkUKSw
-         786Q==
+        d=linaro.org; s=google; t=1747235600; x=1747840400; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=J8jj6jRyHpEahWPL1bxwBIDklu0Ui7Dm+eEH5GeKLrc=;
+        b=U6hhd98VBx26nUxFA6BDVx8Z/bzUuTd56wtcK0gpFeIay6o/Q+foCbWD5VEDLMzd0T
+         kHE2SFzJh1kPQPY+76WjoNkIF+kT6v0Lriqkzk2u+BUw77LsMSjtXs5rKPaogRgY7AUJ
+         bonLvuYToOi7YddGdy0OHEa6nTHQdplYgiY3oZBJSJ8J3gRJAtcECrON8ZIpT9RPgz2j
+         ifz/ZBmjTv7S5msxL7Oc1yK/+LSwpfyvv6AeqYrK2qhAf3OwWnnib/VqejHRUAYpBdvD
+         lgyD+w6qm7yES5SsrZECvyZE279SLI+uItobFN8q8NvsH93hvK8WjJv+GuQqQAQLIwUD
+         bogw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747232149; x=1747836949;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t7ibtTN1MnsJc6E1eBxUxx8I+Mw5Swe/fTJWwFyUmjo=;
-        b=DJm3ahStDlogzHxXHAFPnNWfJ2qaQirQhhnE0HGBfnZrIvgPVxg4A5Qu3AiAGUCB8G
-         NQ8qYWoKBjnetHHWUPJualYG07XkSq0ecIx4uQKr7yCLJz9vmN1G9COP79xUR+ryxK8I
-         BGo181kmJYEwFM9UsmcI1uvyNy/EVf7oZWBEMdgx18R5+1KQuQPYU9zEkWa2yTDSjBWZ
-         iwA319jmq8f2pY26kc2cY0MNeUk5vkpi3pUoI4/DulhHJUJhNhnmH2Cn2pZT8tHqr+8u
-         rUeGQMw3l5GdnW9U+E+nopbHdml9xbpEFBF+aUHdz0qnuRCZ2eCjRCL/Ig8FXHgGi0NO
-         FAVA==
-X-Forwarded-Encrypted: i=1; AJvYcCW5uLts3WBIX8L+smM4UA1gk0x7tZwh9yuIFqGj6kS/hEsAIMx6tjMnBU+xyMp2qmlEaRsO/m0ABw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+JWy3mh+lhrX4KROHzxbjdzUPffskec/MgAE8IJgZ55CXuQAP
-	cuVHPL9CyIazjY3AxcyTYc4iCPO7i7e9+9zNsGkwdN5l+R56tElYiftj22dsPsIods4vHNXkUaP
-	USQ==
-X-Google-Smtp-Source: AGHT+IF9L3gdmcUnBmViiAIB+CbEBP/3GNzYJ74W69/RQCJXO9WEtDuMKsjbGgOXh1LtWeoxFLt4egw1KwI=
-X-Received: from plbmb16.prod.google.com ([2002:a17:903:990:b0:223:4788:2e83])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1a4e:b0:22e:50f2:1450
- with SMTP id d9443c01a7336-23197fc77f2mr53990535ad.22.1747232149047; Wed, 14
- May 2025 07:15:49 -0700 (PDT)
-Date: Wed, 14 May 2025 07:15:42 -0700
-In-Reply-To: <20250513203803.2636561-2-sohil.mehta@intel.com>
+        d=1e100.net; s=20230601; t=1747235600; x=1747840400;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J8jj6jRyHpEahWPL1bxwBIDklu0Ui7Dm+eEH5GeKLrc=;
+        b=kxKbrIpctedZtRetjl+IPU7l/MBQcC05hsxquyf6xcCD9nu8KdBHxizDs0vQWkmY/q
+         jhaG8SPWPs6XjMmJSS4UM4kGoRHxRwgM8tm/dsv8yUGcfh95XfXJ6Rxzvq2ktkW0afBL
+         05XWlYiVwSGWArrxPO5DiDb5MBwHYy4cNuL0lo49m2to1EHuO/MD1soUUyPvWvVmpbbP
+         DrbOTo5nPyP2zWxHHZNZ59EJnEEhmohGX7CsiFHgNsX98uQRHa1ucGDNwlfb/MRQMf1z
+         rRomdQ08N9yqGrvy7goFeQdkRyUnS8nQZL2+DIMBb4TTVQsWhSEnsuKML/+4UxvzZAnc
+         cVCg==
+X-Forwarded-Encrypted: i=1; AJvYcCWFlkq6eh1DPSWiDw4dONzki4fNJqVef72HFbQ/gepsMg500+aDv1oVuP+hLhICXgsRWjRLL3jIYg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/e2Q2jQkIHK+t4Bp4mAY12sS4G/paF7qghQP2uyH3JeS2hI6E
+	5++LD2V51/3CEXEPnpeltKLqfKNUZAnfaLlm4D2F90Y16Si1WMXNQ/ZEHKQ4ohKMStIW5kWrhaX
+	P8PbvBuxaCNHGYBi2g2mPL6xbwatD5tZg9EsXb7SzqY95TWeJrPo=
+X-Gm-Gg: ASbGncshK7Xci8zNkGFgMs/hFJnH8/9Syj2GC0gc9KaSKFJI0E+UobCZW1ZOYUNcMnE
+	NunVAnHmc5mpSkl91IbvlCLVv4zRSmlcrVCE+O0inqwPL4JBwU5wiWIDxbf70QXcZ1OjDSA5HJZ
+	SygdkrADk/0gTumwk31xBbBDRdPPrPejU=
+X-Google-Smtp-Source: AGHT+IHfG4IdFhrynlohLcjINUvWUYxudJNltoIen2Onw6R0djfVvCV0/FdSfcdQNubeHC89QVS5keitmH669vIpZ7M=
+X-Received: by 2002:a05:6902:2389:b0:e78:f538:1c54 with SMTP id
+ 3f1490d57ef6-e7b2bde5e59mr11105285276.4.1747235600229; Wed, 14 May 2025
+ 08:13:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250513203803.2636561-1-sohil.mehta@intel.com> <20250513203803.2636561-2-sohil.mehta@intel.com>
-Message-ID: <aCSljsvI0A-HC_DT@google.com>
-Subject: Re: [PATCH v6 1/9] x86/fred, KVM: VMX: Pass event data to the FRED
- entry point from KVM
-From: Sean Christopherson <seanjc@google.com>
-To: Sohil Mehta <sohil.mehta@intel.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, Xin Li <xin@zytor.com>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Tony Luck <tony.luck@intel.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Andrew Cooper <andrew.cooper3@citrix.com>, 
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
-	Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>, 
-	Sandipan Das <sandipan.das@amd.com>, linux-perf-users@vger.kernel.org, 
-	linux-edac@vger.kernel.org, kvm@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+References: <20250423-rk3576-emmc-fix-v3-1-0bf80e29967f@collabora.com>
+ <CAPDyKFp5N23KCZwOTba6vGyk9eaS1-SjSqY52FfPDng-bahn6g@mail.gmail.com> <6154950.lOV4Wx5bFT@workhorse>
+In-Reply-To: <6154950.lOV4Wx5bFT@workhorse>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 14 May 2025 17:12:44 +0200
+X-Gm-Features: AX0GCFtDU_yTZnx-ehoHmNHeQ7h0DL35V2e2RHKt0pgXDptXnpjYmnfRRnWBnck
+Message-ID: <CAPDyKFpohUibXp_ReVquAxYHY7vZ28P1XmOCTU5GPQdLKYEaNg@mail.gmail.com>
+Subject: Re: [PATCH v3] mmc: sdhci-of-dwcmshc: add PD workaround on RK3576
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Cc: Shawn Lin <shawn.lin@rock-chips.com>, Heiko Stuebner <heiko@sntech.de>, 
+	Elaine Zhang <zhangqing@rock-chips.com>, Finley Xiao <finley.xiao@rock-chips.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, 
+	Sebastian Reichel <sebastian.reichel@collabora.com>, 
+	Detlev Casanova <detlev.casanova@collabora.com>, kernel@collabora.com, 
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, May 13, 2025, Sohil Mehta wrote:
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 5c5766467a61..1d43d4a2f6b6 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -7079,7 +7079,7 @@ static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu,
->  
->  	kvm_before_interrupt(vcpu, KVM_HANDLING_IRQ);
->  	if (cpu_feature_enabled(X86_FEATURE_FRED))
-> -		fred_entry_from_kvm(EVENT_TYPE_EXTINT, vector);
-> +		fred_entry_from_kvm(EVENT_TYPE_EXTINT, vector, 0);
->  	else
->  		vmx_do_interrupt_irqoff(gate_offset((gate_desc *)host_idt_base + vector));
->  	kvm_after_interrupt(vcpu);
-> @@ -7393,7 +7393,8 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
->  	    is_nmi(vmx_get_intr_info(vcpu))) {
->  		kvm_before_interrupt(vcpu, KVM_HANDLING_NMI);
->  		if (cpu_feature_enabled(X86_FEATURE_FRED))
-> -			fred_entry_from_kvm(EVENT_TYPE_NMI, NMI_VECTOR);
-> +			fred_entry_from_kvm(EVENT_TYPE_NMI, NMI_VECTOR,
-> +					    vmx_get_exit_qual(vcpu));
->  		else
->  			vmx_do_nmi_irqoff();
->  		kvm_after_interrupt(vcpu);
+On Tue, 13 May 2025 at 16:27, Nicolas Frattaroli
+<nicolas.frattaroli@collabora.com> wrote:
+>
+> On Tuesday, 29 April 2025 12:06:16 Central European Summer Time Ulf Hansson wrote:
+> > On Wed, 23 Apr 2025 at 09:54, Nicolas Frattaroli
+> > <nicolas.frattaroli@collabora.com> wrote:
+> > >
+> > > RK3576's power domains have a peculiar design where the PD_NVM power
+> > > domain, of which the sdhci controller is a part, seemingly does not have
+> > > idempotent runtime disable/enable. The end effect is that if PD_NVM gets
+> > > turned off by the generic power domain logic because all the devices
+> > > depending on it are suspended, then the next time the sdhci device is
+> > > unsuspended, it'll hang the SoC as soon as it tries accessing the CQHCI
+> > > registers.
+> > >
+> > > RK3576's UFS support needed a new dev_pm_genpd_rpm_always_on function
+> > > added to the generic power domains API to handle what appears to be a
+> > > similar hardware design.
+> > >
+> > > Use this new function to ask for the same treatment in the sdhci
+> > > controller by giving rk3576 its own platform data with its own postinit
+> > > function. The benefit of doing this instead of marking the power domains
+> > > always on in the power domain core is that we only do this if we know
+> > > the platform we're running on actually uses the sdhci controller. For
+> > > others, keeping PD_NVM always on would be a waste, as they won't run
+> > > into this specific issue. The only other IP in PD_NVM that could be
+> > > affected is FSPI0. If it gets a mainline driver, it will probably want
+> > > to do the same thing.
+> > >
+> > > Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+> > > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> >
+> > Applied for next, thanks!
+> >
+> > Kind regards
+> > Uffe
+> >
+>
+> Hi Uffe,
+>
+> I was wondering whether we can get this into 6.15 as a fix as well, as 6.15
+> should already have the genpd API additions this requires AFAIU.
 
-As a prep patch, what if we provide separate wrappers for IRQ vs. NMI?  That way
-KVM doesn't need to shove a '0' literal for the IRQ case.  There isn't that much
-code that's actually shared between the two, once you account for KVM having to
-hardcode the NMI information.
+Sure, it makes perfect sense!
 
-Compile tested only...
+>
+> Fixes tag could be something like:
+>
+>   Fixes: cfee1b507758 ("pmdomain: rockchip: Add support for RK3576 SoC")
+>
+> but may need some more flavorings to keep the stable robot overlords from
+> trying to apply it to 6.14 and earlier and then starting the robot uprising
+> in your inbox when they notice the API is missing.
+>
+> I originally left out the Fixes tag on the rewrite of this using the new
+> API because I wanted to avoid those awkward backport scenarios for a fairly
+> freshly supported SoC, but it'd be great to have this in 6.15 because that
+> will be with us for a full release cycle to come.
 
---
-From: Sean Christopherson <seanjc@google.com>
-Date: Wed, 14 May 2025 07:07:55 -0700
-Subject: [PATCH] x86/fred: Provide separate IRQ vs. NMI wrappers for "entry"
- from KVM
+I added the fixes tag and a stable tag to point out that it should be
+applied only for v6.15+.
 
-Provide separate wrappers for forwarding IRQs vs NMIs from KVM in
-anticipation of adding support for NMI source reporting, which will add
-an NMI-only parameter, i.e. will further pollute the current API with a
-param that is a hardcoded for one of the two call sites.
+>
+> Kind regards,
+> Nicolas Frattaroli
+>
+>
+>
 
-Opportunistically tag the non-FRED NMI wrapper __always_inline, as the
-compiler could theoretically generate a function call and trigger and a
-(completely benign) "leaving noinstr" warning.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/include/asm/fred.h | 24 +++++++++++++++++++-----
- arch/x86/kvm/vmx/vmx.c      |  4 ++--
- 2 files changed, 21 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/include/asm/fred.h b/arch/x86/include/asm/fred.h
-index 2a29e5216881..dfb4f5e6a37a 100644
---- a/arch/x86/include/asm/fred.h
-+++ b/arch/x86/include/asm/fred.h
-@@ -10,6 +10,7 @@
- 
- #include <asm/asm.h>
- #include <asm/trapnr.h>
-+#include <asm/irq_vectors.h>
- 
- /*
-  * FRED event return instruction opcodes for ERET{S,U}; supported in
-@@ -70,14 +71,26 @@ __visible void fred_entry_from_user(struct pt_regs *regs);
- __visible void fred_entry_from_kernel(struct pt_regs *regs);
- __visible void __fred_entry_from_kvm(struct pt_regs *regs);
- 
--/* Can be called from noinstr code, thus __always_inline */
--static __always_inline void fred_entry_from_kvm(unsigned int type, unsigned int vector)
-+/* Must be called from noinstr code, thus __always_inline */
-+static __always_inline void fred_nmi_from_kvm(void)
- {
- 	struct fred_ss ss = {
- 		.ss     =__KERNEL_DS,
--		.type   = type,
-+		.type   = EVENT_TYPE_NMI,
-+		.vector = NMI_VECTOR,
-+		.nmi    = true,
-+		.lm     = 1,
-+	};
-+
-+	asm_fred_entry_from_kvm(ss);
-+}
-+
-+static inline void fred_irq_from_kvm(unsigned int vector)
-+{
-+	struct fred_ss ss = {
-+		.ss     =__KERNEL_DS,
-+		.type   = EVENT_TYPE_EXTINT,
- 		.vector = vector,
--		.nmi    = type == EVENT_TYPE_NMI,
- 		.lm     = 1,
- 	};
- 
-@@ -109,7 +122,8 @@ static __always_inline unsigned long fred_event_data(struct pt_regs *regs) { ret
- static inline void cpu_init_fred_exceptions(void) { }
- static inline void cpu_init_fred_rsps(void) { }
- static inline void fred_complete_exception_setup(void) { }
--static inline void fred_entry_from_kvm(unsigned int type, unsigned int vector) { }
-+static __always_inline void fred_nmi_from_kvm(void) { }
-+static inline void fred_irq_from_kvm(unsigned int vector) { }
- static inline void fred_sync_rsp0(unsigned long rsp0) { }
- static inline void fred_update_rsp0(void) { }
- #endif /* CONFIG_X86_FRED */
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 5c5766467a61..271f92fee76b 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -7079,7 +7079,7 @@ static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu,
- 
- 	kvm_before_interrupt(vcpu, KVM_HANDLING_IRQ);
- 	if (cpu_feature_enabled(X86_FEATURE_FRED))
--		fred_entry_from_kvm(EVENT_TYPE_EXTINT, vector);
-+		fred_irq_from_kvm(vector);
- 	else
- 		vmx_do_interrupt_irqoff(gate_offset((gate_desc *)host_idt_base + vector));
- 	kvm_after_interrupt(vcpu);
-@@ -7393,7 +7393,7 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
- 	    is_nmi(vmx_get_intr_info(vcpu))) {
- 		kvm_before_interrupt(vcpu, KVM_HANDLING_NMI);
- 		if (cpu_feature_enabled(X86_FEATURE_FRED))
--			fred_entry_from_kvm(EVENT_TYPE_NMI, NMI_VECTOR);
-+			fred_nmi_from_kvm();
- 		else
- 			vmx_do_nmi_irqoff();
- 		kvm_after_interrupt(vcpu);
-
-base-commit: 9f35e33144ae5377d6a8de86dd3bd4d995c6ac65
---
+Kind regards
+Uffe
 
