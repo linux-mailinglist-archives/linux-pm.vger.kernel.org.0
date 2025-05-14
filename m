@@ -1,169 +1,169 @@
-Return-Path: <linux-pm+bounces-27156-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27157-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D591AB7635
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 21:54:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C22EAB76FF
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 22:26:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC38D3B41F8
-	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 19:53:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 32BB97B191E
+	for <lists+linux-pm@lfdr.de>; Wed, 14 May 2025 20:24:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 256AF28CF73;
-	Wed, 14 May 2025 19:54:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E79A2213259;
+	Wed, 14 May 2025 20:23:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="do+TrsiD"
+	dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b="WSTuGYOD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from confino.investici.org (confino.investici.org [93.190.126.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3EAE29208E
-	for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 19:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63F95296710
+	for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 20:23:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.190.126.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747252441; cv=none; b=cocqdPV4v7Vu0KsAacEjmcut4sQts31JG+7ddG9CrasbVv6jOh2IS2MmD87I1kNY30yTrvp1QX0g2Z4WPfOcKs02vYgoorTWBfbJuOVs6kGOsCQf7A+Knm+Ga6gEbEf297IvxFltfVdKZFcrOgU/Hqhd3fz+AwfjP8OFE7f2+C8=
+	t=1747254233; cv=none; b=Mb1FYc+6Q5as7FklToUtYNwyozRr8A3W6KK+KyJwZ+MC/BRVMogXeQSf2oxX7f8PbNi6KysMKacftxBAi2iIKiqANGPkydLzWWaOAlg6P1G3/QVf+24Dq1uvo04JcD83K8VdFQvPpIkOLNxsxMCauEG3mnnueoicRR/pJNW9v4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747252441; c=relaxed/simple;
-	bh=TiuJIqeQPLPdM7MV5DHSFrrCGNzg1U0NfsIusO3DWzw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lxG+RTInJggNCgjmqB52erHUcJ8AKkUFdIwCcVL7K/tMbH0t/WT8Yz5ecRGkodmLn6bpP5JDpasKRGH6PoZkKZqx3DGggn2jW0cmMZxqW1uFOmCoSvwrqWiqze8asvroVme3erqtCJf4lPcSx1VI2+v+f0IKrlT3RrqKPjUXBxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=do+TrsiD; arc=none smtp.client-ip=209.85.166.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-86192b6946eso4290339f.1
-        for <linux-pm@vger.kernel.org>; Wed, 14 May 2025 12:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1747252438; x=1747857238; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rqFC7XclFM6HmznNg5RpQqMdlIL+E3U4uiILOAOVAFs=;
-        b=do+TrsiDxIuLHSLCDwRo/JE8/ze5+EEReEonbbZbZz/uGvGHVHVyIWu53w9onN5QYv
-         jbtkur+E+v+F0FFBKxK91FcHL9vellkRsQs4AspsZtKuLh+dyvOAIquM1TVhMNCE+9LJ
-         SZ4XzDf4ftBnBNVxaQmEtTop4E2aytebx8JR0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747252438; x=1747857238;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rqFC7XclFM6HmznNg5RpQqMdlIL+E3U4uiILOAOVAFs=;
-        b=dxOObF87CY0HJtstmjeaehRojvEUoAc10Pz3xhzSnKdXOBrQCwiKV3E+E3qAHHRxnU
-         ZYI/ajqwq4gYMVzmwp5ifmmPanszmFLj8ZLMcH5I1IFUb0BVzUd1afmm2bTIzJqG1h+Y
-         Bke3rMrONhOkRag8pB2OZhTGgSHaOrSkMwAJwHrjbnDNVf04Yy529Y+ngra5AhEYJVor
-         IG5pkIP3Lz7yxHpW/XBzJPbx0xQKm3RiiPag62JdXKLOZQDZLF/GU4IXgOWp/6zTxTRN
-         jGNlqVM3iXeR0ycecrUiEVEdRD88ZkV2bTIlgGMsmXzmByXFoK9HCmu8nCpOVXNvTZRI
-         /8UA==
-X-Forwarded-Encrypted: i=1; AJvYcCVNLJlL5jRCi/NM/SKzWrVz7F7TFqqWbiKpi/AQUU4rErABTMrZslg40VbMkAlSj1juRgiqkjD0Uw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxK7zgFPW3/P0RC+HEBEtZYjSzpQHH2VYz8vDsrSmwW8fOvTByN
-	rOIMBVnGz3XxlAs+FZ3dnK1kp43kGRMYLiuHFHkNuCNCbidCCOi4U+hlivoFYQOlnEdpDwOuAQ2
-	h
-X-Gm-Gg: ASbGncuuXJNSspjako3SIK4wxKZgHp4pFCoJ/CM86NHUx1JeJljHCytOC3LzvSMQKH2
-	A++ZLulzNYZLmPbjYwDaeht5dBPNkU1fp8YS1LFtj8yc4KXnJ4jw6GL0SUYRZaBEJHnADiozNnK
-	eltlhHTGaCkrCpo5xddbpClU8Ftt1O6IM/ddakhPF4gifN79kgy1seDO0suwts6EuzWZlqnBksB
-	0GkwtVeR/vylTAiAgvB/c/zKv2awiT9t6VEQYRGh6vkUis3DFUlAA3b5Cnf01aAaOtgiwF7q+Fi
-	Tbgv3cM7rvhHWDXZxnz5CGgHKj68UZTlMaYRQxRKDorYke5MFNtptrT8gAmDEA==
-X-Google-Smtp-Source: AGHT+IFuhdhs1GZ17AJuuecrmu3II0fZTAN+vGnkqRWbS3S0XvQHj8BZNypViK3Lagb/zZFIppEymQ==
-X-Received: by 2002:a05:6602:3a8a:b0:867:6631:d5cb with SMTP id ca18e2360f4ac-86a08dd377bmr647811939f.5.1747252437851;
-        Wed, 14 May 2025 12:53:57 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-8676356c768sm291043439f.10.2025.05.14.12.53.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 May 2025 12:53:57 -0700 (PDT)
-Message-ID: <53a4d88a-e84d-4cc6-a041-93476f9df75d@linuxfoundation.org>
-Date: Wed, 14 May 2025 13:53:56 -0600
+	s=arc-20240116; t=1747254233; c=relaxed/simple;
+	bh=Po7jr/1zCSd4x7B7pGDnL5ir+QdIxdf4bG70sm0tlvA=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=ee1YXeaIIWGE05e+lo9Mhs3i7BuZuV36cYMf6jczkD53ll6VRO/7bSJfe0TbHn+GhYruPk1RVw4zYD6GdD5xRRuX+cpKknmxo4CdrxHaQLBLuQjAroqfu9KeCnDA0c+7kanNdTM6skQM0RMrejO7LbEmLJTrN5q3dxYKajyv2hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org; spf=pass smtp.mailfrom=paranoici.org; dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b=WSTuGYOD; arc=none smtp.client-ip=93.190.126.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paranoici.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paranoici.org;
+	s=stigmate; t=1747254221;
+	bh=7oJOXd1npiG89z9BvKOpvd0I++0tGACIlN9CtdKjnTE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=WSTuGYOD3RZ7NvH+tsfvyMcJwRmzKcXZjPmdbe+UZxnPAdRBEe8yts7BrSepCy7pe
+	 F+kH99wNGjWszFw14NbdAyA8CWaCOnCveWDKYYY4GjLZ+HQqgTw+yCgMkLwDHmq/qB
+	 5CddE2Y8IXN3aqH7tFcRhpBBhzjBMHVz1tT8tD1E=
+Received: from mx1.investici.org (unknown [127.0.0.1])
+	by confino.investici.org (Postfix) with ESMTP id 4ZyPtj2spPz11Bl;
+	Wed, 14 May 2025 20:23:41 +0000 (UTC)
+Received: from [93.190.126.19] (mx1.investici.org [93.190.126.19]) (Authenticated sender: invernomuto@paranoici.org) by localhost (Postfix) with ESMTPSA id 4ZyPtj140vz11BP;
+	Wed, 14 May 2025 20:23:41 +0000 (UTC)
+Received: from frx by crunch with local (Exim 4.98.2)
+	(envelope-from <invernomuto@paranoici.org>)
+	id 1uFIdg-00000000IVE-1Dz4;
+	Wed, 14 May 2025 22:23:40 +0200
+Date: Wed, 14 May 2025 22:23:29 +0200
+From: Francesco Poli <invernomuto@paranoici.org>
+To: Thorsten Leemhuis <linux@leemhuis.info>
+Cc: linux-pm list <linux-pm@vger.kernel.org>, Thomas Renninger
+ <trenn@suse.com>, Shuah Khan <shuah@kernel.org>, "John B. Wyatt IV"
+ <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>
+Subject: Re: [PATCH v2] cpupower: add a systemd service to run cpupower
+Message-Id: <20250514222329.2db4ac81fccd10661d763ee4@paranoici.org>
+In-Reply-To: <16ad2364-0161-4724-90e1-b57559168843@leemhuis.info>
+References: <20250425151024.121630-1-invernomuto@paranoici.org>
+	<16ad2364-0161-4724-90e1-b57559168843@leemhuis.info>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] tools/powercap: Implement powercap_set_enabled()
-To: Suchit K <suchitkarunakaran@gmail.com>
-Cc: trenn@suse.com, shuah@kernel.org, jwyatt@redhat.com, jkacur@redhat.com,
- linux-pm@vger.kernel.org, linux-kernel-mentees@lists.linux.dev,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20250510184709.44935-1-suchitkarunakaran@gmail.com>
- <09c7ad5e-4061-4c0b-b097-fa575c12a244@linuxfoundation.org>
- <CAO9wTFjyEngVR10ixYj=G8udRBeKaxAQquPCdi0V638t3WqQfA@mail.gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CAO9wTFjyEngVR10ixYj=G8udRBeKaxAQquPCdi0V638t3WqQfA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Type: multipart/signed; protocol="application/pgp-signature";
+ micalg="PGP-SHA512";
+ boundary="Signature=_Wed__14_May_2025_22_23_29_+0200_llX3Y0S0RykOpWsP"
 
-On 5/13/25 19:20, Suchit K wrote:
-> Thanks for the suggestion, Shuah. And I did compile the kernel after
-> making the changes.
-> 
-> 
+--Signature=_Wed__14_May_2025_22_23_29_+0200_llX3Y0S0RykOpWsP
+Content-Type: text/plain; charset=UTF-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Please don't top post in kernel patch responses.
+On Wed, 14 May 2025 14:41:35 +0200 Thorsten Leemhuis wrote:
 
-> On Wed, 14 May 2025 at 03:33, Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> On 5/10/25 12:47, Suchit Karunakaran wrote:
->>> The powercap_set_enabled() function previously returned a dummy value
->>> and was marked with a TODO comment. This patch implements the function
->>> by writing the desired mode (0 or 1) to /sys/class/powercap/intel-rapl/enabled
->>
->> The short summary should say cpupower: Implement powercap_set_enabled()
+> Hi Francesco!
 
-I am not clear on how this can be used. Can you elaborate on the use-case
-for the set?
+Hello Thorsten!
 
-Send me v2 fixing the change log.
+> Many thx for addressing the issues I brought up earlier
+> which now landed in -next, much appreciated.
 
->>>
->>> Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
->>> ---
->>>    tools/power/cpupower/lib/powercap.c | 22 ++++++++++++++++++----
->>>    1 file changed, 18 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/tools/power/cpupower/lib/powercap.c b/tools/power/cpupower/lib/powercap.c
->>> index 94a0c69e55ef..7947b9809239 100644
->>> --- a/tools/power/cpupower/lib/powercap.c
->>> +++ b/tools/power/cpupower/lib/powercap.c
->>> @@ -70,6 +70,22 @@ static int sysfs_get_enabled(char *path, int *mode)
->>>        return ret;
->>>    }
->>>
->>> +static int sysfs_set_enabled(const char *path, int mode)
->>> +{
->>> +     int fd;
->>> +     char buf[2] = { mode ? '1' : '0', '\n' };
->>> +     ssize_t ret;
->>> +
->>> +     fd = open(path, O_WRONLY);
->>> +     if (fd == -1)
->>> +             return -1;
->>> +
->>> +     ret = write(fd, buf, sizeof(buf));
->>> +     close(fd);
->>> +
->>> +     return ret == sizeof(buf) ? 0 : -1;
->>> +}
->>> +
->>>    int powercap_get_enabled(int *mode)
->>>    {
->>>        char path[SYSFS_PATH_MAX] = PATH_TO_POWERCAP "/intel-rapl/enabled";
->>> @@ -77,12 +93,10 @@ int powercap_get_enabled(int *mode)
->>>        return sysfs_get_enabled(path, mode);
->>>    }
->>>
->>> -/*
->>> - * TODO: implement function. Returns dummy 0 for now.
->>> - */
->>>    int powercap_set_enabled(int mode)
->>>    {
->>> -     return 0;
->>> +     char path[SYSFS_PATH_MAX] = PATH_TO_POWERCAP "/intel-rapl/enabled";
->>> +     return sysfs_set_enabled(path, mode);
->>
->> Did you compile this?
->>
->> thanks,
->> -- Shuah
+You're welcome, I am glad you appreciated it.
 
+>=20
+> Sadly with those fixes in I noticed another issue I missed earlier. One
+> from the "small differences between different Linux distributions that
+> make all our lives hard". :-/
+
+OK, the fix is simple: all other distros should be more similar to
+Debian!   ;-)
+
+...just kidding, of course!   :p
+
+>=20
+> On 25.04.25 17:07, Francesco Poli (wintermute) wrote:
+> > One of the most typical use cases of the 'cpupower' utility works as
+> > follows: run 'cpupower' at boot with the desired command-line options
+> > and then forget about it.
+>=20
+> > diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makef=
+ile
+> > index 835123add0ed..9c2b5f71fee1 100644
+> > [...]
+> > @@ -302,6 +305,14 @@ install-tools: $(OUTPUT)cpupower
+> >  	$(INSTALL_PROGRAM) $(OUTPUT)cpupower $(DESTDIR)${bindir}
+> >  	$(INSTALL) -d $(DESTDIR)${bash_completion_dir}
+> >  	$(INSTALL_SCRIPT) cpupower-completion.sh '$(DESTDIR)${bash_completion=
+_dir}/cpupower'
+> > +	$(INSTALL) -d $(DESTDIR)${confdir}default
+> > +	$(INSTALL_DATA) cpupower.default '$(DESTDIR)${confdir}default/cpupowe=
+r'
+> > +	$(INSTALL) -d $(DESTDIR)${libexecdir}
+> > +	$(INSTALL_PROGRAM) cpupower.sh '$(DESTDIR)${libexecdir}/cpupower'
+> > +	$(INSTALL) -d $(DESTDIR)${libdir}/systemd/system
+>=20
+> That last line to the best of my knowledge is wrong on distributions
+> like Fedora, where ${libdir} expands to /usr/lib64/ -- which is the
+> right path for libraries, but the wrong one for systemd units, as they
+> are always stored in /usr/lib/systemd/system (at least on Fedora). Not
+> sure what the right fix it, it might be something like defining
+>=20
+> unitdir ?=3D /usr/lib/systemd/system
+>=20
+> earlier in the Makefile and then using it in the last quoted line above.
+
+This could be the right fix, I think.
+And it would improve the flexibility of the Makefile, as well.
+
+If nobody raises objections, I will prepare another patch to address
+this issue.
+
+>=20
+> Ciao, Thorsten
+
+Tsch=C3=BCss!
+
+
+--=20
+ http://www.inventati.org/frx/
+ There's not a second to spare! To the laboratory!
+..................................................... Francesco Poli .
+ GnuPG key fpr =3D=3D CA01 1147 9CD2 EFDF FB82  3925 3E1C 27E1 1F69 BFFE
+
+--Signature=_Wed__14_May_2025_22_23_29_+0200_llX3Y0S0RykOpWsP
+Content-Type: application/pgp-signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEygERR5zS79/7gjklPhwn4R9pv/4FAmgk+8EACgkQPhwn4R9p
+v/5oIg/+JUZTeyyOSeWVjsz7zDb3FeQRQOnqNq3JPsVS8LFjwIQeVDG06hqvdtW2
+0NePEUxue96jQEVJEI341VwbZKf9MgTEETNPdpalsxZ5SbkkQsnXAWRTDwkaG+of
+aUpf8mdYB1/bigwmzV5INkRRVtVlW74yIK+pEkYDqfBZyu8K1IFS0aWNiOVv9sVu
+0AVxIXsc0e0dHNPXI+dVoii3iq3he7pl/83sQMSFqPzxqDxCMx4g6C6yVoGoQQ35
+kiAwhr44b87aZeETzjQi80XCnN3REmMeomlRSH5FIj45xI9mSPT0Hjy29hxwlJR+
+7NDzj0H1oDVbdLeQ8tDlMv9zRMYTBPAGNM9W1eHOwkMMfwIHZHezslWpVgPDr1Hz
+2IXCcGtXkfHcd9aiV9uvsj2ViZvddsNeVfCi1ZqxarbVuusstsrPgqgZbC+ZvkCL
+is+c0DNs6PrbxSPOeDNNhsbblQgp4bY8urFdI0RH3T4mOByUFWazGD+lh6r4P7xz
+C20Y2fkF2i93Bcd5hg3V/mQt3UocpCYxyCRCFfXMhtK1XSsiFqYpu6qGUWILqOwC
+1sUdJjTQw3hoQsuVYK4k3Lnl/gDlfqgcZOchaVSVEU1vNmk7si7i7NMN277EQFqO
++Qt2JhsFpb4uxWi30jh6IXqyTVJoZC1Yh7ZPH462P+IA/D8uieQ=
+=cZw8
+-----END PGP SIGNATURE-----
+
+--Signature=_Wed__14_May_2025_22_23_29_+0200_llX3Y0S0RykOpWsP--
 
