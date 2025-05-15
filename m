@@ -1,146 +1,117 @@
-Return-Path: <linux-pm+bounces-27220-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27221-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F2A6AB91B6
-	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 23:23:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E600AB91C3
+	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 23:24:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D9CF4E74E0
-	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 21:23:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F163BA24872
+	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 21:23:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCEF429DB73;
-	Thu, 15 May 2025 21:20:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0736289352;
+	Thu, 15 May 2025 21:23:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GOZTCYE1"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Era89RFd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E98E29DB69;
-	Thu, 15 May 2025 21:20:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E8BE2550A6;
+	Thu, 15 May 2025 21:23:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747344024; cv=none; b=EfheTduqp+q5JYnMnWn5wFhJIET5b969pNjCk6zVkMAyVAfApdBCihaxGFFZKBizGkOHLdVvVTIWnpLkhEjISjjUsF/kTrypU48vmtGU5IccFxAQx7j7tRjwOVkJ7CPzHOUIvFKrfA0OVwfFogmregxwjVxQefOm9ktmmTyC2zA=
+	t=1747344206; cv=none; b=n4hkWc8OvzdPpV5XVUw5P9nLy6196L/+ISc1JAzOsENVhqNZzHfPE53il2dKCs/QEx7QaZw6aKxMk1MyVKgddXqh7exF9BJPAS650+4g7tMd5JLn1S6LEkulgu0VWyY/Rnqvq/0KISaNwimK7afUToTi9OcLAEdaHpqbV9+1iYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747344024; c=relaxed/simple;
-	bh=ccxi92/CdYcFz5SRXc75fcFWq7DUZRAtA96LadU0vMs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=my4P3RsIETlE7AO9sxP80OQOkhLWv/5gxSVO3VyWDjKgESVddb8LSbFGLAR+t+3dUXwbaYYCzOmQpVeiDEPUGuch2i++NrBlZWws2ZU//kceGyfqdZyG6r3oSOvlDIftz01sFMcQt9OBYGE1ZXVy8nJcg4AL957O+EZEPCaZwzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GOZTCYE1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C90BEC4CEE7;
-	Thu, 15 May 2025 21:20:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747344024;
-	bh=ccxi92/CdYcFz5SRXc75fcFWq7DUZRAtA96LadU0vMs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GOZTCYE1AfYxSnTPuiMx3EDc6y/a2uA5klS8tlrZUT+kTUswdV2mpHwHq2PtgCZ2D
-	 beD2/4FeQp06ZQGtEqdbeuWVZ+ZMTrBW5jJiaMuEgixFX5CPKyBQt1anoB+RaBO7yN
-	 0B39LvVbQ25TALtekJjBCIGICa8Q0xb9G801WX9SEWofhEgbPlPN2jMMfPrGl3U+Fz
-	 Xu3Y3HBREIsStb/Eu4Z1ZmQQdoneTyPpd3glVAQzHIYAP6Xe7hIWsqpUoe/Fb0Prfu
-	 JiJDWPTpLQvmVxenU7fFJqIE/z6JwYfdWzEkxLzURnyRL9Y75xkm2OCFrVUxCBVqlc
-	 RLRGWTk2EeeLg==
-From: Mario Limonciello <superm1@kernel.org>
-To: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: Mario Limonciello <mario.limonciello@amd.com>,
-	Perry Yuan <perry.yuan@amd.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Huang Rui <ray.huang@amd.com>,
-	"Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	platform-driver-x86@vger.kernel.org (open list:AMD HETERO CORE HARDWARE FEEDBACK DRIVER),
-	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-	linux-doc@vger.kernel.org (open list:DOCUMENTATION),
-	linux-pm@vger.kernel.org (open list:AMD PSTATE DRIVER)
-Subject: [PATCH v10 13/13] x86/itmt: Add debugfs file to show core priorities
-Date: Thu, 15 May 2025 16:19:50 -0500
-Message-ID: <20250515211950.3102922-14-superm1@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250515211950.3102922-1-superm1@kernel.org>
-References: <20250515211950.3102922-1-superm1@kernel.org>
+	s=arc-20240116; t=1747344206; c=relaxed/simple;
+	bh=oVYbB4mvS5cfWCiHQJsTQZyBYXY5ZEDYJpI67V0lKb0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cunh2oHtRfuh/pYlXOcY332yIHaxP4s4scZZy5SXg4QMm99pYOuhQu3wr3ZKq3Qw0hPfNjLp+OtO+OrIHZCasEGU8MW9vlwfCoJKfPYioaFPudcBbFY9L91FGiuyDFgYuY6UJsOrO4SdQkNNN3YcT34eLcxj+gRbGBYPzoc6UQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Era89RFd; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=ZuFYpEebz7eNMFM2Au2qK78qxUP2XIO3+2uAIGKCqFo=; b=Era89RFdEYToePNFSYPchDIGdE
+	GIgWTfTw826wSiHIo4qlKg2jvVe6sy2ThdpsC+0BnPvoDbDmMUwwbDfFeWgfGqLM4asa8Hb5PERy0
+	1i8mUE5545Z6nD6s079M3JvU9NVw8KetFgApzRAGLPQUNN/y34bP6ecnxnj2SV+XZc3EY89Hkm1iJ
+	VLO6YTdtBMdgpFfwWp8yzvFpCM4JW9qA16i73P3ZScH3jfPEpR/Tp6UgiWvL2KV+wr/7wIGi9eaEX
+	mCKa3vryZZ3EY36Y2jNgNL7rmc28JtK5nXW7QWgSiHLu95k2wPDFW3wDPlAfpdZEJ/M8xOx9rXc9P
+	4jebtc3g==;
+Received: from [50.53.25.54] (helo=[192.168.254.17])
+	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
+	id 1uFg2f-0000000Ha4B-3VvL;
+	Thu, 15 May 2025 21:23:06 +0000
+Message-ID: <e0e6a6cb-3b73-471f-97f8-415fd6ac5333@infradead.org>
+Date: Thu, 15 May 2025 14:22:56 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 04/13] platform/x86: hfi: Introduce AMD Hardware
+ Feedback Interface Driver
+To: Mario Limonciello <superm1@kernel.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Mario Limonciello <mario.limonciello@amd.com>,
+ Perry Yuan <perry.yuan@amd.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+ "H . Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
+ Huang Rui <ray.huang@amd.com>, "Gautham R . Shenoy"
+ <gautham.shenoy@amd.com>, "Rafael J . Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ "open list:AMD HETERO CORE HARDWARE FEEDBACK DRIVER"
+ <platform-driver-x86@vger.kernel.org>,
+ "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
+ <linux-kernel@vger.kernel.org>,
+ "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+ "open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>,
+ Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+References: <20250515211950.3102922-1-superm1@kernel.org>
+ <20250515211950.3102922-5-superm1@kernel.org>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20250515211950.3102922-5-superm1@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+just a coding style nit:
 
-Multiple drivers can report priorities to ITMT. To aid in debugging
-any issues with the values reported by drivers introduce a debugfs
-file to read out the values.
+On 5/15/25 2:19 PM, Mario Limonciello wrote:
+> diff --git a/drivers/platform/x86/amd/hfi/Kconfig b/drivers/platform/x86/amd/hfi/Kconfig
+> new file mode 100644
+> index 0000000000000..476e4a9ed67a9
+> --- /dev/null
+> +++ b/drivers/platform/x86/amd/hfi/Kconfig
+> @@ -0,0 +1,17 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +#
+> +# AMD Hardware Feedback Interface Driver
+> +#
+> +
+> +config AMD_HFI
+> +	bool "AMD Hetero Core Hardware Feedback Driver"
+> +	depends on ACPI
+> +	depends on CPU_SUP_AMD
+> +	help
+> +	 Select this option to enable the AMD Heterogeneous Core Hardware
+> +	 Feedback Interface. If selected, hardware provides runtime thread
+> +	 classification guidance to the operating system on the performance and
+> +	 energy efficiency capabilities of each heterogeneous CPU core. These
+> +	 capabilities may vary due to the inherent differences in the core types
+> +	 and can also change as a result of variations in the operating
+> +	 conditions of the system such as power and thermal limits.
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- arch/x86/kernel/itmt.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+Help text should be indented with one tab + 2 spaces.
 
-diff --git a/arch/x86/kernel/itmt.c b/arch/x86/kernel/itmt.c
-index 9cea1fc36c18f..243a769fdd97b 100644
---- a/arch/x86/kernel/itmt.c
-+++ b/arch/x86/kernel/itmt.c
-@@ -59,6 +59,18 @@ static ssize_t sched_itmt_enabled_write(struct file *filp,
- 	return result;
- }
- 
-+static int sched_core_priority_show(struct seq_file *s, void *unused)
-+{
-+	int cpu;
-+
-+	seq_puts(s, "CPU #\tPriority\n");
-+	for_each_possible_cpu(cpu)
-+		seq_printf(s, "%d\t%d\n", cpu, arch_asym_cpu_priority(cpu));
-+
-+	return 0;
-+}
-+DEFINE_SHOW_ATTRIBUTE(sched_core_priority);
-+
- static const struct file_operations dfs_sched_itmt_fops = {
- 	.read =         debugfs_read_file_bool,
- 	.write =        sched_itmt_enabled_write,
-@@ -67,6 +79,7 @@ static const struct file_operations dfs_sched_itmt_fops = {
- };
- 
- static struct dentry *dfs_sched_itmt;
-+static struct dentry *dfs_sched_core_prio;
- 
- /**
-  * sched_set_itmt_support() - Indicate platform supports ITMT
-@@ -102,6 +115,14 @@ int sched_set_itmt_support(void)
- 		return -ENOMEM;
- 	}
- 
-+	dfs_sched_core_prio = debugfs_create_file("sched_core_priority", 0644,
-+						  arch_debugfs_dir, NULL,
-+						  &sched_core_priority_fops);
-+	if (IS_ERR_OR_NULL(dfs_sched_core_prio)) {
-+		dfs_sched_core_prio = NULL;
-+		return -ENOMEM;
-+	}
-+
- 	sched_itmt_capable = true;
- 
- 	sysctl_sched_itmt_enabled = 1;
-@@ -133,6 +154,8 @@ void sched_clear_itmt_support(void)
- 
- 	debugfs_remove(dfs_sched_itmt);
- 	dfs_sched_itmt = NULL;
-+	debugfs_remove(dfs_sched_core_prio);
-+	dfs_sched_core_prio = NULL;
- 
- 	if (sysctl_sched_itmt_enabled) {
- 		/* disable sched_itmt if we are no longer ITMT capable */
 -- 
-2.43.0
+~Randy
 
 
