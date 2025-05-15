@@ -1,225 +1,192 @@
-Return-Path: <linux-pm+bounces-27202-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27203-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02BF9AB8A42
-	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 17:08:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADCA5AB8E66
+	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 20:02:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C0CBB171EE2
-	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 15:06:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 955601BA6B63
+	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 18:02:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3F7D1F8691;
-	Thu, 15 May 2025 15:06:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEF4E258CED;
+	Thu, 15 May 2025 18:02:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I8Orkj+A"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fYLu+Rx1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8906023BE;
-	Thu, 15 May 2025 15:06:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D0F2586C7;
+	Thu, 15 May 2025 18:02:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747321571; cv=none; b=mL9RHTXnqbWrqZDyt2TAWCyF93bcTOs+KX2Ht21mbxulvEmHR5i0JnJ9aJQ7ncnQNu1hphm7kyhTPpUaMf5VEjuRMqMG2EyYiXC+5pdptoTUHa0n1Fi3+XXGF17BlppLtW3hsFWH7A6zA4L6B5GL+uK+a3HPgcc6C6NSl8xQEQ0=
+	t=1747332132; cv=none; b=j+RwZbzQCxmtIoH+gMp3R1NhMVEFSeq8vb6RP0KLZ/37Xh/UWp1cdhwYkJ+S+E0l6v2yO7Qo9ocd5gKFm1Rf986LPpdoEgOSc/Zcw1nf8H2yz5TChzLdkjIcQWgdZzOYVUnvEEtWdJ3lzPDRfYkxeOWvB8gdkCeMsPYxlLjuMtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747321571; c=relaxed/simple;
-	bh=FlUH0o0HQ8UiYkcGGiHz4cGt/8yWibv5yobf4uyVa+o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DfO2nmKg6DTmwTRMMV76P6TgSDg+Zs7hL+mC4avhg07q0ZOzOu9uHg3eHOlwheCKWs+UqthI/15I0BMa3bjh1y43ExgGm71TnFvJsZ3fUgkjAviI8qRbk1nXekYB4F8zwjryaoow2hk5gT6/GmQXmlcI51ZlS1tmy1deEyHWG2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I8Orkj+A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CE10C4CEE7;
-	Thu, 15 May 2025 15:06:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747321570;
-	bh=FlUH0o0HQ8UiYkcGGiHz4cGt/8yWibv5yobf4uyVa+o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=I8Orkj+ANvhMbwsaCNLZt60rhU9KMAaCGgsKGDDrBag7kjHaqmVHJO0lRN616nRyl
-	 Qj4mz/Ent+beYHVvHBlMLC5iWpWsMXC3u17fC6u16XMiO9VGReG9nK36AR6ans60Pf
-	 VABOa0ZZw6ZtH8EdVtT0ftFuTLOI5WpZlzknv4AaWHuptaxZswfeX+WMq66sD+Zi3i
-	 0E4Xq9l662KgLIWCG5TQ4aHLI10IyRMgCumO9B1GIDi5x8+j15lbHQPkSso5QzaVd3
-	 YVUGQg0e4BsjDzs3RsZIxs7hfv8wqKMUmRuT2Wbsc0ZU+ENSFkeP2XtBJTaIAS8t0X
-	 Q4FCtK/jIBL9A==
-Date: Thu, 15 May 2025 17:06:02 +0200
-From: Ingo Molnar <mingo@kernel.org>
-To: Shivank Garg <shivankg@amd.com>
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	luto@kernel.org, peterz@infradead.org, rafael@kernel.org,
-	pavel@kernel.org, akpm@linux-foundation.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	sohil.mehta@intel.com, rui.zhang@intel.com, yuntao.wang@linux.dev,
-	kai.huang@intel.com, xiaoyao.li@intel.com, peterx@redhat.com,
-	sandipan.das@amd.com, ak@linux.intel.com, rostedt@goodmis.org
-Subject: Re: [PATCH RESEND 1/4] x86/mm: pgtable: Fix W=1 build kernel-doc
- warnings
-Message-ID: <aCYC2pYpXeYVlxA1@gmail.com>
-References: <20250514062637.3287779-1-shivankg@amd.com>
- <aCRMT0TlpFvpRGYk@gmail.com>
- <6c4b227e-abdd-4e7f-8abd-d85cae0f0ec3@amd.com>
- <aCRgRxmO6rsR-0k3@gmail.com>
- <c5ad88e9-434a-4399-8e21-3c41e9295e93@amd.com>
- <aCWPp4wYwauSuTed@gmail.com>
- <eddc986d-62be-425c-8065-3cd5a3922026@amd.com>
+	s=arc-20240116; t=1747332132; c=relaxed/simple;
+	bh=xYxE3KmAJuDBwEUTV/7JBSyd7GH9iHMFGQRs1lUAZlc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QgKXzeBV/tgDxLGJOx+tea9/HxzvrI0vPQRPDAX0w92GkQCNn4gk3V5sWVyUVwmhHuMVLl1cstdCluDEQ08QB8pX2toTLnpTUY5wQs6LxgwqyTQcDJ+1sT/sFzjtSdCWvS5vBpfGlAzr86xwwWdKQIUoitzEkYPlgNeUFd4xigw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fYLu+Rx1; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-600210e4219so793017a12.0;
+        Thu, 15 May 2025 11:02:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747332129; x=1747936929; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bNN+vfuMJJgSzRBBX1dcv69JrH0Sd8EtzpYEboDV/q8=;
+        b=fYLu+Rx1EldXlJSmKgme1AVOXXw/BgC3RyBSt2P4eMUCEM3HVvFt3kpsWb/0sfGID0
+         FyGnh7lpEBHGl/Fua/VuI+7iUdjaRnaUkh4CY1hsvpT6qtUki4+YyshD9LNDVqXZEv43
+         uP7QVnMP/en4EhYOJTFVDf+M/MEZFmlqRJJ7OLkBDZCuYBgURO7BGGM8JLagYG94lDHQ
+         C6L5PV8jVeGuWUKqwJ6h0yl1y7qxOpDveRmf9A+/XnNd17qcWAJM2sj+M8rXS3qOzcIo
+         YTrybl6x7QVQglBhxFEP6wVyFWqHqpfiG5hYXVX4EODm8YZmNLj5uV80J/Vaft+a+CC5
+         sGTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747332129; x=1747936929;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bNN+vfuMJJgSzRBBX1dcv69JrH0Sd8EtzpYEboDV/q8=;
+        b=Ywrfz4eQL8CIEGfspD2HyEhxyBipRYCOjorM1qAxKniCeS7tLhU4AP4/2lpRIZBAJa
+         r+ovJZTV6g8FuKx+JnovFxBrtKIrCijjuE/Qh/j0KLVVGLLPCPtJSqhwKB0eosXCc0u5
+         e6DYg3GTRRg4jqWwmQLoTzFXl1cxl/OAfYiuaPiKvmf0Db65mmmmGUKeO4PBAUeIJsqY
+         vVBIEDTJ5BxVimWBVy6hxQPnuE12uG8FfjJ8kOSyQHDX0mHvycoepudYWRCOD0F7l5En
+         vrv62Y/IziDQeNWbQSLJfEDhfEUJCt2Q65FnbEnAuLpJ1/sVbRq+zW3qHe6cP//SavI7
+         YnbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUKe15P+uT21THv7UTC82c3jHL6cP/lo8qSgqdYv2fwS/CAqh2wZBKM1TmAWvBWE7VA0NP5wpEqIeNf0Es=@vger.kernel.org, AJvYcCWePnP5eKI31ey6ZTaYog2s1KD1b5pAierqV9U1vU2bWckzvSp8CZbnOmELt1fA/g2HU0ORm6cjN3E=@vger.kernel.org, AJvYcCXWJqD4OqJeSy4p9uUyEWxuvudpSx9czuxS2F3/C1lU5zvyYjis6oDKQ26DU7TOsWj3POQxaqhwUGcf7I6O5BSHMe8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMWRDtVd5HgyMEOIB2wz5QnegNaSWquzKeWCUITj0vuFNEkswu
+	GAUfWiW+XF0SXjlUS+qgCMspOLlf00K8KFz9VLThs1byE5tHc2CfqHGcXhPxiTKrZrPSzMpshVK
+	3gs0Z/yYHvLBMjiehNSAEJUkoUHSx4mc=
+X-Gm-Gg: ASbGncuLsrkE+MT4S8L38gD+DRWoXuqr0o/rK9Q16nCwvtx/15fCyUz9mFQiBMwEeYO
+	r9nOD6luk1t2t994UDWC3hhUON+T1b38vzORQihfE2BLO/PFEvCN50hjmyOVbOSnZ22r3zIZbUj
+	Ccuay4D8H00lIDzljsz7YN/Ef4JoYj4yU=
+X-Google-Smtp-Source: AGHT+IGJ3VLgyC5oRyYT9SJhjLgRqlja96rlJ3f3rzeXshYp1J9lbgDhqI7B6B7Y0eDrmuUni3A/DX8mMtH0+4aqo58=
+X-Received: by 2002:a17:907:980f:b0:ad2:41ae:a1e4 with SMTP id
+ a640c23a62f3a-ad50f7c4f3dmr407267966b.24.1747332128837; Thu, 15 May 2025
+ 11:02:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eddc986d-62be-425c-8065-3cd5a3922026@amd.com>
+References: <20250430123306.15072-1-linux.amoon@gmail.com> <aCR9RzGMWEuI0pxS@mai.linaro.org>
+ <CANAwSgSA-JHMRD7-19wijOY=TSWD-sv6yyrT=mH+wkUJuvxFAw@mail.gmail.com> <92c2949e-2fc1-40e9-9dea-e3d9f7aa571d@linaro.org>
+In-Reply-To: <92c2949e-2fc1-40e9-9dea-e3d9f7aa571d@linaro.org>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Thu, 15 May 2025 23:31:50 +0530
+X-Gm-Features: AX0GCFsEAXplwRDB3NXZqHZ-d-ohJ2IJuxMQMC4KvVGNnVidBm-TZoRYGMggWAM
+Message-ID: <CANAwSgQryVLdRVd9KRBnaUcjtX8xR9w9BBTCvoqKH6funkj=2A@mail.gmail.com>
+Subject: Re: [PATCH v6 0/4] Exynos Thermal code improvement
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	"open list:SAMSUNG THERMAL DRIVER" <linux-pm@vger.kernel.org>, 
+	"open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>, 
+	"moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" <linux-arm-kernel@lists.infradead.org>, 
+	open list <linux-kernel@vger.kernel.org>, 
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi Daniel,
 
-* Shivank Garg <shivankg@amd.com> wrote:
+On Thu, 15 May 2025 at 18:59, Daniel Lezcano <daniel.lezcano@linaro.org> wr=
+ote:
+>
+> On 5/15/25 13:10, Anand Moon wrote:
+> > Hi Daniel,
+> >
+> > On Wed, 14 May 2025 at 16:53, Daniel Lezcano <daniel.lezcano@linaro.org=
+> wrote:
+> >>
+> >> On Wed, Apr 30, 2025 at 06:02:56PM +0530, Anand Moon wrote:
+> >>> Hi All,
+> >>
+> >> Hi Anand,
+> >>
+> >> if the goal of the changes is to do cleanups, I recommend to rework
+> >> how the code is organized. Instead of having the data->soc check all
+> >> around the functions, write per platform functions and store them in
+> >> struct of_device_id data field instead of the soc version.
+> >>
+> >> Basically get rid of exynos_map_dt_data by settings the different ops
+> >> in a per platform structure.
+> >>
+> >> Then the initialization routine would be simpler to clean.
+> >>
+> >
+> > Thanks, I had previously attempted this approach.
+> > The goal is to split the exynos_tmu_data structure to accommodate
+> > SoC-specific callbacks for initialization and configuration.
+> >
+> > In my earlier attempt, I tried to refactor the code to achieve this.
+> > However, the main challenge I encountered was that the
+> > exynos_sensor_ops weren=E2=80=99t being correctly mapped for each SoC.
+> >
+> > Some SoC have multiple sensor
+> > exynos4x12
+> >                      tmu: tmu@100c0000
+> > exynos5420
+> >                  tmu_cpu0: tmu@10060000
+> >                  tmu_cpu1: tmu@10064000
+> >                  tmu_cpu2: tmu@10068000
+> >                  tmu_cpu3: tmu@1006c000
+> >                  tmu_gpu: tmu@100a0000
+> >   exynos5433
+> >                  tmu_atlas0: tmu@10060000
+> >                  tmu_atlas1: tmu@10068000
+> >                  tmu_g3d: tmu@10070000
+> > exynos7
+> >                  tmu@10060000
+> >
+> > It could be a design issue of the structure.or some DTS issue.
+> > So what I found in debugging it is not working correctly.
+> >
+> > static const struct thermal_zone_device_ops exynos_sensor_ops =3D {
+> >          .get_temp =3D exynos_get_temp,
+> >          .set_emul_temp =3D exynos_tmu_set_emulation,
+> >          .set_trips =3D exynos_set_trips,
+> > };
+> >
+> > The sensor callback will not return a valid pointer and soc id for the =
+get_temp.
+> >
+> > Here is my earlier version of local changes.
+> > [1] https://pastebin.com/bbEP04Zh exynos_tmu.c
+> > [2] https://pastebin.com/PzNz5yve Odroid U3 dmesg.log
+> > [3] https://pastebin.com/4Yjt2d2u    Odroid Xu4 dmesg.log
+> >
+> > I want to re-model the structure to improve the code.
+> > Once Its working condition I will send this for review.
+> >
+> > If you have some suggestions please let me know.
+>
+> I suggest to do the conversion step by step beginning by
+> exynos4210_tmu_clear_irqs, then by exynos_map_dt_data as the first
+> cleanup iteration
+>
+Ok you want IRQ handle per SoC call back functions?
+so on all the changes depending on SoC id should be moved to
+respective callback functions to reduce the code.
 
-> > Also, similar errors are elsewhere as well.
-> 
-> I'm sorry for missing these details in the previous revision.
-> I'm changing the first letter of variable description to capital.
-> 
-> https://docs.kernel.org/doc-guide/kernel-doc.html
-> /**
->  * function_name() - Brief description of function.
->  * @arg1: Describe the first argument.
->  * @arg2: Describe the second argument.
->  *        One can provide multiple line descriptions
->  *        for arguments.
-> 
-> Function description also starts with capital letter in the doc-guide
-> and other kernel places so this should make it consistent.
+Thank  you for having a look into my changes
 
-Thank you! This version is much more complete. There were a few other 
-things missing, quite a few of them pre-existing, which I fixed up in 
-the commit (see the delta patch below).
-
-Note that I standardized on a kernel-doc style variant without full 
-stops for simple singular sentences. This is what most of the x86 code 
-and the core kernel is doing, and it's contrary to the kernel-doc.html 
-recommendation - but you couldn't really have known that.
-
-Thanks,
-
-	Ingo
-
-=====================>
- arch/x86/mm/pgtable.c | 50 +++++++++++++++++++++++++-------------------------
- 1 file changed, 25 insertions(+), 25 deletions(-)
-
-diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
-index 9aa3c60c6afa..59c42dec7076 100644
---- a/arch/x86/mm/pgtable.c
-+++ b/arch/x86/mm/pgtable.c
-@@ -543,11 +543,11 @@ pud_t pudp_invalidate(struct vm_area_struct *vma, unsigned long address,
- #endif
- 
- /**
-- * reserve_top_address - Reserves a hole in the top of kernel address space
-- * @reserve: Size of hole to reserve.
-+ * reserve_top_address - Reserve a hole in the top of the kernel address space
-+ * @reserve: Size of hole to reserve
-  *
-  * Can be used to relocate the fixmap area and poke a hole in the top
-- * of kernel address space to make room for a hypervisor.
-+ * of the kernel address space to make room for a hypervisor.
-  */
- void __init reserve_top_address(unsigned long reserve)
- {
-@@ -594,10 +594,10 @@ void native_set_fixmap(unsigned /* enum fixed_addresses */ idx,
- #ifdef CONFIG_HAVE_ARCH_HUGE_VMAP
- #ifdef CONFIG_X86_5LEVEL
- /**
-- * p4d_set_huge - Setup kernel P4D mapping
-- * @p4d: Pointer to the P4D entry.
-- * @addr: Virtual address associated with the P4D entry.
-- * @prot: Protection bits to use.
-+ * p4d_set_huge - Set up kernel P4D mapping
-+ * @p4d: Pointer to the P4D entry
-+ * @addr: Virtual address associated with the P4D entry
-+ * @prot: Protection bits to use
-  *
-  * No 512GB pages yet -- always return 0
-  */
-@@ -608,7 +608,7 @@ int p4d_set_huge(p4d_t *p4d, phys_addr_t addr, pgprot_t prot)
- 
- /**
-  * p4d_clear_huge - Clear kernel P4D mapping when it is set
-- * @p4d: Pointer to the P4D entry to clear.
-+ * @p4d: Pointer to the P4D entry to clear
-  *
-  * No 512GB pages yet -- do nothing
-  */
-@@ -618,10 +618,10 @@ void p4d_clear_huge(p4d_t *p4d)
- #endif
- 
- /**
-- * pud_set_huge - Setup kernel PUD mapping
-- * @pud: Pointer to the PUD entry.
-- * @addr: Virtual address associated with the PUD entry.
-- * @prot: Protection bits to use.
-+ * pud_set_huge - Set up kernel PUD mapping
-+ * @pud: Pointer to the PUD entry
-+ * @addr: Virtual address associated with the PUD entry
-+ * @prot: Protection bits to use
-  *
-  * MTRRs can override PAT memory types with 4KiB granularity. Therefore, this
-  * function sets up a huge page only if the complete range has the same MTRR
-@@ -652,10 +652,10 @@ int pud_set_huge(pud_t *pud, phys_addr_t addr, pgprot_t prot)
- }
- 
- /**
-- * pmd_set_huge - Setup kernel PMD mapping
-- * @pmd: Pointer to the PMD entry.
-- * @addr: Virtual address associated with the PMD entry.
-- * @prot: Protection bits to use.
-+ * pmd_set_huge - Set up kernel PMD mapping
-+ * @pmd: Pointer to the PMD entry
-+ * @addr: Virtual address associated with the PMD entry
-+ * @prot: Protection bits to use
-  *
-  * See text over pud_set_huge() above.
-  *
-@@ -717,11 +717,11 @@ int pmd_clear_huge(pmd_t *pmd)
- 
- #ifdef CONFIG_X86_64
- /**
-- * pud_free_pmd_page - Clear pud entry and free pmd page.
-- * @pud: Pointer to a PUD.
-- * @addr: Virtual address associated with pud.
-+ * pud_free_pmd_page - Clear PUD entry and free PMD page
-+ * @pud: Pointer to a PUD
-+ * @addr: Virtual address associated with PUD
-  *
-- * Context: The pud range has been unmapped and TLB purged.
-+ * Context: The PUD range has been unmapped and TLB purged.
-  * Return: 1 if clearing the entry succeeded. 0 otherwise.
-  *
-  * NOTE: Callers must allow a single page allocation.
-@@ -764,11 +764,11 @@ int pud_free_pmd_page(pud_t *pud, unsigned long addr)
- }
- 
- /**
-- * pmd_free_pte_page - Clear pmd entry and free pte page.
-- * @pmd: Pointer to a PMD.
-- * @addr: Virtual address associated with pmd.
-+ * pmd_free_pte_page - Clear PMD entry and free PTE page.
-+ * @pmd: Pointer to the PMD
-+ * @addr: Virtual address associated with PMD
-  *
-- * Context: The pmd range has been unmapped and TLB purged.
-+ * Context: The PMD range has been unmapped and TLB purged.
-  * Return: 1 if clearing the entry succeeded. 0 otherwise.
-  */
- int pmd_free_pte_page(pmd_t *pmd, unsigned long addr)
-@@ -790,7 +790,7 @@ int pmd_free_pte_page(pmd_t *pmd, unsigned long addr)
- 
- /*
-  * Disable free page handling on x86-PAE. This assures that ioremap()
-- * does not update sync'd pmd entries. See vmalloc_sync_one().
-+ * does not update sync'd PMD entries. See vmalloc_sync_one().
-  */
- int pmd_free_pte_page(pmd_t *pmd, unsigned long addr)
- {
+Thanks
+-Anand
+>
+> --
+> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
+M SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
 
