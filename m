@@ -1,167 +1,243 @@
-Return-Path: <linux-pm+bounces-27172-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27175-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10051AB7D96
-	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 08:13:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6724AB7DC0
+	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 08:22:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD67A862A41
-	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 06:12:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9002F4A54FB
+	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 06:22:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 964EA288C80;
-	Thu, 15 May 2025 06:12:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27221296705;
+	Thu, 15 May 2025 06:22:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="sYw2JwaZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="csVn2Z6A"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B3F1280A57
-	for <linux-pm@vger.kernel.org>; Thu, 15 May 2025 06:12:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFBF328153C;
+	Thu, 15 May 2025 06:22:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747289576; cv=none; b=PXm8sZFG1SA566W97hcktPaFUYKNrnhep2BkMRWjdg/wNlRsOV+1AseLtwWhaLfEodA6uppGLg0iV2pA+TFEMeDsLpKx/tpd7EbU+S5HT+LayXBApdlNZAAV9Ug+CeQchefL5FluSgiGtT0Q3dJhWWUqUeHtCIGUoUR3U6TevBo=
+	t=1747290134; cv=none; b=DEYcANiIV5dZcDbew8pKTOzE+V6XeqGNRx6SnVt+RnbE5QA0y7FTvkJjgss2owOQk5FJkeisKkrdeVAri90ErPmKE5dP4r7UVqdTb05q/Vu9WSrMWSyZgqlbF0j/QWVM5+d+dimIJuxC2VA/2FddrFPk3RMQpVbpaZC8EPV/bkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747289576; c=relaxed/simple;
-	bh=nV8LNEHzNw4XM/C8Ve7z6p3b3ZFApm3ugvilKIoC1wA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=G7TITD3K/rjiUOEQChAliGLc5oAB5NxmXT++8IGRaaYB88lbK5rvpV4mCHmRA80gJjfCn8camvM++cAmZtSpw6cQU6zE0D5kC7GhFRmFyMccb+/MXPL1ra583k+5GwZIl/YG76LzXs2sTCM86J/kHdzgMjX+5BimyTJEVGavCgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=sYw2JwaZ; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=ACAEfF2QFSc6szu+oHQZGDcdynjEdtwuIa2X/ehdwYM=; t=1747289574;
-	x=1747721574; b=sYw2JwaZCCrvVn1FQEdgcunXsIZ+mnoXeCI2n0Ixb97/+z6yojvrPX2oC4loh
-	5QKvkbm3Zu8aaCJdCQedsUXHJoXGjy2nMcO6MF0Tn+A80RJzBaTJ53yQE80y8/f5GXYkfhVY+PkB0
-	GOr1uDYlQRGZaf2mrsAit0May3nqO/MFkSGj3WizPC0NErT8h3/7ilN0YBIKqJJrLiBm5T/TO04O7
-	C7EBIHNAykjIHmlG5eYXJgQa+X8douqZQjWM0hUNMotTis/HxAqcq1n/jJaifhMVREMXx/ixNR7J7
-	EwIxqWroKTdaqZgoaZckRSe1dXsq7zoIF8lA+qbLxCkv/RvvCg==;
-Received: from [2a02:8108:8984:1d00:a0cf:1912:4be:477f]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-	id 1uFRpr-002yNF-0V;
-	Thu, 15 May 2025 08:12:51 +0200
-Message-ID: <260b6d79-ab61-43b7-a0eb-813e257bc028@leemhuis.info>
-Date: Thu, 15 May 2025 08:12:50 +0200
+	s=arc-20240116; t=1747290134; c=relaxed/simple;
+	bh=4zeGaBUvC1Q9ojCS6BwilpI7jNLQBxZR8OQzD04olA4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=aZlcfSXT5CbRIMu7VzrNjfVnNpoYKAF8GFVGRQPClmxVNhYzNp9GV5h7mUUIWkabRUK8jOmu50bMLTGwCQfKnvfqfkfF2ql9TVyPeEmwz4hqrZeRbpaJgW4A88XU4hMx6wQx0KC0J63X0maijNprTSJudN2XXvgkDfLeYTYyWjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=csVn2Z6A; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2371DC4CEE7;
+	Thu, 15 May 2025 06:22:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747290134;
+	bh=4zeGaBUvC1Q9ojCS6BwilpI7jNLQBxZR8OQzD04olA4=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=csVn2Z6A8Sl3SqKO3MI5MubdJCB8umTAnTFO5SMw/elfFoZzdsYdpt/RDZBpzTS+D
+	 b750TEKmduBW/BRISjdWknmxjvrJAYeRR44lbMSBNOUpiYAsSnBENfmfAX3ObU7JVQ
+	 eNW5xm5MtIbtcwh1+Z7tidGqaTMKf9Iqz2SRS7bDVweaSYrkAilHX91qq8m+CeeUiQ
+	 RNHfqKizr6VUkCFuk6znR7+3fICDvCWnHSYmIugJsJl+3L+WwdHZX9flrmZvjfN9Sg
+	 n6So2U4wZNplCdbAxlEe+FGj0Tz64KBRC80c7riOnfTgdIGurersTsNtpn4AP0Od6A
+	 QJMsL2mWgXgPA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16C3EC2D0CD;
+	Thu, 15 May 2025 06:22:14 +0000 (UTC)
+From: Sven Peter via B4 Relay <devnull+sven.svenpeter.dev@kernel.org>
+Subject: [PATCH v6 00/10] Apple Mac System Management Controller
+Date: Thu, 15 May 2025 06:21:12 +0000
+Message-Id: <20250515-smc-6-15-v6-0-c47b1ef4b0ae@svenpeter.dev>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] cpupower: add a systemd service to run cpupower
-To: Francesco Poli <invernomuto@paranoici.org>
-Cc: linux-pm list <linux-pm@vger.kernel.org>,
- Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
- "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>
-References: <20250425151024.121630-1-invernomuto@paranoici.org>
- <16ad2364-0161-4724-90e1-b57559168843@leemhuis.info>
- <20250514222329.2db4ac81fccd10661d763ee4@paranoici.org>
-From: Thorsten Leemhuis <linux@leemhuis.info>
-Content-Language: de-DE, en-US
-Autocrypt: addr=linux@leemhuis.info; keydata=
- xsFNBFJ4AQ0BEADCz16x4kl/YGBegAsYXJMjFRi3QOr2YMmcNuu1fdsi3XnM+xMRaukWby47
- JcsZYLDKRHTQ/Lalw9L1HI3NRwK+9ayjg31wFdekgsuPbu4x5RGDIfyNpd378Upa8SUmvHik
- apCnzsxPTEE4Z2KUxBIwTvg+snEjgZ03EIQEi5cKmnlaUynNqv3xaGstx5jMCEnR2X54rH8j
- QPvo2l5/79Po58f6DhxV2RrOrOjQIQcPZ6kUqwLi6EQOi92NS9Uy6jbZcrMqPIRqJZ/tTKIR
- OLWsEjNrc3PMcve+NmORiEgLFclN8kHbPl1tLo4M5jN9xmsa0OZv3M0katqW8kC1hzR7mhz+
- Rv4MgnbkPDDO086HjQBlS6Zzo49fQB2JErs5nZ0mwkqlETu6emhxneAMcc67+ZtTeUj54K2y
- Iu8kk6ghaUAfgMqkdIzeSfhO8eURMhvwzSpsqhUs7pIj4u0TPN8OFAvxE/3adoUwMaB+/plk
- sNe9RsHHPV+7LGADZ6OzOWWftk34QLTVTcz02bGyxLNIkhY+vIJpZWX9UrfGdHSiyYThHCIy
- /dLz95b9EG+1tbCIyNynr9TjIOmtLOk7ssB3kL3XQGgmdQ+rJ3zckJUQapLKP2YfBi+8P1iP
- rKkYtbWk0u/FmCbxcBA31KqXQZoR4cd1PJ1PDCe7/DxeoYMVuwARAQABzSdUaG9yc3RlbiBM
- ZWVtaHVpcyA8bGludXhAbGVlbWh1aXMuaW5mbz7CwZQEEwEKAD4CGwMFCwkIBwMFFQoJCAsF
- FgIDAQACHgECF4AWIQSoq8a+lZZX4oPULXVytubvTFg9LQUCX31PIwUJFmtPkwAKCRBytubv
- TFg9LWsyD/4t3g4i2YVp8RoKAcOut0AZ7/uLSqlm8Jcbb+LeeuzjY9T3mQ4ZX8cybc1jRlsL
- JMYL8GD3a53/+bXCDdk2HhQKUwBJ9PUDbfWa2E/pnqeJeX6naLn1LtMJ78G9gPeG81dX5Yq+
- g/2bLXyWefpejlaefaM0GviCt00kG4R/mJJpHPKIPxPbOPY2REzWPoHXJpi7vTOA2R8HrFg/
- QJbnA25W55DzoxlRb/nGZYG4iQ+2Eplkweq3s3tN88MxzNpsxZp475RmzgcmQpUtKND7Pw+8
- zTDPmEzkHcUChMEmrhgWc2OCuAu3/ezsw7RnWV0k9Pl5AGROaDqvARUtopQ3yEDAdV6eil2z
- TvbrokZQca2808v2rYO3TtvtRMtmW/M/yyR233G/JSNos4lODkCwd16GKjERYj+sJsW4/hoZ
- RQiJQBxjnYr+p26JEvghLE1BMnTK24i88Oo8v+AngR6JBxwH7wFuEIIuLCB9Aagb+TKsf+0c
- HbQaHZj+wSY5FwgKi6psJxvMxpRpLqPsgl+awFPHARktdPtMzSa+kWMhXC4rJahBC5eEjNmP
- i23DaFWm8BE9LNjdG8Yl5hl7Zx0mwtnQas7+z6XymGuhNXCOevXVEqm1E42fptYMNiANmrpA
- OKRF+BHOreakveezlpOz8OtUhsew9b/BsAHXBCEEOuuUg87BTQRSeAENARAAzu/3satWzly6
- +Lqi5dTFS9+hKvFMtdRb/vW4o9CQsMqL2BJGoE4uXvy3cancvcyodzTXCUxbesNP779JqeHy
- s7WkF2mtLVX2lnyXSUBm/ONwasuK7KLz8qusseUssvjJPDdw8mRLAWvjcsYsZ0qgIU6kBbvY
- ckUWkbJj/0kuQCmmulRMcaQRrRYrk7ZdUOjaYmjKR+UJHljxLgeregyiXulRJxCphP5migoy
- ioa1eset8iF9fhb+YWY16X1I3TnucVCiXixzxwn3uwiVGg28n+vdfZ5lackCOj6iK4+lfzld
- z4NfIXK+8/R1wD9yOj1rr3OsjDqOaugoMxgEFOiwhQDiJlRKVaDbfmC1G5N1YfQIn90znEYc
- M7+Sp8Rc5RUgN5yfuwyicifIJQCtiWgjF8ttcIEuKg0TmGb6HQHAtGaBXKyXGQulD1CmBHIW
- zg7bGge5R66hdbq1BiMX5Qdk/o3Sr2OLCrxWhqMdreJFLzboEc0S13BCxVglnPqdv5sd7veb
- 0az5LGS6zyVTdTbuPUu4C1ZbstPbuCBwSwe3ERpvpmdIzHtIK4G9iGIR3Seo0oWOzQvkFn8m
- 2k6H2/Delz9IcHEefSe5u0GjIA18bZEt7R2k8CMZ84vpyWOchgwXK2DNXAOzq4zwV8W4TiYi
- FiIVXfSj185vCpuE7j0ugp0AEQEAAcLBfAQYAQoAJgIbDBYhBKirxr6Vllfig9QtdXK25u9M
- WD0tBQJffU8wBQkWa0+jAAoJEHK25u9MWD0tv+0P/A47x8r+hekpuF2KvPpGi3M6rFpdPfeO
- RpIGkjQWk5M+oF0YH3vtb0+92J7LKfJwv7GIy2PZO2svVnIeCOvXzEM/7G1n5zmNMYGZkSyf
- x9dnNCjNl10CmuTYud7zsd3cXDku0T+Ow5Dhnk6l4bbJSYzFEbz3B8zMZGrs9EhqNzTLTZ8S
- Mznmtkxcbb3f/o5SW9NhH60mQ23bB3bBbX1wUQAmMjaDQ/Nt5oHWHN0/6wLyF4lStBGCKN9a
- TLp6E3100BuTCUCrQf9F3kB7BC92VHvobqYmvLTCTcbxFS4JNuT+ZyV+xR5JiV+2g2HwhxWW
- uC88BtriqL4atyvtuybQT+56IiiU2gszQ+oxR/1Aq+VZHdUeC6lijFiQblqV6EjenJu+pR9A
- 7EElGPPmYdO1WQbBrmuOrFuO6wQrbo0TbUiaxYWyoM9cA7v7eFyaxgwXBSWKbo/bcAAViqLW
- ysaCIZqWxrlhHWWmJMvowVMkB92uPVkxs5IMhSxHS4c2PfZ6D5kvrs3URvIc6zyOrgIaHNzR
- 8AF4PXWPAuZu1oaG/XKwzMqN/Y/AoxWrCFZNHE27E1RrMhDgmyzIzWQTffJsVPDMQqDfLBhV
- ic3b8Yec+Kn+ExIF5IuLfHkUgIUs83kDGGbV+wM8NtlGmCXmatyavUwNCXMsuI24HPl7gV2h n7RI
-In-Reply-To: <20250514222329.2db4ac81fccd10661d763ee4@paranoici.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1747289574;e3677f5b;
-X-HE-SMSGID: 1uFRpr-002yNF-0V
+X-B4-Tracking: v=1; b=H4sIANmHJWgC/13MQQ6CMBCF4auQWVszhU4DrriHcWHpVLoQSEsaD
+ eHuFlxIXL7J/N8CkYPnCJdigcDJRz8OeehTAV1/Hx4svM0bSiwJK1QiPjuhhSThkK2WDVfSKsj
+ vU2DnXzt1veXd+ziP4b3LSW3XL5KZH5KUQEGIpjGalHZdGxMPE88czpYTbFCiQyzlIaYcO2pqN
+ NbI2tj/eF3XD+K8fWjhAAAA
+X-Change-ID: 20250304-smc-6-15-f0ed619e31d4
+To: Sven Peter <sven@svenpeter.dev>, Janne Grunau <j@jannau.net>, 
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
+ Hector Martin <marcan@marcan.st>, Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+ Lee Jones <lee@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+ "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7511; i=sven@svenpeter.dev;
+ h=from:subject:message-id;
+ bh=4zeGaBUvC1Q9ojCS6BwilpI7jNLQBxZR8OQzD04olA4=;
+ b=owGbwMvMwCHmIlirolUq95LxtFoSQ4ZqB1vgt88/QjfM+n7KTPLoEil3G/Gj/DdOiTiFbHRXb
+ +BXtbzZUcrCIMbBICumyLJ9v73pk4dvBJduuvQeZg4rE8gQBi5OAZhI+RKG/2GGJdFRj9jNJ55j
+ 9PSXe3i7dBmTxo+YV0G7/W+y2gQe3c/w3z28aVtD+4H+FX17jrrN3eP3p0Neq+tAh/LX2mX6/eu
+ aOQA=
+X-Developer-Key: i=sven@svenpeter.dev; a=openpgp;
+ fpr=A1E3E34A2B3C820DBC4955E5993B08092F131F93
+X-Endpoint-Received: by B4 Relay for sven@svenpeter.dev/default with
+ auth_id=167
+X-Original-From: Sven Peter <sven@svenpeter.dev>
+Reply-To: sven@svenpeter.dev
 
-On 14.05.25 22:23, Francesco Poli wrote:
-> On Wed, 14 May 2025 14:41:35 +0200 Thorsten Leemhuis wrote:
->> Sadly with those fixes in I noticed another issue I missed earlier. One
->> from the "small differences between different Linux distributions that
->> make all our lives hard". :-/
->
-> OK, the fix is simple: all other distros should be more similar to
-> Debian!   ;-)
-> 
-> ...just kidding, of course!   :p
+Hi,
 
-:-D
+This series adds support for the System Management Controller found in
+Apple Silicon devices which we model as a mfd. It also includes support
+for the GPIO block and the power/reset block as sub-devices.
 
->> On 25.04.25 17:07, Francesco Poli (wintermute) wrote:
-> [...]
->>> +	$(INSTALL) -d $(DESTDIR)${libdir}/systemd/system
->>
->> That last line to the best of my knowledge is wrong on distributions
->> like Fedora, where ${libdir} expands to /usr/lib64/ -- which is the
->> right path for libraries, but the wrong one for systemd units, as they
->> are always stored in /usr/lib/systemd/system (at least on Fedora). Not
->> sure what the right fix it, it might be something like defining
->>
->> unitdir ?= /usr/lib/systemd/system
->>
->> earlier in the Makefile and then using it in the last quoted line above.
-> 
-> This could be the right fix, I think.
-> And it would improve the flexibility of the Makefile, as well.
-> 
-> If nobody raises objections, I will prepare another patch to address
-> this issue.
+Changes between v5 and v6:
+  - Actually reorder struct members this time, start comments with an
+    uppercase letter, and use devm_ for mfd_register_devices instead of
+    dropping those fixup commits by accident
+  - Stefan's comment: Renamed ret to bfr in the reboot driver
+  - Sebastian's comments on the reboot driver:
+    - Moved Kconfig dependencies to MFD device and made reboot only
+      depend on that one
+    - Removed sysfs file to configure "reboot after power loss" for now
+      since this probably belongs in a userspace tool that directly
+      writes to nvmem instead
+    - Dropped setting pdev->dev.of_node since that's already done
+      automatically and adjusted #include to linux/mod_devicetable.h
+    - Dropped MODULE_ALIAS which was probably a leftover from a previous
+      version that did not use of_match_table
+  - Rob's comments to the dt-bindings
+    - Removed examples from sub-devices and added them to the main smc
+      binding
+    - Removed a spurious |
 
-Thx!
+Changes between v4 and v5:
+  - Alyssa's comments:
+    - Made the WARN_ON in the reboot driver more obvious
+    - Added missing brackets around a for loop in the reboot driver
+    - Used min instead of open-coded variant inside the gpio driver
+    - Reoder struct memebers to prevent padding inside the mfd driver
+  - Lee's comments:
+    - All comments now start with an uppercase letter
+    - Removed apple_smc_read_ioft_scaled and apple_smc_read_f32_scaled
+      since these are not yet used and likely don't belong into
+      drivers/mfd
+    - Relaced if (ret != 0) with if (ret) when possible
+    - Used devm_platform_get_and_ioremap_resource to get and map the
+      SRAM resource
+    - Used reverse Christmas-tree formating when declaring variables
+    - Dropped _platform left-overs from probe and remove functions
+    - Removed dev_dbg prints which are no long required after
+      development
+    - Reworked is_alive/is_initialized so that it's obvious how errors
+      during boot are propagated from the callback to the probe function
+    - Used dev_warn instead of dev_err in a few places
+    - Removed no-op apple_smc_rtkit_shmem_destroy; this required an
+      additional change in rtkit.c because we had a check there that's a
+      bit too strict
+    - Removed struct resource in apple_smc_rtkit_shmem_setup and
+      open-coded resource_contains instead
+    - Unwrapped lines with less than 100 chars
+    - Made sure to compile with W=1 and ran scripts/kernel-doc -v
+      on macsmc.h once and fixed any fallout
+  - Removed first_key/last_key from struct smc and moved
+    apple_smc_find_first_key_index to the gpio driver since it's only
+    used there anyway to find the index of the first GPIO key (gP00)
+  - Return -EIO when a command fails instead of whatever SMC returns
+    which does not map to Linux errnos on errors
 
-FWIW, after sending my mail my brain worked out that there is another
-problem. One that was there before your patches. One someone here might
-be interested to address. That
+Changes between v3 and v4:
+  - Added documentation for all functions and structs
+  - Fixed dt-bindings and re-ordered commits so that the mfd one comes
+    last and can include the gpio subdevice
+  - Added the reset driver and corresponding bindings
+  - Reworked the atomic mode inside SMC since the previous implementation
+    called mutex_lock from atomic context
+  - Removed the backend split for now which lead to a quite intense discussion
+    for the previous versions which hadn't been solved as far as I could tell
+    from the old threads.
+    It's also been 2+ years and I haven't heard of any backend implementation
+    for T2 or even older macs. It's also unclear to me which sub-devices
+    are actually useful there because at least GPIO and shutdown/reboot
+    from this series will not work as-is there.
+    I'd rather have this initial version which only supports M1+ macs upstream
+    and then iterate there if any other backend is developed.
+    I'll gladly help to re-introduce backend support if it's ever required.
 
-libdir ?=       /usr/lib
+Dependencies:
+The code and dt-bindings themselves apply cleanly to 6.15-rc1 but
+the device tree changes require the already merged SPMI controller
+and SPMI NVMEM series which will be part of 6.16.
+The series is also using the printf format specifiers which will
+land in 6.16 via the drm-misc tree.
+A tree with all dependencies for testing is available at
+https://github.com/AsahiLinux/linux/commits/smc-v6/.
 
-in tools/power/cpupower/Makefile will obviously do the wrong thing on
-distros that use /usr/lib64/ for 64bit libs (like Fedora and iirc
-openSUSE, too -- and all their derivatives of course). From a quick look
-other Makefiles we ship handle that fine by default, as during a quick
-grep I spotted code to handle the right lib/lib64 placement in Makefiles
-like tools/lib/bpf/Makefile, tools/net/ynl/Makefile, or
-tools/lib/perf/Makefile.
+Merging:
+The dt-binding patches all depend on each other such that they all
+should probably go together with the mfd device itself.
+The following commits also depend on mfd due to the new header file and
+will either have to go through the mfd tree as well or we'll need an
+immutable branch there or we just wait one kernel release and I'll
+re-submit the rest then.
+I'll take the device tree updates through our tree which also has the
+previous device tree updates these depend on.
 
-Ciao, Thorsten
+v5: https://lore.kernel.org/asahi/20250511-smc-6-15-v5-0-f5980bdb18bd@svenpeter.dev/
+v4: https://lore.kernel.org/asahi/20250503-smc-6-15-v4-0-500b9b6546fc@svenpeter.dev/
+v3: https://lore.kernel.org/asahi/Y2qEpgIdpRTzTQbN@shell.armlinux.org.uk/
+v2: https://lore.kernel.org/asahi/YxdInl2qzQWM+3bs@shell.armlinux.org.uk/
+v1: https://lore.kernel.org/asahi/YxC5eZjGgd8xguDr@shell.armlinux.org.uk/
+
+Best,
+
+Sven
+
+---
+Hector Martin (5):
+      gpio: Add new gpio-macsmc driver for Apple Macs
+      power: reset: macsmc-reboot: Add driver for rebooting via Apple SMC
+      arm64: dts: apple: t8103: Add SMC node
+      arm64: dts: apple: t8112: Add SMC node
+      arm64: dts: apple: t600x: Add SMC node
+
+Russell King (Oracle) (2):
+      dt-bindings: gpio: Add Apple Mac SMC GPIO block
+      dt-bindings: mfd: Add Apple Mac System Management Controller
+
+Sven Peter (3):
+      dt-bindings: power: reboot: Add Apple Mac SMC Reboot Controller
+      soc: apple: rtkit: Make shmem_destroy optional
+      mfd: Add Apple Silicon System Management Controller
+
+ .../devicetree/bindings/gpio/apple,smc-gpio.yaml   |  29 ++
+ .../devicetree/bindings/mfd/apple,smc.yaml         |  79 ++++
+ .../bindings/power/reset/apple,smc-reboot.yaml     |  40 ++
+ MAINTAINERS                                        |   7 +
+ arch/arm64/boot/dts/apple/t600x-die0.dtsi          |  35 ++
+ arch/arm64/boot/dts/apple/t8103.dtsi               |  35 ++
+ arch/arm64/boot/dts/apple/t8112.dtsi               |  35 ++
+ drivers/gpio/Kconfig                               |  10 +
+ drivers/gpio/Makefile                              |   1 +
+ drivers/gpio/gpio-macsmc.c                         | 292 ++++++++++++
+ drivers/mfd/Kconfig                                |  18 +
+ drivers/mfd/Makefile                               |   1 +
+ drivers/mfd/macsmc.c                               | 498 +++++++++++++++++++++
+ drivers/power/reset/Kconfig                        |   9 +
+ drivers/power/reset/Makefile                       |   1 +
+ drivers/power/reset/macsmc-reboot.c                | 294 ++++++++++++
+ drivers/soc/apple/rtkit.c                          |   3 +-
+ include/linux/mfd/macsmc.h                         | 279 ++++++++++++
+ 18 files changed, 1664 insertions(+), 2 deletions(-)
+---
+base-commit: 5abab6ab4ebacfff5857b63bd349902a6568d2e8
+change-id: 20250304-smc-6-15-f0ed619e31d4
+
+Best regards,
+-- 
+Sven Peter <sven@svenpeter.dev>
+
+
 
