@@ -1,122 +1,153 @@
-Return-Path: <linux-pm+bounces-27167-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27168-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F927AB7BFB
-	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 05:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 00A85AB7C74
+	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 05:47:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 83A9F1BA7B67
-	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 03:04:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA36A1BA4438
+	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 03:47:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3648C293B58;
-	Thu, 15 May 2025 03:04:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BCF9183098;
+	Thu, 15 May 2025 03:47:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ZW0JM7Wn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01FBA29375F;
-	Thu, 15 May 2025 03:04:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8911361;
+	Thu, 15 May 2025 03:47:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747278258; cv=none; b=osCnekwda3pSCBJpUihbGjzhYLc+qMjSjJrNmZRgeMj+4JzIGk4F+bKcGSD3qa6hXKTk10EQsb+Azxe3XTwt43Gd1Dx6D1MHOePXPawI84RPJApVfDWTE4iiebTsWY4bNkmpgNt2TKUwaxxEIdNjJZYoOS0b61n9/NQlpFAnSSI=
+	t=1747280858; cv=none; b=BH3aB1/CZLkK2bi8j07Qy30XLdCOtmRMJLk1HSzvE91pBcPy0tjTKq09SRX6Y2NLGOHyRI6+Qvj13ZBLQJ+0SozaWLozbQABHgzctYv9UFqlVU+JlLklIllp+dk1+DNnADr4YYZZG9+Y+JwP+oT3XSOzN7YIp2zTBHluDVMFHGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747278258; c=relaxed/simple;
-	bh=KbCF5MKCWNn3YP5xLgTo6/b3b/wNnyl4Ieq6Iz4mRVg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=io+Kjl0QcRAmtmk1Q9mE++TC6iHhor2HCFZm7bUt3QkAO9XKqZNVEIqbZEUfvUXpoMvZnOgf6C2gNMyuchXGwhXlB4y5b9a3wg0CLkyWBgSPH+zsV6A96xk0BJN3vrntPsDYBKNtqJRivfmQ769KgZCdePrrEG5oqKv2d9f5m9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 40f45dde313911f0b29709d653e92f7d-20250515
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:5a9b7689-c6cc-429c-bf32-1c973e39c20c,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:8860f9c49583b8e2e2cb45ee7d7b6a34,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:nil,UR
-	L:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
-	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 40f45dde313911f0b29709d653e92f7d-20250515
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 606235159; Thu, 15 May 2025 11:04:02 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id C9E55E003507;
-	Thu, 15 May 2025 11:04:01 +0800 (CST)
-X-ns-mid: postfix-682559A1-648868357
-Received: from localhost.localdomain (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 4EB96E003506;
-	Thu, 15 May 2025 11:04:01 +0800 (CST)
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-To: rafael@kernel.org,
-	pavel@kernel.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Zihuan Zhang <zhangzihuan@kylinos.cn>
-Subject: [PATCH v1] freezer: Skip zombie processes early to reduce lock contention
-Date: Thu, 15 May 2025 11:01:51 +0800
-Message-Id: <20250515030151.224508-1-zhangzihuan@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1747280858; c=relaxed/simple;
+	bh=jusEkXQPdT+EmYOtbUapz0vfxgv/rJOyiAD+Rz2I7p4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rk4bH+bvJ/dPlT4tjTI2AhOad8J15WVEtaNQSHocKlITBoXiML2SMmQRqC1KY6FJ51nQJygF2i5MeGj6FhuvM8t4YChrXFw84a8nB6j/MqRzZwkL5IvPN0zOnQLerV3+Jg5fHiyPJIwNa8fNo2B8VHpxmpaOiBZNrTBxLdYVrBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ZW0JM7Wn; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54EKPAuj013086;
+	Thu, 15 May 2025 03:47:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=zGTC0pl80cZTRh+KrVwQmdum
+	JQlUqqo0pnHsL1UmezI=; b=ZW0JM7Wnr+AfhIkQ6S1RyA3LKAoI6FRjwkPhf3wH
+	HBFyvz8gxywzhYX208+3o6xZUhgm7VIxcJXR8eTxiecJs0ZyEGqC/48mHel+4VWI
+	Szi3Si0pG9M4M12nPX1nSEW81epCwCNOZG8oxjHUSPvBit5bne6kZqHN1+Q4M4qS
+	JsgjrIHVpoK25BydioheTjM3Q+KJxO90LBfhNsEFAIsX0IDsHqNyzZbG4cHio7oP
+	1gbqEe5+NvGhMbUOeADWjFt6ttUDwCk2ylQ9uYYWCjfmi+A4EAOruKdwdoQ8R/Ng
+	35PbWXc7ylmkW32czePTuBbIWcgdTWNccy9LPdHr4Eu7gQ==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46mbcmmv4r-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 15 May 2025 03:47:19 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 54F3lIIg000483
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 15 May 2025 03:47:18 GMT
+Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 14 May 2025 20:47:18 -0700
+Date: Wed, 14 May 2025 20:47:16 -0700
+From: Mike Tipton <quic_mdtipton@quicinc.com>
+To: Sudeep Holla <sudeep.holla@arm.com>
+CC: Cristian Marussi <cristian.marussi@arm.com>,
+        "Rafael J . Wysocki"
+	<rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Peng Fan
+	<peng.fan@oss.nxp.com>,
+        Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH v3] cpufreq: scmi: Skip SCMI devices that aren't used by
+ the CPUs
+Message-ID: <aCVjxJB6dUzIAyPJ@hu-mdtipton-lv.qualcomm.com>
+References: <20250428144728.871404-1-quic_mdtipton@quicinc.com>
+ <aBtLMYqcnwacGJuy@pluto>
+ <20250507-analytic-practical-carp-5cddaf@sudeepholla>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250507-analytic-practical-carp-5cddaf@sudeepholla>
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTE1MDAzNCBTYWx0ZWRfXzGvfqREIeNlu
+ mK6PGnMZr0Z3NEH+vaH9JvW+HwiRH1nF5lnM4DuOSxGqcVLb07N1qD0AaDACMjg18rUGUa/VEeY
+ S7ldd1wxFSZ2rmHAYKaRn9jwD7W2ERYr5xTH/iL5VFWrP/e12oxkXSa4zZj1kX5NStmlVpS3h7U
+ 4cn+1c0z0C8XkQeNHOfTAPANWIOcP/MmE0ORIMdNB452CtjyOk5kADIsrlp0wHemX6gGPSODK+b
+ eO1LordZDsYUl0HQJlhFmXavKtP1I3bXescCjbuLf+jARaLqdCYIy7E5QXMSVw/KW8tmWr62Jb5
+ RmDYsB7Fw+a6VFnQu0aL1XTNgvsWbulChQjTdpyMKaZyzuLK10wLYdOtuLW2RONpT0rO9O7AHhi
+ /jyn97wi1tSxi/XE/kOW9w73p0Gm6OzaenUSomuMtxtoDC/xKf0EEaJq6ETAbBCMT/e6n2xZ
+X-Authority-Analysis: v=2.4 cv=G5scE8k5 c=1 sm=1 tr=0 ts=682563c7 cx=c_pps
+ a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=3H110R4YSZwA:10 a=kj9zAlcOel0A:10 a=dt9VzEwgFbYA:10 a=7CQSdrXTAAAA:8
+ a=Ml6eQ6jI9tVgauyEpOUA:9 a=CjuIK1q_8ugA:10 a=a-qgeE7W1pNrGK8U0ZQC:22
+X-Proofpoint-GUID: 5PJ48GxnBVuJhvW7hiJVMppIztQxFO7i
+X-Proofpoint-ORIG-GUID: 5PJ48GxnBVuJhvW7hiJVMppIztQxFO7i
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-15_01,2025-05-14_03,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 mlxlogscore=717 clxscore=1015 phishscore=0 bulkscore=0
+ suspectscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0 mlxscore=0
+ malwarescore=0 adultscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505070000
+ definitions=main-2505150034
 
-Currently, the freezer core processes all tasks, including zombie tasks
-(EXIT_ZOMBIE), when performing freeze operations.  However, zombie tasks
-cannot be frozen since they are already dead and won't execute further.
-Despite this, these tasks are still passed to freeze_task(), which may
-involve acquiring locks and accessing unnecessary internal state.
+On Wed, May 07, 2025 at 02:12:36PM +0100, Sudeep Holla wrote:
+> On Wed, May 07, 2025 at 12:59:45PM +0100, Cristian Marussi wrote:
+> > On Mon, Apr 28, 2025 at 07:47:28AM -0700, Mike Tipton wrote:
+> > > +static bool scmi_dev_used_by_cpus(struct device *scmi_dev)
+> > > +{
+> > > +	struct device_node *scmi_np = dev_of_node(scmi_dev);
+> > > +	struct device_node *np;
+> > > +	struct device *cpu_dev;
+> > > +	int cpu, idx;
+> > > +
+> > > +	if (!scmi_np)
+> > > +		return false;
+> > > +
+> > > +	for_each_possible_cpu(cpu) {
+> > > +		cpu_dev = get_cpu_device(cpu);
+> > > +		if (!cpu_dev)
+> > > +			continue;
+> > > +
+> > > +		np = dev_of_node(cpu_dev);
+> > > +
+> > > +		if (of_parse_phandle(np, "clocks", 0) == scmi_np)
+> > 
+> > Shouldn't this, on Success, be released by an of_node_put() (or, BETTER,
+> > by some OF-related cleanup.h magic...)
+> > 
+> 
+> Good catch, I missed this.
+> 
+> With the above issue fixed, you can add and post new version:
+> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 
-This patch introduces an early check to skip zombie tasks when calling
-freeze_task(), significantly reducing the lock contention, especially on
-systems with many short-lived processes or a high volume of process
-exits.
+Thanks Cristian / Sudeep.
 
-Benefits:
-- Reduces unnecessary lock contention by skipping zombie processes
-  earlier in the freeze process.
-- Improves overall freezing performance, particularly in high-load
-  systems where there are many zombie processes.
+The cleanup.h __free() logic gets a bit cumbersome here, especially with
+two struct *device_node to free in the same scope. And since there isn't
+any complicated cleanup logic to unwind, then I'll just go with the
+direct calls to of_node_put().
 
-Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
----
- kernel/freezer.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Also note we aren't calling of_node_put() in scmi_cpu_domain_id(),
+either. I can fix that in a follow up patch.
 
-diff --git a/kernel/freezer.c b/kernel/freezer.c
-index 8d530d0949ff..a6867195bb77 100644
---- a/kernel/freezer.c
-+++ b/kernel/freezer.c
-@@ -164,6 +164,9 @@ bool freeze_task(struct task_struct *p)
- {
- 	unsigned long flags;
-=20
-+	if (p->exit_state =3D=3D EXIT_ZOMBIE)
-+		return false;
-+
- 	spin_lock_irqsave(&freezer_lock, flags);
- 	if (!freezing(p) || frozen(p) || __freeze_task(p)) {
- 		spin_unlock_irqrestore(&freezer_lock, flags);
-@@ -203,6 +206,9 @@ void __thaw_task(struct task_struct *p)
- {
- 	unsigned long flags;
-=20
-+	if (p->exit_state =3D=3D EXIT_ZOMBIE)
-+		return;
-+
- 	spin_lock_irqsave(&freezer_lock, flags);
- 	if (WARN_ON_ONCE(freezing(p)))
- 		goto unlock;
---=20
-2.25.1
-
+I'll send v4 of this patch shortly.
 
