@@ -1,137 +1,93 @@
-Return-Path: <linux-pm+bounces-27190-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27191-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A050AB7E58
-	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 08:55:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C86FAB7EB3
+	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 09:19:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C1977B082E
-	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 06:53:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F3563AB550
+	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 07:19:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0D89297128;
-	Thu, 15 May 2025 06:54:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D57612CD96;
+	Thu, 15 May 2025 07:19:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gq/pCxjf"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="dzr0cIvr";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="WPQc3xvl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 835A6295D89;
-	Thu, 15 May 2025 06:54:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E140D1B960;
+	Thu, 15 May 2025 07:19:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747292079; cv=none; b=TFvH3PS69wT720Jhd2IPn2FaoWxZzHJ0q9tBVDlhGmo5PdcxyTs3FG+Z1xCrtXD862oQwKse9MY6iqa2GIIhyb7SUklPBFndA6MinuabL8jCJwIpaIanMN3QTfGcq0mC7dHNdnk/exlnPBvWDcCcg+Om2qGwEcCO4u6+UgCfsQM=
+	t=1747293563; cv=none; b=OR25G3v1KteGo7XzseIZRN4dI/eUyZFuIMBZ4ED3efQOciyccQuTHV+IlIy+ufTIdv/Zd6K15TXGcYTAmvGCoUWh6YXeMBT2iywSbZHcqo+oBFWCnnU3Ob19Mi8JWb+CflSSVOnWz7ZLdLHHxr5zvHj4PN2p8I+ehtmXmL6yW5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747292079; c=relaxed/simple;
-	bh=2W8v5Gdhm+xnSWlzDaIimqr2v2xWvhPz810ej4BlwHE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JECi3w5062j6tfRTIcU/KdrPgZ8V/KD5svpfcnNJsTkQgdlIc32K+d3QoPSepH5jaSfJUO9KzYGhBZiZCLkJMJ5fY8MleM5ILJnRXSO/Vwytm4I1v17fMicWgHWvEGKbo5IL+YQLJ7LSbHt20qxj8Xahqtxy49T7Z88DT0vI6nk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gq/pCxjf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 347FFC4CEE7;
-	Thu, 15 May 2025 06:54:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747292079;
-	bh=2W8v5Gdhm+xnSWlzDaIimqr2v2xWvhPz810ej4BlwHE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Gq/pCxjfX6mGmuXzyMRIfxOX4elFRSCNmBy7cdeJgUJ33gGLHj1HwHR82HMFdDPaF
-	 Itmn53oheVwh+KYS3jmmOAQe4tsr6+h1uQLF4DBAHe1gDFuThYW0tyTJHvDakrheX8
-	 8EsZ5REZ4rDo8+xFxQ564SyoLpowEL2ap8g068TTp6Mf998kOiDttJYhXPwVlfj+LP
-	 W7OPLjs6C5TAveGNsNU0GDNFKdbrFv2WUpRuAf42hUEbnNQ5lUEwiL5N1DFqdEopR8
-	 5p2lQLExDhfwP+m1+o2nWxFCyC10Dr9GqeARwrvDI75rx5x2bG02m5r618oEI5osiz
-	 WYW52mzq9Oe+w==
-Date: Thu, 15 May 2025 08:54:31 +0200
-From: Ingo Molnar <mingo@kernel.org>
-To: Shivank Garg <shivankg@amd.com>
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	luto@kernel.org, peterz@infradead.org, rafael@kernel.org,
-	pavel@kernel.org, akpm@linux-foundation.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	sohil.mehta@intel.com, rui.zhang@intel.com, yuntao.wang@linux.dev,
-	kai.huang@intel.com, xiaoyao.li@intel.com, peterx@redhat.com,
-	sandipan.das@amd.com, ak@linux.intel.com, rostedt@goodmis.org
-Subject: Re: [PATCH RESEND 1/4] x86/mm: pgtable: Fix W=1 build kernel-doc
- warnings
-Message-ID: <aCWPp4wYwauSuTed@gmail.com>
+	s=arc-20240116; t=1747293563; c=relaxed/simple;
+	bh=un43Rmr7pThpelAYiq373H0+K8u+aZOSIfYm0dwc0YM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=P3IkrTcxflGSbHIK7gchGq/GfyvQ4v9/q1Z2PeuN8kiKVpTZ5kaRU7B1uHP5xT8MPH0DOYSlYTwk5RHrarzW/XwUV8vld5Cf82EWEJzNzNidlswHEQhfZi5r4ClXOlJhHLa1wAlAGYztcOmpqvig8q8BUQQV9Rr0ToTCPszXSUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=dzr0cIvr; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=WPQc3xvl; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1747293558;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6D07CqThBr8ECVgNpKkQgHMewXWhEO/lS7W8K+zKG1M=;
+	b=dzr0cIvrDO9a5IxS6gXJH+20QhY54+m1fbYW4/1nVO27UB0OaiMAhT1f4ge/y3nGCXCorr
+	EH8/EJLjeG6GjQekYPY+BavJV84oN9u2xOSlEOr6nBjk2nb3Meue8Ut2qzoISw/Zhgn4jF
+	bPLMZpiFgayPt0gl/GurlF+lgHD2y0abYOTALvyDdryQqYkoLQXweoe/cBC6sFvUtuM7Ys
+	5Oe3odFCHy3U/fWanUTp3sO4tN2lJkLzygmXCJKyc57KSxYsV78BmBQz5sfxV0keCYJ5lF
+	2a+DQHmWIm0x4NhVLYVogiubDkqELsM7saFOWCHZ49xYRbkeKVUMcUns2Q4DHA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1747293558;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6D07CqThBr8ECVgNpKkQgHMewXWhEO/lS7W8K+zKG1M=;
+	b=WPQc3xvl8nzGkuu5aDYjIdp2pLWc0Ds1i6m5/PgOyC8LhlGLtTYap4TCtxwExaYZnsQsW0
+	pjcAmIIjvm8vmaDQ==
+To: Shivank Garg <shivankg@amd.com>, Ingo Molnar <mingo@kernel.org>
+Cc: mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+ x86@kernel.org, hpa@zytor.com, luto@kernel.org, peterz@infradead.org,
+ rafael@kernel.org, pavel@kernel.org, akpm@linux-foundation.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ sohil.mehta@intel.com, rui.zhang@intel.com, yuntao.wang@linux.dev,
+ kai.huang@intel.com, xiaoyao.li@intel.com, peterx@redhat.com,
+ sandipan.das@amd.com, ak@linux.intel.com, rostedt@goodmis.org
+Subject: Re: [PATCH RESEND 4/4] x86/apic: Fix W=1 build kernel-doc warning
+In-Reply-To: <51fbdbcd-a895-43b0-bb59-aa3361d77cad@amd.com>
 References: <20250514062637.3287779-1-shivankg@amd.com>
- <aCRMT0TlpFvpRGYk@gmail.com>
- <6c4b227e-abdd-4e7f-8abd-d85cae0f0ec3@amd.com>
- <aCRgRxmO6rsR-0k3@gmail.com>
- <c5ad88e9-434a-4399-8e21-3c41e9295e93@amd.com>
+ <20250514062637.3287779-4-shivankg@amd.com> <aCRMpba5mp5YvmY3@gmail.com>
+ <51fbdbcd-a895-43b0-bb59-aa3361d77cad@amd.com>
+Date: Thu, 15 May 2025 09:19:17 +0200
+Message-ID: <87o6vuibnu.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c5ad88e9-434a-4399-8e21-3c41e9295e93@amd.com>
+Content-Type: text/plain
 
+On Thu, May 15 2025 at 12:03, Shivank Garg wrote:
+> On 5/14/2025 1:26 PM, Ingo Molnar wrote:
+>> This is incorrect and is based on a misunderstanding of what the code 
+>> does:
+>> 
+>> DEFINE_IDTENTRY_IRQ(spurious_interrupt)
+>> {
+>>         handle_spurious_interrupt(vector);
+>> }
+>
+> The kernel-doc tool doesn't handle macros properly.
+> Can I change it to a normal comment instead?
+> or if a kernel-doc comment is required how should I make it correct?
 
-* Shivank Garg <shivankg@amd.com> wrote:
-
-> 
-> 
-> On 5/14/2025 2:50 PM, Ingo Molnar wrote:
-> > 
-> > * Shivank Garg <shivankg@amd.com> wrote:
-> > 
-> >>>> @@ -665,6 +665,9 @@ void native_set_fixmap(unsigned /* enum fixed_addresses */ idx,
-> >>>>  #ifdef CONFIG_X86_5LEVEL
-> >>>>  /**
-> >>>>   * p4d_set_huge - setup kernel P4D mapping
-> >>>> + * @p4d: Pointer to a p4d entry.
-> >>>> + * @addr: Virtual Address associated with p4d.
-> >>>> + * @prot: Protection bits to use.
-> >>>
-> >>> How about using the same capitalization you already see in this 
-> >>> description?
-> > 
-> >> Please review the revised patch with suggested changes.
-> > 
-> > I think you misunderstood: why are you using 'p4d', while a line before 
-> > it's 'P4D'? It's an acronym, and only used lowercase when it's a local 
-> > variable. 'p4d is a pointer to a p4d entry' is doubly confusing in that 
-> > regard ...
-> > 
-> > Same for PMD/PUD etc.
-> > 
-> 
-> Thank you for the clarification. I understand it now.
-> I hope the attached patch looks good now.
-
-No. Please re-read your patches and see whether you caught everything, 
-not just the things I pointed out ...
-
->  /**
->   * reserve_top_address - reserves a hole in the top of kernel address space
-> - * @reserve - size of hole to reserve
-> + * @reserve: size of hole to reserve.
-
-And here the original capitalization in your -v1 patch was better.
-
->   * p4d_set_huge - setup kernel P4D mapping
-> + * @p4d: pointer to a P4D entry.
-> + * @addr: virtual Address associated with p4d.
-> + * @prot: protection bits to use.
-
-Why is 'address' capitalized here?
-
->  /**
->   * pud_set_huge - setup kernel PUD mapping
-> + * @pud: pointer to a PUD entry.
-> + * @addr: virtual Address associated with pud.
-> + * @prot: protection bits to use.
-
-s/pud
- /the PUD entry
-
-Also, similar errors are elsewhere as well.
-
-Thanks,
-
-	Ingo
+Fix the stupid tool and leave the comment alone.
 
