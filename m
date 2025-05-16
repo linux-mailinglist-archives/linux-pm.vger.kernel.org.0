@@ -1,126 +1,100 @@
-Return-Path: <linux-pm+bounces-27229-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27230-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB6B9AB98A3
-	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 11:21:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 572D3AB997B
+	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 11:55:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFFEA188BB60
-	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 09:21:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B16E7A4B60
+	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 09:53:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D86A22FF37;
-	Fri, 16 May 2025 09:21:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yt97lc3e"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74C63235063;
+	Fri, 16 May 2025 09:54:02 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361EF22F75C
-	for <linux-pm@vger.kernel.org>; Fri, 16 May 2025 09:20:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BB6D231858;
+	Fri, 16 May 2025 09:53:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.51.26.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747387260; cv=none; b=FBnYc9DaXSSkVaZq3+e/ekVjwuTQgAsGNeCNpZewcNHGjud4ewS+60fxFaHJ0komcd3I9Ue1kBO+sgCdfGiNg55zqq+am8tws/g2uBeiQOWNeW0uo4IHv4z4PhAgx8iTToUxbSTKczC9M6ChWx9WA/G+McjzaZg6Ms77W0Jeihw=
+	t=1747389242; cv=none; b=XjQe2gi15frYhGC2e/RfXPLzqjATpJ+C6W2eHejSo7eCxWXE0shkqwNgFeSKW0PKnWBiyEaWoCofA79YqYaOJ+09wIOcwnUJ91e8LoM913lGJzlAH8hLyyvL/gSJQUYiPK6jeb+Bypr1mUm75Vrj/TtAZ+MuLzVrI9bu9YV6iqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747387260; c=relaxed/simple;
-	bh=LKnFOUwwXq/9fAvcKvTjoW/6ZFr5JUhO2L711QhoihA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TwK3mJQFmdANZHmSg1pfEG/L2BWOmmsNmPmTg4B7AeKYjmB7WfgUeQrWYDhFk+Q7adgCijuAl+2IXmICVPS2CSVTj0ZkIWZxnMuZ+XqYsHH+nq7R9QcRMWHJxG7gjEP3AW8kGxmS2+wDf+4u2lJTnmNx5AchWjI8kpgO5cR6QFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yt97lc3e; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-441d437cfaaso11066485e9.1
-        for <linux-pm@vger.kernel.org>; Fri, 16 May 2025 02:20:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747387256; x=1747992056; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=oVkdhl0yZ1MFLhzxiopsXMYZ7EZJ0whWLEhnArATGGM=;
-        b=yt97lc3e5iz9s7CTwnr5fw38Q04ZN+A9rhPxyeIhYoC1E/Z6M2KlEH0gLtv29oBBDj
-         Gv0zvo5yQSvwgBPht518ICoLAM3dP/x9QrstAsaogn+8F9KXqPHKBb7Or1lYlTEwEKFU
-         22SvuXQfLDDdYr2pPWrKPsudEk8lwDrmGFgFq+Nrc697Ym2/8kMCKaM09k3q00B6DUIV
-         50Y4leJyswQUOe55uu+aKouyephrTKusMS3Rfa5tY663V1BwAJg8Vh2MLkttdpLrJ+qp
-         NnNEYot0MFayLff8B5Ws/fpK5FmTwggGs1IcfAh2FTjtrn6RO+dLLRDGtx3MloIBy45k
-         3+dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747387256; x=1747992056;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oVkdhl0yZ1MFLhzxiopsXMYZ7EZJ0whWLEhnArATGGM=;
-        b=OdqzCzXdq66O0wUrhRIlC47slgjGYdtZB5kqXeCnIjWDozAV3uw8rZEYmU9+4nSzEM
-         fgh1WJkI9mQS3db8uXZsekE6Ru6baW6vjf2aZbSFksnVNpzqVYQnVih+stadMT8PS1gq
-         EWnrEeFAIry05eC9NU+uX4zumbPdCA13t7VdeD+uTJ+8A6AZ7stEscoV3qImCfypD2tf
-         6+4ICQRVhWH3xrhooSk4i+BYiQy9dwHUfFvR0J4tHtH6F0qt+/g8sENLbPpBgPXlwtO7
-         FwLTPCLrtWlhf4IvNLQhNWFBtjb4D0RK61glfAoyoxQAF2LVLVDPXs9tp8hszuZkR91L
-         D4UQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVy1LFxFYAyPiPImHI/x4RyXlgvSZMFkmy6cvL5ZGcnQLHNVFPW/awFq6PecrdmjwJG913u7rCgRg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+WJVjJEdJIkETlcfBXKB9vHH3bhSKIDb2tkEHq9AiJQ+mex/e
-	guu9d4hy7tUmBB38+CanNWk3W+4WyBSHqkNPsDi9DcCOJI7OAp+qJr6K6ORpqCFS50c=
-X-Gm-Gg: ASbGncsSPJpe5FqOf0GMtTh7K1RDuqGdVvHPItdh9fQKkK567em7aBSjYuDYBnEqoL5
-	8PG9gxqc/OZO2+mRc2PWk0yNcED95Tz8BBgAwp3IlzOd35rlVw5NSCMrxxiuEu1/f5jMlACGo1p
-	X6UZ5vDGW5DUHPHzzOEns3zmn+SO5ETW2G3QfPWmM9Zgl/A51DkcPt6537W5UsOxDrup1PkoXGK
-	2ndYbAeINr+iRznJ7RFZnXqV1LN8VeFnAad0vUuiiGDU6Iv2j3Mwp+6ciGymip0vut9culxoxKo
-	jq2JCy8EyVjDWnvV1DPae+ILfPT/xAoiW6mwzItpa9YuaSKuAi9F4AZ9oziDJ1Q7x8dB61KOSrg
-	mDv4k4KcS9t5rIg==
-X-Google-Smtp-Source: AGHT+IES3ifXyD0j3PvByP7vCZ00BMKCLJoV59bgFS9BgxMTVRCSsT0jxN+o23wdcE+SKI61YC0zEw==
-X-Received: by 2002:a05:600c:34d5:b0:43c:e7a7:1e76 with SMTP id 5b1f17b1804b1-442fefd5e7fmr17195875e9.1.1747387256441;
-        Fri, 16 May 2025 02:20:56 -0700 (PDT)
-Received: from mai.linaro.org (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a35ca4d263sm2210297f8f.3.2025.05.16.02.20.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 May 2025 02:20:55 -0700 (PDT)
-Date: Fri, 16 May 2025 11:20:54 +0200
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Thierry Reding <treding@nvidia.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/5] soc: tegra: fuse: add Tegra114 nvmem cells and
- fuse lookups
-Message-ID: <aCcDdqXo_d34BHpE@mai.linaro.org>
-References: <20250321145326.113211-1-clamor95@gmail.com>
- <20250321145326.113211-2-clamor95@gmail.com>
+	s=arc-20240116; t=1747389242; c=relaxed/simple;
+	bh=q0ACZUFrY5UcA6zkdpN4QJxoZ852bW+WRHVN5OX318Q=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qs3fp+4s7H4VuwNorN16rcT1Mq67mRqb5tBc/OOeKZpKiznL2nC0qVllYkNfUs5e+HJleFgoXPpahm/fEzmquiwxWly9wmt0xNvTu4XTvVEBzn0mUcH7z8wRSovhHXf2d4tOcV8I0AA93swc+2X638cw9DDZr8sxWQv2TDnvfSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com; spf=pass smtp.mailfrom=inspur.com; arc=none smtp.client-ip=210.51.26.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inspur.com
+Received: from jtjnmail201602.home.langchao.com
+        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id 202505161753474539;
+        Fri, 16 May 2025 17:53:47 +0800
+Received: from jtjnmail201607.home.langchao.com (10.100.2.7) by
+ jtjnmail201602.home.langchao.com (10.100.2.2) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Fri, 16 May 2025 17:53:49 +0800
+Received: from locahost.localdomain.com (10.94.6.108) by
+ jtjnmail201607.home.langchao.com (10.100.2.7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Fri, 16 May 2025 17:53:48 +0800
+From: Charles Han <hanchunchao@inspur.com>
+To: <krzk@kernel.org>, <sre@kernel.org>, <akpm@linux-foundation.org>,
+	<lee@kernel.org>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Charles Han
+	<hanchunchao@inspur.com>
+Subject: [PATCH] charger: max14577: Handle NULL pdata when CONFIG_OF is not set
+Date: Fri, 16 May 2025 17:53:46 +0800
+Message-ID: <20250516095346.24169-1-hanchunchao@inspur.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250321145326.113211-2-clamor95@gmail.com>
+Content-Type: text/plain
+X-ClientProxiedBy: Jtjnmail201613.home.langchao.com (10.100.2.13) To
+ jtjnmail201607.home.langchao.com (10.100.2.7)
+tUid: 2025516175347009ab4415561c54360ebd2bbe3d44228
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
 
-On Fri, Mar 21, 2025 at 04:53:22PM +0200, Svyatoslav Ryhel wrote:
-> Add missing Tegra114 nvmem cells and fuse lookups which were added for
-> Tegra124+ but omitted for Tegra114.
-> 
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> ---
->  drivers/soc/tegra/fuse/fuse-tegra30.c | 122 ++++++++++++++++++++++++++
->  1 file changed, 122 insertions(+)
-> 
-> diff --git a/drivers/soc/tegra/fuse/fuse-tegra30.c b/drivers/soc/tegra/fuse/fuse-tegra30.c
+When the kernel is not configured  CONFIG_OF, the max14577_charger_dt_init
+function returns NULL. Fix the max14577_charger_probe functionby returning
+ -ENODATA instead of potentially passing a NULL pointer to PTR_ERR.
 
-Why this code does not end up in a fuse-tegra114.c ? (as there is
-speedo-tegra114.c along in the directory) ?
+Fix below smatch warning.
+smatch warnings:
+drivers/power/supply/max14577_charger.c:576 max14577_charger_probe() warn: passing zero to 'PTR_ERR'
 
+Fixes: e30110e9c96f ("charger: max14577: Configure battery-dependent settings from DTS and sysfs")
+Signed-off-by: Charles Han <hanchunchao@inspur.com>
+---
+ drivers/power/supply/max14577_charger.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/power/supply/max14577_charger.c b/drivers/power/supply/max14577_charger.c
+index 1cef2f860b5f..ed6f5a584c2c 100644
+--- a/drivers/power/supply/max14577_charger.c
++++ b/drivers/power/supply/max14577_charger.c
+@@ -572,8 +572,10 @@ static int max14577_charger_probe(struct platform_device *pdev)
+ 	chg->max14577 = max14577;
+ 
+ 	chg->pdata = max14577_charger_dt_init(pdev);
+-	if (IS_ERR_OR_NULL(chg->pdata))
++	if (IS_ERR(chg->pdata))
+ 		return PTR_ERR(chg->pdata);
++	else if (!chg->pdata)
++		return -ENODATA;
+ 
+ 	ret = max14577_charger_reg_init(chg);
+ 	if (ret)
 -- 
+2.43.0
 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
