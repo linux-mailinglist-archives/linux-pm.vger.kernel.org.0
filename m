@@ -1,157 +1,672 @@
-Return-Path: <linux-pm+bounces-27223-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27224-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4659AB938F
-	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 03:15:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78AB7AB94CF
+	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 05:34:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFA663B9C80
-	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 01:15:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6BA70A03F1B
+	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 03:34:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0925322126F;
-	Fri, 16 May 2025 01:15:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01FD172631;
+	Fri, 16 May 2025 03:34:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yasT5pOt"
+	dkim=pass (2048-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="j1D7dmA8";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="teBKw9rO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8A92AEED
-	for <linux-pm@vger.kernel.org>; Fri, 16 May 2025 01:15:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9AB92C9D
+	for <linux-pm@vger.kernel.org>; Fri, 16 May 2025 03:34:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747358147; cv=none; b=Fp6W2vuMbdzXcbOSCWLNWxlmW5IvvKlJjIJEMe0fkGlsmmC8zLXyZSRQhq+hIgNWPBKowZ5FAi+hYg8XdupxsmxosQ0v/kAPNiKqyonPtZGTMQEngGpXAN+AulkImO2j+GTG7FeFLgxAns3FLYqHeJKRKkfqOY3ixGgGzV4VUAc=
+	t=1747366494; cv=none; b=NxJibl+LEYl6bp/quWp4vzbfbMQCG8SFlTsUkhE7LVjrT3aO4i6xGoyDoitAdSfoHMnRe75WAopdIXOiTamy2ErGwY0naTiqiGb9NFDWQMEhG3XD/EcAEHGZZVwTHv2p9KE4jVXd7u4iiefgQH/sivHRr15SvZTNwpS9FFCxwcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747358147; c=relaxed/simple;
-	bh=NIzlTsdcB+N3toFqpEFnhBW4WHNKbcmfhgrOkvMx7bE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=SHtpW/uM/cazeSBviXmQQNRtNdm0MriY08C6Y2nK6/QsOuNstj8u6Z9eekwY3JDCoraWxRil0PSusL0JQJjSHzQmwec86slp1opR5EBtIwWoV4rdX0oumAT3W5iYT5/UPbV8Yt3II7RL7jErio2/E+biGipDArJ4toLZwaAjTF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yasT5pOt; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b115383fcecso935277a12.1
-        for <linux-pm@vger.kernel.org>; Thu, 15 May 2025 18:15:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747358145; x=1747962945; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XVMuD/PalT/pmzH7BG3QdDQAVO8SDVrpqfTHUU96orc=;
-        b=yasT5pOtkKZ2HIA+K53Sqk6H4Ev8CXGSUQ58YSHc821Ly+j4DoAPt9SguA4b+QGp7p
-         3kXm3LYhtjpsz+pRT6dskwUlHoo1nU+BtBUHdivyiBqYR7IeWMld0yiWyG63qXqOkZim
-         PpwHdxjrSeV8Se24vrlRbQl/1p1HvizesDBX++ds8cl2eg+nE3NQ7WiutdmQSHRq2hY0
-         2obLDB+RR2cz4uNHhrVhhkLrbEqcVkJA8sRydxDA7reF+FlstnY4L89fNTYBN5JyZAC6
-         UqRO7Q2G0L1M8bHS91dmzw7fnyphVs0p5QNOIg3d2kM7AqpoFLvxsBEjWlJETHO+BgaB
-         iAvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747358145; x=1747962945;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XVMuD/PalT/pmzH7BG3QdDQAVO8SDVrpqfTHUU96orc=;
-        b=N/r7hCDstpItV08htITL3hdOFfBZSMrcT0k7V+TXZjIV73kC/adR6wmBNMATu1vwqn
-         MmbuEOuGE+4mk3mqKK7B9wQoiOLymFnTWJ8z2ic3o50vw5vERFvLvfBueiSbGAR5wvKl
-         4+OMlJOg7so+jVQoKbt9W9RLfqKBDbBYEI17vf4yv905gF9AZLLN70t9sutjVLcz90lP
-         seId9ABf2ZzAsQp0cF/CUeJbHbjJY7QS51vRngoAFrz6Ikrvw3DEeflp6cqrzDApEtPe
-         iZE28FEI7ge43B44OnpyOvleRNQELi+a0F6hqvyuKQKN4rOTJlIjr04NnCraciYLlmrW
-         LqAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX/PdAPi8PqDa3jIOrF/hljAVh9u+3ZSCdt0MpICrIdJ2isEh+/SabE/4TuFRlcUDeobhc2VSV4gA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz39pd7vEy+EVCbG+wyCXXOrJzNrsOp5G7CCupOFupNB7NZPrYP
-	BmQzXbqRDWQ1dyAHD1cBdKcOBMkTUYSvpJQ+TofhdwhlBltljnwVPOPbFjjLDv5uk8OAnKLGBPG
-	MiH/vMg==
-X-Google-Smtp-Source: AGHT+IG5J9s2NMDhY7/8A4O+MyMGUN6e8x3str2oF1VXVAVtOy4jEWK/Fd7BwjZNXFkmEs5DGaZLrHwGgt0=
-X-Received: from pjyp5.prod.google.com ([2002:a17:90a:e705:b0:30e:7783:edb6])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3905:b0:30e:6a25:e4e6
- with SMTP id 98e67ed59e1d1-30e7d5acafcmr1469988a91.22.1747358145046; Thu, 15
- May 2025 18:15:45 -0700 (PDT)
-Date: Thu, 15 May 2025 18:15:43 -0700
-In-Reply-To: <e12abcca-b7b4-404d-b379-8636e5b68813@intel.com>
+	s=arc-20240116; t=1747366494; c=relaxed/simple;
+	bh=ImN0s1W3YInp4J6OCjTVFe+S1l+/62KK4XaenjQ4M54=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=dnsB5CUWZ5wtcv+P4kZTrgN+ULgsJD2RpVWAWpCDz4QfS4vp8+440A3tLLCE+bX1gTitmC2by2fBBVIj9kVaiK+B0okxNVVVBa0ZkiaUQ7ODCPxFUKxu5z/ZgOcDFLYhaCdJXvYTx7/92+YXRvlZ/e9u96vUPyTeZv+CCA677lw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (2048-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=j1D7dmA8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=teBKw9rO; arc=none smtp.client-ip=103.168.172.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fluxnic.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fluxnic.net
+Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 8B7A5114008D;
+	Thu, 15 May 2025 23:34:50 -0400 (EDT)
+Received: from phl-frontend-02 ([10.202.2.161])
+  by phl-compute-02.internal (MEProxy); Thu, 15 May 2025 23:34:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fluxnic.net; h=
+	cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1747366490; x=1747452890; bh=UJeEK1wvqh
+	/5GI00xPvic9jYaOrLKQqzETwEkdBkLnc=; b=j1D7dmA8hg6lqoiNW2oOOC/yC0
+	8vfeNbN3v49/wxRf4Wwq81RkjC35MYInZLAQtjf+k+skl9E4RvxZNmf38EPeSAzt
+	FWl5Ovs/IwxdhGJGhoxbVoOXfI9KwEBLhaxtuzt35zGwwo0wo06JX4Ef8xS6rZbH
+	yK1caIYECfdtnorluugIWKptzmjbQyy6u2xJeYdR9I9OBBije/QMrIXtlxJ/oGet
+	GAxwMHfyMBg23HK71E1hgmL36YaaozU7yyxxSR4UGcqiqjVTvdtfmxqn8EyP2VpG
+	TtfYrKrmyqKMM0eTJospu/OyUdU9JG+YCmNhRIFilcyXTVg5D4NL0oMYTw5A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1747366490; x=1747452890; bh=UJeEK1wvqh/5GI00xPvic9jYaOrLKQqzETw
+	EkdBkLnc=; b=teBKw9rOOrrNhFbnP9rtfNg/ByOhuCYVpUlGaXaGEK+Y1JL5gAX
+	0I4j9RF97b4FI4pNRQJEAyUKdlIQ7pu+zvsn/olvEqiV9zFEFkjm/lsSGgaizsY+
+	/0wXG/uSsOAXhuI325NwGIgIinCQcIKTQJAVk3CBeq8F8eGx2uYOlYUgaPLEbRVi
+	8yLvqdIykQZVJeLDF430QTh39nr2XMVl6omkjd2VKYrfUapDTM1umNNOs5d+6b/w
+	PefG1hHZunUzyF/xL3AbcvwzBrVm2qfmY6ZJiC5YIoS/yfUaq9mvkkI1clwb9uHl
+	qYZWOq17iajbzapCqM29PfVPXgewR69rS9w==
+X-ME-Sender: <xms:WrImaFPjCDkW8qFoiOkrqPdE5HcaxWHC84wXKtudxUPa-lWg2qM_2Q>
+    <xme:WrImaH94fxeJ_RWI2pEyzkxC0f9uS0a4WfrTk8rFV8u-o6WJHGP3tk-McKn_Jk07G
+    ZgH8F7K3WQn6hrS7Bo>
+X-ME-Received: <xmr:WrImaETA_LVU7T7rUf9pOEEj-zJ5ZHjCHbfLK6eJixVKoiJLQuWcHx7ZHgnR2dRQB8xQZo4pLi52Hg2Y7_h_N0Wyv8vuTk3MQdI2LVGSzMJZlhPvNQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudduieekucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepfffhvfevufgjkfhfgggtsehttdertddttddv
+    necuhfhrohhmpefpihgtohhlrghsucfrihhtrhgvuceonhhitghosehflhhugihnihgtrd
+    hnvghtqeenucggtffrrghtthgvrhhnpefgvedvhfefueejgefggfefhfelffeiieduvdeh
+    ffduheduffekkefhgeffhfefveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehnihgtohesfhhluhignhhitgdrnhgvthdpnhgspghrtghpthht
+    ohephedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnghgvlhhoghhiohgrtg
+    gthhhinhhordguvghlrhgvghhnohestgholhhlrggsohhrrgdrtghomhdprhgtphhtthho
+    pehmrghtthhhihgrshdrsghgghesghhmrghilhdrtghomhdprhgtphhtthhopegurghnih
+    gvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidq
+    mhgvughirghtvghksehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoh
+    eplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:WrImaBth7gzI70AYoD_kg_AR5VhkDXip424OG81z2UDZNzwUHR_UMA>
+    <xmx:WrImaNde5dfj5-mWfX-_yFASh6pYBb16UdFOZfVZorGOpCu2WobIVQ>
+    <xmx:WrImaN0n-WCyr0DfJxm5KDqewjGKZKZTiG0AM9GOJzj4ZvyzpnhS5w>
+    <xmx:WrImaJ8YQPwW5XzdSchSKjmeAR3wq6Hn7SVs5uGJ3FbLT2PaFaSdjg>
+    <xmx:WrImaOJJPZIzbdB1eB58nzYo6Mu6nqViGzcb2alOBQgxrfz7285dXEBN>
+Feedback-ID: i58514971:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 15 May 2025 23:34:49 -0400 (EDT)
+Received: from xanadu (xanadu.lan [192.168.1.120])
+	by yoda.fluxnic.net (Postfix) with ESMTPSA id 5F1B811A5628;
+	Thu, 15 May 2025 23:34:49 -0400 (EDT)
+Date: Thu, 15 May 2025 23:34:49 -0400 (EDT)
+From: Nicolas Pitre <nico@fluxnic.net>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+    Matthias Brugger <matthias.bgg@gmail.com>, 
+    Daniel Lezcano <daniel.lezcano@linaro.org>
+cc: linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] dts: arm64: mediatek: thermal adjustments for MT8186,
+ MT8188 and MT8195
+In-Reply-To: <prp38558-r53s-756p-o6n8-795o7q87sssr@onlyvoer.pbz>
+Message-ID: <590n1r09-s4pp-0nnq-1oo6-20sos6os63op@syhkavp.arg>
+References: <prp38558-r53s-756p-o6n8-795o7q87sssr@onlyvoer.pbz>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250513203803.2636561-1-sohil.mehta@intel.com>
- <20250513203803.2636561-2-sohil.mehta@intel.com> <aCSljsvI0A-HC_DT@google.com>
- <e12abcca-b7b4-404d-b379-8636e5b68813@intel.com>
-Message-ID: <aCaRvwnkXf07Mtue@google.com>
-Subject: Re: [PATCH v6 1/9] x86/fred, KVM: VMX: Pass event data to the FRED
- entry point from KVM
-From: Sean Christopherson <seanjc@google.com>
-To: Sohil Mehta <sohil.mehta@intel.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, Xin Li <xin@zytor.com>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Tony Luck <tony.luck@intel.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Andrew Cooper <andrew.cooper3@citrix.com>, 
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
-	Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>, 
-	Sandipan Das <sandipan.das@amd.com>, linux-perf-users@vger.kernel.org, 
-	linux-edac@vger.kernel.org, kvm@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 
-On Wed, May 14, 2025, Sohil Mehta wrote:
-> On 5/14/2025 7:15 AM, Sean Christopherson wrote:
-> > Compile tested only...
-> > 
+Gentle ping.
+
+On Fri, 18 Apr 2025, Nicolas Pitre wrote:
+
+> Adjust temperature threshold values. Provide the "switch on" thermal 
+> trip point to be used by the power allocator governor.
 > 
-> No worries. I'll test it out. I am assuming you want this patch to go as
-> part of this series.
-
-Yes please.  I can also post it separately, but that seems unnecessary.
-
-> > --
-> > From: Sean Christopherson <seanjc@google.com>
-> > Date: Wed, 14 May 2025 07:07:55 -0700
-> > Subject: [PATCH] x86/fred: Provide separate IRQ vs. NMI wrappers for "entry"
-> >  from KVM
-> > 
-> > Provide separate wrappers for forwarding IRQs vs NMIs from KVM in
-> > anticipation of adding support for NMI source reporting, which will add
-> > an NMI-only parameter, i.e. will further pollute the current API with a
-> > param that is a hardcoded for one of the two call sites.
-> > 
-> > Opportunistically tag the non-FRED NMI wrapper __always_inline, as the
-> > compiler could theoretically generate a function call and trigger and a
-> > (completely benign) "leaving noinstr" warning.
-> > 
+> All numbers were provided by Mediatek.
 > 
-> If this is really a concern, wouldn't there be similar semantics in
-> other places as well?
-
-There are, e.g. the stubs in include/linux/context_tracking_state.h and many
-other places.  It looks ridiculous, but the compiler will generate RET+CALL for
-literal nops if the right sanitizers are enabled.  E.g. see commit
-432727f1cb6e ("KVM: VMX: Always inline to_vmx() and to_kvm_vmx()").
-
-> > @@ -70,14 +71,26 @@ __visible void fred_entry_from_user(struct pt_regs *regs);
-> >  __visible void fred_entry_from_kernel(struct pt_regs *regs);
-> >  __visible void __fred_entry_from_kvm(struct pt_regs *regs);
-> >  
-> > -/* Can be called from noinstr code, thus __always_inline */
-> > -static __always_inline void fred_entry_from_kvm(unsigned int type, unsigned int vector)
-> > +/* Must be called from noinstr code, thus __always_inline */
-> > +static __always_inline void fred_nmi_from_kvm(void)
-> >  {
-> >  	struct fred_ss ss = {
-> >  		.ss     =__KERNEL_DS,
-> > -		.type   = type,
-> > +		.type   = EVENT_TYPE_NMI,
-> > +		.vector = NMI_VECTOR,
-> > +		.nmi    = true,
-> > +		.lm     = 1,
-> > +	};
-> > +
-> > +	asm_fred_entry_from_kvm(ss);
-> > +}
-> > +
+> Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
 > 
-> The original code uses spaces for alignment. Since we are modifying it,
-> I am thinking of changing it to tabs.
-
-Oof, yeah, definitely do that.
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> index b91f88ffae..bfea811491 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> @@ -2229,22 +2229,23 @@ cpu-little0-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <150>;
+>  			thermal-sensors = <&lvts MT8186_LITTLE_CPU0>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> -				cpu_little0_alert0: trip-alert0 {
+> -					temperature = <85000>;
+> +				cpu_little0_pa_switch_on: trip_pa_switch_on {
+> +					temperature = <58000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu_little0_alert1: trip-alert1 {
+> -					temperature = <95000>;
+> +				cpu_little0_alert0: trip-alert {
+> +					temperature = <82000>;
+>  					hysteresis = <2000>;
+> -					type = "hot";
+> +					type = "passive";
+>  				};
+>  
+>  				cpu_little0_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <103000>;
+>  					hysteresis = <0>;
+>  					type = "critical";
+>  				};
+> @@ -2267,22 +2268,23 @@ cpu-little1-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <150>;
+>  			thermal-sensors = <&lvts MT8186_LITTLE_CPU1>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> -				cpu_little1_alert0: trip-alert0 {
+> -					temperature = <85000>;
+> +				cpu_little1_pa_switch_on: trip_pa_switch_on {
+> +					temperature = <58000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu_little1_alert1: trip-alert1 {
+> -					temperature = <95000>;
+> +				cpu_little1_alert0: trip-alert {
+> +					temperature = <82000>;
+>  					hysteresis = <2000>;
+> -					type = "hot";
+> +					type = "passive";
+>  				};
+>  
+>  				cpu_little1_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <103000>;
+>  					hysteresis = <0>;
+>  					type = "critical";
+>  				};
+> @@ -2305,22 +2307,23 @@ cpu-little2-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <150>;
+>  			thermal-sensors = <&lvts MT8186_LITTLE_CPU2>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> -				cpu_little2_alert0: trip-alert0 {
+> -					temperature = <85000>;
+> +				cpu_little2_pa_switch_on: trip_pa_switch_on {
+> +					temperature = <58000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu_little2_alert1: trip-alert1 {
+> -					temperature = <95000>;
+> +				cpu_little2_alert0: trip-alert {
+> +					temperature = <82000>;
+>  					hysteresis = <2000>;
+> -					type = "hot";
+> +					type = "passive";
+>  				};
+>  
+>  				cpu_little2_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <103000>;
+>  					hysteresis = <0>;
+>  					type = "critical";
+>  				};
+> @@ -2454,22 +2457,23 @@ cpu-big0-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <100>;
+>  			thermal-sensors = <&lvts MT8186_BIG_CPU0>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> -				cpu_big0_alert0: trip-alert0 {
+> -					temperature = <85000>;
+> +				cpu_big0_pa_switch_on: trip_pa_switch_on {
+> +					temperature = <58000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu_big0_alert1: trip-alert1 {
+> -					temperature = <95000>;
+> +				cpu_big0_alert0: trip-alert {
+> +					temperature = <82000>;
+>  					hysteresis = <2000>;
+> -					type = "hot";
+> +					type = "passive";
+>  				};
+>  
+>  				cpu_big0_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <103000>;
+>  					hysteresis = <0>;
+>  					type = "critical";
+>  				};
+> @@ -2488,22 +2492,23 @@ cpu-big1-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <100>;
+>  			thermal-sensors = <&lvts MT8186_BIG_CPU1>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> -				cpu_big1_alert0: trip-alert0 {
+> -					temperature = <85000>;
+> +				cpu_big1_pa_switch_on: trip_pa_switch_on {
+> +					temperature = <58000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu_big1_alert1: trip-alert1 {
+> -					temperature = <95000>;
+> +				cpu_big1_alert0: trip-alert {
+> +					temperature = <82000>;
+>  					hysteresis = <2000>;
+> -					type = "hot";
+> +					type = "passive";
+>  				};
+>  
+>  				cpu_big1_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <103000>;
+>  					hysteresis = <0>;
+>  					type = "critical";
+>  				};
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8188.dtsi b/arch/arm64/boot/dts/mediatek/mt8188.dtsi
+> index 69a8423d38..c2ac47c77c 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8188.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8188.dtsi
+> @@ -472,22 +472,23 @@ cpu-little0-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <150>;
+>  			thermal-sensors = <&lvts_mcu MT8188_MCU_LITTLE_CPU0>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> -				cpu_little0_alert0: trip-alert0 {
+> -					temperature = <85000>;
+> +				cpu_little0_pa_switch_on: trip-pa-switch_on {
+> +					temperature = <68000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu_little0_alert1: trip-alert1 {
+> -					temperature = <95000>;
+> +				cpu_little0_alert0: trip-alert {
+> +					temperature = <85000>;
+>  					hysteresis = <2000>;
+> -					type = "hot";
+> +					type = "passive";
+>  				};
+>  
+>  				cpu_little0_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <115000>;
+>  					hysteresis = <0>;
+>  					type = "critical";
+>  				};
+> @@ -510,22 +511,23 @@ cpu-little1-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <150>;
+>  			thermal-sensors = <&lvts_mcu MT8188_MCU_LITTLE_CPU1>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> -				cpu_little1_alert0: trip-alert0 {
+> -					temperature = <85000>;
+> +				cpu_little1_pa_switch_on: trip-pa-switch_on {
+> +					temperature = <68000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu_little1_alert1: trip-alert1 {
+> -					temperature = <95000>;
+> +				cpu_little1_alert0: trip-alert {
+> +					temperature = <85000>;
+>  					hysteresis = <2000>;
+> -					type = "hot";
+> +					type = "passive";
+>  				};
+>  
+>  				cpu_little1_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <115000>;
+>  					hysteresis = <0>;
+>  					type = "critical";
+>  				};
+> @@ -548,22 +550,23 @@ cpu-little2-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <150>;
+>  			thermal-sensors = <&lvts_mcu MT8188_MCU_LITTLE_CPU2>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> -				cpu_little2_alert0: trip-alert0 {
+> -					temperature = <85000>;
+> +				cpu_little2_pa_switch_on: trip-pa-switch_on {
+> +					temperature = <68000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu_little2_alert1: trip-alert1 {
+> -					temperature = <95000>;
+> +				cpu_little2_alert0: trip-alert {
+> +					temperature = <85000>;
+>  					hysteresis = <2000>;
+> -					type = "hot";
+> +					type = "passive";
+>  				};
+>  
+>  				cpu_little2_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <115000>;
+>  					hysteresis = <0>;
+>  					type = "critical";
+>  				};
+> @@ -586,22 +589,23 @@ cpu-little3-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <150>;
+>  			thermal-sensors = <&lvts_mcu MT8188_MCU_LITTLE_CPU3>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> -				cpu_little3_alert0: trip-alert0 {
+> -					temperature = <85000>;
+> +				cpu_little3_pa_switch_on: trip-pa-switch_on {
+> +					temperature = <68000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu_little3_alert1: trip-alert1 {
+> -					temperature = <95000>;
+> +				cpu_little3_alert0: trip-alert {
+> +					temperature = <85000>;
+>  					hysteresis = <2000>;
+> -					type = "hot";
+> +					type = "passive";
+>  				};
+>  
+>  				cpu_little3_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <115000>;
+>  					hysteresis = <0>;
+>  					type = "critical";
+>  				};
+> @@ -624,22 +628,23 @@ cpu-big0-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <100>;
+>  			thermal-sensors = <&lvts_mcu MT8188_MCU_BIG_CPU0>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> -				cpu_big0_alert0: trip-alert0 {
+> -					temperature = <85000>;
+> +				cpu_big0_pa_switch_on: trip-pa-switch_on {
+> +					temperature = <68000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu_big0_alert1: trip-alert1 {
+> -					temperature = <95000>;
+> +				cpu_big0_alert0: trip-alert {
+> +					temperature = <85000>;
+>  					hysteresis = <2000>;
+> -					type = "hot";
+> +					type = "passive";
+>  				};
+>  
+>  				cpu_big0_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <115000>;
+>  					hysteresis = <0>;
+>  					type = "critical";
+>  				};
+> @@ -658,22 +663,23 @@ cpu-big1-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <100>;
+>  			thermal-sensors = <&lvts_mcu MT8188_MCU_BIG_CPU1>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> -				cpu_big1_alert0: trip-alert0 {
+> -					temperature = <85000>;
+> +				cpu_big1_pa_switch_on: trip-pa-switch_on {
+> +					temperature = <68000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu_big1_alert1: trip-alert1 {
+> -					temperature = <95000>;
+> +				cpu_big1_alert0: trip-alert {
+> +					temperature = <85000>;
+>  					hysteresis = <2000>;
+> -					type = "hot";
+> +					type = "passive";
+>  				};
+>  
+>  				cpu_big1_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <115000>;
+>  					hysteresis = <0>;
+>  					type = "critical";
+>  				};
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> index 4f2dc0a755..06631760c2 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> @@ -3729,16 +3729,23 @@ cpu0-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <250>;
+>  			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU0>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> +				cpu0_pa_switch_on: trip_pa_switch_on {
+> +						temperature = <68000>;
+> +						hysteresis = <2000>;
+> +						type = "passive";
+> +				};
+> +
+>  				cpu0_alert: trip-alert {
+> -					temperature = <85000>;
+> +					temperature = <90000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+>  				cpu0_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <115000>;
+>  					hysteresis = <2000>;
+>  					type = "critical";
+>  				};
+> @@ -3759,16 +3766,23 @@ cpu1-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <250>;
+>  			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU1>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> +				cpu1_pa_switch_on: trip_pa_switch_on {
+> +						temperature = <68000>;
+> +						hysteresis = <2000>;
+> +						type = "passive";
+> +				};
+> +
+>  				cpu1_alert: trip-alert {
+> -					temperature = <85000>;
+> +					temperature = <90000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+>  				cpu1_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <115000>;
+>  					hysteresis = <2000>;
+>  					type = "critical";
+>  				};
+> @@ -3789,16 +3803,23 @@ cpu2-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <250>;
+>  			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU2>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> +				cpu2_pa_switch_on: trip_pa_switch_on {
+> +						temperature = <68000>;
+> +						hysteresis = <2000>;
+> +						type = "passive";
+> +				};
+> +
+>  				cpu2_alert: trip-alert {
+> -					temperature = <85000>;
+> +					temperature = <90000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+>  				cpu2_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <115000>;
+>  					hysteresis = <2000>;
+>  					type = "critical";
+>  				};
+> @@ -3819,16 +3840,23 @@ cpu3-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <250>;
+>  			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU3>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> +				cpu3_pa_switch_on: trip_pa_switch_on {
+> +						temperature = <68000>;
+> +						hysteresis = <2000>;
+> +						type = "passive";
+> +				};
+> +
+>  				cpu3_alert: trip-alert {
+> -					temperature = <85000>;
+> +					temperature = <90000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+>  				cpu3_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <115000>;
+>  					hysteresis = <2000>;
+>  					type = "critical";
+>  				};
+> @@ -3849,16 +3877,23 @@ cpu4-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <250>;
+>  			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU0>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> +				cpu4_pa_switch_on: trip_pa_switch_on {
+> +						temperature = <68000>;
+> +						hysteresis = <2000>;
+> +						type = "passive";
+> +				};
+> +
+>  				cpu4_alert: trip-alert {
+> -					temperature = <85000>;
+> +					temperature = <90000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+>  				cpu4_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <115000>;
+>  					hysteresis = <2000>;
+>  					type = "critical";
+>  				};
+> @@ -3879,16 +3914,23 @@ cpu5-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <250>;
+>  			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU1>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> +				cpu5_pa_switch_on: trip_pa_switch_on {
+> +						temperature = <68000>;
+> +						hysteresis = <2000>;
+> +						type = "passive";
+> +				};
+> +
+>  				cpu5_alert: trip-alert {
+> -					temperature = <85000>;
+> +					temperature = <90000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+>  				cpu5_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <115000>;
+>  					hysteresis = <2000>;
+>  					type = "critical";
+>  				};
+> @@ -3909,16 +3951,23 @@ cpu6-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <250>;
+>  			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU2>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> +				cpu6_pa_switch_on: trip_pa_switch_on {
+> +						temperature = <68000>;
+> +						hysteresis = <2000>;
+> +						type = "passive";
+> +				};
+> +
+>  				cpu6_alert: trip-alert {
+> -					temperature = <85000>;
+> +					temperature = <90000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+>  				cpu6_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <115000>;
+>  					hysteresis = <2000>;
+>  					type = "critical";
+>  				};
+> @@ -3939,16 +3988,23 @@ cpu7-thermal {
+>  			polling-delay = <1000>;
+>  			polling-delay-passive = <250>;
+>  			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU3>;
+> +			sustainable-power = <1500>;
+>  
+>  			trips {
+> +				cpu7_pa_switch_on: trip_pa_switch_on {
+> +						temperature = <68000>;
+> +						hysteresis = <2000>;
+> +						type = "passive";
+> +				};
+> +
+>  				cpu7_alert: trip-alert {
+> -					temperature = <85000>;
+> +					temperature = <90000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+>  				cpu7_crit: trip-crit {
+> -					temperature = <100000>;
+> +					temperature = <115000>;
+>  					hysteresis = <2000>;
+>  					type = "critical";
+>  				};
+> 
 
