@@ -1,672 +1,138 @@
-Return-Path: <linux-pm+bounces-27224-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27225-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78AB7AB94CF
-	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 05:34:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21EF4AB9501
+	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 05:47:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6BA70A03F1B
-	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 03:34:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E023E1BA657A
+	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 03:47:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01FD172631;
-	Fri, 16 May 2025 03:34:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA52F1D6DBB;
+	Fri, 16 May 2025 03:47:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="j1D7dmA8";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="teBKw9rO"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="G4dNYCWR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9AB92C9D
-	for <linux-pm@vger.kernel.org>; Fri, 16 May 2025 03:34:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B585D14012;
+	Fri, 16 May 2025 03:47:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747366494; cv=none; b=NxJibl+LEYl6bp/quWp4vzbfbMQCG8SFlTsUkhE7LVjrT3aO4i6xGoyDoitAdSfoHMnRe75WAopdIXOiTamy2ErGwY0naTiqiGb9NFDWQMEhG3XD/EcAEHGZZVwTHv2p9KE4jVXd7u4iiefgQH/sivHRr15SvZTNwpS9FFCxwcQ=
+	t=1747367248; cv=none; b=CjawvP3uv9uquH0IGME3gbsBNEGl481l4/GB6KhKuNKiptM61qr3JWLn78nEtfXadPN/almshlxvWOrictPCvN/DhxC2py7KnPbLvoA5c4QJxBK5iYI4LClRpUIjLvAynVBeXnm0Z3LqTXgYZ0aRmQ/kA4hhYulxXJB1D9axfOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747366494; c=relaxed/simple;
-	bh=ImN0s1W3YInp4J6OCjTVFe+S1l+/62KK4XaenjQ4M54=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=dnsB5CUWZ5wtcv+P4kZTrgN+ULgsJD2RpVWAWpCDz4QfS4vp8+440A3tLLCE+bX1gTitmC2by2fBBVIj9kVaiK+B0okxNVVVBa0ZkiaUQ7ODCPxFUKxu5z/ZgOcDFLYhaCdJXvYTx7/92+YXRvlZ/e9u96vUPyTeZv+CCA677lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (2048-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=j1D7dmA8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=teBKw9rO; arc=none smtp.client-ip=103.168.172.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fluxnic.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fluxnic.net
-Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 8B7A5114008D;
-	Thu, 15 May 2025 23:34:50 -0400 (EDT)
-Received: from phl-frontend-02 ([10.202.2.161])
-  by phl-compute-02.internal (MEProxy); Thu, 15 May 2025 23:34:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fluxnic.net; h=
-	cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1747366490; x=1747452890; bh=UJeEK1wvqh
-	/5GI00xPvic9jYaOrLKQqzETwEkdBkLnc=; b=j1D7dmA8hg6lqoiNW2oOOC/yC0
-	8vfeNbN3v49/wxRf4Wwq81RkjC35MYInZLAQtjf+k+skl9E4RvxZNmf38EPeSAzt
-	FWl5Ovs/IwxdhGJGhoxbVoOXfI9KwEBLhaxtuzt35zGwwo0wo06JX4Ef8xS6rZbH
-	yK1caIYECfdtnorluugIWKptzmjbQyy6u2xJeYdR9I9OBBije/QMrIXtlxJ/oGet
-	GAxwMHfyMBg23HK71E1hgmL36YaaozU7yyxxSR4UGcqiqjVTvdtfmxqn8EyP2VpG
-	TtfYrKrmyqKMM0eTJospu/OyUdU9JG+YCmNhRIFilcyXTVg5D4NL0oMYTw5A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1747366490; x=1747452890; bh=UJeEK1wvqh/5GI00xPvic9jYaOrLKQqzETw
-	EkdBkLnc=; b=teBKw9rOOrrNhFbnP9rtfNg/ByOhuCYVpUlGaXaGEK+Y1JL5gAX
-	0I4j9RF97b4FI4pNRQJEAyUKdlIQ7pu+zvsn/olvEqiV9zFEFkjm/lsSGgaizsY+
-	/0wXG/uSsOAXhuI325NwGIgIinCQcIKTQJAVk3CBeq8F8eGx2uYOlYUgaPLEbRVi
-	8yLvqdIykQZVJeLDF430QTh39nr2XMVl6omkjd2VKYrfUapDTM1umNNOs5d+6b/w
-	PefG1hHZunUzyF/xL3AbcvwzBrVm2qfmY6ZJiC5YIoS/yfUaq9mvkkI1clwb9uHl
-	qYZWOq17iajbzapCqM29PfVPXgewR69rS9w==
-X-ME-Sender: <xms:WrImaFPjCDkW8qFoiOkrqPdE5HcaxWHC84wXKtudxUPa-lWg2qM_2Q>
-    <xme:WrImaH94fxeJ_RWI2pEyzkxC0f9uS0a4WfrTk8rFV8u-o6WJHGP3tk-McKn_Jk07G
-    ZgH8F7K3WQn6hrS7Bo>
-X-ME-Received: <xmr:WrImaETA_LVU7T7rUf9pOEEj-zJ5ZHjCHbfLK6eJixVKoiJLQuWcHx7ZHgnR2dRQB8xQZo4pLi52Hg2Y7_h_N0Wyv8vuTk3MQdI2LVGSzMJZlhPvNQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudduieekucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepfffhvfevufgjkfhfgggtsehttdertddttddv
-    necuhfhrohhmpefpihgtohhlrghsucfrihhtrhgvuceonhhitghosehflhhugihnihgtrd
-    hnvghtqeenucggtffrrghtthgvrhhnpefgvedvhfefueejgefggfefhfelffeiieduvdeh
-    ffduheduffekkefhgeffhfefveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehnihgtohesfhhluhignhhitgdrnhgvthdpnhgspghrtghpthht
-    ohephedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnghgvlhhoghhiohgrtg
-    gthhhinhhordguvghlrhgvghhnohestgholhhlrggsohhrrgdrtghomhdprhgtphhtthho
-    pehmrghtthhhihgrshdrsghgghesghhmrghilhdrtghomhdprhgtphhtthhopegurghnih
-    gvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidq
-    mhgvughirghtvghksehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoh
-    eplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:WrImaBth7gzI70AYoD_kg_AR5VhkDXip424OG81z2UDZNzwUHR_UMA>
-    <xmx:WrImaNde5dfj5-mWfX-_yFASh6pYBb16UdFOZfVZorGOpCu2WobIVQ>
-    <xmx:WrImaN0n-WCyr0DfJxm5KDqewjGKZKZTiG0AM9GOJzj4ZvyzpnhS5w>
-    <xmx:WrImaJ8YQPwW5XzdSchSKjmeAR3wq6Hn7SVs5uGJ3FbLT2PaFaSdjg>
-    <xmx:WrImaOJJPZIzbdB1eB58nzYo6Mu6nqViGzcb2alOBQgxrfz7285dXEBN>
-Feedback-ID: i58514971:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 15 May 2025 23:34:49 -0400 (EDT)
-Received: from xanadu (xanadu.lan [192.168.1.120])
-	by yoda.fluxnic.net (Postfix) with ESMTPSA id 5F1B811A5628;
-	Thu, 15 May 2025 23:34:49 -0400 (EDT)
-Date: Thu, 15 May 2025 23:34:49 -0400 (EDT)
-From: Nicolas Pitre <nico@fluxnic.net>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-    Matthias Brugger <matthias.bgg@gmail.com>, 
-    Daniel Lezcano <daniel.lezcano@linaro.org>
-cc: linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] dts: arm64: mediatek: thermal adjustments for MT8186,
- MT8188 and MT8195
-In-Reply-To: <prp38558-r53s-756p-o6n8-795o7q87sssr@onlyvoer.pbz>
-Message-ID: <590n1r09-s4pp-0nnq-1oo6-20sos6os63op@syhkavp.arg>
-References: <prp38558-r53s-756p-o6n8-795o7q87sssr@onlyvoer.pbz>
+	s=arc-20240116; t=1747367248; c=relaxed/simple;
+	bh=s2rihKl9XDtBH5mPiYwlPCYKyYdViNQfkjpgYaOGXVw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gAmx49Ll+3uD0o+CkiuwrbyOyCkFnfoopKg4D0dkjXou1L0d8dNKlbKx5pBoe58LVS1n+7FoQY2EMp06e3I2VNc7/QHyuTM0YX3OXlI6OMhF6d2inSEg1ope0puob2mPkERFcFm+G1MzeaT4dkWdo8ys9tM7HQ3mxvpvvVIEYm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=G4dNYCWR; arc=none smtp.client-ip=54.92.39.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1747367215;
+	bh=1KyIl7Rv4fR9Xm7x89ddsmf0zM0jgC8Wn8zmDSvEkX8=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=G4dNYCWR8qcFqAw6Euzl76lpYCNB87LEWkOEe2dFvsftdp+UbEAn7hnf1+0jmSWCh
+	 c5pgO9cfxbtY5oibkS3Ld5JUBYzD/KFXPH4WM6Iev/YiGg3RzfsA+Pe0jysxWnqBEy
+	 Gigpyu6hRLNMriHqvT6YSyVlb42l3cdpTR0ALeoA=
+X-QQ-mid: zesmtpip2t1747367207tc0f146ca
+X-QQ-Originating-IP: vgaBzqfMUuElUlGxB27jZgCiRCcjbDssB8bQ6mUogdg=
+Received: from localhost.localdomain ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 16 May 2025 11:46:45 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 5041222066668530054
+EX-QQ-RecipientCnt: 7
+From: tuhaowen <tuhaowen@uniontech.com>
+To: pavel@kernel.org,
+	len.brown@intel.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	huangbibo@uniontech.com,
+	wangyuli@uniontech.com,
+	tuhaowen <tuhaowen@uniontech.com>
+Subject: [PATCH] PM/console: Fix the black screen issue
+Date: Fri, 16 May 2025 11:46:43 +0800
+Message-Id: <20250516034643.22355-1-tuhaowen@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: N0zPMTspoMaf97td3EsIO7VorJ54SVVu6b/94hfk49uAVMthh5mJ6ox3
+	GDjcgbcUQk/PW98Q4jwmvF+hLu2+FnogIsY/781aY9R2Q1XT8rf6I/MXdfpq9nRQT8FFU6s
+	xmjBEpJYAVfizZC4Q3F7ayMGmc5gLLApZLKZUa7MCxPlpcKPF6kBgCB5Gj069Zu7EajjQYE
+	XW0APoNhb+Ec5SVogBHJz93/eUwD8B8v+Lv4Kh9fO+rbq0mjrynKF6FpYBhjPbqswdVI7U0
+	etpLeH1Q3LBvBHmajISwv41t3SI6vLTentL7AZ+OkYPjR3CqRfzY81E3OtiJJtt/nBgNvJq
+	euwc2+05S8wM+HDN71lw6Kn74Axtd3+EfqCjz2D4ErLncXoHw2wXkrTfMCYfj3UFvDSMoMa
+	YWWVGm+mEztBCBXRF5Bo3FQ8aH+FJHO1dLRwLOjF1tTiWP8TA1Z0H31AtlIvs4eSmZrxRvQ
+	hu68N4LBXjsOJ7dYrUDeeY9UMJVKpFnQwakDq6z/f4WH/TNBs/CWs68MkzE4mc/T/ZPBf7f
+	dgrCi0aWLpTh7O3UOktlEw2vncxX0SlVqyz5+HJkHtMBdfjBxz8dsGff+UrjGFMKHFzNQI9
+	VTdEzhQYceBF55At6ocIFkBANS7DEzj/6TX9ZbeBM2/VI4GsSaBnFP/o+nxwTCf7vZyJe8w
+	u2tWy8Y/zaoUc9OpoQkgOcgnV7HJGDHo/HtGeVCmY2gWCrgiK4eeBC3tdYyzpHWk6sIwavm
+	pwScrq8U5UZEjkGm7UQb+SAzYLvzL8fxrVeqh3PrEobxdoniwtOrKT9ZhZ6anNhY5jzzYvo
+	TVPPswu0CHDBqUcRnPg5M6jnZwt96qIx+CMftXQ3UKifCXE/rSVfm0MA5jZfaporImuHKUJ
+	sMMeeqkpmOLa2Src/VLKMRj85N0GSAmwWOk5O4Mg+LCWkJ6l5Yz9ols4BV0LntxBVAgPzJ/
+	WBn23iAnan99WsPuTirE4/O6iN+irXzfZZukMrT6PHU40KVSJxuh+AZbXZd6wKc7qyts=
+X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
+X-QQ-RECHKSPAM: 0
 
-Gentle ping.
+When the computer enters sleep status without a monitor
+connected, the system switches the console to the virtual
+terminal tty63(SUSPEND_CONSOLE).
 
-On Fri, 18 Apr 2025, Nicolas Pitre wrote:
+If a monitor is subsequently connected before waking up,
+the system skips the required VT restoration process
+during wake-up, leaving the console on tty63 instead of
+switching back to tty1.
 
-> Adjust temperature threshold values. Provide the "switch on" thermal 
-> trip point to be used by the power allocator governor.
-> 
-> All numbers were provided by Mediatek.
-> 
-> Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-> index b91f88ffae..bfea811491 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-> @@ -2229,22 +2229,23 @@ cpu-little0-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <150>;
->  			thermal-sensors = <&lvts MT8186_LITTLE_CPU0>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> -				cpu_little0_alert0: trip-alert0 {
-> -					temperature = <85000>;
-> +				cpu_little0_pa_switch_on: trip_pa_switch_on {
-> +					temperature = <58000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
-> -				cpu_little0_alert1: trip-alert1 {
-> -					temperature = <95000>;
-> +				cpu_little0_alert0: trip-alert {
-> +					temperature = <82000>;
->  					hysteresis = <2000>;
-> -					type = "hot";
-> +					type = "passive";
->  				};
->  
->  				cpu_little0_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <103000>;
->  					hysteresis = <0>;
->  					type = "critical";
->  				};
-> @@ -2267,22 +2268,23 @@ cpu-little1-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <150>;
->  			thermal-sensors = <&lvts MT8186_LITTLE_CPU1>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> -				cpu_little1_alert0: trip-alert0 {
-> -					temperature = <85000>;
-> +				cpu_little1_pa_switch_on: trip_pa_switch_on {
-> +					temperature = <58000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
-> -				cpu_little1_alert1: trip-alert1 {
-> -					temperature = <95000>;
-> +				cpu_little1_alert0: trip-alert {
-> +					temperature = <82000>;
->  					hysteresis = <2000>;
-> -					type = "hot";
-> +					type = "passive";
->  				};
->  
->  				cpu_little1_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <103000>;
->  					hysteresis = <0>;
->  					type = "critical";
->  				};
-> @@ -2305,22 +2307,23 @@ cpu-little2-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <150>;
->  			thermal-sensors = <&lvts MT8186_LITTLE_CPU2>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> -				cpu_little2_alert0: trip-alert0 {
-> -					temperature = <85000>;
-> +				cpu_little2_pa_switch_on: trip_pa_switch_on {
-> +					temperature = <58000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
-> -				cpu_little2_alert1: trip-alert1 {
-> -					temperature = <95000>;
-> +				cpu_little2_alert0: trip-alert {
-> +					temperature = <82000>;
->  					hysteresis = <2000>;
-> -					type = "hot";
-> +					type = "passive";
->  				};
->  
->  				cpu_little2_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <103000>;
->  					hysteresis = <0>;
->  					type = "critical";
->  				};
-> @@ -2454,22 +2457,23 @@ cpu-big0-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <100>;
->  			thermal-sensors = <&lvts MT8186_BIG_CPU0>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> -				cpu_big0_alert0: trip-alert0 {
-> -					temperature = <85000>;
-> +				cpu_big0_pa_switch_on: trip_pa_switch_on {
-> +					temperature = <58000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
-> -				cpu_big0_alert1: trip-alert1 {
-> -					temperature = <95000>;
-> +				cpu_big0_alert0: trip-alert {
-> +					temperature = <82000>;
->  					hysteresis = <2000>;
-> -					type = "hot";
-> +					type = "passive";
->  				};
->  
->  				cpu_big0_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <103000>;
->  					hysteresis = <0>;
->  					type = "critical";
->  				};
-> @@ -2488,22 +2492,23 @@ cpu-big1-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <100>;
->  			thermal-sensors = <&lvts MT8186_BIG_CPU1>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> -				cpu_big1_alert0: trip-alert0 {
-> -					temperature = <85000>;
-> +				cpu_big1_pa_switch_on: trip_pa_switch_on {
-> +					temperature = <58000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
-> -				cpu_big1_alert1: trip-alert1 {
-> -					temperature = <95000>;
-> +				cpu_big1_alert0: trip-alert {
-> +					temperature = <82000>;
->  					hysteresis = <2000>;
-> -					type = "hot";
-> +					type = "passive";
->  				};
->  
->  				cpu_big1_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <103000>;
->  					hysteresis = <0>;
->  					type = "critical";
->  				};
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8188.dtsi b/arch/arm64/boot/dts/mediatek/mt8188.dtsi
-> index 69a8423d38..c2ac47c77c 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8188.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8188.dtsi
-> @@ -472,22 +472,23 @@ cpu-little0-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <150>;
->  			thermal-sensors = <&lvts_mcu MT8188_MCU_LITTLE_CPU0>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> -				cpu_little0_alert0: trip-alert0 {
-> -					temperature = <85000>;
-> +				cpu_little0_pa_switch_on: trip-pa-switch_on {
-> +					temperature = <68000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
-> -				cpu_little0_alert1: trip-alert1 {
-> -					temperature = <95000>;
-> +				cpu_little0_alert0: trip-alert {
-> +					temperature = <85000>;
->  					hysteresis = <2000>;
-> -					type = "hot";
-> +					type = "passive";
->  				};
->  
->  				cpu_little0_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <115000>;
->  					hysteresis = <0>;
->  					type = "critical";
->  				};
-> @@ -510,22 +511,23 @@ cpu-little1-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <150>;
->  			thermal-sensors = <&lvts_mcu MT8188_MCU_LITTLE_CPU1>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> -				cpu_little1_alert0: trip-alert0 {
-> -					temperature = <85000>;
-> +				cpu_little1_pa_switch_on: trip-pa-switch_on {
-> +					temperature = <68000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
-> -				cpu_little1_alert1: trip-alert1 {
-> -					temperature = <95000>;
-> +				cpu_little1_alert0: trip-alert {
-> +					temperature = <85000>;
->  					hysteresis = <2000>;
-> -					type = "hot";
-> +					type = "passive";
->  				};
->  
->  				cpu_little1_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <115000>;
->  					hysteresis = <0>;
->  					type = "critical";
->  				};
-> @@ -548,22 +550,23 @@ cpu-little2-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <150>;
->  			thermal-sensors = <&lvts_mcu MT8188_MCU_LITTLE_CPU2>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> -				cpu_little2_alert0: trip-alert0 {
-> -					temperature = <85000>;
-> +				cpu_little2_pa_switch_on: trip-pa-switch_on {
-> +					temperature = <68000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
-> -				cpu_little2_alert1: trip-alert1 {
-> -					temperature = <95000>;
-> +				cpu_little2_alert0: trip-alert {
-> +					temperature = <85000>;
->  					hysteresis = <2000>;
-> -					type = "hot";
-> +					type = "passive";
->  				};
->  
->  				cpu_little2_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <115000>;
->  					hysteresis = <0>;
->  					type = "critical";
->  				};
-> @@ -586,22 +589,23 @@ cpu-little3-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <150>;
->  			thermal-sensors = <&lvts_mcu MT8188_MCU_LITTLE_CPU3>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> -				cpu_little3_alert0: trip-alert0 {
-> -					temperature = <85000>;
-> +				cpu_little3_pa_switch_on: trip-pa-switch_on {
-> +					temperature = <68000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
-> -				cpu_little3_alert1: trip-alert1 {
-> -					temperature = <95000>;
-> +				cpu_little3_alert0: trip-alert {
-> +					temperature = <85000>;
->  					hysteresis = <2000>;
-> -					type = "hot";
-> +					type = "passive";
->  				};
->  
->  				cpu_little3_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <115000>;
->  					hysteresis = <0>;
->  					type = "critical";
->  				};
-> @@ -624,22 +628,23 @@ cpu-big0-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <100>;
->  			thermal-sensors = <&lvts_mcu MT8188_MCU_BIG_CPU0>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> -				cpu_big0_alert0: trip-alert0 {
-> -					temperature = <85000>;
-> +				cpu_big0_pa_switch_on: trip-pa-switch_on {
-> +					temperature = <68000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
-> -				cpu_big0_alert1: trip-alert1 {
-> -					temperature = <95000>;
-> +				cpu_big0_alert0: trip-alert {
-> +					temperature = <85000>;
->  					hysteresis = <2000>;
-> -					type = "hot";
-> +					type = "passive";
->  				};
->  
->  				cpu_big0_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <115000>;
->  					hysteresis = <0>;
->  					type = "critical";
->  				};
-> @@ -658,22 +663,23 @@ cpu-big1-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <100>;
->  			thermal-sensors = <&lvts_mcu MT8188_MCU_BIG_CPU1>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> -				cpu_big1_alert0: trip-alert0 {
-> -					temperature = <85000>;
-> +				cpu_big1_pa_switch_on: trip-pa-switch_on {
-> +					temperature = <68000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
-> -				cpu_big1_alert1: trip-alert1 {
-> -					temperature = <95000>;
-> +				cpu_big1_alert0: trip-alert {
-> +					temperature = <85000>;
->  					hysteresis = <2000>;
-> -					type = "hot";
-> +					type = "passive";
->  				};
->  
->  				cpu_big1_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <115000>;
->  					hysteresis = <0>;
->  					type = "critical";
->  				};
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> index 4f2dc0a755..06631760c2 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> @@ -3729,16 +3729,23 @@ cpu0-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <250>;
->  			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU0>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> +				cpu0_pa_switch_on: trip_pa_switch_on {
-> +						temperature = <68000>;
-> +						hysteresis = <2000>;
-> +						type = "passive";
-> +				};
-> +
->  				cpu0_alert: trip-alert {
-> -					temperature = <85000>;
-> +					temperature = <90000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
->  				cpu0_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <115000>;
->  					hysteresis = <2000>;
->  					type = "critical";
->  				};
-> @@ -3759,16 +3766,23 @@ cpu1-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <250>;
->  			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU1>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> +				cpu1_pa_switch_on: trip_pa_switch_on {
-> +						temperature = <68000>;
-> +						hysteresis = <2000>;
-> +						type = "passive";
-> +				};
-> +
->  				cpu1_alert: trip-alert {
-> -					temperature = <85000>;
-> +					temperature = <90000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
->  				cpu1_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <115000>;
->  					hysteresis = <2000>;
->  					type = "critical";
->  				};
-> @@ -3789,16 +3803,23 @@ cpu2-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <250>;
->  			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU2>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> +				cpu2_pa_switch_on: trip_pa_switch_on {
-> +						temperature = <68000>;
-> +						hysteresis = <2000>;
-> +						type = "passive";
-> +				};
-> +
->  				cpu2_alert: trip-alert {
-> -					temperature = <85000>;
-> +					temperature = <90000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
->  				cpu2_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <115000>;
->  					hysteresis = <2000>;
->  					type = "critical";
->  				};
-> @@ -3819,16 +3840,23 @@ cpu3-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <250>;
->  			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU3>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> +				cpu3_pa_switch_on: trip_pa_switch_on {
-> +						temperature = <68000>;
-> +						hysteresis = <2000>;
-> +						type = "passive";
-> +				};
-> +
->  				cpu3_alert: trip-alert {
-> -					temperature = <85000>;
-> +					temperature = <90000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
->  				cpu3_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <115000>;
->  					hysteresis = <2000>;
->  					type = "critical";
->  				};
-> @@ -3849,16 +3877,23 @@ cpu4-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <250>;
->  			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU0>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> +				cpu4_pa_switch_on: trip_pa_switch_on {
-> +						temperature = <68000>;
-> +						hysteresis = <2000>;
-> +						type = "passive";
-> +				};
-> +
->  				cpu4_alert: trip-alert {
-> -					temperature = <85000>;
-> +					temperature = <90000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
->  				cpu4_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <115000>;
->  					hysteresis = <2000>;
->  					type = "critical";
->  				};
-> @@ -3879,16 +3914,23 @@ cpu5-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <250>;
->  			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU1>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> +				cpu5_pa_switch_on: trip_pa_switch_on {
-> +						temperature = <68000>;
-> +						hysteresis = <2000>;
-> +						type = "passive";
-> +				};
-> +
->  				cpu5_alert: trip-alert {
-> -					temperature = <85000>;
-> +					temperature = <90000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
->  				cpu5_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <115000>;
->  					hysteresis = <2000>;
->  					type = "critical";
->  				};
-> @@ -3909,16 +3951,23 @@ cpu6-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <250>;
->  			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU2>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> +				cpu6_pa_switch_on: trip_pa_switch_on {
-> +						temperature = <68000>;
-> +						hysteresis = <2000>;
-> +						type = "passive";
-> +				};
-> +
->  				cpu6_alert: trip-alert {
-> -					temperature = <85000>;
-> +					temperature = <90000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
->  				cpu6_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <115000>;
->  					hysteresis = <2000>;
->  					type = "critical";
->  				};
-> @@ -3939,16 +3988,23 @@ cpu7-thermal {
->  			polling-delay = <1000>;
->  			polling-delay-passive = <250>;
->  			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU3>;
-> +			sustainable-power = <1500>;
->  
->  			trips {
-> +				cpu7_pa_switch_on: trip_pa_switch_on {
-> +						temperature = <68000>;
-> +						hysteresis = <2000>;
-> +						type = "passive";
-> +				};
-> +
->  				cpu7_alert: trip-alert {
-> -					temperature = <85000>;
-> +					temperature = <90000>;
->  					hysteresis = <2000>;
->  					type = "passive";
->  				};
->  
->  				cpu7_crit: trip-crit {
-> -					temperature = <100000>;
-> +					temperature = <115000>;
->  					hysteresis = <2000>;
->  					type = "critical";
->  				};
-> 
+Signed-off-by: tuhaowen <tuhaowen@uniontech.com>
+---
+ kernel/power/console.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/power/console.c b/kernel/power/console.c
+index fcdf0e14a47d..832e04bf5439 100644
+--- a/kernel/power/console.c
++++ b/kernel/power/console.c
+@@ -16,6 +16,7 @@
+ #define SUSPEND_CONSOLE	(MAX_NR_CONSOLES-1)
+ 
+ static int orig_fgconsole, orig_kmsg;
++static int vt_switch_done;
+ 
+ static DEFINE_MUTEX(vt_switch_mutex);
+ 
+@@ -136,15 +137,19 @@ void pm_prepare_console(void)
+ 	if (orig_fgconsole < 0)
+ 		return;
+ 
++	vt_switch_done = 1;
++
+ 	orig_kmsg = vt_kmsg_redirect(SUSPEND_CONSOLE);
+ 	return;
+ }
+ 
+ void pm_restore_console(void)
+ {
+-	if (!pm_vt_switch())
++	if (!pm_vt_switch() && !vt_switch_done)
+ 		return;
+ 
++	vt_switch_done = 0;
++
+ 	if (orig_fgconsole >= 0) {
+ 		vt_move_to_console(orig_fgconsole, 0);
+ 		vt_kmsg_redirect(orig_kmsg);
+-- 
+2.20.1
+
 
