@@ -1,273 +1,157 @@
-Return-Path: <linux-pm+bounces-27222-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27223-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57B05AB92B6
-	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 01:14:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4659AB938F
+	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 03:15:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A07E174F28
-	for <lists+linux-pm@lfdr.de>; Thu, 15 May 2025 23:14:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFA663B9C80
+	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 01:15:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A946E28C85B;
-	Thu, 15 May 2025 23:14:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0925322126F;
+	Fri, 16 May 2025 01:15:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="oEJD+/+i"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yasT5pOt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81B8289350;
-	Thu, 15 May 2025 23:13:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8A92AEED
+	for <linux-pm@vger.kernel.org>; Fri, 16 May 2025 01:15:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747350843; cv=none; b=SXpSwf0LqeLGw8SQaKlFgu//KnH6Y4tr79jK1VJD1co+nqxDCRb/skWlT2ua59gKg+RlMGDvMiL5XoMEl/eqQ6IkksQFd/Aom6swMrKHdqo4H3z/IAdgn9ltZq6p4qbCVY48tg3MwyLkcLfS53aAUJlZ08hLD0IsO8J7NNMqQ8c=
+	t=1747358147; cv=none; b=Fp6W2vuMbdzXcbOSCWLNWxlmW5IvvKlJjIJEMe0fkGlsmmC8zLXyZSRQhq+hIgNWPBKowZ5FAi+hYg8XdupxsmxosQ0v/kAPNiKqyonPtZGTMQEngGpXAN+AulkImO2j+GTG7FeFLgxAns3FLYqHeJKRKkfqOY3ixGgGzV4VUAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747350843; c=relaxed/simple;
-	bh=KqMuxf9SaKWHq2sSCg2ifS1SPQDPbNmvhFTbFsJ80aA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PHi++mEN48c1U4H1Zqt4Qf4tahv/eUHBOLmgL7anj3WD2B7wz/0JKoXNwi+h5T+yOGgxWmgl/0tbWVXZvtjnv8s9BJduwLcm9R8aSF8gPtIx0Sw6kfCgGJvJ43pEY+PiPfGGyWO1sJoxnEXdiB4LuHa0mXWAJpSRUKAWJa7gDWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=oEJD+/+i; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=l2HTjJLXCkXP9njX/Q5a/gHMnA3q+ubjVW5ykhl9oWI=; b=oEJD+/+ivxS5ZnxMiRO3xEvLuK
-	sZ+vLy8qZArr8TTsXZS509uANu+4A16KAEc0ROcLCe83KbXiMnNhxpW5lstEsXgrAIJJie3ZgVjt8
-	PM60dkM9bevTKEBQ+UYye/perG3OQwDFZGo4XgvKtTGdfjRJkIYAqBl+8RTZ5fNFHfCd7TXP/IgoH
-	vqmH2tU6VXbYz/tK5Fl4fCqNpIoa5viMf2mySByX05s/2//nFTFEvAnoIHXzAJP3GWh3X472LrF2l
-	u5tPCxgW144uZsOufE8RS1CcN846R0lL6gt1T/I9ZeTNYjJeuo6dRAMnryseIjFszECXASDUeZK8+
-	BZjavgPQ==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
-	id 1uFhlo-000000000Tl-0jCW;
-	Thu, 15 May 2025 23:13:46 +0000
-Message-ID: <f79ad154-2bbe-4d21-8cd2-6ae3e5be2ed7@infradead.org>
-Date: Thu, 15 May 2025 16:13:39 -0700
+	s=arc-20240116; t=1747358147; c=relaxed/simple;
+	bh=NIzlTsdcB+N3toFqpEFnhBW4WHNKbcmfhgrOkvMx7bE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=SHtpW/uM/cazeSBviXmQQNRtNdm0MriY08C6Y2nK6/QsOuNstj8u6Z9eekwY3JDCoraWxRil0PSusL0JQJjSHzQmwec86slp1opR5EBtIwWoV4rdX0oumAT3W5iYT5/UPbV8Yt3II7RL7jErio2/E+biGipDArJ4toLZwaAjTF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yasT5pOt; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b115383fcecso935277a12.1
+        for <linux-pm@vger.kernel.org>; Thu, 15 May 2025 18:15:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1747358145; x=1747962945; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XVMuD/PalT/pmzH7BG3QdDQAVO8SDVrpqfTHUU96orc=;
+        b=yasT5pOtkKZ2HIA+K53Sqk6H4Ev8CXGSUQ58YSHc821Ly+j4DoAPt9SguA4b+QGp7p
+         3kXm3LYhtjpsz+pRT6dskwUlHoo1nU+BtBUHdivyiBqYR7IeWMld0yiWyG63qXqOkZim
+         PpwHdxjrSeV8Se24vrlRbQl/1p1HvizesDBX++ds8cl2eg+nE3NQ7WiutdmQSHRq2hY0
+         2obLDB+RR2cz4uNHhrVhhkLrbEqcVkJA8sRydxDA7reF+FlstnY4L89fNTYBN5JyZAC6
+         UqRO7Q2G0L1M8bHS91dmzw7fnyphVs0p5QNOIg3d2kM7AqpoFLvxsBEjWlJETHO+BgaB
+         iAvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747358145; x=1747962945;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XVMuD/PalT/pmzH7BG3QdDQAVO8SDVrpqfTHUU96orc=;
+        b=N/r7hCDstpItV08htITL3hdOFfBZSMrcT0k7V+TXZjIV73kC/adR6wmBNMATu1vwqn
+         MmbuEOuGE+4mk3mqKK7B9wQoiOLymFnTWJ8z2ic3o50vw5vERFvLvfBueiSbGAR5wvKl
+         4+OMlJOg7so+jVQoKbt9W9RLfqKBDbBYEI17vf4yv905gF9AZLLN70t9sutjVLcz90lP
+         seId9ABf2ZzAsQp0cF/CUeJbHbjJY7QS51vRngoAFrz6Ikrvw3DEeflp6cqrzDApEtPe
+         iZE28FEI7ge43B44OnpyOvleRNQELi+a0F6hqvyuKQKN4rOTJlIjr04NnCraciYLlmrW
+         LqAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX/PdAPi8PqDa3jIOrF/hljAVh9u+3ZSCdt0MpICrIdJ2isEh+/SabE/4TuFRlcUDeobhc2VSV4gA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz39pd7vEy+EVCbG+wyCXXOrJzNrsOp5G7CCupOFupNB7NZPrYP
+	BmQzXbqRDWQ1dyAHD1cBdKcOBMkTUYSvpJQ+TofhdwhlBltljnwVPOPbFjjLDv5uk8OAnKLGBPG
+	MiH/vMg==
+X-Google-Smtp-Source: AGHT+IG5J9s2NMDhY7/8A4O+MyMGUN6e8x3str2oF1VXVAVtOy4jEWK/Fd7BwjZNXFkmEs5DGaZLrHwGgt0=
+X-Received: from pjyp5.prod.google.com ([2002:a17:90a:e705:b0:30e:7783:edb6])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3905:b0:30e:6a25:e4e6
+ with SMTP id 98e67ed59e1d1-30e7d5acafcmr1469988a91.22.1747358145046; Thu, 15
+ May 2025 18:15:45 -0700 (PDT)
+Date: Thu, 15 May 2025 18:15:43 -0700
+In-Reply-To: <e12abcca-b7b4-404d-b379-8636e5b68813@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 01/13] Documentation: x86: Add AMD Hardware Feedback
- Interface documentation
-To: Mario Limonciello <superm1@kernel.org>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: Mario Limonciello <mario.limonciello@amd.com>,
- Perry Yuan <perry.yuan@amd.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
- "H . Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
- Huang Rui <ray.huang@amd.com>, "Gautham R . Shenoy"
- <gautham.shenoy@amd.com>, "Rafael J . Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- "open list:AMD HETERO CORE HARDWARE FEEDBACK DRIVER"
- <platform-driver-x86@vger.kernel.org>,
- "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
- <linux-kernel@vger.kernel.org>,
- "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
- "open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>,
- Bagas Sanjaya <bagasdotme@gmail.com>
-References: <20250515211950.3102922-1-superm1@kernel.org>
- <20250515211950.3102922-2-superm1@kernel.org>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250515211950.3102922-2-superm1@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20250513203803.2636561-1-sohil.mehta@intel.com>
+ <20250513203803.2636561-2-sohil.mehta@intel.com> <aCSljsvI0A-HC_DT@google.com>
+ <e12abcca-b7b4-404d-b379-8636e5b68813@intel.com>
+Message-ID: <aCaRvwnkXf07Mtue@google.com>
+Subject: Re: [PATCH v6 1/9] x86/fred, KVM: VMX: Pass event data to the FRED
+ entry point from KVM
+From: Sean Christopherson <seanjc@google.com>
+To: Sohil Mehta <sohil.mehta@intel.com>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, Xin Li <xin@zytor.com>, 
+	"H . Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Tony Luck <tony.luck@intel.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Andrew Cooper <andrew.cooper3@citrix.com>, 
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
+	Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>, 
+	Sandipan Das <sandipan.das@amd.com>, linux-perf-users@vger.kernel.org, 
+	linux-edac@vger.kernel.org, kvm@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-Hi,
-
-On 5/15/25 2:19 PM, Mario Limonciello wrote:
-> From: Perry Yuan <Perry.Yuan@amd.com>
+On Wed, May 14, 2025, Sohil Mehta wrote:
+> On 5/14/2025 7:15 AM, Sean Christopherson wrote:
+> > Compile tested only...
+> > 
 > 
-> Introduce a new documentation file, `amd_hfi.rst`, which delves into the
-> implementation details of the AMD Hardware Feedback Interface and its
-> associated driver, `amd_hfi`. This documentation describes how the
-> driver provides hint to the OS scheduling which depends on the capability
-> of core performance and efficiency ranking data.
+> No worries. I'll test it out. I am assuming you want this patch to go as
+> part of this series.
+
+Yes please.  I can also post it separately, but that seems unnecessary.
+
+> > --
+> > From: Sean Christopherson <seanjc@google.com>
+> > Date: Wed, 14 May 2025 07:07:55 -0700
+> > Subject: [PATCH] x86/fred: Provide separate IRQ vs. NMI wrappers for "entry"
+> >  from KVM
+> > 
+> > Provide separate wrappers for forwarding IRQs vs NMIs from KVM in
+> > anticipation of adding support for NMI source reporting, which will add
+> > an NMI-only parameter, i.e. will further pollute the current API with a
+> > param that is a hardcoded for one of the two call sites.
+> > 
+> > Opportunistically tag the non-FRED NMI wrapper __always_inline, as the
+> > compiler could theoretically generate a function call and trigger and a
+> > (completely benign) "leaving noinstr" warning.
+> > 
 > 
-> This documentation describes
-> * The design of the driver
-> * How the driver provides hints to the OS scheduling
-> * How the driver interfaces with the kernel for efficiency ranking data.
+> If this is really a concern, wouldn't there be similar semantics in
+> other places as well?
+
+There are, e.g. the stubs in include/linux/context_tracking_state.h and many
+other places.  It looks ridiculous, but the compiler will generate RET+CALL for
+literal nops if the right sanitizers are enabled.  E.g. see commit
+432727f1cb6e ("KVM: VMX: Always inline to_vmx() and to_kvm_vmx()").
+
+> > @@ -70,14 +71,26 @@ __visible void fred_entry_from_user(struct pt_regs *regs);
+> >  __visible void fred_entry_from_kernel(struct pt_regs *regs);
+> >  __visible void __fred_entry_from_kvm(struct pt_regs *regs);
+> >  
+> > -/* Can be called from noinstr code, thus __always_inline */
+> > -static __always_inline void fred_entry_from_kvm(unsigned int type, unsigned int vector)
+> > +/* Must be called from noinstr code, thus __always_inline */
+> > +static __always_inline void fred_nmi_from_kvm(void)
+> >  {
+> >  	struct fred_ss ss = {
+> >  		.ss     =__KERNEL_DS,
+> > -		.type   = type,
+> > +		.type   = EVENT_TYPE_NMI,
+> > +		.vector = NMI_VECTOR,
+> > +		.nmi    = true,
+> > +		.lm     = 1,
+> > +	};
+> > +
+> > +	asm_fred_entry_from_kvm(ss);
+> > +}
+> > +
 > 
-> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  Documentation/arch/x86/amd-hfi.rst | 133 +++++++++++++++++++++++++++++
->  Documentation/arch/x86/index.rst   |   1 +
->  2 files changed, 134 insertions(+)
->  create mode 100644 Documentation/arch/x86/amd-hfi.rst
-> 
-> diff --git a/Documentation/arch/x86/amd-hfi.rst b/Documentation/arch/x86/amd-hfi.rst
-> new file mode 100644
-> index 0000000000000..8c1799acb6fe6
-> --- /dev/null
-> +++ b/Documentation/arch/x86/amd-hfi.rst
-> @@ -0,0 +1,133 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +======================================================================
-> +Hardware Feedback Interface For Hetero Core Scheduling On AMD Platform
-> +======================================================================
-> +
-> +:Copyright: 2025 Advanced Micro Devices, Inc. All Rights Reserved.
-> +
-> +:Author: Perry Yuan <perry.yuan@amd.com>
-> +:Author: Mario Limonciello <mario.limonciello@amd.com>
-> +
-> +Overview
-> +--------
-> +
-> +AMD Heterogeneous Core implementations are comprised of more than one
-> +architectural class and CPUs are comprised of cores of various efficiency and
-> +power capabilities: performance-oriented *classic cores* and power-efficient
-> +*dense cores*. As such, power management strategies must be designed to
-> +accommodate the complexities introduced by incorporating different core types.
-> +Heterogeneous systems can also extend to more than two architectural classes
-> +as well. The purpose of the scheduling feedback mechanism is to provide
-> +information to the operating system scheduler in real time such that the
-> +scheduler can direct threads to the optimal core.
-> +
-> +The goal of AMD's heterogeneous architecture is to attain power benefit by
-> +sending background thread to the dense cores while sending high priority
+> The original code uses spaces for alignment. Since we are modifying it,
+> I am thinking of changing it to tabs.
 
-                      threads
-
-> +threads to the classic cores. From a performance perspective, sending
-> +background threads to dense cores can free up power headroom and allow the
-> +classic cores to optimally service demanding threads. Furthermore, the area
-> +optimized nature of the dense cores allows for an increasing number of
-> +physical cores. This improved core density will have positive multithreaded
-> +performance impact.
-> +
-> +AMD Heterogeneous Core Driver
-> +-----------------------------
-> +
-> +The ``amd_hfi`` driver delivers the operating system a performance and energy
-> +efficiency capability data for each CPU in the system. The scheduler can use
-> +the ranking data from the HFI driver to make task placement decisions.
-> +
-> +Thread Classification and Ranking Table Interaction
-> +----------------------------------------------------
-> +
-> +The thread classification is used to select into a ranking table that
-> +describes an efficiency and performance ranking for each classification.
-> +
-> +Threads are classified during runtime into enumerated classes. The classes
-> +represent thread performance/power characteristics that may benefit from
-> +special scheduling behaviors. The below table depicts an example of thread
-> +classification and a preference where a given thread should be scheduled
-> +based on its thread class. The real time thread classification is consumed
-> +by the operating system and is used to inform the scheduler of where the
-> +thread should be placed.
-> +
-> +Thread Classification Example Table
-> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> ++----------+----------------+-------------------------------+---------------------+---------+
-> +| class ID | Classification | Preferred scheduling behavior | Preemption priority | Counter |
-> ++----------+----------------+-------------------------------+---------------------+---------+
-> +| 0        | Default        | Performant                    | Highest             |         |
-> ++----------+----------------+-------------------------------+---------------------+---------+
-> +| 1        | Non-scalable   | Efficient                     | Lowest              | PMCx1A1 |
-> ++----------+----------------+-------------------------------+---------------------+---------+
-> +| 2        | I/O bound      | Efficient                     | Lowest              | PMCx044 |
-> ++----------+----------------+-------------------------------+---------------------+---------+
-> +
-> +Thread classification is performed by the hardware each time that the thread is switched out.
-> +Threads that don't meet any hardware specified criteria will be classified as "default".
-
-                        I would say                        are classified
-
-> +
-> +AMD Hardware Feedback Interface
-> +--------------------------------
-> +
-> +The Hardware Feedback Interface provides to the operating system information
-> +about the performance and energy efficiency of each CPU in the system. Each
-> +capability is given as a unit-less quantity in the range [0-255]. A higher
-> +performance value indicates higher performance capability, and a higher
-> +efficiency value indicates more efficiency. Energy efficiency and performance
-> +are reported in separate capabilities in the shared memory based ranking table.
-> +
-> +These capabilities may change at runtime as a result of changes in the
-> +operating conditions of the system or the action of external factors.
-> +Power Management FW is responsible for detecting events that would require
-
-s/FW/firmware/                                                s/would//
-
-> +a reordering of the performance and efficiency ranking. Table updates would
-
-                                                                       s/would//
-
-> +happen relatively infrequently and occur on the time scale of seconds or more.
-> +
-> +The following events trigger a table update:
-> +    * Thermal Stress Events
-> +    * Silent Compute
-> +    * Extreme Low Battery Scenarios
-> +
-> +The kernel or a userspace policy daemon can use these capabilities to modify
-> +task placement decisions. For instance, if either the performance or energy
-> +capabilities of a given logical processor becomes zero, it is an indication
-> +that the hardware recommends to the operating system to not schedule any tasks
-> +on that processor for performance or energy efficiency reasons, respectively.
-> +
-> +Implementation details for Linux
-> +--------------------------------
-> +
-> +The implementation of threads scheduling consists of the following steps:
-> +
-> +1. A thread is spawned and scheduled to the ideal core using the default
-> +   heterogeneous scheduling policy.
-> +2. The processor profiles thread execution and assigns an enumerated
-> +   classification ID.
-> +   This classification is communicated to the OS via logical processor
-> +   scope MSR.
-> +3. During the thread context switch out the operating system consumes the
-> +   workload(WL) classification which resides in a logical processor scope MSR.
-
-      workload (WL)
-
-> +4. The OS triggers the hardware to clear its history by writing to an MSR,
-> +   after consuming the WL classification and before switching in the new thread.
-> +5. If due to the classification, ranking table, and processor availability,
-> +   the thread is not on its ideal processor, the OS will then consider
-> +   scheduling the thread on its ideal processor (if available).
-> +
-> +Ranking Table
-> +-------------
-> +The ranking table is a shared memory region that is used to communicate the
-> +performance and energy efficiency capabilities of each CPU in the system.
-> +
-> +The ranking table design includes rankings for each APIC ID in the system and
-> +rankings both for performance and efficiency for each workload classification.
-> +
-> +.. kernel-doc:: drivers/platform/x86/amd/hfi/hfi.c
-> +   :doc: amd_shmem_info
-> +
-> +Ranking Table update
-> +---------------------------
-> +The power management firmware issues an platform interrupt after updating the
-> +ranking table and is ready for the operating system to consume it. CPUs receive
-> +such interrupt and read new ranking table from shared memory which PCCT table
-> +has provided, then ``amd_hfi`` driver parse the new table to provide new
-
-                                         parses
-
-> +consume data for scheduling decisions.
-
-
--- 
-~Randy
-
+Oof, yeah, definitely do that.
 
