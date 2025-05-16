@@ -1,225 +1,188 @@
-Return-Path: <linux-pm+bounces-27233-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27234-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 128D5AB9EDC
-	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 16:45:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AA4BAB9F47
+	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 17:04:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB3751BC5137
-	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 14:45:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A1C75067CD
+	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 15:00:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA6E81A0730;
-	Fri, 16 May 2025 14:45:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15F071F417F;
+	Fri, 16 May 2025 14:58:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nAwbAjAV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V6xMM9Jw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CEDC193062
-	for <linux-pm@vger.kernel.org>; Fri, 16 May 2025 14:45:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB2101F2BAB;
+	Fri, 16 May 2025 14:58:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747406726; cv=none; b=vEpaHO8F5kpLlvUCPby6CgGEFahpO9dAye/dpsr/3hfbcF0dny11es2j3bOM6pS/RC6zR8XCq4abBHi+jn8SHWigPqqt+fp9YYGmtx9Vnyv2mlpvBSyKScEAVgCg9RD7uZ0+07bbeMQSuJHY6LjHZPwKZTWUT/0Nd3/QfftN7S8=
+	t=1747407526; cv=none; b=ijB6i7Kcvb9mtu4+tDlj1E803NOeHIlMz2l9e4M2gg/84bAYxSqBYkqFErCMSdnPAnbyTSeF9E2OgUEfZHCsvEIef8SmRXIgWw3QMbUfAWnDUPLc33ej+vl+OeCkkkfhiZS52kxRe+njMLs62jy1vlKeXG8H7dvNzkhyqAIPmvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747406726; c=relaxed/simple;
-	bh=N7Liw7c36pTdZuHiUAWTD2kfaxk2DuwfaFnr0fCGPWw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=smLkef8amhrHyOsh39dZCqe1raRmG4XFMeVgTOeJ8xVaIIVim2W//2AToxkPAmO23tPCdPax332Eoon/z/AOMB2wKjc2BL1E7CNy/ghOpGqFydbKOS/QZqDmFU4GmBpGf3nPUsIQy6D5TWDhc5jd7ykAWoW1iAfv9zd2JaYbwlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nAwbAjAV; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-442e9c00bf4so15990535e9.3
-        for <linux-pm@vger.kernel.org>; Fri, 16 May 2025 07:45:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747406723; x=1748011523; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8DPdNi4T7V/yvBz4It+xorfOv4L6Xc1BemGmrvImCwg=;
-        b=nAwbAjAVYXguOh2v1ojCDYJdRwpiiehEWq2Nh0DiI7BrSbLVOVFU6xhF76fJh8Z4UW
-         7et80Lk5STd/TVvdJWToEBAtE0Slkam0PSD/YLeMbLyOqhXTjt+Om8fzzJDPJLmjeGgw
-         64IMz/OpF8syIhUAaDOHLvEXWsdPVT72SccI91+nljYtqp3Q/Kdtp8TZqIXUHYjk4PKN
-         pnc1mtwqH+gKEofmerWiCyJXr8LEPtBlvD1JmHmjF6Ea7fxOlnC2ozotWHBacWRI+rUg
-         XTaX6yPrzX1EtGfK6P+oXI212smJbti15ouCktGnFoOeI2SsttKipKTrdH5ocmIYzyMR
-         OZ5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747406723; x=1748011523;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8DPdNi4T7V/yvBz4It+xorfOv4L6Xc1BemGmrvImCwg=;
-        b=uAEvm/l7Um5Ajy7ca0G1YhQnKJ+ln32gX90f4lVcKRjx/F24O/ie5/VA/aEgwfedP6
-         DGZLz8Iyi9aBGjz8jKP4XF2kG7lSEJNskGUt/ZEbvB6hWkC1XX1r6jOYLvZ1hjIgkydG
-         AepphCeUE0l3fER4bPqRstli1H+/3WDzoQ7HzIgyZf35BKxksDEqlephRmfgzDBn5RuQ
-         f76CD7pDwIFaWklt/IyBAhr5wjRIQqlXRcNZwmkPix3cbmzhMPYU2XzzuUHuBld/OC3X
-         JRgl3DtKD5xCDgAS07VGiCkK7ezdqckZ07xoGJAfy+amuEZPDaBuzhSRuNxofD8tGa7J
-         WNWg==
-X-Forwarded-Encrypted: i=1; AJvYcCVVy38yHEdgwOjKoCLnbEKtPsLVMtVv3zWoqQ/HGOGxBfr/1KAlpuglR5yewzQmK8Q6rxdloT7YTg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+MGIwsuBqV+NX2gEQx7LJCtT6X40zLYLkMKc/eFgPZdyS2dX1
-	gZMnOLAuvaEC0unRuuAdWXeVPrHdgcPH8R+PV9o0JuAQYbuxgMtNjyIlf31u8zEM9QQ=
-X-Gm-Gg: ASbGncvTCKa9fYKSH4O2jUIMLPUP3GgX0JB/Wv6un1oOWV8qDAq2Vay+Ljt/eugVDxU
-	RGGDDUds/SPO0mZOVpfaTRGqyiSwK5s9bhLdXLMaKD5G/eSGeqdbeHL1Z28IEIYPuHdtZbD0SbD
-	ZmXanfhAXiuwkG1z99/wQFDs6ipn5hL7QrPAb3gDVflA9NXUjl9dqZ/cE4IMJQHJi3LSq1ZgKpo
-	tbh0S3QfdLP+oNuZoz+Be0VPq4TAOrFRS8NIPyQk1xVW4Ix3IS1yElTrrOhVRBb428/K9F07UMr
-	OElPeVsCAuWf61mTJgflBJYqorUm7SaT6yHulELO0TpM+S9ygJR5Pmx2WHRI7tngtI+aton0Jao
-	oRNuQQcCzcVLU
-X-Google-Smtp-Source: AGHT+IE+e8uUfU2U7RrsspDQy+hqfnS3XZDgVHe+ewX3FxYMCsEn5Vbv/9CZ6GBFRep73wxKvvMGnw==
-X-Received: by 2002:a05:600c:34d5:b0:43c:e7a7:1e76 with SMTP id 5b1f17b1804b1-442fefd5e7fmr30145935e9.1.1747406722689;
-        Fri, 16 May 2025 07:45:22 -0700 (PDT)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-442f39e84acsm112377585e9.25.2025.05.16.07.45.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 May 2025 07:45:22 -0700 (PDT)
-Message-ID: <3c44154c-7261-4b03-bd12-bddf4d493e74@linaro.org>
-Date: Fri, 16 May 2025 16:45:17 +0200
+	s=arc-20240116; t=1747407526; c=relaxed/simple;
+	bh=hDbT6l8Ra4g1YkirifZKoYMzeq+3uNXkWZ7n3nMfPI8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=J8yScT+TKpYq0ow1gWD37zOuimhcVY5HGfNKnGfu5JZ223/p/aCd0LJ/Fm2bFluozhdAyCvPrZs05SC4ebuL68BQ5DUCAAs2YedY2USdWSGM/nlYm0mQdjw1T/TxB3e6bBKxTdaApYK1mWInummIB1RN5fCbguoZxWzPrKUfSik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V6xMM9Jw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EBECC4CEF9;
+	Fri, 16 May 2025 14:58:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747407525;
+	bh=hDbT6l8Ra4g1YkirifZKoYMzeq+3uNXkWZ7n3nMfPI8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=V6xMM9JwEfvlz1axejebsqy7HHf6Fip3sstL6Sgp+uQ/M+5YQpvGbMSj7tWa7P4Kh
+	 gPzHqZct2qk6Jj2jZ3KWGdr9FkAioGUV5xb8O3uhHJ7Ij1OnApX9wR1FaMjGQIx4nQ
+	 YXgkij3UEeE8qCfCiEhDzy/O//cmoJT9Bd7Ngfw6xJERTATXOmM8i0ku9jAcgUwWVz
+	 vqdk6Bpuf4mnYOm84fkg3qtzwA7+IFO250Y6zuFhXuYq+2M+cxA0HCqPlXwMGYIuJg
+	 pM4ZuFeofvURRluv165gKSjhz128QC86DfzOofsfFarLShF7HQr7wX4ybN/17+3L3n
+	 Rwgq3d2ir+MNg==
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-b26df8f44e6so1883008a12.2;
+        Fri, 16 May 2025 07:58:45 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU0pgWrUFR+HSRruF2rRUUWD26nqwr1rZOPyPQQ332K++0NS8N+qb2825+CnAhdY3QTONBHa9+hAIw=@vger.kernel.org, AJvYcCV43CZXYypZ6nBEc2OGVuRATHydMvqqjH2EEzRb6gvzvEAJBlLE5+7bn3w1HDz/lVPCWNKx8khVn9wyjzs=@vger.kernel.org, AJvYcCWXCl5w8k4PHrY/S/VolN5ENT8+H3vb8iTg6gweqdSyn2HXAb45AyxyTH66xU6ytXCCXF1123p3JdIt@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyi+lHkNqxK3CXJtsEVEKxBq5sq9UlqON8Zrm5Tlp6KYAFzR+Z+
+	4/4WRNKPsbDKArxwMKZq8t87brf+DYQoEunAADEsqTgJEKNPKdGFQ+AO9vO9nk08b68O+4apNhA
+	GYINWYLCf8uyHNet8CnTVHP0xVrDByEE=
+X-Google-Smtp-Source: AGHT+IF5oHQ3XiAHYu26SgYpqkEnmMVmix54PXMDrlWr+tTbxJJdHTghAEF9U7opguKYaqW8+b2I34wPBroq6Ou90Xg=
+X-Received: by 2002:a05:6820:1792:b0:608:3f1d:bbdb with SMTP id
+ 006d021491bc7-609f37ac4d0mr1916015eaf.8.1747407513779; Fri, 16 May 2025
+ 07:58:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/4] Exynos Thermal code improvement
-To: Anand Moon <linux.amoon@gmail.com>
-Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
- Krzysztof Kozlowski <krzk@kernel.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Alim Akhtar <alim.akhtar@samsung.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- "open list:SAMSUNG THERMAL DRIVER" <linux-pm@vger.kernel.org>,
- "open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>,
- "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES"
- <linux-arm-kernel@lists.infradead.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b"
- <llvm@lists.linux.dev>
-References: <20250430123306.15072-1-linux.amoon@gmail.com>
- <aCR9RzGMWEuI0pxS@mai.linaro.org>
- <CANAwSgSA-JHMRD7-19wijOY=TSWD-sv6yyrT=mH+wkUJuvxFAw@mail.gmail.com>
- <92c2949e-2fc1-40e9-9dea-e3d9f7aa571d@linaro.org>
- <CANAwSgQryVLdRVd9KRBnaUcjtX8xR9w9BBTCvoqKH6funkj=2A@mail.gmail.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CANAwSgQryVLdRVd9KRBnaUcjtX8xR9w9BBTCvoqKH6funkj=2A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250514193406.3998101-1-superm1@kernel.org> <20250514193406.3998101-2-superm1@kernel.org>
+In-Reply-To: <20250514193406.3998101-2-superm1@kernel.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 16 May 2025 16:58:22 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jifqTP_eZ33nBmKPCuLWrrVF_0jNGf5CpHU6nXuK8qBw@mail.gmail.com>
+X-Gm-Features: AX0GCFvRVOcB0kGKWz9Xrc6Hm7LoXkhsAklO5VHQqK_W1PeYhcRLJ3-5UfSo-D0
+Message-ID: <CAJZ5v0jifqTP_eZ33nBmKPCuLWrrVF_0jNGf5CpHU6nXuK8qBw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] PM: Use hibernate flows for system power off
+To: Mario Limonciello <superm1@kernel.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Alex Deucher <alexander.deucher@amd.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, 
+	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>, 
+	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>, 
+	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	Mario Limonciello <mario.limonciello@amd.com>, AceLan Kao <acelan.kao@canonical.com>, 
+	Kai-Heng Feng <kaihengf@nvidia.com>, Mark Pearson <mpearson-lenovo@squebb.ca>, 
+	=?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>, 
+	Denis Benato <benato.denis96@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/15/25 20:01, Anand Moon wrote:
-> Hi Daniel,
-> 
-> On Thu, 15 May 2025 at 18:59, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->> On 5/15/25 13:10, Anand Moon wrote:
->>> Hi Daniel,
->>>
->>> On Wed, 14 May 2025 at 16:53, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>>>
->>>> On Wed, Apr 30, 2025 at 06:02:56PM +0530, Anand Moon wrote:
->>>>> Hi All,
->>>>
->>>> Hi Anand,
->>>>
->>>> if the goal of the changes is to do cleanups, I recommend to rework
->>>> how the code is organized. Instead of having the data->soc check all
->>>> around the functions, write per platform functions and store them in
->>>> struct of_device_id data field instead of the soc version.
->>>>
->>>> Basically get rid of exynos_map_dt_data by settings the different ops
->>>> in a per platform structure.
->>>>
->>>> Then the initialization routine would be simpler to clean.
->>>>
->>>
->>> Thanks, I had previously attempted this approach.
->>> The goal is to split the exynos_tmu_data structure to accommodate
->>> SoC-specific callbacks for initialization and configuration.
->>>
->>> In my earlier attempt, I tried to refactor the code to achieve this.
->>> However, the main challenge I encountered was that the
->>> exynos_sensor_ops weren’t being correctly mapped for each SoC.
->>>
->>> Some SoC have multiple sensor
->>> exynos4x12
->>>                       tmu: tmu@100c0000
->>> exynos5420
->>>                   tmu_cpu0: tmu@10060000
->>>                   tmu_cpu1: tmu@10064000
->>>                   tmu_cpu2: tmu@10068000
->>>                   tmu_cpu3: tmu@1006c000
->>>                   tmu_gpu: tmu@100a0000
->>>    exynos5433
->>>                   tmu_atlas0: tmu@10060000
->>>                   tmu_atlas1: tmu@10068000
->>>                   tmu_g3d: tmu@10070000
->>> exynos7
->>>                   tmu@10060000
->>>
->>> It could be a design issue of the structure.or some DTS issue.
->>> So what I found in debugging it is not working correctly.
->>>
->>> static const struct thermal_zone_device_ops exynos_sensor_ops = {
->>>           .get_temp = exynos_get_temp,
->>>           .set_emul_temp = exynos_tmu_set_emulation,
->>>           .set_trips = exynos_set_trips,
->>> };
->>>
->>> The sensor callback will not return a valid pointer and soc id for the get_temp.
->>>
->>> Here is my earlier version of local changes.
->>> [1] https://pastebin.com/bbEP04Zh exynos_tmu.c
->>> [2] https://pastebin.com/PzNz5yve Odroid U3 dmesg.log
->>> [3] https://pastebin.com/4Yjt2d2u    Odroid Xu4 dmesg.log
->>>
->>> I want to re-model the structure to improve the code.
->>> Once Its working condition I will send this for review.
->>>
->>> If you have some suggestions please let me know.
->>
->> I suggest to do the conversion step by step beginning by
->> exynos4210_tmu_clear_irqs, then by exynos_map_dt_data as the first
->> cleanup iteration
->>
-> Ok you want IRQ handle per SoC call back functions?
-> so on all the changes depending on SoC id should be moved to
-> respective callback functions to reduce the code.
+On Wed, May 14, 2025 at 9:34=E2=80=AFPM Mario Limonciello <superm1@kernel.o=
+rg> wrote:
+>
+> From: Mario Limonciello <mario.limonciello@amd.com>
+>
+> When the system is powered off the kernel will call device_shutdown()
+> which will issue callbacks into PCI core to wake up a device and call
+> it's shutdown() callback.  This will leave devices in ACPI D0 which can
+> cause some devices to misbehave with spurious wakeups and also leave some
+> devices on which will consume power needlessly.
+>
+> The issue won't happen if the device is in D3 before system shutdown, so
+> putting device to low power state before shutdown solves the issue.
+>
+> ACPI Spec 6.5, "7.4.2.5 System \_S4 State" says "Devices states are
+> compatible with the current Power Resource states. In other words, all
+> devices are in the D3 state when the system state is S4."
+>
+> The following "7.4.2.6 System \_S5 State (Soft Off)" states "The S5
+> state is similar to the S4 state except that OSPM does not save any
+> context." so it's safe to assume devices should be at D3 for S5.
+>
+> To accomplish this, modify the PM core to call all the device hibernate
+> callbacks when turning off the system when the kernel is compiled with
+> hibernate support. If compiled without hibernate support or hibernate fai=
+ls
+> fall back into the previous shutdown flow.
+>
+> Cc: AceLan Kao <acelan.kao@canonical.com>
+> Cc: Kai-Heng Feng <kaihengf@nvidia.com>
+> Cc: Mark Pearson <mpearson-lenovo@squebb.ca>
+> Cc: Merthan Karaka=C5=9F <m3rthn.k@gmail.com>
+> Tested-by: Denis Benato <benato.denis96@gmail.com>
+> Link: https://lore.kernel.org/linux-pci/20231213182656.6165-1-mario.limon=
+ciello@amd.com/
+> Link: https://lore.kernel.org/linux-pci/20250506041934.1409302-1-superm1@=
+kernel.org/
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v2:
+>  * Handle failures to hibernate (fall back to shutdown)
+>  * Don't use dedicated events
+>  * Only allow under CONFIG_HIBERNATE_CALLBACKS
+> ---
+>  kernel/reboot.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>
+> diff --git a/kernel/reboot.c b/kernel/reboot.c
+> index ec087827c85cd..52f5e6e36a6f8 100644
+> --- a/kernel/reboot.c
+> +++ b/kernel/reboot.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/kexec.h>
+>  #include <linux/kmod.h>
+>  #include <linux/kmsg_dump.h>
+> +#include <linux/pm.h>
+>  #include <linux/reboot.h>
+>  #include <linux/suspend.h>
+>  #include <linux/syscalls.h>
+> @@ -305,6 +306,17 @@ static void kernel_shutdown_prepare(enum system_stat=
+es state)
+>                 (state =3D=3D SYSTEM_HALT) ? SYS_HALT : SYS_POWER_OFF, NU=
+LL);
+>         system_state =3D state;
+>         usermodehelper_disable();
+> +#ifdef CONFIG_HIBERNATE_CALLBACKS
+> +       if (dpm_suspend_start(PMSG_HIBERNATE))
+> +               goto resume_devices;
 
-I think you can keep the same irq handler function but move the 
-tmu_intstat, tmu_intclear in the persoc structure and remove the 
-exynos4210_tmu_clear_irqs function.
+A failure of one device may trigger a cascade of failures when trying
+to resume devices and it is not even necessary to resume the ones that
+have been powered off successfully.
 
-You should end up with something like:
+IMV this should just ignore errors during the processing of devices,
+so maybe introduce PMSG_POWEROFF for it?
 
-static irqreturn_t exynos_tmu_threaded_irq(int irq, void *id)
-{
-	struct exynos_tmu_data *data = id;
-	unsigned int val_irq;
+It should also ignore wakeup events that occur while devices are powered of=
+f.
 
-	thermal_zone_device_update(data->tzd, THERMAL_EVENT_UNSPECIFIED);
+> +       if (dpm_suspend_end(PMSG_HIBERNATE))
+> +               goto resume_devices;
+> +       return;
+> +
+> +resume_devices:
+> +       pr_emerg("Failed to power off devices, using shutdown instead.\n"=
+);
+> +       dpm_resume_end(PMSG_RESTORE);
 
-	mutex_lock(&data->lock);
-	clk_enable(data->clk);
+Unfortunately, PMSG_RESTORE is not the right resume action for
+PMSG_HIBERNATE because it may not power-up things (some drivers assume
+that the restore kernel will power-up devices and so they don't do it
+in "restore" callbacks).
 
-	val_irq = readl(data->base + data->tmu_intstat);
-         writel(val_irq, data->base + data->tmu_intclear);
+I do realize that hibernation uses it to reverse PMSG_HIBERNATE, but
+it should not do that either.  That may be fixed later, though.
 
-	clk_disable(data->clk);
-	mutex_unlock(&data->lock);
+> +#endif
+>         device_shutdown();
+>  }
+>  /**
+> --
 
-	return IRQ_HANDLED;
-}
+I'd prefer to get back to this series after the 6.16 merge window
+starts.  It is sort of last minute for 6.16 and it is far from ready
+IMV.
 
-But if the irq handler has some soc specific code, then it should be a 
-separate function
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Thanks!
 
