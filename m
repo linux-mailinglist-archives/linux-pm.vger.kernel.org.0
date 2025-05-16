@@ -1,87 +1,48 @@
-Return-Path: <linux-pm+bounces-27231-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27232-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A4BDAB9B1A
-	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 13:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EFEF6AB9C18
+	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 14:32:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5329B1704EF
-	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 11:32:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CFA8502517
+	for <lists+linux-pm@lfdr.de>; Fri, 16 May 2025 12:32:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F234D238172;
-	Fri, 16 May 2025 11:32:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9940723D2AB;
+	Fri, 16 May 2025 12:32:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="dRqR66ap"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s8ZDXGra"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6748E238142
-	for <linux-pm@vger.kernel.org>; Fri, 16 May 2025 11:32:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700901E871;
+	Fri, 16 May 2025 12:32:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747395122; cv=none; b=pMbWvP0PEAI/XghtZOHzuwmCIv50cXtajOD5Y+r50Q/2VyOxxAS0nRLgPcLvXHxdtmUC1txWziVo6oJxLH4S/M6CLpzEP0jM7q1XWCISDU468zHHj4NyAedIEMK0iokGBLEIxsKhgLjEvDXfoR0ZHokdi3PW3KhzjUnBvMt+2As=
+	t=1747398773; cv=none; b=pzgXXUevcYfRFHdKzdWmc0Sa9ERjJZTMOD1x6X9MmXVoX+40w4DgB5TVoYpTI5uxKIwMLdzC/W55XOSU51uRNkrNbOq6xSvHrrT+akVx/8ovT8xAob2oinhigO+ye6wuSHt7Qx93yjmDZhaz9q8A6yesJdg3PhUNssd2awzOnoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747395122; c=relaxed/simple;
-	bh=FycK2ZODVKZ+lpAYgjUK8m4GTFrVQc0AVRZfmvA+wIc=;
+	s=arc-20240116; t=1747398773; c=relaxed/simple;
+	bh=b+Xuv3gIA3XDiMWqMug6Xe3XFqcyKwwOFub/NYbnrrs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Hbc7OUsf7rpT3m2iXqfwL/2ytKF2TKAAVm+v5jIMzeaDHGQVxgr6XYgZ140OfFltzYfKXeM78h/Z9GryxdZRAPc1zRpXkvAck54dV2ROP1yX1GWvH4x8Pr9CgFTUnRvU98T/z/z0BnQQdQto9oawjxkPwOp1W1isDYlZUw4GcCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=dRqR66ap; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54G8v4vq021960
-	for <linux-pm@vger.kernel.org>; Fri, 16 May 2025 11:32:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	fnzC285t3rkaZwxrXZ55mpC+N/Zc/3Ny+FfdlNU2kLY=; b=dRqR66apEnvPjJPH
-	yeID3G5+Rg5NPfrXuFh3aGQIqGG5DIuplLekO0sl+RQJkooeU4ONUMMXJ0X3RCvW
-	3ktUwywPWGnVeY1XUpZknIlM92ZBbQnmZ/6Qiwd3kftYppZep6jrqsPQPMFWhENh
-	xEzh2sxpEvSN384z8sFftn/0k5TDMkA28Seumy3ILgk4y47lJP+qd0EDaFDHkDb5
-	9Y+Sxf368DK8pHZPpczNgJCcuwn7tuICBNS9tbuEEVrD+4iITgb9J6uAK3pKCwcz
-	cwcAVUEcDhUXO3WeyLd1zzUHSvWV5Wo64a2CFcFCFV1fFgZbE83sbPvkwxzo2cnM
-	lbLKNQ==
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46mbew9m1e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 16 May 2025 11:31:59 +0000 (GMT)
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4775bdbcdc3so5565971cf.2
-        for <linux-pm@vger.kernel.org>; Fri, 16 May 2025 04:31:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747395113; x=1747999913;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fnzC285t3rkaZwxrXZ55mpC+N/Zc/3Ny+FfdlNU2kLY=;
-        b=CFzDSV1jxiWgX3v4GIx3R6W87n9e0g/ytXVmdJ14qhdcqEn8A+h4nwJukBm0pg5ic7
-         560G13ADz9TWslNe3A1gcPKamXEdXtv1ed7vMmeSZSVgQvhHf7Gy4/I4uV+zGIiD/89z
-         mEbYFkb+8M74SRaP2HgF+SWtS8AaNfkqdvb5RcFNGEnyClcqJE7qDCFfj6fsEIVA6UUW
-         l42UmZDfhNR0QtVSz8dfm5TtlUTHUPqQ8v6mgExm/gvCQyVkSnmjSddYznM2R3bi86J0
-         RO/zdTQc1OGcUy+VFKIqXwe/y23TUl0d0KBA3BoQSqEXZdED7nlcS9GmLVJr+s9fXvYs
-         e3WQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUsyF94RuVXJnruZoXW/tGw/ZGxtXwzcLa0rDth8k69Q0oK3xKzNT70V/KOY21mw/qUlvNAdopGEg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzws3G5uTJBSZdZFo0ZobHpKMrB+OQ5r3VNlGOaxY/vVD7PmgB5
-	uD3geGLDmWm6Z7zgWBRpZbQNgxQFHIM2aQrLxp02ZD62THaL3InNpWKQchgTWruQoXw3Aqgfq07
-	9ubp0lZglXcFsp3FXUWykqBL6RAXQ1nUMKTegFz5o32fTPFif5OEe8TMdl4+JiQ==
-X-Gm-Gg: ASbGncvswSi2/ULj3F+c4Fi8T9c/vNL80bMipg7XGzzZoN3h+r4SfMqVLmF8AojWPzE
-	hozr2uX6HI+ftEVokLNMdt4oD7Rt9Z/9BBVDMze9JrvmUyZZ3qqxmbINwjF654nhgSdA3zW6k6N
-	3c3SdZFD/AsSUNfoVNVc4Aj6nA8p9S9x8R6FlU6jOMQBSYRFfosLdwRHO0kSdOREPol6IhrcqxK
-	U+g62HN5foNP9fNTi4wLxyBeOM07DmPfJzQ0zGGUYxB6OGTYPxss0y9dIweG377WmJ4WqKMo9Ti
-	9mddtmFEDI6NLf/8GM27OsI+oqAIwpx+/BpyZqA4HiQ1IBH5Hg0hudCi0KvQ4pdqBg==
-X-Received: by 2002:ad4:5765:0:b0:6f6:d4a8:1a6c with SMTP id 6a1803df08f44-6f8b0806decmr20294346d6.1.1747395112935;
-        Fri, 16 May 2025 04:31:52 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFCEBLp3n/whIhi4REkgwi84pjCbz7w5PCZVecxxq7YLAuV1dBIWRpjJYZo6uKW+5BD+6N3Pg==
-X-Received: by 2002:ad4:5765:0:b0:6f6:d4a8:1a6c with SMTP id 6a1803df08f44-6f8b0806decmr20293946d6.1.1747395112304;
-        Fri, 16 May 2025 04:31:52 -0700 (PDT)
-Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6005a6dfd41sm1294532a12.35.2025.05.16.04.31.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 May 2025 04:31:51 -0700 (PDT)
-Message-ID: <f8e44e19-0c86-435e-adc0-b9cd5b24b1ed@oss.qualcomm.com>
-Date: Fri, 16 May 2025 13:31:49 +0200
+	 In-Reply-To:Content-Type; b=jYMl9lSN1xGCU5incwiW8i2+s8ybn8ZE7KRQU4f/aEh6BYKbTrh58fyUlr3Zc1tTxhuGl9dFJSfkgUuQ5YJYq/rescAfXERb8CBXI96ktfuuzxNZWhp44HtcvMXkQkLi3I2Vlwkgph2bNNBK5PAJ+cfac9Z8+N7ihPMrCYxuyC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s8ZDXGra; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6339AC4CEE4;
+	Fri, 16 May 2025 12:32:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747398772;
+	bh=b+Xuv3gIA3XDiMWqMug6Xe3XFqcyKwwOFub/NYbnrrs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=s8ZDXGra5rflloqVc7VCU86+hcauaceQgr1T1qMaxHjts5aMJDBtdNhUuy4ZRa9K7
+	 SmpxBkf4L0mXyyGO17WGHAZd5JkGIAjrNHSZ3IvhOLFyzMlkbG5GJFZhsH5bHLCv2H
+	 H96PUt6lf9zItxDHDV0IBh1uYx8xtyTUTfXb4tRWC7/qXSEkbOp2O8/vo8gzf0aEVe
+	 E1kDFYmSX5zC3v42IEa1G+ZA1MgGO2+hQs4wFdkNvsbccUdH2itpPX7k8ns4+tlP1h
+	 5tum3wASvw4uIUFiY0mf5HuGZobHYJeoUqfaoVJ9Ugn1OulO4UNtyRyPUn7XtrdlbL
+	 V4SFUoRnFuUMA==
+Message-ID: <32290fec-72e7-44fc-a187-d29347ea94ea@kernel.org>
+Date: Fri, 16 May 2025 14:32:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,99 +50,90 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [v15 5/6] usb: dwc3: qcom: Configure wakeup interrupts during
- suspend
-To: Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc: devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-References: <1651740973-7944-1-git-send-email-quic_kriskura@quicinc.com>
- <1651740973-7944-6-git-send-email-quic_kriskura@quicinc.com>
+Subject: Re: [PATCH] charger: max14577: Handle NULL pdata when CONFIG_OF is
+ not set
+To: Charles Han <hanchunchao@inspur.com>, sre@kernel.org,
+ akpm@linux-foundation.org, lee@kernel.org
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250516095346.24169-1-hanchunchao@inspur.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <1651740973-7944-6-git-send-email-quic_kriskura@quicinc.com>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250516095346.24169-1-hanchunchao@inspur.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: 3GpA2De5--eSMf_9t0N4XUjbu9jBQygj
-X-Proofpoint-ORIG-GUID: 3GpA2De5--eSMf_9t0N4XUjbu9jBQygj
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTE2MDExMCBTYWx0ZWRfXypfSfZKG6Dqk
- CDthmKfvvB6EGljbL/Bz9eSkGssekvlfaVmLhb1tvb35SNLS5tp8iywVdnZq18g9u9f5WSiQmDB
- E9uckKVOcbPny10fclAqH7EOrjxHq6SrTDYnHQba4TAUGJg5M2BXZEl+YUZzF6YpoAvMf75r1rS
- H3lA/3Zro++4IU7Wqrmfs83zRIpxbz2F0uEVc6/uee33WN/Fc6YmnIR5qyVU/nXqtGuNOgcD2x6
- 4biaWjZdcGDD9nUcsocKWQ6V2Gie4NxUL5VQLAYrQpu05ClvH//B27mFtSUjb+PExOLbwnXd70L
- uZ+6lM8GLTY+pLZrJhod+BYFCm/UPUIqs4Tun8aIduOA8Uyq98tCyYF0bylgoRjOF32sMAE/nUK
- lWh3VqyqjB1oRxxZc4NATQmbqMDK6gfdrRs+WqYL4BmJ0mtdVI7KelNWc8lyIeUnT51/oxjA
-X-Authority-Analysis: v=2.4 cv=LOFmQIW9 c=1 sm=1 tr=0 ts=68272230 cx=c_pps
- a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=COk6AnOGAAAA:8 a=bXvnuBKqF766Z0xgLQAA:9
- a=QEXdDO2ut3YA:10 a=dawVfQjAaf238kedN5IG:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-16_05,2025-05-16_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 spamscore=0 adultscore=0 priorityscore=1501 suspectscore=0
- mlxscore=0 malwarescore=0 mlxlogscore=998 impostorscore=0 bulkscore=0
- clxscore=1015 phishscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505070000
- definitions=main-2505160110
 
-On 5/5/22 10:56 AM, Krishna Kurapati wrote:
-> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+On 16/05/2025 11:53, Charles Han wrote:
+> When the kernel is not configured  CONFIG_OF, the max14577_charger_dt_init
+> function returns NULL. Fix the max14577_charger_probe functionby returning
+>  -ENODATA instead of potentially passing a NULL pointer to PTR_ERR.
 > 
-> Configure DP/DM interrupts to detect line state changes based on
-> hs_phy_mode. Enable the triggers opposite of what the current
-> DP, DM levels. For HS/FS mode enable DM interrupt and for LS enable DP
-> interrupt.
-
-This is not what the patch does for FS
-
-[...]
-
-> +	if (dwc->hs_phy_mode & PHY_MODE_USB_HOST_LS) {
-
-to do so, this check should cover FS too
-
-Konrad
-
-> +		dwc3_qcom_disable_wakeup_irq(qcom->dp_hs_phy_irq);
-> +	} else if (dwc->hs_phy_mode & PHY_MODE_USB_HOST_HS) {
-> +		dwc3_qcom_disable_wakeup_irq(qcom->dm_hs_phy_irq);
-> +	} else {
-> +		dwc3_qcom_disable_wakeup_irq(qcom->dp_hs_phy_irq);
-> +		dwc3_qcom_disable_wakeup_irq(qcom->dm_hs_phy_irq);
-> +	}
+> Fix below smatch warning.
+> smatch warnings:
+> drivers/power/supply/max14577_charger.c:576 max14577_charger_probe() warn: passing zero to 'PTR_ERR'
+> 
+> Fixes: e30110e9c96f ("charger: max14577: Configure battery-dependent settings from DTS and sysfs")
+> Signed-off-by: Charles Han <hanchunchao@inspur.com>
+> ---
+>  drivers/power/supply/max14577_charger.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/power/supply/max14577_charger.c b/drivers/power/supply/max14577_charger.c
+> index 1cef2f860b5f..ed6f5a584c2c 100644
+> --- a/drivers/power/supply/max14577_charger.c
+> +++ b/drivers/power/supply/max14577_charger.c
+> @@ -572,8 +572,10 @@ static int max14577_charger_probe(struct platform_device *pdev)
+>  	chg->max14577 = max14577;
 >  
->  	dwc3_qcom_disable_wakeup_irq(qcom->ss_phy_irq);
->  }
->  
->  static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
->  {
-> -	dwc3_qcom_enable_wakeup_irq(qcom->hs_phy_irq);
-> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
->  
-> -	dwc3_qcom_enable_wakeup_irq(qcom->dp_hs_phy_irq);
-> +	dwc3_qcom_enable_wakeup_irq(qcom->hs_phy_irq);
->  
-> -	dwc3_qcom_enable_wakeup_irq(qcom->dm_hs_phy_irq);
-> +	if (dwc->hs_phy_mode & PHY_MODE_USB_HOST_LS) {
-> +		dwc3_qcom_enable_wakeup_irq(qcom->dp_hs_phy_irq);
-> +	} else if (dwc->hs_phy_mode & PHY_MODE_USB_HOST_HS) {
-> +		dwc3_qcom_enable_wakeup_irq(qcom->dm_hs_phy_irq);
-> +	} else {
-> +		dwc3_qcom_enable_wakeup_irq(qcom->dp_hs_phy_irq);
-> +		dwc3_qcom_enable_wakeup_irq(qcom->dm_hs_phy_irq);
-> +	}
->  
->  	dwc3_qcom_enable_wakeup_irq(qcom->ss_phy_irq);
->  }
+>  	chg->pdata = max14577_charger_dt_init(pdev);
+
+Thanks for the fix. I would prefer to fix the max14577_charger_dt_init()
+stub to return ERR_PTR(-ENODATA) in such case  and then you have here
+only if (IS_ERR()).
+
+> -	if (IS_ERR_OR_NULL(chg->pdata))
+Best regards,
+Krzysztof
 
