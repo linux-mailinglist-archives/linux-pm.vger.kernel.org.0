@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-27263-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27264-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F760ABA9A4
-	for <lists+linux-pm@lfdr.de>; Sat, 17 May 2025 13:16:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFD03ABA9A7
+	for <lists+linux-pm@lfdr.de>; Sat, 17 May 2025 13:18:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 16B35189374A
-	for <lists+linux-pm@lfdr.de>; Sat, 17 May 2025 11:17:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 791793BE09F
+	for <lists+linux-pm@lfdr.de>; Sat, 17 May 2025 11:18:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC1161DE2DC;
-	Sat, 17 May 2025 11:16:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50FFA1DDA09;
+	Sat, 17 May 2025 11:18:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J5MqPy0E"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WFl8Myr9"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 836071865EE;
-	Sat, 17 May 2025 11:16:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 214A71B6CE9;
+	Sat, 17 May 2025 11:18:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747480604; cv=none; b=q9UKlUQu9vra5/HcO/7bT4Am5CcNDnCLCOP1lOmrNZwLLpu/1O1gWRifVEP55kbe0+3B13hGPqP8Xn1C+67oi0x/6ZbuPxaRhzfRD0tLP9BbMFKLrnDhMkHNDQ8ih3W15Bl1sDcjLduUDdMRYbQ5Qm0MWapg876LjlVNwIVnSbU=
+	t=1747480733; cv=none; b=PJvXki1A0xfLWFcfKn8K4cTLNvskKC9CLdF8tVO2rJxQmzpPNmya3aQAZXlqFBKYJlIxDWJ1S4AIXQdNbyzAJO+gRZmJ1hlVH8HEkyAOWc/SgB/UPUbU7fDEw/aw8q2Ho1d7rUfiREDjKKgdQyozsBbqTxZsVdatSkMpoqhZ1iQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747480604; c=relaxed/simple;
-	bh=TQbNzv+KNeF4oDstHc0C0i1N8dU8BT9R/sMC1iLPUdQ=;
+	s=arc-20240116; t=1747480733; c=relaxed/simple;
+	bh=MPdzYIq7/J3CmyoD/GlHukOWsSzehm0XQFEIdnZvlCY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U5TOYcKoVgGmoSg39mHopL0/9QnghRQDP4QpTW1Yuk1NJtTikJ+V859nc281ikhPwVwu+ggygrAGdqdiKHD+C84uHn9q+obptTe+GTlp2KxiH5szRE2tS50oSn1FS9zWtEGdTVGLGKi9xfmQVpl1VSkhqKHgb1ARbKjbAvbPMek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J5MqPy0E; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A08D8C4CEE3;
-	Sat, 17 May 2025 11:16:40 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=RiZieNcCnWhBqpBXgkEn4t6DLksruEuANvX+IA3KA1y/z4efY8UwBDmNABohw7ZzI9UVcnBj3wvvNnTP45YJew9s8BTtbX9lTgYv6ibCwgA9Mr4SSJ7SmC8YZV1EWB6tQfRFF0NBsl1oBRMjlCj8t6kT279SYCG7wOEfo3VM/GY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WFl8Myr9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2653CC4CEE3;
+	Sat, 17 May 2025 11:18:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747480604;
-	bh=TQbNzv+KNeF4oDstHc0C0i1N8dU8BT9R/sMC1iLPUdQ=;
+	s=k20201202; t=1747480732;
+	bh=MPdzYIq7/J3CmyoD/GlHukOWsSzehm0XQFEIdnZvlCY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=J5MqPy0EdP85nQXq5Y5mJmAaro5lHrk6ShnYJuJH42eynbHOEuR9/9alKFYdVqWPt
-	 eXRH5s6QRgRiZXZRaX393uluc19OdscPU1SOsO9dDUZJRK1d+1qedmN2/Mfgt3w1Ys
-	 3zXIXfAdFdePrACrdBNdixIK9eWgFE+5sRmk5wHnNbzot6W7R0PMRwoM32tKJ09DgV
-	 OkxP4y420cDYF+8I0ejuSrJ0m8jygVOtmO4Bs+8A4K+FTbmzbGcD7mYodP6po8mQaD
-	 oadX++J41fDPC/KEKDSsse9/eQ+omcNvss2mTrSkIrlYxW6zQh+ATf9LN1hfjsfxE3
-	 YWNMCwt0/+w+A==
-Message-ID: <31542315-5ea1-4849-b2f9-686cabce914a@kernel.org>
-Date: Sat, 17 May 2025 13:16:38 +0200
+	b=WFl8Myr9Is9JMCocSMXcQVMQv2khtHkTcCwImEBO8HGet90csh+b3k+OUGl39o0Ex
+	 6O6RzIoP00/ZJrSYD96NxEXliYtTQp7BLljRaQ4ye57AoKCEiRLRpmpUnu64GDRpHZ
+	 PGR1YNE3Db1lzec9HZH45keMNY+4zAUq1AVtL2GwcjfUlY6G1yq2SHJVhLMJKpiTAx
+	 ThVuikUlFhi+KdKofYwJCM/kF34trg+aBNv3dNEIFpjD8B9DQjCmZaAPQgH7rKxuOk
+	 +4Y2PaIfPQbMVNcruC+7toUPj2h/JWr6dH58855T52tkbWmElAP2bg6g7qMoxwLd16
+	 nOns3kwO68JUA==
+Message-ID: <0c84a24a-2dbe-4c8f-80b1-2e1531fd4ec1@kernel.org>
+Date: Sat, 17 May 2025 13:18:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,18 +50,18 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/9] dt-bindings: mfd: add pf1550
+Subject: Re: [PATCH v2 5/9] mfd: pf1550: add core mfd driver
 To: Samuel Kayode <samuel.kayode@savoirfairelinux.com>,
  Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
  Mark Brown <broonie@kernel.org>, Dmitry Torokhov
  <dmitry.torokhov@gmail.com>, Sebastian Reichel <sre@kernel.org>,
  Robin Gong <yibin.gong@nxp.com>
 Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-imx@nxp.com, inux-input@vger.kernel.org, Abel Vesa
- <abelvesa@linux.com>, Abel Vesa <abel.vesa@nxp.com>,
+ linux-imx@nxp.com, linux-input@vger.kernel.org,
+ Abel Vesa <abelvesa@linux.com>, Abel Vesa <abel.vesa@nxp.com>,
  Robin Gong <b38343@freescale.com>, Enric Balletbo Serra <eballetbo@gmail.com>
 References: <cover.1747409892.git.samuel.kayode@savoirfairelinux.com>
- <8be1626f970c9fab8b50ae9ad45e0ddd88fa36bf.1747409892.git.samuel.kayode@savoirfairelinux.com>
+ <85004e02a5177aef6334fc30494bb3924a58f1de.1747409892.git.samuel.kayode@savoirfairelinux.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,118 +107,167 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <8be1626f970c9fab8b50ae9ad45e0ddd88fa36bf.1747409892.git.samuel.kayode@savoirfairelinux.com>
+In-Reply-To: <85004e02a5177aef6334fc30494bb3924a58f1de.1747409892.git.samuel.kayode@savoirfairelinux.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 16/05/2025 20:53, Samuel Kayode wrote:
-> Add a DT binding document for pf1550 PMIC. This describes the core mfd
-> device.
-> 
-> Signed-off-by: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-
-You need to explain the dependencies in the cover letter. There is
-nothing there but you have clear dependency and all bindings must go via
-one tree, unless you re-do this to use compatibles.
-
-
-> ---
->  .../devicetree/bindings/mfd/pf1550.yaml       | 122 ++++++++++++++++++
-
-Same comments.
-
-
->  1 file changed, 122 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/pf1550.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/pf1550.yaml b/Documentation/devicetree/bindings/mfd/pf1550.yaml
-> new file mode 100644
-> index 000000000000..461bc13513eb
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/pf1550.yaml
-> @@ -0,0 +1,122 @@
-> +# SPDX-License-Identifier: GPL-2.0
-
-No.
-
-Please run scripts/checkpatch.pl on the patches and fix reported
-warnings. After that, run also 'scripts/checkpatch.pl --strict' on the
-patches and (probably) fix more warnings. Some warnings can be ignored,
-especially from --strict run, but the code here looks like it needs a
-fix. Feel free to get in touch if the warning is not clear.
-
-
-<form letter>
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC. It might happen, that command when run on an older
-kernel, gives you outdated entries. Therefore please be sure you base
-your patches on recent Linux kernel.
-
-Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-people, so fix your workflow. Tools might also fail if you work on some
-ancient tree (don't, instead use mainline) or work on fork of kernel
-(don't, instead use mainline). Just use b4 and everything should be
-fine, although remember about `b4 prep --auto-to-cc` if you added new
-patches to the patchset.
-
-You missed at least devicetree list (maybe more), so this won't be
-tested by automated tooling. Performing review on untested code might be
-a waste of time.
-
-Please kindly resend and include all necessary To/Cc entries.
-</form letter>
-
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/pf1550.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+On 16/05/2025 20:54, Samuel Kayode wrote:
 > +
-> +title: PF1550 low power PMIC from NXP.
+> +static int pf1550_i2c_probe(struct i2c_client *i2c)
+> +{
+> +	struct pf1550_dev *pf1550;
+> +	unsigned int reg_data = 0;
+> +	int ret = 0;
+> +
+> +	pf1550 = devm_kzalloc(&i2c->dev,
+> +			      sizeof(struct pf1550_dev), GFP_KERNEL);
 
-Same comments
+sizeof(*)
+
+> +	if (!pf1550)
+> +		return -ENOMEM;
+> +
+> +	i2c_set_clientdata(i2c, pf1550);
+> +	pf1550->dev = &i2c->dev;
+> +	pf1550->i2c = i2c;
+> +	pf1550->irq = i2c->irq;
+> +
+> +	pf1550->regmap = devm_regmap_init_i2c(i2c, &pf1550_regmap_config);
+> +	if (IS_ERR(pf1550->regmap)) {
+> +		ret = PTR_ERR(pf1550->regmap);
+> +		dev_err(pf1550->dev, "failed to allocate register map: %d\n",
+> +			ret);
+
+
+Syntax is always: return dev_err_probe
+
+> +		return ret;
+> +	}
+> +
+> +	ret = regmap_read(pf1550->regmap, PF1550_PMIC_REG_DEVICE_ID, &reg_data);
+> +	if (ret < 0 || reg_data != PF1550_DEVICE_ID) {
+> +		dev_err(pf1550->dev, "device not found!\n");
+> +		return ret;
+
+Syntax is always: return dev_err_probe
+
+> +	}
+> +
+> +	pf1550->type = PF1550;
+> +	dev_info(pf1550->dev, "pf1550 found.\n");
+
+Drop. Drivers should be silent. This is really useless and just pollutes
+log. See also coding style.
 
 > +
-> +maintainers:
-> +  - Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-> +
-> +description: |
-> +  PF1550 is a low power PMIC providing battery charging and power supply for
-> +  low power IoT and wearable applications.
-> +
-> +  For device-tree bindings of other sub-modules (regulator, power supply and
-> +  onkey) refer to the binding documents under the respective sub-system
-> +  directories.
-> +
-> +properties:
-> +  compatible:
-> +    const: fsl,pf1550
-> +
-> +  reg:
-> +    description:
-> +      I2C device address.
+> +	ret = devm_regmap_add_irq_chip(pf1550->dev, pf1550->regmap,
+> +				       pf1550->irq,
+> +				IRQF_ONESHOT | IRQF_SHARED |
+> +				IRQF_TRIGGER_FALLING, 0,
+> +				&pf1550_regulator_irq_chip,
+> +				&pf1550->irq_data_regulator);
+> +	if (ret) {
+> +		dev_err(pf1550->dev, "failed to add irq1 chip: %d\n", ret);
+> +		return ret;
 
-Drop
+Syntax is always: return dev_err_probe
 
-> +    maxItems: 1
+> +	}
 > +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  regulators:
-> +    $ref: /schemas/regulator/pf1550.yaml
-> +
-> +  charger:
-> +    $ref: /schemas/power/supply/pf1550_charger.yaml
-> +
-> +  onkey:
-> +    $ref: /schemas/input/pf1550_onkey.yaml
+> +	ret = devm_regmap_add_irq_chip(pf1550->dev, pf1550->regmap,
+> +				       pf1550->irq,
+> +				IRQF_ONESHOT | IRQF_SHARED |
+> +				IRQF_TRIGGER_FALLING, 0,
+> +				&pf1550_onkey_irq_chip,
+> +				&pf1550->irq_data_onkey);
+> +	if (ret) {
+> +		dev_err(pf1550->dev, "failed to add irq3 chip: %d\n", ret);
+> +		return ret;
 
-This makes merging via separate trees not possible...
+Syntax is always: return dev_err_probe
 
-Just fold everything here, drop compatibles and then put binding in the
-regulator. Unless children are re-usable which would justify
-compatibles, but then please provide arguments for that.
+> +	}
+> +
+> +	ret = devm_regmap_add_irq_chip(pf1550->dev, pf1550->regmap,
+> +				       pf1550->irq,
+> +				IRQF_ONESHOT | IRQF_SHARED |
+> +				IRQF_TRIGGER_FALLING, 0,
+> +				&pf1550_charger_irq_chip,
+> +				&pf1550->irq_data_charger);
+> +	if (ret) {
+> +		dev_err(pf1550->dev, "failed to add irq4 chip: %d\n", ret);
+> +		return ret;
 
+Syntax is always: return dev_err_probe
+
+> +	}
+> +
+> +	return devm_mfd_add_devices(pf1550->dev, -1, pf1550_devs,
+> +			      ARRAY_SIZE(pf1550_devs), NULL, 0, NULL);
+> +}
+> +
+> +static const struct i2c_device_id pf1550_i2c_id[] = {
+> +	{ "pf1550", PF1550 },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(i2c, pf1550_i2c_id);
+
+Table IDs are next to each other.
+
+> +
+> +static int pf1550_suspend(struct device *dev)
+> +{
+> +	struct i2c_client *i2c = container_of(dev, struct i2c_client, dev);
+> +	struct pf1550_dev *pf1550 = i2c_get_clientdata(i2c);
+> +
+> +	if (device_may_wakeup(dev)) {
+> +		enable_irq_wake(pf1550->irq);
+> +		disable_irq(pf1550->irq);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int pf1550_resume(struct device *dev)
+> +{
+> +	struct i2c_client *i2c = container_of(dev, struct i2c_client, dev);
+> +	struct pf1550_dev *pf1550 = i2c_get_clientdata(i2c);
+> +
+> +	if (device_may_wakeup(dev)) {
+> +		disable_irq_wake(pf1550->irq);
+> +		enable_irq(pf1550->irq);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static DEFINE_SIMPLE_DEV_PM_OPS(pf1550_pm, pf1550_suspend, pf1550_resume);
+> +
+> +static const struct of_device_id pf1550_dt_match[] = {
+> +	{ .compatible = "fsl,pf1550" },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, pf1550_dt_match);
+> +
+> +static struct i2c_driver pf1550_i2c_driver = {
+> +	.driver = {
+> +		   .name = "pf1550",
+> +		   .pm = pm_sleep_ptr(&pf1550_pm),
+> +		   .of_match_table = of_match_ptr(pf1550_dt_match),
+
+
+Drop of_match_ptr, you have warnings here.
+
+> +	},
+> +	.probe = pf1550_i2c_probe,
+> +	.id_table = pf1550_i2c_id,
+> +};
+> +
+> +module_i2c_driver(pf1550_i2c_driver);
+> +
+> +MODULE_DESCRIPTION("Freescale PF1550 multi-function core driver");
+> +MODULE_AUTHOR("Robin Gong <yibin.gong@freescale.com>");
+> +MODULE_LICENSE("GPL v2");
 Best regards,
 Krzysztof
 
