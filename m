@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-27261-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27262-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E8BEABA99F
-	for <lists+linux-pm@lfdr.de>; Sat, 17 May 2025 13:13:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27AC3ABA9A2
+	for <lists+linux-pm@lfdr.de>; Sat, 17 May 2025 13:14:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8C16A7A6688
-	for <lists+linux-pm@lfdr.de>; Sat, 17 May 2025 11:12:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A59D16E773
+	for <lists+linux-pm@lfdr.de>; Sat, 17 May 2025 11:14:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E7971EE032;
-	Sat, 17 May 2025 11:13:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3A9D1F3BA9;
+	Sat, 17 May 2025 11:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lUXKu2kR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mr2efONw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DDE34C9D;
-	Sat, 17 May 2025 11:13:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85CB2193077;
+	Sat, 17 May 2025 11:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747480430; cv=none; b=WonRKtCg5kjYaz3fWhCs1lgD9VhqGbD75BvSqEzgfpEph18cmDuTNTbnL5gAAwHIAtu7WOB22Q4QNTztEntRBLwBLiDBRDchsmgnP1+hwC+tYkUcV/qw9vyPqM6EabO91SuKbsxHZscyeHgWWiUIygpGgK06uUWKaLacwBkYTOo=
+	t=1747480447; cv=none; b=f9TiN81jywBrka5MQikIiikP1kD6qBpHtxVL6BgNy3L0CutRQEOWVlHmNlNggF4zV3z5ueEeT71jKRUtAsEZ5oz4PUsQ85BnCe/uTkpzlNrMDx+v3LcY4OPNk7AY1LJlw0IBmCKpBgvU0N69xsupL8LWIDBaGqBPv0WnNNxeP+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747480430; c=relaxed/simple;
-	bh=1xvFSu54juvnm3cMisULG6AsJmVUsKoWnJRrOc//nEI=;
+	s=arc-20240116; t=1747480447; c=relaxed/simple;
+	bh=WaaokQx6aXURJ2TbAfU78m5xgMtmQAOjFi7bqUctwgY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SmKnwwObxW+te4TIYjBF/vpjcw+s5P3eWaV1JjvJPGFOvL8OlADHEvUttr4AY5tZXO8jqfvUBdZT/FXUCBPlG7fRoiWZnrZHIY/jS1ShIHUR//apoMzaHrQ/uIPKOU/dPv13hVZU0B1EhYvf0wsQPB82NgIkEbeZy/rOhrk+Bg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lUXKu2kR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95FC7C4CEE3;
-	Sat, 17 May 2025 11:13:46 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=rHCsTpNvMbJGqMoxPlgwVqNg7p5B2vPWXEbmoHYYunyA58maLodQysryEvIoXTc1Pqdp+9dVPQPReMGZlP2XM0/qRjLIeop/3ehcy4iowEDz3DwbqFqio/Ru5Mek1yejgN8bnVFFQ4ltDEBcitSF4wy+nzBnsw6N39IxrrF51ns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mr2efONw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6903AC4CEE3;
+	Sat, 17 May 2025 11:14:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747480429;
-	bh=1xvFSu54juvnm3cMisULG6AsJmVUsKoWnJRrOc//nEI=;
+	s=k20201202; t=1747480447;
+	bh=WaaokQx6aXURJ2TbAfU78m5xgMtmQAOjFi7bqUctwgY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lUXKu2kRhWtIOjUOpV7LErJa0Pknsa8AemkOE0TkvjyvJ/C4IjLncE7CMQLVKZBqv
-	 Porkb4TFiG4ANq/qI27/yL+PTibmG5QgG+UA/X3il0aLcl4WXb9ApTGCrnW+4hNeSu
-	 S1KBlAfnwROXXSL0eHlpUh8I7elJckgXGEpyBjsrr90HMv+Mk5t+09HBEUbHWi3FH3
-	 74zAFS3nhAGJfmjeAIXyHIqK45lFFTO5q7u3wOsW6lG2NC+cTcQ8+1IbDKLrL28BXF
-	 vb/atjGeqQKEUrl9wuLD/dubNI2t9c+ytKpQ+pb3IYvSUp1WFCvyQFzKNvzghxuqKe
-	 IKUfQ746lf8JQ==
-Message-ID: <0a0f9e2a-cd70-4f61-8ffc-0c13e3396ada@kernel.org>
-Date: Sat, 17 May 2025 13:13:44 +0200
+	b=mr2efONw/1W0g0SzCfzw8afaTIQhkZCi0oUZFDl//6CEHKJfS36xbShOE2uRKlGMk
+	 ualKJ+Wnu948wy0J9TA+wYZmf97JllhTwjC9+zz2lJ63RIMmWzAxT63xm6udsi5fZm
+	 HWggtpPZ/i9m7ueqYMzdGmaERgDR0tsMT/uNqQloa1HJ+HhAJDlgaahxRLS1NSaafH
+	 7C7OxsLFsOYcBdKe+0ooqWKgUbddDhxl18PW/5549AQX6L+2GlO0jl2NeoiQyo7oRo
+	 W9UAIZoFIYa6QOfYjNevQx9TNuutEX84j59oTHniKOOnbx1pW+mV8dpR0yDIUYg7Wq
+	 B0K9c2jHODqbQ==
+Message-ID: <84a29c78-6717-4c70-9429-72d4784b9a0c@kernel.org>
+Date: Sat, 17 May 2025 13:14:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,17 +50,18 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/9] dt-bindings: regulator: add pf1550
+Subject: Re: [PATCH v2 3/9] dt-bindings: input: add pf1550
 To: Samuel Kayode <samuel.kayode@savoirfairelinux.com>,
  Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, Dmitry Torokho <dmitry.torokhov@gmail.com>,
- Sebastian Reichel <sre@kernel.org>, Robin Gong <yibin.gong@nxp.com>
+ Mark Brown <broonie@kernel.org>, Dmitry Torokhov
+ <dmitry.torokhov@gmail.com>, Sebastian Reichel <sre@kernel.org>,
+ Robin Gong <yibin.gong@nxp.com>
 Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  linux-imx@nxp.com, linux-input@vger.kernel.org,
  Abel Vesa <abelvesa@linux.com>, Abel Vesa <abel.vesa@nxp.com>,
  Robin Gong <b38343@freescale.com>, Enric Balletbo Serra <eballetbo@gmail.com>
 References: <cover.1747409892.git.samuel.kayode@savoirfairelinux.com>
- <7c8ceab2aa66bf221981f689025d0bd29df8d596.1747409892.git.samuel.kayode@savoirfairelinux.com>
+ <ceed690bd200eb03bc47c0d462292a5230aa2fbf.1747409892.git.samuel.kayode@savoirfairelinux.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -106,94 +107,18 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <7c8ceab2aa66bf221981f689025d0bd29df8d596.1747409892.git.samuel.kayode@savoirfairelinux.com>
+In-Reply-To: <ceed690bd200eb03bc47c0d462292a5230aa2fbf.1747409892.git.samuel.kayode@savoirfairelinux.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 16/05/2025 20:50, Samuel Kayode wrote:
-> Add the DT binding document for pf1550 regulators.
+On 16/05/2025 20:52, Samuel Kayode wrote:
+> Add the DT binding document for the onkey module of pf1550.
 > 
 > Signed-off-by: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
 > ---
->  .../devicetree/bindings/regulator/pf1550.yaml | 35 +++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/pf1550.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/regulator/pf1550.yaml b/Documentation/devicetree/bindings/regulator/pf1550.yaml
-> new file mode 100644
-> index 000000000000..a684ab974496
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/pf1550.yaml
-> @@ -0,0 +1,35 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/pf1550.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Regulators for PF1550 PMIC from NXP.
+>  .../bindings/input/pf1550_onkey.yaml          | 31 +++++++++++++++++++
 
 Same comments as for other patch.
-
-> +
-> +maintainers:
-> +  - Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-> +
-> +description: |
-> +  This module is part of the PF1550 MFD device. For more details
-> +  see Documentation/devicetree/bindings/mfd/pf1550.yaml.
-> +
-> +  The regulator controller is represented as a sub-node of the PMIC node
-> +  on the device tree.
-> +
-> +  The device has three LDO regulators, three buck converters and a DDR
-> +  termination reference voltage.
-> +
-> +properties:
-> +  compatible:
-> +    const: fsl,pf1550-regulator
-
-This looks not needed.
-
-> +
-> +patternProperties:
-> +  "^(LDO[1-3]|SW[1-3]|VREFADDR)$":
-
-Node names are lowercase.
-
-> +    $ref: regulator.yaml#
-> +    unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-
-Missing blank line
-
-> +additionalProperties: false
-> +
-> +...
-
-<form letter>
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC. It might happen, that command when run on an older
-kernel, gives you outdated entries. Therefore please be sure you base
-your patches on recent Linux kernel.
-
-Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-people, so fix your workflow. Tools might also fail if you work on some
-ancient tree (don't, instead use mainline) or work on fork of kernel
-(don't, instead use mainline). Just use b4 and everything should be
-fine, although remember about `b4 prep --auto-to-cc` if you added new
-patches to the patchset.
-
-You missed at least devicetree list (maybe more), so this won't be
-tested by automated tooling. Performing review on untested code might be
-a waste of time.
-
-Please kindly resend and include all necessary To/Cc entries.
-</form letter>
-
-
 
 Best regards,
 Krzysztof
