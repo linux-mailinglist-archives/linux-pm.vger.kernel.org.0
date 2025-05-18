@@ -1,114 +1,125 @@
-Return-Path: <linux-pm+bounces-27275-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27276-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0042ABAEC2
-	for <lists+linux-pm@lfdr.de>; Sun, 18 May 2025 10:24:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49A89ABB056
+	for <lists+linux-pm@lfdr.de>; Sun, 18 May 2025 15:19:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B35CA189A8E0
-	for <lists+linux-pm@lfdr.de>; Sun, 18 May 2025 08:24:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9246B16F41D
+	for <lists+linux-pm@lfdr.de>; Sun, 18 May 2025 13:19:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B43FA20E716;
-	Sun, 18 May 2025 08:24:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1116211A0E;
+	Sun, 18 May 2025 13:19:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EtuQAT+M"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.lichtvoll.de (lichtvoll.de [37.120.160.25])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 879FD13D52F
-	for <linux-pm@vger.kernel.org>; Sun, 18 May 2025 08:24:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.120.160.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F72C1373;
+	Sun, 18 May 2025 13:19:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747556650; cv=none; b=imq1F8OQ2hY/++mWubA1Z9dGqxuWKidU663bphlPpKgaVFnrdddncuNsmLm5AO6TIr4yiqzMtKXMiV29yUCfz88ZGgSPlPOpWK/JCjkujidTffseihmOlrxIXER90N0Yi4x+bli72skiMqM35RZUnSgtwrYppX4zA8JK2VlAQTo=
+	t=1747574351; cv=none; b=W2FgVzedgvBQWvEMhV7GRGtjqVGaCDjY8K3+Av28serrzYvTj3aPAJ/INbJV8QFKKjSwZy5OHHbytu941GiC2JOtbsh0a8JmpzHcg/R9A6JkbIglFJffRh7xBrlm7jTG3vqMC0MyHp8f31PRu7O8to6ULr6Rc8TwtIXf3czUeO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747556650; c=relaxed/simple;
-	bh=yC1I4NNT2qghc4qf+/LWirCbqI5f4ZmCwIK+U29wXdI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Oefs9enh98pbZnVXBdsheMRfTTmbgb6XhG6/coDsSzNNYUqtSQbTht/kACjmh+8YLcnd+siAxVq/YMNpss5yycV8CNUW9cDZlU5rS9FIuu3M2O74zwLhLkwDVrfoqKTSPsRLt8Y/7vDFOOCyDh0uCaJBrxTDcwXrabZGwG6Zl+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lichtvoll.de; spf=pass smtp.mailfrom=lichtvoll.de; arc=none smtp.client-ip=37.120.160.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lichtvoll.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lichtvoll.de
-Received: from 127.0.0.1 (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384)
-	(No client certificate requested)
-	by mail.lichtvoll.de (Postfix) with ESMTPSA id 6BA30FBF31;
-	Sun, 18 May 2025 08:24:02 +0000 (UTC)
-Authentication-Results: mail.lichtvoll.de;
-	auth=pass smtp.auth=martin@lichtvoll.de smtp.mailfrom=martin@lichtvoll.de
-From: Martin Steigerwald <martin@lichtvoll.de>
-To: Denis Benato <benato.denis96@gmail.com>, rafael@kernel.org,
- len.brown@intel.com, pavel@kernel.org, gregkh@linuxfoundation.org,
- dakr@kernel.org, Mario Limonciello <superm1@kernel.org>,
- Mario Limonciello <superm1@kernel.org>
-Cc: AceLan Kao <acelan.kao@canonical.com>,
- Kai-Heng Feng <kaihengf@nvidia.com>,
- Mark Pearson <mpearson-lenovo@squebb.ca>,
- Merthan =?UTF-8?B?S2FyYWthxZ8=?= <m3rthn.k@gmail.com>,
- linux-pm@vger.kernel.org
-Subject: Re: [PATCH] PM: Use hibernate flows for system power off
-Date: Sun, 18 May 2025 10:24:01 +0200
-Message-ID: <5890366.DvuYhMxLoT@lichtvoll.de>
-In-Reply-To: <7274e7a9-d645-48f6-b672-f5d8366fc813@kernel.org>
-References:
- <20250512212628.2539193-1-superm1@kernel.org>
- <2993537.e9J7NaK4W3@lichtvoll.de>
- <7274e7a9-d645-48f6-b672-f5d8366fc813@kernel.org>
+	s=arc-20240116; t=1747574351; c=relaxed/simple;
+	bh=zqPJuOXxqod++t44o4DuYRjFJgaOBYIO604IdtZ/VSE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uMARPL/m+wIzoDxBNnxXeePrN/Qih5oBP/duuND/qX/afD6XKCJ9ullU98UqxicFieAIvAT/yb7pEBMxXRaOBWmJrnpF3LP+nEipO37WRm+LoN+UzS3gJPA1NWXIsPTp+k2XMz0jlkgMMWPeiwY6Wvw+ZMD4qZT5v/JysG5rxqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EtuQAT+M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17127C4CEE7;
+	Sun, 18 May 2025 13:19:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747574351;
+	bh=zqPJuOXxqod++t44o4DuYRjFJgaOBYIO604IdtZ/VSE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=EtuQAT+MxP1GAaFTXXnnzw0HNIiXtfN6h78D9OLv9S74SNymO1gsGhp/UUqG3JpA0
+	 j9pmoOFDNiNbCwt7VF1iPNmMsiZ0DxFrrqSFc3tMHEQHNHwWAKoVHlUsqpxpTl3nci
+	 0kSDGHL+uu3VHErMoMm0jpgkyLTUukVsYi8chHctOkKabDmnnS7Q6/S0ai1o4ezgXm
+	 9OYe0RCZ6UmlL/CGmMqfZvhJxqeJ0qqRrzuaFeMZE+kuUQAqt1tGdcEnj1W4Ee2/1c
+	 bGsIc+NojAA2qppAo8h78OvHwRZ1f7XJbOAucZMUCTmsGFVQOcWNuXEmhbfOXaXlqx
+	 vXbE4nECNWgXw==
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-329107e3f90so3774661fa.3;
+        Sun, 18 May 2025 06:19:11 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUL9zoGbkrM8CpXRAsVo77LpR5xFbkrV/FJZuoBJmypFeSUnILxmVZm9ueTLG5nByQiztqvtUU/Tqi9ZU4=@vger.kernel.org, AJvYcCVSJRh41pONmtblkVOPv9+ucNrSCBH9gaQiCFO5mWYaQmFYboVA8t8fM6YkR9JOlVm+enDZU5G8SBA=@vger.kernel.org, AJvYcCWbySZEDOiBZ6JfTbuYyiWYXP2OxLZd3MlWSy2UJwfNtnuFp8jW4URUI9C7AtIN+/nrMMPfBswOqXgZcSCH@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVkS0Kgq+fcer3jGyE41A+Q7OYPcB6/SMyIdPtvYeCkBMc8MZi
+	BuBae3ntAHFa7rKNMkGEHTbRm05KDal6PAUXufxR0Y3lbgLwulB1BJP+1BDfefC3vdGnX7e1N/+
+	4UO86h1Ee0s4/UGgDQ/wGRWWh6ZzpdxM=
+X-Google-Smtp-Source: AGHT+IErqxXbCbuTtNVXIG+u+d7vpWcTqptYViLWkXc2Q2KmR50BGaqxSQAOGQizG46jzCV5EsAkk2BeVoCgiwwTEIU=
+X-Received: by 2002:a05:651c:400c:b0:30b:f42b:72f6 with SMTP id
+ 38308e7fff4ca-3280977f153mr20883761fa.32.1747574349469; Sun, 18 May 2025
+ 06:19:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+References: <20250516231858.27899-1-ebiggers@kernel.org> <20250516231858.27899-4-ebiggers@kernel.org>
+ <aCg2DSYp0nakwX3l@gmail.com> <20250517183919.GC1239@sol> <aCl_cSO2XqtSQEZT@gmail.com>
+In-Reply-To: <aCl_cSO2XqtSQEZT@gmail.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Sun, 18 May 2025 15:18:58 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGVAbD9zxUQSwwGo=ueadqWWSdaQNDe_-7ZezpFLMJRMA@mail.gmail.com>
+X-Gm-Features: AX0GCFu1VtSQRdHeCMJJc1l14RlBDttfmugJzDPWh47VUQRPpT4-fKjjp6OfCwk
+Message-ID: <CAMj1kXGVAbD9zxUQSwwGo=ueadqWWSdaQNDe_-7ZezpFLMJRMA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] x86/fpu: Don't support kernel-mode FPU when irqs_disabled()
+To: Ingo Molnar <mingo@kernel.org>
+Cc: Eric Biggers <ebiggers@kernel.org>, x86@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Borislav Petkov <bp@alien8.de>, Thomas Gleixner <tglx@linutronix.de>, Ayush Jain <Ayush.Jain3@amd.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi.
+On Sun, 18 May 2025 at 08:34, Ingo Molnar <mingo@kernel.org> wrote:
+>
+>
+> * Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> > > Alternatively we could set in_kernel_fpu during CPU bootstrap, and
+> > > clear it once we know the FPU is usable? This is only a relatively
+> > > short early boot period, with no scheduling, right?
+> >
+> > Yes, if there isn't agreement on this approach we can do that
+> > instead.  Say:
+> >
+> > - Replace in_kernel_fpu with kernel_fpu_supported, with the opposite
+> >   meaning (so that the initial value of false means "unsupported")
+>
+> I'm not against simplifying the x86 FPU model to exclude IRQs-off
+> context (especially if it also micro-optimizes some of the key runtime
+> kernel-FPU primitives), but it has to be a full solution and we'll have
+> to see how complicated the EFI changes get.
+>
+> Ie. without seeing the full cost-benefit balance it's hard to call this
+> in advance. Mind sending a full series that addresses the EFI case too?
+>
 
-Thanks for your reply, Mario.
+EFI services are only called with IRQs disabled in exceptional cases,
+so it would be unfortunate if it prevents us from make meaningful
+improvements here. In ordinary cases, they are called from a
+workqueue, and I'd prefer it if we can address this without calling
+all EFI services with interrupts disabled either.
 
-Mario Limonciello - 14.05.25, 19:06:03 CEST:
-> > I will eventually see I bet.
-> >=20
-> > Currently I only compile my own kernel for my current ThinkPad which
-> > is not affected by this issue.
+AIUI, the reason we cannot tolerate IRQs being disabled is because
+re-enabling softirqs will complain if IRQs are disabled, due to the
+fact that handling softirqs should not be attempted at that point?
 
-> As a debugging tactic for your problem you can try to save your shutdown
-> log to the EFI pstore by adding this to your kernel command line for a
-> boot.
->=20
-> efi_pstore.pstore_disable=3DN printk.always_kmsg_dump=3DY
->=20
-> Then the next boot if you have the systemd-pstore service enabled it
-> will move the log into /var/lib/systemd/pstore.
->=20
-> If you don't have it enabled you can run this to manually do it one
-> time.
->=20
-> sudo systemctl start systemd-pstore.service
->=20
-> Hopefully that log will be helpful in identifying your problem.
+I don't know the history here, but I wonder if that isn't overly
+pedantic? Disabling softirqs could be avoided entirely when IRQs are
+off, given that they are disabled implicitly already. But why then is
+it not permitted to disable and re-enable softirqs under this
+condition, given that it makes no difference? Or perhaps I'm missing
+something here.
 
-Thanks for the hint on how to debug things like this without some serial=20
-console or so.
+A good way to trigger such an exceptional case is running a kernel
+with efi-pstore and lkdtm built-in under QEMU with OVMF, and do
 
-As I use Devuan and thus do not have Systemd installed, I will need to=20
-find a different way to obtain the log from the pstore. But according to=20
-kernel documentation this seems to be easy enough=C2=B9:
+# echo PANIC > /sys/kernel/debug/provoke-crash/DIRECT
 
-mount -t pstore pstore /sys/fs/pstore
-
-I can indeed mount it and there are a lot of "dmesg-efi_pstore-
-[timestamp]" files where time stamp seems to be in seconds since beginning=
-=20
-of 1970.
-
-[1] https://docs.kernel.org/admin-guide/pstore-blk.html
-
-Thanks,
-=2D-=20
-Martin
-
-
+Another case that likely executes with IRQs disabled (but I haven't
+double checked) is reset_system(), which may return with an error, or
+reboot/poweroff the machine and never return.
 
