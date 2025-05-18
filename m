@@ -1,141 +1,241 @@
-Return-Path: <linux-pm+bounces-27277-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27278-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6121BABB0BF
-	for <lists+linux-pm@lfdr.de>; Sun, 18 May 2025 18:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BD334ABB174
+	for <lists+linux-pm@lfdr.de>; Sun, 18 May 2025 21:33:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 66B721897980
-	for <lists+linux-pm@lfdr.de>; Sun, 18 May 2025 16:04:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2E4E1895FCF
+	for <lists+linux-pm@lfdr.de>; Sun, 18 May 2025 19:34:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E27B18A6C4;
-	Sun, 18 May 2025 16:03:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 583F91EB18A;
+	Sun, 18 May 2025 19:33:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CGRC2IXP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K9jExvFj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6454B1E5E;
-	Sun, 18 May 2025 16:03:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28DB513B58D;
+	Sun, 18 May 2025 19:33:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747584227; cv=none; b=lPW4TRNqfFiYS9QdLZJa7oFLRSb5vcMeqdwnKagIFYtc/ilB8Y01+jwioS/wde3olQcNcgdwcQna0Ip03EuJN/dFuqeXcrEtxGSiEmKW27d3ZdDn6vqfA+O7hmnfDTgt3RWcROwvNTWEuBblfvnVJU+L7wQ7mzumTKQEX6gFiUE=
+	t=1747596833; cv=none; b=IidVfcXjkSEj3epOqBNckIXMFLJX5mUZrwlrDVaFgniRtp+3928FNpkX8bR5nNeBTL1JAaNnbpt64VFvBlO25YTGTvOz1EI0NsXGH4kuZWW7GMqVAX6uGLobsmeyaqFQ00jzaFiyOxH0nTUfFslUpSJcLqbW//osYzSy24gD+Ho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747584227; c=relaxed/simple;
-	bh=NEn4CVT3vMiLLPE655kPeSKolXUSHA2Tv96ka1G5+B4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h0/1MybWDJabmpnk51TZwukh/iCz45Bmo1PIiyuAy40AwJhwzK2Rk2VHeaJUupHbxCFP/37HrbW8jGREnJsWKpd58JTA0C5iZsraP+J+tAOr0XdOW+iVcGq8ZwPP8G3vwTXVY0lol9pQFfeZLuY+8aUBv1rNcehcjwfNQV3W/2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CGRC2IXP; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747584225; x=1779120225;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NEn4CVT3vMiLLPE655kPeSKolXUSHA2Tv96ka1G5+B4=;
-  b=CGRC2IXP2BFqbEZi8EgapsTI7Nye5AoND1jqNKBHiZeDtLKP+eTaHZHW
-   g95vj1jwE6K6Pee4X0FhNUuip44v3YUOwSguQaOCt1HzZQQF1d1C+fO0W
-   modGC+f1WSF/dmNHwokYcTFkJHLmRIz2rzSrf6zVtvR38h4Gj1MdJEzEr
-   umoSvNWjNdNfPUdq5i1GK4EPPb1Od98pMPHI6HvRL2jHG4ua8qMKaGx3p
-   PT+Aw8slWsECJtzDfutmS6uig0v8k4aJ8M/dn4zXOXvShm7dteeXXI/7I
-   KetjPxtiu4N/m4NbNeqT/sG8u09VGknNMfPMCFbyxP4RMi/pX1QK+ApIy
-   w==;
-X-CSE-ConnectionGUID: yvJYNEeIQhO+QEzVLb/KOg==
-X-CSE-MsgGUID: 2cFyyHjVQH6ixMuDpqGacA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11437"; a="74887795"
-X-IronPort-AV: E=Sophos;i="6.15,299,1739865600"; 
-   d="scan'208";a="74887795"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2025 09:03:45 -0700
-X-CSE-ConnectionGUID: yM6flAhGTmq8jKPvsW8hfw==
-X-CSE-MsgGUID: Vj6WNdPERD2wU5GMCOlTXQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,299,1739865600"; 
-   d="scan'208";a="139558967"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 18 May 2025 09:03:42 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uGgUF-000Krj-2t;
-	Sun, 18 May 2025 16:03:39 +0000
-Date: Mon, 19 May 2025 00:03:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Samuel Kayode <samuel.kayode@savoirfairelinux.com>,
-	Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Sebastian Reichel <sre@kernel.org>, Robin Gong <yibin.gong@nxp.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-imx@nxp.com,
-	linux-input@vger.kernel.org, Abel Vesa <abelvesa@linux.com>,
-	Enric Balletbo Serra <eballetbo@gmail.com>
-Subject: Re: [PATCH v2 7/9] input: pf1550: add onkey support
-Message-ID: <202505182355.Of8g2bwa-lkp@intel.com>
-References: <7d80afedf1ad9e98c9739163751bcb2785009e74.1747409892.git.samuel.kayode@savoirfairelinux.com>
+	s=arc-20240116; t=1747596833; c=relaxed/simple;
+	bh=hzxC7MYJ7+HUoIK32oYZfsXGgy71E5mkKoul03prqBY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tUREhp5HjqxYoiT8Hq1XDAgH+iOUkaBtLe2G+7zwnnRhXxqLBHKacQ8DuKUO9eNX9Sd34jMVZgrA1LaYl8dEDSCD3BockBQV3pFKDa3GAHzGwCbnPoKYe/zq79+nBEeg32n0fk0GItAOQfRzH6ucKMzE47cinnhiP/NVnXMrLyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K9jExvFj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B3E1C4CEE7;
+	Sun, 18 May 2025 19:33:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747596832;
+	bh=hzxC7MYJ7+HUoIK32oYZfsXGgy71E5mkKoul03prqBY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=K9jExvFjIVhPfLJbHSeB2Mxr7qr4DIfmXw9JPk9gqGUDTUdrQI0kJtQWCfpmiS7DU
+	 bePig/0VgJQlhuVkVJ41gs20O2cm+ZUQsznqnTHrzgZgrpBCujDlEscR8axKY8+DjJ
+	 LovSondh2F7ENE2LaoTQ0WzlHiL+ag9ZoXsABSToxIQrjJpO9kFIpwHfsWbPrar3qE
+	 CeYfyZwrs8Z88UmGcm3HHNi4UMeoLXwScFZhVi7jP0yuDh3bgnGOHxRHZpU9eHh0yK
+	 C/dhuOgAqTN2vA0fvv23qwYaSevXABDMmyySpJTXfcEWcGgIOC20F2tJ+WqplPvUyY
+	 NHFH1MolVwZDw==
+From: Eric Biggers <ebiggers@kernel.org>
+To: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Borislav Petkov <bp@alien8.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ayush Jain <Ayush.Jain3@amd.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Ard Biesheuvel <ardb@kernel.org>
+Subject: [PATCH] x86/fpu: Fix irq_fpu_usable() to return false during CPU onlining
+Date: Sun, 18 May 2025 12:32:12 -0700
+Message-ID: <20250518193212.1822-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7d80afedf1ad9e98c9739163751bcb2785009e74.1747409892.git.samuel.kayode@savoirfairelinux.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Samuel,
+From: Eric Biggers <ebiggers@google.com>
 
-kernel test robot noticed the following build warnings:
+irq_fpu_usable() incorrectly returned true before the FPU is
+initialized.  The x86 CPU onlining code can call sha256() to checksum
+AMD microcode images, before the FPU is initialized.  Since sha256()
+recently gained a kernel-mode FPU optimized code path, a crash occurred
+in kernel_fpu_begin_mask() during hotplug CPU onlining.
 
-[auto build test WARNING on b1d8766052eb0534b27edda8af1865d53621bd6a]
+(The crash did not occur during boot-time CPU onlining, since the
+optimized sha256() code is not enabled until subsys_initcalls run.)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Kayode/dt-bindings-power-supply-add-pf1550/20250517-030259
-base:   b1d8766052eb0534b27edda8af1865d53621bd6a
-patch link:    https://lore.kernel.org/r/7d80afedf1ad9e98c9739163751bcb2785009e74.1747409892.git.samuel.kayode%40savoirfairelinux.com
-patch subject: [PATCH v2 7/9] input: pf1550: add onkey support
-config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20250518/202505182355.Of8g2bwa-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250518/202505182355.Of8g2bwa-lkp@intel.com/reproduce)
+Fix this by making irq_fpu_usable() return false before fpu__init_cpu()
+has run.  To do this without adding any additional overhead to
+irq_fpu_usable(), replace the existing per-CPU bool in_kernel_fpu with
+kernel_fpu_allowed which tracks both initialization and usage rather
+than just usage.  The initial state is false; FPU initialization sets it
+to true; kernel-mode FPU sections toggle it to false and then back to
+true; and CPU offlining restores it to the initial state of false.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505182355.Of8g2bwa-lkp@intel.com/
+Fixes: 11d7956d526f ("crypto: x86/sha256 - implement library instead of shash")
+Reported-by: Ayush Jain <Ayush.Jain3@amd.com>
+Closes: https://lore.kernel.org/r/20250516112217.GBaCcf6Yoc6LkIIryP@fat_crate.local
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+---
+ arch/x86/include/asm/fpu/api.h |  1 +
+ arch/x86/kernel/fpu/core.c     | 34 +++++++++++++++++++++-------------
+ arch/x86/kernel/fpu/init.c     |  3 +++
+ arch/x86/kernel/smpboot.c      |  6 ++++++
+ 4 files changed, 31 insertions(+), 13 deletions(-)
 
-All warnings (new ones prefixed by >>):
+diff --git a/arch/x86/include/asm/fpu/api.h b/arch/x86/include/asm/fpu/api.h
+index 8e6848f55dcdb..cd6f194a912bf 100644
+--- a/arch/x86/include/asm/fpu/api.h
++++ b/arch/x86/include/asm/fpu/api.h
+@@ -124,10 +124,11 @@ extern void fpstate_init_soft(struct swregs_state *soft);
+ #else
+ static inline void fpstate_init_soft(struct swregs_state *soft) {}
+ #endif
+ 
+ /* State tracking */
++DECLARE_PER_CPU(bool, kernel_fpu_allowed);
+ DECLARE_PER_CPU(struct fpu *, fpu_fpregs_owner_ctx);
+ 
+ /* Process cleanup */
+ #ifdef CONFIG_X86_64
+ extern void fpstate_free(struct fpu *fpu);
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index 948b4f5fad99c..ea138583dd92a 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -42,12 +42,15 @@ struct fpu_state_config fpu_user_cfg __ro_after_init;
+  * Represents the initial FPU state. It's mostly (but not completely) zeroes,
+  * depending on the FPU hardware format:
+  */
+ struct fpstate init_fpstate __ro_after_init;
+ 
+-/* Track in-kernel FPU usage */
+-static DEFINE_PER_CPU(bool, in_kernel_fpu);
++/*
++ * Track FPU initialization and kernel-mode usage. 'true' means the FPU is
++ * initialized and is not currently being used by the kernel:
++ */
++DEFINE_PER_CPU(bool, kernel_fpu_allowed);
+ 
+ /*
+  * Track which context is using the FPU on the CPU:
+  */
+ DEFINE_PER_CPU(struct fpu *, fpu_fpregs_owner_ctx);
+@@ -70,19 +73,22 @@ bool irq_fpu_usable(void)
+ {
+ 	if (WARN_ON_ONCE(in_nmi()))
+ 		return false;
+ 
+ 	/*
+-	 * In kernel FPU usage already active?  This detects any explicitly
+-	 * nested usage in task or softirq context, which is unsupported.  It
+-	 * also detects attempted usage in a hardirq that has interrupted a
+-	 * kernel-mode FPU section.
++	 * Return false in the following cases:
++	 *
++	 * - FPU is not yet initialized. This can happen only when the call is
++	 *   coming from CPU onlining, for example for microcode checksumming.
++	 * - The kernel is already using the FPU, either because of explicit
++	 *   nesting (which should never be done), or because of implicit
++	 *   nesting when a hardirq interrupted a kernel-mode FPU section.
++	 *
++	 * The single boolean check below handles both cases:
+ 	 */
+-	if (this_cpu_read(in_kernel_fpu)) {
+-		WARN_ON_FPU(!in_hardirq());
++	if (!this_cpu_read(kernel_fpu_allowed))
+ 		return false;
+-	}
+ 
+ 	/*
+ 	 * When not in NMI or hard interrupt context, FPU can be used in:
+ 	 *
+ 	 * - Task context except from within fpregs_lock()'ed critical
+@@ -437,13 +443,14 @@ void kernel_fpu_begin_mask(unsigned int kfpu_mask)
+ {
+ 	if (!irqs_disabled())
+ 		fpregs_lock();
+ 
+ 	WARN_ON_FPU(!irq_fpu_usable());
+-	WARN_ON_FPU(this_cpu_read(in_kernel_fpu));
+ 
+-	this_cpu_write(in_kernel_fpu, true);
++	/* Toggle kernel_fpu_allowed to false: */
++	WARN_ON_FPU(!this_cpu_read(kernel_fpu_allowed));
++	this_cpu_write(kernel_fpu_allowed, false);
+ 
+ 	if (!(current->flags & (PF_KTHREAD | PF_USER_WORKER)) &&
+ 	    !test_thread_flag(TIF_NEED_FPU_LOAD)) {
+ 		set_thread_flag(TIF_NEED_FPU_LOAD);
+ 		save_fpregs_to_fpstate(x86_task_fpu(current));
+@@ -459,13 +466,14 @@ void kernel_fpu_begin_mask(unsigned int kfpu_mask)
+ }
+ EXPORT_SYMBOL_GPL(kernel_fpu_begin_mask);
+ 
+ void kernel_fpu_end(void)
+ {
+-	WARN_ON_FPU(!this_cpu_read(in_kernel_fpu));
++	/* Toggle kernel_fpu_allowed back to true: */
++	WARN_ON_FPU(this_cpu_read(kernel_fpu_allowed));
++	this_cpu_write(kernel_fpu_allowed, true);
+ 
+-	this_cpu_write(in_kernel_fpu, false);
+ 	if (!irqs_disabled())
+ 		fpregs_unlock();
+ }
+ EXPORT_SYMBOL_GPL(kernel_fpu_end);
+ 
+diff --git a/arch/x86/kernel/fpu/init.c b/arch/x86/kernel/fpu/init.c
+index 6bb3e35c40e24..99db41bf9fa6b 100644
+--- a/arch/x86/kernel/fpu/init.c
++++ b/arch/x86/kernel/fpu/init.c
+@@ -49,10 +49,13 @@ static void fpu__init_cpu_generic(void)
+  */
+ void fpu__init_cpu(void)
+ {
+ 	fpu__init_cpu_generic();
+ 	fpu__init_cpu_xstate();
++
++	/* Start allowing kernel-mode FPU: */
++	this_cpu_write(kernel_fpu_allowed, true);
+ }
+ 
+ static bool __init fpu__probe_without_cpuid(void)
+ {
+ 	unsigned long cr0;
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index e266c4edea17e..58ede3fa6a75b 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -1186,10 +1186,16 @@ void cpu_disable_common(void)
+ {
+ 	int cpu = smp_processor_id();
+ 
+ 	remove_siblinginfo(cpu);
+ 
++	/*
++	 * Stop allowing kernel-mode FPU. This is needed so that if the CPU is
++	 * brought online again, the initial state is not allowed:
++	 */
++	this_cpu_write(kernel_fpu_allowed, false);
++
+ 	/* It's now safe to remove this processor from the online map */
+ 	lock_vector_lock();
+ 	remove_cpu_from_maps(cpu);
+ 	unlock_vector_lock();
+ 	fixup_irqs();
 
-   drivers/input/keyboard/pf1550_onkey.c: In function 'pf1550_onkey_resume':
->> drivers/input/keyboard/pf1550_onkey.c:171:30: warning: conversion from 'long unsigned int' to 'unsigned int' changes value from '18446744073709551552' to '4294967232' [-Woverflow]
-     171 |                              ~(ONKEY_IRQ_PUSHI | ONKEY_IRQ_1SI | ONKEY_IRQ_2SI |
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     172 |                              ONKEY_IRQ_3SI | ONKEY_IRQ_4SI | ONKEY_IRQ_8SI));
-         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +171 drivers/input/keyboard/pf1550_onkey.c
-
-   162	
-   163	static int pf1550_onkey_resume(struct device *dev)
-   164	{
-   165		struct platform_device *pdev = to_platform_device(dev);
-   166		struct onkey_drv_data *onkey = platform_get_drvdata(pdev);
-   167	
-   168		if (!device_may_wakeup(&pdev->dev))
-   169			regmap_write(onkey->pf1550->regmap,
-   170				     PF1550_PMIC_REG_ONKEY_INT_MASK0,
- > 171				     ~(ONKEY_IRQ_PUSHI | ONKEY_IRQ_1SI | ONKEY_IRQ_2SI |
-   172				     ONKEY_IRQ_3SI | ONKEY_IRQ_4SI | ONKEY_IRQ_8SI));
-   173		else
-   174			disable_irq_wake(onkey->pf1550->irq);
-   175	
-   176		return 0;
-   177	}
-   178	
-
+base-commit: 8566fc3b96539e3235909d6bdda198e1282beaed
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.49.0
+
 
