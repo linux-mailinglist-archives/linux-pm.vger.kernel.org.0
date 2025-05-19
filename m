@@ -1,114 +1,103 @@
-Return-Path: <linux-pm+bounces-27328-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27329-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51598ABB9E9
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 11:46:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB499ABBA48
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 11:54:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AD897A7164
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 09:41:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72CB87A2AD3
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 09:51:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E96727510E;
-	Mon, 19 May 2025 09:31:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321191FF610;
+	Mon, 19 May 2025 09:49:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UFpixuAd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EkJQYffE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E265B272E6A
-	for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 09:31:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03F8D33086;
+	Mon, 19 May 2025 09:49:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747647090; cv=none; b=TLNA7gIuPGS0UoG1XeeBIyrHQCP52P5h8kYYmnXM1PzPAMKKLTFIb5zUSJyARMk79Yx7vhyMgQHQlKpD4WBE7Z9+2+BTSkFSaTJ6V4fzoaDb21PJ9JQuZXTcAb6KATfkgasxSq6Vq7INyHAB3YS5V40hlSmWXSrn28V+IVKJ50o=
+	t=1747648184; cv=none; b=lMBtP1vUTT1CBoVYmm54neTdoDlsfXnAZWTEUymsmNpoZhc5GgBa/YhexsV9U12yYPk5m4gG683kS77nCL1QIjJlG/AoiC6ExSd9C7IZuSnpcabY3uIXPGn5L42nrVbTiHlMMlyZixuitZG6Ikc7ol1g4Wwe+okYneZYdMi78Q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747647090; c=relaxed/simple;
-	bh=c/wBlaYM4RSxl/erOHhMdSWmwIe8Uwd04Sjt8QeJ8/Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=La1kvfRMD0MDT76QHFPVD3iFngyMlCKp32QxVhfJhTzzeo46mU8PkJfPQNU9GjouIOgk2MAeskFjBXy3utqZHanhtc8A4dWKD9knjpUwq7whq/eD/lKSJnT3ypF9MVFza5vwKib9/yJAepViB7wLxnfHUYtN/7zuGhmP6dfrf4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UFpixuAd; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-b26f5cd984cso2419384a12.3
-        for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 02:31:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747647088; x=1748251888; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bvQ9YmGROOXrG/iLumMa04WB7ur/2tl9ZFhlSZDT+Cc=;
-        b=UFpixuAdc+84m/oLMFEg7ktPLRO266iv4r2R61QJuK55D4eoz1BmICqbBnY4w/iPIF
-         q5QcoIvX0Mef3IrqKvsvvxwx1VewXlyhpzKpbeWEVEUD7pqrygZ63rdvqR0XnWyLj1xC
-         UV69s49HaJnmqDLoU8wsDXiu2aG2Zfxg3Em/rUGKQ6GMfjrNk2ZaF7mTvfFMj0wTfcdK
-         brdUJerbFXyfT7pWp8uB9tWXlQwO/8XXCRTGc4l9+ClBBZLPUD+DEG8JSwRO2YlkIll5
-         2m4xkgjPvV/wSxN62rvaXEhAtyk7+5k+tQKxq2N2ClK/uK+iEpIpmbG4grlBq7N9iLL9
-         HswA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747647088; x=1748251888;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bvQ9YmGROOXrG/iLumMa04WB7ur/2tl9ZFhlSZDT+Cc=;
-        b=TOx7X520aMpvA5/YqgFnDZxPUqpViVGysL3WFh5ADi7yty4WfFH/IO2P8SzKhhshpe
-         hSmcaMwSubl4trI/yintbHt8y/9QMbpcBmH+VT8FVZdTcTA8RGoYiwNiVZGPv4dujJQV
-         Zhbn6HxfYTQlg7EJIt5g8oRRN6/3hi8x9zM7Kn2Xh/SiqlxGE+0L5WFP7/slShTN8NcU
-         jvw/SlYZTRJv93fsYeVvL0zUe4DjVi/ZAaR6K1hCLVQMToAdW6LrnF7SrmPR+XVEjT82
-         af4FexYU6nxp0SX0Oxvmww6o5O81WfC4PqlLIuskFHHit3/+Z5NI2/P8QzhRHv2mix8m
-         mXoA==
-X-Forwarded-Encrypted: i=1; AJvYcCWhrk4KoqAkA23BvwDZxgE4oe1hJpJZkqZ9XQ0H9g3KkHKabKGczWzxdavt3PQUIE3Pgro1/DzSmg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbbpvjcPhqufNg1oH141ocMTfiXZMTozP9gLSiMfTwlSYuPew7
-	o8opRETqqiG38BOoSyIyIJYxomqUeZELRxyXxfwzgISBM22IMTWprEL5GVWGF2kdexE=
-X-Gm-Gg: ASbGncvLWrvscZgb6HIjDbt9gAHBjnAMgpkrIShairewrEzH6syZVShiA6wNOisbSWj
-	pcTebezmmDkvH3cH7IvS9kZGfGy9RcPv2xbiXNg6DWQmDiqU1OLjnUIX1UyZ6AGEx9rnS0tYHDy
-	EGh0XKSDy023yJUNqnHivwRZVcp4PbLgr69mPEZGMqdDmvioZXpwdBfJe673NDPS5IFYPRBc1z6
-	e8LT2sYuTmX0Dt/VnUgHZmFTyvgnQZfv46fV4CFq/aTgr3JPJmg5CclLzZAZDKqjFP/VxWv0JD3
-	6gnKeB3ZqS0d9SKScMRpvF/DCCgI55T5/JHlNs/enG7Mmi3eMpx0
-X-Google-Smtp-Source: AGHT+IHQejNmLqqvXox/EeoAuxX3X7m8LUs8KU1gDcylEBYdUF9gjHc0zecpPmtgBo7FvB8Kzn20/Q==
-X-Received: by 2002:a17:903:2f47:b0:224:376:7a21 with SMTP id d9443c01a7336-231d452d0bamr162849905ad.42.1747647088089;
-        Mon, 19 May 2025 02:31:28 -0700 (PDT)
-Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-231d4ac9567sm55776315ad.11.2025.05.19.02.31.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 May 2025 02:31:27 -0700 (PDT)
-Date: Mon, 19 May 2025 15:01:25 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-Cc: rafael@kernel.org, pierre.gondois@arm.com, sumitg@nvidia.com,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linuxarm@huawei.com, mario.limonciello@amd.com,
-	yumpusamongus@gmail.com, srinivas.pandruvada@linux.intel.com,
-	jonathan.cameron@huawei.com, zhanjie9@hisilicon.com,
-	lihuisong@huawei.com, cenxinghai@h-partners.com,
-	yubowen8@huawei.com, hepeng68@huawei.com
-Subject: Re: [PATCH] cpufreq: CPPC: Support for autonomous selection in
- cppc_cpufreq
-Message-ID: <20250519093125.jn2naozcsrroahco@vireshk-i7>
-References: <20250507031941.2812701-1-zhenglifeng1@huawei.com>
- <20250519081850.7ycbcw56jzpiwkth@vireshk-i7>
- <4c4b0140-9126-4586-92f8-f7c9fd7a4a34@huawei.com>
+	s=arc-20240116; t=1747648184; c=relaxed/simple;
+	bh=GsbMk3lBqAULDnb+QrS3EC8rrwMu4pNT1Ee885kOqtA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QyMi/bUkpgDbgXqPfzQhy8UcibrEtfTS6P629VpWv/GXCUlpLPTCXQQG60VPYWTc8/0/4gdCZkKs5CYXFMDdV0Gr+H+YRZ3a7IDkndDMXGJRuFOreigO5Rb7dfleGRw+QjjwCHhg794OefwoUIOzm9XuslTkudZyyQCo2dhB0LM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EkJQYffE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7487DC4AF09;
+	Mon, 19 May 2025 09:49:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747648181;
+	bh=GsbMk3lBqAULDnb+QrS3EC8rrwMu4pNT1Ee885kOqtA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=EkJQYffE1VqZHkjAq8NPxnUmAvtmF1S/yPp41BlsOVOx1Xx94bzNIDoBAVrL3fpTr
+	 9/hl7J7473dDm1wdx1jxs51MI1l6n5tfUlMtnOxUfjPJDhLHcMZcZG/dJS67TsOfYE
+	 Kic0GIHbjkz9e10d/EUewreZLaXJL6I9rNuX7vFyJFESBIvODelHTnjNMq0nHtIxId
+	 5QUbd4AWBUcYmtaCVD8rhf4dSr2kxKLWL9r5RWDYRVOKaQSQOgkNpYlMjN7BbxRxHL
+	 gs9uhBCd60Asb1SipGkbzCbwAP1DM6GF8M4pjjPSdFZANjRTs65SuX+kG/QPC+G6PE
+	 hlYo1NsOuI94A==
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-54b166fa41bso6345569e87.0;
+        Mon, 19 May 2025 02:49:41 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUC9g/f+SZurNX9+y3vUQMsTs4/mSBIC4UIsXbZ6T+fgJFzhQXk1Zvtc9ZysOIjcqSRgB4P5cHsY/Q6cic=@vger.kernel.org, AJvYcCVuIRC/HQmuleEB7lUHpGx8B/8dSA7URluOJUxLMZCJxAMgFpEri4cE0m6vtcIJ2jRZ03fTFY17qrnSviXM@vger.kernel.org, AJvYcCWezp3KLx0zEiQGFu8EnkXxKgFXwohBzh7nGtla58XBkPi59Hj9QW+je4UfHAayAvpA0tnSqDv8Zi0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKmlPyEdUl6UlC1WvZ+7tY8GoeVrMB/wXAjSCkLERuBL+JfRYj
+	DifH2+9f8KjeCxdNTbj3xDyQKmAK5GppOTZzmIwTv+X1Q29yFEHNmurFSp8TCHxk8Yn0t+TzLt1
+	MDBUg+FwKnRzC04rMl15GwI1jOVNlK+M=
+X-Google-Smtp-Source: AGHT+IFHpwka7r/jvwA9nGkxVeZQ1YTP11Ojb06eAYdaCEkmB9G5ujZDY/NFjf5ABOkcMR8fScaCOANQVjIL+X/hH5w=
+X-Received: by 2002:a05:6512:1342:b0:551:f780:a6d0 with SMTP id
+ 2adb3069b0e04-551f780a82fmr270916e87.40.1747648179867; Mon, 19 May 2025
+ 02:49:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4c4b0140-9126-4586-92f8-f7c9fd7a4a34@huawei.com>
+References: <20250516231858.27899-1-ebiggers@kernel.org> <20250516231858.27899-4-ebiggers@kernel.org>
+ <aCg2DSYp0nakwX3l@gmail.com> <20250517183919.GC1239@sol> <aCl_cSO2XqtSQEZT@gmail.com>
+ <CAMj1kXGVAbD9zxUQSwwGo=ueadqWWSdaQNDe_-7ZezpFLMJRMA@mail.gmail.com>
+ <20250518200114.GA1764@sol> <aCrmZnSokvmqfel3@gmail.com>
+In-Reply-To: <aCrmZnSokvmqfel3@gmail.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Mon, 19 May 2025 11:49:28 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGe0hMD-71KYN_htJztAL+P8vFNf+9+W_aVDkHx3nCEWA@mail.gmail.com>
+X-Gm-Features: AX0GCFtaUNa2B-7_aRHLOnxbWmvQvGoR1F6bLsfojcbDm8Cwpd0zWGPWxHlaz9Y
+Message-ID: <CAMj1kXGe0hMD-71KYN_htJztAL+P8vFNf+9+W_aVDkHx3nCEWA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] x86/fpu: Don't support kernel-mode FPU when irqs_disabled()
+To: Ingo Molnar <mingo@kernel.org>
+Cc: Eric Biggers <ebiggers@kernel.org>, x86@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Borislav Petkov <bp@alien8.de>, Thomas Gleixner <tglx@linutronix.de>, Ayush Jain <Ayush.Jain3@amd.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>
+Content-Type: text/plain; charset="UTF-8"
 
-On 19-05-25, 17:29, zhenglifeng (A) wrote:
-> cpufreq/policyN/ is linked to cpuX/cpufreq/, both paths correct.
+On Mon, 19 May 2025 at 10:06, Ingo Molnar <mingo@kernel.org> wrote:
+>
+>
+> * Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> > > # echo PANIC > /sys/kernel/debug/provoke-crash/DIRECT
+> > >
+> > > Another case that likely executes with IRQs disabled (but I haven't
+> > > double checked) is reset_system(), which may return with an error, or
+> > > reboot/poweroff the machine and never return.
+> >
+> > That makes sense to me.  preempt_disable() and preempt_enable() are already
+> > allowed when IRQs are disabled, and I'm not sure why local_bh_disable() and
+> > local_bh_enable() are different.
+>
+> Because local_bh_enable() may run softirq handlers immediately if
+> there's pending softirqs, which shouldn't be done in hardirq context.
+>
 
-Ahh, my bad.
+Sure, but why is that mandatory?
 
-> It means Continuous Performance Control, you can see that in ACPI 6.5,
-> s8.4.6.1 _CPC (Continuous Performance Control). Use "_CPC" might be better.
-
-Okay.
-
-This looks fine to me then, let Sumit reply and then I can apply it.
-
--- 
-viresh
+preempt_disable() has preempt_enable() and preempt_enable_no_resched()
+counterparts. Could we have a local_bh_enable_no_xxx() version that
+re-enables async softirq processing on the current CPU but does not
+kick off a synchronous processing run?
 
