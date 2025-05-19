@@ -1,123 +1,121 @@
-Return-Path: <linux-pm+bounces-27378-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27379-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79A8FABC799
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 21:11:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9519DABC8F8
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 23:16:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B7AE1B64637
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 19:11:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D6D14A154F
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 21:16:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D47E420E310;
-	Mon, 19 May 2025 19:11:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 232561A704B;
+	Mon, 19 May 2025 21:16:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bBuGTRVL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UE/R2W23"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D9D13635C;
-	Mon, 19 May 2025 19:11:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B2BD2FF
+	for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 21:16:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747681860; cv=none; b=Wit2Gh8j3vc/sWNUL1iRWQkJ8ammYrR42fONhm3RyPphbpqlusPyrgu0mVwbOaxx4sVfm1K3tAZ14r3UHmpoDYIBqQ400qu9Kolg+W4Xh46NjEpNWiC6oOqazXitYKnrVNj2aYv7ezQYldIoudl2WmNIGcDtEhGSu2L8pbB1k94=
+	t=1747689368; cv=none; b=ksr0wRgcpIVWJkGQoXWqvKSIR5RDRxwyzPhf8xrbTjCCqHUVOarHCImWn8RsY1mCo73hRBc26oNACbNbVEvaEDy/IX2LjiNec8ABuWdTWLi7/IoqXI6Yrk/qGYc1tMldHAjKjVtJSO67TZyfwwJ1xA6DVlV7z2JT1JVKZUkq1Pc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747681860; c=relaxed/simple;
-	bh=5UpWvRtyyVKCNBvlRnU6EYbY0K1yCTIYPFLr2mvenlE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Zy69l633tuGptpZeg0UcVWsZYUbe5SGUo+xl9jxoDvzU1iD9kXD+x3t5T8Ovc+ztBAWqTsgFqresfU1IMFti6UDabmytwFhi9rppX8S3hkJ0d8nVFxLz+ZneugydkGiexgY4BIPV4Wd9xnWi2H8B9PJrOoL52IKdrKZWPlL8VQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bBuGTRVL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89BE0C4CEE4;
-	Mon, 19 May 2025 19:11:00 +0000 (UTC)
+	s=arc-20240116; t=1747689368; c=relaxed/simple;
+	bh=Xy6HiSEYCErWmGoi1cCXef/5iBu5QArWPQPMFezVfbM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tKFj4ogW+k1E/FyFTcjMPKRYL/Zi4neH/9FZtmFfdqz3ILqpAPiCRARO2ZCvpdpu2SED1WrJoBcR1zWtZAUPIRGxJ2db4JAu+X6pyyRQS0NOSBx6ki3lsSQ7N0KKVP3mTkGk+6rirtGjr7kWIx0FotzICYA82qx0rkBWewy8j30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UE/R2W23; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B26DC4CEE4;
+	Mon, 19 May 2025 21:16:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747681860;
-	bh=5UpWvRtyyVKCNBvlRnU6EYbY0K1yCTIYPFLr2mvenlE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=bBuGTRVLg4fWt2z/M81jOfcC2axuGKzLH8jCjG9ZIUD4C0k9d6gA3PWuexagWjAsc
-	 c3t4H6TRTrTvp3qESekKOxsFvCyHZiFmvchlBUGSRwYU3NVANrDIPRD43I60RCvMQ1
-	 1V2rrM6X/lqEaGHwdwpkSDfVGJEef4YkE71sZmsruyO25zC5VBuijXq1atBeVGmr5L
-	 +agZOhd2+vyehkFufLbOx9S/PbQCRlizJOTAHv3ZBayb6MZ1ooNrcTjnGRl8EoJVIh
-	 z1qx//JslcW+aucVeFFEEin3Q2JiWe3KUqnOkOLdpyw58wvu32FxCUPxv5JCQdApk2
-	 czgRMwv8Q8FYA==
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-606440d92eeso2516139eaf.2;
-        Mon, 19 May 2025 12:11:00 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVG3SKeJosPZ16xwtz8wUmHeTtYrw3tgE4xIOH7XfuE8J5XqMVs+LQ29+szuO6VwUfVbAyKoaDaR4uLNUc=@vger.kernel.org, AJvYcCXX1/lw8YTd2318ByfPT/MQC9GDF0t6jwu/u8YRzK8RiZoJTSx1SQuP28uP0oKfVMMwSG2wE6Ub9Q0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySMO/sbmX+lDCIrvp3rON8FGH2Vfl/J32HM4qXhR3PRep9KZ5p
-	Thh5COmRblg6V9Qmhl/TmKVRjHDO2RHgAzeZBo7fyyQG0xNcT1d1Y8C9/ZMLlpsKHI0fO/I270p
-	cD9yVgdCFk8uFMgl+FGTEfxlkEOpiVQk=
-X-Google-Smtp-Source: AGHT+IG8HY1pU0LJCDkdPqsrocfW1VbvRMSWOddpdCXa87vWDDROVqAHWs5AtZqDwRfqdWn3T++3IzYKm2pPhOqCRSE=
-X-Received: by 2002:a05:6820:2705:b0:606:26bd:7208 with SMTP id
- 006d021491bc7-609f37bc37dmr8119192eaf.7.1747681859874; Mon, 19 May 2025
- 12:10:59 -0700 (PDT)
+	s=k20201202; t=1747689367;
+	bh=Xy6HiSEYCErWmGoi1cCXef/5iBu5QArWPQPMFezVfbM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=UE/R2W23gJVA2eLHyd7WFiCbwNev694FyiDZnwhxhsrjhLZsSipqqUrPFquz/FdNn
+	 8LPlrRT2dECwxNWa+GLMBzLRAHvY+eJO8XXSrNUPTeldUUdqr9OgnnIRnn9Hd2j08e
+	 uQSgn5BYYEfMRPEZnRLyQIozVBru3iBSXwnKFM8O/aOMRn8fCJWF6aSBRisu1dadM6
+	 jOC6uPTw4FeWMIGZ48WJyTNL9KdWN/zRn6mRBpjoio8483v/3DrWy0PWSafzXcWUf6
+	 lOZu5584yUJfIS1SWajd+h9ARmvPhHvhPBkHeqjzSxIfJLy4tyJ0Pd9G7aiqdua0f/
+	 RsF0I8RcGzLuQ==
+Message-ID: <4a17230a-1340-445a-a8a3-33ca31f1ffa2@kernel.org>
+Date: Mon, 19 May 2025 16:16:05 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250519070901.1031233-1-rui.zhang@intel.com>
-In-Reply-To: <20250519070901.1031233-1-rui.zhang@intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 19 May 2025 21:10:48 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iZVjbnJKfpzWsmz_j978FRpw+ocQKjUU+u2e2OZQOZMw@mail.gmail.com>
-X-Gm-Features: AX0GCFuODlhskytFNMsfpAga0_WiJT1WXXb9MMNg-aSgbgO4B9N4ZwC1K7l1zKE
-Message-ID: <CAJZ5v0iZVjbnJKfpzWsmz_j978FRpw+ocQKjUU+u2e2OZQOZMw@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel: x86_pkg_temp_thermal: Fix bogus trip temperature
-To: Zhang Rui <rui.zhang@intel.com>
-Cc: rafael.j.wysocki@intel.com, zhangn1985@outlook.com, 
-	daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] PM: Use hibernate flows for system power off
+To: Martin Steigerwald <martin@lichtvoll.de>,
+ Denis Benato <benato.denis96@gmail.com>, rafael@kernel.org,
+ len.brown@intel.com, pavel@kernel.org, gregkh@linuxfoundation.org,
+ dakr@kernel.org
+Cc: AceLan Kao <acelan.kao@canonical.com>, Kai-Heng Feng
+ <kaihengf@nvidia.com>, Mark Pearson <mpearson-lenovo@squebb.ca>,
+ =?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>,
+ linux-pm@vger.kernel.org
+References: <20250512212628.2539193-1-superm1@kernel.org>
+ <2993537.e9J7NaK4W3@lichtvoll.de>
+ <7274e7a9-d645-48f6-b672-f5d8366fc813@kernel.org>
+ <5890366.DvuYhMxLoT@lichtvoll.de>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <5890366.DvuYhMxLoT@lichtvoll.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, May 19, 2025 at 9:09=E2=80=AFAM Zhang Rui <rui.zhang@intel.com> wro=
-te:
->
-> The tj_max value obtained from the Intel TCC library are in Celsius,
-> whereas the thermal subsystem operates in milli-Celsius.
-> This discrepancy leads to incorrect trip temperature calculations.
->
-> Fix bogus trip temperature by converting tj_max to milli-Celsius Unit.
->
-> Fixes: 8ef0ca4a177d ("Merge back other thermal control material for 6.3."=
-)
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> Reported-by: zhang ning <zhangn1985@outlook.com>
-> Closes: https://lore.kernel.org/all/TY2PR01MB3786EF0FE24353026293F5ACCD97=
-A@TY2PR01MB3786.jpnprd01.prod.outlook.com/
-> Tested-by: zhang ning <zhangn1985@outlook.com>
-> ---
-> Commit 983eb370cb87 ("thermal/x86_pkg_temp_thermal: Use Intel TCC
-> library") converts tj_max to use the standard API without switching the
-> Unit, which is a bug. This was mitigated by the next commit 58374a3970a0
-> ("thermal/x86_pkg_temp_thermal: Add support for handling dynamic tjmax")
-> which uses the Celsius tj_max for failure check only.
->
-> This may confuse the maintainer and the bug was introduced by commit
-> 8ef0ca4a177d ("Merge back other thermal control material for 6.3."),
-> when addressing the conflicts with commit d3ecaf17b586
-> ("thermal/drivers/intel: Use generic thermal_zone_get_trip() function").
-> ---
->  drivers/thermal/intel/x86_pkg_temp_thermal.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/therm=
-al/intel/x86_pkg_temp_thermal.c
-> index 4894a26b1e4e..3fc679b6f11b 100644
-> --- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-> +++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-> @@ -330,6 +330,7 @@ static int pkg_temp_thermal_device_add(unsigned int c=
-pu)
->         tj_max =3D intel_tcc_get_tjmax(cpu);
->         if (tj_max < 0)
->                 return tj_max;
-> +       tj_max *=3D 1000;
->
->         zonedev =3D kzalloc(sizeof(*zonedev), GFP_KERNEL);
->         if (!zonedev)
-> --
+On 5/18/2025 3:24 AM, Martin Steigerwald wrote:
+> Hi.
+> 
+> Thanks for your reply, Mario.
+> 
+> Mario Limonciello - 14.05.25, 19:06:03 CEST:
+>>> I will eventually see I bet.
+>>>
+>>> Currently I only compile my own kernel for my current ThinkPad which
+>>> is not affected by this issue.
+> 
+>> As a debugging tactic for your problem you can try to save your shutdown
+>> log to the EFI pstore by adding this to your kernel command line for a
+>> boot.
+>>
+>> efi_pstore.pstore_disable=N printk.always_kmsg_dump=Y
+>>
+>> Then the next boot if you have the systemd-pstore service enabled it
+>> will move the log into /var/lib/systemd/pstore.
+>>
+>> If you don't have it enabled you can run this to manually do it one
+>> time.
+>>
+>> sudo systemctl start systemd-pstore.service
+>>
+>> Hopefully that log will be helpful in identifying your problem.
+> 
+> Thanks for the hint on how to debug things like this without some serial
+> console or so.
+> 
+> As I use Devuan and thus do not have Systemd installed, I will need to
+> find a different way to obtain the log from the pstore. But according to
+> kernel documentation this seems to be easy enough¹:
+> 
+> mount -t pstore pstore /sys/fs/pstore
+> 
+> I can indeed mount it and there are a lot of "dmesg-efi_pstore-
+> [timestamp]" files where time stamp seems to be in seconds since beginning
+> of 1970.
+> 
+> [1] https://docs.kernel.org/admin-guide/pstore-blk.html
+> 
+> Thanks,
 
-Applied as 6.15-rc material, thanks!
+Great.  As a word of warning - you will want to clear these out manually 
+while debugging if you don't have something like systemd to do it for you.
+
+Now that you can debug, does this patch series improve anything?  Or 
+it's a completely separate problem you're seeing?
 
