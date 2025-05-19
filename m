@@ -1,72 +1,53 @@
-Return-Path: <linux-pm+bounces-27315-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27316-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15B58ABB5C1
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 09:13:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7393CABB5C8
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 09:14:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5CA861898A84
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 07:13:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0BAFF17789E
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 07:13:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECD69265CC2;
-	Mon, 19 May 2025 07:09:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hjmWEAJ/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 037EC267F48;
+	Mon, 19 May 2025 07:09:20 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4379D2586E0;
-	Mon, 19 May 2025 07:09:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B6E2586E0;
+	Mon, 19 May 2025 07:09:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747638553; cv=none; b=XqOD/nHGxEDXbxT/2EM/2GaKDhI8p6cg8UWq2K9JL5ceWaRFLY0NouBNeiTPXCBjIjsew2RQ7cOfwG3U2F33ySrNVhkmF1WEmetT8Pyy1GhN+gSkng1vJF470+HKb15mR807ttNlTBu2WqQyD3Lt+sX9nooavbQLXDucrdoWYao=
+	t=1747638559; cv=none; b=gx6p/9zL6qiDxy4W/LUvQzhUQJkB0tJdJ1HN9neGucPAbj/GbzYxnr4MOyrIbj8LZQnL6CTAf7251B7H3XrbZICiYQy2pij/EFTnObE2KvsOtBYOAy8DDWW1nfJNULW9FHMgoaCoSBiWhK1nzBdMfi2mwQPn9fP884bVMoAQEYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747638553; c=relaxed/simple;
-	bh=YPfaHyzVc1GkjxTfsXefHKSQnQddmr9nsMn8mGq/bRQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qJRt8pjjU2/Z2MhWVblSiTCG0cR6vItUVpxde6ONDoFVMJX2Ynfs3pfpMict4MxFNeiFg4iymuJOexlqOsfXKLDhBh3SapLH2fiP4LvSN/3/hZ/omP6kOT1L5D611LWh4iekm2iHqnXsqil45iIMX1bfpcTCZneJedw/fuIZZjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hjmWEAJ/; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747638552; x=1779174552;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YPfaHyzVc1GkjxTfsXefHKSQnQddmr9nsMn8mGq/bRQ=;
-  b=hjmWEAJ/Uv1a705WKLVbdv70Hzm2Xw5j6AN5b/kCE/o3ZjAdsboHv8Ws
-   nJsyaHGca6NdWJzo0THc9zBQ1moz6vh46bigTIditk44ZIhVopSvT2370
-   liJkG9SXSynbO55wLjcbRpaGRRhd0NYtA7FMLjyUWdIZRIKeOx3aBBIQ3
-   0BiuvaiT3KotefuEfz4Yve1DXZIwA/Jt5/nnAovcIM1BVdrJaBkqZD4Kc
-   D9QWpBaufZ+bq9Lsj22voCqxB3sGZe/3jnMIRG4cyuV0s2CNPvwSKONG3
-   N7Iy5qx/cMFELcIcCII8FeIVt9bCX0/LdROtUu/crtyWIKLGe+E3TQrGe
-   w==;
-X-CSE-ConnectionGUID: bF4HhNGFTKWChFJ7R/wX3g==
-X-CSE-MsgGUID: gmC6gUSwQGeKMFOP+T21fQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11437"; a="59752787"
-X-IronPort-AV: E=Sophos;i="6.15,300,1739865600"; 
-   d="scan'208";a="59752787"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 00:09:05 -0700
-X-CSE-ConnectionGUID: WJQM+OVRTFawgrmKBv9J9w==
-X-CSE-MsgGUID: i62RG5J6TaKO3DrGxXPPKA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,300,1739865600"; 
-   d="scan'208";a="170321353"
-Received: from rzhang1-mobl7.sh.intel.com ([10.238.6.124])
-  by fmviesa001.fm.intel.com with ESMTP; 19 May 2025 00:09:02 -0700
-From: Zhang Rui <rui.zhang@intel.com>
-To: rafael.j.wysocki@intel.com
-Cc: zhangn1985@outlook.com,
-	daniel.lezcano@linaro.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH] thermal: intel: x86_pkg_temp_thermal: Fix bogus trip temperature
-Date: Mon, 19 May 2025 15:09:01 +0800
-Message-ID: <20250519070901.1031233-1-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1747638559; c=relaxed/simple;
+	bh=WSpJYlRdTTN+OUW6AXaLqzDV6FzuUBYEVN+BQ6jqN9M=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KItlqSx264/406CH3qVc26Mk7cuyrcKs8F4udfVzjociqaZQKRicc2CiOlcgorb+y9QsGbscPQa17GgSfQSOmc/Mr7EmKAonMLCmd5hhHCURxs+BJFvd/2RimwojolTBgoWt92m6CikZRbLTpUlWPwfPPV9l/k8TfS5paLzVKbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.214])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4b17xN1msmz2CdVR;
+	Mon, 19 May 2025 15:05:28 +0800 (CST)
+Received: from kwepemk500012.china.huawei.com (unknown [7.202.194.97])
+	by mail.maildlp.com (Postfix) with ESMTPS id 2BAC21A016C;
+	Mon, 19 May 2025 15:09:09 +0800 (CST)
+Received: from localhost.localdomain (10.50.165.33) by
+ kwepemk500012.china.huawei.com (7.202.194.97) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 19 May 2025 15:09:08 +0800
+From: Bowen Yu <yubowen8@huawei.com>
+To: <rafael@kernel.org>, <viresh.kumar@linaro.org>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linuxarm@huawei.com>, <zhanjie9@hisilicon.com>,
+	<jonathan.cameron@huawei.com>, <lihuisong@huawei.com>,
+	<zhenglifeng1@huawei.com>, <yubowen8@huawei.com>, <cenxinghai@h-partners.com>
+Subject: [PATCH] cpufreq: Replace magic number
+Date: Mon, 19 May 2025 15:09:08 +0800
+Message-ID: <20250519070908.930879-1-yubowen8@huawei.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -74,46 +55,33 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemk500012.china.huawei.com (7.202.194.97)
 
-The tj_max value obtained from the Intel TCC library are in Celsius,
-whereas the thermal subsystem operates in milli-Celsius.
-This discrepancy leads to incorrect trip temperature calculations.
+Setting the length of str_governor with a magic number could cause
+overflow when max length increases, it is better to use the defined
+macro in this case.
 
-Fix bogus trip temperature by converting tj_max to milli-Celsius Unit.
-
-Fixes: 8ef0ca4a177d ("Merge back other thermal control material for 6.3.")
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-Reported-by: zhang ning <zhangn1985@outlook.com>
-Closes: https://lore.kernel.org/all/TY2PR01MB3786EF0FE24353026293F5ACCD97A@TY2PR01MB3786.jpnprd01.prod.outlook.com/
-Tested-by: zhang ning <zhangn1985@outlook.com>
+Signed-off-by: Bowen Yu <yubowen8@huawei.com>
 ---
-Commit 983eb370cb87 ("thermal/x86_pkg_temp_thermal: Use Intel TCC
-library") converts tj_max to use the standard API without switching the
-Unit, which is a bug. This was mitigated by the next commit 58374a3970a0
-("thermal/x86_pkg_temp_thermal: Add support for handling dynamic tjmax")
-which uses the Celsius tj_max for failure check only.
+ drivers/cpufreq/cpufreq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This may confuse the maintainer and the bug was introduced by commit
-8ef0ca4a177d ("Merge back other thermal control material for 6.3."),
-when addressing the conflicts with commit d3ecaf17b586
-("thermal/drivers/intel: Use generic thermal_zone_get_trip() function").
----
- drivers/thermal/intel/x86_pkg_temp_thermal.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-index 4894a26b1e4e..3fc679b6f11b 100644
---- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-+++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-@@ -330,6 +330,7 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
- 	tj_max = intel_tcc_get_tjmax(cpu);
- 	if (tj_max < 0)
- 		return tj_max;
-+	tj_max *= 1000;
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 0c842edd1a76..a3a376f030f0 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -809,7 +809,7 @@ static ssize_t show_scaling_governor(struct cpufreq_policy *policy, char *buf)
+ static ssize_t store_scaling_governor(struct cpufreq_policy *policy,
+ 					const char *buf, size_t count)
+ {
+-	char str_governor[16];
++	char str_governor[CPUFREQ_NAME_LEN];
+ 	int ret;
  
- 	zonedev = kzalloc(sizeof(*zonedev), GFP_KERNEL);
- 	if (!zonedev)
+ 	ret = sscanf(buf, "%15s", str_governor);
 -- 
-2.43.0
+2.33.0
 
 
