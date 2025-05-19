@@ -1,83 +1,82 @@
-Return-Path: <linux-pm+bounces-27304-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27305-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26830ABB5A8
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 09:10:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74E9FABB5AE
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 09:11:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBF8E3B8B94
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 07:09:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE94D3BA4B0
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 07:09:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22E9E2676F3;
-	Mon, 19 May 2025 07:08:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 207E72698BC;
+	Mon, 19 May 2025 07:08:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YSLARzX7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TpvJi+Kr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C4D12690C4
-	for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 07:08:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 396752690FA
+	for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 07:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747638485; cv=none; b=nd2JS3/fPSjTY/6GtQTpecAJNr+qSeWN/8ieY/X4KTq0rWHe6qqf4JHxu/Rwap5eOyp3y+uXJ1WqOEw+H3MfHDiPypeI7aUgLJJW/YrnYjJ4VWqSGhmTYMKB+s/MpiHAI1ZpeZeWzm2jaoIfcoYWeejKrbhzknYyN1YvGm42vQQ=
+	t=1747638490; cv=none; b=iC+OqGXvEPzLjMVb9yp9zZsZFIm1EYSXGZBFm6kx2MmoUYJt44TQ//rUrYekIQHpFlvpLIQWGnSpQN6Y9aWUxcupWq9lOeJ596LYvm+G0OnFZbgvEWL6NezkNBczJ8FiI/HICoDJzJ8IswQ/e6kEtSXvoyOsBb8n9a8eLphGRFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747638485; c=relaxed/simple;
-	bh=5L5Hmj+hoBZ1EgPgIOEh7N2LK8PQQuUGQGeNdU/vBY8=;
+	s=arc-20240116; t=1747638490; c=relaxed/simple;
+	bh=RPs39+G/2/WRBdJP3KwTQnQlR3Lp/kvURzUIgtDgvwA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rwB/J4ke+rrR7Cu5ISvSDiEMrsX3nTd8jr5b3h9BUDs/qQQexnhxRlS4H6YvIvv4dgGJs0G2mLQ9WuGUcG8e07eVEN3fphmX3CJB4SGvMhNICL+H/QBeW7nfFAoJLZzpmCzIPNnptxKEKeR6j/+z5OTkM1kEwIS6D1R38lFhM2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YSLARzX7; arc=none smtp.client-ip=209.85.214.176
+	 MIME-Version; b=hICRliiDScy2+mR7xUPUr9FN7dvKIckC8OE0sborXe9K0wjMK96upJIcjJcJPu7a4kbgn0L1NkvHjw4pgk7U+/pJvbrY/7GSN9vGT8NrVmOE1vhQKJ99FzX3iEc87xl78uZClqxNaS/1FCCgmvCeYqRbqC9caWt5RZtZY/4aOR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TpvJi+Kr; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-232059c0b50so11735725ad.2
-        for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 00:08:03 -0700 (PDT)
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-73bf5aa95e7so3602001b3a.1
+        for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 00:08:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747638482; x=1748243282; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1747638486; x=1748243286; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DO5+lgLPT8S/OeMtRlQPVr+3mHA37EzCb8FAlkZERxU=;
-        b=YSLARzX7eH7ppZvU6+QUxmSHLz1SdFkd4y3j7eOE9gzHMCnonJ4OVkRoGY0dy/TzkD
-         GFd7B0fwJH93rugUMJ7rRWxiz73Ccj/tpN7uENUIO0Nr6+HqpunLXk8MlI458qBB6AVZ
-         l9/AUAyfY39CGi/zG8zB892v9uTZ/6BT9E2C+jgwHOGnRkntsoTcJlbG99Oqpwgk+pxq
-         QDcS0c5WxoTxkmmBEM9N9DyVkYpgb769CDSUm9x1zRmQcwNLjCoNiSnWfFBX/glvbsgt
-         SnBvZ54Xc4a7gOmw31+Zvl61WjNshgmLDqTpL5rC8figEJNYHNdWMarJRshCP9gZFPSZ
-         SmQA==
+        bh=06XWI3zWvI8xB81BSzBcpZnXhq7zBjUBfZT4cp51CDs=;
+        b=TpvJi+KreG9k+1tnyhg46J2UAumtPDce3pxuk/EPgy9RF25DuB/valuzxXRAOIzTX/
+         5zr5MF4xvECZ3/d+xd0M24bFSUzUOtAN24ifMNxOgaFLFeYy16psv0DRCgTt8rzNaK1g
+         hGphfvcsFtV4K5sjUuyugXdLGPIfWxl/ktSsqZ6z0mIpMYWBK5Y1VXjTCOyp0beMSAD0
+         uOer9o4z9VYJwtpYkawNXQCfECTbUDncvYusT5Ml6duR/7j3ibBX6PdpTUnOrKhEsPtF
+         I8praT4zGMDz5KdygZFooZovOscrT0qfiBc1aIb4kmBiVWPQt37P9ykwEnd9NY8M9KF9
+         3p/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747638482; x=1748243282;
+        d=1e100.net; s=20230601; t=1747638486; x=1748243286;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DO5+lgLPT8S/OeMtRlQPVr+3mHA37EzCb8FAlkZERxU=;
-        b=cVrltB2NpDTPf45YPFV5kONeB9Oh2/KwwgZBSFRHR29D0CHkin7FDHp511gdD4ros5
-         dhJsWRjl6tjh5gRRNwazh8BrDfcDsOCTKv5LzUYb6Lddg0n1j2LRbUyyNx3HcXst3/aZ
-         IfURhfwHo685TQWeNr7aKr9+TUMiyBxVei8bG/TTn6rxe5cVCgQ+bli76RvqODCxXh26
-         9yKRZmLPd+187RwSJ6HgGvr9ix2LHmSGVF5woK7gvvoDhv+BatdkrbS+1o1WLRwDJ+zD
-         FwROIS9Ay/ESmTmTZSB/+qvcbKmv+Gy5rlq26k4SJT57Jt1lOvKLoWhGWwMiNMTeT+JG
-         +YxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXGmsNu+YrGlfaZTnwlXl/SjVVrHv7uZ/KkXXITlCqeN4NFKghROD00TXrY/NVc/+mGIns/1Q7bEw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwEjaFmdlPKpXg+hhHgi2OI6S72CEgEzsMUM27myqUT5m9cou1
-	lmbpUHZJZP+C9qEUXTR8MJwo/STlf0vuSOnGbCtlVZz2uW1yZhuj70P1OJAxpnnAgTA=
-X-Gm-Gg: ASbGncu8/uXpT92DCnTRlebEagVXi+WV54z9a/IYnb/2r0NqGkPuWVSf3dWRNc++aFN
-	RltSBa/mTaywCogmJJwhoaDIAfLxV6rLA936RpMybrwMNooeSaS4a9wWpNYAI7nM1+BgUIJSPBE
-	QHVZXlDUQ570e1AHwXLuLRb4ygcTe88UQDe4RlPZ/UK8bu/YZpT4CeuON7/hxdMrkUPUztRhkCb
-	kIBq4vWBq44UkkpKbkDyqzJlRpTlmUXMGK++ISUzmufvYkFM/v0GFtEQn+0vcEWjysQ+9Pdsp2D
-	y6ZEAZw7ZFicG4j/V3rVE0SyM9yvnHeQq9Q9GZTjYOTEjXS83jxs
-X-Google-Smtp-Source: AGHT+IHjKKphjMeTJbrWdHGlFJHlNdpGPNMrULzrgSDDhULG3ADFXBlhrBdHy3LnjqfpGfHSVht4nA==
-X-Received: by 2002:a17:903:41c7:b0:224:1221:1ab4 with SMTP id d9443c01a7336-231de317b43mr173678205ad.22.1747638482451;
-        Mon, 19 May 2025 00:08:02 -0700 (PDT)
+        bh=06XWI3zWvI8xB81BSzBcpZnXhq7zBjUBfZT4cp51CDs=;
+        b=gmm68rXpm3sMhDdvPIVjFijxnydInREu2OiCEf1blitqYZ5JAQwnxMFvftdU4f1WRD
+         EpsRg6jfsIDLxeiO8XU3cuzdUsqR60NfJ92aMeisRFV6ckMhkULGYyBM7FdjYKx1+/xv
+         duRVCTbFctj3pE/YcReqmyyV5lLdcs1UdoSrw3RbuBlfLmnenXHNpIZpZWprwm41yfzf
+         vL2zS9h9Y4kfNVbiHEiun9KdBEYFTXMW839w/5TCTpV47d6hfIBIRUKXMUQgqbwe5WUf
+         g3SCKLyI+TsnZDMcopsER6GwA7TWFhCOuiPlCFIvjUvsNBZ36s3q8KhcZlTtGn19x2Tt
+         vidw==
+X-Forwarded-Encrypted: i=1; AJvYcCUp1N22dCYeSAZIYmU+vEbDSkvUFiu67oYDeOhsSYGjDLJYB8LzMXgNx4tZud4nIC5gdddz327rYA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwN3hU0DxxO0rwFc+tK0eqm7nXGFI1755Nxx2l2GfyKTpiVIPsW
+	oHmsVrdewVSvrcSy4vbykwO+eiM3BMAyAoRJQHijYU9lxlFuhdGUSJM1oBjnTHZ0e1EMHOr9l7Y
+	903xL
+X-Gm-Gg: ASbGnctvspBlpvvqASdKR5uAtiWBnSpDASawpgalfzMSBA4juLFITtTCNyVGJiyj0sS
+	kA0WJWCTBKikPDaMq6HjJko7FH4ToOZNm/5JMguua7s3ocD6ZuD2zKL1NCJ81eCZ8NY34K/icCX
+	aBVWcpe1sIYNDqhIMAOJ9grYOUrZ3ppw5SB6jHMOmWq+ofFkXOHXZU4foPAmXt0R14aIpT/NJNI
+	5PgSRW08IAiUx8K4z143n6RVwNsPtzBOCIDPQSIqrX+5/QGo7cck2JhwjV51rP7cLd5/UhLgWOI
+	8H6CDk8za3WJbHFx33l4u9oVjP/Bh7D4cJeZIQBN4H4Tc3HfiPr1
+X-Google-Smtp-Source: AGHT+IHDxTCILxiZSszxnTc982DJY8orsb9n0sCiFXe5hNTg/g6o+f+sr8ozsUbLXvO9AluZPucbQw==
+X-Received: by 2002:a05:6a21:a0cb:b0:218:c22:e3e6 with SMTP id adf61e73a8af0-2180c22e3fdmr15396853637.12.1747638486393;
+        Mon, 19 May 2025 00:08:06 -0700 (PDT)
 Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-231d4ac9fc8sm53183405ad.27.2025.05.19.00.08.01
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742acb8731esm5294876b3a.168.2025.05.19.00.08.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 May 2025 00:08:01 -0700 (PDT)
+        Mon, 19 May 2025 00:08:05 -0700 (PDT)
 From: Viresh Kumar <viresh.kumar@linaro.org>
 To: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
 	Danilo Krummrich <dakr@redhat.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
 	Miguel Ojeda <ojeda@kernel.org>,
 	Alex Gaynor <alex.gaynor@gmail.com>,
 	Boqun Feng <boqun.feng@gmail.com>,
@@ -91,6 +90,7 @@ To: "Rafael J. Wysocki" <rafael@kernel.org>,
 Cc: Viresh Kumar <viresh.kumar@linaro.org>,
 	linux-pm@vger.kernel.org,
 	Vincent Guittot <vincent.guittot@linaro.org>,
+	Stephen Boyd <sboyd@kernel.org>,
 	Nishanth Menon <nm@ti.com>,
 	rust-for-linux@vger.kernel.org,
 	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
@@ -102,12 +102,13 @@ Cc: Viresh Kumar <viresh.kumar@linaro.org>,
 	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
 	Russell King <linux@armlinux.org.uk>,
 	linux-clk@vger.kernel.org,
+	Michael Turquette <mturquette@baylibre.com>,
 	Andrew Ballance <andrewjballance@gmail.com>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
+	Anisse Astier <anisse@astier.eu>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH V12 05/15] rust: clk: Add initial abstractions
-Date: Mon, 19 May 2025 12:37:10 +0530
-Message-Id: <a223f92ce22a2d1e04437559e5e8b79d392bb32a.1747634382.git.viresh.kumar@linaro.org>
+Subject: [PATCH V12 06/15] rust: macros: enable use of hyphens in module names
+Date: Mon, 19 May 2025 12:37:11 +0530
+Message-Id: <21b4c30db60f22d56cc6386a18564705ad3a6f4a.1747634382.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1747634382.git.viresh.kumar@linaro.org>
 References: <cover.1747634382.git.viresh.kumar@linaro.org>
@@ -119,386 +120,91 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add initial abstractions for the clk APIs. These provide the minimal
-functionality needed for common use cases, making them straightforward
-to introduce in the first iteration.
+From: Anisse Astier <anisse@astier.eu>
 
-These will be used by Rust based cpufreq / OPP layers to begin with.
+Some modules might need naming that contains hyphens "-" to match the
+auto-probing by name in the platform devices that comes from the device
+tree.
 
-Tested-by: Daniel Almeida <daniel.almeida@collabora.com>
-Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
+But rust identifiers cannot contain hyphens, so replace the module name
+by an underscore anywhere we'd use it as an identifier.
+
+Signed-off-by: Anisse Astier <anisse@astier.eu>
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+[Viresh: Replace "-" with '-', and fix line length checkpatch warnings]
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- MAINTAINERS        |   1 +
- rust/kernel/clk.rs | 334 +++++++++++++++++++++++++++++++++++++++++++++
- rust/kernel/lib.rs |   1 +
- 3 files changed, 336 insertions(+)
- create mode 100644 rust/kernel/clk.rs
+ rust/macros/module.rs | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 608689342aaf..12cde55579a0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5884,6 +5884,7 @@ F:	include/linux/clk-pr*
- F:	include/linux/clk/
- F:	include/linux/of_clk.h
- F:	rust/helpers/clk.c
-+F:	rust/kernel/clk.rs
- X:	drivers/clk/clkdev.c
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index a9418fbc9b44..27cc72d474f0 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -185,7 +185,9 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
  
- COMMON INTERNET FILE SYSTEM CLIENT (CIFS and SMB3)
-diff --git a/rust/kernel/clk.rs b/rust/kernel/clk.rs
-new file mode 100644
-index 000000000000..6041c6d07527
---- /dev/null
-+++ b/rust/kernel/clk.rs
-@@ -0,0 +1,334 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+//! Clock abstractions.
-+//!
-+//! C header: [`include/linux/clk.h`](srctree/include/linux/clk.h)
-+//!
-+//! Reference: <https://docs.kernel.org/driver-api/clk.html>
-+
-+use crate::ffi::c_ulong;
-+
-+/// The frequency unit.
-+///
-+/// Represents a frequency in hertz, wrapping a [`c_ulong`] value.
-+///
-+/// ## Examples
-+///
-+/// ```
-+/// use kernel::clk::Hertz;
-+///
-+/// let hz = 1_000_000_000;
-+/// let rate = Hertz(hz);
-+///
-+/// assert_eq!(rate.as_hz(), hz);
-+/// assert_eq!(rate, Hertz(hz));
-+/// assert_eq!(rate, Hertz::from_khz(hz / 1_000));
-+/// assert_eq!(rate, Hertz::from_mhz(hz / 1_000_000));
-+/// assert_eq!(rate, Hertz::from_ghz(hz / 1_000_000_000));
-+/// ```
-+#[derive(Copy, Clone, PartialEq, Eq, Debug)]
-+pub struct Hertz(pub c_ulong);
-+
-+impl Hertz {
-+    /// Create a new instance from kilohertz (kHz)
-+    pub fn from_khz(khz: c_ulong) -> Self {
-+        Self(khz * 1_000)
-+    }
-+
-+    /// Create a new instance from megahertz (MHz)
-+    pub fn from_mhz(mhz: c_ulong) -> Self {
-+        Self(mhz * 1_000_000)
-+    }
-+
-+    /// Create a new instance from gigahertz (GHz)
-+    pub fn from_ghz(ghz: c_ulong) -> Self {
-+        Self(ghz * 1_000_000_000)
-+    }
-+
-+    /// Get the frequency in hertz
-+    pub fn as_hz(&self) -> c_ulong {
-+        self.0
-+    }
-+
-+    /// Get the frequency in kilohertz
-+    pub fn as_khz(&self) -> c_ulong {
-+        self.0 / 1_000
-+    }
-+
-+    /// Get the frequency in megahertz
-+    pub fn as_mhz(&self) -> c_ulong {
-+        self.0 / 1_000_000
-+    }
-+
-+    /// Get the frequency in gigahertz
-+    pub fn as_ghz(&self) -> c_ulong {
-+        self.0 / 1_000_000_000
-+    }
-+}
-+
-+impl From<Hertz> for c_ulong {
-+    fn from(freq: Hertz) -> Self {
-+        freq.0
-+    }
-+}
-+
-+#[cfg(CONFIG_COMMON_CLK)]
-+mod common_clk {
-+    use super::Hertz;
-+    use crate::{
-+        device::Device,
-+        error::{from_err_ptr, to_result, Result},
-+        prelude::*,
-+    };
-+
-+    use core::{ops::Deref, ptr};
-+
-+    /// A reference-counted clock.
-+    ///
-+    /// Rust abstraction for the C [`struct clk`].
-+    ///
-+    /// # Invariants
-+    ///
-+    /// A [`Clk`] instance holds either a pointer to a valid [`struct clk`] created by the C
-+    /// portion of the kernel or a NULL pointer.
-+    ///
-+    /// Instances of this type are reference-counted. Calling [`Clk::get`] ensures that the
-+    /// allocation remains valid for the lifetime of the [`Clk`].
-+    ///
-+    /// ## Examples
-+    ///
-+    /// The following example demonstrates how to obtain and configure a clock for a device.
-+    ///
-+    /// ```
-+    /// use kernel::c_str;
-+    /// use kernel::clk::{Clk, Hertz};
-+    /// use kernel::device::Device;
-+    /// use kernel::error::Result;
-+    ///
-+    /// fn configure_clk(dev: &Device) -> Result {
-+    ///     let clk = Clk::get(dev, Some(c_str!("apb_clk")))?;
-+    ///
-+    ///     clk.prepare_enable()?;
-+    ///
-+    ///     let expected_rate = Hertz::from_ghz(1);
-+    ///
-+    ///     if clk.rate() != expected_rate {
-+    ///         clk.set_rate(expected_rate)?;
-+    ///     }
-+    ///
-+    ///     clk.disable_unprepare();
-+    ///     Ok(())
-+    /// }
-+    /// ```
-+    ///
-+    /// [`struct clk`]: https://docs.kernel.org/driver-api/clk.html
-+    #[repr(transparent)]
-+    pub struct Clk(*mut bindings::clk);
-+
-+    impl Clk {
-+        /// Gets [`Clk`] corresponding to a [`Device`] and a connection id.
-+        ///
-+        /// Equivalent to the kernel's [`clk_get`] API.
-+        ///
-+        /// [`clk_get`]: https://docs.kernel.org/core-api/kernel-api.html#c.clk_get
-+        pub fn get(dev: &Device, name: Option<&CStr>) -> Result<Self> {
-+            let con_id = if let Some(name) = name {
-+                name.as_ptr()
-+            } else {
-+                ptr::null()
-+            };
-+
-+            // SAFETY: It is safe to call [`clk_get`] for a valid device pointer.
-+            //
-+            // INVARIANT: The reference-count is decremented when [`Clk`] goes out of scope.
-+            Ok(Self(from_err_ptr(unsafe {
-+                bindings::clk_get(dev.as_raw(), con_id)
-+            })?))
-+        }
-+
-+        /// Obtain the raw [`struct clk`] pointer.
-+        #[inline]
-+        pub fn as_raw(&self) -> *mut bindings::clk {
-+            self.0
-+        }
-+
-+        /// Enable the clock.
-+        ///
-+        /// Equivalent to the kernel's [`clk_enable`] API.
-+        ///
-+        /// [`clk_enable`]: https://docs.kernel.org/core-api/kernel-api.html#c.clk_enable
-+        #[inline]
-+        pub fn enable(&self) -> Result {
-+            // SAFETY: By the type invariants, self.as_raw() is a valid argument for
-+            // [`clk_enable`].
-+            to_result(unsafe { bindings::clk_enable(self.as_raw()) })
-+        }
-+
-+        /// Disable the clock.
-+        ///
-+        /// Equivalent to the kernel's [`clk_disable`] API.
-+        ///
-+        /// [`clk_disable`]: https://docs.kernel.org/core-api/kernel-api.html#c.clk_disable
-+        #[inline]
-+        pub fn disable(&self) {
-+            // SAFETY: By the type invariants, self.as_raw() is a valid argument for
-+            // [`clk_disable`].
-+            unsafe { bindings::clk_disable(self.as_raw()) };
-+        }
-+
-+        /// Prepare the clock.
-+        ///
-+        /// Equivalent to the kernel's [`clk_prepare`] API.
-+        ///
-+        /// [`clk_prepare`]: https://docs.kernel.org/core-api/kernel-api.html#c.clk_prepare
-+        #[inline]
-+        pub fn prepare(&self) -> Result {
-+            // SAFETY: By the type invariants, self.as_raw() is a valid argument for
-+            // [`clk_prepare`].
-+            to_result(unsafe { bindings::clk_prepare(self.as_raw()) })
-+        }
-+
-+        /// Unprepare the clock.
-+        ///
-+        /// Equivalent to the kernel's [`clk_unprepare`] API.
-+        ///
-+        /// [`clk_unprepare`]: https://docs.kernel.org/core-api/kernel-api.html#c.clk_unprepare
-+        #[inline]
-+        pub fn unprepare(&self) {
-+            // SAFETY: By the type invariants, self.as_raw() is a valid argument for
-+            // [`clk_unprepare`].
-+            unsafe { bindings::clk_unprepare(self.as_raw()) };
-+        }
-+
-+        /// Prepare and enable the clock.
-+        ///
-+        /// Equivalent to calling [`Clk::prepare`] followed by [`Clk::enable`].
-+        #[inline]
-+        pub fn prepare_enable(&self) -> Result {
-+            // SAFETY: By the type invariants, self.as_raw() is a valid argument for
-+            // [`clk_prepare_enable`].
-+            to_result(unsafe { bindings::clk_prepare_enable(self.as_raw()) })
-+        }
-+
-+        /// Disable and unprepare the clock.
-+        ///
-+        /// Equivalent to calling [`Clk::disable`] followed by [`Clk::unprepare`].
-+        #[inline]
-+        pub fn disable_unprepare(&self) {
-+            // SAFETY: By the type invariants, self.as_raw() is a valid argument for
-+            // [`clk_disable_unprepare`].
-+            unsafe { bindings::clk_disable_unprepare(self.as_raw()) };
-+        }
-+
-+        /// Get clock's rate.
-+        ///
-+        /// Equivalent to the kernel's [`clk_get_rate`] API.
-+        ///
-+        /// [`clk_get_rate`]: https://docs.kernel.org/core-api/kernel-api.html#c.clk_get_rate
-+        #[inline]
-+        pub fn rate(&self) -> Hertz {
-+            // SAFETY: By the type invariants, self.as_raw() is a valid argument for
-+            // [`clk_get_rate`].
-+            Hertz(unsafe { bindings::clk_get_rate(self.as_raw()) })
-+        }
-+
-+        /// Set clock's rate.
-+        ///
-+        /// Equivalent to the kernel's [`clk_set_rate`] API.
-+        ///
-+        /// [`clk_set_rate`]: https://docs.kernel.org/core-api/kernel-api.html#c.clk_set_rate
-+        #[inline]
-+        pub fn set_rate(&self, rate: Hertz) -> Result {
-+            // SAFETY: By the type invariants, self.as_raw() is a valid argument for
-+            // [`clk_set_rate`].
-+            to_result(unsafe { bindings::clk_set_rate(self.as_raw(), rate.as_hz()) })
-+        }
-+    }
-+
-+    impl Drop for Clk {
-+        fn drop(&mut self) {
-+            // SAFETY: By the type invariants, self.as_raw() is a valid argument for [`clk_put`].
-+            unsafe { bindings::clk_put(self.as_raw()) };
-+        }
-+    }
-+
-+    /// A reference-counted optional clock.
-+    ///
-+    /// A lightweight wrapper around an optional [`Clk`]. An [`OptionalClk`] represents a [`Clk`]
-+    /// that a driver can function without but may improve performance or enable additional
-+    /// features when available.
-+    ///
-+    /// # Invariants
-+    ///
-+    /// An [`OptionalClk`] instance encapsulates a [`Clk`] with either a valid [`struct clk`] or
-+    /// `NULL` pointer.
-+    ///
-+    /// Instances of this type are reference-counted. Calling [`OptionalClk::get`] ensures that the
-+    /// allocation remains valid for the lifetime of the [`OptionalClk`].
-+    ///
-+    /// ## Examples
-+    ///
-+    /// The following example demonstrates how to obtain and configure an optional clock for a
-+    /// device. The code functions correctly whether or not the clock is available.
-+    ///
-+    /// ```
-+    /// use kernel::c_str;
-+    /// use kernel::clk::{OptionalClk, Hertz};
-+    /// use kernel::device::Device;
-+    /// use kernel::error::Result;
-+    ///
-+    /// fn configure_clk(dev: &Device) -> Result {
-+    ///     let clk = OptionalClk::get(dev, Some(c_str!("apb_clk")))?;
-+    ///
-+    ///     clk.prepare_enable()?;
-+    ///
-+    ///     let expected_rate = Hertz::from_ghz(1);
-+    ///
-+    ///     if clk.rate() != expected_rate {
-+    ///         clk.set_rate(expected_rate)?;
-+    ///     }
-+    ///
-+    ///     clk.disable_unprepare();
-+    ///     Ok(())
-+    /// }
-+    /// ```
-+    ///
-+    /// [`struct clk`]: https://docs.kernel.org/driver-api/clk.html
-+    pub struct OptionalClk(Clk);
-+
-+    impl OptionalClk {
-+        /// Gets [`OptionalClk`] corresponding to a [`Device`] and a connection id.
-+        ///
-+        /// Equivalent to the kernel's [`clk_get_optional`] API.
-+        ///
-+        /// [`clk_get_optional`]:
-+        /// https://docs.kernel.org/core-api/kernel-api.html#c.clk_get_optional
-+        pub fn get(dev: &Device, name: Option<&CStr>) -> Result<Self> {
-+            let con_id = if let Some(name) = name {
-+                name.as_ptr()
-+            } else {
-+                ptr::null()
-+            };
-+
-+            // SAFETY: It is safe to call [`clk_get_optional`] for a valid device pointer.
-+            //
-+            // INVARIANT: The reference-count is decremented when [`OptionalClk`] goes out of
-+            // scope.
-+            Ok(Self(Clk(from_err_ptr(unsafe {
-+                bindings::clk_get_optional(dev.as_raw(), con_id)
-+            })?)))
-+        }
-+    }
-+
-+    // Make [`OptionalClk`] behave like [`Clk`].
-+    impl Deref for OptionalClk {
-+        type Target = Clk;
-+
-+        fn deref(&self) -> &Clk {
-+            &self.0
-+        }
-+    }
-+}
-+
-+#[cfg(CONFIG_COMMON_CLK)]
-+pub use common_clk::*;
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 75f78f6bfaa6..3fd7c17cbc06 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -42,6 +42,7 @@
- pub mod block;
- #[doc(hidden)]
- pub mod build_assert;
-+pub mod clk;
- pub mod cpumask;
- pub mod cred;
- pub mod device;
+     let info = ModuleInfo::parse(&mut it);
+ 
+-    let mut modinfo = ModInfoBuilder::new(info.name.as_ref());
++    /* Rust does not allow hyphens in identifiers, use underscore instead */
++    let name_identifier = info.name.replace('-', "_");
++    let mut modinfo = ModInfoBuilder::new(name_identifier.as_ref());
+     if let Some(author) = info.author {
+         modinfo.emit("author", &author);
+     }
+@@ -310,14 +312,15 @@ mod __module_init {{
+                     #[doc(hidden)]
+                     #[link_section = \"{initcall_section}\"]
+                     #[used]
+-                    pub static __{name}_initcall: extern \"C\" fn() -> kernel::ffi::c_int = __{name}_init;
++                    pub static __{name_identifier}_initcall: extern \"C\" fn() ->
++                        kernel::ffi::c_int = __{name_identifier}_init;
+ 
+                     #[cfg(not(MODULE))]
+                     #[cfg(CONFIG_HAVE_ARCH_PREL32_RELOCATIONS)]
+                     core::arch::global_asm!(
+                         r#\".section \"{initcall_section}\", \"a\"
+-                        __{name}_initcall:
+-                            .long   __{name}_init - .
++                        __{name_identifier}_initcall:
++                            .long   __{name_identifier}_init - .
+                             .previous
+                         \"#
+                     );
+@@ -325,7 +328,7 @@ mod __module_init {{
+                     #[cfg(not(MODULE))]
+                     #[doc(hidden)]
+                     #[no_mangle]
+-                    pub extern \"C\" fn __{name}_init() -> kernel::ffi::c_int {{
++                    pub extern \"C\" fn __{name_identifier}_init() -> kernel::ffi::c_int {{
+                         // SAFETY: This function is inaccessible to the outside due to the double
+                         // module wrapping it. It is called exactly once by the C side via its
+                         // placement above in the initcall section.
+@@ -335,13 +338,13 @@ mod __module_init {{
+                     #[cfg(not(MODULE))]
+                     #[doc(hidden)]
+                     #[no_mangle]
+-                    pub extern \"C\" fn __{name}_exit() {{
++                    pub extern \"C\" fn __{name_identifier}_exit() {{
+                         // SAFETY:
+                         // - This function is inaccessible to the outside due to the double
+                         //   module wrapping it. It is called exactly once by the C side via its
+                         //   unique name,
+-                        // - furthermore it is only called after `__{name}_init` has returned `0`
+-                        //   (which delegates to `__init`).
++                        // - furthermore it is only called after `__{name_identifier}_init` has
++                        //   returned `0` (which delegates to `__init`).
+                         unsafe {{ __exit() }}
+                     }}
+ 
+@@ -381,6 +384,7 @@ unsafe fn __exit() {{
+         ",
+         type_ = info.type_,
+         name = info.name,
++        name_identifier = name_identifier,
+         modinfo = modinfo.buffer,
+         initcall_section = ".initcall6.init"
+     )
 -- 
 2.31.1.272.g89b43f80a514
 
