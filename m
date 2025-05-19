@@ -1,107 +1,140 @@
-Return-Path: <linux-pm+bounces-27295-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27296-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80E77ABB471
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 07:24:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81DCAABB47F
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 07:52:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92F03189508B
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 05:24:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EF2A170AE2
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 05:52:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A17C1E25EF;
-	Mon, 19 May 2025 05:23:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D69371EDA1A;
+	Mon, 19 May 2025 05:52:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="xfVe5nv8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dSJcadqo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2039427453;
-	Mon, 19 May 2025 05:23:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABE671DBB13;
+	Mon, 19 May 2025 05:52:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747632236; cv=none; b=rTGUQlRjz1KmZ99MffMl6xd/tpfWh4ltxojoQJgoqXcLwVFohD5Yo3pUfOh7keytMA+anPoAnyCIl0bSRzn1KUk1WCiw2BIb2zR/Y61CKvnuzYnynwwlvJBXs8W5K/SbOSTBahovdyL2zvjID6VWp+HaZck1bd/tnhqbwEx5nuE=
+	t=1747633921; cv=none; b=FppSX3fsmvagSbIReteoBbZX5UZfkY4uLQq+oQYLbhgarggQP2sUN0pXZTjpUdfoSeJkTTI9SeJZ7OTBYeoDGe8FX6SYq+JD1UVZvCxQwo8FIzgn/bOMjR14nK/XEWIuYuobZgPRvvqsBSUUFzL3ol10Y8MyLH+OXdDRkMshuOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747632236; c=relaxed/simple;
-	bh=Ma6J5CmVLVn7pucZEsvbwHDgreaVRnprrOMo8RP2wxY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WJyczcQ7w+Fz4mWmtVwlc6sM/IO9ICyBag9oTqR44hdztpIkV7iszNzFoLjuKwMrtoNPSzlfIaBo3ZSMT8UkYaM+Vpl1Ec9PBIF/2jegU3Idoo/KhnAskEYUD5oj9e4eLE9aGPiEDMbhtS2I4+0z3G0EoJGnH+tcHTpwE86GRoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=xfVe5nv8; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=L9JD+q348GXIv6b9KLko+dnfCCLdQBps7z1zpvbHi/c=; b=xfVe5nv8ubNmETzvT88K5N0p4S
-	94bc7MDWWuVW7dxa5dAvmaGXUP4kRbq/LPd9s+fVPAU6l0XdRCFecUwWwRdRzkg89Kmdao0IGgo/W
-	FNJ8y+UHZsS0quGPuikkJLLZO90a/i1Lxq33FvbosXFjQ5K7dPk4Wkt4UpSOTVE6hj3+KxTNqYX8j
-	uDBbsThygFxKi1VVcR7Iiso66eFA0AU6hf0+h8MqzDZbeY4vfFBLGRawUJ9Hu/lX6hc3FwAMOCKHa
-	7tXi/y1YWDQI3KED88MX1Ono3esa7Dqbanh4lclj8KRpazcb10o0z01KEKWNLhGPRT6MPkCAfLfYc
-	BWRexomA==;
-Received: from [50.53.25.54] (helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uGsyb-000000081Mn-42A9;
-	Mon, 19 May 2025 05:23:50 +0000
-From: Randy Dunlap <rdunlap@infradead.org>
-To: linux-kernel@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	Len Brown <len.brown@intel.com>,
-	linux-pm@vger.kernel.org,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH v2] kernel.h: add comments for system_states
-Date: Sun, 18 May 2025 22:23:43 -0700
-Message-ID: <20250519052343.1872023-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1747633921; c=relaxed/simple;
+	bh=fGqHTP2q8/OCZvTcrwKxWknaonfy5fx1oKUM6w0aEYA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HuL9Mc4iiRdN3TjTfC+h3tGMUeXg153uCGSxnlotk817TWCaI1pFZjoil4pgkUXs2g4vyLVl55aCzIB48S3feyqJJCHq9NQ2OqbucwEqzsdPgZaRm+s+XurwKfbRs3DFpnCYj29DuwDYzOftckGse2ivShWCnWdxCcBtlt6mv+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dSJcadqo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FADFC4CEED;
+	Mon, 19 May 2025 05:51:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747633921;
+	bh=fGqHTP2q8/OCZvTcrwKxWknaonfy5fx1oKUM6w0aEYA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=dSJcadqo9KBIZLHJYzHDmPluue3j/A2Fp6mrhaYrzuezHPTiRkZ1knlxU34U0FZKn
+	 4E92DoTdOy0ThIfcFgXckG5wMdm1rqTNp+kV+NqsBkBmXyVTufje6x1x5a6swTCy1/
+	 PZBUN+fjMN1QYtyvjhPHR2tRgehds1WXyot13nFTrkMfG+myWkPuBkAWhebBLFm/vP
+	 Oq7VGTWylTxDkioKRSyez7Fg+NTN74zOK7pHDMTHDGjbuyT5wDNvsLRzwad64Z4SeG
+	 yPUUP9lMFY28340He2rWTpRm160EJhIUwOogFX8efWCTe4xkMD8eSv6JBDJkVzbUnw
+	 9MI8Q3GuY/3Dw==
+Message-ID: <12523bd9-0c04-4d63-9f0e-014f14d359c2@kernel.org>
+Date: Mon, 19 May 2025 07:51:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2] charger: max14577: Handle NULL pdata when CONFIG_OF is
+ not set
+To: Charles Han <hanchunchao@inspur.com>, sre@kernel.org,
+ akpm@linux-foundation.org, lee@kernel.org
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250516095346.24169-1-hanchunchao@inspur.com>
+ <20250519014804.2244-1-hanchunchao@inspur.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250519014804.2244-1-hanchunchao@inspur.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Provide some basic comments about the system_states and what they imply.
-Also convert the comments to kernel-doc format.
+On 19/05/2025 03:48, Charles Han wrote:
+> When the kernel is not configured  CONFIG_OF, the max14577_charger_dt_init
+> function returns NULL. Fix the max14577_charger_probe functionby returning
+>  -ENODATA instead of potentially passing a NULL pointer to PTR_ERR.
+> 
+> Fix below smatch warning.
+> smatch warnings:
+> drivers/power/supply/max14577_charger.c:576 max14577_charger_probe() warn: passing zero to 'PTR_ERR'
+> 
+> Fixes: e30110e9c96f ("charger: max14577: Configure battery-dependent settings from DTS and sysfs")
+> Signed-off-by: Charles Han <hanchunchao@inspur.com>
+> ---
+>  drivers/power/supply/max14577_charger.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/power/supply/max14577_charger.c b/drivers/power/supply/max14577_charger.c
+> index 1cef2f860b5f..af1694cac5ea 100644
+> --- a/drivers/power/supply/max14577_charger.c
+> +++ b/drivers/power/supply/max14577_charger.c
+> @@ -501,7 +501,7 @@ static struct max14577_charger_platform_data *max14577_charger_dt_init(
+>  static struct max14577_charger_platform_data *max14577_charger_dt_init(
+>  		struct platform_device *pdev)
+>  {
+> -	return NULL;
+> +	return -ENODATA;
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Len Brown <len.brown@intel.com>
-Cc: linux-pm@vger.kernel.org
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
----
-v2: add Rafael's Ack.
+No, you did not test it and it is obviously buggy code. Please learn
+first about pointers.
 
- include/linux/kernel.h |   14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
-
---- linux-next-20250516.orig/include/linux/kernel.h
-+++ linux-next-20250516/include/linux/kernel.h
-@@ -164,9 +164,19 @@ extern int root_mountflags;
- 
- extern bool early_boot_irqs_disabled;
- 
--/*
-- * Values used for system_state. Ordering of the states must not be changed
-+/**
-+ * enum system_states - Values used for system_state.
-+ * Ordering of the states must not be changed
-  * as code checks for <, <=, >, >= STATE.
-+ *
-+ * @SYSTEM_BOOTING:	%0, no init needed
-+ * @SYSTEM_SCHEDULING:	system is ready for scheduling; OK to use RCU
-+ * @SYSTEM_FREEING_INITMEM: system is freeing all of initmem; almost running
-+ * @SYSTEM_RUNNING:	system is up and running
-+ * @SYSTEM_HALT:	system entered clean system halt state
-+ * @SYSTEM_POWER_OFF:	system entered shutdown/clean power off state
-+ * @SYSTEM_RESTART:	system entered emergency power off or normal restart
-+ * @SYSTEM_SUSPEND:	system entered suspend or hibernate state
-  */
- extern enum system_states {
- 	SYSTEM_BOOTING,
+Best regards,
+Krzysztof
 
