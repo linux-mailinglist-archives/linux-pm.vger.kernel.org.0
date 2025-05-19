@@ -1,75 +1,76 @@
-Return-Path: <linux-pm+bounces-27339-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27340-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C21FABBB51
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 12:42:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30F82ABBBF0
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 13:07:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5DEB5178524
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 10:42:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F68F3B1712
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 11:06:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AC962749EA;
-	Mon, 19 May 2025 10:42:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AE842741A1;
+	Mon, 19 May 2025 11:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Rn7q29cf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BuhIXdxa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66930274656;
-	Mon, 19 May 2025 10:41:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34C3726D4EF;
+	Mon, 19 May 2025 11:06:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747651320; cv=none; b=OVrIEX2qO46EC/gUPxQDtDXQlVM/WpopoS2Ii3+E3YH9ZywOJLidmpufMvLXxMV1rfzy/iNNd1rKv+iwEWS2XOJhFIX1DgNtfz4Ud0yi7EfvIuWEIYlKoMkmRgNkmgAJ3gO6EuAjVshfp/5v1LWFa1EoiyGJIgzvpaMEeKaQFng=
+	t=1747652819; cv=none; b=tEJypwOHpRrD6kVABl4+Fe5kaOrIjjrqPWaB5Hlwio8FG9adbyQPF81ywxoDxlTlLXydlS8IvyO88nSdoKrwsjYu0PWTYQwTeWRpPTzfk4RAAHACNNi2t0ZelpmRPRRxiNQ5SjeAFhjT6BrABaK98gAWx4rQdFEGY35coSptuO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747651320; c=relaxed/simple;
-	bh=WwdWSDzHYkwFYjUjNLqQ7dTd0+b4+asbHn//f9+h/z4=;
+	s=arc-20240116; t=1747652819; c=relaxed/simple;
+	bh=QW6b2iPr1kIC6mJxbCjvYl2N57UynhfAeMer3vkWIAk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WR4vbPyTb4kVKq/jn+5ObtOwfYe1C6g2RK2YiD9N1m0NzzzygOKNeLgsbnNVTvxmhVabwsQUNN4lCV/w8s8HRp0LA6VqVDmLVUsdFGW6TOlZNC70ZaZJ1r2tsWpHTmiwclUOREI71snlDvaNVt+07HPCumL/1fof7IiUc+9cLlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Rn7q29cf; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747651318; x=1779187318;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WwdWSDzHYkwFYjUjNLqQ7dTd0+b4+asbHn//f9+h/z4=;
-  b=Rn7q29cfOQYGEkBAR/oTQ8fdjbj28nTP/WXiNHdHpPrxOmDd1/caStAN
-   5Tv9sQWIulPqkddkYA9uRLoDZ9vJvphx7U0TASj40znc8N7gxIyoZxp7h
-   1nOOXiVcChsQUyHwXuAJXNgKacmAT2SzFmF2e6aj7+m1pR7IYBZpnE/Ie
-   11NK3ihVH8qvbzW0vlkwZlKS2d9d/uXqirkxnRfzS3HIwITbgwH+Tj4O5
-   NkhhUo9ZBLyFi0plhzHEYs1MRVvhpgBD61ugPWCSaHLS7cEpctl5rLG9/
-   oqDBw0IuaHhmh5DL186P/52vNp9oFLPhOct7qfjQ8v+UoPf5tuj+gPII0
-   g==;
-X-CSE-ConnectionGUID: /vLTRnN8SlKhSKpU6wgALQ==
-X-CSE-MsgGUID: ANoeMXuAR1W1tap6dlU3Hw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11437"; a="48657721"
-X-IronPort-AV: E=Sophos;i="6.15,300,1739865600"; 
-   d="scan'208";a="48657721"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 03:41:57 -0700
-X-CSE-ConnectionGUID: oUqXr90sQfCsQ0lxJh+iXQ==
-X-CSE-MsgGUID: VJV/wwbTSwy/hsPTBHueXA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,300,1739865600"; 
-   d="scan'208";a="170243692"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 03:41:54 -0700
-Date: Mon, 19 May 2025 13:41:51 +0300
-From: Raag Jadav <raag.jadav@intel.com>
-To: rafael@kernel.org, mahesh@linux.ibm.com, oohall@gmail.com,
-	bhelgaas@google.com
-Cc: linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, ilpo.jarvinen@linux.intel.com,
-	lukas@wunner.de, aravind.iddamsetty@linux.intel.com,
-	superm1@kernel.org, benato.denis96@gmail.com
-Subject: Re: [PATCH v4] PCI: Prevent power state transition of erroneous
- device
-Message-ID: <aCsK743YSuahPtnH@black.fi.intel.com>
-References: <20250519102808.4130271-1-raag.jadav@intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tgRNJWfb0drH13D/nTrENiBoNTh7bOtG5lKm99GXTsuJGPBBzLPyqdO3xkL9KchQ98OX282LBJELr3JsEqUF4u39yKXGZZjMNctVOdmundcKevqGUw8ukRxwlTIU/p9vEKh5AhunckYuHJSQz/Irq/TiK26ew2YRezqLPNPNn/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BuhIXdxa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A038C4CEEB;
+	Mon, 19 May 2025 11:06:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747652818;
+	bh=QW6b2iPr1kIC6mJxbCjvYl2N57UynhfAeMer3vkWIAk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BuhIXdxakTY1pYyP0h9EYlDjkftNK2yF2RT5R1m5fJFV/cyYtxCauwCEJ1wgdWEmB
+	 L+doYZLJnMrYA4uNiPnzlim3/rRaLR+3BpBYYGhx5vf2vywCuqBQsp4Jzha6VtOog4
+	 dzCUNXuCoTU3jjTpx2898tHtA+g+IjH5carTbwqcDiGnpuxgdKPpUeVbdv7VKNn5Y6
+	 zRhRj5PtPtbT+aBCeSGbsEHyuVBmKLbbMk83Wz3himg43IKctQNZbm86vygEvwLNtn
+	 ACpudJeRajJ2TMzOnpihwAnCF8yUdm4j5eHVvlEExnz/WB3CA8e+PpYvmBzWF7/BOe
+	 m+FAPlrbuL7Ig==
+Date: Mon, 19 May 2025 13:06:50 +0200
+From: Danilo Krummrich <dakr@kernel.org>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Danilo Krummrich <dakr@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+	rust-for-linux@vger.kernel.org,
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+	Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
+	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
+	Yury Norov <yury.norov@gmail.com>, Burak Emir <bqe@google.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Russell King <linux@armlinux.org.uk>, linux-clk@vger.kernel.org,
+	Michael Turquette <mturquette@baylibre.com>,
+	Andrew Ballance <andrewjballance@gmail.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V12 13/15] rust: cpufreq: Extend abstractions for driver
+ registration
+Message-ID: <aCsQylyW7R5rC15m@pollux>
+References: <cover.1747634382.git.viresh.kumar@linaro.org>
+ <68906d67109c3b323b54469fb1ee44e10c1c5b1e.1747634382.git.viresh.kumar@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,110 +79,89 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250519102808.4130271-1-raag.jadav@intel.com>
+In-Reply-To: <68906d67109c3b323b54469fb1ee44e10c1c5b1e.1747634382.git.viresh.kumar@linaro.org>
 
-On Mon, May 19, 2025 at 03:58:08PM +0530, Raag Jadav wrote:
-> If error status is set on an AER capable device, most likely either the
-> device recovery is in progress or has already failed. Neither of the
-> cases are well suited for power state transition of the device, since
-> this can lead to unpredictable consequences like resume failure, or in
-> worst case the device is lost because of it. Leave the device in its
-> existing power state to avoid such issues.
-> 
-> Signed-off-by: Raag Jadav <raag.jadav@intel.com>
-> ---
-> 
-> v2: Synchronize AER handling with PCI PM (Rafael)
-> v3: Move pci_aer_in_progress() to pci_set_low_power_state() (Rafael)
->     Elaborate "why" (Bjorn)
-> v4: Rely on error status instead of device status
->     Condense comment (Lukas)
+On Mon, May 19, 2025 at 12:37:18PM +0530, Viresh Kumar wrote:
+> +/// CPU frequency driver Registration.
+> +///
+> +/// ## Examples
+> +///
+> +/// The following example demonstrates how to register a cpufreq driver.
+> +///
+> +/// ```
+> +/// use kernel::{
+> +///     cpu, cpufreq,
+> +///     c_str,
+> +///     device::{Bound, Device},
+> +///     macros::vtable,
+> +///     sync::Arc,
+> +/// };
+> +/// struct FooDevice;
+> +///
+> +/// #[derive(Default)]
+> +/// struct FooDriver;
+> +///
+> +/// #[vtable]
+> +/// impl cpufreq::Driver for FooDriver {
+> +///     const NAME: &'static CStr = c_str!("cpufreq-foo");
+> +///     const FLAGS: u16 = cpufreq::flags::NEED_INITIAL_FREQ_CHECK | cpufreq::flags::IS_COOLING_DEV;
+> +///     const BOOST_ENABLED: bool = true;
+> +///
+> +///     type PData = Arc<FooDevice>;
+> +///
+> +///     fn init(policy: &mut cpufreq::Policy) -> Result<Self::PData> {
+> +///         // Initialize here
+> +///         Ok(Arc::new(FooDevice, GFP_KERNEL)?)
+> +///     }
+> +///
+> +///     fn exit(_policy: &mut cpufreq::Policy, _data: Option<Self::PData>) -> Result<()> {
 
-Since pci_aer_in_progress() is changed I've not included Rafael's tag with
-my understanding of this needing a revisit. If this was a mistake, please
-let me know.
+This can just be `Result`, here and below.
 
-Denis, Mario, does this fix your issue?
+> +///         Ok(())
+> +///     }
+> +///
+> +///     fn suspend(policy: &mut cpufreq::Policy) -> Result<()> {
+> +///         policy.generic_suspend()
+> +///     }
+> +///
+> +///     fn verify(data: &mut cpufreq::PolicyData) -> Result<()> {
+> +///         data.generic_verify()
+> +///     }
+> +///
+> +///     fn target_index(policy: &mut cpufreq::Policy, index: cpufreq::TableIndex) -> Result<()> {
+> +///         // Update CPU frequency
+> +///         Ok(())
+> +///     }
+> +///
+> +///     fn get(policy: &mut cpufreq::Policy) -> Result<u32> {
+> +///         policy.generic_get()
+> +///     }
+> +/// }
+> +///
+> +/// fn foo_probe(dev: &Device<Bound>) {
 
-> More discussion on [1].
-> [1] https://lore.kernel.org/all/CAJZ5v0g-aJXfVH+Uc=9eRPuW08t-6PwzdyMXsC6FZRKYJtY03Q@mail.gmail.com/
-> 
->  drivers/pci/pci.c      |  9 +++++++++
->  drivers/pci/pcie/aer.c | 13 +++++++++++++
->  include/linux/aer.h    |  2 ++
->  3 files changed, 24 insertions(+)
-> 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 4d7c9f64ea24..a20018692933 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -9,6 +9,7 @@
->   */
->  
->  #include <linux/acpi.h>
-> +#include <linux/aer.h>
->  #include <linux/kernel.h>
->  #include <linux/delay.h>
->  #include <linux/dmi.h>
-> @@ -1539,6 +1540,14 @@ static int pci_set_low_power_state(struct pci_dev *dev, pci_power_t state, bool
->  	   || (state == PCI_D2 && !dev->d2_support))
->  		return -EIO;
->  
-> +	/*
-> +	 * If error status is set on an AER capable device, it is not well
-> +	 * suited for power state transition. Leave it in its existing power
-> +	 * state to avoid issues like unpredictable resume failure.
-> +	 */
-> +	if (pci_aer_in_progress(dev))
-> +		return -EIO;
-> +
->  	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
->  	if (PCI_POSSIBLE_ERROR(pmcsr)) {
->  		pci_err(dev, "Unable to change power state from %s to %s, device inaccessible\n",
-> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> index a1cf8c7ef628..617fbac0d38a 100644
-> --- a/drivers/pci/pcie/aer.c
-> +++ b/drivers/pci/pcie/aer.c
-> @@ -237,6 +237,19 @@ int pcie_aer_is_native(struct pci_dev *dev)
->  }
->  EXPORT_SYMBOL_NS_GPL(pcie_aer_is_native, "CXL");
->  
-> +bool pci_aer_in_progress(struct pci_dev *dev)
-> +{
-> +	int aer = dev->aer_cap;
-> +	u32 cor, uncor;
-> +
-> +	if (!pcie_aer_is_native(dev))
-> +		return false;
-> +
-> +	pci_read_config_dword(dev, aer + PCI_ERR_COR_STATUS, &cor);
-> +	pci_read_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS, &uncor);
-> +	return cor || uncor;
-> +}
-> +
->  static int pci_enable_pcie_error_reporting(struct pci_dev *dev)
->  {
->  	int rc;
-> diff --git a/include/linux/aer.h b/include/linux/aer.h
-> index 02940be66324..e6a380bb2e68 100644
-> --- a/include/linux/aer.h
-> +++ b/include/linux/aer.h
-> @@ -56,12 +56,14 @@ struct aer_capability_regs {
->  #if defined(CONFIG_PCIEAER)
->  int pci_aer_clear_nonfatal_status(struct pci_dev *dev);
->  int pcie_aer_is_native(struct pci_dev *dev);
-> +bool pci_aer_in_progress(struct pci_dev *dev);
->  #else
->  static inline int pci_aer_clear_nonfatal_status(struct pci_dev *dev)
->  {
->  	return -EINVAL;
->  }
->  static inline int pcie_aer_is_native(struct pci_dev *dev) { return 0; }
-> +static inline bool pci_aer_in_progress(struct pci_dev *dev) { return false; }
->  #endif
->  
->  void pci_print_aer(struct pci_dev *dev, int aer_severity,
-> -- 
-> 2.34.1
-> 
+You could use a real probe function, e.g. from platform:
+
+	# struct Driver;
+	
+	impl platform::Driver for SampleDriver {
+	   # type IdInfo = ();
+	   # const OF_ID_TABLE: Option<of::IdTable<Self::IdInfo>> = None;
+	
+	   fn probe(
+	      pdev: &platform::Device<Core>,
+	      info: Option<&Self::IdInfo>,
+	   ) -> Result<Pin<KBox<Self>>> {
+	      ...
+	   }
+	}
+
+> +///     cpufreq::Registration::<FooDriver>::new_foreign_owned(dev).unwrap();
+
+I prefer if we do not use unwrap() in doctests, since they also serve as example
+and people might think that calling unwrap() is valid thing to do.
+
+Sorry, I didn't catch the above in my previous review -- fine for me if you do
+those improvements in a subsequent patch.
 
