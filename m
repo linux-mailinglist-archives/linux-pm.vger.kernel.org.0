@@ -1,155 +1,115 @@
-Return-Path: <linux-pm+bounces-27348-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27349-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D0D0ABC018
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 16:01:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72361ABC05C
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 16:15:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE6EE3A6D8A
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 14:01:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91BDE189F9F3
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 14:16:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43ED6281376;
-	Mon, 19 May 2025 14:01:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E823283C8D;
+	Mon, 19 May 2025 14:15:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="x20Bq8eG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jrt7RWpH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819A01DFFD
-	for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 14:01:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 246631A83F8;
+	Mon, 19 May 2025 14:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747663288; cv=none; b=Os9bPdUrjcziNnkHyAz2Jlh1GvMA01iKU0IbAsOT5pUowPiQimfuzGc9P9cBALbKU0bAXGoeuSd9qYKLcwpdTcDgXbRJbm1/rF/s/MjeHspSZhqU9RGzqTcYMWeZEUdY3EbzQS8QBiUnBVHxG6vSYfVfjOyyYPujkcoHJtie96Q=
+	t=1747664143; cv=none; b=jhwZ+6CFq4k97yrBwGfnaNZFu9BSjoUBPkGh3TQBYdQmJLwkuxyviNZKYDmqbdXqknwo7jGgkxbiQRbBpmkJi1R6famfRvjHAYuoBdAMxTqEj1FkRBbCLPKiU5nWiSbXzaxQlOQDiQw+/w3op8sH8XrjKGGTA0oCU6+5AMwR2PQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747663288; c=relaxed/simple;
-	bh=aLuvRgvb3s7BTkwnIQO1uDxvC7yDCvP5XMIFuZd8GwA=;
+	s=arc-20240116; t=1747664143; c=relaxed/simple;
+	bh=LBz7CbTok9hiT/Rd4gD+6R6Afb6EOxFXMSfsbOL4IRU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I57KS2/4p/vT/Nlmkf0qEVNBu5HxjxtXuPNjFA1YEBS93TdK/mSVPnZbd6TA9KK1IZa6yUNMNCi2iRV4V7eBE2GeYM/TmkzQNcwGFAMkTAoEXYeTaMFL86MyLIQMXAeFYDijpSlGs/lasRpaUzhalPZSGONOSLpquICHHk/7cM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=x20Bq8eG; arc=none smtp.client-ip=209.85.219.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-e7387d4a336so3668446276.2
-        for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 07:01:26 -0700 (PDT)
+	 To:Cc:Content-Type; b=dqoPXo0mQF9qzQK6W3Z3w0WvDt7KQOnDz4jEU5tYjRvTgDS+2raKen54XDqJoKcA9UEi2XlPd9ao2k57+gIk/5ZixJqIQyIGj7uNEfzuilJ2CWlTS+JWHX7Vbjvz0fHIlBzRiKqIocxWB/RFteMFemkRVy99EJsssYZhh2GU5IQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jrt7RWpH; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-22e17b7173bso2295715ad.3;
+        Mon, 19 May 2025 07:15:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747663285; x=1748268085; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aLuvRgvb3s7BTkwnIQO1uDxvC7yDCvP5XMIFuZd8GwA=;
-        b=x20Bq8eGf7mLbtjTWFTDZwS8k4G796nwUCkrhjxgJvWvuZSBSVIXJFPPoA/Y+4r1SL
-         9jd0fs5Azlq25yqqkkZoM5kk3c2MoUH0Ysk2DDrnVzprSat5ktQu1Ib/cmLMy7wvEm6L
-         XPjkCdly0yZw75C/MFhaMwpE6/qv45RFQaUcfeAuh1LgZsKbTlCkN0M6MBrYaRutQ9CJ
-         EaeMEbO1zC4aoSyistnAtiAyFV/lmF0U2RyoUgFVgha9n4+N7ox6Gj18NRATZ/Fg6bXR
-         8BU83oZuQwmZHuxNPmeQSS4eacauqzzQQrorQukcjnkX+pgeOyRAnu6oyZb2krZDxA6z
-         cVQg==
+        d=gmail.com; s=20230601; t=1747664141; x=1748268941; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JFWLr6OI5wVVnuVWXpsQry3bxwa2eh/RNHdZAeSrn9E=;
+        b=jrt7RWpHtthPTXQ3CzVTiGI7DyDQ8ze3MSA6+8u3Bek/dP84X6ii8IItJyuS+qMD5x
+         dxRAOCj3mVUQQDWujd6bVUJrnJUSgLSwDrq5iAjBsa71Bs9FgmjfDpsWHlfeVSYGwYdj
+         1aKIWemP1rrMFhn3x7PbDtwVCnnIwgWfP2wjFGPAv8iR9dwxKsGcSH7fvmTAPicovD6q
+         YQ18xI6EBql0YjuRrn97hnPgkxmkTD9yZ11+g52iDszP9Cjfnbd2d+p9q9IZH2d4FhVP
+         bP5UkzrsGVSKQ5vSB5JQvt4oKeEU5FgwONzFepaMXxzA1YtV8S/oVstRy8VekXpSLYze
+         ePww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747663285; x=1748268085;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aLuvRgvb3s7BTkwnIQO1uDxvC7yDCvP5XMIFuZd8GwA=;
-        b=XW86QxKsPQsbfYPMj+sVSYMe0neBJl9HhTN0e/1FaB/Nb3bMc+ARNlLALAWtZVd2mC
-         QcjlFY6keo36KXk8FtJzpe+5as2oibU4t2oSG2U0gp1/9FLCJMBjiArJodM9zJaKLhIq
-         AsRtaJpswWApH6IamcPyqc/qKngHnuekhRp/F+luIpNIU3vyFEJnPoMMrXWUXAsbFXWq
-         1+PlkgWH/eE/PgsEokIRnaHCQNPuowgcWGVc1DBkRMcu6vRttA0MNVcanRxz164ZUH7a
-         op6ByVOe77FH9kSNEUrXj20GCBFKfWh4780k/BPQBKUrpwNfCBQEqe65ktG+3OVYmTZo
-         BhZw==
-X-Forwarded-Encrypted: i=1; AJvYcCVYIRGo9gjluXk4JEcRunr+KS14SWwMbxoTzGA/9KJg5anA8kchl1BrG20fBTS0jf3bHym4BiVwLA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcNqZXctw6zeSrG+9nKLWVkkduXwlgfcwGN0UlnyO7B0jLg93x
-	UzpdJYFK5SItG99gvSI/EpXGH1E5RswSFTMlAGgMuoNdAAHOBmlj1FsITL7ZQn7G4F36u52XbKm
-	RCI5VoO0Xs0/oJV76q2jRHMKL7pD1dMFH+HTftiDSXg==
-X-Gm-Gg: ASbGncvJVQVoyXhcAHvIYcTH1txKZxF0J0MTn/Orr5UjA0vwDM52EMiumIGfXt/LkMp
-	ccwsKHBytWytGPUnaTsr810vqreILoW5SsB7Qts9QQ7Eo8Csbmypgim+aPU5BbT/DUCRRd1ASUJ
-	7KtoqZXja2JOKoxdxT84KgGzh91GAlFnNmpA==
-X-Google-Smtp-Source: AGHT+IGymy4KwEyW6tUTDmkKCdWsD1NdA2BXUsfFPtuQu5zTUxG8N+u0+twFQNQlgv1A85rUxSkjp/XUGAYDWxieAxI=
-X-Received: by 2002:a05:6902:4aa:b0:e7b:8251:9904 with SMTP id
- 3f1490d57ef6-e7b8251bc0cmr9661682276.34.1747663284841; Mon, 19 May 2025
- 07:01:24 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1747664141; x=1748268941;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JFWLr6OI5wVVnuVWXpsQry3bxwa2eh/RNHdZAeSrn9E=;
+        b=nkouM/Q1hC4IeXbfBsJxjpMyIzWVY9bba/TNQj4GtCQlN2Zfsy2CCpUce9OjAwE3qn
+         IdylnGAQv7NRi4roPtql9y0wifGk48gf5kjPhWtLJLvsCIe6ZrjeVctTfTd1o/DTB5EZ
+         8tTE55hFYsgME4ZrxdtOq89eUXg82ouQvAH4hLEWNGPaMhqb1yqdcZ/WhUf0VPvHz8wc
+         X1vHXEROc2y5s1CQYZHwGhdttFRz63L98yPp9Hkp4fok6nHk8f1jikO8fqpP7P/sYcIM
+         8XjscpFMnwTsbsEMMGM4Kw2tfDcRQza+Be6tMAPG0OdynYpZqP0WxRX7NZRcOh1WDTEA
+         y2AA==
+X-Forwarded-Encrypted: i=1; AJvYcCU+6N06doPk/OZEkWNKdVQ4avfa3EHtxzggPDnXqME3NU5xpCEPk49hvj9eFWV0PjU0P1wHw6G6OOOurZDyOlQ=@vger.kernel.org, AJvYcCVCH67AZgW7MtqWYrky2ywOcAk1m4ZtnGwDgRyfCHiGbiUc1gNDcEhkDc3MJWBpDHET24bVBBGTyok=@vger.kernel.org, AJvYcCVYZOhLO6iCEDZq8/4HBlgYOzvCO9X3mXopeoW55zaC0xWeWoWz9NcOYejrBXOxwGHF8s2Sj9uI++0=@vger.kernel.org, AJvYcCWlvu7c2XM+oUtyXJ5DA81F/hW6u3ZlWfJvw+p7v+dHjqzMuhF7JE37J8B05ha4kg8GPk2vS4aLECZCFY8w@vger.kernel.org
+X-Gm-Message-State: AOJu0YylrHS5HieXMc+N3nlm74Cf5D0ganffYnNlZgRHFriguSEcF/Xg
+	R/KmkVPQ7hWkf/nxbRho/DVCpKBG5Saw1mT6GhI7rPNHF8vTsISHB/mNd2+x1DPXimYBvA51Tke
+	EgDNKOEyWf8KRcDfsiZVVeuLSH8NNYZM=
+X-Gm-Gg: ASbGncs1rBO3nlywNkZQMXXLakBMO6e1OvGf7Jq3qdJXQnIIcHQnK9kqjqyjgzNV9Xk
+	jZKk61+PRD1rjzQebEZtsTTyRxQxcU8pVxEN+6nUITnmVe2RIzs32Tfc4bWqNuJOVqeooHRFDFy
+	LQL2h1jlWU8XIXYgl4k2N0S8B00KeFvRbs
+X-Google-Smtp-Source: AGHT+IEYa3sccvA8xQ5p1zCSL1p/yZXI4bGMmkiDApxIBC1xjOK5CDTHXaWyMmXLa8VfSf8paFTObwZ3GjovVzMUVuw=
+X-Received: by 2002:a17:902:f543:b0:212:48f0:5b6f with SMTP id
+ d9443c01a7336-231d45262a6mr65988125ad.9.1747664141111; Mon, 19 May 2025
+ 07:15:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241101024421.26679-1-quic_msana@quicinc.com>
- <1e47ee3e-7439-4dc4-aef6-0ad2f82ee341@intel.com> <CAPDyKFrku7pEPz0xNbtJetK1XhUmhgsN9Sx9Ea8=tNNhTkxa7w@mail.gmail.com>
- <5cb72bb7-7393-6d3f-d003-e20a21bd607f@quicinc.com>
-In-Reply-To: <5cb72bb7-7393-6d3f-d003-e20a21bd607f@quicinc.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 19 May 2025 16:00:49 +0200
-X-Gm-Features: AX0GCFtvt1Ewn2676BRWcozy6UpOsMiezUEmqWm-EAduBWMtSn60NlzHYQvLUBY
-Message-ID: <CAPDyKFrXXLps31gqqWnqniSrEPcstE3wyCMK6L0TF--CoOJ9ug@mail.gmail.com>
-Subject: Re: [PATCH] mmc: sdhc: Add PM QoS support for mmc driver
-To: Ram Prakash Gupta <quic_rampraka@quicinc.com>
-Cc: Madhusudhan Sana <quic_msana@quicinc.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	quic_cang@quicinc.com, quic_nguyenb@quicinc.com, quic_bhaskarv@quicinc.com, 
-	quic_mapa@quicinc.com, quic_narepall@quicinc.com, quic_nitirawa@quicinc.com, 
-	quic_sachgupt@quicinc.com, quic_sartgarg@quicinc.com, 
-	Linux PM list <linux-pm@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>
+References: <cover.1747634382.git.viresh.kumar@linaro.org> <21b4c30db60f22d56cc6386a18564705ad3a6f4a.1747634382.git.viresh.kumar@linaro.org>
+In-Reply-To: <21b4c30db60f22d56cc6386a18564705ad3a6f4a.1747634382.git.viresh.kumar@linaro.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 19 May 2025 16:15:28 +0200
+X-Gm-Features: AX0GCFtC-8NcfIsvsg4cU78ogkZiXh9AmQGXjdzvJiPpuVhnrDGer3E08jYPZ1U
+Message-ID: <CANiq72mNHYKXcDm6DiB=69W0w8pZ1KhqeARqqKBK_s01PPRsmQ@mail.gmail.com>
+Subject: Re: [PATCH V12 06/15] rust: macros: enable use of hyphens in module names
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@redhat.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, linux-pm@vger.kernel.org, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Stephen Boyd <sboyd@kernel.org>, 
+	Nishanth Menon <nm@ti.com>, rust-for-linux@vger.kernel.org, 
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>, =?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>, 
+	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>, 
+	Yury Norov <yury.norov@gmail.com>, Burak Emir <bqe@google.com>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Russell King <linux@armlinux.org.uk>, 
+	linux-clk@vger.kernel.org, Michael Turquette <mturquette@baylibre.com>, 
+	Andrew Ballance <andrewjballance@gmail.com>, Anisse Astier <anisse@astier.eu>, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 14 May 2025 at 05:01, Ram Prakash Gupta
-<quic_rampraka@quicinc.com> wrote:
+On Mon, May 19, 2025 at 9:08=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
 >
-> Thanks a lot Adrian and Uffe for your review and comment. The Qualcomm
-> engineer who initiated this work, is no longer working on this and I am
-> taking up the responsibility to continue on this work.
->
->
-> On 11/12/2024 8:38 PM, Ulf Hansson wrote:
-> > On Fri, 8 Nov 2024 at 15:43, Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >> On 1/11/24 04:44, Madhusudhan Sana wrote:
-> >>> Register mmc driver to CPU latency PM QoS framework to improve
-> >>> mmc device io performance.
-> >> Not sure host controller drivers should really be manipulating
-> >> cpu_latency_qos in order to squeeze a bit more I/O performance.
-> > I fully agree, this type of boosting doesn't belong in a low level
-> > storage driver, as it is simply not capable of understanding the
-> > use-case. Note that the cpu_latency_qos can also be managed from
-> > user-space.
-> >
-> > Moreover, I guess there are use cases where it would make sense to
-> > have some in-kernel governor to boost too for some conditions. But as
-> > far as I can tell, we don't have a common way to do this, but rather
-> > platform specific hacks via devfreq drivers for example.
-> >
-> > Kind regards
-> > Uffe
->
-> Hi Uffe/Adrian,
->
-> In my opinion, many use case owners might not opt to control qos and
-> may not use qos to gain better performance, and similar work was done
-> in other driver eg.
-> https://patchwork.kernel.org/project/linux-mediatek/patch/20231219123706.6463-2-quic_mnaresh@quicinc.com/
->
-> Earlier this was done in Qualcomm specific file but later community
-> suggested to make it into core driver, so that it applies for everyone.
-> Having this thought in mind, here also this was made it into core driver.
-> If this still doesn't fit here in mmc context, would like to refactor and
-> move into Qualcomm specific file sdhci-msm.c please share your opinion.
+> +    /* Rust does not allow hyphens in identifiers, use underscore instea=
+d */
 
-Well, I think you need to look at the broader picture. I understand
-what you want to achieve, but there are more than one use-case and
-platform to keep in mind.
+(In case you see this before you apply)
 
-The UFS change that you point at above is an indication that there is
-indeed a common problem - but the problem is not even limited to UFS.
-For example, how do we make sure that the QoS constraint is the
-correct one? Depending on the use-case and the platforms, things may
-not necessarily get better, but worse and wasting energy for no good
-reasons.
+Nit: `//` for comments, also please end with a period.
 
-Don't get me wrong, I think this deserves to be discussed. My
-suggestion is that you post an "RFD" to the linux-block
-email-mailing-list, make sure to describe the problem from a top-level
-point of view and ask for people's opinion/suggestions. I would be
-happy to be cc:ed too.
-
-[...]
-
-Kind regards
-Uffe
+Cheers,
+Miguel
 
