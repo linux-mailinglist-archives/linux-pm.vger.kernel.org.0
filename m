@@ -1,278 +1,170 @@
-Return-Path: <linux-pm+bounces-27375-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27376-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EE2FABC5A3
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 19:31:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F591ABC6DA
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 20:08:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 571444A3684
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 17:31:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7362A3A01D8
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 18:07:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C664288CA2;
-	Mon, 19 May 2025 17:30:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39B6A288C3F;
+	Mon, 19 May 2025 18:00:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JTg+RvBc"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Ds4IZ/aq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E702288C9C;
-	Mon, 19 May 2025 17:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD101E32C3
+	for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 17:59:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747675845; cv=none; b=YJ1PaqhVEje3bDNwTvsYd4ONreP6lhJmf119VKReNcsrVErFKEylegZ3d78jvRR2e2dc2qEjbFJgw6AHjZMcHgB1Ld7m/C2ZpchujVfGAf5i0n8Do12KBj5pOOBEaoapcxPgpINvKVUtDpxsZPtBuJ376RY0klLxUVwpZojg5HI=
+	t=1747677600; cv=none; b=gqHaNtpnyI8Lt9wv07XUUA3ypT8SbpEdLf+4mZcYBqxrxWzrwsQRP0+fIDoOUtjjqgrpyjo+FAuWYGRjxviVlM+piL1BTNB2ySNVFqeS5gzNqAZECsvww3UNugtN1hCk2s0oczxLUEiGnvAE23ZtPi/GHe73IShXq6dtOSQt5IE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747675845; c=relaxed/simple;
-	bh=445sPrJ0OISg9BTwHpJqzeGDnex13qUpJTleh2di2JI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CWcS3g6zIlnNUx26Fx/mc6EdZnRSNL7rcwlZ6W01eK9KqyP/lS8qbAXzwGi1CUfUl3U8GztSpAlpQs25Xe3g9Xk4JGrceU8fv1cL6ElpEJvW2fhAZ2y5aFEXPznZXfa8wb1/+fw8eicUocEMzkgOCbtLo06GDjpRXB6QuNqLeoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JTg+RvBc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 427FBC4CEED;
-	Mon, 19 May 2025 17:30:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747675843;
-	bh=445sPrJ0OISg9BTwHpJqzeGDnex13qUpJTleh2di2JI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=JTg+RvBczj4vy+Lx8ePGBs6s9RsaDm7gAipItAzNfUI2IUO4Rhn3mqP54GF+DsMDR
-	 FkFh7mZwwvCj/Z/PiHoaD5NcYlfPUNiOgyxHu4agOB8/To1IHrawZCV/TnraKdTvP/
-	 BSbUl3Z6+P2JfDMrdKiOUffVx5wdAWHCNx6jLEd9MeDSaIqWMfbFs2XbvsOg+gEhMB
-	 rmSye9Ty/GUN4q/cCWXkm/m/QeNPnDrVo/nPN49npVHy35QOff3Y8k1UV+vAR0rSUr
-	 IACav5/YF8qDmLT70v3q35QwoKRDQ0mL9viEyTLYBq9q8H0vOaBhQJhKTH6OhO8ESE
-	 jxHPRNQ/aYDsg==
-From: Eric Biggers <ebiggers@kernel.org>
-To: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Borislav Petkov <bp@alien8.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ayush Jain <Ayush.Jain3@amd.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH v2] x86/fpu: Fix irq_fpu_usable() to return false during CPU onlining
-Date: Mon, 19 May 2025 10:29:54 -0700
-Message-ID: <20250519172954.13015-1-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1747677600; c=relaxed/simple;
+	bh=oPDuJpU2aDI3veakBUF05VkL4vY3wVTvTbUP2qIWjRk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=olwqaPGGHGevuMmFsfs2He7ZQqucsGCyfvQDHIesCDojIU3U4FH7G/NVxZ2yAFCiL+eUsvQBJqDC8qhwElWmbJTxunai+I5YLQjs9ZxrTdifMSE+AbcmZc+e6RkPJDfIuJ6mZ63ELSyti8f3VNL1OeA9Es4lo3uNgJlHKforPrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Ds4IZ/aq; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54J9W3oh025924
+	for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 17:59:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	QRhDmJNbBgVCCdG1SgH+0GcltALE5aKIBtKkQzfk7nA=; b=Ds4IZ/aqZWmGiwgn
+	sbE/4AUgRZZPZf7UKwixi6I6ie5LuUHBSIx9C+FkPIgEs+BNY3vFdt0JdMi6ZGHp
+	tQzILFDQa1Z3NHC3gmoA0lvOYIqNjAtHo5RxKw/Pmc3e7CsFfDA75z7PANnvIa+t
+	3RS6WIha7u3oZEWvl77NyzPstdRhm+WRJX/C21I9930VSIq/8h/pFPjIrbZhL9cg
+	Jy4PTZv5icbdJljTHf8Qkq/18/brtnkkSbZN7Js0Yh7bV4Heq0pcX+9B5viFmeSt
+	+/VdXSVpfK1IAt81vAJ8yOV7XMC5ADO37uSfZJfJBNYNcub8XavqfARykSf3HpVv
+	fSDrnQ==
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46pjkynahr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 17:59:56 +0000 (GMT)
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-47983a580dbso11765221cf.3
+        for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 10:59:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747677595; x=1748282395;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QRhDmJNbBgVCCdG1SgH+0GcltALE5aKIBtKkQzfk7nA=;
+        b=Vzt+Zd5ZMxk4bWThgXkbur8oNTHjid6OzD9kDKn9OahmkFQpjn05Pmo3crI+Sxqiea
+         GB82qa1QDw4xzFnvzhtTTPNhzIz9TgNJnYpUwFDJYGiYSCCsVXnWcoz7IWOKRuMmY3KA
+         AYP1yMdXb/vKYkZnhHG8Q3yqi7gMqPKsXneL0jwwxZcJP57Yf2Ro/WT4AoLZQF+0YgLB
+         meNJvsi+1mFg8N94OZU/meLzMpF5lyzAHqj9rxUXegBYzORTOMc3QQwGpb0FIs2Uh01L
+         wP7Cy06w82DwVNKn4gkrNUNhopY9nyyoig8ufgtChDA6cyfgFLBqZ1ZclPWcwpn6so4z
+         xB7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXl9jh+iXhnyvJBFO5tgoQ0xH4gWgMaMxjZ+IOBZZJkGOjQfBxCoy4ooRkx9UyTnwJMzEidhjmqfg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywy/NuLEHiNLXQg30AjDRzdLaWjYi/VEGNOBfbqsoJF/3l8QV+z
+	jsg8bJXS1HPS//sk3q1RBPmuFSXrwdhzrNYV/oC97RqrVZL9eJQA5C0rg/LD8ZU0N20WOQr5BrV
+	5Ur0LwzGky6OwBNdtOLnlzf/5kS7/FbbM84A69P56KUrVdWT1ysbRwNk6rsGtxw==
+X-Gm-Gg: ASbGncvACthK6UDjlb8gbZ9HVEGFYltx8PxNXaXyO/Jg1r8Mh+MzlfYRIskfs9WCQDW
+	Jw7iH6wvrc7f8BGFxvhQn7PO6ZKDUe1CoP9fZUBhJsLbmVr7Wuoq0veSkEEMviTZQtZC0Hfdg67
+	XV5FdSjiSXlRbE288Ej4qffM1qEo4S3nLmX+24UJFycVS2aC7HEntWA7bY+3ylvM5WxD4Y5GeeO
+	6OOz+yJPAYeKbKRrMKcR2ZIWD83xyU1zbG/qFynoqnzwGxkvT2I8V3U00MFUObmQ1fDLHuNjzEA
+	cqUJZOHvdFxKu0+xGu0JP17Oj/wYVP2S6bAH91P7TCQVA6jZjITpZtXUi1XQ0ymzYg==
+X-Received: by 2002:ad4:5495:0:b0:6f8:daec:8b7c with SMTP id 6a1803df08f44-6f8daec8c02mr14808286d6.6.1747677595376;
+        Mon, 19 May 2025 10:59:55 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGj+7fg16x74gYzVk+YjiEHRe8Kboy7RuyCWGBLuiZoGpt6d9MsVthshVMvw3wwrX5PCaJACA==
+X-Received: by 2002:ad4:5495:0:b0:6f8:daec:8b7c with SMTP id 6a1803df08f44-6f8daec8c02mr14808056d6.6.1747677594815;
+        Mon, 19 May 2025 10:59:54 -0700 (PDT)
+Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad52d498b2fsm622845466b.147.2025.05.19.10.59.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 May 2025 10:59:54 -0700 (PDT)
+Message-ID: <071255ad-ad08-4a15-97d3-016703e7d9a8@oss.qualcomm.com>
+Date: Mon, 19 May 2025 19:59:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] arm64: dts: qcom: sm8750: Add BWMONs
+To: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Melody Olvera <quic_molvera@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shivnandan Kumar <quic_kshivnan@quicinc.com>
+References: <20250304-sm8750_bwmon_master-v3-1-01a5cb330dd9@quicinc.com>
+ <d2640b21-41f7-4bb4-a616-42b6bd9cab0b@oss.qualcomm.com>
+ <cpwyee5bgu3r36sh76mfd2o7oc2dnm3weuvynkvbsklr5nhm7l@gb2utngj6vfl>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <cpwyee5bgu3r36sh76mfd2o7oc2dnm3weuvynkvbsklr5nhm7l@gb2utngj6vfl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: JBrKZVvv4a11Ag_5RAOXV_K8GL2KpdnC
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTE5MDE2NyBTYWx0ZWRfXwPuaZSJHqScn
+ XVfk6ufaLCPIMVxbtADiWENP6+dtVMQ43Ufsyn9v/6y3QDWONSHktqtAyBAVid9lxQw8cEA5GcO
+ I4u3ugbA1b4gpp9xV+sEiNjvbGLdRCIU731S7NnJfYanx6uRxAnhnOrkD6BUnXz4S4kUBPhLPRU
+ 0PpWEyDd0L4hgnTTe47JroO+BK9ZPh10fQXGZCzUznus7M44rUkojHbZ4YUaTh+DayyGllKgr2d
+ 0tAvblb1XOuq6pge4LVZfc9g2J0ofvs3aDbkeaVLoy53SvEKnluv7XNIh5WDnw7tMfl7tIemM4y
+ 7M6oB00tYR/z9ydl3Z7wmgB9jA1LeBaSQADdTfgzPXXzI2Zm6vIx08wQ510ZJPVHwMr7CBKVQkd
+ lXuHEyeT7BS5n1TjPYvzEKL4uxI5PntHUyh5kykyzbwvz+oZ9JPpNjxMZb30dqFlxSmknQpp
+X-Authority-Analysis: v=2.4 cv=H8Pbw/Yi c=1 sm=1 tr=0 ts=682b719c cx=c_pps
+ a=JbAStetqSzwMeJznSMzCyw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8
+ a=wbSWbzf5WjKv6xKPGGgA:9 a=QEXdDO2ut3YA:10 a=uxP6HrT_eTzRwkO_Te1X:22
+ a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: JBrKZVvv4a11Ag_5RAOXV_K8GL2KpdnC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-19_07,2025-05-16_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1015 mlxlogscore=999 adultscore=0
+ phishscore=0 mlxscore=0 priorityscore=1501 suspectscore=0 malwarescore=0
+ impostorscore=0 spamscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505070000
+ definitions=main-2505190167
 
-From: Eric Biggers <ebiggers@google.com>
+On 5/18/25 12:37 AM, Bjorn Andersson wrote:
+> On Sat, Mar 08, 2025 at 07:15:06PM +0100, Konrad Dybcio wrote:
+>> On 5.03.2025 1:33 AM, Melody Olvera wrote:
+>>> From: Shivnandan Kumar <quic_kshivnan@quicinc.com>
+>>>
+>>> Add the CPU BWMONs for SM8750 SoCs.
+>>>
+>>> Signed-off-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
+>>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+>>> ---
+>>> Changes in v3:
+>>> - Change cluster 1 destination interconnect to tag active only from tag
+>>>   always
+>>> - Link to v2: https://lore.kernel.org/r/20250304-sm8750_bwmon_master-v2-1-ead16909397d@quicinc.com
+>>>
+>>> Changes in v2:
+>>> - Change destination interconnect to tag active only from tag always
+>>> - Link to v1: https://lore.kernel.org/r/20250113-sm8750_bwmon_master-v1-0-f082da3a3308@quicinc.com
+>>> ---
+>>
+>> This looks good, but I found that this platform may require some more
+>> changes for bwmon, we're investigating that
+>>
+> 
+> Did we reach a conclusion on this?
 
-irq_fpu_usable() incorrectly returned true before the FPU is
-initialized.  The x86 CPU onlining code can call sha256() to checksum
-AMD microcode images, before the FPU is initialized.  Since sha256()
-recently gained a kernel-mode FPU optimized code path, a crash occurred
-in kernel_fpu_begin_mask() during hotplug CPU onlining.
+Yes.
 
-(The crash did not occur during boot-time CPU onlining, since the
-optimized sha256() code is not enabled until subsys_initcalls run.)
+Melody, LMK whether you want to proceed or want me to resubmit with
+the necessary change
 
-Fix this by making irq_fpu_usable() return false before fpu__init_cpu()
-has run.  To do this without adding any additional overhead to
-irq_fpu_usable(), replace the existing per-CPU bool in_kernel_fpu with
-kernel_fpu_allowed which tracks both initialization and usage rather
-than just usage.  The initial state is false; FPU initialization sets it
-to true; kernel-mode FPU sections toggle it to false and then back to
-true; and CPU offlining restores it to the initial state of false.
-
-Fixes: 11d7956d526f ("crypto: x86/sha256 - implement library instead of shash")
-Reported-by: Ayush Jain <Ayush.Jain3@amd.com>
-Closes: https://lore.kernel.org/r/20250516112217.GBaCcf6Yoc6LkIIryP@fat_crate.local
-Tested-by: Ayush Jain <Ayush.Jain3@amd.com>
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
-
-v2:
-  - Add WARN_ON_FPU when kernel_fpu_allowed has unexpected value in
-    fpu__init_cpu() or cpu_disable_common().  Since WARN_ON_FPU is
-    defined in fpu/internal.h which should not be included by smpboot.c,
-    made cpu_disable_common() call a new function fpu__disable_cpu().
-  - Added Tested-by.
-
- arch/x86/include/asm/fpu/api.h |  1 +
- arch/x86/kernel/fpu/core.c     | 34 +++++++++++++++++++++-------------
- arch/x86/kernel/fpu/init.c     | 13 +++++++++++++
- arch/x86/kernel/fpu/internal.h |  2 ++
- arch/x86/kernel/smpboot.c      |  6 ++++++
- 5 files changed, 43 insertions(+), 13 deletions(-)
-
-diff --git a/arch/x86/include/asm/fpu/api.h b/arch/x86/include/asm/fpu/api.h
-index 8e6848f55dcdb..2983acd95f5de 100644
---- a/arch/x86/include/asm/fpu/api.h
-+++ b/arch/x86/include/asm/fpu/api.h
-@@ -116,10 +116,11 @@ extern void fpu_reset_from_exception_fixup(void);
- /* Boot, hotplug and resume */
- extern void fpu__init_cpu(void);
- extern void fpu__init_system(void);
- extern void fpu__init_check_bugs(void);
- extern void fpu__resume_cpu(void);
-+extern void fpu__disable_cpu(void);
- 
- #ifdef CONFIG_MATH_EMULATION
- extern void fpstate_init_soft(struct swregs_state *soft);
- #else
- static inline void fpstate_init_soft(struct swregs_state *soft) {}
-diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-index 948b4f5fad99c..ea138583dd92a 100644
---- a/arch/x86/kernel/fpu/core.c
-+++ b/arch/x86/kernel/fpu/core.c
-@@ -42,12 +42,15 @@ struct fpu_state_config fpu_user_cfg __ro_after_init;
-  * Represents the initial FPU state. It's mostly (but not completely) zeroes,
-  * depending on the FPU hardware format:
-  */
- struct fpstate init_fpstate __ro_after_init;
- 
--/* Track in-kernel FPU usage */
--static DEFINE_PER_CPU(bool, in_kernel_fpu);
-+/*
-+ * Track FPU initialization and kernel-mode usage. 'true' means the FPU is
-+ * initialized and is not currently being used by the kernel:
-+ */
-+DEFINE_PER_CPU(bool, kernel_fpu_allowed);
- 
- /*
-  * Track which context is using the FPU on the CPU:
-  */
- DEFINE_PER_CPU(struct fpu *, fpu_fpregs_owner_ctx);
-@@ -70,19 +73,22 @@ bool irq_fpu_usable(void)
- {
- 	if (WARN_ON_ONCE(in_nmi()))
- 		return false;
- 
- 	/*
--	 * In kernel FPU usage already active?  This detects any explicitly
--	 * nested usage in task or softirq context, which is unsupported.  It
--	 * also detects attempted usage in a hardirq that has interrupted a
--	 * kernel-mode FPU section.
-+	 * Return false in the following cases:
-+	 *
-+	 * - FPU is not yet initialized. This can happen only when the call is
-+	 *   coming from CPU onlining, for example for microcode checksumming.
-+	 * - The kernel is already using the FPU, either because of explicit
-+	 *   nesting (which should never be done), or because of implicit
-+	 *   nesting when a hardirq interrupted a kernel-mode FPU section.
-+	 *
-+	 * The single boolean check below handles both cases:
- 	 */
--	if (this_cpu_read(in_kernel_fpu)) {
--		WARN_ON_FPU(!in_hardirq());
-+	if (!this_cpu_read(kernel_fpu_allowed))
- 		return false;
--	}
- 
- 	/*
- 	 * When not in NMI or hard interrupt context, FPU can be used in:
- 	 *
- 	 * - Task context except from within fpregs_lock()'ed critical
-@@ -437,13 +443,14 @@ void kernel_fpu_begin_mask(unsigned int kfpu_mask)
- {
- 	if (!irqs_disabled())
- 		fpregs_lock();
- 
- 	WARN_ON_FPU(!irq_fpu_usable());
--	WARN_ON_FPU(this_cpu_read(in_kernel_fpu));
- 
--	this_cpu_write(in_kernel_fpu, true);
-+	/* Toggle kernel_fpu_allowed to false: */
-+	WARN_ON_FPU(!this_cpu_read(kernel_fpu_allowed));
-+	this_cpu_write(kernel_fpu_allowed, false);
- 
- 	if (!(current->flags & (PF_KTHREAD | PF_USER_WORKER)) &&
- 	    !test_thread_flag(TIF_NEED_FPU_LOAD)) {
- 		set_thread_flag(TIF_NEED_FPU_LOAD);
- 		save_fpregs_to_fpstate(x86_task_fpu(current));
-@@ -459,13 +466,14 @@ void kernel_fpu_begin_mask(unsigned int kfpu_mask)
- }
- EXPORT_SYMBOL_GPL(kernel_fpu_begin_mask);
- 
- void kernel_fpu_end(void)
- {
--	WARN_ON_FPU(!this_cpu_read(in_kernel_fpu));
-+	/* Toggle kernel_fpu_allowed back to true: */
-+	WARN_ON_FPU(this_cpu_read(kernel_fpu_allowed));
-+	this_cpu_write(kernel_fpu_allowed, true);
- 
--	this_cpu_write(in_kernel_fpu, false);
- 	if (!irqs_disabled())
- 		fpregs_unlock();
- }
- EXPORT_SYMBOL_GPL(kernel_fpu_end);
- 
-diff --git a/arch/x86/kernel/fpu/init.c b/arch/x86/kernel/fpu/init.c
-index 6bb3e35c40e24..c581a3e452dfd 100644
---- a/arch/x86/kernel/fpu/init.c
-+++ b/arch/x86/kernel/fpu/init.c
-@@ -49,10 +49,23 @@ static void fpu__init_cpu_generic(void)
-  */
- void fpu__init_cpu(void)
- {
- 	fpu__init_cpu_generic();
- 	fpu__init_cpu_xstate();
-+
-+	/* Start allowing kernel-mode FPU: */
-+	WARN_ON_FPU(this_cpu_read(kernel_fpu_allowed));
-+	this_cpu_write(kernel_fpu_allowed, true);
-+}
-+
-+/*
-+ * Stop allowing kernel-mode FPU. Called when a CPU is brought offline:
-+ */
-+void fpu__disable_cpu(void)
-+{
-+	WARN_ON_FPU(!this_cpu_read(kernel_fpu_allowed));
-+	this_cpu_write(kernel_fpu_allowed, false);
- }
- 
- static bool __init fpu__probe_without_cpuid(void)
- {
- 	unsigned long cr0;
-diff --git a/arch/x86/kernel/fpu/internal.h b/arch/x86/kernel/fpu/internal.h
-index 975de070c9c98..9782152d609c7 100644
---- a/arch/x86/kernel/fpu/internal.h
-+++ b/arch/x86/kernel/fpu/internal.h
-@@ -2,10 +2,12 @@
- #ifndef __X86_KERNEL_FPU_INTERNAL_H
- #define __X86_KERNEL_FPU_INTERNAL_H
- 
- extern struct fpstate init_fpstate;
- 
-+DECLARE_PER_CPU(bool, kernel_fpu_allowed);
-+
- /* CPU feature check wrappers */
- static __always_inline __pure bool use_xsave(void)
- {
- 	return cpu_feature_enabled(X86_FEATURE_XSAVE);
- }
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index d7d61b3de2bf6..cf42a7632dd49 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1186,10 +1186,16 @@ void cpu_disable_common(void)
- {
- 	int cpu = smp_processor_id();
- 
- 	remove_siblinginfo(cpu);
- 
-+	/*
-+	 * Stop allowing kernel-mode FPU. This is needed so that if the CPU is
-+	 * brought online again, the initial state is not allowed:
-+	 */
-+	fpu__disable_cpu();
-+
- 	/* It's now safe to remove this processor from the online map */
- 	lock_vector_lock();
- 	remove_cpu_from_maps(cpu);
- 	unlock_vector_lock();
- 	fixup_irqs();
-
-base-commit: 3ee84e3dd88e39b55b534e17a7b9a181f1d46809
--- 
-2.49.0
-
+Konrad
 
