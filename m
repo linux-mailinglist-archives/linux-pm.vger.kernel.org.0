@@ -1,87 +1,84 @@
-Return-Path: <linux-pm+bounces-27332-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27333-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34862ABBA8D
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 12:04:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61982ABBAA8
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 12:09:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3F95164724
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 10:04:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C5DCA7AEABD
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 10:07:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC6D326AAAE;
-	Mon, 19 May 2025 10:04:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 964A626F467;
+	Mon, 19 May 2025 10:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WvZNcLbX"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cvaJdDcd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F04833086
-	for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 10:04:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1110326F447
+	for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 10:08:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747649061; cv=none; b=Kv9CA3hXxnkvhU4yqsOXrFRaoPXqLQK3eIJ+IHi0SAbOObJsjgvswAZd0eK9DysPcEbmZCRAPGfwoXStbCiKMgp2jGticnIGQT71CO5vkROd5bluaLgpL9KY0qR+b4IniuEmLcW84eMASzllgM89eWiExkbpha/W4k/ig8RQyQc=
+	t=1747649307; cv=none; b=UBIUKXBqkdJmcTTdqy/xUMyKWjmlhYYrv9V1q4FhlyovCJ7wML/6TjJwItl8kvfCaRWhxNMwNzk1JmbUv2Y7pgZfUaahtN5T2geIAMzLME2urOKd7vrHyBRe3xo6JzBd4kDYJUHCDePZhmaFimz8aq0ud1Ox+godEoW5X/GlKUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747649061; c=relaxed/simple;
-	bh=A2dpHN2sEArEhvFdNCYfmCtLjsUgITLXWvLvTrLuVBs=;
+	s=arc-20240116; t=1747649307; c=relaxed/simple;
+	bh=z/sjIVYh1QCOUgieYgekPUG6x3X7vMY1sv7Ow5t/JAQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cMb+n37rKNKzcgGXGXYRHp24/TACLBRfyy6Fpbjz74tirCjCrn2wwHrbDeypRZkPZGFPibtLjUD/hmlrriP9QPNU6KmjW2JP0NFCnUkVNEGrcmlH3Wx2/4ls38e2lRHcfrfY8cP+3nRRe7e2+9BA09px6Ozf2BkLW6hvtUrNroo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WvZNcLbX; arc=none smtp.client-ip=209.85.210.171
+	 Content-Type:Content-Disposition:In-Reply-To; b=hAAK+H7ByVWJLgK5I4UeAHpfR0j2p7Z3ILKxUf+bnguNB0E05iqifI+z7wSbaMtJ+6ebDELjLP/4Z0aO1amcflSDDK62vO0S5z4B5v1atccZl+CPYBD2sLRAw6rzGbMKCK94SZ4bfqd9U4FYO/dH5MOlkIV8TAgNs8qi96H9DBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cvaJdDcd; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-742c035f2afso789804b3a.2
-        for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 03:04:20 -0700 (PDT)
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2322dc5c989so6227995ad.3
+        for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 03:08:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747649059; x=1748253859; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1747649305; x=1748254105; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6YtPqJD96+AiahoiLJUfGwNDiBMARBZnTBQnE7bF3oI=;
-        b=WvZNcLbXhzvZMpHu2RQSADGOOFz2wJsI1vwDb/Eeqo1Th0ZuvMr64BU/PtzN+7khSc
-         feWXkTwtELhjB10GcJueP4le41gB+eLzQIazeVhEYTSAATAHPN1B5CmgqaaMfj3cO+/g
-         W/B+JdaslYpdQ72Ci8zvrbNLVjbpBWeWlsXnxqWQTp9Tyx/ewTrZSYGh39cvQup3b9gx
-         xTm15MTrodAzsq6cekciQ0pb74Dbjw7A3pkvjm7HGBVFrQFGY8Nd0RxjuxidSLoDsKKa
-         iFYWXB6KQbrRN+7/+VLBFJo4bhqje6j/PHCvHkrih14EOoziGyBYpFlHlNXESzNu0If8
-         YHCg==
+        bh=PuBulIo1CkbxayB7KEtrbV86yLWE3VV7SPvLxmKhqYc=;
+        b=cvaJdDcdmBcmDGGxC++gm7bjRghNQbkwZvTbIWdk+mU77A3KmqRvVFdIYT7XmCKgl7
+         U8Ldx2atTGWkbFKfBDZ2D+z8MxWBqwbv3joLquNwRlxIVmlUDFCPG5TjPMz4NNH/mMaM
+         I01H+s9a4quWcVDCrSc3KXFDZLEAuITj2CB2O0ZDcxQWpLq93iEP2qCH39V5DdF+xM/A
+         DLs2OVA+MgWvXwte8CAwYEAcPUqJypQARCGG/I3KgMimJi8YkYuTwPpKxHV9c65+COpr
+         b27vSFuhATO/NSXM6OIQy5bCRSrmgY8APi4QhOKaq0Y+0Ak3OSCrXKjJS2TOsPKSmzei
+         e+hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747649059; x=1748253859;
+        d=1e100.net; s=20230601; t=1747649305; x=1748254105;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6YtPqJD96+AiahoiLJUfGwNDiBMARBZnTBQnE7bF3oI=;
-        b=t73yi9Zd91l4bIy3/ww7ZTfOFIuIRzMBzmSAd7LUMubmJc/xi8s5gdFmyw2GinMfMS
-         MuFvUQZ3sx4Q+mLjhx1oYM5atvSBhSo5M5aXLo4tnK98DE5mh8TIDmHFSNdfil/yvVSU
-         gDUKxLhPQp4qjpr2mhfz2caLYxRRQtgf7WHS4p/aQZ+GhvzhconRnkcc0HYSrah/j4EX
-         12VKdvVGqlhUQneyWbiQ2X1pi1oxuDP/0Y1SzM4onqe0tcNBiFioid50bjf5XL+JMhpL
-         CAlj6LVJUDQMonk/0zZ54/OB88esAqkZXwys8PNPy7caDqgUIqibQRUfmBkVgH/KdY8l
-         2Uhg==
-X-Forwarded-Encrypted: i=1; AJvYcCUA2pQulaL3TRCkl+kyIIw/vaKpO9pGORa4A1jISLUqnpki9m2g60aPFxM7Fg5Rz4ahSpZxpdPEyA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvKU0wxQrqNgmhfYVntkxoGRXMZotZBYg7SciL5rnHAqhnzg8U
-	ywLWNjo/hsXD9XVH9rHspNgCktjVId7/EdFyk4EMLEfAnjBFZ+VSPOi9w2faJ+aoONc=
-X-Gm-Gg: ASbGncsbUyrtfcuQN9CucGodgzZq22yySSo71ynSOp4MKlSgphtdnvR3DNAFAvwijJW
-	YclEt7I80be/fpEGReKfFgWK/aN7BGDg9irYaFskuhA757PCHW5swHI3CK8BPD7eILE31fl9Dax
-	34T4aLHD67z+IY2hu8mZH7sY2IfeFhCZWJLO1VVKQv1/3sSpeOHcTg9lnqxcIRc+0eTu+pav1BZ
-	yUwJMzCfQ3ul7LNrAzfglaqwjhhY160s+TC9zaUlgOpsYiPBQ6bXcr/nCFpkJIWmPHR4Dol/Szl
-	RNKoUzXXINbaqYlv9c5ZQKHKznoy/FKuHk+/0Ry537UA5hhGahz20ORxlmYBSoM=
-X-Google-Smtp-Source: AGHT+IGEnvVwZRiTsCwUsGjKmnNCAfKCTA6Ra5Mk20OfWP5M786bdcXDJyaBb9y/Cv6azGJ88xUN1w==
-X-Received: by 2002:a05:6a00:91d3:b0:73e:2d7a:8fc0 with SMTP id d2e1a72fcca58-742a9786a79mr15783828b3a.1.1747649059593;
-        Mon, 19 May 2025 03:04:19 -0700 (PDT)
+        bh=PuBulIo1CkbxayB7KEtrbV86yLWE3VV7SPvLxmKhqYc=;
+        b=mx96DyjQcgoxzPaVSccEYrHBluVY+yPGg99Hwn1CMlN0VFY7sSZk3IEdtuwzet2hYN
+         jj3ZuwCJiVb5nEf+RrTZGE7bmqXbZ5mM6Rn/YnQ+4QLkeomooDQBg5zBucmCYg79Vqf0
+         cfqAL13+6HoHvWjY2YqXMEZh92Zgn325sApto/YO3B10EUx2KwvyYztCBgah3XGwasSR
+         zT1drb7b95ExrqNn5bms8WKouMpWtN69YpUaflSxl1b9ypcdac2XQ2HhRex1J/om8QIx
+         k8AA0A/Po/deamAO6UbiU+kaEfZCUxzXE3XIsB5bN+QlYTLHxCUtw7XgUdlb2Oufyi2C
+         Gb9A==
+X-Forwarded-Encrypted: i=1; AJvYcCVTgTeS62FeesGACSV/smGu32P2AxFAkCq8zRBi0i9nYwDQbSlZ8udpBUdI8FocFRP2DRAXmdbZfw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywe4t4yEXnhws0NlY/FNNn2UNOpw7ndhvcEaGZzsCFAC7Ymr5SP
+	2WhfgXEKRgxA5MNEfTVD2ns1VVjjQbK6GX2kW2SfL6lImX/l0nv4ppSt4ATcgbN6iNM=
+X-Gm-Gg: ASbGncu6mo61mLmVmro+gD8A9GD8Bb8FfOS6xqJjFfM8+HQEOqsMUuwlD/VLwo/S8Uq
+	/gtEPQeDJK7SChvdtN9ZU62wTkyeZ2uGIeCJ+AVWkbjvoIu01zlpA/nSC534QHXEA3EIPf85SMa
+	DxtrCUE5cRsnsagbqrv7oa6ONkaJABCjlCrrxxByKMA+Vfhp7WB7F3icH3ZJ5vJOdinSth69zYX
+	DIHdHPLiDM+4NlHfHfF0fnzizzS8ShkAW6UamZQGuxSsLZCpI2ECyVfsRazpH2Xh3O2nhl8I/9h
+	HmtxNkggAsPvC4yhXd2w4e61iS+km2sOEkrJZWjKRpw3JgCl+c4h6OqY9CYpjdI=
+X-Google-Smtp-Source: AGHT+IGVe2J3cpxAL9EWq9+6d/4gOwJD/80cWTDZrTmrnV8DWVsCp2X+TptmRzbGQd3z7gfCQALgqA==
+X-Received: by 2002:a17:903:41c7:b0:224:1221:1ab4 with SMTP id d9443c01a7336-231de317b43mr180365815ad.22.1747649305463;
+        Mon, 19 May 2025 03:08:25 -0700 (PDT)
 Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a9877030sm6014959b3a.148.2025.05.19.03.04.18
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-231d4ed5e7bsm55732915ad.249.2025.05.19.03.08.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 May 2025 03:04:19 -0700 (PDT)
-Date: Mon, 19 May 2025 15:34:16 +0530
+        Mon, 19 May 2025 03:08:24 -0700 (PDT)
+Date: Mon, 19 May 2025 15:38:22 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Bowen Yu <yubowen8@huawei.com>
-Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linuxarm@huawei.com,
-	zhanjie9@hisilicon.com, jonathan.cameron@huawei.com,
-	lihuisong@huawei.com, zhenglifeng1@huawei.com,
-	cenxinghai@h-partners.com
-Subject: Re: [PATCH] cpufreq: Update sscanf() to kstrtouint()
-Message-ID: <20250519100416.fjixyqgbgk44pgps@vireshk-i7>
-References: <20250519070938.931396-1-yubowen8@huawei.com>
+To: zhang.enpei@zte.com.cn
+Cc: vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] OPP: switch to use kmemdup_array()
+Message-ID: <20250519100822.evhd4vs6p34irx2q@vireshk-i7>
+References: <20250515201312562vXizlDSg23_PhQ1nALjYV@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,37 +87,34 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250519070938.931396-1-yubowen8@huawei.com>
+In-Reply-To: <20250515201312562vXizlDSg23_PhQ1nALjYV@zte.com.cn>
 
-On 19-05-25, 15:09, Bowen Yu wrote:
-> In store_scaling_setspeed(), sscanf is still used to read to sysfs.
-> Newer kstrtox provide more features including overflow protection,
-> better errorhandling and allows for other systems of numeration. It
-> is therefore better to update sscanf() to kstrtouint().
+On 15-05-25, 20:13, zhang.enpei@zte.com.cn wrote:
+> From: Zhang Enpei <zhang.enpei@zte.com.cn>
 > 
-> Signed-off-by: Bowen Yu <yubowen8@huawei.com>
+> Use kmemdup_array() to avoid multiplication and possible overflows.
+> 
+> Signed-off-by: Zhang Enpei <zhang.enpei@zte.com.cn>
 > ---
->  drivers/cpufreq/cpufreq.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  drivers/opp/core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index be727da0be4d..0c842edd1a76 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -920,9 +920,9 @@ static ssize_t store_scaling_setspeed(struct cpufreq_policy *policy,
->  	if (!policy->governor || !policy->governor->store_setspeed)
->  		return -EINVAL;
->  
-> -	ret = sscanf(buf, "%u", &freq);
-> -	if (ret != 1)
-> -		return -EINVAL;
-> +	ret = kstrtouint(buf, 0, &freq);
-> +	if (ret)
-> +		return ret;
->  
->  	policy->governor->store_setspeed(policy, freq);
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 72fbb6cadc23..d85e3371493f 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -2087,8 +2087,8 @@ static int _opp_set_supported_hw(struct opp_table *opp_table,
+>         if (opp_table->supported_hw)
+>                 return 0;
+> 
+> -       opp_table->supported_hw = kmemdup(versions, count * sizeof(*versions),
+> -                                       GFP_KERNEL);
+> +       opp_table->supported_hw = kmemdup_array(versions, count, sizeof(*versions),
+> +                                               GFP_KERNEL);
+>         if (!opp_table->supported_hw)
+>                 return -ENOMEM;
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Applied. Thanks.
 
 -- 
 viresh
