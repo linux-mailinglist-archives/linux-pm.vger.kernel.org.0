@@ -1,240 +1,354 @@
-Return-Path: <linux-pm+bounces-27353-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27354-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8717CABC138
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 16:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A6BF3ABC194
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 17:02:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F22BE17C767
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 14:45:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4044E4A2100
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 15:02:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F97B283C86;
-	Mon, 19 May 2025 14:45:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9DB5284B3E;
+	Mon, 19 May 2025 15:02:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TzSHzBCm"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jBoeTHHw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227EB2820DB
-	for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 14:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B7E283CB8
+	for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 15:02:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747665908; cv=none; b=LJcpnyCOSBjUrxON0CIdEvVXJuTixGV6HkcJUPPDmtHt/kIqLmi9V9Y61uyXUdSgIMtlSiRl3hNjMD3Xk3r3CirKFwdgGCEIJGbPoDo5tqqZp26iHNBiw3zpmnyJ9eQpUxjO2hX1H4m/VAPOc8OS0qKMZdENHlwvsK1MT52B0GI=
+	t=1747666965; cv=none; b=QT6LG2uwqkVCf0TqaP09fzPmjhzB9K79f1QDAyFfe+3ooZBE4qn+DpNiVKeTAwLJ1bag8vt4OGxrwyrwWJ8TFh7Z+MYZrBSChFaZWsXmucwqIp2VPgAL8m3jU/Ia2Bg+GHoCX1UZJM6dahwbTX6BXqsLSAAjWtjmx2ZdA7jR37M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747665908; c=relaxed/simple;
-	bh=7txlZqDAV8K5i3phl6bNeE7/e+2UQXhvJqe7GPPm0ko=;
+	s=arc-20240116; t=1747666965; c=relaxed/simple;
+	bh=xCMBzFTKadLRPmtv7g5TAh2wHLI7XCcszjl48cloJm4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rz9FT90IjuCEAGYu/9zpmg0fTS6TSGrLLHCEbdJb4sqjywUqQOmcvheWR/+C44ARzOzZTNXHq5dCq5z6Zfm98OxyEZ181j0zl6zZjgFPevE6Ta2qk/BcGc++mKT1lQiqDSgjGueiieIF9sKVwGAishX6X6LAzfKcScIqAYcJVwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TzSHzBCm; arc=none smtp.client-ip=209.85.219.174
+	 To:Cc:Content-Type; b=BE9HdFvcZZEdeLUb5KoKFNNyTigWuqqbd6Er0jV+Pxq0NPffLih+zSZvtHJkkQ3kb8/1stDVq6uzseE4zDbrmdsG7OZa5Md7UkZImOH8tKAblNZ+0PptGzeWAeLrR+l3AeT3TILepGdJzTR2F4UoH7mNeFIj8FoK39W3p7/nLO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jBoeTHHw; arc=none smtp.client-ip=209.85.219.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e7b811be778so2412527276.2
-        for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 07:45:05 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e7b98303087so1146279276.1
+        for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 08:02:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747665905; x=1748270705; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1747666961; x=1748271761; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WrNoKeX2Lj5/qNveVALcOn5Q7n0Yzi5c56UWgJ4BBhY=;
-        b=TzSHzBCmqaThfKr3krpc1H1+CCuSNc+nTBHp6G0fvkCVnG3k2jDGOF7jQGZ/Cb0l83
-         XaVA/qoL5qH1dREhL+lBgz2l0oRMh1H51X6wr/V9S0JuRWAg75p0tj8KZ81fB9DMRl+M
-         w6A+6AP92xziBQyX+6Uvl7JllMQV2V19REIGLnnTgAnwal716y04kbVIBj3vMQcmAqEK
-         ho7Wv15/nEHctngOZVZassYr+g5XrmYr7edtct3xGT+6U4TIs6oSXZiCgewvFGEtLoln
-         bI9/87G2t3xvdLcWWkqcOQGn39/s0jp24kp5Vy5J+unRBhabXjadgvRCBBgv4ZwOZ2zY
-         eEWw==
+        bh=KK1Eu2M4Mh/WDmhNwRWQNeNWHLjCRcKPAYxNAnWHznY=;
+        b=jBoeTHHwh/idAgadyyo6fbVLRKy0EQRmP/8ws74tx7PTq0WKLdKBYwaQGjyWKz51Jt
+         cAAmw6rauzXhvGKgTDb5PlAwL28lrqCuFlpujwtGIA4LjrI7twFkNGpHW4UrAH4rCUau
+         zayuqaN4lyO6duPYXIDdRKifsGhitx4uSGPFMm8shYxBYhOclzzUOjiLWdFR3BX6jJW9
+         tZGg5VzhY+WFvOkwTxg9ifPrcyBaWZ4stXjUd0oRBNQ5wLT+xmzfmK9te8br1E7WvygX
+         t30W6QFKtZwyYODDb/pwvlsKHsLK033WyHI0IP2RROxyrNButYzepiyNLFeA2aMJB54e
+         pX5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747665905; x=1748270705;
+        d=1e100.net; s=20230601; t=1747666961; x=1748271761;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WrNoKeX2Lj5/qNveVALcOn5Q7n0Yzi5c56UWgJ4BBhY=;
-        b=eveV9R1CqxXFD5vV5g+BXI8q1X146dUhe1Own6FUmc9R9PNaBehdc2F3hyfs25V4ie
-         TmdcYP1WEgWt5XPQFM+BXEWzn5k8lRChZIV8ROa5Dj4rbnHE3+nxpvdKV7jUgSteAzea
-         lXHDcfBiwGZi/z5ju9YA5BHeVsHtG2DRkkRaf05Fq2JP0256l0+I9HzLrZS5IFAIFIvJ
-         AordpU0VdtM09bO6lNFthNuxC74IMe2ar9nJnIXmdf5q83/ElkF2W4I7ZewBPJoLzFxo
-         JCdMHPN7MlRdgs2G5iCg6nWGiFH6yQ1H3aiSrWlotMo/hvLrqrfzVAjPc93QSRgSs2N6
-         eNjA==
-X-Forwarded-Encrypted: i=1; AJvYcCXtIlSy7HyxjrO+7ClVsa82MYeVt5FCqgt4qH4lvNQr87YaI5tfua76OqI2kqOwGWUdGnNqBgjLAw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZZ9cd5/UM8j4wCxz9ZmAj075Y8HBglOLHixJj+pz7y9U2tI56
-	gJ62g2l/MJPMfkA5047MSezZ6FhjKNkeM0a7yXeoak0qXsQLwNrcKuin/tYZBcgDMkQ2ZsLDPFs
-	hByhJwTykJa3O0sn6o+oYd/UlrBH6xeXOinnkORJ0qQ==
-X-Gm-Gg: ASbGncvofcZ/NijjqUBC/btXFWWkfLc2CDxqeJNlz7FMBqmucgngMc5Qaa49dlJVyHB
-	tVUFvCiw8c1mv9LIReKlmc8LvcaldQkcVyfMCeFCcvtks4UgoJCg5/DtzQ0loRasc/LvUssvqFV
-	vbACGvxCq8rbuW5kzHcg0kP6TuqWtfgx4I09AuCjAeuuw2
-X-Google-Smtp-Source: AGHT+IF8/uwDdoGOrriHzNUlc7Tuwt8k1isUfkEw9K/S9llcMRcrkUJk2jiCJcYg88blueJKed7YKLdIpbr1Gbas65Y=
-X-Received: by 2002:a05:6902:2504:b0:e7b:5e00:54a8 with SMTP id
- 3f1490d57ef6-e7b6a41fc80mr17171222276.32.1747665905046; Mon, 19 May 2025
- 07:45:05 -0700 (PDT)
+        bh=KK1Eu2M4Mh/WDmhNwRWQNeNWHLjCRcKPAYxNAnWHznY=;
+        b=Og9NRBD+YD6mFkm7PF+wraiWCM/FUcMelv/L37plJ3Ai6rVDRlRGvPiNvPqhpqgs6b
+         NJ2NA+pqDocDGiYV3HfFkuhuTkUKkUF5btl6dXik41EWgZvGdMyo6c2HGp7t8SlL1Zon
+         pCS3H7zzB9a2PDr50tiqT/8/eCPh5R6X+JUoGXNX8dlSg350AT08UptYeoO1zcWG3m01
+         gw3T5FHAgB7zGTlh40AhcsIjpmiqf2ogIq5EF7B84aD+KQq1P+Ce7/FZBA2P//9TuR9T
+         cXgvJPWahYkmG7pmZra5W3Q4egb1xaU7CCSHuHtVV4clzUdPzIAB9bH33/yUIzWS6wBt
+         j1NA==
+X-Forwarded-Encrypted: i=1; AJvYcCUNgvVBXDtkb3iHjwjF817hmq5ZQrBJQUW+v/gwG71onQHdG4LUiIUzJWMmK0yvtz81YgmJf7qkwA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6cw4kYmKknJbR2g/BdChoK0fhgLLVxfiezx1uMZUY/WI5fgJL
+	4F5tXVprhydKq1KgknibeEc3o6OSWhU8IIc8GiaW+SEkMmAipTMPwpjmcJELdx8B2MXpKLUfFPB
+	movHIO8TEscgOsU66pzGD6T86lrgvnKf/m91OCaOtKg==
+X-Gm-Gg: ASbGnct9v1xY11ESWb0KquwoW3u4mRcjdC06kYYlwJVbEAThZjEnT2lFriFv7UWIbb4
+	X56XiIz3qb/NLiCbMI6GV/uu+8y8z457H2oZmm/xeQb+YBqwLZ46sTExSKN3ckvAAQ3IcL2iZB/
+	2wvhMOW5boy5Nvqeslbn2WHwMPtlA6mcZY8A==
+X-Google-Smtp-Source: AGHT+IGAMW1jJVmsC56GADCWfLVvAWa25Q8V5u6NcwoboEdczZSNQHEvjyAiU7Bv07VEfhQwRzfU/FWoR33EwRolkAQ=
+X-Received: by 2002:a05:6902:2e04:b0:e78:edd6:f51d with SMTP id
+ 3f1490d57ef6-e7b6d3bb9a9mr17684678276.1.1747666961296; Mon, 19 May 2025
+ 08:02:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250507160056.11876-1-hiagofranco@gmail.com> <20250507160056.11876-4-hiagofranco@gmail.com>
- <CAPDyKFrHD1hVCfOK-JV5FJM+Cd9DoKKZGKcC94fxx6_9Bsri1g@mail.gmail.com>
- <20250508202826.33bke6atcvqdkfa4@hiago-nb> <CAPDyKFr3yF=yYZ=Xo5FicvSbDPOTx7+fMwc8dMCLYKPBMEtCKA@mail.gmail.com>
- <20250509191308.6i3ydftzork3sv5c@hiago-nb> <20250512045613.GB31197@nxa18884-linux>
- <CAPDyKFqLMEOEnGDRE-1OUi8o8eVd4_oYPH4heu=WFQ8+4s+3-w@mail.gmail.com>
-In-Reply-To: <CAPDyKFqLMEOEnGDRE-1OUi8o8eVd4_oYPH4heu=WFQ8+4s+3-w@mail.gmail.com>
+References: <20250215130849.227812-1-claudiu.beznea.uj@bp.renesas.com>
+ <2025021539-untrained-prompter-a48f@gregkh> <4bf01946-90e3-4169-91fa-10d9f90310e9@tuxon.dev>
+ <8d83ea72-bb81-4c63-bf69-28cf5848ae20@tuxon.dev> <20250305140309.744866b2@jic23-huawei>
+ <Z8k8lDxA53gUJa0n@google.com> <f74085be-7b14-4551-a0a7-779318a5dc70@tuxon.dev>
+ <20250330163129.02f24afb@jic23-huawei> <5bca6dfd-fe03-4c44-acf4-a51673124338@tuxon.dev>
+ <95f5923f-7a8f-4947-b588-419525930bcb@tuxon.dev> <CAPDyKFoMqmCFBoO8FwQe2wHh2kqQi4jUZNFyiNckK7QhGVgmvg@mail.gmail.com>
+ <c3a2950a-17ff-444a-bee7-af5e7e10e2bf@tuxon.dev>
+In-Reply-To: <c3a2950a-17ff-444a-bee7-af5e7e10e2bf@tuxon.dev>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 19 May 2025 16:44:28 +0200
-X-Gm-Features: AX0GCFsoxBKbaWTA3FYRE0-ad2i-E4rboVBaxePNJn3SS4-9nGpIGtS4wBpf9Ns
-Message-ID: <CAPDyKFrRLKc5FSng3P-8Hfe+R-3CYoPLwrYq1uMgXVNO4MA-xw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] remoteproc: imx_rproc: add power mode check for
- remote core attachment
-To: Peng Fan <peng.fan@oss.nxp.com>
-Cc: Hiago De Franco <hiagofranco@gmail.com>, Mathieu Poirier <mathieu.poirier@linaro.org>, 
-	linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Bjorn Andersson <andersson@kernel.org>, Hiago De Franco <hiago.franco@toradex.com>, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	daniel.baluta@nxp.com, iuliana.prodan@oss.nxp.com, 
-	Fabio Estevam <festevam@gmail.com>, Pengutronix Kernel Team <kernel@pengutronix.de>, Peng Fan <peng.fan@nxp.com>
+Date: Mon, 19 May 2025 17:02:05 +0200
+X-Gm-Features: AX0GCFtT0LL3C5PZqcUOks46F5YEw4VSiH9mC9596wx_rF2txlVq97tlrI49Nv8
+Message-ID: <CAPDyKFozR4qDq4mzcZBK-LcoPf=fGyuJTXwdt=Ey+_DcQOAp0g@mail.gmail.com>
+Subject: Re: [PATCH] driver core: platform: Use devres group to free driver
+ probe resources
+To: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Cc: Jonathan Cameron <jic23@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, dakr@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	geert@linux-m68k.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-iio@vger.kernel.org, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, bhelgaas@google.com
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 19 May 2025 at 16:39, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+On Fri, 9 May 2025 at 16:12, Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
 >
-> On Mon, 12 May 2025 at 05:46, Peng Fan <peng.fan@oss.nxp.com> wrote:
+> Hi, Ulf,
+>
+> Thank you for your input!
+>
+> On 09.05.2025 16:07, Ulf Hansson wrote:
+> > On Fri, 9 May 2025 at 13:51, Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+> >>
+> >> Hi, Rafael, Ulf, PM list,
+> >>
+> >>
+> >> On 09.04.2025 19:12, Claudiu Beznea wrote:
+> >>> Hi, Rafael,
+> >>>
+> >>> On 30.03.2025 18:31, Jonathan Cameron wrote:
+> >>>> On Thu, 27 Mar 2025 18:47:53 +0200
+> >>>> Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+> >>>>
+> >>>>> Hi, Rafael,
+> >>>>>
+> >>>>> On 06.03.2025 08:11, Dmitry Torokhov wrote:
+> >>>>>> On Wed, Mar 05, 2025 at 02:03:09PM +0000, Jonathan Cameron wrote:
+> >>>>>>> On Wed, 19 Feb 2025 14:45:07 +0200
+> >>>>>>> Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+> >>>>>>>
+> >>>>>>>> Hi, Daniel, Jonathan,
+> >>>>>>>>
+> >>>>>>>> On 15.02.2025 15:51, Claudiu Beznea wrote:
+> >>>>>>>>> Hi, Greg,
+> >>>>>>>>>
+> >>>>>>>>> On 15.02.2025 15:25, Greg KH wrote:
+> >>>>>>>>>> On Sat, Feb 15, 2025 at 03:08:49PM +0200, Claudiu wrote:
+> >>>>>>>>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> >>>>>>>>>>>
+> >>>>>>>>>>> On the Renesas RZ/G3S (and other Renesas SoCs, e.g., RZ/G2{L, LC, UL}),
+> >>>>>>>>>>> clocks are managed through PM domains. These PM domains, registered on
+> >>>>>>>>>>> behalf of the clock controller driver, are configured with
+> >>>>>>>>>>> GENPD_FLAG_PM_CLK. In most of the Renesas drivers used by RZ SoCs, the
+> >>>>>>>>>>> clocks are enabled/disabled using runtime PM APIs. The power domains may
+> >>>>>>>>>>> also have power_on/power_off support implemented. After the device PM
+> >>>>>>>>>>> domain is powered off any CPU accesses to these domains leads to system
+> >>>>>>>>>>> aborts.
+> >>>>>>>>>>>
+> >>>>>>>>>>> During probe, devices are attached to the PM domain controlling their
+> >>>>>>>>>>> clocks and power. Similarly, during removal, devices are detached from the
+> >>>>>>>>>>> PM domain.
+> >>>>>>>>>>>
+> >>>>>>>>>>> The detachment call stack is as follows:
+> >>>>>>>>>>>
+> >>>>>>>>>>> device_driver_detach() ->
+> >>>>>>>>>>>   device_release_driver_internal() ->
+> >>>>>>>>>>>     __device_release_driver() ->
+> >>>>>>>>>>>       device_remove() ->
+> >>>>>>>>>>>         platform_remove() ->
+> >>>>>>>>>>>         dev_pm_domain_detach()
+> >>>>>>>>>>>
+> >>>>>>>>>>> During driver unbind, after the device is detached from its PM domain,
+> >>>>>>>>>>> the device_unbind_cleanup() function is called, which subsequently invokes
+> >>>>>>>>>>> devres_release_all(). This function handles devres resource cleanup.
+> >>>>>>>>>>>
+> >>>>>>>>>>> If runtime PM is enabled in driver probe via devm_pm_runtime_enable(), the
+> >>>>>>>>>>> cleanup process triggers the action or reset function for disabling runtime
+> >>>>>>>>>>> PM. This function is pm_runtime_disable_action(), which leads to the
+> >>>>>>>>>>> following call stack of interest when called:
+> >>>>>>>>>>>
+> >>>>>>>>>>> pm_runtime_disable_action() ->
+> >>>>>>>>>>>   pm_runtime_dont_use_autosuspend() ->
+> >>>>>>>>>>>     __pm_runtime_use_autosuspend() ->
+> >>>>>>>>>>>       update_autosuspend() ->
+> >>>>>>>>>>>         rpm_idle()
+> >>>>>>>>>>>
+> >>>>>>>>>>> The rpm_idle() function attempts to resume the device at runtime. However,
+> >>>>>>>>>>> at the point it is called, the device is no longer part of a PM domain
+> >>>>>>>>>>> (which manages clocks and power states). If the driver implements its own
+> >>>>>>>>>>> runtime PM APIs for specific functionalities - such as the rzg2l_adc
+> >>>>>>>>>>> driver - while also relying on the power domain subsystem for power
+> >>>>>>>>>>> management, rpm_idle() will invoke the driver's runtime PM API. However,
+> >>>>>>>>>>> since the device is no longer part of a PM domain at this point, the PM
+> >>>>>>>>>>> domain's runtime PM APIs will not be called. This leads to system aborts on
+> >>>>>>>>>>> Renesas SoCs.
+> >>>>>>>>>>>
+> >>>>>>>>>>> Another identified case is when a subsystem performs various cleanups
+> >>>>>>>>>>> using device_unbind_cleanup(), calling driver-specific APIs in the process.
+> >>>>>>>>>>> A known example is the thermal subsystem, which may call driver-specific
+> >>>>>>>>>>> APIs to disable the thermal device. The relevant call stack in this case
+> >>>>>>>>>>> is:
+> >>>>>>>>>>>
+> >>>>>>>>>>> device_driver_detach() ->
+> >>>>>>>>>>>   device_release_driver_internal() ->
+> >>>>>>>>>>>     device_unbind_cleanup() ->
+> >>>>>>>>>>>       devres_release_all() ->
+> >>>>>>>>>>>         devm_thermal_of_zone_release() ->
+> >>>>>>>>>>>         thermal_zone_device_disable() ->
+> >>>>>>>>>>>           thermal_zone_device_set_mode() ->
+> >>>>>>>>>>>             struct thermal_zone_device_ops::change_mode()
+> >>>>>>>>>>>
+> >>>>>>>>>>> At the moment the driver-specific change_mode() API is called, the device
+> >>>>>>>>>>> is no longer part of its PM domain. Accessing its registers without proper
+> >>>>>>>>>>> power management leads to system aborts.
+> >>>>>>>>>>>
+> >>>>>>>>>>> Open a devres group before calling the driver probe, and close it
+> >>>>>>>>>>> immediately after the driver remove function is called and before
+> >>>>>>>>>>> dev_pm_domain_detach(). This ensures that driver-specific devm actions or
+> >>>>>>>>>>> reset functions are executed immediately after the driver remove function
+> >>>>>>>>>>> completes. Additionally, it prevents driver-specific runtime PM APIs from
+> >>>>>>>>>>> being called when the device is no longer part of its power domain.
+> >>>>>>>>>>>
+> >>>>>>>>>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> >>>>>>>>>>> ---
+> >>>>>>>>>>>
+> >>>>>>>>>>> Hi,
+> >>>>>>>
+> >>>>>>> Hi Claudiu, Greg,
+> >>>>>>>
+> >>>>>>> Sorry, I missed this thread whilst travelling and only saw it because
+> >>>>>>> of reference from the in driver solution.
+> >>>>>>>
+> >>>>>>>>>>>
+> >>>>>>>>>>> Although Ulf gave its green light for the approaches on both IIO [1],
+> >>>>>>>>>>> [2] and thermal subsystems [3], Jonathan considered unacceptable the
+> >>>>>>>>>>> approaches in [1], [2] as he considered it may lead to dificult to
+> >>>>>>>>>>> maintain code and code opened to subtle bugs (due to the potential of
+> >>>>>>>>>>> mixing devres and non-devres calls). He pointed out a similar approach
+> >>>>>>>>>>> that was done for the I2C bus [4], [5].
+> >>>>>>>>>>>
+> >>>>>>>>>>> As the discussions in [1], [2] stopped w/o a clear conclusion, this
+> >>>>>>>>>>> patch tries to revive it by proposing a similar approach that was done
+> >>>>>>>>>>> for the I2C bus.
+> >>>>>>>>>>>
+> >>>>>>>>>>> Please let me know you input.
+> >>>>>>>>>>
+> >>>>>>>>>> I'm with Jonathan here, the devres stuff is getting crazy here and you
+> >>>>>>>>>> have drivers mixing them and side affects happening and lots of
+> >>>>>>>>>> confusion.  Your change here is only going to make it even more
+> >>>>>>>>>> confusing, and shouldn't actually solve it for other busses (i.e. what
+> >>>>>>>>>> about iio devices NOT on the platform bus?)
+> >>>>>>>
+> >>>>>>> In some cases they are already carrying the support as per the link
+> >>>>>>> above covering all i2c drivers.  I'd like to see a generic solution and
+> >>>>>>> I suspect pushing it to the device drivers rather than the bus code
+> >>>>>>> will explode badly and leave us with subtle bugs where people don't
+> >>>>>>> realise it is necessary.
+> >>>>>>>
+> >>>>>>> https://lore.kernel.org/all/20250224120608.1769039-1-claudiu.beznea.uj@bp.renesas.com/
+> >>>>>>> is a lot nastier looking than what we have here. I'll review that in a minute
+> >>>>>>> to show that it need not be that bad, but none the less not pleasant.
+> >>>>>>>
+> >>>>>>> +CC linux-iio to join up threads and Dmitry wrt to i2c case (and HID that does
+> >>>>>>> similar)
+> >>>>>>
+> >>>>>> We should not expect individual drivers handle this, because this is a
+> >>>>>> layering violation: they need to know implementation details of the bus
+> >>>>>> code to know if the bus is using non-devres managed resources, and
+> >>>>>> adjust their behavior. Moving this into driver core is also not
+> >>>>>> feasible, as not all buses need it. So IMO this should belong to
+> >>>>>> individual bus code.
+> >>>>>>
+> >>>>>> Instead of using devres group a bus may opt to use
+> >>>>>> devm_add_action_or_reset() and other devm APIs to make sure bus'
+> >>>>>> resource unwinding is carried in the correct order relative to freeing
+> >>>>>> driver-owned resources.
+> >>>>>
+> >>>>> Can you please let us know your input on the approach proposed in this
+> >>>>> patch? Or if you would prefer devm_add_action_or_reset() as suggested by
+> >>>>> Dmitry? Or if you consider another approach would fit better?
+> >>>>>
+> >>>>> Currently there were issues identified with the rzg2l-adc driver (driver
+> >>>>> based solution proposed in [1]) and with the rzg3s thermal driver (solved
+> >>>>> by function rzg3s_thermal_probe() from [2]).
+> >>>>>
+> >>>>> As expressed previously by Jonathan and Dimitry this is a common problem
+> >>>>> and as the issue is due to a call in the bus driver, would be better and
+> >>>>> simpler to handle it in the bus driver. Otherwise, individual drivers would
+> >>>>> have to be adjusted in a similar way.
+> >>>>>
+> >>>>
+> >>>> Rafael,
+> >>>>
+> >>>> Greg suggested we ask for your input on the right option:
+> >>>>
+> >>>> https://lore.kernel.org/all/2025032703-genre-excitable-9473@gregkh/
+> >>>> (that thread has the other option).
+> >>>
+> >>> Can you please let us know your opinion on this?
+> >> Can you please let us know if you have any suggestions for this?
 > >
-> > On Fri, May 09, 2025 at 04:13:08PM -0300, Hiago De Franco wrote:
-> > >On Fri, May 09, 2025 at 12:37:02PM +0200, Ulf Hansson wrote:
-> > >> On Thu, 8 May 2025 at 22:28, Hiago De Franco <hiagofranco@gmail.com> wrote:
-> > >> >
-> > >> > Hello,
-> > >> >
-> > >> > On Thu, May 08, 2025 at 12:03:33PM +0200, Ulf Hansson wrote:
-> > >> > > On Wed, 7 May 2025 at 18:02, Hiago De Franco <hiagofranco@gmail.com> wrote:
-> > >> > > >
-> > >> > > > From: Hiago De Franco <hiago.franco@toradex.com>
-> > >> > > >
-> > >> > > > When the remote core is started before Linux boots (e.g., by the
-> > >> > > > bootloader), the driver currently is not able to attach because it only
-> > >> > > > checks for cores running in different partitions. If the core was kicked
-> > >> > > > by the bootloader, it is in the same partition as Linux and it is
-> > >> > > > already up and running.
-> > >> > > >
-> > >> > > > This adds power mode verification through the SCU interface, enabling
-> > >> > > > the driver to detect when the remote core is already running and
-> > >> > > > properly attach to it.
-> > >> > > >
-> > >> > > > Signed-off-by: Hiago De Franco <hiago.franco@toradex.com>
-> > >> > > > Suggested-by: Peng Fan <peng.fan@nxp.com>
-> > >> > > > ---
-> > >> > > > v2: Dropped unecessary include. Removed the imx_rproc_is_on function, as
-> > >> > > > suggested.
-> > >> > > > ---
-> > >> > > >  drivers/remoteproc/imx_rproc.c | 13 +++++++++++++
-> > >> > > >  1 file changed, 13 insertions(+)
-> > >> > > >
-> > >> > > > diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-> > >> > > > index 627e57a88db2..9b6e9e41b7fc 100644
-> > >> > > > --- a/drivers/remoteproc/imx_rproc.c
-> > >> > > > +++ b/drivers/remoteproc/imx_rproc.c
-> > >> > > > @@ -949,6 +949,19 @@ static int imx_rproc_detect_mode(struct imx_rproc *priv)
-> > >> > > >                         if (of_property_read_u32(dev->of_node, "fsl,entry-address", &priv->entry))
-> > >> > > >                                 return -EINVAL;
-> > >> > > >
-> > >> > > > +                       /*
-> > >> > > > +                        * If remote core is already running (e.g. kicked by
-> > >> > > > +                        * the bootloader), attach to it.
-> > >> > > > +                        */
-> > >> > > > +                       ret = imx_sc_pm_get_resource_power_mode(priv->ipc_handle,
-> > >> > > > +                                                               priv->rsrc_id);
-> > >> > > > +                       if (ret < 0)
-> > >> > > > +                               dev_err(dev, "failed to get power resource %d mode, ret %d\n",
-> > >> > > > +                                       priv->rsrc_id, ret);
-> > >> > > > +
-> > >> > > > +                       if (ret == IMX_SC_PM_PW_MODE_ON)
-> > >> > > > +                               priv->rproc->state = RPROC_DETACHED;
-> > >> > > > +
-> > >> > > >                         return imx_rproc_attach_pd(priv);
-> > >> > >
-> > >> > > Why is it important to potentially set "priv->rproc->state =
-> > >> > > RPROC_DETACHED" before calling imx_rproc_attach_pd()?
-> > >> > >
-> > >> > > Would it be possible to do it the other way around? First calling
-> > >> > > imx_rproc_attach_pd() then get the power-mode to know if
-> > >> > > RPROC_DETACHED should be set or not?
-> > >> > >
-> > >> > > The main reason why I ask, is because of how we handle the single PM
-> > >> > > domain case. In that case, the PM domain has already been attached
-> > >> > > (and powered-on) before we reach this point.
-> > >> >
-> > >> > I am not sure if I understood correcly, let me know if I missed
-> > >> > something. From my understanding in this case it does not matter, since
-> > >> > the RPROC_DETACHED will only be a flag to trigger the attach callback
-> > >> > from rproc_validate(), when rproc_add() is called inside
-> > >> > remoteproc_core.c.
-> > >>
-> > >> Okay, I see.
-> > >>
-> > >> To me, it sounds like we should introduce a new genpd helper function
-> > >> instead. Something along the lines of this (drivers/pmdomain/core.c)
-> > >>
-> > >> bool dev_pm_genpd_is_on(struct device *dev)
-> > >> {
-> > >>         struct generic_pm_domain *genpd;
-> > >>         bool is_on;
-> > >>
-> > >>         genpd = dev_to_genpd_safe(dev);
-> > >>         if (!genpd)
-> > >>                 return false;
-> > >>
-> > >>         genpd_lock(genpd);
-> > >>         is_on = genpd_status_on(genpd);
-> > >>         genpd_unlock(genpd);
-> > >>
-> > >>         return is_on;
-> > >> }
-> > >>
-> > >> After imx_rproc_attach_pd() has run, we have the devices that
-> > >> correspond to the genpd(s). Those can then be passed as in-parameters
-> > >> to the above function to get the power-state of their PM domains
-> > >> (genpds). Based on that, we can decide if priv->rproc->state should be
-> > >> to RPROC_DETACHED or not. Right?
-> > >
-> > >Got your idea, I think it should work yes, I am not so sure how. From
-> > >what I can see these power domains are managed by
-> > >drivers/pmdomain/imx/scu-pd.c and by enabling the debug messages I can
-> > >see the power mode is correct when the remote core is powered on:
-> > >
-> > >[    0.317369] imx-scu-pd system-controller:power-controller: cm40-pid0 : IMX_SC_PM_PW_MODE_ON
-> > >
-> > >and powered off:
-> > >
-> > >[    0.314953] imx-scu-pd system-controller:power-controller: cm40-pid0 : IMX_SC_PM_PW_MODE_OFF
-> > >
-> > >But I cannot see how to integrate this into the dev_pm_genpd_is_on() you
-> > >proposed. For a quick check, I added this function and it always return
-> > >NULL at dev_to_genpd_safe(). Can you help me to understand this part?
-> >
-> > Ulf's new API dev_pm_genpd_is_on needs to run after power domain attached.
+> > It's been a while since I looked at this. Although as I understand it,
+> > the main issue comes from using devm_pm_runtime_enable().
 >
-> Correct, but you need to provide the correct "dev" to it. See my other
-> reply to Hiago.
->
-> >
-> > But if run after power domain attached, there is no API to know whether
-> > M4 is kicked by bootloader or now.
->
-> As long as you have multiple PM domains attached for a device, genpd
-> will *not* power on the PM domain(s).
->
-> Genpd does a power-on in the single PM domain case (for legacy
-> reasons), but that should not be a problem here, right?
->
-> So what am I missing?
+> Yes, it comes from the usage of devm_pm_runtime_enable() in drivers and the
+> dev_pm_domain_detach() call in platform_remove() right after calling
+> driver's remove function.
 
-Aha, PD_FLAG_DEV_LINK_ON is being used when you attach to the PM
-domains. I would re-work things in the driver (if needed) so you can
-avoid using this flag, then the PM domains should stay power-off until
-there is a call to pm_runtime_get_sync().
+Okay.
 
-[...]
+>
+> On the platform I experienced issues with, the dev_pm_domain_detach() drops
+> the clocks from the device power domain and any subsequent PM runtime
+> resume calls (that may happen in the devres cleanup phase) have no effect
+> on enabling the clocks. If driver has functions registered (e.g. through
+> devm_add_action_or_reset()), or driver specific runtime PM functions that
+> access directly registers in the devres cleanup phase this leads to system
+> aborts.
+
+So if you move away from using devm_pm_runtime_enable() things would
+be easier to manage and there is no additional new devres-management
+needed.
+
+>
+>
+> >
+> > As I have tried to argue before, I think devm_pm_runtime_enable()
+> > should *not* be used. Not here, not at all. Runtime PM isn't like any
+> > other resources that we fetch/release. Instead, it's a behaviour that
+> > you turn on and off, which needs to be managed more carefully, rather
+> > than relying on fetch/release ordering from devres.
+> >
+> > That said, I would convert the driver to use pm_runtime_enable() and
+> > pm_runtime_disable() instead.
+>
+> I've tried this approach previously but it resulted in more complicated
+> code and thus, Jonathan wasn't happy with it [1].
+
+I understand that you have been trying to move forward to address
+people's opinions. It's not always easy to keep everybody happy. :-)
+
+That said, I still think this is the most viable option as it's how
+the vast majority of drivers do it today. A few lines of additional
+code shouldn't really be a big problem in my opinion.
+
+>
+> Another approach I've tried was to have devres group opened/closed in the
+> driver itself [2], [3] but it was postponed as this approach may have a chance.
+>
+> At the moment I have 2 drivers waiting for a resolution on this [2], [3]
+> and I recently posted a new one [4] that uses driver specific local devres
+> group to avoid this issue.
+>
 
 Kind regards
 Uffe
+
+>
+> Thank you,
+> Claudiu
+>
+> [1]
+> https://lore.kernel.org/all/20250224120608.1769039-2-claudiu.beznea.uj@bp.renesas.com
+> [2]
+> https://lore.kernel.org/all/20250324122627.32336-2-claudiu.beznea.uj@bp.renesas.com
+> [3]
+> https://lore.kernel.org/all/20250324135701.179827-3-claudiu.beznea.uj@bp.renesas.com/
+> [4]
+> https://lore.kernel.org/all/20250430103236.3511989-6-claudiu.beznea.uj@bp.renesas.com
 
