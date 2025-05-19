@@ -1,140 +1,176 @@
-Return-Path: <linux-pm+bounces-27296-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27297-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81DCAABB47F
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 07:52:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9461ABB48D
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 07:59:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EF2A170AE2
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 05:52:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D78C1892D5F
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 05:59:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D69371EDA1A;
-	Mon, 19 May 2025 05:52:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 959B92066F7;
+	Mon, 19 May 2025 05:58:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dSJcadqo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CE0w6WwO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABE671DBB13;
-	Mon, 19 May 2025 05:52:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88B3F1FF1C7;
+	Mon, 19 May 2025 05:58:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747633921; cv=none; b=FppSX3fsmvagSbIReteoBbZX5UZfkY4uLQq+oQYLbhgarggQP2sUN0pXZTjpUdfoSeJkTTI9SeJZ7OTBYeoDGe8FX6SYq+JD1UVZvCxQwo8FIzgn/bOMjR14nK/XEWIuYuobZgPRvvqsBSUUFzL3ol10Y8MyLH+OXdDRkMshuOQ=
+	t=1747634337; cv=none; b=dqod75jfAqU+aibuAfrx0w/CZJNw6mgFQjvLPHg1hT9mqxMa7M1pbeDYTBk5V7yazyZC8rIeBfEhke3nlepcu6Emq1Qh6tnBhPA+kSDKTf6lgkKFhX77WUW3x0/+1KtA23ji71vMj7SxPwqc0AtTEF54+lmV1UxGYTw2ju8hWAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747633921; c=relaxed/simple;
-	bh=fGqHTP2q8/OCZvTcrwKxWknaonfy5fx1oKUM6w0aEYA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HuL9Mc4iiRdN3TjTfC+h3tGMUeXg153uCGSxnlotk817TWCaI1pFZjoil4pgkUXs2g4vyLVl55aCzIB48S3feyqJJCHq9NQ2OqbucwEqzsdPgZaRm+s+XurwKfbRs3DFpnCYj29DuwDYzOftckGse2ivShWCnWdxCcBtlt6mv+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dSJcadqo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FADFC4CEED;
-	Mon, 19 May 2025 05:51:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747633921;
-	bh=fGqHTP2q8/OCZvTcrwKxWknaonfy5fx1oKUM6w0aEYA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dSJcadqo9KBIZLHJYzHDmPluue3j/A2Fp6mrhaYrzuezHPTiRkZ1knlxU34U0FZKn
-	 4E92DoTdOy0ThIfcFgXckG5wMdm1rqTNp+kV+NqsBkBmXyVTufje6x1x5a6swTCy1/
-	 PZBUN+fjMN1QYtyvjhPHR2tRgehds1WXyot13nFTrkMfG+myWkPuBkAWhebBLFm/vP
-	 Oq7VGTWylTxDkioKRSyez7Fg+NTN74zOK7pHDMTHDGjbuyT5wDNvsLRzwad64Z4SeG
-	 yPUUP9lMFY28340He2rWTpRm160EJhIUwOogFX8efWCTe4xkMD8eSv6JBDJkVzbUnw
-	 9MI8Q3GuY/3Dw==
-Message-ID: <12523bd9-0c04-4d63-9f0e-014f14d359c2@kernel.org>
-Date: Mon, 19 May 2025 07:51:57 +0200
+	s=arc-20240116; t=1747634337; c=relaxed/simple;
+	bh=V+uTJfNAlt+eTwGKfdtk7Aw4sPh5/5YlJ42c3mBtdFk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p3pF+kbtt4/MASm8Ld9GmgmZJyjIVkrM9m3gwUV1Tgt9V3mxcOLf/NCX/EiSatcnCyNb1s7/FtmkSuP4rVTGBQw1cNTQnMJ1Qi6l5uY2pnUh4LCCdd337aAVmMp3mEp9XNDMRSwatSpyH09S4tPiGwnT7Px7bgPe8bZZJkTnEi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CE0w6WwO; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747634336; x=1779170336;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=V+uTJfNAlt+eTwGKfdtk7Aw4sPh5/5YlJ42c3mBtdFk=;
+  b=CE0w6WwOi8fbOfpL3UlTAlsvAFuwinsFSiD4FH8MchfjDxwrjooIK8To
+   8ThitDC8Lo3yLxcCDxL3ETEQQqv2OtUPu1dYmacHKIDhn3nF+wJRMQ3+P
+   etcyWm80+39AF3fSurQcao2BAA48EUEaA9SQFcSChfm/27CE3Sj3LdlTs
+   9QEL8O1F5OINqVDPzf1dsjSOvDUtotrHcleDyFRR4J6o0WINm1g945Ysb
+   7dqEvTANNLm1OeHijsnnCULLAim66/YeN8BJHF1RWzxek7pBmNHR+o8dx
+   irnKZYeftPdMXdMOh4c1DbX8ZsNHGgF5Qj2Bi6WZFpjEzILOmrVwvChGc
+   A==;
+X-CSE-ConnectionGUID: e6XKzEHERtixF4MG+FNc0w==
+X-CSE-MsgGUID: CjSL7aczSZqI0d+IDvJ6dw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11437"; a="53336333"
+X-IronPort-AV: E=Sophos;i="6.15,300,1739865600"; 
+   d="scan'208";a="53336333"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2025 22:58:52 -0700
+X-CSE-ConnectionGUID: XXlEr0BlS0uOimkdzmH2/Q==
+X-CSE-MsgGUID: zBUN46WgTf6FANBZw9Iusw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,300,1739865600"; 
+   d="scan'208";a="139766796"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 18 May 2025 22:58:49 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uGtWR-000LB1-07;
+	Mon, 19 May 2025 05:58:47 +0000
+Date: Mon, 19 May 2025 13:58:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Charles Han <hanchunchao@inspur.com>, krzk@kernel.org, sre@kernel.org,
+	akpm@linux-foundation.org, lee@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Charles Han <hanchunchao@inspur.com>
+Subject: Re: [PATCH V2] charger: max14577: Handle NULL pdata when CONFIG_OF
+ is not set
+Message-ID: <202505191305.un0tzZu1-lkp@intel.com>
+References: <20250519014804.2244-1-hanchunchao@inspur.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2] charger: max14577: Handle NULL pdata when CONFIG_OF is
- not set
-To: Charles Han <hanchunchao@inspur.com>, sre@kernel.org,
- akpm@linux-foundation.org, lee@kernel.org
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250516095346.24169-1-hanchunchao@inspur.com>
- <20250519014804.2244-1-hanchunchao@inspur.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
- QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
- +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
- ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
- 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
- hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
- tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
- 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
- naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
- hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
- whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
- qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
- RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
- Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
- H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
- dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
- AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
- jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
- zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
- XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20250519014804.2244-1-hanchunchao@inspur.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 19/05/2025 03:48, Charles Han wrote:
-> When the kernel is not configured  CONFIG_OF, the max14577_charger_dt_init
-> function returns NULL. Fix the max14577_charger_probe functionby returning
->  -ENODATA instead of potentially passing a NULL pointer to PTR_ERR.
-> 
-> Fix below smatch warning.
-> smatch warnings:
-> drivers/power/supply/max14577_charger.c:576 max14577_charger_probe() warn: passing zero to 'PTR_ERR'
-> 
-> Fixes: e30110e9c96f ("charger: max14577: Configure battery-dependent settings from DTS and sysfs")
-> Signed-off-by: Charles Han <hanchunchao@inspur.com>
-> ---
->  drivers/power/supply/max14577_charger.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/power/supply/max14577_charger.c b/drivers/power/supply/max14577_charger.c
-> index 1cef2f860b5f..af1694cac5ea 100644
-> --- a/drivers/power/supply/max14577_charger.c
-> +++ b/drivers/power/supply/max14577_charger.c
-> @@ -501,7 +501,7 @@ static struct max14577_charger_platform_data *max14577_charger_dt_init(
->  static struct max14577_charger_platform_data *max14577_charger_dt_init(
->  		struct platform_device *pdev)
->  {
-> -	return NULL;
-> +	return -ENODATA;
+Hi Charles,
 
-No, you did not test it and it is obviously buggy code. Please learn
-first about pointers.
+kernel test robot noticed the following build errors:
 
-Best regards,
-Krzysztof
+[auto build test ERROR on sre-power-supply/for-next]
+[also build test ERROR on linus/master v6.15-rc7 next-20250516]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Charles-Han/charger-max14577-Handle-NULL-pdata-when-CONFIG_OF-is-not-set/20250519-095431
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/20250519014804.2244-1-hanchunchao%40inspur.com
+patch subject: [PATCH V2] charger: max14577: Handle NULL pdata when CONFIG_OF is not set
+config: sh-randconfig-002-20250519 (https://download.01.org/0day-ci/archive/20250519/202505191305.un0tzZu1-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250519/202505191305.un0tzZu1-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505191305.un0tzZu1-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/power/supply/max14577_charger.c: In function 'max14577_charger_dt_init':
+>> drivers/power/supply/max14577_charger.c:504:16: error: returning 'int' from a function with return type 'struct max14577_charger_platform_data *' makes pointer from integer without a cast [-Wint-conversion]
+     504 |         return -ENODATA;
+         |                ^
+
+
+vim +504 drivers/power/supply/max14577_charger.c
+
+   454	
+   455	#ifdef CONFIG_OF
+   456	static struct max14577_charger_platform_data *max14577_charger_dt_init(
+   457			struct platform_device *pdev)
+   458	{
+   459		struct max14577_charger_platform_data *pdata;
+   460		struct device_node *np = pdev->dev.of_node;
+   461		int ret;
+   462	
+   463		if (!np) {
+   464			dev_err(&pdev->dev, "No charger OF node\n");
+   465			return ERR_PTR(-EINVAL);
+   466		}
+   467	
+   468		pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
+   469		if (!pdata)
+   470			return ERR_PTR(-ENOMEM);
+   471	
+   472		ret = of_property_read_u32(np, "maxim,constant-uvolt",
+   473				&pdata->constant_uvolt);
+   474		if (ret) {
+   475			dev_err(&pdev->dev, "Cannot parse maxim,constant-uvolt field from DT\n");
+   476			return ERR_PTR(ret);
+   477		}
+   478	
+   479		ret = of_property_read_u32(np, "maxim,fast-charge-uamp",
+   480				&pdata->fast_charge_uamp);
+   481		if (ret) {
+   482			dev_err(&pdev->dev, "Cannot parse maxim,fast-charge-uamp field from DT\n");
+   483			return ERR_PTR(ret);
+   484		}
+   485	
+   486		ret = of_property_read_u32(np, "maxim,eoc-uamp", &pdata->eoc_uamp);
+   487		if (ret) {
+   488			dev_err(&pdev->dev, "Cannot parse maxim,eoc-uamp field from DT\n");
+   489			return ERR_PTR(ret);
+   490		}
+   491	
+   492		ret = of_property_read_u32(np, "maxim,ovp-uvolt", &pdata->ovp_uvolt);
+   493		if (ret) {
+   494			dev_err(&pdev->dev, "Cannot parse maxim,ovp-uvolt field from DT\n");
+   495			return ERR_PTR(ret);
+   496		}
+   497	
+   498		return pdata;
+   499	}
+   500	#else /* CONFIG_OF */
+   501	static struct max14577_charger_platform_data *max14577_charger_dt_init(
+   502			struct platform_device *pdev)
+   503	{
+ > 504		return -ENODATA;
+   505	}
+   506	#endif /* CONFIG_OF */
+   507	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
