@@ -1,87 +1,88 @@
-Return-Path: <linux-pm+bounces-27334-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27335-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5C9AABBAE0
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 12:17:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DAC9ABBB0E
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 12:26:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B6B116D4AF
-	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 10:17:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDED61685FE
+	for <lists+linux-pm@lfdr.de>; Mon, 19 May 2025 10:26:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8E9A2741D3;
-	Mon, 19 May 2025 10:17:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A662741D8;
+	Mon, 19 May 2025 10:26:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cq/7wDP7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sWeoyF8n"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1EC91FC0F3
-	for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 10:17:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F3282459E7
+	for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 10:26:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747649851; cv=none; b=kkjk5i/1+6vzfdO0Ay6Dfbf0bSJ8phG6E1eyZzP82U3btkn4OEF3UeU9Cow/e2RF/Xf89NPLp7sOI72pgc/sw63S+iKZ92PLz6DSjz3FnPdRjdzmVaONu9dGEgWvIspXGRQo9UD7ZjTuSGYEGK98rimglktGzo4cC/NoAK/yf8k=
+	t=1747650394; cv=none; b=mA9uNnmDax6gPRYzm5GCq6djMyazoAvRIgGCz0IP5cI+pTAOqI6RpQUgbFaVJ2Ouhylj8xRMD+jJxJdIs/D7LgvpSBZnYEqR/stEaE8Y5TVxk1LcKv8w2Ywbh9M4sgXrufyeVs2XXvJErbZzlWQB2mKl8JMQo7Em15v4P++1zmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747649851; c=relaxed/simple;
-	bh=kGZApSmsqJ8FNloZKAWaRm5Et6mAG5BJUOLTz4KMwl8=;
+	s=arc-20240116; t=1747650394; c=relaxed/simple;
+	bh=6T1f1gQ788CwCIndP7K5d2YwrhlQLWj57RrD8MAtP7I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WfgIWnD9LVAgqs8aaD3HqUK/246uctTcXB5JTwpZHgTks8zL6S1x7lpB9jKPBrGCazmbSimhBMX27ArV538QN2loviu3dyTlgh/07TBbluIEa8Gl06et/scwgE3RclOZgxHY29GvCdjbUFORQ7dqqcUUoCyS6ErU7ZU9mN316gA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cq/7wDP7; arc=none smtp.client-ip=209.85.215.175
+	 Content-Type:Content-Disposition:In-Reply-To; b=pWrBZNaGY7HI7pvpksb5a7aRQSGrdGY0031YIK9I+hnWXRXTQd/8Fm/L0W8z3Uv6sWVM+j91vgMMoUWA64f+WWKUe2aaDhg/6qNdIdGRBiDlY/4jQL3d4Jsp1VUqysUrTkqQtIRV+Za2bUP2Q5ocXa0fHPpaKFgb9Mg+8HRvqs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sWeoyF8n; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-b170c99aa49so2748888a12.1
-        for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 03:17:28 -0700 (PDT)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-231e21d3b63so34072895ad.3
+        for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 03:26:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747649848; x=1748254648; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1747650392; x=1748255192; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2boHRW0tDTKKABf5lEFG75r/QTlyWAxlLMkN8E6Z4vI=;
-        b=cq/7wDP7hD7YPKSF2bUnj7fEhZGR+HfkQjxgcl+/qT63Rlh6RNe5m7EgPaZtRmwR9+
-         g78d1GvcMFIqo7YgNoqkh8ilKmiaR8m/F5gbkA+fk46crPtR6f8yk0Yjdh+W8LMAsLb2
-         wb2PaCEEEVJU2r9lUefcP2haB438ZxAep03x6u9UlugIKPMweypLL5SQEamtd8q9ZZnA
-         4bVGRD01eR82n0tbNn5lIlnno2orOp9hPFoY7x3v4Djg2ooFuMGJNTAiQvxvcR+4344b
-         zqheTN/ejkOLRYM0H8usJjuusm2TJxQs6RGdAaYBow3NGbeG0cWeVGfe7TsJRU0wEujk
-         QtXA==
+        bh=94QENvQ1KWEG5NwI/w4uyuU8E14TEUfGFeGO7c7WDvo=;
+        b=sWeoyF8neBCSuvdV+42RbR1GCnL48ocG3rxQtKbvMBbaVZIs2yt6esFFy12BewYbOu
+         40eaf2VfRtvXa16PSA7ZKkX6zaMogWpgiwk5vdPP+PR5QI7LdFLrmiGw7EYLDTKeoL7G
+         0PcjXVYDwp0Byyditw7zUTIiSnzVy9DX3uLXB0tez8LKgJy3fu8R7oNBIbYuY0KdJhOg
+         ag4f/ZNMTrL3HwvX0rYu0+WGJC4mI5v8jY5c1nDChegHsRiN2YeXLvUUixh/eyWZGns1
+         XIjK1N+WB3BXKfO7sQzbWi3qvafyHxwVPba7IS5k0Wk+HkiisNxUckwyufDyB3lKI1K8
+         LjGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747649848; x=1748254648;
+        d=1e100.net; s=20230601; t=1747650392; x=1748255192;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2boHRW0tDTKKABf5lEFG75r/QTlyWAxlLMkN8E6Z4vI=;
-        b=SDAxjvli2vb3wxDDIXZKiNUm84EZJwsX6FAF1JFdt+PzVA/317faoVl74gSOejBmVY
-         1DHQ1kDHZyXrr78LBeyBH1bMrDJ3vLwjwxP+ScqkJejyawvahJhwspBvieOfT+M8Uxfv
-         2jbU8ovbekBq4ZoSApD3A/Q/3TctUVRpzECEjAdNOS614JRgeXgwn9w15FIWjC4NzwVu
-         iaPT81bdg7KJ38zq9sb9QqK2bKgOSMX/+/c5ByWaT/W9ysQma48Y3sS9JsQqQz0WB5uc
-         Xw4BE2pG6NhKRaMuqO0T0hGFXYmAgCHrg2gWi59MI46ZzMLBUzh97MqScbBRyH7HhoXa
-         X5JQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXysKoL9QM4KHm/z3P2vXNU3FS+Pk44+1da9I73iIQ9SraNubUv5GQHw8TzmccQUY0I7K2a+92Ong==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5wotC9vymSsW4ZqKUXgnKCclK1fDT7MSepSNDopM5qaCG8Npu
-	hfhjKd69IKgrAfl8T5j8fQyG251umyFShy8DlAZIf+EyDmL6Stdr0oMJ4eRNCxRwqBQ=
-X-Gm-Gg: ASbGnctnTbSJ6Yy3/0aud1HjCUA9QUOhHwMVXRGtbVCGWRAzHOXR4TFo3BLyK4xQfeu
-	Sq6od8VPOR5z6sBDSPcY7UZvZ5SgS1Lk3qDhGTDJV4edmYD+ICv03sfWDulnk9pNsacTB4gs6W+
-	VTrIR4rnv79uJ9O6BP9svBAkGSj59MLcGXecCkxbqcIMtQUF1XZzAr6gcjX2CUS1GxHobsatkL2
-	/1ABD7I2B2yqTxdi4InOqmZMogfqysdvvX/YvO6eu3uF3SJKi1iXxccfSveELXYx1sLuP597zKj
-	yPZmfNdd31t3JPFot+qg/vbDHtwgdGsPsNhTAwt1yp2Ntr15GM38
-X-Google-Smtp-Source: AGHT+IEhCTAYxf2Bo20tqIdppUI7vimjOl158zpzlgDenffyAtRSk7F0NETM1YiKj0O0xkG784yPvw==
-X-Received: by 2002:a17:903:2449:b0:231:c2e8:89df with SMTP id d9443c01a7336-231d4535a98mr192661745ad.28.1747649848139;
-        Mon, 19 May 2025 03:17:28 -0700 (PDT)
+        bh=94QENvQ1KWEG5NwI/w4uyuU8E14TEUfGFeGO7c7WDvo=;
+        b=EQNWSMPE4/i3RQeNUvhq7VRXPlDxxR6MIGDxxmjaT3GuyhYt2QIfvnu/XIqnQSIosT
+         pV4o+FyJk+feZROXqY0mophgmlyjYDWiM9m6Zt7avj5PVw2ya58e8Ukz4EPCYH+bK4Wl
+         PCOTe+A8WzIa/d55iy1CLND7YWT2znA5gxQqhwKrAVntapA5Ajk5qQMdN0ncwSjXFKCu
+         UiBBf5ONN7O9as4tWh/lcHFGJ9ynVmRXvS4LdKyjBEKX+uZKadjIZKZsFoKz1D524l91
+         dkSr/nngGd4qJFyh6R6MzoYRL2HETg9ZIzq3Gij1YDassPedbkpjZ7+wb5gYTAenYmbb
+         KMwg==
+X-Forwarded-Encrypted: i=1; AJvYcCUwfJRQnStdV2WsjqvrxvdcZa6826JBrOXDhVBQQBXW4fU2dh/Fl6+AZ7LI3+Ks6Y2PaZLDdhjQhQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyxk2LxxLqsMf7WjMEalsNjDGv4sktAgib5AlA9jS3+sfxdDSXa
+	EBZguYeb8plYni2a1zWCpsWtmCZ7Xr6PXlHU3b1cXFxio4VRySPTOZKYzeKQZUFLEapeLeSeABI
+	+FZhY
+X-Gm-Gg: ASbGncvQGpIO++dxSrsvMAqKsCeR6JRYebKUaSuiciUFwQSxmLZ37CM7MTxfndKZDIp
+	0HON/Dx6OTyZxaaTv8jrXddlh+N/52g675jTqnoNgW1i1Aquv7bSfB/KOMmK7tNaI/Xj+P3SE6E
+	j8pr3g4steZXydpIU6gxAZf5T3iU3a4VIgl8Eqsy7FmUHDkAEfaSyEBsNEjr8mxVut9Jg+iYv0F
+	JwCmD0ks27z6DYjSsafPeb9LiuC48WoR31gfP/kgN5KzP3brG4lCUaRAuS4gHS9ILW93Gc6Nhr3
+	tWtRINhaX8Vida5gMz5uI84U2oFyn1i0mCzLHJ/J+or/ZwMbLlG2
+X-Google-Smtp-Source: AGHT+IFOX0X2+R42qCuUGR5p/td3W4u1++p+fajp/DYt04hZBSF3cDqdXMoReTclZppoLGO2xeShYQ==
+X-Received: by 2002:a17:90b:5710:b0:2ee:9d49:3ae6 with SMTP id 98e67ed59e1d1-30e830fbf1fmr18521513a91.10.1747650381025;
+        Mon, 19 May 2025 03:26:21 -0700 (PDT)
 Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-231d4ed4ecfsm56201355ad.234.2025.05.19.03.17.27
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30e7d1d12c7sm6314287a91.0.2025.05.19.03.26.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 May 2025 03:17:27 -0700 (PDT)
-Date: Mon, 19 May 2025 15:47:25 +0530
+        Mon, 19 May 2025 03:26:20 -0700 (PDT)
+Date: Mon, 19 May 2025 15:56:18 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
 To: Jon Hunter <jonathanh@nvidia.com>
 Cc: webgeek1234@gmail.com, "Rafael J. Wysocki" <rafael@kernel.org>,
 	Thierry Reding <thierry.reding@gmail.com>, linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] cpufreq: tegra124: Remove use of disable_cpufreq
-Message-ID: <20250519101725.k644wzizjwygtwa7@vireshk-i7>
+Subject: Re: [PATCH v4 2/2] cpufreq: tegra124: Allow building as a module
+Message-ID: <20250519102618.4thbahapz3lfmfo5@vireshk-i7>
 References: <20250508-tegra124-cpufreq-v4-0-d142bcbd0234@gmail.com>
- <20250508-tegra124-cpufreq-v4-1-d142bcbd0234@gmail.com>
- <040b0d8b-e862-48dd-9b77-9266a5194f99@nvidia.com>
+ <20250508-tegra124-cpufreq-v4-2-d142bcbd0234@gmail.com>
+ <da080e61-4e54-4334-a239-1619bf8fea0c@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,31 +91,30 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <040b0d8b-e862-48dd-9b77-9266a5194f99@nvidia.com>
+In-Reply-To: <da080e61-4e54-4334-a239-1619bf8fea0c@nvidia.com>
 
-On 09-05-25, 12:04, Jon Hunter wrote:
-> > diff --git a/drivers/cpufreq/tegra124-cpufreq.c b/drivers/cpufreq/tegra124-cpufreq.c
-> > index 514146d98bca2d8aa59980a14dff3487cd8045f6..bc0691e8971f9454def37f489e4a3e244100b9f4 100644
-> > --- a/drivers/cpufreq/tegra124-cpufreq.c
-> > +++ b/drivers/cpufreq/tegra124-cpufreq.c
-> > @@ -168,7 +168,10 @@ static int __maybe_unused tegra124_cpufreq_resume(struct device *dev)
-> >   disable_dfll:
-> >   	clk_disable_unprepare(priv->dfll_clk);
-> >   disable_cpufreq:
-> > -	disable_cpufreq();
+On 14-05-25, 11:31, Jon Hunter wrote:
+> > +static void tegra124_cpufreq_remove(struct platform_device *pdev)
+> > +{
+> > +	struct tegra124_cpufreq_priv *priv = dev_get_drvdata(&pdev->dev);
+> > +
 > > +	if (!IS_ERR(priv->cpufreq_dt_pdev)) {
 > > +		platform_device_unregister(priv->cpufreq_dt_pdev);
 > > +		priv->cpufreq_dt_pdev = ERR_PTR(-ENODEV);
 > > +	}
+> > +
+> > +	clk_put(priv->pllp_clk);
+> > +	clk_put(priv->pllx_clk);
+> > +	clk_put(priv->dfll_clk);
+> > +	clk_put(priv->cpu_clk);
 > 
-> So you are proposing to unregister the device in resume? That seems odd. I
-> see there is no remove for this driver, but I really don't see the value in
-> this.
+> 
+> If we use devm_clk_get() in probe, then we should be able to avoid this.
 
-This is the failure path and the driver is trying to disable itself
-here. Instead of using the disable_cpufreq() (which isn't designed for
-this usecase), I suggested removing the device itself as the driver
-will be unusable after this anyway.
+Not sure if we can do that. The clks belong to the CPU device, while
+the devm_* functions are using &pdev->dev. The CPU device never goes
+away and so the resources won't get freed if we use devm for the CPU
+device.
 
 -- 
 viresh
