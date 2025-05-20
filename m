@@ -1,83 +1,75 @@
-Return-Path: <linux-pm+bounces-27385-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27386-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C159ABCDAE
-	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 05:09:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B71AABCDD2
+	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 05:26:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACFBC3AC7A2
-	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 03:09:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 462584A3DC4
+	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 03:26:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B634C255E32;
-	Tue, 20 May 2025 03:09:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YFVxMPTl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE3CF257455;
+	Tue, 20 May 2025 03:26:09 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7551C860B
-	for <linux-pm@vger.kernel.org>; Tue, 20 May 2025 03:09:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E9313C3CD;
+	Tue, 20 May 2025 03:26:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747710568; cv=none; b=F44DzNAAMbATZsZHxgfdNaLZMHWygcNCzN9tnnRl0xkmnN9SEYPK5N6HmEcFPFUDtXSEROVSzqFTLusthlWxIHHfBKvBXdihNqrqUFcS5dsoOe67HRDiUlk6Thetx6G+WKQALtMevDqi8W3knTo8gvTzvZYgZJwcedHOGYjPAVs=
+	t=1747711569; cv=none; b=ceQPupb9k6jYO2w73I6uB+33utqyae08rfXQiVUN2dDOOp/axXSosIJL42yZ5iQ6Glg4utRl9DMUVGYVaNC4JLUyIQ0sqhCZaagtgnAirG+uaLfWg5fB+sbu3xqSRjozcAGVcjOu1/hEnmXmEWkt3HUehK2MO3XTPpwNv3N5alI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747710568; c=relaxed/simple;
-	bh=WFIJhpj8kHnoZQR/hf5HHxL5h/aWV/NOwBwPTu1YjSo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OHgwwIVmILF63O2qg4bdB977240IJVUXaCg/NZ/WWYlazo90VLhIiPpJCZJ2dBgQxYig+z7IIL0gISAGVkCSkx618IboPuM4jssTPDquo+FTZdbLZIvY6gkfkuL1bR1k+AIl7LiX4b0Ick8w39GMaSUsF5SzWOMVuZ8oK5SsFeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YFVxMPTl; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b061a06f127so3383609a12.2
-        for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 20:09:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747710566; x=1748315366; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UUyeLkns9IfRG/8V3c0lYiMThv/MhJAXlf6Hx02ddXI=;
-        b=YFVxMPTliWwpltk/wNTz/c0RagzeB5F4fSwBeDhE5nooc5FkupBY55HE6gFRvSaTmw
-         IUDeRmzisV9N5Dh6tjzz3fNcmMYJsgXpEwmZX75AJDduTalHvPtLCEJyFO+GSTLmK3+8
-         La/jkcB1jxLpN2XDJQIO/Twc/HW87PgeRpGaA9sJ16NDPdqsqK1qBPYZj8VNVTL6Elpj
-         WvAkvFIrd2Ub00hGfdBkdcuCvTAorSvv2INcK19zCDhMsGHTdf6fk1jjcrojVoYfBzvI
-         Gtax/WEq77KhzsXPKYrz1XZXo+BmuPaphxFvQH9HVYWuPtq9cU/JNE32DpMwrA/fJEW3
-         pcpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747710566; x=1748315366;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UUyeLkns9IfRG/8V3c0lYiMThv/MhJAXlf6Hx02ddXI=;
-        b=uWPA8rUAAOi6B5ovaZjNpT27Ou6CUprNMLdcVLuv1tYKNwyTtQpmjQy5BLbQ3n7CQh
-         Qi+RPgx2CBxInzG+VvTzYl/DQxVeXhDwByACVW7dwEaHfT3SC5bZ4XKqUM/DhNU7vsKs
-         CFDh5XhiSh6iOzgu8ZH/YUiuI1wWh04pWLfFMPc8OmwFSdXhgV7md+UMrvok8MnqUhaV
-         1lmmxoc5ZUOCsxzVHyMwMWsi2DV0o6cuuWDlWWIEiu6SPxpg85XHIWDq01cKBALRo8x2
-         PLhQVqgv4aMAiGESZ74dvIle/Wrx8JeioYeoiD5zYLf4DgBLQ0Olaz7mTofofAnTv6ra
-         ffzg==
-X-Gm-Message-State: AOJu0YxDJ/VHbWP408GvO5rIgCDfIztixceEGX5J51aVP2+4hIRckUeQ
-	iemSHaEk45H025Fty0gDVAZcK0W4c3LemNfs5tt0egh0fDBOAY50xghQ
-X-Gm-Gg: ASbGncsmpL2Dj5z/pvP1Ss8NYgRgPUtrWVb6j0K8DQlrN5EzZ7TufOVXl3j9yGBbspp
-	iWA7fdTNvstIV4qGkfhPo0hcW1jHLs0/7LxobiVQ7TRN+PCTprgqyTYDQtqJ0LENnANzkncphxs
-	ARATj3R7rEB9hc0S75g3ARxG+lNKwFgWI/AbR8DFDdX2oOCme38cnlcjCPws1fe1qwOSQGnxx1p
-	oKOPzUOQJCO2JPWHBHPMGtlNH+PnfLLOhpnzgIiQldkoQk87fJedOZdJIdZO2ACpIcU1FtGG7eI
-	0rCOCuKIWsGIhKL5olFhvzCmFoQwV8v4Wje9eo/GkYdG7vGPXEfhLty6EU2S
-X-Google-Smtp-Source: AGHT+IF1EH0S3UJO61+AOv7LmyvrKoE7wCgmqSnvQt+pg4Z0TcfIVg12LADlSjYbkzb6uK+SWxpsnw==
-X-Received: by 2002:a17:903:94f:b0:223:5ca1:3b0b with SMTP id d9443c01a7336-231d45a9aa0mr232819085ad.40.1747710566294;
-        Mon, 19 May 2025 20:09:26 -0700 (PDT)
-Received: from localhost ([107.155.12.245])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-231d4e9784bsm67167645ad.113.2025.05.19.20.09.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 May 2025 20:09:25 -0700 (PDT)
-From: "qiwu.chen" <qiwuchen55@gmail.com>
-X-Google-Original-From: "qiwu.chen" <qiwu.chen@transsion.com>
+	s=arc-20240116; t=1747711569; c=relaxed/simple;
+	bh=Ce1stjmKd1SeeDt5rAy+aPPT0UwVSQP0hncyimk6dFw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=N6Njwq3JQyhFe7e+dahVkmIsAuhA17xHafh/6Wdcfk8EV0gC8Zj6SqDADFQ/ISba5nFWQI9Fgr9lMcRdGaGNJUbeandEWriunLo4Y3kTiPBkrmPNlWFZYj+xo5aND4t2Pg/dBQ7ucafMC2DjgmKBt51ihday/kzGrxQbrwSRW3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 2256a87e352a11f0b29709d653e92f7d-20250520
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:5cf46822-bcc4-4ae1-a95a-bc11dd089c0c,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:3d2dc94f2c8adf2d4324e835b2217efb,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:nil,UR
+	L:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
+	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 2256a87e352a11f0b29709d653e92f7d-20250520
+Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 106061420; Tue, 20 May 2025 11:25:52 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id B4B38E003505;
+	Tue, 20 May 2025 11:25:52 +0800 (CST)
+X-ns-mid: postfix-682BF640-597826294
+Received: from localhost.localdomain (unknown [172.25.120.24])
+	by mail.kylinos.cn (NSMail) with ESMTPA id 22024E006100;
+	Tue, 20 May 2025 11:25:48 +0800 (CST)
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
 To: rafael@kernel.org,
-	daniel.lezcano@linaro.org
+	len.brown@intel.com,
+	pavel@kernel.org
 Cc: linux-pm@vger.kernel.org,
-	"qiwu.chen" <qiwu.chen@transsion.com>
-Subject: [PATCH] cpuidle: add tracepoint for enter_s2idle flow
-Date: Tue, 20 May 2025 11:09:22 +0800
-Message-Id: <20250520030922.9505-1-qiwu.chen@transsion.com>
+	linux-kernel@vger.kernel.org,
+	akpm@linux-foundation.org,
+	tzungbi@kernel.org,
+	a.fatoum@pengutronix.de,
+	jani.nikula@intel.com,
+	joel.granados@kernel.org,
+	paulmck@kernel.org,
+	zhangguopeng@kylinos.cn,
+	linux@weissschuh.net,
+	Zihuan Zhang <zhangzihuan@kylinos.cn>
+Subject: [PATCH 0/3] PM / Sleep: Introduce and use system sleep lock helpers 
+Date: Tue, 20 May 2025 11:25:42 +0800
+Message-Id: <20250520032545.29558-1-zhangzihuan@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -85,37 +77,45 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 
-Add the tracepoint cpu_idle in enter_s2idle_proper for tracing
-the enter and exit events with a determined idle state.
+This patch series introduces wrapper functions for locking
+system_transition_mutex used in system sleep (suspend/hibernate) code,
+and refactors the existing usage in kernel/power to improve maintainabili=
+ty,
+readability, and future extensibility.
 
-Signed-off-by: qiwu.chen <qiwu.chen@transsion.com>
----
- drivers/cpuidle/cpuidle.c | 2 ++
- 1 file changed, 2 insertions(+)
+Currently, mutex_lock/unlock(&system_transition_mutex) is used directly
+in multiple places in the suspend and hibernation paths. This results in
+boilerplate repetition and makes it harder to change the locking mechanis=
+m
+later if needed (e.g., for debugging, tracing, or replacing the mutex
+with another primitive).
 
-diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-index 0835da449db8..9ff8fa5db444 100644
---- a/drivers/cpuidle/cpuidle.c
-+++ b/drivers/cpuidle/cpuidle.c
-@@ -147,6 +147,7 @@ static noinstr void enter_s2idle_proper(struct cpuidle_driver *drv,
- 	struct cpuidle_state *target_state = &drv->states[index];
- 	ktime_t time_start, time_end;
- 
-+	trace_cpu_idle(index, dev->cpu);
- 	instrumentation_begin();
- 
- 	time_start = ns_to_ktime(local_clock_noinstr());
-@@ -178,6 +179,7 @@ static noinstr void enter_s2idle_proper(struct cpuidle_driver *drv,
- 	dev->states_usage[index].s2idle_time += ktime_us_delta(time_end, time_start);
- 	dev->states_usage[index].s2idle_usage++;
- 	instrumentation_end();
-+	trace_cpu_idle(PWR_EVENT_EXIT, dev->cpu);
- }
- 
- /**
--- 
+Summary:
+
+- Patch 1 replaces mutex_lock with lock_system_sleep.
+
+- Patch 2 adds a non-blocking `try_lock_system_sleep()` for code paths th=
+at
+  should proceed only if the lock is immediately available.
+
+- Patch 3 replaces remaining uses of `system_transition_mutex` in
+  `kernel/power/` with the new helper functions.
+
+This change brings all system sleep transition locking behind well-named
+abstractions, preparing the code for future evolution while simplifying
+reasoning and avoiding repeated direct mutex usage.
+
+ include/linux/suspend.h  |  2 ++
+ kernel/power/hibernate.c | 11 +++++++----
+ kernel/power/main.c      | 12 ++++++++++++
+ kernel/power/suspend.c   |  7 +++++--
+ kernel/power/user.c      |  6 ++++--
+ kernel/reboot.c          |  5 +++--
+ 6 files changed, 33 insertions(+), 10 deletions(-)
+
+--=20
 2.25.1
 
 
