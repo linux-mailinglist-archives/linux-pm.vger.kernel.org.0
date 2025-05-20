@@ -1,191 +1,311 @@
-Return-Path: <linux-pm+bounces-27432-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27433-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADB22ABE340
-	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 20:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CE5DABE357
+	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 21:08:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7DB21BA6D92
-	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 18:56:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E4941B661FC
+	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 19:08:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28DF626C3AD;
-	Tue, 20 May 2025 18:56:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EA102701A0;
+	Tue, 20 May 2025 19:08:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="toSS6erc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jFbCkwb+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE0877485;
-	Tue, 20 May 2025 18:56:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DB051C5F10;
+	Tue, 20 May 2025 19:08:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747767391; cv=none; b=Spm1PIl9d7btwEZUSDMP0VlHoBtZ79EB6KlbfMhyAQWXHA4E7Lw10wemgCqrjlTi9lx0UD9lOAPO6d/PeWbLiQJNK11U1ehix8vMKOTvGNQlb1Cfi39PLxc0XXckrgSKRWKjs+x/z1iVqnaTknnm1xgtafV/suZgqp0WcxBUuto=
+	t=1747768118; cv=none; b=GR04IV+Km8trNNiBAg/rdtH7FY8xAu6YR1pAiaA7XkHFZZZJCYoyd4F3/8W87oI6zsJrGhxS/ZVJwmKXlGXAQ9x81QvxLKZzuLK1C8VcYY/hvGoI2GScaxdN7tsOsTR2eSEqRNtu7fCdXrCNLiVERpPccl/seP7iLZAwYIRFyuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747767391; c=relaxed/simple;
-	bh=OENKUQyaM4BuN8bH8ns8/4Vc0ap1To6lcfFetFEiQpE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lW5ywajwG5jXlDtn8WZryPOaeS3S+OcegHVS/mX9vy65eSvogt294XTrJfWouvfFo3xmTjRqBmDsbVNFd7/rfzRjxQgwbhN/iVCanl68sm+5Q4kF98oxEr8usgwBWc9b5qlm719RZ/hQWhahHANS79IRj7p5BXEJYt/aZDRCUGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=toSS6erc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72E60C4CEE9;
-	Tue, 20 May 2025 18:56:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747767390;
-	bh=OENKUQyaM4BuN8bH8ns8/4Vc0ap1To6lcfFetFEiQpE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=toSS6ercj5WRjD98Zc7wTxVi5L6qtlGRqxjfkXLBenxUqpBwAkyEIv2xSKOghXPDW
-	 TiET+7Z+UnzkKDgC1+zd1/Ue+33pUekIqSbU3giAuU9cQpJICElyixiq21zNM3I8+F
-	 QolHaPiu/Ma1e6nPeSIr0REJdZW3kaqWVarAmEw+bV2vZ1QMmNi45UbDva89JwX+a+
-	 BneDwdClHjLrw6paEzdqmL7yJkGZ8tZDbmzgGp4ItUDK4IGPPeGgjigr+t61ncyYP7
-	 zptDG+/Iiw08i+jPeme52P8IjMux+ThIanPnnH7YYdqtiSpLZpe2D7oTDlIxzOTpxH
-	 A5kIAle9kuurw==
-Message-ID: <fea86161-2c47-4b0f-ac07-b3f9b0f10a03@kernel.org>
-Date: Tue, 20 May 2025 13:56:28 -0500
+	s=arc-20240116; t=1747768118; c=relaxed/simple;
+	bh=CSNTKQTCteZoO7cckjRlOzhkByjiYe8neyWXkxZxMBE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PaljluwBI5EOy9bYgbQx4G409DCzHBGc3U4J3kHI1lQ0MEfRD/FmqfP1I5Wp4ETWcYvsThnhkJSonwigZA9+gCIPsWmoOkjerowuaY8FLbcvdre2VgHjPh/LeGmUxi8b7Qeat6aMyEMDlCWXOv1NRZwPkMPBK3PxPS+Lgy5JcqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jFbCkwb+; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-74068f95d9fso5365871b3a.0;
+        Tue, 20 May 2025 12:08:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747768116; x=1748372916; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GqlcH96iSCswYPhO83dojFmUU9wnimuW4cTsR396Z4k=;
+        b=jFbCkwb+KFCEjvpElCG2rW0WYnlHEr5/HzHxNszG8VONAA+ST/SJaMtwhxKtVt5yXp
+         KrR6rOIS9W3JMTvNyfPcVHSSYPpbTtbv537LpQzCT6Jx1p0NPNtZ4UIlR8r8FqXptLhO
+         Mp/F+zYOtibF54PAbbVP+1fP2jH+3bF6lpM2UVVmt+5uaXKKx1NcKtox8/F4LP5PxEjg
+         j7Vunt3RxGlEQtqMM/E3XTmsTaTZgE+e8Yga0LO/geTvDtYRJY+cTK0LjKk1g8Uhxput
+         3JIY/KYXQEe3SS/rVDHfc4woumWNzXZIorJPL09IkLjYXOeFlwBV7Al3Lk7h2tmDSVFP
+         EBCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747768116; x=1748372916;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GqlcH96iSCswYPhO83dojFmUU9wnimuW4cTsR396Z4k=;
+        b=VI0Bbc5oL3Dpb4OEo6ICh1hfldoyZIQW/5rV4uzVTxMu+iFxZymfmuSX43J4gZID2M
+         i9wM7h08c2CGeor66no35djKThOBWJFEoQxMBcG6dBC2q7YDT9cp+wjkN5azpErOMlJP
+         nLDn2gc/uIshwll9dCo2CDCPXkagRqrW+pQCr0l87gNsDly71deGxJ9dZK5A85BhUG9v
+         5jMWlFFuVDKvpfV8cf5YypeIQkkCuLFGe07YjevyMxnqvSyKb3VvLeBU4OwoeCKp4UPs
+         fQF3B510Oe9sdRVtk4d+aOhSazLxuVngEnj6StmKMTFC1D7BYYpQvW3VHWzUka35JUSW
+         0UAw==
+X-Forwarded-Encrypted: i=1; AJvYcCUHWZCdSakwRyYpRmIUcdNl0+R7Ckfv2x1E8ZZRtNkabdDQcUwP2jRZjJVSKbHvNoiYJbO82YZqMRBxpAR2VeIf2tM=@vger.kernel.org, AJvYcCVzQ64ANEt5PphQZbmkM2CcfNsP7oJHkhxLsWCsJmkrRc3m7Jg+yiOLgcH7b34WSfhs2xYh2E/kWxX2EjDZ@vger.kernel.org, AJvYcCW3/W+5CeDraQtoKYCIYzDCSwl4QBnEvi5mMJbKEsumbHv+c+YklbXWUrVz7hWlekrJsh4U5rNVIhg=@vger.kernel.org, AJvYcCXlNsII0afp36wwOJaxzbymxjCfBWOp02DDeoWqTs6SsR7L81qNCFCVLqziqtG9pUNysFLlJ/D8r4U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/yl+Sn1FWpgM56yglu9O0fsXNTVvmMJugnDAGfFtc1tVkVPgk
+	lZ26vRU792YWLpfeJiq7kCMZbq8nClGq7HN6iIzc8e0F10/b1faS4+K3
+X-Gm-Gg: ASbGncvVFjSQYTVNf8lRjKqOHY7V/1zY+Fgu49nCj/jEZz8Bwfs2nMAdnZHbxqWOZwE
+	TDI7lTBF2oWOqMwiU48z4JARPkCmoYA9Fy+hfsnRdSjdVHiZzVn5b2iWOZk6KmbvOot4xWDCsgF
+	4mbl96VNxT1R7rwqj1QL6in4xu0eOXvFuhH4D1a+D5kPUH8Btn42ue35jPasgb93vPBtr4TjX8W
+	uAf24qHMcwtUaWDHj972Jt8MHTkoCkt8Zr8zkhiM8bfOBfDbkd4a3/O/mR+fv1Hyr0bRYDUNoYs
+	IJ97LTOqTmOm5rVLKFqMXW3Qe2ObdRapGoUlEFS3vmaivNEr+2pK
+X-Google-Smtp-Source: AGHT+IGiB1X92EfvLP/EZtCe636Zd3m+e9TMbPk/FNEqdjKNHk8INchZMRzY1HhTuqUz/0VXqBD2bw==
+X-Received: by 2002:a05:6a21:9208:b0:1f5:8479:dfe2 with SMTP id adf61e73a8af0-2170cafa32emr26628026637.6.1747768116229;
+        Tue, 20 May 2025 12:08:36 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:533f:75df:b89f:cab5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a9876e62sm8483846b3a.147.2025.05.20.12.08.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 May 2025 12:08:35 -0700 (PDT)
+Date: Tue, 20 May 2025 12:08:32 -0700
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Jonathan Cameron <jic23@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, dakr@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org, geert@linux-m68k.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	linux-iio@vger.kernel.org, bhelgaas@google.com
+Subject: Re: [PATCH] driver core: platform: Use devres group to free driver
+ probe resources
+Message-ID: <gthb7h5e3lu2lbajsra22nzlkfafxhnn4d5unpx2soxlj6bpvc@p2y6qjb5lpqd>
+References: <Z8k8lDxA53gUJa0n@google.com>
+ <f74085be-7b14-4551-a0a7-779318a5dc70@tuxon.dev>
+ <20250330163129.02f24afb@jic23-huawei>
+ <5bca6dfd-fe03-4c44-acf4-a51673124338@tuxon.dev>
+ <95f5923f-7a8f-4947-b588-419525930bcb@tuxon.dev>
+ <CAPDyKFoMqmCFBoO8FwQe2wHh2kqQi4jUZNFyiNckK7QhGVgmvg@mail.gmail.com>
+ <c3a2950a-17ff-444a-bee7-af5e7e10e2bf@tuxon.dev>
+ <CAPDyKFozR4qDq4mzcZBK-LcoPf=fGyuJTXwdt=Ey+_DcQOAp0g@mail.gmail.com>
+ <4o3wo76st7w6qwyye3rrayuo2qx773i6jfzcnbkhdj76ouh7ds@3e2mblehkgwf>
+ <CAPDyKFqMB7XutXba73YHx1X4rm6uc3Fz6yMZ8yM=wgduEmgUDg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] PCI: Prevent power state transition of erroneous
- device
-To: Raag Jadav <raag.jadav@intel.com>
-Cc: Denis Benato <benato.denis96@gmail.com>, rafael@kernel.org,
- mahesh@linux.ibm.com, oohall@gmail.com, bhelgaas@google.com,
- linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, ilpo.jarvinen@linux.intel.com,
- lukas@wunner.de, aravind.iddamsetty@linux.intel.com,
- "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
- Alex Deucher <alexander.deucher@amd.com>
-References: <20250519102808.4130271-1-raag.jadav@intel.com>
- <aCsK743YSuahPtnH@black.fi.intel.com>
- <85ed0b91-c84f-4d24-8e19-a8cb3ba02b14@gmail.com>
- <aCxP6vQ8Ep9LftPv@black.fi.intel.com>
- <a8c83435-4c91-495c-950c-4d12b955c54c@kernel.org>
- <aCyj9nbnIRet93O-@black.fi.intel.com>
- <552d75b2-2736-419f-887e-ce2692616578@kernel.org>
- <ee1117cf-6367-4e9a-aa85-ccfc6c63125d@gmail.com>
- <6f23d82c-10cc-4d70-9dce-41978b05ec9a@kernel.org>
- <aCzNL9uXGbBSdF2S@black.fi.intel.com>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <aCzNL9uXGbBSdF2S@black.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFqMB7XutXba73YHx1X4rm6uc3Fz6yMZ8yM=wgduEmgUDg@mail.gmail.com>
 
-On 5/20/2025 1:42 PM, Raag Jadav wrote:
-> On Tue, May 20, 2025 at 12:39:12PM -0500, Mario Limonciello wrote:
->> On 5/20/2025 12:22 PM, Denis Benato wrote:
->>> On 5/20/25 17:49, Mario Limonciello wrote:
->>>> On 5/20/2025 10:47 AM, Raag Jadav wrote:
->>>>> On Tue, May 20, 2025 at 10:23:57AM -0500, Mario Limonciello wrote:
->>>>>> On 5/20/2025 4:48 AM, Raag Jadav wrote:
->>>>>>> On Mon, May 19, 2025 at 11:42:31PM +0200, Denis Benato wrote:
->>>>>>>> On 5/19/25 12:41, Raag Jadav wrote:
->>>>>>>>> On Mon, May 19, 2025 at 03:58:08PM +0530, Raag Jadav wrote:
->>>>>>>>>> If error status is set on an AER capable device, most likely either the
->>>>>>>>>> device recovery is in progress or has already failed. Neither of the
->>>>>>>>>> cases are well suited for power state transition of the device, since
->>>>>>>>>> this can lead to unpredictable consequences like resume failure, or in
->>>>>>>>>> worst case the device is lost because of it. Leave the device in its
->>>>>>>>>> existing power state to avoid such issues.
->>>>>>>>>>
->>>>>>>>>> Signed-off-by: Raag Jadav <raag.jadav@intel.com>
->>>>>>>>>> ---
->>>>>>>>>>
->>>>>>>>>> v2: Synchronize AER handling with PCI PM (Rafael)
->>>>>>>>>> v3: Move pci_aer_in_progress() to pci_set_low_power_state() (Rafael)
->>>>>>>>>>         Elaborate "why" (Bjorn)
->>>>>>>>>> v4: Rely on error status instead of device status
->>>>>>>>>>         Condense comment (Lukas)
->>>>>>>>> Since pci_aer_in_progress() is changed I've not included Rafael's tag with
->>>>>>>>> my understanding of this needing a revisit. If this was a mistake, please
->>>>>>>>> let me know.
->>>>>>>>>
->>>>>>>>> Denis, Mario, does this fix your issue?
->>>>>>>>>
->>>>>>>> Hello,
->>>>>>>>
->>>>>>>> Unfortunately no, I have prepared a dmesg but had to remove the bootup process because it was too long of a few kb: https://pastebin.com/1uBEA1FL
->>>>>>>
->>>>>>> Thanks for the test. It seems there's no hotplug event this time around
->>>>>>> and endpoint device is still intact without any PCI related failure.
->>>>>>>
->>>>>>> Also,
->>>>>>>
->>>>>>> amdgpu 0000:09:00.0: PCI PM: Suspend power state: D3hot
->>>>>>>
->>>>>>> Which means whatever you're facing is either not related to this patch,
->>>>>>> or at best exposed some nasty side-effect that's not handled correctly
->>>>>>> by the driver.
->>>>>>>
->>>>>>> I'd say amdgpu folks would be of better help for your case.
->>>>>>>
->>>>>>> Raag
->>>>>>
->>>>>> So according to the logs Denis shared with v4
->>>>>> (https://pastebin.com/1uBEA1FL) the GPU should have been going to BOCO. This
->>>>>> stands for "Bus off Chip Off"
->>>>>>
->>>>>> amdgpu 0000:09:00.0: amdgpu: Using BOCO for runtime pm
->>>>>>
->>>>>> If it's going to D3hot - that's not going to be BOCO, it should be going to
->>>>>> D3cold.
->>>>>
->>>>> Yes, because upstream port is in D0 for some reason (might be this patch
->>>>> but not sure) and so will be the root port.
->>>>>
->>>>> pcieport 0000:07:00.0: PCI PM: Suspend power state: D0
->>>>> pcieport 0000:07:00.0: PCI PM: Skipped
->>>>>
->>>>> and my best guess is the driver is not able to cope with the lack of D3cold.
->>>>
->>>> Yes; if the driver is configured to expect BOCO (D3cold) if it doesn't get it, chaos ensues.
->>>>
->>>> I guess let's double check the behavior with CONFIG_PCI_DEBUG to verify this patch is what is changing that upstream port behavior.
->>>
->>>
->>> This is the very same exact kernel, minus the patch in question:  https://pastebin.com/rwMYgG7C
->>>
->>>
->>> Both previous kernel and this one have CONFIG_PCI_DEBUG=y.
->>>
->>> Removed the initial bootup sequence to be able to use pastebin.
->>
->> Thanks - this confirms that the problem is the root port not going to D3.
->> This new log shows:
->>
->> pcieport 0000:07:00.0: PCI PM: Suspend power state: D3hot
->>
->> So I feel we should fixate on solving that.
+On Tue, May 20, 2025 at 02:09:36PM +0200, Ulf Hansson wrote:
+> [...]
 > 
-> Which means what you're looking for is error flag being set somewhere in
-> the hierarchy that is preventing suspend.
+> > > > >>>>>
+> > > > >>>>
+> > > > >>>> Rafael,
+> > > > >>>>
+> > > > >>>> Greg suggested we ask for your input on the right option:
+> > > > >>>>
+> > > > >>>> https://lore.kernel.org/all/2025032703-genre-excitable-9473@gregkh/
+> > > > >>>> (that thread has the other option).
+> > > > >>>
+> > > > >>> Can you please let us know your opinion on this?
+> > > > >> Can you please let us know if you have any suggestions for this?
+> > > > >
+> > > > > It's been a while since I looked at this. Although as I understand it,
+> > > > > the main issue comes from using devm_pm_runtime_enable().
+> > > >
+> > > > Yes, it comes from the usage of devm_pm_runtime_enable() in drivers and the
+> > > > dev_pm_domain_detach() call in platform_remove() right after calling
+> > > > driver's remove function.
+> > >
+> > > Okay.
+> >
+> > This is not the root of the problem though. There is nothing really
+> > special about power domain and runtime power management. The root of the
+> > problem is that current code violates the order of releasing resources
+> > by mixing devm- and normal resource management together. Usually it is
+> > individual driver's fault, but in this case it is bus code that uses the
+> > manual release (dev_om_domain_detach) that violates the "release in
+> > opposite order to acquisition" rule.
+> 
+> As I said before, runtime PM is not a regular resource, but a
+> behaviour that we turn on/off for a device. Enabling and disabling
+> runtime PM needs to be managed more carefully in my opinion.
 
-Is the issue perhaps that this is now gated on both correctable and 
-uncorrectable errors?
+You also need to be careful enabling and disabling interrupts, be
+careful with power supplies to make sure the chip you want to talk to is
+powered up, and has clocks running.
 
-Perhaps should *correctable errors* be emitted with a warning and the 
-*uncorrectable errors* be fatal?
+But I think you are concentrating too much on runtime PM aspect and are
+missing the bigger picture: even in the absence of runtime PM we should
+not detach the device from its power domain out of order compared to
+releasing other resources.
+
+We have:
+
+static void platform_remove(struct device *_dev)
+{
+	struct platform_driver *drv = to_platform_driver(_dev->driver);
+	struct platform_device *dev = to_platform_device(_dev);
+
+	if (drv->remove)
+		drv->remove(dev);
+	dev_pm_domain_detach(_dev, true);
+}
+
+That "dev_pm_domain_detach(_dev, true)" means that device may get
+powered off. If you look at for example ACPI power domain it will end up
+calling acpi_dev_pm_low_power() which may place the device into D3Cold
+state. At this point you can't talk to the device.
+
+Now, if the driver used devm APIs, all the resources acquired will be
+released *after* we detach from the domain. That means that interrupts
+may still be firing, custom devm callbacks may still try to communicate
+with the device, etc. This can cause multitude of errors, from
+relatively benign logs in dmesg to system hangs. 
+
+To solve this is simple: make sure we take devm into account and
+release all devm resources acquired after the device was attached to a
+power domain before we detach the device from that power domain.
+
+If we do this we can also safely use devm_pm_runtime_enable() and it
+will be disabled at the right time and everyone will be happy.
 
 > 
-> But regardless of it, my understanding is that root port suspend depends
-> on a lot of factors (now errors flags being one of them with this patch)
-> and endpoint driver can't possibly enforce or guarantee it - the best it
-> can do is try.
+> For example, even if the order is made correctly, suppose a driver's
+> ->remove() callback completes by turning off the resources for its
+> device and leaves runtime PM enabled, as it relies on devres to do it
+> some point later. Beyond this point, nothing would prevent userspace
+> for runtime resuming/suspending the device via sysfs. I would be quite
+> worried if that happens as it certainly would lead to undefined
+> behaviour.
+
+If you have this situation that means that you have logic error in the
+driver. You should not run off resources too early. devm usually helps
+with that. If you do:
+
+devm_regulator_get_enaled()
+devm_clk_get_enabled()
+devm_request_threaded_irq()
+devm_pm_runtime_enable()
+
+then at remove time you should see:
+
+runtime_pm_disable()
+free_irq()
+clk_disable()
+regulator_disable/put()
+
+in this particular order, which should be safe. But if you start mixing
+things up and let's say use clk_get() (not devm variant) and explicitly
+call clk_put() in remove() you will end up with clocks disabled but
+interrupts still active and trouble will ensue.
+
+The point of devm is so that you do not simply "leave runtime PM
+enabled" with other resources shut off.
+
 > 
-> What's probably needed is D3cold failure handling on driver side, but I'm
-> no PCI PM expert and perhaps Rafael can comment on it.
+> >
+> > >
+> > > >
+> > > > On the platform I experienced issues with, the dev_pm_domain_detach() drops
+> > > > the clocks from the device power domain and any subsequent PM runtime
+> > > > resume calls (that may happen in the devres cleanup phase) have no effect
+> > > > on enabling the clocks. If driver has functions registered (e.g. through
+> > > > devm_add_action_or_reset()), or driver specific runtime PM functions that
+> > > > access directly registers in the devres cleanup phase this leads to system
+> > > > aborts.
+> > >
+> > > So if you move away from using devm_pm_runtime_enable() things would
+> > > be easier to manage and there is no additional new devres-management
+> > > needed.
+> >
+> > How exactly will it improve the situation? You still need to make sure
+> > that you are not disabling things out of the order. You simply moving
+> > the complexity to the driver, essentially forbidding it (and any other
+> > driver on platform bus) from using any devm APIs.
 > 
-> Raag
+> The driver can still use the devres APIs to "get" all resources and
+> then rely on devres to "put" them. There is nothing that prevents
+> that, right?
 
- From the driver perspective it does have expectations that the parts 
-outside the driver did the right thing.  If the driver was expecting the 
-root port to be powered down at suspend and it wasn't there are hardware 
-components that didn't power cycle and that's what we're seeing here.
+*Order* is important. You need to release everything in reverse order.
 
+> 
+> Or maybe I didn't understand the problem correctly?
 
+If you mix devm and regular APIs it is nearly impossible to maintain the
+proper order of releasing the resources.
+
+I hope I was able to explain the issue above.
+
+> 
+> >
+> > >
+> > > >
+> > > >
+> > > > >
+> > > > > As I have tried to argue before, I think devm_pm_runtime_enable()
+> > > > > should *not* be used. Not here, not at all. Runtime PM isn't like any
+> > > > > other resources that we fetch/release. Instead, it's a behaviour that
+> > > > > you turn on and off, which needs to be managed more carefully, rather
+> > > > > than relying on fetch/release ordering from devres.
+> >
+> > I disagree. It is a resource that you turn on and off, same as clocks,
+> > regulators, interrupts, etc. We manage those during lifetime of the
+> > device, disable them when going into low power mode/suspend, reenable
+> > them upon resume, may disable and reenable them for other reasons.
+> >
+> > PM is not any more special here. As long as you keep the proper order of
+> > operations it works as well.
+> 
+> How would you solve the issue I pointed out above?
+
+The proper order is to disable runtime PM at the right time (which is
+typically early enough as it is typically enabled late in probe()) so
+there is no concern with "leaving it enabled". And again, the issue is
+not limited to runtime PM, even devices that do not use runtime PM
+should not be detached from their power domain too early.
+
+> 
+> >
+> > > > >
+> > > > > That said, I would convert the driver to use pm_runtime_enable() and
+> > > > > pm_runtime_disable() instead.
+> > > >
+> > > > I've tried this approach previously but it resulted in more complicated
+> > > > code and thus, Jonathan wasn't happy with it [1].
+> > >
+> > > I understand that you have been trying to move forward to address
+> > > people's opinions. It's not always easy to keep everybody happy. :-)
+> > >
+> > > That said, I still think this is the most viable option as it's how
+> > > the vast majority of drivers do it today. A few lines of additional
+> > > code shouldn't really be a big problem in my opinion.
+> >
+> > Have you tried making such change? Again, you will need to abandon use
+> > of most other devm APIs so that you keep the order of releasing
+> > resources. The only devm that you can still use is devm_k*alloc(), the
+> > rest has to be converted into unmanaged.
+> 
+> I guess I need to take a stab at this particular use case.
+> 
+> Looking closer, could it be that it's really the combination of
+> turning on/off resources using devres (not just get/put if them) like
+> clocks - and using devm_pm_runtime_enable()?
+
+It is mixing devres and non-devres resources, yes. Not specifically
+runtime PM.
+
+Thanks.
+
+-- 
+Dmitry
 
