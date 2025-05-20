@@ -1,58 +1,58 @@
-Return-Path: <linux-pm+bounces-27389-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27387-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85655ABCDD6
-	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 05:26:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A80DABCDD5
+	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 05:26:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF86F1B65A60
-	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 03:26:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B7A204A3E8B
+	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 03:26:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC23259C80;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BB36258CD4;
 	Tue, 20 May 2025 03:26:11 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AFCD2571D2;
-	Tue, 20 May 2025 03:26:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67EDC19DFA2;
+	Tue, 20 May 2025 03:26:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747711571; cv=none; b=B0MsF6W77Uc9/5iFq9Ba2igjpnbK93WvN5o/W94r+X8qQBMmDlnYdhP0l9ncIDOFxmUWBigchyURIDQxdwlQ4p+V8xV+B53Y6pptwsJmq9h/6VzbBrHEQlI78lqUrv1xfUhLhJKLfaEvP/h4NYzN3EXLmYTy8sOMzoXRt9CpKgc=
+	t=1747711571; cv=none; b=ovPIB4qzN4wZV4qEYcF/xrfk6AIsylBjZsbO62FdtgqELPAJIqbYY57GHOmTxrBFr3rxU2YdJVNZVe5d9MEd886FVNb9+LerXOFL9LA9LJj07H0rwtqXHjzBpyU+XujZ49d9NJaqguvhn3xIoRKCJBdikXutdMU2oV+4oOTW33w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1747711571; c=relaxed/simple;
-	bh=O5WlLJx2+c4wwI4hD4aEpExVS165ZV3Rb0A7jWj6nqc=;
+	bh=tg+9f5/ByTz0+AQUTAOwJD0oEiW16Fr4sW+Q/4ViH6E=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uPRQZpT3c3Yk/uvfRvJxnEuXSQ7zV2LZWNytVuWTcIlqPWFhLor59Sc9D2+/JTmC6P3OCJoiH0IgnqHlMYllJYgZOYGLxs7iVYL/ze/DHWU0V+hsMUaYkeZVSysm047llfeIxTzlV/dweZSxmIwTFCwDz1sGVSYUcuidBW35x+A=
+	 MIME-Version; b=rWpF2pZ3LXYAVkf8hEybE8+nIvV/BCxS8kLv9Kj8PkP059topsDagdQU0YwMT63x8E2iqfCgt+7Lw17yM+AUmZUjM0JUpTGbeY7QnLEbkXFICA5p5VrEN/xKVHVNQsXL1fHF9OdPlJIOYXtm3bC+grTzsHLJyRnSW9i6vxF9TTw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 23f5f7fc352a11f0b29709d653e92f7d-20250520
+X-UUID: 251d14f8352a11f0b29709d653e92f7d-20250520
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:37b74419-d921-4320-accf-1d236675eb27,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:1597e8b14a6d409660efa3b5747038bb,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:-3,IP:
-	nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,L
-	ES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-O-INFO: VERSION:1.1.45,REQID:0f2dcd53-08cf-4cde-8942-edf7488aee0a,IP:0,U
+	RL:0,TC:0,Content:-25,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:ee0770a97088b4f5b4010e9bc23f2486,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:5,IP:n
+	il,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LE
+	S:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 23f5f7fc352a11f0b29709d653e92f7d-20250520
+X-UUID: 251d14f8352a11f0b29709d653e92f7d-20250520
 Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
 	(envelope-from <zhangzihuan@kylinos.cn>)
 	(Generic MTA)
-	with ESMTP id 1874766652; Tue, 20 May 2025 11:25:55 +0800
+	with ESMTP id 271715950; Tue, 20 May 2025 11:25:57 +0800
 Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 79925E003505;
-	Tue, 20 May 2025 11:25:55 +0800 (CST)
-X-ns-mid: postfix-682BF643-334541295
+	by mail.kylinos.cn (NSMail) with SMTP id 683FCE003505;
+	Tue, 20 May 2025 11:25:57 +0800 (CST)
+X-ns-mid: postfix-682BF645-263278296
 Received: from localhost.localdomain (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 57878E006100;
-	Tue, 20 May 2025 11:25:54 +0800 (CST)
+	by mail.kylinos.cn (NSMail) with ESMTPA id 4772BE006100;
+	Tue, 20 May 2025 11:25:56 +0800 (CST)
 From: Zihuan Zhang <zhangzihuan@kylinos.cn>
 To: rafael@kernel.org,
 	len.brown@intel.com,
@@ -68,9 +68,9 @@ Cc: linux-pm@vger.kernel.org,
 	zhangguopeng@kylinos.cn,
 	linux@weissschuh.net,
 	Zihuan Zhang <zhangzihuan@kylinos.cn>
-Subject: [PATCH 1/3] PM / Sleep: Replace mutex_[un]lock(&system_transition_mutex) with [un]lock_system_sleep()
-Date: Tue, 20 May 2025 11:25:43 +0800
-Message-Id: <20250520032545.29558-2-zhangzihuan@kylinos.cn>
+Subject: [PATCH 2/3] PM / Sleep:  Introduce try_lock_system_sleep()
+Date: Tue, 20 May 2025 11:25:44 +0800
+Message-Id: <20250520032545.29558-3-zhangzihuan@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250520032545.29558-1-zhangzihuan@kylinos.cn>
 References: <20250520032545.29558-1-zhangzihuan@kylinos.cn>
@@ -82,106 +82,71 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-These function currently calls mutex_lock(&system_transition_mutex) and
-mutex_unlock() directly to protect the resume-from-disk operation from
-concurrent suspend/resume transitions.
+The suspend subsystem uses system_transition_mutex to serialize
+suspend and hibernate transitions. The existing lock_system_sleep()
+wrapper both acquires the mutex and sets PF_NOFREEZE on the current
+task to avoid it being frozen during the suspend process.
 
-However, this is inconsistent with the rest of the power management
-code, where lock_system_sleep() and unlock_system_sleep() are used to
-wrap suspend/hibernate transitions. These wrapper functions not only
-acquire system_transition_mutex, but also set PF_NOFREEZE for the
-calling thread, ensuring that it is not subject to freezing during
-suspend.
+However, in some places such as enter_state(), mutex_trylock() is
+used instead. This path currently lacks PF_NOFREEZE protection.
 
-This change replaces the raw mutex_lock()/unlock() with the standard
-lock_system_sleep()/unlock_system_sleep() wrapper pair, bringing it in
-line with the locking pattern used by hibernate(), pm_suspend(), and
-other similar entry points.
+This patch introduces a new wrapper:
 
-Benefits of this change:
+    try_lock_system_sleep()
 
- - Ensures the thread performing software resume is marked PF_NOFREEZE,
-   which is important during early resume paths where freezing is
-active.
- - Improves code clarity by making the locking intent more explicit.
- - Unifies suspend/hibernate locking style across the kernel power
-   subsystem.
- - Reduces the risk of future maintenance issues due to inconsistent
-   locking.
-
-No functional change is expected at runtime, since the lock order and
-coverage remain the same. This is a straightforward cleanup and
-consistency fix.
+It sets PF_NOFREEZE and then performs mutex_trylock(), mirroring the
+existing lock_system_sleep() implementation. This improves consistency
+and enables future cleanup of raw trylock calls.
 
 Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
 ---
- kernel/power/hibernate.c | 5 +++--
- kernel/reboot.c          | 5 +++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ include/linux/suspend.h |  2 ++
+ kernel/power/main.c     | 12 ++++++++++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 23c0f4e6cb2f..cfaa92f24857 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -988,6 +988,7 @@ static int __init find_resume_device(void)
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index da6ebca3ff77..6c9e8fe0c446 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -468,6 +468,7 @@ extern void pm_wakep_autosleep_enabled(bool set);
+ extern void pm_print_active_wakeup_sources(void);
 =20
- static int software_resume(void)
- {
-+	unsigned int sleep_flags;
- 	int error;
+ extern unsigned int lock_system_sleep(void);
++extern unsigned int try_lock_system_sleep(void);
+ extern void unlock_system_sleep(unsigned int);
 =20
- 	pm_pr_dbg("Hibernation image partition %d:%d present\n",
-@@ -995,7 +996,7 @@ static int software_resume(void)
+ #else /* !CONFIG_PM_SLEEP */
+@@ -496,6 +497,7 @@ static inline void pm_wakeup_clear(bool reset) {}
+ static inline void pm_system_irq_wakeup(unsigned int irq_number) {}
 =20
- 	pm_pr_dbg("Looking for hibernation image.\n");
+ static inline unsigned int lock_system_sleep(void) { return 0; }
++static inline unsigned int try_lock_system_sleep(void) { return 0; }
+ static inline void unlock_system_sleep(unsigned int flags) {}
 =20
--	mutex_lock(&system_transition_mutex);
-+	sleep_flags =3D lock_system_sleep();
- 	error =3D swsusp_check(true);
- 	if (error)
- 		goto Unlock;
-@@ -1050,7 +1051,7 @@ static int software_resume(void)
- 	hibernate_release();
- 	/* For success case, the suspend path will release the lock */
-  Unlock:
--	mutex_unlock(&system_transition_mutex);
-+	unlock_system_sleep(sleep_flags);
- 	pm_pr_dbg("Hibernation image not present or could not be loaded.\n");
- 	return error;
-  Close_Finish:
-diff --git a/kernel/reboot.c b/kernel/reboot.c
-index ec087827c85c..68ac7e377efb 100644
---- a/kernel/reboot.c
-+++ b/kernel/reboot.c
-@@ -729,6 +729,7 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, uns=
-igned int, cmd,
- 		void __user *, arg)
- {
- 	struct pid_namespace *pid_ns =3D task_active_pid_ns(current);
-+	unsigned int sleep_flags;
- 	char buffer[256];
- 	int ret =3D 0;
-=20
-@@ -761,7 +762,7 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, uns=
-igned int, cmd,
- 		cmd =3D LINUX_REBOOT_CMD_HALT;
- 	}
-=20
--	mutex_lock(&system_transition_mutex);
-+	sleep_flags =3D lock_system_sleep();
- 	switch (cmd) {
- 	case LINUX_REBOOT_CMD_RESTART:
- 		kernel_restart(NULL);
-@@ -811,7 +812,7 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, uns=
-igned int, cmd,
- 		ret =3D -EINVAL;
- 		break;
- 	}
--	mutex_unlock(&system_transition_mutex);
-+	unlock_system_sleep(sleep_flags);
- 	return ret;
+ #endif /* !CONFIG_PM_SLEEP */
+diff --git a/kernel/power/main.c b/kernel/power/main.c
+index 6254814d4817..e5b64f0dda2d 100644
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -58,6 +58,18 @@ unsigned int lock_system_sleep(void)
  }
+ EXPORT_SYMBOL_GPL(lock_system_sleep);
 =20
++unsigned int try_lock_system_sleep(void)
++{
++	unsigned int flags =3D current->flags;
++	current->flags |=3D PF_NOFREEZE;
++
++	if (!mutex_trylock(&system_transition_mutex))
++		return 0;
++
++	return flags;
++}
++EXPORT_SYMBOL_GPL(try_lock_system_sleep);
++
+ void unlock_system_sleep(unsigned int flags)
+ {
+ 	if (!(flags & PF_NOFREEZE))
 --=20
 2.25.1
 
