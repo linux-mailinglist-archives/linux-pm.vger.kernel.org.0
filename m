@@ -1,115 +1,189 @@
-Return-Path: <linux-pm+bounces-27430-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27431-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83844ABE2C7
-	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 20:38:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02358ABE309
+	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 20:44:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96E8F1BC097D
-	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 18:39:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3EAD8A68DA
+	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 18:43:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9D9625B1C5;
-	Tue, 20 May 2025 18:38:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4DF12820A4;
+	Tue, 20 May 2025 18:43:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="TnlDoJMg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hkESjV87"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3201A2580F7
-	for <linux-pm@vger.kernel.org>; Tue, 20 May 2025 18:38:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A9A28151E;
+	Tue, 20 May 2025 18:43:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747766326; cv=none; b=RVsehKlbPv7ZBqZ/n4SQewKRSWWg1cmladrli8qQTT1VUGjrNsIyVipEyk5zACd8FUSRICjfInqbbIYRx8BgASpkE8pGlc3fw+A9RDSPs99vuM97XNviLpkhO/XuYLRcAzhok/QQHmqIwpkcnqfp23XquyGL7hBc86109NU7EKM=
+	t=1747766584; cv=none; b=p9+PTg+F8xbXTiV6SwgHn2g8DHhRkD21UCWwlHAyNEQSHpnxvnlQ5ss0czAJrTLA5kGcsCSkVQ1HqLrFRlVQRD8K3cwfAN5mz5eFYWiZE8U1sQ93geFr3wt6qtDA7TWoqSecPz7cMAcMg7cwJ+TvOWfmJRGxVAjjqYL93Cc312U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747766326; c=relaxed/simple;
-	bh=rWwnfB/TbeNImJkz273xKx5BFJ5CIQ0KcX4dNJ4mTtI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Rlsp9UjiRC7TDx/efyzldLc5ZCoDLPnddMvRxl5JUYHAwu6Iyt5muU1DBfiqsYPO3c7Hq1/wp8COcGwxurX7/WHhKnX1wn3LU2F8brl6jzjufj6FjAfSd3fhjMPMBpmSDAIHXalIXGoh64LGpVVcj660ogfm7bQ5l08LBXQX/eU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=TnlDoJMg; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=u3v+sVXn3QS5HAZR6rlTvCjsDNvFK3/tVpaq1eLWVu0=; b=TnlDoJMght2Uzy7gaxZQpE1Dr9
-	FusfAMBSB6rYCB2jSSC2ocaG3pmnnC4ac1wuEfYHlSIWE//NkQMgDiSNIZBHdGGoNVIQf/sYrAhqG
-	dGCCrZbu6H8GDMuGifH6qjt+7lRyybeemwOSPelvQg/A+kZfDzwOtwuL34RG66DgyKh3uw4RaAEBk
-	poOhLxpuPu/Biw69o9blr5h40q1O9+pbNAgjjysf+DpidOyYQfHxJ266061ZSTRZrvEeI+NPv/zMw
-	QIe7wsj6hRfUThpCKD8m2PTrPcOkSR5CfY3ChPnCz3zoRItFVsnX+Ha7e9T65SpWH1PgqgKBFhh+I
-	pRpNb4HQ==;
-Received: from [61.8.146.112] (helo=phil.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1uHRrM-0004Av-9K; Tue, 20 May 2025 20:38:40 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: ulf.hansson@linaro.org, mark.rutland@arm.com, lpieralisi@kernel.org,
- sudeep.holla@arm.com, Robin Murphy <robin.murphy@arm.com>
-Cc: linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/2] pmdomain: rockchip: Relax SMCCC dependency
-Date: Tue, 20 May 2025 20:38:39 +0200
-Message-ID: <2393836.usQuhbGJ8B@phil>
-In-Reply-To:
- <6f0a38e596c0727d0de13a29c9224f71bc7d30f1.1747760015.git.robin.murphy@arm.com>
-References:
- <ab0476382e3342161beda94a45ddadb49b026dcd.1747760015.git.robin.murphy@arm.com>
- <6f0a38e596c0727d0de13a29c9224f71bc7d30f1.1747760015.git.robin.murphy@arm.com>
+	s=arc-20240116; t=1747766584; c=relaxed/simple;
+	bh=RzRcyyxnsvIp9rQq1aJgSFL7GqkqlgKUiiG/uQNBHq8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YaZ6K4E5ejvbLK+aXSR+xeueQmlHRdql+apsoPSlYxbSiZbk/utXn5uhLZQoyW/m862ZShsTEQI6Oy2Aw69SDe3M8LPIVPl9x2Ld0z6gVLkFWVWASRCPR1OCBnCI0bMvKqNrTshHbpq2V3q/lyBdaeGUNM9CfryhjAQ2E9LSVWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hkESjV87; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747766583; x=1779302583;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=RzRcyyxnsvIp9rQq1aJgSFL7GqkqlgKUiiG/uQNBHq8=;
+  b=hkESjV87WfH7q9w2Yk9Q1oQ//3/2/Lx4ZoyyLziiCkIbzf1pWvh9GrtX
+   xymz6jwiDIzjtcOd/C6k6FbTy9jYx4sBgboL8hBZKc/q+bSOwEAD/csTY
+   FMR+SXGU7RMTRbrEQsn8z1lKIV1IXmSfXCXNSo1FLY2ou4WJxUzZSgY/f
+   /krWX3ApMbsO13dq2BxgeE2TL3L54h6zzCVzBMNWVxzSADHGGuHsf3WGr
+   JJAWbbrzKTjb11lOsyCJPkyyuEsEzjC2R5q2ecPfzLeLoq8/m0jfuWlWE
+   UKEv5EM8vJf9M29gHASRqsKCzxvhZ2fdWQX2mNGPgSZQ2/F3rEwLK+HE9
+   Q==;
+X-CSE-ConnectionGUID: nHgGVxBZRb26Y0cgxrvqdA==
+X-CSE-MsgGUID: 8nnZsU6MRum2HSRjfHmIYA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11439"; a="61110790"
+X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
+   d="scan'208";a="61110790"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 11:43:02 -0700
+X-CSE-ConnectionGUID: g6zN9/HZT2Sl8gVW2+1uDg==
+X-CSE-MsgGUID: r5vPL/OUSpeWOV4yHn0pLA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
+   d="scan'208";a="144519254"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 11:42:59 -0700
+Date: Tue, 20 May 2025 21:42:55 +0300
+From: Raag Jadav <raag.jadav@intel.com>
+To: Mario Limonciello <superm1@kernel.org>
+Cc: Denis Benato <benato.denis96@gmail.com>, rafael@kernel.org,
+	mahesh@linux.ibm.com, oohall@gmail.com, bhelgaas@google.com,
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, ilpo.jarvinen@linux.intel.com,
+	lukas@wunner.de, aravind.iddamsetty@linux.intel.com
+Subject: Re: [PATCH v4] PCI: Prevent power state transition of erroneous
+ device
+Message-ID: <aCzNL9uXGbBSdF2S@black.fi.intel.com>
+References: <20250519102808.4130271-1-raag.jadav@intel.com>
+ <aCsK743YSuahPtnH@black.fi.intel.com>
+ <85ed0b91-c84f-4d24-8e19-a8cb3ba02b14@gmail.com>
+ <aCxP6vQ8Ep9LftPv@black.fi.intel.com>
+ <a8c83435-4c91-495c-950c-4d12b955c54c@kernel.org>
+ <aCyj9nbnIRet93O-@black.fi.intel.com>
+ <552d75b2-2736-419f-887e-ce2692616578@kernel.org>
+ <ee1117cf-6367-4e9a-aa85-ccfc6c63125d@gmail.com>
+ <6f23d82c-10cc-4d70-9dce-41978b05ec9a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6f23d82c-10cc-4d70-9dce-41978b05ec9a@kernel.org>
 
-Am Dienstag, 20. Mai 2025, 19:10:17 Mitteleurop=C3=A4ische Sommerzeit schri=
-eb Robin Murphy:
-> Most 32-bit Rockchip platforms do not use PSCI, so having to select
-> ARM_PSCI to satisfy a dependency chain to retain working power domain
-> support is a bit weird and non-obvious. Now that the offending SMCCC API
-> is properly stubbed out for optional usage, we can relax this again.
->=20
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+On Tue, May 20, 2025 at 12:39:12PM -0500, Mario Limonciello wrote:
+> On 5/20/2025 12:22 PM, Denis Benato wrote:
+> > On 5/20/25 17:49, Mario Limonciello wrote:
+> > > On 5/20/2025 10:47 AM, Raag Jadav wrote:
+> > > > On Tue, May 20, 2025 at 10:23:57AM -0500, Mario Limonciello wrote:
+> > > > > On 5/20/2025 4:48 AM, Raag Jadav wrote:
+> > > > > > On Mon, May 19, 2025 at 11:42:31PM +0200, Denis Benato wrote:
+> > > > > > > On 5/19/25 12:41, Raag Jadav wrote:
+> > > > > > > > On Mon, May 19, 2025 at 03:58:08PM +0530, Raag Jadav wrote:
+> > > > > > > > > If error status is set on an AER capable device, most likely either the
+> > > > > > > > > device recovery is in progress or has already failed. Neither of the
+> > > > > > > > > cases are well suited for power state transition of the device, since
+> > > > > > > > > this can lead to unpredictable consequences like resume failure, or in
+> > > > > > > > > worst case the device is lost because of it. Leave the device in its
+> > > > > > > > > existing power state to avoid such issues.
+> > > > > > > > > 
+> > > > > > > > > Signed-off-by: Raag Jadav <raag.jadav@intel.com>
+> > > > > > > > > ---
+> > > > > > > > > 
+> > > > > > > > > v2: Synchronize AER handling with PCI PM (Rafael)
+> > > > > > > > > v3: Move pci_aer_in_progress() to pci_set_low_power_state() (Rafael)
+> > > > > > > > >        Elaborate "why" (Bjorn)
+> > > > > > > > > v4: Rely on error status instead of device status
+> > > > > > > > >        Condense comment (Lukas)
+> > > > > > > > Since pci_aer_in_progress() is changed I've not included Rafael's tag with
+> > > > > > > > my understanding of this needing a revisit. If this was a mistake, please
+> > > > > > > > let me know.
+> > > > > > > > 
+> > > > > > > > Denis, Mario, does this fix your issue?
+> > > > > > > > 
+> > > > > > > Hello,
+> > > > > > > 
+> > > > > > > Unfortunately no, I have prepared a dmesg but had to remove the bootup process because it was too long of a few kb: https://pastebin.com/1uBEA1FL
+> > > > > > 
+> > > > > > Thanks for the test. It seems there's no hotplug event this time around
+> > > > > > and endpoint device is still intact without any PCI related failure.
+> > > > > > 
+> > > > > > Also,
+> > > > > > 
+> > > > > > amdgpu 0000:09:00.0: PCI PM: Suspend power state: D3hot
+> > > > > > 
+> > > > > > Which means whatever you're facing is either not related to this patch,
+> > > > > > or at best exposed some nasty side-effect that's not handled correctly
+> > > > > > by the driver.
+> > > > > > 
+> > > > > > I'd say amdgpu folks would be of better help for your case.
+> > > > > > 
+> > > > > > Raag
+> > > > > 
+> > > > > So according to the logs Denis shared with v4
+> > > > > (https://pastebin.com/1uBEA1FL) the GPU should have been going to BOCO. This
+> > > > > stands for "Bus off Chip Off"
+> > > > > 
+> > > > > amdgpu 0000:09:00.0: amdgpu: Using BOCO for runtime pm
+> > > > > 
+> > > > > If it's going to D3hot - that's not going to be BOCO, it should be going to
+> > > > > D3cold.
+> > > > 
+> > > > Yes, because upstream port is in D0 for some reason (might be this patch
+> > > > but not sure) and so will be the root port.
+> > > > 
+> > > > pcieport 0000:07:00.0: PCI PM: Suspend power state: D0
+> > > > pcieport 0000:07:00.0: PCI PM: Skipped
+> > > > 
+> > > > and my best guess is the driver is not able to cope with the lack of D3cold.
+> > > 
+> > > Yes; if the driver is configured to expect BOCO (D3cold) if it doesn't get it, chaos ensues.
+> > > 
+> > > I guess let's double check the behavior with CONFIG_PCI_DEBUG to verify this patch is what is changing that upstream port behavior.
+> > 
+> > 
+> > This is the very same exact kernel, minus the patch in question:  https://pastebin.com/rwMYgG7C
+> > 
+> > 
+> > Both previous kernel and this one have CONFIG_PCI_DEBUG=y.
+> > 
+> > Removed the initial bootup sequence to be able to use pastebin.
+> 
+> Thanks - this confirms that the problem is the root port not going to D3.
+> This new log shows:
+> 
+> pcieport 0000:07:00.0: PCI PM: Suspend power state: D3hot
+> 
+> So I feel we should fixate on solving that.
 
+Which means what you're looking for is error flag being set somewhere in
+the hierarchy that is preventing suspend.
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+But regardless of it, my understanding is that root port suspend depends
+on a lot of factors (now errors flags being one of them with this patch)
+and endpoint driver can't possibly enforce or guarantee it - the best it
+can do is try.
 
-Of course this needs patch1 of this series to get applied
-first.
+What's probably needed is D3cold failure handling on driver side, but I'm
+no PCI PM expert and perhaps Rafael can comment on it.
 
-I think for bisectability, doing this directly in patch1 might
-be less dangerous though?
-
-
-Heiko
-
-> ---
->  drivers/pmdomain/rockchip/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
->=20
-> diff --git a/drivers/pmdomain/rockchip/Kconfig b/drivers/pmdomain/rockchi=
-p/Kconfig
-> index 218d43186e5b..ffe5e7b78494 100644
-> --- a/drivers/pmdomain/rockchip/Kconfig
-> +++ b/drivers/pmdomain/rockchip/Kconfig
-> @@ -4,7 +4,6 @@ if ARCH_ROCKCHIP || COMPILE_TEST
->  config ROCKCHIP_PM_DOMAINS
->  	bool "Rockchip generic power domain"
->  	depends on PM
-> -	depends on HAVE_ARM_SMCCC_DISCOVERY
->  	depends on REGULATOR
->  	select PM_GENERIC_DOMAINS
->  	help
->=20
-
-
-
-
+Raag
 
