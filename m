@@ -1,157 +1,189 @@
-Return-Path: <linux-pm+bounces-27392-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27393-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 838E0ABCF07
-	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 08:14:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB670ABCF19
+	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 08:20:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BCE1167E86
-	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 06:14:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 397598A35A4
+	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 06:19:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38B4525C80A;
-	Tue, 20 May 2025 06:14:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F060325C80A;
+	Tue, 20 May 2025 06:19:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=astier.eu header.i=@astier.eu header.b="UK1dKBGl";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kXV3Z0ps"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="i+60eLsu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B77825A334;
-	Tue, 20 May 2025 06:14:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3070E25CC48
+	for <linux-pm@vger.kernel.org>; Tue, 20 May 2025 06:19:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747721645; cv=none; b=CJitSo6o56Tf4nadOo1reCKiPxDvMVP0eK/wSH9Ih8KP++ifcKrIzM9wF1muVIotIX1U7PQGQbeTX2jPlHxWFFXobxlXqzl1j4tOUVimb7eMkUYEtwcmyt0XhyyyMRKwJ6yla6kldZgrE/OReCMOJgVqCcCxtHATMOLWKwc/tCE=
+	t=1747721989; cv=none; b=LSD7zMq4r2JwLBbXCO7szc6867j9zqryimeZCfS/zSpDSqndBqPjEirMPCgSTQrcCqfxRu9YWPhDvMsx1uRvBHyqnKJgeZLUvE5LirsOMVn5HjoC7R99o4egGOnbCBPUw02Gr0F7tJ5CQp+3lYsZw74Z8gk5gLNtIqi9qhwy7wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747721645; c=relaxed/simple;
-	bh=sfOGzBxbmYxrpTmsmk9iA7kI+4GcUiAg7Ev+d64vRxA=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=UstwmppSmTF0q2myh9EN/kTRoSfGfXdEcYqN7OIaAg9m3VfCGSd9GXLP2swUPPa0Huc6V7LFvlzPbx1WEP80hbqLQxiCKJvK2C4a+Q7KIB4L6xjUZAnYCqWOM4BvceJO4itVWT2keQeXGQljkFZMlSFF+2pouW5Xqr2dW25ty3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astier.eu; spf=pass smtp.mailfrom=astier.eu; dkim=pass (2048-bit key) header.d=astier.eu header.i=@astier.eu header.b=UK1dKBGl; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kXV3Z0ps; arc=none smtp.client-ip=202.12.124.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astier.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=astier.eu
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 6119F2540156;
-	Tue, 20 May 2025 02:14:00 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Tue, 20 May 2025 02:14:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=astier.eu; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1747721640;
-	 x=1747808040; bh=ebCCwKl+ctIjs3xdVcCquO8ccEzo9gT00bMAJW9tR3k=; b=
-	UK1dKBGlOE/nPbSFz2w4NVz0qzvvRxtPLIANPfir872v6f8QPbeybw8fzi0JeWj4
-	vnalmJl4JpaBJSrU3Z2FkdoQyOephsDTEdjqhfkX8Vb8tMta+dcg7LhphfWbhf7a
-	akyJcLx5Ehiq6iXJIEeOtQUnM1hm8V3GsHdS4mZKqJlFlKeYqhycgERZpMRCwwiy
-	zI0iHMLipA4FCU5uJc7ER6HPVfylazaud6VKL7eLLsvS4szv4V9+/aRpb5XzJMky
-	XAGTJjplkAKqCVkVpWheHRepDybx53LwpLxYKjuHlni+OAymlLhxZ63aeYf54OO+
-	RtyyzPdKSTSO7ItH29fL9Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1747721640; x=
-	1747808040; bh=ebCCwKl+ctIjs3xdVcCquO8ccEzo9gT00bMAJW9tR3k=; b=k
-	XV3Z0ps9QdyShz3WgtdZTFTNx4ZS/RgqjBNiy8fn05lQc2cyOiqvTR7QxmGDCtaR
-	e167ALUh3QZg2+lJUz1Tjykr9PcflQK0S/bz1gnQBWbfUfwLIzGYgoDQBdb++iL7
-	LK1rIM/qpRVRO/kxvMTJkNdswhrWfIOO3NL9KlAklw9zinyzdvRjRBhmoBBN9fNK
-	0ge2wA5diNZtojP2miy8fSnwY7SjHBjebJVzG83b0+zz1aXYVeB9/RNqvQuyftGI
-	ei+Z4LUZAYNPNjd/s40uTGFzdQNPUXU3AHYWSeLA6pbejnK0XU5IIyoqTCPmXktR
-	dNA1ffpfGnsdmLM99D0sw==
-X-ME-Sender: <xms:px0saFY933IyeKEWYu3XuDcC-SGiR6bNl4iLz_M7NuHdPfvXkjllOQ>
-    <xme:px0saMZ9ZuGp5gd440aUHBHelMRvH5_nWuDdlHln6mDWgYxZ0oLQlKhRejnK0tbX2
-    z0FaoDXmVVF2IoGz38>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefvdefheduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertder
-    tdejnecuhfhrohhmpedftehnihhsshgvucetshhtihgvrhdfuceorghnihhsshgvsegrsh
-    htihgvrhdrvghuqeenucggtffrrghtthgvrhhnpeekvedutdeghfevfeevjefhvdfhtdeh
-    teetfedvgfdvffefveeufeduueethfegfeenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpegrnhhishhsvgesrghsthhivghrrdgvuhdpnhgspghr
-    tghpthhtohepfedupdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehlihhnuhigse
-    grrhhmlhhinhhugidrohhrghdruhhkpdhrtghpthhtohepmhhtuhhrqhhuvghtthgvsegs
-    rgihlhhisghrvgdrtghomhdprhgtphhtthhopehgrghrhiesghgrrhihghhuohdrnhgvth
-    dprhgtphhtthhopegrlhgvgidrghgrhihnohhrsehgmhgrihhlrdgtohhmpdhrtghpthht
-    oheprghnughrvgifjhgsrghllhgrnhgtvgesghhmrghilhdrtghomhdprhgtphhtthhope
-    gsohhquhhnrdhfvghnghesghhmrghilhdrtghomhdprhgtphhtthhopehmihhguhgvlhdr
-    ohhjvggurgdrshgrnhguohhnihhssehgmhgrihhlrdgtohhmpdhrtghpthhtohephihurh
-    ihrdhnohhrohhvsehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghlihgtvghrhihhlhes
-    ghhoohhglhgvrdgtohhm
-X-ME-Proxy: <xmx:px0saH_Ji6vuSbgAkP2LDvb94v-U3vk5LgRfgazc5HYIcqfC-vpOMA>
-    <xmx:px0saDpRhMm_Nx09JgSroPL-Ur1A8wMHKD2-6mLWZMjOv-38Pdxqpw>
-    <xmx:px0saAp2DBjw2SBZMd8AmMDJB34Elb9ERuvq7RqLGbtGWH-yQMuOQQ>
-    <xmx:px0saJTaeW3h9Vhf5t5KvcchACqLnVj3EhG2N4j48qFuWAFl1aTvJg>
-    <xmx:qB0saEPbiwR3t4qKp0RzcC6tYAfavsmtt2bjyqVbRFtLP3L5rEOWCj73>
-Feedback-ID: iccec46d4:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 4EE4B700060; Tue, 20 May 2025 02:13:59 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1747721989; c=relaxed/simple;
+	bh=OU4ByQOtWJ+gydec1QudsIgdSpAgtbfCrGrIflz+nS8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=TUBAM6Qwsqgo/Zf1OVyRguLzY4ZvSNT78dE1u1Ct9xZcGiWXU7Sdac0HndE9qrhybFl3NwD5q3pG+jYocWx6D5sIjPJYbY6kPAZP63MGGbtAADaHDqcDg2MaxEJpZuqh9JoFp1V9d7syzcCy/LJE5trYTzkixINhVPBnpo65c9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=i+60eLsu; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-b26df8f44e6so5057191a12.2
+        for <linux-pm@vger.kernel.org>; Mon, 19 May 2025 23:19:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1747721987; x=1748326787; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3QrXriFq0Ub8Xkck+rczHyL+UrIKWIcIp4tiFFkhPQs=;
+        b=i+60eLsuO0ylqhzpxi+ZOIKwJ8fyv5ziruPyFc2o5VRpOSsKHK7K25lFad/aizRAly
+         XMP2vGfQIovyOVRuu7ggnrAZaZQNsELNX5MYd5e/H5jSmgxth/trdWxqUKER04w9IJej
+         DXvIXBx8So+/JplflzfN/KmVg/Hn/jYsgF1KqhSTSxEvI4x5IhYrQJVetPVQcuak9p84
+         VmE7Tj9U+Kzyam44jsDRyglmnXlWSLwU4nI8RAabdLpNyMzdzwPR7/O0mC97gPTE2Fxe
+         ddsiqTauLwxB5iomUVaC9oV2LbSeCqpxIGT0VZN+xNP2pYMaSz9wsXgb5WUli+B355Hf
+         pDnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747721987; x=1748326787;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3QrXriFq0Ub8Xkck+rczHyL+UrIKWIcIp4tiFFkhPQs=;
+        b=sj3OY+AGg9eR9zkiaprirQQe5VBb2EGE4pqof4T3MRv+fhB7npmSbsNo5M4lCw41HA
+         jviyUqFtmJ9q6naADjylyu+n7WwOgd4WVp7Od6vAgSNnAnu0qeKycBkp4pPPV08LUSDM
+         NeDBcJhIquXTFiuq/j9k7vVZEImx1AglqsLzrpJB/O8yZ4jdaloVIH9T8DpG1hBCy7+q
+         MNVak9QAIxAYdIX9msJjCOqp4kCxAEhDsduMTRHoGQm02pwgMbG5b/Z2kBSEV7YaY/bH
+         mWbAkEZWqEVlR88AOGzq86BbahgvVXv3PcKz7GoI4b6G9Osdnf9sFERzCWAUcWJK32lB
+         /ADg==
+X-Gm-Message-State: AOJu0YzW5p24z8iZyG3Q0ZGani3OcAEdZFkdGeO2syVWQUKfrLJXKaim
+	IYJ7MuI3aTbz2dtj+F5+SFF4J0j7mm8yrrw95vrWttfCYvvmG3Po8tKvF43T8M0ivazoi+dStuY
+	Lir+p
+X-Gm-Gg: ASbGnctohQXQV5QSoZC+i1PWSRK7ZLcYmBOIJwPI2eoKwaIdea9fyfZT556Q0QafR9M
+	/JO0+qxYAkyzh4b6o2z33flwHkguqQXD0f1lBLxsgXVVLJ7cXyazoRfWhkZ1RxIqLAGBo/0kMGs
+	L5HRZS7GXNrZYqFakhmCjxhWIKyZYE08C0GpFuMeNvmDItLzxkdV1BSSRX7BX55vOAO8skN3g8l
+	ub02Rk2cGjYfItJysCm9zo0nZnmVb/dEP2izX2CFXzsXtPqpp0/7FqZeGz7DoocHPgscIjkIzTw
+	q6MB3v14KHpqJW4evrqYlZWgJ05f7Pjs4I3kPnVvD5ga/2yAjiW1
+X-Google-Smtp-Source: AGHT+IGel+JHrtNl1VZJn7tExvpoE+fr1Yt4fLgYovTO9C4ueG3OMFXqk0yUacYe6nEzeAwxxm7EIw==
+X-Received: by 2002:a05:6a20:10a9:b0:216:60bc:2ca9 with SMTP id adf61e73a8af0-21660cb6eefmr17944742637.40.1747721987317;
+        Mon, 19 May 2025 23:19:47 -0700 (PDT)
+Received: from localhost ([122.172.81.72])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b26eaf6e6a5sm7238085a12.17.2025.05.19.23.19.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 May 2025 23:19:46 -0700 (PDT)
+Date: Tue, 20 May 2025 11:49:44 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, rust-for-linux@vger.kernel.org
+Subject: [GIT PULL] cpufreq/arm updates for 6.16
+Message-ID: <20250520061944.pl3mqw2clo2roe3s@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: Tc582061166103edd
-Date: Tue, 20 May 2025 08:13:09 +0200
-From: "Anisse Astier" <anisse@astier.eu>
-To: "Viresh Kumar" <viresh.kumar@linaro.org>,
- "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
- "Danilo Krummrich" <dakr@redhat.com>, "Miguel Ojeda" <ojeda@kernel.org>,
- "Alex Gaynor" <alex.gaynor@gmail.com>,
- "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- "Benno Lossin" <benno.lossin@proton.me>,
- "Andreas Hindborg" <a.hindborg@kernel.org>,
- "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
- "Danilo Krummrich" <dakr@kernel.org>, linux-pm@vger.kernel.org,
- "Vincent Guittot" <vincent.guittot@linaro.org>,
- "Stephen Boyd" <sboyd@kernel.org>, "Nishanth Menon" <nm@ti.com>,
- rust-for-linux@vger.kernel.org,
- "Manos Pitsidianakis" <manos.pitsidianakis@linaro.org>,
- =?UTF-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>,
- "Joakim Bech" <joakim.bech@linaro.org>, "Rob Herring" <robh@kernel.org>,
- "Yury Norov" <yury.norov@gmail.com>, "Burak Emir" <bqe@google.com>,
- "Rasmus Villemoes" <linux@rasmusvillemoes.dk>,
- "Russell King" <linux@armlinux.org.uk>, linux-clk@vger.kernel.org,
- "Michael Turquette" <mturquette@baylibre.com>,
- "Andrew Ballance" <andrewjballance@gmail.com>,
- linux-kernel@vger.kernel.org
-Message-Id: <e8a404b2-4ec6-4e1d-a973-15684676e870@app.fastmail.com>
-In-Reply-To: <20250520043355.wjkrslnripaqj6mm@vireshk-i7>
-References: <cover.1747634382.git.viresh.kumar@linaro.org>
- <21b4c30db60f22d56cc6386a18564705ad3a6f4a.1747634382.git.viresh.kumar@linaro.org>
- <CANiq72mNHYKXcDm6DiB=69W0w8pZ1KhqeARqqKBK_s01PPRsmQ@mail.gmail.com>
- <20250520043355.wjkrslnripaqj6mm@vireshk-i7>
-Subject: Re: [PATCH V12 06/15] rust: macros: enable use of hyphens in module names
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+Hi Rafael,
 
+This contains few patches from Danilo Krummrich as well, which will
+get merged via driver-core separately. Please push this to Linus once
+that is merged during rc1. Thanks.
 
-Mar 20 mai 2025, =C3=A0 06:33, Viresh Kumar a =C3=A9crit=E2=80=AF:
-> On 19-05-25, 16:15, Miguel Ojeda wrote:
->> On Mon, May 19, 2025 at 9:08=E2=80=AFAM Viresh Kumar <viresh.kumar@li=
-naro.org> wrote:
->> >
->> > +    /* Rust does not allow hyphens in identifiers, use underscore =
-instead */
->>=20
->> (In case you see this before you apply)
->>=20
->> Nit: `//` for comments, also please end with a period.
->
-> Done.
+The following changes since commit a374f28700abd20e8a7d026f89aa26f759445918:
 
-Thank you Viresh for iterating on this and picking up review comments. D=
-o not hesitate to add your Co-developed-by.
+  cpufreq: fix compile-test defaults (2025-04-17 13:36:29 +0530)
 
-Kind regards,
+are available in the Git repository at:
 
-Anisse
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-updates-6.16
+
+for you to fetch changes up to 6c9bb86922728c7a4cceb99f131e00dd87514f20:
+
+  cpufreq: scmi: Skip SCMI devices that aren't used by the CPUs (2025-05-20 11:24:18 +0530)
+
+----------------------------------------------------------------
+CPUFreq updates for 6.16
+
+- Rust abstractions for CPUFreq framework (Viresh Kumar).
+
+- Rust abstractions for OPP framework (Viresh Kumar).
+
+- Basic Rust abstractions for Clk and Cpumask frameworks (Viresh Kumar).
+
+- Minor cleanup to the SCMI cpufreq driver (Mike Tipton).
+
+----------------------------------------------------------------
+Anisse Astier (1):
+      rust: macros: enable use of hyphens in module names
+
+Danilo Krummrich (8):
+      rust: device: implement impl_device_context_deref!
+      rust: device: implement impl_device_context_into_aref!
+      rust: device: implement device context for Device
+      rust: platform: preserve device context in AsRef
+      rust: pci: preserve device context in AsRef
+      rust: device: implement Bound device context
+      rust: pci: move iomap_region() to impl Device<Bound>
+      rust: devres: require a bound device
+
+Mike Tipton (1):
+      cpufreq: scmi: Skip SCMI devices that aren't used by the CPUs
+
+Viresh Kumar (16):
+      Merge commit 'eaff6b62d343' of pm/linux-next into commit 'f720efda2db5' of driver-core/driver-core-next
+      rust: cpumask: Add few more helpers
+      rust: cpumask: Add initial abstractions
+      MAINTAINERS: Add entry for Rust cpumask API
+      rust: clk: Add helpers for Rust code
+      rust: clk: Add initial abstractions
+      rust: cpu: Add from_cpu()
+      rust: opp: Add initial abstractions for OPP framework
+      rust: opp: Add abstractions for the OPP table
+      rust: opp: Add abstractions for the configuration options
+      rust: cpufreq: Add initial abstractions for cpufreq framework
+      rust: cpufreq: Extend abstractions for policy and driver ops
+      rust: cpufreq: Extend abstractions for driver registration
+      rust: opp: Extend OPP abstractions with cpufreq support
+      cpufreq: Add Rust-based cpufreq-dt driver
+      Merge branch 'rust/cpufreq-dt' into cpufreq/arm/linux-next
+
+ MAINTAINERS                     |   11 ++
+ drivers/cpufreq/Kconfig         |   12 ++
+ drivers/cpufreq/Makefile        |    1 +
+ drivers/cpufreq/amd-pstate.c    |    7 +-
+ drivers/cpufreq/cpufreq.c       |  345 +++++++++++++++++----------------------
+ drivers/cpufreq/intel_pstate.c  |   47 +++---
+ drivers/cpufreq/rcpufreq_dt.rs  |  226 ++++++++++++++++++++++++++
+ drivers/cpufreq/scmi-cpufreq.c  |   36 ++++-
+ include/linux/cpufreq.h         |   10 +-
+ rust/bindings/bindings_helper.h |    4 +
+ rust/helpers/clk.c              |   66 ++++++++
+ rust/helpers/cpufreq.c          |   10 ++
+ rust/helpers/cpumask.c          |   25 +++
+ rust/helpers/helpers.c          |    2 +
+ rust/kernel/clk.rs              |  334 ++++++++++++++++++++++++++++++++++++++
+ rust/kernel/cpu.rs              |   30 ++++
+ rust/kernel/cpufreq.rs          | 1321 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ rust/kernel/cpumask.rs          |  330 +++++++++++++++++++++++++++++++++++++
+ rust/kernel/device.rs           |   90 ++++++++++-
+ rust/kernel/devres.rs           |   17 +-
+ rust/kernel/lib.rs              |    7 +
+ rust/kernel/opp.rs              | 1145 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ rust/kernel/pci.rs              |   33 ++--
+ rust/kernel/platform.rs         |   32 +---
+ rust/macros/module.rs           |   20 ++-
+ 25 files changed, 3861 insertions(+), 300 deletions(-)
+ create mode 100644 drivers/cpufreq/rcpufreq_dt.rs
+ create mode 100644 rust/helpers/clk.c
+ create mode 100644 rust/helpers/cpufreq.c
+ create mode 100644 rust/kernel/clk.rs
+ create mode 100644 rust/kernel/cpu.rs
+ create mode 100644 rust/kernel/cpufreq.rs
+ create mode 100644 rust/kernel/cpumask.rs
+ create mode 100644 rust/kernel/opp.rs
+
+-- 
+viresh
 
