@@ -1,89 +1,93 @@
-Return-Path: <linux-pm+bounces-27406-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27407-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 469FEABD50D
-	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 12:33:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5016ABD53A
+	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 12:38:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB2678A4E74
-	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 10:32:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48E9A4C465C
+	for <lists+linux-pm@lfdr.de>; Tue, 20 May 2025 10:33:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B108B278E7B;
-	Tue, 20 May 2025 10:30:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 143BD272E46;
+	Tue, 20 May 2025 10:33:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cpJU3lLn"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nKEAvyTn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFDA727A106
-	for <linux-pm@vger.kernel.org>; Tue, 20 May 2025 10:30:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9C1270ED9
+	for <linux-pm@vger.kernel.org>; Tue, 20 May 2025 10:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747737040; cv=none; b=GilqfAODldCdIWnzDY33b5+TMF42Ob0kpTxHB9Q/fN4gyWTdPrhT6PhNrz5RHPq25/IqxjZ+QcDZQLRA5nG1ltcMZNYw2YuUGLrlWtrW7Xc0jp2V1ZB+C7IeJ1YPSRDqrjhA8VhK48C101FQE2WhAZSHdxa/3UeKlBIa8oeUV6s=
+	t=1747737190; cv=none; b=qHibD/jUAvmTlLScyaI7gP0/JhvfAwGvdviAphxUV6Xq5E67TEMdBxBB6Gmno59AwuszXp8DtwtXvXgQmLJq5VXCBoilhK2dZFNhnpSsNJD9TuWrA+4aaZK7uzsE8Dn4A09xMorGfvC3aRfAW1X5gZc0KuCoAtx0eeY/hNtZIDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747737040; c=relaxed/simple;
-	bh=u6CIUKSBSq4Ix3l4J/Oqt7B1dVs5L8DFoS4qUugvU2E=;
+	s=arc-20240116; t=1747737190; c=relaxed/simple;
+	bh=Ltw5M1lySmrMauSrqTCCb0ZHHbcTroNTLc7rS9O0Oms=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c4h+W7TRsxXQ87pJ4QnZ+vugspzj2jMq45//XcwlL3cbSjvbojqTiwryStnBYkOgIb+b+hwXSO2WCMtqmUv2sM4iH7N5x4Z1nybyL3k+PIMIczKXgzT09B4pQlt/LVy4uD3p9l9Lprb8iOi3TgFgNXrTzpMrfOhso0KFD3SpZx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cpJU3lLn; arc=none smtp.client-ip=209.85.214.178
+	 Content-Type:Content-Disposition:In-Reply-To; b=rvR/LRs6a7bKUACk54NXQD8/WXJi5BXqghgxZkYHApsBs5UPTFrsGhuab4SqrM7ILvyW9kQErf13Fjm9WPcmbpA2nXn0C7HWmxdfg45iGUqS2RGyb36BB9HHqd4ke6Jkn9CFXuMZAQjm0Jp8gqUdyYHgajQjBi9U5cyQ9F0x4qs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nKEAvyTn; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2321c38a948so27854115ad.2
-        for <linux-pm@vger.kernel.org>; Tue, 20 May 2025 03:30:38 -0700 (PDT)
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-30e7bfef27dso3516969a91.0
+        for <linux-pm@vger.kernel.org>; Tue, 20 May 2025 03:33:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747737038; x=1748341838; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1747737187; x=1748341987; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=H/usBm7/NAt93csSN1UpRXi2JrI8o/Uk8kpvnxNyHM4=;
-        b=cpJU3lLnnV1/1sj30D8Q2Pa+ncT9EIx7PtlY8Qy5w9xbxvUWUb7ZUvELZd+/1Cm+wp
-         bTwHLfxBAtqb2lOSiL3j+eAYeBKhLyPpPnw3p28h0FMsJyRPAGfyBRUjvimCcufMOZSZ
-         tNea/tQF9xelb6fro3Ne1yAOfn10/P0UpbPF6iqIb3wSN4RcyHEoV0c0xkfIgoaDLpxZ
-         IWsbml0vruiTHkrVyefh+xmns8+z1oU6D5Vmrv8H94Dn2r5dRQ9IX8B/0JT/kWgvyDjU
-         jEMGcOmoXz18ZMEloaeIHZSFjEw7VS9XOp1tlu86kwUUJiknx7Z6hpteWLXZoHM1H88a
-         DHIw==
+        bh=a2kiU0hliZX3M+Z93vHD55Gq88AD3oRKFF0hgKdQy4o=;
+        b=nKEAvyTnJCQ9CAKW2m8fgGQ78ddTxEiCCDkeGyAeNf5lq7PgtRcHt+CqEIqgWp6qCJ
+         VnObKfFen6GZeVK4cYDIyYL9BhMfIXBsAkMbP/l5y98UXj1qnC++oT4veeN6o5VmGYc7
+         ERj8J9JLAx2ZmC/FHohAfIcYayNitiHAZkGJKgKvWUB00fK+doJig09HQQJyJSPpyVGm
+         V58qLWhYBtp4cA4BU3RpNhb3VHo/6LZ57qIAXSYz6C2muMrxbJ2WB5acQRQvyFoaRInq
+         gl8z30Ubl6b3EDhGtnurGSr20hamNgudSLC+FaJ5njzdSrIDPpVEIZ1Yg1A1RXZ4xrIj
+         TwiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747737038; x=1748341838;
+        d=1e100.net; s=20230601; t=1747737187; x=1748341987;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=H/usBm7/NAt93csSN1UpRXi2JrI8o/Uk8kpvnxNyHM4=;
-        b=Jv/chCk2ANT9tK9MUPZiyMLBnNhzd4oG9aRWeW72vtmPYrjIZMrXdFSfarsxb1xHR6
-         h3IlTumuekVkIJm3YBbEQPz3pwIGaj0VcXtd7oNWvzx7qd9O4//Mcpfuo8UHT8vzxBnv
-         L3741YCbdoH9PPbkW+J0M0aziwwR89tMWKcbTnQQ7xs7fsT9/b1cELcN0BeNf9v0UOif
-         lac9LUgyNkoUAAm5EiWkYhm83oyhixhz1IlhHXeObl9+ZJsNYFONIKF5A02AuHWPr+Kt
-         Yvg1JCsLnZ7F6/SuuoCjtosK2/xaZTmTSS3uZYVUb2O/i1JJidndYQEBsmNLu/K1FoOL
-         qRnw==
-X-Forwarded-Encrypted: i=1; AJvYcCXCPJ80VrJtK4IfRN8RVRko6gh3mz7OiRNzRrGfFfNNOkMTY1XdWncXPMwwzwD7536XZ91ojK72ww==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0daUDp8H6C+iyiQTgzk/yAo7OmdQuTnXofEF7AJFB5vEjmLNa
-	RD9fjQ4IP+UqreRYA8+LIbWKF0SGr6GU1vc01jvBUQjH0NQYw+Bo+/FbrZSzyYwT32c=
-X-Gm-Gg: ASbGncuIwqvqQAP3CABY7T57YPqqTOndUWnsJw4FUoGDVznn/Q3E51SjH9Fx7lLupcx
-	fA71szlvUa3ycnIOkaZSoV0pyvOkufPQe0qxQEeZ4DBZXTzo8EH0G8+WGJyl0msrmr7pCcvJ5kg
-	3z1sVvr6ipvGa6P4PFsVEHuW3EmyB33FP8JvArtsCzeW83Y6n2zy+Q4267GRaVOatZulWmImHXs
-	PgSOSNOb2jqvJGk3omZTTSNlK1hFBc7GNA3hWgt/DfdmrT/0Pdrdyg1s5q+qQImY4Ed8S+zhh8M
-	anY9u05X6Ssm2USEw9SOxqK+qbntETQ5N+nJ8m51cNlv2p6BtWZW
-X-Google-Smtp-Source: AGHT+IEVnfXH/zqEWQYeU+r8yG7C9+amgQVZq5itWp8zHXHAtKGqz7sdjWAI54+2mZwcCMJktSMncQ==
-X-Received: by 2002:a17:902:d543:b0:231:b7e1:c977 with SMTP id d9443c01a7336-231de3763abmr230013975ad.29.1747737038053;
-        Tue, 20 May 2025 03:30:38 -0700 (PDT)
+        bh=a2kiU0hliZX3M+Z93vHD55Gq88AD3oRKFF0hgKdQy4o=;
+        b=PHXH1rqdj5cUPIMF7UL+ztgtyAWmmdxbdxFGPcBXI7HPWLlQN5gGHSMejxbr0P2LJt
+         xPueQsu12Gf22Q8q7UPw3uZAdTGvtbSwjKPomnYRAalniIU4oF6Fz9kfyqSYMXlRvAHc
+         gJLGS13gLDL+MV5gpKo/yHEdMnm94A8OEp3XIQ+xllpY3TnhjonZHwVSvP62iO2gT+xW
+         xmEmkwqhzrNGH5wJF2Z79S7RMN+0NSxv/joSv5ia5fpavCJNKM6fczRrGg2Rxy9DexLC
+         Hggx9BU+M/JOhMszCh2xYlcOoBDar84/GMN68KQYkxpjOytdrF1GwvwMrCZmpp2Qyq5C
+         SPeg==
+X-Forwarded-Encrypted: i=1; AJvYcCU5knFdeROemAtM82lo/YygivUcYNcsMUjljGivjIJ8TqTZ2M+XAlWjt2cDn912olJhCrvYiPjWpg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzY30VEhe2FFrkmQYY6wzoEClLP6b01qhqvokrSd2o71Iw9t0Wn
+	NmbwwQMu5JzhCwz9XFXNEDFCd1hFikR6UGEo3DuGdhyAuk9Q7SvD7Zh/5LExLokAQ8o=
+X-Gm-Gg: ASbGncuJsnYFoN2XcjYO2iEMQUZ6JT4Re6d45KG5mobAw1rmyiqHgVWZ/FcJEWm7DBh
+	9UJaslOedL5ycx4YYJ+4TgQwXSYmZVZSc/IEQsMc6fH1Y/6v42KLMFk/xJS/TbLH1SYultFuriC
+	FNVcWa3qwttV6h0ahV9okLp6USBc7z0pP9xf8klfdQaiItnuIwcHkv30INhSNxvGBUIIjn3Kw1l
+	C8nIS7Y52j4auRwmd1DUdUUv3nOHx1Adbedm+gqU6PDUw1/K6H8DSwQjSIi5eV2aewBwZHwdUe0
+	2xII5RNoYk2oiszq2GE0iKT+G95HxnNM+kSR26Ho2W1Q/XmxpsHh
+X-Google-Smtp-Source: AGHT+IHm+zce6wVGhmj39um6VsmybhdOdhuKQ+lb+Ma5CrUm2fVpCacBPSaYFhoG1FApBOr61KuRzg==
+X-Received: by 2002:a17:90b:48c6:b0:2ef:19d0:2261 with SMTP id 98e67ed59e1d1-30e8314cff5mr29948004a91.16.1747737187612;
+        Tue, 20 May 2025 03:33:07 -0700 (PDT)
 Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-231d4ebb0d4sm73773575ad.195.2025.05.20.03.30.36
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b26eb081aa2sm7772574a12.48.2025.05.20.03.33.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 May 2025 03:30:37 -0700 (PDT)
-Date: Tue, 20 May 2025 16:00:35 +0530
+        Tue, 20 May 2025 03:33:07 -0700 (PDT)
+Date: Tue, 20 May 2025 16:03:04 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
 To: Jon Hunter <jonathanh@nvidia.com>
-Cc: webgeek1234@gmail.com, "Rafael J. Wysocki" <rafael@kernel.org>,
+Cc: Aaron Kling <webgeek1234@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
 	Thierry Reding <thierry.reding@gmail.com>, linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
 Subject: Re: [PATCH v4 2/2] cpufreq: tegra124: Allow building as a module
-Message-ID: <20250520103035.udl25zv2uriljrby@vireshk-i7>
+Message-ID: <20250520103304.jfevon546rft2ncr@vireshk-i7>
 References: <20250508-tegra124-cpufreq-v4-0-d142bcbd0234@gmail.com>
  <20250508-tegra124-cpufreq-v4-2-d142bcbd0234@gmail.com>
- <da080e61-4e54-4334-a239-1619bf8fea0c@nvidia.com>
- <20250519102618.4thbahapz3lfmfo5@vireshk-i7>
- <972984d6-a9b6-4847-be76-fca50782682a@nvidia.com>
+ <cd801698-d7cf-4e9e-aa01-5525f8687ab0@nvidia.com>
+ <CALHNRZ_9tMi5iihyTsEuU4T72=oTQM6-rVhqozzLf9DiB_TpcA@mail.gmail.com>
+ <CALHNRZ-pu9HUzVyR3-U=XZKFFZPnn5-DNLWPqPx6CSoW0dHMrA@mail.gmail.com>
+ <bc0a4c75-df5b-4b4d-9c9e-a2c99d3f4f6e@nvidia.com>
+ <20250519103749.falgd64ikkwkfpg7@vireshk-i7>
+ <9a15ea89-5e33-48e7-8c75-b041f6832bc1@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -92,28 +96,36 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <972984d6-a9b6-4847-be76-fca50782682a@nvidia.com>
+In-Reply-To: <9a15ea89-5e33-48e7-8c75-b041f6832bc1@nvidia.com>
 
-On 20-05-25, 11:03, Jon Hunter wrote:
-> On 19/05/2025 11:26, Viresh Kumar wrote:
-> > Not sure if we can do that. The clks belong to the CPU device, while
-> > the devm_* functions are using &pdev->dev. The CPU device never goes
-> > away and so the resources won't get freed if we use devm for the CPU
-> > device.
+On 20-05-25, 10:57, Jon Hunter wrote:
+> 
+> On 19/05/2025 11:37, Viresh Kumar wrote:
+> > On 15-05-25, 07:41, Jon Hunter wrote:
+> > > Yes and that is understood. I see a few drivers calling ...
+> > > 
+> > >   platform_device_register_simple("cpufreq-dt", -1, NULL, 0);
+> > > 
+> > > One option, and I don't know if this would be acceptable, would be to add a
+> > > new wrapper function in the cpufreq-dt driver for the above that other
+> > > drivers could call and that would create the dependency you need.
+> > 
+> > Doing that won't be a problem, but I doubt if that is a better than
+> > adding a soft dependency here. I personally felt that the soft
+> > dependency may be the right way here. The cpufreq-dt file presents a
+> > driver, a device can be added from any file and that doesn't require
+> > the driver file to be inserted first. If the platform wants to
+> > simplify and create a dependency, a soft dependency looks okay.
+> 
+> The only downside of a soft dependency is that this driver could load but if
+> the cpufreq-dt driver is missing for whatever reason, it might not be
+> obvious. Ideally it is better if this driver does not load at all if the
+> cpufreq-dt is not present.
 
-That would have been the case, if we can actually do a devm_clk_get()
-in the first place, but...
+Fair enough.
 
-> I don't follow. If they are allocated in the probe using the pdev->dev
-> device by using devm_clk_get() they should get freed when the platform
-> device is removed.
-
-... devm_clk_get(&pdev->dev, ...) won't work here IIUC. The clks
-belong to the CPU device and not pdev->dev. That's why we are doing
-of_clk_get_by_name() over the CPU device's OF node here.
-
-Maybe I am wrong, but I don't see how devm_* can be used here for
-clks.
+Aaron, you can introduce a helper like cpufreq_dt_pdev_register() to
+solve the linking here.
 
 -- 
 viresh
