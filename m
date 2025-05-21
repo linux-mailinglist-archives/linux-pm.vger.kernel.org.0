@@ -1,216 +1,387 @@
-Return-Path: <linux-pm+bounces-27445-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27446-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CED97ABEEA2
-	for <lists+linux-pm@lfdr.de>; Wed, 21 May 2025 10:54:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C771ABF1E4
+	for <lists+linux-pm@lfdr.de>; Wed, 21 May 2025 12:44:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA0501BA12DD
-	for <lists+linux-pm@lfdr.de>; Wed, 21 May 2025 08:55:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A034B3A9B3B
+	for <lists+linux-pm@lfdr.de>; Wed, 21 May 2025 10:44:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F911237713;
-	Wed, 21 May 2025 08:54:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE6B625F98F;
+	Wed, 21 May 2025 10:44:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K1O65h9i"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="nu5ssv0h"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2064.outbound.protection.outlook.com [40.107.93.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77DBC33F3;
-	Wed, 21 May 2025 08:54:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747817685; cv=none; b=pYArTmJZcZcm7EZ0iYrqASQM/XTgDsEYwUADNvp08NXtkiqRSVZ1R3/jvX06R2HQ0S7U/n6yacYf//k+MZtZtyidJ3rCsyO7CrccUJXP+8eDF2iURcb3daFV+s0BUfzZck368XyJKcKE0Zj6Ms3NT8JSjYL9HbD40SELT0FX7Qw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747817685; c=relaxed/simple;
-	bh=RRXpTaxMfCR/XYxMZIMKn6YvZ8uobJPW7HJVtW4gMVg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kPhNpe7nKGFLKOMCBdVAlJXjB9a38GGI6zBuTbxvynmIgi941CDYK1l1RPzwrmFoJ/2JHpmqce/pT71+DP/iJOTnuRBaHet0U2I4/Ueh+2WG+9ldBnw+4D6+nT5/tfAgS+4abLe6aPFZ7m9hbfxRTk7Si/pN1Sd7abQjBwOGuNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K1O65h9i; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747817683; x=1779353683;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=RRXpTaxMfCR/XYxMZIMKn6YvZ8uobJPW7HJVtW4gMVg=;
-  b=K1O65h9i28Q/jkEKpKHqBHLGvcUC0mLUtOqc/f0R1XZrDgzg6WELfMDG
-   tnUlGhT+uz4KVKWak9/b+Ea6uqW+Q87jzQKZUUqtQWG9ZgENd9YSLHn8M
-   HOnkjU92DX9t3Dw490Mfga9VImnMrLanN433b3UE1exrdwQE16iZi5MZN
-   eZuE1eHo+UB+mjkXkwECRyzlhfLxJm0OjVwOKS9U2fAZ5qwbM/ciFPe6i
-   Yvcpmq+4GxPBc61JZo0Tdj0m4WIc/SE3slO/4Phb1zjQdfosssHPxE0es
-   TNOaSo+nFzZh8hGXD/Jw2Uy4nybFHTKrdxOj8fSoYYEAmtAK0q24uMugy
-   w==;
-X-CSE-ConnectionGUID: IOo+bhwZTnSB1cGmsz2ljw==
-X-CSE-MsgGUID: v6/IZxz2TxaQs4zxl3d6kg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11439"; a="67340280"
-X-IronPort-AV: E=Sophos;i="6.15,303,1739865600"; 
-   d="scan'208";a="67340280"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2025 01:54:42 -0700
-X-CSE-ConnectionGUID: p5kv5wEhQXqYHUeaXAVrAw==
-X-CSE-MsgGUID: QK+tNzJXQ4GeEHkr036Mpg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,303,1739865600"; 
-   d="scan'208";a="143964583"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2025 01:54:39 -0700
-Date: Wed, 21 May 2025 11:54:36 +0300
-From: Raag Jadav <raag.jadav@intel.com>
-To: Mario Limonciello <superm1@kernel.org>
-Cc: Denis Benato <benato.denis96@gmail.com>, rafael@kernel.org,
-	mahesh@linux.ibm.com, oohall@gmail.com, bhelgaas@google.com,
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, ilpo.jarvinen@linux.intel.com,
-	lukas@wunner.de, aravind.iddamsetty@linux.intel.com,
-	"amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-	Alex Deucher <alexander.deucher@amd.com>
-Subject: Re: [PATCH v4] PCI: Prevent power state transition of erroneous
- device
-Message-ID: <aC2UzG-eycjqYQep@black.fi.intel.com>
-References: <aCsK743YSuahPtnH@black.fi.intel.com>
- <85ed0b91-c84f-4d24-8e19-a8cb3ba02b14@gmail.com>
- <aCxP6vQ8Ep9LftPv@black.fi.intel.com>
- <a8c83435-4c91-495c-950c-4d12b955c54c@kernel.org>
- <aCyj9nbnIRet93O-@black.fi.intel.com>
- <552d75b2-2736-419f-887e-ce2692616578@kernel.org>
- <ee1117cf-6367-4e9a-aa85-ccfc6c63125d@gmail.com>
- <6f23d82c-10cc-4d70-9dce-41978b05ec9a@kernel.org>
- <aCzNL9uXGbBSdF2S@black.fi.intel.com>
- <fea86161-2c47-4b0f-ac07-b3f9b0f10a03@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F40CD25F972;
+	Wed, 21 May 2025 10:44:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.64
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747824258; cv=fail; b=My9WrTcUVaCEuwwfiZ4Q3wIhDqDuQdh2zBzTyZunuwigSa4vtPysyif5OVQ5LLN2okhkw9en4ysuCLU1dDiVUwoZv1AbyWgctR7DtXEVm6yC46sY+gabY6X4KSs0M9oxobSGjz2kbKMF1mquoUxUr1S7iiDlWIBcZ8waeNosPsE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747824258; c=relaxed/simple;
+	bh=jd8Mj3fgg6M9ZM6KJyMVss7Yn1ENf8vI0BA5/hGfh18=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=vFaybrV2VWZuatUyc3ZA+8zw0k2GybkNyzumfWX4z/ZH5QDoHhfq0in0V4dU4180xt7iOM75Z3zjeSSsLTzuuBCB+IgP1DZxiShc4L0rTioDTulkCL2LXLzyjW4wee2e4cp9LuHWwhwxnV4Ftq2HtOieenpZBEM8ASEipp/FZMQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=nu5ssv0h; arc=fail smtp.client-ip=40.107.93.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Z6Igty8XFdvnBojM87mwBsS7udVbwl4VLUUqsJIKfYSF3VQELTB3PIw/yg55PoRBMJ3JiE6IolG29I8TG3g9LVbAdMJejyexBbDVvVtOOGdN5eTbqiHu5getHVsSI+cgHQLBFdX4RnFH1w4eIq1pk8ooe1JhK31aaiYcYpoyoRv84Pl6KAfg1MVIn0ivgOyNl1x/5XBT+tKXBQEpgTLNzePApnefFIeFE52O7D1Zx26L7zSedR+cTKArS48fRI52U1LOiiu7ZZqEdPW+l3WRR4IIOgcYsdL8unjmwm8x4akNwiC5O9P7EExglaoxj4UCT3hIhObVeu36UUkL1thJrQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=j73jbV88UiiQk9nK9TBNoXJ3ZeXMNp3bKR/PWS5J1i0=;
+ b=T3QELaDSDkVNh/zDR+U0FVHUycDzwqqkBNABNJyoNwjcjbxCepW+/Rdv3YlyMkCRGktw+NT38ZaoGBF2ad7lqw9roWmuO/NqTjthQHBCUJRk75eB9QYAA29gDEBerwH1wUZ2clsXFztpmhl4E8gBOpN6AZk2yRUtxjKXxmy3mhquA8ZIyMEq74J4aSVVAKbu4yLvy2IEJhUSNTjH1KVWl6Hut6VXng9dBf8Bqj0nV13DB6FLrCdms1ZSgMQNUVTFgYl2s04lksWMEVMoBCxxWukAcPpRFajP4c/NzBnMCX/nQrcRQeV2oVUJB4Gcql/HToS8dmMyhyiAcmsAzcbYZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=huawei.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=j73jbV88UiiQk9nK9TBNoXJ3ZeXMNp3bKR/PWS5J1i0=;
+ b=nu5ssv0hqx2zt27W2Xazx0zOSWCKK4AAzGmGoDmbsVvzcCTZm6BmIQ6sOd3Iv/jHRJ8xw4TuYw7o9iGFALiKkq4ag9h6RKF20oqHdG/DZ8Wp1D3NGKy82PodHm2KxpEA7Mtgu/hlf8s0Q7OPPfHxM/UABguWQJYbg1EnRuL7bQDk+Dp5KQDCnxTPrTfDPSwQaZqJoKrF0zIfKJcosKrM/XpUEKR2Xg1tPIAqFSQYakJ8g7YNdXT6GjLWbjLq8v0G2vNjuYnF4/vw9u2QKocoBEuKmAe5KeHq+6DyEBYuXg/9bd6FdChS8Lu/3/rJOFLdszNcCin+4qxtPbwuqtPDnA==
+Received: from DS7PR03CA0333.namprd03.prod.outlook.com (2603:10b6:8:55::15) by
+ CYYPR12MB8990.namprd12.prod.outlook.com (2603:10b6:930:ba::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8746.30; Wed, 21 May 2025 10:44:10 +0000
+Received: from CH3PEPF00000011.namprd21.prod.outlook.com
+ (2603:10b6:8:55:cafe::f8) by DS7PR03CA0333.outlook.office365.com
+ (2603:10b6:8:55::15) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8746.29 via Frontend Transport; Wed,
+ 21 May 2025 10:44:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CH3PEPF00000011.mail.protection.outlook.com (10.167.244.116) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8792.4 via Frontend Transport; Wed, 21 May 2025 10:44:08 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 21 May
+ 2025 03:43:52 -0700
+Received: from [10.41.21.119] (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 21 May
+ 2025 03:43:47 -0700
+Message-ID: <98c87824-2c77-4ae3-b466-badd8e8187ad@nvidia.com>
+Date: Wed, 21 May 2025 16:13:44 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fea86161-2c47-4b0f-ac07-b3f9b0f10a03@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpufreq: CPPC: Support for autonomous selection in
+ cppc_cpufreq
+To: Lifeng Zheng <zhenglifeng1@huawei.com>, <rafael@kernel.org>,
+	<viresh.kumar@linaro.org>, <pierre.gondois@arm.com>
+CC: <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linuxarm@huawei.com>, <mario.limonciello@amd.com>,
+	<yumpusamongus@gmail.com>, <srinivas.pandruvada@linux.intel.com>,
+	<jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
+	<lihuisong@huawei.com>, <cenxinghai@h-partners.com>, <yubowen8@huawei.com>,
+	<hepeng68@huawei.com>, linux-tegra <linux-tegra@vger.kernel.org>
+References: <20250507031941.2812701-1-zhenglifeng1@huawei.com>
+Content-Language: en-US
+From: Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <20250507031941.2812701-1-zhenglifeng1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PEPF00000011:EE_|CYYPR12MB8990:EE_
+X-MS-Office365-Filtering-Correlation-Id: ab30a8b9-5814-4baa-ec05-08dd98546a6a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014|7416014|7053199007|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?em5lWCttMEFQbWVRMHRTcE1xdGlqZWw4VnV6MHhGeS9HbnZEKzFDYXFpMVY3?=
+ =?utf-8?B?MlFBZzBKOFZ0T242c2g4UXR6MUNnaXpTUUhFQk5xMnZUOUM4aGk0cE5DWmdw?=
+ =?utf-8?B?RUlWeHJVMjFtNFlOTDk4b1cydzhGY0dFZVZnb1lEUTZsS3hFc1k0bXZFUzIr?=
+ =?utf-8?B?Tk1udFJDMDlvNnZsU1VYTnZvQWVVSnRtbFRrU0RJQmZxY3QraVllNzFhZk45?=
+ =?utf-8?B?TEhoRG9JdUtacVc2aGZLWVk4VFFKQmFEb3ZvOSthakE3MklOb2I2YzJOWGFt?=
+ =?utf-8?B?UGRocHh1R09sSFRTZDdtWkRva0NwS25vTkt2L0syMkJEN3BXTk1McEk0NlFL?=
+ =?utf-8?B?Nkh3cVBHVERPSkRPalUydkNXb1FwMmJkYTNpU0NLYWI3N3F4cG1Gb0Q2VzZj?=
+ =?utf-8?B?VzZLZEpzREFEZWtNUzRmaDgyOG9WMHlLSjJrQTVpSnBMMGVHWDJ5TjMrRVYy?=
+ =?utf-8?B?MldmblprbGdiNnpTQjlOTzNkank0Z2loM1hYN0lJL0Y5eXBNN0lmdE9NbUpj?=
+ =?utf-8?B?bXdlV0VKSnNTK25MbkRJaU5oRWlVa2Z5RVpaRGV0bVRBSWk1a3JCdU1TVzJK?=
+ =?utf-8?B?WWlVVG0ycXVYM1FBN3RQWmlBYTV5clVWVzRxeEw5cjZJaXA5N2ZMT01jUXpj?=
+ =?utf-8?B?ZGk4UW1zeGJkenRBTUZUSDIwQURBVEQvUHN2eDVMcnJXOE15b2FLaFlpbWRz?=
+ =?utf-8?B?OTE5M1EvblIvV3Y3SURvZ2g0SGI4WTJkbHVKRmlLbzJKTE04bmNhYllJeGZD?=
+ =?utf-8?B?Y0lYYTJQOVp5RFF2bTNOUUVvY3NsVVJmY1Y4Q0JHMmpQV2ZwbTlmakxXdEYy?=
+ =?utf-8?B?b3Q0R1lYc1B5NVB1eE52WlJPdDZPVzFmR0EvUnowRFpxUFZWS2FKUERIblMy?=
+ =?utf-8?B?MDJweVlDV2dlaUVQN08vdm9SSVV4Z25xZzBrZGkxbTJxNG1TQllwUC9pUUsr?=
+ =?utf-8?B?Q3Rjd3k5WjV0TExzdWVZYmw3Yk1kS21jeCt1OFI3NFcvTTVubitoQ1pXamtX?=
+ =?utf-8?B?VXVWb0xlSmljOUUxOS9kZ1Jzb2pkTmVPR2h3YnFWK3FyWmhJVXdIdEc4dU1x?=
+ =?utf-8?B?NzVQOU9GRFZ1eW41WUVUVUo1L0gxZnFmVm9PUWJvWFA5cW9NNjJJVDdPL1d1?=
+ =?utf-8?B?SC9DK3V6L3g4Z0t6Y0U4ZCtPVld4YitQWmdUQmdubkR5Tm13ODNGZVF1UkVm?=
+ =?utf-8?B?WUVONWwvTDMwbHI5V3NpM01VUXdwcmU1d2lxU0ViVU1UcERiVkt5SWRTZTA3?=
+ =?utf-8?B?ZDR5eFl6VEY1N0N1aVlZN1lyVUt5aldaelo2aVppKzNiMkVoMlBpSkY4MEds?=
+ =?utf-8?B?amNjS3Z0N0wzNHE4RmlrcUQ0aGdzNVV5eTN6NWJmRlVSSlBnU2YvbTdwdm1T?=
+ =?utf-8?B?T3QwWitETklFcHZhN1hEa216TVBaeUZRRzhZdGh2MjEwc0NZT3BoZ2tRWmc3?=
+ =?utf-8?B?WVo1VDU3eVg4UnN3TWFxTVJNRkNWbXZPSGVVUzh5T1VuUXJyS0RnM0Z0aHND?=
+ =?utf-8?B?N2ZrT0g1QlNtdW1tOSs0Q2NSZEp5WGdoenIwVjNRK1d2Q0NodjFIdExjRzR5?=
+ =?utf-8?B?aUFzVHdsRmppSUNmZVpCVkdvc0tuUkszSTF3MHhXb0pNSTdHY01PZGw3Y2U1?=
+ =?utf-8?B?aHRMUVVtOEM4R2ZnTVlKUk9BV011c25Cd3V2d1pidG9aVlNvdjl5SXZySVpu?=
+ =?utf-8?B?TFZ2NUNLeWNQVDl0TFZicnZvbjFuZ3M3bm9NdzYxZStZQ0t2K3lmVFNrcC9Z?=
+ =?utf-8?B?emV6L2tKanJ0TkVUdmtiVC9CdnRESjQ4eXJMQzVqQkxoTkkybE9vdEpLeDBt?=
+ =?utf-8?B?RVUwMWN3Y3NOdEc1UVFQaXdRUXV3a3ptWi9UV1dXRUtLRU4xZzJiZjZpNE1q?=
+ =?utf-8?B?QXZvc2dwQ2lwUm1GNVFQbmd3RmhwcDNDeU8vQnZOSTlmVDljQkpqelUyd2Vo?=
+ =?utf-8?B?VmlpWk1jRUtFdCsxY1A5WjJ2Wmp4TWRWRElxL0txMXZEUlc0R1Y5emp4bHRt?=
+ =?utf-8?B?RDVCdldXbWlMM0lDdWsxb0JnRzNVME9sRjA2elJtbkxCdG5CSDRYZ0g0enJh?=
+ =?utf-8?B?enR2MVl5RStESHdkTkNKdy9HeFY3ZFZwS3pNdz09?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014)(7416014)(7053199007)(13003099007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 May 2025 10:44:08.4957
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ab30a8b9-5814-4baa-ec05-08dd98546a6a
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH3PEPF00000011.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8990
 
-On Tue, May 20, 2025 at 01:56:28PM -0500, Mario Limonciello wrote:
-> On 5/20/2025 1:42 PM, Raag Jadav wrote:
-> > On Tue, May 20, 2025 at 12:39:12PM -0500, Mario Limonciello wrote:
-> > > On 5/20/2025 12:22 PM, Denis Benato wrote:
-> > > > On 5/20/25 17:49, Mario Limonciello wrote:
-> > > > > On 5/20/2025 10:47 AM, Raag Jadav wrote:
-> > > > > > On Tue, May 20, 2025 at 10:23:57AM -0500, Mario Limonciello wrote:
-> > > > > > > On 5/20/2025 4:48 AM, Raag Jadav wrote:
-> > > > > > > > On Mon, May 19, 2025 at 11:42:31PM +0200, Denis Benato wrote:
-> > > > > > > > > On 5/19/25 12:41, Raag Jadav wrote:
-> > > > > > > > > > On Mon, May 19, 2025 at 03:58:08PM +0530, Raag Jadav wrote:
-> > > > > > > > > > > If error status is set on an AER capable device, most likely either the
-> > > > > > > > > > > device recovery is in progress or has already failed. Neither of the
-> > > > > > > > > > > cases are well suited for power state transition of the device, since
-> > > > > > > > > > > this can lead to unpredictable consequences like resume failure, or in
-> > > > > > > > > > > worst case the device is lost because of it. Leave the device in its
-> > > > > > > > > > > existing power state to avoid such issues.
-> > > > > > > > > > > 
-> > > > > > > > > > > Signed-off-by: Raag Jadav <raag.jadav@intel.com>
-> > > > > > > > > > > ---
-> > > > > > > > > > > 
-> > > > > > > > > > > v2: Synchronize AER handling with PCI PM (Rafael)
-> > > > > > > > > > > v3: Move pci_aer_in_progress() to pci_set_low_power_state() (Rafael)
-> > > > > > > > > > >         Elaborate "why" (Bjorn)
-> > > > > > > > > > > v4: Rely on error status instead of device status
-> > > > > > > > > > >         Condense comment (Lukas)
-> > > > > > > > > > Since pci_aer_in_progress() is changed I've not included Rafael's tag with
-> > > > > > > > > > my understanding of this needing a revisit. If this was a mistake, please
-> > > > > > > > > > let me know.
-> > > > > > > > > > 
-> > > > > > > > > > Denis, Mario, does this fix your issue?
-> > > > > > > > > > 
-> > > > > > > > > Hello,
-> > > > > > > > > 
-> > > > > > > > > Unfortunately no, I have prepared a dmesg but had to remove the bootup process because it was too long of a few kb: https://pastebin.com/1uBEA1FL
-> > > > > > > > 
-> > > > > > > > Thanks for the test. It seems there's no hotplug event this time around
-> > > > > > > > and endpoint device is still intact without any PCI related failure.
-> > > > > > > > 
-> > > > > > > > Also,
-> > > > > > > > 
-> > > > > > > > amdgpu 0000:09:00.0: PCI PM: Suspend power state: D3hot
-> > > > > > > > 
-> > > > > > > > Which means whatever you're facing is either not related to this patch,
-> > > > > > > > or at best exposed some nasty side-effect that's not handled correctly
-> > > > > > > > by the driver.
-> > > > > > > > 
-> > > > > > > > I'd say amdgpu folks would be of better help for your case.
-> > > > > > > > 
-> > > > > > > > Raag
-> > > > > > > 
-> > > > > > > So according to the logs Denis shared with v4
-> > > > > > > (https://pastebin.com/1uBEA1FL) the GPU should have been going to BOCO. This
-> > > > > > > stands for "Bus off Chip Off"
-> > > > > > > 
-> > > > > > > amdgpu 0000:09:00.0: amdgpu: Using BOCO for runtime pm
-> > > > > > > 
-> > > > > > > If it's going to D3hot - that's not going to be BOCO, it should be going to
-> > > > > > > D3cold.
-> > > > > > 
-> > > > > > Yes, because upstream port is in D0 for some reason (might be this patch
-> > > > > > but not sure) and so will be the root port.
-> > > > > > 
-> > > > > > pcieport 0000:07:00.0: PCI PM: Suspend power state: D0
-> > > > > > pcieport 0000:07:00.0: PCI PM: Skipped
-> > > > > > 
-> > > > > > and my best guess is the driver is not able to cope with the lack of D3cold.
-> > > > > 
-> > > > > Yes; if the driver is configured to expect BOCO (D3cold) if it doesn't get it, chaos ensues.
-> > > > > 
-> > > > > I guess let's double check the behavior with CONFIG_PCI_DEBUG to verify this patch is what is changing that upstream port behavior.
-> > > > 
-> > > > 
-> > > > This is the very same exact kernel, minus the patch in question:  https://pastebin.com/rwMYgG7C
-> > > > 
-> > > > 
-> > > > Both previous kernel and this one have CONFIG_PCI_DEBUG=y.
-> > > > 
-> > > > Removed the initial bootup sequence to be able to use pastebin.
-> > > 
-> > > Thanks - this confirms that the problem is the root port not going to D3.
-> > > This new log shows:
-> > > 
-> > > pcieport 0000:07:00.0: PCI PM: Suspend power state: D3hot
-> > > 
-> > > So I feel we should fixate on solving that.
-> > 
-> > Which means what you're looking for is error flag being set somewhere in
-> > the hierarchy that is preventing suspend.
+
+
+On 07/05/25 08:49, Lifeng Zheng wrote:
+> External email: Use caution opening links or attachments
 > 
-> Is the issue perhaps that this is now gated on both correctable and
-> uncorrectable errors?
 > 
-> Perhaps should *correctable errors* be emitted with a warning and the
-> *uncorrectable errors* be fatal?
-
-That'd be more or less inline with hiding the issue, and it can also race
-with err_handler callback if driver has registered it.
-
-> > But regardless of it, my understanding is that root port suspend depends
-> > on a lot of factors (now errors flags being one of them with this patch)
-> > and endpoint driver can't possibly enforce or guarantee it - the best it
-> > can do is try.
-> > 
-> > What's probably needed is D3cold failure handling on driver side, but I'm
-> > no PCI PM expert and perhaps Rafael can comment on it.
-> > 
-> > Raag
+> Add sysfs interfaces for CPPC autonomous selection in the cppc_cpufreq
+> driver.
 > 
-> From the driver perspective it does have expectations that the parts outside
-> the driver did the right thing.  If the driver was expecting the root port
-> to be powered down at suspend and it wasn't there are hardware components
-> that didn't power cycle and that's what we're seeing here.
+> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
 
-Which means the expectation set by the driver is the opposite of the
-purpose of this patch, and it's going to fail if any kind of error is
-detected under root port during suspend.
+Looks good to me.
 
-Raag
+Reviewed-by: Sumit Gupta <sumitg@nvidia.com>
+
+> ---
+> Hi Rafael,
 > 
+> This patch is the 8th patch in [1]. After the discussion in [2], Sumit
+> is OK with adding sysfs entries under cpufreq sysfs node, so I resend
+> this patch. He will later send his updated patch after.
+> 
+> Any comments appreciated!
+> 
+> Lifeng
+> 
+> [1] https://lore.kernel.org/all/20250206131428.3261578-1-zhenglifeng1@huawei.com/
+> [2] https://lore.kernel.org/all/20250211103737.447704-1-sumitg@nvidia.com/
+> 
+>   .../ABI/testing/sysfs-devices-system-cpu      |  54 +++++++++
+>   drivers/cpufreq/cppc_cpufreq.c                | 109 ++++++++++++++++++
+>   2 files changed, 163 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+> index 206079d3bd5b..37065e1b8ebc 100644
+> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
+> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+> @@ -268,6 +268,60 @@ Description:       Discover CPUs in the same CPU frequency coordination domain
+>                  This file is only present if the acpi-cpufreq or the cppc-cpufreq
+>                  drivers are in use.
+> 
+> +What:          /sys/devices/system/cpu/cpuX/cpufreq/auto_select
+> +Date:          May 2025
+> +Contact:       linux-pm@vger.kernel.org
+> +Description:   Autonomous selection enable
+> +
+> +               Read/write interface to control autonomous selection enable
+> +                       Read returns autonomous selection status:
+> +                               0: autonomous selection is disabled
+> +                               1: autonomous selection is enabled
+> +
+> +                       Write 'y' or '1' or 'on' to enable autonomous selection.
+> +                       Write 'n' or '0' or 'off' to disable autonomous selection.
+> +
+> +               This file is only present if the cppc-cpufreq driver is in use.
+> +
+> +What:          /sys/devices/system/cpu/cpuX/cpufreq/auto_act_window
+> +Date:          May 2025
+> +Contact:       linux-pm@vger.kernel.org
+> +Description:   Autonomous activity window
+> +
+> +               This file indicates a moving utilization sensitivity window to
+> +               the platform's autonomous selection policy.
+> +
+> +               Read/write an integer represents autonomous activity window (in
+> +               microseconds) from/to this file. The max value to write is
+> +               1270000000 but the max significand is 127. This means that if 128
+> +               is written to this file, 127 will be stored. If the value is
+> +               greater than 130, only the first two digits will be saved as
+> +               significand.
+> +
+> +               Writing a zero value to this file enable the platform to
+> +               determine an appropriate Activity Window depending on the workload.
+> +
+> +               Writing to this file only has meaning when Autonomous Selection is
+> +               enabled.
+> +
+> +               This file is only present if the cppc-cpufreq driver is in use.
+> +
+> +What:          /sys/devices/system/cpu/cpuX/cpufreq/energy_performance_preference_val
+> +Date:          May 2025
+> +Contact:       linux-pm@vger.kernel.org
+> +Description:   Energy performance preference
+> +
+> +               Read/write an 8-bit integer from/to this file. This file
+> +               represents a range of values from 0 (performance preference) to
+> +               0xFF (energy efficiency preference) that influences the rate of
+> +               performance increase/decrease and the result of the hardware's
+> +               energy efficiency and performance optimization policies.
+> +
+> +               Writing to this file only has meaning when Autonomous Selection is
+> +               enabled.
+> +
+> +               This file is only present if the cppc-cpufreq driver is in use.
+> +
+> 
+>   What:          /sys/devices/system/cpu/cpu*/cache/index3/cache_disable_{0,1}
+>   Date:          August 2008
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index b3d74f9adcf0..3c3d00cec298 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -808,10 +808,119 @@ static ssize_t show_freqdomain_cpus(struct cpufreq_policy *policy, char *buf)
+> 
+>          return cpufreq_show_cpus(cpu_data->shared_cpu_map, buf);
+>   }
+> +
+> +static ssize_t show_auto_select(struct cpufreq_policy *policy, char *buf)
+> +{
+> +       bool val;
+> +       int ret;
+> +
+> +       ret = cppc_get_auto_sel(policy->cpu, &val);
+> +
+> +       /* show "<unsupported>" when this register is not supported by cpc */
+> +       if (ret == -EOPNOTSUPP)
+> +               return sysfs_emit(buf, "<unsupported>\n");
+> +
+> +       if (ret)
+> +               return ret;
+> +
+> +       return sysfs_emit(buf, "%d\n", val);
+> +}
+> +
+> +static ssize_t store_auto_select(struct cpufreq_policy *policy,
+> +                                const char *buf, size_t count)
+> +{
+> +       bool val;
+> +       int ret;
+> +
+> +       ret = kstrtobool(buf, &val);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = cppc_set_auto_sel(policy->cpu, val);
+> +       if (ret)
+> +               return ret;
+> +
+> +       return count;
+> +}
+> +
+> +static ssize_t show_auto_act_window(struct cpufreq_policy *policy, char *buf)
+> +{
+> +       u64 val;
+> +       int ret;
+> +
+> +       ret = cppc_get_auto_act_window(policy->cpu, &val);
+> +
+> +       /* show "<unsupported>" when this register is not supported by cpc */
+> +       if (ret == -EOPNOTSUPP)
+> +               return sysfs_emit(buf, "<unsupported>\n");
+> +
+> +       if (ret)
+> +               return ret;
+> +
+> +       return sysfs_emit(buf, "%llu\n", val);
+> +}
+> +
+> +static ssize_t store_auto_act_window(struct cpufreq_policy *policy,
+> +                                    const char *buf, size_t count)
+> +{
+> +       u64 usec;
+> +       int ret;
+> +
+> +       ret = kstrtou64(buf, 0, &usec);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = cppc_set_auto_act_window(policy->cpu, usec);
+> +       if (ret)
+> +               return ret;
+> +
+> +       return count;
+> +}
+> +
+> +static ssize_t show_energy_performance_preference_val(struct cpufreq_policy *policy, char *buf)
+> +{
+> +       u64 val;
+> +       int ret;
+> +
+> +       ret = cppc_get_epp_perf(policy->cpu, &val);
+> +
+> +       /* show "<unsupported>" when this register is not supported by cpc */
+> +       if (ret == -EOPNOTSUPP)
+> +               return sysfs_emit(buf, "<unsupported>\n");
+> +
+> +       if (ret)
+> +               return ret;
+> +
+> +       return sysfs_emit(buf, "%llu\n", val);
+> +}
+> +
+> +static ssize_t store_energy_performance_preference_val(struct cpufreq_policy *policy,
+> +                                                      const char *buf, size_t count)
+> +{
+> +       u64 val;
+> +       int ret;
+> +
+> +       ret = kstrtou64(buf, 0, &val);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = cppc_set_epp(policy->cpu, val);
+> +       if (ret)
+> +               return ret;
+> +
+> +       return count;
+> +}
+> +
+>   cpufreq_freq_attr_ro(freqdomain_cpus);
+> +cpufreq_freq_attr_rw(auto_select);
+> +cpufreq_freq_attr_rw(auto_act_window);
+> +cpufreq_freq_attr_rw(energy_performance_preference_val);
+> 
+>   static struct freq_attr *cppc_cpufreq_attr[] = {
+>          &freqdomain_cpus,
+> +       &auto_select,
+> +       &auto_act_window,
+> +       &energy_performance_preference_val,
+>          NULL,
+>   };
+> 
+> --
+> 2.33.0
 > 
 
