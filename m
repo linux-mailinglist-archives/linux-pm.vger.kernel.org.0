@@ -1,206 +1,145 @@
-Return-Path: <linux-pm+bounces-27457-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27458-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEC48ABF5AB
-	for <lists+linux-pm@lfdr.de>; Wed, 21 May 2025 15:12:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2094ABF616
+	for <lists+linux-pm@lfdr.de>; Wed, 21 May 2025 15:29:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6273E178EA1
-	for <lists+linux-pm@lfdr.de>; Wed, 21 May 2025 13:12:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A50344A601A
+	for <lists+linux-pm@lfdr.de>; Wed, 21 May 2025 13:29:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1948A2676C4;
-	Wed, 21 May 2025 13:11:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D0F52798ED;
+	Wed, 21 May 2025 13:29:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TBM60d25"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="nFeEbAn8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A11263F4E;
-	Wed, 21 May 2025 13:11:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B79D26FA5B
+	for <linux-pm@vger.kernel.org>; Wed, 21 May 2025 13:29:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747833118; cv=none; b=CsYHlJUYcL2on/2/hraSHEiOoTIX8lg6enzBun9FUSHiq2C7bgQDKfYNmHPEWUOOjzNYNDC6aFBzM9goZpsolECPHP/gLLrD0u6zKjN80YGH88lK3C230fCQRWyLiRyq0nTHKD646+wgr8kxckpPXU6Sihcyj9bPZ9H8fso+Ywo=
+	t=1747834185; cv=none; b=nsORFosVPDUBAV80WISptKI2MGY585D5OOdqb6xHJfBerKXaSF+jpgKKBI3+z7R26WGZw9c9PIJbe8Z7cqHxbdtOIuGMFGX4gBsbSsrOVlMWW4IQdYshvqRM9ltUDAylSbL0fH0OTFrGk73/cT0J/WIcCEddbPO0ESNbKm13vdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747833118; c=relaxed/simple;
-	bh=za+MdSYK+CoBXvIWPz3YA6uAitLEqcQq9VREikg77H8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NdaOMaDvgIIOppusa/TL422m76RvwEYxVIYfVvvVssDR+0Kt83RBeKslpuIcHHYkalt6SEdGYThxT9HxSCgoB4+XJyjTYTZvAZaMwYT6Lg6KGEpSA2Fn66YYvwKvY6onQX9DkMNV3AuL+nKR2wJzuI+qNkY/IpRbxai/zDzAwHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TBM60d25; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-739b3fe7ce8so5653368b3a.0;
-        Wed, 21 May 2025 06:11:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747833115; x=1748437915; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=O2qQPefvvV4ihaAAFaNPu9WwGYNsphvozJRkAhoefLE=;
-        b=TBM60d25l5nm9YZS0Qkz5QoPWZJigtO7w+rqKjcdfRnpz95kXbfdvqq8VAVPQCt0u2
-         AQ7bgE0/ErcuQUz23nCgofSzeVvJkrkgn5UU/f0GHib2abFWqGnUy6k9j0HzSJlLb4Xt
-         J7oCUjPSEhSd+IhrK1hKXy5fDfj5P2/Y9g6sYQHOmWbmvsR897R5WVVWC8XzzdenpO1o
-         SUiJSe8L2LX60g4y86Qy41/an0iwdNEWBlwOWy0R5tzu+201Qsi6Okvr50wM2g3sNb17
-         cU21ywb5BgV8tX5B8h6W89kunu94Dl6qHp7463mYfZJ28LtIjpzoOHGc31/uHXqQ1LA8
-         6ZMw==
+	s=arc-20240116; t=1747834185; c=relaxed/simple;
+	bh=tlg1lzkYJfIIie1O0gwsHYFTGSnrPtTa21pJSRBZrYg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BhaS0QJmsPbkaWeyrMKGtx5PUCR1L5QVrymLfyGx9zLKo6ozrvR5dyDQ1yCQ28xOu02cSzrpfhghn1XZS+dzv84mbi1bb+CvBTsZeMo06uBG0KfUBuZTCYMugksXDkUT+fEW7piP/bq6CYzyZm4P7Mw3rCEqUglUtE0jUnOg14M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=nFeEbAn8; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54L9XI7c031677
+	for <linux-pm@vger.kernel.org>; Wed, 21 May 2025 13:29:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=yB5N65tJppWHuCi8FRw9iMEM
+	njhFwmKIAmj2+p8j+Zo=; b=nFeEbAn8AOTdA9soMZv7HzFxDrFHjlARlZbffBOj
+	uZ2m0dGbTnMvqD+QonYto89cxPFemG6cRnqPy9GhEMfFbDGTATO+JpJLzJOWk+0d
+	NyUb13ItY9BUnIqGBk3JEnnNdFy/SKHNMm852TnthTnKm3PIs9zvl0BkHUi9pLhn
+	4+4w7GbYECy2VC1v8ajOymBtmEwJodX2YxYnK60V948naiVBq24SZaPyC9ku4Ahp
+	YfoR/5lvFNox68bObaKOk23f5p2ZmGDSYtnZjvGymQZgyRNwN2lvEX4UTzbUjO1E
+	bS4nLSyd1kKXFh3iIW+jGtKVCR8MebZwnUalB1tyA2UA4w==
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46s8c21k3c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Wed, 21 May 2025 13:29:43 +0000 (GMT)
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4768f9fea35so165374181cf.2
+        for <linux-pm@vger.kernel.org>; Wed, 21 May 2025 06:29:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747833115; x=1748437915;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O2qQPefvvV4ihaAAFaNPu9WwGYNsphvozJRkAhoefLE=;
-        b=muHDa5nCgijV+jHlWZaU+ar1gHhcDyRdTkqT92emT2bMb3KDe35F4Oqez6H1KKJS4G
-         PcHoH442B9OhiQjFm7u+InJ71B0qU2V9Ltq9mXuCYQBuo8gbuGl88XtFf/hzri4SPcCI
-         NhjLgIxkpf+L44+y84Ymnvl5nISc3JG9HsDPnQ2hCV38nTY4Vt07pv8jnyxBk63QGHQb
-         YPdpqd6truoF8zQm265bUFMRp5S3sfj4cNAWl2nR50NkOgDO6IUU2sf1IYMscneWGQou
-         5G+qIKnMut1OAd89JGw3Z8QCF6uxZUTG7+nVo5iFZF0xU5BVigkXhbwvJi2gHZvLMPn+
-         8Ulg==
-X-Forwarded-Encrypted: i=1; AJvYcCVjDAfD/+mBQ2I7gRdXdqbGGORcuTLnTcoCJ+g64Ruf80xC4g8MoxcAtwEMyiioKGQ3ovZKGLIlVlnURrFu@vger.kernel.org, AJvYcCVwsYjTz/4fcTtrLvKtGYqCs3WuDElJyYsZPXpXOkwHTkCcxNwEQ0sl6xiAYo1Khc4lBxEDr7bSLjWREcbx@vger.kernel.org, AJvYcCXl7qXY5EZKS4RYG916VgCX4pXbMNvOUF087IGk30+a11ADiO0XgFd72Gn8/9aztS4txICv6Kc04zs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyw03ej7fTEsKgPGoSD4CJlwUZ6Agf3gXK7vDz0kzaov0kO05yX
-	+7TJ07Fxp0KPlAEps2JKJyuLzwC2ZQN+QQH1GeS1T6/H1KSSTTaONQQ13pnzUydfjyDn1Q==
-X-Gm-Gg: ASbGncucCJ9YpHS67I7EJt7A6GgBxKg/V01UVK6QiZeME/KSV79IoOqGmkYIkU+NFHT
-	PX90/oybemP7t89PLVWGVSHsXSV42ymhdD7IhWq0j1AUYBR7WJA2UXMBC5x940Nrdy9518SwBk6
-	lDzIXepWvWfGIIhYsD0hjUSNZWMB3WmNLHWGDuKSNyCRuZjOt4t9g/rxPMBUuybJgcAxcQtYZKj
-	csGWJnBpc4JvMXpLv7PzisySAB5rpT3O3FhL492PdBSwUVkm27vKNX6rTmiXyBVailqDwaqXlOg
-	ty9/W7QAIeSKeEWP6CPQCNJWAjzI1Ze6SZ4nbvwJTyQejDau670NVH/GfN151RhIkWqtKgxqGrs
-	gsHnOwg==
-X-Google-Smtp-Source: AGHT+IFlGplauBEgvKTRiQTI4a4oPx0iajBKn0509TDL6mEGaAIkVylvguO2Fv9F3FG+EprGcIHh4Q==
-X-Received: by 2002:a05:6a20:7353:b0:1f5:8c05:e8f8 with SMTP id adf61e73a8af0-216218f916cmr33749172637.25.1747833114470;
-        Wed, 21 May 2025 06:11:54 -0700 (PDT)
-Received: from localhost.localdomain ([61.77.55.112])
-        by smtp.googlemail.com with ESMTPSA id 41be03b00d2f7-b26eaf5c6b0sm9679038a12.7.2025.05.21.06.11.52
+        d=1e100.net; s=20230601; t=1747834181; x=1748438981;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yB5N65tJppWHuCi8FRw9iMEMnjhFwmKIAmj2+p8j+Zo=;
+        b=CrmbwYtGJlL05VsRwOIem2xNVohZi3hrG9nFo2aQ2xg3vAf8S0bCZXQdpHIjxtHhkA
+         pvw/ikXuMLR1ZBDfCZSrpKmDhzHitTxQ7n/hxQrD9bMYmA0Gchs6KvOpj8CyNjI54wy4
+         Z1pVIWcRlFm2CUnEv/ZWUWi9i7wfsWTs0Z4gxEm2UCr2NSA/U/IlMaP1wvf+2IRmahP+
+         jloUqlzMqlqVifgT16ci5sqvQEPbbnY4bmk48uZiC2nRahiOP7o8dmvNm/qjnKNXj1BA
+         ZSgHlEmuHObG9VFiKK4CfHVkeKpmjqBsBdMcAhJ1Jk4yR+awAbHpmRtbUXUYeGNP9T0/
+         N0eg==
+X-Forwarded-Encrypted: i=1; AJvYcCUGv39iU465v16XhLcJavTaO1d1T5PuNDPyp760cHHJBOiomrzaGR+bKR7Lnwx2+NDxEC6iLK6J3Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+IZSW5jW49dpbe+6OpK3W+3RmwW9qY5LFsLtA39l/EqRKKlc7
+	KwXbaYgMiNo5SVNtNTxbji2jdL/JdHCLA0uvupqLMkdcRwWg/gWDXlhu2vMoTkHHa2I8kuxPP0N
+	YwuoJfOhcZGEaWqZ5CrglB8nE9AAXXXbAGx18zqdcyXH3SX3VEjb97tv47BWTP1IPpv6BUA==
+X-Gm-Gg: ASbGnctlDKPiG2nw/YtihFZ1r0rmext14KBk/cKsXQ+6kMQqkR3JjS3vpu9krb4vM/s
+	9WDqM2kA43fVls9OLZTM/r6epnnPmQY6uAV51PqiJW/bug+MsEvbASMTK7U8lEL4z2CQILuucVl
+	rOg2FY+Qf0l/gMNqdVr8/DxGAdnzt6+xhgaTRW+o79CpB0FYn6BVqfKbTsiQTvRofCRRepJCn0Y
+	TKAKbVI8cK6zWEEHA1zBNQ8JWz4OwLjZIGbr3Rh15UnZLmjKiAzgV4u6OJzcHca1dmBIMUyGcud
+	Jb+SBuq6P19S/JiS8qTqjsxJ8IkSs8DfvWR7tElwLa1U5az+EB9xOfQrUc0EA21S9NTM+AqVAdY
+	=
+X-Received: by 2002:ac8:5ccd:0:b0:476:739a:5cf3 with SMTP id d75a77b69052e-494b074d0c6mr367953041cf.1.1747834181410;
+        Wed, 21 May 2025 06:29:41 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFLno4oDfMSD+g+A5XtQec5aytsPNBkXfe9N89uXd43okFNSnebocYqbtoiXPeNdVJfVlhxww==
+X-Received: by 2002:a05:6214:21a5:b0:6e4:3eb1:2bdb with SMTP id 6a1803df08f44-6f8b2d3a73emr302130866d6.43.1747834170228;
+        Wed, 21 May 2025 06:29:30 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-550e703ca85sm2874298e87.217.2025.05.21.06.29.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 May 2025 06:11:53 -0700 (PDT)
-From: Taeyoung Kwon <xoduddk12345@gmail.com>
-X-Google-Original-From: Taeyoung Kwon <Taeyoung.Kwon@telit.com>
-To: Sebastian Reichel <sre@kernel.org>,
-	linux-arm-msm@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Taeyoung Kwon <Taeyoung.Kwon@telit.com>
-Subject: [PATCH v2] power: reset: qcom-pon: Rename variables to use generic naming
-Date: Wed, 21 May 2025 13:09:52 +0000
-Message-ID: <20250521131116.2664-1-Taeyoung.Kwon@telit.com>
-X-Mailer: git-send-email 2.49.0
+        Wed, 21 May 2025 06:29:29 -0700 (PDT)
+Date: Wed, 21 May 2025 16:29:27 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Taeyoung Kwon <xoduddk12345@gmail.com>
+Cc: Sebastian Reichel <sre@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Taeyoung Kwon <Taeyoung.Kwon@telit.com>
+Subject: Re: [PATCH v2] power: reset: qcom-pon: Rename variables to use
+ generic naming
+Message-ID: <uvqqq2f2mhpuqvtq2yrxw7nkw6e34yf2bv6ulkglutgq5wa4dd@fi5h3m7yibz7>
+References: <20250521131116.2664-1-Taeyoung.Kwon@telit.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250521131116.2664-1-Taeyoung.Kwon@telit.com>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTIxMDEzMSBTYWx0ZWRfX7KHFQdAJo7LH
+ 6TmWVrdfPmc6MNAvL3byxO78VzQ158gJ1a+esQZ64v5yjDkXjD5v8QjCo+xUMtgIAUwlykNTroX
+ Y37rFdnF7Je+fuOnlfqYigrf3f1yGSLo8OYyuNBR1tKACWdusuhZasdro+VjL8zzeHyHkIVMHsJ
+ Y5so30A18Pg5ZyucgxgNXscd8U+zG2SNdroeLgycNOb+abc1Kg5/RqECh6dbNnosrVylHb9bZWx
+ Nl7Dqphd7rb35bkyLrrdfkC/OXF4f8UyxdOi1oLJPFS2HiP1NYuPd2QJz2l4DD1IO+sh7KN4+AL
+ XtFYuGWVcxt4ypzoGHhK7YQUXVgz6xCED+d0g2E0940v6vXfrutY7ULPyI1KfSom4639fyCHur1
+ W1o+mpCDEcofrjsATB4Yw6+YxQUQX4gYvYUjQdlVdC81EYF/Mcy80QCY3pnhAlBfE+t8mH3m
+X-Authority-Analysis: v=2.4 cv=RIuzH5i+ c=1 sm=1 tr=0 ts=682dd547 cx=c_pps
+ a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=dt9VzEwgFbYA:10 a=8xVn4GeRAAAA:8 a=EUspDBNiAAAA:8 a=38eAcjmzj4vKwzUmQakA:9
+ a=CjuIK1q_8ugA:10 a=a_PwQJl-kcHnX1M80qC6:22 a=By6hKCY_mHIbKsINY6vW:22
+X-Proofpoint-ORIG-GUID: nu_tHfJ94w6mQ0e-eaVuXji5C70M2vZl
+X-Proofpoint-GUID: nu_tHfJ94w6mQ0e-eaVuXji5C70M2vZl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-21_04,2025-05-20_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 phishscore=0 suspectscore=0 malwarescore=0 bulkscore=0
+ mlxlogscore=698 spamscore=0 lowpriorityscore=0 mlxscore=0 priorityscore=1501
+ adultscore=0 impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505160000
+ definitions=main-2505210131
 
-From: Taeyoung Kwon <Taeyoung.Kwon@telit.com>
+On Wed, May 21, 2025 at 01:09:52PM +0000, Taeyoung Kwon wrote:
+> From: Taeyoung Kwon <Taeyoung.Kwon@telit.com>
+> 
+> The qcom-pon driver was originally implemented for the PM8916 PMIC, and
+> as a result, several internal variable names still refer to 'pm8916'.
+> However, the driver has since been extended to support other PMICs as
+> well.
+> 
+> This patch renames those variables to use more generic and consistent
+> names, improving clarity and reducing confusion for non-PM8916 devices.
+> 
+> Signed-off-by: Taeyoung Kwon <Taeyoung.Kwon@telit.com>
+> ---
+> 
 
-The qcom-pon driver was originally implemented for the PM8916 PMIC, and
-as a result, several internal variable names still refer to 'pm8916'.
-However, the driver has since been extended to support other PMICs as
-well.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 
-This patch renames those variables to use more generic and consistent
-names, improving clarity and reducing confusion for non-PM8916 devices.
-
-Signed-off-by: Taeyoung Kwon <Taeyoung.Kwon@telit.com>
----
-
-Changes in v1:
-- Moved explanation under the '---' line
-
-Changes in v2:
-- Moved "From:" line
-
-Since my company email automatically adds a footer signature,
-I’m sending this patch from my personal Gmail account.
-
-Apologies for the repeated mistakes.
-
- drivers/power/reset/qcom-pon.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/power/reset/qcom-pon.c b/drivers/power/reset/qcom-pon.c
-index 1344b361a475..7e108982a582 100644
---- a/drivers/power/reset/qcom-pon.c
-+++ b/drivers/power/reset/qcom-pon.c
-@@ -19,7 +19,7 @@
- 
- #define NO_REASON_SHIFT			0
- 
--struct pm8916_pon {
-+struct qcom_pon {
- 	struct device *dev;
- 	struct regmap *regmap;
- 	u32 baseaddr;
-@@ -27,11 +27,11 @@ struct pm8916_pon {
- 	long reason_shift;
- };
- 
--static int pm8916_reboot_mode_write(struct reboot_mode_driver *reboot,
-+static int qcom_pon_reboot_mode_write(struct reboot_mode_driver *reboot,
- 				    unsigned int magic)
- {
--	struct pm8916_pon *pon = container_of
--			(reboot, struct pm8916_pon, reboot_mode);
-+	struct qcom_pon *pon = container_of
-+			(reboot, struct qcom_pon, reboot_mode);
- 	int ret;
- 
- 	ret = regmap_update_bits(pon->regmap,
-@@ -44,9 +44,9 @@ static int pm8916_reboot_mode_write(struct reboot_mode_driver *reboot,
- 	return ret;
- }
- 
--static int pm8916_pon_probe(struct platform_device *pdev)
-+static int qcom_pon_probe(struct platform_device *pdev)
- {
--	struct pm8916_pon *pon;
-+	struct qcom_pon *pon;
- 	long reason_shift;
- 	int error;
- 
-@@ -72,7 +72,7 @@ static int pm8916_pon_probe(struct platform_device *pdev)
- 	if (reason_shift != NO_REASON_SHIFT) {
- 		pon->reboot_mode.dev = &pdev->dev;
- 		pon->reason_shift = reason_shift;
--		pon->reboot_mode.write = pm8916_reboot_mode_write;
-+		pon->reboot_mode.write = qcom_pon_reboot_mode_write;
- 		error = devm_reboot_mode_register(&pdev->dev, &pon->reboot_mode);
- 		if (error) {
- 			dev_err(&pdev->dev, "can't register reboot mode\n");
-@@ -85,7 +85,7 @@ static int pm8916_pon_probe(struct platform_device *pdev)
- 	return devm_of_platform_populate(&pdev->dev);
- }
- 
--static const struct of_device_id pm8916_pon_id_table[] = {
-+static const struct of_device_id qcom_pon_id_table[] = {
- 	{ .compatible = "qcom,pm8916-pon", .data = (void *)GEN1_REASON_SHIFT },
- 	{ .compatible = "qcom,pm8941-pon", .data = (void *)NO_REASON_SHIFT },
- 	{ .compatible = "qcom,pms405-pon", .data = (void *)GEN1_REASON_SHIFT },
-@@ -93,16 +93,16 @@ static const struct of_device_id pm8916_pon_id_table[] = {
- 	{ .compatible = "qcom,pmk8350-pon", .data = (void *)GEN2_REASON_SHIFT },
- 	{ }
- };
--MODULE_DEVICE_TABLE(of, pm8916_pon_id_table);
-+MODULE_DEVICE_TABLE(of, qcom_pon_id_table);
- 
--static struct platform_driver pm8916_pon_driver = {
--	.probe = pm8916_pon_probe,
-+static struct platform_driver qcom_pon_driver = {
-+	.probe = qcom_pon_probe,
- 	.driver = {
--		.name = "pm8916-pon",
--		.of_match_table = pm8916_pon_id_table,
-+		.name = "qcom-pon",
-+		.of_match_table = qcom_pon_id_table,
- 	},
- };
--module_platform_driver(pm8916_pon_driver);
-+module_platform_driver(qcom_pon_driver);
- 
--MODULE_DESCRIPTION("pm8916 Power On driver");
-+MODULE_DESCRIPTION("Qualcomm Power On driver");
- MODULE_LICENSE("GPL v2");
 -- 
-2.49.0
-
+With best wishes
+Dmitry
 
