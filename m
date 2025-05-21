@@ -1,121 +1,126 @@
-Return-Path: <linux-pm+bounces-27472-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27474-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1998ABFE93
-	for <lists+linux-pm@lfdr.de>; Wed, 21 May 2025 23:00:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57311ABFEDE
+	for <lists+linux-pm@lfdr.de>; Wed, 21 May 2025 23:24:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2536B9E78BA
-	for <lists+linux-pm@lfdr.de>; Wed, 21 May 2025 21:00:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A55451B64CF9
+	for <lists+linux-pm@lfdr.de>; Wed, 21 May 2025 21:24:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A94FB29B212;
-	Wed, 21 May 2025 21:00:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C67AD2BCF7E;
+	Wed, 21 May 2025 21:24:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="CIjmP3oc"
+	dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b="O+JN7rxS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
+Received: from devianza.investici.org (devianza.investici.org [198.167.222.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A327145FE0;
-	Wed, 21 May 2025 21:00:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293EA1A5BAC
+	for <linux-pm@vger.kernel.org>; Wed, 21 May 2025 21:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.167.222.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747861237; cv=none; b=fsHXXRoYqmsPWXLCPqe3OnmI3cQOZXPxArv83JvNFXf5iDVoijlXvhQuecTiSdEjd9BHTLxj7VDU49qa/bj6W6wk70VGZt2yah+U8fhoUGLbsIgM7sclEUiCscJtkKHERBdmWmLQAu4uhbIFxHohPTJsNqUirEvIYY7hsen3fz0=
+	t=1747862660; cv=none; b=EkYtYyE8yulyaYpFfroBXkpGKaMnvZtyYxaCMuO9gH2fmP5FNCBOgXm8oBovWTBWRaqZOU1/bh/RB0PpxC+6HRWXllTl3YaNGStud3OugEyjZ5ruhvfNG+xSzvg4VbStNRZKlQ87ARUxq8RbICp6dKu1X89dVzVnectdMoeJqfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747861237; c=relaxed/simple;
-	bh=0oYjCXjS4sH9UQwXXGgifJus/SXfuN9+9VoHkC7p0dY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nsq+YeJrWulo6f0EHT23ZSJ06aBKwTbCiHT1i5vGeHBwYI2ikAWk0/JdxJeLOktDN8laf4Wd++ibzUKlXcmez/ZGM9bi8nfIqw2LNMdX7NAu+BvMo7WIcxX70DSkiSTzDoUjJOnxBz9oOikB3Ohtdt3eOh/vKndniTKVnM7wSwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=CIjmP3oc; arc=none smtp.client-ip=208.88.110.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id 8EBDE9C11E3;
-	Wed, 21 May 2025 17:00:32 -0400 (EDT)
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
- with ESMTP id qbZlAlv4cQFW; Wed, 21 May 2025 17:00:32 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id 211739C349D;
-	Wed, 21 May 2025 17:00:32 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 211739C349D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
-	t=1747861232; bh=VSYCrUr2jQIFVHQA14LqoWAe4hyMiMmPDg22XFPGbLo=;
-	h=Date:From:To:Message-ID:MIME-Version;
-	b=CIjmP3ocacJryrBlWDhDAtaS8OiO4p0fuHF7dOuNYaoLTQvwUTUaUPlpflOM0azCq
-	 c1RiBg+Y67LQpI4DS3xT5TDb0qUaD4x1U1aNYu30IjDw5ZX5ERXY0N0tbRRYPNT1Ny
-	 msbWllEy2Ck3gqEl6eAMRJlVdOujWcRsfUGeJoBJKlTWYHn2NxEpOs3Nk+mPHlg1/N
-	 1amI991f2hB7thbXenYwooN6myQZ2svMV6MN+QwLsWS1vyRT8G/p2cVOYRaBQyoIJt
-	 YU3YzQGqEEZBAOwo086pFm9UnPA/8F5a1sZj8q/iEGnCjr+1cvxcnwzzkl3/UBzP55
-	 HS0JkDyKUKMuA==
-X-Virus-Scanned: amavis at mail.savoirfairelinux.com
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
- with ESMTP id 8pC_bwiUjZXw; Wed, 21 May 2025 17:00:32 -0400 (EDT)
-Received: from fedora (unknown [192.168.51.254])
-	by mail.savoirfairelinux.com (Postfix) with ESMTPSA id D2F619C11E3;
-	Wed, 21 May 2025 17:00:31 -0400 (EDT)
-Date: Wed, 21 May 2025 17:00:30 -0400
-From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>,
-	Robin Gong <yibin.gong@nxp.com>, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-imx@nxp.com,
-	linux-input@vger.kernel.org, Abel Vesa <abelvesa@linux.com>,
-	Abel Vesa <abel.vesa@nxp.com>, Robin Gong <b38343@freescale.com>,
-	Enric Balletbo Serra <eballetbo@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 7/9] input: pf1550: add onkey support
-Message-ID: <aC4-7pNAFn9jN-DI@fedora>
-References: <cover.1747409892.git.samuel.kayode@savoirfairelinux.com>
- <7d80afedf1ad9e98c9739163751bcb2785009e74.1747409892.git.samuel.kayode@savoirfairelinux.com>
- <pnfj4tyj3hovtu5ttnecmgozdq7hm2clxhl4xpuzrahlrzqmdm@qpdr4z2y5ylg>
+	s=arc-20240116; t=1747862660; c=relaxed/simple;
+	bh=OHgA9xgdiCe7JlP9s02C14pVouo1UjLuOXqqvGF7eYk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DtYjVt36/QDkfOkaZjUzv6FZesEUonnoXJHk5NhVe0XmjPJ+3dVCKrrC9k+FQZ2Ae2DJKB6SJ/62E77jIXU+aps5lAYewwY3nv2QjKVytWzpbzMbryHR+aLWrMau7oU+vqoE1SkOys9jTCPdCJs+hMzRPN0UPrdZbmNkHx8HVLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org; spf=pass smtp.mailfrom=paranoici.org; dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b=O+JN7rxS; arc=none smtp.client-ip=198.167.222.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paranoici.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paranoici.org;
+	s=stigmate; t=1747862250;
+	bh=vLEw7WaNQ9TyUKGCrdww17iw6jYoTDFvSmJWvNTB4rY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=O+JN7rxSIB/IvjURNgzw2WmOhx0y/JNIlqhsqJOQN0gWioDT3JBcBxljpEl/5l61t
+	 RllBofpZNA+gr2Dxy7nSu4uIoRPG1+km8iQE0RqB1G6ZYR3SB4ojFLBn9rEJv6+CL1
+	 QJcsPRUAk+lhvMyqvzWNf78r5QE+b6Q0xxoj5WVg=
+Received: from mx2.investici.org (unknown [127.0.0.1])
+	by devianza.investici.org (Postfix) with ESMTP id 4b2klZ1XJcz6y0v;
+	Wed, 21 May 2025 21:17:30 +0000 (UTC)
+Received: from [198.167.222.108] (mx2.investici.org [198.167.222.108]) (Authenticated sender: invernomuto@paranoici.org) by localhost (Postfix) with ESMTPSA id 4b2klZ18c2z6xxL;
+	Wed, 21 May 2025 21:17:30 +0000 (UTC)
+Received: from frx by crunch with local (Exim 4.98.2)
+	(envelope-from <invernomuto@paranoici.org>)
+	id 1uHqoa-00000000HEZ-3YvZ;
+	Wed, 21 May 2025 23:17:28 +0200
+From: "Francesco Poli (wintermute)" <invernomuto@paranoici.org>
+To: linux-pm list <linux-pm@vger.kernel.org>
+Cc: Francesco Poli <invernomuto@paranoici.org>,
+	Thomas Renninger <trenn@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"John B. Wyatt IV" <jwyatt@redhat.com>,
+	John Kacur <jkacur@redhat.com>,
+	Thorsten Leemhuis <linux@leemhuis.info>,
+	Justin Forbes <jforbes@redhat.com>
+Subject: [PATCH] cpupower: split unitdir from libdir in Makefile
+Date: Wed, 21 May 2025 23:14:39 +0200
+Message-ID: <20250521211656.65646-1-invernomuto@paranoici.org>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <pnfj4tyj3hovtu5ttnecmgozdq7hm2clxhl4xpuzrahlrzqmdm@qpdr4z2y5ylg>
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 16, 2025 at 03:55:02PM -0700, Dmitry Torokhov wrote:
-> > +	input->name = pdev->name;
-> > +	input->phys = "pf1550-onkey/input0";
-> > +	input->id.bustype = BUS_HOST;
-> > +
-> > +	input_set_capability(input, EV_KEY, onkey->keycode);
-> > +
-> > +	for (i = 0; i < ARRAY_SIZE(pf1550_onkey_irqs); i++) {
-> > +		struct pf1550_irq_info *onkey_irq =
-> > +						&pf1550_onkey_irqs[i];
-> > +		unsigned int virq = 0;
-> > +
-> > +		virq = regmap_irq_get_virq(pf1550->irq_data_onkey,
-> > +					   onkey_irq->irq);
-> > +		if (!virq)
-> > +			return -EINVAL;
-> > +
-> > +		onkey_irq->virq = virq;
-> 
-> I think this kind of mapping needs to be done in the core part of your
-> driver.
->
-Without doing the mapping in the MFD children, a list of all virqs for the PMIC
-would have to be maintained in addition to the (regmap_irq) irqs. Perhaps,
-there is a better way to implement this?
-> > +
-> > +		error = devm_request_threaded_irq(&pdev->dev, virq, NULL,
-> > +						  pf1550_onkey_irq_handler,
-> > +					IRQF_NO_SUSPEND,
-> > +					onkey_irq->name, onkey);
-Thanks,
-Sam
+Improve the installation procedure for the systemd service unit
+'cpupower.service', to be more flexible. Some distros install libraries
+to /usr/lib64/, but systemd service units have to be installed to
+/usr/lib/systemd/system: as a consequence, the installation procedure
+should not assume that systemd service units can be installed to
+${libdir}/systemd/system ...
+Define a dedicated variable ("unitdir") in the Makefile.
+
+Link: https://lore.kernel.org/linux-pm/260b6d79-ab61-43b7-a0eb-813e257bc028@leemhuis.info/T/#m0601940ab439d5cbd288819d2af190ce59e810e6
+
+Fixes: 9c70b779ad91 ("cpupower: add a systemd service to run cpupower")
+
+Signed-off-by: Francesco Poli (wintermute) <invernomuto@paranoici.org>
+---
+ tools/power/cpupower/Makefile | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
+index be8dfac14076..c43db1c41205 100644
+--- a/tools/power/cpupower/Makefile
++++ b/tools/power/cpupower/Makefile
+@@ -73,6 +73,7 @@ sbindir ?=	/usr/sbin
+ mandir ?=	/usr/man
+ libdir ?=	/usr/lib
+ libexecdir ?=	/usr/libexec
++unitdir ?=	/usr/lib/systemd/system
+ includedir ?=	/usr/include
+ localedir ?=	/usr/share/locale
+ docdir ?=       /usr/share/doc/packages/cpupower
+@@ -309,9 +310,9 @@ install-tools: $(OUTPUT)cpupower
+ 	$(INSTALL_DATA) cpupower-service.conf '$(DESTDIR)${confdir}'
+ 	$(INSTALL) -d $(DESTDIR)${libexecdir}
+ 	$(INSTALL_PROGRAM) cpupower.sh '$(DESTDIR)${libexecdir}/cpupower'
+-	$(INSTALL) -d $(DESTDIR)${libdir}/systemd/system
+-	sed 's|___CDIR___|${confdir}|; s|___LDIR___|${libexecdir}|' cpupower.service.in > '$(DESTDIR)${libdir}/systemd/system/cpupower.service'
+-	$(SETPERM_DATA) '$(DESTDIR)${libdir}/systemd/system/cpupower.service'
++	$(INSTALL) -d $(DESTDIR)${unitdir}
++	sed 's|___CDIR___|${confdir}|; s|___LDIR___|${libexecdir}|' cpupower.service.in > '$(DESTDIR)${unitdir}/cpupower.service'
++	$(SETPERM_DATA) '$(DESTDIR)${unitdir}/cpupower.service'
+ 
+ install-man:
+ 	$(INSTALL_DATA) -D man/cpupower.1 $(DESTDIR)${mandir}/man1/cpupower.1
+@@ -348,7 +349,7 @@ uninstall:
+ 	- rm -f $(DESTDIR)${bindir}/utils/cpupower
+ 	- rm -f $(DESTDIR)${confdir}cpupower-service.conf
+ 	- rm -f $(DESTDIR)${libexecdir}/cpupower
+-	- rm -f $(DESTDIR)${libdir}/systemd/system/cpupower.service
++	- rm -f $(DESTDIR)${unitdir}/cpupower.service
+ 	- rm -f $(DESTDIR)${mandir}/man1/cpupower.1
+ 	- rm -f $(DESTDIR)${mandir}/man1/cpupower-frequency-set.1
+ 	- rm -f $(DESTDIR)${mandir}/man1/cpupower-frequency-info.1
+
+base-commit: e5174365c13246ed8fd2d40900edec37be6f7a34
+-- 
+2.47.2
+
 
