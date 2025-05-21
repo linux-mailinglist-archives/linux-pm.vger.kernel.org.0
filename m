@@ -1,105 +1,121 @@
-Return-Path: <linux-pm+bounces-27471-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27472-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A793ABFE84
-	for <lists+linux-pm@lfdr.de>; Wed, 21 May 2025 22:54:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1998ABFE93
+	for <lists+linux-pm@lfdr.de>; Wed, 21 May 2025 23:00:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8041B1689D6
-	for <lists+linux-pm@lfdr.de>; Wed, 21 May 2025 20:54:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2536B9E78BA
+	for <lists+linux-pm@lfdr.de>; Wed, 21 May 2025 21:00:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89C5F2C0303;
-	Wed, 21 May 2025 20:49:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A94FB29B212;
+	Wed, 21 May 2025 21:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CeCANrss"
+	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="CIjmP3oc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB782BEC5B;
-	Wed, 21 May 2025 20:49:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A327145FE0;
+	Wed, 21 May 2025 21:00:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747860553; cv=none; b=OAIOi+mimEmF9HDVnasfMh4dwaP2hzI4sBMjfVYDj4xRpOVVXLOelYOQRNd3sjtWebV9ayuPIsY94lYA11d5Pk92XjMFdyYe2SeHh8ThkA0erIifmCAjq4pIZFgTWWpxrKSxXSxnZXgyX+jvjq/RuDJIeP8L71v6idQ+30sz3ns=
+	t=1747861237; cv=none; b=fsHXXRoYqmsPWXLCPqe3OnmI3cQOZXPxArv83JvNFXf5iDVoijlXvhQuecTiSdEjd9BHTLxj7VDU49qa/bj6W6wk70VGZt2yah+U8fhoUGLbsIgM7sclEUiCscJtkKHERBdmWmLQAu4uhbIFxHohPTJsNqUirEvIYY7hsen3fz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747860553; c=relaxed/simple;
-	bh=mrTRctOtUcJ84jXnO+310QFcU1Kwrn6jVHOd5Jr/N04=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eJCiJAFTGnHFDqIFJpXA0Ilx3EiWfP9Gp06i3ghUGK7dQt3GLiCHOc7U1DRjPCatNTnhJcHhhb0seGQ6+eLykQDsO1SJMFNiI1ywmggySC3o5t2pzOOOyhsxmPAIWK//n95Ep8mQNKwZvCJkKvme1u0Sew1umx/WPB9UqgzG/c0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CeCANrss; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A2B8C4CEEF;
-	Wed, 21 May 2025 20:49:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747860553;
-	bh=mrTRctOtUcJ84jXnO+310QFcU1Kwrn6jVHOd5Jr/N04=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=CeCANrss13lMVCYBd303dahYRRcP3//oNIADAYeh5uCMFUZtTRhayH/Co0HajWv+D
-	 u6iAXUucctnfWL5Hrl1fH0TmHgSt4WGZZhYenvzWRjJcDHtTvnUEG0Hi/CgxiJM3Rt
-	 vno4OZKrpdmnKVQwYINlqMII4GBp/Nm8PWGMp2tHeyUnjoYuQfIFcqe/hPp4LIeG6V
-	 psd8XVvba1B8XaNtK2/C1dzv2+y1/p9FT+pRyAhQOm4SagJAqv6Sz53LVgonXvoNuA
-	 GvWAN/nGbGb01WHJaZCBMHtcVDZxYoaHfMJXc9n3WbWajoGT/HUpe8zG8ej/ReE+IM
-	 1JhWbuYa0YJyg==
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-6060167af73so4591752eaf.2;
-        Wed, 21 May 2025 13:49:13 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWtwlr9xGdnwJAn7MeGWZ+wPbriWqWdGbHav3CyWzfxS/ns8OoVL/eD3MxmfS7vEtjCE9pLt46jgM+213Y=@vger.kernel.org, AJvYcCXbaelE+1qFHiew9/NUr119HSJ7hyY0j2V/7C9CyeUFTIlIS1k94tfxlsd134YMsFnWtn//TBakDG8=@vger.kernel.org, AJvYcCXcrUHgrGM7mb7+YNpaesMas4DI2Xf7rghg5xJiI0Juu3Ld+XXiShBcFJ6VCsJY47fnZbk0X+PhW1oqm2Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzR+pJNdTVxc/hfBZ7F1QXmopVj/rPp3yOetdT166IHvixqV6MK
-	qft2qw0s45yd6/0Ow4LeURHOBAAIifcQXKww0y9jXmU3MXXIo6GqTqMsz6zCgchntmPdjyJ+G0X
-	DdbAFxxkgfGyypJexDTs/SGWuch7T25s=
-X-Google-Smtp-Source: AGHT+IEPkrPQfl18bWldZIboDlU0gNEGDMtQpM0dlHeO2zo12vGpxSU7I22tRnNIM6pQuZZbb4xC4aKhvh+4ma/DDkI=
-X-Received: by 2002:a05:6820:1b09:b0:606:9ed9:c38 with SMTP id
- 006d021491bc7-609f3615b68mr14252127eaf.0.1747860552552; Wed, 21 May 2025
- 13:49:12 -0700 (PDT)
+	s=arc-20240116; t=1747861237; c=relaxed/simple;
+	bh=0oYjCXjS4sH9UQwXXGgifJus/SXfuN9+9VoHkC7p0dY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nsq+YeJrWulo6f0EHT23ZSJ06aBKwTbCiHT1i5vGeHBwYI2ikAWk0/JdxJeLOktDN8laf4Wd++ibzUKlXcmez/ZGM9bi8nfIqw2LNMdX7NAu+BvMo7WIcxX70DSkiSTzDoUjJOnxBz9oOikB3Ohtdt3eOh/vKndniTKVnM7wSwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=CIjmP3oc; arc=none smtp.client-ip=208.88.110.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
+Received: from localhost (localhost [127.0.0.1])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id 8EBDE9C11E3;
+	Wed, 21 May 2025 17:00:32 -0400 (EDT)
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
+ with ESMTP id qbZlAlv4cQFW; Wed, 21 May 2025 17:00:32 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id 211739C349D;
+	Wed, 21 May 2025 17:00:32 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 211739C349D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
+	t=1747861232; bh=VSYCrUr2jQIFVHQA14LqoWAe4hyMiMmPDg22XFPGbLo=;
+	h=Date:From:To:Message-ID:MIME-Version;
+	b=CIjmP3ocacJryrBlWDhDAtaS8OiO4p0fuHF7dOuNYaoLTQvwUTUaUPlpflOM0azCq
+	 c1RiBg+Y67LQpI4DS3xT5TDb0qUaD4x1U1aNYu30IjDw5ZX5ERXY0N0tbRRYPNT1Ny
+	 msbWllEy2Ck3gqEl6eAMRJlVdOujWcRsfUGeJoBJKlTWYHn2NxEpOs3Nk+mPHlg1/N
+	 1amI991f2hB7thbXenYwooN6myQZ2svMV6MN+QwLsWS1vyRT8G/p2cVOYRaBQyoIJt
+	 YU3YzQGqEEZBAOwo086pFm9UnPA/8F5a1sZj8q/iEGnCjr+1cvxcnwzzkl3/UBzP55
+	 HS0JkDyKUKMuA==
+X-Virus-Scanned: amavis at mail.savoirfairelinux.com
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
+ with ESMTP id 8pC_bwiUjZXw; Wed, 21 May 2025 17:00:32 -0400 (EDT)
+Received: from fedora (unknown [192.168.51.254])
+	by mail.savoirfairelinux.com (Postfix) with ESMTPSA id D2F619C11E3;
+	Wed, 21 May 2025 17:00:31 -0400 (EDT)
+Date: Wed, 21 May 2025 17:00:30 -0400
+From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	Robin Gong <yibin.gong@nxp.com>, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-imx@nxp.com,
+	linux-input@vger.kernel.org, Abel Vesa <abelvesa@linux.com>,
+	Abel Vesa <abel.vesa@nxp.com>, Robin Gong <b38343@freescale.com>,
+	Enric Balletbo Serra <eballetbo@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 7/9] input: pf1550: add onkey support
+Message-ID: <aC4-7pNAFn9jN-DI@fedora>
+References: <cover.1747409892.git.samuel.kayode@savoirfairelinux.com>
+ <7d80afedf1ad9e98c9739163751bcb2785009e74.1747409892.git.samuel.kayode@savoirfairelinux.com>
+ <pnfj4tyj3hovtu5ttnecmgozdq7hm2clxhl4xpuzrahlrzqmdm@qpdr4z2y5ylg>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250507031941.2812701-1-zhenglifeng1@huawei.com>
- <98c87824-2c77-4ae3-b466-badd8e8187ad@nvidia.com> <20250521104831.6a3qfhzrwf2mcnyu@vireshk-i7>
-In-Reply-To: <20250521104831.6a3qfhzrwf2mcnyu@vireshk-i7>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 21 May 2025 22:49:01 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jtar_refDoYQ0vFm1pWGu-DmFTaoHH-Rv+vGBvuMnL2g@mail.gmail.com>
-X-Gm-Features: AX0GCFtWB6FomTG9jILgelbT-29sCuyvYJpoU4Cz84DNwUvy6rzN3Xu2B_ybQQE
-Message-ID: <CAJZ5v0jtar_refDoYQ0vFm1pWGu-DmFTaoHH-Rv+vGBvuMnL2g@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: CPPC: Support for autonomous selection in cppc_cpufreq
-To: Viresh Kumar <viresh.kumar@linaro.org>, Lifeng Zheng <zhenglifeng1@huawei.com>
-Cc: Sumit Gupta <sumitg@nvidia.com>, pierre.gondois@arm.com, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linuxarm@huawei.com, mario.limonciello@amd.com, 
-	yumpusamongus@gmail.com, srinivas.pandruvada@linux.intel.com, 
-	jonathan.cameron@huawei.com, zhanjie9@hisilicon.com, lihuisong@huawei.com, 
-	cenxinghai@h-partners.com, yubowen8@huawei.com, hepeng68@huawei.com, 
-	linux-tegra <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <pnfj4tyj3hovtu5ttnecmgozdq7hm2clxhl4xpuzrahlrzqmdm@qpdr4z2y5ylg>
 
-On Wed, May 21, 2025 at 12:48=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.=
-org> wrote:
+On Fri, May 16, 2025 at 03:55:02PM -0700, Dmitry Torokhov wrote:
+> > +	input->name = pdev->name;
+> > +	input->phys = "pf1550-onkey/input0";
+> > +	input->id.bustype = BUS_HOST;
+> > +
+> > +	input_set_capability(input, EV_KEY, onkey->keycode);
+> > +
+> > +	for (i = 0; i < ARRAY_SIZE(pf1550_onkey_irqs); i++) {
+> > +		struct pf1550_irq_info *onkey_irq =
+> > +						&pf1550_onkey_irqs[i];
+> > +		unsigned int virq = 0;
+> > +
+> > +		virq = regmap_irq_get_virq(pf1550->irq_data_onkey,
+> > +					   onkey_irq->irq);
+> > +		if (!virq)
+> > +			return -EINVAL;
+> > +
+> > +		onkey_irq->virq = virq;
+> 
+> I think this kind of mapping needs to be done in the core part of your
+> driver.
 >
-> On 21-05-25, 16:13, Sumit Gupta wrote:
-> >
-> >
-> > On 07/05/25 08:49, Lifeng Zheng wrote:
-> > > External email: Use caution opening links or attachments
-> > >
-> > >
-> > > Add sysfs interfaces for CPPC autonomous selection in the cppc_cpufre=
-q
-> > > driver.
-> > >
-> > > Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-> >
-> > Looks good to me.
-> >
-> > Reviewed-by: Sumit Gupta <sumitg@nvidia.com>
->
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
->
-> Rafael, since I have already sent the pull request, can you please
-> take it directly ? Thanks.
-
-Done, thanks!
+Without doing the mapping in the MFD children, a list of all virqs for the PMIC
+would have to be maintained in addition to the (regmap_irq) irqs. Perhaps,
+there is a better way to implement this?
+> > +
+> > +		error = devm_request_threaded_irq(&pdev->dev, virq, NULL,
+> > +						  pf1550_onkey_irq_handler,
+> > +					IRQF_NO_SUSPEND,
+> > +					onkey_irq->name, onkey);
+Thanks,
+Sam
 
