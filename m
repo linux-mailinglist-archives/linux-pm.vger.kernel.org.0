@@ -1,150 +1,132 @@
-Return-Path: <linux-pm+bounces-27473-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27477-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBB84ABFEDD
-	for <lists+linux-pm@lfdr.de>; Wed, 21 May 2025 23:23:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90CB3AC0282
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 04:35:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 708504E0792
-	for <lists+linux-pm@lfdr.de>; Wed, 21 May 2025 21:23:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1A841BA6E86
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 02:35:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D6612BCF7E;
-	Wed, 21 May 2025 21:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b="Jb6s+pxU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C299313C8EA;
+	Thu, 22 May 2025 02:35:31 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from confino.investici.org (confino.investici.org [93.190.126.19])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B0552BCF7B
-	for <linux-pm@vger.kernel.org>; Wed, 21 May 2025 21:23:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.190.126.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F381F92A;
+	Thu, 22 May 2025 02:35:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747862610; cv=none; b=VZPnvD3GFALy7FLPklNIacdQPxNSldgDvi/rjbnHcfLBtav+E+M3jlpE6IRjDIR7zHECU40AGCa6r6668mlnkkCX/Xyt+u1iXTTVlcwaQUQWGRfHOjtQkWlK8grhqHotJ9qV/Q+Bbx+HLMCMKp5qECNl/YupVDG8JL54WVdPc9g=
+	t=1747881331; cv=none; b=T5EDOk66ix6ZrOcMaNpE+aAA7MJPyYGtXncCWedYcJ32ei868gnraMo6VDP0NEMDuBAkknvVw52nZz3IGgsHwQORzShceTRdngzfkyjVW4FId4P1iapdx4UdA1WX/1QYrG4AwT7V+Mxrk7ZsPm/yQXwmclXA9a7hSD/7h5oNwgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747862610; c=relaxed/simple;
-	bh=tjGJVjt9JCo9FTmODqDkaUjuR7f9y7WCHIeJhKCvBTc=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=knUxsve139mqYAEV+FoSBc7KSX154acZYdLJ40T1u4HLSjT7AjIaY00kYjVV0hysAu3V6A86yciCtP4PUbsrdAhHpLHaaBF2ZoD9ch6xjEJiTfQQcwYQrf1/kAqTb/5ORz8gUpSPR52gpJqevMnUk4ga5FlWhacItF84dAGX2Us=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org; spf=pass smtp.mailfrom=paranoici.org; dkim=pass (1024-bit key) header.d=paranoici.org header.i=@paranoici.org header.b=Jb6s+pxU; arc=none smtp.client-ip=93.190.126.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=paranoici.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paranoici.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paranoici.org;
-	s=stigmate; t=1747862598;
-	bh=IGxf9Kl5yPpMKEOSn9zcGvlyNfFEhMz1XZ1V9xG/G+8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Jb6s+pxUCLaRJCbseg66wYGUm94LnhIeC4PgclDy5cEAf9OaPNCGmDMIaM9Bejx3c
-	 vFUu1f1gGIAbw6FBJwEFZxNjfs/dyhKmvWmfL+PGETPcQLr1YOybZmDHIE4QlCNSDt
-	 XzXAG0VI570N0lFOv54MyyoYVwNH34+mKGUEAFgA=
-Received: from mx1.investici.org (unknown [127.0.0.1])
-	by confino.investici.org (Postfix) with ESMTP id 4b2ktG30zWz11BB;
-	Wed, 21 May 2025 21:23:18 +0000 (UTC)
-Received: from [93.190.126.19] (mx1.investici.org [93.190.126.19]) (Authenticated sender: invernomuto@paranoici.org) by localhost (Postfix) with ESMTPSA id 4b2ktG2PpDz11B9;
-	Wed, 21 May 2025 21:23:18 +0000 (UTC)
-Received: from frx by crunch with local (Exim 4.98.2)
-	(envelope-from <invernomuto@paranoici.org>)
-	id 1uHquD-00000000HaU-29z7;
-	Wed, 21 May 2025 23:23:17 +0200
-Date: Wed, 21 May 2025 23:23:03 +0200
-From: Francesco Poli <invernomuto@paranoici.org>
-To: Thorsten Leemhuis <linux@leemhuis.info>
-Cc: linux-pm list <linux-pm@vger.kernel.org>, Thomas Renninger
- <trenn@suse.com>, Shuah Khan <shuah@kernel.org>, "John B. Wyatt IV"
- <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>
-Subject: Re: [PATCH v2] cpupower: add a systemd service to run cpupower
-Message-Id: <20250521232303.6b66ddc90cf9a25ff07d1042@paranoici.org>
-In-Reply-To: <260b6d79-ab61-43b7-a0eb-813e257bc028@leemhuis.info>
-References: <20250425151024.121630-1-invernomuto@paranoici.org>
-	<16ad2364-0161-4724-90e1-b57559168843@leemhuis.info>
-	<20250514222329.2db4ac81fccd10661d763ee4@paranoici.org>
-	<260b6d79-ab61-43b7-a0eb-813e257bc028@leemhuis.info>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1747881331; c=relaxed/simple;
+	bh=63M06YZciWrO32ny4WrHmNnrZASyO0GXqI7vUurNqOA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Z5vafG4edOMuoMkGAV+n5V/qpugYC9rUOAB3nXXsoUbxYrYlN+l232nyeTFbrbpdShPwpB68BxdWBwYUIgeavqGBZIr0vGkhahCMTQtdZQlt/PcR6LEQpFxdMbjbg1P/TiX1S88lp81f1JdJ8TmVycXSOvBxE7JT5ehJV/g5Vyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 68700db436b511f0b29709d653e92f7d-20250522
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:221870d2-6de2-44d4-9a1b-ea24b782e830,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:570af180dfd3bde387f2acee1b101686,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:nil,UR
+	L:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
+	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 68700db436b511f0b29709d653e92f7d-20250522
+Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 1693527093; Thu, 22 May 2025 10:35:21 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id 98AD7E00351A;
+	Thu, 22 May 2025 10:17:00 +0800 (CST)
+X-ns-mid: postfix-682E891C-450249442
+Received: from localhost.localdomain (unknown [172.25.120.24])
+	by mail.kylinos.cn (NSMail) with ESMTPA id 204E2E003519;
+	Thu, 22 May 2025 10:16:58 +0800 (CST)
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+To: rafael@kernel.org,
+	len.brown@intel.com,
+	pavel@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	akpm@linux-foundation.org,
+	tzungbi@kernel.org,
+	a.fatoum@pengutronix.de,
+	jani.nikula@intel.com,
+	joel.granados@kernel.org,
+	paulmck@kernel.org,
+	zhangguopeng@kylinos.cn,
+	linux@weissschuh.net,
+	Zihuan Zhang <zhangzihuan@kylinos.cn>
+Subject: [PATCH v2 0/3] PM / Sleep: Introduce and use system sleep lock helpers
+Date: Thu, 22 May 2025 10:16:46 +0800
+Message-Id: <20250522021649.55228-1-zhangzihuan@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pgp-signature";
- micalg="PGP-SHA512";
- boundary="Signature=_Wed__21_May_2025_23_23_03_+0200_Q=tit1JDTIoVl2It"
-
---Signature=_Wed__21_May_2025_23_23_03_+0200_Q=tit1JDTIoVl2It
-Content-Type: text/plain; charset=UTF-8
-Content-Disposition: inline
+MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, 15 May 2025 08:12:50 +0200 Thorsten Leemhuis wrote:
+This patch series introduces wrapper functions for locking
+system_transition_mutex used in system sleep (suspend/hibernate) code,
+and refactors the existing usage in kernel/power to improve maintainabili=
+ty,
+readability, and future extensibility.
 
-> On 14.05.25 22:23, Francesco Poli wrote:
-> > On Wed, 14 May 2025 14:41:35 +0200 Thorsten Leemhuis wrote:
-[...]
-> >> unitdir ?=3D /usr/lib/systemd/system
-> >>
-> >> earlier in the Makefile and then using it in the last quoted line abov=
-e.
-> >=20
-> > This could be the right fix, I think.
-> > And it would improve the flexibility of the Makefile, as well.
-> >=20
-> > If nobody raises objections, I will prepare another patch to address
-> > this issue.
->=20
-> Thx!
+Currently, mutex_lock/unlock(&system_transition_mutex) is used directly
+in multiple places in the suspend and hibernation paths. This results in
+boilerplate repetition and makes it harder to change the locking mechanis=
+m
+later if needed (e.g., for debugging, tracing, or replacing the mutex
+with another primitive).
 
-I've just sent a patch that introduces this new 'unitdir' variable into
-the Makefile.
+Summary:
 
->=20
-> FWIW, after sending my mail my brain worked out that there is another
-> problem. One that was there before your patches. One someone here might
-> be interested to address. That
->=20
-> libdir ?=3D       /usr/lib
->=20
-> in tools/power/cpupower/Makefile will obviously do the wrong thing on
-> distros that use /usr/lib64/ for 64bit libs (like Fedora and iirc
-> openSUSE, too -- and all their derivatives of course). From a quick look
-> other Makefiles we ship handle that fine by default, as during a quick
-> grep I spotted code to handle the right lib/lib64 placement in Makefiles
-> like tools/lib/bpf/Makefile, tools/net/ynl/Makefile, or
-> tools/lib/perf/Makefile.
+- Patch 1 replaces mutex_lock with lock_system_sleep.
 
-I'll leave this to other people...
+- Patch 2 adds a non-blocking `try_lock_system_sleep()` for code paths th=
+at
+  should proceed only if the lock is immediately available.
 
->=20
-> Ciao, Thorsten
+- Patch 3 replaces remaining uses of `system_transition_mutex` in
+  `kernel/power/` with the new helper functions.
 
-Tsch=C3=BCss!
+This change brings all system sleep transition locking behind well-named
+abstractions, preparing the code for future evolution while simplifying
+reasoning and avoiding repeated direct mutex usage.
 
+change log:
+    V2:
+    Fix PF_NOFREEZE leakage on try_lock_system_sleep() failure.
+
+Zihuan Zhang (3):
+  PM / Sleep: Replace mutex_[un]lock(&system_transition_mutex) with
+    [un]lock_system_sleep()
+  PM / Sleep:  Introduce try_lock_system_sleep()
+  PM / Sleep: Replace mutex_trylock(&system_transition_mutex) with
+    try_lock_system_sleep()
+
+ include/linux/suspend.h  |  2 ++
+ kernel/power/hibernate.c | 11 +++++++----
+ kernel/power/main.c      | 14 ++++++++++++++
+ kernel/power/suspend.c   |  7 +++++--
+ kernel/power/user.c      |  6 ++++--
+ kernel/reboot.c          |  5 +++--
+ 6 files changed, 35 insertions(+), 10 deletions(-)
 
 --=20
- http://www.inventati.org/frx/
- There's not a second to spare! To the laboratory!
-..................................................... Francesco Poli .
- GnuPG key fpr =3D=3D CA01 1147 9CD2 EFDF FB82  3925 3E1C 27E1 1F69 BFFE
+2.25.1
 
---Signature=_Wed__21_May_2025_23_23_03_+0200_Q=tit1JDTIoVl2It
-Content-Type: application/pgp-signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEygERR5zS79/7gjklPhwn4R9pv/4FAmguRDcACgkQPhwn4R9p
-v/5GFw/+MdZ0kbW0XM3UFVMfQvimFgKY+qY7tDawA+iG/6lDMIim0Dms8+hm+P7z
-sKQqxH9H0J5ZGSfadoOUBFGqM+GvkMrgw94oX2pbXKeeB9cptO8Rys9zSbtF0AXx
-8aEWmVy73a69FajlncRZ+6Lptd/ro4MWL3x+uPZ7Y0lFLdYNvM0LAaIohMEAhbOB
-nS2ybMGXHoqXJoba9JSETGgI2nQidbGV1pYlVySY/+APK4OkVndzfDfmn7e4LUxo
-MSwjyCsP48apwRlQncJL1DCoOIRLjCn8+rBbTCveTxE4wfi7+UkCJow0iNi8EDga
-OlZqpQLmd6/n5JWu/NmizLChwnt6Dv24KXzXkMCbCUuy8h3GbMsfzE9ouQiFbKrU
-8SanYVL8f/eih/Dedvel1WHmNGHG91xSVOt7bb409j4rIxFm8rZuaoj4VTGJz9sY
-wYPZIJod7CLe1Wm/jGt1B9EVN8FTipuOLSXiMMsM5URIDupkDsyN2qlxmDMOw+xO
-IxrR+8Ay3za9OzlN4K+0iIOd4u/BN/EAd08Q6RbJSRvmkQDMQ+HC8e6cvRwSJgnj
-7hVFAeQp2Dq/TXjB38d7YQFEm839Hca/cYD2mNUpGHoCnfoMT1WGhKDZj/H1gsP8
-cPROJh7u1d7H7YIfPM6qxxHXHCpMcj9hnFtztcWnqDC5HCjYves=
-=wV/u
------END PGP SIGNATURE-----
-
---Signature=_Wed__21_May_2025_23_23_03_+0200_Q=tit1JDTIoVl2It--
 
