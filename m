@@ -1,99 +1,130 @@
-Return-Path: <linux-pm+bounces-27488-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27490-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C77C0AC066D
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 10:01:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 770EBAC06CC
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 10:16:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 821F01766B3
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 08:01:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 18E0B7B6761
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 08:14:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A62D255F42;
-	Thu, 22 May 2025 08:01:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9051C23372E;
+	Thu, 22 May 2025 08:15:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="WMbg7s3o"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 775AF255F20;
-	Thu, 22 May 2025 08:01:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from jpms-ob01.noc.sony.co.jp (jpms-ob01.noc.sony.co.jp [211.125.140.164])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 970C91B0434;
+	Thu, 22 May 2025 08:15:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.125.140.164
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747900883; cv=none; b=RSXu9CzVM4WyPhKIsrNcl8XPxgwTZPEd341iR7kLe3kQU+MryAwMn1zMcvkPVc3o7JGyKIAD8YUhvpFjKJgvaJGKP/SrWi0HijEdMHwQleI8OXzCFZPMZasm/Atm9jrS1n8TVbi76kuTqrWzdh0Qk+6oA4YHwjxfjUnZf+yfS4g=
+	t=1747901753; cv=none; b=kbXFqLkKDH6B6enAtrHn8VocKW+CcAFwxMU5ilQ8PxKJU9/VvVy9zvhROXfRplM9UBLp0q1+YAOKd1KObbuz0vZq/rcyVqv8nUrWy3ZgoVgW8ROxwPzKtu+3iK/LIu5wG92PKg07GM/KdUmSbjA+fCZ5JRnmPvUkttzDPuKKG5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747900883; c=relaxed/simple;
-	bh=XdmeEDoNZYPpV8kEuitQPQUL2DyG8e+fdGW59aPkNI4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MXHhUpTyOQYpM2RrZsRMvul7aWnsNz3s0eUq7MAOCGjMexkh+1JaXzlyAq6tdqeABxWJVUolfQ4/yS5jo/tOhGl7/FxbsydhVlADM/nOLqj/8YCMwzsnTY6IKkkx3CQ7JvL4oOkpclEFSzON7NDdXYAMCsdkXbwqaaU/4DMbBZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF95E1A32;
-	Thu, 22 May 2025 01:01:06 -0700 (PDT)
-Received: from [10.57.46.113] (unknown [10.57.46.113])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B47443F5A1;
-	Thu, 22 May 2025 01:01:19 -0700 (PDT)
-Message-ID: <bb462e70-bd55-44eb-9701-06905cf64986@arm.com>
-Date: Thu, 22 May 2025 09:01:24 +0100
+	s=arc-20240116; t=1747901753; c=relaxed/simple;
+	bh=7E4VpZaYTeyHmonM9ukVDRJ98qeI0xAsr6LbdRcYv4k=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=QK+CowQqpO3mNf10QHDC/P9wYfTwyPg5VjcVesZr/x1bOT0HkedsdueEl7SkAnaS6M84mR5IO7cN9A0aiAvYhM947bb7zZ11IugFs1fqwrJq5kBTfbdzO2oD+NeEK6fJdyY0VFxgePnJWw4nuypX+93ZB0IX7OoS/Q3noWYcNME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com; spf=pass smtp.mailfrom=sony.com; dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b=WMbg7s3o; arc=none smtp.client-ip=211.125.140.164
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sony.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=sony.com; s=s1jp; t=1747901748; x=1779437748;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:to:cc;
+  bh=1WWTa3On4JPd2OiE7+97JDn9jIPF7/XgeqzVzCmonJQ=;
+  b=WMbg7s3oqbnhLci0corqti8vq/nksYm8JuLweDpUQps/0XTYLVTV2Sp6
+   ppiu8xgXAMEaTopXykMGdLsKEwnFMG+KnA6q37tal5XiJlaRi4Kq3X/4g
+   ipWyyCpajpr4Q/gP131EKIDeQuliDhu81uEYoz5tUd/6tpdiPnkPjRdPw
+   qnoR2D3dddV24f3Kieh9KsKgoXQ2tkcTsyEcE4MwvVyME6FRRfM5l7hQT
+   wIvrJwTaxa4Vg2NsDdFzB4Ii3fAxVZCUszSuwewDdZyoT5VIxmNwwqxd+
+   QdP3juAunrhgsxwekS82IVLFL09cAcBtcT1QQWL3i1ns/0caD+AokidKg
+   Q==;
+Received: from unknown (HELO jpmta-ob1.noc.sony.co.jp) ([IPv6:2001:cf8:0:6e7::6])
+  by jpms-ob01.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2025 17:05:37 +0900
+X-IronPort-AV: E=Sophos;i="6.15,305,1739804400"; 
+   d="scan'208";a="562594206"
+Received: from unknown (HELO [127.0.1.1]) ([IPv6:2001:cf8:1:573:0:dddd:6b3e:119e])
+  by jpmta-ob1.noc.sony.co.jp with ESMTP; 22 May 2025 17:05:37 +0900
+From: Shashank Balaji <shashank.mahadasyam@sony.com>
+Date: Thu, 22 May 2025 17:05:33 +0900
+Subject: [PATCH] cpufreq, docs: (userspace governor) add that actual freq
+ is >= scaling_setspeed
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Documentation: EM: Fix typos in example driver code
-To: Atul Kumar Pant <atulpant.linux@gmail.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- rafael@kernel.org, len.brown@intel.com, pavel@kernel.org
-References: <20250511071141.13237-1-atulpant.linux@gmail.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20250511071141.13237-1-atulpant.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20250522-userspace-governor-doc-v1-1-c8a038e39084@sony.com>
+X-B4-Tracking: v=1; b=H4sIAMzaLmgC/x3MPQqAMAxA4atIZgO1UhGvIg79iTVLKymKIL27x
+ fEN33uhkDAVWLoXhG4unFOLoe/AHzZFQg6tQSttlNEarwbKaT1hzDdJyoIhe5yncVbBWTcGAw2
+ fQjs//3jdav0AAr4h5GgAAAA=
+X-Change-ID: 20250522-userspace-governor-doc-86380dbab3d5
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, Jonathan Corbet <corbet@lwn.net>
+Cc: linux-pm@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Shinya Takumi <shinya.takumi@sony.com>, 
+ Shashank Balaji <shashank.mahadasyam@sony.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2204;
+ i=shashank.mahadasyam@sony.com; h=from:subject:message-id;
+ bh=7E4VpZaYTeyHmonM9ukVDRJ98qeI0xAsr6LbdRcYv4k=;
+ b=owGbwMvMwCV2mPH4Ij++H1mMp9WSGDL0bl04EOm1ZPGGI+3Bvpe9CqsZZu/7bhklo2jw99ok/
+ +9Zde8udpSyMIhxMciKKbK8k1l34aCVZdPX4wzfYOawMoEMYeDiFICJnL7K8FcyrilrX8Yi6+PN
+ C96vUusUZsk1PKoRd3oSi0zKX7b4XCdGhoP51zUc+JU6A0OfS3MzFfS5f7dw7d7ybs1/JubDL76
+ u4AYA
+X-Developer-Key: i=shashank.mahadasyam@sony.com; a=openpgp;
+ fpr=EE1CAED0C13A3982F5C700F6C301C7A24E0EF86A
 
+The userspace governor does not have the CPUFREQ_GOV_STRICT_TARGET flag, which
+means the requested frequency may not strictly be followed. This is true in the
+case of the intel_pstate driver with HWP enabled. When programming the
+HWP_REQUEST MSR, the min_perf is set to `scaling_setspeed`, and the max_perf
+is set to the policy's max. So, the hardware is free to increase the frequency
+beyond the requested frequency.
 
+This behaviour can be slightly surprising, given the current wording "allows
+userspace to set the CPU frequency". Hence, document this.
 
-On 5/11/25 08:11, Atul Kumar Pant wrote:
-> Fix the API name to free the allocated table in the example driver code
-> that modifies the EM. Also fix the passing of correct table when
-> updating the cost.
-> 
-> Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
-> ---
->   Documentation/power/energy-model.rst | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/power/energy-model.rst b/Documentation/power/energy-model.rst
-> index ada4938c3..29388f6d1 100644
-> --- a/Documentation/power/energy-model.rst
-> +++ b/Documentation/power/energy-model.rst
-> @@ -381,17 +381,17 @@ up periodically to check the temperature and modify the EM data::
->     26		rcu_read_unlock();
->     27
->     28		/* Calculate 'cost' values for EAS */
-> -  29		ret = em_dev_compute_costs(dev, table, pd->nr_perf_states);
-> +  29		ret = em_dev_compute_costs(dev, new_table, pd->nr_perf_states);
->     30		if (ret) {
->     31			dev_warn(dev, "EM: compute costs failed %d\n", ret);
-> -  32			em_free_table(em_table);
-> +  32			em_table_free(em_table);
->     33			return;
->     34		}
->     35
->     36		ret = em_dev_update_perf_domain(dev, em_table);
->     37		if (ret) {
->     38			dev_warn(dev, "EM: update failed %d\n", ret);
-> -  39			em_free_table(em_table);
-> +  39			em_table_free(em_table);
->     40			return;
->     41		}
->     42
+Signed-off-by: Shashank Balaji <shashank.mahadasyam@sony.com>
+---
+ Documentation/admin-guide/pm/cpufreq.rst | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-Thanks for having a look at this, LGTM.
+diff --git a/Documentation/admin-guide/pm/cpufreq.rst b/Documentation/admin-guide/pm/cpufreq.rst
+index 3950583f2b1549b27f568632547e22e9ef8bc167..066fe74f856699c8dd6aaf5e135162ce70686333 100644
+--- a/Documentation/admin-guide/pm/cpufreq.rst
++++ b/Documentation/admin-guide/pm/cpufreq.rst
+@@ -397,8 +397,15 @@ policy limits change after that.
+ -------------
+ 
+ This governor does not do anything by itself.  Instead, it allows user space
+-to set the CPU frequency for the policy it is attached to by writing to the
+-``scaling_setspeed`` attribute of that policy.
++to set a target CPU frequency for the policy it is attached to by writing to the
++``scaling_setspeed`` attribute of that policy. The actual frequency will be
++greater than or equal to ``scaling_setspeed``, depending on the cpufreq driver.
++For example, if hardware-managed P-states are enabled, then the ``intel_pstate``
++driver will set the minimum frequency to the value of ``scaling_setspeed`` and
++the maximum frequency to the value of ``scaling_max_freq``.  The hardware is
++free to select any frequency between those two values. If this behavior is not
++desired, then ``scaling_max_freq`` should be set to the same value as
++``scaling_setspeed``.
+ 
+ ``schedutil``
+ -------------
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+---
+base-commit: d608703fcdd9e9538f6c7a0fcf98bf79b1375b60
+change-id: 20250522-userspace-governor-doc-86380dbab3d5
 
+Best regards,
+-- 
+Shashank Balaji <shashank.mahadasyam@sony.com>
 
 
