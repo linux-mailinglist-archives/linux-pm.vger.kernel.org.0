@@ -1,518 +1,322 @@
-Return-Path: <linux-pm+bounces-27513-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27514-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21E80AC0C3D
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 15:07:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D324AC0DB2
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 16:10:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50A229E6AA8
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 13:07:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45C754A23A9
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 14:09:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B756F28BA90;
-	Thu, 22 May 2025 13:07:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D797C28C2BD;
+	Thu, 22 May 2025 14:08:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="WCkbBfOo"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="SqIMqXp8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB511D618A;
-	Thu, 22 May 2025 13:07:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747919264; cv=pass; b=LWQ7gwubhdsu/LmmGrOok5BpCp6tS9KcIizERr08WOXpu4zR0np5AonPh08+C65v4APY4JKPzoGiNqtwPZAPh8nik45RXqyKsv+kw4bKW4w7Lna8IEV9V4TUtDIeSM0JPIrMMP6FZkh+TYn3cC6fVWpEkOD1Y7GqIvh8jR8j3tA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747919264; c=relaxed/simple;
-	bh=jQxDuZ9R0b9bBZwRehtck9j87R5IEI5aBPwGzbcQZvk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TtAVMSs37y2mn5HAslEjwQab+bh+DXLB1MOuJsfoX5lryXuqbB/5IOXB3+DfDAzqfJEA4v0+mECxYoFCgzGT6LZrCCMQCuvJYKMbSsuOiEBzraueMjmA4VoXOBGBU9mrbM7J7epxxMdFJHJ6OMGbl1Tk5WJkedxbQ+HtWNwYibs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=WCkbBfOo; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1747919210; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Ck0TM/HURCzQNfkC0FfntaPkefppCNGhvOZ5Fx6N1J+bifj1K6/xYSI2wfiPVjtH3gYpsK8rX4M6CFBgv0yEzSm608QZgl7PFzYiWYB1iIKvrdTDQRW+qCIZOZr2zu4fBq4myeGF0xsurLKJMVS7jEbr29kOl1mNIt6VXJrmOuE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1747919210; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=pURki4Th1hWSWrG4hgjSsahdcAd/g4lCRi+SNl0XRG8=; 
-	b=PVrKy7W3wQZKNlyh0rIrgBSyCcDJ/ZQY90Q8Fcj+QxKlgtbV+C+frcXtA4JuMwm67oxi9CF2fx4mBp0dF9f/io7gGOYPCKOCSvayByvtzNA0s/JNchU4ZLJrpTcS/B7gIiBI2AdOx7xTj+FTohrPN1a7AF2LPzrPYdwQa6yboVo=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1747919210;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=pURki4Th1hWSWrG4hgjSsahdcAd/g4lCRi+SNl0XRG8=;
-	b=WCkbBfOoxC5L2F1NcYEheBzpXz13jGbIZjmI8hcGzWiAqrNmUvA4x3T8tbOnH33k
-	77sRh9ccUqDTwoB8Oz2lqlhF1Ecvzbr6Na7NKRBEUIBeYwuWDPAS/QsYHhQFz0yBAb5
-	3FkQQAVAUmgIaaqrffzm72cHzHqQUyN6xUFPBLqw=
-Received: by mx.zohomail.com with SMTPS id 1747919207079181.66547867456336;
-	Thu, 22 May 2025 06:06:47 -0700 (PDT)
-Received: by venus (Postfix, from userid 1000)
-	id A5D9E1807A4; Thu, 22 May 2025 15:06:42 +0200 (CEST)
-Date: Thu, 22 May 2025 15:06:42 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: sven@svenpeter.dev
-Cc: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
-	Neal Gompa <neal@gompa.dev>, Hector Martin <marcan@marcan.st>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, Marc Zyngier <maz@kernel.org>, 
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v6 07/10] power: reset: macsmc-reboot: Add driver for
- rebooting via Apple SMC
-Message-ID: <gk656zq44i6ls6bbcb6qpd42typzkw3hqbft6b6rvfaw5aocsd@2fsiokbcnbtf>
-References: <20250515-smc-6-15-v6-0-c47b1ef4b0ae@svenpeter.dev>
- <20250515-smc-6-15-v6-7-c47b1ef4b0ae@svenpeter.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74EDD28C007
+	for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 14:08:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747922909; cv=none; b=NXsSIbvRFY4ggr+ruxQB2CH01eQCXqOET5klgU7Lj/24O3z5spnHumPdDjjAswlQrMClAyObr75VTTAJAvFVNfDhaHqEzU7kU9R83VGbjVwkubuFfJ5ZJVEbNIEBRqKO4RGJHzlKRPehec0n0OduZQQeaiF44dR+VDrLJBsiHR4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747922909; c=relaxed/simple;
+	bh=sKRWtQLFM3BikSvuSI0I19AZjAJ0USpkd0DsiZKT94U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UbRriHyVFI5x1VJdz4/EfQvlfR1/ScTS+e/pR/AfBw5gqBhds+1u3RFxLlCFsUJao+cDrQWjLT2hvmGiWGdonDNZpFzKTjd/y5KnC2eSzDW5zz8U/S71XHMs23F1v/63+cec7JqOP0mHhKvB3YASPb7mSL6kCo2P3UNAY723kMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=SqIMqXp8; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ad5394be625so513046966b.2
+        for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 07:08:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1747922905; x=1748527705; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7JnH/UvNq6EudFKnyGLwmWgVhkOUt6Qi43wiQBrg6GA=;
+        b=SqIMqXp8kcAF/NL86NhVrDxBbqFmslLjxoDXTcEY0739VQDpNh2Eq5tW0hoqg20N6L
+         Udm3AHQKchknm09I49NFqQ+2U6qMbHQAH68gh0QrZs5dQ1wE2I5RW8AiLBG+g9p0groO
+         eB+fJ8B1DY4bxHgzn3BJ5ixePDPBL2VgQ86tVpReLWiJf38ei98NAI6gyHhqOWG8+x0H
+         WEeH93U2HIH6LLnjB7TQtwhsxJ8RBW1Ah5AZbK0HJS5JYEZvSOHfcv0AZk3VlvtZzOSt
+         Q2OlxGNzgz5jVBatwPd3BzKktAOHZtxUEekWyB3Z0ipQOV5B0/LLurbgecBhCOFUVclu
+         T1ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747922905; x=1748527705;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7JnH/UvNq6EudFKnyGLwmWgVhkOUt6Qi43wiQBrg6GA=;
+        b=fjRXAU7EB4AYScRGqgAk76sYbIpSuPV1IQuk1epR75uR1r8hIvYXiVK9Ax2oVXuHaX
+         I4Sp3hA+Ch3u07Y7d/jrWJYO3aTQkCr4rr62co9K3Z9Cf1sF0Sp5ZqYxiRJ8CQX/FczD
+         a3Y0FaZuc/CqnuazvZRC88jvXNTnOuQmLAL4ymhoX22eJsRIq3wCwGSsFZ7U/LXZs3Sn
+         WIPf/xE0DboZBtUsNPwD9PWt+rG6SM6lCubD7WQIOAfUcW2szXEibtSWWbEf4GkRFuVH
+         OrZuQNcFK2tYdynfbAnRoLTSk535ABZ60gFVBVygzAySaEihGQoUEzDI9qoRB/2PwgaA
+         8kBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXjRQ3/BIlldBrhngINxGBxLkV/UTEkqGgCG3BYIuwBA7JQ1wymQeyZoatgAO+AvSN9QjQ5t0y+GA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCT7PsL4aLQjr3RAkp4qyiKjPDyWZUiUEjxB8iZ4385MdLHVLA
+	5uBcJHDcwuLpCkXJkSb4TH0TtHBK9VqJeb8Y6KNuqJ2BAzozROpYptvltvXhqQ7Kdhg=
+X-Gm-Gg: ASbGncsZ/xdk+KGEMvpeYD3mouu8/PVSh//4yH4BSId/7Gfe4t8MTzQ+mBsklczo8Ql
+	USA/9daeRdOLsMF1/eMRVjxKaq+p5tQM1xSkOxeav0BOeeopTZjWSe9pM7XSMhC4cgoTYW0v1q+
+	GbmyhJEnqS7IK8H072Qr4N0W6Q1nd3a5hA1O0Okf8wMWtNidm8bih2MhE6tf1Daqs3dJxd+m51x
+	vs693ubB4rs+O1HEE4kW5gkOCCPsv5hi+sUTCx+p62DZaMc8B+5NOVJO/yB6u63uM9VeJL0Ok/T
+	596A/kzz+bAQosRu8H6gTyGG2IP9gaXb26ZIrUROQMgCQLokmf3IrRdte+MpexX822GqSA==
+X-Google-Smtp-Source: AGHT+IHCMBXqdKSREDToijHF0Dd4OGxrQuItebItFBlt1XKnbPAI9VNU5D+hMOLVkNTSvt/yX3GJyQ==
+X-Received: by 2002:a17:907:940f:b0:acf:c:22ca with SMTP id a640c23a62f3a-ad536b5a48dmr2356806666b.1.1747922905316;
+        Thu, 22 May 2025 07:08:25 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.58])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad52d278290sm1075395866b.78.2025.05.22.07.08.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 May 2025 07:08:24 -0700 (PDT)
+Message-ID: <482b55c9-a210-4b2d-8405-e9f30d48a8fd@tuxon.dev>
+Date: Thu, 22 May 2025 17:08:23 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="c4k7uzu7ifiuep5j"
-Content-Disposition: inline
-In-Reply-To: <20250515-smc-6-15-v6-7-c47b1ef4b0ae@svenpeter.dev>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.2/245.114.34
-X-ZohoMailClient: External
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] driver core: platform: Use devres group to free driver
+ probe resources
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Jonathan Cameron <jic23@kernel.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ dakr@kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, geert@linux-m68k.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-iio@vger.kernel.org,
+ bhelgaas@google.com
+References: <20250330163129.02f24afb@jic23-huawei>
+ <5bca6dfd-fe03-4c44-acf4-a51673124338@tuxon.dev>
+ <95f5923f-7a8f-4947-b588-419525930bcb@tuxon.dev>
+ <CAPDyKFoMqmCFBoO8FwQe2wHh2kqQi4jUZNFyiNckK7QhGVgmvg@mail.gmail.com>
+ <c3a2950a-17ff-444a-bee7-af5e7e10e2bf@tuxon.dev>
+ <CAPDyKFozR4qDq4mzcZBK-LcoPf=fGyuJTXwdt=Ey+_DcQOAp0g@mail.gmail.com>
+ <4o3wo76st7w6qwyye3rrayuo2qx773i6jfzcnbkhdj76ouh7ds@3e2mblehkgwf>
+ <CAPDyKFqMB7XutXba73YHx1X4rm6uc3Fz6yMZ8yM=wgduEmgUDg@mail.gmail.com>
+ <a20fc6ee-c6c3-4013-b175-4918b9a44380@tuxon.dev>
+ <CAPDyKFpbeLJUiB_xQbqDib+-8Q3AcJNVg+DuEcqmVGMbFdNxwA@mail.gmail.com>
+ <fgl4w5uhxci7rrbdigtni72vveb2gqemh6iccz4qruqkek5rja@rzwkcjg6hkid>
+ <3b1963ba-f93f-48f2-8fb0-a485dd80ffcb@tuxon.dev>
+ <CAPDyKFqrAS4iV59S-zJ9H7_3VuGr9JdZABhfUGBwTzQNDCasaw@mail.gmail.com>
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Content-Language: en-US
+In-Reply-To: <CAPDyKFqrAS4iV59S-zJ9H7_3VuGr9JdZABhfUGBwTzQNDCasaw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+Hi, Ulf,
 
---c4k7uzu7ifiuep5j
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v6 07/10] power: reset: macsmc-reboot: Add driver for
- rebooting via Apple SMC
-MIME-Version: 1.0
+On 22.05.2025 14:53, Ulf Hansson wrote:
+> On Thu, 22 May 2025 at 11:48, Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+>>
+>> Hi, Ulf,
+>>
+>> On 21.05.2025 17:57, Dmitry Torokhov wrote:
+>>> On Wed, May 21, 2025 at 02:37:08PM +0200, Ulf Hansson wrote:
+>>>> On Wed, 21 May 2025 at 07:41, Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+>>>>>
+>>>>> Hi, Ulf,
+>>>>>
+>>>>> On 20.05.2025 15:09, Ulf Hansson wrote:
+>>>>>> For example, even if the order is made correctly, suppose a driver's
+>>>>>> ->remove() callback completes by turning off the resources for its
+>>>>>> device and leaves runtime PM enabled, as it relies on devres to do it
+>>>>>> some point later. Beyond this point, nothing would prevent userspace
+>>>>>> for runtime resuming/suspending the device via sysfs.
+>>>>>
+>>>>> If I'm not wrong, that can't happen? The driver_sysfs_remove() is called
+>>>>> before device_remove() (which calls the driver remove) is called, this
+>>>>> being the call path:
+>>>>>
+>>>>> device_driver_detach() ->
+>>>>>   device_release_driver_internal() ->
+>>>>>     __device_release_driver() ->
+>>>>>       driver_sysfs_remove()
+>>>>>       // ...
+>>>>>       device_remove()
+>>>>>
+>>>>> And the driver_sysfs_remove() calls in the end __kernfs_remove() which
+>>>>> looks to me like the place that actually drops the entries from sysfs, this
+>>>>> being a call path for it:
+>>>>>
+>>>>> driver_sysfs_remove() ->
+>>>>>   sysfs_remove_link() ->
+>>>>>     kernfs_remove_by_name() ->
+>>>>>       kernfs_remove_by_name_ns() ->
+>>>>>         __kernfs_remove() ->
+>>>>>
+>>>>> activating the following line in __kernfs_remove():
+>>>>>
+>>>>> pr_debug("kernfs %s: removing\n", kernfs_rcu_name(kn));
+>>>>>
+>>>>> leads to the following prints when unbinding the watchdog device from its
+>>>>> watchdog driver (attached to platform bus) on my board:
+>>>>> https://p.fr33tux.org/935252
+>>>>
+>>>> Indeed this is a very good point you make! I completely overlooked
+>>>> this fact, thanks a lot for clarifying this!
+>>>>
+>>>> However, my main point still stands.
+>>>>
+>>>> In the end, there is nothing preventing rpm_suspend|resume|idle() in
+>>>> drivers/base/power/runtime.c from running (don't forget runtime PM is
+>>>> asynchronous too) for the device in question. This could lead to that
+>>>> a ->runtime_suspend|resume|idle() callback becomes executed at any
+>>>> point in time, as long as we haven't called pm_runtime_disable() for
+>>>> the device.
+>>>
+>>> So exactly the same may happen if you enter driver->remove() and
+>>> something calls runtime API before pm_runtime_disable() is called.
+>>> The driver has (as they should be doing currently) be prepared for this.
+>>
+>> I took the time and tried to do a comparison of the current solutions
+>> (describing the bad and good things I see), trying to understand your
+>> concerns with regards to RPM suspend|resume|idle while unbinding a device
+>> from its driver.
+>>
+>> I see the following cases:
+>>
+>> Case 1/ the current approach when devm_pm_runtime_enable() is used in
+>> driver's ->probe() with the current code base:
+>>
+>> - right after driver ->remove() finish its execution clocks are detached
+>>   from the PM domain, through dev_pm_domain_detach() call in
+>>   platform_remove()
+>>
+>> - any subsequent RPM resume|suspend|idle will lead to failure if the driver
+>>   specific RPM APIs access directly registers and counts on PM domain to
+>>   enable/disable the clocks
+>>
+>> - at this point, if the IRQs are shared (but not only) and devm requested
+>>   the driver's IRQ handler can still be called asynchronously; driver
+>>   should be prepared for such events and should be written to work for such
+>>   scenarios; but as the clocks are not in the PM domain anymore and RPM is
+>>   still enabled at this point, if the driver don't run runtime suspend on
+>>   probe (and runtime resume/suspend on runtime), I think (because I haven't
+>>   investigated this yet) it can't rely on pm_runtime_active()/
+>>   pm_runtime_suspended() checks in interrupt handlers
+>>   and can't decide if it can interrogate registers or not; interrogating
+>>   should lead to failure at this stage as the clocks are disabled; drivers
+>>   should work in such scenario and the CONFIG_DEBUG_SHIRQ is a way to check
+>>   they can; I previously debugged a similar issue on drivers/net/ethernet/
+>>   renesas/ravb driver where using devm_pm_runtime_enable() in probe and
+>>   pm_runtime_suspended() checks in IRQ handlers was the way to make this
+>>   scenario happy; at that time I wasn't able to find that
+>>   dev_pm_domain_detach() have the impact discussed in this thread
+>>
+>> Case 2/ What is proposed in this patch: devm_pm_runtime_enable() used +
+>> open devres group after dev_pm_domain_attach() (in probe) and close the
+>> devres group before dev_pm_domain_attach() (in remove):
+>>
+>> - right after the driver ->remove() is executed only the driver allocated
+>>   devres resources are freed; this happens before dev_pm_domain_deattach()
+>>   is called, though the proposed devres_release_group() call in this patch
+>>
+>> - while doing this, driver can still get async RPM suspend|resume|idle
+>>   requests; is like the execution is in the driver ->remove()
+>>   but the pm_runtime_disable() hasn't been called yet
+>>
+>> - as the runtime PM is enabled in driver's ->probe() mostly after the HW is
+>>   prepared to take requests and all the other devm resources are allocated,
+>>   the RPM disable is going to be among the first things to be called by the
+>>   devres_release_group()
+>>
+>> - then, after RPM disable, all the devres resources allocated only in the
+>>   driver's ->probe() are cleaned up in reverse order, just like
+>>   device_unbind_cleanup() -> devres_release_all() call in
+>>   __device_release_driver() is doing, but limited only to the resources
+>>   allocated by the driver itself; I personally see this like manually
+>>   allocating and freeing resources in the driver itself w/o relying on
+>>   devres
+>>
+>> - then it comes the turn of dev_pm_domain_detach() call in
+>>   platform_remove(): at the time dev_pm_domain_detach() is executed the
+>>   runtime PM is disabled and all the devres resources allocated by driver
+>>   are freed as well
+>>
+>> - after the dev_pm_domain_detach() is executed all the driver resources
+>>   are cleaned up, the driver can't get IRQs as it's handler was already
+>>   unregistered, no other user can execute rpm suspend|resume|idle
+>>   as the RPM is disabled at this time
+>>
+>> Case 3/ devm_pm_runtime_enabled() dropped and replaced by manual cleanup:
+>> - the driver code is going be complicated, difficult to maintain and error
+>>   prone
+> 
+> Yes, the driver's code would become slightly more complicated, but
+> more importantly it would be correct.
+> 
+> To me it sounds like the driver's ->remove() callback could do this:
+> 
+> pm_runtime_get_sync()
+> pm_runtime_disable()
+> pm_runtime_put_noidle()
 
-Hi,
+In my case it was just pm_runtime_disable() at the end of driver ->remove()
+and pm_runtime_active() checks in IRQ handlers which didn't worked after
+driver ->remove() finished execution due to disable_depth being incremented
+in pm_runtime_disable(). The IRQs were devm requested.
 
-On Thu, May 15, 2025 at 06:21:19AM +0000, Sven Peter via B4 Relay wrote:
-> From: Hector Martin <marcan@marcan.st>
->=20
-> This driver implements the reboot/shutdown support exposed by the SMC
-> on Apple Silicon machines, such as Apple M1 Macs.
->=20
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> Reviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
-> Reviewed-by: Neal Gompa <neal@gompa.dev>
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> ---
->  MAINTAINERS                         |   1 +
->  drivers/power/reset/Kconfig         |   9 ++
->  drivers/power/reset/Makefile        |   1 +
->  drivers/power/reset/macsmc-reboot.c | 294 ++++++++++++++++++++++++++++++=
-++++++
->  4 files changed, 305 insertions(+)
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index fa3a5f9ee40446bcc725c9eac2a36651e6bc7553..84f7a730eb2260b7c1e0487d1=
-8c8eb3de82f5206 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2303,6 +2303,7 @@ F:	drivers/mfd/macsmc.c
->  F:	drivers/nvme/host/apple.c
->  F:	drivers/nvmem/apple-efuses.c
->  F:	drivers/pinctrl/pinctrl-apple-gpio.c
-> +F:	drivers/power/reset/macsmc-reboot.c
->  F:	drivers/pwm/pwm-apple.c
->  F:	drivers/soc/apple/*
->  F:	drivers/spi/spi-apple.c
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index 60bf0ca64cf395cd18238fc626611c74d29844ee..82b9391307cf1a7bedafaa9e0=
-b8e9501e64449aa 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-> @@ -128,6 +128,15 @@ config POWER_RESET_LINKSTATION
-> =20
->  	  Say Y here if you have a Buffalo LinkStation LS421D/E.
-> =20
-> +config POWER_RESET_MACSMC
-> +	tristate "Apple SMC reset/power-off driver"
-> +	depends on MFD_MACSMC
-> +	help
-> +	  This driver supports reset and power-off on Apple Mac machines
-> +	  that implement this functionality via the SMC.
-> +
-> +	  Say Y here if you have an Apple Silicon Mac.
-> +
->  config POWER_RESET_MSM
->  	bool "Qualcomm MSM power-off driver"
->  	depends on ARCH_QCOM
-> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-> index 10782d32e1da39f4b8b4566e8a885f2e13f65130..887dd9e49b7293b69b9429ddc=
-0c1571194a153cf 100644
-> --- a/drivers/power/reset/Makefile
-> +++ b/drivers/power/reset/Makefile
-> @@ -13,6 +13,7 @@ obj-$(CONFIG_POWER_RESET_GPIO) +=3D gpio-poweroff.o
->  obj-$(CONFIG_POWER_RESET_GPIO_RESTART) +=3D gpio-restart.o
->  obj-$(CONFIG_POWER_RESET_HISI) +=3D hisi-reboot.o
->  obj-$(CONFIG_POWER_RESET_LINKSTATION) +=3D linkstation-poweroff.o
-> +obj-$(CONFIG_POWER_RESET_MACSMC) +=3D macsmc-reboot.o
->  obj-$(CONFIG_POWER_RESET_MSM) +=3D msm-poweroff.o
->  obj-$(CONFIG_POWER_RESET_MT6323) +=3D mt6323-poweroff.o
->  obj-$(CONFIG_POWER_RESET_QCOM_PON) +=3D qcom-pon.o
-> diff --git a/drivers/power/reset/macsmc-reboot.c b/drivers/power/reset/ma=
-csmc-reboot.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..5cfbf56282452bab8d06ed7e9=
-7e9d2405d7b30c0
-> --- /dev/null
-> +++ b/drivers/power/reset/macsmc-reboot.c
-> @@ -0,0 +1,294 @@
-> +// SPDX-License-Identifier: GPL-2.0-only OR MIT
-> +/*
-> + * Apple SMC Reboot/Poweroff Handler
-> + * Copyright The Asahi Linux Contributors
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/mfd/macsmc.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/nvmem-consumer.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reboot.h>
-> +#include <linux/slab.h>
-> +
-> +struct macsmc_reboot_nvmem {
-> +	struct nvmem_cell *shutdown_flag;
-> +	struct nvmem_cell *boot_stage;
-> +	struct nvmem_cell *boot_error_count;
-> +	struct nvmem_cell *panic_count;
-> +};
-> +
-> +static const char * const nvmem_names[] =3D {
-> +	"shutdown_flag",
-> +	"boot_stage",
-> +	"boot_error_count",
-> +	"panic_count",
-> +};
-> +
-> +enum boot_stage {
-> +	BOOT_STAGE_SHUTDOWN		=3D 0x00, /* Clean shutdown */
-> +	BOOT_STAGE_IBOOT_DONE		=3D 0x2f, /* Last stage of bootloader */
-> +	BOOT_STAGE_KERNEL_STARTED	=3D 0x30, /* Normal OS booting */
-> +};
-> +
-> +struct macsmc_reboot {
-> +	struct device *dev;
-> +	struct apple_smc *smc;
-> +	struct notifier_block reboot_notify;
-> +
-> +	union {
-> +		struct macsmc_reboot_nvmem nvm;
-> +		struct nvmem_cell *nvm_cells[ARRAY_SIZE(nvmem_names)];
-> +	};
-> +};
-> +
-> +/* Helpers to read/write a u8 given a struct nvmem_cell */
-> +static int nvmem_cell_get_u8(struct nvmem_cell *cell)
-> +{
-> +	size_t len;
-> +	void *bfr;
-> +	u8 val;
-> +
-> +	bfr =3D nvmem_cell_read(cell, &len);
-> +	if (IS_ERR(bfr))
-> +		return PTR_ERR(bfr);
-> +
-> +	if (len < 1) {
-> +		kfree(bfr);
-> +		return -EINVAL;
-> +	}
-> +
-> +	val =3D *(u8 *)bfr;
-> +	kfree(bfr);
-> +	return val;
-> +}
-> +
-> +static int nvmem_cell_set_u8(struct nvmem_cell *cell, u8 val)
-> +{
-> +	return nvmem_cell_write(cell, &val, sizeof(val));
-> +}
-> +
-> +/*
-> + * SMC 'MBSE' key actions:
-> + *
-> + * 'offw' - shutdown warning
-> + * 'slpw' - sleep warning
-> + * 'rest' - restart warning
-> + * 'off1' - shutdown (needs PMU bit set to stay on)
-> + * 'susp' - suspend
-> + * 'phra' - restart ("PE Halt Restart Action"?)
-> + * 'panb' - panic beginning
-> + * 'pane' - panic end
-> + */
-> +
-> +static int macsmc_prepare_atomic(struct sys_off_data *data)
-> +{
-> +	struct macsmc_reboot *reboot =3D data->cb_data;
-> +
-> +	dev_info(reboot->dev, "Preparing SMC for atomic mode\n");
-> +
-> +	apple_smc_enter_atomic(reboot->smc);
-> +	return NOTIFY_OK;
-> +}
-> +
-> +static int macsmc_power_off(struct sys_off_data *data)
-> +{
-> +	struct macsmc_reboot *reboot =3D data->cb_data;
-> +
-> +	dev_info(reboot->dev, "Issuing power off (off1)\n");
-> +
-> +	if (apple_smc_write_u32_atomic(reboot->smc, SMC_KEY(MBSE), SMC_KEY(off1=
-)) < 0) {
-> +		dev_err(reboot->dev, "Failed to issue MBSE =3D off1 (power_off)\n");
-> +	} else {
-> +		mdelay(100);
-> +		WARN_ONCE(1, "Unable to power off system\n");
-> +	}
-> +
-> +	return NOTIFY_OK;
-> +}
-> +
-> +static int macsmc_restart(struct sys_off_data *data)
-> +{
-> +	struct macsmc_reboot *reboot =3D data->cb_data;
-> +
-> +	dev_info(reboot->dev, "Issuing restart (phra)\n");
-> +
-> +	if (apple_smc_write_u32_atomic(reboot->smc, SMC_KEY(MBSE), SMC_KEY(phra=
-)) < 0) {
-> +		dev_err(reboot->dev, "Failed to issue MBSE =3D phra (restart)\n");
-> +	} else {
-> +		mdelay(100);
-> +		WARN_ONCE(1, "Unable to restart system\n");
-> +	}
-> +
-> +	return NOTIFY_OK;
-> +}
-> +
-> +static int macsmc_reboot_notify(struct notifier_block *this, unsigned lo=
-ng action, void *data)
-> +{
-> +	struct macsmc_reboot *reboot =3D container_of(this, struct macsmc_reboo=
-t, reboot_notify);
-> +	u8 shutdown_flag;
-> +	u32 val;
-> +
-> +	switch (action) {
-> +	case SYS_RESTART:
-> +		val =3D SMC_KEY(rest);
-> +		shutdown_flag =3D 0;
-> +		break;
-> +	case SYS_POWER_OFF:
-> +		val =3D SMC_KEY(offw);
-> +		shutdown_flag =3D 1;
-> +		break;
-> +	default:
-> +		return NOTIFY_DONE;
-> +	}
-> +
-> +	dev_info(reboot->dev, "Preparing for reboot (%p4ch)\n", &val);
-> +
-> +	/* On the Mac Mini, this will turn off the LED for power off */
-> +	if (apple_smc_write_u32(reboot->smc, SMC_KEY(MBSE), val) < 0)
-> +		dev_err(reboot->dev, "Failed to issue MBSE =3D %p4ch (reboot_prepare)\=
-n", &val);
-> +
-> +	/* Set the boot_stage to 0, which means we're doing a clean shutdown/re=
-boot. */
-> +	if (reboot->nvm.boot_stage &&
-> +	    nvmem_cell_set_u8(reboot->nvm.boot_stage, BOOT_STAGE_SHUTDOWN) < 0)
-> +		dev_err(reboot->dev, "Failed to write boot_stage\n");
-> +
-> +	/*
-> +	 * Set the PMU flag to actually reboot into the off state.
-> +	 * Without this, the device will just reboot. We make it optional in ca=
-se it is no longer
-> +	 * necessary on newer hardware.
-> +	 */
-> +	if (reboot->nvm.shutdown_flag &&
-> +	    nvmem_cell_set_u8(reboot->nvm.shutdown_flag, shutdown_flag) < 0)
-> +		dev_err(reboot->dev, "Failed to write shutdown_flag\n");
-> +
-> +	return NOTIFY_OK;
-> +}
-> +
-> +static void macsmc_power_init_error_counts(struct macsmc_reboot *reboot)
-> +{
-> +	int boot_error_count, panic_count;
-> +
-> +	if (!reboot->nvm.boot_error_count || !reboot->nvm.panic_count)
-> +		return;
-> +
-> +	boot_error_count =3D nvmem_cell_get_u8(reboot->nvm.boot_error_count);
-> +	if (boot_error_count < 0) {
-> +		dev_err(reboot->dev, "Failed to read boot_error_count (%d)\n", boot_er=
-ror_count);
-> +		return;
-> +	}
-> +
-> +	panic_count =3D nvmem_cell_get_u8(reboot->nvm.panic_count);
-> +	if (panic_count < 0) {
-> +		dev_err(reboot->dev, "Failed to read panic_count (%d)\n", panic_count);
-> +		return;
-> +	}
-> +
-> +	if (!boot_error_count && !panic_count)
-> +		return;
-> +
-> +	dev_warn(reboot->dev, "PMU logged %d boot error(s) and %d panic(s)\n",
-> +		 boot_error_count, panic_count);
-> +
-> +	if (nvmem_cell_set_u8(reboot->nvm.panic_count, 0) < 0)
-> +		dev_err(reboot->dev, "Failed to reset panic_count\n");
-> +	if (nvmem_cell_set_u8(reboot->nvm.boot_error_count, 0) < 0)
-> +		dev_err(reboot->dev, "Failed to reset boot_error_count\n");
-> +}
-> +
-> +static int macsmc_reboot_probe(struct platform_device *pdev)
-> +{
-> +	struct apple_smc *smc =3D dev_get_drvdata(pdev->dev.parent);
-> +	struct macsmc_reboot *reboot;
-> +	int ret, i;
-> +
-> +	/* Ignore devices without this functionality */
-> +	if (!apple_smc_key_exists(smc, SMC_KEY(MBSE)))
-> +		return -ENODEV;
+The solution found at the that time was to use devm_pm_runtime_enable() in
+probe and pm_runtime_suspended() calls in IRQ handlers.
 
-Is that a leftover? I would expect that you do not have the
-'apple,smc-reboot' sub-device described in DT for such a case.
+> 
+> In this way, the driver will runtime resume its device, allowing
+> devres to drop/turn-off resources in the order we want.
+> Except for the
+> clocks, as those would be turned off via dev_pm_domain_detach() before
+> the IRQ handler is freed (via devres), right?
+> 
+> To avoid getting the IRQ handler to be called when it can't access
+> registers, we could do one of the below:
+> *) Look for a condition in the IRQ handler and bail-out when we know
+> we should not manage IRQs. Is using pm_runtime_enabled() sufficient,
+> you think? Otherwise we need a driver specific flag, which should be
+> set in ->remove().
+> *) Don't use devm* when registering the IRQ handler.
 
-Otherwise
+That's true.
 
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> 
+> Yes, both options further contribute to making the driver code
+> slightly more complicated, but if you want to solve the problem sooner
+> than later, I think this is what you need to do. Yet, I think there is
+> another option too, see below.
+> 
+>>
+>> I may have missed considering things when describing the case 2 (which is
+>> what is proposed by this patch) as I don't have the full picture behind the
+>> dev_pm_domain_detach() call in platform bus remove. If so, please correct me.
+> 
+> The dev_pm_domain_attach|detach() calls in bus level code
+> (probe/remove) were added there a long time ago, way before devres was
+> being used like today.
+> 
+> Currently we also have devm_pm_domain_attach_list(), which is used
+> when devices have multiple PM domains to attach too. This is *not*
+> called by bus-level code, but by the driver themselves. For these
+> cases, we would not encounter the problems you have been facing with
+> clocks/IRQ-handler, I think - because the devres order is maintained
+> for PM domains too.
+> 
+> That said, I think adding a devm_pm_domain_attach() interface would
+> make perfect sense. Then we can try to replace
+> dev_pm_domain_attach|detach() in bus level code, with just a call to
+> devm_pm_domain_attach(). In this way, we should preserve the
+> expectation for drivers around devres for PM domains. Even if it would
+> change the behaviour for some drivers, it still sounds like the
+> correct thing to do in my opinion.
 
--- Sebastian
+This looks good to me, as well. I did prototype it on my side and tested on
+all my failure cases and it works.
 
-> +
-> +	reboot =3D devm_kzalloc(&pdev->dev, sizeof(*reboot), GFP_KERNEL);
-> +	if (!reboot)
-> +		return -ENOMEM;
-> +
-> +	reboot->dev =3D &pdev->dev;
-> +	reboot->smc =3D smc;
-> +
-> +	platform_set_drvdata(pdev, reboot);
-> +
-> +	for (i =3D 0; i < ARRAY_SIZE(nvmem_names); i++) {
-> +		struct nvmem_cell *cell;
-> +
-> +		cell =3D devm_nvmem_cell_get(&pdev->dev,
-> +					   nvmem_names[i]);
-> +		if (IS_ERR(cell)) {
-> +			if (PTR_ERR(cell) =3D=3D -EPROBE_DEFER)
-> +				return -EPROBE_DEFER;
-> +			dev_warn(&pdev->dev, "Missing NVMEM cell %s (%ld)\n",
-> +				 nvmem_names[i], PTR_ERR(cell));
-> +			/* Non fatal, we'll deal with it */
-> +			cell =3D NULL;
-> +		}
-> +		reboot->nvm_cells[i] =3D cell;
-> +	}
-> +
-> +	/* Set the boot_stage to indicate we're running the OS kernel */
-> +	if (reboot->nvm.boot_stage &&
-> +	    nvmem_cell_set_u8(reboot->nvm.boot_stage, BOOT_STAGE_KERNEL_STARTED=
-) < 0)
-> +		dev_err(reboot->dev, "Failed to write boot_stage\n");
-> +
-> +	/* Display and clear the error counts */
-> +	macsmc_power_init_error_counts(reboot);
-> +
-> +	reboot->reboot_notify.notifier_call =3D macsmc_reboot_notify;
-> +
-> +	ret =3D devm_register_sys_off_handler(&pdev->dev, SYS_OFF_MODE_POWER_OF=
-F_PREPARE,
-> +					    SYS_OFF_PRIO_HIGH, macsmc_prepare_atomic, reboot);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret,
-> +				     "Failed to register power-off prepare handler\n");
-> +	ret =3D devm_register_sys_off_handler(&pdev->dev, SYS_OFF_MODE_POWER_OF=
-F, SYS_OFF_PRIO_HIGH,
-> +					    macsmc_power_off, reboot);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret,
-> +				     "Failed to register power-off handler\n");
-> +
-> +	ret =3D devm_register_sys_off_handler(&pdev->dev, SYS_OFF_MODE_RESTART_=
-PREPARE,
-> +					    SYS_OFF_PRIO_HIGH, macsmc_prepare_atomic, reboot);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret,
-> +				     "Failed to register restart prepare handler\n");
-> +	ret =3D devm_register_sys_off_handler(&pdev->dev, SYS_OFF_MODE_RESTART,=
- SYS_OFF_PRIO_HIGH,
-> +					    macsmc_restart, reboot);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret, "Failed to register restart hand=
-ler\n");
-> +
-> +	ret =3D devm_register_reboot_notifier(&pdev->dev, &reboot->reboot_notif=
-y);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret, "Failed to register reboot notif=
-ier\n");
-> +
-> +	dev_info(&pdev->dev, "Handling reboot and poweroff requests via SMC\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id macsmc_reboot_of_table[] =3D {
-> +	{ .compatible =3D "apple,smc-reboot", },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, macsmc_reboot_of_table);
-> +
-> +static struct platform_driver macsmc_reboot_driver =3D {
-> +	.driver =3D {
-> +		.name =3D "macsmc-reboot",
-> +		.of_match_table =3D macsmc_reboot_of_table,
-> +	},
-> +	.probe =3D macsmc_reboot_probe,
-> +};
-> +module_platform_driver(macsmc_reboot_driver);
-> +
-> +MODULE_LICENSE("Dual MIT/GPL");
-> +MODULE_DESCRIPTION("Apple SMC reboot/poweroff driver");
-> +MODULE_AUTHOR("Hector Martin <marcan@marcan.st>");
->=20
-> --=20
-> 2.34.1
->=20
->=20
-
---c4k7uzu7ifiuep5j
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmgvIVsACgkQ2O7X88g7
-+ppuTQ//Q0fURHIz1nalMSnA+ta9JGOTUXBHAiWH9IBycwPQwsxRwA0uupTshWxe
-bGvYu6eRxQ1flcPmhAAKvT1wkzPjoBh31qhAPLHp9yVkpqTH61JY5r1Vhei6rJn/
-0D4NVTvoofdLVgKh8Nbxt4rjU0JcF/j068HBu+MFwjBgSyGumOFp2IwvJu+pvI2F
-ngVQaKtZpwEovGxMC9T9MRS4D1SS2nK6HA8bZr6kuboTOlsh/0rc86suO7hjUs3X
-c3RcUV7kYhii4FKkfCkHRUJC0+AHc+89X/X2TwgyVzQtSqQZedS0uQ+S7Okghlzu
-zp6S5Pw7FENx7VQkRrlWSkJGB3IA6LtEozvgBQGhU6xsh94sjQD73HeNBy2F0mZs
-YnbZPp8HEz/b3/s3Dx4SrQD2FuCjuPAV9CMPGIWnM3bPfecpeEe4oEHv8AfndXMp
-B8ZiErNEAcsR0nErbxPk6rGNYsnMg1rsaRCIRcJdM/u19mdQ1dQxZHMwfpVtXLAK
-fEJxPYwAol5m70pLffBViSweneZaquZAk4ijZTUqraQOVfSrN1fSqXIILYQtv7eg
-FJaR6l3xuFvxiu1JQPHuy53y2kqK7CiMVEQT+PBDwytB534Jfk/hKGeEf4ULOB2O
-a7dPj+q71C0QO519GW4XN10DqmhkZrTLtqQKdMaeqtnMkPPlJTA=
-=bmnZ
------END PGP SIGNATURE-----
-
---c4k7uzu7ifiuep5j--
+Thank you,
+Claudiu
 
