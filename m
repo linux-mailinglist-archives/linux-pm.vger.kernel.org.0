@@ -1,192 +1,180 @@
-Return-Path: <linux-pm+bounces-27504-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27505-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E232AC09A7
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 12:20:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 790DEAC09D8
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 12:32:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF91B4A522E
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 10:20:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0DA53B4AD9
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 10:32:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6BAB2356CF;
-	Thu, 22 May 2025 10:20:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74274286D56;
+	Thu, 22 May 2025 10:32:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IH29CO3N"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="r4gPe61+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A312914;
-	Thu, 22 May 2025 10:20:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A97D6233735
+	for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 10:32:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747909228; cv=none; b=sdyikdBpeBwKhvbsHWsR+l0UWCfPfJeVtq/N7Kd5G96kl/AGqOBLE6p84j1SN99QUDunyxzefP5OexTrgIZmEmBZxLqVNHM36eIBwxxxPMOV9dOdDJsmkFFWihK8gzRSvK8ApLvbhTRpb4Q8B5txJxFM2lAvVoaGWwxP/9YRwsE=
+	t=1747909961; cv=none; b=bfLtjy8WRPrgo80M/2drCb+Tbrm6wh8yYeT1aDoglxYvQgtdEbnfXLuHavQjqO3e9dUa8ZHvaKC5hg6OoF2kxbb5uZcatI3HZn8U9qZvI+FcAK4SLMczJRbazMlnQP+C8rCA8I2RJd2xLqMqoGVZrjwNamifhnjeakHq++GaSWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747909228; c=relaxed/simple;
-	bh=uP5XtD0V69EicAgIlot7wFwDfbvfb+5YbEYAYzUUyio=;
+	s=arc-20240116; t=1747909961; c=relaxed/simple;
+	bh=YI9fPYbxNpIx4m28qeoBw7esjheFt6NN0mg28O/d8YU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ahJUbK0qsOpWLHlfob780G1OY8EnXjghSoa7ciO6dGwjliqsCRDUp7xCGbokrXUtGz1EvQxfIg2b5Sv+6FSvB6D7tu/CbhfGMDskiD6jf6vllJYZ6YMjZ3dP5rkaKGkEI5i9v4jUyw0hAkFecFA0NcWeVgSfTW2cC8ueh3Ivt5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IH29CO3N; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12C3BC4CEF0;
-	Thu, 22 May 2025 10:20:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747909228;
-	bh=uP5XtD0V69EicAgIlot7wFwDfbvfb+5YbEYAYzUUyio=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=IH29CO3N3bWb1BteBNLRYPoyAKm+zYOuiNhpKJwQI5Ektln9do8VAeeV+Mwu4rRNr
-	 Zl1H5MFNFLTGqhEr0+T3d0Q3X8eimiEhMzJjHRAfPVPkNZe0ga51kIDPQshkvTEI3g
-	 /zsEnILuJmEQLwb79U0WzaGIqCpYlomiSwET0ovBuuCnVWGbgoGzRo+hfCRlRW4kaO
-	 1fQBQISeyiMXPSYj5xV+DT52T+Gk3BxrV4e8Dbk7Vo9OpOGWH4AwEDJBRuStcH5Snz
-	 WvxVA7DgofLqYQfOA7BgWBG3dKCiLANJ2fcGw5xzTz8XXvzzeEXw5TuZf2/sPRLvN1
-	 eR6rte8pBLPhQ==
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-6062e41916dso4459346eaf.1;
-        Thu, 22 May 2025 03:20:28 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWU0cuMwiMM8lAV15cz93jL+ax3KJx0eP0d1+IviZ2SPrZ6AShP1H3cbYv/jtKS6Eo/jujtZ2bEbZcBBsUccxA=@vger.kernel.org, AJvYcCWcuPa4t8WKG+15GV6NNMqP9+Wm1Ub2ol9CJa734oXYrwWoxqqtsD1xTMIIomQf5JWhFtjrYPeAYw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZ9EyPf3tQWhdjNf54NNZcC/eafWnNPYIu2nZUoNUjoC03lTy3
-	FoMrKBJVIqpFdR5pwawROG7X/6qh+FGD/k1lx9q7ZoKPMdvxfvdAvnA8vuKFCAdoVlt6mJakdqQ
-	M1AzpQJSDAUML/mluPdvERPNcvaePTkU=
-X-Google-Smtp-Source: AGHT+IH8IyKNBrSnzUSi0Gaks/5GRDrQrgrMjKu+uDnHk/7gqxRd4WJHDI4b4K20v7qdr2KYUwnNKnpXCLWOyw8Og58=
-X-Received: by 2002:a05:6820:a09:b0:60a:bee:497a with SMTP id
- 006d021491bc7-60a0bee49fcmr9176330eaf.2.1747909227345; Thu, 22 May 2025
- 03:20:27 -0700 (PDT)
+	 To:Cc:Content-Type; b=reKNlw7khAcCetq+ZJ38dSc7RrYB9kNSP/fX2pyidXGgi0fI083lSJmUdwRqsuNHJAw3+cfgQATsisnT5fIptEtNzhsG4js9jfop7fZS7zJL7v4BoMTBo/Ef1WkOUjmW6vgaxsbYTP4n+DM/2mr/Sx5Zpz9WO8W11IfGf+wh9Zs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=r4gPe61+; arc=none smtp.client-ip=209.85.219.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e7d6be50fe2so669570276.2
+        for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 03:32:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1747909958; x=1748514758; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qg9PlAs1c3H2apUuqGgxlCvVOYlrIlBejRb6yanSPt4=;
+        b=r4gPe61+5AYjVmjAFy+eu4b8pavfun3dJXse8vPyQi5KgzEgA7uebDbNieriGl8+xI
+         fOCM1l/O8Gir2f6pIKbRDYcI2yiAnSu/lD/J9NMpOyHKPPVGda6R/vcMGbvQO55Z3HrD
+         c1+7y4aMvcIK6biHNyHEgtF1l2RkNjVVoIqHXo22nedEWHrVFfG+OKRNCwH6ykgbGpyo
+         ZwuA11+babu/UBbqA1uHZYUIYPoH/z0wmb3LILXJyk71beSPLyBOd+Hu5PEaOKHNbWyU
+         AXYOrXU1JpB6I1ASLGnLGF8n81nig6hMEA9X7CJKXzlfgJ2afoGqAHAebWUmBprA/KMA
+         wBnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747909958; x=1748514758;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qg9PlAs1c3H2apUuqGgxlCvVOYlrIlBejRb6yanSPt4=;
+        b=csDh6TFJeNsyTmSHML8eoUL4XC/b7+aZ5mprxDJ7mJ2Q7mUr4C3j1xCVqS7lFmaeu2
+         bKGHcgZ9GveNH83uVy/8PohP33GR4GvxCcnYXC56AHEBCZ/ypyFzu4+p57tYrRoiNS9v
+         rBT5OQhqdP9rT1L9e/uVoBgG3TxcQ6G74sPzUELgM//ojgF+f3baFhPgWPlGrUbDwBt6
+         BmWDmPLlBa4lST7YsypZG0ftV5lUWp6z3KXAK7y6kXlNZifCie1/4rIFVG3R/p71EOtd
+         4kCnEh1Qy8bAnN8gTifP0SdnyIfzTl5K7PluJkQ8noBh4W+brwWu33qRQEAU+oq5i2L+
+         gmnA==
+X-Forwarded-Encrypted: i=1; AJvYcCUcMctFSVSzwPal5A9qeXlfqSt/FaPtcqDeNkFnCeGsuoQ2tebDQVhILO/gBJc0q1XPymY9pk2V+g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywqd32oaQe3xGb/v+XFoh7TGQdutIjTUnZvfYm+xAkqM6HXFYWP
+	JdTemCg9vIKpBNS7j/kGWsarkhTjbGrcB6DEkqGsK3iVlpXyTwUtSSOtRi8D4Z5WHSvDd4FJQx9
+	BbOcdV9B8G/557HCsYgN1b01RmecBPxy5VmbqCNdxvA==
+X-Gm-Gg: ASbGncslHHJSTPhB/ZMfHp6zEjJjB1Jr7zfhvaTmDivqCBSmOd68jS/toA4qPeyBECq
+	/quPqguQoycirhGzYCS/L9z2xcehqi9ldMFn76pIrVDxPLd3hXbjy6m3tuSZnO1bJTjJ5gmNKiY
+	xV2LeOGMrfvawc2NrSDcYNiGPhX3JWDSVjYw==
+X-Google-Smtp-Source: AGHT+IEG7xv7iMGd+C2t24T8MuB8mYwImHBZWwHHma4S1d6s3uzDWckhj4BH1W50gTd0IHqU8jYfunAzW1hH/aCCsec=
+X-Received: by 2002:a05:6902:20c3:b0:e7d:7663:1687 with SMTP id
+ 3f1490d57ef6-e7d766317f7mr613007276.24.1747909958605; Thu, 22 May 2025
+ 03:32:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250520061944.pl3mqw2clo2roe3s@vireshk-i7>
-In-Reply-To: <20250520061944.pl3mqw2clo2roe3s@vireshk-i7>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 22 May 2025 12:20:15 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gBRQ87bFk3-MCOudgvGWb29O_ihfz0Lo2kGcVpfSu=nQ@mail.gmail.com>
-X-Gm-Features: AX0GCFs-uf9AeqqcjLAqgSIPAHFTS4cdSJluRCEWb1yLf4kC-3qYNKIL2zSZR7Q
-Message-ID: <CAJZ5v0gBRQ87bFk3-MCOudgvGWb29O_ihfz0Lo2kGcVpfSu=nQ@mail.gmail.com>
-Subject: Re: [GIT PULL] cpufreq/arm updates for 6.16
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	rust-for-linux@vger.kernel.org
+References: <20250330163129.02f24afb@jic23-huawei> <5bca6dfd-fe03-4c44-acf4-a51673124338@tuxon.dev>
+ <95f5923f-7a8f-4947-b588-419525930bcb@tuxon.dev> <CAPDyKFoMqmCFBoO8FwQe2wHh2kqQi4jUZNFyiNckK7QhGVgmvg@mail.gmail.com>
+ <c3a2950a-17ff-444a-bee7-af5e7e10e2bf@tuxon.dev> <CAPDyKFozR4qDq4mzcZBK-LcoPf=fGyuJTXwdt=Ey+_DcQOAp0g@mail.gmail.com>
+ <4o3wo76st7w6qwyye3rrayuo2qx773i6jfzcnbkhdj76ouh7ds@3e2mblehkgwf>
+ <CAPDyKFqMB7XutXba73YHx1X4rm6uc3Fz6yMZ8yM=wgduEmgUDg@mail.gmail.com>
+ <a20fc6ee-c6c3-4013-b175-4918b9a44380@tuxon.dev> <CAPDyKFpbeLJUiB_xQbqDib+-8Q3AcJNVg+DuEcqmVGMbFdNxwA@mail.gmail.com>
+ <fgl4w5uhxci7rrbdigtni72vveb2gqemh6iccz4qruqkek5rja@rzwkcjg6hkid>
+In-Reply-To: <fgl4w5uhxci7rrbdigtni72vveb2gqemh6iccz4qruqkek5rja@rzwkcjg6hkid>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 22 May 2025 12:32:02 +0200
+X-Gm-Features: AX0GCFsbcG4QcgjpeUriah20d0XN1Br8aF18T9UTJDZEoQVqyTUAEPAdSEgU96Y
+Message-ID: <CAPDyKFq4C_Beay3JBbDc+rRFx_SV0HQg6iO1zrt628tFdjv0pg@mail.gmail.com>
+Subject: Re: [PATCH] driver core: platform: Use devres group to free driver
+ probe resources
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Claudiu Beznea <claudiu.beznea@tuxon.dev>, Jonathan Cameron <jic23@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, dakr@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, geert@linux-m68k.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-iio@vger.kernel.org, bhelgaas@google.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Viresh,
+On Wed, 21 May 2025 at 16:58, Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
+>
+> On Wed, May 21, 2025 at 02:37:08PM +0200, Ulf Hansson wrote:
+> > On Wed, 21 May 2025 at 07:41, Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+> > >
+> > > Hi, Ulf,
+> > >
+> > > On 20.05.2025 15:09, Ulf Hansson wrote:
+> > > > For example, even if the order is made correctly, suppose a driver's
+> > > > ->remove() callback completes by turning off the resources for its
+> > > > device and leaves runtime PM enabled, as it relies on devres to do it
+> > > > some point later. Beyond this point, nothing would prevent userspace
+> > > > for runtime resuming/suspending the device via sysfs.
+> > >
+> > > If I'm not wrong, that can't happen? The driver_sysfs_remove() is called
+> > > before device_remove() (which calls the driver remove) is called, this
+> > > being the call path:
+> > >
+> > > device_driver_detach() ->
+> > >   device_release_driver_internal() ->
+> > >     __device_release_driver() ->
+> > >       driver_sysfs_remove()
+> > >       // ...
+> > >       device_remove()
+> > >
+> > > And the driver_sysfs_remove() calls in the end __kernfs_remove() which
+> > > looks to me like the place that actually drops the entries from sysfs, this
+> > > being a call path for it:
+> > >
+> > > driver_sysfs_remove() ->
+> > >   sysfs_remove_link() ->
+> > >     kernfs_remove_by_name() ->
+> > >       kernfs_remove_by_name_ns() ->
+> > >         __kernfs_remove() ->
+> > >
+> > > activating the following line in __kernfs_remove():
+> > >
+> > > pr_debug("kernfs %s: removing\n", kernfs_rcu_name(kn));
+> > >
+> > > leads to the following prints when unbinding the watchdog device from its
+> > > watchdog driver (attached to platform bus) on my board:
+> > > https://p.fr33tux.org/935252
+> >
+> > Indeed this is a very good point you make! I completely overlooked
+> > this fact, thanks a lot for clarifying this!
+> >
+> > However, my main point still stands.
+> >
+> > In the end, there is nothing preventing rpm_suspend|resume|idle() in
+> > drivers/base/power/runtime.c from running (don't forget runtime PM is
+> > asynchronous too) for the device in question. This could lead to that
+> > a ->runtime_suspend|resume|idle() callback becomes executed at any
+> > point in time, as long as we haven't called pm_runtime_disable() for
+> > the device.
+>
+> So exactly the same may happen if you enter driver->remove() and
+> something calls runtime API before pm_runtime_disable() is called.
+> The driver has (as they should be doing currently) be prepared for this.
+>
+> >
+> > That's why the devm_pm_runtime_enable() should be avoided as it simply
+> > introduces a race-condition. Drivers need to be more careful and use
+> > pm_runtime_enable|disable() explicitly to control the behaviour.
+>
+> You make it sound like we are dealing with some non-deterministic
+> process, like garbage collector, where runtime disable done by devm
+> happens at some unspecified point in the future. However we are dealing
+> with very well defined order of operations, all happening within
+> __device_release_driver() call. It is the same scope as when using
+> manual pm_runtime_disable(). Just the order is wrong, that is it.
 
-On Tue, May 20, 2025 at 8:19=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
->
-> Hi Rafael,
->
-> This contains few patches from Danilo Krummrich as well, which will
-> get merged via driver-core separately. Please push this to Linus once
-> that is merged during rc1. Thanks.
->
-> The following changes since commit a374f28700abd20e8a7d026f89aa26f7594459=
-18:
->
->   cpufreq: fix compile-test defaults (2025-04-17 13:36:29 +0530)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufr=
-eq-arm-updates-6.16
->
-> for you to fetch changes up to 6c9bb86922728c7a4cceb99f131e00dd87514f20:
->
->   cpufreq: scmi: Skip SCMI devices that aren't used by the CPUs (2025-05-=
-20 11:24:18 +0530)
->
-> ----------------------------------------------------------------
-> CPUFreq updates for 6.16
->
-> - Rust abstractions for CPUFreq framework (Viresh Kumar).
->
-> - Rust abstractions for OPP framework (Viresh Kumar).
->
-> - Basic Rust abstractions for Clk and Cpumask frameworks (Viresh Kumar).
->
-> - Minor cleanup to the SCMI cpufreq driver (Mike Tipton).
->
-> ----------------------------------------------------------------
-> Anisse Astier (1):
->       rust: macros: enable use of hyphens in module names
->
-> Danilo Krummrich (8):
->       rust: device: implement impl_device_context_deref!
->       rust: device: implement impl_device_context_into_aref!
->       rust: device: implement device context for Device
->       rust: platform: preserve device context in AsRef
->       rust: pci: preserve device context in AsRef
->       rust: device: implement Bound device context
->       rust: pci: move iomap_region() to impl Device<Bound>
->       rust: devres: require a bound device
->
-> Mike Tipton (1):
->       cpufreq: scmi: Skip SCMI devices that aren't used by the CPUs
->
-> Viresh Kumar (16):
->       Merge commit 'eaff6b62d343' of pm/linux-next into commit 'f720efda2=
-db5' of driver-core/driver-core-next
->       rust: cpumask: Add few more helpers
->       rust: cpumask: Add initial abstractions
->       MAINTAINERS: Add entry for Rust cpumask API
->       rust: clk: Add helpers for Rust code
->       rust: clk: Add initial abstractions
->       rust: cpu: Add from_cpu()
->       rust: opp: Add initial abstractions for OPP framework
->       rust: opp: Add abstractions for the OPP table
->       rust: opp: Add abstractions for the configuration options
->       rust: cpufreq: Add initial abstractions for cpufreq framework
->       rust: cpufreq: Extend abstractions for policy and driver ops
->       rust: cpufreq: Extend abstractions for driver registration
->       rust: opp: Extend OPP abstractions with cpufreq support
->       cpufreq: Add Rust-based cpufreq-dt driver
->       Merge branch 'rust/cpufreq-dt' into cpufreq/arm/linux-next
->
->  MAINTAINERS                     |   11 ++
->  drivers/cpufreq/Kconfig         |   12 ++
->  drivers/cpufreq/Makefile        |    1 +
->  drivers/cpufreq/amd-pstate.c    |    7 +-
->  drivers/cpufreq/cpufreq.c       |  345 +++++++++++++++++----------------=
-------
->  drivers/cpufreq/intel_pstate.c  |   47 +++---
->  drivers/cpufreq/rcpufreq_dt.rs  |  226 ++++++++++++++++++++++++++
->  drivers/cpufreq/scmi-cpufreq.c  |   36 ++++-
->  include/linux/cpufreq.h         |   10 +-
->  rust/bindings/bindings_helper.h |    4 +
->  rust/helpers/clk.c              |   66 ++++++++
->  rust/helpers/cpufreq.c          |   10 ++
->  rust/helpers/cpumask.c          |   25 +++
->  rust/helpers/helpers.c          |    2 +
->  rust/kernel/clk.rs              |  334 +++++++++++++++++++++++++++++++++=
-+++++
->  rust/kernel/cpu.rs              |   30 ++++
->  rust/kernel/cpufreq.rs          | 1321 +++++++++++++++++++++++++++++++++=
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-+++++++++++++++++++++++++++++++++++++++++
->  rust/kernel/cpumask.rs          |  330 +++++++++++++++++++++++++++++++++=
-++++
->  rust/kernel/device.rs           |   90 ++++++++++-
->  rust/kernel/devres.rs           |   17 +-
->  rust/kernel/lib.rs              |    7 +
->  rust/kernel/opp.rs              | 1145 +++++++++++++++++++++++++++++++++=
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-+++++++++++++++++++++
->  rust/kernel/pci.rs              |   33 ++--
->  rust/kernel/platform.rs         |   32 +---
->  rust/macros/module.rs           |   20 ++-
->  25 files changed, 3861 insertions(+), 300 deletions(-)
->  create mode 100644 drivers/cpufreq/rcpufreq_dt.rs
->  create mode 100644 rust/helpers/clk.c
->  create mode 100644 rust/helpers/cpufreq.c
->  create mode 100644 rust/kernel/clk.rs
->  create mode 100644 rust/kernel/cpu.rs
->  create mode 100644 rust/kernel/cpufreq.rs
->  create mode 100644 rust/kernel/cpumask.rs
->  create mode 100644 rust/kernel/opp.rs
->
-> --
+I understand that devres is deterministic, the order to manage things
+is ofcourse specified how we use it during ->probe() etc. My apologies
+if it has sounded different to you.
 
-Pulled and added to linux-pm.git/linux-next, thanks!
+What I have been trying to say is, because how the runtime PM works,
+drivers must be careful about calling pm_runtime_enable|disable() as
+relying on the order from devres is in many cases not sufficient.
+
+Kind regards
+Uffe
 
