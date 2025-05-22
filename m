@@ -1,148 +1,141 @@
-Return-Path: <linux-pm+bounces-27516-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27517-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97059AC0FB6
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 17:17:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B92A8AC10AD
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 18:04:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF8B2189E6BE
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 15:17:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7968A27C7C
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 16:03:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71E672980A8;
-	Thu, 22 May 2025 15:17:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB12E29995D;
+	Thu, 22 May 2025 16:03:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XLPHO6rK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CICX/f7/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7B72980D2
-	for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 15:17:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF37580B;
+	Thu, 22 May 2025 16:03:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747927050; cv=none; b=I3DJWTDD+9uGhnlOtBXV68D9GanwVAA1eLnWZkUt+O6lGjayEM1OG+8t3pw8Ak69I8Q6Th3MFMTBkIipa+UUn2F6nPlig4Fq8f3FMr3Ua0ixZWy3/5hkbt+e5G7w/TCs5R3/Hr3wULZM2FSB0Wai+TnNmg4//sydCs7BL8w8Mc4=
+	t=1747929828; cv=none; b=nATPWemjQd+rAGdZL86P7sIdhbv4Zg4BJhrH1e13DRb3l7JWoGYq6dw74/fc8G2D3N2X0LeE7gjZXZvb0WwrHgy8wwn6ISOehL01H8O+2jQS+hSAWoj4XaIXZXL1aaoz2UY79ESjZ8saolY461vMnPRaJQQYhgsrjoL4waAYO0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747927050; c=relaxed/simple;
-	bh=yECD6ZktgTjXDSCFgMyFUoroNATnVYVOCITlOnNEHpc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fI4VgsRE6YezUcIcQh9xxziXlE8BdxLWZmsOGqvXDb47vf9kdsuwyG9OpO8GsBupxs1Y7NZNfTdnGOg/CA+sJ0pXJXWRkRP+nT09goPDhM4Z7EbGLoam1gH3R30sohBzPYUe9HpoUaQxW4UnEv516ME5DPQeypYqAlF0GewoPi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XLPHO6rK; arc=none smtp.client-ip=209.85.166.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-8613f456960so242003839f.1
-        for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 08:17:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1747927047; x=1748531847; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IETGeB30Ud5t90dKFtz7PPdKbD88fIhHcL4tZXb4WTs=;
-        b=XLPHO6rKWko+sw+IZXc/CqddPJL2u1YVjas/lQyH6No6tywCoJ7tXRSOTQxrtLDOVH
-         LNnjbQDtVPx+89YwKtWJQHrYaKnKaB2ScLHuG13vC8AwOKipjeQg3aQt1ryQnI8tvACg
-         V3CIVdUvzcmWqoCUHxCjnID5DGrM0g0GvBXRw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747927047; x=1748531847;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IETGeB30Ud5t90dKFtz7PPdKbD88fIhHcL4tZXb4WTs=;
-        b=YWWBxWsNpeHUFFmpoRv9L8JhtlwKT7Ot0hrJRsHxZwrkG4li76ZDJyQ5B66OhnNWvP
-         Wv+jyzURQOqmNxjeTWoBQ5x4tYnfkqgHH/heDyDWK7CtBJ6dlwMgDVe0BeWyCe2iiBVu
-         V3QhM8UVyV0fLVpi+rCqxHcd2TOfjfPYn5IrPk4nyvKcQ5w2ByQ+QXtNfQbKBic/iJNY
-         RQq5YphZthOhS4qzsjVrBgElL1mx/hHlnqmjeyG0dZAP0tTw2gDlJzqWcWA2SKu/Fd9w
-         CMlhJPx1V+hA4lFIBXwp/iF8KHvxVH5IBRzpUuMbj9E9BV0p62VE3JIca9UEwtImSKrP
-         jjbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUbmkEEY7n3o59ehhqA488vGE8GSvoRgjkXiiD6wgD/ehWp+M5PfeIgaAXbZzyYPTpZuhlZxhblPw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhExHe9PepOEjQDlqRO4PNk4ESAnLADB1JpayFrat+9Hh7MCm+
-	zLOCbyOBGsRKhzy56rz5lrxJGXEa41WP/TkOph4v12zntdMaDu+Pyx/j2qXoESRo1jU=
-X-Gm-Gg: ASbGnctcxZ59NSucElwoAWPS4PH6UOVcR3Ildsw3qx+ANWcUhbT2hsMbAWmLzEATgVs
-	pZsgaHtEHv2sBQHA1aaeo57d35WzuALASnp6b7g0k/bFpZCuWc9/jLEKG7V/oDsP5NtHBlbzgIj
-	WMkxEzA3vKwhVFKvsM95DLwtBCDpT18nQmDM+QDNZ1hpJdkFpjQ3peP2VIGX7Nk18ss2AR6tBlC
-	G7v6lDszI+xa5ZPmSjFzJc1OOQ/NN0O/gsh86XddGHPeQ6J+A6xC55Xrqnjxo1uepNUkKHDjKOU
-	6+xLMm7K7DjSF3SR48PxLGp9o9jp5cT/sxDXDtDLvbwSlbrZlTs0RtwkiMFtAQ==
-X-Google-Smtp-Source: AGHT+IE4miy92v8IzzM9z3nzWIqMhYC4PYeZ/1gnpzPA+Nm1GpEEXc0VF3cDp3wCEis+0MsO80e57g==
-X-Received: by 2002:a05:6e02:3e06:b0:3d5:893a:93ea with SMTP id e9e14a558f8ab-3db843046c6mr236224255ab.13.1747927047461;
-        Thu, 22 May 2025 08:17:27 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3dc8ad89ecfsm5792365ab.26.2025.05.22.08.17.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 May 2025 08:17:26 -0700 (PDT)
-Message-ID: <2b7acb5f-65c7-4787-aac5-ebcec83c8ac0@linuxfoundation.org>
-Date: Thu, 22 May 2025 09:17:26 -0600
+	s=arc-20240116; t=1747929828; c=relaxed/simple;
+	bh=HUH0RE34oNU0RQxQXjHa25P4cj8iY+R/hhIkpLqzuK0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RMHx7iDvkZKwbC+Btw2uDU1QcXbxmFkqWft0uFxUo3mwiWs+/7+2wFhmVy2rBia4iPuu087ZALVp6MIMs0qx+tt2Ope/D0no9HlV7bPl26k3WEvqAJA9yJyduteLbF3trrg5Syyq50fQYXA7/hFZR4RWDlvRDnjexACp3ZYKfOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CICX/f7/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ACF9C4CEEA;
+	Thu, 22 May 2025 16:03:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747929828;
+	bh=HUH0RE34oNU0RQxQXjHa25P4cj8iY+R/hhIkpLqzuK0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=CICX/f7/sYLCTkMY2c3FCwbW8kA2sy33klFoF897s7tYU7DNjeX/Iyi6ixz50mYFd
+	 ggRRsFUJIcAc93crjhGtrRZruJ9fRNm8bUlrGHJiS6JJltY5tUghExhdQyjCeomB8Q
+	 8by+rZfPn1QMUPPjQVuPR9MRxE71yLrUjOPTtO7RUdN6mySd4gaag7I85Hn1gZcTCi
+	 dXfbcu/OYbcNi2XFBVF0zb/rxZHaLhI+fkYpAVTpTWoSlVJeEWobqu179THB5/FtbO
+	 bHY2RtXuXF54L5K3l1a67e/n1fiTml9Cx0sAGjeyjo4FE+PPSMcIZPFh3/swBDcG+0
+	 iMw0PlNwMW+0w==
+From: Georgi Djakov <djakov@kernel.org>
+To: gregkh@linuxfoundation.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	djakov@kernel.org
+Subject: [GIT PULL] interconnect changes for 6.16
+Date: Thu, 22 May 2025 19:03:31 +0300
+Message-Id: <20250522160331.2666873-1-djakov@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/cpufreq: Fix cpufreq basic read and update
- testcases
-To: Viresh Kumar <viresh.kumar@linaro.org>,
- Swapnil Sapkal <swapnil.sapkal@amd.com>
-Cc: rafael@kernel.org, shuah@kernel.org, gautham.shenoy@amd.com,
- narasimhan.v@amd.com, linux-pm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250430171433.10866-1-swapnil.sapkal@amd.com>
- <20250519075854.opnlhjlbybrkvd2k@vireshk-i7>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250519075854.opnlhjlbybrkvd2k@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/19/25 01:58, Viresh Kumar wrote:
-> On 30-04-25, 17:14, Swapnil Sapkal wrote:
->> In cpufreq basic selftests, one of the testcases is to read all cpufreq
->> sysfs files and print the values. This testcase assumes all the cpufreq
->> sysfs files have read permissions. However certain cpufreq sysfs files
->> (eg. stats/reset) are write only files and this testcase errors out
->> when it is not able to read the file.
->> Similarily, there is one more testcase which reads the cpufreq sysfs
->> file data and write it back to same file. This testcase also errors out
->> for sysfs files without read permission.
->> Fix these testcases by adding proper read permission checks.
+Hello Greg,
 
-Can you share how you ran the test?
+This is the pull request with interconnect changes for the v6.16-rc1 merge
+window. It contains core and driver changes. As always, the summary is in
+the signed tag.
 
->>
->> Reported-by: Narasimhan V <narasimhan.v@amd.com>
->> Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
->> ---
->>   tools/testing/selftests/cpufreq/cpufreq.sh | 15 +++++++++++----
->>   1 file changed, 11 insertions(+), 4 deletions(-)
->>
->> diff --git a/tools/testing/selftests/cpufreq/cpufreq.sh b/tools/testing/selftests/cpufreq/cpufreq.sh
->> index e350c521b467..3484fa34e8d8 100755
->> --- a/tools/testing/selftests/cpufreq/cpufreq.sh
->> +++ b/tools/testing/selftests/cpufreq/cpufreq.sh
->> @@ -52,7 +52,14 @@ read_cpufreq_files_in_dir()
->>   	for file in $files; do
->>   		if [ -f $1/$file ]; then
->>   			printf "$file:"
->> -			cat $1/$file
->> +			#file is readable ?
->> +			local rfile=$(ls -l $1/$file | awk '$1 ~ /^.*r.*/ { print $NF; }')
->> +
->> +			if [ ! -z $rfile ]; then
->> +				cat $1/$file
->> +			else
->> +				printf "$file is not readable\n"
->> +			fi
-> 
-> What about:
-> 
-> if [ -r $1/$file ]; then
->      cat $1/$file
-> else
->      printf "$file is not readable\n"
-> fi
-> 
-> 
+All patches have been in linux-next for a while. There are currently no
+reported issues. Please pull into char-misc-next when possible.
 
-thanks,
--- Shuah
+Thanks,
+Georgi
+
+
+The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
+
+  Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.16-rc1
+
+for you to fetch changes up to 5fed7fe33c2cd7104fc87b7bc699a7be892befa2:
+
+  Merge branch 'icc-sa8775p' into icc-next (2025-05-19 17:09:50 +0300)
+
+----------------------------------------------------------------
+interconnect changes for 6.16
+
+This pull request contains the interconnect changes for the 6.16-rc1
+merge window. The core and driver changes are listed below.
+
+Core changes:
+- Add support for dynamic id allocation, that allows creating
+  multiple instances of the same provider
+
+Driver changes:
+- Add driver for the EPSS L3 instances on SA8775P SoC
+- Add QoS support for SM8650 SoC
+- Add some missing nodes for SM8650
+- Misc dt-binding style and indentation fixes
+
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
+
+----------------------------------------------------------------
+Georgi Djakov (1):
+      Merge branch 'icc-sa8775p' into icc-next
+
+Krzysztof Kozlowski (1):
+      dt-bindings: interconnect: Correct indentation and style in DTS example
+
+Neil Armstrong (4):
+      interconnect: qcom: sm8650: enable QoS configuration
+      dt-bindings: interconnect: sm8650: document the MASTER_APSS_NOC
+      interconnect: qcom: sm8650: add the MASTER_APSS_NOC
+      interconnect: qcom: sm8650: remove regmap config for mc_virt & clk_virt
+
+Raviteja Laggyshetty (5):
+      dt-bindings: interconnect: Add EPSS L3 compatible for SA8775P
+      interconnect: core: Add dynamic id allocation support
+      interconnect: qcom: Add multidev EPSS L3 support
+      interconnect: qcom: icc-rpmh: Add dynamic icc node id support
+      interconnect: qcom: sa8775p: Add dynamic icc node id support
+
+ .../devicetree/bindings/interconnect/qcom,msm8939.yaml          |   8 +-
+ .../devicetree/bindings/interconnect/qcom,msm8953.yaml          |  20 +-
+ .../devicetree/bindings/interconnect/qcom,msm8974.yaml          |  20 +-
+ Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml |   1 +
+ Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml    |  12 +-
+ Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml   |  28 +-
+ .../devicetree/bindings/interconnect/qcom,sdx75-rpmh.yaml       |  16 +-
+ drivers/interconnect/core.c                                     |  82 +-
+ drivers/interconnect/qcom/icc-rpmh.c                            |  17 +-
+ drivers/interconnect/qcom/icc-rpmh.h                            |   5 +
+ drivers/interconnect/qcom/osm-l3.c                              |  38 +-
+ drivers/interconnect/qcom/sa8775p.c                             | 952 +++-----
+ drivers/interconnect/qcom/sm8650.c                              | 344 +++
+ drivers/interconnect/qcom/sm8650.h                              |   1 +
+ include/dt-bindings/interconnect/qcom,sm8650-rpmh.h             |   1 +
+ include/linux/interconnect-provider.h                           |  12 +
+ include/linux/interconnect.h                                    |   3 +
+ 17 files changed, 873 insertions(+), 687 deletions(-)
 
