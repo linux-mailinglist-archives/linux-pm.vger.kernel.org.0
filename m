@@ -1,192 +1,290 @@
-Return-Path: <linux-pm+bounces-27509-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27510-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DACCAC0ABA
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 13:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 18E94AC0AE2
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 13:54:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A5964E4B69
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 11:44:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9006917D60F
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 11:54:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4369E28A1CC;
-	Thu, 22 May 2025 11:44:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EEF628A40F;
+	Thu, 22 May 2025 11:54:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="VV1CP/2l"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SpzQjW5I"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C348818AE2
-	for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 11:44:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA97528A3FC
+	for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 11:54:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747914243; cv=none; b=KGp6mRLopxjmzR7RPUgQE23dYSF7XvSlxgW5fbU67O42wAtb+D6X7zO4wXytqmf75jvQBIyuR55WJPVNemWLdCbMuKsPZ+hF9zbCEaEEOKWcRoireaIt7FgW4sE0M4u1ZHHmi/GTEqNFsHaU5GGC8i+v9XNCqkq+V/fI/ED7YYk=
+	t=1747914877; cv=none; b=sio3y57J4FYn8PsUDnnF8zj6khyrFyPy/YbTpJwMurDHSljJiKyrXFOfDNGocO1e+cm2q0q5f2gYPf/FSOjzesHCY5HsMvyaiP245QA05hnEBxmLNLnpVX03d51WJD8gcWctb5zpLSQ11FWLjaM5RqGyV8eZ2P53qtZ2Z3/q5uE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747914243; c=relaxed/simple;
-	bh=ddztaC93XsxXspd5f83K4Tqr+OAVb8jVQZWVa2DOFZg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EyCKGpu6+XrR3Hi/g1/IBMFHq7vyQyNZvVtlC0nCDBZD6xqlbMPH7Jk2jUSHH9RWsZB0m7A/VJ4prx3eTqh+tZ1N6a7y5ZHlCM0QInyodN4VueaTLrWIrsZXj8U6Q61oNhJJz1+r640Fr4khk0R7r7hcfStFqTpVOjDXDsNvd4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=VV1CP/2l; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=ao5pSf3NGDn3Ek7X1VvDzRrHSsrUaYrxQb1kPX/zF4U=; t=1747914240;
-	x=1748346240; b=VV1CP/2lz8ibaZCMspipkjEYZdAuOyRpu3VayMU9tpyUHFs2e5gxihZqE+DJD
-	P9qraT7utIl0K2mH9F5sr2pu2HgkZpcZrtsaM1CDq8eX7CeppyiFVLl0r+C2YTXPiJCDtklJZ52oF
-	XLgayiGjcecMKZprohVDA8IJSCcKPJGy+QZCdJ83igTf3L2AZhBkePjUZ97rPKGaID5Hj35AbhRoy
-	7Vf3XqRQHCtH8MlpnZXT1Oeh7PQv8mPTKUoK53O+OjshYU6Qd8l2DGtfFhoEKAAws9JrYLyd+Gvy5
-	333+DBkhdvJPCcSiUA/qqMxv1+KiipvT7j856FjMW5Hphz18rw==;
-Received: from [2a02:8108:8984:1d00:a0cf:1912:4be:477f]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-	id 1uI4L2-007FXu-19;
-	Thu, 22 May 2025 13:43:52 +0200
-Message-ID: <6deefc69-856e-44d7-b970-2f0127090539@leemhuis.info>
-Date: Thu, 22 May 2025 13:43:49 +0200
+	s=arc-20240116; t=1747914877; c=relaxed/simple;
+	bh=OBwru+cRfueT1e3kkrOMrY8pYvfmQq0K2S+WKQU6xw8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hTpbfVYFYRwEiy1IKi7BTwd2qi6pRFEYZt1nV/etkuSAr4mBaIjun7LNQIzq2hWk5q37ljxqfSH3TOqnApbNjsH+BVK1Ipd5ceOoVAvLm0wKnb0eeyPty2sgOYMtIWWGWuvZoJANmpCn1M+HPTmXOW610yvX7/OxbF/QRXQtMRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SpzQjW5I; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e7d750304c3so274381276.0
+        for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 04:54:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1747914873; x=1748519673; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nahjDlHZRtIQPLWgWjg8FK6SCa/IxKI/5CZRJv2Bs5A=;
+        b=SpzQjW5InH47mXQbK9tXmx3vo6bOfcUx8vk33QyvfspSuL0om79NNv5CnitUjSBfGr
+         gjkVJcX2/cWSiJTCuHTQwyd6bVA87n/aZm8hGPk9ZoOA25sX6tgX8y1ePTv546aOvfjO
+         tn4IGekha/oBUE7pGQ1WJTFPhXwOqgAmNiZiDdIEAgoW+ln/SavAHmPCCZgngPEhlMMx
+         /4/DwvZXZElhDzuhqv8qDcd0lcfsIckORWGG1A8hU8bxHPkiWAdzi/4s5jZguPJVLCL7
+         Y3N8tyXdDsdD3xP5wfLA2K2LofKotWNeUfVqOaM9SmU/EEhnVV1HsTTrDhyNmYrvSSXv
+         pS5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747914873; x=1748519673;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nahjDlHZRtIQPLWgWjg8FK6SCa/IxKI/5CZRJv2Bs5A=;
+        b=PZvd85//TGNEomhH5ATsR7VPPn7NA8DqhXmAWPWIFWotuYwsd/ExpRGf4dxxZNjAQ7
+         sNiPed5wqX6CFA+62mpwqoLJKwt70nfRUxfX4MwGcdwtn6kEOTbYmEjnvlFY+duhKCOJ
+         6Qi65OZacNOIoHF47F/7+IRVoGkIDDqbZzALzhjEg3q17khmsvBhaos4wtIaRwzErqnM
+         yV8AboDgDWOiO+nMXgmxxw0k300Lp8CjHBvECzHt93spAUAcBdbf3VGlHUg1r4oA/Iac
+         KQjkEBU1S+1tfxp4c9p55jHaxha3ItLVgUbx5VJc40be4L2EijECjfksy65sKmsMjiMt
+         5hMw==
+X-Forwarded-Encrypted: i=1; AJvYcCVVROlHwV6lCNfpCNyH7ev0HkCdTNMURH2RbW8fZUlbvbSr5cSf5o7KG1MHyq8vw6794/pBlvKayw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9wSa9Hm/I9CcZS7E1JEOQhL9c0c5C3RIwbYEha4FBh60iR8Dv
+	fEtzSb2DBB7XACwZ6KBhrIOpE0rr2Lzq4E1AINnoWW98AHMkBybnYPJfCzSiTzKdeDRzdBZM7mi
+	DYpVixYCqgxM/RHW5x9TGewW/Dby6TSUjrHGyyqD/BA==
+X-Gm-Gg: ASbGncvpQT/25RLItvJOBP15HMzlTvFXRX/oizeyT85t5KTfB3jfh2DtVJlq3h3Z6wf
+	8gwKv7Hip2pIPrFovYlAyX+xpjPh/LfqJ+srLqSn5g6h64QIzCg2wG7p3CvadiYxIptIYdaOUrC
+	Yz7lYtUvfznzReG8AeM3hrcBOW12BzvPHBDsOY6eVh/uMq
+X-Google-Smtp-Source: AGHT+IEvyYJoez3OuvyFjy/eMJjsM7ltpFQ1t1siHOuCIOR1BtW01wfO+hiXpRAVJAZv2ewkmX80/iPYOP1QH6psj1c=
+X-Received: by 2002:a05:6902:1144:b0:e7d:7767:81ed with SMTP id
+ 3f1490d57ef6-e7d776782ffmr745394276.43.1747914873551; Thu, 22 May 2025
+ 04:54:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpupower: split unitdir from libdir in Makefile
-To: "Francesco Poli (wintermute)" <invernomuto@paranoici.org>,
- linux-pm list <linux-pm@vger.kernel.org>
-Cc: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
- "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>,
- Justin Forbes <jforbes@redhat.com>
-References: <20250521211656.65646-1-invernomuto@paranoici.org>
-From: Thorsten Leemhuis <linux@leemhuis.info>
-Content-Language: de-DE, en-US
-Autocrypt: addr=linux@leemhuis.info; keydata=
- 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 n7RI
-In-Reply-To: <20250521211656.65646-1-invernomuto@paranoici.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1747914240;036afa35;
-X-HE-SMSGID: 1uI4L2-007FXu-19
+References: <20250330163129.02f24afb@jic23-huawei> <5bca6dfd-fe03-4c44-acf4-a51673124338@tuxon.dev>
+ <95f5923f-7a8f-4947-b588-419525930bcb@tuxon.dev> <CAPDyKFoMqmCFBoO8FwQe2wHh2kqQi4jUZNFyiNckK7QhGVgmvg@mail.gmail.com>
+ <c3a2950a-17ff-444a-bee7-af5e7e10e2bf@tuxon.dev> <CAPDyKFozR4qDq4mzcZBK-LcoPf=fGyuJTXwdt=Ey+_DcQOAp0g@mail.gmail.com>
+ <4o3wo76st7w6qwyye3rrayuo2qx773i6jfzcnbkhdj76ouh7ds@3e2mblehkgwf>
+ <CAPDyKFqMB7XutXba73YHx1X4rm6uc3Fz6yMZ8yM=wgduEmgUDg@mail.gmail.com>
+ <a20fc6ee-c6c3-4013-b175-4918b9a44380@tuxon.dev> <CAPDyKFpbeLJUiB_xQbqDib+-8Q3AcJNVg+DuEcqmVGMbFdNxwA@mail.gmail.com>
+ <fgl4w5uhxci7rrbdigtni72vveb2gqemh6iccz4qruqkek5rja@rzwkcjg6hkid> <3b1963ba-f93f-48f2-8fb0-a485dd80ffcb@tuxon.dev>
+In-Reply-To: <3b1963ba-f93f-48f2-8fb0-a485dd80ffcb@tuxon.dev>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 22 May 2025 13:53:57 +0200
+X-Gm-Features: AX0GCFv4fOj3U6qHEnXPsAPzrJUl0MUGhARn9unikV5eCSTTNgUooV9tTdSMvdg
+Message-ID: <CAPDyKFqrAS4iV59S-zJ9H7_3VuGr9JdZABhfUGBwTzQNDCasaw@mail.gmail.com>
+Subject: Re: [PATCH] driver core: platform: Use devres group to free driver
+ probe resources
+To: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>, Jonathan Cameron <jic23@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, dakr@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, geert@linux-m68k.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-iio@vger.kernel.org, bhelgaas@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 21.05.25 23:14, Francesco Poli (wintermute) wrote:
-> Improve the installation procedure for the systemd service unit
-> 'cpupower.service', to be more flexible. Some distros install libraries
-> to /usr/lib64/, but systemd service units have to be installed to
-> /usr/lib/systemd/system: as a consequence, the installation procedure
-> should not assume that systemd service units can be installed to
-> ${libdir}/systemd/system ...
-> Define a dedicated variable ("unitdir") in the Makefile.
+On Thu, 22 May 2025 at 11:48, Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+>
+> Hi, Ulf,
+>
+> On 21.05.2025 17:57, Dmitry Torokhov wrote:
+> > On Wed, May 21, 2025 at 02:37:08PM +0200, Ulf Hansson wrote:
+> >> On Wed, 21 May 2025 at 07:41, Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+> >>>
+> >>> Hi, Ulf,
+> >>>
+> >>> On 20.05.2025 15:09, Ulf Hansson wrote:
+> >>>> For example, even if the order is made correctly, suppose a driver's
+> >>>> ->remove() callback completes by turning off the resources for its
+> >>>> device and leaves runtime PM enabled, as it relies on devres to do it
+> >>>> some point later. Beyond this point, nothing would prevent userspace
+> >>>> for runtime resuming/suspending the device via sysfs.
+> >>>
+> >>> If I'm not wrong, that can't happen? The driver_sysfs_remove() is called
+> >>> before device_remove() (which calls the driver remove) is called, this
+> >>> being the call path:
+> >>>
+> >>> device_driver_detach() ->
+> >>>   device_release_driver_internal() ->
+> >>>     __device_release_driver() ->
+> >>>       driver_sysfs_remove()
+> >>>       // ...
+> >>>       device_remove()
+> >>>
+> >>> And the driver_sysfs_remove() calls in the end __kernfs_remove() which
+> >>> looks to me like the place that actually drops the entries from sysfs, this
+> >>> being a call path for it:
+> >>>
+> >>> driver_sysfs_remove() ->
+> >>>   sysfs_remove_link() ->
+> >>>     kernfs_remove_by_name() ->
+> >>>       kernfs_remove_by_name_ns() ->
+> >>>         __kernfs_remove() ->
+> >>>
+> >>> activating the following line in __kernfs_remove():
+> >>>
+> >>> pr_debug("kernfs %s: removing\n", kernfs_rcu_name(kn));
+> >>>
+> >>> leads to the following prints when unbinding the watchdog device from its
+> >>> watchdog driver (attached to platform bus) on my board:
+> >>> https://p.fr33tux.org/935252
+> >>
+> >> Indeed this is a very good point you make! I completely overlooked
+> >> this fact, thanks a lot for clarifying this!
+> >>
+> >> However, my main point still stands.
+> >>
+> >> In the end, there is nothing preventing rpm_suspend|resume|idle() in
+> >> drivers/base/power/runtime.c from running (don't forget runtime PM is
+> >> asynchronous too) for the device in question. This could lead to that
+> >> a ->runtime_suspend|resume|idle() callback becomes executed at any
+> >> point in time, as long as we haven't called pm_runtime_disable() for
+> >> the device.
+> >
+> > So exactly the same may happen if you enter driver->remove() and
+> > something calls runtime API before pm_runtime_disable() is called.
+> > The driver has (as they should be doing currently) be prepared for this.
+>
+> I took the time and tried to do a comparison of the current solutions
+> (describing the bad and good things I see), trying to understand your
+> concerns with regards to RPM suspend|resume|idle while unbinding a device
+> from its driver.
+>
+> I see the following cases:
+>
+> Case 1/ the current approach when devm_pm_runtime_enable() is used in
+> driver's ->probe() with the current code base:
+>
+> - right after driver ->remove() finish its execution clocks are detached
+>   from the PM domain, through dev_pm_domain_detach() call in
+>   platform_remove()
+>
+> - any subsequent RPM resume|suspend|idle will lead to failure if the driver
+>   specific RPM APIs access directly registers and counts on PM domain to
+>   enable/disable the clocks
+>
+> - at this point, if the IRQs are shared (but not only) and devm requested
+>   the driver's IRQ handler can still be called asynchronously; driver
+>   should be prepared for such events and should be written to work for such
+>   scenarios; but as the clocks are not in the PM domain anymore and RPM is
+>   still enabled at this point, if the driver don't run runtime suspend on
+>   probe (and runtime resume/suspend on runtime), I think (because I haven't
+>   investigated this yet) it can't rely on pm_runtime_active()/
+>   pm_runtime_suspended() checks in interrupt handlers
+>   and can't decide if it can interrogate registers or not; interrogating
+>   should lead to failure at this stage as the clocks are disabled; drivers
+>   should work in such scenario and the CONFIG_DEBUG_SHIRQ is a way to check
+>   they can; I previously debugged a similar issue on drivers/net/ethernet/
+>   renesas/ravb driver where using devm_pm_runtime_enable() in probe and
+>   pm_runtime_suspended() checks in IRQ handlers was the way to make this
+>   scenario happy; at that time I wasn't able to find that
+>   dev_pm_domain_detach() have the impact discussed in this thread
+>
+> Case 2/ What is proposed in this patch: devm_pm_runtime_enable() used +
+> open devres group after dev_pm_domain_attach() (in probe) and close the
+> devres group before dev_pm_domain_attach() (in remove):
+>
+> - right after the driver ->remove() is executed only the driver allocated
+>   devres resources are freed; this happens before dev_pm_domain_deattach()
+>   is called, though the proposed devres_release_group() call in this patch
+>
+> - while doing this, driver can still get async RPM suspend|resume|idle
+>   requests; is like the execution is in the driver ->remove()
+>   but the pm_runtime_disable() hasn't been called yet
+>
+> - as the runtime PM is enabled in driver's ->probe() mostly after the HW is
+>   prepared to take requests and all the other devm resources are allocated,
+>   the RPM disable is going to be among the first things to be called by the
+>   devres_release_group()
+>
+> - then, after RPM disable, all the devres resources allocated only in the
+>   driver's ->probe() are cleaned up in reverse order, just like
+>   device_unbind_cleanup() -> devres_release_all() call in
+>   __device_release_driver() is doing, but limited only to the resources
+>   allocated by the driver itself; I personally see this like manually
+>   allocating and freeing resources in the driver itself w/o relying on
+>   devres
+>
+> - then it comes the turn of dev_pm_domain_detach() call in
+>   platform_remove(): at the time dev_pm_domain_detach() is executed the
+>   runtime PM is disabled and all the devres resources allocated by driver
+>   are freed as well
+>
+> - after the dev_pm_domain_detach() is executed all the driver resources
+>   are cleaned up, the driver can't get IRQs as it's handler was already
+>   unregistered, no other user can execute rpm suspend|resume|idle
+>   as the RPM is disabled at this time
+>
+> Case 3/ devm_pm_runtime_enabled() dropped and replaced by manual cleanup:
+> - the driver code is going be complicated, difficult to maintain and error
+>   prone
 
-Many thx for doing this!
+Yes, the driver's code would become slightly more complicated, but
+more importantly it would be correct.
 
-Tested-by: Thorsten Leemhuis <linux@leemhuis.info>
+To me it sounds like the driver's ->remove() callback could do this:
 
-Nitpicking:
+pm_runtime_get_sync()
+pm_runtime_disable()
+pm_runtime_put_noidle()
 
-> Link: https://lore.kernel.org/linux-pm/260b6d79-ab61-43b7-a0eb-813e257bc028@leemhuis.info/T/#m0601940ab439d5cbd288819d2af190ce59e810e6
-> 
-> Fixes: 9c70b779ad91 ("cpupower: add a systemd service to run cpupower")
+In this way, the driver will runtime resume its device, allowing
+devres to drop/turn-off resources in the order we want. Except for the
+clocks, as those would be turned off via dev_pm_domain_detach() before
+the IRQ handler is freed (via devres), right?
 
-There should be no blank line between those two lines.
+To avoid getting the IRQ handler to be called when it can't access
+registers, we could do one of the below:
+*) Look for a condition in the IRQ handler and bail-out when we know
+we should not manage IRQs. Is using pm_runtime_enabled() sufficient,
+you think? Otherwise we need a driver specific flag, which should be
+set in ->remove().
+*) Don't use devm* when registering the IRQ handler.
 
-And you should use
-https://lore.kernel.org/linux-pm/16ad2364-0161-4724-90e1-b57559168843@leemhuis.info/
-as URL after "Link:", as it is shorter. That's the URL you get to when
-you open
-https://lore.kernel.org/linux-pm/260b6d79-ab61-43b7-a0eb-813e257bc028@leemhuis.info/T/#m0601940ab439d5cbd288819d2af190ce59e810e6
-and hit "permalink".
+Yes, both options further contribute to making the driver code
+slightly more complicated, but if you want to solve the problem sooner
+than later, I think this is what you need to do. Yet, I think there is
+another option too, see below.
 
-Some maintainers might reject patches due to such aspects, so I thought
-it was better to let you know this before it causes trouble sooner or later.
+>
+> I may have missed considering things when describing the case 2 (which is
+> what is proposed by this patch) as I don't have the full picture behind the
+> dev_pm_domain_detach() call in platform bus remove. If so, please correct me.
 
-Thx again! Ciao, Thorsten
+The dev_pm_domain_attach|detach() calls in bus level code
+(probe/remove) were added there a long time ago, way before devres was
+being used like today.
 
+Currently we also have devm_pm_domain_attach_list(), which is used
+when devices have multiple PM domains to attach too. This is *not*
+called by bus-level code, but by the driver themselves. For these
+cases, we would not encounter the problems you have been facing with
+clocks/IRQ-handler, I think - because the devres order is maintained
+for PM domains too.
 
-> Signed-off-by: Francesco Poli (wintermute) <invernomuto@paranoici.org>
-> ---
->  tools/power/cpupower/Makefile | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-> index be8dfac14076..c43db1c41205 100644
-> --- a/tools/power/cpupower/Makefile
-> +++ b/tools/power/cpupower/Makefile
-> @@ -73,6 +73,7 @@ sbindir ?=	/usr/sbin
->  mandir ?=	/usr/man
->  libdir ?=	/usr/lib
->  libexecdir ?=	/usr/libexec
-> +unitdir ?=	/usr/lib/systemd/system
->  includedir ?=	/usr/include
->  localedir ?=	/usr/share/locale
->  docdir ?=       /usr/share/doc/packages/cpupower
-> @@ -309,9 +310,9 @@ install-tools: $(OUTPUT)cpupower
->  	$(INSTALL_DATA) cpupower-service.conf '$(DESTDIR)${confdir}'
->  	$(INSTALL) -d $(DESTDIR)${libexecdir}
->  	$(INSTALL_PROGRAM) cpupower.sh '$(DESTDIR)${libexecdir}/cpupower'
-> -	$(INSTALL) -d $(DESTDIR)${libdir}/systemd/system
-> -	sed 's|___CDIR___|${confdir}|; s|___LDIR___|${libexecdir}|' cpupower.service.in > '$(DESTDIR)${libdir}/systemd/system/cpupower.service'
-> -	$(SETPERM_DATA) '$(DESTDIR)${libdir}/systemd/system/cpupower.service'
-> +	$(INSTALL) -d $(DESTDIR)${unitdir}
-> +	sed 's|___CDIR___|${confdir}|; s|___LDIR___|${libexecdir}|' cpupower.service.in > '$(DESTDIR)${unitdir}/cpupower.service'
-> +	$(SETPERM_DATA) '$(DESTDIR)${unitdir}/cpupower.service'
->  
->  install-man:
->  	$(INSTALL_DATA) -D man/cpupower.1 $(DESTDIR)${mandir}/man1/cpupower.1
-> @@ -348,7 +349,7 @@ uninstall:
->  	- rm -f $(DESTDIR)${bindir}/utils/cpupower
->  	- rm -f $(DESTDIR)${confdir}cpupower-service.conf
->  	- rm -f $(DESTDIR)${libexecdir}/cpupower
-> -	- rm -f $(DESTDIR)${libdir}/systemd/system/cpupower.service
-> +	- rm -f $(DESTDIR)${unitdir}/cpupower.service
->  	- rm -f $(DESTDIR)${mandir}/man1/cpupower.1
->  	- rm -f $(DESTDIR)${mandir}/man1/cpupower-frequency-set.1
->  	- rm -f $(DESTDIR)${mandir}/man1/cpupower-frequency-info.1
-> 
-> base-commit: e5174365c13246ed8fd2d40900edec37be6f7a34
+That said, I think adding a devm_pm_domain_attach() interface would
+make perfect sense. Then we can try to replace
+dev_pm_domain_attach|detach() in bus level code, with just a call to
+devm_pm_domain_attach(). In this way, we should preserve the
+expectation for drivers around devres for PM domains. Even if it would
+change the behaviour for some drivers, it still sounds like the
+correct thing to do in my opinion.
 
+[...]
+
+Kind regards
+Uffe
 
