@@ -1,160 +1,133 @@
-Return-Path: <linux-pm+bounces-27531-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27533-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73D07AC16A2
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 00:25:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0C2EAC16EB
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 00:38:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D567A7AAA70
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 22:23:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C85E172F05
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 22:38:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12E1827055B;
-	Thu, 22 May 2025 22:25:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C9DA281539;
+	Thu, 22 May 2025 22:38:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="b4Kymxef"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fueoYtN9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264C62571AE
-	for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 22:25:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E7E327FD6C
+	for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 22:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747952703; cv=none; b=bQOVT6TJrBN+fahaTlQnG4QA9pn3Qv8+1Kav9odWzBZiO1aY5upkRdsEb6Pfify6sUBkOPCUEZ/c85245LRMAD4/okny1uV23osc7Th6iLyxprvIHqpNVKf+/VKmZ5sOMIipk96JI2+ms3VZpYRZoNlLoKJmDX6eXyN4F61OASI=
+	t=1747953528; cv=none; b=V+S4nN8qm7M2tAOxaxv06LplXEPqZnDKqhhoGtrtS5EZh6o1okV6x7VY1E/61wtecOwKCd/CBuclPxu7kWL+afHNeAinsODdtwL1Hgik9Dh8PawW2BHst7n/B56lhIbRRh4VfIVgM+WQK30JMdM35FJ1OypFCfG9UlHbH6OxRzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747952703; c=relaxed/simple;
-	bh=D4gXf7k9CUNciIPNoD2d5KCpK3nE9hEh+TOs0VegVxg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oIVK86pYL5oulrYSWDumMofySDIs7cqUiain3Q0NVnMhFPEypYgCK5lksuMMrJyz+ukocNikERjVy8lpmLDnA4GVVFD2lEOcAsMvztsrTHbAWa11UjmCS95Nq0P6XyWysTMGgwa5K6fb9h742lzOljFOocY9i5ZsTvJqwU2QF50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=b4Kymxef; arc=none smtp.client-ip=209.85.219.172
+	s=arc-20240116; t=1747953528; c=relaxed/simple;
+	bh=a3PRYd3Cjo/rv/itdwXNTrt3wKQ+asO4RWYKiV1N2rE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FF7nIaoJeRXYm9aUDf43X/62tVbncZQjUZdAoF45NAxr09Tvo2MpUBixFhj6qusyLyHD66oKxXMthc6qbBt9x7HJwJ/Qp23/gReIGVt7s2MHOYxnuTFj0LBcUFtMaaYGlw9EL7cjm04wxNpk+oBesmr+xHQ3uxoAk4yTwWRP6nI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fueoYtN9; arc=none smtp.client-ip=209.85.167.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e7b811be6dbso5852193276.2
-        for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 15:25:00 -0700 (PDT)
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-551eb17123cso8196643e87.1
+        for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 15:38:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747952700; x=1748557500; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NxvStOnrhhdHpMl3yQwpKdFC4CaZgST0YwPJdz+2jlk=;
-        b=b4Kymxefn57MH8NGpFP18ojN00ommkF1eBK+DW+GsA55syu3B7RL0ms+Mn0qy9S/JK
-         Xt8FFPO+f0yNhAKj/93ETc2fcUkhKX3G3Gi9CRHxKYBGbfe4rZ29t7R18H6ErwdosM0a
-         ZuSah0+5s8b4D7yexmp2KerldTwUYIhEXBAAGSs+cOrNUA1IevUUJMK0Q8aSwr7j8CwF
-         E2590UPX34cvDGL/eUDlK8WFJO1Dc1LbI5RaUbn9hDeZS7xEt90DSAhnl1Bl5zrmWr8N
-         PQEuHWsiBEhBLxUmo0/NvttidBCuG0sm5lIhSWbmQLqikPgKvk+qr86XRyj7oni/3NFe
-         a+rw==
+        d=linaro.org; s=google; t=1747953525; x=1748558325; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=162PHkNGgQO3PjVXfDykPBsa+evqNxguX1rebBysG+k=;
+        b=fueoYtN99VdT8GS7lnPa/Y0Rff8e47AURXcWXbGA+sMzcHNjjnpgdUUdYbsgLgpYpv
+         w1i543W6bAvN4nMKtZ+UAisGNAWd1Ztx4Aap5yCHVy6Saa/LC34W+KzfP+DDKjX4y96O
+         wT19r/qc7sfr3gxqJhj6axitATH9uUPpdb2EyCmPCStIz9OD2XIkEDwYbb/pmTgZo11c
+         5YQdEnqejgcSrn7WHpeQQcpytGy1vUdSB43nEnNY7tBpEoVfQuONEbWDJVLzOplpjpz0
+         vIwUnDzmLa/2lMfSd6oytD/kmRE8I9UGwHMeYLDiKmDCJYuY38szAThfm7Ix9Cj+qmgk
+         uRKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747952700; x=1748557500;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1747953525; x=1748558325;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NxvStOnrhhdHpMl3yQwpKdFC4CaZgST0YwPJdz+2jlk=;
-        b=Ud+dfVEiWnpqNSSz7IkG4FUfNGg4e2/9PKeRlW5GXBIN9JS4vUw++M4FbmWcnsCwOR
-         A/UReGveyWg3MA4Sb/hkENpsP/RZsEaBj9JWGBz6HvHPlnE5sy0V/EA0kJV9UCfdUp2B
-         SRFxsueh42igEsri/8b3IZJUBdn5ntjDkeDBsj7IUPxV3spTlIYC0WfE37jnak8gqFrz
-         tUoGbK69q90SD2Ft1kC7KQghGhjCKBB9JvKZPaYslKgUYGRIvjo1qfjFPfDw79gch9FE
-         71nv7jizdum8vgzyKdH9gTC8UC+Iu2+1JMl2260C2q3LTsSlw3GHpc+QLDrzMQ6ESIw+
-         OFRg==
-X-Forwarded-Encrypted: i=1; AJvYcCWEci6VGuYBBKAtAz+bNCSLWlVFMOdtgXfwNbmmCGO4NEA/zQUcprAnpshGrH5Zd8CAS5flRxjI5g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOJOwlD74cWXuIgWr+TaceHoNGf4bJlHVeLoi7v+uX7O0KoYy7
-	WF4TNBJCsBJrjr+7hdsn1foZ3xMBmTZLr61pXsL43StTeVGQB0PpEhwPpek0ayHlR8JmnqJz/pg
-	kLIl1hGQ/gSZzZ7ldXckkTw4fSTZ61CLrPGKWpgDG0w==
-X-Gm-Gg: ASbGncvjD6u4WcJGUvyenVyai8k9kNLVd2LUJk4Ik/pqpcJvuYt7CQrjQUS8F5wY/8N
-	mnPB0nITc+ULSoEWkqJYNA7CkQyWKO+lkdo0WhuuE6UeWV61+/v+Vqd2JB1+K5SYUVjND3nw921
-	6ldZHsOpf3SqhklcTlTt9k4e7iWWcq53deaA==
-X-Google-Smtp-Source: AGHT+IEo+69w2SsM6WMoVy+VU1iqNjeWOLIwlyMXV18izZtek9qzw2edQkf8SeO0U8a6gS+XaVviMhz0QFnpEijXRvY=
-X-Received: by 2002:a05:6902:1247:b0:e7d:702d:9342 with SMTP id
- 3f1490d57ef6-e7d7e0a37acmr1367189276.8.1747952700109; Thu, 22 May 2025
- 15:25:00 -0700 (PDT)
+        bh=162PHkNGgQO3PjVXfDykPBsa+evqNxguX1rebBysG+k=;
+        b=S09MgvRBBPJkkMps3Pq8pohaP7hVSNMLjODWX2M9Bo17bbAq7su+VORK3gbQAXpGqB
+         nIhOKWJBHYUt6/tpv2QGnO5su049oNdmJe7Pd6Y2IT6dLThGHsNFVMkoAFOd9bYi8HIs
+         BFcD3nhzANcaJ0hyBH7E8ZEWrNmBTE2SBF32R18EQwKEhNeoDbCCrUT6lwiQOBBFWdh3
+         a2P0JyJeNcbMNLc9oD7tqYMGOUQRnvmoYrmpNc7RNWpT2j9oaw49/oijSY7STXq4okDB
+         6WdKEMoxSBywv9Y8BZFLGjwhbPFu8O//v1k3uDIvwOmFLmZGshK+0muTgLdnmMxQZ7Na
+         PaRA==
+X-Forwarded-Encrypted: i=1; AJvYcCWUZQZn6odUOOAAOSi7OiVIIG82nVFeC/Y5gT83g4fGUYJQBGa+HAVFklIs9INWtBMOwVX+1fTA1g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCRAHHn8YBu5DBgFnIddcZ6akWBi3fM6gj5tr82zYTJtH7PEMF
+	x1OAgUrQ5Y+VTV1UK73VFLOBJHa1bONVKjPNKLHQT1qcShrU80YaLeui3AnwhzKN060=
+X-Gm-Gg: ASbGncsd7ECv+YmSLQvyRPt12PNSkaf6c75c0w+wkyOBzO6RW+kcwzZ739Shvz2XkW8
+	pa7lViZ7mbZjzS0ny/hXhLruEubcW7D96+J2zGrabGDGzdtwl/ZXJSvUCiwSL5QpUPdAC89g7UC
+	m/3Q3KgLWoyTi4QCrbcyLAPg3BeWg03UyJOzMJW6zyrb4ShhTs7xQ+Md9r/M3jf2XktkltCVk8S
+	Od/ryMaZNqF8f4DvBm2XXKg6QibsQjDzkl2q3ImRaDqNvaZ2mlZkZMYOIhDuQdeE7TkICYyTTV5
+	XwCZXsPhTkjCW16bFKN3U4+aHWtBOPSYewdw4cqvZ/fU2IGE4ziFIcRJ4aJofUTdDEeNEfeOtGd
+	TtkN1SUNAIlIeWHJ9ZJfMz43lHw==
+X-Google-Smtp-Source: AGHT+IHpKvG7QTF5JMFQRfjxHS1e4Hh60oqpoUmBhfN3NuDv06qvqDXaNXWN+vdIaPYvt1ahDgUnfA==
+X-Received: by 2002:a05:6512:22d4:b0:550:f012:966 with SMTP id 2adb3069b0e04-550f0120ce6mr5060108e87.39.1747953524641;
+        Thu, 22 May 2025 15:38:44 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-328084c8c78sm33932571fa.36.2025.05.22.15.38.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 May 2025 15:38:44 -0700 (PDT)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: Linus <torvalds@linux-foundation.org>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] pmdomain fixes for v6.15-rc8
+Date: Fri, 23 May 2025 00:38:43 +0200
+Message-ID: <20250522223843.171621-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250330163129.02f24afb@jic23-huawei> <5bca6dfd-fe03-4c44-acf4-a51673124338@tuxon.dev>
- <95f5923f-7a8f-4947-b588-419525930bcb@tuxon.dev> <CAPDyKFoMqmCFBoO8FwQe2wHh2kqQi4jUZNFyiNckK7QhGVgmvg@mail.gmail.com>
- <c3a2950a-17ff-444a-bee7-af5e7e10e2bf@tuxon.dev> <CAPDyKFozR4qDq4mzcZBK-LcoPf=fGyuJTXwdt=Ey+_DcQOAp0g@mail.gmail.com>
- <4o3wo76st7w6qwyye3rrayuo2qx773i6jfzcnbkhdj76ouh7ds@3e2mblehkgwf>
- <CAPDyKFqMB7XutXba73YHx1X4rm6uc3Fz6yMZ8yM=wgduEmgUDg@mail.gmail.com>
- <a20fc6ee-c6c3-4013-b175-4918b9a44380@tuxon.dev> <CAPDyKFpbeLJUiB_xQbqDib+-8Q3AcJNVg+DuEcqmVGMbFdNxwA@mail.gmail.com>
- <fgl4w5uhxci7rrbdigtni72vveb2gqemh6iccz4qruqkek5rja@rzwkcjg6hkid>
- <3b1963ba-f93f-48f2-8fb0-a485dd80ffcb@tuxon.dev> <CAPDyKFqrAS4iV59S-zJ9H7_3VuGr9JdZABhfUGBwTzQNDCasaw@mail.gmail.com>
- <CAMuHMdWxeKWJ8hDG=GHngJzGxs_pDe3oGeok38S_PhxQy194RA@mail.gmail.com>
-In-Reply-To: <CAMuHMdWxeKWJ8hDG=GHngJzGxs_pDe3oGeok38S_PhxQy194RA@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Fri, 23 May 2025 00:24:23 +0200
-X-Gm-Features: AX0GCFuXinMJhLA931XICspXqJ6iaQgPA7OkwAdTsyiI_m91Si1IspTyACa7VnU
-Message-ID: <CAPDyKFq1iFCan+jB8oSh7z9CRogYWTZPj8x_jbFAu-U93QEMiQ@mail.gmail.com>
-Subject: Re: [PATCH] driver core: platform: Use devres group to free driver
- probe resources
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Claudiu Beznea <claudiu.beznea@tuxon.dev>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Jonathan Cameron <jic23@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, dakr@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-iio@vger.kernel.org, bhelgaas@google.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, 22 May 2025 at 16:56, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Ulf,
->
-> On Thu, 22 May 2025 at 13:54, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > On Thu, 22 May 2025 at 11:48, Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
-> > > I may have missed considering things when describing the case 2 (which is
-> > > what is proposed by this patch) as I don't have the full picture behind the
-> > > dev_pm_domain_detach() call in platform bus remove. If so, please correct me.
-> >
-> > The dev_pm_domain_attach|detach() calls in bus level code
-> > (probe/remove) were added there a long time ago, way before devres was
-> > being used like today.
-> >
-> > Currently we also have devm_pm_domain_attach_list(), which is used
-> > when devices have multiple PM domains to attach too. This is *not*
-> > called by bus-level code, but by the driver themselves. For these
-> > cases, we would not encounter the problems you have been facing with
-> > clocks/IRQ-handler, I think - because the devres order is maintained
-> > for PM domains too.
-> >
-> > That said, I think adding a devm_pm_domain_attach() interface would
-> > make perfect sense. Then we can try to replace
-> > dev_pm_domain_attach|detach() in bus level code, with just a call to
-> > devm_pm_domain_attach(). In this way, we should preserve the
-> > expectation for drivers around devres for PM domains. Even if it would
-> > change the behaviour for some drivers, it still sounds like the
-> > correct thing to do in my opinion.
->
-> IMO that sounds like going in the wrong direction.  Why would a driver
-> need to care if the device it manages is not located in a PM domain,
-> located in a single PM domain, or located in multiple PM domains?
+Hi Linus,
 
-Before we added support for multiple PM domains for a device, it was
-more or less transparent for drivers. It still is, as long as there
-are not multiple PM domains to consider for the device in question.
+Here's a PR with a couple of pmdomain fixes intended for v6.15-rc8. Details
+about the highlights are as usual found in the signed tag.
 
-The problem with making this transparent/common for the multiple PM
-domain case too, was in principle that it could not be done flexible
-enough from bus level code. It was discussed at conferences and at
-LKML, sorry but I don't have the references to those chats at hand.
-Anyway, that was the conclusion back when we introduced this around
-2018. See the below commits:
-
-82e12d9e0bd5 PM / Domains: Add dev_pm_domain_attach_by_id() to manage
-multi PM domains
-3c095f32a92b PM / Domains: Add support for multi PM domains per device to genpd
-
-> All of this depends on SoC integration, not on the device that's
-> being driven. The nice thing about doing all this in the bus level
-> code is that it is abstracted away for the device driver (modulo using
-> pm_runtime_*() calls).
-
-Right, I would have been nice, but we couldn't make it work back then.
-
-[...]
+Please pull this in!
 
 Kind regards
-Uffe
+Ulf Hansson
+
+
+The following changes since commit 9c32cda43eb78f78c73aee4aa344b777714e259b:
+
+  Linux 6.15-rc3 (2025-04-20 13:43:47 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.15-rc3
+
+for you to fetch changes up to 0f5757667ec0aaf2456c3b76fcf0c6c3ea3591fe:
+
+  pmdomain: core: Fix error checking in genpd_dev_pm_attach_by_id() (2025-05-08 13:29:30 +0200)
+
+----------------------------------------------------------------
+pmdomain core:
+ - Fix error checking in genpd_dev_pm_attach_by_id()
+
+pmdomain providers:
+ - renesas: Remove obsolete nullify checks for rcar domains
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      pmdomain: core: Fix error checking in genpd_dev_pm_attach_by_id()
+
+Geert Uytterhoeven (1):
+      pmdomain: renesas: rcar: Remove obsolete nullify checks
+
+ drivers/pmdomain/core.c                   | 2 +-
+ drivers/pmdomain/renesas/rcar-gen4-sysc.c | 5 -----
+ drivers/pmdomain/renesas/rcar-sysc.c      | 5 -----
+ 3 files changed, 1 insertion(+), 11 deletions(-)
 
