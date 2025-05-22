@@ -1,144 +1,148 @@
-Return-Path: <linux-pm+bounces-27515-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27516-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B56E4AC0F17
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 16:58:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97059AC0FB6
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 17:17:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EA7E1BA3249
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 14:57:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF8B2189E6BE
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 15:17:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F35528DEFA;
-	Thu, 22 May 2025 14:56:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71E672980A8;
+	Thu, 22 May 2025 15:17:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XLPHO6rK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77AD228D8E7;
-	Thu, 22 May 2025 14:56:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7B72980D2
+	for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 15:17:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747925770; cv=none; b=IbYmAvI6qTfD+9yIp6D9Ju6GlG7Kk6NJbMeDX8WZ6ktfE4JJ/vOc5afMy+QQCVXOpEBkfHg1adtJJ+tAgoptJ0w8xmZFFV/AaKUF2+ZZA6nf2FIl8akpPrvw06mQwF2JoSn/gyRQU6E063VvMIIriIIDz30ru+JDB/qqcO8XYi8=
+	t=1747927050; cv=none; b=I3DJWTDD+9uGhnlOtBXV68D9GanwVAA1eLnWZkUt+O6lGjayEM1OG+8t3pw8Ak69I8Q6Th3MFMTBkIipa+UUn2F6nPlig4Fq8f3FMr3Ua0ixZWy3/5hkbt+e5G7w/TCs5R3/Hr3wULZM2FSB0Wai+TnNmg4//sydCs7BL8w8Mc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747925770; c=relaxed/simple;
-	bh=NYJvjVyWZ5DTqLy2C2F52WrdMf9IXrohyaEHnqRLQsg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hdywHPO+r3lKVxE2tgL3uyfUPcVj2YBiwtiYJGp31ekszgGwS5MR8PY3wvTzHJVZo0SoseBMzqnFyyckCXmQvaH+I3r55uPppK7s+X3/15O3/jqZ5xM03qMVRBY5wZYD51+l/iDo8MxEMw0O46ihfxFV6j5vtsNjMMJSeOf2Jto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-87bfa88c10eso1301064241.1;
-        Thu, 22 May 2025 07:56:08 -0700 (PDT)
+	s=arc-20240116; t=1747927050; c=relaxed/simple;
+	bh=yECD6ZktgTjXDSCFgMyFUoroNATnVYVOCITlOnNEHpc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fI4VgsRE6YezUcIcQh9xxziXlE8BdxLWZmsOGqvXDb47vf9kdsuwyG9OpO8GsBupxs1Y7NZNfTdnGOg/CA+sJ0pXJXWRkRP+nT09goPDhM4Z7EbGLoam1gH3R30sohBzPYUe9HpoUaQxW4UnEv516ME5DPQeypYqAlF0GewoPi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XLPHO6rK; arc=none smtp.client-ip=209.85.166.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-8613f456960so242003839f.1
+        for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 08:17:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1747927047; x=1748531847; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IETGeB30Ud5t90dKFtz7PPdKbD88fIhHcL4tZXb4WTs=;
+        b=XLPHO6rKWko+sw+IZXc/CqddPJL2u1YVjas/lQyH6No6tywCoJ7tXRSOTQxrtLDOVH
+         LNnjbQDtVPx+89YwKtWJQHrYaKnKaB2ScLHuG13vC8AwOKipjeQg3aQt1ryQnI8tvACg
+         V3CIVdUvzcmWqoCUHxCjnID5DGrM0g0GvBXRw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747925766; x=1748530566;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oP0j9pV17FFkWZ8R/alfKDNyj6fTbmxsIhF06TlHwMU=;
-        b=SBcF0lAnB5mAS8D3UtO6gkf2Ndrhl6n631ITP7ccKrNFQrbMbqDHo1Y7R3atbc9AtY
-         /Rx7sLOegPochiKctbsga0pcertLFJmJOFP5wwlmbZBxaOmUJJu9/33HmOnwb3xksQYL
-         nm1Jqw2bdBZtEU3aX+1aU2iTEwf5hjm4XCqhFs2eji9jibfeHncyzND+FrlArNLCbgkm
-         anT1TUfLCcBpqJU/pf73+tuSKEkBee0rLVWxuluGGYv0uyrhm9ZQuj2cNngIPepwfmMi
-         TVPoLiPbFR8OXc5wZxrArTeli35Ac9zT2e13su/8MiQMqBuA03x00ghAtNe8f9anEitB
-         nX2g==
-X-Forwarded-Encrypted: i=1; AJvYcCW/daMz6r/hS96sv9rOWBP6L4rWlwwQZy5VFn1Yywqc9BF38W/zv7qjzSD7vp3Y9YZxJbRGYQWvC4Q=@vger.kernel.org, AJvYcCWT5JKSxgaGmQOHQPi91JlipUpKe4W7GNdiPJHORwsFxT5VgtmgtOwr+NvHa0gB32LBRSA0Z9PpMNouL7Us@vger.kernel.org, AJvYcCWnst9VAyl6sjrMNzJxraihhxGG5G8YaXlvGSC9v4iJluNAZ3KTu75Ply4KQcw3PMmj+KrkFzqTFKc=@vger.kernel.org, AJvYcCWwCrjEEKCIPLCg4xmmH8E6F54yETC45zaNMWU+ZSigyacwkTLbLHesiBFXPmkeVbL8mDn0Iun2QmJOznMX/g1Yc2A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLnYDSTD2uzxSN+CazKCKcCmqDtBC202KPotQcMxR/eRn/oX5S
-	LBqSbeEvtQl+1Iy8IemLw0xfKVEtZxFB7A7euP/IDUCahr8SQ2JKyqdPXIorjG5H
-X-Gm-Gg: ASbGncv27O+bI3gPYyMW7i4y3RnmHf/5qwH55Zssxxc/s8eWK3e/WI8mV9CsAAoW41Z
-	r9h+DspX7jbk0lblrzgjC3Zz6eTZegJqk4ZudR5KU5ZY35AugE3bV5hWxrbaB4qhRXNJK+m7iNd
-	m4FlmvBMXFBZtjCj1jzCacXq9tdIW0H5o0WDNW2iwdmgL6YoI7f0thiGCUaibqctY+HDZWmpwxx
-	ZTQZ3ZbWOvh9/iKEkGw0QvcKwu3fkkmboSX/pSmk/HPNXLUaQUVDxp6gfkHx9lK9Qiki8k1lmCJ
-	FnyvAZwzr7gyp7F12WGO1z+L++0Fu3pyy1PxNHccTy7lJ1s51A2kf9aNpQgWMX1/zLVg+J/VEtZ
-	nrisW8oPzj/IUJw==
-X-Google-Smtp-Source: AGHT+IGYpNMsrIUNBsUmeANyljSIDMmEsBns73FKku4rNKRR1m/zl4iySNcwtuiXac4qw6AACHzteg==
-X-Received: by 2002:a05:6102:2049:b0:4e2:83db:82cd with SMTP id ada2fe7eead31-4e283db82e4mr11771982137.15.1747925766455;
-        Thu, 22 May 2025 07:56:06 -0700 (PDT)
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-87bec22768fsm10461643241.30.2025.05.22.07.56.05
+        d=1e100.net; s=20230601; t=1747927047; x=1748531847;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IETGeB30Ud5t90dKFtz7PPdKbD88fIhHcL4tZXb4WTs=;
+        b=YWWBxWsNpeHUFFmpoRv9L8JhtlwKT7Ot0hrJRsHxZwrkG4li76ZDJyQ5B66OhnNWvP
+         Wv+jyzURQOqmNxjeTWoBQ5x4tYnfkqgHH/heDyDWK7CtBJ6dlwMgDVe0BeWyCe2iiBVu
+         V3QhM8UVyV0fLVpi+rCqxHcd2TOfjfPYn5IrPk4nyvKcQ5w2ByQ+QXtNfQbKBic/iJNY
+         RQq5YphZthOhS4qzsjVrBgElL1mx/hHlnqmjeyG0dZAP0tTw2gDlJzqWcWA2SKu/Fd9w
+         CMlhJPx1V+hA4lFIBXwp/iF8KHvxVH5IBRzpUuMbj9E9BV0p62VE3JIca9UEwtImSKrP
+         jjbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUbmkEEY7n3o59ehhqA488vGE8GSvoRgjkXiiD6wgD/ehWp+M5PfeIgaAXbZzyYPTpZuhlZxhblPw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxhExHe9PepOEjQDlqRO4PNk4ESAnLADB1JpayFrat+9Hh7MCm+
+	zLOCbyOBGsRKhzy56rz5lrxJGXEa41WP/TkOph4v12zntdMaDu+Pyx/j2qXoESRo1jU=
+X-Gm-Gg: ASbGnctcxZ59NSucElwoAWPS4PH6UOVcR3Ildsw3qx+ANWcUhbT2hsMbAWmLzEATgVs
+	pZsgaHtEHv2sBQHA1aaeo57d35WzuALASnp6b7g0k/bFpZCuWc9/jLEKG7V/oDsP5NtHBlbzgIj
+	WMkxEzA3vKwhVFKvsM95DLwtBCDpT18nQmDM+QDNZ1hpJdkFpjQ3peP2VIGX7Nk18ss2AR6tBlC
+	G7v6lDszI+xa5ZPmSjFzJc1OOQ/NN0O/gsh86XddGHPeQ6J+A6xC55Xrqnjxo1uepNUkKHDjKOU
+	6+xLMm7K7DjSF3SR48PxLGp9o9jp5cT/sxDXDtDLvbwSlbrZlTs0RtwkiMFtAQ==
+X-Google-Smtp-Source: AGHT+IE4miy92v8IzzM9z3nzWIqMhYC4PYeZ/1gnpzPA+Nm1GpEEXc0VF3cDp3wCEis+0MsO80e57g==
+X-Received: by 2002:a05:6e02:3e06:b0:3d5:893a:93ea with SMTP id e9e14a558f8ab-3db843046c6mr236224255ab.13.1747927047461;
+        Thu, 22 May 2025 08:17:27 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3dc8ad89ecfsm5792365ab.26.2025.05.22.08.17.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 May 2025 07:56:06 -0700 (PDT)
-Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-86d5e3ddb66so2059121241.2;
-        Thu, 22 May 2025 07:56:05 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVkKl9IHkm/yOplPTgMydYj5alVRr2j3Wbq3Y6LNJc901wA4qSPZ/DGK7DS8CD1AC6ihjbVnUsk0uc=@vger.kernel.org, AJvYcCVlJJIHbJqbZDIcbtgqaoN7b+WRJ4+ApIUwNfMPFSHECRTSTG9xSq8o8b2BzwzjiWo6DfYdEisYxIk=@vger.kernel.org, AJvYcCVo8NpOMowE5GnGxbdaSlKRBKJ93QB086DFPXWJipRP4lsm2ojso9CXTF3xyHfW8dJjFiUjI++PZxLV5szteFqCTJE=@vger.kernel.org, AJvYcCWJn5vC07Z19AUXZFD2Y/zF+Ki6ASYGIuPjNaRv4298UjxOYPG+DrOsvuB8JSXkwC0emhwiOsUBEfzy32CH@vger.kernel.org
-X-Received: by 2002:a05:6102:50a4:b0:4bc:82f:b4e0 with SMTP id
- ada2fe7eead31-4dfa6c4654bmr23423017137.22.1747925765571; Thu, 22 May 2025
- 07:56:05 -0700 (PDT)
+        Thu, 22 May 2025 08:17:26 -0700 (PDT)
+Message-ID: <2b7acb5f-65c7-4787-aac5-ebcec83c8ac0@linuxfoundation.org>
+Date: Thu, 22 May 2025 09:17:26 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250330163129.02f24afb@jic23-huawei> <5bca6dfd-fe03-4c44-acf4-a51673124338@tuxon.dev>
- <95f5923f-7a8f-4947-b588-419525930bcb@tuxon.dev> <CAPDyKFoMqmCFBoO8FwQe2wHh2kqQi4jUZNFyiNckK7QhGVgmvg@mail.gmail.com>
- <c3a2950a-17ff-444a-bee7-af5e7e10e2bf@tuxon.dev> <CAPDyKFozR4qDq4mzcZBK-LcoPf=fGyuJTXwdt=Ey+_DcQOAp0g@mail.gmail.com>
- <4o3wo76st7w6qwyye3rrayuo2qx773i6jfzcnbkhdj76ouh7ds@3e2mblehkgwf>
- <CAPDyKFqMB7XutXba73YHx1X4rm6uc3Fz6yMZ8yM=wgduEmgUDg@mail.gmail.com>
- <a20fc6ee-c6c3-4013-b175-4918b9a44380@tuxon.dev> <CAPDyKFpbeLJUiB_xQbqDib+-8Q3AcJNVg+DuEcqmVGMbFdNxwA@mail.gmail.com>
- <fgl4w5uhxci7rrbdigtni72vveb2gqemh6iccz4qruqkek5rja@rzwkcjg6hkid>
- <3b1963ba-f93f-48f2-8fb0-a485dd80ffcb@tuxon.dev> <CAPDyKFqrAS4iV59S-zJ9H7_3VuGr9JdZABhfUGBwTzQNDCasaw@mail.gmail.com>
-In-Reply-To: <CAPDyKFqrAS4iV59S-zJ9H7_3VuGr9JdZABhfUGBwTzQNDCasaw@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 22 May 2025 16:55:53 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWxeKWJ8hDG=GHngJzGxs_pDe3oGeok38S_PhxQy194RA@mail.gmail.com>
-X-Gm-Features: AX0GCFscAejGATVLf32FZ3zb7da-a_NFq9dpjeQEYvH9yG-Iw_s5Pnys5J7LY1I
-Message-ID: <CAMuHMdWxeKWJ8hDG=GHngJzGxs_pDe3oGeok38S_PhxQy194RA@mail.gmail.com>
-Subject: Re: [PATCH] driver core: platform: Use devres group to free driver
- probe resources
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Claudiu Beznea <claudiu.beznea@tuxon.dev>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Jonathan Cameron <jic23@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, dakr@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-iio@vger.kernel.org, bhelgaas@google.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/cpufreq: Fix cpufreq basic read and update
+ testcases
+To: Viresh Kumar <viresh.kumar@linaro.org>,
+ Swapnil Sapkal <swapnil.sapkal@amd.com>
+Cc: rafael@kernel.org, shuah@kernel.org, gautham.shenoy@amd.com,
+ narasimhan.v@amd.com, linux-pm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20250430171433.10866-1-swapnil.sapkal@amd.com>
+ <20250519075854.opnlhjlbybrkvd2k@vireshk-i7>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20250519075854.opnlhjlbybrkvd2k@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Ulf,
+On 5/19/25 01:58, Viresh Kumar wrote:
+> On 30-04-25, 17:14, Swapnil Sapkal wrote:
+>> In cpufreq basic selftests, one of the testcases is to read all cpufreq
+>> sysfs files and print the values. This testcase assumes all the cpufreq
+>> sysfs files have read permissions. However certain cpufreq sysfs files
+>> (eg. stats/reset) are write only files and this testcase errors out
+>> when it is not able to read the file.
+>> Similarily, there is one more testcase which reads the cpufreq sysfs
+>> file data and write it back to same file. This testcase also errors out
+>> for sysfs files without read permission.
+>> Fix these testcases by adding proper read permission checks.
 
-On Thu, 22 May 2025 at 13:54, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> On Thu, 22 May 2025 at 11:48, Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
-> > I may have missed considering things when describing the case 2 (which is
-> > what is proposed by this patch) as I don't have the full picture behind the
-> > dev_pm_domain_detach() call in platform bus remove. If so, please correct me.
->
-> The dev_pm_domain_attach|detach() calls in bus level code
-> (probe/remove) were added there a long time ago, way before devres was
-> being used like today.
->
-> Currently we also have devm_pm_domain_attach_list(), which is used
-> when devices have multiple PM domains to attach too. This is *not*
-> called by bus-level code, but by the driver themselves. For these
-> cases, we would not encounter the problems you have been facing with
-> clocks/IRQ-handler, I think - because the devres order is maintained
-> for PM domains too.
->
-> That said, I think adding a devm_pm_domain_attach() interface would
-> make perfect sense. Then we can try to replace
-> dev_pm_domain_attach|detach() in bus level code, with just a call to
-> devm_pm_domain_attach(). In this way, we should preserve the
-> expectation for drivers around devres for PM domains. Even if it would
-> change the behaviour for some drivers, it still sounds like the
-> correct thing to do in my opinion.
+Can you share how you ran the test?
 
-IMO that sounds like going in the wrong direction.  Why would a driver
-need to care if the device it manages is not located in a PM domain,
-located in a single PM domain, or located in multiple PM domains?
-All of this depends on SoC integration, not on the device that's
-being driven. The nice thing about doing all this in the bus level
-code is that it is abstracted away for the device driver (modulo using
-pm_runtime_*() calls).
+>>
+>> Reported-by: Narasimhan V <narasimhan.v@amd.com>
+>> Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
+>> ---
+>>   tools/testing/selftests/cpufreq/cpufreq.sh | 15 +++++++++++----
+>>   1 file changed, 11 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/cpufreq/cpufreq.sh b/tools/testing/selftests/cpufreq/cpufreq.sh
+>> index e350c521b467..3484fa34e8d8 100755
+>> --- a/tools/testing/selftests/cpufreq/cpufreq.sh
+>> +++ b/tools/testing/selftests/cpufreq/cpufreq.sh
+>> @@ -52,7 +52,14 @@ read_cpufreq_files_in_dir()
+>>   	for file in $files; do
+>>   		if [ -f $1/$file ]; then
+>>   			printf "$file:"
+>> -			cat $1/$file
+>> +			#file is readable ?
+>> +			local rfile=$(ls -l $1/$file | awk '$1 ~ /^.*r.*/ { print $NF; }')
+>> +
+>> +			if [ ! -z $rfile ]; then
+>> +				cat $1/$file
+>> +			else
+>> +				printf "$file is not readable\n"
+>> +			fi
+> 
+> What about:
+> 
+> if [ -r $1/$file ]; then
+>      cat $1/$file
+> else
+>      printf "$file is not readable\n"
+> fi
+> 
+> 
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+thanks,
+-- Shuah
 
