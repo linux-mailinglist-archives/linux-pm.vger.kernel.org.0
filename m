@@ -1,141 +1,125 @@
-Return-Path: <linux-pm+bounces-27486-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27487-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAF8FAC05C0
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 09:31:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6D6EAC062E
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 09:53:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BC603A4FC3
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 07:31:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 527744A2884
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 07:52:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A1EB221701;
-	Thu, 22 May 2025 07:31:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C256D2505D2;
+	Thu, 22 May 2025 07:52:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jhoVKYdE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA1B4A3C;
-	Thu, 22 May 2025 07:31:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C20E24EA8E;
+	Thu, 22 May 2025 07:52:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747899086; cv=none; b=WQiU+ao8k/4Moh/zDZOfYSmTCiVWherG456hB6sRluTife+VtIlT50a/nCCv20Exe4yhNSTADciJxcyiuxKAZPHfMpTNXejCJg4Otgrg0h2QrlQ2TSJ9EDWqimu3PtMZjoGLLNz9zLm60zrP5UABvOWrNzHv/Aj11snViCEhmi8=
+	t=1747900331; cv=none; b=B73bQuV1cU0E+qsleTD/cmB8l/xImhklshk1xV/UEY9mv8bbSIpVjKy1tG1HFlTjUo5lN8teW/Wq8k+IgcJTcQRzib740Ld1dEgNQYRyId5SdU6VaqZ3Ti1c0f1cYlQvcmnLYjYyj7ae25/RwHY44iaBjoOB+X1clMysnDs5u1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747899086; c=relaxed/simple;
-	bh=NFZt1VhNtWX7jDY9C5p1Hu6OXloY8TUL9Rgfibs2nzg=;
+	s=arc-20240116; t=1747900331; c=relaxed/simple;
+	bh=T6UY1TqGv//MKV9QGiY+pagJxws1WT6fHX3Dckvh8xc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q6/HFQAO0q58HVEb0ZIdj684tzxaQwSQ44Lt2vxLJZpxFjtKT/LgUfHFOCxmEjW7pNlgV+8WmKo7KJPQl00tV7LKp3H47E7L4KojVpnTFWmyDD24Aur0OQyCxLfNkPvQeiWQP5VxGl4IJCGmbv3Iwk1boAW3Ih0bMuIExBUl4GM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=176.9.242.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout3.hostsharing.net (Postfix) with ESMTPS id 6B0272C000B4;
-	Thu, 22 May 2025 09:31:16 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id 406E010652; Thu, 22 May 2025 09:31:16 +0200 (CEST)
-Date: Thu, 22 May 2025 09:31:16 +0200
-From: Lukas Wunner <lukas@wunner.de>
-To: Denis Benato <benato.denis96@gmail.com>
-Cc: Mario Limonciello <superm1@kernel.org>,
-	Raag Jadav <raag.jadav@intel.com>, rafael@kernel.org,
-	mahesh@linux.ibm.com, oohall@gmail.com, bhelgaas@google.com,
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, ilpo.jarvinen@linux.intel.com,
-	aravind.iddamsetty@linux.intel.com,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Mathias Nyman <mathias.nyman@intel.com>
-Subject: Re: [PATCH v4] PCI: Prevent power state transition of erroneous
- device
-Message-ID: <aC7SxEzfRwmL2eBH@wunner.de>
-References: <aCsK743YSuahPtnH@black.fi.intel.com>
- <85ed0b91-c84f-4d24-8e19-a8cb3ba02b14@gmail.com>
- <aCxP6vQ8Ep9LftPv@black.fi.intel.com>
- <a8c83435-4c91-495c-950c-4d12b955c54c@kernel.org>
- <aCyj9nbnIRet93O-@black.fi.intel.com>
- <552d75b2-2736-419f-887e-ce2692616578@kernel.org>
- <ee1117cf-6367-4e9a-aa85-ccfc6c63125d@gmail.com>
- <aC3XiuOPVYB2EX18@wunner.de>
- <6bddf9bb-0c57-4823-bef1-e5bdf16ef5f7@kernel.org>
- <442887ac-d53c-4a89-8916-e7c8b1f2e6a8@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tyllpH76Xq6R+WGBhlY2q1iMM9P3GUTf2gkG6rc4cFQXloOpNw2gsh3Aou+7NSZ1xniACisYLrh+mPRUTS3A3CzQIzQ7UIR0ZCgpJHmHwAaY3o1OhbAMeWhxPm2ILPaJebl6qMoX51Oiu89zq9CTPMWLbEJa6WB01c/0BY3U8HQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jhoVKYdE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AD75C4CEE4;
+	Thu, 22 May 2025 07:52:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747900330;
+	bh=T6UY1TqGv//MKV9QGiY+pagJxws1WT6fHX3Dckvh8xc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jhoVKYdEO+x6EgNOUvVzOtcWCsJW/PERVPRppCRhBEYlRsbztMloi3w6rNpXaC6cQ
+	 XEima4m1fFyVB8RUEoezKyuuoC0BCx9rgwPH2MtW+R5LiqeCqUwzQU54pesJXFAu3f
+	 ZsWRoxrPv0lrWj3NzRWjY2kDdAf3m2bFFcFpW+XlmhV/zAO0D79dECPPg/FSQBLlZ+
+	 bjgQig4eXpbHM0mfvMiYSSPhv6f6zDSdqRGwdim1muGBD9cTgVtP/DsaTDzZT3ZybJ
+	 JOwTxPwiNYDTSsBlDqFH7nZXxFFYWAwpmc3PCt5NiYXpWQAbNSHg8F49jeKeP9CYiE
+	 iyViKA7eIJ7ug==
+Date: Thu, 22 May 2025 09:52:07 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Julien Massot <julien.massot@collabora.com>
+Cc: kernel@collabora.com, Sen Chu <sen.chu@mediatek.com>, 
+	Sean Wang <sean.wang@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>, 
+	Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	=?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>, Hui Liu <hui.liu@mediatek.com>, Yong Wu <yong.wu@mediatek.com>, 
+	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
+	Robin Murphy <robin.murphy@arm.com>, Tinghan Shen <tinghan.shen@mediatek.com>, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, iommu@lists.linux.dev
+Subject: Re: [PATCH v2 1/3] dt-bindings: mfd: mediatek: mt6397: Add
+ #sound-dai-cells property
+Message-ID: <20250522-independent-ginger-bullfrog-4552d1@kuoka>
+References: <20250514-mt8395-dtb-errors-v2-0-d67b9077c59a@collabora.com>
+ <20250514-mt8395-dtb-errors-v2-1-d67b9077c59a@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <442887ac-d53c-4a89-8916-e7c8b1f2e6a8@gmail.com>
+In-Reply-To: <20250514-mt8395-dtb-errors-v2-1-d67b9077c59a@collabora.com>
 
-[cc += Mika, Mathias]
+On Wed, May 14, 2025 at 10:19:56AM GMT, Julien Massot wrote:
+> The 'mt6359.dtsi' file already uses the '#sound-dai-cells' property.
+> Add the corresponding property to the binding to fix the following
+> dtb-check error:
+> 
+> mediatek/mt8395-radxa-nio-12l.dtb: pmic: '#sound-dai-cells', 'mt6359rtc' do not match any of the regexes: 'pinctrl-[0-9]+'
+> from schema $id: http://devicetree.org/schemas/mfd/mediatek,mt6397.yaml#
 
-On Tue, May 20, 2025 at 07:22:04PM +0200, Denis Benato wrote:
-> This is the very same exact kernel, minus the patch in question:
-> https://pastebin.com/rwMYgG7C
+If this is a random drive-by, would be fine, but if that's your platform
+which you should know, then I expect this to be a real reason instead
+something which can easily be rejected with: what if DTS is wrong?
 
-I note that your machine uses an Intel Maple Ridge 2C Thunderbolt
-controller.  It looks like we're missing that one in the list of
-XHCI devices which are allowed to runtime suspend.  Only the 4C
-variant of that controller was allowed to runtime suspend by commit
-5a8e3229ac27 ("xhci-pci: Allow host runtime PM as default for Intel
-Maple Ridge xHCI").
+I could not find the ASoC driver for that compatible and quick glance to
+MFD shown me no usage of dai cells, so you need proper explanation here.
 
-Commit a611bf473d1f ("xhci-pci: Set runtime PM as default policy on
-all xHC 1.2 or later devices") has since obviated the need to
-continuously amend the list of controllers, but it's unclear to me
-whether it encompasses Maple Ridge 2C or not.  Chances are it doesn't
-because the 4C variant was kept in the whitelist.
+Especially, that there is a subnode audio-codec, so adding dai cells to
+the parent node feels just wrong. One is wrong - either subnode or
+parent is a codec.
 
-What do you get if you run:
+> 
+> Fixes: 9bc8353be720 ("arm64: dts: mt6359: Add #sound-dai-cells property")
+> Signed-off-by: Julien Massot <julien.massot@collabora.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+> index 6a89b479d10fad3c8b61cab5a3af1453baca4d1a..9580c4ec1ae00f1dd1182357d8b0a5035a1b7f82 100644
+> --- a/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+> @@ -30,6 +30,9 @@ description: |
+>    See the following for pwrap node definitions:
+>    Documentation/devicetree/bindings/soc/mediatek/mediatek,pwrap.yaml
+>  
+> +allOf:
+> +  - $ref: /schemas/sound/dai-common.yaml#
+> +
+>  properties:
+>    compatible:
+>      oneOf:
+> @@ -53,6 +56,9 @@ properties:
+>    "#interrupt-cells":
+>      const: 2
+>  
+> +  '#sound-dai-cells':
+> +    const: 1
 
-cat /sys/bus/pci/devices/0000:38:00.0/power/runtime_enabled
-cat /sys/bus/pci/devices/0000:38:00.0/power/runtime_status
+Also extend the example, if there is one for such device.
 
-Below is a small patch to add the 2C variant to the whitelist.
-Does it help in any way?  What's the output for the two commands
-above if you apply the patch?
+Best regards,
+Krzysztof
 
-Upthread it was said that it's a problem if the Root Port stays in D0.
-Of course if the XHCI doesn't runtime suspend, that will keep the
-Root Port in D0 as well.  The patch may eliminate one reason for the
-Root Port to stay in D0.
-
-The PCI IDs database was also missing the IDs of the 2C variant,
-I just went ahead and fixed that.
-
-Thanks,
-
-Lukas
-
--- >8 --
-
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 0c481cb..5233d59 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -61,7 +61,8 @@
- #define PCI_DEVICE_ID_PHYTIUM_XHCI			0xdc27
- 
- /* Thunderbolt */
--#define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
-+#define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_2C_XHCI		0x1135
-+#define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_4C_XHCI		0x1138
- #define PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_2C_XHCI	0x15b5
- #define PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_4C_XHCI	0x15b6
- #define PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_LP_XHCI	0x15c1
-@@ -387,7 +388,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI ||
--	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI))
-+	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_2C_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_4C_XHCI))
- 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
- 
- 	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
 
