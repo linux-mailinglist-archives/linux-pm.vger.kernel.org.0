@@ -1,123 +1,141 @@
-Return-Path: <linux-pm+bounces-27485-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27486-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA76AAC052D
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 09:02:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAF8FAC05C0
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 09:31:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8189817DAF1
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 07:02:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BC603A4FC3
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 07:31:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D46822173A;
-	Thu, 22 May 2025 07:02:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZO4y/2m8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A1EB221701;
+	Thu, 22 May 2025 07:31:26 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB121A841C;
-	Thu, 22 May 2025 07:02:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA1B4A3C;
+	Thu, 22 May 2025 07:31:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747897357; cv=none; b=Mr+QqCRvoIDD/yC8uQUygPJvdI9PjacxBqMmoFdgunb1eqy3NjeZG9P4bvY3K5JEbLVp5yPfG895EhENU3eMrIVnpWOvyDXGqVkj6UHoZfMtnEXUnJk6KkkjOKYHPwPokFKx1l8ww+MMA+ZDTAjDZxzZWBK49GIVq7HqFKRdZ5A=
+	t=1747899086; cv=none; b=WQiU+ao8k/4Moh/zDZOfYSmTCiVWherG456hB6sRluTife+VtIlT50a/nCCv20Exe4yhNSTADciJxcyiuxKAZPHfMpTNXejCJg4Otgrg0h2QrlQ2TSJ9EDWqimu3PtMZjoGLLNz9zLm60zrP5UABvOWrNzHv/Aj11snViCEhmi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747897357; c=relaxed/simple;
-	bh=uA2NaTnSrsjaw+u1a1w4m99SGUK5RHR7xtImeGhk49g=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=h+APQYwf3QfxLLvnKT+J/U/YBTkg/8rA3piVrTY/QPRv+JTRpuv8TLWseOw5dNmeDoYUNeJhQ565+J4GzgCvxMrs38ZSGrYC+me5AehjDvpL47C5NK1yosR/B+2BhmQHm8o8u02G0Zvm8gXsahpHMT+CcMUZCW79hE8wu7TBQ6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZO4y/2m8; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-30ea8e2bbaaso4538598a91.2;
-        Thu, 22 May 2025 00:02:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747897355; x=1748502155; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jGtCz5gnhXYzL9ayCi6Yx/k+BthTHNTVsByaVh8/+D0=;
-        b=ZO4y/2m8ylkHghvF74kzQLrWPnJ6mZPQJIgecpOG7oaD5tp+SdhNWKKLn6EEM9/1e2
-         gf+hRFwGdHmKfTLz3mGCoVZm2GMfDfCqqWrX5qmcFh6XFTPYtkfTieZb5t0Uemrgu9fD
-         oRXZE+7iNTPtzbea2XBsa05VwJrRk6l7NI5gkaJCUpympg3zz71RCCFY0axr5dVx31zO
-         VNm8/kMgGBih3i0USszpGDRz5w8So4MoQvpJ5vqvsAtZ1YHTPE6ns74MAdrWN3Fahifv
-         wbE3iCJvS53uSHzYVSGHiW+ii7byb+lQExKaqxnHVolyzutLbqF2koLJ5xOaUXaXZT0F
-         TcaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747897355; x=1748502155;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jGtCz5gnhXYzL9ayCi6Yx/k+BthTHNTVsByaVh8/+D0=;
-        b=f5NEvHeaKdZ8adA62/0CvWzqcTZbJRCTouAJf3bu/NTFUwMKMCnZmZkHkHb1+qv1r7
-         Xblo1pH6+nVD+RqoJ+9HNxM6u02ZhQQkZru54lc1xWwyhmNALcdP0W5p5CyG/pDjLoSo
-         NqQiheWNP+pUgOZ4rLEsfOryKko6LuaK9aFnKmmSHteilF0zb8elMHsAPYmwde3JoKrm
-         qkcMEFQ+xGXhGi5J5NF4plHy3d11klzKrkoTbMYh6EguUbNkZKvj9FUu7XFiJtlX/CES
-         PsVBO3TYTGA9hm2k6FtWw188e/5YsS9UbnOAsmE+VXEkIYlnMg7t9+DDm7lfNklspkHt
-         cujw==
-X-Forwarded-Encrypted: i=1; AJvYcCUxdw+JeBMFG5PZ1sVQv4mqnqXsUkmRHHCtwdxQSeI7jPZI6C9LjFlpqtGPc/fGyq+JeiEaiOPjgBo=@vger.kernel.org, AJvYcCXYfOTrnVaNFN/ODgMtwn+TW/f/WCplsPHHDuJAtMsl/T3ZItgknCiBLMVDWDiBPzE7XnGLMAYssungBg3p@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMp7x+UUp8hDQHltDJ51aD6lb1T3LnIW4NIJuxIanQ2C2/q/j4
-	GoT3/jFkpLZRWo6kCWsfCMFSbMPMkO+3U/wv3Ibl3tyXcv0zgljifnFIQD4kI/r5
-X-Gm-Gg: ASbGnctTQp7PmyXNbaIvl42ZAt8eGv4LGXQRNwh2ftczvDVTwB70z4rU6LIdj2qzycq
-	2RxjMpvZAsSI9kcoUBHd6Mart94Ewg0dftMAh7zaL1TKE1LLHQFdHKi5WGJqQ5f5UuW1nyNbapb
-	R9JLmrfsfbVwZqGaV14+MvgNSxT6oah/UFBWbkgAk2pQ3Rx47GKCHhSbCGfRT2fLk//1WrCIpeC
-	lCvlmviQLu9AstAWqSZbM3ae9Ah+7IykOYzOSEvsL0gisaSZ6p+tVUpjYskjTN8/3Ii3byE2+rn
-	AxeG/RIzSO5ifjaZBAOg3Q0TZCWIkR3kvsvvXjIjTz5Vtss5yakDEqNgp67rapW73DPbY1x06V1
-	pkeV9t80zL4jMFA==
-X-Google-Smtp-Source: AGHT+IGLZQvgE6vIaT87y4QlfLMbqTSQVnSQp3oMK/aK4G8bVgQ/LuMqQC40bpRTNLSNHvIWBuWD5A==
-X-Received: by 2002:a17:90b:3e8e:b0:2ff:4e90:3c55 with SMTP id 98e67ed59e1d1-30e7d5ac887mr34551529a91.27.1747897354183;
-        Thu, 22 May 2025 00:02:34 -0700 (PDT)
-Received: from SHOUYELIU-MC0.tencent.com ([43.132.141.21])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2982c04d12sm3646879a12.21.2025.05.22.00.02.31
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 22 May 2025 00:02:33 -0700 (PDT)
-From: shouyeliu <shouyeliu@gmail.com>
-To: ray.huang@amd.com,
-	gautham.shenoy@amd.com,
-	mario.limonciello@amd.com,
-	perry.yuan@amd.com,
-	corbet@lwn.net
-Cc: linux-pm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Shouye Liu <shouyeliu@tencent.com>
-Subject: [PATCH] Documentation: amd-pstate:fix minimum performance state label error
-Date: Thu, 22 May 2025 15:01:41 +0800
-Message-Id: <20250522070140.17557-1-shouyeliu@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	s=arc-20240116; t=1747899086; c=relaxed/simple;
+	bh=NFZt1VhNtWX7jDY9C5p1Hu6OXloY8TUL9Rgfibs2nzg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=q6/HFQAO0q58HVEb0ZIdj684tzxaQwSQ44Lt2vxLJZpxFjtKT/LgUfHFOCxmEjW7pNlgV+8WmKo7KJPQl00tV7LKp3H47E7L4KojVpnTFWmyDD24Aur0OQyCxLfNkPvQeiWQP5VxGl4IJCGmbv3Iwk1boAW3Ih0bMuIExBUl4GM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=176.9.242.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout3.hostsharing.net (Postfix) with ESMTPS id 6B0272C000B4;
+	Thu, 22 May 2025 09:31:16 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 406E010652; Thu, 22 May 2025 09:31:16 +0200 (CEST)
+Date: Thu, 22 May 2025 09:31:16 +0200
+From: Lukas Wunner <lukas@wunner.de>
+To: Denis Benato <benato.denis96@gmail.com>
+Cc: Mario Limonciello <superm1@kernel.org>,
+	Raag Jadav <raag.jadav@intel.com>, rafael@kernel.org,
+	mahesh@linux.ibm.com, oohall@gmail.com, bhelgaas@google.com,
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, ilpo.jarvinen@linux.intel.com,
+	aravind.iddamsetty@linux.intel.com,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Mathias Nyman <mathias.nyman@intel.com>
+Subject: Re: [PATCH v4] PCI: Prevent power state transition of erroneous
+ device
+Message-ID: <aC7SxEzfRwmL2eBH@wunner.de>
+References: <aCsK743YSuahPtnH@black.fi.intel.com>
+ <85ed0b91-c84f-4d24-8e19-a8cb3ba02b14@gmail.com>
+ <aCxP6vQ8Ep9LftPv@black.fi.intel.com>
+ <a8c83435-4c91-495c-950c-4d12b955c54c@kernel.org>
+ <aCyj9nbnIRet93O-@black.fi.intel.com>
+ <552d75b2-2736-419f-887e-ce2692616578@kernel.org>
+ <ee1117cf-6367-4e9a-aa85-ccfc6c63125d@gmail.com>
+ <aC3XiuOPVYB2EX18@wunner.de>
+ <6bddf9bb-0c57-4823-bef1-e5bdf16ef5f7@kernel.org>
+ <442887ac-d53c-4a89-8916-e7c8b1f2e6a8@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <442887ac-d53c-4a89-8916-e7c8b1f2e6a8@gmail.com>
 
-In the AMD P-States Performance Scale diagram, the labels for "Max Perf"
-and "Lowest Perf" were incorrectly used to define the range for
-"Desired Perf".The "Desired performance target" should be bounded by the
-"Maximum requested performance" and the "Minimum requested performance",
-which corresponds to "Max Perf" and "Min Perf", respectively.
+[cc += Mika, Mathias]
 
-Signed-off-by: Shouye Liu <shouyeliu@tencent.com>
----
- Documentation/admin-guide/pm/amd-pstate.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, May 20, 2025 at 07:22:04PM +0200, Denis Benato wrote:
+> This is the very same exact kernel, minus the patch in question:
+> https://pastebin.com/rwMYgG7C
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index 412423c54f25..e1771f2225d5 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -72,7 +72,7 @@ to manage each performance update behavior. ::
-   Lowest non-        |                       |                         |                       |
-   linear perf ------>+-----------------------+                         +-----------------------+
-                      |                       |                         |                       |
--                     |                       |       Lowest perf  ---->|                       |
-+                     |                       |          Min perf  ---->|                       |
-                      |                       |                         |                       |
-   Lowest perf ------>+-----------------------+                         +-----------------------+
-                      |                       |                         |                       |
--- 
-2.19.1
+I note that your machine uses an Intel Maple Ridge 2C Thunderbolt
+controller.  It looks like we're missing that one in the list of
+XHCI devices which are allowed to runtime suspend.  Only the 4C
+variant of that controller was allowed to runtime suspend by commit
+5a8e3229ac27 ("xhci-pci: Allow host runtime PM as default for Intel
+Maple Ridge xHCI").
 
+Commit a611bf473d1f ("xhci-pci: Set runtime PM as default policy on
+all xHC 1.2 or later devices") has since obviated the need to
+continuously amend the list of controllers, but it's unclear to me
+whether it encompasses Maple Ridge 2C or not.  Chances are it doesn't
+because the 4C variant was kept in the whitelist.
+
+What do you get if you run:
+
+cat /sys/bus/pci/devices/0000:38:00.0/power/runtime_enabled
+cat /sys/bus/pci/devices/0000:38:00.0/power/runtime_status
+
+Below is a small patch to add the 2C variant to the whitelist.
+Does it help in any way?  What's the output for the two commands
+above if you apply the patch?
+
+Upthread it was said that it's a problem if the Root Port stays in D0.
+Of course if the XHCI doesn't runtime suspend, that will keep the
+Root Port in D0 as well.  The patch may eliminate one reason for the
+Root Port to stay in D0.
+
+The PCI IDs database was also missing the IDs of the 2C variant,
+I just went ahead and fixed that.
+
+Thanks,
+
+Lukas
+
+-- >8 --
+
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 0c481cb..5233d59 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -61,7 +61,8 @@
+ #define PCI_DEVICE_ID_PHYTIUM_XHCI			0xdc27
+ 
+ /* Thunderbolt */
+-#define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
++#define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_2C_XHCI		0x1135
++#define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_4C_XHCI		0x1138
+ #define PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_2C_XHCI	0x15b5
+ #define PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_4C_XHCI	0x15b6
+ #define PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_LP_XHCI	0x15c1
+@@ -387,7 +388,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI ||
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI ||
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI ||
+-	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI))
++	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_2C_XHCI ||
++	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_4C_XHCI))
+ 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
+ 
+ 	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
 
