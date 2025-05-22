@@ -1,80 +1,79 @@
-Return-Path: <linux-pm+bounces-27507-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27508-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A1B5AC0A6A
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 13:15:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15188AC0A6C
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 13:15:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7956B3ADE90
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 11:15:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF25B173A60
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 11:15:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A293D22D791;
-	Thu, 22 May 2025 11:15:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECCC1231859;
+	Thu, 22 May 2025 11:15:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XNsgnW/P"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g2Kd1sci"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F33D4221F0A;
-	Thu, 22 May 2025 11:15:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59EEC221F0A;
+	Thu, 22 May 2025 11:15:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747912529; cv=none; b=QeYhF1fM0r9L+5st2VXb6qqbBBh3NQ5nizWqhsrWrxAlBW+73WTPeOqRXJ6YvFxGVPX3sg676t3REqN52XYHUKvgSm7OT4MCQ4i0eulW1R65ZxgJm5q+X4u8v9osGSWihg5i+SefMOa9kJYQL3RcKSycC9NwgZ6DSMeXP9szowI=
+	t=1747912537; cv=none; b=ZIx/BFlTaNaTe6VxkC58Rh+t0WUxJir2NzCRhxPsX5dbz4OWEN4wv/DhB6Xoj8QyjhKywsE6ct/rrdo1TdxeYOWel7VpMgx9d3og/6GAnfvMkPhnisHzQ1vcwoeOKsHnR/9NJkwTm3IJZQkHHbkbNaQHRACcGWUjRNskfbQmAKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747912529; c=relaxed/simple;
-	bh=PYiCglQe17p+UCnGT1JX2kII7JObgxkxKAaLnythrUM=;
+	s=arc-20240116; t=1747912537; c=relaxed/simple;
+	bh=ebDvpO1OwZKUNS75vF6+7bj47Ss2QdeMnQQ7n4rYyuc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DFPssCqNolR2HWsJ1C2A7Vfx/b5xtSXlYEt9jDerqkJhDztSeY8+sKlNEAVojX6dvoPWAs5huDQhjg8xzH5pzHag5Lgtw6sa5LKIe5kSgvcn7cyGHxGRuZ9PwXBx7PT9iqHwv2j5jjhECF0DkXe4k97AKM7QCgHDOUaAkII90iw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XNsgnW/P; arc=none smtp.client-ip=209.85.219.41
+	 In-Reply-To:Content-Type; b=W4q1ZS/mScPT6QREQv6jnChH7sNJx7erW/kuWJk8KwsGZJC7pUyu7ipgEU6Sraiok6xRJ3I+uQJUzT9gl4SbSrQ619wcXkDONQqydTZVzek5ooZ7qYN/wr5HX6XWUYKWc5dS8rrT4vKVAttw3ppKJ3bWvD30xD+mp4jXm991jiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g2Kd1sci; arc=none smtp.client-ip=209.85.219.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6f8b0fdd5ffso77807276d6.0;
-        Thu, 22 May 2025 04:15:27 -0700 (PDT)
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6f8c53aeedbso110985416d6.2;
+        Thu, 22 May 2025 04:15:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747912527; x=1748517327; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1747912535; x=1748517335; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Xif0BFiKHRKFy77wQivk8+MEWBvoVtTEierfI/Fy18Y=;
-        b=XNsgnW/PUG6c/rjJ83pvhAByBMv5GupUxd6fJcOVTjAmSvB6XHNOr3xKu/ZBEWUnAc
-         x8gFoaDVla1WQFrwuqq7W8P01O/9FNpYlB4GeNvv8DxkH6R+DBz24W9wuJs9/FMelAMs
-         S+c/2z1p0VxI1GTNVcdvSH0EPou++Vu9K12g3WrkOgOLdX6Pdqe+on+HFdoi1jt1ijKa
-         uwBLjZs8HvrBaq3X0FKbXLmNk9yAf0dbM1vrJmxVW7MCilbLdUgxwKzd+r2QUmC2dR2g
-         4hUYRso8xI8+u1xrraOTbuo0eZ1QsZwqNtChvjt8eD6zYOV3VgIgJeBpUgPEtD1lbsNp
-         /dIw==
+        bh=ruiAoqc5x+2/FUk28JhfABxTDDi+jme412UvmRvsGUA=;
+        b=g2Kd1sciXmks+mgRV/pfWhQMQyqX5ND98UJ4L2cbKSudrJsW9xB/p2+VN8mnlv5Bws
+         ARJLbN9FWJm6l4PUpReg3DBhXD9CKpRW89JpPG2MCGuHGWNr04fBQQC0xBmHN7BvRvmK
+         9vYVKwqpO2OAzJAjXFwGrjxE1HYvCyF89M2ALkr7//+bSO+z4RD14KDa3POjkn9/aiPa
+         rpLJik8P1veV3lwD5bg5GcnEayIUpQChQxR45RFDYFD1t8BG3eXcZYVlQfTK00Sj3k8t
+         Jn5GZyUEh2xJQJfQgGuZuUsJIETHNIoLwvq9ropTeHb2FfnktQ+sXjZHetj0lKRYpgZ/
+         xHgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747912527; x=1748517327;
+        d=1e100.net; s=20230601; t=1747912535; x=1748517335;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xif0BFiKHRKFy77wQivk8+MEWBvoVtTEierfI/Fy18Y=;
-        b=SfrdupxguTM3JNTwH2FZW0NsDPmL8RvqEBSJnzknCQEvOW129ZPGaqG+ExmNi+pFpp
-         /baO/pYohJtzQCti/CUWjDVU+Ogrp4YDflo0nqmFsHcoay4fQTQtjWzKI4D+qe9zq82T
-         o+xiwpSFabviQ43U+U5LGtc1tqJYu2PgLti74qO0JuzJHP2Q2e9uQFIJElg9fb2J9EtA
-         cOUuwFIPZNMfEWzS66KvL5PlhSU9JpEGDTrsNVB3bbHZwDsaQYYWGKnQkQTgaNZv6S8T
-         DLwSqHB+JSKmutj6VPvanoaQIZdI0q9eD0aLO1Jq1WoNmZWAZdgfIy7y1O9fuhiQm6ZT
-         28Fw==
-X-Forwarded-Encrypted: i=1; AJvYcCU5hPz3AiDnCLOt1ix1GR1VxmJNoRBuyU6Yz5xGaRHXo2o4Fd6oxrgj7Crm2/n/zJ8uZol80NMZTLTHFePK@vger.kernel.org, AJvYcCW+XfTp6bYqHW4IC79N+5IQhzl5r/1iG5Al1RGj8GZY5rYTgyOSgk6LgTGjATD05PFjkT4JdDsoeSY=@vger.kernel.org, AJvYcCWTv4178lyzRNWJv3Lycvknt8bsALDrqZ/LM6G5GT8BFCbSn+jExhUjVujOjLuNcR6Zx/M+ackkA7g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzaldxHpIaYjfvooEN0QNGN9Vhqqnxkpd8GcnIOnD3lI3jhsUFd
-	zI9jnoxIXevg41CIoVTolMohenMw7DL/VDAvVVUieA9CaPPEhmaX4u8F
-X-Gm-Gg: ASbGncu+gSKPIKoid5lOCFvF6CrAmtYrTN9HuVUADQ5znsyoHddZBkKi10mcVfd+yRk
-	GdEAhojn+dN1VRBEJb0hzZxL/KTWL5BTYnV8AYFwoRfksw2RZ+fZqBjxg1Zzp8XAtraf6dzhtcM
-	UgdAQmSqw2OedBMM/u5Tj8e81iR8MYedaOaBWvwHwNSjiRkdrXFULyApgQKXkdO3rdTl9oH9J3G
-	zAgyJQLT7g9y4d2Xlh3CuQ89ijINUf1mj0trZNFFzjqXyxRF9667MvdTRbhu/OgWCk0gbex+T3l
-	KZDXLkyE0hawk7cxzbwW1T58qFoh6aBTwyXPIpgN6XVuoWIund82WTa19wyxcV4ShWw7FJcHYsi
-	cRw==
-X-Google-Smtp-Source: AGHT+IF+w9MKktfhqzOrURUJ6c7DxwXWpC4hkXUEFIIUtW7CQjQt72TsTF4tBGZW48aVTTDOw3j/RQ==
-X-Received: by 2002:ad4:5f08:0:b0:6e8:f166:b19c with SMTP id 6a1803df08f44-6f8b08ee744mr332249466d6.41.1747912526433;
-        Thu, 22 May 2025 04:15:26 -0700 (PDT)
+        bh=ruiAoqc5x+2/FUk28JhfABxTDDi+jme412UvmRvsGUA=;
+        b=qM4imJT5S6JuO7dpuIv3j7WGHao73sfqFAcwdbqnNwPnGLsrAv5CZgPHcnCaLA18/C
+         kiS+CwDpHpPK9JuLGkTdCOf136+/xYQKZivhhQY8tXClsIj9h4QJQZKg8XHmbp/MNl84
+         9xcyuru2F7fNidDSLEmjV1ne144PNSNHfrT2qdqYZA+Ar0lD+h8K39TtfVP8HT/wyzqi
+         j9vMIX9dvkZW97F4LzjT9gcTHWcLmKixRmcZDYEkqhEjzYDI6w+mzZIGyteEyE8LI4x/
+         cjvgX4rvb1nH4yOetKPeU+NYaT1WNZvYDWW62MCOOYzfjcWZcMtaWoGCD8wzCzePuE2M
+         cQkA==
+X-Forwarded-Encrypted: i=1; AJvYcCUJp+cWBpmXPrp5154f8QXInPNHgSZJsl803PGdInFInaAyKtTTAzQqIIMvwaZ5SoMyAi4EicAcZNQ=@vger.kernel.org, AJvYcCVWusVCOb2UxBz6BmR4f6dqwmgqzW0gpjZsBdwoq6zaFN7jJfon60PIAcrbKf3vKKeZFeUaN0t8Qe8=@vger.kernel.org, AJvYcCXizqsa20+tJCUYMM4Jv7QzFtk7rSjGsj7k9KIphKh2qbi8PU1iXXUKdJ0tGcyeHZl6KsyT13UYDdx686Cf@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVD4FKl0FRQU5+biImGucqD9UX401eKqrGF8CDxKt6i+dmWOTc
+	LWmyENgXwzWEibaY3WlH2lgS8GtP5A+exV55xLXXcnRDTNj3fssECuHj
+X-Gm-Gg: ASbGncteLNwfMNg143NDDuEy//STbOI5zvPuYifsWncH1GuUVyzR8p5C4TgzuVKLz8B
+	8WU1PvUEdZ7OTxJH5zvb6kYp5e0Qnou9yg9PqGrgTKNmbVngEPYe4jeODx+VuKfnCpHFut8Zbc6
+	B0hLszFfn/wxk14Rq0y4AJil2u3WUjwxvt8oUq23jaXFVvCS9AV7JXUa/8Ew3v9ez6k9KLHraF4
+	0H4yA/EnzVDA5Yr+Zq6NBVXvxa0+4DDlBdWcVDAmpMeF211U/BcrOY7Q2MJVz1/nFw7WOA11aDM
+	DzuRYisDQLVJwZqXvC43tvRlvDb2Oc+NG97t5BfdP0Y9oO1tqQxzq2xFBOLleYE8Cr8=
+X-Google-Smtp-Source: AGHT+IETHQOvQBgH6nIedb4pwNDnjs6C8JqC3hD4bVE8Zvo1pWISsIt/wBo148kg00t9t5mrY1pdDA==
+X-Received: by 2002:a05:6214:20ec:b0:6f8:e52:ef81 with SMTP id 6a1803df08f44-6f8b2d2e23emr421101566d6.36.1747912535137;
+        Thu, 22 May 2025 04:15:35 -0700 (PDT)
 Received: from ?IPV6:2600:6c56:7d00:582f::64e? ([2600:6c56:7d00:582f::64e])
-        by smtp.googlemail.com with ESMTPSA id 6a1803df08f44-6f8b0883f45sm98958816d6.23.2025.05.22.04.15.25
+        by smtp.googlemail.com with ESMTPSA id 6a1803df08f44-6f8b08ac4bcsm97291486d6.40.2025.05.22.04.15.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 May 2025 04:15:26 -0700 (PDT)
-Message-ID: <b62c0462-8185-4eb8-8ac6-7f2abc387768@gmail.com>
-Date: Thu, 22 May 2025 06:15:24 -0500
+        Thu, 22 May 2025 04:15:34 -0700 (PDT)
+Message-ID: <8c9fc3d2-991d-4caa-8773-418bea0fdf21@gmail.com>
+Date: Thu, 22 May 2025 06:15:32 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -84,69 +83,39 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] cpufreq, docs: (userspace governor) add that actual freq
  is >= scaling_setspeed
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Shashank Balaji <shashank.mahadasyam@sony.com>,
+To: Shashank Balaji <shashank.mahadasyam@sony.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
  Viresh Kumar <viresh.kumar@linaro.org>, Jonathan Corbet <corbet@lwn.net>,
  linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, Shinya Takumi <shinya.takumi@sony.com>
 References: <20250522-userspace-governor-doc-v1-1-c8a038e39084@sony.com>
  <15871c67-0d18-430f-935e-261b2cda855b@gmail.com>
- <CAJZ5v0gz3Y+RGqBf9E1hzq9rwfrryd98Xpk51DtLd-uck5y-rw@mail.gmail.com>
+ <aC7yeQvKVQ1No9EW@JPC00244420>
 Content-Language: en-US
 From: Russell Haley <yumpusamongus@gmail.com>
-In-Reply-To: <CAJZ5v0gz3Y+RGqBf9E1hzq9rwfrryd98Xpk51DtLd-uck5y-rw@mail.gmail.com>
+In-Reply-To: <aC7yeQvKVQ1No9EW@JPC00244420>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 
 
-On 5/22/25 4:47 AM, Rafael J. Wysocki wrote:
-> On Thu, May 22, 2025 at 10:51 AM Russell Haley <yumpusamongus@gmail.com> wrote:
->>
->>
->> On 5/22/25 3:05 AM, Shashank Balaji wrote:
->>> The userspace governor does not have the CPUFREQ_GOV_STRICT_TARGET flag, which
->>> means the requested frequency may not strictly be followed. This is true in the
->>> case of the intel_pstate driver with HWP enabled. When programming the
->>> HWP_REQUEST MSR, the min_perf is set to `scaling_setspeed`, and the max_perf
->>> is set to the policy's max. So, the hardware is free to increase the frequency
->>> beyond the requested frequency.
->>>
->>> This behaviour can be slightly surprising, given the current wording "allows
->>> userspace to set the CPU frequency". Hence, document this.
->>>
->>
->> In my opinion, the documentation is correct, and it is the
->> implementation in intel_pstate that is wrong. If the user wanted two
->> separate knobs that control the minimum and maximum frequencies, they
->> could leave intel_pstate in "active" mode and change scaling_min_freq
->> and scaling_max_freq.
->>
->> If the user asks for the frequency to be set from userspace, the
->> frequency had damn well better be set from userspace.
+On 5/22/25 4:46 AM, Shashank Balaji wrote:
+> Hi Russell,
 > 
-> The userspace governor requests a frequency between policy->min and
-> policy->max on behalf of user space.  In intel_pstate this translates
-> to setting DESIRED_PERF to the requested value which is also the case
-> for the other governors.
+> If intel_pstate is left in "active" mode, then userspace can't use any
+> of the other governors. Moreover, intel_pstate's min and max frequencies
+> apply to all the cpus. Whereas, the userspace governor can be set on a
+> per-cpu basis.
 
-Huh.  On this Skylake box with kernel 6.14.6, it seems to be setting
-Minimum_Performance, and leaving desired at 0.
-
-> echo userspace | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-userspace
-> echo 1400000 | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_setspeed
-1400000
-> sudo x86_energy_perf_policy &| grep REQ
-cpu0: HWP_REQ: min 14 max 40 des 0 epp 128 window 0x0 (0*10^0us) use_pkg 0
-cpu1: HWP_REQ: min 14 max 40 des 0 epp 128 window 0x0 (0*10^0us) use_pkg 0
-cpu2: HWP_REQ: min 14 max 40 des 0 epp 128 window 0x0 (0*10^0us) use_pkg 0
-cpu3: HWP_REQ: min 14 max 40 des 0 epp 128 window 0x0 (0*10^0us) use_pkg 0
-cpu4: HWP_REQ: min 14 max 40 des 0 epp 128 window 0x0 (0*10^0us) use_pkg 0
-cpu5: HWP_REQ: min 14 max 40 des 0 epp 128 window 0x0 (0*10^0us) use_pkg 0
-cpu6: HWP_REQ: min 14 max 40 des 0 epp 128 window 0x0 (0*10^0us) use_pkg 0
-cpu7: HWP_REQ: min 14 max 40 des 0 epp 128 window 0x0 (0*10^0us) use_pkg 0
+If setting frequencies on a per-CPU basis is how you discovered this,
+you may find it to be a source of more automagic. There are a lot of
+client processors that cannot (usefully) have different frequency
+targets for each CPU, because there is only one voltage regulator. In
+that case, slowing any CPU down would only harm its performance (and
+efficiency, because race-to-sleep). So, the global frequency target is
+taken as the maximum of the per-CPU targets.
 
 Cheers,
 Russell
+
 
