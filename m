@@ -1,137 +1,192 @@
-Return-Path: <linux-pm+bounces-27503-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27504-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 615A2AC0924
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 11:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E232AC09A7
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 12:20:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08290173663
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 09:56:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF91B4A522E
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 10:20:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 427681C3C04;
-	Thu, 22 May 2025 09:56:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6BAB2356CF;
+	Thu, 22 May 2025 10:20:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sOGhBB7A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IH29CO3N"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129153C38;
-	Thu, 22 May 2025 09:56:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A312914;
+	Thu, 22 May 2025 10:20:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747907796; cv=none; b=ipHVCThUlg2XUcE7yqOmKp+TOlMKCb49rHI9l5d7buNsqC8UsviF6L1cDMUlz8MtUCEIEog8mZOayPC5SKZP3e2mVzZoUAlkxlB2kzCdBfSN9Y9n5UMN48KUecCGv3zETkzGc0mg3vihMpSVk2MZPlWLuyuWIk9b1q3iPRS5cuA=
+	t=1747909228; cv=none; b=sdyikdBpeBwKhvbsHWsR+l0UWCfPfJeVtq/N7Kd5G96kl/AGqOBLE6p84j1SN99QUDunyxzefP5OexTrgIZmEmBZxLqVNHM36eIBwxxxPMOV9dOdDJsmkFFWihK8gzRSvK8ApLvbhTRpb4Q8B5txJxFM2lAvVoaGWwxP/9YRwsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747907796; c=relaxed/simple;
-	bh=l+UBCZ90uofbpfwu3YkJzh8e5MpIZHy9Wgl4VOlqqQ8=;
+	s=arc-20240116; t=1747909228; c=relaxed/simple;
+	bh=uP5XtD0V69EicAgIlot7wFwDfbvfb+5YbEYAYzUUyio=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uDBf+lfVdHRyiPxybkixwWfyNwWd6uvef5b4bOsrUCn11uiF+C2dB7ogwqQAPwi+/jg/u7qrF6d54X23hw3uVG87cSCqfC9OSESZRwxcw1iSnPkHFabQaecNQaHW6/u7Jjnm5WnLBe1JLBS43WOZt7ha/1orFF3Jg2crbxbiEjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sOGhBB7A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74330C4CEE4;
-	Thu, 22 May 2025 09:56:34 +0000 (UTC)
+	 To:Cc:Content-Type; b=ahJUbK0qsOpWLHlfob780G1OY8EnXjghSoa7ciO6dGwjliqsCRDUp7xCGbokrXUtGz1EvQxfIg2b5Sv+6FSvB6D7tu/CbhfGMDskiD6jf6vllJYZ6YMjZ3dP5rkaKGkEI5i9v4jUyw0hAkFecFA0NcWeVgSfTW2cC8ueh3Ivt5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IH29CO3N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12C3BC4CEF0;
+	Thu, 22 May 2025 10:20:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747907794;
-	bh=l+UBCZ90uofbpfwu3YkJzh8e5MpIZHy9Wgl4VOlqqQ8=;
+	s=k20201202; t=1747909228;
+	bh=uP5XtD0V69EicAgIlot7wFwDfbvfb+5YbEYAYzUUyio=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=sOGhBB7AyYSHlj7s2xcnLFewRhTps5gnKReHSzWTEv8zi3E98oOyS9oyoqLK62vRu
-	 jyy8rRfgpQAnXZ9HZ7zBzmKaeTZjRs229VPnKLG4KGH5kysl1/rf2OAQs9qmZF0P6Y
-	 7BfzEdsSSvIYATjrOFYUAizciWlFftbXCaGf7zk5RFEJBhbf6KOBqoJkUoHPjBEWwQ
-	 TCmW1vWkXLUI3xdgV8BIgDkmwzXtewI7CU144XoA371TaF9OepfCpmvBtVWDh/2/Hq
-	 kdHh0ZgNC8DOm2qQQDUmgkDCff9h+jbflCaglp92F4i7Drkub1MdLT9sZ6g8QDSBId
-	 gN/o3tp9TnZ0Q==
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-604f0d27c24so4082080eaf.2;
-        Thu, 22 May 2025 02:56:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUWUfWuPSb0mbGJJmzPD+HZTF5QDVVNbmuiV5jyc4IOt5S/O77zDTrU56WFueqTG+el3mA5n54ovlc=@vger.kernel.org, AJvYcCV1CNCVHuuhTGkP7wH0Bic1//mbV0OXRimpjDDLZQnZfB9pROJyPXbZ9fFm013XyEBHlw6MyawSJMQ=@vger.kernel.org, AJvYcCVBF9KMq/Lj59JBfxHM/0b8It6hJO75ecWY863rp1x26BBbrLGOhhYQbz2KZbCgJG32OtwHCcL7Kf34kqWv@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCrT4x94uWNozXSS2WduA4Gu9wg7Vre62mH/Rkl3nkrSSxfck0
-	E/FAfAQp6lWnE+vioOujvx6BCkuG5ghjHhGam3KTEA8oDBf29r7NtthpOla+0z3z/R4HxShth/C
-	AIQOROsAd3Wr5xetxisSwFwDCLEHQsMQ=
-X-Google-Smtp-Source: AGHT+IFDlauQgvFUHi7zRroxnG0JT5GL+TEEToKRpHxNLwLE2g/bn421wTKa1Lj6BeKs24deqdV/eZDC+3zwVRMva/k=
-X-Received: by 2002:a4a:ec49:0:b0:607:dd61:9c33 with SMTP id
- 006d021491bc7-609f48646b0mr13509442eaf.1.1747907793770; Thu, 22 May 2025
- 02:56:33 -0700 (PDT)
+	b=IH29CO3N3bWb1BteBNLRYPoyAKm+zYOuiNhpKJwQI5Ektln9do8VAeeV+Mwu4rRNr
+	 Zl1H5MFNFLTGqhEr0+T3d0Q3X8eimiEhMzJjHRAfPVPkNZe0ga51kIDPQshkvTEI3g
+	 /zsEnILuJmEQLwb79U0WzaGIqCpYlomiSwET0ovBuuCnVWGbgoGzRo+hfCRlRW4kaO
+	 1fQBQISeyiMXPSYj5xV+DT52T+Gk3BxrV4e8Dbk7Vo9OpOGWH4AwEDJBRuStcH5Snz
+	 WvxVA7DgofLqYQfOA7BgWBG3dKCiLANJ2fcGw5xzTz8XXvzzeEXw5TuZf2/sPRLvN1
+	 eR6rte8pBLPhQ==
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-6062e41916dso4459346eaf.1;
+        Thu, 22 May 2025 03:20:28 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWU0cuMwiMM8lAV15cz93jL+ax3KJx0eP0d1+IviZ2SPrZ6AShP1H3cbYv/jtKS6Eo/jujtZ2bEbZcBBsUccxA=@vger.kernel.org, AJvYcCWcuPa4t8WKG+15GV6NNMqP9+Wm1Ub2ol9CJa734oXYrwWoxqqtsD1xTMIIomQf5JWhFtjrYPeAYw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZ9EyPf3tQWhdjNf54NNZcC/eafWnNPYIu2nZUoNUjoC03lTy3
+	FoMrKBJVIqpFdR5pwawROG7X/6qh+FGD/k1lx9q7ZoKPMdvxfvdAvnA8vuKFCAdoVlt6mJakdqQ
+	M1AzpQJSDAUML/mluPdvERPNcvaePTkU=
+X-Google-Smtp-Source: AGHT+IH8IyKNBrSnzUSi0Gaks/5GRDrQrgrMjKu+uDnHk/7gqxRd4WJHDI4b4K20v7qdr2KYUwnNKnpXCLWOyw8Og58=
+X-Received: by 2002:a05:6820:a09:b0:60a:bee:497a with SMTP id
+ 006d021491bc7-60a0bee49fcmr9176330eaf.2.1747909227345; Thu, 22 May 2025
+ 03:20:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250522-userspace-governor-doc-v1-1-c8a038e39084@sony.com>
- <15871c67-0d18-430f-935e-261b2cda855b@gmail.com> <aC7yeQvKVQ1No9EW@JPC00244420>
-In-Reply-To: <aC7yeQvKVQ1No9EW@JPC00244420>
+References: <20250520061944.pl3mqw2clo2roe3s@vireshk-i7>
+In-Reply-To: <20250520061944.pl3mqw2clo2roe3s@vireshk-i7>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 22 May 2025 11:56:22 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0i6i6xt5-QOU2r0MDxR+7aOXYBUJ4kkJFQg6+RekayTNQ@mail.gmail.com>
-X-Gm-Features: AX0GCFuDeg96kru4SyCumlyfA3Q7mWIK4DCxHnyPBE6HaK68vl43j7pxhzrRxqk
-Message-ID: <CAJZ5v0i6i6xt5-QOU2r0MDxR+7aOXYBUJ4kkJFQg6+RekayTNQ@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq, docs: (userspace governor) add that actual freq
- is >= scaling_setspeed
-To: Shashank Balaji <shashank.mahadasyam@sony.com>
-Cc: Russell Haley <yumpusamongus@gmail.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Shinya Takumi <shinya.takumi@sony.com>
+Date: Thu, 22 May 2025 12:20:15 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gBRQ87bFk3-MCOudgvGWb29O_ihfz0Lo2kGcVpfSu=nQ@mail.gmail.com>
+X-Gm-Features: AX0GCFs-uf9AeqqcjLAqgSIPAHFTS4cdSJluRCEWb1yLf4kC-3qYNKIL2zSZR7Q
+Message-ID: <CAJZ5v0gBRQ87bFk3-MCOudgvGWb29O_ihfz0Lo2kGcVpfSu=nQ@mail.gmail.com>
+Subject: Re: [GIT PULL] cpufreq/arm updates for 6.16
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	rust-for-linux@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 22, 2025 at 11:46=E2=80=AFAM Shashank Balaji
-<shashank.mahadasyam@sony.com> wrote:
+Hi Viresh,
+
+On Tue, May 20, 2025 at 8:19=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
 >
-> Hi Russell,
+> Hi Rafael,
 >
-> On Thu, May 22, 2025 at 03:50:55AM -0500, Russell Haley wrote:
-> > If the user asks for the frequency to be set from userspace, the
-> > frequency had damn well better be set from userspace.
+> This contains few patches from Danilo Krummrich as well, which will
+> get merged via driver-core separately. Please push this to Linus once
+> that is merged during rc1. Thanks.
 >
-> First of all, I agree with you. In fact, before sending this patch, I
-> was considering adding CPUFREQ_GOV_STRICT_TARGET to the userspace
-> governor. intel_pstate should handle the rest of it.
-
-This wouldn't work the way you expect, though.  It would cause the
-driver to always set the frequency to policy->max.
-
-> > In my opinion, the documentation is correct, and it is the
-> > implementation in intel_pstate that is wrong. If the user wanted two
-> > separate knobs that control the minimum and maximum frequencies, they
-> > could leave intel_pstate in "active" mode and change scaling_min_freq
-> > and scaling_max_freq.
+> The following changes since commit a374f28700abd20e8a7d026f89aa26f7594459=
+18:
 >
-> If intel_pstate is left in "active" mode, then userspace can't use any
-> of the other governors. Moreover, intel_pstate's min and max frequencies
-> apply to all the cpus.
-
-That's not true.
-
-scaling_min_freq and scaling_max_freq is per CPU, but the values from
-there are subject to hardware coordination.
-
-> Whereas, the userspace governor can be set on a per-cpu basis.
-
-This is also subject to hardware coordination.
-
-> Let's say this is "fixed" by adding CPUFREQ_GOV_STRICT_TARGET flag to
-> the userspace governor. Then userspace has no way to get back the
-> current behavior where the hardware automagically increases frequency
-> beyond the target frequency. At least not without a new interface.
+>   cpufreq: fix compile-test defaults (2025-04-17 13:36:29 +0530)
 >
-> With the current behaviour, userspace can have it both ways:
->     - actual frequency =3D target frequency
->     - actual frequency >=3D target frequency
+> are available in the Git repository at:
 >
-> And the occasional higher frequency shouldn't hurt performance, right?
-> But if they still want exact equality, with the current interface, they
-> can do that too.
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufr=
+eq-arm-updates-6.16
 >
-> This consideration is what led me to document the "actual freq >=3D targe=
-t
-> freq" rather than patch it so that "actual freq =3D target freq".
+> for you to fetch changes up to 6c9bb86922728c7a4cceb99f131e00dd87514f20:
+>
+>   cpufreq: scmi: Skip SCMI devices that aren't used by the CPUs (2025-05-=
+20 11:24:18 +0530)
+>
+> ----------------------------------------------------------------
+> CPUFreq updates for 6.16
+>
+> - Rust abstractions for CPUFreq framework (Viresh Kumar).
+>
+> - Rust abstractions for OPP framework (Viresh Kumar).
+>
+> - Basic Rust abstractions for Clk and Cpumask frameworks (Viresh Kumar).
+>
+> - Minor cleanup to the SCMI cpufreq driver (Mike Tipton).
+>
+> ----------------------------------------------------------------
+> Anisse Astier (1):
+>       rust: macros: enable use of hyphens in module names
+>
+> Danilo Krummrich (8):
+>       rust: device: implement impl_device_context_deref!
+>       rust: device: implement impl_device_context_into_aref!
+>       rust: device: implement device context for Device
+>       rust: platform: preserve device context in AsRef
+>       rust: pci: preserve device context in AsRef
+>       rust: device: implement Bound device context
+>       rust: pci: move iomap_region() to impl Device<Bound>
+>       rust: devres: require a bound device
+>
+> Mike Tipton (1):
+>       cpufreq: scmi: Skip SCMI devices that aren't used by the CPUs
+>
+> Viresh Kumar (16):
+>       Merge commit 'eaff6b62d343' of pm/linux-next into commit 'f720efda2=
+db5' of driver-core/driver-core-next
+>       rust: cpumask: Add few more helpers
+>       rust: cpumask: Add initial abstractions
+>       MAINTAINERS: Add entry for Rust cpumask API
+>       rust: clk: Add helpers for Rust code
+>       rust: clk: Add initial abstractions
+>       rust: cpu: Add from_cpu()
+>       rust: opp: Add initial abstractions for OPP framework
+>       rust: opp: Add abstractions for the OPP table
+>       rust: opp: Add abstractions for the configuration options
+>       rust: cpufreq: Add initial abstractions for cpufreq framework
+>       rust: cpufreq: Extend abstractions for policy and driver ops
+>       rust: cpufreq: Extend abstractions for driver registration
+>       rust: opp: Extend OPP abstractions with cpufreq support
+>       cpufreq: Add Rust-based cpufreq-dt driver
+>       Merge branch 'rust/cpufreq-dt' into cpufreq/arm/linux-next
+>
+>  MAINTAINERS                     |   11 ++
+>  drivers/cpufreq/Kconfig         |   12 ++
+>  drivers/cpufreq/Makefile        |    1 +
+>  drivers/cpufreq/amd-pstate.c    |    7 +-
+>  drivers/cpufreq/cpufreq.c       |  345 +++++++++++++++++----------------=
+------
+>  drivers/cpufreq/intel_pstate.c  |   47 +++---
+>  drivers/cpufreq/rcpufreq_dt.rs  |  226 ++++++++++++++++++++++++++
+>  drivers/cpufreq/scmi-cpufreq.c  |   36 ++++-
+>  include/linux/cpufreq.h         |   10 +-
+>  rust/bindings/bindings_helper.h |    4 +
+>  rust/helpers/clk.c              |   66 ++++++++
+>  rust/helpers/cpufreq.c          |   10 ++
+>  rust/helpers/cpumask.c          |   25 +++
+>  rust/helpers/helpers.c          |    2 +
+>  rust/kernel/clk.rs              |  334 +++++++++++++++++++++++++++++++++=
++++++
+>  rust/kernel/cpu.rs              |   30 ++++
+>  rust/kernel/cpufreq.rs          | 1321 +++++++++++++++++++++++++++++++++=
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
++++++++++++++++++++++++++++++++++++++++++
+>  rust/kernel/cpumask.rs          |  330 +++++++++++++++++++++++++++++++++=
+++++
+>  rust/kernel/device.rs           |   90 ++++++++++-
+>  rust/kernel/devres.rs           |   17 +-
+>  rust/kernel/lib.rs              |    7 +
+>  rust/kernel/opp.rs              | 1145 +++++++++++++++++++++++++++++++++=
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
++++++++++++++++++++++
+>  rust/kernel/pci.rs              |   33 ++--
+>  rust/kernel/platform.rs         |   32 +---
+>  rust/macros/module.rs           |   20 ++-
+>  25 files changed, 3861 insertions(+), 300 deletions(-)
+>  create mode 100644 drivers/cpufreq/rcpufreq_dt.rs
+>  create mode 100644 rust/helpers/clk.c
+>  create mode 100644 rust/helpers/cpufreq.c
+>  create mode 100644 rust/kernel/clk.rs
+>  create mode 100644 rust/kernel/cpu.rs
+>  create mode 100644 rust/kernel/cpufreq.rs
+>  create mode 100644 rust/kernel/cpumask.rs
+>  create mode 100644 rust/kernel/opp.rs
+>
+> --
 
-The documentation can be adjusted by replacing "set" with "request" in
-the userspace governor description and adding a clarification to it
-that the requested frequency is between the policy min and max levels.
-
-With HWP enabled, the closest to setting the frequency to a specific
-value one can get is by setting scaling_min_freq and scaling_max_freq
-to that value.
+Pulled and added to linux-pm.git/linux-next, thanks!
 
