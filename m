@@ -1,112 +1,132 @@
-Return-Path: <linux-pm+bounces-27480-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27481-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FF46AC02FB
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 05:27:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABFA1AC0435
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 07:49:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08E884E19FF
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 03:27:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE3D99E777C
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 05:48:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED2131527B1;
-	Thu, 22 May 2025 03:27:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB7FF1ACEC7;
+	Thu, 22 May 2025 05:49:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MEXhqQZq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16AB27482
-	for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 03:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE2F91A8404;
+	Thu, 22 May 2025 05:49:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747884437; cv=none; b=iC0cv+NpaYKIldbuN/0y5Zj6/PjdGyn+8VSck+TvLbaY+cxrFGI/ZOgUk84fepHFPt5ETyucCZwDLZBDsBp4pfdQ3Ct9378jczwZBx4n1qG39i7rZSfTovQ6dGy6598W/iHRk8bMOo0jD45NUHvkw/DyHyjMI3vIw9XjP4olBqg=
+	t=1747892940; cv=none; b=RDlZz2Zw5gtDUUmwOicobwZo7q1rUi6ItQQL90kUt80t6u2aC5h7jFOm3hi7xVUG4/T0Sv9Y9WYqiDhSGYS1TLdxj9gbKtvgTwJKwCv2D3AJ5izpuWUWYCJDieDRbf9tYfmNgntUmbMiP+/LcsgYiZ4PXw3t458oa4MQIABYqHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747884437; c=relaxed/simple;
-	bh=D8hLKJVcu/CyQp52cwWk5qa0fmj0mzdNIdpWJxXf8L4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=erLZTYDXYjIm4i6/1oITae3pFs9I2+SW9dFMOzy2aD4EVNXj5axLDe6J0J5Eu4EmGlJ30yiXK6RseiWoCWst2tcL2P84Z0ctphc2CGM1Yxab5U/wCOO2a344nUBVYDnpZd/I+Re+1ZQXgzDm7qdBSCC91lKDJV165LEtilP9b5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.88.194])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4b2twB6sCsz1d1Bh;
-	Thu, 22 May 2025 11:25:30 +0800 (CST)
-Received: from kwepemo100006.china.huawei.com (unknown [7.202.195.47])
-	by mail.maildlp.com (Postfix) with ESMTPS id 10ED5140132;
-	Thu, 22 May 2025 11:27:07 +0800 (CST)
-Received: from [10.67.121.58] (10.67.121.58) by kwepemo100006.china.huawei.com
- (7.202.195.47) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 22 May
- 2025 11:27:06 +0800
-Message-ID: <f69ff550-ec27-af8f-ac5c-b52eb7eb0a6f@hisilicon.com>
-Date: Thu, 22 May 2025 11:27:06 +0800
+	s=arc-20240116; t=1747892940; c=relaxed/simple;
+	bh=D5JokSP59ASe1HGXnYivFqbn/bmgi/lDHm1iFZZIxEw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=KUyxcCGgHGyrV3rLo7UQywPz/FvqeYHBZ/DHrzbT5z+45ItbzAowYMlUrdDiwRRo4P5zBz0MjfEilWzxUx0zppKT0sBKAOnic0Ge51PGhgENUrIysYlfpLmoxj1y7A5cJTLaRwuJbI8wwTX5UnqPyAKIHYZYMEth0jB2ZQyuzEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MEXhqQZq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0DB94C4CEE4;
+	Thu, 22 May 2025 05:49:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747892940;
+	bh=D5JokSP59ASe1HGXnYivFqbn/bmgi/lDHm1iFZZIxEw=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=MEXhqQZqwLTecIz+atOI7cO121aErPesCfbxoyhjhnGvjmLrCtryF/Aknp4MSZixq
+	 UJQJvuxxUeoWmwoPxIMj6gllAwHKa/y9i41rm2lCFsLSdymCxoMzWjvPXHE+9Z9Rre
+	 zMoj9Gha4QEP8b7QS1bPPeCOmxKz2PV2xsW58IOHGFgTc4s4mS+tg0R0FIGxbPVnvO
+	 CFtPWMA4st2SVaxDlgIXje9NE+xf+LS3jZRvqSCj6iKZVhZNdmYiDwBHB/PQUrsCfd
+	 CCGvv1Qgn2N1NbjtErfI4OKqRyOjbxwPe/hCpeUS64Rh9WIE6Ax5u6QjO9tUEtgNEx
+	 a/0VElIMZ4Pwg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9BBFC54756;
+	Thu, 22 May 2025 05:48:59 +0000 (UTC)
+From: George Moussalem via B4 Relay <devnull+george.moussalem.outlook.com@kernel.org>
+Date: Thu, 22 May 2025 09:48:51 +0400
+Subject: [PATCH] thermal: qcom: ipq5018: make ops_ipq5018 struct static
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v3] PM / devfreq: Add HiSilicon uncore frequency scaling
- driver
-To: <cw00.choi@samsung.com>, <myungjoo.ham@samsung.com>,
-	<kyungmin.park@samsung.com>
-CC: <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
-	<alireza.sanaee@huawei.com>, <zhenglifeng1@huawei.com>,
-	<lihuisong@huawei.com>, <yubowen8@huawei.com>, <liwei728@huawei.com>,
-	<prime.zeng@hisilicon.com>
-References: <20250522031701.1912458-1-zhanjie9@hisilicon.com>
-From: Jie Zhan <zhanjie9@hisilicon.com>
-In-Reply-To: <20250522031701.1912458-1-zhanjie9@hisilicon.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemo100006.china.huawei.com (7.202.195.47)
+Message-Id: <20250522-ipq5018-tsens-sparse-v1-1-97edaaaef27c@outlook.com>
+X-B4-Tracking: v=1; b=H4sIAMK6LmgC/y3MywqDMBCF4VeRWXcgCY23VykuTDPqbNI4o1IQ3
+ 72h7fI7cP4TlIRJoa9OEDpY+ZUK7K2C5zKmmZBjMTjjvPHOIufVG9vippQUNY+ihPfQ1rFrYgi
+ 2gXLNQhO/v9nH8LPQupf69h+v6wMO8VuHewAAAA==
+X-Change-ID: 20250521-ipq5018-tsens-sparse-4b86d97dbb17
+To: Amit Kucheria <amitk@kernel.org>, 
+ Thara Gopinath <thara.gopinath@gmail.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>, 
+ George Moussalem <george.moussalem@outlook.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1747892937; l=1603;
+ i=george.moussalem@outlook.com; s=20250321; h=from:subject:message-id;
+ bh=AQVbg0exLroJo2VR6NwKRBYnMgg5MIEpgmctdGB8598=;
+ b=tpAJawEZhOFGF5BWQgBdrS2gQMZ2F7XTxy01rJUUbdTRqdR+Ohng0RJNl1KX+coo2+FtH90L8
+ 1/07OjPaxg5BM/HleCtxKQ0u3x0v+afA//+C80QZ8jZBxJYAmSVL7R5
+X-Developer-Key: i=george.moussalem@outlook.com; a=ed25519;
+ pk=/PuRTSI9iYiHwcc6Nrde8qF4ZDhJBlUgpHdhsIjnqIk=
+X-Endpoint-Received: by B4 Relay for george.moussalem@outlook.com/20250321
+ with auth_id=364
+X-Original-From: George Moussalem <george.moussalem@outlook.com>
+Reply-To: george.moussalem@outlook.com
 
-Sorry, my bad.  Please ignore this one.
+From: George Moussalem <george.moussalem@outlook.com>
 
-Keep onto this v3 thread: https://lore.kernel.org/linux-pm/20250521104956.2780150-1-zhanjie9@hisilicon.com/
+Fix a sparse warning by making the ops_ipq5018 struct static.
 
-Jie
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202505202356.S21Sc7bk-lkp@intel.com/
+Signed-off-by: George Moussalem <george.moussalem@outlook.com>
+---
+Fix below sparse warning by making the ops_ipq5018 struct static.
 
-On 22/05/2025 11:17, Jie Zhan wrote:
-> Add the HiSilicon uncore frequency scaling driver for Kunpeng SoCs based on
-> the devfreq framework.  The uncore domain contains shared computing
-> resources, including system interconnects and L3 cache.  The uncore
-> frequency significantly impacts the system-wide performance as well as
-> power consumption.  This driver adds support for runtime management of
-> uncore frequency from kernel and userspace.  The main function includes
-> setting and getting frequencies, changing frequency scaling policies, and
-> querying the list of CPUs whose performance is significantly related to
-> this uncore frequency domain, etc.  The driver communicates with a platform
-> controller through an ACPI PCC mailbox to take the actual actions of
-> frequency scaling.
-> 
-> Co-developed-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
-> ---
-> v3:
-> - Remove redundant resource freeing processes when drv->probe() fails as
->   they're already handled by devm
-> 
-> v2:
-> https://lore.kernel.org/linux-pm/20250520074120.4187096-1-zhanjie9@hisilicon.com/
-> - Make devm manage the release sequence, remove drv->remove()
-> - Warn on !uncore or !uncore->pchan as they're no longer expected
-> - Remove ioremap of pcc shared memory because it's done by the pcc driver
-> - Fix compiler warning of discarding 'const'
-> - Minor trivial coding style changes
-> 
-> v1:
-> https://lore.kernel.org/linux-pm/20250506021434.944386-1-zhanjie9@hisilicon.com/
-> ---
->  drivers/devfreq/Kconfig            |  11 +
->  drivers/devfreq/Makefile           |   1 +
->  drivers/devfreq/hisi_uncore_freq.c | 722 +++++++++++++++++++++++++++++
->  3 files changed, 734 insertions(+)
->  create mode 100644 drivers/devfreq/hisi_uncore_freq.c
+sparse warnings: (new ones prefixed by >>)
+>> drivers/thermal/qcom/tsens-v1.c:246:24: sparse: sparse: symbol 'ops_ipq5018' was not declared. Should it be static?
+
+vim +/ops_ipq5018 +246 drivers/thermal/qcom/tsens-v1.c
+
+   245	
+ > 246	const struct tsens_ops ops_ipq5018 = {
+   247		.init		= init_tsens_v1_no_rpm,
+   248		.calibrate	= tsens_calibrate_common,
+   249		.get_temp	= get_temp_tsens_valid,
+   250	};
+   251	
+---
+ drivers/thermal/qcom/tsens-v1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
+index 27360e70d62a94e52e67f5aaa45457be165bfeb3..faa5d00788ca6fb29b367857d27596578218358e 100644
+--- a/drivers/thermal/qcom/tsens-v1.c
++++ b/drivers/thermal/qcom/tsens-v1.c
+@@ -243,7 +243,7 @@ struct tsens_plat_data data_8976 = {
+ 	.fields		= tsens_v1_regfields,
+ };
+ 
+-const struct tsens_ops ops_ipq5018 = {
++static const struct tsens_ops ops_ipq5018 = {
+ 	.init		= init_tsens_v1_no_rpm,
+ 	.calibrate	= tsens_calibrate_common,
+ 	.get_temp	= get_temp_tsens_valid,
+
+---
+base-commit: 54b982e44c486d604583efe8742557ab56c944e0
+change-id: 20250521-ipq5018-tsens-sparse-4b86d97dbb17
+
+Best regards,
+-- 
+George Moussalem <george.moussalem@outlook.com>
+
+
 
