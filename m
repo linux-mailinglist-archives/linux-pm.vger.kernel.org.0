@@ -1,149 +1,163 @@
-Return-Path: <linux-pm+bounces-27511-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27512-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D52D4AC0AE5
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 13:55:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36BA0AC0BD7
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 14:46:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90CC64E12D8
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 11:55:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64F551BA5D75
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 12:46:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD93C28A3FC;
-	Thu, 22 May 2025 11:54:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07D2A22EE5;
+	Thu, 22 May 2025 12:46:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PIa/Wk9C"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="VCpmfFnw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 745CF28A1DC;
-	Thu, 22 May 2025 11:54:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B41922FDE2
+	for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 12:46:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747914888; cv=none; b=faaey8VwI52yuRl4vSTHy/AKmZk/HZNhwH1VwiVED95mi9qyffbOORFxDxDR89MyfK5gn8XsOw2LUJGxCnjXliF1zeTisX9vUWmxpOlyz8v5TXNSilmERYo96qwVsBGHuE1XcLAXQkuRNmvLP+mK0yFBg3ZfntpvXSUlf7FnvVk=
+	t=1747917965; cv=none; b=ekjq6dB0JwsmTqCI3vZ7SxPtOZOFuctymQp7gr6SxGlwpx1GrFu533qaFUbSvcJnk2HdyyjKMlJMGA1+m2QBHDO3RYR5ukWj5fIZ+C4Ijarg1rvZyANHfCl46wNR0g/Rc9Ef6hPUtPtDR05KTC/Ws8pUtKCSCdphLZIUJY4kEro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747914888; c=relaxed/simple;
-	bh=Nryi9QMkPLKZdjBmO37cvNvIiUIaiZZgJ1/+v4pk0d8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VikqW7HMGNG1+jChKdOwvo+tpwsWWrIE2ozNA06N5F8Le21dtG8BWjKWs02EpTKIAOPyF65riF2KzXaboM7JkprPXIUxkvbgORQ18Tz70k1sHMsrqVGBJG1/+Fd5fO2c7lOXcWt16CmJWvFOhQcje/H4Gy+ECrUMHWXkRJdtnGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PIa/Wk9C; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D776FC4CEE4;
-	Thu, 22 May 2025 11:54:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747914887;
-	bh=Nryi9QMkPLKZdjBmO37cvNvIiUIaiZZgJ1/+v4pk0d8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=PIa/Wk9CjnaF3EyPtT2yfVbpH2Z65JH/9xkgqm3jEDkoVpf2g9r/U3uxEG1CRexGf
-	 tqRaswH6pXE7VkAw1TQvDMT/r8tykf2aoDwDZ5elmKuH7thq2BUG+U+HMguiaAc99S
-	 rmKpu4r0e6PPKhLX04ttwL03pzdht8uE+/egbj6ny9xxgoZPKWqBl0kysTaZsTTD5C
-	 7tndUIt/j0Pri+Eq3WEvFj2YNJ/GahAPWb5wyE+35tw35laWkimPfsjjndZ1OLchoG
-	 k8XL3DOWYhItT2unOcmqehajtBxcOfSre/HIhAxwKCFWJNSzZbFJDA2xbR7RN1dPNW
-	 hzeg4uOK0z5Lw==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-606440d92eeso3811771eaf.2;
-        Thu, 22 May 2025 04:54:47 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVgjJArXxEkv5oiYqAMjXijZQEAM3rTavDv5ZkZY+MZmzzuPptVsmJDf6meTIfySLg8tRybz5sVWUJk4c1O@vger.kernel.org, AJvYcCW+RCRQF9BJKGgdRIz5LgUT4wA9eEvYdv4aWEjgeZrGvZds0T/41QS9+fd5uB3+pGXp/pSHYemNFlU=@vger.kernel.org, AJvYcCWGZgvjepXr1X5JuDLl3mB4+NmzYHM0DgCwhVOx2IEbsvT7XsOf5MohTlTwwU1lv0WklIxmWwzIeR8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YywVPATnezHyGbFaVFsslU9sON+biia7x/mFSmFlfZzTyAtNsXW
-	b1Vn7vvBTOuBA3aSDK2c6fxPkLcyabX7QL+2D3yAAb7oqq1r8l67iEy/T2x8ofwn4Lz33Iz2+ob
-	pubK2T/dwPM9yxwVKUYf6najWHOareLk=
-X-Google-Smtp-Source: AGHT+IG+KzzlVR5WjMP68KLNL7UutmcZ1GBLYAe3Zls3GG+S92wBlVefQFR7vROwlcJ9qGU+spgYeWgkBLpmk6P7mOw=
-X-Received: by 2002:a05:6820:2705:b0:606:26bd:7208 with SMTP id
- 006d021491bc7-609f37bc37dmr15131315eaf.7.1747914887086; Thu, 22 May 2025
- 04:54:47 -0700 (PDT)
+	s=arc-20240116; t=1747917965; c=relaxed/simple;
+	bh=G6qoqkoT+pTNDGZdq6ve/6OJVbQnJuz85yGz+aLGcFE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iVGsZIdHAdI1BdoEwxN4uHoUs9osWbj5I+JooOxNxlgdFlVbMVhiY0zPzglRifVOj5QWYsI8JYy1rm/mxUYkLw9fZvF2/6IezUDbkNglhzCg553GJXAEsovTT6MC+mG9gfxiwt2IctEWCzb0ouUw4gw3FzLpz6mtYLea2e6sa7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=VCpmfFnw; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54M8J2SX011346
+	for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 12:46:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=hxb24Tzeo0KMUYFizXcVNuIL
+	xkcDwZQp4t3EVpGJMhg=; b=VCpmfFnwhjd9rUh4BnrHyCP68FqHSMZOivsYYQmv
+	EYV573MRARqhTEWXxTwOJMqnU7q68nJ7twCjev7dJxAq36D7UYhzb+LUCpOWShwJ
+	aM/YXM1EvY7ODlC9BjPhNChyYpKgPBT++FeenKNPBUL/nGaPlEnUfVTiYRBYtAvQ
+	ri/s9BGRsSKNUdfRNPL3eKW14zuOr5Ii5IHXPjTcxtaqg0n1CvwvjkQyoAN0HZPT
+	bp6TXAwPRi4gIETAZqC68i/vvJwFI2wGPkG7jtjCRYRZMAJSe96oV2qLK4lrIKCC
+	sO90xx27fdv2wjB4tuB6wDZnLOUREKtW10xV5vYDRRG2rA==
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com [209.85.219.70])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46rwfb682w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 12:46:03 +0000 (GMT)
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6f8d47383f3so81827116d6.1
+        for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 05:46:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747917962; x=1748522762;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hxb24Tzeo0KMUYFizXcVNuILxkcDwZQp4t3EVpGJMhg=;
+        b=N/BMZGEc0+rdxr305HW0nylQV/Edx/3pfr0UXgOmALH42V7BsbbEj8w+YQq/Ym4bIZ
+         b/gi/3xUtRpx4uZvgAM8rf85Ir1L0s4NJvGMhjctodVv1eEGJxT+6p2lixO31jykid7T
+         ZM3ms91d2cMIcwxnpkvb44xcin3KPdbNwDiN5UU0JtRyYx8GLemCI/NhXTacJzhcXgcy
+         ELH2azVINHZjyCHJJOPpZxOO3W+7N54BdGKfdY+F7cFqE6a1AexoczUYUXZn7/mvAYKv
+         +hO0n1kcJvTGZyX19lhbiLNYpU6BHMfYvCl1cXv4oEtpNnXMlSEyQp3WQYBPYDatPemi
+         p6/w==
+X-Forwarded-Encrypted: i=1; AJvYcCUSnKBE/R4e5DltLPj3/egRyfOI/xV3Wr/xC+FrXJuk6Si/x/HPyTdcxk7hgo4osAT8cgsogN2oUw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgCPSEWEmUEpcJSssZF+pSvQdPiVuZiNJD6uQauR6p3/vor+rf
+	dSZYUZXGt0RXRwdcRK7RRrTLWq+MLhXi30GNjiFlwu38JvE6hOImtDMKmtBM7l0C0EEtv6/XTlG
+	jK4iUPzaaAYzqKYhLZzVi+XASNqE3VaxtHQOgoYICneIB3KmjYwzsX9gxl6Shmw==
+X-Gm-Gg: ASbGncvyGkeP95aGZWwPTyyR4Xqn0fbbmxaISC6UwrpPJsjwV/YP1KG6jmjdP55Et86
+	Df8NltjajO1EFbTxNLPlw3NkTjcJxKO1yQs4HIcnmrPjoq3uFruGm6y+T5TfOqGd+m+gUJEr3eM
+	1rystzVA/ZL7/5YcBBWlB+h12PBAKty4Gj96pXBzQBwcN/FX32Nf1iFTvg0jvljt8bhc2UvmMhD
+	HOeHUfhfVrzYXBEYBen2I8bvRk5ytgWJKpyOnQsiLCURXhv+1HcWgbOQNCOTbCDwVL0LW45+XSV
+	uQuAfr3UT1osJmF7l36SptPFmu59/lLVmnc+yZ8OvTgkXN6TDrxckHuNUSGWcxJ7+Zu0Asag4i4
+	=
+X-Received: by 2002:a05:6214:e85:b0:6ed:15ce:e33e with SMTP id 6a1803df08f44-6f8b082e9a0mr430704066d6.27.1747917962217;
+        Thu, 22 May 2025 05:46:02 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGFssdC80K92sx7xKrUev631XuatncvYaG62tDTkTyyXHOExAcKuWZ2mBRfrr9QTOcb/tyTgQ==
+X-Received: by 2002:a05:6214:e85:b0:6ed:15ce:e33e with SMTP id 6a1803df08f44-6f8b082e9a0mr430703446d6.27.1747917961725;
+        Thu, 22 May 2025 05:46:01 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-550e6f1622asm3384812e87.25.2025.05.22.05.46.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 May 2025 05:46:00 -0700 (PDT)
+Date: Thu, 22 May 2025 15:45:59 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: george.moussalem@outlook.com
+Cc: Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] thermal: qcom: ipq5018: make ops_ipq5018 struct static
+Message-ID: <h7eddsjh27vvv53gbexo42pizjrma47463nhiytqhk5nyzmanh@bdnjxzc4hzro>
+References: <20250522-ipq5018-tsens-sparse-v1-1-97edaaaef27c@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250522-userspace-governor-doc-v1-1-c8a038e39084@sony.com>
- <15871c67-0d18-430f-935e-261b2cda855b@gmail.com> <CAJZ5v0gz3Y+RGqBf9E1hzq9rwfrryd98Xpk51DtLd-uck5y-rw@mail.gmail.com>
- <b62c0462-8185-4eb8-8ac6-7f2abc387768@gmail.com>
-In-Reply-To: <b62c0462-8185-4eb8-8ac6-7f2abc387768@gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 22 May 2025 13:54:36 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jrwDJ-TQuay_OkwfsWr2z9COg=oDY7q0FqRBC-3_br2Q@mail.gmail.com>
-X-Gm-Features: AX0GCFvq_DNusbqq8SXDC-zaNsRp6E6EsPke3RrXzEnZGLbMYlcVyN8Q9_5afVs
-Message-ID: <CAJZ5v0jrwDJ-TQuay_OkwfsWr2z9COg=oDY7q0FqRBC-3_br2Q@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq, docs: (userspace governor) add that actual freq
- is >= scaling_setspeed
-To: Russell Haley <yumpusamongus@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Shashank Balaji <shashank.mahadasyam@sony.com>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Shinya Takumi <shinya.takumi@sony.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250522-ipq5018-tsens-sparse-v1-1-97edaaaef27c@outlook.com>
+X-Proofpoint-ORIG-GUID: ai_t8K-JI1eKen0HjrW4PDgGaauIFRAh
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTIyMDEyOSBTYWx0ZWRfX/MifC+zz6RaA
+ NpwAbxLSpGA3pmbS8aKHYcs56lhKKyeuKlXdZrpoCdvrdrhU6CZMaCGDgKCKAU3ql3282GXA92Z
+ 0qVdIKTChyitgIt+Tz9qcwsrxtPhKM5m2S7JWzJBQ6VCrp9WjZ/P5wVhEvvZZRV6dF1X06zD3/I
+ yjUBMpPu4ONYTLfnoaouCv+4FTKDsBb21suJWC5BSurCuNSDFT1N+GEqt69LwaaztKSYys9t+w2
+ 0GZ2yzXnsWHVv+G/1zU/RYrqEQ8zsJrSb+Ibi8mYYNOEJ6eHEnE5Pgh3MJNpW26DljlfWz7TsEq
+ SzfBWNLMwUu4YKVOqT9BTBfbxaq97Lxpe/bdnk0Z8HzYgHMzYV6M3yu3OHdEDLebsj5vEhfRjVB
+ qmNlSD98RFXvFAgQFdvDF9TX3mw4AtR6LDTDddzdPqaJw9lpN8cVboDTbqQ/g6R5TbmtIzH1
+X-Proofpoint-GUID: ai_t8K-JI1eKen0HjrW4PDgGaauIFRAh
+X-Authority-Analysis: v=2.4 cv=dLCmmPZb c=1 sm=1 tr=0 ts=682f1c8b cx=c_pps
+ a=oc9J++0uMp73DTRD5QyR2A==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=QyXUC8HyAAAA:8 a=UqCG9HQmAAAA:8
+ a=EUspDBNiAAAA:8 a=ONbtDiuOtXKcKyDzJgsA:9 a=CjuIK1q_8ugA:10
+ a=iYH6xdkBrDN1Jqds4HTS:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-22_06,2025-05-22_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ mlxscore=0 clxscore=1015 adultscore=0 bulkscore=0 phishscore=0 suspectscore=0
+ impostorscore=0 malwarescore=0 lowpriorityscore=0 mlxlogscore=983 spamscore=0
+ priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505160000
+ definitions=main-2505220129
 
-On Thu, May 22, 2025 at 1:15=E2=80=AFPM Russell Haley <yumpusamongus@gmail.=
-com> wrote:
->
->
->
-> On 5/22/25 4:47 AM, Rafael J. Wysocki wrote:
-> > On Thu, May 22, 2025 at 10:51=E2=80=AFAM Russell Haley <yumpusamongus@g=
-mail.com> wrote:
-> >>
-> >>
-> >> On 5/22/25 3:05 AM, Shashank Balaji wrote:
-> >>> The userspace governor does not have the CPUFREQ_GOV_STRICT_TARGET fl=
-ag, which
-> >>> means the requested frequency may not strictly be followed. This is t=
-rue in the
-> >>> case of the intel_pstate driver with HWP enabled. When programming th=
-e
-> >>> HWP_REQUEST MSR, the min_perf is set to `scaling_setspeed`, and the m=
-ax_perf
-> >>> is set to the policy's max. So, the hardware is free to increase the =
-frequency
-> >>> beyond the requested frequency.
-> >>>
-> >>> This behaviour can be slightly surprising, given the current wording =
-"allows
-> >>> userspace to set the CPU frequency". Hence, document this.
-> >>>
-> >>
-> >> In my opinion, the documentation is correct, and it is the
-> >> implementation in intel_pstate that is wrong. If the user wanted two
-> >> separate knobs that control the minimum and maximum frequencies, they
-> >> could leave intel_pstate in "active" mode and change scaling_min_freq
-> >> and scaling_max_freq.
-> >>
-> >> If the user asks for the frequency to be set from userspace, the
-> >> frequency had damn well better be set from userspace.
-> >
-> > The userspace governor requests a frequency between policy->min and
-> > policy->max on behalf of user space.  In intel_pstate this translates
-> > to setting DESIRED_PERF to the requested value which is also the case
-> > for the other governors.
->
-> Huh.  On this Skylake box with kernel 6.14.6, it seems to be setting
-> Minimum_Performance, and leaving desired at 0.
->
-> > echo userspace | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_=
-governor
-> userspace
-> > echo 1400000 | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_se=
-tspeed
-> 1400000
-> > sudo x86_energy_perf_policy &| grep REQ
-> cpu0: HWP_REQ: min 14 max 40 des 0 epp 128 window 0x0 (0*10^0us) use_pkg =
-0
-> cpu1: HWP_REQ: min 14 max 40 des 0 epp 128 window 0x0 (0*10^0us) use_pkg =
-0
-> cpu2: HWP_REQ: min 14 max 40 des 0 epp 128 window 0x0 (0*10^0us) use_pkg =
-0
-> cpu3: HWP_REQ: min 14 max 40 des 0 epp 128 window 0x0 (0*10^0us) use_pkg =
-0
-> cpu4: HWP_REQ: min 14 max 40 des 0 epp 128 window 0x0 (0*10^0us) use_pkg =
-0
-> cpu5: HWP_REQ: min 14 max 40 des 0 epp 128 window 0x0 (0*10^0us) use_pkg =
-0
-> cpu6: HWP_REQ: min 14 max 40 des 0 epp 128 window 0x0 (0*10^0us) use_pkg =
-0
-> cpu7: HWP_REQ: min 14 max 40 des 0 epp 128 window 0x0 (0*10^0us) use_pkg =
-0
+On Thu, May 22, 2025 at 09:48:51AM +0400, George Moussalem via B4 Relay wrote:
+> From: George Moussalem <george.moussalem@outlook.com>
+> 
+> Fix a sparse warning by making the ops_ipq5018 struct static.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202505202356.S21Sc7bk-lkp@intel.com/
+> Signed-off-by: George Moussalem <george.moussalem@outlook.com>
+> ---
+> Fix below sparse warning by making the ops_ipq5018 struct static.
+> 
+> sparse warnings: (new ones prefixed by >>)
+> >> drivers/thermal/qcom/tsens-v1.c:246:24: sparse: sparse: symbol 'ops_ipq5018' was not declared. Should it be static?
+> 
+> vim +/ops_ipq5018 +246 drivers/thermal/qcom/tsens-v1.c
+> 
+>    245	
+>  > 246	const struct tsens_ops ops_ipq5018 = {
+>    247		.init		= init_tsens_v1_no_rpm,
+>    248		.calibrate	= tsens_calibrate_common,
+>    249		.get_temp	= get_temp_tsens_valid,
+>    250	};
+>    251	
+> ---
+>  drivers/thermal/qcom/tsens-v1.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-OK, let me double check the code.
+Fixes: 04b31cc53fe0 ("thermal/drivers/qcom/tsens: Add support for IPQ5018 tsens")
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+
+
+-- 
+With best wishes
+Dmitry
 
