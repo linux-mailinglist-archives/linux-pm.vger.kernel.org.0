@@ -1,114 +1,269 @@
-Return-Path: <linux-pm+bounces-27501-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27502-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C04CAC08F3
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 11:47:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99FA8AC0901
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 11:49:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99F8A188C93A
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 09:47:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB8D33B02F7
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 09:48:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04E94280321;
-	Thu, 22 May 2025 09:47:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD567287505;
+	Thu, 22 May 2025 09:48:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FCIR5Zow"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="dgm6F4R3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82EF19ABDE;
-	Thu, 22 May 2025 09:47:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A02A2868AA
+	for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 09:48:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747907239; cv=none; b=ii/kC/O3SG9Nj0gRs0+HwvBzmaBPa5VaxEq00c7jqpECC+9wyoXDXlol7XGQNhylpiAR/3juvSZtUIFajBpB9TVssu/UN1KqDrCPfhquMq74PvOFwHSPi+7YBFNteZkBRKSRAxHIVo/GkLx7wCRHVLJqYfg/Q1irc9+wRTHzSVM=
+	t=1747907339; cv=none; b=AtSPNq/LkvwACYFaZMYVsx9v0Pw+/SsHSjQlsIvMOcfedywwEW9OQEpv9qEkXwI7ClfNF8VuhulmnW3kpRnzQAS6/SHiXxpNLhEZ4bQc4/LALLPLr2UivIUxJ7dMhZEk6WjnquVq9FYGS1F2LmKkONp5+uZ70xqGb2dORm7Me+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747907239; c=relaxed/simple;
-	bh=wPk4ppqhqv2VPlVT26EM2PkHrNSLSJCeGnRWlxBg7Rk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=k3NbAkf4yTW0S111Jm4XobjpGCkwtcTzpvXXQIf8isGezXtAuwaGfMF1LLIGJjcnZFvIH53vDWgtXM2r7Op42AFeNKhYpeauN7EM4EpmYo4PgAeBXXfWLUBwO5a18r01VS7JSmecsmDe6sFno3BFASFR3lDWb8+7U9N6FhlWHdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FCIR5Zow; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CAC2C4CEE4;
-	Thu, 22 May 2025 09:47:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747907237;
-	bh=wPk4ppqhqv2VPlVT26EM2PkHrNSLSJCeGnRWlxBg7Rk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=FCIR5ZowXZABtr+GqkpGFt4VxzB/wqaf2T8kdnoTKbL9IHDlFogYClH3XneW86das
-	 E72mm1uKBFyTyp8LOWFXdrcJvjL+nfZEg/V4NY9jfRmLlZ/J2byM0me5SNYuIWTRpn
-	 jt2Of3S3fh+CSuV10FF5PGpWacglQBKkFZEQaug/PdZBKn+FKGOB8zr5P+lx5QiMuX
-	 GgVH9zePHbmZ5uPU22XxlXr68TOjLoV55UMz1/NhHmO0HVxJECVwjIfa0M3BlwNfW6
-	 70jOhcLggwk0BrLHrbjKJh/kQHJalyX8zIi2pncbbFqhl/6IPVnqhRA7SKt2OjKWIi
-	 HMs82u5f4nrPQ==
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3f8ae3ed8f4so5005190b6e.3;
-        Thu, 22 May 2025 02:47:17 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWAurBNXusr889NPPPrFdLZoa9iRiwj6IHY3XWTonzRcfXpgMhj8TN0utMpZDzf3yuKvru20UQlIOg=@vger.kernel.org, AJvYcCWJh/Re0K0m+NVWP4r6AnzBz3ud4dT0nMURB9g4hLcHZE2cv7GWrWkFdiDEs05oVCwVk5f6IUqq/kMsWVq3@vger.kernel.org, AJvYcCWe0Dw91dwiWKKqeLL0uXVz1HyjjMHNI0v8nyzqyBAejI2UbzqLiBk0vbsinbFLiRBhn2oNTbEgbgY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmFTIkN1DmYsm5g84lWEMhYZsWsJkDfno9XZGaIooF6ivHIl4W
-	rmskHtwgNEbPz8UBdDsB0G4p51/t3Hd/PhZZ2D72DeQ0oMnvD9SbZq9rFe8+JO6Mclwh0rD/nKf
-	+IabsLrDZ/Vahq+nug6XVpKjB4jWI2+4=
-X-Google-Smtp-Source: AGHT+IHqj6QSMl9Aw2ToZVsCr3PhfufkcskyUJbk05OX0Q2RQ3/40Slrwh7uo0rEXdISL7J7PqeZOJVJKZNg9Y4Glqg=
-X-Received: by 2002:a05:6808:338a:b0:3f6:a9d4:b7e4 with SMTP id
- 5614622812f47-404d86f3f18mr16853920b6e.20.1747907236480; Thu, 22 May 2025
- 02:47:16 -0700 (PDT)
+	s=arc-20240116; t=1747907339; c=relaxed/simple;
+	bh=qdGgntxIIjfcvQxUD7MkNPywpqkarEzTXwYkWCvLQjA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RizuwVwhPO8wHQqUxsZGXo5Nt2eMPy8+Tu/LRLCmfcRcFr7rNfERQ5V+2ba7zzemmwz9tSQ4W39YMzEUc7NarnUKW0JPIE2EBRbWjmPSRiMZVexrFlwmFj4U/keYpzlF1GLmNZsuERJw+VEmaGxpMEfEzW7wc7FJFScJF1PRhb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=dgm6F4R3; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ad1a87d93f7so1267036266b.0
+        for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 02:48:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1747907336; x=1748512136; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=klE7E1sXnfwhBGRUczKqI9pMXJRo0twyYdkymVqjNqM=;
+        b=dgm6F4R3vfZWOv//68H/pqtnnjo3/wP4hmTqw8WMXYHhgRkPedDTEtsmq2LHi0b6iy
+         wEWmsCIOcTsRPH/2Jv7XLk+HCmFSj9rIiyvzndkrEni9fZWevgzlgW9U/W6HfDqMgh6F
+         PesVYmrcufFJ7Dtvp0mRcavRZmvFufYsDFej8kiVbd91IOPiTgjyLDIJdOT7YVqoIyYD
+         wW5j8RRo/v7ck6/dV24VLYuxLm44U2GWqOUrIjAJDLY99SjbmXfX70CXwNdoY6KUJBQf
+         OxRQ15e3KNG8caw/UZsaELvEqnRpnjeY2Ip1pxUQWPXWrI5C1xSb4cptUOn0FYTLXdhZ
+         Y8tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747907336; x=1748512136;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=klE7E1sXnfwhBGRUczKqI9pMXJRo0twyYdkymVqjNqM=;
+        b=WQMI4rVtI55B1TMano/6NVCMKO5yWjcW1fUHte4/JQKfTub1OC0kO7INz/8FSIS3Sb
+         rJ+sJZY5JmOi8kuncTBLBhiA8lSYPKQv4TpxsTuQMwQHjHB4FCP2W5ew/rEcuLvOktnE
+         6iPfvezrpfdFk4NPV0eTTib5xeUhvcFTTc0f7lvXoM09PcYiYfJXJLRabxnSPX7OxQ+3
+         Z5L/RsdtP+3jRTsNj06aDULb7CfAPoxK1BxoAezVb1yapMNcqnRIEj6dFoEaBbPvFjaJ
+         R1t+7Aw83qYVgy9BP0IYYx7cKD9uslofZhLN2lKl8I1cMKqmcLQqwSD/H9atClpAsZ3s
+         1F8w==
+X-Forwarded-Encrypted: i=1; AJvYcCUGUoEL8AmacCETAUCPc/X36lKluhmuTW37BFPS3grIQoK/hFWKHX24BccoGJ6w8nnKrBLCUdyNvw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxV/yMQPzp/c0H6PAazblg/NNx9VlsaxxYwAkDpZIS1/4HEfEUJ
+	mcWt4HCr1wUB6XkYf24kXi6u6nbJrZsZI66YWBm9GTpTXLd+kwk4qgkvKsSekqhcFPA=
+X-Gm-Gg: ASbGncuDHaCpk7IZKWYCWaChTzaCiIRuQlPhrv9sd+hoDysGUPyFkepjRmqqe2vKWG0
+	4zwAK22IT5ow1UAoiAWU0vNTnljVjaIt3JXl9vAED6uvqUEmdTKD0ureRSYBxGmXnHdXfBL32Li
+	M5m9HmDoiYkpGBIcLKumBtQqrqKFH6+WkiI4NdNsg609MbjBO5zlqnSncd/o6P3NA0aIEO6i6a7
+	ouxVd6jG9a+PmtHSrFZXeIWP5r8v5Z8jEYonieuUUlSVxdBZgniLO4heEjLZTVon/XLe8pJP7ql
+	Lf2HmLpf7ARHAf1qlbGF/voGiQ/Jv4WYNQ+oVka4a8bdIP4qW6LMfr2hTB0=
+X-Google-Smtp-Source: AGHT+IGR5u6qykqEC57e3nACLD+fywuUN8Jcwlf4E/4zcXLVu7BeLHKEwlYarei9wxiFcWeh77KjeA==
+X-Received: by 2002:a17:906:230a:b0:ad4:f6d2:431b with SMTP id a640c23a62f3a-ad536dce6cfmr1624516166b.44.1747907335489;
+        Thu, 22 May 2025 02:48:55 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.58])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad52d438403sm1040645066b.123.2025.05.22.02.48.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 May 2025 02:48:55 -0700 (PDT)
+Message-ID: <3b1963ba-f93f-48f2-8fb0-a485dd80ffcb@tuxon.dev>
+Date: Thu, 22 May 2025 12:48:53 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250522-userspace-governor-doc-v1-1-c8a038e39084@sony.com> <15871c67-0d18-430f-935e-261b2cda855b@gmail.com>
-In-Reply-To: <15871c67-0d18-430f-935e-261b2cda855b@gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 22 May 2025 11:47:04 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gz3Y+RGqBf9E1hzq9rwfrryd98Xpk51DtLd-uck5y-rw@mail.gmail.com>
-X-Gm-Features: AX0GCFuEkuL_MNkf6jCc8Tj-u2AdKArucmRgg0Lk2TB1xeDhvOGntl8-Xw66Wng
-Message-ID: <CAJZ5v0gz3Y+RGqBf9E1hzq9rwfrryd98Xpk51DtLd-uck5y-rw@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq, docs: (userspace governor) add that actual freq
- is >= scaling_setspeed
-To: Russell Haley <yumpusamongus@gmail.com>
-Cc: Shashank Balaji <shashank.mahadasyam@sony.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Shinya Takumi <shinya.takumi@sony.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] driver core: platform: Use devres group to free driver
+ probe resources
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Jonathan Cameron <jic23@kernel.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ dakr@kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, geert@linux-m68k.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-iio@vger.kernel.org,
+ bhelgaas@google.com
+References: <20250330163129.02f24afb@jic23-huawei>
+ <5bca6dfd-fe03-4c44-acf4-a51673124338@tuxon.dev>
+ <95f5923f-7a8f-4947-b588-419525930bcb@tuxon.dev>
+ <CAPDyKFoMqmCFBoO8FwQe2wHh2kqQi4jUZNFyiNckK7QhGVgmvg@mail.gmail.com>
+ <c3a2950a-17ff-444a-bee7-af5e7e10e2bf@tuxon.dev>
+ <CAPDyKFozR4qDq4mzcZBK-LcoPf=fGyuJTXwdt=Ey+_DcQOAp0g@mail.gmail.com>
+ <4o3wo76st7w6qwyye3rrayuo2qx773i6jfzcnbkhdj76ouh7ds@3e2mblehkgwf>
+ <CAPDyKFqMB7XutXba73YHx1X4rm6uc3Fz6yMZ8yM=wgduEmgUDg@mail.gmail.com>
+ <a20fc6ee-c6c3-4013-b175-4918b9a44380@tuxon.dev>
+ <CAPDyKFpbeLJUiB_xQbqDib+-8Q3AcJNVg+DuEcqmVGMbFdNxwA@mail.gmail.com>
+ <fgl4w5uhxci7rrbdigtni72vveb2gqemh6iccz4qruqkek5rja@rzwkcjg6hkid>
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Content-Language: en-US
+In-Reply-To: <fgl4w5uhxci7rrbdigtni72vveb2gqemh6iccz4qruqkek5rja@rzwkcjg6hkid>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, May 22, 2025 at 10:51=E2=80=AFAM Russell Haley <yumpusamongus@gmail=
-.com> wrote:
->
->
-> On 5/22/25 3:05 AM, Shashank Balaji wrote:
-> > The userspace governor does not have the CPUFREQ_GOV_STRICT_TARGET flag=
-, which
-> > means the requested frequency may not strictly be followed. This is tru=
-e in the
-> > case of the intel_pstate driver with HWP enabled. When programming the
-> > HWP_REQUEST MSR, the min_perf is set to `scaling_setspeed`, and the max=
-_perf
-> > is set to the policy's max. So, the hardware is free to increase the fr=
-equency
-> > beyond the requested frequency.
-> >
-> > This behaviour can be slightly surprising, given the current wording "a=
-llows
-> > userspace to set the CPU frequency". Hence, document this.
-> >
->
-> In my opinion, the documentation is correct, and it is the
-> implementation in intel_pstate that is wrong. If the user wanted two
-> separate knobs that control the minimum and maximum frequencies, they
-> could leave intel_pstate in "active" mode and change scaling_min_freq
-> and scaling_max_freq.
->
-> If the user asks for the frequency to be set from userspace, the
-> frequency had damn well better be set from userspace.
+Hi, Ulf,
 
-The userspace governor requests a frequency between policy->min and
-policy->max on behalf of user space.  In intel_pstate this translates
-to setting DESIRED_PERF to the requested value which is also the case
-for the other governors.
+On 21.05.2025 17:57, Dmitry Torokhov wrote:
+> On Wed, May 21, 2025 at 02:37:08PM +0200, Ulf Hansson wrote:
+>> On Wed, 21 May 2025 at 07:41, Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+>>>
+>>> Hi, Ulf,
+>>>
+>>> On 20.05.2025 15:09, Ulf Hansson wrote:
+>>>> For example, even if the order is made correctly, suppose a driver's
+>>>> ->remove() callback completes by turning off the resources for its
+>>>> device and leaves runtime PM enabled, as it relies on devres to do it
+>>>> some point later. Beyond this point, nothing would prevent userspace
+>>>> for runtime resuming/suspending the device via sysfs.
+>>>
+>>> If I'm not wrong, that can't happen? The driver_sysfs_remove() is called
+>>> before device_remove() (which calls the driver remove) is called, this
+>>> being the call path:
+>>>
+>>> device_driver_detach() ->
+>>>   device_release_driver_internal() ->
+>>>     __device_release_driver() ->
+>>>       driver_sysfs_remove()
+>>>       // ...
+>>>       device_remove()
+>>>
+>>> And the driver_sysfs_remove() calls in the end __kernfs_remove() which
+>>> looks to me like the place that actually drops the entries from sysfs, this
+>>> being a call path for it:
+>>>
+>>> driver_sysfs_remove() ->
+>>>   sysfs_remove_link() ->
+>>>     kernfs_remove_by_name() ->
+>>>       kernfs_remove_by_name_ns() ->
+>>>         __kernfs_remove() ->
+>>>
+>>> activating the following line in __kernfs_remove():
+>>>
+>>> pr_debug("kernfs %s: removing\n", kernfs_rcu_name(kn));
+>>>
+>>> leads to the following prints when unbinding the watchdog device from its
+>>> watchdog driver (attached to platform bus) on my board:
+>>> https://p.fr33tux.org/935252
+>>
+>> Indeed this is a very good point you make! I completely overlooked
+>> this fact, thanks a lot for clarifying this!
+>>
+>> However, my main point still stands.
+>>
+>> In the end, there is nothing preventing rpm_suspend|resume|idle() in
+>> drivers/base/power/runtime.c from running (don't forget runtime PM is
+>> asynchronous too) for the device in question. This could lead to that
+>> a ->runtime_suspend|resume|idle() callback becomes executed at any
+>> point in time, as long as we haven't called pm_runtime_disable() for
+>> the device.
+> 
+> So exactly the same may happen if you enter driver->remove() and
+> something calls runtime API before pm_runtime_disable() is called.
+> The driver has (as they should be doing currently) be prepared for this.
 
-There is no guarantee that the request will be granted by the
-hardware, either way.
+I took the time and tried to do a comparison of the current solutions
+(describing the bad and good things I see), trying to understand your
+concerns with regards to RPM suspend|resume|idle while unbinding a device
+from its driver.
+
+I see the following cases:
+
+Case 1/ the current approach when devm_pm_runtime_enable() is used in
+driver's ->probe() with the current code base:
+
+- right after driver ->remove() finish its execution clocks are detached
+  from the PM domain, through dev_pm_domain_detach() call in
+  platform_remove()
+
+- any subsequent RPM resume|suspend|idle will lead to failure if the driver
+  specific RPM APIs access directly registers and counts on PM domain to
+  enable/disable the clocks
+
+- at this point, if the IRQs are shared (but not only) and devm requested
+  the driver's IRQ handler can still be called asynchronously; driver
+  should be prepared for such events and should be written to work for such
+  scenarios; but as the clocks are not in the PM domain anymore and RPM is
+  still enabled at this point, if the driver don't run runtime suspend on
+  probe (and runtime resume/suspend on runtime), I think (because I haven't
+  investigated this yet) it can't rely on pm_runtime_active()/
+  pm_runtime_suspended() checks in interrupt handlers
+  and can't decide if it can interrogate registers or not; interrogating
+  should lead to failure at this stage as the clocks are disabled; drivers
+  should work in such scenario and the CONFIG_DEBUG_SHIRQ is a way to check
+  they can; I previously debugged a similar issue on drivers/net/ethernet/
+  renesas/ravb driver where using devm_pm_runtime_enable() in probe and
+  pm_runtime_suspended() checks in IRQ handlers was the way to make this
+  scenario happy; at that time I wasn't able to find that
+  dev_pm_domain_detach() have the impact discussed in this thread
+
+Case 2/ What is proposed in this patch: devm_pm_runtime_enable() used +
+open devres group after dev_pm_domain_attach() (in probe) and close the
+devres group before dev_pm_domain_attach() (in remove):
+
+- right after the driver ->remove() is executed only the driver allocated
+  devres resources are freed; this happens before dev_pm_domain_deattach()
+  is called, though the proposed devres_release_group() call in this patch
+
+- while doing this, driver can still get async RPM suspend|resume|idle
+  requests; is like the execution is in the driver ->remove()
+  but the pm_runtime_disable() hasn't been called yet
+
+- as the runtime PM is enabled in driver's ->probe() mostly after the HW is
+  prepared to take requests and all the other devm resources are allocated,
+  the RPM disable is going to be among the first things to be called by the
+  devres_release_group()
+
+- then, after RPM disable, all the devres resources allocated only in the
+  driver's ->probe() are cleaned up in reverse order, just like
+  device_unbind_cleanup() -> devres_release_all() call in
+  __device_release_driver() is doing, but limited only to the resources
+  allocated by the driver itself; I personally see this like manually
+  allocating and freeing resources in the driver itself w/o relying on
+  devres
+
+- then it comes the turn of dev_pm_domain_detach() call in
+  platform_remove(): at the time dev_pm_domain_detach() is executed the
+  runtime PM is disabled and all the devres resources allocated by driver
+  are freed as well
+
+- after the dev_pm_domain_detach() is executed all the driver resources
+  are cleaned up, the driver can't get IRQs as it's handler was already
+  unregistered, no other user can execute rpm suspend|resume|idle
+  as the RPM is disabled at this time
+
+Case 3/ devm_pm_runtime_enabled() dropped and replaced by manual cleanup:
+- the driver code is going be complicated, difficult to maintain and error
+  prone
+
+I may have missed considering things when describing the case 2 (which is
+what is proposed by this patch) as I don't have the full picture behind the
+dev_pm_domain_detach() call in platform bus remove. If so, please correct me.
+
+Thank you,
+Claudiu
+
+> 
+>>
+>> That's why the devm_pm_runtime_enable() should be avoided as it simply
+>> introduces a race-condition. Drivers need to be more careful and use
+>> pm_runtime_enable|disable() explicitly to control the behaviour.
+> 
+> You make it sound like we are dealing with some non-deterministic
+> process, like garbage collector, where runtime disable done by devm
+> happens at some unspecified point in the future. However we are dealing
+> with very well defined order of operations, all happening within
+> __device_release_driver() call. It is the same scope as when using
+> manual pm_runtime_disable(). Just the order is wrong, that is it.
+> 
+> Thanks.
+> 
+
 
