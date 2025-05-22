@@ -1,133 +1,106 @@
-Return-Path: <linux-pm+bounces-27533-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27534-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0C2EAC16EB
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 00:38:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FEDEAC1742
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 01:06:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C85E172F05
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 22:38:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1EF233A36B8
+	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 23:06:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C9DA281539;
-	Thu, 22 May 2025 22:38:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EFD32C178D;
+	Thu, 22 May 2025 23:05:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fueoYtN9"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HN6FeF2M"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E7E327FD6C
-	for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 22:38:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589052C0304
+	for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 23:04:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747953528; cv=none; b=V+S4nN8qm7M2tAOxaxv06LplXEPqZnDKqhhoGtrtS5EZh6o1okV6x7VY1E/61wtecOwKCd/CBuclPxu7kWL+afHNeAinsODdtwL1Hgik9Dh8PawW2BHst7n/B56lhIbRRh4VfIVgM+WQK30JMdM35FJ1OypFCfG9UlHbH6OxRzo=
+	t=1747955102; cv=none; b=tRUs4VZR3buT8Rqe0RFR3fir/NvTqOEdBwdcBpF3NwmBcUGfZjK54VhtWplZIjlWgmQDfqBVjsZjdiIhy1IQ1tho2w8iWRFauwG/woafmI/QK9rbDzgLhMp+zmmIycaPdX8W9avKVS7f7ZtlpAFSSREAB/o4I4sMwTARKXnCFys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747953528; c=relaxed/simple;
-	bh=a3PRYd3Cjo/rv/itdwXNTrt3wKQ+asO4RWYKiV1N2rE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FF7nIaoJeRXYm9aUDf43X/62tVbncZQjUZdAoF45NAxr09Tvo2MpUBixFhj6qusyLyHD66oKxXMthc6qbBt9x7HJwJ/Qp23/gReIGVt7s2MHOYxnuTFj0LBcUFtMaaYGlw9EL7cjm04wxNpk+oBesmr+xHQ3uxoAk4yTwWRP6nI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fueoYtN9; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-551eb17123cso8196643e87.1
-        for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 15:38:46 -0700 (PDT)
+	s=arc-20240116; t=1747955102; c=relaxed/simple;
+	bh=lScQnSCkvuRBtECCWLHIYCv8vmN77MwE39G4+WsfwoI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LIHNiVqmkFh1O2ZzHXPT7yHUO140nrJdE8x/lRRvbYZezzJCfxLJHKbWSmIkBz7u1qk/Ln42Xb6at9ckHcCKOTvkiDnPHG3lhzzYMTuWdO0Ot76UBXKwdVzLpDN1545m9W8sAfGnFlN3YSFWGpjbeNyz0wdSiUHrhM23aO34eb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HN6FeF2M; arc=none smtp.client-ip=209.85.166.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-3dc64b08343so26304505ab.2
+        for <linux-pm@vger.kernel.org>; Thu, 22 May 2025 16:04:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747953525; x=1748558325; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=162PHkNGgQO3PjVXfDykPBsa+evqNxguX1rebBysG+k=;
-        b=fueoYtN99VdT8GS7lnPa/Y0Rff8e47AURXcWXbGA+sMzcHNjjnpgdUUdYbsgLgpYpv
-         w1i543W6bAvN4nMKtZ+UAisGNAWd1Ztx4Aap5yCHVy6Saa/LC34W+KzfP+DDKjX4y96O
-         wT19r/qc7sfr3gxqJhj6axitATH9uUPpdb2EyCmPCStIz9OD2XIkEDwYbb/pmTgZo11c
-         5YQdEnqejgcSrn7WHpeQQcpytGy1vUdSB43nEnNY7tBpEoVfQuONEbWDJVLzOplpjpz0
-         vIwUnDzmLa/2lMfSd6oytD/kmRE8I9UGwHMeYLDiKmDCJYuY38szAThfm7Ix9Cj+qmgk
-         uRKg==
+        d=linuxfoundation.org; s=google; t=1747955098; x=1748559898; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NyQ/Gx89Cr5NXHdPsJF5IueYH71HqlFunPxqtl/qLjg=;
+        b=HN6FeF2MiC7fFEHxmFsL6OL6b6NBiQo8Y/2heghsL9cCi8xfqaHkmy96L7K8oBrjfz
+         JSx96lKxpQjStR99tr9QocdPVXinuga4F2ar22XhSm4QHMY7a4uNE5jWDLrtoRZ3uZnc
+         38Te2I2VK1OaZv6w4DPMrEDVHF9gnjzNzf8xw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747953525; x=1748558325;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=162PHkNGgQO3PjVXfDykPBsa+evqNxguX1rebBysG+k=;
-        b=S09MgvRBBPJkkMps3Pq8pohaP7hVSNMLjODWX2M9Bo17bbAq7su+VORK3gbQAXpGqB
-         nIhOKWJBHYUt6/tpv2QGnO5su049oNdmJe7Pd6Y2IT6dLThGHsNFVMkoAFOd9bYi8HIs
-         BFcD3nhzANcaJ0hyBH7E8ZEWrNmBTE2SBF32R18EQwKEhNeoDbCCrUT6lwiQOBBFWdh3
-         a2P0JyJeNcbMNLc9oD7tqYMGOUQRnvmoYrmpNc7RNWpT2j9oaw49/oijSY7STXq4okDB
-         6WdKEMoxSBywv9Y8BZFLGjwhbPFu8O//v1k3uDIvwOmFLmZGshK+0muTgLdnmMxQZ7Na
-         PaRA==
-X-Forwarded-Encrypted: i=1; AJvYcCWUZQZn6odUOOAAOSi7OiVIIG82nVFeC/Y5gT83g4fGUYJQBGa+HAVFklIs9INWtBMOwVX+1fTA1g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCRAHHn8YBu5DBgFnIddcZ6akWBi3fM6gj5tr82zYTJtH7PEMF
-	x1OAgUrQ5Y+VTV1UK73VFLOBJHa1bONVKjPNKLHQT1qcShrU80YaLeui3AnwhzKN060=
-X-Gm-Gg: ASbGncsd7ECv+YmSLQvyRPt12PNSkaf6c75c0w+wkyOBzO6RW+kcwzZ739Shvz2XkW8
-	pa7lViZ7mbZjzS0ny/hXhLruEubcW7D96+J2zGrabGDGzdtwl/ZXJSvUCiwSL5QpUPdAC89g7UC
-	m/3Q3KgLWoyTi4QCrbcyLAPg3BeWg03UyJOzMJW6zyrb4ShhTs7xQ+Md9r/M3jf2XktkltCVk8S
-	Od/ryMaZNqF8f4DvBm2XXKg6QibsQjDzkl2q3ImRaDqNvaZ2mlZkZMYOIhDuQdeE7TkICYyTTV5
-	XwCZXsPhTkjCW16bFKN3U4+aHWtBOPSYewdw4cqvZ/fU2IGE4ziFIcRJ4aJofUTdDEeNEfeOtGd
-	TtkN1SUNAIlIeWHJ9ZJfMz43lHw==
-X-Google-Smtp-Source: AGHT+IHpKvG7QTF5JMFQRfjxHS1e4Hh60oqpoUmBhfN3NuDv06qvqDXaNXWN+vdIaPYvt1ahDgUnfA==
-X-Received: by 2002:a05:6512:22d4:b0:550:f012:966 with SMTP id 2adb3069b0e04-550f0120ce6mr5060108e87.39.1747953524641;
-        Thu, 22 May 2025 15:38:44 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-328084c8c78sm33932571fa.36.2025.05.22.15.38.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 May 2025 15:38:44 -0700 (PDT)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Linus <torvalds@linux-foundation.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] pmdomain fixes for v6.15-rc8
-Date: Fri, 23 May 2025 00:38:43 +0200
-Message-ID: <20250522223843.171621-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1747955098; x=1748559898;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NyQ/Gx89Cr5NXHdPsJF5IueYH71HqlFunPxqtl/qLjg=;
+        b=NfTGXLru4AHu0zBTNgcZyQOiIie6Hh+a9XcIYncTJGCtVTZQSG1W6EKpM2lNzEBuql
+         ooki6WAm1nQw2Brmn8sqpfuLktA6Lgo2mOqnIl7wylKN0glCvLiU+BKhUIXC4DMYd6OZ
+         WZ4rTTHsx5px+2Rks77RtLQxhxTK9SfnDelcBhexKOSEQJ2K06hkOlyw/RHki5Aw9IpO
+         Jvt7KwV6A+IRyYH/b+CyP8JN3C/zm3M/vo/Pu6/RwtRjsCBYASYnSESq0kVFLxTAsbBb
+         r74/zPRQYGseu3p89Y6qW9FSCFuUtOax/6IGlcdsH19VfS/F/NL0sf2ExJyCfGeTXlV8
+         r2ZA==
+X-Forwarded-Encrypted: i=1; AJvYcCWnob37YFrJgOTghPYRCrHGn5LcvemmW6woeYjikbRY2Y8ZRcg7slugME88izdhOMOJvh8G5cHJtQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyylLx6/ICyXiz7tYK2kGLjcOTwHEYa6QjNN9xvpTSV0TM8EmkD
+	ObQPft6Qvj4Fz5fpX8tWIvRktJYnvwF6traQifnWKTyIP8r54RbBhWz1LtLG717ARgo=
+X-Gm-Gg: ASbGncuy24c1Nu7QPbEipAAsMysmxTIK8JabcC7kWKqPwIezbpU1WEP3YEuoKJ25/WG
+	pDEahS85a+spWN8fR4lJ+xvmp5toQchE4G3oeS1Bm6l+jiQGDzcvhSIHpiZbJvFgbT+3ZlmZedc
+	5HcEGyNF8WJom2Qi1JSJnPG5YhpwfdxDgHLQn17xZQEKgrJnsdkx/O2P1HvqbwXuojnbaXIpDlU
+	LvH7ZDxCoyD2yhphUSTkrjLr32OokiOxw3hVXhepTmr2ng/XQMZknblh8Tek4+cMDBwNMN8QOJz
+	xeI2nX9ed+o89Viigrctyift+kBDlj/KihEFRWZ2Dq+UBeAkMEJkGccCDlKyWKMm4bhNWKsM
+X-Google-Smtp-Source: AGHT+IHl0m/OZ2YTgjx9CaKgNardws6NVkvU4kTAEKOuts391ldEwKbiR8NDEIfzEyuXJto1DxeWHg==
+X-Received: by 2002:a05:6e02:1748:b0:3dc:7df8:c82c with SMTP id e9e14a558f8ab-3dc7df8d014mr126479675ab.7.1747955098357;
+        Thu, 22 May 2025 16:04:58 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3dc8b75d09dsm6447005ab.54.2025.05.22.16.04.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 May 2025 16:04:58 -0700 (PDT)
+Message-ID: <e1f8156c-e9f5-493e-b780-1f1e63f22cc7@linuxfoundation.org>
+Date: Thu, 22 May 2025 17:04:57 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] cpupower: Implement powercap_set_enabled()
+To: Suchit Karunakaran <suchitkarunakaran@gmail.com>, trenn@suse.com,
+ shuah@kernel.org, jwyatt@redhat.com, jkacur@redhat.com,
+ linux-pm@vger.kernel.org
+Cc: linux-kernel-mentees@lists.linux.dev, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20250520094345.97200-1-suchitkarunakaran@gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20250520094345.97200-1-suchitkarunakaran@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Linus,
+On 5/20/25 03:43, Suchit Karunakaran wrote:
+> The powercap_set_enabled() function previously returned a dummy value
+> and was marked with a TODO comment to implement it. This patch implements the
+> function by writing the desired mode (0 or 1) to /sys/class/powercap/intel-rapl/enabled
+> 
+> Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
 
-Here's a PR with a couple of pmdomain fixes intended for v6.15-rc8. Details
-about the highlights are as usual found in the signed tag.
+How did you test this patch? Please include the information in
+the change log and send v3.
 
-Please pull this in!
-
-Kind regards
-Ulf Hansson
-
-
-The following changes since commit 9c32cda43eb78f78c73aee4aa344b777714e259b:
-
-  Linux 6.15-rc3 (2025-04-20 13:43:47 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.15-rc3
-
-for you to fetch changes up to 0f5757667ec0aaf2456c3b76fcf0c6c3ea3591fe:
-
-  pmdomain: core: Fix error checking in genpd_dev_pm_attach_by_id() (2025-05-08 13:29:30 +0200)
-
-----------------------------------------------------------------
-pmdomain core:
- - Fix error checking in genpd_dev_pm_attach_by_id()
-
-pmdomain providers:
- - renesas: Remove obsolete nullify checks for rcar domains
-
-----------------------------------------------------------------
-Dan Carpenter (1):
-      pmdomain: core: Fix error checking in genpd_dev_pm_attach_by_id()
-
-Geert Uytterhoeven (1):
-      pmdomain: renesas: rcar: Remove obsolete nullify checks
-
- drivers/pmdomain/core.c                   | 2 +-
- drivers/pmdomain/renesas/rcar-gen4-sysc.c | 5 -----
- drivers/pmdomain/renesas/rcar-sysc.c      | 5 -----
- 3 files changed, 1 insertion(+), 11 deletions(-)
+thanks,
+-- Shuah
 
