@@ -1,233 +1,79 @@
-Return-Path: <linux-pm+bounces-27535-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27536-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82BF3AC174B
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 01:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F221BAC18D1
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 02:01:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D67C1C042C7
-	for <lists+linux-pm@lfdr.de>; Thu, 22 May 2025 23:07:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9F631C06C93
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 00:01:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C0682C178E;
-	Thu, 22 May 2025 23:06:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 428A528A1EC;
+	Thu, 22 May 2025 23:58:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ht/m0N2z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cMN4/M0u"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B62582C033D;
-	Thu, 22 May 2025 23:06:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1916F24DCF6;
+	Thu, 22 May 2025 23:58:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747955213; cv=none; b=ihH8r2kcNo2lyiJRrH0HyNj6qHdW2blyVpR6vv1U4kVA3Osdnq7qeZ1Y0H7SQL4lVPjfKBy82RQiArva1/4yBZvpvqo3uEHl7D9UzyanSXUwUB0/M0VWm9Lj0u7GO97auiNI4UXCQZTTz56ImefKjlcQ1mCqkV8ENAqFAz4089I=
+	t=1747958305; cv=none; b=i4DyHMuutysbQ5f/b7eYjrgkT8j27T5TuJ+JRogVMWfh3aaG2dCnqVIDGiIrdxJN+M6ZLmgeVlPhIplwp+uGz0u5nJyOdw5hIw/EhWtP1CAZFVTHVQLP+W6KLGFNh6Dgk12BQUT3+wlAvdk5Pyowg3aeJorrTyHpKTKVD2m3RJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747955213; c=relaxed/simple;
-	bh=xp2gEGdxL4gvITseGz46xtMZ+uLCblWXLLQGn4MdhdA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sHYJruyQuQi4UOf/7iE0erc58+5qM6K1CxnUROFcLNfD6Fs3v+Tzuhmf7T1QKtZKEN8ZQSrsFaJ1bSTqyoJ+B5jW3cae2WnrcawIIDapsbe/B0kS9t7SIriZ82FFWjnwFiOHKZS2TYxEccyXSa0MFaWzWNAKQFyqbJbjaOaWShc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ht/m0N2z; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-74068f95d9fso7509222b3a.0;
-        Thu, 22 May 2025 16:06:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747955211; x=1748560011; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QAKhy4iiLBv1l7QDi7CDt/6dLpT+ioC4ESr76y1HPRQ=;
-        b=Ht/m0N2zqxGs2HLotPuuUY10w4OKETUo5mxVX3ujoLmDvp3mWTCDvmTLj2S6X7TVyE
-         jU6tFBrhX1XOOATHo5N41jRQXGGJ7Hg9n56qm+HPHp/LE2DFa5wgBQCFvksdreEGWHCI
-         zUNo1UNtplavC6A1VKTrRmMd/rUHSm8vlJTwOAz8TWqpmXKuYCSSRxUAdZAl9x4W1lLQ
-         iOBmIkgLCdVBVkuBcJDZo3YllfIZzKx+72bTL0sSTBzQ68yZyOcAMN2rNPDjtNXHF7Qv
-         X2jTk9aEKdldOUr/Ce0DQ7uTEYVZnXJeWpblto0IB946fIhb81PE6T0opPXlVhMi/+Mn
-         Mh5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747955211; x=1748560011;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QAKhy4iiLBv1l7QDi7CDt/6dLpT+ioC4ESr76y1HPRQ=;
-        b=oGPD8W2FuN30NyE4kxw4/loDjwo7OFkpgGp8z7u8j9isamJLFZi4gB9EjmDB7ct0in
-         Ne3pzXVLxiM2IWJgW8/AEnVi1uG0bZbWAg3Fyf3I+TYH0ZWhL0wcZBBhSTkGvCAIWaWL
-         U9FpvuB2is1DZYY3PAPYTBu1CzdSKdmbJP1U8bRU2WyTujsZGw5yGHszuZxooiehqzii
-         b+FCiRZ72gHX44E044AtU2ANRwKpLGKkzmP4c2W2pquEQjS1r+49wrRF0nJuDgp37CRC
-         4TlqVEKp0t3cLw4N73vF8gqfrAcWyqXI8/hsRVnIgzKZTV+QBEcD0Ao3+U/GubHGhd95
-         POWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUBLNnWk/mS+5NmReAZGsw15M3R5XQxlh//4x9c/YDjVNjr+cMJwkbIP4s8wXEv6XEhpfHYG8rkOS4=@vger.kernel.org, AJvYcCVpYzAwzxunupaH0LRCI4CCj2EW9VW4sp45v1TmssU6jEhL1A9jlslbMtlTcnAgnZLo3EkUNdCEAhk=@vger.kernel.org, AJvYcCX/W6FUS4pjDssEq0EdDUtUaOXgsMmBW4Fu293+ngSZHjJ9vrUXLvjz7OCUmAYGn+jbIktsJnNYYAuSGVB7@vger.kernel.org, AJvYcCXjV/5VKLFN2sc4aL06Ij7HeWUd41CB4agiEtJjHCSE2wY11nfSNnmW/Ff2VMIIyQLTpWFY4YfRnRoDw28Cmne2/ik=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBRjEmIZqKR20V8s7Ub8Zy73B/trypsI+C0QLbMLnQKMRoMTVL
-	1LeYotCFGpPDGhQ4vW0+ncMeTIUTjJVT7Z6P1cZQ9YpQwreg4MuOcIr3
-X-Gm-Gg: ASbGncu2SfQgqBlg3uo2cKgqJRQQ3NzsrUTx2qYu2S8hqjOJnSXV5DXIwTmc1vwCOge
-	raFAuE+BfYAtd2PPqHJvcsXtCOTU6VLAXGdQK7n+3tEyGWYrPguzLrE6fZeXabNQqtih+FNFB3N
-	aShDXV0aSMzA76PcCTm/aCcdPTF0B5ATu7YwvICWD7CfOf/CmA5Qoxu1h0NGZg1aEN4aHZMYy4U
-	qE4VZwn3xa0MvJxafHfsfLAN0XhnqF6za8eAjI19qGgeFyZEcmhgMmWYMM1kmSmpOz28usa0xy/
-	0G4mpm/oixuo8mmP92cfj1AKIjwNZdLotSiSYG9OVQufakKh9RXa
-X-Google-Smtp-Source: AGHT+IHMZuSWOKsTMSLZmzfCpaFbJLJni2pvDaktkoMtYDLwAW4d5/C5udr2MOFQXAO1MEX/izqVJA==
-X-Received: by 2002:a05:6a21:3941:b0:1f5:a3e8:64dd with SMTP id adf61e73a8af0-216f85c6d15mr41220130637.0.1747955210798;
-        Thu, 22 May 2025 16:06:50 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:4e98:8fc0:fed2:bab1])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a9829b9dsm11725405b3a.88.2025.05.22.16.06.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 May 2025 16:06:50 -0700 (PDT)
-Date: Thu, 22 May 2025 16:06:47 -0700
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+	s=arc-20240116; t=1747958305; c=relaxed/simple;
+	bh=dV3C3FSrxga/xMlaTuycKD+t44FmP/fFjl0D/jaskrI=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=XdkVx+qR+/waux6U92fJHZuqK7+HRYGG0pGWbQTu2ai+WpbPrGAevbUyLm0rffwSX/2JxpkSG/JYQ7GcPtPwd2fKvSEeD12godE3AaRxEbprGI6I++8pqQMGHi2+L9/jh06Hv9v7bMmufkJLrWIVLJ/l3G4vaGGalQ1a6fv1LV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cMN4/M0u; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 851CAC4CEE4;
+	Thu, 22 May 2025 23:58:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747958304;
+	bh=dV3C3FSrxga/xMlaTuycKD+t44FmP/fFjl0D/jaskrI=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=cMN4/M0uuru6Q0ypAj2/G1GQUL0nJHe940pvPoPvRbBLxllEspVn6vzqTI+Nh40Ac
+	 aBesyPoA/iDAau2AaqX3ERK2eFldtXEP9MZouZVX20JzQuNYskF6e4oYLpXtgZ+j2Q
+	 jVxqn5MaqMO/g3cNbovljVniBl2UQdEZG2Xe9gL1O1hr7WZsee2tfhm8lDTg3jRHEM
+	 ATPGK/xmp3Sl1mnOUTI6NeRLyJI+pKx0HIi6lpnhRC+dXnKFBtd+QcSUmrFWxyXklR
+	 JpYKZz3Mdfcpr1GawBrPkGwPO9YitIsGMi+T6ZdtiB2KsqrKaUWo+9LDak41jKlZaK
+	 b3QYLbJR0EyQg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33C303805D89;
+	Thu, 22 May 2025 23:59:01 +0000 (UTC)
+Subject: Re: [GIT PULL] pmdomain fixes for v6.15-rc8
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20250522223843.171621-1-ulf.hansson@linaro.org>
+References: <20250522223843.171621-1-ulf.hansson@linaro.org>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20250522223843.171621-1-ulf.hansson@linaro.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.15-rc3
+X-PR-Tracked-Commit-Id: 0f5757667ec0aaf2456c3b76fcf0c6c3ea3591fe
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 94305e83eccb3120c921cd3a015cd74731140bac
+Message-Id: <174795833977.3061927.107906031204643619.pr-tracker-bot@kernel.org>
+Date: Thu, 22 May 2025 23:58:59 +0000
 To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Jonathan Cameron <jic23@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, dakr@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org, geert@linux-m68k.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	linux-iio@vger.kernel.org, bhelgaas@google.com
-Subject: Re: [PATCH] driver core: platform: Use devres group to free driver
- probe resources
-Message-ID: <hd3hobuaunmn2uqzl72yv7nz2ms25fczc264wmt6o7twrxdhsy@mm22ujnawutc>
-References: <CAPDyKFqMB7XutXba73YHx1X4rm6uc3Fz6yMZ8yM=wgduEmgUDg@mail.gmail.com>
- <a20fc6ee-c6c3-4013-b175-4918b9a44380@tuxon.dev>
- <CAPDyKFpbeLJUiB_xQbqDib+-8Q3AcJNVg+DuEcqmVGMbFdNxwA@mail.gmail.com>
- <fgl4w5uhxci7rrbdigtni72vveb2gqemh6iccz4qruqkek5rja@rzwkcjg6hkid>
- <3b1963ba-f93f-48f2-8fb0-a485dd80ffcb@tuxon.dev>
- <CAPDyKFqrAS4iV59S-zJ9H7_3VuGr9JdZABhfUGBwTzQNDCasaw@mail.gmail.com>
- <482b55c9-a210-4b2d-8405-e9f30d48a8fd@tuxon.dev>
- <CAPDyKFpLF2P438GGWSgbXzpT7JNdUjtZ2ZxYf1_4=fNUX3s-KQ@mail.gmail.com>
- <4fzotopz57igmiyssgkogfbup6uu7qgza3t53t5qsouegmj7ii@wfiz4g3eiffs>
- <CAPDyKFoxs6wDCLp5EGHVqkqSstBLNmngps2KfanRezV_EN8tuA@mail.gmail.com>
+Cc: Linus <torvalds@linux-foundation.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>, linux-arm-kernel@lists.infradead.org
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFoxs6wDCLp5EGHVqkqSstBLNmngps2KfanRezV_EN8tuA@mail.gmail.com>
 
-On Fri, May 23, 2025 at 12:09:08AM +0200, Ulf Hansson wrote:
-> On Thu, 22 May 2025 at 20:47, Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
-> >
-> > On Thu, May 22, 2025 at 06:28:44PM +0200, Ulf Hansson wrote:
-> > > On Thu, 22 May 2025 at 16:08, Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
-> > > >
-> > > > Hi, Ulf,
-> > > >
-> > > > On 22.05.2025 14:53, Ulf Hansson wrote:
-> > > > >
-> > > > > That said, I think adding a devm_pm_domain_attach() interface would
-> > > > > make perfect sense. Then we can try to replace
-> > > > > dev_pm_domain_attach|detach() in bus level code, with just a call to
-> > > > > devm_pm_domain_attach(). In this way, we should preserve the
-> > > > > expectation for drivers around devres for PM domains. Even if it would
-> > > > > change the behaviour for some drivers, it still sounds like the
-> > > > > correct thing to do in my opinion.
-> > > >
-> > > > This looks good to me, as well. I did prototype it on my side and tested on
-> > > > all my failure cases and it works.
-> > >
-> > > That's great! I am happy to help review, if/when you decide to post it.
-> >
-> > So you are saying you'd be OK with essentially the following (with
-> > devm_pm_domain_attach() actually being elsewhere in a real patch and not
-> > necessarily mimicked by devm_add_action_or_reset()):
-> 
-> Correct!
-> 
-> >
-> > diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-> > index cfccf3ff36e7..1e017bfa5caf 100644
-> > --- a/drivers/base/platform.c
-> > +++ b/drivers/base/platform.c
-> > @@ -1376,6 +1376,27 @@ static int platform_uevent(const struct device *dev, struct kobj_uevent_env *env
-> >         return 0;
-> >  }
-> >
-> > +
-> > +static void platform_pm_domain_detach(void *d)
-> > +{
-> > +       dev_pm_domain_detach(d, true);
-> > +}
-> 
-> Well, I would not limit this to the platform bus, even if that is the
-> most widely used.
-> 
-> Let's add the new generic interface along with
-> dev_pm_domain_attach|detach* and friends instead.
-> 
-> Then we can convert bus level code (and others), such as the platform
-> bus to use it, in a step-by-step approach.
+The pull request you sent on Fri, 23 May 2025 00:38:43 +0200:
 
-Right, this was only a draft:
+> git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.15-rc3
 
-"... with devm_pm_domain_attach() actually being elsewhere in a real
-patch and not necessarily mimicked by devm_add_action_or_reset() ..."
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/94305e83eccb3120c921cd3a015cd74731140bac
 
-> 
-> > +
-> > +static int devm_pm_domain_attach(struct device *dev)
-> > +{
-> > +       int error;
-> > +
-> > +       error = dev_pm_domain_attach(dev, true);
-> > +       if (error)
-> > +               return error;
-> > +
-> > +       error = devm_add_action_or_reset(dev, platform_pm_domain_detach, dev);
-> > +       if (error)
-> > +               return error;
-> > +
-> > +       return 0;
-> > +}
-> > +
-> >  static int platform_probe(struct device *_dev)
-> >  {
-> >         struct platform_driver *drv = to_platform_driver(_dev->driver);
-> > @@ -1396,15 +1417,12 @@ static int platform_probe(struct device *_dev)
-> >         if (ret < 0)
-> >                 return ret;
-> >
-> > -       ret = dev_pm_domain_attach(_dev, true);
-> > +       ret = devm_pm_domain_attach(_dev);
-> >         if (ret)
-> >                 goto out;
-> >
-> > -       if (drv->probe) {
-> > +       if (drv->probe)
-> >                 ret = drv->probe(dev);
-> > -               if (ret)
-> > -                       dev_pm_domain_detach(_dev, true);
-> > -       }
-> >
-> >  out:
-> >         if (drv->prevent_deferred_probe && ret == -EPROBE_DEFER) {
-> > @@ -1422,7 +1440,6 @@ static void platform_remove(struct device *_dev)
-> >
-> >         if (drv->remove)
-> >                 drv->remove(dev);
-> > -       dev_pm_domain_detach(_dev, true);
-> >  }
-> >
-> >  static void platform_shutdown(struct device *_dev)
-> >
-> >
-> > If so, then OK, it will work for me as well. This achieves the
-> > same behavior as with using devres group. The only difference is that if
-> > we ever need to extend the platform bus to acquire/release more
-> > resources they will also have to use devm API and not the regular one.
-> 
-> Sounds reasonable to me! Thanks for a nice discussion!
-> 
-> When it comes to the devm_pm_runtime_enable() API, I think we
-> seriously should consider removing it. Let me have a closer look at
-> that.
-
-I think once we sort out the power domain detach being out of order with
-regard to other devm-managed resources in bus code you need to analyze
-this again and you will find out that much as with IRQs, devm API for
-runtime PM is useful for majority of cases. Of course there will be
-exceptions, but by and large it will cut down on boilerplate code.
-
-Thanks.
+Thank you!
 
 -- 
-Dmitry
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
