@@ -1,106 +1,151 @@
-Return-Path: <linux-pm+bounces-27585-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27586-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FCF0AC25D1
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 17:03:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DABFAC260D
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 17:10:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1ED4C1785B4
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 15:02:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 076A47BD446
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 15:09:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C44F296D0D;
-	Fri, 23 May 2025 15:02:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D673B29615B;
+	Fri, 23 May 2025 15:10:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JKnv+jZT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R3dWmpa+"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20A2296731;
-	Fri, 23 May 2025 15:02:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD02296157;
+	Fri, 23 May 2025 15:10:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748012563; cv=none; b=DCteN7LvnWiAxmmsrad7Ss2j4ueTggFtpvBve3I7xX7kZOKf7CkBP7QQ+dJ3OOip/SNv+V8GZLV3E6OtuK47LJBb5t+JRMjU5nBbnZY1sfnvF8+JhAEIAqfbow72kQqIadKWljjXQqWQsA3x9GqRVOfqkR3aOjoc+Grf2iDme3Q=
+	t=1748013039; cv=none; b=tbeUqBQHEGYVYjv1uNaJ5E97ULxqBD9e2hs6sd2u6vfE6NTmV+fU6OOUnOA+e6c6O777DNxkcIAojjWVTSSyOiYtyj6IYBHw/6gedPu4DPwa+OBPfJpHDtEr1rtgq1mD7Uz3njc4vOEb+HCdqnRDHQaKvQCWm7IuBpOVL76z/e4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748012563; c=relaxed/simple;
-	bh=yeEwoT8PzEjoyanP7MaGg6wH0I3SAEbIqeSO/slYwaY=;
+	s=arc-20240116; t=1748013039; c=relaxed/simple;
+	bh=1ZER5+aBDnuBoSCbc6x2pQIeNK9vhs5kJnMpDiT/9fs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JFAu3XCLSLNE7TFSW7jwEXr0FlrqUSExwryLZwAqcu5idjnUgl7kz9s+B6xkMctfWAFjPoaem4P4lAPdyktj//pMR9H/pRsfVNN6EAOj9lTnrTBuhumc70GpHavfrJKl2qwT6xS0EtqakPCG+D8LaIgzYv69mxmWZbXDFh/KYAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JKnv+jZT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E187C4CEF1;
-	Fri, 23 May 2025 15:02:42 +0000 (UTC)
+	 To:Cc:Content-Type; b=DQRQAzeiNFjScrGKw7sgBi4SvwimTEt07UH/P4Hj5iC3TztWhjepYyx9b5KVtKKRvI4ltr7T3eli1dEoJVkdIQAv3YFdyrNv64B1ehivHfIl0dz+uTHRUqZQ6hk1iWKVpXQvydhaFtmkaCK4qPobsH68Nzf2/w3oIpehq10BWs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R3dWmpa+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 252A0C4AF09;
+	Fri, 23 May 2025 15:10:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748012562;
-	bh=yeEwoT8PzEjoyanP7MaGg6wH0I3SAEbIqeSO/slYwaY=;
+	s=k20201202; t=1748013039;
+	bh=1ZER5+aBDnuBoSCbc6x2pQIeNK9vhs5kJnMpDiT/9fs=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=JKnv+jZT8uo3dhabyWrkSyfdLyXDRjwH7dxFnjtZt9tDxK25ZdSga/Hijv2WlMYD4
-	 zkWYpP+bJusHqgBJ3qBm0iUN+8u6g/fp01mppelKjMTA9RfhIQwJsBK+kzA9fZXiD+
-	 QPMyS5tl5SZrcKY7Btdbbk1AQwyEBhl79rhF6pTHDSC4wF2mdYIAMjcWO8DemnbF1i
-	 a8WJWU9XoFPwdmFnu9tG1NY53u1WYzDUwwEaAg2+PdFvNhufSq2TpBlrjRSZRMDGzT
-	 qyhUX6Xit5LFeT4RJhW23+5SjM7f1LPzogeiQVIg002wfnNkoMrylG87PNzcUVokb4
-	 stIZxgvuB9OAA==
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-606668f8d51so24318eaf.0;
-        Fri, 23 May 2025 08:02:42 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUC2aRsfpmMkd2t84wgJ5SE++M+HWvobnHWCloFV23KORtw8lEVoEnY8rEFIvu54hqNDNTUSQkr43A=@vger.kernel.org, AJvYcCVkmjO4Lmc0uQ0Tau9U+tVwykSa7ppxKREc8NBbCFY2EUqDu8UjUcMuRQjWqLc1dJHJK7gRrPF67dUC+qT4C54=@vger.kernel.org, AJvYcCXy1Vi97/5tkzbHuqvVGn53/BTxYaeu5wAasp3vXb7WppSh49+FoZlPbC/N+1Cmmdz7QGIs5kOwbwnu8YvH@vger.kernel.org
-X-Gm-Message-State: AOJu0YzotEhw+voetqzvKcHHAfd9Y3UIOfGLfvGg+3M1WCniBsw2zUVw
-	sofP7rSe9WwHU81aLXrMf3eOjVs1GZ9g+4DTc1uYK0YaK7MPa07rAkXQExeIqMJbbiiPNFydCWj
-	SHKD0STPfaDi+HYS8e0mZoJkAHI80NFw=
-X-Google-Smtp-Source: AGHT+IH9Y4wLz5/pJ6ZzxN0hDwbYbOJN5QHqil4L+lAF31fYQ2PwzTFhe6cQLrw8+MzkeTje+8/0rG2DUGdVZRYsTdc=
-X-Received: by 2002:a05:6820:206:b0:603:f809:ce19 with SMTP id
- 006d021491bc7-60b93fc575amr2521581eaf.3.1748012561774; Fri, 23 May 2025
- 08:02:41 -0700 (PDT)
+	b=R3dWmpa+N6hoP1CvxOlu7roVfC0AUxUOaWgjSz6F494dkA8FOYefcqv5UB1NzwZqI
+	 NbukgXJpjvESBL9dVUh6NlIes4velVCUs5su850T1sl52Dmeifsa2c8EBEloJRbdgt
+	 zs87hovmw6rFkT2ijz8y+ZnIwVUpbhKQXjPIdSCeu3LhX83OwlUhc1su8/qpqUCXgN
+	 K3jVsNwrXv5GK+PzERDd4xLEg1OyrJqkWg8VWBiPKJrbMInRBqTVuwYUONpwhENcoJ
+	 2un1sIrEbTflbMxGT55N4D5xeBoVh8FznJ5XCcy0olhkVsGMe4o5/nCuduLOsiARth
+	 fenNjjSFxf9Vg==
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3fbaa18b810so22716b6e.2;
+        Fri, 23 May 2025 08:10:39 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV2Wqj9E2oQTx5upBLO7tOFraiYeixFKlIBWvmx2z532Wd9TrlJwEcPOgpbvmEgZKNdZmX+xgylB3HrRzA=@vger.kernel.org, AJvYcCWXock+oX5vtrMpGH3H4ffVmpClh53KpIhYnTIVTLswEUAaM8ISAfdnb/xqZPFgm5lwTZ0Ny7ibYEE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynjSOEzWk1Ef9aI+ZrTWXaqIVFVdZOvZctGsnqW3WybygbJUWM
+	HZvu84qBmUrcvaaeGJpzpofI8YNQulNjZ5TZmpBcYTxR84HXmt78Rd2iXxpR06pHX+h+6i9r1+1
+	Z3QyeYPzYK5ISnx/4MJPXEl5/ViJHPl8=
+X-Google-Smtp-Source: AGHT+IGxAsxnD6gRCOZG/OvzSCsWfF12hBV27JMmE4jSskt0tjlXticiu9aTvNs0YstL5t0Yzc58hit/7oCtAlCQmNE=
+X-Received: by 2002:a05:6808:2f0d:b0:403:31a4:f406 with SMTP id
+ 5614622812f47-404da735919mr19019904b6e.10.1748013038448; Fri, 23 May 2025
+ 08:10:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250522083157.1957240-1-colin.i.king@gmail.com>
-In-Reply-To: <20250522083157.1957240-1-colin.i.king@gmail.com>
+References: <20250516084011.29309-1-tuhaowen@uniontech.com> <20250523085645.17695-1-tuhaowen@uniontech.com>
+In-Reply-To: <20250523085645.17695-1-tuhaowen@uniontech.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 23 May 2025 17:02:30 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iE6LtKcDHiV88z3E11c_qhuWyoS4n0XjwGesdduDfDKg@mail.gmail.com>
-X-Gm-Features: AX0GCFvSZPSsva3B90BZAwDIdj_iwZcxnJNROkMIUQJGlpaB3GGbyzorS7URnMw
-Message-ID: <CAJZ5v0iE6LtKcDHiV88z3E11c_qhuWyoS4n0XjwGesdduDfDKg@mail.gmail.com>
-Subject: Re: [PATCH][next] thermal/drivers/airoha: Fix spelling mistake
- "calibrarion" -> "calibration"
-To: Colin Ian King <colin.i.king@gmail.com>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
-	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Fri, 23 May 2025 17:10:27 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jazfh7A8-6werFtsQ=XOYzDioYh19p4S4v=0to2Na4Hw@mail.gmail.com>
+X-Gm-Features: AX0GCFvuvqReknQ5QffB20GDXZFmKM5klmigewjIpnkzgVP6BJSMJXA1EGYV_H8
+Message-ID: <CAJZ5v0jazfh7A8-6werFtsQ=XOYzDioYh19p4S4v=0to2Na4Hw@mail.gmail.com>
+Subject: Re: [PATCH v2 RESEND] PM/console: Fix the black screen issue
+To: tuhaowen <tuhaowen@uniontech.com>
+Cc: pavel@kernel.org, len.brown@intel.com, rafael@kernel.org, 
+	huangbibo@uniontech.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, wangyuli@uniontech.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 22, 2025 at 10:32=E2=80=AFAM Colin Ian King <colin.i.king@gmail=
-.com> wrote:
+On Fri, May 23, 2025 at 10:57=E2=80=AFAM tuhaowen <tuhaowen@uniontech.com> =
+wrote:
 >
-> There is a spelling mistake in a dev_info message. Fix it.
+> When the computer enters sleep status without a monitor
+> connected, the system switches the console to the virtual
+> terminal tty63(SUSPEND_CONSOLE).
 >
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> If a monitor is subsequently connected before waking up,
+> the system skips the required VT restoration process
+> during wake-up, leaving the console on tty63 instead of
+> switching back to tty1.
+>
+> To fix this issue, a global flag vt_switch_done is introduced
+> to record whether the system has successfully switched to
+> the suspend console via vt_move_to_console() during suspend.
+>
+> If the switch was completed, vt_switch_done is set to 1.
+> Later during resume, this flag is checked to ensure that
+> the original console is restored properly by calling
+> vt_move_to_console(orig_fgconsole, 0).
+>
+> This prevents scenarios where the resume logic skips console
+> restoration due to incorrect detection of the console state,
+> especially when a monitor is reconnected before waking up.
+>
+> Signed-off-by: tuhaowen <tuhaowen@uniontech.com>
 > ---
->  drivers/thermal/airoha_thermal.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Changes in v2:
+> - Added explanation in the commit message on how the issue is fixed.
+> - Link to v1: https://lore.kernel.org/all/20250516034643.22355-1-tuhaowen=
+@uniontech.com
+> ---
+>  kernel/power/console.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 >
-> diff --git a/drivers/thermal/airoha_thermal.c b/drivers/thermal/airoha_th=
-ermal.c
-> index 9a7a702a17de..b9fd6bfc88e5 100644
-> --- a/drivers/thermal/airoha_thermal.c
-> +++ b/drivers/thermal/airoha_thermal.c
-> @@ -352,7 +352,7 @@ static void airoha_thermal_setup_adc_val(struct devic=
-e *dev,
->                 priv->default_offset =3D airoha_get_thermal_ADC(priv);
->                 priv->default_slope =3D EN7581_SLOPE_X100_DIO_DEFAULT;
->                 priv->init_temp =3D EN7581_INIT_TEMP_NONK_X10;
-> -               dev_info(dev, "missing thermal calibrarion EFUSE, using n=
-on calibrated value\n");
-> +               dev_info(dev, "missing thermal calibration EFUSE, using n=
-on calibrated value\n");
->         }
+> diff --git a/kernel/power/console.c b/kernel/power/console.c
+> index fcdf0e14a47d..832e04bf5439 100644
+> --- a/kernel/power/console.c
+> +++ b/kernel/power/console.c
+> @@ -16,6 +16,7 @@
+>  #define SUSPEND_CONSOLE        (MAX_NR_CONSOLES-1)
+>
+>  static int orig_fgconsole, orig_kmsg;
+> +static int vt_switch_done;
+
+Better use bool for this.
+
+Thanks!
+
+>
+>  static DEFINE_MUTEX(vt_switch_mutex);
+>
+> @@ -136,15 +137,19 @@ void pm_prepare_console(void)
+>         if (orig_fgconsole < 0)
+>                 return;
+>
+> +       vt_switch_done =3D 1;
+> +
+>         orig_kmsg =3D vt_kmsg_redirect(SUSPEND_CONSOLE);
+>         return;
 >  }
 >
+>  void pm_restore_console(void)
+>  {
+> -       if (!pm_vt_switch())
+> +       if (!pm_vt_switch() && !vt_switch_done)
+>                 return;
+>
+> +       vt_switch_done =3D 0;
+> +
+>         if (orig_fgconsole >=3D 0) {
+>                 vt_move_to_console(orig_fgconsole, 0);
+>                 vt_kmsg_redirect(orig_kmsg);
 > --
-
-Applied as 6.16 material, thanks!
+> 2.20.1
+>
 
