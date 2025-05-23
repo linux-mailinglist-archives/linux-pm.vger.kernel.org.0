@@ -1,52 +1,52 @@
-Return-Path: <linux-pm+bounces-27555-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27559-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4D28AC2308
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 14:52:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF249AC2312
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 14:52:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51D154A41C2
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 12:52:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA5004E06E9
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 12:52:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 703BE49620;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAC09146D45;
 	Fri, 23 May 2025 12:52:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oBVE8BCi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TXnmkCKz"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3910978F43;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D9383AC1C;
 	Fri, 23 May 2025 12:52:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748004725; cv=none; b=aHXxuqrC3ECeU34lwtVkIzBi8ru4Rdktw3ZpuDxiS/O3oTiLI/Zk0H21/Pbgvf88JTzVzVSyHlX0aG3drTwkj/KHNISa4eACxY8sZo4TP/HmGCVyf5jE+5ORaF4wz1bZnzoGeHOos5SrJYOyV0geNKdf+VHlzQcWuF6iXz/I9zA=
+	t=1748004725; cv=none; b=VFSjZnxWb4sMl4sNfLLQTfwTX23mrTCV7MqcdGtXuZJKnVyu2hWl7aM+fDoWxA8ZcBdgv2uDCY/hvvTbp15zZAJl2ShuAq65zrZTOLfxWPIiiaT0l/tx2R0DaEinQZGWeCG/cpE3q8SZHVNjNny9OmpfACu4SbUJGmkSRz5f9uQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1748004725; c=relaxed/simple;
-	bh=+XmnqJafyQcwrFJLxADUPwTUQffXYM+rCbOQP3MIijo=;
+	bh=NveI/c5xQaxOP/723CwcVzN8aFWHOag/eGc7TuodKC8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Fgfv/+F6BN4SeZQwlXx1rwdRujO1a32EFF1vD9eN36RowGQD8zW5iUuQEd55OsRdFyTd60wJvt0QVkMCBzrwcINyE0Qm7EoU79PpV6dPVXKfvqx0cSC+J0j2a6qMSFSQrY9GA+oYVq/jTXEoQFSAENc5Ed0Yei+J4nRTGBA+teM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oBVE8BCi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D5B87C4CEF0;
+	 In-Reply-To:To:Cc; b=ijo2gxP6wxjj7DXR5y2dEzR7+8aTYlD4fr65cmJB1MHH9qsNos1O9YGH7UTj/cIegaW47UFoX4MIw/WHDos+HtLEGm+yNIvLp7J/4u32crcgsBTFJpk5ty8qUDbCWc/z/PvlrApN29z26HEb+4VSQKNkAmirrpnGaLo8Udw9aI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TXnmkCKz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E3201C4CEF4;
 	Fri, 23 May 2025 12:52:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748004724;
-	bh=+XmnqJafyQcwrFJLxADUPwTUQffXYM+rCbOQP3MIijo=;
+	s=k20201202; t=1748004725;
+	bh=NveI/c5xQaxOP/723CwcVzN8aFWHOag/eGc7TuodKC8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=oBVE8BCiedbQZmqp8ydR09me2y6vC0t5yriDFz1OA85eO//lIWAVwrUAmsKfbrcjL
-	 4u6sSPGbuemZQqKdd11EQwLQvVoJmS/GIG1GJmHQnQBgvUuS0YoJFIcXdG7irvFO36
-	 yUBCGnNB/iSUhMyVmqw2DLMtjjNbW+WsvefOgT6gpB+DLRoi4wKigds8f1kupn3Npx
-	 66Owu0+eMabPalIGeBq1n2Jtt78A/rhYo9CXxD1IbtWbQ9j7mxZx5tqRVklsUHzW78
-	 yneM2dxK5TQWE8UCgLQje8qkoO5noCkN/CNYaRYaKqVXyJStbynUqdTK52bIyjXrqh
-	 bhbcELqoZqvag==
+	b=TXnmkCKz9hGSfTZovLeW2UjOICio8LoJ6TTxFV7e/3mhMKar9XQLj+eP0ADCF7C7t
+	 BnFbyWRaRA5ffbqZ2lKd9HtyudivcnB/a2W/0E1qQLp6tlkYItl7R8kYDLHl5SHZ41
+	 khU/8/gjRY7k3onKkhAoPCBG5t7pJNHdclvFmTIoaFKMMHPDuWwMC0rbcSkHaDeNnP
+	 eWMx3T6IfqvcO/DYS0rdJlojh80nwk+fB545yYKou7wPK/8zVgVeRGj7iNsKbmTREP
+	 zValZAlmoZfBf30yGsLC1PYwZ02qjOJMn67Fa5hB0wCVHdMXzQdepdw3Fg/WFXPP8q
+	 SCfqVOFC5c+xw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8434C54F32;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5447C54F30;
 	Fri, 23 May 2025 12:52:04 +0000 (UTC)
 From: Thomas Antoine via B4 Relay <devnull+t.antoine.uclouvain.be@kernel.org>
-Date: Fri, 23 May 2025 14:51:45 +0200
-Subject: [PATCH v4 2/5] power: supply: add support for max77759 fuel gauge
+Date: Fri, 23 May 2025 14:51:46 +0200
+Subject: [PATCH v4 3/5] dt-bindings: power: supply: add max77759-fg flavor
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -54,8 +54,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250523-b4-gs101_max77759_fg-v4-2-b49904e35a34@uclouvain.be>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250523-b4-gs101_max77759_fg-v4-3-b49904e35a34@uclouvain.be>
 References: <20250523-b4-gs101_max77759_fg-v4-0-b49904e35a34@uclouvain.be>
 In-Reply-To: <20250523-b4-gs101_max77759_fg-v4-0-b49904e35a34@uclouvain.be>
 To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -70,11 +70,11 @@ Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  linux-samsung-soc@vger.kernel.org, Thomas Antoine <t.antoine@uclouvain.be>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1748004727; l=13610;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1748004727; l=2682;
  i=t.antoine@uclouvain.be; s=20241202; h=from:subject:message-id;
- bh=ujei8+tGZ04eLfSz9q7hY0k7LCQPXJItSoaGVV8nRgo=;
- b=9vgiT8M/epyDvKxCRwTGKAOFRL8AmgjeJ5rsSoC3syzW4zqHss38aagiqZiFx6Tv07Te5L4UL
- ajaCthh6PqpCE/LIiNpIcjH885o7ua3yWfmjOKmE2zPsLBBVixjE/o+
+ bh=GU2WoKOxlaWJoWfEaZr2bJ8lw3s+AOWQv0h8uwcwC90=;
+ b=1zMV5uiw+xStEJWY23TLxuRPfW60BpaXrb6tMzTSEz/FqhcXCpWyL8y858ymE4+QoyVLSt7Fu
+ iIKgAx0Q2TYCrw1JC4VQmzIV0StD/KwzRrwQOyp3yvofsr+hC59GTRu
 X-Developer-Key: i=t.antoine@uclouvain.be; a=ed25519;
  pk=sw7UYl31W1LTpgWRiX4xIF5x6ok7YWZ6XZnHqy/d3dY=
 X-Endpoint-Received: by B4 Relay for t.antoine@uclouvain.be/20241202 with
@@ -84,429 +84,101 @@ Reply-To: t.antoine@uclouvain.be
 
 From: Thomas Antoine <t.antoine@uclouvain.be>
 
-The interface of the Maxim MAX77759 fuel gauge has a lot of common with the
-Maxim MAX1720x. A major difference is the lack of non-volatile memory
-slave address. No slave is available at address 0xb of the i2c bus, which
-is coherent with the following driver from google: line 5836 disables
-non-volatile memory for m5 gauge.
+The Maxim MAX77759 is an IC used to manage the power supply of the battery
+and the USB-C. Based on drivers from google, it contains at least a PMIC,
+a fuel gauge, a TCPCI and a charger.
 
-Link: https://android.googlesource.com/kernel/google-modules/bms/+/1a68c36bef474573cc8629cc1d121eb6a81ab68c/max1720x_battery.c
+Use max77759-fg compatible to avoid conflict with drivers for other
+functions.
 
-Other differences include the lack of V_BATT register to read the battery
-level. The voltage must instead be read from V_CELL, the lowest voltage of
-all cells. The mask to identify the chip is different. The computation of
-the charge must also be changed to take into account TASKPERIOD, which
-can add a factor 2 to the result.
+The Maxim MAX77759 has no non-volatile memory so it doesn't require an
+address and instead requires a value for the current sensing resistor.
 
-Add support for the MAX77759 by taking into account all of those
-differences based on chip type.
-
-Do not advertise temp probes using the non-volatile memory as those are
-not available.
-
-The regmap was proposed by André Draszik in
-
-Link: https://lore.kernel.org/all/d1bade77b5281c1de6b2ddcb4dbbd033e455a116.camel@linaro.org/
+Keep shunt-resistor-micro-ohms optional for the MAX17201/MAX17205 as it is
+not be used at the moment but could be in the future. (e.g. as a default
+value to be used in case of nvmem failure)
 
 Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
 ---
- drivers/power/supply/max1720x_battery.c | 265 ++++++++++++++++++++++++++++----
- 1 file changed, 238 insertions(+), 27 deletions(-)
+ .../bindings/power/supply/maxim,max17201.yaml      | 42 ++++++++++++++++++++--
+ 1 file changed, 39 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/power/supply/max1720x_battery.c b/drivers/power/supply/max1720x_battery.c
-index 68b5314ecf3a234f906ec8fe400e586855b69cd9..c9ad452ada9d0a2a51f37d04fd8c3260be522405 100644
---- a/drivers/power/supply/max1720x_battery.c
-+++ b/drivers/power/supply/max1720x_battery.c
-@@ -37,6 +37,7 @@
- #define MAX172XX_REPCAP			0x05	/* Average capacity */
- #define MAX172XX_REPSOC			0x06	/* Percentage of charge */
- #define MAX172XX_TEMP			0x08	/* Temperature */
-+#define MAX172XX_VCELL			0x09	/* Lowest cell voltage */
- #define MAX172XX_CURRENT		0x0A	/* Actual current */
- #define MAX172XX_AVG_CURRENT		0x0B	/* Average current */
- #define MAX172XX_FULL_CAP		0x10	/* Calculated full capacity */
-@@ -54,15 +55,28 @@
- #define MAX172XX_BATT			0xDA	/* Battery voltage */
- #define MAX172XX_ATAVCAP		0xDF
+diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max17201.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max17201.yaml
+index fe3dd9bd5585618e45220c51023391a5b21acfd2..2fb826b4b160eb9abe6604185ac2192447d90b8c 100644
+--- a/Documentation/devicetree/bindings/power/supply/maxim,max17201.yaml
++++ b/Documentation/devicetree/bindings/power/supply/maxim,max17201.yaml
+@@ -9,13 +9,11 @@ title: Maxim MAX17201 fuel gauge
+ maintainers:
+   - Dimitri Fedrau <dima.fedrau@gmail.com>
  
-+#define MAX77759_DEV_NAME_TYPE_MASK	GENMASK(15, 9)
-+#define MAX77759_DEV_NAME_TYPE_MAX77759	0x31
-+#define MAX77759_TASKPERIOD		0x3C
-+#define MAX77759_TASKPERIOD_175MS	0x1680
-+#define MAX77759_TASKPERIOD_351MS	0x2D00
-+
- static const char *const max1720x_manufacturer = "Maxim Integrated";
- static const char *const max17201_model = "MAX17201";
- static const char *const max17205_model = "MAX17205";
-+static const char *const max77759_model = "MAX77759";
-+
-+enum chip_id {
-+	MAX1720X_ID,
-+	MAX77759_ID,
-+};
- 
- struct max1720x_device_info {
- 	struct regmap *regmap;
- 	struct regmap *regmap_nv;
- 	struct i2c_client *ancillary;
- 	int rsense;
-+	enum chip_id id;
- };
- 
- /*
-@@ -271,6 +285,80 @@ static const enum power_supply_property max1720x_battery_props[] = {
- 	POWER_SUPPLY_PROP_MANUFACTURER,
- };
- 
-+/*
-+ * Registers 0x80 up to 0xaf which contain the model for the fuel gauge
-+ * algorithm (stored in nvmem for the max1720x) are locked. They can
-+ * be unlocked by writing 0x59 to 0x62 and 0xc4 to 0x63. They should be
-+ * enabled in the regmap if the driver is extended to manage the model.
-+ */
-+static const struct regmap_range max77759_registers[] = {
-+	regmap_reg_range(0x00, 0x4f),
-+	regmap_reg_range(0xb0, 0xbf),
-+	regmap_reg_range(0xd0, 0xd0),
-+	regmap_reg_range(0xdc, 0xdf),
-+	regmap_reg_range(0xfb, 0xfb),
-+	regmap_reg_range(0xff, 0xff),
-+};
-+
-+static const struct regmap_range max77759_ro_registers[] = {
-+	regmap_reg_range(0x3d, 0x3d),
-+	regmap_reg_range(0xfb, 0xfb),
-+	regmap_reg_range(0xff, 0xff),
-+};
-+
-+static const struct regmap_access_table max77759_write_table = {
-+	.no_ranges = max77759_ro_registers,
-+	.n_no_ranges = ARRAY_SIZE(max77759_ro_registers),
-+};
-+
-+static const struct regmap_access_table max77759_rd_table = {
-+	.yes_ranges = max77759_registers,
-+	.n_yes_ranges = ARRAY_SIZE(max77759_registers),
-+};
-+
-+static const struct regmap_config max77759_regmap_cfg = {
-+	.reg_bits = 8,
-+	.val_bits = 16,
-+	.max_register = 0xff,
-+	.wr_table = &max77759_write_table,
-+	.rd_table = &max77759_rd_table,
-+	.val_format_endian = REGMAP_ENDIAN_LITTLE,
-+	.cache_type = REGCACHE_NONE,
-+};
-+
-+static const enum power_supply_property max77759_battery_props[] = {
-+	POWER_SUPPLY_PROP_PRESENT,
-+	POWER_SUPPLY_PROP_CAPACITY,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-+	POWER_SUPPLY_PROP_CHARGE_FULL,
-+	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-+	POWER_SUPPLY_PROP_CHARGE_AVG,
-+	POWER_SUPPLY_PROP_TEMP,
-+	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_CURRENT_AVG,
-+	POWER_SUPPLY_PROP_MODEL_NAME,
-+	POWER_SUPPLY_PROP_MANUFACTURER,
-+};
-+
-+
-+struct chip_data {
-+	bool has_nvmem;
-+	const struct regmap_config *regmap_cfg;
-+	enum chip_id id;
-+};
-+
-+static const struct chip_data max1720x_data  = {
-+	.has_nvmem = true,
-+	.regmap_cfg = &max1720x_regmap_cfg,
-+	.id = MAX1720X_ID,
-+};
-+
-+static const struct chip_data max77759_data = {
-+	.has_nvmem = false,
-+	.regmap_cfg = &max77759_regmap_cfg,
-+	.id = MAX77759_ID,
-+};
-+
- /* Convert regs value to power_supply units */
- 
- static int max172xx_time_to_ps(unsigned int reg)
-@@ -288,12 +376,41 @@ static int max172xx_voltage_to_ps(unsigned int reg)
- 	return reg * 1250;	/* in uV */
- }
- 
-+static int max172xx_cell_voltage_to_ps(unsigned int reg)
-+{
-+	return reg * 625 / 8;	/* in uV */
-+}
-+
- static int max172xx_capacity_to_ps(unsigned int reg,
- 				   struct max1720x_device_info *info)
- {
- 	return reg * (500000 / info->rsense);	/* in uAh */
- }
- 
-+static int max77759_capacity_lsb(struct max1720x_device_info *info,
-+				 unsigned int *lsb)
-+{
-+	unsigned int reg_task_period;
-+	int ret;
-+
-+	ret = regmap_read(info->regmap, MAX77759_TASKPERIOD, &reg_task_period);
-+	if (ret < 0)
-+		return ret;
-+
-+	switch (reg_task_period) {
-+	case MAX77759_TASKPERIOD_175MS:
-+		*lsb = 1;
-+		break;
-+	case MAX77759_TASKPERIOD_351MS:
-+		*lsb = 2;
-+		break;
-+	default:
-+		return -ENODEV;
-+	}
-+
-+	return 0;
-+}
-+
- /*
-  * Current and temperature is signed values, so unsigned regs
-  * value must be converted to signed type
-@@ -390,16 +507,36 @@ static int max1720x_battery_get_property(struct power_supply *psy,
- 		val->intval = max172xx_percent_to_ps(reg_val);
- 		break;
- 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
--		ret = regmap_read(info->regmap, MAX172XX_BATT, &reg_val);
--		val->intval = max172xx_voltage_to_ps(reg_val);
-+		if (info->id == MAX1720X_ID) {
-+			ret = regmap_read(info->regmap, MAX172XX_BATT, &reg_val);
-+			val->intval = max172xx_voltage_to_ps(reg_val);
-+		} else if (info->id == MAX77759_ID) {
-+			ret = regmap_read(info->regmap, MAX172XX_VCELL, &reg_val);
-+			val->intval = max172xx_cell_voltage_to_ps(reg_val);
-+		} else
-+			return -ENODEV;
- 		break;
- 	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
- 		ret = regmap_read(info->regmap, MAX172XX_DESIGN_CAP, &reg_val);
-+		if (ret < 0)
-+			return ret;
-+
- 		val->intval = max172xx_capacity_to_ps(reg_val, info);
-+		if (info->id == MAX77759_ID) {
-+			ret = max77759_capacity_lsb(info, &reg_val);
-+			val->intval *= reg_val;
-+		}
- 		break;
- 	case POWER_SUPPLY_PROP_CHARGE_AVG:
- 		ret = regmap_read(info->regmap, MAX172XX_REPCAP, &reg_val);
-+		if (ret < 0)
-+			return ret;
-+
- 		val->intval = max172xx_capacity_to_ps(reg_val, info);
-+		if (info->id == MAX77759_ID) {
-+			ret = max77759_capacity_lsb(info, &reg_val);
-+			val->intval *= reg_val;
-+		}
- 		break;
- 	case POWER_SUPPLY_PROP_TIME_TO_EMPTY_AVG:
- 		ret = regmap_read(info->regmap, MAX172XX_TTE, &reg_val);
-@@ -423,16 +560,35 @@ static int max1720x_battery_get_property(struct power_supply *psy,
- 		break;
- 	case POWER_SUPPLY_PROP_CHARGE_FULL:
- 		ret = regmap_read(info->regmap, MAX172XX_FULL_CAP, &reg_val);
-+		if (ret < 0)
-+			return ret;
-+
- 		val->intval = max172xx_capacity_to_ps(reg_val, info);
-+		if (info->id == MAX77759_ID) {
-+			ret = max77759_capacity_lsb(info, &reg_val);
-+			val->intval *= reg_val;
-+		}
- 		break;
- 	case POWER_SUPPLY_PROP_MODEL_NAME:
- 		ret = regmap_read(info->regmap, MAX172XX_DEV_NAME, &reg_val);
--		reg_val = FIELD_GET(MAX172XX_DEV_NAME_TYPE_MASK, reg_val);
--		if (reg_val == MAX172XX_DEV_NAME_TYPE_MAX17201)
--			val->strval = max17201_model;
--		else if (reg_val == MAX172XX_DEV_NAME_TYPE_MAX17205)
--			val->strval = max17205_model;
--		else
-+		if (ret < 0)
-+			return ret;
-+
-+		if (info->id == MAX1720X_ID) {
-+			reg_val = FIELD_GET(MAX172XX_DEV_NAME_TYPE_MASK, reg_val);
-+			if (reg_val == MAX172XX_DEV_NAME_TYPE_MAX17201)
-+				val->strval = max17201_model;
-+			else if (reg_val == MAX172XX_DEV_NAME_TYPE_MAX17205)
-+				val->strval = max17205_model;
-+			else
-+				return -ENODEV;
-+		} else if (info->id == MAX77759_ID) {
-+			reg_val = FIELD_GET(MAX77759_DEV_NAME_TYPE_MASK, reg_val);
-+			if (reg_val == MAX77759_DEV_NAME_TYPE_MAX77759)
-+				val->strval = max77759_model;
-+			else
-+				return -ENODEV;
-+		} else
- 			return -ENODEV;
- 		break;
- 	case POWER_SUPPLY_PROP_MANUFACTURER:
-@@ -527,7 +683,6 @@ static int max1720x_probe_nvmem(struct i2c_client *client,
- 		.priv = info,
- 	};
- 	struct nvmem_device *nvmem;
--	unsigned int val;
- 	int ret;
- 
- 	info->ancillary = i2c_new_ancillary_device(client, "nvmem", 0xb);
-@@ -549,18 +704,6 @@ static int max1720x_probe_nvmem(struct i2c_client *client,
- 		return PTR_ERR(info->regmap_nv);
- 	}
- 
--	ret = regmap_read(info->regmap_nv, MAX1720X_NRSENSE, &val);
--	if (ret < 0) {
--		dev_err(dev, "Failed to read sense resistor value\n");
--		return ret;
--	}
+-allOf:
+-  - $ref: power-supply.yaml#
 -
--	info->rsense = val;
--	if (!info->rsense) {
--		dev_warn(dev, "RSense not calibrated, set 10 mOhms!\n");
--		info->rsense = 1000; /* in regs in 10^-5 */
--	}
--
- 	nvmem = devm_nvmem_register(dev, &nvmem_config);
- 	if (IS_ERR(nvmem)) {
- 		dev_err(dev, "Could not register nvmem!");
-@@ -570,6 +713,38 @@ static int max1720x_probe_nvmem(struct i2c_client *client,
- 	return 0;
- }
+ properties:
+   compatible:
+     oneOf:
+       - const: maxim,max17201
++      - const: maxim,max77759-fg
+       - items:
+           - enum:
+               - maxim,max17205
+@@ -25,11 +23,18 @@ properties:
+     items:
+       - description: ModelGauge m5 registers
+       - description: Nonvolatile registers
++    minItems: 1
++    maxItems: 2
  
-+static int max1720x_get_rsense(struct device *dev,
-+			       struct max1720x_device_info *info,
-+			       const struct chip_data *data)
-+{
-+	unsigned int val;
-+	int ret;
+   reg-names:
+     items:
+       - const: m5
+       - const: nvmem
++    minItems: 1
++    maxItems: 2
 +
-+	if (data->has_nvmem) {
-+		ret = regmap_read(info->regmap_nv, MAX1720X_NRSENSE, &val);
-+		if (ret < 0) {
-+			dev_err(dev, "Failed to read RSense from nvmem\n");
-+			return ret;
-+		}
-+
-+		info->rsense = val;
-+		if (!info->rsense) {
-+			dev_warn(dev, "RSense not calibrated, set 10 mOhms!\n");
-+			info->rsense = 1000; /* in regs in 10^-5 */
-+		}
-+	} else {
-+		ret = device_property_read_u32(dev, "shunt-resistor-micro-ohms",
-+					       &val);
-+		if (ret) {
-+			dev_err(dev, "Failed to read RSense from devicetree\n");
-+			return ret;
-+		}
-+		info->rsense = val / 10;
-+	}
-+
-+	return 0;
-+}
-+
- static const struct power_supply_desc max1720x_bat_desc = {
- 	.name = "max1720x",
- 	.no_thermal = true,
-@@ -579,32 +754,67 @@ static const struct power_supply_desc max1720x_bat_desc = {
- 	.get_property = max1720x_battery_get_property,
- };
++  shunt-resistor-micro-ohms:
++    description: The value of current sense resistor in microohms.
  
-+static const struct power_supply_desc max77759_bat_desc = {
-+	.name = "max77759-fg",
-+	.no_thermal = true,
-+	.type = POWER_SUPPLY_TYPE_BATTERY,
-+	.properties = max77759_battery_props,
-+	.num_properties = ARRAY_SIZE(max77759_battery_props),
-+	.get_property = max1720x_battery_get_property,
-+};
-+
- static int max1720x_probe(struct i2c_client *client)
- {
- 	struct power_supply_config psy_cfg = {};
- 	struct device *dev = &client->dev;
- 	struct max1720x_device_info *info;
- 	struct power_supply *bat;
-+	const struct chip_data *data;
-+	const struct power_supply_desc *bat_desc;
- 	int ret;
+   interrupts:
+     maxItems: 1
+@@ -39,6 +44,37 @@ required:
+   - reg
+   - reg-names
  
- 	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
- 	if (!info)
- 		return -ENOMEM;
++allOf:
++  - $ref: power-supply.yaml#
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - maxim,max17201
++    then:
++      properties:
++        reg:
++          minItems: 2
++        reg-names:
++          minItems: 2
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - maxim,max77759-fg
++    then:
++      properties:
++        reg:
++          maxItems: 1
++        reg-names:
++          maxItems: 1
++      required:
++        - shunt-resistor-micro-ohms
++
+ unevaluatedProperties: false
  
-+	data = device_get_match_data(dev);
-+	if (!data)
-+		return dev_err_probe(dev, -EINVAL, "Failed to get chip data\n");
-+
- 	psy_cfg.drv_data = info;
- 	psy_cfg.fwnode = dev_fwnode(dev);
--	psy_cfg.attr_grp = max1720x_groups;
-+
-+	switch (data->id) {
-+	case MAX1720X_ID:
-+		psy_cfg.attr_grp = max1720x_groups;
-+		bat_desc = &max1720x_bat_desc;
-+		break;
-+	case MAX77759_ID:
-+		bat_desc = &max77759_bat_desc;
-+		break;
-+	default:
-+		return dev_err_probe(dev, -EINVAL, "Unsupported chip\n");
-+	}
-+
- 	i2c_set_clientdata(client, info);
--	info->regmap = devm_regmap_init_i2c(client, &max1720x_regmap_cfg);
-+
-+	info->id = data->id;
-+	info->regmap = devm_regmap_init_i2c(client, data->regmap_cfg);
- 	if (IS_ERR(info->regmap))
- 		return dev_err_probe(dev, PTR_ERR(info->regmap),
- 				     "regmap initialization failed\n");
- 
--	ret = max1720x_probe_nvmem(client, info);
-+	if (data->has_nvmem) {
-+		ret = max1720x_probe_nvmem(client, info);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "Failed to probe nvmem\n");
-+	}
-+
-+	ret = max1720x_get_rsense(dev, info, data);
- 	if (ret)
--		return dev_err_probe(dev, ret, "Failed to probe nvmem\n");
-+		return ret;
- 
--	bat = devm_power_supply_register(dev, &max1720x_bat_desc, &psy_cfg);
-+	bat = devm_power_supply_register(dev, bat_desc, &psy_cfg);
- 	if (IS_ERR(bat))
- 		return dev_err_probe(dev, PTR_ERR(bat),
- 				     "Failed to register power supply\n");
-@@ -613,7 +823,8 @@ static int max1720x_probe(struct i2c_client *client)
- }
- 
- static const struct of_device_id max1720x_of_match[] = {
--	{ .compatible = "maxim,max17201" },
-+	{ .compatible = "maxim,max17201", .data = (void *) &max1720x_data },
-+	{ .compatible = "maxim,max77759-fg", .data = (void *) &max77759_data },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, max1720x_of_match);
+ examples:
 
 -- 
 2.49.0
