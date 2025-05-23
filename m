@@ -1,118 +1,121 @@
-Return-Path: <linux-pm+bounces-27587-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27588-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F9B1AC2614
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 17:12:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FE58AC2619
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 17:14:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFBFC17BBC8
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 15:12:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 506363AC2E1
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 15:14:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B684296D04;
-	Fri, 23 May 2025 15:12:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA866296723;
+	Fri, 23 May 2025 15:14:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="owPxhH+D"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BAxOtxvk"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 059AC296731
-	for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 15:12:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93524294A04;
+	Fri, 23 May 2025 15:14:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748013172; cv=none; b=NDbQSijqnvGYZZasyaCBwk8y5IOU5rWD+wltVrCXqnb6Ywj7KuqAJ0U6gMhfh/WY9xXabbxc+EaoKbJqAc6RiLXv+bSh4N8yzeoA5SrLZaXsyndy0K14jcXZhI4jrcKGplHL8nN/ouACcOHbfWf4xmztGMDXCWioM2u+b+yYFvI=
+	t=1748013270; cv=none; b=JDtu62Z7DMFrULsUYmIjYHnQYh26ZAQrEDPT5aH/ws/Ve0Hes1JulfQ9yT9+hPK0HBUbB0g3DFVHZsUBEsQPSyP//rNgalaTnOMerYTQy+Rz1R0T8nN03lQFEpsesrkLpfAFh2MYmU16o7EtOw2JNIovlqOOUqvkP10NCpEw0cM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748013172; c=relaxed/simple;
-	bh=5vYFfJe6MTZ02v7Xzf4QUVyqeeVnh3mj0iuKh2VTyPc=;
+	s=arc-20240116; t=1748013270; c=relaxed/simple;
+	bh=0Qw66rc7PmkxBXsDw/t2zc/4z3MAFYfxOMkORRxiylc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mMUucTMckd4dL/ZXSOqhYSFFF8ASbYa+MMVtdWx+9ARr69TvcEez4OCYOrCG6sjvUAI/QcuVEJJ7m6Gy7eI5pJCsMlCMojBZEwcOfP/SaXHiuakd3Bjh+k/GCR/MVMgsquaWaRswL8CfUJiplVDHHL9NYD/g5QyeT3k6FxjoD4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=owPxhH+D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63541C4CEF1
-	for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 15:12:51 +0000 (UTC)
+	 To:Cc:Content-Type; b=LVplnKzNkeB/uswLLWCpyeDxV8KFuRnbdMITymgWbtnmk7wFGo8+4cP4bzOA2GvVQEZQTTMiKoSBIefu1cfEyz/8A9ZEjEHY89bQcqVLtQEa+dZnd6hmuae5i4rEw5tc8bMMBaAuQrKjw7iIHWaFlv8GKgNIo4bk7gXZdouY/EM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BAxOtxvk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DCADC4CEE9;
+	Fri, 23 May 2025 15:14:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748013171;
-	bh=5vYFfJe6MTZ02v7Xzf4QUVyqeeVnh3mj0iuKh2VTyPc=;
+	s=k20201202; t=1748013270;
+	bh=0Qw66rc7PmkxBXsDw/t2zc/4z3MAFYfxOMkORRxiylc=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=owPxhH+DwbbxLImQIHlliZFVyDN0xnN0ftsxskZzjV8XqAK6BwExwCu1B1DOti3/2
-	 HA4FwtiGNrAdVto1X1rC+dS9XfoyPu1XtbHVoP03V86zv1qza89UGYxcOcBEsrcdA3
-	 pVXVwpGGxay98oGZcd1c48K6H9IetvEtQbSKWEce4vJeSKU1LFK+GbFskFsR+x1lY4
-	 1CvFACq38O2MsCaiqfcQnq8HJ79jvJnDg9Ec6De5ea7K3CRdLVee/qOrt5ip4Z92hC
-	 co1yoAF6gpd9GWBB42UytzRdpHUEVzgXljgENBBKX9NpLKyA/43kTVjbvQ7DsTjatx
-	 We69prCLHAOJA==
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-609e7f27c66so12691eaf.0
-        for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 08:12:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWcIQF5S1bIJSqia7SzFoACZUsIzktpTDRwP9sKLKxcx2NODbwSSm4KV2j7rGE+nlvd9nqI4HLc3w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXlN0w6U9IPZSbsNZuNa3pfuj4GPM2mUwXwYV71FzImr0J//Ij
-	IAhekQbDND+r/fYgW4WllPVxX0tApssEuU95l7uf46U3oqBhOoXjIWM0mrD4lMSPA97P1UppXJ1
-	G/6Xhr9NO2OF4IpmN69yYQ9IR66gy9TY=
-X-Google-Smtp-Source: AGHT+IHM5eBmOOKMsXnRBdxwfNqS24cWsMGg0nYIaPVTSbRgbom5+Y1t/HRMAboiubwHNpSEo/W0U+jMp5b7fyo78Cg=
-X-Received: by 2002:a05:6820:188e:b0:603:fada:ac53 with SMTP id
- 006d021491bc7-609f48de6e9mr17710092eaf.2.1748013170701; Fri, 23 May 2025
- 08:12:50 -0700 (PDT)
+	b=BAxOtxvkHqlhntoG02uY9XO9rTEmZVz7VCzQw+Sn+nWw8DrYgF9cRe7y+xR0imvFT
+	 4vGAcM5M42BOyMoYLbexs+NK7P3alZaeQ/aAeTDCS7u49zvOxWzRka1ym3DMSAkwa9
+	 ah+ajsmdjU7yfsV3K7aQ9mcaiGvW5HAdjSTOfm5E5AFXAByegyGft1WwUbFaXfIZlO
+	 iDGQGDD0ERMwgP9x0OEshMRqQvw9fsrUcyhGMPAfJCK2cTmufulKvjWp/wka44h+pN
+	 ZQf3zYUAxch4Efq9GFUkbRO5QulmhfV9u3+4JQ4gBv9JjtaxCq7bliKz/76cg8MI1e
+	 hshD+0JMm7ccQ==
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-60b8a9be972so11577eaf.1;
+        Fri, 23 May 2025 08:14:30 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUY/mNuXuKbhGItXqet4TodSa8elVa8s60FDgYgRZILFFmyP7JHJkJ84abalWKpji+K4uxlZEm5y29I5OA=@vger.kernel.org, AJvYcCWyaCFGFzurdzjV2is0g2HLyfZJKfxvkYA9/pKjXnnz6P93br69N0v4RIWGDQUwcqRx1YDT9vSiEvg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyANx0ZA2T1+aNIPdNnuqG1ND91UrJFXb1Bi0jHxK4uyMdfSHqL
+	6uI6p5kOH8k5DYfDuFUWnYn7t5zpYBN0odNV8YBi+1TpJlZrcP8AoZKV1ksgG/i+/v1pt6nBNVh
+	+FVQl2/j/cG0MCgGTWqVcqeqYNx3FHYc=
+X-Google-Smtp-Source: AGHT+IHgbeaYJujl+cfbxuxc1QsSxMsWo29Cf9GRGctriPfjo9YYNXi5dgreqXSQN0lHqPMLs4yiPndPUAFqAJ1KsAM=
+X-Received: by 2002:a05:6820:1990:b0:605:f34d:7e00 with SMTP id
+ 006d021491bc7-609f376c5c0mr18879038eaf.7.1748013269433; Fri, 23 May 2025
+ 08:14:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250523072239.181371-1-qiwu.chen@transsion.com>
-In-Reply-To: <20250523072239.181371-1-qiwu.chen@transsion.com>
+References: <20250523034253.88083-1-zhangzihuan@kylinos.cn>
+In-Reply-To: <20250523034253.88083-1-zhangzihuan@kylinos.cn>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 23 May 2025 17:12:39 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0io7ZrzA1nJLoJx5e+0rUFACzvOaxBTEy2-jTNQRL3XYQ@mail.gmail.com>
-X-Gm-Features: AX0GCFvOIaRl7DTY4ydxjgbh2yKUXn1ngWUMhciHuAEzPoWz89srqnbytkizWA0
-Message-ID: <CAJZ5v0io7ZrzA1nJLoJx5e+0rUFACzvOaxBTEy2-jTNQRL3XYQ@mail.gmail.com>
-Subject: Re: [PATCH v2] cpuidle: add tracepoint for s2idle flow
-To: "qiwu.chen" <qiwuchen55@gmail.com>
-Cc: rafael@kernel.org, daniel.lezcano@linaro.org, linux-pm@vger.kernel.org, 
-	"qiwu.chen" <qiwu.chen@transsion.com>
+Date: Fri, 23 May 2025 17:14:18 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0j7i1zbcR7Tv4zNDzR8__keq3bV2m1BZJCS0-cxT8Da4Q@mail.gmail.com>
+X-Gm-Features: AX0GCFvM-eoDysKXc8iJBisS9rMmvxIADQatA2sZ0L8nAWQSXFVSvvpxzo6Au1Y
+Message-ID: <CAJZ5v0j7i1zbcR7Tv4zNDzR8__keq3bV2m1BZJCS0-cxT8Da4Q@mail.gmail.com>
+Subject: Re: [PATCH v2] PM / Freezer: Skip dead/zombie processes
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Cc: rafael@kernel.org, len.brown@intel.com, pavel@kernel.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 23, 2025 at 9:22=E2=80=AFAM qiwu.chen <qiwuchen55@gmail.com> wr=
-ote:
+On Fri, May 23, 2025 at 5:44=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylinos.c=
+n> wrote:
 >
-> Add the tracepoint cpu_idle in enter_s2idle_proper() for tracing
-> the s2idle enter and exit events with a determined idle state.
+> ZOMBIE (exit_state =3D=3D EXIT_ZOMBIE) and DEAD (exit_state =3D=3D EXIT_D=
+EAD)
+> processes have already finished execution and will not be scheduled again=
+.
 >
-> Signed-off-by: qiwu.chen <qiwu.chen@transsion.com>
+> In the context of system suspend (e.g., S3), attempting to freeze such
+> processes is unnecessary. Moreover, freezing them can obscure suspend
+> diagnostics and delay resume if they appear "stuck" in logs.
+>
+> This patch introduces an early check for `p->exit_state !=3D 0` in
+> `try_to_freeze_tasks()` and skips freezing for such tasks. This is a safe
+> optimization because:
+>
+>  - They hold no running resources
+>  - Their `task_struct` is only waiting to be collected or freed
+>
+> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
 >
 > Changes in v2:
-> - fix the build warning reported by kernel test robot in v1:
-> https://lore.kernel.org/all/20250520030922.9505-1-qiwu.chen@transsion.com=
-/
+> - Simplified code, added judgment of dead processes
+> - Rewrite changelogs
 > ---
->  drivers/cpuidle/cpuidle.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  kernel/power/process.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-> index 0835da449db8..9dca6a63e4ad 100644
-> --- a/drivers/cpuidle/cpuidle.c
-> +++ b/drivers/cpuidle/cpuidle.c
-> @@ -149,6 +149,7 @@ static noinstr void enter_s2idle_proper(struct cpuidl=
-e_driver *drv,
+> diff --git a/kernel/power/process.c b/kernel/power/process.c
+> index 66ac067d9ae6..82528a79d46a 100644
+> --- a/kernel/power/process.c
+> +++ b/kernel/power/process.c
+> @@ -51,7 +51,7 @@ static int try_to_freeze_tasks(bool user_only)
+>                 todo =3D 0;
+>                 read_lock(&tasklist_lock);
+>                 for_each_process_thread(g, p) {
+> -                       if (p =3D=3D current || !freeze_task(p))
+> +                       if (p =3D=3D current || p->exit_state || !freeze_=
+task(p))
+>                                 continue;
 >
->         instrumentation_begin();
->
-> +       trace_cpu_idle(index, dev->cpu);
->         time_start =3D ns_to_ktime(local_clock_noinstr());
->
->         tick_freeze();
-> @@ -174,6 +175,7 @@ static noinstr void enter_s2idle_proper(struct cpuidl=
-e_driver *drv,
->         start_critical_timings();
->
->         time_end =3D ns_to_ktime(local_clock_noinstr());
-> +       trace_cpu_idle(PWR_EVENT_EXIT, dev->cpu);
->
->         dev->states_usage[index].s2idle_time +=3D ktime_us_delta(time_end=
-, time_start);
->         dev->states_usage[index].s2idle_usage++;
+>                         todo++;
 > --
 
-This is a bit too late for 6.16, please resubmit when 6.16-rc1 is released.
+This is a bit too late for 6.16, please resubmit when 6.16-rc1 is out.
 
 Thanks!
 
