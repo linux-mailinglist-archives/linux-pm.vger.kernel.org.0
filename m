@@ -1,245 +1,128 @@
-Return-Path: <linux-pm+bounces-27619-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27620-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADF17AC2B83
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 23:47:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A26EBAC2B9E
+	for <lists+linux-pm@lfdr.de>; Sat, 24 May 2025 00:03:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA5637A16F5
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 21:46:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E0F37BB660
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 22:01:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 685E5202F79;
-	Fri, 23 May 2025 21:47:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FA4820E717;
+	Fri, 23 May 2025 22:02:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MzQXetTV"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="m/m32+DA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+Received: from sonic312-20.consmr.mail.sg3.yahoo.com (sonic312-20.consmr.mail.sg3.yahoo.com [106.10.244.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973C63D76;
-	Fri, 23 May 2025 21:47:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E7AB20E012
+	for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 22:02:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=106.10.244.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748036854; cv=none; b=BRV0z2ezXVonB4YCvzQxhIr2OGaSgBHy8EIyxbG2RDR4bM9Ajj7t3NsgW+X7Ef2imtL89gdwr5zHCckmXr/tZksb0MhhaGrNresov90XyD+FL4A2LnmlN5mMGRADftKj1eAdG3gYGPz1bhRHQK6E3reh9Mj+ODc0XoxLTkU+Lqg=
+	t=1748037773; cv=none; b=AkXm4dXPrnEu8G9jpw0tEpkrS1oRvzahFha9jkCHNvBLVyr/ZeGITTtBBRwuGaoiQwJHhbdqOmonaapmJKKBlTXFC4T675mcydxe6stzu8FmOgVJFsriMlOEagjTLi7KRT+fyqFvmV8nknQWe5JWUqu8xyiHhE+2snUQ5uyNnUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748036854; c=relaxed/simple;
-	bh=fhPAlDbOG5HyAawH7JLmusZbx+86SF4MxmwX95wKXpE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oWEsBAJTxo1evYrAjIZeV1SmkoELMvIJMN14Mr9L13kCTr8NmO5KD7BzqopG7ruNgkETAREKIBMDFRNgYETz9LCRGVNfxocVylNwLd9PP+6amyzQcAzkZJlHrWJzfPJu+Z8PfXl/7+/I1iEBwG53RWV2wlTfblHlnBwmVqwvBF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MzQXetTV; arc=none smtp.client-ip=209.85.219.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e7c5d470a8bso303263276.0;
-        Fri, 23 May 2025 14:47:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748036850; x=1748641650; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hGy2ccPh/CViJ6eWW2JFWtauMqcjGtl82E9Hd+SYN9U=;
-        b=MzQXetTVgIdXoVhRfXcUheyruR9DI+cnqCZ+0OmkhI++cNMDiWszNU/9ADJHvlf3Gk
-         MDM18mYSbC0fa0gZ1Dt7cvwLKIZLLLyHEjiWGAfPAV5Xw4mqaUATGL3R0i1BO0hkGSA3
-         DBghrLlTtQ5CV7VijPJ4ogp+4iLHRl1udX/vVFWkDGpw1Yb3f4gxE0BWxKpi+b+CI7Lv
-         f9p5fOwiVUyk5DZG97LkwqudI/3aJjuz/t5D6vbjRLIEozb2moaCMj6058PX2L8LtIEZ
-         cgsiVJ/vth8F9lXo81Wo7aBBz/K1tSJ2r7CO2cZinKrSWr90hDn+d/6HSalHLML71vM6
-         cqwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748036850; x=1748641650;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hGy2ccPh/CViJ6eWW2JFWtauMqcjGtl82E9Hd+SYN9U=;
-        b=IiV/mS6RqnLDFQZPrCReejPGwInTbEKmVipQFoZTj2124BwWrTu7JWHdm6J+QIPe6v
-         6XUR7YNb6dvUSIo4cciRxjzcvOgMu78y2PPzHkebHu30SAykMBclyVxawsR7xyT80G4v
-         bY/PjSspGFeS/bNU7QdQTidGDGVM0EaCvjA9L314wH0Oqp4aVkKGD1pZWRV7Wy3iSfpI
-         WJv7raioANJszX9wgtgoVYrk17kZdWBoyhlKvgNOqDNdvKzun6gMRav+nF0jBRiknmv2
-         WC0403ufLoxLi2KbEpeTXoKieiTmJ5A5BlwRKWPWXYIgTq6VZTT4AVN2tJx7nCpaGmHt
-         UVPg==
-X-Forwarded-Encrypted: i=1; AJvYcCWftpNZgBmQSHZ07T5rEEOjvlsA345/D5TOn7Zd+LcfN4pApthf7cKmd5sCD+71axzgNo+k+D+wz/Q=@vger.kernel.org, AJvYcCXaXucLMoWdUszwiDsQy27hEY3AxGNuEXb4h6VTaBXs0YT0GfKWhbHI/L1Oht9NxExE3c6HFccMWmo=@vger.kernel.org, AJvYcCXmpAgliCdGayUg/ujCjX4dUrdWeQGgTfuQy+KP3MIPogdkJKqLBR0bAxa2ZXNRBFcijG4wz5tkrjj6PefB@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/FrrE/KjB3Y93Oxzc7B+4VEqh5H9MkVu0Pwt53r+uTMX4Daqn
-	mU7M7TWfjgS4BFP3Ayvj+3KDRuBeRszUCYznyLgKmqT43zEzUuqGkqqU
-X-Gm-Gg: ASbGncux/zTVdSPCz7z3/R+rb083VbZjRg+FkZWw2kotjGDiPl4bXIS/u2eNt3JrLEJ
-	pGUCl3YMa5JMJW+fBF7SeJJE0+tLkUICD8dCmZJq8fY6p601BL8lcTsly+pe+/5GlLU80ebuqOn
-	I2pZ3qYhK18g/WmSVLGXTJCqMAFWR7sYB1/1sSA0bDnABVbwBa6GdtZtCMvn6NnG9p7Nfxd5V8x
-	d1L8uFCt8dGmooGDycJFqmN/cmz2YN00cwFqe2DzFipQhqqnqHVHMJ4KFba7P8r/VDUcrmlVLOd
-	6f5gtlJgTv5F7mg4lxVlaLH++B76aXLObEz+llJOHiArSK19RjCxPJ45gRUFSJjlg4Y=
-X-Google-Smtp-Source: AGHT+IEK2ofhGIZM2ngoU8KxP4VorOYY4yaj08SlJ8NBjEZfjg6fX/L29sdxg6et0J1FWHwQ+3AfUA==
-X-Received: by 2002:a05:6902:1587:b0:e7d:6ee0:17ac with SMTP id 3f1490d57ef6-e7d9176d4c3mr1400817276.9.1748036850364;
-        Fri, 23 May 2025 14:47:30 -0700 (PDT)
-Received: from ?IPV6:2600:6c56:7d00:582f::64e? ([2600:6c56:7d00:582f::64e])
-        by smtp.googlemail.com with ESMTPSA id 3f1490d57ef6-e7b6adcce03sm5506559276.50.2025.05.23.14.47.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 May 2025 14:47:29 -0700 (PDT)
-Message-ID: <60d84153-9ccf-45c1-8b5b-71d51a59aacd@gmail.com>
-Date: Fri, 23 May 2025 16:47:28 -0500
+	s=arc-20240116; t=1748037773; c=relaxed/simple;
+	bh=Ld8sSIiOdoLEcRyi37iPeIWW6gGFZx0wcF07f5OOJjQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=i3I2DdKjlkW9KrnHOlhfE/eaQvcDD06xyrmGb0jKw/nmU4vwWfvvgLXp/4z89swgXvxlpDcjNOUf50BTLz+u2ouNQEIgP34l9A6j0/7yZYxC/MprmffeZ9T45qgqAGhZTTf8PlkFdTLblEPbeDgt1KWjwtlhSVwMIBZSot+A7JU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com; spf=pass smtp.mailfrom=yahoo.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=m/m32+DA; arc=none smtp.client-ip=106.10.244.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yahoo.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1748037764; bh=g3PopIJDq4T11kCNZlSkgS3dVhWsotgsaLpI5IrDYXM=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=m/m32+DAmfjk50P13ks2sQc5Bg8j837NKnqrFP7wF5hhhr21BoqO4MmndJH6+cOW9wkqMKY7gBy3NNtOyG9FnbdDNDAG67m5KHVNqOZr3mzofj8clKehJxst/NX7yfeCuTKh0GpV5lcPUMgiYL9+6wKoAzVm/xCkwLbKL+iCKadOb0hYKX+xD+3TEd+0T3dc2gkCs7wbtiN7eC3yc8SWabFCxGMH+PMMi3IOrFd9u+sMWCBXWmqJVl0ww14bddQqUSZQAGE1fNZb718Z/He+n0KvJUE+HyXeexTV+QchiCLka4LQNo4B9aIGFXT/fBF6pNn46ex4IVGF6aRE1N0dbQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1748037764; bh=vm7jqXRtyiY/E2jBsscGxMWqT7WbgvMDmjyx01HkGXW=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=NdFhrYlarKNd/N7XmbpFQNgO9JrFPbUEFjbsGtnGZKg7KwQuYZq825FxzBLK1GzVV9Ach/f3nJR+1N42JUA51fY+nqWnijxMruWm1q2p+xD0QTIgGOFxjKRVfyJgPRftR+7JjJ7IxSY4r2O6ftjpspjup5XBVodypO3rN3zaIR+vZm2Di8ZvlkRZFaneXJOLd54NbZRWEnOmSd8ChM0i8pFdnO1yOrn2RN6Di63p2bgFq62tnxIy5boje8Su92ksk9X+8TiZ0FGDF50QZ1wTZprisiTxLis23/b+3fIrD0bFTM62uI4AI+EE0/hbAigEBAexJIF2pTMP8zan4PiJpg==
+X-YMail-OSG: t2vWDoAVM1nTGRJePXqMaqHw5ro0JZjImZWOmVPpZCuaXqbvED8lbDVuChKK0hK
+ zwcISGhEn3mrvO75CYouml876pPept6QRUcUbaIvMtgvG_5ehdA_45BdXSQKKA5K1IrSYabp9_Es
+ x4ZRFMn_Ay9BKWmMpH.ZSoztJrU449blbDONS8uVP66FeZ9nKNU5JF7XDpl6Ihc0Rarr9x7nkkye
+ 3fTk7xsGIWUEZDUKYKhJRvcAw0LpPaciGIaJ0VSCS9jnotXQvkQrtXmiHFBA6OGxMxhHEosdZOqm
+ xlgepOYDwHQY20f1VEkbeBSOhov708T56wVZPHS1j5gB9MaSB0JgFBejPnJ0HeUchyzIJQzLLlrT
+ cO1N_c4wWzgU6Zwoa9YgRltR5oDiSwHMr8pwI1aZJYFddsrMxFsQdVfiwnJRkvni_vKBvOzFe4gw
+ wUZYDnb9yevLN9OkEsrYnpFUnW.hBZGhBOiiehJLzpQHaur92RqLEi8ZYRKrPjWBVPOK0QHQ8iBB
+ jh3PaIdiY45iVHIan8gMJpEkyRjAwv37WFD5.3h02lY2bI5oVuOYHeIi32Joh795hcdWEbp5hfnw
+ tBXgOORQpfikKV0bCB4JmebvB.UGl3JLtxj2taog4gflr0kVhy1QjRxtlHhPOUNcVleh29L6LQsY
+ da8kGQ8Z.qpO1W8Nedef.ASsscaoq6TJv2YABCAuBECPEYrnW7uteo1wRlhlplE47Thu2krqs_qN
+ 8g9IOnBqfzT46qla5E4gGdNQwxDfgCa4GzGbp0r.J8WxInqcVzxw86U75h93HRJfh7_L3xrfOJOr
+ MXAtOf.bLFemO7E6KBYgejSURI5.0JGQpunhSCh4Tgtks7XTZgDrHtme40Py2xKuSHBfIbZ.V08O
+ _IzdGg0y028DkZ6l3FXJo2anz5l.4kNf4XvJpnCiXNUHXt8wFCUsbwQtSM3jUoI_BkyLU9FpK3ei
+ p0OhykuIzyoa_844bado_gCPPac.05Jz65wMqZ0Cmn6QpZ.pdZH0UNB4.59Of9J9q8c0fhz8nLJo
+ .OrdUCBUGVTOoiv5zw9bYwEe7Of2yIt1lnyL3uji91Ordjuzba6exZBrmCNUKBw9xv00Ut6cWKsp
+ fjzeEDSXov6EeirBjZFEgj6aVS3.iI7zeHAZzk26DRgg_Z23lW1FhHNVH8BB1z3r.C8MYka7.mqV
+ CkZYxk5.hkZM5jRdfGTqxqtEYmNyFTWFkiTO_X9VQnXaV8DetkWJZoyXqvJqTSHW_vM3BLmEEoAp
+ H2kQFfc23.7sp6FoCBvmOICfqG1DF8LJjljgyD59X3G1xevomTHKdwDe3dmR49f.i1ytVH3L8PoE
+ 3uFMOYGFKwCSw3rTlCpvTyupGGX6gse1qAIfDPP.rY7M24JQkxKHYcyvpGmuxB8pdghF4piZM5dA
+ Lmad9XfJueeaqYXu_DM1qqEzUXTCXgwpO6dS1tu9F4F67o251Dt91CdFJmic_P.__9GGulcCES4S
+ EdETlk2EuV_ODaEB19TXU2ns.1CjTxOl2GbaG63tW9142qOO4VG1aT.4QqcPt.FKb34xyUmWJL0Y
+ aI_DmCp00OtHh9d6hAqINxCLRxLQpNmuQ.9SxdxK4FQKVcUX5vkOJuwNioeGb9dlMge39GOV_Agc
+ jToAHUpK35AWClE2VVAMuEK3Hx5OLBIBS49r3SF7Y8wLl0AIdAKFQmKnHScJbxtmCLfrrj9EBliB
+ 6GxKOZbewPskw2K1anB4D8qFumdCUY4DyvH4gbWGSlh9TTemwhS1L46rzOH9Afp74ZpzWmt.SgNy
+ rNykpRP_nVacv.zgG7nRTR08kawIl3FepNtpGA0yJ8FmJjxqPYV88HxRH2y1V0vCf60__dzAYQF_
+ Pk11kJguxF5aFSLT6P1MGRuATyVXmk7Owdsa7UsoIaPezR4z2Uiy6hgCOLczAO1M6A00LLJX3qJd
+ IHqubOIx6FcNFCfd7fG_4SqwBs5Zq6w69deatiB3L4PLgdsv_BDPo16srr2Zc9JMbbTS58e7KIVM
+ smxAnbtzJnOVNA8FlVKOAK9WY2tvObaSdkcOvUL_AdR7bCJQUhmUyBeY4SDBtCBojqG5tQJsnZW8
+ GU0RfTppkZFIckP7kzbgnaD71ivWPA7XFsOykdlPW_Rt8xVO92mj4As3L_PZ.nH7wYZrH7r8W1sH
+ TnwiXa1okfTaN9T2FI.1PLdCw5vfQi6_ANs271vh.LWOWc8ApLBoocoRdFYqISPsMQwrH40Zo6Iz
+ YxuIbo5OxQL.yvq_SRlHs7_PqXbcCrNXXnt_fNsiGI_dasrWuG0rmnMZL59HXSB_DDrySwfCX0.8
+ nN74YpKqahf3kFLjn7RwfjJ8YAQQyadR7d0qSuee_eXaA
+X-Sonic-MF: <sumanth.gavini@yahoo.com>
+X-Sonic-ID: a4fdc27a-feff-43de-adb5-bc10c078fb40
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.sg3.yahoo.com with HTTP; Fri, 23 May 2025 22:02:44 +0000
+Received: by hermes--production-gq1-74d64bb7d7-ntkkg (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 248dee39e4af4432b83091d1a9b4c06a;
+          Fri, 23 May 2025 22:02:42 +0000 (UTC)
+From: Sumanth Gavini <sumanth.gavini@yahoo.com>
+To: skhan@linuxfoundation.org,
+	rjw@rjwysocki.net,
+	stern@rowland.harvard.edu,
+	arjan@linux.intel.com,
+	linux@dominikbrodowski.net
+Cc: Sumanth Gavini <sumanth.gavini@yahoo.com>,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH v2] docs: ABI: Fix "diasble" to "disable"
+Date: Fri, 23 May 2025 15:02:37 -0700
+Message-ID: <20250523220238.455718-1-sumanth.gavini@yahoo.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <a0f5b68d-e321-4ed3-a22c-24f80f4d906f@linuxfoundation.org>
+References: <a0f5b68d-e321-4ed3-a22c-24f80f4d906f@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq, docs: (userspace governor) add that actual freq
- is >= scaling_setspeed
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Shashank Balaji <shashank.mahadasyam@sony.com>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>, Jonathan Corbet <corbet@lwn.net>,
- linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shinya Takumi <shinya.takumi@sony.com>
-References: <20250522-userspace-governor-doc-v1-1-c8a038e39084@sony.com>
- <15871c67-0d18-430f-935e-261b2cda855b@gmail.com>
- <CAJZ5v0gz3Y+RGqBf9E1hzq9rwfrryd98Xpk51DtLd-uck5y-rw@mail.gmail.com>
- <b62c0462-8185-4eb8-8ac6-7f2abc387768@gmail.com>
- <aC_4yLsFVVszI_FA@JPC00244420>
- <CAJZ5v0g1o03La9aWJF1rheC9CM8SU2iC52auEAnaBpUCMunpJA@mail.gmail.com>
-Content-Language: en-US
-From: Russell Haley <yumpusamongus@gmail.com>
-In-Reply-To: <CAJZ5v0g1o03La9aWJF1rheC9CM8SU2iC52auEAnaBpUCMunpJA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+ Fix misspelling reported by codespell
 
+Signed-off-by: Sumanth Gavini <sumanth.gavini@yahoo.com>
+---
+changes in v2:
+- No code changes
+  - Link to v1: https://lore.kernel.org/lkml/a0f5b68d-e321-4ed3-a22c-24f80f4d906f@linuxfoundation.org/
+- Addressed review comments from Shuah Khan.
+  - get_maintainers.pl doesn't give you the complete list, So resending
+    the patchv2 with linux-pm, doccumentation list and PM maintainers
 
-On 5/23/25 2:06 PM, Rafael J. Wysocki wrote:
-> On Fri, May 23, 2025 at 6:25 AM Shashank Balaji
-> <shashank.mahadasyam@sony.com> wrote:
->>
->> Hi Russell,
->>
->> On Thu, May 22, 2025 at 06:15:24AM -0500, Russell Haley wrote:
->>>> The userspace governor requests a frequency between policy->min and
->>>> policy->max on behalf of user space.  In intel_pstate this translates
->>>> to setting DESIRED_PERF to the requested value which is also the case
->>>> for the other governors.
->>>
->>> Huh.  On this Skylake box with kernel 6.14.6, it seems to be setting
->>> Minimum_Performance, and leaving desired at 0.
->>>
->>>> echo userspace | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
->>> userspace
->>>> echo 1400000 | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_setspeed
->>> 1400000
->>>> sudo x86_energy_perf_policy &| grep REQ
->>> cpu0: HWP_REQ: min 14 max 40 des 0 epp 128 window 0x0 (0*10^0us) use_pkg 0
->>
->> Oh cool, I didn't know about x86_energy_perf_policy.
->>
->> Consider the following on a Raptor Lake machine:
->>
->> 1. HWP_REQUEST MSR set by intel_pstate in active mode:
->>
->>         # echo active > intel_pstate/status
->>         # x86_energy_perf_policy -c 0 2>&1 | grep REQ
->>         cpu0: HWP_REQ: min 11 max 68 des 0 epp 128 window 0x0 (0*10^0us) use_pkg 0
->>         pkg0: HWP_REQ_PKG: min 1 max 255 des 0 epp 128 window 0x0 (0*10^0us)
->>         # echo 2000000 > cpufreq/policy0/scaling_min_freq
->>         # echo 3000000 > cpufreq/policy0/scaling_max_freq
->>         # x86_energy_perf_policy -c 0 2>&1 | grep REQ
->>         cpu0: HWP_REQ: min 26 max 39 des 0 epp 128 window 0x0 (0*10^0us) use_pkg 0
->>         pkg0: HWP_REQ_PKG: min 1 max 255 des 0 epp 128 window 0x0 (0*10^0us)
->>
->>         scaling_{min,max}_freq just affect the min and max frequencies
->>         set in HWP_REQEST. desired_freq is left at 0.
->>
->> 2. HWP_REQUEST MSR set by intel_pstate in passive mode with userspace
->> governor:
->>
->>         # echo passive > intel_pstate/status
->>         # echo userspace > cpufreq/policy0/scaling_governor
->>         # cat cpufreq/policy0/scaling_setspeed
->>         866151
->>         # x86_energy_perf_policy -c 0 2>&1 | grep REQ
->>         cpu0: HWP_REQ: min 11 max 68 des 0 epp 128 window 0x0 (0*10^0us) use_pkg 0
->>         pkg0: HWP_REQ_PKG: min 1 max 255 des 0 epp 128 window 0x0 (0*10^0us)
->>         # echo 2000000 > cpufreq/policy0/scaling_setspeed
->>         # x86_energy_perf_policy -c 0 2>&1 | grep REQ
->>         cpu0: HWP_REQ: min 26 max 68 des 0 epp 128 window 0x0 (0*10^0us) use_pkg 0
->>         pkg0: HWP_REQ_PKG: min 1 max 255 des 0 epp 128 window 0x0 (0*10^0us)
->>
->>         scaling_setspeed only changes the min frequency in HWP_REQUEST.
->>         Meaning, software is explicitly allowing the hardware to choose
->>         higher frequencies.
->>
->> 3. Same as above, except with strictuserspace governor, which is a
->> custom kernel module which is exactly the same as the userspace
->> governor, except it has the CPUFREQ_GOV_STRICT_TARGET flag set:
->>
->>         # echo strictuserspace > cpufreq/policy0/scaling_governor
->>         # x86_energy_perf_policy -c 0 2>&1 | grep REQ
->>         cpu0: HWP_REQ: min 26 max 26 des 0 epp 128 window 0x0 (0*10^0us) use_pkg 0
->>         pkg0: HWP_REQ_PKG: min 1 max 255 des 0 epp 128 window 0x0 (0*10^0us)
->>         # echo 3000000 > cpufreq/policy0/scaling_setspeed
->>         # x86_energy_perf_policy -c 0 2>&1 | grep REQ
->>         cpu0: HWP_REQ: min 39 max 39 des 0 epp 128 window 0x0 (0*10^0us) use_pkg 0
->>         pkg0: HWP_REQ_PKG: min 1 max 255 des 0 epp 128 window 0x0 (0*10^0us)
->>
->>         With the strict flag set, intel_pstate honours this by setting
->>         the min and max freq same.
->>
->> desired_perf is always 0 in the above cases. The strict flag check is done in
->> intel_cpufreq_update_pstate, which sets max_pstate to target_pstate if policy
->> has strict target, and cpu->max_perf_ratio otherwise.
->>
->> As Russell and Rafael have noted, CPU frequency is subject to hardware
->> coordination and optimizations. While I get that, shouldn't software try
->> its best with whatever interface it has available? If a user sets the
->> userspace governor, that's because they want to have manual control over
->> CPU frequency, for whatever reason. The kernel should honor this by
->> setting the min and max freq in HWP_REQUEST equal. The current behaviour
->> explicitly lets the hardware choose higher frequencies.
-> 
-> Well, the userspace governor ends up calling the same function,
-> intel_cpufreq_target(), as other cpufreq governors except for
-> schedutil.  This function needs to work for all of them and for some
-> of them setting HWP_MIN_PERF to the same value as HWP_MAX_PERF would
-> be too strict.  HWP_DESIRED_PERF can be set to the same value as
-> HWP_MIN_PERF, though (please see the attached patch).
+---
+ Documentation/ABI/testing/sysfs-devices-power | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The other governors have been around a lot longer than HWP, though, and
-and are used on non-Intel hardware, which may not have a, "this
-frequency or higher subject to firmware heuristics," interface.
-
-I tried this on a non-HWP Haswell machine, and there it works like
-DESIRED=MIN. Or maybe DESIRED=MAX=MIN; I don't understand when or why
-hardware would choose frequencies between DESIRED and MAX (before module
-coordination).
-
-IMO, intel_cpufreq_target() being wired up to HWP_MIN_PERF is actually
-*more* strange for the other governors than for userspace, because at
-least with userspace governor, the userspace program is free to write to
-scaling_{min,max}_freq instead of scaling_setspeed if it wants.
-
-The conservative governor on HWP hardware, for example, will cause
-strictly higher frequencies (and typically, higher energy consumption)
-than HWP powersave. But on non-HWP hardware, conservative is an
-efficient, slow-ramping governor.
-
-Changing the behavior of the old-style cpufreq governors is fraught,
-because the defaults are schedutil and HWP-powersave, so users of the
-other governors likely made an intentional choice, presumably after
-tests on a specific platform. A change would invalidate those tests.
-
-But on the other hand, they might *already* be invalid because of an
-upgrade from non-HWP hardware. In that case, changing to DES=MIN would
-move closer to the tested behavior.
-
-And then there's churn coming from other parts of the stack. For
-example, until recently [1] tuned would select conservative for its
-"balanced" profile and ondemand for its "powersave" profile, based on
-very old data. But that didn't matter until Redhat stopped funding work
-on power-profiles-daemon, and the desktop environments' power-profile
-selectors got wired up to tuned in Fedora. Hector Martin fixed that,
-switching both to schedutil (unless CONFIG_CPU_FREQ_GOV_SCHEDUTIL=n,
-which is rare I think). That is at least not terrible on non-HWP
-hardware, but given what he was working on at the time, it might not
-have been tested on x86.
-
-[1]
-https://github.com/redhat-performance/tuned/commit/e24bfef651aa7f4da95727815b2cacbf571b59af
-
-Cheers,
-Russell
+diff --git a/Documentation/ABI/testing/sysfs-devices-power b/Documentation/ABI/testing/sysfs-devices-power
+index 54195530e97a..d3da88b26a53 100644
+--- a/Documentation/ABI/testing/sysfs-devices-power
++++ b/Documentation/ABI/testing/sysfs-devices-power
+@@ -56,7 +56,7 @@ Date:		January 2009
+ Contact:	Rafael J. Wysocki <rjw@rjwysocki.net>
+ Description:
+ 		The /sys/devices/.../async attribute allows the user space to
+-		enable or diasble the device's suspend and resume callbacks to
++		enable or disable the device's suspend and resume callbacks to
+ 		be executed asynchronously (ie. in separate threads, in parallel
+ 		with the main suspend/resume thread) during system-wide power
+ 		transitions (eg. suspend to RAM, hibernation).
+-- 
+2.43.0
 
 
