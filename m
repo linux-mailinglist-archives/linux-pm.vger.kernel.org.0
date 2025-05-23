@@ -1,172 +1,265 @@
-Return-Path: <linux-pm+bounces-27552-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27553-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2012AAC2155
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 12:44:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67FDBAC2184
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 12:52:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC974A42FA5
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 10:44:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 769F23AF4E2
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 10:51:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEEAB229B26;
-	Fri, 23 May 2025 10:44:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD99F22A4FE;
+	Fri, 23 May 2025 10:52:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="nuB7GT0G"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="RMgPcdtV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DCF32288E3
-	for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 10:44:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1989314A627
+	for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 10:52:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747997055; cv=none; b=eX1gIvzBXan4RYv3UVjVsS0dZ02dx8FMvXuZHwN30NpSwu/bW9JjCfcYz1wD4KM8leI6wVNoQL0dk/IXkfuCQ7TNHEVYpcdKMFJUG+5n1kDnI3STqhatydXRK4BUa6kPuntgA3XwdTOy/gJ5cUvEv55l0h4lxqfpy4IP7rNmbT4=
+	t=1747997530; cv=none; b=QsBtCmDrVGl+dWUOI0t05FS6L+xq+R5/8DyaNhNz+lZ3cbULs6Y7X5Nni++OiZKVUYgILiKdA5qwPGmfQd+svSMUtb9lN2tVLBp3gpoYUkKYEe2jkkOK3SILP0SdKfKeQi6WMXdSTKCvTFk80sOqkDcpvgSgWHrapT0u/Y5VQQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747997055; c=relaxed/simple;
-	bh=eDGd1A8CdNRMzewrtGp+LQNqJa5uMr8RmO6vabiZtP8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dIrYFZJyDlPRf5m0PPbnum/BuOLEHz+S33dWPTYO+zTODq5ThJl8m8RaCC45FSZnSQt68sQJB/ZiB6XatgRsqw7tW3ZsisgXWh+5NCmm/SstbY6oLvvtJJJWlevSY839OmRR8n2tcT9DYzykdgsz0TgsjegbBaEX+ldGNO0EGwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=nuB7GT0G; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54N42HX5020598
-	for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 10:44:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=0D7e6LvkuMZVb5n+b52vYbIq
-	Q+d1bIu9hB6AiSPvDa4=; b=nuB7GT0GhjzJnXndk2Kr4Y/wfFMq0pnQl8xfl4Oa
-	zzdnFzprchf2dysPcCjV+IxWykip/ft/3g+FOHoQVHTv3QkG0U6UKWcpWtUoPSNi
-	E+RYHwCkVsd6BGJolCfMrBq57ZIcQXEsmQy59+C8AG7TyMg5yDxa//hlCQ/0xyzy
-	nmXpMW+xNeY8MDC1QwQcqlHsldIeTx3yXT6ygsC6jlzd67TxpWAp67iA2jQixUen
-	Nqrlhd7it590QLFeDFx1TkgSHGwwSkRtz+98Ll2Os2sUnjpkFeQ+JnZIhmqXEGGj
-	4dca1vcpYCpXRcSJ/FHi4oHTEUMAKGAYGarADUfyf8/TwA==
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com [209.85.219.70])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46s9pb8319-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 10:44:13 +0000 (GMT)
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6f8cb4b1861so96745936d6.3
-        for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 03:44:13 -0700 (PDT)
+	s=arc-20240116; t=1747997530; c=relaxed/simple;
+	bh=j1XZzWdwtTmEvvN2qv3t6z37DY91Kr1PWlQJJLrpV1k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=My01tA23b1ZbRfTdBCgcZQ2LQWcHe0kFFdZWg1rF6U6mmEpB01tvOx2TwhrRCmZTX+OJ9M5Cgg8M61Lv/ijAnW6HU/SMqfZCmhuV6eUXTooJc2QKy5k4dl97+hlh35YwkrMrWgyD16y0kY0oQAxDxO+IQsWlhd/0yVfiTJrad4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=RMgPcdtV; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5f3f04b5dbcso13664282a12.1
+        for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 03:52:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1747997525; x=1748602325; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XwP8jYnybIYdZwiFlF4p0pHyTP1yOv6D4gpD/fnEuLY=;
+        b=RMgPcdtVQFRHdCZBiBKbtXQG0qgQDhPDt74zDK4mNDBZ7sYmm+FzV0Z1DZgY6j37xe
+         123Ske63/i4rSU2z5SlP0szNl0B+YECVWvMx1/tQKz0qJ3COzgGz4lA3osbiZkNX0C/l
+         tOkoV+0oDUOajEvaw6DeddEriNwIueCo8cCMkoijQpy5QkLJlAv56KkWHEhCOyqEz0yZ
+         4hfO3Vj4XD/m3HB3RNRyfdpHttBJ96fQhSiLlyZnXqVgMUvVU5ONK43IzesqtQ0kyye9
+         5INYQUVR0dXL0AoplQZJW9b1KVTPOX3NnfdLby7Ay1N+tdY94glxR/O2oM7MyZqD76Am
+         IHTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747997052; x=1748601852;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0D7e6LvkuMZVb5n+b52vYbIqQ+d1bIu9hB6AiSPvDa4=;
-        b=HPedI7FyIwhW7Z4q8lN2IGiVntyx/v3F6Is06SksQfx36HNWaImMOVvpC+BYcZGSDT
-         +vZ21ZckdkyF+AnKZSpqIMWEoMKSeoDWeFJADv46AMHAOmQ5ywQ37pI6UUwxtA+Up20q
-         i6FjIFcqZq4isiq+zAlrG/XEyV2xXFMVXCo5JNI6bV5XqWnRDvj31B2yQS2qLsQmJZRR
-         M/pw6larZQh6JahZvJUmfNrbyZEKgFcrux7f7FysjciY20RU+gmRVxUSOX/95zXMnszY
-         rRN/8xViS9Hpi/DwaWmRTufu1THZa0jfOYl/KoLDRhFaIRtQb8OsSbhAsX8ARAP5NX+S
-         ufNA==
-X-Forwarded-Encrypted: i=1; AJvYcCVpEI1oDN1LMZE9sOwGrUlRf+MQNSGQbNukZ9TzjFgsbCpMmVNVNoMMI8ID+OVBDDYtB8OqkFFgJQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVw4GZOTS5RXrllKwuXyEi0AhnFKdxAvY5tftB7hVP80yHNRUg
-	7NyaTjLZgfa2acO+0gGRLgnTBNXnnZJkE4l85rI6sU2pGMgiyFQtnrXE+mrpv1qQqGgAnvKDY2n
-	lSetDmFWR1/6cRLKR3b5iP45nuZEfzz4HUMspr5qIE0ywpnBFUqKMjAI8LZ1LlT6GMuMnig==
-X-Gm-Gg: ASbGncsN2KfsETnMOkIaIYnqrwXKKD6SpCJjkscmHinzz8FEA0ZVfHoiClPhnj5nRaJ
-	OTlOusFZMCf4CEpBifUHI2fLUJHx/DtztoI8H64I6QaDAINPEiUJYm1AVB0kI2V7Uy/5cdWn9KR
-	2WK/yLgED6ATNUXca7XroND7MDzIrjLMQWZGNu3WBZtUNqlgnkzkDiwKYBzhBzsVmhxg4NTpmVo
-	9APhFz5KLry1A00lZHfZG4h3b6XST/dD1M8GW3kF/MuxOXFWXxtTknATq58P6so6hIhr9J6XgUL
-	lKNVQJVNscJtwC2wt0CT00QvwU14e6epgH71n5P3LNAZh60dp24HspnZcQInWuolJ1A+8aJ6/Xw
-	=
-X-Received: by 2002:a05:6214:cc2:b0:6f8:ac64:64ca with SMTP id 6a1803df08f44-6f8b0828750mr382110826d6.6.1747997051713;
-        Fri, 23 May 2025 03:44:11 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEeS62dzPel9ch9lSgqWKEmbxy/diUVrvetaVUG0ypD79ipE/0sxsqSYTwSLfgB7z3VmBMJgQ==
-X-Received: by 2002:a05:6214:cc2:b0:6f8:ac64:64ca with SMTP id 6a1803df08f44-6f8b0828750mr382110556d6.6.1747997051372;
-        Fri, 23 May 2025 03:44:11 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-328084cabdasm36493711fa.44.2025.05.23.03.44.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 May 2025 03:44:10 -0700 (PDT)
-Date: Fri, 23 May 2025 13:44:09 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Abel Vesa <abel.vesa@linaro.org>
-Cc: Sebastian Reichel <sre@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: qcom_battmgr: Add lithium-polymer entry
-Message-ID: <xwr5xiwbiyl27x3uhe5z2kvyqdkwdp3nnwzcbufr3fgmkqa3gz@oacrb7zk7dyp>
-References: <20250523-psy-qcom-battmgr-add-lipo-entry-v1-1-938c20a43a25@linaro.org>
+        d=1e100.net; s=20230601; t=1747997525; x=1748602325;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XwP8jYnybIYdZwiFlF4p0pHyTP1yOv6D4gpD/fnEuLY=;
+        b=vFlnz4caizka1d6X5gbOnJlgFEvukJUOlApZ3+pFjFKWDDjDpqC4P1ZwnQ/d88LO3U
+         V06QPcmxX2QaJMc9wcjvIoKsRKiRE306e9Cq2l+zoK3szMT9f05L+nmKPdPortcm9YQY
+         PcP68417/NwthuyKqPVmTOoKJ7C3Vd8R03OWdaQzK5w4r1nqkMvqG33f/wGpZQi/29yB
+         zbOXy8vPl43yCf6ZMNRn7VS4IE6JgbNiGq71p+FGSODXnxwkaTChuC8TkswP8omK9cV9
+         2sewmzG82K7q/40TE2q5/zTvNy4Y9se218UOQkLkm17pUCtk7gLbJDI5gs93Fxa2dncu
+         k2AA==
+X-Forwarded-Encrypted: i=1; AJvYcCXqz2n+9QX+5v8M6wcxlZEJIcEViH49Oe9BWByNkSB5vqkSUGfSx7No7T6PnHvjdHplnxIlDSgk9w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1xquRWPWppy0H12OAXa5YamI+yCRqvZNgwEsZEJ7xlqh2fR8x
+	/7fe3OKuRQp3WDMcklDzS6MCLxgew+GV0pr16fbeftt3pWrks13UOypn/P/V6dY6by0=
+X-Gm-Gg: ASbGncvDHSGY+HgsoZF2u9rkwCQN/1WwxLvrfdr/rfOQ2R8Bf1tvR0Q5ZhBOcrPidm5
+	FYh20mGVGSPIekIYrZiCSgfLhlbd0aqE1uXTpGMIttgGBqnnTC7QVzL7neZa/JcCXq2wcQtmPRR
+	WUy208vIMGJp+GOsSvGG2tkue3GHYbOL9n+b6SGmjr3DDuB2pMHxLGFl5dMPw8hdJAcEfMR2z9x
+	QuA6xkeWiTR+ReL4jYECbN/49UhPkz9hj0kOfJY1SbxgfK6cRKzQmRuGreylHItSxkwp5kiPGbw
+	bBDPYzKFpUkSErh4TfQcOKi6YOEkzzzHxRKdZgzOxpkEGZ9qC0Avy2woHwbJeio7UXOsPA==
+X-Google-Smtp-Source: AGHT+IEC4yMEc83C32Rd4QKL4hSK5Wu12v5T+oSzGSvYSxS2+OO278DiRhv1/vjRF4GiSVkrB+WCww==
+X-Received: by 2002:a05:6402:2709:b0:601:9dc3:2796 with SMTP id 4fb4d7f45d1cf-6019dc32a0bmr19644753a12.6.1747997525189;
+        Fri, 23 May 2025 03:52:05 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.58])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6005a6e019asm11583614a12.36.2025.05.23.03.52.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 May 2025 03:52:04 -0700 (PDT)
+Message-ID: <47853bb8-db03-42b1-bcc2-3338fc208abb@tuxon.dev>
+Date: Fri, 23 May 2025 13:52:03 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250523-psy-qcom-battmgr-add-lipo-entry-v1-1-938c20a43a25@linaro.org>
-X-Authority-Analysis: v=2.4 cv=WJl/XmsR c=1 sm=1 tr=0 ts=6830517d cx=c_pps
- a=oc9J++0uMp73DTRD5QyR2A==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=dt9VzEwgFbYA:10 a=KKAkSRfTAAAA:8 a=EUspDBNiAAAA:8 a=rZQgA2wR-xeWlAxma3cA:9
- a=CjuIK1q_8ugA:10 a=iYH6xdkBrDN1Jqds4HTS:22 a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-ORIG-GUID: pPtbAnfVM9apUyYnSx0xZeNRmcdL5GWA
-X-Proofpoint-GUID: pPtbAnfVM9apUyYnSx0xZeNRmcdL5GWA
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTIzMDA5NSBTYWx0ZWRfX1B3qvpafXJQq
- HBmUIvwYu4GNq12YKt96K4EHOYds5qGAkbgLquk/xQg5RlvXpGYQ4V0boOPkTLCdhKrXSW3UleL
- FJBrt8z3ciPDbBGAUvZJJUGhFMascvFo37tSJMJLE521nRXmWOSkcg+R/4H7NBKfWlC68j96F7N
- a/7sM0xOIDiQZgGvUP1EgihnK5Hn8U6Pvh4Q0tUKgkHGDyO+GoHN0lGv/7yRinHw3Sm6Tk8aSZf
- +9O5cMavrLIZZHBE0U0qusuABT1nXHE+XHOwOYJstKQbRqldHlXA4kALW9JohtK0b2S0XmJopUw
- Y0XSCLGN6fgmbrLBsE1oFVQV58aCYCLbqm7Wl+mhGT6X6TIjfY5AJylXlyXxnwmEDhqjXv6oWBI
- aOi6yDtSiZqnjCpYx4643D2c25rUpb+BSYHEZd20KOuMxWJQOFjxYahmYKgqyLjXmGE2mOop
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-23_03,2025-05-22_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 lowpriorityscore=0 clxscore=1015 suspectscore=0 bulkscore=0
- malwarescore=0 impostorscore=0 mlxscore=0 adultscore=0 phishscore=0
- mlxlogscore=999 priorityscore=1501 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505160000 definitions=main-2505230095
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] driver core: platform: Use devres group to free driver
+ probe resources
+To: Ulf Hansson <ulf.hansson@linaro.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Jonathan Cameron <jic23@kernel.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ dakr@kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, geert@linux-m68k.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-iio@vger.kernel.org,
+ bhelgaas@google.com
+References: <CAPDyKFqMB7XutXba73YHx1X4rm6uc3Fz6yMZ8yM=wgduEmgUDg@mail.gmail.com>
+ <a20fc6ee-c6c3-4013-b175-4918b9a44380@tuxon.dev>
+ <CAPDyKFpbeLJUiB_xQbqDib+-8Q3AcJNVg+DuEcqmVGMbFdNxwA@mail.gmail.com>
+ <fgl4w5uhxci7rrbdigtni72vveb2gqemh6iccz4qruqkek5rja@rzwkcjg6hkid>
+ <3b1963ba-f93f-48f2-8fb0-a485dd80ffcb@tuxon.dev>
+ <CAPDyKFqrAS4iV59S-zJ9H7_3VuGr9JdZABhfUGBwTzQNDCasaw@mail.gmail.com>
+ <482b55c9-a210-4b2d-8405-e9f30d48a8fd@tuxon.dev>
+ <CAPDyKFpLF2P438GGWSgbXzpT7JNdUjtZ2ZxYf1_4=fNUX3s-KQ@mail.gmail.com>
+ <4fzotopz57igmiyssgkogfbup6uu7qgza3t53t5qsouegmj7ii@wfiz4g3eiffs>
+ <CAPDyKFoxs6wDCLp5EGHVqkqSstBLNmngps2KfanRezV_EN8tuA@mail.gmail.com>
+ <hd3hobuaunmn2uqzl72yv7nz2ms25fczc264wmt6o7twrxdhsy@mm22ujnawutc>
+ <CAPDyKFpRUhTK=UfcEdRdT0f5EVoGN5okLosd9_tYjdGKr0qvkA@mail.gmail.com>
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Content-Language: en-US
+In-Reply-To: <CAPDyKFpRUhTK=UfcEdRdT0f5EVoGN5okLosd9_tYjdGKr0qvkA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, May 23, 2025 at 01:14:22PM +0300, Abel Vesa wrote:
-> On some Dell XPS 13 (9345) variants, the battery used is lithium-polymer
-> based. Currently, this is reported as unknown technology due to the entry
-> missing.
-> 
-> [ 4083.135325] Unknown battery technology 'LIP'
-> 
-> Add another check for lithium-polymer in the technology parsing callback
-> and return that instead of unknown.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->  drivers/power/supply/qcom_battmgr.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
-> index fe27676fbc7cd12292caa6fb3b5b46a18c426e6d..32c85939b8973422ee417c3f1552f2355658cf06 100644
-> --- a/drivers/power/supply/qcom_battmgr.c
-> +++ b/drivers/power/supply/qcom_battmgr.c
-> @@ -981,6 +981,8 @@ static unsigned int qcom_battmgr_sc8280xp_parse_technology(const char *chemistry
->  {
->  	if (!strncmp(chemistry, "LIO", BATTMGR_CHEMISTRY_LEN))
->  		return POWER_SUPPLY_TECHNOLOGY_LION;
-> +	else if (!strncmp(chemistry, "LIP", BATTMGR_CHEMISTRY_LEN))
+Hi, Ulf,
 
-no need for 'else'.
-
-With that fixed:
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-
-
-> +		return POWER_SUPPLY_TECHNOLOGY_LIPO;
->  
->  	pr_err("Unknown battery technology '%s'\n", chemistry);
->  	return POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
+On 23.05.2025 12:47, Ulf Hansson wrote:
+> On Fri, 23 May 2025 at 01:06, Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
+>>
+>> On Fri, May 23, 2025 at 12:09:08AM +0200, Ulf Hansson wrote:
+>>> On Thu, 22 May 2025 at 20:47, Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
+>>>>
+>>>> On Thu, May 22, 2025 at 06:28:44PM +0200, Ulf Hansson wrote:
+>>>>> On Thu, 22 May 2025 at 16:08, Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+>>>>>>
+>>>>>> Hi, Ulf,
+>>>>>>
+>>>>>> On 22.05.2025 14:53, Ulf Hansson wrote:
+>>>>>>>
+>>>>>>> That said, I think adding a devm_pm_domain_attach() interface would
+>>>>>>> make perfect sense. Then we can try to replace
+>>>>>>> dev_pm_domain_attach|detach() in bus level code, with just a call to
+>>>>>>> devm_pm_domain_attach(). In this way, we should preserve the
+>>>>>>> expectation for drivers around devres for PM domains. Even if it would
+>>>>>>> change the behaviour for some drivers, it still sounds like the
+>>>>>>> correct thing to do in my opinion.
+>>>>>>
+>>>>>> This looks good to me, as well. I did prototype it on my side and tested on
+>>>>>> all my failure cases and it works.
+>>>>>
+>>>>> That's great! I am happy to help review, if/when you decide to post it.
+>>>>
+>>>> So you are saying you'd be OK with essentially the following (with
+>>>> devm_pm_domain_attach() actually being elsewhere in a real patch and not
+>>>> necessarily mimicked by devm_add_action_or_reset()):
+>>>
+>>> Correct!
+>>>
+>>>>
+>>>> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+>>>> index cfccf3ff36e7..1e017bfa5caf 100644
+>>>> --- a/drivers/base/platform.c
+>>>> +++ b/drivers/base/platform.c
+>>>> @@ -1376,6 +1376,27 @@ static int platform_uevent(const struct device *dev, struct kobj_uevent_env *env
+>>>>         return 0;
+>>>>  }
+>>>>
+>>>> +
+>>>> +static void platform_pm_domain_detach(void *d)
+>>>> +{
+>>>> +       dev_pm_domain_detach(d, true);
+>>>> +}
+>>>
+>>> Well, I would not limit this to the platform bus, even if that is the
+>>> most widely used.
+>>>
+>>> Let's add the new generic interface along with
+>>> dev_pm_domain_attach|detach* and friends instead.
+>>>
+>>> Then we can convert bus level code (and others), such as the platform
+>>> bus to use it, in a step-by-step approach.
+>>
+>> Right, this was only a draft:
+>>
+>> "... with devm_pm_domain_attach() actually being elsewhere in a real
+>> patch and not necessarily mimicked by devm_add_action_or_reset() ..."
+>>
+>>>
+>>>> +
+>>>> +static int devm_pm_domain_attach(struct device *dev)
+>>>> +{
+>>>> +       int error;
+>>>> +
+>>>> +       error = dev_pm_domain_attach(dev, true);
+>>>> +       if (error)
+>>>> +               return error;
+>>>> +
+>>>> +       error = devm_add_action_or_reset(dev, platform_pm_domain_detach, dev);
+>>>> +       if (error)
+>>>> +               return error;
+>>>> +
+>>>> +       return 0;
+>>>> +}
+>>>> +
+>>>>  static int platform_probe(struct device *_dev)
+>>>>  {
+>>>>         struct platform_driver *drv = to_platform_driver(_dev->driver);
+>>>> @@ -1396,15 +1417,12 @@ static int platform_probe(struct device *_dev)
+>>>>         if (ret < 0)
+>>>>                 return ret;
+>>>>
+>>>> -       ret = dev_pm_domain_attach(_dev, true);
+>>>> +       ret = devm_pm_domain_attach(_dev);
+>>>>         if (ret)
+>>>>                 goto out;
+>>>>
+>>>> -       if (drv->probe) {
+>>>> +       if (drv->probe)
+>>>>                 ret = drv->probe(dev);
+>>>> -               if (ret)
+>>>> -                       dev_pm_domain_detach(_dev, true);
+>>>> -       }
+>>>>
+>>>>  out:
+>>>>         if (drv->prevent_deferred_probe && ret == -EPROBE_DEFER) {
+>>>> @@ -1422,7 +1440,6 @@ static void platform_remove(struct device *_dev)
+>>>>
+>>>>         if (drv->remove)
+>>>>                 drv->remove(dev);
+>>>> -       dev_pm_domain_detach(_dev, true);
+>>>>  }
+>>>>
+>>>>  static void platform_shutdown(struct device *_dev)
+>>>>
+>>>>
+>>>> If so, then OK, it will work for me as well. This achieves the
+>>>> same behavior as with using devres group. The only difference is that if
+>>>> we ever need to extend the platform bus to acquire/release more
+>>>> resources they will also have to use devm API and not the regular one.
+>>>
+>>> Sounds reasonable to me! Thanks for a nice discussion!
+>>>
+>>> When it comes to the devm_pm_runtime_enable() API, I think we
+>>> seriously should consider removing it. Let me have a closer look at
+>>> that.
+>>
+>> I think once we sort out the power domain detach being out of order with
+>> regard to other devm-managed resources in bus code you need to analyze
+>> this again and you will find out that much as with IRQs, devm API for
+>> runtime PM is useful for majority of cases. Of course there will be
+>> exceptions, but by and large it will cut down on boilerplate code.
 > 
-> ---
-> base-commit: 176e917e010cb7dcc605f11d2bc33f304292482b
-> change-id: 20250523-psy-qcom-battmgr-add-lipo-entry-e75b3be303b6
+> Well, the problem is that the interface is just too difficult to
+> understand how to use correctly.
 > 
-> Best regards,
-> -- 
-> Abel Vesa <abel.vesa@linaro.org>
-> 
+> A quick look for deployments in drivers confirms my worries.
 
--- 
-With best wishes
-Dmitry
+Maybe we can add something like:
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 96e64f3d7b47..568a8307863b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10100,6 +10100,7 @@ F:
+Documentation/devicetree/bindings/power/power?domain*
+ T:     git git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git
+ F:     drivers/pmdomain/
+ F:     include/linux/pm_domain.h
++K:      \bpm_runtime_\w+\b
+
+in MAINTAINERS file so that any new patch using the RPM will also be sent
+to PM maintainers and checked accordingly?
+
+Thank you,
+Claudiu
+
 
