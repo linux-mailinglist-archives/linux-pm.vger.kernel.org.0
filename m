@@ -1,76 +1,78 @@
-Return-Path: <linux-pm+bounces-27561-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27562-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0662FAC2430
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 15:40:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72845AC2432
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 15:40:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BAF8F4A5C96
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 13:40:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9B804A639F
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 13:40:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C54AD293746;
-	Fri, 23 May 2025 13:40:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 716E6293B5C;
+	Fri, 23 May 2025 13:40:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BobEldln"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="s5SO9le5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B2A4C6C
-	for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 13:40:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 829DA29375B
+	for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 13:40:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748007641; cv=none; b=B4TS093h71N2jSwLnr79Y1lEq0kRPv+Uh3Reo8gho6m7XM+kPDpmZx+9BdZdqDC6L8LrG8w4eIEUGI9vwN2I7pX3Xk+r+QHwuoh8wJPBoqNsuAofxmVgXS7t2suEebEeg3f7+Ya+cW0+Xb7hlcEdEJEurQ4yQv3MAFqFC9NTmOQ=
+	t=1748007644; cv=none; b=ULdzVYJOzsJlsDoevIJPZwqoEe2SVYQV91oGj4lprP/Smxgb9KdF/rqOEhFgoYK8kJMf0cGa2P5SYtIE0pjs17QQQolD5euAydIy1mr9CH2gKdG9qY41z1LiC3jFAD58vSpc6Wo8pXd6GMr8q8oZ3vju+kOnptTepL44HsdkP7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748007641; c=relaxed/simple;
-	bh=0hShcddQUJ+0eOxNUp6ajHVoa9avM9UDQg3ZWcmCiL4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pg3hBKDsEb8ztO05nem2VLrHJDEUqVGPSPoVlw2GXVW+uRLx9P7RF7xS3MYEP0bnab0oXiBFLkTvbT88IDcRIGJQsbbNf9yFa8/6zVQ+jDGmPjIRCKyqKTmfFhW0JRLnRFjp1LCtaDcILJoiR4S7aEC5pCyJ/SCJ1QYA7fvPqj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BobEldln; arc=none smtp.client-ip=209.85.167.43
+	s=arc-20240116; t=1748007644; c=relaxed/simple;
+	bh=ZWuXoHRykjcQLvugNPxk6lMikozG+4QpwkTnChGz2TI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=hE24sYJprzA/UG5pNf1G5Il5lrYAmAab8NrKKG/LA5cKKO5gy2tZReOOq3TqOAiIx7MCL/DVKztvw6Pwr/JAPUx29zTvSObM6h9T4XSMX2iZZ8WsFQdsdJid9/QnU57z0wZsJvV/oMp6mL2Ezmv7n94z2pN0+HrAresJ++aTtK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=s5SO9le5; arc=none smtp.client-ip=209.85.167.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-551f00720cfso7705687e87.0
-        for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 06:40:39 -0700 (PDT)
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-551ed563740so8326583e87.2
+        for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 06:40:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1748007638; x=1748612438; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=o8UsG0Cv+W+SbA3fwsKYtIRZq6NFodm959GZlb0m+LI=;
-        b=BobEldlnqiWaTKuDsewJMTFSxNvCYZecB70K8TqP34uetLYnLvKGpyyC5zq3rEkTjI
-         eWgCpQfnydq73QFaJp/fcbWDK1oBhT3bJ334USJ4qIiWrpvwh+wRWn02EkGoHXd6fVd/
-         uYc5+uccy2XP5jPdrI2h8N8IOKW9Q1V6SmusCbReukNKLkpt7NBUj80aUBKUOeZUNghd
-         scJ+c302MIs930wH+XE7LSLJXudgvKO7co5B2XVIXK9NrXRlPmx+SG9x5sJ5Z+RH2ujq
-         cj+E3fKiaxmHV/XLs+9VHW8RqG+ioWQ4Q6udMMlbDCvLnNQOp3cNsi9cFib7hWL+Tzv4
-         eoMw==
+        d=linaro.org; s=google; t=1748007641; x=1748612441; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pVuyQaWXDo32LSLemr1Wiyb/FTBR994cD4zXDWOXk7w=;
+        b=s5SO9le58+lcREccGO3MaZ3Nx2+KdSXzrVQbArBo4z61JHHrAOBhqqSYXX6up24zAJ
+         +YcOiTuf6q4mTwzO4Xj+j1H0WZSL+YBaXmpTIiJYDw4X7PdcOpIDCbp48Vn92MKXpTR6
+         Xzh5kUB1zNtEa1WzfWZQfPOlQt6Qd23OgwXIy39LqJMax2+Fcz+8OXft8e594mheGooa
+         pcj3++Cjh/+IbvacuYQg2l+CeYdLndpCI088jbEPjgUt78RRTR7t41H7Tbc5v5MdZNmk
+         vK5Kaum5Vyl6a82bL7Mkt2foMr7B6Mj1L/7DMcoU8RFxo/m9wI1/WYgLuen7bfJ1HkP7
+         SmVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748007638; x=1748612438;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o8UsG0Cv+W+SbA3fwsKYtIRZq6NFodm959GZlb0m+LI=;
-        b=spgewcKi7ic8aXj9bGfL/4x5qilX4X6rosu6xjUM79xPbGtxHZdfZTDBYtC/1rmqQQ
-         pLC1YV7rBXEQI0z6n64D7+DasIud7o7ru9K04LOnblHNJw4LNsNLQsGbYpefMhbMYgHJ
-         WvF4kxS1us1E05q1htOT3K7Yaxwny6S6B/QW8n3bqqw5IPZwBtkM7zgLomKJvsGy0UL/
-         D6S+ytDSaynceQ8LJZuHKQEI4lhP4GxNrNvVHg/DK7hWa0nkrc7CTD+RJ5Q/4jmh2R1o
-         As0CVTiqk5ND9uE+A5/hyKB1WDFaMvcYCmXqHVO8B6SvMd0khJrYEwNU/OSz7KhMslM6
-         5HMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWGNaodFDQ+rgcSMj5idl82HhWS7vBXoFrzhDQOomu7ZuHbu5WpB55UsSbfno6mYKsNGWu9AX9Blg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZCqorqS9WulJ8i9QHKbXBzYzF7OfoX97ClA5Pw1lQIhH09Bab
-	2GFUtuku+W9xK9ZIfWTRfoBfN1pc+SjqIkiKyBWDkbYl3GFSFk4YVvv631vUBcTI+C0=
-X-Gm-Gg: ASbGnctmI5tVNa/Uj6WY7g2l03c/3lTXr9l+j1/DRKWBzohXFNNGSQ1zB2U7CMCdgfI
-	YSXygmw/grpICGb2UYL3rNmzVhmUYQ+RBOAywjFSKL2aKtnEy017Kpzb5wUq5aZKQdSI9qdlJc8
-	RQs5NwYGYREuADS+hTcO3p69gj1Eal8/rhsFae9fn/0Gy0lTLRCsMdtfSXEyeM4V039fOMqqlPA
-	iD8frkbIsuBonboW/UzUCTpDuQz27Y0U+iPmFkG4cqSQu+iIia/iFxuOCAINBP0aaar3cp3cVF4
-	xy1x3kHqjQsjYS+mhKQK4JZo5Ps+JyWw4ZMlNQU1ll4tJooE8yr9kCiYOYl0GLlZ9V1ifzRQgaK
-	WO8sfE+VQof6hI4aykgTqItgFqA==
-X-Google-Smtp-Source: AGHT+IHnygsP+tGAk04VZnCfGgEIdN8EfQ0ZCgQ471fg+idaH3A0yfEu5eg6xgFw+xqxxde3XVbpbQ==
-X-Received: by 2002:a05:6512:6081:b0:545:6fa:bf5f with SMTP id 2adb3069b0e04-550e7195284mr7962698e87.2.1748007637808;
-        Fri, 23 May 2025 06:40:37 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1748007641; x=1748612441;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pVuyQaWXDo32LSLemr1Wiyb/FTBR994cD4zXDWOXk7w=;
+        b=dv8W6b3El7DXrk1Oneh44ai/56U9vt2lcg3drGJTrXv59+8r2PFXWIBey4Qh4dKFvt
+         CYrO6E60zSzJxyvVEx1mbUhd/zea0/3xIy9mWXP7dgHI8WPTVduySgK63ca4v5CqwD27
+         xWtaKcXBZK+Drk/ljgjeiOK1m3NJd25Yw2/9l5UhMlVm5CafuRqJQA6iQN57adBP7xAv
+         vynuGMveUTbA6OAD6ks5pFXzls0n2DHOKkbgDSu+6LtLfng9vdXGtCZ9CTBTB6ztmUgd
+         NcRmLGu/4KPUZzUnjlkLKXDhi5Su3co/+VUgfwJSafrITQh07KGhfC0qWPVIbbRjPcUt
+         vZNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW+8c3v2ZWfEMmqUM5iPqpsu9n5WPWKCNmIyZRxC7vuFhgvlphYc9smdhDIzDjw4aNHmHBaR/4pJw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIy/HOB9RvBpkaF7xcIGAQnzeTgL2HmV/ZkUk3rs452T+307vF
+	CKfyDGJQA7jQd8tXNtdaSWpQM8BfgdrHyEoTlWyDYSEazjNEkwhQp+hAhuVyqthDG6c=
+X-Gm-Gg: ASbGnctQv6IUy8/J+q7OhJaxjJTPJxhRFmi5lQFgnIMbEJx80aga0SVfJyFMpSuq6p5
+	UcVABIwHCKPNCaW7q7GwfpsJLi8xVL81ez60/sANcjRAK5Is2RM7wtPlr6RC/HDZm3VugMHa96x
+	20TQU1Nrl0iYubzVP2xchag0z7NHumcgAVXB2QSgM70dImFyq9+Cy3HIyLOx1fWoQxD2q49ty0f
+	TaGKRzVvzNFvVp9OgbXMMk0aZiO4a+2bZszNYRqKIX07avQmHyV5uoBumNWx6rsic045GGfiLEF
+	RgzbO8mRpcW1VroVl5xax3FzCb4Z9AP/50WQZZe/ZAgV8uSgj8sG42Or2HQUxMpT1Z5EPR1MkqI
+	mP/0A4sXxSFyMNzyMFu2t+mL+iQ==
+X-Google-Smtp-Source: AGHT+IEVIbZ36oRuBgtUIV/gY2wrVcuoRcXYW2ew4UfjOMiCZ3z4VNYKumXWYXyWKY98xtuLk0dWog==
+X-Received: by 2002:a05:6512:22c9:b0:551:eb71:4aa8 with SMTP id 2adb3069b0e04-551eb714cbdmr4668192e87.25.1748007640612;
+        Fri, 23 May 2025 06:40:40 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-551fc0d473bsm1950609e87.244.2025.05.23.06.40.34
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-551fc0d473bsm1950609e87.244.2025.05.23.06.40.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 May 2025 06:40:37 -0700 (PDT)
+        Fri, 23 May 2025 06:40:40 -0700 (PDT)
 From: Ulf Hansson <ulf.hansson@linaro.org>
 To: Saravana Kannan <saravanak@google.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -91,10 +93,12 @@ Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
 	Ulf Hansson <ulf.hansson@linaro.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 00/21] pmdomain: Add generic ->sync_state() support to genpd
-Date: Fri, 23 May 2025 15:39:57 +0200
-Message-ID: <20250523134025.75130-1-ulf.hansson@linaro.org>
+Subject: [PATCH v2 01/21] pmdomain: core: Use of_fwnode_handle()
+Date: Fri, 23 May 2025 15:39:58 +0200
+Message-ID: <20250523134025.75130-2-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250523134025.75130-1-ulf.hansson@linaro.org>
+References: <20250523134025.75130-1-ulf.hansson@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -103,75 +107,64 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Changes in v2:
-	- Well, quite a lot as I discovered various problems when doing
-	additional testing of corner-case. I suggest re-review from scratch,
-	even if I decided to keep some reviewed-by tags.
-	- Added patches to allow some drivers that needs to align or opt-out
-	from the new common behaviour in genpd.
+Let's avoid accessing the np->fwnode directly and use the common helper
+of_fwnode_handle() instead.
 
-If a PM domain (genpd) is powered-on during boot, there is probably a good
-reason for it. Therefore it's known to be a bad idea to allow such genpd to be
-powered-off before all of its consumer devices have been probed. This series
-intends to fix this problem.
+Suggested-by: Saravana Kannan <saravanak@google.com>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ drivers/pmdomain/core.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-We have been discussing these issues at LKML and at various Linux-conferences
-in the past. I have therefore tried to include the people I can recall being
-involved, but I may have forgotten some (my apologies), feel free to loop them
-in.
-
-I have tested this with QEMU with a bunch of local test-drivers and DT nodes.
-Let me know if you want me to share this code too.
-
-Please help review and test!
-Finally, a big thanks to Saravana for all the support!
-
-Kind regards
-Ulf Hansson
-
-
-Saravana Kannan (1):
-  driver core: Add dev_set_drv_sync_state()
-
-Ulf Hansson (20):
-  pmdomain: core: Use of_fwnode_handle()
-  pmdomain: core: Add a bus and a driver for genpd providers
-  pmdomain: core: Add the genpd->dev to the genpd provider bus
-  pmdomain: core: Export a common ->sync_state() helper for genpd
-    providers
-  pmdomain: core: Prepare to add the common ->sync_state() support
-  soc/tegra: pmc: Opt-out from genpd's common ->sync_state() support
-  cpuidle: psci: Opt-out from genpd's common ->sync_state() support
-  cpuidle: riscv-sbi: Opt-out from genpd's common ->sync_state() support
-  pmdomain: qcom: rpmhpd: Use of_genpd_sync_state()
-  pmdomain: qcom: rpmhpd: Use of_genpd_sync_state()
-  firmware/pmdomain: xilinx: Move ->sync_state() support to firmware
-    driver
-  firmware: xilinx: Don't share zynqmp_pm_init_finalize()
-  firmware: xilinx: Use of_genpd_sync_state()
-  driver core: Export get_dev_from_fwnode()
-  pmdomain: core: Add common ->sync_state() support for genpd providers
-  pmdomain: core: Default to use of_genpd_sync_state() for genpd
-    providers
-  pmdomain: core: Leave powered-on genpds on until late_initcall_sync
-  pmdomain: core: Leave powered-on genpds on until sync_state
-  cpuidle: psci: Drop redundant sync_state support
-  cpuidle: riscv-sbi: Drop redundant sync_state support
-
- drivers/base/core.c                         |   8 +-
- drivers/cpuidle/cpuidle-psci-domain.c       |  14 --
- drivers/cpuidle/cpuidle-riscv-sbi.c         |  14 --
- drivers/firmware/xilinx/zynqmp.c            |  18 +-
- drivers/pmdomain/core.c                     | 239 ++++++++++++++++++--
- drivers/pmdomain/qcom/rpmhpd.c              |   2 +
- drivers/pmdomain/qcom/rpmpd.c               |   2 +
- drivers/pmdomain/xilinx/zynqmp-pm-domains.c |  16 --
- drivers/soc/tegra/pmc.c                     |  26 ++-
- include/linux/device.h                      |  13 ++
- include/linux/firmware/xlnx-zynqmp.h        |   6 -
- include/linux/pm_domain.h                   |  17 ++
- 12 files changed, 294 insertions(+), 81 deletions(-)
-
+diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+index ff5c7f2b69ce..9a66b728fbbf 100644
+--- a/drivers/pmdomain/core.c
++++ b/drivers/pmdomain/core.c
+@@ -2557,7 +2557,7 @@ static int genpd_add_provider(struct device_node *np, genpd_xlate_t xlate,
+ 	cp->node = of_node_get(np);
+ 	cp->data = data;
+ 	cp->xlate = xlate;
+-	fwnode_dev_initialized(&np->fwnode, true);
++	fwnode_dev_initialized(of_fwnode_handle(np), true);
+ 
+ 	mutex_lock(&of_genpd_mutex);
+ 	list_add(&cp->link, &of_genpd_providers);
+@@ -2727,7 +2727,7 @@ void of_genpd_del_provider(struct device_node *np)
+ 			 * so that the PM domain can be safely removed.
+ 			 */
+ 			list_for_each_entry(gpd, &gpd_list, gpd_list_node) {
+-				if (gpd->provider == &np->fwnode) {
++				if (gpd->provider == of_fwnode_handle(np)) {
+ 					gpd->has_provider = false;
+ 
+ 					if (gpd->opp_table) {
+@@ -2737,7 +2737,7 @@ void of_genpd_del_provider(struct device_node *np)
+ 				}
+ 			}
+ 
+-			fwnode_dev_initialized(&cp->node->fwnode, false);
++			fwnode_dev_initialized(of_fwnode_handle(cp->node), false);
+ 			list_del(&cp->link);
+ 			of_node_put(cp->node);
+ 			kfree(cp);
+@@ -2916,7 +2916,7 @@ struct generic_pm_domain *of_genpd_remove_last(struct device_node *np)
+ 
+ 	mutex_lock(&gpd_list_lock);
+ 	list_for_each_entry_safe(gpd, tmp, &gpd_list, gpd_list_node) {
+-		if (gpd->provider == &np->fwnode) {
++		if (gpd->provider == of_fwnode_handle(np)) {
+ 			ret = genpd_remove(gpd);
+ 			genpd = ret ? ERR_PTR(ret) : gpd;
+ 			break;
+@@ -3269,7 +3269,7 @@ static int genpd_parse_state(struct genpd_power_state *genpd_state,
+ 
+ 	genpd_state->power_on_latency_ns = 1000LL * exit_latency;
+ 	genpd_state->power_off_latency_ns = 1000LL * entry_latency;
+-	genpd_state->fwnode = &state_node->fwnode;
++	genpd_state->fwnode = of_fwnode_handle(state_node);
+ 
+ 	return 0;
+ }
 -- 
 2.43.0
 
