@@ -1,191 +1,261 @@
-Return-Path: <linux-pm+bounces-27581-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27583-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9A75AC2458
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 15:45:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1498AC247A
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 15:49:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B30EA45763
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 13:44:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8423716483A
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 13:49:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6B1D297B7D;
-	Fri, 23 May 2025 13:41:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13B4D293754;
+	Fri, 23 May 2025 13:49:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rQH4OHk2"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qWNSdYIQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1283297A4E
-	for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 13:41:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E2B72DCBFF
+	for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 13:49:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748007676; cv=none; b=RcD8a9YtscvbA/fz036W4RKdBArL+7Hs/zLk4wyKYzN2dop+JFfdIHaLVLRTAdsFbwWaUkKkE003zAti3elRiWktchMsvH4NjZMhTQMKrIXbN2ZdjetDcePbSlyaDF113V0EijEDgTiH6P1nwrTOT2cODpVsMOtgnWq4On41BNA=
+	t=1748008176; cv=none; b=I6xawM2dIKMxNGNgj7kMJChG8pkAATKQ+68G8gYd2GEIh5Vqgefzlki5jOKfUP+TsJjgclVwU16t8tf6rDC1+c0oOoBM3ZfwyhuqvUbVZC/D5aLbSL5doYfOoWLlg4u/dGJB3TPUREC0Cv/GVDZScMoVKGkcMYhc2P+SUdMOcSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748007676; c=relaxed/simple;
-	bh=cUPVPfOLqbKbGTZ9buOjuzMp47UCVQpzZR5BzbuI17A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=K3dgeoA6jIW8gBpNJy1E0PTnuc9fs2jVfapqE3FTdtONalPXp2hy4OtCGIO/F4724NTuz/gjiQa1UurWz6+bc0EmchWm2oiI2kL/Os/Pri4r0PeqPUEIG01mjBGqDI3jG2AVoP7b637s6voeWfPW+ihQCacmIpDgjXE4PmWOZCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rQH4OHk2; arc=none smtp.client-ip=209.85.167.53
+	s=arc-20240116; t=1748008176; c=relaxed/simple;
+	bh=hQH4sl4pAH2WPO33R/7uyvvZOOHNtsDFvCDO5Xyji5E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Vat5uSEGZ37bcb8Q6IrXBqTsqxqZhtAhY6zHFhODmxnd4Yi/jsmrwsYPv9QJoaIZk3L5fao+n6nBbJ4//md5I+FZwSPYsy1sIzjYHul6vs/3nVPaUURPvZVH1llY6cK74iYXdMEmryHbVoMPTWTkhCTSedXKUtXLRZQsOY/d0YA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qWNSdYIQ; arc=none smtp.client-ip=209.85.219.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-551fe46934eso1063442e87.1
-        for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 06:41:14 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e7d750304c3so1473246276.0
+        for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 06:49:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1748007673; x=1748612473; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HGyEwCJhPN1ZKDIimFxnLW+xEyMfXf8H84gi9aCiP1o=;
-        b=rQH4OHk27026Huv+aUSNiCciMgwT+9NnCTPgwT2sr/OmHh5/Ly3bGay9CeMIOyRnvi
-         zajmFV19CXTV1qVVg/gY69fAjeJMtdsMwHSovJrm4L8P+kyJAIZ5Qvru2A4e6VdcZWi4
-         C1CJN5lk14bLW2cdRsWshYVEkSiGFje/+dxz3qyBIrOWc1pQixhSnMVcwmYB2bNGBA3h
-         49Mqon4rlfzL7hml/Gwbkx3OFgktBwDjZFTYUJD9co4M9lUnXxU/OIrQ6NLrMnI4kLa6
-         i6/m4Zt1yNNdRstCv4h5l0a6s+URja6+KCEyjUVdOZJMJ/84kwdXFxTpw85laeDR+fo2
-         cYMA==
+        d=linaro.org; s=google; t=1748008173; x=1748612973; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jm7LJvTGmSbZFlkn4UoigKXMnhFDdijfvdo8t5yXxjg=;
+        b=qWNSdYIQeErMMhjJVz2qT79n9g/JRctNfv0E3/6C/7edhOW/tnfd8s3Ta1CFIkat+j
+         x/G4z3bGJNqh0Bx2DJZWgs+uDSsDYYe90vGyvWptbWdTTSikEYg9l+Uqmm27a4LqFHAH
+         wj7KcXqFg6sqswGOKutosag3IdtktE0KOItFMCkSR7de/4YfFpzsX6agA+cl5S5tLhpq
+         xX4pHvfLG7VgGL2MQK5enTL1O2qWUOR/bYDd6qzq9xxxwmkq9qQ1QE7PNQmk9PU4Zo92
+         bxLDe5B8Uw6drmb7ZPWLZjey+PA9WO/ix6V7ii01bteB/f2thtIrZjX7izq8UsMd1Ix9
+         ZWlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748007673; x=1748612473;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HGyEwCJhPN1ZKDIimFxnLW+xEyMfXf8H84gi9aCiP1o=;
-        b=mztdXNHoMnTqVSfFgh1uZ1iltrl8JJzEO9CdfH1o0U5WNmNKNfQZsUshiHdm38GJdT
-         8xvZZgRPAvQDrrJ1YJJkwQh6LBTBiksEAf/fMzNdHSb9OPkdAMowsberkE1ZZaMehJRK
-         Qp1+o5WG19iBTxSGt2buXhrkfzcSEXs1MFHGPS7XKrHtytjeybkHa7hE4dkQLdymvJxJ
-         V+RXaB4menoDO0j0kPlBZfanWd+9ak4Et3doeYFKr5IWiN/+FGFbqbAhxiaWeLelKAnV
-         mFOpTCFIG7VmVfyE0CYZ+LLO7Qs3Rd6BLF5iR+2pQzLQ0ec1TX7CM+ilfgcRufXNPHq3
-         +Z4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUy8qmsPcKpscx2ENrjVmMeVDyOZhxykRwoSS7dqsvT6Rh32N4BWGUKSNz/N53U6uhS0EjJoGbRuA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxg0RRQlqnJmv0rygGE7bmDjSbb9e/1NLF1IhIt4t9CrJR6RvvT
-	l7cU7mYYdydHFTdoHkUjMiKs8uBsglBf2oWUyGXpB87N14UL+86pwaQDcqL7tC5dVNo=
-X-Gm-Gg: ASbGnctiKhXjl+OJWJaofQBHiVikeltGhaLfxieUquZl+VMN3VjvAHR9jRRzY2QUOJo
-	Eg7udzBkCe3iriT+VmPcl5wl9ENzAbwnwwHQE5ycWfw8BzdkVPFPmnFgruO2wIuIUw2viPjQ2zO
-	CUICIq/vnOYhkkiaScMtsItsJdbHX/7F94prXStmz7syQhzT68/sVDAwps+wLY/yvVq31ucI2ff
-	jrjmO0PsGY+5YrCNmxykhfwkCubeves5F1TqqKaqzFP2EJ2fx2TdIIDIFhUuFTaJx2U8QXSKvDm
-	409X2zg3NWjTfwSmG9FQLzecQSIxrpeQc7h2PSrCjRbLQS2dBiG3xuzVV83u3PkcXBWD5MTtDJ6
-	yATwOjfCKMP5mF+MFSumE3FmPBA==
-X-Google-Smtp-Source: AGHT+IGPyCQFUdzHIALfteU0vTerPpV7oILLzxQIlLInZMqH94Tb+MaxZdvt9CEg2iCH7sWV6l9Bng==
-X-Received: by 2002:a05:6512:3ba7:b0:54f:c1cc:1241 with SMTP id 2adb3069b0e04-552156cc6a3mr1224907e87.25.1748007672736;
-        Fri, 23 May 2025 06:41:12 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-551fc0d473bsm1950609e87.244.2025.05.23.06.41.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 May 2025 06:41:12 -0700 (PDT)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Saravana Kannan <saravanak@google.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	linux-pm@vger.kernel.org
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Michael Grzeschik <m.grzeschik@pengutronix.de>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Peng Fan <peng.fan@oss.nxp.com>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Johan Hovold <johan@kernel.org>,
-	Maulik Shah <maulik.shah@oss.qualcomm.com>,
-	Michal Simek <michal.simek@amd.com>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Anup Patel <anup@brainfault.org>,
-	linux-riscv@lists.infradead.org
-Subject: [PATCH v2 21/21] cpuidle: riscv-sbi: Drop redundant sync_state support
-Date: Fri, 23 May 2025 15:40:18 +0200
-Message-ID: <20250523134025.75130-22-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250523134025.75130-1-ulf.hansson@linaro.org>
-References: <20250523134025.75130-1-ulf.hansson@linaro.org>
+        d=1e100.net; s=20230601; t=1748008173; x=1748612973;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jm7LJvTGmSbZFlkn4UoigKXMnhFDdijfvdo8t5yXxjg=;
+        b=qWHXQN6mlncsxad/7XGwox7iMaKhpND9k0BJ6TVZgEk2QgaWAEjUBgsuMfdhsd8KOk
+         LHwb5bg1q1/K5ploVT9wwfnsbivjgj5NeLs5bsh1HQrYlUboGbUEFQoqaM+kk4YIhc/N
+         eDzNssfhCn1//tT9gSMT+v98r+U6YqzOWIYxukAdgQnRpoJhRhkr7xBk3bB55kp51+JK
+         BHkFLB3u0SoJCJrIfFvNkMTo69Sn+T4c5YzN2Y3u+GUYe9rFX29UygDl1Yc20PVScRdU
+         Dd3dNnnmHLQA0boRzrl05p9XEZHZqC19XZlOgwfHV2APpKdKHuT+sGmRC5mCzlHuYPf4
+         WR3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWavDNc2fXq5s5W25rGB62HYwx8ON3J5vpPwLeVcQctLI0lIY6pQBYdeGYHmnpDfPDp9CMOJeAH0A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzImOQoEtlr9HdA9sbxW2GbTJZ/hQw8qbNzML+tm8YSi89+/Md0
+	6ft9nPbjceFdMfz61xeZo3j0fada8i+WFLKcpqsK8ylsyhAelVygoQg1QyMUamphTAHRv2EX3vt
+	o7TVeo+znoadoHCnlLmaOA2DdI3P2Lka5JVsrsLrsYw==
+X-Gm-Gg: ASbGncuIc5e65wiFacxno5FRHtHBN1xa6v5daEG6ctZLTEcepXLt9UBUy5MyRF/hRKU
+	23J7t+lvg653FxjntvKiHD/oKnuzxaQ1y6v1j1WUV0fxC+EwEU7kUnJZnuxBx4MnLadf36RKTRZ
+	vaCMDEeBRRtlYW0n2iznVwotxOSbOil3/ooQ==
+X-Google-Smtp-Source: AGHT+IGNqYy2yI4RNlUni96VpZTudvYTqV4SwGwfXprccTDokjVwD65TwJIsh8Rz9fSY0wLyanwf8XtnOdcJPBjSIrQ=
+X-Received: by 2002:a05:6902:1025:b0:e7d:702d:934b with SMTP id
+ 3f1490d57ef6-e7d702d950cmr6373613276.32.1748008173039; Fri, 23 May 2025
+ 06:49:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAPDyKFqMB7XutXba73YHx1X4rm6uc3Fz6yMZ8yM=wgduEmgUDg@mail.gmail.com>
+ <a20fc6ee-c6c3-4013-b175-4918b9a44380@tuxon.dev> <CAPDyKFpbeLJUiB_xQbqDib+-8Q3AcJNVg+DuEcqmVGMbFdNxwA@mail.gmail.com>
+ <fgl4w5uhxci7rrbdigtni72vveb2gqemh6iccz4qruqkek5rja@rzwkcjg6hkid>
+ <3b1963ba-f93f-48f2-8fb0-a485dd80ffcb@tuxon.dev> <CAPDyKFqrAS4iV59S-zJ9H7_3VuGr9JdZABhfUGBwTzQNDCasaw@mail.gmail.com>
+ <482b55c9-a210-4b2d-8405-e9f30d48a8fd@tuxon.dev> <CAPDyKFpLF2P438GGWSgbXzpT7JNdUjtZ2ZxYf1_4=fNUX3s-KQ@mail.gmail.com>
+ <4fzotopz57igmiyssgkogfbup6uu7qgza3t53t5qsouegmj7ii@wfiz4g3eiffs>
+ <CAPDyKFoxs6wDCLp5EGHVqkqSstBLNmngps2KfanRezV_EN8tuA@mail.gmail.com>
+ <hd3hobuaunmn2uqzl72yv7nz2ms25fczc264wmt6o7twrxdhsy@mm22ujnawutc>
+ <CAPDyKFpRUhTK=UfcEdRdT0f5EVoGN5okLosd9_tYjdGKr0qvkA@mail.gmail.com> <47853bb8-db03-42b1-bcc2-3338fc208abb@tuxon.dev>
+In-Reply-To: <47853bb8-db03-42b1-bcc2-3338fc208abb@tuxon.dev>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 23 May 2025 15:48:56 +0200
+X-Gm-Features: AX0GCFsSac-ldUQm8kyY0pi3eboltE5eDrGVCa-jAdlSEMVJc5esYEhG-rZoc2Y
+Message-ID: <CAPDyKFofyCNCbGfwo9D0-fwH9Bf+7hpcQUE1jUGwSrSKvEBm4A@mail.gmail.com>
+Subject: Re: [PATCH] driver core: platform: Use devres group to free driver
+ probe resources
+To: Claudiu Beznea <claudiu.beznea@tuxon.dev>, "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>, Jonathan Cameron <jic23@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, dakr@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	geert@linux-m68k.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-iio@vger.kernel.org, bhelgaas@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-The recent updates to the genpd core, can entirely manage the sync_state
-support for the cpuidle-riscv-sbi-domain. More precisely, genpd prevents
-our ->power_off() callback from being invoked, until all of our consumers
-are ready for it.
+On Fri, 23 May 2025 at 12:52, Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+>
+> Hi, Ulf,
+>
+> On 23.05.2025 12:47, Ulf Hansson wrote:
+> > On Fri, 23 May 2025 at 01:06, Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
+> >>
+> >> On Fri, May 23, 2025 at 12:09:08AM +0200, Ulf Hansson wrote:
+> >>> On Thu, 22 May 2025 at 20:47, Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
+> >>>>
+> >>>> On Thu, May 22, 2025 at 06:28:44PM +0200, Ulf Hansson wrote:
+> >>>>> On Thu, 22 May 2025 at 16:08, Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+> >>>>>>
+> >>>>>> Hi, Ulf,
+> >>>>>>
+> >>>>>> On 22.05.2025 14:53, Ulf Hansson wrote:
+> >>>>>>>
+> >>>>>>> That said, I think adding a devm_pm_domain_attach() interface would
+> >>>>>>> make perfect sense. Then we can try to replace
+> >>>>>>> dev_pm_domain_attach|detach() in bus level code, with just a call to
+> >>>>>>> devm_pm_domain_attach(). In this way, we should preserve the
+> >>>>>>> expectation for drivers around devres for PM domains. Even if it would
+> >>>>>>> change the behaviour for some drivers, it still sounds like the
+> >>>>>>> correct thing to do in my opinion.
+> >>>>>>
+> >>>>>> This looks good to me, as well. I did prototype it on my side and tested on
+> >>>>>> all my failure cases and it works.
+> >>>>>
+> >>>>> That's great! I am happy to help review, if/when you decide to post it.
+> >>>>
+> >>>> So you are saying you'd be OK with essentially the following (with
+> >>>> devm_pm_domain_attach() actually being elsewhere in a real patch and not
+> >>>> necessarily mimicked by devm_add_action_or_reset()):
+> >>>
+> >>> Correct!
+> >>>
+> >>>>
+> >>>> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+> >>>> index cfccf3ff36e7..1e017bfa5caf 100644
+> >>>> --- a/drivers/base/platform.c
+> >>>> +++ b/drivers/base/platform.c
+> >>>> @@ -1376,6 +1376,27 @@ static int platform_uevent(const struct device *dev, struct kobj_uevent_env *env
+> >>>>         return 0;
+> >>>>  }
+> >>>>
+> >>>> +
+> >>>> +static void platform_pm_domain_detach(void *d)
+> >>>> +{
+> >>>> +       dev_pm_domain_detach(d, true);
+> >>>> +}
+> >>>
+> >>> Well, I would not limit this to the platform bus, even if that is the
+> >>> most widely used.
+> >>>
+> >>> Let's add the new generic interface along with
+> >>> dev_pm_domain_attach|detach* and friends instead.
+> >>>
+> >>> Then we can convert bus level code (and others), such as the platform
+> >>> bus to use it, in a step-by-step approach.
+> >>
+> >> Right, this was only a draft:
+> >>
+> >> "... with devm_pm_domain_attach() actually being elsewhere in a real
+> >> patch and not necessarily mimicked by devm_add_action_or_reset() ..."
+> >>
+> >>>
+> >>>> +
+> >>>> +static int devm_pm_domain_attach(struct device *dev)
+> >>>> +{
+> >>>> +       int error;
+> >>>> +
+> >>>> +       error = dev_pm_domain_attach(dev, true);
+> >>>> +       if (error)
+> >>>> +               return error;
+> >>>> +
+> >>>> +       error = devm_add_action_or_reset(dev, platform_pm_domain_detach, dev);
+> >>>> +       if (error)
+> >>>> +               return error;
+> >>>> +
+> >>>> +       return 0;
+> >>>> +}
+> >>>> +
+> >>>>  static int platform_probe(struct device *_dev)
+> >>>>  {
+> >>>>         struct platform_driver *drv = to_platform_driver(_dev->driver);
+> >>>> @@ -1396,15 +1417,12 @@ static int platform_probe(struct device *_dev)
+> >>>>         if (ret < 0)
+> >>>>                 return ret;
+> >>>>
+> >>>> -       ret = dev_pm_domain_attach(_dev, true);
+> >>>> +       ret = devm_pm_domain_attach(_dev);
+> >>>>         if (ret)
+> >>>>                 goto out;
+> >>>>
+> >>>> -       if (drv->probe) {
+> >>>> +       if (drv->probe)
+> >>>>                 ret = drv->probe(dev);
+> >>>> -               if (ret)
+> >>>> -                       dev_pm_domain_detach(_dev, true);
+> >>>> -       }
+> >>>>
+> >>>>  out:
+> >>>>         if (drv->prevent_deferred_probe && ret == -EPROBE_DEFER) {
+> >>>> @@ -1422,7 +1440,6 @@ static void platform_remove(struct device *_dev)
+> >>>>
+> >>>>         if (drv->remove)
+> >>>>                 drv->remove(dev);
+> >>>> -       dev_pm_domain_detach(_dev, true);
+> >>>>  }
+> >>>>
+> >>>>  static void platform_shutdown(struct device *_dev)
+> >>>>
+> >>>>
+> >>>> If so, then OK, it will work for me as well. This achieves the
+> >>>> same behavior as with using devres group. The only difference is that if
+> >>>> we ever need to extend the platform bus to acquire/release more
+> >>>> resources they will also have to use devm API and not the regular one.
+> >>>
+> >>> Sounds reasonable to me! Thanks for a nice discussion!
+> >>>
+> >>> When it comes to the devm_pm_runtime_enable() API, I think we
+> >>> seriously should consider removing it. Let me have a closer look at
+> >>> that.
+> >>
+> >> I think once we sort out the power domain detach being out of order with
+> >> regard to other devm-managed resources in bus code you need to analyze
+> >> this again and you will find out that much as with IRQs, devm API for
+> >> runtime PM is useful for majority of cases. Of course there will be
+> >> exceptions, but by and large it will cut down on boilerplate code.
+> >
+> > Well, the problem is that the interface is just too difficult to
+> > understand how to use correctly.
+> >
+> > A quick look for deployments in drivers confirms my worries.
+>
+> Maybe we can add something like:
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 96e64f3d7b47..568a8307863b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10100,6 +10100,7 @@ F:
+> Documentation/devicetree/bindings/power/power?domain*
+>  T:     git git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git
+>  F:     drivers/pmdomain/
+>  F:     include/linux/pm_domain.h
+> +K:      \bpm_runtime_\w+\b
+>
+> in MAINTAINERS file so that any new patch using the RPM will also be sent
+> to PM maintainers and checked accordingly?
 
-Let's therefore drop the sync_state support for the
-cpuidle-riscv-sbi-domain as it has become redundant.
+Well, I like the idea, but I am worried that it may be too much for me
+to review. :-)
 
-Cc: Anup Patel <anup@brainfault.org>
-Cc: linux-riscv@lists.infradead.org
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/cpuidle/cpuidle-riscv-sbi.c | 22 +---------------------
- 1 file changed, 1 insertion(+), 21 deletions(-)
+Although, perhaps I should help Rafael, more officially, to helpt
+review code under "POWER MANAGEMENT CORE". Runtime PM is part of it.
 
-diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
-index 83d58d00872f..a360bc4d20b7 100644
---- a/drivers/cpuidle/cpuidle-riscv-sbi.c
-+++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-@@ -44,7 +44,6 @@ static DEFINE_PER_CPU_READ_MOSTLY(struct sbi_cpuidle_data, sbi_cpuidle_data);
- static DEFINE_PER_CPU(struct sbi_domain_state, domain_state);
- static bool sbi_cpuidle_use_osi;
- static bool sbi_cpuidle_use_cpuhp;
--static bool sbi_cpuidle_pd_allow_domain_state;
- 
- static inline void sbi_set_domain_state(u32 state)
- {
-@@ -345,20 +344,6 @@ static int sbi_cpuidle_init_cpu(struct device *dev, int cpu)
- 	return ret;
- }
- 
--static void sbi_cpuidle_domain_sync_state(struct device *dev)
--{
--	struct sbi_pd_provider *pd_provider;
--
--	/*
--	 * All devices have now been attached/probed to the PM domain
--	 * topology, hence it's fine to allow domain states to be picked.
--	 */
--	sbi_cpuidle_pd_allow_domain_state = true;
--
--	list_for_each_entry(pd_provider, &sbi_pd_providers, link)
--		of_genpd_sync_state(pd_provider->node);
--}
--
- #ifdef CONFIG_DT_IDLE_GENPD
- 
- static int sbi_cpuidle_pd_power_off(struct generic_pm_domain *pd)
-@@ -369,9 +354,6 @@ static int sbi_cpuidle_pd_power_off(struct generic_pm_domain *pd)
- 	if (!state->data)
- 		return 0;
- 
--	if (!sbi_cpuidle_pd_allow_domain_state)
--		return -EBUSY;
--
- 	/* OSI mode is enabled, set the corresponding domain state. */
- 	pd_state = state->data;
- 	sbi_set_domain_state(*pd_state);
-@@ -401,8 +383,7 @@ static int sbi_pd_init(struct device_node *np)
- 	if (!pd_provider)
- 		goto free_pd;
- 
--	pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_CPU_DOMAIN |
--		     GENPD_FLAG_NO_SYNC_STATE;
-+	pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_CPU_DOMAIN;
- 
- 	/* Allow power off when OSI is available. */
- 	if (sbi_cpuidle_use_osi)
-@@ -570,7 +551,6 @@ static struct platform_driver sbi_cpuidle_driver = {
- 	.probe = sbi_cpuidle_probe,
- 	.driver = {
- 		.name = "sbi-cpuidle",
--		.sync_state = sbi_cpuidle_domain_sync_state,
- 	},
- };
- 
--- 
-2.43.0
+Rafael, what do you think?
 
+Kind regards
+Uffe
 
