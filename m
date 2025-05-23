@@ -1,129 +1,143 @@
-Return-Path: <linux-pm+bounces-27590-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27591-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 128E9AC264E
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 17:20:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6A76AC2654
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 17:21:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66BC69E472E
-	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 15:19:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 013159E7434
+	for <lists+linux-pm@lfdr.de>; Fri, 23 May 2025 15:20:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD97021B9E5;
-	Fri, 23 May 2025 15:19:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABE3A2206B1;
+	Fri, 23 May 2025 15:21:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JOnlrfNc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bj8DgWq8"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4AE32063F0;
-	Fri, 23 May 2025 15:19:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86CA0625
+	for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 15:21:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748013588; cv=none; b=SE8w20XNf9BIC63tJqfgNUrenq1jYGYQi/G4mkpUsczk+TVFW+K5I9W01yDqDyPoxwg7i4K1xxODifXuf1gyoyryvtlh6mPoqWPt+dZrsOl8GpiSv5RY7+xS0UdPEyyN556TIikzwxY4HNHs0vTVJiBFiIUbQrZHJjJBCKc21zA=
+	t=1748013663; cv=none; b=NFmm7cAaIPh8IefKjV/3Kp4oK2mTW2nzuLU69vaUgFkgDUkG6xevOesioeTAtCyD1ivlh4ymlhXawGouchUVfLN3MkGOj0VOE/N4YZ8LK/lvc5ldcK49hXDowrJBLPCZGAk5ehIfoPoYGmm07VNXiqYzczTZBJyyCBIhgqZx9/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748013588; c=relaxed/simple;
-	bh=GsrKYlRnFo2LgPBmqPloVglZHVpw1rjgUueyKeKx75I=;
+	s=arc-20240116; t=1748013663; c=relaxed/simple;
+	bh=ysgiaY1YgmJPIosEWI4Gee0/4cvqR8zWZVxc7c8KAhE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LNp9XSWq1M6NNM1vhjw0yblQhHa+1GCAvopgCaed++c0SdXMiExhxv7fh3gSahKFH+CoQg5St81RY2ySQOOyyTsHG9EI1J/RaWNny5UGGT+x/xWkapu3W4iMj8D6XRcgvSuW0LZNUU6VI0DT8nIc2baZAQJ01ZU3lxj1PVZR6SQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JOnlrfNc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28E4CC4CEF0;
-	Fri, 23 May 2025 15:19:48 +0000 (UTC)
+	 To:Cc:Content-Type; b=Ei3256Cl71FscWODNDhxkbedkS2TkVMKAmerE9M6F3AFcQG0xnbfTBFriCnxZ4JinU+vRF1UgYZo2hvIqMdRrTRY16mwanDY5Yap/T9e+oqoosUV7fqc36NHUZCd0mPytxUWDcubkR0CygVXnulxqMnYhHxKY3LMW2jHr0hqKRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bj8DgWq8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66424C4CEF3
+	for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 15:21:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748013588;
-	bh=GsrKYlRnFo2LgPBmqPloVglZHVpw1rjgUueyKeKx75I=;
+	s=k20201202; t=1748013663;
+	bh=ysgiaY1YgmJPIosEWI4Gee0/4cvqR8zWZVxc7c8KAhE=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=JOnlrfNc+76cTq0dBfzsuD0pkdpgqjmuJUSVLNUzA955tkvO3c8ydXTbbj8B7g64H
-	 HjN4XJpUj6OHiILOzQCY0O8Yjz9Z7jkBF8QH+B0GiltMA5xzVGe9yVDLCwd8pr7LAA
-	 3jYRtepTqt/unBbLfQZcjRbf+GjLELTZFi8Cn0JysRmDCqT4bVVAyWKn+npbAXw+Xf
-	 S9UYkBU2UXQzqNwsHR2Oog4LsJKb/MCX3BFB/DFGYeWRyHZg4L4C+mwhHqzrL+RK3Y
-	 GVSJHQlX4/E5TZZUDvx2Cvua39VJ/CLyYbLfh2mJBV4vbH1ieY8+cT3FeC0KcJ6Oqz
-	 OfjdnmaDERkEw==
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-40356cb3352so32132b6e.1;
-        Fri, 23 May 2025 08:19:48 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXPqmirtyqSlEnL97kBVGs7bOYK/PEwf254kYB/pOAAK49wlVaLomf6ImHtoE8QJPsQxHjA0JTpAAajpoI=@vger.kernel.org, AJvYcCXoOv+VWi1KnmpGsG+rhgbdOPdoUuHCHg8SsFpeEGhZgrqOSfF5DNLHhHRoTZ/T4x7jGYDoLKAxJjE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGCeBQ5o62E4HKjghFepCVrJ6PL9HdIuYS3WUSLDCu9TDKORWC
-	YoX1qHi9iw8T385kN17a3fPZLdD9xbgzKigKsQP9osFrVOD5aVcwKNHgKBJervqy4H3GujQ5eU7
-	RnoBOhQqEEyGk82s+92buO7GnwZqL1CY=
-X-Google-Smtp-Source: AGHT+IHPmjFpjw3qKgfuzcY4WQBFbM52qXPB23Fn5HqrUimRCc2YddbQvsr03GtL7MMXd2LDTWME+N+xi40SrKF9BoY=
-X-Received: by 2002:a05:6808:4244:b0:406:44c9:480 with SMTP id
- 5614622812f47-40644c90565mr373451b6e.5.1748013587516; Fri, 23 May 2025
- 08:19:47 -0700 (PDT)
+	b=bj8DgWq80XHMGnhrcNkIEgv95Ao9YDOaN6G5nDCTQrpye+VXEy9rUztkhQzWKkVIX
+	 nxr08XAwVcKfc2n0eDvOhE0Nm5aHQG/pzlWR34a4iA83nzUsJAZWx3+95DXrmXMWUj
+	 +kkTIAFZBvJKczIY7MHpJ/w7hfxDMKeQj+cQyMQMDkwQymUPVGVdfF4EznmGPmjKgH
+	 92F2oNHQ5Iw4teuQkTIClD1/AzODnrs4DyjWo5XOupRpY0Dyp4A26MZGGUrmkRxzW0
+	 hjpZTMgm5HeAYQUeTRD4KduoH2PstpFPbZgw4Lmnr+g1rZkqPDgUI39WgYWFWJDwTv
+	 E6H3WYbsc5OXQ==
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3f6a92f234dso36690b6e.3
+        for <linux-pm@vger.kernel.org>; Fri, 23 May 2025 08:21:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXBcczahN+LNaimX13/tgkzA70i+oe0+mLJjo82sI2LV3J7VGM2UyWQKc7SQ1c0gkHpjo3rGGu2mQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxr3ebRILgZPZe9yR42s/Dgyi7beZrJtEY3zjTmLbEBkO+4NkX1
+	a93tGc6KzfyKc/XDOVfgG3khG73omLVAxiKYCSqdSccRRDH9Ngq9xEwhDXwABH/W3xG/rAdehZd
+	yNPk43DCqRDODiWAC+HSzqm6xK5lCv3k=
+X-Google-Smtp-Source: AGHT+IHW0VMRAoHbOS4siw7ekm0MN8Vkx9hh/7FT9B7Bb/fsjTOo/vFaZr1vxex4MyzDhWSjew/4Tb40sOfXCMPCLnM=
+X-Received: by 2002:a05:6808:4447:b0:3fe:ab15:5ecb with SMTP id
+ 5614622812f47-404da713fc8mr20288341b6e.9.1748013662722; Fri, 23 May 2025
+ 08:21:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250522021649.55228-1-zhangzihuan@kylinos.cn>
-In-Reply-To: <20250522021649.55228-1-zhangzihuan@kylinos.cn>
+References: <20250519082811.92279-1-qiwu.chen@transsion.com>
+In-Reply-To: <20250519082811.92279-1-qiwu.chen@transsion.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 23 May 2025 17:19:35 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iT66HGuXG7G78G1=44DOTFgZvH=53ghsYWXyj1Pd+dHA@mail.gmail.com>
-X-Gm-Features: AX0GCFsYMVPLEr3Yd3TzyKAFGj_GtVfcUDjZ5M_y4NEQ7SGcMofyOTApUte5dHE
-Message-ID: <CAJZ5v0iT66HGuXG7G78G1=44DOTFgZvH=53ghsYWXyj1Pd+dHA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] PM / Sleep: Introduce and use system sleep lock helpers
-To: Zihuan Zhang <zhangzihuan@kylinos.cn>
-Cc: rafael@kernel.org, len.brown@intel.com, pavel@kernel.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	akpm@linux-foundation.org, tzungbi@kernel.org, a.fatoum@pengutronix.de, 
-	jani.nikula@intel.com, joel.granados@kernel.org, paulmck@kernel.org, 
-	zhangguopeng@kylinos.cn, linux@weissschuh.net
+Date: Fri, 23 May 2025 17:20:50 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jnA0sCMs5JCmQszrp2ys=m5Pz-q=vHAP7YP5xttRBDOA@mail.gmail.com>
+X-Gm-Features: AX0GCFvzC2Zh9Wk3AtVe_ka1PGZh8mFZDEQ35xGakLsonoXih0DwqfRaP0wp39U
+Message-ID: <CAJZ5v0jnA0sCMs5JCmQszrp2ys=m5Pz-q=vHAP7YP5xttRBDOA@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: Add find_deepest_state trace event
+To: "qiwu.chen" <qiwuchen55@gmail.com>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, rostedt@goodmis.org, 
+	mhiramat@kernel.org, chmathieu.desnoyers@efficios.com, 
+	linux-pm@vger.kernel.org, "qiwu.chen" <qiwu.chen@transsion.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 22, 2025 at 4:35=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylinos.c=
-n> wrote:
+On Mon, May 19, 2025 at 10:28=E2=80=AFAM qiwu.chen <qiwuchen55@gmail.com> w=
+rote:
 >
-> This patch series introduces wrapper functions for locking
-> system_transition_mutex used in system sleep (suspend/hibernate) code,
-> and refactors the existing usage in kernel/power to improve maintainabili=
-ty,
-> readability, and future extensibility.
+> Add a new trace event namely cpuidle_find_deepest_state to trace
+> the found deepest idle state during CPUidle flow.
 >
-> Currently, mutex_lock/unlock(&system_transition_mutex) is used directly
-> in multiple places in the suspend and hibernation paths. This results in
-> boilerplate repetition and makes it harder to change the locking mechanis=
-m
-> later if needed (e.g., for debugging, tracing, or replacing the mutex
-> with another primitive).
+> The new trace event will help developers debug CPUidle issues by
+> providing more detailed information about the CPUidle states.
 >
-> Summary:
+> Signed-off-by: qiwu.chen <qiwu.chen@transsion.com>
+> ---
+>  drivers/cpuidle/cpuidle.c    |  2 ++
+>  include/trace/events/power.h | 24 ++++++++++++++++++++++++
+>  2 files changed, 26 insertions(+)
 >
-> - Patch 1 replaces mutex_lock with lock_system_sleep.
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index 0835da449db8..9065aa396892 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -103,6 +103,8 @@ static int find_deepest_state(struct cpuidle_driver *=
+drv,
+>                 latency_req =3D s->exit_latency_ns;
+>                 ret =3D i;
+>         }
+> +       trace_cpuidle_find_deepest_state(dev->cpu, s2idle, ret);
+> +
+>         return ret;
+>  }
 >
-> - Patch 2 adds a non-blocking `try_lock_system_sleep()` for code paths th=
-at
->   should proceed only if the lock is immediately available.
+> diff --git a/include/trace/events/power.h b/include/trace/events/power.h
+> index 9253e83b9bb4..82b5ac8c46e6 100644
+> --- a/include/trace/events/power.h
+> +++ b/include/trace/events/power.h
+> @@ -62,6 +62,30 @@ TRACE_EVENT(cpu_idle_miss,
+>                 (unsigned long)__entry->state, (__entry->below)?"below":"=
+above")
+>  );
 >
-> - Patch 3 replaces remaining uses of `system_transition_mutex` in
->   `kernel/power/` with the new helper functions.
+> +TRACE_EVENT(cpuidle_find_deepest_state,
+> +
+> +       TP_PROTO(unsigned int cpu_id, bool s2idle, unsigned int deepest_s=
+tate),
+> +
+> +       TP_ARGS(cpu_id, s2idle, deepest_state),
+> +
+> +       TP_STRUCT__entry(
+> +               __field(u32,            cpu_id)
+> +               __field(bool,           s2idle)
+> +               __field(u32,            deepest_state)
+> +       ),
+> +
+> +       TP_fast_assign(
+> +               __entry->cpu_id =3D cpu_id;
+> +               __entry->s2idle =3D s2idle;
+> +               __entry->deepest_state =3D deepest_state;
+> +       ),
+> +
+> +       TP_printk("cpu_id=3D%lu is_s2idle=3D%s deepest_state=3D%lu",
+> +                (unsigned long)__entry->cpu_id,
+> +                (__entry->s2idle)?"yes":"no",
+> +                (unsigned long)__entry->deepest_state)
+> +);
+> +
+>  DECLARE_EVENT_CLASS(psci_domain_idle,
 >
-> This change brings all system sleep transition locking behind well-named
-> abstractions, preparing the code for future evolution while simplifying
-> reasoning and avoiding repeated direct mutex usage.
->
-> change log:
->     V2:
->     Fix PF_NOFREEZE leakage on try_lock_system_sleep() failure.
->
-> Zihuan Zhang (3):
->   PM / Sleep: Replace mutex_[un]lock(&system_transition_mutex) with
->     [un]lock_system_sleep()
->   PM / Sleep:  Introduce try_lock_system_sleep()
->   PM / Sleep: Replace mutex_trylock(&system_transition_mutex) with
->     try_lock_system_sleep()
->
->  include/linux/suspend.h  |  2 ++
->  kernel/power/hibernate.c | 11 +++++++----
->  kernel/power/main.c      | 14 ++++++++++++++
->  kernel/power/suspend.c   |  7 +++++--
->  kernel/power/user.c      |  6 ++++--
->  kernel/reboot.c          |  5 +++--
->  6 files changed, 35 insertions(+), 10 deletions(-)
->
+>         TP_PROTO(unsigned int cpu_id, unsigned int state, bool s2idle),
 > --
 
 This is a bit too late for 6.16, please resubmit when 6.16-rc1 is out.
