@@ -1,200 +1,638 @@
-Return-Path: <linux-pm+bounces-27622-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27623-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B947DAC2DFE
-	for <lists+linux-pm@lfdr.de>; Sat, 24 May 2025 08:31:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBD8FAC2EA4
+	for <lists+linux-pm@lfdr.de>; Sat, 24 May 2025 11:55:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 160961C03782
-	for <lists+linux-pm@lfdr.de>; Sat, 24 May 2025 06:31:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0416A21C49
+	for <lists+linux-pm@lfdr.de>; Sat, 24 May 2025 09:54:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19CED1BD9CE;
-	Sat, 24 May 2025 06:30:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OpFesYvK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DDA416F0FE;
+	Sat, 24 May 2025 09:55:09 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D92DB54918;
-	Sat, 24 May 2025 06:30:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B4024690
+	for <linux-pm@vger.kernel.org>; Sat, 24 May 2025 09:55:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748068259; cv=none; b=dj1YrFWCxSeltHp94jQeRfgxMjLqEuVmaGwgbY9a0YrGq9LjjxbvUZkR0rXPDrcpry0pBT4R6jBK3n5ihZcsO4PjQ2hySqYYB/CG1+VG6DIctMQ5PgQtot2eIlxuJY+j73rOy7/1CmIny0nBzVSwk4ZFz8f14Va3cqroRONNKMA=
+	t=1748080509; cv=none; b=q8O06oOhXBZfoEKYOewZh1VXKVBw1TY1ZwSzTd7bxdyClHrHafruZ/f0dJ5HlshUHjlUcc1y8MVKzhOmFDFTNNyyl8B5c9FBJfTp4ZI0RiXX5+y8VzDuTAwvMKu0R+ZhEdwjOgsuJ1BGh0atILGcCGgTqZuK3bI1YL11PBlOR10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748068259; c=relaxed/simple;
-	bh=OSW0a8O6Ua3C9OWukvcF0yxnXBWtC+NYWhxAHl7Wztc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=MOgVXBQqltnjrcrPlx8H5+ZU88jKPHRJtQWI8bh0n/cd1g3RRdGg2a0R288LQ6qrDsuj1BJmDpTFxQmeTg4heeb/kGnCG/0gXhJN5tQc7gvem33amEFwfMoW7zJ6Z8+sxYALTXV3gWSGx8kuFANbGpiWsr/flzkvLGsdDivSyWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OpFesYvK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8884C4CEE4;
-	Sat, 24 May 2025 06:30:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748068258;
-	bh=OSW0a8O6Ua3C9OWukvcF0yxnXBWtC+NYWhxAHl7Wztc=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=OpFesYvKN/KLhXgATBYCI4q4vGnBunLB8OMRrNQr7btbcpD1+sOXwyAGFj8EQAlu0
-	 tni57uJKB6QINRKRPcfU2dQtlXpp1blv1muy6foBOrSwffg0VCuocZIs/jiVD25lHT
-	 6pGk00a3MAT0PRZZXAidk2SmQnsDJgZvFOn6YXyPMjfE8Y7v/XzAp1Ikb0xZ3TkFGy
-	 eP2TQLhEKnbos+TxdcALReBys49nl/svLLJdxjEXGYiH7z18TJq/04GCjDt6hHjzO/
-	 /h+RaK86SID+ZhpbVh+We1Zc/zx5kQKZFSb3pj+QDktnaS9gVnt1DSD6eMms5W36xS
-	 wA0w2vSnT5dBg==
-Message-ID: <e19ee6c5-447e-43ee-bc63-df15ff2f6031@kernel.org>
-Date: Sat, 24 May 2025 08:30:53 +0200
+	s=arc-20240116; t=1748080509; c=relaxed/simple;
+	bh=CEX1z2hqHxe8QOUfyVvOcKSNgDkyXdy5M1TzWfeWvm8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=PcyB2Bpx4L2wMMWy6IbkYQiPGXKGhs0aU/QCx5rSHa1QmFxmBCUkKBhE0T9bQ5BmZ4BgdaOTnf49KfzxIjLphW0Cy9pydgaBdG9LY089R+PF8PvzVNZz7BBy2ze1y/bw7Qr/prUdf88xFpGte5v3agSBS9ODdKllZxAx/JGKgGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
+Received: from mail.maildlp.com (unknown [172.19.88.234])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4b4HNJ1N6qz2CdX3;
+	Sat, 24 May 2025 17:51:12 +0800 (CST)
+Received: from kwepemo100006.china.huawei.com (unknown [7.202.195.47])
+	by mail.maildlp.com (Postfix) with ESMTPS id 5A6091402C3;
+	Sat, 24 May 2025 17:54:55 +0800 (CST)
+Received: from [10.67.121.58] (10.67.121.58) by kwepemo100006.china.huawei.com
+ (7.202.195.47) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Sat, 24 May
+ 2025 17:54:54 +0800
+Message-ID: <595f2574-4ee8-9684-7692-757bfe9c9cd1@hisilicon.com>
+Date: Sat, 24 May 2025 17:54:54 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/5] dt-bindings: thermal: airoha: Rename and Document
- AN7583 support
-To: Christian Marangi <ansuelsmth@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250523182939.30489-1-ansuelsmth@gmail.com>
- <20250523182939.30489-5-ansuelsmth@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250523182939.30489-5-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v3] PM / devfreq: Add HiSilicon uncore frequency scaling
+ driver
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>, <linuxarm@huawei.com>
+CC: <cw00.choi@samsung.com>, <myungjoo.ham@samsung.com>,
+	<kyungmin.park@samsung.com>, <linux-pm@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <alireza.sanaee@huawei.com>,
+	<zhenglifeng1@huawei.com>, <lihuisong@huawei.com>, <yubowen8@huawei.com>,
+	<liwei728@huawei.com>, <prime.zeng@hisilicon.com>
+References: <20250521104956.2780150-1-zhanjie9@hisilicon.com>
+ <20250521192842.0000251b@huawei.com>
+From: Jie Zhan <zhanjie9@hisilicon.com>
+In-Reply-To: <20250521192842.0000251b@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemo100006.china.huawei.com (7.202.195.47)
 
-On 23/05/2025 20:29, Christian Marangi wrote:
-> Rename .yaml to a more generic airoha-thermal and Document support for
-> Airoha AN7583 thermal driver.
+Thanks a lot for reviewing!
+
+On 22/05/2025 02:29, Jonathan Cameron wrote:
+> On Wed, 21 May 2025 18:49:56 +0800
+> Jie Zhan <zhanjie9@hisilicon.com> wrote:
 > 
-> Airoha AN7583 follow the same logic of Airoha EN7581 to read the
-> temperature but lack all the support for the PTP_THERMAL used to monitor
-> and react when trip point are triggered.
+>> Add the HiSilicon uncore frequency scaling driver for Kunpeng SoCs based on
+>> the devfreq framework.  The uncore domain contains shared computing
+>> resources, including system interconnects and L3 cache.  The uncore
+>> frequency significantly impacts the system-wide performance as well as
+>> power consumption.  This driver adds support for runtime management of
+>> uncore frequency from kernel and userspace.  The main function includes
+>> setting and getting frequencies, changing frequency scaling policies, and
+>> querying the list of CPUs whose performance is significantly related to
+>> this uncore frequency domain, etc.  The driver communicates with a platform
+>> controller through an ACPI PCC mailbox to take the actual actions of
+>> frequency scaling.
+>>
+>> Co-developed-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+>> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+>> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
 > 
-> Also the Airoha AN7583 lives entirely under the Chip SCU SoC register
-> space.
+> Minor comments inline.
 > 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
->  ...n7581-thermal.yaml => airoha-thermal.yaml} | 42 ++++++++++++++++---
->  1 file changed, 36 insertions(+), 6 deletions(-)
->  rename Documentation/devicetree/bindings/thermal/{airoha,en7581-thermal.yaml => airoha-thermal.yaml} (52%)
+> Is the userspace ABI documented already?
 
-No. I do not see any reason to rename correct filename (how we expect)
-to incorrect (wrong format, no vendor prefix, not matching compatible).
+The common devfreq sysfs ABIs are documented in
+Documentation/ABI/testing/sysfs-class-devfreq.
+
+This driver adds a custom sysfs file 'related_cpus' to indicate userspace
+that the performance of these cpus is closely related to this uncore freq
+domain.
+Will update that in the doc in v4.
 
 > 
-> diff --git a/Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml b/Documentation/devicetree/bindings/thermal/airoha-thermal.yaml
-> similarity index 52%
-> rename from Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml
-> rename to Documentation/devicetree/bindings/thermal/airoha-thermal.yaml
-> index ca0242ef0378..42f93b095783 100644
-> --- a/Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/airoha-thermal.yaml
-> @@ -1,17 +1,19 @@
->  # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->  %YAML 1.2
->  ---
-> -$id: http://devicetree.org/schemas/thermal/airoha,en7581-thermal.yaml#
-> +$id: http://devicetree.org/schemas/thermal/airoha-thermal.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: Airoha EN7581 Thermal Sensor and Monitor
-> +title: Airoha Thermal Sensor and Monitor
->  
->  maintainers:
->    - Christian Marangi <ansuelsmth@gmail.com>
->  
->  properties:
->    compatible:
-> -    const: airoha,en7581-thermal
-> +    enum:
-> +      - airoha,en7581-thermal
-> +      - airoha,an7583-thermal
->  
->    reg:
->      maxItems: 1
-> @@ -28,9 +30,30 @@ properties:
->  
->  required:
->    - compatible
-> -  - reg
-> -  - interrupts
-> -  - airoha,chip-scu
-> +  - '#thermal-sensor-cells'
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: airoha,en7581-thermal
-> +    then:
-> +      required:
-> +        - reg
-> +        - interrupts
-> +        - airoha,chip-scu
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: airoha,an7583-thermal
-> +    then:
-> +      properties:
-> +        reg: false
+>> diff --git a/drivers/devfreq/hisi_uncore_freq.c b/drivers/devfreq/hisi_uncore_freq.c
+>> new file mode 100644
+>> index 000000000000..1e9ee4827c3f
+>> --- /dev/null
+>> +++ b/drivers/devfreq/hisi_uncore_freq.c
+> 
+>> +/* PCC channel timeout = PCC nominal latency * NUM */
+>> +#define HUCF_PCC_POLL_TIMEOUT_NUM	1000
+>> +#define HUCF_PCC_POLL_INTERVAL_US	5
+>> +
+>> +/* Default polling interval in ms for devfreq governors*/
+>> +#define DEFAULT_POLLING_MS 100
+>> +
+>> +static int hisi_uncore_request_pcc_chan(struct hisi_uncore_freq *uncore)
+>> +{
+>> +	struct pcc_mbox_chan *pcc_chan;
+>> +	int rc;
+>> +
+>> +	uncore->cl = (struct mbox_client) {
+>> +		.dev = uncore->dev,
+>> +		.tx_block = false,
+>> +		.knows_txdone = true,
+>> +	};
+>> +
+>> +	pcc_chan = pcc_mbox_request_channel(&uncore->cl, uncore->chan_id);
+>> +	if (IS_ERR(pcc_chan)) {
+>> +		dev_err(uncore->dev, "Failed to request PCC channel %u\n",
+>> +			uncore->chan_id);
+>> +		return PTR_ERR(pcc_chan);
+>> +	}
+>> +
+>> +	if (!pcc_chan->shmem_base_addr) {
+>> +		dev_err(uncore->dev, "Invalid PCC shared memory address\n");
+>> +		rc = -EINVAL;
+>> +		goto err_pcc_chan_free;
+>> +	}
+>> +
+>> +	if (pcc_chan->shmem_size < sizeof(struct hisi_uncore_pcc_shmem)) {
+>> +		dev_err(uncore->dev, "Invalid PCC shared memory size (%lluB)\n",
+>> +			pcc_chan->shmem_size);
+>> +		rc = -EINVAL;
+>> +		goto err_pcc_chan_free;
+>> +	}
+>> +
+>> +	mutex_init(&uncore->pcc_lock);
+> For new code maybe use
+> 	rc = devm_mutex_init()
+> 	if (rc)
+> 		goto err_pcc_chan_free;
+> 
 
-Don't stuff completely different devices into one binding. They are
-completely different if they have completely different programming model.
+Done
 
+>> +	uncore->pchan = pcc_chan;
+>> +
+>> +	return 0;
+>> +
+>> +err_pcc_chan_free:
+>> +	pcc_mbox_free_channel(pcc_chan);
+>> +
+>> +	return rc;
+>> +}
+>> +
+>> +static void hisi_uncore_free_pcc_chan(struct hisi_uncore_freq *uncore)
+> If only called from devm don't bother with separate function.
+>> +{
+>> +	if (uncore->pchan) {
+> 
+> Given nothing to do if this isn't set, why register the cleanup if it isn't?
+> 
 
-Best regards,
-Krzysztof
+This should be deleted since v2.
+Removed in v4 now.
+
+>> +		guard(mutex)(&uncore->pcc_lock);
+>> +		pcc_mbox_free_channel(uncore->pchan);
+>> +		uncore->pchan = NULL;
+>> +	}
+>> +}
+>> +
+>> +static void devm_hisi_uncore_free_pcc_chan(void *data)
+>> +{
+>> +	hisi_uncore_free_pcc_chan(data);
+>> +}
+>> +
+>> +static acpi_status hisi_uncore_pcc_reg_scan(struct acpi_resource *res,
+>> +					    void *ctx)
+>> +{
+>> +	struct acpi_resource_generic_register *reg;
+>> +	struct hisi_uncore_freq *uncore;
+>> +
+>> +	if (!res || res->type != ACPI_RESOURCE_TYPE_GENERIC_REGISTER)
+>> +		return AE_OK;
+>> +
+>> +	reg = &res->data.generic_reg;
+>> +	if (reg->space_id != ACPI_ADR_SPACE_PLATFORM_COMM)
+>> +		return AE_OK;
+>> +
+>> +	if (!ctx)
+>> +		return AE_ERROR;
+>> +
+>> +	uncore = ctx;
+>> +	/* PCC subspace ID stored in Access Size */
+>> +	uncore->chan_id = reg->access_size;
+>> +
+>> +	return AE_CTRL_TERMINATE;
+>> +}
+>> +
+>> +static int hisi_uncore_init_pcc_chan(struct hisi_uncore_freq *uncore)
+>> +{
+>> +	acpi_handle handle = ACPI_HANDLE(uncore->dev);
+>> +	acpi_status status;
+>> +	int rc;
+>> +
+>> +	uncore->chan_id = -1;
+>> +	status = acpi_walk_resources(handle, METHOD_NAME__CRS,
+>> +				     hisi_uncore_pcc_reg_scan, uncore);
+>> +	if (ACPI_FAILURE(status) || uncore->chan_id < 0) {
+>> +		dev_err(uncore->dev, "Failed to get a PCC channel\n");
+>> +		return -ENODEV;
+>> +	}
+>> +
+>> +	rc = hisi_uncore_request_pcc_chan(uncore);
+>> +	if (rc)
+>> +		return rc;
+>> +
+>> +	return devm_add_action_or_reset(uncore->dev,
+>> +					devm_hisi_uncore_free_pcc_chan,
+>> +					uncore);
+>> +}
+>> +
+>> +static int hisi_uncore_cmd_send(struct hisi_uncore_freq *uncore,
+>> +				u8 cmd, u32 *data)
+>> +{
+>> +	struct hisi_uncore_pcc_shmem __iomem *addr;
+>> +	struct hisi_uncore_pcc_shmem shmem;
+>> +	struct pcc_mbox_chan *pchan;
+>> +	unsigned int mrtt;
+>> +	s64 time_delta;
+>> +	u16 status;
+>> +	int rc;
+>> +
+>> +	guard(mutex)(&uncore->pcc_lock);
+>> +
+>> +	pchan = uncore->pchan;
+>> +	if (!pchan)
+>> +		return -ENODEV;
+>> +
+>> +	addr = (struct hisi_uncore_pcc_shmem __iomem *)pchan->shmem;
+>> +	if (!addr)
+>> +		return -EINVAL;
+>> +
+>> +	/* Handle the Minimum Request Turnaround Time (MRTT) */
+>> +	mrtt = pchan->min_turnaround_time;
+>> +	time_delta = ktime_us_delta(ktime_get(),
+>> +				    uncore->last_cmd_cmpl_time);
+>> +	if (mrtt > time_delta)
+>> +		udelay(mrtt - time_delta);
+>> +
+>> +	/* Copy data */
+>> +	shmem.head = (struct acpi_pcct_shared_memory) {
+>> +		.signature = PCC_SIGNATURE | uncore->chan_id,
+>> +		.command = cmd,
+>> +		.status = 0,
+> Why explicitly set status?  Just leave the c spec defined setting
+> of other fields to do that maybe?
+> 
+
+Sure.
+
+>> +	};
+>> +	shmem.pcc_data.data = *data;
+>> +	memcpy_toio(addr, &shmem, sizeof(shmem));
+>> +
+>> +	/* Ring doorbell */
+>> +	rc = mbox_send_message(pchan->mchan, &cmd);
+>> +	if (rc < 0) {
+>> +		dev_err(uncore->dev, "Failed to send mbox message, %d\n", rc);
+>> +		return rc;
+>> +	}
+>> +
+>> +	/* Wait status */
+>> +	rc = readw_poll_timeout(&addr->head.status, status,
+>> +				status & (PCC_STATUS_CMD_COMPLETE |
+>> +					  PCC_STATUS_ERROR),
+>> +				HUCF_PCC_POLL_INTERVAL_US,
+>> +				pchan->latency * HUCF_PCC_POLL_TIMEOUT_NUM);
+>> +	if (rc) {
+>> +		dev_err(uncore->dev, "PCC channel response timeout, cmd=%u\n", cmd);
+>> +		goto exit;
+>> +	}
+>> +
+>> +	if (status & PCC_STATUS_ERROR) {
+>> +		dev_err(uncore->dev, "PCC cmd error, cmd=%u\n", cmd);
+>> +		rc = -EIO;
+>> +		goto exit;
+> 
+> goto not doing anything here...
+> 
+> I'd be tempted to use an else if (status & PCC_STATUS_ERROR)
+> and get rid of the label entirely.
+> 
+> 
+
+Yeah that looks more sensible.
+Done.
+
+>> +	}
+>> +
+>> +exit:
+>> +	uncore->last_cmd_cmpl_time = ktime_get();
+>> +
+>> +	/* Copy data back */
+>> +	memcpy_fromio(data, &addr->pcc_data.data, sizeof(*data));
+>> +
+>> +	/* Clear mailbox active req */
+>> +	mbox_client_txdone(pchan->mchan, rc);
+>> +
+>> +	return rc;
+>> +}
+> 
+>> +static int hisi_uncore_devfreq_register(struct hisi_uncore_freq *uncore)
+>> +{
+>> +	struct devfreq_dev_profile *profile;
+>> +	unsigned long freq;
+>> +	u32 data;
+>> +	int rc;
+>> +
+>> +	rc = hisi_uncore_get_cur_freq(uncore->dev, &freq);
+>> +	if (rc) {
+>> +		dev_err(uncore->dev, "Failed to get plat init freq (%d)\n", rc);
+>> +		return rc;
+>> +	}
+>> +
+>> +	profile = devm_kzalloc(uncore->dev, sizeof(*profile), GFP_KERNEL);
+>> +	if (!profile)
+>> +		return -ENOMEM;
+>> +
+>> +	profile->initial_freq = freq;
+>> +	profile->polling_ms = DEFAULT_POLLING_MS;
+>> +	profile->timer = DEVFREQ_TIMER_DELAYED;
+>> +	profile->target = hisi_uncore_target;
+>> +	profile->get_dev_status = hisi_uncore_get_dev_status;
+>> +	profile->get_cur_freq = hisi_uncore_get_cur_freq;
+> 
+> 	*profile = (struct devfreq_dev_profile) {
+> 		.initial_freq = ...
+> etc
+> 	};
+> makes this sort of fill things in code easier to read.
+> 
+
+Done.
+
+>> +
+>> +	rc = hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_GET_MODE, &data);
+>> +	if (rc) {
+>> +		dev_err(uncore->dev, "Failed to get operate mode (%d)\n", rc);
+> 
+> return dev_err_probe(); and similar places.
+> 
+
+Thanks, done for all.
+
+>> +		return rc;
+>> +	}
+>> +
+>> +	if (data == HUCF_MODE_PLATFORM)
+>> +		uncore->devfreq = devm_devfreq_add_device(uncore->dev, profile,
+>> +					  hisi_platform_governor.name, NULL);
+>> +	else
+>> +		uncore->devfreq = devm_devfreq_add_device(uncore->dev, profile,
+>> +					  DEVFREQ_GOV_PERFORMANCE, NULL);
+>> +	if (IS_ERR(uncore->devfreq)) {
+>> +		dev_err(uncore->dev, "Failed to add devfreq device\n");
+>> +		return PTR_ERR(uncore->devfreq);
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int hisi_uncore_mark_related_cpus(struct hisi_uncore_freq *uncore,
+>> +				 char *property, int (*get_topo_id)(int cpu),
+>> +				 const struct cpumask *(*get_cpumask)(int cpu))
+>> +{
+>> +	unsigned int i, cpu;
+>> +	size_t len;
+>> +	u32 *num;
+>> +	int rc;
+>> +
+>> +	rc = device_property_count_u32(uncore->dev, property);
+>> +	if (rc < 0)
+>> +		return rc;
+>> +	if (rc == 0)
+>> +		return -EINVAL;
+>> +
+>> +	len = rc;
+>> +	num = kcalloc(len, sizeof(*num), GFP_KERNEL);
+> Freed in all path so include cleanup.h and use
+> 
+> 	u32 *num __free(kfree) = kcalloc(len, ..
+> 
+> and no need for goto as it'll get freed automagically.
+> 
+> 
+
+Sure. Thanks!
+
+>> +	if (!num)
+>> +		return -ENOMEM;
+>> +
+>> +	rc = device_property_read_u32_array(uncore->dev, property, num, len);
+>> +	if (rc)
+>> +		goto out;
+>> +
+>> +	for (i = 0; i < len; i++) {
+>> +		for_each_possible_cpu(cpu) {
+>> +			if (get_topo_id(cpu) == num[i]) {
+>> +				cpumask_or(&uncore->related_cpus,
+>> +					   &uncore->related_cpus,
+>> +					   get_cpumask(cpu));
+>> +				break;
+>> +			}
+>> +		}
+>> +	}
+>> +
+>> +out:
+>> +	kfree(num);
+>> +
+>> +	return rc;
+>> +}
+>> +
+> 
+>> +static ssize_t related_cpus_show(struct device *dev,
+>> +				 struct device_attribute *attr, char *buf)
+>> +{
+>> +	struct hisi_uncore_freq *uncore = dev_get_drvdata(dev->parent);
+>> +
+>> +	return cpumap_print_to_pagebuf(true, buf, &uncore->related_cpus);
+>> +}
+>> +
+>> +DEVICE_ATTR_RO(related_cpus);
+>> +
+>> +static struct device_attribute *attr_group[] = {
+>> +	&dev_attr_related_cpus,
+>> +	NULL,
+> 
+> No comma on a terminating NULL. We don't want it to be easy to stick
+> things afterwards.
+> 
+
+Cool.
+
+>> +};
+>> +
+>> +static void hisi_uncore_remove_dev_interface(struct hisi_uncore_freq *uncore)
+>> +{
+>> +	struct device_attribute **attr = attr_group;
+>> +
+>> +	while (attr && *attr) {
+>> +		device_remove_file(&uncore->devfreq->dev, *attr);
+>> +		attr++;
+> With dev_groups approach you shouldn't need anything manual for this.
+> 
+
+Indeed, thanks for pointing it out.
+
+>> +	}
+>> +}
+>> +
+>> +static void devm_hisi_uncore_remove_dev_interface(void *data)
+>> +{
+>> +	hisi_uncore_remove_dev_interface(data);
+>> +}
+>> +
+>> +static int hisi_uncore_init_dev_interface(struct hisi_uncore_freq *uncore)
+>> +{
+>> +	struct device_attribute **attr = attr_group;
+>> +	int rc;
+>> +
+>> +	rc = hisi_uncore_mark_related_cpus_wrap(uncore);
+>> +	if (rc) {
+>> +		dev_err(uncore->dev, "Failed to mark related cpus (%d)\n", rc);
+>> +		return rc;
+> 
+> return dev_err_probe() as below.
+> 
+
+Done
+
+>> +	}
+>> +
+>> +	while (attr && *attr) {
+> 
+> How would attr not be true?
+> 
+>> +		rc = device_create_file(&uncore->devfreq->dev, *attr);
+> 
+> Normally we do a lot to avoid device_create_file as it causes
+> races with udev - it's unusual to add attributes directly to a platform
+> device from a driver... Why does it need to happen here?
+> Can use use dev_groups in the platform_driver.driver instead?
+> 
+> 
+
+Yeah that makes the code cleaner and safer.  Done.
+
+>> +		if (rc) {
+>> +			hisi_uncore_remove_dev_interface(uncore);
+>> +			return rc;
+>> +		}
+>> +		attr++;
+>> +	}
+>> +
+>> +	return devm_add_action_or_reset(uncore->dev,
+>> +					devm_hisi_uncore_remove_dev_interface,
+>> +					uncore);
+>> +}
+>> +
+>> +static int hisi_uncore_freq_probe(struct platform_device *pdev)
+>> +{
+>> +	struct hisi_uncore_freq *uncore;
+>> +	u32 cap;
+>> +	int rc;
+>> +
+>> +	uncore = devm_kzalloc(&pdev->dev, sizeof(*uncore), GFP_KERNEL);
+> 
+> I'd define
+> 
+> 	struct device *dev = &pdev->dev;
+> 
+> and use that for all the places you have pdev->dev or uncore->dev
+> Slightly shorter lines in lots of places.
+> 
+
+Sure.
+
+>> +	if (!uncore)
+>> +		return -ENOMEM;
+>> +
+>> +	uncore->dev = &pdev->dev;
+>> +	platform_set_drvdata(pdev, uncore);
+>> +
+>> +	rc = hisi_uncore_init_pcc_chan(uncore);
+>> +	if (rc) {
+>> +		dev_err(uncore->dev, "Failed to init PCC channel (%d)", rc);
+>> +		return rc;
+> 
+> Might as well use
+> 
+> 		return dev_err_probe(dev, rc, "Failed to init PCC channel\n");
+> 
+> Should have \n on error messages really. (they get fixed up if you don't
+> but convention is have it still I think).
+
+Yeah I missed it here.
+
+> 
+> dev_err_probe() just pretty prints the return value and saves a bunch of
+> code by allowing you to return it's return value.
+> 
+> Use it for every case of dev_err that is only called from probe.
+> 
+
+Done.
+
+>> +	}
+>> +
+>> +	rc = hisi_uncore_init_opp(uncore);
+>> +	if (rc) {
+>> +		dev_err(uncore->dev, "Failed to init OPP (%d)\n", rc);
+>> +		return rc;
+>> +	}
+>> +
+>> +	rc = hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_GET_CAP, &cap);
+>> +	if (rc) {
+>> +		dev_err(uncore->dev, "Failed to get capability (%d)\n", rc);
+>> +		return rc;
+>> +	}
+>> +	uncore->cap = cap;
+>> +
+>> +	rc = hisi_uncore_add_platform_gov(uncore);
+>> +	if (rc) {
+>> +		dev_err(uncore->dev, "Failed to add hisi_platform governor (%d)\n", rc);
+>> +		return rc;
+>> +	}
+>> +
+>> +	rc = hisi_uncore_devfreq_register(uncore);
+>> +	if (rc) {
+>> +		dev_err(uncore->dev, "Failed to register devfreq (%d)\n", rc);
+>> +		return rc;
+>> +	}
+>> +
+>> +	rc = hisi_uncore_init_dev_interface(uncore);
+>> +	if (rc) {
+>> +		dev_err(uncore->dev, "Failed to init custom device interfaces (%d)\n", rc);
+>> +		return rc;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct acpi_device_id hisi_uncore_freq_acpi_match[] = {
+>> +	{ "HISI04F1", },
+>> +	{ },
+> 
+> No need for that trailing comma on a terminating entry.
+> 
+
+Done
+
+>> +};
+>> +MODULE_DEVICE_TABLE(acpi, hisi_uncore_freq_acpi_match);
+>> +
+>> +static struct platform_driver hisi_uncore_freq_drv = {
+>> +	.probe	= hisi_uncore_freq_probe,
+>> +	.driver = {
+>> +		.name	= "hisi_uncore_freq",
+> 
+> No point in using a tab if it doesn't align with anything else!
+> (generally I dislike trying to force alignment, but here it's really pointless!)
+> 
+
+Yeah.  Actually that's not my intention.  That might be a misclick :D
+
+>> +		.acpi_match_table = hisi_uncore_freq_acpi_match,
+>> +	},
+>> +};
+>> +module_platform_driver(hisi_uncore_freq_drv);
+>> +
+>> +MODULE_DESCRIPTION("HiSilicon uncore frequency scaling driver");
+>> +MODULE_AUTHOR("Jie Zhan <zhanjie9@hisilicon.com>");
+>> +MODULE_LICENSE("GPL");
+> 
 
