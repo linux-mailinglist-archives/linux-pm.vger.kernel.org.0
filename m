@@ -1,145 +1,133 @@
-Return-Path: <linux-pm+bounces-27650-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27651-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7831AC3DE0
-	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 12:30:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B62A2AC3E01
+	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 12:45:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC18F3B8177
-	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 10:30:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D35318976FC
+	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 10:45:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 823231F8AD3;
-	Mon, 26 May 2025 10:30:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA6781F582A;
+	Mon, 26 May 2025 10:45:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="KCBqZl1Z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tJr/37iJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456FD1F4E4F;
-	Mon, 26 May 2025 10:30:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADBF81F4CB8
+	for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 10:45:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748255414; cv=none; b=dhKTjQ1CSDgnWttU+Zs6zTEgemOrnMJqFBNR87llROLgeSBfrw7g5HCZE+7fAICAbvWBJoksvnKy0wpZRItVWzVdUdy0a9wpTc7bi3afyIbr2d5VmPPrzpBAElz2mrifPBaOvHOU37rO0t0Vu0SzU5FJMcR3rQ1Zf5MhT0TAM2E=
+	t=1748256303; cv=none; b=itDibOIlfBvEiPlGqeia2HWmdxL2TpciEfCf5dTyvpqxTrM93fPqnsQB3PegNC2Z7pn5/H4AyUxIXCuH9Q8J6xRpKHU4k5EmtfN02Ho0XUT3VgTFBeT+62rfbHtHHtz/ttFV+XtV2R05Q7TGl8hlezs8XuRO/KvmGeCdgsuhA8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748255414; c=relaxed/simple;
-	bh=evADbRF2EWOAqmWvpPFwz11yO+Rquk4eQojofDihrGA=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=n+62NxEQ2yt51fu00pAY65hPBMWy2OJaRiCIizZcnHm2Z7V9KY01lPl63AI1yZooXm/nZOk7sZ+QTNpMO0zyGt5vGgQe6JkJ0YOiZVK8StKLba6Pim5Eg29Andf/GbHuBNt5sOJ9VLlaryzxlJVDqel1A7O47OjmjSSvFdO5I1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=KCBqZl1Z; arc=none smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 63c214643a1c11f082f7f7ac98dee637-20250526
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=91e5x2EcR5Mt3gBhF7/AndsuLuz3EaR21v2cOsb+1pk=;
-	b=KCBqZl1ZO+kSuZNNZzRv/SND//y8NtY1mE0rWoe152sRgjMbrHjC9BH79g9U9cG2KqxfP5L/sg/f901LK3VwoOkn+8Xgynfd7VqDgAeyyeZQebnJ4dvuSzFEB7UzFcU8YcL7SccKqWC7DBn+Hp2Mo+s++Nz2uMwEy32WnAwh0/8=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.2.1,REQID:1806e5e4-1638-4f9f-8053-b2b5467b2ce0,IP:0,UR
-	L:0,TC:0,Content:-25,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:-55
-X-CID-META: VersionHash:0ef645f,CLOUDID:c9c0bc47-ee4f-4716-aedb-66601021a588,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:2,
-	IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:
-	0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 63c214643a1c11f082f7f7ac98dee637-20250526
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
-	(envelope-from <mason-cw.chang@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1619150673; Mon, 26 May 2025 18:30:05 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.39; Mon, 26 May 2025 18:30:02 +0800
-Received: from mtksitap99.mediatek.inc (10.233.130.16) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1258.39 via Frontend Transport; Mon, 26 May 2025 18:30:03 +0800
-From: Mason Chang <mason-cw.chang@mediatek.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
-	<daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
-	<lukasz.luba@arm.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>,
-	=?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?=
-	<nfraprado@collabora.com>, Julien Panis <jpanis@baylibre.com>, Nicolas Pitre
-	<npitre@baylibre.com>, Colin Ian King <colin.i.king@gmail.com>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, "Chen-Yu
- Tsai" <wenst@chromium.org>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, Frank Wunderlich
-	<frank-w@public-files.de>, Daniel Golle <daniel@makrotopia.org>, Steven Liu
-	<steven.liu@mediatek.com>, Sam Shih <sam.shih@mediatek.com>
-CC: Mason Chang <mason-cw.chang@mediatek.com>
-Subject: [PATCH 3/3] thermal/drivers/mediatek/lvts_thermal: add mt7988 lvts commands
-Date: Mon, 26 May 2025 18:26:59 +0800
-Message-ID: <20250526102659.30225-4-mason-cw.chang@mediatek.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250526102659.30225-1-mason-cw.chang@mediatek.com>
-References: <20250526102659.30225-1-mason-cw.chang@mediatek.com>
+	s=arc-20240116; t=1748256303; c=relaxed/simple;
+	bh=jqaMg616BhstWmDS8XPA9yURNdhIMKlspazlXf+Mz04=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eS97XS+4ntiS6Yei0+Uf6uGaRT2NQx3qSjAZErULu3pFb8afHmSC2RFN5YkLz74Ymydh8HHwxf05U+hzsmKtDgqn7i6/JJZz1UQC9KFNMMJ1eVrIGp3JwrUFaDBr7tanuyOQwns85AR+smsUgRi580evzrnHR8UtlSeFD7qLskA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tJr/37iJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7402DC4CEE7
+	for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 10:45:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748256303;
+	bh=jqaMg616BhstWmDS8XPA9yURNdhIMKlspazlXf+Mz04=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=tJr/37iJ34IQfS9IpGcTF3eJ1ueDZXdoyGwgrd506t8sTE19I1ukV6EolFR1t/1V5
+	 v09X/yk8bH/PG7BPN7RUbP2wCbVZmpXmd+656i4M8ekxt9BHCdeywCs2E+zKKTKsVr
+	 dMgl5cqBqKqSF3MLTKNDup+U315fmhOcO9EqOXQxQ71JMrIqO+dMId5DbQ3koQYyDe
+	 De3C88ediBkPlJorFJb0kTxuSx7JPFYeyh9FNK6qQ7PUpOeR+gNWxuuKVHFyG/GT2r
+	 JfJ4YDYxim+ojhJ62dFQga9/1BQ/IRnuYmtDjgtJCeFJ/16fGDE+yQ/ekoo7XdZY2P
+	 963r4Hw4Qa95A==
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3f94b7bd964so1259100b6e.1
+        for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 03:45:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXRab/t0Klg/2YaQxriE3oKNsiL/Da3xkuKXjGJyjGd8WFefmmF4xtl2TtVSXNlDU5s0pfcVcskjA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yywdon7D7L0CPb1z20Zw+xZXEf+Mr+8w6CHGiRQG6j/kVY+RvuI
+	8ML7BXE6IGAGthUMCnf6mo7KGD5ld0OtwQPr3ofH5Ea4JtjWVQo3E5tcuMlCykALpS3CU796biO
+	di7ra3+V7V+GWCxSVw18zO+qMNYcBg60=
+X-Google-Smtp-Source: AGHT+IEIYvxf+h6LQCqnIpg/EsJ+9iST6pwxFN/hoeyWKHOppsdB7FjMMdXR4AVaKuSlo+pBQkM43mPM3keNHPTGa2k=
+X-Received: by 2002:a05:6808:80c3:b0:404:ed12:453 with SMTP id
+ 5614622812f47-4064682bebcmr4930416b6e.19.1748256302813; Mon, 26 May 2025
+ 03:45:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
+References: <20250526063647.ydi7vlqdiguf7cof@vireshk-i7>
+In-Reply-To: <20250526063647.ydi7vlqdiguf7cof@vireshk-i7>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 26 May 2025 12:44:48 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iEts2_SBPi4gV5TzUP0K-9-Fy09qBJ+V75E9U+SCyPMw@mail.gmail.com>
+X-Gm-Features: AX0GCFtPiI2DEjsaSj72KqwhmKEAhAP4xqBEFO4VF6-h5vlMuesujp0XeQJxUbc
+Message-ID: <CAJZ5v0iEts2_SBPi4gV5TzUP0K-9-Fy09qBJ+V75E9U+SCyPMw@mail.gmail.com>
+Subject: Re: [GIT PULL] OPP updates for 6.16
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-These commands are necessary to avoid severely abnormal and inaccurate
-temperature readings that are caused by using the default commands.
+On Mon, May 26, 2025 at 8:36=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
+>
+> The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089a=
+c8:
+>
+>   Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-u=
+pdates-6.16
+>
+> for you to fetch changes up to 03eadcbd981b4c9b10ec89a046deeccb115c98b3:
+>
+>   OPP: switch to use kmemdup_array() (2025-05-19 15:37:53 +0530)
+>
+> ----------------------------------------------------------------
+> OPP Updates for 6.16
+>
+> - OPP: Add dev_pm_opp_set_level() (Praveen Talari).
+>
+> - Introduce scope-based cleanup headers and mutex locking guards in OPP
+>   core (Viresh Kumar).
+>
+> - switch to use kmemdup_array() (Zhang Enpei).
+>
+> ----------------------------------------------------------------
+> Praveen Talari (1):
+>       OPP: Add dev_pm_opp_set_level()
+>
+> Viresh Kumar (6):
+>       OPP: Remove _get_opp_table_kref()
+>       OPP: Return opp from dev_pm_opp_get()
+>       OPP: Return opp_table from dev_pm_opp_get_opp_table_ref()
+>       OPP: Use scope-based OF cleanup helpers
+>       OPP: Define and use scope-based cleanup helpers
+>       OPP: Use mutex locking guards
+>
+> Zhang Enpei (1):
+>       OPP: switch to use kmemdup_array()
+>
+>  drivers/opp/core.c     | 428 +++++++++++++++++++++++++++++++++++++++++++=
++++++++++++++--------------------------------------------------------------=
+-----------------------------------------
+>  drivers/opp/cpu.c      |  30 ++++--------
+>  drivers/opp/of.c       | 205 +++++++++++++++++++++++++++----------------=
+---------------------------------
+>  drivers/opp/opp.h      |   1 -
+>  include/linux/pm_opp.h |  32 ++++++++++--
+>  5 files changed, 262 insertions(+), 434 deletions(-)
+>
+> --
 
-Signed-off-by: Mason Chang <mason-cw.chang@mediatek.com>
----
- drivers/thermal/mediatek/lvts_thermal.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+Applied and added to linux-pm.git/linux-next.
 
-diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index 5b7bf29a7..4d49482f0 100644
---- a/drivers/thermal/mediatek/lvts_thermal.c
-+++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -1443,6 +1443,8 @@ static int lvts_resume(struct device *dev)
- }
- 
- static const u32 default_conn_cmds[] = { 0xC103FFFF, 0xC502FF55 };
-+static const u32 mt7988_conn_cmds[] = { 0xC103FFFF, 0xC502FC55 };
-+
- /*
-  * Write device mask: 0xC1030000
-  */
-@@ -1453,6 +1455,12 @@ static const u32 default_init_cmds[] = {
- 	0xC10300FC, 0xC103009D, 0xC10300F1, 0xC10300E1
- };
- 
-+static const u32 mt7988_init_cmds[] = {
-+	0xC1030300, 0xC1030420, 0xC1030500, 0xC10307A6, 0xC1030CFC,
-+	0xC1030A8C, 0xC103098D, 0xC10308F1, 0xC1030B04, 0xC1030E01,
-+	0xC10306B8
-+};
-+
- /*
-  * The MT8186 calibration data is stored as packed 3-byte little-endian
-  * values using a weird layout that makes sense only when viewed as a 32-bit
-@@ -1747,11 +1755,11 @@ static const struct lvts_ctrl_data mt8195_lvts_ap_data_ctrl[] = {
- 
- static const struct lvts_data mt7988_lvts_ap_data = {
- 	.lvts_ctrl	= mt7988_lvts_ap_data_ctrl,
--	.conn_cmd	= default_conn_cmds,
--	.init_cmd	= default_init_cmds,
-+	.conn_cmd	= mt7988_conn_cmds,
-+	.init_cmd	= mt7988_init_cmds,
- 	.num_lvts_ctrl	= ARRAY_SIZE(mt7988_lvts_ap_data_ctrl),
--	.num_conn_cmd	= ARRAY_SIZE(default_conn_cmds),
--	.num_init_cmd	= ARRAY_SIZE(default_init_cmds),
-+	.num_conn_cmd	= ARRAY_SIZE(mt7988_conn_cmds),
-+	.num_init_cmd	= ARRAY_SIZE(mt7988_init_cmds),
- 	.temp_factor	= LVTS_COEFF_A_MT7988,
- 	.temp_offset	= LVTS_COEFF_B_MT7988,
- 	.gt_calib_bit_offset = 24,
--- 
-2.45.2
+I gather that it doesn't depend on the Rust material, so it will be
+included in the first PM pull request for 6.16-rc1.
 
+Thanks!
 
