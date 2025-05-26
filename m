@@ -1,133 +1,100 @@
-Return-Path: <linux-pm+bounces-27651-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27652-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B62A2AC3E01
-	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 12:45:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B86EAC3E2F
+	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 12:54:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D35318976FC
-	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 10:45:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0444A16ED7A
+	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 10:54:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA6781F582A;
-	Mon, 26 May 2025 10:45:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A2931F4725;
+	Mon, 26 May 2025 10:54:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tJr/37iJ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cBL0RYtU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADBF81F4CB8
-	for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 10:45:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F05514AD2B
+	for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 10:54:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748256303; cv=none; b=itDibOIlfBvEiPlGqeia2HWmdxL2TpciEfCf5dTyvpqxTrM93fPqnsQB3PegNC2Z7pn5/H4AyUxIXCuH9Q8J6xRpKHU4k5EmtfN02Ho0XUT3VgTFBeT+62rfbHtHHtz/ttFV+XtV2R05Q7TGl8hlezs8XuRO/KvmGeCdgsuhA8A=
+	t=1748256884; cv=none; b=XCpx05VZz9l1DSjfOw+15YbHmsCTx2uhscI7wnkbtUc3WyR3kbW41n+VUZXMWvrZRq8YiWDHBFzL/8se076YV1kP3sLQMxRXEScPhBuYfTHKbEM8cRqLy5wJn1ggE2IOGjENkvXH+QD2+JREfdiM2IyXIWh7odiwtKP08ELaZRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748256303; c=relaxed/simple;
-	bh=jqaMg616BhstWmDS8XPA9yURNdhIMKlspazlXf+Mz04=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eS97XS+4ntiS6Yei0+Uf6uGaRT2NQx3qSjAZErULu3pFb8afHmSC2RFN5YkLz74Ymydh8HHwxf05U+hzsmKtDgqn7i6/JJZz1UQC9KFNMMJ1eVrIGp3JwrUFaDBr7tanuyOQwns85AR+smsUgRi580evzrnHR8UtlSeFD7qLskA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tJr/37iJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7402DC4CEE7
-	for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 10:45:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748256303;
-	bh=jqaMg616BhstWmDS8XPA9yURNdhIMKlspazlXf+Mz04=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=tJr/37iJ34IQfS9IpGcTF3eJ1ueDZXdoyGwgrd506t8sTE19I1ukV6EolFR1t/1V5
-	 v09X/yk8bH/PG7BPN7RUbP2wCbVZmpXmd+656i4M8ekxt9BHCdeywCs2E+zKKTKsVr
-	 dMgl5cqBqKqSF3MLTKNDup+U315fmhOcO9EqOXQxQ71JMrIqO+dMId5DbQ3koQYyDe
-	 De3C88ediBkPlJorFJb0kTxuSx7JPFYeyh9FNK6qQ7PUpOeR+gNWxuuKVHFyG/GT2r
-	 JfJ4YDYxim+ojhJ62dFQga9/1BQ/IRnuYmtDjgtJCeFJ/16fGDE+yQ/ekoo7XdZY2P
-	 963r4Hw4Qa95A==
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3f94b7bd964so1259100b6e.1
-        for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 03:45:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXRab/t0Klg/2YaQxriE3oKNsiL/Da3xkuKXjGJyjGd8WFefmmF4xtl2TtVSXNlDU5s0pfcVcskjA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yywdon7D7L0CPb1z20Zw+xZXEf+Mr+8w6CHGiRQG6j/kVY+RvuI
-	8ML7BXE6IGAGthUMCnf6mo7KGD5ld0OtwQPr3ofH5Ea4JtjWVQo3E5tcuMlCykALpS3CU796biO
-	di7ra3+V7V+GWCxSVw18zO+qMNYcBg60=
-X-Google-Smtp-Source: AGHT+IEIYvxf+h6LQCqnIpg/EsJ+9iST6pwxFN/hoeyWKHOppsdB7FjMMdXR4AVaKuSlo+pBQkM43mPM3keNHPTGa2k=
-X-Received: by 2002:a05:6808:80c3:b0:404:ed12:453 with SMTP id
- 5614622812f47-4064682bebcmr4930416b6e.19.1748256302813; Mon, 26 May 2025
- 03:45:02 -0700 (PDT)
+	s=arc-20240116; t=1748256884; c=relaxed/simple;
+	bh=WoRRDE7tMT6ju9+8BJZvDtVb7dYNA0fgQEcnW7e3AR8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YQhahIaUNou/1isv/BYV63L18fJlKLeseOoDSoidt4sXGSAM+hqF///Fvo3SVQR2+jAiBO/6AL9CYJikjIPzoqIR3caqqQt8OHkLAH2fV/8EANA7IPPCKVEpLV1xPy9lVAzHNV1rZrRnwOxa2cznDJAJLukO5suNI6cn0RvlwrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cBL0RYtU; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-22d95f0dda4so21162335ad.2
+        for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 03:54:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1748256882; x=1748861682; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tLCxic84uJtwU//3LF6ddUkS7r9eUJOZDNLeT51w6NU=;
+        b=cBL0RYtUc3m/+Rh0xKItEAwPHesWTR0V7rgbqbshN5m1Hljxmu1Mr+ZusFoaEx8Oyg
+         7KipxW2RW8vWbpi47mySNAYcR4Gpz4hTZCfLmfdjJP/JoOVI7sN7iBCqagLIAt3W5sQh
+         JyU4H4qEH/oPIPMc8nJhiDnJ2sUHxR+7iX7J03j4wt2W5A5gM+6DCUWsLUrhsRzABAvz
+         T74Kzb1U5ReEf995sUpYAgYZiCFB6jB5tnfunsRKK6vi11MToJr2U0oZkJWRYxwyR2jg
+         4AhwfjK2fbqscTYbm6qnLFB7SDvKi6lwrxASUyFQk907iZk5pBqbKmG3XRZm04Q19brG
+         mt7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748256882; x=1748861682;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tLCxic84uJtwU//3LF6ddUkS7r9eUJOZDNLeT51w6NU=;
+        b=drHC2M24qkkw+QXJQZZcLJk5aaxXb6akaqNOMZd1KMvoPaguJnsBeL+SDWZaHu8JHi
+         VVpYQ/nOEsxcV6mZkQJ66FFFzLD8rgwZ+QmCCPClU2rHpJzufC13UibLiCIc7WXZLP5X
+         b+UDAo7uFWx2acSEH559qbTVJG6lCKggXgPep1wgc1II4qv7zXf3VdNBCmweR7gzUnD7
+         29gt2tB4k3mTgMv7vJl6lDEpcUa0Bmv+UBAtPvdu2iPsz6tqlonGm9d3RaqJ+QIpXxf8
+         JbdGPkNw3vQ4kInu8mz5yZG/pe9WamVksbZRAP4EY3TFPvO+YRg3glYS1GXEbzesjjTt
+         xTSQ==
+X-Gm-Message-State: AOJu0Yw3KxzPMCIpNRgPF5FymROBC37/A/2OmP3RnQ0P+ZHrvBmHfW6H
+	TIQ/Wu6FpdoyhbcHMXDJxnjYrJddlw/LdXkH8IQGB9EgAvxoSXOb4bXozfDoTxKLRVjk+7Zoi3Q
+	2En3U
+X-Gm-Gg: ASbGncvBVQ2QqXrWzH3k1l9rCVC3xcB9Zrxym/gjciPx96EMfpYAs7o3K+LF2LnYq4J
+	I7xgb753kmSJP0xqIPCPoqpfJmJDhORJX56M/LE/PIQvuwuU2awXNKmGhX+vE/Ju9tsyc1UCGcH
+	RFSEGqLkEWzzfHwpQlff1AnHr9fGqjExRl2cqCT5gZp34ujBXhd/nGS7GEA+hRYXWxKj75KAoyc
+	0aX0YTXQkLN70VF63xW70oeA09G0TKcUX6zymt20vpzkuOfQy5SJAe6aT2xC98UbKq4YbjEMrtC
+	eLETALmS6/UPzmr3+vKbxsU7WBbkvKyCkAOCwqgkfoiNPvI8YDKq
+X-Google-Smtp-Source: AGHT+IGCeaICQqcTOZvKYH88FEe3Fu+UqQ3DRySLa3lEHif8v6RPKTT7qsMgExf9t/iMecbP9pww6w==
+X-Received: by 2002:a17:903:19f0:b0:233:ab04:27a with SMTP id d9443c01a7336-2341500e3d6mr151462825ad.53.1748256881847;
+        Mon, 26 May 2025 03:54:41 -0700 (PDT)
+Received: from localhost ([122.172.81.72])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2342d6cf012sm30999205ad.96.2025.05.26.03.54.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 May 2025 03:54:41 -0700 (PDT)
+Date: Mon, 26 May 2025 16:24:38 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [GIT PULL] OPP updates for 6.16
+Message-ID: <20250526105438.fvgnvqdgbm5inlal@vireshk-i7>
+References: <20250526063647.ydi7vlqdiguf7cof@vireshk-i7>
+ <CAJZ5v0iEts2_SBPi4gV5TzUP0K-9-Fy09qBJ+V75E9U+SCyPMw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250526063647.ydi7vlqdiguf7cof@vireshk-i7>
-In-Reply-To: <20250526063647.ydi7vlqdiguf7cof@vireshk-i7>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 26 May 2025 12:44:48 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iEts2_SBPi4gV5TzUP0K-9-Fy09qBJ+V75E9U+SCyPMw@mail.gmail.com>
-X-Gm-Features: AX0GCFtPiI2DEjsaSj72KqwhmKEAhAP4xqBEFO4VF6-h5vlMuesujp0XeQJxUbc
-Message-ID: <CAJZ5v0iEts2_SBPi4gV5TzUP0K-9-Fy09qBJ+V75E9U+SCyPMw@mail.gmail.com>
-Subject: Re: [GIT PULL] OPP updates for 6.16
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0iEts2_SBPi4gV5TzUP0K-9-Fy09qBJ+V75E9U+SCyPMw@mail.gmail.com>
 
-On Mon, May 26, 2025 at 8:36=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
->
-> The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089a=
-c8:
->
->   Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-u=
-pdates-6.16
->
-> for you to fetch changes up to 03eadcbd981b4c9b10ec89a046deeccb115c98b3:
->
->   OPP: switch to use kmemdup_array() (2025-05-19 15:37:53 +0530)
->
-> ----------------------------------------------------------------
-> OPP Updates for 6.16
->
-> - OPP: Add dev_pm_opp_set_level() (Praveen Talari).
->
-> - Introduce scope-based cleanup headers and mutex locking guards in OPP
->   core (Viresh Kumar).
->
-> - switch to use kmemdup_array() (Zhang Enpei).
->
-> ----------------------------------------------------------------
-> Praveen Talari (1):
->       OPP: Add dev_pm_opp_set_level()
->
-> Viresh Kumar (6):
->       OPP: Remove _get_opp_table_kref()
->       OPP: Return opp from dev_pm_opp_get()
->       OPP: Return opp_table from dev_pm_opp_get_opp_table_ref()
->       OPP: Use scope-based OF cleanup helpers
->       OPP: Define and use scope-based cleanup helpers
->       OPP: Use mutex locking guards
->
-> Zhang Enpei (1):
->       OPP: switch to use kmemdup_array()
->
->  drivers/opp/core.c     | 428 +++++++++++++++++++++++++++++++++++++++++++=
-+++++++++++++--------------------------------------------------------------=
------------------------------------------
->  drivers/opp/cpu.c      |  30 ++++--------
->  drivers/opp/of.c       | 205 +++++++++++++++++++++++++++----------------=
----------------------------------
->  drivers/opp/opp.h      |   1 -
->  include/linux/pm_opp.h |  32 ++++++++++--
->  5 files changed, 262 insertions(+), 434 deletions(-)
->
-> --
+On 26-05-25, 12:44, Rafael J. Wysocki wrote:
+> I gather that it doesn't depend on the Rust material, so it will be
+> included in the first PM pull request for 6.16-rc1.
 
-Applied and added to linux-pm.git/linux-next.
+Right.
 
-I gather that it doesn't depend on the Rust material, so it will be
-included in the first PM pull request for 6.16-rc1.
-
-Thanks!
+-- 
+viresh
 
