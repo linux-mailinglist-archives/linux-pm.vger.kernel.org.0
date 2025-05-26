@@ -1,120 +1,109 @@
-Return-Path: <linux-pm+bounces-27646-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27647-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9930FAC3DB8
-	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 12:12:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4749FAC3DD8
+	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 12:29:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4425518950CD
-	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 10:12:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08370171852
+	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 10:29:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 298D81F17F7;
-	Mon, 26 May 2025 10:12:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 687AB1F4C85;
+	Mon, 26 May 2025 10:29:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bu/4jCXL"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="Y81Efuj7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 839FA1DCB09
-	for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 10:12:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D84711C3BFC;
+	Mon, 26 May 2025 10:29:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748254361; cv=none; b=MbewhiCGl0C0QddXfZhcmD6EGwgnDDaSixB/V4rBJfZtjAqWmu3m446BYPU6ciRODf4jkX+/gVaFNBalAl9eZt5g6Xfr4zqBbG2OCqJaayk1XK1EEXD9blLzugAXPKBHoGQZBtQjtWdtxLYPoCldkLMgrTz/X9ojxB0tYsuafuA=
+	t=1748255350; cv=none; b=UP7WAsNgeMmbR1CZLXYQe8eceV7ZHWNoxm4VPm+vJJcX2M8axSJAgeiSitQo+rkxr94BVmADEarakqAKW/0tssUT9C34Tf1ZzWkF1Zh39nJpT8iSbOl4ZycCH7Je5i4La3z7aNkpBlr5mnJER6fle+PP6fq+8G+q3HtooehDSqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748254361; c=relaxed/simple;
-	bh=wNDOt/KgMMP7lsIAa87g1prMRWTJTTagQvC31pmgO2A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lZbZWA3C8QqOzG3C/wDfnHyUTHJAgHdMFosYi79kicUQezKKEsFdET6wJv+Z9TDqpBVzsXS9w6q4Ae089Y8SkeAtHDINiNTLX3/HcZ3P6DatQ6qX4PV4uM4xhpACXlCB7F6uBYBT+qq6+QYp5fk5tbgWz7AWW/jXx2/x1GdmH/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bu/4jCXL; arc=none smtp.client-ip=209.85.219.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e7db7334738so336062276.3
-        for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 03:12:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1748254358; x=1748859158; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wNDOt/KgMMP7lsIAa87g1prMRWTJTTagQvC31pmgO2A=;
-        b=bu/4jCXLBfgyWSxXuOjtGpgjGvbDvjib9BCju7rEnPC1PEy7+yBMb6hsDiSYy3zI8p
-         A5cT1MpgVYgKvL/wgX/IPmlOXoRZ6RJcZMaCY5oFRh1TM/Zmd+AZdh//QMb0SESMbFPp
-         yFWwdPXQVYm/Y8nEFFg2+7K6gTdu972XrnI07lduhghtk4BZBKM8/rijmoz5jUwRFY++
-         59iA16et8pymKvoVaM93JuF+pO/WLAIrivstrKJpeBJj3rfDKtRt1z8sKYlYMBeZ1ZYz
-         9To3HGlBHRGUb3fOkRK9lpnD3hprjjgjY8Ieu6fm5gLEiJ1JeYgWd1oUFObdqwYuHuBe
-         XUuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748254358; x=1748859158;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wNDOt/KgMMP7lsIAa87g1prMRWTJTTagQvC31pmgO2A=;
-        b=YwCRWYlrKzhDfe4rOT+5+JaJu3kn3geN3ctxQF2bqcGRoQkilredAVhCPQgJVa9HUv
-         PohqAbLkPFlMWX/o/c6mVBNvWQJluedvQwQS8JSuRoXdtWCavaAptBQKtTCrfFpiq6ia
-         LoYmb4vPhlx8yXSfAFt5TGSeJMt8YpNGFk8pLOERfizoFY+8hKnkkyr5NTRFHnoKhfMu
-         HG1s9CGX9RerAKG546+P7bzAmbO3teCfG4hSSUYOwoIQ/q6jQnOxPw2hAPku0gsUK2ca
-         Tkem+Ko+qf8OvJY6YU1WMFp/3etVZgIq8b0EOsQL13XgDnzAUV08Gntj7aIz9uHyvsHm
-         7fIg==
-X-Forwarded-Encrypted: i=1; AJvYcCUD1tGoKgMMSNvi7PJ4eqD3y+jvgWz3R9FS8ijC1qs18A2Aq31dEyw2YcwnaGFJ79oi731kXDQmtg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzragUe7XGq1wxnMB2qXD/aEvUI2x+RR9KMUJgXQzwF1awKC2s8
-	WNResdyC8PG3qFardJ8O9ZQQnDFDl5Mg7KqcUmay7FVy+UKZYw+RjCkTAOWfPlogTLaqlhWY3eh
-	vK3ocmZwlVkvAK8iIhhGOHJN2/EUxQ3agDughYKODSw==
-X-Gm-Gg: ASbGncswFw/QUzfwDcvK0TSAymwOQPoxo8fcY5ni0gNCRXxOMRMPHEHlDF56Hu9Bhvr
-	s2rGs8NfkZk5Q18gNB7xrcQPulcUo+5Z4POREQN1z7ftWYIsJRrXkkT4nKCzjowVfg0h0FeyU6V
-	S8jQ2Z4i0o3v4pl2Lom3JtPex5qnEe5BCvCxrZ07/0MBu4
-X-Google-Smtp-Source: AGHT+IHi2XOZ9dRIdDcFBl3BRRFnnGCoagXOgAmEZ2Ih20GPqbGzZkP+XJCYm0HJs1gaCBhpq5GmobfeIAleVXtAPSQ=
-X-Received: by 2002:a05:6902:1082:b0:e7d:b5bc:aa7c with SMTP id
- 3f1490d57ef6-e7db5bcabb1mr1985809276.16.1748254358450; Mon, 26 May 2025
- 03:12:38 -0700 (PDT)
+	s=arc-20240116; t=1748255350; c=relaxed/simple;
+	bh=dZOAvYOewadzcPcnvWUn/AR8zt4RFBd2FLaurgPflTE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=itc19ceMzsh9o4qGdKTr1QOMDlgGxPFrlOAlpMUTIo0X5hHhD3UyFcny8x6Ib9hubaGJZnWSTa6CZkWSvhQ2NvaeOr4VJiVZJ+RtL23RLTYqoO7dQ3wn4NEpF9FZpJ0H92QCQliD4QMg1Luw+Gx5JoxKNIkHnzBbpUchLSVOF2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=Y81Efuj7; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 3f096b223a1c11f0813e4fe1310efc19-20250526
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=GAsd9eNeTAxwTsjxWBsXwdLIVBhMhnuoasv/118TESw=;
+	b=Y81Efuj7ph0c55XAV2JEUAxkpG08fbsWoyqMcJ6uSQdpiYmlS5w7qbPoaJDQaM6igZjwDjEDWa+fnP4yJbEBBJyQTOCNz80b38G4VwNV9We8UlfnPWB7g2jSJlD5Cyo8F7JD984tgcW8VW9kLnUp4Mz4spa6cta7Ie3xi8uI+1Y=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.2.1,REQID:35b8a956-95bf-49e7-8a5a-717c8956de20,IP:0,UR
+	L:0,TC:0,Content:56,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:26
+X-CID-META: VersionHash:0ef645f,CLOUDID:e225fc57-abad-4ac2-9923-3af0a8a9a079,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:3|50,EDM:2,IP:nil
+	,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:
+	1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 3f096b223a1c11f0813e4fe1310efc19-20250526
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+	(envelope-from <mason-cw.chang@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1944595671; Mon, 26 May 2025 18:29:03 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.39; Mon, 26 May 2025 18:28:59 +0800
+Received: from mtksitap99.mediatek.inc (10.233.130.16) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1258.39 via Frontend Transport; Mon, 26 May 2025 18:28:59 +0800
+From: Mason Chang <mason-cw.chang@mediatek.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
+	<daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+	<lukasz.luba@arm.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>,
+	=?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?=
+	<nfraprado@collabora.com>, Julien Panis <jpanis@baylibre.com>, Nicolas Pitre
+	<npitre@baylibre.com>, Colin Ian King <colin.i.king@gmail.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, Chen-Yu
+ Tsai <wenst@chromium.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, Frank Wunderlich
+	<frank-w@public-files.de>, Daniel Golle <daniel@makrotopia.org>, Steven Liu
+	<steven.liu@mediatek.com>, Sam Shih <sam.shih@mediatek.com>
+CC: Mason Chang <mason-cw.chang@mediatek.com>
+Subject: [PATCH 0/3] thermal/drivers/mediatek/lvts_thermal: add mt7988 lvts commands
+Date: Mon, 26 May 2025 18:26:56 +0800
+Message-ID: <20250526102659.30225-1-mason-cw.chang@mediatek.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250523134025.75130-1-ulf.hansson@linaro.org>
- <20250523134025.75130-10-ulf.hansson@linaro.org> <4a0ec467-b81e-4282-8e09-b7adc67eba97@oss.qualcomm.com>
-In-Reply-To: <4a0ec467-b81e-4282-8e09-b7adc67eba97@oss.qualcomm.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 26 May 2025 12:12:02 +0200
-X-Gm-Features: AX0GCFuhoe61jaT4ElHv6kD_woYqu09-YjR-85TQ3dhfrASylj73JDHmzoEBPqk
-Message-ID: <CAPDyKFo+DDuBiic78hdN6JVSO1iQbJTvJgPwYaO8Y8soaJyEhg@mail.gmail.com>
-Subject: Re: [PATCH v2 09/21] pmdomain: qcom: rpmhpd: Use of_genpd_sync_state()
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Saravana Kannan <saravanak@google.com>, Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Michael Grzeschik <m.grzeschik@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
-	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, 
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Johan Hovold <johan@kernel.org>, 
-	Maulik Shah <maulik.shah@oss.qualcomm.com>, Michal Simek <michal.simek@amd.com>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-Hi Konrad,
+Add the LVTS commands for Mediatek Filogic 880/MT7988.
 
-On Fri, 23 May 2025 at 21:42, Konrad Dybcio
-<konrad.dybcio@oss.qualcomm.com> wrote:
->
-> On 5/23/25 3:40 PM, Ulf Hansson wrote:
-> > To make sure genpd tries to power off unused PM domains, let's call
-> > of_genpd_sync_state() from our own ->sync_state() callback.
-> >
-> > Cc: Bjorn Andersson <andersson@kernel.org>
-> > Cc: Konrad Dybcio <konradybcio@kernel.org>
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
->
-> note: the subject is wrong - this driver is rpmpd, the other
-> one is rpm*h*pd (patch 10 has the correct subject)
+This series fixes severely abnormal and inaccurate LVTS temperature
+readings when using the default commands.
 
-Thanks for spotting this!
+Signed-off-by: Mason Chang <mason-cw.chang@mediatek.com>
 
-BTW, would it be possible for you to run some tests on QC HW for this?
-Any help would be greatly appreciated.
+Mason Chang (3):
+  thermal/drivers/mediatek/lvts_thermal: change lvts commands array to
+    static const
+  thermal/drivers/mediatek/lvts_thermal: add lvts commands and their
+    sizes to driver data
+  thermal/drivers/mediatek/lvts_thermal: add mt7988 lvts commands
 
-Kind regards
-Uffe
+ drivers/thermal/mediatek/lvts_thermal.c | 74 ++++++++++++++++++++-----
+ 1 file changed, 61 insertions(+), 13 deletions(-)
+
+-- 
+2.45.2
+
 
