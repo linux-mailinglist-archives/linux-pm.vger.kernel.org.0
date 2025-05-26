@@ -1,125 +1,80 @@
-Return-Path: <linux-pm+bounces-27653-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27654-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E3E2AC3E51
-	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 13:09:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 363BCAC3E98
+	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 13:31:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3788C176D98
-	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 11:09:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E762F3B6557
+	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 11:30:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7CB71F7580;
-	Mon, 26 May 2025 11:09:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rvv8IKZw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC1E4156228;
+	Mon, 26 May 2025 11:31:10 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88301F4180;
-	Mon, 26 May 2025 11:09:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7624910E3;
+	Mon, 26 May 2025 11:31:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748257751; cv=none; b=nJe/az0XbNBpYirCPRBq5T93coUsdsdaK5Cs9rxNiRkK81tVESxFw+xfHyK8opmYugzpTbxHtbPhaNtA32OFVpbyueoByOu01QoOSvkG2MGpOg3w6qhbVF0bm1A2sZ4AgNPhHUmMdTYUd6LDgM1p90zLmvgv8gNT5TkHENCtAgM=
+	t=1748259070; cv=none; b=Dr4UXvkZPiItQzpqJPHcLlE57qI5Uu+8DIJnEUw9PMA/Tu2Dl1N+JJ+76Pr4FJ2KC4R3r4MiQuu9BpfzCTlsE4eLoQXreTIS0QvYVYyS+jKVt2rEUxyOnhwcd7b67loib2RfgHKJd5s3sXXKCnioF0oFysPARZ9bDWQWRv2vdwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748257751; c=relaxed/simple;
-	bh=AsfpaPTDC+OYbgOCC0jEDUUnbLPKEPdMFbZHZ4SKdh8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N/uRB4XMdoKgCLh5PK6r/lRoZaK6LdC74SI+ssvj9xmfdy/XuoB6ytL5YN5yeJ3HtFdGuqi72CfEPuSPY9Go6D1DXRmCkKTndMA/OWQlChyqcaCIK1CePPXBxiGYjJasQCXLW97/yE/66kEfR+gBg276AkEwHoVSdisU1fdtIkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rvv8IKZw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 189C1C4CEF4;
-	Mon, 26 May 2025 11:09:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748257751;
-	bh=AsfpaPTDC+OYbgOCC0jEDUUnbLPKEPdMFbZHZ4SKdh8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=rvv8IKZwV7//CReWxIASz+vn2B/lgb/ziIEmWFhe05CpYYODJr4yabe8Wrw1T3tna
-	 I6z0oZkGKl0jb4krW/mmRXZJdrxdpai7TJ6kJyrcfc7yUt9C6QBBPbYiZDGm5pbhEL
-	 RWHAcKg5ucUA9mPTQOXPuoGgGKAMEU1PvWF5rAFL4tkm9g+h1Kzob8YBhneNLAaYQk
-	 K4BYv0QgjEp/mEqs66DzAzvk5d2Ux8f1LINwAHg08LOIz09wJrO/GsXGMw0+5R6TjK
-	 MCCwsYWVEXenUMwCXQXSo+mh2pDdsgQQ0FDdTbWCzgD8PLqJFNHA/RGfXD61c5EQ+G
-	 2kK/jLo4GoH1g==
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-400fa6eafa9so1222041b6e.1;
-        Mon, 26 May 2025 04:09:11 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU3r8UbTf/OREUjbEZeEUJ1d0IWLANmulheGZorCeq0bNdbMrtKqlGP9jgtvMH9CPUrO/l58IdiK5Kk4Lg=@vger.kernel.org, AJvYcCUSP5MTW3bjpsabbac4/UPl/1nkXMB6Q1WIGald7CLGOgBUgCgd3PbZ86RSr74XeoWj8IUTkWcyX62XYlAN+eo=@vger.kernel.org, AJvYcCXrps8ELbxJJTOkF3c9h14ijzUmJngV2GyEj5J3ibg0vZGJuvbDwNOpzp6YbCGUbpETP6pYvkKjJkY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzj8PBP/Mekcvhzp67oDK20Zo2oVAH+zWWzFT+PFc9MA/NdlZJA
-	pd615W2DVbT19gqeeYgTUR5CAiMF2CsztCkKeJlG5AHE8+HDl3+sUEAk7dwlWHwwA6I3q7seAp1
-	TE+CgfkN/gMGCVIq5aV6Hf73fBb2YYZI=
-X-Google-Smtp-Source: AGHT+IFOeaPpPGmYn7dVAaU+KM8QqAb/9uaFoMYACp+Z/v1FEQ0CuwF9UtmQD2LKWYhzbyNsqmfJzpkzY3j5ntJfQuM=
-X-Received: by 2002:a05:6808:1a24:b0:404:a009:630b with SMTP id
- 5614622812f47-40646874847mr5236886b6e.39.1748257750304; Mon, 26 May 2025
- 04:09:10 -0700 (PDT)
+	s=arc-20240116; t=1748259070; c=relaxed/simple;
+	bh=aWKAJqxQ5cA15GSoq6PTN/J56VFxZG1kjousgJwks5o=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GeKWMbxMHCOL/C14v+e5o5vfQphXKE5rlprjaBW4MTIBVD3zs2p3oTVGnLdOCisFVSg3hn3Ng1HDaT4GNw3g+BtcNsGIl1PkZ1s5SpTY34eZrkU9yv4O3LuPGOFbU340l/lUIpyAMx4rpbbQ/6WWNM3F31kuJa6ESD5y5/loaKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4b5YSf5LpYz13LvC;
+	Mon, 26 May 2025 19:29:22 +0800 (CST)
+Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
+	by mail.maildlp.com (Postfix) with ESMTPS id 9387C18006C;
+	Mon, 26 May 2025 19:31:04 +0800 (CST)
+Received: from localhost.localdomain (10.50.165.33) by
+ kwepemh100008.china.huawei.com (7.202.181.93) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 26 May 2025 19:31:03 +0800
+From: Lifeng Zheng <zhenglifeng1@huawei.com>
+To: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <robert.moore@intel.com>,
+	<lenb@kernel.org>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-acpi@vger.kernel.org>, <acpica-devel@lists.linux.dev>,
+	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
+	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>,
+	<cenxinghai@h-partners.com>, <yubowen8@huawei.com>, <zhenglifeng1@huawei.com>
+Subject: [PATCH 0/3] cpufreq: CPPC: Some optimizations for cppc_cpufreq.c.
+Date: Mon, 26 May 2025 19:30:54 +0800
+Message-ID: <20250526113057.3086513-1-zhenglifeng1@huawei.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <a80bfedcb4d94531dc27d3b48062db5042078e88.1748237646.git.viresh.kumar@linaro.org>
-In-Reply-To: <a80bfedcb4d94531dc27d3b48062db5042078e88.1748237646.git.viresh.kumar@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 26 May 2025 13:08:56 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0j5-8U5HbDHjx8C+Z3eX3M0sfE_FV+O29HY04eWoecfJQ@mail.gmail.com>
-X-Gm-Features: AX0GCFtYCnEaJcZ6GzBtfXoM8p2Uo3heQzV1-lGDSlStuT03-KN64WF9iTd_FzA
-Message-ID: <CAJZ5v0j5-8U5HbDHjx8C+Z3eX3M0sfE_FV+O29HY04eWoecfJQ@mail.gmail.com>
-Subject: Re: [PATCH] rust: opp: Make the doctest example depend on CONFIG_OF
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, linux-pm@vger.kernel.org, 
-	Vincent Guittot <vincent.guittot@linaro.org>, kernel test robot <lkp@intel.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ kwepemh100008.china.huawei.com (7.202.181.93)
 
-On Mon, May 26, 2025 at 7:35=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
->
-> The doctest example uses a function only available for CONFIG_OF and so
-> the build with doc tests fails when it isn't enabled.
->
->   error[E0599]: no function or associated item named `from_of_cpumask`
->   found for struct `rust_doctest_kernel_alloc_kbox_rs_4::kernel::opp::Tab=
-le`
->   in the current scope
->
-> Fix this by making the doctest depend on CONFIG_OF.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202505260856.ZQWHW2xT-lkp@i=
-ntel.com/
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
-> Rafael,
->
-> Please apply this directly, if no one objects to it. Thanks.
+This patch series makes some minor optimizations for cppc_cpufreq.c to
+makes codes cleaner.
 
-Done, thanks!
+Lifeng Zheng (3):
+  cpufreq: CPPC: Remove cpu_data_list
+  cpufreq: CPPC: Return void in populate_efficiency_class()
+  cpufreq: CPPC: Remove forward declaration of
+    cppc_cpufreq_register_em()
 
->
->  rust/kernel/opp.rs | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/rust/kernel/opp.rs b/rust/kernel/opp.rs
-> index 212555dacd45..c2bdc11f3999 100644
-> --- a/rust/kernel/opp.rs
-> +++ b/rust/kernel/opp.rs
-> @@ -582,6 +582,7 @@ extern "C" fn config_regulators(
->  /// use kernel::opp::Table;
->  /// use kernel::types::ARef;
->  ///
-> +/// #[cfg(CONFIG_OF)]
->  /// fn get_table(dev: &ARef<Device>, mask: &mut Cpumask, freq: Hertz) ->=
- Result<Table> {
->  ///     let mut opp_table =3D Table::from_of_cpumask(dev, mask)?;
->  ///
-> --
-> 2.31.1.272.g89b43f80a514
->
+ drivers/cpufreq/cppc_cpufreq.c | 59 +++++++++-------------------------
+ include/acpi/cppc_acpi.h       |  1 -
+ 2 files changed, 15 insertions(+), 45 deletions(-)
+
+-- 
+2.33.0
+
 
