@@ -1,205 +1,119 @@
-Return-Path: <linux-pm+bounces-27645-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27646-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32BA4AC3DB2
-	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 12:08:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9930FAC3DB8
+	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 12:12:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AAADD1894FFA
-	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 10:08:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4425518950CD
+	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 10:12:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F2611F4187;
-	Mon, 26 May 2025 10:08:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 298D81F17F7;
+	Mon, 26 May 2025 10:12:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Spq1EHqX"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bu/4jCXL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23E619F424
-	for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 10:08:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 839FA1DCB09
+	for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 10:12:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748254109; cv=none; b=XfbkjffgbwW/d2NgiNQGZ5otEYHyP578I3IOAH9IMf4GTdVWd1G7EEHmeZ9BYr3WVkOzFJJEWJedesuWzfkpmMsjxQFTiwjs3inhzd35HxxBEF4aPfBGnR8Uz8WKw9d8EAU3vzMvbwJ1uSY0K/anycMPVRCx1fsrxULqtlhiOKU=
+	t=1748254361; cv=none; b=MbewhiCGl0C0QddXfZhcmD6EGwgnDDaSixB/V4rBJfZtjAqWmu3m446BYPU6ciRODf4jkX+/gVaFNBalAl9eZt5g6Xfr4zqBbG2OCqJaayk1XK1EEXD9blLzugAXPKBHoGQZBtQjtWdtxLYPoCldkLMgrTz/X9ojxB0tYsuafuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748254109; c=relaxed/simple;
-	bh=RssPTTSlOi3uPhFyxHYOhka1vxO3+iE4N6adykha/8k=;
+	s=arc-20240116; t=1748254361; c=relaxed/simple;
+	bh=wNDOt/KgMMP7lsIAa87g1prMRWTJTTagQvC31pmgO2A=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mTSWn7w8TDYgPxrEtj7QPBQvMiCmhPNryrd7IjTp53CwWeUVP8HNLTenCTdvp0UsQOA9fspBrUXeb2bsn0BYQpQ/sbgH9VrXT4trBQjtgWwe0VqZ00Ct4p/DAVQ9ZFciR8jlxOrGQHh2TvdJ2YLCbDFcaXIjfQGEibzViqIDZH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Spq1EHqX; arc=none smtp.client-ip=209.85.219.173
+	 To:Cc:Content-Type; b=lZbZWA3C8QqOzG3C/wDfnHyUTHJAgHdMFosYi79kicUQezKKEsFdET6wJv+Z9TDqpBVzsXS9w6q4Ae089Y8SkeAtHDINiNTLX3/HcZ3P6DatQ6qX4PV4uM4xhpACXlCB7F6uBYBT+qq6+QYp5fk5tbgWz7AWW/jXx2/x1GdmH/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bu/4jCXL; arc=none smtp.client-ip=209.85.219.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e75668006b9so1563260276.3
-        for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 03:08:26 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e7db7334738so336062276.3
+        for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 03:12:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1748254106; x=1748858906; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1748254358; x=1748859158; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NpPv+jwx+sCOwe5Xg7tTvOuLFtJsEPCNaLZVy2I7eGY=;
-        b=Spq1EHqXbIGNlg8Q0GD1Yo9/3bvEJqFPG812dFxbLji/uK0kQjjyLHvZUht+9GvYRM
-         Y887wY4XJ4FhVokSF9aCttMUiaNtIk77o5WaMFJjK5DKTlXZmZAlzMhCfGYPbLaaj8TT
-         F+0mUzb5A0qLF7UTSlADuiQKQkOecHZQM9Em9IpU5oCHYDWlEVjUQUYzZ89baHq1nSZ1
-         +B1BdsEBnZ1UpX60FLeY4BgiMlMzP2lqEry0mOAoHHFkedBXE5r8MB2Fl8r+GVvUYut4
-         ctRghzxNgRm5akLx3a0u8p8Km5ASdCEhEOX2a5wN0hD+mybJpcp8LbwEsikO+0PwlxzP
-         OVyg==
+        bh=wNDOt/KgMMP7lsIAa87g1prMRWTJTTagQvC31pmgO2A=;
+        b=bu/4jCXLBfgyWSxXuOjtGpgjGvbDvjib9BCju7rEnPC1PEy7+yBMb6hsDiSYy3zI8p
+         A5cT1MpgVYgKvL/wgX/IPmlOXoRZ6RJcZMaCY5oFRh1TM/Zmd+AZdh//QMb0SESMbFPp
+         yFWwdPXQVYm/Y8nEFFg2+7K6gTdu972XrnI07lduhghtk4BZBKM8/rijmoz5jUwRFY++
+         59iA16et8pymKvoVaM93JuF+pO/WLAIrivstrKJpeBJj3rfDKtRt1z8sKYlYMBeZ1ZYz
+         9To3HGlBHRGUb3fOkRK9lpnD3hprjjgjY8Ieu6fm5gLEiJ1JeYgWd1oUFObdqwYuHuBe
+         XUuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748254106; x=1748858906;
+        d=1e100.net; s=20230601; t=1748254358; x=1748859158;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NpPv+jwx+sCOwe5Xg7tTvOuLFtJsEPCNaLZVy2I7eGY=;
-        b=EoFuHxYpyWjxsc1toiu5K5bg33j/dnpXwVoW/zl3DdH1Wb5l777bpQcY/2jaxg1bY1
-         p012EytcoJWC0VMMP3HxoA3zsBnT4MX6V4i0X1FxAx6xzxboGoKXf6KXHyKq+i98XGNV
-         XAc6kung2Bz95aPvyA+V2L5fqTIIekYfT5XLuEQZvMaCbroWxydfPZZ+ZdThoFPRDnj1
-         /ojFIPhvKYwMzxexcAGTx2rUyYXjpGbyZLMShUKFyI/wREb2RjKx10b7ttpuBgnrGw0D
-         CfWzVMUZwcK2Yb6erlOx89fnpvJBBsNcGq7osFt3tzjE/mSUD/ECoqknik/3p7l7tDJK
-         JIMA==
-X-Forwarded-Encrypted: i=1; AJvYcCXqSSK8Ix33dK7bY2Tu/cJBYsaRgynbneaFWQGx4eWSQpF2rWvXPFHMbXm0MygxoEjZfoDS9iMw5w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuPT9CE6kfexRMwqbUDq5lEWLJ1vYELZ2Zw3DEvEY3iRThwRLy
-	7mXHqtN+oT3iAQ+dKQcbuYeeKRoiEBlca9HjNz21ljYY8CEFvNDxRH2znCqTpOPY4fHVhh4boo7
-	pTS2MsCCAa9toYAffDOwDnhlW5sTyXSW7ASj7jsJYQw==
-X-Gm-Gg: ASbGnct962qy+uivBfhb99++3PiYx+uR0+AnmlyWIwPQqee9gM+CbTjOBK49a0J0Om1
-	Wz6VwkDH4h4j/6qGkIV3zEQT4X49f7VhMHB+jUcvHejnj9i4SERkQ8gAnjpbWNJa7G/+tBZWr84
-	nhAczuRtZvvpeyEhaqD6x5k7GkZZ5sdnghuA==
-X-Google-Smtp-Source: AGHT+IFdBGTGYZOotDK/y3Q59f0r8dFms0TkmjC4C0sHaJmgkuM3Am4LonkHZ4KeqelTVat8o4uyIxhJmZyFRyDPL7U=
-X-Received: by 2002:a05:6902:160d:b0:e7d:b8ce:cb91 with SMTP id
- 3f1490d57ef6-e7db8cecd3dmr1219626276.5.1748254105723; Mon, 26 May 2025
- 03:08:25 -0700 (PDT)
+        bh=wNDOt/KgMMP7lsIAa87g1prMRWTJTTagQvC31pmgO2A=;
+        b=YwCRWYlrKzhDfe4rOT+5+JaJu3kn3geN3ctxQF2bqcGRoQkilredAVhCPQgJVa9HUv
+         PohqAbLkPFlMWX/o/c6mVBNvWQJluedvQwQS8JSuRoXdtWCavaAptBQKtTCrfFpiq6ia
+         LoYmb4vPhlx8yXSfAFt5TGSeJMt8YpNGFk8pLOERfizoFY+8hKnkkyr5NTRFHnoKhfMu
+         HG1s9CGX9RerAKG546+P7bzAmbO3teCfG4hSSUYOwoIQ/q6jQnOxPw2hAPku0gsUK2ca
+         Tkem+Ko+qf8OvJY6YU1WMFp/3etVZgIq8b0EOsQL13XgDnzAUV08Gntj7aIz9uHyvsHm
+         7fIg==
+X-Forwarded-Encrypted: i=1; AJvYcCUD1tGoKgMMSNvi7PJ4eqD3y+jvgWz3R9FS8ijC1qs18A2Aq31dEyw2YcwnaGFJ79oi731kXDQmtg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzragUe7XGq1wxnMB2qXD/aEvUI2x+RR9KMUJgXQzwF1awKC2s8
+	WNResdyC8PG3qFardJ8O9ZQQnDFDl5Mg7KqcUmay7FVy+UKZYw+RjCkTAOWfPlogTLaqlhWY3eh
+	vK3ocmZwlVkvAK8iIhhGOHJN2/EUxQ3agDughYKODSw==
+X-Gm-Gg: ASbGncswFw/QUzfwDcvK0TSAymwOQPoxo8fcY5ni0gNCRXxOMRMPHEHlDF56Hu9Bhvr
+	s2rGs8NfkZk5Q18gNB7xrcQPulcUo+5Z4POREQN1z7ftWYIsJRrXkkT4nKCzjowVfg0h0FeyU6V
+	S8jQ2Z4i0o3v4pl2Lom3JtPex5qnEe5BCvCxrZ07/0MBu4
+X-Google-Smtp-Source: AGHT+IHi2XOZ9dRIdDcFBl3BRRFnnGCoagXOgAmEZ2Ih20GPqbGzZkP+XJCYm0HJs1gaCBhpq5GmobfeIAleVXtAPSQ=
+X-Received: by 2002:a05:6902:1082:b0:e7d:b5bc:aa7c with SMTP id
+ 3f1490d57ef6-e7db5bcabb1mr1985809276.16.1748254358450; Mon, 26 May 2025
+ 03:12:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAPDyKFrHD1hVCfOK-JV5FJM+Cd9DoKKZGKcC94fxx6_9Bsri1g@mail.gmail.com>
- <20250508202826.33bke6atcvqdkfa4@hiago-nb> <CAPDyKFr3yF=yYZ=Xo5FicvSbDPOTx7+fMwc8dMCLYKPBMEtCKA@mail.gmail.com>
- <20250509191308.6i3ydftzork3sv5c@hiago-nb> <CAPDyKFpnLzk5YR3piksGhdB8ZoGNCzmweBTxm_rDX5=vjLFxqQ@mail.gmail.com>
- <20250519172357.vfnwehrbkk24vkge@hiago-nb> <CAPDyKFpGcgMzOUHf-JTRTLBviFdLdbjZKrMm8yd37ZqJ1nfkHw@mail.gmail.com>
- <20250521041306.GA28017@nxa18884-linux> <20250521041840.GB28017@nxa18884-linux>
- <CAPDyKFpSb+KsfDr1-=uk4TF4Op1dUQ9rDwPP5sSpMfxDRDhnZA@mail.gmail.com> <20250523191713.nylhi74jq6z4hqmr@hiago-nb>
-In-Reply-To: <20250523191713.nylhi74jq6z4hqmr@hiago-nb>
+References: <20250523134025.75130-1-ulf.hansson@linaro.org>
+ <20250523134025.75130-10-ulf.hansson@linaro.org> <4a0ec467-b81e-4282-8e09-b7adc67eba97@oss.qualcomm.com>
+In-Reply-To: <4a0ec467-b81e-4282-8e09-b7adc67eba97@oss.qualcomm.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 26 May 2025 12:07:49 +0200
-X-Gm-Features: AX0GCFtV9JrsWnRtXpr1h2X2HDFYAFvpBaxszSIspVyj2HxlBm4_wnbvi_OW3II
-Message-ID: <CAPDyKFq6HG6iTZRnBSN25vhCU8Zj1c+r_ufGbiBsJ16N+1bJVg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] remoteproc: imx_rproc: add power mode check for
- remote core attachment
-To: Hiago De Franco <hiagofranco@gmail.com>
-Cc: Peng Fan <peng.fan@oss.nxp.com>, Mathieu Poirier <mathieu.poirier@linaro.org>, 
-	linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Bjorn Andersson <andersson@kernel.org>, Hiago De Franco <hiago.franco@toradex.com>, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	daniel.baluta@nxp.com, iuliana.prodan@oss.nxp.com, 
-	Fabio Estevam <festevam@gmail.com>, Pengutronix Kernel Team <kernel@pengutronix.de>, Peng Fan <peng.fan@nxp.com>
+Date: Mon, 26 May 2025 12:12:02 +0200
+X-Gm-Features: AX0GCFuhoe61jaT4ElHv6kD_woYqu09-YjR-85TQ3dhfrASylj73JDHmzoEBPqk
+Message-ID: <CAPDyKFo+DDuBiic78hdN6JVSO1iQbJTvJgPwYaO8Y8soaJyEhg@mail.gmail.com>
+Subject: Re: [PATCH v2 09/21] pmdomain: qcom: rpmhpd: Use of_genpd_sync_state()
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Saravana Kannan <saravanak@google.com>, Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Michael Grzeschik <m.grzeschik@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
+	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, 
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Johan Hovold <johan@kernel.org>, 
+	Maulik Shah <maulik.shah@oss.qualcomm.com>, Michal Simek <michal.simek@amd.com>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 23 May 2025 at 21:17, Hiago De Franco <hiagofranco@gmail.com> wrote:
+Hi Konrad,
+
+On Fri, 23 May 2025 at 21:42, Konrad Dybcio
+<konrad.dybcio@oss.qualcomm.com> wrote:
 >
-> Hi Ulf,
->
-> On Wed, May 21, 2025 at 02:11:02PM +0200, Ulf Hansson wrote:
-> > You should not provide any flag (or attach_data to
-> > dev_pm_domain_attach_list()) at all. In other words just call
-> > dev_pm_domain_attach_list(dev, NULL, &priv->pd_list), similar to how
-> > drivers/remoteproc/imx_dsp_rproc.c does it.
+> On 5/23/25 3:40 PM, Ulf Hansson wrote:
+> > To make sure genpd tries to power off unused PM domains, let's call
+> > of_genpd_sync_state() from our own ->sync_state() callback.
 > >
-> > In this way, the device_link is created by making the platform->dev
-> > the consumer and by keeping the supplier-devices (corresponding to the
-> > genpds) in RPM_SUSPENDED state.
-> >
-> > The PM domains (genpds) are then left in their current state, which
-> > should allow us to call dev_pm_genpd_is_on() for the corresponding
-> > supplier-devices, to figure out whether the bootloader turned them on
-> > or not, I think.
-> >
-> > Moreover, to make sure the genpds are turned on when needed, we also
-> > need to call pm_runtime_enable(platform->dev) and
-> > pm_runtime_get_sync(platform->dev). The easiest approach is probably
-> > to do that during ->probe() - and then as an improvement on top you
-> > may want to implement more fine-grained support for runtime PM.
-> >
-> > [...]
-> >
-> > Kind regards
-> > Uffe
+> > Cc: Bjorn Andersson <andersson@kernel.org>
+> > Cc: Konrad Dybcio <konradybcio@kernel.org>
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
 >
-> I did some tests here and I might be missing something. I used the
-> dev_pm_genpd_is_on() inside imx_rproc.c with the following changes:
->
-> @@ -902,7 +902,12 @@ static int imx_rproc_attach_pd(struct imx_rproc *priv)
->         if (dev->pm_domain)
->                 return 0;
->
->         ret = dev_pm_domain_attach_list(dev, &pd_data, &priv->pd_list);
-> +       printk("hfranco: returned pd devs is %d", ret);
-> +       for (int i = 0; i < ret; i++) {
-> +               test = dev_pm_genpd_is_on(priv->pd_list->pd_devs[i]);
-> +               printk("hfranco: returned value is %d", test);
-> +       }
->         return ret < 0 ? ret : 0;
->  }
->
-> This was a quick test to check the returned value, and it always return
-> 1 for both pds, even if I did not boot the remote core.
->
-> So I was wondering if it was because of PD_FLAG_DEV_LINK_ON, I removed
-> it and passed NULL to dev_pm_domain_attach_list().
+> note: the subject is wrong - this driver is rpmpd, the other
+> one is rpm*h*pd (patch 10 has the correct subject)
 
-Right, that's exactly what we should be doing.
+Thanks for spotting this!
 
-> Booting the kernel
-> now it correctly reports 0 for both pds, however when I start the
-> remote core with a hello world firmware and boot the kernel, the CPU
-> resets with a fault reset ("Reset cause: SCFW fault reset").
->
-> I added both pm functions to probe, just to test:
->
-> @@ -1152,6 +1158,9 @@ static int imx_rproc_probe(struct platform_device *pdev)
->                 goto err_put_clk;
->         }
->
-> +       pm_runtime_enable(dev);
-> +       pm_runtime_get_sync(dev);
-> +
-
-Indeed, calling pm_runtime_enable() and then pm_runtime_get_sync()
-should turn on the PM domains for the device, which I assume is needed
-at some point.
-
-Although, I wonder if this may be a bit too late, I would expect that
-you at least need to call these *before* the call to rproc_add(), as I
-assume the rproc-core may start using the device/driver beyond that
-point.
-
->         return 0
->
-> Now the kernel boot with the remote core running, but it still returns
-> 0 from dev_pm_genpd_is_on(). So basically now it always returns 0, with
-> or without the remote core running.
-
-dev_pm_genpd_is_on() is returning the current status of the PM domain
-(genpd) for the device.
-
-Could it be that the genpd provider doesn't register its PM domains
-with the state that the HW is really in? pm_genpd_init() is the call
-that allows the genpd provider to specify the initial state.
-
-I think we need Peng's help here to understand what goes on.
-
->
-> I tried to move pm_runtime_get_sync() to .prepare function but it make
-> the kernel not boot anymore (with the SCU fault reset).
-
-Try move pm_runtime_enable() before rproc_add().
-
->
-> Do you have any suggestions? Am I doing something wrong with these PDs?
->
-> Best regards,
-> Hiago.
+BTW, would it be possible for you to run some tests on QC HW for this?
+Any help would be greatly appreciated.
 
 Kind regards
 Uffe
