@@ -1,239 +1,133 @@
-Return-Path: <linux-pm+bounces-27634-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27635-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22D4DAC39BE
-	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 08:20:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 912C7AC3A01
+	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 08:37:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D97E73B2D68
-	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 06:19:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 187DD1894117
+	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 06:37:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54D4C1D5CD9;
-	Mon, 26 May 2025 06:19:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C7F81DE4DB;
+	Mon, 26 May 2025 06:36:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="KhrzV4+p"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XId/7r9E"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13C81D5142
-	for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 06:19:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A0B1DDC15
+	for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 06:36:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748240398; cv=none; b=FustckG8NBPo8/oqbU2VDp4faKSFG4s2w3+Tz5GXs0OfaRj1PyPdUGsnpzqpLBXlSYkv8shpRffYQoptOPoJkWiARP25L5CsGVHXA4FgnVl2ALANf0sATcoaCtZQWS8WiOcLFstS5pB7KOfV/7kHiyQ3KC5vAJ8tvobgX0BTA+s=
+	t=1748241412; cv=none; b=EldmPNVQR1YlZhWW9U5ow7Jw4DxwpVz8/g3+Ez9il/en+dy1kyMr9Uf6oOtfVTCWkqr8590bS9N8EI0CfcQw1kLWfaQujzc7couMwuopoWwLed5tfjK2OUfwI5jdaf0ErWB1to70azQ78ITQBVI+rTKmTIOIuddn57forMw5eKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748240398; c=relaxed/simple;
-	bh=kfKqrjxj7SWq9xEU4Nr35KADHrm9QuM4zBWdzxTlRIU=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=qoTx3k5Z/ylWcPu+xpqfGiAlk3LG9V/db6cxhkaaZK7pZ9yFeNAVRpiNo3DdFMOKG5oo93hpyGLK2YNrLNDiObfBbkuOSVw5iZK/3eziZpUdql6lLTAPKM5Av/YLSA0aw1L1RxiXfr4d/HrvTY+49EB3AGDXlOB8pn8r2NLHKmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=KhrzV4+p; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54PMeJSV020729
-	for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 06:19:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	jrpH81vVpBiCOEXoQcJthbVv1fuikJmHn767rBuFXaY=; b=KhrzV4+pKtB3HxOM
-	uoWDa0wzmqu7cl5SPPw5PVsjzh8XrbdG5x5XTEtVAdlV24GaDnE8ilHcKbmiexEc
-	fuL8imxn0TGSlfLn5O7bR/0n0a2AJ0sotBii/PhKG/l/Pq5KykJb2l9shCGzaGSb
-	2QP4nPYWeSatrmbDvNOrM482BcTqcVYttDrGkln+NZwMt3F9dYZp1omaAJbZnMor
-	27I8g2UC1OQnRS6KBYCFCmF3Uk1IXHnJq+fJAHkimeydKkOjdw1viIyEedrOcooy
-	RPtc5bXp/rgH4bY1P8tMMsDOUcnu5BtGu2sCEKlo2Qy5czoR0T4XJwCsHAfezoWL
-	rdvuuw==
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46u5eju5q5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 06:19:55 +0000 (GMT)
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-7391d68617cso2187586b3a.0
-        for <linux-pm@vger.kernel.org>; Sun, 25 May 2025 23:19:55 -0700 (PDT)
+	s=arc-20240116; t=1748241412; c=relaxed/simple;
+	bh=X2OOs6s10Gs5ErOKkMQqN3mvJJDpDGuaTwSXr9QX100=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=R1thRTyuzK3IX+y96BWZHAs4VsAn3MIBGhEkdVFyxR0Mc2b6/ivE7ZDSxpjuCoDhppmtLkWzEtewNOdB7m6QqViasL/HgnFR5AOse4NvkEaHsu0oYtRyLPSRzDyYDE7/oF3g59QCfHGJuFbZrQh/whR5roNrotvuQ1um9UhDJX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XId/7r9E; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-234549aed3cso6104955ad.1
+        for <linux-pm@vger.kernel.org>; Sun, 25 May 2025 23:36:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1748241410; x=1748846210; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4ZPltjG5SvwVjWya2TV7fEz5DnOlg2tbFAzmA5YnBrg=;
+        b=XId/7r9EjEU0l0EFU+4a7fpTS5h+7OZK/MozFapAKDhXPazMSQIo+eDyeAq4A8SpEG
+         hS/ma7ko5ckmmGfzY4tOS0t/zHkGJDm+Ane1utoCWnI+iT9cpxm6P1WkEaFMh+Lw26Ru
+         xSLoch9ALeBwrCf0s6SG0wVUcllXc4tnBtGTq86i6oDYcGjIAlKqyFrQjSmjPOE/K7FW
+         /WzFLfYDXJ9cQTOdqDIyIiebyPNUsJwyglUMIqMcMqtuW4wKHGCZBKco/u6VgOkxJrhj
+         XBhvmD2ugGXwL2HjMZ9BwljEBWj4FgQiySSvhN/b6EoQJHZAqV3xFk21//m+ik8a54Ls
+         tcWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748240394; x=1748845194;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1748241410; x=1748846210;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jrpH81vVpBiCOEXoQcJthbVv1fuikJmHn767rBuFXaY=;
-        b=XO7fHadnEQSXe6Sx962WlxMim0g6U89ald3bjyO2BUlGtXRIl3xZq8pSA0lobSYmVk
-         mqdjC6OjxIzaqSMvOjoviLjwZ2gECjuqR8Xzj4ZfQZGVs/uSZ2n0il55U6yYmC0bFRnx
-         0ZIakLNHw2Z8ydrgExS938de5VuJvPiCTKO21d0MeV6LU1rFqTOVIfqEsURoCSbuD7wA
-         4zkvD5RFJD2EcekQSPgYxZPb2b2LBtGYguM+k5K98q4SN7MJjnqME9Qp0VIo8NzwKyKC
-         wVIZh3OjkvNXGv2FK1I+J7ciAAjM9ZbU55UhUVvw+eA3zl1YgzOOlbYnUz3UtrdKZ2rJ
-         C2Jw==
-X-Forwarded-Encrypted: i=1; AJvYcCVBD+u14d2Sp3NSBM3xKqrOqog+Zkiy/938GPLSlbF6Qfi8Eu5lvBC/9rzSpS2bDKmpA5N86u2a7Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDYE4C6N7KWWqc3+dIPX8k/Cgx74lrg07lvtD5tv2THZwmeKWa
-	ZlYaGC7N2U5027/AxTHhuKxi0RHoewSqRno4OGnuGqyonltRofBgY3kNY6C3jYbvVCrVEnlG/Z+
-	AZps9LMe6KnVz6npTe3ZE9pGHGV9ABX8h7cSHUQQ1OKi0rvK0yt59k/XtVzvZkuh2A57a8s5Z
-X-Gm-Gg: ASbGncukbFR4cRdENdKM7BoaFVrVCUxMouLPXP1o5wIOVBZ7iI/ucWeg65OE8t43E0L
-	1hkb0VQJK3Oj090gWKj5ILej1G1tdFbfa4ULLEj5r5N6H91wmNAH4FDQXg4QOwvMYavxTh6NZdW
-	pbwWQVu5CdcFe+3ZTYjx1rcKgpBUwNLxOlq5n9Q5TKXqyQNQbHOPZi3wGEmgiMdBKOZcj4z7RWN
-	99ExGq9GIUDV+cC4tcPM+bzroQmPd0kMIgkPRdKzeiW8KLCwgq0svY+BLI6FErdU1mYF9kYJeMY
-	zDVQlikB1UseWmtcVjYeUlCsB+8TAN8PRA==
-X-Received: by 2002:a05:6a21:9a01:b0:1f3:26ae:7792 with SMTP id adf61e73a8af0-2188b7186c6mr12136494637.18.1748240394034;
-        Sun, 25 May 2025 23:19:54 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFLnz0uckNYdWgaRUUv1Iy4mf9s2o5p3ZDDG1bu8ljveYmIuLe+S+fQSQXw8/Y/OCC+jguUEQ==
-X-Received: by 2002:a05:6a21:9a01:b0:1f3:26ae:7792 with SMTP id adf61e73a8af0-2188b7186c6mr12136477637.18.1748240393663;
-        Sun, 25 May 2025 23:19:53 -0700 (PDT)
-Received: from [10.239.154.73] ([114.94.8.21])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a97398f8sm16407814b3a.78.2025.05.25.23.19.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 May 2025 23:19:52 -0700 (PDT)
-Message-ID: <1b1c4617-0e5b-40c8-9a66-d243b48c0977@oss.qualcomm.com>
-Date: Mon, 26 May 2025 14:19:49 +0800
+        bh=4ZPltjG5SvwVjWya2TV7fEz5DnOlg2tbFAzmA5YnBrg=;
+        b=ISK/NnsyrLQQVDmGq0Xb8Uirzyr6s4Q8uh1fx6kmLtJMxlvn1Sa54QJWEnS4RxlRXY
+         gvQL4Z5ukwuJ+ao1mFcotome6205GijTUHlJq/h5y1G89HhJrE4L8yXGf0bVX20qseJn
+         p0oeOKncOByNac/9Pa5XBh0KdPbWioCuBjf6MBuK5k+zDKorjz4m7MmRSfss7xlVUbZk
+         UeD6pPldOJ+Qhi2g11TVtBiSMhu/x68OG2ptl5oNsL/nkIBwqHN9wnkJRr7LTwjyYINc
+         ZJnZZBkQMTUh5hDqpDoroy7GNzbJWAlJcZJsYgHJu4Kfi5GdnNBL+yRjVnNBgO/9lpTj
+         lp5w==
+X-Gm-Message-State: AOJu0YySbmJn+fZshjUPORgS2LL4gzKlIBoJy4Hmj8UN6A3SyxY3aOkJ
+	Mrzf32vfzjh41HMuSSKmC4k6KztgQqdW6w+aDJuQkFD/+Uuwbig2Hn3u/VBSskHZnHQ=
+X-Gm-Gg: ASbGncsqR80bZTo30pUGjFFB/GrX6b6XUQRoPS2GOC5yG/yftxMraavj06fWOA3bY31
+	bBr5t+FLeNHAW1FePBna+pfNtQWvzpbavgZw/zDBpJDTmq+xsJ2YrXfbhXmFdoYXunMC+uDUh0P
+	ueukPcqoMlHp3lT7QQ8B5OLNt6D4cE28zHbPO5BGnTi47jKJNLgNq3h9ExH/nvOJheS1YID+6sB
+	A/yllSjh2prZEvYMCNiByUlNq5cdMR5qdyjkUiJt93hdV2FL2eVD7+7YM8YY7VFbMiRYsG0dRSl
+	Cp4izZ1lECWd8F4Pnf5N2oqZs/HRoPmi335I18aUItdTlaiX3j4g
+X-Google-Smtp-Source: AGHT+IFW6ph/NvT237B4CkjRNsZrBg5Ak8Y+oT0ZUYcZh4aktEUHNIBjBQShSRMTh1MBa/gLwOT/ZQ==
+X-Received: by 2002:a17:902:d2d1:b0:224:1ec0:8a1d with SMTP id d9443c01a7336-23414f7d131mr120332135ad.30.1748241409969;
+        Sun, 25 May 2025 23:36:49 -0700 (PDT)
+Received: from localhost ([122.172.81.72])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23424bf7293sm30726645ad.151.2025.05.25.23.36.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 May 2025 23:36:49 -0700 (PDT)
+Date: Mon, 26 May 2025 12:06:47 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>
+Subject: [GIT PULL] OPP updates for 6.16
+Message-ID: <20250526063647.ydi7vlqdiguf7cof@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-Subject: Re: [PATCH 5/5] power: supply: qcom-battmgr: Add charge control
- support
-To: =?UTF-8?Q?Gy=C3=B6rgy_Kurucz?= <me@kuruczgy.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc: Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
-        David Collins <david.collins@oss.qualcomm.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com
-References: <20250523-qcom_battmgr_update-v1-0-2bb6d4e0a56e@oss.qualcomm.com>
- <20250523-qcom_battmgr_update-v1-5-2bb6d4e0a56e@oss.qualcomm.com>
- <db0e40b6-22f3-46aa-b35d-7a8729370ddf@kuruczgy.com>
-Content-Language: en-US
-In-Reply-To: <db0e40b6-22f3-46aa-b35d-7a8729370ddf@kuruczgy.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=GIgIEvNK c=1 sm=1 tr=0 ts=6834080b cx=c_pps
- a=rEQLjTOiSrHUhVqRoksmgQ==:117 a=Uz3yg00KUFJ2y2WijEJ4bw==:17
- a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=t2JPyoOaPHs4AGm2U3oA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=2VI0MkxyNR6bbpdq8BZq:22
-X-Proofpoint-ORIG-GUID: R8bKxAnFnRcTo14BdAgQJO-i5WuKwxsJ
-X-Proofpoint-GUID: R8bKxAnFnRcTo14BdAgQJO-i5WuKwxsJ
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTI2MDA1MSBTYWx0ZWRfX5dSIGrcPRiDP
- owXSw+iyA9a19Xhf0pZe56OYs0gggq+v2QJbmSZvzVLEoBzuxfB1Ozh7MK8uGsd9ZAkQCJXIoEF
- DB9PG9MIvMR7NxmWP+n2dV6VvNZdPcLaU91E1SgwgsNrNxnSWWx6wswsqqytBQwvzBZQek9wxi1
- Y1ybTWZYBLqR3qaARAyoxxeseXCRnjHy05bgxVt4pxvu1AW0XdElDXcHX9F9DHmleI49zYBo0Et
- xi9IH+KwVvZtTK6LAHbhiRnNQfxHasDf+djp5EhW1gsANnRtRMcjFUs11oG2XSqyWN2xSshnAWW
- txEyuT4T2KcOGulJFTKWPg0uJ6ykOET/SZtIHx0GXpWIgtuF09p26MjgXQYZobDMcOH0JBLDYKU
- DIUOcgocljuHJLJ1R+zM+xkHL6WcTrGLpktpCMK7JTZFwj1eU27TAFg1DSHHq+HDME2eiXXX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-26_03,2025-05-22_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 malwarescore=0 bulkscore=0 clxscore=1011 lowpriorityscore=0
- adultscore=0 priorityscore=1501 mlxscore=0 phishscore=0 spamscore=0
- suspectscore=0 mlxlogscore=999 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505160000
- definitions=main-2505260051
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
 
-On 5/24/2025 5:29 AM, György Kurucz wrote:
-> Hi!
->
->> +static int qcom_battmgr_set_charge_control(struct qcom_battmgr 
->> *battmgr,
->> +                       u32 target_soc, u32 delta_soc)
->> +{
->> +    struct qcom_battmgr_charge_ctrl_request request = {
->> +        .hdr.owner = cpu_to_le32(PMIC_GLINK_OWNER_BATTMGR),
->> +        .hdr.type = cpu_to_le32(PMIC_GLINK_REQ_RESP),
->> +        .hdr.opcode = cpu_to_le32(BATTMGR_CHG_CTRL_LIMIT_EN),
->> +        .enable = cpu_to_le32(1),
->> +        .target_soc = cpu_to_le32(target_soc),
->> +        .delta_soc = cpu_to_le32(delta_soc),
->> +    };
->> +
->> +    return qcom_battmgr_request(battmgr, &request, sizeof(request));
->> +}
->> +
->> +static int qcom_battmgr_set_charge_start_threshold(struct 
->> qcom_battmgr *battmgr, int soc)
->> +{
->> +    u32 target_soc, delta_soc;
->> +    int ret;
->> +
->> +    if (soc < CHARGE_CTRL_START_THR_MIN ||
->> +            soc > CHARGE_CTRL_START_THR_MAX) {
->> +        dev_err(battmgr->dev, "charge control start threshold exceed 
->> range: [%u - %u]\n",
->> +                CHARGE_CTRL_START_THR_MIN, CHARGE_CTRL_START_THR_MAX);
->> +        return -EINVAL;
->> +    }
->> +
->> +    /*
->> +     * If the new start threshold is larger than the old end threshold,
->> +     * move the end threshold one step (DELTA_SOC) after the new start
->> +     * threshold.
->> +     */
->> +    if (soc > battmgr->info.charge_ctrl_end) {
->> +        target_soc = soc + CHARGE_CTRL_DELTA_SOC;
->> +        target_soc = min_t(u32, target_soc, CHARGE_CTRL_END_THR_MAX);
->> +        delta_soc = target_soc - soc;
->> +        delta_soc = min_t(u32, delta_soc, CHARGE_CTRL_DELTA_SOC);
->> +    } else {
->> +        target_soc =  battmgr->info.charge_ctrl_end;
->> +        delta_soc = battmgr->info.charge_ctrl_end - soc;
->> +    }
->> +
->> +    mutex_lock(&battmgr->lock);
->> +    ret = qcom_battmgr_set_charge_control(battmgr, target_soc, 
->> delta_soc);
->> +    mutex_unlock(&battmgr->lock);
->> +    if (!ret) {
->> +        battmgr->info.charge_ctrl_start = soc;
->> +        battmgr->info.charge_ctrl_end = target_soc;
->> +    }
->> +
->> +    return 0;
->> +}
->> +
->> +static int qcom_battmgr_set_charge_end_threshold(struct qcom_battmgr 
->> *battmgr, int soc)
->> +{
->> +    u32 delta_soc = CHARGE_CTRL_DELTA_SOC;
->> +    int ret;
->> +
->> +    if (soc < CHARGE_CTRL_END_THR_MIN ||
->> +            soc > CHARGE_CTRL_END_THR_MAX) {
->> +        dev_err(battmgr->dev, "charge control end threshold exceed 
->> range: [%u - %u]\n",
->> +                CHARGE_CTRL_END_THR_MIN, CHARGE_CTRL_END_THR_MAX);
->> +        return -EINVAL;
->> +    }
->> +
->> +    if (battmgr->info.charge_ctrl_start && soc > 
->> battmgr->info.charge_ctrl_start)
->> +        delta_soc = soc - battmgr->info.charge_ctrl_start;
->> +
->> +    mutex_lock(&battmgr->lock);
->> +    ret = qcom_battmgr_set_charge_control(battmgr, soc, delta_soc);
->> +    mutex_unlock(&battmgr->lock);
->> +    if (!ret) {
->> +        battmgr->info.charge_ctrl_start = soc - delta_soc;
->> +        battmgr->info.charge_ctrl_end = soc;
->> +    }
->> +
->> +    return 0;
->> +}
->
-> These function names sound quite generic, but AFAIU this patch is only 
-> adding charge control support for the SM8550. Is sc8280xp and x1e80100 
-> also expected to be supported using the same 
-> qcom_battmgr_charge_ctrl_request format?
+  Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
 
-No, sc8280xp and x1e80100 don't support it. So I didn't add the support 
-for them.
+are available in the Git repository at:
 
-These are generic functions are similar to 
-"qcom_battmgr_update_charge_time" and "qcom_battmgr_update_info" which 
-are only used for sc8280xp platform. Even right now charge control is 
-only supported in mobile platforms starting from SM8550, however, it 
-could be potentially supported in battery management firmware of any 
-future platforms and the same functions could be reused.
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-updates-6.16
 
-> Thanks,
-> György
+for you to fetch changes up to 03eadcbd981b4c9b10ec89a046deeccb115c98b3:
+
+  OPP: switch to use kmemdup_array() (2025-05-19 15:37:53 +0530)
+
+----------------------------------------------------------------
+OPP Updates for 6.16
+
+- OPP: Add dev_pm_opp_set_level() (Praveen Talari).
+
+- Introduce scope-based cleanup headers and mutex locking guards in OPP
+  core (Viresh Kumar).
+
+- switch to use kmemdup_array() (Zhang Enpei).
+
+----------------------------------------------------------------
+Praveen Talari (1):
+      OPP: Add dev_pm_opp_set_level()
+
+Viresh Kumar (6):
+      OPP: Remove _get_opp_table_kref()
+      OPP: Return opp from dev_pm_opp_get()
+      OPP: Return opp_table from dev_pm_opp_get_opp_table_ref()
+      OPP: Use scope-based OF cleanup helpers
+      OPP: Define and use scope-based cleanup helpers
+      OPP: Use mutex locking guards
+
+Zhang Enpei (1):
+      OPP: switch to use kmemdup_array()
+
+ drivers/opp/core.c     | 428 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------------------------------------------------------------------------------------------------------
+ drivers/opp/cpu.c      |  30 ++++--------
+ drivers/opp/of.c       | 205 +++++++++++++++++++++++++++-------------------------------------------------
+ drivers/opp/opp.h      |   1 -
+ include/linux/pm_opp.h |  32 ++++++++++--
+ 5 files changed, 262 insertions(+), 434 deletions(-)
+
+-- 
+viresh
 
