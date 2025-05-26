@@ -1,182 +1,121 @@
-Return-Path: <linux-pm+bounces-27642-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27643-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EDE0AC3C14
-	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 10:53:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7A1FAC3C36
+	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 10:59:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79D0E3B3490
-	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 08:52:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8124D189503E
+	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 09:00:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C16B1F2BA4;
-	Mon, 26 May 2025 08:52:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEC7D1E9B0B;
+	Mon, 26 May 2025 08:59:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="KI2ed8D8"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="qPKCVH/o"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2065.outbound.protection.outlook.com [40.107.92.65])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 762491DE2AD;
-	Mon, 26 May 2025 08:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.65
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748249545; cv=fail; b=QcT/2TPsac8adONi0zde/NDsp/y9/4q74tNkotniS98xTBbFUMiXjFryCzdqdy1/2R8h0VIjqOFOAEAuxHGPMLKOIeFEwE3JEG39zStb6amjeDeMLHhfFoWXz8feY20id/Ods2ikXz9JqkrwQgGU/p3gYu1G4h6jq/KLhpdibuI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748249545; c=relaxed/simple;
-	bh=h7uRSKB0H2NKIzR94aIXteAVwBotb3d07s6rBlWrxrg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=VLl2+8QKJevrfgLAjfrOI2lgw7NxhD4zjSM9Ut9MuVu3hvPiNGhL+XwfijbFR9HkXKlPjzMHmJwYb14/aibDiolennwbl8ieEEyfeASZlhHZ8RVFFHnzOcv6j655XlDBd5nxtRlwlruq2Cx812iHRHZ0QePXaJmcxM0KhuzOBJk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=KI2ed8D8; arc=fail smtp.client-ip=40.107.92.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xZJ5q4K+1/5mjUTAdZTGb+ey+dEVTBlk2M0axseLZaXzGBWwp4IqxUnVlTajuMQyE1V7j4DvEmsoxtSauDT37GFHso6BaAXvOrVMC3AIofJST39I8HnQuCqber/Qw/BolxJm+pEiRHUQntw2xzHMyZwyJzeEf1JGcY6xy3Rd0z/y2+yhpcbvkm6oGztPaf40DiEi81xV5mV78U1pMcqKvox348BVwX6wHZyRcwDWAwfqeDHR8WnF2v7mTYM3ymBGuvUjM2WZizOKRmAi2HmhjCNkZ58KEWFL8SR3fjwt20AFakrhvhgnWInDQinPzTENpH2LPblS3/7J9N3w1yWRiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zCVWm6aj10XvkEBP3F6pSIheRN+bS2GNzljGXYnaZ1k=;
- b=Jcp92uewmwrrC4nuKA/zZSIBcu4iYxmqI+UFOwVTdENH5V+BkxMSCpmbF3sUBYdKFYVw+zHQ0WdPrsLcnOak/lGIV3QPFVr1oAeoejr4DAO+ngAQz9nVRj85zX4AMOnBpcOEFY5+zkO0fkOgHfP9irXI4W+eFCSGP4WJEY0wRCZ+uzunf6n/bef9PfWNOwdacmD3JTbF/Ajy71PlJ7Iya92nCD/ycl/PA5WXLx11PYNdZTm6yhB7b/VcSwpkwNjUQD0j0NIZZwnMJZJwgKOeagPGEak+E7rD9s5Kf50FGZg0DF7PDOcvPDbmhmCM2lDZI03af9UyMg+FUS/PwTD04Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zCVWm6aj10XvkEBP3F6pSIheRN+bS2GNzljGXYnaZ1k=;
- b=KI2ed8D87NcZ8Hi+sS2PSJM/fdfXyB6ioLmnsJG2+V2qWJZxzSPOstCx5aaIU1UZYl0QRkqqXxoXllO0UuszLNE0UlkYnDOuYM3K8ACZN0suxMwN3OOsDCA7wIucqRT8d4BsN6Fu/uWC5E2nsGS0z81OFz5umebj3PpBNu8K+Eg=
-Received: from MN2PR22CA0012.namprd22.prod.outlook.com (2603:10b6:208:238::17)
- by CH3PR12MB8728.namprd12.prod.outlook.com (2603:10b6:610:171::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.24; Mon, 26 May
- 2025 08:52:20 +0000
-Received: from BN3PEPF0000B076.namprd04.prod.outlook.com
- (2603:10b6:208:238:cafe::de) by MN2PR22CA0012.outlook.office365.com
- (2603:10b6:208:238::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8746.31 via Frontend Transport; Mon,
- 26 May 2025 08:52:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN3PEPF0000B076.mail.protection.outlook.com (10.167.243.121) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8769.18 via Frontend Transport; Mon, 26 May 2025 08:52:20 +0000
-Received: from [10.252.216.136] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 26 May
- 2025 03:52:16 -0500
-Message-ID: <76b4dd65-43a9-4d34-88bc-1632c08a9bb6@amd.com>
-Date: Mon, 26 May 2025 14:22:08 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 657212AEFE;
+	Mon, 26 May 2025 08:59:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748249993; cv=none; b=b669CAIhxazAX2KsQvm12cD9nTC266X1kpIOCViZQ3fDjpf3B4t0x/O2JxcR6B+9ITGB87O9USWk1EYGjxuOfWoYwBKdoNJO3PRMgTqJWrbQtWYTfw+0hAWzFMKBSmnSOGKL0BBTX/ehp6RkOIQ5oM/3oUuA3kGi8sgqzkgA1Z0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748249993; c=relaxed/simple;
+	bh=TMcUB/LB+1jE6Ec6x90eZmChUh2FqQpkKLIRpuR6q5Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LYR6/v4T9Ry1r1PRBnlZcHaDutLadOlPODeuJfUVHdxFD+NS7YKuXsffD4pWrIYNL23R1NW0JZmtQ3cBOYyX+vZI01X2l9lLMrIEy0PH3g25DqVT5j3NV/vnumXVdCE+HrFYuhTXJTJi1itoiZwTgNp+PJ8bIsej3d+Zb7kOoY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=qPKCVH/o; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=0eMy8vq5h+PybiES5IoQMngwNShFL7iseFqitaneLkI=; b=qPKCVH/oRsNiTrDqwyuKljUrce
+	M/zc78XLmFLnlJmhDHXHL08ROttqBa2UK/VtOXhVT5I/LnMp4mZlIMusIUWnEIyjaFc1lLSq/6e1X
+	OjATElDqxV+GqmmRe4sCdqi8lUSV5+cgZ+cFva6alwtZ9NXq1ei3DM+82PtCtuvIR1zQsFW1NvNbA
+	HQb6qOed/3iQ2DRAIOUdoD3ovZH6XMWAR6aRET7MMgTWEcbx/ie+VshgrdQYLsXUBwMkghYjWO8X1
+	pwRrRH54UGU0jOQxFyYAov4ar9dONPKCtHwbs9O9/qxpBTujRTHtvKHeOd6sWa7ioRVP17ts1pxhH
+	enbcuT4g==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uJTgN-0000000BDdI-3UvI;
+	Mon, 26 May 2025 08:59:44 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 3BBF330066A; Mon, 26 May 2025 10:59:43 +0200 (CEST)
+Date: Mon, 26 May 2025 10:59:43 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: mingo@redhat.com, juri.lelli@redhat.com, vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	mgorman@suse.de, vschneid@redhat.com, rafael@kernel.org,
+	viresh.kumar@linaro.org, mathieu.desnoyers@efficios.com,
+	paulmck@kernel.org, hannes@cmpxchg.org, surenb@google.com
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, tj@kernel.org,
+	masahiroy@kernel.org
+Subject: Re: [PATCH] sched: Make clangd usable
+Message-ID: <20250526085943.GQ39944@noisy.programming.kicks-ass.net>
+References: <20250523164348.GN39944@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/cpufreq: Fix cpufreq basic read and update
- testcases
-To: Viresh Kumar <viresh.kumar@linaro.org>
-CC: <rafael@kernel.org>, <shuah@kernel.org>, <gautham.shenoy@amd.com>,
-	<narasimhan.v@amd.com>, <linux-pm@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20250430171433.10866-1-swapnil.sapkal@amd.com>
- <20250519075854.opnlhjlbybrkvd2k@vireshk-i7>
- <8a2149ca-a0fe-4b40-8fd4-61a5bf57c8b6@amd.com>
- <20250522094520.22zwevl6vgrjf3aw@vireshk-i7>
-Content-Language: en-US
-From: "Sapkal, Swapnil" <swapnil.sapkal@amd.com>
-In-Reply-To: <20250522094520.22zwevl6vgrjf3aw@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B076:EE_|CH3PR12MB8728:EE_
-X-MS-Office365-Filtering-Correlation-Id: be3dd064-05bd-40dc-832b-08dd9c329fe3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|376014|82310400026|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?eENjVTRvUWZRVDZGL3plZUtBTjJTdnBUYlZ4WnN3dzRsYUJva0d6KzZPSFRj?=
- =?utf-8?B?Ky9sTHF6WmdrTWJQeEp0cFVJdVR3TUU0SGMyTnp5UlhLWHZlM3kyZ3hwVHFL?=
- =?utf-8?B?QU0vcndxODl1bHVIdmt5VDFka29SUldWOGhjakw3K0lpc3d6MlhtR2cwWW5R?=
- =?utf-8?B?REhmbHZHTkMxNS9POUZZTy9rV0tBLy8wVmJJdCs2S25GSGxmSHMvZHVVenNo?=
- =?utf-8?B?Wmx6bUYyTk8wL0tZTzZIeExBWDNrY0VvbHhVR2V2dXFma2FLc3FOTVhtWC90?=
- =?utf-8?B?bDYyK3U1R3pXcVhRK1RhV3RKR1VLS0QycE84WUV0TXFGbkNSWit1SW1JSFJx?=
- =?utf-8?B?d0xvWDVRRmYxREk2bWM0R0F0N2hQbnd1OURHSjVqcytmZjFCYUFKUkFDVWRH?=
- =?utf-8?B?bzlhcUcxc0NkZHBEanBiNWdCc0lpS04xVTkzVzMrcWFUWUw4S0hGWWRhSHBB?=
- =?utf-8?B?SVNkYzl1YlQyQkp1UzZNSC93VjBaSlNhRFpTcDU1bSt0dnVULzlBTHJVaUZO?=
- =?utf-8?B?bVlYeVZEOU5HTndGYUxhQi8zM1BJV0tBRUdQYWoxeFQwamIzTlowMk5UaXZn?=
- =?utf-8?B?eXcycE1BMjN0dm1VbEphVTVqbXVORzgzV0Z1Q1VkY3pzOWY4TGpuaHJKZWI3?=
- =?utf-8?B?bVduMU9ETlgvcjdFd3I1Tmg0NFlQWGo4TVZPbDhodzZSMHZET2d4RzE3ZlNY?=
- =?utf-8?B?VHZGcllEb1NLNVFmMjVOaTZSOXFQOU1uYlZNdGRhNXIrcVliRnR2UklzY0g0?=
- =?utf-8?B?ZUdLcWpCeXpDbkJISXppTzZtL0tDKzVoKzlsYTk0VHpNZVNKZm9kSEQrWmZB?=
- =?utf-8?B?VEVMY3Y3RUxmMkp2T054WCtRUzBwbU5vZGw3M21rMTZIUkNXSHNWQTRkdjZD?=
- =?utf-8?B?ZWpNaEhUV0NSTEtubVR0SkJNTkpZd3grdUtadGtSSDRzVVF6aDVYL0I3TWV2?=
- =?utf-8?B?M0p3dU5wbHpHbzBaaUpkMFM4cVRIZzJCM3dTUXJFL1Zrem1HbDJzdVRvVllQ?=
- =?utf-8?B?UzRDL3JSd0ZzTnJqdmwyU2pETHFmNEZmcTR1eUVsNEtHc05ZdlZXQTlXRmE5?=
- =?utf-8?B?OTRwamg0TWIxaHptQTFCVFRDcys1dEtPVE9NRjhsL3I1Y29WaHZCYWN1aUp0?=
- =?utf-8?B?SjQvS25UWVcvRXRUNzRzdWdZaHRYbGhxeVhnSENKazMzbENiaU9HSTZ2QzNx?=
- =?utf-8?B?c2ozZXBzTmYzUzdCeEZ2QUN4QjIxa3VncFB2MjUzMlZPL1c0cDBnUjFxbmJX?=
- =?utf-8?B?cEIrYUFPTUxoMEFaWGJyemVHZDVoamRsQWVicWxXa2ZmK0RwU3F3eGdmcjhV?=
- =?utf-8?B?dTFWWHo2a3hzV2Jjb2JNSW5ScDl2dUJ3N3ZqZ0VJdktISWJMWW50TzhPVmxq?=
- =?utf-8?B?cVFPeDBRZDNUMGg4Z2thaWg3MHVYbFVjNWhCencxak1hNTlzZk8wbDc4U21P?=
- =?utf-8?B?YXQxblhnWFRkT1pqNjlUM2hCZEV4dXdvdXNiSkFUcEQwWkRqdDZ6RjlQbTFV?=
- =?utf-8?B?ZC9yV2VxaGFaTUcyREh1OHRHMlo3WXhheFZuYVo5RkxoeW1VcFIvRVQ1Vmtn?=
- =?utf-8?B?Z05GcnRSU3NYbGdqRUlaeUFTZEFxK3E1K3NXckYzNTg4eU9NQWJ0dWQwVW5y?=
- =?utf-8?B?VHNYSnNybU9wck8zZ0ZEaFFSY1VtQVAzTW5OdVE1L2hMeFdYWS9WaDM0SWV2?=
- =?utf-8?B?UmNrYW1VdmZZMnVpVUkyMWpObGswQS9NMUQ1RWZpcmdTTUFTbEkydHl1UjlJ?=
- =?utf-8?B?ZmJZR0E1Mm4zZER0R3NwWUtRUFFaeWJMMGVkZjRFUThHU0V3VEdQd2hQekFR?=
- =?utf-8?B?RTZIekdwSVpCY05POEVIZzNFZ3BaZXkrd3AreE1jWjBjSGs1TFBhOS9PYkli?=
- =?utf-8?B?bzQzSFlKTTN6K0FGbHN0aFlSN2V4UHlVUU1RcGJKMHpVYnRsWFNwUHJVVW1S?=
- =?utf-8?B?TldBZlExajArc3U3RVJzT0R1NVZqTDdwWUhZV0wvRW9Ga2w3QWZiMElOUzNl?=
- =?utf-8?B?TmpSRU51RGlCUlJBQkV5TlpYM1JpKzcwQjF3a3l0KzVPM21UYU1TbVJkQjBO?=
- =?utf-8?Q?GX0oKo?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2025 08:52:20.0835
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: be3dd064-05bd-40dc-832b-08dd9c329fe3
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B076.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8728
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250523164348.GN39944@noisy.programming.kicks-ass.net>
 
-Hi Viresh,
+On Fri, May 23, 2025 at 06:43:48PM +0200, Peter Zijlstra wrote:
 
-On 5/22/2025 3:15 PM, Viresh Kumar wrote:
-> On 22-05-25, 14:07, Sapkal, Swapnil wrote:
->> Initially I tried the same, but it does not work properly with the root user.
-> 
-> Hmm,
-> 
-> Tried chatgpt now and it says this should work:
-> 
-> if ! cat "$1/$file" 2>/dev/null; then
->      printf "$file is not readable\n"
-> fi
-> 
-> - This attempts to read the file.
-> - If it fails, the cat command returns non-zero, and you print a message.
-> - 2>/dev/null suppresses error messages (Permission denied, etc.)
-> - This works reliably for both root and non-root users, because it actually tests the read action, not just permission bits.
-> 
+> Setting up clangd on the kernel source is a giant pain in the arse
+> (this really should be improved), but once you do manage, you run into
+> dumb stuff like the above.
 
-This looks clean. I will send v2 with this change.
+Given Steve asked for an emacs lsp plugin, I'm guessing he's going to be
+wanting this part too.
 
---
-Thanks and Regards,
-Swapnil
+The way I got clangd working is something like:
+
+
+$ mkdir clangd-build
+$ make O=clangd-build allmodconfig
+$ make O=clangd-build LLVM=-19 -j128
+$ cd clangd-build
+$ ../scripts/clang-tools/gen_compile_commands.py
+$ sed -i "s'randomize-layout-seed-file=\.'randomize-layout-seed-file=$PWD'g" compile_commands.json
+$ cd -
+$ ln -s clang-build/compile_commands.json 
+
+I then also have:
+
+$ cat .clangd
+# https://clangd.llvm.org/config
+CompileFlags:
+  Add: -ferror-limit=0
+Diagnostics:
+  ClangTidy:
+    Remove: bugprone-sizeof-expression
+  UnusedIncludes: None
+Completion:
+  HeaderInsertion: Never
+$
+
+
+This has you sit on about 10G of build output, and while it is very
+tempting to do make clean on clangd-build, this will in fact ruin
+things. You can however manually delete all the compiler output, just
+not the various generated files.
+
+I've not been annoyed enough to (or out of diskspace enough) to go stare
+at fixing the Makefiles to make all this easier. But ideally it would be
+possible to do a no-op build to just generate the .cmd files without
+doing any actual compiling -- building allmodconfig is slow, doubly so
+with allmodconfig.
+
+Or maybe this is already possible and I just didn't find the magic
+incantations.
 
