@@ -1,133 +1,206 @@
-Return-Path: <linux-pm+bounces-27664-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27665-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA3EFAC41C1
-	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 16:49:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 614D6AC443D
+	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 22:07:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82C8C16B7AE
-	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 14:49:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48BE81890660
+	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 20:07:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F326C202C4E;
-	Mon, 26 May 2025 14:49:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FAA11CAA6C;
+	Mon, 26 May 2025 20:07:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G6VzZtRL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s8ytLS72"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED8E8632E
-	for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 14:49:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE8D190057;
+	Mon, 26 May 2025 20:07:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748270990; cv=none; b=Vvon27Rl0t7rPjD7KPRQMga8EOudB8F4WJx9tAyXxcj0nzWV5oRmJhWvix0ppw2sBXORHtDCCzvvxb4IHQ0AWfUU1g4CfvhlBU41GyaNXs/bpNc2TqJY8zIGHEaB3KmaQf8NnkVGeQVYzlI6vzIpdKJ+ieV9E/GZ1WC5wgakJS8=
+	t=1748290039; cv=none; b=CFOWwtn9M/Lz8ah93AGKceB7ZUucZXTG4NZhaz+oAgG49ZdcAxojnCBG4vw85+wUMaCo2JD1bdgsTXGODjJ/z8DXJ9U5DVS/F3FiuvS2EuHPKQ12VoRpkMzFpDqo4UhNT3g7CQ1W+pRTol/UKRPPlmLhNsFypKOquS6Fmul4cFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748270990; c=relaxed/simple;
-	bh=W0/hyEwuqgPFvCrdO4dCJvxI2sNISkt+32J7IVABea0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=roz4blbxPx7a3SkkClt6VdRo/MmN8dD0umuq0waebzyzyzVqT8tAAH1QmCd2WHjAiAYhO0Y4YRP1HQuHMTu+O7Y3HVxLmwJnPkCBJUTyxUQqa+/2kTzxqfnaSP0iFxAFhgOlQx2VAe8Cr+SlqXRQa4USCCbfw1X9CVuALlyAc90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=G6VzZtRL; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1748270988;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tbRsQjXJhtCNd3c3uCPjlNU72gknC55NyPzUX0RnmC4=;
-	b=G6VzZtRLDoyRQPlSxefVuDcufTXeR9HMecn7B212BckD+Soq8G1NXQUDuHhpjHGqbOCZJV
-	xGv8OwzUJgWk3h1MPbaZeSdbW0vDvt+w3IaSgQThAEVErfvGkTxgCCvDF2saT5cOJkcOLi
-	BYM6AR1tcdU7aK5Uc9P4eah085dSapY=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-557-PPFGJBB_MJi8_IJ_IRnSsg-1; Mon, 26 May 2025 10:49:47 -0400
-X-MC-Unique: PPFGJBB_MJi8_IJ_IRnSsg-1
-X-Mimecast-MFC-AGG-ID: PPFGJBB_MJi8_IJ_IRnSsg_1748270986
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-43cf172ff63so14087075e9.3
-        for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 07:49:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748270986; x=1748875786;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tbRsQjXJhtCNd3c3uCPjlNU72gknC55NyPzUX0RnmC4=;
-        b=dp0+Zcjp95SvQt+k9QyVkHegpFwEX6vrCoD3H/JRE88O4vlfWyMKJ/01AkNOz5SUQ/
-         6rsa7CY6HfSPQE92q+zPVGF+NO6OdtfYnCKlKDhL7eyOEFTktX9zRwcD4OmOKaMuXUBn
-         JiCG5QicEy19+2cQo23UUKkZwEYMUhRSVq+VzBNwEB/20cIzkYA7cdgmmZjrbmQvgkex
-         SSH82UoTkXPj8GMHSufwh9ptBq+cGwNYC9GUN6yEgDcOA9OhrfEqTIgiF3o2LwdsHC8K
-         SnwRUNdXbbM/nCxEPj9QrnTJvTM7SmTibbuzX0Wg8WzZS2gXe3loZBfdAC6k64n9vHft
-         Ntbg==
-X-Forwarded-Encrypted: i=1; AJvYcCVpaSXWNKGjQVdIkl6/mSI865mDjcTSIjnH2G/joZf5itjfKOydTqLQw+lBvKpD4tsTdb2XSKHUxw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZqEs1bHNhNp3rO5ea4JdyspX7xAVkDt8SXgp0xyZWyR9s9vrq
-	QIdQAQOQgbwBpK93g83wS22s2vNjxcUuJg5WuxlPvtdH+L4sE5wRj4AmY6CNVtz8OZhXkdldLfR
-	+YRFmyOk76YgnsiUjck5x4foXp0QIk+5SIDcTKgAT0DLzAcwrdk+Px/X3xtyh
-X-Gm-Gg: ASbGncvLq+1CMSUlY37cvUHbt6YECasVbJR0BL8Eg/+GQqLjQ8PVJs0YC6m5hlbMkm0
-	Mt1rP4yOEVLm7/fwGPg31Yk20rRk8A7dMY//uzbHyPgwORiSp7POEw9QS6l2TM9R13Jt/kJ8zNp
-	3WxOBUSNuhvpquQCqtc5nuhrFsr8vryCVdfzDLwXKUPv+DK3Hyu1VehLmRgKsztYurGsV11u26t
-	6fu6AFZv7fKDCPqgLe/YsHhWcEmLL87lH3lh6P1dwRQUCZ4v8tcYzPRIPCKNzoui3pUgX8Gu8XK
-	QyN91yPO4T7RhoPo4fe0wgnDxxA2QC9S/80L9ANyNQ==
-X-Received: by 2002:a05:600c:3c93:b0:43d:fa58:81d3 with SMTP id 5b1f17b1804b1-44c933f0edfmr65831315e9.32.1748270985829;
-        Mon, 26 May 2025 07:49:45 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEquk3MK1EwO75qTut3w5b91J9jZc5mObLtXUOPqbGkVkc0NrRzBSxJyEDfbLBKJarvXMNWxg==
-X-Received: by 2002:a05:600c:3c93:b0:43d:fa58:81d3 with SMTP id 5b1f17b1804b1-44c933f0edfmr65831105e9.32.1748270985456;
-        Mon, 26 May 2025 07:49:45 -0700 (PDT)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.57.104])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-44804e89c42sm247878465e9.21.2025.05.26.07.49.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 May 2025 07:49:44 -0700 (PDT)
-Date: Mon, 26 May 2025 16:49:42 +0200
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: mingo@redhat.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-	vschneid@redhat.com, rafael@kernel.org, viresh.kumar@linaro.org,
-	mathieu.desnoyers@efficios.com, paulmck@kernel.org,
-	hannes@cmpxchg.org, surenb@google.com, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, tj@kernel.org
-Subject: Re: [PATCH] sched: Make clangd usable
-Message-ID: <aDR_hptEDqSxf112@jlelli-thinkpadt14gen4.remote.csb>
-References: <20250523164348.GN39944@noisy.programming.kicks-ass.net>
+	s=arc-20240116; t=1748290039; c=relaxed/simple;
+	bh=2h8mPg8pHJTB2digswKPZ+FpqDcEtfuqo2Mv5MAMbP0=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=TkOx+0Ru2HpnnXDJFEHP+gSzuaVRv/A920bfBut8T2HqwvVWobST0OxmzFMQMZhE7mDNy+DzJFt3XnPDZNATn7V3qahL8CUq/qjQ24r47XumIppV6nd/lILO48rcH9Lt/ZO6pJvKsXxBp9Y2UHgMT9B8kSGMgLWA81Vwc1z7p7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s8ytLS72; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A141FC4CEE7;
+	Mon, 26 May 2025 20:07:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748290038;
+	bh=2h8mPg8pHJTB2digswKPZ+FpqDcEtfuqo2Mv5MAMbP0=;
+	h=From:Date:Subject:To:Cc:From;
+	b=s8ytLS729MfLjxIuCS+/LBhRH10Oiyy9bQoo14u41Sp9VExdp2h/Utn1p+9qpYNV0
+	 gJheQ6BWQ0MUtqZVZcI3Cc+jOe7dB9Cm8boVglKEOZ2uQ9SrIgcAB8/DuUaESvLmbd
+	 kSQrXjm6rt3y+tA80vhzYiTCUuFXBxQvW24bEszmlDyng7NgLG/uyOM8GRfJ2G3Qos
+	 IEO7bQV7fSC/gAvz5M4fEIBTFOd/bfAm5zZwAGselIrFCZmAbgz36gsiJEmtOudKGT
+	 46vo39qaOPEb3vVMlqkn8+zvTD3k9ivr2y2/OvXFlZ5ZKg8OjQZIoYse8mEP+oeVtW
+	 RXI8UD5RKUTYw==
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-72c13802133so661519a34.3;
+        Mon, 26 May 2025 13:07:18 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWWBB04AaaRsVEPSn7bq35rLD9G40PPk8JkDeng5l3LgY8uDN8L+HEPHYesQlJX49NUUGWr2IcsoN3ix0AL@vger.kernel.org, AJvYcCXblxSyerq0IHom/e8g7VjDAzTuRAEZ+8pl6JeOk6ExWbK8weTOhpsYun3rfcvvWHgLfCdn4KkBv83L@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGgiyKD8Fj1lJpy0dSsVpwOM64l7TYqX0cGRIv8gtmwkdwBTwK
+	/GumdUyiLOl/jfmSEOV+II0p0lHArOAEeHP8S4neEiQ5ithDz4pEefDM+lwzVFeuaOLeDVPpW6G
+	lyrnGaFBDQ09VifmwbIlv1DYjY9uG1lQ=
+X-Google-Smtp-Source: AGHT+IHad05Czm30ecZhI1PmmIVVV3vLG5n5Oyv3ZSa+MpbPBktoK355NfbVfvqVevxCk0gwirMXcP87p8qC6gUgMEc=
+X-Received: by 2002:a05:6808:3191:b0:404:b5c6:46f3 with SMTP id
+ 5614622812f47-406467fff88mr6662350b6e.21.1748290037958; Mon, 26 May 2025
+ 13:07:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250523164348.GN39944@noisy.programming.kicks-ass.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 26 May 2025 22:07:06 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jtbcDUaMcTrnG7ewHmuMG2YUwe4ho1LUg-v9TrwLybLA@mail.gmail.com>
+X-Gm-Features: AX0GCFvmqkqGvP8_niqkJH1vWH5nPYbxY_IgeaKZL4rcdf03WXjM3sKvqq3y2cs
+Message-ID: <CAJZ5v0jtbcDUaMcTrnG7ewHmuMG2YUwe4ho1LUg-v9TrwLybLA@mail.gmail.com>
+Subject: [GIT PULL] Thermal control updates for v6.16-rc1
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, 
+	ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+Hi Linus,
 
-On 23/05/25 18:43, Peter Zijlstra wrote:
-> 
-> Due to the weird Makefile setup of sched the various files do not
-> compile as stand alone units. The new generation of editors are trying
-> to do just this -- mostly to offer fancy things like completions but
-> also better syntax highlighting and code navigation.
-> 
-> Specifically, I've been playing around with neovim and clangd.
+Please pull from the tag
 
-Me too very recently. :)
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ thermal-6.16-rc1
 
-> Setting up clangd on the kernel source is a giant pain in the arse
-> (this really should be improved), but once you do manage, you run into
-> dumb stuff like the above.
-> 
-> Fix up the scheduler files to at least pretend to work.
-> 
-> (this excludes ext because those include games are worse than average)
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+with top-most commit 01daf71a4f57062055f68f8163ed1ad88fb47990
 
-This indeed works for me as well. Thanks!
+ thermal: qcom: ipq5018: make ops_ipq5018 struct static
 
-Tested-by: Juri Lelli <juri.lelli@redhat.com>
+on top of commit 82f2b0b97b36ee3fcddf0f0780a9a0825d52fec3
 
-Best,
-Juri
+ Linux 6.15-rc6
 
+to receive thermal control updates for 6.16-rc1.
+
+These add support for a new feature, Platform Temperature Control (PTC),
+to the Intel int340x thermal driver, add support for the Airoha EN7581
+thermal sensor and the IPQ5018 platform, fix up the ACPI thermal zones
+handling, fix other assorted issues and clean up code.
+
+Specifics:
+
+ - Add Platform Temperature Control (PTC) support to the Intel int340x
+   thermal driver (Srinivas Pandruvada).
+
+ - Make the Hisilicon thermal driver compile by default when ARCH_HISI
+   is set (Krzysztof Kozlowski).
+
+ - Clean up printk() format by using %pC instead of %pCn in the bcm2835
+   thermal driver (Luca Ceresoli).
+
+ - Fix variable name coding style in the AmLogic thermal driver (Enrique
+   Isidoro Vazquez Ramos).
+
+ - Fix missing debugfs entry removal on failure by using the devm_
+   variant in the LVTS thermal driver (AngeloGioacchino Del Regno).
+
+ - Remove the unused lvts_debugfs_exit() function as the devm_ variant
+   introduced before takes care of removing the debugfs entry in the
+   LVTS driver (Arnd Bergmann).
+
+ - Add the Airoha EN7581 thermal sensor support along with its DT
+   bindings (Christian Marangi).
+
+ - Add ipq5018 compatible string DT binding, cleanup and add its support
+   to the QCom Tsens thermal driver (Sricharan Ramabadhran, George
+   Moussalem).
+
+ - Fix comments typos in the Airoha driver (Christian Marangi, Colin Ian
+   King).
+
+ - Address a sparse warning by making a local variable static in the
+   QCom thermal driver (George Moussalem).
+
+ - Fix the usage of the _SCP control method in the driver for ACPI
+   thermal zones (Armin Wolf).
+
+Thanks!
+
+
+---------------
+
+AngeloGioacchino Del Regno (1):
+      thermal/drivers/mediatek/lvts: Fix debugfs unregister on failure
+
+Armin Wolf (2):
+      ACPI: OSI: Stop advertising support for "3.0 _SCP Extensions"
+      ACPI: thermal: Execute _SCP before reading trip points
+
+Arnd Bergmann (1):
+      thermal/drivers/mediatek/lvts: Remove unused lvts_debugfs_exit
+
+Christian Marangi (3):
+      dt-bindings: thermal: Add support for Airoha EN7581 thermal sensor
+      thermal/drivers: Add support for Airoha EN7581 thermal sensor
+      thermal/drivers/airoha: Fix spelling mistake
+
+Colin Ian King (1):
+      thermal/drivers/airoha: Fix spelling mistake "calibrarion" ->
+"calibration"
+
+Enrique Isidoro Vazquez Ramos (1):
+      thermal/drivers/amlogic: Rename Uptat to uptat to follow kernel
+coding style
+
+George Moussalem (3):
+      thermal/drivers/qcom/tsens: Update conditions to strictly
+evaluate for IP v2+
+      thermal/drivers/qcom/tsens: Add support for tsens v1 without RPM
+      thermal: qcom: ipq5018: make ops_ipq5018 struct static
+
+Krzysztof Kozlowski (1):
+      thermal/drivers/hisi: Do not enable by default during compile testing
+
+Luca Ceresoli (2):
+      thermal/drivers/bcm2835: Use %pC instead of %pCn
+      vsprintf: remove redundant and unused %pCn format specifier
+
+Sricharan Ramabadhran (2):
+      dt-bindings: thermal: qcom-tsens: Add ipq5018 compatible
+      thermal/drivers/qcom/tsens: Add support for IPQ5018 tsens
+
+Srinivas Pandruvada (3):
+      thermal: intel: int340x: Add platform temperature control interface
+      thermal: intel: int340x: Enable platform temperature control
+      thermal: int340x: processor_thermal: Platform temperature
+control documentation
+
+---------------
+
+ Documentation/core-api/printk-formats.rst          |   3 +-
+ .../bindings/thermal/airoha,en7581-thermal.yaml    |  48 ++
+ .../devicetree/bindings/thermal/qcom-tsens.yaml    |   2 +
+ Documentation/driver-api/thermal/intel_dptf.rst    |  21 +
+ .../translations/zh_CN/core-api/printk-formats.rst |   3 +-
+ drivers/acpi/osi.c                                 |   1 -
+ drivers/acpi/thermal.c                             |  10 +-
+ drivers/thermal/Kconfig                            |  11 +-
+ drivers/thermal/Makefile                           |   1 +
+ drivers/thermal/airoha_thermal.c                   | 489 +++++++++++++++++++++
+ drivers/thermal/amlogic_thermal.c                  |  16 +-
+ drivers/thermal/broadcom/bcm2835_thermal.c         |   2 +-
+ drivers/thermal/intel/int340x_thermal/Makefile     |   1 +
+ .../int340x_thermal/platform_temperature_control.c | 243 ++++++++++
+ .../int340x_thermal/processor_thermal_device.c     |  15 +-
+ .../int340x_thermal/processor_thermal_device.h     |   3 +
+ .../int340x_thermal/processor_thermal_device_pci.c |   5 +-
+ drivers/thermal/mediatek/lvts_thermal.c            |  18 +-
+ drivers/thermal/qcom/tsens-v1.c                    |  62 +++
+ drivers/thermal/qcom/tsens.c                       |  27 +-
+ drivers/thermal/qcom/tsens.h                       |   4 +
+ lib/vsprintf.c                                     |  10 +-
+ 22 files changed, 946 insertions(+), 49 deletions(-)
 
