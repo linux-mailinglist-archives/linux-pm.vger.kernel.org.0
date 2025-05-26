@@ -1,87 +1,76 @@
-Return-Path: <linux-pm+bounces-27640-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27641-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF0ECAC3BE6
-	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 10:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 817E1AC3BEE
+	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 10:46:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0EA391888105
-	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 08:43:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 037F3188E90D
+	for <lists+linux-pm@lfdr.de>; Mon, 26 May 2025 08:46:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0F801E5716;
-	Mon, 26 May 2025 08:43:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 522211D799D;
+	Mon, 26 May 2025 08:46:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Ca08TtmH"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="N85KgYxk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2051.outbound.protection.outlook.com [40.107.244.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 357A3258A
-	for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 08:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748248991; cv=none; b=jJJdY1kMsMSP88HML3vTQNNQ4+Hsv4olPEveGRLf9RclxLQ05vmucU/8wqZb7gy1qMxGl5WGWIOkvaT3MyMX61izfSbIKWsJB+KUcn4amBxnBmPMbNGyML28iRol1F4vMiwZRXlwwu8HhoMo+nP2h0g72fQ4oPPuvFiWaVjgsmg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748248991; c=relaxed/simple;
-	bh=wvtD7UOxWptjnLXoK3lgX+akul/om9cVgjZjaIgSqCI=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=mvYzpVdSXs77XUjUI+Km+bAjp0mH4i51VGAlqwVHxhi+dCcyOn3gb69vSFRdEmhUdd5PXKQyV01UIaVriWH9DKxTQFx1QaYE+nNJpD3PRdkh7vygZZ3W4zwzjz63To9YfNmbG8vK85bG4bVygwHHVHzYWwf3KtPCi9gfLwe3zlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Ca08TtmH; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54PNF1kj012378
-	for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 08:43:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	sinlLLdJcZNbmFp3xHrrm5fCnPkdkH7iM8nLujxdoeY=; b=Ca08TtmHn6xL1Kff
-	9TY+DrLlT5tBGf2HciqNM3pLFiHurugr8mbxD+kee1q+ZRVdVXwhy8+pqMo3o1u4
-	RHcv4lOz412qSamlE7WkpvGLTufVaR63UDAHpxqKPQVd1GtE4OPK8m93y4YZhW7E
-	lzF9vbNQNfGZlllJe/gPfkZtPuOBrgdXcYbRp9LOrhuR3VZjLlX4/6HEv1KhEHEJ
-	DjFyyhYfC6JakozqpmoPuQxEXaRqtn9w+HVMnSHmiKg7LKlN47EpHmsAtvkc2vNr
-	819CDeb5zqiXjx9XPebktV4TdnaKYf9+8fra5jkTH9aXh1J/zgCE/fHwzES0fRwe
-	xjcwdg==
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46u6b5kk9e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 08:43:09 +0000 (GMT)
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-742aa6581caso1453131b3a.3
-        for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 01:43:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748248988; x=1748853788;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sinlLLdJcZNbmFp3xHrrm5fCnPkdkH7iM8nLujxdoeY=;
-        b=W5psmydGvSpznXiibs/pv9K4QGxW8SNIQMwm3hKtvnaPiqFWmw3JnbbLADvKBtVHcM
-         5kttDD/Xi0/NjazHNSc84AnO0QOyRPiOtVswvAo7lEStZ1GQc0Izi45i0Gs3L6JOcPMw
-         cqKjSAZQqf3xYe8HTXCn0IcxYgXppFZtnvHIheYUrFP5hPWWVr23VsxwBiNqqyKqTsUU
-         DCMCiLZO4AbEqQHrSi3PvzPMHSzsN9FKcS+HNxLKCyJUhhPmwvUUKLqpH2C+2kgAEe6p
-         IitpR/4iRMCVa2pLDFXLsuBKkEP33JZNxxZqyFrb4NjelNWOrV6po8pvcrZ4RNwbsZF0
-         DtRg==
-X-Forwarded-Encrypted: i=1; AJvYcCVjfiS2wIcXH4sjfgfNSOqcK25NYh3lccViY7qTtVc4vFul/QT/WBRwjWwKcC/1Vmc3nQwVRNRjdw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzvbDE/9So36/ITpVdLnoa5yeuVu+LpC+q0LRPg6qUYU95DBrA
-	+u3Dba0/BrQwebfvjXHDFHuKWRvczkbdILJbmh2rtxLtdAwLCXPvATPOTgGd0vFrODMvvwAoDRv
-	8hx2/xVnIM61DQQyd4Ypj7PfHNPwml08Kk096KfFppdlFPM6GFusMoEcq8Hd2Wg==
-X-Gm-Gg: ASbGncvtNEU4UWRMPrjC5cnucoccCvWV/Yxt0Ek6PE+l2iU2ksAfNT5zudJkIagwf8E
-	i8zP/xj6go/GVHfWEj3rtGVnxqiPiA/FbQFUeawqR1gA2hhXog0MbAOYW5qbK93+aWNmOy1Mjt9
-	TBgcQEe4BKWPxqEtkfS8HD7VF0N6e0jrp9BSV0OzohFzNKUsKC+gMZ5QFAACaAQBPaVuvNAQoBo
-	HAc18LXnBPP9Pvm3NFOLs5he1CzcwsspfjtQfSe3Sy36hlyMxmCgKJ7Gg573wus3rDPKqCd1MLH
-	0CF9XApuSRAoDyXtHuIUMVr9DRcgUxX/fw==
-X-Received: by 2002:a05:6a00:14c6:b0:736:5438:ccc with SMTP id d2e1a72fcca58-745fde87a75mr12107165b3a.9.1748248988336;
-        Mon, 26 May 2025 01:43:08 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFoizJR5p+a89MPZAfJfUO3m/tGSDp0byZESTr1wQfYRLYacqwKo8ENa6edgbqkfWqehnyKgg==
-X-Received: by 2002:a05:6a00:14c6:b0:736:5438:ccc with SMTP id d2e1a72fcca58-745fde87a75mr12107134b3a.9.1748248987935;
-        Mon, 26 May 2025 01:43:07 -0700 (PDT)
-Received: from [10.239.154.73] ([114.94.8.21])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a970c8a8sm17197718b3a.60.2025.05.26.01.43.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 May 2025 01:43:07 -0700 (PDT)
-Message-ID: <a6deee53-6106-4e50-8d53-f1a87e50e9f0@oss.qualcomm.com>
-Date: Mon, 26 May 2025 16:43:03 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EDC318EAB;
+	Mon, 26 May 2025 08:46:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748249185; cv=fail; b=Nvu3Q/LRJpWs+KXKu3eJdcxrK6IIWPq+We+PT6r9RZ7rerW6iOXJeunaQlyja4vhlLwy/6mUZdKnD8hYsNMRJMXv5NUYiAPwfBGzIZ/1UDt14U+zhJJJAin8PCpTi28x/BGw7qjxYyNajmaMnr16HVr84lthC+XnBfd29uYYF2o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748249185; c=relaxed/simple;
+	bh=BRgel/W9VQMHnFqHbKREZs9wEfCALEtT3hwNnMxkCkI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=nwroKNAGyr+512YA6T3VT5e6VLFRQn4Nhm4EAWtVsb3dohbx64RczQDFJ6f+lkkRbP8EqVW3UgPiUrDpT12SZ1QhJ7+ElHpUjwnpKiT4zpLoaCoidPtbZFfXgzEH1cIkX5pBL+5g3uU0yGjX6O23Sfz53uO0GrCrf5nhWjysy0M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=N85KgYxk; arc=fail smtp.client-ip=40.107.244.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=jwX98gs0plqW0Y46jySoyNbXY4uVZ3h1QTj3TwZ+3iMGAbHrZN5b0MbL2cQ5HjpNcpfeqytNnAzgpuJQa3Y9zJQG0MCUnWAdnfl3UZ22cLsLnDqeUOeMHifvecvisjeuk2mnEKDKH4FMGEsRvGWEYYmLYs/MFvOJakS6BpReroX1fdADApG1mKeSfx8TIJnW1iRXmdUMfN36TlZOioc9IrIQyvG2pmSf/gq+A4P/caeoFcjjULmlJoSqfV7LqPNJDVcdSyOZHBDUuZhEBmSt92gzoHEPaEQIYbkakN5nGsq6/t5i4yBAWRrS+H2FCxEZJ9j5szdeOVyoN4c4PjG5tQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YlKVHVZuC4z4mhYI5T8OtaRvFfwS7DZhGC8KA5lC/ok=;
+ b=e66hb38Fobk11oG7QvObp2jmozTSYvTDSV/CzEwwV2q2oBCijihOCJ5BsV+0XqQirbwyE4k96M3ut8Zja/CuAjxd3sB/YIUOU98G1TqeDORXTW0PsR2XfE5cmKnZ1x58E7mEWUmMKwpXrFN5ROs7KCdBQyW/bBwHWzA1D59xVpZaMkMGn7hL2mOEkmUWyMi/kf1uASAycdbxFgwo+4y0vTiglKzCmxf5HE/mqmVfBLx02qgWxk5/9Tu58hpgreYCnslBSGq0pHwWDM+SKLs4ztWtb2M4FiOO7oZ0eBDxv5z/0IuEYNyr7XjzvhZj8dYPzUNwuUvBEgLd6E74RMOrfw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YlKVHVZuC4z4mhYI5T8OtaRvFfwS7DZhGC8KA5lC/ok=;
+ b=N85KgYxkQevmg/bAO+NJ5oUgPMQk9PMmJE7yx/qhqr/lntbEfGmjkiCB3sdAf+FHZfJWFkKZdFA7a+rjXp/B9ozxAHmMKYpIAuptjgPPn/qMoxyjUSSAFtcxCNGO2gHcgfoNLe33qjRBjJgrYlwMm/0qI3lngVfjQIiq2gWqq1U=
+Received: from MN2PR01CA0056.prod.exchangelabs.com (2603:10b6:208:23f::25) by
+ MW3PR12MB4426.namprd12.prod.outlook.com (2603:10b6:303:58::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8769.25; Mon, 26 May 2025 08:46:20 +0000
+Received: from BL6PEPF00022572.namprd02.prod.outlook.com
+ (2603:10b6:208:23f:cafe::9a) by MN2PR01CA0056.outlook.office365.com
+ (2603:10b6:208:23f::25) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8769.18 via Frontend Transport; Mon,
+ 26 May 2025 08:47:23 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL6PEPF00022572.mail.protection.outlook.com (10.167.249.40) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8769.18 via Frontend Transport; Mon, 26 May 2025 08:46:19 +0000
+Received: from [10.252.216.136] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 26 May
+ 2025 03:46:16 -0500
+Message-ID: <e667198e-6940-4702-ac9c-7745f07dbf38@amd.com>
+Date: Mon, 26 May 2025 14:16:13 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,176 +78,141 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-Subject: Re: [PATCH 5/5] power: supply: qcom-battmgr: Add charge control
- support
-To: Neil Armstrong <neil.armstrong@linaro.org>,
-        =?UTF-8?Q?Gy=C3=B6rgy_Kurucz?= <me@kuruczgy.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc: Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
-        David Collins <david.collins@oss.qualcomm.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com
-References: <20250523-qcom_battmgr_update-v1-0-2bb6d4e0a56e@oss.qualcomm.com>
- <20250523-qcom_battmgr_update-v1-5-2bb6d4e0a56e@oss.qualcomm.com>
- <db0e40b6-22f3-46aa-b35d-7a8729370ddf@kuruczgy.com>
- <1b1c4617-0e5b-40c8-9a66-d243b48c0977@oss.qualcomm.com>
- <70b6d885-ca52-4731-9a78-80dd25248e2f@linaro.org>
+Subject: Re: [PATCH] selftests/cpufreq: Fix cpufreq basic read and update
+ testcases
+To: Shuah Khan <skhan@linuxfoundation.org>, Viresh Kumar
+	<viresh.kumar@linaro.org>
+CC: <rafael@kernel.org>, <shuah@kernel.org>, <gautham.shenoy@amd.com>,
+	<narasimhan.v@amd.com>, <linux-pm@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20250430171433.10866-1-swapnil.sapkal@amd.com>
+ <20250519075854.opnlhjlbybrkvd2k@vireshk-i7>
+ <2b7acb5f-65c7-4787-aac5-ebcec83c8ac0@linuxfoundation.org>
 Content-Language: en-US
-In-Reply-To: <70b6d885-ca52-4731-9a78-80dd25248e2f@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: "Sapkal, Swapnil" <swapnil.sapkal@amd.com>
+In-Reply-To: <2b7acb5f-65c7-4787-aac5-ebcec83c8ac0@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=ZcodNtVA c=1 sm=1 tr=0 ts=6834299d cx=c_pps
- a=m5Vt/hrsBiPMCU0y4gIsQw==:117 a=Uz3yg00KUFJ2y2WijEJ4bw==:17
- a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=KKAkSRfTAAAA:8 a=Htw2NgF16vZQhe7wStQA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=IoOABgeZipijB_acs4fv:22
- a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTI2MDA3MiBTYWx0ZWRfXwfOdMlB7JPIH
- 4ryeY3v6xagZZJmQi8XM6NpcL00Bw401/6j0cXDqM/Urhr9selGbdnLwSL1lEJEJi1qRLXeOU9I
- cv4j6dFXzE6GVSTx56lpgalV75X0hM8Xl/jAzfYPkiWdSN8ekM7uJdPegF4dUeqg7pp0PyhhW4d
- 43SfwS3RT17j5zr5r81cxQ965Fph9XxuFgdwHwuBFUdPdorsyd2lLR2lCGsWO8UVe+HmdB+ToC3
- 5rfJJY1X0TewqNtIu1aQWDx7H9VRgKo0+/cGCfjqr2cPfoI90VUJF2qRUtCnJeYQ6R91Z/Wny44
- 7io6O/hDUl949A4KyT342H0IyZl7R1t2k3P3cFDDbYWYHZIYXWi2ZD3Ek195oOglGV5gfPTlDUj
- P3YJ1GXgdi33k70zgPkIUTrlf7v/+JHe+tPKyI65hw81AMgzc2jyJml4HyklVzjPEfJ4W08G
-X-Proofpoint-GUID: bcGpHsyUZYxlkClr-zx3fYlMob_6vlf2
-X-Proofpoint-ORIG-GUID: bcGpHsyUZYxlkClr-zx3fYlMob_6vlf2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-26_04,2025-05-22_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0 priorityscore=1501
- spamscore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0 phishscore=0
- impostorscore=0 mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505160000
- definitions=main-2505260072
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF00022572:EE_|MW3PR12MB4426:EE_
+X-MS-Office365-Filtering-Correlation-Id: 86278fc6-6c2c-4213-46f8-08dd9c31c933
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|376014|82310400026|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?MFB2QVZnemZJOXM5ZHhIbmlqOEd5Z0hReVQ5b2UzdElXbTBvTkMwWmp4RGZ5?=
+ =?utf-8?B?TTlXWkNNOGplcTh0U2MwVjVmSzJjWkpWQS9tRW5SN0x6QnBZT0RyR08vMXY3?=
+ =?utf-8?B?VG1kL29wWjU5ZEFuaENqUlJoSm5lWVQ1TUg3djgvNHFCSWRqbGd5Q285Um1u?=
+ =?utf-8?B?ak9UbC9nVHNPYkM5NDdYa1ZSYUQ1ZElxRDMrbGRVVWVjTFRkbU44Nm1DclhD?=
+ =?utf-8?B?ZW1kVU1ZbDV0a1lrZGFOekZ2ekNlazNzZ0FNbS9DNS9hNG9DRHRsM2xBcVNx?=
+ =?utf-8?B?VDZSbUFaT1lZYll5QTE4dDJ0WXp1N3ppWHdncUlFVXRWSjROUTFYa2oreWJU?=
+ =?utf-8?B?YitWMmF5WHo1QW5qWDg5YWxDRWlQcGliR3lCWDUwN1I4TmdsUDlXeFpmZi9h?=
+ =?utf-8?B?U0lZUXZoYkJtZ0RhQ0dwanhnWFhPR3l6WEhMZ1ROZnVJM055SnFIbjdKemVI?=
+ =?utf-8?B?YnBJTzF5TW8wWFdpVEE5NXljeUFkUW5UNnc5eWNHT3oyVlNpN0czZVdHZXJZ?=
+ =?utf-8?B?NGVDYmFRK0MvTjAwdWt6VEpLVVUvSE9JQXNnR1Z2YndSMzdwWlFSUENmTStj?=
+ =?utf-8?B?dzVXVmZVZHh1ZE1jSHpCNmVUV2pkazA2QUYvaEFGRnI0ZmtLYjZ5a1BReXU5?=
+ =?utf-8?B?YlF5NWFiYW5TZmlZOFhGVGRYbFR6cG42TVNzb3ZOTTJGRnlNczJIN3RwVXBY?=
+ =?utf-8?B?YU9JSW1GaXJ3MjZua2tLd3p4LzlhZ1ByNVIzYUQ5SE44ZTBTSThrRnYzL2dx?=
+ =?utf-8?B?Z3VSMVVmVGRkSitEcnRYdHN6b1VmNWpVTHNRaERKbDZ0OFdHTy9GY0JPNVVv?=
+ =?utf-8?B?NGNMMmNuVU9SazlYaGNHdjJyQlBNRWppY2pTdTJuYWh2b0swWm96YmdtZXg5?=
+ =?utf-8?B?ZmVYeGRYcGhFZjJtMFVOQ2huVXg4b3dpQ1dic1N3QXdkYzQ5eHAwVW1YdVVm?=
+ =?utf-8?B?Y0I1TElpR2xZbEJWVTZjMVhHdDBxVzMwUUo2dDE0VVFZSVNVQzhEQ1BuZ011?=
+ =?utf-8?B?QktFYzJ6dElVVG0rVm5oZVpsMlQvNnZzKy9QTnliTjRZVlNTTUZmbjE2a3VF?=
+ =?utf-8?B?S1BWS1p5RnRnK2ZSNUxpMnlrcGxUcVlTOGpoaFB3bk1DeTkyZ2d0Qm5JbUlM?=
+ =?utf-8?B?V0Fvam9XdEVmN0ZBbjEzWUVFK3FJd1ZXSS9VZlBhM1gzNnBjRWRIVFU0WURN?=
+ =?utf-8?B?Q1ZObmlUMW4zdXgwYkdLZjM2ZEZhTTBHVklvcXdIeGZqblpsOVlIUUFtbUdW?=
+ =?utf-8?B?emh1ZnBFOVgzR1lCNnJNSTFtVG93UERKYlo0Uk1Za2IyV0RPZ2VXRDMxT1l4?=
+ =?utf-8?B?bGJSeDNpU2lSMjlGUHZ3cXZ3M3NHVDhVUjRPWWhicm5QYlpqZ2R6RTZyd2lS?=
+ =?utf-8?B?aDh6RlJUeUxVYWprL2JhaFBqZVRxVkVQd2xkWXc1WWs5c2t0Ulo2K2ppdWR1?=
+ =?utf-8?B?VFpsMHBCclRNWWZMSERlaUpqejFsYlg0bHBKaTJWREcvdWdlUmNaN3gvR29v?=
+ =?utf-8?B?SSs1KzdnUWNWYTN2L3VhUTVkWGdTQTl6TzhJWFJYVGlwNC9XeEpmWTZ6a2ZJ?=
+ =?utf-8?B?QzRYNm5KNzdvWHBieWdkWG43MUcxRXppZWsvTDhoWjBxajRqZ01mM0RuUzJp?=
+ =?utf-8?B?c3k5MGZabS9aWXVjSEVwQ2l3b3B4aVJTb2s3bUNCMlhLVFJGUysrangvcEp3?=
+ =?utf-8?B?bEhFSWJ4Yi95ZExVR3BZVnhzaXhoS3hwWVpHeitINUdrMFVsY1I2ZllYV2Zp?=
+ =?utf-8?B?WktCblNKRXFYRHNnYXgzZG1CeC9EQ2JTbDQ1WWJuenZLYmI2ci9QemRFSGVY?=
+ =?utf-8?B?UktOeElXVVl1M0hCb1VzQWZiRWtVWDd5cWVpYVVQZDEyUGlYY1V3M1pxVkFs?=
+ =?utf-8?B?eGZHYVFDZm1Dc1laTTlzNVZJcnYreEpwN1AvMTRxL21OWXlDaXZ5VE0wVmMw?=
+ =?utf-8?B?UkN4Vkt1SU8ySThkVCswclIzaUxxVmdPMDFxbitBeGZQQzRQK2JVbkJlZFVz?=
+ =?utf-8?B?RE45aklaNzR2aWRvUXFtWTFFZlp1THg1RFBMZXdBcVNKRzA1SGJYays2K2pj?=
+ =?utf-8?Q?NRbf7Y?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2025 08:46:19.8949
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86278fc6-6c2c-4213-46f8-08dd9c31c933
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF00022572.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4426
 
+Hi Shuah,
 
-On 5/26/2025 4:27 PM, neil.armstrong@linaro.org wrote:
-> On 26/05/2025 08:19, Fenglin Wu wrote:
->>
->> On 5/24/2025 5:29 AM, György Kurucz wrote:
->>> Hi!
+On 5/22/2025 8:47 PM, Shuah Khan wrote:
+> On 5/19/25 01:58, Viresh Kumar wrote:
+>> On 30-04-25, 17:14, Swapnil Sapkal wrote:
+>>> In cpufreq basic selftests, one of the testcases is to read all cpufreq
+>>> sysfs files and print the values. This testcase assumes all the cpufreq
+>>> sysfs files have read permissions. However certain cpufreq sysfs files
+>>> (eg. stats/reset) are write only files and this testcase errors out
+>>> when it is not able to read the file.
+>>> Similarily, there is one more testcase which reads the cpufreq sysfs
+>>> file data and write it back to same file. This testcase also errors out
+>>> for sysfs files without read permission.
+>>> Fix these testcases by adding proper read permission checks.
+> 
+> Can you share how you ran the test?
+> 
+
+I ran the basic tests with the following command:
+
+./main.sh -t basic
+
 >>>
->>>> +static int qcom_battmgr_set_charge_control(struct qcom_battmgr 
->>>> *battmgr,
->>>> +                       u32 target_soc, u32 delta_soc)
->>>> +{
->>>> +    struct qcom_battmgr_charge_ctrl_request request = {
->>>> +        .hdr.owner = cpu_to_le32(PMIC_GLINK_OWNER_BATTMGR),
->>>> +        .hdr.type = cpu_to_le32(PMIC_GLINK_REQ_RESP),
->>>> +        .hdr.opcode = cpu_to_le32(BATTMGR_CHG_CTRL_LIMIT_EN),
->>>> +        .enable = cpu_to_le32(1),
->>>> +        .target_soc = cpu_to_le32(target_soc),
->>>> +        .delta_soc = cpu_to_le32(delta_soc),
->>>> +    };
->>>> +
->>>> +    return qcom_battmgr_request(battmgr, &request, sizeof(request));
->>>> +}
->>>> +
->>>> +static int qcom_battmgr_set_charge_start_threshold(struct 
->>>> qcom_battmgr *battmgr, int soc)
->>>> +{
->>>> +    u32 target_soc, delta_soc;
->>>> +    int ret;
->>>> +
->>>> +    if (soc < CHARGE_CTRL_START_THR_MIN ||
->>>> +            soc > CHARGE_CTRL_START_THR_MAX) {
->>>> +        dev_err(battmgr->dev, "charge control start threshold 
->>>> exceed range: [%u - %u]\n",
->>>> +                CHARGE_CTRL_START_THR_MIN, 
->>>> CHARGE_CTRL_START_THR_MAX);
->>>> +        return -EINVAL;
->>>> +    }
->>>> +
->>>> +    /*
->>>> +     * If the new start threshold is larger than the old end 
->>>> threshold,
->>>> +     * move the end threshold one step (DELTA_SOC) after the new 
->>>> start
->>>> +     * threshold.
->>>> +     */
->>>> +    if (soc > battmgr->info.charge_ctrl_end) {
->>>> +        target_soc = soc + CHARGE_CTRL_DELTA_SOC;
->>>> +        target_soc = min_t(u32, target_soc, CHARGE_CTRL_END_THR_MAX);
->>>> +        delta_soc = target_soc - soc;
->>>> +        delta_soc = min_t(u32, delta_soc, CHARGE_CTRL_DELTA_SOC);
->>>> +    } else {
->>>> +        target_soc =  battmgr->info.charge_ctrl_end;
->>>> +        delta_soc = battmgr->info.charge_ctrl_end - soc;
->>>> +    }
->>>> +
->>>> +    mutex_lock(&battmgr->lock);
->>>> +    ret = qcom_battmgr_set_charge_control(battmgr, target_soc, 
->>>> delta_soc);
->>>> +    mutex_unlock(&battmgr->lock);
->>>> +    if (!ret) {
->>>> +        battmgr->info.charge_ctrl_start = soc;
->>>> +        battmgr->info.charge_ctrl_end = target_soc;
->>>> +    }
->>>> +
->>>> +    return 0;
->>>> +}
->>>> +
->>>> +static int qcom_battmgr_set_charge_end_threshold(struct 
->>>> qcom_battmgr *battmgr, int soc)
->>>> +{
->>>> +    u32 delta_soc = CHARGE_CTRL_DELTA_SOC;
->>>> +    int ret;
->>>> +
->>>> +    if (soc < CHARGE_CTRL_END_THR_MIN ||
->>>> +            soc > CHARGE_CTRL_END_THR_MAX) {
->>>> +        dev_err(battmgr->dev, "charge control end threshold exceed 
->>>> range: [%u - %u]\n",
->>>> +                CHARGE_CTRL_END_THR_MIN, CHARGE_CTRL_END_THR_MAX);
->>>> +        return -EINVAL;
->>>> +    }
->>>> +
->>>> +    if (battmgr->info.charge_ctrl_start && soc > 
->>>> battmgr->info.charge_ctrl_start)
->>>> +        delta_soc = soc - battmgr->info.charge_ctrl_start;
->>>> +
->>>> +    mutex_lock(&battmgr->lock);
->>>> +    ret = qcom_battmgr_set_charge_control(battmgr, soc, delta_soc);
->>>> +    mutex_unlock(&battmgr->lock);
->>>> +    if (!ret) {
->>>> +        battmgr->info.charge_ctrl_start = soc - delta_soc;
->>>> +        battmgr->info.charge_ctrl_end = soc;
->>>> +    }
->>>> +
->>>> +    return 0;
->>>> +}
+>>> Reported-by: Narasimhan V <narasimhan.v@amd.com>
+>>> Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
+>>> ---
+>>>   tools/testing/selftests/cpufreq/cpufreq.sh | 15 +++++++++++----
+>>>   1 file changed, 11 insertions(+), 4 deletions(-)
 >>>
->>> These function names sound quite generic, but AFAIU this patch is 
->>> only adding charge control support for the SM8550. Is sc8280xp and 
->>> x1e80100 also expected to be supported using the same 
->>> qcom_battmgr_charge_ctrl_request format?
+>>> diff --git a/tools/testing/selftests/cpufreq/cpufreq.sh b/tools/testing/selftests/cpufreq/cpufreq.sh
+>>> index e350c521b467..3484fa34e8d8 100755
+>>> --- a/tools/testing/selftests/cpufreq/cpufreq.sh
+>>> +++ b/tools/testing/selftests/cpufreq/cpufreq.sh
+>>> @@ -52,7 +52,14 @@ read_cpufreq_files_in_dir()
+>>>       for file in $files; do
+>>>           if [ -f $1/$file ]; then
+>>>               printf "$file:"
+>>> -            cat $1/$file
+>>> +            #file is readable ?
+>>> +            local rfile=$(ls -l $1/$file | awk '$1 ~ /^.*r.*/ { print $NF; }')
+>>> +
+>>> +            if [ ! -z $rfile ]; then
+>>> +                cat $1/$file
+>>> +            else
+>>> +                printf "$file is not readable\n"
+>>> +            fi
 >>
->> No, sc8280xp and x1e80100 don't support it. So I didn't add the 
->> support for them.
->
-> And what about SM8650 and SM8750 ?
->
-> Neil
->
-Both SM8650 and SM8750 support charge control functionality. I saw 
-SM8650 has already used "qcom,sm8550-pmic-glink" as fallback compatible 
-string, so it will have it enabled by default when the change gets 
-accepted. SM8750 platform can also use "qcom,sm8550-pmic-glink" as 
-fallback to support it when uploading the DT change.
-
-Fenglin
-
+>> What about:
 >>
->> These are generic functions are similar to 
->> "qcom_battmgr_update_charge_time" and "qcom_battmgr_update_info" 
->> which are only used for sc8280xp platform. Even right now charge 
->> control is only supported in mobile platforms starting from SM8550, 
->> however, it could be potentially supported in battery management 
->> firmware of any future platforms and the same functions could be reused.
+>> if [ -r $1/$file ]; then
+>>      cat $1/$file
+>> else
+>>      printf "$file is not readable\n"
+>> fi
 >>
->>> Thanks,
->>> György
 >>
->
+> 
+> thanks,
+> -- Shuah
+--
+Thanks and Regards,
+Swapnil
 
