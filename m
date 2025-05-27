@@ -1,147 +1,132 @@
-Return-Path: <linux-pm+bounces-27674-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27675-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 832E8AC47A8
-	for <lists+linux-pm@lfdr.de>; Tue, 27 May 2025 07:33:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AD0CAC47C2
+	for <lists+linux-pm@lfdr.de>; Tue, 27 May 2025 07:45:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2581E3B57D6
-	for <lists+linux-pm@lfdr.de>; Tue, 27 May 2025 05:33:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8897A3B9B3A
+	for <lists+linux-pm@lfdr.de>; Tue, 27 May 2025 05:45:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55AB712C544;
-	Tue, 27 May 2025 05:33:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB3441917F4;
+	Tue, 27 May 2025 05:45:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tpKHKMXG"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="R0hd4Lo3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA6BF1BF58
-	for <linux-pm@vger.kernel.org>; Tue, 27 May 2025 05:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6CCB3594A
+	for <linux-pm@vger.kernel.org>; Tue, 27 May 2025 05:45:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748324017; cv=none; b=V4UlF3SxUkD8nfiFIxZrs8HeePy4cu1Bbk6BoF3f3/QB+7okgmucFYj1MQtugutUc+QnojKTetzDa1eAn1YkTwecuDoz5bNEMRFoPgZMKNz5RR96loqjOOyRdNQSlNFogGVtYqrLVKPkRwQ7Rb3rs2J9w6b3Ez1B9cZMfk3qfDw=
+	t=1748324728; cv=none; b=uKsDX+uFZWKK8+AmGVOsr8wUpQ1WDs8eNVZfNTBRllmcbeyO8pMI6sa/ryjilZB76qp83jiXE1v10lMRUw+924+nD00Av0P4i+uUYwF4X9arw5cLnuOzXjQ/dGaCWH57y5kAKpyN/GgJCT2CXYto+dlNXIX7PPO1BeD+yN4axIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748324017; c=relaxed/simple;
-	bh=sKF4zz/4/zo8wIkoons3Ms5WggyqYOdPqZb5QTOICR4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sL0yB49wPQd73/4QsJgqPSaPum3QDh5JlpEa+cI1VzIXMfqtPj0RMvllqeJvNLcCWGRirZmAh2tAQdJq9x2jk21103IfK9qB+oM244Aac2ekmu83g1970u/GeIByXWjAMyX4rpVgWIMXXjaD4uiVlnTlDccq27WPhP9qlypE/+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tpKHKMXG; arc=none smtp.client-ip=209.85.214.169
+	s=arc-20240116; t=1748324728; c=relaxed/simple;
+	bh=0h4MToyMZi6FE1TFu8zlRTj8kxMLKoCJQR+vUO1Zo+U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=l6z8zF9U3Lxyhnlcc/x2FqzyKP81t/k4+Gu4u3higst1fzrB5oZmQHJMLxrj3TQl0XP92eLaosn0Mhf7ZkzdPa2HMcNx7c4nQlaIJ1KIf5ngzru5/c9FmwiZI4tABWgTHL0KvRb8v/FYzVaO0R1wOELFg0xp/n3iI5tlAg7a4Ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=R0hd4Lo3; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2349f096605so2800615ad.3
-        for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 22:33:35 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6021b8b2c5fso5647290a12.2
+        for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 22:45:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1748324015; x=1748928815; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=h8MeiKlq1phnPLJ3Wy+Q/bcsd9h4e9tZsVOSyiDWgEQ=;
-        b=tpKHKMXGFMZ7Vw9cCXL9LsSgc/cqxgA9uWIt27C4CYh7Y5EqDNDBOA8zyDpb6xcjlj
-         K6cKBzrnGtBXfE/WdFihSokdNkG5bFVcDiyss3o9BUy4zNt4TJcJxUZwR5FOyoI4Iqn5
-         glEPjg4DKvE9ywul4TT/05LecvaRR9KsWF2zrsIhqYlDkNawCXyvKjJ5tMg+0Hdb3Dzh
-         nKAGfTcnOfauuIdOemAZErGZ2X6kkRPvNGrHrVVGyDF+bD1Oly07l87uuxqlsFnR4FFa
-         E1n1Qg6ROljQlHj4uGu8XFrN7TLemBotxFUq7uAGyergeaujnldBLc0Cipvp807DmAVU
-         mvZQ==
+        d=linaro.org; s=google; t=1748324725; x=1748929525; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vAdJ/cT5QBHscP2gZxi7G3d4bBHjxu/r9X+j+h7O9D0=;
+        b=R0hd4Lo3WYkT3Iyk5DCwvJIBTQndAZkhtQgNYIRb8n/+FrN+xHMqPB8Xu0mnwJlNq6
+         qpp1SAPXiAZ5HrxCXJLia/M+U0qCs8RwArRXvuoHDyZh3hMZ4SOfFWxu2ngzB1VBtam9
+         HZNp56aStJbmWCMLUWm28z3ogTeUJ468dCM5iaaqu9VvJrWRvTbCDeC4I7uiVd4WQo9c
+         Igr6mnLkeTrJfj8LsgCbHCUHM4EUZ3tbC+jtgwqCAMr9Uc/CjiTHrPQktgE4X00kVEcl
+         sqXScoa+MOEt8CZ/5Em33aGru5kiv4Yfw+pBQfHOdnPOCJ1qHrCfSbz5dRw/6x6MvHzS
+         +5Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748324015; x=1748928815;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h8MeiKlq1phnPLJ3Wy+Q/bcsd9h4e9tZsVOSyiDWgEQ=;
-        b=Bc+KGC1v3vOwApWywmjQgxBK6bmKVT4U6L1xhHYsAE/sWrDTEyWsPvJ/zSCPsHucAY
-         IUju9/8udLolnBAk5gMyFbfbRKRHf1Rp3dkusd3H0zuP6m4R3IJJo120Kk9mcQ7NW8Kh
-         sTY3sJpAB6tI3eIFoQ6I93NxgSTx92bzPERldyY2fQzwRUq1h7ZCtmKsFRSIlHRuF6EQ
-         x/WFtcG2Xd6GcaJfYOKm/W6dpfD2Dy8NPgpVu9rng5aB/A7qNYyhqWD8XpwyIUze09pU
-         1vB6iOr6x1HlOoAePGNBWCxTIMbBDCNKPAgoQXAVRR2pJPpDHIUvpIq+0BbF96Xg0vJa
-         CJoA==
-X-Forwarded-Encrypted: i=1; AJvYcCUYsHwaYoFLrsGCnllfzKIAqPKOUIlKdI87/AXDgjVI4/sguLHkR06yLlUYxfPgWhsOdSNrpbnClA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwK9FNpujgZN1KoWa2yb6qkgsCFHgXwiMzbI3vO7i6vWVXgepvM
-	l96yChm2WW8U1CiisSCnc3rx+DNjt6nMzCDTGoc/958hbVXD2uUfyVQY2dUGbDTOZDI=
-X-Gm-Gg: ASbGncvsXL5bqa9crfQ2KQ2L8MA9EdPg1fUqXbgO67wb5zZNcDLaO3JP80f9WEIaiTy
-	5Ov7Z6/QSmrfMcqcLMb0l177bB80g2wWkqEuvmkatvmrDKEgsGY/hI26hN5XnuTfJRi3lNiFWZC
-	XlRzwFcAVHLJEcqa2YCxMCr0B8jj1iNDFgQ63rMXne2G1N+CxtfT6GED/m92z9VlS4WwUhgwxG7
-	XdMyM4BsaepUq+2468M5jwE/MQjAJS/ZGMZDH5O4Bb0SXh24iULbKpHZohieMT6ztKR05Y3dGRU
-	wSY1TS6fCnreKEmYYLEVGnD1pGZBuKOjZqp73XhIB1I3x9rZDJp+
-X-Google-Smtp-Source: AGHT+IEoBXhd4uJBmeZzJI+pUQ69cLynbx10Uo0njUY2UHsLd0QLG6xZBUS+XTdwv/Joqn/Yqnc6rQ==
-X-Received: by 2002:a17:903:244a:b0:231:f5a8:173a with SMTP id d9443c01a7336-23414fe82d9mr155104945ad.51.1748324012616;
-        Mon, 26 May 2025 22:33:32 -0700 (PDT)
-Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3110ee8f631sm5747169a91.5.2025.05.26.22.33.31
+        d=1e100.net; s=20230601; t=1748324725; x=1748929525;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vAdJ/cT5QBHscP2gZxi7G3d4bBHjxu/r9X+j+h7O9D0=;
+        b=ZeEwn76woW6LhB77OCvgwoRlxhrqLEi1OU/p8/BZkXvKtDMPFw2kU9uQF3qMvzKcvO
+         qmSFpG9MpxnuGmCg9dHUHjCQ4+aBCRYoMPSszBonY0ndB4vqfZ3YAz0dqclSu48+W8q+
+         e6sxZiJbuB0k3d3HVrqtK4Di6HJYDZpE/29PMRROlMNvYakZfMMnVvLytvlvpxEqQxMv
+         Bp270gAfHHMHRe9ijtTXC/CuoogvT32bZ0LxJDWjHjlvIRzAbvSH8Fj3xTfySypD6Y5J
+         r+Ht2k5l3UuBenpqKRuk983tmH3x2ppIQ3dVG79Oe5hu2OoZ5NG9uJqhZwcd+D1yGU/3
+         v9Qg==
+X-Forwarded-Encrypted: i=1; AJvYcCVgQKiCReAqGTrPgXzzWSDkthuN4JTd4BMnajB7iDYAdn2t9BEVfSKkP8EX7sgLaJ0BALgGimwQYQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzaY6MapowHsGGbUQGhp9UCpy6eg9mtIjyaULf7kHSKu2knHl+
+	iL9pHnlN8eEnAdi475vFNuMjKf/4rxh6FWFYZAeIY6WLHQqZu9P+Lgtna00ue7qwrw4=
+X-Gm-Gg: ASbGnctX+/g9mkbOKuGYkUTSJD40P/CKHR0j1F63BJVTm9XqnRnc8PuxN0ZuxHYfd3x
+	3s48k7lZxGb12cOnCWkOHCZykWBXoiNHMcwVDPYdX50qsVhalhsWl+1nHrP9F639xSkRBzSLlql
+	5/+6ywOVR/ieehV93khEqqmnXwI7xY0Y5OuwKpkBS3xOTxXe6nSyAvpLe2GZsFe/q9A9Jpegp4c
+	ahyrrPczG9uWP/RXd6adwFaJrGysEtfdKJSKAtaIFkLHjPiyYRfDlv2ty2O3vC7tr5ELvMHnli+
+	mnIf56P34wCw116BRSvHKqGOCv/d9tKyFmuUiPGmVO4axuNpZFxPUcX2UHVUrGs3Krrv7G985Qs
+	=
+X-Google-Smtp-Source: AGHT+IFjfjGDL9+pR2wI6u63W8YFLk9uDG95aJV/jaoLvZt0KxL00PabZAJ4WGFqwimBN1PB88AkOg==
+X-Received: by 2002:a17:906:f58b:b0:ad2:499d:dfdb with SMTP id a640c23a62f3a-ad85b1bd259mr1048071866b.26.1748324725279;
+        Mon, 26 May 2025 22:45:25 -0700 (PDT)
+Received: from localhost (hf94.n1.ips.mtn.co.ug. [41.210.143.148])
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-ad52d047749sm1788284566b.8.2025.05.26.22.45.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 May 2025 22:33:32 -0700 (PDT)
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>,
-	linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] rust: opp: Move `cfg(CONFIG_OF)` attribute to the top of doc test
-Date: Tue, 27 May 2025 11:03:26 +0530
-Message-Id: <9d93c783cc4419f16dd8942a4359d74bc0149203.1748323971.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+        Mon, 26 May 2025 22:45:24 -0700 (PDT)
+Date: Tue, 27 May 2025 08:45:21 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH next] cpuidle: psci: Fix uninitialized variable in
+ dt_idle_state_present()
+Message-ID: <aDVRcfU8O8sez1x7@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
 
-Move the `#[cfg(CONFIG_OF)]` attribute to the top of the documentation test
-block and hide it. This applies the condition to the entire test and improves
-readability.
+If the first cpu_node = of_cpu_device_node_get() fails then the cleanup.h
+code will try to free "state_node" but it hasn't been initialized yet.
+Declare the device_nodes where they are initialized to fix this.
 
-Placing configuration flags like `CONFIG_OF` at the top serves as a clear
-indicator of the conditions under which the example is valid, effectively
-acting like configuration metadata for the example itself.
-
-Suggested-by: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Fixes: 5836ebeb4a2b ("cpuidle: psci: Avoid initializing faux device if no DT idle states are present")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
 ---
-Rafael,
+ drivers/cpuidle/cpuidle-psci.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-Sorry for the trouble, one more patch to apply :(
-
- rust/kernel/opp.rs | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/rust/kernel/opp.rs b/rust/kernel/opp.rs
-index c2bdc11f3999..a566fc3e7dcb 100644
---- a/rust/kernel/opp.rs
-+++ b/rust/kernel/opp.rs
-@@ -575,6 +575,7 @@ extern "C" fn config_regulators(
- /// frequency.
- ///
- /// ```
-+/// # #![cfg(CONFIG_OF)]
- /// use kernel::clk::Hertz;
- /// use kernel::cpumask::Cpumask;
- /// use kernel::device::Device;
-@@ -582,7 +583,6 @@ extern "C" fn config_regulators(
- /// use kernel::opp::Table;
- /// use kernel::types::ARef;
- ///
--/// #[cfg(CONFIG_OF)]
- /// fn get_table(dev: &ARef<Device>, mask: &mut Cpumask, freq: Hertz) -> Result<Table> {
- ///     let mut opp_table = Table::from_of_cpumask(dev, mask)?;
- ///
+diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+index 3c2756a539c4..4e1ba35deda9 100644
+--- a/drivers/cpuidle/cpuidle-psci.c
++++ b/drivers/cpuidle/cpuidle-psci.c
+@@ -456,14 +456,13 @@ static struct faux_device_ops psci_cpuidle_ops = {
+ 
+ static bool __init dt_idle_state_present(void)
+ {
+-	struct device_node *cpu_node __free(device_node);
+-	struct device_node *state_node __free(device_node);
+-
+-	cpu_node = of_cpu_device_node_get(cpumask_first(cpu_possible_mask));
++	struct device_node *cpu_node __free(device_node) =
++			of_cpu_device_node_get(cpumask_first(cpu_possible_mask));
+ 	if (!cpu_node)
+ 		return false;
+ 
+-	state_node = of_get_cpu_state_node(cpu_node, 0);
++	struct device_node *state_node __free(device_node) =
++			of_get_cpu_state_node(cpu_node, 0);
+ 	if (!state_node)
+ 		return false;
+ 
 -- 
-2.31.1.272.g89b43f80a514
+2.47.2
 
 
