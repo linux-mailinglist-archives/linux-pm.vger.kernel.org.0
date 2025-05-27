@@ -1,125 +1,149 @@
-Return-Path: <linux-pm+bounces-27676-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27677-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5627AAC47EA
-	for <lists+linux-pm@lfdr.de>; Tue, 27 May 2025 07:57:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F06BAC4A14
+	for <lists+linux-pm@lfdr.de>; Tue, 27 May 2025 10:22:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05CB13ACA53
-	for <lists+linux-pm@lfdr.de>; Tue, 27 May 2025 05:56:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2496318914B3
+	for <lists+linux-pm@lfdr.de>; Tue, 27 May 2025 08:22:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41C401E1C1A;
-	Tue, 27 May 2025 05:56:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3661F22578C;
+	Tue, 27 May 2025 08:22:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="FN7MR3WA"
+	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="stlnoo5u"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
+Received: from jpms-ob01.noc.sony.co.jp (jpms-ob01.noc.sony.co.jp [211.125.140.164])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3CD0EC5;
-	Tue, 27 May 2025 05:56:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E0EA24A05D;
+	Tue, 27 May 2025 08:21:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.125.140.164
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748325406; cv=none; b=ZiGg3E0BUkA69MRCUIOg/y8g6gjAO7l6ZAFhIOgt+IeHZU4dQ9US0q6XVT7RD0JJOdLjmKAY0nzlzfXCylac0Pie4WVjCCci9MEXOiQb7cGU7MoUbCCdh7hwJyUfPKXmlxmibCv58SwtLhhBLHTohLE/5lKXqXWWiSpqkGGbUww=
+	t=1748334122; cv=none; b=n8DuOtYecT7i5JDpUQKH/Icl/kdgzSJ3KKM4c3M2TJNjrfaNlwrvZ/XttpiwAYDrLlkTGC6iRpKC79iG2R7nmL9XKh5WiGTKJ69sPXS/Fek1rlMDg/SiqlHmJHisPIsLW8VkgQf0qO6tHGL//MDp9lqey9eKrc+vyfgE3j0DFqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748325406; c=relaxed/simple;
-	bh=U9Yf5Qn+CWpgrecG5lo3yXM4ImFNhP5nzssC2XvTG3I=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gR0GkZna066KR2ZHBE+q11dovtlugT25y1/b1EQrRYfpzQgx8uX1P3JoOtAyOVYPKI6nZnurMk9bvwU2WbFvJX6aIykeBAULmQo0wkwpRVJE6DdyxoI6FIPotOVWxA6Eq78d5XtVkqvrZZWtSAZSO9jqCAPaiGwm1h8aLXgpY3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=FN7MR3WA; arc=none smtp.client-ip=198.47.19.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllvem-sh04.itg.ti.com ([10.64.41.54])
-	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTP id 54R5ubQx1667523;
-	Tue, 27 May 2025 00:56:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1748325397;
-	bh=TyQEMTJMjv/JXggHV0vUjGan81xX/UwqrqP/Y9Utr6I=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=FN7MR3WAYpjes24Ev46ZD8so0Hr6hLBuJIQfU2JVyEtFoFGniMrl6pL9PluakhLR7
-	 PacaaxoMrFCq/Ivrv+0f9jgFqe/4LAO+70YcfeL4yciHr09fQO6RsqyN5EcmcxPkpg
-	 9CasfXen/evUyG3Z+JXmzw8oM2LGFnQdkxaYk+EA=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-	by fllvem-sh04.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 54R5ub012658494
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Tue, 27 May 2025 00:56:37 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 27
- May 2025 00:56:36 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 27 May 2025 00:56:36 -0500
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 54R5uZpo3202397;
-	Tue, 27 May 2025 00:56:36 -0500
-Date: Tue, 27 May 2025 11:26:35 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: bhanuseshukumar <bhanuseshukumar@gmail.com>
-CC: <cw00.choi@samsung.com>, <myungjoo.ham@samsung.com>,
-        <kyungmin.park@samsung.com>, <skhan@linuxfoundation.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] docs: devfreq: Fix typo 'enabeld' to 'enabled' in
- devfreq-event.c
-Message-ID: <20250527055635.qgpf2v7artictbf2@lcpd911>
-References: <20250526133839.64455-1-bhanuseshukumar@gmail.com>
+	s=arc-20240116; t=1748334122; c=relaxed/simple;
+	bh=bP3dyqOcdjmeMKsrJgqUZ/tHl2pKyc9vebW0MO1p2XU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JnglORna58TQlJA8zozGCx9FC18b8u82P/emt2EBjX/U/em1gCiYYLmZI9J4LPRdPVcGakOfc+a49YZrzxJ8A5qew3v55LAUyNbURQQTdUIm+WFz2IJZKI2+OBvk9e0jpFDA6nf54hyNQCv/kpsktQS4PhS06uPawRbNR7hRJbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com; spf=pass smtp.mailfrom=sony.com; dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b=stlnoo5u; arc=none smtp.client-ip=211.125.140.164
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sony.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=sony.com; s=s1jp; t=1748334120; x=1779870120;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=9M+aGmHypwA8Qm6h86CMR5EaNs6NIldl3+8PV51EqcA=;
+  b=stlnoo5uuK0XzPZUwyTV450Kw73uW69bqDF9IuiQmPxYdeSC2tETbmP6
+   tpH7M1ODe2/wiBRfemWWeJ/LEGpbcD5V4xeGWM2JP08fnNWTl8bAFQzG5
+   VXQmcDNpL2gdMm5DLfpUr/uol/pYZ52BF/1+cxaBStlofM7Jh8YMl63nj
+   M1pcv6+ZCcJoM3cEvWvFSbyKvz+k03G63eYxzE2HjclPD+q7vdxY7QdU4
+   8y9TsI7G2UKWLutQ7Q3w2euJN3c/G8pDN2lGO7vS1U3iS4GPDiNdpM6aA
+   9yBJ6H36rfBYjdmjGr3tQPud+BEBbJGbfUodmbx42FAZ60Z33cwxLZMwz
+   Q==;
+Received: from unknown (HELO jpmta-ob02.noc.sony.co.jp) ([IPv6:2001:cf8:0:6e7::7])
+  by jpms-ob01.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2025 17:21:53 +0900
+X-IronPort-AV: E=Sophos;i="6.15,317,1739804400"; 
+   d="scan'208";a="534528132"
+Received: from unknown (HELO JPC00244420) ([IPv6:2001:cf8:1:573:0:dddd:6b3e:119e])
+  by jpmta-ob02.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2025 17:21:52 +0900
+Date: Tue, 27 May 2025 17:21:48 +0900
+From: Shashank Balaji <shashank.mahadasyam@sony.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Russell Haley <yumpusamongus@gmail.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Shinya Takumi <shinya.takumi@sony.com>
+Subject: Re: [PATCH] cpufreq, docs: (userspace governor) add that actual freq
+ is >= scaling_setspeed
+Message-ID: <aDV2HPfybqnbzJ9N@JPC00244420>
+References: <20250522-userspace-governor-doc-v1-1-c8a038e39084@sony.com>
+ <15871c67-0d18-430f-935e-261b2cda855b@gmail.com>
+ <CAJZ5v0gz3Y+RGqBf9E1hzq9rwfrryd98Xpk51DtLd-uck5y-rw@mail.gmail.com>
+ <b62c0462-8185-4eb8-8ac6-7f2abc387768@gmail.com>
+ <aC_4yLsFVVszI_FA@JPC00244420>
+ <CAJZ5v0g1o03La9aWJF1rheC9CM8SU2iC52auEAnaBpUCMunpJA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250526133839.64455-1-bhanuseshukumar@gmail.com>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0g1o03La9aWJF1rheC9CM8SU2iC52auEAnaBpUCMunpJA@mail.gmail.com>
 
-On May 26, 2025 at 19:08:39 +0530, bhanuseshukumar wrote:
-> Fixed a typo in  description of the function 
+Hi Rafael,
+
+On Fri, May 23, 2025 at 09:06:04PM +0200, Rafael J. Wysocki wrote:
+> On Fri, May 23, 2025 at 6:25 AM Shashank Balaji
+> <shashank.mahadasyam@sony.com> wrote:
+> > ...
+> > Consider the following on a Raptor Lake machine:
+> > ...
+> >
+> > 3. Same as above, except with strictuserspace governor, which is a
+> > custom kernel module which is exactly the same as the userspace
+> > governor, except it has the CPUFREQ_GOV_STRICT_TARGET flag set:
+> >
+> >         # echo strictuserspace > cpufreq/policy0/scaling_governor
+> >         # x86_energy_perf_policy -c 0 2>&1 | grep REQ
+> >         cpu0: HWP_REQ: min 26 max 26 des 0 epp 128 window 0x0 (0*10^0us) use_pkg 0
+> >         pkg0: HWP_REQ_PKG: min 1 max 255 des 0 epp 128 window 0x0 (0*10^0us)
+> >         # echo 3000000 > cpufreq/policy0/scaling_setspeed
+> >         # x86_energy_perf_policy -c 0 2>&1 | grep REQ
+> >         cpu0: HWP_REQ: min 39 max 39 des 0 epp 128 window 0x0 (0*10^0us) use_pkg 0
+> >         pkg0: HWP_REQ_PKG: min 1 max 255 des 0 epp 128 window 0x0 (0*10^0us)
+> >
+> >         With the strict flag set, intel_pstate honours this by setting
+> >         the min and max freq same.
+> >
+> > desired_perf is always 0 in the above cases. The strict flag check is done in
+> > intel_cpufreq_update_pstate, which sets max_pstate to target_pstate if policy
+> > has strict target, and cpu->max_perf_ratio otherwise.
+> >
+> > As Russell and Rafael have noted, CPU frequency is subject to hardware
+> > coordination and optimizations. While I get that, shouldn't software try
+> > its best with whatever interface it has available? If a user sets the
+> > userspace governor, that's because they want to have manual control over
+> > CPU frequency, for whatever reason. The kernel should honor this by
+> > setting the min and max freq in HWP_REQUEST equal. The current behaviour
+> > explicitly lets the hardware choose higher frequencies.
 > 
-> This is me trying my way into opensource linux kernel contribution
-> journey beginning with this  first patch of trivial spelling 
-> mistake fix. 
-
-We appreciate your contribution, and welcome you to the community :)
-
-However, this is not something that's meaningful to be part of a "git
-log". commit messages in the git log should convey explanation or
-reasoning behind purely the content of the patch itself.
-So it's fine in this case to write just "Fix a typo...."
-
-Read more about this here:
-https://docs.kernel.org/process/submitting-patches.html#explanation-body
-
+> Well, the userspace governor ends up calling the same function,
+> intel_cpufreq_target(), as other cpufreq governors except for
+> schedutil.  This function needs to work for all of them and for some
+> of them setting HWP_MIN_PERF to the same value as HWP_MAX_PERF would
+> be too strict.  HWP_DESIRED_PERF can be set to the same value as
+> HWP_MIN_PERF, though (please see the attached patch).
 > 
-> Signed-off-by: bhanuseshukumar <bhanuseshukumar@gmail.com>
-> ---
->  drivers/devfreq/devfreq-event.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> > Since Russell pointed out that the "actual freq >= target freq" can be
+> > achieved by leaving intel_pstate active and setting scaling_{min,max}_freq
+> > instead (for some reason this slipped my mind), I now think the strict target
+> > flag should be added to the userspace governor, leaving the documentation as
+> > is. Maybe a warning like "you may want to set this exact frequency, but it's
+> > subject to hardware coordination, so beware" can be added.
 > 
-> diff --git a/drivers/devfreq/devfreq-event.c b/drivers/devfreq/devfreq-event.c
-> index 70219099c604..020fe30ed5d9 100644
-> --- a/drivers/devfreq/devfreq-event.c
-> +++ b/drivers/devfreq/devfreq-event.c
-> @@ -100,7 +100,7 @@ EXPORT_SYMBOL_GPL(devfreq_event_disable_edev);
->   * @edev	: the devfreq-event device
->   *
->   * Note that this function check whether devfreq-event dev is enabled or not.
-> - * If return true, the devfreq-event dev is enabeld. If return false, the
-> + * If return true, the devfreq-event dev is enabled. If return false, the
->   * devfreq-event dev is disabled.
->   */
->  bool devfreq_event_is_enabled(struct devfreq_event_dev *edev)
-> -- 
-> 2.34.1
-> 
-> 
+> If you expect the userspace governor to set the frequency exactly
+> (module HW coordination), that's the only way to make it do so without
+> potentially affecting the other governors.
 
--- 
-Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
+I don't mean to say that intel_cpufreq_target() should be modified. I'm
+suggesting that the CPUFREQ_GOV_STRICT_TARGET flag be added to the
+userspace governor. That'll ensure that HWP_MIN_PERF and
+HWP_MAX_PERF are set to the target frequency. intel_cpufreq_target()
+already correctly deals with the strict target flag. To test this, I
+registered a custom governor, same as the userspace governor, except
+with the strict target flag set. Please see case 3 above.
+
+If this flag is added to the userspace governor, then whatever the
+documentation says right now will actually be true. No need to modify
+the documentation then.
+
+Regards,
+Shashank
 
