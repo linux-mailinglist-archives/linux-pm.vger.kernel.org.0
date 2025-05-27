@@ -1,67 +1,100 @@
-Return-Path: <linux-pm+bounces-27673-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27674-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E876AC4619
-	for <lists+linux-pm@lfdr.de>; Tue, 27 May 2025 04:11:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 832E8AC47A8
+	for <lists+linux-pm@lfdr.de>; Tue, 27 May 2025 07:33:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D32781883E14
-	for <lists+linux-pm@lfdr.de>; Tue, 27 May 2025 02:12:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2581E3B57D6
+	for <lists+linux-pm@lfdr.de>; Tue, 27 May 2025 05:33:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA5F6145FE8;
-	Tue, 27 May 2025 02:11:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55AB712C544;
+	Tue, 27 May 2025 05:33:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tpKHKMXG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CB9F2DCBF0
-	for <linux-pm@vger.kernel.org>; Tue, 27 May 2025 02:11:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA6BF1BF58
+	for <linux-pm@vger.kernel.org>; Tue, 27 May 2025 05:33:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748311904; cv=none; b=MvqfHKAv2TqgqYUhT4zPun4iFiFcBL7E6xVcF18Ved11rhmBekKRx6HMNpHbhVz5KebI8JMgSD4q+Jberghqzu39v0cAZv+UIpe43DdFkFdNKqkMSXAX9mhVlCTZkDVCYp5RcfVQW1HgBk/BpNFcKyiIFaUSXUUand1KMKW0Ung=
+	t=1748324017; cv=none; b=V4UlF3SxUkD8nfiFIxZrs8HeePy4cu1Bbk6BoF3f3/QB+7okgmucFYj1MQtugutUc+QnojKTetzDa1eAn1YkTwecuDoz5bNEMRFoPgZMKNz5RR96loqjOOyRdNQSlNFogGVtYqrLVKPkRwQ7Rb3rs2J9w6b3Ez1B9cZMfk3qfDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748311904; c=relaxed/simple;
-	bh=pPkY3wTPgtFHNpMXLjKrHf31iUWlA6OJXCvOu03g1K4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nEbazero4aOlb7reFDXxm96Aj2tNvZEBqGKBatO4p7B5G3yJKDFUokFvsReaSbbbxsmb/Ctcs2AQpWZY1+z0IUmAKP2w7m0Wmj9MixO38G5qB88lgFbX6rM7lUOrehcGIBUzh/itzx15YIqLEKYf1J8/739CzAEClz5xtQfumPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: e9faace83a9f11f0b29709d653e92f7d-20250527
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:322ac7ea-f6e9-47c7-9169-b7f16651112f,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:-5
-X-CID-INFO: VERSION:1.1.45,REQID:322ac7ea-f6e9-47c7-9169-b7f16651112f,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-META: VersionHash:6493067,CLOUDID:7bf139965fd97f89e0fd01d5110d233c,BulkI
-	D:250527101135X8LMC914,BulkQuantity:0,Recheck:0,SF:17|19|24|44|64|66|78|80
-	|81|82|83|102|841,TC:nil,Content:0|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,B
-	ulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR
-	:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
-X-UUID: e9faace83a9f11f0b29709d653e92f7d-20250527
-X-User: lijun01@kylinos.cn
-Received: from [192.168.31.86] [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <lijun01@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1081283879; Tue, 27 May 2025 10:11:34 +0800
-Message-ID: <3766b8329169b5f39ff33a1893fe8d0ed92c1f6d.camel@kylinos.cn>
-Subject: Re: [PATCH] hibernate: init minimum image size in hibernate
-From: lijun <lijun01@kylinos.cn>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: pavel@ucw.cz, len.brown@intel.com, linux-pm@vger.kernel.org
-Date: Tue, 27 May 2025 10:11:32 +0800
-In-Reply-To: <CAJZ5v0iuxmo6=MxDBcy19AAH2D+cePsj3+sPtKb2UN58krX-pA@mail.gmail.com>
-References: <0468b1df921c304755cf9c137bc8c44dc0082b44.camel@kylinos.cn>
-	 <CAJZ5v0iuxmo6=MxDBcy19AAH2D+cePsj3+sPtKb2UN58krX-pA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.1-2kord0k2.4.25.1 
+	s=arc-20240116; t=1748324017; c=relaxed/simple;
+	bh=sKF4zz/4/zo8wIkoons3Ms5WggyqYOdPqZb5QTOICR4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sL0yB49wPQd73/4QsJgqPSaPum3QDh5JlpEa+cI1VzIXMfqtPj0RMvllqeJvNLcCWGRirZmAh2tAQdJq9x2jk21103IfK9qB+oM244Aac2ekmu83g1970u/GeIByXWjAMyX4rpVgWIMXXjaD4uiVlnTlDccq27WPhP9qlypE/+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tpKHKMXG; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2349f096605so2800615ad.3
+        for <linux-pm@vger.kernel.org>; Mon, 26 May 2025 22:33:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1748324015; x=1748928815; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=h8MeiKlq1phnPLJ3Wy+Q/bcsd9h4e9tZsVOSyiDWgEQ=;
+        b=tpKHKMXGFMZ7Vw9cCXL9LsSgc/cqxgA9uWIt27C4CYh7Y5EqDNDBOA8zyDpb6xcjlj
+         K6cKBzrnGtBXfE/WdFihSokdNkG5bFVcDiyss3o9BUy4zNt4TJcJxUZwR5FOyoI4Iqn5
+         glEPjg4DKvE9ywul4TT/05LecvaRR9KsWF2zrsIhqYlDkNawCXyvKjJ5tMg+0Hdb3Dzh
+         nKAGfTcnOfauuIdOemAZErGZ2X6kkRPvNGrHrVVGyDF+bD1Oly07l87uuxqlsFnR4FFa
+         E1n1Qg6ROljQlHj4uGu8XFrN7TLemBotxFUq7uAGyergeaujnldBLc0Cipvp807DmAVU
+         mvZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748324015; x=1748928815;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h8MeiKlq1phnPLJ3Wy+Q/bcsd9h4e9tZsVOSyiDWgEQ=;
+        b=Bc+KGC1v3vOwApWywmjQgxBK6bmKVT4U6L1xhHYsAE/sWrDTEyWsPvJ/zSCPsHucAY
+         IUju9/8udLolnBAk5gMyFbfbRKRHf1Rp3dkusd3H0zuP6m4R3IJJo120Kk9mcQ7NW8Kh
+         sTY3sJpAB6tI3eIFoQ6I93NxgSTx92bzPERldyY2fQzwRUq1h7ZCtmKsFRSIlHRuF6EQ
+         x/WFtcG2Xd6GcaJfYOKm/W6dpfD2Dy8NPgpVu9rng5aB/A7qNYyhqWD8XpwyIUze09pU
+         1vB6iOr6x1HlOoAePGNBWCxTIMbBDCNKPAgoQXAVRR2pJPpDHIUvpIq+0BbF96Xg0vJa
+         CJoA==
+X-Forwarded-Encrypted: i=1; AJvYcCUYsHwaYoFLrsGCnllfzKIAqPKOUIlKdI87/AXDgjVI4/sguLHkR06yLlUYxfPgWhsOdSNrpbnClA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwK9FNpujgZN1KoWa2yb6qkgsCFHgXwiMzbI3vO7i6vWVXgepvM
+	l96yChm2WW8U1CiisSCnc3rx+DNjt6nMzCDTGoc/958hbVXD2uUfyVQY2dUGbDTOZDI=
+X-Gm-Gg: ASbGncvsXL5bqa9crfQ2KQ2L8MA9EdPg1fUqXbgO67wb5zZNcDLaO3JP80f9WEIaiTy
+	5Ov7Z6/QSmrfMcqcLMb0l177bB80g2wWkqEuvmkatvmrDKEgsGY/hI26hN5XnuTfJRi3lNiFWZC
+	XlRzwFcAVHLJEcqa2YCxMCr0B8jj1iNDFgQ63rMXne2G1N+CxtfT6GED/m92z9VlS4WwUhgwxG7
+	XdMyM4BsaepUq+2468M5jwE/MQjAJS/ZGMZDH5O4Bb0SXh24iULbKpHZohieMT6ztKR05Y3dGRU
+	wSY1TS6fCnreKEmYYLEVGnD1pGZBuKOjZqp73XhIB1I3x9rZDJp+
+X-Google-Smtp-Source: AGHT+IEoBXhd4uJBmeZzJI+pUQ69cLynbx10Uo0njUY2UHsLd0QLG6xZBUS+XTdwv/Joqn/Yqnc6rQ==
+X-Received: by 2002:a17:903:244a:b0:231:f5a8:173a with SMTP id d9443c01a7336-23414fe82d9mr155104945ad.51.1748324012616;
+        Mon, 26 May 2025 22:33:32 -0700 (PDT)
+Received: from localhost ([122.172.81.72])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3110ee8f631sm5747169a91.5.2025.05.26.22.33.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 May 2025 22:33:32 -0700 (PDT)
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] rust: opp: Move `cfg(CONFIG_OF)` attribute to the top of doc test
+Date: Tue, 27 May 2025 11:03:26 +0530
+Message-Id: <9d93c783cc4419f16dd8942a4359d74bc0149203.1748323971.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -70,82 +103,45 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-I conducted a test with 16GB of memory, the image_size = 2/5 *totalram_pages,
-in hibernate_image_size_init,start timing form "echo disk > /sys/power/state"
-to the desk display after resume, the time is 107 seconds.
-the image_size = 0,in hibernate_image_size_init,the time is 63 seconds.
-I opened a 50M file with vim ,display a movie and display a usb camera
-in 4K, before hibernate. resume to the desk ,I didn't feel any delay in
-response from these apps due to S4.
+Move the `#[cfg(CONFIG_OF)]` attribute to the top of the documentation test
+block and hide it. This applies the condition to the entire test and improves
+readability.
 
-------------------------------
-> On Thu, May 8, 2025 at 4:17 AM lijun <
-> lijun01@kylinos.cn
-> > wrote:
-> > From c7240c0614f793e96ab6a18cc9b42e820360d979 Mon Sep 17 00:00:00 2001
-> > From: Li jun <
-> > lijun01@kylinos.cn
-> > >
-> > Date: Wed, 7 May 2025 17:58:22 +0800
-> > Subject: [PATCH] hibernate: init minimum image size in hibernate
-> > 
-> > the image_size = 2/5 * totalram_pages,in hibernate_image_size_init
-> > PM: Allocated 2908160 kbytes in 0.10 seconds
-> > PM: Wrote 3000464 kbytes in 4.13 seconds
-> > PM: Read 3000464 kbytes in 5.67 seconds
-> > the image_size = 0,in hibernate_image_size_init,
-> > PM: Allocated 817872 kbytes in 1.76 seconds,
-> > PM: Wrote 908368 kbytes in 1.16 seconds,
-> > PM: Read 908368 kbytes in 1.82 seconds,
-> > 0.10 + 4.13 + 5.76 = 9.99
-> > 1.76 + 1.16 + 1.82 = 4.74
-> > Reduced time by 53%, the test is in 8G mem,if the mem is 16G or more,
-> > this can reduce more time. the image_size =0, just shrink more
-> > NR_SLAB_RECLAIMABLE, NR_ACTIVE_ANON, NR_INACTIVE_ANON, NR_ACTIVE_FILE,
-> > NR_INACTIVE_FILE pages, S4 is still normal.
-> > When the users use s4 first, they are unlikely to read document because
-> > s4 take long time and then echo 0 > image_size, they may not use S4
-> > anymore. but s4 is so great beacause it can save power and preserve
-> > the working environment, especially for moblile devices.
-> > So from the user's perspective, init image_size to 0 is more
-> > user-friendly.
-> 
-> That's not as simple as it seems because your image write/read numbers
-> above don't include the time needed to push user pages to swap and
-> pull them in after hibernation and the rate at which they are swapped
-> out and faulted in is way less than the image read/write speed.
-> 
-> What matters is the time it takes the system to get to the point when
-> the user will be able to do work again after restoring its state from
-> a hibernation image and if a lot of pages need to be faulted in, that
-> may be much longer than the image reading time.
-> 
-> So reducing the default image size to 0 is not such a great idea after all.
-> 
-> > Signed-off-by: Li Jun <
-> > lijun01@kylinos.cn
-> > >
-> > ---
-> >  kernel/power/snapshot.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> > index 30894d8f0a78..4299a1e4205c 100644
-> > --- a/kernel/power/snapshot.c
-> > +++ b/kernel/power/snapshot.c
-> > @@ -138,7 +138,7 @@ unsigned long image_size;
-> > 
-> >  void __init hibernate_image_size_init(void)
-> >  {
-> > -       image_size = ((totalram_pages() * 2) / 5) * PAGE_SIZE;
-> > +       image_size = 0;
-> >  }
-> > 
-> >  /*
-> > --
-> > 2.25.1
-> > 
-> > 
-> > 
+Placing configuration flags like `CONFIG_OF` at the top serves as a clear
+indicator of the conditions under which the example is valid, effectively
+acting like configuration metadata for the example itself.
+
+Suggested-by: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+Rafael,
+
+Sorry for the trouble, one more patch to apply :(
+
+ rust/kernel/opp.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/rust/kernel/opp.rs b/rust/kernel/opp.rs
+index c2bdc11f3999..a566fc3e7dcb 100644
+--- a/rust/kernel/opp.rs
++++ b/rust/kernel/opp.rs
+@@ -575,6 +575,7 @@ extern "C" fn config_regulators(
+ /// frequency.
+ ///
+ /// ```
++/// # #![cfg(CONFIG_OF)]
+ /// use kernel::clk::Hertz;
+ /// use kernel::cpumask::Cpumask;
+ /// use kernel::device::Device;
+@@ -582,7 +583,6 @@ extern "C" fn config_regulators(
+ /// use kernel::opp::Table;
+ /// use kernel::types::ARef;
+ ///
+-/// #[cfg(CONFIG_OF)]
+ /// fn get_table(dev: &ARef<Device>, mask: &mut Cpumask, freq: Hertz) -> Result<Table> {
+ ///     let mut opp_table = Table::from_of_cpumask(dev, mask)?;
+ ///
+-- 
+2.31.1.272.g89b43f80a514
 
 
