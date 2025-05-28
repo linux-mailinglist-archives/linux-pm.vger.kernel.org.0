@@ -1,215 +1,161 @@
-Return-Path: <linux-pm+bounces-27722-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27723-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89630AC666C
-	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 11:57:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0771FAC67E9
+	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 12:59:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49E1B16BE3D
-	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 09:57:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A64D1BC4E95
+	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 10:59:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1D47278E6A;
-	Wed, 28 May 2025 09:57:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A61EE27AC41;
+	Wed, 28 May 2025 10:59:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pjZnWZtC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i4ueGTMJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4F817BA1
-	for <linux-pm@vger.kernel.org>; Wed, 28 May 2025 09:57:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722D327A448;
+	Wed, 28 May 2025 10:59:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748426267; cv=none; b=shuoIsMUCjpKBv4KEPPI0sJXX26oZULLHGtu6jiqkaJNcTUBoU8yqBWR548LztGP5zHvKMsqFqELRz+KP5tdEKhL7zFlhtDTBc6t+vDsc8/ZOVxctgvVQbxSHnnyBPXHMAVUdj5N8kgOrnp8+lsFTCqHnuStz1kjMJ/yf8qRs4A=
+	t=1748429945; cv=none; b=qOBUdrHSWjYT4f6NYx270Ic6GkSSvHCbATT9o7OAYKYkfjcY7zabyYXvQKqKFQzDwyCgzydSzEHZveibQ0IPi+drKQeNBwwcbNc2MXmaLHrCxIeAtxbyOypBS4ZoWDcsH80fdyf6NNpxYx33EGPIkeFtjf5U+1tWdqRDYEance4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748426267; c=relaxed/simple;
-	bh=NY4ppF8WDLnUEHIz0ojqjJm6a5YSQxyU166J9C6MAD8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eDf6ozHzLmVudjSd5lfEqkI1skQ1m7w6LMIdBSzI+wS/+XAeHLxGbQtCWM2qgG1xKBdYQamLJ8WFA1uDK7N8Yondsjf0XqYSdsxRF8RJ9//cvnT59gMAFgkQR81PS3PdvRpN91BsPnEaPUmlyp5F+r/+D/XPNDuVffairDjv02k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pjZnWZtC; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-60462e180e2so6243130a12.2
-        for <linux-pm@vger.kernel.org>; Wed, 28 May 2025 02:57:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748426264; x=1749031064; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ks3rhmD/IHlVoyz8JuxtGnWPe59bWGftTPLGTy/S1P8=;
-        b=pjZnWZtC2h3kOjEe9LEGzuZHtEOwTYCuV6JqcoGywkjnl2A9RQ7ANO3XQmyThu10io
-         U+FOKZKzkLRZYpBgjGiSI0QCBu0lAXRY3dBVERiK/4Kw+WyHaye37A4RnGd0fLPKCgUX
-         IYMjz17DW+mx/JycEAW83UGudA9ayJe8f1Jtk67NjEgN7HS1S88olgpsKT7uA6IRdCyG
-         79K7ZSXQK1ACe7yMiIeT9Bmcd0E4GI/SpGMnoHayK3P05NC06Z9Ged1l2RcHbJ/5NQUL
-         esEB+IvPl/CauWKZX7yyWHg53uFvgEP2rmvix4vTvBQlGx4DzOEuS+OrG+XSF5CP/jv1
-         dUlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748426264; x=1749031064;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ks3rhmD/IHlVoyz8JuxtGnWPe59bWGftTPLGTy/S1P8=;
-        b=LAuAEkGtn3Iu+3fd5WP6jzVmntdMIE4Ux8AAkKmvJkrMu8XL9x+TwP/BfNT28/u0L5
-         dyW/OpNFBQP3sxWk7BT+YEjn1XidepzcLOpI2XPf7qxP348hHzkGnkpyyR+W5DffAjGU
-         40uIdsdvXngQVAMlXEXiOWtZC1nHllmtODSoZnSF8mXvZ5hTOLk23mT7NNcteuVgQOFy
-         eHAULWv+LM7pSzUpjqAlzYZHJUorXmNvIW6PEWkuSFb6JJWbzIwbhPOfyjImdCyTptvB
-         xGNr9CdSq2Dag8VJsIb0Zi05hl7ym6e5wyjncPMZhVzorCk5AferrJcTetmLFuV/1dqE
-         gwpw==
-X-Forwarded-Encrypted: i=1; AJvYcCX9CSbHYJNbHhwDF7j9f556S7tVEJ8e0ikXGOAIocg6zVwDyh1Fl3D53fnrgmrGt0b7ynZRvcJXGA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZCgwFuzAO0FmgGKs4VSpp8q6hQTNB6dus+i/W6nnpfWdg57G2
-	rWFymyumcmNlnXRaIajV+yIHriNkTBFsE6C1MDtCHhmJdt/vJoUi6JSk/NLWhZWmazBTSPEcsPm
-	cqYn5l+0m1VDLuToGBF7Zp+pVtRP5nMogsjNj4Ic1
-X-Gm-Gg: ASbGncvR2K/f1U9qVmLpnRizjqkEQPTN90AQsi2KedgPPNWhQXTLfYUgEz2uT+GIbNC
-	5QLc2YmDmBlwAemOMK23aSFBKTLMmBlcOadZfX5hispkrpKxGDjzMtFG8SsYYVV6TvFbnZTB/9f
-	OYthZ2wi/woV7Xj7ikcoyqvxLsmJ9rFWStRtte7NQoszLRkWyptGf8ugukbsqQo6TueirBEA==
-X-Google-Smtp-Source: AGHT+IFFD/y5HtmSNrKzHhwfxF7XDgkk5kJYkfCwOSf/luOnKSQmxuN22Xn2tS6vv4V5KENmsK82jP6Xvsq5rx1uJ+c=
-X-Received: by 2002:a05:6402:5112:b0:604:e74d:3615 with SMTP id
- 4fb4d7f45d1cf-604e74d367bmr6357406a12.26.1748426264183; Wed, 28 May 2025
- 02:57:44 -0700 (PDT)
+	s=arc-20240116; t=1748429945; c=relaxed/simple;
+	bh=UeArXwDGUV++k8Y775RIDVtcr2w2zvvPDO6/8+Vet0I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oeWSUO3qMKfIQuZNX10KwgHnUcKqBRwoxKbB9L8JDOzXlhlIBErVe/AX6WkX+KhE/uvuo1f5tLYRMrRILmdupfebWMu2vNUrDnlXz8zVpgVckZdaMSuf/obMGvcP9+/dbV6pMfb0T/e8pjguR3rLaiq0OiSZStieQlobMBtYhWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i4ueGTMJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0372C4CEE7;
+	Wed, 28 May 2025 10:59:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748429944;
+	bh=UeArXwDGUV++k8Y775RIDVtcr2w2zvvPDO6/8+Vet0I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=i4ueGTMJD6zNQpD1yS7j/gqmKAO2WZlbSUEJ3u9a+Va/hRZsifmoXLOl1o4VfIAbH
+	 hYvNIPqeE4i7BLAM/B7fdRjXJ5xLpUuNIav+OVJ16t2sXPYL2jX97SlVXPWy6DnEJ2
+	 clh8wLkZsIgnc4zQ+pg3YGcqg5WGOHGNvrQqiuBSedVJEYEO73tVN45B/l31tuV4bu
+	 WZh9sHlN7Cjcr6p8HWRFIDot8Ip/hax2IFsnZOzcA5X7Azp05qn1y/fBWMuN9gv0EY
+	 wb4oCFq7snTld/yjidTienxTFZQq2HrDg/7nQ5uE7peZZZCuKpF8RCL6/qt0ZTmsxm
+	 IESbW6pfRasYQ==
+Date: Wed, 28 May 2025 11:58:58 +0100
+From: Mark Brown <broonie@kernel.org>
+To: samuel.kayode@savoirfairelinux.com
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-pm@vger.kernel.org, eballetbo@gmail.com, abelvesa@linux.com,
+	b38343@freescale.com, yibin.gong@nxp.com,
+	Abel Vesa <abelvesa@kernel.org>
+Subject: Re: [PATCH v3 3/6] regulator: pf1550: add support for regulator
+Message-ID: <99a2f5bd-5b73-4f4e-95c6-8bc03ffed90c@sirena.org.uk>
+References: <20250527-pf1550-v3-0-45f69453cd51@savoirfairelinux.com>
+ <20250527-pf1550-v3-3-45f69453cd51@savoirfairelinux.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250527121807.3597061-1-korneld@google.com> <oa5okg7i2s6s7pxm5tn6nnanazze5lnnre4vnwrhopn5s5hsil@vhh22j6b5cvq>
-In-Reply-To: <oa5okg7i2s6s7pxm5tn6nnanazze5lnnre4vnwrhopn5s5hsil@vhh22j6b5cvq>
-From: =?UTF-8?Q?Kornel_Dul=C4=99ba?= <korneld@google.com>
-Date: Wed, 28 May 2025 11:57:32 +0200
-X-Gm-Features: AX0GCFvK9nh_ZQOQ8q-wzxVPyhyMhhVBescCioACvy1eSbZRd2cZXohjA9FPaQ4
-Message-ID: <CACF_fqksF+whYbGEdSvJ=87FQH03EzO+hSSf8eRc8MitR2hzxA@mail.gmail.com>
-Subject: Re: [PATCH] power: supply: qcom_battmgr: Report battery capacity
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Bjorn Andersson <andersson@kernel.org>, linux-arm-msm@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	chromeos-krk-upstreaming@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="oXCbNIednqxLO6bi"
+Content-Disposition: inline
+In-Reply-To: <20250527-pf1550-v3-3-45f69453cd51@savoirfairelinux.com>
+X-Cookie: Keep away from edge.
 
-On Tue, May 27, 2025 at 9:34=E2=80=AFPM 'Dmitry Baryshkov' via
-chromeos-krk-upstreaming <chromeos-krk-upstreaming@google.com> wrote:
->
-> On Tue, May 27, 2025 at 12:18:07PM +0000, Kornel Dul=C4=99ba wrote:
-> > Battery charge can be reported in several different ways. One of them i=
-s
-> > is charge percentage referred to as POWER_SUPPLY_PROP_CAPACITY in the
-> > power supply API. Currently the driver reports the capacity in this way
-> > on SM8350, but not on the newer variants referred to as SC8280XP in the
-> > driver. Although this is not a bug in itself, not reporting the
-> > percentage can confuse some userspace consumers.
-> > Mimic what is done in the ACPI driver (drivers/acpi/battery.c) and
-> > calculate the percentage capacity by dividing the current charge value
-> > by the full charge. Both values are expressed in either uWh, or
-> > in uAh.
-> >
-> > Signed-off-by: Kornel Dul=C4=99ba <korneld@google.com>
-> > ---
-> >  drivers/power/supply/qcom_battmgr.c | 18 ++++++++++++++++++
-> >  1 file changed, 18 insertions(+)
-> >
-> > diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply=
-/qcom_battmgr.c
-> > index fe27676fbc7c..5ed5452ab51c 100644
-> > --- a/drivers/power/supply/qcom_battmgr.c
-> > +++ b/drivers/power/supply/qcom_battmgr.c
-> > @@ -577,6 +577,8 @@ static int qcom_battmgr_bat_get_property(struct pow=
-er_supply *psy,
-> >               val->intval =3D battmgr->status.capacity;
-> >               break;
-> >       case POWER_SUPPLY_PROP_CAPACITY:
-> > +             if (battmgr->status.percent =3D=3D (unsigned int)-1)
-> > +                     return -ENODATA;
-> >               val->intval =3D battmgr->status.percent;
-> >               break;
-> >       case POWER_SUPPLY_PROP_TEMP:
-> > @@ -617,6 +619,7 @@ static const enum power_supply_property sc8280xp_ba=
-t_props[] =3D {
-> >       POWER_SUPPLY_PROP_STATUS,
-> >       POWER_SUPPLY_PROP_PRESENT,
-> >       POWER_SUPPLY_PROP_TECHNOLOGY,
-> > +     POWER_SUPPLY_PROP_CAPACITY,
-> >       POWER_SUPPLY_PROP_CYCLE_COUNT,
-> >       POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN,
-> >       POWER_SUPPLY_PROP_VOLTAGE_NOW,
-> > @@ -1063,6 +1066,21 @@ static void qcom_battmgr_sc8280xp_callback(struc=
-t qcom_battmgr *battmgr,
-> >               battmgr->ac.online =3D source =3D=3D BATTMGR_CHARGING_SOU=
-RCE_AC;
-> >               battmgr->usb.online =3D source =3D=3D BATTMGR_CHARGING_SO=
-URCE_USB;
-> >               battmgr->wireless.online =3D source =3D=3D BATTMGR_CHARGI=
-NG_SOURCE_WIRELESS;
-> > +             if (battmgr->info.last_full_capacity !=3D 0) {
-> > +                     /*
-> > +                      * 100 * battmgr->status.capacity can overflow a =
-32bit
-> > +                      * unsigned integer. Do a temporary cast to avoid=
- that.
-> > +                      */
-> > +                     battmgr->status.percent =3D
-> > +                             (uint64_t)100 * battmgr->status.capacity =
-/
-> > +                             battmgr->info.last_full_capacity;
->
-> Can you use mult_frac(), preventing the overflow?
 
-Good idea, but I don't think mult_frac() helps in cases where the
-dividend is smaller than the divider. Let's look at the sources:
-#define mult_frac(x, n, d)      \
-(...)
-        typeof(x_) q =3D x_ / d_; \
-        typeof(x_) r =3D x_ % d_; \
-        q * n_ + r * n_ / d_;   \
+--oXCbNIednqxLO6bi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Since in our case x_ < d_, q =3D 0 and r =3D x_ then r * n_ will still
-result in an overflow.
+On Tue, May 27, 2025 at 06:25:35PM -0400, Samuel Kayode via B4 Relay wrote:
 
-Unfortunately, the cast-and-divide approach won't work either. I
-received an email from a kernel test robot saying that this patch
-breaks a 32-bit only build. (">> ERROR: modpost: "__udivdi3"
-[drivers/power/supply/qcom_battmgr.ko] undefined!") See
-https://lore.kernel.org/oe-kbuild-all/202505280344.GjzOItSS-lkp@intel.com/
-for details.
+> @@ -0,0 +1,353 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * pf1550.c - regulator driver for the PF1550
 
-I suppose I could just use a do_div with a temporary variable to work
-around that. I noticed that all data read from FW is multiplied by
-1000, so I leveraged that instead:
-battmgr->status.percent =3D
-    (100 * le32_to_cpu(resp->status.capacity)) /
-      (battmgr->info.last_full_capacity / 1000);
+Please make the entire comment a C++ one so things look more
+intentional.
 
-Any thoughts?
+> + *
+> + * Copyright (C) 2016 Freescale Semiconductor, Inc.
+> + * Robin Gong <yibin.gong@freescale.com>
 
->
-> > +             } else {
-> > +                     /*
-> > +                      * Let the sysfs handler know no data is availabl=
-e at
-> > +                      * this time.
-> > +                      */
-> > +                     battmgr->status.percent =3D (unsigned int)-1;
-> > +             }
-> >               break;
-> >       case BATTMGR_BAT_DISCHARGE_TIME:
-> >               battmgr->status.discharge_time =3D le32_to_cpu(resp->time=
-);
-> > --
-> > 2.49.0.1151.ga128411c76-goog
-> >
->
-> --
-> With best wishes
-> Dmitry
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "chromeos-krk-upstreaming" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to chromeos-krk-upstreaming+unsubscribe@google.com.
-> To view this discussion visit https://groups.google.com/a/google.com/d/ms=
-gid/chromeos-krk-upstreaming/oa5okg7i2s6s7pxm5tn6nnanazze5lnnre4vnwrhopn5s5=
-hsil%40vhh22j6b5cvq.
-> For more options, visit https://groups.google.com/a/google.com/d/optout.
+Presumably there's been some updates since then?
+
+> +static int pf1550_set_ramp_delay(struct regulator_dev *rdev, int ramp_delay)
+> +{
+> +	int id = rdev_get_id(rdev);
+> +	unsigned int ramp_bits;
+> +	int ret;
+> +
+> +	if (id > PF1550_VREFDDR)
+> +		return -EACCES;
+> +
+> +	ramp_delay = 6250 / ramp_delay;
+> +	ramp_bits = ramp_delay >> 1;
+> +	ret = regmap_update_bits(rdev->regmap, rdev->desc->vsel_reg + 4, 0x10,
+> +				 ramp_bits << 4);
+
+Shouldn't we validate the value of ramp_delay?
+
+> +static irqreturn_t pf1550_regulator_irq_handler(int irq, void *data)
+> +{
+
+> +	switch (irq_type) {
+> +	case PF1550_PMIC_IRQ_SW1_LS:
+> +	case PF1550_PMIC_IRQ_SW2_LS:
+> +	case PF1550_PMIC_IRQ_SW3_LS:
+> +		dev_info(dev, "lowside interrupt triggered! irq_type=%d\n",
+> +			 irq_type);
+> +		break;
+> +	case PF1550_PMIC_IRQ_SW1_HS:
+> +	case PF1550_PMIC_IRQ_SW2_HS:
+> +	case PF1550_PMIC_IRQ_SW3_HS:
+> +		dev_info(dev, "highside interrupt triggered! irq_type=%d\n",
+> +			 irq_type);
+> +		break;
+
+Are these under and overvoltage events which should be reported as such?
+
+> +	case PF1550_PMIC_IRQ_LDO1_FAULT:
+> +	case PF1550_PMIC_IRQ_LDO2_FAULT:
+> +	case PF1550_PMIC_IRQ_LDO3_FAULT:
+> +		dev_info(dev, "ldo fault triggered! irq_type=%d\n", irq_type);
+> +		break;
+
+Similarly, we can report error events.
+
+> +	case PF1550_PMIC_IRQ_TEMP_110:
+> +	case PF1550_PMIC_IRQ_TEMP_125:
+> +		dev_info(dev, "thermal exception triggered! irq_type=%d\n",
+> +			 irq_type);
+> +		break;
+
+We also have an over temperature event type.
+
+--oXCbNIednqxLO6bi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmg27HIACgkQJNaLcl1U
+h9CQZQf+J99VNLePtEzL+A5BdJaKLeiBWdMSF4MgfRlFjXSXBfqarn2GcU/5cEcX
+6GCypJFkQMhyWt6ywk8NNSEQ8YrCiE/y2KfquUo7OQpLw8jvzEancHU76epQabzO
+sfJhz+M2dQ1bJkVe6zGAbATE/dJcPMU6m+yCKFozmMwN7JF20aqeI7HzGWx+fVou
+17F9/jy+DGvJvM5LKWv2KVLcS4TdMmJwuadjMUn2rm1fy0J3aSHN88Wpb9sJmn7v
+VzDfGR5w3dOM/Baqv9b5bSp1Z6XaHqrXmXjfGh2SvVG4PZKsx2/UTwG8dWTDAqt2
+uyEc8XWQOnK6q2M+J16oMOZOZzyrng==
+=g3Y9
+-----END PGP SIGNATURE-----
+
+--oXCbNIednqxLO6bi--
 
