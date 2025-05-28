@@ -1,140 +1,143 @@
-Return-Path: <linux-pm+bounces-27749-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27750-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83A90AC6EC9
-	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 19:09:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B3EDAC6F58
+	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 19:28:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC6974E3C0F
-	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 17:09:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5ACB216EF68
+	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 17:26:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A51D728DF29;
-	Wed, 28 May 2025 17:09:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 805F428B7DF;
+	Wed, 28 May 2025 17:26:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eXU5e9hj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OlRNj5dP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DDBD28DF24;
-	Wed, 28 May 2025 17:09:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B747E1DE881;
+	Wed, 28 May 2025 17:26:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748452174; cv=none; b=G+s3nuzdcmPgtlsV4Lu4CfPCRuj6k2HuCB5cr2ntoqiylk8a6LwjcAaVujd4OfhFg1wzCQvfyuVNim0D+bvP8UMe5nj7PXbYyBOX+q/eulSoS+Th5luoCyFQfxNc2wzag7Zhi05F+uTjeXI87yHJEDb3LHir8PEYrh0c9LpJftM=
+	t=1748453171; cv=none; b=RHXf7SwackIO7fQGPe7Te/7RwiXRtgrVAAfZ5Qw7qVilEf2vBU2UngQ/hgCgrkjq7Q7cFVVrDwIiu4hARcWSs+QlDDT3iOEKTfKSt44aGTW/fs2/4LhdQGxxsSo/l8LJXhp0JDy3bNChZq3qKpiCPRRb/2IcoXTUVgGGiLirBT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748452174; c=relaxed/simple;
-	bh=HkR+wu8C2YNUTGexZDvoxynMprEXblTejO/1RGsnJHo=;
+	s=arc-20240116; t=1748453171; c=relaxed/simple;
+	bh=HgsEhS2sAmmOIZVLiGhDdAQFM5SB/+50Njb9ruDD5sA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u4V89GvMwvIholUzm5bOhl3krhOQG8HZqB1Xq+6J9edMVd7xsXoHNBPpq9NqalRkjwdJJslIeIPXJDDYjdBxKXJgL5X2XL6NjiXIogwLxQiwBU27gopWpHkvaEyRvNl2soNsiAvj4J6+eCtNvAfxrZiK8d9o+Au6C2WQIpZfAXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eXU5e9hj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60282C4CEF1;
-	Wed, 28 May 2025 17:09:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748452174;
-	bh=HkR+wu8C2YNUTGexZDvoxynMprEXblTejO/1RGsnJHo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=eXU5e9hjwe0RYk1Cjl+MC9IAeql1/93wm+xIE6QweWrVed7erIrx4cKBSF9Ph0ozt
-	 FQN9B5RrjJ0IlgDEYvqa0BvZtpJEBDNh1o67zXt/NBx0sGV+HejX9v6zpbTyStnGfe
-	 gSyyMANFIquDgxWE3VyfhaaEs59SZuAf/0AcDRlV9+5FBluenqy1+hqL+zFO05GwA/
-	 kHNwgKS34ayd9RXVjXD5e+ceH+ain/uKwbH2IXzsHZuH8BkTts2LojpeFw9K0IJJXE
-	 fOMF1PkUSRNOBShtFWq1mSWIQyFRP7qzW2XKL70Z4/9Tq5BrfrM8Ub6LIXXGG5Uwpz
-	 jJoOI3bf4pKtA==
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-60219d9812bso18609eaf.0;
-        Wed, 28 May 2025 10:09:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVOMBnxHuYu4FCRo2ioybT+mQMZ7BvUn93PdyEf9SFRoO4dUxwV28uqoAHan0/KStcvByB3nxqWcaYyaRo=@vger.kernel.org, AJvYcCXGgg7n5SqFwUEJ5P5zVDNkWCWMTbQ3ayAbyvfCeiMG5uW2pPmBY7PwqhPzkPUbKWLOh5y7FmmKdv0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyALCOKQOydQG1fJ6oKS6OH2pBgcy27UMUDCHjDT8qHb+D0vyUy
-	UdgdJoYqxACdqJwiUc8zZkUFXqKzxLa0raa+xufEKQ+Najckve+JPv7O/4Us2GiH3KimDbtlQQQ
-	G667F0CgpdjSGd0yPQnOp5rN/qsz8K+c=
-X-Google-Smtp-Source: AGHT+IFxlmFquI8XlLScaVJomEsGf59emFFFBAZ/64sUKvyXiS5JOJ76G4+elEalKulRHHzba52P+lI3Tpz0ktuByPE=
-X-Received: by 2002:a05:6820:4c81:b0:604:4846:78a with SMTP id
- 006d021491bc7-60b9fa5c426mr9718070eaf.2.1748452173721; Wed, 28 May 2025
- 10:09:33 -0700 (PDT)
+	 To:Cc:Content-Type; b=WC3JnCPYijdoTQP2V4HDPuELIUFsF+ie/vare/6BAiBhkwXPO9AkXQszRQLnJ1Kw0VCippXytwuyZNFkOIN//CXMsBSV+8v9mceUNpu9twTEdDLxmjm2CJCXSrGGXCj4mE1zmDTzCPZsYE+2YgeFmlUBpDk+sq9Orvzu3bgyKWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OlRNj5dP; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-54d6f933152so7784776e87.1;
+        Wed, 28 May 2025 10:26:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748453168; x=1749057968; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HgsEhS2sAmmOIZVLiGhDdAQFM5SB/+50Njb9ruDD5sA=;
+        b=OlRNj5dPmY+eASSfZ1PbcvMlKJZGsjMbu1Z9V8KdMybLC/c+kCU8OmiUOJfW4UrPLT
+         jCdiE1FBQcpxXEfb1r9PWHrF6iyZ88+vKCphBoG7G7ybt7DqcEUPBh85QuIW/1pfzid0
+         wmQ38sOOA7ddSTlmCczylo5LC7y26CoP3PWc+bjGEk0Of77Z2ddK21Gvy1b42cAwtR6J
+         zY2jPeoERrt9xGqrL/AKphi/PCfgyQPH7rTplibBiQgmaHihzruuCwjHpIlS/lDq2HNp
+         yWnCtqCrskBd6VmCgrjms49kMrV4WFveoj0r8eUtvcKccBw0kLUi499NDeO9I44h0PXZ
+         Yv5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748453168; x=1749057968;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HgsEhS2sAmmOIZVLiGhDdAQFM5SB/+50Njb9ruDD5sA=;
+        b=TEyoOqc+9XxxpQwEpxb8n532SZsp982qUv/EpC66axjEi4LKgcSDgP3F+SY4pD9m/R
+         cNZ/yTXfe5mLW14Eo4Kt8cJPPaVovsK/+SXuMryy65/8IQk0xst8aZHpexyL/zW7gy6c
+         gtIqLaQkjxKr+ZilZ7FtAXbgBJB8VZDlKT78Fo9+QMnV5i0Mky/ewXJ70U7MlnwW3EIm
+         uWrWwVS3nzi1w6oOR417UAmsu7/2rkxPhF9RKRcfRM76rOIIIAuCaekZ+HxTBTvhjf8F
+         889fDgkQdw+hsZ7wFVFbU3ViTGU56OGim6gbN36sNsigCuEWpT0uj9g4N5+4aab3fQDa
+         Ewbg==
+X-Forwarded-Encrypted: i=1; AJvYcCVNTEXuyueRM4YRMiqCleM9c3/IJV8SjWNih2Ao9N0HZio8CjWRZHWcvE0tgyH8HJLhM01rCvW8Mv8=@vger.kernel.org, AJvYcCVXdYx589uXR+momGiYBMzQFKdVaRsWCoEBm4dvTrXPfg3s/K0e5GRV0FQA0Pfshgy2/J6INfq4peQC5M4=@vger.kernel.org, AJvYcCWEAMkCT6fkk8kNr6m+V/J3Vbnw8pwJZYfiPoclv2gA+jW43vqgzj2lNsR4I2zL8yJEjp+xk0J2sPCZcwI=@vger.kernel.org, AJvYcCXBlgxyY8u6pkcaRn9Ov0lrnUqItNkCr0SpwJDUKzGqpvALpKHMcD4BpH29SudXll7u2BmSTna+y74m@vger.kernel.org
+X-Gm-Message-State: AOJu0YyL+Z4l09rWZr+GlDC3EPijAsPlvpBlAUfUn4y1hqmV2w+qMi+0
+	5v6zshqqCJ/kbsR5CMuI88HzOR7xieksft8nkmlwvW0SHP4A+uUrNP1A3agGmAU654g5Zd+aTaZ
+	nEc72NrgYb9xYsVSFUKerAba71+sFGdI=
+X-Gm-Gg: ASbGnct78M2A6tClYPF/aiTkznsss6NbBMR3uKfXZUWu1/M0th4r3OQJ9Xr8TH7FlDW
+	WWKE73M7r4OVddKp45Gz63PUCsV31Y3gksZ2IUdPWpRqv/RZMiQZLaOJkNz32nkNCGcBqfe3b4t
+	+xru+yZUSiJz5za+1knY2s1/FWDXHtq5fn
+X-Google-Smtp-Source: AGHT+IFDyDQi/9wO2SzKKhtMYaaAss1hk+he7j9jtV0kBiJqcwFAaGlSBAYFYPErvYDNN+uLccqGF2iegKs7RZUaWRc=
+X-Received: by 2002:a05:6512:a90:b0:550:d534:2b1a with SMTP id
+ 2adb3069b0e04-5521c7bc046mr6331845e87.31.1748453167469; Wed, 28 May 2025
+ 10:26:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2006806.PYKUYFuaPT@rjwysocki.net> <20250528131759.GA39944@noisy.programming.kicks-ass.net>
- <CAJZ5v0i=TWMjPKxGa8eT-prV=dtQo=pwys5amcj3QL9qo=EYyQ@mail.gmail.com>
- <20250528133807.GC39944@noisy.programming.kicks-ass.net> <CAJZ5v0g2+OVdFM-bUCOynNivUc4doxH=ukt9e9Z_nKpoZh6gPA@mail.gmail.com>
- <20250528160523.GE39944@noisy.programming.kicks-ass.net>
-In-Reply-To: <20250528160523.GE39944@noisy.programming.kicks-ass.net>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 28 May 2025 19:09:21 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jzF19rToJMHhEvU6Zbt3690KWCs-B_0sPR=s9xeRiUnQ@mail.gmail.com>
-X-Gm-Features: AX0GCFtKiXc3m4qPv0Ukobep1NVEUOLfrhFWYC5AiBQNz19Akzfh3sFePEUu36k
-Message-ID: <CAJZ5v0jzF19rToJMHhEvU6Zbt3690KWCs-B_0sPR=s9xeRiUnQ@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] x86/smp: Fix power regression introduced by commit 96040f7273e2
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	x86 Maintainers <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux PM <linux-pm@vger.kernel.org>, Len Brown <lenb@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@suse.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, 
-	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, 
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>, Ingo Molnar <mingo@redhat.com>, 
-	Todd Brandt <todd.e.brandt@linux.intel.com>
+References: <20250507-pci-tegra-module-v6-0-5fe363eaa302@gmail.com>
+ <20250507-pci-tegra-module-v6-3-5fe363eaa302@gmail.com> <w2ertcizgmtu27kcike3lpw5dvhvqi2b4c6amqzwdfs2xtebfy@itrpen3oblhs>
+ <CALHNRZ8899t0BYMgn1a3iDKz_J9z_Wv_XYM2d8Y4AoiXPZaFjA@mail.gmail.com>
+In-Reply-To: <CALHNRZ8899t0BYMgn1a3iDKz_J9z_Wv_XYM2d8Y4AoiXPZaFjA@mail.gmail.com>
+From: Aaron Kling <webgeek1234@gmail.com>
+Date: Wed, 28 May 2025 12:25:55 -0500
+X-Gm-Features: AX0GCFvjYatE1CdKxTKUCkSaQv_HFCfRBq0g_jM2U1KiL6rRWZ40WAWZ1-Bt-YE
+Message-ID: <CALHNRZ92JPds7DYPTt3A6EvQMMw=PJ50wuSLz526UWgJNo=5rQ@mail.gmail.com>
+Subject: Re: [PATCH v6 3/3] PCI: tegra: Allow building as a module
+To: Thierry Reding <thierry.reding@gmail.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Rob Herring <robh@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 28, 2025 at 6:05=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
+On Thu, May 8, 2025 at 6:26=E2=80=AFAM Aaron Kling <webgeek1234@gmail.com> =
+wrote:
 >
-> On Wed, May 28, 2025 at 04:25:19PM +0200, Rafael J. Wysocki wrote:
->
-> > If cpuidle is available and works, it will do the same thing.
->
-> Why can't we make it available sooner? But no, cpuidle does not do the
-> same thing -- it was argued it does the right thing because it has them
-> tables with C states on and doesn't try and divinate from CPUID.
->
-> > > The whole point was that mwait_play_dead did not DTRT because hints a=
-re
-> > > stupid and it could not select the deepest C state in an unambiguous
-> > > fashion.
+> On Thu, May 8, 2025 at 3:40=E2=80=AFAM Thierry Reding <thierry.reding@gma=
+il.com> wrote:
 > >
-> > Yes, on some systems.
->
-> The 'on some systems' thing is irrelevant. Either it always works, or it
-> doesn't and we shouldnt be having it.
->
-> > > And now you're restoring that -- code you all argued was fundamentall=
-y
-> > > buggered.
+> > On Wed, May 07, 2025 at 10:25:54PM -0500, Aaron Kling via B4 Relay wrot=
+e:
+> > > From: Aaron Kling <webgeek1234@gmail.com>
 > > >
-> > > Yes is 'fixes' things on old platforms, but it is equally broken on t=
-he
-> > > new platforms where you all argued it was broken on. So either way
-> > > around you're going to need to fix those, and this isn't it.
->
-> > The commit reverted by the first patch removed
-> > mwait_play_dead_cpuid_hint() altogether, so it never runs and the only
-> > fallback is hlt_play_dead(), but this doesn't work for disabling SMT
-> > siblings.
->
-> It should either be fixed to always work or stay dead.
-
-I'm talking about the current code which is broken on many systems.
-
-> > > Now, SMT siblings are all AP, by definition. So can't we simply send
-> > > them INIT instead of doing CLI;HLT, that way they drop into
-> > > Wait-for-SIPI and the ucode can sort it out?
+> > > This changes the module macro back to builtin, which does not define =
+an
+> > > exit function. This will prevent the module from being unloaded. Ther=
+e
+> > > are concerns with modules not cleaning up IRQs on unload, thus this
+> > > needs specifically disallowed. The remove callback is also dropped as=
+ it
+> > > is unused.
 > >
-> > No, I don't think so.  I don't think that Wait-for-SIPI is an idle stat=
-e.
+> > What exactly are these concerns? I haven't done this lately, but I'm
+> > pretty sure that unbinding the PCI controller is something that I
+> > extensively tested back when this code was introduced. PCI is designed
+> > to be hot-pluggable, so there shouldn't be a need to prevent unloading
+> > of the controller.
 > >
-> > But we are discussing patch [2/2] here while really the problem is
-> > that the commit in question is broken, so it needs to be reverted in
-> > the first place.
+> > Rather than just forcing this to be always there, can we not fix any
+> > issues and keep this unloadable?
 >
-> No, you all very much argued that mwait_play_dead couldn't be fixed, as
-> such it must die and stay dead. Sometimes working is worse than never
-> working.
+> For the short version, see this part of the conversation on v1 [0].
+> For the long version, read comments on all revisions. Basically, I
+> originally submitted this as unloadable, but got told that due to
+> generic concerns that affect all pci drivers, including ones already
+> modules and unloadable, making this one a module would be blocked if
+> it was unloadable. Which leads us to this revision of the series.
 >
-> So no, I very much object to the revert.
+> Sincerely,
+> Aaron
+>
+> [0] https://lore.kernel.org/all/4u4h27w77sdjvy43b3yonidhfjuvljylms3qxqfaq=
+wyw3v32qo@kzgrrenxr6yz/
 
-And I object to leaving a user-visible regression behind.
+Is there any more comments on this, Manivannan or Thierry? I'd like to
+get some form of this series submitted.
+
+Sincerely,
+Aaron
 
