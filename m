@@ -1,162 +1,127 @@
-Return-Path: <linux-pm+bounces-27743-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27744-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0CECAC6D79
-	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 18:05:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20945AC6D7C
+	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 18:05:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A017D1C00719
-	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 16:05:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F81A168354
+	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 16:05:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2179A28C2C8;
-	Wed, 28 May 2025 16:05:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F2BA28C011;
+	Wed, 28 May 2025 16:05:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qSshGpZ6"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="QRhyVEya"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60DE3279903
-	for <linux-pm@vger.kernel.org>; Wed, 28 May 2025 16:05:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1234244670;
+	Wed, 28 May 2025 16:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748448325; cv=none; b=gNl3Hnivy3Uwt4M/D/iakY/jXAOZkeNI+HrxwCuBYEFi4Fu/0a+0Od+yTN7OSGNqIUQ8PsTgw7aI7kqowMtYxuM68YqbCmAdeo9Ue7dT6kMD3iOr8mYftL1Gdh9s0GyEM+i2x/Cs2dJOMIqOI/CroBhpXjkFUdaXouBdYdMnuWw=
+	t=1748448331; cv=none; b=qjMG5YNxS4sD4R99YagF1DS401evkXmYD1Yu/4oujVGm69Z6X7CS7wTdkE0ZBWivqa0brEU8yyGMBwvWDTpeitcgv6LmeYznKc//uwwU8gnCuC2Sr23LsfboyQq4hXQiyL+Am7iEbNJa8+kXNn4Roriz9fU2PIeURW2zT8HIu24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748448325; c=relaxed/simple;
-	bh=DcRREdQ0ZIb5xF00hDHe1rvvAjFzi38y8N1Y5D0c45k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=e8ko9y7aRuAkJr8uRULpKXNEMNvu21d3b9nwQ04oTyZauZNHEdKzKjXwsaH+KwBAidQQfE+9QAJ0Ocpgx1ujJUbzUrlIKlUf0da1tAYuFg1o65FXQRO7Vjxu7gQSLtzomdkAZ4//BuQS4n+jwhfXW+EKjmr71Iu9VaL73jgOG3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qSshGpZ6; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e7c5d4709caso4078596276.1
-        for <linux-pm@vger.kernel.org>; Wed, 28 May 2025 09:05:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1748448322; x=1749053122; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=w6tC/IsairDziVWtXhkaDimMYA0/jNvKbB4X1Lbk06g=;
-        b=qSshGpZ6ItWc+JjyMXR2REHAQc/3Pziq99/UpT7Ijf1RBHG0RPIc1TRpPb+A22tglG
-         zUD8QdytkIx5O8U+/Vw+wZNYZ63f2fFKmo+3h7AhAhUwkd8fEiSJ0Pm9BICC73TnlwUo
-         Bn+xHyXgrUd6egnSBpgo8wyrbR6Xzy6ph0MunleESFgCWgtcquwhJSYu1WK4SaccwP/H
-         Fq7xz4hVk7MnYE0ixGsZk+l90k9R8+L/U3n5mlHdRtYRNYahWSXunL1qQaZn0n5RZaiR
-         +gnuJx+lq4/mDapjVAGRW3pyzWSCjqitGKdJBzpowDlzoCYBn+ln4rdNiJbabBrmSlXw
-         J+gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748448322; x=1749053122;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w6tC/IsairDziVWtXhkaDimMYA0/jNvKbB4X1Lbk06g=;
-        b=VHEgufReT60SP4RYUpwyoR8gmGhxgCGan9whMEjD4qHXsicC2H9PsdmrUL34nQ5iGK
-         wYBaCNEdyNjrRYnmd76eLk7gjasqPZVGU7/irR1UukOcprIlfmQaU8pt0OugKzaifG67
-         QKkW1hI4jwvojEPV+L5pP++hTITktsZa8UHpV2RsHAQalGBSxMhAtpzI1fJQ6utMsr/n
-         npePlSm9tq03/WH6hFGOx5GQZpqz4jMKjLu8Y6YQEbQ8GAm1KCDBE3nSKt86YF7eN9+V
-         gy1UaEvMlrdTdMYBpCJtdUoDuUtwWYkQN9m4QMTc6qtHosdO/AFXhfhhwWbebb3g9Jva
-         aCww==
-X-Forwarded-Encrypted: i=1; AJvYcCXLU02HCWQUMuga9v6Q+mtpLcApFuWbiIQOd2qsGUxKRK38qEj1m8v33Ycjo8lbnYZL3q4DZ4gSzQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyswzy+14VNtfjHXch5zuq5PuSHGTpuQhOEnn1G3pYAhdVw1dIM
-	Kd+tD7qeUR/U8Ku6F/WyZx6BPJ54sVVYoNRZl3lRY9dq5Qp4SSaxH/RYjqrqmvxJAwx2OSWYR8N
-	JvPE622KFprdmWtTuDCTgVe4lSp0u2LS79MoB31JYANmN3YKafT5DlChu5Q==
-X-Gm-Gg: ASbGncvqi6q85Qu7prACl8zrGKLeVOjpnUNQqujM1YkX1Nf2MQJvc+XZck+32zf9QYy
-	Xq/l/xBpF0qv6jTVUNnRCQ/dD46iZ4/+k6oLMFsYZfL0cgIerjkgd2P4mV54hmim4L4W5Lv5OnH
-	x+UMKU8AQfqncHhtUwifVED2rmlD8XzYMODA==
-X-Google-Smtp-Source: AGHT+IFnwa31CIcmyHHl56Vao4/q5XtrthfioWrNJoyx+lhgVVPWYbbs9O9qtYqlGYN36k/DfrFLU8QJs8LWaKoEyMQ=
-X-Received: by 2002:a05:6902:2203:b0:e7d:b107:d829 with SMTP id
- 3f1490d57ef6-e7db107e038mr15334137276.34.1748448322260; Wed, 28 May 2025
- 09:05:22 -0700 (PDT)
+	s=arc-20240116; t=1748448331; c=relaxed/simple;
+	bh=iN66LX31eETjv33P4suFvIHOxzRjRyd7W6pMLndTMzo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mzszWUcnNFN5aJqOTEGryOUDh2I/C50rtJep9xiZ/GQqf7AEUbRz/G+CTXpD48bbq94eGA4/1Gs/d/1OCItvP8kXOAK1JBVarpGrB785307d+E4IY69RKr1/19sD8NmXk3hVu7ZOw/jdzieniNFE+XLHj9XVtrZMaCmJ/WARRHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=QRhyVEya; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=+DHCZse1DSsGRv64acL++yjtliJ9RC7E53xqlL/i0E4=; b=QRhyVEya/Kyx7XVjlP806y5ZZ6
+	O5wfe0vQ5BwtOl46ZG9IMAg+JoCkBi7vrrYnN2gFmg9QxxiAPhM4WBXjKfpZiABWdqtN+oV+LYS3g
+	nR98+V21vDdA5W1LSKCA89Tdsv+LomvjrKX13b6TCBZi+X/79jvAIJB8sijgoPNHY/41rBf+JD6t+
+	jXWo4wM15RUdIDcue/YohT1RZvTJZrBf2fG/Fb77TM7Mt2O12E2cN1sU1Dvm0JXw5JORqtaDIPqxp
+	XnQ2r9a0R473o3LAz0QuDeWkPEFRB14RP76PQFoCMHdWEdufpAJRt11h9Yh549vEaG957oWjn6+oj
+	H6UPZVdw==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uKJHQ-0000000DpAN-1XZ6;
+	Wed, 28 May 2025 16:05:24 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id E7D5F3005AF; Wed, 28 May 2025 18:05:23 +0200 (CEST)
+Date: Wed, 28 May 2025 18:05:23 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	x86 Maintainers <x86@kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Linux PM <linux-pm@vger.kernel.org>, Len Brown <lenb@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@suse.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+	"Gautham R. Shenoy" <gautham.shenoy@amd.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Todd Brandt <todd.e.brandt@linux.intel.com>
+Subject: Re: [PATCH v1 0/2] x86/smp: Fix power regression introduced by
+ commit 96040f7273e2
+Message-ID: <20250528160523.GE39944@noisy.programming.kicks-ass.net>
+References: <2006806.PYKUYFuaPT@rjwysocki.net>
+ <20250528131759.GA39944@noisy.programming.kicks-ass.net>
+ <CAJZ5v0i=TWMjPKxGa8eT-prV=dtQo=pwys5amcj3QL9qo=EYyQ@mail.gmail.com>
+ <20250528133807.GC39944@noisy.programming.kicks-ass.net>
+ <CAJZ5v0g2+OVdFM-bUCOynNivUc4doxH=ukt9e9Z_nKpoZh6gPA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250526122054.65532-1-claudiu.beznea.uj@bp.renesas.com>
- <20250526122054.65532-2-claudiu.beznea.uj@bp.renesas.com> <hojdkntm3q5a5ywya7n5i4zy24auko4u6zdqm25infhd44nyfx@x2evb6sc2d45>
- <111d2d6c-8ac0-40b9-94c3-02f2f64ef9fe@tuxon.dev>
-In-Reply-To: <111d2d6c-8ac0-40b9-94c3-02f2f64ef9fe@tuxon.dev>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 28 May 2025 18:04:45 +0200
-X-Gm-Features: AX0GCFuID4VhGiX2apyC0Knv4lDmWLbvgXL8Xh33MSHxiRPOzOEH1v_hZ2IXp8w
-Message-ID: <CAPDyKFoQYTNBhtBXY-Ds7E0TohtA6558W1Jf3cLsnXDQC74DSg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] PM: domains: Add devres variant for dev_pm_domain_attach()
-To: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>, gregkh@linuxfoundation.org, 
-	rafael@kernel.org, dakr@kernel.org, len.brown@intel.com, pavel@kernel.org, 
-	jic23@kernel.org, daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, bhelgaas@google.com, geert@linux-m68k.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0g2+OVdFM-bUCOynNivUc4doxH=ukt9e9Z_nKpoZh6gPA@mail.gmail.com>
 
-[...]
+On Wed, May 28, 2025 at 04:25:19PM +0200, Rafael J. Wysocki wrote:
 
-> >> +/**
-> >> + * devm_pm_domain_attach - devres-enabled version of dev_pm_domain_attach()
-> >> + * @dev: Device to attach.
-> >> + * @attach_power_on: Use to indicate whether we should power on the device
-> >> + *                   when attaching (true indicates the device is powered on
-> >> + *                   when attaching).
-> >> + * @detach_power_off: Used to indicate whether we should power off the device
-> >> + *                    when detaching (true indicates the device is powered off
-> >> + *                    when detaching).
-> >> + *
-> >> + * NOTE: this will also handle calling dev_pm_domain_detach() for
-> >> + * you during remove phase.
-> >> + *
-> >> + * Returns 0 on successfully attached PM domain, or a negative error code in
-> >> + * case of a failure.
-> >> + */
-> >> +int devm_pm_domain_attach(struct device *dev, bool attach_power_on,
-> >> +                      bool detach_power_off)
-> >
-> > Do we have examples where we power on a device and leave it powered on
-> > (or do not power on device on attach but power off it on detach)? I
->
-> I haven't found one yet.
->
-> > believe devm release should strictly mirror the acquisition, so separate
-> > flag is not needed.
->
-> I was in the middle whether I should do it with 2 flags or only to revert
-> the acquisition.
->
-> >
-> >
-> >> +{
-> >> +    int ret;
-> >> +
-> >> +    ret = dev_pm_domain_attach(dev, attach_power_on);
-> >> +    if (ret)
-> >> +            return ret;
-> >> +
-> >> +    if (detach_power_off)
-> >> +            return devm_add_action_or_reset(dev, devm_pm_domain_detach_off,
-> >> +                                            dev);
-> >> +
-> >> +    return devm_add_action_or_reset(dev, devm_pm_domain_detach_on, dev);
-> >
-> > Instead of 2 separate cleanup methods maybe define dedicated devres:
-> >
-> > struct dev_pm_domain_devres {
-> >       struct device *dev;
-> >       bool power_off;
-> > }
-> >
-> > ?
->
-> That was the other option I've thought about but I found the one with 2
-> cleanup methods to be simpler. What would you prefer here?
->
-> Ulf: could you please let me know what would you prefer here?
+> If cpuidle is available and works, it will do the same thing.
 
-As it looks like we agreed to use one cleanup method, the struct
-dev_pm_domain_devres seems superfluous to me.
+Why can't we make it available sooner? But no, cpuidle does not do the
+same thing -- it was argued it does the right thing because it has them
+tables with C states on and doesn't try and divinate from CPUID.
 
-[...]
+> > The whole point was that mwait_play_dead did not DTRT because hints are
+> > stupid and it could not select the deepest C state in an unambiguous
+> > fashion.
+> 
+> Yes, on some systems.
 
-Kind regards
-Uffe
+The 'on some systems' thing is irrelevant. Either it always works, or it
+doesn't and we shouldnt be having it.
+
+> > And now you're restoring that -- code you all argued was fundamentally
+> > buggered.
+> >
+> > Yes is 'fixes' things on old platforms, but it is equally broken on the
+> > new platforms where you all argued it was broken on. So either way
+> > around you're going to need to fix those, and this isn't it.
+
+> The commit reverted by the first patch removed
+> mwait_play_dead_cpuid_hint() altogether, so it never runs and the only
+> fallback is hlt_play_dead(), but this doesn't work for disabling SMT
+> siblings.
+
+It should either be fixed to always work or stay dead.
+
+> > Now, SMT siblings are all AP, by definition. So can't we simply send
+> > them INIT instead of doing CLI;HLT, that way they drop into
+> > Wait-for-SIPI and the ucode can sort it out?
+> 
+> No, I don't think so.  I don't think that Wait-for-SIPI is an idle state.
+> 
+> But we are discussing patch [2/2] here while really the problem is
+> that the commit in question is broken, so it needs to be reverted in
+> the first place.
+
+No, you all very much argued that mwait_play_dead couldn't be fixed, as
+such it must die and stay dead. Sometimes working is worse than never
+working.
+
+So no, I very much object to the revert.
 
