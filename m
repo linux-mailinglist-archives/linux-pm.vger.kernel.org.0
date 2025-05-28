@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-27718-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27719-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5089CAC61A7
-	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 08:10:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EED80AC62FA
+	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 09:28:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D15939E60BB
-	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 06:09:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD0F51886809
+	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 07:28:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E5042101B3;
-	Wed, 28 May 2025 06:10:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9B6924468B;
+	Wed, 28 May 2025 07:28:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tHvZ74tM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vAjA7yVP"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C1D9A31;
-	Wed, 28 May 2025 06:10:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B0D3125DF;
+	Wed, 28 May 2025 07:28:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748412614; cv=none; b=qlAHIzzOYZRwnpbTIeGoJ6at989dcsbmhGZ8cAUZ9jM0MSZt1bYZcp6FW6kuzljsNAUscg4t8cChrg9KyDZviHgYceMikM3rJ+sRSJSqQ8e6T1g88SFReALutCVWG0QqPaW2sHhmnn13OIGDur0C722TfLdecjtTa/jLyJByrAg=
+	t=1748417296; cv=none; b=obuAeI+yv2r11k19wgfVNFZsHJqmMHR9XOA5WhEacZ9rZP4BDHEq85Pq8PW4sTLWwxgT7QxPaIUiY+rbBzMfNu81YL+AxEnKRGgXmLUJFr23jW2bKmShcWobbdcV4iCi2KzQMEjKOxWqbGjqOymjpZAdbpkeRxSEOLw+mwDVExU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748412614; c=relaxed/simple;
-	bh=vQLNG7Sx3hoBCGbAUukPObHvWe8q5ijzd5Fnn//0Q2U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=t/QMnLIS/DxDMc4xzWUyDipcUJ5SUsu1bN9NqPUu98BL71ateoOe16nmcePd3+3GLW1MNczU1UxJ3aOZludQNnNQa7Ewz3H2uZUT3xk6GBRjEf+9M1NzyEhvp/Fw1aiZ25leMTeV+0b6P4su81ll79ucLn9J3ARQj9VtM4J6siQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tHvZ74tM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DBF7C4CEE7;
-	Wed, 28 May 2025 06:10:09 +0000 (UTC)
+	s=arc-20240116; t=1748417296; c=relaxed/simple;
+	bh=2Xg2H6irTKVHQRxwQt4OW1u8RbDCO90BghAh8SjAitI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=n1VjyUXH/n48wVxtN8BQuxcm2LhvZeGpzY/t8SV4wfYdJ/qb57skIvKfqWlbxEopgYBmBPTMZH/ICbhdgh00UbrPOQGDMo9uLDtSm1BSjE9RbHAwFCDotNyOd2m/o8oPdJAkFN9uPV1oxlgi/1XuzlVIhxG1F5y9vOiG7ibFMlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vAjA7yVP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6094C4CEE7;
+	Wed, 28 May 2025 07:28:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748412613;
-	bh=vQLNG7Sx3hoBCGbAUukPObHvWe8q5ijzd5Fnn//0Q2U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=tHvZ74tMMAz1OE7L2QijmSeJn3FhwaKQLAHiz0zDu2/kz3eLbdoGOeUbx0VeT9UvT
-	 BmXp5FdCVLZsXwf0MGAbjMy7oID4ofibFezvIYoD95hAoBDLZ++miJSX8u0FU4Ovfp
-	 cTr2IHKzdMeZbZdtyqrLFfE/Y73r/gAEvgLnY09WHIVcaz82eOS3hILyz5IbQBbOLA
-	 qh4KrEqjLdhbeyrv3qXN8C1cJQfL1PcUoYGBreJSkFR+nhn7Tr1z9co8T34CEfmkAw
-	 EVZrTBDJKRFYjs5TakbBMFDG/cWl/A0z8D64c/kIQ2QEO4GoR7o6ybjjoaiCQwp5es
-	 iErf0PW7fDrew==
-Message-ID: <174517ff-f7a5-4dd1-b358-94af15245e37@kernel.org>
-Date: Wed, 28 May 2025 08:10:08 +0200
+	s=k20201202; t=1748417296;
+	bh=2Xg2H6irTKVHQRxwQt4OW1u8RbDCO90BghAh8SjAitI=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=vAjA7yVPhz/gZdzHJOB3/KiV7gLa2pFg8nQCBfwM2oa8BrGLtK3dTztxYG96GFBvH
+	 xVy0JTCaj2LhuVLKB3e0Gs6Ap9qMha5uGm8maEZYYti6qS9izRuN1N3Q39cwCxot+W
+	 mxOXkcf2lebS0kTBmdbVNNI0pkkZR3G6/KaSWZlOPWD0MP9EOgSHvsTmZcDonzqsBP
+	 6w8lTyHcxW7qSB/kdvzWAfV791vqFaCoBGuPZqbGPUiNmED4dk6ND+py+PD3YgsU3U
+	 B+y27pl+WBX0/PoBbkt89KNDCB2sN70uddWkYgKI/goD1VDg+/4j9N45nE72L93CIp
+	 jnWRZpMItxPXw==
+Message-ID: <e3c75b90-e76e-4ecf-b9cb-2abcc018269f@kernel.org>
+Date: Wed, 28 May 2025 09:28:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,18 +50,17 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 6/6] MAINTAINERS: add an entry for pf1550 mfd driver
-To: samuel.kayode@savoirfairelinux.com, Lee Jones <lee@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, Dmitry Torokhov
- <dmitry.torokhov@gmail.com>, Sebastian Reichel <sre@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-input@vger.kernel.org, linux-pm@vger.kernel.org, eballetbo@gmail.com,
- abelvesa@linux.com, b38343@freescale.com, yibin.gong@nxp.com,
- Abel Vesa <abelvesa@kernel.org>
-References: <20250527-pf1550-v3-0-45f69453cd51@savoirfairelinux.com>
- <20250527-pf1550-v3-6-45f69453cd51@savoirfairelinux.com>
+Subject: Re: [PATCH v2 4/5] dt-bindings: thermal: Document Airoha AN7583
+ support
+To: Christian Marangi <ansuelsmth@gmail.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250527215241.25767-1-ansuelsmth@gmail.com>
+ <20250527215241.25767-5-ansuelsmth@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,37 +106,24 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250527-pf1550-v3-6-45f69453cd51@savoirfairelinux.com>
+In-Reply-To: <20250527215241.25767-5-ansuelsmth@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 28/05/2025 00:25, Samuel Kayode via B4 Relay wrote:
-> From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+On 27/05/2025 23:52, Christian Marangi wrote:
+> Document support for Airoha AN7583 thermal driver.
 > 
-> Add MAINTAINERS entry for pf1550 PMIC.
+> Airoha AN7583 follow the same logic of Airoha EN7581 to read the
+> temperature but lack all the support for the PTP_THERMAL used to monitor
+> and react when trip point are triggered.
 > 
-> Signed-off-by: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-> ---
->  MAINTAINERS | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 830ef5f9d86487a599236a2392e422f0e424a313..2be65383c3c7b1c1487577d23bff483aa437c4c8 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17688,6 +17688,16 @@ F:	Documentation/devicetree/bindings/clock/imx*
->  F:	drivers/clk/imx/
->  F:	include/dt-bindings/clock/imx*
->  
-> +NXP PF1550 PMIC MFD DRIVER
+> Also the Airoha AN7583 lives entirely under the Chip SCU SoC register
+> space hence a dedicated schema is introduced.
 
-You call the entry here NXP, so maybe you "nxp" prefixes in the binding
-for compatible, properties and filename?
 
-This itself is fine.
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
+That's wrong argumentation. If this is part of SCU, it does not mean you
+need separate schema. Quite opposite. No resources here, so this should
+be folded into parent node.
 
 Best regards,
 Krzysztof
