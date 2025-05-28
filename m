@@ -1,130 +1,128 @@
-Return-Path: <linux-pm+bounces-27719-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27720-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EED80AC62FA
-	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 09:28:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 663F1AC6310
+	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 09:33:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD0F51886809
-	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 07:28:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3F7E3A43A5
+	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 07:32:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9B6924468B;
-	Wed, 28 May 2025 07:28:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vAjA7yVP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCA531FDE01;
+	Wed, 28 May 2025 07:33:06 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B0D3125DF;
-	Wed, 28 May 2025 07:28:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D201367
+	for <linux-pm@vger.kernel.org>; Wed, 28 May 2025 07:33:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748417296; cv=none; b=obuAeI+yv2r11k19wgfVNFZsHJqmMHR9XOA5WhEacZ9rZP4BDHEq85Pq8PW4sTLWwxgT7QxPaIUiY+rbBzMfNu81YL+AxEnKRGgXmLUJFr23jW2bKmShcWobbdcV4iCi2KzQMEjKOxWqbGjqOymjpZAdbpkeRxSEOLw+mwDVExU=
+	t=1748417586; cv=none; b=GiDs8j5anFB6ZcBxLLpCXrJC9xUBocxqfSbaJ+pi43TY1L+OVF4UHW1XCHys6+1E2gUQ3qiT25TIx7ysKOwgMOyl2L1CDCURWJif4opBtl6tEHKwH7KfB5MdrEQCFMR5MF5AgksxVMmxJpm2o8lcSWBvQb+Pmn1QuAIRB0WF3mM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748417296; c=relaxed/simple;
-	bh=2Xg2H6irTKVHQRxwQt4OW1u8RbDCO90BghAh8SjAitI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=n1VjyUXH/n48wVxtN8BQuxcm2LhvZeGpzY/t8SV4wfYdJ/qb57skIvKfqWlbxEopgYBmBPTMZH/ICbhdgh00UbrPOQGDMo9uLDtSm1BSjE9RbHAwFCDotNyOd2m/o8oPdJAkFN9uPV1oxlgi/1XuzlVIhxG1F5y9vOiG7ibFMlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vAjA7yVP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6094C4CEE7;
-	Wed, 28 May 2025 07:28:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748417296;
-	bh=2Xg2H6irTKVHQRxwQt4OW1u8RbDCO90BghAh8SjAitI=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=vAjA7yVPhz/gZdzHJOB3/KiV7gLa2pFg8nQCBfwM2oa8BrGLtK3dTztxYG96GFBvH
-	 xVy0JTCaj2LhuVLKB3e0Gs6Ap9qMha5uGm8maEZYYti6qS9izRuN1N3Q39cwCxot+W
-	 mxOXkcf2lebS0kTBmdbVNNI0pkkZR3G6/KaSWZlOPWD0MP9EOgSHvsTmZcDonzqsBP
-	 6w8lTyHcxW7qSB/kdvzWAfV791vqFaCoBGuPZqbGPUiNmED4dk6ND+py+PD3YgsU3U
-	 B+y27pl+WBX0/PoBbkt89KNDCB2sN70uddWkYgKI/goD1VDg+/4j9N45nE72L93CIp
-	 jnWRZpMItxPXw==
-Message-ID: <e3c75b90-e76e-4ecf-b9cb-2abcc018269f@kernel.org>
-Date: Wed, 28 May 2025 09:28:12 +0200
+	s=arc-20240116; t=1748417586; c=relaxed/simple;
+	bh=fs7V2EMais1uvsQsiiv8UFl+UXbpQ8gTK8jxn0sDoiQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=o/3WovMVlPwcOXKXqUugdxQotd7/afmsjgWb5X9VqaZQj8tdJY4PCDJ4UHMGc08akcdbgpdrYQsuCufbr8MMDVkFU1s7VGidTmO19EOZk/svE+KaicBk96xXOrbzsN4y1BkcTqBl0+JqmXaA2731XP74hBGV/lnCX+KnDa6yN9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: f96941c03b9511f0b29709d653e92f7d-20250528
+X-CTIC-Tags:
+	HR_CC_AS_FROM, HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_7B
+	HR_CTT_TXT, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN
+	HR_FROM_NAME, HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER
+	HR_SJ_NOR_SYM, HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT
+	HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
+	SA_TRUSTED, SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS
+	DKIM_NOPASS, DMARC_NOPASS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:2eb0e39e-344f-40a3-b65c-8a86e03b0f1c,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:-5
+X-CID-INFO: VERSION:1.1.45,REQID:2eb0e39e-344f-40a3-b65c-8a86e03b0f1c,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-META: VersionHash:6493067,CLOUDID:f575bee11e2aee58bdc56fcac521d48c,BulkI
+	D:250528151521F34SETM6,BulkQuantity:5,Recheck:0,SF:17|19|24|38|44|66|78|10
+	2,TC:nil,Content:0|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BE
+	C:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,TF_CID_SPAM_SNR
+X-UUID: f96941c03b9511f0b29709d653e92f7d-20250528
+X-User: lijun01@kylinos.cn
+Received: from [192.168.31.86] [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <lijun01@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 1727375738; Wed, 28 May 2025 15:32:56 +0800
+Message-ID: <f63c67bee0e0ae498236cff4374feae2a624d410.camel@kylinos.cn>
+Subject: [PATCH v2] hiberbate: init image_size depend on totalram_pages
+From: lijun <lijun01@kylinos.cn>
+To: rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com, 
+	linux-pm@vger.kernel.org
+Cc: lijun01@kylinos.cn
+Date: Wed, 28 May 2025 15:32:34 +0800
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.1-2kord0k2.4.25.1 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/5] dt-bindings: thermal: Document Airoha AN7583
- support
-To: Christian Marangi <ansuelsmth@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250527215241.25767-1-ansuelsmth@gmail.com>
- <20250527215241.25767-5-ansuelsmth@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250527215241.25767-5-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 27/05/2025 23:52, Christian Marangi wrote:
-> Document support for Airoha AN7583 thermal driver.
-> 
-> Airoha AN7583 follow the same logic of Airoha EN7581 to read the
-> temperature but lack all the support for the PTP_THERMAL used to monitor
-> and react when trip point are triggered.
-> 
-> Also the Airoha AN7583 lives entirely under the Chip SCU SoC register
-> space hence a dedicated schema is introduced.
+From cd88cf1ef77c48a85dd54eea696f8936553bd757 Mon Sep 17 00:00:00 2001
+From: Li Jun <lijun01@kylinos.cn>
+Date: Mon, 12 May 2025 10:39:27 +0800
+Subject: [PATCH v2] hiberbate: init image_size depend on totalram_pages
 
+Some automatically loaded applications greedily occupy
+memory, when total memory is 8GB, the image_size is 3GB,
+when total memory is 16GB, the image_size is 6GB, when
+total memory is 32GB, the image_size is 12GB. some
+of these applications,user may not use them. They occupy
+a large amount of image space, resulting in S4 time of
+over 100 seconds or even more. Limit the size of image_size
+to control the time of hibernation and wake-up,making S4
+more user-friendly.
 
-That's wrong argumentation. If this is part of SCU, it does not mean you
-need separate schema. Quite opposite. No resources here, so this should
-be folded into parent node.
+Signed-off-by: Li Jun <lijun01@kylinos.cn>
+---
+ kernel/power/snapshot.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index 2af36cfe35cd..197976d75879 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -135,10 +135,20 @@ void __init hibernate_reserved_size_init(void)
+  * try to create the smallest image possible.
+  */  
+ unsigned long image_size;
+-
++#define MEM_8G 8388608 // KB
++#define MEM_8G_PAGES   MEM_8G / PAGE_SIZE
++#define MEM_16G_PAGES  MEM_8G_PAGES * 2
++#define MEM_32G_PAGES  MEM_8G_PAGES * 4
+ void __init hibernate_image_size_init(void)
+ {
+-   image_size = ((totalram_pages() * 2) / 5) * PAGE_SIZE;
++   if (totalram_pages() >= MEM_32G_PAGES)
++       image_size = ((totalram_pages() * 1) / 20) * PAGE_SIZE;
++   else if (totalram_pages() >= MEM_16G_PAGES)
++       image_size = ((totalram_pages() * 1) / 10) * PAGE_SIZE;
++   else if (totalram_pages() >= MEM_8G_PAGES)
++       image_size = ((totalram_pages() * 1) / 5) * PAGE_SIZE;
++   else
++       image_size = ((totalram_pages() * 2) / 5) * PAGE_SIZE;
+ }
+ 
+ /*
+-- 
+2.25.1
+   
+
 
