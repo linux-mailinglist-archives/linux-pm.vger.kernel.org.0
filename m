@@ -1,128 +1,194 @@
-Return-Path: <linux-pm+bounces-27751-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27752-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2659AC6F62
-	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 19:30:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD593AC6F7F
+	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 19:38:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD99D4A5B2D
-	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 17:29:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3801F9E3A16
+	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 17:38:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B6BF28DF21;
-	Wed, 28 May 2025 17:29:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EFA328DB79;
+	Wed, 28 May 2025 17:38:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GykcIT1l"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q79bKWgq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F4FF38B;
-	Wed, 28 May 2025 17:29:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DE5528DF04;
+	Wed, 28 May 2025 17:38:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748453373; cv=none; b=McbOyQH37y2X4zTIAFsa1MYfN3vzBAC2xUnujNEP4h4ZFFfwPQKyujgiifHYcCii6WtMwk1S5+eJEQNeYTWJ8p2veZFp8x7eiFqsofwtQS2cJ9uugPFnWVIvAxOylvr7062HCzcPlBjrCBXWWL5QiksTwSsvGVhoncXomq57ajg=
+	t=1748453902; cv=none; b=lBPssweMbjBGUJzUl54YToanv9zf2uWrXNqOJaA/kT3BtAjB+oc02AUU5IsHoCFfx/jnNgB5HmMYaZRPXGGJbg2RmTZitLFe/8QHY9WguR2wcpd2J3RqGB9Pzbmk0f3i5acb6XfuVQqLDogD0OlPKkLpRHulLy3a3BwvTr5aPkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748453373; c=relaxed/simple;
-	bh=73UTn5zY0Ma+9HSZwcpINlS8OsmErek97WGREM5hkbg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CAgvWGm34vdCT4lX8tLbvf95KjcmTc3kKHgRV1CynLplBWZ0YBtx0W8gfCZF/OegoBmIgQ3nqK7ZynGR/UwiX5+f01WOdlD8cVDjpoCTNvfe8YwoQ6nbzlsZ4Swea6vrUVO6nnAHb8+Cm9OP4lrkqV+S7JdVEgJ0vZ3+48QILlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GykcIT1l; arc=none smtp.client-ip=209.85.167.41
+	s=arc-20240116; t=1748453902; c=relaxed/simple;
+	bh=U++dy45I+onFjsonr1vngeU772ZgTI8qI+k6vKRdUN0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HDPnr+IbNXVjlJ1N1ZtqUH3YQkSYZAGO9zKVfIcTf0QLBwX/OnQ1F6az2WIDPNnU9yswKjCPBullUR42tGcFSB7mKveeLCeNIA+GOJcuLgeXTNj3+j7S3FW2YTueCBWOLmXDnvf/uuxuqGojrEBMFXSjBj2hQl8onrq6P/RwapM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q79bKWgq; arc=none smtp.client-ip=209.85.222.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-54afb5fcebaso6114319e87.3;
-        Wed, 28 May 2025 10:29:31 -0700 (PDT)
+Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-87df8fa1c6aso7591241.0;
+        Wed, 28 May 2025 10:38:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748453369; x=1749058169; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=73UTn5zY0Ma+9HSZwcpINlS8OsmErek97WGREM5hkbg=;
-        b=GykcIT1lvYeIzcUJaRqn91x3B1EdSAI5PMTv4si0q9pWATJvG/AcTnPt96hd2y28F6
-         ZBO4UGxQtTxpLqzvkezCT3Zj+K1/WoU22YHsfYeR2Wen5on+bVrhl63HhQUlLH40OGzt
-         Jgs2ddqmpyXv+ix8g/1JY14YfEp1OJycz8GhHmqNVN1JlFEz/1wNUjHyOE75BTUjHyQ3
-         Se5hg4HUnGkpBY0GbwHkhhMiN+A2sWBOT2AWWTYpAHOFO6zOMx+51/Sav1830/IvpLMZ
-         7q708FAM6GtF1iLwzLMWdOG/DUjkVyTiO4Tz6gP0q2WeKSJvevk7s4Q4uVuJLqN5ahkq
-         fwHw==
+        d=gmail.com; s=20230601; t=1748453899; x=1749058699; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XuU7vghs/Roa4fUMqe76N60+pRs9TTlZ7VpQ6fcHfmM=;
+        b=Q79bKWgqa4il3gX8SS1S0AhAWXMViTYQJ3z990oIGERVmMGTC0U5+yUAALBlppv296
+         NOXCULWXhlKAb5DnuM8NlRN6aeeb4XHqZAYyHuJtYNfSRT4pLq0PNBJ94WMs30dCRHJQ
+         /ZygiUM1O4pAflqaK+QDhepz35VRUJpoV1/cGtpbhSXQDyE5MjHoJR7zdnA8GAMsULj1
+         +aPtz+h1z+wdAiD/jDKHjJdZS+Q8P09Io3AnudU/YY/ZmqTwHjazR/Dft8uVUd9KQD0i
+         cOPKrn+LAyZ+iLKk82WA7FBLv8wqru3LQYK/jYDFsKQRew4RlbXIOQdtkRyn5MWKcblK
+         qHZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748453369; x=1749058169;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=73UTn5zY0Ma+9HSZwcpINlS8OsmErek97WGREM5hkbg=;
-        b=IpWmJlex4Di5uKWNgXcUNoTzdkbVPCHnv9Wm0vP2yUBh/TEDsU1geefqPQuLbTQ0Rk
-         FYtC98g9a12oV0ehtew17hF5mWTlkHH7qXuiXAjBjHbhv6QBZsALMcDzyg1U1F+gKRnH
-         rXu3eDls/GIKY7nEXrv9qdVoLj0kkzJYWZyuMAh+7NL+n5RqBkISPaYw+T4BmqHKC+d2
-         /hi5FtEKu00c8YSLWVx21vVnv3nr77a7QN7MoZqtyyRPjptvrbsk9E8p6V/5tGeWrO0m
-         Wa0htmQUDwY2+qjb8x3SGqFGIYwleP08Ir10lro7g76aC/KIizY0vW23quwuLDWPHmRF
-         HllQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV/pMiEaUJJY2wo3bpcLN1Xdy6BGWuy+4kS8CG8ztlXLX99vEya4ex02iNI5Q8ocBquxE3CJzNVqXeaLI8=@vger.kernel.org, AJvYcCWZc0reH1uBGhWVABLmPi9EWCjXCvO5XK/cpdfAyTphC0H3MsmCy/cXiiREe5NSA9RIKz6S+iaa5aU=@vger.kernel.org, AJvYcCXPFsCs3EDggjb9+3MGWwqKwa3Ek8iz05EUevxYEBPCP9aU9rk3HcIUqj+WrxGHeQ17ZR2cjGvKeba/NPw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFCYsalcCHrNkoUtRQljy/xxEv2jzlcBcJ2J6IeTcyY04St1/g
-	fzbLDRnhfBN1To4hvpx42KbyrNsX7usi0tHH2FRnCWIf04tdvfCx8ocajcep/ea4YzO1kN9ZTum
-	WnviD+e5T2561ogMNpF8L7UpVpoOM2dk=
-X-Gm-Gg: ASbGncth6OL+8BfZTDgmlhWbj3y56n+0dp+vyvtf+WPYMdYZNq2R1ED/MRYezH4Wigv
-	51M68DnW6TnbUTmeFNr1yHTp8V7Zh0bH7SOJUbSq5FeQ0Qo3x48ns5KLqwU+xKHJew5vPZS7EJ5
-	PGLruKcVrrU+2yOF+NMk/sJVurx5AMK9hl
-X-Google-Smtp-Source: AGHT+IGeLxSaCCmOZYrOhpS4fQYrJKlAb1hOVaUvdIZMARS0JybXByMBW34nalQnpHzL7W3y9vXGkwkkk83WEtarRdA=
-X-Received: by 2002:a05:6512:4152:b0:553:2357:288c with SMTP id
- 2adb3069b0e04-5532357294emr3106825e87.17.1748453369179; Wed, 28 May 2025
- 10:29:29 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1748453899; x=1749058699;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XuU7vghs/Roa4fUMqe76N60+pRs9TTlZ7VpQ6fcHfmM=;
+        b=G1Ux4T8RcTpN0gJo3rtzH1M6xavg1xsRwg66ao9mJLsDB6sVJUgQgnzrpIyaiy/4/d
+         r7urco7myPuXJIf/F3/ZsrJRpcBIA2ah1rwQoJKMe/LEqlca/umRnfQEWa/9mD6xHi07
+         xyRLbDJ/H/dfZY4trpHtErM8c3+dEG3ZuE0UzYlHyU9f9jywYcJD6bJ566yzqdB3pgb0
+         wwBAleC0jT14LvJkP3jy/a5vU1tYB70JKB2S73JCX5+mMnHMDwMmYbdikbY87+2+sUnV
+         hQhxM4srvg2bak8nP0SJJYFkD31rfuZVol+NYKhI0chaF8CuwOveG9u6d+quKKfE5y2S
+         itAw==
+X-Forwarded-Encrypted: i=1; AJvYcCUD9aDr3OK83mU9awEPb1sSQOr0vnajVJaMQMQ6SDc+bA38lD9lX8ue7xvrrh5BWWdo2GorvIYWcWetX8c=@vger.kernel.org, AJvYcCW4cseKNtXmjMDGmgJxffCQ1qTXnmEKmAsXTI1SFEq9nDs6xm2yc3q75ZRtpxOzMekaoaMBiv03EZo=@vger.kernel.org, AJvYcCWyQind8k6GM57JlPInuVJrEccs8rvkO/O7bIK8S7IcirXtGAgqjwNbfH0LTsxqmzBhuMOnwiTGvjAAGg+vJn6Yxw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwanM+o4ozClsPgsheztqNFnJyeFV+FZA6TUmWd0Inea/qHhA8O
+	d2VTqX4HiNQxOGTL/THu/K2RqXo2o1Saoj3xbsgVPYZ9zXckA5Rq+Axj
+X-Gm-Gg: ASbGncs4qgzJwg5Aw5eY1NEAhtXCBnC5mJ4ahYtf/ACwoRc/yp6G7tT7mCZuiWlBcU2
+	xs/YwF5jW2nG0wmtzJhRfzWOZSSy6hmhgXD5bRSst2ZuKEogQp6PlUi6SaDvdlASK/8igOfHyfe
+	wsoaFOTpdoRx/9DfowHZaaw61dfgCavuBpTzZ/M0pQdf09kR3rxFYQ0pok7HbCys/1IYZ4/xp2B
+	ZGrCPOukPl9jJ3GTJEt0P802FZrjixebfe+uGfGec7eYvUwalid46yhwPNpc63x1Yrt98MSsydd
+	ikErl4QwhKNJe6V70Z3oYFpPlK1YzPF/2pd0Mvo5lKClma68vKX3ckNTuxNz
+X-Google-Smtp-Source: AGHT+IH0yWuJoUrC0OxGQWzTqljadyq7cuFUTOFbkQW4fn/ETHGhWue+swzwXlHVyYeAv2NimJNc6A==
+X-Received: by 2002:a05:6122:4286:b0:523:dd87:fe95 with SMTP id 71dfb90a1353d-52f2c5919c0mr15157933e0c.9.1748453899161;
+        Wed, 28 May 2025 10:38:19 -0700 (PDT)
+Received: from hiago-nb ([67.159.246.222])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-53066973c62sm1439097e0c.44.2025.05.28.10.38.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 May 2025 10:38:18 -0700 (PDT)
+Date: Wed, 28 May 2025 14:38:13 -0300
+From: Hiago De Franco <hiagofranco@gmail.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Peng Fan <peng.fan@oss.nxp.com>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Hiago De Franco <hiago.franco@toradex.com>, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	daniel.baluta@nxp.com, iuliana.prodan@oss.nxp.com,
+	Fabio Estevam <festevam@gmail.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH v2 3/3] remoteproc: imx_rproc: add power mode check for
+ remote core attachment
+Message-ID: <20250528173813.rxqu6pzqgu4m5joo@hiago-nb>
+References: <CAPDyKFpGcgMzOUHf-JTRTLBviFdLdbjZKrMm8yd37ZqJ1nfkHw@mail.gmail.com>
+ <20250521041306.GA28017@nxa18884-linux>
+ <20250521041840.GB28017@nxa18884-linux>
+ <CAPDyKFpSb+KsfDr1-=uk4TF4Op1dUQ9rDwPP5sSpMfxDRDhnZA@mail.gmail.com>
+ <20250523191713.nylhi74jq6z4hqmr@hiago-nb>
+ <CAPDyKFq6HG6iTZRnBSN25vhCU8Zj1c+r_ufGbiBsJ16N+1bJVg@mail.gmail.com>
+ <20250527000510.fofehmsdhifcwlys@hiago-nb>
+ <20250527023921.GA14252@nxa18884-linux>
+ <CAPDyKFqZkcaGfss=Oi+H9UERFU29jY2t5uTPnGVGQgSAJSeCoA@mail.gmail.com>
+ <20250527134525.f7yzs4ww64xxmjmr@hiago-nb>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250508-tegra124-cpufreq-v4-0-d142bcbd0234@gmail.com>
- <20250508-tegra124-cpufreq-v4-1-d142bcbd0234@gmail.com> <040b0d8b-e862-48dd-9b77-9266a5194f99@nvidia.com>
- <20250519101725.k644wzizjwygtwa7@vireshk-i7> <49e7d006-e9cb-49da-a4cb-b73a08f6b792@nvidia.com>
- <20250520100218.te5i5ltrx43zjsq6@vireshk-i7>
-In-Reply-To: <20250520100218.te5i5ltrx43zjsq6@vireshk-i7>
-From: Aaron Kling <webgeek1234@gmail.com>
-Date: Wed, 28 May 2025 12:29:16 -0500
-X-Gm-Features: AX0GCFuz-ai7H74ZpiHER5h5FZpctpdNrW6hh5LPSHxVFGPBRpq8sIb3pPiD9gQ
-Message-ID: <CALHNRZ_NtdiOek_bEABYpkW+p=c2RgCC4o9EXmqmAkdv3o9i6A@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] cpufreq: tegra124: Remove use of disable_cpufreq
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Jon Hunter <jonathanh@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250527134525.f7yzs4ww64xxmjmr@hiago-nb>
 
-On Tue, May 20, 2025 at 5:02=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
->
-> On 20-05-25, 10:53, Jon Hunter wrote:
-> > I understand, but this seems odd. It would be odd that the device may j=
-ust
-> > disappear after resuming from suspend if it fails to resume. I have not=
- seen
-> > this done for other drivers that fail to resume. Presumably this is not=
- the
-> > only CPU Freq driver that could fail to resume either?
-> >
-> > It makes the code messy because now we have more than one place where t=
-he
-> > device could be unregistered.
->
-> Fair enough.
->
-> This driver, along with other cpufreq drivers, can fail at multiple
-> places during suspend/resume (and other operations). If something goes
-> wrong, we print an error to inform the user. Should we avoid doing
-> anything else (like everyone else) ? i.e. Just remove the call to
-> disable_cpufreq(), as all later calls will fail anyway.
->
-> This is the only driver that behaves differently on failures.
->
-> --
-> viresh
+On Tue, May 27, 2025 at 10:45:25AM -0300, Hiago De Franco wrote:
 
-Is there any consensus on the best way to handle this? I'd like to
-keep the series moving.
+[...]
 
-Sincerely,
-Aaron
+> > 
+> > Thanks for the detailed analysis!
+> > 
+> > This is a very similar issue as many other genpd providers are
+> > suffering from - and something that I have been working on recently to
+> > fix.
+> > 
+> > A few days ago I posted a new version of a series [1], which is based
+> > upon using the fw_devlink and ->sync_state() support. In principle, we
+> > need to prevent genpd from power-off a PM domain if it was powered-on
+> > during boot , until all the consumer-drivers of a PM domain have been
+> > probed.
+> > 
+> > I had a look at the DT description of how imx describes power-domain
+> > providers/consumers, along with the corresponding genpd provider
+> > implementation in drivers/pmdomain/imx/scu-pd.c. Unless I missed
+> > something, I think [1] should do the trick for you, without any
+> > further changes. Can you please give it a try and see if that solves
+> > this problem?
+> 
+> Cool! I can give a try and provide an answer soon. Thanks!
+
+We are making progress ;-)
+
+With the patches you shared Ulf (I added them on top of the current
+master branch), it works as expected, dev_pm_genpd_is_on() returns 0
+when I boot the kernel without M4 running and it returns 1 when I boot
+the kernel with M4 running with a hello-world demo.
+
+However now I tried to, if dev_pm_genpd_is_on() returns 1, put the
+DETACHED state, something as
+
+if (dev_pm_genpd_is_on(priv->pd_list->pd_devs[0]))
+	priv->rproc->state = RPROC_DETACHED;
+
+In this case I used 0 because I understand this is the
+IMX_SC_R_M4_0_PID0 defined in my device tree overlay:
+
+		power-domains = <&pd IMX_SC_R_M4_0_PID0>,
+				<&pd IMX_SC_R_M4_0_MU_1A>;
+
+But in this case, the kernel does not boot anymore, I see the "Starting
+kernel..." and nothing else.
+
+I am using the pm_runtime functions before rproc_add():
+
+@@ -1146,6 +1154,9 @@ static int imx_rproc_probe(struct platform_device *pdev)
+                }
+        }
+
++       pm_runtime_enable(dev);
++       pm_runtime_get_sync(dev);
++
+        ret = rproc_add(rproc);
+        if (ret) {
+                dev_err(dev, "rproc_add failed\n");
+
+and calling dev_pm_genpd_is_on() after dev_pm_domain_attach_list() has
+been called.
+
+With kernel not starting I cannot even debug it. Do you have any
+suggestion on why this might be happening?
+
+> 
+> > 
+> > [...]
+> > 
+> > Kind regards
+> > Uffe
+> > 
+> > [1]
+> > https://lore.kernel.org/all/20250523134025.75130-1-ulf.hansson@linaro.org/
+> 
+> Best regards,
+> Hiago
+ 
+Best regards,
+Hiago
 
