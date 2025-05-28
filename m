@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-27717-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27718-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9DDBAC619E
-	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 08:08:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5089CAC61A7
+	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 08:10:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF08C4A5983
-	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 06:08:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D15939E60BB
+	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 06:09:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B50952101B3;
-	Wed, 28 May 2025 06:08:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E5042101B3;
+	Wed, 28 May 2025 06:10:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZE0Ma/H0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tHvZ74tM"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E0E120F085;
-	Wed, 28 May 2025 06:08:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C1D9A31;
+	Wed, 28 May 2025 06:10:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748412503; cv=none; b=KpYciTHjIu/O8t/O7ipIib2jTMvB8SIYLFbcOxyOv0OHSuq+hRS9dmUitnzSJPeA/NpGL8AgPyE6R9XPqm/VpcyZhRqWKljYzsP+zQxJBnXVqQwKLvQeUmbZNaE0b0CAQ3eQ7nQmDepSGvyjBUTOGGYpdaxMYoZpP7Yryt4gNGE=
+	t=1748412614; cv=none; b=qlAHIzzOYZRwnpbTIeGoJ6at989dcsbmhGZ8cAUZ9jM0MSZt1bYZcp6FW6kuzljsNAUscg4t8cChrg9KyDZviHgYceMikM3rJ+sRSJSqQ8e6T1g88SFReALutCVWG0QqPaW2sHhmnn13OIGDur0C722TfLdecjtTa/jLyJByrAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748412503; c=relaxed/simple;
-	bh=/JC3gGZ8Q9DdKYDyYaEVzxxLkm2Yi35dZsaPUf3NQDM=;
+	s=arc-20240116; t=1748412614; c=relaxed/simple;
+	bh=vQLNG7Sx3hoBCGbAUukPObHvWe8q5ijzd5Fnn//0Q2U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iO//SNwMUEyle9aYu66XZUXiHF3iQt7dQSWeO88Cjxm7cFO/DViCXYnTXfBJBuLWbUvyKbtTOdl6OzxWBlNf47dWCbLLgd+AMdyoB1y1o0q3YpGj9wPIXaGK/KEuKDt6R8RwFfVdMw949/B2CoNvL9ycXelo3kl61TYgCgUPVI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZE0Ma/H0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34826C4CEE7;
-	Wed, 28 May 2025 06:08:19 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=t/QMnLIS/DxDMc4xzWUyDipcUJ5SUsu1bN9NqPUu98BL71ateoOe16nmcePd3+3GLW1MNczU1UxJ3aOZludQNnNQa7Ewz3H2uZUT3xk6GBRjEf+9M1NzyEhvp/Fw1aiZ25leMTeV+0b6P4su81ll79ucLn9J3ARQj9VtM4J6siQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tHvZ74tM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DBF7C4CEE7;
+	Wed, 28 May 2025 06:10:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748412503;
-	bh=/JC3gGZ8Q9DdKYDyYaEVzxxLkm2Yi35dZsaPUf3NQDM=;
+	s=k20201202; t=1748412613;
+	bh=vQLNG7Sx3hoBCGbAUukPObHvWe8q5ijzd5Fnn//0Q2U=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZE0Ma/H0JblFA4ium+PGZRkGBmojq76R93O6Hm+rB6e3Q8iliL8+IL7lJSRpp9g+p
-	 yEVamsORm4l/eYQV8VxTFbeNHrKHbQ1dn+LhgvnMG7niB5Wu4IoklUsv2HFYXqIN5N
-	 CaMd9uFANvjfT4Z+W3k6OXiyxysdIcppfI6NTw/2Ki7u3hoV4oXcgft+MTFcpZNnXI
-	 pxPLG0x2Bpt04kKspcj8PQ+LSL3z6shBsy09EBnpWfN9BuIAIptp9Ww3nE+0CmSr/9
-	 IY7kYV5iTQsbfw5kcWGTWNUDH+nBUjyhJn9OijHs6Y/cktniJQEEpTkJ/P2JwEszpG
-	 L15qfl5UDEIRg==
-Message-ID: <250c9bf7-c958-4383-9b3f-45b4174585c5@kernel.org>
-Date: Wed, 28 May 2025 08:08:17 +0200
+	b=tHvZ74tMMAz1OE7L2QijmSeJn3FhwaKQLAHiz0zDu2/kz3eLbdoGOeUbx0VeT9UvT
+	 BmXp5FdCVLZsXwf0MGAbjMy7oID4ofibFezvIYoD95hAoBDLZ++miJSX8u0FU4Ovfp
+	 cTr2IHKzdMeZbZdtyqrLFfE/Y73r/gAEvgLnY09WHIVcaz82eOS3hILyz5IbQBbOLA
+	 qh4KrEqjLdhbeyrv3qXN8C1cJQfL1PcUoYGBreJSkFR+nhn7Tr1z9co8T34CEfmkAw
+	 EVZrTBDJKRFYjs5TakbBMFDG/cWl/A0z8D64c/kIQ2QEO4GoR7o6ybjjoaiCQwp5es
+	 iErf0PW7fDrew==
+Message-ID: <174517ff-f7a5-4dd1-b358-94af15245e37@kernel.org>
+Date: Wed, 28 May 2025 08:10:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/6] dt-bindings: mfd: add pf1550
+Subject: Re: [PATCH v3 6/6] MAINTAINERS: add an entry for pf1550 mfd driver
 To: samuel.kayode@savoirfairelinux.com, Lee Jones <lee@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
@@ -61,7 +61,7 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  abelvesa@linux.com, b38343@freescale.com, yibin.gong@nxp.com,
  Abel Vesa <abelvesa@kernel.org>
 References: <20250527-pf1550-v3-0-45f69453cd51@savoirfairelinux.com>
- <20250527-pf1550-v3-1-45f69453cd51@savoirfairelinux.com>
+ <20250527-pf1550-v3-6-45f69453cd51@savoirfairelinux.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,124 +107,36 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250527-pf1550-v3-1-45f69453cd51@savoirfairelinux.com>
+In-Reply-To: <20250527-pf1550-v3-6-45f69453cd51@savoirfairelinux.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 28/05/2025 00:25, Samuel Kayode via B4 Relay wrote:
 > From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
 > 
-> Add a DT binding document for pf1550 PMIC. This describes the core mfd
-> device along with its children: regulators, charger and onkey.
+> Add MAINTAINERS entry for pf1550 PMIC.
 > 
 > Signed-off-by: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
 > ---
-> v3:
->  - Address Krzysztof's feedback:
->    - Fold charger and onkey objects
->    - Drop compatible for sub-devices: onkey, charger and regulator.
->    - Drop constant voltage property already included in
->      monitored-battery
->    - Fix whitespace warnings
->    - Fix license
-> v2:
->  - Add yamls for the PMIC and the sub-devices
-> ---
->  Documentation/devicetree/bindings/mfd/pf1550.yaml | 139 ++++++++++++++++++++++
-
-Filename: nothing improved.
-
-
->  1 file changed, 139 insertions(+)
+>  MAINTAINERS | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/pf1550.yaml b/Documentation/devicetree/bindings/mfd/pf1550.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..7f22cb91eb5542c8aa616525ed1e78efa2a863d3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/pf1550.yaml
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 830ef5f9d86487a599236a2392e422f0e424a313..2be65383c3c7b1c1487577d23bff483aa437c4c8 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17688,6 +17688,16 @@ F:	Documentation/devicetree/bindings/clock/imx*
+>  F:	drivers/clk/imx/
+>  F:	include/dt-bindings/clock/imx*
+>  
+> +NXP PF1550 PMIC MFD DRIVER
 
+You call the entry here NXP, so maybe you "nxp" prefixes in the binding
+for compatible, properties and filename?
 
-...
+This itself is fine.
 
-> +
-> +    patternProperties:
-> +      "^(ldo[1-3]|sw[1-3]|vrefddr)$":
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml
-> +        description:
-> +          regulator configuration for ldo1-3, buck converters(sw1-3)
-> +          and DDR termination reference voltage (vrefddr)
-> +        unevaluatedProperties: false
-> +
-> +    additionalProperties: false
-> +
-> +  monitored-battery:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: |
-> +      A phandle to a monitored battery node that contains a valid value
-> +      for:
-> +      constant-charge-voltage-max-microvolt.
-> +
-> +  fsl,thermal-regulation:
-
--celsius or whatever is in standard suffixes:
-https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
-
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-
-Drop
-
-> +    description:
-> +      Temperature threshold for thermal regulation of charger in celsius.
-
-But this now makes me wonder whether this should be just part of thermal
-zone and get the threshold from there. I assume this is temperature of
-CHARGER, not the battery. If battery, you have such properties in
-battery.yaml (monitored-batter).
-
-@Sebastian,
-Are there existing bindings or devices which regulate temperature based
-on thermal-zones in DT?
-
-
-
-> +    enum: [ 60, 75, 90, 105 ]
-> +
-> +  fsl,min-system-microvolt:
-> +    description:
-> +      System specific lower limit voltage.
-> +    enum: [ 3500000, 3700000, 4300000 ]
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    battery: battery-cell {
-> +        compatible = "simple-battery";
-> +        constant-charge-voltage-max-microvolt = <4400000>;
-> +        operating-range-celsius = <0 75>;
-
-So this looks like duplicating thermal-regulation property.
-
-> +    };
-
-Blank line
-
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/input/linux-event-codes.h>
-
-Includes go before battery-cell.
-
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
 Best regards,
