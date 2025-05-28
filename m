@@ -1,185 +1,231 @@
-Return-Path: <linux-pm+bounces-27747-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27748-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FE9AAC6DEF
-	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 18:23:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EB66AC6E27
+	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 18:40:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB0A71BA46AC
-	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 16:23:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEC6316864E
+	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 16:40:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B93928CF56;
-	Wed, 28 May 2025 16:23:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EDF828D8C9;
+	Wed, 28 May 2025 16:39:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KT0aTuo3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ByvZ4mxD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62D91244670;
-	Wed, 28 May 2025 16:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6AA28DB65;
+	Wed, 28 May 2025 16:39:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748449412; cv=none; b=bpqkj4q8vJOmRjPSveqZKOVtuqohKt29PeZWMJminnS4TdevCPIEMSvw+B6Wuj5s6Ac4nWU25tTuZ0G4Eivu3B+kNg27NOFjHTbNajF9r13LRjV+V4dTQmZ09zCDnKQHSKRzjyVtnQNXgxQmpgmNKF6CmaBZvSj/9NWd1gkMEbE=
+	t=1748450386; cv=none; b=qS4PiT0ywq2BmjsAUZ2hR0Ujha+GzUzqoPVfycpu8uWS4Huhd6XWsikUj6pvMFnGpb1orK7fMTZLqwwikn+NwGsQ49ksOpOFquZaug5gIg7JHqKk5qMq5c41YMb4zy5OaWHBRrtTEByfn+G0XDSkhJYLqewC7fzogyQ9WAI4x/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748449412; c=relaxed/simple;
-	bh=cuyrb+k5/OZVTifVBSYnbWi26a1IZ56MqnHdcIIT5/g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZD/Znva7mI/D0nWu+ZuO1OTLPC3PS3L5n710y7YNHRR0ufMowMLo9lwWfFc4P9oqCc+1BHnL3HF/kba0v1x9aimAWa9XwZi+pGbXy9Twco0uhAXJnFOmEZEYhipPLa3SIcKysnuzvB6EP0uXyqqc2e9jxLt6A3xCf27Dqtg1ElU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KT0aTuo3; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748449411; x=1779985411;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cuyrb+k5/OZVTifVBSYnbWi26a1IZ56MqnHdcIIT5/g=;
-  b=KT0aTuo3RDkDd2zmcztFTSfZr/txcrc74vYIRdnWYl/QlapiXOZy3vM/
-   W0xZtHHH1vj0K1TeYBrH9i6y3DhXGkLgJCSjYleZtPS//3kgVSEM2/FlO
-   D8JpLZqlVfQSuHR33AT4cmVOnK1n6AQD+A2Cr28XCWWng8/5cpndMVdU9
-   wpIIBbyM+UFqYdffhLYTMjlMuORIJ47M+LMAelQRzAXwPqyGo8k6ABnVV
-   8t02Dbpi7No55Kr/hdr0c5hb2vNGp8gxANZx4O9sti75GVj6QGiNnvdZW
-   O1urVSqUVv7KF/yaKYN5NLbo+6HPDQO9TVgnBEzDDRNILn4WYbQdWdy9/
-   Q==;
-X-CSE-ConnectionGUID: XNeIfQpTT7Kk5Kw3StOvkg==
-X-CSE-MsgGUID: V9S/1UrNRJW+DSbHzVl8DA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11447"; a="75873562"
-X-IronPort-AV: E=Sophos;i="6.15,321,1739865600"; 
-   d="scan'208";a="75873562"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2025 09:23:30 -0700
-X-CSE-ConnectionGUID: rNRhxPlZTPqf4Kgi9QflkA==
-X-CSE-MsgGUID: oIw3JplNSjaYtPOevmeJtA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,321,1739865600"; 
-   d="scan'208";a="143285594"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 28 May 2025 09:23:25 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uKJYo-000VrE-3D;
-	Wed, 28 May 2025 16:23:23 +0000
-Date: Thu, 29 May 2025 00:22:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Samuel Kayode via B4 Relay <devnull+samuel.kayode.savoirfairelinux.com@kernel.org>,
-	Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Sebastian Reichel <sre@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Samuel Kayode <samuel.kayode@savoirfairelinux.com>,
-	eballetbo@gmail.com, abelvesa@linux.com, b38343@freescale.com,
-	yibin.gong@nxp.com, Abel Vesa <abelvesa@kernel.org>
-Subject: Re: [PATCH v3 4/6] input: pf1550: add onkey support
-Message-ID: <202505290028.2lbquDkW-lkp@intel.com>
-References: <20250527-pf1550-v3-4-45f69453cd51@savoirfairelinux.com>
+	s=arc-20240116; t=1748450386; c=relaxed/simple;
+	bh=PK5I36SR6KPvbVW5o/5/Nxx2H4DZmk3oW5UwCer9tb8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HtDZ/RJUQkARXd3nCu83H0gbj3Har4aWU2EZyxwzXts7bJfDT/6wF55m66a2+u51k/jdPUCLaANSHVGN2XLpQGSftWDUGuXIHGHyMGgUSCwvbfovzh0iVb5H//Xr6ybhQZDThtTlInUyfR+vsRJIQptOXAkbYePUnts527qC2Lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ByvZ4mxD; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-ad883afdf0cso531810266b.0;
+        Wed, 28 May 2025 09:39:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748450382; x=1749055182; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VKX1pLwdxEywKNCdYX14Pz2UBR1qa4gDnMcpTfxzuao=;
+        b=ByvZ4mxD15OlSA0j06VQ6oQDQ/wCcd9LA3T60RzohzwRaajn/pDtjp88scPFMil3Uc
+         a7d78antlm2MQFGXTnxViJ2yNNjxQhWOw4/KyDvxhhhjl/ns6POnIfAacuTJxZPojTxB
+         KrVqeFR6mGe8DdVH7zc4QepF8P14B7twFP2XXGii7fXI3B/5Q9f4BM9CZn4FFE1sOKCm
+         LnqyikqbnB7VWXgn0EwwFYqe62sNP2IGSs2YyT73ep+H7n7HtisT4zsBJhaW35jcAmur
+         HV/Jf2SIPMCdrtYRG5IaOKciiCBQJTDQkqUWR2VwTDErJBU1QrFH39tNNjCUruqEItPp
+         wGgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748450382; x=1749055182;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VKX1pLwdxEywKNCdYX14Pz2UBR1qa4gDnMcpTfxzuao=;
+        b=ArqsscaoeiZtJC0DmAJdmolqsOvGDatW3QvSZ6Val3q4VgLpFrJoMJTM+txiEQnV2l
+         DA4Z79SKCSh0NY3aw/534aGOyi2cZVGwesilKKDTaIUSlan5yHT9TwJ5OtoKM0jDdc9r
+         vOnC5vsTUx7pHxbgfAPNVA4eVAONDnLw63aoQ6vwHkolXOJaT6M1kLB1g4phdURENHiq
+         cVmH0UdyJaaLerxW3BZtQ6dmsV97SojI4xujWBlfiRvgaUy8/KxqlXVSkeJx8kqf7WOl
+         bu1NrvGTJXSiB6BUPDcK2CZQbzVRd7JClrZG+ZROjI/UacKjZB6PhDLMk0QivP6eiRBu
+         /PFg==
+X-Forwarded-Encrypted: i=1; AJvYcCUGbWcv1P+MQtknStJdYHp8Xi2EAcBpKl1o0SKRTm1lJZyZ17FoyIWXM7bqpMylO+siQcj0Gxvr5mc=@vger.kernel.org, AJvYcCVfKx6cuvkUnxLePRMigMI6m548FXTvUfcWHs9NUK5agpu5BxiBIxSqNltgflCsuVZrK02T1HJqA3vZPX8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJdNVuvNqx/UQxsPnlPb3FsY6Uyf5z45jjVXw7OvMbooGhajta
+	QIP2hXoNFmQ6mBWTn8JrAIiK46Wm2rHRFfCsoEBMl+xJNQH7HmAvzby88IL1lWIiQHVuK1lt3+N
+	3Adyd1PjCOKOdyJ4Khcl9xV2CZ7FGSS4=
+X-Gm-Gg: ASbGncuBSVHE1SC4/01rBvymeSeZVVFe47HjNf9D45tqxz54E0ZxwpFDteuQ2mvr0bT
+	2B8Ab2DqcEHLtbvvzqJVqVlxyenPFCDvfBzDGq9uyHsbKW5mPoDNZSh5/1KBFAYhxDihDaPdnnT
+	iDlxONSd70rfxk2Ogao4Z+0YxC1m/VGiI=
+X-Google-Smtp-Source: AGHT+IHtke/J7pX7aA75Lv72+AWPYtXUnawbwRg8keF4TFoH7myfHumge6n7abfdZpauiHv1YhpnhbXU7KZ+KKW/qZM=
+X-Received: by 2002:a17:907:da3:b0:ad8:9b5d:2c26 with SMTP id
+ a640c23a62f3a-ad89b5d2e87mr425218266b.30.1748450382185; Wed, 28 May 2025
+ 09:39:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250527-pf1550-v3-4-45f69453cd51@savoirfairelinux.com>
+References: <20250113044107.566-1-gautham.shenoy@amd.com> <aDaB63tDvbdcV0cg@HQ-GR2X1W2P57>
+ <aDb6Mgg3TqyR2IRT@BLRRASHENOY1.amd.com>
+In-Reply-To: <aDb6Mgg3TqyR2IRT@BLRRASHENOY1.amd.com>
+From: Manu Bretelle <chantr4@gmail.com>
+Date: Wed, 28 May 2025 09:39:31 -0700
+X-Gm-Features: AX0GCFutIJtBiXdzMO7ABReyuippZSjiExk3NiGS0UThEwallEw2Do4W0buLZVU
+Message-ID: <CAArYzrJHSFgiiPamMDfp9-nvHr1+SGfQ-tgOpJ5tgR5Wtw+Mnw@mail.gmail.com>
+Subject: Re: [PATCH] acpi-cpufreq: Fix max-frequency computation
+To: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+Cc: Mario Limonciello <mario.limonciello@amd.com>, 
+	Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Adam Clark <Adam.Clark@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Samuel,
+>
+> No, the patch has a bug. The nominal_frequency returned from the
+> get_max_boost_ratio() function was in MHz, while cpufreq maintains
+> frequencies in KHz due to which the computed max_frequency was
+> incorrect and thus as a fallback, cpufreq reported P0 frequency as the
+> cpuinfo_max_freq.
+>
+> Can you please try the following patch on top of the original one?
 
-kernel test robot noticed the following build warnings:
+Thanks for the quick turnaround Gautham.
 
-[auto build test WARNING on 0a4b866d08c6adaea2f4592d31edac6deeb4dcbd]
+I applied this patch on top of a fresh Ubuntu 22.04 5.15.0-140-generic tree and
+confirmed that CPU max MHz reports its original value.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Kayode-via-B4-Relay/dt-bindings-mfd-add-pf1550/20250528-062840
-base:   0a4b866d08c6adaea2f4592d31edac6deeb4dcbd
-patch link:    https://lore.kernel.org/r/20250527-pf1550-v3-4-45f69453cd51%40savoirfairelinux.com
-patch subject: [PATCH v3 4/6] input: pf1550: add onkey support
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20250529/202505290028.2lbquDkW-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 14.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250529/202505290028.2lbquDkW-lkp@intel.com/reproduce)
+Thanks!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505290028.2lbquDkW-lkp@intel.com/
+Manu
 
-All warnings (new ones prefixed by >>):
+  $ uname  -r
+  5.15.0-9991-generic
+  $ lscpu
+  Architecture:             x86_64
+    CPU op-mode(s):         32-bit, 64-bit
+    Address sizes:          48 bits physical, 48 bits virtual
+    Byte Order:             Little Endian
+  CPU(s):                   128
+    On-line CPU(s) list:    0-127
+  Vendor ID:                AuthenticAMD
+    Model name:             AMD EPYC 7713P 64-Core Processor
+      CPU family:           25
+      Model:                1
+      Thread(s) per core:   2
+      Core(s) per socket:   64
+      Socket(s):            1
+      Stepping:             1
+      Frequency boost:      enabled
+      CPU max MHz:          3720.7029
+      CPU min MHz:          1500.0000
+      BogoMIPS:             3992.55
+      Flags:                fpu vme de pse tsc msr pae mce cx8 apic
+sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscal
+                            l nx mmxext fxsr_opt pdpe1gb rdtscp lm
+constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid aperfmperf
+                            rapl pni pclmulqdq monitor ssse3 fma cx16
+pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand lahf_lm
+                            cmp_legacy svm extapic cr8_legacy abm
+sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perf
+                            ctr_core perfctr_nb bpext perfctr_llc
+mwaitx cpb cat_l3 cdp_l3 invpcid_single hw_pstate ssbd mba ibrs ibpb
+                            stibp vmmcall fsgsbase bmi1 avx2 smep bmi2
+erms invpcid cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xs
+                            aveopt xsavec xgetbv1 xsaves cqm_llc
+cqm_occup_llc cqm_mbm_total cqm_mbm_local clzero irperf xsaveerptr rdp
+                            ru wbnoinvd amd_ppin arat npt lbrv
+svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists
+pausef
+                            ilter pfthreshold v_vmsave_vmload vgif
+v_spec_ctrl umip pku ospke vaes vpclmulqdq rdpid overflow_recov succ
+                            or smca fsrm
+  Virtualization features:
+    Virtualization:         AMD-V
+  Caches (sum of all):
+    L1d:                    2 MiB (64 instances)
+    L1i:                    2 MiB (64 instances)
+    L2:                     32 MiB (64 instances)
+    L3:                     256 MiB (8 instances)
+  NUMA:
+    NUMA node(s):           1
+    NUMA node0 CPU(s):      0-127
+  Vulnerabilities:
+    Gather data sampling:   Not affected
+    Itlb multihit:          Not affected
+    L1tf:                   Not affected
+    Mds:                    Not affected
+    Meltdown:               Not affected
+    Mmio stale data:        Not affected
+    Reg file data sampling: Not affected
+    Retbleed:               Not affected
+    Spec rstack overflow:   Mitigation; safe RET
+    Spec store bypass:      Mitigation; Speculative Store Bypass
+disabled via prctl and seccomp
+    Spectre v1:             Mitigation; usercopy/swapgs barriers and
+__user pointer sanitization
+    Spectre v2:             Mitigation; Retpolines; IBPB conditional;
+IBRS_FW; STIBP always-on; RSB filling; PBRSB-eIBRS Not affected;
+                            BHI Not affected
+    Srbds:                  Not affected
+    Tsx async abort:        Not affected
 
->> drivers/input/misc/pf1550-onkey.c:153:12: warning: 'pf1550_onkey_resume' defined but not used [-Wunused-function]
-     153 | static int pf1550_onkey_resume(struct device *dev)
-         |            ^~~~~~~~~~~~~~~~~~~
->> drivers/input/misc/pf1550-onkey.c:126:12: warning: 'pf1550_onkey_suspend' defined but not used [-Wunused-function]
-     126 | static int pf1550_onkey_suspend(struct device *dev)
-         |            ^~~~~~~~~~~~~~~~~~~~
+>
+>
+> ------------------------x8------------------------------------------------
+>
+> From 13d5c28823ed03353059801281d3b22e9f139a8d Mon Sep 17 00:00:00 2001
+> From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+> Date: Wed, 28 May 2025 16:43:33 +0530
+> Subject: [PATCH] acpi-cpufreq: Fix nominal_freq units to KHz in get_max_boost_ratio()
+>
+> commit 083466754596 ("cpufreq: ACPI: Fix max-frequency computation")
+> modified get_max_boost_ratio() to return the nominal_freq advertised
+> in the _CPC object for the purposes of computing the maximum
+> frequency. The frequencies advertised in _CPC objects are in MHz but
+> cpufreq expects the frequency to be in KHz. Because the
+> nominal_frequency was not converted to KHz, the cpuinfo_max_frequency
+> that got computed was incorrect and the cpufreq reported the P0
+> frequency as the cpuinfo_max_freq.
+>
+> Fix this by returning nominal_freq in KHz in get_max_boost_ratio()
+>
+> Reported-by: Manu Bretelle <chantr4@gmail.com>
+> Closes: https://lore.kernel.org/lkml/aDaB63tDvbdcV0cg@HQ-GR2X1W2P57/
+> Fixes: 083466754596 ("cpufreq: ACPI: Fix max-frequency computation")
+> Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 
+Tested-by: Manu Bretelle <chantr4@gmail.com>
 
-vim +/pf1550_onkey_resume +153 drivers/input/misc/pf1550-onkey.c
-
-   125	
- > 126	static int pf1550_onkey_suspend(struct device *dev)
-   127	{
-   128		struct platform_device *pdev = to_platform_device(dev);
-   129		struct onkey_drv_data *onkey = platform_get_drvdata(pdev);
-   130		struct irq_domain *domain;
-   131		unsigned int virq;
-   132		int i;
-   133	
-   134		domain = regmap_irq_get_domain(onkey->pf1550->irq_data_onkey);
-   135	
-   136		if (!device_may_wakeup(&pdev->dev)) {
-   137			regmap_write(onkey->pf1550->regmap,
-   138				     PF1550_PMIC_REG_ONKEY_INT_MASK0,
-   139				     ONKEY_IRQ_PUSHI | ONKEY_IRQ_1SI | ONKEY_IRQ_2SI |
-   140				     ONKEY_IRQ_3SI | ONKEY_IRQ_4SI | ONKEY_IRQ_8SI);
-   141		} else {
-   142			for (i = 0; i < PF1550_ONKEY_IRQ_NR; i++) {
-   143				virq = irq_find_mapping(domain, i);
-   144	
-   145				if (virq)
-   146					enable_irq_wake(virq);
-   147			}
-   148		}
-   149	
-   150		return 0;
-   151	}
-   152	
- > 153	static int pf1550_onkey_resume(struct device *dev)
-   154	{
-   155		struct platform_device *pdev = to_platform_device(dev);
-   156		struct onkey_drv_data *onkey = platform_get_drvdata(pdev);
-   157		struct irq_domain *domain;
-   158		unsigned int virq;
-   159		int i;
-   160	
-   161		domain = regmap_irq_get_domain(onkey->pf1550->irq_data_onkey);
-   162	
-   163		if (!device_may_wakeup(&pdev->dev)) {
-   164			regmap_write(onkey->pf1550->regmap,
-   165				     PF1550_PMIC_REG_ONKEY_INT_MASK0,
-   166				     ~((u8)(ONKEY_IRQ_PUSHI | ONKEY_IRQ_1SI |
-   167				     ONKEY_IRQ_2SI | ONKEY_IRQ_3SI | ONKEY_IRQ_4SI |
-   168				     ONKEY_IRQ_8SI)));
-   169		} else {
-   170			for (i = 0; i < PF1550_ONKEY_IRQ_NR; i++) {
-   171				virq = irq_find_mapping(domain, i);
-   172	
-   173				if (virq)
-   174					disable_irq_wake(virq);
-   175			}
-   176		}
-   177	
-   178		return 0;
-   179	}
-   180	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  drivers/cpufreq/acpi-cpufreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+> index d26b610e4f24..76768fe213a9 100644
+> --- a/drivers/cpufreq/acpi-cpufreq.c
+> +++ b/drivers/cpufreq/acpi-cpufreq.c
+> @@ -660,7 +660,7 @@ static u64 get_max_boost_ratio(unsigned int cpu, u64 *nominal_freq)
+>         nominal_perf = perf_caps.nominal_perf;
+>
+>         if (nominal_freq)
+> -               *nominal_freq = perf_caps.nominal_freq;
+> +               *nominal_freq = perf_caps.nominal_freq * 1000;
+>
+>         if (!highest_perf || !nominal_perf) {
+>                 pr_debug("CPU%d: highest or nominal performance missing\n", cpu);
+> --
+> 2.34.1
+>
+>
+> --
+> Thanks and Regards
+> gautham.
 
