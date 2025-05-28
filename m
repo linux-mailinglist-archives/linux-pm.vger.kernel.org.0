@@ -1,210 +1,134 @@
-Return-Path: <linux-pm+bounces-27726-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27727-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBF8DAC6875
-	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 13:35:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CB56AC6891
+	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 13:44:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 774751BC0768
-	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 11:36:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 257E94E013D
+	for <lists+linux-pm@lfdr.de>; Wed, 28 May 2025 11:44:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C72527AC50;
-	Wed, 28 May 2025 11:35:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01F022836BD;
+	Wed, 28 May 2025 11:44:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RB9joLEF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oiarlWmS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726541E8854;
-	Wed, 28 May 2025 11:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4511D1DE3CA
+	for <linux-pm@vger.kernel.org>; Wed, 28 May 2025 11:44:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748432147; cv=none; b=fFjYizhzrx2N8fwUwM2+gX/d6nfX7J5N62o+AHGdCuNs+yNyQu5v+04lbT80e3BQouutRBT6+MOb8GGywrsQglYI+QGAn2BW7Ts3xP1n/NVVDveONI3A9prAaeaUmID07lGnJMvNpnQphAWdpBWHihi2fcT7thyENa38XLhyvOY=
+	t=1748432684; cv=none; b=Ql6Wk+35RvXKnpESorU7ztsGq3J4Ic9PPGEq3dAyavi1EbiaUuLEt7pzxZXI4xCNPnrvl3p0XXYR5L6EFNAFpch7pnOGdlvgRLZ3wZCooWvBZbaJ8dS/aQzEsZjn65YtAYSMC/0wVW5yPvwah4vSysDE2+z/ij7Av/WkPtNtA9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748432147; c=relaxed/simple;
-	bh=2lEqCZdr8xy4W4NYNBUeucB3WeNNwu4LSJR94oM86fI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jJd9gLpgJ6TLsmHkIbjSP7zhoOq+X2ynn7TYYYRob/HlMRu+eJt7Mlskp0FyIe8uv+HuHNCrBOaxsdbEucDXOk95RZzJHTeIB5hZatK2hehvenQhL0CAgDk3Yflq8Rcd20xbEWwSxb7a0PheyQtX/PJjHYCt1kiOFfBEJQyUz/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RB9joLEF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 460C5C4CEEB;
-	Wed, 28 May 2025 11:35:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748432147;
-	bh=2lEqCZdr8xy4W4NYNBUeucB3WeNNwu4LSJR94oM86fI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=RB9joLEF6tAut9ZjZ/5tYcTmGfbIOF3qTaQxB0/9c/DKfoMsbNnE8vYkiHsZA5CwN
-	 yIE+W1PVuM1oWjZ7PPwNbC8bRtvNWlmlyK6xDD+Zp3odt/Lr0EN2K45Vg3po8yED6+
-	 b6WIKC5il75RfhC1Oyd2tQS5NxXfjaq7RSu4EG7uxsEd0TfBqUA84T0+mL80bTXmb5
-	 aB7h0/jPwtW4eTJTpclRiwSx3obtwXPjZk/6E+JMdt/WXERHUgxicNK0qKPki5M7l/
-	 STTfuXEU4vHqZ3nS08e4SrSopZPBz+8K41q5etodpHyJlfCNE1QL9hBeCHA7rcWOhN
-	 OtbXf8pO+ycXw==
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3fe83c8cbdbso1065214b6e.3;
-        Wed, 28 May 2025 04:35:47 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVAg57HxRbV5Znq/tT94Y+6yRIbghjFaRCqgWtR3r7eQr+F+4TZ0xr9TbvsRB1q/RJbA9Y/sGmaIAkqAPtBJQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3E4J8AfK+2gvqjYAtvLMe/JQQ7tBMYi7fVwSSLDohO4iSevuR
-	vWvSTEgMBGx1wEBTXeNEosvY+0BZOwymXm4WfUbKOe3XKP5tBF76hZE7pmZETImR83hvLZY6U8+
-	MnWGxW0Lx/4Obb+XVOdG+igWp1gUJHYI=
-X-Google-Smtp-Source: AGHT+IHeGft4ZhLUsfjL4ahtb4bPFGOTC7gQgr0DUvsn209gFaDaPQAsnzz0Fu+4vaV4SSC3SSEgjz+nJQMEOLX63Nk=
-X-Received: by 2002:a05:6808:1c09:b0:402:ebf9:b774 with SMTP id
- 5614622812f47-4064674456dmr8945066b6e.0.1748432146468; Wed, 28 May 2025
- 04:35:46 -0700 (PDT)
+	s=arc-20240116; t=1748432684; c=relaxed/simple;
+	bh=5w3iOt7bx4YXe3uuZGSNrtCQB20LCWbDNaBLbSF/puo=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=uEt+PPi2qO9LsqPgr8brprTldRLoZcFYbVYtakXfKtDGsUbVYv6aw55QbRfe2FlUSUrTxe6B16XJXGi4A5uu/1z1k9wPh8cJdFv+lEU4lqOFEe8P/Ys8O9CUurUMPOzNFR13B/YL1OEdhW9phERyiQ4VN3oh+iyGvC+msZYGgDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oiarlWmS; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-441c122fa56so21422705e9.2
+        for <linux-pm@vger.kernel.org>; Wed, 28 May 2025 04:44:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1748432681; x=1749037481; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YESEUHNULXjnKu632GnMNSEi7CRefD1s+NpQnb/WNfg=;
+        b=oiarlWmSNnqq+ZKXlXCDsK89LbLyI8oI58y2Vm+ihgkKnVCdwGxJ6NRFX2tW3oImp/
+         PBb+oBejls+8o1Erguti5kRYaZi1t/xYGV+UqW9qxQwwWGlhGjHUUw8y6zhc3jzhinuA
+         eaH6DXQ64MVIZo1jyPSfEBcohDnZJsARt806yenyUFSeTEsmoEdKye8fvOkVOLlz4/xI
+         qV9ZpUAtfSVMdEsC43yEeoc7P9pw5W3bmaTdgaF+lzdPKb2mW/Mc26VkcJuG43T8n5Aa
+         +NiC0sYVBh0SZXrvd0j6AityOsZedslhxCOLZDSZYNnYowYGwQPr30th3MK2l8OLYsQF
+         3cyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748432681; x=1749037481;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YESEUHNULXjnKu632GnMNSEi7CRefD1s+NpQnb/WNfg=;
+        b=D6K1Xs4FQMXYPEqKBAb33KUl0iwffYC3Lv5YW6ku/gIY6ZJyXsZLLLMde9M/j25ewh
+         C5ve2b2NatOFuo7uaSo8e87dva9IJncMp3m63/Mx8Hll5HDAHlaTRQyPAgIoYH+wyf6R
+         FijIABJI2WdWcTAf+QJJPBZEHGT21C7zFQma1CDJDdOr9ooj5Iag2CwvYkD+iywvJeL6
+         VgEGS4ViHEX1y0FR9obbW6q5JWl0T1mvNz0X/PpvEiO8xZ+XNr2D8lF33UyoUmExfZTt
+         3B3D8PtB65ZmyXiuPLx7KVEEPBhQwsBjNFepfj10pAI4b/ZorvOwQi0I3D0HcQaYmsNL
+         r7pA==
+X-Forwarded-Encrypted: i=1; AJvYcCX7iHJR4Mv5a3ZJkiD6+AcMs1B0nHWZJb0WSQ5brL911XEQkPisrzj3aJ/LTu9GhT/djWkhIoZESQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNZ6XFTLWDUGcxQd6msFwMUpnjQLv8BJe1/BixTvk1S8/dpm9j
+	wrZ1/Yk0S8w4yQky962+XQcKMaeNdFANjMC6RBSm4GpEYC1Nd+1PW1fi1LfwP/ViIKyVo6a7H8U
+	ZpGASRl1khRGK3VOMKw==
+X-Google-Smtp-Source: AGHT+IFrdANS9CV9/9pHZOtJqQeMGzp4ixqVl0yKawCo3pc59IGgF9aalERcu0cITtJClcGXKVU9Vs70mqonTYc=
+X-Received: from wmbjg14.prod.google.com ([2002:a05:600c:a00e:b0:450:cb9b:38ad])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:13d3:b0:450:6b55:cf91 with SMTP id 5b1f17b1804b1-4506b55d111mr12634255e9.6.1748432681772;
+ Wed, 28 May 2025 04:44:41 -0700 (PDT)
+Date: Wed, 28 May 2025 11:44:39 +0000
+In-Reply-To: <CAJZ5v0iNwBhpmkwuo7Z_dGmLE5KQGONNRrt5kykXXKRoORTShA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
 References: <20250520061944.pl3mqw2clo2roe3s@vireshk-i7> <CAJZ5v0gBRQ87bFk3-MCOudgvGWb29O_ihfz0Lo2kGcVpfSu=nQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0gBRQ87bFk3-MCOudgvGWb29O_ihfz0Lo2kGcVpfSu=nQ@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 28 May 2025 13:35:35 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iNwBhpmkwuo7Z_dGmLE5KQGONNRrt5kykXXKRoORTShA@mail.gmail.com>
-X-Gm-Features: AX0GCFvziRYcxmTycnZ5vfAnVYe_x0N7HfdeogcoNWQHL9PxOKij-gZakvyQTWc
-Message-ID: <CAJZ5v0iNwBhpmkwuo7Z_dGmLE5KQGONNRrt5kykXXKRoORTShA@mail.gmail.com>
+ <CAJZ5v0iNwBhpmkwuo7Z_dGmLE5KQGONNRrt5kykXXKRoORTShA@mail.gmail.com>
+Message-ID: <aDb3JzdsrrLAxPlW@google.com>
 Subject: Re: [GIT PULL] cpufreq/arm updates for 6.16
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+From: Alice Ryhl <aliceryhl@google.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 
-Hi Viresh,
+On Wed, May 28, 2025 at 01:35:35PM +0200, Rafael J. Wysocki wrote:
+> Two merge conflicts between this material and the mainline have
+> emerged since v6.15.
+> 
+> I've resolved them (they appear to be straightforward to me), but I
+> would appreciate double checking the most recent pm-cpufreq merge into
+> linux-next:
+> 
+> https://web.git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=linux-next&id=25eb7dda15f182b7355488a5aca47078643633dc
+> 
+> and letting me know if it looks good.
+> 
+> Thanks!
 
-On Thu, May 22, 2025 at 12:20=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.o=
-rg> wrote:
->
-> On Tue, May 20, 2025 at 8:19=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro=
-.org> wrote:
-> >
-> > Hi Rafael,
-> >
-> > This contains few patches from Danilo Krummrich as well, which will
-> > get merged via driver-core separately. Please push this to Linus once
-> > that is merged during rc1. Thanks.
-> >
-> > The following changes since commit a374f28700abd20e8a7d026f89aa26f75944=
-5918:
-> >
-> >   cpufreq: fix compile-test defaults (2025-04-17 13:36:29 +0530)
-> >
-> > are available in the Git repository at:
-> >
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpu=
-freq-arm-updates-6.16
-> >
-> > for you to fetch changes up to 6c9bb86922728c7a4cceb99f131e00dd87514f20=
-:
-> >
-> >   cpufreq: scmi: Skip SCMI devices that aren't used by the CPUs (2025-0=
-5-20 11:24:18 +0530)
-> >
-> > ----------------------------------------------------------------
-> > CPUFreq updates for 6.16
-> >
-> > - Rust abstractions for CPUFreq framework (Viresh Kumar).
-> >
-> > - Rust abstractions for OPP framework (Viresh Kumar).
-> >
-> > - Basic Rust abstractions for Clk and Cpumask frameworks (Viresh Kumar)=
-.
-> >
-> > - Minor cleanup to the SCMI cpufreq driver (Mike Tipton).
-> >
-> > ----------------------------------------------------------------
-> > Anisse Astier (1):
-> >       rust: macros: enable use of hyphens in module names
-> >
-> > Danilo Krummrich (8):
-> >       rust: device: implement impl_device_context_deref!
-> >       rust: device: implement impl_device_context_into_aref!
-> >       rust: device: implement device context for Device
-> >       rust: platform: preserve device context in AsRef
-> >       rust: pci: preserve device context in AsRef
-> >       rust: device: implement Bound device context
-> >       rust: pci: move iomap_region() to impl Device<Bound>
-> >       rust: devres: require a bound device
-> >
-> > Mike Tipton (1):
-> >       cpufreq: scmi: Skip SCMI devices that aren't used by the CPUs
-> >
-> > Viresh Kumar (16):
-> >       Merge commit 'eaff6b62d343' of pm/linux-next into commit 'f720efd=
-a2db5' of driver-core/driver-core-next
-> >       rust: cpumask: Add few more helpers
-> >       rust: cpumask: Add initial abstractions
-> >       MAINTAINERS: Add entry for Rust cpumask API
-> >       rust: clk: Add helpers for Rust code
-> >       rust: clk: Add initial abstractions
-> >       rust: cpu: Add from_cpu()
-> >       rust: opp: Add initial abstractions for OPP framework
-> >       rust: opp: Add abstractions for the OPP table
-> >       rust: opp: Add abstractions for the configuration options
-> >       rust: cpufreq: Add initial abstractions for cpufreq framework
-> >       rust: cpufreq: Extend abstractions for policy and driver ops
-> >       rust: cpufreq: Extend abstractions for driver registration
-> >       rust: opp: Extend OPP abstractions with cpufreq support
-> >       cpufreq: Add Rust-based cpufreq-dt driver
-> >       Merge branch 'rust/cpufreq-dt' into cpufreq/arm/linux-next
-> >
-> >  MAINTAINERS                     |   11 ++
-> >  drivers/cpufreq/Kconfig         |   12 ++
-> >  drivers/cpufreq/Makefile        |    1 +
-> >  drivers/cpufreq/amd-pstate.c    |    7 +-
-> >  drivers/cpufreq/cpufreq.c       |  345 +++++++++++++++++--------------=
---------
-> >  drivers/cpufreq/intel_pstate.c  |   47 +++---
-> >  drivers/cpufreq/rcpufreq_dt.rs  |  226 ++++++++++++++++++++++++++
-> >  drivers/cpufreq/scmi-cpufreq.c  |   36 ++++-
-> >  include/linux/cpufreq.h         |   10 +-
-> >  rust/bindings/bindings_helper.h |    4 +
-> >  rust/helpers/clk.c              |   66 ++++++++
-> >  rust/helpers/cpufreq.c          |   10 ++
-> >  rust/helpers/cpumask.c          |   25 +++
-> >  rust/helpers/helpers.c          |    2 +
-> >  rust/kernel/clk.rs              |  334 +++++++++++++++++++++++++++++++=
-+++++++
-> >  rust/kernel/cpu.rs              |   30 ++++
-> >  rust/kernel/cpufreq.rs          | 1321 +++++++++++++++++++++++++++++++=
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-+++++++++++++++++++++++++++++++++++++++++++
-> >  rust/kernel/cpumask.rs          |  330 +++++++++++++++++++++++++++++++=
-++++++
-> >  rust/kernel/device.rs           |   90 ++++++++++-
-> >  rust/kernel/devres.rs           |   17 +-
-> >  rust/kernel/lib.rs              |    7 +
-> >  rust/kernel/opp.rs              | 1145 +++++++++++++++++++++++++++++++=
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-+++++++++++++++++++++++
-> >  rust/kernel/pci.rs              |   33 ++--
-> >  rust/kernel/platform.rs         |   32 +---
-> >  rust/macros/module.rs           |   20 ++-
-> >  25 files changed, 3861 insertions(+), 300 deletions(-)
-> >  create mode 100644 drivers/cpufreq/rcpufreq_dt.rs
-> >  create mode 100644 rust/helpers/clk.c
-> >  create mode 100644 rust/helpers/cpufreq.c
-> >  create mode 100644 rust/kernel/clk.rs
-> >  create mode 100644 rust/kernel/cpu.rs
-> >  create mode 100644 rust/kernel/cpufreq.rs
-> >  create mode 100644 rust/kernel/cpumask.rs
-> >  create mode 100644 rust/kernel/opp.rs
-> >
-> > --
->
-> Pulled and added to linux-pm.git/linux-next, thanks!
+Usually we keep them sorted:
 
-Two merge conflicts between this material and the mainline have
-emerged since v6.15.
+diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
+index 88ab11d74fc7..2c917889d9ba 100644
+--- a/rust/bindings/bindings_helper.h
++++ b/rust/bindings/bindings_helper.h
+@@ -10,8 +10,8 @@
+ #include <linux/blk-mq.h>
+ #include <linux/blk_types.h>
+ #include <linux/blkdev.h>
+-#include <linux/configfs.h>
+ #include <linux/clk.h>
++#include <linux/configfs.h>
+ #include <linux/cpu.h>
+ #include <linux/cpufreq.h>
+ #include <linux/cpumask.h>
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index 6eb61c87b616..3a618f82fb02 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -42,9 +42,9 @@
+ pub mod block;
+ #[doc(hidden)]
+ pub mod build_assert;
++pub mod clk;
+ #[cfg(CONFIG_CONFIGFS_FS)]
+ pub mod configfs;
+-pub mod clk;
+ pub mod cpu;
+ #[cfg(CONFIG_CPU_FREQ)]
+ pub mod cpufreq;
 
-I've resolved them (they appear to be straightforward to me), but I
-would appreciate double checking the most recent pm-cpufreq merge into
-linux-next:
+Otherwise LGTM.
 
-https://web.git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/com=
-mit/?h=3Dlinux-next&id=3D25eb7dda15f182b7355488a5aca47078643633dc
-
-and letting me know if it looks good.
-
-Thanks!
+Alice
 
