@@ -1,34 +1,34 @@
-Return-Path: <linux-pm+bounces-27775-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27776-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 657D1AC74E1
-	for <lists+linux-pm@lfdr.de>; Thu, 29 May 2025 02:14:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F9CEAC74E2
+	for <lists+linux-pm@lfdr.de>; Thu, 29 May 2025 02:15:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29BC81BC7D8F
-	for <lists+linux-pm@lfdr.de>; Thu, 29 May 2025 00:14:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2128A1BC803B
+	for <lists+linux-pm@lfdr.de>; Thu, 29 May 2025 00:15:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C18A717BA9;
-	Thu, 29 May 2025 00:14:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0DA9288A2;
+	Thu, 29 May 2025 00:14:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="QbVhsw1N"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="QVuFRpwy"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DD2BB67A;
-	Thu, 29 May 2025 00:13:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0822F28399;
+	Thu, 29 May 2025 00:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748477642; cv=none; b=ept0c/pZ5LSsI1qsuJbMP9+TGWRGwekLkFrjC+crLvc1rJP8c/gEqnsX7hznT9yYeNn63JarJDu24EhvZzneGct85B3HoZqiOS9OhteqRztKR9hfDj8tWhKX2J5sdXivDsNUW3o4UP0p5NCNvLSAflqbihLQdjBqNooBsU67VQg=
+	t=1748477649; cv=none; b=czrA5imDemfS/yjrhpuoGzJLMWZ+CoHZ8UNQd5ea9RJN5RMWyPJpXHZZbm5esEZi6vgmB09+nfYEVedUJhdpRKxxS/V8lv7DVyIFzzwz0RnrjgkaxoR+UhwrSNLXGAaOigdR3dl9gOogqFRD7ENZcmK/BjUDwkhOOZDaXI7wb9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748477642; c=relaxed/simple;
-	bh=s55kvL81M6t2dqvawvXlqAz6LmeznoRLQGOWTuBVP7Q=;
+	s=arc-20240116; t=1748477649; c=relaxed/simple;
+	bh=5iBVIy5wRtyFD5+cTC9jW4LzEKxOwEnEgIoZzPZ0Jfs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YgEduQlkvpFv/8e05zBHXAAF9PTkqdzpIG7BsGlEkfNeLWJKf54CXIwDFbS3FoSH/Vk0YKDFTyzSDb5orbD17qP4xZIq0T6nUuy73QukPaj2nDczI29qgbqnQx6XVW/8c/mXg+s49tLk7dwRnFtcI3YhbjlUxMFu21p2Qmvqdd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=QbVhsw1N; arc=none smtp.client-ip=213.97.179.56
+	 MIME-Version; b=TzR7ipNk60tXzAFrJF6h3FvJ26YlIY7nCPQ+wCIW40RmTKRoeY5H5veJ8Ga+lWAguYZxnFb+AGCQPfwkDXFmjeGYI6IjUbowm5tEolt+5l+GM/DUbyUYphE2i8u9IsCTwk+CIce9WNzLAtfmIvjqmN6iW44ixcmppUPXdUFvrYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=QVuFRpwy; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
@@ -37,16 +37,16 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=1O+rcdio6J6uZHO+lAjIDTKwuWkhySxmjhn8uaYvZ90=; b=QbVhsw1NVyS553ik4iDulYMNTl
-	hp2htG5zbhzNLZ+CYTdkhryFnEYs82rGFSxnu2IxSZ1Mtfjpvp4vxXB2R/wQiPV0uvUG2WpbD6X6e
-	ah/6nyxj9+uoC4OwQy5QJoRqHlfb0hgCbMDqycXCapRmdI3v+GMkbhVlKOv1LO/r9P1L1p+EC8/mf
-	27BTPAVGIHrIUOXrk0xd6SmSLy6Vtyp5DfBeamd1mYhcupbjfwHTIHb986FBJpXn6ACE0FWTgfhh3
-	Qu1fV0FXRq8BYPip0oqblQAfPGNVC3eTCMZzjPBC3hcV5I84Y2Odaav7MqEuowQqJSN6HkE/nALu3
-	6ecGNWSg==;
+	bh=wHytLi3no870oNIyiqfAuwXzU1eXG/sMChGK6ZBkjtU=; b=QVuFRpwyfIZ/nUYj7cIdOrKDfv
+	3M3RwmLpAzxSBz2DdeaXi7cwUazyCQ8ZEuHe2NLggq5199Qum1q55xJon/WOsLroTon77FB1EfWUA
+	D/63q5RjG6z/1QPFIg5ZiLsomGf5x7F2hJQlIKk2embK4vvxA+9i9P3fBGrggrU8s42GMIJLPLqUv
+	sUasbiO+tm1cK+kW4eP50faX19hF/Fxz3MbOug4EwwVTaR6Jnvh2bnr2yUjodxFSW2MtJniWu8RLb
+	mOO/WC2eidCIUAcoXH6r5u+lsTQJizjfoEU9XRZidm/TYIF+KM2qwijOpyBfq/cYiwRqlCSrXVvko
+	o7vtfVhQ==;
 Received: from [58.29.143.236] (helo=localhost)
 	by fanzine2.igalia.com with utf8esmtpsa 
 	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1uKQu8-00EZwG-Gr; Thu, 29 May 2025 02:13:53 +0200
+	id 1uKQuF-00EZwc-2T; Thu, 29 May 2025 02:14:00 +0200
 From: Changwoo Min <changwoo@igalia.com>
 To: lukasz.luba@arm.com,
 	rafael@kernel.org,
@@ -58,9 +58,9 @@ Cc: christian.loehle@arm.com,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Changwoo Min <changwoo@igalia.com>
-Subject: [PATCH 04/11] PM: EM: Add the infrastructure for command processing.
-Date: Thu, 29 May 2025 09:13:08 +0900
-Message-ID: <20250529001315.233492-5-changwoo@igalia.com>
+Subject: [PATCH 05/11] PM: EM: Assign a unique ID when creating a performance domain.
+Date: Thu, 29 May 2025 09:13:09 +0900
+Message-ID: <20250529001315.233492-6-changwoo@igalia.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250529001315.233492-1-changwoo@igalia.com>
 References: <20250529001315.233492-1-changwoo@igalia.com>
@@ -72,89 +72,129 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The infrastructure for command processing receives a command from a
-userspace and calls a callback corresponding to the request command.
+It is necessary to refer to a specific performance domain from a
+userspace. For example, the energy model of a particular performance
+domain is updated.
 
-Note that the callback functions are just boilerplates in this commit,
-and the actual implementations will be provided in the following commits
-when a callback for a specific command is implemented.
+To this end, assign a unique ID to each performance domain to address it,
+and manage them in a global linked list to look up a specific one by
+matching ID. IDA is used for ID assignment, and the mutex is used to
+protect the global list from concurrent access.
+
+Note that the mutex (em_pd_list_mutex) is not supposed to hold while
+holding em_pd_mutex to avoid ABBA deadlock.
 
 Signed-off-by: Changwoo Min <changwoo@igalia.com>
 ---
- kernel/power/em_netlink.c | 53 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 52 insertions(+), 1 deletion(-)
+ include/linux/energy_model.h |  4 ++++
+ kernel/power/energy_model.c  | 30 +++++++++++++++++++++++++++++-
+ 2 files changed, 33 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/power/em_netlink.c b/kernel/power/em_netlink.c
-index 30d83fb5a3a8..edbaecebd0b4 100644
---- a/kernel/power/em_netlink.c
-+++ b/kernel/power/em_netlink.c
-@@ -23,14 +23,65 @@ static const struct genl_multicast_group em_genl_mcgrps[] = {
- static const struct nla_policy em_genl_policy[EM_GENL_ATTR_MAX + 1] = {
- };
+diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+index 7fa1eb3cc823..2f5c73fcdfe5 100644
+--- a/include/linux/energy_model.h
++++ b/include/linux/energy_model.h
+@@ -54,6 +54,8 @@ struct em_perf_table {
+ /**
+  * struct em_perf_domain - Performance domain
+  * @em_table:		Pointer to the runtime modifiable em_perf_table
++ * @node:		node in	em_pd_list (in energy_model.c)
++ * @id:			A unique ID number for each performance domain
+  * @nr_perf_states:	Number of performance states
+  * @min_perf_state:	Minimum allowed Performance State index
+  * @max_perf_state:	Maximum allowed Performance State index
+@@ -71,6 +73,8 @@ struct em_perf_table {
+  */
+ struct em_perf_domain {
+ 	struct em_perf_table __rcu *em_table;
++	struct list_head node;
++	int id;
+ 	int nr_perf_states;
+ 	int min_perf_state;
+ 	int max_perf_state;
+diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+index b15b685c22bd..529f8a63ab3d 100644
+--- a/kernel/power/energy_model.c
++++ b/kernel/power/energy_model.c
+@@ -25,6 +25,16 @@
+  */
+ static DEFINE_MUTEX(em_pd_mutex);
  
-+struct param {
-+	struct nlattr **attrs;
-+	struct sk_buff *msg;
-+};
++/*
++ * Manage performance domains with IDs. One can iterate the performance domains
++ * through the list and pick one with their associated ID. The mutex serializes
++ * the list access. When holding em_pd_list_mutex, em_pd_mutex should not be
++ * taken to avoid potential deadlock.
++ */
++static DEFINE_IDA(em_pd_ida);
++static LIST_HEAD(em_pd_list);
++static DEFINE_MUTEX(em_pd_list_mutex);
 +
-+typedef int (*cb_t)(struct param *);
+ static void em_cpufreq_update_efficiencies(struct device *dev,
+ 					   struct em_perf_state *table);
+ static void em_check_capacity_update(void);
+@@ -398,7 +408,7 @@ static int em_create_pd(struct device *dev, int nr_states,
+ 	struct em_perf_table *em_table;
+ 	struct em_perf_domain *pd;
+ 	struct device *cpu_dev;
+-	int cpu, ret, num_cpus;
++	int cpu, ret, num_cpus, id;
+ 
+ 	if (_is_cpu_device(dev)) {
+ 		num_cpus = cpumask_weight(cpus);
+@@ -422,6 +432,13 @@ static int em_create_pd(struct device *dev, int nr_states,
+ 
+ 	pd->nr_perf_states = nr_states;
+ 
++	INIT_LIST_HEAD(&pd->node);
 +
- static struct genl_family em_genl_family;
- 
-+/*************************** Command encoding ********************************/
- 
--static int em_genl_cmd_doit(struct sk_buff *skb, struct genl_info *info)
-+static int em_genl_cmd_pd_get_id(struct param *p)
- {
- 	return -ENOTSUPP;
++	id = ida_alloc(&em_pd_ida, GFP_KERNEL);
++	if (id < 0)
++		return -ENOMEM;
++	pd->id = id;
++
+ 	em_table = em_table_alloc(pd);
+ 	if (!em_table)
+ 		goto free_pd;
+@@ -446,6 +463,7 @@ static int em_create_pd(struct device *dev, int nr_states,
+ 	kfree(em_table);
+ free_pd:
+ 	kfree(pd);
++	ida_free(&em_pd_ida, id);
+ 	return -EINVAL;
  }
  
-+static int em_genl_cmd_pd_get_tbl(struct param *p)
-+{
-+	return -ENOTSUPP;
-+}
+@@ -641,6 +659,10 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
+ 	if (_is_cpu_device(dev))
+ 		em_check_capacity_update();
+ 
++	mutex_lock(&em_pd_list_mutex);
++	list_add_tail(&dev->em_pd->node, &em_pd_list);
++	mutex_unlock(&em_pd_list_mutex);
 +
-+static const cb_t cmd_cb[] = {
-+	[EM_GENL_CMD_PD_GET_ID]			= em_genl_cmd_pd_get_id,
-+	[EM_GENL_CMD_PD_GET_TBL]		= em_genl_cmd_pd_get_tbl,
-+};
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(em_dev_register_perf_domain);
+@@ -659,6 +681,10 @@ void em_dev_unregister_perf_domain(struct device *dev)
+ 	if (_is_cpu_device(dev))
+ 		return;
+ 
++	mutex_lock(&em_pd_list_mutex);
++	list_del_init(&dev->em_pd->node);
++	mutex_unlock(&em_pd_list_mutex);
 +
-+static int em_genl_cmd_doit(struct sk_buff *skb, struct genl_info *info)
-+{
-+	struct param p = { .attrs = info->attrs };
-+	struct sk_buff *msg;
-+	void *hdr;
-+	int cmd = info->genlhdr->cmd;
-+	int ret = -EMSGSIZE;
+ 	/*
+ 	 * The mutex separates all register/unregister requests and protects
+ 	 * from potential clean-up/setup issues in the debugfs directories.
+@@ -670,6 +696,8 @@ void em_dev_unregister_perf_domain(struct device *dev)
+ 	em_table_free(rcu_dereference_protected(dev->em_pd->em_table,
+ 						lockdep_is_held(&em_pd_mutex)));
+ 
++	ida_free(&em_pd_ida, dev->em_pd->id);
 +
-+	msg = genlmsg_new(NLMSG_GOODSIZE, GFP_KERNEL);
-+	if (!msg)
-+		return -ENOMEM;
-+	p.msg = msg;
-+
-+	hdr = genlmsg_put_reply(msg, info, &em_genl_family, 0, cmd);
-+	if (!hdr)
-+		goto out_free_msg;
-+
-+	ret = cmd_cb[cmd](&p);
-+	if (ret)
-+		goto out_cancel_msg;
-+
-+	genlmsg_end(msg, hdr);
-+
-+	return genlmsg_reply(msg, info);
-+
-+out_cancel_msg:
-+	genlmsg_cancel(msg, hdr);
-+out_free_msg:
-+	nlmsg_free(msg);
-+
-+	return ret;
-+}
-+
- static const struct genl_small_ops em_genl_ops[] = {
- 	{
- 		.cmd = EM_GENL_CMD_PD_GET_ID,
+ 	kfree(dev->em_pd);
+ 	dev->em_pd = NULL;
+ 	mutex_unlock(&em_pd_mutex);
 -- 
 2.49.0
 
