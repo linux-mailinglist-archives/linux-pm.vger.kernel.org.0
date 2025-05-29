@@ -1,48 +1,88 @@
-Return-Path: <linux-pm+bounces-27795-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27796-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0299AC7926
-	for <lists+linux-pm@lfdr.de>; Thu, 29 May 2025 08:42:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99032AC797A
+	for <lists+linux-pm@lfdr.de>; Thu, 29 May 2025 09:14:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C865188948E
-	for <lists+linux-pm@lfdr.de>; Thu, 29 May 2025 06:42:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBD27A4083A
+	for <lists+linux-pm@lfdr.de>; Thu, 29 May 2025 07:14:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0FA22550CA;
-	Thu, 29 May 2025 06:41:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A17DB2571A9;
+	Thu, 29 May 2025 07:14:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N+4rHpLX"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="XStj0sft"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8727224E010;
-	Thu, 29 May 2025 06:41:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A08256C88
+	for <linux-pm@vger.kernel.org>; Thu, 29 May 2025 07:14:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748500912; cv=none; b=JBwTpEvZFn0yQvBhGwAlxA7d1Asep/t2KVrKXO9Qk9HuezNNIpTwxDrWhvvbSvSHnpu697pNT2i/3kV4MM6+L+mRKuo2513HaPQt4vv0NZ6l47+EuFuZZCrnaafDvpVBVFyJaf5WKI3DpbfYCRsC4fw+ELPzKfWTQx33JeOW//k=
+	t=1748502882; cv=none; b=o5CimlVH6IX+qkKpEN5yAHcBOTswlXqg7x6y4WrMZLWKj56D/J5f8+L6GqsIhz630n17F2BGUnWYKiNBny3GzUHf6vbV9d8WUUvJGxZQSXGQz0WpxKbMUl7Ga/H9BmlZmarUS4vmSa4KoElICVlrkzIowJUOL3B6JBdbnitvWIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748500912; c=relaxed/simple;
-	bh=NUdujDcjJsGqIemjDbrWMMJ9gM3XfgLYI2NbdTBQ96I=;
+	s=arc-20240116; t=1748502882; c=relaxed/simple;
+	bh=07UXbYCn7cRZ5NxV/3AidW5vV7Ee9BWX17yIvYRrP0M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hWUiTOQCascULe9XTnSGTgc1kABrv+xUSW74yBy9mxPdSUUH5yTusZqRjJfXjPCMXA/FaXM2PYAd1wTm+gj4JnstyFG3X6GjcidqEuMT/+Kr27btVmSNQUKChuGN0NqzoU2LKeS6k3AUGH8wwzzq0vsAokDPqKOkoes3RHF72jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N+4rHpLX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83765C4CEE7;
-	Thu, 29 May 2025 06:41:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748500912;
-	bh=NUdujDcjJsGqIemjDbrWMMJ9gM3XfgLYI2NbdTBQ96I=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=N+4rHpLXUlYejKLvY2KJcJTCfWoldMpzo7XfSMaJBzaP7ItxT6FxJZVLtMkQyXHKR
-	 Ax9Drz3lL4ioVklL3FsMzXm9uf62gyjFm6YYlNP52DPkeYP5gU+p+tr+x+XIJ9UZfy
-	 MDl9RRKwx58KQDkm+DuSxnqPGJ3I1ahuuQtX0y2k6z3lU/vINfL4sf8wOM6cknWihM
-	 zi9kF17/dSE7WjJaav4lnlhDppKUIgsRzD3QywFUgzweDK7jEGfkCrItFGx7O7jbJu
-	 gjMAG6ju4qNEg2CIr4PQOyc9kSxLmTU6wQRzds3iZKtIjxVKdlEPLIk3KLGFhxUUfW
-	 MRIma8o9ck9bw==
-Message-ID: <6eca9bc9-ac12-4aec-85c7-66397f70fca0@kernel.org>
-Date: Thu, 29 May 2025 08:41:47 +0200
+	 In-Reply-To:Content-Type; b=O4TteYkFZW30BqkZKquqvwJtnNgIC2R5cXndcxzvLy2EN+vgULhK2yfy83FjWQpTXnNAmV77TxCp8wf7XH50xstmQsjC7ubDF9tJ+r5ljm4RkDNRy6eq95kPGHHcOjVQWwTj73/bqtLp8+O7tE8zI2/J3uThl10qdOWVndci8Mw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=XStj0sft; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54SNWjtV012686
+	for <linux-pm@vger.kernel.org>; Thu, 29 May 2025 07:14:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	jVa35T4wQfLgVUHuSEEbWi7ckEE/l+jqbxBz8uhNkac=; b=XStj0sftasNbddO2
+	bDBUY6bfwxC47/yRNwbYDQkUY7QkHyw7AZ8Wfw5rz/m/vsfdEV1nuMC/iW0gcQhl
+	aScEitpwW3ybCvYyrbb27R7DuNT2JkMCtWbADMGyuWTSHcEk4MVFqe46wSIETJ05
+	S+kmazugXM6VRKZBGXQ7QxNYcqI2JPhdEQMEmKkykiyf4OHTgPQ7wRuLYPNtp+Vt
+	gMiwOTaiQOnczya7j+jMNjHdy7ekHTMD8J1479bjj8gD3KxvfX+E1xtItnJd1RMK
+	XYw9m1IcKjTNfMkPyOjvFi2FtxxWthuOxr/04RsZSHRflQysp0/Zk2G3+Y9BDqet
+	7jRcGg==
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46w691fbxm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Thu, 29 May 2025 07:14:40 +0000 (GMT)
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-233e462f57fso8077565ad.1
+        for <linux-pm@vger.kernel.org>; Thu, 29 May 2025 00:14:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748502879; x=1749107679;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jVa35T4wQfLgVUHuSEEbWi7ckEE/l+jqbxBz8uhNkac=;
+        b=htYaBhqyJJGigZ0dgbHHu/W2kJmD+Eg8BHX8EFbVqyGIlD7yNV1Ts2gq9gx8esY2Ub
+         dNeCbE4BbwEY9CsAMkopwoPfsej3GSSvHYy81DqT3XljSv1mOeIYx8vwy7t5SEq12XYy
+         WiVn5jOreMDNQH1b2DCdPnQLBRkZVJhDpYaXONAOoYxfxGlYAmNOvxgw+40vvI0okw/t
+         AfXBzSYTFP30LxJey4pp5v1fVQMIBGflsLOxa+kD9hPwlnJ7kvnt1X6/T9L9lce70oRk
+         BvgS4h7yilT7MzXyRx9FcMgiYCmwWL8QICJs3AKX2cGgF65Dhx05L5CxcUcPUGV6hHbK
+         2lnA==
+X-Forwarded-Encrypted: i=1; AJvYcCVAaRNcub1+EreXOVvFIfOrHGyE9hVe3G8FyUxOEsF37I7CNYOWP1AsvVVP88W9WKmGNcxpHUcQqA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8yI1fJ3shahCHlrkoGlMv/fekV21y87CzKjEo8Wpa8ybefdCd
+	HpiBAZFwGPDu9xc+Ltou6NZwytVcKuRnsrFYDaUORVLfZqhaph1esw1kYe313yRC5MEi+7P8M3X
+	YYIKj7Z0CumMV0iwE8gphKVsK4VhOehJ6JraJyKR/ZA4EdWUy3nSEZapWfsdVeQ==
+X-Gm-Gg: ASbGncsfn+Lauv/R1iv24n10tlLxrXm51Szw3wu+dx/C2pBHtOUQO0bOz22uqCe2kFg
+	dX2qNdv7wKWKD+axFjshX4uWyZjknez/+Nqv+UpOGDXKRDthyrj+o0T9zPxbfwo7ggwmszo6p8r
+	HHVBFj75e+HdcVaNHtOgayevtnFr3PF/VeAVOyoYsszswbSqbRuwzMA7s2pRk/Ae37+rFzWI6rL
+	QYJEIBT4hEiEJbfOj7dzrQuOuyCEncvwqnYo9/FuUGOdy5ByfY/UO47uuMc7X2sV5FEaWoiaby/
+	LFxBoJQUG1rSI/00xQY7hg5lKbQ06g2I+VQWQlIdgqkjhMqhWTPq6EO55etq3McpS2LGKz6BgX2
+	n
+X-Received: by 2002:a17:903:3c2b:b0:22e:3c2:d477 with SMTP id d9443c01a7336-23414f9127dmr335319715ad.25.1748502879424;
+        Thu, 29 May 2025 00:14:39 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEueHsRRqEM+24t4WlwUoH2u9RMoXV+6e02OQb8YFrStUMU8UnD6bIOHM3t/Mu6fcD1Hx2keg==
+X-Received: by 2002:a17:903:3c2b:b0:22e:3c2:d477 with SMTP id d9443c01a7336-23414f9127dmr335318965ad.25.1748502878502;
+        Thu, 29 May 2025 00:14:38 -0700 (PDT)
+Received: from [10.133.33.104] (tpe-colo-wan-fw-bordernet.qualcomm.com. [103.229.16.4])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23506cf4730sm6464155ad.168.2025.05.29.00.14.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 May 2025 00:14:37 -0700 (PDT)
+Message-ID: <025c297a-de13-49ee-81ea-2290df0f6843@oss.qualcomm.com>
+Date: Thu, 29 May 2025 15:14:34 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,81 +90,67 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: pmdomain: renesas: rcar: Use str_on_off() helper in
- rcar_sysc_power() and rcar_gen4_sysc_power()
-To: shao.mingyin@zte.com.cn, ulf.hansson@linaro.org
-Cc: geert+renesas@glider.be, magnus.damm@gmail.com, linux-pm@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
- yang.yang29@zte.com.cn, xu.xin16@zte.com.cn, yang.tao172@zte.com.cn,
- ye.xingchen@zte.com.cn
-References: <20250529101305686S2ehGmiFg5bnKwSa__96W@zte.com.cn>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH 5/5] power: supply: qcom-battmgr: Add charge control
+ support
+To: me@kuruczgy.com, Sebastian Reichel <sre@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc: Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
+        David Collins <david.collins@oss.qualcomm.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com
+References: <20250523-qcom_battmgr_update-v1-0-2bb6d4e0a56e@oss.qualcomm.com>
+ <20250523-qcom_battmgr_update-v1-5-2bb6d4e0a56e@oss.qualcomm.com>
+ <db0e40b6-22f3-46aa-b35d-7a8729370ddf@kuruczgy.com>
+ <1b1c4617-0e5b-40c8-9a66-d243b48c0977@oss.qualcomm.com>
+ <a6ed79b329492648a496353db1462e7a7a09597b@kuruczgy.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
- QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
- +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
- ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
- 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
- hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
- tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
- 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
- naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
- hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
- whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
- qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
- RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
- Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
- H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
- dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
- AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
- jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
- zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
- XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250529101305686S2ehGmiFg5bnKwSa__96W@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-On 29/05/2025 04:13, shao.mingyin@zte.com.cn wrote:
-> From: Shao Mingyin <shao.mingyin@zte.com.cn>
-> 
-> Remove hard-coded strings by using the str_on_off() helper function.
-> 
-> Signed-off-by: Shao Mingyin <shao.mingyin@zte.com.cn>
-> ---
->  drivers/pmdomain/renesas/rcar-gen4-sysc.c | 3 ++-
->  drivers/pmdomain/renesas/rcar-sysc.c      | 3 ++-
-
-Stop sending such trivial patches one driver per patch, but entire
-subsystem in one patch. That's a lot of churn, considering this was
-rejected:
+From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+In-Reply-To: <a6ed79b329492648a496353db1462e7a7a09597b@kuruczgy.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=WfoMa1hX c=1 sm=1 tr=0 ts=68380960 cx=c_pps
+ a=JL+w9abYAAE89/QcEU+0QA==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
+ a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=hOspveqpAAAA:8 a=ukq9x2Ni-G2YEArqOW4A:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=324X-CrmTo6CU4MGRt3R:22
+ a=3Os_Ld9iau9Fc9k96hWO:22
+X-Proofpoint-GUID: IxA7z-TxOoyK3Wcpf9Alpb4aJgFL2MFe
+X-Proofpoint-ORIG-GUID: IxA7z-TxOoyK3Wcpf9Alpb4aJgFL2MFe
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTI5MDA3MCBTYWx0ZWRfX82VOfMmwuzud
+ i3PQYPqZBBRqgQSzPJLLNyKocQkwtN6aK3YRgjS2CVexsH/GazU1JJzIdcROS1ZU7HZ+eeRZnBv
+ nJ2oU9rKLRoEAKwAJTN825IcvsBylWsQ021Qjs1Rsz2VBY4Soo/sgoehgC6X5X7UdtzxQl03exD
+ EjucrgsbjCUckMv5MgyXMwTYWG9KYzYb4AvkBeHs+6aYaINAYuRNlOnDt2p8IhAGxMK7gXYd7lI
+ wUHj3FmMgUeEASUHAk8cIhPcQaWaLPRwlS54NstmmlS+yTTgUcushrda9+xVvGo9gT4ySMbIiki
+ xGaF82h7PrycfMyG488UmaYe8LviEb3akvmW4IIdoOjI2CsX5lgylDKHsIzgsA9yPg0EY6r4YaI
+ T6M+0WWJNUGsdI6rCBEdR+6iYQ4ZIDHUtuaFU2MDihRYXVsuNvRdK9EIQ2qz9QEzaLuohq+8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-29_03,2025-05-27_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 phishscore=0 mlxlogscore=999 priorityscore=1501 mlxscore=0
+ bulkscore=0 adultscore=0 spamscore=0 suspectscore=0 malwarescore=0
+ clxscore=1015 impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505160000
+ definitions=main-2505290070
 
 
-https://lore.kernel.org/all/20250114203547.1013010-1-krzysztof.kozlowski@linaro.org/
+On 5/28/2025 12:42 AM, me@kuruczgy.com wrote:
+>> No, sc8280xp and x1e80100 don't support it. So I didn't add the support for them.
+> Hm... From what I heard charge limiting works on some X1E laptops, e.g. the ThinkPad T14s on Windows using Lenovo Vantage.
+>
+> Do you happen to know how that works? Is that some vendor specific solution? Or does it depend on the version of the battery management firmware? (AFAIK this is part of the adsp firmware?)
+>
+> Thanks,
+> György
+
+Thank you for the information. I confirmed with our battery management 
+firmware team that the X1E80100 platform does support charge control 
+using the same scheme, opcode, and request and response data messages.
+
+I will add charge control support for X1E80100 in V2.
 
 
-Best regards,
-Krzysztof
+Thanks
+
+Fenglin
+
 
