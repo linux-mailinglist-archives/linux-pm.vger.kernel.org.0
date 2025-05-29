@@ -1,51 +1,52 @@
-Return-Path: <linux-pm+bounces-27772-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27771-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26F89AC74D9
-	for <lists+linux-pm@lfdr.de>; Thu, 29 May 2025 02:13:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EC5DAC74D8
+	for <lists+linux-pm@lfdr.de>; Thu, 29 May 2025 02:13:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F00811BC0E16
-	for <lists+linux-pm@lfdr.de>; Thu, 29 May 2025 00:14:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 858E3A20044
+	for <lists+linux-pm@lfdr.de>; Thu, 29 May 2025 00:13:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8297AD2FF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CF34C8EB;
 	Thu, 29 May 2025 00:13:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="DZt0xvdX"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="DXoPD5hg"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BDC0B67A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96AD4BA3D;
 	Thu, 29 May 2025 00:13:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748477631; cv=none; b=kJvI/ZXy3kOCmBW41PBRHv2kYje3+/YQ0S4GPC9M43wNJkSe69BCo7B+GYGwj3N1JyO3nW4t663H42d9OjGCeubhfrIsDN120U+ZjxUl7jBKRsB9FOr7bIWnPpIU2AnjxuqgJHumE9dG5HwSGQgilTP39ge8bTMjh+UpAH3u/tM=
+	t=1748477631; cv=none; b=XJ9kYwcHNHs4vVFF9cfRL+k32fNdjZW4TMRl0Lq9ME4JQrBUs0QKbCy+2ZN73Q0jgYL74/Ec0H6vVeqfUmnXXPn04ms0S1QVRnkGKvghtHGQpAQgywE0e4o3hh5EjND3eZuuzf7uYm7aNa8Sg/1PUuSpJnEX1dRmEz7gQ2gPJY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1748477631; c=relaxed/simple;
-	bh=pfoihrmJaBwob8Uxd4IBwrStoIpAw40dXmyPLPV6VkM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qwlw3SN3y0Q1CcQEcankv/SQLPVTMSVR4L1co3uGgy/xOzlyn7su76QWFVTdio5mEHUlingEW2bHYhonl8FjzW01CP/f1Up8Hd5ocXxhi/7/VoDD5WsQzUCDtj52pWubcAUGfSajiPA7aceQ9n/4QdvljcUMGRyegTlJWW5KB3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=DZt0xvdX; arc=none smtp.client-ip=213.97.179.56
+	bh=VlFnpcsdHQxDHPb4oV6QFvxYxzGrchCWD4dTCtFa3zk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=uRT/7axXf8HdQE7Ua8x1MY246zWw0vJ79JzIBEXQ7hWuGaDUmwsd+1+W7HUp5chtWg7G4cbEntECc8eInK1PFpCOFePbc3xgneeXgGeuu7Y3rHEpABe+gM1imbT7cH4rzGtEvqWJkFJBhkQqpebDB089B7ZggJw41PrSkHWUZ34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=DXoPD5hg; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
-	Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=GAuvo8PIxtiaaRlvQH9XX/+Yf1c/3eZM6pxfqz02uJ0=; b=DZt0xvdX8CGGevbizc3aQo4yzr
-	9BOZbNXdzve41rNDgGo0vulfXu3heM4ejeeWhqDSUKJ4HK37D5uJofAFt2znKciaNfRPew577gAZf
-	Dut9UkQk6JJIgNlGoCJQVFPPjKmokWBS0xsw+mImO1Cvyv69XcMXk5DwaNyrp9GlOn66UsMzEBDQ7
-	wQWIDa1j/e+BXJSmft32FOHEWcpx9uuVCPYT2ckycvlxfsYWsKi/X8M1b73ACUteCpwvDqmaVm5Ds
-	cFeIZSNbHNM6QQS1/DE1JlYbzlmp60LvHlsf5PHCjQaODnMH8djqk90Z5oXpbd1236CvmvtSKHgCE
-	lqPQRH2Q==;
+	bh=zIN0s/km0iueisreKfHC8QMZpfiOoTcx08RjbxWkD0Y=; b=DXoPD5hgLwelEIuQ4fIw97hygH
+	ZoKX+7N5qN1YGICpApEFIx7QxFeOJUZXsuCRHR7f9q4nf74YCl64VUqEJA4YrA3wWCSZgj+A/3R+0
+	LOCmeBVl6p/vlprbmKNrGNHF2dXBqwkGG1RP6tZXvr45iMeDI1fL2lzmuEZvnXBC96INoFfrEriAP
+	Y/6XHaNLB1fVOHjQIj6SKAUuSXVcqNoLp6i5hFwckhAx4ZTKv5dsyF1UanaZm4mCfV1r4CudaOa88
+	JWwl9vG84Q0H+1HMsCYZ5ryQBOQvPRCFzaCr2F0TjQZVfAiYm953zbxfiWKoVrMczsjRJEFLJFXa4
+	rJxRcPmQ==;
 Received: from [58.29.143.236] (helo=localhost)
 	by fanzine2.igalia.com with utf8esmtpsa 
 	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1uKQti-00EZvY-05; Thu, 29 May 2025 02:13:27 +0200
+	id 1uKQto-00EZvd-Uv; Thu, 29 May 2025 02:13:34 +0200
 From: Changwoo Min <changwoo@igalia.com>
 To: lukasz.luba@arm.com,
 	rafael@kernel.org,
@@ -56,12 +57,13 @@ Cc: christian.loehle@arm.com,
 	kernel-dev@igalia.com,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Changwoo Min <changwoo@igalia.com>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 00/11] PM: EM: Add netlink support for the energy model.
-Date: Thu, 29 May 2025 09:13:04 +0900
-Message-ID: <20250529001315.233492-1-changwoo@igalia.com>
+	Changwoo Min <changwoo@igalia.com>
+Subject: [PATCH 01/11] PM: EM: Add ENERGY_MODEL_NETLINK Kconfig.
+Date: Thu, 29 May 2025 09:13:05 +0900
+Message-ID: <20250529001315.233492-2-changwoo@igalia.com>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250529001315.233492-1-changwoo@igalia.com>
+References: <20250529001315.233492-1-changwoo@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -70,66 +72,33 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-There is a need to access the energy model from the userspace. One such
-example is the sched_ext schedulers [1]. The userspace part of the
-sched_ext schedules could feed the (post-processed) energy-model
-information to the BPF part of the scheduler.
+Define a Kconfig, ENERGY_MODEL_NETLINK. That enables the netlink interface,
+which allows a userspace program to read the energy model and receive
+multicast events upon changes to the energy model.
 
-Currently, debugfs is the only way to read the energy model from userspace;
-however, it lacks proper notification mechanisms when a performance domain
-and its associated energy model change.
-
-This patch set introduces a generic netlink for the energy model, as
-discussed in [2]. It allows a userspace program to read the performance
-domain and its energy model. It notifies the userspace program when a
-performance domain is created or deleted or its energy model is updated
-through a multicast interface.
-
-Specifically, it supports two commands:
-  - EM_GENL_CMD_PD_GET_ID: Get the list of information for all performance domains.
-  - EM_GENL_CMD_PD_GET_TBL: Get the energy model table of a performance domain.
-
-Also, it supports three notification events:
-  - EM_GENL_EVENT_PD_CREATE: When a performance domain is created.
-  - EM_GENL_EVENT_PD_DELETE: When a performance domain is deleted.
-  - EM_GENL_EVENT_PD_UPDATE: When the energy model table of a performance domain is updated.
-
-The userspace code example using the EM netlink interface is at [3].
-
-[1] https://lwn.net/Articles/922405/
-[2] https://lore.kernel.org/lkml/a82423bc-8c38-4d57-93da-c4f20011cc92@arm.com/
-[3] https://github.com/multics69/em-netlink/tree/patch-v1
-
-CC: Lukasz Luba <lukasz.luba@arm.com>
-CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-CC: Tejun Heo <tj@kernel.org>
 Signed-off-by: Changwoo Min <changwoo@igalia.com>
+---
+ kernel/power/Kconfig | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Changwoo Min (11):
-  PM: EM: Add ENERGY_MODEL_NETLINK Kconfig.
-  PM: EM: Add a skeleton code for netlink notification.
-  PM: EM: Initialize the netlink notification during booting.
-  PM: EM: Add the infrastructure for command processing.
-  PM: EM: Assign a unique ID when creating a performance domain.
-  PM: EM: Expose the ID of a performance domain via debugfs.
-  PM: EM: Add an iterator and accessor for the performance domain.
-  PM: EM: Implement EM_GENL_CMD_PD_GET_ID.
-  PM: EM: Implement EM_GENL_CMD_PD_GET_TBL.
-  PM: EM: Implement event notification.
-  PM: EM: Notify an event when the performance domain changes.
-
- include/linux/energy_model.h      |  20 +-
- include/uapi/linux/energy_model.h |  89 ++++++++
- kernel/power/Kconfig              |  10 +
- kernel/power/Makefile             |   1 +
- kernel/power/em_netlink.c         | 324 ++++++++++++++++++++++++++++++
- kernel/power/em_netlink.h         |  45 +++++
- kernel/power/energy_model.c       |  99 ++++++++-
- 7 files changed, 586 insertions(+), 2 deletions(-)
- create mode 100644 include/uapi/linux/energy_model.h
- create mode 100644 kernel/power/em_netlink.c
- create mode 100644 kernel/power/em_netlink.h
-
+diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+index 54a623680019..b45933370b4e 100644
+--- a/kernel/power/Kconfig
++++ b/kernel/power/Kconfig
+@@ -390,3 +390,13 @@ config ENERGY_MODEL
+ 	  The exact usage of the energy model is subsystem-dependent.
+ 
+ 	  If in doubt, say N.
++
++if ENERGY_MODEL
++
++config ENERGY_MODEL_NETLINK
++	bool "Energy Model netlink management"
++	depends on NET
++	help
++	  The energy model framework has a netlink interface to notify the
++	  changes in the energy model. It is recommended to enable the feature.
++endif
 -- 
 2.49.0
 
