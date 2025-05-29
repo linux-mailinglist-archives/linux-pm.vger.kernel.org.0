@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-27794-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27795-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0A1EAC791E
-	for <lists+linux-pm@lfdr.de>; Thu, 29 May 2025 08:41:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0299AC7926
+	for <lists+linux-pm@lfdr.de>; Thu, 29 May 2025 08:42:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24AE8A623D4
-	for <lists+linux-pm@lfdr.de>; Thu, 29 May 2025 06:40:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C865188948E
+	for <lists+linux-pm@lfdr.de>; Thu, 29 May 2025 06:42:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5891220E021;
-	Thu, 29 May 2025 06:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0FA22550CA;
+	Thu, 29 May 2025 06:41:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XLX8RATu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N+4rHpLX"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30B181DF73C;
-	Thu, 29 May 2025 06:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8727224E010;
+	Thu, 29 May 2025 06:41:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748500871; cv=none; b=kZY7LMf0jZTSd3M+05Y2iBNX6siyEsXyGhIrHx5l2nkVgzjsxP76Rbk988YH9TGd7VjsF++NLRGPRJTWDfs1Z6OIIsQ4XZqVnF6FN6Fy2y6FDqRD7EXkSYEW6n+BjJxauUr226M1azIKB/QDk74hAErC+/ud88rvecbEhCzWuUQ=
+	t=1748500912; cv=none; b=JBwTpEvZFn0yQvBhGwAlxA7d1Asep/t2KVrKXO9Qk9HuezNNIpTwxDrWhvvbSvSHnpu697pNT2i/3kV4MM6+L+mRKuo2513HaPQt4vv0NZ6l47+EuFuZZCrnaafDvpVBVFyJaf5WKI3DpbfYCRsC4fw+ELPzKfWTQx33JeOW//k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748500871; c=relaxed/simple;
-	bh=si77hsCEwnK5PxlkuNh9tlkoElXbBQyR1JfvxIJfI3Y=;
+	s=arc-20240116; t=1748500912; c=relaxed/simple;
+	bh=NUdujDcjJsGqIemjDbrWMMJ9gM3XfgLYI2NbdTBQ96I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bkNdEDccxlLqqL1pB5Z4XuWEH6Csd/nVHUnydu3r97nm1wWRG6yTJLtKRjlAzgpPGjO8RBTICGNWcCY8HorSaQ5CIl/wjCidT30GLMR0IgpbOZQbR1ZhFk+0Pty7mrsSHWW/svOjQ5eHZhaKnk8J0ov8EwGDjFg8ZH65P2z5pfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XLX8RATu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 269E0C4CEE7;
-	Thu, 29 May 2025 06:41:06 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=hWUiTOQCascULe9XTnSGTgc1kABrv+xUSW74yBy9mxPdSUUH5yTusZqRjJfXjPCMXA/FaXM2PYAd1wTm+gj4JnstyFG3X6GjcidqEuMT/+Kr27btVmSNQUKChuGN0NqzoU2LKeS6k3AUGH8wwzzq0vsAokDPqKOkoes3RHF72jk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N+4rHpLX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83765C4CEE7;
+	Thu, 29 May 2025 06:41:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748500871;
-	bh=si77hsCEwnK5PxlkuNh9tlkoElXbBQyR1JfvxIJfI3Y=;
+	s=k20201202; t=1748500912;
+	bh=NUdujDcjJsGqIemjDbrWMMJ9gM3XfgLYI2NbdTBQ96I=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XLX8RATuiXndPpD9GR/k05XqUZ+Y9uD9M0/GLAY262OVlP+snnDSwExTmlyRHoIry
-	 xyMVKY2UzMs0n32rMST+VwVyd0+xjT7RvYuzqMcd2zuHOwIM9/6ldm3Qb8FvII18Sk
-	 jitT5pKJOASW1elMAeXoRPX1B/i3yzJQo8tgtOm1GNpe+j4xSvB08yW1qbaeJLTMsj
-	 HgQIl4/fb9Y35FjH/79De+zCL0nhgASKmDIqhg3QOAkZEuthkjlxiw/3ep0Y3+8U6o
-	 VaZVOEYMONaN4N/x/2C9697+mNEVDjjjWSe8MADk/HonkP92bWU8VE/9Y/ng1sti0a
-	 HLUjLAgA4OeIQ==
-Message-ID: <41c0b226-9ff8-4c33-8d55-4990e11bffa1@kernel.org>
-Date: Thu, 29 May 2025 08:41:05 +0200
+	b=N+4rHpLXUlYejKLvY2KJcJTCfWoldMpzo7XfSMaJBzaP7ItxT6FxJZVLtMkQyXHKR
+	 Ax9Drz3lL4ioVklL3FsMzXm9uf62gyjFm6YYlNP52DPkeYP5gU+p+tr+x+XIJ9UZfy
+	 MDl9RRKwx58KQDkm+DuSxnqPGJ3I1ahuuQtX0y2k6z3lU/vINfL4sf8wOM6cknWihM
+	 zi9kF17/dSE7WjJaav4lnlhDppKUIgsRzD3QywFUgzweDK7jEGfkCrItFGx7O7jbJu
+	 gjMAG6ju4qNEg2CIr4PQOyc9kSxLmTU6wQRzds3iZKtIjxVKdlEPLIk3KLGFhxUUfW
+	 MRIma8o9ck9bw==
+Message-ID: <6eca9bc9-ac12-4aec-85c7-66397f70fca0@kernel.org>
+Date: Thu, 29 May 2025 08:41:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,17 +50,14 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: pmdomain: rockchip: Use str_on_off() helper in
- rockchip_do_pmu_set_power_domain()
+Subject: Re: pmdomain: renesas: rcar: Use str_on_off() helper in
+ rcar_sysc_power() and rcar_gen4_sysc_power()
 To: shao.mingyin@zte.com.cn, ulf.hansson@linaro.org
-Cc: heiko@sntech.de, sebastian.reichel@collabora.com,
- detlev.casanova@collabora.com, krzysztof.kozlowski@linaro.org,
- finley.xiao@rock-chips.com, shawn.lin@rock-chips.com, pgwipeout@gmail.com,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+Cc: geert+renesas@glider.be, magnus.damm@gmail.com, linux-pm@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
  yang.yang29@zte.com.cn, xu.xin16@zte.com.cn, yang.tao172@zte.com.cn,
  ye.xingchen@zte.com.cn
-References: <20250529101617844lQtR4fOKHch_xIBWSgzgX@zte.com.cn>
+References: <20250529101305686S2ehGmiFg5bnKwSa__96W@zte.com.cn>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -106,23 +103,26 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250529101617844lQtR4fOKHch_xIBWSgzgX@zte.com.cn>
+In-Reply-To: <20250529101305686S2ehGmiFg5bnKwSa__96W@zte.com.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 29/05/2025 04:16, shao.mingyin@zte.com.cn wrote:
+On 29/05/2025 04:13, shao.mingyin@zte.com.cn wrote:
 > From: Shao Mingyin <shao.mingyin@zte.com.cn>
 > 
 > Remove hard-coded strings by using the str_on_off() helper function.
 > 
 > Signed-off-by: Shao Mingyin <shao.mingyin@zte.com.cn>
 > ---
+>  drivers/pmdomain/renesas/rcar-gen4-sysc.c | 3 ++-
+>  drivers/pmdomain/renesas/rcar-sysc.c      | 3 ++-
 
-This was already sent:
+Stop sending such trivial patches one driver per patch, but entire
+subsystem in one patch. That's a lot of churn, considering this was
+rejected:
+
 
 https://lore.kernel.org/all/20250114203547.1013010-1-krzysztof.kozlowski@linaro.org/
-
-Also read the feedback there.
 
 
 Best regards,
