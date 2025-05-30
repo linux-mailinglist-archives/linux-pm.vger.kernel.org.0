@@ -1,234 +1,275 @@
-Return-Path: <linux-pm+bounces-27855-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27856-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1706CAC8BEE
-	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 12:11:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D912AC8C32
+	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 12:35:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA9BD188642C
-	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 10:11:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D4401BA5157
+	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 10:36:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFF50223329;
-	Fri, 30 May 2025 10:11:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5FE42222A0;
+	Fri, 30 May 2025 10:35:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MEXI23nf"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="BdTvHEnM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C6B21CC41
-	for <linux-pm@vger.kernel.org>; Fri, 30 May 2025 10:11:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F2F521D5B6;
+	Fri, 30 May 2025 10:35:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748599884; cv=none; b=MtaK4JpojY0kIPuRq3UsA+4wYmPZsbXff+IqZzS3maLbzKntIiVu7FeP7dGu2J1JnksXinpgfVCHi3vBkpScF6lCTwo0BvARfV0wxD6gXaOt9aiLS/Cy8FVsedrknFSLJTzGKS/X/MYG2HF/AF97/kXLvaPwjg16hXamMnjTxeA=
+	t=1748601342; cv=none; b=B3ddj2ZpkC6NwRXgRMSBH5TmfqhJI+riNZ7f6EIqQTw6Hn9ePPozJK6za3ao6L5uX3+tGU6KuV1nrVtMfvP3eJKiMCFhbK8jW6ZYa9eL0yaHyoG0A/3IjtpyfBGZCFppgs1Rax1LUTsdKUP81c4vruFzPFZJXckBgagfFfFrao0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748599884; c=relaxed/simple;
-	bh=BtgiWbtyObg4xFKH7C8Tduzp8RP6HRLtefwrW+i2WLM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DPPPmg+C9Updn14YjrXkCgihRfsDdzNAwkydgbPIW6J1HoKCGC2B2zZ36AuH9y2Z/2/Sa+ohYWT6A//j+QEKd/eXjxDDaNV5y5jDh6l+UgeIsohitZnsDb97jpYm3P8zzzIKSBxl/ljz5feAjfQzFvlFSjVWImIeynwOQTw9I1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MEXI23nf; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3a37d24e607so1789446f8f.1
-        for <linux-pm@vger.kernel.org>; Fri, 30 May 2025 03:11:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1748599878; x=1749204678; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w2uvJQQDga9gpIshIa1ROf0lj+l2p+xM+9sY9IixreE=;
-        b=MEXI23nfGNOhAh4nJzWlci373SRWGwDGVyPXdMJxwL/Ug+KO78CEkPVilIyDSlnlF5
-         sVQb8jplnd9SxGYWx+FhMCO/2e9jUZYhhnWk6V/7bq5FignpBE9uX+Wtzvz6PhSmJujr
-         heFblOgB4L6DosbBoUap/t7RECiKKHSjw1idHg+MNY/oODXqAdngmgkZVsIHVHSchvXG
-         DJvoC8A8zaL0stufC75yQ5nE2/MjswI2QfcgVI35/7pOJDprR6Ir9Y9i3tttN9q5GdgV
-         QnDfm5iiaepyaaLshzp71BAsnmPuO67/mOVEhXAIltyjlgaY5fBetGeK5VkF1Mt4HqSi
-         gLRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748599878; x=1749204678;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w2uvJQQDga9gpIshIa1ROf0lj+l2p+xM+9sY9IixreE=;
-        b=MYXvxlXJf+pkDStKqFRdyOZq5hIDYq0AyENaYcVU3htBCDpIPSfr2BLLgs2wmE+oxU
-         lQm8BEpwU0iozZrOCAqLI90d0v7ytg3SV3ul67v2eRll4IO3FMJRb54c9rMlizvnzKdM
-         FOAbmuaIg1yR3BvuUJwwhOEeedaIy3OMwGSdVhbOlotPWAzW086JYwxOoX3yIXNdO9d2
-         Uevl1S9E2uCqW9FjgC0U0zgaPA9/NdwMfDSmblelnQictFAiBfPt0PjhXZJtEAoWANwi
-         zNw5EWPelreIcjmRzSExlsst4Q8hIjiocS3qT6+6w5vo/bPMHrzkY29Kzo4Y2TSMfAGr
-         Yxsg==
-X-Forwarded-Encrypted: i=1; AJvYcCUlIdV7MsvrS4bZEb8DBc+l1e9CmdeOMKb+GuAp78QgtbdOkqsZWPEbtN36ew7TJoVLrG7KViy36Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwddoFYXLr683qr6WYqLR9O8+U53QmtUM2AjjbJ/0vk8bidXTBG
-	03tqQRoiZ+0H26plWdwiJcvoejmLxg0QCWU62T1rg4aSqYBCPY9ZewG9HzkO1hL6ujEhFOinuBr
-	lhFOU/L8=
-X-Gm-Gg: ASbGnct3E1g4SjEQZEYsYTXrwe1aoBeDw/FoLnxaVPnlwQZPntqGNdeMTwU9kFFOTCc
-	lDu1tsrolmvT4rb0OwhqWIfAKNytngH3TMGHwNo+BuhckCUW1d9HMi155tmTR0ykB+/31oBP0VO
-	26LEJUjAXOSELByb6HYwKpH1L0wzDuFMh7PhPdTcPnfNSKeYVa1m3kOyZQt0ZQdnNH/asehXuEH
-	5k+8GhupWf0vCly6on/nCCgPn3Syztz4+/mIZB5Mx7Ad356CymyVjtxvwCuXPYnFXCltazLuF0D
-	vE07nwGoNYuyeUji3vD/pGq6gF9fHpBhsqutoy36De2dRSFuZsnFDsnc441jLayRfYW75MH4ZNx
-	/zrIzwiLcFiZkVHPW
-X-Google-Smtp-Source: AGHT+IEGpK9wxifZBoINj4a9WAqhHPQBuG6oOIYEnwaBOMGLx5F2IGQmU5aCTNH4ODtjQn5uXNaecw==
-X-Received: by 2002:a05:6000:22c6:b0:3a0:b8b0:43ff with SMTP id ffacd0b85a97d-3a4f89a7a30mr1169064f8f.14.1748599878104;
-        Fri, 30 May 2025 03:11:18 -0700 (PDT)
-Received: from [192.168.0.35] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-450d7f8ed27sm13971185e9.2.2025.05.30.03.11.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 May 2025 03:11:17 -0700 (PDT)
-Message-ID: <7f001134-e099-492d-8ce5-4122d83a3de3@linaro.org>
-Date: Fri, 30 May 2025 11:11:15 +0100
+	s=arc-20240116; t=1748601342; c=relaxed/simple;
+	bh=UUCWLF5QlJkGL6aFImtIR5HiycoyUXAnHsMTOOfMZnQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=L2LYxyCBfgzT0HLdSviDyX1RWYY0KD9enlMimmeUHHtD5f3rg6ycpaNxYaWz+zNWJzBHF1b7jR4ex/EkRyK7AtJVHAIUY73+cnSDa/wbMzNsf/PV/k2g31WYlpVp3OzIY0Wx/WRASg5LEGiHKDBP4DFWkWZKxrruJH2TcppW7Nw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=BdTvHEnM; arc=none smtp.client-ip=198.47.23.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelvem-sh01.itg.ti.com ([10.180.77.71])
+	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTP id 54UAZVxj3765537;
+	Fri, 30 May 2025 05:35:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1748601331;
+	bh=tT/U7ULtKLzKCpEKOMNNm5nvTaxFZwdDpBqvlMNie/I=;
+	h=From:To:CC:Subject:Date;
+	b=BdTvHEnM9dVFcwbJJywBCX9ymRKOZ2amTJIV0aqM9ggWpJdx5q2XRvXtAhk9qIPD1
+	 2WiCKx6duFF1xquVplbd9IyHceiXZ5YELJZce1KlMPOuQtydm2wRQHQpAzIcddIQTD
+	 bNsQiFf6mUifpQbRTZNv437heun7Yjq6T5qhBO6Q=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+	by lelvem-sh01.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 54UAZUJ4749463
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Fri, 30 May 2025 05:35:31 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 30
+ May 2025 05:35:30 -0500
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 30 May 2025 05:35:30 -0500
+Received: from lcpd911.dhcp.ti.com (lcpd911.dhcp.ti.com [172.24.227.226])
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 54UAZRNE2989964;
+	Fri, 30 May 2025 05:35:28 -0500
+From: Dhruva Gole <d-gole@ti.com>
+To: Cristian Marussi <cristian.marussi@arm.com>
+CC: Ulf Hansson <ulf.hansson@linaro.org>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Dhruva Gole <d-gole@ti.com>
+Subject: [RFC PATCH] pmdomain: arm: scmi_pm_domain: Do lazy init as part of probe
+Date: Fri, 30 May 2025 16:05:27 +0530
+Message-ID: <20250530103527.2244951-1-d-gole@ti.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/8] power: supply: qcom_battmgr: Add charge control
- support
-To: Fenglin Wu <fenglin.wu@oss.qualcomm.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Sebastian Reichel <sre@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
- David Collins <david.collins@oss.qualcomm.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- kernel@oss.qualcomm.com, devicetree@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20250530-qcom_battmgr_update-v2-0-9e377193a656@oss.qualcomm.com>
- <497BF3hThnrmYe-YHKmdOyZwdjP3ivm1hFYDDy3-HkSOvkCOMVSkokyhb859mcTarGb55Go5nJLfgsc553u7ZA==@protonmail.internalid>
- <20250530-qcom_battmgr_update-v2-5-9e377193a656@oss.qualcomm.com>
- <8b396edf-e344-47e9-b497-3f7fb35783ed@linaro.org>
- <spfJeVsefz_dTMqOG1lKaUye4O8Jz-RSdLCGtvPIrDMwKC9rxNNY_zKkBFVhdrPMheNf2WMkPsv7ElI4uhBfxg==@protonmail.internalid>
- <3df56548-49ea-498c-9ee3-b7e1d2d85d2e@oss.qualcomm.com>
-Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <3df56548-49ea-498c-9ee3-b7e1d2d85d2e@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On 30/05/2025 10:37, Fenglin Wu wrote:
-> Thanks for reviewing the change!
-> 
-> On 5/30/2025 4:48 PM, Bryan O'Donoghue wrote:
->> On 30/05/2025 08:35, Fenglin Wu via B4 Relay wrote:
->>> From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
->>>
->>> Add charge control support for SM8550 and X1E80100. It's supported
->>> with below two power supply properties:
->>>
->>> charge_control_end_threshold: SOC threshold at which the charging
->>> should be terminated.
->>>
->>> charge_control_start_threshold: SOC threshold at which the charging
->>> should be resumed.
->>
->> Maybe this is very obvious to battery charger experts but what does
->> SOC mean here ?
->>
->> Reading your patch you pass a "int soc" and compare it to a threshold
->> value, without 'soc' having an obvious meaning.
->>
->> Its a threshold right ? Why not just call it threshold ?
->>
-> "SOC" stands for battery State of Charge, I will rephrase the commit
-> text for better explanation.
->>>
->>> Signed-off-by: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
->>> ---
->>>    drivers/power/supply/qcom_battmgr.c | 256
->>> ++++++++++++++++++++++++++++++++++--
->>>    1 file changed, 248 insertions(+), 8 deletions(-)
->>>
->>> -    if (battmgr->variant == QCOM_BATTMGR_SC8280XP)
->>> +    if (battmgr->variant == QCOM_BATTMGR_SC8280XP ||
->>> +            battmgr->variant == QCOM_BATTMGR_X1E80100)
->>
->> Please run your series through checkpatch
->>
-> I actually did that before sending the patches out. I run checkpatch
-> with below two commands and I saw no issues:
-> 
-> git format -1 xxxx --stdtout | ./script/checkpatch.pl -
-> 
-> b4 prep --check
-> 
-> Can you let me know what specific command that you ran with it?
+Optimize the SCMI power domain driver to only initialize domains that are
+actually referenced in the device tree. Previously, the driver would
+initialize all possible domains up to the maximum ID, which could lead to
+unnecessary firmware calls and longer probe times.
 
-do $KERNELPATH/scripts/checkpatch.pl --strict $file;
-codespell $file;
+Key changes:
+- Scan device tree to identify which power domains are actually referenced
+- Use bitmap to track needed domains instead of initializing all
+- Only perform state queries and initialization for referenced domains
+- Maintain proper array sizing for power domain framework compatibility
+- Keep full provider structure to support late binding
 
-> 
->> 0004-power-supply-qcom_battmgr-Add-state_of_health-proper.patch has no
->> obvious style problems and is ready for submission.
->> CHECK: Alignment should match open parenthesis
->> #95: FILE: drivers/power/supply/qcom_battmgr.c:521:
->> +    if (battmgr->variant == QCOM_BATTMGR_SC8280XP ||
->> +            battmgr->variant == QCOM_BATTMGR_X1E80100)
->>
->>>
->>> +static int qcom_battmgr_set_charge_start_threshold(struct
->>> qcom_battmgr *battmgr, int soc)
->>> +{
->>> +    u32 target_soc, delta_soc;
->>> +    int ret;
->>> +
->>> +    if (soc < CHARGE_CTRL_START_THR_MIN ||
->>> +            soc > CHARGE_CTRL_START_THR_MAX) {
->>> +        dev_err(battmgr->dev, "charge control start threshold exceed
->>> range: [%u - %u]\n",
->>> +                CHARGE_CTRL_START_THR_MIN, CHARGE_CTRL_START_THR_MAX);
->>> +        return -EINVAL;
->>> +    }
->>
->> 'soc' is what - a threshold as far as I can tell.
-> 
-> I will update it with a more meaningful name
-> 
->>>
->>>        if (opcode == BATTMGR_NOTIFICATION)
->>>            qcom_battmgr_notification(battmgr, data, len);
->>> -    else if (battmgr->variant == QCOM_BATTMGR_SC8280XP)
->>> +    else if (battmgr->variant == QCOM_BATTMGR_SC8280XP ||
->>> +            battmgr->variant == QCOM_BATTMGR_X1E80100)
->>>            qcom_battmgr_sc8280xp_callback(battmgr, data, len);
->>>        else
->>>            qcom_battmgr_sm8350_callback(battmgr, data, len);
->>> @@ -1333,7 +1560,8 @@ static void qcom_battmgr_pdr_notify(void *priv,
->>> int state)
->>>    static const struct of_device_id qcom_battmgr_of_variants[] = {
->>>        { .compatible = "qcom,sc8180x-pmic-glink", .data = (void
->>> *)QCOM_BATTMGR_SC8280XP },
->>>        { .compatible = "qcom,sc8280xp-pmic-glink", .data = (void
->>> *)QCOM_BATTMGR_SC8280XP },
->>> -    { .compatible = "qcom,x1e80100-pmic-glink", .data = (void
->>> *)QCOM_BATTMGR_SC8280XP },
->>> +    { .compatible = "qcom,x1e80100-pmic-glink", .data = (void
->>> *)QCOM_BATTMGR_X1E80100 },
->>> +    { .compatible = "qcom,sm8550-pmic-glink", .data = (void
->>> *)QCOM_BATTMGR_SM8550 },
->>
->> Please separate compat string addition from functional changes.
->>
-> The compatible string "qcom,sm8550-pmic-glink" has been present in the
-> binding for a while and it was added as a fallback of "qcom,pmic-glink".
-> The battmgr function has been also supported well on SM8550 for a while.
-> The change here is only specifying a different match data for SM8550 so
-> the driver can handle some new features differently. Does it also need
-> to add it in a separate change? If so,  this change would be split into
-> following 3 patches I think:
-> 
-> 1) add QCOM_BATTMGR_SM8550/X1E80100 variants definition in
-> qcom_battmgr_variant.
-> 
-> 2) add compatible string with corresponding match data for SM8550.
-> 
-> 3) add the charge control function support.
+This optimization reduces probe time and unnecessary firmware interactions
+by only initializing power domains that are actually used in the system.
+For example, in a system with 100 possible domains but only 3 referenced
+in the device tree, we now only initialize those 3 domains instead of
+all 100.
 
-For preference compats and functional change should be disjoined IMO.
+Signed-off-by: Dhruva Gole <d-gole@ti.com>
+---
+
+Hi all,
+The approach of doing a lazy init was briefly proposed in this [1] 2024
+Embedded Open Source talk. It was also brought up in the monthly ARM
+SCMI meetings that take place and it didn't recieve too much opposition.
+
+This greatly helps to improve the boot time, and I have some data to
+back this up as well. This[2] experiment was done on a TI AM62L SoC
+(which is yet to make it upstream) to measure the time taken in the scmi
+pm domain probe function when it does a full 0..N scmi pd init vs just
+the ones being used in the device tree.
+
+If you have any feedback on this, please let me know. If not, I will go
+ahead and post a "non-RFC" patch assuming everyone is mostly on board
+with this. Also request other SCMI consumers to test this out as much as
+possible to see if it breaks in any situations.
+
+[1] https://static.sched.com/hosted_files/eoss24/2f/ARM_SCMI_Primer_Dhruva_kamlesh.pdf
+[2] https://gist.github.com/DhruvaG2000/75d6a4c31e817f56587537b022761c45
+
+Applies cleanly on top of next-20250530, built and tested on top of the
+same
 
 ---
-bod
+
+ drivers/pmdomain/arm/scmi_pm_domain.c | 88 ++++++++++++++++++++-------
+ 1 file changed, 66 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/pmdomain/arm/scmi_pm_domain.c b/drivers/pmdomain/arm/scmi_pm_domain.c
+index 2a213c218126..8acbfe249ed2 100644
+--- a/drivers/pmdomain/arm/scmi_pm_domain.c
++++ b/drivers/pmdomain/arm/scmi_pm_domain.c
+@@ -10,6 +10,8 @@
+ #include <linux/module.h>
+ #include <linux/pm_domain.h>
+ #include <linux/scmi_protocol.h>
++#include <linux/of.h>
++
+ 
+ static const struct scmi_power_proto_ops *power_ops;
+ 
+@@ -47,14 +49,20 @@ static int scmi_pd_power_off(struct generic_pm_domain *domain)
+ 
+ static int scmi_pm_domain_probe(struct scmi_device *sdev)
+ {
+-	int num_domains, i;
+ 	struct device *dev = &sdev->dev;
+-	struct device_node *np = dev->of_node;
++	struct device_node *np;
+ 	struct scmi_pm_domain *scmi_pd;
+-	struct genpd_onecell_data *scmi_pd_data;
+-	struct generic_pm_domain **domains;
++	struct of_phandle_args args;
+ 	const struct scmi_handle *handle = sdev->handle;
+ 	struct scmi_protocol_handle *ph;
++	struct genpd_onecell_data *scmi_pd_data;
++	struct generic_pm_domain **domains;
++	int max_id = -1;
++	int index, num_domains;
++	ktime_t start_time = ktime_get();
++	unsigned long *domain_ids;
++
++	dev_err(dev, "Starting optimized SCMI power domain probe\n");
+ 
+ 	if (!handle)
+ 		return -ENODEV;
+@@ -69,54 +77,90 @@ static int scmi_pm_domain_probe(struct scmi_device *sdev)
+ 		return num_domains;
+ 	}
+ 
+-	scmi_pd = devm_kcalloc(dev, num_domains, sizeof(*scmi_pd), GFP_KERNEL);
+-	if (!scmi_pd)
++	domain_ids = devm_bitmap_zalloc(dev, num_domains, GFP_KERNEL);
++	if (!domain_ids)
+ 		return -ENOMEM;
+ 
++	/* Find referenced domain IDs and mark them in bitmap */
++	for_each_node_with_property(np, "power-domains") {
++		index = 0;
++		while (!of_parse_phandle_with_args(np, "power-domains",
++					"#power-domain-cells",
++					index, &args)) {
++			if (args.args_count >= 1 && args.np == dev->of_node) {
++				int id = args.args[0];
++				if (id < num_domains) {
++					set_bit(id, domain_ids);
++					max_id = max(max_id, id);
++					dev_dbg(dev, "Found power domain reference %d from node %pOF\n",
++							id, np);
++				}
++			}
++			of_node_put(args.np);
++			index++;
++		}
++	}
++
++	if (max_id < 0) {
++		dev_warn(dev, "No power domains referenced in device tree\n");
++		/* Create provider anyway as domains might be referenced later */
++		max_id = 0;
++	}
++
++	dev_warn(dev, "Highest referenced domain ID: %d\n", max_id);
++
+ 	scmi_pd_data = devm_kzalloc(dev, sizeof(*scmi_pd_data), GFP_KERNEL);
+ 	if (!scmi_pd_data)
+ 		return -ENOMEM;
+ 
+-	domains = devm_kcalloc(dev, num_domains, sizeof(*domains), GFP_KERNEL);
++	domains = devm_kcalloc(dev, max_id + 1, sizeof(*domains), GFP_KERNEL);
+ 	if (!domains)
+ 		return -ENOMEM;
+ 
+-	for (i = 0; i < num_domains; i++, scmi_pd++) {
++	scmi_pd = devm_kcalloc(dev, max_id + 1, sizeof(*scmi_pd), GFP_KERNEL);
++	if (!scmi_pd)
++		return -ENOMEM;
++
++	/* Initialize only referenced domains */
++	for_each_set_bit(index, domain_ids, num_domains) {
+ 		u32 state;
+ 
+-		if (power_ops->state_get(ph, i, &state)) {
+-			dev_warn(dev, "failed to get state for domain %d\n", i);
++		if (power_ops->state_get(ph, index, &state)) {
++			dev_err(dev, "Domain %d not available\n", index);
+ 			continue;
+ 		}
+ 
+-		/*
+-		 * Register the explicit power on request to the firmware so
+-		 * that it is tracked as used by OSPM agent and not
+-		 * accidentally turned off with OSPM's knowledge
+-		 */
+-		if (state == SCMI_POWER_STATE_GENERIC_ON)
+-			power_ops->state_set(ph, i, state);
++		dev_warn(dev, "Initializing referenced domain %d\n", index);
+ 
+-		scmi_pd->domain = i;
++		scmi_pd->domain = index;
+ 		scmi_pd->ph = ph;
+-		scmi_pd->name = power_ops->name_get(ph, i);
++		scmi_pd->name = power_ops->name_get(ph, index);
+ 		scmi_pd->genpd.name = scmi_pd->name;
+ 		scmi_pd->genpd.power_off = scmi_pd_power_off;
+ 		scmi_pd->genpd.power_on = scmi_pd_power_on;
+ 		scmi_pd->genpd.flags = GENPD_FLAG_ACTIVE_WAKEUP;
+ 
++		if (state == SCMI_POWER_STATE_GENERIC_ON) {
++			dev_warn(dev, "Domain %d is ON, registering state\n", index);
++			power_ops->state_set(ph, index, state);
++		}
++
+ 		pm_genpd_init(&scmi_pd->genpd, NULL,
+ 			      state == SCMI_POWER_STATE_GENERIC_OFF);
+ 
+-		domains[i] = &scmi_pd->genpd;
++		domains[index] = &scmi_pd->genpd;
++		scmi_pd++;
+ 	}
+ 
+ 	scmi_pd_data->domains = domains;
+-	scmi_pd_data->num_domains = num_domains;
++	scmi_pd_data->num_domains = max_id + 1;
+ 
+ 	dev_set_drvdata(dev, scmi_pd_data);
+ 
+-	return of_genpd_add_provider_onecell(np, scmi_pd_data);
++	dev_err(dev, "SCMI power domains probe completed in %lld us\n",
++			ktime_us_delta(ktime_get(), start_time));
++
++	return of_genpd_add_provider_onecell(dev->of_node, scmi_pd_data);
+ }
+ 
+ static void scmi_pm_domain_remove(struct scmi_device *sdev)
+-- 
+2.34.1
+
 
