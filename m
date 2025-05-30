@@ -1,178 +1,113 @@
-Return-Path: <linux-pm+bounces-27883-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27884-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 819D5AC8F51
-	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 15:11:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E398EAC9067
+	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 15:39:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B35D5164019
-	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 13:10:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA48018825BC
+	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 13:39:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C4C0280A57;
-	Fri, 30 May 2025 12:42:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBAA4207DFE;
+	Fri, 30 May 2025 13:39:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uP7Ic1Fd"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="W7EytWms"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10768280A39;
-	Fri, 30 May 2025 12:42:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748608931; cv=none; b=fSfmgn7AXucuy/53XY8ZjRhPEwqec+f1FgFHbWsxpNetoCIfyNaiNZ34sMSGYaL4PNkX+cj56oASMCFYK4cuk3Kiy/kVbRsVx4l5KDTSGFwIqTi8m9mEJl5iDNJkQXWEbzOT8N2ynEX5Od0oZD3PN1mgdTfyeJkJc18zARPSQBA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748608931; c=relaxed/simple;
-	bh=mgsylCNypqzTCIVJj1R4VEgOduZnE90YK7JxXM13pLs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Onq5NjBSeQtluJTURd/QH7HWjc2tuBLUlYCWE9P9cTSr2apgoybBTQkUw4MRcwWCWInIGDuqeXOc1BOVWyQPHAciP7KHGMFiRHGlIzAeJuXdvV70KKQPuwXGCcd0QFSub02FC3Vx2deGyUNeEpiFvxMqviY3qxw3LKr3rngkubg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uP7Ic1Fd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C788CC4CEEF;
-	Fri, 30 May 2025 12:42:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748608930;
-	bh=mgsylCNypqzTCIVJj1R4VEgOduZnE90YK7JxXM13pLs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uP7Ic1Fdzo88HjjvWCuMTPaMV+qW9laHgiDwFDcALkb+94QAQCjgHzGXjZrAXi5Rz
-	 TsEs8puhhZlhs5FwvqYzAUnQptmzPB9GWJHMRUCwTbBesY732adupDOAhSpXCNkv1k
-	 roD5Nf0Yd4qQ9ezNGwRfJV5eMSNWAoDcNRr96P4gsjnW9GLvJo92gyMk7s3VR8FI2m
-	 7PcUs7zRTaW85yHAI5MzPjZiHC8fyumns5msUC8zvwxlBEweP0Ur7cdHtPWXM5DhiK
-	 TcTDfUEUbalnOy+LOMvqrWF6nH5/aM9mKx2NU9IC03Il0yyqKL/116cQY2ub8HuoxO
-	 Lz0eb/Av5OYEg==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Charan Teja Kalla <quic_charante@quicinc.com>,
-	Patrick Daly <quic_pdaly@quicinc.com>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-	Sasha Levin <sashal@kernel.org>,
-	rjw@rjwysocki.net,
-	len.brown@intel.com,
-	pavel@ucw.cz,
-	gregkh@linuxfoundation.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 5/6] PM: runtime: fix denying of auto suspend in pm_suspend_timer_fn()
-Date: Fri, 30 May 2025 08:42:02 -0400
-Message-Id: <20250530124203.2577122-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250530124203.2577122-1-sashal@kernel.org>
-References: <20250530124203.2577122-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB20A18DB1E;
+	Fri, 30 May 2025 13:39:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748612354; cv=pass; b=Q+t7phOm0GB+XGv1KFAPsJExX0fvMFnFc8he2kD2VBHDIx6cDWAlbEWxGMl46HQUuYjll1IYOKSRThqqpxcsqinf3SDq9+tU2v0eM6fManxaGORs78CbFdfyN/GaThy4MQqy80XRxjREELMpX/2shp4cUAmrldpb4wPLt1lkD44=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748612354; c=relaxed/simple;
+	bh=12ntjRgwgwK+Seu77q1XPGvqWeoLN1de7YjAF0PqYkA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=YUzlO2IxKhtchVikBGJNw3kNU17kmVL+gLb9eOf5NHm5pin7uwTcUq67bGp6mkfCAQ/1mbsUfQqa37l+GVzOBiRcBqB3mLzZyc+yZ1tRSKTVuh7PG1iZ9ptVa4auhNK0Pqqgn08iwuaWHxwOr9rt51qFM/P0hAM07PTgsp0W2ek=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=W7EytWms; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1748612319; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=SZShYD1t7mTQ9DT2tggEIk7RVpQCf8D3/y2WWQq3xAp3QVq2TJNm8s2lhA5m3Bu7IX4+k3Azipd3wd5/YXEee8Nhg+WAmCgDktW+cPgRxy1nTbwb/ufZlgC6GS60Z0xf1vyoXRkR5neD91mJgPUZrQvyF1lH87/56WRqUC+jYPQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1748612319; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=y1IxS0jtrAS2T8sDTVWHloBSuBdZ/2pcZoSIPKDAGmE=; 
+	b=H3rILkaoiVKgWlNhEKjM6EZiyvUnapLf5g56V+3Bs9THP1+BOv0Z/La9coz7lHvXU7B/RDdf5jf6e/0jm8wQ2bkzPYKyCccXL7uaJlyMPby3SAY5DytJsTzDG/N51Mn9PiN+HltABB0RZAlnB5reYvXoawUyqXogI+Fwl+SmxH8=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1748612319;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:To:To:Cc:Cc:Reply-To;
+	bh=y1IxS0jtrAS2T8sDTVWHloBSuBdZ/2pcZoSIPKDAGmE=;
+	b=W7EytWmsa4SYw9aRN+PY2FYG2NiUItqPeB4c07/PK1UR/4G5Jl6Yc/dXzga8aXn6
+	Pv/I+YN9TL/7dFgSsxf7naHrTNbGeWGerVZPEtxySVSOvA9VafN+FPS1QEVY+YlBGnX
+	G80zcibtcscMFFi97xEAkivPAzxujErT5+pGHHVw=
+Received: by mx.zohomail.com with SMTPS id 1748612317988810.2056390045541;
+	Fri, 30 May 2025 06:38:37 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Subject: [PATCH 0/2] RK3588 rockchip-dfi enhancements
+Date: Fri, 30 May 2025 15:38:07 +0200
+Message-Id: <20250530-rk3588-dfi-improvements-v1-0-6e077c243a95@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.293
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAL+0OWgC/zWNQQqDMBBFrxJm3YEYEytepbiwZtIOJYlNUhHEu
+ zdUunwf/ns7ZEpMGQaxQ6KVM8dQobkImJ9TeBCyrQxKKiNNKzG9WtP3aB0j+yXFlTyFktF1utN
+ KXxtjFdT3ksjx9jPfxpMTvT81UM4R7lMmnKP3XAYRaCv4j8B4HF+xaBm9mgAAAA==
+X-Change-ID: 20250530-rk3588-dfi-improvements-f646424715d2
+To: Chanwoo Choi <cw00.choi@samsung.com>, 
+ MyungJoo Ham <myungjoo.ham@samsung.com>, 
+ Kyungmin Park <kyungmin.park@samsung.com>, Heiko Stuebner <heiko@sntech.de>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: kernel@collabora.com, linux-pm@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, 
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+X-Mailer: b4 0.14.2
 
-From: Charan Teja Kalla <quic_charante@quicinc.com>
+This series consists of two related patches. The first fixes the memory
+cycle counter on RK3588, which read half of what it should've been
+reading. You can easily verify this with
 
-[ Upstream commit 40d3b40dce375d6f1c1dbf08d79eed3aed6c691d ]
+  perf stat -a -e rockchip_ddr/cycles/ sleep 1
 
-pm_runtime_put_autosuspend() schedules a hrtimer to expire
-at "dev->power.timer_expires". If the hrtimer's callback,
-pm_suspend_timer_fn(), observes that the current time equals
-"dev->power.timer_expires", it unexpectedly bails out instead of
-proceeding with runtime suspend.
+and then dividing the result by the number of Hertz the ddr init settles
+on, which for LPDDR4X on RK3588 appears to be 2112MHz.
 
-pm_suspend_timer_fn():
+The second adds support for measuring memory bandwidth with LPDDR5
+memory. Results have been validated by comparing its reported bandwidth
+with that reported by stress-ng --stream 8 --timeout 15, which line up
+almost perfectly.
 
- if (expires > 0 && expires < ktime_get_mono_fast_ns()) {
- 	dev->power.timer_expires = 0;
- 	rpm_suspend(..)
- }
-
-Additionally, as ->timer_expires is not cleared, all the future auto
-suspend requests will not schedule hrtimer to perform auto suspend.
-
-rpm_suspend():
-
- if ((rpmflags & RPM_AUTO) &&...) {
- 	if (!(dev->power.timer_expires && ...) { <-- this will fail.
- 		hrtimer_start_range_ns(&dev->power.suspend_timer,...);
- 	}
- }
-
-Fix this by as well checking if current time reaches the set expiration.
-
-Co-developed-by: Patrick Daly <quic_pdaly@quicinc.com>
-Signed-off-by: Patrick Daly <quic_pdaly@quicinc.com>
-Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
-Link: https://patch.msgid.link/20250515064125.1211561-1-quic_charante@quicinc.com
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
+Nicolas Frattaroli (2):
+      PM / devfreq: rockchip-dfi: double count on RK3588
+      PM / devfreq: rockchip-dfi: add support for LPDDR5
 
-Now, based on my analysis, let me provide the decision: **YES** This
-commit should be backported to stable kernel trees. Here's my extensive
-analysis: ## Bug Analysis This is a clear **logical bug fix** in the PM
-runtime autosuspend mechanism that affects device power management. The
-issue is in the `pm_suspend_timer_fn()` function at
-`drivers/base/power/runtime.c:1006`. ## The Problem The current code
-uses a strict less-than comparison: ```c if (expires > 0 && expires <
-ktime_get_mono_fast_ns()) { ``` However, this creates a race condition
-where: 1. When `pm_runtime_put_autosuspend()` schedules an hrtimer to
-expire at exactly `dev->power.timer_expires` 2. If the timer callback
-`pm_suspend_timer_fn()` observes that the current time **equals**
-`dev->power.timer_expires` (not less than), it incorrectly bails out 3.
-The timer expires but the device is not suspended 4. Since
-`timer_expires` is not cleared, all future auto-suspend requests fail
-because the condition `if (!(dev->power.timer_expires && ...))` in
-`rpm_suspend()` (line 596-597) will always be false ## The Fix The fix
-correctly changes the comparison to `<=` (less than or equal): ```c if
-(expires > 0 && expires <= ktime_get_mono_fast_ns()) { ``` This ensures
-that the suspend is triggered when the current time equals or exceeds
-the expiration time. ## Why This Should Be Backported 1. **Fixes a Real
-User-Affecting Bug**: Devices may fail to auto-suspend, leading to
-increased power consumption and potential battery drain on mobile
-devices. 2. **Minimal Risk**: This is a one-character change (`<` to
-`<=`) that fixes a clear logical error. The change is extremely
-contained and low-risk. 3. **Critical Subsystem**: PM runtime is a
-critical kernel subsystem affecting all device power management. A
-failure here can impact system-wide power efficiency. 4. **No
-Architectural Changes**: This doesn't introduce new features or change
-architecture - it simply fixes incorrect logic. 5. **Small and
-Contained**: The fix is confined to a single comparison operator in one
-function. 6. **Clear Co-authors**: The commit shows collaboration
-between Patrick Daly and Charan Teja Kalla from Qualcomm, indicating
-this was found in real-world usage. ## Comparison with Similar Commits
-Looking at the historical examples: - **Similar Commit #5 (Status:
-YES)**: Also a PM runtime timer fix with data type correction - this had
-similar characteristics and was backported - The current commit follows
-the same pattern: critical PM runtime bug fix with minimal, contained
-changes ## Stable Tree Criteria Met - ✅ Fixes important bug affecting
-users - ✅ Relatively small and contained fix - ✅ No clear side effects
-beyond fixing the issue - ✅ No major architectural changes - ✅ Touches
-critical kernel subsystem (appropriately) - ✅ Follows stable tree rules
-(important bugfix, minimal risk) - ✅ Has clear explanation of the
-problem and solution This commit perfectly fits the stable backport
-criteria and should be included in stable kernel trees to ensure proper
-device power management functionality across all kernel versions.
+ drivers/devfreq/event/rockchip-dfi.c | 91 ++++++++++++++++++++++++++++--------
+ include/soc/rockchip/rk3588_grf.h    |  8 +++-
+ include/soc/rockchip/rockchip_grf.h  |  1 +
+ 3 files changed, 79 insertions(+), 21 deletions(-)
+---
+base-commit: ba2b2250bbaf005016ba85e345add6e19116a1ea
+change-id: 20250530-rk3588-dfi-improvements-f646424715d2
 
- drivers/base/power/runtime.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index d301a6de762df..7fa231076ad5f 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -982,7 +982,7 @@ static enum hrtimer_restart  pm_suspend_timer_fn(struct hrtimer *timer)
- 	 * If 'expires' is after the current time, we've been called
- 	 * too early.
- 	 */
--	if (expires > 0 && expires < ktime_get_mono_fast_ns()) {
-+	if (expires > 0 && expires <= ktime_get_mono_fast_ns()) {
- 		dev->power.timer_expires = 0;
- 		rpm_suspend(dev, dev->power.timer_autosuspends ?
- 		    (RPM_ASYNC | RPM_AUTO) : RPM_ASYNC);
+Best regards,
 -- 
-2.39.5
+Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 
 
