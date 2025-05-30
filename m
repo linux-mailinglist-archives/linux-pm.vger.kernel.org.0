@@ -1,58 +1,59 @@
-Return-Path: <linux-pm+bounces-27860-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27861-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 848BFAC8DCF
-	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 14:39:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FA58AC8DF8
+	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 14:42:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80BC8A24844
-	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 12:39:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DD5227B6162
+	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 12:41:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C1FD22DFAD;
-	Fri, 30 May 2025 12:39:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 459DE235068;
+	Fri, 30 May 2025 12:39:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Px5MgdZr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="if81/KWq"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C50B22DF96;
-	Fri, 30 May 2025 12:39:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15ADD235064;
+	Fri, 30 May 2025 12:39:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748608741; cv=none; b=gtJePHAi5sP+4PCQfFHDAIKEhztC4M8uiIvKkoTWJMEEiy5CkeB3lXjY4pWEeI9S3cKZ7uS5h+WlnQbaa41/GWLv3e+238q/86rveXBABSoOfkC/3+lTo4GAsP9Ss7y/AGBY6/JlSirfgIJSuNe6ylda6bOEEnM7AENtoMshqA4=
+	t=1748608759; cv=none; b=cRV0oDeCrbpeT7uppAlPYV+R88JJApwFwD9jVEuVGFhsIgi5zqlxSsfIQssjoYmv4t3Ae2K97kJ2AKGNUMX6d7/rHavEyF2md0+taxgsq4tDhKj/YErTdiRXBJ8mRNFRQuZbVcJo1jsj/RZKrd80bikqV706CSRTHZba2Ppt6E4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748608741; c=relaxed/simple;
-	bh=xg8veMOPGvIOw6WvGZ0ho8TejVo3zpsy6lpGwjyRjUQ=;
+	s=arc-20240116; t=1748608759; c=relaxed/simple;
+	bh=/JmaFHCdGV4lgLDVoId7ufPnTOktRZrAVesfxtEAkoE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HFciuK1t7sJLchSeuKuFurJv7iqlL7jGZKZ4+dJh+TEqKsUApe07RSF8fzHxlYQ83PQmrLxBMRbmVPa04RsBQlHDCLDzqtpywCwtoSFkdnNEUcH9aSlvnO3HLz0R2M8j6Bb5M9yISHw0lO1i74tuXFwLMuIYz9ztW9XVFT6zhTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Px5MgdZr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 316CDC4CEE9;
-	Fri, 30 May 2025 12:39:00 +0000 (UTC)
+	 MIME-Version:Content-Type; b=D5M771RSqdutZvrOJnACSF8tCrUFfYVTALg8pV6jjx0vmbvGm2eA3AMhi1L+D8VMGKDXvTpuiRpgOn93esa3JqAkkn46Gk4hFwJmrWdGVjHlA9rzOmwKsbjlH94AHDZWzmWQNgOhT0fVwudhEpocc4mnLydd+suMJXPWdoQHt18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=if81/KWq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2CEAC4CEEB;
+	Fri, 30 May 2025 12:39:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748608741;
-	bh=xg8veMOPGvIOw6WvGZ0ho8TejVo3zpsy6lpGwjyRjUQ=;
+	s=k20201202; t=1748608758;
+	bh=/JmaFHCdGV4lgLDVoId7ufPnTOktRZrAVesfxtEAkoE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Px5MgdZrYgiWBFcbv6B7c2aHS8KvqQMz+vhsiz+fiBO0KsEIlFticn/D1KTGMlMPa
-	 1vVn2XtBNEnx5YmngK3D49T7HkWm+zE4HNNFcWTvryMCG5tMBAmqEBSwgNq61wEx9w
-	 2q0R52/qb7rECSp5ibuNMhWTlqCIF8+TDqmtFDoiL2AMK8uMCDxFXQp2E9JE2T1QdY
-	 vPRhJ/O9MCHc6co8fMj4GMb3spr7ytunybcPvdhFCK3+3Q86D5Le6e0/yqC9mTAYnY
-	 +6ZsKQHZ3ifc6r9B6k/m9w3eb+V7ahBKVi9Pg1ACZdkxN9DF6lCyZfevqAF9nC5TbS
-	 NCxTk9NrXxiPQ==
+	b=if81/KWqTTnKdc/D5A6t3+I89QC48hFOjpeo94zdsAfJJ897qCyHxjNfj3GgWlu7l
+	 J4KWSXfLzSD4xgKEeCgo50PoVI9yWb/dRRdDVfkSeKcDcRspgMUvdGNK+WTGAdjBt9
+	 ziL1jgEbZJM8PisJSh3IdKFvWZ3CoWBmq9fVo2kXCZRXqLQLh51saHFh8w47kIu4Ki
+	 ybCwQo2ftcEC+0By1wunnWALToazZ4JJos1m0szXaCgS7BQD0kKew98afJVRg/bcUb
+	 Ze9+4FQZkzj8/lo+jLodPYqEgOmEv706bZvTbYm6yDhMvNfn99n1qfmq2m2/mvRAGX
+	 77kcVqFrs3ucw==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+Cc: Jerry Lv <Jerry.Lv@axis.com>,
+	=?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
 	Sebastian Reichel <sebastian.reichel@collabora.com>,
 	Sasha Levin <sashal@kernel.org>,
 	sre@kernel.org,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.15 06/30] power: supply: collie: Fix wakeup source leaks on device unbind
-Date: Fri, 30 May 2025 08:38:28 -0400
-Message-Id: <20250530123852.2574030-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.15 19/30] power: supply: bq27xxx: Retrieve again when busy
+Date: Fri, 30 May 2025 08:38:41 -0400
+Message-Id: <20250530123852.2574030-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250530123852.2574030-1-sashal@kernel.org>
 References: <20250530123852.2574030-1-sashal@kernel.org>
@@ -62,84 +63,132 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.15
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Jerry Lv <Jerry.Lv@axis.com>
 
-[ Upstream commit c73d19f89cb03c43abbbfa3b9caa1b8fc719764c ]
+[ Upstream commit f16d9fb6cf03fdbdefa41a8b32ba1e57afb7ae3d ]
 
-Device can be unbound, so driver must also release memory for the wakeup
-source.
+Multiple applications may access the battery gauge at the same time, so
+the gauge may be busy and EBUSY will be returned. The driver will set a
+flag to record the EBUSY state, and this flag will be kept until the next
+periodic update. When this flag is set, bq27xxx_battery_get_property()
+will just return ENODEV until the flag is updated.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20250406202730.55096-1-krzysztof.kozlowski@linaro.org
+Even if the gauge was busy during the last accessing attempt, returning
+ENODEV is not ideal, and can cause confusion in the applications layer.
+
+Instead, retry accessing the I2C to update the flag is as expected, for
+the gauge typically recovers from busy state within a few milliseconds.
+If still failed to access the gauge, the real error code would be returned
+instead of ENODEV (as suggested by Pali Rohár).
+
+Reviewed-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Jerry Lv <Jerry.Lv@axis.com>
+Link: https://lore.kernel.org/r/20250415-foo-fix-v2-1-5b45a395e4cc@axis.com
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
-Perfect! This confirms the pattern. Now let me analyze the commit:
-**YES** This commit should be backported to stable kernel trees. Here's
-my extensive analysis: ## Justification for Backporting ### 1. **Bug Fix
-Nature** The commit fixes a resource leak bug where wakeup sources are
-not properly cleaned up when the device is unbound. This is a clear bug
-fix that affects system resource management. ### 2. **Matching Pattern
-with Similar Commits** This commit follows the exact same pattern as the
-similar commits marked "YES" for backporting: - **Similar Commit #1
-(gpio: mpc8xxx)** and **Similar Commit #3 (gpio: zynq)** both have
-identical commit messages and fix the same type of wakeup source leak by
-adding `device_init_wakeup(&pdev->dev, 0)` in the remove function. - All
-these commits are from the same author (Krzysztof Kozlowski) and have
-`Cc: stable@vger.kernel.org` in their commit messages, indicating
-explicit intention for stable tree inclusion. ### 3. **Code Analysis**
-The code change is minimal and surgical: - **Single line addition**:
-`device_init_wakeup(&ucb->dev, 0);` in the `collie_bat_remove()`
-function - **Proper cleanup ordering**: The line is added at the
-beginning of the remove function, which is the correct place for
-resource cleanup - **Symmetric operation**: The probe function calls
-`device_init_wakeup(&ucb->dev, 1)` at line 414, and now the remove
-function properly disables it with `device_init_wakeup(&ucb->dev, 0)`
-### 4. **Resource Leak Prevention** From examining the kernel tree, I
-can see that: - The probe function enables wakeup with
-`device_init_wakeup(&ucb->dev, 1)` - Without this fix, when the driver
-is unbound, the wakeup source memory is leaked - This follows the
-established pattern seen in other drivers like gpio-zynq.c where
-`device_init_wakeup(&pdev->dev, 0)` is called in remove functions ### 5.
-**Low Risk Assessment** - **Minimal scope**: Only affects the collie
-battery driver cleanup path - **No functional changes**: Doesn't change
-driver behavior, only fixes resource cleanup - **No architectural
-changes**: Single line addition for proper resource management - **No
-new features**: Pure bug fix ### 6. **Stable Tree Criteria Compliance**
-- ✅ **Important bug fix**: Prevents resource leaks - ✅ **Minimal risk**:
-Single line, well-understood API call - ✅ **No new features**: Only
-fixes cleanup - ✅ **Small and contained**: Confined to one driver's
-remove function - ✅ **Clear side effects**: Only positive effect of
-proper resource cleanup ### 7. **Explicit Stable Tree Intent** The
-commit message doesn't include `Cc: stable@vger.kernel.org`, but the
-similar commits #1 and #3 from the same author fixing identical issues
-do have this tag, suggesting this is part of a series addressing wakeup
-source leaks across multiple drivers. The fix is essential for proper
-resource management and follows established kernel patterns for wakeup
-source cleanup during device unbinding.
+**YES** This commit should be backported to stable kernel trees. ##
+Detailed Analysis: ### 1. **User-Visible Bug Fix** ✅ The commit fixes a
+clear user-visible issue where multiple applications accessing the
+battery gauge simultaneously receive confusing `-ENODEV` errors instead
+of actual battery data or proper error codes. This directly impacts
+battery monitoring applications and system power management tools. ###
+2. **Code Changes Analysis** **bq27xxx_battery.c change:** ```c -return
+-ENODEV; +return di->cache.flags; ``` This single-line change stops
+masking real error codes with generic `-ENODEV`, allowing applications
+to see the actual error (like `-EBUSY`) and handle it appropriately.
+**bq27xxx_battery_i2c.c changes:** - Adds retry logic with up to 3
+attempts when encountering `-EBUSY` - Uses standard `usleep_range(10000,
+11000)` for 10ms delays - Implements proper loop structure with explicit
+break conditions ### 3. **Small and Contained** ✅ The changes are
+minimal and focused: - No architectural modifications - No changes to
+driver interfaces or APIs - Limited to error handling improvement within
+the same subsystem ### 4. **Low Regression Risk** ✅ - Uses established
+kernel patterns (`usleep_range`, retry counters) - No timing changes to
+critical paths - Battery gauges typically recover from busy state within
+milliseconds - Maintains backward compatibility ### 5. **Historical
+Precedent** ✅ Analysis of similar bq27xxx commits shows consistent
+backporting: - "Fix race condition" (Similar Commit #4): **YES** -
+Similar I2C access improvement - "After charger plug in/out wait 0.5s"
+(Similar Commit #5): **YES** - Similar stability fix - "make status more
+robust" (Similar Commit #2): **YES** - Similar robustness improvement
+### 6. **Follows Kernel Conventions** ✅ - Standard I2C retry mechanisms
+are common in the kernel - Proper error code propagation instead of
+masking - Code reviewed by subsystem maintainer (Pali Rohár) - Uses
+kernel-standard delay functions ### 7. **System Impact** **Improves
+stability** by: - Preventing userspace confusion from misleading error
+codes - Gracefully handling concurrent access scenarios - Better error
+reporting for debugging - No negative side effects identified ### 8.
+**Risk Assessment** **Very Low Risk:** - No memory management changes -
+No locking mechanism modifications - Standard retry pattern with bounded
+attempts - Preserves all existing functionality This commit represents
+an ideal stable backport candidate: it fixes a real user-visible bug
+with minimal, well-understood code changes that follow established
+kernel patterns and have strong historical precedent for backporting in
+this driver subsystem.
 
- drivers/power/supply/collie_battery.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/power/supply/bq27xxx_battery.c     |  2 +-
+ drivers/power/supply/bq27xxx_battery_i2c.c | 13 ++++++++++++-
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/collie_battery.c b/drivers/power/supply/collie_battery.c
-index 68390bd1004f0..3daf7befc0bf6 100644
---- a/drivers/power/supply/collie_battery.c
-+++ b/drivers/power/supply/collie_battery.c
-@@ -440,6 +440,7 @@ static int collie_bat_probe(struct ucb1x00_dev *dev)
+diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
+index 2f31d750a4c1e..93dcebbe11417 100644
+--- a/drivers/power/supply/bq27xxx_battery.c
++++ b/drivers/power/supply/bq27xxx_battery.c
+@@ -2131,7 +2131,7 @@ static int bq27xxx_battery_get_property(struct power_supply *psy,
+ 	mutex_unlock(&di->lock);
  
- static void collie_bat_remove(struct ucb1x00_dev *dev)
- {
-+	device_init_wakeup(&ucb->dev, 0);
- 	free_irq(gpiod_to_irq(collie_bat_main.gpio_full), &collie_bat_main);
- 	power_supply_unregister(collie_bat_bu.psy);
- 	power_supply_unregister(collie_bat_main.psy);
+ 	if (psp != POWER_SUPPLY_PROP_PRESENT && di->cache.flags < 0)
+-		return -ENODEV;
++		return di->cache.flags;
+ 
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_STATUS:
+diff --git a/drivers/power/supply/bq27xxx_battery_i2c.c b/drivers/power/supply/bq27xxx_battery_i2c.c
+index ba0d22d904295..868e95f0887e1 100644
+--- a/drivers/power/supply/bq27xxx_battery_i2c.c
++++ b/drivers/power/supply/bq27xxx_battery_i2c.c
+@@ -6,6 +6,7 @@
+  *	Andrew F. Davis <afd@ti.com>
+  */
+ 
++#include <linux/delay.h>
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
+@@ -31,6 +32,7 @@ static int bq27xxx_battery_i2c_read(struct bq27xxx_device_info *di, u8 reg,
+ 	struct i2c_msg msg[2];
+ 	u8 data[2];
+ 	int ret;
++	int retry = 0;
+ 
+ 	if (!client->adapter)
+ 		return -ENODEV;
+@@ -47,7 +49,16 @@ static int bq27xxx_battery_i2c_read(struct bq27xxx_device_info *di, u8 reg,
+ 	else
+ 		msg[1].len = 2;
+ 
+-	ret = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
++	do {
++		ret = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
++		if (ret == -EBUSY && ++retry < 3) {
++			/* sleep 10 milliseconds when busy */
++			usleep_range(10000, 11000);
++			continue;
++		}
++		break;
++	} while (1);
++
+ 	if (ret < 0)
+ 		return ret;
+ 
 -- 
 2.39.5
 
