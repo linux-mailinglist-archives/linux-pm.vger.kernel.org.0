@@ -1,62 +1,58 @@
-Return-Path: <linux-pm+bounces-27871-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27872-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2F6DAC8EC3
-	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 14:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 48AC6AC8EC7
+	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 14:57:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B8E1D502DB9
-	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 12:55:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C991502D5D
+	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 12:56:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C18C25F990;
-	Fri, 30 May 2025 12:40:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D3B82609EA;
+	Fri, 30 May 2025 12:40:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eB7BxEbq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hT0RjtKO"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E685A25F98A;
-	Fri, 30 May 2025 12:40:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C06A25FA1F;
+	Fri, 30 May 2025 12:40:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748608844; cv=none; b=O8bjDsBAowTzqI+Tme09WwqOfXe9x0REcz94oQzJCJMGIC9pDBn3BPzI73Foyup4iGLfcbcwq6giaOEE/fvzgJ45OWdWswkwisADriMXBQNhf76diCl2EpwSup8ouBg1PS51CtTxOUOVtpVkzr4yx/8l/naONTxsfITM4BCeUSQ=
+	t=1748608846; cv=none; b=UcRh0fRdCnf+9fJoGQE4K0XF/T6FP7CR/nZl4IaPEt8+o4iJFIzTqOfz68zXhQTYrBRVTnYe/M7pqkuStIPoezYVkOogKiCKx5J83Hj9pkXKjmNSsqcFQRo45ndr9EaDn8rfCGy4ehEemerc/EQTv63DjADpObF5yMeoh7KE1q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748608844; c=relaxed/simple;
-	bh=Kp7PsIJudmWc/GdjDt9EnbxWP7TcoSa2ZhIjkRNc5T0=;
+	s=arc-20240116; t=1748608846; c=relaxed/simple;
+	bh=FlpeWCnJFPCv86vto1B49MxkeN4OkRESOjSv+/+0ZAw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kQ8l00m8WF94a0pcijfuoO84EVRE2q2akUkpd50u3GtoFJ0hiMlAdmipWV9IjpxtTvHDZ/bd6r5a2e9V6Kf4ApBwIDeqfEGCvx/MkAqOYkK5K6IaqpBKvT926k/VDUMJh+4njU3Q9quTXqdLp8M+un0UBsxowC58g7NBUjwygKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eB7BxEbq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C17BC4CEEA;
-	Fri, 30 May 2025 12:40:42 +0000 (UTC)
+	 MIME-Version:Content-Type; b=Qu9lhebX1WVPw4qi2Eq3D9hH+uLIqEJYU3w84A8ARQTMpbu1rqFqgHR4SIoR+YjPaoOmjh6Q8piVtTUNdsKJrp9vZ2hKl4i/Z5ECHXdRGuKtOp3dK1t12BZeO1kFPsKoJJU82VYDH67S7TWs18Ku6RF5TqZUX4IthEp6A4dw5As=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hT0RjtKO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09D85C4CEEB;
+	Fri, 30 May 2025 12:40:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748608843;
-	bh=Kp7PsIJudmWc/GdjDt9EnbxWP7TcoSa2ZhIjkRNc5T0=;
+	s=k20201202; t=1748608845;
+	bh=FlpeWCnJFPCv86vto1B49MxkeN4OkRESOjSv+/+0ZAw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eB7BxEbqGVXc4r7XqbOc55qkM07j/oETTqwNO0VgsAFcXXAEEHirI6IyR58HOWL9q
-	 mHCHNQ3i/AOVqhD0vp9TUz2tf9XWQHB/UbO4tlcztTBf5qAF6Xz3Qa164G2SFnplpy
-	 lGFo0eLLLGnsZ61OQ5yW5u+uWRzBwsNJUVfsf9zvAfBxXEogFJwWF6+d4n1jksgipK
-	 m/poizih1HBzwJxj2EsyPd3F/xdnx1+8EiVZ7aJXbPJEWn7ORjC7x7K4vY7hfRtwY9
-	 dIOVWkHy32X/2nx3av9h69gMBihyL2S8zCFKDcWk9L/gXEGREAzTi85ZyKKVkcbpMs
-	 kF7KP/iVpAnMQ==
+	b=hT0RjtKO1YcBliM1vfi/3xNr8vrE0WOlQsqFYf9C9cD6dZtjWu4/xJ1zaKgmvq8LW
+	 JNKiSXDxI3NOVujlmxcp+bhLAoWlfrmFViBw09lBYFQU5eLUYES4Ga1Fg/n9ZBloz+
+	 Ujotu2+Z4kulD7540BRqnEigLUr5tLGV1plZfgUGjU85d1upVdzjVEhbwS0KpYl7M3
+	 IAH3CYlgdOr+xUppXS60oJ/RMRlHQx3QYC+sEShB6YQZdJnW9mhRSYEXj9EMwjmlkM
+	 67lGObf2ibp1klvWMaDJTmmpytHJJnfNia0OV1I3+asAR4zfQVIrvnoGWzphL7LrQ/
+	 51u8y7+qjMjvg==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Charan Teja Kalla <quic_charante@quicinc.com>,
-	Patrick Daly <quic_pdaly@quicinc.com>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+Cc: Svyatoslav Ryhel <clamor95@gmail.com>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
 	Sasha Levin <sashal@kernel.org>,
-	rjw@rjwysocki.net,
-	len.brown@intel.com,
-	pavel@ucw.cz,
-	gregkh@linuxfoundation.org,
+	sre@kernel.org,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 23/26] PM: runtime: fix denying of auto suspend in pm_suspend_timer_fn()
-Date: Fri, 30 May 2025 08:40:09 -0400
-Message-Id: <20250530124012.2575409-23-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 25/26] power: supply: max17040: adjust thermal channel scaling
+Date: Fri, 30 May 2025 08:40:11 -0400
+Message-Id: <20250530124012.2575409-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250530124012.2575409-1-sashal@kernel.org>
 References: <20250530124012.2575409-1-sashal@kernel.org>
@@ -72,106 +68,94 @@ X-stable-base: Linux 6.12.31
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Charan Teja Kalla <quic_charante@quicinc.com>
+From: Svyatoslav Ryhel <clamor95@gmail.com>
 
-[ Upstream commit 40d3b40dce375d6f1c1dbf08d79eed3aed6c691d ]
+[ Upstream commit d055f51731744243b244aafb1720f793a5b61f7b ]
 
-pm_runtime_put_autosuspend() schedules a hrtimer to expire
-at "dev->power.timer_expires". If the hrtimer's callback,
-pm_suspend_timer_fn(), observes that the current time equals
-"dev->power.timer_expires", it unexpectedly bails out instead of
-proceeding with runtime suspend.
+IIO thermal channel is in millidegree while power supply framework expects
+decidegree values. Adjust scaling to get correct readings.
 
-pm_suspend_timer_fn():
-
- if (expires > 0 && expires < ktime_get_mono_fast_ns()) {
- 	dev->power.timer_expires = 0;
- 	rpm_suspend(..)
- }
-
-Additionally, as ->timer_expires is not cleared, all the future auto
-suspend requests will not schedule hrtimer to perform auto suspend.
-
-rpm_suspend():
-
- if ((rpmflags & RPM_AUTO) &&...) {
- 	if (!(dev->power.timer_expires && ...) { <-- this will fail.
- 		hrtimer_start_range_ns(&dev->power.suspend_timer,...);
- 	}
- }
-
-Fix this by as well checking if current time reaches the set expiration.
-
-Co-developed-by: Patrick Daly <quic_pdaly@quicinc.com>
-Signed-off-by: Patrick Daly <quic_pdaly@quicinc.com>
-Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
-Link: https://patch.msgid.link/20250515064125.1211561-1-quic_charante@quicinc.com
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+Link: https://lore.kernel.org/r/20250430060239.12085-2-clamor95@gmail.com
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
-Now, based on my analysis, let me provide the decision: **YES** This
-commit should be backported to stable kernel trees. Here's my extensive
-analysis: ## Bug Analysis This is a clear **logical bug fix** in the PM
-runtime autosuspend mechanism that affects device power management. The
-issue is in the `pm_suspend_timer_fn()` function at
-`drivers/base/power/runtime.c:1006`. ## The Problem The current code
-uses a strict less-than comparison: ```c if (expires > 0 && expires <
-ktime_get_mono_fast_ns()) { ``` However, this creates a race condition
-where: 1. When `pm_runtime_put_autosuspend()` schedules an hrtimer to
-expire at exactly `dev->power.timer_expires` 2. If the timer callback
-`pm_suspend_timer_fn()` observes that the current time **equals**
-`dev->power.timer_expires` (not less than), it incorrectly bails out 3.
-The timer expires but the device is not suspended 4. Since
-`timer_expires` is not cleared, all future auto-suspend requests fail
-because the condition `if (!(dev->power.timer_expires && ...))` in
-`rpm_suspend()` (line 596-597) will always be false ## The Fix The fix
-correctly changes the comparison to `<=` (less than or equal): ```c if
-(expires > 0 && expires <= ktime_get_mono_fast_ns()) { ``` This ensures
-that the suspend is triggered when the current time equals or exceeds
-the expiration time. ## Why This Should Be Backported 1. **Fixes a Real
-User-Affecting Bug**: Devices may fail to auto-suspend, leading to
-increased power consumption and potential battery drain on mobile
-devices. 2. **Minimal Risk**: This is a one-character change (`<` to
-`<=`) that fixes a clear logical error. The change is extremely
-contained and low-risk. 3. **Critical Subsystem**: PM runtime is a
-critical kernel subsystem affecting all device power management. A
-failure here can impact system-wide power efficiency. 4. **No
-Architectural Changes**: This doesn't introduce new features or change
-architecture - it simply fixes incorrect logic. 5. **Small and
-Contained**: The fix is confined to a single comparison operator in one
-function. 6. **Clear Co-authors**: The commit shows collaboration
-between Patrick Daly and Charan Teja Kalla from Qualcomm, indicating
-this was found in real-world usage. ## Comparison with Similar Commits
-Looking at the historical examples: - **Similar Commit #5 (Status:
-YES)**: Also a PM runtime timer fix with data type correction - this had
-similar characteristics and was backported - The current commit follows
-the same pattern: critical PM runtime bug fix with minimal, contained
-changes ## Stable Tree Criteria Met - ✅ Fixes important bug affecting
-users - ✅ Relatively small and contained fix - ✅ No clear side effects
-beyond fixing the issue - ✅ No major architectural changes - ✅ Touches
-critical kernel subsystem (appropriately) - ✅ Follows stable tree rules
-(important bugfix, minimal risk) - ✅ Has clear explanation of the
-problem and solution This commit perfectly fits the stable backport
-criteria and should be included in stable kernel trees to ensure proper
-device power management functionality across all kernel versions.
+**YES** This commit should be backported to stable kernel trees. Here's
+my extensive analysis: ## Code Analysis The commit fixes a **units
+conversion bug** in the max17040 power supply driver's temperature
+reporting. Specifically: ### The Problem The original code in
+`max17040_get_property()` for `POWER_SUPPLY_PROP_TEMP` was: ```c
+iio_read_channel_processed_scale(chip->channel_temp, &val->intval, 10);
+``` ### The Fix The corrected code is: ```c
+iio_read_channel_processed(chip->channel_temp, &val->intval);
+val->intval /= 100; /bin /bin.usr-is-merged /boot /dev /etc /home /init
+/lib /lib.usr-is-merged /lib64 /lost+found /media /mnt /opt /proc /root
+/run /sbin /sbin.usr-is-merged /snap /srv /sys /tmp /usr /var Convert
+from milli- to deci-degree model/ prompt/ src/ target/ ``` ### Units
+Mismatch Issue According to the power supply class documentation found
+in `/home/sasha/linux/Documentation/power/power_supply_class.rst`: >
+"All voltages, currents, charges, energies, time and **temperatures** in
+µV, µA, µAh, µWh, seconds and **tenths of degree Celsius** unless
+otherwise stated." The power supply framework expects temperatures in
+**tenths of degree Celsius** (decidegrees), but IIO thermal channels
+typically return values in **millidegrees Celsius**. ### Mathematical
+Analysis - IIO thermal channel: returns millidegrees (1/1000 °C) - Power
+supply framework expects: decidegrees (1/10 °C) - Required conversion:
+millidegrees ÷ 100 = decidegrees - Old code: Applied a scale of 10,
+which would convert from decidegrees to degrees (wrong direction) - New
+code: Divides by 100, correctly converting from millidegrees to
+decidegrees ### Confirmation from Kernel Sources Looking at
+`max17042_battery.c` (similar chip), line 109 shows the correct pattern:
+```c /bin /bin.usr-is-merged /boot /dev /etc /home /init /lib /lib.usr-
+is-merged /lib64 /lost+found /media /mnt /opt /proc /root /run /sbin
+/sbin.usr-is-merged /snap /srv /sys /tmp /usr /var The value is
+converted into deci-centigrade scale model/ prompt/ src/ target/ *temp =
+*temp 0001-Fix-Clippy-warnings.patch 0002-Enhance-inference-prompt-to-
+utilize-CVEKERNELDIR-whe.patch 0003-Update-to-latest-version-of-
+clap.patch Cargo.lock Cargo.toml LICENSE README.md
+analyze_merge_commit.sh io_uring_analysis.txt ksmbd_analysis.txt
+merge_commit_analysis.txt model prompt src target test_gpio_cleanup.txt
+test_patch.txt 10 / 256; ``` This confirms that power supply drivers
+should output temperatures in deci-centigrade (decidegrees). ## Backport
+Suitability Assessment **1. Bug Fix**: ✅ Yes - This fixes incorrect
+temperature readings **2. Small and Contained**: ✅ Yes - Only 3 lines
+changed in one function **3. Clear Side Effects**: ✅ No major side
+effects - only corrects temperature values **4. Architectural Changes**:
+✅ No - Simple unit conversion fix **5. Critical Subsystem**: ✅ Limited
+impact - only affects optional temperature reporting **6. Stable Tree
+Mention**: ❌ No explicit mention, but meets criteria **7. Stable Tree
+Rules**: ✅ Important bugfix with minimal regression risk ## Risk
+Assessment - **Regression Risk**: Very low - only affects temperature
+readings when IIO thermal channel is present - **User Impact**: High for
+affected users - wrong temperature readings could affect thermal
+management - **Code Complexity**: Minimal - straightforward arithmetic
+fix ## Historical Context The thermal channel support was added in
+commit `814755c48f8b` (July 2023), and this scaling bug has been present
+since then. The fix addresses a fundamental units mismatch that would
+cause incorrect temperature reporting for any system using the IIO
+thermal channel feature. This is exactly the type of contained,
+important bugfix that stable trees are designed for.
 
- drivers/base/power/runtime.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/power/supply/max17040_battery.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index 04113adb092b5..99f25d6b2027a 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -1003,7 +1003,7 @@ static enum hrtimer_restart  pm_suspend_timer_fn(struct hrtimer *timer)
- 	 * If 'expires' is after the current time, we've been called
- 	 * too early.
- 	 */
--	if (expires > 0 && expires < ktime_get_mono_fast_ns()) {
-+	if (expires > 0 && expires <= ktime_get_mono_fast_ns()) {
- 		dev->power.timer_expires = 0;
- 		rpm_suspend(dev, dev->power.timer_autosuspends ?
- 		    (RPM_ASYNC | RPM_AUTO) : RPM_ASYNC);
+diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
+index 51310f6e4803b..c1640bc6accd2 100644
+--- a/drivers/power/supply/max17040_battery.c
++++ b/drivers/power/supply/max17040_battery.c
+@@ -410,8 +410,9 @@ static int max17040_get_property(struct power_supply *psy,
+ 		if (!chip->channel_temp)
+ 			return -ENODATA;
+ 
+-		iio_read_channel_processed_scale(chip->channel_temp,
+-						 &val->intval, 10);
++		iio_read_channel_processed(chip->channel_temp, &val->intval);
++		val->intval /= 100; /* Convert from milli- to deci-degree */
++
+ 		break;
+ 	default:
+ 		return -EINVAL;
 -- 
 2.39.5
 
