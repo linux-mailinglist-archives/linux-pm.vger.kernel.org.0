@@ -1,265 +1,341 @@
-Return-Path: <linux-pm+bounces-27852-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27853-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECAE1AC8B42
-	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 11:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AE5CAC8B57
+	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 11:46:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E13CEA279EE
-	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 09:43:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 897D13A2F33
+	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 09:46:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88E0722B5AC;
-	Fri, 30 May 2025 09:38:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E23621B199;
+	Fri, 30 May 2025 09:46:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="m+mie/MQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LuIOSvSg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C76A6221D82
-	for <linux-pm@vger.kernel.org>; Fri, 30 May 2025 09:38:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67CB71F5425
+	for <linux-pm@vger.kernel.org>; Fri, 30 May 2025 09:46:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748597889; cv=none; b=gvD9IQVeTiotMI1AwN8BdD6NUEDPsD2NArYLRdRF0rdQYBHYXn9TCb3X3mrXXJudAyNInuFD0XKOJhYqAGUYtzsz9n0GLH714w+n5AWZJlvtjp7C3xB7yMMIZzfADmzN/1pOxbKzIeqIxS7meS0IP0jUyJaq7wobf0teEkDNxGg=
+	t=1748598388; cv=none; b=kCu5+LgWPlprZuahFoxPsUi7L1QwQvaQzGHo79tQkEzNG8a6dNSY3M10g8hhemF3NkV18bLaRrOTJiVizmkBcJ6NZ8Mfn4HxOQA7j96xxBW+9CXKr7UAXV7EsirmI/qhXhsPRwQE830SS7xSlB/VZZrpXkx6LjRhEezE7p9j5Nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748597889; c=relaxed/simple;
-	bh=FiXibMwqe7Bzxv2bD86eTxQ7GxvzILN7JJ8MXnunTTg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lB4P1P+3Hw8K6uUgHBV3WjbjPi4FjLl/QVwCbjR8NMdr9jNQg0quEOOp6DdxLoQiNzSsp39O0YKk0L9dt+dG0k4duJp48sQ8xhCRhYv7hfxfeaN53Y+P522GvMjHm+4Ofqtdt6+WCUgKkhkVo1okjXCLmV/Cbi4jTlNDrHH+xNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=m+mie/MQ; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54U205ne023990
-	for <linux-pm@vger.kernel.org>; Fri, 30 May 2025 09:38:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	zfYXyl7VrRhi9hOpPAB1dRuMBvVrvMKjYSFM2OAmP3g=; b=m+mie/MQgL01XB4R
-	H0b1nhJl21Axh657OCSabkJDPAY37Ky5czOBYYlHWVWZQLNfHH2ctOW0l8mO76gY
-	zpxEVBxa9YmA0En+bv7wHx4iiD+zrs3o4H7e//46uXASpHEsPzpA+5/gkMX5DcA5
-	omhQ9Gmjhh7pl741ah6g1O3wWjwZwbWRzv8exE1IhLeUqKOc75lWff2VrK9VACgI
-	0bdeMGWUMlYxxOusCwU69NkFWeaSRF3bMnVdbm5j0TJExJlZlRDHja5PsHVuLBHX
-	WcVnLMi2LfQLBjEuYC98un7KXlJuHoY234MsqoB3ZPC7pHf1dyGpHs2ABSrW9vRl
-	qPkyIg==
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46x8d7d791-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 30 May 2025 09:38:06 +0000 (GMT)
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-74620e98ec8so1707453b3a.1
-        for <linux-pm@vger.kernel.org>; Fri, 30 May 2025 02:38:06 -0700 (PDT)
+	s=arc-20240116; t=1748598388; c=relaxed/simple;
+	bh=1JxPp94yu8DXGtTX7nsw/Vy6yoxIUfLieXiixTYycic=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VJO03Q8mhJedFv0vbmspVzjS4u5YUW150WmJhkyw5lJSt8Oy6LdJMHcfuf6cr+A6G/KLzQxlQE+snB+4MdhZreoX3/z3HoovoNUAcTAyhXhxeCfX/Tee41osmePrahGKg9gA9XoZnzVHXvW7KmSCD8CmF2HP4QX4xp5+LzmoDrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LuIOSvSg; arc=none smtp.client-ip=209.85.219.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e7dc3df7ac3so1861173276.3
+        for <linux-pm@vger.kernel.org>; Fri, 30 May 2025 02:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1748598384; x=1749203184; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=N6UY2y9MOEwZlIGv1rKrrngNk7HNQITxylPxlIC9Qrk=;
+        b=LuIOSvSgSrzcYXmVBpZoE713lYH4TpVCBGMAj7n2HzDWReiBZupqLBpB9PKFgPG+Wc
+         rQ7xQP0V71ITrA4sPuaZiNC1ScK0qMKs8U9C7BUwysULfbRqwR2XutU9U1GeUr9C867J
+         B5f3YchoYLI9cDe6yscmiNzrUEOJ4BpCr1AU5uKYk5fYTHlGCTZj+v6/WSXTfBfVK2v8
+         XP3i7GNn1+RKOgtZZIdITAvPD9/ijv2nSqXneQvbsq27Z8FHMgfD9Ij0fw0GQNxb0T+a
+         OMJfwRzAaWNR8w6sTC9A2O2mcvM0nqpWxuAAaaiYHXr7RdC0ewJAT5lWNp21ulp1uP51
+         ikFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748597885; x=1749202685;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zfYXyl7VrRhi9hOpPAB1dRuMBvVrvMKjYSFM2OAmP3g=;
-        b=Oh+b42s9UUpcCPsPOnn/rL9ouRFkusCjnZNeANINTL/4wxsgGz7ZFF2festbPwITrw
-         I1dv6hMMm9qN05B9T3aTwwdeKagcgLSLa7zk2mm57vkyLgcWH5tFUofbE96TMnYZ+g5b
-         7fk8318/7FYFLSe4FCggNeF9aSp8ENDJlNQHeVLr7HEt9AAivVtt/42inZ3JQUNSR2A0
-         FuzNJ4Oiy6veOeboouGa6vLUjQVE6Yv+/wXPzIIzcyr4b7rCQciOuatKzhCPtxebqTF/
-         ecU+/7sX1MRc/e2n77kSiITADsirh3LhP0b0IKYWfipx20iqLYGkznWjdZtefEMa5TL5
-         7ZVA==
-X-Forwarded-Encrypted: i=1; AJvYcCVdLz4bEcTqmjcvBgUlm1fS9DxjqEFKnpkPGWt17qP51xy8jeFcMbqaVYFSZOmTPTjY4Ko4NuywlQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7xc+qtFKR18f9029VUYAPD9q9RO7kfkByCwUMg1ovUwgh67Nh
-	cbn8Cr9Ch5+nEgOKyxWokY5HkaRskOhVTDKZRUEV31rapJnECTiCZDCGuyvmaa6/vmq5ASVu1RL
-	yF1r52AYf4kAKEGSY7nBUfXfxO85nn+l5qJKiEFo+cF2NmTY/t2/Kz8rjsxWUsA==
-X-Gm-Gg: ASbGncuYbfAPp6i2eRCDbpa/va7XxNEA/6e0V0MmMx/Ey2RbPc+NOtbqereGfwIjBMi
-	SwAfFXd0lQ+gLoTz7faPSlJ6TsLrulaVii+a+vxE46hwsmZvweQ+Kbt78QOIfXnGSL/wpOHHNaP
-	uCnwbETy+oP/SRzunmgdHXQXpUIHI6cDoM8y+uNnj2GH837R+s4FWKhI+9rO1G1flRWtdwe0Y/P
-	Agrdl9bSfMlKRvtzsFXhG7MVCCfCBadcTZDkyolk3q7jxXN6GS7zzPh4cMXLQJrn92c5Ujv4jsl
-	PVWo1riA3B9g1e1tqPre2B4VHswXGMW4fwxieJ4aaBhlSQZ7vjCRDAZ6hwT964Ro+gzKiTPQrjw
-	Z
-X-Received: by 2002:a05:6a00:a87:b0:742:ae7e:7da1 with SMTP id d2e1a72fcca58-747bdbe8035mr3778274b3a.0.1748597885055;
-        Fri, 30 May 2025 02:38:05 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH7NO4N0v3Y1dOO+Iz5dJNKpo+fSGcvNyKt4RkjS35cwzJzfWOV/qn3qrS95ChBrq+phaPJRQ==
-X-Received: by 2002:a05:6a00:a87:b0:742:ae7e:7da1 with SMTP id d2e1a72fcca58-747bdbe8035mr3778244b3a.0.1748597884623;
-        Fri, 30 May 2025 02:38:04 -0700 (PDT)
-Received: from [10.133.33.104] (tpe-colo-wan-fw-bordernet.qualcomm.com. [103.229.16.4])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-747affd437asm2661533b3a.150.2025.05.30.02.38.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 May 2025 02:38:03 -0700 (PDT)
-Message-ID: <3df56548-49ea-498c-9ee3-b7e1d2d85d2e@oss.qualcomm.com>
-Date: Fri, 30 May 2025 17:37:58 +0800
+        d=1e100.net; s=20230601; t=1748598384; x=1749203184;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N6UY2y9MOEwZlIGv1rKrrngNk7HNQITxylPxlIC9Qrk=;
+        b=gUA8LjG4DbEXrDWzZKcxMzyDeRMLX0M3pBT02XcB+kS5pSSwxN612rxhYwRyjYFXXj
+         2qD2ckTkwrsq6wIRwzl6tKLsJxA8Ch8ouwtmo1PHXRiAojfRaLFZ4DogP9UPHB3ORRJJ
+         8UcAKKav5wXwcw45Vns6cDbMKnW1lbZmqzHxwFLCg8v2E40LdVH8+x79ux+52Nl6/HAN
+         BagioLgt/B0w7hdWFc3YHHVwtmgFNEbOYM/Z9fqjfexWngoANsaHpftsITuAVm6Fzobq
+         XJmL2hcG9f7gCbSgWv0r2aLA1EpIpszyMI6/2CP8iyPJyNoioXp8owoH48ClGt6RlK3R
+         xzSA==
+X-Forwarded-Encrypted: i=1; AJvYcCVtfx6Y567VBvqwNfhVVewpY5/AZ+UshMAcohxGTmemUiKsvDC0s0xPYknmiJJzGW4C0p8tS2iYqQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwBeyYSRD+W2TEQdRDKMG44tuU/tPGHSTWsd2VT8YuQVtUNLzN
+	ACD6k7pEVw+wmkOolliQJSnivJ3c19EmDna61b2Ar8t1Wzgl4EqTz1TzOPpqBrXHKMyciIEsA2e
+	dc5yALjaLBNASXLEa/K6p59e5kfQqJDFg1jPB7Dkz75qOwpDLEIzzFHI=
+X-Gm-Gg: ASbGncv2ZnydMxED2RYQWXaH9c0pehHszY1jMlr0Cvm/svdg65oB3hEh86lzjP+FGbo
+	SBgL2UWaw7pM68GxILNrIUgwHpU94zmX9E/9HAtXkBj93uubD57qG60otdxhc42S4OPHiqEQS3g
+	hSF0wvD7Dcqo9PoJY0RR60pHHleS+emSJUgw==
+X-Google-Smtp-Source: AGHT+IHDOOob+rYy5PewBfFSnwrXwwsdqV4NLiR/14XgYNCnd/4FiuYQbhODXW8eT2YWicTg9hQl3xI77mVLBp8m+Dw=
+X-Received: by 2002:a05:6902:26c3:b0:e7d:8875:bfe2 with SMTP id
+ 3f1490d57ef6-e7f81f15dedmr3191276276.43.1748598384251; Fri, 30 May 2025
+ 02:46:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/8] power: supply: qcom_battmgr: Add charge control
- support
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
-        David Collins <david.collins@oss.qualcomm.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20250530-qcom_battmgr_update-v2-0-9e377193a656@oss.qualcomm.com>
- <497BF3hThnrmYe-YHKmdOyZwdjP3ivm1hFYDDy3-HkSOvkCOMVSkokyhb859mcTarGb55Go5nJLfgsc553u7ZA==@protonmail.internalid>
- <20250530-qcom_battmgr_update-v2-5-9e377193a656@oss.qualcomm.com>
- <8b396edf-e344-47e9-b497-3f7fb35783ed@linaro.org>
-Content-Language: en-US
-From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-In-Reply-To: <8b396edf-e344-47e9-b497-3f7fb35783ed@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: hKJQgLimlqkfC4B9lIEggTNoLv3_1314
-X-Proofpoint-ORIG-GUID: hKJQgLimlqkfC4B9lIEggTNoLv3_1314
-X-Authority-Analysis: v=2.4 cv=X8pSKHTe c=1 sm=1 tr=0 ts=68397c7e cx=c_pps
- a=rEQLjTOiSrHUhVqRoksmgQ==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
- a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=EUspDBNiAAAA:8 a=fnrE3p8kPbNp4-9vzRIA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=2VI0MkxyNR6bbpdq8BZq:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTMwMDA4MSBTYWx0ZWRfX447ARV3aH7qp
- bTn0T+gllU218zKHWcUvfymmefDlxR6ynybAZn8ESiQHuRGmxhvnc5Rk2LdtdelaHhz3p49ql83
- US+JCSmeTU3pgu78I10X1JGcAPllO4+Z2UsVW+75771aA7fTlof2l04M1inTjUvJ9iuYvaTOfWu
- hLrqrFGeb/spbok3KbwbspW45SLk8J/a6ZjOmuc2MAgfOlysq6F+yjlgYBkUpt0wDlzQUQ/3Y78
- ZPk+NHWVAvslqiuixi3HALXxSCOvOqLTx3KBWmXKFFh04t+LY4wJw7uUOVV+ztfAoz3usxNmASV
- Abi4w7ybLWX470Tx07lhm5neQLbbAicfiPbImfTKDokXcQe0iPG3j19wGOUMp2STQo5yHmxr0qp
- TczIuuBEorYpe7vT7PNkxSl1Q04eE3POpPQiB8MzMFUuNBrKjIL3C+nzrl+TcnWqKiX4A/kS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-30_04,2025-05-29_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
- adultscore=0 impostorscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
- clxscore=1015 malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505160000
- definitions=main-2505300081
+References: <20250521041840.GB28017@nxa18884-linux> <CAPDyKFpSb+KsfDr1-=uk4TF4Op1dUQ9rDwPP5sSpMfxDRDhnZA@mail.gmail.com>
+ <20250523191713.nylhi74jq6z4hqmr@hiago-nb> <CAPDyKFq6HG6iTZRnBSN25vhCU8Zj1c+r_ufGbiBsJ16N+1bJVg@mail.gmail.com>
+ <20250527000510.fofehmsdhifcwlys@hiago-nb> <20250527023921.GA14252@nxa18884-linux>
+ <CAPDyKFqZkcaGfss=Oi+H9UERFU29jY2t5uTPnGVGQgSAJSeCoA@mail.gmail.com>
+ <20250527134525.f7yzs4ww64xxmjmr@hiago-nb> <20250528173813.rxqu6pzqgu4m5joo@hiago-nb>
+ <PAXPR04MB845941FFF347274012A0ECA88866A@PAXPR04MB8459.eurprd04.prod.outlook.com>
+ <20250529201544.azoqdrgnlqfxi6mb@hiago-nb>
+In-Reply-To: <20250529201544.azoqdrgnlqfxi6mb@hiago-nb>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 30 May 2025 11:45:48 +0200
+X-Gm-Features: AX0GCFsQvcDOUqaNaQ5cjuiIbQU68DMjg5d50KglTL5dTEGM-jQJUgFg_7R2SME
+Message-ID: <CAPDyKFrDvxpFeBU5noRDBZCA1N96iPNYYjM0kqd1R4z_4CUV3w@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] remoteproc: imx_rproc: add power mode check for
+ remote core attachment
+To: Hiago De Franco <hiagofranco@gmail.com>
+Cc: Peng Fan <peng.fan@nxp.com>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, 
+	Mathieu Poirier <mathieu.poirier@linaro.org>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	"linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
+	Hiago De Franco <hiago.franco@toradex.com>, "imx@lists.linux.dev" <imx@lists.linux.dev>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Daniel Baluta <daniel.baluta@nxp.com>, 
+	"Iuliana Prodan (OSS)" <iuliana.prodan@oss.nxp.com>, Fabio Estevam <festevam@gmail.com>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 
-Thanks for reviewing the change!
-
-On 5/30/2025 4:48 PM, Bryan O'Donoghue wrote:
-> On 30/05/2025 08:35, Fenglin Wu via B4 Relay wrote:
->> From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
->>
->> Add charge control support for SM8550 and X1E80100. It's supported
->> with below two power supply properties:
->>
->> charge_control_end_threshold: SOC threshold at which the charging
->> should be terminated.
->>
->> charge_control_start_threshold: SOC threshold at which the charging
->> should be resumed.
+On Thu, 29 May 2025 at 22:15, Hiago De Franco <hiagofranco@gmail.com> wrote:
 >
-> Maybe this is very obvious to battery charger experts but what does 
-> SOC mean here ?
+> On Thu, May 29, 2025 at 03:54:47AM +0000, Peng Fan wrote:
 >
-> Reading your patch you pass a "int soc" and compare it to a threshold 
-> value, without 'soc' having an obvious meaning.
+> [...]
 >
-> Its a threshold right ? Why not just call it threshold ?
+> > > We are making progress ;-)
+> > >
+> > > With the patches you shared Ulf (I added them on top of the current
+> > > master branch), it works as expected, dev_pm_genpd_is_on() returns 0
+> > > when I boot the kernel without M4 running and it returns 1 when I
+> > > boot the kernel with M4 running with a hello-world demo.
+> > >
+> > > However now I tried to, if dev_pm_genpd_is_on() returns 1, put the
+> > > DETACHED state, something as
+> > >
+> > > if (dev_pm_genpd_is_on(priv->pd_list->pd_devs[0]))
+> > >     priv->rproc->state = RPROC_DETACHED;
+> > >
+> > > In this case I used 0 because I understand this is the
+> > > IMX_SC_R_M4_0_PID0 defined in my device tree overlay:
+> > >
+> > >             power-domains = <&pd IMX_SC_R_M4_0_PID0>,
+> > >                             <&pd IMX_SC_R_M4_0_MU_1A>;
+> > >
+> > > But in this case, the kernel does not boot anymore, I see the "Starting
+> > > kernel..." and nothing else.
+> >
+> > Please add "earlycon" in bootargs to see where it hangs.
 >
-"SOC" stands for battery State of Charge, I will rephrase the commit 
-text for better explanation.
->>
->> Signed-off-by: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
->> ---
->>   drivers/power/supply/qcom_battmgr.c | 256 
->> ++++++++++++++++++++++++++++++++++--
->>   1 file changed, 248 insertions(+), 8 deletions(-)
->>
->> -    if (battmgr->variant == QCOM_BATTMGR_SC8280XP)
->> +    if (battmgr->variant == QCOM_BATTMGR_SC8280XP ||
->> +            battmgr->variant == QCOM_BATTMGR_X1E80100)
+> Thanks Peng! I was able to catch the kernel panic yesterday, however I
+> must say that today I was doing the tests again and the issue is gone.
+> Sorry, I might have done something wrong yesterday with the tests.
+> Anyway, here is the log:
 >
-> Please run your series through checkpatch
+> [    1.271163] remoteproc remoteproc0: imx-rproc is available
+> [    1.280296] remoteproc remoteproc0: attaching to imx-rproc
+> [    1.285756] Unable to handle kernel paging request at virtual address ffff80005ae3dd79
+> [    1.293624] Mem abort info:
+> [    1.294655] mmc0: SDHCI controller on 5b010000.mmc [5b010000.mmc] using ADMA
+> [    1.296386]   ESR = 0x0000000096000005
+> [    1.307194]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [    1.312473]   SET = 0, FnV = 0
+> [    1.315566]   EA = 0, S1PTW = 0
+> [    1.318649]   FSC = 0x05: level 1 translation fault
+> [    1.323510] Data abort info:
+> [    1.326370]   ISV = 0, ISS = 0x00000005, ISS2 = 0x00000000
+> [    1.331846]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+> [    1.336882]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+> [    1.342182] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000096bc1000
+> [    1.348870] [ffff80005ae3dd79] pgd=0000000000000000, p4d=1000000097054003, pud=0000000000000000
+> [    1.357565] Internal error: Oops: 0000000096000005 [#1]  SMP
+> [    1.363198] Modules linked in:
+> [    1.366236] CPU: 2 UID: 0 PID: 47 Comm: kworker/u16:3 Not tainted 6.15.0-03667-g3f5f09105c40-dirty #826 PREEMPT
+> [    1.376405] Hardware name: Toradex Colibri iMX8QXP on Colibri Evaluation Board V3 (DT)
+> [    1.384313] Workqueue: events_unbound deferred_probe_work_func
+> [    1.390128] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    1.397076] pc : rproc_handle_resources.constprop.0+0x78/0x1d0
+> [    1.402896] lr : rproc_boot+0x368/0x56c
+> [    1.406717] sp : ffff8000819c3990
+> [    1.410017] x29: ffff8000819c3990 x28: ffff80005ae3dd7d x27: 0000000000000000
+> [    1.417145] x26: 0000000000000000 x25: ffff0000015ec038 x24: ffff800080f0c0a8
+> [    1.424268] x23: ffff8000813a6110 x22: 00000000d999ad79 x21: ffff0000015ec000
+> [    1.431392] x20: 0000000026665683 x19: ffff80005ae3dd79 x18: 0000000000000006
+> [    1.438516] x17: ffff000001799400 x16: ffff000001798e00 x15: 4addd15cca11c529
+> [    1.445639] x14: 53ebce6d5564d787 x13: 4addd15cca11c529 x12: 53ebce6d5564d787
+> [    1.452763] x11: 95a1e33b6b190674 x10: 9e3c9abdb41ca345 x9 : ab17b4eaffd6fd1c
+> [    1.459887] x8 : d5da055de4cfbb87 x7 : dfd7fa31596acbbc x6 : 9946d97107d0dcca
+> [    1.467011] x5 : ffff0000010c7800 x4 : 00000000000003fc x3 : ffff0000010c7780
+> [    1.474134] x2 : fffffffffffffff0 x1 : ffff8000814a3000 x0 : ffff8000814a3000
+> [    1.481261] Call trace:
+> [    1.483690]  rproc_handle_resources.constprop.0+0x78/0x1d0 (P)
+> [    1.487705] mmc0: new HS400 MMC card at address 0001
+> [    1.489502]  rproc_boot+0x368/0x56c
+> [    1.495349] mmcblk0: mmc0:0001 Q2J55L 7.09 GiB
+> [    1.497929]  rproc_add+0x184/0x190
+> [    1.504356]  mmcblk0: p1 p2
+> [    1.505747]  imx_rproc_probe+0x458/0x528
+> [    1.509238] mmcblk0boot0: mmc0:0001 Q2J55L 16.0 MiB
+> [    1.512437]  platform_probe+0x68/0xc0
+> [    1.512452]  really_probe+0xc0/0x38c
+> [    1.520584] mmcblk0boot1: mmc0:0001 Q2J55L 16.0 MiB
+> [    1.520951]  __driver_probe_device+0x7c/0x15c
+> [    1.527522] mmcblk0rpmb: mmc0:0001 Q2J55L 4.00 MiB, chardev (242:0)
+> [    1.529377]  driver_probe_device+0x3c/0x10c
+> [    1.544263]  __device_attach_driver+0xbc/0x158
+> [    1.548586]  bus_for_each_drv+0x84/0xe0
+> [    1.552407]  __device_attach+0x9c/0x1ac
+> [    1.556231]  device_initial_probe+0x14/0x20
+> [    1.560401]  bus_probe_device+0xac/0xb0
+> [    1.564221]  deferred_probe_work_func+0x9c/0xec
+> [    1.568741]  process_one_work+0x14c/0x28c
+> [    1.572735]  worker_thread+0x2cc/0x3d4
+> [    1.576473]  kthread+0x12c/0x208
+> [    1.579687]  ret_from_fork+0x10/0x20
+> [    1.583253] Code: 8b36c033 9100127c 54000924 d503201f (b9400261)
+> [    1.589337] ---[ end trace 0000000000000000 ]---
 >
-I actually did that before sending the patches out. I run checkpatch 
-with below two commands and I saw no issues:
-
-git format -1 xxxx --stdtout | ./script/checkpatch.pl -
-
-b4 prep --check
-
-Can you let me know what specific command that you ran with it?
-
-> 0004-power-supply-qcom_battmgr-Add-state_of_health-proper.patch has no 
-> obvious style problems and is ready for submission.
-> CHECK: Alignment should match open parenthesis
-> #95: FILE: drivers/power/supply/qcom_battmgr.c:521:
-> +    if (battmgr->variant == QCOM_BATTMGR_SC8280XP ||
-> +            battmgr->variant == QCOM_BATTMGR_X1E80100)
+> But again, the issue is not happening anymore ;-) I will keep testing to
+> see if the issue happens again, but for now is working fine, I can now
+> attach to the remote processor.
 >
->>
->> +static int qcom_battmgr_set_charge_start_threshold(struct 
->> qcom_battmgr *battmgr, int soc)
->> +{
->> +    u32 target_soc, delta_soc;
->> +    int ret;
->> +
->> +    if (soc < CHARGE_CTRL_START_THR_MIN ||
->> +            soc > CHARGE_CTRL_START_THR_MAX) {
->> +        dev_err(battmgr->dev, "charge control start threshold exceed 
->> range: [%u - %u]\n",
->> +                CHARGE_CTRL_START_THR_MIN, CHARGE_CTRL_START_THR_MAX);
->> +        return -EINVAL;
->> +    }
+> This is the git diff on top of Ulf patches I have been testing:
 >
-> 'soc' is what - a threshold as far as I can tell.
-
-I will update it with a more meaningful name
-
->>
->>       if (opcode == BATTMGR_NOTIFICATION)
->>           qcom_battmgr_notification(battmgr, data, len);
->> -    else if (battmgr->variant == QCOM_BATTMGR_SC8280XP)
->> +    else if (battmgr->variant == QCOM_BATTMGR_SC8280XP ||
->> +            battmgr->variant == QCOM_BATTMGR_X1E80100)
->>           qcom_battmgr_sc8280xp_callback(battmgr, data, len);
->>       else
->>           qcom_battmgr_sm8350_callback(battmgr, data, len);
->> @@ -1333,7 +1560,8 @@ static void qcom_battmgr_pdr_notify(void *priv, 
->> int state)
->>   static const struct of_device_id qcom_battmgr_of_variants[] = {
->>       { .compatible = "qcom,sc8180x-pmic-glink", .data = (void 
->> *)QCOM_BATTMGR_SC8280XP },
->>       { .compatible = "qcom,sc8280xp-pmic-glink", .data = (void 
->> *)QCOM_BATTMGR_SC8280XP },
->> -    { .compatible = "qcom,x1e80100-pmic-glink", .data = (void 
->> *)QCOM_BATTMGR_SC8280XP },
->> +    { .compatible = "qcom,x1e80100-pmic-glink", .data = (void 
->> *)QCOM_BATTMGR_X1E80100 },
->> +    { .compatible = "qcom,sm8550-pmic-glink", .data = (void 
->> *)QCOM_BATTMGR_SM8550 },
+> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> index 6da25e2c81d2..661a6aad40a8 100644
+> --- a/drivers/pmdomain/core.c
+> +++ b/drivers/pmdomain/core.c
+> @@ -599,6 +599,23 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
+>  }
+>  EXPORT_SYMBOL_GPL(dev_pm_genpd_set_performance_state);
 >
-> Please separate compat string addition from functional changes.
+> +bool dev_pm_genpd_is_on(struct device *dev)
+> +{
+> +        struct generic_pm_domain *genpd;
+> +        bool is_on;
+> +
+> +        genpd = dev_to_genpd_safe(dev);
+> +        if (!genpd)
+> +                return false;
+> +
+> +        genpd_lock(genpd);
+> +        is_on = genpd_status_on(genpd);
+> +        genpd_unlock(genpd);
+> +
+> +        return is_on;
+> +}
+> +EXPORT_SYMBOL_GPL(dev_pm_genpd_is_on);
+> +
+>  /**
+>   * dev_pm_genpd_set_next_wakeup - Notify PM framework of an impending wakeup.
+>   *
+> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+> index 627e57a88db2..9688370f9bb5 100644
+> --- a/drivers/remoteproc/imx_rproc.c
+> +++ b/drivers/remoteproc/imx_rproc.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/of_reserved_mem.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_domain.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/reboot.h>
+>  #include <linux/regmap.h>
+>  #include <linux/remoteproc.h>
+> @@ -891,9 +892,7 @@ static int imx_rproc_attach_pd(struct imx_rproc *priv)
+>  {
+>         struct device *dev = priv->dev;
+>         int ret;
+> -       struct dev_pm_domain_attach_data pd_data = {
+> -               .pd_flags = PD_FLAG_DEV_LINK_ON,
+> -       };
+> +       bool test;
 >
-The compatible string "qcom,sm8550-pmic-glink" has been present in the 
-binding for a while and it was added as a fallback of "qcom,pmic-glink". 
-The battmgr function has been also supported well on SM8550 for a while. 
-The change here is only specifying a different match data for SM8550 so 
-the driver can handle some new features differently. Does it also need 
-to add it in a separate change? If so,  this change would be split into 
-following 3 patches I think:
-
-1) add QCOM_BATTMGR_SM8550/X1E80100 variants definition in 
-qcom_battmgr_variant.
-
-2) add compatible string with corresponding match data for SM8550.
-
-3) add the charge control function support.
-
->>       /* Unmatched devices falls back to QCOM_BATTMGR_SM8350 */
->>       {}
->>   };
->>
->>
->> -- 
->> 2.34.1
->>
->>
->>
+>         /*
+>          * If there is only one power-domain entry, the platform driver framework
+> @@ -902,7 +901,16 @@ static int imx_rproc_attach_pd(struct imx_rproc *priv)
+>         if (dev->pm_domain)
+>                 return 0;
 >
+> -       ret = dev_pm_domain_attach_list(dev, &pd_data, &priv->pd_list);
+> +       ret = dev_pm_domain_attach_list(dev, NULL, &priv->pd_list);
+> +       printk("hfranco: returned pd devs is %d", ret);
+> +       for (int i = 0; i < ret; i++) {
+> +               test = dev_pm_genpd_is_on(priv->pd_list->pd_devs[i]);
+> +               printk("hfranco: returned value is %d", test);
+> +               if (test) {
+> +                       priv->rproc->state = RPROC_DETACHED;
+> +                       break;
+> +               }
+> +       }
+>         return ret < 0 ? ret : 0;
+>  }
+>
+> @@ -1146,6 +1154,9 @@ static int imx_rproc_probe(struct platform_device *pdev)
+>                 }
+>         }
+>
+> +       pm_runtime_enable(dev);
+> +       pm_runtime_get_sync(dev);
+> +
+>         ret = rproc_add(rproc);
+>         if (ret) {
+>                 dev_err(dev, "rproc_add failed\n");
+> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+> index 756b842dcd30..16d1fca2a8c5 100644
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -95,6 +95,7 @@ extern void pm_runtime_put_suppliers(struct device *dev);
+>  extern void pm_runtime_new_link(struct device *dev);
+>  extern void pm_runtime_drop_link(struct device_link *link);
+>  extern void pm_runtime_release_supplier(struct device_link *link);
+> +bool dev_pm_genpd_is_on(struct device *dev);
+>
+>  int devm_pm_runtime_set_active_enabled(struct device *dev);
+>  extern int devm_pm_runtime_enable(struct device *dev);
+>
+> This is the rproc output when bootaux is used:
+>
+> root@colibri-imx8x-07308754:~# dmesg | grep hfranco
+> [    0.478475] hfranco: returned pd devs is 2
+> [    0.478496] hfranco: returned value is 1
+> root@colibri-imx8x-07308754:~# dmesg | grep rproc
+> [    0.478797] remoteproc remoteproc0: imx-rproc is available
+> [    0.478878] remoteproc remoteproc0: attaching to imx-rproc
+> [    0.478961] remoteproc remoteproc0: remote processor imx-rproc is now attached
+>
+> I will cleanup everything and try to come up with a patch. Ulf, in this
+> case, as your patches have not yet been merged, should I wait for them?
+
+I think you can state in the cover-letter that your series depends on
+mine, so please go ahead and submit them.
+
+>
+> Thanks for all the help guys.
+>
+> >
+> > >
+> > > I am using the pm_runtime functions before rproc_add():
+> > >
+> > > @@ -1146,6 +1154,9 @@ static int imx_rproc_probe(struct
+> > > platform_device *pdev)
+> > >                 }
+> > >         }
+> > >
+> > > +       pm_runtime_enable(dev);
+> > > +       pm_runtime_get_sync(dev);
+> >
+> > I think only make this apply for i.MX8QX/8QM/DX, then no
+> > impact to other patforms.
+
+In general I think we should avoid such quirks in drivers, unless it's
+really needed. Just wanted to share my opinion, but it's totally up to
+you.
+
+[...]
+
+Kind regards
+Uffe
 
