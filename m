@@ -1,79 +1,92 @@
-Return-Path: <linux-pm+bounces-27899-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27900-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07B6EAC9807
-	for <lists+linux-pm@lfdr.de>; Sat, 31 May 2025 01:16:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E7A0AC9A94
+	for <lists+linux-pm@lfdr.de>; Sat, 31 May 2025 12:36:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1471D1BA7B0C
-	for <lists+linux-pm@lfdr.de>; Fri, 30 May 2025 23:16:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42CD44A4595
+	for <lists+linux-pm@lfdr.de>; Sat, 31 May 2025 10:36:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE345234973;
-	Fri, 30 May 2025 23:16:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24480238D52;
+	Sat, 31 May 2025 10:36:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PLvs/LuH"
+	dkim=pass (1024-bit key) header.d=kuruczgy.com header.i=@kuruczgy.com header.b="R1LY447n"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6B215990C;
-	Fri, 30 May 2025 23:16:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3306C1F03D4;
+	Sat, 31 May 2025 10:36:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748646968; cv=none; b=ElOcljxobbDRzoNMsk0xT+AWE2OLV0C0NdJrDR0aX9nOXSv3R8FcTYRQIFny3K12gVkfun6Uk4TVkD6IOar1aqOM3u/N2uf5QdwfV8v43lxCmVZMgvLYSeATSE5cT0wTl/NoY8mkvAlU7Zm6ab+psPHFrmSPeQKfm5H5Ha10Afg=
+	t=1748687796; cv=none; b=YPV59PH7yTxspAj5yKdWZF1Uf9SECtyWQXBhHUnBqQwDZZxKm4Oke1ut28hSOOni4Cz8BZWWASAbNdeKzAKd/c/wTTxHrqY4Hy6uUxwyqZaLfGv5wa3WvvNHm14RtL2J7UiK7uKJeyBRfezFr8ZjgUFoAmFSk2hD1zFar2PmC04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748646968; c=relaxed/simple;
-	bh=iHa3AMabhADSubCaxtxruhtvYhfhu25Rv72coO8RgyQ=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=g8IstepOB/auJQaxnsOLHc5OKsuCa9FNerQsue6GB+E5Ry4cjQwQIYbkASt0CmQLH1/H6ivtkQtWIwElg9yktHGge/30JN7mjNcIIDiVNbWzcnb/yMlIV6wygqbvHAd5IuzJhgiDAJRhz/6sWeS9uyD34aThAE+Qay9GlgAl9so=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PLvs/LuH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38021C4CEE9;
-	Fri, 30 May 2025 23:16:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748646968;
-	bh=iHa3AMabhADSubCaxtxruhtvYhfhu25Rv72coO8RgyQ=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=PLvs/LuHo0QiPtbBxVNZKWBDuMVZpOymTGcAuMVV/uYGxYycqNntEYHUYwUGclmRY
-	 V7T5+8iwnhxonSJgQbONdhdueyVO1QMqufsaPw7bk30cOJr0AGPQSjl0OeibQxTpiB
-	 zb4cRsjN67Clp6Wg+i/90R7Yb3vfuvFPwa+jtZyv3QlzhFU9kUFyPNV74JxM5Rw9tV
-	 es1Q/NTa9nP9FLvFq/e/5kmGA/r6WlBU93UAOkZrVW5M755k8WV5hru7f6DKoOP4Mr
-	 EeskZEGY8NSMf1ujUO4h9QGAftu5lVsdb/WK+hISl0TbNP/vwX2iuiqAOcLFVRUOi6
-	 bP3ZaosnlB+mA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B057139F1DF2;
-	Fri, 30 May 2025 23:16:42 +0000 (UTC)
-Subject: Re: [GIT PULL] More power management updates for v6.16-rc1
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0g5C_Zk5-PxsO+W-ef=1oDgbb-PCMYq8UmE9uPi9bASvg@mail.gmail.com>
-References: <CAJZ5v0g5C_Zk5-PxsO+W-ef=1oDgbb-PCMYq8UmE9uPi9bASvg@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0g5C_Zk5-PxsO+W-ef=1oDgbb-PCMYq8UmE9uPi9bASvg@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.16-rc1-2
-X-PR-Tracked-Commit-Id: 3d031d0d8daab86f9c3e9e89c80fec08367fb304
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 976aa630da5b5508c278487db31b873ddf6bae8f
-Message-Id: <174864700116.4165071.472418416452749427.pr-tracker-bot@kernel.org>
-Date: Fri, 30 May 2025 23:16:41 +0000
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Linux PM <linux-pm@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, the arch/x86 maintainers <x86@kernel.org>, ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+	s=arc-20240116; t=1748687796; c=relaxed/simple;
+	bh=LCCWL2kDcC71cBm4psAu8hEsXTmwFcOHqF7dcs3bdUA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KQh+LonepRcEsaEUt2ephL5cT9Py2Lbn9zVgmmo+qwJX0RLEaJWTP/zLWdwH/ET4uG9/CtY9TrNb6y9WXMIMCrQKmaUu47R2FblHC5/xGuLrPJmC+2HS77ys9z+aCMy/UX+8uBEyOM3P49FDgOF5dfx3S1Q8bPyFZ2aWmAxaLuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kuruczgy.com; spf=pass smtp.mailfrom=kuruczgy.com; dkim=pass (1024-bit key) header.d=kuruczgy.com header.i=@kuruczgy.com header.b=R1LY447n; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kuruczgy.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kuruczgy.com
+Message-ID: <f2e0f1da-c626-4cf0-8158-8a5805138871@kuruczgy.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuruczgy.com;
+	s=default; t=1748687790;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UxENrXFiNdrr2zkChFJJEF8ySg4LaGGh/I5I68/5WaI=;
+	b=R1LY447nICiWNxc1AeI717EBaqxuqxidlYGclnrwaFfXxxy7JHZSSb2HkdRUZnj0JNGeki
+	IjULbd61t+yeNxq9FSjgiQQSpKC8tjQqFgA0ngZyh8MRSXM5EiZO8rew8BIWgjKtwm7pak
+	7/w5e9hGRvi2wEVhnEYpcty4ey9N0pk=
+Date: Sat, 31 May 2025 12:36:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH v2 5/8] power: supply: qcom_battmgr: Add charge control
+ support
+To: fenglin.wu@oss.qualcomm.com, Sebastian Reichel <sre@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
+ David Collins <david.collins@oss.qualcomm.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ kernel@oss.qualcomm.com, devicetree@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20250530-qcom_battmgr_update-v2-0-9e377193a656@oss.qualcomm.com>
+ <20250530-qcom_battmgr_update-v2-5-9e377193a656@oss.qualcomm.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: =?UTF-8?Q?Gy=C3=B6rgy_Kurucz?= <me@kuruczgy.com>
+In-Reply-To: <20250530-qcom_battmgr_update-v2-5-9e377193a656@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-The pull request you sent on Fri, 30 May 2025 20:49:57 +0200:
+> Add charge control support for SM8550 and X1E80100.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.16-rc1-2
+Thank you for this, tested on my Lenovo Yoga Slim 7x, the limiting works 
+well, I finally don't have to worry about leaving my laptop plugged in 
+for too long.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/976aa630da5b5508c278487db31b873ddf6bae8f
+One small thing I noticed is that after setting the sysfs values and 
+rebooting, they report 0 again. The limiting appears to stay in effect 
+though, so it seems that the firmware does keep the values, but Linux 
+does not read them back. Indeed, looking at the code, it seems that 
+actually reading back the values is only implemented for the SM8550.
 
-Thank you!
+Anyway, this is just a small nitpick, this does not really affect the 
+functionality, and I would support merging this series regardless of 
+whether the read back values are always correct.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+György
 
