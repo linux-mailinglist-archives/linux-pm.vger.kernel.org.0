@@ -1,140 +1,219 @@
-Return-Path: <linux-pm+bounces-27902-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27903-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EFD8AC9B36
-	for <lists+linux-pm@lfdr.de>; Sat, 31 May 2025 15:40:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5473AC9E8A
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Jun 2025 14:56:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1F917A96A2
-	for <lists+linux-pm@lfdr.de>; Sat, 31 May 2025 13:38:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9DF9017593C
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Jun 2025 12:56:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66ED8238C03;
-	Sat, 31 May 2025 13:40:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U+5pLDPm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CBFA1D516F;
+	Sun,  1 Jun 2025 12:56:21 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lgeamrelo03.lge.com (lgeamrelo03.lge.com [156.147.51.102])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F876ADD;
-	Sat, 31 May 2025 13:39:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BCCA1C8633
+	for <linux-pm@vger.kernel.org>; Sun,  1 Jun 2025 12:56:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.147.51.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748698800; cv=none; b=KhitqpzODet0kgvZmxoSdu46Ps7qD/VSE6us6VK5bvJjinGPEcXrqk/5YtSA7jjDcBLNBQLjn3h2Hft09d9gLL6YEs7sytSeJ2g6qrumoQ4TyOrkgH5P7z8ykUFNaRPdzWLPjDZ96h+/Ha2OjguFmAoFBFH0pfQQ6U4vU9jn878=
+	t=1748782581; cv=none; b=kIY+UEgpPKa7MOJNZYui6bOaguDKzjQhl507RgvGlvwBQPqeF/Si8ExL4QSxp2c/RtZtSy7y7JeVLmnmy0YLX5IV/uZMEl5Lz+7On3k2Ws7ZInccw4dxLTEMO1PdqHiHD1UEHhMdmw00R64/PmrukBUdgsklJCUVejXcyL56BcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748698800; c=relaxed/simple;
-	bh=RyP8MxcAjStXqK5TBc4mN3vd2YK/1GreKNWYk8YXfZI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H/lkWVpw7Jw9ga39SeTzrX4y1dvRVO/BJUEC9vhkWh+Vhwvga4QBMd3IoagILEU0q7Ui2QggbTuc1wM2xAyil/pYWtbFNrsP/YqVwfSCeI7yxehkyjbt7IAwhzQ9N639I2rPv603lw1uiXaN9ZWPeUtVyk/a7srTjYgXeRMOX8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U+5pLDPm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E830EC4CEE3;
-	Sat, 31 May 2025 13:39:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748698799;
-	bh=RyP8MxcAjStXqK5TBc4mN3vd2YK/1GreKNWYk8YXfZI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=U+5pLDPmNlxYoSIeUrF6sFVa6lzw9JaJSmlldotouFY3vAWB6dNvtCmwzng7E/R7V
-	 VXGy3bY5dwX0aEbBqaGEWvxXUbxfs6SqoyDfCrU+tuwT+6nU9CMlHaooiYTbmvJFOI
-	 YazyjkgV34/h6bNighng8JSXSwT+31ATdU13JTbFgL/PuUeo9356AS0pahF2zOLvac
-	 fBG7Aun9yab1mXnPg2s80YEatf/o1Ttvz3Z90VP4tMfQvhWSWyrVl81sAqpjllUUnL
-	 iCG5D/y8ZsUUKJ8avxirH27kC1qfe0tLExfFUAjNtNuJa2CODJcAfyZhGK9WGGCRwu
-	 SazfMtG2/ZEbQ==
-Message-ID: <ead6711d-8e38-43b7-bc50-bcc3f7cddb70@kernel.org>
-Date: Sat, 31 May 2025 15:39:55 +0200
+	s=arc-20240116; t=1748782581; c=relaxed/simple;
+	bh=cvrtNIWyrmKBib2SZoOx+LHxXS7ime+bJoCGWvN0elo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FcwGfoEyvn+jq+xcWptEMe2KUN/Mk3BTv1oDCF3lfiposvgwHk4poEkGqOvHcMiB4R4367M1YUwHuGTO7wJfQ8N/skWTMlBDE43QmDFICDeq7R+o1M/lsBqiQIDdxAuHEnl2OKlU8Myp2J4OZiXWQ0/8+x+oLLkuQT3PCyRNJ+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lge.com; spf=pass smtp.mailfrom=lge.com; arc=none smtp.client-ip=156.147.51.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lge.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lge.com
+Received: from unknown (HELO yjaykim-PowerEdge-T330) (10.177.112.156)
+	by 156.147.51.102 with ESMTP; 1 Jun 2025 21:56:10 +0900
+X-Original-SENDERIP: 10.177.112.156
+X-Original-MAILFROM: youngjun.park@lge.com
+Date: Sun, 1 Jun 2025 21:56:10 +0900
+From: YoungJun Park <youngjun.park@lge.com>
+To: Nhat Pham <nphamcs@gmail.com>
+Cc: linux-mm@kvack.org, akpm@linux-foundation.org, hannes@cmpxchg.org,
+	hughd@google.com, yosry.ahmed@linux.dev, mhocko@kernel.org,
+	roman.gushchin@linux.dev, shakeel.butt@linux.dev,
+	muchun.song@linux.dev, len.brown@intel.com,
+	chengming.zhou@linux.dev, kasong@tencent.com, chrisl@kernel.org,
+	huang.ying.caritas@gmail.com, ryan.roberts@arm.com,
+	viro@zeniv.linux.org.uk, baohua@kernel.org, osalvador@suse.de,
+	lorenzo.stoakes@oracle.com, christophe.leroy@csgroup.eu,
+	pavel@kernel.org, kernel-team@meta.com,
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-pm@vger.kernel.org, peterx@redhat.com, gunho.lee@lge.com,
+	taejoon.song@lge.com, iamjoonsoo.kim@lge.com
+Subject: Re: [RFC PATCH v2 00/18] Virtual Swap Space
+Message-ID: <aDxN6oz86TD5H4IL@yjaykim-PowerEdge-T330>
+References: <20250429233848.3093350-1-nphamcs@gmail.com>
+ <aDlUgVFdA7rCUvHx@yjaykim-PowerEdge-T330>
+ <CAKEwX=MjyEsoyDmMBCRr0QnBfgkTA5bfrshPbfSgNp887zaxVw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: pmdomain: renesas: rcar: Use str_on_off() helper in
- rcar_sysc_power() and rcar_gen4_sysc_power()
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: shao.mingyin@zte.com.cn, ulf.hansson@linaro.org, magnus.damm@gmail.com,
- linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org, yang.yang29@zte.com.cn, xu.xin16@zte.com.cn,
- yang.tao172@zte.com.cn, ye.xingchen@zte.com.cn
-References: <20250529101305686S2ehGmiFg5bnKwSa__96W@zte.com.cn>
- <6eca9bc9-ac12-4aec-85c7-66397f70fca0@kernel.org>
- <CAMuHMdVojqSZVg9xCQBUaonTsaDZ5ORsh_ttueOrhKgr10omiw@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <CAMuHMdVojqSZVg9xCQBUaonTsaDZ5ORsh_ttueOrhKgr10omiw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKEwX=MjyEsoyDmMBCRr0QnBfgkTA5bfrshPbfSgNp887zaxVw@mail.gmail.com>
 
-On 30/05/2025 10:07, Geert Uytterhoeven wrote:
-> Hi Krzysztof,
+On Fri, May 30, 2025 at 09:52:42AM -0700, Nhat Pham wrote:
+> On Thu, May 29, 2025 at 11:47 PM YoungJun Park <youngjun.park@lge.com> wrote:
+> >
+> > On Tue, Apr 29, 2025 at 04:38:28PM -0700, Nhat Pham wrote:
+> > > Changelog:
+> > > * v2:
+> > >       * Use a single atomic type (swap_refs) for reference counting
+> > >         purpose. This brings the size of the swap descriptor from 64 KB
+> > >         down to 48 KB (25% reduction). Suggested by Yosry Ahmed.
+> > >       * Zeromap bitmap is removed in the virtual swap implementation.
+> > >         This saves one bit per phyiscal swapfile slot.
+> > >       * Rearrange the patches and the code change to make things more
+> > >         reviewable. Suggested by Johannes Weiner.
+> > >       * Update the cover letter a bit.
+> >
+> > Hi Nhat,
+> >
+> > Thank you for sharing this patch series.
+> > I’ve read through it with great interest.
+> >
+> > I’m part of a kernel team working on features related to multi-tier swapping,
+> > and this patch set appears quite relevant
+> > to our ongoing discussions and early-stage implementation.
 > 
-> On Thu, 29 May 2025 at 08:41, Krzysztof Kozlowski <krzk@kernel.org> wrote:
->> On 29/05/2025 04:13, shao.mingyin@zte.com.cn wrote:
->>> From: Shao Mingyin <shao.mingyin@zte.com.cn>
->>>
->>> Remove hard-coded strings by using the str_on_off() helper function.
->>>
->>> Signed-off-by: Shao Mingyin <shao.mingyin@zte.com.cn>
->>> ---
->>>  drivers/pmdomain/renesas/rcar-gen4-sysc.c | 3 ++-
->>>  drivers/pmdomain/renesas/rcar-sysc.c      | 3 ++-
->>
->> Stop sending such trivial patches one driver per patch, but entire
->> subsystem in one patch. That's a lot of churn, considering this was
->> rejected:
+> May I ask - what's the use case you're thinking of here? Remote swapping?
 > 
-> Was it? I only see my Rb, and a review comment asking for more...
-> 
->> https://lore.kernel.org/all/20250114203547.1013010-1-krzysztof.kozlowski@linaro.org/
-Indeed this one was not, but my other patchsets were - several
-subsystems clearly expressed that this is just a churn. So if doing
-this, because you do not consider it a churn, do it all at once to, not
-line by line.
 
-Best regards,
-Krzysztof
+Yes, that's correct.  
+Our usage scenario includes remote swap, 
+and we're experimenting with assigning swap tiers per cgroup 
+in order to improve specific scene of our target device performance.
+
+We’ve explored several approaches and PoCs around this, 
+and in the process of evaluating 
+whether our direction could eventually be aligned 
+with the upstream kernel, 
+I came across your patchset and wanted to ask whether 
+similar efforts have been discussed or attempted before.
+
+> >
+> > I had a couple of questions regarding the future direction.
+> >
+> > > * Multi-tier swapping (as mentioned in [5]), with transparent
+> > >   transferring (promotion/demotion) of pages across tiers (see [8] and
+> > >   [9]). Similar to swapoff, with the old design we would need to
+> > >   perform the expensive page table walk.
+> >
+> > Based on the discussion in [5], it seems there was some exploration
+> > around enabling per-cgroup selection of multiple tiers.
+> > Do you envision the current design evolving in a similar direction
+> > to those past discussions, or is there a different direction you're aiming for?
+> 
+> IIRC, that past design focused on the interface aspect of the problem,
+> but never actually touched the mechanism to implement a multi-tier
+> swapping solution.
+> 
+> The simple reason is it's impossible, or at least highly inefficient
+> to do it in the current design, i.e without virtualizing swap. Storing
+
+As you pointed out, there are certainly inefficiencies 
+in supporting this use case with the current design, 
+but if there is a valid use case,
+I believe there’s room for it to be supported in the current model
+—possibly in a less optimized form—
+until a virtual swap device becomes available 
+and provides a more efficient solution.
+What do you think about?
+
+> the physical swap location in PTEs means that changing the swap
+> backend requires a full page table walk to update all the PTEs that
+> refer to the old physical swap location. So you have to pick your
+> poison - either:
+> 1. Pick your backend at swap out time, and never change it. You might
+> not have sufficient information to decide at that time. It prevents
+> you from adapting to the change in workload dynamics and working set -
+> the access frequency of pages might change, so their physical location
+> should change accordingly.
+> 
+> 2. Reserve the space in every tier, and associate them with the same
+> handle. This is kinda what zswap is doing. It is space efficient, and
+> create a lot of operational issues in production.
+> 
+> 3. Bite the bullet and perform the page table walk. This is what
+> swapoff is doing, basically. Raise your hands if you're excited about
+> a full page table walk every time you want to evict a page from zswap
+> to disk swap. Booo.
+> 
+> This new design will give us an efficient way to perform tier transfer
+> - you need to figure out how to obtain the right to perform the
+> transfer (for now, through the swap cache - but you can perhaps
+> envision some sort of locks), and then you can simply make the change
+> at the virtual layer.
+>
+
+One idea that comes to mind is whether the backend swap tier for
+a page could be lazily adjusted at runtime—either reactively 
+or via an explicit interface—before the tier changes.  
+Alternatively, if it's preferable to leave pages untouched
+when the tier configuration changes at runtime, 
+perhaps we could consider making this behavior configurable as well. 
+
+> >
+> > >   This idea is very similar to Kairui's work to optimize the (physical)
+> > >   swap allocator. He is currently also working on a swap redesign (see
+> > >   [11]) - perhaps we can combine the two efforts to take advantage of
+> > >   the swap allocator's efficiency for virtual swap.
+> >
+> > I noticed that your patch appears to be aligned with the work from Kairui.
+> > It seems like the overall architecture may be headed toward introducing
+> > a virtual swap device layer.
+> > I'm curious if there’s already been any concrete discussion
+> > around this abstraction, especially regarding how it might be layered over
+> > multiple physical swap devices?
+> >
+> > From a naive perspective, I imagine that while today’s swap devices
+> > are in a 1:1 mapping with physical devices,
+> > this virtual layer could introduce a 1:N relationship —
+> > one virtual swap device mapped to multiple physical ones.
+> > Would this virtual device behave as a new swappable block device
+> > exposed via `swapon`, or is the plan to abstract it differently?
+> 
+> That was one of the ideas I was thinking of. Problem is this is a very
+> special "device", and I'm not entirely sure opting in through swapon
+> like that won't cause issues. Imagine the following scenario:
+> 
+> 1. We swap on a normal swapfile.
+> 
+> 2. Users swap things with the swapfile.
+> 
+> 2. Sysadmin then swapon a virtual swap device.
+> 
+> It will be quite nightmarish to manage things - we need to be extra
+> vigilant in handling a physical swap slot for e.g, since it can back a
+> PTE or a virtual swap slot. Also, swapoff becomes less efficient
+> again. And the physical swap allocator, even with the swap table
+> change, doesn't quite work out of the box for virtual swap yet (see
+> [1]).
+> 
+> I think it's better to just keep it separate, for now, and adopt
+> elements from Kairui's work to make virtual swap allocation more
+> efficient. Not a hill I will die on though,
+> 
+> [1]: https://lore.kernel.org/linux-mm/CAKEwX=MmD___ukRrx=hLo7d_m1J_uG_Ke+us7RQgFUV2OSg38w@mail.gmail.com/
+> 
+
+I also appreciate your thoughts on keeping the virtual 
+and physical swap paths separate for now. 
+Thanks for sharing your perspective
+—it was helpful to understand the design direction.
+
+Best regards,  
+YoungJun Park
 
