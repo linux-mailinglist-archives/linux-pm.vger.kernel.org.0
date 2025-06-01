@@ -1,59 +1,59 @@
-Return-Path: <linux-pm+bounces-27934-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27935-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F7BDACA6CC
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 02:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C4870ACA6D0
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 02:59:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B67DF7A3303
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 00:58:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 178917A180C
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 00:58:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E9BE325F1B;
-	Sun,  1 Jun 2025 23:42:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EDE429E159;
+	Sun,  1 Jun 2025 23:42:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SMKlV50K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LSs9pAgH"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03602325F17;
-	Sun,  1 Jun 2025 23:42:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E69D52797B8;
+	Sun,  1 Jun 2025 23:42:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748821339; cv=none; b=oEJmXl0p5v+zgIhsnVZF+fzqK7v0y7SabX/t13slurqKOhOkaBWlr03wZcnvnz0q9SvhRslwPGGEaaALeFNUo66LnlUXzLWcGhn1Q3WFg8HvQdEJmSLPiMMKZeuzGyHkKuLNtfTiubaVcxZTCLDQJGQALFEBKowML/q4i3P/iGk=
+	t=1748821342; cv=none; b=R0lpl20IesRcvwbVccrmi7fKkx2KJMWr9zy0suujCE6+7+tDis5r7FHzCb8NoIjX8Xda1f5I7Eld6Se2oeawLMj2CA3F86glN1mp4XWRZQRTy4rqlI0dIcFJHAcZC1U5syvihuTKef6Ps+r71TkU28uwmC5wBoVf/xllfBCno/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748821339; c=relaxed/simple;
-	bh=Z2MU4YmcbPOviEWcyJEo25p0H18rIAge5KxiHXaiE6M=;
+	s=arc-20240116; t=1748821342; c=relaxed/simple;
+	bh=NB0JoqXdcShu3rQ+kxHbS16VkoyB89o0K1K9f49lr4E=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=U2olKDiQSFjQBUUrgc0v3IMaUsAubQVLQ8AjxN9kIIqhVDphM/0I1NYzj/cRptY5zpktLo9YbYlBDKWHYH6A1e8FMXAjDfUfmkRpSOC5sn8UP22f8+6GtpgCwIenvElCTRrjoq21X2IGXH56x8dZV4SDsoQcpIo+9w9nEYK6BOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SMKlV50K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB958C4CEEE;
-	Sun,  1 Jun 2025 23:42:17 +0000 (UTC)
+	 MIME-Version:Content-Type; b=chjSTpfVC31e2vLviu2JRRgL6HhWvN2/RE+ATQ7AwzSsujNb+azgTZnylnvA7rI5NYk/Hyr0k/xuOI1NAZQvC42IKvOVGroiV6Kkf1DnCEeA1GcwhC71LhOHlM7RLVp9tYgkZn8DSLlQxAcZJdgTZkiHhPq+ekA2jCmu5m61SZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LSs9pAgH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58299C4CEE7;
+	Sun,  1 Jun 2025 23:42:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748821338;
-	bh=Z2MU4YmcbPOviEWcyJEo25p0H18rIAge5KxiHXaiE6M=;
+	s=k20201202; t=1748821340;
+	bh=NB0JoqXdcShu3rQ+kxHbS16VkoyB89o0K1K9f49lr4E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SMKlV50KMHEpJlmOZTtYzR2xtUvEaqS3JYQpZAiK6j9ePTlyWrWqjg46lNVTxa7DW
-	 VmjESjct6j0YlV+iFP6gjNi1Fow2BYj8TRN1yhb81TGh5Z6TfLS7KCUjK94xzAaYp5
-	 h+/36bGQErOts8y76c7TMkKh39MpthapiomN+KPPsoF5LPnFGLaakBfNeOB34hdLWJ
-	 tZWSyb0kXG+yguCWVJjSuE6x7Sn7fgvgrE1AHsmUAneVmGXIG6SySIUgq7/G3vMULB
-	 9xckm2Vyx9PRR0/QCopUm4E5WNTvGXRCbOUq3UIcoAUbjbGctr2N8F34UbnXg/9Bxe
-	 Gu+jxuMPIkAPg==
+	b=LSs9pAgHADuRZoguxZvhVDUaEePnyPvLGo+HMzQ35cwgj1LoCL6whmOo3Dut9a0Cv
+	 1/4WS8MGgJkHSGiJqISjooXUIb7HRA/QHi4AyQab0whYxPIJUr5sTJKp7Tz6j2huXV
+	 mwAgu5cSJA5qrb4Fs8Mh6IRNbfdRYn/QK+VDHlKvv8hkyqTc8qq3ig6SSxQt9Z4BVc
+	 Q3GIDjwJH3WEzgPme3n9TQsHEYHIVA0eTa2Q0nWIpgQveufLp0+ODv6ot74Fn6NJ6W
+	 eWrqRHrFlwXnT1dMokYTtKIk+0i8MKmb4CzGC8fiWIgqTBMxWeTBgxXiIYJOOYuy03
+	 gSNloXl2Td1eQ==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Viresh Kumar <viresh.kumar@linaro.org>,
-	Lifeng Zheng <zhenglifeng1@huawei.com>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+Cc: Jerry Lv <Jerry.Lv@axis.com>,
+	=?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
 	Sasha Levin <sashal@kernel.org>,
-	rafael@kernel.org,
+	sre@kernel.org,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 56/58] cpufreq: Force sync policy boost with global boost on sysfs update
-Date: Sun,  1 Jun 2025 19:40:09 -0400
-Message-Id: <20250601234012.3516352-56-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 57/58] power: supply: bq27xxx: Retrieve again when busy
+Date: Sun,  1 Jun 2025 19:40:10 -0400
+Message-Id: <20250601234012.3516352-57-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250601234012.3516352-1-sashal@kernel.org>
 References: <20250601234012.3516352-1-sashal@kernel.org>
@@ -63,98 +63,146 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.1.140
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Viresh Kumar <viresh.kumar@linaro.org>
+From: Jerry Lv <Jerry.Lv@axis.com>
 
-[ Upstream commit 121baab7b88ed865532dadb7ef1aee6e2bea86f5 ]
+[ Upstream commit f16d9fb6cf03fdbdefa41a8b32ba1e57afb7ae3d ]
 
-If the global boost flag is enabled and policy boost flag is disabled, a
-call to `cpufreq_boost_trigger_state(true)` must enable the policy's
-boost state.
+Multiple applications may access the battery gauge at the same time, so
+the gauge may be busy and EBUSY will be returned. The driver will set a
+flag to record the EBUSY state, and this flag will be kept until the next
+periodic update. When this flag is set, bq27xxx_battery_get_property()
+will just return ENODEV until the flag is updated.
 
-The current code misses that because of an optimization. Fix it.
+Even if the gauge was busy during the last accessing attempt, returning
+ENODEV is not ideal, and can cause confusion in the applications layer.
 
-Suggested-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-Reviewed-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-Link: https://patch.msgid.link/852ff11c589e6300730d207baac195b2d9d8b95f.1745511526.git.viresh.kumar@linaro.org
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Instead, retry accessing the I2C to update the flag is as expected, for
+the gauge typically recovers from busy state within a few milliseconds.
+If still failed to access the gauge, the real error code would be returned
+instead of ENODEV (as suggested by Pali Rohár).
+
+Reviewed-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Jerry Lv <Jerry.Lv@axis.com>
+Link: https://lore.kernel.org/r/20250415-foo-fix-v2-1-5b45a395e4cc@axis.com
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
-**YES** This commit should be backported to stable kernel trees. ##
-Analysis ### Code Change Analysis The commit makes a very small,
-targeted fix to the `cpufreq_boost_trigger_state()` function in
-`/drivers/cpufreq/cpufreq.c`. The change removes a single optimization
-check: **Before:** ```c if (cpufreq_driver->boost_enabled == state)
-return 0; ``` **After:** ```c /bin /bin.usr-is-merged /boot /dev /etc
-/home /init /lib /lib.usr-is-merged /lib64 /lost+found /media /mnt /opt
-/proc /root /run /sbin /sbin.usr-is-merged /snap /srv /sys /tmp /usr
-/var linux linux-kernel Don't compare 'cpufreq_driver->boost_enabled'
-with 'state' here to linux linux-kernel make sure all policies are in
-sync with global boost flag. linux-kernel/ linux/ ``` ### Bug Being
-Fixed The commit fixes a synchronization bug between global boost
-settings and per-policy boost settings. The problem occurs when: 1.
-Global boost is enabled (`cpufreq_driver->boost_enabled = true`) 2. Some
-policies have boost disabled (`policy->boost_enabled = false`) 3. A call
-to `cpufreq_boost_trigger_state(true)` should enable boost on all
-policies The old code would return early due to the optimization check,
-failing to sync the policy-level boost flags with the global setting.
-This means individual policies could remain out of sync with the global
-boost state. ### Backport Suitability Assessment **✅ Fixes Important
-Bug:** Yes - this addresses a functional bug where boost settings can
-become inconsistent between global and per-policy levels. **✅ Small and
-Contained:** Yes - the change is minimal (removes 2 lines, adds
-comment), affecting only one function. **✅ Low Risk:** Yes - the change
-simply removes an optimization, ensuring the existing sync logic always
-runs. This cannot introduce new bugs. **✅ No Architectural Changes:**
-Yes - this doesn't change any APIs or data structures. **✅ Critical
-Subsystem:** While cpufreq is important, this specific bug affects only
-boost functionality, which is not a core feature. **✅ Clear Side
-Effects:** The only side effect is that `cpufreq_boost_trigger_state()`
-will now always iterate through all policies even when the global state
-appears unchanged, ensuring proper synchronization. ### Comparison with
-Similar Commits Looking at the provided similar commits: - **Similar
-Commit #3 (YES):** Also fixes per-policy boost behavior with targeted
-changes - **Similar Commit #4 (YES):** Introduces boost_supported flag
-with minimal risk changes - **Similar Commits #1, #2, #5 (NO):** These
-add new features or make broader architectural changes This commit
-follows the pattern of commits #3 and #4 - it's a small, targeted fix to
-existing boost functionality without introducing new features. ###
-Stable Tree Criteria Compliance This commit meets all stable tree
-criteria: - Fixes a real bug affecting users who rely on per-policy
-boost controls - The fix is obvious and minimal - No risk of regression
-since it only removes an optimization - Doesn't change user-visible
-behavior except to fix the broken synchronization - The bug could affect
-power management and performance on systems using cpufreq boost The
-commit represents exactly the type of small, safe bugfix that stable
-trees are designed to include.
+Based on my thorough analysis of the commit and examination of the
+kernel source code, here is my assessment: **YES** This commit should be
+backported to stable kernel trees for the following extensive reasons:
+## Primary Analysis ### 1. **Significant User-Facing Bug Fix** The
+commit fixes a substantial functional issue where the bq27xxx battery
+driver incorrectly returns `-ENODEV` (device not found) when the battery
+gauge is merely temporarily busy with `-EBUSY`. This causes: -
+**Application Confusion**: Battery monitoring applications and power
+management daemons interpret `-ENODEV` as "battery removed/missing"
+rather than "device temporarily busy" - **Persistent Wrong State**: The
+incorrect ENODEV state persists until the next periodic update
+(potentially 5+ seconds), during which all battery properties appear
+unavailable - **User Experience Impact**: Users may see incorrect "no
+battery detected" warnings or lose power management functionality ### 2.
+**Technical Correctness Improvement** The changes fix semantically
+incorrect error handling: **In bq27xxx_battery.c (line 2066):** -
+**Before**: `return -ENODEV;` when `di->cache.flags < 0` - **After**:
+`return di->cache.flags;` (returns actual error code like `-EBUSY`,
+`-EIO`) This change ensures applications receive the correct error code
+and can make informed decisions about retry logic or user notifications.
+**In bq27xxx_battery_i2c.c:** - Adds bounded retry mechanism (max 3
+attempts) for `-EBUSY` conditions - Uses appropriate 10ms delay between
+retries - Falls back to returning the actual error if retries fail ###
+3. **Low Risk Assessment** The changes are well-contained and follow
+established kernel patterns: - **Bounded Retries**: Maximum 3 retries
+with 10ms delays prevent infinite loops - **Existing Patterns**: Similar
+retry mechanisms exist in other I2C drivers throughout the kernel -
+**Fallback Safety**: If retries fail, the real error code is properly
+propagated - **No ABI Changes**: The power supply interface remains the
+same; only error semantics improve ### 4. **Alignment with Stable Tree
+Criteria** This commit meets all stable tree requirements: - **Important
+Bug Fix**: Resolves user-impacting functional issue - **Small and
+Contained**: Changes are minimal and localized to one driver - **No
+Architectural Changes**: Uses existing error handling patterns - **Clear
+Side Effects**: Improved error reporting with bounded retry behavior -
+**Subsystem Confined**: Limited to power supply bq27xxx driver ### 5.
+**Comparison with Historical Precedents** Looking at the provided
+similar commits, this change aligns with accepted backport patterns: -
+Similar to "Fix bq27xxx_battery_update() race condition" (Status: YES) -
+fixes driver robustness - Similar to "make status more robust" (Status:
+YES) - improves reliability - Unlike "fix reporting critical level"
+(Status: NO) which was a flag precedence fix ### 6. **Real-World
+Impact** This fix addresses a common scenario in embedded systems and
+laptops where: - Multiple applications access battery information
+simultaneously - I2C bus contention can cause temporary EBUSY conditions
+- Battery monitoring is critical for power management decisions - Users
+expect consistent battery status reporting ## Conclusion This commit
+represents exactly the type of important bug fix that stable trees are
+designed to include: it resolves a significant user-facing issue with
+minimal risk, follows established patterns, and improves the robustness
+of a critical hardware interface. The semantic correction from ENODEV to
+proper error codes, combined with sensible retry logic, makes this a
+clear candidate for backporting.
 
- drivers/cpufreq/cpufreq.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/power/supply/bq27xxx_battery.c     |  2 +-
+ drivers/power/supply/bq27xxx_battery_i2c.c | 13 ++++++++++++-
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 3f35ce19c7b64..88ab4db3651dd 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -2741,8 +2741,10 @@ int cpufreq_boost_trigger_state(int state)
- 	unsigned long flags;
- 	int ret = 0;
+diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
+index 2868dcf3f96dc..b3dd64ab8d32c 100644
+--- a/drivers/power/supply/bq27xxx_battery.c
++++ b/drivers/power/supply/bq27xxx_battery.c
+@@ -2044,7 +2044,7 @@ static int bq27xxx_battery_get_property(struct power_supply *psy,
+ 	mutex_unlock(&di->lock);
  
--	if (cpufreq_driver->boost_enabled == state)
--		return 0;
-+	/*
-+	 * Don't compare 'cpufreq_driver->boost_enabled' with 'state' here to
-+	 * make sure all policies are in sync with global boost flag.
-+	 */
+ 	if (psp != POWER_SUPPLY_PROP_PRESENT && di->cache.flags < 0)
+-		return -ENODEV;
++		return di->cache.flags;
  
- 	write_lock_irqsave(&cpufreq_driver_lock, flags);
- 	cpufreq_driver->boost_enabled = state;
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_STATUS:
+diff --git a/drivers/power/supply/bq27xxx_battery_i2c.c b/drivers/power/supply/bq27xxx_battery_i2c.c
+index 17b37354e32c0..b05d2693fde04 100644
+--- a/drivers/power/supply/bq27xxx_battery_i2c.c
++++ b/drivers/power/supply/bq27xxx_battery_i2c.c
+@@ -6,6 +6,7 @@
+  *	Andrew F. Davis <afd@ti.com>
+  */
+ 
++#include <linux/delay.h>
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
+@@ -32,6 +33,7 @@ static int bq27xxx_battery_i2c_read(struct bq27xxx_device_info *di, u8 reg,
+ 	struct i2c_msg msg[2];
+ 	u8 data[2];
+ 	int ret;
++	int retry = 0;
+ 
+ 	if (!client->adapter)
+ 		return -ENODEV;
+@@ -48,7 +50,16 @@ static int bq27xxx_battery_i2c_read(struct bq27xxx_device_info *di, u8 reg,
+ 	else
+ 		msg[1].len = 2;
+ 
+-	ret = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
++	do {
++		ret = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
++		if (ret == -EBUSY && ++retry < 3) {
++			/* sleep 10 milliseconds when busy */
++			usleep_range(10000, 11000);
++			continue;
++		}
++		break;
++	} while (1);
++
+ 	if (ret < 0)
+ 		return ret;
+ 
 -- 
 2.39.5
 
