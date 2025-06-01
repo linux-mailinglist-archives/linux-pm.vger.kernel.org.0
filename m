@@ -1,149 +1,229 @@
-Return-Path: <linux-pm+bounces-27906-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27907-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAFCFACA003
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Jun 2025 19:40:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E733FACA069
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Jun 2025 23:08:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2E773B138D
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Jun 2025 17:40:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF7873B3AB8
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Jun 2025 21:08:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67C391EB196;
-	Sun,  1 Jun 2025 17:40:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 242C21DDC07;
+	Sun,  1 Jun 2025 21:08:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b="DyoOMtCI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WI1fO+NK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1480E13AA2E
-	for <linux-pm@vger.kernel.org>; Sun,  1 Jun 2025 17:40:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC1F2A1CA;
+	Sun,  1 Jun 2025 21:08:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748799644; cv=none; b=LEsiGw/3McuphcaYAr1mLWTSWTJ7oIU7CPuVdhmVTpQerR5yVnMqpRflG9HZ1Rvuaoyl+M2quB8Sb3+EbQxxFPwVOjdG/tUHPJsrH4S7WdWuGmtob/+TXxw/iaCAdiGOL+/DRS1ONfvC721vSZXOqMU0vRt8KOjYOGY1nAlrGzM=
+	t=1748812116; cv=none; b=nbyJt6cjbF3+Rv0d3RkMrpjm0VArIvJ0tN4DvMUIOuacKQJheQhv2aM8oVUoKMcjdCXQTMt9IMmDgWAEZ5ATBa63TSGMKmYvjwyYEqiwR7THcUYEYzPJJ668etlgphERiT9mB3uoMrQAUw55nUHgHHQBW4bKb37xsHGdoYSJ0hs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748799644; c=relaxed/simple;
-	bh=fHU9vAayxyS9M23CCsLIv4yQasA8GWOU54cbEzhGxx0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I6vOPX3wWdLAaGDW9j3fNCUWXnI1I8cHYXljGSUlrDI4WxfMNL/r2fckxC14t8aeBERWgoRzcX0UgdSF3gSDk1vwCJyfdV4XnADxfK7TGbvVCXb0YdvXRyQMCtrE1YtH00rx6nzlN9MjoKGbDUmyhv8l9MCjxNkBvZmzfxywamY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com; spf=none smtp.mailfrom=pdp7.com; dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b=DyoOMtCI; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pdp7.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-742c5eb7d1cso3942157b3a.3
-        for <linux-pm@vger.kernel.org>; Sun, 01 Jun 2025 10:40:41 -0700 (PDT)
+	s=arc-20240116; t=1748812116; c=relaxed/simple;
+	bh=+HqRsySLHHpU+vcsNbaQE3x/QwlJPhhRzshUpkjA/mo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WJyMhhnKsuhJvaB42P+WEAty/RtoInCO8+x8K4Pt3FUlZRGeC9QY7LGPC/58s4wWoC0MO5Vtm0KvWhJoQN7qIPrLjtfyN2nGPRe87nptUIhFPZj5/mG0aZznA0nDF0utXxZzIBDHnlJkbw5TGhcRsoHidFQj54GfcEoa4yPW+IA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WI1fO+NK; arc=none smtp.client-ip=209.85.222.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-7cadd46ea9aso483671985a.1;
+        Sun, 01 Jun 2025 14:08:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pdp7-com.20230601.gappssmtp.com; s=20230601; t=1748799641; x=1749404441; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FGcwYr4Y+MLOa5A3Y1t4BMM/OO3+HUq+DjYuxkG81Yg=;
-        b=DyoOMtCIhyJJoviaMXwpyCRnNq2v/HAc5CzrlidKBPhhfLpKatlK1fGkiAJAnpykDm
-         Z2dT3NAUNcC5FwuaeoYpzVCyl74+aYtiwoSF5cIPzAV+Gvqi19o8NBf0aBsZXALPqFbr
-         VMD5u8p3oVMVwW24sAhaZYnzPsPwWY3p+pHZ7yIRRgaT3gQiAFpudLot0IcuxDeX+qOW
-         Ir1XSImh6ew+HE78IgjH8bZ+ELM+tf921nzsPEQqdWivCMlUumcNmBbbzYYcGPnD+V/8
-         K/YOZCSFVr43Zan+i4abn/wGNaC1kvAyo0updgFdsXPz8SiLIXaWElDhrS+iVpirYgV+
-         UwHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748799641; x=1749404441;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1748812113; x=1749416913; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FGcwYr4Y+MLOa5A3Y1t4BMM/OO3+HUq+DjYuxkG81Yg=;
-        b=Zn6ERk+8dQBouR2GmXe/nyEyWkeJCar6vphpcSwHNyqn03zL8nho15gCE81TntzKHJ
-         aCd2RaeeA2vbg9xeDCtp3ic7SJLE9nZG7pWjzHa0Crf8hOEhoBM8VwJmkobRlDey6A65
-         stdVbbo4D9MQ+5VMshn1xWzVlsbgTx3EL/ZZ5Il8j3D0DnTKdETwcVMzmJRBeDm/Nszt
-         VZVBDAjaMMY6pUZ9BxuD5qxruttQ9JIz0t95Ib0/+zYHKr5NeZcRPp258qQVkHY11MGT
-         ygTCDRSHbgv8y2HN4INqLym/tKrO/T23d3v2hfLjKspJZffaFkjI2QhJ413lz+tJbmgy
-         t2WA==
-X-Forwarded-Encrypted: i=1; AJvYcCXaf5+uA8goVB/WtAfXrX6SQwWlTxZMsrMeBzoBB+9H22fK6JVBneHnp023w07TdtpfWAV0oAO2jA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yws0Tra6K/w8CNXRFBbgie8bRfQx3wWBFaZsmuLljiZM5hXWL+h
-	k52ru0OmLeoXgWR9nKAxPCunon4mWydsIwXNFg80uHwqFV4N83LjIUbbAcxtihJ4RcU=
-X-Gm-Gg: ASbGncvwImfym2n9N75hh2eYC8p5N9UcfLFD2Q9k6CViWQV0Yam9r/4TL/dHx+3caAj
-	u8Ota2cBWBZI6JIDcvrRHKhmve3eMHE5J6HBRu2mpIgaOmGWBykKtKeYPGjve7meEk+niPYNCAV
-	5rX3Y6+BRMAjMntHw0Y0mfcijWgvs1Wv49rD153+5hBrN3LnCUQBcZ5Xv24PMnsG9wynZ7HrX+f
-	2VTRmdb3pMuw4VlvlgIj5cQ4Z/rVVFXquWSafrcPXAl5kRnFsAZmrpxUkB5BISS+99GY2xZ4lhf
-	S/BhI0O/qOC8D5+eiMZSxBGtVscXXC4e
-X-Google-Smtp-Source: AGHT+IF2ujxBrmibEGhRD1r5ubHgFgoV1MofVKpoxo8rCC1rOV+5p1PoXq7rqs5EnyuTlJRwnhzInQ==
-X-Received: by 2002:a05:6a21:600e:b0:1f5:8622:5ed5 with SMTP id adf61e73a8af0-21ad94e20c0mr17874238637.3.1748799641313;
-        Sun, 01 Jun 2025 10:40:41 -0700 (PDT)
-Received: from x1 ([97.120.245.255])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-747afeab6b2sm6352890b3a.57.2025.06.01.10.40.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Jun 2025 10:40:40 -0700 (PDT)
-Date: Sun, 1 Jun 2025 10:40:38 -0700
-From: Drew Fustini <drew@pdp7.com>
-To: Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Frank Binns <frank.binns@imgtec.com>,
-	Matt Coster <matt.coster@imgtec.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v3 5/8] riscv: dts: thead: th1520: Add missing reset
- controller header include
-Message-ID: <aDyQlqXhdgBAoR8D@x1>
-References: <20250530-apr_14_for_sending-v3-0-83d5744d997c@samsung.com>
- <CGME20250529222407eucas1p233be883d7e84e5a000e4d44b37cf7265@eucas1p2.samsung.com>
- <20250530-apr_14_for_sending-v3-5-83d5744d997c@samsung.com>
+        bh=9NoP05Qsq2uZudieJiCRentyec71gQ2RU6SK/0NLWW0=;
+        b=WI1fO+NK7YW8yVoXpkfemzG3sKkmnMo25SV8VhSINFRmNYyhFV6DnCYHXm20qlylcK
+         jLSq7R82LP95J5LfnARFWufkjQUVw/kftZijsNW1qhk3DkuIT6blnecKCy8U/FPIAJVv
+         vF5bPUELGER9T2A14R26r65Um7trypYHr3BV9tBeXuVZ0KPgG2Zp3JLmQ6U76ZuqkNc8
+         kVoZXSVm34BhyA3N/WNeyHYOXBiUhLmwoPon59PhzBx30FgvNoTbA/xObnkm5l0c3ThJ
+         xTNa2YTikEuOrxGebynFEx4NQa79+Y5th7WXPFJUw2HB7dwK/QYwvxqYZ/gxTaKlZB7A
+         Z1jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748812113; x=1749416913;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9NoP05Qsq2uZudieJiCRentyec71gQ2RU6SK/0NLWW0=;
+        b=plp/b51S6v5Zwb+DeHReurekQAGVeJXs53acaQTKiO3RLqfa1HH2JLbKJjqawqiZEn
+         y/bnFIDvRSl8d/RThEh+JcCDBs1bJmNOR2aA10GJuBvmfmj5q8SMfIXWYLpn37BvhWca
+         bWH8X35KTFRRSrR2m9Go5rIAvuPKMmTQO7MPb2BbJBtsmHZUB9WTkUmGkzSzvudU2k5T
+         V0eBZFl/tQCB41kwBFtJngbud9207QHwtRxxk3pMM9q+bw8NDhwhkCh6GeZwyyUY6lYz
+         QqlgjWrt1oo+8UbPuPWR/BrC0kVhv+7vWEeAej2jVyY69G8sKu4argDj2hU2eDkzsCMm
+         LBbA==
+X-Forwarded-Encrypted: i=1; AJvYcCUdqDzRAexd+bnMe2l8do5WWV06tYeCTkLEmEmxqiJp2G1Xv7jthB7u8NtJaFsuC6+q+ukUU7xppYO4GQo2@vger.kernel.org, AJvYcCVNt/jBeB12NNAeJBcAbzAfvO5kFfMZ3XGvEDvWgkwIisks10uzEvrqXQQpViF9zVNRsP9IYsN+@vger.kernel.org, AJvYcCVmjtlmlT88fMOeCjlI7MgDrTgAsIKXrNecXKbTQFYd4bR7k6yCHsGe0xEcjT7el5CXxkNyBJRgBes=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXkfyza9xhA47O4xwXPXvS3OPvzGebRxgLokrf/Gyt5snDRj6S
+	kVZfLg6eAXTVPZNzdmWmVUR70y2AepYOK2t6ZK8VUfE22MDATXQsbGvW+pg3tM9mF/x4LEbRjqn
+	aFO8HzkgAFP16Cz/l8p8grkNJHkwKmvM=
+X-Gm-Gg: ASbGncuG7AR9qolTGFWBxs3IW9DdypTYbL14CtjdolNqp7vWwqwJWhrqukRGwpRF91A
+	RTCZYrtuBrXqQmOGQT0FTeZapcdPB4t9UKnkDV74slrwPkeLNtFV5zyLXXiTr46Rc+iq6/bW4DL
+	Z/lsyr7Hv9I/ULyX97nm27k2JcKRNAyXSBPA==
+X-Google-Smtp-Source: AGHT+IHxlNiEI48RrXYIzjtR+5FeE3qMDaF/VMFFLOZ37w2QgHT7hJKBRJx5ce9frjNKjtzDZPYHRGlUZGA6Q/zDpDE=
+X-Received: by 2002:a05:620a:2a01:b0:7c7:827b:46bf with SMTP id
+ af79cd13be357-7d0a4e3cc82mr1374737285a.39.1748812113011; Sun, 01 Jun 2025
+ 14:08:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250530-apr_14_for_sending-v3-5-83d5744d997c@samsung.com>
+References: <20250429233848.3093350-1-nphamcs@gmail.com> <aDlUgVFdA7rCUvHx@yjaykim-PowerEdge-T330>
+ <CAKEwX=MjyEsoyDmMBCRr0QnBfgkTA5bfrshPbfSgNp887zaxVw@mail.gmail.com> <aDxN6oz86TD5H4IL@yjaykim-PowerEdge-T330>
+In-Reply-To: <aDxN6oz86TD5H4IL@yjaykim-PowerEdge-T330>
+From: Nhat Pham <nphamcs@gmail.com>
+Date: Sun, 1 Jun 2025 14:08:22 -0700
+X-Gm-Features: AX0GCFtF6d0uXcv46vS-wy8bPQYtvuz0ynLLrUw6yssIOl32RhKsTE62_m874IM
+Message-ID: <CAKEwX=NFrWyFkyd5XhXEb_qYtWBk4yPUMPPJN0qHPAvzPUq_Dg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 00/18] Virtual Swap Space
+To: YoungJun Park <youngjun.park@lge.com>
+Cc: linux-mm@kvack.org, akpm@linux-foundation.org, hannes@cmpxchg.org, 
+	hughd@google.com, yosry.ahmed@linux.dev, mhocko@kernel.org, 
+	roman.gushchin@linux.dev, shakeel.butt@linux.dev, muchun.song@linux.dev, 
+	len.brown@intel.com, chengming.zhou@linux.dev, kasong@tencent.com, 
+	chrisl@kernel.org, huang.ying.caritas@gmail.com, ryan.roberts@arm.com, 
+	viro@zeniv.linux.org.uk, baohua@kernel.org, osalvador@suse.de, 
+	lorenzo.stoakes@oracle.com, christophe.leroy@csgroup.eu, pavel@kernel.org, 
+	kernel-team@meta.com, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	linux-pm@vger.kernel.org, peterx@redhat.com, gunho.lee@lge.com, 
+	taejoon.song@lge.com, iamjoonsoo.kim@lge.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 30, 2025 at 12:23:52AM +0200, Michal Wilczynski wrote:
-> TH1520_RESET_ID_GPU_CLKGEN and TH1520_RESET_ID_GPU are required for GPU
-> power sequencing to work.  To make these symbols available, add the
-> necessary include for the T-HEAD TH1520 reset controller bindings.
-> 
-> This change was dropped during conflict resolution [1].
-> 
-> [1] - https://lore.kernel.org/all/aAvfn2mq0Ksi8DF2@x1/
-> 
-> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
-> ---
->  arch/riscv/boot/dts/thead/th1520.dtsi | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/riscv/boot/dts/thead/th1520.dtsi b/arch/riscv/boot/dts/thead/th1520.dtsi
-> index 1db0054c4e093400e9dbebcee5fcfa5b5cae6e32..bdbb1b985b0b76cf669a9bf40c6ec37258329056 100644
-> --- a/arch/riscv/boot/dts/thead/th1520.dtsi
-> +++ b/arch/riscv/boot/dts/thead/th1520.dtsi
-> @@ -7,6 +7,7 @@
->  #include <dt-bindings/interrupt-controller/irq.h>
->  #include <dt-bindings/clock/thead,th1520-clk-ap.h>
->  #include <dt-bindings/power/thead,th1520-power.h>
-> +#include <dt-bindings/reset/thead,th1520-reset.h>
->  
->  / {
->  	compatible = "thead,th1520";
-> 
-> -- 
-> 2.34.1
-> 
+On Sun, Jun 1, 2025 at 5:56=E2=80=AFAM YoungJun Park <youngjun.park@lge.com=
+> wrote:
+>
+> On Fri, May 30, 2025 at 09:52:42AM -0700, Nhat Pham wrote:
+> > On Thu, May 29, 2025 at 11:47=E2=80=AFPM YoungJun Park <youngjun.park@l=
+ge.com> wrote:
+> > >
+> > > On Tue, Apr 29, 2025 at 04:38:28PM -0700, Nhat Pham wrote:
+> > > > Changelog:
+> > > > * v2:
+> > > >       * Use a single atomic type (swap_refs) for reference counting
+> > > >         purpose. This brings the size of the swap descriptor from 6=
+4 KB
+> > > >         down to 48 KB (25% reduction). Suggested by Yosry Ahmed.
+> > > >       * Zeromap bitmap is removed in the virtual swap implementatio=
+n.
+> > > >         This saves one bit per phyiscal swapfile slot.
+> > > >       * Rearrange the patches and the code change to make things mo=
+re
+> > > >         reviewable. Suggested by Johannes Weiner.
+> > > >       * Update the cover letter a bit.
+> > >
+> > > Hi Nhat,
+> > >
+> > > Thank you for sharing this patch series.
+> > > I=E2=80=99ve read through it with great interest.
+> > >
+> > > I=E2=80=99m part of a kernel team working on features related to mult=
+i-tier swapping,
+> > > and this patch set appears quite relevant
+> > > to our ongoing discussions and early-stage implementation.
+> >
+> > May I ask - what's the use case you're thinking of here? Remote swappin=
+g?
+> >
+>
+> Yes, that's correct.
+> Our usage scenario includes remote swap,
+> and we're experimenting with assigning swap tiers per cgroup
+> in order to improve specific scene of our target device performance.
 
-Thanks for adding the header back now that there is no longer a
-conflict. I'll look at the rest of this series and the rust pwm series
-soon, but I just want to send a quick Rb on this patch right now.
+Hmm, that can be a start. Right now, we have only 2 swap tiers
+essentially, so memory.(z)swap.max and memory.zswap.writeback is
+usually sufficient to describe the tiering interface. But if you have
+an alternative use case in mind feel free to send a RFC to explore
+this!
 
-Reviewed-by: Drew Fustini <drew@pdp7.com>
+>
+> We=E2=80=99ve explored several approaches and PoCs around this,
+> and in the process of evaluating
+> whether our direction could eventually be aligned
+> with the upstream kernel,
+> I came across your patchset and wanted to ask whether
+> similar efforts have been discussed or attempted before.
+
+I think it is occasionally touched upon in discussion, but AFAICS
+there has not been really an actual upstream patch to add such an
+interface.
+
+>
+> > >
+> > > I had a couple of questions regarding the future direction.
+> > >
+> > > > * Multi-tier swapping (as mentioned in [5]), with transparent
+> > > >   transferring (promotion/demotion) of pages across tiers (see [8] =
+and
+> > > >   [9]). Similar to swapoff, with the old design we would need to
+> > > >   perform the expensive page table walk.
+> > >
+> > > Based on the discussion in [5], it seems there was some exploration
+> > > around enabling per-cgroup selection of multiple tiers.
+> > > Do you envision the current design evolving in a similar direction
+> > > to those past discussions, or is there a different direction you're a=
+iming for?
+> >
+> > IIRC, that past design focused on the interface aspect of the problem,
+> > but never actually touched the mechanism to implement a multi-tier
+> > swapping solution.
+> >
+> > The simple reason is it's impossible, or at least highly inefficient
+> > to do it in the current design, i.e without virtualizing swap. Storing
+>
+> As you pointed out, there are certainly inefficiencies
+> in supporting this use case with the current design,
+> but if there is a valid use case,
+> I believe there=E2=80=99s room for it to be supported in the current mode=
+l
+> =E2=80=94possibly in a less optimized form=E2=80=94
+> until a virtual swap device becomes available
+> and provides a more efficient solution.
+> What do you think about?
+
+Which less optimized form are you thinking of?
+
+>
+> > the physical swap location in PTEs means that changing the swap
+> > backend requires a full page table walk to update all the PTEs that
+> > refer to the old physical swap location. So you have to pick your
+> > poison - either:
+> > 1. Pick your backend at swap out time, and never change it. You might
+> > not have sufficient information to decide at that time. It prevents
+> > you from adapting to the change in workload dynamics and working set -
+> > the access frequency of pages might change, so their physical location
+> > should change accordingly.
+> >
+> > 2. Reserve the space in every tier, and associate them with the same
+> > handle. This is kinda what zswap is doing. It is space efficient, and
+> > create a lot of operational issues in production.
+> >
+> > 3. Bite the bullet and perform the page table walk. This is what
+> > swapoff is doing, basically. Raise your hands if you're excited about
+> > a full page table walk every time you want to evict a page from zswap
+> > to disk swap. Booo.
+> >
+> > This new design will give us an efficient way to perform tier transfer
+> > - you need to figure out how to obtain the right to perform the
+> > transfer (for now, through the swap cache - but you can perhaps
+> > envision some sort of locks), and then you can simply make the change
+> > at the virtual layer.
+> >
+>
+> One idea that comes to mind is whether the backend swap tier for
+> a page could be lazily adjusted at runtime=E2=80=94either reactively
+> or via an explicit interface=E2=80=94before the tier changes.
+> Alternatively, if it's preferable to leave pages untouched
+> when the tier configuration changes at runtime,
+> perhaps we could consider making this behavior configurable as well.
+>
+
+I don't quite understand - could you expand on this?
 
