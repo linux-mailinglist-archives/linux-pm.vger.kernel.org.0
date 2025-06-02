@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-27952-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27953-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C577CACAA02
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 09:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D815ACAA05
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 09:42:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63C493BC79A
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 07:40:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DE193B0FEE
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 07:41:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ABED1B4240;
-	Mon,  2 Jun 2025 07:40:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CA491B0F0A;
+	Mon,  2 Jun 2025 07:42:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CaXmCEz7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oQsTX+7c"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF72B1B0F17;
-	Mon,  2 Jun 2025 07:40:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F061991CB;
+	Mon,  2 Jun 2025 07:41:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748850035; cv=none; b=F390USNYpvs6PW9SFfijGumR2e4h/PnVldUoYceRFjoq/By7S4rocfP8LcBkd5f2OsugnLPfgAmcpsUk6vqYZaHOJjK9Tz1DftZv3VXdlQchgMTW57pMyVyWxSH0+JgFr6+nXK2UD5GMuT+KVH77rQIEO0wOcU7lSOkeT/dbfOU=
+	t=1748850120; cv=none; b=F4d+Frwc3IM8s3WjOFGPCOEmT6E8lC3nZGnOvUZ2Nd8TzyPtJ8T02/nmu3qoZYI4dX4KMWfCdiDYdznF4tbgDZdlXZesjOvtTRLntIwK6hP7jvMoQm2PqbnCvWqE17S+TxyEtU9/aYbHXM4i36xmk67uMoenDsGotRz9uRrDOrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748850035; c=relaxed/simple;
-	bh=hGiH4Hoo2/uVVMFxeDhPxI1kIAj5t2YPrpFBr1YfSY4=;
+	s=arc-20240116; t=1748850120; c=relaxed/simple;
+	bh=hOG4mPEVeG4lGy1Sn/Tq1ECpU9a+dWUrQdhXmcnIpnc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RcpK1pNeWpUzx45ccSgy/KKrFpcE1NemyPt0o5ml0J3G2Hivv1AtIKQfAmd/Skow8PzSkzCzi2/P2J1Y1NFHMAMy2U9KOlRj5Eq+Y/St3RdKkCaqe6ak1GeJAMkv3JdfPAawdZgIRmQzZ2FCU0kyBf9tThpcjl7pB34Ewljygzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CaXmCEz7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3957C4CEEB;
-	Mon,  2 Jun 2025 07:40:30 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=u8SuejWeHO7nd1d8wumohJSPpWLHY6izVm0kJIdMS76sed3VRsW1M7SNi6CwyWu01dbGF38pwhLmpaDwsESYxwooEE6INbSHjlt3wmyVP61zvm3ymuYnMYucrsXauVLTw4O+UeHAro91irXVX+QBCVuMPYBJx2K9uKpx/wGG9Dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oQsTX+7c; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92684C4CEF2;
+	Mon,  2 Jun 2025 07:41:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748850034;
-	bh=hGiH4Hoo2/uVVMFxeDhPxI1kIAj5t2YPrpFBr1YfSY4=;
+	s=k20201202; t=1748850119;
+	bh=hOG4mPEVeG4lGy1Sn/Tq1ECpU9a+dWUrQdhXmcnIpnc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CaXmCEz7hYMcEdm4EIc3whkuIh0WhbzTaK2ejft6ZUzE6W1NjBAJAJ5ZYjiWhq7Vv
-	 a8TYVehAKKYJwT4pK1GlMjpaowjaliyu4GGaMQjDc4ybO7Ah96dpiQc6yaPHn5EWAK
-	 x3aU1UK4mqvX+j9m/Ouyk1lj3D8/y71d6N4l014Yq7LFwWTiiQxJ2jxvUKbL1LK8Gr
-	 zZIjljCo2SyX2QBWnikOiWzbdY0W62s/0HvY6Xd7evsow/9RHb13ZW7YfHr5ScWHHU
-	 4Ua1THv7H29I5hrBQCews3GQOIUdCr1585ZM6cGbEixvVNjJGi/01HatpfULh9alaI
-	 Ia5wNigP1a+jA==
-Message-ID: <4e093835-af3b-4a84-b42f-fa7d3a6f60a1@kernel.org>
-Date: Mon, 2 Jun 2025 09:40:28 +0200
+	b=oQsTX+7chufuFHAltLNBbBScpHRh7pQbwjUJND8O976Dcw1hV6HjXDyi0FZv0UNv/
+	 Dfz1t6dNmYXla7niV3MolRaX2T0GNmF2cQ8QN1eWqm2J35Wnm+aY+rj93SA9vHGFnR
+	 HWUt5yndibzaxdsJx6G749jWqjklClMiTiM3piIAjbB75QmJwVUXtSl6qoxpwKV1Ez
+	 kpRwBJOSL1EckJaBpGzxZLn4b+dac4VDT0FqhuY4AkPdzoDADM937iEDLSfR/b6eGr
+	 Nm1kQdrE+C8DrjFh4Ly+QLDUOlptysbVx/K7+fmGrLpZ0abCYiUEeBjJi5d8zeFvga
+	 bqnR1oWc/VXSg==
+Message-ID: <c585e338-22eb-42f1-b8a9-adeefe14f374@kernel.org>
+Date: Mon, 2 Jun 2025 09:41:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/8] dt-bindings: soc: qcom: pmic-glink: Move X1E80100
- out of fallbacks
+Subject: Re: [PATCH v2 8/8] arm64: dts: qcom: x1*: Remove
+ qcom,sm8550-pmic-glink fallback
 To: fenglin.wu@oss.qualcomm.com, Sebastian Reichel <sre@kernel.org>,
  Bjorn Andersson <andersson@kernel.org>,
  Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -64,7 +64,7 @@ Cc: Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
  kernel@oss.qualcomm.com, devicetree@vger.kernel.org,
  linux-usb@vger.kernel.org
 References: <20250530-qcom_battmgr_update-v2-0-9e377193a656@oss.qualcomm.com>
- <20250530-qcom_battmgr_update-v2-6-9e377193a656@oss.qualcomm.com>
+ <20250530-qcom_battmgr_update-v2-8-9e377193a656@oss.qualcomm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,19 +110,21 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250530-qcom_battmgr_update-v2-6-9e377193a656@oss.qualcomm.com>
+In-Reply-To: <20250530-qcom_battmgr_update-v2-8-9e377193a656@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 30/05/2025 09:35, Fenglin Wu via B4 Relay wrote:
 > From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
 > 
-> Move X1E80100 out of the fallbacks of SM8550 in pmic-glink support.
+> The "qcom,x1e80100-pmic-glink" is not longer a fallback compatible
+> string of "qcom,sm8550-pmic-glink", so remove "qcom,sm8550-pmic-glink"
 
-Why?
+No, it still is.
 
-Do not describe what you do here, it's obvious. We see it from the diff.
+> in x1* platform pmic-glink device nodes.
 
+No explanation, no reasoning and this affects users of this DTS.
 
 Best regards,
 Krzysztof
