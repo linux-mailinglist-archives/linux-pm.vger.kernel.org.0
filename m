@@ -1,332 +1,212 @@
-Return-Path: <linux-pm+bounces-27972-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27973-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 579A1ACBA5E
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 19:33:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E65FACBB15
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 20:30:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1064B1774AB
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 17:33:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3AD5C188D3EC
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 18:30:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1912223DFA;
-	Mon,  2 Jun 2025 17:33:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F906192D70;
+	Mon,  2 Jun 2025 18:30:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b="hiyg5+tI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jac4L/Tt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E536020E026
-	for <linux-pm@vger.kernel.org>; Mon,  2 Jun 2025 17:33:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B06225779;
+	Mon,  2 Jun 2025 18:30:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748885592; cv=none; b=JXU2bY+LFLucQRXt4l9Ap1jdx1GorbA0LOQQCtVFVgRBSXEZUHUVqFS5kNEqEwZcWjl+QmwMrqgZyzgy0TobngsIBrDFLy6YacrVpIwZYKf5LpVwSlZqNqEKvxGuy6uxsnWdpyrf5/CWa2KwwV4+Nog/lgADrPlOOcqQULO+lGE=
+	t=1748889008; cv=none; b=t0YNkPKU9FV4eEYhEfq6wtJfEb9TV2HDxFGbRIGSc39UeH7sg7Hr/hGCzQcyl+ZqOSvh7byg/z0hPq7kipi6cAs9MD2CZwXx/ZR7pMjzzQ6jxUR5aK0adrsPB17qEyaLP78F6rLdfm+QVDORzBSaGX/94Mtjt41zjA+q4cHuGbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748885592; c=relaxed/simple;
-	bh=iZI1TQqs7zFVzBl46Gelxg/rlbbNVCWwOLVs/8skQeE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sauVlFnLlaEQQUAmYCPlQ/YlijQQPVWjeBUXfKGzRTXBZsA+vK7J4asVRRN3x+J54Ycj4F4I2QV9DzA7V98PAy4tIGeb5SKa6k6A+LGKoZj3DUzehUOpoDaxKOmr4fEV8wWgSbiQEHfE4eIbjWNhTzjx5TNoDiD7klpPYjeMYk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com; spf=none smtp.mailfrom=pdp7.com; dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b=hiyg5+tI; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pdp7.com
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-b26f01c638fso4278371a12.1
-        for <linux-pm@vger.kernel.org>; Mon, 02 Jun 2025 10:33:10 -0700 (PDT)
+	s=arc-20240116; t=1748889008; c=relaxed/simple;
+	bh=I3ps/vXS6xOBaRTDgBK/4ZINVG3GFVOLQseSmjF/i0E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qfJrv0iU4HoSLGn1az35LuucUuqfnV9aiXpIDX3dHnd4MnuQov4BG791ThUU81pF8c6/r3syFiCde5K6SjufFl4o2G/jyDJR+dM0LbFOqjcbg/DbwRGaFmY7Vzcc739tYhrRmf4TqZrUUWOm36WrLPB5R8RmIdtmrs3wI7dbjow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jac4L/Tt; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4a52d82adcaso35604401cf.0;
+        Mon, 02 Jun 2025 11:30:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pdp7-com.20230601.gappssmtp.com; s=20230601; t=1748885590; x=1749490390; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=p9nDTLkcGAIkg7CRE/p7klOUylClrsHD4YAyslCH86o=;
-        b=hiyg5+tI2nRfMd/h1ndD2Bl0cSHxznVxOTxI/s4y1WrC/TnYcyZnB+BwGgMP8kupHN
-         S/a8U2f+VPAUIA4Y2vDqnewnbUvOmKuE9waCy01UJ6GfDG+tUFvRXNxMd3HP1BcYju9W
-         5aH3qaoECnuHExM4A6MfXiLbThpZP1rGQ5zalX2RJdmyn/k3BMOspPbu9OqfdOgI/uin
-         4Opg1UHVQ63yaudMeQtEy8rRe03G0Fxux3du2exrFaEE9diZQhdl2v4xzuIsCS5aV0Yv
-         7IOzOHoZBlY1p39Agv/ETknJPOW3NKa2PiH0HcckdgdvcTDTBKyy6JiSGOr7PfRdQ01B
-         Enbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748885590; x=1749490390;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1748889005; x=1749493805; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p9nDTLkcGAIkg7CRE/p7klOUylClrsHD4YAyslCH86o=;
-        b=ukoYychxrPbAX5HuZ6YVB/+3DJePCcjcG1jmSvPgEe0fO/GwwwhRzYy0y52EhsPuMn
-         DprY0KlEMeLkD/XKVBhK7X4KBH34XKxmE48erB4jWO6rfNQFkV1k7BiuANiRs8ZcEYSA
-         ujw2fsPTMXP7mR37264NMf/HP7JzOiuAJX5g5zrY5YC4j48Ky7Hwm1bPXQ6cXE0nhBb5
-         9UeShwRlcflmtBGwgnChF+nzqkDVkcCuRT0CCxgBmzAEzvPCiW5aXrAp3Aso5IruuYgj
-         JOB4WrLoG2/2dHJuoc+LBqT5XANrqik2QneHz8gRQJAW6LCZkZHfkEQIYO0smTDjwhFQ
-         Q5gA==
-X-Forwarded-Encrypted: i=1; AJvYcCXKQoAykxm9fW0GDZaIkgxFo35SRzFcPXWa6mJY0IOYAZi5u2Jnf9w6KKW0Y7sW8rLyV0uf5ZjWjA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YymmZTooBeWWdsbaSFgjWZKi2Cl5ZRtu7yldEEpQ+dxnYfTbxzb
-	0ULso5wPkC8KcvW3Udfim50FhtJV/BZRZ3YQAyo9/DXeN+JWT3ajsPswYz4LucHJfqM=
-X-Gm-Gg: ASbGnctYsrGb6nGL/hLJ3NZTW7zYnqvQ8j+g0LJeilYJ4Qviqsn6J1F9mSEb9OJQrss
-	gAdMCobvTKJ6KW56gRLfDfIDHAl30bRaRToxP6rDiKrIaHBRZrCDWu7+8yWHn+oH8FNjO778jQu
-	i0i4m+soN6VJUN4QrwFk+tvHzTBLy5HbXgPf4hpD5gWoVsyxR/dW737AIwEBlb7GBX6QSE4gwP6
-	uE5OUxo/wuFcKcnxg7atI+fUi7d1JzKoR7kHiAXU9VrPof/DNv75t/N+UcQhqofCqgsuid6HlsT
-	BSVUdAok6Hevd3JhBd1/mA9bC6xgGYIV18wt19oOR8g=
-X-Google-Smtp-Source: AGHT+IEhf+hbSJIgKQ6xbE3OCLEJw/a8F3k729/3ouoi/zbM4ai6IF1UOWTbMpWnLmrJDoMHmmmdxA==
-X-Received: by 2002:a05:6a21:328e:b0:201:85f4:ade6 with SMTP id adf61e73a8af0-21bad15741fmr14269458637.27.1748885589946;
-        Mon, 02 Jun 2025 10:33:09 -0700 (PDT)
-Received: from x1 ([97.120.245.255])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-747afe96474sm7931449b3a.22.2025.06.02.10.33.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jun 2025 10:33:09 -0700 (PDT)
-Date: Mon, 2 Jun 2025 10:33:07 -0700
-From: Drew Fustini <drew@pdp7.com>
-To: Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Frank Binns <frank.binns@imgtec.com>,
-	Matt Coster <matt.coster@imgtec.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v3 0/8] Add TH1520 GPU support with power sequencing
-Message-ID: <aD3gU6lS1eMtkOTU@x1>
-References: <CGME20250529222402eucas1p1c9e0ddd3efd62e078e5de2cf71655f58@eucas1p1.samsung.com>
- <20250530-apr_14_for_sending-v3-0-83d5744d997c@samsung.com>
- <aDzcul5vBeQvP634@x1>
- <d949f2b5-1351-4778-9716-eaec1e2b1ba7@samsung.com>
+        bh=I3ps/vXS6xOBaRTDgBK/4ZINVG3GFVOLQseSmjF/i0E=;
+        b=jac4L/TtDR4/1l60PxILfHcMeezITvlv1qGw2tF4JCwbeV6k5JGMcLTeU7KLW1cs11
+         gxNFy2m7D6pjjTxi5ywah9dRUGKuTeGQ6UEdujigcu3B0ex91YKYnE43mTF7k8/QYyVY
+         e+z6CNVJB0FXqFHCxGiAA5kB+CmDkvqKv5jco8y+Z6TRyHVYJvoh5WfoS+sdUAZlXAa6
+         oS3KPaJQwMD4SVo14VCgqi6oV6nnMguLtLw1bllRPKp+Egkqx3jwYHQVEqk9sph7eQVa
+         Nmtyx9cLCB7FBtDeIq9bHRs5eVeEC6AsgkCu1zICQ6rDXcTkrhgsTkcBAKpK8qW4UPEx
+         ojCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748889005; x=1749493805;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=I3ps/vXS6xOBaRTDgBK/4ZINVG3GFVOLQseSmjF/i0E=;
+        b=j+vxSnn5S2k1PrJeGjSnk5MKU0Mm7qCKG2Q8SXsnr2jAaQbCWKHBH5R2uOVgPdNPtn
+         qLf1ukrfFLvAmORqrP/RGhvJsZwYQKMgp0fvEF03kouefUWCsOcCBTZRVwOVtjhvJVtJ
+         bC5nD7eoxcRGL9+o09ZzZsZsKdilOK9GHDOu93jJLgyrqUtUlIzdfW1fq9HPz1Ym3POP
+         l5YVGECAjHR3zLLze+2K7lY9Uoe9DbTGpqkxng7TTHy9g8VWMRwTpEFBvI143LSdogwY
+         Gcqx4vtH52LLohKocAgJzOrOoCUSStqOV+x98F9DAGYkDnTq32PDSm9RpYn1KAeOvdSE
+         GUNw==
+X-Forwarded-Encrypted: i=1; AJvYcCUN1OihZN93WijfMQpz/2VhpBFp3+nXfjERifccs2w9lih0TuLkUxiBI3iSRxrQM2mTtJLKsyP0xZ0=@vger.kernel.org, AJvYcCVn3szO6qMPxXzmGNRfCcOqilOp99rRjWPR6OTZot71fXC+c5pNySFtZhaOAXmZhpqF2LA3GOixvpLdJjqH@vger.kernel.org, AJvYcCWyd0EEeJptroU6z+mWR6Ss2s+DrZYNo6q0Ctbse9JpF7sVXxai5Si4v1bcvR7pbYFM1NFnQBxR@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz34vXMQeE8CHMri0PujnTCO4WmMHPJaKWLQPX5tEmbTH+JCVy4
+	KGlwxoJRs361Mq2jftTdqLHXr/+DxTmPwbPJgVJWYq1q1W4XYpw7vrBS3Ouehqmee1xpsn4rjfw
+	hVxPCUOgRkQ8+3AZIltVU2ZuSp5hIovg=
+X-Gm-Gg: ASbGncvJbTBZV4Snj+W9EFL4PttF4suanZS1c3pRe0kI3duLMevSOSY5xg0AKOlw+sB
+	mgJWYSqI3MqC4/EZznMXkn3G240bCFMGBKN14JQMh63FWFhUNxppsYUC0aMaICcRVsBr1NitwRW
+	j2204vP+QVGtgVdG/mwi/7tfB7F6U7DQyKUw==
+X-Google-Smtp-Source: AGHT+IHZPAHvPgBuwq78m2HFFGPtWr5KuODcu/WE969DSVc6e4SrjlVi7L7mgjIj8hJ5MrOb7Fv9nOQykrouQpQkSGo=
+X-Received: by 2002:a05:6214:1d2c:b0:6f2:a4cf:5fd7 with SMTP id
+ 6a1803df08f44-6fad9165a84mr147092146d6.45.1748889004983; Mon, 02 Jun 2025
+ 11:30:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d949f2b5-1351-4778-9716-eaec1e2b1ba7@samsung.com>
+References: <20250429233848.3093350-1-nphamcs@gmail.com> <aDlUgVFdA7rCUvHx@yjaykim-PowerEdge-T330>
+ <CAKEwX=MjyEsoyDmMBCRr0QnBfgkTA5bfrshPbfSgNp887zaxVw@mail.gmail.com>
+ <aDxN6oz86TD5H4IL@yjaykim-PowerEdge-T330> <CAMgjq7DGMS5A4t6nOQmwyLy5Px96aoejBkiwFHgy9uMk-F8Y-w@mail.gmail.com>
+In-Reply-To: <CAMgjq7DGMS5A4t6nOQmwyLy5Px96aoejBkiwFHgy9uMk-F8Y-w@mail.gmail.com>
+From: Nhat Pham <nphamcs@gmail.com>
+Date: Mon, 2 Jun 2025 11:29:53 -0700
+X-Gm-Features: AX0GCFt-PUurM1QtJWwmhEL52y2jIqhge_cou40ibH8eyg0VQefqwQtBHmfOVoM
+Message-ID: <CAKEwX=P4Q6jNQAi+H3sMQ73z-F-rG5jz8jj1NeGgUi=Pem_ZTQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 00/18] Virtual Swap Space
+To: Kairui Song <ryncsn@gmail.com>
+Cc: YoungJun Park <youngjun.park@lge.com>, linux-mm@kvack.org, akpm@linux-foundation.org, 
+	hannes@cmpxchg.org, hughd@google.com, yosry.ahmed@linux.dev, 
+	mhocko@kernel.org, roman.gushchin@linux.dev, shakeel.butt@linux.dev, 
+	muchun.song@linux.dev, len.brown@intel.com, chengming.zhou@linux.dev, 
+	chrisl@kernel.org, huang.ying.caritas@gmail.com, ryan.roberts@arm.com, 
+	viro@zeniv.linux.org.uk, baohua@kernel.org, osalvador@suse.de, 
+	lorenzo.stoakes@oracle.com, christophe.leroy@csgroup.eu, pavel@kernel.org, 
+	kernel-team@meta.com, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	linux-pm@vger.kernel.org, peterx@redhat.com, gunho.lee@lge.com, 
+	taejoon.song@lge.com, iamjoonsoo.kim@lge.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 02, 2025 at 10:03:09AM +0200, Michal Wilczynski wrote:
-> 
-> 
-> On 6/2/25 01:05, Drew Fustini wrote:
-> > On Fri, May 30, 2025 at 12:23:47AM +0200, Michal Wilczynski wrote:
-> >> This patch series introduces support for the Imagination IMG BXM-4-64
-> >> GPU found on the T-HEAD TH1520 SoC. A key aspect of this support is
-> >> managing the GPU's complex power-up and power-down sequence, which
-> >> involves multiple clocks and resets.
-> >>
-> >> The TH1520 GPU requires a specific sequence to be followed for its
-> >> clocks and resets to ensure correct operation. Initial discussions and
-> >> an earlier version of this series explored managing this via the generic
-> >> power domain (genpd) framework. However, following further discussions
-> >> with kernel maintainers [1], the approach has been reworked to utilize
-> >> the dedicated power sequencing (pwrseq) framework.
-> >>
-> >> This revised series now employs a new pwrseq provider driver
-> >> (pwrseq-thead-gpu.c) specifically for the TH1520 GPU. This driver
-> >> encapsulates the SoC specific power sequence details. The Imagination
-> >> GPU driver (pvr_device.c) is updated to act as a consumer of this power
-> >> sequencer, requesting the "gpu-power" target. The sequencer driver,
-> >> during its match phase with the GPU device, acquires the necessary clock
-> >> and reset handles from the GPU device node to perform the full sequence.
-> >>
-> >> This approach aligns with the goal of abstracting SoC specific power
-> >> management details away from generic device drivers and leverages the
-> >> pwrseq framework as recommended.
-> >>
-> >> The series is structured as follows:
-> >>
-> >> Patch 1: Adds device tree bindings for the new T-HEAD TH1520 GPU
-> >>          power sequencer provider.
-> >> Patch 2: Introduces the pwrseq-thead-gpu driver to manage the GPU's
-> >>          power-on/off sequence.
-> >> Patch 3: Updates the Imagination DRM driver to utilize the pwrseq
-> >>          framework for TH1520 GPU power management.
-> >> Patch 4: Adds the TH1520 GPU compatible string to the Imagination
-> >>          GPU DT bindings.
-> >> Patch 5: Adds the missing reset controller header include in the
-> >>          TH1520 DTS include file.
-> >> Patch 6: Adds the device tree node for the GPU power sequencer to
-> >>          the TH1520 DTS include file.
-> >> Patch 7: Adds the GPU device tree node for the IMG BXM-4-64 GPU to
-> >>          the TH1520 DTS include file.
-> >> Patch 8: Enables compilation of the drm/imagination on the RISC-V
-> >>          architecture
-> >>
-> >> This patchset finishes the work started in bigger series [2] by adding
-> >> all the remaining GPU power sequencing piece. After this patchset the GPU
-> >> probes correctly.
-> >>
-> >> This series supersedes the previous genpd based approach. Testing on
-> >> T-HEAD TH1520 SoC indicates the new pwrseq based solution works
-> >> correctly.
-> >>
-> >> This time it's based on linux-next, as there are dependent patches not
-> >> yet merged, but present in linux-next like clock and reset patches.
-> >>
-> >> An open point in Patch 7/8 concerns the GPU memory clock (gpu_mem_clk),
-> >> defined as a fixed-clock. The specific hardware frequency for this clock
-> >> on the TH1520 could not be determined from available public
-> >> documentation. Consequently, clock-frequency = <0>; has been used as a
-> >> placeholder to enable driver functionality.
-> >>
-> >> Link to v2 of this series - [3].
-> >>
-> >> v3:
-> >>
-> >>  - re-worked cover letter completely
-> >>  - complete architectural rework from using extended genpd callbacks to a
-> >>    dedicated pwrseq provider driver
-> >>  - introduced pwrseq-thead-gpu.c and associated DT bindings
-> >>    (thead,th1520-gpu-pwrseq)
-> >>  - the Imagination driver now calls devm_pwrseq_get() and uses
-> >>    pwrseq_power_on() / pwrseq_power_off() for the TH1520 GPU
-> >>  - removed the platform_resources_managed flag from dev_pm_info and
-> >>    associated logic
-> >>  - the new pwrseq driver's match() function now acquires consumer-specific
-> >>    resources (GPU clocks, GPU core reset) directly from the consumer device
-> >>
-> >> v2:
-> >>
-> >> Extended the series by adding two new commits:
-> >>  - introduced a new platform_resources_managed flag in dev_pm_info along
-> >>    with helper functions, allowing drivers to detect when clocks and resets
-> >>    are managed by the platform
-> >>  - updated the DRM Imagination driver to skip claiming clocks when
-> >>    platform_resources_managed is set
-> >>
-> >> Split the original bindings update:
-> >>  - the AON firmware bindings now only add the GPU clkgen reset (the GPU
-> >>    core reset remains handled by the GPU node)
-> >>
-> >> Reworked the TH1520 PM domain driver to:
-> >>  - acquire GPU clocks and reset dynamically using attach_dev/detach_dev
-> >>    callbacks
-> >>  - handle clkgen reset internally, while GPU core reset is obtained from
-> >>    the consumer device node
-> >>  - added a check to enforce that only a single device can be attached to
-> >>    the GPU PM domain
-> >>
-> >> [1] - https://lore.kernel.org/all/CAPDyKFpi6_CD++a9sbGBvJCuBSQS6YcpNttkRQhQMTWy1yyrRg@mail.gmail.com/
-> >> [2] - https://lore.kernel.org/all/20250219140239.1378758-1-m.wilczynski@samsung.com/
-> >> [3] - https://lore.kernel.org/all/20250414-apr_14_for_sending-v2-0-70c5af2af96c@samsung.com/
-> >>
-> >> ---
-> >> Michal Wilczynski (8):
-> >>       dt-bindings: power: Add T-HEAD TH1520 GPU power sequencer
-> >>       power: sequencing: Add T-HEAD TH1520 GPU power sequencer driver
-> >>       drm/imagination: Use pwrseq for TH1520 GPU power management
-> >>       dt-bindings: gpu: Add TH1520 GPU compatible to Imagination bindings
-> >>       riscv: dts: thead: th1520: Add missing reset controller header include
-> >>       riscv: dts: thead: Add GPU power sequencer node
-> >>       riscv: dts: thead: th1520: Add IMG BXM-4-64 GPU node
-> >>       drm/imagination: Enable PowerVR driver for RISC-V
-> >>
-> >>  .../devicetree/bindings/gpu/img,powervr-rogue.yaml |   9 +-
-> >>  .../bindings/power/thead,th1520-pwrseq.yaml        |  42 +++++
-> >>  MAINTAINERS                                        |   2 +
-> >>  arch/riscv/boot/dts/thead/th1520.dtsi              |  29 ++++
-> >>  drivers/gpu/drm/imagination/Kconfig                |   3 +-
-> >>  drivers/gpu/drm/imagination/pvr_device.c           |  33 +++-
-> >>  drivers/gpu/drm/imagination/pvr_device.h           |   6 +
-> >>  drivers/gpu/drm/imagination/pvr_power.c            |  82 +++++----
-> >>  drivers/power/sequencing/Kconfig                   |   8 +
-> >>  drivers/power/sequencing/Makefile                  |   1 +
-> >>  drivers/power/sequencing/pwrseq-thead-gpu.c        | 183 +++++++++++++++++++++
-> >>  11 files changed, 363 insertions(+), 35 deletions(-)
-> >> ---
-> >> base-commit: 49473fe7fdb5fbbe5bbfa51083792c17df63d317
-> >> change-id: 20250414-apr_14_for_sending-5b3917817acc
-> >>
-> >> Best regards,
-> >> -- 
-> >> Michal Wilczynski <m.wilczynski@samsung.com>
-> >>
-> > 
-> > Thank you for continuing to work on this series.
-> > 
-> > I applied it to next-20250530 and the boot hangs:
-> > 
-> > <snip>
-> > [    0.895622] mmc0: new HS400 MMC card at address 0001
-> > [    0.902638] mmcblk0: mmc0:0001 8GTF4R 7.28 GiB
-> > [    0.915454]  mmcblk0: p1 p2 p3
-> > [    0.916613] debug_vm_pgtable: [debug_vm_pgtable         ]: Validating architecture page table helpers
-> > [    0.920107] mmcblk0boot0: mmc0:0001 8GTF4R 4.00 MiB
-> > [    0.936592] mmcblk0boot1: mmc0:0001 8GTF4R 4.00 MiB
-> > [    0.944986] mmcblk0rpmb: mmc0:0001 8GTF4R 512 KiB, chardev (243:0)
-> > [    0.947700] mmc1: new UHS-I speed DDR50 SDHC card at address aaaa
-> > [    0.961368] mmcblk1: mmc1:aaaa SU16G 14.8 GiB
-> > [    0.969639]  mmcblk1: p1 p2 p3
-> > [    0.986688] printk: legacy console [ttyS0] disabled
-> > [    0.992468] ffe7014000.serial: ttyS0 at MMIO 0xffe7014000 (irq = 23, base_baud = 6250000) is a 16550A
-> > [    1.002085] printk: legacy console [ttyS0] enabled
-> > [    1.002085] printk: legacy console [ttyS0] enabled
-> > [    1.011784] printk: legacy bootconsole [uart0] disabled
-> > [    1.011784] printk: legacy bootconsole [uart0] disabled
-> > [    1.024633] stackdepot: allocating hash table of 524288 entries via kvcalloc
-> > <no more output>
-> > 
-> > I pasted the full boot log [1]. I have clk_ignore_unused in the kernel
-> > cmdline so I don't think it is related to disabling clocks. Boot does
-> > complete okay if I set the gpu node status to disabled.
-> > 
-> > Any ideas of what might fix the boot hang?
-> > 
-> > Thanks,
-> > Drew
-> 
-> Hi,
-> Thanks a lot for testing and promptly providing debug data. I think the
-> problem is with the fallback logic implemented in the pvr_device.c:
-> 	/*
-> 	 * Try to get a power sequencer. If successful, it will handle clocks
-> 	 * and resets. Otherwise, we fall back to managing them ourselves.
-> 	 */
-> 	pvr_dev->pwrseq = devm_pwrseq_get(dev, "gpu-power");
-> 	if (IS_ERR(pvr_dev->pwrseq)) {
-> 		int pwrseq_err = PTR_ERR(pvr_dev->pwrseq);
-> 
-> 		/*
-> 		 * If the error is -EPROBE_DEFER, it's because the
-> 		 * optional sequencer provider is not present
-> 		 * and it's safe to fall back on manual power-up.
-> 		 */
-> 		if (pwrseq_err == -EPROBE_DEFER)
-> 			pvr_dev->pwrseq = NULL;
-> 		else
-> 			return dev_err_probe(dev, pwrseq_err,
-> 					     "Failed to get power sequencer\n");
-> 	}
-> 
-> 
-> Since you have:
-> # CONFIG_POWER_SEQUENCING_THEAD_GPU is not set
-> The fallback logic assumes that there is no pwrseq provider for
-> 'gpu-power' and falls back on generic driver to do the initial power
-> sequence. Obviously for TH1520 the generic driver fails to do that
-> correctly, and the register access hangs.
+On Sun, Jun 1, 2025 at 9:15=E2=80=AFAM Kairui Song <ryncsn@gmail.com> wrote=
+:
+>
+>
+> Hi All,
 
-Ah! Yeah, I missed setting CONFIG_POWER_SEQUENCING_THEAD_GPU. The boot
-completes okay now that is enabled.
+Thanks for sharing your setup, Kairui! I've always been curious about
+multi-tier compression swapping.
 
-> 
-> So the code seems to behave as designed.
-> 
-> By the way, there are quite a lot of Kconfig options added recently to
-> TH1520 SoC that haven't made it's way to defconfig for risc-v. Do you
-> think it's a good idea to add them there ?
+>
+> I'd like to share some info from my side. Currently we have an
+> internal solution for multi tier swap, implemented based on ZRAM and
+> writeback: 4 compression level and multiple block layer level. The
+> ZRAM table serves a similar role to the swap table in the "swap table
+> series" or the virtual layer here.
+>
+> We hacked the BIO layer to let ZRAM be Cgroup aware, so it even
 
-Yeah, I think we should have all the recent Kconfing options enabled by
-default. I'm not sure if it should be in the riscv defconfig and as new
-selects under ARCH_THEAD in Kconfig.socs. I just asked conor and palmer
-on irc to see what would work best.
+Hmmm this part seems a bit hacky to me too :-?
 
-Thanks,
-Drew
+> supports per-cgroup priority, and per-cgroup writeback control, and it
+> worked perfectly fine in production.
+>
+> The interface looks something like this:
+> /sys/fs/cgroup/cg1/zram.prio: [1-4]
+> /sys/fs/cgroup/cg1/zram.writeback_prio [1-4]
+> /sys/fs/cgroup/cg1/zram.writeback_size [0 - 4K]
+
+How do you do aging with multiple tiers like this? Or do you just rely
+on time thresholds, and have userspace invokes writeback in a cron
+job-style?
+
+Tbh, I'm surprised that we see performance win with recompression. I
+understand that different workloads might benefit the most from
+different points in the Pareto frontier of latency-memory saving:
+latency-sensitive workloads might like a fast compression algorithm,
+whereas other workloads might prefer a compression algorithm that
+saves more memory. So a per-cgroup compressor selection can make
+sense.
+
+However, would the overhead of moving a page from one tier to the
+other not eat up all the benefit from the (usually small) extra memory
+savings?
+
+>
+> It's really nothing fancy and complex, the four priority is simply the
+> four ZRAM compression streams that's already in upstream, and you can
+> simply hardcode four *bdev in "struct zram" and reuse the bits, then
+> chain the write bio with new underlayer bio... Getting the priority
+> info of a cgroup is even simpler once ZRAM is cgroup aware.
+>
+> All interfaces can be adjusted dynamically at any time (e.g. by an
+> agent), and already swapped out pages won't be touched. The block
+> devices are specified in ZRAM's sys files during swapon.
+>
+> It's easy to implement, but not a good idea for upstream at all:
+> redundant layers, and performance is bad (if not optimized):
+> - it breaks SYNCHRONIZE_IO, causing a huge slowdown, so we removed the
+> SYNCHRONIZE_IO completely which actually improved the performance in
+> every aspect (I've been trying to upstream this for a while);
+> - ZRAM's block device allocator is just not good (just a bitmap) so we
+> want to use the SWAP allocator directly (which I'm also trying to
+> upstream with the swap table series);
+> - And many other bits and pieces like bio batching are kind of broken,
+
+Interesting, is zram doing writeback batching?
+
+> busy loop due to the ZRAM_WB bit, etc...
+
+Hmmm, this sounds like something swap cache can help with. It's the
+approach zswap writeback is taking - concurrent assessors can get the
+page in the swap cache, and OTOH zswap writeback back off if it
+detects swap cache contention (since the page is probably being
+swapped in, freed, or written back by another thread).
+
+But I'm not sure how zram writeback works...
+
+> - Lacking support for things like effective migration/compaction,
+> doable but looks horrible.
+>
+> So I definitely don't like this band-aid solution, but hey, it works.
+> I'm looking forward to replacing it with native upstream support.
+> That's one of the motivations behind the swap table series, which
+> I think it would resolve the problems in an elegant and clean way
+> upstreamly. The initial tests do show it has a much lower overhead
+> and cleans up SWAP.
+>
+> But maybe this is kind of similar to the "less optimized form" you
+> are talking about? As I mentioned I'm already trying to upstream
+> some nice parts of it, and hopefully replace it with an upstream
+> solution finally.
+>
+> I can try upstream other parts of it if there are people really
+> interested, but I strongly recommend that we should focus on the
+> right approach instead and not waste time on that and spam the
+> mail list.
+
+I suppose a lot of this is specific to zram, but bits and pieces of it
+sound upstreamable to me :)
+
+We can wait for YoungJun's patches/RFC for further discussion, but perhaps:
+
+1. A new cgroup interface to select swap backends for a cgroup.
+
+2. Writeback/fallback order either designated by the above interface,
+or by the priority of the swap backends.
+
+
+>
+> I have no special preference on how the final upstream interface
+> should look like. But currently SWAP devices already have priorities,
+> so maybe we should just make use of that.
 
