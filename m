@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-27958-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27959-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAF57ACAB37
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 11:16:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10BC0ACAB84
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 11:39:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4EC1179679
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 09:16:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66AB87A37B8
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 09:38:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 315791CBEAA;
-	Mon,  2 Jun 2025 09:16:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 819B61E1DE9;
+	Mon,  2 Jun 2025 09:39:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jHEc3E1o"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lem9UO44"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E944D1A285;
-	Mon,  2 Jun 2025 09:16:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 474EB19CC1C;
+	Mon,  2 Jun 2025 09:39:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748855786; cv=none; b=rhRdPyukstCdQsFoiGWEeCCNgnC4IKU9QFFaW4sY8nyQ6MFcakLsaaX70MVNRp+4oIuQG8tmCVmrhTOBgUBKIxH84U5CIF5WaZizpX15yOdgWil8qJ6tcOzcm4M5+zSgbuZ9xtHLbSyXB2UBxwhrF4a0KECeHxES5C3wJ6HMec8=
+	t=1748857152; cv=none; b=C1ghIcM0N5st56Hsu9LbNXVtYI721tZLgYavQoB4TEiA81nFwqi7kZN/4Wv8provq7lgU9XuJh8UHjkxq19l1RfuZ5fTJSVWzrmNxGJSgnijmrMcRZxeBI21gqolAL/ONU2pMWZFieU1lGEVePGR5NYPRbJvFhwHwDYHTmKJmNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748855786; c=relaxed/simple;
-	bh=C1De+IOxAcDQvZAsEVV4bkESfkA1sLY6u15THMKu99E=;
+	s=arc-20240116; t=1748857152; c=relaxed/simple;
+	bh=lyYNygr33eoeswlcOm02s4h7rjdaOk6qW/QLqNcdbDs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O4EJpRzSFrAd2zxF3+9M+v6+gffLf3Ps2gS0h3LXQT8v4jc1wWEaMUDdqQfTC7/rx+eVCaORQJxMDe6P6GLhp5pTw4qwlrMAiRLFfpUROhUiHmEOtRFfGBiAHOFSxQ29huh1DhqIVLSu5p0pVvXZIpiHI3y6JJXrYrSgpjUFzTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jHEc3E1o; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 248AFC4CEEB;
-	Mon,  2 Jun 2025 09:16:20 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=AjJswxZ0f/e7UHk72dwM2+nSlvUS3xC9vblu7DCJYfcn1zLuEf/DwwOzVj2YV5gi8mGaH2N/LYLYmC3xwu0EjO4kPrMFBOMRZ2pTN1FTP5eUfh5TpF31sW0uBDSA2TH28y8giWoSlFBLCTCxAkxVwSHgsm2M0lHuWT+IKoiDQVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lem9UO44; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B45FCC4CEEB;
+	Mon,  2 Jun 2025 09:39:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748855785;
-	bh=C1De+IOxAcDQvZAsEVV4bkESfkA1sLY6u15THMKu99E=;
+	s=k20201202; t=1748857151;
+	bh=lyYNygr33eoeswlcOm02s4h7rjdaOk6qW/QLqNcdbDs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=jHEc3E1oJ7/9XEzu+JsoTDOH5xVMcn/fP/A5jJUEuy+tl02dHstQU5qiCEQ7k22vH
-	 YPvW4Eo06B+L6lrc/gtocbzJs4F1h3i5cXOLwdDGPpPRbB2BUYzz2EGbLghrjiIEAN
-	 wDad7w8tSFobiy1axktSGLr/qTyQXjX1bPnovR63+I7395BS0vqR5te3jCArw1Gt8M
-	 bItsuS9D3+OTOc5rrvmmbSJ5u73eIUKiF33RYWcv4ZahYT70DHhTE8tNcqCOwaT1kf
-	 pVsWSSIsekxtiHhC9UxwFm0lA3Gw3+0mriORyHx5tCJpqamTXjpwD6TNNNtkcA6JRh
-	 /nKGXCwlDMPDA==
-Message-ID: <9b54c25e-27e9-4590-9ba4-030ba485abcc@kernel.org>
-Date: Mon, 2 Jun 2025 11:16:19 +0200
+	b=Lem9UO44d3wdJK+dKzy86mY8u5f1xJerl1sk7nPdArUDROi4WgdaAMQ/KB0MagqwC
+	 zV7g1erp56QqcEXXECMPBVQERHd5HAJHsoxtzFBLRwVkJ1MyHHHMMFfEa/GiK+63Mo
+	 ET2i4197y6XjyTQydTsKtYRTI8QWMSvGdfL7vXTtX0aE1VmwEU+RmDjhMcLod/xxo6
+	 NAX5d3asM47Oe5xoTTAR0iV3rxKlyS+M9a/GPCeEjjjkg5MmWJAoXUvORAELyd1uk2
+	 y25bLmJa1EL/wOKFL1vDqkVER0OXC2a+BrSTzaXtDNwEwQK96uGnf9oazKuOZUWeT8
+	 IyZNlowIzUXFQ==
+Message-ID: <cd28cf31-0b68-4e7a-8709-e29b177a3619@kernel.org>
+Date: Mon, 2 Jun 2025 11:39:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: clk: mt8189: Porting driver for clk
+Subject: Re: [1/5] clk: mt8189: Porting driver for clk
 To: "irving.ch.lin" <irving-ch.lin@mediatek.com>,
  Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
  <linux@roeck-us.net>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -63,7 +63,7 @@ Cc: angelogioacchino.delregno@collabora.com,
  linux-pm@vger.kernel.org, netdev@vger.kernel.org,
  linux-mediatek@lists.infradead.org,
  Irving lin <irving-ch.lin@mediatek.corp-partner.google.com>
-References: <20250602082610.1848291-1-irving-ch.lin@mediatek.com>
+References: <20250602083624.1849719-1-irving-ch.lin@mediatek.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,26 +109,22 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250602082610.1848291-1-irving-ch.lin@mediatek.com>
+In-Reply-To: <20250602083624.1849719-1-irving-ch.lin@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 02/06/2025 10:25, irving.ch.lin wrote:
+On 02/06/2025 10:36, irving.ch.lin wrote:
 > From: Irving lin <irving-ch.lin@mediatek.corp-partner.google.com>
 > 
 > 1. Add mt8189 clk driver
 > 2. Fix mux failed
 > 3. Add apll12_div_tdmout_b
 > 4. Add disable-unused configs
-> 
-> BUG=b:387252012
-> TEST=emerge-skywalker chromeos-kernel-6_6
 
-6_6 feels like v6.6, so nope. You need to start working on mainline and
-TESTING on mainline.
 
-This also explains a bit all the issues which you copied from downstream
-drivers... although they were fixed in v6.6 as well, so maybe not. :/
+Please do not send the same patch multiple times. This makes reviewing
+difficult and causes people to miss discussion. You received feedback
+already.
 
 Best regards,
 Krzysztof
