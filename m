@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-27969-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27970-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02838ACB6F0
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 17:23:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76CD2ACB7D0
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 17:31:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC9341BC7825
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 15:11:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F5E14A3DCF
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Jun 2025 15:22:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AD96226CEB;
-	Mon,  2 Jun 2025 15:04:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8B90229B0F;
+	Mon,  2 Jun 2025 15:18:02 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from lgeamrelo03.lge.com (lgeamrelo03.lge.com [156.147.51.102])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA85822686F
-	for <linux-pm@vger.kernel.org>; Mon,  2 Jun 2025 15:04:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38DEF228CB5
+	for <linux-pm@vger.kernel.org>; Mon,  2 Jun 2025 15:17:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.147.51.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748876643; cv=none; b=Nkt7PcGPJzSqIxrPo1sezVynMfBAk0x8RMPKUl7wA0cNZ0xDxKzshTM2zhETnnlfI5B7YmZkN0lKtHnJrKObLvbe16YUuhWalFVXrp4zsCtSFeq7SyYQIXMoSoi5nOVP9Sc5aPPEsUSC2Dm9upDUarKroNXNgHL6Ueh8WjEmYg8=
+	t=1748877482; cv=none; b=t1ibWPNkYrb3cdJ27iY9YkPZlJ3m16Mn1asjK5HM0U3d9Vqkoz3QaywSrsy8JWkrINbgQ3qIcrrxQUZZ4QtTX7T43pTygt66n2rASDCaJVg+M4H1WMhzUKyoVb1LHExRrrrm6lQXI5/htvH83TmjGYCiOQ3sjjQoVG+7qRZuw8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748876643; c=relaxed/simple;
-	bh=boJhymIaaEQ9M7ltEnszNrAVcAVirzSEjRdlBJp11ZM=;
+	s=arc-20240116; t=1748877482; c=relaxed/simple;
+	bh=fRjKqdfi/jmJw5tjnf/CKTWSP54t2Ex+l05wCk9TSfw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MoA5jVrLT7uFUsPo3B3hF/L322UT3XmnxccRJukrkVBH6YLuMdg8ZkTjVucAqAHsB5YZaZlNUTajbQsCLFWNwElwPiMbAOjWVIqeL2UrEhkTgLJ0ZEIP3u9/53ME3COPOEEVskEkABcTzUVdf8P5rsdgTy7uCQz1sppPuatioCo=
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZXXRTDgi8b7N1Sjvy7j10kl6D8rxONy8NfFy0e3yeDAuXVjNejy10S8spt9nWrwhrPA/haKYlgPrCYyNclWRRKVjkyHzjVHtdy894zChitQmm6jsHHLZp+JuUrf7TlnXzIBm8+jcYckA7HwsgDDbSruZMqf0fBGBfkb01UD4Q7k=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lge.com; spf=pass smtp.mailfrom=lge.com; arc=none smtp.client-ip=156.147.51.102
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lge.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lge.com
 Received: from unknown (HELO yjaykim-PowerEdge-T330) (10.177.112.156)
-	by 156.147.51.102 with ESMTP; 3 Jun 2025 00:03:52 +0900
+	by 156.147.51.102 with ESMTP; 3 Jun 2025 00:17:58 +0900
 X-Original-SENDERIP: 10.177.112.156
 X-Original-MAILFROM: youngjun.park@lge.com
-Date: Tue, 3 Jun 2025 00:03:52 +0900
+Date: Tue, 3 Jun 2025 00:17:58 +0900
 From: YoungJun Park <youngjun.park@lge.com>
-To: Nhat Pham <nphamcs@gmail.com>
-Cc: linux-mm@kvack.org, akpm@linux-foundation.org, hannes@cmpxchg.org,
-	hughd@google.com, yosry.ahmed@linux.dev, mhocko@kernel.org,
-	roman.gushchin@linux.dev, shakeel.butt@linux.dev,
-	muchun.song@linux.dev, len.brown@intel.com,
-	chengming.zhou@linux.dev, kasong@tencent.com, chrisl@kernel.org,
+To: Kairui Song <ryncsn@gmail.com>
+Cc: Nhat Pham <nphamcs@gmail.com>, linux-mm@kvack.org,
+	akpm@linux-foundation.org, hannes@cmpxchg.org, hughd@google.com,
+	yosry.ahmed@linux.dev, mhocko@kernel.org, roman.gushchin@linux.dev,
+	shakeel.butt@linux.dev, muchun.song@linux.dev, len.brown@intel.com,
+	chengming.zhou@linux.dev, chrisl@kernel.org,
 	huang.ying.caritas@gmail.com, ryan.roberts@arm.com,
 	viro@zeniv.linux.org.uk, baohua@kernel.org, osalvador@suse.de,
 	lorenzo.stoakes@oracle.com, christophe.leroy@csgroup.eu,
@@ -49,12 +49,12 @@ Cc: linux-mm@kvack.org, akpm@linux-foundation.org, hannes@cmpxchg.org,
 	linux-pm@vger.kernel.org, peterx@redhat.com, gunho.lee@lge.com,
 	taejoon.song@lge.com, iamjoonsoo.kim@lge.com
 Subject: Re: [RFC PATCH v2 00/18] Virtual Swap Space
-Message-ID: <aD29WJLms0CJVh8A@yjaykim-PowerEdge-T330>
+Message-ID: <aD3Apu+sz9Na+65B@yjaykim-PowerEdge-T330>
 References: <20250429233848.3093350-1-nphamcs@gmail.com>
  <aDlUgVFdA7rCUvHx@yjaykim-PowerEdge-T330>
  <CAKEwX=MjyEsoyDmMBCRr0QnBfgkTA5bfrshPbfSgNp887zaxVw@mail.gmail.com>
  <aDxN6oz86TD5H4IL@yjaykim-PowerEdge-T330>
- <CAKEwX=NFrWyFkyd5XhXEb_qYtWBk4yPUMPPJN0qHPAvzPUq_Dg@mail.gmail.com>
+ <CAMgjq7DGMS5A4t6nOQmwyLy5Px96aoejBkiwFHgy9uMk-F8Y-w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -64,10 +64,10 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKEwX=NFrWyFkyd5XhXEb_qYtWBk4yPUMPPJN0qHPAvzPUq_Dg@mail.gmail.com>
+In-Reply-To: <CAMgjq7DGMS5A4t6nOQmwyLy5Px96aoejBkiwFHgy9uMk-F8Y-w@mail.gmail.com>
 
-On Sun, Jun 01, 2025 at 02:08:22PM -0700, Nhat Pham wrote:
-> On Sun, Jun 1, 2025 at 5:56 AM YoungJun Park <youngjun.park@lge.com> wrote:
+On Mon, Jun 02, 2025 at 12:14:53AM +0800, Kairui Song wrote:
+> On Sun, Jun 1, 2025 at 8:56 PM YoungJun Park <youngjun.park@lge.com> wrote:
 > >
 > > On Fri, May 30, 2025 at 09:52:42AM -0700, Nhat Pham wrote:
 > > > On Thu, May 29, 2025 at 11:47 PM YoungJun Park <youngjun.park@lge.com> wrote:
@@ -100,21 +100,6 @@ On Sun, Jun 01, 2025 at 02:08:22PM -0700, Nhat Pham wrote:
 > > Our usage scenario includes remote swap,
 > > and we're experimenting with assigning swap tiers per cgroup
 > > in order to improve specific scene of our target device performance.
-> 
-> Hmm, that can be a start. Right now, we have only 2 swap tiers
-> essentially, so memory.(z)swap.max and memory.zswap.writeback is
-> usually sufficient to describe the tiering interface. But if you have
-> an alternative use case in mind feel free to send a RFC to explore
-> this!
->
-
-Yes, sounds good.
-I've organized the details of our swap tiering approach 
-including the specific use case we are trying to solve.
-This approach is based on leveraging 
-the existing priority mechanism in the swap subsystem.
-I’ll be sharing it as an RFC shortly.
- 
 > >
 > > We’ve explored several approaches and PoCs around this,
 > > and in the process of evaluating
@@ -122,11 +107,6 @@ I’ll be sharing it as an RFC shortly.
 > > with the upstream kernel,
 > > I came across your patchset and wanted to ask whether
 > > similar efforts have been discussed or attempted before.
-> 
-> I think it is occasionally touched upon in discussion, but AFAICS
-> there has not been really an actual upstream patch to add such an
-> interface.
-> 
 > >
 > > > >
 > > > > I had a couple of questions regarding the future direction.
@@ -157,63 +137,93 @@ I’ll be sharing it as an RFC shortly.
 > > and provides a more efficient solution.
 > > What do you think about?
 > 
-> Which less optimized form are you thinking of?
->
-
-Just mentioning current swap design would be less optimized regardless 
-of the form of tiering applied.
-Not meaninig my approach is less optimized.
-That may have come across differently than I intended.
-Please feel free to disregard that assumption — 
-I believe it would be more appropriate 
-to evaluate this based on the RFC I plan to share soon.
- 
-> >
-> > > the physical swap location in PTEs means that changing the swap
-> > > backend requires a full page table walk to update all the PTEs that
-> > > refer to the old physical swap location. So you have to pick your
-> > > poison - either:
-> > > 1. Pick your backend at swap out time, and never change it. You might
-> > > not have sufficient information to decide at that time. It prevents
-> > > you from adapting to the change in workload dynamics and working set -
-> > > the access frequency of pages might change, so their physical location
-> > > should change accordingly.
-> > >
-> > > 2. Reserve the space in every tier, and associate them with the same
-> > > handle. This is kinda what zswap is doing. It is space efficient, and
-> > > create a lot of operational issues in production.
-> > >
-> > > 3. Bite the bullet and perform the page table walk. This is what
-> > > swapoff is doing, basically. Raise your hands if you're excited about
-> > > a full page table walk every time you want to evict a page from zswap
-> > > to disk swap. Booo.
-> > >
-> > > This new design will give us an efficient way to perform tier transfer
-> > > - you need to figure out how to obtain the right to perform the
-> > > transfer (for now, through the swap cache - but you can perhaps
-> > > envision some sort of locks), and then you can simply make the change
-> > > at the virtual layer.
-> > >
-> >
-> > One idea that comes to mind is whether the backend swap tier for
-> > a page could be lazily adjusted at runtime—either reactively
-> > or via an explicit interface—before the tier changes.
-> > Alternatively, if it's preferable to leave pages untouched
-> > when the tier configuration changes at runtime,
-> > perhaps we could consider making this behavior configurable as well.
-> >
+> Hi All,
 > 
-> I don't quite understand - could you expand on this?
->
+> I'd like to share some info from my side. Currently we have an
+> internal solution for multi tier swap, implemented based on ZRAM and
+> writeback: 4 compression level and multiple block layer level. The
+> ZRAM table serves a similar role to the swap table in the "swap table
+> series" or the virtual layer here.
+> 
+> We hacked the BIO layer to let ZRAM be Cgroup aware, so it even
+> supports per-cgroup priority, and per-cgroup writeback control, and it
+> worked perfectly fine in production.
+> 
+> The interface looks something like this:
+> /sys/fs/cgroup/cg1/zram.prio: [1-4]
+> /sys/fs/cgroup/cg1/zram.writeback_prio [1-4]
+> /sys/fs/cgroup/cg1/zram.writeback_size [0 - 4K]
+> 
+> It's really nothing fancy and complex, the four priority is simply the
+> four ZRAM compression streams that's already in upstream, and you can
+> simply hardcode four *bdev in "struct zram" and reuse the bits, then
+> chain the write bio with new underlayer bio... Getting the priority
+> info of a cgroup is even simpler once ZRAM is cgroup aware.
+> 
+> All interfaces can be adjusted dynamically at any time (e.g. by an
+> agent), and already swapped out pages won't be touched. The block
+> devices are specified in ZRAM's sys files during swapon.
+> 
+> It's easy to implement, but not a good idea for upstream at all:
+> redundant layers, and performance is bad (if not optimized):
+> - it breaks SYNCHRONIZE_IO, causing a huge slowdown, so we removed the
+> SYNCHRONIZE_IO completely which actually improved the performance in
+> every aspect (I've been trying to upstream this for a while);
+> - ZRAM's block device allocator is just not good (just a bitmap) so we
+> want to use the SWAP allocator directly (which I'm also trying to
+> upstream with the swap table series);
+> - And many other bits and pieces like bio batching are kind of broken,
+> busy loop due to the ZRAM_WB bit, etc...
+> - Lacking support for things like effective migration/compaction,
+> doable but looks horrible.
+> 
 
-Regarding your point, 
-my understanding was that you were referring
-to an immediate migration once a new swap tier is selected at runtime. 
-I was suggesting whether a lazy migration approach
-—or even skipping migration altogether—might 
-be worth considering as alternatives.
-I only mentioned it because, from our use case perspective, 
-immediate migration is not strictly necessary.
+That's interesting — we've explored a similar idea as well, 
+although not by attaching it to ZRAM.
+Instead, our concept involved creating a separate block device 
+capable of performing the tiering functionality, and using it as follows:
+
+1. Prepare a block device that can manage multiple backend block devices.
+2. Perform swapon on this block device.
+3. Within the block device, use cgroup awareness 
+to carry out tiered swap operations across the prepared backend devices.
+
+However, we ended up postponing this approach as a second-tier option, mainly 
+due to the following concerns:
+
+1. The idea of allocating physical slots but managing them internally 
+as logical slots felt inefficient.
+2. Embedding cgroup awareness within a block device 
+seemed like a layer violation.
+
+> So I definitely don't like this band-aid solution, but hey, it works.
+> I'm looking forward to replacing it with native upstream support.
+> That's one of the motivations behind the swap table series, which
+> I think it would resolve the problems in an elegant and clean way
+> upstreamly. The initial tests do show it has a much lower overhead
+> and cleans up SWAP.
+> But maybe this is kind of similar to the "less optimized form" you
+> are talking about? As I mentioned I'm already trying to upstream
+> some nice parts of it, and hopefully replace it with an upstream
+> solution finally.
+> 
+> I can try upstream other parts of it if there are people really
+> interested, but I strongly recommend that we should focus on the
+> right approach instead and not waste time on that and spam the
+> mail list.
+
+I am in agreement with the points you’ve made.
+ 
+> I have no special preference on how the final upstream interface
+> should look like. But currently SWAP devices already have priorities,
+> so maybe we should just make use of that.
+
+I have been exploring an interface design 
+that leverages the existing swap priority mechanism,
+and I believe it would be valuable 
+to share this for further discussion and feedback.
+As mentioned in my earlier response to Nhat,
+I intend to submit this as an RFC to solicit broader input from the community. 
 
 Best regards,
 YoungJun Park
