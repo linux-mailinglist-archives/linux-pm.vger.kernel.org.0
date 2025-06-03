@@ -1,245 +1,311 @@
-Return-Path: <linux-pm+bounces-27996-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27997-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97951ACC32E
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 11:35:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 973A4ACC34C
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 11:40:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 570583A4211
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 09:34:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58FF81883E34
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 09:39:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9920E281379;
-	Tue,  3 Jun 2025 09:34:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 569CA28150E;
+	Tue,  3 Jun 2025 09:38:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="srDdJSkP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f8hV7sLq"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6264720C482;
-	Tue,  3 Jun 2025 09:34:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F682698BC;
+	Tue,  3 Jun 2025 09:38:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748943296; cv=none; b=XLOd/czUvTcBRgWLLwPt6uH/TvwjvFfRY1DW56+3iBf8Pxcca3JX8lKDzJ2cWVzy2LpJCc7rFALw1SzKyqszsQfROhEhXmjo5orB3AwAPstRR3YHDMSUErsKn0R/B5ECm0tSr9sN2yImE2zdL8ab8+5pJ4TjhOTt51tIbZFLdQA=
+	t=1748943533; cv=none; b=uJxOYL7z30iDOTwW6Ne8ENSLuijsaxFPIDfrFhCX68M/5sLayNMcD5zvtKvOrRIhwGoGa43eh8bodgs4ZwfrcNVewb3G2n3qM/PAdM5ECxg5obPwa6awLMyHrQ8opJOpCHScI70+A2QN1MB8zZs2Lt53O1lkvHlcaB4IcuV5Ehk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748943296; c=relaxed/simple;
-	bh=SzH0hLM90X54zNxf3UOoXPCdHZQgrQSH/0xF6n5l+Ew=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YA2ZVJXWSK10wSzD+4qatG9Ko7LE4b5QPY9pxJeipeCWNtWtZf3CUufZS3cCspvxin6POSMF9gayHacz/7jyj9zTtAxtmM6eRLLZZW3AxHMFe2wGbHtSRs3tZ8rlYCA+gp5uvGeMnYXjhtXEMTwQ773+2TuV5sEIS0/iTKdc11Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=srDdJSkP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 937F4C4CEEF;
-	Tue,  3 Jun 2025 09:34:49 +0000 (UTC)
+	s=arc-20240116; t=1748943533; c=relaxed/simple;
+	bh=zsOqiWAIopc/I1cVwsBZWObBt0Y47yQMURR5bDsXUYg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LVdPZ4Sorhwh/YwtoNOGmAftlbywdAs4PBW8wD9CkM8427XFxr5Hze2Rav3ySljjoy6Vh28MAbo4duTL4wHuo1A2ZEpqF7bFNws6pWvqdUz31bsSxU6rxyoKVxSJvbMeTDdC67K8rHZxnAznZAeyJNrgPpDKPAW8whZxF4IRDsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f8hV7sLq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99DF2C4CEF4;
+	Tue,  3 Jun 2025 09:38:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748943293;
-	bh=SzH0hLM90X54zNxf3UOoXPCdHZQgrQSH/0xF6n5l+Ew=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=srDdJSkP2e3NBR54PwK7tPn+pnEmkbWWCDYUriloqP4gJ2ngGGPBIjVANul9CvKVa
-	 txe2qIZAn1DlaTiT1nsubDpoMA/bLrJc950ORVoD2rOchfo8bL8QAphXLynhbm/iTv
-	 AZnghSR8pEduFhjQrXNwYOtMk4ZXEJym1QFN3RgWW0/IFccZ58f4KVwkDBRBeoyv5d
-	 PLdV0J/xYV1l5DCt8s81ZfTvf5c5jatDpX1EhYV5rSXCWvE/t4l8f55pwRrdpORxCx
-	 1yQ0SWuIzn1SdrSGzA/GxN1fewLgF+WsB/lWDQmuiGJ9KMzI7MTIOM+eesAZaG+ylj
-	 ZXf/tJNFPvJvg==
-Message-ID: <898e998f-11b2-4b08-9580-263046c0615a@kernel.org>
-Date: Tue, 3 Jun 2025 11:34:47 +0200
+	s=k20201202; t=1748943532;
+	bh=zsOqiWAIopc/I1cVwsBZWObBt0Y47yQMURR5bDsXUYg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=f8hV7sLq9dVLu9eKhnwo5tSw0Dw8IwDt02v2MvyslvDfAVU42+xENQ9zq7Q+p3wOf
+	 HQ00ffSAjlqXmYzOfEkrqiYpANqudsG1JOpc7WL9lP/QcNUvGv2DYb+T7vNRD57Rav
+	 MiQFUuGkfOxyYroCkqHefdqCp/2fQDDhsL9IUZi2jPWMxISLABM9ATPZlNtpcE9glz
+	 xwDxk/hEzBd/z4y9fo4t29Bf2FOHEj5KwAIVhPCb7bRKBZ+nUxGBQKe7sHN1d/nNBw
+	 SD2uRMkySt65GB7nUxgzhxYmeSTjB1NW+orOQMVYhKvvUjU7n8AvUuRuMtcLRZhEnW
+	 IUGlbmCz5P27w==
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-606440d92eeso2462251eaf.2;
+        Tue, 03 Jun 2025 02:38:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVOAhzzKcX90nB/aOZz3Cf3voCYasdMsluHEoibwdj5eQ90KW9pHqW9VgsQuSchVu5MilDis4AIxrI=@vger.kernel.org, AJvYcCWg607ghWLbwdHMyKNzI3jfN2Eiv/zXU/7wAKlfsG4xBlMp9vIMASjILvFay1x3B6pV4KmMHC9nIkLOVkw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiAwkcTGEdn0EnIpGgeK7ioxxH2znTNWb1BOr1NAjKFixOjQA2
+	Zws5WS34uAiwzNpuiwPBJs74afjloeBzPo+RQhjH15ZBi4pDU/I10bWrVS35DRTJe5Jl4THDkNY
+	KxPGmg2l132Y5lQEZOKrwws9K8/XrTCU=
+X-Google-Smtp-Source: AGHT+IFBv7uzvOFJHhnyjbs5CZt0M71e7GPGPSE6OPYCGR3YUVFAs1qsFrLaDG4JD9JjifGUJ/sxerZ67J4qjhqhuWk=
+X-Received: by 2002:a05:6820:2783:b0:60b:a8e7:b237 with SMTP id
+ 006d021491bc7-60db9ec7b52mr6620888eaf.8.1748943531800; Tue, 03 Jun 2025
+ 02:38:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/8] dt-bindings: soc: qcom: pmic-glink: Move X1E80100
- out of fallbacks
-To: Fenglin Wu <fenglin.wu@oss.qualcomm.com>,
- Sebastian Reichel <sre@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
- David Collins <david.collins@oss.qualcomm.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- kernel@oss.qualcomm.com, devicetree@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20250530-qcom_battmgr_update-v2-0-9e377193a656@oss.qualcomm.com>
- <20250530-qcom_battmgr_update-v2-6-9e377193a656@oss.qualcomm.com>
- <4e093835-af3b-4a84-b42f-fa7d3a6f60a1@kernel.org>
- <14cba9ae-e3bb-46e8-a800-be5d979b2e06@oss.qualcomm.com>
- <b07200a2-4e7b-480e-a683-d116e7da8de8@kernel.org>
- <c4be4b97-6104-45e3-b555-6691e369c3a4@oss.qualcomm.com>
- <bcf487c9-e522-44a3-b094-daf98823a195@kernel.org>
- <a840aa80-75ef-4527-bc17-226ba5157a85@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <a840aa80-75ef-4527-bc17-226ba5157a85@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <10629535.nUPlyArG6x@rjwysocki.net> <3541233.QJadu78ljV@rjwysocki.net>
+ <aD2U3VIhf8vDkl09@debian.local> <CAJZ5v0h-nrVamqiAJ957aYjHqaeAZUUW7BRi0WxPgCFc40M5cQ@mail.gmail.com>
+ <7f0e2865-d35e-4a13-8617-8679afb4b23f@kernel.org> <CAJZ5v0gL3rW8dOxXdPWYjZuq5kAaD8qTa4vZ5++k9+0WniNAdQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gL3rW8dOxXdPWYjZuq5kAaD8qTa4vZ5++k9+0WniNAdQ@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 3 Jun 2025 11:38:37 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jDZQaR8S6Kn_RoXHBU86+tpjp=qgyxm5h03YEe2S=nPg@mail.gmail.com>
+X-Gm-Features: AX0GCFs6073kShWhjpCCxt_P2beN4BqAUhzgFto2bxGO9CdT3q_QdgHtwvF1XHI
+Message-ID: <CAJZ5v0jDZQaR8S6Kn_RoXHBU86+tpjp=qgyxm5h03YEe2S=nPg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/5] PM: sleep: Suspend async parents after suspending children
+To: Mario Limonciello <superm1@kernel.org>, Chris Bainbridge <chris.bainbridge@gmail.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Johan Hovold <johan@kernel.org>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Jon Hunter <jonathanh@nvidia.com>, 
+	Saravana Kannan <saravanak@google.com>, amd-gfx@lists.freedesktop.org
+Content-Type: multipart/mixed; boundary="000000000000f21f990636a7a547"
 
-On 03/06/2025 09:41, Fenglin Wu wrote:
-> 
-> On 6/3/2025 3:06 PM, Krzysztof Kozlowski wrote:
->> On 03/06/2025 08:59, Fenglin Wu wrote:
->>> On 6/3/2025 2:47 PM, Krzysztof Kozlowski wrote:
->>>> On 03/06/2025 08:42, Fenglin Wu wrote:
->>>>> On 6/2/2025 3:40 PM, Krzysztof Kozlowski wrote:
->>>>>> On 30/05/2025 09:35, Fenglin Wu via B4 Relay wrote:
->>>>>>> From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
->>>>>>>
->>>>>>> Move X1E80100 out of the fallbacks of SM8550 in pmic-glink support.
->>>>>> Why?
->>>>>>
->>>>>> Do not describe what you do here, it's obvious. We see it from the diff.
->>>>>>
->>>>>>
->>>>>> Best regards,
->>>>>> Krzysztof
->>>>> Previously, in qcom_battmgr driver, x1e80100 was specified with a match
->>>>> data the same as sc8280xp, also sm8550 was treated a fallback of sm8350
->>>>> without the need of a match data.
->>>>>
->>>>> In ucsi_glink driver, sm8550 had a match data and x1e80100 was treated
->>>>> as a fallback of sm8550. There was no issues to make x1e80100 as a
->>>>> fallback of sm8550 from both qcom_battmgr and ucsi_glink driver perspective.
->>>>>
->>>>> In patch [5/8] in this series, in qcom_battmgr driver, it added charge
->>>>> control functionality for sm8550 and x1e80100 differently hence
->>>>> different match data was specified for them, and it makes x1e80100 ad
->>>>> sm8550 incompatible and they need to be treated differently.
->>>> So you break ABI and that's your problem to fix. You cannot make devices
->>>> incompatible without good justification.
->>> I would say x1e80100 and sm8550 are different and incompatible from a
->>> battery management firmware support perspective. The x1e80100 follows
->>> the sc8280xp as a compute platform, whereas the sm8550 follows the
->>> sm8350 as a mobile platform.
->> Not correct arguments for compatibility.
->>
->>> The difference between them was initially ignored because the sm8550
->>> could use everything that the sm8350 has, and no match data needed to be
->>> specified for it. However, now the sm8550 has new features that the
->>> sm8350 doesn't have, requiring us to treat it differently, thus the
->>> incompatibility was acknowledged.
->> So they are perfectly compatible.
->>
->> I really do not understand what we are discussing here. Explain in
->> simple terms of DT spec: what is incompatible that SW cannot use one
->> interface to handle the other?
-> 
-> 1. x1e80100 was a fallback of sc8280xp, it used "sc8280xp_bat_psy_desc" 
+--000000000000f21f990636a7a547
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Jun 2, 2025 at 9:58=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
+> wrote:
+>
+> On Mon, Jun 2, 2025 at 5:22=E2=80=AFPM Mario Limonciello <superm1@kernel.=
+org> wrote:
+> >
+> > On 6/2/2025 9:29 AM, Rafael J. Wysocki wrote:
+> > > On Mon, Jun 2, 2025 at 2:11=E2=80=AFPM Chris Bainbridge
+> > > <chris.bainbridge@gmail.com> wrote:
+> > >>
+> > >> On Fri, Mar 14, 2025 at 02:13:53PM +0100, Rafael J. Wysocki wrote:
+> > >>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >>>
+> > >>> In analogy with the previous change affecting the resume path,
+> > >>> make device_suspend() start the async suspend of the device's paren=
+t
+> > >>> after the device itself has been processed and make dpm_suspend() s=
+tart
+> > >>> processing "async" leaf devices (that is, devices without children)
+> > >>> upfront so they don't need to wait for the "sync" devices they don'=
+t
+> > >>> depend on.
+> > >>>
+> > >>> On the Dell XPS13 9360 in my office, this change reduces the total
+> > >>> duration of device suspend by approximately 100 ms (over 20%).
+> > >>>
+> > >>> Suggested-by: Saravana Kannan <saravanak@google.com>
+> > >>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >>
+> > >> This commit results in memory corruption on suspend/resume with shor=
+t
+> > >> suspend duration.
+> > >
+> > > What do you mean by short?
+> >
+> > The tool he used will program a timer to wake up the system.
+> > The time he input was programmed for a cycle that was short enough that
+> > the suspend entry didn't finish and it triggered an aborted suspend.
+>
+> So it crashes during resume when the preceding suspend has been aborted I=
+IUC.
+>
+> The exact crash mechanism is still unclear to me though.
+>
+> > >
+> > >> Laptop appears to hang and crash is logged to pstore.
+> > >
+> > > Interesting that this is only happening on one system.
+> > >
+> > > Thanks for the report anyway, I'll look at this shortly.
+> > >
+> > >> To reproduce: `amd_s2idle.py --log log --duration 1 --wait 4 --count=
+ 30`
+> > >>
+> > >> I have reproduced this both with and without Mario's recent suspend =
+fix
+> > >> https://lore.kernel.org/amd-gfx/20250602014432.3538345-1-superm1@ker=
+nel.org/T/#t
+> > >>
+> > >> Pstore log (with Mario's fix):
+> > >>
+> > >> <6>[  194.209939] PM: suspend entry (s2idle)
+> > >> <6>[  194.409450] Filesystems sync: 0.199 seconds
+> > >> <6>[  194.409756] Freezing user space processes
+> > >> <6>[  194.411374] Freezing user space processes completed (elapsed 0=
+.001 seconds)
+> > >> <6>[  194.411377] OOM killer disabled.
+> > >> <6>[  194.411378] Freezing remaining freezable tasks
+> > >> <6>[  194.412517] Freezing remaining freezable tasks completed (elap=
+sed 0.001 seconds)
+> > >> <6>[  194.412520] printk: Suspending console(s) (use no_console_susp=
+end to debug)
+> > >> <7>[  194.663906] PM: suspend of devices aborted after 0.260 msecs
+> > >> <7>[  194.663911] PM: start suspend of devices aborted after 251.365=
+ msecs
+> > >> <3>[  194.663913] PM: Some devices failed to suspend, or early wake =
+event detected
+> > >> <4>[  194.663975] i2c i2c-3: Unbalanced pm_runtime_enable!
+> > >> <4>[  194.663989] ee1004 3-0050: Attempt to enable runtime PM when i=
+t is blocked
+> > >> Oops#1 Part6
+> > >> <4>[  194.663991] ee1004 3-0051: Attempt to enable runtime PM when i=
+t is blocked
+> > >> <4>[  194.663992] CPU: 5 UID: 0 PID: 121 Comm: kworker/u64:10 Not ta=
+inted 6.15.0-rc1-00006-g032a79431b1c #425 PREEMPT(voluntary)
+> > >> <4>[  194.663994] Hardware name: HP HP Pavilion Aero Laptop 13-be0xx=
+x/8916, BIOS F.17 12/18/2024
+> > >> <4>[  194.663996] Workqueue: async async_run_entry_fn
+> > >> <4>[  194.663998]  slab kmalloc-2k
+> > >> <4>[  194.664000]
+> > >> <4>[  194.664000]  start ffff99bbe24ac800 pointer offset 408
+> > >> <4>[  194.664001] Call Trace:
+> > >> <4>[  194.664002]  size 2048
+> > >> <3>[  194.664003] list_add corruption. prev->next should be next (ff=
+ffffff9da75c60), but was ffff99bbd1d94790. (prev=3Dffff99bbe24ac998).
+> > >> <4>[  194.664003]  <TASK>
+> > >> <4>[  194.664007]  dump_stack_lvl+0x6e/0x90
+> > >> <4>[  194.664011] ------------[ cut here ]------------
+> > >> <4>[  194.664011]  pm_runtime_enable.cold+0x28/0x48
+> > >> <2>[  194.664011] kernel BUG at lib/list_debug.c:32!
+> > >> <4>[  194.664013]  device_resume+0x47/0x200
+> > >> <4>[  194.664016] Oops: invalid opcode: 0000 [#1] SMP
+> > >> <4>[  194.664017]  async_resume+0x1d/0x30
+> > >> <4>[  194.664018] CPU: 2 UID: 0 PID: 2505 Comm: amd_s2idle.py Not ta=
+inted 6.15.0-rc1-00006-g032a79431b1c #425 PREEMPT(voluntary)
+> > >> <4>[  194.664019]  async_run_entry_fn+0x2e/0x130
+> > >> <4>[  194.664020] Hardware name: HP HP Pavilion Aero Laptop 13-be0xx=
+x/8916, BIOS F.17 12/18/2024
+> > >> <4>[  194.664021] RIP: 0010:__list_add_valid_or_report+0x90/0xa0
+> > >> <4>[  194.664022]  process_one_work+0x22b/0x5b0
+> > >> <4>[  194.664024] Code: e4 8a ff 0f 0b 48 89 f7 48 89 34 24 e8 49 57=
+ c6 ff 48 8b 34 24 48 c7 c7 70 d1 64 9d 48 8b 16 48 89 f1 48 89 de e8 00 e4=
+ 8a ff <0f> 0b 90 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 f3 0f 1e fa 41 54
+> > >> Oops#1 Part5
+> > >> <4>[  194.664025] RSP: 0018:ffffc09a45dafb20 EFLAGS: 00010246
+> > >> <4>[  194.664026]  worker_thread+0x1da/0x3d0
+> > >> <4>[  194.664027] RAX: 0000000000000075 RBX: ffffffff9da75c60 RCX: 0=
+000000000000027
+> > >> <4>[  194.664028] RDX: 0000000000000000 RSI: 0000000000000001 RDI: f=
+fff99becd11de40
+> > >> <4>[  194.664029] RBP: ffffffff9da74c00 R08: 0000000000000000 R09: 0=
+000000000000000
+> > >> <4>[  194.664029] R10: 0000000000000000 R11: 0000000000000003 R12: 0=
+000000000000010
+> > >> <4>[  194.664029]  ? bh_worker+0x260/0x260
+> > >> <4>[  194.664030] R13: 0000002990e47f3d R14: ffff99bbe24ac998 R15: f=
+fff99bbe0b67620
+> > >> <4>[  194.664031] FS:  00007fe534bfc080(0000) GS:ffff99bf2ee50000(00=
+00) knlGS:0000000000000000
+> > >> <4>[  194.664031]  kthread+0x10a/0x250
+> > >> <4>[  194.664032] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > >> <4>[  194.664033] CR2: 000055fdfaf910b8 CR3: 000000010d4a9000 CR4: 0=
+000000000f50ef0
+> > >> <4>[  194.664034]  ? kthreads_online_cpu+0x130/0x130
+> > >> <4>[  194.664034] PKRU: 55555554
+> > >> <4>[  194.664035] Call Trace:
+> > >> <4>[  194.664036]  <TASK>
+> > >> <4>[  194.664036]  ret_from_fork+0x31/0x50
+> > >> <4>[  194.664037]  dpm_resume+0x139/0x350
+> > >> <4>[  194.664039]  ? kthreads_online_cpu+0x130/0x130
+> > >> <4>[  194.664041]  dpm_resume_end+0x11/0x20
+> > >> <4>[  194.664040]  ret_from_fork_asm+0x11/0x20
+> > >> <4>[  194.664042]  suspend_devices_and_enter+0x18e/0x9f0
+> > >> <4>[  194.664045]  </TASK>
+> > >> <4>[  194.664046]  pm_suspend.cold+0x22f/0x28f
+> > >> <4>[  194.664046] CPU: 4 UID: 0 PID: 115 Comm: kworker/u64:4 Not tai=
+nted 6.15.0-rc1-00006-g032a79431b1c #425 PREEMPT(voluntary)
+> > >> Oops#1 Part4
+> > >> <4>[  194.664048]  state_store+0x6c/0xd0
+> > >> <4>[  194.664049] Hardware name: HP HP Pavilion Aero Laptop 13-be0xx=
+x/8916, BIOS F.17 12/18/2024
+> > >> <4>[  194.664050] Workqueue: async async_run_entry_fn
+> > >> <4>[  194.664051]  kernfs_fop_write_iter+0x194/0x250
+> > >> <4>[  194.664052] Call Trace:
+> > >> <4>[  194.664052]  <TASK>
+> > >> <4>[  194.664053]  dump_stack_lvl+0x6e/0x90
+> > >> <4>[  194.664054]  vfs_write+0x2ac/0x550
+> > >> <4>[  194.664055]  pm_runtime_enable.cold+0x28/0x48
+> > >> <4>[  194.664057]  device_resume+0x47/0x200
+> > >> <4>[  194.664058]  ksys_write+0x71/0xe0
+> > >> <4>[  194.664060]  async_resume+0x1d/0x30
+> > >> <4>[  194.664060]  do_syscall_64+0x95/0x1a0
+> > >> <4>[  194.664062]  async_run_entry_fn+0x2e/0x130
+> > >> <4>[  194.664062]  ? lockdep_sys_exit+0x1e/0x90
+> > >> <4>[  194.664064]  process_one_work+0x22b/0x5b0
+> > >> <4>[  194.664064]  ? trace_hardirqs_on_prepare+0x77/0xa0
+> > >> <4>[  194.664066]  ? syscall_exit_to_user_mode+0xb1/0x280
+> > >> <4>[  194.664067]  worker_thread+0x1da/0x3d0
+> > >> <4>[  194.664068]  ? __mutex_lock+0xdb/0xed0
+> > >> <4>[  194.664070]  ? __mutex_lock+0xafb/0xed0
+> > >> <4>[  194.664070]  ? bh_worker+0x260/0x260
+> > >> <4>[  194.664072]  ? kernfs_fop_llseek+0x35/0xd0
+> > >> <4>[  194.664072]  kthread+0x10a/0x250
+> > >> <4>[  194.664073]  ? lock_release+0x1ff/0x2a0
+> > >> <4>[  194.664074]  ? kthreads_online_cpu+0x130/0x130
+> > >> <4>[  194.664075]  ? lock_acquire+0x270/0x2d0
+> > >> <4>[  194.664076]  ret_from_fork+0x31/0x50
+> > >> <4>[  194.664077]  ? __mutex_unlock_slowpath+0x3c/0x2c0
+> > >> <4>[  194.664078]  ? kthreads_online_cpu+0x130/0x130
+> > >> <4>[  194.664079]  ? kernfs_fop_llseek+0x77/0xd0
+> > >> <4>[  194.664079]  ret_from_fork_asm+0x11/0x20
+> > >> <4>[  194.664081]  ? lockdep_sys_exit+0x1e/0x90
+> > >> <4>[  194.664082]  ? trace_hardirqs_on_prepare+0x77/0xa0
+> > >> Oops#1 Part3
+> > >> <4>[  194.664084]  </TASK>
+> > >> <4>[  194.664084]  ? syscall_exit_to_user_mode+0xb1/0x280
+> > >> <4>[  194.664086]  ? do_syscall_64+0xa1/0x1a0
+> > >> <4>[  194.664086] uvcvideo 1-3:1.0: Unbalanced pm_runtime_enable!
+>
+> So it looks like this device is resumed even though it has not been suspe=
+nded.
 
-No, that's not true. Read the binding again:
+Or it is resumed for the second time in a row during the same transition.
 
-              - qcom,x1e80100-pmic-glink
-           - const: qcom,sm8550-pmic-glink
+I think I know what is going on and the bug is not in the commit in questio=
+n.
 
-No fallback to sc8280xp.
+There is a race between dpm_async_resume_children() and the first loop
+in dpm_resume() which fortunately is only fatal when the preceding
+suspend transition is aborted.  Namely, that loop can call
+dpm_clear_async_state() for a device after dpm_async_with_cleanup()
+has run for it, so power.work_in_progress gets cleared and
+__dpm_async() will allow an async work to be scheduled for the same
+device once again.
 
+Chris, please check if the attached patch helps.  I'm going to post it
+as a fix anyway later today, but it would be good to verify that it is
+sufficient.
 
-> when registering the power supply device.
-> 
-> 2. sm8550 was a fallback of sm8350, and they all used 
+Thanks!
 
+--000000000000f21f990636a7a547
+Content-Type: text/x-patch; charset="US-ASCII"; name="pm-sleep-fix-async-resume.patch"
+Content-Disposition: attachment; filename="pm-sleep-fix-async-resume.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_mbgbsk170>
+X-Attachment-Id: f_mbgbsk170
 
-Also not true. The remaining fallback is not sm8350.
-
-
-> "sm8350_bat_psy_desc" when registering the power supply device.
-> 
-> 3. x1e80100 and sm8550 they are incompatible as they are using different 
-> data structure of "xxx_bat_psy_desc"  and other “psy_desc" too, such as, 
-> ac/usb/wls.
-
-Look at the driver and bindings now - they are compatible. It looks like
-you made it incompatible and now you claim the "they are incompatible".
-No, you did it. Look at the driver.
-
-
-
-> 
-> 4. For charge control functionality, it's only supported in the battery 
-> management firmware in x1e80100 and sm8550 platforms. And the change in 
-> battmgr driver (patch [5/8]) adds the support by using 2 additional 
-> power supply properties, which eventually need to be added in the 
-> "properties" data member of "xxx_bat_psy_desc" when registering power 
-> supply devices. Hence, "x1e80100_bat_psy_desc" and "sm8550_bat_psy_desc" 
-> are created and used separately when registering power supply device 
-> according to the "variant" value defined in the match data.
-> 
-> The main code change is in [5/8], I am pasting a snippet which might 
-> help to explain this a little bit:
-> 
-> -       if (battmgr->variant == QCOM_BATTMGR_SC8280XP) {
-> -               battmgr->bat_psy = devm_power_supply_register(dev, 
-> &sc8280xp_bat_psy_desc, &psy_cfg);
-> +       if (battmgr->variant == QCOM_BATTMGR_SC8280XP || 
-> battmgr->variant == QCOM_BATTMGR_X1E80100) {
-> +               if (battmgr->variant == QCOM_BATTMGR_X1E80100)
-> +                       psy_desc = &x1e80100_bat_psy_desc;
-> +               else
-> +                       psy_desc = &sc8280xp_bat_psy_desc;
-> +
-> +               battmgr->bat_psy = devm_power_supply_register(dev, 
-> psy_desc, &psy_cfg);
->                  if (IS_ERR(battmgr->bat_psy))
->                          return dev_err_probe(dev, 
-> PTR_ERR(battmgr->bat_psy),
-
-
-This explains nothing to me. I think you did not get my questions at all
-and just want to push whatever you have in drivers.
-
-Such ping pongs are just tiring, so go back to my previous email, read
-it carefully and try harder to understand what compatibility means.
-
-
-NAK, you are affecting the users and ABI with justification "I make it
-now incompatible, so it is incompatible".
-
-Best regards,
-Krzysztof
+LS0tCiBkcml2ZXJzL2Jhc2UvcG93ZXIvbWFpbi5jIHwgICAgNyArKysrKysrCiAxIGZpbGUgY2hh
+bmdlZCwgNyBpbnNlcnRpb25zKCspCgotLS0gYS9kcml2ZXJzL2Jhc2UvcG93ZXIvbWFpbi5jCisr
+KyBiL2RyaXZlcnMvYmFzZS9wb3dlci9tYWluLmMKQEAgLTYzOCw2ICs2MzgsMTMgQEAKIHN0YXRp
+YyB2b2lkIGRwbV9hc3luY19yZXN1bWVfY2hpbGRyZW4oc3RydWN0IGRldmljZSAqZGV2LCBhc3lu
+Y19mdW5jX3QgZnVuYykKIHsKIAkvKgorCSAqIFByZXZlbnQgcmFjaW5nIHdpdGggZHBtX2NsZWFy
+X2FzeW5jX3N0YXRlKCkgZHVyaW5nIGluaXRpYWwgbGlzdAorCSAqIHdhbGtzIGluIGRwbV9ub2ly
+cV9yZXN1bWVfZGV2aWNlcygpLCBkcG1fcmVzdW1lX2Vhcmx5KCksIGFuZAorCSAqIGRwbV9yZXN1
+bWUoKS4KKwkgKi8KKwlndWFyZChtdXRleCkoJmRwbV9saXN0X210eCk7CisKKwkvKgogCSAqIFN0
+YXJ0IHByb2Nlc3NpbmcgImFzeW5jIiBjaGlsZHJlbiBvZiB0aGUgZGV2aWNlIHVubGVzcyBpdCdz
+IGJlZW4KIAkgKiBzdGFydGVkIGFscmVhZHkgZm9yIHRoZW0uCiAJICoK
+--000000000000f21f990636a7a547--
 
