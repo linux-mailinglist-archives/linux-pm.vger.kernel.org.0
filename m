@@ -1,124 +1,141 @@
-Return-Path: <linux-pm+bounces-28053-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28054-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E972ACCD01
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 20:28:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D9C9ACCD10
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 20:30:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B1D73A605D
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 18:28:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEE111897017
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 18:30:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67A0C28983B;
-	Tue,  3 Jun 2025 18:27:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AB15288CA8;
+	Tue,  3 Jun 2025 18:30:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XbLSZnZg"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Vkf4K+Nn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB89D289355;
-	Tue,  3 Jun 2025 18:27:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E30288C9D
+	for <linux-pm@vger.kernel.org>; Tue,  3 Jun 2025 18:30:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748975278; cv=none; b=uCFE1Q6fzE5TnDioyAJUuvJIPJCo3DZBrboI/0FE9AiREY0n8QNnJFvrcKq6d0MQS2rt+0L/5NfNTcOcUUA3YhdVomhHoUKa3jHwvZo9Sn9wSFNOZF+tdzlQI1o4byVzDWvYEsCCZFZKOBvPyCxLd0vnihVP3HpYdr2D0yQLg0c=
+	t=1748975402; cv=none; b=tE71wU7d+5Y/0ALet7iMo3GVj0/nu5wpZHsjENsK7P6xVUeYFHqOxh18sfoYzF8A6lBNZEyN5jScxqxGeMIwg22JZGyPxOzt5aMODe3peHm/8z2eIe5PldcsWcMPt3bekSvRE3oLOBiGCUDaipF2JbzAUilAYIkVBSB6QkO8UjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748975278; c=relaxed/simple;
-	bh=d5VvSlRmjGMzNDVpmfFxLSG08CZOidzcCPaxvVrcA00=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cKkb+uijQrhprhYSZ6ECdrKf0lZKExOhjfurmg1w7ZQ1Fbt0PC/SKSKfy5GNDiUmkrAmhPV6Mso1uZ5YGCIoiy+RYh5PvOZaWdwwdyvQSyyHBkngQu6oRHe+rltnMku3uvVCRQM/Yv8T3OHjj/hjhFmeTIKkifplh0ySVzwZwzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XbLSZnZg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 65B7FC113CF;
-	Tue,  3 Jun 2025 18:27:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748975278;
-	bh=d5VvSlRmjGMzNDVpmfFxLSG08CZOidzcCPaxvVrcA00=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=XbLSZnZg0eWhUaZG64rnCA2vt9kJd674d/jEd7Aju01rr0sZWW2l/pscWbYrdvPSS
-	 0ZnBi/6D/+o2QViiINAltm7XpyQf7aXPHdPtMvBgmAzYNObJ7CtLDVMg6FSfLc97ij
-	 pLKNw+hAv+SXIrWwHy9IRciOCmTV/lMRKs94pDF5IN1CbvyB3qAsQSaxPvLmXlOLiR
-	 yL8LblF4NtcLKN3waOtdFYAm1e6oa83pq1EMUJJ/0gqguE3ZRdOnSgdFWvWD5ltfxb
-	 U019cwN9rA+f+87qE75ap5t34uc6FUaUnOuItktlafy1P1xiwnOFSJs7xiF8ef8Gqg
-	 vxdVIvduSxCZA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C0EEC5AE59;
-	Tue,  3 Jun 2025 18:27:58 +0000 (UTC)
-From: Samuel Kayode via B4 Relay <devnull+samuel.kayode.savoirfairelinux.com@kernel.org>
-Date: Tue, 03 Jun 2025 14:27:50 -0400
-Subject: [PATCH v4 6/6] MAINTAINERS: add an entry for pf1550 mfd driver
+	s=arc-20240116; t=1748975402; c=relaxed/simple;
+	bh=y1ZpJ75hRulr5OCrdwCCKe86Qj833y9l6fdMFUcMWXc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=afoYfhgxx+YaIwiq8tiNRpKk3eVkBRxXQwaYL4DZNYl5YVhBSMiEZrnkh6fHcPXCTPiTS84wbfzlp7mUgzMHT/V9Jqp5wk9Ntod7Zucuhq1XCcUtLRW5dwJe9BSgz6UFwPkJ9Gv8XrdDe8coi8INHsvLmFxGagx23oHvjBUgBxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=Vkf4K+Nn; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250603182958euoutp028bb80bbee114817763e0f44ea6dbdc41~Fm9vX5XhJ1075410754euoutp02H
+	for <linux-pm@vger.kernel.org>; Tue,  3 Jun 2025 18:29:58 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250603182958euoutp028bb80bbee114817763e0f44ea6dbdc41~Fm9vX5XhJ1075410754euoutp02H
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1748975398;
+	bh=Q3UHhcvNg9ZUzuZPlUDNEg5b/5o+/vY1pkJ8HrgEMqE=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=Vkf4K+NnAWakwW+l5clmnHU0d5flDuEKOS1rfOm5nh5RXqFPGbAtb7sekDIYLLHQw
+	 bkrYCcDsXavwkWoTKBsVdIEGo3+CTnzgOygn+1ftLlinfSyzhEVIkpMzsvmH/Yqg+p
+	 mk047vU+F4qkth72Ngdq4HIWzByUVZJLwxWgZGwA=
+Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20250603182958eucas1p2fcaf0880cbecd666386f03a525781254~Fm9usPXYJ2435224352eucas1p2F;
+	Tue,  3 Jun 2025 18:29:58 +0000 (GMT)
+Received: from [192.168.1.44] (unknown [106.210.136.40]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250603182957eusmtip1ac2a95b29e9017eb56f62c082e9dbfcc~Fm9tvR43j1164311643eusmtip1N;
+	Tue,  3 Jun 2025 18:29:57 +0000 (GMT)
+Message-ID: <00abf302-cc8c-47c7-8444-ea3791f70436@samsung.com>
+Date: Tue, 3 Jun 2025 20:29:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/8] Add TH1520 GPU support with power sequencing
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, Fu Wei
+	<wefu@redhat.com>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Bartosz
+	Golaszewski <brgl@bgdev.pl>, Philipp Zabel <p.zabel@pengutronix.de>, Frank
+	Binns <frank.binns@imgtec.com>, Matt Coster <matt.coster@imgtec.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
+	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
+	<airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Paul Walmsley
+	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+	<aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Marek Szyprowski
+	<m.szyprowski@samsung.com>, linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org
+Content-Language: en-US
+From: Michal Wilczynski <m.wilczynski@samsung.com>
+In-Reply-To: <CAPDyKFqL9Xpau1BDnaa828s066zj=aVOAQOy1tCS=ztKN0ZsfA@mail.gmail.com>
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250603-pf1550-v4-6-bfdf51ee59cc@savoirfairelinux.com>
-References: <20250603-pf1550-v4-0-bfdf51ee59cc@savoirfairelinux.com>
-In-Reply-To: <20250603-pf1550-v4-0-bfdf51ee59cc@savoirfairelinux.com>
-To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
- Mark Brown <broonie@kernel.org>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
- Sebastian Reichel <sre@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-input@vger.kernel.org, linux-pm@vger.kernel.org, 
- Abel Vesa <abelvesa@kernel.org>, Abel Vesa <abelvesa@linux.com>, 
- Robin Gong <b38343@freescale.com>, 
- Enric Balletbo i Serra <eballetbo@gmail.com>, 
- Samuel Kayode <samuel.kayode@savoirfairelinux.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1748975277; l=1037;
- i=samuel.kayode@savoirfairelinux.com; s=20250527;
- h=from:subject:message-id;
- bh=1qhTIEsmPLxNuuFFSqYxrKKKek2sC5avXrd07642loc=;
- b=dE14mIjMAt45kIJM+A4+U3GTep01fbosFbCHeqVO2/5/keu5gbHrexSVEHYAe2ffeECUEQxKp
- PvTVoNvJY5hD8mhnibT+WTTK4/uTe+/N4pxTngWXSwY+k6KAQ80elNO
-X-Developer-Key: i=samuel.kayode@savoirfairelinux.com; a=ed25519;
- pk=TPSQGQ5kywnnPyGs0EQqLajLFbdDu17ahXz8/gxMfio=
-X-Endpoint-Received: by B4 Relay for
- samuel.kayode@savoirfairelinux.com/20250527 with auth_id=412
-X-Original-From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-Reply-To: samuel.kayode@savoirfairelinux.com
+X-CMS-MailID: 20250603182958eucas1p2fcaf0880cbecd666386f03a525781254
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250529222402eucas1p1c9e0ddd3efd62e078e5de2cf71655f58
+X-EPHeader: CA
+X-CMS-RootMailID: 20250529222402eucas1p1c9e0ddd3efd62e078e5de2cf71655f58
+References: <CGME20250529222402eucas1p1c9e0ddd3efd62e078e5de2cf71655f58@eucas1p1.samsung.com>
+	<20250530-apr_14_for_sending-v3-0-83d5744d997c@samsung.com>
+	<CAPDyKFqL9Xpau1BDnaa828s066zj=aVOAQOy1tCS=ztKN0ZsfA@mail.gmail.com>
 
-From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
 
-Add MAINTAINERS entry for pf1550 PMIC.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
----
- MAINTAINERS | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+On 6/3/25 14:25, Ulf Hansson wrote:
+> On Fri, 30 May 2025 at 00:24, Michal Wilczynski
+> <m.wilczynski@samsung.com> wrote:
+>>
+>> This patch series introduces support for the Imagination IMG BXM-4-64
+>> GPU found on the T-HEAD TH1520 SoC. A key aspect of this support is
+>> managing the GPU's complex power-up and power-down sequence, which
+>> involves multiple clocks and resets.
+>>
+>> The TH1520 GPU requires a specific sequence to be followed for its
+>> clocks and resets to ensure correct operation. Initial discussions and
+>> an earlier version of this series explored managing this via the generic
+>> power domain (genpd) framework. However, following further discussions
+>> with kernel maintainers [1], the approach has been reworked to utilize
+>> the dedicated power sequencing (pwrseq) framework.
+>>
+>> This revised series now employs a new pwrseq provider driver
+>> (pwrseq-thead-gpu.c) specifically for the TH1520 GPU. This driver
+>> encapsulates the SoC specific power sequence details. The Imagination
+>> GPU driver (pvr_device.c) is updated to act as a consumer of this power
+>> sequencer, requesting the "gpu-power" target. The sequencer driver,
+>> during its match phase with the GPU device, acquires the necessary clock
+>> and reset handles from the GPU device node to perform the full sequence.
+>>
+>> This approach aligns with the goal of abstracting SoC specific power
+>> management details away from generic device drivers and leverages the
+>> pwrseq framework as recommended.
+> 
+> Just wanted to share my view. I have looked through the series and to
+> me this seems like the correct approach, nice work!
+> 
+> Feel free to add my Reviewed-by tag for the series, even if I think
+> there may be some comments to address from Bartosz etc.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 98201e1f4ab5908ff49d32d19275e123cedb4b66..29287ab3c9d00240ecb0ac9793aa908ec75a9bd0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17853,6 +17853,16 @@ F:	Documentation/devicetree/bindings/clock/imx*
- F:	drivers/clk/imx/
- F:	include/dt-bindings/clock/imx*
- 
-+NXP PF1550 PMIC MFD DRIVER
-+M:	Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/mfd/nxp,pf1550.yaml
-+F:	drivers/input/misc/pf1550-onkey.c
-+F:	drivers/mfd/pf1550.c
-+F:	drivers/power/supply/pf1550-charger.c
-+F:	drivers/regulator/pf1550-regulator.c
-+F:	include/linux/mfd/pfd1550.h
-+
- NXP PF8100/PF8121A/PF8200 PMIC REGULATOR DEVICE DRIVER
- M:	Jagan Teki <jagan@amarulasolutions.com>
- S:	Maintained
+Thanks for providing the direction and reviewing the code, the pwrseq
+API seems to be perfect to achieve the goals of this series. Appreciate
+your help !
 
+> 
+> [...]
+> 
+> Kind regards
+> Uffe
+> 
+
+Best regards,
 -- 
-2.49.0
-
-
+Michal Wilczynski <m.wilczynski@samsung.com>
 
