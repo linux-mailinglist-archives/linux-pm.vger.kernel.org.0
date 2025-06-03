@@ -1,160 +1,137 @@
-Return-Path: <linux-pm+bounces-28022-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28023-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1C66ACC7F4
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 15:35:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78F9CACC7FA
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 15:37:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C4733A31C8
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 13:35:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 335583A45F4
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 13:36:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 420B4231854;
-	Tue,  3 Jun 2025 13:35:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5BA0230BE3;
+	Tue,  3 Jun 2025 13:36:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="cZJH5KR6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VrwXo6N6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55D1B2253EC
-	for <linux-pm@vger.kernel.org>; Tue,  3 Jun 2025 13:35:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEE51231826;
+	Tue,  3 Jun 2025 13:36:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748957732; cv=none; b=AF1M6NgASdnpgB1JlLEdOf/6IZwh+WXoB/sKKyLZ5CA62GOMhloP+Zzt9LyHuZQcT2NvkPRndkf57+WvQTgEg6BIuFaKRCWdLAvlv4TIUwkN3Vb42evw+bNzhlX4F8HrjjMQXGtsquJ2tqma5gOEH8YPSxlq8xDaWLO3W3GXOB0=
+	t=1748957816; cv=none; b=ZvoHiW9PAMvUXQuzbBTpdFg2YrRJBB49Z03Iz6hd6qdVL9qV9lqwi0Nx4To3ZI3ua/bM+bMCq03yM7NgW0iIXNX0Jm+LA50FTskPj+O+N/U9y9uzT0nfW4Oa8dKCSPCpgBqSsK7knJzhlCmEckyGeb9S5sbXtHXITECWqpVQPTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748957732; c=relaxed/simple;
-	bh=JMbOtPLP2HGwreQOwlEuUKoWxualvBCdLUGJQB6ESDg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=V97oJ3Ea9CGk4dmlbUr4DRaHyuSnoLP8zFX1zq9YWJ5g3MeswVfTauy5IHT2QI1jxCq9mvd+ChWftJfcrmWfcK88A/UWmCPDpLEYkLre2VBgBO2sVBZqkJXBbPEsMZao6IF6OLphLrAXH7iTC+LeXJl1SLCQnPBpVtULhU56j0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=cZJH5KR6; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-54e7967cf67so6601330e87.0
-        for <linux-pm@vger.kernel.org>; Tue, 03 Jun 2025 06:35:29 -0700 (PDT)
+	s=arc-20240116; t=1748957816; c=relaxed/simple;
+	bh=le5QR41xeH5K5QxGsVQri/RDT/2BLTURcIV+cKyLXfg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PeYyJVriG7ljD1DlnnfTHVfCll6Rf7Aqs7dOhc3w0mbpvORBFzeOxak7D2NPc5F5+aoTVikH8AD0n2Iz8yRBp7ymE83YtBUgzszk6oyxnpw65UktYV5b9oE8lPGIr9uD6AHC1xPOTO19FcVTgq/oNkBpulTbcm2hgYo5mslgArk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VrwXo6N6; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43cfe63c592so65365625e9.2;
+        Tue, 03 Jun 2025 06:36:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1748957728; x=1749562528; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JIOXxCHtKeBYGzNsgywd50i1FC81LtsnP0F3u2yP/Ow=;
-        b=cZJH5KR6Y9hzkOsx1b6pnSWo8RRQ+AJdWlM7X/1DAwp2nCTMG6O6gRuUa+XFp1mgl9
-         YcU/l2WjPEYoQDNL88gDIaiCrWthMNv2CvPZIJfzBkirSAMqW8r5i5EaXDlGoaIcYSMr
-         bKC3xJe49hNUhdnsKPyH6a3PbxzZ7h96JxolQtG0b6QViQkIlQqK/v77//jOBl4OrxrE
-         dCFkiZ+1vuVcWyKaAF9PFgTRyw80q7x/asVhx8gk9rrtK1r9hmLWVWmsayj8cDqp8kj5
-         GBERjhmgQ2pvdjtLfHwqWod7BFAOe2wcGWoXPHrkPp+gTQ5yxeTrcHbf6RLRGXzhzFAI
-         6fQQ==
+        d=gmail.com; s=20230601; t=1748957813; x=1749562613; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=XwaOA2UFIdL6uhmEEF3zq5uKFSYlQf1QNo+y/xH05aY=;
+        b=VrwXo6N6GUzTFMR8BX0VInjiMpGuyzAj6kv98URXp8LjZi3vZ+OSJ1XsiFCkNqXxMM
+         q0ic76K1o3+QMasx0MkEHwWtEMVfSAsbPpt4G3Y2DfOim9VOj0oVcrBM5N8dVNAir4us
+         3t5t445VP333qrC46zMudLH5VqHJJUGhrN7gLgohJp2RAfyyIHVYVYvdPJGcExNuLM/Y
+         rS7ikHuMkh4wHyraUnKlVG/uMB0x0mSJGvPU3xoson8m9KPdYQ0YL7EZmyaBC+c8FBCk
+         5by/MJg7jP/6LEfFLxX37sJZusQbtt8QL9qaMK9pm0vBYrskTjMjXa2W74bxEw7lTpBz
+         xtzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748957728; x=1749562528;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JIOXxCHtKeBYGzNsgywd50i1FC81LtsnP0F3u2yP/Ow=;
-        b=BK8C/Dnj4Ki8wHb3JqwQRrSAu+JitN+5uzCeTRsZyQh0pOqESEb7Js7Vb6Epgb9xbf
-         LBIsV4Hrh852lP+G6HUpR7YUa7iHDAN4bNmCRWAlCJ1SIstfMOtD5GXbRBmiFgN40NQY
-         T41SUZwJBNnHN257+Z8cC/pIjndULT+/1XIHNAid9Nl23itK8tvlcQJyocHIkc5DRvmz
-         hmPIA29XCG0IpTdcCjFznckFmwXjOV2xN6ujtDZeQzis1jW+c6k8dYk3307VKrRTDLrO
-         MX5whKDVnMZ0Yaxzh+O1Zo7DEm2LAc7nNfXltDDUDjpXcLvzjOgVamKyoEEzII42r8Lm
-         klZA==
-X-Forwarded-Encrypted: i=1; AJvYcCWBrnhKgM+Y+uU0ysjX0F+GUVE0nRlG3EFoAQ7uOqG1DQGyTF/AO+oLHpy3YXSqJMZOMR0hfSsdOw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzylISpXwxixAtQ+48MzNEgmatwnYIqyMoxHyI6WsQPv73GuNq6
-	f6VThyqHQvBJvkNbzIPzCVft24TOcnN4zgKiuWiPjOyjIf7ls5Fez6vN9z9o0GG7M8M4kHDixpW
-	ljRgPIMFyXx8iXFCIii5HBHE4vXZCi1KFw6njmVK5iQ==
-X-Gm-Gg: ASbGnctQuqsqcarbxFIMHF7REq8DqA0zYmpTIIUmEC3CG8B/GHNwfcVUpqmzPjkOXqc
-	ksCIWJ7ZlOxFvc9YkM9K20rhEUXMiGr0JpMfGK5uEeh08usDn6v31SqvWoFtZ0GXp73s0IxZJX8
-	DNpU5RQl4Ki7cXQ2g3Mz3fDeml/nqm+wDa1qYHk5wDDU2wdlltyS5+yeBJDZH1nI0=
-X-Google-Smtp-Source: AGHT+IG+4ruICaQP9WjnJtvSTT9EmK06oaor1STRsfEcgxfGLSMohUV22g53UcbTlMgO8PAYrxi/zYRyt6cxM4CKTj0=
-X-Received: by 2002:a05:6512:3a89:b0:553:2ce6:c749 with SMTP id
- 2adb3069b0e04-55342f5f525mr4032820e87.24.1748957728189; Tue, 03 Jun 2025
- 06:35:28 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1748957813; x=1749562613;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XwaOA2UFIdL6uhmEEF3zq5uKFSYlQf1QNo+y/xH05aY=;
+        b=ZmE9C6tor85KNQwCo4s3ELO1Uc356q40BkPlgxh7irTGqZ73f1mIrusRvrm9sbEyyM
+         sJ8tU5th43k1ZG5nbtHXtzOARdh9YU2q4r1wqm4rLxF22ZmXmJ4qCS9fEnPSTwqH6zg8
+         Oxvnt4AQ/cEZpFDuaAz2yHckxDxcwwgAZPYkqtxbOKyQYVCqbY1gFFCqwuXQ5FzXol4K
+         aIUXNwZle/WzxNUzI3rta6WozS2i/GANTMNy9Q8E6UP7Wu7gojpRRwVYfXg5wT6ONupC
+         UicGu8xMq/QUBUYzN44GT9Qk+Ldu9WHa+rHkLcwNL23y6MO1ieWCAZ3Okm40Lg5Xd+gS
+         D26A==
+X-Forwarded-Encrypted: i=1; AJvYcCWJKZ4Tq2uRUjbReyrd4FniYg7LoFdcjZ1Cs10eX7IykFwsHFgND+sDwZoFGX7tik38a10q5OYQY8g=@vger.kernel.org, AJvYcCWyz7nebBLlRQZ8D41507tY21wHomCFVFc4A5XGDHV2JvPP7H3CVRIuBQx+FTaRU+bb9MrCubRDhkxg+A0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzbr6KpyLSTrlW+qhYKUOqlNvon074Es8AjXCZJH/JVtZ5PrGEb
+	7iJftdaWCxEsqCNB17E38Njt8Vukbxze7c/cd1BNVWdzB8WCU/EaajfK
+X-Gm-Gg: ASbGncvUeRrKepyuXl2Ia7xNMSsFCk0rDk2twP+Ci4n1ZBp7P3dn5Giv/93sIsfeHJI
+	fRFObntnWanamxY+10KN4L63uBpFlou/kEo0bpaLzcYaHrXT/EA9EFjkBXjK2OKx5mC7fTbJIan
+	SksAmP+HnU8woyw4Y9Xvq+hIDXXxIWprpBMv7ttq+y6j6zSHHhX68VybafbX4gNnZkhojL12mOM
+	1gxdZjBSHXSG35YwKF0FxaMOWq9wj/Jk04hLrUGB866TW1sO6mdKJQZTfv2L8ndqWWPypNztBfF
+	CzIyUdNubouToJVANQuDQlOXndng9dHPxwM05UV1YNEAfqblYF5UtRR6QZ59
+X-Google-Smtp-Source: AGHT+IHlffBpVFQtzIlEFJvBh6YUPRlNSnuEKeo8Dt5LtNWl5139bqwkGJfzkGnuetqW1tpQrNzwAg==
+X-Received: by 2002:a05:600c:8b11:b0:450:d4ad:b7de with SMTP id 5b1f17b1804b1-4511ecb9cd9mr122631155e9.3.1748957811494;
+        Tue, 03 Jun 2025 06:36:51 -0700 (PDT)
+Received: from debian.local ([81.78.104.57])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-450d7fa27b4sm159437275e9.15.2025.06.03.06.36.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jun 2025 06:36:50 -0700 (PDT)
+Date: Tue, 3 Jun 2025 14:36:48 +0100
+From: Chris Bainbridge <chris.bainbridge@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Mario Limonciello <superm1@kernel.org>,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Johan Hovold <johan@kernel.org>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	Saravana Kannan <saravanak@google.com>,
+	amd-gfx@lists.freedesktop.org
+Subject: Re: [PATCH v3 2/5] PM: sleep: Suspend async parents after suspending
+ children
+Message-ID: <aD76cCE5qyALjKHc@debian.local>
+References: <CAJZ5v0jDZQaR8S6Kn_RoXHBU86+tpjp=qgyxm5h03YEe2S=nPg@mail.gmail.com>
+ <aD7L0RD4HT-mEtBc@debian.local>
+ <CAJZ5v0h65Gt1Fw35vp2k8kKu62+goCD8WF8u-tvhfWW6a7xHxQ@mail.gmail.com>
+ <CAJZ5v0ggPHhYcdNos2o8savvq+-zpPTaQunjOkR36k3VwF3_CA@mail.gmail.com>
+ <CAJZ5v0gF=ewooE0cUrNfe5_inhnzq6bqw8VTjkFwr56_wrptJQ@mail.gmail.com>
+ <CAJZ5v0hpJSVdiCN29=kbV8KfgU1y1d3hFfshtBoMpVFXf+LvBQ@mail.gmail.com>
+ <aD7nOMP3xA9BR781@debian.local>
+ <CAJZ5v0gAcohRWuSZbFWvyfAU9Vjc7nRyj+AFRYQ7hcGEXdPxyQ@mail.gmail.com>
+ <CAP-bSRbVjcXBvxDT6ZQuoRB+JF6A4LhdMVnNqnaQC0bg-xg2BQ@mail.gmail.com>
+ <CAJZ5v0gTRtPzrROdkxRjTeXv4BsRyUkyGpCWmh-gHNx3X2L9RA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CGME20250529222403eucas1p1923fe09240be34e3bbadf16822574d75@eucas1p1.samsung.com>
- <20250530-apr_14_for_sending-v3-0-83d5744d997c@samsung.com>
- <20250530-apr_14_for_sending-v3-1-83d5744d997c@samsung.com>
- <CAMRc=Me9cWfe2mL=Q6JQbAFjpd55MOBZuAWC793Us0criiQr4Q@mail.gmail.com>
- <4519844e-b1c0-40a7-b856-a6e4a80c6334@samsung.com> <20250603-cuddly-certain-mussel-4fbe96@kuoka>
-In-Reply-To: <20250603-cuddly-certain-mussel-4fbe96@kuoka>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Tue, 3 Jun 2025 15:35:16 +0200
-X-Gm-Features: AX0GCFuDYKD0oEvnMgBkM50gIAPDgZLFL7Iyce01c_hFdppjyHLpA9k0Aap5-Uk
-Message-ID: <CAMRc=MfXashaEscE1vF_P6cs9iOCBerfNFiB4yC+TX76fZ87nA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/8] dt-bindings: power: Add T-HEAD TH1520 GPU power sequencer
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Michal Wilczynski <m.wilczynski@samsung.com>, Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, 
-	Fu Wei <wefu@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Frank Binns <frank.binns@imgtec.com>, 
-	Matt Coster <matt.coster@imgtec.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0gTRtPzrROdkxRjTeXv4BsRyUkyGpCWmh-gHNx3X2L9RA@mail.gmail.com>
 
-On Tue, Jun 3, 2025 at 3:19=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.org=
-> wrote:
->
-> On Mon, Jun 02, 2025 at 10:29:13PM GMT, Michal Wilczynski wrote:
-> > >> +description: |
-> > >> +  This binding describes the power sequencer for the T-HEAD TH1520 =
-GPU.
-> > >> +  This sequencer handles the specific power-up and power-down seque=
-nces
-> > >> +  required by the GPU, including managing clocks and resets from bo=
-th the
-> > >> +  sequencer and the GPU device itself.
-> > >> +
-> > >> +properties:
-> > >> +  compatible:
-> > >> +    const: thead,th1520-gpu-pwrseq
-> > >> +
+On Tue, Jun 03, 2025 at 03:04:33PM +0200, Rafael J. Wysocki wrote:
+> On Tue, Jun 3, 2025 at 2:27 PM Chris Bainbridge
+> <chris.bainbridge@gmail.com> wrote:
+> >
+> > On Tue, 3 Jun 2025 at 13:24, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > >
+> > > > This patch does fix the list corruption, but the "Unbalanced
+> > > > pm_runtime_enable" still occurs:
 > > >
-> > > Before I review the rest: is this actually a physical device that
-> > > takes care of the power sequencing? Some kind of a power management
-> > > unit for the GPU? If so, I bet it's not called "power sequencer" so
-> > > let's use its actual name as per the datasheet?
+> > > Have you applied it together with the previous patch?
 > >
-> > Hi Bart,
-> > Thanks for your feedback.
-> >
-> > The hardware block responsible for powering up the components in the
-> > TH1520 SoC datasheet is called AON (Always On). However, we already hav=
-e
-> > a DT node named aon that serves as a power domain provider
-> > (Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml).
->
-> So no. One device, one device node (sometimes with cildren nodes). You
-> do not get another device node just because someone wrote incomplete
-> binding or because driver looks differently.
->
-> >
-> > Following the discussion [1] about needing a separate DT node for the
-> > power sequencing capabilities of this AON block, and thinking further
-> > about it, I think the binding should be more generic. The AON block can
-> > manage power sequences for more than just the GPU (e.g. NPU, AUDIO,
-> > DSP).
-> >
-> > The compatible string could be updated like so:
-> > "thead,th1520-aon-pwrseq"
->
-> Should not be separate node, you already have one for AON.
->
+> > Yes
+> 
+> So it looks like some devices have power.is_suspended set from the
+> previous cycle which causes device_resume() to attempt to resume them
+> even though they have not been suspended in the current cycle yet.
+> 
+> Please try the attached patch in addition to the previous 2 patches.
+> 
+> Thanks!
 
-Agreed. And as far as implementation goes, you can have the same
-driver be a PM domain AND pwrseq provider. It just has to bind to the
-device node that represents an actual component, not a made-up
-"convenience" node.
+That fixed it. Passed 30 attempted suspends without error.
 
-Bartosz
+Reported-and-tested-by: Chris Bainbridge <chris.bainbridge@gmail.com>
 
