@@ -1,311 +1,236 @@
-Return-Path: <linux-pm+bounces-27997-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27998-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 973A4ACC34C
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 11:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 07AF3ACC394
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 11:51:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58FF81883E34
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 09:39:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61EAB1883201
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 09:50:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 569CA28150E;
-	Tue,  3 Jun 2025 09:38:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAC6028153C;
+	Tue,  3 Jun 2025 09:50:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f8hV7sLq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MEVlkqiE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F682698BC;
-	Tue,  3 Jun 2025 09:38:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34F7664C6;
+	Tue,  3 Jun 2025 09:50:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748943533; cv=none; b=uJxOYL7z30iDOTwW6Ne8ENSLuijsaxFPIDfrFhCX68M/5sLayNMcD5zvtKvOrRIhwGoGa43eh8bodgs4ZwfrcNVewb3G2n3qM/PAdM5ECxg5obPwa6awLMyHrQ8opJOpCHScI70+A2QN1MB8zZs2Lt53O1lkvHlcaB4IcuV5Ehk=
+	t=1748944224; cv=none; b=c4H3n7GUq040sDxzWq7QMgsQBjVHyrpcv+PxzJZNhEZcxA8qZnhAxwk2+MK96U+bksgydmYY191bCP5N/zO1nt6ja+NyvK9uVgatj8cGp2tEkbS11Qm5ivecKQbQvI5peUUJbuWoKeoKfPkP9AgajId6hXnXizkxF0FugN000wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748943533; c=relaxed/simple;
-	bh=zsOqiWAIopc/I1cVwsBZWObBt0Y47yQMURR5bDsXUYg=;
+	s=arc-20240116; t=1748944224; c=relaxed/simple;
+	bh=bfgWS16/oHW3y3qqAgf4oxs16fetKvRUmJSlL6NTq7k=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LVdPZ4Sorhwh/YwtoNOGmAftlbywdAs4PBW8wD9CkM8427XFxr5Hze2Rav3ySljjoy6Vh28MAbo4duTL4wHuo1A2ZEpqF7bFNws6pWvqdUz31bsSxU6rxyoKVxSJvbMeTDdC67K8rHZxnAznZAeyJNrgPpDKPAW8whZxF4IRDsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f8hV7sLq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99DF2C4CEF4;
-	Tue,  3 Jun 2025 09:38:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748943532;
-	bh=zsOqiWAIopc/I1cVwsBZWObBt0Y47yQMURR5bDsXUYg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=f8hV7sLq9dVLu9eKhnwo5tSw0Dw8IwDt02v2MvyslvDfAVU42+xENQ9zq7Q+p3wOf
-	 HQ00ffSAjlqXmYzOfEkrqiYpANqudsG1JOpc7WL9lP/QcNUvGv2DYb+T7vNRD57Rav
-	 MiQFUuGkfOxyYroCkqHefdqCp/2fQDDhsL9IUZi2jPWMxISLABM9ATPZlNtpcE9glz
-	 xwDxk/hEzBd/z4y9fo4t29Bf2FOHEj5KwAIVhPCb7bRKBZ+nUxGBQKe7sHN1d/nNBw
-	 SD2uRMkySt65GB7nUxgzhxYmeSTjB1NW+orOQMVYhKvvUjU7n8AvUuRuMtcLRZhEnW
-	 IUGlbmCz5P27w==
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-606440d92eeso2462251eaf.2;
-        Tue, 03 Jun 2025 02:38:52 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVOAhzzKcX90nB/aOZz3Cf3voCYasdMsluHEoibwdj5eQ90KW9pHqW9VgsQuSchVu5MilDis4AIxrI=@vger.kernel.org, AJvYcCWg607ghWLbwdHMyKNzI3jfN2Eiv/zXU/7wAKlfsG4xBlMp9vIMASjILvFay1x3B6pV4KmMHC9nIkLOVkw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxiAwkcTGEdn0EnIpGgeK7ioxxH2znTNWb1BOr1NAjKFixOjQA2
-	Zws5WS34uAiwzNpuiwPBJs74afjloeBzPo+RQhjH15ZBi4pDU/I10bWrVS35DRTJe5Jl4THDkNY
-	KxPGmg2l132Y5lQEZOKrwws9K8/XrTCU=
-X-Google-Smtp-Source: AGHT+IFBv7uzvOFJHhnyjbs5CZt0M71e7GPGPSE6OPYCGR3YUVFAs1qsFrLaDG4JD9JjifGUJ/sxerZ67J4qjhqhuWk=
-X-Received: by 2002:a05:6820:2783:b0:60b:a8e7:b237 with SMTP id
- 006d021491bc7-60db9ec7b52mr6620888eaf.8.1748943531800; Tue, 03 Jun 2025
- 02:38:51 -0700 (PDT)
+	 To:Cc:Content-Type; b=KcDm8oAjLP4TYDRBEW0GUqVwAUgjVb2F2RLQe3FkbFfIqAsHX+2RkElv8Ym0nju/Mel8CyG8GchX0gjdsFf67r64eX87dpKA6oEpjLdhq5aXBr4nQzn1b0M3D43THmMembj2Sxyk8ihPr/BNmgYpVIFwb+eH8ztu8s954Xc0jx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MEVlkqiE; arc=none smtp.client-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-32a72e61a3fso67746411fa.0;
+        Tue, 03 Jun 2025 02:50:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748944221; x=1749549021; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bfgWS16/oHW3y3qqAgf4oxs16fetKvRUmJSlL6NTq7k=;
+        b=MEVlkqiE0Y6J0OppBkHFqVJwpRlAiPSHLpXhG4Y0FBAG5QfZOEjAUeRg/seOZnw+p8
+         xAEyW+eEcBdUExZFYQh31NvRSsupxbrsI41m6Ry3WrvMN8DBZEEEpjTEQasc81Q1UXLZ
+         xyoty7ORVZKWjHDvBv4oke00EYafXWGpUFvAm6IwoEA78oNb1CWu8gLvsRGpFSCVz62/
+         4IShh+E91WnCTIlouOUBcfIfcCxne7qg0jr8MkOuzfVrV3EMQhZNtXJGW2y7m9Xp4afv
+         DXq4NlvBOONluL2lIRjDKAFWNdknfZ6Edhe0OvAU4NgBQn1GVEEhqUNZfPFm+1AyMj3B
+         S/Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748944221; x=1749549021;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bfgWS16/oHW3y3qqAgf4oxs16fetKvRUmJSlL6NTq7k=;
+        b=q/IpQYqtQlbuC9PfcnUNvlwye5leVu6smBwG+yTRe9Bn98RMQoOHy/HC2dawO1qH9N
+         yijBc39XmD8EQsTESH6GdlXXkDp2w6TiygAS0ueFbsKT2smBmjthT22ZKU4x1+7pNOye
+         e3ydA7cW7ISNq1ZofRVxB7cnBpODt8qEXdEO2suv1w2Rvrw0WVW5I/K0U92AC9VE1mYF
+         oVnYrCs3saNmf5mT80pRWSAu8q9TUO0U/+e+HVr+OZnO5BOtO7f2WKA/dInzP7w96CJd
+         dDPXcjjo/m/LMVGv2B0eFeUMBbAXhguYVG6UFyYjnT8uBzsOYyYMyvvX/RS3lWFQ8dBn
+         Aj1g==
+X-Forwarded-Encrypted: i=1; AJvYcCVOscaVJhz1ja/edg+90wBNtR+yMQsvyY3QtU77T2zdfNDiHrz4UPJOObCHpcnKKi9zlWuTgQEjPXo=@vger.kernel.org, AJvYcCVlpaIGam3tvFS/S6WhOZ072d7vRZSqKfFoAVZp5izU4y+Bse5qYfk93s2wuFmtuT8ScmjxtMz+@vger.kernel.org, AJvYcCX9K+84WojxoW0oA4q8tTGjzYs49vnbxSMtxNMUoNoUT5E/jG5ggExEmTc0QXba3mCC3Q6f2Iqi015/t9e3@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkVaK2SMveeQOuKW6VdKiOjXqeiYjVYWkx5SJ4S/RN4hXUQSOJ
+	k5ea7jbZcmhQbyYkSIpKUmLY7yFD4frsAg2cuEVnbT9Os24ziDw/7GxwXt7QfWWfIGBQR/GH6HJ
+	Ei+LWOq89BcstDuQCGt0LODhmL239n7c=
+X-Gm-Gg: ASbGnctk2DjY+v9VvCZGDya6w6NQJlziI5S4a1bQ3E7C7fh+BmC/VkiXdcqTTv7qUQQ
+	L8vj16SUQHaqhmDekNDJxmBjobpaQGgbhfHPqkQFrhC3b/OGgNNrDj6Q//BI453m0lG3H2ohJ/S
+	Iev0sSIi9uQZM7ErSrGQ9r6HvZM/C91WR/
+X-Google-Smtp-Source: AGHT+IFbMWbmAjAWpDW+ugQQa4jB7qBaCa2WAMxYSJu0HZ9aWKD03FUQq0hLL3NX8CwLGm33BAU2lvNa/N2YVz+j/6c=
+X-Received: by 2002:a05:651c:2204:b0:30d:c4c3:eafa with SMTP id
+ 38308e7fff4ca-32abf4f838bmr5347851fa.7.1748944220298; Tue, 03 Jun 2025
+ 02:50:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <10629535.nUPlyArG6x@rjwysocki.net> <3541233.QJadu78ljV@rjwysocki.net>
- <aD2U3VIhf8vDkl09@debian.local> <CAJZ5v0h-nrVamqiAJ957aYjHqaeAZUUW7BRi0WxPgCFc40M5cQ@mail.gmail.com>
- <7f0e2865-d35e-4a13-8617-8679afb4b23f@kernel.org> <CAJZ5v0gL3rW8dOxXdPWYjZuq5kAaD8qTa4vZ5++k9+0WniNAdQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0gL3rW8dOxXdPWYjZuq5kAaD8qTa4vZ5++k9+0WniNAdQ@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 3 Jun 2025 11:38:37 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jDZQaR8S6Kn_RoXHBU86+tpjp=qgyxm5h03YEe2S=nPg@mail.gmail.com>
-X-Gm-Features: AX0GCFs6073kShWhjpCCxt_P2beN4BqAUhzgFto2bxGO9CdT3q_QdgHtwvF1XHI
-Message-ID: <CAJZ5v0jDZQaR8S6Kn_RoXHBU86+tpjp=qgyxm5h03YEe2S=nPg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] PM: sleep: Suspend async parents after suspending children
-To: Mario Limonciello <superm1@kernel.org>, Chris Bainbridge <chris.bainbridge@gmail.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Johan Hovold <johan@kernel.org>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Jon Hunter <jonathanh@nvidia.com>, 
-	Saravana Kannan <saravanak@google.com>, amd-gfx@lists.freedesktop.org
-Content-Type: multipart/mixed; boundary="000000000000f21f990636a7a547"
-
---000000000000f21f990636a7a547
+References: <20250429233848.3093350-1-nphamcs@gmail.com> <aDlUgVFdA7rCUvHx@yjaykim-PowerEdge-T330>
+ <CAKEwX=MjyEsoyDmMBCRr0QnBfgkTA5bfrshPbfSgNp887zaxVw@mail.gmail.com>
+ <aDxN6oz86TD5H4IL@yjaykim-PowerEdge-T330> <CAMgjq7DGMS5A4t6nOQmwyLy5Px96aoejBkiwFHgy9uMk-F8Y-w@mail.gmail.com>
+ <CAKEwX=P4Q6jNQAi+H3sMQ73z-F-rG5jz8jj1NeGgUi=Pem_ZTQ@mail.gmail.com>
+In-Reply-To: <CAKEwX=P4Q6jNQAi+H3sMQ73z-F-rG5jz8jj1NeGgUi=Pem_ZTQ@mail.gmail.com>
+From: Kairui Song <ryncsn@gmail.com>
+Date: Tue, 3 Jun 2025 17:50:01 +0800
+X-Gm-Features: AX0GCFs-IQz1kR-0WuzGFg4LJh-1KD3qVtLjG4T0xeN4cJ7JSdCZNhTOkw9EglY
+Message-ID: <CAMgjq7D4gcOih3235DRBEOv4EaaV3YEKc6w2Ab-wTCgb7=sA6w@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 00/18] Virtual Swap Space
+To: Nhat Pham <nphamcs@gmail.com>
+Cc: YoungJun Park <youngjun.park@lge.com>, linux-mm@kvack.org, akpm@linux-foundation.org, 
+	hannes@cmpxchg.org, hughd@google.com, yosry.ahmed@linux.dev, 
+	mhocko@kernel.org, roman.gushchin@linux.dev, shakeel.butt@linux.dev, 
+	muchun.song@linux.dev, len.brown@intel.com, chengming.zhou@linux.dev, 
+	chrisl@kernel.org, huang.ying.caritas@gmail.com, ryan.roberts@arm.com, 
+	viro@zeniv.linux.org.uk, baohua@kernel.org, osalvador@suse.de, 
+	lorenzo.stoakes@oracle.com, christophe.leroy@csgroup.eu, pavel@kernel.org, 
+	kernel-team@meta.com, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	linux-pm@vger.kernel.org, peterx@redhat.com, gunho.lee@lge.com, 
+	taejoon.song@lge.com, iamjoonsoo.kim@lge.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 2, 2025 at 9:58=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
-> wrote:
+On Tue, Jun 3, 2025 at 2:30=E2=80=AFAM Nhat Pham <nphamcs@gmail.com> wrote:
 >
-> On Mon, Jun 2, 2025 at 5:22=E2=80=AFPM Mario Limonciello <superm1@kernel.=
-org> wrote:
+> On Sun, Jun 1, 2025 at 9:15=E2=80=AFAM Kairui Song <ryncsn@gmail.com> wro=
+te:
 > >
-> > On 6/2/2025 9:29 AM, Rafael J. Wysocki wrote:
-> > > On Mon, Jun 2, 2025 at 2:11=E2=80=AFPM Chris Bainbridge
-> > > <chris.bainbridge@gmail.com> wrote:
-> > >>
-> > >> On Fri, Mar 14, 2025 at 02:13:53PM +0100, Rafael J. Wysocki wrote:
-> > >>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >>>
-> > >>> In analogy with the previous change affecting the resume path,
-> > >>> make device_suspend() start the async suspend of the device's paren=
-t
-> > >>> after the device itself has been processed and make dpm_suspend() s=
-tart
-> > >>> processing "async" leaf devices (that is, devices without children)
-> > >>> upfront so they don't need to wait for the "sync" devices they don'=
-t
-> > >>> depend on.
-> > >>>
-> > >>> On the Dell XPS13 9360 in my office, this change reduces the total
-> > >>> duration of device suspend by approximately 100 ms (over 20%).
-> > >>>
-> > >>> Suggested-by: Saravana Kannan <saravanak@google.com>
-> > >>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >>
-> > >> This commit results in memory corruption on suspend/resume with shor=
-t
-> > >> suspend duration.
-> > >
-> > > What do you mean by short?
 > >
-> > The tool he used will program a timer to wake up the system.
-> > The time he input was programmed for a cycle that was short enough that
-> > the suspend entry didn't finish and it triggered an aborted suspend.
+> > Hi All,
 >
-> So it crashes during resume when the preceding suspend has been aborted I=
-IUC.
+> Thanks for sharing your setup, Kairui! I've always been curious about
+> multi-tier compression swapping.
 >
-> The exact crash mechanism is still unclear to me though.
+> >
+> > I'd like to share some info from my side. Currently we have an
+> > internal solution for multi tier swap, implemented based on ZRAM and
+> > writeback: 4 compression level and multiple block layer level. The
+> > ZRAM table serves a similar role to the swap table in the "swap table
+> > series" or the virtual layer here.
+> >
+> > We hacked the BIO layer to let ZRAM be Cgroup aware, so it even
 >
-> > >
-> > >> Laptop appears to hang and crash is logged to pstore.
-> > >
-> > > Interesting that this is only happening on one system.
-> > >
-> > > Thanks for the report anyway, I'll look at this shortly.
-> > >
-> > >> To reproduce: `amd_s2idle.py --log log --duration 1 --wait 4 --count=
- 30`
-> > >>
-> > >> I have reproduced this both with and without Mario's recent suspend =
-fix
-> > >> https://lore.kernel.org/amd-gfx/20250602014432.3538345-1-superm1@ker=
-nel.org/T/#t
-> > >>
-> > >> Pstore log (with Mario's fix):
-> > >>
-> > >> <6>[  194.209939] PM: suspend entry (s2idle)
-> > >> <6>[  194.409450] Filesystems sync: 0.199 seconds
-> > >> <6>[  194.409756] Freezing user space processes
-> > >> <6>[  194.411374] Freezing user space processes completed (elapsed 0=
-.001 seconds)
-> > >> <6>[  194.411377] OOM killer disabled.
-> > >> <6>[  194.411378] Freezing remaining freezable tasks
-> > >> <6>[  194.412517] Freezing remaining freezable tasks completed (elap=
-sed 0.001 seconds)
-> > >> <6>[  194.412520] printk: Suspending console(s) (use no_console_susp=
-end to debug)
-> > >> <7>[  194.663906] PM: suspend of devices aborted after 0.260 msecs
-> > >> <7>[  194.663911] PM: start suspend of devices aborted after 251.365=
- msecs
-> > >> <3>[  194.663913] PM: Some devices failed to suspend, or early wake =
-event detected
-> > >> <4>[  194.663975] i2c i2c-3: Unbalanced pm_runtime_enable!
-> > >> <4>[  194.663989] ee1004 3-0050: Attempt to enable runtime PM when i=
-t is blocked
-> > >> Oops#1 Part6
-> > >> <4>[  194.663991] ee1004 3-0051: Attempt to enable runtime PM when i=
-t is blocked
-> > >> <4>[  194.663992] CPU: 5 UID: 0 PID: 121 Comm: kworker/u64:10 Not ta=
-inted 6.15.0-rc1-00006-g032a79431b1c #425 PREEMPT(voluntary)
-> > >> <4>[  194.663994] Hardware name: HP HP Pavilion Aero Laptop 13-be0xx=
-x/8916, BIOS F.17 12/18/2024
-> > >> <4>[  194.663996] Workqueue: async async_run_entry_fn
-> > >> <4>[  194.663998]  slab kmalloc-2k
-> > >> <4>[  194.664000]
-> > >> <4>[  194.664000]  start ffff99bbe24ac800 pointer offset 408
-> > >> <4>[  194.664001] Call Trace:
-> > >> <4>[  194.664002]  size 2048
-> > >> <3>[  194.664003] list_add corruption. prev->next should be next (ff=
-ffffff9da75c60), but was ffff99bbd1d94790. (prev=3Dffff99bbe24ac998).
-> > >> <4>[  194.664003]  <TASK>
-> > >> <4>[  194.664007]  dump_stack_lvl+0x6e/0x90
-> > >> <4>[  194.664011] ------------[ cut here ]------------
-> > >> <4>[  194.664011]  pm_runtime_enable.cold+0x28/0x48
-> > >> <2>[  194.664011] kernel BUG at lib/list_debug.c:32!
-> > >> <4>[  194.664013]  device_resume+0x47/0x200
-> > >> <4>[  194.664016] Oops: invalid opcode: 0000 [#1] SMP
-> > >> <4>[  194.664017]  async_resume+0x1d/0x30
-> > >> <4>[  194.664018] CPU: 2 UID: 0 PID: 2505 Comm: amd_s2idle.py Not ta=
-inted 6.15.0-rc1-00006-g032a79431b1c #425 PREEMPT(voluntary)
-> > >> <4>[  194.664019]  async_run_entry_fn+0x2e/0x130
-> > >> <4>[  194.664020] Hardware name: HP HP Pavilion Aero Laptop 13-be0xx=
-x/8916, BIOS F.17 12/18/2024
-> > >> <4>[  194.664021] RIP: 0010:__list_add_valid_or_report+0x90/0xa0
-> > >> <4>[  194.664022]  process_one_work+0x22b/0x5b0
-> > >> <4>[  194.664024] Code: e4 8a ff 0f 0b 48 89 f7 48 89 34 24 e8 49 57=
- c6 ff 48 8b 34 24 48 c7 c7 70 d1 64 9d 48 8b 16 48 89 f1 48 89 de e8 00 e4=
- 8a ff <0f> 0b 90 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 f3 0f 1e fa 41 54
-> > >> Oops#1 Part5
-> > >> <4>[  194.664025] RSP: 0018:ffffc09a45dafb20 EFLAGS: 00010246
-> > >> <4>[  194.664026]  worker_thread+0x1da/0x3d0
-> > >> <4>[  194.664027] RAX: 0000000000000075 RBX: ffffffff9da75c60 RCX: 0=
-000000000000027
-> > >> <4>[  194.664028] RDX: 0000000000000000 RSI: 0000000000000001 RDI: f=
-fff99becd11de40
-> > >> <4>[  194.664029] RBP: ffffffff9da74c00 R08: 0000000000000000 R09: 0=
-000000000000000
-> > >> <4>[  194.664029] R10: 0000000000000000 R11: 0000000000000003 R12: 0=
-000000000000010
-> > >> <4>[  194.664029]  ? bh_worker+0x260/0x260
-> > >> <4>[  194.664030] R13: 0000002990e47f3d R14: ffff99bbe24ac998 R15: f=
-fff99bbe0b67620
-> > >> <4>[  194.664031] FS:  00007fe534bfc080(0000) GS:ffff99bf2ee50000(00=
-00) knlGS:0000000000000000
-> > >> <4>[  194.664031]  kthread+0x10a/0x250
-> > >> <4>[  194.664032] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > >> <4>[  194.664033] CR2: 000055fdfaf910b8 CR3: 000000010d4a9000 CR4: 0=
-000000000f50ef0
-> > >> <4>[  194.664034]  ? kthreads_online_cpu+0x130/0x130
-> > >> <4>[  194.664034] PKRU: 55555554
-> > >> <4>[  194.664035] Call Trace:
-> > >> <4>[  194.664036]  <TASK>
-> > >> <4>[  194.664036]  ret_from_fork+0x31/0x50
-> > >> <4>[  194.664037]  dpm_resume+0x139/0x350
-> > >> <4>[  194.664039]  ? kthreads_online_cpu+0x130/0x130
-> > >> <4>[  194.664041]  dpm_resume_end+0x11/0x20
-> > >> <4>[  194.664040]  ret_from_fork_asm+0x11/0x20
-> > >> <4>[  194.664042]  suspend_devices_and_enter+0x18e/0x9f0
-> > >> <4>[  194.664045]  </TASK>
-> > >> <4>[  194.664046]  pm_suspend.cold+0x22f/0x28f
-> > >> <4>[  194.664046] CPU: 4 UID: 0 PID: 115 Comm: kworker/u64:4 Not tai=
-nted 6.15.0-rc1-00006-g032a79431b1c #425 PREEMPT(voluntary)
-> > >> Oops#1 Part4
-> > >> <4>[  194.664048]  state_store+0x6c/0xd0
-> > >> <4>[  194.664049] Hardware name: HP HP Pavilion Aero Laptop 13-be0xx=
-x/8916, BIOS F.17 12/18/2024
-> > >> <4>[  194.664050] Workqueue: async async_run_entry_fn
-> > >> <4>[  194.664051]  kernfs_fop_write_iter+0x194/0x250
-> > >> <4>[  194.664052] Call Trace:
-> > >> <4>[  194.664052]  <TASK>
-> > >> <4>[  194.664053]  dump_stack_lvl+0x6e/0x90
-> > >> <4>[  194.664054]  vfs_write+0x2ac/0x550
-> > >> <4>[  194.664055]  pm_runtime_enable.cold+0x28/0x48
-> > >> <4>[  194.664057]  device_resume+0x47/0x200
-> > >> <4>[  194.664058]  ksys_write+0x71/0xe0
-> > >> <4>[  194.664060]  async_resume+0x1d/0x30
-> > >> <4>[  194.664060]  do_syscall_64+0x95/0x1a0
-> > >> <4>[  194.664062]  async_run_entry_fn+0x2e/0x130
-> > >> <4>[  194.664062]  ? lockdep_sys_exit+0x1e/0x90
-> > >> <4>[  194.664064]  process_one_work+0x22b/0x5b0
-> > >> <4>[  194.664064]  ? trace_hardirqs_on_prepare+0x77/0xa0
-> > >> <4>[  194.664066]  ? syscall_exit_to_user_mode+0xb1/0x280
-> > >> <4>[  194.664067]  worker_thread+0x1da/0x3d0
-> > >> <4>[  194.664068]  ? __mutex_lock+0xdb/0xed0
-> > >> <4>[  194.664070]  ? __mutex_lock+0xafb/0xed0
-> > >> <4>[  194.664070]  ? bh_worker+0x260/0x260
-> > >> <4>[  194.664072]  ? kernfs_fop_llseek+0x35/0xd0
-> > >> <4>[  194.664072]  kthread+0x10a/0x250
-> > >> <4>[  194.664073]  ? lock_release+0x1ff/0x2a0
-> > >> <4>[  194.664074]  ? kthreads_online_cpu+0x130/0x130
-> > >> <4>[  194.664075]  ? lock_acquire+0x270/0x2d0
-> > >> <4>[  194.664076]  ret_from_fork+0x31/0x50
-> > >> <4>[  194.664077]  ? __mutex_unlock_slowpath+0x3c/0x2c0
-> > >> <4>[  194.664078]  ? kthreads_online_cpu+0x130/0x130
-> > >> <4>[  194.664079]  ? kernfs_fop_llseek+0x77/0xd0
-> > >> <4>[  194.664079]  ret_from_fork_asm+0x11/0x20
-> > >> <4>[  194.664081]  ? lockdep_sys_exit+0x1e/0x90
-> > >> <4>[  194.664082]  ? trace_hardirqs_on_prepare+0x77/0xa0
-> > >> Oops#1 Part3
-> > >> <4>[  194.664084]  </TASK>
-> > >> <4>[  194.664084]  ? syscall_exit_to_user_mode+0xb1/0x280
-> > >> <4>[  194.664086]  ? do_syscall_64+0xa1/0x1a0
-> > >> <4>[  194.664086] uvcvideo 1-3:1.0: Unbalanced pm_runtime_enable!
+> Hmmm this part seems a bit hacky to me too :-?
+
+Yeah, terribly hackish :P
+
+One of the reasons why I'm trying to retire it.
+
 >
-> So it looks like this device is resumed even though it has not been suspe=
-nded.
+> > supports per-cgroup priority, and per-cgroup writeback control, and it
+> > worked perfectly fine in production.
+> >
+> > The interface looks something like this:
+> > /sys/fs/cgroup/cg1/zram.prio: [1-4]
+> > /sys/fs/cgroup/cg1/zram.writeback_prio [1-4]
+> > /sys/fs/cgroup/cg1/zram.writeback_size [0 - 4K]
+>
+> How do you do aging with multiple tiers like this? Or do you just rely
+> on time thresholds, and have userspace invokes writeback in a cron
+> job-style?
 
-Or it is resumed for the second time in a row during the same transition.
+ZRAM already has a time threshold, and I added another LRU for swapped
+out entries, aging is supposed to be done by userspace agents, I
+didn't mention it here as things are becoming more irrelevant to
+upstream implementation.
 
-I think I know what is going on and the bug is not in the commit in questio=
-n.
+> Tbh, I'm surprised that we see performance win with recompression. I
+> understand that different workloads might benefit the most from
+> different points in the Pareto frontier of latency-memory saving:
+> latency-sensitive workloads might like a fast compression algorithm,
+> whereas other workloads might prefer a compression algorithm that
+> saves more memory. So a per-cgroup compressor selection can make
+> sense.
+>
+> However, would the overhead of moving a page from one tier to the
+> other not eat up all the benefit from the (usually small) extra memory
+> savings?
 
-There is a race between dpm_async_resume_children() and the first loop
-in dpm_resume() which fortunately is only fatal when the preceding
-suspend transition is aborted.  Namely, that loop can call
-dpm_clear_async_state() for a device after dpm_async_with_cleanup()
-has run for it, so power.work_in_progress gets cleared and
-__dpm_async() will allow an async work to be scheduled for the same
-device once again.
+So far we are not re-compressing things, but per-cgroup compression /
+writeback level is useful indeed. Compressed memory gets written back
+to the block device, that's a large gain.
 
-Chris, please check if the attached patch helps.  I'm going to post it
-as a fix anyway later today, but it would be good to verify that it is
-sufficient.
+> > It's really nothing fancy and complex, the four priority is simply the
+> > four ZRAM compression streams that's already in upstream, and you can
+> > simply hardcode four *bdev in "struct zram" and reuse the bits, then
+> > chain the write bio with new underlayer bio... Getting the priority
+> > info of a cgroup is even simpler once ZRAM is cgroup aware.
+> >
+> > All interfaces can be adjusted dynamically at any time (e.g. by an
+> > agent), and already swapped out pages won't be touched. The block
+> > devices are specified in ZRAM's sys files during swapon.
+> >
+> > It's easy to implement, but not a good idea for upstream at all:
+> > redundant layers, and performance is bad (if not optimized):
+> > - it breaks SYNCHRONIZE_IO, causing a huge slowdown, so we removed the
+> > SYNCHRONIZE_IO completely which actually improved the performance in
+> > every aspect (I've been trying to upstream this for a while);
+> > - ZRAM's block device allocator is just not good (just a bitmap) so we
+> > want to use the SWAP allocator directly (which I'm also trying to
+> > upstream with the swap table series);
+> > - And many other bits and pieces like bio batching are kind of broken,
+>
+> Interesting, is zram doing writeback batching?
 
-Thanks!
+Nope, it even has a comment saying "XXX: A single page IO would be
+inefficient for write". We managed to chain bio on the initial page
+writeback but still not an ideal design.
 
---000000000000f21f990636a7a547
-Content-Type: text/x-patch; charset="US-ASCII"; name="pm-sleep-fix-async-resume.patch"
-Content-Disposition: attachment; filename="pm-sleep-fix-async-resume.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_mbgbsk170>
-X-Attachment-Id: f_mbgbsk170
+> > busy loop due to the ZRAM_WB bit, etc...
+>
+> Hmmm, this sounds like something swap cache can help with. It's the
+> approach zswap writeback is taking - concurrent assessors can get the
+> page in the swap cache, and OTOH zswap writeback back off if it
+> detects swap cache contention (since the page is probably being
+> swapped in, freed, or written back by another thread).
+>
+> But I'm not sure how zram writeback works...
 
-LS0tCiBkcml2ZXJzL2Jhc2UvcG93ZXIvbWFpbi5jIHwgICAgNyArKysrKysrCiAxIGZpbGUgY2hh
-bmdlZCwgNyBpbnNlcnRpb25zKCspCgotLS0gYS9kcml2ZXJzL2Jhc2UvcG93ZXIvbWFpbi5jCisr
-KyBiL2RyaXZlcnMvYmFzZS9wb3dlci9tYWluLmMKQEAgLTYzOCw2ICs2MzgsMTMgQEAKIHN0YXRp
-YyB2b2lkIGRwbV9hc3luY19yZXN1bWVfY2hpbGRyZW4oc3RydWN0IGRldmljZSAqZGV2LCBhc3lu
-Y19mdW5jX3QgZnVuYykKIHsKIAkvKgorCSAqIFByZXZlbnQgcmFjaW5nIHdpdGggZHBtX2NsZWFy
-X2FzeW5jX3N0YXRlKCkgZHVyaW5nIGluaXRpYWwgbGlzdAorCSAqIHdhbGtzIGluIGRwbV9ub2ly
-cV9yZXN1bWVfZGV2aWNlcygpLCBkcG1fcmVzdW1lX2Vhcmx5KCksIGFuZAorCSAqIGRwbV9yZXN1
-bWUoKS4KKwkgKi8KKwlndWFyZChtdXRleCkoJmRwbV9saXN0X210eCk7CisKKwkvKgogCSAqIFN0
-YXJ0IHByb2Nlc3NpbmcgImFzeW5jIiBjaGlsZHJlbiBvZiB0aGUgZGV2aWNlIHVubGVzcyBpdCdz
-IGJlZW4KIAkgKiBzdGFydGVkIGFscmVhZHkgZm9yIHRoZW0uCiAJICoK
---000000000000f21f990636a7a547--
+Yeah, any bit lock design suffers a similar problem (like
+SWAP_HAS_CACHE), I think we should just use folio lock or folio
+writeback in the long term, it works extremely well as a generic
+infrastructure (which I'm trying to push upstream) and we don't need
+any extra locking, minimizing memory / design overhead.
+
+> > - Lacking support for things like effective migration/compaction,
+> > doable but looks horrible.
+> >
+> > So I definitely don't like this band-aid solution, but hey, it works.
+> > I'm looking forward to replacing it with native upstream support.
+> > That's one of the motivations behind the swap table series, which
+> > I think it would resolve the problems in an elegant and clean way
+> > upstreamly. The initial tests do show it has a much lower overhead
+> > and cleans up SWAP.
+> >
+> > But maybe this is kind of similar to the "less optimized form" you
+> > are talking about? As I mentioned I'm already trying to upstream
+> > some nice parts of it, and hopefully replace it with an upstream
+> > solution finally.
+> >
+> > I can try upstream other parts of it if there are people really
+> > interested, but I strongly recommend that we should focus on the
+> > right approach instead and not waste time on that and spam the
+> > mail list.
+>
+> I suppose a lot of this is specific to zram, but bits and pieces of it
+> sound upstreamable to me :)
+>
+> We can wait for YoungJun's patches/RFC for further discussion, but perhap=
+s:
+>
+> 1. A new cgroup interface to select swap backends for a cgroup.
+>
+> 2. Writeback/fallback order either designated by the above interface,
+> or by the priority of the swap backends.
+
+Fully agree, the final interface and features definitely need more
+discussion and collab in upstream...
 
