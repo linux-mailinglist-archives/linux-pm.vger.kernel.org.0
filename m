@@ -1,227 +1,214 @@
-Return-Path: <linux-pm+bounces-28003-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28004-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60505ACC455
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 12:30:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF3B5ACC46C
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 12:35:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66E167A2BA9
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 10:29:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74F513A408D
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 10:35:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F5BD2C3276;
-	Tue,  3 Jun 2025 10:30:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CE3A227E9B;
+	Tue,  3 Jun 2025 10:35:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XRWrZhlF"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="VMFYrqY+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2616F2C3250;
-	Tue,  3 Jun 2025 10:30:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34F353365
+	for <linux-pm@vger.kernel.org>; Tue,  3 Jun 2025 10:35:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748946640; cv=none; b=P33bhLmzI6yxm0rHZoKPEzddEP3QbXQXcoNJijnAcch4xAMNfHA/Nw7vMvHhlfIWox6ZfNK2FJgMVNNfgWpcIp4S4uywBCcOpoTvefJ24K4avS7p6yELF+LoGF2r1ZyinX7AOvFQZofYqcYypgeCN+QYxuZHC8GM1tQef0bdZEQ=
+	t=1748946947; cv=none; b=YG+o25GKPMPMvPK+xJD0BIPArVrdkXiSZaANVh2evJmxBkHLKIzfR3WmGlG/nZQqWm5y8vqzXvRfcD+xx7RfF4Okcu8AqoAGe+FILZRYnR8ETFjt6bkkq+UU8ngNxex8JBDKQLD3CJIMjKQry0E4JFXkbwqV8UH1IKRmcv7smk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748946640; c=relaxed/simple;
-	bh=frmUWxJcLyT+9OJMzPqFcc3Xs+4SBJJpWInxgDDv98Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=n+DqruM1Lq0iImEIT7tK17XcxvS9zjqLT/SuXh5uVfNgAiSqmgvZRG/bOI6VTfcVY3c0QxJeEHV2PCKXi5IYV4mmEzU5D4no2zs+sYthwBGV5BYnuhd0fs4JMu4lpuSgM3B24zjAN5aTOCc3QyHORLFDLbB/fbYm3NnZwmo/11w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XRWrZhlF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97522C4CEEF;
-	Tue,  3 Jun 2025 10:30:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748946639;
-	bh=frmUWxJcLyT+9OJMzPqFcc3Xs+4SBJJpWInxgDDv98Y=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=XRWrZhlFi8Gka4fPY6kdFXmOBi8EDCGCiLmY5WOtLnExm2K2gviX67vQ4N8k9Ch9G
-	 f6txSRaCdVD6S6v9v77GzivGQ5J0PiH2Zlxkf3McoPkz4MeRXCaZoPuEHlNl4/6uyp
-	 dQotvJbadAvgDPBUNoi4eF76foitRdojfkrA9nFrAWGjj/LSFdiKsH0L0v4fAKGB2V
-	 Glj81fLBf/Vc1F15+lag+jO+SilVv7X7OgmUftxRjFl7+uwD40Ee6gksIequ/7+M1S
-	 IfDWQaPNjzMs31qwnPV9BkkdJIl+4Bp+CAS7ApdUUv2R0AtzkuVIgSgDeCpY6EYO17
-	 MtcQT8QRYP1og==
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-736f9e352cbso1633909a34.2;
-        Tue, 03 Jun 2025 03:30:39 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVLPPH2Dkp1jq8oIHKR3lMJ46g8CcjyFEPeqmSmj9l14TpA+fPCHqrz+erq6D5FfV8zgZpe/wf9HCo=@vger.kernel.org, AJvYcCWt0KkA9twghXgpQ5rBmRG8Cptgg/yXP/r7vF8afdbhEvIKlj1xha7tckyEL5qeSGqJyqjPWDSSx5OW7j8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXUt2skaBLtzy/Rq7klWlE5LnHACwsTHxVINPkmgjZz8rCYlxr
-	TNqD0u8urWJ6YUM2TZmhUZMTrPft9uOp94Tgu0wZqU/KdbQJzhqJUyYxWhyTmic5G9jsDHwGEJm
-	IOSDl1ew27+ehc8UB33Ngh8X++rDid48=
-X-Google-Smtp-Source: AGHT+IH3LQDAgoNyB/dZPAtQuqhlxhHgvWEPxw5r+lvNETc+ILDVwtyZSgVA8YP34jm/CBQHtJ520UkUpUjBGuFgR5w=
-X-Received: by 2002:a05:6871:d20f:b0:2e9:e5e:8456 with SMTP id
- 586e51a60fabf-2e92a3aef3bmr9037337fac.22.1748946638886; Tue, 03 Jun 2025
- 03:30:38 -0700 (PDT)
+	s=arc-20240116; t=1748946947; c=relaxed/simple;
+	bh=8BSx8hG7e+Sa8wiL1xLVnVmH9RmhWOKPCzG1Q2KWa1w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ld/rrh8QKylJd6+uhwAzlRCJH45bWkza8Yj2R4Epbf6/L+fIaO2bvyzCX0yeHxJnrxdfDvyj5qAJukspT60/oQfE2do6I4geUcOXySnCycwRMs3WC+PipFG5hQpxqdHzRErpICfu0AZAcBD2RYitoKzOnUS4pQf8e3XCL04DBYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=VMFYrqY+; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5539JJ7P013521
+	for <linux-pm@vger.kernel.org>; Tue, 3 Jun 2025 10:35:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=ENKaMLcnNd+HsLvJhufWlAMm
+	Y2ISC1qjYbmzZ02Ak3U=; b=VMFYrqY+ND1+jxv77tSBuqVeY2Krl7EEQjr9Jqjz
+	vTaT7wgPsyY3cJ6VI12gFDtHLMKgaQOfHNfaJdriKnhB1fRn6dUfhVYfOMUInPZA
+	+LrG7ltCNcEolV4aYwIiNjlS8zuiMmy4qmLcQC5HJ6wzLEBXgyl4lyC2ETWxnFnl
+	LQdTyzw+wR66fC7nOOdhfeU3l+i7Lyzf7bWsab1wvQjtuKH7Jm8MgnWkHJuggWpG
+	as7g3T09Hn6OIvQmvrKXVmc0GMJjV2VnLp1X++m/yaIDwWZbvcjPePVRicG8RBkX
+	RQ/VIy0axCOIx9v1muMeBpIYjik5cLmLaPUmyojUQsQPuA==
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 471g8nj8jy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 03 Jun 2025 10:35:44 +0000 (GMT)
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6fac216872cso107177506d6.2
+        for <linux-pm@vger.kernel.org>; Tue, 03 Jun 2025 03:35:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748946943; x=1749551743;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ENKaMLcnNd+HsLvJhufWlAMmY2ISC1qjYbmzZ02Ak3U=;
+        b=NepMaIp8ja1bclRsYHrx+xW782SJLIJfAHXqPlm4qgopiYr1YkhTh0PrphSKDeVphY
+         rMn4XXAf1Fn2B2J2mWm7Q3yFO1ZrcaZaTzcxbcw89F3QEBS6Pv91R7/ZuzJwgld3UFIY
+         5/OCS/nrZJ1Ohkac4VQeW9CvGDwA4GkqCR332eTbUwgiTgAiSztn3atyCsycgtben84q
+         Ebg65m6xnJSBzp+T/mdyl+gvc7oDSokkACsPF8HJS64m/toMErDb3pIHQ6JD/aOmvwCy
+         1NwRf0lnuC8eyKlvdofcXH0wlU1OF77Th8bZ8rEjtQAnbA2YVgZM1LkEt+AEdIiJMwZL
+         9mVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW9xZjge3xnEiaxHU21uhMrHsuyIVzzqg8LzVQJDaI7F1i1EEmI01NqKMTfCmBnWr3k5KqV72HRkg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAXY1M+4b47qK2OQCpG5XJn59+A0r+adx35RS0fP1eTn+x30vC
+	xJXhTqJuPVltCK/ooG+WVn1Kj25AiiL9n7z0+Dmm70p1JSX+cqGC41jGDQw/mON5BbVdCqhaeoF
+	J4sZ3Rh0BwMuDh4I/CNXD7Y/iruCFqIwzsvmp1S+uSgSO7r4WpkngwBaWiis8yg==
+X-Gm-Gg: ASbGncv6ZJCOwg5dXo4RJfrzGW0WmzoLkQp7UF3beOwKo1dvAs5b4ABEX+rZafUAqr4
+	3iHFr4F60eahmA2qlEzJNUfKB1aHlCq/Diigmdwp4n1+Zv9fwgSmA2UYjanwTm1f0aXlP5jzrxi
+	tKOR+HtgLOo6DwW5K9395NAoD4CoduL6L7zAVhCHDKCPR5ZkfoO+S/LfPqvKQSfoj1d2AhYA/hK
+	UXH2i1g/THu915bTGtA4zdWHLuRAqwGb272pdl2K/aMKVaIOrwUkzpWn+HbDoivomO4fWg6OWVv
+	QJWTfs9m+6ATuPlO1wdlyIZakKrJqN8iea1V/rfT8lb0xhOtR/arddesuDtr/dGjAxWlCpqSgyo
+	=
+X-Received: by 2002:a05:6214:2a8a:b0:6fa:cdc9:8b01 with SMTP id 6a1803df08f44-6fad190b279mr276523636d6.19.1748946943297;
+        Tue, 03 Jun 2025 03:35:43 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE6+xnPN44BmihhZOTq8EzlP77OCBjKRSNvGyN14bFyu6GdHg2oZCIDt0Ztgee2827hAufidA==
+X-Received: by 2002:a05:6214:2a8a:b0:6fa:cdc9:8b01 with SMTP id 6a1803df08f44-6fad190b279mr276522996d6.19.1748946942829;
+        Tue, 03 Jun 2025 03:35:42 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5533791034asm1871748e87.108.2025.06.03.03.35.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jun 2025 03:35:41 -0700 (PDT)
+Date: Tue, 3 Jun 2025 13:35:40 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
+        David Collins <david.collins@oss.qualcomm.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 2/8] power: supply: core: Add state_of_health power
+ supply property
+Message-ID: <p5nxjuexggzxttislcaum7vomawnq5fncos7itfib6ysvy6a4k@d5ywmfpqyk3s>
+References: <20250530-qcom_battmgr_update-v2-0-9e377193a656@oss.qualcomm.com>
+ <20250530-qcom_battmgr_update-v2-2-9e377193a656@oss.qualcomm.com>
+ <6oixvnhihgjucqaovkayzm6cpi35jfmtwmm67wa6h4nlmhr6w5@ggb7auvjzos2>
+ <cd2964b0-e28e-4ddb-b319-9b65fb78b73c@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <10629535.nUPlyArG6x@rjwysocki.net> <3541233.QJadu78ljV@rjwysocki.net>
- <aD2U3VIhf8vDkl09@debian.local> <CAJZ5v0h-nrVamqiAJ957aYjHqaeAZUUW7BRi0WxPgCFc40M5cQ@mail.gmail.com>
- <7f0e2865-d35e-4a13-8617-8679afb4b23f@kernel.org> <CAJZ5v0gL3rW8dOxXdPWYjZuq5kAaD8qTa4vZ5++k9+0WniNAdQ@mail.gmail.com>
- <CAJZ5v0jDZQaR8S6Kn_RoXHBU86+tpjp=qgyxm5h03YEe2S=nPg@mail.gmail.com>
- <aD7L0RD4HT-mEtBc@debian.local> <CAJZ5v0h65Gt1Fw35vp2k8kKu62+goCD8WF8u-tvhfWW6a7xHxQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0h65Gt1Fw35vp2k8kKu62+goCD8WF8u-tvhfWW6a7xHxQ@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 3 Jun 2025 12:30:27 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0ggPHhYcdNos2o8savvq+-zpPTaQunjOkR36k3VwF3_CA@mail.gmail.com>
-X-Gm-Features: AX0GCFsl9a7Ec1RHwkeTWNFLC6M25FA_DxwNDF1aT_u53yEStxj33cEuzPAQw8c
-Message-ID: <CAJZ5v0ggPHhYcdNos2o8savvq+-zpPTaQunjOkR36k3VwF3_CA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] PM: sleep: Suspend async parents after suspending children
-To: Chris Bainbridge <chris.bainbridge@gmail.com>
-Cc: Mario Limonciello <superm1@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Johan Hovold <johan@kernel.org>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
-	Jon Hunter <jonathanh@nvidia.com>, Saravana Kannan <saravanak@google.com>, 
-	amd-gfx@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cd2964b0-e28e-4ddb-b319-9b65fb78b73c@oss.qualcomm.com>
+X-Proofpoint-GUID: Hxm-LW2Mq6J5kP8Q7DDM1ElrCd3eEQmc
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjAzMDA5MiBTYWx0ZWRfX3aKw91n6R9GV
+ AtbI36O5HSIXAhu8W1Cuu3i0CFfzbnhoL3/GkhbuGYAaXxNMu5cnpg3msok9GirrwAipD/WT6Ce
+ nCEfXJX7Ju/0lkvM4TQiaGicfg17Cq/alfPGVFIdW5kVfZlBR/1ntL5o9SzZfl9A13zCelIDJ+G
+ XKFwCEx3QqSNCsvpIRggO2JYgWKTWnBOvRyOWs+jwDfEXHcpYKCd1XUqpvL8fT0H/3gchQvehg7
+ OdnPgPa76tntNpINh6nCglxX7RF5fTclTKie2KrH1nZL3RKJCSA6LPm/02vu43lD4R4pYhthFe4
+ mUdNIYEIl1bZW1KnBXvpZoe4mQhfB0TgcqeIB0LG5zIGy6WaQ563jkngEm39P7tBDFgoAnrYKH5
+ VEBP1O2qnMBfgQRRtv917M4D9uPsLSA1ndlXUgO52wfvt2ZRvtqaoezTBbhuNN3kyYyywZHi
+X-Proofpoint-ORIG-GUID: Hxm-LW2Mq6J5kP8Q7DDM1ElrCd3eEQmc
+X-Authority-Analysis: v=2.4 cv=UphjN/wB c=1 sm=1 tr=0 ts=683ed000 cx=c_pps
+ a=wEM5vcRIz55oU/E2lInRtA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=6IFa9wvqVegA:10 a=EUspDBNiAAAA:8 a=VwQbUJbxAAAA:8 a=gC4Pu52S1TLJhMqEWYgA:9
+ a=CjuIK1q_8ugA:10 a=OIgjcC2v60KrkQgK7BGD:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-03_01,2025-06-02_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 spamscore=0 impostorscore=0 lowpriorityscore=0
+ phishscore=0 mlxlogscore=999 clxscore=1015 malwarescore=0 adultscore=0
+ bulkscore=0 mlxscore=0 suspectscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2506030092
 
-On Tue, Jun 3, 2025 at 12:29=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
->
-> On Tue, Jun 3, 2025 at 12:17=E2=80=AFPM Chris Bainbridge
-> <chris.bainbridge@gmail.com> wrote:
-> >
-> > On Tue, Jun 03, 2025 at 11:38:37AM +0200, Rafael J. Wysocki wrote:
-> > >
-> > > Chris, please check if the attached patch helps.  I'm going to post i=
-t
-> > > as a fix anyway later today, but it would be good to verify that it i=
-s
-> > > sufficient.
-> >
-> > This did not fix my test case, pstore crash log was:
->
-> OK, so can you please enable PM debug messages:
->
-> # echo 1 > /sys/power/pm_debug/messages
+On Tue, Jun 03, 2025 at 12:50:18PM +0800, Fenglin Wu wrote:
+> 
+> On 6/2/2025 2:17 PM, Dmitry Baryshkov wrote:
+> > On Fri, May 30, 2025 at 03:35:07PM +0800, Fenglin Wu via B4 Relay wrote:
+> > > From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+> > > 
+> > > Add state_of_health power supply property to represent battery
+> > > health percentage.
+> > > 
+> > > Signed-off-by: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+> > > ---
+> > >   Documentation/ABI/testing/sysfs-class-power | 10 ++++++++++
+> > >   drivers/power/supply/power_supply_sysfs.c   |  1 +
+> > >   include/linux/power_supply.h                |  1 +
+> > >   3 files changed, 12 insertions(+)
+> > > 
+> > > diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+> > > index 22a565a6a1c509461b8c483e12975295765121d6..74e0d4d67467500c3cd62da3ae0b2e4a67e77680 100644
+> > > --- a/Documentation/ABI/testing/sysfs-class-power
+> > > +++ b/Documentation/ABI/testing/sysfs-class-power
+> > > @@ -562,6 +562,16 @@ Description:
+> > >   		Valid values: Represented in microohms
+> > > +What:		/sys/class/power_supply/<supply_name>/state_of_health
+> > > +Date:		May 2025
+> > > +Contact:	linux-arm-msm@vger.kernel.org
+> > > +Description:
+> > > +		Reports battery power supply state of health in percentage.
+> > > +
+> > > +		Access: Read
+> > > +
+> > > +		Valid values: 0 - 100 (percent)
+> > What does it mean that battery has 77% of health?
+> 
+> I will update this to explain it better:
+> 
+> Reports battery power supply state of health in percentage, indicating that the maximum charge capacity has degraded to that percentage of its original designed capacity.
 
-This should be
+Which basically means that we don't need it in the first place, as we
+can read capacity_full and capacity_full_design (or energy_full /
+energy_full_design) and divide one onto another.
 
-# echo 1 > /sys/power/pm_debug_messages
+> 
+> > > +
+> > >   **USB Properties**
+> > >   What:		/sys/class/power_supply/<supply_name>/input_current_limit
+> > > diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+> > > index dd829148eb6fda5dcd7eab53fc70f99081763714..12af0d0398822ff23d8970f6bdc8e3ef68081a1d 100644
+> > > --- a/drivers/power/supply/power_supply_sysfs.c
+> > > +++ b/drivers/power/supply/power_supply_sysfs.c
+> > > @@ -221,6 +221,7 @@ static struct power_supply_attr power_supply_attrs[] __ro_after_init = {
+> > >   	POWER_SUPPLY_ATTR(MANUFACTURE_MONTH),
+> > >   	POWER_SUPPLY_ATTR(MANUFACTURE_DAY),
+> > >   	POWER_SUPPLY_ATTR(RESISTANCE),
+> > > +	POWER_SUPPLY_ATTR(STATE_OF_HEALTH),
+> > >   	/* Properties of type `const char *' */
+> > >   	POWER_SUPPLY_ATTR(MODEL_NAME),
+> > >   	POWER_SUPPLY_ATTR(MANUFACTURER),
+> > > diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> > > index de3e88810e322546470b21258913abc7707c86a7..dd0108940231352ac6c6f0fa962d1ea904d81c7a 100644
+> > > --- a/include/linux/power_supply.h
+> > > +++ b/include/linux/power_supply.h
+> > > @@ -175,6 +175,7 @@ enum power_supply_property {
+> > >   	POWER_SUPPLY_PROP_MANUFACTURE_MONTH,
+> > >   	POWER_SUPPLY_PROP_MANUFACTURE_DAY,
+> > >   	POWER_SUPPLY_PROP_RESISTANCE,
+> > > +	POWER_SUPPLY_PROP_STATE_OF_HEALTH,
+> > >   	/* Properties of type `const char *' */
+> > >   	POWER_SUPPLY_PROP_MODEL_NAME,
+> > >   	POWER_SUPPLY_PROP_MANUFACTURER,
+> > > 
+> > > -- 
+> > > 2.34.1
+> > > 
+> > > 
 
-sorry.
-
-> and enabled dynamic debug in drivers/base/power/main.c:
->
-> # echo "file drivers/base/power/main.c +p" > /proc/dynamic_debug/control
->
-> repeat the test and capture the log?
->
-> > <6>[  100.690222] Freezing remaining freezable tasks completed (elapsed=
- 0.001 seconds)
-> > <6>[  100.690392] printk: Suspending console(s) (use no_console_suspend=
- to debug)
-> > <7>[  100.949462] PM: suspend of devices aborted after 1.796 msecs
-> > <7>[  100.949469] PM: start suspend of devices aborted after 258.160 ms=
-ecs
-> > <3>[  100.949472] PM: Some devices failed to suspend, or early wake eve=
-nt detected
-> > <4>[  100.949565]  slab kmalloc-cg-4k start ffff916fede97000 pointer of=
-fset 1936 size 4096
-> > <3>[  100.949589] list_add corruption. prev->next should be next (fffff=
-fff8f877180), but was ffff916f8ed40998. (prev=3Dffff916fede97790).
-> > <4>[  100.949600] ------------[ cut here ]------------
-> > <2>[  100.949601] kernel BUG at lib/list_debug.c:32!
-> > <4>[  100.949607] Oops: invalid opcode: 0000 [#1] SMP
-> > <4>[  100.949610] CPU: 13 UID: 0 PID: 3703 Comm: amd_s2idle.py.o Not ta=
-inted 6.15.0-09119-g98079dc6057f #438 PREEMPT(voluntary)
-> > <4>[  100.949613] Hardware name: HP HP Pavilion Aero Laptop 13-be0xxx/8=
-916, BIOS F.17 12/18/2024
-> > <4>[  100.949614] RIP: 0010:__list_add_valid_or_report+0x90/0xa0
-> > <4>[  100.949619] Code: 98 8a ff 0f 0b 48 89 f7 48 89 34 24 e8 69 c6 c5=
- ff 48 8b 34 24 48 c7 c7 30 53 40 8f 48 8b 16 48 89 f1 48 89 de e8 50 98 8a=
- ff <0f> 0b 90 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 f3 0f 1e fa 41 54
-> > <4>[  100.949621] RSP: 0018:ffffa0f6c715fb68 EFLAGS: 00010246
-> > <4>[  100.949622] RAX: 0000000000000075 RBX: ffffffff8f877180 RCX: 0000=
-000000000027
-> > <4>[  100.949623] RDX: 0000000000000000 RSI: 0000000000000001 RDI: ffff=
-91724689e180
-> > <4>[  100.949624] RBP: ffffffff8f876140 R08: 0000000000000001 R09: 0000=
-000000000000
-> > <4>[  100.949625] R10: 0000000000000001 R11: 0000000000000006 R12: 0000=
-000000000010
-> > Oops#1 Part3
-> > <4>[  100.949626] R13: 000000177d0d8fb9 R14: ffff916fede97790 R15: ffff=
-916f8e564820
-> > <4>[  100.949627] FS:  00007f076a109100(0000) GS:ffff9172b67c7000(0000)=
- knlGS:0000000000000000
-> > <4>[  100.949628] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > <4>[  100.949629] CR2: 00007fa8ce10f61c CR3: 00000001b80bb000 CR4: 0000=
-000000f50ef0
-> > <4>[  100.949630] PKRU: 55555554
-> > <4>[  100.949630] Call Trace:
-> > <4>[  100.949631]  <TASK>
-> > <4>[  100.949632]  dpm_resume+0x139/0x350
-> > <4>[  100.949636]  dpm_resume_end+0x11/0x20
-> > <4>[  100.949639]  suspend_devices_and_enter+0x18e/0x9f0
-> > <4>[  100.949642]  pm_suspend.cold+0x273/0x2cf
-> > <4>[  100.949645]  state_store+0x6c/0xd0
-> > <4>[  100.949647]  kernfs_fop_write_iter+0x194/0x250
-> > <4>[  100.949650]  vfs_write+0x254/0x550
-> > <4>[  100.949654]  ksys_write+0x71/0xe0
-> > <4>[  100.949656]  do_syscall_64+0x97/0x3d0
-> > <4>[  100.949658]  ? __lock_acquire+0x469/0x2200
-> > <4>[  100.949662]  ? __handle_mm_fault+0xaa7/0xf70
-> > <4>[  100.949665]  ? lock_acquire+0xc9/0x2d0
-> > <4>[  100.949667]  ? find_held_lock+0x2b/0x80
-> > <4>[  100.949669]  ? rcu_read_unlock+0x17/0x60
-> > <4>[  100.949672]  ? lock_release+0xd1/0x2a0
-> > <4>[  100.949674]  ? find_held_lock+0x2b/0x80
-> > <4>[  100.949676]  ? exc_page_fault+0x90/0x240
-> > <4>[  100.949678]  ? lock_release+0xd1/0x2a0
-> > <4>[  100.949681]  ? do_user_addr_fault+0x36e/0x690
-> > <4>[  100.949684]  ? lockdep_hardirqs_on_prepare+0xd7/0x170
-> > <4>[  100.949686]  entry_SYSCALL_64_after_hwframe+0x4b/0x53
-> > <4>[  100.949688] RIP: 0033:0x7f076a199687
-> > <4>[  100.949690] Code: 48 89 fa 4c 89 df e8 58 b3 00 00 8b 93 08 03 00=
- 00 59 5e 48 83 f8 fc 74 1a 5b c3 0f 1f 84 00 00 00 00 00 48 8b 44 24 10 0f=
- 05 <5b> c3 0f 1f 80 00 00 00 00 83 e2 39 83 fa 08 75 de e8 23 ff ff ff
-> > Oops#1 Part2
-> > <4>[  100.949691] RSP: 002b:00007ffd3a7a3990 EFLAGS: 00000202 ORIG_RAX:=
- 0000000000000001
-> > <4>[  100.949693] RAX: ffffffffffffffda RBX: 00007f076a109100 RCX: 0000=
-7f076a199687
-> > <4>[  100.949694] RDX: 0000000000000003 RSI: 0000000008d3e090 RDI: 0000=
-000000000004
-> > <4>[  100.949694] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000=
-000000000000
-> > <4>[  100.949695] R10: 0000000000000000 R11: 0000000000000202 R12: 0000=
-7f076a109068
-> > <4>[  100.949696] R13: 0000000000000004 R14: 0000000000a7e4f0 R15: 0000=
-000000a50af8
-> > <4>[  100.949700]  </TASK>
-> > <4>[  100.949700] Modules linked in: snd_seq_dummy snd_hrtimer snd_seq =
-snd_seq_device xt_conntrack nft_chain_nat xt_MASQUERADE nf_nat nf_conntrack=
-_netlink nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 xfrm_user xfrm_algo xt_=
-addrtype nft_compat nf_tables br_netfilter bridge stp llc ccm overlay qrtr =
-rfcomm cmac algif_hash algif_skcipher af_alg bnep binfmt_misc ext4 mbcache =
-jbd2 nls_ascii nls_cp437 vfat fat snd_acp3x_rn snd_soc_dmic snd_acp3x_pdm_d=
-ma snd_sof_amd_rembrandt snd_sof_amd_acp snd_sof_pci snd_sof_xtensa_dsp snd=
-_sof snd_sof_utils snd_ctl_led snd_soc_core snd_compress snd_hda_codec_real=
-tek iwlmvm snd_pci_ps snd_hda_codec_generic snd_soc_acpi_amd_match snd_hda_=
-scodec_component snd_rpl_pci_acp6x snd_hda_codec_hdmi intel_rapl_msr uvcvid=
-eo snd_acp_pci mac80211 btusb snd_hda_intel intel_rapl_common videobuf2_vma=
-lloc snd_amd_acpi_mach btrtl snd_intel_dspcfg videobuf2_memops libarc4 kvm_=
-amd snd_acp_legacy_common btintel snd_hda_codec uvc videobuf2_v4l2 snd_hwde=
-p snd_pci_acp6x btbcm kvm videodev snd_hda_core snd_pci_acp5x btmtk
-> > Oops#1 Part1
-> > <4>[  100.949738]  iwlwifi snd_rn_pci_acp3x videobuf2_common snd_pcm hp=
-_wmi bluetooth irqbypass sg snd_acp_config mc snd_timer platform_profile ra=
-pl cfg80211 snd_soc_acpi pcspkr sparse_keymap snd wmi_bmof ee1004 snd_pci_a=
-cp3x soundcore k10temp ccp rfkill battery ac evdev joydev acpi_tad amd_pmc =
-msr parport_pc ppdev lp parport nvme_fabrics efi_pstore configfs nfnetlink =
-efivarfs ip_tables x_tables autofs4 crc32c_cryptoapi btrfs blake2b_generic =
-xor raid6_pq dm_crypt dm_mod sd_mod uas usb_storage scsi_mod scsi_common am=
-dgpu drm_client_lib i2c_algo_bit drm_ttm_helper ttm drm_panel_backlight_qui=
-rks drm_exec drm_suballoc_helper amdxcp drm_buddy gpu_sched hid_multitouch =
-drm_display_helper hid_generic nvme xhci_pci drm_kms_helper ucsi_acpi sp510=
-0_tco typec_ucsi ghash_clmulni_intel cec i2c_hid_acpi nvme_core xhci_hcd wa=
-tchdog roles sha512_ssse3 rc_core amd_sfh i2c_hid nvme_keyring usbcore i2c_=
-piix4 typec video aesni_intel serio_raw crc16 hid nvme_auth i2c_smbus fan u=
-sb_common drm button wmi
-> > <4>[  100.949784] ---[ end trace 0000000000000000 ]---
+-- 
+With best wishes
+Dmitry
 
