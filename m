@@ -1,137 +1,190 @@
-Return-Path: <linux-pm+bounces-28023-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28024-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78F9CACC7FA
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 15:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 858F1ACC818
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 15:41:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 335583A45F4
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 13:36:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AC433A2AE8
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 13:40:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5BA0230BE3;
-	Tue,  3 Jun 2025 13:36:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF47F235071;
+	Tue,  3 Jun 2025 13:41:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VrwXo6N6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n4t4mUV4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEE51231826;
-	Tue,  3 Jun 2025 13:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BDC822FF22;
+	Tue,  3 Jun 2025 13:41:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748957816; cv=none; b=ZvoHiW9PAMvUXQuzbBTpdFg2YrRJBB49Z03Iz6hd6qdVL9qV9lqwi0Nx4To3ZI3ua/bM+bMCq03yM7NgW0iIXNX0Jm+LA50FTskPj+O+N/U9y9uzT0nfW4Oa8dKCSPCpgBqSsK7knJzhlCmEckyGeb9S5sbXtHXITECWqpVQPTE=
+	t=1748958075; cv=none; b=gVvwhNOtflFbBmswkzetoUjt24ZTiE3JIIMtkJtW4TY3oHC3nfJ1tz10CHRkLoUsRwu5HSt7FXecQflqz+zchKbuWJ6tKRlXDAM6yECMKJFv4EHFIJa4BcbORFlfwB4227XNUxJfEZkdL7ccb4LJp+R/x7yzmMW6gDHBl0TBqXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748957816; c=relaxed/simple;
-	bh=le5QR41xeH5K5QxGsVQri/RDT/2BLTURcIV+cKyLXfg=;
+	s=arc-20240116; t=1748958075; c=relaxed/simple;
+	bh=Ld/DmiOsr/GIjO8Gve7Gwa5r9+0LnmJEzLNU8zeFIpw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PeYyJVriG7ljD1DlnnfTHVfCll6Rf7Aqs7dOhc3w0mbpvORBFzeOxak7D2NPc5F5+aoTVikH8AD0n2Iz8yRBp7ymE83YtBUgzszk6oyxnpw65UktYV5b9oE8lPGIr9uD6AHC1xPOTO19FcVTgq/oNkBpulTbcm2hgYo5mslgArk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VrwXo6N6; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43cfe63c592so65365625e9.2;
-        Tue, 03 Jun 2025 06:36:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748957813; x=1749562613; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=XwaOA2UFIdL6uhmEEF3zq5uKFSYlQf1QNo+y/xH05aY=;
-        b=VrwXo6N6GUzTFMR8BX0VInjiMpGuyzAj6kv98URXp8LjZi3vZ+OSJ1XsiFCkNqXxMM
-         q0ic76K1o3+QMasx0MkEHwWtEMVfSAsbPpt4G3Y2DfOim9VOj0oVcrBM5N8dVNAir4us
-         3t5t445VP333qrC46zMudLH5VqHJJUGhrN7gLgohJp2RAfyyIHVYVYvdPJGcExNuLM/Y
-         rS7ikHuMkh4wHyraUnKlVG/uMB0x0mSJGvPU3xoson8m9KPdYQ0YL7EZmyaBC+c8FBCk
-         5by/MJg7jP/6LEfFLxX37sJZusQbtt8QL9qaMK9pm0vBYrskTjMjXa2W74bxEw7lTpBz
-         xtzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748957813; x=1749562613;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XwaOA2UFIdL6uhmEEF3zq5uKFSYlQf1QNo+y/xH05aY=;
-        b=ZmE9C6tor85KNQwCo4s3ELO1Uc356q40BkPlgxh7irTGqZ73f1mIrusRvrm9sbEyyM
-         sJ8tU5th43k1ZG5nbtHXtzOARdh9YU2q4r1wqm4rLxF22ZmXmJ4qCS9fEnPSTwqH6zg8
-         Oxvnt4AQ/cEZpFDuaAz2yHckxDxcwwgAZPYkqtxbOKyQYVCqbY1gFFCqwuXQ5FzXol4K
-         aIUXNwZle/WzxNUzI3rta6WozS2i/GANTMNy9Q8E6UP7Wu7gojpRRwVYfXg5wT6ONupC
-         UicGu8xMq/QUBUYzN44GT9Qk+Ldu9WHa+rHkLcwNL23y6MO1ieWCAZ3Okm40Lg5Xd+gS
-         D26A==
-X-Forwarded-Encrypted: i=1; AJvYcCWJKZ4Tq2uRUjbReyrd4FniYg7LoFdcjZ1Cs10eX7IykFwsHFgND+sDwZoFGX7tik38a10q5OYQY8g=@vger.kernel.org, AJvYcCWyz7nebBLlRQZ8D41507tY21wHomCFVFc4A5XGDHV2JvPP7H3CVRIuBQx+FTaRU+bb9MrCubRDhkxg+A0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzbr6KpyLSTrlW+qhYKUOqlNvon074Es8AjXCZJH/JVtZ5PrGEb
-	7iJftdaWCxEsqCNB17E38Njt8Vukbxze7c/cd1BNVWdzB8WCU/EaajfK
-X-Gm-Gg: ASbGncvUeRrKepyuXl2Ia7xNMSsFCk0rDk2twP+Ci4n1ZBp7P3dn5Giv/93sIsfeHJI
-	fRFObntnWanamxY+10KN4L63uBpFlou/kEo0bpaLzcYaHrXT/EA9EFjkBXjK2OKx5mC7fTbJIan
-	SksAmP+HnU8woyw4Y9Xvq+hIDXXxIWprpBMv7ttq+y6j6zSHHhX68VybafbX4gNnZkhojL12mOM
-	1gxdZjBSHXSG35YwKF0FxaMOWq9wj/Jk04hLrUGB866TW1sO6mdKJQZTfv2L8ndqWWPypNztBfF
-	CzIyUdNubouToJVANQuDQlOXndng9dHPxwM05UV1YNEAfqblYF5UtRR6QZ59
-X-Google-Smtp-Source: AGHT+IHlffBpVFQtzIlEFJvBh6YUPRlNSnuEKeo8Dt5LtNWl5139bqwkGJfzkGnuetqW1tpQrNzwAg==
-X-Received: by 2002:a05:600c:8b11:b0:450:d4ad:b7de with SMTP id 5b1f17b1804b1-4511ecb9cd9mr122631155e9.3.1748957811494;
-        Tue, 03 Jun 2025 06:36:51 -0700 (PDT)
-Received: from debian.local ([81.78.104.57])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-450d7fa27b4sm159437275e9.15.2025.06.03.06.36.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jun 2025 06:36:50 -0700 (PDT)
-Date: Tue, 3 Jun 2025 14:36:48 +0100
-From: Chris Bainbridge <chris.bainbridge@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Mario Limonciello <superm1@kernel.org>,
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
-	Linux PM <linux-pm@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Johan Hovold <johan@kernel.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	Saravana Kannan <saravanak@google.com>,
-	amd-gfx@lists.freedesktop.org
-Subject: Re: [PATCH v3 2/5] PM: sleep: Suspend async parents after suspending
- children
-Message-ID: <aD76cCE5qyALjKHc@debian.local>
-References: <CAJZ5v0jDZQaR8S6Kn_RoXHBU86+tpjp=qgyxm5h03YEe2S=nPg@mail.gmail.com>
- <aD7L0RD4HT-mEtBc@debian.local>
- <CAJZ5v0h65Gt1Fw35vp2k8kKu62+goCD8WF8u-tvhfWW6a7xHxQ@mail.gmail.com>
- <CAJZ5v0ggPHhYcdNos2o8savvq+-zpPTaQunjOkR36k3VwF3_CA@mail.gmail.com>
- <CAJZ5v0gF=ewooE0cUrNfe5_inhnzq6bqw8VTjkFwr56_wrptJQ@mail.gmail.com>
- <CAJZ5v0hpJSVdiCN29=kbV8KfgU1y1d3hFfshtBoMpVFXf+LvBQ@mail.gmail.com>
- <aD7nOMP3xA9BR781@debian.local>
- <CAJZ5v0gAcohRWuSZbFWvyfAU9Vjc7nRyj+AFRYQ7hcGEXdPxyQ@mail.gmail.com>
- <CAP-bSRbVjcXBvxDT6ZQuoRB+JF6A4LhdMVnNqnaQC0bg-xg2BQ@mail.gmail.com>
- <CAJZ5v0gTRtPzrROdkxRjTeXv4BsRyUkyGpCWmh-gHNx3X2L9RA@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=uwwFrJbRu+zvCyS0e+DOGZlAh5X9IIw+eJfUBfK69XmTenu4TGmFwdC43siCacI1qsQJWBlmCv624r1AlJr4sk677qJ2rdHdZTxhlsNA/uHtwNXSeQkm9P7e9+qn0rn/OYPR3gycyYLEzelfftB/0e3OEP5shFGxOnlNTUEusvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n4t4mUV4; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1748958074; x=1780494074;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ld/DmiOsr/GIjO8Gve7Gwa5r9+0LnmJEzLNU8zeFIpw=;
+  b=n4t4mUV4Egsa9n0z+ZRTTESCOnMD9YG83JaD6l/DRQ5V5amUaa7NEALD
+   6kxOEnLPxHlg4bwhny/x8N2/eOMoEX5EDeG8gW7QPbuaJKWiZYZuotzhD
+   B+gRrJyodcqCaDda21soXegjpF9Jgz2ud+GNRdr9ww91AXcpcRMcp66jn
+   ihqJ3N3zoDFcVmof0Q1faNadE0mx83/e79hvlLKfPARaHRExuxSuUClV3
+   PyaUISbhePp1RRDB5/+H2gnZyRWxeVF/uvJXgaoFV/9WNU4lJhdoB6rEi
+   th9W5vz9KkbUBa5DunFMr/A+j9k1zZxIkzki4jo3DVovcprhHlomLGVmI
+   A==;
+X-CSE-ConnectionGUID: jX+4bTatRoOH68ovH/7cKA==
+X-CSE-MsgGUID: RH2MfgJcRBqDKPEv309iMw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11453"; a="50693253"
+X-IronPort-AV: E=Sophos;i="6.16,206,1744095600"; 
+   d="scan'208";a="50693253"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2025 06:41:13 -0700
+X-CSE-ConnectionGUID: Ksv9muBGQaGp28i285/M4Q==
+X-CSE-MsgGUID: Xh9d85mtRBWw5r1/a3RPuA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,206,1744095600"; 
+   d="scan'208";a="145823921"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 03 Jun 2025 06:41:08 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uMRt4-0002Sv-1r;
+	Tue, 03 Jun 2025 13:41:06 +0000
+Date: Tue, 3 Jun 2025 21:40:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: "irving.ch.lin" <irving-ch.lin@mediatek.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, nfraprado@collabora.com
+Cc: oe-kbuild-all@lists.linux.dev, angelogioacchino.delregno@collabora.com,
+	Project_Global_Chrome_Upstream_Group@mediatek.com,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-pm@vger.kernel.org, netdev@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	Irving lin <irving-ch.lin@mediatek.corp-partner.google.com>
+Subject: Re: [1/5] clk: mt8189: Porting driver for clk
+Message-ID: <202506032107.zewlKCY5-lkp@intel.com>
+References: <20250602083624.1849719-1-irving-ch.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0gTRtPzrROdkxRjTeXv4BsRyUkyGpCWmh-gHNx3X2L9RA@mail.gmail.com>
+In-Reply-To: <20250602083624.1849719-1-irving-ch.lin@mediatek.com>
 
-On Tue, Jun 03, 2025 at 03:04:33PM +0200, Rafael J. Wysocki wrote:
-> On Tue, Jun 3, 2025 at 2:27 PM Chris Bainbridge
-> <chris.bainbridge@gmail.com> wrote:
-> >
-> > On Tue, 3 Jun 2025 at 13:24, Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > >
-> > > > This patch does fix the list corruption, but the "Unbalanced
-> > > > pm_runtime_enable" still occurs:
-> > >
-> > > Have you applied it together with the previous patch?
-> >
-> > Yes
-> 
-> So it looks like some devices have power.is_suspended set from the
-> previous cycle which causes device_resume() to attempt to resume them
-> even though they have not been suspended in the current cycle yet.
-> 
-> Please try the attached patch in addition to the previous 2 patches.
-> 
-> Thanks!
+Hi irving.ch.lin,
 
-That fixed it. Passed 30 attempted suspends without error.
+kernel test robot noticed the following build warnings:
 
-Reported-and-tested-by: Chris Bainbridge <chris.bainbridge@gmail.com>
+[auto build test WARNING on clk/clk-next]
+[also build test WARNING on linus/master v6.15 next-20250530]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/irving-ch-lin/clk-mt8189-Porting-driver-for-clk/20250603-105623
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20250602083624.1849719-1-irving-ch.lin%40mediatek.com
+patch subject: [1/5] clk: mt8189: Porting driver for clk
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20250603/202506032107.zewlKCY5-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250603/202506032107.zewlKCY5-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506032107.zewlKCY5-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/clk/mediatek/clk-bringup.c: In function '__bring_up_enable':
+   drivers/clk/mediatek/clk-bringup.c:18:50: error: invalid use of undefined type 'struct platform_device'
+      18 |         clk_con = of_count_phandle_with_args(pdev->dev.of_node, "clocks",
+         |                                                  ^~
+   drivers/clk/mediatek/clk-bringup.c:22:38: error: invalid use of undefined type 'struct platform_device'
+      22 |                 clk = of_clk_get(pdev->dev.of_node, i);
+         |                                      ^~
+   drivers/clk/mediatek/clk-bringup.c: In function 'clk_post_ao_probe':
+   drivers/clk/mediatek/clk-bringup.c:48:40: error: invalid use of undefined type 'struct platform_device'
+      48 |         struct device_node *node = pdev->dev.of_node;
+         |                                        ^~
+   drivers/clk/mediatek/clk-bringup.c: In function 'bring_up_probe':
+   drivers/clk/mediatek/clk-bringup.c:78:51: error: invalid use of undefined type 'struct platform_device'
+      78 |         clk_probe = of_device_get_match_data(&pdev->dev);
+         |                                                   ^~
+   drivers/clk/mediatek/clk-bringup.c:84:17: error: implicit declaration of function 'dev_err' [-Werror=implicit-function-declaration]
+      84 |                 dev_err(&pdev->dev,
+         |                 ^~~~~~~
+   drivers/clk/mediatek/clk-bringup.c:84:30: error: invalid use of undefined type 'struct platform_device'
+      84 |                 dev_err(&pdev->dev,
+         |                              ^~
+   drivers/clk/mediatek/clk-bringup.c:86:29: error: invalid use of undefined type 'struct platform_device'
+      86 |                         pdev->name, r);
+         |                             ^~
+   drivers/clk/mediatek/clk-bringup.c: At top level:
+   drivers/clk/mediatek/clk-bringup.c:96:15: error: variable 'bring_up' has initializer but incomplete type
+      96 | static struct platform_driver bring_up = {
+         |               ^~~~~~~~~~~~~~~
+   drivers/clk/mediatek/clk-bringup.c:97:10: error: 'struct platform_driver' has no member named 'probe'
+      97 |         .probe          = bring_up_probe,
+         |          ^~~~~
+   drivers/clk/mediatek/clk-bringup.c:97:27: warning: excess elements in struct initializer
+      97 |         .probe          = bring_up_probe,
+         |                           ^~~~~~~~~~~~~~
+   drivers/clk/mediatek/clk-bringup.c:97:27: note: (near initialization for 'bring_up')
+   drivers/clk/mediatek/clk-bringup.c:98:10: error: 'struct platform_driver' has no member named 'remove'
+      98 |         .remove         = bring_up_remove,
+         |          ^~~~~~
+   drivers/clk/mediatek/clk-bringup.c:98:27: warning: excess elements in struct initializer
+      98 |         .remove         = bring_up_remove,
+         |                           ^~~~~~~~~~~~~~~
+   drivers/clk/mediatek/clk-bringup.c:98:27: note: (near initialization for 'bring_up')
+   drivers/clk/mediatek/clk-bringup.c:99:10: error: 'struct platform_driver' has no member named 'driver'
+      99 |         .driver         = {
+         |          ^~~~~~
+   drivers/clk/mediatek/clk-bringup.c:99:27: error: extra brace group at end of initializer
+      99 |         .driver         = {
+         |                           ^
+   drivers/clk/mediatek/clk-bringup.c:99:27: note: (near initialization for 'bring_up')
+   drivers/clk/mediatek/clk-bringup.c:99:27: warning: excess elements in struct initializer
+   drivers/clk/mediatek/clk-bringup.c:99:27: note: (near initialization for 'bring_up')
+   drivers/clk/mediatek/clk-bringup.c:106:1: warning: data definition has no type or storage class
+     106 | module_platform_driver(bring_up);
+         | ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/mediatek/clk-bringup.c:106:1: error: type defaults to 'int' in declaration of 'module_platform_driver' [-Werror=implicit-int]
+>> drivers/clk/mediatek/clk-bringup.c:106:1: warning: parameter names (without types) in function declaration
+   drivers/clk/mediatek/clk-bringup.c:96:31: error: storage size of 'bring_up' isn't known
+      96 | static struct platform_driver bring_up = {
+         |                               ^~~~~~~~
+   drivers/clk/mediatek/clk-bringup.c:96:31: warning: 'bring_up' defined but not used [-Wunused-variable]
+   cc1: some warnings being treated as errors
+
+
+vim +106 drivers/clk/mediatek/clk-bringup.c
+
+   105	
+ > 106	module_platform_driver(bring_up);
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
