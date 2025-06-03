@@ -1,268 +1,165 @@
-Return-Path: <linux-pm+bounces-27982-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-27983-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E911AACBDEE
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 02:24:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DEB8ACBE06
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 03:03:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5AF8D1889D57
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 00:24:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A6371890EDD
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 01:03:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58F3F3FB1B;
-	Tue,  3 Jun 2025 00:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F979A937;
+	Tue,  3 Jun 2025 01:02:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aDfbh6B+"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="LppgaXle"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C97C2AEF1
-	for <linux-pm@vger.kernel.org>; Tue,  3 Jun 2025 00:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35AF010E5;
+	Tue,  3 Jun 2025 01:02:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748910240; cv=none; b=Yo67BT9bupJi4FE3D2v3uUlRHnpyd2Z7rwxFwjLyjr6L12C5JhG4o/XVyGYmM6EuDJN1Y2tIwECFMoaQSN6HnnLdvaJ5xBPsK0DEVPrQPcd3O6SYoj3v+xyiNwEt98KcqQPyjBEJtzv79jG2AB7csf6Xxq+bQgHaQkFRKdGYyN4=
+	t=1748912578; cv=none; b=LGr/S01uQOILWbgftQ/3dA3zU084BraBSgPfX6rg/p0kjHx43QWy0zBSsUnLJVeet6sYuSjQNdZqYJSftfynlcrXjD7v1fgUp3XgrAut9CK+X/auA0oi0Ib68Co2FvWIA5PXCsATKeN1B2GiHRLwlHpQlLUS2GW8l1w5N5wuLG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748910240; c=relaxed/simple;
-	bh=AImNFqbk31yDcxGWtqtu6Ckfs89ZrwsGNsbwdSE3RCo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XJUrT1BpNNjdJ7WGs2myYdAUrXXSchNIPObKm/pL+YEtY6IgsKCAMvv1wPgpBFLxE/BUqQYkwweZWaEMPUrhW0q1VAdVdMvr7+k/8Nz+EPdGHaKhHFhvJ9YCQBHIzDd4Saa1FAialcv2ZWJezQbfnzbaw4U+H/SIx1XX1kY+spc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aDfbh6B+; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-54afb5fcebaso6438712e87.3
-        for <linux-pm@vger.kernel.org>; Mon, 02 Jun 2025 17:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748910236; x=1749515036; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5FOpMiYLMMX182EYvmPfUF40zpuQGKvY/VPcmu9Q4Ac=;
-        b=aDfbh6B+hS3/5rFMeoefUXQaHJvv4vJVWXZWfCm427HmV2P/CU04T7v2mMkSrHTnOD
-         PB+wgTzCSx1B2kFET9YviXZXmmzvqwne1DX8D5WhdNBVDoibeuOOeL2nduqn4Jm1YcGa
-         MK5MZ4X9qfBDRdtigKL7aZVxhTI6Q3gIbj5j3iasgfdzqxrZHmTlgjW4oDb5xFaJfMnS
-         VF7Wew6zWgT6/wI7NFJuPUHifeMO1aZwpQ6TyWBGaQNUokrdxoddAs8G6zdsX1pp54a5
-         MZPPFgCfrymrDXCaEwAdh1itBBdQCfF2hP4MtfmqMM7dI/2Ps28YhW0mOG3yThmFSfyu
-         jEvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748910236; x=1749515036;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5FOpMiYLMMX182EYvmPfUF40zpuQGKvY/VPcmu9Q4Ac=;
-        b=K3nA0U+keasnS3rTelnog19VndzCnR7peMIt2QGvXJ7tBGuH6t9R97gLcubJcwwTWJ
-         YMMyCQ94RurxMwBWmOJP8b+JoUFveX45ZpeqSrXEH2bwRE1eRtC0C1KHJAQxxukM0RJn
-         ryuxl2X3dJhR/oYItUCxFXY2k1p0KCU5BbRw/yShfXKRaoicbbaQ8jzYLiesIQnUW5o8
-         p0v7Jt/EodG/77l1IDQarCwuSXkhi+/5CGb0bpBS9kyUCjCqt2cOTCsBIyS+wsIRHLDG
-         FRPDH65JXUE6vIT/ORaCH+oQT0GHCFp0nM7nZnkWaiw9DmawmH8rEot2Hubfokq1PGL6
-         LRkw==
-X-Forwarded-Encrypted: i=1; AJvYcCUSA+Cvzo5olXyhr+0+e8G36ygoGgPxqyQ9auzwCxWTMNlimHGZBFTd06y/2W1OcAFuJUkSH0WNfg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0jW7tvV0eDEn549kt8JYZM6m8F7Vs0e0zIYIxqi0Hdk8FSx5U
-	DEUsen/eRhL4DO0j8rpz7f10a/5xH0DTeJr1Y66/EtxZIAyqfdj/iUy81aGf0XTRTPufMHbjAG7
-	faAYU0mChtmTErAFgOuAcCpXgAC/0LvHmyf6PHbwJ
-X-Gm-Gg: ASbGncvMXb4MKYwwMm7bT/zeXkvhO0m83tC2LlZ7MI9j+6gqnnzWeMDHuFcA618ibAf
-	iarQDYqfRfNI4o+O7vK5cW5Y9fZqBNuwL6TJXz2Gs3rK2qRN3GsPdVjsJAv2Q5MCWjvZjt7oxNE
-	wiTzHoLjB5kxlhXr/0wwDQd5/ofLkdfD8QYZ3YjLMElkOXwcxwrBwa8dzz3Ouccl/Xqh2SRN6US
-	T1v1XFhNGnChs8=
-X-Google-Smtp-Source: AGHT+IF0eNhrWbj9hQxfD1unRyrkdD0kp+Z0yS9s1IOEtVghOX4coHO+O1yKo9y4gO22c3TpyInE02NwNDsomxX6gBM=
-X-Received: by 2002:a05:6512:b86:b0:553:291f:92e with SMTP id
- 2adb3069b0e04-5533b92e470mr4356320e87.39.1748910235984; Mon, 02 Jun 2025
- 17:23:55 -0700 (PDT)
+	s=arc-20240116; t=1748912578; c=relaxed/simple;
+	bh=fyPQ/mfs2CSaeT6RM8/3j9A3OgCvFV5ebkXfbNQ6tqA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=XvTPiYjOCe9Q7CQOdqlT6CGY27bD3jWxyeknXWZZjfn0k/fyUWR01v0s0N/DdXHu/2eRXaloeEeN7dLumSlJwX+JYtZEY6CPQ/gB24FTiL+JHCA1DT4rT0/d9Ca3Z8x5jZ42hqZJ2lSVy4A7iFnM0KG55k0bvFrzxEpOLwpIF3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=LppgaXle; arc=none smtp.client-ip=54.206.16.166
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1748912532;
+	bh=A93XqZVqVhYz+KFT6k3LBe2oQch3w3UxJ0GXN9kjeh4=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=LppgaXle1ssr0tAAQM/r2gVUSDJDYrpA/5RZ3VgF1ubcANm50K9XKw4fyBjUobOi3
+	 JDN7uhnQ0SR68uuRuoHB22OverKxBRbSUDHf6WJPae0zL4168qk5t3GwJC8S7O0CVW
+	 sYaMotoMSoOMDJC0hR3+lE1JsKb45y1rdNDFOLOA=
+X-QQ-mid: zesmtpip4t1748912524taa33fcd8
+X-QQ-Originating-IP: lF+E614tet5TqMgpQePt/nNBt+sipuA1E3BTD/dh+Ts=
+Received: from localhost.localdomain ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 03 Jun 2025 09:02:02 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 12453671181303604206
+EX-QQ-RecipientCnt: 8
+From: tuhaowen <tuhaowen@uniontech.com>
+To: rafael@kernel.org
+Cc: tuhaowen@uniontech.com,
+	huangbibo@uniontech.com,
+	len.brown@intel.com,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	pavel@kernel.org,
+	wangyuli@uniontech.com
+Subject: [PATCH v4] PM/console: Fix the black screen issue
+Date: Tue,  3 Jun 2025 09:01:57 +0800
+Message-Id: <20250603010157.19121-1-tuhaowen@uniontech.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20250526010854.7834-1-tuhaowen@uniontech.com>
+References: <20250526010854.7834-1-tuhaowen@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250523134025.75130-1-ulf.hansson@linaro.org> <20250523134025.75130-3-ulf.hansson@linaro.org>
-In-Reply-To: <20250523134025.75130-3-ulf.hansson@linaro.org>
-From: Saravana Kannan <saravanak@google.com>
-Date: Mon, 2 Jun 2025 17:23:19 -0700
-X-Gm-Features: AX0GCFs2XcbroxtBQgFIVghV_VdooKR0d1OXApi_zYrHQREB3E38JByH61YRbu0
-Message-ID: <CAGETcx-hsKb_BDPLuSM3A_ac0x6Z4NOq2pCmjKKJHTYbYZPwcA@mail.gmail.com>
-Subject: Re: [PATCH v2 02/21] pmdomain: core: Add a bus and a driver for genpd providers
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Michael Grzeschik <m.grzeschik@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
-	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, 
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Johan Hovold <johan@kernel.org>, 
-	Maulik Shah <maulik.shah@oss.qualcomm.com>, Michal Simek <michal.simek@amd.com>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: OFwcIyq3IdMxWT3YhTJ2p3yaYIiOcux8PuE6O/BySTnj7so4MhmQTa8J
+	KcSccOmUU0hnJ3pZztcH3ITrkWba7pENOLwbr3tO1YbTCeQN1OVYjRb3VlvTFUJ5p6uZSlI
+	pTBHgBuc0cAsOAI0grw96Jd5O4VQObqHM3tlbPmgfKbK1sknF4+OR6/X4K+fJ8wNM0rGovg
+	YuMMn0jrZr+DeMAygzQ8duhFvN59cUwk1cTWqxKAek4e3FYLbS58yftxzthSTcJfLzpJD6/
+	fORSmEP4VVyIgx4iYzldD0jk1nSld5010aIL0o2Yi+vVL2xvQbt3fZouroTfUvtmvZN4aoi
+	5w8EWvjbA5zLMd/wJyt/IbnfHLLh3TxmgSP8E0V4eY3ErMAjvLbk5jDOeg2eFIlLbyE+WjZ
+	r593bq+iguZ4A701qII5oq9mkhn5EAyKQZQBO0Q7hcMjZXcsZMbzNaf1egnW9yNzSxHaTac
+	I3FtRM7mHVD6nq6TLOGRFnfKEmfoGYnHbzYdUnppq4s+DtUDh6g/1xjCx5lr64soOpK8z+y
+	7fPcsdK0xGhS7Tx+3NgC2aLwoQotzHO9gFz66OS5BVSS3dCyEzWcAZO3rTzOfi72vxi8P9k
+	hfMRhXX7OgJQ0O200gb7pLQgymnCEl1TMbvjOu361+zf4HwNZFj5wulurEqf7drHRn+y/RD
+	VC1Q2kaYSiQcYociX7fuO9ULy1CJdZDI23F9oYin/b1wIoc+sCb1Lwg4vq9p+wcrW5+FgtR
+	4VdzyX3LwhuPnnUXAIuNFSRWJUq7W2HG7hZexMEhRZz1Qqw4a/770iTGi6+owLNnH79Cu3C
+	Ya9ta0zaIhWfu0KUW7nn6E6MZzZlvoeL3cw8Fjr7uPW0raiyX44zGYqbZAQKIWipytWGUjL
+	28dyFETHfIjJVaaqnrGXP+xL9e5RxkqRBJ7CGxFAMr9Vdvay7BW3lV9NJJ3CO/txrY7gqpW
+	vs/lG3vdqK9AVH8Qh7foJCToRf+1UJZZZOvUyh4kr7JMPrn/phXZcb+IcKxnfRs6h3WfIPY
+	N7mFss3rktzcn1P+2fOR5wsX8HY8A=
+X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
+X-QQ-RECHKSPAM: 0
 
-On Fri, May 23, 2025 at 6:40=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.org=
-> wrote:
->
-> When we create a genpd via pm_genpd_init() we are initializing a
-> corresponding struct device for it, but we don't add the device to any
-> bus_type. It has not really been needed as the device is used as cookie t=
-o
-> help us manage OPP tables.
->
-> However, to prepare to make better use of the device let's add a new genp=
-d
-> provider bus_type and a corresponding genpd provider driver. Subsequent
-> changes will make use of this.
->
-> Suggested-by: Saravana Kannan <saravanak@google.com>
-> Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
->  drivers/pmdomain/core.c | 89 ++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 88 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-> index 9a66b728fbbf..da515350c65b 100644
-> --- a/drivers/pmdomain/core.c
-> +++ b/drivers/pmdomain/core.c
-> @@ -27,6 +27,11 @@
->  /* Provides a unique ID for each genpd device */
->  static DEFINE_IDA(genpd_ida);
->
-> +/* The parent for genpd_provider devices. */
-> +static struct device genpd_provider_bus =3D {
-> +       .init_name =3D "genpd_provider",
-> +};
-> +
->  #define GENPD_RETRY_MAX_MS     250             /* Approximate */
->
->  #define GENPD_DEV_CALLBACK(genpd, type, callback, dev)         \
-> @@ -44,6 +49,14 @@ static DEFINE_IDA(genpd_ida);
->  static LIST_HEAD(gpd_list);
->  static DEFINE_MUTEX(gpd_list_lock);
->
-> +#define to_genpd_provider_drv(d) container_of(d, struct genpd_provider_d=
-rv, drv)
-> +
-> +struct genpd_provider_drv {
-> +       struct device_driver drv;
-> +       int (*probe)(struct device *dev);
-> +       void (*remove)(struct device *dev);
-> +};
-> +
->  struct genpd_lock_ops {
->         void (*lock)(struct generic_pm_domain *genpd);
->         void (*lock_nested)(struct generic_pm_domain *genpd, int depth);
-> @@ -2225,6 +2238,26 @@ static int genpd_set_default_power_state(struct ge=
-neric_pm_domain *genpd)
->         return 0;
->  }
->
-> +static int genpd_provider_bus_probe(struct device *dev)
-> +{
-> +       struct genpd_provider_drv *drv =3D to_genpd_provider_drv(dev->dri=
-ver);
-> +
-> +       return drv->probe(dev);
-> +}
-> +
-> +static void genpd_provider_bus_remove(struct device *dev)
-> +{
-> +       struct genpd_provider_drv *drv =3D to_genpd_provider_drv(dev->dri=
-ver);
-> +
-> +       drv->remove(dev);
-> +}
+When the computer enters sleep status without a monitor
+connected, the system switches the console to the virtual
+terminal tty63(SUSPEND_CONSOLE).
 
-Not sure if I'm missing some corner case you found out, but you don't
-need these stubs just to call the drv ops. Driver core does it anyway
-if the bus probe/remove functions are missing.
+If a monitor is subsequently connected before waking up,
+the system skips the required VT restoration process
+during wake-up, leaving the console on tty63 instead of
+switching back to tty1.
 
-> +
-> +static const struct bus_type genpd_provider_bus_type =3D {
-> +       .name           =3D "genpd_provider",
-> +       .probe          =3D genpd_provider_bus_probe,
-> +       .remove         =3D genpd_provider_bus_remove,
-> +};
-> +
->  static void genpd_provider_release(struct device *dev)
->  {
->         /* nothing to be done here */
-> @@ -2262,6 +2295,8 @@ static int genpd_alloc_data(struct generic_pm_domai=
-n *genpd)
->         genpd->gd =3D gd;
->         device_initialize(&genpd->dev);
->         genpd->dev.release =3D genpd_provider_release;
-> +       genpd->dev.bus =3D &genpd_provider_bus_type;
-> +       genpd->dev.parent =3D &genpd_provider_bus;
->
->         if (!genpd_is_dev_name_fw(genpd)) {
->                 dev_set_name(&genpd->dev, "%s", genpd->name);
-> @@ -3355,9 +3390,61 @@ int of_genpd_parse_idle_states(struct device_node =
-*dn,
->  }
->  EXPORT_SYMBOL_GPL(of_genpd_parse_idle_states);
->
-> +static int genpd_provider_probe(struct device *dev)
-> +{
-> +       return 0;
-> +}
-> +
-> +static void genpd_provider_remove(struct device *dev)
-> +{
-> +}
+To fix this issue, a global flag vt_switch_done is introduced
+to record whether the system has successfully switched to
+the suspend console via vt_move_to_console() during suspend.
 
-Same might apply here.
+If the switch was completed, vt_switch_done is set to 1.
+Later during resume, this flag is checked to ensure that
+the original console is restored properly by calling
+vt_move_to_console(orig_fgconsole, 0).
 
--Saravana
+This prevents scenarios where the resume logic skips console
+restoration due to incorrect detection of the console state,
+especially when a monitor is reconnected before waking up.
 
-> +
-> +static void genpd_provider_sync_state(struct device *dev)
-> +{
-> +}
-> +
-> +static struct genpd_provider_drv genpd_provider_drv =3D {
-> +       .drv =3D {
-> +               .name =3D "genpd_provider",
-> +               .bus =3D &genpd_provider_bus_type,
-> +               .sync_state =3D genpd_provider_sync_state,
-> +               .suppress_bind_attrs =3D true,
-> +       },
-> +       .probe =3D genpd_provider_probe,
-> +       .remove =3D genpd_provider_remove,
-> +};
-> +
->  static int __init genpd_bus_init(void)
->  {
-> -       return bus_register(&genpd_bus_type);
-> +       int ret;
-> +
-> +       ret =3D device_register(&genpd_provider_bus);
-> +       if (ret) {
-> +               put_device(&genpd_provider_bus);
-> +               return ret;
-> +       }
-> +
-> +       ret =3D bus_register(&genpd_provider_bus_type);
-> +       if (ret)
-> +               goto err_dev;
-> +
-> +       ret =3D bus_register(&genpd_bus_type);
-> +       if (ret)
-> +               goto err_prov_bus;
-> +
-> +       ret =3D driver_register(&genpd_provider_drv.drv);
-> +       if (ret)
-> +               goto err_bus;
-> +
-> +       return 0;
-> +
-> +err_bus:
-> +       bus_unregister(&genpd_bus_type);
-> +err_prov_bus:
-> +       bus_unregister(&genpd_provider_bus_type);
-> +err_dev:
-> +       device_unregister(&genpd_provider_bus);
-> +       return ret;
->  }
->  core_initcall(genpd_bus_init);
->
-> --
-> 2.43.0
->
+Signed-off-by: tuhaowen <tuhaowen@uniontech.com>
+---
+Changes in v4:
+- Moved `vt_switch_done = false;` below the `if (orig_fgconsole >= 0)`
+  block to ensure it is only reset after a console switch has occurred.
+- Link to v3: https://lore.kernel.org/all/20250526010854.7834-1-tuhaowen@uniontech.com
+- Link to v2: https://lore.kernel.org/all/20250516084011.29309-1-tuhaowen@uniontech.com
+- Link to v1: https://lore.kernel.org/all/20250516034643.22355-1-tuhaowen@uniontech.com
+---
+ kernel/power/console.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/power/console.c b/kernel/power/console.c
+index fcdf0e14a47d..19c48aa5355d 100644
+--- a/kernel/power/console.c
++++ b/kernel/power/console.c
+@@ -16,6 +16,7 @@
+ #define SUSPEND_CONSOLE	(MAX_NR_CONSOLES-1)
+ 
+ static int orig_fgconsole, orig_kmsg;
++static bool vt_switch_done;
+ 
+ static DEFINE_MUTEX(vt_switch_mutex);
+ 
+@@ -136,17 +137,21 @@ void pm_prepare_console(void)
+ 	if (orig_fgconsole < 0)
+ 		return;
+ 
++	vt_switch_done = true;
++
+ 	orig_kmsg = vt_kmsg_redirect(SUSPEND_CONSOLE);
+ 	return;
+ }
+ 
+ void pm_restore_console(void)
+ {
+-	if (!pm_vt_switch())
++	if (!pm_vt_switch() && !vt_switch_done)
+ 		return;
+ 
+ 	if (orig_fgconsole >= 0) {
+ 		vt_move_to_console(orig_fgconsole, 0);
+ 		vt_kmsg_redirect(orig_kmsg);
+ 	}
++
++	vt_switch_done = false;
+ }
+-- 
+2.20.1
+
 
