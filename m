@@ -1,52 +1,52 @@
-Return-Path: <linux-pm+bounces-28030-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28029-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D06CACCB29
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 18:22:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96355ACCB28
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 18:22:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 561507A3BA9
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 16:21:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60A3E176E1E
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 16:22:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7CCD23E329;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ED2223E33D;
 	Tue,  3 Jun 2025 16:22:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="OXv4ec00"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="hU0+rwnH"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B08EF23E334;
-	Tue,  3 Jun 2025 16:22:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B9A423C51B;
+	Tue,  3 Jun 2025 16:22:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748967744; cv=none; b=r2gk1qsiuFGfraRGs/QwHYFNVjrBaOxPc2HO0aHNGVRp5ESEYQ8L71kq2v3AJYflIlQbKO/mC+DMU5+xiSIQQgXprvXKEdK3ErJaQcxJFanyQq/dTgahk3J0Ba8LiLHvODRXU4dSp5tuDcjtQNlWtmPWq4H2QkbYlJcoPT8oThg=
+	t=1748967744; cv=none; b=RykfhM6Ccze959QrEJco72XthLuGBsrQcHIz+mc+2MVe5kQ/1U+7Q0tfME/TKYJLtbFuusbazqTsp/lcT3iyqyxy4xhmfEmWL9sIG9bP5aKoqWFQHQtPLicyys8K+ClujisbiLzL3Vm1hqN+dofdNTvsPh+fVMHrpmibbs46D8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1748967744; c=relaxed/simple;
-	bh=o5I7PlJZUbrb8Z5gMbcZubvybJd84pVroAir3as0yHU=;
+	bh=Fdok7Br/KDs6NeJ/Y7SQFQQ/Cag227mQAiEgw2APNW0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uH8IHLF2RnW0NzP8hq+EE/WHPqmG+3G8otr1jfEpHBjfHJ/CFicRzivmfSfiCJ06mKkRRbMW7esY0bWECXPYvpkzitw7GZ7q2AbWRpWdDBoK0bu+U6BpOvgTl7OdQ5ZiwDG5O8G6bjmBbprq35fFGzD795Y2Tig87S9Jml3XKsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=OXv4ec00; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=FhB5ILsM1zkjQ3gl4BUlSaGf1cHAZWVNmrDj0UBAouVX+hc21DdWlptqFDwpTZxFAjrjglyVAo06fOLH+zMOFn5zvJnMvMDi8YHZk1uPA4ZOKXirXvcg8HU3XeaAMHwVDxNu5lX+LC0mRSCjUI0fbeymzqKdfUC3hrWu0dioOsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=hU0+rwnH; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from kreacher.localnet (unknown [5.63.189.50])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 963B166BDF3;
-	Tue,  3 Jun 2025 18:22:14 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id A438D66BCC9;
+	Tue,  3 Jun 2025 18:22:13 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1748967735;
-	bh=o5I7PlJZUbrb8Z5gMbcZubvybJd84pVroAir3as0yHU=;
+	s=dkim; t=1748967734;
+	bh=Fdok7Br/KDs6NeJ/Y7SQFQQ/Cag227mQAiEgw2APNW0=;
 	h=From:Subject:Date;
-	b=OXv4ec00tqTzrJ0kjzz81plutlQzPdtENwW6KA7pqTqSSqsyMwTFrLzwZWiMPzRxm
-	 crFQnbE5YTk9Doqe7LVWGgo99dDCE0FN4/hxn9x8UQ+xVIjgVoKprtMhI8WsRNdado
-	 WQZjfOjBu/dzRw5PWOY+zR5jv28PwyyCCXN+Kp4I7w8Nur5wsPVJrH4uCxDVM5mEwH
-	 W8rIW+SABkRTk/A7o3Jv5pQT6YWWxzHS8JHJMrKZJUEtm4Bw8MNYxy/VSk2S58YDbh
-	 uLIUQY11Q1GNTZ2+C921sMSod5K3TV6jVvuIFIrkHqkD+Oo7RnU0H/QXW32Xtt5RRd
-	 F0q0IVrBm6Qeg==
+	b=hU0+rwnHak3id2gyt6DWN/090L6zwPKbz4PbpEes8sM5DBlaxxDB2ZFJHW6CHOWjY
+	 ed892S0Ou02xoDPJdhnpi06wQHkiDF9gLiT7DWJO675ufGcWBwatZcJ2nX4vvvBefR
+	 J2HsFYN+YVHKmZOS6clU6xoIv3NtN9nDMak38Y7sr3oJ7LhyvHBfT20gl0WP0E2sgR
+	 tvQCYQmNmNLbHlnj8wDuyrfML5KOx1btby3G5hErJRsrxSw8Esd8QXXcyGn+LBsZSs
+	 9E+kqPiBjiDJ1xGgM787Ybj9Cp6YGo9pKdmNzWHDVTCs9WV1QqldcqIe7JLBECMbrV
+	 gt29yz3wmFbwg==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
@@ -54,11 +54,9 @@ Cc: LKML <linux-kernel@vger.kernel.org>,
  Chris Bainbridge <chris.bainbridge@gmail.com>,
  Ulf Hansson <ulf.hansson@linaro.org>, Saravana Kannan <saravanak@google.com>,
  Sudeep Holla <sudeep.holla@arm.com>
-Subject:
- [PATCH v1 2/3] PM: sleep: Fix power.is_suspended cleanup for direct-complete
- devices
-Date: Tue, 03 Jun 2025 18:19:27 +0200
-Message-ID: <4990586.GXAFRqVoOG@rjwysocki.net>
+Subject: [PATCH v1 3/3] PM: sleep: Add locking to dpm_async_resume_children()
+Date: Tue, 03 Jun 2025 18:21:57 +0200
+Message-ID: <13779172.uLZWGnKmhe@rjwysocki.net>
 In-Reply-To: <6166108.lOV4Wx5bFT@rjwysocki.net>
 References: <6166108.lOV4Wx5bFT@rjwysocki.net>
 Precedence: bulk
@@ -72,53 +70,64 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 5.63.189.50
 X-CLIENT-HOSTNAME: 5.63.189.50
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: dmFkZTFuZted3QHr/rVwZgdGLcyqu8jkWWOxJF0GFW6Lugmgslew6ZhSn6h88vs1LdILcIVV787TfB6M6b+mRXT06Ij8EuvQrp10ceSLb3/icU7F9n15O3KV4ZWbfWiZyZe7lKp46Kt5G4w0X6iG/QLBydyoV2uRCEgOh90bRqimATdZBJrd4z2/yhBk8j0kFroKeRxFh+++6Pm0zYnNO+67Y9BGSZG8pvisrWIP2dzOYTeG279fZhoGPFisKCoIs30GzEgjHE59fQU50or0qxeX+C1Q5vZyPw5H15xoPkQA8KS8pUUPZfsVou8ma7mTKBCGEr3OAYmA5L+5ao/is7OI/SPCMJPFNbpVH51K4SVwgX1OyPJjmkz/6ilkuSHvYl/eNd5pXwpwjGR0IMW2vPCbScPLVVb7IzR2vmhZA/dL9X3GueGB8XfBLC3QpvLMxKKUXyvf4Q2X9G7OoGYmF/do6cAA+jAd1sqwr2ve5o5/3IdDzo5FEdPuOgbq2HiUQl6fHyoqmLfSjkWMAuT3ncGK2B1ffv5Xo9rfNfWMfP+BQfWJtzGzxMRTB99cLJcpYlpEDy1ZQaBfHON6rHE0+p7HUm4aAiSFOE45miESMchymWGci3S6iYhV5FLQhexEvXl+05TNTOXoF/F3jvX/aDLTncDcW+fqrQgFRC5rpb6IFHeSBA
+X-VADE-SPAMCAUSE: dmFkZTEfh61c7A06WGUkHT7vFJj3USfNCX9d7R2R4WDorhZXrTp+60oyaNLi8kxofXKZvVyiSPeh1eRKP6GGLnApa9zR/OniJAvvEMQ1432r7ddp+szjuOZLmmEDeQ462kYyym/es++QedRbmJpAqZk4JpzfKTE9dwUKY/LAM+xuYz1xsKm5lY/u1Ps2tx+OrHuE44Y42UBvmONU1b9DBIFv9Kn4cWCY2VY9PFdAK+mdu+es0kVGbUtXVZPu2aniTr+6zPi4tYOzPR9rWA2/vfEf7ZgVIBisrWHBBrP1xK9dTKvY8hqHr3gwpkh++zOsshp9kf81spISYgx0MUNxjbhqnYnPsznmf6PtqvqTsuFMbwCXEoxV82wakrZzC8W15DTOfP5sINw+MlDfGvHswhAbP2BiV0iMoEc3ugoVygxh9qxLx1Zuz84+63WhbWqLO5g5wrzRXAkIjQXznjv0MsVepaz1b1yzdBZggSARr5dtZsM85w/TFLW5cbX0fGuNWgnCagYZaXThE7lQjXO/gc6M06VFa8s+Q4x6UVb0U1/wfO1OoTg0/54MVikzjyXL3krJX2y7ITsWwC8GCyppcsa9FUd+QX6dHLMO8ERb9zsW+qvJFoCIMC/5OXDzOWzXEAl7qx1nNe9ttxdP6OAz2rPKwcNs6zVfC/PRvdKt5Ve8NBwkDA
 X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Commit 03f1444016b7 ("PM: sleep: Fix handling devices with direct_complete
-set on errors") caused power.is_suspended to be set for devices with
-power.direct_complete set, but it forgot to ensure the clearing of that
-flag for them in device_resume(), so power.is_suspended is still set for
-them during the next system suspend-resume cycle.
+Commit 0cbef962ce1f ("PM: sleep: Resume children after resuming the
+parent") introduced a subtle concurrency issue that may lead to a kernel
+crash if system suspend is aborted and may also slow down asynchronous
+device resume otherwise.
 
-If that cycle is aborted in dpm_suspend(), the subsequent invocation of
-dpm_resume() will trigger a device_resume() call for every device and
-because power.is_suspended is set for the devices in question, they will
-not be skipped by device_resume() as expected which causes scary error
-messages to be logged (as appropriate).
+Namely, the initial list walks in dpm_noirq_resume_devices(),
+dpm_resume_early(), and dpm_resume() call dpm_clear_async_state() for
+every device and attepmt to asynchronously resume it if it has no
+children (so it is a "root" device).  The asynchronous resume of a
+root device triggers an attempt to asynchronously resume its children
+which may take place before calling dpm_clear_async_state() for them
+due to the lack of synchronization between dpm_async_resume_children()
+and the code calling dpm_clear_async_state().  If this happens, the
+dpm_clear_async_state() that comes in late, will clear
+power.work_in_progress for the given device after it has been set by
+__dpm_async(), so the suspend callback will be allowed to run once
+again for the same device during the same transition.  This leads to
+a whole range of interesting breakage.
 
-To address this issue, move the clearing of power.is_suspended in
-device_resume() immediately after the power.is_suspended check so it
-will be always cleared for all devices processed by that function.
+Fortunately, if the suspend transition is not aborted, power.work_in_progress
+is set by it for all devices, so dpm_async_resume_children() will not
+schedule asynchronous resume for them until dpm_clear_async_state()
+clears that flag, but this means missing an opportunity to start the
+resume of those devices earlier.
 
-Fixes: 03f1444016b7 ("PM: sleep: Fix handling devices with direct_complete set on errors")
+Address the above issue by adding dpm_list_mtx locking to
+dpm_async_resume_children(), so it will wait for the entire initial
+list walk and the invocation of dpm_clear_async_state() for all devices
+to be completed before scheduling any new asynchronous resume callbacks.
+
+Fixes: 0cbef962ce1f ("PM: sleep: Resume children after resuming the parent")
 Reported-and-tested-by: Chris Bainbridge <chris.bainbridge@gmail.com>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/base/power/main.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/base/power/main.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
 --- a/drivers/base/power/main.c
 +++ b/drivers/base/power/main.c
-@@ -992,6 +992,8 @@
- 	if (!dev->power.is_suspended)
- 		goto Complete;
- 
-+	dev->power.is_suspended = false;
+@@ -638,6 +638,13 @@
+ static void dpm_async_resume_children(struct device *dev, async_func_t func)
+ {
+ 	/*
++	 * Prevent racing with dpm_clear_async_state() during initial list
++	 * walks in dpm_noirq_resume_devices(), dpm_resume_early(), and
++	 * dpm_resume().
++	 */
++	guard(mutex)(&dpm_list_mtx);
 +
- 	if (dev->power.direct_complete) {
- 		/*
- 		 * Allow new children to be added under the device after this
-@@ -1054,7 +1056,6 @@
- 
-  End:
- 	error = dpm_run_callback(callback, dev, state, info);
--	dev->power.is_suspended = false;
- 
- 	device_unlock(dev);
- 	dpm_watchdog_clear(&wd);
++	/*
+ 	 * Start processing "async" children of the device unless it's been
+ 	 * started already for them.
+ 	 *
 
 
 
