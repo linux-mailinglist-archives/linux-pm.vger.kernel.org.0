@@ -1,89 +1,92 @@
-Return-Path: <linux-pm+bounces-28004-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28005-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF3B5ACC46C
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 12:35:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBF53ACC484
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 12:37:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74F513A408D
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 10:35:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7543168705
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 10:37:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CE3A227E9B;
-	Tue,  3 Jun 2025 10:35:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB1A2229B2A;
+	Tue,  3 Jun 2025 10:37:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="VMFYrqY+"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="hlcSe1b2"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34F353365
-	for <linux-pm@vger.kernel.org>; Tue,  3 Jun 2025 10:35:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5627919DF4A
+	for <linux-pm@vger.kernel.org>; Tue,  3 Jun 2025 10:37:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748946947; cv=none; b=YG+o25GKPMPMvPK+xJD0BIPArVrdkXiSZaANVh2evJmxBkHLKIzfR3WmGlG/nZQqWm5y8vqzXvRfcD+xx7RfF4Okcu8AqoAGe+FILZRYnR8ETFjt6bkkq+UU8ngNxex8JBDKQLD3CJIMjKQry0E4JFXkbwqV8UH1IKRmcv7smk4=
+	t=1748947033; cv=none; b=mnDzmSxpZVMu2QZ/o9Y27in0nE4LtpRq/snW9GVdonZ28ddofI8zauYryb7rLPJQAw7T8Z+lbEh3tZqJ33goCwLd4Ic45cYk62Idmeqoq/17dRaYjoVgz/Z5gziy2OtRahvphjX5u2Gtw4GGnNARWo919HcrCaj1D/R4cmB5bCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748946947; c=relaxed/simple;
-	bh=8BSx8hG7e+Sa8wiL1xLVnVmH9RmhWOKPCzG1Q2KWa1w=;
+	s=arc-20240116; t=1748947033; c=relaxed/simple;
+	bh=uqpOJv2wigJPKhBBU0tlE5lRcyIvfno4JsOZUYts/FY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ld/rrh8QKylJd6+uhwAzlRCJH45bWkza8Yj2R4Epbf6/L+fIaO2bvyzCX0yeHxJnrxdfDvyj5qAJukspT60/oQfE2do6I4geUcOXySnCycwRMs3WC+PipFG5hQpxqdHzRErpICfu0AZAcBD2RYitoKzOnUS4pQf8e3XCL04DBYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=VMFYrqY+; arc=none smtp.client-ip=205.220.168.131
+	 Content-Type:Content-Disposition:In-Reply-To; b=mk+ntwRJAS8b1iGy1+EPZKIGKNH0We3pNhPGtvo/ZJ5EHrdVcJ5cC37IVHST4YOHe2gO+Y/au8DqCqkFXgf0pvwm4zpplPbT1MXn3jNUSVCdblDCUZInOBfym9I+dJtXYFaTN8fCMcYEP2FVPhWfs8iMVAkKziZizDIWCrruo40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=hlcSe1b2; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5539JJ7P013521
-	for <linux-pm@vger.kernel.org>; Tue, 3 Jun 2025 10:35:44 GMT
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5539JIcn013506
+	for <linux-pm@vger.kernel.org>; Tue, 3 Jun 2025 10:37:11 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=ENKaMLcnNd+HsLvJhufWlAMm
-	Y2ISC1qjYbmzZ02Ak3U=; b=VMFYrqY+ND1+jxv77tSBuqVeY2Krl7EEQjr9Jqjz
-	vTaT7wgPsyY3cJ6VI12gFDtHLMKgaQOfHNfaJdriKnhB1fRn6dUfhVYfOMUInPZA
-	+LrG7ltCNcEolV4aYwIiNjlS8zuiMmy4qmLcQC5HJ6wzLEBXgyl4lyC2ETWxnFnl
-	LQdTyzw+wR66fC7nOOdhfeU3l+i7Lyzf7bWsab1wvQjtuKH7Jm8MgnWkHJuggWpG
-	as7g3T09Hn6OIvQmvrKXVmc0GMJjV2VnLp1X++m/yaIDwWZbvcjPePVRicG8RBkX
-	RQ/VIy0axCOIx9v1muMeBpIYjik5cLmLaPUmyojUQsQPuA==
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 471g8nj8jy-1
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	w9uWNnzZMN7gxXGGetcBuxHkVFtdiwfBWdURBEwcqsI=; b=hlcSe1b2m80sbOH+
+	HrmJDeiCebvVITjj3d/gHYyowy3NuP8JYUV/BR5d8mbbzf1KTrwRKFRvXBzzL8uv
+	HrhbhuseCaIT2KZe4HGcmug2znR5CnaNSW7jRx6v4bcAO9He3/4vmow2zhOJHBWR
+	mZmkryhInHOTzytu69Vh/R0rsIhRX5ta/bM31l5wufZUzxvKvH4Uafjx0XhS9p4A
+	Y8jCnyLguivFvriquzrkWchJZO7/c92KkacJ/py5QD8onnTTmI3+OBg5i9LMqcMg
+	DX2MnNFuXPgLHNQt5SkdcuIR99f4AANY9XAoSetwDrpq1EVR3I5HxSIOTo6RbqRG
+	LPv4bQ==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 471g8nj8pv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 03 Jun 2025 10:35:44 +0000 (GMT)
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6fac216872cso107177506d6.2
-        for <linux-pm@vger.kernel.org>; Tue, 03 Jun 2025 03:35:44 -0700 (PDT)
+	for <linux-pm@vger.kernel.org>; Tue, 03 Jun 2025 10:37:11 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7c9305d29abso867383785a.1
+        for <linux-pm@vger.kernel.org>; Tue, 03 Jun 2025 03:37:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748946943; x=1749551743;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ENKaMLcnNd+HsLvJhufWlAMmY2ISC1qjYbmzZ02Ak3U=;
-        b=NepMaIp8ja1bclRsYHrx+xW782SJLIJfAHXqPlm4qgopiYr1YkhTh0PrphSKDeVphY
-         rMn4XXAf1Fn2B2J2mWm7Q3yFO1ZrcaZaTzcxbcw89F3QEBS6Pv91R7/ZuzJwgld3UFIY
-         5/OCS/nrZJ1Ohkac4VQeW9CvGDwA4GkqCR332eTbUwgiTgAiSztn3atyCsycgtben84q
-         Ebg65m6xnJSBzp+T/mdyl+gvc7oDSokkACsPF8HJS64m/toMErDb3pIHQ6JD/aOmvwCy
-         1NwRf0lnuC8eyKlvdofcXH0wlU1OF77Th8bZ8rEjtQAnbA2YVgZM1LkEt+AEdIiJMwZL
-         9mVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW9xZjge3xnEiaxHU21uhMrHsuyIVzzqg8LzVQJDaI7F1i1EEmI01NqKMTfCmBnWr3k5KqV72HRkg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAXY1M+4b47qK2OQCpG5XJn59+A0r+adx35RS0fP1eTn+x30vC
-	xJXhTqJuPVltCK/ooG+WVn1Kj25AiiL9n7z0+Dmm70p1JSX+cqGC41jGDQw/mON5BbVdCqhaeoF
-	J4sZ3Rh0BwMuDh4I/CNXD7Y/iruCFqIwzsvmp1S+uSgSO7r4WpkngwBaWiis8yg==
-X-Gm-Gg: ASbGncv6ZJCOwg5dXo4RJfrzGW0WmzoLkQp7UF3beOwKo1dvAs5b4ABEX+rZafUAqr4
-	3iHFr4F60eahmA2qlEzJNUfKB1aHlCq/Diigmdwp4n1+Zv9fwgSmA2UYjanwTm1f0aXlP5jzrxi
-	tKOR+HtgLOo6DwW5K9395NAoD4CoduL6L7zAVhCHDKCPR5ZkfoO+S/LfPqvKQSfoj1d2AhYA/hK
-	UXH2i1g/THu915bTGtA4zdWHLuRAqwGb272pdl2K/aMKVaIOrwUkzpWn+HbDoivomO4fWg6OWVv
-	QJWTfs9m+6ATuPlO1wdlyIZakKrJqN8iea1V/rfT8lb0xhOtR/arddesuDtr/dGjAxWlCpqSgyo
-	=
-X-Received: by 2002:a05:6214:2a8a:b0:6fa:cdc9:8b01 with SMTP id 6a1803df08f44-6fad190b279mr276523636d6.19.1748946943297;
-        Tue, 03 Jun 2025 03:35:43 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE6+xnPN44BmihhZOTq8EzlP77OCBjKRSNvGyN14bFyu6GdHg2oZCIDt0Ztgee2827hAufidA==
-X-Received: by 2002:a05:6214:2a8a:b0:6fa:cdc9:8b01 with SMTP id 6a1803df08f44-6fad190b279mr276522996d6.19.1748946942829;
-        Tue, 03 Jun 2025 03:35:42 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1748947030; x=1749551830;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w9uWNnzZMN7gxXGGetcBuxHkVFtdiwfBWdURBEwcqsI=;
+        b=iTRaKsNAAA9EuUSKg8m5PYTPPiM72wkMCoYR0W31Q6jWKDTCWc4IQRrFEHK+q2bOHz
+         oOn2nla0AqwIcyT7erSpZYViOVnMvpQW5nBY67yl6ZxiapVf6tPoGOHLdO89WBFGaf8d
+         39xl8q5LvKSH4DuNjT99IYtyPq/uHVlCXQOu18OGnf0zqcQeU4VGig+PvlGTYrlcZRtl
+         MqH/OvHm8enx4hQupF5wu5wq44Kg8NyuW81mwHhb26cEaMll3onOk2s0ZANXoWWQW0pN
+         PKJE4t/VLsPwhBP8+mzJdduL4CrMxjHAqTVnJOEyj3Ybje1quHbg7bpcypO00kC1RHsr
+         3YMw==
+X-Forwarded-Encrypted: i=1; AJvYcCUd/SILO7PaQvDgXxE5b/OVuizOsIzrc8b64zqyoKEUBY3S4zSwljXZt8BmtTcGAGhIj1xYUIUxFg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YycSE9nlfzDRAn3ZPif+92Yxg3R7/En1TeanXtASAbORbHF154i
+	mNiA8alJRHO18WpqL4wVV4BEe+qwIF5p6ymTKJn9bJ2u5Vp2NphUEcoSKwyEJeYOyQ6hwhNSz9d
+	bNYx3GQLmtJLmtbvLoLGoIufGKuG6qhHr/odBlDu6912vD9VAwVpbHr7eJlOxLQ==
+X-Gm-Gg: ASbGncsHSw8YJQENfjbdDeZTeMh79j0uUS65CBu3uv8aWZFe4LoKY+RbhF/D6Hcb1b7
+	RKS5Igd6nF7H5ybM3LIGt0g/XaTB7w9/wqswqCGqBwGPrk+K76lo2vuqYzzldAV3Bmkf4CPTNpP
+	7u39N5BD+GrcXEwLuy7KKatIls8A5BW9HGaubxC+wmA7gD15txAgLDYalT3oatcvA3guNQF+V4Z
+	BVIYpgiDydeR6wg90ue+HvAdp/eBIksSgpcPywhpw9C7hHJ6BFLoisJ8wSVuqRMZGDSpES58pwd
+	Hrxnmapi+46E/XbtIk8W2yJN4p6t2VbKoshwIPd4guAZhsVWqUVBOqZvTdQKO8OCPWYBabYHpFc
+	ZnqD5Qvc9RQ==
+X-Received: by 2002:a05:620a:3f85:b0:7c3:cd78:df43 with SMTP id af79cd13be357-7d0a203c941mr2733685785a.58.1748947030013;
+        Tue, 03 Jun 2025 03:37:10 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGcaWHfUMt/J84blqUHOVj38V1G/bCnq6PQ19HYI5oXarRw/p2CQ+daA0/OPAIVimxK24L/Xw==
+X-Received: by 2002:a05:620a:3f85:b0:7c3:cd78:df43 with SMTP id af79cd13be357-7d0a203c941mr2733680685a.58.1748947029464;
+        Tue, 03 Jun 2025 03:37:09 -0700 (PDT)
 Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5533791034asm1871748e87.108.2025.06.03.03.35.41
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-553378a00d8sm1888642e87.82.2025.06.03.03.37.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jun 2025 03:35:41 -0700 (PDT)
-Date: Tue, 3 Jun 2025 13:35:40 +0300
+        Tue, 03 Jun 2025 03:37:08 -0700 (PDT)
+Date: Tue, 3 Jun 2025 13:37:06 +0300
 From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 To: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+Cc: =?utf-8?Q?Gy=C3=B6rgy?= Kurucz <me@kuruczgy.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
@@ -94,119 +97,78 @@ Cc: Sebastian Reichel <sre@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com,
         devicetree@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 2/8] power: supply: core: Add state_of_health power
- supply property
-Message-ID: <p5nxjuexggzxttislcaum7vomawnq5fncos7itfib6ysvy6a4k@d5ywmfpqyk3s>
+Subject: Re: [PATCH v2 5/8] power: supply: qcom_battmgr: Add charge control
+ support
+Message-ID: <5knsdgk7o5zifkvzlrqiplmhztnsyhlxnqiuikqf4l7wkx2qvh@s3vzkiezw2bc>
 References: <20250530-qcom_battmgr_update-v2-0-9e377193a656@oss.qualcomm.com>
- <20250530-qcom_battmgr_update-v2-2-9e377193a656@oss.qualcomm.com>
- <6oixvnhihgjucqaovkayzm6cpi35jfmtwmm67wa6h4nlmhr6w5@ggb7auvjzos2>
- <cd2964b0-e28e-4ddb-b319-9b65fb78b73c@oss.qualcomm.com>
+ <20250530-qcom_battmgr_update-v2-5-9e377193a656@oss.qualcomm.com>
+ <f2e0f1da-c626-4cf0-8158-8a5805138871@kuruczgy.com>
+ <8bb3a056-c00f-4ae0-a790-d742d31f229a@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <cd2964b0-e28e-4ddb-b319-9b65fb78b73c@oss.qualcomm.com>
-X-Proofpoint-GUID: Hxm-LW2Mq6J5kP8Q7DDM1ElrCd3eEQmc
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjAzMDA5MiBTYWx0ZWRfX3aKw91n6R9GV
- AtbI36O5HSIXAhu8W1Cuu3i0CFfzbnhoL3/GkhbuGYAaXxNMu5cnpg3msok9GirrwAipD/WT6Ce
- nCEfXJX7Ju/0lkvM4TQiaGicfg17Cq/alfPGVFIdW5kVfZlBR/1ntL5o9SzZfl9A13zCelIDJ+G
- XKFwCEx3QqSNCsvpIRggO2JYgWKTWnBOvRyOWs+jwDfEXHcpYKCd1XUqpvL8fT0H/3gchQvehg7
- OdnPgPa76tntNpINh6nCglxX7RF5fTclTKie2KrH1nZL3RKJCSA6LPm/02vu43lD4R4pYhthFe4
- mUdNIYEIl1bZW1KnBXvpZoe4mQhfB0TgcqeIB0LG5zIGy6WaQ563jkngEm39P7tBDFgoAnrYKH5
- VEBP1O2qnMBfgQRRtv917M4D9uPsLSA1ndlXUgO52wfvt2ZRvtqaoezTBbhuNN3kyYyywZHi
-X-Proofpoint-ORIG-GUID: Hxm-LW2Mq6J5kP8Q7DDM1ElrCd3eEQmc
-X-Authority-Analysis: v=2.4 cv=UphjN/wB c=1 sm=1 tr=0 ts=683ed000 cx=c_pps
- a=wEM5vcRIz55oU/E2lInRtA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=6IFa9wvqVegA:10 a=EUspDBNiAAAA:8 a=VwQbUJbxAAAA:8 a=gC4Pu52S1TLJhMqEWYgA:9
- a=CjuIK1q_8ugA:10 a=OIgjcC2v60KrkQgK7BGD:22
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8bb3a056-c00f-4ae0-a790-d742d31f229a@oss.qualcomm.com>
+X-Proofpoint-GUID: D7gQ9-uXQBW_PRWR2SdTNg7_fKLydvEp
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjAzMDA5MiBTYWx0ZWRfX/2ooNgK5t6oF
+ L7GFIMCxiXzztNcXkD3a2NywsrtwtVBAQCRBtU4LeCkJGRrgta8PqhthEOquGtQNDK3CArqTydq
+ 77wD49rOPzFuhL8TO0J2UPyOhN6N6limzW9YSe085Op0HaK3PUeOA57Ea82Tx1kaY8xvjDvHbhx
+ hvO6Rt1qIGZcDV/zM91TyF0mhjOI2DyBI+bT+bj/C62bd6w2U0cS2Mkwd4V4XLpR3s05KBavp8m
+ NS7dQzAAqOdqm2jHftVmApKKvZHmis0nCmBR/m2EbKfVOLzXaFdBJmQQZoHeaPuX1uvzpBQ995d
+ AGqz5o+KFxJi66bIGXEhFCjkLS2J+MFtxdfQ4gqyi1MWlWmETjrz6D1VlJRfgc1WMViaQRd1FlG
+ hfUu/d0ijx3NH4dRnl/SLpcwYvJlqn44GfDcTvUvMoibpfWlzN4JAoFpuPe30IuIVK9Scqxp
+X-Proofpoint-ORIG-GUID: D7gQ9-uXQBW_PRWR2SdTNg7_fKLydvEp
+X-Authority-Analysis: v=2.4 cv=UphjN/wB c=1 sm=1 tr=0 ts=683ed057 cx=c_pps
+ a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10
+ a=6IFa9wvqVegA:10 a=DVxyIStym39DqTwfPQkA:9 a=3ZKOabzyN94A:10
+ a=wPNLvfGTeEIA:10 a=PEH46H7Ffwr30OY-TuGO:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
  definitions=2025-06-03_01,2025-06-02_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
  priorityscore=1501 spamscore=0 impostorscore=0 lowpriorityscore=0
- phishscore=0 mlxlogscore=999 clxscore=1015 malwarescore=0 adultscore=0
+ phishscore=0 mlxlogscore=802 clxscore=1015 malwarescore=0 adultscore=0
  bulkscore=0 mlxscore=0 suspectscore=0 classifier=spam authscore=0 authtc=n/a
  authcc= route=outbound adjust=0 reason=mlx scancount=1
  engine=8.19.0-2505280000 definitions=main-2506030092
 
-On Tue, Jun 03, 2025 at 12:50:18PM +0800, Fenglin Wu wrote:
+On Tue, Jun 03, 2025 at 01:48:11PM +0800, Fenglin Wu wrote:
 > 
-> On 6/2/2025 2:17 PM, Dmitry Baryshkov wrote:
-> > On Fri, May 30, 2025 at 03:35:07PM +0800, Fenglin Wu via B4 Relay wrote:
-> > > From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-> > > 
-> > > Add state_of_health power supply property to represent battery
-> > > health percentage.
-> > > 
-> > > Signed-off-by: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-> > > ---
-> > >   Documentation/ABI/testing/sysfs-class-power | 10 ++++++++++
-> > >   drivers/power/supply/power_supply_sysfs.c   |  1 +
-> > >   include/linux/power_supply.h                |  1 +
-> > >   3 files changed, 12 insertions(+)
-> > > 
-> > > diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-> > > index 22a565a6a1c509461b8c483e12975295765121d6..74e0d4d67467500c3cd62da3ae0b2e4a67e77680 100644
-> > > --- a/Documentation/ABI/testing/sysfs-class-power
-> > > +++ b/Documentation/ABI/testing/sysfs-class-power
-> > > @@ -562,6 +562,16 @@ Description:
-> > >   		Valid values: Represented in microohms
-> > > +What:		/sys/class/power_supply/<supply_name>/state_of_health
-> > > +Date:		May 2025
-> > > +Contact:	linux-arm-msm@vger.kernel.org
-> > > +Description:
-> > > +		Reports battery power supply state of health in percentage.
-> > > +
-> > > +		Access: Read
-> > > +
-> > > +		Valid values: 0 - 100 (percent)
-> > What does it mean that battery has 77% of health?
+> On 5/31/2025 6:36 PM, György Kurucz wrote:
+> > > Add charge control support for SM8550 and X1E80100.
+> > 
+> > Thank you for this, tested on my Lenovo Yoga Slim 7x, the limiting works
+> > well, I finally don't have to worry about leaving my laptop plugged in
+> > for too long.
+> > 
+> > One small thing I noticed is that after setting the sysfs values and
+> > rebooting, they report 0 again. The limiting appears to stay in effect
+> > though, so it seems that the firmware does keep the values, but Linux
+> > does not read them back. Indeed, looking at the code, it seems that
+> > actually reading back the values is only implemented for the SM8550.
 > 
-> I will update this to explain it better:
+> Right.
 > 
-> Reports battery power supply state of health in percentage, indicating that the maximum charge capacity has degraded to that percentage of its original designed capacity.
+> Based on offline information, X1E80100 doesn't support reading back those
+> threshold values in battery management firmware, so I can only use the
+> cached values for sysfs read.
 
-Which basically means that we don't need it in the first place, as we
-can read capacity_full and capacity_full_design (or energy_full /
-energy_full_design) and divide one onto another.
+Which limits usablity of the attribute, it is now impossible to identify
+whether it is enabled or disabled. Is there a chance of fixing that for
+the X1E80100 platform?
 
 > 
-> > > +
-> > >   **USB Properties**
-> > >   What:		/sys/class/power_supply/<supply_name>/input_current_limit
-> > > diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-> > > index dd829148eb6fda5dcd7eab53fc70f99081763714..12af0d0398822ff23d8970f6bdc8e3ef68081a1d 100644
-> > > --- a/drivers/power/supply/power_supply_sysfs.c
-> > > +++ b/drivers/power/supply/power_supply_sysfs.c
-> > > @@ -221,6 +221,7 @@ static struct power_supply_attr power_supply_attrs[] __ro_after_init = {
-> > >   	POWER_SUPPLY_ATTR(MANUFACTURE_MONTH),
-> > >   	POWER_SUPPLY_ATTR(MANUFACTURE_DAY),
-> > >   	POWER_SUPPLY_ATTR(RESISTANCE),
-> > > +	POWER_SUPPLY_ATTR(STATE_OF_HEALTH),
-> > >   	/* Properties of type `const char *' */
-> > >   	POWER_SUPPLY_ATTR(MODEL_NAME),
-> > >   	POWER_SUPPLY_ATTR(MANUFACTURER),
-> > > diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> > > index de3e88810e322546470b21258913abc7707c86a7..dd0108940231352ac6c6f0fa962d1ea904d81c7a 100644
-> > > --- a/include/linux/power_supply.h
-> > > +++ b/include/linux/power_supply.h
-> > > @@ -175,6 +175,7 @@ enum power_supply_property {
-> > >   	POWER_SUPPLY_PROP_MANUFACTURE_MONTH,
-> > >   	POWER_SUPPLY_PROP_MANUFACTURE_DAY,
-> > >   	POWER_SUPPLY_PROP_RESISTANCE,
-> > > +	POWER_SUPPLY_PROP_STATE_OF_HEALTH,
-> > >   	/* Properties of type `const char *' */
-> > >   	POWER_SUPPLY_PROP_MODEL_NAME,
-> > >   	POWER_SUPPLY_PROP_MANUFACTURER,
-> > > 
-> > > -- 
-> > > 2.34.1
-> > > 
-> > > 
+> > 
+> > Anyway, this is just a small nitpick, this does not really affect the
+> > functionality, and I would support merging this series regardless of
+> > whether the read back values are always correct.
+> > 
+> > György
 
 -- 
 With best wishes
