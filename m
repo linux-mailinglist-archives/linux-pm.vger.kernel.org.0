@@ -1,158 +1,160 @@
-Return-Path: <linux-pm+bounces-28021-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28022-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 810BFACC7CA
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 15:29:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1C66ACC7F4
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 15:35:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50D53164C0F
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 13:29:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C4733A31C8
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jun 2025 13:35:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B38D231826;
-	Tue,  3 Jun 2025 13:29:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 420B4231854;
+	Tue,  3 Jun 2025 13:35:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pK/iBtt2"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="cZJH5KR6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DD8A937;
-	Tue,  3 Jun 2025 13:29:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55D1B2253EC
+	for <linux-pm@vger.kernel.org>; Tue,  3 Jun 2025 13:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748957342; cv=none; b=jB01zEBSAs2SwMs7PHCnMG+bPAEcQYuge4oBoVy7SgsAcjqrpVkX7kFCdrArMiCd43+0104NQ+R7nl12i7P7SvyrwF7crXyWX5vF2dn6DaX8x0sUZZ1DC2fIk8copJJirU8n2ar2FyBdkHK8VD/GWB+gdHMRvFdnhaN3/XAoh30=
+	t=1748957732; cv=none; b=AF1M6NgASdnpgB1JlLEdOf/6IZwh+WXoB/sKKyLZ5CA62GOMhloP+Zzt9LyHuZQcT2NvkPRndkf57+WvQTgEg6BIuFaKRCWdLAvlv4TIUwkN3Vb42evw+bNzhlX4F8HrjjMQXGtsquJ2tqma5gOEH8YPSxlq8xDaWLO3W3GXOB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748957342; c=relaxed/simple;
-	bh=F0kJRudsurFWvAfw/NQZAGVoSklCQBdR6GXq+HvgSFw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e2UPHcVURP2srPOFDQssY/UtLGxkmrI+uXQHpaxnz0ok3mhlcCLfRxfhC7ChBnEmlhpY1jP5LGfQTarQq9uYss9XPyQXdwwCzO2tXOB7zQ/2ZeJe4/HSOa22y/eILIFTFjnoqeCLyDndLnQJTN3vSzQu+xJG5ngeGvJNheLnYss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pK/iBtt2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0E95C4CEED;
-	Tue,  3 Jun 2025 13:29:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748957341;
-	bh=F0kJRudsurFWvAfw/NQZAGVoSklCQBdR6GXq+HvgSFw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pK/iBtt299lLbE8VT7t/nTvPQLQVpuxt5Mgy8NKyug+Kt5+dx9+NGP4u5u+xdIGw7
-	 ErxkyqUEmTwVK8pfVCa230zvl0NCQzrf3gs4jun/ohCWBw8rFBIXlVwzYLwRcsS1Ic
-	 CHh7aoQw4ekcNVsGJPzkCevQ0PH3UFCJowUBmOKXOQmELF49W2lmENetlz4Nvsjhjr
-	 +4fHeeAQTOEU3759B95m8c1QxZZ4T+J1XLEn35Nsvskz2ObDUBGPhFQe2K8vdWYnC2
-	 Yt7RU+p+f31JlTY9kylbg1nKXUV3Gz5ipo+T4Avup6q0JOG9Odz6Rq3rF3E2B8yXf6
-	 5V9tpkm6HY6hQ==
-Date: Tue, 3 Jun 2025 15:28:58 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, 
-	Fu Wei <wefu@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Frank Binns <frank.binns@imgtec.com>, Matt Coster <matt.coster@imgtec.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>, linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v3 3/8] drm/imagination: Use pwrseq for TH1520 GPU power
- management
-Message-ID: <20250603-whispering-jaybird-of-thunder-f87867@kuoka>
-References: <20250530-apr_14_for_sending-v3-0-83d5744d997c@samsung.com>
- <CGME20250529222405eucas1p18ed1254bf1b2d78468734656fec537e1@eucas1p1.samsung.com>
- <20250530-apr_14_for_sending-v3-3-83d5744d997c@samsung.com>
+	s=arc-20240116; t=1748957732; c=relaxed/simple;
+	bh=JMbOtPLP2HGwreQOwlEuUKoWxualvBCdLUGJQB6ESDg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=V97oJ3Ea9CGk4dmlbUr4DRaHyuSnoLP8zFX1zq9YWJ5g3MeswVfTauy5IHT2QI1jxCq9mvd+ChWftJfcrmWfcK88A/UWmCPDpLEYkLre2VBgBO2sVBZqkJXBbPEsMZao6IF6OLphLrAXH7iTC+LeXJl1SLCQnPBpVtULhU56j0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=cZJH5KR6; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-54e7967cf67so6601330e87.0
+        for <linux-pm@vger.kernel.org>; Tue, 03 Jun 2025 06:35:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1748957728; x=1749562528; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JIOXxCHtKeBYGzNsgywd50i1FC81LtsnP0F3u2yP/Ow=;
+        b=cZJH5KR6Y9hzkOsx1b6pnSWo8RRQ+AJdWlM7X/1DAwp2nCTMG6O6gRuUa+XFp1mgl9
+         YcU/l2WjPEYoQDNL88gDIaiCrWthMNv2CvPZIJfzBkirSAMqW8r5i5EaXDlGoaIcYSMr
+         bKC3xJe49hNUhdnsKPyH6a3PbxzZ7h96JxolQtG0b6QViQkIlQqK/v77//jOBl4OrxrE
+         dCFkiZ+1vuVcWyKaAF9PFgTRyw80q7x/asVhx8gk9rrtK1r9hmLWVWmsayj8cDqp8kj5
+         GBERjhmgQ2pvdjtLfHwqWod7BFAOe2wcGWoXPHrkPp+gTQ5yxeTrcHbf6RLRGXzhzFAI
+         6fQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748957728; x=1749562528;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JIOXxCHtKeBYGzNsgywd50i1FC81LtsnP0F3u2yP/Ow=;
+        b=BK8C/Dnj4Ki8wHb3JqwQRrSAu+JitN+5uzCeTRsZyQh0pOqESEb7Js7Vb6Epgb9xbf
+         LBIsV4Hrh852lP+G6HUpR7YUa7iHDAN4bNmCRWAlCJ1SIstfMOtD5GXbRBmiFgN40NQY
+         T41SUZwJBNnHN257+Z8cC/pIjndULT+/1XIHNAid9Nl23itK8tvlcQJyocHIkc5DRvmz
+         hmPIA29XCG0IpTdcCjFznckFmwXjOV2xN6ujtDZeQzis1jW+c6k8dYk3307VKrRTDLrO
+         MX5whKDVnMZ0Yaxzh+O1Zo7DEm2LAc7nNfXltDDUDjpXcLvzjOgVamKyoEEzII42r8Lm
+         klZA==
+X-Forwarded-Encrypted: i=1; AJvYcCWBrnhKgM+Y+uU0ysjX0F+GUVE0nRlG3EFoAQ7uOqG1DQGyTF/AO+oLHpy3YXSqJMZOMR0hfSsdOw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzylISpXwxixAtQ+48MzNEgmatwnYIqyMoxHyI6WsQPv73GuNq6
+	f6VThyqHQvBJvkNbzIPzCVft24TOcnN4zgKiuWiPjOyjIf7ls5Fez6vN9z9o0GG7M8M4kHDixpW
+	ljRgPIMFyXx8iXFCIii5HBHE4vXZCi1KFw6njmVK5iQ==
+X-Gm-Gg: ASbGnctQuqsqcarbxFIMHF7REq8DqA0zYmpTIIUmEC3CG8B/GHNwfcVUpqmzPjkOXqc
+	ksCIWJ7ZlOxFvc9YkM9K20rhEUXMiGr0JpMfGK5uEeh08usDn6v31SqvWoFtZ0GXp73s0IxZJX8
+	DNpU5RQl4Ki7cXQ2g3Mz3fDeml/nqm+wDa1qYHk5wDDU2wdlltyS5+yeBJDZH1nI0=
+X-Google-Smtp-Source: AGHT+IG+4ruICaQP9WjnJtvSTT9EmK06oaor1STRsfEcgxfGLSMohUV22g53UcbTlMgO8PAYrxi/zYRyt6cxM4CKTj0=
+X-Received: by 2002:a05:6512:3a89:b0:553:2ce6:c749 with SMTP id
+ 2adb3069b0e04-55342f5f525mr4032820e87.24.1748957728189; Tue, 03 Jun 2025
+ 06:35:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250530-apr_14_for_sending-v3-3-83d5744d997c@samsung.com>
+References: <CGME20250529222403eucas1p1923fe09240be34e3bbadf16822574d75@eucas1p1.samsung.com>
+ <20250530-apr_14_for_sending-v3-0-83d5744d997c@samsung.com>
+ <20250530-apr_14_for_sending-v3-1-83d5744d997c@samsung.com>
+ <CAMRc=Me9cWfe2mL=Q6JQbAFjpd55MOBZuAWC793Us0criiQr4Q@mail.gmail.com>
+ <4519844e-b1c0-40a7-b856-a6e4a80c6334@samsung.com> <20250603-cuddly-certain-mussel-4fbe96@kuoka>
+In-Reply-To: <20250603-cuddly-certain-mussel-4fbe96@kuoka>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Tue, 3 Jun 2025 15:35:16 +0200
+X-Gm-Features: AX0GCFuDYKD0oEvnMgBkM50gIAPDgZLFL7Iyce01c_hFdppjyHLpA9k0Aap5-Uk
+Message-ID: <CAMRc=MfXashaEscE1vF_P6cs9iOCBerfNFiB4yC+TX76fZ87nA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/8] dt-bindings: power: Add T-HEAD TH1520 GPU power sequencer
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Michal Wilczynski <m.wilczynski@samsung.com>, Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, 
+	Fu Wei <wefu@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Frank Binns <frank.binns@imgtec.com>, 
+	Matt Coster <matt.coster@imgtec.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 30, 2025 at 12:23:50AM GMT, Michal Wilczynski wrote:
-> Update the Imagination PVR DRM driver to leverage the pwrseq framework
-> for managing the power sequence of the GPU on the T-HEAD TH1520 SoC.
-> 
-> In pvr_device_init(), the driver now attempts to get a handle to the
-> "gpu-power" sequencer target using devm_pwrseq_get(). If successful,
-> the responsibility for powering on and off the GPU's core clocks and
-> resets is delegated to the power sequencer. Consequently, the GPU
-> driver conditionally skips acquiring the GPU reset line if the pwrseq
-> handle is obtained, as the sequencer's match function will acquire it.
-> Clock handles are still acquired by the GPU driver for other purposes
-> like devfreq.
-> 
-> The runtime PM callbacks, pvr_power_device_resume() and
-> pvr_power_device_suspend(), are modified to call pwrseq_power_on() and
-> pwrseq_power_off() respectively when the sequencer is present.  If no
-> sequencer is found, the driver falls back to its existing manual clock
-> and reset management. A helper function,
-> pvr_power_off_sequence_manual(), is introduced to encapsulate the manual
-> power-down logic.
-> 
-> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
-> ---
->  drivers/gpu/drm/imagination/Kconfig      |  1 +
->  drivers/gpu/drm/imagination/pvr_device.c | 33 +++++++++++--
->  drivers/gpu/drm/imagination/pvr_device.h |  6 +++
->  drivers/gpu/drm/imagination/pvr_power.c  | 82 +++++++++++++++++++++-----------
->  4 files changed, 89 insertions(+), 33 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/imagination/Kconfig b/drivers/gpu/drm/imagination/Kconfig
-> index 3bfa2ac212dccb73c53bdc2bc259bcba636e7cfc..737ace77c4f1247c687cc1fde2f139fc2e118c50 100644
-> --- a/drivers/gpu/drm/imagination/Kconfig
-> +++ b/drivers/gpu/drm/imagination/Kconfig
-> @@ -11,6 +11,7 @@ config DRM_POWERVR
->  	select DRM_SCHED
->  	select DRM_GPUVM
->  	select FW_LOADER
-> +  select POWER_SEQUENCING
+On Tue, Jun 3, 2025 at 3:19=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.org=
+> wrote:
+>
+> On Mon, Jun 02, 2025 at 10:29:13PM GMT, Michal Wilczynski wrote:
+> > >> +description: |
+> > >> +  This binding describes the power sequencer for the T-HEAD TH1520 =
+GPU.
+> > >> +  This sequencer handles the specific power-up and power-down seque=
+nces
+> > >> +  required by the GPU, including managing clocks and resets from bo=
+th the
+> > >> +  sequencer and the GPU device itself.
+> > >> +
+> > >> +properties:
+> > >> +  compatible:
+> > >> +    const: thead,th1520-gpu-pwrseq
+> > >> +
+> > >
+> > > Before I review the rest: is this actually a physical device that
+> > > takes care of the power sequencing? Some kind of a power management
+> > > unit for the GPU? If so, I bet it's not called "power sequencer" so
+> > > let's use its actual name as per the datasheet?
+> >
+> > Hi Bart,
+> > Thanks for your feedback.
+> >
+> > The hardware block responsible for powering up the components in the
+> > TH1520 SoC datasheet is called AON (Always On). However, we already hav=
+e
+> > a DT node named aon that serves as a power domain provider
+> > (Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml).
+>
+> So no. One device, one device node (sometimes with cildren nodes). You
+> do not get another device node just because someone wrote incomplete
+> binding or because driver looks differently.
+>
+> >
+> > Following the discussion [1] about needing a separate DT node for the
+> > power sequencing capabilities of this AON block, and thinking further
+> > about it, I think the binding should be more generic. The AON block can
+> > manage power sequences for more than just the GPU (e.g. NPU, AUDIO,
+> > DSP).
+> >
+> > The compatible string could be updated like so:
+> > "thead,th1520-aon-pwrseq"
+>
+> Should not be separate node, you already have one for AON.
+>
 
-Messed indent.
+Agreed. And as far as implementation goes, you can have the same
+driver be a PM domain AND pwrseq provider. It just has to bind to the
+device node that represents an actual component, not a made-up
+"convenience" node.
 
->  	help
->  	  Choose this option if you have a system that has an Imagination
->  	  Technologies PowerVR (Series 6 or later) or IMG GPU.
-> diff --git a/drivers/gpu/drm/imagination/pvr_device.c b/drivers/gpu/drm/imagination/pvr_device.c
-> index 8b9ba4983c4cb5bc40342fcafc4259078bc70547..19d48bbc828cf2b8dbead602e90ff88780152124 100644
-> --- a/drivers/gpu/drm/imagination/pvr_device.c
-> +++ b/drivers/gpu/drm/imagination/pvr_device.c
-> @@ -25,6 +25,7 @@
->  #include <linux/interrupt.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
-> +#include <linux/pwrseq/consumer.h>
->  #include <linux/reset.h>
->  #include <linux/slab.h>
->  #include <linux/stddef.h>
-> @@ -631,10 +632,34 @@ pvr_device_init(struct pvr_device *pvr_dev)
->  	if (err)
->  		return err;
->  
-> -	/* Get the reset line for the GPU */
-> -	err = pvr_device_reset_init(pvr_dev);
-> -	if (err)
-> -		return err;
-> +	/*
-> +	 * Try to get a power sequencer. If successful, it will handle clocks
-> +	 * and resets. Otherwise, we fall back to managing them ourselves.
-> +	 */
-> +	pvr_dev->pwrseq = devm_pwrseq_get(dev, "gpu-power");
-> +	if (IS_ERR(pvr_dev->pwrseq)) {
-> +		int pwrseq_err = PTR_ERR(pvr_dev->pwrseq);
-> +
-> +		/*
-> +		 * If the error is -EPROBE_DEFER, it's because the
-> +		 * optional sequencer provider is not present
-> +		 * and it's safe to fall back on manual power-up.
-
-It is safe but why it is desirable? The rule is rather to defer the
-probe, assuming this is probe path.
-
-Best regards,
-Krzysztof
-
+Bartosz
 
