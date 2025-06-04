@@ -1,239 +1,156 @@
-Return-Path: <linux-pm+bounces-28089-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28090-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CA99ACD802
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 08:47:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1130ACD977
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 10:19:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D815317017F
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 06:47:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA62A3A4300
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 08:18:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 340F41FCFF1;
-	Wed,  4 Jun 2025 06:47:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 688F2269898;
+	Wed,  4 Jun 2025 08:19:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o+UQCwsq"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mIGpYvuO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7A71F4606;
-	Wed,  4 Jun 2025 06:47:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F3E8239561
+	for <linux-pm@vger.kernel.org>; Wed,  4 Jun 2025 08:19:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749019643; cv=none; b=C4b0Q+tRHdPcqq+UCnWWpnhWtxgAAH54pVzgk0fVUmtJh69lcVOdNYVPt4frVzoTMLJcq8AU0WyXLgUE73souE4jXamOEPygjp1OxkZWxnTB+drFqFcQYVnMVhIxvC+EsvJFYa8vOqQYWa8UWSiM1qLAHFzi3SEcKFzEdN/YVoU=
+	t=1749025144; cv=none; b=YRc2WgsOVn2hgTud88bnQnkXD/k0GCp5Dz2z+iln+6nXEUxFsrC5EklUy/CkgydZWDsDaXwUtjqKQIjhYwgiiaU82WytlYNNMD8ufWluutvHXUNuVmEpAz8A0v8iYF0BSaGEwH0ZMAHo+ihtyL3tENGfw8dWpLMqYABTRRtPM0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749019643; c=relaxed/simple;
-	bh=SVuq2csc8B+tntGJ/PFd3caemy9vyyP3hUodtswqWwA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VLLm04oVt6fikgOhtf/GspXEnTHe7jovXLWUkmQ9keoHvkao64xH85lwwDdyCRH5UVzgdaGDhoY7t0FhwkCgi2dHtHaFynOuFxAi+7+VXpZy7/bKgoVLPtclgp4eF1exGrJCZWScEUOipCiFkGhqA7RfQOtDJLN8bFTWanmzDxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o+UQCwsq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CD56C4CEE7;
-	Wed,  4 Jun 2025 06:47:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749019642;
-	bh=SVuq2csc8B+tntGJ/PFd3caemy9vyyP3hUodtswqWwA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=o+UQCwsqi2NvZG7jB2mPLYKlfETFtz7e/3kAD/cMMGuNU44cRY75oy2YgXqk1lyFV
-	 4hxJIOyrEBYGkX4x9gfE0WoZMhbqrJTDVFWUr1Gibz/QwRqY1IUqhnpZqF9lttalT9
-	 1eT1z7/OKBQRHd8xniK5iv41Lk54Lw87gpYyVy5/S3SDsxDrj9hQ6Mo68TJ76Jdynz
-	 UDILQx5cQrQG+OAD1DiBNkkmjnClYds1VIAb7oJEqriLg4r5tsPJZurHGMP6pwlWWl
-	 rfJXsicBelvHWXc6dTm0ZNjGE/vK3TiFRJGNtHWD+xH72vzIrvs1LEVKYCAcWI/2El
-	 YDvcxBvmGfpeA==
-Message-ID: <5fb1bcc0-db25-466a-b315-685d8b362245@kernel.org>
-Date: Wed, 4 Jun 2025 08:47:15 +0200
+	s=arc-20240116; t=1749025144; c=relaxed/simple;
+	bh=EslNEbGkoEtGZPgNzSbXr84zl40yV8m1mM0v265VQvE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CpOvox409ay9gclkusQIAV2WJdV08R9b6JYJ/d+tEfESbckZcc03+MYhVYztQk79MADSsIpYgHlTeU3KgwGgZVUNGtGaFiaKz0+BKcs8axrdG6l55pjrKFPQh+QOHJPyOrcxe1IDz0fQFFnS0Qi4WX7UX4tCHzVB2CXNhNPaTiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mIGpYvuO; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3a4ef05f631so663819f8f.3
+        for <linux-pm@vger.kernel.org>; Wed, 04 Jun 2025 01:19:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1749025140; x=1749629940; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IMiMkiTF0Z00OlwzviIMPLOkZdxr4W49dCOYPK/ZpVY=;
+        b=mIGpYvuOHCjKomlYTQ4uMwwrTevmSOc2ukO3WhCaV+9k+1q4fM57HMI0k9w3sMOWdW
+         a9FepbbOSkA7SPSdFhlP09gVt13hivgMKF9ihPA8vQKqv89QlBOFhH8F7cVgd2HNPrg4
+         wcGPQGCY4LSGIFdZiKLwo8B6/F5F3bUE7my7R67F3qmgztVK5EOKNE0Do98Xg1OuPQG4
+         fD+iyPcfEMYHOy3NPYPEY2xqv3Cfh4SlWWKA1GX8z+XgQDxdBfk7bCYGj4EtfxyUTrCS
+         lrEPzf9IFpJJPGoU3BhtCz97KYIRUASVwWNjH4YQ5bIJxple+m28MqRDvShx6KtVIoCj
+         PPkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749025140; x=1749629940;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IMiMkiTF0Z00OlwzviIMPLOkZdxr4W49dCOYPK/ZpVY=;
+        b=tS1HLRMmNvfgvN1OWzO6Nwxsd4ggT5pb/io25TJKOJqLjxySSe4AQi2cA2EN46pC8E
+         BkWUTxHCir40ZX37kjimJ8ny1ShpIbuKCGWBhm1WMz0FUZ8ZeEZoqnmfV5h7IDAniTcL
+         mQL3OiIhCCbbCd1z6x5UCNJcHCLdTqw0Qx1eGGt5m1oD92+eBL9Kbc7COElylmOHqifP
+         YbS12cWadqYCxzOJrptDOi8q6WeO+z3NbFCJiClusBiUippeONo3hEY5ckSaaZDl/CWj
+         aAK03Ax19cCxkmzOf9NCejAdc4r1Q1U66MtiZfemIEUeVyoDGKfeRBSXL/yJpmcwweAD
+         z2tQ==
+X-Gm-Message-State: AOJu0YxxblGU3HhzUWS/JIj6bJQWfZMeMRIyboR6DLPfve6AVaCIaoWn
+	EIdDwYO0aI7gyHtHr6TZ7onLBYC0vGwBCD25InbcQrJtVPhHyBpEdMLPrkwOgVh2zEE=
+X-Gm-Gg: ASbGnct5Jj2Nq6xBNqoxacvaiZR+FGvm/wlxkAS6KH9oBThk0TDW9iG0yVmo32ySi+4
+	lEi9CMGevyzUMftXAH2k3mTndxKoVyy4dX81hNC9K0MBRqhAQiZHpQsN29vvOIqGVrvLoccZGVv
+	S8fZHPBkKPXrgd1GVGM6ApwW02OITXdb5ewteFg5plQ66braKchfgHgq9EA3U4M4JeD69dGhxzs
+	Gm045YzJmuQVQAgTF50vvV/zUlG9HwMDEwvcy/0RJxEqQnf//0HzBB6qfrhcWCpc+0IVGU+5Z72
+	WY8JMr2qOuTRlXq5LbmTdAWPePGnD8Pi+nJ+rBVOcAf5ZhyGex+GK0RAR1CTcGmk1Xq1LY2W/GC
+	opRXer9LPb7fqYLfPwUV8dQ==
+X-Google-Smtp-Source: AGHT+IGQDltAdK05Fw11inWndjZRxULWek/GxMwsA6OXvhVhdjJ8bm9JYWwetuY8H/FAb8SLNfuwKg==
+X-Received: by 2002:a05:6000:1a86:b0:3a4:dd00:9ac3 with SMTP id ffacd0b85a97d-3a51d9789b1mr540032f8f.12.1749025139734;
+        Wed, 04 Jun 2025 01:18:59 -0700 (PDT)
+Received: from [172.16.23.13] (adsl-84-227-104-5.adslplus.ch. [84.227.104.5])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-450d80065e0sm198301215e9.29.2025.06.04.01.18.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jun 2025 01:18:59 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 0/6] dt-bindings: power: supply: Few cleanups around
+ monitored-battery
+Date: Wed, 04 Jun 2025 10:18:20 +0200
+Message-Id: <20250604-dt-bindings-psy-monitored-battery-v1-0-7f755ff75218@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/6] dt-bindings: mfd: add pf1550
-To: samuel.kayode@savoirfairelinux.com, Lee Jones <lee@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, Dmitry Torokhov
- <dmitry.torokhov@gmail.com>, Sebastian Reichel <sre@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
- Abel Vesa <abelvesa@kernel.org>, Abel Vesa <abelvesa@linux.com>,
- Robin Gong <b38343@freescale.com>,
- Enric Balletbo i Serra <eballetbo@gmail.com>
-References: <20250603-pf1550-v4-0-bfdf51ee59cc@savoirfairelinux.com>
- <20250603-pf1550-v4-1-bfdf51ee59cc@savoirfairelinux.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250603-pf1550-v4-1-bfdf51ee59cc@savoirfairelinux.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEwBQGgC/x2NQQqDMBAAvyJ7diEaLaVfKR5Msto9dCO7oVTEv
+ xu8DMxl5gAjZTJ4NQco/dg4S5WubSB+ZlkJOVWH3vWje7gBU8HAklhWw812/GbhkpUShrkU0h3
+ 908cYKv3YQe1sSgv/78d7Os8L1ghAF3MAAAA=
+X-Change-ID: 20250604-dt-bindings-psy-monitored-battery-383ccb383351
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Andrew Davis <afd@ti.com>, 
+ Casey Connolly <casey.connolly@linaro.org>, 
+ Jakob Hauser <jahau@rocketmail.com>, David Heidelberg <david@ixit.cz>, 
+ Dmitry Osipenko <digetx@gmail.com>, Tobias Schrammm <t.schramm@manjaro.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, Chen-Yu Tsai <wens@csie.org>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1930;
+ i=krzysztof.kozlowski@linaro.org; h=from:subject:message-id;
+ bh=EslNEbGkoEtGZPgNzSbXr84zl40yV8m1mM0v265VQvE=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBoQAFP0q6p3Md047rFs8XK9lvNwEHiD07KFK1wf
+ aKho7OfiNOJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaEABTwAKCRDBN2bmhouD
+ 10kAD/9+ewY94g516RgISR2hTlXUOvV1mN4U2JDYN0SqKKHDmKhhBY2u1RcUQ2NU9mdDCiQmuES
+ AiChnX+LznSGTSV/Fls4v7KJJ/dypq6wZdj1gj0U6iQLkkzymLCyIWUa5JEK+8571B7nmLSN5UQ
+ x+P6QAUe87VM4rRg9M0rkMf8W+HxGzoF1Xwpurc+Xix81+3tzQB0ZzTj+oAJiWVRD+c+DLzrgHa
+ qgRddcHN/8BnYMRFe3CZz49PyALOigaaPRcnoD/ufic/uWRx/xWgNLdJ0jPANx640WCnEmCHz5r
+ ynrwbZuoAGcfQGt1etu+OSxGZWSufd486M/+oEiUYr3XZg03Wmko5G2biwTtBZNVQVIhIf8q0iI
+ uV041jbic4CSHpL8GHpLoGuTuHrVdSEK4tKu+G13CKQQT7FR7FSJNE2pguj4tBGTVuifbybMCWT
+ bGt67GHwmxFoMqs7JL01a7Rb+pptMbbvr6znG+RBunHrYLSTRcokDt/vj+vf7MtguCQRBHx95bu
+ ASkdck1Boudvhdt+rqCkR51K9JAU2slJveMMIX3diTmGB9XcYuO8ZZLrbPTs+x3w7Q2ayHS0etR
+ GbkwQWAHa6uj1schUY0nCGnVKGGfAPTXdaU86MLtIHzusWYN5MuxVLocMNiqDgyNoHw1rW1LH7w
+ PPsYXMAofsbSIZg==
+X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp;
+ fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 
-On 03/06/2025 20:27, Samuel Kayode via B4 Relay wrote:
-> From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-> 
-> Add a DT binding document for pf1550 PMIC. This describes the core mfd
-> device along with its children: regulators, charger and onkey.
-> 
-> Signed-off-by: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-> ---
-> v4:
->  - Address Krzystof's feedback:
->    - Filename changed to nxp,pf1550.yaml
->    - Replace Freescale with NXP
->    - Define include before battery-cell
->    - Drop operating-range-celsius in example since
->      nxp,thermal-regulation-celsisus already exists
->  - Not sure if there is similar binding to thermal-regulation...
->    for regulating temperature on thermal-zones? @Sebastian and @Krzysztof
-> v3:
->  - Address Krzysztof's feedback:
->    - Fold charger and onkey objects
->    - Drop compatible for sub-devices: onkey, charger and regulator.
->    - Drop constant voltage property already included in
->      monitored-battery
->    - Fix whitespace warnings
->    - Fix license
-> v2:
->  - Add yamls for the PMIC and the sub-devices
-> ---
->  .../devicetree/bindings/mfd/nxp,pf1550.yaml        | 139 +++++++++++++++++++++
->  1 file changed, 139 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/nxp,pf1550.yaml b/Documentation/devicetree/bindings/mfd/nxp,pf1550.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..add895311b892a6731f54e47fcaaba8dfdac14b3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/nxp,pf1550.yaml
-> @@ -0,0 +1,139 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/nxp,pf1550.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NXP PF1550 Power Management IC
-> +
-> +maintainers:
-> +  - Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-> +
-> +description: |
-
-Drop |, Do not need '|' unless you need to preserve formatting.
-
-> +  PF1550 PMIC provides battery charging and power supply for low power IoT and
-> +  wearable applications. This device consists of an i2c controlled MFD that
-> +  includes regulators, battery charging and an onkey/power button.
-> +
-> +$ref: /schemas/power/supply/power-supply.yaml
-> +
-> +properties:
-> +  compatible:
-> +    const: nxp,pf1550
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  wakeup-source: true
-> +
-> +  regulators:
-> +    type: object
-> +
-> +    patternProperties:
-> +      "^(ldo[1-3]|sw[1-3]|vrefddr)$":
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml
-> +        description:
-> +          regulator configuration for ldo1-3, buck converters(sw1-3)
-> +          and DDR termination reference voltage (vrefddr)
-> +        unevaluatedProperties: false
-> +
-> +    additionalProperties: false
-
-Please put it after type:object
-
-> +
-> +  monitored-battery:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-
-Drop, comes from power supply schema
-
-> +    description: |
-> +      A phandle to a monitored battery node that contains a valid value
-> +      for:
-> +      constant-charge-voltage-max-microvolt.
-> +
-> +  nxp,thermal-regulation-celsius:
-> +    description:
-> +      Temperature threshold for thermal regulation of charger in celsius.
-> +    enum: [ 60, 75, 90, 105 ]
-> +
-> +  nxp,min-system-microvolt:
-> +    description:
-> +      System specific lower limit voltage.
-> +    enum: [ 3500000, 3700000, 4300000 ]
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-
-And this becomes unevaluatedProperties: false.
-
-With these changes (and after testing with dt_bindings_check):
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
+Reference the common power supply schema to bring the definition of
+monitored-battery property allowing to drop redundant pieces.
 
 Best regards,
 Krzysztof
+
+---
+Krzysztof Kozlowski (6):
+      dt-bindings: power: supply: bq2515x: Add missing power-supply ref
+      dt-bindings: power: supply: bq256xx: Add missing power-supply ref
+      dt-bindings: power: supply: qcom,pmi8998: Add missing power-supply ref
+      dt-bindings: power: supply: richtek,rt5033: Add missing power-supply ref
+      dt-bindings: power: supply: summit,smb347: Add missing power-supply ref
+      dt-bindings: power: supply: Drop redundant monitored-battery ref
+
+ Documentation/devicetree/bindings/power/supply/bq24190.yaml        | 1 -
+ Documentation/devicetree/bindings/power/supply/bq2515x.yaml        | 7 ++++---
+ Documentation/devicetree/bindings/power/supply/bq256xx.yaml        | 5 ++---
+ Documentation/devicetree/bindings/power/supply/bq25980.yaml        | 4 +---
+ Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml | 5 +----
+ .../devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml     | 7 ++++---
+ .../devicetree/bindings/power/supply/richtek,rt5033-charger.yaml   | 4 +++-
+ .../devicetree/bindings/power/supply/stericsson,ab8500-btemp.yaml  | 4 +---
+ .../bindings/power/supply/stericsson,ab8500-chargalg.yaml          | 4 +---
+ .../bindings/power/supply/stericsson,ab8500-charger.yaml           | 4 +---
+ .../devicetree/bindings/power/supply/stericsson,ab8500-fg.yaml     | 4 +---
+ .../devicetree/bindings/power/supply/summit,smb347-charger.yaml    | 5 ++---
+ .../power/supply/x-powers,axp20x-battery-power-supply.yaml         | 6 +-----
+ 13 files changed, 22 insertions(+), 38 deletions(-)
+---
+base-commit: 3be1a7a31fbda82f3604b6c31e4f390110de1b46
+change-id: 20250604-dt-bindings-psy-monitored-battery-383ccb383351
+
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
