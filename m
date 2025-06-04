@@ -1,122 +1,157 @@
-Return-Path: <linux-pm+bounces-28115-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28116-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26CD0ACE0BA
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 16:49:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C983ACE123
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 17:23:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24F02188CE53
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 14:49:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 07AF07A2273
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 15:22:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15EE9290DA7;
-	Wed,  4 Jun 2025 14:48:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 057BE187FEC;
+	Wed,  4 Jun 2025 15:23:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="JeQB3GwK"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="FrpnwNfA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE9925C801;
-	Wed,  4 Jun 2025 14:48:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFDE32F56;
+	Wed,  4 Jun 2025 15:23:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749048526; cv=none; b=ruqpWd97hdWdES2W4b5eNVOuXFx+MUQ3GwawaQsDQFj+eJUJ+gfTzYSuVVBd5+GqruFIFwhb0dklH+M6n2/GeZn2crBTZPRP5JMRt9juUfjoNpsKJQkczz+DG12YcJDKCWcMUNKDIIuhHNPG7VEwSMx39nj8sM52QTo/FN+Aajw=
+	t=1749050596; cv=none; b=m3xUZzLG/KKbuUk0A3a4NIIiQFEDDd4KKB4PXMd19xKb3s8V0rIIGy+ESEfU+PiIReSfrgGdZ6Su5rkC5gogY5Ou+UnE8NvWbJzMRl3guy49AAzZU6ccIXa+grsO8Qtq/1DKwbtIQFlAbUO4oNYnb2UQsCTH+eiDrHGsMJNaC8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749048526; c=relaxed/simple;
-	bh=iAh3S8VOuuZTZ4HbWC4OQklPUScRAN7wXnHJJOh3i9U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eRPpC342ppILaBacHOSrzx6e84ERmkP5UdKXry6hBSqkQI+ykZ5droC5UPSuO9JlQe8sNC4gOyNAbgqtwwhx7twDxsMr6xt6wg9/yGpoVw5GZqDa8/hYaIy4103ejiVYPoskzojJ7YlDOUYuYvzzHxP9Dkx1QubZ5RPhK1kgasM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=JeQB3GwK; arc=none smtp.client-ip=208.88.110.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id 7C8123D852DB;
-	Wed,  4 Jun 2025 10:48:41 -0400 (EDT)
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
- with ESMTP id VQ7zUzPCdv6W; Wed,  4 Jun 2025 10:48:41 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id E55A73D856F5;
-	Wed,  4 Jun 2025 10:48:40 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com E55A73D856F5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
-	t=1749048521; bh=YT5CSr2behDQmvPervqqlHa1+NLbBpJUObmWSJIQq/Y=;
-	h=Date:From:To:Message-ID:MIME-Version;
-	b=JeQB3GwK3wTiyXogTAfOrYwGcRm8xVrhtaSj171R6hqkME5SkY4/ym+sMcOH++T3y
-	 tmk3ZzALIR/ozEhe9tTMRPfLBi8YFnD+khmcifiZmLuUAkV+EiQjInaZdXTMt/N6zz
-	 e24EQgG+kxWDvS3C4vDNq1wUhi2BNII8C6PwUcIYmSCR0unF21ochP0uJTed8MYpez
-	 ZP+Kw8Nv2OAoMEbhnLtko7wJEGOXzCbyhUjUm/pFkaaMAQOw8eps4YH84qIpRbXtyE
-	 I9zakO/U6PGJsyikSZzdq/D3EmDxYNxgHvCc00WIsQFluPLzqkVqKP2QiuBdX+4x3Y
-	 XKfc3i0yYY8Lw==
-X-Virus-Scanned: amavis at mail.savoirfairelinux.com
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
- by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
- with ESMTP id N-LkPakHOke5; Wed,  4 Jun 2025 10:48:40 -0400 (EDT)
-Received: from fedora (unknown [192.168.51.254])
-	by mail.savoirfairelinux.com (Postfix) with ESMTPSA id 9437B3D852DB;
-	Wed,  4 Jun 2025 10:48:40 -0400 (EDT)
-Date: Wed, 4 Jun 2025 10:48:39 -0400
-From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-pm@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>,
-	Abel Vesa <abelvesa@linux.com>, Robin Gong <b38343@freescale.com>,
-	Enric Balletbo i Serra <eballetbo@gmail.com>
-Subject: Re: [PATCH v4 3/6] regulator: pf1550: add support for regulator
-Message-ID: <aEBcx0ySywwa4BaZ@fedora>
-References: <20250603-pf1550-v4-0-bfdf51ee59cc@savoirfairelinux.com>
- <20250603-pf1550-v4-3-bfdf51ee59cc@savoirfairelinux.com>
- <eb1fb4e2-42aa-4795-bc6c-dbcf1fa04f11@sirena.org.uk>
- <aEBSSHA8bxw2igAW@fedora>
- <f2064326-e696-48cc-8f0e-5e51c95548b5@sirena.org.uk>
+	s=arc-20240116; t=1749050596; c=relaxed/simple;
+	bh=+lJcxQsjxseXi30qNXRxLB/y4R9OszpeMs9veRimWYg=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=S3EuJH0cFS3iFjGR8OuOEgU1Yva3OFQxtqD1qtiKSdwnDPWYCXuFKJ6JXuZKy82LRxvaAlYI6YckCIkndnOBRobAvYtkJgO1OpttS6MIjKD9yVFc3rQZ8RB6MsazK5GeWr4ie2kTklh1NV3HgHFNM7ikjax95iCc+lxWw51VPWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=FrpnwNfA; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [127.0.0.1] (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 554FMJIY076049
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Wed, 4 Jun 2025 08:22:20 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 554FMJIY076049
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025052101; t=1749050541;
+	bh=NH2ltXtujZBqPJip4ancgNjYxroWFHWZyGX2p6NKPXc=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=FrpnwNfA/rikkJwUqKavu+F3qP9DFDYIsBfs2A92z5aoMEvnWjkzfYojMhs98JXRn
+	 coeiXRhu75/wIJvdUSGvYY6BwK9I1KouJwNAN9odFoW5uUFHS1MptMWQREGT0rX2f8
+	 f6g6Q+cKIDEwQr8ORjzbF/t8oAIDaV9I+VMh75ax64t/EXUvl1y9/YnGNaWTT3lOUj
+	 2eXE0GUVgUxeIwkM/KBWkZkei92+bxbvFBLoD15xH8xydiCwjaggxg4UL8HaEoDOUz
+	 9ubB5Ku2C0uIWI1JSB4rzj+lfkQJeNqgS7twCkpv4PK+6euX/WeKwfNCvb4OXiSErp
+	 ZqMFdhLraiD6A==
+Date: Wed, 04 Jun 2025 08:22:19 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Dave Hansen <dave.hansen@intel.com>, Sohil Mehta <sohil.mehta@intel.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+CC: Xin Li <xin@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>, Tony Luck <tony.luck@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, Steven Rostedt <rostedt@goodmis.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Jacob Pan <jacob.pan@linux.microsoft.com>,
+        Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>,
+        Sandipan Das <sandipan.das@amd.com>, linux-perf-users@vger.kernel.org,
+        linux-edac@vger.kernel.org, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 4/9] x86/nmi: Assign and register NMI-source vectors
+User-Agent: K-9 Mail for Android
+In-Reply-To: <e978e1fb-d88e-4789-bd33-367281dfa0ad@intel.com>
+References: <20250513203803.2636561-1-sohil.mehta@intel.com> <20250513203803.2636561-5-sohil.mehta@intel.com> <e978e1fb-d88e-4789-bd33-367281dfa0ad@intel.com>
+Message-ID: <31DB6043-44B2-43C1-B312-9B0DEC23C500@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f2064326-e696-48cc-8f0e-5e51c95548b5@sirena.org.uk>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 04, 2025 at 03:25:29PM +0100, Mark Brown wrote:
-> On Wed, Jun 04, 2025 at 10:03:52AM -0400, Samuel Kayode wrote:
-> > On Wed, Jun 04, 2025 at 12:35:21PM +0100, Mark Brown wrote:
-> 
-> > > > +	switch (irq_type) {
-> > > > +	case PF1550_PMIC_IRQ_SW1_LS:
-> > > > +		event = REGULATOR_EVENT_OVER_CURRENT;
-> > > > +	case PF1550_PMIC_IRQ_SW1_HS:
-> > > > +		event = REGULATOR_EVENT_OVER_CURRENT;
-> > > > +	case PF1550_PMIC_IRQ_LDO1_FAULT:
-> > > > +		event = REGULATOR_EVENT_OVER_CURRENT;
-> 
-> > > You appear to be flagging all these events as over current events which
-> > > doesn't seem entirely plausible.
-> 
-> > It does seem like it but the manual describes these interrupts as "current limit
-> > interrupt". The interrupts ending in _LS are "low-side current limit interrupt",
-> > _HS are "high-side current limit interrupt" and _FAULT are "current limit fault
-> > interrupt".
-> 
-> That at least needs some comments I think, and for the _LS while it's
-> hard to parse what "low side" means my guess would be that it's a
-> warning to match the other interrupt being the actual error.
+On June 3, 2025 10:23:42 AM PDT, Dave Hansen <dave=2Ehansen@intel=2Ecom> wr=
+ote:
+>On 5/13/25 13:37, Sohil Mehta wrote:
+>=2E=2E=2E
+>> + * Vector 2 is reserved for external NMIs related to the Local APIC -
+>> + * LINT1=2E Some third-party chipsets may send NMI messages with a
+>> + * hardcoded vector of 2, which would result in bit 2 being set in the
+>> + * NMI-source bitmap=2E
+>
+>This doesn't actually say what problem this causes=2E Is this better?
+>
+>	Third-party chipsets send NMI messages with a fixed vector of 2=2E
+>	Using vector 2 for some other purpose would cause confusion
+>	between those Local APIC messages and the other purpose=2E Avoid
+>	using it=2E
+>
+>> + * The vectors are in no particular priority order=2E Add new vector
+>> + * assignments sequentially in the list below=2E
+>> + */
+>> +#define NMIS_VECTOR_NONE	0	/* Reserved - Set for all unidentified sour=
+ces */
+>> +#define NMIS_VECTOR_TEST	1	/* NMI selftest */
+>> +#define NMIS_VECTOR_EXTERNAL	2	/* Reserved - Match External NMI vector=
+ 2 */
+>> +#define NMIS_VECTOR_SMP_STOP	3	/* Panic stop CPU */
+>> +#define NMIS_VECTOR_BT		4	/* CPU backtrace */
+>> +#define NMIS_VECTOR_KGDB	5	/* Kernel debugger */
+>> +#define NMIS_VECTOR_MCE		6	/* MCE injection */
+>> +#define NMIS_VECTOR_PMI		7	/* PerfMon counters */
+>> +
+>> +#define NMIS_VECTORS_MAX	16	/* Maximum number of NMI-source vectors */
+>
+>Would an enum fit here?
+>
+>You could also add a:
+>
+>	NMIS_VECTOR_COUNT
+>
+>as the last entry and then just:
+>
+>	BUILD_BUG_ON(NMIS_VECTOR_COUNT >=3D 16);
+>
+>somewhere=2E
+>
+>I guess it's a little annoying that you need NMIS_VECTOR_EXTERNAL to
+>have a fixed value of 2, but I do like way the enum makes the type explic=
+it=2E
+>
+>
+>>  static int __init register_nmi_cpu_backtrace_handler(void)
+>>  {
+>> -	register_nmi_handler(NMI_LOCAL, nmi_cpu_backtrace_handler, 0, "arch_b=
+t", 0);
+>> +	register_nmi_handler(NMI_LOCAL, nmi_cpu_backtrace_handler, 0, "arch_b=
+t", NMIS_VECTOR_BT);
+>>  	return 0;
+>>  }
+>
+>=2E=2E=2E Oh you replaced _most_ of the random 0's in this patch=2E That =
+helps
+>for sure=2E
 
-Yes, It certainly does need comments. The high-side sensing is more accurate
-and can detect load shorts, so a warning for low side would be more appropriate.
+The "may" here is important=2E *Most* sources are expected to send these a=
+s either a programmable MSI or as LINT1, which is programmable in the APIC,=
+ but since the vector hasn't mattered, we can't rule out that some hardware=
+ might have been built to send an MSI with a hard-coded vector, in which ca=
+se it is most likely they send either 0, 2 or 255=2E 0 and 255 will set the=
+ unknown source bit (0), but 2 is a legitimate source so it is defensive pr=
+ogramming to leave it fallow=2E
 
-Thanks,
-Sam
-
-
+Note also that although the current implementation is limited to 15 source=
+s (+ the unknown/lost source bit), the architecture allows for up to 63=2E
 
