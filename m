@@ -1,231 +1,122 @@
-Return-Path: <linux-pm+bounces-28114-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28115-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2E95ACE061
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 16:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 26CD0ACE0BA
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 16:49:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A18F11888E04
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 14:36:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24F02188CE53
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 14:49:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4733F290BBD;
-	Wed,  4 Jun 2025 14:35:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15EE9290DA7;
+	Wed,  4 Jun 2025 14:48:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SrAO6fDh"
+	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="JeQB3GwK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8090928F950;
-	Wed,  4 Jun 2025 14:35:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE9925C801;
+	Wed,  4 Jun 2025 14:48:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749047738; cv=none; b=FvRvU+YxR1OXskNbHqf+w5QP3LDBN2TXp9DmWbcHGMZuDUUFceQP9QTby1RYW3HteUNvlizbsTXn4A4Xdkg0lzf3S5dbDb9wJoTeYP9C6IZTp0nRQ3467FOe2TrFvNj00G1Jz+ht25yrkb6CrGW8rY8sz88ty8z6GkYRQFFaV9M=
+	t=1749048526; cv=none; b=ruqpWd97hdWdES2W4b5eNVOuXFx+MUQ3GwawaQsDQFj+eJUJ+gfTzYSuVVBd5+GqruFIFwhb0dklH+M6n2/GeZn2crBTZPRP5JMRt9juUfjoNpsKJQkczz+DG12YcJDKCWcMUNKDIIuhHNPG7VEwSMx39nj8sM52QTo/FN+Aajw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749047738; c=relaxed/simple;
-	bh=x/HDN8ZE77fRy93+e9zpmrKLhx3xowe0WlDM+Fs+tB8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y/XBE+EOqNhHF1ezhuKwOt4dn7n4MxH+xM0/tw4mjeMSR3ZWzdRTczbGiTDjPVDF7YCHOdbp24bMFKyRW7bfbCGNuUCM7BGwBloitHT1JGVn0AhezzLeuFVZ7M2s3h8/SOeVP7n1wkjbzhnAAr3mZSWBATQWNaenswGfoNr4aVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SrAO6fDh; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749047736; x=1780583736;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=x/HDN8ZE77fRy93+e9zpmrKLhx3xowe0WlDM+Fs+tB8=;
-  b=SrAO6fDhDfNVbmjW5MH9sy28n05d3PgxBYTN1LOJItDJDFyBsNy+JNsD
-   aRSn0zkxc+CLv0zLGm5d33jcHw1cwEpiDzCcd2gPH6OL70ISH/p7e8IZ1
-   pnOYeaj79J2OCWPNZ3FJ4XpnW1dDJZUmJaJX5XD/2uA6RHkkVoANghjrZ
-   t6k4tQG19J4wydVYmfKzP2dm4RrRm3YPPbuQCNaIAOZGa4yHUDt0LvqV0
-   DZ4osbASI2lcLgJiTIC3ketnbzssEr2xxb7fR5GTlmu2gf9sNY7pwW5GJ
-   3cg1uh4nzLwl/E1hmyE5+og7INDWhD8OOYZlXViKg7VHGz1KON97nuBV6
-   g==;
-X-CSE-ConnectionGUID: 86NMfliHT5mMZMY04cO9tg==
-X-CSE-MsgGUID: O/gp1rXESiOu9NhHKoc2/g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11454"; a="54924141"
-X-IronPort-AV: E=Sophos;i="6.16,209,1744095600"; 
-   d="scan'208";a="54924141"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2025 07:35:35 -0700
-X-CSE-ConnectionGUID: m/5wgwI3TjG4pYN4XeiUAQ==
-X-CSE-MsgGUID: BnW7+6TUSMOdwad30rho3g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,209,1744095600"; 
-   d="scan'208";a="145104296"
-Received: from lstrano-mobl6.amr.corp.intel.com (HELO [10.125.110.233]) ([10.125.110.233])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2025 07:35:34 -0700
-Message-ID: <acb0f359-cd4a-4221-a7ba-9c473ad7ecd2@intel.com>
-Date: Wed, 4 Jun 2025 07:35:33 -0700
+	s=arc-20240116; t=1749048526; c=relaxed/simple;
+	bh=iAh3S8VOuuZTZ4HbWC4OQklPUScRAN7wXnHJJOh3i9U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eRPpC342ppILaBacHOSrzx6e84ERmkP5UdKXry6hBSqkQI+ykZ5droC5UPSuO9JlQe8sNC4gOyNAbgqtwwhx7twDxsMr6xt6wg9/yGpoVw5GZqDa8/hYaIy4103ejiVYPoskzojJ7YlDOUYuYvzzHxP9Dkx1QubZ5RPhK1kgasM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=JeQB3GwK; arc=none smtp.client-ip=208.88.110.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
+Received: from localhost (localhost [127.0.0.1])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id 7C8123D852DB;
+	Wed,  4 Jun 2025 10:48:41 -0400 (EDT)
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
+ with ESMTP id VQ7zUzPCdv6W; Wed,  4 Jun 2025 10:48:41 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id E55A73D856F5;
+	Wed,  4 Jun 2025 10:48:40 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com E55A73D856F5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
+	t=1749048521; bh=YT5CSr2behDQmvPervqqlHa1+NLbBpJUObmWSJIQq/Y=;
+	h=Date:From:To:Message-ID:MIME-Version;
+	b=JeQB3GwK3wTiyXogTAfOrYwGcRm8xVrhtaSj171R6hqkME5SkY4/ym+sMcOH++T3y
+	 tmk3ZzALIR/ozEhe9tTMRPfLBi8YFnD+khmcifiZmLuUAkV+EiQjInaZdXTMt/N6zz
+	 e24EQgG+kxWDvS3C4vDNq1wUhi2BNII8C6PwUcIYmSCR0unF21ochP0uJTed8MYpez
+	 ZP+Kw8Nv2OAoMEbhnLtko7wJEGOXzCbyhUjUm/pFkaaMAQOw8eps4YH84qIpRbXtyE
+	 I9zakO/U6PGJsyikSZzdq/D3EmDxYNxgHvCc00WIsQFluPLzqkVqKP2QiuBdX+4x3Y
+	 XKfc3i0yYY8Lw==
+X-Virus-Scanned: amavis at mail.savoirfairelinux.com
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
+ with ESMTP id N-LkPakHOke5; Wed,  4 Jun 2025 10:48:40 -0400 (EDT)
+Received: from fedora (unknown [192.168.51.254])
+	by mail.savoirfairelinux.com (Postfix) with ESMTPSA id 9437B3D852DB;
+	Wed,  4 Jun 2025 10:48:40 -0400 (EDT)
+Date: Wed, 4 Jun 2025 10:48:39 -0400
+From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-pm@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>,
+	Abel Vesa <abelvesa@linux.com>, Robin Gong <b38343@freescale.com>,
+	Enric Balletbo i Serra <eballetbo@gmail.com>
+Subject: Re: [PATCH v4 3/6] regulator: pf1550: add support for regulator
+Message-ID: <aEBcx0ySywwa4BaZ@fedora>
+References: <20250603-pf1550-v4-0-bfdf51ee59cc@savoirfairelinux.com>
+ <20250603-pf1550-v4-3-bfdf51ee59cc@savoirfairelinux.com>
+ <eb1fb4e2-42aa-4795-bc6c-dbcf1fa04f11@sirena.org.uk>
+ <aEBSSHA8bxw2igAW@fedora>
+ <f2064326-e696-48cc-8f0e-5e51c95548b5@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 4/7] cxl/acpi: Add background worker to wait for
- cxl_pci and cxl_mem probe
-To: "Zhijian Li (Fujitsu)" <lizhijian@fujitsu.com>,
- Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
- "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
- "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Cc: Davidlohr Bueso <dave@stgolabs.net>,
- Jonathan Cameron <jonathan.cameron@huawei.com>,
- Alison Schofield <alison.schofield@intel.com>,
- Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
- Dan Williams <dan.j.williams@intel.com>, Matthew Wilcox
- <willy@infradead.org>, Jan Kara <jack@suse.cz>,
- "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@kernel.org>, Li Ming <ming.li@zohomail.com>,
- Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
- Ying Huang <huang.ying.caritas@gmail.com>,
- "Xingtao Yao (Fujitsu)" <yaoxt.fnst@fujitsu.com>,
- Peter Zijlstra <peterz@infradead.org>, Greg KH <gregkh@linuxfoundation.org>,
- Nathan Fontenot <nathan.fontenot@amd.com>,
- Terry Bowman <terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>,
- Benjamin Cheatham <benjamin.cheatham@amd.com>,
- PradeepVineshReddy Kodamati <PradeepVineshReddy.Kodamati@amd.com>
-References: <20250603221949.53272-1-Smita.KoralahalliChannabasappa@amd.com>
- <20250603221949.53272-5-Smita.KoralahalliChannabasappa@amd.com>
- <860121d7-4f40-4da5-b49a-cfeea5bc14c5@fujitsu.com>
-Content-Language: en-US
-From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <860121d7-4f40-4da5-b49a-cfeea5bc14c5@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f2064326-e696-48cc-8f0e-5e51c95548b5@sirena.org.uk>
 
+On Wed, Jun 04, 2025 at 03:25:29PM +0100, Mark Brown wrote:
+> On Wed, Jun 04, 2025 at 10:03:52AM -0400, Samuel Kayode wrote:
+> > On Wed, Jun 04, 2025 at 12:35:21PM +0100, Mark Brown wrote:
+> 
+> > > > +	switch (irq_type) {
+> > > > +	case PF1550_PMIC_IRQ_SW1_LS:
+> > > > +		event = REGULATOR_EVENT_OVER_CURRENT;
+> > > > +	case PF1550_PMIC_IRQ_SW1_HS:
+> > > > +		event = REGULATOR_EVENT_OVER_CURRENT;
+> > > > +	case PF1550_PMIC_IRQ_LDO1_FAULT:
+> > > > +		event = REGULATOR_EVENT_OVER_CURRENT;
+> 
+> > > You appear to be flagging all these events as over current events which
+> > > doesn't seem entirely plausible.
+> 
+> > It does seem like it but the manual describes these interrupts as "current limit
+> > interrupt". The interrupts ending in _LS are "low-side current limit interrupt",
+> > _HS are "high-side current limit interrupt" and _FAULT are "current limit fault
+> > interrupt".
+> 
+> That at least needs some comments I think, and for the _LS while it's
+> hard to parse what "low side" means my guess would be that it's a
+> warning to match the other interrupt being the actual error.
 
+Yes, It certainly does need comments. The high-side sensing is more accurate
+and can detect load shorts, so a warning for low side would be more appropriate.
 
-On 6/4/25 2:40 AM, Zhijian Li (Fujitsu) wrote:
-> 
-> 
-> On 04/06/2025 06:19, Smita Koralahalli wrote:
->>   drivers/cxl/acpi.c         | 23 +++++++++++++++++++++++
->>   drivers/cxl/core/suspend.c | 21 +++++++++++++++++++++
->>   drivers/cxl/cxl.h          |  2 ++
->>   3 files changed, 46 insertions(+)
->>
->> diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
->> index cb14829bb9be..978f63b32b41 100644
->> --- a/drivers/cxl/acpi.c
->> +++ b/drivers/cxl/acpi.c
->> @@ -813,6 +813,24 @@ static int pair_cxl_resource(struct device *dev, void *data)
->>   	return 0;
->>   }
->>   
->> +static void cxl_softreserv_mem_work_fn(struct work_struct *work)
->> +{
->> +	/* Wait for cxl_pci and cxl_mem drivers to load */
->> +	cxl_wait_for_pci_mem();
->> +
->> +	/*
->> +	 * Wait for the driver probe routines to complete after cxl_pci
->> +	 * and cxl_mem drivers are loaded.
->> +	 */
->> +	wait_for_device_probe();
->> +}
->> +static DECLARE_WORK(cxl_sr_work, cxl_softreserv_mem_work_fn);
->> +
->> +static void cxl_softreserv_mem_update(void)
->> +{
->> +	schedule_work(&cxl_sr_work);
->> +}
->> +
->>   static int cxl_acpi_probe(struct platform_device *pdev)
->>   {
->>   	int rc;
->> @@ -887,6 +905,10 @@ static int cxl_acpi_probe(struct platform_device *pdev)
->>   
->>   	/* In case PCI is scanned before ACPI re-trigger memdev attach */
->>   	cxl_bus_rescan();
->> +
->> +	/* Update SOFT RESERVE resources that intersect with CXL regions */
->> +	cxl_softreserv_mem_update();
->> +
->>   	return 0;
->>   }
->>   
->> @@ -918,6 +940,7 @@ static int __init cxl_acpi_init(void)
->>   
->>   static void __exit cxl_acpi_exit(void)
->>   {
->> +	cancel_work_sync(&cxl_sr_work);
->>   	platform_driver_unregister(&cxl_acpi_driver);
->>   	cxl_bus_drain();
->>   }
->> diff --git a/drivers/cxl/core/suspend.c b/drivers/cxl/core/suspend.c
->> index 72818a2c8ec8..c0d8f70aed56 100644
->> --- a/drivers/cxl/core/suspend.c
->> +++ b/drivers/cxl/core/suspend.c
->> @@ -2,12 +2,15 @@
->>   /* Copyright(c) 2022 Intel Corporation. All rights reserved. */
->>   #include <linux/atomic.h>
->>   #include <linux/export.h>
->> +#include <linux/wait.h>
->>   #include "cxlmem.h"
->>   #include "cxlpci.h"
->>   
->>   static atomic_t mem_active;
->>   static atomic_t pci_loaded;
->>   
->> +static DECLARE_WAIT_QUEUE_HEAD(cxl_wait_queue);
-> 
-> Given that this file (suspend.c) focuses on power management functions,
-> it might be more appropriate to move the wait queue declaration and its
-> related changes to acpi.c in where the its caller is.
+Thanks,
+Sam
 
-You mean drivers/cxl/acpi.c and not drivers/cxl/core/acpi.c right? The core one is my mistake and I'm going to create a patch to remove that.
-
-DJ
-
-> 
-> 
-> Thanks
-> Zhijian
-> 
->> +
->>   bool cxl_mem_active(void)
->>   {
->>   	if (IS_ENABLED(CONFIG_CXL_MEM))
->> @@ -19,6 +22,7 @@ bool cxl_mem_active(void)
->>   void cxl_mem_active_inc(void)
->>   {
->>   	atomic_inc(&mem_active);
->> +	wake_up(&cxl_wait_queue);
->>   }
->>   EXPORT_SYMBOL_NS_GPL(cxl_mem_active_inc, "CXL");
->>   
->> @@ -28,8 +32,25 @@ void cxl_mem_active_dec(void)
->>   }
->>   EXPORT_SYMBOL_NS_GPL(cxl_mem_active_dec, "CXL");
->>   
->> +static bool cxl_pci_loaded(void)
->> +{
->> +	if (IS_ENABLED(CONFIG_CXL_PCI))
->> +		return atomic_read(&pci_loaded) != 0;
->> +
->> +	return false;
->> +}
->> +
->>   void mark_cxl_pci_loaded(void)
->>   {
->>   	atomic_inc(&pci_loaded);
->> +	wake_up(&cxl_wait_queue);
->>   }
->>   EXPORT_SYMBOL_NS_GPL(mark_cxl_pci_loaded, "CXL");
->> +
->> +void cxl_wait_for_pci_mem(void)
->> +{
->> +	if (!wait_event_timeout(cxl_wait_queue, cxl_pci_loaded() &&
->> +				cxl_mem_active(), 30 * HZ))
->> +		pr_debug("Timeout waiting for cxl_pci or cxl_mem probing\n");
->> +}
 
 
