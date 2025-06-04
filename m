@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-28076-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28077-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03977ACD247
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 03:05:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E0A9ACD2EC
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 03:12:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B94D018856A8
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 01:03:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 365F8178DA5
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 01:12:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED41820CCE3;
-	Wed,  4 Jun 2025 00:56:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FC2525CC73;
+	Wed,  4 Jun 2025 00:59:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SWbE6uiy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XxVhfGfh"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFAEF191493;
-	Wed,  4 Jun 2025 00:56:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5B5E1D5143;
+	Wed,  4 Jun 2025 00:59:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748998577; cv=none; b=oqfb0lKmhM8hFD+i+322ZfdhjuPIBTrdDZaq1GvlpS4vfUBvi7TalP436dwYqZS8jcGtEGGbkACGiANs/5ZDiS1/Hg8gJHczM0d+bJlAvqDsDTPxaAD5ZTZ8XMxcWbZPciDLpfIC3ixKBpjKmfwr4ZT6ZA3/Sbi/34BgIV3Yk68=
+	t=1748998798; cv=none; b=TYqIaIR6Xi+/rrnxz1jBRuE93iKY6QlJCk0vJP81bwp9Z3ffFJRDej3pPtGtg1Fn2+bVp/07s2eYyMEcQE2qytY+7w8/KjNpT8sWJwVuoUU7VNdsI//LWk9vCKPLiyEtg4qrlLtXQYjuvbuoRYdtXPa7AbJv1v9pftxfJxVflbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748998577; c=relaxed/simple;
-	bh=eZZB8fNNcB7GU0sENIp9E62Bo/wxHlNpxGIIMgV6yTg=;
+	s=arc-20240116; t=1748998798; c=relaxed/simple;
+	bh=CvODP6G9BtTz0SvtSjzJWeZunMukuYbh+3Df+LdcuIc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=n/EchzNj8fwxUMjvNqxDBEut9WSSc3B0K8hlGmAvmUlSrKwAIHtEKszaeSSpwtpt95QmWG9wQ6zZ/uokK/QTbJMDwFQXq54C2GNgmX9DkiwdSREHoheogc+yIbWFzGdCB70yMtVuivwOyXshy2/5OAmytMULUG+AHhanh3NZIro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SWbE6uiy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51013C4CEF1;
-	Wed,  4 Jun 2025 00:56:16 +0000 (UTC)
+	 MIME-Version:Content-Type; b=N/r4e9uLsPDofBJFDbSgjyaLUUYnWggpdTlL15uLC6k1qbrxe/bsmuDt9QWDiq6g5IvHF8HuG24d2yWUBdJA1k9wVA2iEFirKk9JL3Z3xq4C05XvGm/dQzpgpgfZOg+62As8g2CSXZwTaqS67t24cZlvt4NiQffjmnwv+hHk/I4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XxVhfGfh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55130C4CEED;
+	Wed,  4 Jun 2025 00:59:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748998577;
-	bh=eZZB8fNNcB7GU0sENIp9E62Bo/wxHlNpxGIIMgV6yTg=;
+	s=k20201202; t=1748998797;
+	bh=CvODP6G9BtTz0SvtSjzJWeZunMukuYbh+3Df+LdcuIc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SWbE6uiyWUH2M53C2uiuak11zg3A661pU5NMTST4jcI8wp53P5zCSLNKOuvC66bWZ
-	 fpe7fLmanDcmo4Ymrnaj7VM6rr48tD8koRcWUNmhYl1lnGAgt4Qe73cIzJfXzIsSgs
-	 wy04bz3poWsAytHLxhSIqOVVEQohhWD94eA/k47+EcxP7quQQVKmav8aRcjaLoW4Q6
-	 09Bs+Yw1EaNg2LwA3lb7+CeHVguCu1UboNGAbtn/pBmgpGMQE9vypWkqpVhse7XdCz
-	 j6egIJJNYgNT+iqFnhnc+K0XevPe/zwQs9EiLpbmP8Ubs5Lgg+YO5CFz7rHqVVdXCh
-	 WGJbDrF6uELgQ==
+	b=XxVhfGfhrJ/WcHZOEy88x+9hvV0XA4rRXPpXnij3gAFAb4cCUzzL/whlDOszFTYh0
+	 II1zoncTkeO2BpelKE7CtXCvw3dkVqEOkSRfpg77YEe2DPVADIpK4Shk+NljIOyqxd
+	 gq+lC0Rp2XOB4KsOaK6EZUJ6W7dRYR8Evck6zNVWjFIjkUJhtJlA8W+RcTjATdMLxB
+	 aC3VXzEKpWFZjm7WUzZonY9HSx3IXvKRcQp5Y6OV9BISPDqdtCbleLIF4Vqa67vzaM
+	 wu9beYZU+UmO9XT3o/+intaEUs1DEojnBkjETIzzy/5uc2dTJRnSauS5VPBkVN8f15
+	 J0hLY/FwomsXA==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -54,12 +54,12 @@ Cc: Mike Tipton <quic_mdtipton@quicinc.com>,
 	arm-scmi@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 021/108] cpufreq: scmi: Skip SCMI devices that aren't used by the CPUs
-Date: Tue,  3 Jun 2025 20:54:04 -0400
-Message-Id: <20250604005531.4178547-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 18/93] cpufreq: scmi: Skip SCMI devices that aren't used by the CPUs
+Date: Tue,  3 Jun 2025 20:58:04 -0400
+Message-Id: <20250604005919.4191884-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250604005531.4178547-1-sashal@kernel.org>
-References: <20250604005531.4178547-1-sashal@kernel.org>
+In-Reply-To: <20250604005919.4191884-1-sashal@kernel.org>
+References: <20250604005919.4191884-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14.9
+X-stable-base: Linux 6.12.31
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
@@ -149,10 +149,10 @@ system functionality on modern multi-domain SoCs.
  1 file changed, 35 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-index 9c6eb1238f1be..80e55561630d6 100644
+index 7e7c1613a67c6..beb660ca240cc 100644
 --- a/drivers/cpufreq/scmi-cpufreq.c
 +++ b/drivers/cpufreq/scmi-cpufreq.c
-@@ -410,6 +410,40 @@ static struct cpufreq_driver scmi_cpufreq_driver = {
+@@ -367,6 +367,40 @@ static struct cpufreq_driver scmi_cpufreq_driver = {
  	.register_em	= scmi_cpufreq_register_em,
  };
  
@@ -193,7 +193,7 @@ index 9c6eb1238f1be..80e55561630d6 100644
  static int scmi_cpufreq_probe(struct scmi_device *sdev)
  {
  	int ret;
-@@ -418,7 +452,7 @@ static int scmi_cpufreq_probe(struct scmi_device *sdev)
+@@ -375,7 +409,7 @@ static int scmi_cpufreq_probe(struct scmi_device *sdev)
  
  	handle = sdev->handle;
  
@@ -201,7 +201,7 @@ index 9c6eb1238f1be..80e55561630d6 100644
 +	if (!handle || !scmi_dev_used_by_cpus(dev))
  		return -ENODEV;
  
- 	scmi_cpufreq_driver.driver_data = sdev;
+ 	perf_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_PERF, &ph);
 -- 
 2.39.5
 
