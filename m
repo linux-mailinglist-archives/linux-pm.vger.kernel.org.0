@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-28078-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28079-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 666BCACD38D
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 03:19:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B8D8ACD458
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 03:28:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE0E8177EF7
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 01:18:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6E5E1BA022E
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 01:23:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2104A264F81;
-	Wed,  4 Jun 2025 01:02:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A18B726B085;
+	Wed,  4 Jun 2025 01:04:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bOpOX7Ww"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IWnfdlnV"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37B7264A77;
-	Wed,  4 Jun 2025 01:02:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7494026AAA7;
+	Wed,  4 Jun 2025 01:04:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748998958; cv=none; b=LkAS4hxizBQyWvaLEzg1d6c6BwY5KXadWDUyzpDwFPzzI3Dq5vnoLVWAj2f3C1iiUSv2oKAXoVTrOA1mUFESq1RWP37K/Febm+mPqGyaprcO4T2VyjZ6kk0Nr9Y6/FzqQBpUE0OPgcpdj6B/9FxmsrhQ2/cnaw5LD1nkFrGZ5Cg=
+	t=1748999064; cv=none; b=jvAIUpE/iC+HCybr3ym4C+dQdkc8wDC3UZYmfj6FNh4X+AST3U5bxGrdWHSzDzIyypdbrVzKtbQldbeqY2q+INePXbNBtxz8G/jVxEAjNgdo0Wwc0CpU+xgD6QaARaTRBlHcc1Cm06IoHpS+jP4SMZG2FvagunGLdorRJ0CTlqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748998958; c=relaxed/simple;
+	s=arc-20240116; t=1748999064; c=relaxed/simple;
 	bh=7sbTUe4rbGn0R+n/uqo1b2CMuldZkjg8IMWWeXzYOSU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OQKYxmfyg+wdXdwQTrRwe/tpara0OsUeX6tQZAXRNcDkfMhl966kHfEPgBVzhdXgrg9aLOmIW7R5Yzyt//1LZZWYaW9+OZ0bcwJE5vUyyOF8SSBarRSDo4BmAaD1rG2ZC3vDAepc9Qgbvv4lR7KdEkf7TLKQIftwVUtEDdcHOYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bOpOX7Ww; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6435FC4CEED;
-	Wed,  4 Jun 2025 01:02:36 +0000 (UTC)
+	 MIME-Version:Content-Type; b=B3w/NGt8TE0ZUAqcJZ3fAv7mTOWXdE45netycQd/NHulTwoXZB2yR9O4o08Htdb1hzuOJ1fSCHi93s3MtEB6H3VcgronvpKP4XqF1jpTkHAZZkNItxuhtlfR2M4KvsTS2HkYqgTJ+9XKXhgC7P0A4QTfQW6VwX2A3ADtwWbqn0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IWnfdlnV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01737C4CEF1;
+	Wed,  4 Jun 2025 01:04:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748998957;
+	s=k20201202; t=1748999064;
 	bh=7sbTUe4rbGn0R+n/uqo1b2CMuldZkjg8IMWWeXzYOSU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bOpOX7WwNHPkd0N9mRdyesmQrANyqgY/1gtEDJUGzTUQk41zSEaR1MIh7tO2sHnJn
-	 nPl2FFgcJAfIHkRpVfEsbi+rqZh//VhCzEUDpjOE0wjd0pjb948jr/8WJOfGaBDJrc
-	 P4pjT3oQU6X2K/b66waK3yZGB9EiMRzsYZraEfqyqQNW+nDAdvKC1zKoym2EJFJIeO
-	 D/fXUPL3G8B7mPAgFIn3SvPhEo2gJKiR3+nj/6KMVI49y83Lk/4vSFaByPwGc0P7US
-	 KC0hxtUdafi1x5R9NTegaB147F2ysU22Q3FOFiXHr6G2RTsOK3dAEaa64by8tlqsGv
-	 az5OA4o924s+w==
+	b=IWnfdlnVqx1YiesR8aTvoKRkyEoQD22s78YAl/C1QJ2ikcbI3GvW6ONz1opzWdSSs
+	 NEIIXXSae25oSLy187ba9P5bTOiphk/8uDUTZyngJrxPqUc5bBA/9ubZ7APOS/oiMn
+	 qW13iO1ncL9GB5gO2o3WjvoB8ohwBmbIaSb/gCgfCLr7EMASboKORecUlfzzb0GG4H
+	 X/QnW+ORj8AhZ+wdZAKUD2Y60FzbJlMaUMQyu2UnuvzrM8gBGzMQns4VW55IzTR3Yg
+	 GzJUA9gmJuvDJMi2hOf1X/HN1x+MY9hhvgELZLVMHLirrWiwa4OmUIU13wlgY5y9KO
+	 G65LH8M+BvIqg==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -54,12 +54,12 @@ Cc: Mike Tipton <quic_mdtipton@quicinc.com>,
 	arm-scmi@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 12/62] cpufreq: scmi: Skip SCMI devices that aren't used by the CPUs
-Date: Tue,  3 Jun 2025 21:01:23 -0400
-Message-Id: <20250604010213.3462-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 10/46] cpufreq: scmi: Skip SCMI devices that aren't used by the CPUs
+Date: Tue,  3 Jun 2025 21:03:28 -0400
+Message-Id: <20250604010404.5109-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250604010213.3462-1-sashal@kernel.org>
-References: <20250604010213.3462-1-sashal@kernel.org>
+In-Reply-To: <20250604010404.5109-1-sashal@kernel.org>
+References: <20250604010404.5109-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.92
+X-stable-base: Linux 6.1.140
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
