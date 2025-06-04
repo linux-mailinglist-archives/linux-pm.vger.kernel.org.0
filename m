@@ -1,161 +1,141 @@
-Return-Path: <linux-pm+bounces-28087-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28088-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DECCACD7EA
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 08:36:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52A1BACD7F2
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 08:37:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B466117848D
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 06:36:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 618F33A5266
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 06:36:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BF25221280;
-	Wed,  4 Jun 2025 06:36:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F8991EDA14;
+	Wed,  4 Jun 2025 06:36:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iHYL7Tve"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="ftkxMIWk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAAB41F78E6;
-	Wed,  4 Jun 2025 06:36:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D051EDA0B
+	for <linux-pm@vger.kernel.org>; Wed,  4 Jun 2025 06:36:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749018980; cv=none; b=bszwgzj68ViH3GFWcHiQjVvXtPbsLC1NgXv4oRKM7f2furIdxMrh6A1PZobLqbBHXoLWJBW0kTDA+NprhFacHrdbK5SIDHRo20jY9sc9BZ1ke5ZRzeR2TiSzxxdaZM+iGUoLBjpKQAF48QHHwPzkib3RaSsoNh9ZXJd/+uw1XJc=
+	t=1749018995; cv=none; b=sNpSLHI9x2JzMnI7V+DJsQ3N59aDRJndgUZ4H/5HFmUhMpiMoxoFDb6+hX6ImdIRDyN31oRWp/WeVfBgvkAxqBZD8pvnC4W4Qyh4fYHBdBobTfhvV5/flvDKzIXDFvNNEgtdpSMuD4TeDByffTvhes0K1Wrpnwk/qzk3/jgeESk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749018980; c=relaxed/simple;
-	bh=bhVWW6u1VwoNFF8oGjxaEO25JBnpNeTh2XOUnTfA374=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vdx06mDLP2mTsAhN616FIn+203tOnrAPNtM2wIgirkezSTRg4zhUHPztHnQCZyspyFRY2H0NxBHbvEyFAFLGApbYr/vOAnzzITeN2w/wuN17uPMi5KgDrwScHzgyZV4XQf6zj6XqpGyvhQRD0N9h/D4eDPCb/GFxB847D1vTLo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iHYL7Tve; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDDAFC4CEE7;
-	Wed,  4 Jun 2025 06:36:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749018978;
-	bh=bhVWW6u1VwoNFF8oGjxaEO25JBnpNeTh2XOUnTfA374=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iHYL7Tve2yc3ulZn8/+vs8rScSYJoNA/KWexam3w/7uLZeT0/KHiVcSkGOYZsXtpm
-	 3Cv4QQIIohMlCfZesFb3vLCXgaQ2y9GbaupkcSBGc9xhx3syJgmkQTrjSOd9EbGgXI
-	 5UoFG2CiqlYsjcnzHr9QooIvtowE2igZt9xHnWuzWBHrL3JfiygPwBdKXzsOFU0hAm
-	 yCICn+wshNnu6O42vL9jVZAW/hgwbctOyoEL26c8GQZHX1VNm+F08kGmK0wusQYxbx
-	 0jpmUmlzuKohVrcgxCVrmlUiK0fNcPmRfi745j3HU0KiGMO7BKodGDLS3DrPecigLR
-	 FRtCIyPcQHEDQ==
-Message-ID: <e5a0bee2-ff74-47cf-ad2c-0c78b57ae6cf@kernel.org>
-Date: Wed, 4 Jun 2025 08:36:10 +0200
+	s=arc-20240116; t=1749018995; c=relaxed/simple;
+	bh=D9K32ZU1XZ7DXPyePnHI+L2d3Xh8pDC7EJ8l3Ins/TM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=q7ig8ou+VvXRqnraC/Jo9cYR6lUHSoM778rkwA+GeBQAjPSKYowXqzIPcsJSrh/4reqf4UJYp5L363eQfWIKXRVz13Kjrn1JTKjogB1W73a1HlnhFHDAm1DIGwYrt2rMIPatR8wagOV7w0ingDdjoKOzaB6VOKWdQ4zDUvKS0HQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=ftkxMIWk; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-54b10594812so7734592e87.1
+        for <linux-pm@vger.kernel.org>; Tue, 03 Jun 2025 23:36:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1749018991; x=1749623791; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D9K32ZU1XZ7DXPyePnHI+L2d3Xh8pDC7EJ8l3Ins/TM=;
+        b=ftkxMIWkR9ol6+d8ZlxXrg8ZC2y/J2lZNSGWdWkTHqBamQEUf007DZc64bD9OW1KPL
+         +EncYm7YJKqr1Gi/437L5Hr1w1aupkn2bHynnPS4ysvwYJkLfYrqlK/TvCpSGvQuDBa2
+         3P/LCplxl9f6pxZhXrJbUAKGENroG0JXwzBB793fPeum8gU1iLn8kUkYJoeBdVJrJXOZ
+         HYbTMMmuWd+Qw4XiK9PhVp2Q243iKLNKx+dRwIJEnRbZ3l43+HUf2qiHQcEE++i3whHb
+         6dB26KW2pmb4OeqUJAi8NjQKt/FatfLIOEDZMAAhnc6iIGdNtpBNEVtwXxo5dzb273PX
+         0djA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749018991; x=1749623791;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D9K32ZU1XZ7DXPyePnHI+L2d3Xh8pDC7EJ8l3Ins/TM=;
+        b=FqIGgRH7LZVfs3+gNKhHWNMVu3MRYVKQTE2+yDgfcOjV8NdBXhgYccZ/QTUMbBnUKs
+         Fp3u0/d2dqB2Qn+1B99pp2Oafn0Q93z1JePM1qvlhjBxeU2UAD6QmKvEMjMnXAe35izu
+         lZA1OkoBMkngOtH0qZfZiQqXSE+gk114G882D+wFWbKQcgkhHrvDXKt5iSUHfGmQNmZ3
+         LcDbI7iUO7+LfYl1G3EJ24+QQGXCMlHmQSVcYLPZ4J+rXqtk3+QjIrIISbBXS1xD5tDy
+         ebhVQ2UztK9WV9CIJ9iz9Scc/xaqytJcsLJEYiPAfpzwODML0XWk471O1qJlxUcm/UX+
+         uF9w==
+X-Forwarded-Encrypted: i=1; AJvYcCV5L5WwDwYNcaBPQwvTRrMy+5PLRP7ROcpT97KCxb2U8iAnZHe/+BB/3n7jrda+IK+ljBQazjPJTg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2Vev5vNqwaLVesXWY2qK7zOQtiqcGilc0O7X0aSIhFF2Q1DJA
+	Ele2+9Xg8RoGMsrF0GHTDhtOeeMor8A3m3h1pwP6AVTZQAr2RKQ6+3x71dwvTPhnHpcDbw1kCdy
+	2PU+KgoupGgzlb+YK+Xwd7ExyyHDu1H+iTeHnXxC+/Q==
+X-Gm-Gg: ASbGnct9U+S8qAYfSudi4eJxUQFcU91gQn+06c6dOVT7aTL2uNdexRScHqXtxHI272x
+	+tX2IsdIBCbl7axAczCnddxRCjNEAxNDbTLKAKZeDmKXWPGk/TGkWgkr4NP6RQOov2Du5WpHDRz
+	ma59tQah5UrdZO9n8WTz6Hgon8pJMpOz0KYfFBv9pL3LDIs3SyhFg2lXU0EtfLAQtXmF0UsDi+C
+	aI=
+X-Google-Smtp-Source: AGHT+IGNn5KBz1XRTjIkzj6b6e6ObvNtG1QhrXiTlXPwZa2NH6Gn7Xw0y4y87hgGMzhfMTB1WYM8NYUps+Cmt6+hJMs=
+X-Received: by 2002:a05:6512:1192:b0:553:2ed2:15b5 with SMTP id
+ 2adb3069b0e04-55356df2fe7mr504394e87.57.1749018991176; Tue, 03 Jun 2025
+ 23:36:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/8] drm/imagination: Use pwrseq for TH1520 GPU power
- management
+References: <CGME20250529222403eucas1p1923fe09240be34e3bbadf16822574d75@eucas1p1.samsung.com>
+ <20250530-apr_14_for_sending-v3-0-83d5744d997c@samsung.com>
+ <20250530-apr_14_for_sending-v3-1-83d5744d997c@samsung.com>
+ <CAMRc=Me9cWfe2mL=Q6JQbAFjpd55MOBZuAWC793Us0criiQr4Q@mail.gmail.com>
+ <4519844e-b1c0-40a7-b856-a6e4a80c6334@samsung.com> <20250603-cuddly-certain-mussel-4fbe96@kuoka>
+ <CAMRc=MfXashaEscE1vF_P6cs9iOCBerfNFiB4yC+TX76fZ87nA@mail.gmail.com> <05aa1fad-acf6-4cea-9a20-e54a2a4669b7@samsung.com>
+In-Reply-To: <05aa1fad-acf6-4cea-9a20-e54a2a4669b7@samsung.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Wed, 4 Jun 2025 08:36:20 +0200
+X-Gm-Features: AX0GCFusZW-oAOcE0lriS1jLbCdqE2F5QAmjvVg87YP8T3XsEwEGxH56sPN1Z7A
+Message-ID: <CAMRc=McDb13ZOM5v5gYBAT40Z6eNd8am6gy=FysWU72cG1172w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/8] dt-bindings: power: Add T-HEAD TH1520 GPU power sequencer
 To: Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>,
- Fu Wei <wefu@redhat.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
- Philipp Zabel <p.zabel@pengutronix.de>, Frank Binns
- <frank.binns@imgtec.com>, Matt Coster <matt.coster@imgtec.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, Ulf Hansson <ulf.hansson@linaro.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-References: <20250530-apr_14_for_sending-v3-0-83d5744d997c@samsung.com>
- <CGME20250529222405eucas1p18ed1254bf1b2d78468734656fec537e1@eucas1p1.samsung.com>
- <20250530-apr_14_for_sending-v3-3-83d5744d997c@samsung.com>
- <20250603-whispering-jaybird-of-thunder-f87867@kuoka>
- <d42a8c49-7ad2-49ef-bd9c-1e3d9981b58e@samsung.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <d42a8c49-7ad2-49ef-bd9c-1e3d9981b58e@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Frank Binns <frank.binns@imgtec.com>, 
+	Matt Coster <matt.coster@imgtec.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+	Marek Szyprowski <m.szyprowski@samsung.com>, linux-riscv@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 03/06/2025 21:43, Michal Wilczynski wrote:
->>> +	 * and resets. Otherwise, we fall back to managing them ourselves.
->>> +	 */
->>> +	pvr_dev->pwrseq = devm_pwrseq_get(dev, "gpu-power");
->>> +	if (IS_ERR(pvr_dev->pwrseq)) {
->>> +		int pwrseq_err = PTR_ERR(pvr_dev->pwrseq);
->>> +
->>> +		/*
->>> +		 * If the error is -EPROBE_DEFER, it's because the
->>> +		 * optional sequencer provider is not present
->>> +		 * and it's safe to fall back on manual power-up.
->>
->> It is safe but why it is desirable? The rule is rather to defer the
->> probe, assuming this is probe path.
-> 
-> Yeah this is probe path.
-> 
-> The GPU node will depend on the AON node, which will be the sole
-> provider for the 'gpu-power' sequencer (based on the discussion in patch
-> 1).
-> 
-> Therefore, if the AON/pwrseq driver has already completed its probe, and
-> devm_pwrseq_get() in the GPU driver subsequently returns -EPROBE_DEFER
-> (because pwrseq_get found 'no match' on the bus for 'gpu-power'), the
-> interpretation is that the AON driver did not register this optional
-> sequencer. Since AON is the only anticipated source, it implies the
-> sequencer won't become available later from its designated provider.
+On Tue, Jun 3, 2025 at 8:24=E2=80=AFPM Michal Wilczynski
+<m.wilczynski@samsung.com> wrote:
+> >
+> > Agreed. And as far as implementation goes, you can have the same
+> > driver be a PM domain AND pwrseq provider. It just has to bind to the
+> > device node that represents an actual component, not a made-up
+> > "convenience" node.
+>
+> Sure - this can be done using existing AON node.
+>
+> To keep the pwrseq code organized in drivers/power/sequencing/, a
+> similar approach to our th1520-pd driver interfacing with the AON
+> firmware library (drivers/firmware/thead,th1520-aon.c) could work.
+>
+> The idea would be to treat code like pwrseq-thead-aon.c (changed from a
+> current pwrseq-thead-gpu.c) as a library. It would export its necessary
+> functions (e.g., for specific sequence init/deinit steps) using
+> EXPORT_SYMBOL_GPL. The main AON driver would then call these to provide
+> the pwrseq functionality.
+>
+> This will introduce a compile-time dependency, as expected.
+>
+> An alternative would be to keep the driver in drivers/power/sequencing/
+> as a platform driver and start it up using, for example, an auxiliary
+> bus. This is similar to what the JH7110 clock driver
+> (drivers/clk/starfive/clk-starfive-jh7110-sys.c) is doing with a reset
+> driver. This could offer a cleaner separation of roles if that's
+> preferred.
+>
+> Please let me know which way would be preferred.
 
-I don't understand why you made this assumption. AON could be a module
-and this driver built-in. AON will likely probe later.
+I forgot the auxiliary bus is a thing. Yeah, definitely use that, it's
+more elegant than a library function IMO.
 
-
-
-Best regards,
-Krzysztof
+Bart
 
