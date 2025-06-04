@@ -1,123 +1,175 @@
-Return-Path: <linux-pm+bounces-28103-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28104-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 971D0ACDCA9
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 13:35:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52100ACDD41
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 13:54:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 038BC189768E
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 11:35:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 697B73A4378
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jun 2025 11:53:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 485F728ECC9;
-	Wed,  4 Jun 2025 11:35:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7993624C664;
+	Wed,  4 Jun 2025 11:53:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="byI6xZ56"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="VUQivGpu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C77028EA6D;
-	Wed,  4 Jun 2025 11:35:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83FC11E1DE7
+	for <linux-pm@vger.kernel.org>; Wed,  4 Jun 2025 11:53:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749036928; cv=none; b=HlbYhZHfdS2QFUCSsc8JWiu4FUj4svfM0J/FeGKs/zWmei3xIVo6/MrqzfyBIVoQ7vkOOgTNpnDDWl4WIZxSgl2JbtiMu0uokm+mfy6iiB6gsUq4nqYQGj4JbxFR8qiwd9oiBFZCMu9p/0Z15ByPx2S6vGXiqIEh/m/i+mF76LM=
+	t=1749038035; cv=none; b=VBDLfvZT+ksDiH/WtkV5RlnVseCdXE+BrIEWXrRi5Kcl1jMtyQoq/dE8bDeA1rqBTBPg6Ae6as4GYLxQ9iX52pQLQMkzMss6RiS6mL8QIf8hdl1SeVEJMzqMOMufEatZQSDGqvg7phO0VbKpbd80sRzSlr2iqRu0/JyZYPj6K/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749036928; c=relaxed/simple;
-	bh=wXSTBOc9hfPvgHW6k38UqyP60yWHejz7Bu4vESAaYGk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tw2KvT8JJ6dXxxrEU8fGv0UpagKTU2gHzDPzLJvqXk+F13YJKzkBRpV9QX03M8/btwlHuF4pOQ7g4cRI/PRP5XoJ3BK2iYa9DiY38GxGZU3q+mh1y2vjQS4vJUHGZfHigu9QajAhZe1BdhIsjxAIY1WFq2pQ2+LHDJH92WrYUAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=byI6xZ56; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6247CC4CEE7;
-	Wed,  4 Jun 2025 11:35:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749036927;
-	bh=wXSTBOc9hfPvgHW6k38UqyP60yWHejz7Bu4vESAaYGk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=byI6xZ56+XQ73QaQFzVyf3xS+xcl4WnFhC/Yo9S8+yMrqTI4Tje/ARheZJsjWSCo4
-	 eiAMaihUpAUlyLoo7oRPmdDK1iXVNdFUQ5hUh4Q8Vpcy1EP/viiRDFSudIa2c6ao8U
-	 y71BzzlcWn1e9GRCjG6jbztgcYfhv0Pf5vpDSkQHdzNarlQgEBFiusi23mznCKwtqE
-	 iEJRvZNtc56L6zyNxnPw/2/AfvOIY5mIOAdWyVg8H0wlHbbzf8jFb08t3oTz7ALID/
-	 QbdpU4UhBjYKGyUB2RGa71VkswRBtb7OZRyXzzvEWepJN5sl4PHAJUA0/xQ3Dngxjt
-	 /HNxqs4IaZx1A==
-Date: Wed, 4 Jun 2025 12:35:21 +0100
-From: Mark Brown <broonie@kernel.org>
-To: samuel.kayode@savoirfairelinux.com
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-pm@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>,
-	Abel Vesa <abelvesa@linux.com>, Robin Gong <b38343@freescale.com>,
-	Enric Balletbo i Serra <eballetbo@gmail.com>
-Subject: Re: [PATCH v4 3/6] regulator: pf1550: add support for regulator
-Message-ID: <eb1fb4e2-42aa-4795-bc6c-dbcf1fa04f11@sirena.org.uk>
-References: <20250603-pf1550-v4-0-bfdf51ee59cc@savoirfairelinux.com>
- <20250603-pf1550-v4-3-bfdf51ee59cc@savoirfairelinux.com>
+	s=arc-20240116; t=1749038035; c=relaxed/simple;
+	bh=hF0QbYOloZlOwVAlSYgg34GUEd0zSnKsf9/kU9hggk0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=jTKMaTkuNRKH/VAgGXn2l8KIAa6vaMvK26uH32wBBIp/SAhCSBRsS3qGJexSTNVLCgnCgbq54sFhIcBHQK2E3pyhGg5n4wn2HE7nl6fvNzA95/gvebLODTO9GAcsV7w4UhNOltcEq/Fg40OfIGtG02HPfD0M+8BoefudEZRnqQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=VUQivGpu; arc=none smtp.client-ip=210.118.77.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250604115351euoutp018336ed184f817c86f0c2714babc505da~F1NK6j_dN2509125091euoutp01g
+	for <linux-pm@vger.kernel.org>; Wed,  4 Jun 2025 11:53:51 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250604115351euoutp018336ed184f817c86f0c2714babc505da~F1NK6j_dN2509125091euoutp01g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1749038031;
+	bh=s/0qhETp0/O5tfeuPDSpC29l+QS4DsX1qeaGhsBy0I4=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=VUQivGpuXwfTvpBVWD1oWFdPgrlPaqvo8usOtfrEEyMhn3X9zaHLn/ZJvzMCOaNVm
+	 tThqy1WUXxJeweaD4C6PA2Tr6afc9y6mcEVGtHV1cW7xjKehfa9S0SRk67bkRDLdcy
+	 4vmdhCVu7nbznSCVPy1xyUByvCZtPorTzTysaG3M=
+Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20250604115351eucas1p2029645aec0becbaea4623fed73756400~F1NKR_He42239722397eucas1p2f;
+	Wed,  4 Jun 2025 11:53:51 +0000 (GMT)
+Received: from [192.168.1.44] (unknown [106.210.136.40]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20250604115349eusmtip2988a156336ef42213eda6e883df452af~F1NJJo9GR1421814218eusmtip2Y;
+	Wed,  4 Jun 2025 11:53:49 +0000 (GMT)
+Message-ID: <a6a29e58-8613-47f0-9e5c-d125da7ddb49@samsung.com>
+Date: Wed, 4 Jun 2025 13:53:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7ow0kNdE51Zb6Qp/"
-Content-Disposition: inline
-In-Reply-To: <20250603-pf1550-v4-3-bfdf51ee59cc@savoirfairelinux.com>
-X-Cookie: Non-sequiturs make me eat lampshades.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 3/8] drm/imagination: Use pwrseq for TH1520 GPU power
+ management
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, Fu Wei
+	<wefu@redhat.com>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Bartosz
+	Golaszewski <brgl@bgdev.pl>, Philipp Zabel <p.zabel@pengutronix.de>, Frank
+	Binns <frank.binns@imgtec.com>, Matt Coster <matt.coster@imgtec.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
+	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
+	<airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Paul Walmsley
+	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+	<aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Ulf Hansson
+	<ulf.hansson@linaro.org>, Marek Szyprowski <m.szyprowski@samsung.com>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	dri-devel@lists.freedesktop.org
+Content-Language: en-US
+From: Michal Wilczynski <m.wilczynski@samsung.com>
+In-Reply-To: <e5a0bee2-ff74-47cf-ad2c-0c78b57ae6cf@kernel.org>
+Content-Transfer-Encoding: 7bit
+X-CMS-MailID: 20250604115351eucas1p2029645aec0becbaea4623fed73756400
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250529222405eucas1p18ed1254bf1b2d78468734656fec537e1
+X-EPHeader: CA
+X-CMS-RootMailID: 20250529222405eucas1p18ed1254bf1b2d78468734656fec537e1
+References: <20250530-apr_14_for_sending-v3-0-83d5744d997c@samsung.com>
+	<CGME20250529222405eucas1p18ed1254bf1b2d78468734656fec537e1@eucas1p1.samsung.com>
+	<20250530-apr_14_for_sending-v3-3-83d5744d997c@samsung.com>
+	<20250603-whispering-jaybird-of-thunder-f87867@kuoka>
+	<d42a8c49-7ad2-49ef-bd9c-1e3d9981b58e@samsung.com>
+	<e5a0bee2-ff74-47cf-ad2c-0c78b57ae6cf@kernel.org>
 
 
---7ow0kNdE51Zb6Qp/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Tue, Jun 03, 2025 at 02:27:47PM -0400, Samuel Kayode via B4 Relay wrote:
+On 6/4/25 08:36, Krzysztof Kozlowski wrote:
+> On 03/06/2025 21:43, Michal Wilczynski wrote:
+>>>> +	 * and resets. Otherwise, we fall back to managing them ourselves.
+>>>> +	 */
+>>>> +	pvr_dev->pwrseq = devm_pwrseq_get(dev, "gpu-power");
+>>>> +	if (IS_ERR(pvr_dev->pwrseq)) {
+>>>> +		int pwrseq_err = PTR_ERR(pvr_dev->pwrseq);
+>>>> +
+>>>> +		/*
+>>>> +		 * If the error is -EPROBE_DEFER, it's because the
+>>>> +		 * optional sequencer provider is not present
+>>>> +		 * and it's safe to fall back on manual power-up.
+>>>
+>>> It is safe but why it is desirable? The rule is rather to defer the
+>>> probe, assuming this is probe path.
+>>
+>> Yeah this is probe path.
+>>
+>> The GPU node will depend on the AON node, which will be the sole
+>> provider for the 'gpu-power' sequencer (based on the discussion in patch
+>> 1).
+>>
+>> Therefore, if the AON/pwrseq driver has already completed its probe, and
+>> devm_pwrseq_get() in the GPU driver subsequently returns -EPROBE_DEFER
+>> (because pwrseq_get found 'no match' on the bus for 'gpu-power'), the
+>> interpretation is that the AON driver did not register this optional
+>> sequencer. Since AON is the only anticipated source, it implies the
+>> sequencer won't become available later from its designated provider.
+> 
+> I don't understand why you made this assumption. AON could be a module
+> and this driver built-in. AON will likely probe later.
 
-> +static int pf1550_set_ramp_delay(struct regulator_dev *rdev, int ramp_delay)
-> +{
-> +	int id = rdev_get_id(rdev);
-> +	unsigned int ramp_bits = 0;
-> +	int ret;
-> +
-> +	if (id > PF1550_VREFDDR)
-> +		return -EACCES;
-> +
-> +	if (ramp_delay > 0) {
-> +		ramp_delay = 6250 / ramp_delay;
-> +		ramp_bits = ramp_delay >> 1;
-> +	}
+You're absolutely right that AON could be a module and would generally
+probe later in that scenario. However, the GPU device also has a
+'power-domains = <&aon TH1520_GPU_PD>' dependency. If the AON driver (as
+the PM domain provider) were a late probing module, the GPU driver's
+probe would hit -EPROBE_DEFER when its power domain is requested
+which happens before attempting to get other resources like a power
+sequencer.
 
-I'm not seeing validation of the maximum ramp_delay value here?
+So, if the GPU driver's code does reach the devm_pwrseq_get(dev,
+"gpu-power") call, it strongly implies the AON driver has already
+successfully probed.
 
-> +	switch (irq_type) {
-> +	case PF1550_PMIC_IRQ_SW1_LS:
-> +		event = REGULATOR_EVENT_OVER_CURRENT;
-> +	case PF1550_PMIC_IRQ_SW1_HS:
-> +		event = REGULATOR_EVENT_OVER_CURRENT;
-> +	case PF1550_PMIC_IRQ_LDO1_FAULT:
-> +		event = REGULATOR_EVENT_OVER_CURRENT;
+This leads to the core challenge with the optional 'gpu-power'
+sequencer: Even if the AON driver has already probed, if it then chooses
+not to register the "gpu-power" sequence (because it's an optional
+feature), pwrseq_get() will still find "no device matched" on the
+pwrseq_bus and return EPROBE_DEFER.
 
-You appear to be flagging all these events as over current events which
-doesn't seem entirely plausible.
+If the GPU driver defers here, as it normally should for -EPROBE_DEFER,
+it could wait indefinitely for an optional sequence that its
+already probed AON provider will not supply.
 
---7ow0kNdE51Zb6Qp/
-Content-Type: application/pgp-signature; name="signature.asc"
+Anyway I think you're right, that this is probably confusing and we
+shouldn't rely on this behavior.
 
------BEGIN PGP SIGNATURE-----
+To solve this, and to allow the GPU driver to correctly handle
+-EPROBE_DEFER when a sequencer is genuinely expected, I propose using a
+boolean property on the GPU's DT node, e.g.
+img,gpu-expects-power-sequencer. If the GPU node provides this property
+it means the pwrseq 'gpu-power' is required.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhAL3gACgkQJNaLcl1U
-h9BP0gf7BQBYj/vVLKsA5wseOvzZSYmWZEKxie9t4vNLf1wwUtWrL8QpfAW6AMuA
-zTuTdnQpclS9lZMHtfcdUfLpgEma4S59VuiMDIt7EcjE16R7NvjFppzaRG+rSLHG
-EsaPxW4w2VV7m+oLjGKTMJYxFpBbcldcwNgXKlLsSPnC/tY2x7x1jymSJYuZ93UX
-Z13o6DQjL+9Ku3brZKjPubVwnAnUU8/hY5W9gbNj+Q1yZHReSwNU2Rbre4qOxCRJ
-YsRk1x4xVMcD8E9xDK3iNpk+1Uf3aC2heiSRy2k1tpNCR9AKYqH+pJ3FN61Xc/QP
-cIetZ86IqOH4t8q/Y6lLqNCxEE526A==
-=7Ooj
------END PGP SIGNATURE-----
+I didn't want to use this approach at first, as it seemed to me like the
+pwrseq API had a hands-off approach for the DT with its matching logic,
+but it seems unavoidable at this point.
 
---7ow0kNdE51Zb6Qp/--
+> 
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
+
+Best regards,
+-- 
+Michal Wilczynski <m.wilczynski@samsung.com>
 
