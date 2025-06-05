@@ -1,65 +1,65 @@
-Return-Path: <linux-pm+bounces-28159-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28160-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D60EACF3E2
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 18:15:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BA8FACF4CF
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 18:54:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E117162D3A
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 16:15:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 173CE16AA56
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 16:54:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCCC01E7648;
-	Thu,  5 Jun 2025 16:14:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 566E55FEE6;
+	Thu,  5 Jun 2025 16:54:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F2qDIOU2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DMPHIAJT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16F7733062;
-	Thu,  5 Jun 2025 16:14:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A00274FFE;
+	Thu,  5 Jun 2025 16:54:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749140097; cv=none; b=Y990pYaR5kPQwQPJBuT6NhD17T2Uxw7zHMA8RroBDZjc7XZxToJgoZ0UPwJuYVuyZfBPvmm7kGUhCC8gbEFebJ/G2hXXZLFrYKhW/r07adCgM7VMnzAQAA6Zbah6Eu7AepmXuIRHhYSztYV65BNQH4w9BKrzPbg5XnTJ1VhoJgw=
+	t=1749142452; cv=none; b=Isv1j1ke9S2VA4WZ9PJ64ocHLVbeoDqQL1GvG3pnqzLuMPCLDAB+CHLIw20VFWSjmhmrzx0dGwcMn1wsS9zqjHkEkCQHao7jm5BbSXouNNyYL3UqAs5z4x73yaApLNz0CfxteJRw4YQLqF2ML+cmuO8LKWiv4KVuDM3lQhjWlX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749140097; c=relaxed/simple;
-	bh=Z+qxrYdrG4yhgOppFP8nF3DdRyP2MGfzPB3rOVknUFM=;
+	s=arc-20240116; t=1749142452; c=relaxed/simple;
+	bh=0IMuXTNwS6W3pSr/5C3mr9qYeBQuOHsNvidzOnnNqA8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iHhppwSs//Pjc+hkH444Y67V3WNWP5kol31J30T2ojgDaFu6Y4fsgVb9dL/452haqPXNwlPzowjEnhXF3D0PQqkbWRf3m9kipGtzj/S3juqcPFKOhLAismwD7+GimMOsd88rtc1HjI4Bpx5i9/Ja4ZbYGmPzivOxh4gv7dZZK7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F2qDIOU2; arc=none smtp.client-ip=192.198.163.15
+	 In-Reply-To:Content-Type; b=I+C2kTYzXPShQXvGbfi72DcYthPIXsPrvniQCwbFyPsmOf84Wxz8iHaPSnY6umYf3kP4HrDe3FddDwNyqYCBhvTN386/p+e81/rJNRDABXI1y3mC622bpgbKsf7JCU0LmyU1L+BCD4KIMiyt3sdoBBktivOpnfjIebuc01JJP3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DMPHIAJT; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749140096; x=1780676096;
+  t=1749142451; x=1780678451;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=Z+qxrYdrG4yhgOppFP8nF3DdRyP2MGfzPB3rOVknUFM=;
-  b=F2qDIOU2CHDvXS4cPZHgThXbkyC+ESI6NFjjvdl2ejD0KfQ1h6cU3UXa
-   8Ge3MPUAI9XesulAZ9A+nltGaZKZEJZF6DxmZC2PPuQQpfXTNpS/Vjfn6
-   TjIlmL7sy5p70Xm5mfTN+YhPpDeVWf42Nuyn+drhKWRD5YJCQE2Bfd6Jh
-   uqofTxAdRP9HsRZlN25JbmvO2XuUTvax+tfuyUC60lK0WUfUpAq2nMOwP
-   Q7BgvReTLHgFJhzOibVUJbdJYV+IHanoHFMeAm9sB6BO3BeRVYyi0tSTn
-   Z71+nwz2zcrl88TDPiOhUAR8GbZld2XNszyLc2KCEru7fge6CB7X5dxWS
+  bh=0IMuXTNwS6W3pSr/5C3mr9qYeBQuOHsNvidzOnnNqA8=;
+  b=DMPHIAJT6qtm9OL35mAg4u62azOJ3porHMg8GFmYrgH/p1vUziL8gfKx
+   inKOyqfEbnObKi8Sd2WdvCW353EUFDdHgf+NLeP+MqJxrdpHwELKHf0QZ
+   +ii+mt/uYhYRBb3HYy6925m569NHhlBXKu6P+FIHYJChU5JKUnAgxXCg9
+   9H202cmd3pdfb7iodBnR9NpVVMoaphqOpVWNpeWtbDeRzGF81fePL7icu
+   HUBYiAFUiRBKEQ5sky0ZU+McQ5Vt0oa5pzQzu4/Lu6dAgYsWugSpiEJ7k
+   KAI3cMmG5cPutGq9LehZT3hgXYVhtdLedmuDmjgv+TXoha8OTvAcOpr2E
    Q==;
-X-CSE-ConnectionGUID: JPy0Ka44QMSBUHg1EzSSLQ==
-X-CSE-MsgGUID: hE8BlqTaTV6WsaDaePO9Jw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11455"; a="51415146"
+X-CSE-ConnectionGUID: Wtb6IxnkS52eNNUycYav+w==
+X-CSE-MsgGUID: sIlFVrH1Saa0l2fx1UNUHw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11455"; a="61936880"
 X-IronPort-AV: E=Sophos;i="6.16,212,1744095600"; 
-   d="scan'208";a="51415146"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 09:14:55 -0700
-X-CSE-ConnectionGUID: LDycTst+TAyD9PotJNzUAg==
-X-CSE-MsgGUID: A799Z+d4QZiF9izF4In5bQ==
+   d="scan'208";a="61936880"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 09:54:09 -0700
+X-CSE-ConnectionGUID: HStFr3mNQYCWhfQsX1HCuw==
+X-CSE-MsgGUID: NMpdaaTCRUio8aZe4p1KDg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,212,1744095600"; 
-   d="scan'208";a="146512766"
-Received: from spandruv-desk1.amr.corp.intel.com (HELO [10.125.111.0]) ([10.125.111.0])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 09:14:56 -0700
-Message-ID: <06122416-b24a-493b-9374-550e5c290436@intel.com>
-Date: Thu, 5 Jun 2025 09:14:54 -0700
+   d="scan'208";a="182761905"
+Received: from dwoodwor-mobl2.amr.corp.intel.com (HELO [10.125.111.7]) ([10.125.111.7])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 09:54:07 -0700
+Message-ID: <f4b861fe-d10e-497e-b7d3-af4af9c58cac@intel.com>
+Date: Thu, 5 Jun 2025 09:54:06 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,86 +67,138 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 4/5] ACPI: processor: Rescan "dead" SMT siblings during
- initialization
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>, x86 Maintainers
- <x86@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Len Brown <lenb@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
- "Gautham R. Shenoy" <gautham.shenoy@amd.com>, Ingo Molnar
- <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Linux ACPI <linux-acpi@vger.kernel.org>
-References: <2226957.irdbgypaU6@rjwysocki.net>
- <2005721.PYKUYFuaPT@rjwysocki.net>
-From: Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH v4 6/7] dax/hmem: Save the DAX HMEM platform device
+ pointer
+To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+ linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
+ nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Cc: Davidlohr Bueso <dave@stgolabs.net>,
+ Jonathan Cameron <jonathan.cameron@huawei.com>,
+ Alison Schofield <alison.schofield@intel.com>,
+ Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+ Dan Williams <dan.j.williams@intel.com>, Matthew Wilcox
+ <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+ "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
+ Pavel Machek <pavel@kernel.org>, Li Ming <ming.li@zohomail.com>,
+ Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
+ Ying Huang <huang.ying.caritas@gmail.com>,
+ Yao Xingtao <yaoxt.fnst@fujitsu.com>, Peter Zijlstra <peterz@infradead.org>,
+ Greg KH <gregkh@linuxfoundation.org>,
+ Nathan Fontenot <nathan.fontenot@amd.com>,
+ Terry Bowman <terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>,
+ Benjamin Cheatham <benjamin.cheatham@amd.com>,
+ PradeepVineshReddy Kodamati <PradeepVineshReddy.Kodamati@amd.com>,
+ Zhijian Li <lizhijian@fujitsu.com>
+References: <20250603221949.53272-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20250603221949.53272-7-Smita.KoralahalliChannabasappa@amd.com>
 Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <2005721.PYKUYFuaPT@rjwysocki.net>
+From: Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20250603221949.53272-7-Smita.KoralahalliChannabasappa@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 6/5/25 08:07, Rafael J. Wysocki wrote:
->  #ifdef CONFIG_ACPI_PROCESSOR_CSTATE
-> +void acpi_idle_rescan_dead_smt_siblings(void)
-> +{
-> +	if (cpuidle_get_driver() == &acpi_idle_driver)
-> +		arch_cpu_rescan_dead_smt_siblings();
-> +}
 
-My only thought in reading this is that maybe cpuidle_register_driver()
-would be a better spot to force the arch_cpu_rescan_dead_smt_siblings().
-That way, each driver would not have to do the rescan.
 
-But that's just a little nit at worst, otherwise the series looks good
-to me. Thanks for chasing this down.
+On 6/3/25 3:19 PM, Smita Koralahalli wrote:
+> From: Nathan Fontenot <nathan.fontenot@amd.com>
+> 
+> To enable registration of HMEM devices for SOFT RESERVED regions after
+> the DAX HMEM device is initialized, this patch saves a reference to the
+> DAX HMEM platform device.
+> 
+> This saved pointer will be used in a follow-up patch to allow late
+> registration of SOFT RESERVED memory ranges. It also enables
+> simplification of the walk_hmem_resources() by removing the need to
+> pass a struct device argument.
+> 
+> There are no functional changes.
+> 
+> Co-developed-by: Nathan Fontenot <Nathan.Fontenot@amd.com>
+> Signed-off-by: Nathan Fontenot <Nathan.Fontenot@amd.com>
+> Co-developed-by: Terry Bowman <terry.bowman@amd.com>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+> ---
+>  drivers/dax/hmem/device.c | 4 ++--
+>  drivers/dax/hmem/hmem.c   | 9 ++++++---
+>  include/linux/dax.h       | 5 ++---
+>  3 files changed, 10 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/dax/hmem/device.c b/drivers/dax/hmem/device.c
+> index f9e1a76a04a9..59ad44761191 100644
+> --- a/drivers/dax/hmem/device.c
+> +++ b/drivers/dax/hmem/device.c
+> @@ -17,14 +17,14 @@ static struct resource hmem_active = {
+>  	.flags = IORESOURCE_MEM,
+>  };
+>  
+> -int walk_hmem_resources(struct device *host, walk_hmem_fn fn)
+> +int walk_hmem_resources(walk_hmem_fn fn)
+>  {
+>  	struct resource *res;
+>  	int rc = 0;
+>  
+>  	mutex_lock(&hmem_resource_lock);
+>  	for (res = hmem_active.child; res; res = res->sibling) {
+> -		rc = fn(host, (int) res->desc, res);
+> +		rc = fn((int) res->desc, res);
+>  		if (rc)
+>  			break;
+>  	}
+> diff --git a/drivers/dax/hmem/hmem.c b/drivers/dax/hmem/hmem.c
+> index 5e7c53f18491..3aedef5f1be1 100644
+> --- a/drivers/dax/hmem/hmem.c
+> +++ b/drivers/dax/hmem/hmem.c
+> @@ -9,6 +9,8 @@
+>  static bool region_idle;
+>  module_param_named(region_idle, region_idle, bool, 0644);
+>  
+> +static struct platform_device *dax_hmem_pdev;
+> +
+>  static int dax_hmem_probe(struct platform_device *pdev)
+>  {
+>  	unsigned long flags = IORESOURCE_DAX_KMEM;
+> @@ -59,9 +61,9 @@ static void release_hmem(void *pdev)
+>  	platform_device_unregister(pdev);
+>  }
+>  
+> -static int hmem_register_device(struct device *host, int target_nid,
+> -				const struct resource *res)
+> +static int hmem_register_device(int target_nid, const struct resource *res)
+>  {
+> +	struct device *host = &dax_hmem_pdev->dev;
+>  	struct platform_device *pdev;
+>  	struct memregion_info info;
+>  	long id;
+> @@ -125,7 +127,8 @@ static int hmem_register_device(struct device *host, int target_nid,
+>  
+>  static int dax_hmem_platform_probe(struct platform_device *pdev)
+>  {
+> -	return walk_hmem_resources(&pdev->dev, hmem_register_device);
+> +	dax_hmem_pdev = pdev;
 
-For the x86 bits:
+Is there never more than 1 DAX HMEM platform device that can show up? The global pointer makes me nervous.
 
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+DJ
 
+> +	return walk_hmem_resources(hmem_register_device);
+>  }
+>  
+>  static struct platform_driver dax_hmem_platform_driver = {
+> diff --git a/include/linux/dax.h b/include/linux/dax.h
+> index dcc9fcdf14e4..a4ad3708ea35 100644
+> --- a/include/linux/dax.h
+> +++ b/include/linux/dax.h
+> @@ -305,7 +305,6 @@ static inline void hmem_register_resource(int target_nid, struct resource *r)
+>  }
+>  #endif
+>  
+> -typedef int (*walk_hmem_fn)(struct device *dev, int target_nid,
+> -			    const struct resource *res);
+> -int walk_hmem_resources(struct device *dev, walk_hmem_fn fn);
+> +typedef int (*walk_hmem_fn)(int target_nid, const struct resource *res);
+> +int walk_hmem_resources(walk_hmem_fn fn);
+>  #endif
 
 
