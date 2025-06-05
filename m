@@ -1,240 +1,113 @@
-Return-Path: <linux-pm+bounces-28151-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28157-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79455ACF065
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 15:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E94E9ACF2B0
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 17:13:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D89303AE2AD
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 13:25:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF3AB3AD76A
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 15:11:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFF3A238151;
-	Thu,  5 Jun 2025 13:25:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 899E6274FCE;
+	Thu,  5 Jun 2025 15:10:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YqfZibq2"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="yAUwfp9f"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7F8237164;
-	Thu,  5 Jun 2025 13:25:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE0812749F0;
+	Thu,  5 Jun 2025 15:10:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749129915; cv=none; b=Jhzkzkob+bplhVRj1liEGicq6FwSJ/nV9Pu2++VShfB5P3VFIXqjIEKRlu2BuNW1IG3DB6/NQy1pQjZnJzr5ATaWtpBS8AEJSWzQcwHD72vOwd0HZLIqNdgcljZsx1wJMD7ITqZStnRTmBoyg4AqkJqNEA2BMBDHG0wtfsAqctg=
+	t=1749136205; cv=none; b=ZcEMw8LgdhA4Oekf1RxhDCHc2R8yIjHz9b5tL1Mv3l0HUFz0nDCnB2glt03nxUmkTkJ2YTxSwvRJT4Dhs/i3SvPmEmeE+OKdssxWq1/WF/up6/b733WEB4TDo6NCZktTUcxsUrEV3GLfm6XmpApVIUsPIOHgzObtQsOgkpcz9mg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749129915; c=relaxed/simple;
-	bh=XCqCr87fMiryN8wBVJwOIxfP6gD+dhX1Z/cb7SASagk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=udeuAyWMwkOf3zCX0ZIztSwbJlGRt52/m3mNT6JXIkBDI4vy48c/OxGItPw9JM/wyqWT0v9E8J0g6AobbkTGyuNvoZgOHufvwvCAswUbyVOEqBwYfBM2WHXnFnbjRS55Rt1m3ztlmGhzbUdsTFXot0gtBFXtuW8IM0vJYUCjTIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YqfZibq2; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-74801bc6dc5so850833b3a.1;
-        Thu, 05 Jun 2025 06:25:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749129913; x=1749734713; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FfxhwSOG/RM0gPvUyXeyOo3ZKbVYGqvyCyXESojdWoQ=;
-        b=YqfZibq2LHHdvtdoeA7JVN+oxvnJ2hRJR6lK5VflOZOiSdNpZRwUyJ1foqOfoEBGR/
-         VShMb6A7k5rz31zVlIzSRsmzIDmiF2OwUzwfV1HGdu74tn9OdpGNAhV5+a1Li/mc5mqn
-         z+DEoZJ31U74Bs5rAcXYQiyYpxfD5ikvurw1282fdF8SGKIB4VrJx+rX9qPnq9EC27kj
-         gRPVkVFPo9NS19f+tdG79xSSvMCGpQa+XFgvyUAEQJDyEj+v72bjlw3lwFJr6x/jDrLu
-         uLkbt1zaEvOg7jCH4SwTMkQsoz3HX5AC1B0w+nGhRiqV3Eqz4EwpNsWiPzeZlxmQR1WQ
-         KmXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749129913; x=1749734713;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FfxhwSOG/RM0gPvUyXeyOo3ZKbVYGqvyCyXESojdWoQ=;
-        b=cvocYWCivDMmPwKVwsO+Xup+wZZoIf/+5Yizf2PLYm0LkZlA4FHRBeLU3GOY0VqLzv
-         4Ha3ffk46AzDicWBR6rn2aXSLmnhsNK3BLPpBD9d+fe7gp0B8rjWRhkREldycsRVXOQf
-         stR7GtxImyQgbj36PHoZeAm9js0ksOBEZ7OHw9KoaYKdyiqFcUmKUX32NMSC+pgIPbKV
-         fUE7nBnAGmxJKHoMPFGou0jfqyqgBVDxGdffyGbKZR0amZ2zXtERRg/BwBlSmoq8TrG9
-         eAmhE00jEm1gJ9ipzqR/RGXplaQvqDQS8Y7hqXC8lChJdeoWmqU2CjhE+Ih/wJnq7Ow9
-         VVMg==
-X-Forwarded-Encrypted: i=1; AJvYcCVfuiBMkRsUysY1vMneCVXGFv2eGUtRwfUUjmzMH557Cnzq77B7aAD4JA8JVjmiYpfsG6lxCvuwtsddzK9znTKrHA==@vger.kernel.org, AJvYcCXC0l9UeXN0gWaT4lxfcMbIdFGEfxtCE27gzI//Qbx0uWvMltDGTeWsfpEC8rpqxfnu8P5Qe0Q6NLw=@vger.kernel.org, AJvYcCXjnOQTBRkU/T9HQGD0V4I3+9bxbTxJY1eXUNr1cxZmBQeqMlwtw5ahmR9tz8QB5JCXL2NLM9I+YZ3j+co=@vger.kernel.org
-X-Gm-Message-State: AOJu0YypJApCEOc6ezpRPHzWfuqC6Egd3/bHFKezBSMUb9S11kYFTWYk
-	E3zbNyzS1QkdaddRlQhSPylIhLyL0kkhk3cdOWPETPkAsfVBjTt2mF7PBpHBKmnA
-X-Gm-Gg: ASbGncsOM5ozZlVc+K8Kh0dTBlsGtNeku0VqG8mcXpS0zxsJqvYVAhyO8jcG94o0uNs
-	zQKcdKdrZvd42HLPmYgXr3UEmrQkrayVi3bHKVoyPgq7qqtMdHSp/X7FG00QOVnEI0AYOJoOVEw
-	EJLhn0wR1+xf2anLUYf8XNuFeihZX59YLcuI4p9/ilAvd+uucPzhjc6sZKeD2/bFgpyQubd+fVN
-	0nGeKamlZtOrMJACVejhG9lwRqUZEzUtYRrkrCMzmjcdI4hByt0QdEEsg+lV03wAfDRDn3buHAK
-	jtU1Z43BoP9U+AYOHLbx4H4+ekdQNRQZ1rcYZQvEXyg+MpZt1g==
-X-Google-Smtp-Source: AGHT+IHQGzKHWpB4RSPbdx58AntCVZ2keB8gOeLail6WPggKiKp/eXtko5QLgS4IoilLjWPFK9AAoA==
-X-Received: by 2002:a05:6a00:c83:b0:746:2ae9:fc49 with SMTP id d2e1a72fcca58-748184ab829mr4203417b3a.9.1749129913242;
-        Thu, 05 Jun 2025 06:25:13 -0700 (PDT)
-Received: from hiago-nb ([67.159.246.222])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-747afeab79bsm13234842b3a.50.2025.06.05.06.25.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jun 2025 06:25:12 -0700 (PDT)
-Date: Thu, 5 Jun 2025 10:25:07 -0300
-From: Hiago De Franco <hiagofranco@gmail.com>
-To: Peng Fan <peng.fan@nxp.com>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Hiago De Franco <hiago.franco@toradex.com>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-	Daniel Baluta <daniel.baluta@nxp.com>,
-	"Iuliana Prodan (OSS)" <iuliana.prodan@oss.nxp.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v4 3/3] remoteproc: imx_rproc: detect and attach to
- pre-booted remote cores
-Message-ID: <20250605132507.2td5zlnlapraoggn@hiago-nb>
-References: <20250602131906.25751-1-hiagofranco@gmail.com>
- <20250602131906.25751-4-hiagofranco@gmail.com>
- <PAXPR04MB84594F9ABDF0728D9A71FAFE886CA@PAXPR04MB8459.eurprd04.prod.outlook.com>
+	s=arc-20240116; t=1749136205; c=relaxed/simple;
+	bh=WsntjljouOPbHdbSquLJoJXrNH7kjo5Cyehy4uSQ4Uo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=THledoigrYJcUbMhBXd+rbUROpG4o/Ei/Hmv0oYKWEnd3Ob2/8GosNTm4h9NKb8DjlRyvIxgTx8OsElGVun/m/X/KPbkIRAeMNClpwDjcltAf6DqpoHerCxN98wWwEDrqTkVoLkQHTA+4f4i4CeXqOQ20uq+bGK3W7cAkSc2zS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=yAUwfp9f; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from kreacher.localnet (unknown [5.63.189.50])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 1F2A966C044;
+	Thu,  5 Jun 2025 17:09:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1749136189;
+	bh=WsntjljouOPbHdbSquLJoJXrNH7kjo5Cyehy4uSQ4Uo=;
+	h=From:Subject:Date;
+	b=yAUwfp9f6+Yf3Fewx70/e6mr97+PWDZevnXvooQV8plIaTg3M2rfGuhgE2J77lvnX
+	 cXwkfCWJhXaA06qOCNMMqAMR0rK4BCUU9rgUJS0QacqkFCPitzhG6UjKfdpifdfLeR
+	 7m+OHbBGcAPYuLFwtopHYH0OtEcrTo1onq/op+qBmDdPVh21eJh68HKBGoYgtkIX+a
+	 lp4XksNWMNRwXi3Yri7fxst6cQ73jtOdjA+FqabwOxBJpBPdi0UcNOlfmlMEJNeSYz
+	 2nF0As3011AkOtnjrp47SOzF0U9X+DCCJNgJZUIsSJ/iehKq72En5ndTKkR0kTFHDb
+	 ooiCdJVItfoMA==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: x86 Maintainers <x86@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Len Brown <lenb@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+ "Gautham R. Shenoy" <gautham.shenoy@amd.com>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Linux ACPI <linux-acpi@vger.kernel.org>
+Subject:
+ [PATCH v1 0/5] x86/smp: Restore the elimination of
+ mwait_play_dead_cpuid_hint()
+Date: Thu, 05 Jun 2025 17:03:01 +0200
+Message-ID: <2226957.irdbgypaU6@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PAXPR04MB84594F9ABDF0728D9A71FAFE886CA@PAXPR04MB8459.eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 5.63.189.50
+X-CLIENT-HOSTNAME: 5.63.189.50
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: dmFkZTFgxoheEI+NWfLhkXW46nOJRwoQPjyhtjzK2PMeqp+IFBJDv0dbEecaOBBQv3ODI5hHoLvKO4qggjV7wMyUKH7rvpHM+2q0khd4cBskzjMXa5OVP6/fvVR4NX+IAE5MxbqJhaHV/vLI25++Oxhw0XvJ7Tw1sFvnxsCKjMaiNir/+zhHMbLDTXMAKwoMw0omSoSUQQcZvFJ3WoDQZACckhevk32yYB4ONnkF33LKMXdb51mmTA7HQ7cV8udNC0KF6dGNnLw14bB1fQ1KCQnmYPrUcnheafZ9YxO/DRArbD7H2nOxZzsT37izNVqDHA/Ekyf57/cQFQp8EyOMgRwfFYdCqY4sdDZ3bAYNLDffVlO7RVG9gvXiWPM4sr5/zc6m+y93dNVw/ZMAQ4micCAd0lhuTTl/FJdeD00HpzHXNaK6SUO9i/8mCO7qfOfojK/6TNe+EQEy2XQh/ErVRhx7lseeN4BNoMpGyb5M7au63GWlsF+FkMls3U8c+pOy9tFEUmjA2koqWVQpvzSEL+7Ry6ZFV5q06EH7Mm6LC9lB1JOXiWlxjHg8rGDuksaF0wGoZ7fbeFSzTC57fjeTVg53UmmsFHwz6KoZZ7aJnvrB7EYQVoHKKjUuSFd+9Vct5D+vsS9T9uyBeW4C0Thj/zoF2bXbvDzsXzYYYojt89IjKIl/mQ
+X-DCC--Metrics: v370.home.net.pl 1024; Body=12 Fuz1=12 Fuz2=12
 
-Hi Peng,
+Hi Everyone,
 
-On Wed, Jun 04, 2025 at 03:19:52AM +0000, Peng Fan wrote:
-> > Subject: [PATCH v4 3/3] remoteproc: imx_rproc: detect and attach to
-> > pre-booted remote cores
-> > 
-> > From: Hiago De Franco <hiago.franco@toradex.com>
-> > 
-> > When the remote core is started before Linux boots (e.g., by the
-> > bootloader), the driver currently is not able to attach because it only
-> > checks for cores running in different partitions. If the core was kicked
-> > by the bootloader, it is in the same partition as Linux and it is already
-> > up and running.
-> > 
-> > This adds power mode verification through dev_pm_genpd_is_on(),
-> > enabling the driver to detect when the remote core is already running
-> > and properly attach to it if all the power domain devices are on.
-> > 
-> > To accomplish this, we need to avoid passing any attach_data or flags
-> > to dev_pm_domain_attach_list(), letting the platform device become a
-> > consumer of the power domain provider. With that the current power
-> > state of the genpds will not change, allowing the detection of the
-> > remote core power state.
-> > 
-> > We enable and sync the device runtime PM during probe to make sure
-> > the power domains are correctly managed when the core is controlled
-> > by the kernel.
-> > 
-> > Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > Signed-off-by: Hiago De Franco <hiago.franco@toradex.com>
-> > ---
-> > v4: Changed to use the new dev_pm_genpd_is_on() function instead,
-> > as suggested by Ulf. This will now get the power status of the two
-> > remote cores power domains to decided if imx_rpoc needs to attach or
-> > not. In order to do that, pm_runtime_enable() and
-> > pm_runtime_get_sync() were introduced and pd_data was removed.
-> > v3: Unchanged.
-> > v2: Dropped unecessary include. Removed the imx_rproc_is_on
-> > function, as suggested.
-> > v1:
-> > ---
-> >  drivers/remoteproc/imx_rproc.c | 29 ++++++++++++++++++++++++-----
-> >  1 file changed, 24 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/remoteproc/imx_rproc.c
-> > b/drivers/remoteproc/imx_rproc.c index
-> > 627e57a88db2..6f9680142704 100644
-> > --- a/drivers/remoteproc/imx_rproc.c
-> > +++ b/drivers/remoteproc/imx_rproc.c
-> > @@ -18,6 +18,7 @@
-> >  #include <linux/of_reserved_mem.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/pm_domain.h>
-> > +#include <linux/pm_runtime.h>
-> >  #include <linux/reboot.h>
-> >  #include <linux/regmap.h>
-> >  #include <linux/remoteproc.h>
-> > @@ -890,10 +891,8 @@ static int imx_rproc_partition_notify(struct
-> > notifier_block *nb,  static int imx_rproc_attach_pd(struct imx_rproc
-> > *priv)  {
-> >  	struct device *dev = priv->dev;
-> > -	int ret;
-> > -	struct dev_pm_domain_attach_data pd_data = {
-> > -		.pd_flags = PD_FLAG_DEV_LINK_ON,
-> > -	};
-> > +	int ret, i;
-> > +	bool detached = true;
-> > 
-> >  	/*
-> >  	 * If there is only one power-domain entry, the platform driver
-> > framework @@ -902,7 +901,22 @@ static int
-> > imx_rproc_attach_pd(struct imx_rproc *priv)
-> >  	if (dev->pm_domain)
-> >  		return 0;
-> > 
-> > -	ret = dev_pm_domain_attach_list(dev, &pd_data, &priv-
-> > >pd_list);
-> > +	ret = dev_pm_domain_attach_list(dev, NULL, &priv->pd_list);
-> > +	/*
-> > +	 * If all the power domain devices are already turned on, the
-> > remote
-> > +	 * core is already up when the kernel booted (e.g. kicked by
-> > the
-> > +	 * bootloader). In this case attach to it.
-> > +	 */
-> > +	for (i = 0; i < ret; i++) {
-> > +		if (!dev_pm_genpd_is_on(priv->pd_list->pd_devs[i])) {
-> > +			detached = false;
-> > +			break;
-> > +		}
-> > +	}
-> > +
-> > +	if (detached)
-> > +		priv->rproc->state = RPROC_DETACHED;
-> > +
-> >  	return ret < 0 ? ret : 0;
-> >  }
-> > 
-> > @@ -1146,6 +1160,11 @@ static int imx_rproc_probe(struct
-> > platform_device *pdev)
-> >  		}
-> >  	}
-> > 
-> > +	if (dcfg->method == IMX_RPROC_SCU_API) {
-> > +		pm_runtime_enable(dev);
-> > +		pm_runtime_get_sync(dev);
-> 
-> Need put and disable in imx_rproc_remove.
+The purpose of this series is to reapply the code changes from commit
+96040f7273e2 ("x86/smp: Eliminate mwait_play_dead_cpuid_hint()") that
+has been reverted because of an issue introduced by it.  This takes
+place in the last patch ([5/5]) and the previous patches make
+preparatory changes needed to avoid breaking systems in the field
+once again.
 
-I will add it in a v5, thanks.
+The problem with commit 96040f7273e2 was that on SMT-capable systems
+booting with "nosmt" in the kernel command line, the "dead" SMT siblings
+were stuck in idle state C1 after initialization because they were
+initialized before a proper cpuidle driver for the given platform got
+ready.  That prevented the whole processor from entering deep package
+C-states later on and pretty much ruined idle power (including power
+in suspend-to-idle).
 
-> 
-> BTW: Has this patchset tested with M4 in a separate partition,
-> saying M4 image packed in flash.bin?
+To prevent that from happening, patches [1-4/5] use the approach that
+has been used for some time to address an analogous issue during resume
+from hibernation, in which case the "dead" SMT siblings are also in C1
+when the image kernel gets control back and they need to be put into
+sufficiently deep C-states.  Namely, they are taken online and then
+back offline immediately to make that happen.
 
-Not yet, I will prepare this test today and let you know.
+The general idea is to take the "dead" SMT siblings online and then
+back offline immediately when a proper cpuidle driver gets ready, but
+some changes are made to avoid doing that twice in a row in vain.
+For this purpose, the intel_idle driver initialization is pushed
+to an earlier initialization phase (patch [1/5]) and the ACPI
+processor driver only "rescans" the "dead" SMT siblings when
+the ACPI idle driver is the current cpuidle driver.  It also
+avoids doing this on architectures other than x86 (patch [4/5]).
 
-> 
-> Regards,
-> Peng
-> > +	}
-> > +
-> >  	ret = rproc_add(rproc);
-> >  	if (ret) {
-> >  		dev_err(dev, "rproc_add failed\n");
-> > --
-> > 2.39.5
-> > 
-> 
+Thanks!
 
-Best Regards,
-Hiago.
+
+
 
