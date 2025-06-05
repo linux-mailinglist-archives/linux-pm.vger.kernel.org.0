@@ -1,161 +1,165 @@
-Return-Path: <linux-pm+bounces-28148-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28149-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B32FACEF21
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 14:26:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D16DACEFD0
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 15:00:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB86A1899C40
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 12:26:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 281C9169ABC
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 13:00:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AECE2214813;
-	Thu,  5 Jun 2025 12:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79FF120C01B;
+	Thu,  5 Jun 2025 13:00:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O+zn3CsB"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="v7VVaFSd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F6817B50F;
-	Thu,  5 Jun 2025 12:26:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDFFC20297E
+	for <linux-pm@vger.kernel.org>; Thu,  5 Jun 2025 13:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749126378; cv=none; b=Xkk+LlB8xg/M4KgNaRanwjSdO7Pja3nIHuNHQZaywCfdKcnvr3kMWmxv1pb9GjOKGoWS3kJcx6/vq5VC9GNbss37MbKnjzDs/iU0PeteofL2RmJAMmTkM2g2nC7YAG1EFW/yYgTL8nZ/uvMcSzLXUSL/MIxCnLqcyFbqXeYDMEE=
+	t=1749128430; cv=none; b=bTmzHq0yCrWcG+yV4wEZ0sugXQyHKt6k0UAgDxCWi5W5sh+znmFhHKfHigZN2giNqIxV77rLeYXYHUdV/5NTMmqw6l+tcYPdwwHpG/VSfCGilvOvs3ckkLkibykTVqWpDqN1XwzVBQdjGspyNnf62hD+D56jRmOJq87MI75RfIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749126378; c=relaxed/simple;
-	bh=4WJhgjAnEtUFXmL2GWy4353pkE5BMV7J2KFQCgkngak=;
+	s=arc-20240116; t=1749128430; c=relaxed/simple;
+	bh=XKGDl2rsu8Cx+jAKtsKp4abHlLIqnz3Sddb7IIBINuU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aOb6NItcKoCKCzK5z2ZFWStHtpzH151uaXgOfkKrrcVwXZ6SYJecucmttpdgSQ2Ma1pMBR7H3i8NeGHde6wA4KZXMhU9kBeaM9UEm9k62sz+dt3s8RuFjL2I5Rr9J3w8dPh7wKumKL4cAmHbXvlS6K6nlRPTDDJGVmVzwBl8t1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O+zn3CsB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0876C4CEEF;
-	Thu,  5 Jun 2025 12:26:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749126377;
-	bh=4WJhgjAnEtUFXmL2GWy4353pkE5BMV7J2KFQCgkngak=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=O+zn3CsBROu139GaMTH2Gt5k+eiWkb+LdTiPJmFaaOamXAjtOUN2p1QqF2r1/p/cn
-	 VMtS9KbPYXgnkmyY91qnrOJgUuCE6Nz/jVDquP4uDqCT2YjbUyKbcmz4nmH/2V20Ia
-	 SY/5Xn9zaMjMxN7RZ0rNyMrr4YqZA7KUWNYWr2+C24+Uja5xkGBMZoPPkqbyGTCFTj
-	 tp2WB/UCOxYbEm+PWKaWLuoqMjdI5gGhVPdBsfOM0nK/q67r7oor+COShHn/NtCtfi
-	 EOv43U2jlakyV5dKfpBsOEzzwRee6ijbSsQji6AM+0irX9rOQd8GuWZ922nqDWPZmO
-	 PixHwvdpR+6Xg==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-2e3e58edab5so345159fac.3;
-        Thu, 05 Jun 2025 05:26:17 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUB03EwG6B5s5JtsmPDVWpIM+aYlQIpn6EDuLeSSyrkwSidfJAZ7Sbwtfu6UXcwDNO0HWO2Uf6JhgNwfBY=@vger.kernel.org, AJvYcCWNZDYn+dRaDAMyH5nX9UjQtiLWL7LqXbebUSFFwFZFIdz0bY2dfGPJTJPGaB5l+vUhEJpkwJNez8A=@vger.kernel.org, AJvYcCWlIfSmmBQe4UdhQb+VsjbXdOJAKra1YcaKYPiDQgZj2iDmGSzRixsqmBDO2oKgTvF5Wsf/nkwgFUJs@vger.kernel.org
-X-Gm-Message-State: AOJu0Yybb8qTwfQxKVdf8gcqPJd4G/RxRDaqUTgYok24d2EVcOoNVsnu
-	OeODFbAvIOU7AyKzzxzBhbaithg4WdRdJPuG20HsowBHEtVZq6jdcWbM2GorNB7+M/eO+qHfJQY
-	Bau7S3OUakwVaPjwZvHOvAb1redL3vW0=
-X-Google-Smtp-Source: AGHT+IEwbhB9q1U38/ArzbcpRN42CjSWVC8jtUlFCNmZf81r5ZGmE3b9Dt8Woywq+2BbQRtB4ZT/AhAYyuYovBSyi2U=
-X-Received: by 2002:a05:6870:8e07:b0:2d6:2a40:fbe7 with SMTP id
- 586e51a60fabf-2e9bf31d024mr4658964fac.6.1749126377202; Thu, 05 Jun 2025
- 05:26:17 -0700 (PDT)
+	 To:Cc:Content-Type; b=cC8kOAmbtt3cOLVsTjsYPXrZF0flH2ot8y6Y4dfkh/nxbWf9JJ2OBtn7HhVgrOX0sJPyscKy/g+laxe4uh+J5Y1cMK5qIYSLhnAJgE4yY2quCOdmptD43uixlrVA/dPrmeA76WjlWEagjVOr6fR6BJtyrTqx82/d2nZu00rtGcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=v7VVaFSd; arc=none smtp.client-ip=209.85.161.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-60219d9812bso248450eaf.0
+        for <linux-pm@vger.kernel.org>; Thu, 05 Jun 2025 06:00:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1749128427; x=1749733227; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ecAphYkfEdsn3BUh426paPfp1MReJf3vodIqrsyJcGQ=;
+        b=v7VVaFSd1PcNQqYS7Yb31UacYoBZHikNlksRsAP6cIRpMETOuiQjr9qwz3UkaH+aRr
+         sO8JDX2fAOvGqj34fUv34LWiX0eXQINK1NogdAOnZiSk9j9c7vbKxLOXqeDQnwxrXJfC
+         gckOd5Qs+VYYFontRpoe1Zg+wLQQgLw47xoWG49agFcZglKkWfOm9ncmREnsH0KDAZIc
+         62qRC5cnumNsoPhzTmnrB0NIM77ihS04bukI5ftvspwoOvciHz4icc9K2PU2jwYm9LKM
+         EigAEQTPyp9dNHLF7mDyLZ9noT+9X39AysJ8pte9EtsYjCSD3Pbo9UMfH5gX0v9X7xzm
+         G2kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749128427; x=1749733227;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ecAphYkfEdsn3BUh426paPfp1MReJf3vodIqrsyJcGQ=;
+        b=nROuR4Nf60SAlRhIfIVfMjOHwUmnZi2nTsXoXfaiFMnIIJ6WvurbYrLhwGjlSawOVR
+         /Bw9pDsbedkZi3XP/RWvctumcHCLgx2fX4+trvkH0pB1jTpPCM8kI2ptEOTKKbwJGdGo
+         VlM9aftNOcMIXX1kne1duADj37l7C6ukcsknESDAqdTeqvUXlnLCoL0PCyXv6EuSK1lL
+         1jzP6BsUF/qgagxUZX94NErIwRjRYhS2ox61HMwG3p4WEi4FzfQOZJpJLgG/3PY9DuBw
+         DuqjuWXIKu2qjOtsXkv95JRbQ2c6sRbg8uTibSJVixDbY6b1eXjvrJeyjroHSqYY+QRD
+         PCNg==
+X-Forwarded-Encrypted: i=1; AJvYcCUBy+b1d/QOvClfBXhkGHcE5xiFTfAZCqdn5WkA7feRnWDR9ob9ixF92bzUFl2OqegrY0g8elfI2w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwU1LOsWFT8l0mrxvia5tBrq0GOltib5qYKJMFa5BXvzQTOOXOh
+	+X0B9HBC81q3JHBSZzt9h/aLHlwNGWJUUNtLM4XMLgtw7cC6NxzhDbjrbmKkLK0HPohOs5XecEc
+	H6Tt3O6VaylZx3DpZDoXbWqV6XM43Duo/cmNnFO1A5w==
+X-Gm-Gg: ASbGncv0iTHmucyRo/pW/yc3Ro2doVLRwsf3PG/3mohmEUgpxQvz4sixphDwzq0iro8
+	8gzrXXMOL9mXJlVnmNjyIYDiGkf+TiNkK+LvFZSS0rGKVh+Lv+WDErcGqCRlWF6s1w3ru85LDfQ
+	3628omrmQbim01eOrlxjk9b7czgEoc+O6eT1I=
+X-Google-Smtp-Source: AGHT+IG+FTUmGJ+/COgbGtwp15niG+cd9riFL26aortlN2WN5OKeL0bGxpdnRDnCKPZKQj5eRuIFsDW+Z69953+bUJA=
+X-Received: by 2002:a05:6820:2686:b0:60f:9d6:bd08 with SMTP id
+ 006d021491bc7-60f0c7333b0mr4096808eaf.3.1749128425365; Thu, 05 Jun 2025
+ 06:00:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <6f23d82c-10cc-4d70-9dce-41978b05ec9a@kernel.org>
- <aCzNL9uXGbBSdF2S@black.fi.intel.com> <fea86161-2c47-4b0f-ac07-b3f9b0f10a03@kernel.org>
- <aC2UzG-eycjqYQep@black.fi.intel.com> <CAJZ5v0gRFwKhq21ima3kT0zzFLk4=47ivvzJqARksV7nYHTJAQ@mail.gmail.com>
- <CAJZ5v0h9--jFVBtQ5F7Gee3Cy8P3TeSLdiHEWykQ=EsZdoffmg@mail.gmail.com>
- <aDnpfKvLwRZsKxhH@black.fi.intel.com> <CAJZ5v0gjA2B4AnaYpfYpaNDo49k4LM2FGSrPFFuOCJ62bCMmkA@mail.gmail.com>
- <aEBpdwMfxp5M4Hxr@black.fi.intel.com> <CAJZ5v0hhoh0Fqnph6ZcbyZBj1Wp0t8UqnLr27TAVW31ZyKPL3Q@mail.gmail.com>
- <aEGDL0IF10QX3Abr@black.fi.intel.com>
-In-Reply-To: <aEGDL0IF10QX3Abr@black.fi.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 5 Jun 2025 14:26:05 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hJbKEJKRKv67bcQaHbL7h5e_WDGNPg4BA_P4JY-mk_nw@mail.gmail.com>
-X-Gm-Features: AX0GCFszkKfoW0b4kUz_tjavfz2i9S_MK1cS4vEFCRJbyuk-B48Ya0tiCbJ8hOg
-Message-ID: <CAJZ5v0hJbKEJKRKv67bcQaHbL7h5e_WDGNPg4BA_P4JY-mk_nw@mail.gmail.com>
-Subject: Re: [PATCH v4] PCI: Prevent power state transition of erroneous device
-To: Raag Jadav <raag.jadav@intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Mario Limonciello <superm1@kernel.org>, 
-	Denis Benato <benato.denis96@gmail.com>, mahesh@linux.ibm.com, oohall@gmail.com, 
-	bhelgaas@google.com, linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, ilpo.jarvinen@linux.intel.com, lukas@wunner.de, 
-	aravind.iddamsetty@linux.intel.com, 
-	"amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>, Alex Deucher <alexander.deucher@amd.com>
+References: <20250523-b4-gs101_max77759_fg-v4-0-b49904e35a34@uclouvain.be> <20250523-b4-gs101_max77759_fg-v4-5-b49904e35a34@uclouvain.be>
+In-Reply-To: <20250523-b4-gs101_max77759_fg-v4-5-b49904e35a34@uclouvain.be>
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Thu, 5 Jun 2025 14:00:14 +0100
+X-Gm-Features: AX0GCFsta0Lv7B_0omf8fUD6lFICgS_5x_1K74aulND6HJZCGnhF0KZN-f9c7f0
+Message-ID: <CADrjBPr4QNQPBddcFBe8V4u7G9YW0vs=8jyxEuQ1gVDt1zcfiA@mail.gmail.com>
+Subject: Re: [PATCH v4 5/5] arm64: dts: exynos: gs101-oriole: enable Maxim
+ max77759 fuel gauge
+To: t.antoine@uclouvain.be
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Dimitri Fedrau <dima.fedrau@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 5, 2025 at 1:44=E2=80=AFPM Raag Jadav <raag.jadav@intel.com> wr=
-ote:
->
-> On Wed, Jun 04, 2025 at 08:19:34PM +0200, Rafael J. Wysocki wrote:
-> > On Wed, Jun 4, 2025 at 5:43=E2=80=AFPM Raag Jadav <raag.jadav@intel.com=
-> wrote:
-> > > On Fri, May 30, 2025 at 07:49:26PM +0200, Rafael J. Wysocki wrote:
-> > > > On Fri, May 30, 2025 at 7:23=E2=80=AFPM Raag Jadav <raag.jadav@inte=
-l.com> wrote:
-> > > > > On Fri, May 23, 2025 at 05:23:10PM +0200, Rafael J. Wysocki wrote=
-:
-> > > > > > On Wed, May 21, 2025 at 1:27=E2=80=AFPM Rafael J. Wysocki <rafa=
-el@kernel.org> wrote:
-> > > > > > > On Wed, May 21, 2025 at 10:54=E2=80=AFAM Raag Jadav <raag.jad=
-av@intel.com> wrote:
-> > > > > > > > On Tue, May 20, 2025 at 01:56:28PM -0500, Mario Limonciello=
- wrote:
-> > > > > > > > > On 5/20/2025 1:42 PM, Raag Jadav wrote:
-> > > > > > > > > > On Tue, May 20, 2025 at 12:39:12PM -0500, Mario Limonci=
-ello wrote:
-> > >
-> > > ...
-> > >
-> > > > > > > > > From the driver perspective it does have expectations tha=
-t the parts outside
-> > > > > > > > > the driver did the right thing.  If the driver was expect=
-ing the root port
-> > > > > > > > > to be powered down at suspend and it wasn't there are har=
-dware components
-> > > > > > > > > that didn't power cycle and that's what we're seeing here=
-.
-> > > > > > > >
-> > > > > > > > Which means the expectation set by the driver is the opposi=
-te of the
-> > > > > > > > purpose of this patch, and it's going to fail if any kind o=
-f error is
-> > > > > > > > detected under root port during suspend.
-> > > > > > >
-> > > > > > > And IMV this driver's expectation is questionable at least.
-> > > > > > >
-> > > > > > > There is no promise whatsoever that the device will always be=
- put into
-> > > > > > > D3cold during system suspend.
-> > > > > >
-> > > > > > For instance, user space may disable D3cold for any PCI device =
-via the
-> > > > > > d3cold_allowed attribute in sysfs.
-> > > > > >
-> > > > > > If the driver cannot handle this, it needs to be fixed.
-> > > > >
-> > > > > Thanks for confirming. So should we consider this patch to be val=
-id
-> > > > > and worth moving forward?
-> > > >
-> > > > It doesn't do anything that would be invalid in principle IMV.
-> > > >
-> > > > You need to consider one more thing, though: It may be necessary to
-> > > > power-cycle the device in order to kick it out of the erroneous sta=
-te
-> > > > and the patch effectively blocks this if I'm not mistaken.
-> > > >
-> > > > But admittedly I'm not sure if this really matters.
-> > >
-> > > Wouldn't something like bus reset (SBR) be more predictable?
-> >
-> > Maybe.
-> >
-> > The device state is most likely inconsistent in that case, so it depend=
-s.
->
-> My limited understanding is that if SBR doesn't help, at that point all
-> bets are off including PMCSR configuration and probably a cold boot is
-> needed.
+Hi Thomas,
 
-I'm not talking about PMCSR, I'm talking about power removal (D3cold).
-This should be equivalent to a cold boot for the particular device
-except that cold boot would also reset the hierarchy above it.
+Thanks for your patch and work to enable fuel gauge on Pixel 6!
+
+On Fri, 23 May 2025 at 13:52, Thomas Antoine via B4 Relay
+<devnull+t.antoine.uclouvain.be@kernel.org> wrote:
+>
+> From: Thomas Antoine <t.antoine@uclouvain.be>
+>
+> Add the node for the Maxim MAX77759 fuel gauge as a slave of the i2c.
+>
+> The TODO is still applicable given there are other slaves on the
+> bus (e.g. PCA9468, other MAX77759 functions and the MAX20339 OVP).
+>
+> Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
+> ---
+>  arch/arm64/boot/dts/exynos/google/gs101-pixel-common.dtsi | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/exynos/google/gs101-pixel-common.dtsi b/arch/arm64/boot/dts/exynos/google/gs101-pixel-common.dtsi
+> index b25230495c64dce60916b7cd5dcb9a7cce5d0e4e..84fc10c3562958ab1621f24644709e85a9433b9b 100644
+> --- a/arch/arm64/boot/dts/exynos/google/gs101-pixel-common.dtsi
+> +++ b/arch/arm64/boot/dts/exynos/google/gs101-pixel-common.dtsi
+> @@ -10,6 +10,7 @@
+>
+>  #include <dt-bindings/gpio/gpio.h>
+>  #include <dt-bindings/input/input.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+>  #include <dt-bindings/usb/pd.h>
+>  #include "gs101-pinctrl.h"
+>  #include "gs101.dtsi"
+> @@ -188,6 +189,15 @@ usbc0_role_sw: endpoint {
+>                         };
+>                 };
+>         };
+> +
+> +       fuel-gauge@36 {
+> +               compatible = "maxim,max77759-fg";
+> +               reg = <0x36>;
+> +               reg-names = "m5";
+> +               interrupt-parent = <&gpa9>;
+> +               interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+> +               shunt-resistor-micro-ohms = <5000>;
+> +       };
+>  };
+>
+
+If gpa-9-3 is being used for the interrupt I think we should also add
+the pinctrl configuration for it. Taking a look at downstream the pin
+is defined as
+
+&pinctrl_0 {
+/* [MAX77759: FG_INTB] > FG_INT_L > [XEINT_23 : SC59845XWE] */
+        if_pmic_fg_irq: if-pmic-fg-irq {
+                samsung,pins = "gpa9-3"; /* XEINT_23 */
+                samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+                samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
+                samsung,pin-drv = <GS101_PIN_DRV_2_5_MA>;
+        };
+};
+
+and then the fuel-gauge node declares
+
+/* FG_INT_L -> XEINT_23 */
+pinctrl-names = "default";
+pinctrl-0 = <&if_pmic_fg_irq>;
+
+regards,
+
+Peter
 
