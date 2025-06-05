@@ -1,152 +1,291 @@
-Return-Path: <linux-pm+bounces-28161-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28162-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AE54ACF4E0
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 19:01:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58E3EACF546
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 19:20:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DEFD23AE0DF
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 17:00:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A84151882C7D
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 17:21:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D166F1A7045;
-	Thu,  5 Jun 2025 17:01:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E49713D521;
+	Thu,  5 Jun 2025 17:20:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=moritz.lienau@gmx.de header.b="kInt9oam"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jF25dsnV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 801831DFF8
-	for <linux-pm@vger.kernel.org>; Thu,  5 Jun 2025 17:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4E91DFF8;
+	Thu,  5 Jun 2025 17:20:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749142860; cv=none; b=o6nlRBFtHBuItgsC17yPn6wKTW73nuWkVeqdNMOkAoNVRmJhRsoye1DOVRJ3VqDNNeLyEDQl3Z8wA4bSnZDn+G7sX+SVVIdBje0xHJ1bAdGNSFBwNI0Bwdi21vrgRtTT17PQufUXtL3cpieIj3IefyJsWhd+yB6k3OqU7eXi+mQ=
+	t=1749144047; cv=none; b=QdZoZIqfh6iLPj5h5+mJA+Ii2jARQotxq0k20Te/R40rQPfavwFUZ4oHk1sXVDo5YdGaFw/+ukgNE6hP/HYOlM/yX3//x9mFaL8ZqBiPbwRSPi6ThqFUh9E520uvjG67ktMbF5fHhQJEqY/uI+WhGARwNWlue34hyBfW03/UvVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749142860; c=relaxed/simple;
-	bh=TNkpVnI+KeHVLr1DBdeDOyKHLEVxfkAxHNJtngM2fuI=;
-	h=MIME-Version:Message-ID:From:To:Subject:Content-Type:Date; b=HKH2cJWbopXG1NEwgKaeCSX19E8g4oYhlLm70ftttdxTOi1A3w4PfKttNcK7HdccuJUPVoVqDFQ+f1oQV/6K+HwyQX8EPlxoQ04pKinQrX9a6g4adFddQxwrEc6xg3ur+gDCXmUlAAsu/F+fjzWV7aAJ8DwoH0g9loaxmm1VEEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=moritz.lienau@gmx.de header.b=kInt9oam; arc=none smtp.client-ip=212.227.15.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1749142856; x=1749747656; i=moritz.lienau@gmx.de;
-	bh=TNkpVnI+KeHVLr1DBdeDOyKHLEVxfkAxHNJtngM2fuI=;
-	h=X-UI-Sender-Class:MIME-Version:Message-ID:From:To:Subject:
-	 Content-Type:Date:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=kInt9oamLNL7J3qSSA21peCTFqvHxh8QarrTBofHRdENrR3J5E6Sy35XFNM7oIDj
-	 WfoFeAhBLa42RsvIGlv2Ix5h55uR2cDtrM13WLwGLriIH12e+S65aenHk/TYdu3sS
-	 mmla8GE/tbI0/aU2JbX8pHtVPZrWUhk2G/Dz4dhQ4To3mFQPAQjiAA71ZAHznni2H
-	 j3mK6699WQZXwEfHB+e6PlidFzqfDtFGg/4CIpJqSXbgRM2RCTp+C/AuBjr/ysoh+
-	 0LGyvXXfvBFgfbfK4xiYL4arNfcgzkTGR8UeknPPzZmEdxXpSiBNk+GNUtRHLjSsr
-	 fiWgyKUS86xlbEanSg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [100.65.234.123] ([100.65.234.123]) by
- trinity-msg-rest-gmx-gmx-live-5d9b465786-trjg7 (via HTTP); Thu, 5 Jun 2025
- 17:00:56 +0000
+	s=arc-20240116; t=1749144047; c=relaxed/simple;
+	bh=XwGdHtoqujZip3vIIlT8VmeTxwgZkDqjj9/lpv9bS6s=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=kTpUQkhOuqWEQfhjRKTf2JHDr06AL54dY5tBQVFAHJqLsgr5YTTgIg6h2WArBXKxg6sGrbH+SbdA8J+DOcLuU4VZAiK3TqJTwb0DWEsWCcn3JK+oAFnfVEso399EJ85LWlLA9FyZ2ZRWdvMX5rfGsvhadUmOqlZMy6hEFzm1YE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jF25dsnV; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749144045; x=1780680045;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=XwGdHtoqujZip3vIIlT8VmeTxwgZkDqjj9/lpv9bS6s=;
+  b=jF25dsnVNmEvUT9WaDArrH7D3xFzHzN91YINop1icZo78uNHyejh0Q41
+   fuiNJagje/YXbCC8/dVZHum3CV2lUVh7HJJqk34JGvAxlVpcGmNzA+Pus
+   EkOu5bf8MpEd9ila+UfpaAWeP45wa+BX/+RlM0Pz6A1kSBBPg8kvaAZhh
+   Cd12h9KlEZdBImCQ4zD0y6xp/cQLgLwp75V9bExmL9qmCevv4IGHFzeUX
+   24uVzhVOyDyP8DuZiW45XxdwLlZNT+5l6VXG+Tn+Oqwig4WM5Gjia+TCx
+   QFFkcJ9XV/osZ5bGKIIqaDee4S7V50cuI9Bh6Z13kXzikHZjeYH09pEKI
+   g==;
+X-CSE-ConnectionGUID: lhxwz3qqQB2RB6seJeixiQ==
+X-CSE-MsgGUID: KZXTNB+wTCCjB/n/UaYGMQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11455"; a="68833796"
+X-IronPort-AV: E=Sophos;i="6.16,212,1744095600"; 
+   d="scan'208";a="68833796"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 10:20:45 -0700
+X-CSE-ConnectionGUID: 9iz7uCNLQiuXpVKhsFkmnQ==
+X-CSE-MsgGUID: D1ezj7lbSnikjO92mkTmZw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,212,1744095600"; 
+   d="scan'208";a="150458051"
+Received: from spandruv-desk1.amr.corp.intel.com ([10.124.222.36])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 10:20:44 -0700
+Message-ID: <63d616ac8bb1dbac9eebf10953886a5ce3274940.camel@linux.intel.com>
+Subject: Re: [PATCH 2/2] thermal: intel: int340x: Allow temperature override
+From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To: "Zhang, Rui" <rui.zhang@intel.com>, "lukasz.luba@arm.com"
+	 <lukasz.luba@arm.com>, "rafael@kernel.org" <rafael@kernel.org>, 
+ "daniel.lezcano@linaro.org"
+	 <daniel.lezcano@linaro.org>
+Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+ "linux-kernel@vger.kernel.org"
+	 <linux-kernel@vger.kernel.org>
+Date: Thu, 05 Jun 2025 10:20:43 -0700
+In-Reply-To: <545fae8be782943a92d9df1c4a3ff90b7a865c76.camel@intel.com>
+References: <20250604203518.2330533-1-srinivas.pandruvada@linux.intel.com>
+		 <20250604203518.2330533-2-srinivas.pandruvada@linux.intel.com>
+	 <545fae8be782943a92d9df1c4a3ff90b7a865c76.camel@intel.com>
+Autocrypt: addr=srinivas.pandruvada@linux.intel.com; prefer-encrypt=mutual;
+ keydata=mQGNBGYHNAsBDAC7tv5u9cIsSDvdgBBEDG0/a/nTaC1GXOx5MFNEDL0LWia2p8Asl7igx
+ YrB68fyfPNLSIgtCmps0EbRUkPtoN5/HTbAEZeJUTL8Xdoe6sTywf8/6/DMheEUzprE4Qyjt0HheW
+ y1JGvdOA0f1lkxCnPXeiiDY4FUqQHr3U6X4FPqfrfGlrMmGvntpKzOTutlQl8eSAprtgZ+zm0Jiwq
+ NSiSBOt2SlbkGu9bBYx7mTsrGv+x7x4Ca6/BO9o5dIvwJOcfK/cXC/yxEkr1ajbIUYZFEzQyZQXrT
+ GUGn8j3/cXQgVvMYxrh3pGCq9Q0Q6PAwQYhm97ipXa86GcTpP5B2ip9xclPtDW99sihiL8euTWRfS
+ TUsEI+1YzCyz5DU32w3WiXr3ITicaMV090tMg9phIZsjfFbnR8hY03n0kRNWWFXi/ch2MsZCCqXIB
+ oY/SruNH9Y6mnFKW8HSH762C7On8GXBYJzH6giLGeSsbvis2ZmV/r+LmswwZ6ACcOKLlvvIukAEQE
+ AAbQ5U3Jpbml2YXMgUGFuZHJ1dmFkYSA8c3Jpbml2YXMucGFuZHJ1dmFkYUBsaW51eC5pbnRlbC5j
+ b20+iQHRBBMBCAA7FiEEdki2SeUi0wlk2xcjOqtdDMJyisMFAmYHNAsCGwMFCwkIBwICIgIGFQoJC
+ AsCBBYCAwECHgcCF4AACgkQOqtdDMJyisMobAv+LLYUSKNuWhRN3wS7WocRPCi3tWeBml+qivCwyv
+ oZbmE2LcxYFnkcj6YNoS4N1CHJCr7vwefWTzoKTTDYqz3Ma0D0SbR1p/dH0nDgN34y41HpIHf0tx0
+ UxGMgOWJAInq3A7/mNkoLQQ3D5siG39X3bh9Ecg0LhMpYwP/AYsd8X1ypCWgo8SE0J/6XX/HXop2a
+ ivimve15VklMhyuu2dNWDIyF2cWz6urHV4jmxT/wUGBdq5j87vrJhLXeosueRjGJb8/xzl34iYv08
+ wOB0fP+Ox5m0t9N5yZCbcaQug3hSlgp9hittYRgIK4GwZtNO11bOzeCEMk+xFYUoa5V8JWK9/vxrx
+ NZEn58vMJ/nxoJzkb++iV7KBtsqErbs5iDwFln/TRJAQDYrtHJKLLFB9BGUDuaBOmFummR70Rbo55
+ J9fvUHc2O70qteKOt5A0zv7G8uUdIaaUHrT+VOS7o+MrbPQcSk+bl81L2R7TfWViCmKQ60sD3M90Y
+ oOfCQxricddC
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <trinity-970d44a5-310b-432d-b4b9-9008299746ad-1749142856337@trinity-msg-rest-gmx-gmx-live-5d9b465786-trjg7>
-From: moritz.lienau@gmx.de
-To: linux-pm@vger.kernel.org
-Subject: Assistance with intel_idle and c-states
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 5 Jun 2025 17:00:56 +0000
-Content-Transfer-Encoding: quoted-printable
-X-UI-CLIENT-META-MAIL-DROP: W10=
-X-Provags-ID: V03:K1:D8NWjl1SE4tTpRwM4p8a6m2zdPMszCL6s6MxLRRM4fRB/0UikwoP8l9zjjyb0P9hHl+g7
- 5nzfNLeIP+S5By8satChtWZJ3291wxFlWcCqYSAN/n/J+kPNweY9owJo4bb9KKtraVliOuPvpALm
- i955/fpOW+XgBpZ7CAbljp40AlW83kPQs9rre5KfLvXi3z0oXe0ZJtESpeWuYg7YF27F6mpJ6U3T
- 6r8N+6SDW2WHJtr6+AScdmLEnqCoo1B9OWUgq5cI4Ft0A6KE8AcPTxwEWDdfUoI6ITSpie/YR2r2
- eABrfYyRDMseKSkQ2FpC+D4Pk47z16irvtovm6uJTNWrtbZVgaSnGlIGJkgic30/Wrq8YkBroROc
- vmXk5AHAGAz
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:KWL0Jq97gSs=;3Tcwxu7uMZw9Dpcs33b+lObRG4Q
- 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
- YlSYoLFQwhDgNy8/kioU5oSCEgjauZqtNjxGA==
 
-Dear Power Management Team,
+On Thu, 2025-06-05 at 02:18 +0000, Zhang, Rui wrote:
+> On Wed, 2025-06-04 at 13:35 -0700, Srinivas Pandruvada wrote:
+> > Add debugfs interface to override hardware provide temperature.
+> > This
+> > interface can be used primarily for debug. Alternatively this can
+> > be also used to use hardware control loops to manage temperature
+> > for
+> > virtual sensors. Virtual sensors are soft sensors created by
+> > kernel/
+> > user space aggregating other sensors.
+> >=20
+> > There are three attributes to override the maximum three instances
+> > of
+> > platform temperature control.
+> > /sys/kernel/debug/plaftform_temperature_control/
+> > =E2=94=9C=E2=94=80=E2=94=80 temperature_0
+> > =E2=94=9C=E2=94=80=E2=94=80 temperature_1
+> > =E2=94=94=E2=94=80=E2=94=80 temperature_2
+> >=20
+> > These are write only attributes requires admin privilege. Any value
+> > greater than 0, will override the temperature. A value of 0 will
+> > stop overriding the temperature.
+> >=20
+> > Signed-off-by: Srinivas Pandruvada
+> > <srinivas.pandruvada@linux.intel.com>
+> > ---
+> > =C2=A0.../platform_temperature_control.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 64
+> > +++++++++++++++++++
+> > =C2=A01 file changed, 64 insertions(+)
+> >=20
+> > diff --git
+> > a/drivers/thermal/intel/int340x_thermal/platform_temperature_contro
+> > l.c
+> > b/drivers/thermal/intel/int340x_thermal/platform_temperature_contro
+> > l.c
+> > index 6cd05783a52d..5dcfd2cc9082 100644
+> > ---
+> > a/drivers/thermal/intel/int340x_thermal/platform_temperature_contro
+> > l.c
+> > +++
+> > b/drivers/thermal/intel/int340x_thermal/platform_temperature_contro
+> > l.c
+> > @@ -38,6 +38,7 @@
+> > =C2=A0
+> > =C2=A0#include <linux/kernel.h>
+> > =C2=A0#include <linux/module.h>
+> > +#include <linux/debugfs.h>
+> > =C2=A0#include <linux/pci.h>
+> > =C2=A0#include "processor_thermal_device.h"
+> > =C2=A0
+> > @@ -53,6 +54,7 @@ struct mmio_reg {
+> > =C2=A0
+> > =C2=A0struct ptc_data {
+> > =C2=A0	u32 offset;
+> > +	struct pci_dev *pdev;
+> > =C2=A0	struct attribute_group ptc_attr_group;
+> > =C2=A0	struct attribute *ptc_attrs[PTC_MAX_ATTRS];
+> > =C2=A0	struct device_attribute temperature_target_attr;
+> > @@ -222,6 +224,63 @@ static int ptc_create_groups(struct pci_dev
+> > *pdev,
+> > int instance, struct ptc_data
+> > =C2=A0}
+> > =C2=A0
+> > =C2=A0static struct ptc_data ptc_instance[PTC_MAX_INSTANCES];
+> > +static struct dentry *ptc_debugfs;
+> > +
+> > +#define PTC_TEMP_OVERRIDE_ENABLE_INDEX	4
+> > +#define PTC_TEMP_OVERRIDE_INDEX		5
+> > +
+> > +static ssize_t ptc_temperature_write(struct file *file, const char
+> > __user *data,
+> > +				=C2=A0=C2=A0=C2=A0=C2=A0 size_t count, loff_t *ppos)
+> > +{
+> > +	struct ptc_data *ptc_instance =3D file->private_data;
+> > +	struct pci_dev *pdev =3D ptc_instance->pdev;
+> > +	char buf[32];
+> > +	ssize_t len;
+> > +	u32 value;
+> > +
+> > +	len =3D min(count, sizeof(buf) - 1);
+> > +	if (copy_from_user(buf, data, len))
+> > +		return -EFAULT;
+> > +
+> > +	buf[len] =3D '\0';
+> > +	if (kstrtouint(buf, 0, &value))
+> > +		return -EINVAL;
+> > +
+> > +	if (ptc_mmio_regs[PTC_TEMP_OVERRIDE_INDEX].units)
+> > +		value /=3D
+> > ptc_mmio_regs[PTC_TEMP_OVERRIDE_INDEX].units;
+> > +
+> > +	if (value > ptc_mmio_regs[PTC_TEMP_OVERRIDE_INDEX].mask)
+> > +		return -EINVAL;
+> > +
+> > +	if (!value) {
+> > +		ptc_mmio_write(pdev, ptc_instance->offset,
+> > PTC_TEMP_OVERRIDE_ENABLE_INDEX, 0);
+> > +	} else {
+> > +		ptc_mmio_write(pdev, ptc_instance->offset,
+> > PTC_TEMP_OVERRIDE_INDEX, value);
+> > +		ptc_mmio_write(pdev, ptc_instance->offset,
+> > PTC_TEMP_OVERRIDE_ENABLE_INDEX, 1);
+> > +	}
+> > +
+> > +	return count;
+> > +}
+> > +
+> > +static const struct file_operations ptc_fops =3D {
+> > +	.open =3D simple_open,
+> > +	.write =3D ptc_temperature_write,
+> > +	.llseek =3D generic_file_llseek,
+> > +};
+> > +
+> > +static void ptc_create_debugfs(void)
+> > +{
+> > +	ptc_debugfs =3D
+> > debugfs_create_dir("plaftform_temperature_control", NULL);
+>=20
+> s/platform/plaftform
+>=20
+correct.
 
-I'm currently building my own home server using the Intel i5-14500T and wo=
-uld
-like to take advantage of the Intel C states for improved power efficiancy=
-=2E
-Sadly I have not been able to get the c states running in my proxmox kerne=
-l=2E
-Unfortunately, I haven't been able to get C-States working on my Proxmox k=
-ernel=2E
-I've verified that my hardware supports deeper C-States, updated all drive=
-rs and
-the microcode to version 0x3a, and even tested with a more recent kernel u=
-sing
-Fedora Workstation 42 - but with no success=2E All I get are the acpi stat=
-es from
-c1-c3 and POLL=2E
-After looking into the matter I stumbled accross your intel_idle=2Ec insid=
-e the
-pve-kernel I've pulled from git=2E
-It appeared as if the file has not been updated since 2020 since the copyr=
-ight
-is also from that year=2E Since the i5-14500T was released after that, I w=
-onder if
-support for it might be missing=2E
+> And same in the changelog.
+>=20
+> > +
+> > +	debugfs_create_file("temperature_0",=C2=A0 0200, ptc_debugfs,=C2=A0
+> > &ptc_instance[0], &ptc_fops);
+> > +	debugfs_create_file("temperature_1",=C2=A0 0200, ptc_debugfs,=C2=A0
+> > &ptc_instance[1], &ptc_fops);
+> > +	debugfs_create_file("temperature_2",=C2=A0 0200, ptc_debugfs,=C2=A0
+> > &ptc_instance[2], &ptc_fops);
+> > +}
+> > +
+> > +static void ptc_delete_debugfs(void)
+> > +{
+> > +	debugfs_remove_recursive(ptc_debugfs);
+> > +}
+> > =C2=A0
+> > =C2=A0int proc_thermal_ptc_add(struct pci_dev *pdev, struct
+> > proc_thermal_device *proc_priv)
+> > =C2=A0{
+> > @@ -230,10 +289,13 @@ int proc_thermal_ptc_add(struct pci_dev
+> > *pdev,
+> > struct proc_thermal_device *proc_
+> > =C2=A0
+> > =C2=A0		for (i =3D 0; i < PTC_MAX_INSTANCES; i++) {
+> > =C2=A0			ptc_instance[i].offset =3D ptc_offsets[i];
+> > +			ptc_instance[i].pdev =3D pdev;
+> > =C2=A0			ptc_create_groups(pdev, i,
+> > &ptc_instance[i]);
+> > =C2=A0		}
+> > =C2=A0	}
+> > =C2=A0
+> > +	ptc_create_debugfs();
+> > +
+>=20
+> should we create the debugfs only when PROC_THERMAL_FEATURE_PTC is
+> set?
 
-I would really appreciate your guidance on whether a newer version of the =
-file
-is available or it's possible to manually patch or modify the existing cod=
-e to
-support this cpu=2E
-I=E2=80=99m not very familiar with C or linux kernels, so any help would b=
-e extremely
-helpful=2E
-I hope it's okay to contact you directly=2E
+This function is only called when
+ if (feature_mask & PROC_THERMAL_FEATURE_PTC) {
+}
 
-Thank you in advance for your time and help=2E
 
-Best regards,
-Moritz Lienau
+>=20
+> > =C2=A0	return 0;
+> > =C2=A0}
+> > =C2=A0EXPORT_SYMBOL_GPL(proc_thermal_ptc_add);
+> > @@ -248,6 +310,8 @@ void proc_thermal_ptc_remove(struct pci_dev
+> > *pdev)
+> > =C2=A0		for (i =3D 0; i < PTC_MAX_INSTANCES; i++)
+> > =C2=A0			sysfs_remove_group(&pdev->dev.kobj,
+> > &ptc_instance[i].ptc_attr_group);
+> > =C2=A0	}
+> > +
+> > +	ptc_delete_debugfs();
+>=20
+> ditto.
+Same as above.
+
+Thanks,
+Srinivas
+
+>=20
+> thanks,
+> rui
 
