@@ -1,134 +1,109 @@
-Return-Path: <linux-pm+bounces-28163-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28164-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55D28ACF552
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 19:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A8A9ACF661
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 20:20:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8EEE1890310
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 17:25:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 027D9189D6B2
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 18:21:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D97A02750EA;
-	Thu,  5 Jun 2025 17:25:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABAFA1F7575;
+	Thu,  5 Jun 2025 18:20:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VW38q1U0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="keiFWWIw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1761E519;
-	Thu,  5 Jun 2025 17:25:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792DC18CC15;
+	Thu,  5 Jun 2025 18:20:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749144328; cv=none; b=AmMFS83DeoSrZ1oQiObwJh16KfC3VxZ/f7RkhP2p4NVNoYnOnSpLT74ef7ytqW7tMJhsm7oldy1fqH2HZR7DLRXa32A7Fx/oqxCE+v9qHyfdjfVBUvxybq9b7IsmgI9P7KlLfSW8+uZQ7K86TbDftCFvdxp5hToYjpqO8idbywk=
+	t=1749147649; cv=none; b=mTZ1NgtIAU//augwZU7zBFR4OY5gmM4OaSWGcumAn93qaoFDEAcjn8OipaGrhy5gTaASrmjMO+RrIlVUxo+WvS2y5FmAMjQYkmUBUx+Jj9m44eE/fW4+LkHw6YM+ESl35FXmTBhu/apWP+VjpyatSv9S1xfTCGur3YGCA/VL59c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749144328; c=relaxed/simple;
-	bh=5Yl5mCYxrczLodJ0pTPkcFCpM2H4dD6dZ5cU19KMeyM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=aBgUwjrVUIfkaumeDtNIFazxSHYHllTW4I10Ey4rAYL/p9qb2WHHkhxngqrBLE89xcA47QqXBQQXzFQ+pT7dlvtkBzkMihfDsTlSLb73kjDw1Oox8oUGngpIyJk+kZ8Hb/ELTEAZ+L+Hn8oigUE3XjGWpnXPz0nbQ+5fTk66llc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VW38q1U0; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749144328; x=1780680328;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=5Yl5mCYxrczLodJ0pTPkcFCpM2H4dD6dZ5cU19KMeyM=;
-  b=VW38q1U0lEOTejoNTG/5BeId1K26r2SNb5CaGmiTPixFYfa0URXQPoHo
-   eClF0fE/zMJd8ak8EzPK46j5qxEVJVT9kgMcwrvw98pdP031UK5J5punM
-   paM6kYHoHlI/JL0anD0GqXm3MRuzoHWslrOOHyk1G57v2xlaCesZ7mn5H
-   G6Q9yg4qb2cGojiTj3ntR1WYpiIoXjerckqC/CUamVFHAsYsL082Weyan
-   GOgcD8SXQ1VQM3dyKUTW9kSH6R3q3v55onSN/UDmJBpEO55FnNmI23HhL
-   3ojhXUGfP0K/OdMTdRvN81cLzwcnbuUbI7UBPoTZHaGSnW3/VW3YTZKMl
-   A==;
-X-CSE-ConnectionGUID: cOVoWkJSQUSKpKQH7SSmOQ==
-X-CSE-MsgGUID: z2AV60C1Tn2hE9zS8QB3Lg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11455"; a="51134671"
-X-IronPort-AV: E=Sophos;i="6.16,212,1744095600"; 
-   d="scan'208";a="51134671"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 10:25:27 -0700
-X-CSE-ConnectionGUID: +QonGZtsRx+Ju9/3s/IE8g==
-X-CSE-MsgGUID: iG+kP28qTMWQPy0uhoupGg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,212,1744095600"; 
-   d="scan'208";a="176531907"
-Received: from spandruv-desk1.amr.corp.intel.com ([10.124.222.36])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 10:25:27 -0700
-Message-ID: <5a0dc3858c802a5d6247424529377c6dbfd450ca.camel@linux.intel.com>
-Subject: Re: [PATCH 1/2] thermal: intel: int340x: Add performance control
- for platform temperature control
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: "Zhang, Rui" <rui.zhang@intel.com>, "lukasz.luba@arm.com"
-	 <lukasz.luba@arm.com>, "rafael@kernel.org" <rafael@kernel.org>, 
- "daniel.lezcano@linaro.org"
-	 <daniel.lezcano@linaro.org>
-Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
- "linux-kernel@vger.kernel.org"
-	 <linux-kernel@vger.kernel.org>
-Date: Thu, 05 Jun 2025 10:25:25 -0700
-In-Reply-To: <f33e302aac482860eebf5e5f45a44df77455512c.camel@intel.com>
-References: <20250604203518.2330533-1-srinivas.pandruvada@linux.intel.com>
-	 <f33e302aac482860eebf5e5f45a44df77455512c.camel@intel.com>
-Autocrypt: addr=srinivas.pandruvada@linux.intel.com; prefer-encrypt=mutual;
- keydata=mQGNBGYHNAsBDAC7tv5u9cIsSDvdgBBEDG0/a/nTaC1GXOx5MFNEDL0LWia2p8Asl7igx
- YrB68fyfPNLSIgtCmps0EbRUkPtoN5/HTbAEZeJUTL8Xdoe6sTywf8/6/DMheEUzprE4Qyjt0HheW
- y1JGvdOA0f1lkxCnPXeiiDY4FUqQHr3U6X4FPqfrfGlrMmGvntpKzOTutlQl8eSAprtgZ+zm0Jiwq
- NSiSBOt2SlbkGu9bBYx7mTsrGv+x7x4Ca6/BO9o5dIvwJOcfK/cXC/yxEkr1ajbIUYZFEzQyZQXrT
- GUGn8j3/cXQgVvMYxrh3pGCq9Q0Q6PAwQYhm97ipXa86GcTpP5B2ip9xclPtDW99sihiL8euTWRfS
- TUsEI+1YzCyz5DU32w3WiXr3ITicaMV090tMg9phIZsjfFbnR8hY03n0kRNWWFXi/ch2MsZCCqXIB
- oY/SruNH9Y6mnFKW8HSH762C7On8GXBYJzH6giLGeSsbvis2ZmV/r+LmswwZ6ACcOKLlvvIukAEQE
- AAbQ5U3Jpbml2YXMgUGFuZHJ1dmFkYSA8c3Jpbml2YXMucGFuZHJ1dmFkYUBsaW51eC5pbnRlbC5j
- b20+iQHRBBMBCAA7FiEEdki2SeUi0wlk2xcjOqtdDMJyisMFAmYHNAsCGwMFCwkIBwICIgIGFQoJC
- AsCBBYCAwECHgcCF4AACgkQOqtdDMJyisMobAv+LLYUSKNuWhRN3wS7WocRPCi3tWeBml+qivCwyv
- oZbmE2LcxYFnkcj6YNoS4N1CHJCr7vwefWTzoKTTDYqz3Ma0D0SbR1p/dH0nDgN34y41HpIHf0tx0
- UxGMgOWJAInq3A7/mNkoLQQ3D5siG39X3bh9Ecg0LhMpYwP/AYsd8X1ypCWgo8SE0J/6XX/HXop2a
- ivimve15VklMhyuu2dNWDIyF2cWz6urHV4jmxT/wUGBdq5j87vrJhLXeosueRjGJb8/xzl34iYv08
- wOB0fP+Ox5m0t9N5yZCbcaQug3hSlgp9hittYRgIK4GwZtNO11bOzeCEMk+xFYUoa5V8JWK9/vxrx
- NZEn58vMJ/nxoJzkb++iV7KBtsqErbs5iDwFln/TRJAQDYrtHJKLLFB9BGUDuaBOmFummR70Rbo55
- J9fvUHc2O70qteKOt5A0zv7G8uUdIaaUHrT+VOS7o+MrbPQcSk+bl81L2R7TfWViCmKQ60sD3M90Y
- oOfCQxricddC
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+	s=arc-20240116; t=1749147649; c=relaxed/simple;
+	bh=GuXy+S2OnKHqrs/0WLDLbvtSsvLUSoORLGJxOpGZcXc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CdmkD0uKRmmhQBKAY6Kj+sieuTjxpviO8rmc6OuzcUgESrl4gtrz7qIzzdS0yC8umprVJpVaxig/N2tsEFfYcPiactYo4/9qxXu9/8pYuhOkTQyrSrK+HrP2zgaDJ6y8l1bCnJnog8zalF0fZ8X6pmFCFd/Mb0R6mvSx3lk1JNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=keiFWWIw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 564AEC4AF09;
+	Thu,  5 Jun 2025 18:20:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749147649;
+	bh=GuXy+S2OnKHqrs/0WLDLbvtSsvLUSoORLGJxOpGZcXc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=keiFWWIweJGAGGpJEc3eEuezuxh0czRjsJE0KBKUTBLewXpE67McAwV4kw3SWb94f
+	 WtJ6fohNII7lPoDKA7P+UxyD2iots2ZO2fCQs6J4H9yWKdQ/BYIHPlPlAZPocABts6
+	 jQXtn0wVYM0TR30KMZzoS3hXUnEnYiu8yGuyBp3HR67IrbcEQ6Wng/60vNmx7oM4ZZ
+	 Hlt/h849/EwSo1OaoqWhpiNhqtV9dXp0evEb96u5KlOg14CP0igpIhqiOUEdyPwRLP
+	 fYdqIO7fwRQAklxyXWJ6C3PY+I14Nirzbz4Ef6ImobeqYfZfF8Y7mHxZylHznXLlsk
+	 e9vQTyDY+AuHQ==
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-4080548891fso566892b6e.3;
+        Thu, 05 Jun 2025 11:20:49 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX5wPulpf7ULzqYsOnXve/017yl/I7KXAl3eF/XhXDBSMNXejGKFVRxiEwDs+7xX4Bz9ut1iSFbrmE=@vger.kernel.org, AJvYcCXH19ShC9vyiFay6fa+XI1A7T/8De83BOjDrRLqT8WJWee42u5MuiRO0K7CxTf9H7Sg4dBVd4Wg/s8x@vger.kernel.org, AJvYcCXJrnHa+9rDNFliDooWCMyhcDQoOQvjjPsr6lmQcglg19naieqoknhuapBVlz+HyRXDyp/TQ3cv6J0dUDmg@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYsWOnUol94tRNdvNWDOMYuPoxk9qnjbolzlwwSXDl5Wih4gBK
+	JS3/Fe/gT2XKuc8NmeXzckifYwW0r4aznlEDQFXCNSYpQv1dRHON3upeiiEeu2X5Z8I8ACN7hBj
+	YtHbldgC3IR7jXFitWaFZO0f/zRtt14A=
+X-Google-Smtp-Source: AGHT+IG7/jJC0HU0cZqVScsTdwM1qZWvoE/yBpdMOxLSTp/DaDcMwzM/LYCBuwtfgXrti+7vhjcfBPjwDne2N5E0Has=
+X-Received: by 2002:a4a:ec44:0:b0:60f:9d6:bd08 with SMTP id
+ 006d021491bc7-60f3ceeda67mr390588eaf.3.1749147648692; Thu, 05 Jun 2025
+ 11:20:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <2226957.irdbgypaU6@rjwysocki.net> <2005721.PYKUYFuaPT@rjwysocki.net>
+ <06122416-b24a-493b-9374-550e5c290436@intel.com>
+In-Reply-To: <06122416-b24a-493b-9374-550e5c290436@intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 5 Jun 2025 20:20:37 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0h=d-w3QVdTwC7dApDKE_eVtNxOa1deyG1ru-VTcY_C0g@mail.gmail.com>
+X-Gm-Features: AX0GCFtFXybSlkhGV2Kxomjop5gub7gHo84hnArGGoVN05qIYAyCIl6ek_pkwhA
+Message-ID: <CAJZ5v0h=d-w3QVdTwC7dApDKE_eVtNxOa1deyG1ru-VTcY_C0g@mail.gmail.com>
+Subject: Re: [PATCH v1 4/5] ACPI: processor: Rescan "dead" SMT siblings during initialization
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, x86 Maintainers <x86@kernel.org>, 
+	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Len Brown <lenb@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, 
+	"Gautham R. Shenoy" <gautham.shenoy@amd.com>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Linux ACPI <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2025-06-05 at 03:06 +0000, Zhang, Rui wrote:
-> On Wed, 2025-06-04 at 13:35 -0700, Srinivas Pandruvada wrote:
-> > Add additional attribute to control performance of platform
-> > temperature
-> > control feature. Two attributes are added:
-> >=20
-> > gain: 0-7 levels, with 0 being most aggressive.
-> > 	7 =E2=80=93 graceful, favors performance at the expense of
-> > temperature
-> > 	overshoots
-> > 	0 =E2=80=93 aggressive, favors tight regulation over performance
->=20
-> By reading this, I know that setting "pts_0_control/gain" to a larger
-> value means less aggressive ptc control.
->=20
-> But what does "gain" mean here?
-This is the input to the algorithm on how much performance gain is
-allowed to be in acceptable range for trip violation. May be call
-performance levels instead. I am using the same term as in the spec.
+On Thu, Jun 5, 2025 at 6:14=E2=80=AFPM Dave Hansen <dave.hansen@intel.com> =
+wrote:
+>
+> On 6/5/25 08:07, Rafael J. Wysocki wrote:
+> >  #ifdef CONFIG_ACPI_PROCESSOR_CSTATE
+> > +void acpi_idle_rescan_dead_smt_siblings(void)
+> > +{
+> > +     if (cpuidle_get_driver() =3D=3D &acpi_idle_driver)
+> > +             arch_cpu_rescan_dead_smt_siblings();
+> > +}
+>
+> My only thought in reading this is that maybe cpuidle_register_driver()
+> would be a better spot to force the arch_cpu_rescan_dead_smt_siblings().
+> That way, each driver would not have to do the rescan.
 
-Thanks,
-Srinivas
+Unfortunately, this wouldn't work in the current arrangement of things
+because cpuidle_register_driver() can be called in a CPU online path.
 
->=20
-> May be my English problem, I'm trying hard to understand this, but it
-> is
-> still a bit confusing to me.
->=20
-> thanks,
-> rui
+It should be possible to make this work in the future, but first things fir=
+st.
+
+> But that's just a little nit at worst, otherwise the series looks good
+> to me. Thanks for chasing this down.
+>
+> For the x86 bits:
+>
+> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+
+Thank you!
 
