@@ -1,112 +1,152 @@
-Return-Path: <linux-pm+bounces-28146-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28147-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 711E0ACEE18
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 12:53:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC82FACEEA9
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 13:45:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43E663AD179
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 10:52:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62C10189801D
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 11:45:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8035320E031;
-	Thu,  5 Jun 2025 10:51:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CE07214815;
+	Thu,  5 Jun 2025 11:44:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hbtrbKPB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FM/khJLQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDFA4214209
-	for <linux-pm@vger.kernel.org>; Thu,  5 Jun 2025 10:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02E741C27;
+	Thu,  5 Jun 2025 11:44:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749120716; cv=none; b=Zi35MvUj19KY2G2JDChgIDRr9ZEqNgXKCpm+nk1YpaEorCscbKAoWlucl9zAgu+RVqrxJottoqEQZuTcZ3mX2csKyalTCxSGP4RCSwLZYQ9/3bTq836QJxCBs4vbk6jsf1PtkjsJXJ+Q+Di6/Ji7o1onoN1lYB1L72OiUmRe9B8=
+	t=1749123896; cv=none; b=AsDEfd7XqdUM/fUc/XfJMVbkkUnW7eLEhndmZiAuFULBTEU2criZNnjRdWoatL8EeAmz2rsviKrhme/LuvsFFL5PfWTqUATz0psYGxOzJ+PzSURza9oiDusgYfuMZZtbqBhRlZem1TPbpailaxb0b9CLq8D2+2PgF1FXmNiD21E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749120716; c=relaxed/simple;
-	bh=9id0PzQTrOqnlN917S6tmcSU7arYBTtwcAmTKUqpTx4=;
+	s=arc-20240116; t=1749123896; c=relaxed/simple;
+	bh=NzPkbUkN3Txeqet1Im5YkbvnKI7AuzMxCQo+dJH86v4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i6QaeLKYTam/6MWcMQk52XAvJ4fGPqp04+JTsmTZzmP+ZsPa4vm4edMRavBC7JZn3XL0jjnIFLn6iYHfgBtPkXMzkmYYMEi7DkMwS0odNnUv2H8S8pPtK2nyf+ShCIkUDfOTn3hfIyT1xFvBltA/Ok20oFbElJ6Qwynq/gdh5Ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hbtrbKPB; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2320d06b728so7600965ad.1
-        for <linux-pm@vger.kernel.org>; Thu, 05 Jun 2025 03:51:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1749120714; x=1749725514; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uxflC1Je6NBv1CJoZue5ehKHX4k8+2rNxAhbjWUDhZM=;
-        b=hbtrbKPBfLdZftS5m6fu1Ss2hIstIW3Cp0anwuguqXV3zglRPeYqKXFTwGrzUn+tH+
-         vJ0vd89KqScK5E1AAr4CFqjRKjbF9ywpifhSEv0vZFa78/75Szn0iqXQZHUtoR2SPiH7
-         hx3NWMIHr1VfTb0WU6ZkYcHwOCFMlF7z0nJJ+0c/1NyFi68EZBzwt6985ZWOuj4gJ7Tt
-         30MHYOBU8RfIUKI2ijyfgSk+k3oa+atXeNcD09oF3jFhFvq8gZP690d6MVicFuBL3Aa4
-         goPyaBwxOy5+cbH3wy9u4HjmLtjSPG0X/W4N9hjhkpmrHufigOG/IpWQ38OYMgyIuMH2
-         rodQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749120714; x=1749725514;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uxflC1Je6NBv1CJoZue5ehKHX4k8+2rNxAhbjWUDhZM=;
-        b=DO16IjUwPr3++iPrnbx0z6No6he7jRt07pSe9DcK4iU8wqdZITQYNVrouoc945nOsb
-         ZAEOZ1/kn/U9fW2I6iewUAJJ+C64O8HE6wqz4zLxI1orOet6a92xgQcznWO/sEGqX8iH
-         /Wb/YL3TDSZ47jrE+Ab8kgExA1PpcWrFm2MUtAHZO+4pAlSCXOE6She52glD7mJOR9dw
-         ePgSGxvlXSh/0ncdw/YusQF1UvosO0Mo1mj4gkF5Oz98BFccqbPQjqqcLQfCYolZhaF9
-         +ZVNoMT3wItKa5Z7s4S5WW/9qa150QPrP6RuNo98pxGIQrawN6oMcxXTOBt7dGB9UvlH
-         A4kg==
-X-Forwarded-Encrypted: i=1; AJvYcCUgk/OPAS8LQK6mLU4qQD3uUD+IkxhOkuv4Ee1VlCmjZAVC0sdNGtLPGNclo0UY366hPSUfNEEBVw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNjIv6Lu1dEcSLxjBUNHbpg3df+4SPCNxfnjV1cJIXLv9T2/FH
-	jDr6ghmKkKUMV+kmtlozAuBr58V5Q4OW6dYdkJI+8CGivy0ydSFvs8ej7DKaIh+qeAs=
-X-Gm-Gg: ASbGncs+b6JecrrdE+EZSGSFaqA+h+BOU7X6AsGanlkiATajSKeiQVa+92oMhm16Ado
-	4OwsIRTnVQDAZf2vPIfCR8KErl3KbDYb7w1fSnwjeH/pENZAw7sfIJEsIbGxoTWWglAf+9mnbzU
-	L2s5B2uc5Mx//7ZJ0L0AoVmz3I16ai8adJjl7AS1n7ZtqJ2u70kH0xVvovq/c6rt++rQVaBOJV1
-	xGXfKLP61C9BKMrUP72G3OoeIH9OyrIQS6wTmnqn9ZwCVB1zYKJHU8jkInF3MOe+UK2JMDI6xgX
-	VHWhsmTCQPkMmiwerhTW3EjzM4oITYRrTrul+egxV1X/qg5jObAQ4o+y3Fl4o7A=
-X-Google-Smtp-Source: AGHT+IHu4tZbsrp8f4l8H1I6bLci70BraNurpBDLKW59gH4FCKAHsDuVR+Uq4YM1lGTVhc1gzWLHVg==
-X-Received: by 2002:a17:90b:48c1:b0:311:c5d9:2c7c with SMTP id 98e67ed59e1d1-3131109959amr6859743a91.23.1749120714352;
-        Thu, 05 Jun 2025 03:51:54 -0700 (PDT)
-Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-313318e6846sm1016088a91.8.2025.06.05.03.51.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jun 2025 03:51:53 -0700 (PDT)
-Date: Thu, 5 Jun 2025 16:21:51 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Jon Hunter <jonathanh@nvidia.com>
-Cc: webgeek1234@gmail.com, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] cpufreq: tegra124: Remove use of disable_cpufreq
-Message-ID: <20250605105151.5s6eblr472mbhunt@vireshk-i7>
-References: <20250508-tegra124-cpufreq-v4-0-d142bcbd0234@gmail.com>
- <20250508-tegra124-cpufreq-v4-1-d142bcbd0234@gmail.com>
- <040b0d8b-e862-48dd-9b77-9266a5194f99@nvidia.com>
- <20250519101725.k644wzizjwygtwa7@vireshk-i7>
- <49e7d006-e9cb-49da-a4cb-b73a08f6b792@nvidia.com>
- <20250520100218.te5i5ltrx43zjsq6@vireshk-i7>
- <9826e66a-3474-4a00-967d-b7784ff60be4@nvidia.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=I0uIXGZst+KJmOw3RH3wjPcLur7mwa1bhBfV/ibv8Gs5rJrS9fkRYbonskMDNhYmFfa43I0nktUEBDitIEO0l5B3j9juKqouftqVwCOMz+KJOXsdHoSle3qeV/O7a+76krtLsseamY71sg1y7yc15BoQFYwECkkMGzTjyyZXbhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FM/khJLQ; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749123895; x=1780659895;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=NzPkbUkN3Txeqet1Im5YkbvnKI7AuzMxCQo+dJH86v4=;
+  b=FM/khJLQHIadGMPscHNFU/UMCrboF5PePZ/4vt5R5HPVb3NRiJ238S01
+   kLsho65Jb14+7q+gmUS6QXi03hwhVkVkUy9QPd0eWr70A26G+VJ+MuF0b
+   l4HtUa61TUK66UZPe5DcvoFlXG8SXZdoapT5X7vYqWmEaxtqH0Ftr3kVj
+   XCCYszd3QgDrrKQgU3/5AtiPH2kHI0JoSkAKtbS2z9qNx3Y4+2Pop93MD
+   kMHvwAebpGgPwK5IjBUQOP3oB0dQ4/ZcGPEsMFX0RG5q/3VU0bTDkpajs
+   ooL2tDPscMBF/LaKvblq1gx6vmGtEk/bun4/Oxm0vkyqTaeAd2pIPNcCP
+   Q==;
+X-CSE-ConnectionGUID: v1jwG2eQSz2SMVMSW7Qdvg==
+X-CSE-MsgGUID: A16MX5bfTuqTQgOM7dxPbw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11454"; a="51236299"
+X-IronPort-AV: E=Sophos;i="6.16,211,1744095600"; 
+   d="scan'208";a="51236299"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 04:44:54 -0700
+X-CSE-ConnectionGUID: i+dOHlE1SJqrKaX++mLgSQ==
+X-CSE-MsgGUID: rOi131nVRQSOXbJb9D8/vg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,211,1744095600"; 
+   d="scan'208";a="145364817"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 04:44:51 -0700
+Date: Thu, 5 Jun 2025 14:44:47 +0300
+From: Raag Jadav <raag.jadav@intel.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Mario Limonciello <superm1@kernel.org>,
+	Denis Benato <benato.denis96@gmail.com>, mahesh@linux.ibm.com,
+	oohall@gmail.com, bhelgaas@google.com, linux-pci@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	ilpo.jarvinen@linux.intel.com, lukas@wunner.de,
+	aravind.iddamsetty@linux.intel.com,
+	"amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+	Alex Deucher <alexander.deucher@amd.com>
+Subject: Re: [PATCH v4] PCI: Prevent power state transition of erroneous
+ device
+Message-ID: <aEGDL0IF10QX3Abr@black.fi.intel.com>
+References: <6f23d82c-10cc-4d70-9dce-41978b05ec9a@kernel.org>
+ <aCzNL9uXGbBSdF2S@black.fi.intel.com>
+ <fea86161-2c47-4b0f-ac07-b3f9b0f10a03@kernel.org>
+ <aC2UzG-eycjqYQep@black.fi.intel.com>
+ <CAJZ5v0gRFwKhq21ima3kT0zzFLk4=47ivvzJqARksV7nYHTJAQ@mail.gmail.com>
+ <CAJZ5v0h9--jFVBtQ5F7Gee3Cy8P3TeSLdiHEWykQ=EsZdoffmg@mail.gmail.com>
+ <aDnpfKvLwRZsKxhH@black.fi.intel.com>
+ <CAJZ5v0gjA2B4AnaYpfYpaNDo49k4LM2FGSrPFFuOCJ62bCMmkA@mail.gmail.com>
+ <aEBpdwMfxp5M4Hxr@black.fi.intel.com>
+ <CAJZ5v0hhoh0Fqnph6ZcbyZBj1Wp0t8UqnLr27TAVW31ZyKPL3Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <9826e66a-3474-4a00-967d-b7784ff60be4@nvidia.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0hhoh0Fqnph6ZcbyZBj1Wp0t8UqnLr27TAVW31ZyKPL3Q@mail.gmail.com>
 
-On 05-06-25, 11:34, Jon Hunter wrote:
-> I think that would be fine. Given that the tegra124-cpufreq driver is the
-> parent, if it fails to resume, then I assume that cpufreq-dt driver would
-> not resume either?
+On Wed, Jun 04, 2025 at 08:19:34PM +0200, Rafael J. Wysocki wrote:
+> On Wed, Jun 4, 2025 at 5:43 PM Raag Jadav <raag.jadav@intel.com> wrote:
+> > On Fri, May 30, 2025 at 07:49:26PM +0200, Rafael J. Wysocki wrote:
+> > > On Fri, May 30, 2025 at 7:23 PM Raag Jadav <raag.jadav@intel.com> wrote:
+> > > > On Fri, May 23, 2025 at 05:23:10PM +0200, Rafael J. Wysocki wrote:
+> > > > > On Wed, May 21, 2025 at 1:27 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > > > > On Wed, May 21, 2025 at 10:54 AM Raag Jadav <raag.jadav@intel.com> wrote:
+> > > > > > > On Tue, May 20, 2025 at 01:56:28PM -0500, Mario Limonciello wrote:
+> > > > > > > > On 5/20/2025 1:42 PM, Raag Jadav wrote:
+> > > > > > > > > On Tue, May 20, 2025 at 12:39:12PM -0500, Mario Limonciello wrote:
+> >
+> > ...
+> >
+> > > > > > > > From the driver perspective it does have expectations that the parts outside
+> > > > > > > > the driver did the right thing.  If the driver was expecting the root port
+> > > > > > > > to be powered down at suspend and it wasn't there are hardware components
+> > > > > > > > that didn't power cycle and that's what we're seeing here.
+> > > > > > >
+> > > > > > > Which means the expectation set by the driver is the opposite of the
+> > > > > > > purpose of this patch, and it's going to fail if any kind of error is
+> > > > > > > detected under root port during suspend.
+> > > > > >
+> > > > > > And IMV this driver's expectation is questionable at least.
+> > > > > >
+> > > > > > There is no promise whatsoever that the device will always be put into
+> > > > > > D3cold during system suspend.
+> > > > >
+> > > > > For instance, user space may disable D3cold for any PCI device via the
+> > > > > d3cold_allowed attribute in sysfs.
+> > > > >
+> > > > > If the driver cannot handle this, it needs to be fixed.
+> > > >
+> > > > Thanks for confirming. So should we consider this patch to be valid
+> > > > and worth moving forward?
+> > >
+> > > It doesn't do anything that would be invalid in principle IMV.
+> > >
+> > > You need to consider one more thing, though: It may be necessary to
+> > > power-cycle the device in order to kick it out of the erroneous state
+> > > and the patch effectively blocks this if I'm not mistaken.
+> > >
+> > > But admittedly I'm not sure if this really matters.
+> >
+> > Wouldn't something like bus reset (SBR) be more predictable?
+> 
+> Maybe.
+> 
+> The device state is most likely inconsistent in that case, so it depends.
 
-There is no resume interface in the cpufreq-dt driver, it is the cpufreq core
-which resumes to doing DVFS and I think it will try to do DVFS even if tegra's
-driver failed.
+My limited understanding is that if SBR doesn't help, at that point all
+bets are off including PMCSR configuration and probably a cold boot is
+needed.
 
-> Has anyone tested this?
+Please correct me if I've misunderstood.
 
--- 
-viresh
+Raag
 
