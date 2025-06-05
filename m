@@ -1,66 +1,75 @@
-Return-Path: <linux-pm+bounces-28152-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28158-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B13CACF2A1
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 17:11:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6D45ACF2F1
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 17:22:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AE823AE576
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 15:10:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BB7D97ACBC9
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 15:14:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DC501A08A6;
-	Thu,  5 Jun 2025 15:09:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0449619F480;
+	Thu,  5 Jun 2025 15:15:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="qSH1k1Bt"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="e51u7eqb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E83EA1CCB40;
-	Thu,  5 Jun 2025 15:09:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749136195; cv=none; b=iCZvl0SHR6HGVnK7Cqw1MrH3egO1WVEXwjwtmogLc3Nz600uGlgUcSUelGgY895aE5kOQD9+fA2ev/PVVZRownEmdBPyEvfm1VfcsPQJQ74JXFoOg19LiZJz5xpCRKwZ6GIgwMzmJXUAz5jrUoxh3iRfqk/VSv5r5Ab7ClFKq/4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749136195; c=relaxed/simple;
-	bh=5w6Yv93zAQ3ErcgdTrPiDO9Q9Wfrs45HpAf7J5N0gZQ=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA6C13AD3F;
+	Thu,  5 Jun 2025 15:15:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749136537; cv=pass; b=PkBrasjIY+HYKgngfqp4BTQFxppuNdxtKK/2iAmH2yg7ZFrP/xq+cmswabegei6kwjZnfIeRFOm8jvWgC07sAXLkVlQ3yWN0rGvuVfdm3b63anZPOCIwgSJgkInPgkW/8ssxRT0bV8BLFCPWdw4UkGhY3iy1IJ83QenSbZs7E0w=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749136537; c=relaxed/simple;
+	bh=GgJMseciY2sRjSScoO4X8MCR1HDf9uZ8s4u0sGGTtAc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=s9jeeM+0BV2LpBdI7T3+50OT127mbC+6zze6e641ohyQt09xgP6c53FaJS2llUWgClBgl0v274quT9LjIX9npW0GkNlFkjhueF+FoMF9Rgb0lR6EoemuY22m4J4THyO3lEbEe+ezLHFGHmH69yERNna937QXdX9GEZ4Yfi/jBG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=qSH1k1Bt; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from kreacher.localnet (unknown [5.63.189.50])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 29D2566C036;
-	Thu,  5 Jun 2025 17:09:44 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1749136184;
-	bh=5w6Yv93zAQ3ErcgdTrPiDO9Q9Wfrs45HpAf7J5N0gZQ=;
-	h=From:Subject:Date;
-	b=qSH1k1BtkumQjRlAiVzukEKaymWbwSyIEpgjTJCKwbbWza9OEwLmY60+XkKsJH/yi
-	 0eChstEywNEVUS5+ZcCor3NJkdVZxYWwedkT4EnfaDFc9WwPayV/zO1qhCbaU4CW9Z
-	 2YwyJRFpzW+v0vHX7daAFV0kVPMH4kBfPzRB833qY3U20izZP7DPnF7v8+qZHyk3rC
-	 FM6RwjMcgrStNBR79iBAOTFmLToLPd/QbiXb5UqpH25bF3N86pgbMd4am7m35Uir/s
-	 Gl47N9xeatvxdHmtOYVRp3BrMGzadQyqAWCr8aKT0HqTChfLq4NQRz5mVL2JV8vv95
-	 UnQEwyMZnDjKg==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: x86 Maintainers <x86@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Len Brown <lenb@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
- "Gautham R. Shenoy" <gautham.shenoy@amd.com>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Linux ACPI <linux-acpi@vger.kernel.org>
-Subject:
- [PATCH v1 5/5] Reapply "x86/smp: Eliminate mwait_play_dead_cpuid_hint()"
-Date: Thu, 05 Jun 2025 17:09:35 +0200
-Message-ID: <7813065.EvYhyI6sBW@rjwysocki.net>
-In-Reply-To: <2226957.irdbgypaU6@rjwysocki.net>
-References: <2226957.irdbgypaU6@rjwysocki.net>
+	 MIME-Version:Content-Type; b=PwUQZ+oJIHhUU1j+RS3BZAOQKWCBidqHjrL2A1HLZp5dxLdJwmn62VQQ4lst1AOYOq1ocMlVurlKJ20iAQ8RV0jK7gDSIhkXVAt0RKjloBZvy6MaMjfw2Lxxddyr3A4b6eucbujIPUG0uq+PhQ+HzjEGhzwq+aRwKMsu0WMdhzc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=e51u7eqb; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1749136492; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=ENI8hMjvEmJfVrQRZSFpDbyKHVOtvfZuTm5qF/vEk1X9P4OigUMMG7qLVI2qosebz8ddrxGGYzEZZiDtjkR/dCK0ZzXU3/xZFoNQI6xUCziEB0er4zPVxDzJaiJQt0t0dnHoGf0FOh/E7kyj9Lb841Ko3RteQbTAgBr7G0EjjoA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1749136492; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=/GuYrfRIt3NP/tsfwxH5PFscLlX5erdLhDtZ3+v8kg0=; 
+	b=CiS2fKxauqWUQMP1ejrx8adcDEkkl3oZ9DnqHwWhoP2htA9pVuSul4sJER3KjYov9/oJHH+vXa3rrpAceqawTxO200NM8svS0Pbuz5sYizX1xmOcNiZIW3eUU/NUpsLul3u+Q05GGFSkV1fBADbU+vzKAf4pLubew6rSiEdAO4Q=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1749136492;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+	bh=/GuYrfRIt3NP/tsfwxH5PFscLlX5erdLhDtZ3+v8kg0=;
+	b=e51u7eqbnLxwYY5yZzmLXXP5HnH4XLEy+59bYwU7yq79RAHad1ASKDdWUvA4NKtU
+	WuBzAfplXeyVY87JQsYejDcYPp1lcBqOWM5b+r0qfTjEoxE3JGEyEtz3kpv7NbmYyMh
+	S0FMhUYFU5gwxET6NfPaMpw+TuQSLF2t0mAg7jGE=
+Received: by mx.zohomail.com with SMTPS id 1749136491036595.9387295759052;
+	Thu, 5 Jun 2025 08:14:51 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+To: Chanwoo Choi <cw00.choi@samsung.com>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>, Heiko Stuebner <heiko@sntech.de>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Diederik de Haas <didi.debian@cknow.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, kernel@collabora.com,
+ linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/2] PM / devfreq: rockchip-dfi: add support for LPDDR5
+Date: Thu, 05 Jun 2025 17:14:46 +0200
+Message-ID: <4244538.aeNJFYEL58@workhorse>
+In-Reply-To: <DADLSAEF1YPO.V0CQK084KFFO@cknow.org>
+References:
+ <20250530-rk3588-dfi-improvements-v1-0-6e077c243a95@collabora.com>
+ <20250530-rk3588-dfi-improvements-v1-2-6e077c243a95@collabora.com>
+ <DADLSAEF1YPO.V0CQK084KFFO@cknow.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -68,114 +77,78 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 5.63.189.50
-X-CLIENT-HOSTNAME: 5.63.189.50
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: dmFkZTEzSEGzZ/ONVrWENr6vcXfS3S2jicISDIUk4t6WJg+Zjj/tMsiKrH6p/W9hVn65rDd2JKDd5uTYEHknKQT2r7pOoqF3rdVD5yhK7Rprhh7g9Zvcj23lpp2rY7UCLtUpLjrE40L5kP2ENOt7F7JFMQrsU0BxCSyD9ImwCg/5uHKqloLfTfX1B6buKhq24d5iBCDj1fuCRg5EDPCCcGoXCAG/xJ8DxnVxdLMqNeA6Murrcf5yV2bVSf0qD3cTb1ZGJEaagT8ZwEZw1hwmHq4GBUTZA/geTkMBRKK8IMyXCx4LjU27eYT2E9Bi7kPkpz1heTPAWpmaTKgTxzYdBmQllqRTl/Yl2mbTQxvwrPd3I7zV7RAKW8lL8zC1Qqzv74Nqlxzwid9Qnd2k+6vzP8M8lTjbI3EUY48Qn0InRxGMdT0mI6F/wpdr91v91Wod4Xt1EmxclbwDJX2Is1vMQRh2U2mZLIDQN0M9sNrj+X3o5zkShMz+j9Z0XGTwte4UyGTpMainqH1zLPnxQEI/Cs8t6faBMja0m/aGPSYG7PZDZ0JZ8/fORk3jqIccuBkwbYmzOXwKB1kP9qI0b1DCJzVBeBsHtWzitHFlQ9cMDPKTooa6zSw9QtOGbQS78UXLSL9r4vruh1z2hDnMKDwCCPHN4KlkDj1wHu+122qK3UBoDbQH+w
-X-DCC--Metrics: v370.home.net.pl 1024; Body=12 Fuz1=12 Fuz2=12
+Content-Type: text/plain; charset="utf-8"
 
-From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Hello Diederik,
 
-Revert commit 70523f335734 ("Revert "x86/smp: Eliminate
-mwait_play_dead_cpuid_hint()"") to reapply the changes from commit
-96040f7273e2 ("x86/smp: Eliminate mwait_play_dead_cpuid_hint()")
-reverted by it.
+On Wednesday, 4 June 2025 10:24:33 Central European Summer Time Diederik de Haas wrote:
+> Hi Nicolas,
+> 
+> On Fri May 30, 2025 at 3:38 PM CEST, Nicolas Frattaroli wrote:
+> > [...]
+> > +	case ROCKCHIP_DDRTYPE_LPDDR5:
+> > +		ddrmon_ver = readl_relaxed(dfi->regs);
+> > +		if (ddrmon_ver < 0x40) {
+> > +			*ctrl = DDRMON_CTRL_LPDDR5 | dfi->lp5_bank_mode;
+> > +			*mask |= DDRMON_CTRL_LP5_BANK_MODE_MASK;
+> > +			break;
+> > +		}
+> > +
+> > +		/*
+> > +		 * As it is unknown whether the unpleasant special case
+> > +		 * behaviour used by the vendor kernel is needed for any
+> > +		 * shipping hardware, ask users to report if they have
+> > +		 * some of that hardware.
+> > +		 */
+> > +		dev_err(&dfi->edev->dev,
+> > +			"unsupported DDRMON version 0x%04X, please let linux-rockchip know!\n",
+> > +			ddrmon_ver);
+> > +		return -EOPNOTSUPP;
+> 
+> I'm guessing you mean the linux-rockchip mailing list here? If so, I
+> think it's better to make that explicit as 'Joe User' who may run into
+> this issue may not be aware of that mailing list. The 'linux' and
+> 'rockchip' name combo is used in quite a few places.
 
-Previously, these changes caused idle power to rise on systems booting
-with "nosmt" in the kernel command line because they effectively caused
-"dead" SMT siblings to remain in idle state C1 after executing the HLT
-instruction, which prevented the processor from reaching package idle
-states deeper than PC2 going forward.
+I agree it's ambiguous, the message as it is right now is the way it is
+because we're not allowed to linebreak user-facing messages for grep-
+ability and I also don't want to exceed 100 lines of width (though this
+is the one case where we're allowed to).
 
-Now, the "dead" SMT siblings are rescanned after initializing a proper
-cpuidle driver for the processor (either intel_idle or ACPI idle), at
-which point they are able to enter a sufficiently deep idle state
-in native_play_dead() via cpuidle, so the code changes in question can
-be reapplied.
+I suppose I should just replace it with the e-mail address of the list.
+That should be clear enough and this error message also won't end up in
+random boot logs strewn across the internet if it really is just some
+engineering sample hardware or similar that's affected.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- arch/x86/kernel/smpboot.c |   54 +++++-----------------------------------------
- 1 file changed, 7 insertions(+), 47 deletions(-)
+Kind regards,
+Nicolas Frattaroli
 
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1238,6 +1238,10 @@
- 	local_irq_disable();
- }
- 
-+/*
-+ * We need to flush the caches before going to sleep, lest we have
-+ * dirty data in our caches when we come back up.
-+ */
- void __noreturn mwait_play_dead(unsigned int eax_hint)
- {
- 	struct mwait_cpu_dead *md = this_cpu_ptr(&mwait_cpu_dead);
-@@ -1284,50 +1288,6 @@
- }
- 
- /*
-- * We need to flush the caches before going to sleep, lest we have
-- * dirty data in our caches when we come back up.
-- */
--static inline void mwait_play_dead_cpuid_hint(void)
--{
--	unsigned int eax, ebx, ecx, edx;
--	unsigned int highest_cstate = 0;
--	unsigned int highest_subcstate = 0;
--	int i;
--
--	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
--	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
--		return;
--	if (!this_cpu_has(X86_FEATURE_MWAIT))
--		return;
--	if (!this_cpu_has(X86_FEATURE_CLFLUSH))
--		return;
--
--	eax = CPUID_LEAF_MWAIT;
--	ecx = 0;
--	native_cpuid(&eax, &ebx, &ecx, &edx);
--
--	/*
--	 * eax will be 0 if EDX enumeration is not valid.
--	 * Initialized below to cstate, sub_cstate value when EDX is valid.
--	 */
--	if (!(ecx & CPUID5_ECX_EXTENSIONS_SUPPORTED)) {
--		eax = 0;
--	} else {
--		edx >>= MWAIT_SUBSTATE_SIZE;
--		for (i = 0; i < 7 && edx; i++, edx >>= MWAIT_SUBSTATE_SIZE) {
--			if (edx & MWAIT_SUBSTATE_MASK) {
--				highest_cstate = i;
--				highest_subcstate = edx & MWAIT_SUBSTATE_MASK;
--			}
--		}
--		eax = (highest_cstate << MWAIT_SUBSTATE_SIZE) |
--			(highest_subcstate - 1);
--	}
--
--	mwait_play_dead(eax);
--}
--
--/*
-  * Kick all "offline" CPUs out of mwait on kexec(). See comment in
-  * mwait_play_dead().
-  */
-@@ -1377,9 +1337,9 @@
- 	play_dead_common();
- 	tboot_shutdown(TB_SHUTDOWN_WFS);
- 
--	mwait_play_dead_cpuid_hint();
--	if (cpuidle_play_dead())
--		hlt_play_dead();
-+	/* Below returns only on error. */
-+	cpuidle_play_dead();
-+	hlt_play_dead();
- }
- 
- #else /* ... !CONFIG_HOTPLUG_CPU */
+> 
+> Cheers,
+>   Diederik
+> 
+> > +	default:
+> > +		dev_err(&dfi->edev->dev, "unsupported memory type 0x%X\n",
+> > +			dfi->ddr_type);
+> > +		return -EOPNOTSUPP;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static int rockchip_dfi_enable(struct rockchip_dfi *dfi)
+> >  {
+> >  	void __iomem *dfi_regs = dfi->regs;
+> >  	int i, ret = 0;
+> > +	u32 ctrl;
+> > +	u32 ctrl_mask;
+> >  
+> >  	mutex_lock(&dfi->mutex);
+> >  
+> > @@ -136,8 +186,11 @@ static int rockchip_dfi_enable(struct rockchip_dfi *dfi)
+> > <snip>
+> 
+
 
 
 
