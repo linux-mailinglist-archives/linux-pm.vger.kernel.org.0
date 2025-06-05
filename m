@@ -1,109 +1,119 @@
-Return-Path: <linux-pm+bounces-28164-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28165-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A8A9ACF661
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 20:20:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90020ACF786
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 20:55:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 027D9189D6B2
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 18:21:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F37916B1BF
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 18:55:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABAFA1F7575;
-	Thu,  5 Jun 2025 18:20:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB0D227A102;
+	Thu,  5 Jun 2025 18:55:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="keiFWWIw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EQkUq8MK"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792DC18CC15;
-	Thu,  5 Jun 2025 18:20:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9303E1E2614;
+	Thu,  5 Jun 2025 18:55:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749147649; cv=none; b=mTZ1NgtIAU//augwZU7zBFR4OY5gmM4OaSWGcumAn93qaoFDEAcjn8OipaGrhy5gTaASrmjMO+RrIlVUxo+WvS2y5FmAMjQYkmUBUx+Jj9m44eE/fW4+LkHw6YM+ESl35FXmTBhu/apWP+VjpyatSv9S1xfTCGur3YGCA/VL59c=
+	t=1749149717; cv=none; b=EO7oskaGC3TKqwK6P6HV5Ew134ohoUA0NWdd4uB5P7ieMGVqbH5f3feA7UAVt5Qu2qp0+D7yluHyM39PzzMKknjmoL9sYOA0PqZkbZF1bmoaOkNSoPR0qZ50eD2Ai5v8KFJ/CgFp+m7ZHGRDKmxlKONqKxJx6W2bkTv6Rban+nk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749147649; c=relaxed/simple;
-	bh=GuXy+S2OnKHqrs/0WLDLbvtSsvLUSoORLGJxOpGZcXc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CdmkD0uKRmmhQBKAY6Kj+sieuTjxpviO8rmc6OuzcUgESrl4gtrz7qIzzdS0yC8umprVJpVaxig/N2tsEFfYcPiactYo4/9qxXu9/8pYuhOkTQyrSrK+HrP2zgaDJ6y8l1bCnJnog8zalF0fZ8X6pmFCFd/Mb0R6mvSx3lk1JNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=keiFWWIw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 564AEC4AF09;
-	Thu,  5 Jun 2025 18:20:49 +0000 (UTC)
+	s=arc-20240116; t=1749149717; c=relaxed/simple;
+	bh=FYn75fjf3w/iqVKk96Y/BuTcUXG5n3zvelKIQTkV+iY=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=uNqNAzX7PQy+amko8Uv/3NDtGlQ2vqohrlvMAtgIG6Tfv5CqH7pCckSwZKFm0hEl+IoiSSgzsGPOM71CWlL+hMQj2YyFGrspXvi1oDakbAMSuJ4on/IY9bu5Hw40kznudX8M24ryVrUR4a3re3Rtk3cQldsfgs/WwypHWqbSC0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EQkUq8MK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09B28C4CEE7;
+	Thu,  5 Jun 2025 18:55:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749147649;
-	bh=GuXy+S2OnKHqrs/0WLDLbvtSsvLUSoORLGJxOpGZcXc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=keiFWWIweJGAGGpJEc3eEuezuxh0czRjsJE0KBKUTBLewXpE67McAwV4kw3SWb94f
-	 WtJ6fohNII7lPoDKA7P+UxyD2iots2ZO2fCQs6J4H9yWKdQ/BYIHPlPlAZPocABts6
-	 jQXtn0wVYM0TR30KMZzoS3hXUnEnYiu8yGuyBp3HR67IrbcEQ6Wng/60vNmx7oM4ZZ
-	 Hlt/h849/EwSo1OaoqWhpiNhqtV9dXp0evEb96u5KlOg14CP0igpIhqiOUEdyPwRLP
-	 fYdqIO7fwRQAklxyXWJ6C3PY+I14Nirzbz4Ef6ImobeqYfZfF8Y7mHxZylHznXLlsk
-	 e9vQTyDY+AuHQ==
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-4080548891fso566892b6e.3;
-        Thu, 05 Jun 2025 11:20:49 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX5wPulpf7ULzqYsOnXve/017yl/I7KXAl3eF/XhXDBSMNXejGKFVRxiEwDs+7xX4Bz9ut1iSFbrmE=@vger.kernel.org, AJvYcCXH19ShC9vyiFay6fa+XI1A7T/8De83BOjDrRLqT8WJWee42u5MuiRO0K7CxTf9H7Sg4dBVd4Wg/s8x@vger.kernel.org, AJvYcCXJrnHa+9rDNFliDooWCMyhcDQoOQvjjPsr6lmQcglg19naieqoknhuapBVlz+HyRXDyp/TQ3cv6J0dUDmg@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYsWOnUol94tRNdvNWDOMYuPoxk9qnjbolzlwwSXDl5Wih4gBK
-	JS3/Fe/gT2XKuc8NmeXzckifYwW0r4aznlEDQFXCNSYpQv1dRHON3upeiiEeu2X5Z8I8ACN7hBj
-	YtHbldgC3IR7jXFitWaFZO0f/zRtt14A=
-X-Google-Smtp-Source: AGHT+IG7/jJC0HU0cZqVScsTdwM1qZWvoE/yBpdMOxLSTp/DaDcMwzM/LYCBuwtfgXrti+7vhjcfBPjwDne2N5E0Has=
-X-Received: by 2002:a4a:ec44:0:b0:60f:9d6:bd08 with SMTP id
- 006d021491bc7-60f3ceeda67mr390588eaf.3.1749147648692; Thu, 05 Jun 2025
- 11:20:48 -0700 (PDT)
+	s=k20201202; t=1749149717;
+	bh=FYn75fjf3w/iqVKk96Y/BuTcUXG5n3zvelKIQTkV+iY=;
+	h=From:Date:Subject:To:Cc:From;
+	b=EQkUq8MK7AZC2waLbrE5Po4yPc+zHQxwvuuw5gVFdOMLEjgWta7xkZuk2O/of7wb4
+	 QdV5SzLfmebPD5deIZjmSYJiQyzGuuIcEi17L0MNEWPP6Gk2doapnrrlu/EDxxQrIj
+	 rQnczfRDtsS6zOcNWhCpgB4BzLsx2oILkQg0T2oXIj54wLl50xRDJtr9kaBpHKNBvd
+	 /fp9cAphuj7DZ7Hg5xgZQTW/sKFu8MbOTilb8pYf5csY1WFPZWICTKozkbx+ttc3mw
+	 wIXCbF3+zhw/MZEvCwv8Px0LbEIBtCE0D/1anKv8KdL3NcWPPcATaPXfaVGg3WBOIz
+	 qqrWbYDDbrpAA==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-2e8f7ca7ca3so922204fac.2;
+        Thu, 05 Jun 2025 11:55:17 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWWQi+1EvnOknbYLYAKwxxyYlcBM+5quy7tYTXy+rm/pXDDpg/XzBO+XCQ6bTaXHySk0KUa0suNab8k5tg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/YPkbEl7f0WFF10xNtn10VTBWVO4DuZZUyQbVcNLu4tFDgout
+	756VHiRhNKn6ZWO9QjLIQA66CxKVSWQeaHxMW8XAFUqwK1snX6wgDUw5bhoh1plmB4qC9uSj7dU
+	Xr13iPx+UEroXXRqU4n4JlWpl2bbIE0Y=
+X-Google-Smtp-Source: AGHT+IHV4daEy3CxRB1+a4wtq4QB6viOArsu7E+tiC5V0IzCR6FAgBvaz7VslBfYFei48Sp9WZHCnGmc4Jd1W4gJcZA=
+X-Received: by 2002:a05:6870:de12:b0:289:2126:6826 with SMTP id
+ 586e51a60fabf-2ea011ee207mr477748fac.30.1749149716339; Thu, 05 Jun 2025
+ 11:55:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2226957.irdbgypaU6@rjwysocki.net> <2005721.PYKUYFuaPT@rjwysocki.net>
- <06122416-b24a-493b-9374-550e5c290436@intel.com>
-In-Reply-To: <06122416-b24a-493b-9374-550e5c290436@intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 5 Jun 2025 20:20:37 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0h=d-w3QVdTwC7dApDKE_eVtNxOa1deyG1ru-VTcY_C0g@mail.gmail.com>
-X-Gm-Features: AX0GCFtFXybSlkhGV2Kxomjop5gub7gHo84hnArGGoVN05qIYAyCIl6ek_pkwhA
-Message-ID: <CAJZ5v0h=d-w3QVdTwC7dApDKE_eVtNxOa1deyG1ru-VTcY_C0g@mail.gmail.com>
-Subject: Re: [PATCH v1 4/5] ACPI: processor: Rescan "dead" SMT siblings during initialization
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, x86 Maintainers <x86@kernel.org>, 
-	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Len Brown <lenb@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, 
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Linux ACPI <linux-acpi@vger.kernel.org>
+Date: Thu, 5 Jun 2025 20:55:05 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hBGhVuwsfQW=-MDp3nLL_5epaYYHqmPY-DY9_g6wciSQ@mail.gmail.com>
+X-Gm-Features: AX0GCFvP0XIL-Evb0ogNB-akVzCgCZYFmFQ12rP8FoQ-PWOJVACsdSFDKjhNAvI
+Message-ID: <CAJZ5v0hBGhVuwsfQW=-MDp3nLL_5epaYYHqmPY-DY9_g6wciSQ@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v6.16-rc1
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 5, 2025 at 6:14=E2=80=AFPM Dave Hansen <dave.hansen@intel.com> =
-wrote:
->
-> On 6/5/25 08:07, Rafael J. Wysocki wrote:
-> >  #ifdef CONFIG_ACPI_PROCESSOR_CSTATE
-> > +void acpi_idle_rescan_dead_smt_siblings(void)
-> > +{
-> > +     if (cpuidle_get_driver() =3D=3D &acpi_idle_driver)
-> > +             arch_cpu_rescan_dead_smt_siblings();
-> > +}
->
-> My only thought in reading this is that maybe cpuidle_register_driver()
-> would be a better spot to force the arch_cpu_rescan_dead_smt_siblings().
-> That way, each driver would not have to do the rescan.
+Hi Linus,
 
-Unfortunately, this wouldn't work in the current arrangement of things
-because cpuidle_register_driver() can be called in a CPU online path.
+Please pull from the tag
 
-It should be possible to make this work in the future, but first things fir=
-st.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.16-rc1-3
 
-> But that's just a little nit at worst, otherwise the series looks good
-> to me. Thanks for chasing this down.
->
-> For the x86 bits:
->
-> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+with top-most commit 8887abccf8aa16795f23ef3a3b25650cb8aa804c
 
-Thank you!
+ PM: sleep: Add locking to dpm_async_resume_children()
+
+on top of commit 976aa630da5b5508c278487db31b873ddf6bae8f
+
+ Merge tag 'pm-6.16-rc1-2' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+
+to receive power management fixes for 6.16-rc1.
+
+These fix three issues introduced into device suspend/resume error paths
+in the PM core by some of the recent updates.
+
+First off, list_splice() is replaced with list_splice_init() in three
+places in device suspend error paths to avoid attempting to use an
+uninitialized list head going forward.
+
+Second, device_resume() is rearranged to avoid leaking the
+power.is_suspended device PM flag to the next system suspend/resume
+cycle where it can confuse rolling back after an error or early wakeup.
+
+Finally, synchronization is added to dpm_async_resume_children() to
+avoid resetting the async state mistakenly for devices whose resume
+callbacks have already been queued up for asynchronous execution in the
+given device resume phase, which fortunately can happen only if the
+preceding system suspend transition has been aborted.
+
+Thanks!
+
+
+---------------
+
+Rafael J. Wysocki (3):
+      PM: sleep: Fix list splicing in device suspend error paths
+      PM: sleep: Fix power.is_suspended cleanup for direct-complete devices
+      PM: sleep: Add locking to dpm_async_resume_children()
+
+---------------
+
+ drivers/base/power/main.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
