@@ -1,65 +1,66 @@
-Return-Path: <linux-pm+bounces-28162-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28163-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58E3EACF546
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 19:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 55D28ACF552
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 19:25:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A84151882C7D
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 17:21:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8EEE1890310
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jun 2025 17:25:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E49713D521;
-	Thu,  5 Jun 2025 17:20:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D97A02750EA;
+	Thu,  5 Jun 2025 17:25:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jF25dsnV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VW38q1U0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4E91DFF8;
-	Thu,  5 Jun 2025 17:20:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1761E519;
+	Thu,  5 Jun 2025 17:25:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749144047; cv=none; b=QdZoZIqfh6iLPj5h5+mJA+Ii2jARQotxq0k20Te/R40rQPfavwFUZ4oHk1sXVDo5YdGaFw/+ukgNE6hP/HYOlM/yX3//x9mFaL8ZqBiPbwRSPi6ThqFUh9E520uvjG67ktMbF5fHhQJEqY/uI+WhGARwNWlue34hyBfW03/UvVQ=
+	t=1749144328; cv=none; b=AmMFS83DeoSrZ1oQiObwJh16KfC3VxZ/f7RkhP2p4NVNoYnOnSpLT74ef7ytqW7tMJhsm7oldy1fqH2HZR7DLRXa32A7Fx/oqxCE+v9qHyfdjfVBUvxybq9b7IsmgI9P7KlLfSW8+uZQ7K86TbDftCFvdxp5hToYjpqO8idbywk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749144047; c=relaxed/simple;
-	bh=XwGdHtoqujZip3vIIlT8VmeTxwgZkDqjj9/lpv9bS6s=;
+	s=arc-20240116; t=1749144328; c=relaxed/simple;
+	bh=5Yl5mCYxrczLodJ0pTPkcFCpM2H4dD6dZ5cU19KMeyM=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=kTpUQkhOuqWEQfhjRKTf2JHDr06AL54dY5tBQVFAHJqLsgr5YTTgIg6h2WArBXKxg6sGrbH+SbdA8J+DOcLuU4VZAiK3TqJTwb0DWEsWCcn3JK+oAFnfVEso399EJ85LWlLA9FyZ2ZRWdvMX5rfGsvhadUmOqlZMy6hEFzm1YE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jF25dsnV; arc=none smtp.client-ip=192.198.163.8
+	 Content-Type:MIME-Version; b=aBgUwjrVUIfkaumeDtNIFazxSHYHllTW4I10Ey4rAYL/p9qb2WHHkhxngqrBLE89xcA47QqXBQQXzFQ+pT7dlvtkBzkMihfDsTlSLb73kjDw1Oox8oUGngpIyJk+kZ8Hb/ELTEAZ+L+Hn8oigUE3XjGWpnXPz0nbQ+5fTk66llc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VW38q1U0; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749144045; x=1780680045;
+  t=1749144328; x=1780680328;
   h=message-id:subject:from:to:cc:date:in-reply-to:
    references:content-transfer-encoding:mime-version;
-  bh=XwGdHtoqujZip3vIIlT8VmeTxwgZkDqjj9/lpv9bS6s=;
-  b=jF25dsnVNmEvUT9WaDArrH7D3xFzHzN91YINop1icZo78uNHyejh0Q41
-   fuiNJagje/YXbCC8/dVZHum3CV2lUVh7HJJqk34JGvAxlVpcGmNzA+Pus
-   EkOu5bf8MpEd9ila+UfpaAWeP45wa+BX/+RlM0Pz6A1kSBBPg8kvaAZhh
-   Cd12h9KlEZdBImCQ4zD0y6xp/cQLgLwp75V9bExmL9qmCevv4IGHFzeUX
-   24uVzhVOyDyP8DuZiW45XxdwLlZNT+5l6VXG+Tn+Oqwig4WM5Gjia+TCx
-   QFFkcJ9XV/osZ5bGKIIqaDee4S7V50cuI9Bh6Z13kXzikHZjeYH09pEKI
-   g==;
-X-CSE-ConnectionGUID: lhxwz3qqQB2RB6seJeixiQ==
-X-CSE-MsgGUID: KZXTNB+wTCCjB/n/UaYGMQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11455"; a="68833796"
+  bh=5Yl5mCYxrczLodJ0pTPkcFCpM2H4dD6dZ5cU19KMeyM=;
+  b=VW38q1U0lEOTejoNTG/5BeId1K26r2SNb5CaGmiTPixFYfa0URXQPoHo
+   eClF0fE/zMJd8ak8EzPK46j5qxEVJVT9kgMcwrvw98pdP031UK5J5punM
+   paM6kYHoHlI/JL0anD0GqXm3MRuzoHWslrOOHyk1G57v2xlaCesZ7mn5H
+   G6Q9yg4qb2cGojiTj3ntR1WYpiIoXjerckqC/CUamVFHAsYsL082Weyan
+   GOgcD8SXQ1VQM3dyKUTW9kSH6R3q3v55onSN/UDmJBpEO55FnNmI23HhL
+   3ojhXUGfP0K/OdMTdRvN81cLzwcnbuUbI7UBPoTZHaGSnW3/VW3YTZKMl
+   A==;
+X-CSE-ConnectionGUID: cOVoWkJSQUSKpKQH7SSmOQ==
+X-CSE-MsgGUID: z2AV60C1Tn2hE9zS8QB3Lg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11455"; a="51134671"
 X-IronPort-AV: E=Sophos;i="6.16,212,1744095600"; 
-   d="scan'208";a="68833796"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 10:20:45 -0700
-X-CSE-ConnectionGUID: 9iz7uCNLQiuXpVKhsFkmnQ==
-X-CSE-MsgGUID: D1ezj7lbSnikjO92mkTmZw==
+   d="scan'208";a="51134671"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 10:25:27 -0700
+X-CSE-ConnectionGUID: +QonGZtsRx+Ju9/3s/IE8g==
+X-CSE-MsgGUID: iG+kP28qTMWQPy0uhoupGg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,212,1744095600"; 
-   d="scan'208";a="150458051"
+   d="scan'208";a="176531907"
 Received: from spandruv-desk1.amr.corp.intel.com ([10.124.222.36])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 10:20:44 -0700
-Message-ID: <63d616ac8bb1dbac9eebf10953886a5ce3274940.camel@linux.intel.com>
-Subject: Re: [PATCH 2/2] thermal: intel: int340x: Allow temperature override
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 10:25:27 -0700
+Message-ID: <5a0dc3858c802a5d6247424529377c6dbfd450ca.camel@linux.intel.com>
+Subject: Re: [PATCH 1/2] thermal: intel: int340x: Add performance control
+ for platform temperature control
 From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
 To: "Zhang, Rui" <rui.zhang@intel.com>, "lukasz.luba@arm.com"
 	 <lukasz.luba@arm.com>, "rafael@kernel.org" <rafael@kernel.org>, 
@@ -68,11 +69,10 @@ To: "Zhang, Rui" <rui.zhang@intel.com>, "lukasz.luba@arm.com"
 Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
  "linux-kernel@vger.kernel.org"
 	 <linux-kernel@vger.kernel.org>
-Date: Thu, 05 Jun 2025 10:20:43 -0700
-In-Reply-To: <545fae8be782943a92d9df1c4a3ff90b7a865c76.camel@intel.com>
+Date: Thu, 05 Jun 2025 10:25:25 -0700
+In-Reply-To: <f33e302aac482860eebf5e5f45a44df77455512c.camel@intel.com>
 References: <20250604203518.2330533-1-srinivas.pandruvada@linux.intel.com>
-		 <20250604203518.2330533-2-srinivas.pandruvada@linux.intel.com>
-	 <545fae8be782943a92d9df1c4a3ff90b7a865c76.camel@intel.com>
+	 <f33e302aac482860eebf5e5f45a44df77455512c.camel@intel.com>
 Autocrypt: addr=srinivas.pandruvada@linux.intel.com; prefer-encrypt=mutual;
  keydata=mQGNBGYHNAsBDAC7tv5u9cIsSDvdgBBEDG0/a/nTaC1GXOx5MFNEDL0LWia2p8Asl7igx
  YrB68fyfPNLSIgtCmps0EbRUkPtoN5/HTbAEZeJUTL8Xdoe6sTywf8/6/DMheEUzprE4Qyjt0HheW
@@ -101,190 +101,33 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Thu, 2025-06-05 at 02:18 +0000, Zhang, Rui wrote:
+On Thu, 2025-06-05 at 03:06 +0000, Zhang, Rui wrote:
 > On Wed, 2025-06-04 at 13:35 -0700, Srinivas Pandruvada wrote:
-> > Add debugfs interface to override hardware provide temperature.
-> > This
-> > interface can be used primarily for debug. Alternatively this can
-> > be also used to use hardware control loops to manage temperature
-> > for
-> > virtual sensors. Virtual sensors are soft sensors created by
-> > kernel/
-> > user space aggregating other sensors.
+> > Add additional attribute to control performance of platform
+> > temperature
+> > control feature. Two attributes are added:
 > >=20
-> > There are three attributes to override the maximum three instances
-> > of
-> > platform temperature control.
-> > /sys/kernel/debug/plaftform_temperature_control/
-> > =E2=94=9C=E2=94=80=E2=94=80 temperature_0
-> > =E2=94=9C=E2=94=80=E2=94=80 temperature_1
-> > =E2=94=94=E2=94=80=E2=94=80 temperature_2
-> >=20
-> > These are write only attributes requires admin privilege. Any value
-> > greater than 0, will override the temperature. A value of 0 will
-> > stop overriding the temperature.
-> >=20
-> > Signed-off-by: Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com>
-> > ---
-> > =C2=A0.../platform_temperature_control.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 64
-> > +++++++++++++++++++
-> > =C2=A01 file changed, 64 insertions(+)
-> >=20
-> > diff --git
-> > a/drivers/thermal/intel/int340x_thermal/platform_temperature_contro
-> > l.c
-> > b/drivers/thermal/intel/int340x_thermal/platform_temperature_contro
-> > l.c
-> > index 6cd05783a52d..5dcfd2cc9082 100644
-> > ---
-> > a/drivers/thermal/intel/int340x_thermal/platform_temperature_contro
-> > l.c
-> > +++
-> > b/drivers/thermal/intel/int340x_thermal/platform_temperature_contro
-> > l.c
-> > @@ -38,6 +38,7 @@
-> > =C2=A0
-> > =C2=A0#include <linux/kernel.h>
-> > =C2=A0#include <linux/module.h>
-> > +#include <linux/debugfs.h>
-> > =C2=A0#include <linux/pci.h>
-> > =C2=A0#include "processor_thermal_device.h"
-> > =C2=A0
-> > @@ -53,6 +54,7 @@ struct mmio_reg {
-> > =C2=A0
-> > =C2=A0struct ptc_data {
-> > =C2=A0	u32 offset;
-> > +	struct pci_dev *pdev;
-> > =C2=A0	struct attribute_group ptc_attr_group;
-> > =C2=A0	struct attribute *ptc_attrs[PTC_MAX_ATTRS];
-> > =C2=A0	struct device_attribute temperature_target_attr;
-> > @@ -222,6 +224,63 @@ static int ptc_create_groups(struct pci_dev
-> > *pdev,
-> > int instance, struct ptc_data
-> > =C2=A0}
-> > =C2=A0
-> > =C2=A0static struct ptc_data ptc_instance[PTC_MAX_INSTANCES];
-> > +static struct dentry *ptc_debugfs;
-> > +
-> > +#define PTC_TEMP_OVERRIDE_ENABLE_INDEX	4
-> > +#define PTC_TEMP_OVERRIDE_INDEX		5
-> > +
-> > +static ssize_t ptc_temperature_write(struct file *file, const char
-> > __user *data,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0 size_t count, loff_t *ppos)
-> > +{
-> > +	struct ptc_data *ptc_instance =3D file->private_data;
-> > +	struct pci_dev *pdev =3D ptc_instance->pdev;
-> > +	char buf[32];
-> > +	ssize_t len;
-> > +	u32 value;
-> > +
-> > +	len =3D min(count, sizeof(buf) - 1);
-> > +	if (copy_from_user(buf, data, len))
-> > +		return -EFAULT;
-> > +
-> > +	buf[len] =3D '\0';
-> > +	if (kstrtouint(buf, 0, &value))
-> > +		return -EINVAL;
-> > +
-> > +	if (ptc_mmio_regs[PTC_TEMP_OVERRIDE_INDEX].units)
-> > +		value /=3D
-> > ptc_mmio_regs[PTC_TEMP_OVERRIDE_INDEX].units;
-> > +
-> > +	if (value > ptc_mmio_regs[PTC_TEMP_OVERRIDE_INDEX].mask)
-> > +		return -EINVAL;
-> > +
-> > +	if (!value) {
-> > +		ptc_mmio_write(pdev, ptc_instance->offset,
-> > PTC_TEMP_OVERRIDE_ENABLE_INDEX, 0);
-> > +	} else {
-> > +		ptc_mmio_write(pdev, ptc_instance->offset,
-> > PTC_TEMP_OVERRIDE_INDEX, value);
-> > +		ptc_mmio_write(pdev, ptc_instance->offset,
-> > PTC_TEMP_OVERRIDE_ENABLE_INDEX, 1);
-> > +	}
-> > +
-> > +	return count;
-> > +}
-> > +
-> > +static const struct file_operations ptc_fops =3D {
-> > +	.open =3D simple_open,
-> > +	.write =3D ptc_temperature_write,
-> > +	.llseek =3D generic_file_llseek,
-> > +};
-> > +
-> > +static void ptc_create_debugfs(void)
-> > +{
-> > +	ptc_debugfs =3D
-> > debugfs_create_dir("plaftform_temperature_control", NULL);
+> > gain: 0-7 levels, with 0 being most aggressive.
+> > 	7 =E2=80=93 graceful, favors performance at the expense of
+> > temperature
+> > 	overshoots
+> > 	0 =E2=80=93 aggressive, favors tight regulation over performance
 >=20
-> s/platform/plaftform
+> By reading this, I know that setting "pts_0_control/gain" to a larger
+> value means less aggressive ptc control.
 >=20
-correct.
-
-> And same in the changelog.
->=20
-> > +
-> > +	debugfs_create_file("temperature_0",=C2=A0 0200, ptc_debugfs,=C2=A0
-> > &ptc_instance[0], &ptc_fops);
-> > +	debugfs_create_file("temperature_1",=C2=A0 0200, ptc_debugfs,=C2=A0
-> > &ptc_instance[1], &ptc_fops);
-> > +	debugfs_create_file("temperature_2",=C2=A0 0200, ptc_debugfs,=C2=A0
-> > &ptc_instance[2], &ptc_fops);
-> > +}
-> > +
-> > +static void ptc_delete_debugfs(void)
-> > +{
-> > +	debugfs_remove_recursive(ptc_debugfs);
-> > +}
-> > =C2=A0
-> > =C2=A0int proc_thermal_ptc_add(struct pci_dev *pdev, struct
-> > proc_thermal_device *proc_priv)
-> > =C2=A0{
-> > @@ -230,10 +289,13 @@ int proc_thermal_ptc_add(struct pci_dev
-> > *pdev,
-> > struct proc_thermal_device *proc_
-> > =C2=A0
-> > =C2=A0		for (i =3D 0; i < PTC_MAX_INSTANCES; i++) {
-> > =C2=A0			ptc_instance[i].offset =3D ptc_offsets[i];
-> > +			ptc_instance[i].pdev =3D pdev;
-> > =C2=A0			ptc_create_groups(pdev, i,
-> > &ptc_instance[i]);
-> > =C2=A0		}
-> > =C2=A0	}
-> > =C2=A0
-> > +	ptc_create_debugfs();
-> > +
->=20
-> should we create the debugfs only when PROC_THERMAL_FEATURE_PTC is
-> set?
-
-This function is only called when
- if (feature_mask & PROC_THERMAL_FEATURE_PTC) {
-}
-
-
->=20
-> > =C2=A0	return 0;
-> > =C2=A0}
-> > =C2=A0EXPORT_SYMBOL_GPL(proc_thermal_ptc_add);
-> > @@ -248,6 +310,8 @@ void proc_thermal_ptc_remove(struct pci_dev
-> > *pdev)
-> > =C2=A0		for (i =3D 0; i < PTC_MAX_INSTANCES; i++)
-> > =C2=A0			sysfs_remove_group(&pdev->dev.kobj,
-> > &ptc_instance[i].ptc_attr_group);
-> > =C2=A0	}
-> > +
-> > +	ptc_delete_debugfs();
->=20
-> ditto.
-Same as above.
+> But what does "gain" mean here?
+This is the input to the algorithm on how much performance gain is
+allowed to be in acceptable range for trip violation. May be call
+performance levels instead. I am using the same term as in the spec.
 
 Thanks,
 Srinivas
 
+>=20
+> May be my English problem, I'm trying hard to understand this, but it
+> is
+> still a bit confusing to me.
 >=20
 > thanks,
 > rui
