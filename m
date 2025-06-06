@@ -1,191 +1,197 @@
-Return-Path: <linux-pm+bounces-28204-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28205-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 491F5AD0853
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 20:55:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16FE1AD08B4
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 21:34:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB35A1892687
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 18:55:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 563F23B370E
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 19:33:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85AB01EFFB7;
-	Fri,  6 Jun 2025 18:55:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 061DE1F3B9E;
+	Fri,  6 Jun 2025 19:34:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="St6kZK7N"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HGQGSI4e"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7F431EDA16;
-	Fri,  6 Jun 2025 18:55:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94D71E501C;
+	Fri,  6 Jun 2025 19:34:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749236128; cv=none; b=T/YXSrR2DAuEpe61XQL3KJ+8TIvVZltaVJn54ZQnTkmXEVSzvnP5sOhVyuYtHUXaroQLoHvYgeN1zm0RUkFg31rBQgFSAwiMZsBYyUEvYHdsakb5oz1cnTM5n1tvCbV6UfbQIU6UHEHH0c331OitrknohOweh8w4Jo/ht60lTsQ=
+	t=1749238449; cv=none; b=oOSWdNLbd9ETmpW1DBbdP2EHD6Gl3T5eZ+dSlhiniqCaGHmL7gwiQTgl4C5RCbJoM+GG0UnP6BoO2RAmEC0XPWN4btEuwZ2iu523+rxzoaWvyBFHH+gaA9cMacjEpjF7bVAppAcrr4AX6dq9i1VLHW2ehniH1/ACny5Lp9pgpQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749236128; c=relaxed/simple;
-	bh=IdqCPrXq3+jr02GTO/nLSUv665Ny356ciChyjrXweKk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q5vyaPuvb0w9qBlP1CkR1RSJ+0xvrjbA/EtFfH4J18xRza1mwiEZ3G/i8TcL1/YD0KVFxgY6GzW+0gGI8eTa/kLHrp9xie061gfiBK7Si7YTVtTFgTg8ehyAr4tTAhHP0S+kOk7zwpqxgstYRxF9kSqurVgpTopUGxkK8UksBwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=St6kZK7N; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-747fba9f962so2127104b3a.0;
-        Fri, 06 Jun 2025 11:55:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749236126; x=1749840926; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Es9M+AVV62UY8MMrou2h//EyFErMKtcnspa7i0MthIs=;
-        b=St6kZK7N3MgyBnkDfOupZaTDpvp72Pr91Ufuz51cWAiJ0gGt3xzm3aeLDrt84P+zS/
-         X74PbvpvqUCueWX/++LSjNWt8npOWiEufy7KJO0fMcyNwcAIzVZJ3Ut9AljNW91Q9SV/
-         tDMrcyTQVqr94s+JMDZd8i9ImZXZeMGrkBMKt2DjLpWnhCHj1TWAQfR+Qkxzn3UpJFqn
-         yyFSoIOSDJH/qS2mj5OLaUm5Y5jB/YybXxauxtaiOm17TueSK8xAxGlnnfLunfZ/Pa9r
-         FJhEEtUGw0wYFtuusyrZJQSjrAW6PJSzR+oCOTsjiVbZMHesUsuvF0lm4eNpPdb7F/Ch
-         jFcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749236126; x=1749840926;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Es9M+AVV62UY8MMrou2h//EyFErMKtcnspa7i0MthIs=;
-        b=Qakp4ThzaY3IakWb4F645oMIduvPEhYpnM0uBRDtJbRpoZ+OPRvqHu3VYy8PTzVGUi
-         TyyIJ+gYAC220y/swoL/f2sTc/CaahPSTFpXlHN4VSjQY2nkdnYJY7lPYCT/AUJwzw6u
-         7tFrx1IC+QIU+IF6kZEGD/tqBHZkF7/Nw8LGjnKF/z3WBAdXgygpcMeYWF9wNedVo9Yz
-         l/35HF6RMzwvReuNmZ92Yh8OPUnp0gX4QhKPLc/1c6txci/2fo9lJVjpCHIk18F0fd09
-         HQJwmaeURlBr4Tq6vwbGFKf5+K7hHXBdZPwv3V9kbSa8o5s8MUjPa4yCRG1hNrIe22WE
-         4Udg==
-X-Forwarded-Encrypted: i=1; AJvYcCUYRb5LnderlJyKUfuGRd0GBV76LAJSsqvBrphvOlEzPuMvy50HoAvLXamuMGC0sRSgtg/tQ+gEJoGzqqYSudpijLU=@vger.kernel.org, AJvYcCUk1OzcoOFVVtq8DVHv3UCBKr1DAelkGFbaiEpxr39A9ziUAUQaGSyYJcVIAClzsj9EmcR/0zrlvUs=@vger.kernel.org, AJvYcCWPFssenc5A6uRBOyNQWASImymfhirFvrAKWARKWHX0wFmkQvWvlkiwyXKxOkPIzuLdRs3Lk2DfK3g=@vger.kernel.org, AJvYcCXBOTS6J9O6WsGV9ZHIiUmRxTm9FN2aBeUka4DxuTnlwueenUPgwGztRePICjwnnpVSZPFTKXne/iKe88Tj@vger.kernel.org
-X-Gm-Message-State: AOJu0YzW+5WBEwISpMGm2GWj3e1cdUr1fYUA8bT/dHI9F+Q3/a4LBiPO
-	BaQG8NQ/vPwDGwEjYCBOOlRTCb8eFNJH5gTHY3a+dF+APY+sXSQB8HiZ
-X-Gm-Gg: ASbGncuDdtm8Iof74St3WOiXHJ4QXiNwkwxF6rn1VmZAimyA4v9w+m/UwffbO1o0GTh
-	OWNEUgI2LkA0USJVdfs25Ee8uLdGUML4sLWgPOMrwI1R7SLZJ9YoQDrq5ywVGAlD/KrP3xPSUJR
-	0WjYqaW9blAQBNHkXVRrPIc4m9kqi8AnXYKJN5qYjisBDqVMy5XF74tqwAXNAk6DcShm2IK9DHF
-	DbSB0kISPVb3p6rQCVFjS/YSahwm3cuc9G9xn09rb0nSEZLFYVLxXCxo1p1eIaPfztScO2iXahp
-	4n+Nit5ZWbyUpqEcCvOFUOEfpATx3VdHMyWRkn/t0Bp786AN6yiq
-X-Google-Smtp-Source: AGHT+IHuyoCrI5BcHlICcXmskDkgOBvo79KGR4zs3JSO9ZUGizxOdvPfSccKAax0CmvGcgczb/g54A==
-X-Received: by 2002:a05:6a20:2449:b0:21a:de8e:5c53 with SMTP id adf61e73a8af0-21ee25affa2mr5896945637.12.1749236125912;
-        Fri, 06 Jun 2025 11:55:25 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:b7f5:ce33:d518:3164])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7482b0c5f7fsm1593369b3a.116.2025.06.06.11.55.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jun 2025 11:55:25 -0700 (PDT)
-Date: Fri, 6 Jun 2025 11:55:21 -0700
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Claudiu <claudiu.beznea@tuxon.dev>, gregkh@linuxfoundation.org, 
-	dakr@kernel.org, len.brown@intel.com, pavel@kernel.org, ulf.hansson@linaro.org, 
-	jic23@kernel.org, daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, bhelgaas@google.com, geert@linux-m68k.org, 
-	linux-iio@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	fabrizio.castro.jz@renesas.com, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: [PATCH v3 1/2] PM: domains: Add devres variant for
- dev_pm_domain_attach()
-Message-ID: <zhjytvj35lknj7v3jhva3n3nbv6qctvqgykwyi5huj6omet7lz@wchd7f4p4dpv>
-References: <20250606111749.3142348-1-claudiu.beznea.uj@bp.renesas.com>
- <20250606111749.3142348-2-claudiu.beznea.uj@bp.renesas.com>
- <CAJZ5v0i_Ey+OVpSZHXru=tubMaZi=y-uOh_0M6zmWZ2DqqA7Vg@mail.gmail.com>
+	s=arc-20240116; t=1749238449; c=relaxed/simple;
+	bh=H3LG70DDFkrvPWOnWEJJh55HhE/5hyND70bmc+t70E0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=AdpZqvC+3HI6NoIcsxVt3Rs8NK2S9LU1CBRWD8ywocnI0S8W8wHXIaGLIyh2LYo+ukBenGuqk+pqfbU0tt7TR4cwGYWMWH6Nn3iqG4bdxK0miG7HmV/mVs/IwnW6sfpqp4EgDixUmyQI3611WCDdPO5920VUT8z6KVWzq5+i4qY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HGQGSI4e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68D4EC4CEEB;
+	Fri,  6 Jun 2025 19:34:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749238449;
+	bh=H3LG70DDFkrvPWOnWEJJh55HhE/5hyND70bmc+t70E0=;
+	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
+	b=HGQGSI4edQTuDIM8ShM02brnAcb4Zhl+/8yPBdkt5dNWpORwpxKMbpYd4FzA3MsIQ
+	 XWa+rZJem7lHlTNNvQ0zi8hU89b4xz4P+/9gMNJG/ZZ5Wfx8R/TnA2NGssGy9kxPVZ
+	 R1OaF3lfpzxTC6BBRL78W188XvdDndClcaB3HyoEm+RDaDvowc/Dl4d0RAKfgIMOGG
+	 mBjXSMxPygHFjT8jNrtS5BNtNQA0AvI3nhE0BmZ1RRa11ghoPCu+22/ENB7b/4n/+g
+	 Q40ms7sHhyeIqI3AwFPQLua2kTxvM/Gepykk38FUzv5tNRxy02+9yI6ZnAQxiKm3jh
+	 kXdAwknIhhdpg==
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0i_Ey+OVpSZHXru=tubMaZi=y-uOh_0M6zmWZ2DqqA7Vg@mail.gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 06 Jun 2025 21:34:04 +0200
+Message-Id: <DAFP9ZRENV0S.ON0XKIXIAEKY@kernel.org>
+To: "Boqun Feng" <boqun.feng@gmail.com>
+Cc: "Viresh Kumar" <viresh.kumar@linaro.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, "Yury Norov" <yury.norov@gmail.com>, "Miguel Ojeda"
+ <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Gary Guo"
+ <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Andreas Hindborg" <a.hindborg@kernel.org>,
+ "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
+ "Danilo Krummrich" <dakr@kernel.org>, "Vincent Guittot"
+ <vincent.guittot@linaro.org>, <linux-pm@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>
+Subject: Re: [PATCH] rust: cpumask: Validate CPU number in set() and clear()
+From: "Benno Lossin" <lossin@kernel.org>
+X-Mailer: aerc 0.20.1
+References: <8b5fc7889a7aacbd9f1f7412c99f02c736bde190.1749183428.git.viresh.kumar@linaro.org> <aEJwm16HSwCyt7aB@Mac.home> <DAFAR5SUQSU9.OSLB2UAXE9DY@kernel.org> <aELugDefiviXZjx6@Mac.home>
+In-Reply-To: <aELugDefiviXZjx6@Mac.home>
 
-On Fri, Jun 06, 2025 at 06:00:34PM +0200, Rafael J. Wysocki wrote:
-> On Fri, Jun 6, 2025 at 1:18 PM Claudiu <claudiu.beznea@tuxon.dev> wrote:
-> >
-> > From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> >
-> > The dev_pm_domain_attach() function is typically used in bus code alongside
-> > dev_pm_domain_detach(), often following patterns like:
-> >
-> > static int bus_probe(struct device *_dev)
-> > {
-> >     struct bus_driver *drv = to_bus_driver(dev->driver);
-> >     struct bus_device *dev = to_bus_device(_dev);
-> >     int ret;
-> >
-> >     // ...
-> >
-> >     ret = dev_pm_domain_attach(_dev, true);
-> >     if (ret)
-> >         return ret;
-> >
-> >     if (drv->probe)
-> >         ret = drv->probe(dev);
-> >
-> >     // ...
-> > }
-> >
-> > static void bus_remove(struct device *_dev)
-> > {
-> >     struct bus_driver *drv = to_bus_driver(dev->driver);
-> >     struct bus_device *dev = to_bus_device(_dev);
-> >
-> >     if (drv->remove)
-> >         drv->remove(dev);
-> >     dev_pm_domain_detach(_dev);
-> > }
-> >
-> > When the driver's probe function uses devres-managed resources that depend
-> > on the power domain state, those resources are released later during
-> > device_unbind_cleanup().
-> >
-> > Releasing devres-managed resources that depend on the power domain state
-> > after detaching the device from its PM domain can cause failures.
-> >
-> > For example, if the driver uses devm_pm_runtime_enable() in its probe
-> > function, and the device's clocks are managed by the PM domain, then
-> > during removal the runtime PM is disabled in device_unbind_cleanup() after
-> > the clocks have been removed from the PM domain. It may happen that the
-> > devm_pm_runtime_enable() action causes the device to be runtime-resumed.
-> 
-> Don't use devm_pm_runtime_enable() then.
+On Fri Jun 6, 2025 at 3:34 PM CEST, Boqun Feng wrote:
+> On Fri, Jun 06, 2025 at 10:11:13AM +0200, Benno Lossin wrote:
+>> On Fri Jun 6, 2025 at 6:37 AM CEST, Boqun Feng wrote:
+>> > On Fri, Jun 06, 2025 at 09:47:28AM +0530, Viresh Kumar wrote:
+>> >> The C `cpumask_{set|clear}_cpu()` APIs emit a warning when given an
+>> >> invalid CPU number - but only if `CONFIG_DEBUG_PER_CPU_MAPS=3Dy` is s=
+et.
+>> >>=20
+>> >> Meanwhile, `cpumask_weight()` only considers CPUs up to `nr_cpu_ids`,
+>> >> which can cause inconsistencies: a CPU number greater than `nr_cpu_id=
+s`
+>> >> may be set in the mask, yet the weight calculation won't reflect it.
+>> >>=20
+>> >> This leads to doctest failures when `nr_cpu_ids < 4`, as the test tri=
+es
+>> >> to set CPUs 2 and 3:
+>> >>=20
+>> >>   rust_doctest_kernel_cpumask_rs_0.location: rust/kernel/cpumask.rs:1=
+80
+>> >>   rust_doctest_kernel_cpumask_rs_0: ASSERTION FAILED at rust/kernel/c=
+pumask.rs:190
+>> >>=20
+>> >> Fix this by validating the CPU number in the Rust `set()` and `clear(=
+)`
+>> >> methods to prevent out-of-bounds modifications.
+>> >>=20
+>> >
+>> > Thanks for the quick fix!
+>> >
+>> > While this can fix the current problem, but it's not a good solution f=
+or
+>> > the long run. Because outside a test, we should never use an arbitrary
+>> > i32 as a cpu number (we usually get it from smp_processor_id(), or
+>> > something else). So the `< nr_cpu_ids` testing is not necessary in
+>> > normal use cases.
+>> >
+>> > We should instead provide a wrapper for cpu id:
+>> >
+>> >     /// # Invariants
+>> >     ///
+>> >     /// The number is always in [0..nr_cpu_ids) range.
+>> >     pub struct CpuId(i32);
+>> >
+>> > and
+>> >
+>> >     impl CpuId {
+>> >         /// # Safety
+>> > 	/// Callers must ensure `i` is a valid cpu id (i.e. 0 <=3D i <
+>> > 	/// nr_cpu_ids).
+>> >         pub unsafe fn from_i32_unchecked(i: i32) -> Self {
+>> > 	    // INVARIANT: The function safety guarantees `i` is a valid
+>> > 	    // cpu id.
+>> > 	    CpuId(id);
+>> > 	}
+>> >
+>> > 	pub fn from_i32(i: i32) -> Option<Self> {
+>> > 	    if i < 0 || i >=3D nr_cpu_ids {
+>> > 	        None
+>> > 	    } else {
+>> > 	        // SAFETY: `i` has just been checked as a valid cpu id.
+>> > 	        Some(unsafe { Self::from_i32_unchecked(i) })
+>> > 	    }
+>> > 	}
+>> >
+>> > 	pub fn current() -> Self {
+>> > 	    // SAFETY: smp_processor_id() always return valid cpu id.
+>> > 	    unsafe { Self::from_i32_unchecked(smp_processor_id()) }
+>> > 	}
+>> >     }
+>> >
+>> > All `Cpumask` functions then take `CpuId` instead of `i32` as the
+>> > parameter. Needless to say if we were to have a cpumask_next() wrapper=
+,
+>> > the return value will be `CpuId` (or `Option<CpuId>`), i.e. if a bit w=
+as
+>> > set in a cpumask, then it must represent a correct cpu id.
+>> >
+>> > Make sense?
+>>=20
+>> Just to make sure, the `nr_cpu_ids` stays constant, right?
+>>=20
+>
+> Sort of. I believe the value won't be changed once the kernel boots, in
+> most cases (modulo NR_CPUS=3D1 or CONFIG_FORCE_NR_CPUS=3Dy), it's a
+> read-mostly variable not a constant, and the value gets set by either a
+> kernel command line or how many CPUs the kernel actually detect at boot
+> time. See:
+>
+> https://github.com/Rust-for-Linux/linux/blob/rust-next/kernel/smp.c#L995:=
+w
 
-What about other devm_ APIs? Are you suggesting that platform drivers
-should not be using devm_clk*(), devm_regulator_*(),
-devm_request_*_irq() and devm_add_action_or_reset()? Because again,
-dev_pm_domain_detach() that is called by platform bus_remove() may shut
-off the device too early, before cleanup code has a chance to execute
-proper cleanup.
+It's allowed to increase, but if it ever decreases, the invariant of
+`CpuId` will be wrong (ie it's not *invariant* :).
 
-The issue is not limited to runtime PM.
+>> >> @@ -101,10 +108,16 @@ pub fn set(&mut self, cpu: u32) {
+>> >>      /// This mismatches kernel naming convention and corresponds to =
+the C
+>> >>      /// function `__cpumask_clear_cpu()`.
+>> >>      #[inline]
+>> >> -    pub fn clear(&mut self, cpu: i32) {
+>> >> +    pub fn clear(&mut self, cpu: i32) -> Result {
+>> >> +        // SAFETY: It is safe to read `nr_cpu_ids`.
+>> >> +        if unsafe { cpu as u32 >=3D bindings::nr_cpu_ids } {
+>> >
+>> > You probably want to check whether `bindings::nr_cpu_ids` can be
+>> > accessible if NR_CPUS =3D=3D 1 or CONFIG_FORCE_NR_CPUS=3Dy, because th=
+en
+>> > nr_cpu_ids is a macro definition.
+>>=20
+>> Just define a helper function?
+>>=20
+>
+> Maybe, but it is then "a variable read" vs "a FFI function call" if we
+> want to check every time in clear()/set(), of course if we only check it
+> in CpuId::from_i32() mentioned above, the performance impact shouldn't
+> be observable, because we won't call that method often.
 
-> 
-> > If the driver specific runtime PM APIs access registers directly, this
-> > will lead to accessing device registers without clocks being enabled.
-> > Similar issues may occur with other devres actions that access device
-> > registers.
-> >
-> > Add devm_pm_domain_attach(). When replacing the dev_pm_domain_attach() and
-> > dev_pm_domain_detach() in bus probe and bus remove, it ensures that the
-> > device is detached from its PM domain in device_unbind_cleanup(), only
-> > after all driver's devres-managed resources have been release.
-> >
-> > For flexibility, the implemented devm_pm_domain_attach() has 2 state
-> > arguments, one for the domain state on attach, one for the domain state on
-> > detach.
-> 
-> dev_pm_domain_attach() is not part driver API and I'm not convinced at
+Sure, you could also have a rust function that is inlined that does the
+two different checks depending on the config.
 
-Is the concern that devm_pm_domain_attach() will be [ab]used by drivers?
-In that case we can go back to using devres group to enforce ordering,
-but proper ordering is needed.
+> Either, I was just pointing out the current fix may cause build errors.
 
-> all by the arguments above.
+Yeah that should be fixed.
 
-Please reconsider given the fact that issue is not limited to the
-runtime PM.
-
-Thanks.
-
--- 
-Dmitry
+---
+Cheers,
+Benno
 
