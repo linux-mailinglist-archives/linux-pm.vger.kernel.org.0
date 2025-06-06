@@ -1,240 +1,147 @@
-Return-Path: <linux-pm+bounces-28214-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28213-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16504AD0A59
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Jun 2025 01:42:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FFB8AD0A36
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Jun 2025 01:23:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8218B1726AA
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 23:42:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 290247A16DD
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 23:22:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5101923ED56;
-	Fri,  6 Jun 2025 23:42:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B19923D2AC;
+	Fri,  6 Jun 2025 23:23:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codesensesolutions.com header.i=joe.walter@codesensesolutions.com header.b="zjb+416c"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kNiFaxTS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88BD42A83;
-	Fri,  6 Jun 2025 23:42:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA6A126C17;
+	Fri,  6 Jun 2025 23:23:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749253337; cv=none; b=PLYIJNxj5LDM8+4oyr2YwQslDYnkgUjPkjkUsN2NsS5JqLZikHTJEGvbFU5c4h6tC6CMpUJ0PQk2RqdNSIuuONygPH4UvshKFurXpRvPpqQYtWNO28/uj/ZCZMesRAcs0gpSpO+cqcxiGwkTCz/RonIdGAGy7Qh9yu0hS5kpF04=
+	t=1749252224; cv=none; b=c6rbyqTQo48+lY2F5HScMnHghuBVtWF998nSjCgazHWjekXgokHii9do3vQrm4FuOq3T1vg0USRC2rH8gckU3GWo7qz5S96gc6d/QWdNx2lfdx0Eq2yJ55TzuYUrNzO9x2uzfWHsU2oVRdOISH2+uwl2s2LjCCaI3u/hOCDIAic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749253337; c=relaxed/simple;
-	bh=C+IR39tUkiTTCkYcCBh9yKbjRvfgTXZzNOf0olfsY2o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sMsTREQqlCH0eHvrYclMWm5sOOCdBdQSSsvV+Pa9DcNfi8rFEXewsfeXDW+13/PFy4UiXSJP/WAEexVoWSZbrZ5/NrqFpf6iW6JLWaFYdUN63GfDXizv1ne55JVR/CHy71qwBDMPRnKebiDeMAQyVOIV8lwdWqw1lnPSWLsKNCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=codesensesolutions.com; spf=pass smtp.mailfrom=codesensesolutions.com; dkim=pass (2048-bit key) header.d=codesensesolutions.com header.i=joe.walter@codesensesolutions.com header.b=zjb+416c; arc=none smtp.client-ip=74.208.4.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=codesensesolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codesensesolutions.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codesensesolutions.com; s=s1-ionos; t=1749253333; x=1749858133;
-	i=joe.walter@codesensesolutions.com;
-	bh=pQc42KUwgUGS2WmegoHpY8vL7gP3oEBUaiYeFR/4kEU=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
-	 MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=zjb+416cjfA7p7tRTUMQlYA0s6YDBM0i0oqaC8AU2OaWfSflCkguOKKzRlxcAuS6
-	 ICBc7yqG2qeHzlFf3V4kJaSyqmwgbOdEgqTE6cdzthxls0/L8FDDkyGrGRb7UHqCp
-	 9/4bDhDFZgKpZyAREmlRWxqccbAoiOKYubE91ZrtnY1HO500m8SvuMhCiY+Gpqh50
-	 Zvc2Grkvn1Ofvj5yr+YsBndVSnMEEmNdEPEL9q8qZrUAIIaJnUjvyWQZ/y8WSFOUl
-	 fX0F557POdkZhz/9kAvCon2oR6eK57MOSEw3iMudHdl4G2BRttGtb5VZ53DiRAXKI
-	 RwRbU082CwS8KXYRqA==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from jennycraig-lappy ([50.225.178.2]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0LufTy-1uo75S2j0y-015Ev5;
- Sat, 07 Jun 2025 01:16:46 +0200
-From: Joe Walter <joe.walter@codesensesolutions.com>
-To: srinivas.pandruvada@linux.intel.com,
-	rafael@kernel.org
-Cc: viresh.kumar@linaro.org,
-	lenb@kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Joe Walter <joe.walter@codesensesolutions.com>
-Subject: [PATCH] cpufreq: intel_pstate: Add DMI quirk for Dell Inspiron systems
-Date: Fri,  6 Jun 2025 16:15:30 -0700
-Message-ID: <20250606231530.3032-1-joe.walter@codesensesolutions.com>
-X-Mailer: git-send-email 2.48.1
+	s=arc-20240116; t=1749252224; c=relaxed/simple;
+	bh=nk0adjKeA8nMvS/JXyOJRsJFhrbYKZB2dialpfkhKwg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JDt6+TMYFc+W8Ac3omdJpjwL6nMCL0BLBNjPD1w3MCgUMA708CzLAtl3/2Lxrt5vdZ/gwBkR+I4pLV1Bf9lueGhtr1EP8vSPXvlO+7qTor+sugQ143JwiqdpLw8hR1J3uyHVQotQ/6Nc5LFEJVN7Sw9Pm6mmHHv16F/ubEjld/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kNiFaxTS; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749252222; x=1780788222;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nk0adjKeA8nMvS/JXyOJRsJFhrbYKZB2dialpfkhKwg=;
+  b=kNiFaxTStnfLTYAK74XsPw1UuJxUThXB3gWxPNIeZpZqhS4yz1AXOv78
+   o1az6wQDN1QeKmB27eRutzqteC+TIjyrE1mzM3sK/xbqXjnGq6g4urpR0
+   4D8LVng8Bl6BPSxyJlWZJrcOiXssRcr0D6+Zgsl/gxtTG8RN2oNXVG6xt
+   bs7vj4cFnJVls11JbxxHLQHPboZc6RsWYT1mglSLsuhSdQRqgvuT2C/e0
+   fq3c98pkvkShoy97HYNU3AQRa+9PBkdfVFE+itk61JOwFyh/MXBzqIIj0
+   bg6rjlpEvBgaZQCGCneI+MlDHIfSS/tVUbH29d9cTi3nXMOzdyx4XgnmO
+   Q==;
+X-CSE-ConnectionGUID: XN57pPFnSBGJvLcoXMwsRA==
+X-CSE-MsgGUID: cPj8855RSPGPXpNQEGBfvg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11456"; a="62809855"
+X-IronPort-AV: E=Sophos;i="6.16,216,1744095600"; 
+   d="scan'208";a="62809855"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2025 16:23:41 -0700
+X-CSE-ConnectionGUID: 6vARsndVQ9OefKbRucXDKQ==
+X-CSE-MsgGUID: VYhtg7hyTXqW0/RCPetyWA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,216,1744095600"; 
+   d="scan'208";a="145878058"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 06 Jun 2025 16:23:37 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uNgPO-0005Kt-2q;
+	Fri, 06 Jun 2025 23:23:34 +0000
+Date: Sat, 7 Jun 2025 07:23:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Yury Norov <yury.norov@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH] rust: cpumask: Validate CPU number in set() and clear()
+Message-ID: <202506070707.giDP6xhc-lkp@intel.com>
+References: <8b5fc7889a7aacbd9f1f7412c99f02c736bde190.1749183428.git.viresh.kumar@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:b7KUDsQQohqjJEPY3hwinrLqrGma3HlyZ//5hJXZdUkCbxMasKf
- tA5PM14YqECe8vVZvIpNJyBqexiAClOqvYSFcmqQVVsdhMW5Og+aDg4/PcQmonElTqKwyJl
- e6pKz4BPZaLwlaHc2eToT+H2e8ywh8AZl2VobclYF+sy1gy07s58FxXPrsGQSPrE3AJEg0x
- XPR7A92SnruTgA+4IakLA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:GgFBluPKg9M=;rD/a9TXfcYdxfMvNOJTUkrceQBq
- qWt1ysC7kgkujgoCQYQyZKxLtkR/uNa6C2uTjEcesblAUjeXna64Z8UHNBItKdfKL8Qs1vLNw
- 0gI5DTrwcSJlMqLXTcTBnQ+vVg3Ki8O2nR7+tM+LFhmnCmIKqTLVTUs3Nw+ZTmsyGGDk1A0Jw
- //wmpPX898uhz4662RcFg2J/qyMTnyMrbCrTmKmtZtW6XNA6+3B7O3+9nWvBiNJ/MdwTvJFOL
- fRYGOK4SrHzkG1Z1ai8oUUQFNh7Weit38lVS9QCFyrIGQNivQCJJbhCVmzte/Rrddq4nq3vbe
- zrkUQfx9SDjJka6Iho2FQuDsrpiWDzF9clUkkwY6a6krOd7aklwQFRrZDdc4elu8cotiNN/FM
- mB+8dr3fQWTye1FG38BipHLq6i+1voZrMQp+DH5BVWfXBOEY/CMwJROpCXeNxEIPYqHstZjfV
- lL0/Xa5aemtC9BZkVEszplMeYRuhbdjqJcgYxM1jdOiTywabhs70iMZfc55VRgB3jnYOIFh/Y
- B/JHc0urEyeK7vm4GdP5HVYYP0HtZqNkoN0wEF+rm2e3Mz1JolLlMEPwqyVVgCTDTYnjN3E3N
- Itm0pk4tGJcT8br0P6BHxDvJ+uSM8cQxpzxTTBbYPF5LuKEb6gz4D54yiMeEUqdidQrh652JP
- fEA3wnkb9W55ineoefbKk11iR7KwEeVc0gOXYod5ic3rpvSIrV4rqao1yukmcYBJj3+/REBFd
- Tz1PCA+dvgfd4MbNHVWa0qgkAdu5WXMPqgGlWcEJO2VFKtpV4YJDyA5fFmIo7/ChzRq79bnwZ
- HX4JwjJSXGC1yVs8hCEmz9DBwvtVIZ7jsi8hAQHGqfJLU9OoSNbzNYz2X6bIq+GZYRAHRN+70
- mxJjjPcbH9uJrqrqUzpVxo9xCC/by/At3mD/uD/vmlR0Niog5vZ3FkpyVlDN1neAexIvKowqM
- p4QLqb8rOCRSCo5Vg+6OcBF6q4EOkdxM41zY2D4lrR5vTlmutUtdgiBjnwFpuVo94m9PrYu24
- JYJQ7pV/m/tb2HhMiMwvuVcxHL5+C+eL+L+vJEn0GDWxibDEQNl4NCIZtfnYvR9ns0u3oFRTb
- uMZd82VlG87d4dLPtWXLz9PQzVzU3YnJWH5TfmUUyu+d9UkXLrt2g5csgDNjfaBokFVdmEKUt
- Se/hji7SGPTKeQM00KKK5C31mYWNdyUM/rn/6vG28IPh4qE2boAHhWEMInwpZusBRsd1dGbKD
- bqhrtJ1oAlSOzbJ8Oy/ibTVpqoWz6jspkWNaxiebZhBvT/nLNkUnCEaNSEszvYA5imgEZW5Su
- BOoZeYcPgtD4gl/3sGBYZF4aU916tw5K5frSg01r7NF7+VVTDSvJZuoa+MLKriTgPFIlWGaG2
- j4cq9vsJqZC9H9/T8wdkAHOHIroQU9JhuMiqU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8b5fc7889a7aacbd9f1f7412c99f02c736bde190.1749183428.git.viresh.kumar@linaro.org>
 
-Some Dell Inspiron systems experience frequency scaling issues with
-intel_pstate driver where the CPU gets locked at 900MHz after load.
+Hi Viresh,
 
-Add DMI quirk table to detect affected Dell Inspiron models and prevent
-intel_pstate from loading, allowing acpi-cpufreq to handle frequency
-scaling instead.
+kernel test robot noticed the following build errors:
 
-Affected models:
-- Dell Inspiron 15 7000 Gaming
-- Dell Inspiron 7567
-- Dell Inspiron 7559
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/bleeding-edge linus/master next-20250606]
+[cannot apply to v6.15]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Tested-by: Joe Walter <joe.walter@codesensesolutions.com>
-Signed-off-by: Joe Walter <joe.walter@codesensesolutions.com>
-=2D--
- drivers/cpufreq/intel_pstate.c | 65 ++++++++++++++++++++++------------
- 1 file changed, 42 insertions(+), 23 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Viresh-Kumar/rust-cpumask-Validate-CPU-number-in-set-and-clear/20250606-121822
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/8b5fc7889a7aacbd9f1f7412c99f02c736bde190.1749183428.git.viresh.kumar%40linaro.org
+patch subject: [PATCH] rust: cpumask: Validate CPU number in set() and clear()
+config: um-randconfig-001-20250607 (https://download.01.org/0day-ci/archive/20250607/202506070707.giDP6xhc-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250607/202506070707.giDP6xhc-lkp@intel.com/reproduce)
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate=
-.c
-index 1b1f62ccec92..3aeb04755afa 100644
-=2D-- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -28,7 +28,6 @@
- #include <linux/pm_qos.h>
- #include <linux/bitfield.h>
- #include <trace/events/power.h>
--#include <linux/dmi.h>
- #include <linux/units.h>
-=20
- #include <asm/cpu.h>
-@@ -48,6 +47,7 @@
- #ifdef CONFIG_ACPI
- #include <acpi/processor.h>
- #include <acpi/cppc_acpi.h>
-+#include <linux/dmi.h>
- #endif
-=20
- #define FRAC_BITS 8
-@@ -299,25 +299,6 @@ struct pstate_funcs {
-=20
- static struct pstate_funcs pstate_funcs __read_mostly;
-=20
--/* DMI quirk table for systems that should prefer acpi-cpufreq over intel=
-_pstate */
--static int intel_pstate_prefer_acpi_cpufreq(const struct dmi_system_id *i=
-d)
--{
--	pr_info("Preferring acpi-cpufreq for %s due to performance issues with i=
-ntel_pstate\n",
--		id->ident);
--	return 1;
--}
--
--static const struct dmi_system_id intel_pstate_acpi_cpufreq_prefer[] =3D =
-{
--	{
--		.callback =3D intel_pstate_prefer_acpi_cpufreq,
--		.ident =3D "Dell Inspiron 15 7000 Gaming",
--		.matches =3D {
--			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
--			DMI_MATCH(DMI_PRODUCT_NAME, "Inspiron 15 7000 Gaming"),
--		},
--	},
--	{ }
--};
- static bool hwp_active __ro_after_init;
- static int hwp_mode_bdw __ro_after_init;
- static bool per_cpu_limits __ro_after_init;
-@@ -2799,6 +2780,41 @@ static const struct x86_cpu_id intel_pstate_cpu_ids=
-[] =3D {
- };
- MODULE_DEVICE_TABLE(x86cpu, intel_pstate_cpu_ids);
-=20
-+/* DMI quirk table for systems that should prefer acpi-cpufreq over intel=
-_pstate */
-+static int intel_pstate_prefer_acpi_cpufreq(const struct dmi_system_id *i=
-d)
-+{
-+	pr_info("Detected %s, preferring acpi-cpufreq\n", id->ident);
-+	return 0;
-+}
-+
-+static const struct dmi_system_id intel_pstate_acpi_cpufreq_prefer[] =3D =
-{
-+	{
-+		.ident =3D "Dell Inspiron 15 7000 Gaming",
-+		.matches =3D {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Inspiron 15 7000 Gaming"),
-+		},
-+		.callback =3D intel_pstate_prefer_acpi_cpufreq,
-+	},
-+	{
-+		.ident =3D "Dell Inspiron 7567",
-+		.matches =3D {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Inspiron 7567"),
-+		},
-+		.callback =3D intel_pstate_prefer_acpi_cpufreq,
-+	},
-+	{
-+		.ident =3D "Dell Inspiron 7559",
-+		.matches =3D {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Inspiron 7559"),
-+		},
-+		.callback =3D intel_pstate_prefer_acpi_cpufreq,
-+	},
-+	{}
-+};
-+
- #ifdef CONFIG_ACPI
- static const struct x86_cpu_id intel_pstate_cpu_oob_ids[] __initconst =3D=
- {
- 	X86_MATCH(INTEL_BROADWELL_D,		core_funcs),
-@@ -3825,6 +3841,12 @@ static int __init intel_pstate_init(void)
- 	const struct x86_cpu_id *id;
- 	int rc;
-=20
-+
-+	/* Early DMI check - prevent intel_pstate on problematic systems */
-+	if (dmi_check_system(intel_pstate_acpi_cpufreq_prefer)) {
-+		pr_info("intel_pstate: system prefers acpi-cpufreq, not loading\n");
-+		return -ENODEV;
-+	}
- 	if (boot_cpu_data.x86_vendor !=3D X86_VENDOR_INTEL)
- 		return -ENODEV;
-=20
-@@ -3887,9 +3909,6 @@ static int __init intel_pstate_init(void)
- 		pr_info("Invalid MSRs\n");
- 		return -ENODEV;
- 	}
--/* Check for systems that should prefer acpi-cpufreq */
--	if (!default_driver && dmi_check_system(intel_pstate_acpi_cpufreq_prefer=
-))
--		default_driver =3D &intel_cpufreq;
- 	/* Without HWP start in the passive mode. */
- 	if (!default_driver)
- 		default_driver =3D &intel_cpufreq;
-=2D-=20
-2.48.1
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506070707.giDP6xhc-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
+
+   ***
+   *** Rust bindings generator 'bindgen' < 0.69.5 together with libclang >= 19.1
+   *** may not work due to a bug (https://github.com/rust-lang/rust-bindgen/pull/2824),
+   *** unless patched (like Debian's).
+   ***   Your bindgen version:  0.65.1
+   ***   Your libclang version: 21.0.0
+   ***
+   ***
+   *** Please see Documentation/rust/quick-start.rst for details
+   *** on how to set up the Rust support.
+   ***
+>> error[E0425]: cannot find value `nr_cpu_ids` in crate `bindings`
+   --> rust/kernel/cpumask.rs:96:38
+   |
+   96 |         if unsafe { cpu >= bindings::nr_cpu_ids } {
+   |                                      ^^^^^^^^^^ not found in `bindings`
+--
+>> error[E0425]: cannot find value `nr_cpu_ids` in crate `bindings`
+   --> rust/kernel/cpumask.rs:113:45
+   |
+   113 |         if unsafe { cpu as u32 >= bindings::nr_cpu_ids } {
+   |                                             ^^^^^^^^^^ not found in `bindings`
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
