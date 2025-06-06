@@ -1,197 +1,113 @@
-Return-Path: <linux-pm+bounces-28205-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28206-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16FE1AD08B4
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 21:34:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60C8BAD08B9
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 21:37:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 563F23B370E
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 19:33:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6E997A249A
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 19:36:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 061DE1F3B9E;
-	Fri,  6 Jun 2025 19:34:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0488220E011;
+	Fri,  6 Jun 2025 19:37:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HGQGSI4e"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fMJGfjbx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94D71E501C;
-	Fri,  6 Jun 2025 19:34:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7017FBA2;
+	Fri,  6 Jun 2025 19:37:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749238449; cv=none; b=oOSWdNLbd9ETmpW1DBbdP2EHD6Gl3T5eZ+dSlhiniqCaGHmL7gwiQTgl4C5RCbJoM+GG0UnP6BoO2RAmEC0XPWN4btEuwZ2iu523+rxzoaWvyBFHH+gaA9cMacjEpjF7bVAppAcrr4AX6dq9i1VLHW2ehniH1/ACny5Lp9pgpQU=
+	t=1749238644; cv=none; b=nehTHqUyUy1RVqnZuyJiMaqaPxxVAdsd/RqDGEj3J9LdQGOhjDpBcewYhkB+pdPSnSkz47XkSn3MzL68ac8OI4hKtbthWo8Qr2ZyLHkbFTf1nCxACie+/D+jZdaiLUrNJmUWkYnEryhGHFswP/xYTnkr5YDAKaD75eRyck71qDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749238449; c=relaxed/simple;
-	bh=H3LG70DDFkrvPWOnWEJJh55HhE/5hyND70bmc+t70E0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=AdpZqvC+3HI6NoIcsxVt3Rs8NK2S9LU1CBRWD8ywocnI0S8W8wHXIaGLIyh2LYo+ukBenGuqk+pqfbU0tt7TR4cwGYWMWH6Nn3iqG4bdxK0miG7HmV/mVs/IwnW6sfpqp4EgDixUmyQI3611WCDdPO5920VUT8z6KVWzq5+i4qY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HGQGSI4e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68D4EC4CEEB;
-	Fri,  6 Jun 2025 19:34:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749238449;
-	bh=H3LG70DDFkrvPWOnWEJJh55HhE/5hyND70bmc+t70E0=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-	b=HGQGSI4edQTuDIM8ShM02brnAcb4Zhl+/8yPBdkt5dNWpORwpxKMbpYd4FzA3MsIQ
-	 XWa+rZJem7lHlTNNvQ0zi8hU89b4xz4P+/9gMNJG/ZZ5Wfx8R/TnA2NGssGy9kxPVZ
-	 R1OaF3lfpzxTC6BBRL78W188XvdDndClcaB3HyoEm+RDaDvowc/Dl4d0RAKfgIMOGG
-	 mBjXSMxPygHFjT8jNrtS5BNtNQA0AvI3nhE0BmZ1RRa11ghoPCu+22/ENB7b/4n/+g
-	 Q40ms7sHhyeIqI3AwFPQLua2kTxvM/Gepykk38FUzv5tNRxy02+9yI6ZnAQxiKm3jh
-	 kXdAwknIhhdpg==
+	s=arc-20240116; t=1749238644; c=relaxed/simple;
+	bh=yauKZvBgJgkLXxhOcb4XcPY7cqiucnyOqvsgSihOc5w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=apBKqrh/cn1gZ7Op9nbnKQ3eybTaB15V/mo80BLLx1ky7A0OpzTZmCjU563jJdYcVccTw9BfDcs3HT3ah4plq/zo7HuqOuIxh9Ujqbh0QHsD2rLx9f/dlaTYABaM/w0frHjIDWdcvQG3ZJHemTrQQHZmeAmkoKrKemxhv2QXzbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fMJGfjbx; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749238643; x=1780774643;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yauKZvBgJgkLXxhOcb4XcPY7cqiucnyOqvsgSihOc5w=;
+  b=fMJGfjbx0JDZk+kqodmf3GpR1DJVj0ajz17c5WdfcHnRsq7yqqFvtF9F
+   jqkEqB2pi6zERKZg5vIcXBXzhyI4KGF9sYkvIT5syBskGcwFgK6t1lXv0
+   Vc8U3c4P8E7pCGI7KS+YsKqtp29/LFQLBF+AYyQpEk2XtGVQj9zg2rEDl
+   YQLrL9qJDhjBAfRtCuLBIbPWBq7/0Jo3pGW8j6a7s/yu+AcQ/wL3HE8zj
+   jJCuE8HWBRjMRXX5H+Pft04ZMR4B91yDNs3TJCd+e5430fXYpACsvKzcl
+   UFK/67v/eKTQQvBICvKZ7B/qdAEoM9sc0k8Cx/fHYXWsUMbqqa4nvsnQ5
+   Q==;
+X-CSE-ConnectionGUID: +R51QbclRKezN0+CNWw9kQ==
+X-CSE-MsgGUID: JmBlSM2wSKaV2mUOkDTUZw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11456"; a="62794188"
+X-IronPort-AV: E=Sophos;i="6.16,216,1744095600"; 
+   d="scan'208";a="62794188"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2025 12:37:22 -0700
+X-CSE-ConnectionGUID: qomSxd9RQJ2x0B+qhszmmg==
+X-CSE-MsgGUID: aUWKipvwSb2oBZbAWpFSuQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,216,1744095600"; 
+   d="scan'208";a="176857294"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 06 Jun 2025 12:37:21 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uNcsQ-0005Ez-2R;
+	Fri, 06 Jun 2025 19:37:18 +0000
+Date: Sat, 7 Jun 2025 03:36:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
+	devel@acpica.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge 7/9] drivers/acpi/processor_idle.c:63:
+ undefined reference to `arch_cpu_rescan_dead_smt_siblings'
+Message-ID: <202506070341.ACtZRDtC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 06 Jun 2025 21:34:04 +0200
-Message-Id: <DAFP9ZRENV0S.ON0XKIXIAEKY@kernel.org>
-To: "Boqun Feng" <boqun.feng@gmail.com>
-Cc: "Viresh Kumar" <viresh.kumar@linaro.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, "Yury Norov" <yury.norov@gmail.com>, "Miguel Ojeda"
- <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Gary Guo"
- <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Andreas Hindborg" <a.hindborg@kernel.org>,
- "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
- "Danilo Krummrich" <dakr@kernel.org>, "Vincent Guittot"
- <vincent.guittot@linaro.org>, <linux-pm@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>
-Subject: Re: [PATCH] rust: cpumask: Validate CPU number in set() and clear()
-From: "Benno Lossin" <lossin@kernel.org>
-X-Mailer: aerc 0.20.1
-References: <8b5fc7889a7aacbd9f1f7412c99f02c736bde190.1749183428.git.viresh.kumar@linaro.org> <aEJwm16HSwCyt7aB@Mac.home> <DAFAR5SUQSU9.OSLB2UAXE9DY@kernel.org> <aELugDefiviXZjx6@Mac.home>
-In-Reply-To: <aELugDefiviXZjx6@Mac.home>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri Jun 6, 2025 at 3:34 PM CEST, Boqun Feng wrote:
-> On Fri, Jun 06, 2025 at 10:11:13AM +0200, Benno Lossin wrote:
->> On Fri Jun 6, 2025 at 6:37 AM CEST, Boqun Feng wrote:
->> > On Fri, Jun 06, 2025 at 09:47:28AM +0530, Viresh Kumar wrote:
->> >> The C `cpumask_{set|clear}_cpu()` APIs emit a warning when given an
->> >> invalid CPU number - but only if `CONFIG_DEBUG_PER_CPU_MAPS=3Dy` is s=
-et.
->> >>=20
->> >> Meanwhile, `cpumask_weight()` only considers CPUs up to `nr_cpu_ids`,
->> >> which can cause inconsistencies: a CPU number greater than `nr_cpu_id=
-s`
->> >> may be set in the mask, yet the weight calculation won't reflect it.
->> >>=20
->> >> This leads to doctest failures when `nr_cpu_ids < 4`, as the test tri=
-es
->> >> to set CPUs 2 and 3:
->> >>=20
->> >>   rust_doctest_kernel_cpumask_rs_0.location: rust/kernel/cpumask.rs:1=
-80
->> >>   rust_doctest_kernel_cpumask_rs_0: ASSERTION FAILED at rust/kernel/c=
-pumask.rs:190
->> >>=20
->> >> Fix this by validating the CPU number in the Rust `set()` and `clear(=
-)`
->> >> methods to prevent out-of-bounds modifications.
->> >>=20
->> >
->> > Thanks for the quick fix!
->> >
->> > While this can fix the current problem, but it's not a good solution f=
-or
->> > the long run. Because outside a test, we should never use an arbitrary
->> > i32 as a cpu number (we usually get it from smp_processor_id(), or
->> > something else). So the `< nr_cpu_ids` testing is not necessary in
->> > normal use cases.
->> >
->> > We should instead provide a wrapper for cpu id:
->> >
->> >     /// # Invariants
->> >     ///
->> >     /// The number is always in [0..nr_cpu_ids) range.
->> >     pub struct CpuId(i32);
->> >
->> > and
->> >
->> >     impl CpuId {
->> >         /// # Safety
->> > 	/// Callers must ensure `i` is a valid cpu id (i.e. 0 <=3D i <
->> > 	/// nr_cpu_ids).
->> >         pub unsafe fn from_i32_unchecked(i: i32) -> Self {
->> > 	    // INVARIANT: The function safety guarantees `i` is a valid
->> > 	    // cpu id.
->> > 	    CpuId(id);
->> > 	}
->> >
->> > 	pub fn from_i32(i: i32) -> Option<Self> {
->> > 	    if i < 0 || i >=3D nr_cpu_ids {
->> > 	        None
->> > 	    } else {
->> > 	        // SAFETY: `i` has just been checked as a valid cpu id.
->> > 	        Some(unsafe { Self::from_i32_unchecked(i) })
->> > 	    }
->> > 	}
->> >
->> > 	pub fn current() -> Self {
->> > 	    // SAFETY: smp_processor_id() always return valid cpu id.
->> > 	    unsafe { Self::from_i32_unchecked(smp_processor_id()) }
->> > 	}
->> >     }
->> >
->> > All `Cpumask` functions then take `CpuId` instead of `i32` as the
->> > parameter. Needless to say if we were to have a cpumask_next() wrapper=
-,
->> > the return value will be `CpuId` (or `Option<CpuId>`), i.e. if a bit w=
-as
->> > set in a cpumask, then it must represent a correct cpu id.
->> >
->> > Make sense?
->>=20
->> Just to make sure, the `nr_cpu_ids` stays constant, right?
->>=20
->
-> Sort of. I believe the value won't be changed once the kernel boots, in
-> most cases (modulo NR_CPUS=3D1 or CONFIG_FORCE_NR_CPUS=3Dy), it's a
-> read-mostly variable not a constant, and the value gets set by either a
-> kernel command line or how many CPUs the kernel actually detect at boot
-> time. See:
->
-> https://github.com/Rust-for-Linux/linux/blob/rust-next/kernel/smp.c#L995:=
-w
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   aedfeec2f90dc1553d4e2230c4f5d30c2a6876d4
+commit: 0e0551545a620641d99184afff8b2079cedd11da [7/9] ACPI: processor: Rescan "dead" SMT siblings during initialization
+config: i386-buildonly-randconfig-003-20250607 (https://download.01.org/0day-ci/archive/20250607/202506070341.ACtZRDtC-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250607/202506070341.ACtZRDtC-lkp@intel.com/reproduce)
 
-It's allowed to increase, but if it ever decreases, the invariant of
-`CpuId` will be wrong (ie it's not *invariant* :).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506070341.ACtZRDtC-lkp@intel.com/
 
->> >> @@ -101,10 +108,16 @@ pub fn set(&mut self, cpu: u32) {
->> >>      /// This mismatches kernel naming convention and corresponds to =
-the C
->> >>      /// function `__cpumask_clear_cpu()`.
->> >>      #[inline]
->> >> -    pub fn clear(&mut self, cpu: i32) {
->> >> +    pub fn clear(&mut self, cpu: i32) -> Result {
->> >> +        // SAFETY: It is safe to read `nr_cpu_ids`.
->> >> +        if unsafe { cpu as u32 >=3D bindings::nr_cpu_ids } {
->> >
->> > You probably want to check whether `bindings::nr_cpu_ids` can be
->> > accessible if NR_CPUS =3D=3D 1 or CONFIG_FORCE_NR_CPUS=3Dy, because th=
-en
->> > nr_cpu_ids is a macro definition.
->>=20
->> Just define a helper function?
->>=20
->
-> Maybe, but it is then "a variable read" vs "a FFI function call" if we
-> want to check every time in clear()/set(), of course if we only check it
-> in CpuId::from_i32() mentioned above, the performance impact shouldn't
-> be observable, because we won't call that method often.
+All errors (new ones prefixed by >>):
 
-Sure, you could also have a rust function that is inlined that does the
-two different checks depending on the config.
+   ld: drivers/acpi/processor_idle.o: in function `acpi_idle_rescan_dead_smt_siblings':
+>> drivers/acpi/processor_idle.c:63: undefined reference to `arch_cpu_rescan_dead_smt_siblings'
 
-> Either, I was just pointing out the current fix may cause build errors.
 
-Yeah that should be fixed.
+vim +63 drivers/acpi/processor_idle.c
 
----
-Cheers,
-Benno
+    58	
+    59	#ifdef CONFIG_ACPI_PROCESSOR_CSTATE
+    60	void acpi_idle_rescan_dead_smt_siblings(void)
+    61	{
+    62		if (cpuidle_get_driver() == &acpi_idle_driver)
+  > 63			arch_cpu_rescan_dead_smt_siblings();
+    64	}
+    65	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
