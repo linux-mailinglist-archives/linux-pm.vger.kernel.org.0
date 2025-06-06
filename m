@@ -1,239 +1,136 @@
-Return-Path: <linux-pm+bounces-28174-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28175-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03882ACFBE7
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 06:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F3E9ACFBE9
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 06:19:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 200F07A9E67
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 04:16:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B0ED77A34CC
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 04:17:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 370A41DE885;
-	Fri,  6 Jun 2025 04:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E86619F12A;
+	Fri,  6 Jun 2025 04:19:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AnOd8j7q"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yPvErT3v"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70D3D23A6
-	for <linux-pm@vger.kernel.org>; Fri,  6 Jun 2025 04:17:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E3BA3234
+	for <linux-pm@vger.kernel.org>; Fri,  6 Jun 2025 04:19:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749183466; cv=none; b=pMqhyi557iFZa+KDzbepwa620nQXQPrknMhN9bzq992Rtw9xA0VpXwgkGLgp7SL8yup/7ut9JZp9wdZq1i+n2WlZ3aWpvK18G0oHEttFqlHMiULMjHJ/qkOKEzzcFCUcfdl3vcek81wiYjF6ogVcNC6eScQM3p++/GJ3LUek4+g=
+	t=1749183550; cv=none; b=H73JBYc5GZVivNDZ0gtIIBDqFXIBk3dATuvE0bU5QwwQpzD1XH5R2L7LvG/Pw/Z4Uja3tuT4O9UDvYviItP6NQkICdFOgqsrcmT9EyJT7xJgKxRw9kGn9Rb+JZLOStvLV+zam/Dos3GmOXsfKWAV6OhErrJBHlkOZx6HvNWgfoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749183466; c=relaxed/simple;
-	bh=UQczbJJINksg9RChdSK+z3ZVyXio4KjtiG6ElGO1pKY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=r9swuDuOKfzPwkkqhIjohtojAboquQwR20GhDc6eRHQFg6E9SUuzBPYPhG1NeqGDZU84OSt9zVtyMQ0xxLDhwUOwDCOs34Vpa9vuy/10djuZhHn7A/BCO+3ftReyeLYV7NNj8LWse0Bbgjq4SwMipmZXxZkmhpJ2W2lxqAHN70Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AnOd8j7q; arc=none smtp.client-ip=209.85.210.178
+	s=arc-20240116; t=1749183550; c=relaxed/simple;
+	bh=o4abm83KhcX/5c/veDlyP/zoZnmewDi2a5Q046z8zEk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AGAkkPLtXt4JgzRP/7TbyFvXUezGj1x5dw7MYyX0jrAO1ZTmcV80EX9LB2qPZrBjm0FNffHghWKqDg3gFiYiTOsfbubG2LVGVDhrZWXtwoE9zGvixhihl3Yszcu3qrtICL2e8C9S81fkTkDAww5DGyiXOecbfYb4UeiESzDfc00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yPvErT3v; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-747e41d5469so1955992b3a.3
-        for <linux-pm@vger.kernel.org>; Thu, 05 Jun 2025 21:17:43 -0700 (PDT)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-22c33677183so15495585ad.2
+        for <linux-pm@vger.kernel.org>; Thu, 05 Jun 2025 21:19:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1749183462; x=1749788262; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=z4aEyrZFNk/1CL01crfYm+eFmGehcO94b8G4ubo5r+k=;
-        b=AnOd8j7q1ugKK9K8ks8t4YNupvJ+yXE9tSBbwFh2zsgXclgsFQV99jK34HnXgb0PDb
-         sw0lMNz/lDUthjqyuDkX5LkSy4WUh1DvVVT052wDJ0hcOvz8bLksybS4YrtlER0YHz+a
-         iN+EoOjERpPcVZX/JrmuWSvrPihVgeFcw8DFVgavQMpYCTuFpySwv/PfLIA/ZAkrgXrT
-         QXX1dwGQMW9mJMeOM5VBCygVQLdT9xtzp/lMGKcuwHOhPe2Vw4EiYDwjyfPVwVak3kry
-         GMsvuSmS00aaG8TAAdLuUzVZ7RTwoz/6FqLb3Ej9idrA9BOW5Dq4t0lECp7vzeVPUTlQ
-         p9Yw==
+        d=linaro.org; s=google; t=1749183548; x=1749788348; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xUTI80lWcRXNjZ88XXY8GFQIEPWXmof1Egz2/hSjiZw=;
+        b=yPvErT3vW02iG73N1mkQvfpATCr37g2hAIizKFYP7/NXIO6T0SrW6tsc1ne/A/aEfa
+         PI09n5HgojI6D0TmAh0A4r29ZIIgX9TuJNbEaDLi3iZ48DESaLqDKd3qFy4Y0N3/z435
+         IhEQ6V3oFm97jK/nkkCCnoN5JTegNU3qE0WQoy8JR6EjrUrjWfJQz7ofZj0iA7jlMcTc
+         RMn0Fq4QdX6266zgCO4zItNqSQyQ+ZJVVprlfH6IiKliNtje5kRxvvS2L/a7oS+URFuv
+         xX4Xy6MMPfmWSR95x/Nu5MTjFMivccYZKzb3642NTYZBKf25y1pslKpwfl1rdU+iThOh
+         9+xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749183462; x=1749788262;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z4aEyrZFNk/1CL01crfYm+eFmGehcO94b8G4ubo5r+k=;
-        b=oYuVrHK24dYgSZCF63d3FUqFGyp68N6xWj49TR1HqZvj7Dc2cdTKCPnbTzIQ2EcDVo
-         kzbWiwFpp39RaS8I0NF7KDlPPD00w/oFSLBG9thkdWrOFYJJYI2PNxjNzwllGnfFnB1u
-         +x36tK5iaxTJiu/r4v0Mxm5/nQ3xW1OSf+672amJ7y+KqEwH6Mm4Zyv0GUf8MPFGMsN4
-         4Uuam7Yje8E/FVwBsHAM4C6SGc/bjMZ5rzuqsz5zPtTNMFaXIWGRZaHNajE8po29VohH
-         nJiPPSMUsJk8+RtMZGcxom9IycY/VO5CK/eK/vdW0NgZrBrerAXUgCdab7zmv7AIzIOq
-         0ikw==
-X-Forwarded-Encrypted: i=1; AJvYcCWyfEnS3fZyrr1np+5pV2fq9SKkSQA2r4NpABFPadBPJa1qsnYTm4DCb4DxCq1/TiEHqRvUMKYTCQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoNlG2Q/spudPpInWPhmWRTHth47t7OixCjGUEHCj6xZpLpHIj
-	yrRKsNO+/bReXgvdcc6rURTDCMLAdZkssvMFkd7Bxr3qMduscXP+8VT/rGSeSK8/q20=
-X-Gm-Gg: ASbGncu0/S+Va1Yxx/NqDA9KFWB0LPgDsimEhCIzNneROFUU/gbgm8KKGS6qrccKXfi
-	YlLTj3sA7fzHbahb5VWV2sRTY7qgExZdT+mL7UQkHpm3DxXdu8C66dliuw7si3o4e5tcbWur5Vc
-	URrOgHBx/tRwEUCPuxVszUJPeb81q3Sg9PuKPIXCGttEQUNyoiaDwemgOwlSp1ApRT1LxdC269w
-	7tFmhs35sIZeDv1k6prYypHvcwD658pzdBiKhrLJWvdHCI0UDbA9Y8Cnx2O3rlEQxUy51PiknFP
-	JIKV5FUwNL49xQlklE7qrAoXnsj9OHXx3N80VAXXK7hWrzPQFBX4dlI0kBY5AJE=
-X-Google-Smtp-Source: AGHT+IF2LowmZhLzFucdSuxz1wiMxL5SZAl0Mf2BPTZjTMLgb+HM9hELn+kmbzYtxQLVBabHLHUR4g==
-X-Received: by 2002:a05:6a00:1142:b0:740:5927:bb8b with SMTP id d2e1a72fcca58-74827cfb07fmr3098083b3a.0.1749183462550;
-        Thu, 05 Jun 2025 21:17:42 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1749183548; x=1749788348;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xUTI80lWcRXNjZ88XXY8GFQIEPWXmof1Egz2/hSjiZw=;
+        b=TI+ZpN+ejEMqA47IYpq2GIh9e4YmKRIQRksuUUXxIDCtquQIiWx0Tx8aJ2kpdbK5hy
+         x+WrlBLcobEvOo7Sejz69/JqorO6oJFrFOpdXwadeuCzw4GWNPN7V2dQ//PQEwKEA3I8
+         NAIgXwtaHwbzef6Bt5M2GbZZAJ4Y/kq7UOS5SMC8Okj8wkBw7TXDgOOHPmOiwjIzF33t
+         gOahyHLwkj8Wdr7LG0LMBqb4wWGoNyH2RsPJkU6zFhOyN6MldTHn2pIzgyEXXIZrx6zt
+         N9HHhu1xNqkzSLErG7MWqeBu8OVHTPck5r8hcTEpx+fA7EVISGjVBMH7SI7w7bC16pxG
+         wzMg==
+X-Forwarded-Encrypted: i=1; AJvYcCUP/VEc285Mb95ref5IzKfhdHTabaT/srVCeLM7D0XQsUOaQS711JvDkKJrb3BYuaYVtryogMXF+w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yww4GaYLgHT6IXbYBmPb5+bHqA7RkXhlGugT8D8AbXJOzSQPqtJ
+	DX1Bo22OLyzWPg3m2oX467sLTFAdCUYfytiWVR4rgX2N5OQAD8CASDZdY6HpxPQDhZA=
+X-Gm-Gg: ASbGncuCHljn/lILYK71ncsTKXsOZSiZOmyIIzZUmDPCuLMavAKAdBlLaRzeDWXUX8h
+	HnRGGvaTn6ssCIo99QDTwipyejFQnhh/3Tg8lvCnz5VjB2URlBuzDlY1T7f1qnbrZVT2X92Zpbm
+	85G7mTxfRxsh8PhJ+d9hKc5gd6gRB1SWlGPln42c4y4h+zHLh4qNB3m5mD+fuRlUzwPWMoYcRXI
+	D1cjTfjfWkMG5H17Ah1PL0wGOtsixt91wjbNAgIDZb3EhbBZ7g+6sBcrEExpqSIobJj/l4Bq6w8
+	dsWdN+AoVeOI3yXuBFm7mHEEAiZkoPCBxB6PMfOxelTJmuiOffAw
+X-Google-Smtp-Source: AGHT+IGzgVo+9iJ8+pGbStrfqIojnnqwOZeq5s8p51j8fnc0ghBhaDbG4KoHtQPh1UGLy5Ce/aq75A==
+X-Received: by 2002:a17:902:da8c:b0:235:2e0:aa9 with SMTP id d9443c01a7336-23601d24441mr27452635ad.14.1749183548029;
+        Thu, 05 Jun 2025 21:19:08 -0700 (PDT)
 Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7482af3859csm433912b3a.36.2025.06.05.21.17.41
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23603a6723esm3349595ad.252.2025.06.05.21.19.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jun 2025 21:17:41 -0700 (PDT)
+        Thu, 05 Jun 2025 21:19:07 -0700 (PDT)
+Date: Fri, 6 Jun 2025 09:49:05 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Yury Norov <yury.norov@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
+To: Andreas Hindborg <a.hindborg@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Danilo Krummrich <dakr@redhat.com>,
 	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
 	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: [PATCH] rust: cpumask: Validate CPU number in set() and clear()
-Date: Fri,  6 Jun 2025 09:47:28 +0530
-Message-Id: <8b5fc7889a7aacbd9f1f7412c99f02c736bde190.1749183428.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+	Benno Lossin <benno.lossin@proton.me>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Danilo Krummrich <dakr@kernel.org>, Gary Guo <gary@garyguo.net>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Miguel Ojeda <ojeda@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Trevor Gross <tmgross@umich.edu>, Viresh Kumar <vireshk@kernel.org>,
+	Yury Norov <yury.norov@gmail.com>, linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	rust-for-linux@vger.kernel.org,
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
+	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
+	Burak Emir <bqe@google.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Russell King <linux@armlinux.org.uk>, linux-clk@vger.kernel.org,
+	Andrew Ballance <andrewjballance@gmail.com>,
+	Anisse Astier <anisse@astier.eu>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V12 00/15] Rust abstractions for clk, cpumask, cpufreq,
+ OPP
+Message-ID: <20250606041905.zgjb2vxpwbpjhlzs@vireshk-i7>
+References: <HVTDJypFNQFfSQJmmYDSPU4o-irFnjmDN22RW3S0z5Kwe_hVk9kquZWElv-C2k6d5kOIiewhj_Xo2kAoTHbHgg==@protonmail.internalid>
+ <cover.1747634382.git.viresh.kumar@linaro.org>
+ <87qzzy3ric.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87qzzy3ric.fsf@kernel.org>
 
-The C `cpumask_{set|clear}_cpu()` APIs emit a warning when given an
-invalid CPU number — but only if `CONFIG_DEBUG_PER_CPU_MAPS=y` is set.
+On 05-06-25, 21:41, Andreas Hindborg wrote:
+> I was testing an unrelated patch and found this kunit failure in
+> mainline today:
+> 
+> [19:45:34] # rust_doctest_kernel_cpumask_rs_0.location: rust/kernel/cpumask.rs:180
+> [19:45:34] # rust_doctest_kernel_cpumask_rs_0: ASSERTION FAILED at rust/kernel/cpumask.rs:190
+> 
+> This is for arm64 defconfig. The test seems to passes on x86_64.
 
-Meanwhile, `cpumask_weight()` only considers CPUs up to `nr_cpu_ids`,
-which can cause inconsistencies: a CPU number greater than `nr_cpu_ids`
-may be set in the mask, yet the weight calculation won't reflect it.
+Posted a fix:
 
-This leads to doctest failures when `nr_cpu_ids < 4`, as the test tries
-to set CPUs 2 and 3:
+https://lore.kernel.org/all/8b5fc7889a7aacbd9f1f7412c99f02c736bde190.1749183428.git.viresh.kumar@linaro.org/
 
-  rust_doctest_kernel_cpumask_rs_0.location: rust/kernel/cpumask.rs:180
-  rust_doctest_kernel_cpumask_rs_0: ASSERTION FAILED at rust/kernel/cpumask.rs:190
-
-Fix this by validating the CPU number in the Rust `set()` and `clear()`
-methods to prevent out-of-bounds modifications.
-
-Fixes: 8961b8cb3099 ("rust: cpumask: Add initial abstractions")
-Reported-by: Miguel Ojeda <ojeda@kernel.org>
-Closes: https://lore.kernel.org/all/87qzzy3ric.fsf@kernel.org/
-Reported-by: Andreas Hindborg <a.hindborg@kernel.org>
-Closes: https://lore.kernel.org/all/87qzzy3ric.fsf@kernel.org/
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/cpufreq/rcpufreq_dt.rs |  2 +-
- rust/kernel/cpumask.rs         | 49 +++++++++++++++++++++++-----------
- 2 files changed, 34 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/cpufreq/rcpufreq_dt.rs b/drivers/cpufreq/rcpufreq_dt.rs
-index 94ed81644fe1..f396c8f35069 100644
---- a/drivers/cpufreq/rcpufreq_dt.rs
-+++ b/drivers/cpufreq/rcpufreq_dt.rs
-@@ -70,7 +70,7 @@ fn init(policy: &mut cpufreq::Policy) -> Result<Self::PData> {
-         let dev = unsafe { cpu::from_cpu(cpu)? };
-         let mut mask = CpumaskVar::new_zero(GFP_KERNEL)?;
- 
--        mask.set(cpu);
-+        mask.set(cpu)?;
- 
-         let token = find_supply_names(dev, cpu)
-             .map(|names| {
-diff --git a/rust/kernel/cpumask.rs b/rust/kernel/cpumask.rs
-index c90bfac9346a..75d4ce916b4f 100644
---- a/rust/kernel/cpumask.rs
-+++ b/rust/kernel/cpumask.rs
-@@ -37,13 +37,14 @@
- /// use kernel::bindings;
- /// use kernel::cpumask::Cpumask;
- ///
--/// fn set_clear_cpu(ptr: *mut bindings::cpumask, set_cpu: u32, clear_cpu: i32) {
-+/// fn set_clear_cpu(ptr: *mut bindings::cpumask, set_cpu: u32, clear_cpu: i32) -> Result {
- ///     // SAFETY: The `ptr` is valid for writing and remains valid for the lifetime of the
- ///     // returned reference.
- ///     let mask = unsafe { Cpumask::as_mut_ref(ptr) };
- ///
--///     mask.set(set_cpu);
--///     mask.clear(clear_cpu);
-+///     mask.set(set_cpu)?;
-+///     mask.clear(clear_cpu)?;
-+///     Ok(())
- /// }
- /// ```
- #[repr(transparent)]
-@@ -90,9 +91,15 @@ pub fn as_raw(&self) -> *mut bindings::cpumask {
-     /// This mismatches kernel naming convention and corresponds to the C
-     /// function `__cpumask_set_cpu()`.
-     #[inline]
--    pub fn set(&mut self, cpu: u32) {
-+    pub fn set(&mut self, cpu: u32) -> Result {
-+        // SAFETY: It is safe to read `nr_cpu_ids`.
-+        if unsafe { cpu >= bindings::nr_cpu_ids } {
-+            return Err(EINVAL);
-+        }
-+
-         // SAFETY: By the type invariant, `self.as_raw` is a valid argument to `__cpumask_set_cpu`.
-         unsafe { bindings::__cpumask_set_cpu(cpu, self.as_raw()) };
-+        Ok(())
-     }
- 
-     /// Clear `cpu` in the cpumask.
-@@ -101,10 +108,16 @@ pub fn set(&mut self, cpu: u32) {
-     /// This mismatches kernel naming convention and corresponds to the C
-     /// function `__cpumask_clear_cpu()`.
-     #[inline]
--    pub fn clear(&mut self, cpu: i32) {
-+    pub fn clear(&mut self, cpu: i32) -> Result {
-+        // SAFETY: It is safe to read `nr_cpu_ids`.
-+        if unsafe { cpu as u32 >= bindings::nr_cpu_ids } {
-+            return Err(EINVAL);
-+        }
-+
-         // SAFETY: By the type invariant, `self.as_raw` is a valid argument to
-         // `__cpumask_clear_cpu`.
-         unsafe { bindings::__cpumask_clear_cpu(cpu, self.as_raw()) };
-+        Ok(())
-     }
- 
-     /// Test `cpu` in the cpumask.
-@@ -180,19 +193,23 @@ pub fn copy(&self, dstp: &mut Self) {
- /// ```
- /// use kernel::cpumask::CpumaskVar;
- ///
--/// let mut mask = CpumaskVar::new_zero(GFP_KERNEL).unwrap();
-+/// fn cpumask_test() -> Result {
-+///     let mut mask = CpumaskVar::new_zero(GFP_KERNEL).unwrap();
- ///
--/// assert!(mask.empty());
--/// mask.set(2);
--/// assert!(mask.test(2));
--/// mask.set(3);
--/// assert!(mask.test(3));
--/// assert_eq!(mask.weight(), 2);
-+///     assert!(mask.empty());
-+///     mask.set(2)?;
-+///     assert!(mask.test(2));
-+///     mask.set(3)?;
-+///     assert!(mask.test(3));
-+///     assert_eq!(mask.weight(), 2);
- ///
--/// let mask2 = CpumaskVar::try_clone(&mask).unwrap();
--/// assert!(mask2.test(2));
--/// assert!(mask2.test(3));
--/// assert_eq!(mask2.weight(), 2);
-+///     let mask2 = CpumaskVar::try_clone(&mask).unwrap();
-+///     assert!(mask2.test(2));
-+///     assert!(mask2.test(3));
-+///     assert_eq!(mask2.weight(), 2);
-+///
-+///     Ok(())
-+/// }
- /// ```
- pub struct CpumaskVar {
-     #[cfg(CONFIG_CPUMASK_OFFSTACK)]
 -- 
-2.31.1.272.g89b43f80a514
-
+viresh
 
