@@ -1,172 +1,268 @@
-Return-Path: <linux-pm+bounces-28201-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28202-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38A90AD063A
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 17:55:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79FD2AD065A
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 18:00:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D7583ADB09
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 15:53:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34ECC175A75
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 16:00:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 700AC17C219;
-	Fri,  6 Jun 2025 15:53:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 442651DE4C4;
+	Fri,  6 Jun 2025 16:00:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b3OT9DNn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aN/v7igt"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EB32A8D0;
-	Fri,  6 Jun 2025 15:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FBBE19D06A;
+	Fri,  6 Jun 2025 16:00:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749225205; cv=none; b=NUGwLPkTWsz4ehXvfRR09p7eDzwGIWf+jAYIMPhGruMbPaSHnINTqvbGAYeD0VJdIWWL7+sO2sBhMuZOnim65SRUcPwpqrMzTdvi++ZDsgBBzRgnnB/HOjKZDgW1dhGNMW7UqtCI80zYwWC09xykyLyFDffoyI6Hl8pUlE7/HxY=
+	t=1749225647; cv=none; b=JQSbAhwkHxIdOmtXyUs0q/NJP2NolcshPPTYkRAVExTd9mafPbIXTdyJde+vivKb9sIZQ68KGWjyOr2avQtv0D12lunt4093QmQcLS3s8sxNWp9cco0F0m6wuMDichj5Wxx6zG6zbgy6uAm3lR1lalBwueiik34aielky8d9GQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749225205; c=relaxed/simple;
-	bh=ZffmP67iCxIRYWii/TFpM7JL7F9vyh8RFszEdPO/+Hs=;
+	s=arc-20240116; t=1749225647; c=relaxed/simple;
+	bh=0+E08hRwywKhkjx7JnQt4se8cvECsmAoG8+aEI0QaTw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cpsM7csr1U7Gw5v+7RfMZG8OUsVZCFJwqRZrIXIU0TgqteGkzOGa3oifoSC3wbYcJUxh7lVwZqrwXMbTYjkUCU+dsnN483XBGW+2FomEjZSiyQbPLJ30ELFng1FJavJOZf7OBN9tqdOAIjX7no7CdQa3LRZOCJU1hp6JMQisELg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b3OT9DNn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C176BC4AF0B;
-	Fri,  6 Jun 2025 15:53:24 +0000 (UTC)
+	 To:Cc:Content-Type; b=V+gHVu9XlfDjPuOPCDEXE52RoG6V3UoQ7uPaA5q3TyDJbbGz7jkkNd47EEV1GMXn1+sZcVo3c2rGwtvVR2ksyXxoECv8TqNvLJe7no83ZzlByEC8bA5SmyZIgrpOZqnI69iHX2CjUWoZm2nrJoPQCoIr++Ld070Ql9WT6AlpPvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aN/v7igt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D41F6C4CEF6;
+	Fri,  6 Jun 2025 16:00:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749225204;
-	bh=ZffmP67iCxIRYWii/TFpM7JL7F9vyh8RFszEdPO/+Hs=;
+	s=k20201202; t=1749225646;
+	bh=0+E08hRwywKhkjx7JnQt4se8cvECsmAoG8+aEI0QaTw=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=b3OT9DNnXO5osD4dJlnoyI4sFZc6IAYmkIkPppRJN9y4+1OfB57nSX9FRApm7m62l
-	 PbAZJP4LoUmrIOQPtLxXgcm89KiaOLxuOqQx2qH/BP2wIolqCh9qWnT9spfg7D8BWj
-	 8/OxwCNljX3iAThB5iKR7pLM1YDA3aDcb9AHCl8Xqm/j6HTqzI09w+QEidilv7ewYN
-	 ai1pEREFmx5Q5EVXTMrdKaO66lSRdW2+ZAVZ8FA/x4h44RPsPM4LsKsxB7+Pljq8K4
-	 Xltt9jkNa42MAVJPxnHiwtSeXjR/ldwbgUW3H/H7LkLq4QLXWYdFavAwj9nRQudZke
-	 7PHl6AzrFgmTw==
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-606440d92eeso1047646eaf.2;
-        Fri, 06 Jun 2025 08:53:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU5sQH6skdmi5lE3tcQQLeM8iPtyf4sL27aEtharf0YYB6pZnn5YtBhB67EyYCxD8KjqRGDa8r3BQ==@vger.kernel.org, AJvYcCXt8miAJVs+yD/MTPfaU43cEyZCs9EU2Qq918Hw7YYIsfsIcIQTX8sxyRrI7OEpZOih2IP0yh3MYiL64M9J5afVcS1c@vger.kernel.org
-X-Gm-Message-State: AOJu0YypGi6HCtq2edY9wQB8YnTus/BZ5v8UxmniluQuyLG3sFyrlrVm
-	0Uuqy+f6i4umn0RcnYf+TwO6hMXetGSQnyzVECYzhw4nMqW9uxIf96ICGQXbMwZOZnRUiCh1Tb/
-	ekxvaC/cXKHl+5bEuo+NPCecsDaKTA3A=
-X-Google-Smtp-Source: AGHT+IHBSME4mlhGbIZWonHHrlJr7EgE5rjgS6F7nUJqSApeJe5WcvW3GCMdvtQHJSXOLL/eLJNs6DSTGvoI7zCAw8Y=
-X-Received: by 2002:a05:6820:1898:b0:60b:c6c6:f69e with SMTP id
- 006d021491bc7-60f3cf1d259mr2209450eaf.6.1749225204064; Fri, 06 Jun 2025
- 08:53:24 -0700 (PDT)
+	b=aN/v7igtpEDVhwIJFRhxmY7E4gZfzp/s4XbROI0iBLJbLV+MylVl6it9hyqNkQiWg
+	 Fjol823KWKYUP+c4P4B0Ldc3JaOCL2RUHcG6umTiCiwD2ve0ZNuRuuk8d95c4pOL8j
+	 SB9jsu67mvFHyYraWhBQWv33/WRdXBEj5jbsoTy/k2UkluRNhoy55ThC2M8Ahk1SYj
+	 5Keo1BaKYkYgjA9TxHzyWPHygXFTR6cOrSnIDaPI1Sb/r0CqrG7JsGjdNCylI1A39/
+	 MfWVpv2CReJ8CXeN1A+Q8eZoL17vdRV6eiGMnvaVetJ935abpTNtMIrIpVH6SWp0SB
+	 NiUR6Y/fmo7PQ==
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-4074997ce2bso650153b6e.3;
+        Fri, 06 Jun 2025 09:00:46 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUFBI4OuEr0M23yJvo2SH+0HIjiYpOyZvWZl5J0Rnz1NeDSi43/9pYKxC6T25SuFRxzFgwChzseD8iLfCtd@vger.kernel.org, AJvYcCUQQe9pXdosMGvRooK2J3vDWNP86dNnxZLouBEOjHvAP99kFGKxeEEOn0QTh331nDQZPVL/X+hvPuY=@vger.kernel.org, AJvYcCWP1DHMU6+aIdTXD5BcZqBD+x2FhpM0ajgHYM2MckLma8c3ZrbPouipTvv1YpXDGYLnP/+KYakdRAAFESR5Kgzwk+8=@vger.kernel.org, AJvYcCX8GJ1ptLXKF1O4sV1vZeOw10yIBBjB2CbTQrRrxySiwGSKnQ7G4mMhCHwOP4l3sHB10nq7nDAAUS4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNxsEKcLbCh4dCGqisl3st1LPfBAeZLahvFGp4DTpvW6r9uCgH
+	PUeLjT/cFUaKDzHQBu8jKj2gk+lJx0fCiuQ6V3AwUaqUDrrldCLjZzrcXNqtX0KKcowBbsm6S65
+	UxSaYHIaBgD2FVVf03Hmk7fVbiddOwm0=
+X-Google-Smtp-Source: AGHT+IG+/p8dPlsG+i+bKyi4+OPGxOvAlCFygsy2kq8Yd4lHK8Rtxzkc4gi25tmt3K47CNUiAhq8jyV80f/PLw6impg=
+X-Received: by 2002:a05:6808:288f:b0:402:b0f:4ccc with SMTP id
+ 5614622812f47-409051d725bmr1988228b6e.16.1749225645925; Fri, 06 Jun 2025
+ 09:00:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250605162106.1a459dad@gandalf.local.home>
-In-Reply-To: <20250605162106.1a459dad@gandalf.local.home>
+References: <20250606111749.3142348-1-claudiu.beznea.uj@bp.renesas.com> <20250606111749.3142348-2-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20250606111749.3142348-2-claudiu.beznea.uj@bp.renesas.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 6 Jun 2025 17:53:12 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hd_vCvmX9+__0M=aB437P-dxhYYEFnF2EaMe=XLTQiUw@mail.gmail.com>
-X-Gm-Features: AX0GCFsDgwpPXDpz0mMHZAFjnJVZ7FG-ShjXzJgXHh-KI0TNkQ3yTdfKt6UL3sI
-Message-ID: <CAJZ5v0hd_vCvmX9+__0M=aB437P-dxhYYEFnF2EaMe=XLTQiUw@mail.gmail.com>
-Subject: Re: [PATCH] tracing: PM: Remove unused clock events
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, 
-	Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>, linux-pm@vger.kernel.org, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, 
-	Kajetan Puchalski <kajetan.puchalski@arm.com>, 
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Date: Fri, 6 Jun 2025 18:00:34 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0i_Ey+OVpSZHXru=tubMaZi=y-uOh_0M6zmWZ2DqqA7Vg@mail.gmail.com>
+X-Gm-Features: AX0GCFuO1uRWb5NWOssOUUfHKn6m_s_TDNlqKwT50_Lx4DRONBgPCZFQvedB7Bs
+Message-ID: <CAJZ5v0i_Ey+OVpSZHXru=tubMaZi=y-uOh_0M6zmWZ2DqqA7Vg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] PM: domains: Add devres variant for dev_pm_domain_attach()
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org, 
+	len.brown@intel.com, pavel@kernel.org, ulf.hansson@linaro.org, 
+	jic23@kernel.org, daniel.lezcano@linaro.org, dmitry.torokhov@gmail.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, bhelgaas@google.com, 
+	geert@linux-m68k.org, linux-iio@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, fabrizio.castro.jz@renesas.com, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 5, 2025 at 10:19=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org=
-> wrote:
+On Fri, Jun 6, 2025 at 1:18=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> w=
+rote:
 >
-> From: Steven Rostedt <rostedt@goodmis.org>
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 >
-> The events clock_enable, clock_disable, and clock_set_rate were added bac=
-k
-> in 2010. In 2011 they were used by the arm architecture but removed in
-> 2013. These events add around 7K of memory which was wasted for the last =
-12
-> years.
+> The dev_pm_domain_attach() function is typically used in bus code alongsi=
+de
+> dev_pm_domain_detach(), often following patterns like:
 >
-> Remove them.
+> static int bus_probe(struct device *_dev)
+> {
+>     struct bus_driver *drv =3D to_bus_driver(dev->driver);
+>     struct bus_device *dev =3D to_bus_device(_dev);
+>     int ret;
 >
-> Link: https://lore.kernel.org/all/20250529130138.544ffec4@gandalf.local.h=
-ome/
+>     // ...
 >
-> Fixes: 74704ac6ea402 ("tracing, perf: Add more power related events")
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>     ret =3D dev_pm_domain_attach(_dev, true);
+>     if (ret)
+>         return ret;
+>
+>     if (drv->probe)
+>         ret =3D drv->probe(dev);
+>
+>     // ...
+> }
+>
+> static void bus_remove(struct device *_dev)
+> {
+>     struct bus_driver *drv =3D to_bus_driver(dev->driver);
+>     struct bus_device *dev =3D to_bus_device(_dev);
+>
+>     if (drv->remove)
+>         drv->remove(dev);
+>     dev_pm_domain_detach(_dev);
+> }
+>
+> When the driver's probe function uses devres-managed resources that depen=
+d
+> on the power domain state, those resources are released later during
+> device_unbind_cleanup().
+>
+> Releasing devres-managed resources that depend on the power domain state
+> after detaching the device from its PM domain can cause failures.
+>
+> For example, if the driver uses devm_pm_runtime_enable() in its probe
+> function, and the device's clocks are managed by the PM domain, then
+> during removal the runtime PM is disabled in device_unbind_cleanup() afte=
+r
+> the clocks have been removed from the PM domain. It may happen that the
+> devm_pm_runtime_enable() action causes the device to be runtime-resumed.
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Don't use devm_pm_runtime_enable() then.
 
+> If the driver specific runtime PM APIs access registers directly, this
+> will lead to accessing device registers without clocks being enabled.
+> Similar issues may occur with other devres actions that access device
+> registers.
+>
+> Add devm_pm_domain_attach(). When replacing the dev_pm_domain_attach() an=
+d
+> dev_pm_domain_detach() in bus probe and bus remove, it ensures that the
+> device is detached from its PM domain in device_unbind_cleanup(), only
+> after all driver's devres-managed resources have been release.
+>
+> For flexibility, the implemented devm_pm_domain_attach() has 2 state
+> arguments, one for the domain state on attach, one for the domain state o=
+n
+> detach.
+
+dev_pm_domain_attach() is not part driver API and I'm not convinced at
+all by the arguments above.
+
+Thanks!
+
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > ---
->  include/trace/events/power.h | 47 ------------------------------------
->  1 file changed, 47 deletions(-)
 >
-> diff --git a/include/trace/events/power.h b/include/trace/events/power.h
-> index 9253e83b9bb4..6c631eec23e3 100644
-> --- a/include/trace/events/power.h
-> +++ b/include/trace/events/power.h
-> @@ -337,53 +337,6 @@ DEFINE_EVENT(wakeup_source, wakeup_source_deactivate=
-,
->         TP_ARGS(name, state)
->  );
+> Changes in v3:
+> - dropped devm_pm_domain_detach_off(), devm_pm_domain_detach_on()
+>   and use a single function devm_pm_domain_detach()
 >
-> -/*
-> - * The clock events are used for clock enable/disable and for
-> - *  clock rate change
-> - */
-> -DECLARE_EVENT_CLASS(clock,
-> -
-> -       TP_PROTO(const char *name, unsigned int state, unsigned int cpu_i=
-d),
-> -
-> -       TP_ARGS(name, state, cpu_id),
-> -
-> -       TP_STRUCT__entry(
-> -               __string(       name,           name            )
-> -               __field(        u64,            state           )
-> -               __field(        u64,            cpu_id          )
-> -       ),
-> -
-> -       TP_fast_assign(
-> -               __assign_str(name);
-> -               __entry->state =3D state;
-> -               __entry->cpu_id =3D cpu_id;
-> -       ),
-> -
-> -       TP_printk("%s state=3D%lu cpu_id=3D%lu", __get_str(name),
-> -               (unsigned long)__entry->state, (unsigned long)__entry->cp=
-u_id)
-> -);
-> -
-> -DEFINE_EVENT(clock, clock_enable,
-> -
-> -       TP_PROTO(const char *name, unsigned int state, unsigned int cpu_i=
-d),
-> -
-> -       TP_ARGS(name, state, cpu_id)
-> -);
-> -
-> -DEFINE_EVENT(clock, clock_disable,
-> -
-> -       TP_PROTO(const char *name, unsigned int state, unsigned int cpu_i=
-d),
-> -
-> -       TP_ARGS(name, state, cpu_id)
-> -);
-> -
-> -DEFINE_EVENT(clock, clock_set_rate,
-> -
-> -       TP_PROTO(const char *name, unsigned int state, unsigned int cpu_i=
-d),
-> -
-> -       TP_ARGS(name, state, cpu_id)
-> -);
-> -
->  /*
->   * The power domain events are used for power domains transitions
->   */
+> Changes in v2:
+> - none; this patch is new
+>
+>  drivers/base/power/common.c | 50 +++++++++++++++++++++++++++++++++++++
+>  include/linux/pm_domain.h   |  6 +++++
+>  2 files changed, 56 insertions(+)
+>
+> diff --git a/drivers/base/power/common.c b/drivers/base/power/common.c
+> index 781968a128ff..82ea20b343f5 100644
+> --- a/drivers/base/power/common.c
+> +++ b/drivers/base/power/common.c
+> @@ -115,6 +115,56 @@ int dev_pm_domain_attach(struct device *dev, bool po=
+wer_on)
+>  }
+>  EXPORT_SYMBOL_GPL(dev_pm_domain_attach);
+>
+> +/**
+> + * devm_pm_domain_detach - devres action for devm_pm_domain_attach() to
+> + * detach a device from its domain.
+> + * @dev: device to detach.
+> + * @res: indicate if the device should be powered off
+> + *
+> + * This function reverse the actions from devm_pm_domain_attach().
+> + * It will be invoked during the remove phase from drivers implicitly.
+> + */
+> +static void devm_pm_domain_detach(struct device *dev, void *res)
+> +{
+> +       bool *power_off =3D res;
+> +
+> +       dev_pm_domain_detach(dev, *power_off);
+> +}
+> +
+> +/**
+> + * devm_pm_domain_attach - devres-enabled version of dev_pm_domain_attac=
+h()
+> + * @dev: Device to attach.
+> + * @power_on: Use to indicate whether we should power on the device
+> + *            when attaching.
+> + *
+> + * NOTE: this will also handle calling dev_pm_domain_detach() for
+> + * you during remove phase.
+> + *
+> + * Returns 0 on successfully attached PM domain, or a negative error cod=
+e in
+> + * case of a failure.
+> + */
+> +int devm_pm_domain_attach(struct device *dev, bool power_on)
+> +{
+> +       bool *power_off;
+> +       int ret;
+> +
+> +       power_off =3D devres_alloc(devm_pm_domain_detach, sizeof(*power_o=
+ff), GFP_KERNEL);
+> +       if (!power_off)
+> +               return -ENOMEM;
+> +
+> +       ret =3D dev_pm_domain_attach(dev, power_on);
+> +       if (ret) {
+> +               devres_free(power_off);
+> +               return ret;
+> +       }
+> +
+> +       *power_off =3D power_on;
+> +       devres_add(dev, power_off);
+> +
+> +       return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_pm_domain_attach);
+> +
+>  /**
+>   * dev_pm_domain_attach_by_id - Associate a device with one of its PM do=
+mains.
+>   * @dev: The device used to lookup the PM domain.
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index 0b18160901a2..f78b6b4dd734 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -509,6 +509,7 @@ struct device *dev_pm_domain_attach_by_name(struct de=
+vice *dev,
+>  int dev_pm_domain_attach_list(struct device *dev,
+>                               const struct dev_pm_domain_attach_data *dat=
+a,
+>                               struct dev_pm_domain_list **list);
+> +int devm_pm_domain_attach(struct device *dev, bool power_on);
+>  int devm_pm_domain_attach_list(struct device *dev,
+>                                const struct dev_pm_domain_attach_data *da=
+ta,
+>                                struct dev_pm_domain_list **list);
+> @@ -539,6 +540,11 @@ static inline int dev_pm_domain_attach_list(struct d=
+evice *dev,
+>         return 0;
+>  }
+>
+> +static inline int devm_pm_domain_attach(struct device *dev, bool power_o=
+n)
+> +{
+> +       return 0;
+> +}
+> +
+>  static inline int devm_pm_domain_attach_list(struct device *dev,
+>                                              const struct dev_pm_domain_a=
+ttach_data *data,
+>                                              struct dev_pm_domain_list **=
+list)
 > --
-> 2.47.2
->
+> 2.43.0
 >
 
