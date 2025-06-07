@@ -1,147 +1,144 @@
-Return-Path: <linux-pm+bounces-28213-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28215-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FFB8AD0A36
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Jun 2025 01:23:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AFE2AD0BC4
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Jun 2025 09:51:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 290247A16DD
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Jun 2025 23:22:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC1DA3B011B
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Jun 2025 07:50:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B19923D2AC;
-	Fri,  6 Jun 2025 23:23:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F05DD1E9B1A;
+	Sat,  7 Jun 2025 07:51:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kNiFaxTS"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="rKRk0A5D"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA6A126C17;
-	Fri,  6 Jun 2025 23:23:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65DE51D6193
+	for <linux-pm@vger.kernel.org>; Sat,  7 Jun 2025 07:51:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749252224; cv=none; b=c6rbyqTQo48+lY2F5HScMnHghuBVtWF998nSjCgazHWjekXgokHii9do3vQrm4FuOq3T1vg0USRC2rH8gckU3GWo7qz5S96gc6d/QWdNx2lfdx0Eq2yJ55TzuYUrNzO9x2uzfWHsU2oVRdOISH2+uwl2s2LjCCaI3u/hOCDIAic=
+	t=1749282669; cv=none; b=bT6zOwc+jkgh9BBNuQZUgPlzJjpH2ovevtnOaOWJkWDW5EMML+3V3WAgqxnAKGw8uPLWnSLsygslYE8JEYIINGj7IbmAkug4zhPJ2kIJnVVMF3gbfiGQEy2lefWXuCLSYQ+HIT+U5Js4ZK7eeGtcLV/LFLxZ1qAb3MiU0ZWTW3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749252224; c=relaxed/simple;
-	bh=nk0adjKeA8nMvS/JXyOJRsJFhrbYKZB2dialpfkhKwg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JDt6+TMYFc+W8Ac3omdJpjwL6nMCL0BLBNjPD1w3MCgUMA708CzLAtl3/2Lxrt5vdZ/gwBkR+I4pLV1Bf9lueGhtr1EP8vSPXvlO+7qTor+sugQ143JwiqdpLw8hR1J3uyHVQotQ/6Nc5LFEJVN7Sw9Pm6mmHHv16F/ubEjld/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kNiFaxTS; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749252222; x=1780788222;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nk0adjKeA8nMvS/JXyOJRsJFhrbYKZB2dialpfkhKwg=;
-  b=kNiFaxTStnfLTYAK74XsPw1UuJxUThXB3gWxPNIeZpZqhS4yz1AXOv78
-   o1az6wQDN1QeKmB27eRutzqteC+TIjyrE1mzM3sK/xbqXjnGq6g4urpR0
-   4D8LVng8Bl6BPSxyJlWZJrcOiXssRcr0D6+Zgsl/gxtTG8RN2oNXVG6xt
-   bs7vj4cFnJVls11JbxxHLQHPboZc6RsWYT1mglSLsuhSdQRqgvuT2C/e0
-   fq3c98pkvkShoy97HYNU3AQRa+9PBkdfVFE+itk61JOwFyh/MXBzqIIj0
-   bg6rjlpEvBgaZQCGCneI+MlDHIfSS/tVUbH29d9cTi3nXMOzdyx4XgnmO
-   Q==;
-X-CSE-ConnectionGUID: XN57pPFnSBGJvLcoXMwsRA==
-X-CSE-MsgGUID: cPj8855RSPGPXpNQEGBfvg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11456"; a="62809855"
-X-IronPort-AV: E=Sophos;i="6.16,216,1744095600"; 
-   d="scan'208";a="62809855"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2025 16:23:41 -0700
-X-CSE-ConnectionGUID: 6vARsndVQ9OefKbRucXDKQ==
-X-CSE-MsgGUID: VYhtg7hyTXqW0/RCPetyWA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,216,1744095600"; 
-   d="scan'208";a="145878058"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 06 Jun 2025 16:23:37 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uNgPO-0005Kt-2q;
-	Fri, 06 Jun 2025 23:23:34 +0000
-Date: Sat, 7 Jun 2025 07:23:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Yury Norov <yury.norov@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH] rust: cpumask: Validate CPU number in set() and clear()
-Message-ID: <202506070707.giDP6xhc-lkp@intel.com>
-References: <8b5fc7889a7aacbd9f1f7412c99f02c736bde190.1749183428.git.viresh.kumar@linaro.org>
+	s=arc-20240116; t=1749282669; c=relaxed/simple;
+	bh=AXJAH3uY48Ed4CsD26WXNULA89MjIzh0wjE3KUViDzc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mbntCTuShWPWR06a2uSOS7mGNp3lcf2PJzSznvGW0FA8Q8HCgMcKEV/xc6vsdoQxSDakxQmCn6SaaHxpHeqNjrvDavhtndhU5S4u3TdcbXrwuw7LocS3k7hqH8DO7VF0hPlSoGN94Aq7l71miCpgQW2B0lAZdicwYJC2d8JBMb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=rKRk0A5D; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=kJGMj6Xl38XkbHW0TqppSMwXqreutrH7MRsAkcagsPw=; t=1749282665;
+	x=1749714665; b=rKRk0A5DIlZ9Pvh1I/axE3qd8TbWCngP2TJCCL0Yz2s29nqL1jKIwloyrFL9A
+	Cn99N0diLJJ6oLVq1kHCcVdzQj7wqKirK3y8NQm4EwOKcGNhVCsihCaOiF1xCyLCAuGguoX2TFLU5
+	zqkiObTBzII+ClyQPAUTHMwpQBS/+Cn4H57xCmTkslxHYryrrDVNAxH0cjiNQB9d0cR4upGSSXxWy
+	YK5ynwtyJJm+kGmkkHzHzLUIaqXV9ZwGk7h9iR0P9s74iXZ1Bkn7uUUYeY+13J9vHWmFKGqM4vZqk
+	DGCQ7LCPtEUBImjOGoq6TqprEnt7oibvBGyiImzjiA4HcvjaYg==;
+Received: from [212.47.9.51] (helo=[10.120.34.54]); authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
+	id 1uNoKP-007FMt-20;
+	Sat, 07 Jun 2025 09:50:57 +0200
+Message-ID: <b9533ccd-b38d-437e-8315-3ca4672d1b69@leemhuis.info>
+Date: Sat, 7 Jun 2025 09:50:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8b5fc7889a7aacbd9f1f7412c99f02c736bde190.1749183428.git.viresh.kumar@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpupower: split unitdir from libdir in Makefile
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-pm list <linux-pm@vger.kernel.org>,
+ Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
+ "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>,
+ Justin Forbes <jforbes@redhat.com>,
+ Francesco Poli <invernomuto@paranoici.org>
+References: <20250521211656.65646-1-invernomuto@paranoici.org>
+ <6deefc69-856e-44d7-b970-2f0127090539@leemhuis.info>
+ <20250523002113.ca1ff066061da6049721c275@paranoici.org>
+ <af43cc33-2f10-4664-982c-444a5f9717cc@linuxfoundation.org>
+From: Thorsten Leemhuis <linux@leemhuis.info>
+Content-Language: de-DE, en-US
+Autocrypt: addr=linux@leemhuis.info; keydata=
+ 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 n7RI
+In-Reply-To: <af43cc33-2f10-4664-982c-444a5f9717cc@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1749282665;b207441d;
+X-HE-SMSGID: 1uNoKP-007FMt-20
 
-Hi Viresh,
+On 23.05.25 19:06, Shuah Khan wrote:
+> On 5/22/25 16:21, Francesco Poli wrote:
+>> On Thu, 22 May 2025 13:43:49 +0200 Thorsten Leemhuis wrote:
+>>
+>>> On 21.05.25 23:14, Francesco Poli (wintermute) wrote:
+>>>> Improve the installation procedure for the systemd service unit
+>>>> 'cpupower.service', to be more flexible. Some distros install libraries
+>>>> to /usr/lib64/, but systemd service units have to be installed to
+>>>> /usr/lib/systemd/system: as a consequence, the installation procedure
+>>>> should not assume that systemd service units can be installed to
+>>>> ${libdir}/systemd/system ...
+>>>> Define a dedicated variable ("unitdir") in the Makefile.
+>>> Many thx for doing this!
+>> You're welcome!   :-)
+> 
+> Thank you both. Applied to m,y cpupower branch. Will include it
+> in my next pr to PM maintainer.
 
-kernel test robot noticed the following build errors:
+Thx. Sorry for pestering, but will you send that PR any time soon? The
+current state of things in mainline creates small problems downstream;
+not a big deal, but would be nice to get this resolved properly rather
+sooner than later my mainlining this change.
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge linus/master next-20250606]
-[cannot apply to v6.15]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Viresh-Kumar/rust-cpumask-Validate-CPU-number-in-set-and-clear/20250606-121822
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/8b5fc7889a7aacbd9f1f7412c99f02c736bde190.1749183428.git.viresh.kumar%40linaro.org
-patch subject: [PATCH] rust: cpumask: Validate CPU number in set() and clear()
-config: um-randconfig-001-20250607 (https://download.01.org/0day-ci/archive/20250607/202506070707.giDP6xhc-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250607/202506070707.giDP6xhc-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506070707.giDP6xhc-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   ***
-   *** Rust bindings generator 'bindgen' < 0.69.5 together with libclang >= 19.1
-   *** may not work due to a bug (https://github.com/rust-lang/rust-bindgen/pull/2824),
-   *** unless patched (like Debian's).
-   ***   Your bindgen version:  0.65.1
-   ***   Your libclang version: 21.0.0
-   ***
-   ***
-   *** Please see Documentation/rust/quick-start.rst for details
-   *** on how to set up the Rust support.
-   ***
->> error[E0425]: cannot find value `nr_cpu_ids` in crate `bindings`
-   --> rust/kernel/cpumask.rs:96:38
-   |
-   96 |         if unsafe { cpu >= bindings::nr_cpu_ids } {
-   |                                      ^^^^^^^^^^ not found in `bindings`
---
->> error[E0425]: cannot find value `nr_cpu_ids` in crate `bindings`
-   --> rust/kernel/cpumask.rs:113:45
-   |
-   113 |         if unsafe { cpu as u32 >= bindings::nr_cpu_ids } {
-   |                                             ^^^^^^^^^^ not found in `bindings`
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Ciao, Thorsten
 
