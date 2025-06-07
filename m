@@ -1,93 +1,87 @@
-Return-Path: <linux-pm+bounces-28219-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28220-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF5F8AD0D29
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Jun 2025 13:43:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3CF3AD0D82
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Jun 2025 15:06:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4D9B27A9723
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Jun 2025 11:42:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59889189510C
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Jun 2025 13:06:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7283B21B9F7;
-	Sat,  7 Jun 2025 11:43:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBAD1220F25;
+	Sat,  7 Jun 2025 13:06:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XH9gD9ZH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NPHVhphh"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E15A1F151C;
-	Sat,  7 Jun 2025 11:43:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2764CA5A;
+	Sat,  7 Jun 2025 13:06:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749296621; cv=none; b=WClDthUTVk4woPP0JNelHaXEmLgWHecUM3MaEmowdPptFQYUNo6KRsZalb+Q1Ypcu8/0hE5JYczU9r4sHCIiBckFyEVrlwMkuIxkAysTpqOZm/KFbgBo+e+yPW3VU1mYgII4dTW37Gi9RhLXj3CHkMtahVBz1Vgog2bC4ER+62Y=
+	t=1749301571; cv=none; b=Lxl+SdKTdE2WmrAJt9XPwew1BgB5+f2V5eA16Ycl4tnytB1BMdLv+5uz0CyD8oX2qw7BGufR78ItHpcFyJ8m9+0P4LGTJb234xfoOiEqjlQCzQU6ljqkkNb5x/jYVjVnM2GVJ/nk95NasBam2I4HIY8sSu5/Hdyjk+XcK87ZGtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749296621; c=relaxed/simple;
-	bh=SX6x8lcMQQu92DOlDbnahesgKUUjd2UjQLVSnWHmy/w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=V8KiKCj9cbsErLkgDUC8bfF+oIuoF8gjIts4noZLoF4PkGvhqirDsKmdoeQm0yskT5U/BO1yk9OYaO6E4gxooDKKJCkbNn5IeZPrVNFw8j4S6Dvje+mwO/6Z1mV1b04Qop/xYov3H920mX2RYstrrJDw0RiC1sP6sPPQzenlnQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XH9gD9ZH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF833C4CEF1;
-	Sat,  7 Jun 2025 11:43:40 +0000 (UTC)
+	s=arc-20240116; t=1749301571; c=relaxed/simple;
+	bh=6c+HOf6ZjIH9W8D0daft7amDlJzRluE+zsoKm7aXUC0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kRR/L9oulsgH4rkFH3fhMkq1VVqlzwJV5ROya8ILrdzgUEWoNCzDiD16kCPvKzOzrbmpVlgGg2QMYS1L/+lWGs58/8fY+IeQASexPvOe8Uhbv4jUmnQ1IDmAKRficFCCUVG1Wy5MAelERJdiWQ8vc4RaiMUGRn6yx8cy/BynQIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NPHVhphh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88FC1C4CEE4;
+	Sat,  7 Jun 2025 13:06:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749296620;
-	bh=SX6x8lcMQQu92DOlDbnahesgKUUjd2UjQLVSnWHmy/w=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=XH9gD9ZH8faoABoPA/CliUC9yAKk4xUdMOP/CGm9HCPAimf7aNV6YyiG5axdHa51I
-	 fB154CDwDFaIAvzfqWuOvIXQ7dMN3mezliivBjbF155oOHwKzErK4OWFVQxkN9k6Kg
-	 O6J+ewRwWaLAIKi43RE5jjK6r5+JoION0uQh8zW38bsDHPUineneXgS7dN6ZgvzNMg
-	 nWNl3OIdcqRzTnvrA9VjFMBGtugJ4xOjUY3has+dW/q4sZLyu/uQkUIXNzJK+QF7S8
-	 kuaXEbO3P7o34FksdTsgUamzIfoUvyA93m3zEan6tAXt0A6VXiZwz0U+HLjHS2LGk2
-	 QNwC8jOD462Lw==
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-4067ac8f6cdso2408469b6e.2;
-        Sat, 07 Jun 2025 04:43:40 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUsdl2+UZpu18H9Y1Mtd6ChRpxA3iV+qjxMy5twa9OxjEXXipQte/L8QgheiE/Lt5gsrdWBasmAntdi11sekMmK+s0=@vger.kernel.org, AJvYcCVjt8y1siObcXrpBC03q/KaqV62KpBSuNkwjsmzpDbGcGPaCNw7vNAgELstd97tAbEx+2yscY4kR/Q=@vger.kernel.org, AJvYcCVoYszi+NFoJTSTnP9a1oyzSK1qCyOqnLmcz+yH64TJ4uWYCZyvRK4X6AFAmKoAqtjbVgrrb0uxJueU1XYf@vger.kernel.org, AJvYcCWMDoJWOyFWPeemLSFCb81030mDJ1csZJ0vYeS6yocwQZMniuIN43eqEOTMaQIB8XIJ5lJIt+yeXEw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yygd8WsO1VSTfEOBIl2GkONu18qVnxya3LZxcQvXvYPQa5jjaf/
-	+op0YVHp9kewvxZFUVwiTsr/BAfPgMKqhEId7u+2H/0xLnd4BDLS51clkQaOQ0CRbYk+qlBgUwM
-	kW14D3EgVZ1IIEsfvOFCAyeaSwl10jNo=
-X-Google-Smtp-Source: AGHT+IF3MnqzphsP0Aj2aIg2yl7XI8dp/NM9Y6H+A8UL7T966MeN/B7HkHpxRiSvUvZLVuLMG/CCjA7BjOvTOW9l/Jc=
-X-Received: by 2002:a05:6808:3a06:b0:3fe:ab15:5ed6 with SMTP id
- 5614622812f47-409051b20b3mr4396736b6e.12.1749296620023; Sat, 07 Jun 2025
- 04:43:40 -0700 (PDT)
+	s=k20201202; t=1749301571;
+	bh=6c+HOf6ZjIH9W8D0daft7amDlJzRluE+zsoKm7aXUC0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=NPHVhphhbYulIq1XoIsucXc0qTYaBVWJO8K8l98szbmu1CKQh3rQhp9L0Ktv1snf3
+	 L7hgh0jS3B3nD9KULbAdN3zDdxQDMwrosZxWSWi5AQt+ntkdKNzZVFSY7lZUNdgK0b
+	 Ipuhjogl7k4RbDHs7J2WkhQPmzZNmkC+GjpN0xnQSKkVln+F6x5H5Kco+Ie6r9trTz
+	 960gpJG2j36iiuvNMHRZSj/QJN1RzvVShoB08sHazmkutLJ4j+l6nR9WrVyz3mU7nC
+	 tlGynQ/HI1g4uvCdjf+vSCz4VHRtC+oN/0flRVW0DeBZ1GJsvibwQJDcYkoWEnchVe
+	 QqkAaFV4/wtlA==
+Date: Sat, 7 Jun 2025 14:06:00 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>, Claudiu
+ <claudiu.beznea@tuxon.dev>, gregkh@linuxfoundation.org, dakr@kernel.org,
+ len.brown@intel.com, pavel@kernel.org, ulf.hansson@linaro.org,
+ daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, bhelgaas@google.com, geert@linux-m68k.org,
+ linux-iio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ fabrizio.castro.jz@renesas.com, Claudiu Beznea
+ <claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: [PATCH v3 1/2] PM: domains: Add devres variant for
+ dev_pm_domain_attach()
+Message-ID: <20250607140600.76e87ea5@jic23-huawei>
+In-Reply-To: <CAJZ5v0hsT-Q2hz=qoBo409oungaCmexJwwGheN7KRLFqz=6_Dw@mail.gmail.com>
+References: <20250606111749.3142348-1-claudiu.beznea.uj@bp.renesas.com>
+	<20250606111749.3142348-2-claudiu.beznea.uj@bp.renesas.com>
+	<CAJZ5v0i_Ey+OVpSZHXru=tubMaZi=y-uOh_0M6zmWZ2DqqA7Vg@mail.gmail.com>
+	<zhjytvj35lknj7v3jhva3n3nbv6qctvqgykwyi5huj6omet7lz@wchd7f4p4dpv>
+	<CAJZ5v0hsT-Q2hz=qoBo409oungaCmexJwwGheN7KRLFqz=6_Dw@mail.gmail.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250606111749.3142348-1-claudiu.beznea.uj@bp.renesas.com>
- <20250606111749.3142348-2-claudiu.beznea.uj@bp.renesas.com>
- <CAJZ5v0i_Ey+OVpSZHXru=tubMaZi=y-uOh_0M6zmWZ2DqqA7Vg@mail.gmail.com>
- <zhjytvj35lknj7v3jhva3n3nbv6qctvqgykwyi5huj6omet7lz@wchd7f4p4dpv> <CAJZ5v0hsT-Q2hz=qoBo409oungaCmexJwwGheN7KRLFqz=6_Dw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hsT-Q2hz=qoBo409oungaCmexJwwGheN7KRLFqz=6_Dw@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sat, 7 Jun 2025 13:43:28 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hSqLGF_7xmiEf-=0gvHcNJjAsu-X60v6i3csv6ibc40g@mail.gmail.com>
-X-Gm-Features: AX0GCFv4XobSvj2dlLBGvOdVJ5KhLGQQoql-NVH0ppX4BNmroN0ev4Uw8EHd3Zw
-Message-ID: <CAJZ5v0hSqLGF_7xmiEf-=0gvHcNJjAsu-X60v6i3csv6ibc40g@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] PM: domains: Add devres variant for dev_pm_domain_attach()
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>, Claudiu <claudiu.beznea@tuxon.dev>
-Cc: gregkh@linuxfoundation.org, dakr@kernel.org, len.brown@intel.com, 
-	pavel@kernel.org, ulf.hansson@linaro.org, jic23@kernel.org, 
-	daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, bhelgaas@google.com, geert@linux-m68k.org, 
-	linux-iio@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	fabrizio.castro.jz@renesas.com, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 6, 2025 at 10:01=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
->
+On Fri, 6 Jun 2025 22:01:52 +0200
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+
+Hi Rafael,
+
 > On Fri, Jun 6, 2025 at 8:55=E2=80=AFPM Dmitry Torokhov
 > <dmitry.torokhov@gmail.com> wrote:
 > >
-> > On Fri, Jun 06, 2025 at 06:00:34PM +0200, Rafael J. Wysocki wrote:
+> > On Fri, Jun 06, 2025 at 06:00:34PM +0200, Rafael J. Wysocki wrote: =20
 > > > On Fri, Jun 6, 2025 at 1:18=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.=
-dev> wrote:
+dev> wrote: =20
 > > > >
 > > > > From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > > > >
@@ -125,8 +119,7 @@ longside
 > > > >
 > > > > When the driver's probe function uses devres-managed resources that=
  depend
-> > > > on the power domain state, those resources are released later durin=
-g
+> > > > on the power domain state, those resources are released later during
 > > > > device_unbind_cleanup().
 > > > >
 > > > > Releasing devres-managed resources that depend on the power domain =
@@ -135,16 +128,15 @@ state
 > > > >
 > > > > For example, if the driver uses devm_pm_runtime_enable() in its pro=
 be
-> > > > function, and the device's clocks are managed by the PM domain, the=
-n
+> > > > function, and the device's clocks are managed by the PM domain, then
 > > > > during removal the runtime PM is disabled in device_unbind_cleanup(=
 ) after
 > > > > the clocks have been removed from the PM domain. It may happen that=
  the
 > > > > devm_pm_runtime_enable() action causes the device to be runtime-res=
-umed.
+umed. =20
 > > >
-> > > Don't use devm_pm_runtime_enable() then.
+> > > Don't use devm_pm_runtime_enable() then. =20
 > >
 > > What about other devm_ APIs? Are you suggesting that platform drivers
 > > should not be using devm_clk*(), devm_regulator_*(),
@@ -154,8 +146,8 @@ umed.
 > > proper cleanup.
 > >
 > > The issue is not limited to runtime PM.
-> >
-> > >
+> > =20
+> > > =20
 > > > > If the driver specific runtime PM APIs access registers directly, t=
 his
 > > > > will lead to accessing device registers without clocks being enable=
@@ -172,21 +164,81 @@ h() and
 nly
 > > > > after all driver's devres-managed resources have been release.
 > > > >
-> > > > For flexibility, the implemented devm_pm_domain_attach() has 2 stat=
-e
+> > > > For flexibility, the implemented devm_pm_domain_attach() has 2 state
 > > > > arguments, one for the domain state on attach, one for the domain s=
 tate on
-> > > > detach.
+> > > > detach. =20
 > > >
 > > > dev_pm_domain_attach() is not part driver API and I'm not convinced a=
-t
+t =20
 > >
 > > Is the concern that devm_pm_domain_attach() will be [ab]used by drivers=
-?
->
+? =20
+>=20
 > Yes, among other things.
 
-This would be much less objectionable to me if it were not devm_, but
-also the current expectation is that the PM domain will be gone after
-device_remove() has returned.
+Maybe naming could make abuse at least obvious to spot? e.g.
+pm_domain_attach_with_devm_release()
+
+>=20
+> > In that case we can go back to using devres group to enforce ordering,
+> > but proper ordering is needed. =20
+>=20
+> Sure.
+
+Ok. Please take a look at:
+https://lore.kernel.org/all/20250215130849.227812-1-claudiu.beznea.uj@bp.re=
+nesas.com/
+
+>=20
+> > > all by the arguments above. =20
+> >
+> > Please reconsider given the fact that issue is not limited to the
+> > runtime PM. =20
+>=20
+> PM domains are not resources, they are interfaces that are added to
+> devices by the bus types that need them and they also need to be
+> removed by those bus types.
+>=20
+> A PM domain needs to go away at remove time because it may not make
+> sense to use PM domain callbacks without driver callbacks and if
+> enabled runtime PM is leaked beyond the point at which there are no
+> driver and bus type callbacks, this is exactly what may happen.
+
+I'm fully in agreement with all that.  However, I'm not sure on relevance t=
+o this
+discussion as (if the new function is used as intended) the pm domain will =
+get
+removed before any problems occur. The only call in
+__device_release_driver() between the bus remove and device_unbind_cleanup()
+which unrolls the devm stuff as the first thing it does is
+dev->bus->dma_cleanup().
+
+Maybe I'm missing another path?
+
+>=20
+> If you have ordering issues in drivers, that's where they are and
+> that's where they need to be addressed.
+>=20
+
+To my viewpoint, the ordering issue is in the bus driver because devm
+setup calls are in device driver probe() which comes after the
+bus_type->probe() but unwound after the bus_type->remove() - they should
+be before that if they are only for device driver usage.  There are
+devm uses in bus probe functions though which is assume why the ordering
+is as we have it.
+
+Personally I preferred the devres group in the bus driver. It's a
+model a couple of busses are already using.  The solution in this
+patch also worked for me though as a good compromise between different view
+points.
+
+Claudiu has been working on different solutions to this problem for a long
+time so lets work together to find a solution that finally resolves it.
+
+Jonathan
+
+
+> Thanks!
+
 
