@@ -1,56 +1,49 @@
-Return-Path: <linux-pm+bounces-28276-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28281-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3825AAD14A8
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 23:24:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14F3CAD14DC
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 23:52:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5EFC47A4CCD
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 21:23:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1EA323AA525
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 21:52:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CFEE25D20B;
-	Sun,  8 Jun 2025 21:23:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="AE0wCESV"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 319E5255227;
+	Sun,  8 Jun 2025 21:52:23 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 156151DED52;
-	Sun,  8 Jun 2025 21:23:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63FBD2A1BA;
+	Sun,  8 Jun 2025 21:52:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749417828; cv=none; b=GhvHF04KAwWSwRtqcPLZW3/FhonhG/60AfTDC4U35Xrfe0FTmXhFQgGyQHF8TSyQvIoII3kiCWc9kZ86i/irrSIfgzDibY/pWvqfNGCkaznRWQJFB8a7eu7MrupTPzG1K1tbPw41roShtPbs7s2ezIbUVyg3UVlQ+qkhWCMsaQY=
+	t=1749419543; cv=none; b=QJsmgs1yaXPh5kTAYCUX64MCItRNL6T8hM+HLiaK8p4rRxYp6d8TyIkEkifx0y9ltdBC/YR0oW6N5n7yRNaxaIbzzh0m23NwvXcrodDNMZUDStTdyVMPZtDK1TW3awTW2n+AKioE5/8jOua+vvwXihK1zDCrrWUfPXYrjSRerCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749417828; c=relaxed/simple;
-	bh=WJEH2etwcynU+UPKgXiBrqtDc3afsRIYVIBs2k0FJhI=;
+	s=arc-20240116; t=1749419543; c=relaxed/simple;
+	bh=5cmtpXM42mjrBHj5zxSMEEhpaxOYRy3DT3XllnzWDtY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eg3hpcDWsyaDLHJh3VFG7A+E+F0nPogprDSqlGbm1EZnCKA+keChYwFHkjDf/EZcRDveZV3kNHC8i58DuvqBiiRvflWMLceOFUglf1v/ksTqHDoimZCvMFkG0ogX9FnDk1LaYWydetC/QEElAb2G25fIL3ytQtHRSHoteTVekt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=AE0wCESV; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=t6K1DK8TwWXVFwtnP7hylwxjWAnaQ8nQe4sIAcH0KiI=; b=AE0wCESVzCTtp0M8ElqNVDGXRM
-	oGFM+uCGOfAOyb9B0QkwBlohtYwCV54AeYrviLNRh09FEZZ1gi+HBm2qSYdOXZkp2gl1Os+5gOl2n
-	JGHmqqGaG2RRZpE83eoNbG+VjkxTaZ/EzB1CHOFam8alz/6jwvvpf+eXZzU2QF1nwqtY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1uONU2-00F6eS-Px; Sun, 08 Jun 2025 23:23:14 +0200
-Date: Sun, 8 Jun 2025 23:23:14 +0200
-From: Andrew Lunn <andrew@lunn.ch>
+	 Content-Type:Content-Disposition:In-Reply-To; b=YZGpFB2Z7PLs05IXj6OlXmfwhRkutUejZX40gnu0jAxDy4Si0Mxv0JsHYJ2qwCf1SuGQ215WVZW5+9RtASKStlijJm1KOGs1l3gW0Jw9OAAHIYJ7YKYCjB7M9q6T51rTXm6lvRR8wrT1+8iI+UHX7Tw4A8iBD+3tXuModExNek4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org; spf=pass smtp.mailfrom=makrotopia.org; arc=none smtp.client-ip=185.142.180.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=makrotopia.org
+Received: from local
+	by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+	 (Exim 4.98.2)
+	(envelope-from <daniel@makrotopia.org>)
+	id 1uONMs-000000006CU-2z4t;
+	Sun, 08 Jun 2025 21:24:32 +0000
+Date: Sun, 8 Jun 2025 23:24:15 +0200
+From: Daniel Golle <daniel@makrotopia.org>
 To: Frank Wunderlich <linux@fw-web.de>
 Cc: MyungJoo Ham <myungjoo.ham@samsung.com>,
 	Kyungmin Park <kyungmin.park@samsung.com>,
 	Chanwoo Choi <cw00.choi@samsung.com>,
 	Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
 	Vladimir Oltean <olteanv@gmail.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
@@ -64,7 +57,6 @@ Cc: MyungJoo Ham <myungjoo.ham@samsung.com>,
 	Landen Chao <Landen.Chao@mediatek.com>,
 	DENG Qingfang <dqfext@gmail.com>,
 	Sean Wang <sean.wang@mediatek.com>,
-	Daniel Golle <daniel@makrotopia.org>,
 	Lorenzo Bianconi <lorenzo@kernel.org>, Felix Fietkau <nbd@nbd.name>,
 	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
@@ -72,7 +64,7 @@ Cc: MyungJoo Ham <myungjoo.ham@samsung.com>,
 	linux-mediatek@lists.infradead.org
 Subject: Re: [PATCH v3 06/13] arm64: dts: mediatek: mt7988: add basic
  ethernet-nodes
-Message-ID: <cc73b532-f31b-443e-8127-0e5667c3f9c3@lunn.ch>
+Message-ID: <aEX_f3GIxOzPh00J@pidgin.makrotopia.org>
 References: <20250608211452.72920-1-linux@fw-web.de>
  <20250608211452.72920-7-linux@fw-web.de>
 Precedence: bulk
@@ -85,38 +77,40 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20250608211452.72920-7-linux@fw-web.de>
 
-> +			gmac0: mac@0 {
-> +				compatible = "mediatek,eth-mac";
-> +				reg = <0>;
-> +				phy-mode = "internal";
+On Sun, Jun 08, 2025 at 11:14:39PM +0200, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
+> 
+> Add basic ethernet related nodes.
+> 
+> Mac1+2 needs pcs (sgmii+usxgmii) to work correctly which will be linked
+> later when driver is merged.
+> 
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+>  arch/arm64/boot/dts/mediatek/mt7988a.dtsi | 124 +++++++++++++++++++++-
+>  1 file changed, 121 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt7988a.dtsi b/arch/arm64/boot/dts/mediatek/mt7988a.dtsi
+> index 560ec86dbec0..ee1e01d720fe 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt7988a.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt7988a.dtsi
 > +
-> +				fixed-link {
-> +					speed = <10000>;
-> +					full-duplex;
-> +					pause;
-> +				};
+> +		eth: ethernet@15100000 {
+> +			compatible = "mediatek,mt7988-eth";
+> +			reg = <0 0x15100000 0 0x80000>,
+> +			      <0 0x15400000 0 0x200000>;
+> +			interrupts = <GIC_SPI 196 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 197 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 198 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 199 IRQ_TYPE_LEVEL_HIGH>;
 
-Maybe i've asked this before? What is on the other end of this link?
-phy-mode internal and fixed link seems an odd combination. It might
-just need some comments, if this is internally connected to a switch.
+It would be better to use MT7988 with RSS and add the additional
+interrupts for doing so before introducing support for this SoC without
+RSS. In this way we would avoid having to deal with keeping the DT
+support compatible with the old (ie. 4 IRQs) way while also supporting the
+RSS-way (with a total of 8 IRQs).
+Alternatively, if we really want to support MT7988 with and without RSS we
+should use 'interrupt-names' instead of unnamed interrupts imho.
 
-> +			mdio_bus: mdio-bus {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				/* internal 2.5G PHY */
-> +				int_2p5g_phy: ethernet-phy@f {
-> +					reg = <15>;
-
-It is a bit odd mixing hex and decimal.
-
-> +					compatible = "ethernet-phy-ieee802.3-c45";
-
-I _think_ the coding standard say the compatible should be first.
-
-> +					phy-mode = "internal";
-
-A phy should not have a phy-mode.
-
-	Andrew
 
