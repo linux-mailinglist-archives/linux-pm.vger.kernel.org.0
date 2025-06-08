@@ -1,56 +1,60 @@
-Return-Path: <linux-pm+bounces-28253-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28254-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00E12AD143F
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 22:40:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D7ABAD143E
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 22:40:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3412A7A4DC7
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 20:39:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 27C76168855
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 20:40:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02B67253F2B;
-	Sun,  8 Jun 2025 20:40:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16867254855;
+	Sun,  8 Jun 2025 20:40:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZJJzKzw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S9l3PJ3G"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1EE818CC1C
-	for <linux-pm@vger.kernel.org>; Sun,  8 Jun 2025 20:40:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5FCA18CC1C
+	for <linux-pm@vger.kernel.org>; Sun,  8 Jun 2025 20:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749415214; cv=none; b=h/SGTuXjrKVkxc7/g9+xaZcN1HGUiUpsHCVhPZl0JqmpyO/hif/NQSw/Q3vvKw/KHYodewfxjtrRRXIvqn74kK5IGz2unyNF0E5C0imWEsZhycQorJ7Mq/4DS7O/dYuAl/3uHUIIgw5BGwS/G9du1/zl68M8xPJIDPbiFmmMjjg=
+	t=1749415217; cv=none; b=O2ejUlrDB4zmAXWxcJmFCO/GNXXsKYe6UeLrDOH3/mEsGlS/Tg2TvdFvlTJGLpWyGYAr92gY2hHbeid3ZhLUn7JRtg1t5yNKVyBCrkwRi/8wBmvN+bjZisz/Djo9d9TDkJUAMSEc/fZYhgdefjmCOFtpkQKpziwpXCU+0DFHwdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749415214; c=relaxed/simple;
-	bh=1OEJpRB13IcI/bXBoK7ym0bWpyJu3MyyFVCpaqfm90w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fKL6vnkBZ8OSoKbaMY0zIVjhZ9v+4vWKjKIdBH5R5wIySc4YoJh8SnlOABRwjYr7poziN7w3VjDDVGUJuu9l1oxQbXsDszQrWsAkoQjW6t1oaCsDTQLa3c1ZC5deh4pwo+dCtcdpzqys7aGIhM9LfQdH4qmHxsToyWId5Qt1eeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZJJzKzw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1201C4CEEE;
-	Sun,  8 Jun 2025 20:40:12 +0000 (UTC)
+	s=arc-20240116; t=1749415217; c=relaxed/simple;
+	bh=6k84NDF/UFSgdkBu89qk4s4Ny/cAH9w+gjDgw6Nkv24=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=OlqlgHmb3TeiWjjd9ROHDcbLisvSeUQ/xec91cJdJShMbMbsqxku9EddyV9ay/wxxmB3gYr7vlvcoInX/BFxKE7PBSLVy34S1qM1xPJslJno++iGkU42RFksGQcG9z3nfrdoLvSaXPOHwog8mQI9joBkhULzCP8SMxBDcM3VGZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S9l3PJ3G; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7775C4CEF3;
+	Sun,  8 Jun 2025 20:40:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749415214;
-	bh=1OEJpRB13IcI/bXBoK7ym0bWpyJu3MyyFVCpaqfm90w=;
-	h=From:To:Cc:Subject:Date:From;
-	b=kZJJzKzw6XpP1g0VqZR5T9PGx+geRnGeQUZjGG6mv50kjdWiKMCHlaW1xkkO5BU6l
-	 Zvzrn/82kYY0iOBazKMgzgboZT8W6kgVeW94FLjQ7yINB4XijA3xk6wWgvga0lDbh0
-	 vBXWNflB6Fv1xu2mXfhTYakawy5pbRVQ8DOKvOjkKLVBifg2h0bcWt8fj8iEwyWBDW
-	 7H5zXZv6vVcgVY22+/lehIJflmSpUayszjfXptSQwqDQEbvDJkKJVAdq/ZpBOClC0B
-	 9afOrc+ApIW8cO/tbW5694W2chKZ2Sg9Rl1hzfQn8sTBfvySWj9CTThaOScd5UwdME
-	 G06fQPfDZ59wg==
+	s=k20201202; t=1749415216;
+	bh=6k84NDF/UFSgdkBu89qk4s4Ny/cAH9w+gjDgw6Nkv24=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=S9l3PJ3GyTDZ5a/F+rDfnll9tQHq1MDW6p6zlKIaAdfTIGrO1kjIcH7td+O/6UNco
+	 3+Ern4bJUi/UuLLnH03eGomEHnTfTs1Ke/YPbt37X2e+lVivpJi5XgxSofuU7Cqeiz
+	 Q70W2twBM3bTaoBncyaRGWgSo6IUfkyvSw11cRZbQxwE+nGpCm4c6H3RErfXYMGgL3
+	 0KQhS5Q1VxlxliUb7gU6O30FbL94wrAMSnBygjp/WWu9NU1hsmz+yZQ3t6Tptj9vJg
+	 SwUi8orWDDt//PRCUvoqCPJWPuw7imgIisFgBKtwOvl3WV1bPSSHNEW/HJnf0zJJ3H
+	 QwOG7zcs4Ma4A==
 From: Hans de Goede <hansg@kernel.org>
 To: Sebastian Reichel <sre@kernel.org>
 Cc: Hans de Goede <hansg@kernel.org>,
 	Mark Brown <broonie@kernel.org>,
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
 	Linus Walleij <linus.walleij@linaro.org>,
-	linux-pm@vger.kernel.org
-Subject: [PATCH 00/10] power: supply: ug3105_battery: Switch to power_supply_batinfo_ocv2cap()
-Date: Sun,  8 Jun 2025 22:40:00 +0200
-Message-ID: <20250608204010.37482-1-hansg@kernel.org>
+	linux-pm@vger.kernel.org,
+	Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCH 01/10] regulator: act8865-regulator: switch psy_cfg from of_node to fwnode
+Date: Sun,  8 Jun 2025 22:40:01 +0200
+Message-ID: <20250608204010.37482-2-hansg@kernel.org>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250608204010.37482-1-hansg@kernel.org>
+References: <20250608204010.37482-1-hansg@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -59,51 +63,32 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi All,
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-This series converts the ug3105_battery driver from using
-a static ovc - capcity mapping table + its own DIY code to using
-the ovc-capacity-table(s) from the battery fwnode and using the
-power_supply_batinfo_ocv2cap() helper.
+In order to remove .of_node from the power_supply_config struct,
+use .fwnode instead.
 
-Since the ug3105_battery driver is used on ACPI platforms this relies
-on sre's "[PATCH v2 0/5] power: supply: core: convert to fwnode" series
-for completenes sake I've added a copy of that series + 2 fixup patches to
-"[PATCH v2 3/5] power: supply: core: battery-info: fully switch to fwnode",
-the original patches are unmodified.
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Link: https://lore.kernel.org/r/20250430-psy-core-convert-to-fwnode-v2-1-f9643b958677@collabora.com
+Reviewed-by: Hans de Goede <hansg@kernel.org>
+Signed-off-by: Hans de Goede <hansg@kernel.org>
+---
+ drivers/regulator/act8865-regulator.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-While working on this I also noticed somewhat of a memleak in the bq24190
-driver, so the final patch in the series is a fix for that.
-
-Regards,
-
-Hans
-
-
-Hans de Goede (5):
-  fixup! power: supply: core: battery-info: fully switch to fwnode
-  fixup! power: supply: core: battery-info: fully switch to fwnode
-  power: supply: ug3105_battery: Use psy->battery_info
-  power: supply: ug3105_battery: Switch to power_supply_batinfo_ocv2cap()
-  power: supply: bq24190: Free battery_info
-
-Sebastian Reichel (5):
-  regulator: act8865-regulator: switch psy_cfg from of_node to fwnode
-  power: supply: core: remove of_node from power_supply_config
-  power: supply: core: battery-info: fully switch to fwnode
-  power: supply: core: convert to fwnnode
-  power: supply: core: rename power_supply_get_by_phandle to
-    power_supply_get_by_reference
-
- drivers/phy/allwinner/phy-sun4i-usb.c    |   2 +-
- drivers/power/supply/bq2415x_charger.c   |   2 +-
- drivers/power/supply/bq24190_charger.c   |   2 +
- drivers/power/supply/power_supply_core.c | 185 ++++++++++++-----------
- drivers/power/supply/ug3105_battery.c    |  81 ++--------
- drivers/regulator/act8865-regulator.c    |   2 +-
- include/linux/power_supply.h             |  16 +-
- 7 files changed, 118 insertions(+), 172 deletions(-)
-
+diff --git a/drivers/regulator/act8865-regulator.c b/drivers/regulator/act8865-regulator.c
+index 0457af23c55a..b2a6ddc6f56d 100644
+--- a/drivers/regulator/act8865-regulator.c
++++ b/drivers/regulator/act8865-regulator.c
+@@ -643,7 +643,7 @@ static int act8600_charger_probe(struct device *dev, struct regmap *regmap)
+ 	struct power_supply *charger;
+ 	struct power_supply_config cfg = {
+ 		.drv_data = regmap,
+-		.of_node = dev->of_node,
++		.fwnode = dev_fwnode(dev),
+ 	};
+ 
+ 	charger = devm_power_supply_register(dev, &act8600_charger_desc, &cfg);
 -- 
 2.49.0
 
