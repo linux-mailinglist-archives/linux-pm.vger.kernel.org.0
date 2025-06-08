@@ -1,79 +1,112 @@
-Return-Path: <linux-pm+bounces-28246-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28247-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B9E2AD13E0
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 20:52:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 809ACAD13FF
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 21:25:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34AD4168D92
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 18:52:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 704BC3A754E
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 19:24:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB9251A5B91;
-	Sun,  8 Jun 2025 18:52:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 005F71D9A54;
+	Sun,  8 Jun 2025 19:25:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZOlE/EVh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kYeqFRc4"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1CE41A314D;
-	Sun,  8 Jun 2025 18:52:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B563019343B;
+	Sun,  8 Jun 2025 19:25:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749408771; cv=none; b=pJ2NcWI1r988NKKPoxKgOfW6qGBvZ6loLjs0k0Fi9vRxx5HbgOPCs0qVoNnNcdBrQAjX0MeeIYUnDR+dlOG7cVq15MrFsBUHNUO5fnqwcIM5VA+tQY169hnVKkSqLuR26m/tv6TUI1Rjo1cCckEQS6PE0ZD+W2okSXcohDudZX8=
+	t=1749410714; cv=none; b=nJK0fMWOhAmLAI2qIclWoHeST0BwleWH127cg48YOKfZfRE9KHSfkLXTjqTV29Mvz8n4hfb5QkI+vv9PkzDCfXNSSqBuz2x73Jorvk8KJUtYYIzhgzHTql69coMskRaUL8/YUKeUlLYjUykxweNn6O8h31PJ1rP6zYTeF0AoeIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749408771; c=relaxed/simple;
-	bh=26lYZgkHQdShUoigTGZrWmLTlyD+mBAld3OXUl/Rypk=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=h54wqQFvVjv2ivnxoVtlBuv9N/OnAgz4HcfjyxJP1mtUoTp3ZXzqNFuk8Qz2smQcqmpdjI4Qa/H+eFMSHJgcFp5F2rrxGCqN/NDHUFQrmQV+B7mev04mjaNOAhZmjrklCG70X0EuuQZO84ZF+WxgUWdf7/wBuiMBnZ2cWuWAGL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZOlE/EVh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 823FAC4CEEE;
-	Sun,  8 Jun 2025 18:52:51 +0000 (UTC)
+	s=arc-20240116; t=1749410714; c=relaxed/simple;
+	bh=w+z1n0H/ZI54B2EQAM5ESY1LA63IHqm/6PwgUYexADs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IRsZLlQCb3eUeZXYAlnW66SoFTo/k3bilDagXBU0B58oArQSXcMIqNuc8RgWV27MKrrsnvEy5yS89ToqOCoRGo/SjQfoe4UgBi47vbFF7GvbgV7tfiKIuw8sqOLRlwSh3AxBo7srD+h+DGXcOyGeTi5hVZ/YpKqxYMM4Ij3U/dw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kYeqFRc4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0790C4CEEE;
+	Sun,  8 Jun 2025 19:25:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749408771;
-	bh=26lYZgkHQdShUoigTGZrWmLTlyD+mBAld3OXUl/Rypk=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=ZOlE/EVhPC/NcKuplx1Gzh7yHFjxqsVvi3DGeA+g0yrqBR/GnPQRru42/OjefsFtz
-	 coq7OKYaTt09vG8+MLKeNThJh04x1D+r77EFvzqeaCYcpMsTZi2kvx55HiwFWghXg4
-	 NWxaMrtTqtjDRXxYPGBINW+XkJAZLv4t38txJUdkBgYX3NP7a+ng7f7uMxVqQPJpRB
-	 Xnh0RYIzLeyoQAv1x47c5cFyTbn3mJwopVHSgrAcPJ2YtYQ8BXy5RMgFgKWlsP/pA7
-	 3bIlb/6326zPoHcn8+P1FwcehyXvXDSEI1Oi85vzfHi+nGePg+Oa+MNAvnBEOGQsZJ
-	 CsWSvBVrh4JVg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE14A380AAE2;
-	Sun,  8 Jun 2025 18:53:23 +0000 (UTC)
-Subject: Re: Fwd: [GIT PULL] turbostat 2025.06.08
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAJvTdKkpMWWtfSFqEqzjSxcvSqUjjcTC6+Yub8Q+Twu+PM99mQ@mail.gmail.com>
-References: <CAJvTdK=9R+A=b=NY5OM2jiSupofrnJOKXrFCGeXfAfN57VhE_g@mail.gmail.com> <CAJvTdKkpMWWtfSFqEqzjSxcvSqUjjcTC6+Yub8Q+Twu+PM99mQ@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJvTdKkpMWWtfSFqEqzjSxcvSqUjjcTC6+Yub8Q+Twu+PM99mQ@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git tags/turbostat-2025.06.08
-X-PR-Tracked-Commit-Id: 42fd37dcc432df1ea1987232d41bb84fcb7e150c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 939f15e640f193616691d3bcde0089760e75b0d3
-Message-Id: <174940880237.385950.9062730259647447034.pr-tracker-bot@kernel.org>
-Date: Sun, 08 Jun 2025 18:53:22 +0000
-To: Len Brown <lenb@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux PM list <linux-pm@vger.kernel.org>
+	s=k20201202; t=1749410714;
+	bh=w+z1n0H/ZI54B2EQAM5ESY1LA63IHqm/6PwgUYexADs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=kYeqFRc4zYbahTwZEPeffzql0DHH9cp0Kzk/HruxmqPT61KQyfnqNHTaXei/RUFyc
+	 1Kv3DToU7RzT0MDuFTuzDTOhL3QviDrBwAPSrB4KINjRZofXDzm4hxqM0ZgGDL5obJ
+	 OpmCMMK9GcwSymqTwJOMc4hKmBosyEg702qxEy2dTqBZ2UxCCdJcBMaqaxJs5I+EXz
+	 vlcpPuhovC+7xQd4EYFa/aRuUVbH7bFbHkOvD/RjUsj2PcgV6lxcJuHrhYuS1uxnzV
+	 EklV8MZRyTXN6380NWXgVmE1/ju3pTe2iJFuER4yioOhHoNieL/CXOSeTqwN50iBaP
+	 fzjO1SR7P7JKg==
+Message-ID: <66a5a4d6-691c-4b3f-8356-dce8b52b0940@kernel.org>
+Date: Sun, 8 Jun 2025 21:25:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/5] regulator: act8865-regulator: switch psy_cfg from
+ of_node to fwnode
+To: Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Sebastian Reichel <sre@kernel.org>, Mark Brown <broonie@kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>, Hans de Goede <hdegoede@redhat.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Samuel Holland <samuel@sholland.org>,
+ Matti Vaittinen <mazziesaccount@gmail.com>, =?UTF-8?Q?Pali_Roh=C3=A1r?=
+ <pali@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-phy@vger.kernel.org
+References: <20250430-psy-core-convert-to-fwnode-v2-0-f9643b958677@collabora.com>
+ <20250430-psy-core-convert-to-fwnode-v2-1-f9643b958677@collabora.com>
+Content-Language: en-US, nl
+From: Hans de Goede <hansg@kernel.org>
+In-Reply-To: <20250430-psy-core-convert-to-fwnode-v2-1-f9643b958677@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The pull request you sent on Sun, 8 Jun 2025 14:23:44 -0400:
+Hi,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git tags/turbostat-2025.06.08
+On 30-Apr-25 12:54 AM, Sebastian Reichel wrote:
+> In order to remove .of_node from the power_supply_config struct,
+> use .fwnode instead.
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/939f15e640f193616691d3bcde0089760e75b0d3
+Thanks, patch looks good to me:
 
-Thank you!
+Reviewed-by: Hans de Goede <hansg@kernel.org>
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Regards,
+
+Hans
+
+
+
+> ---
+>  drivers/regulator/act8865-regulator.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/regulator/act8865-regulator.c b/drivers/regulator/act8865-regulator.c
+> index 0457af23c55acdd97b2cdc6fd6bfd07ae0f9d11f..b2a6ddc6f56d32e8758977e25858b972e294bc84 100644
+> --- a/drivers/regulator/act8865-regulator.c
+> +++ b/drivers/regulator/act8865-regulator.c
+> @@ -643,7 +643,7 @@ static int act8600_charger_probe(struct device *dev, struct regmap *regmap)
+>  	struct power_supply *charger;
+>  	struct power_supply_config cfg = {
+>  		.drv_data = regmap,
+> -		.of_node = dev->of_node,
+> +		.fwnode = dev_fwnode(dev),
+>  	};
+>  
+>  	charger = devm_power_supply_register(dev, &act8600_charger_desc, &cfg);
+> 
+
 
