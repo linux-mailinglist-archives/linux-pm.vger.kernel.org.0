@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-28237-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28238-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 131F1AD13B3
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 20:19:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CA89AD13B4
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 20:19:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 214113A7FAE
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 18:18:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22F95168FA1
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 18:19:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E409A1D5CEA;
-	Sun,  8 Jun 2025 18:19:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E14B1D6DC5;
+	Sun,  8 Jun 2025 18:19:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m24zHWfD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F6ICc9jN"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03DC199947
-	for <linux-pm@vger.kernel.org>; Sun,  8 Jun 2025 18:19:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A384C2FB
+	for <linux-pm@vger.kernel.org>; Sun,  8 Jun 2025 18:19:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749406740; cv=none; b=lnaOFb/a5MR+7Ih2ExonaauryznJK+DSYKKnM9THQFDZJTZx7BxF0UowwLk6eo+Jyk2F56keiN+ynxTmMefwNDyozcvs79Wof6I4NoMU1hBCRH5FqBv+wLDGrP7GtsKc348medENGHtZIn+kot+LyuIQKv8NfxI57vOkYod2Cc4=
+	t=1749406741; cv=none; b=SSC2yNM6lXzA1S7DGGZfrpjA2h7iDP/OanPA8iROm2QLpUPSVplCR1cRv6w+6V9McY6t3/eaKmk9dO5AecZeVEQvV5+jgaheayeJQJQUL+BV2Xb5mJykdiqtcw58sHQCWKamu8JGCPTVQZl7WeCTaJi6cFONDGbPcPlOCdpXfC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749406740; c=relaxed/simple;
-	bh=MWCngn20Bq1JUliEaQUoBN136L/IfdmyQCZ6iFXSvwk=;
+	s=arc-20240116; t=1749406741; c=relaxed/simple;
+	bh=RkeD4VU5ihkZYUE18puxYB7Wgu+C9Y8ufNw740HesFo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bno7NNS34wEvFY3euKiGtauLyhh/4d2FjMw1MpcowPx+624I+pdwTULeGnOq0gIzVijcuG3N4oeY7yoaB6JPe5QhPB208wlDm9Eed/3U98jzl1SFQz/w6DQ17kJLCmfVIhSQhikDc3pCYXTUdgioEn+QFB50d48zRlOfrK6qZSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m24zHWfD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F924C4CEF2;
+	 MIME-Version; b=g1Vnty39ologNzhSc2235KwYGLVSOEA2Ll95Jkn8fb8BNop2gPtiyv7qGOwq1wO5IajLPVOSmu3JhbIuR6Tpr08+J/FXqMcCJAPtDJSaI0rU7gpJQtzs3aytWQBHoem3EURQLDPcBYfDRhw6R3u0jykdAmVc/qOWqW3C2LtI6ZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F6ICc9jN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC9C2C4CEF0;
 	Sun,  8 Jun 2025 18:19:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749406740;
-	bh=MWCngn20Bq1JUliEaQUoBN136L/IfdmyQCZ6iFXSvwk=;
+	s=k20201202; t=1749406741;
+	bh=RkeD4VU5ihkZYUE18puxYB7Wgu+C9Y8ufNw740HesFo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=m24zHWfDIogyfgbewJSBO2IKIG0OnQ8txJWzRNyaZ8rU9lujVloOCX2vuOoUl87Zz
-	 YpY9XKhO9cBGMdCKSee/bZlw+pdK2zchYnMxJQkttsVSJLzEDRwRBH5aGzrGJTUtQ7
-	 nHthfrqC/S5vruy8Kug+Ab02d1oDkOLlOERbMmfxwFTqvJ0rXX9mAkn6huG72qE7kq
-	 JmfbJkbe7riA3S31hMbA/Z4BVXnozYjtPkJ/5FUb2Zx+usLDrGYyAcAktuwfYlpHlC
-	 6U/P+pQOdH37/uwXYdX+AB8Ge46mGnIXxmmZGocxpQl0h+rLoOnWLSloSbenHney1F
-	 1q78J1BFN7Vcw==
+	b=F6ICc9jNnQke4n18x22ILDEQYEuBj2m8P4+0mSx+ryTnlZDv9Z8689hdOAttD1DDk
+	 AfO//qsfqJNw7kDZfNrtMysssmileGuDK7s1E5I2dLlnAH7IB24fYwaT1YtamDPMIS
+	 W4BqPgNzv7rpFUlFwI8Buajxi/Oqo/DcN7u4pn46UWGA0JF2kvrXsxnBCOglhSpjmw
+	 0LOsAQHytLxBJsav0g1cE8MGcN2JaK+BkLOQa6XKfHUZjBfKaJgvdbxBofJduvNYsB
+	 xxGeg0XHbENyFqvLfArMO54ihsD/iEbDyTbpTeg3Cque8zvvCkYxJwMELBWkl1KZ3g
+	 BnkhItdJ1Uraw==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
 Cc: Zhang Rui <rui.zhang@intel.com>,
 	Len Brown <len.brown@intel.com>
-Subject: [PATCH 12/18] tools/power turbostat: Clean up add perf/msr counter logic
-Date: Sun,  8 Jun 2025 14:17:11 -0400
-Message-ID: <843b32ccdfdf88563e46fca209b8e562536c7a8f.1749406068.git.len.brown@intel.com>
+Subject: [PATCH 13/18] tools/power turbostat: Allow probing RAPL with platform_features->rapl_msrs cleared
+Date: Sun,  8 Jun 2025 14:17:12 -0400
+Message-ID: <653d21afccf1812c95ca042777aeebcfca080173.1749406068.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <780da8a9557f2d114aaffda0eb0a517fe6a244c8.1749406068.git.len.brown@intel.com>
 References: <780da8a9557f2d114aaffda0eb0a517fe6a244c8.1749406068.git.len.brown@intel.com>
@@ -63,109 +63,110 @@ Content-Transfer-Encoding: 8bit
 
 From: Zhang Rui <rui.zhang@intel.com>
 
-Increase the code readability by moving the no_perf/no_msr flag and the
-cai->perf_name/cai->msr sanity checks into the counter probe functions.
+platform_features->rapl_msrs describes the RAPL MSRs supported. While
+RAPL Perf counters can be exposed from different kernel backend drivers,
+e.g. RAPL MSR I/F driver, or RAPL TPMI I/F driver.
 
-No functional change.
+Thus, turbostat should first blindly probe all the available RAPL Perf
+counters, and falls back to the RAPL MSR counters if they are listed in
+platform_features->rapl_msrs.
+
+With this, platforms that don't have RAPL MSRs can clear the
+platform_features->rapl_msrs bits and use RAPL Perf counters only.
 
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 25 ++++++++++++++++++-------
- 1 file changed, 18 insertions(+), 7 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 49 +++++++++++++--------------
+ 1 file changed, 24 insertions(+), 25 deletions(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index a38cb43ff140..5a0c526e33c0 100644
+index 5a0c526e33c0..6f91ec3f3f14 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -2230,6 +2230,9 @@ int add_msr_counter(int cpu, off_t offset)
- 	if (no_msr)
- 		return -1;
+@@ -2245,15 +2245,18 @@ int add_msr_counter(int cpu, off_t offset)
+ 	return 1;
+ }
  
-+	if (!offset)
+-int add_rapl_msr_counter(int cpu, off_t offset, int index)
++int add_rapl_msr_counter(int cpu, const struct rapl_counter_arch_info *cai)
+ {
+ 	int ret;
+ 
+-	ret = add_msr_counter(cpu, offset);
++	if (!(platform->rapl_msrs & cai->feature_mask))
 +		return -1;
 +
- 	retval = pread(get_msr_fd(cpu), &value, sizeof(value), offset);
- 
- 	/* if the read failed, the probe fails */
-@@ -7875,6 +7878,9 @@ int add_rapl_perf_counter(int cpu, struct rapl_counter_info_t *rci, const struct
- 	if (no_perf)
++	ret = add_msr_counter(cpu, cai->msr);
+ 	if (ret < 0)
  		return -1;
  
-+	if (!cai->perf_name)
-+		return -1;
+-	switch (index) {
++	switch (cai->rci_index) {
+ 	case RAPL_RCI_INDEX_ENERGY_PKG:
+ 	case RAPL_RCI_INDEX_ENERGY_CORES:
+ 	case RAPL_RCI_INDEX_DRAM:
+@@ -2668,7 +2671,7 @@ void print_header(char *delim)
+ 	if (DO_BIC(BIC_SYS_LPI))
+ 		outp += sprintf(outp, "%sSYS%%LPI", (printed++ ? delim : ""));
+ 
+-	if (platform->rapl_msrs && !rapl_joules) {
++	if (!rapl_joules) {
+ 		if (DO_BIC(BIC_PkgWatt))
+ 			outp += sprintf(outp, "%sPkgWatt", (printed++ ? delim : ""));
+ 		if (DO_BIC(BIC_CorWatt) && !platform->has_per_core_rapl)
+@@ -2681,7 +2684,7 @@ void print_header(char *delim)
+ 			outp += sprintf(outp, "%sPKG_%%", (printed++ ? delim : ""));
+ 		if (DO_BIC(BIC_RAM__))
+ 			outp += sprintf(outp, "%sRAM_%%", (printed++ ? delim : ""));
+-	} else if (platform->rapl_msrs && rapl_joules) {
++	} else {
+ 		if (DO_BIC(BIC_Pkg_J))
+ 			outp += sprintf(outp, "%sPkg_J", (printed++ ? delim : ""));
+ 		if (DO_BIC(BIC_Cor_J) && !platform->has_per_core_rapl)
+@@ -7988,26 +7991,22 @@ void rapl_perf_init(void)
+ 
+ 			struct rapl_counter_info_t *rci = &rapl_counter_info_perdomain[next_domain];
+ 
+-			/* Check if the counter is enabled and accessible */
+-			if (platform->rapl_msrs & cai->feature_mask) {
+-
+-				/* Use perf API for this counter */
+-				if (add_rapl_perf_counter(cpu, rci, cai, &scale, &unit) != -1) {
+-					rci->source[cai->rci_index] = COUNTER_SOURCE_PERF;
+-					rci->scale[cai->rci_index] = scale * cai->compat_scale;
+-					rci->unit[cai->rci_index] = unit;
+-					rci->flags[cai->rci_index] = cai->flags;
+-
+-					/* Use MSR for this counter */
+-				} else if (add_rapl_msr_counter(cpu, cai->msr, cai->rci_index) >= 0) {
+-					rci->source[cai->rci_index] = COUNTER_SOURCE_MSR;
+-					rci->msr[cai->rci_index] = cai->msr;
+-					rci->msr_mask[cai->rci_index] = cai->msr_mask;
+-					rci->msr_shift[cai->rci_index] = cai->msr_shift;
+-					rci->unit[cai->rci_index] = RAPL_UNIT_JOULES;
+-					rci->scale[cai->rci_index] = *cai->platform_rapl_msr_scale * cai->compat_scale;
+-					rci->flags[cai->rci_index] = cai->flags;
+-				}
++			/* Use perf API for this counter */
++			if (add_rapl_perf_counter(cpu, rci, cai, &scale, &unit) != -1) {
++				rci->source[cai->rci_index] = COUNTER_SOURCE_PERF;
++				rci->scale[cai->rci_index] = scale * cai->compat_scale;
++				rci->unit[cai->rci_index] = unit;
++				rci->flags[cai->rci_index] = cai->flags;
 +
- 	const double scale = read_perf_scale(cai->perf_subsys, cai->perf_name);
++			/* Use MSR for this counter */
++			} else if (add_rapl_msr_counter(cpu, cai) >= 0) {
++				rci->source[cai->rci_index] = COUNTER_SOURCE_MSR;
++				rci->msr[cai->rci_index] = cai->msr;
++				rci->msr_mask[cai->rci_index] = cai->msr_mask;
++				rci->msr_shift[cai->rci_index] = cai->msr_shift;
++				rci->unit[cai->rci_index] = RAPL_UNIT_JOULES;
++				rci->scale[cai->rci_index] = *cai->platform_rapl_msr_scale * cai->compat_scale;
++				rci->flags[cai->rci_index] = cai->flags;
+ 			}
  
- 	if (scale == 0.0)
-@@ -7986,15 +7992,14 @@ void rapl_perf_init(void)
- 			if (platform->rapl_msrs & cai->feature_mask) {
- 
- 				/* Use perf API for this counter */
--				if (!no_perf && cai->perf_name
--				    && add_rapl_perf_counter(cpu, rci, cai, &scale, &unit) != -1) {
-+				if (add_rapl_perf_counter(cpu, rci, cai, &scale, &unit) != -1) {
- 					rci->source[cai->rci_index] = COUNTER_SOURCE_PERF;
- 					rci->scale[cai->rci_index] = scale * cai->compat_scale;
- 					rci->unit[cai->rci_index] = unit;
- 					rci->flags[cai->rci_index] = cai->flags;
- 
- 					/* Use MSR for this counter */
--				} else if (!no_msr && cai->msr && add_rapl_msr_counter(cpu, cai->msr, cai->rci_index) >= 0) {
-+				} else if (add_rapl_msr_counter(cpu, cai->msr, cai->rci_index) >= 0) {
- 					rci->source[cai->rci_index] = COUNTER_SOURCE_MSR;
- 					rci->msr[cai->rci_index] = cai->msr;
- 					rci->msr_mask[cai->rci_index] = cai->msr_mask;
-@@ -8042,6 +8047,9 @@ int add_cstate_perf_counter(int cpu, struct cstate_counter_info_t *cci, const st
- 	if (no_perf)
- 		return -1;
- 
-+	if (!cai->perf_name)
-+		return -1;
-+
- 	int *pfd_group = get_cstate_perf_group_fd(cci, cai->perf_subsys);
- 
- 	if (pfd_group == NULL)
-@@ -8073,6 +8081,9 @@ int add_msr_perf_counter(int cpu, struct msr_counter_info_t *cci, const struct m
- 	if (no_perf)
- 		return -1;
- 
-+	if (!cai->perf_name)
-+		return -1;
-+
- 	const unsigned int type = read_perf_type(cai->perf_subsys);
- 	const unsigned int config = read_perf_config(cai->perf_subsys, cai->perf_name);
- 
-@@ -8119,12 +8130,12 @@ void msr_perf_init_(void)
- 
- 			if (cai->needed) {
- 				/* Use perf API for this counter */
--				if (!no_perf && cai->perf_name && add_msr_perf_counter(cpu, cci, cai) != -1) {
-+				if (add_msr_perf_counter(cpu, cci, cai) != -1) {
- 					cci->source[cai->rci_index] = COUNTER_SOURCE_PERF;
- 					cai->present = true;
- 
- 					/* User MSR for this counter */
--				} else if (!no_msr && cai->msr && add_msr_counter(cpu, cai->msr) >= 0) {
-+				} else if (add_msr_counter(cpu, cai->msr) >= 0) {
- 					cci->source[cai->rci_index] = COUNTER_SOURCE_MSR;
- 					cci->msr[cai->rci_index] = cai->msr;
- 					cci->msr_mask[cai->rci_index] = cai->msr_mask;
-@@ -8232,12 +8243,12 @@ void cstate_perf_init_(bool soft_c1)
- 
- 			if (counter_needed && counter_supported) {
- 				/* Use perf API for this counter */
--				if (!no_perf && cai->perf_name && add_cstate_perf_counter(cpu, cci, cai) != -1) {
-+				if (add_cstate_perf_counter(cpu, cci, cai) != -1) {
- 
- 					cci->source[cai->rci_index] = COUNTER_SOURCE_PERF;
- 
- 					/* User MSR for this counter */
--				} else if (!no_msr && cai->msr && pkg_cstate_limit >= cai->pkg_cstate_limit
-+				} else if (pkg_cstate_limit >= cai->pkg_cstate_limit
- 					   && add_msr_counter(cpu, cai->msr) >= 0) {
- 					cci->source[cai->rci_index] = COUNTER_SOURCE_MSR;
- 					cci->msr[cai->rci_index] = cai->msr;
+ 			if (rci->source[cai->rci_index] != COUNTER_SOURCE_NONE)
 -- 
 2.45.2
 
