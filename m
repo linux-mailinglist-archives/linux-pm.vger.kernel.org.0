@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-28241-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28242-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA9E2AD13B7
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 20:19:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F03DAD13B8
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 20:19:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 713FF168F29
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 18:19:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E34E3A7FBF
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 18:19:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D0CC1D88A6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDEB61DA61B;
 	Sun,  8 Jun 2025 18:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b7dRXDOJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nYw5U9eI"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69ED21A316C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95FC1D9A5D
 	for <linux-pm@vger.kernel.org>; Sun,  8 Jun 2025 18:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749406743; cv=none; b=Rh3HdUeH4u8qzbwv5390B7b1Rm9OV4LjxlI3awvrbcuj1vSGGNgxOLpVijd3at0cprLUppJ6M8LLIgmzsiPJoxK9A7YmjeHHLFe99vFJ2XtoxdR5PEyAXRwixynUTS2/wJzNoQ9QVo4Hh6wvSu2JKu+OcaP70hdNesfZE8L7TmE=
+	t=1749406743; cv=none; b=RR5oQyep1OTJQX8e4K1PaYG+Ds5QSGNQotT0khlGgy5UCETQ+u5pjonJf9K0qaDzSdO/5xSetKmuR6LsQZOC7B+zw6nCTNHYFqyyOTRzajoD781Rv+NdUslyMgnbHE2w8TZ4o5uX9M18+dFWUVhU63blcrWH0IBFvRe5LfOIyU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1749406743; c=relaxed/simple;
-	bh=5XJKdmFlYICN/VGuJaAD42nmvRgFZWuMHKz27MODxwg=;
+	bh=UG9+2LpGLG2Ywjpn/vl3/n89afhl/r8oY39E6RZm1Jg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DKEkggrxEkVCgfWE2DPdznAPGyP28CSda0+iMX72kj70Xn0lgfy6m7rm6oIqV045e/Kx8mTeEJgOvmGt7301iPdZYp/yDstropx1/c5HoupifcrpLeylSOcrEjOkSpWeY4ytBHaAlTduC74+G9wl/gvVS9UhUkdNWziG05NBswI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b7dRXDOJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1133C4CEF1;
-	Sun,  8 Jun 2025 18:19:02 +0000 (UTC)
+	 MIME-Version; b=DNbuYNqURtdujiv2nD/kWJMlULtfXUofPWZHog5tMF+DGKc0FhUPJOGLO/dfJ1Ss/o0PptyjByttHT1G5SIfeqr4yVF3oalfP2/RciFzjlLJM780SXPGn0EMX4Ta1vR9+sk7zqsswBdjkWmoye3NC/P0WevAIn+fF8wbj3UKEx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nYw5U9eI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B6C7C4CEEE;
+	Sun,  8 Jun 2025 18:19:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1749406743;
-	bh=5XJKdmFlYICN/VGuJaAD42nmvRgFZWuMHKz27MODxwg=;
+	bh=UG9+2LpGLG2Ywjpn/vl3/n89afhl/r8oY39E6RZm1Jg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=b7dRXDOJ+//vthiuJkiJ4sTDeWdMLvJIdbFezbhr5jO4PnDjLrUuLbL1l40UtnrjV
-	 wj1rFWwSAwW03A0mDrQFI4gcmjAKvaJrmb+wzTH6NDV5uyPbOx807YL0dcoj1fKBrl
-	 PfX4MvcTBprt4KrKkg0anAsWorNjyvTslPDOs77ZGBqSR5A9D7A4ms4fDaOlYY4Z/2
-	 a7fl5NViZOHyFL+GPTPzpmGL6Irl3JPfMy/JAaHXkRRAhVKbJaj89q6/ZzKEw+Hd1x
-	 jpuw868LKTQ0+loEJVyxdqmXBwNYVmt4r0qDb9LLHqPjZX4LSAs9cnYWkhFOqldoDd
-	 MuRtmFYulMVnA==
+	b=nYw5U9eIM/q4RNWvDKjIqyrO4JZ626lZe3P2RrVaMJ9L5ZK6YHlhb/7gRt4jvNKa8
+	 Yk1u0Ne95bZKVwAlvSLUdU4DRadH1yIItIGVwFPdEnlnC3ZJvhTy8aOb8vkEIxDVDn
+	 4yqS48dm+hd84WCjTRmjWVu7nJXkX+mYopjBwB0yjijl6A1pNvEaDz88i8Ak6PmkKw
+	 1w2Sd97n8qN6J0U9xeXiplLE0ow08RHboV5Xfkul9uN7j9PybNfG6937XMu/R+FcMw
+	 anybIK+3d0DhzZaTKt5aL5+WgzFmPDcrBIlFve5adGQWI1u9H/WiYQfZauSKd9eZIk
+	 0dBTmR4xAJ9IA==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
 Cc: Zhang Rui <rui.zhang@intel.com>,
 	Len Brown <len.brown@intel.com>
-Subject: [PATCH 16/18] tools/power turbostat: Add initial support for DMR
-Date: Sun,  8 Jun 2025 14:17:15 -0400
-Message-ID: <7e7f0d80128721ace3c79196bcc9ed5814625cff.1749406068.git.len.brown@intel.com>
+Subject: [PATCH 17/18] tools/power turbostat: Add initial support for BartlettLake
+Date: Sun,  8 Jun 2025 14:17:16 -0400
+Message-ID: <58a669953404405e72551357c0e9431d0b1df0af.1749406068.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <780da8a9557f2d114aaffda0eb0a517fe6a244c8.1749406068.git.len.brown@intel.com>
 References: <780da8a9557f2d114aaffda0eb0a517fe6a244c8.1749406068.git.len.brown@intel.com>
@@ -63,50 +63,26 @@ Content-Transfer-Encoding: 8bit
 
 From: Zhang Rui <rui.zhang@intel.com>
 
-Add initial support for DMR.
+Add initial support for BartlettLake.
 
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ tools/power/x86/turbostat/turbostat.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 30faa214676f..dca0753a76fb 100644
+index dca0753a76fb..db0134adc8ce 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -839,6 +839,23 @@ static const struct platform_features spr_features = {
- 	.rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL | RAPL_PSYS,
- };
- 
-+static const struct platform_features dmr_features = {
-+	.has_msr_misc_feature_control = spr_features.has_msr_misc_feature_control,
-+	.has_msr_misc_pwr_mgmt = spr_features.has_msr_misc_pwr_mgmt,
-+	.has_nhm_msrs = spr_features.has_nhm_msrs,
-+	.has_config_tdp = spr_features.has_config_tdp,
-+	.bclk_freq = spr_features.bclk_freq,
-+	.supported_cstates = spr_features.supported_cstates,
-+	.cst_limit = spr_features.cst_limit,
-+	.has_msr_core_c1_res = spr_features.has_msr_core_c1_res,
-+	.has_msr_module_c6_res_ms = 1,	/* DMR has Dual Core Module and MC6 MSR */
-+	.has_irtl_msrs = spr_features.has_irtl_msrs,
-+	.has_cst_prewake_bit = spr_features.has_cst_prewake_bit,
-+	.has_fixed_rapl_psys_unit = spr_features.has_fixed_rapl_psys_unit,
-+	.trl_msrs = spr_features.trl_msrs,
-+	.rapl_msrs = 0,		/* DMR does not have RAPL MSRs */
-+};
-+
- static const struct platform_features srf_features = {
- 	.has_msr_misc_feature_control = 1,
- 	.has_msr_misc_pwr_mgmt = 1,
-@@ -1028,6 +1045,7 @@ static const struct platform_data turbostat_pdata[] = {
- 	{ INTEL_EMERALDRAPIDS_X, &spr_features },
- 	{ INTEL_GRANITERAPIDS_X, &spr_features },
- 	{ INTEL_GRANITERAPIDS_D, &spr_features },
-+	{ INTEL_PANTHERCOVE_X, &dmr_features },
- 	{ INTEL_LAKEFIELD, &cnl_features },
- 	{ INTEL_ALDERLAKE, &adl_features },
- 	{ INTEL_ALDERLAKE_L, &adl_features },
+@@ -1052,6 +1052,7 @@ static const struct platform_data turbostat_pdata[] = {
+ 	{ INTEL_RAPTORLAKE, &adl_features },
+ 	{ INTEL_RAPTORLAKE_P, &adl_features },
+ 	{ INTEL_RAPTORLAKE_S, &adl_features },
++	{ INTEL_BARTLETTLAKE, &adl_features },
+ 	{ INTEL_METEORLAKE, &adl_features },
+ 	{ INTEL_METEORLAKE_L, &adl_features },
+ 	{ INTEL_ARROWLAKE_H, &adl_features },
 -- 
 2.45.2
 
