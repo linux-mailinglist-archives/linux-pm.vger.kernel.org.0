@@ -1,51 +1,51 @@
-Return-Path: <linux-pm+bounces-28271-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28274-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36875AD1493
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 23:22:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFD5CAD149E
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 23:23:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99B6A188B03B
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 21:22:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9ACC27A5A0A
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 21:22:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E345C25B1FF;
-	Sun,  8 Jun 2025 21:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DF4925D1EC;
+	Sun,  8 Jun 2025 21:23:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="KpiNgaca"
+	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="ECl7hcJU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxout1.routing.net (mxout1.routing.net [134.0.28.11])
+Received: from mxout4.routing.net (mxout4.routing.net [134.0.28.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 949A41A5B91;
-	Sun,  8 Jun 2025 21:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 593BF2586E8;
+	Sun,  8 Jun 2025 21:23:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749417738; cv=none; b=WoQVfM6bpfyqXujYO1XR9gp2+MpiD7rlCas8OgttkspnfRM4W52jAvm2/f/DtFXu7Tx7l4yb9uwQpkjlgOkDKOYWOyzuEHbpERy2QwPA6PuhcyWbRYZD6at9aIZi1WUVDy/ZZQnxcvRUP4ebKPbC2rUotO2wkOYmPvy7gPywfJg=
+	t=1749417789; cv=none; b=D2BBpDPG46aHCAhP44gilB/LdOxS3Lq7VEHB4KeChg2xac9QrgYTrmhe+TEetHXBjE58V7piu/ATmsW4PnN0pVZJw0ktlfGDTgWHc4nW+9lqo43nq0FEPtzeif/jQ2wiktL7k9i7zkTD+OHjCIp8RZ59QdJBuX7VMkZjxJ6Um5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749417738; c=relaxed/simple;
-	bh=htqcoHAk8wG4t8I4v7JXMnGKMG3faePy59bduotEJlY=;
+	s=arc-20240116; t=1749417789; c=relaxed/simple;
+	bh=cyWdCCwdTOm6awHacCn+5KtDkL7jycH2KOpN1v9QDIg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=W76Hk+bxrORB5EHE5OQRpdldB8mEvBbYEkZwGmUhEuGtrSYE8VaQ3bPy44DBB6juiIUBR/UfkDxAB0BN1KBceLuvytQ/kabG0KUHVu+nwujTXXA0iD+Jg74lEVTaDsFFzfWOJgk15zbxc+5OT1spWK9eoDkNJbsV3h9C8+FqJO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=KpiNgaca; arc=none smtp.client-ip=134.0.28.11
+	 MIME-Version; b=WgLa/d3LpxVXZhfTalfXfglnfJVtkGRgLGCMhGjM2jxoYV+xogMxA8R3V7Gx7MsHO4nU7d8GTZfyNqLHtI/l32egOEhx3IQeD9AWrY4yZX48zzFckibiI1xbOxkqSDSSPUM1DKt/S+ENG5nu/Ovh9hC6IGpjVN3y51eFLQjfdP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=ECl7hcJU; arc=none smtp.client-ip=134.0.28.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
 Received: from mxbulk.masterlogin.de (unknown [192.168.10.85])
-	by mxout1.routing.net (Postfix) with ESMTP id D61C23FD96;
-	Sun,  8 Jun 2025 21:14:59 +0000 (UTC)
+	by mxout4.routing.net (Postfix) with ESMTP id 40301100252;
+	Sun,  8 Jun 2025 21:15:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
 	s=20200217; t=1749417300;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=K8bX81MxPTi+Jhd3n3SJZqbc7e3SnaNqOjwZqHrKmH0=;
-	b=KpiNgacaDEvmnOScUpbA2d8BGHEjQiHUk6Pp89YEl1H0XNOFjF1kcWUCROGCrSAspM59xc
-	XGL3EW10RO9tDO9Kg9NwL6ibdO/ci+VCfH8RKFCJ1ZrDKhfa7vhLPamQZUBjKt+eSRrIn8
-	zqxv+H5NsCdBq8N34RgDTWEbw0L/YSs=
+	bh=YWGa+NZ5Jq1T+ZAcsp9vpV8h57UNEkpbrj+QyOwJwlI=;
+	b=ECl7hcJUQIHXBT/aIooApyrrRrWwBR5yclHVmUg6T1v/1rxZKERbsnTk/JfYwrnw62QtAY
+	ZmPwau+O/UYHjLiaXijnTp4tOHMGajgIi4T1fP925mieGDPfwcz+gyR+P/3cKOfv+/hrvP
+	r4vRuMaTSz6s0HAmMxHUbyYRa3AE5UU=
 Received: from frank-u24.. (fttx-pool-80.245.77.166.bambit.de [80.245.77.166])
-	by mxbulk.masterlogin.de (Postfix) with ESMTPSA id 70BCD1226D6;
+	by mxbulk.masterlogin.de (Postfix) with ESMTPSA id D125D1226F5;
 	Sun,  8 Jun 2025 21:14:59 +0000 (UTC)
 From: Frank Wunderlich <linux@fw-web.de>
 To: MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -79,9 +79,9 @@ Cc: Frank Wunderlich <frank-w@public-files.de>,
 	netdev@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org
-Subject: [PATCH v3 02/13] dt-bindings: net: dsa: mediatek,mt7530: add dsa-port definition for mt7988
-Date: Sun,  8 Jun 2025 23:14:35 +0200
-Message-ID: <20250608211452.72920-3-linux@fw-web.de>
+Subject: [PATCH v3 03/13] dt-bindings: net: dsa: mediatek,mt7530: add internal mdio bus
+Date: Sun,  8 Jun 2025 23:14:36 +0200
+Message-ID: <20250608211452.72920-4-linux@fw-web.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250608211452.72920-1-linux@fw-web.de>
 References: <20250608211452.72920-1-linux@fw-web.de>
@@ -95,47 +95,40 @@ Content-Transfer-Encoding: 8bit
 
 From: Frank Wunderlich <frank-w@public-files.de>
 
-Add own dsa-port binding for SoC with internal switch where only phy-mode
-'internal' is valid.
+Mt7988 buildin switch has own mdio bus where ge-phys are connected.
+Add related property for this.
 
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- .../bindings/net/dsa/mediatek,mt7530.yaml          | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+v2:
+- change from patternproperty to property
+- add unevaluatedProperties and mediatek,pio subproperty
+---
+ .../devicetree/bindings/net/dsa/mediatek,mt7530.yaml   | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-index 51205f9f2985..9b983fdbf3c7 100644
+index 9b983fdbf3c7..815a90808901 100644
 --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
 +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-@@ -190,6 +190,18 @@ required:
-   - reg
+@@ -136,6 +136,16 @@ properties:
+       See Documentation/devicetree/bindings/regulator/mt6323-regulator.txt for
+       details for the regulator setup on these boards.
  
- $defs:
-+  builtin-dsa-port:
-+    patternProperties:
-+      "^(ethernet-)?ports$":
-+        patternProperties:
-+          "^(ethernet-)?port@[0-6]$":
-+            if:
-+              required: [ ethernet ]
-+            then:
-+              properties:
-+                phy-mode:
-+                  const: internal
++  mdio:
++    $ref: /schemas/net/mdio.yaml#
++    unevaluatedProperties: false
 +
-   mt7530-dsa-port:
-     patternProperties:
-       "^(ethernet-)?ports$":
-@@ -297,7 +309,7 @@ allOf:
-             - airoha,en7581-switch
-             - airoha,an7583-switch
-     then:
--      $ref: "#/$defs/mt7530-dsa-port"
-+      $ref: "#/$defs/builtin-dsa-port"
-       properties:
-         gpio-controller: false
-         mediatek,mcm: false
++    properties:
++      mediatek,pio:
++        $ref: /schemas/types.yaml#/definitions/phandle
++        description:
++          Phandle pointing to the mediatek pinctrl node.
++
+   mediatek,mcm:
+     type: boolean
+     description:
 -- 
 2.43.0
 
