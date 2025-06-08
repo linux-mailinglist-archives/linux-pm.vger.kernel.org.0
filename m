@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-28231-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28232-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFD4FAD13AC
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 20:19:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB2BAAD13AF
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 20:19:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D5FC169031
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 18:19:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 135471889DB8
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 18:19:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90FFD1C6FFA;
-	Sun,  8 Jun 2025 18:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 473B51C860B;
+	Sun,  8 Jun 2025 18:18:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hEmYxm+7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kz1lx36H"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D56B1C6FE8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21DD61C6FE8
 	for <linux-pm@vger.kernel.org>; Sun,  8 Jun 2025 18:18:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749406737; cv=none; b=Go6ydFRZiwUpZhLboWIMkNqmt+KJTdSv9H/HhXSD3nNA0nBUVjfpk5xSwEOGO0Lj03IHMwlFLo+NmAQy0UMcr4rm1bzuuR53PT7Cv0gIW4XDY+AID1RuaLWDZnQP4YTtd0UcKWkaSAP0PCacfOCEVFsyqPCY5cEIaAB5wVkhczA=
+	t=1749406738; cv=none; b=DGwDiMb/idwMOB0/EBS5C2MBykl5uAp3Sg8oUsG6e10vmN2ewf9nxYU44rcQ0oBnMTLe83GGPHQjinvc62Tsoprn9KvuKtjZ3w8zdhPkt/ffJ9icu7qcjdZ2+WexFoTwHVg4aFPa/78Uo/h6WAhDLSONzy0eEgXSDqngsNnFtcg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749406737; c=relaxed/simple;
-	bh=W8X77xhnnBVZ0rRMaGrdMWinmM0Txty+8GwvbxejCig=;
+	s=arc-20240116; t=1749406738; c=relaxed/simple;
+	bh=QmXCcXv9hwJ1VKAcNUOOaVWK5RssElRe0GowEBgVFBg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sZyipMHf8Dee5SkNz7E7ohlU8Kd/Vi7BYqELJY9PoGO1NH3IU3S4lVj1NPahmLM2/hSXv+KSoAGpOqhsM+qMUo2ya3c8dZ/8gaX9IsGqbZ+7HbRsRHhw5MWPBghmcAgcDkpZ/tUCzBh86RT+oHRrX+3sffo81Q4jxnIl9ttUjFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hEmYxm+7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7D25C4CEF6;
-	Sun,  8 Jun 2025 18:18:56 +0000 (UTC)
+	 MIME-Version; b=QWDaKfUrHHXcB2ZuShrSAZWrQJZpvRNL1DjlIsgbGaK8cVoihhY1nOtnXobyl1RGR2wKGduYtbnCW+3RXBqwWqPYjzSjG1A7uSJeNmv/SdF9iPjTpPN04EFrnGa7O1mVLFk1O9yBCsGX7FAgfLLtabe6dQ4uHleTet1gZwPpnVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kz1lx36H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59A71C4CEF2;
+	Sun,  8 Jun 2025 18:18:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1749406737;
-	bh=W8X77xhnnBVZ0rRMaGrdMWinmM0Txty+8GwvbxejCig=;
+	bh=QmXCcXv9hwJ1VKAcNUOOaVWK5RssElRe0GowEBgVFBg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=hEmYxm+7MdEoTEQIZpSiCHBKRp+1ZyuQuxqayRkKI53iuPr35Ri96r4bKv/bKdbT1
-	 mmV2r0UGWnP1JCdavfMfDSwZkUs51IYP2OM+hWBZexQAy2XNsIGzprNqJ1q1ozPZcX
-	 WhGhntEdr+FHdwBuXQ0aUU1M76u6d149S+apNlcCgFA3tevhrqr19g5zvmK2WxnNqE
-	 FrOdIonZegqJtu5Kl5FMM7QhfemhaFECqZwiSROj4BY4QrILDcojU+I9DCGmwmDHl2
-	 8y4QF7eI9In2z3xtKHqtYLs8qGU6Qb/la5tLQdUzHWcRlbPhdE0yO78jGgqhyh2iUO
-	 aOFl4kluH2Ygg==
+	b=Kz1lx36HagLJ40WQ5OIeHdqddRzkKCVCe+k8liSW5joGKuPJ5LzUWKj5QbUe7TOyF
+	 B04T/OrNeA25Dk/k/kfXNIAmqnuSFyq4xC4kjvN9/pGEVDrJ2Fn08xRDU8CQ6k+OWM
+	 WvIK6vVFY59qw2vhql9GQjfRUK7dRXTWCwoV6u5eP7l7y5gFExD8Mu8qxl72xv1y9i
+	 4tHPENFWAgpANTgwtPli7g7vtUqgdvMUOI247xeJthalmEEGCy79gbvYnYtE8pONy9
+	 iR1TPSUyB2tNvLWd172/L1WfdGppRNcZhFAD1kQhOfT1UEKfjbBS38cmnMvqSDOAWF
+	 oQN1cJtYGqbsg==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
 Cc: Zhang Rui <rui.zhang@intel.com>,
 	Len Brown <len.brown@intel.com>
-Subject: [PATCH 06/18] tools/power turbostat: Always check rapl_joules flag
-Date: Sun,  8 Jun 2025 14:17:05 -0400
-Message-ID: <ebb275c4e5544a0493a57010e9978240076a5738.1749406068.git.len.brown@intel.com>
+Subject: [PATCH 07/18] tools/power turbostat: Quit early for unsupported RAPL counters
+Date: Sun,  8 Jun 2025 14:17:06 -0400
+Message-ID: <bd2c6acc500d5c44d0202463aa2138a3363ae103.1749406068.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <780da8a9557f2d114aaffda0eb0a517fe6a244c8.1749406068.git.len.brown@intel.com>
 References: <780da8a9557f2d114aaffda0eb0a517fe6a244c8.1749406068.git.len.brown@intel.com>
@@ -63,59 +63,39 @@ Content-Transfer-Encoding: 8bit
 
 From: Zhang Rui <rui.zhang@intel.com>
 
-rapl_joules bit should always be checked even if
-platform_features->rapl_msrs is not set or no_msr flag is used.
+Quit early for unsupported RAPL counters.
+
+No functional change.
 
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 743db19a13c2..69c19e01b681 100644
+index 69c19e01b681..7e7d25d2362a 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -7302,6 +7302,9 @@ void rapl_probe_intel(void)
- 	else
- 		bic_enabled &= ~bic_joules_bits;
+@@ -7948,6 +7948,9 @@ void rapl_perf_init(void)
+ 		enum rapl_unit unit;
+ 		unsigned int next_domain;
  
-+	if (!platform->rapl_msrs || no_msr)
-+		return;
++		if (!BIC_IS_ENABLED(cai->bic))
++			continue;
 +
- 	if (!(platform->rapl_msrs & RAPL_PKG_PERF_STATUS))
- 		bic_enabled &= ~BIC_PKG__;
- 	if (!(platform->rapl_msrs & RAPL_DRAM_PERF_STATUS))
-@@ -7352,6 +7355,9 @@ void rapl_probe_amd(void)
- 	else
- 		bic_enabled &= ~bic_joules_bits;
+ 		memset(domain_visited, 0, num_domains * sizeof(*domain_visited));
  
-+	if (!platform->rapl_msrs || no_msr)
-+		return;
-+
- 	if (get_msr(base_cpu, MSR_RAPL_PWR_UNIT, &msr))
- 		return;
+ 		for (int cpu = 0; cpu < topo.max_cpu_num + 1; ++cpu) {
+@@ -7971,7 +7974,7 @@ void rapl_perf_init(void)
+ 			struct rapl_counter_info_t *rci = &rapl_counter_info_perdomain[next_domain];
  
-@@ -7504,9 +7510,6 @@ int print_rapl(struct thread_data *t, struct core_data *c, struct pkg_data *p)
-  */
- void probe_rapl(void)
- {
--	if (!platform->rapl_msrs || no_msr)
--		return;
--
- 	if (genuine_intel)
- 		rapl_probe_intel();
- 	if (authentic_amd || hygon_genuine)
-@@ -7515,6 +7518,9 @@ void probe_rapl(void)
- 	if (quiet)
- 		return;
+ 			/* Check if the counter is enabled and accessible */
+-			if (BIC_IS_ENABLED(cai->bic) && (platform->rapl_msrs & cai->feature_mask)) {
++			if (platform->rapl_msrs & cai->feature_mask) {
  
-+	if (!platform->rapl_msrs || no_msr)
-+		return;
-+
- 	for_all_cpus(print_rapl, ODD_COUNTERS);
- }
- 
+ 				/* Use perf API for this counter */
+ 				if (!no_perf && cai->perf_name
 -- 
 2.45.2
 
