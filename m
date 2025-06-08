@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-28234-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28236-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF80FAD13AE
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 20:19:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 254E9AD13B1
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 20:19:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E84DE3AA2AC
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 18:18:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6503168F12
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Jun 2025 18:19:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 097D71CF7AF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57A0C1D61AA;
 	Sun,  8 Jun 2025 18:19:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MBSoHFfI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CiXoDRbp"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9CBC13B58A
-	for <linux-pm@vger.kernel.org>; Sun,  8 Jun 2025 18:18:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 332A51D5CEA
+	for <linux-pm@vger.kernel.org>; Sun,  8 Jun 2025 18:19:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749406739; cv=none; b=hSmXJiNehMW5eKhCJjRnTHh/LYDk0LoxUR0H7tuh9MYomBROuKfqZNz3KFOBW9KdUAAiONGarOvtttydZlhpn3qrsf/d5eUQHAqegfaTnWb1EUQerjMvWNe3tKuWdbU73Z5Fj8SiVXQZk6oQpdYTa8/I2E7LOjSH9Squhenku7Q=
+	t=1749406740; cv=none; b=W5e1fZzSFg+4wscOdCacJIVNcDQLDUodpFvXPez3LMyl7a9rCgMdH96WL6xB+16gXi8SdC0K6yobq5zfZB80iEZTeTVY6PMP4x/Boh9EioLLM+5L0dDBVmeW7g39AWmKAzllPfPSxXqla43hnvtJtYlD7uVg6Y5woabLgoPyY5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749406739; c=relaxed/simple;
-	bh=O/9o3vnBRhPOu36Yv9n2MUcrOQOKvxYkBQTRTgP1LHs=;
+	s=arc-20240116; t=1749406740; c=relaxed/simple;
+	bh=JpDQcv1oYiX4oNyhU8kLkpuinSLRHqHGdKBzhV93bpg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=M/GvuyoxeWU9Fep47xTu8eiqzPBGj6KsOr1xoXTpnl7EA2dIwA0XGMKsHMEuyYviF+afeELVnTTm0mfVt4lJzfHqoOGp7ZFV9x17OOCJFMh7QTqkp5Dg6jnxFGsnjYGgvxsBDhRWkvtciK6VrCi8XhLVfnHYOka/iIg6dM+L9v0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MBSoHFfI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24D2CC4CEF0;
+	 MIME-Version; b=GOG75gELV4WaVFKyE6/Q8DtsK/2NyHSg1SLzCqgaENZ/eEGiBy8KVtfEr4lOXaissbBKdlvIEfi1KSEYG13X03npodq1/hiGT7l5wuoRhiUVYTsbzUEkH9CYpArFt8dz46+uEwaPHhJtXOtbQG8XVnXBZFwn/mSIxf9Mb/IzoGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CiXoDRbp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3179C4CEF5;
 	Sun,  8 Jun 2025 18:18:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749406739;
-	bh=O/9o3vnBRhPOu36Yv9n2MUcrOQOKvxYkBQTRTgP1LHs=;
+	s=k20201202; t=1749406740;
+	bh=JpDQcv1oYiX4oNyhU8kLkpuinSLRHqHGdKBzhV93bpg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=MBSoHFfIYVK36hntZuEKhzkU93IXAD7x2l9rGUfIAmwU2KVuel2PLAvTadsaO092r
-	 3XOTPVXRwqwaM5l0mnuLBu2mcW+Z1BTDD3tNDzmRkVIDB6wwUDzRJQzzpY8Y4Uho6Z
-	 K4K/gEPCnip4o1qBpwWJdzeNz5Vl6Zupx0xzLs1uC/DTww0GkI2tfchYmvgWZjNvBy
-	 OWMCFFrNk0NqENiCUyaiu0xjknGF6EONzdthwJrbCpgU2KQNuBM9tDhLA4E4PmryLL
-	 1/2U3M4A5C9aiv5lymFdwgMl6k3eZOh745FUA3vqZCncGcgfCywF+f9fhjGOQPu2Gn
-	 sCB7CnPgF6Jhg==
+	b=CiXoDRbp9DhDRna+JX6dN49cp08wgNvHOfa1p3nV+Ph81ewmJhrw0mDZE01wh3Fnp
+	 /rKDQeJnRtcWngSf/lF/ytXSl+C5wwXXtYCvgUzgE8L0gC0pbak2gJViEt5TRr3KhO
+	 91FfmYQPbd1cUt3PDjSQdDX1EFAw+Z9oikZ82uXZncYv/VBOglTt3ZLvmf0jYu+APb
+	 hZmWcERRUx0aq7BC056qUOkNzmqr0JEDST7bvNb400BrABbJtVn7mY/a03779t4m/a
+	 /TFAmgcZt+s6o5/51n7Z5/m6j40j9mWUDZ1r4OzSX8E4OtKgUulIpfCwrhTN4Y9m2J
+	 RiWdA/zZxDphw==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
 Cc: Zhang Rui <rui.zhang@intel.com>,
 	Len Brown <len.brown@intel.com>
-Subject: [PATCH 10/18] tools/power turbostat: Remove add_msr_perf_counter_()
-Date: Sun,  8 Jun 2025 14:17:09 -0400
-Message-ID: <9621106bd7e19dc5d9df0930bec2ae94d2ba7a22.1749406068.git.len.brown@intel.com>
+Subject: [PATCH 11/18] tools/power turbostat: Introduce add_msr_counter()
+Date: Sun,  8 Jun 2025 14:17:10 -0400
+Message-ID: <71b820f0c32c3ee25fd492a728493d19f24f6972.1749406068.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <780da8a9557f2d114aaffda0eb0a517fe6a244c8.1749406068.git.len.brown@intel.com>
 References: <780da8a9557f2d114aaffda0eb0a517fe6a244c8.1749406068.git.len.brown@intel.com>
@@ -63,64 +63,106 @@ Content-Transfer-Encoding: 8bit
 
 From: Zhang Rui <rui.zhang@intel.com>
 
-As the only caller of add_msr_perf_counter_(), add_msr_perf_counter()
-just gives extra debug output on top. There is no need to keep both
-functions.
+probe_rapl_msr() is reused for probing RAPL MSR counters, cstate MSR
+counters and MPERF/APERF/SMI MSR counters, thus its name is misleading.
 
-Remove add_msr_perf_counter_() and move all the logic to
-add_msr_perf_counter().
+Similar to add_perf_counter(), introduce add_msr_counter() to probe a
+counter via MSR. Introduce wrapper function add_rapl_msr_counter() at
+the same time to add extra check for Zero return value for specified
+RAPL counters.
 
-No functional change.
+No functional change intended.
 
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 20 ++++++++------------
- 1 file changed, 8 insertions(+), 12 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 32 +++++++++++++++++++--------
+ 1 file changed, 23 insertions(+), 9 deletions(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 9af1e13484e2..ef923da00765 100644
+index ef923da00765..a38cb43ff140 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -8052,30 +8052,26 @@ int add_cstate_perf_counter(int cpu, struct cstate_counter_info_t *cci, const st
- 	return ret;
+@@ -2222,32 +2222,46 @@ int get_msr(int cpu, off_t offset, unsigned long long *msr)
+ 	return 0;
  }
  
--int add_msr_perf_counter_(int cpu, struct msr_counter_info_t *cci, const struct msr_counter_arch_info *cai)
-+int add_msr_perf_counter(int cpu, struct msr_counter_info_t *cci, const struct msr_counter_arch_info *cai)
+-int probe_rapl_msr(int cpu, off_t offset, int index)
++int add_msr_counter(int cpu, off_t offset)
  {
-+	int ret = -1;
+ 	ssize_t retval;
+ 	unsigned long long value;
+ 
+-	assert(!no_msr);
++	if (no_msr)
++		return -1;
+ 
+ 	retval = pread(get_msr_fd(cpu), &value, sizeof(value), offset);
+ 
+ 	/* if the read failed, the probe fails */
+ 	if (retval != sizeof(value))
+-		return 1;
++		return -1;
 +
- 	if (no_perf)
- 		return -1;
++	if (value == 0)
++		return 0;
++
++	return 1;
++}
++
++int add_rapl_msr_counter(int cpu, off_t offset, int index)
++{
++	int ret;
++
++	ret = add_msr_counter(cpu, offset);
++	if (ret < 0)
++		return -1;
  
- 	const unsigned int type = read_perf_type(cai->perf_subsys);
- 	const unsigned int config = read_perf_config(cai->perf_subsys, cai->perf_name);
+-	/* If an Energy Status Counter MSR returns 0, the probe fails */
+ 	switch (index) {
+ 	case RAPL_RCI_INDEX_ENERGY_PKG:
+ 	case RAPL_RCI_INDEX_ENERGY_CORES:
+ 	case RAPL_RCI_INDEX_DRAM:
+ 	case RAPL_RCI_INDEX_GFX:
+ 	case RAPL_RCI_INDEX_ENERGY_PLATFORM:
+-		if (value == 0)
++		if (ret == 0)
+ 			return 1;
+ 	}
  
--	const int fd_counter = open_perf_counter(cpu, type, config, cci->fd_perf, PERF_FORMAT_GROUP);
-+	ret = open_perf_counter(cpu, type, config, cci->fd_perf, PERF_FORMAT_GROUP);
+ 	/* PKG,DRAM_PERF_STATUS MSRs, can return any value */
+-	return 0;
++	return 1;
+ }
  
--	if (fd_counter == -1)
--		return -1;
-+	if (ret == -1)
-+		goto end;
+ /* Convert CPU ID to domain ID for given added perf counter. */
+@@ -7980,7 +7994,7 @@ void rapl_perf_init(void)
+ 					rci->flags[cai->rci_index] = cai->flags;
  
- 	/* If it's the first counter opened, make it a group descriptor */
- 	if (cci->fd_perf == -1)
--		cci->fd_perf = fd_counter;
--
--	return fd_counter;
--}
--
--int add_msr_perf_counter(int cpu, struct msr_counter_info_t *cci, const struct msr_counter_arch_info *cai)
--{
--	int ret = add_msr_perf_counter_(cpu, cci, cai);
-+		cci->fd_perf = ret;
+ 					/* Use MSR for this counter */
+-				} else if (!no_msr && cai->msr && probe_rapl_msr(cpu, cai->msr, cai->rci_index) == 0) {
++				} else if (!no_msr && cai->msr && add_rapl_msr_counter(cpu, cai->msr, cai->rci_index) >= 0) {
+ 					rci->source[cai->rci_index] = COUNTER_SOURCE_MSR;
+ 					rci->msr[cai->rci_index] = cai->msr;
+ 					rci->msr_mask[cai->rci_index] = cai->msr_mask;
+@@ -8110,7 +8124,7 @@ void msr_perf_init_(void)
+ 					cai->present = true;
  
-+end:
- 	if (debug)
- 		fprintf(stderr, "%s: %s/%s: %d (cpu: %d)\n", __func__, cai->perf_subsys, cai->perf_name, ret, cpu);
+ 					/* User MSR for this counter */
+-				} else if (!no_msr && cai->msr && probe_rapl_msr(cpu, cai->msr, cai->rci_index) == 0) {
++				} else if (!no_msr && cai->msr && add_msr_counter(cpu, cai->msr) >= 0) {
+ 					cci->source[cai->rci_index] = COUNTER_SOURCE_MSR;
+ 					cci->msr[cai->rci_index] = cai->msr;
+ 					cci->msr_mask[cai->rci_index] = cai->msr_mask;
+@@ -8224,7 +8238,7 @@ void cstate_perf_init_(bool soft_c1)
  
+ 					/* User MSR for this counter */
+ 				} else if (!no_msr && cai->msr && pkg_cstate_limit >= cai->pkg_cstate_limit
+-					   && probe_rapl_msr(cpu, cai->msr, cai->rci_index) == 0) {
++					   && add_msr_counter(cpu, cai->msr) >= 0) {
+ 					cci->source[cai->rci_index] = COUNTER_SOURCE_MSR;
+ 					cci->msr[cai->rci_index] = cai->msr;
+ 				}
 -- 
 2.45.2
 
