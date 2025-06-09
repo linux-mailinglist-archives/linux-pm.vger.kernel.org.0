@@ -1,197 +1,180 @@
-Return-Path: <linux-pm+bounces-28297-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28298-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7084EAD18EC
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 09:17:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1EC9AD19CC
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 10:30:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D5D316666D
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 07:17:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA7333A6C49
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 08:30:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 473901D63D3;
-	Mon,  9 Jun 2025 07:17:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE6921A314D;
+	Mon,  9 Jun 2025 08:30:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="RKc3w8VC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="edm/kAxs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9AA199943
-	for <linux-pm@vger.kernel.org>; Mon,  9 Jun 2025 07:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD4718024;
+	Mon,  9 Jun 2025 08:30:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749453443; cv=none; b=L9BdSw1amN++jSBQw99rvNlNagAmxHZ+Wgog8ZEEZCcQxupisvQWnl3MqXQkPH3panglu0F+QKaFXOYMQxwnpw8IDKHBsfLNUxd0Or1PP2zye+zKM+E2Tb53YJOjJD6lObbLB3ds7wSWFAQ0VEp20Qv7e0ZM9Lz8kPEnxkGlnAU=
+	t=1749457845; cv=none; b=QeudpX3drshd/wihWg6ubQ1l+qRoFjQEzFY2bADGdl1A7nmGMqqH82sqCAuFgqeEsGMmP+N9vJM1i2mV4GRDhZ/vOk+Si6OZEN6gMwUMxhMVpyTKP5WK7/nqtV4Bv+RzncJTFJSIoAy0ZNdegCNHu76H71hcO+lWKyvhKjVy61k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749453443; c=relaxed/simple;
-	bh=dnOOCHxE/dICMo1ItkE+yCkFIQkdWx5eFZ5lfhxhpo0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jn/yoeAinhpfh707ggehi1gPJx50Z3735buye6FrFZ7Psrfq7RRGZHnNcNnpwkXiMFrddaLyyzLS9O/qu4HESgEnFS71GA4/LVwIun3WtIU7ACumrNo/xWyr1NJierQudgQFQlFwaPgWtG1ian5kRSf0xz2BfuJBE9bL61tisV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=RKc3w8VC; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 558MElRA011931
-	for <linux-pm@vger.kernel.org>; Mon, 9 Jun 2025 07:17:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	ykt1m8wMBYY0GbBmpdFucNObSEG06qB6oOFyulI3RIQ=; b=RKc3w8VCApEr4HRZ
-	h6eKGZSki85kIXwn45ia71nSMmmjQMWHUkgeWEwJ5dG+giLPXXeONpaEGC/eXRhT
-	/m+IM5BcBHRvSnXdcDxA9ofAmQLV7Qe5HjDURXWkf90s3AC4/cJi7CxnrTUOSRM0
-	msnaxK58N/RkpeWX19Yju7p3EFafHp/vK5HjxZnLRFj/+SShAqJ+t9ji9rd6sUCF
-	VDbNgDOx53rrHl3uxtSmmAJczueEuVTEDXlVPF/5tiVeFvP+IgSO3fdJb1vXdAcP
-	x5l6naKx2FFQpxq6e51VNULHB1uv7NqT7err8Q66vgKrMV2CwuRJl7XXHGtLfddj
-	DI2XYQ==
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 474ekpmtyc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 09 Jun 2025 07:17:20 +0000 (GMT)
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7d099c1779dso756075185a.0
-        for <linux-pm@vger.kernel.org>; Mon, 09 Jun 2025 00:17:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749453438; x=1750058238;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ykt1m8wMBYY0GbBmpdFucNObSEG06qB6oOFyulI3RIQ=;
-        b=LHrnEb7gJchqhAmROuOwk5DDlxwKHdJKz2lBhDufXasmPGOLhDhyGgRqCBHdnhYQfC
-         7pNCNKWnuIGN/LUdRF30ss/sCj3uMbFYqhU487EmpANca1jd89cp4Anz/DsgNOEdxIwu
-         TeIMxdudJWZWz89klafyMlx9odzVuoIb4sXJRRWhrmEqiWqzfIK9iiMVr50eAb62M9cp
-         lF4r/XNSGP4oyipOogCMmnEsqJljTbKgYOgqoSrhNRotNISfiG/7SlTmeEv7k65dQpNp
-         pGmO3VP+9dNqra4fOnn9gZvuGJVsXWtjouRX31eE1f8bS3/R7FBgOrREX1AgJADd1gyg
-         YsJg==
-X-Forwarded-Encrypted: i=1; AJvYcCURakw1s+gNqBitZMaWaN9pI74xWCe9JcCPFw4/O6LuUxgAaeD/vDoclDuV6VsUN9RVwrvRVZL5LQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzHqZyG0QFJfw6xFvfPSue+I6KCdoZmriN1QLTXHTvHTj2894u
-	DqSTzPQxLMFoSRDf0OoWv1FPvJprrnrQbAJMG6hpBXWh72+0vqnqvnl0bI/XxO8TSca4T56JSc5
-	0pi3KP5jPPAk5k16ClvSz7D/NkWkktLC/suPmARX380b7TTdrvxoiEGcZxHIa2Iup7fI+3A==
-X-Gm-Gg: ASbGncsrOdxQ01sqe252jEbBTqVDUib4WAqKjfHzW94cgUSaGQGSRYCAlx166gIJVQ6
-	z/hqVijUkePFa0HMCRRk5kiG+VyKLDLoqtT/rBHutBet3c8FjAASCT5G2wXZYV0EORV8FrP78ip
-	H1WZ4bbPw5JpiiIKuv7MqeZRhzkFjUytYQFxE+6gFGBSju0i/hzqAXynNJOoB4V7UvzIJtZMtOc
-	NstaMmf/MfC3W4lpIbEQUG+UGl7WqQ7SGZ2iuMDqEMXecnnKBE8yn167aLAsDDzxbGEnibYbKLf
-	41UB6fETGOHAUKUo6+mL/1VbEWSA74bn6DyfW99houIl7Wyr2/wgjtjTO3OvUNXx3zpgZLjOr0J
-	4g1zY32A5yBcEVg==
-X-Received: by 2002:a05:620a:4394:b0:7d0:9782:9af8 with SMTP id af79cd13be357-7d22989371cmr1836112885a.15.1749453438394;
-        Mon, 09 Jun 2025 00:17:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHdkd6CyJurG1kbBol7Erd8qyoJpOICpwacKz5TVDzmXLohtAPsAPvsf/9GyQC+BvRxwRlLJQ==
-X-Received: by 2002:a05:620a:1787:b0:7c5:47c6:b886 with SMTP id af79cd13be357-7d2298ec4bbmr1913052985a.43.1749453422860;
-        Mon, 09 Jun 2025 00:17:02 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0c3:3a00::4c9? (2001-14ba-a0c3-3a00--4c9.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::4c9])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-32ae1b34742sm9904481fa.32.2025.06.09.00.17.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jun 2025 00:17:01 -0700 (PDT)
-Message-ID: <b938b358-301a-4842-bdf6-93ec3c459d41@oss.qualcomm.com>
-Date: Mon, 9 Jun 2025 10:17:00 +0300
+	s=arc-20240116; t=1749457845; c=relaxed/simple;
+	bh=ensT7p+N/ywee7KLRyYcOmYZaATuuZJ+u1tIIRo0PZs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lx3d/pxYLx5RwHK6adrhB34k8lzmmj1zcwLECrbRGerL4YwAskkuP9+KwzM8+geIPMGpuojW2jZiH3EudI+vvoegXJkYh9Kh0uR7pk/cFtQNyU+y5cLzGhmbpZFd5RRYbv2CBuIYMsfNzv4rafIA4CHQUi6dCOC9i2bnli1vShg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=edm/kAxs; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749457844; x=1780993844;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ensT7p+N/ywee7KLRyYcOmYZaATuuZJ+u1tIIRo0PZs=;
+  b=edm/kAxssvUiFX2AcN+EAlNgiGMoSEqPkcBZtMlOhpUwUXLrUuj7mzzw
+   COAFDJK46yujl/+lQuGZo7lQhVdJRENo0wf5r8lHxQTHi83ACMsmJQTG1
+   JR0psujnKpCBT3TRqoVCFZIZ5p1uaDPt8EdqVF1q4V0RjA+gVAqAMOV4D
+   rPhfLUU7oZRnzX6m/nUwHM0byacBMDnQEKb4a/NVHZCtYDNzzx/hf4Gpw
+   +pJZ7AiWgT7rKZV9p+dJDcTDs/rYQekVeC/Y3EahooJEd4ofKpQznAOYU
+   niSDK5EDgQiiZdrB5Q0pr8DfpbCwNDchmYge14oYb+L/ZMmwRoQS11KRY
+   Q==;
+X-CSE-ConnectionGUID: H0y8W1G6RayvBnUH528R/w==
+X-CSE-MsgGUID: 2CJuj0fVT/+dmO9qPYi/Rw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11458"; a="76921921"
+X-IronPort-AV: E=Sophos;i="6.16,222,1744095600"; 
+   d="scan'208";a="76921921"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2025 01:30:43 -0700
+X-CSE-ConnectionGUID: 5Pkjg0zRSoW7rgRyVlx9Gg==
+X-CSE-MsgGUID: h31gkaVcRXapdesgq+80fQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,222,1744095600"; 
+   d="scan'208";a="147382809"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 09 Jun 2025 01:30:38 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uOXts-0006t3-0L;
+	Mon, 09 Jun 2025 08:30:36 +0000
+Date: Mon, 9 Jun 2025 16:29:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <superm1@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Bjorn Helgaas <helgaas@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	amd-gfx@lists.freedesktop.org,
+	"(open list:HIBERNATION (aka Software Suspend, aka swsusp))" <linux-pm@vger.kernel.org>,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	dri-devel@lists.freedesktop.org, linux-scsi@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	AceLan Kao <acelan.kao@canonical.com>,
+	Kai-Heng Feng <kaihengf@nvidia.com>,
+	Mark Pearson <mpearson-lenovo@squebb.ca>,
+	Denis Benato <benato.denis96@gmail.com>,
+	Merthan =?utf-8?Q?Karaka=C5=9F?= <m3rthn.k@gmail.com>
+Subject: Re: [PATCH v3 2/5] PCI: Put PCIe ports with downstream devices into
+ D3 at hibernate
+Message-ID: <202506091639.HaxwbWtd-lkp@intel.com>
+References: <20250609024619.407257-3-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/8] power: supply: qcom_battmgr: Add charge control
- support
-To: Fenglin Wu <fenglin.wu@oss.qualcomm.com>,
-        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: =?UTF-8?Q?Gy=C3=B6rgy_Kurucz?= <me@kuruczgy.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
-        David Collins <david.collins@oss.qualcomm.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20250530-qcom_battmgr_update-v2-0-9e377193a656@oss.qualcomm.com>
- <20250530-qcom_battmgr_update-v2-5-9e377193a656@oss.qualcomm.com>
- <f2e0f1da-c626-4cf0-8158-8a5805138871@kuruczgy.com>
- <8bb3a056-c00f-4ae0-a790-d742d31f229a@oss.qualcomm.com>
- <5knsdgk7o5zifkvzlrqiplmhztnsyhlxnqiuikqf4l7wkx2qvh@s3vzkiezw2bc>
- <219a46d0-446c-4eed-8809-4f2400de0ef9@oss.qualcomm.com>
- <cf3479b4-5f02-4d19-8164-306214966248@oss.qualcomm.com>
-Content-Language: en-US
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-In-Reply-To: <cf3479b4-5f02-4d19-8164-306214966248@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=JcO8rVKV c=1 sm=1 tr=0 ts=68468a80 cx=c_pps
- a=50t2pK5VMbmlHzFWWp8p/g==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=6IFa9wvqVegA:10 a=NtchbJF2b19TUD_QsiUA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=IoWCM6iH3mJn3m4BftBB:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjA5MDA1NiBTYWx0ZWRfXzJiurlH4YC+p
- kB62oRmgJ/XQeKgvOxJEdE0607k8HJa0oiMGSKf4DYLhunfSqw3yaNXt7XSvkokK9FUa7Qv//hz
- 8KxEXJST9Ip7OJWZCmGnknhXRDah45E/wkewIn06ej8VMvn+KbMR/5iVGm7kYdMZrM+lMBTvI2z
- 4M64ygUQD7+mVi4/dIQBHBXmrcJWcXB/8Yjm8Z5zByngZ51u1eocLqUkN2Qn1qvn5JaKV3VYGvr
- wfmpH0bc3oRi+nPN3uRe+LCbn81ZNZUWHx6XkJHx9VIPA703hS0FGs2n8vLg/lgY7EuQiUvFMkd
- YSemQgt8Fc6cyEHbKQdgiynBlXTokdC0tHpDDHYwyDB4VRIznwk0i8GxgAmfJZdubApebuptB/N
- +sIKqwyiWZ+cpYpYCs1P0Vdd5k9qCCTkrnwVVNlJBsYQUK59ehb4iWUglx9cFPqY9bsj1YOh
-X-Proofpoint-GUID: L4OTse7_UUCM3zVBv500gVBuq-n8aFb8
-X-Proofpoint-ORIG-GUID: L4OTse7_UUCM3zVBv500gVBuq-n8aFb8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-09_03,2025-06-05_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- mlxlogscore=999 bulkscore=0 spamscore=0 impostorscore=0 phishscore=0
- priorityscore=1501 mlxscore=0 adultscore=0 clxscore=1015 malwarescore=0
- suspectscore=0 lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2506090056
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250609024619.407257-3-superm1@kernel.org>
 
-On 09/06/2025 05:39, Fenglin Wu wrote:
-> 
-> On 6/7/2025 5:46 PM, Konrad Dybcio wrote:
->> On 6/3/25 12:37 PM, Dmitry Baryshkov wrote:
->>> On Tue, Jun 03, 2025 at 01:48:11PM +0800, Fenglin Wu wrote:
->>>> On 5/31/2025 6:36 PM, György Kurucz wrote:
->>>>>> Add charge control support for SM8550 and X1E80100.
->>>>> Thank you for this, tested on my Lenovo Yoga Slim 7x, the limiting 
->>>>> works
->>>>> well, I finally don't have to worry about leaving my laptop plugged in
->>>>> for too long.
->>>>>
->>>>> One small thing I noticed is that after setting the sysfs values and
->>>>> rebooting, they report 0 again. The limiting appears to stay in effect
->>>>> though, so it seems that the firmware does keep the values, but Linux
->>>>> does not read them back. Indeed, looking at the code, it seems that
->>>>> actually reading back the values is only implemented for the SM8550.
->>>> Right.
->>>>
->>>> Based on offline information, X1E80100 doesn't support reading back 
->>>> those
->>>> threshold values in battery management firmware, so I can only use the
->>>> cached values for sysfs read.
->>> Which limits usablity of the attribute, it is now impossible to identify
->>> whether it is enabled or disabled. Is there a chance of fixing that for
->>> the X1E80100 platform?
->> Is there a chance we store that value in SDAM and can read it back?
->>
->> Konrad
-> 
-> The thresholds are stored in PMIC SDAM registers by ADSP after receiving 
-> the set requests, and ADSP reads them back during initialization. This 
-> is why ADSP retains them upon device reboot.
-> 
-> I spoke with the battery management firmware team, and they have no 
-> plans to update the battery management firmware for X1E80100 further. 
-> Consequently, they cannot provide any interfaces to read these 
-> thresholds through PMIC Glink.
-> 
-> Reading them from the existing SDAM registers requires adding "nvmem- 
-> cells" DT properties to specify the SDAM registers. However, the 
-> "pmic_glink.power-supply" device is an auxiliary device created by the 
-> pmic_glink driver and does not have an associated DT node. Is there any 
-> method to create a DT node and add DT properties for an auxiliary device?
+Hi Mario,
 
-Auxiliary-bus devices don't have their OF nodes. Instead they use the 
-main device's of node thanks to the call to device_set_of_node_from_dev().
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/bleeding-edge mkp-scsi/for-next jejb-scsi/for-next linus/master v6.16-rc1 next-20250606]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/PM-Use-hibernate-flows-for-system-power-off/20250609-105658
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20250609024619.407257-3-superm1%40kernel.org
+patch subject: [PATCH v3 2/5] PCI: Put PCIe ports with downstream devices into D3 at hibernate
+config: i386-buildonly-randconfig-003-20250609 (https://download.01.org/0day-ci/archive/20250609/202506091639.HaxwbWtd-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250609/202506091639.HaxwbWtd-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506091639.HaxwbWtd-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/pci/pci-driver.c:1221:7: error: call to undeclared function 'pci_pm_set_prepare_bus_pm'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1221 |         if (!pci_pm_set_prepare_bus_pm(pci_dev))
+         |              ^
+   1 error generated.
+
+
+vim +/pci_pm_set_prepare_bus_pm +1221 drivers/pci/pci-driver.c
+
+  1195	
+  1196	static int pci_pm_poweroff_noirq(struct device *dev)
+  1197	{
+  1198		struct pci_dev *pci_dev = to_pci_dev(dev);
+  1199		const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+  1200	
+  1201		if (dev_pm_skip_suspend(dev))
+  1202			return 0;
+  1203	
+  1204		if (pci_has_legacy_pm_support(pci_dev))
+  1205			return pci_legacy_suspend_late(dev);
+  1206	
+  1207		if (!pm) {
+  1208			pci_fixup_device(pci_fixup_suspend_late, pci_dev);
+  1209			return 0;
+  1210		}
+  1211	
+  1212		if (pm->poweroff_noirq) {
+  1213			int error;
+  1214	
+  1215			error = pm->poweroff_noirq(dev);
+  1216			suspend_report_result(dev, pm->poweroff_noirq, error);
+  1217			if (error)
+  1218				return error;
+  1219		}
+  1220	
+> 1221		if (!pci_pm_set_prepare_bus_pm(pci_dev))
+  1222			goto Fixup;
+  1223	
+  1224		/*
+  1225		 * The reason for doing this here is the same as for the analogous code
+  1226		 * in pci_pm_suspend_noirq().
+  1227		 */
+  1228		if (pci_dev->class == PCI_CLASS_SERIAL_USB_EHCI)
+  1229			pci_write_config_word(pci_dev, PCI_COMMAND, 0);
+  1230	
+  1231	Fixup:
+  1232		pci_fixup_device(pci_fixup_suspend_late, pci_dev);
+  1233	
+  1234		return 0;
+  1235	}
+  1236	
 
 -- 
-With best wishes
-Dmitry
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
