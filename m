@@ -1,180 +1,203 @@
-Return-Path: <linux-pm+bounces-28298-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28299-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1EC9AD19CC
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 10:30:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DBA0AD1B96
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 12:29:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA7333A6C49
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 08:30:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18FA7188A703
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 10:29:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE6921A314D;
-	Mon,  9 Jun 2025 08:30:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02E9B253F30;
+	Mon,  9 Jun 2025 10:29:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="edm/kAxs"
+	dkim=pass (2048-bit key) header.d=public-files.de header.i=frank-w@public-files.de header.b="MS/0fkoK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD4718024;
-	Mon,  9 Jun 2025 08:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7DE253949;
+	Mon,  9 Jun 2025 10:29:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749457845; cv=none; b=QeudpX3drshd/wihWg6ubQ1l+qRoFjQEzFY2bADGdl1A7nmGMqqH82sqCAuFgqeEsGMmP+N9vJM1i2mV4GRDhZ/vOk+Si6OZEN6gMwUMxhMVpyTKP5WK7/nqtV4Bv+RzncJTFJSIoAy0ZNdegCNHu76H71hcO+lWKyvhKjVy61k=
+	t=1749464964; cv=none; b=LV7/l7jLeVpJ9APGystqXRQRVXY1Lo0Vy/W77/CV/p+yqNV/EyvpakWmyntED1BhNY6Wgs/kv+CeDY7XGlGcQbZs6L/gDGuYbVoGS3RqpWYqyZ3mA0ZwsoORJqm3J+POHVhHEXZ2zhvoPJl3+X5b2REuS0oizjoj2IGXjItvIUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749457845; c=relaxed/simple;
-	bh=ensT7p+N/ywee7KLRyYcOmYZaATuuZJ+u1tIIRo0PZs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lx3d/pxYLx5RwHK6adrhB34k8lzmmj1zcwLECrbRGerL4YwAskkuP9+KwzM8+geIPMGpuojW2jZiH3EudI+vvoegXJkYh9Kh0uR7pk/cFtQNyU+y5cLzGhmbpZFd5RRYbv2CBuIYMsfNzv4rafIA4CHQUi6dCOC9i2bnli1vShg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=edm/kAxs; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749457844; x=1780993844;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ensT7p+N/ywee7KLRyYcOmYZaATuuZJ+u1tIIRo0PZs=;
-  b=edm/kAxssvUiFX2AcN+EAlNgiGMoSEqPkcBZtMlOhpUwUXLrUuj7mzzw
-   COAFDJK46yujl/+lQuGZo7lQhVdJRENo0wf5r8lHxQTHi83ACMsmJQTG1
-   JR0psujnKpCBT3TRqoVCFZIZ5p1uaDPt8EdqVF1q4V0RjA+gVAqAMOV4D
-   rPhfLUU7oZRnzX6m/nUwHM0byacBMDnQEKb4a/NVHZCtYDNzzx/hf4Gpw
-   +pJZ7AiWgT7rKZV9p+dJDcTDs/rYQekVeC/Y3EahooJEd4ofKpQznAOYU
-   niSDK5EDgQiiZdrB5Q0pr8DfpbCwNDchmYge14oYb+L/ZMmwRoQS11KRY
-   Q==;
-X-CSE-ConnectionGUID: H0y8W1G6RayvBnUH528R/w==
-X-CSE-MsgGUID: 2CJuj0fVT/+dmO9qPYi/Rw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11458"; a="76921921"
-X-IronPort-AV: E=Sophos;i="6.16,222,1744095600"; 
-   d="scan'208";a="76921921"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2025 01:30:43 -0700
-X-CSE-ConnectionGUID: 5Pkjg0zRSoW7rgRyVlx9Gg==
-X-CSE-MsgGUID: h31gkaVcRXapdesgq+80fQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,222,1744095600"; 
-   d="scan'208";a="147382809"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 09 Jun 2025 01:30:38 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uOXts-0006t3-0L;
-	Mon, 09 Jun 2025 08:30:36 +0000
-Date: Mon, 9 Jun 2025 16:29:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <superm1@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Bjorn Helgaas <helgaas@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	amd-gfx@lists.freedesktop.org,
-	"(open list:HIBERNATION (aka Software Suspend, aka swsusp))" <linux-pm@vger.kernel.org>,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	dri-devel@lists.freedesktop.org, linux-scsi@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	AceLan Kao <acelan.kao@canonical.com>,
-	Kai-Heng Feng <kaihengf@nvidia.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	Denis Benato <benato.denis96@gmail.com>,
-	Merthan =?utf-8?Q?Karaka=C5=9F?= <m3rthn.k@gmail.com>
-Subject: Re: [PATCH v3 2/5] PCI: Put PCIe ports with downstream devices into
- D3 at hibernate
-Message-ID: <202506091639.HaxwbWtd-lkp@intel.com>
-References: <20250609024619.407257-3-superm1@kernel.org>
+	s=arc-20240116; t=1749464964; c=relaxed/simple;
+	bh=kLeynbC7Nsabe/zZnAE4wIR/2+EJVZRySOC+x218YFQ=;
+	h=MIME-Version:Message-ID:From:To:Cc:Subject:Content-Type:Date:
+	 In-Reply-To:References; b=DAiIUDuONzxJglc6/2kjp79DzX5hYJRjJTtp+I9lhk2LWaQS/HlVlhIrEcrzyH240KuLCFoKbCz9quF9T94HhW3jHsmjivQDQ+CLu+7xKXHKEu2EDhrP6T2P4Heph0JHg+1jGiutT2vdNzVwGQpaQ4DD7iK2YQff2Mir6oR+LA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=public-files.de; spf=pass smtp.mailfrom=public-files.de; dkim=pass (2048-bit key) header.d=public-files.de header.i=frank-w@public-files.de header.b=MS/0fkoK; arc=none smtp.client-ip=212.227.15.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=public-files.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=public-files.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=public-files.de;
+	s=s31663417; t=1749464918; x=1750069718; i=frank-w@public-files.de;
+	bh=UjVgFSIpV2X04ea9AxQMDu3aUAqHlJDuyDyhBp2KhX4=;
+	h=X-UI-Sender-Class:MIME-Version:Message-ID:From:To:Cc:Subject:
+	 Content-Type:Date:In-Reply-To:References:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=MS/0fkoKpCyad+CC+J4GnkAyF87kEu/JFzIgg5K4U+jerrW54U+QOyOsaXPpvRKr
+	 LyCb8s0xH6ff+z6Nv3DomqSz0T0hAC7TjTfw5CUUiFu67M3Hso8pxSIW4hYIXPu8y
+	 T2T4AC2rsVc6vVEfmGHJqTKelmohQ0y+JHAcphkSJO4Y1lAUu8jB0rSAxkbHhLP2v
+	 w2RgfeS+BdRzDattHZZf2Q/p9ef6LzvK05Xw37ITnzQzcUja9Q7ZCuKBc9f7XWt2A
+	 SpOVrpq3MKhRx884LzjMZRtAXRVs+WdzYVtwSBmZKPc0EwT5OszD77DHgelzJ8m2n
+	 RY7cEaodwo7EOS+9Rg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [100.71.3.129] ([100.71.3.129]) by
+ trinity-msg-rest-gmx-gmx-live-5d9b465786-mldbm (via HTTP); Mon, 9 Jun 2025
+ 10:28:38 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250609024619.407257-3-superm1@kernel.org>
+Message-ID: <trinity-87fadcdb-eee3-4e66-b62d-5cef65f1462d-1749464918307@trinity-msg-rest-gmx-gmx-live-5d9b465786-mldbm>
+From: Frank Wunderlich <frank-w@public-files.de>
+To: andrew@lunn.ch, linux@fw-web.de, daniel@makrotopia.org
+Cc: myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+ cw00.choi@samsung.com, djakov@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, olteanv@gmail.com,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, matthias.bgg@gmail.com,
+ angelogioacchino.delregno@collabora.com, jia-wei.chang@mediatek.com,
+ johnson.wang@mediatek.com, arinc.unal@arinc9.com, Landen.Chao@mediatek.com,
+ dqfext@gmail.com, sean.wang@mediatek.com, lorenzo@kernel.org, nbd@nbd.name,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+Subject: Aw: Re: [PATCH v3 06/13] arm64: dts: mediatek: mt7988: add basic
+ ethernet-nodes
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 9 Jun 2025 10:28:38 +0000
+In-Reply-To: <cc73b532-f31b-443e-8127-0e5667c3f9c3@lunn.ch>
+References: <20250608211452.72920-1-linux@fw-web.de>
+ <20250608211452.72920-7-linux@fw-web.de>
+ <cc73b532-f31b-443e-8127-0e5667c3f9c3@lunn.ch>
+X-UI-CLIENT-META-MAIL-DROP: W10=
+X-Provags-ID: V03:K1:5JwfFEh+N+ttjTh5vxuvvC5upKEDjso7yy21yl5pV/dtZv3anNKBvjY4rDfI6hKaUSOph
+ u8cGAWJUMqq9DWNm8iKkqwO2Z5WJeQqxTWvWCSuzL4Xre7oAMDiEITW76an37MgkjRiA/VVTVBAn
+ TCuY1ELiDsMHuFNrDzszDGVRqLzacVimbed2YZnRdNlsBYJjaqCXQLWiZPBfQq3r7GObmVg0ocIP
+ A5WoGgxfMhiqvOzBnRLK+WX0OfUnkAXTuI00V5820/3i5E3zK5rBte6ZVcFLl2V5lBRpaDq949jq
+ 3zwHlZajQ3Yg+5V0ACqAG+LGF7OsDOtplghm9747djY/y9p/OJ653mxK7VE6jqn6OU=
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:nc+zqxOfX0U=;I8/8WjzQbL4heqzXq4h8MsUMufe
+ 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
+Content-Transfer-Encoding: quoted-printable
 
-Hi Mario,
+Hi Andrew
 
-kernel test robot noticed the following build errors:
+> Gesendet: Sonntag, 8. Juni 2025 um 23:23
+> Von: "Andrew Lunn" <andrew@lunn.ch>
+> An: "Frank Wunderlich" <linux@fw-web.de>
+> Betreff: Re: [PATCH v3 06/13] arm64: dts: mediatek: mt7988: add basic et=
+hernet-nodes
+>
+> > +			gmac0: mac@0 {
+> > +				compatible =3D "mediatek,eth-mac";
+> > +				reg =3D <0>;
+> > +				phy-mode =3D "internal";
+> > +
+> > +				fixed-link {
+> > +					speed =3D <10000>;
+> > +					full-duplex;
+> > +					pause;
+> > +				};
+>=20
+> Maybe i've asked this before? What is on the other end of this link?
+> phy-mode internal and fixed link seems an odd combination. It might
+> just need some comments, if this is internally connected to a switch.
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge mkp-scsi/for-next jejb-scsi/for-next linus/master v6.16-rc1 next-20250606]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+yes you've asked in v1 and i responded :)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/PM-Use-hibernate-flows-for-system-power-off/20250609-105658
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20250609024619.407257-3-superm1%40kernel.org
-patch subject: [PATCH v3 2/5] PCI: Put PCIe ports with downstream devices into D3 at hibernate
-config: i386-buildonly-randconfig-003-20250609 (https://download.01.org/0day-ci/archive/20250609/202506091639.HaxwbWtd-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250609/202506091639.HaxwbWtd-lkp@intel.com/reproduce)
+https://patchwork.kernel.org/project/linux-mediatek/patch/20250511141942.1=
+0284-9-linux@fw-web.de/
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506091639.HaxwbWtd-lkp@intel.com/
+connected to internal (mt7530) switch. Which kind of comment do you want h=
+ere? Only "connected to internal switch"
+or some more details?
 
-All errors (new ones prefixed by >>):
+> > +			mdio_bus: mdio-bus {
+> > +				#address-cells =3D <1>;
+> > +				#size-cells =3D <0>;
+> > +
+> > +				/* internal 2.5G PHY */
+> > +				int_2p5g_phy: ethernet-phy@f {
+> > +					reg =3D <15>;
+>=20
+> It is a bit odd mixing hex and decimal.
 
->> drivers/pci/pci-driver.c:1221:7: error: call to undeclared function 'pci_pm_set_prepare_bus_pm'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1221 |         if (!pci_pm_set_prepare_bus_pm(pci_dev))
-         |              ^
-   1 error generated.
+do you prefer hex or decimal for both? for r3mini i used decimal for both,=
+ so i would change unit-address
+to 15.
 
+> > +					compatible =3D "ethernet-phy-ieee802.3-c45";
+>=20
+> I _think_ the coding standard say the compatible should be first.
 
-vim +/pci_pm_set_prepare_bus_pm +1221 drivers/pci/pci-driver.c
+i can move this up of course
 
-  1195	
-  1196	static int pci_pm_poweroff_noirq(struct device *dev)
-  1197	{
-  1198		struct pci_dev *pci_dev = to_pci_dev(dev);
-  1199		const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
-  1200	
-  1201		if (dev_pm_skip_suspend(dev))
-  1202			return 0;
-  1203	
-  1204		if (pci_has_legacy_pm_support(pci_dev))
-  1205			return pci_legacy_suspend_late(dev);
-  1206	
-  1207		if (!pm) {
-  1208			pci_fixup_device(pci_fixup_suspend_late, pci_dev);
-  1209			return 0;
-  1210		}
-  1211	
-  1212		if (pm->poweroff_noirq) {
-  1213			int error;
-  1214	
-  1215			error = pm->poweroff_noirq(dev);
-  1216			suspend_report_result(dev, pm->poweroff_noirq, error);
-  1217			if (error)
-  1218				return error;
-  1219		}
-  1220	
-> 1221		if (!pci_pm_set_prepare_bus_pm(pci_dev))
-  1222			goto Fixup;
-  1223	
-  1224		/*
-  1225		 * The reason for doing this here is the same as for the analogous code
-  1226		 * in pci_pm_suspend_noirq().
-  1227		 */
-  1228		if (pci_dev->class == PCI_CLASS_SERIAL_USB_EHCI)
-  1229			pci_write_config_word(pci_dev, PCI_COMMAND, 0);
-  1230	
-  1231	Fixup:
-  1232		pci_fixup_device(pci_fixup_suspend_late, pci_dev);
-  1233	
-  1234		return 0;
-  1235	}
-  1236	
+> > +					phy-mode =3D "internal";
+>=20
+> A phy should not have a phy-mode.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+not sure if this is needed for mt7988 internal 2.5g phy driver, but seems =
+not when i look at the driver
+(drivers/net/phy/mediatek/mtk-2p5ge.c). The switch phys also use this and =
+also here i do not see any
+access in the driver (drivers/net/dsa/mt7530-mmio.c + mt7530.c) on a quick=
+ look.
+Afaik binding required the property and should be read by phylink (to be n=
+ot unknown, but looks like
+handled the same way).
+
+Maybe daniel can describe a bit deeper.
+
+> 	Andrew
+
+regards Frank
+
 
