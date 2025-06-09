@@ -1,383 +1,245 @@
-Return-Path: <linux-pm+bounces-28311-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28312-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B94F5AD215D
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 16:50:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23288AD24F8
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 19:31:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23AD43ACDAF
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 14:49:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE646189092E
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 17:31:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 539BF19E97C;
-	Mon,  9 Jun 2025 14:49:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54A5B21ADA3;
+	Mon,  9 Jun 2025 17:31:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KEBAMZ4L"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PgvxpeAp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC5219D093;
-	Mon,  9 Jun 2025 14:49:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9500C3597B;
+	Mon,  9 Jun 2025 17:31:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749480571; cv=none; b=mjHxZ7vM0/cpo6VQOpI6gRJcfC3yYsFoS2/msAnHurGHY1tbg+hVQDLcoDiK6bg6MQyJ3puwoUjbziu8a7pvVTyp4a6pW1nZ4eCgIeYkxHS3xaFsDjx67BWzGvEGZ2BEWBK5YfUwxrR7N0XP+JbIQCraM0TAALQ9QTYQsldg0EA=
+	t=1749490286; cv=none; b=dhcK/nqs8d21I6O5bI9mpK31IvDyUeVWraBuo0CuaugsVOlZ2tdF2gj5osk8w+tPMP3HHotMqiWtl6dV4n2OqsIhCIZrbkzFb30xFM+YkLzoxxtnKp+D9Z0jrB0bK3BylVkhodBb038d04olUYUIjMsCuDsuK45cvv0Qhzca9C0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749480571; c=relaxed/simple;
-	bh=N2hGCKcDh6Xpz7j/msHBJtSOvhiYQg5u/JmVQ9+iXpc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JMxoExY64aTqoKp4x4VKrQg0LRUl/fg/9No+DKD4b9+xKEQOgvAdJZXSoTeQHwOTfJE87s95lyesYJHsNKPgXVvZzC17YUYKmCjztQQo3LLR1thYWIRQRjfgP8BS2uT0zsI/Wrpu9aRx7HCs6p0LsFqcs64N6gOPn1GZDBZyHyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KEBAMZ4L; arc=none smtp.client-ip=209.85.214.175
+	s=arc-20240116; t=1749490286; c=relaxed/simple;
+	bh=8LBJLyj0kgr4c05PRceO/pKC3cvZqpYuU4UKLWl6TZA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kPkX9lp0PBDRv0isXnwsBibJ0WRw9ojgcDG4LbiGv9QcXE69hKmdgMK+HqaNjYnoKXvZhA1Atz3DnR/9YK38qJn9G0bgVXwUEq6X/q5XoV7PMerTSWpLt9WTjxZU+IEo23IG+9E8NstXHGUsoRO4FlEQCG0I220My1NqD+5VQY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PgvxpeAp; arc=none smtp.client-ip=209.85.221.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-234c5b57557so40023965ad.3;
-        Mon, 09 Jun 2025 07:49:29 -0700 (PDT)
+Received: by mail-vk1-f182.google.com with SMTP id 71dfb90a1353d-53082f1ac34so1348428e0c.3;
+        Mon, 09 Jun 2025 10:31:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749480569; x=1750085369; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VDQ70N0apsO9qdPmuXxM1Y0/xVvdzg0zBWkIx78RQC4=;
-        b=KEBAMZ4Ld9jd7B13Hj9YQXaUe3fArul3ZsCJFGyUA5A4u2a+WPAXpfdsm6/wIB+GyR
-         plZRixzUuX3CFYaZMP3ueA146Dy5G4w5cUWpcJQ7pCLr72rDVJQodNNEPzFaIg6Gk0e+
-         ThBMtoZF/6qENJphq6bt3YG5GGVQWOdqxY9+xm93BsOiXyJLtP+iT8kztcHP+1EedGnb
-         sL/8w2PpvN5jc0s/pJE71zDGg0wEUAAd6s9uSD3JojAwv3AL6H5YQcuoLtXZgcr09cqz
-         g6r1A1eUP5nLXCJ+bVDtvnBuBBPu+fV+cO79T4co2qddd6SLBcIKmbenjdkeVgup/fcv
-         bgZQ==
+        d=gmail.com; s=20230601; t=1749490283; x=1750095083; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=v0Qu66z7kDW3js03KQPZ0HZb8QpcE1+x1gXTQ8PQnaU=;
+        b=PgvxpeApqp67C7bN8eeiv94rxHScde6hMQvz2XZYeFIacPXfNtOVFGCLuZ5XjebKUa
+         M52u4JkMTyY9uRlZlJjmAac0RgYLxxF3JO4UxlGipguvcSlmucYLW/iE5zGthQVBz/bZ
+         F6U/td8CXYbHW2bsBhEO1pHHEDngcJUMANKCrl8wjuCGoxfw0Q3Hirwcce09siI8wBHm
+         WtEDxAQarK5Fg45wcQ5ARI6aYqULgQI72dN0hlAM2HaZ0Wkl1WLVAhmJezjj+4pzvoB6
+         1KJ31ZoFxRSiklelF40rR6mFG0gyJSPUrysDy8b92CATCgNRFjxMHNHVyBOl5mAZQlEf
+         z0Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749480569; x=1750085369;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VDQ70N0apsO9qdPmuXxM1Y0/xVvdzg0zBWkIx78RQC4=;
-        b=XhaxfiHVxuCmpuS3ViDzxrwBcqbd84Wr508W8Ef7XUS8d7KFMAMCgzZeMx49hrwE+o
-         CejN7cSGOcZ/qt0w8cI4I6V59Uw4E1AHA3YBCTG/HI380FPUbYc7EpR83RZ6PaudoKmP
-         /qkO037DilW1EOQl+tp424Wk2rLLtclV2Nj3rzWd5Qxo57s87CR0E89NF5f614z93MyX
-         WnP5ZfyLQ/ZARR2mUW/moLCi4mZLq0/F8yqt+UyZOWCirgpAmKDN+FkEdknW9hTHGljJ
-         9F2Qug0kUfXIns10XCXtzbNdYbhKmCSHLaDJCs3PU1UWiPom8Cm97cj55yaEcA0/3Zft
-         jnBA==
-X-Forwarded-Encrypted: i=1; AJvYcCXdwbh86J46bhcCfNVytv+C1tgy4xxe2c1pTBEqy0JyZkBR7ZHwj20LA42Snk0UlZ1pa4bePpx8mnyzCxM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8KkoMEh+aoja1r6qWKhKVgiZzVrz7xdli/lUXF10yT3+m6fEJ
-	T6BxiKmuVZG4Pm28eo4AuFJB6cLmUH0uWeOz1xQ0y+cJFqP+s0YuaEoI
-X-Gm-Gg: ASbGnct3HM+1FkZCdGqlPfjTF4YGSbWppKeyEP8IYXS9WnBZOUGkw4BRqgmYdhTPVlz
-	C3Fs7TodiRBZegX9KEc3GfNcdV69dVmFZP5ycCwW7MxuOmyaUMECKXUJnn+9T0nLSZ8ltstYxHB
-	rmOYrT7u4TvTVQbNrZUqZwQTJEowe7KQJzlo6HZrsmoSVYRsLCCkN2xF7n9MnPDsG45CePAZ8cy
-	BKxJTZfGbNTxhIJsXUyV9aN/DGqv+HdawKE0JVsc/STdogVyJc8hXStBxxOViLCMhxbcPhr0att
-	oqMbC9Z1slXEoIh7iny2NuhXst6fRrXAiFXpGfBKtOnQnHiiGcD6UYIoTj+934mWY6WTuHcoKQ3
-	i82pF0pb3y60TZceIqL7d
-X-Google-Smtp-Source: AGHT+IGh7IxC0gxR92VaO3pJATFB7kZhChhV4DQACNpg/Bn2At+RqcEukNET3ao+hdzNQYXuwV3U2Q==
-X-Received: by 2002:a17:902:d4cd:b0:229:1619:ab58 with SMTP id d9443c01a7336-23601dc4419mr200497475ad.43.1749480568711;
-        Mon, 09 Jun 2025 07:49:28 -0700 (PDT)
-Received: from localhost.localdomain ([2409:40c2:30ac:7971:9724:5a2d:e1ce:3f3])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-236030925e3sm55499015ad.53.2025.06.09.07.49.25
+        d=1e100.net; s=20230601; t=1749490283; x=1750095083;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v0Qu66z7kDW3js03KQPZ0HZb8QpcE1+x1gXTQ8PQnaU=;
+        b=SY9sPR206OFCQVeNhOA9ytiZhWNpgeCCf4hazBE97umfWYlIEZorSQVuibwY2/wy99
+         GjlTKrUtQS0Qajhaa4K4aHqOC3EV1iu4J37dXCfaLBq6lfDmGN4Ih1gsmf1KDZNV2F0G
+         I3xoNgOZzhyXcnNFZ3ZZW4sqQDhxsluzx514x/dJb4kULNS+0aH0cNHzdr7sz7APKkNJ
+         e/izk8lbEJoyabCOTa6qQq7mkSNKoGrB91kbq7h0UuzP3lh5Qyc5c57rNElGLBKn7klN
+         fxw+/o45KByx1j7oqpERItRhH7dSWaI31hPZQEaAw8f63vjyoPSSdJhFLaMC+osxHhux
+         BM5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUPu0EeGPrgJ4b0Mc+BWLoJDvLiiDDtf7omj9CDJ4HwHxQbRuurVQ/6Ih0IVXrwd3AAd+urjEGq8JU=@vger.kernel.org, AJvYcCVlv+Se5w+1AQpyiqvsz2c91rEh9BqARbd1B6hJTyE9lyLZjKpaPV5ZTIDbLynmEFCv+sn3sXJTZjLLLZc=@vger.kernel.org, AJvYcCX/uTjYHuM91aegToey7JgsripJCJiqG14BZX/vi1la56ozMq9rKTrAQBSKKN6akxhAyhCPeoaEYw4Ea0Zkln4OGw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKD5ljoIQnrnHj0EeA7Bk5MSVI7h3cqX/VLZuyF5aRPkvl7Dge
+	0X892W/ya8eQTu6DvdNwWlXaIZVlFFf+0TTQFzfIvJQ0D/sNYqTA+zan
+X-Gm-Gg: ASbGncsuGDX+t8yLYGcngynCVa1GFiOOPahL7vXwDw/iBjQIoG6wp728JxgbvrpCliQ
+	c8iTSaYTOuxR6RzeX0kL1F+FMOLW+FXdFrZ9VlseTmbjjxhW/hNDjNpusK1adaKCN3/dl5fbqr+
+	5D+pwHwPu7M+BgtTSBpppNM1eJh7ak5bMwx1AFyY+Y6SEx1ZiVKQRUFh3dh5d4WSoC+c1N13mZL
+	MXTbxzID7n40nT6sdIvOsjEQ+U1/BWZANX1bVwEkSE+tI294Xs95oea1LoEl/D7X/uRTkhQZ98c
+	A2SD/v8cm7bOA9jZFx9lMRTyp4atHRQzlsvCVaKuGz/pvug8QQ==
+X-Google-Smtp-Source: AGHT+IGzoebj1QMPet5l8I9qWvt9vrbw2pGLKm4WGcWKCZt5wa18t6jdZYC5Lc1lX0z+RxP/znejvw==
+X-Received: by 2002:a05:6122:8d1:b0:52b:789:2d0 with SMTP id 71dfb90a1353d-530e47ed0a2mr11738050e0c.5.1749490282233;
+        Mon, 09 Jun 2025 10:31:22 -0700 (PDT)
+Received: from hiago-nb ([67.159.246.222])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-53113abd74bsm32564e0c.17.2025.06.09.10.31.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jun 2025 07:49:28 -0700 (PDT)
-From: Rohan Lambture <rohanlambture13@gmail.com>
-To: trenn@suse.com,
-	shuah@kernel.org,
-	jwyatt@redhat.com,
-	jkacur@redhat.com
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Rohan Lambture <rohanlambture13@gmail.com>
-Subject: [PATCH] cpupower: Add cpu_start()/cpu_stop() callbacks for monitors
-Date: Mon,  9 Jun 2025 20:19:12 +0530
-Message-ID: <94c3faee898b5436cc0b837c6778011a060b8468.1749480264.git.rohanlambture13@gmail.com>
-X-Mailer: git-send-email 2.49.0
+        Mon, 09 Jun 2025 10:31:21 -0700 (PDT)
+Date: Mon, 9 Jun 2025 14:31:15 -0300
+From: Hiago De Franco <hiagofranco@gmail.com>
+To: Peng Fan <peng.fan@nxp.com>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Hiago De Franco <hiago.franco@toradex.com>,
+	"imx@lists.linux.dev" <imx@lists.linux.dev>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+	Daniel Baluta <daniel.baluta@nxp.com>,
+	"Iuliana Prodan (OSS)" <iuliana.prodan@oss.nxp.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v4 3/3] remoteproc: imx_rproc: detect and attach to
+ pre-booted remote cores
+Message-ID: <20250609173115.qecc2noswkcgr3hm@hiago-nb>
+References: <20250602131906.25751-1-hiagofranco@gmail.com>
+ <20250602131906.25751-4-hiagofranco@gmail.com>
+ <PAXPR04MB84594F9ABDF0728D9A71FAFE886CA@PAXPR04MB8459.eurprd04.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PAXPR04MB84594F9ABDF0728D9A71FAFE886CA@PAXPR04MB8459.eurprd04.prod.outlook.com>
 
-Move per-CPU logic from inside individual monitors to the main
-monitoring framework by adding cpu_start() and cpu_stop() callback
-functions to the cpuidle_monitor structure.
+On Wed, Jun 04, 2025 at 03:19:52AM +0000, Peng Fan wrote:
+> > Subject: [PATCH v4 3/3] remoteproc: imx_rproc: detect and attach to
+> > pre-booted remote cores
+> > 
+> > From: Hiago De Franco <hiago.franco@toradex.com>
+> > 
+> > When the remote core is started before Linux boots (e.g., by the
+> > bootloader), the driver currently is not able to attach because it only
+> > checks for cores running in different partitions. If the core was kicked
+> > by the bootloader, it is in the same partition as Linux and it is already
+> > up and running.
+> > 
+> > This adds power mode verification through dev_pm_genpd_is_on(),
+> > enabling the driver to detect when the remote core is already running
+> > and properly attach to it if all the power domain devices are on.
+> > 
+> > To accomplish this, we need to avoid passing any attach_data or flags
+> > to dev_pm_domain_attach_list(), letting the platform device become a
+> > consumer of the power domain provider. With that the current power
+> > state of the genpds will not change, allowing the detection of the
+> > remote core power state.
+> > 
+> > We enable and sync the device runtime PM during probe to make sure
+> > the power domains are correctly managed when the core is controlled
+> > by the kernel.
+> > 
+> > Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > Signed-off-by: Hiago De Franco <hiago.franco@toradex.com>
+> > ---
+> > v4: Changed to use the new dev_pm_genpd_is_on() function instead,
+> > as suggested by Ulf. This will now get the power status of the two
+> > remote cores power domains to decided if imx_rpoc needs to attach or
+> > not. In order to do that, pm_runtime_enable() and
+> > pm_runtime_get_sync() were introduced and pd_data was removed.
+> > v3: Unchanged.
+> > v2: Dropped unecessary include. Removed the imx_rproc_is_on
+> > function, as suggested.
+> > v1:
+> > ---
+> >  drivers/remoteproc/imx_rproc.c | 29 ++++++++++++++++++++++++-----
+> >  1 file changed, 24 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/remoteproc/imx_rproc.c
+> > b/drivers/remoteproc/imx_rproc.c index
+> > 627e57a88db2..6f9680142704 100644
+> > --- a/drivers/remoteproc/imx_rproc.c
+> > +++ b/drivers/remoteproc/imx_rproc.c
+> > @@ -18,6 +18,7 @@
+> >  #include <linux/of_reserved_mem.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/pm_domain.h>
+> > +#include <linux/pm_runtime.h>
+> >  #include <linux/reboot.h>
+> >  #include <linux/regmap.h>
+> >  #include <linux/remoteproc.h>
+> > @@ -890,10 +891,8 @@ static int imx_rproc_partition_notify(struct
+> > notifier_block *nb,  static int imx_rproc_attach_pd(struct imx_rproc
+> > *priv)  {
+> >  	struct device *dev = priv->dev;
+> > -	int ret;
+> > -	struct dev_pm_domain_attach_data pd_data = {
+> > -		.pd_flags = PD_FLAG_DEV_LINK_ON,
+> > -	};
+> > +	int ret, i;
+> > +	bool detached = true;
+> > 
+> >  	/*
+> >  	 * If there is only one power-domain entry, the platform driver
+> > framework @@ -902,7 +901,22 @@ static int
+> > imx_rproc_attach_pd(struct imx_rproc *priv)
+> >  	if (dev->pm_domain)
+> >  		return 0;
+> > 
+> > -	ret = dev_pm_domain_attach_list(dev, &pd_data, &priv-
+> > >pd_list);
+> > +	ret = dev_pm_domain_attach_list(dev, NULL, &priv->pd_list);
+> > +	/*
+> > +	 * If all the power domain devices are already turned on, the
+> > remote
+> > +	 * core is already up when the kernel booted (e.g. kicked by
+> > the
+> > +	 * bootloader). In this case attach to it.
+> > +	 */
+> > +	for (i = 0; i < ret; i++) {
+> > +		if (!dev_pm_genpd_is_on(priv->pd_list->pd_devs[i])) {
+> > +			detached = false;
+> > +			break;
+> > +		}
+> > +	}
+> > +
+> > +	if (detached)
+> > +		priv->rproc->state = RPROC_DETACHED;
+> > +
+> >  	return ret < 0 ? ret : 0;
+> >  }
+> > 
+> > @@ -1146,6 +1160,11 @@ static int imx_rproc_probe(struct
+> > platform_device *pdev)
+> >  		}
+> >  	}
+> > 
+> > +	if (dcfg->method == IMX_RPROC_SCU_API) {
+> > +		pm_runtime_enable(dev);
+> > +		pm_runtime_get_sync(dev);
+> 
+> Need put and disable in imx_rproc_remove.
+> 
+> BTW: Has this patchset tested with M4 in a separate partition,
+> saying M4 image packed in flash.bin?
 
-This refactoring allows the framework to handle per-CPU scheduling
-and gives higher priority to fork_it operations as mentioned in
-the TODO. Individual monitors now only need to implement per-CPU
-initialization and cleanup logic without managing the CPU iteration
-themselves.
+Sorry for the delay.
 
-Changes made:
-- Add cpu_start()/cpu_stop() function pointers to cpuidle_monitor struct
-- Update monitoring framework to call per-CPU callbacks for each CPU
-- Refactor cpuidle_sysfs and mperf monitors to use new callback pattern
-- Maintain backward compatibility for monitors without per-CPU callbacks
+I tested it now and there must be something missing on my U-Boot:
 
-This addresses the TODO item: "Add cpu_start()/cpu_stop() callbacks
-for monitor -> This is to move the per_cpu logic from inside the
-monitor to outside it."
+Disable imx8x-cm4 rsrc 278 not owned
+Disable imx8x-cm4 rsrc 297 not owned
 
-Signed-off-by: Rohan Lambture <rohanlambture13@gmail.com>
----
- .../utils/idle_monitor/cpuidle_sysfs.c        | 44 ++++++-----
- .../utils/idle_monitor/cpupower-monitor.c     | 78 +++++++++++++++++--
- .../utils/idle_monitor/cpupower-monitor.h     |  2 +
- .../utils/idle_monitor/mperf_monitor.c        | 30 +++----
- 4 files changed, 114 insertions(+), 40 deletions(-)
+It removes my nodes from the DT before starting the kernel, so I cannot
+attach. Do you know what should I do in this case?
 
-diff --git a/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c b/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c
-index 8b42c2f0a5b0..01b1de04e03b 100644
---- a/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c
-+++ b/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c
-@@ -43,35 +43,39 @@ static int cpuidle_get_count_percent(unsigned int id, double *percent,
- 
- static int cpuidle_start(void)
- {
--	int cpu, state;
- 	clock_gettime(CLOCK_REALTIME, &start_time);
--	for (cpu = 0; cpu < cpu_count; cpu++) {
--		for (state = 0; state < cpuidle_sysfs_monitor.hw_states_num;
--		     state++) {
--			previous_count[cpu][state] =
--				cpuidle_state_time(cpu, state);
--			dprint("CPU %d - State: %d - Val: %llu\n",
--			       cpu, state, previous_count[cpu][state]);
--		}
--	}
- 	return 0;
- }
- 
- static int cpuidle_stop(void)
- {
--	int cpu, state;
- 	struct timespec end_time;
-+
- 	clock_gettime(CLOCK_REALTIME, &end_time);
- 	timediff = timespec_diff_us(start_time, end_time);
-+	return 0;
-+}
- 
--	for (cpu = 0; cpu < cpu_count; cpu++) {
--		for (state = 0; state < cpuidle_sysfs_monitor.hw_states_num;
--		     state++) {
--			current_count[cpu][state] =
--				cpuidle_state_time(cpu, state);
--			dprint("CPU %d - State: %d - Val: %llu\n",
--			       cpu, state, previous_count[cpu][state]);
--		}
-+static int cpuidle_cpu_start(unsigned int cpu)
-+{
-+	int state;
-+
-+	for (state = 0; state < cpuidle_sysfs_monitor.hw_states_num; state++) {
-+		previous_count[cpu][state] = cpuidle_state_time(cpu, state);
-+		dprint("CPU %d - State: %d - Val: %llu\n",
-+		       cpu, state, previous_count[cpu][state]);
-+	}
-+	return 0;
-+}
-+
-+static int cpuidle_cpu_stop(unsigned int cpu)
-+{
-+	int state;
-+
-+	for (state = 0; state < cpuidle_sysfs_monitor.hw_states_num; state++) {
-+		current_count[cpu][state] = cpuidle_state_time(cpu, state);
-+		dprint("CPU %d - State: %d - Val: %llu\n",
-+		       cpu, state, current_count[cpu][state]);
- 	}
- 	return 0;
- }
-@@ -205,6 +209,8 @@ struct cpuidle_monitor cpuidle_sysfs_monitor = {
- 	.hw_states		= cpuidle_cstates,
- 	.start			= cpuidle_start,
- 	.stop			= cpuidle_stop,
-+	.cpu_start		= cpuidle_cpu_start,
-+	.cpu_stop		= cpuidle_cpu_stop,
- 	.do_register		= cpuidle_register,
- 	.unregister		= cpuidle_unregister,
- 	.flags.needs_root	= 0,
-diff --git a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
-index ad493157f826..096e3cf35eb3 100644
---- a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
-+++ b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
-@@ -304,12 +304,29 @@ int fork_it(char **argv)
- 	unsigned long long timediff;
- 	pid_t child_pid;
- 	struct timespec start, end;
-+	int cpu;
- 
- 	child_pid = fork();
- 	clock_gettime(CLOCK_REALTIME, &start);
- 
--	for (num = 0; num < avail_monitors; num++)
--		monitors[num]->start();
-+	/* Call global start callbacks first */
-+	for (num = 0; num < avail_monitors; num++) {
-+		if (monitors[num]->start)
-+			monitors[num]->start();
-+	}
-+
-+	/* Call per-CPU start callbacks */
-+	for (num = 0; num < avail_monitors; num++) {
-+		if (monitors[num]->cpu_start) {
-+			for (cpu = 0; cpu < cpu_count; cpu++) {
-+				if (monitors[num]->flags.per_cpu_schedule) {
-+					if (bind_cpu(cpu))
-+						continue;
-+				}
-+				monitors[num]->cpu_start(cpu);
-+			}
-+		}
-+	}
- 
- 	if (!child_pid) {
- 		/* child */
-@@ -332,8 +349,25 @@ int fork_it(char **argv)
- 		}
- 	}
- 	clock_gettime(CLOCK_REALTIME, &end);
--	for (num = 0; num < avail_monitors; num++)
--		monitors[num]->stop();
-+
-+	/* Call per-CPU stop callbacks */
-+	for (num = 0; num < avail_monitors; num++) {
-+		if (monitors[num]->cpu_stop) {
-+			for (cpu = 0; cpu < cpu_count; cpu++) {
-+				if (monitors[num]->flags.per_cpu_schedule) {
-+					if (bind_cpu(cpu))
-+						continue;
-+				}
-+				monitors[num]->cpu_stop(cpu);
-+			}
-+		}
-+	}
-+
-+	/* Call global stop callbacks */
-+	for (num = 0; num < avail_monitors; num++) {
-+		if (monitors[num]->stop)
-+			monitors[num]->stop();
-+	}
- 
- 	timediff = timespec_diff_us(start, end);
- 	if (WIFEXITED(status))
-@@ -352,10 +386,25 @@ int do_interval_measure(int i)
- 		for (cpu = 0; cpu < cpu_count; cpu++)
- 			bind_cpu(cpu);
- 
-+	/* Call global start callbacks first */
- 	for (num = 0; num < avail_monitors; num++) {
- 		dprint("HW C-state residency monitor: %s - States: %d\n",
- 		       monitors[num]->name, monitors[num]->hw_states_num);
--		monitors[num]->start();
-+		if (monitors[num]->start)
-+			monitors[num]->start();
-+	}
-+
-+	/* Call per-CPU start callbacks */
-+	for (num = 0; num < avail_monitors; num++) {
-+		if (monitors[num]->cpu_start) {
-+			for (cpu = 0; cpu < cpu_count; cpu++) {
-+				if (monitors[num]->flags.per_cpu_schedule) {
-+					if (bind_cpu(cpu))
-+						continue;
-+				}
-+				monitors[num]->cpu_start(cpu);
-+			}
-+		}
- 	}
- 
- 	sleep(i);
-@@ -364,9 +413,24 @@ int do_interval_measure(int i)
- 		for (cpu = 0; cpu < cpu_count; cpu++)
- 			bind_cpu(cpu);
- 
--	for (num = 0; num < avail_monitors; num++)
--		monitors[num]->stop();
-+	/* Call per-CPU stop callbacks */
-+	for (num = 0; num < avail_monitors; num++) {
-+		if (monitors[num]->cpu_stop) {
-+			for (cpu = 0; cpu < cpu_count; cpu++) {
-+				if (monitors[num]->flags.per_cpu_schedule) {
-+					if (bind_cpu(cpu))
-+						continue;
-+				}
-+				monitors[num]->cpu_stop(cpu);
-+			}
-+		}
-+	}
- 
-+	/* Call global stop callbacks */
-+	for (num = 0; num < avail_monitors; num++) {
-+		if (monitors[num]->stop)
-+			monitors[num]->stop();
-+	}
- 
- 	return 0;
- }
-diff --git a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h
-index c559d3115330..830ad5ee68d6 100644
---- a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h
-+++ b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h
-@@ -57,6 +57,8 @@ struct cpuidle_monitor {
- 	cstate_t *hw_states;
- 	int (*start) (void);
- 	int (*stop) (void);
-+	int (*cpu_start) (unsigned int cpu);
-+	int (*cpu_stop) (unsigned int cpu);
- 	struct cpuidle_monitor* (*do_register) (void);
- 	void (*unregister)(void);
- 	unsigned int overflow_s;
-diff --git a/tools/power/cpupower/utils/idle_monitor/mperf_monitor.c b/tools/power/cpupower/utils/idle_monitor/mperf_monitor.c
-index 73b6b10cbdd2..6340f5d771b6 100644
---- a/tools/power/cpupower/utils/idle_monitor/mperf_monitor.c
-+++ b/tools/power/cpupower/utils/idle_monitor/mperf_monitor.c
-@@ -224,27 +224,27 @@ static int mperf_get_count_freq(unsigned int id, unsigned long long *count,
- 
- static int mperf_start(void)
- {
--	int cpu;
--
--	for (cpu = 0; cpu < cpu_count; cpu++) {
--		clock_gettime(CLOCK_REALTIME, &time_start[cpu]);
--		mperf_get_tsc(&tsc_at_measure_start[cpu]);
--		mperf_init_stats(cpu);
--	}
--
- 	return 0;
- }
- 
- static int mperf_stop(void)
- {
--	int cpu;
-+	return 0;
-+}
- 
--	for (cpu = 0; cpu < cpu_count; cpu++) {
--		mperf_measure_stats(cpu);
--		mperf_get_tsc(&tsc_at_measure_end[cpu]);
--		clock_gettime(CLOCK_REALTIME, &time_end[cpu]);
--	}
-+static int mperf_cpu_start(unsigned int cpu)
-+{
-+	clock_gettime(CLOCK_REALTIME, &time_start[cpu]);
-+	mperf_get_tsc(&tsc_at_measure_start[cpu]);
-+	mperf_init_stats(cpu);
-+	return 0;
-+}
- 
-+static int mperf_cpu_stop(unsigned int cpu)
-+{
-+	mperf_measure_stats(cpu);
-+	mperf_get_tsc(&tsc_at_measure_end[cpu]);
-+	clock_gettime(CLOCK_REALTIME, &time_end[cpu]);
- 	return 0;
- }
- 
-@@ -373,6 +373,8 @@ struct cpuidle_monitor mperf_monitor = {
- 	.hw_states		= mperf_cstates,
- 	.start			= mperf_start,
- 	.stop			= mperf_stop,
-+	.cpu_start		= mperf_cpu_start,
-+	.cpu_stop		= mperf_cpu_stop,
- 	.do_register		= mperf_register,
- 	.unregister		= mperf_unregister,
- 	.flags.needs_root	= 1,
--- 
-2.49.0
+But apart from that, at least the imx-rproc does not crash or anything.
 
+> 
+> Regards,
+> Peng
+> > +	}
+> > +
+> >  	ret = rproc_add(rproc);
+> >  	if (ret) {
+> >  		dev_err(dev, "rproc_add failed\n");
+> > --
+> > 2.39.5
+> > 
+> 
+
+Best Regards,
+Hiago.
 
