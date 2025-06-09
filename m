@@ -1,259 +1,311 @@
-Return-Path: <linux-pm+bounces-28306-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28307-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AC4BAD1D17
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 14:22:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27E7AAD1E2C
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 14:55:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C6213A236A
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 12:22:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B4C9D1885E16
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 12:55:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E6AC1E98FB;
-	Mon,  9 Jun 2025 12:22:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SAz8l2W/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C598A2571C5;
+	Mon,  9 Jun 2025 12:54:53 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A8C12E7E;
-	Mon,  9 Jun 2025 12:22:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F13B60DCF;
+	Mon,  9 Jun 2025 12:54:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749471748; cv=none; b=njdeXtuVaxRbycSqa/xMLawnpqjyZJqYwgj8htPDH+5K2VtF76qN+FCJX63jFmIjh9hDfM0FgNtZ91uWLSY0RZLSXFgLnQsvll/jdBwIfJZrrWdZAwHrveRixRHEQ8FvEGS2U9jwdYezo33PAvDAp33KjaB103zJHZZXCoLy+ZI=
+	t=1749473693; cv=none; b=WyBPIdJBid/b8ctsgQd45IfQ38n+0Us35dKuubT5p7NI6yyxGgTnjhCH3GvEI6Y6Hoj1adiwyoyRgm0DvcmTdjopl84IjoM9ugRMJAzdflk4FccIoET5hQn07znJWqam6OudQKi5ZzGONmPlfw3e2D/q2wolkrqL7yrBL466cj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749471748; c=relaxed/simple;
-	bh=FhUb+ZXql8dArcka8IrDv/E1OATdkq2BGb4ry+i1JHI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NCK2Z2uknNQqkTNykPhhiKeTq0NXJDG4K5Dog0fLTqyqGDMAxH9BU9D7yNnG1BHNOIvDXyg7KQaIxPlJZ86U/XMSnmTYtC2EJ8/1Hc/OWboiTw8554GiQhPnQPT5DMjAv3fLd/rbaR4UXeBHVNN5RFCv3/Z2ofnyGw9zi1bZM18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SAz8l2W/; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-742c73f82dfso3290758b3a.2;
-        Mon, 09 Jun 2025 05:22:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749471747; x=1750076547; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YBch+ffur1O0Rgja7qluq4MVSQH3W827o3L8nkl80n0=;
-        b=SAz8l2W/P47BMU9FJxDsE51sBska+Ba/5HFbVW3fqGXTur4aoCl20ZpSoxNakGkIXb
-         +V8vb2A/phyHCFqQLt8Deqjun5s7VNEyVLlbrF8IHVpN9ZHqW7KVVcpElZgYBM+CDFqB
-         1dinPfqoJlqE2RGmOiHxUPFuc+JLeH37KaLPwaJt2MwMvQhMoHpAW0cnyAM4ZqiopL/o
-         VFtsVQc+cS5d8o2+SqzwqxuAJJmROs9YpOjPU+rQ+VO0mBY9WF4bCnzM8uCASVniH4Qz
-         lFcuGB2z5ti6+b7AwKeK/mcOmnFj6D0vNXky9aiydKJUYOtiVFTcvuNJi1pRvVRMKpMv
-         NUDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749471747; x=1750076547;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YBch+ffur1O0Rgja7qluq4MVSQH3W827o3L8nkl80n0=;
-        b=CPzimJW8/oT3J76d+WQTsPJj0/PMUVfUjzmiq4FgEmOlyHhjASuwyIy6xQPjIRk/ub
-         ifVPeooAizcumzckhrDIq8IhvFlcxzniuZyY6jgdcOf2UEGGcW9ZHWzsJQQASwWGhqOn
-         h96pcItcXxBoSzCt4ek/MhXw3mt0/du/kgBwbeY+SNA3YdN92DbEyCxigfZx7RDT56YM
-         sLZqVyroAl9iHy2TpjObFxbvngOElEUzlIhTVwskzKNGSWwGqs9H21NUbGCrD9I/N6Kz
-         hh+yQ7FBQBAB/SZ0PeTPvQpbKX8bmCiTFqLGFB9itOi/CbJbEY9/Dmk1xXXAuwLPFOAZ
-         2pPg==
-X-Forwarded-Encrypted: i=1; AJvYcCX2qEYFtXaF12HmpqmZswq10Galj21tL7Dqwp2LYX98u9CBMnI58wVvBN0/endXk7ArAGk5kJieHCyoaPw=@vger.kernel.org, AJvYcCX7Tk2jn5RnJPC+NhGijemn+D3AszblPBzdybUgoNRD3Veo81N0chHTCLxvCAg+GUP7ClwnJAv9FdVrIyejsIc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxuufwIrNJl1xZbXv5TD+tN7PS7gucYQ32F0+cwin9HaMe4rppd
-	S37aZJ3feOX+X/0NVZLycMLQkXtQtJz3rfgs3DZa8k1jzipnxq18nrIo
-X-Gm-Gg: ASbGncsKWPLaT7gM+3jDhXKXQox29OCd212csZKYJYcrSbwd9uITrrSHJiei5VLIZxi
-	arBI++m0bk5HjehuBnTu7m57kSzXaZDbgg9C6dGh+M0HIn1JU8xKvRZGNCXtdAe4H+8+B8KCjAF
-	KrpO/6CAfWFvPPZ2Qh2IHaMOI46WSV1a4KoQb91tuugOvb8GQHU+mF9Co1GBHjs7I4ne0jJI71K
-	6rP52YgOUY2kk0UefqkiFmTeSntYIFZXvirWn4phkWVTMxH/61YKu5INju9kIoEojiPwzE0tk88
-	YiPDJ3JxYqeho6miA83ZmDVw+qdhbf9a1jBfWwVpZmnknocT+lYJSoa2Ffwvznyl4kKjaSj8
-X-Google-Smtp-Source: AGHT+IFN/6jpjwnUWAnmieziowXquVGyIPIEOCFl8zdXOz/2r+NiQoJ5BLmsN49W1/EDBbcGUv3y0g==
-X-Received: by 2002:a05:6a21:6e41:b0:21f:62e7:cd08 with SMTP id adf61e73a8af0-21f62e7ce8dmr5864666637.8.1749471746484;
-        Mon, 09 Jun 2025 05:22:26 -0700 (PDT)
-Received: from pop-os.. ([201.49.69.163])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2f5f7827c0sm5170285a12.62.2025.06.09.05.22.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jun 2025 05:22:26 -0700 (PDT)
-From: Guilherme Giacomo Simoes <trintaeoitogc@gmail.com>
-To: rafael@kernel.org,
-	viresh.kumar@linaro.org,
-	dakr@kernel.org,
-	maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org,
-	tzimmermann@suse.de,
-	airlied@gmail.com,
-	simona@ffwll.ch,
-	mcgrof@kernel.org,
-	russ.weight@linux.dev,
-	ojeda@kernel.org,
-	alex.gaynor@gmail.com,
-	boqun.feng@gmail.com,
-	gary@garyguo.net,
-	bjorn3_gh@protonmail.com,
-	lossin@kernel.org,
-	a.hindborg@kernel.org,
-	aliceryhl@google.com,
-	tmgross@umich.edu,
-	leitao@debian.org,
-	gregkh@linuxfoundation.org,
-	david.m.ertman@intel.com,
-	ira.weiny@intel.com,
-	leon@kernel.org,
-	fujita.tomonori@gmail.com,
-	tamird@gmail.com,
-	igor.korotin.linux@gmail.com,
-	walmeida@microsoft.com,
-	anisse@astier.eu
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	nouveau@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	rust-for-linux@vger.kernel.org,
-	trintaeoitogc@gmail.com
-Subject: [PATCH] rust: module: remove deprecated author key
-Date: Mon,  9 Jun 2025 09:22:00 -0300
-Message-Id: <20250609122200.179307-1-trintaeoitogc@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1749473693; c=relaxed/simple;
+	bh=oWXz3lIwzuU8+p8l5Hj/DkcEeQgbyu9sSB7Bw2e/FgE=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SrgAXC5tpZKv4/CDvcPTPdxdLWLHc3+GM67lUN5ASGmx1zPqwTO8gHnQp0e1QIkY8pNmhaNi7KFiqyBxRB5KWbDbaRnCtbG6v+IqT0T9IJPyIeIs86UyfT/M4+XXPJnOrAiVoRqoXBgrqAC1dW/FNrVrZRQjZ2SDXs3/twPZRLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bGBfh74zzz6L5H8;
+	Mon,  9 Jun 2025 20:53:00 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id D7D701404C5;
+	Mon,  9 Jun 2025 20:54:47 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 9 Jun
+ 2025 14:54:46 +0200
+Date: Mon, 9 Jun 2025 13:54:44 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+CC: <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, Davidlohr Bueso <dave@stgolabs.net>, Dave Jiang
+	<dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, Vishal
+ Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, Dan
+ Williams <dan.j.williams@intel.com>, Matthew Wilcox <willy@infradead.org>,
+	Jan Kara <jack@suse.cz>, "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown
+	<len.brown@intel.com>, Pavel Machek <pavel@kernel.org>, Li Ming
+	<ming.li@zohomail.com>, Jeff Johnson <jeff.johnson@oss.qualcomm.com>, Ying
+ Huang <huang.ying.caritas@gmail.com>, Yao Xingtao <yaoxt.fnst@fujitsu.com>,
+	"Peter Zijlstra" <peterz@infradead.org>, Greg KH
+	<gregkh@linuxfoundation.org>, Nathan Fontenot <nathan.fontenot@amd.com>,
+	Terry Bowman <terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>,
+	"Benjamin Cheatham" <benjamin.cheatham@amd.com>, PradeepVineshReddy Kodamati
+	<PradeepVineshReddy.Kodamati@amd.com>, Zhijian Li <lizhijian@fujitsu.com>
+Subject: Re: [PATCH v4 5/7] cxl/region: Introduce SOFT RESERVED resource
+ removal on region teardown
+Message-ID: <20250609135444.0000703f@huawei.com>
+In-Reply-To: <20250603221949.53272-6-Smita.KoralahalliChannabasappa@amd.com>
+References: <20250603221949.53272-1-Smita.KoralahalliChannabasappa@amd.com>
+	<20250603221949.53272-6-Smita.KoralahalliChannabasappa@amd.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500009.china.huawei.com (7.191.174.84) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-Commit 38559da6afb2 ("rust: module: introduce `authors` key") introduced
-a new `authors` key to support multiple module authors, while keeping
-the old `author` key for backward compatibility.
+On Tue, 3 Jun 2025 22:19:47 +0000
+Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com> wrote:
 
-Now that all in-tree modules have migrated to `authors`, remove:
-1. The deprecated `author` key support from the module macro
-2. Legacy `author` entries from remaining modules
+> Reworked from a patch by Alison Schofield <alison.schofield@intel.com>
+> 
+> Previously, when CXL regions were created through autodiscovery and their
+> resources overlapped with SOFT RESERVED ranges, the soft reserved resource
+> remained in place after region teardown. This left the HPA range
+> unavailable for reuse even after the region was destroyed.
+> 
+> Enhance the logic to reliably remove SOFT RESERVED resources associated
+> with a region, regardless of alignment or hierarchy in the iomem tree.
+> 
+> Link: https://lore.kernel.org/linux-cxl/29312c0765224ae76862d59a17748c8188fb95f1.1692638817.git.alison.schofield@intel.com/
+> Co-developed-by: Alison Schofield <alison.schofield@intel.com>
+> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> Co-developed-by: Terry Bowman <terry.bowman@amd.com>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+> ---
+>  drivers/cxl/acpi.c        |   2 +
+>  drivers/cxl/core/region.c | 151 ++++++++++++++++++++++++++++++++++++++
+>  drivers/cxl/cxl.h         |   5 ++
+>  3 files changed, 158 insertions(+)
+> 
+> diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
+> index 978f63b32b41..1b1388feb36d 100644
+> --- a/drivers/cxl/acpi.c
+> +++ b/drivers/cxl/acpi.c
+> @@ -823,6 +823,8 @@ static void cxl_softreserv_mem_work_fn(struct work_struct *work)
+>  	 * and cxl_mem drivers are loaded.
+>  	 */
+>  	wait_for_device_probe();
+> +
+> +	cxl_region_softreserv_update();
+>  }
+>  static DECLARE_WORK(cxl_sr_work, cxl_softreserv_mem_work_fn);
+>  
+> diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
+> index 109b8a98c4c7..3a5ca44d65f3 100644
+> --- a/drivers/cxl/core/region.c
+> +++ b/drivers/cxl/core/region.c
+> @@ -3443,6 +3443,157 @@ int cxl_add_to_region(struct cxl_port *root, struct cxl_endpoint_decoder *cxled)
+>  }
+>  EXPORT_SYMBOL_NS_GPL(cxl_add_to_region, "CXL");
+>  
+> +static int add_soft_reserved(resource_size_t start, resource_size_t len,
+> +			     unsigned long flags)
+> +{
+> +	struct resource *res = kmalloc(sizeof(*res), GFP_KERNEL);
+> +	int rc;
+> +
+> +	if (!res)
+> +		return -ENOMEM;
+> +
+> +	*res = DEFINE_RES_MEM_NAMED(start, len, "Soft Reserved");
+> +
+> +	res->desc = IORES_DESC_SOFT_RESERVED;
+> +	res->flags = flags;
 
-Signed-off-by: Guilherme Giacomo Simoes <trintaeoitogc@gmail.com>
----
- drivers/cpufreq/rcpufreq_dt.rs        | 2 +-
- drivers/gpu/drm/nova/nova.rs          | 2 +-
- drivers/gpu/nova-core/nova_core.rs    | 2 +-
- rust/kernel/firmware.rs               | 2 +-
- rust/macros/module.rs                 | 6 ------
- samples/rust/rust_configfs.rs         | 2 +-
- samples/rust/rust_driver_auxiliary.rs | 2 +-
- 7 files changed, 6 insertions(+), 12 deletions(-)
+I'm a bit doubtful about using a define that restricts a bunch of the
+elements, then overriding 2 of them immediate after.
 
-diff --git a/drivers/cpufreq/rcpufreq_dt.rs b/drivers/cpufreq/rcpufreq_dt.rs
-index 94ed81644fe1..bdf4b844de42 100644
---- a/drivers/cpufreq/rcpufreq_dt.rs
-+++ b/drivers/cpufreq/rcpufreq_dt.rs
-@@ -220,7 +220,7 @@ fn probe(
- module_platform_driver! {
-     type: CPUFreqDTDriver,
-     name: "cpufreq-dt",
--    author: "Viresh Kumar <viresh.kumar@linaro.org>",
-+    authors: ["Viresh Kumar <viresh.kumar@linaro.org>"],
-     description: "Generic CPUFreq DT driver",
-     license: "GPL v2",
- }
-diff --git a/drivers/gpu/drm/nova/nova.rs b/drivers/gpu/drm/nova/nova.rs
-index 902876aa14d1..64fd670e99e1 100644
---- a/drivers/gpu/drm/nova/nova.rs
-+++ b/drivers/gpu/drm/nova/nova.rs
-@@ -12,7 +12,7 @@
- kernel::module_auxiliary_driver! {
-     type: NovaDriver,
-     name: "Nova",
--    author: "Danilo Krummrich",
-+    authors: ["Danilo Krummrich"],
-     description: "Nova GPU driver",
-     license: "GPL v2",
- }
-diff --git a/drivers/gpu/nova-core/nova_core.rs b/drivers/gpu/nova-core/nova_core.rs
-index 618632f0abcc..f405d7a99c28 100644
---- a/drivers/gpu/nova-core/nova_core.rs
-+++ b/drivers/gpu/nova-core/nova_core.rs
-@@ -13,7 +13,7 @@
- kernel::module_pci_driver! {
-     type: driver::NovaCore,
-     name: "NovaCore",
--    author: "Danilo Krummrich",
-+    authors: ["Danilo Krummrich"],
-     description: "Nova Core GPU driver",
-     license: "GPL v2",
-     firmware: [],
-diff --git a/rust/kernel/firmware.rs b/rust/kernel/firmware.rs
-index 2494c96e105f..ed2fc20cba9b 100644
---- a/rust/kernel/firmware.rs
-+++ b/rust/kernel/firmware.rs
-@@ -181,7 +181,7 @@ unsafe impl Sync for Firmware {}
- /// module! {
- ///    type: MyModule,
- ///    name: "module_firmware_test",
--///    author: "Rust for Linux",
-+///    authors: ["Rust for Linux"],
- ///    description: "module_firmware! test module",
- ///    license: "GPL",
- /// }
-diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-index 2ddd2eeb2852..5dd276a2e5cb 100644
---- a/rust/macros/module.rs
-+++ b/rust/macros/module.rs
-@@ -94,7 +94,6 @@ struct ModuleInfo {
-     type_: String,
-     license: String,
-     name: String,
--    author: Option<String>,
-     authors: Option<Vec<String>>,
-     description: Option<String>,
-     alias: Option<Vec<String>>,
-@@ -108,7 +107,6 @@ fn parse(it: &mut token_stream::IntoIter) -> Self {
-         const EXPECTED_KEYS: &[&str] = &[
-             "type",
-             "name",
--            "author",
-             "authors",
-             "description",
-             "license",
-@@ -134,7 +132,6 @@ fn parse(it: &mut token_stream::IntoIter) -> Self {
-             match key.as_str() {
-                 "type" => info.type_ = expect_ident(it),
-                 "name" => info.name = expect_string_ascii(it),
--                "author" => info.author = Some(expect_string(it)),
-                 "authors" => info.authors = Some(expect_string_array(it)),
-                 "description" => info.description = Some(expect_string(it)),
-                 "license" => info.license = expect_string_ascii(it),
-@@ -179,9 +176,6 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
-     // Rust does not allow hyphens in identifiers, use underscore instead.
-     let ident = info.name.replace('-', "_");
-     let mut modinfo = ModInfoBuilder::new(ident.as_ref());
--    if let Some(author) = info.author {
--        modinfo.emit("author", &author);
--    }
-     if let Some(authors) = info.authors {
-         for author in authors {
-             modinfo.emit("author", &author);
-diff --git a/samples/rust/rust_configfs.rs b/samples/rust/rust_configfs.rs
-index 60ddbe62cda3..af04bfa35cb2 100644
---- a/samples/rust/rust_configfs.rs
-+++ b/samples/rust/rust_configfs.rs
-@@ -14,7 +14,7 @@
- module! {
-     type: RustConfigfs,
-     name: "rust_configfs",
--    author: "Rust for Linux Contributors",
-+    authors: ["Rust for Linux Contributors"],
-     description: "Rust configfs sample",
-     license: "GPL",
- }
-diff --git a/samples/rust/rust_driver_auxiliary.rs b/samples/rust/rust_driver_auxiliary.rs
-index 3e15e6d002bb..abf3d55ed249 100644
---- a/samples/rust/rust_driver_auxiliary.rs
-+++ b/samples/rust/rust_driver_auxiliary.rs
-@@ -114,7 +114,7 @@ fn init(module: &'static kernel::ThisModule) -> impl PinInit<Self, Error> {
- module! {
-     type: SampleModule,
-     name: "rust_driver_auxiliary",
--    author: "Danilo Krummrich",
-+    authors: ["Danilo Krummrich"],
-     description: "Rust auxiliary driver",
-     license: "GPL v2",
- }
--- 
-2.34.1
+DEFINE_RES_NAMED_DESC(start, len, "Soft Reserved", flags | IORESOURCE_MEM,
+		      IORES_DESC_SOFT_RESERVED);
+
+> +	rc = insert_resource(&iomem_resource, res);
+> +	if (rc) {
+> +		kfree(res);
+> +		return rc;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void remove_soft_reserved(struct cxl_region *cxlr, struct resource *soft,
+> +				 resource_size_t start, resource_size_t end)
+> +{
+> +	struct cxl_root_decoder *cxlrd = to_cxl_root_decoder(cxlr->dev.parent);
+> +	resource_size_t new_start, new_end;
+> +	int rc;
+> +
+> +	/* Prevent new usage while removing or adjusting the resource */
+> +	guard(mutex)(&cxlrd->range_lock);
+> +
+> +	/* Aligns at both resource start and end */
+> +	if (soft->start == start && soft->end == end)
+> +		goto remove;
+> +
+
+Might be a clearer flow with else if rather than
+a goto.  
+
+> +	/* Aligns at either resource start or end */
+> +	if (soft->start == start || soft->end == end) {
+> +		if (soft->start == start) {
+> +			new_start = end + 1;
+> +			new_end = soft->end;
+> +		} else {
+> +			new_start = soft->start;
+> +			new_end = start - 1;
+> +		}
+> +
+> +		rc = add_soft_reserved(new_start, new_end - new_start + 1,
+> +				       soft->flags);
+
+This is the remnant of what was there before, but the flags are from
+the bit we are dropping?  That feels odd.  They might well be the same
+but maybe we need to make that explicit?
+
+> +		if (rc)
+> +			dev_warn(&cxlr->dev, "cannot add new soft reserved resource at %pa\n",
+> +				 &new_start);
+> +
+> +		/* Remove the original Soft Reserved resource */
+> +		goto remove;
+> +	}
+> +
+> +	/*
+> +	 * No alignment. Attempt a 3-way split that removes the part of
+> +	 * the resource the region occupied, and then creates new soft
+> +	 * reserved resources for the leading and trailing addr space.
+> +	 */
+> +	new_start = soft->start;
+> +	new_end = soft->end;
+> +
+> +	rc = add_soft_reserved(new_start, start - new_start, soft->flags);
+> +	if (rc)
+> +		dev_warn(&cxlr->dev, "cannot add new soft reserved resource at %pa\n",
+> +			 &new_start);
+> +
+> +	rc = add_soft_reserved(end + 1, new_end - end, soft->flags);
+> +	if (rc)
+> +		dev_warn(&cxlr->dev, "cannot add new soft reserved resource at %pa + 1\n",
+> +			 &end);
+> +
+> +remove:
+> +	rc = remove_resource(soft);
+> +	if (rc)
+> +		dev_warn(&cxlr->dev, "cannot remove soft reserved resource %pr\n",
+> +			 soft);
+> +}
+> +
+> +/*
+> + * normalize_resource
+> + *
+> + * The walk_iomem_res_desc() returns a copy of a resource, not a reference
+> + * to the actual resource in the iomem_resource tree. As a result,
+> + * __release_resource() which relies on pointer equality will fail.
+
+Probably want some statement on why nothing can race with this give
+the resource_lock is not being held.
+
+> + *
+> + * This helper walks the children of the resource's parent to find and
+> + * return the original resource pointer that matches the given resource's
+> + * start and end addresses.
+> + *
+> + * Return: Pointer to the matching original resource in iomem_resource, or
+> + *         NULL if not found or invalid input.
+> + */
+> +static struct resource *normalize_resource(struct resource *res)
+> +{
+> +	if (!res || !res->parent)
+> +		return NULL;
+> +
+> +	for (struct resource *res_iter = res->parent->child;
+> +	     res_iter != NULL; res_iter = res_iter->sibling) {
+
+I'd move the res_iter != NULL to previous line as it is still under 80 chars.
+
+
+> +		if ((res_iter->start == res->start) &&
+> +		    (res_iter->end == res->end))
+> +			return res_iter;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +static int __cxl_region_softreserv_update(struct resource *soft,
+> +					  void *_cxlr)
+> +{
+> +	struct cxl_region *cxlr = _cxlr;
+> +	struct resource *res = cxlr->params.res;
+> +
+> +	/* Skip non-intersecting soft-reserved regions */
+> +	if (soft->end < res->start || soft->start > res->end)
+> +		return 0;
+> +
+> +	soft = normalize_resource(soft);
+> +	if (!soft)
+> +		return -EINVAL;
+> +
+> +	remove_soft_reserved(cxlr, soft, res->start, res->end);
+> +
+> +	return 0;
+> +}
+> +
+> +int cxl_region_softreserv_update(void)
+> +{
+> +	struct device *dev = NULL;
+> +
+> +	while ((dev = bus_find_next_device(&cxl_bus_type, dev))) {
+> +		struct device *put_dev __free(put_device) = dev;
+This free is a little bit outside of the constructor and destructor
+together rules.
+
+I wonder if bus_for_each_dev() is cleaner here or is there a reason
+we have to have released the subsystem lock + grabbed the device
+one before calling __cxl_region_softreserv_update?
+
+> +		struct cxl_region *cxlr;
+> +
+> +		if (!is_cxl_region(dev))
+> +			continue;
+If you stick to bus_find_X   I wonder if we should define helpers for
+
+the match function and use bus_find_device()
+
+> +
+> +		cxlr = to_cxl_region(dev);
+> +
+> +		walk_iomem_res_desc(IORES_DESC_SOFT_RESERVED,
+> +				    IORESOURCE_MEM, 0, -1, cxlr,
+> +				    __cxl_region_softreserv_update);
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(cxl_region_softreserv_update, "CXL");
+
 
 
