@@ -1,106 +1,135 @@
-Return-Path: <linux-pm+bounces-28295-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28296-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05C7CAD1797
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 06:05:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2193DAD189E
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 08:35:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF23C16717B
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 04:05:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C1513A5D5A
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 06:35:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D72D192B75;
-	Mon,  9 Jun 2025 04:05:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF8F82459F7;
+	Mon,  9 Jun 2025 06:35:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BR7ywKbf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221D622339;
-	Mon,  9 Jun 2025 04:05:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A153610D;
+	Mon,  9 Jun 2025 06:35:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749441930; cv=none; b=HVjdQLWdG4p7DH0o2rn4ZtUc2z8+kNSulqnm1B49VKNpuSPoUODXtkOy/d/bs8XxxwGMkNyJaSUcDuA1WQAELiHMUWau/55uXoCjQeaSzDxnz0Uv8jiwVOOwpkhDUPM3yzBiqnuQ/Q3Vk/8uxWPa9pZ82vX04IdLShX9gYPNK00=
+	t=1749450935; cv=none; b=BaxZpHp6CjDID3OTjsUwqPVaablDO1as4w/oTnIsLEabViMTLrXM3/c18EqfcP5GfEeeUn+4jL/KrVAxRdU8XCgPIiwPzmpd2cAjbLiqYjHD0nOifnxikSPzkkgA05zo6FdBtY8g1mBpZ4IJz973Ed4KKgXCRMzVq0tJCn2IMXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749441930; c=relaxed/simple;
-	bh=SR1lkzbZ7sW0vxs7n8MlXWnQR+u4npJ+xZrJWtOep24=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cCFMf1b608KVcuyvNfrINL178a5Rma9sd25JLxbdNT8WdVbeflfq2SNWWknkkMRSCcDvXRjMAXdH+hk7HJbNb8KX9Jnvkrt3MzpfoEV7b/OxP/71p/VJaEW3ZmK3xtswbri62DBzjGASYOuX+T0TXOh0G2mcHBvVmx9jEb/s7QU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: f4f5d3d844e611f0b29709d653e92f7d-20250609
-X-CID-CACHE: Type:Local,Time:202506091146+08,HitQuantity:1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:e53a8877-982c-42b4-b057-1024c2ff2634,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-META: VersionHash:6493067,CLOUDID:9e483725f417c604585cbed8794d6973,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: f4f5d3d844e611f0b29709d653e92f7d-20250609
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1579250139; Mon, 09 Jun 2025 12:05:19 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id B998BE00891C;
-	Mon,  9 Jun 2025 12:05:18 +0800 (CST)
-X-ns-mid: postfix-68465D7E-5632772
-Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 94065E008900;
-	Mon,  9 Jun 2025 12:05:15 +0800 (CST)
-Message-ID: <83513599-e007-4d07-ac28-386bc5c7552d@kylinos.cn>
-Date: Mon, 9 Jun 2025 12:05:14 +0800
+	s=arc-20240116; t=1749450935; c=relaxed/simple;
+	bh=eLeuTaQZ+mEjmhuaoA3ei0mbiUMW1mObJTYwjfYNIWE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Y1/4lAj4OemardP8eww4YYFcVqmQacZzvZ1cGr5MpMmcIcPx9L/nGdFNKQ8xxV7zyPeTYywMzIdcSEVNnqxJRNmGIVn640MrewVKbfwxZ1By94LA/6QH0pzBCP1g8m6VFmQW1kJz0R8cHWCMFnNP/B3gSL/ezpFM/5GTI8OraKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BR7ywKbf; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-60700a745e5so5029772a12.3;
+        Sun, 08 Jun 2025 23:35:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749450932; x=1750055732; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=D5QjZTzRsvth07TwPIj9Bqpfw7PuFxeIFc4P3or3VHQ=;
+        b=BR7ywKbfoT9gBA/ruItom26URDTalhJdJ0xsXsxpOCbthmkenCDDHgxwhXfgzzjnHn
+         UVUeWkxSKHvWNjW6mOQhbwp+wCTjr/ziKLo/5/IaJN8enJJHqy+/6lzd5FFcSIMLErbD
+         SAzyydYxbM8NghiLNU/8uNaqxclH7LcNkl3A/ldUPUtVbTl5zYQdfzoujZPHBA0BnCwM
+         Bb15mJ3xHruJ7c+zAw5HP8nSLydSt+r7UnIyvDq/jleJz/CGCUUePF0or6fdElRRxyzS
+         LX8VL0TJx7vRJY5+38waXPmj4ej4bHlfbU+82t/T2+SaSe9t4sPVXEzAUTao7Q8tLfJ6
+         nbPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749450932; x=1750055732;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D5QjZTzRsvth07TwPIj9Bqpfw7PuFxeIFc4P3or3VHQ=;
+        b=NaRBMH/pR3Y+mh5aXc/tBICDErbOSIRQI0sqiTtHSe5PHUf7nreMrXz3CaHUh37z58
+         cY2/wkZrnm3PN9Zx+1fEHmDg3ePFNkZXEB7rMWJqv2iuBoB/1l8nettaul5tbQE3RvBM
+         k9qxT95u9DqhadDVVS4J4mxAOSqF0Gg1/jIi0TVQb1TikIZV7z4NNYeMBGpkAW9YN3U8
+         m/+wGmhut8uDr99qms4qGLFJriX4sOYNTq4bRKmfMnaYihoyUIUUX9cZPqlAqBV7vzZ+
+         S5Je+hfppi85vRlRZbDbK0SNU5rELztpQfNApSJyc3ZvOKZeuqMcLmnOiReMWDqA7/id
+         RlBg==
+X-Forwarded-Encrypted: i=1; AJvYcCU/NcJRzLLSIiOVYHJhUBWHwI7fyxzPq/OuLeqcfTksLrTuRmszsRyVIMw68NmCi0Bt87tv4tBEUdMNvlA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzJ2RXdpisjDUMLduZF2I3xECWj7KrUlll0YDC+8BkoKTurDUN
+	uKiKrqsPCQlYHOLSpbi91kkitBIp1VXAStwb7H9wJ7iN1QUvhg7GizIVey5fvQ==
+X-Gm-Gg: ASbGncutCXK9dOKHVcLbIIW6qRqn1ic+ZIL2OE84X4pXgibRxdmMS2gbtpqdDYl38Dx
+	+ue3minrpiRnokMHcHfjEvSpl4hc6+uy/z3+MAvYuFyw/OJHChecQ5PuN4bY3gsYc/7XIkH6CKZ
+	TgGr1T/7kWyfD4a6iPOOLWVvFXkljcckqOBo9U7NHLv6KRIRnpIHB7uBG3TMeXYuwXTgdpF/2Ik
+	6CC18yuylT4mwG91+hJEXxrBFbGNnRIO7BYENd0YgQAU8jQ+3OoNdlao5pkl/rdDkPGN/b2d6bP
+	nk9aGqqdBXQwHHNw+58wbV1D+P4YdUi+d9JAB7mOVrOlfyBnAr5Idw==
+X-Google-Smtp-Source: AGHT+IGXZra7Xr70TDC239IEydaDWpezL0pc8rf8jjOV14kiuQEftAI3djMfCzXCg27Br/+QvUSdyA==
+X-Received: by 2002:a05:6402:1e92:b0:607:2417:6d04 with SMTP id 4fb4d7f45d1cf-6077351442cmr10350880a12.14.1749450932025;
+        Sun, 08 Jun 2025 23:35:32 -0700 (PDT)
+Received: from fedora.. ([193.77.86.199])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-607783c0620sm4394270a12.49.2025.06.08.23.35.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Jun 2025 23:35:31 -0700 (PDT)
+From: Uros Bizjak <ubizjak@gmail.com>
+To: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Uros Bizjak <ubizjak@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+	Len Brown <lenb@kernel.org>
+Subject: [PATCH] intel_idle: Update arguments of mwait_idle_with_hints()
+Date: Mon,  9 Jun 2025 08:35:01 +0200
+Message-ID: <20250609063528.48715-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] PM: Optionally block user fork during freeze to
- improve performance
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: rafael@kernel.org, len.brown@intel.com, pavel@kernel.org,
- kees@kernel.org, mingo@redhat.com, juri.lelli@redhat.com,
- vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
- bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
- akpm@linux-foundation.org, david@redhat.com, lorenzo.stoakes@oracle.com,
- Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com,
- mhocko@suse.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org
-References: <20250606062502.19607-1-zhangzihuan@kylinos.cn>
- <20250606082244.GL30486@noisy.programming.kicks-ass.net>
-From: zhangzihuan <zhangzihuan@kylinos.cn>
-In-Reply-To: <20250606082244.GL30486@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi Peter,
-Thanks a lot for the feedback!
+Commit a17b37a3f416 ("x86/idle: Change arguments of mwait_idle_with_hints() to u32")
+changed the type of arguments of mwait_idle_with_hints() from unsigned
+long to u32. Change the type of variables in the call to
+mwait_idle_with_hints() to unsigned int to follow the change.
 
-=E5=9C=A8 2025/6/6 16:22, Peter Zijlstra =E5=86=99=E9=81=93:
-> This isn't blocking fork(), this is failing fork(). Huge difference.
-> Also problematic, because -EBUSY is not a recognised return value of
-> fork(). As such, no existing software will adequately handle it.
-> =C2=A0I completely agree there's a significant difference between faili=
-ng=20
-> and blocking fork().
-The intent was to prevent late-created user tasks from interfering with=20
-the freezing process, but you're right: returning -EBUSY is not valid=20
-for fork(), and existing user-space programs wouldn't expect or handle=20
-that properly.
-As a next step, I'm considering switching to a blocking mechanism=20
-instead =E2=80=94 that is, have user fork() temporarily sleep if it's att=
-empted=20
-during the freeze window. That should avoid breaking user-space=20
-expectations while still helping maintain freeze stability.
-Would that be more acceptable?
-Thanks again for the insight,
-Zihuan Zhang
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Cc: Len Brown <lenb@kernel.org>
+---
+ drivers/idle/intel_idle.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index 8ccb483204fa..f3ab1d6e3276 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -152,8 +152,8 @@ static __always_inline int __intel_idle(struct cpuidle_device *dev,
+ 					int index, bool irqoff)
+ {
+ 	struct cpuidle_state *state = &drv->states[index];
+-	unsigned long eax = flg2MWAIT(state->flags);
+-	unsigned long ecx = 1*irqoff; /* break on interrupt flag */
++	unsigned int eax = flg2MWAIT(state->flags);
++	unsigned int ecx = 1*irqoff; /* break on interrupt flag */
+ 
+ 	mwait_idle_with_hints(eax, ecx);
+ 
+@@ -226,9 +226,9 @@ static __cpuidle int intel_idle_xstate(struct cpuidle_device *dev,
+ static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
+ 				       struct cpuidle_driver *drv, int index)
+ {
+-	unsigned long ecx = 1; /* break on interrupt flag */
+ 	struct cpuidle_state *state = &drv->states[index];
+-	unsigned long eax = flg2MWAIT(state->flags);
++	unsigned int eax = flg2MWAIT(state->flags);
++	unsigned int ecx = 1; /* break on interrupt flag */
+ 
+ 	if (state->flags & CPUIDLE_FLAG_INIT_XSTATE)
+ 		fpu_idle_fpregs();
+-- 
+2.49.0
+
 
