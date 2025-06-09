@@ -1,142 +1,259 @@
-Return-Path: <linux-pm+bounces-28305-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28306-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1E5EAD1CEA
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 14:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AC4BAD1D17
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 14:22:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C9663ACD36
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 12:13:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C6213A236A
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 12:22:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12F332571A2;
-	Mon,  9 Jun 2025 12:13:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E6AC1E98FB;
+	Mon,  9 Jun 2025 12:22:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="GELQe7zl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SAz8l2W/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1AB4256C9B;
-	Mon,  9 Jun 2025 12:13:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A8C12E7E;
+	Mon,  9 Jun 2025 12:22:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749471204; cv=none; b=nLGD8XeGwDo6F8sa7V/YBCarmGhvhxQAJeqr0vLscJOCAeJq/XscTeyd5UP6VBx7QlXXUvJOsXKaf8jdCWZTgRofZIbdH1ZO5Eui4PjbroVjbJQsS/Zowp5wi1Je5nOJcgYQH06cMN8xGymFjPd/444BbpeUpv01agpGJ4Um5mw=
+	t=1749471748; cv=none; b=njdeXtuVaxRbycSqa/xMLawnpqjyZJqYwgj8htPDH+5K2VtF76qN+FCJX63jFmIjh9hDfM0FgNtZ91uWLSY0RZLSXFgLnQsvll/jdBwIfJZrrWdZAwHrveRixRHEQ8FvEGS2U9jwdYezo33PAvDAp33KjaB103zJHZZXCoLy+ZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749471204; c=relaxed/simple;
-	bh=PjWv2JVHoaGy0VTS2P6IlLGrSZt154xP1RtHIPoptTs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kvv+ko017wQbNuw37KAUBVKkGJNFFzzyFyAScw2AdV/1rMMVyiwfXkjxts6sLbSgYWlnrvYo9wTx31NqfNpNC7NSW0WbSZLrb9n4VQ4jAE9ef9/y848KSKlPT2YjmUyQ8P5yWcYCLydz0WJh3BQlIpOo1nxHbifcaV7c+j2YrVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=GELQe7zl; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=NueSzK31DadYmmhRVawstIJJP48eqaOR7oYF5vEnWFE=; b=GELQe7zlFulZ3w8scQGOg8Bdph
-	qmSuWlEQovDrrtDkxsJHB8b7o9FWIvW5gzD/DF+r0DMgiYc5LOhBBw+OhvM2B1pPGkUzM7riKoSc7
-	xsFzUDNgO29L1XHNB9QZWzUSYJBTUV4grY00EkB+ig27NwqE82kIMJl39FuFa8HLAvVQ=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1uObMx-00F9CK-5J; Mon, 09 Jun 2025 14:12:51 +0200
-Date: Mon, 9 Jun 2025 14:12:51 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Frank Wunderlich <frank-w@public-files.de>
-Cc: linux@fw-web.de, daniel@makrotopia.org, myungjoo.ham@samsung.com,
-	kyungmin.park@samsung.com, cw00.choi@samsung.com, djakov@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com, jia-wei.chang@mediatek.com,
-	johnson.wang@mediatek.com, arinc.unal@arinc9.com,
-	Landen.Chao@mediatek.com, dqfext@gmail.com, sean.wang@mediatek.com,
-	lorenzo@kernel.org, nbd@nbd.name, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: Re: [PATCH v3 06/13] arm64: dts: mediatek: mt7988: add basic
- ethernet-nodes
-Message-ID: <9d27e0d3-5ecb-4dcd-b8aa-d4e0affbb915@lunn.ch>
-References: <20250608211452.72920-1-linux@fw-web.de>
- <20250608211452.72920-7-linux@fw-web.de>
- <cc73b532-f31b-443e-8127-0e5667c3f9c3@lunn.ch>
- <trinity-87fadcdb-eee3-4e66-b62d-5cef65f1462d-1749464918307@trinity-msg-rest-gmx-gmx-live-5d9b465786-mldbm>
+	s=arc-20240116; t=1749471748; c=relaxed/simple;
+	bh=FhUb+ZXql8dArcka8IrDv/E1OATdkq2BGb4ry+i1JHI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NCK2Z2uknNQqkTNykPhhiKeTq0NXJDG4K5Dog0fLTqyqGDMAxH9BU9D7yNnG1BHNOIvDXyg7KQaIxPlJZ86U/XMSnmTYtC2EJ8/1Hc/OWboiTw8554GiQhPnQPT5DMjAv3fLd/rbaR4UXeBHVNN5RFCv3/Z2ofnyGw9zi1bZM18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SAz8l2W/; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-742c73f82dfso3290758b3a.2;
+        Mon, 09 Jun 2025 05:22:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749471747; x=1750076547; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YBch+ffur1O0Rgja7qluq4MVSQH3W827o3L8nkl80n0=;
+        b=SAz8l2W/P47BMU9FJxDsE51sBska+Ba/5HFbVW3fqGXTur4aoCl20ZpSoxNakGkIXb
+         +V8vb2A/phyHCFqQLt8Deqjun5s7VNEyVLlbrF8IHVpN9ZHqW7KVVcpElZgYBM+CDFqB
+         1dinPfqoJlqE2RGmOiHxUPFuc+JLeH37KaLPwaJt2MwMvQhMoHpAW0cnyAM4ZqiopL/o
+         VFtsVQc+cS5d8o2+SqzwqxuAJJmROs9YpOjPU+rQ+VO0mBY9WF4bCnzM8uCASVniH4Qz
+         lFcuGB2z5ti6+b7AwKeK/mcOmnFj6D0vNXky9aiydKJUYOtiVFTcvuNJi1pRvVRMKpMv
+         NUDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749471747; x=1750076547;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YBch+ffur1O0Rgja7qluq4MVSQH3W827o3L8nkl80n0=;
+        b=CPzimJW8/oT3J76d+WQTsPJj0/PMUVfUjzmiq4FgEmOlyHhjASuwyIy6xQPjIRk/ub
+         ifVPeooAizcumzckhrDIq8IhvFlcxzniuZyY6jgdcOf2UEGGcW9ZHWzsJQQASwWGhqOn
+         h96pcItcXxBoSzCt4ek/MhXw3mt0/du/kgBwbeY+SNA3YdN92DbEyCxigfZx7RDT56YM
+         sLZqVyroAl9iHy2TpjObFxbvngOElEUzlIhTVwskzKNGSWwGqs9H21NUbGCrD9I/N6Kz
+         hh+yQ7FBQBAB/SZ0PeTPvQpbKX8bmCiTFqLGFB9itOi/CbJbEY9/Dmk1xXXAuwLPFOAZ
+         2pPg==
+X-Forwarded-Encrypted: i=1; AJvYcCX2qEYFtXaF12HmpqmZswq10Galj21tL7Dqwp2LYX98u9CBMnI58wVvBN0/endXk7ArAGk5kJieHCyoaPw=@vger.kernel.org, AJvYcCX7Tk2jn5RnJPC+NhGijemn+D3AszblPBzdybUgoNRD3Veo81N0chHTCLxvCAg+GUP7ClwnJAv9FdVrIyejsIc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxuufwIrNJl1xZbXv5TD+tN7PS7gucYQ32F0+cwin9HaMe4rppd
+	S37aZJ3feOX+X/0NVZLycMLQkXtQtJz3rfgs3DZa8k1jzipnxq18nrIo
+X-Gm-Gg: ASbGncsKWPLaT7gM+3jDhXKXQox29OCd212csZKYJYcrSbwd9uITrrSHJiei5VLIZxi
+	arBI++m0bk5HjehuBnTu7m57kSzXaZDbgg9C6dGh+M0HIn1JU8xKvRZGNCXtdAe4H+8+B8KCjAF
+	KrpO/6CAfWFvPPZ2Qh2IHaMOI46WSV1a4KoQb91tuugOvb8GQHU+mF9Co1GBHjs7I4ne0jJI71K
+	6rP52YgOUY2kk0UefqkiFmTeSntYIFZXvirWn4phkWVTMxH/61YKu5INju9kIoEojiPwzE0tk88
+	YiPDJ3JxYqeho6miA83ZmDVw+qdhbf9a1jBfWwVpZmnknocT+lYJSoa2Ffwvznyl4kKjaSj8
+X-Google-Smtp-Source: AGHT+IFN/6jpjwnUWAnmieziowXquVGyIPIEOCFl8zdXOz/2r+NiQoJ5BLmsN49W1/EDBbcGUv3y0g==
+X-Received: by 2002:a05:6a21:6e41:b0:21f:62e7:cd08 with SMTP id adf61e73a8af0-21f62e7ce8dmr5864666637.8.1749471746484;
+        Mon, 09 Jun 2025 05:22:26 -0700 (PDT)
+Received: from pop-os.. ([201.49.69.163])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2f5f7827c0sm5170285a12.62.2025.06.09.05.22.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jun 2025 05:22:26 -0700 (PDT)
+From: Guilherme Giacomo Simoes <trintaeoitogc@gmail.com>
+To: rafael@kernel.org,
+	viresh.kumar@linaro.org,
+	dakr@kernel.org,
+	maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org,
+	tzimmermann@suse.de,
+	airlied@gmail.com,
+	simona@ffwll.ch,
+	mcgrof@kernel.org,
+	russ.weight@linux.dev,
+	ojeda@kernel.org,
+	alex.gaynor@gmail.com,
+	boqun.feng@gmail.com,
+	gary@garyguo.net,
+	bjorn3_gh@protonmail.com,
+	lossin@kernel.org,
+	a.hindborg@kernel.org,
+	aliceryhl@google.com,
+	tmgross@umich.edu,
+	leitao@debian.org,
+	gregkh@linuxfoundation.org,
+	david.m.ertman@intel.com,
+	ira.weiny@intel.com,
+	leon@kernel.org,
+	fujita.tomonori@gmail.com,
+	tamird@gmail.com,
+	igor.korotin.linux@gmail.com,
+	walmeida@microsoft.com,
+	anisse@astier.eu
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	nouveau@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	rust-for-linux@vger.kernel.org,
+	trintaeoitogc@gmail.com
+Subject: [PATCH] rust: module: remove deprecated author key
+Date: Mon,  9 Jun 2025 09:22:00 -0300
+Message-Id: <20250609122200.179307-1-trintaeoitogc@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <trinity-87fadcdb-eee3-4e66-b62d-5cef65f1462d-1749464918307@trinity-msg-rest-gmx-gmx-live-5d9b465786-mldbm>
+Content-Transfer-Encoding: 8bit
 
-> > > +			gmac0: mac@0 {
-> > > +				compatible = "mediatek,eth-mac";
-> > > +				reg = <0>;
-> > > +				phy-mode = "internal";
-> > > +
-> > > +				fixed-link {
-> > > +					speed = <10000>;
-> > > +					full-duplex;
-> > > +					pause;
-> > > +				};
-> > 
-> > Maybe i've asked this before? What is on the other end of this link?
-> > phy-mode internal and fixed link seems an odd combination. It might
-> > just need some comments, if this is internally connected to a switch.
-> 
-> yes you've asked in v1 and i responded :)
-> 
-> https://patchwork.kernel.org/project/linux-mediatek/patch/20250511141942.10284-9-linux@fw-web.de/
-> 
-> connected to internal (mt7530) switch. Which kind of comment do you want here? Only "connected to internal switch"
-> or some more details?
+Commit 38559da6afb2 ("rust: module: introduce `authors` key") introduced
+a new `authors` key to support multiple module authors, while keeping
+the old `author` key for backward compatibility.
 
-"Connected to internal switch" will do. The word switch explains the
-fixed-link, and internal the phy-mode.
+Now that all in-tree modules have migrated to `authors`, remove:
+1. The deprecated `author` key support from the module macro
+2. Legacy `author` entries from remaining modules
 
-It is not the case here, but i've seen DT misused like this because
-the MAC is connected to a PHY and there is no PHY driver yet, so a
-fixed link is used instead.
+Signed-off-by: Guilherme Giacomo Simoes <trintaeoitogc@gmail.com>
+---
+ drivers/cpufreq/rcpufreq_dt.rs        | 2 +-
+ drivers/gpu/drm/nova/nova.rs          | 2 +-
+ drivers/gpu/nova-core/nova_core.rs    | 2 +-
+ rust/kernel/firmware.rs               | 2 +-
+ rust/macros/module.rs                 | 6 ------
+ samples/rust/rust_configfs.rs         | 2 +-
+ samples/rust/rust_driver_auxiliary.rs | 2 +-
+ 7 files changed, 6 insertions(+), 12 deletions(-)
 
-> > > +			mdio_bus: mdio-bus {
-> > > +				#address-cells = <1>;
-> > > +				#size-cells = <0>;
-> > > +
-> > > +				/* internal 2.5G PHY */
-> > > +				int_2p5g_phy: ethernet-phy@f {
-> > > +					reg = <15>;
-> > 
-> > It is a bit odd mixing hex and decimal.
-> 
-> do you prefer hex or decimal for both? for r3mini i used decimal for both, so i would change unit-address
-> to 15.
+diff --git a/drivers/cpufreq/rcpufreq_dt.rs b/drivers/cpufreq/rcpufreq_dt.rs
+index 94ed81644fe1..bdf4b844de42 100644
+--- a/drivers/cpufreq/rcpufreq_dt.rs
++++ b/drivers/cpufreq/rcpufreq_dt.rs
+@@ -220,7 +220,7 @@ fn probe(
+ module_platform_driver! {
+     type: CPUFreqDTDriver,
+     name: "cpufreq-dt",
+-    author: "Viresh Kumar <viresh.kumar@linaro.org>",
++    authors: ["Viresh Kumar <viresh.kumar@linaro.org>"],
+     description: "Generic CPUFreq DT driver",
+     license: "GPL v2",
+ }
+diff --git a/drivers/gpu/drm/nova/nova.rs b/drivers/gpu/drm/nova/nova.rs
+index 902876aa14d1..64fd670e99e1 100644
+--- a/drivers/gpu/drm/nova/nova.rs
++++ b/drivers/gpu/drm/nova/nova.rs
+@@ -12,7 +12,7 @@
+ kernel::module_auxiliary_driver! {
+     type: NovaDriver,
+     name: "Nova",
+-    author: "Danilo Krummrich",
++    authors: ["Danilo Krummrich"],
+     description: "Nova GPU driver",
+     license: "GPL v2",
+ }
+diff --git a/drivers/gpu/nova-core/nova_core.rs b/drivers/gpu/nova-core/nova_core.rs
+index 618632f0abcc..f405d7a99c28 100644
+--- a/drivers/gpu/nova-core/nova_core.rs
++++ b/drivers/gpu/nova-core/nova_core.rs
+@@ -13,7 +13,7 @@
+ kernel::module_pci_driver! {
+     type: driver::NovaCore,
+     name: "NovaCore",
+-    author: "Danilo Krummrich",
++    authors: ["Danilo Krummrich"],
+     description: "Nova Core GPU driver",
+     license: "GPL v2",
+     firmware: [],
+diff --git a/rust/kernel/firmware.rs b/rust/kernel/firmware.rs
+index 2494c96e105f..ed2fc20cba9b 100644
+--- a/rust/kernel/firmware.rs
++++ b/rust/kernel/firmware.rs
+@@ -181,7 +181,7 @@ unsafe impl Sync for Firmware {}
+ /// module! {
+ ///    type: MyModule,
+ ///    name: "module_firmware_test",
+-///    author: "Rust for Linux",
++///    authors: ["Rust for Linux"],
+ ///    description: "module_firmware! test module",
+ ///    license: "GPL",
+ /// }
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index 2ddd2eeb2852..5dd276a2e5cb 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -94,7 +94,6 @@ struct ModuleInfo {
+     type_: String,
+     license: String,
+     name: String,
+-    author: Option<String>,
+     authors: Option<Vec<String>>,
+     description: Option<String>,
+     alias: Option<Vec<String>>,
+@@ -108,7 +107,6 @@ fn parse(it: &mut token_stream::IntoIter) -> Self {
+         const EXPECTED_KEYS: &[&str] = &[
+             "type",
+             "name",
+-            "author",
+             "authors",
+             "description",
+             "license",
+@@ -134,7 +132,6 @@ fn parse(it: &mut token_stream::IntoIter) -> Self {
+             match key.as_str() {
+                 "type" => info.type_ = expect_ident(it),
+                 "name" => info.name = expect_string_ascii(it),
+-                "author" => info.author = Some(expect_string(it)),
+                 "authors" => info.authors = Some(expect_string_array(it)),
+                 "description" => info.description = Some(expect_string(it)),
+                 "license" => info.license = expect_string_ascii(it),
+@@ -179,9 +176,6 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
+     // Rust does not allow hyphens in identifiers, use underscore instead.
+     let ident = info.name.replace('-', "_");
+     let mut modinfo = ModInfoBuilder::new(ident.as_ref());
+-    if let Some(author) = info.author {
+-        modinfo.emit("author", &author);
+-    }
+     if let Some(authors) = info.authors {
+         for author in authors {
+             modinfo.emit("author", &author);
+diff --git a/samples/rust/rust_configfs.rs b/samples/rust/rust_configfs.rs
+index 60ddbe62cda3..af04bfa35cb2 100644
+--- a/samples/rust/rust_configfs.rs
++++ b/samples/rust/rust_configfs.rs
+@@ -14,7 +14,7 @@
+ module! {
+     type: RustConfigfs,
+     name: "rust_configfs",
+-    author: "Rust for Linux Contributors",
++    authors: ["Rust for Linux Contributors"],
+     description: "Rust configfs sample",
+     license: "GPL",
+ }
+diff --git a/samples/rust/rust_driver_auxiliary.rs b/samples/rust/rust_driver_auxiliary.rs
+index 3e15e6d002bb..abf3d55ed249 100644
+--- a/samples/rust/rust_driver_auxiliary.rs
++++ b/samples/rust/rust_driver_auxiliary.rs
+@@ -114,7 +114,7 @@ fn init(module: &'static kernel::ThisModule) -> impl PinInit<Self, Error> {
+ module! {
+     type: SampleModule,
+     name: "rust_driver_auxiliary",
+-    author: "Danilo Krummrich",
++    authors: ["Danilo Krummrich"],
+     description: "Rust auxiliary driver",
+     license: "GPL v2",
+ }
+-- 
+2.34.1
 
-I suspect decimal is more common, but i don't care.
-
-> 
-> > > +					compatible = "ethernet-phy-ieee802.3-c45";
-> > 
-> > I _think_ the coding standard say the compatible should be first.
-> 
-> i can move this up of course
-> 
-> > > +					phy-mode = "internal";
-> > 
-> > A phy should not have a phy-mode.
-> 
-> not sure if this is needed for mt7988 internal 2.5g phy driver, but seems not when i look at the driver
-> (drivers/net/phy/mediatek/mtk-2p5ge.c). The switch phys also use this and also here i do not see any
-> access in the driver (drivers/net/dsa/mt7530-mmio.c + mt7530.c) on a quick look.
-> Afaik binding required the property and should be read by phylink (to be not unknown, but looks like
-> handled the same way).
-
-Which binding requires this? This is a PHY node, but i don't see
-anything about it in ethernet-phy.yaml.
-
-	Andrew
 
