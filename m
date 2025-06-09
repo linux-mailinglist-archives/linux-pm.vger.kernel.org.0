@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-28328-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28329-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F80EAD2751
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 22:08:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55602AD2758
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 22:08:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22CE7188FC10
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 20:08:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 38D2416EED6
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 20:08:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4384E22687B;
-	Mon,  9 Jun 2025 20:05:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1737C227E82;
+	Mon,  9 Jun 2025 20:05:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lM3a3Z7e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hNoOtvB3"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A5F226545;
-	Mon,  9 Jun 2025 20:05:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C3522128C;
+	Mon,  9 Jun 2025 20:05:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749499548; cv=none; b=k6tmALklJJnK2K9i21XCzb6NhWlo8gH4FmpczlWPwwCPVo/zCasSduma8Uonvh/g6PtFxZKqg8mZSBpveE+y9/VIVAFq1X9K75WWhjlZ9OvdJJTXWbXPup5hX4mgXb9gcYp0YLeiKnlmtlapoo9aZYuYdaTMz74UhfuF2eC7pBY=
+	t=1749499549; cv=none; b=I6YxxHJb9mPGpKgicy/DFU8xbFFmjwI02qQYizpEXOm8aHbVHMqjb7U/YGXLT/N5TVSeiZnHy0C5BvqVRbN9ynPw2RIjMoxEdfCfr6S8+PZEwAxZEVHmUBhcqrqlM4xX0OtsvKscWuCkFMWb0wdhsUPCjvVcRL7+4kuouvfJwHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749499548; c=relaxed/simple;
-	bh=RfYSMBAHzzthlwu3koY6cePj5ENJllMqmK+GS+Iydb4=;
+	s=arc-20240116; t=1749499549; c=relaxed/simple;
+	bh=98IFVg/2xavMwcAK1kftPNwdCjBQz1GB//A4WKY7EPU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CWJtBC3G+BJh/0z9g/izvtSEGs6o6FmnhvE5YH8ZwlHvBWXnl5PEx25gjH13C/MsQFtlP6Kq9DEELEjGerC4xF8iS3bY21h1ubM7mF31kU92ON0fZROouO+Tf0Sh51tLVyFXER7C2xoSP9fy2fgHQvDv2UtYy75nAJgwmsooZnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lM3a3Z7e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BC37C4CEEB;
-	Mon,  9 Jun 2025 20:05:46 +0000 (UTC)
+	 MIME-Version; b=JDTXAQyx3udE1sb3MJ2WpsjViAOIBo8yBr8jrH3taQVAYM30pQopEovxw1RWXbaIdmqOxWNyYFyz/ZOkVq+h98wGLOzKIKNArSlmRxfjh2W4pQszUCccEom04YtxrPsbbahwbIDl+/zL807uZnScxxOCnVn7MzYkdFRFUaAoySM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hNoOtvB3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 295CCC4CEF0;
+	Mon,  9 Jun 2025 20:05:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749499547;
-	bh=RfYSMBAHzzthlwu3koY6cePj5ENJllMqmK+GS+Iydb4=;
+	s=k20201202; t=1749499549;
+	bh=98IFVg/2xavMwcAK1kftPNwdCjBQz1GB//A4WKY7EPU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lM3a3Z7eNvpRoggFW9Ha3sbovVNPovPMMyVZeTGMNZC7vHKw83aiZAndrA1x1U/SE
-	 BLwvAue2BCHgkM622mjO/MfUHx//u7+gZP81kt26ijuu6hYWfI5U1bnJ58O8I7gpgX
-	 V/emS1k/FO6kb/HlQBsZeJQ5Q5vlWXHBMqE+zLoPe5DRkJDYUnhxb4NpD4fSqn17EB
-	 cW0Rf8qSSvEwkuzrdukkn7OHqnoWKvkRMKSKQXHhS5cJrp02vFfHAfgLekgMwotNng
-	 hrhwHJkExcdQCgjuU/gDuReYKpxhCGzH0ve8g7LKBwTBa7n8otqWXTi/7DlskIyk6y
-	 JitrHE2xJcROg==
+	b=hNoOtvB3EVe330aRisayDJKGm2M8xd5X0cMlaHa/rodUM4+BNSA8pPlWc48YUrQZf
+	 yjwB89qJdg8ML4xmCNR9aLpgxAJuz02HwKG0CyfpV6DLgLo830SuySHg/mUoNHjtnk
+	 1E5tf5vMV2ZzOCUZTTsJwXc7/L1J/EczhkWagDbnwS8krX/NvGD/r1b+zvAohlXnAu
+	 pGEw8AC6lUA2mQAa8b9oxfsNpnezklUlr6TWMtiGToTTUMv8KtkKttjW2Mg08govoj
+	 EmE1/ihZJY9tvy1127h0/URRhOSrQMVee/TkfV5SCplOSApVUw9EFro/IqBP59JmNo
+	 LvoquiBuUtxPA==
 From: Mario Limonciello <superm1@kernel.org>
 To: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc: Mario Limonciello <mario.limonciello@amd.com>,
@@ -60,9 +60,9 @@ Cc: Mario Limonciello <mario.limonciello@amd.com>,
 	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
 	linux-doc@vger.kernel.org (open list:DOCUMENTATION),
 	linux-pm@vger.kernel.org (open list:AMD PSTATE DRIVER)
-Subject: [PATCH v11 11/13] platform/x86/amd: hfi: Set ITMT priority from ranking data
-Date: Mon,  9 Jun 2025 15:05:16 -0500
-Message-ID: <20250609200518.3616080-12-superm1@kernel.org>
+Subject: [PATCH v11 12/13] platform/x86/amd: hfi: Add debugfs support
+Date: Mon,  9 Jun 2025 15:05:17 -0500
+Message-ID: <20250609200518.3616080-13-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250609200518.3616080-1-superm1@kernel.org>
 References: <20250609200518.3616080-1-superm1@kernel.org>
@@ -76,64 +76,103 @@ Content-Transfer-Encoding: 8bit
 
 From: Mario Limonciello <mario.limonciello@amd.com>
 
-The static ranking data that is read at module load should be used
-to set up the priorities for the cores relative to the performance
-values.
+Add a dump of the class and capabilities table to debugfs to assist
+with debugging scheduler issues.
 
 Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
- drivers/platform/x86/amd/hfi/Kconfig |  1 +
- drivers/platform/x86/amd/hfi/hfi.c   | 10 ++++++++++
- 2 files changed, 11 insertions(+)
+v9:
+ * signed->unsigned
+v8:
+ * s,for_each_present_cpu,for_each_possible_cpu,
+v3:
+ * Move idx to earlier line
+---
+ drivers/platform/x86/amd/hfi/hfi.c | 35 ++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/drivers/platform/x86/amd/hfi/Kconfig b/drivers/platform/x86/amd/hfi/Kconfig
-index 019638047e629..fecef68480234 100644
---- a/drivers/platform/x86/amd/hfi/Kconfig
-+++ b/drivers/platform/x86/amd/hfi/Kconfig
-@@ -7,6 +7,7 @@ config AMD_HFI
- 	bool "AMD Hetero Core Hardware Feedback Driver"
- 	depends on ACPI
- 	depends on CPU_SUP_AMD
-+	depends on SCHED_MC_PRIO
- 	help
- 	  Select this option to enable the AMD Heterogeneous Core Hardware
- 	  Feedback Interface. If selected, hardware provides runtime thread
 diff --git a/drivers/platform/x86/amd/hfi/hfi.c b/drivers/platform/x86/amd/hfi/hfi.c
-index 2c6832a3020ec..ef38bc367eecc 100644
+index ef38bc367eecc..17df96d47de88 100644
 --- a/drivers/platform/x86/amd/hfi/hfi.c
 +++ b/drivers/platform/x86/amd/hfi/hfi.c
-@@ -114,6 +114,12 @@ static DEFINE_PER_CPU(struct amd_hfi_cpuinfo, amd_hfi_cpuinfo) = {.class_index =
+@@ -13,6 +13,7 @@
+ #include <linux/acpi.h>
+ #include <linux/cpu.h>
+ #include <linux/cpumask.h>
++#include <linux/debugfs.h>
+ #include <linux/gfp.h>
+ #include <linux/init.h>
+ #include <linux/io.h>
+@@ -73,6 +74,8 @@ struct amd_hfi_data {
+ 	void __iomem		*pcc_comm_addr;
+ 	struct acpi_subtable_header	*pcct_entry;
+ 	struct amd_shmem_info	*shmem;
++
++	struct dentry *dbgfs_dir;
+ };
  
- static DEFINE_MUTEX(hfi_cpuinfo_lock);
+ /**
+@@ -238,6 +241,13 @@ static int amd_hfi_alloc_class_data(struct platform_device *pdev)
+ 	return 0;
+ }
  
-+static void amd_hfi_sched_itmt_work(struct work_struct *work)
++static void amd_hfi_remove(struct platform_device *pdev)
 +{
-+	sched_set_itmt_support();
++	struct amd_hfi_data *dev = platform_get_drvdata(pdev);
++
++	debugfs_remove_recursive(dev->dbgfs_dir);
 +}
-+static DECLARE_WORK(sched_amd_hfi_itmt_work, amd_hfi_sched_itmt_work);
 +
- static int find_cpu_index_by_apicid(unsigned int target_apicid)
+ static int amd_set_hfi_ipcc_score(struct amd_hfi_cpuinfo *hfi_cpuinfo, int cpu)
  {
- 	int cpu_index;
-@@ -238,6 +244,8 @@ static int amd_set_hfi_ipcc_score(struct amd_hfi_cpuinfo *hfi_cpuinfo, int cpu)
- 		WRITE_ONCE(hfi_cpuinfo->ipcc_scores[i],
- 			   hfi_cpuinfo->amd_hfi_classes[i].perf);
+ 	for (int i = 0; i < hfi_cpuinfo->nr_class; i++)
+@@ -393,6 +403,26 @@ static int amd_hfi_metadata_parser(struct platform_device *pdev,
+ 	return ret;
+ }
  
-+	sched_set_itmt_core_prio(hfi_cpuinfo->ipcc_scores[0], cpu);
++static int class_capabilities_show(struct seq_file *s, void *unused)
++{
++	u32 cpu, idx;
++
++	seq_puts(s, "CPU #\tWLC\tPerf\tEff\n");
++	for_each_possible_cpu(cpu) {
++		struct amd_hfi_cpuinfo *hfi_cpuinfo = per_cpu_ptr(&amd_hfi_cpuinfo, cpu);
++
++		seq_printf(s, "%d", cpu);
++		for (idx = 0; idx < hfi_cpuinfo->nr_class; idx++) {
++			seq_printf(s, "\t%u\t%u\t%u\n", idx,
++				   hfi_cpuinfo->amd_hfi_classes[idx].perf,
++				   hfi_cpuinfo->amd_hfi_classes[idx].eff);
++		}
++	}
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(class_capabilities);
++
+ static int amd_hfi_pm_resume(struct device *dev)
+ {
+ 	int ret, cpu;
+@@ -469,6 +499,10 @@ static int amd_hfi_probe(struct platform_device *pdev)
+ 
+ 	schedule_work(&sched_amd_hfi_itmt_work);
+ 
++	amd_hfi_data->dbgfs_dir = debugfs_create_dir("amd_hfi", arch_debugfs_dir);
++	debugfs_create_file("class_capabilities", 0644, amd_hfi_data->dbgfs_dir, pdev,
++			    &class_capabilities_fops);
 +
  	return 0;
  }
  
-@@ -459,6 +467,8 @@ static int amd_hfi_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		return ret;
+@@ -480,6 +514,7 @@ static struct platform_driver amd_hfi_driver = {
+ 		.acpi_match_table = ACPI_PTR(amd_hfi_platform_match),
+ 	},
+ 	.probe = amd_hfi_probe,
++	.remove = amd_hfi_remove,
+ };
  
-+	schedule_work(&sched_amd_hfi_itmt_work);
-+
- 	return 0;
- }
- 
+ static int __init amd_hfi_init(void)
 -- 
 2.43.0
 
