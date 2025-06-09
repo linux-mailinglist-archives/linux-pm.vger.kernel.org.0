@@ -1,437 +1,382 @@
-Return-Path: <linux-pm+bounces-28310-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28311-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F523AD2107
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 16:36:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B94F5AD215D
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 16:50:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 584A13A9366
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 14:36:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23AD43ACDAF
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 14:49:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E38325CC54;
-	Mon,  9 Jun 2025 14:36:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 539BF19E97C;
+	Mon,  9 Jun 2025 14:49:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IIB0bmtg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KEBAMZ4L"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21A760DCF;
-	Mon,  9 Jun 2025 14:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC5219D093;
+	Mon,  9 Jun 2025 14:49:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749479782; cv=none; b=L2qO9OvSG88VUcyWg0taMBfPApgj6TrjcnL0mWj7YUxWNT+YNBoHDDJl9B2J2TORjiOoyMESBYaFnP656FPkerMDw0Ore0gG9NNY1XfdkkesycmO5OOQTiLC2l1aBdZsY3pD8wPhq19jjwkqLbAU/PiOt5llLlPx70aqboYg9IY=
+	t=1749480571; cv=none; b=mjHxZ7vM0/cpo6VQOpI6gRJcfC3yYsFoS2/msAnHurGHY1tbg+hVQDLcoDiK6bg6MQyJ3puwoUjbziu8a7pvVTyp4a6pW1nZ4eCgIeYkxHS3xaFsDjx67BWzGvEGZ2BEWBK5YfUwxrR7N0XP+JbIQCraM0TAALQ9QTYQsldg0EA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749479782; c=relaxed/simple;
-	bh=dtDoz4lFxHUrcNFFc2ksHg5b9nQk/UBSA45CCM1lT3M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Fd4N2H/BoWaFNhS/a1+0ryJ0a7R7V1/YOFgU2lKs9Zbrp/CGJxl0ka/EDI1ZGiljvzTQvXCTQRyimLei11x5Ya9QaXwvVbjcrx0Rdr1zCJo1dAiMWsbLPKEbulP/LFpCDDzuh5RFH2P9aBDcnA09DJ3ztAZcCLYnyQ8oo5IJUfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IIB0bmtg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2D8FC4CEF0;
-	Mon,  9 Jun 2025 14:36:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749479780;
-	bh=dtDoz4lFxHUrcNFFc2ksHg5b9nQk/UBSA45CCM1lT3M=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IIB0bmtgUJBIR6dCR1po5pvdKRHtFE7AWpA+ome6M7jicyY/jzw9KPr6R3dFOzszN
-	 KgTjtQoDJ+Up/RvX95bNTyMOp+rNqGzT44TBBXdaOX0SOgNt7bimDW4esCJO0pbTgt
-	 f68icJ2iX3ohNucKrXxthOCFqbUxPthojzuSjM/0its+2Ty2Gd8gocLCurtk5LjtBh
-	 WH4bNgMK5frossZ/5EZXFAXR7/qMafJ/rcenzo4KRAZeFm6UKtvACpOYd3Wn/pYJy9
-	 6iuTltXaVu33mYMlfymtYYPxYGC+oek+puV0fhsMlwKX87lUpF2k6Yr/IJwCXCBeUL
-	 SuFC9iBCED0ug==
-From: Hans de Goede <hansg@kernel.org>
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: Hans de Goede <hansg@kernel.org>,
-	dri-devel@lists.freedesktop.org,
-	linux-media@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-input@vger.kernel.org,
-	linux-ide@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH v2 1/1] MAINTAINERS: .mailmap: Update Hans de Goede's email address
-Date: Mon,  9 Jun 2025 16:35:57 +0200
-Message-ID: <20250609143558.42941-2-hansg@kernel.org>
+	s=arc-20240116; t=1749480571; c=relaxed/simple;
+	bh=N2hGCKcDh6Xpz7j/msHBJtSOvhiYQg5u/JmVQ9+iXpc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JMxoExY64aTqoKp4x4VKrQg0LRUl/fg/9No+DKD4b9+xKEQOgvAdJZXSoTeQHwOTfJE87s95lyesYJHsNKPgXVvZzC17YUYKmCjztQQo3LLR1thYWIRQRjfgP8BS2uT0zsI/Wrpu9aRx7HCs6p0LsFqcs64N6gOPn1GZDBZyHyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KEBAMZ4L; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-234c5b57557so40023965ad.3;
+        Mon, 09 Jun 2025 07:49:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749480569; x=1750085369; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VDQ70N0apsO9qdPmuXxM1Y0/xVvdzg0zBWkIx78RQC4=;
+        b=KEBAMZ4Ld9jd7B13Hj9YQXaUe3fArul3ZsCJFGyUA5A4u2a+WPAXpfdsm6/wIB+GyR
+         plZRixzUuX3CFYaZMP3ueA146Dy5G4w5cUWpcJQ7pCLr72rDVJQodNNEPzFaIg6Gk0e+
+         ThBMtoZF/6qENJphq6bt3YG5GGVQWOdqxY9+xm93BsOiXyJLtP+iT8kztcHP+1EedGnb
+         sL/8w2PpvN5jc0s/pJE71zDGg0wEUAAd6s9uSD3JojAwv3AL6H5YQcuoLtXZgcr09cqz
+         g6r1A1eUP5nLXCJ+bVDtvnBuBBPu+fV+cO79T4co2qddd6SLBcIKmbenjdkeVgup/fcv
+         bgZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749480569; x=1750085369;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VDQ70N0apsO9qdPmuXxM1Y0/xVvdzg0zBWkIx78RQC4=;
+        b=XhaxfiHVxuCmpuS3ViDzxrwBcqbd84Wr508W8Ef7XUS8d7KFMAMCgzZeMx49hrwE+o
+         CejN7cSGOcZ/qt0w8cI4I6V59Uw4E1AHA3YBCTG/HI380FPUbYc7EpR83RZ6PaudoKmP
+         /qkO037DilW1EOQl+tp424Wk2rLLtclV2Nj3rzWd5Qxo57s87CR0E89NF5f614z93MyX
+         WnP5ZfyLQ/ZARR2mUW/moLCi4mZLq0/F8yqt+UyZOWCirgpAmKDN+FkEdknW9hTHGljJ
+         9F2Qug0kUfXIns10XCXtzbNdYbhKmCSHLaDJCs3PU1UWiPom8Cm97cj55yaEcA0/3Zft
+         jnBA==
+X-Forwarded-Encrypted: i=1; AJvYcCXdwbh86J46bhcCfNVytv+C1tgy4xxe2c1pTBEqy0JyZkBR7ZHwj20LA42Snk0UlZ1pa4bePpx8mnyzCxM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8KkoMEh+aoja1r6qWKhKVgiZzVrz7xdli/lUXF10yT3+m6fEJ
+	T6BxiKmuVZG4Pm28eo4AuFJB6cLmUH0uWeOz1xQ0y+cJFqP+s0YuaEoI
+X-Gm-Gg: ASbGnct3HM+1FkZCdGqlPfjTF4YGSbWppKeyEP8IYXS9WnBZOUGkw4BRqgmYdhTPVlz
+	C3Fs7TodiRBZegX9KEc3GfNcdV69dVmFZP5ycCwW7MxuOmyaUMECKXUJnn+9T0nLSZ8ltstYxHB
+	rmOYrT7u4TvTVQbNrZUqZwQTJEowe7KQJzlo6HZrsmoSVYRsLCCkN2xF7n9MnPDsG45CePAZ8cy
+	BKxJTZfGbNTxhIJsXUyV9aN/DGqv+HdawKE0JVsc/STdogVyJc8hXStBxxOViLCMhxbcPhr0att
+	oqMbC9Z1slXEoIh7iny2NuhXst6fRrXAiFXpGfBKtOnQnHiiGcD6UYIoTj+934mWY6WTuHcoKQ3
+	i82pF0pb3y60TZceIqL7d
+X-Google-Smtp-Source: AGHT+IGh7IxC0gxR92VaO3pJATFB7kZhChhV4DQACNpg/Bn2At+RqcEukNET3ao+hdzNQYXuwV3U2Q==
+X-Received: by 2002:a17:902:d4cd:b0:229:1619:ab58 with SMTP id d9443c01a7336-23601dc4419mr200497475ad.43.1749480568711;
+        Mon, 09 Jun 2025 07:49:28 -0700 (PDT)
+Received: from localhost.localdomain ([2409:40c2:30ac:7971:9724:5a2d:e1ce:3f3])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-236030925e3sm55499015ad.53.2025.06.09.07.49.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jun 2025 07:49:28 -0700 (PDT)
+From: Rohan Lambture <rohanlambture13@gmail.com>
+To: trenn@suse.com,
+	shuah@kernel.org,
+	jwyatt@redhat.com,
+	jkacur@redhat.com
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Rohan Lambture <rohanlambture13@gmail.com>
+Subject: [PATCH] cpupower: Add cpu_start()/cpu_stop() callbacks for monitors
+Date: Mon,  9 Jun 2025 20:19:12 +0530
+Message-ID: <94c3faee898b5436cc0b837c6778011a060b8468.1749480264.git.rohanlambture13@gmail.com>
 X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250609143558.42941-1-hansg@kernel.org>
-References: <20250609143558.42941-1-hansg@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-I'm moving all my kernel work over to using my kernel.org email address.
-Update .mailmap and MAINTAINER entries still using hdegoede@redhat.com.
+Move per-CPU logic from inside individual monitors to the main
+monitoring framework by adding cpu_start() and cpu_stop() callback
+functions to the cpuidle_monitor structure.
 
-Signed-off-by: Hans de Goede <hansg@kernel.org>
+This refactoring allows the framework to handle per-CPU scheduling
+and gives higher priority to fork_it operations as mentioned in
+the TODO. Individual monitors now only need to implement per-CPU
+initialization and cleanup logic without managing the CPU iteration
+themselves.
+
+Changes made:
+- Add cpu_start()/cpu_stop() function pointers to cpuidle_monitor struct
+- Update monitoring framework to call per-CPU callbacks for each CPU
+- Refactor cpuidle_sysfs and mperf monitors to use new callback pattern
+- Maintain backward compatibility for monitors without per-CPU callbacks
+
+This addresses the TODO item: "Add cpu_start()/cpu_stop() callbacks
+for monitor -> This is to move the per_cpu logic from inside the
+monitor to outside it."
+
+Signed-off-by: Rohan Lambture <rohanlambture13@gmail.com>
 ---
- .mailmap    |  1 +
- MAINTAINERS | 72 ++++++++++++++++++++++++++---------------------------
- 2 files changed, 37 insertions(+), 36 deletions(-)
+ .../utils/idle_monitor/cpuidle_sysfs.c        | 44 ++++++-----
+ .../utils/idle_monitor/cpupower-monitor.c     | 78 +++++++++++++++++--
+ .../utils/idle_monitor/cpupower-monitor.h     |  2 +
+ .../utils/idle_monitor/mperf_monitor.c        | 30 +++----
+ 4 files changed, 114 insertions(+), 40 deletions(-)
 
-diff --git a/.mailmap b/.mailmap
-index 9b0dc7c30e6d..6ea2677ae494 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -276,6 +276,7 @@ Gustavo Padovan <gustavo@las.ic.unicamp.br>
- Gustavo Padovan <padovan@profusion.mobi>
- Hamza Mahfooz <hamzamahfooz@linux.microsoft.com> <hamza.mahfooz@amd.com>
- Hanjun Guo <guohanjun@huawei.com> <hanjun.guo@linaro.org>
-+Hans de Goede <hansg@kernel.org> <hdegoede@redhat.com>
- Hans Verkuil <hverkuil@xs4all.nl> <hansverk@cisco.com>
- Hans Verkuil <hverkuil@xs4all.nl> <hverkuil-cisco@xs4all.nl>
- Harry Yoo <harry.yoo@oracle.com> <42.hyeyoo@gmail.com>
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b8a8d8a5a2e1..020ee13d64c2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -207,7 +207,7 @@ X:	arch/*/include/uapi/
- X:	include/uapi/
+diff --git a/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c b/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c
+index 8b42c2f0a5b0..01b1de04e03b 100644
+--- a/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c
++++ b/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c
+@@ -43,35 +43,39 @@ static int cpuidle_get_count_percent(unsigned int id, double *percent,
  
- ABIT UGURU 1,2 HARDWARE MONITOR DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-hwmon@vger.kernel.org
- S:	Maintained
- F:	drivers/hwmon/abituguru.c
-@@ -371,7 +371,7 @@ S:	Maintained
- F:	drivers/platform/x86/quickstart.c
+ static int cpuidle_start(void)
+ {
+-	int cpu, state;
+ 	clock_gettime(CLOCK_REALTIME, &start_time);
+-	for (cpu = 0; cpu < cpu_count; cpu++) {
+-		for (state = 0; state < cpuidle_sysfs_monitor.hw_states_num;
+-		     state++) {
+-			previous_count[cpu][state] =
+-				cpuidle_state_time(cpu, state);
+-			dprint("CPU %d - State: %d - Val: %llu\n",
+-			       cpu, state, previous_count[cpu][state]);
+-		}
+-	}
+ 	return 0;
+ }
  
- ACPI SERIAL MULTI INSTANTIATE DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/serial-multi-instantiate.c
-@@ -3506,7 +3506,7 @@ F:	arch/arm64/boot/Makefile
- F:	scripts/make_fit.py
+ static int cpuidle_stop(void)
+ {
+-	int cpu, state;
+ 	struct timespec end_time;
++
+ 	clock_gettime(CLOCK_REALTIME, &end_time);
+ 	timediff = timespec_diff_us(start_time, end_time);
++	return 0;
++}
  
- ARM64 PLATFORM DRIVERS
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- M:	Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
- R:	Bryan O'Donoghue <bryan.odonoghue@linaro.org>
- L:	platform-driver-x86@vger.kernel.org
-@@ -3667,7 +3667,7 @@ F:	drivers/platform/x86/asus*.c
- F:	drivers/platform/x86/eeepc*.c
+-	for (cpu = 0; cpu < cpu_count; cpu++) {
+-		for (state = 0; state < cpuidle_sysfs_monitor.hw_states_num;
+-		     state++) {
+-			current_count[cpu][state] =
+-				cpuidle_state_time(cpu, state);
+-			dprint("CPU %d - State: %d - Val: %llu\n",
+-			       cpu, state, previous_count[cpu][state]);
+-		}
++static int cpuidle_cpu_start(unsigned int cpu)
++{
++	int state;
++
++	for (state = 0; state < cpuidle_sysfs_monitor.hw_states_num; state++) {
++		previous_count[cpu][state] = cpuidle_state_time(cpu, state);
++		dprint("CPU %d - State: %d - Val: %llu\n",
++		       cpu, state, previous_count[cpu][state]);
++	}
++	return 0;
++}
++
++static int cpuidle_cpu_stop(unsigned int cpu)
++{
++	int state;
++
++	for (state = 0; state < cpuidle_sysfs_monitor.hw_states_num; state++) {
++		current_count[cpu][state] = cpuidle_state_time(cpu, state);
++		dprint("CPU %d - State: %d - Val: %llu\n",
++		       cpu, state, current_count[cpu][state]);
+ 	}
+ 	return 0;
+ }
+@@ -205,6 +209,8 @@ struct cpuidle_monitor cpuidle_sysfs_monitor = {
+ 	.hw_states		= cpuidle_cstates,
+ 	.start			= cpuidle_start,
+ 	.stop			= cpuidle_stop,
++	.cpu_start		= cpuidle_cpu_start,
++	.cpu_stop		= cpuidle_cpu_stop,
+ 	.do_register		= cpuidle_register,
+ 	.unregister		= cpuidle_unregister,
+ 	.flags.needs_root	= 0,
+diff --git a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
+index ad493157f826..096e3cf35eb3 100644
+--- a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
++++ b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
+@@ -304,12 +304,29 @@ int fork_it(char **argv)
+ 	unsigned long long timediff;
+ 	pid_t child_pid;
+ 	struct timespec start, end;
++	int cpu;
  
- ASUS TF103C DOCK DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git
-@@ -5553,14 +5553,14 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git
- F:	drivers/usb/chipidea/
+ 	child_pid = fork();
+ 	clock_gettime(CLOCK_REALTIME, &start);
  
- CHIPONE ICN8318 I2C TOUCHSCREEN DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-input@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/input/touchscreen/chipone,icn8318.yaml
- F:	drivers/input/touchscreen/chipone_icn8318.c
+-	for (num = 0; num < avail_monitors; num++)
+-		monitors[num]->start();
++	/* Call global start callbacks first */
++	for (num = 0; num < avail_monitors; num++) {
++		if (monitors[num]->start)
++			monitors[num]->start();
++	}
++
++	/* Call per-CPU start callbacks */
++	for (num = 0; num < avail_monitors; num++) {
++		if (monitors[num]->cpu_start) {
++			for (cpu = 0; cpu < cpu_count; cpu++) {
++				if (monitors[num]->flags.per_cpu_schedule) {
++					if (bind_cpu(cpu))
++						continue;
++				}
++				monitors[num]->cpu_start(cpu);
++			}
++		}
++	}
  
- CHIPONE ICN8505 I2C TOUCHSCREEN DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-input@vger.kernel.org
- S:	Maintained
- F:	drivers/input/touchscreen/chipone_icn8505.c
-@@ -6844,7 +6844,7 @@ F:	include/dt-bindings/pmu/exynos_ppmu.h
- F:	include/linux/devfreq-event.h
+ 	if (!child_pid) {
+ 		/* child */
+@@ -332,8 +349,25 @@ int fork_it(char **argv)
+ 		}
+ 	}
+ 	clock_gettime(CLOCK_REALTIME, &end);
+-	for (num = 0; num < avail_monitors; num++)
+-		monitors[num]->stop();
++
++	/* Call per-CPU stop callbacks */
++	for (num = 0; num < avail_monitors; num++) {
++		if (monitors[num]->cpu_stop) {
++			for (cpu = 0; cpu < cpu_count; cpu++) {
++				if (monitors[num]->flags.per_cpu_schedule) {
++					if (bind_cpu(cpu))
++						continue;
++				}
++				monitors[num]->cpu_stop(cpu);
++			}
++		}
++	}
++
++	/* Call global stop callbacks */
++	for (num = 0; num < avail_monitors; num++) {
++		if (monitors[num]->stop)
++			monitors[num]->stop();
++	}
  
- DEVICE RESOURCE MANAGEMENT HELPERS
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- R:	Matti Vaittinen <mazziesaccount@gmail.com>
- S:	Maintained
- F:	include/linux/devm-helpers.h
-@@ -7435,7 +7435,7 @@ F:	drivers/gpu/drm/gud/
- F:	include/drm/gud.h
+ 	timediff = timespec_diff_us(start, end);
+ 	if (WIFEXITED(status))
+@@ -352,10 +386,25 @@ int do_interval_measure(int i)
+ 		for (cpu = 0; cpu < cpu_count; cpu++)
+ 			bind_cpu(cpu);
  
- DRM DRIVER FOR GRAIN MEDIA GM12U320 PROJECTORS
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- S:	Maintained
- T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
- F:	drivers/gpu/drm/tiny/gm12u320.c
-@@ -7809,7 +7809,7 @@ F:	drivers/gpu/drm/ci/xfails/vkms*
- F:	drivers/gpu/drm/vkms/
++	/* Call global start callbacks first */
+ 	for (num = 0; num < avail_monitors; num++) {
+ 		dprint("HW C-state residency monitor: %s - States: %d\n",
+ 		       monitors[num]->name, monitors[num]->hw_states_num);
+-		monitors[num]->start();
++		if (monitors[num]->start)
++			monitors[num]->start();
++	}
++
++	/* Call per-CPU start callbacks */
++	for (num = 0; num < avail_monitors; num++) {
++		if (monitors[num]->cpu_start) {
++			for (cpu = 0; cpu < cpu_count; cpu++) {
++				if (monitors[num]->flags.per_cpu_schedule) {
++					if (bind_cpu(cpu))
++						continue;
++				}
++				monitors[num]->cpu_start(cpu);
++			}
++		}
+ 	}
  
- DRM DRIVER FOR VIRTUALBOX VIRTUAL GPU
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	dri-devel@lists.freedesktop.org
- S:	Maintained
- T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
-@@ -8208,7 +8208,7 @@ F:	drivers/gpu/drm/panel/
- F:	include/drm/drm_panel.h
+ 	sleep(i);
+@@ -364,9 +413,24 @@ int do_interval_measure(int i)
+ 		for (cpu = 0; cpu < cpu_count; cpu++)
+ 			bind_cpu(cpu);
  
- DRM PRIVACY-SCREEN CLASS
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	dri-devel@lists.freedesktop.org
- S:	Maintained
- T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
-@@ -10101,7 +10101,7 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/connector/gocontroll,moduline-module-slot.yaml
+-	for (num = 0; num < avail_monitors; num++)
+-		monitors[num]->stop();
++	/* Call per-CPU stop callbacks */
++	for (num = 0; num < avail_monitors; num++) {
++		if (monitors[num]->cpu_stop) {
++			for (cpu = 0; cpu < cpu_count; cpu++) {
++				if (monitors[num]->flags.per_cpu_schedule) {
++					if (bind_cpu(cpu))
++						continue;
++				}
++				monitors[num]->cpu_stop(cpu);
++			}
++		}
++	}
  
- GOODIX TOUCHSCREEN
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-input@vger.kernel.org
- S:	Maintained
- F:	drivers/input/touchscreen/goodix*
-@@ -10139,7 +10139,7 @@ F:	include/dt-bindings/clock/google,gs101.h
- K:	[gG]oogle.?[tT]ensor
++	/* Call global stop callbacks */
++	for (num = 0; num < avail_monitors; num++) {
++		if (monitors[num]->stop)
++			monitors[num]->stop();
++	}
  
- GPD POCKET FAN DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/gpd-pocket-fan.c
-@@ -11287,7 +11287,7 @@ F:	drivers/i2c/busses/i2c-via.c
- F:	drivers/i2c/busses/i2c-viapro.c
+ 	return 0;
+ }
+diff --git a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h
+index c559d3115330..830ad5ee68d6 100644
+--- a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h
++++ b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h
+@@ -57,6 +57,8 @@ struct cpuidle_monitor {
+ 	cstate_t *hw_states;
+ 	int (*start) (void);
+ 	int (*stop) (void);
++	int (*cpu_start) (unsigned int cpu);
++	int (*cpu_stop) (unsigned int cpu);
+ 	struct cpuidle_monitor* (*do_register) (void);
+ 	void (*unregister)(void);
+ 	unsigned int overflow_s;
+diff --git a/tools/power/cpupower/utils/idle_monitor/mperf_monitor.c b/tools/power/cpupower/utils/idle_monitor/mperf_monitor.c
+index 73b6b10cbdd2..6340f5d771b6 100644
+--- a/tools/power/cpupower/utils/idle_monitor/mperf_monitor.c
++++ b/tools/power/cpupower/utils/idle_monitor/mperf_monitor.c
+@@ -224,27 +224,27 @@ static int mperf_get_count_freq(unsigned int id, unsigned long long *count,
  
- I2C/SMBUS INTEL CHT WHISKEY COVE PMIC DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-i2c@vger.kernel.org
- S:	Maintained
- F:	drivers/i2c/busses/i2c-cht-wc.c
-@@ -11868,13 +11868,13 @@ S:	Supported
- F:	sound/soc/intel/
+ static int mperf_start(void)
+ {
+-	int cpu;
+-
+-	for (cpu = 0; cpu < cpu_count; cpu++) {
+-		clock_gettime(CLOCK_REALTIME, &time_start[cpu]);
+-		mperf_get_tsc(&tsc_at_measure_start[cpu]);
+-		mperf_init_stats(cpu);
+-	}
+-
+ 	return 0;
+ }
  
- INTEL ATOMISP2 DUMMY / POWER-MANAGEMENT DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/intel/atomisp2/pm.c
+ static int mperf_stop(void)
+ {
+-	int cpu;
++	return 0;
++}
  
- INTEL ATOMISP2 LED DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/intel/atomisp2/led.c
-@@ -13535,7 +13535,7 @@ S:	Maintained
- F:	drivers/platform/x86/lenovo-wmi-hotkey-utilities.c
+-	for (cpu = 0; cpu < cpu_count; cpu++) {
+-		mperf_measure_stats(cpu);
+-		mperf_get_tsc(&tsc_at_measure_end[cpu]);
+-		clock_gettime(CLOCK_REALTIME, &time_end[cpu]);
+-	}
++static int mperf_cpu_start(unsigned int cpu)
++{
++	clock_gettime(CLOCK_REALTIME, &time_start[cpu]);
++	mperf_get_tsc(&tsc_at_measure_start[cpu]);
++	mperf_init_stats(cpu);
++	return 0;
++}
  
- LETSKETCH HID TABLET DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-input@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git
-@@ -13585,7 +13585,7 @@ F:	drivers/ata/sata_gemini.c
- F:	drivers/ata/sata_gemini.h
++static int mperf_cpu_stop(unsigned int cpu)
++{
++	mperf_measure_stats(cpu);
++	mperf_get_tsc(&tsc_at_measure_end[cpu]);
++	clock_gettime(CLOCK_REALTIME, &time_end[cpu]);
+ 	return 0;
+ }
  
- LIBATA SATA AHCI PLATFORM devices support
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-ide@vger.kernel.org
- S:	Maintained
- F:	drivers/ata/ahci_platform.c
-@@ -13956,7 +13956,7 @@ F:	Documentation/admin-guide/ldm.rst
- F:	block/partitions/ldm.*
- 
- LOGITECH HID GAMING KEYBOARDS
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-input@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git
-@@ -14623,7 +14623,7 @@ F:	Documentation/devicetree/bindings/power/supply/maxim,max17040.yaml
- F:	drivers/power/supply/max17040_battery.c
- 
- MAXIM MAX17042 FAMILY FUEL GAUGE DRIVERS
--R:	Hans de Goede <hdegoede@redhat.com>
-+R:	Hans de Goede <hansg@kernel.org>
- R:	Krzysztof Kozlowski <krzk@kernel.org>
- R:	Marek Szyprowski <m.szyprowski@samsung.com>
- R:	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-@@ -15414,7 +15414,7 @@ Q:	https://patchwork.kernel.org/project/netdevbpf/list/
- F:	drivers/net/ethernet/mellanox/mlxfw/
- 
- MELLANOX HARDWARE PLATFORM SUPPORT
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- M:	Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
- M:	Vadim Pasternak <vadimp@nvidia.com>
- L:	platform-driver-x86@vger.kernel.org
-@@ -16332,7 +16332,7 @@ S:	Maintained
- F:	drivers/platform/surface/surface_gpe.c
- 
- MICROSOFT SURFACE HARDWARE PLATFORM SUPPORT
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- M:	Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
- M:	Maximilian Luz <luzmaximilian@gmail.com>
- L:	platform-driver-x86@vger.kernel.org
-@@ -17496,7 +17496,7 @@ F:	tools/include/nolibc/
- F:	tools/testing/selftests/nolibc/
- 
- NOVATEK NVT-TS I2C TOUCHSCREEN DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-input@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/input/touchscreen/novatek,nvt-ts.yaml
-@@ -22430,7 +22430,7 @@ K:	fu[57]40
- K:	[^@]sifive
- 
- SILEAD TOUCHSCREEN DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-input@vger.kernel.org
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
-@@ -22463,7 +22463,7 @@ F:	Documentation/devicetree/bindings/i3c/silvaco,i3c-master.yaml
- F:	drivers/i3c/master/svc-i3c-master.c
- 
- SIMPLEFB FB DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-fbdev@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/display/simple-framebuffer.yaml
-@@ -22592,7 +22592,7 @@ F:	Documentation/hwmon/emc2103.rst
- F:	drivers/hwmon/emc2103.c
- 
- SMSC SCH5627 HARDWARE MONITOR DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-hwmon@vger.kernel.org
- S:	Supported
- F:	Documentation/hwmon/sch5627.rst
-@@ -23241,7 +23241,7 @@ S:	Supported
- F:	Documentation/process/stable-kernel-rules.rst
- 
- STAGING - ATOMISP DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- M:	Mauro Carvalho Chehab <mchehab@kernel.org>
- R:	Sakari Ailus <sakari.ailus@linux.intel.com>
- L:	linux-media@vger.kernel.org
-@@ -23538,7 +23538,7 @@ F:	arch/m68k/sun3*/
- F:	drivers/net/ethernet/i825xx/sun3*
- 
- SUN4I LOW RES ADC ATTACHED TABLET KEYS DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-input@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lradc-keys.yaml
-@@ -25258,7 +25258,7 @@ F:	Documentation/hid/hiddev.rst
- F:	drivers/hid/usbhid/
- 
- USB INTEL XHCI ROLE MUX DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-usb@vger.kernel.org
- S:	Maintained
- F:	drivers/usb/roles/intel-xhci-usb-role-switch.c
-@@ -25449,7 +25449,7 @@ F:	Documentation/firmware-guide/acpi/intel-pmc-mux.rst
- F:	drivers/usb/typec/mux/intel_pmc_mux.c
- 
- USB TYPEC PI3USB30532 MUX DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-usb@vger.kernel.org
- S:	Maintained
- F:	drivers/usb/typec/mux/pi3usb30532.c
-@@ -25478,7 +25478,7 @@ F:	drivers/usb/host/uhci*
- 
- USB VIDEO CLASS
- M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- W:	http://www.ideasonboard.org/uvc/
-@@ -26001,7 +26001,7 @@ F:	include/uapi/linux/virtio_snd.h
- F:	sound/virtio/*
- 
- VIRTUAL BOX GUEST DEVICE DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- M:	Arnd Bergmann <arnd@arndb.de>
- M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
- S:	Maintained
-@@ -26010,7 +26010,7 @@ F:	include/linux/vbox_utils.h
- F:	include/uapi/linux/vbox*.h
- 
- VIRTUAL BOX SHARED FOLDER VFS DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-fsdevel@vger.kernel.org
- S:	Maintained
- F:	fs/vboxsf/*
-@@ -26263,7 +26263,7 @@ F:	drivers/mmc/host/wbsd.*
- 
- WACOM PROTOCOL 4 SERIAL TABLETS
- M:	Julian Squires <julian@cipht.net>
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-input@vger.kernel.org
- S:	Maintained
- F:	drivers/input/tablet/wacom_serial4.c
-@@ -26424,7 +26424,7 @@ F:	include/linux/wwan.h
- F:	include/uapi/linux/wwan.h
- 
- X-POWERS AXP288 PMIC DRIVERS
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- S:	Maintained
- F:	drivers/acpi/pmic/intel_pmic_xpower.c
- N:	axp288
-@@ -26516,14 +26516,14 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/mm
- F:	arch/x86/mm/
- 
- X86 PLATFORM ANDROID TABLETS DSDT FIXUP DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git
- F:	drivers/platform/x86/x86-android-tablets/
- 
- X86 PLATFORM DRIVERS
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- M:	Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
+@@ -373,6 +373,8 @@ struct cpuidle_monitor mperf_monitor = {
+ 	.hw_states		= mperf_cstates,
+ 	.start			= mperf_start,
+ 	.stop			= mperf_stop,
++	.cpu_start		= mperf_cpu_start,
++	.cpu_stop		= mperf_cpu_stop,
+ 	.do_register		= mperf_register,
+ 	.unregister		= mperf_unregister,
+ 	.flags.needs_root	= 1,
 -- 
 2.49.0
 
