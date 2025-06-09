@@ -1,111 +1,118 @@
-Return-Path: <linux-pm+bounces-28303-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28304-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8967AD1C42
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 13:11:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 519B1AD1C5A
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 13:17:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C00CB7A22FA
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 11:10:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 202F616BA8F
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jun 2025 11:17:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07BAF254AEC;
-	Mon,  9 Jun 2025 11:11:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D79424EA85;
+	Mon,  9 Jun 2025 11:17:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="lpyUj2t+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fMQeG99z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6311B255F59;
-	Mon,  9 Jun 2025 11:11:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78162747F
+	for <linux-pm@vger.kernel.org>; Mon,  9 Jun 2025 11:17:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749467480; cv=none; b=uNtp5TyMuxR5TcQb1eJfz0pQTaXk1F9ppda4AqBWV0lYSLPT/LTA7buwYfKKbhfoJ2QKeELYe1QR3/IASmNdmDVPTolTCC6lbUZWHNCIDD/EohHt3BzFArEZqNu59zVC6o1rDoHW9QU3FzTqUzWvIBwU/H6bDau52v3PZRO9HZc=
+	t=1749467843; cv=none; b=LCyAoR6cE6Qm4Ztos5DiyO2RpTAQnx9gJq7weVAD75JCVWorLoRBy97oL9ZP64gLyo6Apzt2q388elAZ4okV4ntTqLis+dQxfteE1yV72zsWSadXcHElmD/U+3cGA53Jj9mfGYNNtvHYfltxRoo/rbrDwjz63mjSc/X/8VUHR/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749467480; c=relaxed/simple;
-	bh=KmuMug8eo+1xqQzVx3etjJKqVimLn63xMDr1MuVhHQU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Wcd3H80okEK6ELvPZXGenT84MT9HYcBqAN42rehWFsGpYkUc/mDEk7B/L3rTYFJ675XWWZOg2OzCjnJbJ9jM3M77h2tVp++bnImphPGjRgxT4ZyDnxU6dN9y580sTVmweEeOmlkM9ifJV9DDQ+szk1FW+8RFlezEjWdeepnRZic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=lpyUj2t+; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=BBAmbvG9DKJ5ZBtHCrdVkfgG0G+RQFv12c3uqAQzHz0=; b=lpyUj2t+obwq5CMWCTbvg57HuZ
-	dxrsN0ETGbkfP4ePm+9flK5EAPa+KIlaCmrXAwZ7Nvm5GWmkItNic0WUmhG0mtc8oINDLpBzoJTbG
-	1NkkXWTzvf0GAUNELM9Wk2hMt5q1Lv249lG8uldv5Mdf9IkkEQXBnRI9DFjGjt7roYW70SL9KlGLu
-	lS+KDeWHsNZ/kBWI9RB7D1lP3HSXtSnhp8p5BSjaL7Etc3PZbNkKLZedPbHqulac8WrMb2lnsUz1Q
-	ldC71dvXi9NNcSCndKHsnMfU4a4MEsGXS+nBwjo/w4sUSNdOcE2vd0N72Frn7IDJtruiZ5DW5m0F5
-	Ztlvlqmg==;
-Received: from i53875b1c.versanet.de ([83.135.91.28] helo=phil.fritz.box)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1uOaPC-0006VT-MY; Mon, 09 Jun 2025 13:11:06 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: Mark Brown <broonie@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Sam Edwards <cfsworks@gmail.com>
-Cc: Heiko Stuebner <heiko@sntech.de>,
-	linux-rockchip@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Elaine Zhang <zhangqing@rock-chips.com>,
-	=?UTF-8?q?Adri=C3=A1n=20Mart=C3=ADnez=20Larumbe?= <adrian.larumbe@collabora.com>,
-	Boris Brezillon <boris.brezillon@collabora.com>,
-	Peter Geis <pgwipeout@gmail.com>,
-	Tomeu Vizoso <tomeu@tomeuvizoso.net>,
-	Vignesh Raman <vignesh.raman@collabora.com>,
-	=?UTF-8?q?Daniel=20Kukie=C5=82a?= <daniel@kukiela.pl>,
-	Sven Rademakers <sven.rademakers@gmail.com>,
-	Joshua Riek <jjriek@verizon.net>,
-	Sam Edwards <CFSworks@gmail.com>,
-	stable@vger.kernel.org
-Subject: Re: [RESEND PATCH] arm64: dts: rockchip: Remove workaround that prevented Turing RK1 GPU power regulator control
-Date: Mon,  9 Jun 2025 13:11:01 +0200
-Message-ID: <174946744885.771907.2986962634832337844.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250608184855.130206-1-CFSworks@gmail.com>
-References: <20250608184855.130206-1-CFSworks@gmail.com>
+	s=arc-20240116; t=1749467843; c=relaxed/simple;
+	bh=1rf4k3D4qfLQox3AK7UIIbUKUE/1gntkD5UCAGbx2u0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oh7oHusdpHzwRdUmd7uwFt06rfO0zVHN/SeI1XntoimfNfnaCQYBSSeF+neWZvJTOF0tTPlExLSv9Kn0+v3oFcIc3RG0xBl4xNbgJhMb/lMvD2KuqPB3Va5pz2wVpL7C3cXmGG9C05+aBqW0NJuE7Nym8ivfgvHsojoP3CkCO+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fMQeG99z; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-74267c68c11so3253524b3a.0
+        for <linux-pm@vger.kernel.org>; Mon, 09 Jun 2025 04:17:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1749467842; x=1750072642; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3jmcmYhpSc0FqNNEiRx4dLKTU/hJsjGZ9t0Q+PDFigY=;
+        b=fMQeG99z3RP37VErZF4qBvYuv9ljrKs2oiihvq5I1j84xL+Tysuymn6ATaf0v4QIq8
+         +5JD/ztWl/3cw5P+hupm7OsL17/YV/wsBmvxpv+ogZqDTAW06RFt7qcc+ghs0yCR6trj
+         cDuY+ZDIkWqHhcPiJeoZ1Q18D+/+xzXdQQ3wbw34REQtXuPoMiSHQy4x9ggDK+aWnyVq
+         W5tytAMTXKKVdVvJyHOTYnHN2uug4fW4Ux6Dj9IAMCwYs/8sDI59KMSIlQNileuHgYw1
+         eX3f15cXxybID/eFKvhzMSO1p2bfZ7grLQs/BNA0LsfJDdjKaELDbjvk+2Kgu+PTTTIS
+         TN6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749467842; x=1750072642;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3jmcmYhpSc0FqNNEiRx4dLKTU/hJsjGZ9t0Q+PDFigY=;
+        b=PrALirGb1g2Mf54etF/OoOnab7UkxStlo+EK5hRlsz86iuqLRN18da5vcyqJyWHXaT
+         4FBPLRKdxHAZaZgjRdPKOUIT+2a2ISmSqSPEA5K9S4JMTw2eqafBlTEh0BiXWQdBeMDn
+         oB+xD6tFU2xViL50QBkqSVBK4Pw4vOxtF2e84h3D4lqNYLm+Fs/03DdfaWD1yJySEMj0
+         wZ9DUGRicblshk9U9rJShiQ2dmhq/jXL7OIIPF6rB2GXuq0oOqXVqj9OfBSXDoi+OA6P
+         G3YVgl1uUQEIH5Ul1h+5ZSFs1K0ZWon+mT/x1p/36TScPOxwaejB2vfTwjfWus73kV3e
+         bL4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUdmxh72qGCIUgh85ZPNyfUxcdP25TN31qLNVqwvsyvRUxBT3xc0/adOxD0EFKq0lb4FDp1f22GEQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6iTp2yVPU9Owo2VxES55e6lYpwIDIpd7OyWvIKhWqHKWloa2i
+	+RzgPRLEJ3ZaDHCUe4sXVa/gKxvodnd9nedjIXWg2WvvJmk5fp7zd5MyPbgA+1jwKIY=
+X-Gm-Gg: ASbGncuD0buV3MKcQl6dgT4v7sa3pt5t2x6anDaGdZKehKRZGeu5++0iLkEFS2SfFEm
+	pxnjEs9daNi2pMEEpxqjaopJESpgaLRLm1ZO1yBylv5vlFW4r0eKL23Rx3kC2iJIpC0HtrqC24Y
+	Zus1tUJKscoq4KkPdUqfFU2gBdJmK9THBylOcMkcjAYTFFvhYajMxMjwSc7dJPLdFkn6wqmmQ2y
+	xC4rSVH8ylQ648FqsXxsNNewsG+P9s+IRA7rSgW2zAGlslbKAXqEgFybvzQufopsUQBXMGDp9Al
+	s1nnqPNfBdQEQWXZtJRtPDL9PJXjE6tg68JZyELeg7K5s4jB82c6
+X-Google-Smtp-Source: AGHT+IEWqD5LrlH9rkiU0S5rSFvCTOABuN2T34dBr5ro8m9I229gWJ2E8+H+/Lj8DYJDHkqAZ13+KA==
+X-Received: by 2002:a05:6a20:12c5:b0:1f5:9016:3594 with SMTP id adf61e73a8af0-21ee255c80cmr20215648637.18.1749467841762;
+        Mon, 09 Jun 2025 04:17:21 -0700 (PDT)
+Received: from localhost ([122.172.81.72])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7482b08571dsm5502621b3a.84.2025.06.09.04.17.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jun 2025 04:17:21 -0700 (PDT)
+Date: Mon, 9 Jun 2025 16:47:19 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Yury Norov <yury.norov@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH] rust: cpumask: Validate CPU number in set() and clear()
+Message-ID: <20250609111719.gne4mhchivobyv3y@vireshk-i7>
+References: <8b5fc7889a7aacbd9f1f7412c99f02c736bde190.1749183428.git.viresh.kumar@linaro.org>
+ <aEJwm16HSwCyt7aB@Mac.home>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aEJwm16HSwCyt7aB@Mac.home>
 
+On 05-06-25, 21:37, Boqun Feng wrote:
+> While this can fix the current problem, but it's not a good solution for
+> the long run. Because outside a test, we should never use an arbitrary
+> i32 as a cpu number (we usually get it from smp_processor_id(), or
+> something else). So the `< nr_cpu_ids` testing is not necessary in
+> normal use cases.
 
-On Sun, 08 Jun 2025 11:48:55 -0700, Sam Edwards wrote:
-> The RK3588 GPU power domain cannot be activated unless the external
-> power regulator is already on. When GPU support was added to this DT,
-> we had no way to represent this requirement, so `regulator-always-on`
-> was added to the `vdd_gpu_s0` regulator in order to ensure stability.
-> A later patch series (see "Fixes:" commit) resolved this shortcoming,
-> but that commit left the workaround -- and rendered the comment above
-> it no longer correct.
-> 
-> [...]
+Thanks for the feedback Boqun.
 
-Applied, thanks!
+I have sent a new version and hopefully took care of all the review
+comments:
 
-[1/1] arm64: dts: rockchip: Remove workaround that prevented Turing RK1 GPU power regulator control
-      commit: 5952996d5303c96702ef30ad30ec0a01acda46d4
+https://lore.kernel.org/all/cover.1749463570.git.viresh.kumar@linaro.org/
 
-Best regards,
 -- 
-Heiko Stuebner <heiko@sntech.de>
+viresh
 
