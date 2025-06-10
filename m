@@ -1,107 +1,118 @@
-Return-Path: <linux-pm+bounces-28377-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28378-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22996AD3834
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 15:08:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1474FAD3865
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 15:12:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 56B99167EB9
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 13:03:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 052151894B19
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 13:06:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25A9F29A9FE;
-	Tue, 10 Jun 2025 12:56:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 611D52C375C;
+	Tue, 10 Jun 2025 12:59:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iGzKdesq"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="ujDB7z68"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC35F29A9E1;
-	Tue, 10 Jun 2025 12:56:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D9382C17B0;
+	Tue, 10 Jun 2025 12:59:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749560163; cv=none; b=c/nBUtBmob7Zs/xyYEM8nt8LNHPzF2welh6qMRbavR1fXbDAr9UjjijSB8wNnwr0aFVHlbPTAIEeXIH7RtEMdDrl/bcD3AMqvFwQSG3OC+295Y8Qauvd7SNlel3Bgp44Fhc3rWPapoKh9RurTgheqgVUobLJUhZbCizAyuaBTIA=
+	t=1749560350; cv=none; b=Y39wb7toxWXHPuyfdmb1sSxMRdHRMIwWgA5zCiFTdXO+XI9sCmBFnz5oKtT1sBDpwkjPitE1RBgXwuxahHIpgWWEsBbO1e0WesGGweVPGi+70CpTOzGw9kfJmwoi8OrNjKGmN2B6EwzBboQmMU8uhZvq7v7I2klBtG3bKhvP3ek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749560163; c=relaxed/simple;
-	bh=ymdmRNA1an7znV7VwE8aKDdd9upCMjadrk7wwCN+JS0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=XIW2jolqGctnmyLh2WQc3+AO90rwPXRU5jap0AVVfr6fUR5sTWcj5Qkiz7kUR+yWi0GjT5ZqQsL6HLH/R4jCkYkXlMwgqYsqcncz+wBqt+wUbRyFaNH7eApX9jH3PswsMVpUrZxtz9xCAkfC4YT1ovRTd4hIPX684+JmcgCcGHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iGzKdesq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EB62C4CEEF;
-	Tue, 10 Jun 2025 12:55:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749560162;
-	bh=ymdmRNA1an7znV7VwE8aKDdd9upCMjadrk7wwCN+JS0=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=iGzKdesqdm1MrpyWKVIbnnnTO2O5kjtU0RWXuPsX72qmoBIf1+QGRaRjgZ2tudgyJ
-	 r066JMd+OFmUd03hH7AREG3eFtPRIYeT5fffPBhRHTDNsYzZrn6GSXuoczYlB+tFEM
-	 Xv83cl923uHkQY0nVAc6FsJLFl6Xy4uunqWmjZpzls9Pcz/9aoH+/TifQuZ8u0DNrI
-	 nrPNp24G+J/OqKYjScTqVdrdyOBtof8CkpfQeM/WEzZpnj9R7LbpZfTUgnHFRF9Fse
-	 9ejaWmya7EgYDDrJ7BRajiE9GTVPe8gd8UDUzd+NxnZW5xx5LIyQvYxetZHzMia4dg
-	 ACzOo9EY8FAwQ==
+	s=arc-20240116; t=1749560350; c=relaxed/simple;
+	bh=oFMazrCuecngzoa++NkSmIOCoYRid8dS5A/ERnGJBpo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YWOOKWvX3q1WpRLyacAq9irJmo78J0Eo965EWeL24SXMzVx6EIlfIitRTjU0P5Qk6AzqK7iSdyhQWU5RV760ZEePfFOxfz5QuDSSQxMZZNVHunnjp20deeEEyFN9lKdM+JuQZ4eeyyZ6VUzrSbKJQ+aBd5/yS9EM9PUDqFqYh4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=ujDB7z68; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=0mN0Y6VG8wJwIHBPmUq5Ichmc5b23YwTM3GHpfC0Ov0=; b=ujDB7z68qrrQWLKAjGzbmCQGy3
+	LdOtDJSTUvPJoAR+dlK+SCrvQO4qgGvAcvh2Obe7Xf1qUhfc6kUAHntYjvGObWD50/ANPKe97yd3y
+	StFdUf5u32nQt5lMjBOlGoqnG9dJYy8rhkzxAKLYPIrFSRwObLsOO0zSTHB4qQv0slmA=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1uOyYu-00FGk5-Tp; Tue, 10 Jun 2025 14:58:44 +0200
+Date: Tue, 10 Jun 2025 14:58:44 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Frank Wunderlich <frank-w@public-files.de>
+Cc: linux@fw-web.de, myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+	cw00.choi@samsung.com, djakov@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, olteanv@gmail.com,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com, jia-wei.chang@mediatek.com,
+	johnson.wang@mediatek.com, arinc.unal@arinc9.com,
+	Landen.Chao@mediatek.com, dqfext@gmail.com, sean.wang@mediatek.com,
+	daniel@makrotopia.org, lorenzo@kernel.org, nbd@nbd.name,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: Re: [PATCH v3 12/13] arm64: dts: mediatek: mt7988a-bpi-r4: add
+ sfp cages and link to gmac
+Message-ID: <e1a49ca7-f082-4983-89fe-1a8f8c8a3de1@lunn.ch>
+References: <20250608211452.72920-1-linux@fw-web.de>
+ <20250608211452.72920-13-linux@fw-web.de>
+ <934b1515-2da1-4479-848e-cd2475ebe98d@lunn.ch>
+ <trinity-b9ab960d-38f8-4524-b645-fc0832ce72ec-1749546239525@trinity-msg-rest-gmx-gmx-live-5d9b465786-6phds>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 10 Jun 2025 14:55:55 +0200
-Message-Id: <DAIVBBJADWNR.1LLZJ6YWV8IN2@kernel.org>
-Cc: <a.hindborg@kernel.org>, <airlied@gmail.com>, <alex.gaynor@gmail.com>,
- <aliceryhl@google.com>, <anisse@astier.eu>, <bjorn3_gh@protonmail.com>,
- <boqun.feng@gmail.com>, <dakr@kernel.org>, <david.m.ertman@intel.com>,
- <dri-devel@lists.freedesktop.org>, <fujita.tomonori@gmail.com>,
- <gary@garyguo.net>, <gregkh@linuxfoundation.org>,
- <igor.korotin.linux@gmail.com>, <ira.weiny@intel.com>, <leitao@debian.org>,
- <leon@kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-pm@vger.kernel.org>, <maarten.lankhorst@linux.intel.com>,
- <mcgrof@kernel.org>, <mripard@kernel.org>, <nouveau@lists.freedesktop.org>,
- <ojeda@kernel.org>, <rafael@kernel.org>, <russ.weight@linux.dev>,
- <rust-for-linux@vger.kernel.org>, <simona@ffwll.ch>, <tamird@gmail.com>,
- <tmgross@umich.edu>, <tzimmermann@suse.de>, <viresh.kumar@linaro.org>,
- <walmeida@microsoft.com>
-Subject: Re: [PATCH] rust: module: remove deprecated author key
-From: "Benno Lossin" <lossin@kernel.org>
-To: "Guilherme Giacomo Simoes" <trintaeoitogc@gmail.com>,
- <miguel.ojeda.sandonis@gmail.com>
-X-Mailer: aerc 0.20.1
-References: <CANiq72kORZjTe3tPEBueDi57TGF7KfxgTSw4Tn0DQeK_X5hi5A@mail.gmail.com> <20250610123731.194853-1-trintaeoitogc@gmail.com>
-In-Reply-To: <20250610123731.194853-1-trintaeoitogc@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <trinity-b9ab960d-38f8-4524-b645-fc0832ce72ec-1749546239525@trinity-msg-rest-gmx-gmx-live-5d9b465786-6phds>
 
-On Tue Jun 10, 2025 at 2:37 PM CEST, Guilherme Giacomo Simoes wrote:
-> Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> wrotes:
->> On Tue, Jun 10, 2025 at 12:12=E2=80=AFPM Benno Lossin <lossin@kernel.org=
-> wrote:
->> >
->> > Hmm, I guess a checkpatch lint fits better then?
->>=20
->> Yeah, that would work.
->>=20
->> Probably for the C side too -- from a quick grep I don't see it.
-> Maybe, after this patch we can make a checkpatch change for check the `au=
-thors`
-> key (and MODULE_AUTHOR for C side), and throw a WARN if the author is a n=
-ame
-> (not a url, or "rust for linux") and don't have a email address.=20
+> > sff,sfp.yaml says:
+> > 
+> >   maximum-power-milliwatt:
+> >     minimum: 1000
+> >     default: 1000
+> >     description:
+> >       Maximum module power consumption Specifies the maximum power consumption
+> >       allowable by a module in the slot, in milli-Watts. Presently, modules can
+> >       be up to 1W, 1.5W or 2W.
+> > 
+> > I've no idea what will happen when the SFP core sees 3000. Is the
+> > comment out of date?
+> 
+> at least sfp-core has no issue with the setting
+> 
+> root@bpi-r4-phy-8G:~# dmesg | grep sfp
+> [    1.269437] sfp sfp1: Host maximum power 3.0W
+> [    1.613749] sfp sfp1: module CISCO-FINISAR    FTLX8571D3BCL-C2 rev A    sn S2209167650      dc 220916  
+> 
+> imho some modules require more than 2W (some gpon/xpon and 10G copper ethernet).
 
-Most other authors fields that don't list explicit names use "Rust for
-Linux Contributors", so we should probably scan for that instead.
+Looking at the code:
 
-But I think that we should no longer add any author fields using that.
-Things with that are from way back in the day (when RfL was still out of
-tree) where many people contributed to a single file, hence the use of
-that phrase.
+static int sfp_module_parse_power(struct sfp *sfp)
+{
+        u32 power_mW = 1000;
+        bool supports_a2;
 
-> Unless you guys tell me otherwise, I guess this is not so priority.
+        if (sfp->id.ext.sff8472_compliance >= SFP_SFF8472_COMPLIANCE_REV10_2 &&
+            sfp->id.ext.options & cpu_to_be16(SFP_OPTIONS_POWER_DECL))
+                power_mW = 1500;
+        /* Added in Rev 11.9, but there is no compliance code for this */
+        if (sfp->id.ext.sff8472_compliance >= SFP_SFF8472_COMPLIANCE_REV11_4 &&
+            sfp->id.ext.options & cpu_to_be16(SFP_OPTIONS_HIGH_POWER_LEVEL))
+                power_mW = 2000;
 
-Yeah this isn't high priority. We can just make this into a
-good-first-issue, then someone can eventually pick it up.
+How does your module indicate it needs 3000 mW? Does this bit of code
+need extending to read additional bits?
 
----
-Cheers,
-Benno
+	Andrew
 
