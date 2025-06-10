@@ -1,155 +1,131 @@
-Return-Path: <linux-pm+bounces-28390-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28391-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57A43AD3BE9
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 16:57:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F817AD3C7F
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 17:17:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 354263A9D3E
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 14:56:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F39D1887F26
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 15:15:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CB7622CBC4;
-	Tue, 10 Jun 2025 14:56:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C77C1D7995;
+	Tue, 10 Jun 2025 15:13:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=borehabit.cfd header.i=@borehabit.cfd header.b="alzIeCSA"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QAD11tw6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from borehabit.cfd (ip160.ip-51-81-179.us [51.81.179.160])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8923230BCC
-	for <linux-pm@vger.kernel.org>; Tue, 10 Jun 2025 14:56:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.81.179.160
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFD49201034
+	for <linux-pm@vger.kernel.org>; Tue, 10 Jun 2025 15:13:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749567373; cv=none; b=ggeIFK3O3Em7j84GIqlgRNKVXKw5XyG3KSOw30O9zraeZ4Qg7CcHTETVpuUw0CTq7iTpxlzOyi6xovnPe8CzeWe43+2e4LBN+nE9mneHHhny7/+SP3LLO9Mt7jhxlShAix6z+Xx+jklpVbhW7DWfQeIefVLfw7tkgVBFY/m+PXI=
+	t=1749568385; cv=none; b=a7nEdQXazc6e+6DqoHEImdjPrffs2oMm1MsfXqAeerbTIvNy4o+f7U31nIM5t0pCGFjQG7B/BtQb7GXivRE8wbD6xSXAVD/Ktb+qezcjUjaHxQRkDAiyjQ3OzuSAWNqYcNXRj51JywPTcwPASqt6t6McAHKUPkgFWluLna7Soag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749567373; c=relaxed/simple;
-	bh=j/qZ6nCFDOcbnwIbag40JF9HDzOLw0n9TJz9U1mz3X8=;
-	h=To:Subject:Date:From:Message-ID:MIME-Version:Content-Type; b=ij5nhPl5+MPmDWkkxbKetZ3q98/IvLJhUZ0qmuuhbWaBQpsSgmeFCs0dOtv+mujJcwplfzrjvyTlqlPEyx7vkQuPb3CHqeqL2M0DgL4pMcuvbkBse506t3iA7Ix9lGwdtpSufOesk0vzXx0UEzrW/NMiycLol0peHmcJOll9utg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=borehabit.cfd; spf=pass smtp.mailfrom=borehabit.cfd; dkim=pass (1024-bit key) header.d=borehabit.cfd header.i=@borehabit.cfd header.b=alzIeCSA; arc=none smtp.client-ip=51.81.179.160
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=borehabit.cfd
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=borehabit.cfd
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=borehabit.cfd; s=mail; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Message-ID:Reply-To:From:Date:Subject:To:Sender:Cc:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=CFYjPvEUim5mD5QwWelE+Axpgk7p2gwnF2M5gpb++Rg=; b=alzIeCSAuGdnvs1q2+d2JQ9Qj3
-	n8DFuRdZy8QTUElFMXchb/ge6+x5tDvrXyz/2ewZh4fqGCXujwnyIfU9e5r06rUa/PXWVf/3eYzOB
-	yD6cAANWE6b/k+62dr63hHhALWoPO69XFpFRJScFI+gmhnQjjaL8HoRBcAaXf08INO8c=;
-Received: from admin by borehabit.cfd with local (Exim 4.90_1)
-	(envelope-from <support@borehabit.cfd>)
-	id 1uP0OY-000WEo-UQ
-	for linux-pm@vger.kernel.org; Tue, 10 Jun 2025 21:56:10 +0700
-To: linux-pm@vger.kernel.org
-Subject: WTS Available laptops and Memory
-Date: Tue, 10 Jun 2025 14:56:10 +0000
-From: Exceptional One PC <support@borehabit.cfd>
-Reply-To: info@exceptionalonepc.com
-Message-ID: <899662ec3d8fa90c55bb5c6ed2b4d914@borehabit.cfd>
+	s=arc-20240116; t=1749568385; c=relaxed/simple;
+	bh=kZQny1cAxPye/n1el8HzBid9nHSdh3LxEWrjSsKYbKA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=V4pxrFVue8AFbiBw0BNzN14nVWSzeiLiz+KgTd1R9iPiWFOQbufZlLRRS6Ha8S+g0cdODkUI0HVYfgke6iRwZRZu/feliUYO3Ik5FZdCjjyVDl7xCwTRCIuszbuOaJE0Tl6//BIh5q4PF0aF0chH0xFIKWjL0BdfkzXPnyn0yjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QAD11tw6; arc=none smtp.client-ip=209.85.219.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6fad8b4c927so50140646d6.0
+        for <linux-pm@vger.kernel.org>; Tue, 10 Jun 2025 08:13:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1749568381; x=1750173181; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1G90VU3NTpUnISqZJ7xyM3mHZw3huNrnbe2PvVxoUbk=;
+        b=QAD11tw6k6GjZGmvRg71QsMl9+CMc74DWZMi5+zWJulPVLj0aqsvddKxhZ+1keOsNQ
+         AVFnyHk0hcrZxplr03te6MZEb1jq7WDBaGMCCO3jdWNpQL0YLRMXo1I+ojJNeStoJyaW
+         aqfWHcc0tOwaDUO3a0kHyTIMcNYC6KQ83BfzQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749568381; x=1750173181;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1G90VU3NTpUnISqZJ7xyM3mHZw3huNrnbe2PvVxoUbk=;
+        b=tAea/BkIG7w3RTxT/W1NY90OWrH6ECEr5CzwP+sW+b1CZ9aGAsR+EqFTFkdWb+tnnb
+         Y6rLHGY59fCemiITv2RQAsiwRhpw3HN9vB3NrXQR69SSCetgJvlffLg8NSbcsIGgzIDs
+         ItgogXtoWSGcDtgLcLwjkRE/kzFPha8nSfqaZ1Ob/7rbJny+fGEy+7AVO9B/bkXJ0YTy
+         V9qPWuzT4gIo045bDalheew4eKS8NPtUZdCLaM4GnWnTlyzFptCXkQsBHWcAx5W9KPDK
+         OAhWawFip6nDw3JQIfYLdPxLc01SutkX5Ft7FjykuVosHp6eD9HiBJwbazXNsoAjx/sP
+         VBwg==
+X-Gm-Message-State: AOJu0YweJjplpuTojxzn94QeDfv2GigqmVEFw538wGkG8Co9/MkWL+sK
+	PC3pM7u8cs6vXKKwz3f6t0n/3KRMX9NDrfMQKrqsA3m+GbXIHNdAisvBBT/LbhTPgSw=
+X-Gm-Gg: ASbGncsLdVLMTKlmM5pcbVhNjNf1l78pWkkj1GMhCMyeVz8BctLoEKdtNHxJ0QL2Xw9
+	2ZMaWQwsEj27jFi/exfJV5IeqHf4W2jRo2D1bmRktwoTCEYwunGsnutikcf+3MxEilcpX1Qxc9o
+	kkIG/inI6Z3TOspDTIkY9SATeFzKCP5sQsjAGtu6KvVpxKw/UjCGBHABqZ8tfilggS77yXEs3kO
+	DxSeiETchoz+Ybsmc1tGJACDrekN8h5s9myjj7+Qxw0cgyIEHcs3i0rltqJuSopqgHsD7N2fFY0
+	tEKGrpWdb9XSomnNDgiGDZ9rX+XMO83ZfBd5/f5eMOOLujZelE8frn7u10jt4hloOtpr6NjtuHR
+	O
+X-Google-Smtp-Source: AGHT+IHuunM03hGGpFWfO2kEd1Fz1zj1+dxV4jFUc+vOXYjB5Z+0KnIknlW2+I7Z9yc4H48Q7Ks7RA==
+X-Received: by 2002:a05:6214:b6d:b0:6fa:bb26:1459 with SMTP id 6a1803df08f44-6fb08f4f665mr283080356d6.7.1749568381501;
+        Tue, 10 Jun 2025 08:13:01 -0700 (PDT)
+Received: from [10.212.144.179] ([12.216.155.19])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fb09ab948dsm67168676d6.11.2025.06.10.08.13.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jun 2025 08:13:01 -0700 (PDT)
+Message-ID: <e08b042c-0786-43d7-9b2a-21197cbb1458@linuxfoundation.org>
+Date: Tue, 10 Jun 2025 09:13:00 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpupower: split unitdir from libdir in Makefile
+To: Thorsten Leemhuis <linux@leemhuis.info>
+Cc: linux-pm list <linux-pm@vger.kernel.org>,
+ Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
+ "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>,
+ Justin Forbes <jforbes@redhat.com>,
+ Francesco Poli <invernomuto@paranoici.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20250521211656.65646-1-invernomuto@paranoici.org>
+ <6deefc69-856e-44d7-b970-2f0127090539@leemhuis.info>
+ <20250523002113.ca1ff066061da6049721c275@paranoici.org>
+ <af43cc33-2f10-4664-982c-444a5f9717cc@linuxfoundation.org>
+ <b9533ccd-b38d-437e-8315-3ca4672d1b69@leemhuis.info>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <b9533ccd-b38d-437e-8315-3ca4672d1b69@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hello,
+On 6/7/25 01:50, Thorsten Leemhuis wrote:
+> On 23.05.25 19:06, Shuah Khan wrote:
+>> On 5/22/25 16:21, Francesco Poli wrote:
+>>> On Thu, 22 May 2025 13:43:49 +0200 Thorsten Leemhuis wrote:
+>>>
+>>>> On 21.05.25 23:14, Francesco Poli (wintermute) wrote:
+>>>>> Improve the installation procedure for the systemd service unit
+>>>>> 'cpupower.service', to be more flexible. Some distros install libraries
+>>>>> to /usr/lib64/, but systemd service units have to be installed to
+>>>>> /usr/lib/systemd/system: as a consequence, the installation procedure
+>>>>> should not assume that systemd service units can be installed to
+>>>>> ${libdir}/systemd/system ...
+>>>>> Define a dedicated variable ("unitdir") in the Makefile.
+>>>> Many thx for doing this!
+>>> You're welcome!   :-)
+>>
+>> Thank you both. Applied to m,y cpupower branch. Will include it
+>> in my next pr to PM maintainer.
+> 
+> Thx. Sorry for pestering, but will you send that PR any time soon? The
+> current state of things in mainline creates small problems downstream;
+> not a big deal, but would be nice to get this resolved properly rather
+> sooner than later my mainlining this change.
+> 
+> Ciao, Thorsten
 
-Looking for a buyer to move any of the following Items located in USA.
+I am planning to send it today. I ran into merge issues when I tried to
+send it on Friday.
 
-
-Used MICRON SSD 7300 PRO 3.84TB 
-U.2 HTFDHBE3T8TDF SSD 2.5" NVMe 3480GB
-Quantity 400, price $100 EACH 
-
-
- 005052112 _ 7.68TB HDD -$200 PER w/ caddies refurbished 
- Quantity 76, price $100
-
-
-
-Brand New CISCO C9300-48UXM-E
-Available 5
-$2000 EACH
-
-
-Brand New C9200L-48T-4X-E
-$1,200 EACH
-QTY4
-
-HP 1040G3 Elite Book Folio Processor :- Intel Core i5
-◻Processor :- Intel Core i5
-◻Generation :- 6th
-◻RAM :- 16GB
-◻Storage :- 256G SSD
-◻Display :- 14 inch" Touch Screen 
-QTY 340 $90 EA
-
-
-
-SK HYNIX 16GB 2RX4 PC4 - 2133P-RAO-10
-HMA42GR7AFR4N-TF TD AB 1526
-QTY560 $20 EA
-
-
-Xeon Gold 6442Y (60M Cache, 2.60 GHz)	
- PK8071305120500	 
- QTY670 700 each 
-
-
-SAMSUNG 64GB 4DRX4 PC4-2666V-LD2-12-MAO
-M386A8K40BM2-CTD60 S
-QTY 320 $42 each
-
-
-
-Brand New CISCO C9300-48UXM-E
-Available 5
-$2500 EACH
-
-
-Core i3-1315U (10M Cache, up to 4.50 GHz)	
- FJ8071505258601
-QTY50  $80 EA
-
-Intel Xeon Gold 5418Y Processors
-QTY28 $780 each
-
-
-Brand New C9200L-48T-4X-E  
-$1000 EACH
-QTY4
-
-
-Brand New Gigabyte NVIDIA GeForce RTX 5090 AORUS
-MASTER OC Graphics Card GPU 32GB GDDR7
-QTY50 $1,300
-
-
- Brand New N9K-C93108TC-FX-24 Nexus
-9300-FX w/ 24p 100M/1/10GT & 6p 40/100G
-Available 4
-$3000 each
-
-
-
-Brand New NVIDIA GeForce RTX 4090 Founders
-Edition 24GB - QTY: 56 - $700 each
-
-
-
-
-Charles Lawson
-Exceptional One PC
-3645 Central Ave, Riverside
-CA 92506, United States
-www.exceptionalonepc.com
-info@exceptionalonepc.com
-Office: (951)-556-3104
-
+thanks,
+-- Shuah
 
