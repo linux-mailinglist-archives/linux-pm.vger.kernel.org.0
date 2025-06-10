@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-28342-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28343-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4361AAD30F3
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 10:52:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50AD2AD30FD
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 10:56:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC3801892F83
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 08:53:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 246443A3306
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 08:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A78A7283120;
-	Tue, 10 Jun 2025 08:51:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A0E6286D5E;
+	Tue, 10 Jun 2025 08:56:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cvntSdbN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MpwKaJms"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7058C280A5B;
-	Tue, 10 Jun 2025 08:51:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A332286D47;
+	Tue, 10 Jun 2025 08:56:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749545519; cv=none; b=IjjyBOvHEZj2cbhPEU4uVBy5lRstQLcb/UKmPBg/CUmDZrsLRfSypsKhwDqzdzdXnchWsLE7ylME0g/t1ZF374VYI4iNUBh0/Cy5nev76NgM4Lh/eeWKUwZJWHanlckbS0JMBdKfvdp6LJiNAuznGEyJ3hHYI2+U78LEFFZHnsA=
+	t=1749545769; cv=none; b=BsFTVCfdrl7zCvDb259rVoe4qnInQXUkc5HCvmYbUK6T3tlLs9iU82MhklSOG+UCWq1JVCi5hJ2WvL1aUTgy/O67KkawpICsEZp6VzD013WH4NmwerN79DvQM9YAL1nb2QKjZW7Ia8TQ34HwspYeyg0Zi3j7mKKfeo2dSWZZzpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749545519; c=relaxed/simple;
-	bh=tIcchOMaFNPXY9DImmRAijW7ukKxm0xP3sOuKfsKPFA=;
+	s=arc-20240116; t=1749545769; c=relaxed/simple;
+	bh=FDylNM5QiKDVslap+v69luYbNSSeUxYW7i/sVB1GflI=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=phIWtUXstyLjrU59dofE722nVPN6gg88gAE6vNcSmusi15p6LFWFwoSiUb/OigoN8kSSOw71XTJ8TStimOpimNQHLIZvUVDys2KMOqqBkBcxmqyq3A96pTZewhtPEaPodWjpJMoRjQ6bGypHwX0rcEzJEDA4XWFZLAytyZEDS04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cvntSdbN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F046C4CEED;
-	Tue, 10 Jun 2025 08:51:54 +0000 (UTC)
+	 References:In-Reply-To; b=D3HEj3ijHCPPDWog6pksKusKIx4huVNE5R+VM/VuNku5INJVOYzzvLoK/OC+cLrIXz1qJKlFGWuWodImWtGFcKCgunk2CLJLhvT7KeKkL/aFL88KiK+nHlDcn6JOibObEF04Wxf/zj6WId911Upr7AFgpSCDWjKfIGkT+oxUwsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MpwKaJms; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 907D6C4CEED;
+	Tue, 10 Jun 2025 08:56:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749545519;
-	bh=tIcchOMaFNPXY9DImmRAijW7ukKxm0xP3sOuKfsKPFA=;
+	s=k20201202; t=1749545768;
+	bh=FDylNM5QiKDVslap+v69luYbNSSeUxYW7i/sVB1GflI=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=cvntSdbNff1bASd5hfRl8MNG0J1HiARpZLXNso8Jt84qGplr1OQxTpDtygVCXMpDc
-	 VCn2LXg98IvBmHoFrt4coTZ2wQ2Nk9yApGEZ4cqlhJcM/lLxVtwvOFZ2mgpXBuc7SL
-	 IS70p6LEkoPY3P6NfiwEbkvVaYFVYRNCOulDaZm8rhfajbQVN8T00Cvf+IYrUVFOPn
-	 zsn8/YGGINgF8cnx6np0Y6g0Q6JH47v9AdRVVnolHDHWc/yOyOXVIrc2dIddt4/bd4
-	 GCTOe+JSm+SGMkNk3srSqC52I7mKbzvUoaIlRAeflJ1BZCsFK4VwMiIoNE/RoerWBT
-	 X1kNMG8EkouCA==
+	b=MpwKaJmscN1m61JeMuiBSNXN04P15jq1shwdEt0PGS9cTHeGx6whJWd9idQvI5qF0
+	 Y1HX7p8J8Yk9n8V3hxj9UwSRBQwRVTz4DIpRSqpaDlGRmZ2vEQ5BdnvDLiAXJkv1iD
+	 rL2lfRcKhaVmjG4DJyjH8ARKr7s5FD5OEBbmnakyhltz1OH09yj2yanzliL4BcQWLG
+	 dPpjlqKoyxWOzO48ba76ZkrJflVMutLfxa5W7mnViJu7ocCb2Y3Kl8z2yftNwENtMM
+	 VjAd73v8nyQsg9PlDv8pz/Az+2on8uxvxC+2/niv60Uos6Tp3bsdk8IlpeVY3JqJVn
+	 rXd5xQpKDqt3w==
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -49,79 +49,50 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 10 Jun 2025 10:51:52 +0200
-Message-Id: <DAIQ4GUF8JGO.2EL4XVGRV06R0@kernel.org>
-Cc: "Vincent Guittot" <vincent.guittot@linaro.org>,
- <linux-block@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
- <linux-pm@vger.kernel.org>, <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH] rust: Use consistent "# Examples" heading style in
- rustdoc
+Date: Tue, 10 Jun 2025 10:56:00 +0200
+Message-Id: <DAIQ7MZ4BJN8.3QO6IHT7OPWFS@kernel.org>
+Cc: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <nouveau@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+ <rust-for-linux@vger.kernel.org>
+Subject: Re: [PATCH] rust: module: remove deprecated author key
 From: "Benno Lossin" <lossin@kernel.org>
-To: "Viresh Kumar" <viresh.kumar@linaro.org>, "Andreas Hindborg"
- <a.hindborg@kernel.org>, "Boqun Feng" <boqun.feng@gmail.com>, "Michael
- Turquette" <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>,
- "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>,
- "Gary Guo" <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Alice Ryhl" <aliceryhl@google.com>, "Trevor
- Gross" <tmgross@umich.edu>, "Danilo Krummrich" <dakr@kernel.org>, "Breno
- Leitao" <leitao@debian.org>, "Rafael J. Wysocki" <rafael@kernel.org>, "Yury
- Norov" <yury.norov@gmail.com>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Luis Chamberlain" <mcgrof@kernel.org>, "Russ
- Weight" <russ.weight@linux.dev>, "Nishanth Menon" <nm@ti.com>, "Bjorn
- Helgaas" <bhelgaas@google.com>, =?utf-8?q?Krzysztof_Wilczy=C5=84ski?=
- <kwilczynski@kernel.org>
+To: "Guilherme Giacomo Simoes" <trintaeoitogc@gmail.com>,
+ <rafael@kernel.org>, <viresh.kumar@linaro.org>, <dakr@kernel.org>,
+ <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
+ <tzimmermann@suse.de>, <airlied@gmail.com>, <simona@ffwll.ch>,
+ <mcgrof@kernel.org>, <russ.weight@linux.dev>, <ojeda@kernel.org>,
+ <alex.gaynor@gmail.com>, <boqun.feng@gmail.com>, <gary@garyguo.net>,
+ <bjorn3_gh@protonmail.com>, <a.hindborg@kernel.org>,
+ <aliceryhl@google.com>, <tmgross@umich.edu>, <leitao@debian.org>,
+ <gregkh@linuxfoundation.org>, <david.m.ertman@intel.com>,
+ <ira.weiny@intel.com>, <leon@kernel.org>, <fujita.tomonori@gmail.com>,
+ <tamird@gmail.com>, <igor.korotin.linux@gmail.com>,
+ <walmeida@microsoft.com>, <anisse@astier.eu>
 X-Mailer: aerc 0.20.1
-References: <70994d1b172b998aa83c9a87b81858806ddfa1bb.1749530212.git.viresh.kumar@linaro.org>
-In-Reply-To: <70994d1b172b998aa83c9a87b81858806ddfa1bb.1749530212.git.viresh.kumar@linaro.org>
+References: <20250609122200.179307-1-trintaeoitogc@gmail.com>
+In-Reply-To: <20250609122200.179307-1-trintaeoitogc@gmail.com>
 
-On Tue Jun 10, 2025 at 6:37 AM CEST, Viresh Kumar wrote:
-> Use a consistent `# Examples` heading in rustdoc across the codebase.
+On Mon Jun 9, 2025 at 2:22 PM CEST, Guilherme Giacomo Simoes wrote:
+> Commit 38559da6afb2 ("rust: module: introduce `authors` key") introduced
+> a new `authors` key to support multiple module authors, while keeping
+> the old `author` key for backward compatibility.
 >
-> Some modules previously used `## Examples` or `# Example`, which deviates
-> from the preferred `# Examples` style.
+> Now that all in-tree modules have migrated to `authors`, remove:
+> 1. The deprecated `author` key support from the module macro
+> 2. Legacy `author` entries from remaining modules
 >
-> Suggested-by: Miguel Ojeda <ojeda@kernel.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Guilherme Giacomo Simoes <trintaeoitogc@gmail.com>
 > ---
->  rust/kernel/block/mq.rs  |  2 +-
->  rust/kernel/clk.rs       |  6 +++---
->  rust/kernel/configfs.rs  |  2 +-
->  rust/kernel/cpufreq.rs   |  8 ++++----
->  rust/kernel/cpumask.rs   |  4 ++--
->  rust/kernel/devres.rs    |  4 ++--
->  rust/kernel/firmware.rs  |  4 ++--
->  rust/kernel/opp.rs       | 16 ++++++++--------
->  rust/kernel/pci.rs       |  4 ++--
->  rust/kernel/platform.rs  |  2 +-
->  rust/kernel/sync.rs      |  2 +-
->  rust/kernel/workqueue.rs |  2 +-
->  rust/pin-init/src/lib.rs |  2 +-
->  13 files changed, 29 insertions(+), 29 deletions(-)
+>  drivers/cpufreq/rcpufreq_dt.rs        | 2 +-
+>  drivers/gpu/drm/nova/nova.rs          | 2 +-
+>  drivers/gpu/nova-core/nova_core.rs    | 2 +-
+>  rust/kernel/firmware.rs               | 2 +-
+>  rust/macros/module.rs                 | 6 ------
+>  samples/rust/rust_configfs.rs         | 2 +-
+>  samples/rust/rust_driver_auxiliary.rs | 2 +-
+>  7 files changed, 6 insertions(+), 12 deletions(-)
 
-
-> diff --git a/rust/pin-init/src/lib.rs b/rust/pin-init/src/lib.rs
-> index 9ab34036e6bc..c5f395b44ec8 100644
-> --- a/rust/pin-init/src/lib.rs
-> +++ b/rust/pin-init/src/lib.rs
-> @@ -953,7 +953,7 @@ macro_rules! try_init {
->  /// Asserts that a field on a struct using `#[pin_data]` is marked with =
-`#[pin]` ie. that it is
->  /// structurally pinned.
->  ///
-> -/// # Example
-> +/// # Examples
->  ///
->  /// This will succeed:
->  /// ```
-
-@Miguel, if you take this, then:
-
-Acked-by: Benno Lossin <lossin@kernel.org>
-
-For such a small change I don't mind upstreaming it myself, but if
-Viresh wants to have a merged GitHub PR in pin-init, then we can take it
-that route.
+Reviewed-by: Benno Lossin <lossin@kernel.org>
 
 ---
 Cheers,
