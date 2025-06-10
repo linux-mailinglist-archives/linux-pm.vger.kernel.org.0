@@ -1,209 +1,129 @@
-Return-Path: <linux-pm+bounces-28346-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28347-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 597A0AD3122
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 11:04:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C21DEAD312A
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 11:05:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E5743B3633
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 09:04:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85CD43B5E85
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 09:04:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78CA628A3F2;
-	Tue, 10 Jun 2025 09:04:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18EA21A8401;
+	Tue, 10 Jun 2025 09:05:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=public-files.de header.i=frank-w@public-files.de header.b="IJ5Ea6W7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WxskI7jB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0FCE1EE033;
-	Tue, 10 Jun 2025 09:04:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 532A2280A5A
+	for <linux-pm@vger.kernel.org>; Tue, 10 Jun 2025 09:05:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749546260; cv=none; b=uEhG3TEvMadqABGnZQAOTIyt5aHaWk9obEgp0LGuxzjoMOVKQkx8bKG7KIo7mO4JJouiv/GG3c7JQSIhdtjublgtqHmym3Dnh0dX6NNsB3iZ0t6i5e3SDrx+FKCtl+Qe1AjepG5M8XTOQzMvNz511BK9UDZVwoNxzgq4Qi4R0i8=
+	t=1749546312; cv=none; b=ql8/Rd9Vn04OTIHIZ/hmwF9deq1ZhAd+i937k+4t82y3DMOEvc8q7kLPp2Ddp5MDEAejktltrfB/H7gwIq/pFj8L02Tb5D3Lj1Xv2DV6Vw1d2Up+GG+PLZJ9d2L+hKJVy6VIpaEE8IzRk4nakQATX8hDSaDBPPDrDlQxSbAbwvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749546260; c=relaxed/simple;
-	bh=c7eXqn3OR8hXh/I05OT0JGgKzgXMbXPO7tWOiXvXpQo=;
-	h=MIME-Version:Message-ID:From:To:Cc:Subject:Content-Type:Date:
-	 In-Reply-To:References; b=cnkL+pe9fzF833e3VyR5DzBmj7PX/z9buD4rt1T1Z+ITtgHeSxMFtYotQ5U3xTVzDpX4Ng3KRA+X4hbz5LhIz3AVkOYeEtJP8FrQru3H1Ql369oPfl69uM2PO7Hm9i3bZGV8y4lIgP0PfrdwumAjfcDxc93hUQy4MMv/TbOPw0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=public-files.de; spf=pass smtp.mailfrom=public-files.de; dkim=pass (2048-bit key) header.d=public-files.de header.i=frank-w@public-files.de header.b=IJ5Ea6W7; arc=none smtp.client-ip=212.227.15.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=public-files.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=public-files.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=public-files.de;
-	s=s31663417; t=1749546239; x=1750151039; i=frank-w@public-files.de;
-	bh=x9isndutnG7FzSCz38wRWR3/GK7vlaPRNBGI74YSN5E=;
-	h=X-UI-Sender-Class:MIME-Version:Message-ID:From:To:Cc:Subject:
-	 Content-Type:Date:In-Reply-To:References:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=IJ5Ea6W7y6sTzEDB05dbUDocNZCqcni0Hii/uaCZIuM0Zg/7l8U89wwEXWC0u7PI
-	 fYgLeMT7BIOvyx1mbGJVu/s033MIr4CbHo+0uRS8hAsXSFrNEXiblFuJBONebx1i/
-	 kCqAI2G0WQCKQtIfRH6QtbdeRTaMLSRjJM6ss5Ihb/PIQelp+XlC5V9TuSbifXu40
-	 2CGrvxqkxKmgI2MvYE10hzuN3ucSkVkCjwZC6Xal71MdGyY3+CwYaCLf9YLqdOa7M
-	 tSXyPJ1LdBjiVd3iRL6o9wBZtLlYtTM3nOAp9mdaiQ4DjFv+TenKPtDN9pnG7AbJD
-	 PK7vX4n1uYJPspO/fg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [100.70.254.165] ([100.70.254.165]) by
- trinity-msg-rest-gmx-gmx-live-5d9b465786-6phds (via HTTP); Tue, 10 Jun 2025
- 09:03:59 +0000
+	s=arc-20240116; t=1749546312; c=relaxed/simple;
+	bh=3GM1WRqVYQXAazSmtHqVXUifnN2sHGlrFP+6YGCoYhE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GaxBa0rm5mciFmr3ky3QGHKxZR/gB0NytVXSaIMVJUs5A7zxH3CqdeT/tXNceKOjojSnh4zYi7DSI2kzPFONt5yYehb2xkos2YEvVu9bP48XoOhHMV/hB8Oj3oHcAVE+jD1CApBenqHqLiUKLsaEghhyF7mjAqIngEFj45IWRZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WxskI7jB; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-311d27eb8bdso3204407a91.0
+        for <linux-pm@vger.kernel.org>; Tue, 10 Jun 2025 02:05:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1749546309; x=1750151109; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MxpjoO2mYPkQZpQAdh6mmcVEOjQK1F3ewQIY1Y/f3Y4=;
+        b=WxskI7jBlYVLJXQyulu04qcMectt4Trgg6Nk4LjbJt8g2h4vWZ2GRPeEbsmOrPi9JK
+         YzpstdZ950QKrKYmEb6VAFH5/XcyWkq0D5hYAxGC+2N6UXouQqFZbh7exahs7xADUNo/
+         H5AOZ/Uy+OtzFM/s3xyj3Wxj04nKze2tL5UyrltR1DgAmto64ZIIHYNOfqXQ1ayGthau
+         VjO13WMzgd9v0SskStzsNi2JiKSzS0n0zBv+g0y9PnLNTM6M2yKDleYrtixyehpz6rFW
+         vSCtNnVh7A2jdytMVmH/3xK44kzS7w52aPZpNi+4o40I+WhfQeeG0EyNZ0QyW+Ovdm0y
+         vnVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749546309; x=1750151109;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MxpjoO2mYPkQZpQAdh6mmcVEOjQK1F3ewQIY1Y/f3Y4=;
+        b=NuUKoqDVrK70aJZXIYnKvmadGA3eHWWHsGgfrWYvydPDC89nGDRrzbblDiQixzszaJ
+         xkVJtnQADz09ksJsRvIqpdyVfes2WJLJ+Tn0Ef0T6du0XrjYf0ROviUesGdhR+0sPcd3
+         JoLOaMl2ZysoVyBfeKTYRQXl3NEDMhA1DbFoGrzJU4KvAfmq2lP7Ha9cXjq6Nv2DC/2P
+         3qyk+xjeAHYZxFFgTl9C/XG9mFLu7SKX/yfesUJKHQ2TQHOg3VI3D7srY+uQoy/xCnws
+         msWmT89kcCs9Ad0szGAOI1z46mL9x5lAO9QLS4fxemsBlehb3PnDWHuQ18+aybNTjCFP
+         NDBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVIg7RMtZ9SRhtvaK/jgYlab1oVefoJuB+Une6oAcl0Wo1r+XZ0JbbJyvrHpKOB/JldLomMAEFzAQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMvHPHi22yjcVfZ3ypypPbgGRxUa9QSzmTNoscE9P4hoClUs1H
+	Geb2jnY1BKrdoSCrXgTDj3KyZIsZwm/As2ZZRMKRnYP+kG1q4kxOHxeVm1FFVfAsV8I=
+X-Gm-Gg: ASbGncu9072k5DE/1qkdKQtkI8KcpqKLak3ebUU5yMjzdo9rm/KPnkd5CFBgJBugFRE
+	t2bQZF1t/5OOztnVDomBZYEQPZAn6/hDIre/dTkbWPohmfKHzMXCNS2oiVFrGMhp+KIrv61oGH1
+	KQwFv+Rd7KalE9j5Ybl/ldCw9+8HyoTA6WeTLEGYZ1svPdv5vdG0o2Skas5RDn3gIISSQChTJ3p
+	1kSKOjM2LDf6frpIUZmpRFbLyPcfA0Y2CFZGqoK2pbHWdAiSNVVrFumu2Bo5F0r6k83h3cVy0jI
+	W7Pa9LMtk89oXU9wsTIQzEkddnDl1YJm/wKN9+sL5g9p5EeBkSsoIgjwnC9BzbM=
+X-Google-Smtp-Source: AGHT+IHHYZrKaT/gzmS9tsVK3hFeYuSn3Ec8BLsyZRN7hNdemDEI/1VCu0avcGXTkJj/JdBACM9Kxg==
+X-Received: by 2002:a17:90b:53c8:b0:311:d3a5:572a with SMTP id 98e67ed59e1d1-313a15739ecmr2416667a91.8.1749546308712;
+        Tue, 10 Jun 2025 02:05:08 -0700 (PDT)
+Received: from localhost ([122.172.81.72])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31349fc373esm6863637a91.32.2025.06.10.02.05.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jun 2025 02:05:08 -0700 (PDT)
+Date: Tue, 10 Jun 2025 14:35:06 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Benno Lossin <lossin@kernel.org>
+Cc: Andreas Hindborg <a.hindborg@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Breno Leitao <leitao@debian.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Yury Norov <yury.norov@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Russ Weight <russ.weight@linux.dev>, Nishanth Menon <nm@ti.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	linux-block@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH] rust: Use consistent "# Examples" heading style in
+ rustdoc
+Message-ID: <20250610090506.24lmdltnqldsra6a@vireshk-i7>
+References: <70994d1b172b998aa83c9a87b81858806ddfa1bb.1749530212.git.viresh.kumar@linaro.org>
+ <DAIQ4GUF8JGO.2EL4XVGRV06R0@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <trinity-b9ab960d-38f8-4524-b645-fc0832ce72ec-1749546239525@trinity-msg-rest-gmx-gmx-live-5d9b465786-6phds>
-From: Frank Wunderlich <frank-w@public-files.de>
-To: andrew@lunn.ch, linux@fw-web.de
-Cc: myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
- cw00.choi@samsung.com, djakov@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, olteanv@gmail.com,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, matthias.bgg@gmail.com,
- angelogioacchino.delregno@collabora.com, jia-wei.chang@mediatek.com,
- johnson.wang@mediatek.com, arinc.unal@arinc9.com, Landen.Chao@mediatek.com,
- dqfext@gmail.com, sean.wang@mediatek.com, daniel@makrotopia.org,
- lorenzo@kernel.org, nbd@nbd.name, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org
-Subject: Aw: Re: [PATCH v3 12/13] arm64: dts: mediatek: mt7988a-bpi-r4: add
- sfp cages and link to gmac
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 10 Jun 2025 09:03:59 +0000
-In-Reply-To: <934b1515-2da1-4479-848e-cd2475ebe98d@lunn.ch>
-References: <20250608211452.72920-1-linux@fw-web.de>
- <20250608211452.72920-13-linux@fw-web.de>
- <934b1515-2da1-4479-848e-cd2475ebe98d@lunn.ch>
-X-UI-CLIENT-META-MAIL-DROP: W10=
-X-Provags-ID: V03:K1:P+w5LatxuczWjuU5VjC2cu3RusygmzTEcHnWEMF+vMd+V144Nuq0nbegfrwU1/70t+IO5
- ZZCfjP1mt0nBNkGjj7f83sEa1HX3LswwVcLmtn0EkewzcBQy+5sk93/FE8OFJGz2cjArfnRlYVfB
- 3XMrQQsXoPxZtNXsZP8bmZLVhtzLablHfLA6+NXenDy0XEURhrtBRk+vVZ+h17JVyrBl/eHW2FY2
- uaWJKp0HW8d7z76dXGwZ1/AAP+8bL2oTm6hnK6iomw2WSiz0PVS0NPZKi4ROB6MkXRYd1FGSV6CI
- oFPPiTF5PBKHUC5CAEdu/94Ju1rZzvA0FeA3Gu9s0Qj3j8HbE5+i4yztEMvFIiZFnY=
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:TLvXeFIDP6E=;qZFVm6ncGdxJPw6owUfJx41Igss
- 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
- AmzvamVKyQ==
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DAIQ4GUF8JGO.2EL4XVGRV06R0@kernel.org>
 
-Hi Andrew
+On 10-06-25, 10:51, Benno Lossin wrote:
+> @Miguel, if you take this, then:
+> 
+> Acked-by: Benno Lossin <lossin@kernel.org>
 
-> Gesendet: Sonntag, 8. Juni 2025 um 23:31
-> Von: "Andrew Lunn" <andrew@lunn.ch>
-> Betreff: Re: [PATCH v3 12/13] arm64: dts: mediatek: mt7988a-bpi-r4: add =
-sfp cages and link to gmac
->
-> > +&gmac1 {
-> > +	phy-mode =3D "internal";
-> > +	phy-connection-type =3D "internal";
->=20
-> ethernet-controller.yaml says:
->=20
->   phy-connection-type:
->     description:
->       Specifies interface type between the Ethernet device and a physica=
-l
->       layer (PHY) device.
->     enum:
->       # There is not a standard bus between the MAC and the PHY,
->       # something proprietary is being used to embed the PHY in the
->       # MAC.
->       - internal
->       - mii
->       - gmii
->   ...
->=20
->   phy-mode:
->     $ref: "#/properties/phy-connection-type"
->=20
->=20
-> so phy-mode and phy-connection-type are the same thing.
+Thanks Benno.
 
-phy-connection-type seems not needed, tested without it and 2.5G phy works=
- without this property in the 2g5 dts.
+> For such a small change I don't mind upstreaming it myself, but if
+> Viresh wants to have a merged GitHub PR in pin-init, then we can take it
+> that route.
 
-> > +	/* SFP2 cage (LAN) */
-> > +	sfp2: sfp2 {
-> > +		compatible =3D "sff,sfp";
-> > +		i2c-bus =3D <&i2c_sfp2>;
-> > +		los-gpios =3D <&pio 2 GPIO_ACTIVE_HIGH>;
-> > +		mod-def0-gpios =3D <&pio 83 GPIO_ACTIVE_LOW>;
-> > +		tx-disable-gpios =3D <&pio 0 GPIO_ACTIVE_HIGH>;
-> > +		tx-fault-gpios =3D <&pio 1 GPIO_ACTIVE_HIGH>;
-> > +		rate-select0-gpios =3D <&pio 3 GPIO_ACTIVE_LOW>;
-> > +		maximum-power-milliwatt =3D <3000>;
->=20
-> sff,sfp.yaml says:
->=20
->   maximum-power-milliwatt:
->     minimum: 1000
->     default: 1000
->     description:
->       Maximum module power consumption Specifies the maximum power consu=
-mption
->       allowable by a module in the slot, in milli-Watts. Presently, modu=
-les can
->       be up to 1W, 1.5W or 2W.
->=20
-> I've no idea what will happen when the SFP core sees 3000. Is the
-> comment out of date?
+I am fine with anyone picking it up.
 
-at least sfp-core has no issue with the setting
+FWIW, I have sent a V2 now with your Ack.
 
-root@bpi-r4-phy-8G:~# dmesg | grep sfp
-[    1.269437] sfp sfp1: Host maximum power 3.0W
-[    1.613749] sfp sfp1: module CISCO-FINISAR    FTLX8571D3BCL-C2 rev A   =
- sn S2209167650      dc 220916 =20
-
-imho some modules require more than 2W (some gpon/xpon and 10G copper ethe=
-rnet).
-
-> 	Andrew
->=20
-
-regards Frank
+-- 
+viresh
 
