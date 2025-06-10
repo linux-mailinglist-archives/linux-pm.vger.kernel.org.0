@@ -1,167 +1,204 @@
-Return-Path: <linux-pm+bounces-28361-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28362-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C9E0AD353B
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 13:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AFB7AD35F1
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 14:20:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 774F81750CB
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 11:43:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE98E176C67
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 12:20:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EF6128C859;
-	Tue, 10 Jun 2025 11:43:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3D1728FAAF;
+	Tue, 10 Jun 2025 12:20:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="CpI7t8Fm"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Gb5f+v3w"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFA2C28B511;
-	Tue, 10 Jun 2025 11:43:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2511328FAA0
+	for <linux-pm@vger.kernel.org>; Tue, 10 Jun 2025 12:20:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749555808; cv=none; b=ibtGx2RFEh8z+Fnev+/DW7O3EBiSkdex7kGFpq/NSGVuCj0YZoFnoASlzzf/e+fNLeJyi+FSGiKgST387YezVTvEmfoZiUv4n2mTiqBbQ1To122501PGV7OpGFg2rq/RTkFfs45EROcu9LLacUIFzOhhx1zWEENwdY5ZwUGy0a0=
+	t=1749558005; cv=none; b=utDM96SCq3eY6k/y3rtzQnP89VrPz10VutXTzNwrCTvhR9sZL64PQuJt1DhlDc4OjbiCyLsVjvgLYdpkjWH1OpcmG6P3pdmuy3wI08LeDy0Qp/wIJqSDvzkmwb5qmXZF4aWMNhkTXgBZ0uEy3JTJrOE/OBHb8q4C3MZst1KMYd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749555808; c=relaxed/simple;
-	bh=zttwvK0O3NKo3GYxs8/u5gnwpMnkU62+8cdJAit8uok=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hGeyPK7Ehm75Z1j0vXmbg16VxPhkcCfpzCDfuB6QWEgRgjUAgPvquOr9K29GbRHYd8kmjcJiubdJ/+9KLFTGIuM4kyMDbhx33TSGBAFAgKvlf+bquO601CfLoaaVtcRz3IMALc4rm55BzZbfh8wCqhekSpxdSAfMLn92rVPQUoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=CpI7t8Fm; arc=none smtp.client-ip=198.47.19.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllvem-sh03.itg.ti.com ([10.64.41.86])
-	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTP id 55ABhGWi2272226;
-	Tue, 10 Jun 2025 06:43:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1749555796;
-	bh=ElZooU3CNCyqKkNfeNkQwCo1PtAimQ5tNeABrqN0df4=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=CpI7t8Fmy7fmU+FegDv3dQll4pRyI4Vvu7qAc4p57UXrXj+QNOsOFcocrYaaAoaDj
-	 r81GTeS9OrLifAb3A0nyYHAsJ1gJ30BNdbDralFO9dU86V4L9ta4UPQBHIuoGi2+kl
-	 ufg3hGCjptVeCVr8Hs9Sf5c0SYAAnPXbE6sBq/94=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-	by fllvem-sh03.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 55ABhGdg225032
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Tue, 10 Jun 2025 06:43:16 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 10
- Jun 2025 06:43:16 -0500
-Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 10 Jun 2025 06:43:16 -0500
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
-	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 55ABhFw92838964;
-	Tue, 10 Jun 2025 06:43:15 -0500
-Date: Tue, 10 Jun 2025 17:13:14 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Sudeep Holla <sudeep.holla@arm.com>
-CC: Cristian Marussi <cristian.marussi@arm.com>,
-        Ulf Hansson
-	<ulf.hansson@linaro.org>, <arm-scmi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <vigneshr@ti.com>,
-        <khilman@baylibre.com>
-Subject: Re: [RFC PATCH] pmdomain: arm: scmi_pm_domain: Do lazy init as part
- of probe
-Message-ID: <20250610114314.dpfedrbok2pmfgxu@lcpd911>
-References: <20250530103527.2244951-1-d-gole@ti.com>
- <20250530-honest-chital-of-growth-db31e1@sudeepholla>
+	s=arc-20240116; t=1749558005; c=relaxed/simple;
+	bh=GnMINJ+rcQerWjj/m73j4gOd+J0Oo877g1bdajEn74A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=K6dp1oVvHQfFSw5tyIuSCwSBJFbt6HWW4vQ6TWkBJf3hXVL4nSur+Bl5whrexh+/cgGjiLNnpebefEhyPtyjFqZ5pRs6Urag7W1snpzVhhm/HeK6RQYsLfKqpKByprf0fUkyWVGKjzyzNMHMy1mFzmAVu2frR4X36Xrb25VU7qA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Gb5f+v3w; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55AACwFX010145
+	for <linux-pm@vger.kernel.org>; Tue, 10 Jun 2025 12:20:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Vhau6mD0BxB2kfcVfZ6o+4OrKjXeXzy3kAMgYfwD+6c=; b=Gb5f+v3wiAXBOjWm
+	U3/Z+qc1ffSG11W0f7W/Quc4XETq5jiRUQb1TG1U7qV8tsfoQdsjZzTMywHCFIPi
+	dKiK52++dhjN90+tHo9F2Z6e+TaW3b0LkZmc/R1B7GFfdUjaFcuMt7E5z+fmVKA8
+	wvShmWzIdVcAohoyLuxxzBZCHcvlKGEDOKMqU9sSZncRLA0sq5SlyaWJ9bcv7da7
+	7vmS5r34ZIQFrgV8AITons19LyYvgjMwLuj9M9I+b87NOoj9RWgxi6Iy5Oayq72G
+	d3mR4DSp4Xg53G18kSTsq9XiEPWqzu+HSuFzN1b/UAnPYB1Jg48MzDfJ5yqMf8jp
+	4B6/Mw==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 476jrh8bps-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 10 Jun 2025 12:20:02 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7d097083cc3so96731085a.3
+        for <linux-pm@vger.kernel.org>; Tue, 10 Jun 2025 05:20:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749558002; x=1750162802;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vhau6mD0BxB2kfcVfZ6o+4OrKjXeXzy3kAMgYfwD+6c=;
+        b=NMY7NvBsGdGyM7i3Ud23ExV2/LWiAyzUUlvMDFNafi/LX/iRAzO4a00ooNU228BR+Q
+         Wd+uJy7oDxMpyH+Q+l1FhSPGcVUgyetf3aDUTExt4tjpXjEGKNY0XRV/xU/kwMLuuuJk
+         qwTDzYOL0C9uzf8IuhROcPc9lli9k4BMCWV7x59RG+5OHViG7SPCoe09beQuLDexuTUl
+         bobLCBRQrVtOtJpFeCGTDnIZpnmyzHFzVPpuN5jUaWHnflsNpLgTWiQIjrOH7wWbTXI4
+         c8G0MP4ZGp4WzxKbtgdcHjV864hNGlmbnVnTUGhm8BftJREvkPLAXQhIZf5noCIKYv22
+         WVbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVwe1KISn/RQe6djvXBUz6MkgSdB15Z7HY3lGpJRgkUPZiaXvnRE33IUc7adtURCDrVVaL9DLZ4vA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxK1PQXKfdJlFe5YMCyjOvk/df4MfzaCpJkdqTz5j1Qo5gHdEh9
+	KvE5Vz9eyhJEhXyj48NR4EvrEyiRtInLHoSk2SPO27mxw5v3p3PgJTX7AYpKnZGqG8Bvoy3g+k9
+	50fCvC3sNYh/PS3vVLr6JjacU5bRI4KypGnKEUIxNf5FSSPUGfvQ76Ht001IkAA==
+X-Gm-Gg: ASbGncsm4f3/QM5gL7yUw02yW/yV591dbfMHv1InXh74ZgnCIxAEl/kxFUq1pIwJn4S
+	1iZ5DveueR79TKTA5FIXB/FHVMRe5izKysJiN9hpSkPHnVpWCGECQ38LZpIxjHK6Wf1YKzGXxOi
+	xgQIifaBiq9DtmdUHIpyKXnI+ZdaeeAE5wl62+XXXUsuDwwzHq5/3oVuzhTdKX+azlFghSZTVHj
+	kbw/7gOh/dar5QCAn0GZdrYEHSV6Wy1BopoiRPNc49skz27+zx9AuOUutKz7UHWHlztkndC+abb
+	8Ej8FK/+SmqAomYZoQKF1+myt7UfCrehJSN0Cxtr+vgGo0MpAGYffl5wA+GbKXMQqFp1rNF2N8I
+	R
+X-Received: by 2002:a05:620a:4494:b0:7c3:d3a0:578d with SMTP id af79cd13be357-7d33df21327mr843521685a.14.1749558001935;
+        Tue, 10 Jun 2025 05:20:01 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFf2HmxcJv0wsb0YZ7xLVm6b6ibXcsPzLTTHoRArwARqQqeSPVzstDTUy8hZeAaa52emy+X7w==
+X-Received: by 2002:a05:620a:4494:b0:7c3:d3a0:578d with SMTP id af79cd13be357-7d33df21327mr843519085a.14.1749558001494;
+        Tue, 10 Jun 2025 05:20:01 -0700 (PDT)
+Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-607783c05a0sm6225865a12.44.2025.06.10.05.19.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jun 2025 05:20:00 -0700 (PDT)
+Message-ID: <bc1daec6-9198-43af-b5a6-c1057d7f2392@oss.qualcomm.com>
+Date: Tue, 10 Jun 2025 14:19:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250530-honest-chital-of-growth-db31e1@sudeepholla>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 5/8] power: supply: qcom_battmgr: Add charge control
+ support
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Fenglin Wu <fenglin.wu@oss.qualcomm.com>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: =?UTF-8?Q?Gy=C3=B6rgy_Kurucz?= <me@kuruczgy.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
+        David Collins <david.collins@oss.qualcomm.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20250530-qcom_battmgr_update-v2-0-9e377193a656@oss.qualcomm.com>
+ <20250530-qcom_battmgr_update-v2-5-9e377193a656@oss.qualcomm.com>
+ <f2e0f1da-c626-4cf0-8158-8a5805138871@kuruczgy.com>
+ <8bb3a056-c00f-4ae0-a790-d742d31f229a@oss.qualcomm.com>
+ <5knsdgk7o5zifkvzlrqiplmhztnsyhlxnqiuikqf4l7wkx2qvh@s3vzkiezw2bc>
+ <219a46d0-446c-4eed-8809-4f2400de0ef9@oss.qualcomm.com>
+ <cf3479b4-5f02-4d19-8164-306214966248@oss.qualcomm.com>
+ <b938b358-301a-4842-bdf6-93ec3c459d41@oss.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <b938b358-301a-4842-bdf6-93ec3c459d41@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=EovSrTcA c=1 sm=1 tr=0 ts=684822f2 cx=c_pps
+ a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=ZeCA1ImQhjoAQTjEC58A:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=PEH46H7Ffwr30OY-TuGO:22
+X-Proofpoint-ORIG-GUID: fbLYb_hAQf859efnyKlvnGUIV-SIc6bH
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjEwMDA5NiBTYWx0ZWRfX14FVC4+5sZMD
+ L1Qj9E+9Tpx6M9PAigp8cDZEA/jTF3LiEz4BobvACcxzSMByNEQ4VDh5bqzpeCWKD2KFMxVTpL4
+ kuD4HNjNl3l0DVeVcJ3BE9RYlnCela2o02y7uTEMQh5CMWBftBkzh/j7R34fISKqvXjbbQsPqBE
+ 1meOj8heEZsQFFUWTbb6QcFwUN1YKbjSJBKe2j0bzEcNPaGattB+s1W4V2GnQ6V+kuMNRhX5vFp
+ 5gsSW8gzowsF56bCkn0UCTCxgkn7lAs/VDK18SJ4YKGv/fHlwOIrE+ZtjQstD9ftxOc0wuMFDXt
+ QHh1I0israG8vAPaTIw3qhnTC4PcJZjpN2OsBxdKu2408VI2hSW0TvVcb0e82K4UvQfuRg/emZP
+ W5cZ2U9ihYEwoeApc+3eh36yS9dBwMKxGTn04TLomzcOuTA/B2rpHaWHb0sCL/1XkEs6fU8H
+X-Proofpoint-GUID: fbLYb_hAQf859efnyKlvnGUIV-SIc6bH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-10_04,2025-06-10_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 spamscore=0 suspectscore=0 priorityscore=1501 mlxlogscore=999
+ mlxscore=0 clxscore=1015 malwarescore=0 adultscore=0 lowpriorityscore=0
+ phishscore=0 bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506100096
 
-Hi,
-
-On May 30, 2025 at 17:31:08 +0100, Sudeep Holla wrote:
-> On Fri, May 30, 2025 at 04:05:27PM +0530, Dhruva Gole wrote:
-> > Optimize the SCMI power domain driver to only initialize domains that are
-> > actually referenced in the device tree. Previously, the driver would
-> > initialize all possible domains up to the maximum ID, which could lead to
-> > unnecessary firmware calls and longer probe times.
-> > 
-> > Key changes:
-> > - Scan device tree to identify which power domains are actually referenced
+On 6/9/25 9:17 AM, Dmitry Baryshkov wrote:
+> On 09/06/2025 05:39, Fenglin Wu wrote:
+>>
+>> On 6/7/2025 5:46 PM, Konrad Dybcio wrote:
+>>> On 6/3/25 12:37 PM, Dmitry Baryshkov wrote:
+>>>> On Tue, Jun 03, 2025 at 01:48:11PM +0800, Fenglin Wu wrote:
+>>>>> On 5/31/2025 6:36 PM, György Kurucz wrote:
+>>>>>>> Add charge control support for SM8550 and X1E80100.
+>>>>>> Thank you for this, tested on my Lenovo Yoga Slim 7x, the limiting works
+>>>>>> well, I finally don't have to worry about leaving my laptop plugged in
+>>>>>> for too long.
+>>>>>>
+>>>>>> One small thing I noticed is that after setting the sysfs values and
+>>>>>> rebooting, they report 0 again. The limiting appears to stay in effect
+>>>>>> though, so it seems that the firmware does keep the values, but Linux
+>>>>>> does not read them back. Indeed, looking at the code, it seems that
+>>>>>> actually reading back the values is only implemented for the SM8550.
+>>>>> Right.
+>>>>>
+>>>>> Based on offline information, X1E80100 doesn't support reading back those
+>>>>> threshold values in battery management firmware, so I can only use the
+>>>>> cached values for sysfs read.
+>>>> Which limits usablity of the attribute, it is now impossible to identify
+>>>> whether it is enabled or disabled. Is there a chance of fixing that for
+>>>> the X1E80100 platform?
+>>> Is there a chance we store that value in SDAM and can read it back?
+>>>
+>>> Konrad
+>>
+>> The thresholds are stored in PMIC SDAM registers by ADSP after receiving the set requests, and ADSP reads them back during initialization. This is why ADSP retains them upon device reboot.
+>>
+>> I spoke with the battery management firmware team, and they have no plans to update the battery management firmware for X1E80100 further. Consequently, they cannot provide any interfaces to read these thresholds through PMIC Glink.
+>>
+>> Reading them from the existing SDAM registers requires adding "nvmem- cells" DT properties to specify the SDAM registers. However, the "pmic_glink.power-supply" device is an auxiliary device created by the pmic_glink driver and does not have an associated DT node. Is there any method to create a DT node and add DT properties for an auxiliary device?
 > 
-> How do this work with runtime DT overlays ?
+> Auxiliary-bus devices don't have their OF nodes. Instead they use the main device's of node thanks to the call to device_set_of_node_from_dev().
 
-Thanks for bringing this up, I hadn't considered runtime DT overlays for
-this particular patch.
-Off the top of my mind, we can initialize all at probe, but only query state
-for referenced ones.
+i.e. something like this is what we want:
 
-> 
-> > - Use bitmap to track needed domains instead of initializing all
-> > - Only perform state queries and initialization for referenced domains
-> > - Maintain proper array sizing for power domain framework compatibility
-> > - Keep full provider structure to support late binding
-> > 
-> > This optimization reduces probe time and unnecessary firmware interactions
-> > by only initializing power domains that are actually used in the system.
-> 
-> Why is this very specific to power domains only ? This must apply for other
-> domains like perf or clock or reset ?
+---- socname.dtsi ----
 
-Yes, it should. Starting out with just power domains for now though. I
-haven't looked at other places like perf and clock yet.
+pmic-glink {
+	compatible = ...;
+	[...]
 
-> 
-> > For example, in a system with 100 possible domains but only 3 referenced
-> > in the device tree, we now only initialize those 3 domains instead of
-> > all 100.
-> > 
-> 
-> Well, how much of these PD will get used in the final products ? I can
-> understand the need to use just 3 in devel platforms. Just trying to see
-> how realistic is the scenario ? Is there any other optimisation possible
-> from the firmware ? Does getting the state of a PD takes so much time
-> on the platform in question ?
+	nvmem-cells = <&charge_limit_lower>, <&charge_limit_upper>;
+	nvmem-cell-names = "charge-limit-lower", "charge-limit-upper";
+}
 
-Well, it's not only about how much time it takes on any particular platform
-to query the state of a PD. Even if say it takes 10us to query it, it will
-add a whole 1ms to the probe time. This mean 1ms more of boot time, and
-perhaps boot time experts can chime in here but every optimisation
-possible matters!
-ARM systems are usually very strict on boot time requirements.
+---------------------
 
-Even if we somehow optimise the firmware, to me it seems like kernel is
-wasting time querrying for something that it doesn't need at that moment.
+if you have better names for these cells than what i put here as
+placeholders, go for it - just make sure to also add the -names
+counterpart, as we won't be able to rely on just indices in the long run
 
-Just replying here to your next reply on the thread:
-> And I missed another point. Someone will soon complain Linux no longer
-> turns off unused power domains. So I am inclined against this optimisation.
-> We need to consider all the above point before .
-
-I agree on some points like the runtime overlay. However I am not sure
-why Linux should be the one to turn OFF power domains that it's
-_unaware_ of. "unused" would probably be a wrong assumption to make.
-There maybe other entities that would be using power domains that
-are not in the device tree. (For eg. an RTOS running on the same system
-accessing a PD that is controlled by the SCP firmware but not mentioned in the
-device tree.)
-
-While one may argue that's why firmware should be the one to keep ref
-counts to avoid resource conflicts, one could also argue that firmwares
-could be the one to turn off unused power domains.
-
-Why should the kernel touch something that it hasn't been told about
-explicitly in the DT? Isn't the whole point of DT to be the literal
-hardware descriptor for the kernel? So if something doesn't exist in the
-DT, kernel shouldn't have other places telling it does - in this context
-power domains.
-
--- 
-Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
+Konrad
 
