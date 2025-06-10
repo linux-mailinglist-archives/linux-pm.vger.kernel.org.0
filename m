@@ -1,52 +1,53 @@
-Return-Path: <linux-pm+bounces-28402-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28400-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 411FEAD3E7E
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 18:11:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D71BAD3E78
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 18:11:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6087916686B
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 16:11:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD59D7AA0E2
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 16:09:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95383242D72;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA7D242D69;
 	Tue, 10 Jun 2025 16:10:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="drqhcmUo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AhiBzzfF"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E49D241132;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DAA8241131;
 	Tue, 10 Jun 2025 16:10:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749571840; cv=none; b=BNLwHsnBK4GEfyJIVj+A8opECFazJS7dCkSbv1Wl+7MNCO9H2iJZP/ONPR0ILdsLIOA3eoEJDOwFzV7EiUx6S/7Cu4TcI6LBhDcIYSzuOWe9kRU27b6x8OY2xq94TsPZBZrTYXDSB0NyDsCzY4P17Y41DAVGO1LwNZd4/GXOeX8=
+	t=1749571840; cv=none; b=d8wT8y0D2eXVSFa02pDjfW29fc9WUUTtW6A2n7FuU8Ek0KOdmb2y3eTYCin07xk4z8pzxcwQ8lACSkPKHr+L+z+RJQHmUzsC4ME5lm35sAWNgzY15PgiAVkVfzn4D4ogAVVQbFQbGUCxCSoaXb4oUH9YRe6uaa3dne2g4dIrVRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1749571840; c=relaxed/simple;
-	bh=jppi4p43w2+OqAURzcY2PoaEMYWDk0O7AhDc9FNJWc8=;
+	bh=iDYD/fFjxq0dyrmmtcnnCPr7yDVjDU05UW9VFtSG1G4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WiAjBsGjSSPKcGOymc+u7AnPwcw+IuOhCiYI8u8uc395Di4JYHb79hrM6Z/VGltO9Tx9dDQHVNthxewVMdNjFjhfIKC7o36Sq9lug1OkBDERWbhmT8j6iYipoDeSREMGKtKRtPXt5bru1puzpPY3RWou3I+6EaxT9UHCCYYbkHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=drqhcmUo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AA965C116C6;
+	 In-Reply-To:To:Cc; b=q3QnHqScQLZQQGnFur7mW0Nh1qaoC3MGMBwP125ASSiNXnpg/2fBgxHT+8drMo5hOP/GXSfYnueYOrSgFvkkfIWhLtKvM6/gsW+cOZjuse4adoFn+umv47N6K2eRILTWToXtUg4sbUcPAeWhyE3o7XXRe4ysFRVOvU903R5F+tE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AhiBzzfF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BDA0CC19425;
 	Tue, 10 Jun 2025 16:10:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1749571839;
-	bh=jppi4p43w2+OqAURzcY2PoaEMYWDk0O7AhDc9FNJWc8=;
+	bh=iDYD/fFjxq0dyrmmtcnnCPr7yDVjDU05UW9VFtSG1G4=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=drqhcmUo0ZyveU9z8qrtKSPmdL8h21l7Y7v+9yv4ruVo3keQPZ49IOVJ++uK6v2oj
-	 7e44MlM5wV7ODiRZ+E/rxE2GPqtVPnED93IlDVxk0T279At5l5/Cw86RXJWazM86Px
-	 PVwmurqpxqvkSDYeHIq3mn5ElspM2N7NwgAMHGD2nxP3kcafNo9M5H7lN7GqiZ7+VU
-	 yV8S9RV2uu+HTub1w9ik46PmW9CRW3hLmh8vQTLCadZvmAtXLS49B0fN2t2/dSbiif
-	 HHPVXdS/9DYdnT8/1PgKxMVgb+djQD16dLmn6MKVV/nbzTADgr0Mok3YLuTXlaF8+N
-	 HPa33FwSkP4Lg==
+	b=AhiBzzfFVC0cuuV7ijg9qItiBKWhBm5xTcRawmhX7WauPswAnur3fHLbYMm8zWNNo
+	 3JCd8veiFJHMWv0UGAhYdCJyDFedSCPMjFhZ8UsVLWLDgVlHic2H8XC8hg4FlxBNoh
+	 Ig0+9rDZ/GFYJEr7A6feSTg9K+TN/ebicEYiDzSr2aVG5/dXxpvMO3IK7mKQP9PKiM
+	 C4LlrMGHDCQFbVbWabajSR2mgGQD4vC2CMEXDS3dKcx1qPAn+6j2PKafKxA4CsuA/w
+	 A4eMCfKqWFgUxYiPfqP4YfTm0XWjgpFzYr6EDaT7pDIrK0hN8Xfn0CZuXlQxinbpg8
+	 VUCneYz8MIvWw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EF0DC677C4;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1795C71132;
 	Tue, 10 Jun 2025 16:10:39 +0000 (UTC)
 From: Sven Peter <sven@kernel.org>
-Date: Tue, 10 Jun 2025 15:29:47 +0000
-Subject: [PATCH v7 06/10] gpio: Add new gpio-macsmc driver for Apple Macs
+Date: Tue, 10 Jun 2025 15:29:48 +0000
+Subject: [PATCH v7 07/10] power: reset: macsmc-reboot: Add driver for
+ rebooting via Apple SMC
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -55,7 +56,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250610-smc-6-15-v7-6-556cafd771d3@kernel.org>
+Message-Id: <20250610-smc-6-15-v7-7-556cafd771d3@kernel.org>
 References: <20250610-smc-6-15-v7-0-556cafd771d3@kernel.org>
 In-Reply-To: <20250610-smc-6-15-v7-0-556cafd771d3@kernel.org>
 To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, 
@@ -68,15 +69,16 @@ To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
  "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
  linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10954; i=sven@kernel.org;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11424; i=sven@kernel.org;
  h=from:subject:message-id;
- bh=D/X6Dy0ot49l7NAwvpE0LPeXJ/1E7k4ds7lld8UPzP4=;
- b=owGbwMvMwCHmIlirolUq95LxtFoSQ4aHf3m/8bW8hD9LdwZ190kk3H28KbzP5IfllHCpcucjA
- rq6LK86SlkYxDgYZMUUWbbvtzd98vCN4NJNl97DzGFlAhnCwMUpABP59IThn9GNKS53dO6ea97P
- 82KSbOOPigiFBZ/eiW5ytty+rXtv8RSG/3EflpjmqGolWClM/6i1iVsu7XTJ57zDEy7wmTedLP3
- jywQA
+ bh=Pph3bVuy3ad/rZIuRUzym6r/zApadkRqVHhHAKz+yZs=;
+ b=owGbwMvMwCHmIlirolUq95LxtFoSQ4aHf8XaiVZ3U740fw2T/13zvst5j+TiJskmizvVMlVvd
+ /htE1/SUcrCIMbBICumyLJ9v73pk4dvBJduuvQeZg4rE8gQBi5OAZiISjHDf69XSTvEEkXbHj5r
+ r5ikctGyJpQ1I5axr3SrwxXmnw5VSYwMTxz5o34q79nKsKWTuYZhtznv5Ir0svkWbfd5elW7r5b
+ yAAA=
 X-Developer-Key: i=sven@kernel.org; a=openpgp;
  fpr=A1E3E34A2B3C820DBC4955E5993B08092F131F93
 X-Endpoint-Received: by B4 Relay for sven@kernel.org/default with
@@ -84,377 +86,361 @@ X-Endpoint-Received: by B4 Relay for sven@kernel.org/default with
 
 From: Hector Martin <marcan@marcan.st>
 
-This driver implements the GPIO service on top of the SMC framework
-on Apple Mac machines. In particular, these are the GPIOs present in the
-PMU IC which are used to control power to certain on-board devices.
-
-Although the underlying hardware supports various pin config settings
-(input/output, open drain, etc.), this driver does not implement that
-functionality and leaves it up to the firmware to configure things
-properly. We also don't yet support interrupts/events. This is
-sufficient for device power control, which is the only thing we need to
-support at this point. More features will be implemented when needed.
-
-To our knowledge, only Apple Silicon Macs implement this SMC feature.
+This driver implements the reboot/shutdown support exposed by the SMC
+on Apple Silicon machines, such as Apple M1 Macs.
 
 Signed-off-by: Hector Martin <marcan@marcan.st>
-Reviewed-by: Bartosz Golaszewski <brgl@bgdev.pl>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Sven Peter <sven@kernel.org>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Reviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
 Reviewed-by: Neal Gompa <neal@gompa.dev>
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sven Peter <sven@kernel.org>
 ---
- MAINTAINERS                |   1 +
- drivers/gpio/Kconfig       |  10 ++
- drivers/gpio/Makefile      |   1 +
- drivers/gpio/gpio-macsmc.c | 292 +++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 304 insertions(+)
+ MAINTAINERS                         |   1 +
+ drivers/power/reset/Kconfig         |   9 ++
+ drivers/power/reset/Makefile        |   1 +
+ drivers/power/reset/macsmc-reboot.c | 290 ++++++++++++++++++++++++++++++++++++
+ 4 files changed, 301 insertions(+)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index f6bf4643c20b641f553b3b60825b572b4b4865bb..4c1977d0af7c99aaef38a89e5d7eb32f42c4565f 100644
+index 4c1977d0af7c99aaef38a89e5d7eb32f42c4565f..9a3f273c557fbb24fe8b6f77d9df3c026b898e7a 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -2357,6 +2357,7 @@ F:	drivers/bluetooth/hci_bcm4377.c
- F:	drivers/clk/clk-apple-nco.c
- F:	drivers/cpufreq/apple-soc-cpufreq.c
- F:	drivers/dma/apple-admac.c
-+F:	drivers/gpio/gpio-macsmc.c
- F:	drivers/pmdomain/apple/
- F:	drivers/i2c/busses/i2c-pasemi-core.c
- F:	drivers/i2c/busses/i2c-pasemi-platform.c
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index 44f922e10db2f8dcbdacf79ccd27b0fd9cd93564..8a58df00faa1fafae8a36805e0d3a77672d43297 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -1464,6 +1464,16 @@ config GPIO_LP87565
- 	  This driver can also be built as a module. If so, the module will be
- 	  called gpio-lp87565.
+@@ -2370,6 +2370,7 @@ F:	drivers/nvme/host/apple.c
+ F:	drivers/nvmem/apple-efuses.c
+ F:	drivers/nvmem/apple-spmi-nvmem.c
+ F:	drivers/pinctrl/pinctrl-apple-gpio.c
++F:	drivers/power/reset/macsmc-reboot.c
+ F:	drivers/pwm/pwm-apple.c
+ F:	drivers/soc/apple/*
+ F:	drivers/spi/spi-apple.c
+diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+index e71f0af4e378c1d0e5a73bdf0b52262976fff190..733d812621599dadffb8303b6b95150c228f6426 100644
+--- a/drivers/power/reset/Kconfig
++++ b/drivers/power/reset/Kconfig
+@@ -128,6 +128,15 @@ config POWER_RESET_LINKSTATION
  
-+config GPIO_MACSMC
-+	tristate "Apple Mac SMC GPIO"
+ 	  Say Y here if you have a Buffalo LinkStation LS421D/E.
+ 
++config POWER_RESET_MACSMC
++	tristate "Apple SMC reset/power-off driver"
 +	depends on MFD_MACSMC
 +	help
-+	  Support for GPIOs controlled by the SMC microcontroller on Apple Mac
-+	  systems.
++	  This driver supports reset and power-off on Apple Mac machines
++	  that implement this functionality via the SMC.
 +
-+	  This driver can also be built as a module. If so, the module will be
-+	  called gpio-macsmc.
++	  Say Y here if you have an Apple Silicon Mac.
 +
- config GPIO_MADERA
- 	tristate "Cirrus Logic Madera class codecs"
- 	depends on PINCTRL_MADERA
-diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-index 88dedd298256c1c60b347313f27ee6626cf5e9b6..3e5bc90ba59e5602de93120ade50a7d13972a2d8 100644
---- a/drivers/gpio/Makefile
-+++ b/drivers/gpio/Makefile
-@@ -99,6 +99,7 @@ obj-$(CONFIG_GPIO_LP873X)		+= gpio-lp873x.o
- obj-$(CONFIG_GPIO_LP87565)		+= gpio-lp87565.o
- obj-$(CONFIG_GPIO_LPC18XX)		+= gpio-lpc18xx.o
- obj-$(CONFIG_GPIO_LPC32XX)		+= gpio-lpc32xx.o
-+obj-$(CONFIG_GPIO_MACSMC)		+= gpio-macsmc.o
- obj-$(CONFIG_GPIO_MADERA)		+= gpio-madera.o
- obj-$(CONFIG_GPIO_MAX3191X)		+= gpio-max3191x.o
- obj-$(CONFIG_GPIO_MAX7300)		+= gpio-max7300.o
-diff --git a/drivers/gpio/gpio-macsmc.c b/drivers/gpio/gpio-macsmc.c
+ config POWER_RESET_MSM
+ 	bool "Qualcomm MSM power-off driver"
+ 	depends on ARCH_QCOM
+diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+index 1b9b63a1a8731b765c0010e02543083dd184ee6c..b7c2b5940be9971548a5527384d1931abff11c4c 100644
+--- a/drivers/power/reset/Makefile
++++ b/drivers/power/reset/Makefile
+@@ -13,6 +13,7 @@ obj-$(CONFIG_POWER_RESET_GPIO) += gpio-poweroff.o
+ obj-$(CONFIG_POWER_RESET_GPIO_RESTART) += gpio-restart.o
+ obj-$(CONFIG_POWER_RESET_HISI) += hisi-reboot.o
+ obj-$(CONFIG_POWER_RESET_LINKSTATION) += linkstation-poweroff.o
++obj-$(CONFIG_POWER_RESET_MACSMC) += macsmc-reboot.o
+ obj-$(CONFIG_POWER_RESET_MSM) += msm-poweroff.o
+ obj-$(CONFIG_POWER_RESET_MT6323) += mt6323-poweroff.o
+ obj-$(CONFIG_POWER_RESET_QCOM_PON) += qcom-pon.o
+diff --git a/drivers/power/reset/macsmc-reboot.c b/drivers/power/reset/macsmc-reboot.c
 new file mode 100644
-index 0000000000000000000000000000000000000000..7570d9e89adfff49b9858c82bb34b075fb0e5f16
+index 0000000000000000000000000000000000000000..e9702acdd366b053ce7a032bb09f636ac5c02444
 --- /dev/null
-+++ b/drivers/gpio/gpio-macsmc.c
-@@ -0,0 +1,292 @@
++++ b/drivers/power/reset/macsmc-reboot.c
+@@ -0,0 +1,290 @@
 +// SPDX-License-Identifier: GPL-2.0-only OR MIT
 +/*
-+ * Apple SMC GPIO driver
++ * Apple SMC Reboot/Poweroff Handler
 + * Copyright The Asahi Linux Contributors
-+ *
-+ * This driver implements basic SMC PMU GPIO support that can read inputs
-+ * and write outputs. Mode changes and IRQ config are not yet implemented.
 + */
 +
-+#include <linux/bitmap.h>
-+#include <linux/device.h>
-+#include <linux/gpio/driver.h>
++#include <linux/delay.h>
 +#include <linux/mfd/core.h>
 +#include <linux/mfd/macsmc.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/nvmem-consumer.h>
++#include <linux/platform_device.h>
++#include <linux/reboot.h>
++#include <linux/slab.h>
 +
-+#define MAX_GPIO 64
-+
-+/*
-+ * Commands 0-6 are, presumably, the intended API.
-+ * Command 0xff lets you get/set the pin configuration in detail directly,
-+ * but the bit meanings seem not to be stable between devices/PMU hardware
-+ * versions.
-+ *
-+ * We're going to try to make do with the low commands for now.
-+ * We don't implement pin mode changes at this time.
-+ */
-+
-+#define CMD_ACTION	(0 << 24)
-+#define CMD_OUTPUT	(1 << 24)
-+#define CMD_INPUT	(2 << 24)
-+#define CMD_PINMODE	(3 << 24)
-+#define CMD_IRQ_ENABLE	(4 << 24)
-+#define CMD_IRQ_ACK	(5 << 24)
-+#define CMD_IRQ_MODE	(6 << 24)
-+#define CMD_CONFIG	(0xff << 24)
-+
-+#define MODE_INPUT	0
-+#define MODE_OUTPUT	1
-+#define MODE_VALUE_0	0
-+#define MODE_VALUE_1	2
-+
-+#define IRQ_MODE_HIGH		0
-+#define IRQ_MODE_LOW		1
-+#define IRQ_MODE_RISING		2
-+#define IRQ_MODE_FALLING	3
-+#define IRQ_MODE_BOTH		4
-+
-+#define CONFIG_MASK	GENMASK(23, 16)
-+#define CONFIG_VAL	GENMASK(7, 0)
-+
-+#define CONFIG_OUTMODE	GENMASK(7, 6)
-+#define CONFIG_IRQMODE	GENMASK(5, 3)
-+#define CONFIG_PULLDOWN	BIT(2)
-+#define CONFIG_PULLUP	BIT(1)
-+#define CONFIG_OUTVAL	BIT(0)
-+
-+/*
-+ * Output modes seem to differ depending on the PMU in use... ?
-+ * j274 / M1 (Sera PMU):
-+ *   0 = input
-+ *   1 = output
-+ *   2 = open drain
-+ *   3 = disable
-+ * j314 / M1Pro (Maverick PMU):
-+ *   0 = input
-+ *   1 = open drain
-+ *   2 = output
-+ *   3 = ?
-+ */
-+
-+struct macsmc_gpio {
-+	struct device *dev;
-+	struct apple_smc *smc;
-+	struct gpio_chip gc;
-+
-+	int first_index;
++struct macsmc_reboot_nvmem {
++	struct nvmem_cell *shutdown_flag;
++	struct nvmem_cell *boot_stage;
++	struct nvmem_cell *boot_error_count;
++	struct nvmem_cell *panic_count;
 +};
 +
-+static int macsmc_gpio_nr(smc_key key)
++static const char * const nvmem_names[] = {
++	"shutdown_flag",
++	"boot_stage",
++	"boot_error_count",
++	"panic_count",
++};
++
++enum boot_stage {
++	BOOT_STAGE_SHUTDOWN		= 0x00, /* Clean shutdown */
++	BOOT_STAGE_IBOOT_DONE		= 0x2f, /* Last stage of bootloader */
++	BOOT_STAGE_KERNEL_STARTED	= 0x30, /* Normal OS booting */
++};
++
++struct macsmc_reboot {
++	struct device *dev;
++	struct apple_smc *smc;
++	struct notifier_block reboot_notify;
++
++	union {
++		struct macsmc_reboot_nvmem nvm;
++		struct nvmem_cell *nvm_cells[ARRAY_SIZE(nvmem_names)];
++	};
++};
++
++/* Helpers to read/write a u8 given a struct nvmem_cell */
++static int nvmem_cell_get_u8(struct nvmem_cell *cell)
 +{
-+	int low = hex_to_bin(key & 0xff);
-+	int high = hex_to_bin((key >> 8) & 0xff);
++	size_t len;
++	void *bfr;
++	u8 val;
 +
-+	if (low < 0 || high < 0)
-+		return -1;
++	bfr = nvmem_cell_read(cell, &len);
++	if (IS_ERR(bfr))
++		return PTR_ERR(bfr);
 +
-+	return low | (high << 4);
-+}
-+
-+static int macsmc_gpio_key(unsigned int offset)
-+{
-+	return _SMC_KEY("gP\0\0") | hex_asc_hi(offset) << 8 | hex_asc_lo(offset);
-+}
-+
-+static int macsmc_gpio_find_first_gpio_index(struct macsmc_gpio *smcgp)
-+{
-+	struct apple_smc *smc = smcgp->smc;
-+	smc_key key = macsmc_gpio_key(0);
-+	smc_key first_key, last_key;
-+	int start, count, ret;
-+
-+	/* Return early if the key is out of bounds */
-+	ret = apple_smc_get_key_by_index(smc, 0, &first_key);
-+	if (ret)
-+		return ret;
-+	if (key <= first_key)
-+		return -ENODEV;
-+
-+	ret = apple_smc_get_key_by_index(smc, smc->key_count - 1, &last_key);
-+	if (ret)
-+		return ret;
-+	if (key > last_key)
-+		return -ENODEV;
-+
-+	/* Binary search to find index of first SMC key bigger or equal to key */
-+	start = 0;
-+	count = smc->key_count;
-+	while (count > 1) {
-+		smc_key pkey;
-+		int pivot = start + ((count - 1) >> 1);
-+
-+		ret = apple_smc_get_key_by_index(smc, pivot, &pkey);
-+		if (ret < 0)
-+			return ret;
-+
-+		if (pkey == key)
-+			return pivot;
-+
-+		pivot++;
-+
-+		if (pkey < key) {
-+			count -= pivot - start;
-+			start = pivot;
-+		} else {
-+			count = pivot - start;
-+		}
++	if (len < 1) {
++		kfree(bfr);
++		return -EINVAL;
 +	}
 +
-+	return start;
++	val = *(u8 *)bfr;
++	kfree(bfr);
++	return val;
 +}
 +
-+static int macsmc_gpio_get_direction(struct gpio_chip *gc, unsigned int offset)
++static int nvmem_cell_set_u8(struct nvmem_cell *cell, u8 val)
 +{
-+	struct macsmc_gpio *smcgp = gpiochip_get_data(gc);
-+	smc_key key = macsmc_gpio_key(offset);
-+	u32 val;
-+	int ret;
++	return nvmem_cell_write(cell, &val, sizeof(val));
++}
 +
-+	/* First try reading the explicit pin mode register */
-+	ret = apple_smc_rw_u32(smcgp->smc, key, CMD_PINMODE, &val);
-+	if (!ret)
-+		return (val & MODE_OUTPUT) ? GPIO_LINE_DIRECTION_OUT : GPIO_LINE_DIRECTION_IN;
++/*
++ * SMC 'MBSE' key actions:
++ *
++ * 'offw' - shutdown warning
++ * 'slpw' - sleep warning
++ * 'rest' - restart warning
++ * 'off1' - shutdown (needs PMU bit set to stay on)
++ * 'susp' - suspend
++ * 'phra' - restart ("PE Halt Restart Action"?)
++ * 'panb' - panic beginning
++ * 'pane' - panic end
++ */
++
++static int macsmc_prepare_atomic(struct sys_off_data *data)
++{
++	struct macsmc_reboot *reboot = data->cb_data;
++
++	dev_info(reboot->dev, "Preparing SMC for atomic mode\n");
++
++	apple_smc_enter_atomic(reboot->smc);
++	return NOTIFY_OK;
++}
++
++static int macsmc_power_off(struct sys_off_data *data)
++{
++	struct macsmc_reboot *reboot = data->cb_data;
++
++	dev_info(reboot->dev, "Issuing power off (off1)\n");
++
++	if (apple_smc_write_u32_atomic(reboot->smc, SMC_KEY(MBSE), SMC_KEY(off1)) < 0) {
++		dev_err(reboot->dev, "Failed to issue MBSE = off1 (power_off)\n");
++	} else {
++		mdelay(100);
++		WARN_ONCE(1, "Unable to power off system\n");
++	}
++
++	return NOTIFY_OK;
++}
++
++static int macsmc_restart(struct sys_off_data *data)
++{
++	struct macsmc_reboot *reboot = data->cb_data;
++
++	dev_info(reboot->dev, "Issuing restart (phra)\n");
++
++	if (apple_smc_write_u32_atomic(reboot->smc, SMC_KEY(MBSE), SMC_KEY(phra)) < 0) {
++		dev_err(reboot->dev, "Failed to issue MBSE = phra (restart)\n");
++	} else {
++		mdelay(100);
++		WARN_ONCE(1, "Unable to restart system\n");
++	}
++
++	return NOTIFY_OK;
++}
++
++static int macsmc_reboot_notify(struct notifier_block *this, unsigned long action, void *data)
++{
++	struct macsmc_reboot *reboot = container_of(this, struct macsmc_reboot, reboot_notify);
++	u8 shutdown_flag;
++	u32 val;
++
++	switch (action) {
++	case SYS_RESTART:
++		val = SMC_KEY(rest);
++		shutdown_flag = 0;
++		break;
++	case SYS_POWER_OFF:
++		val = SMC_KEY(offw);
++		shutdown_flag = 1;
++		break;
++	default:
++		return NOTIFY_DONE;
++	}
++
++	dev_info(reboot->dev, "Preparing for reboot (%p4ch)\n", &val);
++
++	/* On the Mac Mini, this will turn off the LED for power off */
++	if (apple_smc_write_u32(reboot->smc, SMC_KEY(MBSE), val) < 0)
++		dev_err(reboot->dev, "Failed to issue MBSE = %p4ch (reboot_prepare)\n", &val);
++
++	/* Set the boot_stage to 0, which means we're doing a clean shutdown/reboot. */
++	if (reboot->nvm.boot_stage &&
++	    nvmem_cell_set_u8(reboot->nvm.boot_stage, BOOT_STAGE_SHUTDOWN) < 0)
++		dev_err(reboot->dev, "Failed to write boot_stage\n");
 +
 +	/*
-+	 * Less common IRQ configs cause CMD_PINMODE to fail, and so does open drain mode.
-+	 * Fall back to reading IRQ mode, which will only succeed for inputs.
++	 * Set the PMU flag to actually reboot into the off state.
++	 * Without this, the device will just reboot. We make it optional in case it is no longer
++	 * necessary on newer hardware.
 +	 */
-+	ret = apple_smc_rw_u32(smcgp->smc, key, CMD_IRQ_MODE, &val);
-+	return ret ? GPIO_LINE_DIRECTION_OUT : GPIO_LINE_DIRECTION_IN;
++	if (reboot->nvm.shutdown_flag &&
++	    nvmem_cell_set_u8(reboot->nvm.shutdown_flag, shutdown_flag) < 0)
++		dev_err(reboot->dev, "Failed to write shutdown_flag\n");
++
++	return NOTIFY_OK;
 +}
 +
-+static int macsmc_gpio_get(struct gpio_chip *gc, unsigned int offset)
++static void macsmc_power_init_error_counts(struct macsmc_reboot *reboot)
 +{
-+	struct macsmc_gpio *smcgp = gpiochip_get_data(gc);
-+	smc_key key = macsmc_gpio_key(offset);
-+	u32 cmd, val;
-+	int ret;
++	int boot_error_count, panic_count;
 +
-+	ret = macsmc_gpio_get_direction(gc, offset);
-+	if (ret < 0)
-+		return ret;
++	if (!reboot->nvm.boot_error_count || !reboot->nvm.panic_count)
++		return;
 +
-+	if (ret == GPIO_LINE_DIRECTION_OUT)
-+		cmd = CMD_OUTPUT;
-+	else
-+		cmd = CMD_INPUT;
-+
-+	ret = apple_smc_rw_u32(smcgp->smc, key, cmd, &val);
-+	if (ret < 0)
-+		return ret;
-+
-+	return val ? 1 : 0;
-+}
-+
-+static int macsmc_gpio_set(struct gpio_chip *gc, unsigned int offset, int value)
-+{
-+	struct macsmc_gpio *smcgp = gpiochip_get_data(gc);
-+	smc_key key = macsmc_gpio_key(offset);
-+	int ret;
-+
-+	value |= CMD_OUTPUT;
-+	ret = apple_smc_write_u32(smcgp->smc, key, CMD_OUTPUT | value);
-+	if (ret < 0)
-+		dev_err(smcgp->dev, "GPIO set failed %p4ch = 0x%x\n",
-+			&key, value);
-+
-+	return ret;
-+}
-+
-+static int macsmc_gpio_init_valid_mask(struct gpio_chip *gc,
-+				       unsigned long *valid_mask, unsigned int ngpios)
-+{
-+	struct macsmc_gpio *smcgp = gpiochip_get_data(gc);
-+	int count;
-+	int i;
-+
-+	count = min(smcgp->smc->key_count, MAX_GPIO);
-+
-+	bitmap_zero(valid_mask, ngpios);
-+
-+	for (i = 0; i < count; i++) {
-+		int ret, gpio_nr;
-+		smc_key key;
-+
-+		ret = apple_smc_get_key_by_index(smcgp->smc, smcgp->first_index + i, &key);
-+		if (ret < 0)
-+			return ret;
-+
-+		if (key > SMC_KEY(gPff))
-+			break;
-+
-+		gpio_nr = macsmc_gpio_nr(key);
-+		if (gpio_nr < 0 || gpio_nr > MAX_GPIO) {
-+			dev_err(smcgp->dev, "Bad GPIO key %p4ch\n", &key);
-+			continue;
-+		}
-+
-+		set_bit(gpio_nr, valid_mask);
++	boot_error_count = nvmem_cell_get_u8(reboot->nvm.boot_error_count);
++	if (boot_error_count < 0) {
++		dev_err(reboot->dev, "Failed to read boot_error_count (%d)\n", boot_error_count);
++		return;
 +	}
++
++	panic_count = nvmem_cell_get_u8(reboot->nvm.panic_count);
++	if (panic_count < 0) {
++		dev_err(reboot->dev, "Failed to read panic_count (%d)\n", panic_count);
++		return;
++	}
++
++	if (!boot_error_count && !panic_count)
++		return;
++
++	dev_warn(reboot->dev, "PMU logged %d boot error(s) and %d panic(s)\n",
++		 boot_error_count, panic_count);
++
++	if (nvmem_cell_set_u8(reboot->nvm.panic_count, 0) < 0)
++		dev_err(reboot->dev, "Failed to reset panic_count\n");
++	if (nvmem_cell_set_u8(reboot->nvm.boot_error_count, 0) < 0)
++		dev_err(reboot->dev, "Failed to reset boot_error_count\n");
++}
++
++static int macsmc_reboot_probe(struct platform_device *pdev)
++{
++	struct apple_smc *smc = dev_get_drvdata(pdev->dev.parent);
++	struct macsmc_reboot *reboot;
++	int ret, i;
++
++	reboot = devm_kzalloc(&pdev->dev, sizeof(*reboot), GFP_KERNEL);
++	if (!reboot)
++		return -ENOMEM;
++
++	reboot->dev = &pdev->dev;
++	reboot->smc = smc;
++
++	platform_set_drvdata(pdev, reboot);
++
++	for (i = 0; i < ARRAY_SIZE(nvmem_names); i++) {
++		struct nvmem_cell *cell;
++
++		cell = devm_nvmem_cell_get(&pdev->dev,
++					   nvmem_names[i]);
++		if (IS_ERR(cell)) {
++			if (PTR_ERR(cell) == -EPROBE_DEFER)
++				return -EPROBE_DEFER;
++			dev_warn(&pdev->dev, "Missing NVMEM cell %s (%ld)\n",
++				 nvmem_names[i], PTR_ERR(cell));
++			/* Non fatal, we'll deal with it */
++			cell = NULL;
++		}
++		reboot->nvm_cells[i] = cell;
++	}
++
++	/* Set the boot_stage to indicate we're running the OS kernel */
++	if (reboot->nvm.boot_stage &&
++	    nvmem_cell_set_u8(reboot->nvm.boot_stage, BOOT_STAGE_KERNEL_STARTED) < 0)
++		dev_err(reboot->dev, "Failed to write boot_stage\n");
++
++	/* Display and clear the error counts */
++	macsmc_power_init_error_counts(reboot);
++
++	reboot->reboot_notify.notifier_call = macsmc_reboot_notify;
++
++	ret = devm_register_sys_off_handler(&pdev->dev, SYS_OFF_MODE_POWER_OFF_PREPARE,
++					    SYS_OFF_PRIO_HIGH, macsmc_prepare_atomic, reboot);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret,
++				     "Failed to register power-off prepare handler\n");
++	ret = devm_register_sys_off_handler(&pdev->dev, SYS_OFF_MODE_POWER_OFF, SYS_OFF_PRIO_HIGH,
++					    macsmc_power_off, reboot);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret,
++				     "Failed to register power-off handler\n");
++
++	ret = devm_register_sys_off_handler(&pdev->dev, SYS_OFF_MODE_RESTART_PREPARE,
++					    SYS_OFF_PRIO_HIGH, macsmc_prepare_atomic, reboot);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret,
++				     "Failed to register restart prepare handler\n");
++	ret = devm_register_sys_off_handler(&pdev->dev, SYS_OFF_MODE_RESTART, SYS_OFF_PRIO_HIGH,
++					    macsmc_restart, reboot);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "Failed to register restart handler\n");
++
++	ret = devm_register_reboot_notifier(&pdev->dev, &reboot->reboot_notify);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "Failed to register reboot notifier\n");
++
++	dev_info(&pdev->dev, "Handling reboot and poweroff requests via SMC\n");
 +
 +	return 0;
 +}
 +
-+static int macsmc_gpio_probe(struct platform_device *pdev)
-+{
-+	struct macsmc_gpio *smcgp;
-+	struct apple_smc *smc = dev_get_drvdata(pdev->dev.parent);
-+	smc_key key;
-+	int ret;
-+
-+	smcgp = devm_kzalloc(&pdev->dev, sizeof(*smcgp), GFP_KERNEL);
-+	if (!smcgp)
-+		return -ENOMEM;
-+
-+	smcgp->dev = &pdev->dev;
-+	smcgp->smc = smc;
-+
-+	smcgp->first_index = macsmc_gpio_find_first_gpio_index(smcgp);
-+	if (smcgp->first_index < 0)
-+		return smcgp->first_index;
-+
-+	ret = apple_smc_get_key_by_index(smc, smcgp->first_index, &key);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (key > macsmc_gpio_key(MAX_GPIO - 1))
-+		return -ENODEV;
-+
-+	dev_info(smcgp->dev, "First GPIO key: %p4ch\n", &key);
-+
-+	smcgp->gc.label = "macsmc-pmu-gpio";
-+	smcgp->gc.owner = THIS_MODULE;
-+	smcgp->gc.get = macsmc_gpio_get;
-+	smcgp->gc.set_rv = macsmc_gpio_set;
-+	smcgp->gc.get_direction = macsmc_gpio_get_direction;
-+	smcgp->gc.init_valid_mask = macsmc_gpio_init_valid_mask;
-+	smcgp->gc.can_sleep = true;
-+	smcgp->gc.ngpio = MAX_GPIO;
-+	smcgp->gc.base = -1;
-+	smcgp->gc.parent = &pdev->dev;
-+
-+	return devm_gpiochip_add_data(&pdev->dev, &smcgp->gc, smcgp);
-+}
-+
-+static const struct of_device_id macsmc_gpio_of_table[] = {
-+	{ .compatible = "apple,smc-gpio", },
++static const struct of_device_id macsmc_reboot_of_table[] = {
++	{ .compatible = "apple,smc-reboot", },
 +	{}
 +};
-+MODULE_DEVICE_TABLE(of, macsmc_gpio_of_table);
++MODULE_DEVICE_TABLE(of, macsmc_reboot_of_table);
 +
-+static struct platform_driver macsmc_gpio_driver = {
++static struct platform_driver macsmc_reboot_driver = {
 +	.driver = {
-+		.name = "macsmc-gpio",
-+		.of_match_table = macsmc_gpio_of_table,
++		.name = "macsmc-reboot",
++		.of_match_table = macsmc_reboot_of_table,
 +	},
-+	.probe = macsmc_gpio_probe,
++	.probe = macsmc_reboot_probe,
 +};
-+module_platform_driver(macsmc_gpio_driver);
++module_platform_driver(macsmc_reboot_driver);
 +
-+MODULE_AUTHOR("Hector Martin <marcan@marcan.st>");
 +MODULE_LICENSE("Dual MIT/GPL");
-+MODULE_DESCRIPTION("Apple SMC GPIO driver");
++MODULE_DESCRIPTION("Apple SMC reboot/poweroff driver");
++MODULE_AUTHOR("Hector Martin <marcan@marcan.st>");
 
 -- 
 2.34.1
