@@ -1,228 +1,123 @@
-Return-Path: <linux-pm+bounces-28339-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28340-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2608AD307E
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 10:34:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DECEAAD3085
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 10:35:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE8F9188C30E
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 08:35:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D31DA7A82E5
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 08:33:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C49D22157B;
-	Tue, 10 Jun 2025 08:34:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E366625E80A;
+	Tue, 10 Jun 2025 08:35:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WM5yE3KD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxde.zte.com.cn (mxde.zte.com.cn [209.9.37.143])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100521D555;
-	Tue, 10 Jun 2025 08:34:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.9.37.143
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CCA922157B;
+	Tue, 10 Jun 2025 08:35:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749544492; cv=none; b=E1JBgxFyFa4Ouh8WB4PXcq90vJQfcpwSCNCia/foAIBms3klreoGFDIAP0TG3HA2WKjNYugB0qPP2ysWgstgb1DMuqZGIP+pqEIMGG2ccIX2T/+LDS0LFxm9T6EY1q+A/1wqmvoLclrVkqOfdjOIpqNxqtRuGbBsnhvtI5eOjC8=
+	t=1749544501; cv=none; b=C9PA6tex5tnTsk0YMf+L+wiFQSwzWRIsdV8JK/UtJCElsHjUpA16LTBsW1PCLwnzo4vHoZX7jx3b9DvvYNTT8uvldfGfFXVCZpnydbWTDs36qfmriuiVw4/R+3HXQS8YeL90I6Dy4UO46JCzIUlMqKk/UYU17KRplZ/w8hD5ti4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749544492; c=relaxed/simple;
-	bh=btIRtQmLoXDnPdAl2vERwqdyVKMgYNNkSMM7j+ikU6Y=;
-	h=Date:Message-ID:Mime-Version:From:To:Cc:Subject:Content-Type; b=NWBL6PT7/szcW2Er/UQ4VU550JbSLd7NBwIeWutZ71bzEc7mrFqQDOwKn8hM7qQO7GV3vBJjUhBhy5qffy3n8FebLcZttcsNEskH/mORHV0ViydLOVfg33OUkIzPFU8CTu0Myp0kUnqnVTdV+wd1ZsmC/U7uBYWuvEQeEB40JEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn; spf=pass smtp.mailfrom=zte.com.cn; arc=none smtp.client-ip=209.9.37.143
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
-Received: from mxhk.zte.com.cn (unknown [192.168.250.138])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mxde.zte.com.cn (FangMail) with ESMTPS id 4bGht75wDVz5Bdcy;
-	Tue, 10 Jun 2025 16:34:39 +0800 (CST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mxhk.zte.com.cn (FangMail) with ESMTPS id 4bGhsy0jvvz5DXWl;
-	Tue, 10 Jun 2025 16:34:30 +0800 (CST)
-Received: from xaxapp05.zte.com.cn ([10.99.98.109])
-	by mse-fl2.zte.com.cn with SMTP id 55A8YG0C000519;
-	Tue, 10 Jun 2025 16:34:16 +0800 (+08)
-	(envelope-from shao.mingyin@zte.com.cn)
-Received: from mapi (xaxapp04[null])
-	by mapi (Zmail) with MAPI id mid32;
-	Tue, 10 Jun 2025 16:34:19 +0800 (CST)
-Date: Tue, 10 Jun 2025 16:34:19 +0800 (CST)
-X-Zmail-TransId: 2afb6847ee0bffffffff9f2-c7679
-X-Mailer: Zmail v1.0
-Message-ID: <202506101634190538mcMSzfKfxQTy4LgbSpOy@zte.com.cn>
+	s=arc-20240116; t=1749544501; c=relaxed/simple;
+	bh=AKMt5bOqhnoUm7/yUiDXZGax3MVDPIxJL5bYGkHzERI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=irPZuhaq1RxOVZRNo4vUEh/x7LOkBjqkyjviVdoFQ4/bVDFh+TmpYC1Y0Ke8GB9jevyX90wFY2Sj3cvMnrLNnKW4IlfV1J4immTaJP/xwRuefSHEgkCoLrmMSvn1BpK7mUNeURwHePkaRRpjgiQyjAMG0LJO3BEcnWWl52rwywc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WM5yE3KD; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3138e64fc73so188094a91.2;
+        Tue, 10 Jun 2025 01:35:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749544500; x=1750149300; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AKMt5bOqhnoUm7/yUiDXZGax3MVDPIxJL5bYGkHzERI=;
+        b=WM5yE3KDuMTi0aRvwuFycTaclSzCED0mbjoPQsD22AgrNpMSBd5kd6b0TwxpbS6AaA
+         x6S3LU3NCB4lY0eNsU+dKMFkBZIRgTOCS0RDmOkTlGT3ReRh/BxwZ62o5VS8arc+Tevo
+         0d+upa62AD3RaVRM2JW4ZEfFHfAEFj6A9tJHYnhAu0T0h2M1mZe+ptKXhGHQWDJrfm9D
+         dpNFuxEyyiDyn4xw60m4Tj50Kgy7z9tj/gsxQi+J0b1Lwyw/p+WZcD7CgOB7od9L6771
+         jix6+pJVAAYT8vWeJX5/6OCDVR2lED2HcogWm4+TX0rVOnhwTleyfflDLoDag372O72E
+         WXzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749544500; x=1750149300;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AKMt5bOqhnoUm7/yUiDXZGax3MVDPIxJL5bYGkHzERI=;
+        b=pnx08ExgWNS2Vnph4jZQOYSfG6AHQEKpblM8hOorNxVno5EcegC8qiJiOesv8hMeH7
+         yFiZ8dhg2KMv5CGu02ueIW9Ta5jwr3cPh399KY5nJ8VD30M4pWqmNwJFZxujvjuZT5Q/
+         5/vztv5dcQr2lDrCw/VwDHfznt7ISW8mtUTzvBTCXpBZKb60iWobRp3f4Q+fHCUMtXeD
+         pNxtoYhVr4ljyPkFwq+WoJHcfRhjTyRIyDFX1m4lRGeZrmasZWYriDCk21XILyDxmS14
+         78tS+O/qTt3AqfSDHjwW8IouUzRr1pUSBV/+6+O3oClFK9NCYmse00CZXqNIq5dWaZ56
+         lxpA==
+X-Forwarded-Encrypted: i=1; AJvYcCVih8oeqD02KbKo1LUCC5DVozv59S6gZtLSjrvlPXHOklU7EqMN24UR5W17g+QoiP71tKol1Hm3IFo9jA==@vger.kernel.org, AJvYcCWE2Nt9C6DkikSZKJtVKeE4bHXySHhaaQOXPBBz7pKwHR9szMyNh6hD5K1LHWk8XHiZJzzTxKUSr6XAHuL8PMQ=@vger.kernel.org, AJvYcCWPs7/w3WndJelDmKiSTdiv89huZ9a491HQZLSXsK6myYm+MTU8p2W6TN0KVkQOgKwFiNBS1vw540Qm8KLl@vger.kernel.org, AJvYcCWyaJe4P59BGBX2F4wM1kY1rTQVI0zLcXIUASuSL1keWLdvJyVMEL2gpwKhbcjkM6hIu3hUBsXv7p8=@vger.kernel.org, AJvYcCXCUYE15Ib2OQ54vdber+dtRehdi9wTV+CdH1yMbz+v4pYOmdlpsgltu+CIccP2JrvkmNXA4mPXI1JG@vger.kernel.org, AJvYcCXxwU9a5nKb+VrPSuUzO15IFgQcRmQFrS4AcV8zv32AqwWuECxflHvh5c/3X3Yv4AjEjbZ3UrYecHR9@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywu5rmambIqMuCVa6Ho/VkJONQZz7A+R0Fr0OlHvCy6D2vCR3PB
+	zHFTf3X/Zw38Okkgs9D9auSPXtDtPxFAMvo6SFItbhT5pxXy/JznTnFZwqe2CeW7w9eCK00vCQw
+	1L7QvSjb0aoRSzLsT6gx0FKGm5/JAn3I=
+X-Gm-Gg: ASbGncuvKEvveuClKrwIwnoa3kTdhD+iHDQx/u1RLKr72uSAlLJNM2TTap6GnVG+GWy
+	I298fbW/cOsYVPbByW4cZglko8xkJJUiWzOhZ+Kf2aozjYzwbXqI/7mPD40JHFOfuMXz/DoZKRL
+	JEeYBZBXvRBK0TFEdUeJ3wye1Az01FgmEEP9CAtnJBjH4=
+X-Google-Smtp-Source: AGHT+IG9o8l5nJqI45FrwDH7Khv7XoEw96OrQqnf6E/rj5r8N91+BEKWod7OyjPnRZjArPU77UU87Z94T1+rv+17SlU=
+X-Received: by 2002:a17:90a:d006:b0:311:e9a6:332e with SMTP id
+ 98e67ed59e1d1-3134ded1839mr9033972a91.0.1749544499647; Tue, 10 Jun 2025
+ 01:34:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-From: <shao.mingyin@zte.com.cn>
-To: <ulf.hansson@linaro.org>
-Cc: <geert+renesas@glider.be>, <magnus.damm@gmail.com>, <heiko@sntech.de>,
-        <krzk@kernel.org>, <alim.akhtar@samsung.com>,
-        <walker.chen@starfivetech.com>, <changhuang.liang@starfivetech.com>,
-        <sebastian.reichel@collabora.com>, <detlev.casanova@collabora.com>,
-        <finley.xiao@rock-chips.com>, <shawn.lin@rock-chips.com>,
-        <pgwipeout@gmail.com>, <qiu.yutan@zte.com.cn>,
-        <shao.mingyin@zte.com.cn>, <linux-pm@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <yang.yang29@zte.com.cn>,
-        <xu.xin16@zte.com.cn>, <yang.tao172@zte.com.cn>,
-        <ye.xingchen@zte.com.cn>
-Subject: =?UTF-8?B?cG1kb21haW46IFVzZSBzdHJfZW5hYmxlX2Rpc2FibGUtbGlrZSBoZWxwZXJz?=
-Content-Type: text/plain;
-	charset="UTF-8"
-X-MAIL:mse-fl2.zte.com.cn 55A8YG0C000519
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6847EE1E.000/4bGht75wDVz5Bdcy
+MIME-Version: 1.0
+References: <70994d1b172b998aa83c9a87b81858806ddfa1bb.1749530212.git.viresh.kumar@linaro.org>
+In-Reply-To: <70994d1b172b998aa83c9a87b81858806ddfa1bb.1749530212.git.viresh.kumar@linaro.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 10 Jun 2025 10:34:47 +0200
+X-Gm-Features: AX0GCFuW4nKJxDOyQjzaKLJqfQBe7ZqYmgxa6VoP-kHbDElCPzAeYxEw-DuKrag
+Message-ID: <CANiq72mhyBOjzmvmUDfgFBoRqO_aaS-CL-ct3vmJ56HoJAsV4A@mail.gmail.com>
+Subject: Re: [PATCH] rust: Use consistent "# Examples" heading style in rustdoc
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Andreas Hindborg <a.hindborg@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Breno Leitao <leitao@debian.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Yury Norov <yury.norov@gmail.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Russ Weight <russ.weight@linux.dev>, Nishanth Menon <nm@ti.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, linux-block@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-pci@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Shao Mingyin <shao.mingyin@zte.com.cn>
+On Tue, Jun 10, 2025 at 6:38=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
+>
+> Some modules previously used `## Examples` or `# Example`, which deviates
+> from the preferred `# Examples` style.
 
-Replace ternary (condition ? "enable" : "disable") syntax and ternary
-(condition ? "on" : "off") syntax with helpers from
-string_choices.h because:
-1. Simple function call with one argument is easier to read.  Ternary
-   operator has three arguments and with wrapping might lead to quite
-   long code.
-2. Is slightly shorter thus also easier to read.
-3. It brings uniformity in the text - same string.
-4. Allows deduping by the linker, which results in a smaller binary
-   file.
+Note that `##` is not necessarily wrong, it depends on the intended
+header level. Top-level headers use `#`, second level is `##`, and so
+on.
 
-Signed-off-by: Shao Mingyin <shao.mingyin@zte.com.cn>
----
- drivers/pmdomain/renesas/rcar-gen4-sysc.c    | 3 ++-
- drivers/pmdomain/renesas/rcar-sysc.c         | 3 ++-
- drivers/pmdomain/rockchip/pm-domains.c       | 3 ++-
- drivers/pmdomain/samsung/exynos-pm-domains.c | 6 +++---
- drivers/pmdomain/starfive/jh71xx-pmu.c       | 5 +++--
- 5 files changed, 12 insertions(+), 8 deletions(-)
+(In particular, it shouldn't be used as a hack to get smaller font
+size in the rendered form).
 
-diff --git a/drivers/pmdomain/renesas/rcar-gen4-sysc.c b/drivers/pmdomain/renesas/rcar-gen4-sysc.c
-index e001b5c25bed..c8aa7538e95f 100644
---- a/drivers/pmdomain/renesas/rcar-gen4-sysc.c
-+++ b/drivers/pmdomain/renesas/rcar-gen4-sysc.c
-@@ -18,6 +18,7 @@
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <linux/types.h>
-+#include <linux/string_choices.h>
+So, for instance, in the `workqueue.rs` one in this patch, the example
+is likely intended to be a subsection of the "safe API" section, not
+an example of everything, so I don't think that one should change.
 
- #include "rcar-gen4-sysc.h"
+Thanks!
 
-@@ -171,7 +172,7 @@ static int rcar_gen4_sysc_power(u8 pdr, bool on)
-  out:
-        spin_unlock_irqrestore(&rcar_gen4_sysc_lock, flags);
-
--       pr_debug("sysc power %s domain %d: %08x -> %d\n", on ? "on" : "off",
-+       pr_debug("sysc power %s domain %d: %08x -> %d\n", str_on_off(on),
-                 pdr, ioread32(rcar_gen4_sysc_base + SYSCISCR(reg_idx)), ret);
-        return ret;
- }
-diff --git a/drivers/pmdomain/renesas/rcar-sysc.c b/drivers/pmdomain/renesas/rcar-sysc.c
-index 047495f54e8a..dae01ca0ef6a 100644
---- a/drivers/pmdomain/renesas/rcar-sysc.c
-+++ b/drivers/pmdomain/renesas/rcar-sysc.c
-@@ -17,6 +17,7 @@
- #include <linux/io.h>
- #include <linux/iopoll.h>
- #include <linux/soc/renesas/rcar-sysc.h>
-+#include <linux/string_choices.h>
-
- #include "rcar-sysc.h"
-
-@@ -162,7 +163,7 @@ static int rcar_sysc_power(const struct rcar_sysc_pd *pd, bool on)
-
-        spin_unlock_irqrestore(&rcar_sysc_lock, flags);
-
--       pr_debug("sysc power %s domain %d: %08x -> %d\n", on ? "on" : "off",
-+       pr_debug("sysc power %s domain %d: %08x -> %d\n", str_on_off(on),
-                 pd->isr_bit, ioread32(rcar_sysc_base + SYSCISR), ret);
-        return ret;
- }
-diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-index 4cce407bb1eb..0681c763f843 100644
---- a/drivers/pmdomain/rockchip/pm-domains.c
-+++ b/drivers/pmdomain/rockchip/pm-domains.c
-@@ -21,6 +21,7 @@
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
- #include <linux/mfd/syscon.h>
-+#include <linux/string_choices.h>
- #include <soc/rockchip/pm_domains.h>
- #include <soc/rockchip/rockchip_sip.h>
- #include <dt-bindings/power/px30-power.h>
-@@ -595,7 +596,7 @@ static int rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *pd,
-                                        is_on == on, 0, 10000);
-        if (ret) {
-                dev_err(pmu->dev, "failed to set domain '%s' %s, val=%d\n",
--                       genpd->name, on ? "on" : "off", is_on);
-+                       genpd->name, str_on_off(on), is_on);
-                return ret;
-        }
-
-diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
-index 9b502e8751d1..1a892c611dad 100644
---- a/drivers/pmdomain/samsung/exynos-pm-domains.c
-+++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
-@@ -13,6 +13,7 @@
- #include <linux/err.h>
- #include <linux/platform_device.h>
- #include <linux/slab.h>
-+#include <linux/string_choices.h>
- #include <linux/pm_domain.h>
- #include <linux/delay.h>
- #include <linux/of.h>
-@@ -38,7 +39,6 @@ static int exynos_pd_power(struct generic_pm_domain *domain, bool power_on)
-        struct exynos_pm_domain *pd;
-        void __iomem *base;
-        u32 timeout, pwr;
--       char *op;
-
-        pd = container_of(domain, struct exynos_pm_domain, pd);
-        base = pd->base;
-@@ -51,8 +51,8 @@ static int exynos_pd_power(struct generic_pm_domain *domain, bool power_on)
-
-        while ((readl_relaxed(base + 0x4) & pd->local_pwr_cfg) != pwr) {
-                if (!timeout) {
--                       op = (power_on) ? "enable" : "disable";
--                       pr_err("Power domain %s %s failed\n", domain->name, op);
-+                       pr_err("Power domain %s %s failed\n", domain->name,
-+                              str_enable_disable(power_on));
-                        return -ETIMEDOUT;
-                }
-                timeout--;
-diff --git a/drivers/pmdomain/starfive/jh71xx-pmu.c b/drivers/pmdomain/starfive/jh71xx-pmu.c
-index 74720c09a6e3..0e8fca4e2de9 100644
---- a/drivers/pmdomain/starfive/jh71xx-pmu.c
-+++ b/drivers/pmdomain/starfive/jh71xx-pmu.c
-@@ -12,6 +12,7 @@
- #include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pm_domain.h>
-+#include <linux/string_choices.h>
- #include <dt-bindings/power/starfive,jh7110-pmu.h>
-
- /* register offset */
-@@ -155,7 +156,7 @@ static int jh7110_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
-
-        if (ret) {
-                dev_err(pmu->dev, "%s: failed to power %s\n",
--                       pmd->genpd.name, on ? "on" : "off");
-+                       pmd->genpd.name, str_on_off(on));
-                return -ETIMEDOUT;
-        }
-
-@@ -198,7 +199,7 @@ static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
-
-        if (is_on == on) {
-                dev_dbg(pmu->dev, "pm domain [%s] is already %sable status.\n",
--                       pmd->genpd.name, on ? "en" : "dis");
-+                       pmd->genpd.name, str_enable_disable(on));
-                return 0;
-        }
-
--- 
-2.25.1
+Cheers,
+Miguel
 
