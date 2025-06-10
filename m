@@ -1,96 +1,122 @@
-Return-Path: <linux-pm+bounces-28336-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28337-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40451AD2E66
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 09:11:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA665AD2F30
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 09:50:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 194D01886A5E
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 07:11:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9508F16DA7D
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 07:49:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AABDF279782;
-	Tue, 10 Jun 2025 07:11:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98E1427FB1E;
+	Tue, 10 Jun 2025 07:49:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lb1cbvFk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KM1KIahb"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B1321D594;
-	Tue, 10 Jun 2025 07:11:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EFAC25DCEC;
+	Tue, 10 Jun 2025 07:49:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749539484; cv=none; b=UjabY6ignjxDJ9LCmEYSwZna4jktpsO0xjhqz3u49ipKV2y3osH2P4qzDHdwQfLVhC2GYR2ehk7wzQL5nP7f8wIv1NufWi/Me/Vvvb+YArYJcrllPVEJxQhjB/CeCrhhhz1hsymBCtKcoOL8q8q35WDPv/1+QCtOM1piPi/6IGY=
+	t=1749541781; cv=none; b=hlLANaPiGMLfr/uobalk+c0a83XIjiJgYTdPn99YpkCD5IY323o2KrpXBWihFEPuc1wTMPNXxLMuOCLITdSH8FsVcJCCGd6Z39pNYbI2OaQHuwbIujjC6Mek42A5Lc4qms7cuwwLceV9Y8mLCl+t59bCI5beFpP/7J8q9BQ1K20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749539484; c=relaxed/simple;
-	bh=neg1A76eaomaWdPPybsDSsKC2N8/KM8/tJFtzbUDeQI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=e4x/Ty/ibu9cPu/R19p4ykClwfLR8I95kbqVapiU4yfYaie+vzmO8dgZE948hS+8RhR4x4HPBTKL3ooIwO2GrTaAZuDWgt98r0ebKZLa55/R847+TrjKYNeU//rwZJI+ryawJ/5mVD5zbiJ+HUJ5spnxXoMixUwg/DDQfiulcu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lb1cbvFk; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1749541781; c=relaxed/simple;
+	bh=Zf8zlM1ikY+x+Aj1YRBI4DnaZ4NqNZdfWKGRPGe8aOI=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=MMkrCcqC4hz+K3zv7Q0cL/FoSmv+CGVcMcl5/veM0MDc/qe7DqnRLVH6g5k11f6XIl1SIQDxFTnASgQ02Cl4EdZe9BiS/Ujslfo5TgKkYzjLLvoMXrFB5zTyIom9CbG6Zrpmrkb5fvx68vGiwgNMawZMP0riRCXmfF2s718MjkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KM1KIahb; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749539483; x=1781075483;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=neg1A76eaomaWdPPybsDSsKC2N8/KM8/tJFtzbUDeQI=;
-  b=Lb1cbvFkj/jcj7nbN859a2Kmst1e6SNtuffSFxpndhp9Nr8w3DWK5Nxb
-   qAjkPq4QyEYHGwXvBdmLU9955hsdXZBJJSCzdaG2NtnOZwimIHygxOyc2
-   A1my9p6jRxxrTLHfu4hXb3OuBzzXjosvurG9mjMaKwIebzLsOEcmeR9Y5
-   gFRTMyGWwzm1qrTh+ehQVhgLz7HrxDQXI4P6mJuKZl/Nw1Qt3M8vC4uDl
-   Y+kuGpK6Lh6QQjwoo8aCQBKJe5OJQOEsp+FRkJqo9Z01kXIWYdxhLGK6y
-   lGXwWD+d0RMt4/yuIRf0gEXY5dpC3gZQanr8wV+vx2KeiWoNDVZGy0XuA
-   Q==;
-X-CSE-ConnectionGUID: KiQmpX5qSv+e+rW6xvT4wg==
-X-CSE-MsgGUID: Veji9aVoStaiTp6Rt6vZ8g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11459"; a="77035783"
+  t=1749541780; x=1781077780;
+  h=from:to:cc:in-reply-to:references:subject:message-id:
+   date:mime-version:content-transfer-encoding;
+  bh=Zf8zlM1ikY+x+Aj1YRBI4DnaZ4NqNZdfWKGRPGe8aOI=;
+  b=KM1KIahbTLOwS1KuFsdOIh5CIwbw4+1A4Wxy1hkKfSCqcMXi3X0/cwLY
+   pJu1etFwgDm4UNeU9g5MsfR5cokprtHBuH2ZhkRiWn7xkyVT1DBoTbFrz
+   5aNCtfk7qxyHsaxP03+7NBxWa1JItZ7aYc8js139okkHS7XFn8G8KB9CT
+   zQiiHQMidT9hQl6j/axycXKvstp8BySjLg2g1u7CKwC7ka8CE13f/OzFg
+   VRscBTUqWWKe2llZCj2xCV6jo6md+9ril9jAyi5vCXXQjar3x3aPY9SW5
+   vorarPgO+9rT/rrplFubfJkq6EoqirSenJSkGEuvDpukBiOwE6WDIMg8I
+   w==;
+X-CSE-ConnectionGUID: AOtDDZgQRRSKne8PvFNQhQ==
+X-CSE-MsgGUID: 9FihaGAvQBiBEo97XD8fCw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11459"; a="77039694"
 X-IronPort-AV: E=Sophos;i="6.16,224,1744095600"; 
-   d="scan'208";a="77035783"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2025 00:11:22 -0700
-X-CSE-ConnectionGUID: TEzqJQhwTUWSr90uhVp86w==
-X-CSE-MsgGUID: G9TJos/lQQm0epoSmo45Ww==
+   d="scan'208";a="77039694"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2025 00:49:38 -0700
+X-CSE-ConnectionGUID: ufZhjqNVQGCbIO00v9qvhw==
+X-CSE-MsgGUID: R8sZ0L7BSHmP28FclTzhsw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,224,1744095600"; 
-   d="scan'208";a="183932960"
-Received: from linux.intel.com ([10.54.29.200])
-  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2025 00:11:22 -0700
-Received: from [10.245.244.218] (unknown [10.245.244.218])
-	by linux.intel.com (Postfix) with ESMTP id BE41420B5736;
-	Tue, 10 Jun 2025 00:11:19 -0700 (PDT)
-Message-ID: <d8482e4cb4384fa02d61a6d80075be363598734b.camel@linux.intel.com>
-Subject: Re: [PATCH] intel_idle: Update arguments of mwait_idle_with_hints()
-From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-To: Uros Bizjak <ubizjak@gmail.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>
-Date: Tue, 10 Jun 2025 10:11:18 +0300
-In-Reply-To: <20250609063528.48715-1-ubizjak@gmail.com>
-References: <20250609063528.48715-1-ubizjak@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+   d="scan'208";a="146682211"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.196])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2025 00:49:30 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ "Rafael J . Wysocki" <rafael@kernel.org>, 
+ Sebastian Reichel <sre@kernel.org>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Jiri Kosina <jikos@kernel.org>, 
+ Benjamin Tissoires <bentiss@kernel.org>, 
+ Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, 
+ Andy Shevchenko <andy@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Hans Verkuil <hverkuil@xs4all.nl>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Hans de Goede <hansg@kernel.org>
+Cc: dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org, 
+ linux-fsdevel@vger.kernel.org, linux-input@vger.kernel.org, 
+ linux-ide@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org
+In-Reply-To: <20250609143558.42941-1-hansg@kernel.org>
+References: <20250609143558.42941-1-hansg@kernel.org>
+Subject: Re: [PATCH v2 0/1] MAINTAINERS: .mailmap: Update Hans de Goede's
+ email address
+Message-Id: <174954176287.5583.6841576782802896940.b4-ty@linux.intel.com>
+Date: Tue, 10 Jun 2025 10:49:22 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
 
-On Mon, 2025-06-09 at 08:35 +0200, Uros Bizjak wrote:
-> Commit a17b37a3f416 ("x86/idle: Change arguments of mwait_idle_with_hints=
-() to u32")
-> changed the type of arguments of mwait_idle_with_hints() from unsigned
-> long to u32. Change the type of variables in the call to
-> mwait_idle_with_hints() to unsigned int to follow the change.
->=20
-> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-> Cc: Len Brown <lenb@kernel.org>
+On Mon, 09 Jun 2025 16:35:56 +0200, Hans de Goede wrote:
 
-Reviewed-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> I'm moving all my kernel work over to using my kernel.org email address.
+> 
+> The single patch in this series updates .mailmap and all MAINTAINERS
+> entries still using hdegoede@redhat.com.
+> 
+> Since most of my work is pdx86 related I believe it would be best for Ilpo
+> to merge this through the pdx86 tree (preferable through the fixes branch).
+> 
+> [...]
+
+
+Thank you for your contribution, it has been applied to my local
+review-ilpo-fixes branch. Note it will show up in the public
+platform-drivers-x86/review-ilpo-fixes branch only once I've pushed my
+local branch there, which might take a while.
+
+The list of commits applied:
+[1/1] MAINTAINERS: .mailmap: Update Hans de Goede's email address
+      commit: 3fbf25ecf8b7b524b4774b427657d30a24e696ef
+
+--
+ i.
+
 
