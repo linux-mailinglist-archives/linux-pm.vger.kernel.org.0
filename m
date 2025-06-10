@@ -1,76 +1,76 @@
-Return-Path: <linux-pm+bounces-28391-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28393-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F817AD3C7F
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 17:17:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D843BAD3D9A
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 17:41:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F39D1887F26
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 15:15:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0521172C36
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 15:38:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C77C1D7995;
-	Tue, 10 Jun 2025 15:13:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B46F223F291;
+	Tue, 10 Jun 2025 15:37:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QAD11tw6"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ON2vEwHa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFD49201034
-	for <linux-pm@vger.kernel.org>; Tue, 10 Jun 2025 15:13:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3E38238D51
+	for <linux-pm@vger.kernel.org>; Tue, 10 Jun 2025 15:37:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749568385; cv=none; b=a7nEdQXazc6e+6DqoHEImdjPrffs2oMm1MsfXqAeerbTIvNy4o+f7U31nIM5t0pCGFjQG7B/BtQb7GXivRE8wbD6xSXAVD/Ktb+qezcjUjaHxQRkDAiyjQ3OzuSAWNqYcNXRj51JywPTcwPASqt6t6McAHKUPkgFWluLna7Soag=
+	t=1749569840; cv=none; b=gcN9cH3DlcaLc9Qqs/xjdS683wFj/R0CWG5N6Xo+gYCC0j3AhWIy/VmIzzCAKsX94JWrOx+S+mZpPTzqNwAyh5HCSnOiMH4ecJAd4i363ISa5HKlZOYBcbr8vGpFIBV8o32oOh2EKz39tCD+6kL3NhCaKJwCxy0iLo5fkOjVhSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749568385; c=relaxed/simple;
-	bh=kZQny1cAxPye/n1el8HzBid9nHSdh3LxEWrjSsKYbKA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V4pxrFVue8AFbiBw0BNzN14nVWSzeiLiz+KgTd1R9iPiWFOQbufZlLRRS6Ha8S+g0cdODkUI0HVYfgke6iRwZRZu/feliUYO3Ik5FZdCjjyVDl7xCwTRCIuszbuOaJE0Tl6//BIh5q4PF0aF0chH0xFIKWjL0BdfkzXPnyn0yjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QAD11tw6; arc=none smtp.client-ip=209.85.219.53
+	s=arc-20240116; t=1749569840; c=relaxed/simple;
+	bh=Ge1LFO3GJbt9hd5N8cGDfDJg7Ju9ZPGoCT0kFFxY694=;
+	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=Omn/QBg3FbrULXbp/RWOjC+JBUri/EMZnRlSG3PFdA/95VkLHc3Wg6sZTg/oszyZ7dVFxVXLFdmCAyly19S/svaNwO8jCPXnN4rOGkYklXbYb4PyTN0wFK4l1KLDvHeVS5pXHM8MiKGLmrI5ohc9I33pStns+gIjMWeQ1tTXmTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ON2vEwHa; arc=none smtp.client-ip=209.85.160.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6fad8b4c927so50140646d6.0
-        for <linux-pm@vger.kernel.org>; Tue, 10 Jun 2025 08:13:02 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4a5ae2fdf4eso61854661cf.0
+        for <linux-pm@vger.kernel.org>; Tue, 10 Jun 2025 08:37:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1749568381; x=1750173181; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1G90VU3NTpUnISqZJ7xyM3mHZw3huNrnbe2PvVxoUbk=;
-        b=QAD11tw6k6GjZGmvRg71QsMl9+CMc74DWZMi5+zWJulPVLj0aqsvddKxhZ+1keOsNQ
-         AVFnyHk0hcrZxplr03te6MZEb1jq7WDBaGMCCO3jdWNpQL0YLRMXo1I+ojJNeStoJyaW
-         aqfWHcc0tOwaDUO3a0kHyTIMcNYC6KQ83BfzQ=
+        d=linuxfoundation.org; s=google; t=1749569837; x=1750174637; darn=vger.kernel.org;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=nh+mGpHpRQJpNMq16cUvVk7l1gQB7lXYTYB8ff8wx5k=;
+        b=ON2vEwHa6wpDttnIQUUM1hkDGhGAF48c1oOwgFGzl9uxk8+GxucSGtA0nwumkRqmT3
+         om+D5offFKK8MGcLDRm+uYK0jqBW0L3Z/ReRxZfP2TNVtSWDrMYU0vlf64Z9Te3LMdti
+         dLiTCVwCofbWAVjI0tJDyNVKoo56oFktIhUFw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749568381; x=1750173181;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1G90VU3NTpUnISqZJ7xyM3mHZw3huNrnbe2PvVxoUbk=;
-        b=tAea/BkIG7w3RTxT/W1NY90OWrH6ECEr5CzwP+sW+b1CZ9aGAsR+EqFTFkdWb+tnnb
-         Y6rLHGY59fCemiITv2RQAsiwRhpw3HN9vB3NrXQR69SSCetgJvlffLg8NSbcsIGgzIDs
-         ItgogXtoWSGcDtgLcLwjkRE/kzFPha8nSfqaZ1Ob/7rbJny+fGEy+7AVO9B/bkXJ0YTy
-         V9qPWuzT4gIo045bDalheew4eKS8NPtUZdCLaM4GnWnTlyzFptCXkQsBHWcAx5W9KPDK
-         OAhWawFip6nDw3JQIfYLdPxLc01SutkX5Ft7FjykuVosHp6eD9HiBJwbazXNsoAjx/sP
-         VBwg==
-X-Gm-Message-State: AOJu0YweJjplpuTojxzn94QeDfv2GigqmVEFw538wGkG8Co9/MkWL+sK
-	PC3pM7u8cs6vXKKwz3f6t0n/3KRMX9NDrfMQKrqsA3m+GbXIHNdAisvBBT/LbhTPgSw=
-X-Gm-Gg: ASbGncsLdVLMTKlmM5pcbVhNjNf1l78pWkkj1GMhCMyeVz8BctLoEKdtNHxJ0QL2Xw9
-	2ZMaWQwsEj27jFi/exfJV5IeqHf4W2jRo2D1bmRktwoTCEYwunGsnutikcf+3MxEilcpX1Qxc9o
-	kkIG/inI6Z3TOspDTIkY9SATeFzKCP5sQsjAGtu6KvVpxKw/UjCGBHABqZ8tfilggS77yXEs3kO
-	DxSeiETchoz+Ybsmc1tGJACDrekN8h5s9myjj7+Qxw0cgyIEHcs3i0rltqJuSopqgHsD7N2fFY0
-	tEKGrpWdb9XSomnNDgiGDZ9rX+XMO83ZfBd5/f5eMOOLujZelE8frn7u10jt4hloOtpr6NjtuHR
-	O
-X-Google-Smtp-Source: AGHT+IHuunM03hGGpFWfO2kEd1Fz1zj1+dxV4jFUc+vOXYjB5Z+0KnIknlW2+I7Z9yc4H48Q7Ks7RA==
-X-Received: by 2002:a05:6214:b6d:b0:6fa:bb26:1459 with SMTP id 6a1803df08f44-6fb08f4f665mr283080356d6.7.1749568381501;
-        Tue, 10 Jun 2025 08:13:01 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1749569837; x=1750174637;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nh+mGpHpRQJpNMq16cUvVk7l1gQB7lXYTYB8ff8wx5k=;
+        b=LR8CW3WWoxYrRjtHAy3mF+df5HEGT+Rx+4gW4WGTmqW0tMS3HFKbzi8yOtiGCiWRti
+         XXmE3TpqDHx8rBfDMMxypEywb7EAAsM4vz15RKxg+3LxJ5O/vZRoDvZWRyMheyMqxhGN
+         TQQqa0INqK5wuDXzRdtMtQRsmgtej/ReAknRLx5AbYs+iTm5n9VvrihquYfXPD+RHiTT
+         mwX33scrMVY/DqzzmhxF9PrsVKygzGVHfsG0jWJBw9MD5t/j4QnrotfyK+yWg6tEATkJ
+         zuOjq98Kjy78XCr1GluU3/wx8Kcf2HIn2iHTxeWe6/rHtlAnGog5BBoHeRtZx/Nk9FPn
+         8ZBg==
+X-Forwarded-Encrypted: i=1; AJvYcCVPe29YB26wnTlxu51Hrp8O+VFNmLoXdpoGFKoi+GY1VEMDyXC5keYWAV6E0TYdD96MhmJUD++aSQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxdtJ/OJ5dRhBrz6uf3TPqzYjEg4rQCwq6/ZoOasqrgEs3rqb/a
+	xzzmkzX6zmgJgYjLRwtglwaEaHj21ryDQZ/4AA6W9pOPCK2Ujq2HILXhu1xNhx61zto=
+X-Gm-Gg: ASbGncvwlO7sSFFLiF3sh0H6+hj29DBkhJQUaXsWLBOMojil+9BKykMypMeBxOzk7XU
+	gQVwBYBg4JTbwn28R/J/VAR6iEJEViWh0ftkkjcSjj8loPiCfamQ/R9qL0YSNSAY2BmbckhTWOe
+	0Sxpf48DEnsNI9w0xYaRztsdNTjjTfLRqv6urnEVfRBVrECcuMCTEqHcGCKTg0s85D2SlE7Xt57
+	WSiF94PriHvzhstOVyu4nyfbe5B1WyPp0aAMsgSYPRYHcD1xy4gwRmsFx5zJFdhDlDK80an9f6K
+	vOJ1V8iFH8emvTYPhtCJ7vcQBok3i90cULe4WYnPROsUJnnU9emsSk3Pg+35gM3YbHWy/6HxQMJ
+	c8NvKetRSsKs=
+X-Google-Smtp-Source: AGHT+IHZRFV8Mnfm66KxgqbQ+xn/V03aqh6SUiPn4eSw5iLcmKe2WvnZXGgaVLUZu9Zeyu5/wNzwfA==
+X-Received: by 2002:a05:622a:5587:b0:49c:d64b:3d5f with SMTP id d75a77b69052e-4a708ce76e9mr56271861cf.9.1749569836627;
+        Tue, 10 Jun 2025 08:37:16 -0700 (PDT)
 Received: from [10.212.144.179] ([12.216.155.19])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fb09ab948dsm67168676d6.11.2025.06.10.08.13.00
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a6ef785c23sm57361681cf.35.2025.06.10.08.37.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jun 2025 08:13:01 -0700 (PDT)
-Message-ID: <e08b042c-0786-43d7-9b2a-21197cbb1458@linuxfoundation.org>
-Date: Tue, 10 Jun 2025 09:13:00 -0600
+        Tue, 10 Jun 2025 08:37:16 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------Zvf7rR069wIOZjcyzA1npCtG"
+Message-ID: <ab7fe518-0177-4178-a40d-51e0a5fbe8aa@linuxfoundation.org>
+Date: Tue, 10 Jun 2025 09:37:15 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,54 +78,102 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpupower: split unitdir from libdir in Makefile
-To: Thorsten Leemhuis <linux@leemhuis.info>
-Cc: linux-pm list <linux-pm@vger.kernel.org>,
- Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
- "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>,
- Justin Forbes <jforbes@redhat.com>,
- Francesco Poli <invernomuto@paranoici.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250521211656.65646-1-invernomuto@paranoici.org>
- <6deefc69-856e-44d7-b970-2f0127090539@leemhuis.info>
- <20250523002113.ca1ff066061da6049721c275@paranoici.org>
- <af43cc33-2f10-4664-982c-444a5f9717cc@linuxfoundation.org>
- <b9533ccd-b38d-437e-8315-3ca4672d1b69@leemhuis.info>
 Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+ "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>,
+ Thomas Renninger <trenn@suse.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Thorsten Leemhuis <linux@leemhuis.info>
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <b9533ccd-b38d-437e-8315-3ca4672d1b69@leemhuis.info>
+Subject: [GIT PULL] cpupower urgent fix for Linux 6.16-rc2
+
+This is a multi-part message in MIME format.
+--------------Zvf7rR069wIOZjcyzA1npCtG
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 6/7/25 01:50, Thorsten Leemhuis wrote:
-> On 23.05.25 19:06, Shuah Khan wrote:
->> On 5/22/25 16:21, Francesco Poli wrote:
->>> On Thu, 22 May 2025 13:43:49 +0200 Thorsten Leemhuis wrote:
->>>
->>>> On 21.05.25 23:14, Francesco Poli (wintermute) wrote:
->>>>> Improve the installation procedure for the systemd service unit
->>>>> 'cpupower.service', to be more flexible. Some distros install libraries
->>>>> to /usr/lib64/, but systemd service units have to be installed to
->>>>> /usr/lib/systemd/system: as a consequence, the installation procedure
->>>>> should not assume that systemd service units can be installed to
->>>>> ${libdir}/systemd/system ...
->>>>> Define a dedicated variable ("unitdir") in the Makefile.
->>>> Many thx for doing this!
->>> You're welcome!   :-)
->>
->> Thank you both. Applied to m,y cpupower branch. Will include it
->> in my next pr to PM maintainer.
-> 
-> Thx. Sorry for pestering, but will you send that PR any time soon? The
-> current state of things in mainline creates small problems downstream;
-> not a big deal, but would be nice to get this resolved properly rather
-> sooner than later my mainlining this change.
-> 
-> Ciao, Thorsten
+Hi Rafael,
 
-I am planning to send it today. I ran into merge issues when I tried to
-send it on Friday.
+Please pull this cpupower urgent fix for Linux 6.16-rc2.
+
+Add unitdir variable for specifying the location to install systemd
+service units instead of installing under ${libdir}/systemd/system
+which doesn't work on some distributions.
+
+Note: I meant to send this during the merge window and ran into some
+merge conflicts during the PR test. Decided to wait on it until rc1.
+
+diff is attached.
 
 thanks,
 -- Shuah
+
+----------------------------------------------------------------
+The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
+
+   Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-cpupower-6.16-rc2-fixes
+
+for you to fetch changes up to e044b8a9545cd8265c7110c179aeec2624c16455:
+
+   cpupower: split unitdir from libdir in Makefile (2025-06-09 10:17:46 -0600)
+
+----------------------------------------------------------------
+linux-cpupower-6.16-rc2-fixes
+
+Add unitdir variable for specifying the location to install systemd
+service units instead of installing under ${libdir}/systemd/system
+which doesn't work on some distributions.
+
+----------------------------------------------------------------
+Francesco Poli (wintermute) (1):
+       cpupower: split unitdir from libdir in Makefile
+
+  tools/power/cpupower/Makefile | 9 +++++----
+  1 file changed, 5 insertions(+), 4 deletions(-)
+
+----------------------------------------------------------------
+--------------Zvf7rR069wIOZjcyzA1npCtG
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-cpupower-6.16-rc2-fixes.diff"
+Content-Disposition: attachment; filename="linux-cpupower-6.16-rc2-fixes.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL01ha2VmaWxlIGIvdG9vbHMvcG93
+ZXIvY3B1cG93ZXIvTWFrZWZpbGUKaW5kZXggYmU4ZGZhYzE0MDc2Li5jNDNkYjFjNDEyMDUg
+MTAwNjQ0Ci0tLSBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL01ha2VmaWxlCisrKyBiL3Rvb2xz
+L3Bvd2VyL2NwdXBvd2VyL01ha2VmaWxlCkBAIC03Myw2ICs3Myw3IEBAIHNiaW5kaXIgPz0J
+L3Vzci9zYmluCiBtYW5kaXIgPz0JL3Vzci9tYW4KIGxpYmRpciA/PQkvdXNyL2xpYgogbGli
+ZXhlY2RpciA/PQkvdXNyL2xpYmV4ZWMKK3VuaXRkaXIgPz0JL3Vzci9saWIvc3lzdGVtZC9z
+eXN0ZW0KIGluY2x1ZGVkaXIgPz0JL3Vzci9pbmNsdWRlCiBsb2NhbGVkaXIgPz0JL3Vzci9z
+aGFyZS9sb2NhbGUKIGRvY2RpciA/PSAgICAgICAvdXNyL3NoYXJlL2RvYy9wYWNrYWdlcy9j
+cHVwb3dlcgpAQCAtMzA5LDkgKzMxMCw5IEBAIGluc3RhbGwtdG9vbHM6ICQoT1VUUFVUKWNw
+dXBvd2VyCiAJJChJTlNUQUxMX0RBVEEpIGNwdXBvd2VyLXNlcnZpY2UuY29uZiAnJChERVNU
+RElSKSR7Y29uZmRpcn0nCiAJJChJTlNUQUxMKSAtZCAkKERFU1RESVIpJHtsaWJleGVjZGly
+fQogCSQoSU5TVEFMTF9QUk9HUkFNKSBjcHVwb3dlci5zaCAnJChERVNURElSKSR7bGliZXhl
+Y2Rpcn0vY3B1cG93ZXInCi0JJChJTlNUQUxMKSAtZCAkKERFU1RESVIpJHtsaWJkaXJ9L3N5
+c3RlbWQvc3lzdGVtCi0Jc2VkICdzfF9fX0NESVJfX198JHtjb25mZGlyfXw7IHN8X19fTERJ
+Ul9fX3wke2xpYmV4ZWNkaXJ9fCcgY3B1cG93ZXIuc2VydmljZS5pbiA+ICckKERFU1RESVIp
+JHtsaWJkaXJ9L3N5c3RlbWQvc3lzdGVtL2NwdXBvd2VyLnNlcnZpY2UnCi0JJChTRVRQRVJN
+X0RBVEEpICckKERFU1RESVIpJHtsaWJkaXJ9L3N5c3RlbWQvc3lzdGVtL2NwdXBvd2VyLnNl
+cnZpY2UnCisJJChJTlNUQUxMKSAtZCAkKERFU1RESVIpJHt1bml0ZGlyfQorCXNlZCAnc3xf
+X19DRElSX19ffCR7Y29uZmRpcn18OyBzfF9fX0xESVJfX198JHtsaWJleGVjZGlyfXwnIGNw
+dXBvd2VyLnNlcnZpY2UuaW4gPiAnJChERVNURElSKSR7dW5pdGRpcn0vY3B1cG93ZXIuc2Vy
+dmljZScKKwkkKFNFVFBFUk1fREFUQSkgJyQoREVTVERJUikke3VuaXRkaXJ9L2NwdXBvd2Vy
+LnNlcnZpY2UnCiAKIGluc3RhbGwtbWFuOgogCSQoSU5TVEFMTF9EQVRBKSAtRCBtYW4vY3B1
+cG93ZXIuMSAkKERFU1RESVIpJHttYW5kaXJ9L21hbjEvY3B1cG93ZXIuMQpAQCAtMzQ4LDcg
+KzM0OSw3IEBAIHVuaW5zdGFsbDoKIAktIHJtIC1mICQoREVTVERJUikke2JpbmRpcn0vdXRp
+bHMvY3B1cG93ZXIKIAktIHJtIC1mICQoREVTVERJUikke2NvbmZkaXJ9Y3B1cG93ZXItc2Vy
+dmljZS5jb25mCiAJLSBybSAtZiAkKERFU1RESVIpJHtsaWJleGVjZGlyfS9jcHVwb3dlcgot
+CS0gcm0gLWYgJChERVNURElSKSR7bGliZGlyfS9zeXN0ZW1kL3N5c3RlbS9jcHVwb3dlci5z
+ZXJ2aWNlCisJLSBybSAtZiAkKERFU1RESVIpJHt1bml0ZGlyfS9jcHVwb3dlci5zZXJ2aWNl
+CiAJLSBybSAtZiAkKERFU1RESVIpJHttYW5kaXJ9L21hbjEvY3B1cG93ZXIuMQogCS0gcm0g
+LWYgJChERVNURElSKSR7bWFuZGlyfS9tYW4xL2NwdXBvd2VyLWZyZXF1ZW5jeS1zZXQuMQog
+CS0gcm0gLWYgJChERVNURElSKSR7bWFuZGlyfS9tYW4xL2NwdXBvd2VyLWZyZXF1ZW5jeS1p
+bmZvLjEK
+
+--------------Zvf7rR069wIOZjcyzA1npCtG--
 
