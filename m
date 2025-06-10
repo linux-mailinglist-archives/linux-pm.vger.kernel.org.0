@@ -1,53 +1,52 @@
-Return-Path: <linux-pm+bounces-28395-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28398-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC791AD3E68
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 18:10:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C22BEAD3E71
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 18:11:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F6E0188F72D
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 16:11:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC8FE189BD76
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 16:11:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09FDA23E346;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BACA24166F;
 	Tue, 10 Jun 2025 16:10:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G9NnCBsX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZRy7mozZ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C721A23C4F9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1010823F26A;
 	Tue, 10 Jun 2025 16:10:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749571839; cv=none; b=Kl+yLjaG4TUbLjz7RbRRhwrQex93D6PLjvBe265ddo7lRLRdbHZoUHho7yxdTpAp8UxuBq4t+2bs6eBjATV1+rnReB3IE6NCEcdZB1B6T47DYZtM0jWBT2hRjXNiwy6yWkx7JIKKUn0cUWGPSUwG9dbDZBF9X4TMHGhDzC4llVA=
+	t=1749571840; cv=none; b=fXC8lwdkI93TWFAszQEvrEWNGPOBMeG6vmgFUIVmTSftC8QeEELljtq6g1aNOLRuR8rePs0TKILbhnmWNxB5mEB8VU0iY5HlWTdhASjEKlRY/l3fJRvWGb5Lmkrv90ZlzY4TcC0BdPVQqdeyZcvNLLz4lVu8PSl43wIb7dkDbzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749571839; c=relaxed/simple;
-	bh=MpKAKeLwqqtr6InWSxHm2yFP1y7V+wBCfr1eih7q5s0=;
+	s=arc-20240116; t=1749571840; c=relaxed/simple;
+	bh=8AHayrsdUhbqQMcspAGbazKi3nWfZBzVE3Bi2u++Vts=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AtUHwWbIhvniRZMjH7g3+NLSY4E8ZP7i5C+RpGQW/ZyM+K4GuGGvObOAbrk1z0JLwSoK4BiTO3UvxfgL79KWOEq2shD9HWJeF5CafNu9CvORELO8i7lJ79RQu6mtWjUhy0voKNWNeT1cGBWvY3dMMP5IimayZeIxNrpYJFyymoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G9NnCBsX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7497DC4CEF5;
+	 In-Reply-To:To:Cc; b=S9syw6E16DGLavTcuRWKIrRL7IigE0Nhg3W/UQqBVHxkkUQdcL97aTic3gEaAHWW+v9LrdQKVOjlXwHrQa5NqvuAgPLlW/jFLUChR5XWnVYYr49a+WSCHIgLiQiMd+AUK5GJOkWnOiiULRoMSZf2hE6cskDnxkmucsHqrnKagEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZRy7mozZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 81EF5C4CEFA;
 	Tue, 10 Jun 2025 16:10:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1749571839;
-	bh=MpKAKeLwqqtr6InWSxHm2yFP1y7V+wBCfr1eih7q5s0=;
+	bh=8AHayrsdUhbqQMcspAGbazKi3nWfZBzVE3Bi2u++Vts=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=G9NnCBsXt8kGCC4P2yV1eTkrcVdOd6slx53CgMZAGS/LwkaHgRpTU8sj9wqOSyP/5
-	 l8gproc3g9WHGAT0m/AODgwchs1E6Tfu81klURZtvPjRw7JZEsJRzNbwsERFQFb1+C
-	 B0QQoRcDDOU/6m3+uS/IBPegLuun/WtH8l7yZL6EFryazy9Qe6dfgjtlL8TKGYQkgW
-	 PrOHxE2QD9bb4UVqlQgDZguX9ZAAf36hev8rlNz6KA0XgOuMHNVQtRU57LkU999g6P
-	 kFy9gRWBdAK4rKH6FhqjVmIIv6ZuU0QClpxVNoGtgPEfE5MFylhUFJ101LmyzMWDyy
-	 Z+4wwZl2EyoxA==
+	b=ZRy7mozZmTZtMXeg5kTY8XxSdQNQ8J4sjPhHeZI+koSVcL2WMvUppih5TRtunv13n
+	 574/jhpTEAvnkL2ZcuJvpNNQJuVrnpVI8j0DTz9WzBSzJM7jnc48fYqTu4hRhOk/OJ
+	 iT2kLT/brZGg1/j1mN2vdCc2mt7gUhUUKVTZXqdH3jkLRl+ZT7O3VOcUHgXY4sL1zU
+	 y5qfJJrSY684CgknFYjqGRESPGCHmf5J7wP2V9gCMDqlsjOa9m/dIrEK9ghjoN/6L+
+	 2ZfTA49DW0d1fFnp3buPNO5yVmlAMx0cuzpryDVZZ0aGDXs3dCXoksU68jy64d2cZc
+	 CGrWPlVgbMInA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67AAFC71132;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76B67C71131;
 	Tue, 10 Jun 2025 16:10:39 +0000 (UTC)
 From: Sven Peter <sven@kernel.org>
-Date: Tue, 10 Jun 2025 15:29:44 +0000
-Subject: [PATCH v7 03/10] dt-bindings: mfd: Add Apple Mac System Management
- Controller
+Date: Tue, 10 Jun 2025 15:29:45 +0000
+Subject: [PATCH v7 04/10] soc: apple: rtkit: Make shmem_destroy optional
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,7 +55,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250610-smc-6-15-v7-3-556cafd771d3@kernel.org>
+Message-Id: <20250610-smc-6-15-v7-4-556cafd771d3@kernel.org>
 References: <20250610-smc-6-15-v7-0-556cafd771d3@kernel.org>
 In-Reply-To: <20250610-smc-6-15-v7-0-556cafd771d3@kernel.org>
 To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, 
@@ -69,133 +68,44 @@ To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
  "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
  linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3512; i=sven@kernel.org;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=985; i=sven@kernel.org;
  h=from:subject:message-id;
- bh=MBhTLFSa+MA8vJScnTlr0fsDm4OGdrB/SyplsXOEjuQ=;
- b=owGbwMvMwCHmIlirolUq95LxtFoSQ4aHf3FjV13HK+arrw96pNce/r7x/cGsvjkNtx8+Uhadv
- C//ftfSjlIWBjEOBlkxRZbt++1Nnzx8I7h006X3MHNYmUCGMHBxCsBE7B4x/Pdgd2xU5+ll2ytw
- bi6L02P2DtejZy2WvgieKndy2jo77i2MDCe+LGPj3LOmoH0e//eDD1Qni87zyQ3JSo83eaFZXnW
- 5kBEA
+ bh=8AHayrsdUhbqQMcspAGbazKi3nWfZBzVE3Bi2u++Vts=;
+ b=owGbwMvMwCHmIlirolUq95LxtFoSQ4aHf6lPwZLfTr37rzZuMXQr0dpkvWbLfuZE+Svuj3t+2
+ f2/5dLbUcrCIMbBICumyLJ9v73pk4dvBJduuvQeZg4rE8gQBi5OAZhInBnDP7XK0ExmQdffcXVM
+ M9RMPdfsesw44UyPqY7Zo7pL3xbLqzAyTJ5+ULtCpehDnRsHV35Xy+puxf+3u76KLbmkPHtT4Za
+ JLAA=
 X-Developer-Key: i=sven@kernel.org; a=openpgp;
  fpr=A1E3E34A2B3C820DBC4955E5993B08092F131F93
 X-Endpoint-Received: by B4 Relay for sven@kernel.org/default with
  auth_id=407
 
-From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+shmem_destroy isn't always required for coprocessor-managed buffers but we
+still enforce that it exists. Just relax the check.
 
-Add a DT binding for the Apple Mac System Management Controller.
-
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Reviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
 Reviewed-by: Neal Gompa <neal@gompa.dev>
 Signed-off-by: Sven Peter <sven@kernel.org>
 ---
- .../devicetree/bindings/mfd/apple,smc.yaml         | 79 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 80 insertions(+)
+ drivers/soc/apple/rtkit.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/mfd/apple,smc.yaml b/Documentation/devicetree/bindings/mfd/apple,smc.yaml
-new file mode 100644
-index 0000000000000000000000000000000000000000..8a10e270d421ecd703848f64af597de351fcfd74
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/apple,smc.yaml
-@@ -0,0 +1,79 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/apple,smc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Apple Mac System Management Controller
-+
-+maintainers:
-+  - Sven Peter <sven@kernel.org>
-+
-+description:
-+  Apple Mac System Management Controller implements various functions
-+  such as GPIO, RTC, power, reboot.
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - apple,t6000-smc
-+          - apple,t8103-smc
-+          - apple,t8112-smc
-+      - const: apple,smc
-+
-+  reg:
-+    items:
-+      - description: SMC area
-+      - description: SRAM area
-+
-+  reg-names:
-+    items:
-+      - const: smc
-+      - const: sram
-+
-+  mboxes:
-+    maxItems: 1
-+
-+  gpio:
-+    $ref: /schemas/gpio/apple,smc-gpio.yaml
-+
-+  reboot:
-+    $ref: /schemas/power/reset/apple,smc-reboot.yaml
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - mboxes
-+
-+examples:
-+  - |
-+    soc {
-+      #address-cells = <2>;
-+      #size-cells = <2>;
-+
-+      smc@23e400000 {
-+        compatible = "apple,t8103-smc", "apple,smc";
-+        reg = <0x2 0x3e400000 0x0 0x4000>,
-+               <0x2 0x3fe00000 0x0 0x100000>;
-+        reg-names = "smc", "sram";
-+        mboxes = <&smc_mbox>;
-+
-+        smc_gpio: gpio {
-+          compatible = "apple,smc-gpio";
-+          gpio-controller;
-+          #gpio-cells = <2>;
-+        };
-+
-+        reboot {
-+          compatible = "apple,smc-reboot";
-+          nvmem-cells = <&shutdown_flag>, <&boot_stage>,
-+                        <&boot_error_count>, <&panic_count>;
-+          nvmem-cell-names = "shutdown_flag", "boot_stage",
-+                             "boot_error_count", "panic_count";
-+        };
-+      };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1dd004f7dff669e3a3609e5f1702887129d8ff35..329b2df08d4b1039948e54353c5815e23ae65e77 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2339,6 +2339,7 @@ F:	Documentation/devicetree/bindings/iommu/apple,dart.yaml
- F:	Documentation/devicetree/bindings/iommu/apple,sart.yaml
- F:	Documentation/devicetree/bindings/leds/backlight/apple,dwi-bl.yaml
- F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
-+F:	Documentation/devicetree/bindings/mfd/apple,smc.yaml
- F:	Documentation/devicetree/bindings/net/bluetooth/brcm,bcm4377-bluetooth.yaml
- F:	Documentation/devicetree/bindings/nvme/apple,nvme-ans.yaml
- F:	Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
+diff --git a/drivers/soc/apple/rtkit.c b/drivers/soc/apple/rtkit.c
+index 5fffd0f003dc2f4f377faf96cce0c1ce4ff0b788..b8d4da147d23f7e99e76eea314e4d976cddbd1c6 100644
+--- a/drivers/soc/apple/rtkit.c
++++ b/drivers/soc/apple/rtkit.c
+@@ -279,8 +279,7 @@ static int apple_rtkit_common_rx_get_buffer(struct apple_rtkit *rtk,
+ 	dev_dbg(rtk->dev, "RTKit: buffer request for 0x%zx bytes at %pad\n",
+ 		buffer->size, &buffer->iova);
+ 
+-	if (buffer->iova &&
+-	    (!rtk->ops->shmem_setup || !rtk->ops->shmem_destroy)) {
++	if (buffer->iova && !rtk->ops->shmem_setup) {
+ 		err = -EINVAL;
+ 		goto error;
+ 	}
 
 -- 
 2.34.1
