@@ -1,135 +1,406 @@
-Return-Path: <linux-pm+bounces-28358-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28359-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50D69AD3496
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 13:09:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7954AD34DC
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 13:23:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5836D1695D0
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 11:09:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 563557A35DD
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 11:22:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4EF428DF32;
-	Tue, 10 Jun 2025 11:09:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF317228CBC;
+	Tue, 10 Jun 2025 11:23:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y2Yq/7sQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tV29Jtwd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333CB28B3EF;
-	Tue, 10 Jun 2025 11:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7FD018024
+	for <linux-pm@vger.kernel.org>; Tue, 10 Jun 2025 11:23:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749553751; cv=none; b=mFzty24JTIy4zzgNhBOxkrJL+QdqFyD0Vj+AgrWwPTKjHlgpMPK+jmvuUlN4D9HbXfG2WxU17GE/GL4zDpVkPg5QNR/mCnScePbC76sgswkUNh69+Z1K1JMxbozJfKSGDCNqmpYMkBFZkUMwa6vDTw4Pil0ILPmNvaz7dECKb9E=
+	t=1749554625; cv=none; b=MGz6yvKkKuh86l6KPvcPytkq/gxPVydlPdbgqW9VOLy7CABIP5A+qYYb/taoYwGK2Xf8RG28mAO/7/YmYDyAavLdX6JsiYR7asdUGW2gjpxZqmv+zWMWW3yyH1tNqZqbq9JBOFej5kJZxJV3+9BiFpkzcmU1ByikHNFfqo/cEQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749553751; c=relaxed/simple;
-	bh=dzzDigNbQWvFnbgIjdwltehjUydpRvZcm8J0CiyGL6A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FdemSVzB1qpNwHHjLG/lkdyPyye4+3O57/xB7ZEccz1EE+bk6AahAoHky32T7vZ6qjVLkZh881AQDelSQinPfIUKZHIUZK+FQ+UX+yABXM/WoadMcqBMkKUob73QagummsLLqwOe3Ie7zJzqwCciuGvtWoKaNBIx7LI+zjSkH0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y2Yq/7sQ; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-45300c82c1cso9377665e9.3;
-        Tue, 10 Jun 2025 04:09:09 -0700 (PDT)
+	s=arc-20240116; t=1749554625; c=relaxed/simple;
+	bh=vCjb0uxbfPFk0UYdvMbqoDPkEkRiXB/JN/UWoh+Hxsk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ssUFTvsdXB3jM389Djuz7/oLOVLOoG/QjUeg+H2gz0lVExixLrTiBQOZ0kgwVR0zKbr5b6kYzgT88TVrB7NPLlTu/mXbCPcBAn3VUTQB/S8wqklJeWYeHOeEUY/FG/ucZi7YaiYLs2xD0lZ/HtoDJRbHdU9MIwNntxfMrT85ZuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tV29Jtwd; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-b2c3c689d20so3334671a12.3
+        for <linux-pm@vger.kernel.org>; Tue, 10 Jun 2025 04:23:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749553748; x=1750158548; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dzzDigNbQWvFnbgIjdwltehjUydpRvZcm8J0CiyGL6A=;
-        b=Y2Yq/7sQnRs8P0rdsctJE3bOCJ1IBA2XExaiU2e7ANYBKp5Dq5zzdTHlK9j/SNUiYt
-         Pi85J6w8somcrCIMQrlEHkHckJ5SFQI8ieldpNytbtVRJGEoWV8fMLHEwamna9QShY1J
-         ybGV/Sqh7ELtH58v+YTsFwGkA+xGxwOW79xzcV25kAMrddl54RPjcLGAH9FdJNN0UBy9
-         i9BVfHKQgd/251fC6jmflAd1mxcbB4uspHPATlrMm6XpkHZGzgQxX52NaBWcoS9qlW4C
-         yCkKJfU0GatFs3WwtohOtzcN2yy53DFA8/krlQglbm0Ij+5VOPtCEeCuk7kRyqLTZmUv
-         UylQ==
+        d=linaro.org; s=google; t=1749554623; x=1750159423; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QAOxshUoslySRqoBSqJuXZMRLjIvGL3UlikR3NO42PI=;
+        b=tV29JtwdoG3nSfw8/RxiMhIAjuYPuTrDKkEGi76UA3Otv1vnrIzDOaBOKpLtevRcqp
+         t5k/MOG91Lnvt/hH0f/9evv6U1WhElcU0xFqQ/YcfPdpdf0CWxLxE6gHooWDklXIlIol
+         kyaHkkhFkAOjV7a7RT+C8+J14E6gL+g7MbS924hiYrRPvwbPgQR7PtUPwU+YhsUr893h
+         DyNPXvS81K73cap0IyBEu6dUmbAHujGthrVXLrWNCGtMQhP2wtjmMsUZkeZizH7S51Jo
+         HTrEle8MPwPkgivZY3OTFF3qB6cGQgGlJSPNE6vbtFS3voi7PrGPBmNPU2a4pHcGBDrn
+         kw/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749553748; x=1750158548;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dzzDigNbQWvFnbgIjdwltehjUydpRvZcm8J0CiyGL6A=;
-        b=BW3XlvnLQQkbLQzuB8D+I57IzHgbpSu9JUzzZfL6W2R6ViV04ys6rnHrBXV/6TP2AM
-         Si3IWI7kGeM7Ss4503mjTxnj/3YdmhRu4kFMmCJ9L4wGmM1CiG3+rp7BzP30Jf4RVKEl
-         4qIfohD8qZZUv0YtoJXL2MIeRzf96XyphL0QE/LzScuUFIqV3UZgECC/cWQ6vvEYC7zj
-         Ha2FZKIQweHVsm7kOx730ow8oXC2v3lC0CQ/IksTe+Ah1sdwzEDhjI8jAqQKaZvInEIq
-         VN3TpNmdj51nCeqDk5iMD9E4bUcjJ4/MsvO+YRjR77jNd0BcJ2Z6oNahHEfTqSg53sNf
-         ubGA==
-X-Forwarded-Encrypted: i=1; AJvYcCV79Mm75Kk2AkQ1Nbo6PNTEOA8onfJJI/qhXWLKXCTSdTfXIXP3QFZBHII0Sl1s588vCvFqFX/NSDNqCXmQ@vger.kernel.org, AJvYcCWhPUy4CdUdz5XJT0PqSX2sLunErWEsnyGVvGYF1d1RmbxHivrrXkNvYbBeR7m7P3DzdvS9eOZKZIN1ttg=@vger.kernel.org, AJvYcCWkDTM3yxLHqvYx1EU9a4zXRNA2P/ggCnLfRQsAFeuxD8xHQizH5e20Ghnv54nuUdQ413JzJ9CZqHY=@vger.kernel.org, AJvYcCXeC3Ib2M9QZZmpKwGxk0m+15LQ+sDK6NoxCu2zxLCUbxowmUMEu9q7kviGZBD6dZQUHoHiXycdW18=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZ1LLFhirbVQTuV4r9RJMtzaJ1vB49u2D3RfmG4jj8PVChBYyk
-	R7lh5sKRNmxWGZ46dOYRB4A7kQvXpfznfh12Hn3uArA8i7JykhwJDnlc
-X-Gm-Gg: ASbGncslmIDDmbxSMyYJx/6XHdeD2I/0BsIN0YDXdaUcPYHy6nal3TdNNtONRKxSBot
-	blkqtJCmcymVn1hXatWekAGIOxl14Fp6YTDGPdW90vj39T1S/3+8NbhdZ1CxLe0iy8ZSGey9+T7
-	q4+ILPoNH0gkPoWbUcqvDv8rJG/Dlz6yyGoYvopVevK4k6AnJWcoS9VTqQyo+h9GuWy1UMqjrSx
-	zyqlTT9EDd1Fv+BlFMRra4a33RNv1jQEOqcBZzG812fvYiTM7R656BWSZsMc+hLGuxYn8YI92CR
-	q/kWTK4qGtAei1T+w+OfO416SK42RzM4hiP1+s/JMU3LCtg2KD8PBUOrzgB1udABoNN1++E4LVm
-	ax5T44S/2c6MGaO2LIHCGsbzbRGlDXI8PWPa/1Y66Dkn4oLGM
-X-Google-Smtp-Source: AGHT+IG68oUn/KlqqErVvFmv6p1audzggHo+5krqXAROPFaPY2NiSSWkghrcrZfQLAO3t9T1pwRiwA==
-X-Received: by 2002:a05:600c:8718:b0:450:d07e:ee14 with SMTP id 5b1f17b1804b1-452013ada08mr171855775e9.17.1749553748299;
-        Tue, 10 Jun 2025 04:09:08 -0700 (PDT)
-Received: from orome (p200300e41f281b00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f28:1b00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a5324364f1sm12316562f8f.58.2025.06.10.04.09.06
+        d=1e100.net; s=20230601; t=1749554623; x=1750159423;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QAOxshUoslySRqoBSqJuXZMRLjIvGL3UlikR3NO42PI=;
+        b=pBrehouZYarprMou49+wHXWOOV5nOd0EiOiyeEYuo2rdsOQCXv5txBo9UkzFpGg+JQ
+         Gb/OxRhGTyTx7TY9pdZpf53sHfzd3G1IAtmO0h5LNdKh6LnD86Yp4gcJqblE66Oe5Zx1
+         WeeTnpEZpg8kpliQ0MFy+ThSEjqlKP+6aIe0ZGOabc2XpxUx+t5fQpSqcBJGXAN/8VTC
+         adRU7xz/Y3Q27eb0rvaaMXKNAD0i/QtQ5U47AEdNXVzWaRptsT6PCQXytQAmsa7V09eG
+         Q3ciPwQAbHaqPTc3AbABeUyX6XhvJC5yxhdsCmExKj29zP5FZijXYCL92+RLSYxjAM/0
+         +xTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWQSuyFwyJrRY5PjD2li+UoNxuAWA7XmiPLPAOn5D32p+VNtpVmSATGIO3y3M3QVtSly2cl4iQvzw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3bXXU87pcBYMw7s5nXySZUilVXbBUbU2cch+AHSFlsLDNplYY
+	Z8I/iujWoVFpDngzJxizPtDUw4KVU/qduO4+QuOAJiecg3sXrhbgD7LA3BdJmbK+HTUTiECTQdD
+	zhUtb
+X-Gm-Gg: ASbGncuDiDJD08whKLhqH6Nj1YA1CWRI7Sc/B+yJetSDsWdDHzqvoNSWlagCd4BJGOZ
+	KPhS8HF5bW17ZP/mOQd5/aUUlpZuPj+aopq9SDSSkdKNflg0HyuDP7TPzS3uF5jDCKcslYsU1eP
+	oyvjP9jZa1902NtSASA2HfIh961hwe5WJ/10BAuf2iS1JedawppAD/TLyjtGK0AeY4P4GXrqDY8
+	Tj1gkNso33sOdi5hpmWLJRWvHnQ5h/xyhyPbRRujdaXLbRsQMoxjfMp4oOO4KEhIqIb5IhX01Lz
+	LPMoD/uIgdnvUoQ4LwmD8u5f67bhmh40TG7ThbxTR0FG+HzlAOCfvpqmtbS8kFk=
+X-Google-Smtp-Source: AGHT+IECQ3d1p5YhRXaqwtWVtF4QNxUMVW4lM2m6vVyst0oTYorm1TkVH4ar0oNCMOIXUUZpiF/4cg==
+X-Received: by 2002:a17:90b:3b42:b0:312:959:dc42 with SMTP id 98e67ed59e1d1-31347302b63mr24129745a91.11.1749554622954;
+        Tue, 10 Jun 2025 04:23:42 -0700 (PDT)
+Received: from localhost ([122.172.81.72])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31349f32df7sm7090063a91.15.2025.06.10.04.23.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jun 2025 04:09:06 -0700 (PDT)
-Date: Tue, 10 Jun 2025 13:09:05 +0200
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: Jonathan Hunter <jonathanh@nvidia.com>, 
-	Peter De Schrijver <pdeschrijver@nvidia.com>, Prashant Gaikwad <pgaikwad@nvidia.com>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1 1/3] drivers: cpufreq: add Tegra 4 support
-Message-ID: <svbpvo5cpwonxae46wre7ar2w4yf5j2xbfkb4hek6xgnue3jpl@5v57pp4iz7uv>
-References: <20250321095556.91425-1-clamor95@gmail.com>
- <20250321095556.91425-2-clamor95@gmail.com>
+        Tue, 10 Jun 2025 04:23:42 -0700 (PDT)
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>,
+	linux-pm@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] cpufreq: Convert `/// SAFETY` lines to `# Safety` sections
+Date: Tue, 10 Jun 2025 16:53:34 +0530
+Message-Id: <4823a58093c6dfa20df62b5c18da613621b9716e.1749554599.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="lc2bghryyziuu5ih"
-Content-Disposition: inline
-In-Reply-To: <20250321095556.91425-2-clamor95@gmail.com>
+Content-Transfer-Encoding: 8bit
 
+Replace `/// SAFETY` comments in doc comments with proper `# Safety`
+sections, as per rustdoc conventions.
 
---lc2bghryyziuu5ih
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Subject: Re: [PATCH v1 1/3] drivers: cpufreq: add Tegra 4 support
-MIME-Version: 1.0
+Also mark the C FFI callbacks as `unsafe` to correctly reflect their
+safety requirements.
 
-On Fri, Mar 21, 2025 at 11:55:54AM +0200, Svyatoslav Ryhel wrote:
-> Tegra 4 is fully compatible with existing Tegra K1 cpufreq driver.
+Reported-by: Miguel Ojeda <ojeda@kernel.org>
+Closes: https://github.com/Rust-for-Linux/linux/issues/1169
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ rust/kernel/cpufreq.rs | 146 ++++++++++++++++++++++++++++++-----------
+ 1 file changed, 109 insertions(+), 37 deletions(-)
 
-It might be confusing to refer to this as both Tegra 4 and Tegra114. I
-think it'd be better to stick with just Tegra114. Otherwise:
+diff --git a/rust/kernel/cpufreq.rs b/rust/kernel/cpufreq.rs
+index b0a9c6182aec..9b995f18aac6 100644
+--- a/rust/kernel/cpufreq.rs
++++ b/rust/kernel/cpufreq.rs
+@@ -1055,8 +1055,11 @@ pub fn new_foreign_owned(dev: &Device<Bound>) -> Result {
+ impl<T: Driver> Registration<T> {
+     /// Driver's `init` callback.
+     ///
+-    /// SAFETY: Called from C. Inputs must be valid pointers.
+-    extern "C" fn init_callback(ptr: *mut bindings::cpufreq_policy) -> kernel::ffi::c_int {
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    /// - The pointer arguments must be valid pointers.
++    unsafe extern "C" fn init_callback(ptr: *mut bindings::cpufreq_policy) -> kernel::ffi::c_int {
+         from_result(|| {
+             // SAFETY: The `ptr` is guaranteed to be valid by the contract with the C code for the
+             // lifetime of `policy`.
+@@ -1070,8 +1073,11 @@ extern "C" fn init_callback(ptr: *mut bindings::cpufreq_policy) -> kernel::ffi::
+ 
+     /// Driver's `exit` callback.
+     ///
+-    /// SAFETY: Called from C. Inputs must be valid pointers.
+-    extern "C" fn exit_callback(ptr: *mut bindings::cpufreq_policy) {
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    /// - The pointer arguments must be valid pointers.
++    unsafe extern "C" fn exit_callback(ptr: *mut bindings::cpufreq_policy) {
+         // SAFETY: The `ptr` is guaranteed to be valid by the contract with the C code for the
+         // lifetime of `policy`.
+         let policy = unsafe { Policy::from_raw_mut(ptr) };
+@@ -1082,8 +1088,11 @@ extern "C" fn exit_callback(ptr: *mut bindings::cpufreq_policy) {
+ 
+     /// Driver's `online` callback.
+     ///
+-    /// SAFETY: Called from C. Inputs must be valid pointers.
+-    extern "C" fn online_callback(ptr: *mut bindings::cpufreq_policy) -> kernel::ffi::c_int {
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    /// - The pointer arguments must be valid pointers.
++    unsafe extern "C" fn online_callback(ptr: *mut bindings::cpufreq_policy) -> kernel::ffi::c_int {
+         from_result(|| {
+             // SAFETY: The `ptr` is guaranteed to be valid by the contract with the C code for the
+             // lifetime of `policy`.
+@@ -1094,8 +1103,13 @@ extern "C" fn online_callback(ptr: *mut bindings::cpufreq_policy) -> kernel::ffi
+ 
+     /// Driver's `offline` callback.
+     ///
+-    /// SAFETY: Called from C. Inputs must be valid pointers.
+-    extern "C" fn offline_callback(ptr: *mut bindings::cpufreq_policy) -> kernel::ffi::c_int {
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    /// - The pointer arguments must be valid pointers.
++    unsafe extern "C" fn offline_callback(
++        ptr: *mut bindings::cpufreq_policy,
++    ) -> kernel::ffi::c_int {
+         from_result(|| {
+             // SAFETY: The `ptr` is guaranteed to be valid by the contract with the C code for the
+             // lifetime of `policy`.
+@@ -1106,8 +1120,13 @@ extern "C" fn offline_callback(ptr: *mut bindings::cpufreq_policy) -> kernel::ff
+ 
+     /// Driver's `suspend` callback.
+     ///
+-    /// SAFETY: Called from C. Inputs must be valid pointers.
+-    extern "C" fn suspend_callback(ptr: *mut bindings::cpufreq_policy) -> kernel::ffi::c_int {
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    /// - The pointer arguments must be valid pointers.
++    unsafe extern "C" fn suspend_callback(
++        ptr: *mut bindings::cpufreq_policy,
++    ) -> kernel::ffi::c_int {
+         from_result(|| {
+             // SAFETY: The `ptr` is guaranteed to be valid by the contract with the C code for the
+             // lifetime of `policy`.
+@@ -1118,8 +1137,11 @@ extern "C" fn suspend_callback(ptr: *mut bindings::cpufreq_policy) -> kernel::ff
+ 
+     /// Driver's `resume` callback.
+     ///
+-    /// SAFETY: Called from C. Inputs must be valid pointers.
+-    extern "C" fn resume_callback(ptr: *mut bindings::cpufreq_policy) -> kernel::ffi::c_int {
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    /// - The pointer arguments must be valid pointers.
++    unsafe extern "C" fn resume_callback(ptr: *mut bindings::cpufreq_policy) -> kernel::ffi::c_int {
+         from_result(|| {
+             // SAFETY: The `ptr` is guaranteed to be valid by the contract with the C code for the
+             // lifetime of `policy`.
+@@ -1130,8 +1152,11 @@ extern "C" fn resume_callback(ptr: *mut bindings::cpufreq_policy) -> kernel::ffi
+ 
+     /// Driver's `ready` callback.
+     ///
+-    /// SAFETY: Called from C. Inputs must be valid pointers.
+-    extern "C" fn ready_callback(ptr: *mut bindings::cpufreq_policy) {
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    /// - The pointer arguments must be valid pointers.
++    unsafe extern "C" fn ready_callback(ptr: *mut bindings::cpufreq_policy) {
+         // SAFETY: The `ptr` is guaranteed to be valid by the contract with the C code for the
+         // lifetime of `policy`.
+         let policy = unsafe { Policy::from_raw_mut(ptr) };
+@@ -1140,8 +1165,13 @@ extern "C" fn ready_callback(ptr: *mut bindings::cpufreq_policy) {
+ 
+     /// Driver's `verify` callback.
+     ///
+-    /// SAFETY: Called from C. Inputs must be valid pointers.
+-    extern "C" fn verify_callback(ptr: *mut bindings::cpufreq_policy_data) -> kernel::ffi::c_int {
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    /// - The pointer arguments must be valid pointers.
++    unsafe extern "C" fn verify_callback(
++        ptr: *mut bindings::cpufreq_policy_data,
++    ) -> kernel::ffi::c_int {
+         from_result(|| {
+             // SAFETY: The `ptr` is guaranteed to be valid by the contract with the C code for the
+             // lifetime of `policy`.
+@@ -1152,8 +1182,13 @@ extern "C" fn verify_callback(ptr: *mut bindings::cpufreq_policy_data) -> kernel
+ 
+     /// Driver's `setpolicy` callback.
+     ///
+-    /// SAFETY: Called from C. Inputs must be valid pointers.
+-    extern "C" fn setpolicy_callback(ptr: *mut bindings::cpufreq_policy) -> kernel::ffi::c_int {
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    /// - The pointer arguments must be valid pointers.
++    unsafe extern "C" fn setpolicy_callback(
++        ptr: *mut bindings::cpufreq_policy,
++    ) -> kernel::ffi::c_int {
+         from_result(|| {
+             // SAFETY: The `ptr` is guaranteed to be valid by the contract with the C code for the
+             // lifetime of `policy`.
+@@ -1164,8 +1199,11 @@ extern "C" fn setpolicy_callback(ptr: *mut bindings::cpufreq_policy) -> kernel::
+ 
+     /// Driver's `target` callback.
+     ///
+-    /// SAFETY: Called from C. Inputs must be valid pointers.
+-    extern "C" fn target_callback(
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    /// - The pointer arguments must be valid pointers.
++    unsafe extern "C" fn target_callback(
+         ptr: *mut bindings::cpufreq_policy,
+         target_freq: u32,
+         relation: u32,
+@@ -1180,8 +1218,11 @@ extern "C" fn target_callback(
+ 
+     /// Driver's `target_index` callback.
+     ///
+-    /// SAFETY: Called from C. Inputs must be valid pointers.
+-    extern "C" fn target_index_callback(
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    /// - The pointer arguments must be valid pointers.
++    unsafe extern "C" fn target_index_callback(
+         ptr: *mut bindings::cpufreq_policy,
+         index: u32,
+     ) -> kernel::ffi::c_int {
+@@ -1200,8 +1241,11 @@ extern "C" fn target_index_callback(
+ 
+     /// Driver's `fast_switch` callback.
+     ///
+-    /// SAFETY: Called from C. Inputs must be valid pointers.
+-    extern "C" fn fast_switch_callback(
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    /// - The pointer arguments must be valid pointers.
++    unsafe extern "C" fn fast_switch_callback(
+         ptr: *mut bindings::cpufreq_policy,
+         target_freq: u32,
+     ) -> kernel::ffi::c_uint {
+@@ -1212,7 +1256,11 @@ extern "C" fn fast_switch_callback(
+     }
+ 
+     /// Driver's `adjust_perf` callback.
+-    extern "C" fn adjust_perf_callback(
++    ///
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    unsafe extern "C" fn adjust_perf_callback(
+         cpu: u32,
+         min_perf: usize,
+         target_perf: usize,
+@@ -1225,8 +1273,11 @@ extern "C" fn adjust_perf_callback(
+ 
+     /// Driver's `get_intermediate` callback.
+     ///
+-    /// SAFETY: Called from C. Inputs must be valid pointers.
+-    extern "C" fn get_intermediate_callback(
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    /// - The pointer arguments must be valid pointers.
++    unsafe extern "C" fn get_intermediate_callback(
+         ptr: *mut bindings::cpufreq_policy,
+         index: u32,
+     ) -> kernel::ffi::c_uint {
+@@ -1243,8 +1294,11 @@ extern "C" fn get_intermediate_callback(
+ 
+     /// Driver's `target_intermediate` callback.
+     ///
+-    /// SAFETY: Called from C. Inputs must be valid pointers.
+-    extern "C" fn target_intermediate_callback(
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    /// - The pointer arguments must be valid pointers.
++    unsafe extern "C" fn target_intermediate_callback(
+         ptr: *mut bindings::cpufreq_policy,
+         index: u32,
+     ) -> kernel::ffi::c_int {
+@@ -1262,12 +1316,21 @@ extern "C" fn target_intermediate_callback(
+     }
+ 
+     /// Driver's `get` callback.
+-    extern "C" fn get_callback(cpu: u32) -> kernel::ffi::c_uint {
++    ///
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    unsafe extern "C" fn get_callback(cpu: u32) -> kernel::ffi::c_uint {
+         PolicyCpu::from_cpu(cpu).map_or(0, |mut policy| T::get(&mut policy).map_or(0, |f| f))
+     }
+ 
+     /// Driver's `update_limit` callback.
+-    extern "C" fn update_limits_callback(ptr: *mut bindings::cpufreq_policy) {
++    ///
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    /// - The pointer arguments must be valid pointers.
++    unsafe extern "C" fn update_limits_callback(ptr: *mut bindings::cpufreq_policy) {
+         // SAFETY: The `ptr` is guaranteed to be valid by the contract with the C code for the
+         // lifetime of `policy`.
+         let policy = unsafe { Policy::from_raw_mut(ptr) };
+@@ -1276,8 +1339,11 @@ extern "C" fn update_limits_callback(ptr: *mut bindings::cpufreq_policy) {
+ 
+     /// Driver's `bios_limit` callback.
+     ///
+-    /// SAFETY: Called from C. Inputs must be valid pointers.
+-    extern "C" fn bios_limit_callback(cpu: i32, limit: *mut u32) -> kernel::ffi::c_int {
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    /// - The pointer arguments must be valid pointers.
++    unsafe extern "C" fn bios_limit_callback(cpu: i32, limit: *mut u32) -> kernel::ffi::c_int {
+         from_result(|| {
+             let mut policy = PolicyCpu::from_cpu(cpu as u32)?;
+ 
+@@ -1288,8 +1354,11 @@ extern "C" fn bios_limit_callback(cpu: i32, limit: *mut u32) -> kernel::ffi::c_i
+ 
+     /// Driver's `set_boost` callback.
+     ///
+-    /// SAFETY: Called from C. Inputs must be valid pointers.
+-    extern "C" fn set_boost_callback(
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    /// - The pointer arguments must be valid pointers.
++    unsafe extern "C" fn set_boost_callback(
+         ptr: *mut bindings::cpufreq_policy,
+         state: i32,
+     ) -> kernel::ffi::c_int {
+@@ -1303,8 +1372,11 @@ extern "C" fn set_boost_callback(
+ 
+     /// Driver's `register_em` callback.
+     ///
+-    /// SAFETY: Called from C. Inputs must be valid pointers.
+-    extern "C" fn register_em_callback(ptr: *mut bindings::cpufreq_policy) {
++    /// # Safety
++    ///
++    /// - This function may only be called from the cpufreq C infrastructure.
++    /// - The pointer arguments must be valid pointers.
++    unsafe extern "C" fn register_em_callback(ptr: *mut bindings::cpufreq_policy) {
+         // SAFETY: The `ptr` is guaranteed to be valid by the contract with the C code for the
+         // lifetime of `policy`.
+         let policy = unsafe { Policy::from_raw_mut(ptr) };
+-- 
+2.31.1.272.g89b43f80a514
 
-Reviewed-by: Thierry Reding <treding@nvidia.com>
-
---lc2bghryyziuu5ih
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmhIElAACgkQ3SOs138+
-s6Fk7g/6AjRUWbg6q1l0nhejjkpwMeIxmpQSymJfQ98bwI0lntbIDB26QfmZZFfR
-8rIjlsf53Uu6LWe0KOxxOot4X9uIauE5EZsAb9y3ESBzxC+0k6PYXb2wpLFwyIDo
-lQ7jlr6lPvjf9RMdO/hrdbcZr6UI6A3jfXJ2BpoiLOSuDSjqHGMzLJX3M+3WovdL
-WFjhVLaosl7gq8eF40ozOz5PZpb5WxhtcqhJbKWhZc5SEpbd/SHNWf6teBRDqiBB
-Km7V8NqYUBvWpN7SoJj+X+JI13tokegEDiHIgEX3AIQ9ldy9SeExkPKQe1j7ak2H
-PqDs7iMd1g7e1AKZBAkbcn2IxM+guFwnIOzfXU89iWNs2lQG8LQuqlbFVtd4bbY+
-2lUyM/vRoghKPpXpGB7TdRkZwa6WeiOZu4TYI6sNXx3vCgPo8Zne37hoGeoaquCM
-8N/8oS3ZxVKtGWQPXIYspoM5JdN9X8lEldHmp5duWk2YsMpnpEu2qENBLt3YEK6l
-xLnLxGuX71x1dMAigYe7hayAvSo5B/iAszYFKPS0o0FMQZMxAwxJb2ZrhhpmaF5R
-x4Xcrvub1yXS+L3r88x9zoo9xTlPcVDHOZtpnfK6AG2dbEixauPN/U6h9acuD7/W
-FzTLT/GCrGjoq5VYBE6Fh+fT8BlXGRFPegB4nH0/ZfCYLyFp990=
-=Hh0/
------END PGP SIGNATURE-----
-
---lc2bghryyziuu5ih--
 
