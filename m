@@ -1,59 +1,60 @@
-Return-Path: <linux-pm+bounces-28366-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28368-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27B9EAD364C
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 14:33:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D31A3AD366A
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 14:35:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 132653A59AD
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 12:33:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5048A177B6E
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 12:35:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB1E92949E3;
-	Tue, 10 Jun 2025 12:33:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2B0C29614A;
+	Tue, 10 Jun 2025 12:33:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="cB0jGed+"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="ipXVos4F"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1CC522D9E0;
-	Tue, 10 Jun 2025 12:33:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0F629553A;
+	Tue, 10 Jun 2025 12:33:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749558800; cv=pass; b=WL/5tY32qoo0VLpPAvBEz1OLInwtaHQ/0K6lL9TYjsWWAzAt/6FL6xftm1x4HTUjPQEJ9hHjU5CjHnC3AsaMeN2Axz2C/wMPokCUs+3yLWwXeqghu1x5JiSAOeJaK0P+WiovqW8QJGZHVQr1euhrtI71PpnPfLaMvGGuBvGJLMo=
+	t=1749558811; cv=pass; b=C8cQqMOh0sLq3n+fAbglrlqcrI1RC2ffs0pRJwPwsxtiimJxB1N9f7QhWYzYX2lhbpHyif4TztM6ei71A/bHejGQ55aaP6dO6PnH1XqQbOywqNZ3pjig0RQpsNvXaJ5ExhS0q3zZ1cF/Qca8xmIf+ULx2OXSK2DoNK5vqE4Nx/I=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749558800; c=relaxed/simple;
-	bh=eO2+e+Z6SVkDsCMkTxaUjbggom3QyHMw23h4D7QNraI=;
+	s=arc-20240116; t=1749558811; c=relaxed/simple;
+	bh=XQ0dSp3Flpla5xIAgUPRx6pHdPhqCsf7vpoehMz7BJQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qkvyeb9w4FVpHuBLtxOQ96r+U+5oo9fFtA0QOd3FCL6SSuh/uTV+5IqBLk4nlHxVdMCE4lKwNEWohNWpnT1zTQ2R5VIUWRB7nAJqwY2HTOPhKwF2wGVatKluDmhXPqfnt5+rWpkV0IceGLOz+C42Z2o+g6Or1TetZzeyvqViWLs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=cB0jGed+; arc=pass smtp.client-ip=136.143.188.112
+	 In-Reply-To:To:Cc; b=ZRy0uwgoRTlP8UyL/U/oW182yWS4lehi7e07QLXAmjfBWauJvJKdfT05u54tsmyNzpwiccFLEGVpMb52qCYmxv1CsUGyYzxkNYj2Xe8XAEHG7n+/hcBamYKNMnW82tMejINvfVGxVGikHmfpvwiIdYdAFmQyajYG5F+l2oaGvJQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=ipXVos4F; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1749558771; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1749558775; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=Y/HWAl+BrVvwcj3QIGlOh+eH8RGYVyzKfX1d0+Tk1LKJ2zfwnXZKj+S6/GH2WWq4zNFFgBl/oPYGc4DzgsBqoKnNEES+pH+KoqXAgvJRv0YaCzEfZhoDQ8ANR1+ArGy2f3tPDbJ/R98v4f9xuEI8U2jBThJmCQ1iJkTA9FpEU5Q=
+	b=PWrFAe12c+Ts2tfLA2JswJvpCYBMSNzS5AyoFv50ZXlr8FjCWBqcOmSFhpCBdOlRAOaG/+85mB9UF4/AB6PAeymWd6FKePahKd9kHlMFT24NMIncZc4QGZaNjceCcrQwqCG7PFobmUaDRs3RLvIQtaooCaDlhZNNnsHBRxyAcOg=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1749558771; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=Tnp7bdW/um/Nf3Hkgt/EOyvTtoi0plo3EB+bh3F7o3o=; 
-	b=NGD2fXCk7pG4diymGtx2OYJQzF5bZl7zpEPKSP8+25n8fncHp+g7UQTJf///oIAUDD7quPWqiCVEDg4qAJTco3BQwqv4PbZ92HS94d3fJI9d+cZGIVtiVZr9ViKI1N4YsmmQN1vGYpf4ue+hwpsSCYuuwNIYnIm8BvaTw78sPGs=
+	t=1749558775; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=r/yCBdXULN/7dimob9RM70hBvraS8nfz9TzFTVD+37g=; 
+	b=YJHxPvED16rQ8AaSg54DrvzKYbKM0xp7anEcYkRxAL+mGh+m8CprAT3iyLNgjnESta4ovgWOS02Q306hldkwQl824wAta/R/o9gIkzpI5ObsZtEsnkA2F2phppIMESKFUY3bDBXXY9D2ua3Tk02NbFWrh9x8gcuxv+f2WfoZVOQ=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
 	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1749558771;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1749558775;
 	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
 	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=Tnp7bdW/um/Nf3Hkgt/EOyvTtoi0plo3EB+bh3F7o3o=;
-	b=cB0jGed+HtxmlOcbiif09rpri7CVAT2t0+RhgfBMafdP8nxkDlGei+FEvTXK88iB
-	xZ1iFy++EpOT6N+ZyiYTiHDW8LYzLxfv5pkClMP0jRo0DuWgv7muV/E3+rb2Zriw/zN
-	bcgTF7p3bARCKb5czFkAnz+9k4e/laDT8542rA7k=
-Received: by mx.zohomail.com with SMTPS id 1749558770257746.9148597054228;
-	Tue, 10 Jun 2025 05:32:50 -0700 (PDT)
+	bh=r/yCBdXULN/7dimob9RM70hBvraS8nfz9TzFTVD+37g=;
+	b=ipXVos4F1ag70tE7+CYrhMEtEYcBoEwficzD+uvDH57MnVWq65ts5BvLE/nQ0HyN
+	Qk5znHRSBksD/RNwcxOnC281HcGQTCGHiPMG1XOJho7mnwwD2bac4NwtmXhOluUTNnk
+	gwtciSxEfTLUYBVqKGaMn+eydf1w3h/4TQ0wRvw0=
+Received: by mx.zohomail.com with SMTPS id 1749558774709569.5144844612655;
+	Tue, 10 Jun 2025 05:32:54 -0700 (PDT)
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Tue, 10 Jun 2025 14:32:37 +0200
-Subject: [PATCH v6 1/7] thermal: rockchip: rename rk_tsadcv3_tshut_mode
+Date: Tue, 10 Jun 2025 14:32:38 +0200
+Subject: [PATCH v6 2/7] dt-bindings: rockchip-thermal: Add RK3576
+ compatible
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,7 +63,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250610-rk3576-tsadc-upstream-v6-1-b6e9efbf1015@collabora.com>
+Message-Id: <20250610-rk3576-tsadc-upstream-v6-2-b6e9efbf1015@collabora.com>
 References: <20250610-rk3576-tsadc-upstream-v6-0-b6e9efbf1015@collabora.com>
 In-Reply-To: <20250610-rk3576-tsadc-upstream-v6-0-b6e9efbf1015@collabora.com>
 To: Alexey Charkov <alchark@gmail.com>, 
@@ -79,40 +80,26 @@ Cc: Sebastian Reichel <sebastian.reichel@collabora.com>,
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 X-Mailer: b4 0.14.2
 
-The "v" version specifier here refers to the hardware IP revision.
-Mainline deviated from downstream here by calling the v4 revision v3 as
-it didn't support the v3 hardware revision at all.
+Add a new compatible for the thermal sensor device on the RK3576 SoC.
 
-This creates needless confusion, so rename it to rk_tsadcv4_tshut_mode
-to be consistent with what the hardware wants to be called.
-
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
- drivers/thermal/rockchip_thermal.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
-index a8ad85feb68fbb7ec8d79602b16c47838ecb3c00..40c7d234c3ef99f69dd8db4d8c47f9d493c0583d 100644
---- a/drivers/thermal/rockchip_thermal.c
-+++ b/drivers/thermal/rockchip_thermal.c
-@@ -1045,7 +1045,7 @@ static void rk_tsadcv2_tshut_mode(int chn, void __iomem *regs,
- 	writel_relaxed(val, regs + TSADCV2_INT_EN);
- }
+diff --git a/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml b/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
+index b717ea8261ca24ebaf709f410ec6372de1366b8a..49ceed68c92ce5a32ed8d4f39bd88fd052de0e80 100644
+--- a/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
+@@ -21,6 +21,7 @@ properties:
+       - rockchip,rk3368-tsadc
+       - rockchip,rk3399-tsadc
+       - rockchip,rk3568-tsadc
++      - rockchip,rk3576-tsadc
+       - rockchip,rk3588-tsadc
+       - rockchip,rv1108-tsadc
  
--static void rk_tsadcv3_tshut_mode(int chn, void __iomem *regs,
-+static void rk_tsadcv4_tshut_mode(int chn, void __iomem *regs,
- 				  enum tshut_mode mode)
- {
- 	u32 val_gpio, val_cru;
-@@ -1297,7 +1297,7 @@ static const struct rockchip_tsadc_chip rk3588_tsadc_data = {
- 	.get_temp = rk_tsadcv4_get_temp,
- 	.set_alarm_temp = rk_tsadcv3_alarm_temp,
- 	.set_tshut_temp = rk_tsadcv3_tshut_temp,
--	.set_tshut_mode = rk_tsadcv3_tshut_mode,
-+	.set_tshut_mode = rk_tsadcv4_tshut_mode,
- 	.table = {
- 		.id = rk3588_code_table,
- 		.length = ARRAY_SIZE(rk3588_code_table),
 
 -- 
 2.49.0
