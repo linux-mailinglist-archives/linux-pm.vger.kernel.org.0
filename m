@@ -1,226 +1,167 @@
-Return-Path: <linux-pm+bounces-28360-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28361-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0826CAD3507
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 13:34:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C9E0AD353B
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 13:43:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6FA2165715
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 11:34:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 774F81750CB
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 11:43:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 699FB280009;
-	Tue, 10 Jun 2025 11:34:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EF6128C859;
+	Tue, 10 Jun 2025 11:43:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="CpI7t8Fm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EDC82253F8;
-	Tue, 10 Jun 2025 11:34:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=183.62.165.209
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFA2C28B511;
+	Tue, 10 Jun 2025 11:43:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749555263; cv=none; b=kvxagPCk0yvL3AdrA4O+ZWsHYlG7/bMG9lNo3XtdOsZCwEklktnv0B9zuBlrSoNhTWCai5k+DFoFjlZxtB47uSwhq0qAbT/p4LkkdoRxBIMIfTWlJXOIsEW2KdyHZq8wDVsGFF40omt8w+beKRSVL7jQ1OGhhyhtqkDwHeOe4tI=
+	t=1749555808; cv=none; b=ibtGx2RFEh8z+Fnev+/DW7O3EBiSkdex7kGFpq/NSGVuCj0YZoFnoASlzzf/e+fNLeJyi+FSGiKgST387YezVTvEmfoZiUv4n2mTiqBbQ1To122501PGV7OpGFg2rq/RTkFfs45EROcu9LLacUIFzOhhx1zWEENwdY5ZwUGy0a0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749555263; c=relaxed/simple;
-	bh=cVtT3YT9Xv4eaPkI9AJRnDqFJZ/NsUmg+VTunANrekY=;
-	h=Date:Message-ID:Mime-Version:From:To:Cc:Subject:Content-Type; b=SYfS8hOe4TRcfsmDMGAx/MiES92Mb+xcC7sY71hEVEUr5Rn1hRrhO9zKbCRJbt+RbztvkaykfiLXXG3BmHWUET7KWEsZpM60DHcULsAjT4ULedd0C3a8bYQtdiYJBBpO5TXpptUUb3Gbh/ysyMRm+Qun47oydBW4x88GfyszzkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn; spf=pass smtp.mailfrom=zte.com.cn; arc=none smtp.client-ip=183.62.165.209
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mxct.zte.com.cn (FangMail) with ESMTPS id 4bGmsB2P7nz4y3Rt;
-	Tue, 10 Jun 2025 19:34:06 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.99.176])
-	by mse-fl1.zte.com.cn with SMTP id 55ABXxDX055070;
-	Tue, 10 Jun 2025 19:33:59 +0800 (+08)
-	(envelope-from shao.mingyin@zte.com.cn)
-Received: from mapi (xaxapp04[null])
-	by mapi (Zmail) with MAPI id mid32;
-	Tue, 10 Jun 2025 19:34:03 +0800 (CST)
-Date: Tue, 10 Jun 2025 19:34:03 +0800 (CST)
-X-Zmail-TransId: 2afb6848182b233-bddc4
-X-Mailer: Zmail v1.0
-Message-ID: <20250610193403161UQCV5cVGXCRVDheTb7jvi@zte.com.cn>
+	s=arc-20240116; t=1749555808; c=relaxed/simple;
+	bh=zttwvK0O3NKo3GYxs8/u5gnwpMnkU62+8cdJAit8uok=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hGeyPK7Ehm75Z1j0vXmbg16VxPhkcCfpzCDfuB6QWEgRgjUAgPvquOr9K29GbRHYd8kmjcJiubdJ/+9KLFTGIuM4kyMDbhx33TSGBAFAgKvlf+bquO601CfLoaaVtcRz3IMALc4rm55BzZbfh8wCqhekSpxdSAfMLn92rVPQUoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=CpI7t8Fm; arc=none smtp.client-ip=198.47.19.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllvem-sh03.itg.ti.com ([10.64.41.86])
+	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTP id 55ABhGWi2272226;
+	Tue, 10 Jun 2025 06:43:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1749555796;
+	bh=ElZooU3CNCyqKkNfeNkQwCo1PtAimQ5tNeABrqN0df4=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=CpI7t8Fmy7fmU+FegDv3dQll4pRyI4Vvu7qAc4p57UXrXj+QNOsOFcocrYaaAoaDj
+	 r81GTeS9OrLifAb3A0nyYHAsJ1gJ30BNdbDralFO9dU86V4L9ta4UPQBHIuoGi2+kl
+	 ufg3hGCjptVeCVr8Hs9Sf5c0SYAAnPXbE6sBq/94=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+	by fllvem-sh03.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 55ABhGdg225032
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Tue, 10 Jun 2025 06:43:16 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 10
+ Jun 2025 06:43:16 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 10 Jun 2025 06:43:16 -0500
+Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 55ABhFw92838964;
+	Tue, 10 Jun 2025 06:43:15 -0500
+Date: Tue, 10 Jun 2025 17:13:14 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: Sudeep Holla <sudeep.holla@arm.com>
+CC: Cristian Marussi <cristian.marussi@arm.com>,
+        Ulf Hansson
+	<ulf.hansson@linaro.org>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <vigneshr@ti.com>,
+        <khilman@baylibre.com>
+Subject: Re: [RFC PATCH] pmdomain: arm: scmi_pm_domain: Do lazy init as part
+ of probe
+Message-ID: <20250610114314.dpfedrbok2pmfgxu@lcpd911>
+References: <20250530103527.2244951-1-d-gole@ti.com>
+ <20250530-honest-chital-of-growth-db31e1@sudeepholla>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-From: <shao.mingyin@zte.com.cn>
-To: <ulf.hansson@linaro.org>, <changhuang.liang@starfivetech.com>
-Cc: <geert+renesas@glider.be>, <magnus.damm@gmail.com>, <heiko@sntech.de>,
-        <krzk@kernel.org>, <alim.akhtar@samsung.com>,
-        <walker.chen@starfivetech.com>, <sebastian.reichel@collabora.com>,
-        <detlev.casanova@collabora.com>, <finley.xiao@rock-chips.com>,
-        <shawn.lin@rock-chips.com>, <pgwipeout@gmail.com>,
-        <qiu.yutan@zte.com.cn>, <shao.mingyin@zte.com.cn>,
-        <linux-pm@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <yang.yang29@zte.com.cn>,
-        <xu.xin16@zte.com.cn>, <yang.tao172@zte.com.cn>,
-        <ye.xingchen@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIHYyXSBwbWRvbWFpbjogVXNlIHN0cl9lbmFibGVfZGlzYWJsZS1saWtlIGhlbHBlcnM=?=
-Content-Type: text/plain;
-	charset="UTF-8"
-X-MAIL:mse-fl1.zte.com.cn 55ABXxDX055070
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6848182E.001/4bGmsB2P7nz4y3Rt
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250530-honest-chital-of-growth-db31e1@sudeepholla>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-From: Shao Mingyin <shao.mingyin@zte.com.cn>
+Hi,
 
-Replace ternary (condition ? "enable" : "disable") syntax and ternary
-(condition ? "on" : "off") syntax with helpers from
-string_choices.h because:
-1. Simple function call with one argument is easier to read.  Ternary
-   operator has three arguments and with wrapping might lead to quite
-   long code.
-2. Is slightly shorter thus also easier to read.
-3. It brings uniformity in the text - same string.
-4. Allows deduping by the linker, which results in a smaller binary
-   file.
+On May 30, 2025 at 17:31:08 +0100, Sudeep Holla wrote:
+> On Fri, May 30, 2025 at 04:05:27PM +0530, Dhruva Gole wrote:
+> > Optimize the SCMI power domain driver to only initialize domains that are
+> > actually referenced in the device tree. Previously, the driver would
+> > initialize all possible domains up to the maximum ID, which could lead to
+> > unnecessary firmware calls and longer probe times.
+> > 
+> > Key changes:
+> > - Scan device tree to identify which power domains are actually referenced
+> 
+> How do this work with runtime DT overlays ?
 
-Signed-off-by: Shao Mingyin <shao.mingyin@zte.com.cn>
----
-v2:
- %sable ==> %s in jh71xx_pmu_dev()
- drivers/pmdomain/renesas/rcar-gen4-sysc.c    | 3 ++-
- drivers/pmdomain/renesas/rcar-sysc.c         | 3 ++-
- drivers/pmdomain/rockchip/pm-domains.c       | 3 ++-
- drivers/pmdomain/samsung/exynos-pm-domains.c | 6 +++---
- drivers/pmdomain/starfive/jh71xx-pmu.c       | 7 ++++---
- 5 files changed, 13 insertions(+), 9 deletions(-)
+Thanks for bringing this up, I hadn't considered runtime DT overlays for
+this particular patch.
+Off the top of my mind, we can initialize all at probe, but only query state
+for referenced ones.
 
-diff --git a/drivers/pmdomain/renesas/rcar-gen4-sysc.c b/drivers/pmdomain/renesas/rcar-gen4-sysc.c
-index e001b5c25bed..c8aa7538e95f 100644
---- a/drivers/pmdomain/renesas/rcar-gen4-sysc.c
-+++ b/drivers/pmdomain/renesas/rcar-gen4-sysc.c
-@@ -18,6 +18,7 @@
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <linux/types.h>
-+#include <linux/string_choices.h>
+> 
+> > - Use bitmap to track needed domains instead of initializing all
+> > - Only perform state queries and initialization for referenced domains
+> > - Maintain proper array sizing for power domain framework compatibility
+> > - Keep full provider structure to support late binding
+> > 
+> > This optimization reduces probe time and unnecessary firmware interactions
+> > by only initializing power domains that are actually used in the system.
+> 
+> Why is this very specific to power domains only ? This must apply for other
+> domains like perf or clock or reset ?
 
- #include "rcar-gen4-sysc.h"
+Yes, it should. Starting out with just power domains for now though. I
+haven't looked at other places like perf and clock yet.
 
-@@ -171,7 +172,7 @@ static int rcar_gen4_sysc_power(u8 pdr, bool on)
-  out:
-        spin_unlock_irqrestore(&rcar_gen4_sysc_lock, flags);
+> 
+> > For example, in a system with 100 possible domains but only 3 referenced
+> > in the device tree, we now only initialize those 3 domains instead of
+> > all 100.
+> > 
+> 
+> Well, how much of these PD will get used in the final products ? I can
+> understand the need to use just 3 in devel platforms. Just trying to see
+> how realistic is the scenario ? Is there any other optimisation possible
+> from the firmware ? Does getting the state of a PD takes so much time
+> on the platform in question ?
 
--       pr_debug("sysc power %s domain %d: %08x -> %d\n", on ? "on" : "off",
-+       pr_debug("sysc power %s domain %d: %08x -> %d\n", str_on_off(on),
-                 pdr, ioread32(rcar_gen4_sysc_base + SYSCISCR(reg_idx)), ret);
-        return ret;
- }
-diff --git a/drivers/pmdomain/renesas/rcar-sysc.c b/drivers/pmdomain/renesas/rcar-sysc.c
-index 047495f54e8a..dae01ca0ef6a 100644
---- a/drivers/pmdomain/renesas/rcar-sysc.c
-+++ b/drivers/pmdomain/renesas/rcar-sysc.c
-@@ -17,6 +17,7 @@
- #include <linux/io.h>
- #include <linux/iopoll.h>
- #include <linux/soc/renesas/rcar-sysc.h>
-+#include <linux/string_choices.h>
+Well, it's not only about how much time it takes on any particular platform
+to query the state of a PD. Even if say it takes 10us to query it, it will
+add a whole 1ms to the probe time. This mean 1ms more of boot time, and
+perhaps boot time experts can chime in here but every optimisation
+possible matters!
+ARM systems are usually very strict on boot time requirements.
 
- #include "rcar-sysc.h"
+Even if we somehow optimise the firmware, to me it seems like kernel is
+wasting time querrying for something that it doesn't need at that moment.
 
-@@ -162,7 +163,7 @@ static int rcar_sysc_power(const struct rcar_sysc_pd *pd, bool on)
+Just replying here to your next reply on the thread:
+> And I missed another point. Someone will soon complain Linux no longer
+> turns off unused power domains. So I am inclined against this optimisation.
+> We need to consider all the above point before .
 
-        spin_unlock_irqrestore(&rcar_sysc_lock, flags);
+I agree on some points like the runtime overlay. However I am not sure
+why Linux should be the one to turn OFF power domains that it's
+_unaware_ of. "unused" would probably be a wrong assumption to make.
+There maybe other entities that would be using power domains that
+are not in the device tree. (For eg. an RTOS running on the same system
+accessing a PD that is controlled by the SCP firmware but not mentioned in the
+device tree.)
 
--       pr_debug("sysc power %s domain %d: %08x -> %d\n", on ? "on" : "off",
-+       pr_debug("sysc power %s domain %d: %08x -> %d\n", str_on_off(on),
-                 pd->isr_bit, ioread32(rcar_sysc_base + SYSCISR), ret);
-        return ret;
- }
-diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-index 4cce407bb1eb..0681c763f843 100644
---- a/drivers/pmdomain/rockchip/pm-domains.c
-+++ b/drivers/pmdomain/rockchip/pm-domains.c
-@@ -21,6 +21,7 @@
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
- #include <linux/mfd/syscon.h>
-+#include <linux/string_choices.h>
- #include <soc/rockchip/pm_domains.h>
- #include <soc/rockchip/rockchip_sip.h>
- #include <dt-bindings/power/px30-power.h>
-@@ -595,7 +596,7 @@ static int rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *pd,
-                                        is_on == on, 0, 10000);
-        if (ret) {
-                dev_err(pmu->dev, "failed to set domain '%s' %s, val=%d\n",
--                       genpd->name, on ? "on" : "off", is_on);
-+                       genpd->name, str_on_off(on), is_on);
-                return ret;
-        }
+While one may argue that's why firmware should be the one to keep ref
+counts to avoid resource conflicts, one could also argue that firmwares
+could be the one to turn off unused power domains.
 
-diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
-index 9b502e8751d1..1a892c611dad 100644
---- a/drivers/pmdomain/samsung/exynos-pm-domains.c
-+++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
-@@ -13,6 +13,7 @@
- #include <linux/err.h>
- #include <linux/platform_device.h>
- #include <linux/slab.h>
-+#include <linux/string_choices.h>
- #include <linux/pm_domain.h>
- #include <linux/delay.h>
- #include <linux/of.h>
-@@ -38,7 +39,6 @@ static int exynos_pd_power(struct generic_pm_domain *domain, bool power_on)
-        struct exynos_pm_domain *pd;
-        void __iomem *base;
-        u32 timeout, pwr;
--       char *op;
-
-        pd = container_of(domain, struct exynos_pm_domain, pd);
-        base = pd->base;
-@@ -51,8 +51,8 @@ static int exynos_pd_power(struct generic_pm_domain *domain, bool power_on)
-
-        while ((readl_relaxed(base + 0x4) & pd->local_pwr_cfg) != pwr) {
-                if (!timeout) {
--                       op = (power_on) ? "enable" : "disable";
--                       pr_err("Power domain %s %s failed\n", domain->name, op);
-+                       pr_err("Power domain %s %s failed\n", domain->name,
-+                              str_enable_disable(power_on));
-                        return -ETIMEDOUT;
-                }
-                timeout--;
-diff --git a/drivers/pmdomain/starfive/jh71xx-pmu.c b/drivers/pmdomain/starfive/jh71xx-pmu.c
-index 74720c09a6e3..dc3e109e273a 100644
---- a/drivers/pmdomain/starfive/jh71xx-pmu.c
-+++ b/drivers/pmdomain/starfive/jh71xx-pmu.c
-@@ -12,6 +12,7 @@
- #include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pm_domain.h>
-+#include <linux/string_choices.h>
- #include <dt-bindings/power/starfive,jh7110-pmu.h>
-
- /* register offset */
-@@ -155,7 +156,7 @@ static int jh7110_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
-
-        if (ret) {
-                dev_err(pmu->dev, "%s: failed to power %s\n",
--                       pmd->genpd.name, on ? "on" : "off");
-+                       pmd->genpd.name, str_on_off(on));
-                return -ETIMEDOUT;
-        }
-
-@@ -197,8 +198,8 @@ static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
-        }
-
-        if (is_on == on) {
--               dev_dbg(pmu->dev, "pm domain [%s] is already %sable status.\n",
--                       pmd->genpd.name, on ? "en" : "dis");
-+               dev_dbg(pmu->dev, "pm domain [%s] is already %s status.\n",
-+                       pmd->genpd.name, str_enable_disable(on));
-                return 0;
-        }
+Why should the kernel touch something that it hasn't been told about
+explicitly in the DT? Isn't the whole point of DT to be the literal
+hardware descriptor for the kernel? So if something doesn't exist in the
+DT, kernel shouldn't have other places telling it does - in this context
+power domains.
 
 -- 
-2.25.1
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
