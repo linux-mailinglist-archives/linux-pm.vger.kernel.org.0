@@ -1,52 +1,53 @@
-Return-Path: <linux-pm+bounces-28396-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28397-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A00D2AD3E6D
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C4BEAD3E6C
 	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 18:10:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D51593A4149
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 16:10:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E724D165228
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 16:10:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E2D8241103;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3666A241116;
 	Tue, 10 Jun 2025 16:10:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pRNaShsw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OUx/WFc+"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBFE123C501;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E667C23C50E;
 	Tue, 10 Jun 2025 16:10:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749571840; cv=none; b=AlnyvHUtGb4cC8m0ZmnY6btgO5TMnSrU9Q1TxjOPdz3w5DyS9qU/nbMAzCF9etGAPXcWz8gQnOiM4nARZ0A2PMdnFm7X2prRk0rWGkeACOR0iRjfBDOAzIc2/g1WuCsxqFncNYe/hr5QTg+egIOubn5/L4Duiz/fR+hnyaTjsxk=
+	t=1749571840; cv=none; b=uYcAI/MOcPq+sAc8RWbB2isQKl2pQLklehvLYcajXNbrcTdDEkVplSqMMiM+GXoSz6Zqa0hMYbHo5h7Zz84T6+MEgsOwy6+mE5cO62BOfgVt+j5W8QoPQE+7udhg4Zuwedz/UjzfRZNUlJUkDhZKE/aXMBotfCkPpcDOM1Q4bhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1749571840; c=relaxed/simple;
-	bh=KS5KZh83WhFoHDXQ2W/EWKz/ArbrhyBg7ZBRgDlrWe0=;
+	bh=QLsFhzpHRYmA1ajW0KypVDBYFMUVDXC7AICzYhpICrc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TCaZFQG/39JilCkfBZRmvvGIlz862AsnyGiEAaL99fLelPEFEtPhaVzXnxEOVjKHLbJLGR6D+89oS7QVjKEq+PB+6hh23HBSUcvwmWZN0k2o6euXX49f1TuPIl7W78OLEXTbKuVZnTS3PecwZsUEanxEOERRnzdC5qj2kdjorbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pRNaShsw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 58DAEC4CEF1;
+	 In-Reply-To:To:Cc; b=ZMx+xRlkzfLjpUmXi+I6ZnWY0vVQgtngIQMTnskoVPSDD3oEDCrCMqdmFXFNRw3l6SnAPsxqDsd4D7keBTVBrA7IZu9XwE6JIyqwCm/h6SzFnGRF6WwYx7rTHEoKScHzMXdjg9rn2LHoiEpHKqc8QA+knlML6zx3lGuz12lv12U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OUx/WFc+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 67FAFC4CEF2;
 	Tue, 10 Jun 2025 16:10:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1749571839;
-	bh=KS5KZh83WhFoHDXQ2W/EWKz/ArbrhyBg7ZBRgDlrWe0=;
+	bh=QLsFhzpHRYmA1ajW0KypVDBYFMUVDXC7AICzYhpICrc=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=pRNaShsw9P/X545nF4QHLzjKgNg+/bfrWYi9K41GQwFLdXCk68IqRKuikjRKzqeB+
-	 UHKYuSlHn9H8QN2vwHQKk5JISMQpGQj/X93MxMJZ1GTmoyMERNt4zPvlfiEOHKM4jD
-	 oXOTcF8aDb9QoGix11vYnWyxDu6TA1vsXpF1TutFc7xQyj+uWSMmFI91BaFEB7HhNJ
-	 P/C45cJkhGq4nVLSA43bJqRzB3OwE7UMoCMtMR78oBM5YqRNV8Pa+rW1UUD12T8C8f
-	 LAwwCziocHCt5d/EyafqSOYJROSnU1MrfGKhri7FBaIk8ebPurP7df7OPhttFhBF53
-	 JQzDjLiZmoZqw==
+	b=OUx/WFc+WeDHtK2TSCOwJd4TFXkbevR7wu9y4wrq1Do1CL5Rx8TPQGaVScpPfEmCJ
+	 jE92dmiY0qOXWKxjbrc4evGQPiaryiwQbiK46SbROpGEqh+WhbHLoem74q1TTrI0e0
+	 FcSHByHErtFeuP2otQ4kV5GzwZ5krv4NFKDRbqWlMwtl0VpDJ1hAOy0j7lYoWk3qS1
+	 7KEj/rQdficA6VFps3Z5gqeohrFoFPcTNmTz11EmrNorUU5zjD3LxOC29WTT1/8ZgN
+	 yqR2V6nxkn1GqfD0rLkVa5XHhCFDBWb8U5zAdAGfuHOsTDjgMcSL3cRD8EP+LNizuf
+	 BkWdFBrQiPd9Q==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46AD6C71130;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 579BFC677C4;
 	Tue, 10 Jun 2025 16:10:39 +0000 (UTC)
 From: Sven Peter <sven@kernel.org>
-Date: Tue, 10 Jun 2025 15:29:42 +0000
-Subject: [PATCH v7 01/10] dt-bindings: gpio: Add Apple Mac SMC GPIO block
+Date: Tue, 10 Jun 2025 15:29:43 +0000
+Subject: [PATCH v7 02/10] dt-bindings: power: reboot: Add Apple Mac SMC
+ Reboot Controller
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -55,7 +56,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250610-smc-6-15-v7-1-556cafd771d3@kernel.org>
+Message-Id: <20250610-smc-6-15-v7-2-556cafd771d3@kernel.org>
 References: <20250610-smc-6-15-v7-0-556cafd771d3@kernel.org>
 In-Reply-To: <20250610-smc-6-15-v7-0-556cafd771d3@kernel.org>
 To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, 
@@ -70,80 +71,89 @@ Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
  linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2261; i=sven@kernel.org;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2766; i=sven@kernel.org;
  h=from:subject:message-id;
- bh=Dle4XqGGzX04NP6gmHjHUQRP+Y2skcv80CBrmz9twWY=;
- b=owGbwMvMwCHmIlirolUq95LxtFoSQ4aHf2FxrPtsXTfRtF9zLz97Kjp3MbOF5JIFWtfZo/0r1
- L9IdUV3lLIwiHEwyIopsmzfb2/65OEbwaWbLr2HmcPKBDKEgYtTACaSMI2R4VW24cJNwnt/hBxU
- aeIp8jb7vXZzVKTTV4Y61ymzzMU+eDAytFS+z+e/J7JwtaxUi5STrOVchvxP+/K6jthZHfy0rlW
- TEQA=
+ bh=QLsFhzpHRYmA1ajW0KypVDBYFMUVDXC7AICzYhpICrc=;
+ b=owGbwMvMwCHmIlirolUq95LxtFoSQ4aHf9Hn32suSFhNTdyT4XxIdtv/vq9WUZ8t3ito7c3md
+ lU8sWtRRykLgxgHg6yYIsv2/famTx6+EVy66dJ7mDmsTCBDGLg4BWAiS1YyMrxafbupQ+HVTJml
+ H3eWNJ/Z/VrT3bPr9/6dTx+WvvJMkMpnZFiwed2Gbx5mE+9u3arxZd6EnX5xrZFzvSarHTncdlh
+ ymhIfAA==
 X-Developer-Key: i=sven@kernel.org; a=openpgp;
  fpr=A1E3E34A2B3C820DBC4955E5993B08092F131F93
 X-Endpoint-Received: by B4 Relay for sven@kernel.org/default with
  auth_id=407
 
-From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+On Apple Silicon machines a clean shutdown or reboot requires
+talking to SMC and writing to NVMEM cells. Add a binding for
+this MFD sub-device.
 
-Add the DT binding for the Apple Mac System Management Controller GPIOs.
-
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 Reviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
 Reviewed-by: Neal Gompa <neal@gompa.dev>
 Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 Signed-off-by: Sven Peter <sven@kernel.org>
 ---
- .../devicetree/bindings/gpio/apple,smc-gpio.yaml   | 29 ++++++++++++++++++++++
+ .../bindings/power/reset/apple,smc-reboot.yaml     | 40 ++++++++++++++++++++++
  MAINTAINERS                                        |  1 +
- 2 files changed, 30 insertions(+)
+ 2 files changed, 41 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/gpio/apple,smc-gpio.yaml b/Documentation/devicetree/bindings/gpio/apple,smc-gpio.yaml
+diff --git a/Documentation/devicetree/bindings/power/reset/apple,smc-reboot.yaml b/Documentation/devicetree/bindings/power/reset/apple,smc-reboot.yaml
 new file mode 100644
-index 0000000000000000000000000000000000000000..42b1bc0a10c97a5586c435413b3c3ef1bb9fc797
+index 0000000000000000000000000000000000000000..ce5ed88493cdb60bfc8b444cd9e1d36714890ffe
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/gpio/apple,smc-gpio.yaml
-@@ -0,0 +1,29 @@
++++ b/Documentation/devicetree/bindings/power/reset/apple,smc-reboot.yaml
+@@ -0,0 +1,40 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/gpio/apple,smc-gpio.yaml#
++$id: http://devicetree.org/schemas/power/reset/apple,smc-reboot.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Apple Mac System Management Controller GPIO
++title: Apple SMC Reboot Controller
++
++description:
++  The Apple System Management Controller (SMC) provides reboot functionality
++  on Apple Silicon SoCs. It uses NVMEM cells to store and track various
++  system state information related to boot, shutdown, and panic events.
 +
 +maintainers:
 +  - Sven Peter <sven@kernel.org>
 +
-+description:
-+  Apple Mac System Management Controller GPIO block.
-+
 +properties:
 +  compatible:
-+    const: apple,smc-gpio
++    const: apple,smc-reboot
 +
-+  gpio-controller: true
++  nvmem-cells:
++    items:
++      - description: Flag indicating shutdown (as opposed to reboot)
++      - description: Stage at which the boot process stopped (0x30 for normal boot)
++      - description: Counter for boot errors
++      - description: Counter for system panics
 +
-+  '#gpio-cells':
-+    const: 2
++  nvmem-cell-names:
++    items:
++      - const: shutdown_flag
++      - const: boot_stage
++      - const: boot_error_count
++      - const: panic_count
 +
 +required:
 +  - compatible
-+  - gpio-controller
-+  - '#gpio-cells'
++  - nvmem-cells
++  - nvmem-cell-names
 +
 +additionalProperties: false
 diff --git a/MAINTAINERS b/MAINTAINERS
-index a92290fffa163f9fe8fe3f04bf66426f9a894409..68097b1a44251b076bfd55cc07cffa5d0e3e83c5 100644
+index 68097b1a44251b076bfd55cc07cffa5d0e3e83c5..1dd004f7dff669e3a3609e5f1702887129d8ff35 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -2331,6 +2331,7 @@ F:	Documentation/devicetree/bindings/arm/apple/*
- F:	Documentation/devicetree/bindings/clock/apple,nco.yaml
- F:	Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
- F:	Documentation/devicetree/bindings/dma/apple,admac.yaml
-+F:	Documentation/devicetree/bindings/gpio/apple,smc-gpio.yaml
- F:	Documentation/devicetree/bindings/i2c/apple,i2c.yaml
- F:	Documentation/devicetree/bindings/input/touchscreen/apple,z2-multitouch.yaml
- F:	Documentation/devicetree/bindings/interrupt-controller/apple,*
+@@ -2346,6 +2346,7 @@ F:	Documentation/devicetree/bindings/nvmem/apple,spmi-nvmem.yaml
+ F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
+ F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
+ F:	Documentation/devicetree/bindings/power/apple*
++F:	Documentation/devicetree/bindings/power/reset/apple,smc-reboot.yaml
+ F:	Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml
+ F:	Documentation/devicetree/bindings/spi/apple,spi.yaml
+ F:	Documentation/devicetree/bindings/spmi/apple,spmi.yaml
 
 -- 
 2.34.1
