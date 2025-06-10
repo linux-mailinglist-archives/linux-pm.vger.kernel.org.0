@@ -1,62 +1,62 @@
-Return-Path: <linux-pm+bounces-28417-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28418-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1AC5AD4445
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 22:58:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3913AD4456
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 23:02:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84F8B17A89D
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 20:58:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD0043A5DCC
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jun 2025 21:02:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B25DD2676FF;
-	Tue, 10 Jun 2025 20:58:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CA63265614;
+	Tue, 10 Jun 2025 21:02:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="EE/xyLw2"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="BxSAzpS+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011006.outbound.protection.outlook.com [40.107.130.6])
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011032.outbound.protection.outlook.com [52.101.65.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E019F4685;
-	Tue, 10 Jun 2025 20:58:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B472459C0;
+	Tue, 10 Jun 2025 21:02:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749589097; cv=fail; b=G0WuV6wBwj9JIY0mPwQ97Nz7INkTtPsn5jvkWztl/6ykRCDhNnV3fGtE5mPLg+3LKYBfLGrmqoRMbENjl+EAP0L1BHY4NYvqQUDo3sj3fJ8fXT32k3D20l7ZL60y9TheBlZLNuu4iKB2IYYAznlBt6AkjRRLJgb8gsPQXxWeJ4g=
+	t=1749589362; cv=fail; b=CNCtymufhXu50qhMcemX71a1poZ+dCeTPsVNkv5wa6aOHYnUpLAFrAd1C7AWkx6p81DGOQN0s7yssAqUNnKtA8IziJKmblnVYRo2DxH4t1i/fbQ+qke38bTgUiSX0R/lZVLQ3Q5EdAgaeaHN8cjGnxVuVxJzEEmKLoyhWLqWz+I=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749589097; c=relaxed/simple;
-	bh=QmHjYcIIFZkRYhP2mB7617KkRyTb17Kb6QTnxgMpEC0=;
+	s=arc-20240116; t=1749589362; c=relaxed/simple;
+	bh=zWiqTC1Q2FlMCPrbak/JsMd09NIo7eleuyVOAEkuEHg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=JK+WPqoxWaOog3qbkUdtnaZXgX83jwN4QeiqI4TRhT1OS484JFehFg6PosN7wfS0e0vnNEepbR6QNN4CojwBpqDvscEAspJYxYiRZCXIXjJ0/490iRSuPJ2qRmUM1wwpQbR+Lvkf9t7evfa7bF7MXBZleRquJPaq0vfiiHTwbI8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=EE/xyLw2; arc=fail smtp.client-ip=40.107.130.6
+	 Content-Disposition:In-Reply-To:MIME-Version; b=nPZSmHm7B8MFlJ7oKUNhdWtgLJhPRmYOSW9Cvna+wF39V1aV+cQEXFyBXbRpwPwnUA02zYN0pBvXEpPvBmLpvliEixaCGF3hRjzB/6JVPhoACvQba0nYdNCzjBC/YNMWFMft6kyzLTUXx0QIxA9uNID2erXI3xtZQZB6teOg/lo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=BxSAzpS+; arc=fail smtp.client-ip=52.101.65.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vlFiWfq/hEnaE4ryChcUqCZ/URbQbgdQVwXvspDrW4GuQalpyMTWvkxMD5wC2h3lUTNgaiH/FOZBlPrqRsfFz/tTbaJ0FY2GsE87oU8fSao46u2Aquja5hevsgKjRAY35A2muIPaSEoSv8FgONZIJubFNteWOPxqPTVGIt1TY/tmZOVDQRupUT8/sqiM8KZdFT1rWMxbExI9s/OVREde9M+SqeFn4MIN6Ipx6lxz9EGMVX9r2GKpDL/FvhVfnhX2cQ1dJ5r35gthiiz0rNtjBDZHezTz7qciotCeHwwfq26WhPKqn4H1V2t4cX0ipC6DbNxlWiRt9ExnJW11/lvOMQ==
+ b=QsVCQCEn+iTkyxkkrSdGVJKAzcQDikL6ANL2NvtwCdhSt4TkyzUWXHU0LpasJEzCLoYAPY5tQ4JygP4jgvIAdPfONQtkuqCm37qpKt9FpkTxQfdIT12cl8V947WNXfC2ynLrQtfFLTbqJJBrNYJmyDz1aJU6VKsy4AUbb7M5vjDC48ZQDQ6rM5xWe4+P84BYG37wjq7RSfyDVSaRm9+V1oE/V4QcIpcE83og10RQNZu72jX+nmep7SqsKDVM4Moa4B+ELmNRiAyQUOj9+oq1GLEYw7VSqDo9avTYEs/hq4t3xuSH57Dm+Yrv+WhOK+ZCy/a1lUnSXZFHpJhW77vcIg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m2pN1ZS/BreatNf6TmKWxky8IcUkVZ7fVGA0xwTspQ4=;
- b=pFi21sPPnhX26ICditznuthDMyMx+K5/VnDmGKhf1nT1iJObjWKw2ZEL05wtez0lpA5WDURxpWXd3qMA2kHHsc4EarNamy8G4W8TXAKljIA8TcD3bJ9sRXNDun1RnLHEaxSZjWfMxAi/9LfC7P9QAxPoUlKPrCDdjZjPebggCAI37Q1NNbRNNaJZiGfNOqwItNzeqzRiVSgYZ1W+rthMKHF5KRDgmW1DkcK14sVfcaqdKdDcETc+N058ltUBN+npVwzrDHZt8kxZ7MDeuYRAwYdsRJoG6bpgoyZSRipsD1Q4ERGmxsnIwYC4gsvGQHwBtX/HjQnYxRXF9IzMFlXxFA==
+ bh=cF324or/2CN9pq6dSSnu20S6WShg9W3C2IcmaD2S/kE=;
+ b=QksSy8AXwoVpsIBrEtfki24mHqEgLyQQ8TIYPRAEgNAg9k0RAffNTmTgl+AyNlk2xOpH9m2hxB7uDspKfHMrRaAxb6Zsile3a1eZynYsDPdllWUZdBkYhl2OWqKMBpELN72NCwzbRnGmgnRj+IPmWIspy0QFD6q7g7rISgGhSxS0d2nQevPvX36WJ1hP6a+PROAqoYbUGwtNgaSfl0CenSTHKNuCLsNZlNYAOEfJXBuDAfRG3c6IMe+1deMARYSw9Y5nHt8YRpHkxvzuy6VOTWuGx3z2sOfrbI5Nqx9DyWsHeZh96Tq7UCdsDcd6drpQpHEZ+W3gS4zhXHyQbmMI1g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m2pN1ZS/BreatNf6TmKWxky8IcUkVZ7fVGA0xwTspQ4=;
- b=EE/xyLw2fdPjG4eapRl0EhOXbwfSpdQjQiBkyjzZM/KAC0qNptFBY/ikGmPGbA6H1glF+3y8RVlOhl3hEHs/ZUK36sHc9oGOVNfctN1mABq9AKTJ+Z+0BtkLRW3SIvEgbc4zP5Eqw0tw/5me209elwINrvjAwzj7LmHZFUE3OJMMX16VzmrkvDyeid9osWoEox04KCwzeT+bZo2FSUJLZnEYXY5BYleuG7HikCF4U2spytsy3/gB7OewzcK9sinCKIbnwcyXRkW/NJoTZun9AT5btIa2DRe3TzYanbyrvdfo3QzusgUBHl5JmPvDBfg3FMOdbBxTAEO+MKJYbPVPIw==
+ bh=cF324or/2CN9pq6dSSnu20S6WShg9W3C2IcmaD2S/kE=;
+ b=BxSAzpS+FByF5XYPq8rHiGpoS6+/rvEiKUGyMwNkA9ebsoLHlSXurqx0WN0tXOFomlUYKOZOX/NZV9XjuOfZMO9OvLmoH586t+r2h0HAvofF0VUcnfrjdcFyhydrsh/cS+NJSmRmURLGHqk2KOpr7sM7LOHydGhz2UOKxT6MP6HcTIc/jzoi84kFkuhcUaRhjw7BYULvnpYyQVbKnXPLcHMgXWc5Ufo+168w9Qe1hnW6eJTKDdsSLiFK+CjrXMmGMmpvYyoO5cd2R10ASOm951uAzDinmETRU1FPrtGcH0iNRwRfeDZtcYr3jhNGcLhNVcr5pfddJjwBqM7dnBzfYA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
  by DU2PR04MB9018.eurprd04.prod.outlook.com (2603:10a6:10:2d9::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.18; Tue, 10 Jun
- 2025 20:58:10 +0000
+ 2025 21:02:37 +0000
 Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
  ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
  ([fe80::9126:a61e:341d:4b06%7]) with mapi id 15.20.8813.024; Tue, 10 Jun 2025
- 20:58:10 +0000
-Date: Tue, 10 Jun 2025 16:58:01 -0400
+ 21:02:37 +0000
+Date: Tue, 10 Jun 2025 17:02:28 -0400
 From: Frank Li <Frank.li@nxp.com>
 To: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
 Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -71,15 +71,15 @@ Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
 	Abel Vesa <abelvesa@linux.com>, Robin Gong <b38343@freescale.com>,
 	Robin Gong <yibin.gong@nxp.com>,
 	Enric Balletbo i Serra <eballetbo@gmail.com>
-Subject: Re: [PATCH v5 3/6] regulator: pf1550: add support for regulator
-Message-ID: <aEicWcrWr1TMq9r9@lizhi-Precision-Tower-5810>
+Subject: Re: [PATCH v5 4/6] input: pf1550: add onkey support
+Message-ID: <aEidZI0hTPFaB7e8@lizhi-Precision-Tower-5810>
 References: <20250610-pf1550-v5-0-ed0d9e3aaac7@savoirfairelinux.com>
- <20250610-pf1550-v5-3-ed0d9e3aaac7@savoirfairelinux.com>
+ <20250610-pf1550-v5-4-ed0d9e3aaac7@savoirfairelinux.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250610-pf1550-v5-3-ed0d9e3aaac7@savoirfairelinux.com>
-X-ClientProxiedBy: BY5PR20CA0015.namprd20.prod.outlook.com
- (2603:10b6:a03:1f4::28) To PAXPR04MB9642.eurprd04.prod.outlook.com
+In-Reply-To: <20250610-pf1550-v5-4-ed0d9e3aaac7@savoirfairelinux.com>
+X-ClientProxiedBy: PH7PR13CA0018.namprd13.prod.outlook.com
+ (2603:10b6:510:174::22) To PAXPR04MB9642.eurprd04.prod.outlook.com
  (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -89,519 +89,341 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|DU2PR04MB9018:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0b65034a-533e-429c-6d0a-08dda861820d
+X-MS-Office365-Filtering-Correlation-Id: 633c273c-ffe1-4ae4-f374-08dda86220fd
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|52116014|7053199007|38350700014;
+	BCL:0;ARA:13230040|1800799024|366016|7416014|52116014|376014|38350700014|7053199007;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?RvLKw6qPFHtZyBKei3Sl7t1si5R+zforp5wUraQTYZs9o0RaIhZzUb+GO+Uj?=
- =?us-ascii?Q?bWPcDryc+zw7mToINh5LdoeUKIjwPmoitgL3rF3q+8XsnJM5z6Ij5Zel4guw?=
- =?us-ascii?Q?Zrpzl/hPmtgDclsYyuSVGllNSBSDAa4GGnz9vooug9Le98gh279n1uVBHkNi?=
- =?us-ascii?Q?hGrOtgHIf9BFfkXiGA+op7gCEJWW+Yn6ZtgWsL1/dULg2YNncLK7WtDrQihx?=
- =?us-ascii?Q?P84jByT4rpxLHnUOXELEeLsINtqqYRxVixh9zUbGy3R1wTklLu4GSx3H8kyS?=
- =?us-ascii?Q?c+UaTbaYG/0YLQYXof3wLh7QSsZvRjfYPio+rLitdqjh2CmQuG9+JuEt9tct?=
- =?us-ascii?Q?3NWo8ifX1tVnoAvS5EXZifNcw5yEY1vKqw3c2R5DOIwEnKPGiBofcVBullxn?=
- =?us-ascii?Q?EkHZ/PCes6IDT8bbr8S06F8zsW0SGH5YUJXuaN7dtQBlY2cpPCEwA0A0t6R7?=
- =?us-ascii?Q?0zyY27MWwRTtLfnzJOjCpowAeNLFvd2k72NboARfDS6YS0SytfozbgqTDQv9?=
- =?us-ascii?Q?lzXbbaTegLQINKyYlIx77jXDVenvT+QNAue4SZlq2rRmW5h/Moiqe7Lkg8Ab?=
- =?us-ascii?Q?DrpcBNWwKYnW4IxL8LFWv8z+Nq1bfTYmbACwR+28uNt9v3Y7QFz2UX2zarOs?=
- =?us-ascii?Q?U+fgtOdq694x3/nCPHDP1i/+AzhCa9PleQBTFnGNIfhT4uTEdFnq52XZpzyy?=
- =?us-ascii?Q?+j7IXvwjcIDD/Gogvckr5gsM3QffCJyXzG73h7JjGhJfRipRG9o5JNjDV6eq?=
- =?us-ascii?Q?dJtPS0Xef6qqWxpz0eKbvzhbQr750GaF0YoYPN3cnLIOR9cyMAG7sXFIP0xR?=
- =?us-ascii?Q?KpgkRybJvWkvQtN8g+MUgUebpNIg5c2U+DBVp7w2QdbOYggKk35E+FZ91TOp?=
- =?us-ascii?Q?mqzNhbiHUTjihxCzNUqtY7l8LJKegPBmusvBkaB+Rvh6/GRtgGASw55SmwAa?=
- =?us-ascii?Q?i2lx9LkNFD5jJuMTtu45IxJKDb2+iHz3q0eVS1OUihbK+o6O8LY0Ov6+tUUy?=
- =?us-ascii?Q?BAd91O1uHTVJb1kNzUBpyLvB4zbW005PIYxVKMFvf/MhfnqcCZZFKHxQhdaL?=
- =?us-ascii?Q?XtuyulJd1yFQXXmbCcMSpIqMKeKjaBbVFJfsC0mBts6YBMfJ2w5qhqVdqjrK?=
- =?us-ascii?Q?iOQHXKEsvzINW6DzBPGvAM8jetXXoOLdwRM79fYmUJ9hB9jIH7QpjnP3X9y1?=
- =?us-ascii?Q?1uXphQOXRZ96wuVFC4FdgUzQK0m9UTCYCtG5YrX+g2vKdhCcnFeitftWK9CN?=
- =?us-ascii?Q?oRInurz97Uj5a6HWO/dGjZ8UYpRHziwI3o0Br6IMhHWfxHxVI6upetwNn+MG?=
- =?us-ascii?Q?4df87TlKFn96USrlX1qaQSY8Mk24ONIgfvmMQW+FhAB8I9zX5M47ufadVDYG?=
- =?us-ascii?Q?Gp8fGP0BJQFFupa3LHAPZSNoj/MwWgyKtlc4NFFbLgTtXZi2FWGknRdwnuS+?=
- =?us-ascii?Q?VQb6X2+9kxtMTWWXly8kxgnWa9xz30NEuX1VzG7+wcb6brCcHBag7A=3D=3D?=
+	=?us-ascii?Q?QV6yOdZJgPEd2XWg5SgRxS/DIzd+OAv+VbueV56gKx5tQwmOvW+42YejWX1u?=
+ =?us-ascii?Q?kBvCubkb+0DgfTR9sLvJ9xTIowb+/CER4cjqelInGawsJdqHDRY9OmF2HKE2?=
+ =?us-ascii?Q?/l0XBlfKMEJQx9FRxNKSnAPiky103KBtmDjbOjr6tldUa+pTietqzU7cWHOt?=
+ =?us-ascii?Q?OVLnt9bzBLJfB4wx6fgXDW4cBiULkZu06OhEEwJeHFuNt5Z5H2jansGwOdhf?=
+ =?us-ascii?Q?dzN1ykITGT+mzJU5m28bc/oziSAcRBTeyC4B+5GDSA9hKySeM6ruuP0ZBUKE?=
+ =?us-ascii?Q?NrSmeyBqgxniR6ulcHtXouBNlON8VU8Bwr+ClYW4e+5dYezhCPwVya23FSIs?=
+ =?us-ascii?Q?jh4QYdcuWoAD4kA5l3Mh9uXK9zx/VwVrKGye7rHTh63sFWHNNPWZfjMcSCXq?=
+ =?us-ascii?Q?prD6z7GvKG7qpt3VAN8vwAM2S3MkOH7v6jNT++eFqZaJSQ7njqDDb/51qUJw?=
+ =?us-ascii?Q?XzVVFTvw2UbmWWbGc/Vm/+8BdM34LgEgjGEL+45MyG3aF0vibRvS/jAmtdVc?=
+ =?us-ascii?Q?wbtTuJ3SaszzAhAkVin1i7M/LtvJ5wfQIb3Z+PTzsis/al/XR82IoP2XO8vV?=
+ =?us-ascii?Q?YVq7CBDLvsVSblzar7u/VoQbdkE9MWdQfHdpEDzbpBo6QOcDFrXsoElDmRCt?=
+ =?us-ascii?Q?+bgEDp+LEftpo3C4GnyeDnNMuEAfrPJzgHX95rSz2cTWjA82kyLBWNmcac15?=
+ =?us-ascii?Q?nFtdSvQ6sMBt/Z4/l+zN4srG4dNg+Wti2t65d5IBLHP/kYP3YqDG3oPFfoTA?=
+ =?us-ascii?Q?kdjCsxOmjzlXATaGUfeY8YZCsLqdlH996K+sYzzEfvWGccE0lXJ7HwN8T4pD?=
+ =?us-ascii?Q?1QAD+3q4WJ04vPY7h+OmaT5R0puL3lnJcA2Gk0sjRLYagG1xlQ6KpRaGSjsg?=
+ =?us-ascii?Q?0R2l2+Hx9gsWQPjoXpuN4Sg06jb3ee2bFn0Js2IBqNH/OyZRLY5iJxu11yQD?=
+ =?us-ascii?Q?ECef64o2lalwmmzMm843+rg6H8URzHLlsSzgHinXIBwEo8u61HJ+E+EX75la?=
+ =?us-ascii?Q?P9xDyc8dERsKKxvERCu7mM1KgZ7TVWFlNihzLms5jI1g+lcU+H01eyzX4zF6?=
+ =?us-ascii?Q?yEy+tCmwjXUBfqAzYG3pMihCuUcNG958I8FV0IaNdtuysnsKBVFWYlYTLEq/?=
+ =?us-ascii?Q?R0Tzyh7SgBpFB6wkSln5wI3VPku7iZeuqj3es6FeIJOIXP9F/bjOW0IroSRz?=
+ =?us-ascii?Q?GoEHV+LvsNUfhIqeUeQua/vmSvcLDBfa1s2MWD8T34PaKj0ij5ocG/DwhkbB?=
+ =?us-ascii?Q?Cinb0P5aOkx6G8dhhiU0vis3JOPqr5pMvELL9D+SOVMYgHbu61BVNpg3QsCV?=
+ =?us-ascii?Q?eAvM9o89ekfO8LBnw3kOA8rfGW99B3GAS99zNj9YV7gKC61Lvtfw2+NhkER/?=
+ =?us-ascii?Q?M0MeS1QW3KcKSdpEhuuDq+mqVO/uDkLVziMK1hAW0zm9TWqIrCjYXRVrX8Ml?=
+ =?us-ascii?Q?WVToiJqK7N9or9R0S3HkUg18EkevE6NwvBlhO13hGHaZJaJwyIa5bw=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(52116014)(7053199007)(38350700014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(52116014)(376014)(38350700014)(7053199007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?kAM/bZs+icGRLUCX2ZoKzir9l2ZRFsaXo1eca99G2Ejq7Ob+aHtCUQtFvME8?=
- =?us-ascii?Q?W5FibC97iZSMv5S0jfZiLpETjjYxM728BDU/ENnpMXGBOelJKMOMmDhkaBji?=
- =?us-ascii?Q?EIA0xo4N1ORu7UGQeystKu2Z2TyZ6eeOlPiKVViXzulKXKTKAK6SBUROPPgY?=
- =?us-ascii?Q?0P69NU5IuJsFzkPP6G6g3WuNoM/UXdD5ii3mA0hJfi2LRgCWsIe3WsbiZg6+?=
- =?us-ascii?Q?6Mcx1K/yfoPccbvyaBgGAuhMWCw+UufN6PfTlumnba8+pkpnNWJMqszXPZ6a?=
- =?us-ascii?Q?JIEtPTKfp7RPJAYj+0eMmHgHDSzdqvOndonClMz15cFu49KE8gXemRq+xzga?=
- =?us-ascii?Q?+hBK/1GqvZa6Qltjp/UBk3w/JqQqILD9EJkpvuXm7vv6s4KE4+7nEfPP8xAq?=
- =?us-ascii?Q?TXsvYXeRmyA1rueuccZ5A8uYVQ2rf8ykm/bc2C+ygRIlq894qEXg428AzJ4n?=
- =?us-ascii?Q?IwMiOP5FVkKwhX/7N6VSAcCKx7xE/fb4nf42uivqKnspZqhLq6trQmAqfGah?=
- =?us-ascii?Q?vJ4pdUA0DlzjbiPgrBP7f+igFYfqvcNe/jkHCZRtGpbxHJy4iJB1aBsMKGhY?=
- =?us-ascii?Q?Eo8Qs0e18X61gS1GactkMIcoDjfY8sYW3ELZn0XIovjkISohuu/cyc2bcq8H?=
- =?us-ascii?Q?pdlI6tBSNJRBkeYc4j6/tFiEhJ4Kd1nsdXn07BHFssNdgf5GE4+RoV8dl3Vx?=
- =?us-ascii?Q?KVhAMlDaxyQl/xjFb18tyP+VkeybBYkHRo5qWsSqprton3z8tlpKTz4dYYkR?=
- =?us-ascii?Q?rH1ySdCkSqEEEm8TBj8H6YvCzn8U9r0Bbj49qocP6Jhl0cjXI/RoCSYEV6V+?=
- =?us-ascii?Q?BwC8wYOt+0or7TvyUw9LVg/Kg/D4QDPAjT7EveZLHoLBLXCpsDkCv3ot9O9/?=
- =?us-ascii?Q?ae9a0lL9jHjzK4s+1m+ugak3L5ji/MZhvFpomIuiPGDFtmzL73R+Kcmfprda?=
- =?us-ascii?Q?3gOr32qaFDqhbXDDtYG6q6AOTLTpHIcoxTGlV/zcs9+wToBtvQb5Hme2zWB6?=
- =?us-ascii?Q?ruDSiQ69v2f7R/N8pBUB2Z2ehBaUV8W3T4clkb/V0Q9snwVaVHxSulHtrQ1q?=
- =?us-ascii?Q?wkxtw2DUW6WgEyynM3iuT+nwtnXAgh4LNyWH+TN9seb0TH5NfYneA3FlLR8z?=
- =?us-ascii?Q?R2M/zyIpMz8y61rW4gAySrEylKus3057yQUzj5X9lrn1jIK5WD2/mACujs6g?=
- =?us-ascii?Q?BrnC9DixPD8LkW37tJTiLcgca8fcgAI9V7X3HJ8J+Yu7p9k+RMUmJXq61Du7?=
- =?us-ascii?Q?sfGOMGFsD3nrqQ/yZ0Vv63ERf3j1WFmtqg0PX7riEVCiWjoot05i2ZDDNctB?=
- =?us-ascii?Q?YtYoJE6QiG3G4kTYD4nKJU1mcRGCkpYuQ4HSgl8e/V3N3JyTLGdI9+HNaWJE?=
- =?us-ascii?Q?QEp1yfSEjRphmd4ycQOoSVYcABBufQ0Uwm8M/8SLxIqWl0hXgM3Ohrz9d5nZ?=
- =?us-ascii?Q?+cTg4aK9lZPdJpGztmQVGym3T+P8GImzOCET7TR0CzYpkyjMaFGX2WCo/UN2?=
- =?us-ascii?Q?wwjlb15fNpd2FwB9Dx+1vwj4tWdvHn7pSaSwGuXT5L14yJ9EEj33sLINszqG?=
- =?us-ascii?Q?NdhGDtJ3Q2bkcJgsk+jhOi6CHfmIZPBx/m6+JCse?=
+	=?us-ascii?Q?hSXZZAtV6e5Gi9LAlyX8naKCFO4ujLVZHHETVD/4i5T5StGoHnnnyVLFtOVn?=
+ =?us-ascii?Q?ZXgQm8zQlvZJ6pv01S5U/oRT4ThtNoXklATeuyXCGBrPFmt4B0Zt7xJrKSEO?=
+ =?us-ascii?Q?Y6eyyBP+X3fpAIB8tFOzSPaxwAYkRwp4xuKsjE4fAGar/rUxWUf5hSh9nhed?=
+ =?us-ascii?Q?gcuHoKzn/bRhQibo3FYavdMrHj4vdUcRaXmWuAI7cpt+6iDoNeChwbnUaxBj?=
+ =?us-ascii?Q?PQKxfewb9SrzyZI+/YBLtGFPYNuWzIDEpIBpxNIIU3jCoUYyIhV9RTx9I+Hz?=
+ =?us-ascii?Q?weg/ctirdJdraSueBilXTaaxVhg0BiHxt5s5rpIIvcPaXf8BIiKGQR2xAgk4?=
+ =?us-ascii?Q?uTcmBfZ2t707wKrARUSn/FuHf0Z+rXQmDFiDFtHuxkJknDCtXPwBd810/kXW?=
+ =?us-ascii?Q?AIi8WTVGBSdlDi8P0JOtyyAYUXKJwXboBpa5T/8Cq3sru1u9dt5sqYxf2wD3?=
+ =?us-ascii?Q?f6sHNKh9ON9Rxi4jzgiitP8Q/Rxc7iuC6YF03VEla2m1NXRtJ06tDwMrsJl7?=
+ =?us-ascii?Q?dCLbM3iILgBC4AUSKHeFZI/DtIwky9xUc5VDyHjoSGemPxaSH1q2TW/3uMvL?=
+ =?us-ascii?Q?ItLefpJWdCaqhUpaA07zYaMV0K6qXKukBtwtTa552+rUmymWC0R/k8eFc0Y9?=
+ =?us-ascii?Q?merRArTTNqrPIP5yesdBRZ4LsfqmViR1tyqBCqPv7csOTT1dJnND320W6j8Y?=
+ =?us-ascii?Q?RSKSHddh6kurTeG5Iwujc4wtOuJRjLlpBAikuS1Wr58Ikj5ndIwYe+d7+Iyc?=
+ =?us-ascii?Q?xgZGpdVp/qUhY0lRsYCZHUG3GI1vYztPk7nNiILyxJASSitwp4Kw7IfmxL0M?=
+ =?us-ascii?Q?EYPswch36Q2sOZ91f4dWxH3610AOZNokxXUpH9ZmO/erRWtUcEkb+iEGTnQz?=
+ =?us-ascii?Q?3Qd+XYuQyeUu9lVCK2o9WnsSaElP9QN2skAoAf9/5Ci6HyzngYj+XHO8Ocnn?=
+ =?us-ascii?Q?Smkj7R8EneTnEr9bfBiANlqA5+Kz4wJndeRUMov0/FC5JHX8Lah6De281ppp?=
+ =?us-ascii?Q?rboaAPiqJBixz7M0X0WTzLUpss3dHliLtlHfF850wEtjWxzQl2hAPfGazU5s?=
+ =?us-ascii?Q?YlaSsk2bIM0ysbuCNjlqZFUrx+KRiM47mOmPoz6lU9geduOIMHzf9OaA2+FW?=
+ =?us-ascii?Q?U9IlXhjFKB/79cd0x+DiTUnhVEFpF7P0N+ew/8W25WBt0Kbn/k6/DhSXfutE?=
+ =?us-ascii?Q?PVaoR7XyvRH4Ka1tFJ6j8Jhw0YU2U340uhZqs0GUrn46lw3/9QPqkJwf77/B?=
+ =?us-ascii?Q?fJvABqC+cpHv1/WEyID66SHN+bpFBAJzyrDPHzh9EvSzgYIY6TimI8wMzRHp?=
+ =?us-ascii?Q?60qkkqGKtFwkI+GxWqzxn6LtkgCT0eoY+fcUxNq+4opvz80ZcHCaa9AKwb4E?=
+ =?us-ascii?Q?50ny6adOwSpnwuw+URv19M3sIfs1SwwnKMtRyYDm4FBIGdtwwgzwkIzZc/pb?=
+ =?us-ascii?Q?TRoD+Q5vh8kPh2lFlgLDDvCL1OBrVDSbrNI9imx55F26Ss4yNTk402U+3jjY?=
+ =?us-ascii?Q?tPbBPFGV+8FCjexG/xbcDiKT0bKcDakg2i9dTfnouI2JGn6LpZlH/BggDGob?=
+ =?us-ascii?Q?6icpNzK9EajY5vPPXBfOqzzNVG0ImA1CSOE/1gqo?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0b65034a-533e-429c-6d0a-08dda861820d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 633c273c-ffe1-4ae4-f374-08dda86220fd
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2025 20:58:10.7057
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2025 21:02:37.1697
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iw+aQ16BEvkgLJuCO+meA0kPCMFVJTqOPrisouTN267k0zNxJN2pPUCJBgFwSCcG2f9r+sZvdSe7D0Xn9/0+uw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: /w9ZaBOfsW8OdX+7v8JhOFcaULj/iqBOi+4Gjnnl15GHdaXAaOxz/mbg83DwTJLoRwF554Wa2PDmUE2WwPFT+g==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9018
 
-On Tue, Jun 10, 2025 at 03:47:31PM -0400, Samuel Kayode wrote:
-> Add regulator support for the pf1550 PMIC.
+On Tue, Jun 10, 2025 at 03:47:32PM -0400, Samuel Kayode wrote:
+> Add support for the onkey of the pf1550 PMIC.
 >
 > Signed-off-by: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
+
 > ---
-> v5:
-> - Address Mark's feedback:
->   - Add comments to clarify difference in interrupts
->   - Issue warn event for _LS(low side) interrupt
->   - Validate maximum ramp_delay
 > v4:
-> - Address Mark's feedback:
->   - Use C++ comments for SPDX license
->   - Add portions copyright to reflect my update
->   - Validate ramp_delay
->   - Report overcurrent and temperature events
-> - Use platform_get_irq
+> - Address Dmitry's feedback
+>   - Drop irq variable in onkey_drv_data
+>   - Drop keycode variable in onkey_drv_data
+>   - Define wakeup as type bool
+>   - Use platform_get_irq
+>   - Use type const for struct pf1550_dev in onkey_drv_data
+>   - Replace (error < 0) with (error) in if statement when applicable
+>   - No need to define driver_data in table id
+> - Define driver.pm with pm_sleep_ptr
 > v3:
-> - Drop duplicate include
-> - Drop unnecessary includes
-> - Accept lower case regulator names from devicetree
-> - Use virqs mapped in core MFD driver
+> - Address Dmitry's feedback
+>   - Drop compatible string
+>   - Remove dependency on OF
+>   - Use generic device properties
+>   - Drop unnecessary includes
+>   - Drop unnecessary initializations in probe
+>   - Always use the KEY_POWER property for onkey->keycode
+>   - Do mapping of irqs in MFD driver
+>   - Define onkey->input before interrupts are active
+>   - Drop unnecessary input_free_device since devm
+>   - Manage onkey irqs instead of the main interrupt line.
+> - Fix integer overflow when unmasking onkey irqs in onkey_resume.
 > v2:
-> - Add driver for regulator
+> - Add driver for onkey
 > ---
->  drivers/regulator/Kconfig            |   9 +
->  drivers/regulator/Makefile           |   1 +
->  drivers/regulator/pf1550-regulator.c | 366 +++++++++++++++++++++++++++++++++++
->  3 files changed, 376 insertions(+)
+>  drivers/input/misc/Kconfig        |  11 +++
+>  drivers/input/misc/Makefile       |   1 +
+>  drivers/input/misc/pf1550-onkey.c | 183 ++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 195 insertions(+)
 >
-> diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-> index 6d8988387da4599633ca9bde2698b9711e34a245..de455887f9aeeada5546e44b8dc9d7ed041618a6 100644
-> --- a/drivers/regulator/Kconfig
-> +++ b/drivers/regulator/Kconfig
-> @@ -1049,6 +1049,15 @@ config REGULATOR_PV88090
->  	  Say y here to support the voltage regulators and convertors
->  	  on PV88090
+> diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
+> index f5496ca0c0d2bfcb7968503ccd1844ff43bbc1c0..47b3c43ff0550f14d61990997976366436411adc 100644
+> --- a/drivers/input/misc/Kconfig
+> +++ b/drivers/input/misc/Kconfig
+> @@ -179,6 +179,17 @@ config INPUT_PCSPKR
+>  	  To compile this driver as a module, choose M here: the
+>  	  module will be called pcspkr.
 >
-> +config REGULATOR_PF1550
-> +	tristate "NXP PF1550 regulator"
+> +config INPUT_PF1550_ONKEY
+> +	tristate "NXP PF1550 Onkey support"
 > +	depends on MFD_PF1550
 > +	help
-> +	  Say y here to select this option to enable the regulators on
-> +	  the PF1550 PMICs.
-> +	  This driver controls the PF1550 regulators via I2C bus.
-> +	  The regulators include three bucks and three ldos.
+> +	  Say Y here if you want support for PF1550 PMIC. Onkey can trigger
+> +	  release and 1s(push hold), 2s, 3s, 4s, 8s interrupt for long press
+> +	  detect.
 > +
->  config REGULATOR_PWM
->  	tristate "PWM voltage regulator"
->  	depends on PWM
-> diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-> index c0bc7a0f4e67098c50ac3cf887ae95f46b2eac44..891174b511fc0653bac662c71659498122e8441f 100644
-> --- a/drivers/regulator/Makefile
-> +++ b/drivers/regulator/Makefile
-> @@ -125,6 +125,7 @@ obj-$(CONFIG_REGULATOR_QCOM_USB_VBUS) += qcom_usb_vbus-regulator.o
->  obj-$(CONFIG_REGULATOR_PALMAS) += palmas-regulator.o
->  obj-$(CONFIG_REGULATOR_PCA9450) += pca9450-regulator.o
->  obj-$(CONFIG_REGULATOR_PF9453) += pf9453-regulator.o
-> +obj-$(CONFIG_REGULATOR_PF1550) += pf1550-regulator.o
->  obj-$(CONFIG_REGULATOR_PF8X00) += pf8x00-regulator.o
->  obj-$(CONFIG_REGULATOR_PFUZE100) += pfuze100-regulator.o
->  obj-$(CONFIG_REGULATOR_PV88060) += pv88060-regulator.o
-> diff --git a/drivers/regulator/pf1550-regulator.c b/drivers/regulator/pf1550-regulator.c
+> +	  To compile this driver as a module, choose M here. The module will be
+> +	  called pf1550-onkey.
+> +
+>  config INPUT_PM8941_PWRKEY
+>  	tristate "Qualcomm PM8941 power key support"
+>  	depends on MFD_SPMI_PMIC
+> diff --git a/drivers/input/misc/Makefile b/drivers/input/misc/Makefile
+> index 6d91804d0a6f761a094e6c380f878f74c3054d63..c652337de464c1eeaf1515d0bc84d10de0cb3a74 100644
+> --- a/drivers/input/misc/Makefile
+> +++ b/drivers/input/misc/Makefile
+> @@ -62,6 +62,7 @@ obj-$(CONFIG_INPUT_PCAP)		+= pcap_keys.o
+>  obj-$(CONFIG_INPUT_PCF50633_PMU)	+= pcf50633-input.o
+>  obj-$(CONFIG_INPUT_PCF8574)		+= pcf8574_keypad.o
+>  obj-$(CONFIG_INPUT_PCSPKR)		+= pcspkr.o
+> +obj-$(CONFIG_INPUT_PF1550_ONKEY)	+= pf1550-onkey.o
+>  obj-$(CONFIG_INPUT_PM8941_PWRKEY)	+= pm8941-pwrkey.o
+>  obj-$(CONFIG_INPUT_PM8XXX_VIBRATOR)	+= pm8xxx-vibrator.o
+>  obj-$(CONFIG_INPUT_PMIC8XXX_PWRKEY)	+= pmic8xxx-pwrkey.o
+> diff --git a/drivers/input/misc/pf1550-onkey.c b/drivers/input/misc/pf1550-onkey.c
 > new file mode 100644
-> index 0000000000000000000000000000000000000000..54fdf28643d8376d87faa5d2c5a562593ba0c063
+> index 0000000000000000000000000000000000000000..7e604c5544066eefbd84abe7bdff767b8b8978ab
 > --- /dev/null
-> +++ b/drivers/regulator/pf1550-regulator.c
-> @@ -0,0 +1,366 @@
+> +++ b/drivers/input/misc/pf1550-onkey.c
+> @@ -0,0 +1,183 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +//
-> +// pf1550.c - regulator driver for the PF1550
-> +//
-> +// Copyright (C) 2016 Freescale Semiconductor, Inc.
-> +// Robin Gong <yibin.gong@freescale.com>
+> +// Driver for the PF1550 ON_KEY
+> +// Copyright (C) 2016 Freescale Semiconductor, Inc. All Rights Reserved.
 > +//
 > +// Portions Copyright (c) 2025 Savoir-faire Linux Inc.
 > +// Samuel Kayode <samuel.kayode@savoirfairelinux.com>
 > +//
-> +// This driver is based on pfuze100-regulator.c
-> +//
 > +
 > +#include <linux/err.h>
+> +#include <linux/input.h>
 > +#include <linux/interrupt.h>
-> +#include <linux/mfd/pf1550.h>
+> +#include <linux/kernel.h>
 > +#include <linux/module.h>
+> +#include <linux/mfd/pf1550.h>
 > +#include <linux/platform_device.h>
-> +#include <linux/regulator/driver.h>
-> +#include <linux/regulator/machine.h>
 > +
-> +#define PF1550_REGULATOR_IRQ_NR		11
-> +#define PF1550_MAX_REGULATOR		7
+> +#define PF1550_ONKEY_IRQ_NR	6
 > +
-> +struct pf1550_desc {
-> +	struct regulator_desc desc;
-> +	unsigned char stby_reg;
-> +	unsigned char stby_mask;
-> +};
-> +
-> +struct pf1550_regulator_info {
+> +struct onkey_drv_data {
 > +	struct device *dev;
 > +	const struct pf1550_dev *pf1550;
-> +	struct pf1550_desc regulator_descs[PF1550_MAX_REGULATOR];
-> +	struct regulator_dev *rdevs[PF1550_MAX_REGULATOR];
+> +	bool wakeup;
+> +	struct input_dev *input;
 > +};
 > +
-> +static const int pf1550_sw12_volts[] = {
-> +	1100000, 1200000, 1350000, 1500000, 1800000, 2500000, 3000000, 3300000,
-> +};
-> +
-> +static const int pf1550_ldo13_volts[] = {
-> +	750000, 800000, 850000, 900000, 950000, 1000000, 1050000, 1100000,
-> +	1150000, 1200000, 1250000, 1300000, 1350000, 1400000, 1450000, 1500000,
-> +	1800000, 1900000, 2000000, 2100000, 2200000, 2300000, 2400000, 2500000,
-> +	2600000, 2700000, 2800000, 2900000, 3000000, 3100000, 3200000, 3300000,
-> +};
-> +
-> +static int pf1550_set_ramp_delay(struct regulator_dev *rdev, int ramp_delay)
+> +static irqreturn_t pf1550_onkey_irq_handler(int irq, void *data)
 > +{
-> +	int id = rdev_get_id(rdev);
-> +	unsigned int ramp_bits = 0;
-> +	int ret;
+> +	struct onkey_drv_data *onkey = data;
+> +	struct platform_device *pdev = to_platform_device(onkey->dev);
+> +	int i, state, irq_type = -1;
 > +
-> +	if (id > PF1550_VREFDDR)
-> +		return -EACCES;
-> +
-> +	if (ramp_delay < 0 || ramp_delay > 6250)
-> +		return -EINVAL;
-> +
-> +	ramp_delay = 6250 / ramp_delay;
-> +	ramp_bits = ramp_delay >> 1;
-> +
-> +	ret = regmap_update_bits(rdev->regmap, rdev->desc->vsel_reg + 4, 0x10,
-> +				 ramp_bits << 4);
-> +	if (ret < 0)
-> +		dev_err(&rdev->dev, "ramp failed, err %d\n", ret);
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct regulator_ops pf1550_sw1_ops = {
-> +	.list_voltage = regulator_list_voltage_table,
-> +	.set_voltage_sel = regulator_set_voltage_sel_regmap,
-> +	.get_voltage_sel = regulator_get_voltage_sel_regmap,
-> +	.set_voltage_time_sel = regulator_set_voltage_time_sel,
-> +	.set_ramp_delay = pf1550_set_ramp_delay,
-> +};
-> +
-> +static const struct regulator_ops pf1550_sw2_ops = {
-> +	.list_voltage = regulator_list_voltage_linear,
-> +	.set_voltage_sel = regulator_set_voltage_sel_regmap,
-> +	.get_voltage_sel = regulator_get_voltage_sel_regmap,
-> +	.set_voltage_time_sel = regulator_set_voltage_time_sel,
-> +	.set_ramp_delay = pf1550_set_ramp_delay,
-> +};
-> +
-> +static const struct regulator_ops pf1550_ldo1_ops = {
-> +	.enable = regulator_enable_regmap,
-> +	.disable = regulator_disable_regmap,
-> +	.is_enabled = regulator_is_enabled_regmap,
-> +	.list_voltage = regulator_list_voltage_table,
-> +	.map_voltage = regulator_map_voltage_ascend,
-> +	.set_voltage_sel = regulator_set_voltage_sel_regmap,
-> +	.get_voltage_sel = regulator_get_voltage_sel_regmap,
-> +};
-> +
-> +static const struct regulator_ops pf1550_ldo2_ops = {
-> +	.enable = regulator_enable_regmap,
-> +	.disable = regulator_disable_regmap,
-> +	.is_enabled = regulator_is_enabled_regmap,
-> +	.list_voltage = regulator_list_voltage_linear,
-> +	.set_voltage_sel = regulator_set_voltage_sel_regmap,
-> +	.get_voltage_sel = regulator_get_voltage_sel_regmap,
-> +};
-> +
-> +static const struct regulator_ops pf1550_fixed_ops = {
-> +	.enable = regulator_enable_regmap,
-> +	.disable = regulator_disable_regmap,
-> +	.is_enabled = regulator_is_enabled_regmap,
-> +	.list_voltage = regulator_list_voltage_linear,
-> +};
-> +
-> +#define PF_VREF(_chip, match, _name, voltage)	{	\
-> +	.desc = {	\
-> +		.name = #_name,	\
-> +		.of_match = of_match_ptr(match),	\
-> +		.regulators_node = of_match_ptr("regulators"),	\
-> +		.n_voltages = 1,	\
-> +		.ops = &pf1550_fixed_ops,	\
-> +		.type = REGULATOR_VOLTAGE,	\
-> +		.id = _chip ## _ ## _name,	\
-> +		.owner = THIS_MODULE,	\
-> +		.min_uV = (voltage),	\
-> +		.enable_reg = _chip ## _PMIC_REG_ ## _name ## _CTRL, \
-> +		.enable_mask = 0x1,	\
-> +	},	\
-> +	.stby_reg = _chip ## _PMIC_REG_ ## _name ## _CTRL, \
-> +	.stby_mask = 0x2,	\
-> +}
-> +
-> +#define PF_SW1(_chip, match, _name, mask, voltages)	{	\
-> +	.desc = {	\
-> +		.name = #_name,	\
-> +		.of_match = of_match_ptr(match),	\
-> +		.regulators_node = of_match_ptr("regulators"),	\
-> +		.n_voltages = ARRAY_SIZE(voltages),	\
-> +		.ops = &pf1550_sw1_ops,	\
-> +		.type = REGULATOR_VOLTAGE,	\
-> +		.id = _chip ## _ ## _name,	\
-> +		.owner = THIS_MODULE,	\
-> +		.volt_table = voltages,	\
-> +		.vsel_reg = _chip ## _PMIC_REG_ ## _name ## _VOLT, \
-> +		.vsel_mask = (mask),	\
-> +	},	\
-> +	.stby_reg = _chip ## _PMIC_REG_ ## _name ## _STBY_VOLT,	\
-> +	.stby_mask = (mask),	\
-> +}
-> +
-> +#define PF_SW3(_chip, match, _name, min, max, mask, step)	{	\
-> +	.desc = {	\
-> +		.name = #_name,	\
-> +		.of_match = of_match_ptr(match),	\
-> +		.regulators_node = of_match_ptr("regulators"),	\
-> +		.n_voltages = ((max) - (min)) / (step) + 1,	\
-> +		.ops = &pf1550_sw2_ops,	\
-> +		.type = REGULATOR_VOLTAGE,	\
-> +		.id = _chip ## _ ## _name,	\
-> +		.owner = THIS_MODULE,	\
-> +		.min_uV = (min),	\
-> +		.uV_step = (step),	\
-> +		.vsel_reg = _chip ## _PMIC_REG_ ## _name ## _VOLT, \
-> +		.vsel_mask = (mask),	\
-> +	},	\
-> +	.stby_reg = _chip ## _PMIC_REG_ ## _name ## _STBY_VOLT,	\
-> +	.stby_mask = (mask),	\
-> +}
-> +
-> +#define PF_LDO1(_chip, match, _name, mask, voltages)	{	\
-> +	.desc = {	\
-> +		.name = #_name,	\
-> +		.of_match = of_match_ptr(match),	\
-> +		.regulators_node = of_match_ptr("regulators"),	\
-> +		.n_voltages = ARRAY_SIZE(voltages),	\
-> +		.ops = &pf1550_ldo1_ops,	\
-> +		.type = REGULATOR_VOLTAGE,	\
-> +		.id = _chip ## _ ## _name,	\
-> +		.owner = THIS_MODULE,	\
-> +		.volt_table = voltages, \
-> +		.vsel_reg = _chip ## _PMIC_REG_ ## _name ## _VOLT, \
-> +		.vsel_mask = (mask),	\
-> +		.enable_reg = _chip ## _PMIC_REG_ ## _name ## _CTRL, \
-> +		.enable_mask = 0x1,	\
-> +	},	\
-> +	.stby_reg = _chip ## _PMIC_REG_ ## _name ## _CTRL, \
-> +	.stby_mask = 0x2,	\
-> +}
-> +
-> +#define PF_LDO2(_chip, match, _name, mask, min, max, step)	{	\
-> +	.desc = {	\
-> +		.name = #_name,	\
-> +		.of_match = of_match_ptr(match),	\
-> +		.regulators_node = of_match_ptr("regulators"),	\
-> +		.n_voltages = ((max) - (min)) / (step) + 1,	\
-> +		.ops = &pf1550_ldo2_ops,	\
-> +		.type = REGULATOR_VOLTAGE,	\
-> +		.id = _chip ## _ ## _name,	\
-> +		.owner = THIS_MODULE,	\
-> +		.min_uV = (min),	\
-> +		.uV_step = (step),	\
-> +		.vsel_reg = _chip ## _PMIC_REG_ ## _name ## _VOLT, \
-> +		.vsel_mask = (mask),	\
-> +		.enable_reg = _chip ## _PMIC_REG_ ## _name ## _CTRL, \
-> +		.enable_mask = 0x1,	\
-> +	},	\
-> +	.stby_reg = _chip ## _PMIC_REG_ ## _name ## _CTRL, \
-> +	.stby_mask = 0x2,	\
-> +}
-> +
-> +static struct pf1550_desc pf1550_regulators[] = {
-> +	PF_SW3(PF1550, "sw1", SW1, 600000, 1387500, 0x3f, 12500),
-> +	PF_SW3(PF1550, "sw2", SW2, 600000, 1387500, 0x3f, 12500),
-> +	PF_SW3(PF1550, "sw3", SW3, 1800000, 3300000, 0xf, 100000),
-> +	PF_VREF(PF1550, "vrefddr", VREFDDR, 1200000),
-> +	PF_LDO1(PF1550, "ldo1", LDO1, 0x1f, pf1550_ldo13_volts),
-> +	PF_LDO2(PF1550, "ldo2", LDO2, 0xf, 1800000, 3300000, 100000),
-> +	PF_LDO1(PF1550, "ldo3", LDO3, 0x1f, pf1550_ldo13_volts),
-> +};
-> +
-> +static irqreturn_t pf1550_regulator_irq_handler(int irq, void *data)
-> +{
-> +	struct pf1550_regulator_info *info = data;
-> +	struct device *dev = info->dev;
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +	int i, irq_type = -1;
-> +	unsigned int event;
-> +
-> +	for (i = 0; i < PF1550_REGULATOR_IRQ_NR; i++)
+> +	for (i = 0; i < PF1550_ONKEY_IRQ_NR; i++)
 > +		if (irq == platform_get_irq(pdev, i))
 > +			irq_type = i;
 > +
 > +	switch (irq_type) {
-> +	/* The _LS interrupts indicate over-current event. The _HS interrupts
-> +	 * which are more accurate and can detect catastrophic faults, issue
-> +	 * an error event. The current limit FAULT interrupt is similar to the
-> +	 * _HS'
-> +	 */
-> +	case PF1550_PMIC_IRQ_SW1_LS:
-> +	case PF1550_PMIC_IRQ_SW2_LS:
-> +	case PF1550_PMIC_IRQ_SW3_LS:
-> +		event = REGULATOR_EVENT_OVER_CURRENT_WARN;
-> +		for (i = 0; i < PF1550_MAX_REGULATOR; i++)
-> +			if (!strcmp(rdev_get_name(info->rdevs[i]), "SW3"))
-> +				regulator_notifier_call_chain(info->rdevs[i],
-> +							      event, NULL);
+> +	case PF1550_ONKEY_IRQ_PUSHI:
+> +		state = 0;
 > +		break;
-> +	case PF1550_PMIC_IRQ_SW1_HS:
-> +	case PF1550_PMIC_IRQ_SW2_HS:
-> +	case PF1550_PMIC_IRQ_SW3_HS:
-> +		event = REGULATOR_EVENT_OVER_CURRENT;
-> +		for (i = 0; i < PF1550_MAX_REGULATOR; i++)
-> +			if (!strcmp(rdev_get_name(info->rdevs[i]), "SW3"))
-> +				regulator_notifier_call_chain(info->rdevs[i],
-> +							      event, NULL);
-> +		break;
-> +	case PF1550_PMIC_IRQ_LDO1_FAULT:
-> +	case PF1550_PMIC_IRQ_LDO2_FAULT:
-> +	case PF1550_PMIC_IRQ_LDO3_FAULT:
-> +		event = REGULATOR_EVENT_OVER_CURRENT;
-> +		for (i = 0; i < PF1550_MAX_REGULATOR; i++)
-> +			if (!strcmp(rdev_get_name(info->rdevs[i]), "LDO3"))
-> +				regulator_notifier_call_chain(info->rdevs[i],
-> +							      event, NULL);
-> +		break;
-> +	case PF1550_PMIC_IRQ_TEMP_110:
-> +	case PF1550_PMIC_IRQ_TEMP_125:
-> +		event = REGULATOR_EVENT_OVER_TEMP;
-> +		for (i = 0; i < PF1550_MAX_REGULATOR; i++)
-> +			regulator_notifier_call_chain(info->rdevs[i],
-> +						      event, NULL);
+> +	case PF1550_ONKEY_IRQ_1SI:
+> +	case PF1550_ONKEY_IRQ_2SI:
+> +	case PF1550_ONKEY_IRQ_3SI:
+> +	case PF1550_ONKEY_IRQ_4SI:
+> +	case PF1550_ONKEY_IRQ_8SI:
+> +		state = 1;
 > +		break;
 > +	default:
-> +		dev_err(dev, "regulator interrupt: irq %d occurred\n",
+> +		dev_err(onkey->dev, "onkey interrupt: irq %d occurred\n",
 > +			irq_type);
+> +		return IRQ_HANDLED;
 > +	}
+> +
+> +	input_event(onkey->input, EV_KEY, KEY_POWER, state);
+> +	input_sync(onkey->input);
 > +
 > +	return IRQ_HANDLED;
 > +}
 > +
-> +static int pf1550_regulator_probe(struct platform_device *pdev)
+> +static int pf1550_onkey_probe(struct platform_device *pdev)
 > +{
-> +	const struct pf1550_dev *pf1550 = dev_get_drvdata(pdev->dev.parent);
-> +	struct pf1550_regulator_info *info;
-> +	int i, irq = -1, ret = 0;
-> +	struct regulator_config config = { };
+> +	struct onkey_drv_data *onkey;
+> +	struct input_dev *input;
+> +	int i, irq, error;
 > +
-> +	info = devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
-> +	if (!info)
+> +	onkey = devm_kzalloc(&pdev->dev, sizeof(*onkey), GFP_KERNEL);
+> +	if (!onkey)
 > +		return -ENOMEM;
 > +
-> +	config.regmap = dev_get_regmap(pf1550->dev, NULL);
-> +	if (!config.regmap)
+> +	onkey->dev = &pdev->dev;
+> +
+> +	onkey->pf1550 = dev_get_drvdata(pdev->dev.parent);
+> +	if (!onkey->pf1550->regmap)
 > +		return dev_err_probe(&pdev->dev, -ENODEV,
-> +				     "failed to get parent regmap\n");
+> +				     "failed to get regmap\n");
 > +
-> +	config.dev = pf1550->dev;
-> +	config.regmap = pf1550->regmap;
-> +	info->dev = &pdev->dev;
-> +	info->pf1550 = pf1550;
+> +	onkey->wakeup = device_property_read_bool(pdev->dev.parent,
+> +						  "wakeup-source");
 > +
-> +	memcpy(info->regulator_descs, pf1550_regulators,
-> +	       sizeof(info->regulator_descs));
+> +	input = devm_input_allocate_device(&pdev->dev);
+> +	if (!input)
+> +		return dev_err_probe(&pdev->dev, -ENOMEM,
+> +				     "failed to allocate the input device\n");
 > +
-> +	for (i = 0; i < ARRAY_SIZE(pf1550_regulators); i++) {
-> +		struct regulator_desc *desc;
-> +		unsigned int val;
+> +	input->name = pdev->name;
+> +	input->phys = "pf1550-onkey/input0";
+> +	input->id.bustype = BUS_HOST;
 > +
-> +		desc = &info->regulator_descs[i].desc;
+> +	input_set_capability(input, EV_KEY, KEY_POWER);
 > +
-> +		if (desc->id == PF1550_SW2) {
-> +			pf1550_read_otp(info->pf1550, 0x1f, &val);
-
-I suggest don't export pf1550_read_otp() function, you can add a field at
-top pf1550_dev like 'dvs_enb', here just check if (pf1550->dvs_enb).
-
-Frank
-
-> +			/* OTP_SW2_DVS_ENB == 1? */
-> +			if ((val & 0x8)) {
-> +				desc->volt_table = pf1550_sw12_volts;
-> +				desc->n_voltages = ARRAY_SIZE(pf1550_sw12_volts);
-> +				desc->ops = &pf1550_sw1_ops;
-> +			}
-> +		}
+> +	onkey->input = input;
+> +	platform_set_drvdata(pdev, onkey);
 > +
-> +		info->rdevs[i] = devm_regulator_register(&pdev->dev, desc,
-> +							 &config);
-> +		if (IS_ERR(info->rdevs[i]))
-> +			return dev_err_probe(&pdev->dev,
-> +					     PTR_ERR(info->rdevs[i]),
-> +					     "failed to initialize regulator-%d\n",
-> +					     i);
-> +	}
-> +
-> +	platform_set_drvdata(pdev, info);
-> +
-> +	for (i = 0; i < PF1550_REGULATOR_IRQ_NR; i++) {
+> +	for (i = 0; i < PF1550_ONKEY_IRQ_NR; i++) {
 > +		irq = platform_get_irq(pdev, i);
 > +		if (irq < 0)
 > +			return irq;
 > +
-> +		ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-> +						pf1550_regulator_irq_handler,
-> +						IRQF_NO_SUSPEND,
-> +						"pf1550-regulator", info);
-> +		if (ret)
-> +			return dev_err_probe(&pdev->dev, ret,
+> +		error = devm_request_threaded_irq(&pdev->dev, irq, NULL,
+> +						  pf1550_onkey_irq_handler,
+> +						  IRQF_NO_SUSPEND,
+> +						  "pf1550-onkey", onkey);
+> +		if (error)
+> +			return dev_err_probe(&pdev->dev, error,
 > +					     "failed: irq request (IRQ: %d)\n",
 > +					     i);
 > +	}
 > +
+> +	error = input_register_device(input);
+> +	if (error)
+> +		return dev_err_probe(&pdev->dev, error,
+> +				     "failed to register input device\n");
+> +
+> +	device_init_wakeup(&pdev->dev, onkey->wakeup);
+> +
 > +	return 0;
 > +}
 > +
-> +static const struct platform_device_id pf1550_regulator_id[] = {
-> +	{ "pf1550-regulator", 0 },
+> +static int pf1550_onkey_suspend(struct device *dev)
+> +{
+> +	struct platform_device *pdev = to_platform_device(dev);
+> +	struct onkey_drv_data *onkey = platform_get_drvdata(pdev);
+> +	int i, irq;
+> +
+> +	if (!device_may_wakeup(&pdev->dev))
+> +		regmap_write(onkey->pf1550->regmap,
+> +			     PF1550_PMIC_REG_ONKEY_INT_MASK0,
+> +			     ONKEY_IRQ_PUSHI | ONKEY_IRQ_1SI | ONKEY_IRQ_2SI |
+> +			     ONKEY_IRQ_3SI | ONKEY_IRQ_4SI | ONKEY_IRQ_8SI);
+> +	else
+> +		for (i = 0; i < PF1550_ONKEY_IRQ_NR; i++) {
+> +			irq = platform_get_irq(pdev, i);
+> +			if (irq > 0)
+> +				enable_irq_wake(irq);
+> +		}
+> +
+> +	return 0;
+> +}
+> +
+> +static int pf1550_onkey_resume(struct device *dev)
+> +{
+> +	struct platform_device *pdev = to_platform_device(dev);
+> +	struct onkey_drv_data *onkey = platform_get_drvdata(pdev);
+> +	int i, irq;
+> +
+> +	if (!device_may_wakeup(&pdev->dev))
+> +		regmap_write(onkey->pf1550->regmap,
+> +			     PF1550_PMIC_REG_ONKEY_INT_MASK0,
+> +			     ~((u8)(ONKEY_IRQ_PUSHI | ONKEY_IRQ_1SI |
+> +			     ONKEY_IRQ_2SI | ONKEY_IRQ_3SI | ONKEY_IRQ_4SI |
+> +			     ONKEY_IRQ_8SI)));
+> +	else
+> +		for (i = 0; i < PF1550_ONKEY_IRQ_NR; i++) {
+> +			irq = platform_get_irq(pdev, i);
+> +			if (irq > 0)
+> +				disable_irq_wake(irq);
+> +		}
+> +
+> +	return 0;
+> +}
+> +
+> +static SIMPLE_DEV_PM_OPS(pf1550_onkey_pm_ops, pf1550_onkey_suspend,
+> +			 pf1550_onkey_resume);
+> +
+> +static const struct platform_device_id pf1550_onkey_id[] = {
+> +	{ "pf1550-onkey", 0 },
 > +	{ /* sentinel */ }
 > +};
-> +MODULE_DEVICE_TABLE(platform, pf1550_regulator_id);
+> +MODULE_DEVICE_TABLE(platform, pf1550_onkey_id);
 > +
-> +static struct platform_driver pf1550_regulator_driver = {
+> +static struct platform_driver pf1550_onkey_driver = {
 > +	.driver = {
-> +		   .name = "pf1550-regulator",
-> +		   },
-> +	.probe = pf1550_regulator_probe,
-> +	.id_table = pf1550_regulator_id,
+> +		.name = "pf1550-onkey",
+> +		.pm   = pm_sleep_ptr(&pf1550_onkey_pm_ops),
+> +	},
+> +	.probe = pf1550_onkey_probe,
+> +	.id_table = pf1550_onkey_id,
 > +};
-> +module_platform_driver(pf1550_regulator_driver);
+> +module_platform_driver(pf1550_onkey_driver);
 > +
-> +MODULE_DESCRIPTION("NXP PF1550 regulator driver");
-> +MODULE_AUTHOR("Robin Gong <yibin.gong@freescale.com>");
+> +MODULE_AUTHOR("Freescale Semiconductor");
+> +MODULE_DESCRIPTION("PF1550 onkey Driver");
 > +MODULE_LICENSE("GPL");
 >
 > --
