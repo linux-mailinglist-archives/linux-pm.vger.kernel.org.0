@@ -1,114 +1,126 @@
-Return-Path: <linux-pm+bounces-28426-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28427-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AB90AD4866
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 04:11:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E624AD48C6
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 04:19:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6DEAD188E921
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 02:11:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADAEB17731E
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 02:18:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2D8B1714AC;
-	Wed, 11 Jun 2025 02:11:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4322187858;
+	Wed, 11 Jun 2025 02:18:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WrwnM+C5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [160.30.148.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AAC3188A0E;
-	Wed, 11 Jun 2025 02:11:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.30.148.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BFFF16D4E6
+	for <linux-pm@vger.kernel.org>; Wed, 11 Jun 2025 02:18:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749607870; cv=none; b=ua8m4UvGEky5QdLVSmGPsNTrDD32Wi0kcrF7RRN6NTv7xuzqK5OyW34e6PoYUyqNoOO75My2N1SVKDnK+boMPUslIiMDCDm9q8y9bigI1EdbScOfNZDo2kKMk6zB+9qlQADZNTtaUW7HMDrVVbsqom01/Xnq9OkMhvjKJMty8qU=
+	t=1749608313; cv=none; b=S+rIARV74OvPho+yUKgAog09TEHmS0iRNRIouAG/We201CdTDbyTvD0jXTmdJH0lhXLTQa1/JvDezqsXTu2xXZKGMQL3lI15KTUN0EBmzx+gIqrfDnCayDylXNxYaZiLbZWphjcuIa39oBWqcPLLczeOUosHSb8rTmphcL456yM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749607870; c=relaxed/simple;
-	bh=V5UN5NhiNun71JzA8xAksH+w0p9JSGOBeaRrap2XsUI=;
-	h=Date:Message-ID:In-Reply-To:References:Mime-Version:From:To:Cc:
-	 Subject:Content-Type; b=BDNfhOQqNiZRNa+oUkqqT6EZUj5oCTRJq8q2IrC6lOHgceWoxBhpazvRFaO/Vldhyp9spyouvKj/pD8R0vGUCw64I0HGF6BrC1/lQHzVQg+sTs2AeHq++DUXH0Sqj2lgadXtnYbvtHKR1muXNE16HOz11gaDibfBg4sUoGoBnTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn; spf=pass smtp.mailfrom=zte.com.cn; arc=none smtp.client-ip=160.30.148.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mxhk.zte.com.cn (FangMail) with ESMTPS id 4bH8K31lSsz5B1Gv;
-	Wed, 11 Jun 2025 10:11:03 +0800 (CST)
-Received: from xaxapp05.zte.com.cn ([10.99.98.109])
-	by mse-fl1.zte.com.cn with SMTP id 55B2AotE031617;
-	Wed, 11 Jun 2025 10:10:50 +0800 (+08)
-	(envelope-from shao.mingyin@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-	by mapi (Zmail) with MAPI id mid32;
-	Wed, 11 Jun 2025 10:10:52 +0800 (CST)
-Date: Wed, 11 Jun 2025 10:10:52 +0800 (CST)
-X-Zmail-TransId: 2af96848e5ac313-fd045
-X-Mailer: Zmail v1.0
-Message-ID: <202506111010521118VJaiO_pb0rD7b3daxqox@zte.com.cn>
-In-Reply-To: <6b9d5edf-7186-4d7b-814c-5c3f306c68db@kernel.org>
-References: 20250610193403161UQCV5cVGXCRVDheTb7jvi@zte.com.cn,6b9d5edf-7186-4d7b-814c-5c3f306c68db@kernel.org
+	s=arc-20240116; t=1749608313; c=relaxed/simple;
+	bh=A1VFeAvhgOC1yMtN7yIyjPHN3d7Ti6ibq7gtPR6jl6U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UURn4pO0dW4im/CTHF91GSDmFC274KYKnXh1ABDz6nGaUsNpgqfInbhrGhWXDPvVb1VCuFwu/XwvwOfupBH8tryyczwTcctKbUFvFrKgIVVijSNbkkZ0H42q7CxHuaa/ciKlYTrnOAsE/R4SB6tWiGHgpL9IMwLeboZCCE0N5Ro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WrwnM+C5; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3137c20213cso3450807a91.3
+        for <linux-pm@vger.kernel.org>; Tue, 10 Jun 2025 19:18:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1749608311; x=1750213111; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BVzPT+QBa+W+93Jw6CnS8ATXdFQx76rd+QJAPEuwELM=;
+        b=WrwnM+C5gS3K6h39OPo0xbroKtmYSKvrQTB8inA/cHMPjFxA3/Xck8+dz0nAQEJcpj
+         nGH9hzS50hH1T+xQSupeRsZYD8+oIRHJs4vPOGiDwBfgU1GMR/EyUj6IW5MuvruIRqIm
+         20y4n4U1P2yHs3FgcMTKFEqEjgyXAOVVb+AxKcGPM8CXffSCTYXvlmcoO6XjtXhhTxjk
+         o3ZaAvX57KMGbHD6WwSZicKwQlExmARUZ2inZLRABHBV/KnhOjJlOAmakrD5ruhlXpPt
+         0Qi09WfF6G2hrRkqAX13zrpxstKI+Sii3ilY5p4X9Kk7GftAWgvb5K6jx6muolQUQlhj
+         hFgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749608311; x=1750213111;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BVzPT+QBa+W+93Jw6CnS8ATXdFQx76rd+QJAPEuwELM=;
+        b=BY9T/qK1yvYHwam2rg340oSlTH6mkH4Sne9cih7/ytAfeZz0ljmjtp2uA41/Y/fHAm
+         xarxxCl5CCicvthkvQhJ6tRKkp/3TFAiXR4WPD/IgpLO4XO3Om5TRbKSVXG5K3PZHnTJ
+         E5IiO6HNOVz8fSbIXiyFQAgXD7L8hPlN5s/2Mw1jO9/R162L7V+MIBukMV/zkl2ikp3E
+         hBVNPLAAmipRbB3uV7pN1F3/KhxqqYylKd7DWn0e1I18wILDrMX1ofzcCFCItDx6MFvI
+         iJkkQqcQ0c8OWx63eRVny3+MXPf+kpR6nifTCKVCa8WRmUcVsGN2QARJKogi8dAao3pA
+         lG7g==
+X-Forwarded-Encrypted: i=1; AJvYcCWUY4sofk+sr4IPy4QHTrLoi2xTGQLIXVFzkKtwXMm3lObhcuYdHktJXNlLQC90/A8vsfDG5aqdwA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzz1thwHVARrUZ9DsjQdxiBtNBVrMDgxJ2OqwJHnBVsXvjUBnaH
+	fgL9Mbhb1SkDm/UwHzrnKVZPaCfEntE2RGEPHxxpwGwDyaSZcl77sbdgbS9Ron/3LpA=
+X-Gm-Gg: ASbGncvo4nbL08WP1M8CF+m2RjcbmBzHuuU5TBx/x0D2bEURtv03SbF8abHLkKpYeY3
+	+imdzJKy8m9N0/1miYMFcGUSOyAu+agDwrGcG59pLOSjPnuYmzo7Yd9keDQm5TNBUFzUhXkjX/c
+	2sfiRc/9JAaeAZ5v7X42hL3NbTtxiScxu49gZ5M/0z6LB5d4NmnamtEjHw6aWkTc2LmLZEXv8QB
+	1H3zGCco0vz9Cv3EGXSQHJd7t3IgsDEu8SCrI+WvWP29Vp1g6m+WjTdaOLKgTX626DHC/FFNHVU
+	8RYbq+xsBxwFNxlcQDE59I+zV+1TKQhjjlB1DW890HSKciwVtXta1fyINWkJRmDS6xrUJMfkaA=
+	=
+X-Google-Smtp-Source: AGHT+IExhs5eYhf6tHwalRmCPZodGm+T8pYXC1tEHKyqqYin+EC/fkXPzgbCpRMDAYA8+l44SvhlXw==
+X-Received: by 2002:a17:90b:1dcf:b0:311:d28a:73ef with SMTP id 98e67ed59e1d1-313b1ef5898mr1307915a91.10.1749608311204;
+        Tue, 10 Jun 2025 19:18:31 -0700 (PDT)
+Received: from localhost ([122.172.81.72])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-313b2141e6asm256489a91.42.2025.06.10.19.18.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jun 2025 19:18:30 -0700 (PDT)
+Date: Wed, 11 Jun 2025 07:48:28 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Benno Lossin <lossin@kernel.org>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Danilo Krummrich <dakr@kernel.org>, Gary Guo <gary@garyguo.net>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Trevor Gross <tmgross@umich.edu>, Yury Norov <yury.norov@gmail.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH V3 0/3] rust: Introduce CpuId and fix cpumask doctest
+Message-ID: <20250611021828.fbdyugkxz4axz67b@vireshk-i7>
+References: <cover.1749554685.git.viresh.kumar@linaro.org>
+ <CANiq72mWAP5ZuOGTXZ1=zTOR_Y2YuqV2i8PberOeWOkx3VL0ew@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-From: <shao.mingyin@zte.com.cn>
-To: <krzk@kernel.org>
-Cc: <ulf.hansson@linaro.org>, <changhuang.liang@starfivetech.com>,
-        <geert+renesas@glider.be>, <magnus.damm@gmail.com>, <heiko@sntech.de>,
-        <alim.akhtar@samsung.com>, <walker.chen@starfivetech.com>,
-        <sebastian.reichel@collabora.com>, <detlev.casanova@collabora.com>,
-        <finley.xiao@rock-chips.com>, <shawn.lin@rock-chips.com>,
-        <pgwipeout@gmail.com>, <qiu.yutan@zte.com.cn>,
-        <linux-pm@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <yang.yang29@zte.com.cn>,
-        <xu.xin16@zte.com.cn>, <yang.tao172@zte.com.cn>,
-        <ye.xingchen@zte.com.cn>
-Subject: =?UTF-8?B?UmU6IFtQQVRDSCB2Ml0gcG1kb21haW46IFVzZSBzdHJfZW5hYmxlX2Rpc2FibGUtbGlrZSBoZWxwZXJz?=
-Content-Type: text/plain;
-	charset="UTF-8"
-X-MAIL:mse-fl1.zte.com.cn 55B2AotE031617
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6848E5B7.000/4bH8K31lSsz5B1Gv
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72mWAP5ZuOGTXZ1=zTOR_Y2YuqV2i8PberOeWOkx3VL0ew@mail.gmail.com>
 
->> From: Shao Mingyin <shao.mingyin@zte.com.cn>
->> 
->> Replace ternary (condition ? "enable" : "disable") syntax and ternary
->> (condition ? "on" : "off") syntax with helpers from
->> string_choices.h because:
->> 1. Simple function call with one argument is easier to read.  Ternary
->>    operator has three arguments and with wrapping might lead to quite
->>    long code.
->> 2. Is slightly shorter thus also easier to read.
->> 3. It brings uniformity in the text - same string.
->> 4. Allows deduping by the linker, which results in a smaller binary
->>    file.
->
->So you just taken everything from the same my patch - even entire commit
->subject and commit description - and sent it as yours?
->
->https://lore.kernel.org/all/20250114203547.1013010-1-krzysztof.kozlowski@linaro.org/
->
->oh my, if doing EXACTLY the same keep original authorship - the From and
->Sob fields.
->
->Best regards,
->Krzysztof
-Dear Krzysztof,
-Thank you for your suggestions. I have carefully read your advice and
-made adjustments to the patches accordingly. I used your patch as a
-reference standard, not just taking everything from the same your patch.
+On 10-06-25, 19:10, Miguel Ojeda wrote:
+> On Tue, Jun 10, 2025 at 3:22 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > Here is another attempt at fixing the cpumask doctest. This series creates a new
+> > abstraction `CpuId`, which is used to write a cleaner cpumask example which
+> > doesn't fail in those corner cases.
+> >
+> > Rebased over v6.16-rc1 + [1].
+> 
+> Given this is growing, should we apply something trivial right away as
+> a fix meanwhile? Or are you planning to send this as a fix during the
+> -rcs?
 
-Based on your suggestion, I have consolidated the series of patches for
-the pmdomain driver into a single patch. Additionally, following
-@changhuang's suggestion, I have supplemented the patch for
-drivers/pmdomain/starfive/jh71xx-pmu.c.
+Yeah, I am planning to send this for rc2 or rc3.
 
-If there's anything inappropriate in this patch, I sincerely apologize.
-
-Best regards,
-Mingyin
+-- 
+viresh
 
