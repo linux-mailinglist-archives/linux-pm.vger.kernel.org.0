@@ -1,295 +1,214 @@
-Return-Path: <linux-pm+bounces-28453-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28455-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E924AAD4F72
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 11:11:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C191AD4FE9
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 11:34:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43E55176D27
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 09:11:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53BB53A420C
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 09:33:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55999256C7C;
-	Wed, 11 Jun 2025 09:11:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F6C72528F3;
+	Wed, 11 Jun 2025 09:33:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="kvJCsUXa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R1sBmeGv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F881253F07
-	for <linux-pm@vger.kernel.org>; Wed, 11 Jun 2025 09:11:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF55E482EB;
+	Wed, 11 Jun 2025 09:33:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749633089; cv=none; b=LxCAART/db/Y3D4g++aF4kBTn+hUq8zd0mjka4IWmMcf58TXnxzaAKfyzr89EhSx44IKIvn0mfItd5Tc6uLmLUR7Pb0KHYwX50HrHgVTKF5lwrEK9QybbwxOQRvlTSoHRVss2hO3TZAO4t0lN9tI+MEpsLfInGY56dX8/Srp05o=
+	t=1749634409; cv=none; b=aKDVpDApF/y2JMXWKCF5UjUwhZToPM9YftJJKHNaCQ/BmOtPmyq17zARVvsG83QcCTvedKd4DkNxtbClHxG724wb3Zd3Y47OURvRqX9/RK7XZ5dEdrACKleaRvYdtpdEvTMmVQSZggaaSVqq/PgjWmFzL90OxpbDt0dIzL0P6Tw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749633089; c=relaxed/simple;
-	bh=svnshkck4Z/6Otk3WH/zhHTAY/iPBFU71gzx4y6fQ7o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BG9c2mMGWCoFAPgSjdQv108PLefFeOTVpUveRhOYPSl3TlxAVsywjuozNjdyYIKIWTPoFN+E8sGEbTi/SkcRHVSwqIJSQ+QgjxJrQCCGVP0pkq1clWH17Zjwjq9P9J47D2zXOsZx4OK78ZXbOEKXBbMMBcxAlb+AyRftQvNzRYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=kvJCsUXa; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-ade5ca8bc69so447891466b.0
-        for <linux-pm@vger.kernel.org>; Wed, 11 Jun 2025 02:11:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1749633085; x=1750237885; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I9so2D1SFcGeC3ZBssCRYBd2vbdhM7v92BxxUWR2mkU=;
-        b=kvJCsUXaucvm3CkYxyGTQuYnJlVGW/P2jNgDNN77hsbMlq5r5pNusHHB8IFzCLcXui
-         GrMDz4apQn8hLWohB8cGhhg2e/HaUubJ83zjpZnP0kXlzJ1sAND49EO89RSndUJz2gCy
-         29Qh1Hb4yau4R5U/oKoDVLJrg2P6vrvXwdne+HAkVu8PCT25SxNd20jFrurYeq2oAOpX
-         xuaNdgEaaStWaL3zUxLRjGSuJxDuOcwKBsRMkNLQOiAUGfsf2wZD93sQsBYwMTHhBHeL
-         TFpny7YKZtJ3j0N9i8urFCsLbLZsujvQEF+DREzLiP+XLctZqxPJ1k5bbWBgXchtb+rH
-         t9uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749633085; x=1750237885;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I9so2D1SFcGeC3ZBssCRYBd2vbdhM7v92BxxUWR2mkU=;
-        b=u80ZF7QgvRUJJdmSLy/ZHftryE7uK/KrY2h3a2/4+lUSP4b5a4093oI113vbZJObyW
-         +UEXGCbXuX4ZTDVxgAMTOAeRW8oF6eNXoT83UHlCJ5JDSpv6K9CjkwD94f3+brLSOfpT
-         6d1DW5nTVHfM+QSR2XEQhVQpRov8GiXv/KQ/nqM9+VTg1f6ggo85mla0H4kT0ryhoKBM
-         v3GsUdNbSPjkG2OioeQswMw1+m5sQ44ogy+Rq+Ecm67Zdu2xU1pIrhRFu01R0Ogjphiz
-         wPsrp2CD11PL706EA4vftucpQggmlXSGIU3Lw6Vo9OQ/pLKHZtVuw998+XN1JNstLP4X
-         SOGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUaSIOlgo2F6rZ5fScr/BDYNcYJzEOhQu4r1cA68zhrLjAKqxvlFMf+VN7odvQLmq9ltdljlRW/Kg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzg+KCqlJ217zpIf6Fha5eor8duQaXoKefmnYCDmP+4mj2a/aUd
-	63wD0TeIo/pDF63tqZqoOnM5NTqOi7QMulRLcs567+HKOPMGUzZDfbOC/porPudGKXDdcnwjbXo
-	gfkRY
-X-Gm-Gg: ASbGncsAwCsJlkZa5ljoabE6GYYJTXtmz7sb3nYJGo+P4GQSqG2bAadNeXMGPVORSvJ
-	+X8gtimfbB+fy1Szy1pztNNoY3+mNyanSXRszrSkklm0XB5cLsGJceGXR99zxZJYWfAAbO5JlrC
-	MXbg2rLEQ2lvzqAA6c4lldJajSdqA0nhYk9zZz9muKMlssC6XiNBlMV/FxX1umbR2lgeDEmu0yK
-	dhdXRY9RpiIzkuv1+yg6khs57YKB3B6sg+xwv8hpoqeVq431E6/Xe2DJDIEE3yP1vJ40we2cXzv
-	HDwHD6D/s5t4+vXTqAvqtRSdGxhsznrWClyzAWyT1ZCR4FdmAgU4ZR00sXp4dCJe0qx+CNs=
-X-Google-Smtp-Source: AGHT+IEvOSlxHoXGncKzxzRqRXyipVGyqcvO/ntMV8/CABeJ/b3ILPHrv+DfGj4vZCTUe7oABVL/0w==
-X-Received: by 2002:a17:907:97d1:b0:adb:413e:2a2f with SMTP id a640c23a62f3a-ade893db39fmr225242366b.9.1749633070215;
-        Wed, 11 Jun 2025 02:11:10 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.126])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-607ef848c27sm3966519a12.38.2025.06.11.02.11.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jun 2025 02:11:09 -0700 (PDT)
-Message-ID: <84a0e4bf-cb65-4b6e-93d7-48ac3ba06b0f@tuxon.dev>
-Date: Wed, 11 Jun 2025 12:11:08 +0300
+	s=arc-20240116; t=1749634409; c=relaxed/simple;
+	bh=5DRr7AZHrJWUPaFLYxjMOWvjVddxzI7+L7NjuR+7jGo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=XSAIL3grzcNgmNzNHhw4KROHn+P/3e27k1Pk+4Lvsw2/gXJ9KIla9U4seeigTK/I2+7VCcgdcxinB2zay5uhbuDY7L1IWAuhnSjcc4rzQEd3kyJqGA063LTliQBKlEjOxZGm7IRpTV7sZtr7o7hGHTg1I09mTQwY6TCqFu/aOvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R1sBmeGv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6435AC4CEEE;
+	Wed, 11 Jun 2025 09:33:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749634408;
+	bh=5DRr7AZHrJWUPaFLYxjMOWvjVddxzI7+L7NjuR+7jGo=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=R1sBmeGvdBbjIJ/sw/Pdh8rlSG0t1cUd6nAIvn5HHcf62POzcP+NegXzyChT41tJ9
+	 d7DrmfLYp7jYPcBcihIFr78bocm4ehfYkPh4otovQamPjODRult4mRze3DH27CL58k
+	 0RRXQan4Q9xV36t1nk+baYGxAFbMEQSmwgt3eymhET9R73YMxfAZh6JMvn0VxtzBpY
+	 bgsuoM7EaH4SxVkWslyMPIk7fjA62hPfi8kOECnAwKAB/DumZyBQ2yufIzB+6uAz9+
+	 b4P/rKVTCZ1uJopSqwqBO/lmlbDwVhaKnrrdlrLOXIegZC5+/pezSH59aZoGLCnRN5
+	 3r2ePzt0XGc8A==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DD69C677C4;
+	Wed, 11 Jun 2025 09:33:28 +0000 (UTC)
+From: George Moussalem via B4 Relay <devnull+george.moussalem.outlook.com@kernel.org>
+Subject: [PATCH v12 0/2] Add support for IPQ5018 tsens
+Date: Wed, 11 Jun 2025 13:33:20 +0400
+Message-Id: <20250611-ipq5018-tsens-v12-0-a61374a5517d@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] PM: domains: Add devres variant for
- dev_pm_domain_attach()
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Jonathan Cameron <jic23@kernel.org>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>, gregkh@linuxfoundation.org,
- dakr@kernel.org, len.brown@intel.com, pavel@kernel.org,
- ulf.hansson@linaro.org, daniel.lezcano@linaro.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, bhelgaas@google.com,
- geert@linux-m68k.org, linux-iio@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, fabrizio.castro.jz@renesas.com,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20250606111749.3142348-1-claudiu.beznea.uj@bp.renesas.com>
- <20250606111749.3142348-2-claudiu.beznea.uj@bp.renesas.com>
- <CAJZ5v0i_Ey+OVpSZHXru=tubMaZi=y-uOh_0M6zmWZ2DqqA7Vg@mail.gmail.com>
- <zhjytvj35lknj7v3jhva3n3nbv6qctvqgykwyi5huj6omet7lz@wchd7f4p4dpv>
- <CAJZ5v0hsT-Q2hz=qoBo409oungaCmexJwwGheN7KRLFqz=6_Dw@mail.gmail.com>
- <20250607140600.76e87ea5@jic23-huawei>
- <CAJZ5v0jqZ6gYKb85dpR-X5RwFeUBcbbcJ_b-AOe+JypBXod-MA@mail.gmail.com>
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Content-Language: en-US
-In-Reply-To: <CAJZ5v0jqZ6gYKb85dpR-X5RwFeUBcbbcJ_b-AOe+JypBXod-MA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGBNSWgC/53TyYrcMBAG4FcZfI5MVWnPqb3eAiE5hhA0XmZE2
+ kvb7k7C0O8e2ZDMND6EDuhSQv+nhdJLNDeTb+bo/cNLNDUXP/uhDwXSu4eoenb9U8N8HSYiApI
+ gQDA/niSgYcvc9DNT4rG1sq05Rx2FzDg1rf+5gV++hvrZz8sw/dr8C66zESrLg8VBM2MRGLInv
+ 7Cg1azpnD+y09lX3+bJh/0nd1gr31dxNXTRKl5oU8J5OFiUSBjOFRtQSlOw/hHmb8JEGPKoYtL
+ CmHA1ZH+DP3zPxqNb2mHq2Hmcl6lxHWB8OrtjwLpXUWxi/ll//IT2Q2qM4WnBTUapBMiBE3Itd
+ GLzTNPhZlncu26carTxOA11PJyX4zB8f5XlXqYyL3Jlcl6kKRSFLqwt/0NWezkMnkHC0zLjmS4
+ zYXCV4U5Z72VUJMr1pZUVMlNcAKwy3SmbvVwYsqQKIQoAQA1ab6+R3ynbvZzkiZBcGw4JaGElt
+ 3qVsztlhD/tJkGFVr/9O5et+blDcNKRElQd9gK+FXAnIANGSkmlHtsalbsVrtfrbyjagcLiAwA
+ A
+X-Change-ID: 20250404-ipq5018-tsens-64bf95fd3317
+To: Amit Kucheria <amitk@kernel.org>, 
+ Thara Gopinath <thara.gopinath@gmail.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, 
+ Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
+ George Moussalem <george.moussalem@outlook.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Dmitry Baryshkov <lumag@kernel.org>, Dmitry Baryshkov <lumag@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1749634406; l=5550;
+ i=george.moussalem@outlook.com; s=20250321; h=from:subject:message-id;
+ bh=5DRr7AZHrJWUPaFLYxjMOWvjVddxzI7+L7NjuR+7jGo=;
+ b=LQ92VY71wz/3CBE0OlMOMUiKu9St8Jew4FoMS0Aa9+D91/f0s2dI7x5WAwilKyqzQ2hcv2IZY
+ Vt/woT5NhYNA2wK5AyD2uS9d0rWbHr8EqeEpjPyqCeBOdbW1azkZLkk
+X-Developer-Key: i=george.moussalem@outlook.com; a=ed25519;
+ pk=/PuRTSI9iYiHwcc6Nrde8qF4ZDhJBlUgpHdhsIjnqIk=
+X-Endpoint-Received: by B4 Relay for george.moussalem@outlook.com/20250321
+ with auth_id=364
+X-Original-From: George Moussalem <george.moussalem@outlook.com>
+Reply-To: george.moussalem@outlook.com
 
-Hi, Rafael,
+IPQ5018 has tsens V1.0 IP with 5 sensors, of which 4 are in use,
+and 1 interrupt. There is no RPM present in the soc to do tsens early
+enable. Adding support for the same here.
 
-On 09.06.2025 22:59, Rafael J. Wysocki wrote:
-> On Sat, Jun 7, 2025 at 3:06 PM Jonathan Cameron <jic23@kernel.org> wrote:
->>
->> On Fri, 6 Jun 2025 22:01:52 +0200
->> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
->>
->> Hi Rafael,
->>
->>> On Fri, Jun 6, 2025 at 8:55 PM Dmitry Torokhov
->>> <dmitry.torokhov@gmail.com> wrote:
->>>>
->>>> On Fri, Jun 06, 2025 at 06:00:34PM +0200, Rafael J. Wysocki wrote:
->>>>> On Fri, Jun 6, 2025 at 1:18 PM Claudiu <claudiu.beznea@tuxon.dev> wrote:
->>>>>>
->>>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>>>>>
->>>>>> The dev_pm_domain_attach() function is typically used in bus code alongside
->>>>>> dev_pm_domain_detach(), often following patterns like:
->>>>>>
->>>>>> static int bus_probe(struct device *_dev)
->>>>>> {
->>>>>>     struct bus_driver *drv = to_bus_driver(dev->driver);
->>>>>>     struct bus_device *dev = to_bus_device(_dev);
->>>>>>     int ret;
->>>>>>
->>>>>>     // ...
->>>>>>
->>>>>>     ret = dev_pm_domain_attach(_dev, true);
->>>>>>     if (ret)
->>>>>>         return ret;
->>>>>>
->>>>>>     if (drv->probe)
->>>>>>         ret = drv->probe(dev);
->>>>>>
->>>>>>     // ...
->>>>>> }
->>>>>>
->>>>>> static void bus_remove(struct device *_dev)
->>>>>> {
->>>>>>     struct bus_driver *drv = to_bus_driver(dev->driver);
->>>>>>     struct bus_device *dev = to_bus_device(_dev);
->>>>>>
->>>>>>     if (drv->remove)
->>>>>>         drv->remove(dev);
->>>>>>     dev_pm_domain_detach(_dev);
->>>>>> }
->>>>>>
->>>>>> When the driver's probe function uses devres-managed resources that depend
->>>>>> on the power domain state, those resources are released later during
->>>>>> device_unbind_cleanup().
->>>>>>
->>>>>> Releasing devres-managed resources that depend on the power domain state
->>>>>> after detaching the device from its PM domain can cause failures.
->>>>>>
->>>>>> For example, if the driver uses devm_pm_runtime_enable() in its probe
->>>>>> function, and the device's clocks are managed by the PM domain, then
->>>>>> during removal the runtime PM is disabled in device_unbind_cleanup() after
->>>>>> the clocks have been removed from the PM domain. It may happen that the
->>>>>> devm_pm_runtime_enable() action causes the device to be runtime-resumed.
->>>>>
->>>>> Don't use devm_pm_runtime_enable() then.
->>>>
->>>> What about other devm_ APIs? Are you suggesting that platform drivers
->>>> should not be using devm_clk*(), devm_regulator_*(),
->>>> devm_request_*_irq() and devm_add_action_or_reset()? Because again,
->>>> dev_pm_domain_detach() that is called by platform bus_remove() may shut
->>>> off the device too early, before cleanup code has a chance to execute
->>>> proper cleanup.
->>>>
->>>> The issue is not limited to runtime PM.
->>>>
->>>>>
->>>>>> If the driver specific runtime PM APIs access registers directly, this
->>>>>> will lead to accessing device registers without clocks being enabled.
->>>>>> Similar issues may occur with other devres actions that access device
->>>>>> registers.
->>>>>>
->>>>>> Add devm_pm_domain_attach(). When replacing the dev_pm_domain_attach() and
->>>>>> dev_pm_domain_detach() in bus probe and bus remove, it ensures that the
->>>>>> device is detached from its PM domain in device_unbind_cleanup(), only
->>>>>> after all driver's devres-managed resources have been release.
->>>>>>
->>>>>> For flexibility, the implemented devm_pm_domain_attach() has 2 state
->>>>>> arguments, one for the domain state on attach, one for the domain state on
->>>>>> detach.
->>>>>
->>>>> dev_pm_domain_attach() is not part driver API and I'm not convinced at
->>>>
->>>> Is the concern that devm_pm_domain_attach() will be [ab]used by drivers?
->>>
->>> Yes, among other things.
->>
->> Maybe naming could make abuse at least obvious to spot? e.g.
->> pm_domain_attach_with_devm_release()
-> 
-> If I'm not mistaken, it is not even necessary to use devres for this.
-> 
-> You might as well add a dev_pm_domain_detach() call to
-> device_unbind_cleanup() after devres_release_all().  There is a slight
-> complication related to the second argument of it, but I suppose that
-> this can be determined at the attach time and stored in a new device
-> PM flag, or similar.
+Last patch series sent by Qualcomm dates back to Sep 22, 2023.
+Since I'm working on OpenWrt support for IPQ5018 based boards (routers)
+and Sricharan Ramabadhran <quic_srichara@quicinc.com> in below email
+confirmed this SoC is still active, I'm continuing the efforts to send
+patches upstream for Linux kernel support.
+https://lore.kernel.org/all/63dc4054-b1e2-4e7a-94e7-643beb26a6f3@quicinc.com/
 
-I can try this as well.
+Signed-off-by: George Moussalem <george.moussalem@outlook.com>
+---
+Changes in v12:
+- Updated description in dt bindings for IP v1 without RPM
+- Added Fixes tag as this this version of tsens needs to be explicitly
+  reset and enabled in the driver, introduced as part of:
+  commit: 19f9b02ebc8f ("thermal/drivers/qcom/tsens: Add support for tsens v1 without RPM")
+- Link to v11: https://lore.kernel.org/r/20250611-ipq5018-tsens-v11-0-266566bfd16a@outlook.com
 
-Another option I see at the moment would be keep the code added in
-drivers/base/power/common.c in drivers/base/platform.c, something like:
+Changes in v11:
+- Dropped polling-delay property as its value of 0 is the default value
+- Removed comments for TM and SROT in tsens node
+- Replace underscore by hyphen in node name of top-glue-critical trip
+- Added cooling device using CPU freq scaling making use of the passive
+  trip defined under the CPU trips
+- Make qcom,ipq5018-tsens a standalone compatible in the bindings as it
+  should not use qcom,tsens-v1 as a fallback. This also fixes the issue
+  reported by Rob's bot
 
-diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-index 075ec1d1b73a..391d725cd4c7 100644
---- a/drivers/base/platform.c
-+++ b/drivers/base/platform.c
-@@ -1376,10 +1376,18 @@ static int platform_uevent(const struct device
-*dev, struct kobj_uevent_env *env
-        return 0;
- }
+Changes in v10:
+- Rebased onto updated pull of master to resolve merge conflicts in the
+  DTS patch
+- Link to v9: https://lore.kernel.org/all/DS7PR19MB88836DC6965515E12D70BB2C9DCC2@DS7PR19MB8883.namprd19.prod.outlook.com/
 
-+static void platform_dev_pm_domain_detach(struct device *dev, void *res)
-+{
-+       bool *power_off = res;
-+
-+       dev_pm_domain_detach(dev, *power_off);
-+}
-+
- static int platform_probe(struct device *_dev)
- {
-        struct platform_driver *drv = to_platform_driver(_dev->driver);
-        struct platform_device *dev = to_platform_device(_dev);
-+       bool *power_off;
-        int ret;
+Changes in v9:
+- Updated checks in tsens to more strictly evaluate for v2+ upon enabling
+  v2 features as suggsted by Dmitry.
+- Split patch 3 into two, one to update conditional statements as
+  mentioned above and the other to implement tsens IP v1 without RPM.
+- Added back Dmitry's RB tag on patch 6 which wasn't carried over
+  from v7 to v8
+- Link to v8: https://lore.kernel.org/all/DS7PR19MB88833F7A9C8F4FC484977BA69DCD2@DS7PR19MB8883.namprd19.prod.outlook.com/
 
-        /*
-@@ -1396,15 +1404,22 @@ static int platform_probe(struct device *_dev)
-        if (ret < 0)
-                return ret;
+Changes in v8:
+- Tsens V1 uses v1 interrupts and watchdog is not present (only on v2.3+).
+  As such, replaced VER_1_X with VER_1_X_NO_RPM in conditons to ensure
+  v1 interrupts are set and watchdog isn't enabled.
+- Tested on Linksys MX2000 and SPNMX56
+- Link to v7: https://lore.kernel.org/all/DS7PR19MB88831624F11516945C63400F9DC22@DS7PR19MB8883.namprd19.prod.outlook.com/
 
-+       power_off = devres_alloc(platform_dev_pm_domain_detach,
-sizeof(*power_off),
-+                                GFP_KERNEL);
-+       if (!power_off)
-+               return -ENOMEM;
-+
-        ret = dev_pm_domain_attach(_dev, true);
--       if (ret)
-+       if (ret) {
-+               devres_free(power_off);
-                goto out;
-+       }
+Changes in v7:
+- Updated cover letter
+- Replaced patch 3 with a new one to add support for tsens v1.0 with
+  no RPM and removed Dmitry's 'Reviewed-by tag
+- Refactored patch 4 and split support for IPQ5018 from support for
+  tsens v1.0 without RPM. As such, also removed Dmitry's RB tag.
+- Depends on patch 1 and 2 from patch series to add support for
+  IQP5332 and IPQ5424 applied on Feb 11 2025:
+  https://patchwork.kernel.org/project/linux-arm-msm/cover/20250210120436.821684-1-quic_mmanikan@quicinc.com/
+- Link to v6: https://lore.kernel.org/all/DS7PR19MB88838833C0A3BFC3C7FC481F9DC02@DS7PR19MB8883.namprd19.prod.outlook.com/
 
--       if (drv->probe) {
-+       *power_off = true;
-+       devres_add(_dev, power_off);
-+
-+       if (drv->probe)
-                ret = drv->probe(dev);
--               if (ret)
--                       dev_pm_domain_detach(_dev, true);
--       }
+Changes in v6:
+- Include (this) cover letter
+- Picked up Dmitry's Reviewed-by tag on patch 5
+- Link to v5: https://lore.kernel.org/all/DS7PR19MB88832FDED68D3EBB0EE7E99F9DC72@DS7PR19MB8883.namprd19.prod.outlook.com/
 
- out:
-        if (drv->prevent_deferred_probe && ret == -EPROBE_DEFER) {
-@@ -1422,7 +1437,6 @@ static void platform_remove(struct device *_dev)
+Changes in v5:
+- Adjusted commit messages to indicate IPQ5018 has 5 sensors of
+  which 4 are described and in use as per downstream driver and dts.
+- Padded addresses of tsens and qfprom nodes with leading zeros.
+- Link to v4: https://lore.kernel.org/all/DS7PR19MB8883BE38C2B500D03213747A9DC72@DS7PR19MB8883.namprd19.prod.outlook.com/
 
-        if (drv->remove)
-                drv->remove(dev);
--       dev_pm_domain_detach(_dev, true);
- }
+Changes in v4:
+- Documented ipq5018 in qcom,qfprom bindings
+- Constrained ipq5018-tsens to one interrupt with description
+- Added Rob's Acked-by tag
+- Added Dmitry's Reviewed-by tag
+- Fixed modpost warning: added __init to init_common
+- Sorted tsens nodes by address
+- Sorted thermal-zones nodes by name
+- Link to v3: https://lore.kernel.org/all/20230922115116.2748804-1-srichara@win-platform-upstream01.qualcomm.com/
 
-but this would involve duplicating code, as, sooner or later, this would
-have to be done for other busses as well.
+Changes in v3:
+- Added the tsens-ipq5018 as  new binding without rpm
+- Added Dmitry's Reviewed tag
+- Fixed Dmitry's comments for error checks in init_ipq5018
+- Ordered the qfprom device node properties
+- Link to v2: https://lore.kernel.org/all/20230915121504.806672-1-quic_srichara@quicinc.com/
 
-Could you please let me know what option would you prefer so that I can go
-forward with it?
+Changes in v2:
+- Sorted the compatible and removed example
+- Fixed the name for new tsens_feature
+- Used tsend_calibrate_common instead of legacy
+  and addressed comments from Dmitry.
+- Squashed patch 3 & 4
+- Fixed node names, order and added qfprom cells
+  for points seprately
+- Squashed patch 6 & 7
+- Link to v1: https://lore.kernel.org/all/1693250307-8910-1-git-send-email-quic_srichara@quicinc.com/
 
-Thank you for your review,
-Claudiu
+---
+George Moussalem (1):
+      dt-bindings: thermal: qcom-tsens: make ipq5018 tsens standalone compatible
 
-> 
-> Note that dev->pm_domain is expected to be cleared by ->detach(), so
-> this should not cause the domain to be detached twice in a row from
-> the same device, but that needs to be double-checked.
-> 
-> Thanks!
+Sricharan Ramabadhran (1):
+      arm64: dts: qcom: ipq5018: Add tsens node
+
+ .../devicetree/bindings/thermal/qcom-tsens.yaml    |   7 +-
+ arch/arm64/boot/dts/qcom/ipq5018.dtsi              | 182 +++++++++++++++++++++
+ 2 files changed, 188 insertions(+), 1 deletion(-)
+---
+base-commit: afc582fb6563b8eb5cd73f9eca52e55da827567f
+change-id: 20250404-ipq5018-tsens-64bf95fd3317
+
+Best regards,
+-- 
+George Moussalem <george.moussalem@outlook.com>
+
 
 
