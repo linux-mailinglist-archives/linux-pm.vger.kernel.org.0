@@ -1,237 +1,210 @@
-Return-Path: <linux-pm+bounces-28499-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28500-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03D43AD5C68
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 18:38:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8FDFAD5FA6
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 22:03:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7E6B3AA175
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 16:36:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3A4F17236D
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 20:03:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FB6B221544;
-	Wed, 11 Jun 2025 16:35:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83439288C96;
+	Wed, 11 Jun 2025 20:03:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zs6rp9oZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dV3ebDPL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAFBD20766E;
-	Wed, 11 Jun 2025 16:35:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D4671779B8;
+	Wed, 11 Jun 2025 20:02:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749659712; cv=none; b=rUP+hsPcrucijx0w2id7WVUoGf+SghBPfXvTd8ZJGDizdMfzUHEWrClxIprzZsfC3GUAEgaXhCaYv6qZLSB8NRkzqFcepxWtE1SS2n5TpZSs1VVYmEwAZTQ2vcHvRsh92WmtWr2Dg4FtKf9UtiQmSY5FU6XQGdjcTLBVFvrM9VQ=
+	t=1749672180; cv=none; b=lJyAbIgvjR1GXA+fNKNq9E2UyeD3PxTaqJQO84Hk7xOCYEnSObvwirIopMUdZt0u3nQuqyiuXE7Y0HbUn82dIH5JRt17qvKBBVBMUjVBC63yqrPuoP91xRugdKd9X5DT84FSVXXJM+x9l8anz6k6ibrJXYt96N9ma/2DnawFay0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749659712; c=relaxed/simple;
-	bh=4T6TefxymGuT/EcWLXnyw9C8XuFwlxDI5hIHJ4PoN8I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Kk6++MDccgx9GT89nVWBURSJBkTDQSDhngDMVyENaP1tG/Jgphb6LOoIAzCu+T/q2VFlyHHZf90Cv/e2Iz/BL7w8/tslXOzSn0rmWSIauulsofU5zzydnuurBwGzGhAiWAA54iqLek2ZjT6NBhX71Wo+8M5HUhmTzIbL9Pm1iK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zs6rp9oZ; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-234d366e5f2so220215ad.1;
-        Wed, 11 Jun 2025 09:35:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749659710; x=1750264510; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=moYDdCBKQo1o7OL3pKThQFqO2J9Mz1W/woNo6FWp4v0=;
-        b=Zs6rp9oZniOEPp6xVStk5JjIZy/dPERIQRtjK2uUn9dpJqrIOgqTCUcoXo1KfwnZQ5
-         O+Pdmb4c5j9SPribFns3fKDO4BW1Rh1+4cMJ87ad6tVE0Za+x+6WpbMDzRXX9xX0u49C
-         Psd0PEXrH1i0B9KjdpP3pfJ/taSnrcvVlsOUqPdgpF2LUroN/BMPLePyUBqEtlQjTzzg
-         iPFcjn5juuUXoGjDOiF64K3d8+y0jUqZ5lTeyDurYb8/L8Gsf+y4kEd+2b3+TKs0N2C1
-         V12cBG5fEwBK/xRvOx00qkA8q8JpVpiil1ltStRXIt8qZmo2Lp1z7E+kJAhW+cKQ1uee
-         rVVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749659710; x=1750264510;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=moYDdCBKQo1o7OL3pKThQFqO2J9Mz1W/woNo6FWp4v0=;
-        b=kjDgq24TiIroAvmYUVZt1RUOQi8yLoJRBozYpu4O0WUpt1hxlzeuN5M9tXXLtnZZOX
-         wKiWPwnPzY5G0RyTg+S74FnMdmlWrJa7vXxfutg9EMxNmw7THdKuCq9PFtHOVAO7mysd
-         3MY3CmY6J2eeyCOTgTxbQQcxUq5NuR8rR2H4c412fLNpDH/6ZaqS5wgsb9GQZ2H/4DIF
-         hibwN32d+0I9UJCI3s9qvL7B3XCtsfSzqPKpMmIco4J9p6uMfm3npJeGVxMmGVBv6k6o
-         4DRFHEhlo8ya+JffKwcQY1sqmttGxGvuv+DP6p54KAYN7PNMcrrxIMy7j3yOet2DPXw4
-         YfRA==
-X-Forwarded-Encrypted: i=1; AJvYcCU1MKPQZk7iPuqx+JWgAPO/WHWJT0qzgRgexsr/3rRjEPJRdupYYPSPzGH5+83lvPwrPgGjQ2sIrzU=@vger.kernel.org, AJvYcCVBfWSA2GVnq9h+mF7/DOTzEXltTNLcRLXOlChwV4ZZUoqc09/ByQ1XaRICkFTf9g5AZi2kxaIYZ5dHiY+eioxf2Ts=@vger.kernel.org, AJvYcCWvAn9sgV+31p2aicamMPngGAL6cFGOUYJO70s2LUYwYtf6M/MyU3/IqnwUGBkRBzXlB8cgyh3RgVhIe0SL@vger.kernel.org, AJvYcCXBQu7iwUbPvHky84f+ca8ZKg0iIglRDTCbirgVhepKTjfePc32W04GhTtAe1HlDKcB6S4UBnKRYLQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZ/btEA4Mg+gUtoIuTd4XMY4CWAlyad8YXOl3Ih8IaZNRFUxm4
-	zsK4LPIE/r7ZVPSPI54PTevNmg86KTdrvGahICI4h91tugsIQ3OipDkS
-X-Gm-Gg: ASbGncsRsK5Xq7quSFnecf7oTQF5YXu4XRrJI2JDawJVvbOtkBqp+K6TAE60yjOHezL
-	fur+5ehah0bH69Q+rV2/S3Ff8IgM72GF60KLRzFouTochip0HA3SoBOmcjme/38fOQq9w/fjpiA
-	eOYOTrPx9nTIxIA8/6OzNgP5V7M0nqAv9vLU4lX4//BaPeyB1m9RIEEe1w2ZgM9q6Yr9zA8TdSa
-	HepG7NhpiIaIJ9XAEth7H4QO0Q264S4msuvn+0Z4uvU3UN8tK22lu5xbcJqMwWXpeYmqFho20hL
-	vqBfhe+7PSX7XKfdyZVEyBj55jWZbHWB7CR/qJgVnh4kTJ+Eg/kTkdDUiKNJPQ==
-X-Google-Smtp-Source: AGHT+IGFMdjlBJbDVBzlFLVjv8c8nQwxnnks3iI6iwDj44idHGQ1w7rK96VSZvYthFmcR0aZsdS8UA==
-X-Received: by 2002:a17:902:f54c:b0:235:ea0d:ae10 with SMTP id d9443c01a7336-23641a9a44amr62858495ad.12.1749659709804;
-        Wed, 11 Jun 2025 09:35:09 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:cc6e:a0f4:a9c8:328])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2360340b735sm89936435ad.190.2025.06.11.09.35.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jun 2025 09:35:09 -0700 (PDT)
-Date: Wed, 11 Jun 2025 09:35:05 -0700
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Claudiu <claudiu.beznea@tuxon.dev>, gregkh@linuxfoundation.org, dakr@kernel.org, len.brown@intel.com, 
-	pavel@kernel.org, ulf.hansson@linaro.org, daniel.lezcano@linaro.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, bhelgaas@google.com, 
-	geert@linux-m68k.org, linux-iio@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	fabrizio.castro.jz@renesas.com, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: [PATCH v3 1/2] PM: domains: Add devres variant for
- dev_pm_domain_attach()
-Message-ID: <yd4nhx4b3dbbsru747l2mxwo66xrz3kbyhjpo5kgiqrfvxbyk4@exebi7owkezd>
-References: <20250606111749.3142348-1-claudiu.beznea.uj@bp.renesas.com>
- <20250606111749.3142348-2-claudiu.beznea.uj@bp.renesas.com>
- <CAJZ5v0i_Ey+OVpSZHXru=tubMaZi=y-uOh_0M6zmWZ2DqqA7Vg@mail.gmail.com>
- <zhjytvj35lknj7v3jhva3n3nbv6qctvqgykwyi5huj6omet7lz@wchd7f4p4dpv>
- <CAJZ5v0hsT-Q2hz=qoBo409oungaCmexJwwGheN7KRLFqz=6_Dw@mail.gmail.com>
- <20250607140600.76e87ea5@jic23-huawei>
- <CAJZ5v0jqZ6gYKb85dpR-X5RwFeUBcbbcJ_b-AOe+JypBXod-MA@mail.gmail.com>
- <20250611172307.37c9b725@jic23-huawei>
+	s=arc-20240116; t=1749672180; c=relaxed/simple;
+	bh=Y91AIqXiYb2KFSBw95LNtXg6HYm3TMJd6I6LrNYm+hU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=aCU4HgUhw2k8pF6JWf8wNlS/USnd0byyQwQC8EGn8Bmp9jjXuskrhOVsQoxWMvUPHj+oqn+czq4Nw/VjRJZSlz7G2cmeVQk8djDOW7mwo6jeFQpUlZmKnOCNvItumMCc/XE2/r6ucXwMfDxUk1wAt9bPzArhHdfktzbXojzUUMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dV3ebDPL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C13BEC4CEE3;
+	Wed, 11 Jun 2025 20:02:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749672179;
+	bh=Y91AIqXiYb2KFSBw95LNtXg6HYm3TMJd6I6LrNYm+hU=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=dV3ebDPLcFhnmvWvMkOQNDCU1Hu9LzpZQPmtCSh8tRb6QbiiSGxy+mOOyLHCL7MN/
+	 bHDO/DUYxiv3g3Lbmq2A2/1wcqNJt+3/AuyMpFI9KL0lOKAl/h273PGjyZtNG/JEA+
+	 aCOe1DqA2X+Pj9jNMGme1mZi9bp3VnCxOYhtODt4bJuIyhZABtDw/iYYhtQbllJgl1
+	 BWYQ5rk0oIaXwnr7qJLaHuYplwn2IPwr3V+XZuAyO9AJiDy70F+sBfVGb3Ej1OntzR
+	 WKo/EruFL/Yz1uu0NO7UeydkebwWdQ5t+2LbwZMigRBoKyPiFJGejjyViKz+e2bCLQ
+	 Vj8A9WN0olENQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9DF3C71135;
+	Wed, 11 Jun 2025 20:02:59 +0000 (UTC)
+From: Samuel Kayode via B4 Relay <devnull+samuel.kayode.savoirfairelinux.com@kernel.org>
+Subject: [PATCH v6 0/6] add support for pf1550 PMIC MFD-based drivers
+Date: Wed, 11 Jun 2025 16:02:57 -0400
+Message-Id: <20250611-pf1550-v6-0-34f2ddfe045e@savoirfairelinux.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250611172307.37c9b725@jic23-huawei>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPHgSWgC/33OQW7CMBAF0KtEXmM0jj0JYcU9EAvHHpeRSgJ2s
+ KhQ7l4TJKgqtcs/+np/7iJRZEpiW91FpMyJx6GEZlUJd7TDB0n2JYsaagSsW3kOChGkN6ACeGj
+ 7DYhSPkcKfFug/eGZI12uxZueR9HbRNKNpxNP2yo3a4XiUTxymsb4tTyQ9dL8vZW1BGkwNJ1B7
+ TyqXbJ55BgsR/rk4XpbF3fRsnkLDeiXYIrQBx9QEWHn3D8C/hAUvAQsAnnwHWlrrWv/EOZ5/gZ
+ ThFDFVAEAAA==
+X-Change-ID: 20250527-pf1550-d401f0d07b80
+To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+ Mark Brown <broonie@kernel.org>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+ Sebastian Reichel <sre@kernel.org>, Frank Li <Frank.li@nxp.com>
+Cc: imx@lists.linux.dev, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-input@vger.kernel.org, 
+ linux-pm@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>, 
+ Abel Vesa <abelvesa@linux.com>, Robin Gong <b38343@freescale.com>, 
+ Robin Gong <yibin.gong@nxp.com>, 
+ Enric Balletbo i Serra <eballetbo@gmail.com>, 
+ Samuel Kayode <samuel.kayode@savoirfairelinux.com>, 
+ Abel Vesa <abelvesa@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1749672178; l=5702;
+ i=samuel.kayode@savoirfairelinux.com; s=20250527;
+ h=from:subject:message-id;
+ bh=Y91AIqXiYb2KFSBw95LNtXg6HYm3TMJd6I6LrNYm+hU=;
+ b=KhQKypj8p61lIPfOxcvU2HW0f7+RjCrKcWknRH21uY3VXARHYJ5hKE780E1ymPx2g+TWxPxKi
+ Btp3YoyEidaCagdEBKtIEywWlB9NZxEzNgwfcJhzWegimhPlyogC/Og
+X-Developer-Key: i=samuel.kayode@savoirfairelinux.com; a=ed25519;
+ pk=TPSQGQ5kywnnPyGs0EQqLajLFbdDu17ahXz8/gxMfio=
+X-Endpoint-Received: by B4 Relay for
+ samuel.kayode@savoirfairelinux.com/20250527 with auth_id=412
+X-Original-From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+Reply-To: samuel.kayode@savoirfairelinux.com
 
-On Wed, Jun 11, 2025 at 05:23:07PM +0100, Jonathan Cameron wrote:
-> On Mon, 9 Jun 2025 21:59:57 +0200
-> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> 
-> > On Sat, Jun 7, 2025 at 3:06 PM Jonathan Cameron <jic23@kernel.org> wrote:
-> > >
-> > > On Fri, 6 Jun 2025 22:01:52 +0200
-> > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > >
-> > > Hi Rafael,
-> > >  
-> > > > On Fri, Jun 6, 2025 at 8:55 PM Dmitry Torokhov
-> > > > <dmitry.torokhov@gmail.com> wrote:  
-> > > > >
-> > > > > On Fri, Jun 06, 2025 at 06:00:34PM +0200, Rafael J. Wysocki wrote:  
-> > > > > > On Fri, Jun 6, 2025 at 1:18 PM Claudiu <claudiu.beznea@tuxon.dev> wrote:  
-> > > > > > >
-> > > > > > > From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> > > > > > >
-> > > > > > > The dev_pm_domain_attach() function is typically used in bus code alongside
-> > > > > > > dev_pm_domain_detach(), often following patterns like:
-> > > > > > >
-> > > > > > > static int bus_probe(struct device *_dev)
-> > > > > > > {
-> > > > > > >     struct bus_driver *drv = to_bus_driver(dev->driver);
-> > > > > > >     struct bus_device *dev = to_bus_device(_dev);
-> > > > > > >     int ret;
-> > > > > > >
-> > > > > > >     // ...
-> > > > > > >
-> > > > > > >     ret = dev_pm_domain_attach(_dev, true);
-> > > > > > >     if (ret)
-> > > > > > >         return ret;
-> > > > > > >
-> > > > > > >     if (drv->probe)
-> > > > > > >         ret = drv->probe(dev);
-> > > > > > >
-> > > > > > >     // ...
-> > > > > > > }
-> > > > > > >
-> > > > > > > static void bus_remove(struct device *_dev)
-> > > > > > > {
-> > > > > > >     struct bus_driver *drv = to_bus_driver(dev->driver);
-> > > > > > >     struct bus_device *dev = to_bus_device(_dev);
-> > > > > > >
-> > > > > > >     if (drv->remove)
-> > > > > > >         drv->remove(dev);
-> > > > > > >     dev_pm_domain_detach(_dev);
-> > > > > > > }
-> > > > > > >
-> > > > > > > When the driver's probe function uses devres-managed resources that depend
-> > > > > > > on the power domain state, those resources are released later during
-> > > > > > > device_unbind_cleanup().
-> > > > > > >
-> > > > > > > Releasing devres-managed resources that depend on the power domain state
-> > > > > > > after detaching the device from its PM domain can cause failures.
-> > > > > > >
-> > > > > > > For example, if the driver uses devm_pm_runtime_enable() in its probe
-> > > > > > > function, and the device's clocks are managed by the PM domain, then
-> > > > > > > during removal the runtime PM is disabled in device_unbind_cleanup() after
-> > > > > > > the clocks have been removed from the PM domain. It may happen that the
-> > > > > > > devm_pm_runtime_enable() action causes the device to be runtime-resumed.  
-> > > > > >
-> > > > > > Don't use devm_pm_runtime_enable() then.  
-> > > > >
-> > > > > What about other devm_ APIs? Are you suggesting that platform drivers
-> > > > > should not be using devm_clk*(), devm_regulator_*(),
-> > > > > devm_request_*_irq() and devm_add_action_or_reset()? Because again,
-> > > > > dev_pm_domain_detach() that is called by platform bus_remove() may shut
-> > > > > off the device too early, before cleanup code has a chance to execute
-> > > > > proper cleanup.
-> > > > >
-> > > > > The issue is not limited to runtime PM.
-> > > > >  
-> > > > > >  
-> > > > > > > If the driver specific runtime PM APIs access registers directly, this
-> > > > > > > will lead to accessing device registers without clocks being enabled.
-> > > > > > > Similar issues may occur with other devres actions that access device
-> > > > > > > registers.
-> > > > > > >
-> > > > > > > Add devm_pm_domain_attach(). When replacing the dev_pm_domain_attach() and
-> > > > > > > dev_pm_domain_detach() in bus probe and bus remove, it ensures that the
-> > > > > > > device is detached from its PM domain in device_unbind_cleanup(), only
-> > > > > > > after all driver's devres-managed resources have been release.
-> > > > > > >
-> > > > > > > For flexibility, the implemented devm_pm_domain_attach() has 2 state
-> > > > > > > arguments, one for the domain state on attach, one for the domain state on
-> > > > > > > detach.  
-> > > > > >
-> > > > > > dev_pm_domain_attach() is not part driver API and I'm not convinced at  
-> > > > >
-> > > > > Is the concern that devm_pm_domain_attach() will be [ab]used by drivers?  
-> > > >
-> > > > Yes, among other things.  
-> > >
-> > > Maybe naming could make abuse at least obvious to spot? e.g.
-> > > pm_domain_attach_with_devm_release()  
-> > 
-> > If I'm not mistaken, it is not even necessary to use devres for this.
-> > 
-> > You might as well add a dev_pm_domain_detach() call to
-> > device_unbind_cleanup() after devres_release_all().  There is a slight
-> > complication related to the second argument of it, but I suppose that
-> > this can be determined at the attach time and stored in a new device
-> > PM flag, or similar.
-> 
-> That options sounds good to me.  I think this moves dev_pm_domain_detach()
-> call into the the driver core / perhaps device_unbind_cleanup().  It's a noop
-> if a domain was never attached so that should be fine.
-> 
-> Given that second parameter, I guess we can't move the dev_pm_domain_attach()
-> into the driver core as well so it is a little odd wrt to balance,
-> but with some documentation that is probably fine.
+This series adds support for pf1550 PMIC. It provides the core mfd driver and a
+set of three sub-drivers for the regulator, power supply and input subsystems.
 
-It is going to be confusing IMO and might lead to ordering issues again
-if there are more resources allocated by bus probe() before domain
-attach is called.
+Patch 1 adds the DT binding document for the PMIC. Patches 2-5 adds the
+pertinent drivers. Last patch adds a MAINTAINERS entry for the drivers.
 
-I know Rafael does not consider dev_pm_domain_attach() a "driver" API
-(although I do not see much difference between driver and bus probe
-code), but maybe we can solve this by using different name
-(devres_controlled_pm_domain_attach() instead of
-devm_pm_domain_attach()?).
+Changes since v1:
+   - DT bindings for all devices included
+   - Add onkey driver
+   - Add driver for the regulators
+   - Ensure charger is activated as some variants have it off by default
+   - Update mfd and charger driver per feedback from eballetbo@gmail.com
+   - Add myself as maintainer for these drivers
+   - Link to v1: https://lore.kernel.org/1523974819-8711-1-git-send-email-abel.vesa@nxp.com/
 
-OTOH we have devm_pm_domain_attach_list() already which is I guess
-driver-level API...
+Changes since v2:
+   - Rebase on recent mainline kernel v6.15
+   - Single yaml file containing dt bindings for all pf1550 devices
+   - irq mapping done in MFD driver as suggested by Dmitry Torokhov
+   - Drop unnecessary includes in drivers
+   - Replace dev_err with dev_err_probe in probe method of drivers
+   - Drop compatible string from drivers of the sub-devices
+   - Remove dependency on OF from drivers of the sub-devices
+   - onkey: move driver from input/keyboard into input/misc
+   - onkey: remove dependency on OF
+   - onkey: use onkey virqs instead of central irq
+   - onkey: fix integer overflow for regmap_write when unmasking
+     interrupts during pf1550_onkey_resume
+   - charger: add support for monitored-battery which is used in setting
+     a constant voltage for the charger.
+   - Address other feedback from Dmitry Torokhov and Krzysztof Kozlowski
+   - Link to v2: https://lore.kernel.org/cover.1747409892.git.samuel.kayode@savoirfairelinux.com/
 
-Thanks.
+Changes since v3:
+   - Update manufacturer from Freescale to NXP in compatible,
+     dt-binding and Kconfigs
+   - Use C++ style comments for SPDX license in .c code
+   - Add portions copyright to source code
+   - irqs are defined as struct resource in mfd cell such that
+     platform_get_irq is used in the sub-devices
+   - Make struct pf1550_dev of type const in sub-device driver
+   - irq variable dropped from sub-device driver struct
+   - EXPORT_SYMBOL of global pf1550_read_otp function for use in
+     regulator driver
+   - Drop unneeded info in driver_data when defining device table id
+   - regulator: validate ramp_delay
+   - regulator: report overcurrent and over temperature events
+   - onkey: drop unnecessary keycode variable
+   - onkey: change wakeup variable to type bool
+   - onkey: replace (error < 0) with error in if statement when possible
+   - onkey: use pm_sleep_ptr when defining driver.pm
+   - charger: finish handling of some interrupts in threaded irq handler
+   - Link to v3: https://lore.kernel.org/20250527-pf1550-v3-0-45f69453cd51@savoirfairelinux.com/
 
+Changes since v4:
+   - Use top level interrupt to minimize number of registers checked on
+     each interrupt
+   - Fix bad offset for temperature interrupts of regulator irq chip
+   - Address Krzysztof's comments for dt-binding
+   - regulator: add comments to clarify difference in its interrupts
+   - regulator: issue warn event for _LS interrupt and error event for
+     _HS interrupt
+   - regulator: validate maximum and minimum ramp_delay
+   - charger: drop lock in battery and charger delayed_work
+   - charger: more conservative locking for vbus delayed_work
+   - charger: apply lock when setting power_supply type during register
+     intialization
+   - Link to v4: https://lore.kernel.org/r/20250603-pf1550-v4-0-bfdf51ee59cc@savoirfairelinux.com
+
+Changes since v5:
+   - Ensure lowercase when assigning hex values
+   - Add imx@lists.linux.dev to relevant mailing list in MAINTAINERS file
+   - Use GENMASK macro
+   - Drop unused chips variable
+   - Read the OTP in the mfd driver probe for new dvs_enb variable
+   - Hardcode IRQ flags in pf1550_add_child function
+   - charger: drop the mutex entirely
+   - charger: reverse christmas tree style local variable definition in
+     probe
+   - Link to v5: https://lore.kernel.org/r/20250610-pf1550-v5-0-ed0d9e3aaac7@savoirfairelinux.com
+
+Signed-off-by: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+---
+---
+Samuel Kayode (6):
+      dt-bindings: mfd: add pf1550
+      mfd: pf1550: add core mfd driver
+      regulator: pf1550: add support for regulator
+      input: pf1550: add onkey support
+      power: supply: pf1550: add battery charger support
+      MAINTAINERS: add an entry for pf1550 mfd driver
+
+ .../devicetree/bindings/mfd/nxp,pf1550.yaml        | 137 +++++
+ MAINTAINERS                                        |  11 +
+ drivers/input/misc/Kconfig                         |  11 +
+ drivers/input/misc/Makefile                        |   1 +
+ drivers/input/misc/pf1550-onkey.c                  | 183 ++++++
+ drivers/mfd/Kconfig                                |  14 +
+ drivers/mfd/Makefile                               |   2 +
+ drivers/mfd/pf1550.c                               | 339 +++++++++++
+ drivers/power/supply/Kconfig                       |  11 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/pf1550-charger.c              | 633 +++++++++++++++++++++
+ drivers/regulator/Kconfig                          |   9 +
+ drivers/regulator/Makefile                         |   1 +
+ drivers/regulator/pf1550-regulator.c               | 362 ++++++++++++
+ include/linux/mfd/pf1550.h                         | 254 +++++++++
+ 15 files changed, 1969 insertions(+)
+---
+base-commit: 0a4b866d08c6adaea2f4592d31edac6deeb4dcbd
+change-id: 20250527-pf1550-d401f0d07b80
+
+Best regards,
 -- 
-Dmitry
+Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+
+
 
