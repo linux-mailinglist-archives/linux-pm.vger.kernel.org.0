@@ -1,130 +1,118 @@
-Return-Path: <linux-pm+bounces-28482-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28483-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C1E4AD53D9
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 13:26:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC1AEAD5472
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 13:46:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 383B41886486
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 11:26:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CC3B17AA2E
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 11:46:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC3DC25BEE6;
-	Wed, 11 Jun 2025 11:25:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BD502690EC;
+	Wed, 11 Jun 2025 11:46:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RQzubqUj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lZE12aPi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992512E6108;
-	Wed, 11 Jun 2025 11:25:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B651025BEF5;
+	Wed, 11 Jun 2025 11:46:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749641150; cv=none; b=SgeUfI2u4mgiBGhHpp2VzXB0tfBYiObZjGKV6h2beuE1u+OotYYdMd1g8CPn1tPYrgFzwwwFIfj3BkCVa0MFFTM040Rj1kEOKcDeRAL/Y46wTyQLlhcGbSleBsCAs5Z8XyLl1GtsGSb0+d9SpqlUiW8jfIsrPLvsIrvkjdRqac8=
+	t=1749642416; cv=none; b=oZy2sk9nLGSgTVTUJzHtegiXO7JcDJqNIUNF3QzgXuvtp6Sz9fz/NfBnUIcCucqj+PbLkKeNP8eBHh2X7p9m/fpjtk/H9K80VBhvqAR4BTjrW5hgocdSahKafZju8sg6lEG/UKsTzwH5SesJ6zrCEkL6YIiZ7I+xk0SIsNHdWlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749641150; c=relaxed/simple;
-	bh=1fZ+iceq3RPjXWpAsNdBQALGaGO5Tot/BSmkCc/YjWM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Wd2Wv1bvfvXgEgVIJKbgMugekZmI7jOU0ywuJ6SD+OSA/RHxliibP2xIz8CTgki+7KYd7Qoze8o3QNXJTH7C0FJq3InIvON62UKsSw2/vpH69pRvzOZr/p3y2+MfITg6lc8pav62+YPACGU/2Xm0dhvLZgBTwJvaVDkrPbUqVzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RQzubqUj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B14BFC4CEEE;
-	Wed, 11 Jun 2025 11:25:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749641150;
-	bh=1fZ+iceq3RPjXWpAsNdBQALGaGO5Tot/BSmkCc/YjWM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RQzubqUj7ApoX0vizvn2DXbNxCOpNjDNCC3JNSjLHPGxM9KYccS7o/lKlZmNy4/B6
-	 DTEgGXTvAkRJ3uPAaB0C1WYOdLtqFyDDbB+XABhfvEu4nW6x7RkWVC7c7bH3f6LiOi
-	 zJZnEmM1YiWo0V4xjrk7NsMDIiBn8o1J2nIT1UaG/ONtW7x4L1VRBeCwlVu7Kvxvid
-	 WmN9vWQQNoRXqQJZDhrb8knyPprdNvCeayD7I4iGGDyx+Uh0G0KPAV7DAYMvE7InnZ
-	 JvUVTOpJn0AtAHWo1OLttS3hdlRVGElw38m228Ze3Clfl9u7kJaVLFl3n5vImMhtD2
-	 pF+INMBkrmVOA==
-Message-ID: <810f7614-ed73-471e-bc5b-3305816737da@kernel.org>
-Date: Wed, 11 Jun 2025 13:25:42 +0200
+	s=arc-20240116; t=1749642416; c=relaxed/simple;
+	bh=1Vmq0G5G0jKDHDGJXI6e/ZacBmMDzC6HHXD4ZTz+mhs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=g6KViy6Xra+azBq8Hk/Sm33jRq2HybIxNg9/Yi2ZSQIve8YxzJjkN4xrTAsQYF1Nwg0HHc4rtqwr+3EpV5a+IL/3gM865zFFdGm1IyhnjHRgnrNdU1koMIP1zBTFGDk/kGTyj70w6WIVspbq76kjrNx3VOGVZWD3R6iR/rAcCA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lZE12aPi; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-234a45e69c8so482135ad.2;
+        Wed, 11 Jun 2025 04:46:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749642413; x=1750247213; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fjWqiBDm0nvwj9CkSqR8k0GoBN5tkJezIwfnIgfr1fE=;
+        b=lZE12aPiurji4j4oPecweq2Wk3q/7W3cpMzxXUUsrGGnydAPpVyRrBA2JlxHTXLDKC
+         jPdP+SPkmDqvwNGBMlpzNU8kvtrLkZB1A1/TUyBhKh5D3PBmMN2fQmvc2z+LSeJVlOhN
+         vqTy3ox31b6Jr/LStjbGmKFGb0AO41qmxcvEhroLh506AeN590r6ExLoUcJy/BRAezVA
+         YBfQceHHOI+piUEZpQJpkvop+YV6ZYYTmFyrob6T7/OzFXglFOMcT2xILPNHKkA/ILvD
+         Eo8eEdRd2oWnU2L3E5cE0IfXdxXCkzXCUVcQKEsHWJ2+fzwG2W9XQrjYMLBpkbgEkSHd
+         TdpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749642413; x=1750247213;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fjWqiBDm0nvwj9CkSqR8k0GoBN5tkJezIwfnIgfr1fE=;
+        b=U7sD8vdP600EcyBEqE9o6yhzN1phW4jRLBG5HC5dqh8TO1dK950/JQWG5HtXFkPsbY
+         52g3/T+UVWPPBpQbTn6vSRg3sNjeA4GeLrZwXom14DtKXDbwemus4/rg7N5NOICip1ZJ
+         xvJniem0TdO+WyFCU0qNnCraMJkfmkVuoDL0GwuCh3gDFVwatTlDY0DzUy4sN5fPgs0h
+         q0P9+IFfm+lQrNZSqt1KvgShQLLa75/2UDhb4vJ4QyDpxz9nYXQw+deQkPyaw08ca02g
+         O/680Y4VEiSdjGd05fDdO7WoygQz8nyHudtiDuQX/XpTUcwscJ8trINKPOcUlF2l1p0W
+         cWew==
+X-Forwarded-Encrypted: i=1; AJvYcCUNvH1dyzJA5yfgvgRws2OZTw4LprE7pfAgkz4vUYtp8LuWYHNKcS31wQnwd5kTINSb/H7nAsE8GSLhXEU=@vger.kernel.org, AJvYcCUff1ry4mqgnu3l0OaAC0PFgyuGJt1nW6hQu7YHGhFEwzECI6ixgmJ5F8ZhQ5uKCTrXH5AbYftzzz+3rkYL9EE=@vger.kernel.org, AJvYcCWIuX36vDwN/ndo0VmSwy1+s+kie2BwhgEpFtPZH7884fo3nRsy0R8KxDzAE1u4yMLcIsP5arnqmAE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0BV0TYIVtPnz2S11V2UQFyiEZDghH7Fl/k1INtuvmM9cOmzbE
+	Lnq8hlscdsJhy3gWlsZdFoku5nCsyJDDtSkruFkntdDw7Cg75vUZWE7jzQ33jW9jL0s2GscBHx/
+	m8LijpmnKHEPWWIc46jWvNIsPsPwHx1E=
+X-Gm-Gg: ASbGncsLYteOuawNw2PMJEyYbcrz882AEfhItAaH03LMEvAove9rmepf8sddQ2MxYxd
+	Gm/nL4io9bHJBWbKA9i7oB3Ir5EK+pEdpQhgljrs91iWv30FqYvOombJ3qt1oYz1+zlAv2DxXKx
+	04rWoTuxNAWjUoVhYCu+GGBnYzm1r33YKVjd/N5jTMTDI=
+X-Google-Smtp-Source: AGHT+IEAkOiZNEkNpkBzHS7JLVKeGLFvXjY3JtxvmbIO55yJyWwHo+gCFBtPANQRLKT9IZ5Svvxp3Xsu3zCbP9CRHxo=
+X-Received: by 2002:a17:903:1a6f:b0:234:bfe3:c4b8 with SMTP id
+ d9443c01a7336-23641a8b1f2mr13819255ad.2.1749642412877; Wed, 11 Jun 2025
+ 04:46:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/4] arm64: defconfig: Enable X1P42100_GPUCC driver
-To: Akhil P Oommen <akhilpo@oss.qualcomm.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Rob Clark <robin.clark@oss.qualcomm.com>, Sean Paul <sean@poorly.run>,
- Konrad Dybcio <konradybcio@kernel.org>, Dmitry Baryshkov <lumag@kernel.org>,
- Abhinav Kumar <abhinav.kumar@linux.dev>,
- Jessica Zhang <jessica.zhang@oss.qualcomm.com>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
- Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
- freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20250611-x1p-adreno-v2-0-5074907bebbd@oss.qualcomm.com>
- <20250611-x1p-adreno-v2-2-5074907bebbd@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250611-x1p-adreno-v2-2-5074907bebbd@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <4823a58093c6dfa20df62b5c18da613621b9716e.1749554599.git.viresh.kumar@linaro.org>
+In-Reply-To: <4823a58093c6dfa20df62b5c18da613621b9716e.1749554599.git.viresh.kumar@linaro.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Wed, 11 Jun 2025 13:46:40 +0200
+X-Gm-Features: AX0GCFtUQb1VuES-5s_8BtAuzHpz1VaP_GiqWmmS9tyONSLXXcQH_X0BPBTkrdQ
+Message-ID: <CANiq72mP7tGzZM_f2gRSVcBw5a5Y7vMM3eOSvuAOK=yJeEmFBg@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Convert `/// SAFETY` lines to `# Safety` sections
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Vincent Guittot <vincent.guittot@linaro.org>, linux-pm@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/06/2025 13:15, Akhil P Oommen wrote:
-> In order to enable GPU support in Snapdragon X1P42100
-> (8 CPU core version found on Asus Zenbook A14 and other
+On Tue, Jun 10, 2025 at 1:23=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
+>
+> Replace `/// SAFETY` comments in doc comments with proper `# Safety`
+> sections, as per rustdoc conventions.
+>
+> Also mark the C FFI callbacks as `unsafe` to correctly reflect their
+> safety requirements.
 
-There is no A14 upstream board DTS in next. Your commit msg should
-provide rationale for this, e.g. which upstream boards use this driver.
++1 I guess the Clippy lint triggered when writing the section, right?
 
-Best regards,
-Krzysztof
+I think it would be nice to have a lint to catch this other case, i.e.
+using `// SAFETY`, so opened:
+
+    https://github.com/rust-lang/rust-clippy/issues/15033
+
+I also found a possible false negative (or positive, depends) related
+to this, so opened:
+
+    https://github.com/rust-lang/rust-clippy/issues/15034
+
+Cheers,
+Miguel
 
