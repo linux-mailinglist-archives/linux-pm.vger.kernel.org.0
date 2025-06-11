@@ -1,109 +1,124 @@
-Return-Path: <linux-pm+bounces-28514-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28513-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F157AD6265
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 00:35:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31F0DAD622F
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 00:09:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 548E73AAD9A
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 22:35:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1979E189FF05
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 22:10:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 698ED242D84;
-	Wed, 11 Jun 2025 22:35:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27E83248F4C;
+	Wed, 11 Jun 2025 22:09:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="N1AplYhj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jtr7GlFL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sonic309-47.consmr.mail.sg3.yahoo.com (sonic309-47.consmr.mail.sg3.yahoo.com [106.10.244.110])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9620786342
-	for <linux-pm@vger.kernel.org>; Wed, 11 Jun 2025 22:35:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=106.10.244.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD2A1E9B28;
+	Wed, 11 Jun 2025 22:09:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749681351; cv=none; b=IQArOQ32XzxvDzsMDL2w/RWDo856sfC9MptxAYnRUQpUw9JSRIJHgCNwW9ZHXu88YonBfVT5wZ4PS/33ftGP4R5eJFenU3kkK2bAxgTaaIqFEiQATGVUZFO2A36mRhALCjREW/Jfg/jIjsj3LClx5Z9AJh2HGKaFYFV5IwVV8Ds=
+	t=1749679785; cv=none; b=qMGbCKnas845ey73ZV+9su3woR0w6tWci0/xJBw2s9hBlTY2LVGqrPWVImsT5iRoMjTBdqSNhdjBks9S8DRpyp5MAKjRaBC5J2HnnC1K8uspI5gHI5FGZiTD/TtvT3AtJXI4Lqq2BZper9HE1tjf70/mM1mHgZeGOxJcU7xesYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749681351; c=relaxed/simple;
-	bh=/0Vdo2n4vBWv00iFSktmhK52XeKrbW6rz6XK2gUH1Ws=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LlK41CXmuBpdszRKgi/4wQn+iKAxrhSImicMGHoMktoUavZYIunuQArGHvM0MLxBTTghkSrJeDVv7Nvr9apoUQAM7ac1QUR4sTTpcs4MZbQ3oQqk0i/GG/xrlZaHb6w9OLeZVYILrIXsNrF+g41oyPlwLG7WPV72I23kUM1cxfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com; spf=pass smtp.mailfrom=yahoo.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=N1AplYhj; arc=none smtp.client-ip=106.10.244.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yahoo.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1749681347; bh=Rn5w/P+M1tuc2960ReqD3yHmxZwhUR9NzbcqGhHPW7M=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=N1AplYhjzUFlIZtpPnDdDhclNaJDEzCosejw92oHDNQJl/naR1zEhlO5zUvQXRxkXqGAqlEkSDcS0UAepNYuAWBBv2BGqIk1GKpEvt2FjqFrIbG2ZNuRA6lkV2uim1sMojRLypNM6NIvkpi3RUelWry+Isby4H6thd7znbRQSJWpkhozLSZRjVrnXCtrroOyfOBRgMDfiHec1+zs/9kDF8PL6DP1PBrMvZDmsCxHLyLyAkdkHemWLJEU+5GtOraMSXmgtmCRmlWGO4jkfZTRJP3NLoZhyJ1AJEtYid4c6omw677SmzrVhuZsZd3pgI4sxMLY+sKgVIzdJDk8CSfFXw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1749681347; bh=5FKii5pTTT3JaJ6ALr0j2h4n2hyIILhMfn20qRxePGm=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=PqJp0iouAoGemjJz0wI8K2z3Wqmu9tkrTtvuE/MsTBXutwyPBOUw9xzKK/MRkv7ekvmKQGcFj+4fGa0iplFdRTHk0dEOwbIEIAAHZtYz4Ced1gGvXJ+iRvIl4zgDKHHeZG5dpBWIB9Zz+A5cKE5Az8+KiDHifyvstddiiPhscd2ZG7ze1nGaNfiZclyV9WVWueNqDwxt3kJnRJUalGOeExUSbr8KzAl30edHrKmYvDj0VCzhdO+ll6Snyy+vxfcH+WUHHCb59tt8cPRXGpF8grN8S65OEW3Eu90Jvsi+WF0GLMV6ZCtpxZAnXL2rUsHHJI/FeZqNQ3Jqbt5N9VVk0g==
-X-YMail-OSG: a.2tuGwVM1kfTLH6cec8WQUaPjVAFMdGc_qj0obGbzt8ygiI76p6JNr6G_t7TNU
- xGuN5cd9OoP7wXqGpGsp9X9ZpLcBbjDfzYqVBz_QHh9IE.29GFtDVbvjEnCdmMCkK6Z_LV1M9lY7
- Cm1dWqolJibkZSHRbGeqWxPJNL.6m2zdGykka4rcqAlejOlA3IPABXmixc_Ea0BIMYUgWINPBok7
- Fcm_ugku.30z8XXilYtUqN4J7cDq0dTBPS8QomNEfi5GupqZmQmQJGxUin2BD5RKQYKo7G3hsd7g
- IAldcfyTWeNTQWAorNfklhHBAx8jASU7j0.JmmJyUd35cpiJNjx06DnLBVtPCrnx.xfz5b2GnaYO
- VOAhw955azmutM.vZJmUA99CUDIE_Oa6FdFGgcuRviNQH4wx.HBZCXAHV7QUNArgzC4NEV6vbvT6
- upOpgG_iT4.g8VhnAsXpyEDAcM8Ml3ua0qlSyifZRJCEheSYAoB2V8f8LLpoO9iVxOzwJNd6i3WN
- oqQNq6Cm9C.7x8bSseYohwx4FEx6tf0ZPEr2G3Hra.QHeMpxBzDKa1VsskgsDjW9oPY46y3dysxq
- TQWRzYC_mh3PX._ac7a3LqI2bn1zsI.0uuHC9ZupasHF_PGCcROdrcfXGqvgvDapl_7z9J7Jka0h
- 30YCshIZCE2_88vQ4cri5LLBnKE8FB3S6ck0vlmk0NlFqB3mdGFdyLrUrZFJaHH_llf91s3MiI6h
- i1BpwNaZXpZvHJ2pI8wncO_cSHcSloQFeYSO2JD3Vp6OGZGtMWFA._mMxMUOLNlTN3Cv7bkNpvmI
- GdolRtY0kBO723j.995iZpv7h4FTmlTYL8.I5MlI8zs_RoToFlxG4cr_zvfqZze6plhPHOpiOY90
- Lv_gaJgvKj7IxBir8kSh5hcSweRV8V5Niq8Y1x08.Yp7C1D0YUTMNhDKFHxKmQbEFM1d6emeNRm6
- d51o2rlSNmd0afFhiFzq8nQH62blgpT2gYU.I7IRvxW3npQLWPrI6NmKwuJbBwx.bzAQAIureylV
- ptwFv1ziUygDfS001u4EU9UiqCp6rqCYRB4epJ4hPm0.DXBksKGhvsGj9vcv76lJo_.HjwXswVON
- lTYM6tXkDvK0PEnLH1OjFcUOAjMav6hMN1eMp25y_C89inUF2WNAIOLz7EBG87IzWBtp8CHqMiiF
- UriGno6HFimBoQ5VTnX9PtJhFoiNVD8TY.NJeAF73WxRoEgSDW8_PJCvhvi8jw.eg.e0629Zj1Yq
- 4OJt7g8tmVqytzi0kc1tN9gstyWPI3Z8MNTIqI6seWCu66AWgmSnwk42YOzs.ryZ5FFhhlVc9WTc
- 6BUHY3jALbge7ezobBp60qb1oZS2CnBDYHAsyA_UgWd5LHf7L2gGU_875oFZRm8qDLKhKJ_4qsQ4
- bVvnM0Etzinzlqjixt2YjHfrNPNJjb68gFoIpyrI6Bp71pra9P9afraiYnkR5mjuwF9chVErmN7y
- uGDV7nQ6U.bZmbqurg1Dtwh9jBswdrDx7Kua0IFGqUGYKmAA2OezdA.8whW5TaD85SI058LICV.A
- 6tloNepag8tY4m9VAvOCm9QP08JSYGacFwlvbXbyxdvdz18vNF6zAcMV.kYaoCDPyZeCQHO0Dvbb
- mK1R0dyhDGsBd7Wpqt0mC1.T1RqAWfnK05ulpVi3j6u8hB5PFuMMrWbIA73p8lczP5sdkC.oXueI
- kYZeHAYiVsPAPUkWRJscLs3sdUhm2nj_EfV5hrPSsjLZqwVjMXvRVZb1UJAj6S10U4VTBIniv76c
- 7xC5VUtYn0wfHKq8P1T5sPa6BDFjoJ_YHgFJrY5Xn4dFuIphUmF00ZcexwuxJ.uLK4EwE3PQ22Q0
- VUM2Lm7n8Sr75gmSkrpFw5yKA7Tyi2go4dysvxqvqFLaN7tywT5v9zub3OXfFrxL4SvL5ixv0kBW
- Ss5guBVKB8w_wxHsrJRA6Hhzky1Z7_LMlcHHEg2NRw33jPxt2O3vrQwV7mR7epJwfXAI..d80x8c
- CqPoh06oKAcpiLQvpcBwambQJGiSN3SNGVGsBrJmlvtTai2OFbc720uadlZC.u2qwOWPiWKTOBBX
- WQgE.DZb_.KMDL0vOKRduPadta6G9QAIuj1ImOqFrmJZsOdJCRfE_L.CiwZR9z91TZKklo3LI_Vn
- WqEanhCjtAZwkRGAN1mV0ACe6bVodKf97_FU4DydmxTI8rodceS.A.30HsqG79WmQTW6EP4l0Xho
- jBR0ry4.R9tv2_VjeSgwIGDNZJq_lr3Yziv_mhHn15vZiLUoo_fxgSVU9h176mEgnoQUIjB4IPxk
- 0aEP80XEW8CLsfoRTCFwjnn48kji2yUvip.MZ_oQvz9pcIoxWNdU-
-X-Sonic-MF: <sumanth.gavini@yahoo.com>
-X-Sonic-ID: d3e8ac7e-f1a1-4672-bbca-d7271f1c36cb
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.sg3.yahoo.com with HTTP; Wed, 11 Jun 2025 22:35:47 +0000
-Received: by hermes--production-ne1-9495dc4d7-psbrp (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 2ed6d631eec321540bbe8aaca754edee;
-          Wed, 11 Jun 2025 21:53:10 +0000 (UTC)
-From: Sumanth Gavini <sumanth.gavini@yahoo.com>
-To: sumanth.gavini@yahoo.com
-Cc: arjan@linux.intel.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux@dominikbrodowski.net,
-	rjw@rjwysocki.net,
-	skhan@linuxfoundation.org,
-	stern@rowland.harvard.edu
-Subject: [PATCH v2] docs: ABI: Fix "diasble" to "disable"
-Date: Wed, 11 Jun 2025 16:53:06 -0500
-Message-ID: <20250611215306.2989590-1-sumanth.gavini@yahoo.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250523220238.455718-1-sumanth.gavini@yahoo.com>
-References: <20250523220238.455718-1-sumanth.gavini@yahoo.com>
+	s=arc-20240116; t=1749679785; c=relaxed/simple;
+	bh=q3xX2X7h9he/dUJnCnbpHt/NgJ+2yrK0a9aojccAvFc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dDU/vDtyNzLi356GfKW043FBIFH5V0Q9bfmYJ3oYKCWfilUoTYIgalYWAQL9eRG//tfYgSmaK2pLQ+u2DXwhb8sbRQeM07K/VZ4Ktufezk1gG8YnCxSpjlA2hR4P+dAI8VD57rx0yAMwp6HMoN6tLNz7taDQFQe2ulc091jj9KQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jtr7GlFL; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749679783; x=1781215783;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=q3xX2X7h9he/dUJnCnbpHt/NgJ+2yrK0a9aojccAvFc=;
+  b=Jtr7GlFLaVxQibFvgXW0Bo2njFQh6sTO+0B9BunqFZl/K7Wkliu+4CW9
+   wmxs06IROtMt8FVYDZ5e7auSqYti22OJHMueTFFQB3p1NdaJtKqkOUmdE
+   yRVV/XbHQhpph4rbNYxof4amppIX2dUrorQMnWwqnN4HtbHHeHbrPVRW4
+   O+T5aOz5X00DNRjIN9FjKbFr7n2YoRTFySqTPWavp4PL2iWtAfMNlUW/d
+   E5Anz8tEXsTwiFZJPnQA/K/cvgGYhvgRW28S2lqoxDfE37v/k0LSYAfzV
+   SLRd60AVQ+L7552W10TL85zm9SXxQ0F7zmttkVedUuo8e9offAjb1/kJ2
+   g==;
+X-CSE-ConnectionGUID: sJWnWLE9Rd2RmFt5Y8mwgw==
+X-CSE-MsgGUID: f2AKRsOwTNymlFQWnHyUnw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11461"; a="51707291"
+X-IronPort-AV: E=Sophos;i="6.16,229,1744095600"; 
+   d="scan'208";a="51707291"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 15:09:41 -0700
+X-CSE-ConnectionGUID: IpgnycrbQlKXGyi3trCu0w==
+X-CSE-MsgGUID: W1gk8/exQIulUE0QautbAg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,229,1744095600"; 
+   d="scan'208";a="147220983"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 11 Jun 2025 15:09:38 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uPTdX-000AtS-2b;
+	Wed, 11 Jun 2025 22:09:35 +0000
+Date: Thu, 12 Jun 2025 06:09:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nick Hu <nick.hu@sifive.com>, conor+dt@kernel.org, krzk+dt@kernel.org,
+	Alexandre Ghiti <alex@ghiti.fr>, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org
+Cc: Paul Gazzillo <paul@pgazz.com>,
+	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+	oe-kbuild-all@lists.linux.dev, Nick Hu <nick.hu@sifive.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Samuel Holland <samuel.holland@sifive.com>
+Subject: Re: [PATCH v2 3/3] cpuidle: Add SiFive power provider
+Message-ID: <202506120535.f1iULf9O-lkp@intel.com>
+References: <20250611031023.28769-4-nick.hu@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250611031023.28769-4-nick.hu@sifive.com>
 
-Hi Shuah,
+Hi Nick,
 
-Just following up on my patch submitted on 2025-05-23 22:02  with subject "[[PATCH v2] docs: ABI: Fix "diasble" to "disable"]".
+kernel test robot noticed the following build warnings:
 
-Original message: https://lore.kernel.org/all/20250523220238.455718-1-sumanth.gavini@yahoo.com/
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on rafael-pm/bleeding-edge robh/for-next linus/master v6.16-rc1 next-20250611]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Would you have any feedback on this change? I'd be happy to address any comments or concerns.
+url:    https://github.com/intel-lab-lkp/linux/commits/Nick-Hu/cpuidle-riscv-sbi-Work-with-the-external-pmdomain-driver/20250611-121115
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20250611031023.28769-4-nick.hu%40sifive.com
+patch subject: [PATCH v2 3/3] cpuidle: Add SiFive power provider
+config: riscv-kismet-CONFIG_PM_GENERIC_DOMAINS_OF-CONFIG_SIFIVE_DMC_PD_CPUIDLE-0-0 (https://download.01.org/0day-ci/archive/20250612/202506120535.f1iULf9O-lkp@intel.com/config)
+reproduce: (https://download.01.org/0day-ci/archive/20250612/202506120535.f1iULf9O-lkp@intel.com/reproduce)
 
-Thank you for your time and consideration.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506120535.f1iULf9O-lkp@intel.com/
 
-Best regards,
-Sumanth Gavini
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS_OF when selected by SIFIVE_DMC_PD_CPUIDLE
+   WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS_OF
+     Depends on [n]: PM_GENERIC_DOMAINS [=n] && OF [=y]
+     Selected by [y]:
+     - SIFIVE_DMC_PD_CPUIDLE [=y] && CPU_IDLE [=y] && RISCV [=y] && ARCH_SIFIVE [=y]
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
