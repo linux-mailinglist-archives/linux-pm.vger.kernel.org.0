@@ -1,68 +1,68 @@
-Return-Path: <linux-pm+bounces-28513-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28516-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31F0DAD622F
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 00:09:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17030AD63B8
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 01:11:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1979E189FF05
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 22:10:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA4FA2C02AA
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 23:11:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27E83248F4C;
-	Wed, 11 Jun 2025 22:09:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CEF82701D1;
+	Wed, 11 Jun 2025 23:11:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jtr7GlFL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aq7OfoyP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD2A1E9B28;
-	Wed, 11 Jun 2025 22:09:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBD0266588;
+	Wed, 11 Jun 2025 23:11:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749679785; cv=none; b=qMGbCKnas845ey73ZV+9su3woR0w6tWci0/xJBw2s9hBlTY2LVGqrPWVImsT5iRoMjTBdqSNhdjBks9S8DRpyp5MAKjRaBC5J2HnnC1K8uspI5gHI5FGZiTD/TtvT3AtJXI4Lqq2BZper9HE1tjf70/mM1mHgZeGOxJcU7xesYg=
+	t=1749683509; cv=none; b=DR/0ByRbuFTzPH//DUVX/xgAZQ7dGkIaAf2Oa/T0a2Va2oNeNWz85DqVyrbPJ/nK4qjIcuxovqVz67ueCJ6lSxgSEvMCq4dm4uOJMZzozNptYZyx0NAIDne06TVK6WCPxOvPBDtKuo3bO5A6n2AcVoB4gkQXNuMRBHD6pXdWCJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749679785; c=relaxed/simple;
-	bh=q3xX2X7h9he/dUJnCnbpHt/NgJ+2yrK0a9aojccAvFc=;
+	s=arc-20240116; t=1749683509; c=relaxed/simple;
+	bh=Xi7Bn8Dl4dzWWpiOeR/DTKrcXEYcYeIJC7prsjMVDnk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dDU/vDtyNzLi356GfKW043FBIFH5V0Q9bfmYJ3oYKCWfilUoTYIgalYWAQL9eRG//tfYgSmaK2pLQ+u2DXwhb8sbRQeM07K/VZ4Ktufezk1gG8YnCxSpjlA2hR4P+dAI8VD57rx0yAMwp6HMoN6tLNz7taDQFQe2ulc091jj9KQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jtr7GlFL; arc=none smtp.client-ip=198.175.65.21
+	 Content-Type:Content-Disposition:In-Reply-To; b=urEoh0Swp+f5uZ5zhV+HZyH8EZi4elhkL65ThF8R57G1JOclD0WEo+tzOB6cmLb30JjsNidQ/hFirNrhO3M7lEE9jXtoFwNBnE8qsS4dAm8GMNL2SGNarGbuXPi84RzjrH/DyjemQIOIEA6kHqwVwygaS6Rqz1oBNL9T8ajuFfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aq7OfoyP; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749679783; x=1781215783;
+  t=1749683508; x=1781219508;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=q3xX2X7h9he/dUJnCnbpHt/NgJ+2yrK0a9aojccAvFc=;
-  b=Jtr7GlFLaVxQibFvgXW0Bo2njFQh6sTO+0B9BunqFZl/K7Wkliu+4CW9
-   wmxs06IROtMt8FVYDZ5e7auSqYti22OJHMueTFFQB3p1NdaJtKqkOUmdE
-   yRVV/XbHQhpph4rbNYxof4amppIX2dUrorQMnWwqnN4HtbHHeHbrPVRW4
-   O+T5aOz5X00DNRjIN9FjKbFr7n2YoRTFySqTPWavp4PL2iWtAfMNlUW/d
-   E5Anz8tEXsTwiFZJPnQA/K/cvgGYhvgRW28S2lqoxDfE37v/k0LSYAfzV
-   SLRd60AVQ+L7552W10TL85zm9SXxQ0F7zmttkVedUuo8e9offAjb1/kJ2
-   g==;
-X-CSE-ConnectionGUID: sJWnWLE9Rd2RmFt5Y8mwgw==
-X-CSE-MsgGUID: f2AKRsOwTNymlFQWnHyUnw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11461"; a="51707291"
+  bh=Xi7Bn8Dl4dzWWpiOeR/DTKrcXEYcYeIJC7prsjMVDnk=;
+  b=aq7OfoyPryAYOwh+xcGnofJuEsfLy5kTNBOxfAHnjiT2+aEvmdNNlHI8
+   sDvzNHmSATEL+X/SCSA42rBHnK8wyJdEDi2x2VRlQ9WKkjT2d8eKljTRc
+   c5WD4GzK4KeF7g+YPXEccqfd9rKUV8G5gC+2AaSnAroWL0CpxrL5i/o7Z
+   L68KjXAokt2h0GXy8xbgLsIGJ6pghoQqA1mzMysuDQOG37pKHPjDEpDMz
+   dKOhkIiV8tBrlbosp1WprIJscishmuYZ3x4vbC4dqzSm+BbWFaXsy69KK
+   PaiCjibWk9gnEknddr+cNh+kUat/GmZR7RraKCT1bhd9ss2RbLvDRR/41
+   w==;
+X-CSE-ConnectionGUID: KsIHq3oqTrG5M2SFIS061w==
+X-CSE-MsgGUID: g3x1LF1QTAO3L2BUDojOJg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11461"; a="51063181"
 X-IronPort-AV: E=Sophos;i="6.16,229,1744095600"; 
-   d="scan'208";a="51707291"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 15:09:41 -0700
-X-CSE-ConnectionGUID: IpgnycrbQlKXGyi3trCu0w==
-X-CSE-MsgGUID: W1gk8/exQIulUE0QautbAg==
+   d="scan'208";a="51063181"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 16:11:47 -0700
+X-CSE-ConnectionGUID: WCKpKM7NRfePmN8CCfTQuw==
+X-CSE-MsgGUID: jVTruJE9RbKw+bqDvkvdzg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,229,1744095600"; 
-   d="scan'208";a="147220983"
+   d="scan'208";a="178245955"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 11 Jun 2025 15:09:38 -0700
+  by orviesa002.jf.intel.com with ESMTP; 11 Jun 2025 16:11:43 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uPTdX-000AtS-2b;
-	Wed, 11 Jun 2025 22:09:35 +0000
-Date: Thu, 12 Jun 2025 06:09:05 +0800
+	id 1uPUbc-000Av4-1y;
+	Wed, 11 Jun 2025 23:11:40 +0000
+Date: Thu, 12 Jun 2025 07:11:17 +0800
 From: kernel test robot <lkp@intel.com>
 To: Nick Hu <nick.hu@sifive.com>, conor+dt@kernel.org, krzk+dt@kernel.org,
 	Alexandre Ghiti <alex@ghiti.fr>, linux-kernel@vger.kernel.org,
@@ -77,7 +77,7 @@ Cc: Paul Gazzillo <paul@pgazz.com>,
 	Albert Ou <aou@eecs.berkeley.edu>,
 	Samuel Holland <samuel.holland@sifive.com>
 Subject: Re: [PATCH v2 3/3] cpuidle: Add SiFive power provider
-Message-ID: <202506120535.f1iULf9O-lkp@intel.com>
+Message-ID: <202506120735.Ek7I6Nze-lkp@intel.com>
 References: <20250611031023.28769-4-nick.hu@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -103,18 +103,23 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Nick-Hu/cpuidle-riscv-sbi
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
 patch link:    https://lore.kernel.org/r/20250611031023.28769-4-nick.hu%40sifive.com
 patch subject: [PATCH v2 3/3] cpuidle: Add SiFive power provider
-config: riscv-kismet-CONFIG_PM_GENERIC_DOMAINS_OF-CONFIG_SIFIVE_DMC_PD_CPUIDLE-0-0 (https://download.01.org/0day-ci/archive/20250612/202506120535.f1iULf9O-lkp@intel.com/config)
-reproduce: (https://download.01.org/0day-ci/archive/20250612/202506120535.f1iULf9O-lkp@intel.com/reproduce)
+config: riscv-kismet-CONFIG_RISCV_SBI_CPUIDLE-CONFIG_SIFIVE_DMC_PD_CPUIDLE-0-0 (https://download.01.org/0day-ci/archive/20250612/202506120735.Ek7I6Nze-lkp@intel.com/config)
+reproduce: (https://download.01.org/0day-ci/archive/20250612/202506120735.Ek7I6Nze-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506120535.f1iULf9O-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506120735.Ek7I6Nze-lkp@intel.com/
 
 kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS_OF when selected by SIFIVE_DMC_PD_CPUIDLE
+>> kismet: WARNING: unmet direct dependencies detected for RISCV_SBI_CPUIDLE when selected by SIFIVE_DMC_PD_CPUIDLE
    WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS_OF
      Depends on [n]: PM_GENERIC_DOMAINS [=n] && OF [=y]
+     Selected by [y]:
+     - SIFIVE_DMC_PD_CPUIDLE [=y] && CPU_IDLE [=y] && RISCV [=y] && ARCH_SIFIVE [=y]
+   
+   WARNING: unmet direct dependencies detected for RISCV_SBI_CPUIDLE
+     Depends on [n]: CPU_IDLE [=y] && RISCV [=y] && RISCV_SBI [=n]
      Selected by [y]:
      - SIFIVE_DMC_PD_CPUIDLE [=y] && CPU_IDLE [=y] && RISCV [=y] && ARCH_SIFIVE [=y]
 
