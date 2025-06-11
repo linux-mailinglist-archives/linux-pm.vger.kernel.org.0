@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-28481-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28482-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 118C4AD53BF
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 13:23:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C1E4AD53D9
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 13:26:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 992E9188CADE
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 11:23:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 383B41886486
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 11:26:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A838233D86;
-	Wed, 11 Jun 2025 11:22:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC3DC25BEE6;
+	Wed, 11 Jun 2025 11:25:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PDP9PBo/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RQzubqUj"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652452E6135;
-	Wed, 11 Jun 2025 11:22:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992512E6108;
+	Wed, 11 Jun 2025 11:25:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749640962; cv=none; b=lBKW/kYa2SmgyHrXGunrBsUlMUZcI+vogjjTK8JPEzhSkSHHjDQHVU/ufZD/zFhTfBoJwHoukgOyQ+hneqqkivj/XuQ8o0TA12ciIBIvzC6U4+5JaYfMf0gPaWmngtXuZlqRXwVR1QYPYNkNByVDOOuZAlu2PZ4tuAVcGITBnxQ=
+	t=1749641150; cv=none; b=SgeUfI2u4mgiBGhHpp2VzXB0tfBYiObZjGKV6h2beuE1u+OotYYdMd1g8CPn1tPYrgFzwwwFIfj3BkCVa0MFFTM040Rj1kEOKcDeRAL/Y46wTyQLlhcGbSleBsCAs5Z8XyLl1GtsGSb0+d9SpqlUiW8jfIsrPLvsIrvkjdRqac8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749640962; c=relaxed/simple;
-	bh=docsndFI6Pu2XiM5fhPypxl5HJBhGvZAfSKa9arbkFY=;
+	s=arc-20240116; t=1749641150; c=relaxed/simple;
+	bh=1fZ+iceq3RPjXWpAsNdBQALGaGO5Tot/BSmkCc/YjWM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uW56L/nKBCPs6CfOiip/CWFj5yo/EQReMvXdKAmtGai9PNGLZyjUOOUPZdbibPTIwWj3xHYGZgq1GSrym8ESSgmDuP3hwsMjmh1K/RuzHcNSoSgL0mSHUh1qN1DRnNMHacZQBoZMFNk1q8zDhTiHBhlpvCDpf8shLcVpjIgoXHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PDP9PBo/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF3EEC4CEEE;
-	Wed, 11 Jun 2025 11:22:36 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Wd2Wv1bvfvXgEgVIJKbgMugekZmI7jOU0ywuJ6SD+OSA/RHxliibP2xIz8CTgki+7KYd7Qoze8o3QNXJTH7C0FJq3InIvON62UKsSw2/vpH69pRvzOZr/p3y2+MfITg6lc8pav62+YPACGU/2Xm0dhvLZgBTwJvaVDkrPbUqVzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RQzubqUj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B14BFC4CEEE;
+	Wed, 11 Jun 2025 11:25:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749640962;
-	bh=docsndFI6Pu2XiM5fhPypxl5HJBhGvZAfSKa9arbkFY=;
+	s=k20201202; t=1749641150;
+	bh=1fZ+iceq3RPjXWpAsNdBQALGaGO5Tot/BSmkCc/YjWM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PDP9PBo/LYCXBfQVelEBN/Z6h+1sGl43me9RqV2mdNPiuSrXcTOX5E7srWXDxtsPu
-	 gRXWwmUHGY4GgGe/mF6JXJBg5AY/8xPGwRSo6yRcfcEtz4xckFscb7Cgb9Ma+5tf5U
-	 hy581ySOpQA7DuLaVzyHsEoXUluxKQbGuA34TxjvWVO2o61WSASYs3zCi5/sbdkCZW
-	 i97MmVXropQ3P1zruX8V7ijad/EYSxyxl0Xnez0s5+r603Oq0i+5VgiFAxo7tAcHkW
-	 FbagN9CswA8sZMHJ+nZInFf1LObaTqYIBw44ynOynJHKHvTroW0PCCTr5foGmG5sJA
-	 7U9uLRaS2IMdQ==
-Message-ID: <1ee554e4-d813-47cd-a1ab-9eaa4634cdb1@kernel.org>
-Date: Wed, 11 Jun 2025 13:22:35 +0200
+	b=RQzubqUj7ApoX0vizvn2DXbNxCOpNjDNCC3JNSjLHPGxM9KYccS7o/lKlZmNy4/B6
+	 DTEgGXTvAkRJ3uPAaB0C1WYOdLtqFyDDbB+XABhfvEu4nW6x7RkWVC7c7bH3f6LiOi
+	 zJZnEmM1YiWo0V4xjrk7NsMDIiBn8o1J2nIT1UaG/ONtW7x4L1VRBeCwlVu7Kvxvid
+	 WmN9vWQQNoRXqQJZDhrb8knyPprdNvCeayD7I4iGGDyx+Uh0G0KPAV7DAYMvE7InnZ
+	 JvUVTOpJn0AtAHWo1OLttS3hdlRVGElw38m228Ze3Clfl9u7kJaVLFl3n5vImMhtD2
+	 pF+INMBkrmVOA==
+Message-ID: <810f7614-ed73-471e-bc5b-3305816737da@kernel.org>
+Date: Wed, 11 Jun 2025 13:25:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: Add GPU support to X1P42100 SoC
+Subject: Re: [PATCH v2 2/4] arm64: defconfig: Enable X1P42100_GPUCC driver
 To: Akhil P Oommen <akhilpo@oss.qualcomm.com>,
  Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
  Rob Clark <robin.clark@oss.qualcomm.com>, Sean Paul <sean@poorly.run>,
@@ -68,7 +68,7 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
  linux-pm@vger.kernel.org
 References: <20250611-x1p-adreno-v2-0-5074907bebbd@oss.qualcomm.com>
- <20250611-x1p-adreno-v2-4-5074907bebbd@oss.qualcomm.com>
+ <20250611-x1p-adreno-v2-2-5074907bebbd@oss.qualcomm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -114,34 +114,16 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250611-x1p-adreno-v2-4-5074907bebbd@oss.qualcomm.com>
+In-Reply-To: <20250611-x1p-adreno-v2-2-5074907bebbd@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 11/06/2025 13:15, Akhil P Oommen wrote:
-> +		opp-280000000 {
-> +			opp-hz = /bits/ 64 <280000000>;
-> +			opp-level = <RPMH_REGULATOR_LEVEL_LOW_SVS_D1>;
-> +			opp-peak-kBps = <2136719>;
-> +			qcom,opp-acd-level = <0xc82f5ffd>;
-> +			opp-supported-hw = <0x1f>;
-> +		};
-> +	};
-> +
->  };
->  
->  &gpucc {
-> @@ -41,6 +150,13 @@ &pcie6a_phy {
->  	compatible = "qcom,x1p42100-qmp-gen4x4-pcie-phy";
->  };
->  
-> +&qfprom {
-> +	gpu_speed_bin: gpu_speed_bin@119 {
+> In order to enable GPU support in Snapdragon X1P42100
+> (8 CPU core version found on Asus Zenbook A14 and other
 
-No underscores. You need to align downstream code to upstream. See
-coding style.
-
-
+There is no A14 upstream board DTS in next. Your commit msg should
+provide rationale for this, e.g. which upstream boards use this driver.
 
 Best regards,
 Krzysztof
