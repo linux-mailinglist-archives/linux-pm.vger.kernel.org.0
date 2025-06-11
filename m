@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-28480-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28481-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA9DFAD53BC
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 13:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 118C4AD53BF
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 13:23:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B96A18859CF
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 11:21:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 992E9188CADE
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 11:23:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBEAA23ABBD;
-	Wed, 11 Jun 2025 11:21:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A838233D86;
+	Wed, 11 Jun 2025 11:22:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BNtN1SRw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PDP9PBo/"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D192E611C;
-	Wed, 11 Jun 2025 11:21:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652452E6135;
+	Wed, 11 Jun 2025 11:22:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749640866; cv=none; b=Reie8+OBHuhvGcIVX2avbOcnyWMzw7WaGktF5AEg/mS9tAHHzckZtu6s2jRyGUBqZZa0dXfmrHl7eeumqf1YtbTIdFdz+9FdXa3wD1TDAo1Dm+cTeSXq0VUWQIAYCIOpejIOi+z45iepV/kfRoC5PCjnWbio8+uyOVXz99BtWwQ=
+	t=1749640962; cv=none; b=lBKW/kYa2SmgyHrXGunrBsUlMUZcI+vogjjTK8JPEzhSkSHHjDQHVU/ufZD/zFhTfBoJwHoukgOyQ+hneqqkivj/XuQ8o0TA12ciIBIvzC6U4+5JaYfMf0gPaWmngtXuZlqRXwVR1QYPYNkNByVDOOuZAlu2PZ4tuAVcGITBnxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749640866; c=relaxed/simple;
-	bh=PevshR8jJnNZj9lauUzY2OJoRgPg5R1bh+4/c6iM5Ds=;
+	s=arc-20240116; t=1749640962; c=relaxed/simple;
+	bh=docsndFI6Pu2XiM5fhPypxl5HJBhGvZAfSKa9arbkFY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k6rWRqTxSYoY3YiROy50Rd4DHy045wIb/zbbRAXSeZchDqsmiB8fRnd5UH7Y2KUKg8Bf3pMl8ziUgcN/qvZSHtYpxhDhWr9x9laVVQaJqNywqDV/xlJyvcOyft7MyRFb8QKKhY1RaCzzsUDbmKrcnTjiYMGV5ZqOBZ6ScL6EEg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BNtN1SRw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B13E8C4CEEE;
-	Wed, 11 Jun 2025 11:20:59 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=uW56L/nKBCPs6CfOiip/CWFj5yo/EQReMvXdKAmtGai9PNGLZyjUOOUPZdbibPTIwWj3xHYGZgq1GSrym8ESSgmDuP3hwsMjmh1K/RuzHcNSoSgL0mSHUh1qN1DRnNMHacZQBoZMFNk1q8zDhTiHBhlpvCDpf8shLcVpjIgoXHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PDP9PBo/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF3EEC4CEEE;
+	Wed, 11 Jun 2025 11:22:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749640865;
-	bh=PevshR8jJnNZj9lauUzY2OJoRgPg5R1bh+4/c6iM5Ds=;
+	s=k20201202; t=1749640962;
+	bh=docsndFI6Pu2XiM5fhPypxl5HJBhGvZAfSKa9arbkFY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BNtN1SRwdngnasV09EqD20gCyCLT342msBBOYjIo+u5al/JBFGbonQ11QmGYXeUde
-	 NqwFKQlZUZJG5S0YOu7rJX6EXn7nES12TLLRdLX80AK6GKy7cwA9ikhSq3ZiTpZ7zh
-	 JIKzZYT3EdlXVS4afXkk9cvcPyieZNkDVTeq32JEcrF7uiIICvM75GabhVseZ9HdjN
-	 8Dbc2BK09lMCix6y0LReGHQh0iyOk+OUzGM+KKxmRej0QoxZ4PseUb87zX5kcr2OgY
-	 oSqRu6se+oe7GIf7nmNAFX6XvJytOEM/vi30hpbxVwmXDTnJABHxne6S1RdySc/2YY
-	 vHa7cd0nNyFLg==
-Message-ID: <492417fe-c086-4980-b108-0487bad08155@kernel.org>
-Date: Wed, 11 Jun 2025 13:20:57 +0200
+	b=PDP9PBo/LYCXBfQVelEBN/Z6h+1sGl43me9RqV2mdNPiuSrXcTOX5E7srWXDxtsPu
+	 gRXWwmUHGY4GgGe/mF6JXJBg5AY/8xPGwRSo6yRcfcEtz4xckFscb7Cgb9Ma+5tf5U
+	 hy581ySOpQA7DuLaVzyHsEoXUluxKQbGuA34TxjvWVO2o61WSASYs3zCi5/sbdkCZW
+	 i97MmVXropQ3P1zruX8V7ijad/EYSxyxl0Xnez0s5+r603Oq0i+5VgiFAxo7tAcHkW
+	 FbagN9CswA8sZMHJ+nZInFf1LObaTqYIBw44ynOynJHKHvTroW0PCCTr5foGmG5sJA
+	 7U9uLRaS2IMdQ==
+Message-ID: <1ee554e4-d813-47cd-a1ab-9eaa4634cdb1@kernel.org>
+Date: Wed, 11 Jun 2025 13:22:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] dt-bindings: opp: adreno: Update regex of OPP
- entry
+Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: Add GPU support to X1P42100 SoC
 To: Akhil P Oommen <akhilpo@oss.qualcomm.com>,
  Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
  Rob Clark <robin.clark@oss.qualcomm.com>, Sean Paul <sean@poorly.run>,
@@ -69,7 +68,7 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
  linux-pm@vger.kernel.org
 References: <20250611-x1p-adreno-v2-0-5074907bebbd@oss.qualcomm.com>
- <20250611-x1p-adreno-v2-1-5074907bebbd@oss.qualcomm.com>
+ <20250611-x1p-adreno-v2-4-5074907bebbd@oss.qualcomm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -115,36 +114,33 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250611-x1p-adreno-v2-1-5074907bebbd@oss.qualcomm.com>
+In-Reply-To: <20250611-x1p-adreno-v2-4-5074907bebbd@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 11/06/2025 13:15, Akhil P Oommen wrote:
-> Update regex to allow multi-worded OPP entry names.
-
-Why would we want multi-worded? This needs to be explained here.
-
-
-> 
-> Signed-off-by: Akhil P Oommen <akhilpo@oss.qualcomm.com>
-> ---
->  Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
-> index a27ba7b663d456f964628a91a661b51a684de1be..bba95799919eb52d12afa42354ed909d0ef3c627 100644
-> --- a/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
-> +++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
-> @@ -23,7 +23,7 @@ properties:
->        const: operating-points-v2-adreno
+> +		opp-280000000 {
+> +			opp-hz = /bits/ 64 <280000000>;
+> +			opp-level = <RPMH_REGULATOR_LEVEL_LOW_SVS_D1>;
+> +			opp-peak-kBps = <2136719>;
+> +			qcom,opp-acd-level = <0xc82f5ffd>;
+> +			opp-supported-hw = <0x1f>;
+> +		};
+> +	};
+> +
+>  };
 >  
->  patternProperties:
-> -  '^opp-[0-9]+$':
-> +  '^opp(-?[0-9]+)*$':
+>  &gpucc {
+> @@ -41,6 +150,13 @@ &pcie6a_phy {
+>  	compatible = "qcom,x1p42100-qmp-gen4x4-pcie-phy";
+>  };
+>  
+> +&qfprom {
+> +	gpu_speed_bin: gpu_speed_bin@119 {
 
-Not correct regex. You allow "opp", "opp1" and all other unusual
-variants. Commit does not explain what problem you are solving, so I
-have no clue what you want here, but for sure opp1 is wrong.
+No underscores. You need to align downstream code to upstream. See
+coding style.
+
 
 
 Best regards,
