@@ -1,253 +1,120 @@
-Return-Path: <linux-pm+bounces-28429-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28430-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40315AD493C
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 05:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 769B0AD493F
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 05:15:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7992B1897918
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 03:11:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 586F718994D0
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 03:15:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFD36227EB2;
-	Wed, 11 Jun 2025 03:10:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EBEB7E0FF;
+	Wed, 11 Jun 2025 03:15:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="ZBMY8787"
+	dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b="ud1rhdty"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A01A227E90
-	for <linux-pm@vger.kernel.org>; Wed, 11 Jun 2025 03:10:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4540C382;
+	Wed, 11 Jun 2025 03:15:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.88.110.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749611452; cv=none; b=ucqUlZTtmReDrYvH3+sdbP1hZXrtC6tQWFeCNWVQT9n5WJ3m4EqAsmYvNxquzhkghmV5t7oP17Bt1xVrtqrlIxTwIZNkWOOuMP6H+8n1LYAmHdc3o9DIzanAgOXBpOKRGv5XDaUhrMUQ8EXprNeIZ9RDKfk9rA/Cia+KkyKr7lQ=
+	t=1749611719; cv=none; b=UuVNgOilyuKoYR1SoeX0ELx9BrmlZmkbf75rBIz02ahaQti9NoTXdiolR3hCc6Zii1l7MzEPG1X7LMz/BLOKLJXX6Qk5gCavA3WqzHyEhU3E/JMz7DUoaaLscesRWqE0/b08tpdXmt7YAQnHHZPvQ6ZGo8jnM95tO15NfArJVUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749611452; c=relaxed/simple;
-	bh=ezs1yVD1qWrbfIWXSnxmuxGlazdXg0gy9Hw4rcIv6x4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=qvI4GuXWslzBKwGHXHLwG0oof4eo4FVlkFj940yXLzRxFILoEM6BgduF67WfjHrWqg3RJfSETMf5GTFYtX/KlQptz7/LHOZoGBNkTD+VeSjTu7E9zH++lin+vHrnPbslv+3JwXGX8O0H/oPB9ccu2y1O176kYvh2oZmKd2vgKDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=ZBMY8787; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-234bfe37cccso75080945ad.0
-        for <linux-pm@vger.kernel.org>; Tue, 10 Jun 2025 20:10:50 -0700 (PDT)
+	s=arc-20240116; t=1749611719; c=relaxed/simple;
+	bh=DVA5qFswk6iXJ/N1plbE7chdHkrDmca4dgefxI9a7qM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pnvAVpRvcH9eOEsCp2s4X2tJMxnnAOxR678CNKMNUiG7Gqiohsj9IQG8ipFLBYBsAtNLv5sUkXzX20j93WqQqZynno86iLUwWADKoTW5lmiir0n7Xvu96bIF40XFnvCWzFjqQDWMxnEq7UhZG+s3wHskHv72z99rtJLfS1yR3po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com; spf=pass smtp.mailfrom=savoirfairelinux.com; dkim=pass (2048-bit key) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com header.b=ud1rhdty; arc=none smtp.client-ip=208.88.110.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
+Received: from localhost (localhost [127.0.0.1])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id 4D1EC3D875C7;
+	Tue, 10 Jun 2025 23:15:09 -0400 (EDT)
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
+ with ESMTP id atB_blumOGNh; Tue, 10 Jun 2025 23:15:08 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+	by mail.savoirfairelinux.com (Postfix) with ESMTP id DB55D3D8760A;
+	Tue, 10 Jun 2025 23:15:07 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com DB55D3D8760A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1749611450; x=1750216250; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=OKliCGksR6+ULOCTOHx3A9pUuY8LclRcFBEc4eLZfck=;
-        b=ZBMY87875OYYsz8xUp9Th+H9YPYEl2tts+Aa5FEEu8w1ta2QUvq4AmodGGF15a2NBw
-         jiybxhQTZqX9zciLU8KbNOwqdLsfVZpjL0zb2ORPGQ3TjNZE10FDCO7g812durV5hdun
-         oQXcvuq1XCWAlANzmWbH5urj0KPbqpkwmYNEp46DUwOG7gJYFqwgNabdb0zWooHMT8OS
-         CwOzH94wGABe4lsw+GP3hxnev6u2s70X8xzjCkyO4X1gm5POAGWJI0lG8+026TfV7Ss2
-         rP+Zr4MRQslfLn5S4jlGHw0YuNpIn22w8ROcLZ2rwuz0pvtIocVm67tD0G1P/Lzq4Ivr
-         vHMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749611450; x=1750216250;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OKliCGksR6+ULOCTOHx3A9pUuY8LclRcFBEc4eLZfck=;
-        b=N2BxVKLWsSBlbHQv/8SHXqKQYrBbqAASvwovnWHt8oqYdQ5ujmUfJsL0iWTLieC74H
-         Bm5lGWFkIXv3TfS46ynj2Bik20l7JV+3L9DFXzd5+1NcC/990xm5+LWy9uqzi/0mbLpJ
-         VBgSCHHZs8YJe9jcn5EwNFB6RAUMijlMsqvgQ+zDgi52y6s22hc9zzqtUlU91UBWku2W
-         xg6+dkKAYebG7Sa0ZGLk50HWGjwhCmot5pjC99IoVycFe9DAjV2sTM6r6cN8Y1WGN2Zf
-         Bm2fStg8cC985ONtTLLA9qIzBgdQRbCWEDDYxQsR7PkQAe5swLvbXah0TmMlpB7AFhi+
-         XH6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUGoSuL1zVeAXb4a3I7dKrBKFXKzkunyKLOJ44yxnRofhZt2PV4vmQ3HoQXBNReTGhbwiBj4NW0CQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrEYRX9+UPnJbsrk/Ki1mFLIOhp4lQeDGhglNdUKJFsW5hiJIB
-	b3zxLXlu+FIS5PnZiUwOefjsq4dXawHgT4YzX40lQdBSPQuX9sYl7jFvv6+wJwBM0TQ=
-X-Gm-Gg: ASbGncsWjdrzGFnHvDUoxiqWQk0bOAd1nO8+pmN6N4YhDnIilzzw2FCGiJgYhqZMtZ+
-	U37oS6uTEDtzMKH7ilHgm+I7ARKUSJH3arKPDSRG4UsX19AnLc/LsqrOHPP3rInO9+2b9en0vc4
-	poBC0Sw+uJxKks6JueDN+A6ZeV1Skgp6ESzjq13xWpJtfMyFWgF/77O8Y6QmE5ohmonEsrVZqmo
-	Gteg3wNdx/dyjUsNYNOsS4nDvHEOcqq0i3iV9ZpFC7f7cU8R3rTvKYDdkLFzW5faqKfmBL/QWyM
-	bq7elcOMBzV3rkW9/J4n7Lccw++DVON1YdGBRKNu7LlT8XHsLo/DKcphB7HrkdsYgrVWNDYSR5E
-	3AN/rvI3a
-X-Google-Smtp-Source: AGHT+IFPno+Zu2I5qZ202mkGD/8XfyJVIJyg5/3MgZXAw5pnr/jUfcVT8Ys4xo+b9DSKEUYG3e62jw==
-X-Received: by 2002:a17:902:dacf:b0:234:986c:66f9 with SMTP id d9443c01a7336-23642621cf9mr18955565ad.22.1749611450426;
-        Tue, 10 Jun 2025 20:10:50 -0700 (PDT)
-Received: from hsinchu26.internal.sifive.com ([210.176.154.34])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-236030789c2sm77669035ad.29.2025.06.10.20.10.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jun 2025 20:10:50 -0700 (PDT)
-From: Nick Hu <nick.hu@sifive.com>
-To: conor+dt@kernel.org,
-	krzk+dt@kernel.org,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Cc: Nick Hu <nick.hu@sifive.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Samuel Holland <samuel.holland@sifive.com>
-Subject: [PATCH v2 3/3] cpuidle: Add SiFive power provider
-Date: Wed, 11 Jun 2025 11:10:22 +0800
-Message-Id: <20250611031023.28769-4-nick.hu@sifive.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20250611031023.28769-1-nick.hu@sifive.com>
-References: <20250611031023.28769-1-nick.hu@sifive.com>
+	d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
+	t=1749611707; bh=lUqSdGomfcXWRdfKxjUuLGoqWQaLYyPcpWf4O0c0pSg=;
+	h=Date:From:To:Message-ID:MIME-Version;
+	b=ud1rhdty7qh7DmmQ3zxh270/Mn2E0gqn/nr76xbHtOJeTpdeYoQnafN4Mg/NySJCw
+	 2xsQz1B6acejnDdCr9nzhhHVfj/yF3maOOzfCPa3XpE364EjcnFVdGop4mzSdwq5ww
+	 YM/sQDbWofDd+4NgDQbEGXiX12jrFs3fRplJ9zLtXpA7RaxUsHY1QqNTRZVWDu6TFu
+	 ciPj/F+HWiBsDjnfcbV+Oa/oqOTXoy/Xx7CllxeHqwjLOlwUbjrD5fo+FjeuvQH3vi
+	 Cfcc42fMeQiPa/ipWh8VHkxxn4ex1EaxIVwrg7LiesRj93+6Cm26Xd0N4TBTAcbG/c
+	 7Sk4ABVimsjww==
+X-Virus-Scanned: amavis at mail.savoirfairelinux.com
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
+ with ESMTP id YhwpZXGteoB4; Tue, 10 Jun 2025 23:15:07 -0400 (EDT)
+Received: from sam-fedora (unknown [192.168.51.254])
+	by mail.savoirfairelinux.com (Postfix) with ESMTPSA id 1E2733D875C7;
+	Tue, 10 Jun 2025 23:15:07 -0400 (EDT)
+Date: Tue, 10 Jun 2025 23:15:05 -0400
+From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+To: Frank Li <Frank.li@nxp.com>
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-pm@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>,
+	Abel Vesa <abelvesa@linux.com>, Robin Gong <b38343@freescale.com>,
+	Robin Gong <yibin.gong@nxp.com>,
+	Enric Balletbo i Serra <eballetbo@gmail.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v5 6/6] MAINTAINERS: add an entry for pf1550 mfd driver
+Message-ID: <aEj0uYahiPOZBrv8@sam-fedora>
+References: <20250610-pf1550-v5-0-ed0d9e3aaac7@savoirfairelinux.com>
+ <20250610-pf1550-v5-6-ed0d9e3aaac7@savoirfairelinux.com>
+ <aEiVZBloUxYcNOIP@lizhi-Precision-Tower-5810>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aEiVZBloUxYcNOIP@lizhi-Precision-Tower-5810>
 
-The SiFive DMC is the power provider of the devices that inside the
-SiFive CPU power domains, which include Tile, Cluster and Core Complex
-power domains. Before the cpu entering the firmware-based idle state,
-each devices that inside the corresponding domain should be suspended
-properly. So this driver will create the power provider and set the
-correct idle state.
+On Tue, Jun 10, 2025 at 04:28:20PM -0400, Frank Li wrote:
+> On Tue, Jun 10, 2025 at 03:47:34PM -0400, Samuel Kayode wrote:
+> > Add MAINTAINERS entry for pf1550 PMIC.
+> >
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Signed-off-by: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+> > ---
+> >  MAINTAINERS | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 98201e1f4ab5908ff49d32d19275e123cedb4b66..29287ab3c9d00240ecb0ac9793aa908ec75a9bd0 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -17853,6 +17853,16 @@ F:	Documentation/devicetree/bindings/clock/imx*
+> >  F:	drivers/clk/imx/
+> >  F:	include/dt-bindings/clock/imx*
+> >
+> > +NXP PF1550 PMIC MFD DRIVER
+> > +M:	Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+> > +S:	Maintained
+> 
+> Can you add mail list imx@lists.linux.dev ?
 
-Signed-off-by: Nick Hu <nick.hu@sifive.com>
----
- drivers/cpuidle/Kconfig.riscv           |  11 +++
- drivers/cpuidle/Makefile                |   1 +
- drivers/cpuidle/cpuidle-sifive-dmc-pd.c | 102 ++++++++++++++++++++++++
- 3 files changed, 114 insertions(+)
- create mode 100644 drivers/cpuidle/cpuidle-sifive-dmc-pd.c
+Definitely. I'll add it in the next version.
 
-diff --git a/drivers/cpuidle/Kconfig.riscv b/drivers/cpuidle/Kconfig.riscv
-index 78518c26af74..af802afefa21 100644
---- a/drivers/cpuidle/Kconfig.riscv
-+++ b/drivers/cpuidle/Kconfig.riscv
-@@ -13,3 +13,14 @@ config RISCV_SBI_CPUIDLE
- 	  Select this option to enable RISC-V SBI firmware based CPU idle
- 	  driver for RISC-V systems. This drivers also supports hierarchical
- 	  DT based layout of the idle state.
-+
-+config SIFIVE_DMC_PD_CPUIDLE
-+	bool "SiFive DMC SBI PD Provider Driver"
-+	depends on ARCH_SIFIVE
-+	select PM_GENERIC_DOMAINS_OF
-+	select RISCV_SBI_CPUIDLE
-+	default y
-+	help
-+	  Select this option to enable SiFive DMC SBI PD Provider driver.
-+	  This driver will create the genpd provider and work with the
-+	  RISC-V SBI firmware based CPU idle driver.
-diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
-index 1de9e92c5b0f..1f8e01b415e8 100644
---- a/drivers/cpuidle/Makefile
-+++ b/drivers/cpuidle/Makefile
-@@ -42,3 +42,4 @@ obj-$(CONFIG_POWERNV_CPUIDLE)		+= cpuidle-powernv.o
- ###############################################################################
- # RISC-V drivers
- obj-$(CONFIG_RISCV_SBI_CPUIDLE)		+= cpuidle-riscv-sbi.o
-+obj-$(CONFIG_SIFIVE_DMC_PD_CPUIDLE)	+= cpuidle-sifive-dmc-pd.o
-diff --git a/drivers/cpuidle/cpuidle-sifive-dmc-pd.c b/drivers/cpuidle/cpuidle-sifive-dmc-pd.c
-new file mode 100644
-index 000000000000..1c6b2131e573
---- /dev/null
-+++ b/drivers/cpuidle/cpuidle-sifive-dmc-pd.c
-@@ -0,0 +1,102 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * SiFive CPUIDLE SBI PD driver
-+ */
-+
-+#define pr_fmt(fmt) "sifive_cpuidle_sbi_pd: " fmt
-+
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
-+#include <linux/pm_runtime.h>
-+
-+#include "cpuidle-riscv-sbi.h"
-+#include "dt_idle_genpd.h"
-+
-+static void sifive_dmc_remove(struct platform_device *pdev)
-+{
-+	struct generic_pm_domain *pd = platform_get_drvdata(pdev);
-+	struct device *dev = &pdev->dev;
-+
-+	pm_runtime_disable(dev);
-+	of_genpd_del_provider(dev->of_node);
-+	pm_genpd_remove(pd);
-+	dt_idle_pd_free(pd);
-+}
-+
-+static int sifive_dmc_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
-+	struct generic_pm_domain *pd;
-+	struct of_phandle_args child, parent;
-+	int ret = -ENOMEM;
-+
-+	pd = dt_idle_pd_alloc(np, sbi_dt_parse_state_node);
-+	if (!pd)
-+		goto fail;
-+
-+	pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_CPU_DOMAIN;
-+	pd->power_off = sbi_cpuidle_pd_power_off;
-+
-+	ret = pm_genpd_init(pd, &pm_domain_cpu_gov, false);
-+	if (ret)
-+		goto free_pd;
-+
-+	ret = of_genpd_add_provider_simple(np, pd);
-+	if (ret)
-+		goto remove_pd;
-+
-+	if (of_parse_phandle_with_args(np, "power-domains",
-+				       "#power-domain-cells", 0,
-+				       &parent) == 0) {
-+		child.np = np;
-+		child.args_count = 0;
-+
-+		if (of_genpd_add_subdomain(&parent, &child))
-+			pr_warn("%pOF failed to add subdomain: %pOF\n",
-+				parent.np, child.np);
-+		else
-+			pr_debug("%pOF has a child subdomain: %pOF.\n",
-+				 parent.np, child.np);
-+	}
-+
-+	platform_set_drvdata(pdev, pd);
-+	pm_runtime_enable(dev);
-+	pr_info("%s create success\n", pd->name);
-+	return 0;
-+
-+remove_pd:
-+	pm_genpd_remove(pd);
-+free_pd:
-+	dt_idle_pd_free(pd);
-+fail:
-+	pr_info("%s create fail\n", pd->name);
-+
-+	return ret;
-+}
-+
-+static const struct of_device_id sifive_dmc_of_match[] = {
-+	{ .compatible = "sifive,tmc1", },
-+	{ .compatible = "sifive,tmc0", },
-+	{ .compatible = "sifive,smc1", },
-+	{ .compatible = "sifive,smc0", },
-+	{ .compatible = "sifive,cmc2", },
-+	{}
-+};
-+
-+static struct platform_driver sifive_dmc_driver = {
-+	.probe = sifive_dmc_probe,
-+	.remove = sifive_dmc_remove,
-+	.driver = {
-+		.name = "sifive_dmc",
-+		.of_match_table = sifive_dmc_of_match,
-+		.suppress_bind_attrs = true,
-+	},
-+};
-+
-+static int __init sifive_dmc_init(void)
-+{
-+	return platform_driver_register(&sifive_dmc_driver);
-+}
-+arch_initcall(sifive_dmc_init);
--- 
-2.17.1
-
+Thanks,
+Sam
 
