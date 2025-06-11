@@ -1,86 +1,126 @@
-Return-Path: <linux-pm+bounces-28509-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28510-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7D7DAD615E
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 23:33:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86DF6AD6173
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 23:36:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0CBBF1E1566
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 21:33:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96FCC188DF71
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 21:35:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D26B923AB81;
-	Wed, 11 Jun 2025 21:33:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4857243364;
+	Wed, 11 Jun 2025 21:35:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="SpUrOrzl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LW4x+Wwq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from AS8PR03CU001.outbound.protection.outlook.com (mail-westeuropeazon11012058.outbound.protection.outlook.com [52.101.71.58])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7403523717C;
-	Wed, 11 Jun 2025 21:33:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.71.58
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E897C380;
+	Wed, 11 Jun 2025 21:34:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.19
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749677589; cv=fail; b=Q0hoQdYyFz+rkl7S5Gr8othaPAXIRN3+4q0opgIMtFJZekPW1ZGJu+i9ZpUUQ1zUMZ26W98m7k9eHQLGwXU0p2IrpGjUMJfGAIiw8bq2qvyJluG6UpGE5VWWFijsgynlv4wuKa65RCe1R7uqhC5HWXcnFEZUJDIKhR0TZU0NJ+8=
+	t=1749677700; cv=fail; b=GOwdTpyzm9rvb6ywP4DWmXdC0SRabNo2WwQ2fX+MXPyoVnfGIJfiw6IvQHawg6QehmBWst74nTyGUkDIa/M/lNMheKJj4JWdJvJoTtAtRFgeRGkOu4qUTS2qf1up+Di0mzZ9QTaE/DD7xCqawD3UZ2efQiXcrrTL4nS9qXVd4Rs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749677589; c=relaxed/simple;
-	bh=WeM4YeU4y3lXIskIfytO2sSWtCFs8ZEUyJS+N8xd9IU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=mW9L+6g+p63bOauseQ1Gw7KFCnB9IgF+HnObj1qOouRbI01KPbNUI3GpV5R7IsVkZdH8/va26joFr1ijbc6mOdaYG0A+Jbl1LHQiZJb+1kogq/ii3LN7Hb70Z/EM/xLQpCFe8cIewzZVgxRPGJDvaaaSWxAM3UDI250g8IAZl0c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=SpUrOrzl; arc=fail smtp.client-ip=52.101.71.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	s=arc-20240116; t=1749677700; c=relaxed/simple;
+	bh=IN8/D3FC4wDSed760Z3hCjErOQ/PxYA2NEe8Wh3pICY=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=SCe+7Xq3yKW1JhgU7DYMlOb5BP+WCVtjNXSimmbCrsEScXoBLFTQ5HDGNR/E6IkKj93WwETApAPRxQfCBHyKyelC0GtGoz79Ia/JE0uvLMz6jlxG74Bds3ndslOtHOdFGhCClOhfgH/YlCa4ZaoEZJHwxFH9XE7QOnt431DULL8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LW4x+Wwq; arc=fail smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749677699; x=1781213699;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=IN8/D3FC4wDSed760Z3hCjErOQ/PxYA2NEe8Wh3pICY=;
+  b=LW4x+WwqUPq3IbJ4i9z0Q8pDpnEo18bdsQcKabnc5cVy6qCEoRXm8TmU
+   dPm/sh0AFpwq2wBMnXL9Em8lchBODm/n7bgimH+YUYNLlGY0Y9nVULnK4
+   hxDCfGUx4y6dNP82eBihNOS8xbcmUWK+ojLgoQ3O3bewzGL/k99g62p1b
+   LMqhu0T2BF7n6jHRAYkBi+QiRJn7DWCkZNq05ocCEdylBz3JgxEm7DLvd
+   VAffiJDMcGPVsFIr2os+wfOXxsCNXX7J6qGCZQyzh/Qr8TI6qUq+1g7MJ
+   I5qtEGNYlp4zcL2kbWL3jNUh4BPlupBW9Ru9LJhireCq6UsqHex9/fBS5
+   Q==;
+X-CSE-ConnectionGUID: RYFlG26GTMG0QPCQANxABg==
+X-CSE-MsgGUID: 4URszZ7JRryN31P8CME+3w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11461"; a="50943045"
+X-IronPort-AV: E=Sophos;i="6.16,229,1744095600"; 
+   d="scan'208";a="50943045"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 14:34:58 -0700
+X-CSE-ConnectionGUID: +sn37uMTRjyUN2vtgSUNjg==
+X-CSE-MsgGUID: cRIL1joORjeO92yFAZ/g4A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,229,1744095600"; 
+   d="scan'208";a="148228457"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 14:34:57 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Wed, 11 Jun 2025 14:34:56 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25 via Frontend Transport; Wed, 11 Jun 2025 14:34:56 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (40.107.237.88)
+ by edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Wed, 11 Jun 2025 14:34:55 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=eOmc01Tf0JooWS8y9cHI23OSsw7cInf7bVqrXTAe/xUeyQheUZdnSLhmoaay34z21iItDXZWHQPRcinzqjkiot/R5Nb3c1M0dT/MhvwvekDkbY84Kh+2GqZH1zj9kB/kuoLtkWaBUenjQVVj3j3qDZ0G/ZJ6lnYmeT7XV34jk5sTZsaQInrN0lA7qT9mx1SxfSRJfkoQJVo/uCI/pCsy5vRu3Vj0FvvZnbDA5FPSVxz9FfcJzNNjbE277ASlMX1iO4EtXuOl9CHDk9siW3khYt495IND8eS/J77mpF+ztMAWMInT4YQYzYtlWVIUGp+8K4vmq5VBW88Cx5mo5PF5vQ==
+ b=QDzjnS4/Ue+RovSv9xWceWMXIJBvSGrB3CC+e/yIYL7ZpoYKeF6/sJSYis3BsC3DBCXVS70HLkER7b9GpvlJSPGcRoykRVSbMtCh6DH+tBmxSXzdbH4ulUrOJk21IgJX8T4AMxH/7EXbYqt6EjGuxtJzaLrQRP+7fA15brxEMzFVWtAziCVZI+DUQWmYxJJeaby6R7/4CkZP/6GXJLZhC2rAhC+DkezzpgxJhu8YESG3G2gPdbnIMd5/jbv1woCRhvMrB3IZw6pYs3IuNqUoOZszIXyaj8LzbL1ungToWDbIdo3LP3Z18ZE7L8rIiohUus5T6asTkFHwRq4UYz6v+Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HB6d5+hYJmDtPe6pIaRAJ62XubCfP2a5fo2Ou9V1crk=;
- b=c3NtJNEyzw34hNQdQvGeWMu3IoYLLA1E+E3vZDbqbLpO4sZkntKS9CDLTrj6c7dE+2kWNW1PZhnOMGc5swxoXWyMoM1vr8O+vESENrFeyVoX68lcq2LzHy0wXYXCJ3VE6HlfQcB3QFzLE+8W1JZVPg+z5ZrJxK56CeWbIt9qL4+p78znPR9i4BEc/JiTbQMnJg2G+wHStFfrMN9yxH3wllVNxqi8U6q02IKFZTiuPgrMRfUsWE391Q/r+9OIncE2QlTsIQQ0zrEAGQ2mXQbCYC9dcs7viEQ8qKdaF+ll43xKw629BxJ7Rm5gyTkST0Id+yv6KQz+9Mn6N0s7r/opZQ==
+ bh=BIFULUN7XMnE/tEQRH7eMNNaXMvAkQsCn2sLnacbMqs=;
+ b=C7pC2447HJhZQv+rIGQ9MMtu8CRMO5oscMr0j8Kwg1eDN5pOJfJ00fVgT8sdAtichGlFB/HWrmM56PyIRAIW+cwnaaTZ7JmzZeZTxJZUDx7yfZ62qpPE84GzIktWM9+fSdXLn+2h7cM5R02IB6jf48RTizvA9ph0W2xsC2PYORsEBHrrNXvc1h8EvS7ZcB8u3ne1vkuiDJ3QQbfxX4gHVTPn36PCvs6jDOz8j4JMCGIf0iJ8rxjDdrMOF/gpQIiUVylzIkjYguCdR/wAeANfyzuprNGa7vvWyFlSP4hJd7S/wQ4g602VuROG5QShzeEkWiKdet9O266J0lYSdjePOg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HB6d5+hYJmDtPe6pIaRAJ62XubCfP2a5fo2Ou9V1crk=;
- b=SpUrOrzl7zZ541bGLMe2gT8sRAqWDP4BZUZ6M31uykrJOTZnagqTFf20VoSml8Nlk+xgFgmUVUhGLHEnjup2xquJLjEivVlkayVtVILt75ynfEW6LuiRyRqk76LWVPfcjulvdsAyRV65Fx41jgN7QUni3hJlocrf2tC6Sa3+fuCV639rbogdWBfwoUk50w2MipOsLJpTMnDNCycGgQJIlpkBKLbAeeLhQ8raOjZTeSLhgCWLagPnSIodbyLsh/8SOOeBu/NTYUjMYNOL13WQBPIzj4KmXjKWvBbVijrGK5WJKBDg5xZvFT0Y1PWKXkcAAEnvzRf+zqcyC5RWyDIy0Q==
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by VI1PR04MB6846.eurprd04.prod.outlook.com (2603:10a6:803:12f::20) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
+ by MW4PR11MB7056.namprd11.prod.outlook.com (2603:10b6:303:21a::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.22; Wed, 11 Jun
- 2025 21:33:03 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%7]) with mapi id 15.20.8813.024; Wed, 11 Jun 2025
- 21:33:03 +0000
-Date: Wed, 11 Jun 2025 17:32:57 -0400
-From: Frank Li <Frank.li@nxp.com>
-To: samuel.kayode@savoirfairelinux.com
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Sebastian Reichel <sre@kernel.org>, imx@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
-	Abel Vesa <abelvesa@kernel.org>, Abel Vesa <abelvesa@linux.com>,
-	Robin Gong <b38343@freescale.com>, Robin Gong <yibin.gong@nxp.com>,
-	Enric Balletbo i Serra <eballetbo@gmail.com>
-Subject: Re: [PATCH v6 4/6] input: pf1550: add onkey support
-Message-ID: <aEn2CXio9a8TVG4V@lizhi-Precision-Tower-5810>
-References: <20250611-pf1550-v6-0-34f2ddfe045e@savoirfairelinux.com>
- <20250611-pf1550-v6-4-34f2ddfe045e@savoirfairelinux.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250611-pf1550-v6-4-34f2ddfe045e@savoirfairelinux.com>
-X-ClientProxiedBy: AS4P192CA0009.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:20b:5da::16) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.31; Wed, 11 Jun
+ 2025 21:34:53 +0000
+Received: from BYAPR11MB3320.namprd11.prod.outlook.com
+ ([fe80::e8c4:59e3:f1d5:af3b]) by BYAPR11MB3320.namprd11.prod.outlook.com
+ ([fe80::e8c4:59e3:f1d5:af3b%4]) with mapi id 15.20.8813.024; Wed, 11 Jun 2025
+ 21:34:53 +0000
+Message-ID: <707b643e-a740-49a4-a549-7d63c5f4da76@intel.com>
+Date: Wed, 11 Jun 2025 14:34:51 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 4/9] x86/nmi: Assign and register NMI-source vectors
+Content-Language: en-US
+To: "H. Peter Anvin" <hpa@zytor.com>, Xin Li <xin@zytor.com>,
+	<x86@kernel.org>, <linux-kernel@vger.kernel.org>
+CC: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, Peter Zijlstra <peterz@infradead.org>, "Sean
+ Christopherson" <seanjc@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>, Tony Luck <tony.luck@intel.com>,
+	"Zhang Rui" <rui.zhang@intel.com>, Steven Rostedt <rostedt@goodmis.org>,
+	"Andrew Cooper" <andrew.cooper3@citrix.com>, "Kirill A . Shutemov"
+	<kirill.shutemov@linux.intel.com>, Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>, "Sandipan
+ Das" <sandipan.das@amd.com>, <linux-perf-users@vger.kernel.org>,
+	<linux-edac@vger.kernel.org>, <kvm@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>
+References: <20250513203803.2636561-1-sohil.mehta@intel.com>
+ <20250513203803.2636561-5-sohil.mehta@intel.com>
+ <9950dc5a-05ab-4a7c-a4e8-34012ef98549@zytor.com>
+ <FEE77392-D778-4412-B4B7-583EF58955EB@zytor.com>
+From: Sohil Mehta <sohil.mehta@intel.com>
+In-Reply-To: <FEE77392-D778-4412-B4B7-583EF58955EB@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0164.namprd03.prod.outlook.com
+ (2603:10b6:a03:338::19) To BYAPR11MB3320.namprd11.prod.outlook.com
+ (2603:10b6:a03:18::25)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -88,348 +128,123 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|VI1PR04MB6846:EE_
-X-MS-Office365-Filtering-Correlation-Id: 843e400d-244f-44a1-4205-08dda92f8bde
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3320:EE_|MW4PR11MB7056:EE_
+X-MS-Office365-Filtering-Correlation-Id: bd6e63b9-0281-4a4d-7c3a-08dda92fcd2c
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|52116014|7416014|376014|1800799024|7053199007|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?nU8nodPVu6GAyt2g1M9rfKgjVjerScKjlhwG8xt21OHHo6PQofvhfE6Ykowa?=
- =?us-ascii?Q?mUi3wMZW1/VPu97+4MnN3J6fluf3xePkxqCgYhQNxcW50zkauJZwqu/oYHb3?=
- =?us-ascii?Q?NIM0UfzfACgoomD+FjuCPYOO1/IUwSIg211TthouKxpN51Bf/aR1NWNMPpzo?=
- =?us-ascii?Q?lQVDHlubgLWH3bq4LLx5XqthCW3TVSuVUDNQHkxeR/Ln7ghX3RWadXyp6DRg?=
- =?us-ascii?Q?4kHNJE/aUC4WFAwg7ki2GbLuJuDgACR06VJp97kBxpImLf3sW6mQLV2rrtEr?=
- =?us-ascii?Q?hMzpt8nmrHR1CLd5C3CGWGOxONJWZCwToe5T4saWspKYWT46ll4KF+vO7xwF?=
- =?us-ascii?Q?HfhOkPuRKbX3+bsj758IbkCwebRBsaHrbmloioSPAQNPh6x08ACKzjud2YwG?=
- =?us-ascii?Q?DGl8lOry03jcZXbNFraHDHlXfwgJmYmYzAdutH+oudJtCCgfHKQ9g8Tgn+kI?=
- =?us-ascii?Q?7eMdrF3Pdyfzb4ArRHPxp6qqE8byAPxeYVkzZr2Mr7BWERVdls23Z2bLxq9w?=
- =?us-ascii?Q?aPtODkyr5Tk7spGtpzezCgp2d0oIRtANOZMA72SJ3Sz1jzpsExLqzaHCOUWr?=
- =?us-ascii?Q?7A/tg6GbZ63b4ohvnuEmPhGjorH1e5GgejIm32W2S0Ox7wW0vjJIKmgfFhda?=
- =?us-ascii?Q?F/uH/LYYgBzfhQoaITu6Fd8hfa3yrpVyV65D9AmW9WZ5CT8IiVq7xjOMxfkB?=
- =?us-ascii?Q?JZU3r7qxK3jWezEUc0A3+VxccMiAtktX1sADRw2s0RlIwHK/C395Je3rcfR8?=
- =?us-ascii?Q?tf4svn8T4JkuL80hPfGxbbZkuzAORB0dj1gURYKUbESxC3BC0lAZ4zCUVcfC?=
- =?us-ascii?Q?3hsrhPXszMu2h6CpcZ9lRSEfUfDznHhUCOPsiwm+6gQubOSWSimBBDTUv3wO?=
- =?us-ascii?Q?ku+WX6mIgSHfyLVqPYIZvinedjPrJyLT2GywS3nT1aupkN0Hzcy4kSJB86wt?=
- =?us-ascii?Q?iUfi7lenp6ndIrLKDN8ttQn5py/jwEe9U89xnvREM/aZco4flJPS7P5+Glr0?=
- =?us-ascii?Q?SUZ4/LgzrqwlHhfQEdYQCjfNB34VD/RjfTq+DX13qwX4ya7X5SzhUvIZPoj8?=
- =?us-ascii?Q?cNvramjUK3XLFEmVAqfANvy+EMCc/GmQVOAXXtS8WNAUVXBSxFdvg1wgsKz5?=
- =?us-ascii?Q?/Ip/fxYT3eSza6pecuRHyPlAjmQ+jKIHkrr4HisCbMatDxC3WM2TBidCqID3?=
- =?us-ascii?Q?brb233b4iN51ih9R3IF18WpsZbzJL9lIBpy3kAT0KkNHhyRaxPczuiXCOz1T?=
- =?us-ascii?Q?896KYHy8judPUhJvdyRfPkqqPAumdd7lw3wO+JM524XCuz7OkEORUo7/dXQb?=
- =?us-ascii?Q?fBAicdVxaLy2LiB+illixI0hI1G0l+GRguA/aYwbLO/x/JpA8r5icjzUlczz?=
- =?us-ascii?Q?T5AEI+v2yESWS+wFJj+rbUZrXfE5QCnZcIIVzRkqGu2sU/2yUiu0DZRKlUvQ?=
- =?us-ascii?Q?boOD5+W31tYLk9G+4ZPIixkc/XKvUVVYP0fZAK1VrT/ALAwIlBVzUg=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(52116014)(7416014)(376014)(1800799024)(7053199007)(38350700014);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|366016|376014;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?WStWLzBQMzN3eEUzTkxwUHEzN3l4R3liNDN0ckk5NEpnS203OUtQaWNwT2Vn?=
+ =?utf-8?B?Sm1ZNmI1allKcGh1QURzM2llSGYxYWhrSURFY1RxV2NwYVpRYkVwUnNOL3JF?=
+ =?utf-8?B?RXNjcFluZDNNSnVUYmZ4V3JUd0Z6ZThNQkdPWEttZHpiNTAwejhVdDVuZ1Ba?=
+ =?utf-8?B?K3FZVG9hamNEVjgrMnYwbStOd3F5VVdmei92bGhMY3BqL0k1UUQrUElwV0NY?=
+ =?utf-8?B?Z3JUMkUvZjNTNjRyVy9kTnIva2RnU1pJellpbURxWXdiVXNwUTYvaDFidHh4?=
+ =?utf-8?B?Lzc5Q0ZoQ2hvVC9QMDV3M2FoWU5vTmo2N0thVHVaQ3JIUmhTY1ZkQmRYb21w?=
+ =?utf-8?B?bEo3c0NXMnFhRC9xcDdOT2N1bDB0WDErRUpKVGJKeGk3R3BudU1NdnhvQjEr?=
+ =?utf-8?B?QzZIc2VNYVQ5RHVaWlQxVm5XUnc3N1V1aGdSdDFLbjgvWnVlcTAwTjd6MkNh?=
+ =?utf-8?B?WWhGV29laXh3anVWaXg4UzRiMnpmMkswczZkanRFYnF4MUdOVDRRUGF5dHdX?=
+ =?utf-8?B?WEJON255RnM5dW9Lc0lzRmsvMlZ4bDVRYmt6U3Z0Nk9xSjJWbXl3OWVVUlF0?=
+ =?utf-8?B?azFEbDJhelptSWdla0txZzRmNUlqZXlxbGNLdEtONFdrS2hGOWxobFE5TnB5?=
+ =?utf-8?B?VzdyYmsyVEtoS1BFT1hIOUpWMnRMVVdxbEdycWtUU05LTHYwL0p6YUt4MEFD?=
+ =?utf-8?B?MTljN3VHdGVYUTlON3prNXpIS0M0T3hjVWpQWm4vTUxDRy8zaTl3dzlHdVNZ?=
+ =?utf-8?B?aklXRTJRSDRTczVuanhuMXdFUUYwU0lRRldkb2U1dkFVNThpaTM0SnBwcy9E?=
+ =?utf-8?B?L3c1ODdyK09pei9HV2VUeEpweldpaDhxd3Jjeno5RWxUS254dnlvVGkrYUZp?=
+ =?utf-8?B?YXJkWGxlWFUyS3FFb2Z6YU9EaElZSlMzSDZaQWNEK2dzZzIxWTgwRExnRlY0?=
+ =?utf-8?B?ZCsvN2NWRS9KU3cyTXpQckFmWDg1L0RhTW1IYzJtdm5yQkUzWTZqZG9VR0tp?=
+ =?utf-8?B?WmhzQmdmREhjcWdtOXBuWkE4akFOQWY3ZHg3NWZBZG1LZWRVUVlvcCttaVVR?=
+ =?utf-8?B?NnhDaGVQYXBVM2xXK2FacVVPSnNEZ29hUEFFYWc3ZDFUZjNPd2pidklFc3l5?=
+ =?utf-8?B?V1lIMnR0bEhmdmI1dEczcVkzR0IwcWNuVE5tci9ielVPL3Y0R2VTK3VER1RD?=
+ =?utf-8?B?T1ZYcjB2bkVaNGIzbll4NzBZVS80Q3lTQ3BFZjllKzJ5eUJhU0NIdnY0ZG9E?=
+ =?utf-8?B?VHF4OGhHZWFoVndxQ3l3S2lwZC9TeTg0TGVoWUhUTjRobzN6VVhTRHc4OG54?=
+ =?utf-8?B?UjluSmtNNGJ5dFFUOFJKeTZ1Rlo5MGxCQ0xLNktCWUtQc2tRcE0xUGVFblRw?=
+ =?utf-8?B?NjdLTjErTFFRc2lKdW5jaDV3WkVIQThRM0d0RXBieFk2c0FUWWxNd09Pbnp0?=
+ =?utf-8?B?TlYwTGtKczNHVENLNFd3andQWmtUcm9sQktQSWUvTXA5dExKRUlRYkpzbC9N?=
+ =?utf-8?B?bFcyS3BwQTdIYlMzNnNuVzBSK3A2bFE0Q2dNZS9ZMFFOUjlRaHAxZFJGeDRS?=
+ =?utf-8?B?aXJiK0h4WFZVTkc1am0wYlY4bGtRM0JjMTZwMnNvc2tobmVta09BZFBqQ3NV?=
+ =?utf-8?B?WFhvWFh5c3lobWZKZGhhRnJVZ2pEUWRXRFptUkZHcVpQTXByckNZREE3YklT?=
+ =?utf-8?B?UG1QRlBCUXNZOEhDemRIbUp6eFcyc3JuQS9DZ0JVREZ1REdTdnM3Q28yNTFR?=
+ =?utf-8?B?bGN6QjZLck9nL3ZPVkppaENRNkpKSEd3T2NtUk11M2Vzcjh0ellmUHIzdTly?=
+ =?utf-8?B?V3pQZEFFcnZwb0NiR2RYYlVBYVBKR2pVdXpmRElGTVZ0SXFTUUEvNVVFV2FZ?=
+ =?utf-8?B?MmduTUtkSGVoMUx4ajJQS1A3Q1kvUC9ZaGQ4cUNCUWlSWm1UQW1DeVRVYklh?=
+ =?utf-8?Q?MX4XvErP6N8=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(366016)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?tTedEVmH5+k3AGFgcoRsC6zJ1uPNVMTZhYuVe5u+stRltf+O4THc/+VtxAT8?=
- =?us-ascii?Q?DowBxhLSwX/+Xl25Ws88djUkD8N9R9MmA0dhCph4rxk7Gg5gnLlYcfTJbKb8?=
- =?us-ascii?Q?eJGR9PY+MVXa3+MrXP3iP4rsfD1OkiaQoI1N9Zfl8li64+jD2J0+DscRxlEZ?=
- =?us-ascii?Q?iv4Bra2Se81J63hpp7sGexaZnbUskXicnAXqgg1z0LHEJMJqB156XZmDC9mO?=
- =?us-ascii?Q?rKo1eI/y/3Q9ldYcO0wfjumL5yK9ExFGeoylvYF5Gj+BVf/DVKFxj7ihUiuU?=
- =?us-ascii?Q?ZjiZ0V/ss3qQBT3/5alpJLMKLOjIUFJOnMX5M5CbbScgB7FFnluIXDsIg5A7?=
- =?us-ascii?Q?1qp1Wae9syZlgnGaRruw67tW6EGO4YxT1FZ3yTiq1W64xo8k5KAbWwtEP5lC?=
- =?us-ascii?Q?QDAerP8ZKAasUjRdjTYyrUYjkxdsGpaBuxVmSiKzXl/h+PaRCJKRWPQwgCwb?=
- =?us-ascii?Q?1kk6FiNldsaVkWxpGD6+3r0ivcAx6PG+RWQh+xmPrBYssLig22yIr/ATFv3O?=
- =?us-ascii?Q?CON3zXoRCYXi+UwkPKcgDScw56TydMl91aj1xrYdoGuUefxO0lQHbCXlXr6c?=
- =?us-ascii?Q?QdEGY2w/LqOv9KHLk9Cm0TiOPChxPMQ+AxN0WbbVDDO/H3evEsYWog573sDa?=
- =?us-ascii?Q?nM8PLw1F4DUkoKi1PkVUmIgmC9tkytouZfc3izRDj1orr8XfLHiQH6FKhNwP?=
- =?us-ascii?Q?A91qlz/2KDofWEpQiRvNUKbcpzOmOcji6wnr0CcOAHEYSJc4uVXQpHQrQnLN?=
- =?us-ascii?Q?USr7ggkpL1dpqd075g3eUAcazzupqkWlL8WwMmWbWnR5L4XGFVDAJag6ENU0?=
- =?us-ascii?Q?b21o/TE+dtKwuE8YTJlWl6i01Z6iMsI/Q6baWDtyfgsVs8H3wCZ3FGndVCTY?=
- =?us-ascii?Q?uWAZiCXc39HLJwtaC42Xtw71lScy0oa2wEyWajJjwQ4O9nDnkdLF1KfNOLrF?=
- =?us-ascii?Q?nwvb+O7lIGdsBdlbCVhH3yfNeJWqE7bTLP5PjgjXYXHNNwngoT/9zMG2UNQD?=
- =?us-ascii?Q?cFjttxoe4/q3XH/XCifry4MoGLbm7upbbXI+TirA7n8UdGpaszDO1jK+jIF/?=
- =?us-ascii?Q?dK857CreKBoS8IwLlysy2KBST6qTUHvH/0QToy63dO5klLgd7X9Hy3MK1qMc?=
- =?us-ascii?Q?UQ/CWLYcYhGYj2ZTv2o6+fUU1zoStEbL/YXdSodZ2sHyG6ri8pt+CbVjddiD?=
- =?us-ascii?Q?5WL2AJpQbTcQp2R9vRUwGnEvkV0DFe3uYGfOKM59q2lMbIuXXwjvggqM5a+q?=
- =?us-ascii?Q?UgbufNhTDzGHRsByEJpFKsoheFvZ39wPTFEaMPCshWjMicq0PyXz4Z1XfbsW?=
- =?us-ascii?Q?+bnL7XJuScHBYCGYYQiIJKe2riNRJpxMuYnonawb5t6XhWSOTtEU8mjSF5IH?=
- =?us-ascii?Q?Jgsl4koPIQGJ8dXJ5FIjA77FEscMq3FhwBXcUja+iVaQox5i3/3blHJyC/XZ?=
- =?us-ascii?Q?aHnPIV450G9HSDFyd6qL4U1Kij2pZkJ5B55QJ9zpspMSY/umVeTWTO8yEZL3?=
- =?us-ascii?Q?t5SIcnZZXKhqVcZDmPjTIzTakOyus1W9eJZHX0aJEziIyhlws7Y4Kf5cCBG2?=
- =?us-ascii?Q?KO1RCC3VzSFgnThqmsNG8TQNZ9l+URo1AqGd6Mql?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 843e400d-244f-44a1-4205-08dda92f8bde
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WHorQXROV3JicG1QWjBUNEtSZWlXM2VHbDVrVXhpS0F5Y0c4MmUyU1B2U0M5?=
+ =?utf-8?B?OGx1WHJMQ2ZKSEhkZ2JPQ3ZUeUZsQWRSYXp6YkF2R0R6end1MWo1V1hBQTEr?=
+ =?utf-8?B?SzVsNVcvKzVxRDVQaGFpVFM0YnFEcU9qelA3YzNaSXV2d3ZpWDNwSUV6V3Ro?=
+ =?utf-8?B?Z2ZLc0Z4Z0hwT09NTkRydVkzUmdoK2RuSmRPYXUrSG9rbG5HSlZTeEY4cTVx?=
+ =?utf-8?B?Mi9kdWdPeU14QWxGSzFDWlJoSEkrcndZMEdpTGVBZUpzV2d3UWE3cEdUYkVt?=
+ =?utf-8?B?dExXcWd0ckdXaDc4b1Mvak1xWENiekx5UWo0YUJrV1I5RHN2aE81VjlyWlRv?=
+ =?utf-8?B?ZlViWFI3bURXckptYWhFRnBhc3k5VnczYUNaNHdGNnNYNldKVGVqTzM2RnNK?=
+ =?utf-8?B?bzNpcnVuVmhLLzRLOExoVEY4K3JnVFBJb1ZPWGNyWkljWVEwOHdybzJqc0lK?=
+ =?utf-8?B?RHlXcWZxU1VXbW02QWtVbkozT0k4eHhVU1d6MHVOUFd1THVsY1huc3NJQzhS?=
+ =?utf-8?B?dlF5MTlHeHFEVk9yUEtCUlhRcDRNam1CZ0FVOUVFeGo4MGxxak4vOWxEYVNn?=
+ =?utf-8?B?eWozM3pUN2tRZmdBY3RPbDZGS1N0UzIwQnF1RTJMUldkdFZTYUNVbmpDYVEw?=
+ =?utf-8?B?T2h6UUwyZ2FUYzdSWmVmSU45M1FZamNoUFZOQVc0clR5RE95V1BZOHhieVFG?=
+ =?utf-8?B?NytTRU1XaVVTaEx1dDN1QnBmWWc3cU5HWjR0SCtSM0g0dC9ZU0Rjb1B3cm4w?=
+ =?utf-8?B?NVpxeThQOElubFJweXhTWDhYV2NZTUpkSnhuWGJPSkRMVG5sa0JkRVorZGRm?=
+ =?utf-8?B?V0J6dXhSWXBqZ2dtZFhPbXBycVA1b0dlWFRGNUhoMkdpS2Rad3NrUTR6OVBD?=
+ =?utf-8?B?c3o2eW9VSXVJelNRbnlNUzk2R2paM3pHL3E2NXFtTFZxckdZUWNYM0tEcnJW?=
+ =?utf-8?B?QUU4TzRYS0lVMjRMNlZUeXRjajhkb1NzendSTk1nVys5TldzTzA2cjhnWmRq?=
+ =?utf-8?B?cDJnSmd1Uks2eFo0K2VWUysyWSt4UmtYQnhiUmV4MDhtU3RDblpZdmNTNUEy?=
+ =?utf-8?B?YkVqOUJITWxwaUFJKzVTL0lJdVB0YzBoVUN5dWkrOUQ0bHhBbWJhMGVWSDFK?=
+ =?utf-8?B?eS9TLytBdVNMSkJQZ3djbmpqb01GdEdIVXgzbTRVb2o0eGUrZjYxNmE3aGdG?=
+ =?utf-8?B?dEtsVGk1SEMxZDByL1F3QXpsdHprSmNyM2tqMWJJMWFYVllSSlNlUmJjTk1N?=
+ =?utf-8?B?cG01L0dRV09FWTJseXBTcC9aTmVSY0pybnN5VFR2WHlvWWZFQjhKK0tuMHFx?=
+ =?utf-8?B?dVhzek1QLytnSkJXWlZ6L3pUeERad3lEMjhUVkM4SURSRCswd3pVbDlZaHFv?=
+ =?utf-8?B?QnZFeFhnNUpOem4veU96UmRzYzdnRkpvdTB6VGZHNVVrWkFwK1VqQk9HdWU4?=
+ =?utf-8?B?amZtZVRlTFdUbmpzN0F1K3k3M0VDV0JubE9SdTN0bUI1b1FQbGNsNkp1TjhJ?=
+ =?utf-8?B?VUh4WXRaSnZwVWxuVDMwKzZYUXducUVha0MvVGMwUFllYVlvbUFoQ1JLdWlo?=
+ =?utf-8?B?cXFEc1NNV0NkcTZOTVBnM3JnZTQvYm1rb3lxYkFCVkFLQTh0R3FKWDhrbHll?=
+ =?utf-8?B?RDNua0N2V2RuWmRybVpZZHU2eEo2QlBkaUZSU3dnZnlGMVhhd0tBRGIrZUYr?=
+ =?utf-8?B?eXdLN0VBTUdId3A2ZklNditJMHZBMWhRcDlJZlNQNVFyWUpZdFdUWFJ6T09T?=
+ =?utf-8?B?dng5VEJubkZ2aW00ZnRIOFBmOHBnUlo0dFduYnlST3J2OTU0TmxVQ1dwREpu?=
+ =?utf-8?B?NGJZS2tyOXhLTWF0MnJ1R3ZySVpXa1NyVHpsR3dwakhlOUZXZExiQkhablQ0?=
+ =?utf-8?B?Q2p0SFFjK1RTc3VaT043YnN3OWxlUFdMNTg3UjVWYnBiaVY4K2kxdjZ2aDBK?=
+ =?utf-8?B?QzRaZ2NpU24rbnAxWDFJVGhyVlBma1dDaWJpOU5OeE5BN2s1RWZLUExKV0kr?=
+ =?utf-8?B?S1FVeDcyU2JHUUdnMDFnZGtpb0REVk1LOW53andWV042ckZjZmlYYlNhUU5k?=
+ =?utf-8?B?VG04M241RFV6MGFBMi9VTjZCQ1hVQnZLbTBOOXJ4eUZRRkpKTERuazFoa2Ix?=
+ =?utf-8?Q?fX8L8QP8Ip4lQkW7F8cH5Hujk?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: bd6e63b9-0281-4a4d-7c3a-08dda92fcd2c
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2025 21:33:03.2815
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2025 21:34:52.9174
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nr5z2HrajuDxhNTmQNWi2TJB8eY3upp4Qa9uS1Tt0MsaG2YNI70pQHhlqlfG8RA+2Z1mquzvQUz0DL71YkNJxA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6846
+X-MS-Exchange-CrossTenant-UserPrincipalName: eJ6UrX2ZaOskRXBeTrfhcC9NuSF4AXGnLn0IeSmUHvfJ+dV/ZDqOsWmeM9u47VvQMOV4NFl3QXvvOeKF/5VjqQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB7056
+X-OriginatorOrg: intel.com
 
-On Wed, Jun 11, 2025 at 04:03:01PM -0400, Samuel Kayode via B4 Relay wrote:
-> From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
->
-> Add support for the onkey of the pf1550 PMIC.
->
-> Signed-off-by: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+On 6/4/2025 8:28 AM, H. Peter Anvin wrote:
+> 
+> The architectural maximum* is 63 sources (plus the error bit), 
+> although the current version only supports 1-15. If extended to be 
+> wider, we would presumably add a new cpuid bit.
+> 
+> However, we should make sure there is nothing in the implementation 
+> that limits us to 16 or 32 bits; when manipulating the bitmask we 
+> should use a 64 bit type.
+> 
 
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
+There isn't anything in the implementation that would limit it to less
+than 64 bits. However, (as suggested by Dave), I am planning to include:
 
-> ---
-> v4:
-> - Address Dmitry's feedback
->   - Drop irq variable in onkey_drv_data
->   - Drop keycode variable in onkey_drv_data
->   - Define wakeup as type bool
->   - Use platform_get_irq
->   - Use type const for struct pf1550_dev in onkey_drv_data
->   - Replace (error < 0) with (error) in if statement when applicable
->   - No need to define driver_data in table id
-> - Define driver.pm with pm_sleep_ptr
-> v3:
-> - Address Dmitry's feedback
->   - Drop compatible string
->   - Remove dependency on OF
->   - Use generic device properties
->   - Drop unnecessary includes
->   - Drop unnecessary initializations in probe
->   - Always use the KEY_POWER property for onkey->keycode
->   - Do mapping of irqs in MFD driver
->   - Define onkey->input before interrupts are active
->   - Drop unnecessary input_free_device since devm
->   - Manage onkey irqs instead of the main interrupt line.
-> - Fix integer overflow when unmasking onkey irqs in onkey_resume.
-> v2:
-> - Add driver for onkey
-> ---
->  drivers/input/misc/Kconfig        |  11 +++
->  drivers/input/misc/Makefile       |   1 +
->  drivers/input/misc/pf1550-onkey.c | 183 ++++++++++++++++++++++++++++++++++++++
->  3 files changed, 195 insertions(+)
->
-> diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
-> index f5496ca0c0d2bfcb7968503ccd1844ff43bbc1c0..47b3c43ff0550f14d61990997976366436411adc 100644
-> --- a/drivers/input/misc/Kconfig
-> +++ b/drivers/input/misc/Kconfig
-> @@ -179,6 +179,17 @@ config INPUT_PCSPKR
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called pcspkr.
->
-> +config INPUT_PF1550_ONKEY
-> +	tristate "NXP PF1550 Onkey support"
-> +	depends on MFD_PF1550
-> +	help
-> +	  Say Y here if you want support for PF1550 PMIC. Onkey can trigger
-> +	  release and 1s(push hold), 2s, 3s, 4s, 8s interrupt for long press
-> +	  detect.
-> +
-> +	  To compile this driver as a module, choose M here. The module will be
-> +	  called pf1550-onkey.
-> +
->  config INPUT_PM8941_PWRKEY
->  	tristate "Qualcomm PM8941 power key support"
->  	depends on MFD_SPMI_PMIC
-> diff --git a/drivers/input/misc/Makefile b/drivers/input/misc/Makefile
-> index 6d91804d0a6f761a094e6c380f878f74c3054d63..c652337de464c1eeaf1515d0bc84d10de0cb3a74 100644
-> --- a/drivers/input/misc/Makefile
-> +++ b/drivers/input/misc/Makefile
-> @@ -62,6 +62,7 @@ obj-$(CONFIG_INPUT_PCAP)		+= pcap_keys.o
->  obj-$(CONFIG_INPUT_PCF50633_PMU)	+= pcf50633-input.o
->  obj-$(CONFIG_INPUT_PCF8574)		+= pcf8574_keypad.o
->  obj-$(CONFIG_INPUT_PCSPKR)		+= pcspkr.o
-> +obj-$(CONFIG_INPUT_PF1550_ONKEY)	+= pf1550-onkey.o
->  obj-$(CONFIG_INPUT_PM8941_PWRKEY)	+= pm8941-pwrkey.o
->  obj-$(CONFIG_INPUT_PM8XXX_VIBRATOR)	+= pm8xxx-vibrator.o
->  obj-$(CONFIG_INPUT_PMIC8XXX_PWRKEY)	+= pmic8xxx-pwrkey.o
-> diff --git a/drivers/input/misc/pf1550-onkey.c b/drivers/input/misc/pf1550-onkey.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..7e604c5544066eefbd84abe7bdff767b8b8978ab
-> --- /dev/null
-> +++ b/drivers/input/misc/pf1550-onkey.c
-> @@ -0,0 +1,183 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +//
-> +// Driver for the PF1550 ON_KEY
-> +// Copyright (C) 2016 Freescale Semiconductor, Inc. All Rights Reserved.
-> +//
-> +// Portions Copyright (c) 2025 Savoir-faire Linux Inc.
-> +// Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-> +//
-> +
-> +#include <linux/err.h>
-> +#include <linux/input.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/mfd/pf1550.h>
-> +#include <linux/platform_device.h>
-> +
-> +#define PF1550_ONKEY_IRQ_NR	6
-> +
-> +struct onkey_drv_data {
-> +	struct device *dev;
-> +	const struct pf1550_dev *pf1550;
-> +	bool wakeup;
-> +	struct input_dev *input;
-> +};
-> +
-> +static irqreturn_t pf1550_onkey_irq_handler(int irq, void *data)
-> +{
-> +	struct onkey_drv_data *onkey = data;
-> +	struct platform_device *pdev = to_platform_device(onkey->dev);
-> +	int i, state, irq_type = -1;
-> +
-> +	for (i = 0; i < PF1550_ONKEY_IRQ_NR; i++)
-> +		if (irq == platform_get_irq(pdev, i))
-> +			irq_type = i;
-> +
-> +	switch (irq_type) {
-> +	case PF1550_ONKEY_IRQ_PUSHI:
-> +		state = 0;
-> +		break;
-> +	case PF1550_ONKEY_IRQ_1SI:
-> +	case PF1550_ONKEY_IRQ_2SI:
-> +	case PF1550_ONKEY_IRQ_3SI:
-> +	case PF1550_ONKEY_IRQ_4SI:
-> +	case PF1550_ONKEY_IRQ_8SI:
-> +		state = 1;
-> +		break;
-> +	default:
-> +		dev_err(onkey->dev, "onkey interrupt: irq %d occurred\n",
-> +			irq_type);
-> +		return IRQ_HANDLED;
-> +	}
-> +
-> +	input_event(onkey->input, EV_KEY, KEY_POWER, state);
-> +	input_sync(onkey->input);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int pf1550_onkey_probe(struct platform_device *pdev)
-> +{
-> +	struct onkey_drv_data *onkey;
-> +	struct input_dev *input;
-> +	int i, irq, error;
-> +
-> +	onkey = devm_kzalloc(&pdev->dev, sizeof(*onkey), GFP_KERNEL);
-> +	if (!onkey)
-> +		return -ENOMEM;
-> +
-> +	onkey->dev = &pdev->dev;
-> +
-> +	onkey->pf1550 = dev_get_drvdata(pdev->dev.parent);
-> +	if (!onkey->pf1550->regmap)
-> +		return dev_err_probe(&pdev->dev, -ENODEV,
-> +				     "failed to get regmap\n");
-> +
-> +	onkey->wakeup = device_property_read_bool(pdev->dev.parent,
-> +						  "wakeup-source");
-> +
-> +	input = devm_input_allocate_device(&pdev->dev);
-> +	if (!input)
-> +		return dev_err_probe(&pdev->dev, -ENOMEM,
-> +				     "failed to allocate the input device\n");
-> +
-> +	input->name = pdev->name;
-> +	input->phys = "pf1550-onkey/input0";
-> +	input->id.bustype = BUS_HOST;
-> +
-> +	input_set_capability(input, EV_KEY, KEY_POWER);
-> +
-> +	onkey->input = input;
-> +	platform_set_drvdata(pdev, onkey);
-> +
-> +	for (i = 0; i < PF1550_ONKEY_IRQ_NR; i++) {
-> +		irq = platform_get_irq(pdev, i);
-> +		if (irq < 0)
-> +			return irq;
-> +
-> +		error = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-> +						  pf1550_onkey_irq_handler,
-> +						  IRQF_NO_SUSPEND,
-> +						  "pf1550-onkey", onkey);
-> +		if (error)
-> +			return dev_err_probe(&pdev->dev, error,
-> +					     "failed: irq request (IRQ: %d)\n",
-> +					     i);
-> +	}
-> +
-> +	error = input_register_device(input);
-> +	if (error)
-> +		return dev_err_probe(&pdev->dev, error,
-> +				     "failed to register input device\n");
-> +
-> +	device_init_wakeup(&pdev->dev, onkey->wakeup);
-> +
-> +	return 0;
-> +}
-> +
-> +static int pf1550_onkey_suspend(struct device *dev)
-> +{
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +	struct onkey_drv_data *onkey = platform_get_drvdata(pdev);
-> +	int i, irq;
-> +
-> +	if (!device_may_wakeup(&pdev->dev))
-> +		regmap_write(onkey->pf1550->regmap,
-> +			     PF1550_PMIC_REG_ONKEY_INT_MASK0,
-> +			     ONKEY_IRQ_PUSHI | ONKEY_IRQ_1SI | ONKEY_IRQ_2SI |
-> +			     ONKEY_IRQ_3SI | ONKEY_IRQ_4SI | ONKEY_IRQ_8SI);
-> +	else
-> +		for (i = 0; i < PF1550_ONKEY_IRQ_NR; i++) {
-> +			irq = platform_get_irq(pdev, i);
-> +			if (irq > 0)
-> +				enable_irq_wake(irq);
-> +		}
-> +
-> +	return 0;
-> +}
-> +
-> +static int pf1550_onkey_resume(struct device *dev)
-> +{
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +	struct onkey_drv_data *onkey = platform_get_drvdata(pdev);
-> +	int i, irq;
-> +
-> +	if (!device_may_wakeup(&pdev->dev))
-> +		regmap_write(onkey->pf1550->regmap,
-> +			     PF1550_PMIC_REG_ONKEY_INT_MASK0,
-> +			     ~((u8)(ONKEY_IRQ_PUSHI | ONKEY_IRQ_1SI |
-> +			     ONKEY_IRQ_2SI | ONKEY_IRQ_3SI | ONKEY_IRQ_4SI |
-> +			     ONKEY_IRQ_8SI)));
-> +	else
-> +		for (i = 0; i < PF1550_ONKEY_IRQ_NR; i++) {
-> +			irq = platform_get_irq(pdev, i);
-> +			if (irq > 0)
-> +				disable_irq_wake(irq);
-> +		}
-> +
-> +	return 0;
-> +}
-> +
-> +static SIMPLE_DEV_PM_OPS(pf1550_onkey_pm_ops, pf1550_onkey_suspend,
-> +			 pf1550_onkey_resume);
-> +
-> +static const struct platform_device_id pf1550_onkey_id[] = {
-> +	{ "pf1550-onkey", 0 },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(platform, pf1550_onkey_id);
-> +
-> +static struct platform_driver pf1550_onkey_driver = {
-> +	.driver = {
-> +		.name = "pf1550-onkey",
-> +		.pm   = pm_sleep_ptr(&pf1550_onkey_pm_ops),
-> +	},
-> +	.probe = pf1550_onkey_probe,
-> +	.id_table = pf1550_onkey_id,
-> +};
-> +module_platform_driver(pf1550_onkey_driver);
-> +
-> +MODULE_AUTHOR("Freescale Semiconductor");
-> +MODULE_DESCRIPTION("PF1550 onkey Driver");
-> +MODULE_LICENSE("GPL");
->
-> --
-> 2.49.0
->
->
+	BUILD_BUG_ON(NMIS_VECTORS_MAX > 16);
+
+If someone hits this compile issue while adding new vectors, it would
+help them realize the limitations of the existing hardware.
+
+We can recommend vector aliasing at that point or if there is hardware
+in the pipeline that extends this beyond 16, we can simply get rid of
+the BUILD_BUG_ON() along with the patches that add the new vectors.
+
+> -hpa
+> 
+> * If we were to use the additional error reporting fields in the 
+> FRED frame at some future point it could be extended as far as 207, 
+> but since we at this point don't have anyone clamouring for more 
+> than 15 this seems like a very remote possibility.
+
 
