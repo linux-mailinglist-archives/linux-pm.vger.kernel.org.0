@@ -1,128 +1,87 @@
-Return-Path: <linux-pm+bounces-28511-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28512-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89756AD61A9
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 23:42:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF4BEAD61C0
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 23:45:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 193C31BC3A81
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 21:42:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A87C03A3875
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 21:44:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6F5324C068;
-	Wed, 11 Jun 2025 21:39:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DED524468A;
+	Wed, 11 Jun 2025 21:44:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V5RmWnVh"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="UfJiQ/QV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011051.outbound.protection.outlook.com [40.107.130.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEE024BD0C;
-	Wed, 11 Jun 2025 21:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6700424339D;
+	Wed, 11 Jun 2025 21:44:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749677952; cv=fail; b=FJNwueA5FvG5jny1bxFJqlHCmPfHAc0/pmIlfq8o2mIgB/0CTB6FiLIhKY3YJvrl+4ssQRnM+fsFYHDvo9OmJvDHTaiBD5IyPTy2kHpMvq0d/bKHXTrdsHVdPcm/E6iYf58E1NgpQCsUG6XXMw7DXzsjqJuuYI6ZQUxtdVa+EUc=
+	t=1749678291; cv=fail; b=U5oE9zxRjBg1kvsF6WXHDA29KYsY3sWRVS9YSLB3miMJsNzS9SQV4rIX2hI/vo/s9E3CbAJ9BeSs3OZ23VuzoB3D05JrJpALDfeKnlGJIL3IgnWwneQav3sAcsczrqR8hfmbPlVO20Wrssjb0vy1tL4QoMytw4f9FdU41qvFSQE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749677952; c=relaxed/simple;
-	bh=JCdLOf9c2jdrqvNT+a5/WzzcKxbO8RF5t+a3lcJiRcg=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=EIBeRu825lInjigNT9yZ+7b4rSgyRVbs4KS1hWfCVrXlVm9bwrRNFo27GLNECEntSyuPIGbPDYe/mWqqMdPyxe46Z1efCp3HPEjH6PljK+HUUniMVeRPcsconxSQHQk6pNkNnaudAkNfZjS8Eb/TusGTZcku7DnjYYCS+YMOGCs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V5RmWnVh; arc=fail smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749677951; x=1781213951;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=JCdLOf9c2jdrqvNT+a5/WzzcKxbO8RF5t+a3lcJiRcg=;
-  b=V5RmWnVhVEAEOxwj+Vz45/IVcPzfqZfbVnpRaHEG1HAJRTZsGXtv/LlW
-   K1v7ZSVkVQ6zF6KLXO19IRnPwUAUjf6Fvz0ERYCdn31um+ofLoXWRGgPY
-   2OGhzL7Ak4/7Mey6fsZyOcA4skz/ZaxRsX2GCOYaJPUlkMErMpL5GaKYe
-   xYW5PXLXwaEvpewOa5MhgNp3Mq+eXNkKfNJOWayUXDsGbHCuCY41f8qI4
-   mTZr76KC/3Oh8aoQYFsIBeqEaxhAYcQoCu/bd+8Nck1PlByrlBkN5W9bc
-   X4ZMVxYmDJ/iH7DTYXjgHrUi1lPuJ5EhektybiQ/9RHouPz11OVaGR4tN
-   w==;
-X-CSE-ConnectionGUID: oC30ZyPGTCWwUL35KWZpSw==
-X-CSE-MsgGUID: UxfyAKUqSPKXpTh+eiXBug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11461"; a="63244369"
-X-IronPort-AV: E=Sophos;i="6.16,229,1744095600"; 
-   d="scan'208";a="63244369"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 14:39:10 -0700
-X-CSE-ConnectionGUID: HSamITpwS56DKQI2tCrNGw==
-X-CSE-MsgGUID: EjlzY4CaSd+U+SaoOgDQZw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,229,1744095600"; 
-   d="scan'208";a="152466550"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 14:39:09 -0700
-Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Wed, 11 Jun 2025 14:39:07 -0700
-Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25 via Frontend Transport; Wed, 11 Jun 2025 14:39:07 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (40.107.101.77)
- by edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Wed, 11 Jun 2025 14:39:07 -0700
+	s=arc-20240116; t=1749678291; c=relaxed/simple;
+	bh=vzK18v9p3xM74IYvZGmwWT3sNiXIujleZBlRQUMVkRk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=iAfnwuNThAf8+AODVInqZbD+Zh1iZqHGjhVQYHu0A1Yk5WsrbBe2S4UnWADZzFfJf24b+yywOOxsIfQsJRbRp+PmPnXjpdSls1odOcs50lJjqFTrhB3IjZSEgwRmFQV0fTvC7iQEgc4wzSvZdjk6+SfjYo53ebAQwZ2I7x4SEwM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=UfJiQ/QV; arc=fail smtp.client-ip=40.107.130.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nhv2fEOIgoeGcRopsHsjhdpPOOUeowm4dpDjpI/i2aoMgcS3FN4bndIuZFZhMeSrJ+C6+EVCrm9sX0wQ3HmG3VGUyKp1sX1cE8SCV8DqxMDWNtc4LviJnH31GBP6olhs1wP3YoBaf50R5LoDLOYD/ni42hCTi+LN7hje9k0y16MvBwGBgVbDKSziiWw8dYku7d0vPX8GS7dMqBokW/ZUSJP9TK4Q6bz/SD9mUpliCm1RfVUgM2fNhEpgjrkqkeZ2tZF2fqTevdNMtdJKQPd/D3wnKEUFMehE/fWT9MdSqHj3NYnXgr/NrKFcAXbMK/w3BO0LzEhS2M/scW4A2Bw1ZQ==
+ b=LTsB5GL6IEwi4Za6B5EiC2TL7vPR+xET0QjThGE49H1vcC2mdCt4yLbfwaP3AeaLPpvGpZUua8aFL502shOL/NhihNapMBIZqCc40YS9/G4AH1P/VYIt1MijioVV0hV3ODz2MmlpslVnwiTqf9co7nbD/rWqUsK+2dLTLPcXQgBjsTDP+bCGXxKzqVjZ+mKctLXunK1oXCnSKqWMuU5X+8DS77hcEnrxr+KMIk4ENEbnEcubJ7FL/xLxkj8lns7yxIRxgb8Ho89tNxsz+3JP4C5ENnwMBx03q18tJazdN3m/MHb/4VR5Ct/utjOkpeGPVQ8gK92kaz5ofzKFcBVytg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JCdLOf9c2jdrqvNT+a5/WzzcKxbO8RF5t+a3lcJiRcg=;
- b=QukFfdqOeQK6v4Crk1PQK1rBfN8S3kbV71cEqL8jIy5bxZRSetgPZwCn/I6Ax97kwkzNwAp3yX3Loz9ICMKiRrex0Q8K5JcmbXWN0+mJLiEqRPKHpK3S/YFqsHgkN5KM429LsBkzRUDdLKmRijfBpx3gad8ZEdmhgLXNB96fOfN+pPXHUeFZEtZw3hdBzBQLz6P1pvP9POKCYIYZd11CEkGBWvBiTKLzTg2BPFpNlxBp5w0/qyFNK0+Ut4UgsGy0MynDOvq3DYuq6J6AXzjZOT1rhTyU3TkWz43A34MFCh9XZsg6FUq60SLldnIGQw2k3o1yA1l5N4hIkuyeb/okHQ==
+ bh=aEySemoBgamZ8vmVnVFH04Y+dbAzBmfKSKh2gZKqp7U=;
+ b=otDKfdbPhPOK45lG9fmBmqEQPdWtKym8BdAgqSGbBGzROmmi9HBNMxkmFCwvCpYKQLh/qRHBQ0lu30Ra2N1iPTKIpd3SpHuHgjzHhDmxKBCx4CQ1rxCC/zozJWhOAOWqyQ8Tm7IrLrupo7MlqbzwzzUkql8AwhsFPMXpIlUq9V+ReAgIu+fTapjnH5K7BmLIrsd0LRKqEaRFQjXVTPwgYdZyQlNV86MfoMEribJXMZSN+LT1lxDeP9UbWxnI3jFhDWfQB+oy+kxslW3gT/PftX1kDnV5x3eic1I4ZJ6SOss11HxopYAD+NB+hp3sn7H4Dg7BC3vKL7ny4LZn2rBHIQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aEySemoBgamZ8vmVnVFH04Y+dbAzBmfKSKh2gZKqp7U=;
+ b=UfJiQ/QV5HDI4H2DcrgNHbYKS9ZqTH6wagPRKLuIZBX/xU4OW9CRmfUXym2fF8ays64yRYGwXsZLXhUuKi8UnPFIHlannxJwgVRbLDfac2x1Tn8+6Z/+i3FPb6D20Gyu7vVC9F8PEV6iX7vIJ2XNRht+mGk2Esu2QoL+qmwpzirHS0AbECnTay2gB8o/o30CrNX8UJXRHKJUSdASXDulSvUcFUpkWpmCBlMcOp9oh9G3kOF7AJYZL9ZyaYzUpXSs6tOnhxvItvmlEj68dsW6FVMRHdHIXrppC8MtBkReIbcQHxkMvE8qpGum21c7w6kwvzwVfSMoYg2Aj6cTQg6gPA==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
- by SJ5PPF183C9380E.namprd11.prod.outlook.com (2603:10b6:a0f:fc02::815) with
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by AM7PR04MB6886.eurprd04.prod.outlook.com (2603:10a6:20b:106::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.19; Wed, 11 Jun
- 2025 21:39:04 +0000
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::e8c4:59e3:f1d5:af3b]) by BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::e8c4:59e3:f1d5:af3b%4]) with mapi id 15.20.8813.024; Wed, 11 Jun 2025
- 21:39:04 +0000
-Message-ID: <7abb2bf8-be36-41b1-bb6e-e23a984a4ab6@intel.com>
-Date: Wed, 11 Jun 2025 14:39:01 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 9/9] x86/nmi: Print source information with the unknown
- NMI console message
-Content-Language: en-US
-To: "H. Peter Anvin" <hpa@zytor.com>, Xin Li <xin@zytor.com>,
-	<x86@kernel.org>, <linux-kernel@vger.kernel.org>
-CC: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, Peter Zijlstra <peterz@infradead.org>, "Sean
- Christopherson" <seanjc@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>, Tony Luck <tony.luck@intel.com>,
-	"Zhang Rui" <rui.zhang@intel.com>, Steven Rostedt <rostedt@goodmis.org>,
-	"Andrew Cooper" <andrew.cooper3@citrix.com>, "Kirill A . Shutemov"
-	<kirill.shutemov@linux.intel.com>, Jacob Pan <jacob.pan@linux.microsoft.com>,
-	Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>, "Sandipan
- Das" <sandipan.das@amd.com>, <linux-perf-users@vger.kernel.org>,
-	<linux-edac@vger.kernel.org>, <kvm@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>
-References: <20250513203803.2636561-1-sohil.mehta@intel.com>
- <20250513203803.2636561-10-sohil.mehta@intel.com>
- <31507dc8-b1dc-4df3-bc0c-6958b4218746@zytor.com>
- <fa948d41-3f95-4385-86c1-5c115561b939@intel.com>
- <8035D788-0F60-48B8-8B98-DC352EC9AE62@zytor.com>
-From: Sohil Mehta <sohil.mehta@intel.com>
-In-Reply-To: <8035D788-0F60-48B8-8B98-DC352EC9AE62@zytor.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY5PR04CA0015.namprd04.prod.outlook.com
- (2603:10b6:a03:1d0::25) To BYAPR11MB3320.namprd11.prod.outlook.com
- (2603:10b6:a03:18::25)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8813.31; Wed, 11 Jun
+ 2025 21:44:45 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%7]) with mapi id 15.20.8813.024; Wed, 11 Jun 2025
+ 21:44:45 +0000
+Date: Wed, 11 Jun 2025 17:44:35 -0400
+From: Frank Li <Frank.li@nxp.com>
+To: samuel.kayode@savoirfairelinux.com
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Sebastian Reichel <sre@kernel.org>, imx@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
+	Abel Vesa <abelvesa@kernel.org>, Abel Vesa <abelvesa@linux.com>,
+	Robin Gong <b38343@freescale.com>, Robin Gong <yibin.gong@nxp.com>,
+	Enric Balletbo i Serra <eballetbo@gmail.com>
+Subject: Re: [PATCH v6 5/6] power: supply: pf1550: add battery charger
+ supporty
+Message-ID: <aEn4w15FwM4Z3Xwe@lizhi-Precision-Tower-5810>
+References: <20250611-pf1550-v6-0-34f2ddfe045e@savoirfairelinux.com>
+ <20250611-pf1550-v6-5-34f2ddfe045e@savoirfairelinux.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250611-pf1550-v6-5-34f2ddfe045e@savoirfairelinux.com>
+X-ClientProxiedBy: BY5PR03CA0007.namprd03.prod.outlook.com
+ (2603:10b6:a03:1e0::17) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -130,104 +89,800 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3320:EE_|SJ5PPF183C9380E:EE_
-X-MS-Office365-Filtering-Correlation-Id: d07eb428-7ac0-45ee-9237-08dda93062fc
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|AM7PR04MB6886:EE_
+X-MS-Office365-Filtering-Correlation-Id: f494b46f-60b1-45bc-65c1-08dda9312e0e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?T2NQRGJER2JIYUQzOXRBRlhKRHlFYnJMaHBqc2RGOFI3NUF0Z25IWmlUY09G?=
- =?utf-8?B?b2RaaVIvUnlTYUVrbkVqV3VrZDFSR2ZiMlFYeWJlQjBsVWVoSk80bFViUXpS?=
- =?utf-8?B?RTVpNFhxdVpIUkdreGl2cW9wN3AwMVgvY0VoU1g2ZjFUelFFYUxqSHlUdVoy?=
- =?utf-8?B?QjRtUFFPcHE5bDZQWFROMkF4WElyS1hDUFNLeTFiVGYySFE4Y2lMalRkcVNB?=
- =?utf-8?B?UCs0YzNGQnFhVGVTLys1V3l6TWZqQlV5WFkwelpIV2F5dDBBSFdHLytTOUZ2?=
- =?utf-8?B?MUY5ekEwWVh4eFNlczF5ZXFHNTI2UFBmcS9JWDFGNDIrRmpmUGxVdXo0ci82?=
- =?utf-8?B?MGI4bXU1UW1JSEpFTGdYM0JzcUVOaDNaWThIOVlhSWJPZERBU2lrN09GZksv?=
- =?utf-8?B?ZGhodXZUV3VPT3lQOURrbThQcEVTOUQzdG1BT3RWb1d3eS9vQzNwN1g4Zm9n?=
- =?utf-8?B?c3ZDbGpha2ZvclBsUmZJbTJBS3R5QmlCQkFDcW40b05MK1I0clJ2MXVSUjd5?=
- =?utf-8?B?R3B6bk83RXpsalJ6ZDBzZWttR0tLVE84NGlQaUJLWlNWYUs5MEtOVkdLczkz?=
- =?utf-8?B?c2tFb0xxUzRBS3BERWVEQVgwYWlSSks4Zkw2ZDRzcmhCdjFEcFZhRlJxZ2NF?=
- =?utf-8?B?ZEs2L1RIaVdpeUlOZ3dQZnh4Vm9vUUV2RUpNMG53UXZabUJSYlhETmpZTWh5?=
- =?utf-8?B?UEVEdldPak1QZjE3TlkySGpycjc1eE5zdFdxa2hBM3NRQ3pOTEx2clBpS3NE?=
- =?utf-8?B?TU5WR2hibW50akh6T0JtZkpwbmJ4UllHc2txTFZaendmYWpEenlkQVV3M1dC?=
- =?utf-8?B?VHBjMGdzMGlPTWtyVlJObUI0MlZjTGxDL1h1aEhuV1Nmbjh3UVlmcDMvblEz?=
- =?utf-8?B?Q0JSSFJqQkJseGxMM3dTM1BVZmlocUZpa2tNamlvYk5aU3Vjak9LdjBmQzlC?=
- =?utf-8?B?NURWL29mbkFuS25EcEcwa2x0aUtvamVZRUtEOXdjRk1hNDNoZHpjTEF0WGFB?=
- =?utf-8?B?OUEvYTJ5ZmQ0aDZUTGk0aHJDYlU5cFcyMFN6clVyREpsb3RVQUFnRE1sRXVu?=
- =?utf-8?B?MmgzMWhuT3FyMys0ZzB5MW5VV2RoaGhuSWVNR3BWTS9SdzFhSFg0MmQ5Ynho?=
- =?utf-8?B?dzlvOE1HREU3SkNUOVBRV1lnTFcrcHMwcnhSQTQ4NnNZUlUveTRKVlVwTWhx?=
- =?utf-8?B?T2JhbFUxbkw0QkJuYUtrdnJoZXNvVWxxSzd0UC9Yc2JVUVNNTlUyMEtuN1lZ?=
- =?utf-8?B?Vldwdjgzc001ZUh2dUZXc2tXdWtoSE1QTG8wZnJiSmxseXk3ZG9pMHhmczR5?=
- =?utf-8?B?VVVKUWNLanBhbzFZTUlKT1F5cUxUeDVHNEQxRWFWRU9nSHZtNysrWmV2N0FM?=
- =?utf-8?B?Q2ZINU9tY1VJSTR3OU8zZzNmQWdacE5xWGRGSk5TWW8wb0NvZGVJTWJJdjVT?=
- =?utf-8?B?bVZrTEExaHNYVk05bENTVzJrd0ZvWXROQXJVR1JkSkF6UnJQbUdTN2NNeEwz?=
- =?utf-8?B?RXA2Z0Jmd2dSblVWY3Bid3Q1Q0w0UzRla2hoc2VweE5vYVJ6MXNuNmY0K2RC?=
- =?utf-8?B?clFnZzdHZWVpeXFLVXVGZDUraDNDYWNjamlScVgyQ2kvQ3QwVU5TZnRGNFFJ?=
- =?utf-8?B?WDIxN0JRT2lrbTJrOWRCL3dodEk4WU53V2R0c29CczVaRDE3L284dVpGZk8y?=
- =?utf-8?B?VHVCdjdMdzBRdGZDV2tSZWcvYUpnVi9xNUJmUlBYQmhzRmJ5eTc1cTB4aUlE?=
- =?utf-8?B?Z2JOTGhEcXU1dHZSOUlxbTVXTlV2NWxmUnZmQjgySnlJbXJzaXltSTgrVzRy?=
- =?utf-8?B?UThYaUsrRmsyUlkrcFdGUlV5aFBJNzdjSnNDNFFzOGtJaUtCaUdZRkl5aElm?=
- =?utf-8?B?RkRraW9QN1hzdnRHbERWUmRuR1JtYmxZdkJBOG5lNXViRGtxT1Yxb1JRclJE?=
- =?utf-8?Q?g8vRiQgtMrY=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|52116014|376014|7416014|38350700014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?xvaqqOakk18v+M5d+157PZtDOHo0upZ/G/QwllJqypW5hC/b4SuS6OeRFXaY?=
+ =?us-ascii?Q?tq1WysbcUj/8dvTt7AFTmyUFCdn5EhE2EIP8/h7HqEBdi8LxeX1mq9ZML2WW?=
+ =?us-ascii?Q?aIt8L/oerZw5NBwm6ljiOUKD1rI0C212l9ULb5912QaTkxLB4/h61fpC/FI7?=
+ =?us-ascii?Q?fM4CZDTFuCFJUiPTk/Jxh9ucRSH4kaqT8dUIGqyPgTxLCwNTX/JdY09599L8?=
+ =?us-ascii?Q?uD5Od3H4/BYuAmqL4wxzgrqiMSvzsnnRbjF3qPlXy69KWKVmfHETkyVtyGK6?=
+ =?us-ascii?Q?X1li6p6uLPGf3HcSrK0nP8j1mXQXC5qXkOyJQDF3H/BgG7/gz67YFwh6RbRM?=
+ =?us-ascii?Q?a4oKe3jKSbw6cwP87vmXsX7oA7ibx6yRM/3oobSt/0kNhplIDzGIXmXvtXj9?=
+ =?us-ascii?Q?ar5f8qLFt8HQ/pP/pd1VPYLU6tZ9VdTs77K3GVGvy5mvaLNPmZPqFDH5dWym?=
+ =?us-ascii?Q?dPbxAYaY2WY6eJQj1TF/VZdRnXUtm39DFHEWGNcL2AGSKqCngB3qYPyM0JzK?=
+ =?us-ascii?Q?+bjGiBL9ZE5fg1GOHoCclLnBYjK4mQfsdXK9q7h9izjxqtEVfrrJ9kXXxniS?=
+ =?us-ascii?Q?whF+dY/+SEFFOVeVTCRA3f3Hl1fNIXMnWt2SZTGQ1+LO3JxmqZYUIOWNeseo?=
+ =?us-ascii?Q?GxxHngtUh5iDu6Ro9eoKG6pznnh8f7SHgonVtTDElgYpK1rjlPvX8K4frawu?=
+ =?us-ascii?Q?lyE/+Hq18W4WXePlmewAxSyenDj4s+YYSkIQeiJ9Z6xtevYquEqjvd8s2fPO?=
+ =?us-ascii?Q?J1o1GWg9KCDaAf9V3jalYq254sbsYWqZiAFWLF1LrV80Z1egr3HXfOrkjz+4?=
+ =?us-ascii?Q?+MTufa8m/qVRuKU8ttXxnAxfc8JtGPsfj73ndSpMd5g7e2xIKSX/l4QHuq+w?=
+ =?us-ascii?Q?dVmlIpIoFOFmYWLoYLSF45HqMQOC50mYdmz0wn4VywIZMFOronB2ngWkXmUS?=
+ =?us-ascii?Q?0sNTG2uo354AVUTKa469qBBv6+Ia4A59FADaeRqx+0NLhaZShpSC5YrrT+Q1?=
+ =?us-ascii?Q?vb/cQCHhNHHJWmxE5Tj7g/oQqstVvyh8mcFeu/r97p9scl11pJl6mt2VzEG2?=
+ =?us-ascii?Q?9V0cjwQ2wy+mQogubFeYRMD7TC5JnqkBKSDjh2x/nXdfjgj6EyzFsfLXIQI1?=
+ =?us-ascii?Q?cELacuWgPDdg6JC0yZ40qFAFfjAiEJHG/G5ybDDTba3V6F4+ITQ0H1wGqhhm?=
+ =?us-ascii?Q?G3E9fCekTHk1K9hiljmMKxF9n8mYn+qFmy25zIP6QhlhOfkSoFRW46Wb+NVe?=
+ =?us-ascii?Q?tIQQWl97RwHMU+LCbtm4SHfh5TV0cQ6fFOCXMDTLXMdHa19OQlhr7zLe0WI4?=
+ =?us-ascii?Q?ihQpPSkL9HXSQ8geyag+sfPFmxaxTjyrJPgtJJP/ZMUja7B0vOBv6kOvKZyT?=
+ =?us-ascii?Q?GRiUan2XE6T+N7nNDHmoDodXhSIF6JReKavT4cIVpRR5mY5+H1Xk37KPI9EM?=
+ =?us-ascii?Q?RhFrqAUO9f2+vxskm0mZyIEXKQ61o7SlK53QVfP77vaEW7nz9N/hIg=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(52116014)(376014)(7416014)(38350700014)(7053199007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TDA3bE0vdzRqMDV2aDBnQVFNdmxNanlBRDBuVVJNL0pHSVVIcC9kSTdxYmJx?=
- =?utf-8?B?emVKK2FzVXExRlJ2RWNIcmdYVkYydnQ2bEdhbTU2NkRqZTRnUVpLQkRCbVh0?=
- =?utf-8?B?UGJsbktFa0dDd1p1VWlJWFZsYTI3V0NXSHFtT0JjalFUWFlTVXQvQWUzMEZK?=
- =?utf-8?B?cE02TUNhd0lDQzAzY2IrU3V1Yk9sdVNLYUNGcTJJQXpPZ2JHbGVNZHlGV3FJ?=
- =?utf-8?B?cVFRMSs2bysvV3Jlam5DZFNnU0FvV3hDbW9WN2ZHTGVYSUxPd1dyMVJ2cWFs?=
- =?utf-8?B?ODBCMkVaNFhISEt1dWZnbC9mcWVtM3lZMGJxOTgvNll1NW8yazBqeWFMZUdk?=
- =?utf-8?B?eVJxWFlQbDJrVEVaS0dmSGhvblp2K0t4TXdBcFlqbjJCSy9TYnNiTklwVHdt?=
- =?utf-8?B?TVhNNzJHNVU5RE82TFNVOFV1MHZNc0ZBUkhNV3U5UDhxcEo0Nmlrc3lkckZR?=
- =?utf-8?B?cWFITVFraDZRdmRoNEFIUkUzbzQ4ODM0TFhiRTU1QnNsdVpDcW92MDJxTVRj?=
- =?utf-8?B?amgzYmVlUFpXdm1jWHEvTDdaaDdGL3c0a1dmNXdNSGRWMncxdjhUcDZoeW1Q?=
- =?utf-8?B?bHBLcE9oYnlMM0VCeEd5WExOM0NBR0pXc0JONS8wanJEQUN0empYbDhNNHdZ?=
- =?utf-8?B?bWVUYjlGNGZ4RkpmcVVHbm9TaDZaeWJVTDRPWmN3aXNmTzVqQVhtUzhwWktI?=
- =?utf-8?B?WE1kL0xFcW5oM3Z1QktGL2pxejJpTkdhVUhqSnpLMGdRWDdvc3BXakFzbkRa?=
- =?utf-8?B?bWNVVktTN3RUTllNZDZTKy9XNWJrVUdtRGgvSEdTWHZUc0FPTTRRdUlhU2ty?=
- =?utf-8?B?Y1hoMloyWjlEenhTMDBHZmI3QWkxMXRuUGg0Z0tra0puZGIwNjdzaHYxWVhF?=
- =?utf-8?B?Z1NBc1ZPck1WckZTNTFOdHRrbEpzZUpaWnZjMUdzdFljODRnakpLM0h0eFJC?=
- =?utf-8?B?bWFSU1Jrd01XdzhnT0EyMk8zdEYybUovT0ROaU9hWEtqZnlXMVE5cldIcC81?=
- =?utf-8?B?YllVQllmYyt3Vk1tbXgzczJ6TGtNQ0xwNWRiYjdLbGpJNFppS01rTE1UZXJ1?=
- =?utf-8?B?eDJwZ1M0WG5GMTNiajJReGZ5dHhuNGhIRWwvNm40ckN1WjFsWXBreU9zOSs0?=
- =?utf-8?B?QjVuNEEzV0ZMdG5NZEIxQlhhK3B6KzNoTUZ6djRNYWxEemRuM1BVTUNzaTBm?=
- =?utf-8?B?bzhjRFZydVo4cEt4U1drOFBXb1NoNWNQWlRmOFhUck9OSUlGemxuM3ZoMUhj?=
- =?utf-8?B?WGkycXNraXJVdEFkVXBXYlJXNUJ3WVZDM2RoUXg3M2k5a1l3MWVsa3FrSC9I?=
- =?utf-8?B?elZyNDRvRS9ONjBmRzR3dDcxWGhNY0ZrbnF4RGJmWjBtdzViRFR3SUV6RkQ5?=
- =?utf-8?B?U1JRVGhyR0E1b1k5OENScDkvV1o0dElZWitXQnNITlAvZWJNYWN6YmhRT2lq?=
- =?utf-8?B?YTZSUlhWOFpqeHNWWlVmKzJoN0lYdXlNKzY4LzcvTGJCMENuRVZ6aXFvcEZC?=
- =?utf-8?B?VDIzSWJWRFZOM1RqNjc0S09QMGlyZHpqUW9QaVZGTGJMbXROcDF5dkNYSkIy?=
- =?utf-8?B?cFNOYkZKZDV5TUZUQlk5d1drY1pPRU96emVNbDQyaHhGWnBPdHBCa0NucFBk?=
- =?utf-8?B?Y2JXQXhHWXF0aU52RHRNMVZuYm5wMU1FRHNrZ1lDUlU3TUl2YjkzVi9jZldv?=
- =?utf-8?B?dERvWUZzeU1nZmlJVC80NzJoaVZRak01bUNjb3JCbWNyR0xncE4yUDRJNlJM?=
- =?utf-8?B?ZlM0UGk2WUpzSFlqcUVhczlYeFZrY2hBeGhhdjlWRmQ2WlhZZ3lKSlpsYlNC?=
- =?utf-8?B?eksvdFRhNTNKRzc3MzNJdWdXdTdnTFRldjcrSGZqMjQwQmZ0NkRsTnA2TllT?=
- =?utf-8?B?MU1Ib2dOczVjSmNlRU1WUS81akU1eVViYW5BSW1WUkFiWVl3Yy9BT3dMd3FV?=
- =?utf-8?B?VlBDR3cxZE1XSU5vUitFbHZ3QTdxVzNXTjJhSUoxT2NsYklFdFMwbnQwUjhH?=
- =?utf-8?B?dkZBQ3BEelowcGx4VCtBT2t4MjZXNmZhbEdKMXNEVktKWCtwKzVuRXkvZGVw?=
- =?utf-8?B?UTM2V0JBcDFoMU0xKzdNWXZzUldsUWREdzEybXNDVCtKVmNkR2RYNTc3UU02?=
- =?utf-8?Q?i2WeAWDhFwYe9yHt9+0j0UnfX?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: d07eb428-7ac0-45ee-9237-08dda93062fc
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?nhUhbWz8ExVs1Ly/xU1LikbXNHqWZERvAtVVu0KFKlrHslFgIPm8H1ElBP+R?=
+ =?us-ascii?Q?2kBk9AuUBKxrCtIKibXm5gb3DUob5YH/Gkjp4/BZA27cHZxm04KLJTznCFtt?=
+ =?us-ascii?Q?U37ATUaSandLJl4QeRWh1kbWwq1zSHY8zgf6iR3XeG/395XP5oD8hv/mH7Sq?=
+ =?us-ascii?Q?gMDD7FYQVFYqVt7HhRspQbALGBBzUDInV0VG/iNlFgP0zHK5buBvXr/enfCh?=
+ =?us-ascii?Q?6E72tmGEnouWF8+t73psWwAxBi7BU54jrXoX5dTkL1lhwbyNAl7ihq6+pn4X?=
+ =?us-ascii?Q?Ngh9mvhU1kmbyqzxqTCpxXb5HDGj8aCgyiLP6BU9ln3VHNz81ajqN6qHPjyj?=
+ =?us-ascii?Q?D4m2/FCzl/k2JTeuWGIPhvmXoL9Jh6ef3xDLwBNAGEubZkxHjQcb7ybbTsfe?=
+ =?us-ascii?Q?PN+Mksb8aL5xsCK91R5cpROC7v95vGDjmsIvRhMvLVJqnNwGD+DtpYlvx/jQ?=
+ =?us-ascii?Q?hFA6t9MzZoV4b64JEBAIYW0RUUOjlK7MLPXKckUJtURI4cNo2WpXCx0rr4QJ?=
+ =?us-ascii?Q?YIgPPPEdivmnLsX+RmtmfTyYTC2Pj5r+UR6et0RhI0M1HmcnfsMyiyDdLByr?=
+ =?us-ascii?Q?OeW4NoJzw8hNUg3zGLQPES/B+QeaDrvLH8kqDKkL0nuMIIEmvuQgAfqQ+ufS?=
+ =?us-ascii?Q?fvJQB6MLdXzV5CEKSsg10gRmzuE5qR61m2kcYa8faaAouv1usDjprYIWTVs4?=
+ =?us-ascii?Q?qHoA2o4n0Xu0k3StdX7107b7tZVF5MMa8wjRSMe+TlLgG2euFp4WfGm5qHPD?=
+ =?us-ascii?Q?OcXdHcC/TxqgiFpQ6kYpg4I6UBnnc6Gsn/vPYSSnjKM8T95kKGDsUz6eqqzo?=
+ =?us-ascii?Q?HI3SKtU86A8bvPCby+PbaP+aMmaJun3NkcSD+YEMQmB7YrIxvaUYqRGVAHsj?=
+ =?us-ascii?Q?V5ICvqKwa1SqDJpi3a227bdF7bqwt3jKBp2UXHoyqvglkDT6JqCg8N0DMJTm?=
+ =?us-ascii?Q?PqaI3aOBAQll3T2gyVTadCwSk1ajY1oOvUk0LMCUe+W6A/eIvgsXHCFhsmuY?=
+ =?us-ascii?Q?KlusHGP62MrT7smQl05HkoQv3I8MiUbm2TtHwyLr2Ug2rP6WpAYtRB7NUEDr?=
+ =?us-ascii?Q?E2eV2LT+jf50FMoay0xSEzh0d6w8N3pxLNIRQ9vkxhE0n7k5Ta2bw2BYbHus?=
+ =?us-ascii?Q?cXQuxq9ekruGxLvILUxepGGc4UhJZjLEWbvkeK282fT5zh7DyUEUFkQ+OyBc?=
+ =?us-ascii?Q?5mTFJYjOP97n5DTcqxE/DGrUipt42iC7bF1MtvjScA6j/Q4un30HaUqB85+p?=
+ =?us-ascii?Q?8BsxRM1d5ooGjpLJsSmAX6DBWvaTe/WrQ/91GuZD5POCgpSP74H8btuJIIGB?=
+ =?us-ascii?Q?5vfwuu8GkNUdN5Orc9TTkgaVCiinfs6xQDVJ5VrnkUCcZY2/gVuyTPXu+yw5?=
+ =?us-ascii?Q?6FWWZMqYbbig+Zs4zJh0m4jm9kETpMNsL+RgvOJn06s5GjtFrn1iqYWxkty3?=
+ =?us-ascii?Q?A9SFBKDbk3wWW9pcDfhc/nrtx7TxF88bAN3bbNW2HJPfjRsZHp+xrYd5RJc1?=
+ =?us-ascii?Q?lAX2G+wodt7jKRVFxuDxyhFtptoXBRJnWaPYkX5aulJWhIl1aGuxlwL8K4yl?=
+ =?us-ascii?Q?yjNT52aIria4K2MzZIvxFE3DFd3qMRiBGMVw1KCo?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f494b46f-60b1-45bc-65c1-08dda9312e0e
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2025 21:39:04.2146
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2025 21:44:45.0388
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BceAS6U6F9dwyGCIXD6WA/rqbQ+UuFlytG5+LP2YWbxCn2oEZKh0Y9XudnX1PKcmSpbi2P8CdSucVeKUeQK7PQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ5PPF183C9380E
-X-OriginatorOrg: intel.com
+X-MS-Exchange-CrossTenant-UserPrincipalName: nSzugvpL9RpLgDVUS+xxufAvsNCDoufS3UY+I49Savz00yDFjtrosxldxrMSkoUcJpZyEWQ47RHRePLFOXRbyQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6886
 
-On 6/4/2025 8:41 AM, H. Peter Anvin wrote:
-> I think printing the bitmap is fine for unknown bits set... after
-> all, you might have surprise vectors. Maybe a list would be cleaner
-> by some definition, but we already print bitmaps all over the place.
-> It is not critical as long as the information necessary for
-> debugging is there. In fact, it is often better for the information
-> to be compact so users don't get tempted to abbreviate a bug report.
-Sure, will print the full bitmap here. Since this is the unknown NMI
-message, it may have unexpected bits set in the bitmap.
+On Wed, Jun 11, 2025 at 04:03:02PM -0400, Samuel Kayode via B4 Relay wrote:
+> From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+>
+> Add support for the battery charger for pf1550 PMIC.
+>
+> Signed-off-by: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+> ---
+> v6:
+> - Drop lock entirely
+> - Reverse christmas tree order for variables defined in probe as
+>   suggested by Frank
+> - return pf1550_reg_init
+> v5:
+> - Drop lock for battery and charger delayed_work
+> - More conservative locking in vbus delayed_work
+> - Apply lock when setting power supply type during register initialization
+> v4:
+> - Finish handling of some interrupts in threaded irq handler
+> - Use platform_get_irq
+> v3:
+> - Use struct power_supply_get_battery_info to get constant charge
+>   voltage if specified
+> - Use virqs mapped in MFD driver
+> v2:
+> - Address feedback from Enric Balletbo Serra
+> ---
+>  drivers/power/supply/Kconfig          |  11 +
+>  drivers/power/supply/Makefile         |   1 +
+>  drivers/power/supply/pf1550-charger.c | 633 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 645 insertions(+)
+>
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index 79ddb006e2dad6bf96b71ed570a37c006b5f9433..6d0c872edac1f45da314632e671af1aeda4c87b8 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -471,6 +471,17 @@ config CHARGER_88PM860X
+>  	help
+>  	  Say Y here to enable charger for Marvell 88PM860x chip.
+>
+> +config CHARGER_PF1550
+> +	tristate "NXP PF1550 battery charger driver"
+> +	depends on MFD_PF1550
+> +	help
+> +	  Say Y to enable support for the NXP PF1550 battery charger.
+> +	  The device is a single cell Li-Ion/Li-Polymer battery charger for
+> +	  portable application.
+> +
+> +	  This driver can also be built as a module. If so, the module will be
+> +	  called pf1550-charger.
+> +
+>  config BATTERY_RX51
+>  	tristate "Nokia RX-51 (N900) battery driver"
+>  	depends on TWL4030_MADC
+> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+> index 4f5f8e3507f80da02812f0d08c2d81ddff0a272f..7f68380099c59dab71b73120150612a23e16a745 100644
+> --- a/drivers/power/supply/Makefile
+> +++ b/drivers/power/supply/Makefile
+> @@ -64,6 +64,7 @@ obj-$(CONFIG_CHARGER_RT9467)	+= rt9467-charger.o
+>  obj-$(CONFIG_CHARGER_RT9471)	+= rt9471.o
+>  obj-$(CONFIG_BATTERY_TWL4030_MADC)	+= twl4030_madc_battery.o
+>  obj-$(CONFIG_CHARGER_88PM860X)	+= 88pm860x_charger.o
+> +obj-$(CONFIG_CHARGER_PF1550)	+= pf1550-charger.o
+>  obj-$(CONFIG_BATTERY_RX51)	+= rx51_battery.o
+>  obj-$(CONFIG_AB8500_BM)		+= ab8500_bmdata.o ab8500_charger.o ab8500_fg.o ab8500_btemp.o ab8500_chargalg.o
+>  obj-$(CONFIG_CHARGER_CPCAP)	+= cpcap-charger.o
+> diff --git a/drivers/power/supply/pf1550-charger.c b/drivers/power/supply/pf1550-charger.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..3b4cdf4cab9659005f86ffb32e8457c7cb3065f9
+> --- /dev/null
+> +++ b/drivers/power/supply/pf1550-charger.c
+> @@ -0,0 +1,633 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +//
+> +// pf1550_charger.c - charger driver for the PF1550
+> +//
+> +// Copyright (C) 2016 Freescale Semiconductor, Inc.
+> +// Robin Gong <yibin.gong@freescale.com>
+> +//
+> +// Portions Copyright (c) 2025 Savoir-faire Linux Inc.
+> +// Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+> +//
+> +
+> +#include <linux/interrupt.h>
+> +#include <linux/mfd/pf1550.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/power_supply.h>
+> +
+> +#define PF1550_CHARGER_NAME		"pf1550-charger"
+> +#define PF1550_DEFAULT_CONSTANT_VOLT	4200000
+> +#define PF1550_DEFAULT_MIN_SYSTEM_VOLT	3500000
+> +#define PF1550_DEFAULT_THERMAL_TEMP	75
+> +#define PF1550_CHARGER_IRQ_NR		5
+> +
+> +static const char *pf1550_charger_model		= "PF1550";
+> +static const char *pf1550_charger_manufacturer	= "NXP";
 
+nit: these const string just use once, needn't such varible.
 
+> +
+> +struct pf1550_charger {
+> +	struct device *dev;
+> +	const struct pf1550_dev *pf1550;
+> +	struct power_supply *charger;
+> +	struct power_supply_desc psy_desc;
+> +	struct delayed_work vbus_sense_work;
+> +	struct delayed_work chg_sense_work;
+> +	struct delayed_work bat_sense_work;
+> +
+> +	u32 constant_volt;
+> +	u32 min_system_volt;
+> +	u32 thermal_regulation_temp;
+> +};
+> +
+> +static int pf1550_get_charger_state(struct regmap *regmap, int *val)
+> +{
+> +	int ret;
+> +	unsigned int data;
+
+nit: use reverise christmas order, check other function.
+
+> +
+> +	ret = regmap_read(regmap, PF1550_CHARG_REG_CHG_SNS, &data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	data &= PF1550_CHG_SNS_MASK;
+> +
+> +	switch (data) {
+> +	case PF1550_CHG_PRECHARGE:
+> +	case PF1550_CHG_CONSTANT_CURRENT:
+> +		*val = POWER_SUPPLY_STATUS_CHARGING;
+> +		break;
+> +	case PF1550_CHG_CONSTANT_VOL:
+> +		*val = POWER_SUPPLY_STATUS_CHARGING;
+> +		break;
+> +	case PF1550_CHG_EOC:
+> +		*val = POWER_SUPPLY_STATUS_CHARGING;
+> +		break;
+> +	case PF1550_CHG_DONE:
+> +		*val = POWER_SUPPLY_STATUS_FULL;
+> +		break;
+> +	case PF1550_CHG_TIMER_FAULT:
+> +	case PF1550_CHG_SUSPEND:
+> +		*val = POWER_SUPPLY_STATUS_NOT_CHARGING;
+> +		break;
+> +	case PF1550_CHG_OFF_INV:
+> +	case PF1550_CHG_OFF_TEMP:
+> +	case PF1550_CHG_LINEAR_ONLY:
+> +		*val = POWER_SUPPLY_STATUS_DISCHARGING;
+> +		break;
+> +	default:
+> +		*val = POWER_SUPPLY_STATUS_UNKNOWN;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int pf1550_get_charge_type(struct regmap *regmap, int *val)
+> +{
+> +	int ret;
+> +	unsigned int data;
+> +
+> +	ret = regmap_read(regmap, PF1550_CHARG_REG_CHG_SNS, &data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	data &= PF1550_CHG_SNS_MASK;
+> +
+> +	switch (data) {
+> +	case PF1550_CHG_SNS_MASK:
+> +		*val = POWER_SUPPLY_CHARGE_TYPE_TRICKLE;
+> +		break;
+> +	case PF1550_CHG_CONSTANT_CURRENT:
+> +	case PF1550_CHG_CONSTANT_VOL:
+> +	case PF1550_CHG_EOC:
+> +		*val = POWER_SUPPLY_CHARGE_TYPE_FAST;
+> +		break;
+> +	case PF1550_CHG_DONE:
+> +	case PF1550_CHG_TIMER_FAULT:
+> +	case PF1550_CHG_SUSPEND:
+> +	case PF1550_CHG_OFF_INV:
+> +	case PF1550_CHG_BAT_OVER:
+> +	case PF1550_CHG_OFF_TEMP:
+> +	case PF1550_CHG_LINEAR_ONLY:
+> +		*val = POWER_SUPPLY_CHARGE_TYPE_NONE;
+> +		break;
+> +	default:
+> +		*val = POWER_SUPPLY_CHARGE_TYPE_UNKNOWN;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Supported health statuses:
+> + *  - POWER_SUPPLY_HEALTH_DEAD
+> + *  - POWER_SUPPLY_HEALTH_GOOD
+> + *  - POWER_SUPPLY_HEALTH_OVERVOLTAGE
+> + *  - POWER_SUPPLY_HEALTH_UNKNOWN
+> + */
+> +static int pf1550_get_battery_health(struct regmap *regmap, int *val)
+> +{
+> +	int ret;
+> +	unsigned int data;
+> +
+> +	ret = regmap_read(regmap, PF1550_CHARG_REG_BATT_SNS, &data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	data &= PF1550_BAT_SNS_MASK;
+> +
+> +	switch (data) {
+> +	case PF1550_BAT_NO_DETECT:
+> +		*val = POWER_SUPPLY_HEALTH_DEAD;
+> +		break;
+> +	case PF1550_BAT_NO_VBUS:
+> +	case PF1550_BAT_LOW_THAN_PRECHARG:
+> +	case PF1550_BAT_CHARG_FAIL:
+> +	case PF1550_BAT_HIGH_THAN_PRECHARG:
+> +		*val = POWER_SUPPLY_HEALTH_GOOD;
+> +		break;
+> +	case PF1550_BAT_OVER_VOL:
+> +		*val = POWER_SUPPLY_HEALTH_OVERVOLTAGE;
+> +		break;
+> +	default:
+> +		*val = POWER_SUPPLY_HEALTH_UNKNOWN;
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int pf1550_get_present(struct regmap *regmap, int *val)
+> +{
+> +	unsigned int data;
+> +	int ret;
+> +
+> +	ret = regmap_read(regmap, PF1550_CHARG_REG_BATT_SNS, &data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	data &= PF1550_BAT_SNS_MASK;
+> +	*val = (data == PF1550_BAT_NO_DETECT) ? 0 : 1;
+> +
+> +	return 0;
+> +}
+> +
+> +static int pf1550_get_online(struct regmap *regmap, int *val)
+> +{
+> +	unsigned int data;
+> +	int ret;
+> +
+> +	ret = regmap_read(regmap, PF1550_CHARG_REG_VBUS_SNS, &data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	*val = (data & PF1550_VBUS_VALID) ? 1 : 0;
+> +
+> +	return 0;
+> +}
+> +
+> +static void pf1550_chg_bat_work(struct work_struct *work)
+> +{
+> +	struct pf1550_charger *chg = container_of(to_delayed_work(work),
+> +						  struct pf1550_charger,
+> +						  bat_sense_work);
+> +	unsigned int data;
+> +
+> +	if (!chg->charger)
+> +		return;
+> +
+> +	if (regmap_read(chg->pf1550->regmap, PF1550_CHARG_REG_BATT_SNS, &data)) {
+> +		dev_err(chg->dev, "Read BATT_SNS error.\n");
+> +		return;
+> +	}
+> +
+> +	switch (data & PF1550_BAT_SNS_MASK) {
+> +	case PF1550_BAT_NO_VBUS:
+> +		dev_dbg(chg->dev, "No valid VBUS input.\n");
+> +		break;
+> +	case PF1550_BAT_LOW_THAN_PRECHARG:
+> +		dev_dbg(chg->dev, "VBAT < VPRECHG.LB.\n");
+> +		break;
+> +	case PF1550_BAT_CHARG_FAIL:
+> +		dev_dbg(chg->dev, "Battery charging failed.\n");
+> +		break;
+> +	case PF1550_BAT_HIGH_THAN_PRECHARG:
+> +		dev_dbg(chg->dev, "VBAT > VPRECHG.LB.\n");
+> +		break;
+> +	case PF1550_BAT_OVER_VOL:
+> +		dev_dbg(chg->dev, "VBAT > VBATOV.\n");
+> +		break;
+> +	case PF1550_BAT_NO_DETECT:
+> +		dev_dbg(chg->dev, "Battery not detected.\n");
+> +		break;
+> +	default:
+> +		dev_err(chg->dev, "Unknown value read:%x\n",
+> +			data & PF1550_CHG_SNS_MASK);
+> +	}
+> +}
+> +
+> +static void pf1550_chg_chg_work(struct work_struct *work)
+> +{
+> +	struct pf1550_charger *chg = container_of(to_delayed_work(work),
+> +						  struct pf1550_charger,
+> +						  chg_sense_work);
+> +	unsigned int data;
+> +
+> +	if (!chg->charger)
+> +		return;
+> +
+> +	if (regmap_read(chg->pf1550->regmap, PF1550_CHARG_REG_CHG_SNS, &data)) {
+> +		dev_err(chg->dev, "Read CHG_SNS error.\n");
+> +		return;
+> +	}
+> +
+> +	switch (data & PF1550_CHG_SNS_MASK) {
+> +	case PF1550_CHG_PRECHARGE:
+> +		dev_dbg(chg->dev, "In pre-charger mode.\n");
+> +		break;
+> +	case PF1550_CHG_CONSTANT_CURRENT:
+> +		dev_dbg(chg->dev, "In fast-charge constant current mode.\n");
+> +		break;
+> +	case PF1550_CHG_CONSTANT_VOL:
+> +		dev_dbg(chg->dev, "In fast-charge constant voltage mode.\n");
+> +		break;
+> +	case PF1550_CHG_EOC:
+> +		dev_dbg(chg->dev, "In EOC mode.\n");
+> +		break;
+> +	case PF1550_CHG_DONE:
+> +		dev_dbg(chg->dev, "In DONE mode.\n");
+> +		break;
+> +	case PF1550_CHG_TIMER_FAULT:
+> +		dev_info(chg->dev, "In timer fault mode.\n");
+> +		break;
+> +	case PF1550_CHG_SUSPEND:
+> +		dev_info(chg->dev, "In thermistor suspend mode.\n");
+> +		break;
+> +	case PF1550_CHG_OFF_INV:
+> +		dev_info(chg->dev, "Input invalid, charger off.\n");
+> +		break;
+> +	case PF1550_CHG_BAT_OVER:
+> +		dev_info(chg->dev, "Battery over-voltage.\n");
+> +		break;
+> +	case PF1550_CHG_OFF_TEMP:
+> +		dev_info(chg->dev, "Temp high, charger off.\n");
+> +		break;
+> +	case PF1550_CHG_LINEAR_ONLY:
+> +		dev_dbg(chg->dev, "In Linear mode, not charging.\n");
+> +		break;
+> +	default:
+> +		dev_err(chg->dev, "Unknown value read:%x\n",
+> +			data & PF1550_CHG_SNS_MASK);
+> +	}
+> +}
+> +
+> +static void pf1550_chg_vbus_work(struct work_struct *work)
+> +{
+> +	struct pf1550_charger *chg = container_of(to_delayed_work(work),
+> +						  struct pf1550_charger,
+> +						  vbus_sense_work);
+> +	unsigned int data;
+> +	bool psy_changed = false;
+> +
+> +	if (!chg->charger)
+> +		return;
+> +
+> +	if (regmap_read(chg->pf1550->regmap, PF1550_CHARG_REG_VBUS_SNS, &data)) {
+> +		dev_err(chg->dev, "Read VBUS_SNS error.\n");
+> +		return;
+> +	}
+> +
+> +	if (data & PF1550_VBUS_UVLO) {
+> +		chg->psy_desc.type = POWER_SUPPLY_TYPE_BATTERY;
+> +		psy_changed = true;
+> +		dev_dbg(chg->dev, "VBUS detached.\n");
+> +	}
+> +	if (data & PF1550_VBUS_IN2SYS)
+> +		dev_dbg(chg->dev, "VBUS_IN2SYS_SNS.\n");
+> +	if (data & PF1550_VBUS_OVLO)
+> +		dev_dbg(chg->dev, "VBUS_OVLO_SNS.\n");
+> +	if (data & PF1550_VBUS_VALID) {
+> +		chg->psy_desc.type = POWER_SUPPLY_TYPE_MAINS;
+> +		psy_changed = true;
+> +		dev_dbg(chg->dev, "VBUS attached.\n");
+> +	}
+> +
+> +	if (psy_changed)
+> +		power_supply_changed(chg->charger);
+> +}
+> +
+> +static irqreturn_t pf1550_charger_irq_handler(int irq, void *data)
+> +{
+> +	struct pf1550_charger *chg = data;
+> +	struct device *dev = chg->dev;
+> +	struct platform_device *pdev = to_platform_device(dev);
+> +	int i, irq_type = -1;
+> +
+> +	for (i = 0; i < PF1550_CHARGER_IRQ_NR; i++)
+> +		if (irq == platform_get_irq(pdev, i))
+> +			irq_type = i;
+
+generally save irq number to pf1550_charger at probe, needn't call
+platform_get_irq to get from dts again.
+
+Frank
+
+> +
+> +	switch (irq_type) {
+> +	case PF1550_CHARG_IRQ_BAT2SOCI:
+> +		dev_info(dev, "BAT to SYS Overcurrent interrupt.\n");
+> +		break;
+> +	case PF1550_CHARG_IRQ_BATI:
+> +		schedule_delayed_work(&chg->bat_sense_work,
+> +				      msecs_to_jiffies(10));
+> +		break;
+> +	case PF1550_CHARG_IRQ_CHGI:
+> +		schedule_delayed_work(&chg->chg_sense_work,
+> +				      msecs_to_jiffies(10));
+> +		break;
+> +	case PF1550_CHARG_IRQ_VBUSI:
+> +		schedule_delayed_work(&chg->vbus_sense_work,
+> +				      msecs_to_jiffies(10));
+> +		break;
+> +	case PF1550_CHARG_IRQ_THMI:
+> +		dev_info(dev, "Thermal interrupt.\n");
+> +		break;
+> +	default:
+> +		dev_err(dev, "unknown interrupt occurred.\n");
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static enum power_supply_property pf1550_charger_props[] = {
+> +	POWER_SUPPLY_PROP_STATUS,
+> +	POWER_SUPPLY_PROP_CHARGE_TYPE,
+> +	POWER_SUPPLY_PROP_HEALTH,
+> +	POWER_SUPPLY_PROP_PRESENT,
+> +	POWER_SUPPLY_PROP_ONLINE,
+> +	POWER_SUPPLY_PROP_MODEL_NAME,
+> +	POWER_SUPPLY_PROP_MANUFACTURER,
+> +};
+> +
+> +static int pf1550_charger_get_property(struct power_supply *psy,
+> +				       enum power_supply_property psp,
+> +				       union power_supply_propval *val)
+> +{
+> +	struct pf1550_charger *chg = power_supply_get_drvdata(psy);
+> +	struct regmap *regmap = chg->pf1550->regmap;
+> +	int ret = 0;
+> +
+> +	switch (psp) {
+> +	case POWER_SUPPLY_PROP_STATUS:
+> +		ret = pf1550_get_charger_state(regmap, &val->intval);
+> +		break;
+> +	case POWER_SUPPLY_PROP_CHARGE_TYPE:
+> +		ret = pf1550_get_charge_type(regmap, &val->intval);
+> +		break;
+> +	case POWER_SUPPLY_PROP_HEALTH:
+> +		ret = pf1550_get_battery_health(regmap, &val->intval);
+> +		break;
+> +	case POWER_SUPPLY_PROP_PRESENT:
+> +		ret = pf1550_get_present(regmap, &val->intval);
+> +		break;
+> +	case POWER_SUPPLY_PROP_ONLINE:
+> +		ret = pf1550_get_online(regmap, &val->intval);
+> +		break;
+> +	case POWER_SUPPLY_PROP_MODEL_NAME:
+> +		val->strval = pf1550_charger_model;
+> +		break;
+> +	case POWER_SUPPLY_PROP_MANUFACTURER:
+> +		val->strval = pf1550_charger_manufacturer;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int pf1550_set_constant_volt(struct pf1550_charger *chg,
+> +				    unsigned int uvolt)
+> +{
+> +	unsigned int data;
+> +
+> +	if (uvolt >= 3500000 && uvolt <= 4440000)
+> +		data = 8 + (uvolt - 3500000) / 20000;
+> +	else
+> +		return dev_err_probe(chg->dev, -EINVAL,
+> +				     "Wrong value for constant voltage\n");
+> +
+> +	dev_dbg(chg->dev, "Charging constant voltage: %u (0x%x)\n", uvolt,
+> +		data);
+> +
+> +	return regmap_update_bits(chg->pf1550->regmap,
+> +				  PF1550_CHARG_REG_BATT_REG,
+> +				  PF1550_CHARG_REG_BATT_REG_CHGCV_MASK, data);
+> +}
+> +
+> +static int pf1550_set_min_system_volt(struct pf1550_charger *chg,
+> +				      unsigned int uvolt)
+> +{
+> +	unsigned int data;
+> +
+> +	switch (uvolt) {
+> +	case 3500000:
+> +		data = 0x0;
+> +		break;
+> +	case 3700000:
+> +		data = 0x1;
+> +		break;
+> +	case 4300000:
+> +		data = 0x2;
+> +		break;
+> +	default:
+> +		return dev_err_probe(chg->dev, -EINVAL,
+> +				     "Wrong value for minimum system voltage\n");
+> +	}
+> +
+> +	data <<= PF1550_CHARG_REG_BATT_REG_VMINSYS_SHIFT;
+> +
+> +	dev_dbg(chg->dev, "Minimum system regulation voltage: %u (0x%x)\n",
+> +		uvolt, data);
+> +
+> +	return regmap_update_bits(chg->pf1550->regmap,
+> +				  PF1550_CHARG_REG_BATT_REG,
+> +				  PF1550_CHARG_REG_BATT_REG_VMINSYS_MASK, data);
+> +}
+> +
+> +static int pf1550_set_thermal_regulation_temp(struct pf1550_charger *chg,
+> +					      unsigned int cells)
+> +{
+> +	unsigned int data;
+> +
+> +	switch (cells) {
+> +	case 60:
+> +		data = 0x0;
+> +		break;
+> +	case 75:
+> +		data = 0x1;
+> +		break;
+> +	case 90:
+> +		data = 0x2;
+> +		break;
+> +	case 105:
+> +		data = 0x3;
+> +		break;
+> +	default:
+> +		return dev_err_probe(chg->dev, -EINVAL,
+> +				     "Wrong value for thermal temperature\n");
+> +	}
+> +
+> +	data <<= PF1550_CHARG_REG_THM_REG_CNFG_REGTEMP_SHIFT;
+> +
+> +	dev_dbg(chg->dev, "Thermal regulation loop temperature: %u (0x%x)\n",
+> +		cells, data);
+> +
+> +	return regmap_update_bits(chg->pf1550->regmap,
+> +				  PF1550_CHARG_REG_THM_REG_CNFG,
+> +				  PF1550_CHARG_REG_THM_REG_CNFG_REGTEMP_MASK,
+> +				  data);
+> +}
+> +
+> +/*
+> + * Sets charger registers to proper and safe default values.
+> + */
+> +static int pf1550_reg_init(struct pf1550_charger *chg)
+> +{
+> +	struct device *dev = chg->dev;
+> +	int ret;
+> +	unsigned int data;
+> +
+> +	/* Unmask charger interrupt, mask DPMI and reserved bit */
+> +	ret =  regmap_write(chg->pf1550->regmap, PF1550_CHARG_REG_CHG_INT_MASK,
+> +			    PF1550_CHG_INT_MASK);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret,
+> +				     "Error unmask charger interrupt\n");
+> +
+> +	ret = regmap_read(chg->pf1550->regmap, PF1550_CHARG_REG_VBUS_SNS,
+> +			  &data);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Read charg vbus_sns error\n");
+> +
+> +	if (data & PF1550_VBUS_VALID)
+> +		chg->psy_desc.type = POWER_SUPPLY_TYPE_MAINS;
+> +
+> +	ret = pf1550_set_constant_volt(chg, chg->constant_volt);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = pf1550_set_min_system_volt(chg, chg->min_system_volt);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = pf1550_set_thermal_regulation_temp(chg,
+> +						 chg->thermal_regulation_temp);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Turn on charger */
+> +	ret = regmap_write(chg->pf1550->regmap, PF1550_CHARG_REG_CHG_OPER,
+> +			   PF1550_CHG_TURNON);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Error turn on charger\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static void pf1550_dt_parse_dev_info(struct pf1550_charger *chg)
+> +{
+> +	struct device *dev = chg->dev;
+> +	struct power_supply_battery_info *info;
+> +
+> +	if (device_property_read_u32(dev->parent, "nxp,min-system-microvolt",
+> +				     &chg->min_system_volt))
+> +		chg->min_system_volt = PF1550_DEFAULT_MIN_SYSTEM_VOLT;
+> +
+> +	if (device_property_read_u32(dev->parent,
+> +				     "nxp,thermal-regulation-celsius",
+> +				     &chg->thermal_regulation_temp))
+> +		chg->thermal_regulation_temp = PF1550_DEFAULT_THERMAL_TEMP;
+> +
+> +	if (power_supply_get_battery_info(chg->charger, &info))
+> +		chg->constant_volt = PF1550_DEFAULT_CONSTANT_VOLT;
+> +	else
+> +		chg->constant_volt = info->constant_charge_voltage_max_uv;
+> +}
+> +
+> +static int pf1550_charger_probe(struct platform_device *pdev)
+> +{
+> +	const struct pf1550_dev *pf1550 = dev_get_drvdata(pdev->dev.parent);
+> +	struct power_supply_config psy_cfg = {};
+> +	struct pf1550_charger *chg;
+> +	int i, irq, ret;
+> +
+> +	chg = devm_kzalloc(&pdev->dev, sizeof(*chg), GFP_KERNEL);
+> +	if (!chg)
+> +		return -ENOMEM;
+> +
+> +	chg->dev = &pdev->dev;
+> +	chg->pf1550 = pf1550;
+> +
+> +	if (!chg->pf1550->regmap)
+> +		return dev_err_probe(&pdev->dev, -ENODEV,
+> +				     "failed to get regmap\n");
+> +
+> +	platform_set_drvdata(pdev, chg);
+> +
+> +	INIT_DELAYED_WORK(&chg->vbus_sense_work, pf1550_chg_vbus_work);
+> +	INIT_DELAYED_WORK(&chg->chg_sense_work, pf1550_chg_chg_work);
+> +	INIT_DELAYED_WORK(&chg->bat_sense_work, pf1550_chg_bat_work);
+> +
+> +	for (i = 0; i < PF1550_CHARGER_IRQ_NR; i++) {
+> +		irq = platform_get_irq(pdev, i);
+> +		if (irq < 0)
+> +			return irq;
+> +
+> +		ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
+> +						pf1550_charger_irq_handler,
+> +						IRQF_NO_SUSPEND,
+> +						"pf1550-charger", chg);
+> +		if (ret)
+> +			return dev_err_probe(&pdev->dev, ret,
+> +					     "failed irq request\n");
+> +	}
+> +
+> +	psy_cfg.drv_data = chg;
+> +
+> +	chg->psy_desc.name = PF1550_CHARGER_NAME;
+> +	chg->psy_desc.type = POWER_SUPPLY_TYPE_BATTERY;
+> +	chg->psy_desc.get_property = pf1550_charger_get_property;
+> +	chg->psy_desc.properties = pf1550_charger_props;
+> +	chg->psy_desc.num_properties = ARRAY_SIZE(pf1550_charger_props);
+> +
+> +	chg->charger = devm_power_supply_register(&pdev->dev, &chg->psy_desc,
+> +						  &psy_cfg);
+> +	if (IS_ERR(chg->charger))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(chg->charger),
+> +				     "failed: power supply register\n");
+> +
+> +	pf1550_dt_parse_dev_info(chg);
+> +
+> +	return pf1550_reg_init(chg);
+> +}
+> +
+> +static void pf1550_charger_remove(struct platform_device *pdev)
+> +{
+> +	struct pf1550_charger *chg = platform_get_drvdata(pdev);
+> +
+> +	cancel_delayed_work_sync(&chg->bat_sense_work);
+> +	cancel_delayed_work_sync(&chg->chg_sense_work);
+> +	cancel_delayed_work_sync(&chg->vbus_sense_work);
+> +}
+> +
+> +static const struct platform_device_id pf1550_charger_id[] = {
+> +	{ "pf1550-charger", 0 },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(platform, pf1550_charger_id);
+> +
+> +static struct platform_driver pf1550_charger_driver = {
+> +	.driver = {
+> +		.name	= "pf1550-charger",
+> +	},
+> +	.probe		= pf1550_charger_probe,
+> +	.remove		= pf1550_charger_remove,
+> +	.id_table	= pf1550_charger_id,
+> +};
+> +module_platform_driver(pf1550_charger_driver);
+> +
+> +MODULE_AUTHOR("Robin Gong <yibin.gong@freescale.com>");
+> +MODULE_DESCRIPTION("PF1550 charger driver");
+> +MODULE_LICENSE("GPL");
+>
+> --
+> 2.49.0
+>
+>
 
