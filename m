@@ -1,91 +1,200 @@
-Return-Path: <linux-pm+bounces-28485-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28486-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83BFEAD553E
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 14:17:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A13AAD5570
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 14:25:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72B041BC1C85
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 12:17:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BC931E033C
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 12:25:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B97E2777F9;
-	Wed, 11 Jun 2025 12:17:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2D12280CF8;
+	Wed, 11 Jun 2025 12:25:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="gYDy+ZM8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1901274FDE;
-	Wed, 11 Jun 2025 12:17:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EEE3280300;
+	Wed, 11 Jun 2025 12:25:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749644238; cv=none; b=t6hVLufbYcMev9xIaIfo/PbUQF19sMh4I6+95wkU/eUOtMd3DkgkPG6gzTgqnE5clF0Yrc4oNnC9vurEAj8Ih9sYVmk/OzvUDnRIR4Y4EoCQrF3IeKi753MOYC3GiuFgSY04eI6uJJ6ozXzCw15FUs0kkyXRZKm4xSz09iUG9yM=
+	t=1749644733; cv=none; b=E8EFdZVD+Q6xuEuUubxsSVqhcB72ljvN/t4bI3iDGJdnIk1xfJie3t2R86TB9Vq2veiUOesQwWtLJ2B8tgC2QMw/fjhaV+WnVQZarXznhBpE9HHo6LyHURC30BKviGFSgLWKERDYQAi6NirmCUyw8PCf6ZGmZzJsti7hfK4K/E4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749644238; c=relaxed/simple;
-	bh=HF5uVuhB0h+FzyGFATdcJwR9EcckejdGzlGRXznbmOI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jtUbQNxwBAusO28YlVB6CaTrUlPzzoRfJUxD52Q3DuwBpvm/QriiEz1rbfZUBvSt+6YRO0j8YsLIUThV95xOy4RnPsfHUKhPn6Y2W7pmyzmIYN4Iw7wBMaFiKvtMYL54LvxlxWcZCEo5zIXENMWAdkXef9Pky4TuZYhBT17OKJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E0FC15A1;
-	Wed, 11 Jun 2025 05:16:56 -0700 (PDT)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1CBAB3F673;
-	Wed, 11 Jun 2025 05:17:13 -0700 (PDT)
-Date: Wed, 11 Jun 2025 13:17:11 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc: Cristian Marussi <cristian.marussi@arm.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>, <arm-scmi@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 0/3] firmware: arm_scmi: perf/cpufreq: Enable
- notification only if supported by platform
-Message-ID: <20250611-cherubic-solemn-toucanet-aac5af@sudeepholla>
-References: <20250611-scmi-perf-v1-0-df2b548ba77c@nxp.com>
+	s=arc-20240116; t=1749644733; c=relaxed/simple;
+	bh=mq5fQh6TxmI6S2ebT8lugj5Q9NravY0okjLw4RPOEH0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=K95staXafmM/IMl3xcNgqGCjEfGIjjGNZ5bBj2QtqKTFth5GTzieF6dwaEwy3dyhUh8RIixmycyzf3hLZD8jZU+dscWdE23p36Ap3vqIpMOHLAR6vEsOf8gl4+pWJJ9sIsrZ3g14/yzYtrf/sx53t5EOrHCsl1IQlIsz6jBrWCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=gYDy+ZM8; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55B9DDrF023918;
+	Wed, 11 Jun 2025 12:24:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	pGAuQJnCZRenSUKeUSJste/qOhgDi8yuC9MgXtEQqHA=; b=gYDy+ZM8lCRyvKb8
+	Y927Tqu4+0a16Mf2gDCVxhZfsUWS5YCE0iwHFZy79ojO1v5ENqTp3uLJv/Gb8cHK
+	dX+rqJioT+ndWZCbQBq2xZA2324/Uce0Z4PNyFMX29jyvhLAT/I1HMEXodVLEN3x
+	c45z59T9GTrijJd3hoWvOLkgnL+gJFkYhozjust+Ql9CRbCYCh2I9jcQEWZ6VXv8
+	5c9n+wNGZ+qt0pQ5/QtgvYTR5utTiAlUW1QXEUlJpzM0Ck0zxXDtvCStQDwjduha
+	arMy/gPTPJUJOxqkiFXoytpRBain2Z70mRSRHT6/N10L8uzVBYKGUQ27KDnaDYuH
+	ALHz4A==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 475v2tfhvs-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Jun 2025 12:24:57 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 55BCOuWd012122
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Jun 2025 12:24:56 GMT
+Received: from [10.216.28.79] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 11 Jun
+ 2025 05:24:48 -0700
+Message-ID: <d482653e-5c0e-4b03-98d6-2c898b445917@quicinc.com>
+Date: Wed, 11 Jun 2025 17:54:44 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250611-scmi-perf-v1-0-df2b548ba77c@nxp.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/4] dt-bindings: opp: adreno: Update regex of OPP
+ entry
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+        Akhil P Oommen
+	<akhilpo@oss.qualcomm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Will
+ Deacon" <will@kernel.org>,
+        Rob Clark <robin.clark@oss.qualcomm.com>, Sean
+ Paul <sean@poorly.run>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Dmitry
+ Baryshkov <lumag@kernel.org>,
+        Abhinav Kumar <abhinav.kumar@linux.dev>,
+        Jessica Zhang <jessica.zhang@oss.qualcomm.com>,
+        Marijn Suijten
+	<marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>, "Simona
+ Vetter" <simona@ffwll.ch>,
+        Bjorn Andersson <andersson@kernel.org>, Rob
+ Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor
+ Dooley <conor+dt@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
+        Nishanth
+ Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
+CC: <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+References: <20250611-x1p-adreno-v2-0-5074907bebbd@oss.qualcomm.com>
+ <20250611-x1p-adreno-v2-1-5074907bebbd@oss.qualcomm.com>
+ <492417fe-c086-4980-b108-0487bad08155@kernel.org>
+From: Akhil P Oommen <quic_akhilpo@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <492417fe-c086-4980-b108-0487bad08155@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 19Wy04pcgBOYQabLMROi2WkoaX8g-IgR
+X-Authority-Analysis: v=2.4 cv=GoxC+l1C c=1 sm=1 tr=0 ts=68497599 cx=c_pps
+ a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=EUspDBNiAAAA:8
+ a=snIp_u72ujy8X2fHCcYA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: 19Wy04pcgBOYQabLMROi2WkoaX8g-IgR
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjExMDEwNiBTYWx0ZWRfX8/VpQ35K3txV
+ 0LE/3vFvyiqLM1KGZhDyw53Hlk7CMoEbHrqhh0/DhZeXDc2YvHYAhicvpnujZyStWiy35n5K4rN
+ wX+m80mCGjHNIvl0Ry5I0BXYGwz2LJkpBnyDmGlIYSi7/tbFY8dMtk83X/vB6RgHmK5fw+8c0EZ
+ 1tBW63P14pVPPyK4NJNNqZllRWwtW5xPwNXQmYHRSX51BdA4l+o+AJAbmK+dYX6PkXgilZMY1YD
+ 97BZ15yjVYz+ddZTvlddufqXy/JvHXCV4meWLqWU0hFePNdgnlmBm6zvH61JLpWiSjEKeuSuerb
+ YAp5p1kVZMVHOG5K/h5A8NQ3RXIfacvN3HXqnu0oAnM2Cz9bgn65fbnu+MQSk5laoYL/BJ7jXq1
+ iJwZdswf/j6MgVIP9xJSsJ/e2KTjOb7Yy2aXssLnpEXAsVAq6Jf5HNnu93XhdMqpcd+ZfrTZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-11_05,2025-06-10_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ mlxlogscore=999 adultscore=0 impostorscore=0 malwarescore=0 mlxscore=0
+ suspectscore=0 phishscore=0 priorityscore=1501 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2506110106
 
-On Wed, Jun 11, 2025 at 03:52:42PM +0800, Peng Fan (OSS) wrote:
-> PERFORMANCE_NOTIFY_LIMITS and PERFORMANCE_NOTIFY_LEVEL are optional
-> commands. If use these commands on platforms that not support the two,
-> there is error log:
->   SCMI Notifications - Failed to ENABLE events for key:13000008 !
->   scmi-cpufreq scmi_dev.4: failed to register for limits change notifier for domain 8
+On 6/11/2025 4:50 PM, Krzysztof Kozlowski wrote:
+> On 11/06/2025 13:15, Akhil P Oommen wrote:
+>> Update regex to allow multi-worded OPP entry names.
 > 
+> Why would we want multi-worded? This needs to be explained here.
 
-I wonder if it makes sense to quiesce the warnings from the core if the
-platform doesn't support notifications. I prefer to not add if notification
-supported in all the protocols.
+I took the new regex from "opp-v2-base.yaml" file, so I thought it was
+obvious enough. The requirement is that sometimes Adreno GPU may require
+variants of OPP entries with same frequency. As an example, we may want
+to vote different peak bandwidths in different SKUs for the same GPU
+frequency. So to denote this minor variation, we can add an integer
+suffix to the OPP entry name separated by '-'. An example from another
+patch in this series:
 
-If the interface can return -EOPNOTSUPP(equivalent to SCMI_ERR_SUPPORT),
-the caller must handle it appropriately(i.e. continue if it can handle
-absence of notification or propagate error).
+ opp-666000000-0 {
+         opp-hz = /bits/ 64 <666000000>;
+         opp-level = <RPMH_REGULATOR_LEVEL_SVS_L1>;
+         opp-peak-kBps = <8171875>;
+         qcom,opp-acd-level = <0xa82d5ffd>;
+         opp-supported-hw = <0xf>;
+ };
 
-Cristian, Thoughts/opinions ?
+ /* Only applicable for SKUs which has 666Mhz as Fmax */
+ opp-666000000-1 {
+         opp-hz = /bits/ 64 <666000000>;
+         opp-level = <RPMH_REGULATOR_LEVEL_SVS_L1>;
+         opp-peak-kBps = <16500000>;
+         qcom,opp-acd-level = <0xa82d5ffd>;
+         opp-supported-hw = <0x10>;
+ };
 
-> If platforms not support perf notification, saving some cpu cycles
-> by introducing notify_supported ops.
+I will add this explanation in the commit text in the next revision.
+
 > 
+> 
+>>
+>> Signed-off-by: Akhil P Oommen <akhilpo@oss.qualcomm.com>
+>> ---
+>>  Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
+>> index a27ba7b663d456f964628a91a661b51a684de1be..bba95799919eb52d12afa42354ed909d0ef3c627 100644
+>> --- a/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
+>> +++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
+>> @@ -23,7 +23,7 @@ properties:
+>>        const: operating-points-v2-adreno
+>>  
+>>  patternProperties:
+>> -  '^opp-[0-9]+$':
+>> +  '^opp(-?[0-9]+)*$':
+> 
+> Not correct regex. You allow "opp", "opp1" and all other unusual
+> variants. Commit does not explain what problem you are solving, so I
+> have no clue what you want here, but for sure opp1 is wrong.
 
-Sure, makes sense to improve where ever possible.
+Just to confirm, would this be fine for the requirement I mentioned above?
 
-> While at here, patch 1 is a typo fix when doing the patchset.
->
+"'^opp(-[0-9]+)*$'"
 
-This one looks OK.
+-Akhil.
 
--- 
-Regards,
-Sudeep
+> 
+> 
+> Best regards,
+> Krzysztof
+
 
