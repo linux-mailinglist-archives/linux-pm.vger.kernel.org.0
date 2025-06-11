@@ -1,161 +1,200 @@
-Return-Path: <linux-pm+bounces-28472-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28473-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3ADBAD5294
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 12:49:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22F13AD52A2
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 12:50:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F33A3A7D1C
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 10:48:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01D0E1893CCE
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jun 2025 10:49:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10AD5288C96;
-	Wed, 11 Jun 2025 10:44:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14B0828A714;
+	Wed, 11 Jun 2025 10:45:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sa4DIAu9"
+	dkim=pass (2048-bit key) header.d=public-files.de header.i=frank-w@public-files.de header.b="RpRDFNg6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5B7428850C;
-	Wed, 11 Jun 2025 10:44:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A46289E15;
+	Wed, 11 Jun 2025 10:45:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749638685; cv=none; b=PJ6zPTYu0W/9URrUqr43s9etp8MzB4mT3pQ52iJuNys8BuVPWwKATwrw9qhMhm9xPBVo9QIJhqODolTxriHLPLflO1QYAWJYDsFc34XcxV8i5hU5Pfn0hHv6IQrCbUGsc+iqzwg9T8cnrIQVBdt8L05Gwpsho5rjv2spmL2FH0A=
+	t=1749638715; cv=none; b=h/ugOkeWVzRjtUvChKHTqTTqohkUq1w17zCJwKvlQYxlqtQkiNuVwjXYQWqRYadM7rxAVCB7CEbnCOmMQyo7v38s1GoRYiMKiPM1vInxvUFSdrkjFtCZgFAzshiYptzXJAFjWKkb8Y7/V+rSYEl3iqY/Oy6LvlJUYVlne37EdK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749638685; c=relaxed/simple;
-	bh=f5qbQ8Fc4E+01P0Dh1oZ2Hoqqa0z07Fu0gRmiBSanlk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GcV0SzDpD97FWPGrVBq8R97QPoh2GgaIKfWdT0x0AzD+YUoVxpjWozIgR3gdDxo2hcN7yvQZggLYeULksOkKVLM63c/bnVfl/3DSWqa9mBpuVrOr0QgXw85od3Fr8mU8+AAuyVY2MMf+Ncexee2jBwKLU/sId+z5/HV9Qd5Q9vU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sa4DIAu9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAC3AC4CEF2;
-	Wed, 11 Jun 2025 10:44:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749638685;
-	bh=f5qbQ8Fc4E+01P0Dh1oZ2Hoqqa0z07Fu0gRmiBSanlk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sa4DIAu9Vvf1WurQjI0XhYcEIcBkDlZ3nyZ23fCFbbba0Mh1Iq6uywKVi5H9/NcoI
-	 a2Pmjva05ZVRM38aqIYUO9X+GUQW/N69gi1nSvWcd+XEowP3bATpkkt5LqlKNWZRc0
-	 OKI+Yi5uJkgMxg9FuyH6L9ebGHnH38BHj/XPVokzGZ0DgVDTzV1Nkh77hEmEeYlSXT
-	 6sDR7tP7fyEj3PcrdnTsZEVRcpSImF4PRJiJu1CkAmaANzBfNF2t29cPRKNZtBhC74
-	 FeP68e4Jw3uhhr3f2tBxpldJKsvAfnlEKss+6xoyBrDxOJ7T+avAJChry0yU6mnC0A
-	 B6OAlJsAeR/HA==
-From: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-To: linux-kernel@vger.kernel.org
-Cc: tglx@linutronix.de,
-	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-	Amit Kucheria <amitk@kernel.org>,
-	Thara Gopinath <thara.gopinath@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	linux-arm-msm@vger.kernel.org,
-	linux-tegra@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH] thermal: Use dev_fwnode()
-Date: Wed, 11 Jun 2025 12:43:48 +0200
-Message-ID: <20250611104348.192092-20-jirislaby@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250611104348.192092-1-jirislaby@kernel.org>
-References: <20250611104348.192092-1-jirislaby@kernel.org>
+	s=arc-20240116; t=1749638715; c=relaxed/simple;
+	bh=DqgUkWIggm0ChFDOeWFtjBzmN592Cxe7bdY/Aq6bHGk=;
+	h=MIME-Version:Message-ID:From:To:Cc:Subject:Content-Type:Date:
+	 In-Reply-To:References; b=EGDH3ggLsc2pjeAesGEuUV4uMY0cWnkJexzOXGWElITEFTqb5S/PfW8C7vzlj4n93+dEqZtRVKPgoVBeB2v4SZOVJVSNBY66vZpSXqGl4UW8vUJwIaazkgSRvBZ/iFVXOprQpBWBOPCkPZw8Cb8C9QDfceBAtH7G/fpsDskZJcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=public-files.de; spf=pass smtp.mailfrom=public-files.de; dkim=pass (2048-bit key) header.d=public-files.de header.i=frank-w@public-files.de header.b=RpRDFNg6; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=public-files.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=public-files.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=public-files.de;
+	s=s31663417; t=1749638694; x=1750243494; i=frank-w@public-files.de;
+	bh=4tlDAQPp+Ak4wlcbM+NYh2qaHTfYWrGnJVTAcQWxrFQ=;
+	h=X-UI-Sender-Class:MIME-Version:Message-ID:From:To:Cc:Subject:
+	 Content-Type:Date:In-Reply-To:References:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=RpRDFNg6OkTnwbBvFDQXwDw3ZnY9fU3SrWVN6Y0AXpmLJ7VOUA8Z+M8lU7AOerFI
+	 Ha04XjyzR2yeNDFmBcVpY98IddLHZcPn29i5nnoMdrR/9xpwb0YoUEpnZKPFGYcwg
+	 97vULFG6z8g1GjgKEfEkWk2eLOWr3LemMUBr0E0ngW3/rXuKzRYQAMp656pA0B34S
+	 fg7wYUbEdaK46atnrcxjtJiC/ZAIybLh5qFyMBhxd938EnygQg9YCnRjvHk24tVH3
+	 QlxojIlFYyrqJK2nso72mIArxmmT3mL9w7Sz4jAauUjNagdcb+KURa32u4epCnNMS
+	 LwlCCn2UEh5EKLDnxw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [100.70.254.165] ([100.70.254.165]) by
+ trinity-msg-rest-gmx-gmx-live-847b5f5c86-m27rw (via HTTP); Wed, 11 Jun 2025
+ 10:44:54 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-ID: <trinity-cf16c45f-66e1-486f-969f-fb19f722f769-1749638694479@trinity-msg-rest-gmx-gmx-live-847b5f5c86-m27rw>
+From: Frank Wunderlich <frank-w@public-files.de>
+To: angelogioacchino.delregno@collabora.com, linux@fw-web.de,
+ myungjoo.ham@samsung.com, kyungmin.park@samsung.com, cw00.choi@samsung.com,
+ djakov@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, andrew@lunn.ch, olteanv@gmail.com,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, matthias.bgg@gmail.com
+Cc: jia-wei.chang@mediatek.com, johnson.wang@mediatek.com,
+ arinc.unal@arinc9.com, Landen.Chao@mediatek.com, dqfext@gmail.com,
+ sean.wang@mediatek.com, daniel@makrotopia.org, lorenzo@kernel.org,
+ nbd@nbd.name, linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+Subject: Aw: Re: [PATCH v3 12/13] arm64: dts: mediatek: mt7988a-bpi-r4: add
+ sfp cages and link to gmac
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 11 Jun 2025 10:44:54 +0000
+In-Reply-To: <37c7ac6c-a5ea-45cc-8ded-9d9bb22d092e@collabora.com>
+References: <20250608211452.72920-1-linux@fw-web.de>
+ <20250608211452.72920-13-linux@fw-web.de>
+ <37c7ac6c-a5ea-45cc-8ded-9d9bb22d092e@collabora.com>
+X-UI-CLIENT-META-MAIL-DROP: W10=
+X-Provags-ID: V03:K1:5rfuqZloftTYUAetD3kmXeAf3vlJVORdvbUbXRuFz6ctJ/YskeQgbaIrY1+CKtBB0RGrh
+ xF81oHJBfThhmKqrC7/MQbVKLhQiQWo5qNeBUoLAMolFs9/NiZFcTlCZyGcmFfFI0hkp9ZSMyVJb
+ f4bzJVC3oV/YaOnXFS6mtZMMG0pGogVwoOwr2mbGIpAEGfIwdAAJgdbz8AbxmhVo4sxEF82H6CZj
+ 89B+KQaWe4amQ0aIQvb6vKIVxQhS1Swsl3m5OKYvFRxldHOFP5ovfoiHVT75u9kGH/OaBI1z83Q6
+ mo6DbsyMc0pMe1Nb7DpiY6xS3BA6NvYt9rxOvEUAC7H4Co/P/IqvPwiUkoCq6PY1SQ=
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:daVp29AyH1E=;NfjQzZDQVxx/ddNWbUFfMljQE5a
+ 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
+ MmTkMNEeyg==
+Content-Transfer-Encoding: quoted-printable
 
-irq_domain_create_simple() takes fwnode as the first argument. It can be
-extracted from the struct device using dev_fwnode() helper instead of
-using of_node with of_fwnode_handle().
+Hi
 
-So use the dev_fwnode() helper.
+> Gesendet: Mittwoch, 11. Juni 2025 um 11:33
+> Von: "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.c=
+om>
+> Betreff: Re: [PATCH v3 12/13] arm64: dts: mediatek: mt7988a-bpi-r4: add =
+sfp cages and link to gmac
+>
+> Il 08/06/25 23:14, Frank Wunderlich ha scritto:
+> > From: Frank Wunderlich <frank-w@public-files.de>
+> >=20
+> > Add SFP cages to Bananapi-R4 board. The 2.5g phy variant only contains=
+ the
+> > wan-SFP, so add this to common dtsi and the lan-sfp only to the dual-S=
+FP
+> > variant.
+> >=20
+> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> > ---
+> > v3:
+> > - enable mac with 2.5g phy on r4 phy variant because driver is now mai=
+nline
+> > ---
+> >   .../mediatek/mt7988a-bananapi-bpi-r4-2g5.dts   | 12 ++++++++++++
+> >   .../dts/mediatek/mt7988a-bananapi-bpi-r4.dts   | 18 ++++++++++++++++=
+++
+> >   .../dts/mediatek/mt7988a-bananapi-bpi-r4.dtsi  | 18 ++++++++++++++++=
+++
+> >   3 files changed, 48 insertions(+)
+> >=20
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4-2g5.=
+dts b/arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4-2g5.dts
+> > index 53de9c113f60..e63e17ae35a0 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4-2g5.dts
+> > +++ b/arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4-2g5.dts
+> > @@ -9,3 +9,15 @@ / {
+> >   	model =3D "Banana Pi BPI-R4 (1x SFP+, 1x 2.5GbE)";
+> >   	chassis-type =3D "embedded";
+> >   };
+> > +
+> > +&gmac1 {
+>=20
+> phy =3D ...
+> phy-c..onnection-type
+> phy-m...ode
 
-Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-Cc: Amit Kucheria <amitk@kernel.org>
-Cc: Thara Gopinath <thara.gopinath@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Lukasz Luba <lukasz.luba@arm.com>
-Cc: Thierry Reding <thierry.reding@gmail.com>
-Cc: Jonathan Hunter <jonathanh@nvidia.com>
-Cc: linux-arm-msm@vger.kernel.org
-Cc: linux-tegra@vger.kernel.org
----
-Cc: linux-pm@vger.kernel.org
----
- drivers/thermal/qcom/lmh.c       |  3 +--
- drivers/thermal/tegra/soctherm.c | 13 +++++--------
- 2 files changed, 6 insertions(+), 10 deletions(-)
+phy-connection-type is dropped in next version due to comment from andrew,=
+ but i order alphabetically
 
-diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
-index 991d1573983d..75eaa9a68ab8 100644
---- a/drivers/thermal/qcom/lmh.c
-+++ b/drivers/thermal/qcom/lmh.c
-@@ -209,8 +209,7 @@ static int lmh_probe(struct platform_device *pdev)
- 	}
- 
- 	lmh_data->irq = platform_get_irq(pdev, 0);
--	lmh_data->domain = irq_domain_create_linear(of_fwnode_handle(np), 1, &lmh_irq_ops,
--						    lmh_data);
-+	lmh_data->domain = irq_domain_create_linear(dev_fwnode(dev), 1, &lmh_irq_ops, lmh_data);
- 	if (!lmh_data->domain) {
- 		dev_err(dev, "Error adding irq_domain\n");
- 		return -EINVAL;
-diff --git a/drivers/thermal/tegra/soctherm.c b/drivers/thermal/tegra/soctherm.c
-index 926f1052e6de..53a5c649f4b1 100644
---- a/drivers/thermal/tegra/soctherm.c
-+++ b/drivers/thermal/tegra/soctherm.c
-@@ -1206,7 +1206,7 @@ static const struct irq_domain_ops soctherm_oc_domain_ops = {
- /**
-  * soctherm_oc_int_init() - Initial enabling of the over
-  * current interrupts
-- * @np:	The devicetree node for soctherm
-+ * @fwnode:	The devicetree node for soctherm
-  * @num_irqs:	The number of new interrupt requests
-  *
-  * Sets the over current interrupt request chip data
-@@ -1215,7 +1215,7 @@ static const struct irq_domain_ops soctherm_oc_domain_ops = {
-  * -ENOMEM (out of memory), or irq_base if the function failed to
-  * allocate the irqs
-  */
--static int soctherm_oc_int_init(struct device_node *np, int num_irqs)
-+static int soctherm_oc_int_init(struct fwnode_handle *fwnode, int num_irqs)
- {
- 	if (!num_irqs) {
- 		pr_info("%s(): OC interrupts are not enabled\n", __func__);
-@@ -1234,10 +1234,8 @@ static int soctherm_oc_int_init(struct device_node *np, int num_irqs)
- 	soc_irq_cdata.irq_chip.irq_set_type = soctherm_oc_irq_set_type;
- 	soc_irq_cdata.irq_chip.irq_set_wake = NULL;
- 
--	soc_irq_cdata.domain = irq_domain_create_linear(of_fwnode_handle(np), num_irqs,
--						     &soctherm_oc_domain_ops,
--						     &soc_irq_cdata);
--
-+	soc_irq_cdata.domain = irq_domain_create_linear(fwnode, num_irqs, &soctherm_oc_domain_ops,
-+							&soc_irq_cdata);
- 	if (!soc_irq_cdata.domain) {
- 		pr_err("%s: Failed to create IRQ domain\n", __func__);
- 		return -ENOMEM;
-@@ -1968,10 +1966,9 @@ static void tegra_soctherm_throttle(struct device *dev)
- static int soctherm_interrupts_init(struct platform_device *pdev,
- 				    struct tegra_soctherm *tegra)
- {
--	struct device_node *np = pdev->dev.of_node;
- 	int ret;
- 
--	ret = soctherm_oc_int_init(np, TEGRA_SOC_OC_IRQ_MAX);
-+	ret = soctherm_oc_int_init(dev_fwnode(&pdev->dev), TEGRA_SOC_OC_IRQ_MAX);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "soctherm_oc_int_init failed\n");
- 		return ret;
--- 
-2.49.0
+> > +	phy-mode =3D "internal";
+> > +	phy-connection-type =3D "internal";
+> > +	phy =3D <&int_2p5g_phy>;
+> > +	status =3D "okay";
+> > +};
+> > +
+> > +&int_2p5g_phy {
+> > +	pinctrl-names =3D "i2p5gbe-led";
+> > +	pinctrl-0 =3D <&i2p5gbe_led0_pins>;
+>=20
+> pinctrl-names
+> pinctrl-0
 
+what the difference? i don't see it :(
+
+the others i change in v4
+
+regards Frank
 
