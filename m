@@ -1,182 +1,149 @@
-Return-Path: <linux-pm+bounces-28523-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28525-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76EBFAD6706
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 07:01:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19469AD679E
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 08:10:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E97C189D6FB
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 05:01:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E69B1189FBF8
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 06:10:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A8451AAA1F;
-	Thu, 12 Jun 2025 05:01:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF2E1EE033;
+	Thu, 12 Jun 2025 06:10:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="viLNnXJn"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="GS550hFw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 883473C1F
-	for <linux-pm@vger.kernel.org>; Thu, 12 Jun 2025 05:01:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 364F7153598;
+	Thu, 12 Jun 2025 06:10:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749704483; cv=none; b=pTtKZ720CuENzDEVIj4fphTNdqhlwTrOr/EJ3rpZXEEJFWgVRMbBgP0Eec9u06fjvkYOAROfEzLDSY99J7YxyAQsTxzUhjIJKuApON0fCxkwxgLI7FU5KOTahjMzKXNNVVTnT3eYQnSe5Ls9PVryURnxGbTZw4//XY8G66kWfRE=
+	t=1749708606; cv=none; b=I586AfYb3rdSzNH5E3yxhlSNuv50BIaCLIZ+V6O9DdtriqMzWcn8TgYinPk2Of66+tTDaLXYBJnM7CE67wI3IGtxk7mpUkugeeE1So1U6JDGJAlbJm9NLQV9ejod+tN2+bPjkobMLhQ6pIEI1/DSXQptkkOMBYPWkAy0mri8DFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749704483; c=relaxed/simple;
-	bh=9pHjVMGg2ruxdwaHtiPTktq8Zbd4RUe/LdD/4hfxsW8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZkiQTMk6KnTwbcWPq1qWRckOt0rydQZoxKVPqjC1+hlRqwBR7BtnLxoieDb4mEr9gbYryqC+JrpShD0g2OJorF7mD+9qiyhGwlisRnQ5PjBeR8u1eyIgYmgL5/FYVedpg/mzah9WJp27AwEG2+qqKxiMI477k19XiqLODMIsfDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=viLNnXJn; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-234d3261631so4070435ad.1
-        for <linux-pm@vger.kernel.org>; Wed, 11 Jun 2025 22:01:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1749704481; x=1750309281; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ta897ANnsOKw/3ZrDJN+Z/Yd5TG55/Y0TTXdSO5Wgwo=;
-        b=viLNnXJngWrQpc05n6uWOIH+yg1CAoaDc7rhmN8TZqE/BcUNz5fRkH4TA/7J10XIU4
-         bLlDIsTEezVSVLmDgi//cx0s+pPkgNEhlQzceBU4QKLmDFk3SMpc260bVNjkSta4LU9j
-         oW3Tl/sK/FxI+fYwQfhQwXXLWXOKxkRPAh+fIKInhaOW580yODdPTF1+yxwLZUfNpv9W
-         y/CW6bdwqbeEbs5+k9h74F4eqlEMl9aGleAYQltTPbJy0mZhaCObpnWxEr9t+ASzXm4e
-         L1LZKeFoccFh76AoUCGp2BjsfKQRG+au3B7knpxKzDlf8EU9ytWTgNLDPzZ6PFhrBrn9
-         2aLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749704481; x=1750309281;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ta897ANnsOKw/3ZrDJN+Z/Yd5TG55/Y0TTXdSO5Wgwo=;
-        b=NnUd+b/Qn8eLaQVo8+zFrGQSFWHoLKbw0h1undNdA/NO7qfOGog7KL88TxVn/lt9yx
-         tO9N6FvljWr/l5dwuOZonDWw9WeLWJ7KA19uj+8Xsr9/izDBWoiucExUwBPSupjJ3n5E
-         eM0ea9nAesrq+2NXMLFj6QKM71bnU52H+c3jfEP4OXKG/Pn1w7ACztS8DuJxoukmpsMQ
-         7bahe7bmTlBu0fD4TgRIhIC/XHgjof4SM4qY/dxZw0OiWLm+eevVbbFSSbwzyCGzHPGa
-         fjiH4jkUnCVzzwIYwVxuarcBhVSmezg5br87WG04ReXhertOtMZzo/SMAmm8FH7EPK+y
-         MC+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWHNh69QTm/oWyMIHJ+Vs+F3TlIElT1EXgomANzq5LocaqvxHLWn0L3/KSi8sdpWsB2KAfj2lbIQg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKBMSbwfTyUj2wM4PA0UwPJ2UnbUoXOW460OVN8eguXqtesaJ5
-	R8XJgaA0zkJibACLEJKa9xq3Ary8Q2Y3HjoKVHAMxdpYr20kB8vMxQC5/u1btHHOhA0=
-X-Gm-Gg: ASbGncs1gOETVJrXrVe0Ll8oIKX7Bnj+U+7Tu0DcxbG5LTq59tOzCXRt/RLHvvU57Kx
-	2HZ4m2aqXKqtE0D9YuCLO39SX7AbWnY7Aeyfy4dEdDdMImcinRLxBAdTcs3HhLODkHSRjKXT8aJ
-	z0F1msQjDBmbsRHnsrjsA7ZVLwG5fKSlxKT23W+9lIWMTZehA9guSp6BB0Hu/nijvL1BukjtLiA
-	zM8gU1jKfGrdYQIRFIMPgVaOm/Mxzr0wi16qkCK3A5xGO6/gDoULa4ob8oCF3vqZsGaMIpmZz5v
-	LKhZYMarHUZ8N1K0MymlHl68NOVgCrjRIlW8iHK1fYI9l5+J0uf4gFyJKOPW7i5cUjum1spvMQ=
-	=
-X-Google-Smtp-Source: AGHT+IHFd17mtrnTaIfhEeysW8IO5ia6VXlIvrfEaCUzdPUvSOMJM3AaKiJKr973WWitYYB9zcOAZA==
-X-Received: by 2002:a17:902:ef0c:b0:234:986c:66f9 with SMTP id d9443c01a7336-2364ca0c6e4mr33957475ad.22.1749704480788;
-        Wed, 11 Jun 2025 22:01:20 -0700 (PDT)
-Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2364e6d9c45sm4698395ad.140.2025.06.11.22.01.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jun 2025 22:01:20 -0700 (PDT)
-Date: Thu, 12 Jun 2025 10:31:17 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Yury Norov <yury.norov@gmail.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	rust-for-linux@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3 2/3] rust: Use CpuId in place of raw CPU numbers
-Message-ID: <20250612050117.3oi6belkf5lrreoh@vireshk-i7>
-References: <cover.1749554685.git.viresh.kumar@linaro.org>
- <e790f17123beb45c6a811135ec3df8f0bd761c0e.1749554685.git.viresh.kumar@linaro.org>
- <aEmq8fs1fHSB3z4i@tardis.local>
+	s=arc-20240116; t=1749708606; c=relaxed/simple;
+	bh=i8PWqD4P60CAuVZ7Gnxu56jRgxjKhfnbhFQBOFOxYPw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TRaOQJou+DsaGMgE27k4FPuuvmrXkOs9ucv9X3ssac+KtOjkWuUEix0bOj/EabKjWsQKlu0h369LbxLysl6U4i0ZpubpyYKGPDmIv8iokbVdLX/zYjkA/1zE1/fkfDLDLNoCc0jsWT512ljveG1NBVUTx6yf9lx9a3RD5KIFxhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=GS550hFw; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from [192.168.88.20] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id C3C24250;
+	Thu, 12 Jun 2025 08:09:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1749708590;
+	bh=i8PWqD4P60CAuVZ7Gnxu56jRgxjKhfnbhFQBOFOxYPw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=GS550hFw+nJb/FK5Nx2uzBtRkHj00NFY09rVTblYEDtONh65dodWEsjEWfQc2fCt6
+	 m353b0o/OgbkJGVPAhAZz8kboB11gVYvUDzCn1m2H952qcLmviH7yeT9EYLqPuflWk
+	 gix4oZKAiG40KM4yp3ssHV/m5O7V4uV6zvGDGDdE=
+Message-ID: <4a682199-1da1-404b-addf-f0afa65d4c08@ideasonboard.com>
+Date: Thu, 12 Jun 2025 09:09:54 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aEmq8fs1fHSB3z4i@tardis.local>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 00/21] pmdomain: Add generic ->sync_state() support to
+ genpd
+To: Ulf Hansson <ulf.hansson@linaro.org>,
+ Saravana Kannan <saravanak@google.com>, Stephen Boyd <sboyd@kernel.org>,
+ linux-pm@vger.kernel.org
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Michael Grzeschik <m.grzeschik@pengutronix.de>,
+ Bjorn Andersson <andersson@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
+ Peng Fan <peng.fan@oss.nxp.com>, Johan Hovold <johan@kernel.org>,
+ Maulik Shah <maulik.shah@oss.qualcomm.com>,
+ Michal Simek <michal.simek@amd.com>, Konrad Dybcio <konradybcio@kernel.org>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20250523134025.75130-1-ulf.hansson@linaro.org>
+Content-Language: en-US
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
+ 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
+In-Reply-To: <20250523134025.75130-1-ulf.hansson@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 11-06-25, 09:12, Boqun Feng wrote:
-> I generally found that `u32::from(cpu)` is more clear than `cpu.into()`,
-> but it's up to you. Same for the rest of `cpu.into()` cases.
 
-Updated as:
+On 23/05/2025 16:39, Ulf Hansson wrote:
+> Changes in v2:
+> 	- Well, quite a lot as I discovered various problems when doing
+> 	additional testing of corner-case. I suggest re-review from scratch,
+> 	even if I decided to keep some reviewed-by tags.
+> 	- Added patches to allow some drivers that needs to align or opt-out
+> 	from the new common behaviour in genpd.
+> 
+> If a PM domain (genpd) is powered-on during boot, there is probably a good
+> reason for it. Therefore it's known to be a bad idea to allow such genpd to be
+> powered-off before all of its consumer devices have been probed. This series
+> intends to fix this problem.
+> 
+> We have been discussing these issues at LKML and at various Linux-conferences
+> in the past. I have therefore tried to include the people I can recall being
+> involved, but I may have forgotten some (my apologies), feel free to loop them
+> in.
+> 
+> I have tested this with QEMU with a bunch of local test-drivers and DT nodes.
+> Let me know if you want me to share this code too.
+> 
+> Please help review and test!
+> Finally, a big thanks to Saravana for all the support!
 
-diff --git a/rust/kernel/cpu.rs b/rust/kernel/cpu.rs
-index 7549594fad7f..abc780d7a8ec 100644
---- a/rust/kernel/cpu.rs
-+++ b/rust/kernel/cpu.rs
-@@ -129,7 +129,7 @@ fn from(id: CpuId) -> Self {
- /// any references to the CPU device within the notifier's callback.
- pub unsafe fn from_cpu(cpu: CpuId) -> Result<&'static Device> {
-     // SAFETY: It is safe to call `get_cpu_device()` for any CPU.
--    let ptr = unsafe { bindings::get_cpu_device(cpu.into()) };
-+    let ptr = unsafe { bindings::get_cpu_device(u32::from(cpu)) };
-     if ptr.is_null() {
-         return Err(ENODEV);
-     }
-diff --git a/rust/kernel/cpufreq.rs b/rust/kernel/cpufreq.rs
-index ea6106db5c29..11b03e9d7e89 100644
---- a/rust/kernel/cpufreq.rs
-+++ b/rust/kernel/cpufreq.rs
-@@ -527,7 +527,7 @@ pub fn generic_suspend(&mut self) -> Result {
-     #[inline]
-     pub fn generic_get(&self) -> Result<u32> {
-         // SAFETY: By the type invariant, the pointer stored in `self` is valid.
--        Ok(unsafe { bindings::cpufreq_generic_get(self.cpu().into()) })
-+        Ok(unsafe { bindings::cpufreq_generic_get(u32::from(self.cpu())) })
-     }
- 
-     /// Provides a wrapper to the register with energy model using the OPP core.
-@@ -682,7 +682,7 @@ fn clear_data<T: ForeignOwnable>(&mut self) -> Option<T> {
- impl<'a> PolicyCpu<'a> {
-     fn from_cpu(cpu: CpuId) -> Result<Self> {
-         // SAFETY: It is safe to call `cpufreq_cpu_get` for any valid CPU.
--        let ptr = from_err_ptr(unsafe { bindings::cpufreq_cpu_get(cpu.into()) })?;
-+        let ptr = from_err_ptr(unsafe { bindings::cpufreq_cpu_get(u32::from(cpu)) })?;
- 
-         Ok(Self(
-             // SAFETY: The `ptr` is guaranteed to be valid and remains valid for the lifetime of
-diff --git a/rust/kernel/cpumask.rs b/rust/kernel/cpumask.rs
-index 11ddd43edcb5..19c607709b5f 100644
---- a/rust/kernel/cpumask.rs
-+++ b/rust/kernel/cpumask.rs
-@@ -94,7 +94,7 @@ pub fn as_raw(&self) -> *mut bindings::cpumask {
-     #[inline]
-     pub fn set(&mut self, cpu: CpuId) {
-         // SAFETY: By the type invariant, `self.as_raw` is a valid argument to `__cpumask_set_cpu`.
--        unsafe { bindings::__cpumask_set_cpu(cpu.into(), self.as_raw()) };
-+        unsafe { bindings::__cpumask_set_cpu(u32::from(cpu), self.as_raw()) };
-     }
- 
-     /// Clear `cpu` in the cpumask.
-@@ -106,7 +106,7 @@ pub fn set(&mut self, cpu: CpuId) {
-     pub fn clear(&mut self, cpu: CpuId) {
-         // SAFETY: By the type invariant, `self.as_raw` is a valid argument to
-         // `__cpumask_clear_cpu`.
--        unsafe { bindings::__cpumask_clear_cpu(cpu.into(), self.as_raw()) };
-+        unsafe { bindings::__cpumask_clear_cpu(i32::from(cpu), self.as_raw()) };
-     }
- 
-     /// Test `cpu` in the cpumask.
-@@ -115,7 +115,7 @@ pub fn clear(&mut self, cpu: CpuId) {
-     #[inline]
-     pub fn test(&self, cpu: CpuId) -> bool {
-         // SAFETY: By the type invariant, `self.as_raw` is a valid argument to `cpumask_test_cpu`.
--        unsafe { bindings::cpumask_test_cpu(cpu.into(), self.as_raw()) }
-+        unsafe { bindings::cpumask_test_cpu(i32::from(cpu), self.as_raw()) }
-     }
- 
-     /// Set all CPUs in the cpumask.
+For TI AM62A and Xilinx ZynqMP ZCU106:
 
--- 
-viresh
+Tested-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+
+ Tomi
+
 
