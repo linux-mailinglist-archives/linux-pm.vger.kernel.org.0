@@ -1,149 +1,220 @@
-Return-Path: <linux-pm+bounces-28525-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28527-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19469AD679E
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 08:10:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 098EEAD682B
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 08:46:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E69B1189FBF8
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 06:10:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD53517C451
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 06:46:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF2E1EE033;
-	Thu, 12 Jun 2025 06:10:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C828C1FBC90;
+	Thu, 12 Jun 2025 06:46:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="GS550hFw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qHiQthmz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 364F7153598;
-	Thu, 12 Jun 2025 06:10:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890581E5B7A;
+	Thu, 12 Jun 2025 06:46:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749708606; cv=none; b=I586AfYb3rdSzNH5E3yxhlSNuv50BIaCLIZ+V6O9DdtriqMzWcn8TgYinPk2Of66+tTDaLXYBJnM7CE67wI3IGtxk7mpUkugeeE1So1U6JDGJAlbJm9NLQV9ejod+tN2+bPjkobMLhQ6pIEI1/DSXQptkkOMBYPWkAy0mri8DFE=
+	t=1749710810; cv=none; b=Gx60V14BqCCP3yhrTc6379yCK4R2jo5OHM66iNFUWVmUvdpSGDEkGwsiv3HT7nFn1FP1cLu3SXEmE3RDm3cRfMixpzcQcjuZlgkVzlSRFW57EDfBPPabfUVQUE53E1EvBWWWTsF422qYMEKT8QFDB67X3z4cwh+cBAIdjyY+SHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749708606; c=relaxed/simple;
-	bh=i8PWqD4P60CAuVZ7Gnxu56jRgxjKhfnbhFQBOFOxYPw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TRaOQJou+DsaGMgE27k4FPuuvmrXkOs9ucv9X3ssac+KtOjkWuUEix0bOj/EabKjWsQKlu0h369LbxLysl6U4i0ZpubpyYKGPDmIv8iokbVdLX/zYjkA/1zE1/fkfDLDLNoCc0jsWT512ljveG1NBVUTx6yf9lx9a3RD5KIFxhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=GS550hFw; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from [192.168.88.20] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id C3C24250;
-	Thu, 12 Jun 2025 08:09:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1749708590;
-	bh=i8PWqD4P60CAuVZ7Gnxu56jRgxjKhfnbhFQBOFOxYPw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=GS550hFw+nJb/FK5Nx2uzBtRkHj00NFY09rVTblYEDtONh65dodWEsjEWfQc2fCt6
-	 m353b0o/OgbkJGVPAhAZz8kboB11gVYvUDzCn1m2H952qcLmviH7yeT9EYLqPuflWk
-	 gix4oZKAiG40KM4yp3ssHV/m5O7V4uV6zvGDGDdE=
-Message-ID: <4a682199-1da1-404b-addf-f0afa65d4c08@ideasonboard.com>
-Date: Thu, 12 Jun 2025 09:09:54 +0300
+	s=arc-20240116; t=1749710810; c=relaxed/simple;
+	bh=Qhrm6Yqf09Uhu8mGMYsjgqSJmKMNkYbsTliS5amUUQU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Ro3UW8sjo2AutK6Jn2Ja6tWNkIvF+iX/QuQ4BREa9cEaiI4K84ZHA2Z+7xiS6IyZ7a+RSYo9509r+7T6jVtZ6Y/ARf87J4RTyi0fgMmSuNBMDhM71VS3o1Lt991z1+GuC4YcJ1byNQmsgDSQevDaXK6N2TXe/RQLoIfRfCeEeoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qHiQthmz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 05C4BC4CEEA;
+	Thu, 12 Jun 2025 06:46:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749710810;
+	bh=Qhrm6Yqf09Uhu8mGMYsjgqSJmKMNkYbsTliS5amUUQU=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=qHiQthmznmSnyemAPmy0Coqq29H4vIa+gJtqedVH2yEvamK0CvaUVyTDXSvm2g0Z9
+	 Y5SSXc7BR3OCgAC/NZ4bWi/69I87ouUSjjY4lWDQ8rZF3EXf39wIUm7M9+x/8d20cO
+	 HaMCScNIpJiEFAr/SvS53hwagosXDowGIaZ9FAWBy+zY24uj5ROtQXaqmEgDS9HRfS
+	 77oLCkIhYfP4D7kViJC7cmIPlyCH3K3qL0/+WhnCWsqUPNBiMltD1cscJekMIvtyLK
+	 QQiljFwH2XKNJ+CscqHlVv3JYpp+bKaQngzcpXvlp7EA+mnkrgqYu/z7cVArlDXUi8
+	 QENnsfwkdYRfA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E130CC61CE8;
+	Thu, 12 Jun 2025 06:46:49 +0000 (UTC)
+From: George Moussalem via B4 Relay <devnull+george.moussalem.outlook.com@kernel.org>
+Subject: [PATCH v13 0/2] Add support for IPQ5018 tsens
+Date: Thu, 12 Jun 2025 10:46:12 +0400
+Message-Id: <20250612-ipq5018-tsens-v13-0-a210f3683240@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/21] pmdomain: Add generic ->sync_state() support to
- genpd
-To: Ulf Hansson <ulf.hansson@linaro.org>,
- Saravana Kannan <saravanak@google.com>, Stephen Boyd <sboyd@kernel.org>,
- linux-pm@vger.kernel.org
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Michael Grzeschik <m.grzeschik@pengutronix.de>,
- Bjorn Andersson <andersson@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
- Peng Fan <peng.fan@oss.nxp.com>, Johan Hovold <johan@kernel.org>,
- Maulik Shah <maulik.shah@oss.qualcomm.com>,
- Michal Simek <michal.simek@amd.com>, Konrad Dybcio <konradybcio@kernel.org>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20250523134025.75130-1-ulf.hansson@linaro.org>
-Content-Language: en-US
-From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
- 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
-In-Reply-To: <20250523134025.75130-1-ulf.hansson@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALR3SmgC/53TS2vcMBAH8K8SfK7MzOjd0/p5K5T2WEpR1nYis
+ n6s7d22hP3ulQ1tsri0bECXEfr/9GD0HE316Ospen/3HI312U++70KB/N1dtH903UPNfBUmIgK
+ SIEAwPxwloGHzVHcTU+K+sbKpOEcdhcww1o3/sYJfvob60U9zP/5c/TMusxEqy4PFQTNjERiyB
+ z+zoFWsbp0/sOPJ779Now/7j263VL7bx/u+jRbxTKsSzsPBokTCcK7YgFKagvWfMH8VJsKQRxW
+ TFsaEqyH7E/zuOzYc3Nz0Y8tOwzSPtWsB4+PJHQLWvohiFfPP+uMntB9SYwxPC24ySiVADpyQa
+ 6ETm2eadlfL4s61w1ihjYexr+L+NB/6/ulFlluZyrzIlcl5kaZQFLqwtnyDrLZyGDyDhKdlxjN
+ dZsLgIsONst7KqEiUy0srK2SmuABYZLpRNlu5MGRJFUIUAIAatF5fI79Rtls5yRMhuTYcEtDCS
+ m71Imc3ygi/202CCq1+/XfOa/Nzh+CkIyVov9sK+FrAjYAMGCkllbpvKlTuLwL9W6AgOLU0qZM
+ SdXUtXC6XX//nKdUkBAAA
+X-Change-ID: 20250404-ipq5018-tsens-64bf95fd3317
+To: Amit Kucheria <amitk@kernel.org>, 
+ Thara Gopinath <thara.gopinath@gmail.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, 
+ Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
+ George Moussalem <george.moussalem@outlook.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Dmitry Baryshkov <lumag@kernel.org>, Dmitry Baryshkov <lumag@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1749710807; l=5823;
+ i=george.moussalem@outlook.com; s=20250321; h=from:subject:message-id;
+ bh=Qhrm6Yqf09Uhu8mGMYsjgqSJmKMNkYbsTliS5amUUQU=;
+ b=qD0XD9VUfnORyj8ViKGVs7gEFaZa0jcmJ9EFimDy5qEhsqDn8rLdTwJpluY/0lNKh1A1h0wv5
+ HYUjQBxEMQ1Ao3HO3mJZqiCQhZYlgCic4n/1YsT1s+tmS6D1fkYWzld
+X-Developer-Key: i=george.moussalem@outlook.com; a=ed25519;
+ pk=/PuRTSI9iYiHwcc6Nrde8qF4ZDhJBlUgpHdhsIjnqIk=
+X-Endpoint-Received: by B4 Relay for george.moussalem@outlook.com/20250321
+ with auth_id=364
+X-Original-From: George Moussalem <george.moussalem@outlook.com>
+Reply-To: george.moussalem@outlook.com
 
+IPQ5018 has tsens V1.0 IP with 5 sensors, of which 4 are in use,
+and 1 interrupt. There is no RPM present in the soc to do tsens early
+enable. Adding support for the same here.
 
-On 23/05/2025 16:39, Ulf Hansson wrote:
-> Changes in v2:
-> 	- Well, quite a lot as I discovered various problems when doing
-> 	additional testing of corner-case. I suggest re-review from scratch,
-> 	even if I decided to keep some reviewed-by tags.
-> 	- Added patches to allow some drivers that needs to align or opt-out
-> 	from the new common behaviour in genpd.
-> 
-> If a PM domain (genpd) is powered-on during boot, there is probably a good
-> reason for it. Therefore it's known to be a bad idea to allow such genpd to be
-> powered-off before all of its consumer devices have been probed. This series
-> intends to fix this problem.
-> 
-> We have been discussing these issues at LKML and at various Linux-conferences
-> in the past. I have therefore tried to include the people I can recall being
-> involved, but I may have forgotten some (my apologies), feel free to loop them
-> in.
-> 
-> I have tested this with QEMU with a bunch of local test-drivers and DT nodes.
-> Let me know if you want me to share this code too.
-> 
-> Please help review and test!
-> Finally, a big thanks to Saravana for all the support!
+Last patch series sent by Qualcomm dates back to Sep 22, 2023.
+Since I'm working on OpenWrt support for IPQ5018 based boards (routers)
+and Sricharan Ramabadhran <quic_srichara@quicinc.com> in below email
+confirmed this SoC is still active, I'm continuing the efforts to send
+patches upstream for Linux kernel support.
+https://lore.kernel.org/all/63dc4054-b1e2-4e7a-94e7-643beb26a6f3@quicinc.com/
 
-For TI AM62A and Xilinx ZynqMP ZCU106:
+Signed-off-by: George Moussalem <george.moussalem@outlook.com>
+---
+Changes in v13:
+- Dropped polling-delay-passive property as its value of 0 is the
+  default value
+- Updated hysterssis value to 1000 milicelsius in line with other boards
+- Link to v12: https://lore.kernel.org/r/20250611-ipq5018-tsens-v12-0-a61374a5517d@outlook.com
 
-Tested-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Changes in v12:
+- Updated description in dt bindings for IP v1 without RPM
+- Added Fixes tag as this this version of tsens needs to be explicitly
+  reset and enabled in the driver, introduced as part of:
+  commit: 19f9b02ebc8f ("thermal/drivers/qcom/tsens: Add support for tsens v1 without RPM")
+- Link to v11: https://lore.kernel.org/r/20250611-ipq5018-tsens-v11-0-266566bfd16a@outlook.com
 
- Tomi
+Changes in v11:
+- Dropped polling-delay property as its value of 0 is the default value
+- Removed comments for TM and SROT in tsens node
+- Replace underscore by hyphen in node name of top-glue-critical trip
+- Added cooling device using CPU freq scaling making use of the passive
+  trip defined under the CPU trips
+- Make qcom,ipq5018-tsens a standalone compatible in the bindings as it
+  should not use qcom,tsens-v1 as a fallback. This also fixes the issue
+  reported by Rob's bot
+
+Changes in v10:
+- Rebased onto updated pull of master to resolve merge conflicts in the
+  DTS patch
+- Link to v9: https://lore.kernel.org/all/DS7PR19MB88836DC6965515E12D70BB2C9DCC2@DS7PR19MB8883.namprd19.prod.outlook.com/
+
+Changes in v9:
+- Updated checks in tsens to more strictly evaluate for v2+ upon enabling
+  v2 features as suggsted by Dmitry.
+- Split patch 3 into two, one to update conditional statements as
+  mentioned above and the other to implement tsens IP v1 without RPM.
+- Added back Dmitry's RB tag on patch 6 which wasn't carried over
+  from v7 to v8
+- Link to v8: https://lore.kernel.org/all/DS7PR19MB88833F7A9C8F4FC484977BA69DCD2@DS7PR19MB8883.namprd19.prod.outlook.com/
+
+Changes in v8:
+- Tsens V1 uses v1 interrupts and watchdog is not present (only on v2.3+).
+  As such, replaced VER_1_X with VER_1_X_NO_RPM in conditons to ensure
+  v1 interrupts are set and watchdog isn't enabled.
+- Tested on Linksys MX2000 and SPNMX56
+- Link to v7: https://lore.kernel.org/all/DS7PR19MB88831624F11516945C63400F9DC22@DS7PR19MB8883.namprd19.prod.outlook.com/
+
+Changes in v7:
+- Updated cover letter
+- Replaced patch 3 with a new one to add support for tsens v1.0 with
+  no RPM and removed Dmitry's 'Reviewed-by tag
+- Refactored patch 4 and split support for IPQ5018 from support for
+  tsens v1.0 without RPM. As such, also removed Dmitry's RB tag.
+- Depends on patch 1 and 2 from patch series to add support for
+  IQP5332 and IPQ5424 applied on Feb 11 2025:
+  https://patchwork.kernel.org/project/linux-arm-msm/cover/20250210120436.821684-1-quic_mmanikan@quicinc.com/
+- Link to v6: https://lore.kernel.org/all/DS7PR19MB88838833C0A3BFC3C7FC481F9DC02@DS7PR19MB8883.namprd19.prod.outlook.com/
+
+Changes in v6:
+- Include (this) cover letter
+- Picked up Dmitry's Reviewed-by tag on patch 5
+- Link to v5: https://lore.kernel.org/all/DS7PR19MB88832FDED68D3EBB0EE7E99F9DC72@DS7PR19MB8883.namprd19.prod.outlook.com/
+
+Changes in v5:
+- Adjusted commit messages to indicate IPQ5018 has 5 sensors of
+  which 4 are described and in use as per downstream driver and dts.
+- Padded addresses of tsens and qfprom nodes with leading zeros.
+- Link to v4: https://lore.kernel.org/all/DS7PR19MB8883BE38C2B500D03213747A9DC72@DS7PR19MB8883.namprd19.prod.outlook.com/
+
+Changes in v4:
+- Documented ipq5018 in qcom,qfprom bindings
+- Constrained ipq5018-tsens to one interrupt with description
+- Added Rob's Acked-by tag
+- Added Dmitry's Reviewed-by tag
+- Fixed modpost warning: added __init to init_common
+- Sorted tsens nodes by address
+- Sorted thermal-zones nodes by name
+- Link to v3: https://lore.kernel.org/all/20230922115116.2748804-1-srichara@win-platform-upstream01.qualcomm.com/
+
+Changes in v3:
+- Added the tsens-ipq5018 as  new binding without rpm
+- Added Dmitry's Reviewed tag
+- Fixed Dmitry's comments for error checks in init_ipq5018
+- Ordered the qfprom device node properties
+- Link to v2: https://lore.kernel.org/all/20230915121504.806672-1-quic_srichara@quicinc.com/
+
+Changes in v2:
+- Sorted the compatible and removed example
+- Fixed the name for new tsens_feature
+- Used tsend_calibrate_common instead of legacy
+  and addressed comments from Dmitry.
+- Squashed patch 3 & 4
+- Fixed node names, order and added qfprom cells
+  for points seprately
+- Squashed patch 6 & 7
+- Link to v1: https://lore.kernel.org/all/1693250307-8910-1-git-send-email-quic_srichara@quicinc.com/
+
+---
+George Moussalem (1):
+      dt-bindings: thermal: qcom-tsens: make ipq5018 tsens standalone compatible
+
+Sricharan Ramabadhran (1):
+      arm64: dts: qcom: ipq5018: Add tsens node
+
+ .../devicetree/bindings/thermal/qcom-tsens.yaml    |   7 +-
+ arch/arm64/boot/dts/qcom/ipq5018.dtsi              | 178 +++++++++++++++++++++
+ 2 files changed, 184 insertions(+), 1 deletion(-)
+---
+base-commit: afc582fb6563b8eb5cd73f9eca52e55da827567f
+change-id: 20250404-ipq5018-tsens-64bf95fd3317
+
+Best regards,
+-- 
+George Moussalem <george.moussalem@outlook.com>
+
 
 
