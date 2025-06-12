@@ -1,146 +1,120 @@
-Return-Path: <linux-pm+bounces-28539-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28540-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9485AD6F0B
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 13:30:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E716AD6F80
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 13:52:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3B081BC1EE4
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 11:30:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB1577AA641
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 11:50:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28F0923C51E;
-	Thu, 12 Jun 2025 11:29:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D681122333B;
+	Thu, 12 Jun 2025 11:51:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RfdUCG1Y"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y4lWnG5u"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE6923A99F;
-	Thu, 12 Jun 2025 11:29:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB3A1442F4;
+	Thu, 12 Jun 2025 11:51:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749727789; cv=none; b=Vis9NN6+HS9HxezLZQ1T36yAZs0L0hhyYazCYg6AXU0CBY4nA4fmrz9z5i7f7UW5OmPyU/uhxx7bNZ1xG2iTaBdgwceIqc+OZkDnHI61FEiRLGAFs6od/d8u8Qj1Sf6Z1lfRfu27BM6a8wFTLZWyF0RQGLs3ouDsV9uJDsqLf3g=
+	t=1749729111; cv=none; b=EnibaDNu/IL3YTmHE4YDPpBeWH87naLe7XhoDMbAZAaMs4BLP/lvA4WkHQmvqIkIT1RRbTgzvdQC5qKSEXGc7I/Ks4Wz5IxCJAMVI0+z6qzh8eUiREI/4N4x3+V37lE7AECtOm/sVYSKNJOFtQJa5SFei+r8xJYJOi3K4GYMYIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749727789; c=relaxed/simple;
-	bh=h0T3I7+TyMc8TPOcdKVmcbRavVxEBpO6mjA9/hD7GHQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ccns66A+UA6r5RqIuhn4ubox8uTQluhlZKJS99aCMDEdkx3/4kFJY928geWH9Z6paQ2lhaETwdeGwxnyb3jNayvUZUZIj4I0lAtZel55QDJB2bV6z9sXBz9FLOuYf9GvsOp+RYTHFsF2mokvcys2OdUiAFrB59CInilRzdK6nyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RfdUCG1Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3110C4CEEA;
-	Thu, 12 Jun 2025 11:29:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749727788;
-	bh=h0T3I7+TyMc8TPOcdKVmcbRavVxEBpO6mjA9/hD7GHQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RfdUCG1Y+NMTMgwC6sdb2WUIdBETLGR2cl+QEVneNbfasc66xvmqmDv2xqr/J1+zY
-	 ZpEjTI2ohRf2iuWtU3DGYamY10vvSjHiNI8ghanj3moN/B2+SLBBovKMZff6FBjSIn
-	 1KNzOVCtmn4kwkoHEqGceFJrtIMjmgXDIZL4sQa/glz7+3tRYqJE2e3kcAcOo2VfCo
-	 seeQ7z/Ps4D8JyratgoT2PloZk7fYuE7iQWFR+lcQDXYdnta4+SCWKS9FyvtaXS3bI
-	 uCPwkiXSbNK9wgkbMTTMF1w33nFG5GI9Q0LURf1SkCTnFWI3aBNhl6sLTbsbRQcQx4
-	 u0TJCoCx1BV1w==
-Message-ID: <750da319-d25f-454d-b376-ebbc194e0e41@kernel.org>
-Date: Thu, 12 Jun 2025 13:29:40 +0200
+	s=arc-20240116; t=1749729111; c=relaxed/simple;
+	bh=PdDzwXq5efcwhoojhVqsKxNYcVXXyqdpXYauJg8SHrY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Szzdybs0vsksuC0dRtAhjKNktJcB4RX4sKkOx/xv30zgPKLUxWqmpEomsRHwfacerSEZVPUUqYp6QM5xZCxOUIv2NanUgV70xxXlVZZBuTGS4ABJb+6bLKYhRMJUHI5Paot4ICt6qwCWYuzK4kVzP7ZG5vL8/sE55i/NHrJd7oU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y4lWnG5u; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-313756c602fso131300a91.3;
+        Thu, 12 Jun 2025 04:51:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749729109; x=1750333909; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PdDzwXq5efcwhoojhVqsKxNYcVXXyqdpXYauJg8SHrY=;
+        b=Y4lWnG5uBtNIkztbKAfFPLgt48pJhuTTeWSItwuRC0UOM5QZ28isMsBUUihcOKoJ+g
+         24/YMJruzU6xTA4tK19o4nuijOouQCsP7nfN/O5j2u5n9S4p4YcXNl8U18hccuMHjkeN
+         gyGYlVd29CR6VQCGNmkje2UjcvwlyhEGYM/H8IjhWrbQBDKchkNwO4IKEI9hB6hB3NBK
+         /UaAuI5VT4EWvHxb5/h9FnvckisUQGfZjyzg80WglRL6U3GPmV/nyQBLOw+zDK8PfkcO
+         K96xyt4FRyLynerQGH22U9f74FmZHC+Sic4AFIZ/I7y+wrjAY99zT0PCqHlwI0sxungW
+         gAXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749729109; x=1750333909;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PdDzwXq5efcwhoojhVqsKxNYcVXXyqdpXYauJg8SHrY=;
+        b=K7XUjl7qqTIaz/ahG7segNo9zMJ/2gBvPSaMa6zkWzgrAHimgeOyjXzwG1qDv/BAsT
+         FeSfF/0P30/NLQ9L3CHu6VMMY0gaAU+216DE+9CtEXKlOplRu33y16zhFxL70kVsq/IV
+         123lWzafA9Rmjs12zMdD1CzgzM+pH4GwwSRrr211UJqel1XEbYassaHuy8R0u26du890
+         3PFKNkz28dzAFPXpDIWaJIXG6RYT6dTwDrWwwB1mfgFGyfPS78x137XzUsV+kC5SzIdx
+         Q9MpdmuInceF4EVz1eu5Offm1P7fAXL28nf4Yg/P3YkRfNrnAln9VYB1o6Pxcdikwfrw
+         vvng==
+X-Forwarded-Encrypted: i=1; AJvYcCUFqFplsiuSMCgikXhbNv1Pw0PEKBbmM9dB8ibSfF/lFfNAE2/zmEfFj1JGQ3WkaI3VmsaTjzV94JBs1ek=@vger.kernel.org, AJvYcCUo8U0oGxfq0oJ7lcuzU/ItIeiAMaX82jKhAAiOzJN94KBIen14M12CiPb7WvVmiwlRx/CeIN7FDgVPa8Db6wQ=@vger.kernel.org, AJvYcCVFrgUHL3sWTYmjiPj4TEr4x35tSTZHX48I19bWmCrlC2hxrdKCgCZeOPZwh1063zeQgGxBgLlAA1g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYfnfvANETjUoar1EmrczeNPQi4zaaJRIqaF3G1P/FDt++nBac
+	qR8qnnZMNtKNgntOQWuwiO3bu/M29oXxZfalFPf/fIHBmay0Ki7eX8ZKXO1fPef2wHI4PNIXgDH
+	QLmRGamWfSJnwwehTnp1QMzoNKVvg0HA=
+X-Gm-Gg: ASbGncsbqytzDoClDt0tem3CT7osY/z5oG/7h5rZLtchFg8SLss9ihQkjY+plMOHQ1y
+	21e/OiqMzF2yirhOXStry2OOZd0nYsQcmoI0ZG5eFIL75YV21JAmXapTSWl0X05LQXxa633o6BP
+	u52Hyf/FJ2kge5CKUUgiLYVPSb2PkgxuzmIcdIVXc4cec=
+X-Google-Smtp-Source: AGHT+IH7THszr02geeayihPmfwjMV6SGbVO16iehszdy4de7QDOCkC+RAYCpDksbfEQmD+yJ1XW+OU5DT6T8YKP/lfo=
+X-Received: by 2002:a17:90b:3a86:b0:311:e8cc:4250 with SMTP id
+ 98e67ed59e1d1-313af235741mr3849605a91.3.1749729109591; Thu, 12 Jun 2025
+ 04:51:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] dt-bindings: opp: adreno: Update regex of OPP
- entry
-To: Akhil P Oommen <quic_akhilpo@quicinc.com>,
- Akhil P Oommen <akhilpo@oss.qualcomm.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Rob Clark <robin.clark@oss.qualcomm.com>, Sean Paul <sean@poorly.run>,
- Konrad Dybcio <konradybcio@kernel.org>, Dmitry Baryshkov <lumag@kernel.org>,
- Abhinav Kumar <abhinav.kumar@linux.dev>,
- Jessica Zhang <jessica.zhang@oss.qualcomm.com>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
- Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
- freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20250611-x1p-adreno-v2-0-5074907bebbd@oss.qualcomm.com>
- <20250611-x1p-adreno-v2-1-5074907bebbd@oss.qualcomm.com>
- <492417fe-c086-4980-b108-0487bad08155@kernel.org>
- <d482653e-5c0e-4b03-98d6-2c898b445917@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <d482653e-5c0e-4b03-98d6-2c898b445917@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250612104253.10413-1-abhinav.ogl@gmail.com>
+In-Reply-To: <20250612104253.10413-1-abhinav.ogl@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 12 Jun 2025 13:51:37 +0200
+X-Gm-Features: AX0GCFuuEiFXuG9m5B4w8TQVGIVEkX8OwIZ3GxfOrh5kNvLiPuGk1EGTbyzD1mQ
+Message-ID: <CANiq72kReki1=sbKhurkj-WVt47h4u=rz4Jn0RjmeB1wgPGtug@mail.gmail.com>
+Subject: Re: [PATCH v2] rust : Update the bios_limit_callback to use the C FFI
+ types #1170
+To: Abhinav Ananthu <abhinav.ogl@gmail.com>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, linux-pm@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/06/2025 14:24, Akhil P Oommen wrote:
->>>  
->>>  patternProperties:
->>> -  '^opp-[0-9]+$':
->>> +  '^opp(-?[0-9]+)*$':
->>
->> Not correct regex. You allow "opp", "opp1" and all other unusual
->> variants. Commit does not explain what problem you are solving, so I
->> have no clue what you want here, but for sure opp1 is wrong.
-> 
-> Just to confirm, would this be fine for the requirement I mentioned above?
-> 
-> "'^opp(-[0-9]+)*$'"
+On Thu, Jun 12, 2025 at 12:43=E2=80=AFPM Abhinav Ananthu <abhinav.ogl@gmail=
+.com> wrote:
+>
+> Update the `bios_limit_callback` function to use `c_int` and `c_uint` typ=
+es,
+> which match the C ABI for the corresponding callback function. These type=
+s are
+> imported from the prelude.
+>
+> This change ensures the Rust function signature exactly matches its expec=
+ted
+> C counterpart, avoiding potential issues with type mismatches in the FFI
+> boundary.
+>
+> Reported-by: Miguel Ojeda <ojeda@kernel.org>
+> Closes: https://lore.kernel.org/rust-for-linux/CANiq72=3DWpuGELzLbH-fxdOe=
+Jy9fiDFwatz6ynERDh=3DHP2z2MBw@mail.gmail.com/.
+> Signed-off-by: Abhinav Ananthu <abhinav.ogl@gmail.com>
 
-No, You did not solve half of the problems - still allows "opp" and
-commit msg does not explain why "opp" is now correct. Describe the
-actual problem and then write the regex solving it in specific way, not
-causing other effects.
+This seems to be a duplicate email.
 
-Best regards,
-Krzysztof
+Cheers,
+Miguel
 
