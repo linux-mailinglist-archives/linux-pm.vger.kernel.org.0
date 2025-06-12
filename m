@@ -1,129 +1,126 @@
-Return-Path: <linux-pm+bounces-28531-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28532-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73062AD6C66
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 11:38:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B465AD6D82
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 12:22:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 028BC3AB276
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 09:38:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFA9D188577E
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 10:22:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89FF222A4F0;
-	Thu, 12 Jun 2025 09:38:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 807D52356CB;
+	Thu, 12 Jun 2025 10:22:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="biS6vLlK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AoW26Lmh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA781F583D;
-	Thu, 12 Jun 2025 09:38:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0961E232369;
+	Thu, 12 Jun 2025 10:22:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749721129; cv=none; b=tgR71rFuNmILN9kJ6P2XhN4f6nZV06JOt/Y+a/CIkgPrQmfA9yARHX97Y0IRJSvpxMX2//ShndQ9zIsMqhcjE8Ublwcke7F2oChTMTX1TQgjRVXjlzc82Bu+NKudyO+1OkRzRed0fuSIC+dGfGR0tO/8Go/F3O+1vGUdp7Qig8s=
+	t=1749723740; cv=none; b=BbeEsBCO6kS+OOnBKDdlVjDq58hU33a8Byk8r34bLqbk4U2fDq/YdwFuRUiG1azw5ug2sk8Pk7YvY0RBWuP0yvA5vN4VU6d2le24Wugj7tCdF6mKlkoXhi8yP6xhElSxpRtA7qaCxxwDyNlqiiYfXCv3mocPqQsKSc9oDEAxWmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749721129; c=relaxed/simple;
-	bh=v5GhzUrFc5S72xIR0qU5dk158HTvhJG0PwF8YU0COuw=;
+	s=arc-20240116; t=1749723740; c=relaxed/simple;
+	bh=SO37R/h1del/1aQpao1BZENt0XTR2Cf547jTkk++7rY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F/T/kPx5Ca751pXNQ9uvoZHakVO3TtVFAmga7WzKM4O7Xu8FXZWMgoSqOhqLW5Ucw0qEBAEiv/Cn0k2YJBJNL8VNtPMKjK4YMXzs+TU8Gr8ZEmpefO99HjHxfy8CCES7g1Qx/HehzFRPiC9qxKiXuYo0SpbYeXlOth75efXaSx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=biS6vLlK; arc=none smtp.client-ip=209.85.216.50
+	 To:Cc:Content-Type; b=KA3K1kSA1R8K5P9KQN2HEgREMFRDpL8UGNrtdk06pZA2heHO/e3xKxQIelthMNfeMsVofhNL2a5ClLsHN+Bkb8mLwA29eqRZAga+t5YxWDSigr3oLF1bkEDcjETVdiheo0v3IbBYQEht2nJtJSdV685ITbPxxZ8OV8PxO0IkZiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AoW26Lmh; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-313290ea247so122221a91.3;
-        Thu, 12 Jun 2025 02:38:47 -0700 (PDT)
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3138e64fc73so85788a91.2;
+        Thu, 12 Jun 2025 03:22:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749721127; x=1750325927; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1749723737; x=1750328537; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aylNlwJp9K9D8QsyZ96uoB7rAafx9TnuyqXX6P4eY/4=;
-        b=biS6vLlK0ZZ/XwiS4qE/1WAqrX3KyzUHDPoOcDJ+uw9BKUcloMmxHthFRGiAIfk5Az
-         FIlizj/N2JcudVM45zQ5P2RoF6epT/uY78lQ+W1aLQQtfyqHOI6FBsIW4ln0oWijEIPs
-         F2aOGCU08cHj54QEUB6qBpFJyjiFYE8T5GIMFBWVS4R+te8qPq6+d+SbpsVVoxFk1NPT
-         vIrUrMBRSGEfvOrVD39pp6MOieCzHgxJIkqgUlx5Df5KR4b650MN4sxkuAgAr+1NeU/E
-         MHIPatdWzm0qyeV6I+8Jx1XOgBwxEbSVJK8layhc5U/A4r0IjijjTpPymYsuXLDLiv8b
-         tLiw==
+        bh=SO37R/h1del/1aQpao1BZENt0XTR2Cf547jTkk++7rY=;
+        b=AoW26LmhJeT0bI/QCmMy0K5zdYGfIVK0KHgO3TedC3Y1bgq3ZS3BVososn2srZRjr4
+         1TS3ykdki0NrnwvgKbqUlyuhsbsPrCYwzSxMQ7l8/2c120Wd0AUzrt5M5kvXr5s+Lz+T
+         YFRZuLnHUWRrGJloTnFGYsv1daPXEm2iQ8MEzL1GlQJMeteLiV75ZJiNv0gBw6lOkD0i
+         49B97KBLQREArPlnhNZFpGVAU3tVghT0y2HVRbizQC2RhPw9NefXDnj0Yd/eSayPGckl
+         H4i9K43r9ZwAATU2zp6WXqF0wbWSQmUloMl9Pt2JkQcx6a2GD1fvd/8Hs7yu//sp4YKv
+         k2/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749721127; x=1750325927;
+        d=1e100.net; s=20230601; t=1749723737; x=1750328537;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aylNlwJp9K9D8QsyZ96uoB7rAafx9TnuyqXX6P4eY/4=;
-        b=q1LJwy65J5uUG8SOUqcmsI6orqUrAhgTG61b5pmtx+RvgNVKl2dtDiZTUettoFoIc5
-         xVa6X9NRPmn6evoSXgojO/734e/w64/ofoQZLblGWDXMoXvNa6tmn7IHMZ03kYk3n80j
-         yWW8+UPEHU3rGJJ1e4+hdixyLlra7gOYsLF6KaVJ1HQTkDhPUeeI3Zc2FFhkWHQOvzpY
-         +gnD7RpCKim5F4BlS+9O9dD1juNTaedZVlCyJJYj1svI/Xq9V0qisQj5aeLK7YH7bB6V
-         1qCey02LCz6o3lFZAmsfsdRxFeooJGU4ThrCIDyh26IwPh8n3IK+14A4TvTcnu/Xaux3
-         W+Ug==
-X-Forwarded-Encrypted: i=1; AJvYcCX0zOYZbFDoYO5Xt1p+7+nfndiF8fd0ZNPAi+weJdSh/ArDeOx9Jj0KRFTqCDnSNzXpCZbkNecdfsK/zDwgEjU=@vger.kernel.org, AJvYcCXVw3wtmk0lPtKkwvNQZV3UdWs2n4cojgXFN2m/rfC+DdsIM5Zngd+VQCndtTwzO1m+28MIhBsPmw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzE69hpNMwfs95X0UdKnuE6GrwoN1nbheK7VToVDGhutt3+ThSS
-	UnL7nlvkdwO4U0seL5W9FxrK0y7BsJ+JhMIwwp9JN3p3rf80IOt//MTn6GvoIG0ZSDqJsExzcg9
-	2s82U77DpgBLI80foI/k6FMTtJqIf3vk=
-X-Gm-Gg: ASbGnctycvsQwNC1FAJmmMMfqE+R7QaRi7jqvQJWjWLDHjGf5Q9Dpd/6AdJBkpQwto5
-	d5XyRGMCDxykBDa5q24GpPNKKrz5aTkavs+7fMpPs5+YVigEk1PbFMhhDQu+SXN/Cz/hBW4veSW
-	jx7PaRd8tJwDCkDKoJRG7dzgN35io6t9Jf+As5RlGlI2WeuMpaYYHo+g==
-X-Google-Smtp-Source: AGHT+IHuG9iIemNFMRj9U8eukNK/ONK2Cfzx+xw/jHFhuOn4aUO2/0NrajLbC8xtUqJsm5AtKPXgkyRHeP3XDWoS9Ak=
-X-Received: by 2002:a17:90b:2f8b:b0:313:14b5:2521 with SMTP id
- 98e67ed59e1d1-313af1e1bfdmr3979868a91.5.1749721127304; Thu, 12 Jun 2025
- 02:38:47 -0700 (PDT)
+        bh=SO37R/h1del/1aQpao1BZENt0XTR2Cf547jTkk++7rY=;
+        b=Ng/w+QT2RI0jwqiQgrwl2LGTHt3OLOxFNP3gUTzMXhg29fqmBzB+vyKb664ElMEONX
+         YxXqQ5i00fHB6qpfMX9dRjxMM0qOfhMWf/HnrG2I69pKBmc4wS0WaEKKvB4GvxY4pmOq
+         5+DH0VWzoFD6A0/EPfOlZWUQgwlVmbtKRWCGRAVwolDrjdQfP9S9p503Y9/7xciBcn8k
+         VJ11mlpxEP367vZyn4J/MpkdKTa7Qt1FWnjWXWwI/IDWnIrXeUNpMVQX4OnrKU5pV50A
+         Tce2ffJEQrwY5MsmlsiryxQg1MejCEQkR3tUxK0v5Jar+UxcgY0syJDJky42K6HC0UsP
+         goIA==
+X-Forwarded-Encrypted: i=1; AJvYcCU+czE17UsLf/lPu3AxhLvJbsFeBwbLrgdRdM4v07UbeDrCdGh/DiOzfsGzDHheMlzGqs06ZZO/JPnc@vger.kernel.org, AJvYcCW010Nmt85OfNKTjSJygPldEtzt3nEz6NrNT8oY5reizCHm8Uesd1RPnVtL9heFMcbDOrrtQdnSGdh7kg==@vger.kernel.org, AJvYcCWxYuCNIl2uZ50FTAXDYFZOIaXNhtVbRHCq5/yt4Dqgl0Fe2ON3l+kPssVRyfA5Wr+EYMi0XrFJ4uA=@vger.kernel.org, AJvYcCXBnZZqDQq8tCoSQTkK+DqFfUrq3S6x6HQPGy2aNOXiAL8fJ1E+jlLYe6hv2PremUl/AqwO7LQtpq0l@vger.kernel.org, AJvYcCXRMmzlgd7tlwmZVbVfprcC39hL9umLlY1VREKlWNYYUbCBIPzkMI3xICQIrBPYF5fSFJrAVPeoEO+s5kb1@vger.kernel.org, AJvYcCXqKmKNEzclJHzUj7EBIai1xPbK4ogBQeYljaBODK7+l5BbXOYuZytxJlVYmf2Mfic2NmikZGjpFHH45PtBWLg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBb7JZlBJF2p2AZ2D7tWbsa+UF2YoZ/o8I0h4t2faKplgQnVB0
+	y9ByUXq9nEEGICUden4MdD8UvDmSPtTdsMcnTsOaBPATdmGUhGDKb39KmDinrHev+RfRrHJ0IWS
+	yS3BulCPhDLj0nlijWUfPYKMAnvuoYWs=
+X-Gm-Gg: ASbGncuMA8JVWmBYT8taEn+fgCjAi0AGO4eyLUet4PtiyCK7sCRG7iCNwVQBx6mCPVI
+	T8fysoRtuRCem+SP04bF87XDDMc6UqjxTba1ZBEzJ1556vhiz+P+a80W4LqUE1X6DuQkY0sSPtV
+	8zsATIymzMKkGJSazahzyJ+MGddkdkHjtZmfAH3L8S5f0=
+X-Google-Smtp-Source: AGHT+IH94DNvTVzRRDj3ogVCtR6iefFy1RSOyjadVcC0pwgm1vWym97QPStxMRP0lyaW52odQ/fleX0SckRjUMwc7mI=
+X-Received: by 2002:a17:90b:17cd:b0:312:639:a06d with SMTP id
+ 98e67ed59e1d1-313af136457mr3612530a91.5.1749723737296; Thu, 12 Jun 2025
+ 03:22:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <DAKDXCX8JJVP.2MG7OCAEY73MR@kernel.org> <20250612084623.7410-1-abhinav.ogl@gmail.com>
-In-Reply-To: <20250612084623.7410-1-abhinav.ogl@gmail.com>
+References: <ddd5ce0ac20c99a72a4f1e4322d3de3911056922.1749545815.git.viresh.kumar@linaro.org>
+ <20250612014210.bcp2p6ww5ofvy6zh@vireshk-i7>
+In-Reply-To: <20250612014210.bcp2p6ww5ofvy6zh@vireshk-i7>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 12 Jun 2025 11:38:35 +0200
-X-Gm-Features: AX0GCFsQNPJsCalsngra6w9qU5_SqzteMjcyp6WB3g7SsaQa3NV4NSNg-ZiloL0
-Message-ID: <CANiq72m6F6ROBA7JP+UF-vL4ezVksJkOMUuG+vDBrfSnTZFw1g@mail.gmail.com>
-Subject: Re: [PATCHv2 rust-for-linux] fix : Update the bios_limit_callback to use
-To: Abhinav Ananthu <abhinav.ogl@gmail.com>, Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+Date: Thu, 12 Jun 2025 12:22:05 +0200
+X-Gm-Features: AX0GCFuqCHMJ_ULC48U5582v9ZYgwTQqDBONlu6akMmTosspZ2vQkFio_vWEcxA
+Message-ID: <CANiq72=m+O7p==Fte4HA7kmt0DKaKmkeAQ-J1kVtyTKDKibgcA@mail.gmail.com>
+Subject: Re: [PATCH V2] rust: Use consistent "# Examples" heading style in rustdoc
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Andreas Hindborg <a.hindborg@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
 	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org, linux-pm@vger.kernel.org, 
-	"Rafael J. Wysocki" <rafael@kernel.org>
+	Benno Lossin <lossin@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Breno Leitao <leitao@debian.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Yury Norov <yury.norov@gmail.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Russ Weight <russ.weight@linux.dev>, Nishanth Menon <nm@ti.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, linux-block@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-pci@vger.kernel.org, Tejun Heo <tj@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 12, 2025 at 10:47=E2=80=AFAM Abhinav Ananthu <abhinav.ogl@gmail=
-.com> wrote:
+On Thu, Jun 12, 2025 at 3:42=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
 >
-> PATCH(v1)
-> Update the bios_limit_callback function to use C FFI-compatible types
-> (kernel::ffi::c_int and kernel::ffi::c_uint) for its parameters and retur=
-n
-> value. This ensures ABI compatibility with the corresponding C callback
-> signature.
->
-> PATCH(v2)
-> updated the `bios_limit_callback` function to use `c_int` and `c_uint` di=
-rectly
-> via the prelude instead of the fully-qualified `kernel::ffi::*` paths.
->
-> Reported-by: Miguel Ojeda <ojeda@kernel.org>
-> Closes: https://lore.kernel.org/rust-for-linux/CANiq72=3DWpuGELzLbH-fxdOe=
-Jy9fiDFwatz6ynERDh=3DHP2z2MBw@mail.gmail.com/.
-> Signed-off-by: Abhinav Ananthu <abhinav.ogl@gmail.com>
+> If you are okay, I can also take this via the PM tree along with my other=
+ rust
+> fixes for next rc.
 
-Cc'ing Viresh/Rafael/cpufreq, since this is on their subsystem (please
-see the entry in the `MAINTAINERS` file for `rust/kernel/cpufreq.rs`).
+Do you need it there? It is trivial, so it probably does not matter,
+but mistakes are still possible (like it happened in v1). Since it
+touches files from a few maintainers, it would be best to put it
+across the "global" Rust tree (ideally with their Acked-by), and Cc
+everyone (e.g. Tejun added now).
 
-Also, please note that the changelog goes below the `---` line. The
-commit message (above the `---` line) should explain the "what" and
-the "why" of the current proposed changes, not other versions.
+I also have a fixes PR to send, but I was not planning to take this as
+a fix since it is not marked as such.
 
-Finally, the title would normally have been something like:
+But I don't want to delay you. If you need the changes, then I would
+suggest just applying the parts that modify your files, and we clean
+up the rest later.
 
-    [PATCH v2] rust: cpufreq: ...
-
-Thanks for the patch!
+Thanks!
 
 Cheers,
 Miguel
