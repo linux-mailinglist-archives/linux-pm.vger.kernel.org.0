@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-28547-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28548-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FA4FAD74AD
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 16:54:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B4C8AD74DA
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 16:58:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB2CF1709AE
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 14:53:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D76E1890C50
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 14:53:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65B9D27145C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 806FE27145F;
 	Thu, 12 Jun 2025 14:52:39 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 833B8270ED4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9623F270575;
 	Thu, 12 Jun 2025 14:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749739959; cv=none; b=f5mbiOXl7EN8RscO2hWTSGgsH/Yp3OaEE4iuzmljTYj09iVAFq99VVPjKWHBL8D4LEvtxPXqzmXr908AITR6jPvlXxpQoTPu+2AQzSEqA+ffIuSlMq86Ml8uDhor2qD1fgo0PEgih5DTPRmEV3cvTY73INZM42JSV7EBk+oBXGM=
+	t=1749739959; cv=none; b=iGjQsurIjx8TPKVR7sJyvbF57oqWIcmy/lInG9ybXOiSVXefxCV/YSdx/l8fGs/C/jdustDFv5fmobwtTdoEDHtB7PosSI+059ODKcq3X2J7Z3an5z9vkOrAcE5bQaXM+1ZkZbPyLjlKAUgxMaidlYgCGxXcUyUYGf1uqARNLJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1749739959; c=relaxed/simple;
-	bh=IRJXCXJo+dhajKqs/GVW4X4ORkkZ2S8OHxOKkOQph4A=;
+	bh=GqYAzQTTqOixsKkeHNFxk70fTgCxt/tudq0aJ4T0s2o=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=HkgO1C+mmXMuSdVmiiYPph+AmNE/x05quzIzLufr3sS8fVRL2dYAwocxU4Xo7HIPPZAPDyTVUpwNhzsllnLg1Nmej918o7n3q4KBy49AzxNKwpZRJVT/TXJqf/d0hJQHAN9OvdcMpX7TsQlrQEvXdhWiKtVJ+xfjzaam9CEuvwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
+	 Content-Type; b=gyg9EozQ6Y183L7rNRn96ZNX7DT9diYejKV6rmC6Sr1bnkWFz0IRJudzVVnib4kEFEHwuptXzuQP0wu3Zy6zGSow6b3waPyC1DQxlMPTpkZ60anBAgP66gPvWPNlvLdq95N8Z/27LKjF1sVWOMk4UxoShu4gldYDTOFeagn4wnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id 7925A1D8149;
+Received: from omf12.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay03.hostedemail.com (Postfix) with ESMTP id 967A0BF42D;
 	Thu, 12 Jun 2025 14:52:34 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf10.hostedemail.com (Postfix) with ESMTPA id 926A542;
+Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf12.hostedemail.com (Postfix) with ESMTPA id A99CF20;
 	Thu, 12 Jun 2025 14:52:32 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1uPjJg-00000001lP7-0woS;
+	id 1uPjJg-00000001lPb-1eeF;
 	Thu, 12 Jun 2025 10:54:08 -0400
-Message-ID: <20250612145408.074769245@goodmis.org>
+Message-ID: <20250612145408.246703478@goodmis.org>
 User-Agent: quilt/0.68
-Date: Thu, 12 Jun 2025 10:53:12 -0400
+Date: Thu, 12 Jun 2025 10:53:13 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -54,7 +54,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Viresh Kumar <viresh.kumar@linaro.org>,
  Madhavan Srinivasan <maddy@linux.ibm.com>,
  Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 2/4] PM: tracing: Hide psci_domain_idle events under ARM_PSCI_CPUIDLE
+Subject: [PATCH 3/4] PM: tracing: Hide device_pm_callback events under PM_SLEEP
 References: <20250612145310.563358597@goodmis.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -63,21 +63,20 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Stat-Signature: t1gxukcmttsd57ypqjtoxhrrxmtqcbd4
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 926A542
+X-Rspamd-Queue-Id: A99CF20
+X-Stat-Signature: fpyn74mhzgi6edsr6q5dyg95485qe48o
+X-Rspamd-Server: rspamout06
 X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+DsACEpXW1Hxr3qrAKke4Xko/DKEfchDw=
-X-HE-Tag: 1749739952-596550
-X-HE-Meta: U2FsdGVkX1/IfiTNa6p40H7QmDBnX3sN/6qr5uRq/JvAr7V1bDaJdMzuHdv9rphnCS17FRaeM9YiG/hUMr8hC+mmUkKa0GYv6prfsggZcR30qEBOVcLhtOrcpWkG9Ke5VWnCKzJPAS+oVNTXZLKmnVNRgI8rHLYI+4BIgQ5P+8REpPm0IUyhvyqcvcR6ZrGJXdrvG26x+XwbyxFfx9pCY+/T72i8WHl5FLPqyaya7yCJu7mTuCI++6kdd2AdXw0heORM81ecFOTnPWDnlqGe5AJqYMSrMlgjV4UQkUVFoiPDyxArJdqWfPCA3AWG5OghmNV9H+jgpkjvSB7BKhddo4QqgJNLqXdaKjxk7wGsIF82E/1scem3bHrh9pxweG2gg0+cvTokxC3MRJ/u9tEdqw==
+X-Session-ID: U2FsdGVkX19j43D1p8tely174eW3U7IK9BarJsJXwwI=
+X-HE-Tag: 1749739952-946871
+X-HE-Meta: U2FsdGVkX19Y+FZTAuN70shmtNMQh8PF2z5w7Al6e+s8ndEXUZ5waGRazYm5aCm2Wr9+0EzyzaKU8+39h43/bI6vwC1JF3awrJxUzixgqFB3CkY/vNKmEsPT/OV5hI4lu+/m0RfUj7nkgQJbHak4qGw+xUParAwYSnfDYmsnUA8nJAyD6BG+V0ytFtMXWmALmab5EFfBTUI5MdjZAAdTv/cWm6PKSm5M9NWf1SX25RHOP6PmO6myilu4l5HiqBpSf6h20aPkkJZ6xNU6nuhYc2en4NRWWwSTYaJqJxRD5a1I7uOniuYR3SvoNNigOYTMI1LKxCHOU2Q1hJiFGU31S+MkEnNyOtsQ3FRNqXap5c/U/vbNbY4d1XhRVHkiS/T/NNdisUq1KQZm54tC8qipcA==
 
 From: Steven Rostedt <rostedt@goodmis.org>
 
-The events psci_domain_idle_enter and psci_domain_idle_exit events are
-only called when CONFIG_ARM_PSCI_CPUIDLE is defined. As each event can
-take up to 5K (less for DEFINE_EVENT()) regardless if they are used or
-not, it's best not to define them when they are not used. Add #ifdef
-around these events when they are not used.
+The events device_pm_callback_start and device_pm_callback_end events are
+only called when CONFIG_PM_SLEEP is defined. As each event can take up to
+5K regardless if they are used or not, it's best not to define them when
+they are not used. Add #ifdef around these events when they are not used.
 
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
@@ -85,24 +84,24 @@ Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
  1 file changed, 2 insertions(+)
 
 diff --git a/include/trace/events/power.h b/include/trace/events/power.h
-index 913181cebfe9..a10ad300d660 100644
+index a10ad300d660..5b1df5e1e092 100644
 --- a/include/trace/events/power.h
 +++ b/include/trace/events/power.h
-@@ -62,6 +62,7 @@ TRACE_EVENT(cpu_idle_miss,
- 		(unsigned long)__entry->state, (__entry->below)?"below":"above")
+@@ -212,6 +212,7 @@ TRACE_EVENT(cpu_frequency_limits,
+ 		  (unsigned long)__entry->cpu_id)
  );
  
-+#ifdef CONFIG_ARM_PSCI_CPUIDLE
- DECLARE_EVENT_CLASS(psci_domain_idle,
++#ifdef CONFIG_PM_SLEEP
+ TRACE_EVENT(device_pm_callback_start,
  
- 	TP_PROTO(unsigned int cpu_id, unsigned int state, bool s2idle),
-@@ -98,6 +99,7 @@ DEFINE_EVENT(psci_domain_idle, psci_domain_idle_exit,
- 
- 	TP_ARGS(cpu_id, state, s2idle)
+ 	TP_PROTO(struct device *dev, const char *pm_ops, int event),
+@@ -260,6 +261,7 @@ TRACE_EVENT(device_pm_callback_end,
+ 	TP_printk("%s %s, err=%d",
+ 		__get_str(driver), __get_str(device), __entry->error)
  );
 +#endif
  
- TRACE_EVENT(pstate_sample,
+ TRACE_EVENT(suspend_resume,
  
 -- 
 2.47.2
