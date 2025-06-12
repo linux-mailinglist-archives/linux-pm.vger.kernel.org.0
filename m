@@ -1,166 +1,130 @@
-Return-Path: <linux-pm+bounces-28595-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28596-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55C48AD7C00
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 22:11:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB5A5AD7C57
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 22:28:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D312C3A492C
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 20:10:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 62D837A3581
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 20:27:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A36F92D6615;
-	Thu, 12 Jun 2025 20:10:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 789BA2D5421;
+	Thu, 12 Jun 2025 20:28:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="csQgwIeS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Faz8D18k"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F212036FA;
-	Thu, 12 Jun 2025 20:10:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02AA71D79A5;
+	Thu, 12 Jun 2025 20:28:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749759045; cv=none; b=FWz9l54sQwE4daOTdHUsZWueSyjSkNJMZ/3NwBWTl/0UbDu5zis/EjuXt88Ca1OrqJu32u4ani5gN8e3L3OM3uMWlHGuRoXVEvkTNhU/HJjhCGZoGFYor6C/Oex1q36pb/YtFqoLmg4WoXJ/rWEoSWuMiyVq59FmSqx8kaFIPjc=
+	t=1749760101; cv=none; b=S+iLvTAX8sfaEHpePQe6L5INjjw0zUgWffyqYYOMx45Mi0LMZLwpxd/Wt4PsmQB3pxjMZ6OIRRdCzqkSffEslX86NeBEqb0nq8L1Y9L3EVZri11p14q43Sy3JL/08Y5J8y36bhd4mXCSa4fs927TsJRtPROUKPF0c1+Hk1o0Vqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749759045; c=relaxed/simple;
-	bh=+YxhKp8pbLzEr9fypYT/DVhapjMVFFU4pxYzJ32Tuf4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hc/kSzDfM91rDQ0SJedULB/UCwkjlXPvdyCl1KZgTg1deXvzfH+35R1mnxmu3y+euh6U+cmL/sRGh0GIems0Z2MS+Ip7ydUrDQ6oNbq/7qTrme19M/ppz0CYe99NrDn67VEAowHGIFgySEubtBxscHn6nv3Os0Srb8xEQP+1ptg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=csQgwIeS; arc=none smtp.client-ip=209.85.215.172
+	s=arc-20240116; t=1749760101; c=relaxed/simple;
+	bh=oRSm7ZpB2dIF6nVqpuQz3Jd3BNn0/vdz7YkxnBDKJzc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KzQngG56flCoXkFzIU76O1hs3tHq8P6Dt9OMgZ7wmKs3oIj6VFhQO7HGCdrUc+5KienfOG2Rn4QbX1BG5cjlsxyVBUOZtM7WjVz6FWV9Bp0cBlAytH18H5mHXpN4mh/MJwQWO7yJYmjOLBF1/eJ7tFAYjEivxgsaYz14pEP4m7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Faz8D18k; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-879d2e419b9so1410578a12.2;
-        Thu, 12 Jun 2025 13:10:40 -0700 (PDT)
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3138e64b42aso1539470a91.0;
+        Thu, 12 Jun 2025 13:28:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749759040; x=1750363840; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ACQzSKiLB081J7RKsan9TDO2EOdfGESNIDhEKLy5me8=;
-        b=csQgwIeS8lux0ymDzBSc4rrAlnzd14PfePEdI9tkxvsqE7T4KC1qYq2SZqCI1m5GG5
-         k+QWxHllIUOa4K1MzKK4TSiqsNEjJOfrWfwh0JQjg02eFgu/tFPYnGTsZUqo9072j0jk
-         DKBlDwTg5Z1ehdy1xIM3+MN9yH+P/5x3Ua5milpx05RzrZkBSCAr9WGcvb+hF9rQm2UL
-         vBwTix+p0DKc8uwjZAYIX63iCpZA5h5KWxMujZxnygdv2I8DSn+bx31aLF4LkQA+EvPB
-         hidVr238MmjzhNxVEVbf74mMF0E75g6IwPzMSdNRHTPNtQDo04ck0IE6D0WvPW5OhpL6
-         H07w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749759040; x=1750363840;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1749760099; x=1750364899; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ACQzSKiLB081J7RKsan9TDO2EOdfGESNIDhEKLy5me8=;
-        b=B2TQLwh3ebEl2ljSruWymS2FH9PpSnVb42mtuaSNN4F1Ed31aoKibpIuYlMglUgAin
-         njOvEWj943VZyydZxXgNRzFn25skl17thd+Z4BnuTMe3nQzSepLDvr6AdW4kIroJWiyF
-         /32+Q2nSVR1BREYQtZ7kjvv9e/KglinqRI9xwA47y4dGkslAdzffxZ5FGCQ9hml2FSQV
-         yZCXbAkecgE8H3ZXP8011i74LGJD22tlBhkg0sdFKQ0Xb9bzaWc/EaZMOnl6uZlmXOGF
-         SSA/qd0c2vviHc8w9vzDckJby5JILFXShjFmq0DRQI/N8K9gBIThhhdMNfDl0vXgtwa0
-         XVcA==
-X-Forwarded-Encrypted: i=1; AJvYcCU1Mwp7PB+2LWzT+srQJVDpqgTclkrnYaYLEmevJWsbjyF4gpOI2rMR6n41h75HzPQmUs4JIHZl@vger.kernel.org, AJvYcCUeou45KmIbAtjzrsH3KI4oc9VyxgnCdyUTesE5nLS6l5PgboJ8q+wJTyvQ8K0pIwaWhLEnp6MuFZs=@vger.kernel.org, AJvYcCUw+N0ejK6su/66zkkLBlUk5m5GZRkC3CR2E+v/dEJnl7iZhiecmlSb7Gu+hikjCm9Zel6NFa2B6PHG@vger.kernel.org, AJvYcCVSyEfFUZUUG4cuqDVu72nFng4uWOHaa3ZOkxmWne9vsvUGk3jll3amtH7ff9qUFjoBgRJ1HW7hJEzT8Bo=@vger.kernel.org, AJvYcCVmtagSTa+4ezWP6V3SQ8iC0cQfckNBtKxf/vA/jJSDXDZLsH5vUWQjPSmpI0NVy6Ns9WM93kzkWthHS5Hq@vger.kernel.org, AJvYcCWyBqp2sJ6sQKDVZC/4kgAK/MZ8Jz+zA87CAyA/mUfI9MVT5gW24ClbVrpjveXG88QgBOKZp6xegVw=@vger.kernel.org, AJvYcCXfaD2pg6gPZoKxXJcNRUF0XOy0IfF7SVR/T4XBexSRE2to0ZPtiPCbjkodvPNZelqFzxMsTSxYXY1vZdU=@vger.kernel.org, AJvYcCXmNKTaNEMd6Fw4mpLjBJ6WGJD57qnyAVUy86oTe3ZQszFyr698+GLx0CqMBDvd2FNVi2gFERuj+RZa@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNi7yRmE4U28f7cvFCUDtfivW9ZASHG9FVtk42V4jDw4u6HrS4
-	6jbxqlZcTadPhVkrnJKgu8PlJLK0c1Zf04tmwvDu3wkkJnOlumYw880h
-X-Gm-Gg: ASbGnctl0rozPdhjcZyHYybB55FSprwy5e3GBtrfuo5s6KnuPlgfQhKKl5FWtTh7FHQ
-	KwKIxnkHYQPqd4rGmgW1i/GOefXkPYcjfpQOSnSuDM3SGRtifVdpZbjOyrhbbUy1ogPciyvvq6h
-	S8ZlXGaEMj373OzCXbkjOXkUCaFLOnVOmUG1bDy3vp1SrEpexu3o6rQ0jYefrm1Qb1KY0+8daf0
-	7rYHXaYxRIsahNruMra875PgC8uYLzWZYQAEGgNB2ZXTSAR9qK+t3v+cegvtIsoqVOZVyTRB5v7
-	sbUB5EIZNUy/L+P9QUNNyKT5TF6HX+2gENGP82m9mWaFBooJehKY4DKEjxmPoA==
-X-Google-Smtp-Source: AGHT+IG8TocKyZo9LiHYpgmcLhk97cCKpOT9D/IFBCoE4AePraGyNKa1PzBXNuqHoDVO+xHoWj80Yg==
-X-Received: by 2002:a05:6a21:8dc4:b0:1f5:6c94:2cd7 with SMTP id adf61e73a8af0-21fad11efd4mr288514637.42.1749759040324;
-        Thu, 12 Jun 2025 13:10:40 -0700 (PDT)
-Received: from localhost ([216.228.127.129])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2fe1691d7fsm150701a12.69.2025.06.12.13.10.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jun 2025 13:10:39 -0700 (PDT)
-Date: Thu, 12 Jun 2025 16:10:37 -0400
-From: Yury Norov <yury.norov@gmail.com>
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Jaehoon Chung <jh80.chung@samsung.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Shreeya Patel <shreeya.patel@collabora.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Sandy Huang <hjc@rock-chips.com>,
-	Andy Yan <andy.yan@rock-chips.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Shawn Lin <shawn.lin@rock-chips.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Qin Jian <qinjian@cqplus1.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, kernel@collabora.com,
-	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
-	linux-sound@vger.kernel.org, netdev@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 01/20] bitfield: introduce HWORD_UPDATE bitfield macros
-Message-ID: <aEs0PVkwFN9uRgU0@yury>
-References: <20250612-byeword-update-v1-0-f4afb8f6313f@collabora.com>
- <20250612-byeword-update-v1-1-f4afb8f6313f@collabora.com>
- <20250612124415.3399e26b@kernel.org>
- <22744779.EfDdHjke4D@workhorse>
+        bh=RbNc7HY8VMs8jQgNlP6re9PN2yZih6ZIaqzQM653mQQ=;
+        b=Faz8D18kb4AWoe6kcvsGP7Q7hk9U8M4yU+kc4uHht2eqV0TVuLSeU/abE7FCUI5jE8
+         eO8zxwo+h3k0GpkrnjzatIOBAeLz0NSRfk3g9TGbsG8blvARGRuAwQ01lqaEG5vDblbK
+         tXCdM90AtPwQgsmsRYl6O1ZODU0Qj6/5SWLBKJC2I1Ui/Uyh7fQkWT39ujBds+wrZstk
+         MWPqlo17hPKHKNpNeE7YsRjqYRSX3xzhAiidgnh+2czW6Wf4NP15Jx2nDKXG5tZLpOr2
+         eJYUAhktvfeVYNnqDJn1U2EQxsSMO+SRihWUCAqmpgiU0wifcwtoJeSKqfBWo2EZXzQE
+         op+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749760099; x=1750364899;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RbNc7HY8VMs8jQgNlP6re9PN2yZih6ZIaqzQM653mQQ=;
+        b=YYXQvUgtG8F+zDqY8RsdV36WqcSzZCZUTnGa6G111c0ixoV9GbzfczFg79uLA31Zin
+         uUPQr+nXv8tvNGT2GDwIdMWq7NBLTPPmWNSDnRT2dCssXzBfdy01wr1VRbRobDA2eaPV
+         Q/4CP1TxFub5pH+IHgRfrQP1YK8FUAa3sOuSMEfniVl8KAwE30AHdkUn07OxSnrkHdKL
+         nHv89UnB1DvqNaeyhOD67MVSvYjNWrLJ5Ce2rNrKnHrInH+5CaOWDVzQ+/LPm0T6x6Zo
+         oXNlRO2xhzRrcZIm9Iwy055vYWfLVV0u4kUeCJQ4xA4KulQcJRF9FhhBOo+V3SRrc2po
+         MpMw==
+X-Forwarded-Encrypted: i=1; AJvYcCVnLnm3r1e2/Ce91xIO+E7VyIjTRl3uYpc0xb0eGFfbD7Lz3QxorUt4d5wG+pckfCANf8pZyoW4dhCnsUJ/@vger.kernel.org, AJvYcCWAt8S4F4ktHWktW8qcWXIX3EBGO7zYxGKT99i2XQ2C8XRbxpK8hZpx9rLNcN2z+MQusvw=@vger.kernel.org, AJvYcCX81wLivfd13yTRfihBdUXaQRl3/QO54TvoP+0BWfo7V2OKi/d1yneXKsO7i9kQ0FzwrJX/MpRVXBg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfiwWWR5NRdF2563h/SHUWBOZNca7RGjjtjmXu1dHVLK9dDVd4
+	eylg58bn290O8iRHBGlke9rp6oLqMQWH1VWNevFaKDxOhIHTaYhdnkT6ITox0qqAdjP3ltX71Az
+	5hsH9E2RRJ9Bd2nozJzv5OwQJsc4RyV0=
+X-Gm-Gg: ASbGncv4QKzitpS/XgheL6ygzFH/PuBptT6CVEQLJ/DAbE8cg/L4L2/WBeIgjwj0qnN
+	eoiS8XC5pdtalHU1d+jy8LhblYqCKdFzfY4w6O12W2BATGeVe0GfAvQ2I+8eMnpUnBeLELu/nLY
+	5pkkuIq9tb+C85JUmiMPIiQuRDLvpxVnfG7wrRHysI2zPppIswUoj/TsJiHW0=
+X-Google-Smtp-Source: AGHT+IFzp9wE6ohGX9H5TUuxNuCopVHXZP+q6ExEdlcRvnybkr7qomkVzrU4YPeYA/75XCqu0VoEcg00BbvSowdup2Q=
+X-Received: by 2002:a17:90b:3d06:b0:311:c970:c9ce with SMTP id
+ 98e67ed59e1d1-313d9ea2effmr736404a91.28.1749760099154; Thu, 12 Jun 2025
+ 13:28:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <22744779.EfDdHjke4D@workhorse>
+References: <20250606214840.3165754-1-andrii@kernel.org> <CANiq72kDA3MPpjMzX+LutOoLgKqm9uz8xAT_-iBzhR3pFC+L_Q@mail.gmail.com>
+In-Reply-To: <CANiq72kDA3MPpjMzX+LutOoLgKqm9uz8xAT_-iBzhR3pFC+L_Q@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 12 Jun 2025 13:28:06 -0700
+X-Gm-Features: AX0GCFv2_R1w9AinnKKibx6LjkaQ05xASRlncBw9977J0iGCLXb0a7tS5H8foEE
+Message-ID: <CAEf4BzZDkkjRxp4rL7mMvjEOiwb_jhQLP2Y2YgyUO=O-FksDiQ@mail.gmail.com>
+Subject: Re: [PATCH v2] .gitignore: ignore compile_commands.json globally
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, linux-kernel@vger.kernel.org, masahiroy@kernel.org, 
+	ojeda@kernel.org, nathan@kernel.org, bpf@vger.kernel.org, 
+	kernel-team@meta.com, linux-pm@vger.kernel.org, 
+	Eduard Zingerman <eddyz87@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 12, 2025 at 09:50:12PM +0200, Nicolas Frattaroli wrote:
-> On Thursday, 12 June 2025 21:44:15 Central European Summer Time Jakub Kicinski wrote:
-> > On Thu, 12 Jun 2025 20:56:03 +0200 Nicolas Frattaroli wrote:
-> > > Hardware of various vendors, but very notably Rockchip, often uses
-> > > 32-bit registers where the upper 16-bit half of the register is a
-> > > write-enable mask for the lower half.
-> > 
-> > Please limit the spread of this weirdness to a rockchip or "hiword"
-> > specific header. To a normal reader of bitfield.h these macros will
-> > be equally confusing and useless.
-> > 
-> 
-> That is how this change started out, and then a different maintainer told
-> me that this is a commonly used thing (see: the sunplus patch), and
-> Rockchip just happens to have a lot of these with consistent naming.
+On Sat, Jun 7, 2025 at 2:27=E2=80=AFAM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On Fri, Jun 6, 2025 at 11:48=E2=80=AFPM Andrii Nakryiko <andrii@kernel.or=
+g> wrote:
+> >
+> > compile_commands.json can be used with clangd to enable language server
+> > protocol-based assistance. For kernel itself this can be built with
+> > scripts/gen_compile_commands.py, but other projects (e.g., libbpf, or
+> > BPF selftests) can benefit from their own compilation database file,
+> > which can be generated successfully using external tools, like bear [0]=
+.
+> >
+> > So, instead of adding compile_commands.json to .gitignore in respective
+> > individual projects, let's just ignore it globally anywhere in Linux re=
+po.
+> >
+> > While at it, remove exactly such a local .gitignore rule under
+> > tools/power/cpupower.
+> >
+> >   [0] https://github.com/rizsotto/Bear
+> >
+> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> > Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+>
+> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+>
 
-That other maintainer was me, and the macro is indeed not used by rockchip
-weirdness solely:
+Masahiro,
 
-$ git grep HIWORD | grep -v rockchip | wc -l
-326
+Would you be able to pick this up? Or where should we route this
+through, in your opinion? Thanks!
 
-I don't think that that having HWORD_UPDATE() in bitfield.h is a wrong
-thing. Jakub, if you do, we can just create a new header for it.
-
-Thanks,
-Yury
+> Thanks!
+>
+> Cheers,
+> Miguel
 
