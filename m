@@ -1,194 +1,225 @@
-Return-Path: <linux-pm+bounces-28609-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28610-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB1EDAD7D51
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 23:20:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEBE1AD7DC1
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 23:50:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6945F18986FF
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 21:20:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F6CD3A1A50
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 21:50:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1000B2D4B58;
-	Thu, 12 Jun 2025 21:20:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B10002D8798;
+	Thu, 12 Jun 2025 21:50:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="EaxjjFpJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C8jRJYOS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588BF22DF9A
-	for <linux-pm@vger.kernel.org>; Thu, 12 Jun 2025 21:20:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5952D1AAE17;
+	Thu, 12 Jun 2025 21:50:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749763203; cv=none; b=PKfntVLNYdQdYmg/1lbuY6AnoKY0z9T35V25wzBXpoEZYzbOh0NAOKZaiz1hjPffQsmpy2JrNOsCtmk5yfzeRikVhIg+OxKRPTarSrHwre45qmAG+0/R7bxqCRGhiGh0V1M/+7bqjL83k8Un5a9GesVs0o4fnKVOi9BlknlWxY8=
+	t=1749765028; cv=none; b=BRUvxXSOZ2u3USkiZK5uGpH0nCAPDr2LlMkzRY9s3+T37rvMKXOgdJzDr8CPQgWnCvRWPESzdCBEFGxtTx0xmHyhxpBoEHkUG3ExGm5859G1NjPCoUmgs/lPDnl3imp9AwKqjjFefmHxu6uVRi5G1tcEx8UWdGIN6Y7p0UoY22k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749763203; c=relaxed/simple;
-	bh=H3ogvr7A5eaCLCoobtUF9Y+ndFSfv9DKlh2LHMiNqnc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vhu//2wElMBRnT40QERQVxYY8zv2kAsbxzuenlSuCh26cxC/wcjhJ/G0NYaJlCIhLfHC8jCViv46EGbLPm5Csfk1ulQyBDcswhR1NWxNpMjqha1YWK2I3GtGiV+rLkPbnEDNpb/ETSazEvSN2Jw7scg1VaUoO4zdGlRYL9MQEX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=EaxjjFpJ; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55CIM5e8009041
-	for <linux-pm@vger.kernel.org>; Thu, 12 Jun 2025 21:20:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	3Zmr5+JECjNDrTnuNUMITpmDMpNItBuB/kFf5nbp53s=; b=EaxjjFpJ7wS6WdqT
-	Al1W1Dj40l1WVibjXSMhFBkQf7/kUWFEy7BYQ5Xh1aoIZxivt/1erMUK4pXf9IzK
-	D6GvU6tPk97CzCjDbyjp4RBj9ZR2Q1Hvg6pEjCSoSHTOS3GpK1i0MNQqh6ss9Eg2
-	SsavzA5JlzCtAdLE/i56RtkKXQdF9mkMe7qiHQCpIWSERGU97gZWoXfBPDeAs+Jw
-	GtAZTZSGbvNuZJ46oglDZhV60SoySDp0yIswVG/qv1FuDvK6FXSbAiIjtNYMBxKL
-	RYCYlTJN6LekxjS9R3Ha9R4GwWOjrVcR9JwvsLgw9wJq8Ykq2S9uhRG9dXyOKWIo
-	0C2X8Q==
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47753bws6c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Thu, 12 Jun 2025 21:20:00 +0000 (GMT)
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-313d6d671ffso364991a91.2
-        for <linux-pm@vger.kernel.org>; Thu, 12 Jun 2025 14:20:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749763199; x=1750367999;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Zmr5+JECjNDrTnuNUMITpmDMpNItBuB/kFf5nbp53s=;
-        b=GL65IwnclopGChVkM4Q1hDtasABBOZ3GIH4OzLHnkpH2Nc9PrstYFEf9M4IWEhLG10
-         /znos5ZXXq46kl5E0m6O31yNcJJXsl7ojn0UOVaaiWSfP5J0Io2OUQzQzS242OM2X3RW
-         liO+Yy83ugKOoRCybi646i+b+ce9Z+VfsZwLGFS59Zs2l+50JgoJ736XbOTtM34TqlQv
-         gsicW8cn3+2Z5NGuztOL25Wqr64t4ckNxEITWu5tVETWm9fM4Awye9b7a7msldC4nr9v
-         q0ZbtmXDS98B3FpNqkr+06hI0DR+LM8P2zaaJE4PxRqaClXeXrn1/mr1m7wZWnPU7koi
-         n+SA==
-X-Forwarded-Encrypted: i=1; AJvYcCW8EnKOTdV+bD3ygKClxJWyWzKfsIOoosV1V7dmSQROBxOZbAZW5FTD9osY857jeR8W+3z/dAmpGw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpfX4MSJO+m3zFRVCh0EvoAEUQcRwuaF6B3r2CGVyHagSaO1iI
-	m4p+6odIRYYXqbaxPN09B3uww4IDRxeD4kq3cRAyzU8MfIZ9cW0MmfDgP+cyzQUDJ4tJHFUMKpG
-	TKTDZd8ji6j8+m/HeDgNiWLMEWX90LdrB9EeyDmLx3wc24jxQzJ9HJgJww4CnLg==
-X-Gm-Gg: ASbGnct7iqG+UhKR/rQ+3h26MjXYXLiFlMqlAI3yEzbY2ly6DvZl8Zf42Wh7RqKAyih
-	5NWqCS5FJw++ODWZ8z/CEM9sCLnQxgt4Hc2KQMFLVqZKtIFytweuPxOgNZRNuRYB7PGRRiU3UBO
-	zTMqbIkxitRZgADZ/zXZUcK7mgMb8xA/Sn6kVx61sVpeI2P6SVnjw82dCnwmaSfUV+yspnuzVA9
-	EUKCqa7DpZrLn8voBmUQpvQJpL2EltKUP6hkx01BPdmbdPQrx7qsOFOFQQJ/DvWy61trHawSxHK
-	BGAS1uD5xSd4NjDe8a73dTue+ygHtXKpz7wBNIJVGg==
-X-Received: by 2002:a17:90b:1843:b0:30e:712e:5739 with SMTP id 98e67ed59e1d1-313d9d71383mr1065535a91.14.1749763198846;
-        Thu, 12 Jun 2025 14:19:58 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFcEB2oQFFgVMym1bB2VUhhziP7lQFCJfNjFpbKCnIdWSG44vwJc/VtPEHqnpJDg2SoasT6AQ==
-X-Received: by 2002:a17:90b:1843:b0:30e:712e:5739 with SMTP id 98e67ed59e1d1-313d9d71383mr1065512a91.14.1749763198422;
-        Thu, 12 Jun 2025 14:19:58 -0700 (PDT)
-Received: from [192.168.1.8] ([106.222.228.17])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-313c1b5a882sm1990932a91.40.2025.06.12.14.19.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jun 2025 14:19:57 -0700 (PDT)
-Message-ID: <036e739c-54e4-4252-b6f0-c8eed5557d15@oss.qualcomm.com>
-Date: Fri, 13 Jun 2025 02:49:48 +0530
+	s=arc-20240116; t=1749765028; c=relaxed/simple;
+	bh=/raPSIZSWZZj4n+fwc8niF30vvTlX7BXAu0879ygFwg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KNEjxSyrdcB4IL2TcllDCUcoLfl6194g82Ajpe8A1cE5wXTONXjmdavEfRjY/iSkv5vjcG0ixczWlOf/n+QsGQ9O0EEKYSvAOdZ8gvGuNHiRpgHRczwthybV+eINqx3olpaEhQtE8WUaObe2dsmiU+QdDFb+b4XLm67W3ztBgC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C8jRJYOS; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749765026; x=1781301026;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/raPSIZSWZZj4n+fwc8niF30vvTlX7BXAu0879ygFwg=;
+  b=C8jRJYOSoI1RcF6CfgBZGvGgw4fiDgKiEeHG2my7ivx20kGJoLCaYeaN
+   79RYQzhf3AULZuQFk0EHpVl8Mityo1VJ1KBpzptGkcU3em2Tcb47x6GGg
+   QKpATvIsIip00r/uzBtuJGiR0j0gDRj3T/VoPpKvgRC4fHb3xTpXQ/9SJ
+   Gb3wyll3vs1OUEMbNOIo1QrFvLC0PeHvezNonnsrE1SCq8upMqYI1lGXO
+   S9pjaOreC9gmeFoIUfOmZvo6g+++qnY+Y/HLa1xbcpEO/JwvGdIJi5s/L
+   8vz2/ubyUhgGMfskVVuIUQb/St8jXnuXGQJzJ1NdRE4d06/CVChB5pE7+
+   Q==;
+X-CSE-ConnectionGUID: KO9Tb3+tQH+6nIn0/+YtwA==
+X-CSE-MsgGUID: Ee9q89g+SySxyyS+qWyxvQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11462"; a="52065282"
+X-IronPort-AV: E=Sophos;i="6.16,231,1744095600"; 
+   d="scan'208";a="52065282"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2025 14:50:25 -0700
+X-CSE-ConnectionGUID: uNxYaw0STgevhIIGnpvmjA==
+X-CSE-MsgGUID: OHAXHIIIRlqcKT46b9Xztw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,231,1744095600"; 
+   d="scan'208";a="184881931"
+Received: from sohilmeh.sc.intel.com ([172.25.103.65])
+  by orviesa001.jf.intel.com with ESMTP; 12 Jun 2025 14:50:24 -0700
+From: Sohil Mehta <sohil.mehta@intel.com>
+To: x86@kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Xin Li <xin@zytor.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Tony Luck <tony.luck@intel.com>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Sohil Mehta <sohil.mehta@intel.com>,
+	Andrew Cooper <andrew.cooper3@citrix.com>,
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Andi Kleen <ak@linux.intel.com>,
+	Kai Huang <kai.huang@intel.com>,
+	Sandipan Das <sandipan.das@amd.com>,
+	linux-perf-users@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: [PATCH v7 00/10] x86: Add support for NMI-source reporting with FRED
+Date: Thu, 12 Jun 2025 14:48:39 -0700
+Message-ID: <20250612214849.3950094-1-sohil.mehta@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/4] Support for Adreno X1-45 GPU
-To: Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Rob Clark <robin.clark@oss.qualcomm.com>, Sean Paul <sean@poorly.run>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Dmitry Baryshkov <lumag@kernel.org>,
-        Abhinav Kumar <abhinav.kumar@linux.dev>,
-        Jessica Zhang <jessica.zhang@oss.qualcomm.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-References: <20250611-x1p-adreno-v2-0-5074907bebbd@oss.qualcomm.com>
- <0e6fd97d-9a56-426b-8b98-dc8aa50d02d2@oldschoolsolutions.biz>
-From: Akhil P Oommen <akhilpo@oss.qualcomm.com>
-Content-Language: en-US
-In-Reply-To: <0e6fd97d-9a56-426b-8b98-dc8aa50d02d2@oldschoolsolutions.biz>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjEyMDE2NCBTYWx0ZWRfXz6gTz+snIPFR
- ZG8gnHmkP6lTn5yzX+ABI69/2s8FVRlvF1nxvPKr6oxqmtJ4YGcD0ZVqEPuhPTCWv8Ep6ckxNH/
- ejs6iqS1Oha25InkQ0woruYRZowwfMtKhY027g9TQxL+yfZI3er6G8+zkN7DEGiBZCuc2kxn87I
- 1tRqdTYvjBVJnmEQQpD8TcjjqSOsSFkhprIhAfUGoQmF0xW9a/gMc87hEbJNIM2LJrIqwBCxFKJ
- RGLQBG8N4yzXfKyDEICnYkhjsfolidcUHH7peg3AkIlgyMod7nB+gE4nElRwEfuCSGKNoCJNHZq
- pUFt/3N9Da+EHXqTxLVn7SVlTXJxjHArL+17A8kPkSOf6+cMqYWOZjlb9b/3TEYcblUBuyZQlTu
- cgUfmieghjhkc7HkB571LMmsmjzdN9WjggqaQQUenYP4gEMuajeS3Yq4ILgqw4vL+PuLYVgi
-X-Proofpoint-GUID: jwbcr01WecWHnBmzfh1MfPua_eWQnDm4
-X-Proofpoint-ORIG-GUID: jwbcr01WecWHnBmzfh1MfPua_eWQnDm4
-X-Authority-Analysis: v=2.4 cv=SqOQ6OO0 c=1 sm=1 tr=0 ts=684b4480 cx=c_pps
- a=UNFcQwm+pnOIJct1K4W+Mw==:117 a=8TKXt+tWyFtBY9WE4KDEmA==:17
- a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=uKUkM4gl_lyc4tR08vMA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=uKXjsCUrEbL0IQVhDsJ9:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-12_10,2025-06-12_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 mlxscore=0 mlxlogscore=999 bulkscore=0 impostorscore=0
- spamscore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0 suspectscore=0
- clxscore=1015 malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506120164
 
-On 6/12/2025 5:32 PM, Jens Glathe wrote:
-> On 6/11/25 13:15, Akhil P Oommen wrote:
-> 
->> Add support for X1-45 GPU found in X1P41200 chipset (8 cpu core
->> version). X1-45 is a smaller version of X1-85 with lower core count and
->> smaller memories. From UMD perspective, this is similar to "FD735"
->> present in Mesa.
->>
-> Hi Akhil,
-> 
-> when loading the driver (still without firmware files) I'm getting a
-> speedbin warning:
-> 
-> [    3.318341] adreno 3d00000.gpu: [drm:a6xx_gpu_init [msm]] *ERROR*
-> missing support for speed-bin: 233. Some OPPs may not be supported by
-> hardware
-> 
-> I've seen that there is a table for speed bins, this one is not there.
-> Tested on a Lenovo ThinkBook 16 G7 QOY.
+Changes since v6
+================
+This series is a minor update from v6, with the following changes:
 
-Hi Jens,
+ * Includes a pre-patch to provide separate KVM IRQ and NMI entry
+   wrappers for FRED (Sean).
+ * Uses an enum to allocate NMI-source vectors (DaveH).
+ * Picks up review tags from Xin.
+ * Rebased on top of 6.16-rc1.
 
-Could you please try the below patch?
+The patchset seems to be maturing, so while reviewing this version, please 
+consider providing Acks and Review tags if the patches look okay.
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_catalog.c
-b/drivers/gpu/drm/msm/adreno/a6xx_catalog.c
-index 2db748ce7df5..7748f92919b8 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_catalog.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_catalog.c
-@@ -1510,7 +1510,8 @@ static const struct adreno_info a7xx_gpus[] = {
-                        { 0,   0 },
-                        { 294, 1 },
-                        { 263, 2 },
--                       { 141, 3 },
-+                       { 233, 3 },
-+                       { 141, 4 },
-                ),
-        }
- };
+v6: https://lore.kernel.org/lkml/20250513203803.2636561-1-sohil.mehta@intel.com/
 
-With this, you should see 1107Mhz as the GPU Fmax.
+Background
+==========
+NMI-source reporting with FRED [1] provides a new mechanism for
+identifying the source of NMIs. As part of the FRED event delivery
+framework, a 16-bit vector bitmap is provided that identifies one or
+more sources that caused the NMI.
 
--Akhil.
+Using the source bitmap, the kernel can precisely run the relevant NMI
+handlers instead of polling the entire NMI handler list. Additionally,
+the source information would be invaluable for debugging misbehaving
+handlers and unknown NMIs.
 
-> 
-> with best regards
-> 
-> Jens
-> 
+Overview of NMI-source usage
+============================
+Code snippets:
+
+// Allocate a static source vector at compile time
+#define NMIS_VECTOR_TEST	1
+
+// Register an NMI handler with the vector
+register_nmi_handler(NMI_LOCAL, test_handler, 0, "nmi_test", NMIS_VECTOR_TEST);
+
+// Generate an NMI with the source vector using NMI encoded delivery
+__apic_send_IPI_mask(cpumask, APIC_DM_NMI | NMIS_VECTOR_TEST);
+
+// Handle an NMI with or without the source information (oversimplified)
+source_bitmap = fred_event_data(regs);
+if (!source_bitmap || (source_bitmap & BIT(NMIS_VECTOR_TEST)))
+	test_handler();
+
+// Unregister handler along with the vector
+unregister_nmi_handler(NMI_LOCAL, "nmi_test");
+
+Patch structure
+===============
+Patch 1-3: Prepare FRED/KVM and enumerate NMI-source reporting
+Patch 4-6: Register and handle NMI-source vectors 
+Patch 7-9: APIC changes to generate NMIs with vectors
+Patch  10: Improve debug print with NMI-source information
+
+Many thanks to Sean Christopherson, Xin Li, H. Peter Anvin, Andi Kleen,
+Tony Luck, Kan Liang, Jacob Pan Jun, Zeng Guang, Peter Zijlstra,
+Sandipan Das, Steven Rostedt, Dave Hansen and others for their
+contributions, reviews and feedback.
+
+Future work
+===========
+I am considering a few additional changes related to debugging and
+tracing, as well as KVM support, that would be valuable for enhancing
+NMI handling in the kernel.
+
+Refer the v6 cover letter for more details:
+v6: https://lore.kernel.org/lkml/20250513203803.2636561-1-sohil.mehta@intel.com/
+
+Links
+=====
+[1]: Chapter 9, https://www.intel.com/content/www/us/en/content-details/819481/flexible-return-and-event-delivery-fred-specification.html
+
+Jacob Pan (1):
+  perf/x86: Enable NMI-source reporting for perfmon
+
+Sean Christopherson (1):
+  x86/fred: Provide separate IRQ vs. NMI wrappers for entry from KVM
+
+Sohil Mehta (8):
+  x86/fred: Pass event data to the NMI entry point from KVM
+  x86/cpufeatures: Add the CPUID feature bit for NMI-source reporting
+  x86/nmi: Extend the registration interface to include the NMI-source
+    vector
+  x86/nmi: Assign and register NMI-source vectors
+  x86/nmi: Add support to handle NMIs with source information
+  x86/nmi: Prepare for the new NMI-source vector encoding
+  x86/nmi: Enable NMI-source for IPIs delivered as NMIs
+  x86/nmi: Print source information with the unknown NMI console message
+
+ arch/x86/entry/entry_64_fred.S      |  2 +-
+ arch/x86/events/amd/ibs.c           |  2 +-
+ arch/x86/events/core.c              |  6 +--
+ arch/x86/events/intel/core.c        |  6 +--
+ arch/x86/include/asm/apic.h         | 39 ++++++++++++++++++
+ arch/x86/include/asm/apicdef.h      |  2 +-
+ arch/x86/include/asm/cpufeatures.h  |  1 +
+ arch/x86/include/asm/fred.h         | 35 +++++++++++-----
+ arch/x86/include/asm/nmi.h          | 62 ++++++++++++++++++++++++++++-
+ arch/x86/kernel/apic/hw_nmi.c       |  5 +--
+ arch/x86/kernel/apic/ipi.c          |  4 +-
+ arch/x86/kernel/apic/local.h        | 24 ++++++-----
+ arch/x86/kernel/cpu/cpuid-deps.c    |  1 +
+ arch/x86/kernel/cpu/mce/inject.c    |  4 +-
+ arch/x86/kernel/cpu/mshyperv.c      |  2 +-
+ arch/x86/kernel/kgdb.c              |  8 ++--
+ arch/x86/kernel/kvm.c               |  9 +----
+ arch/x86/kernel/nmi.c               | 40 +++++++++++++++++++
+ arch/x86/kernel/nmi_selftest.c      |  8 ++--
+ arch/x86/kernel/smp.c               |  6 +--
+ arch/x86/kvm/vmx/vmx.c              |  4 +-
+ arch/x86/platform/uv/uv_nmi.c       |  4 +-
+ drivers/acpi/apei/ghes.c            |  2 +-
+ drivers/char/ipmi/ipmi_watchdog.c   |  3 +-
+ drivers/edac/igen6_edac.c           |  3 +-
+ drivers/thermal/intel/therm_throt.c |  2 +-
+ drivers/watchdog/hpwdt.c            |  6 +--
+ 27 files changed, 218 insertions(+), 72 deletions(-)
+
+
+base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+-- 
+2.43.0
 
 
