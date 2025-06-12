@@ -1,123 +1,138 @@
-Return-Path: <linux-pm+bounces-28541-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28542-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CE65AD6F95
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 13:55:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35859AD6FA9
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 14:03:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE5D93A4415
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 11:55:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27C84189F591
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 12:03:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA86522A4DB;
-	Thu, 12 Jun 2025 11:55:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E8861D95B3;
+	Thu, 12 Jun 2025 12:03:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gMq06Whv"
+	dkim=pass (2048-bit key) header.d=oldschoolsolutions.biz header.i=jens.glathe@oldschoolsolutions.biz header.b="hq88WZBS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635AA223714;
-	Thu, 12 Jun 2025 11:55:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7CA12F430B;
+	Thu, 12 Jun 2025 12:02:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749729347; cv=none; b=WtdxiPikveMbdTv6ZYXvn0SVIifx91ptKUq8GPj3FwSdfh21vhl7MrI5YWvxjirM0Ah+3/x6UOZCoMp36iGMe93sU7hSSh2BcWtwxBTC8aUx+6gGUqnIqzTqmsw6DltIHxrAtlnXRLhTOjVMmqPzX3naKQCwDi+3jnRo8MbtKRI=
+	t=1749729781; cv=none; b=IC79KAvZyGQ0SAa8VIOpq+5mFZMgy848AjZrWHwrmp3g522obzzItIQkJoEcpR5KYothjYsRkSvMdlY1TCA6t/KgjqAKTEb/P+QkkIxiKDFsiorsS7CFdKkHbtrxGXaGhbeEbm7CF1rRN26qrQR70RUDCcbCbS3rUmmQi03nwmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749729347; c=relaxed/simple;
-	bh=4jtY07w7CqFvyQ56olcIlj5IIKBtW9w+utsjhz0iD20=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=B3ORfa/8GqvTdukXQtDiujjKr1lFoFEMyi0pkqy2LAUMtgQaWRVijp1X2Cmv9juX3KUijlzOCkl5TxXm6DiughSN7VlQPSOxviv7eW7bw5ElPO2Lwd0XinURtl9miw4cR3KyMOXW8Ix4nBrI7wc7gwoZxHj1m4n9qknz1dWlDTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gMq06Whv; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-313862d48e7so183975a91.1;
-        Thu, 12 Jun 2025 04:55:46 -0700 (PDT)
+	s=arc-20240116; t=1749729781; c=relaxed/simple;
+	bh=9TF4TS7HJTGPNOkFIxQGNmmFmjlfd1e/5O/TAB6Zj10=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VpVG+MZtZjn579ai1wOHdreJNvaTYlAH1dRBSOordtg6QUhFhi2MTdIakr6aknRfnaWjITr1Shrn3oa6vruY6AnAi1rAd7XW3XfWHm0EnTPZ7I1AHTbPdGG2uVTWevuo52lZR9Ym0cTI6DLujFEYhAZ0tWM68yq0Hv4nwNYOXrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldschoolsolutions.biz; spf=pass smtp.mailfrom=oldschoolsolutions.biz; dkim=pass (2048-bit key) header.d=oldschoolsolutions.biz header.i=jens.glathe@oldschoolsolutions.biz header.b=hq88WZBS; arc=none smtp.client-ip=217.72.192.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldschoolsolutions.biz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oldschoolsolutions.biz
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749729345; x=1750334145; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4jtY07w7CqFvyQ56olcIlj5IIKBtW9w+utsjhz0iD20=;
-        b=gMq06WhvqBmjUOVzeuG5Uch1oZbhY/lGNhQb2A55bim0lPQ/++niP3dMxxTD0laruL
-         lIOVSdBjYC5AQFgIMlwl0P3/KJckdsOEYoAMDt61mOl3CGnrptI9SXnaWa5fxFce7ayQ
-         vR9QYiwlkb3/E2mD9Nnh5x7pxAmPVs3gd4/r4qjbTTFCSPCCv25XouZZoUx4Gr06KoCt
-         4VJ2CrorWzhwm2NjSFmxY5WIbFFwm6ZdGVR2gYD7t3MtCJrKBIjykg44jgQJ6CfXbkCv
-         O2UJFj9bZvHAHTDKXczV506IYA4mzXM/PsVaBNotdVFzVYLVysiXM7O0+osJX2cpr+oY
-         KxXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749729345; x=1750334145;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4jtY07w7CqFvyQ56olcIlj5IIKBtW9w+utsjhz0iD20=;
-        b=aaguHzHb+d8J4t0HmcUFsiokQPlGoGs9nWeJ6DKVvFa7uMQkMa1E45XaRNYbcvsgKC
-         pOARbXx9YLbw2j32AR6K8aEjj2R52Ko1EDFLJTrSQTkfILYgcRkkj75biYRBsKZBl6Jr
-         W7lzHWoWmyKUUwoUoZ3eJTQ+OlPTs+wAEKe5NifMlrxzsgaw92tsnQWnkJ0AOB4EHeMN
-         /87ylzUd6qJZilm4ud0QX0jz4Bf99gDgGUosSl6Xo6L5X+dqpMoKnl9ccaP2L1yRUeMb
-         NDz9aD/ZG7weY7jNR7S+tqmAcXms7M0HFl6fe7hdp7KSdS8l/bV3LS7sLb2tnjn/5XGG
-         787A==
-X-Forwarded-Encrypted: i=1; AJvYcCUQY37KHtJsWvscMz8aWD7yZiZ2uGOqGzdj4ZomctYEw0n6zfNNf/EtWize/YGVF2Sna3/8dvxTk+IaYCk=@vger.kernel.org, AJvYcCW06noeF9iSG12p1h0H7zMxOMZTf3o87kOOWrDkFc7Ykd/yeaMtS8i4iu7wjBfng4D1Ft0pdNJolIwludawXRI=@vger.kernel.org, AJvYcCWxLEr10fmmssCF1LC6H9qiLVlR5VuzOBmDCnbtrFRq17g0y0hCmkA+g6s9Xo2AeUDwO4rsmNNoyFo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YznrlaG8baGNx0Go4xbJy1aZWJ6bSgOjzdlfym9L01lieL5HBFD
-	d4TZt57DRrlYVYNCkyB6R6Pw0yjP7GUDzlMnPVeD5ylr9Ofn7pCW5eXD8eWcD84Fn4LLvwk84Az
-	8DEnVXA6TcYufdQEOBQWh8EcvQZ/BhCg=
-X-Gm-Gg: ASbGncvriy/odplBUJB7T2SKXbvzGiy0WhSBuZioM+unZWdqK3EuE2hp5WMtYW194zL
-	mnXVgY4/FFis8zzwcWR1lvcS8pBzaMvaMsvI1qebsQU50AWqwTg3ra8qHFERTbeYKK5nn/UE8CE
-	PcFh9GpCTvQAPh8WhynJb29wn3ImPd++y6JxIRSowSD2g=
-X-Google-Smtp-Source: AGHT+IHEVUQMd5qwB7n+n3wg9nXXrJmm7nQXn3OMFP07d2fU6W8OIt3bUE1929Z0dsVTCWQaSa7HsRf0tlSUrkLwgeQ=
-X-Received: by 2002:a17:90b:3dc8:b0:313:2bfc:94c with SMTP id
- 98e67ed59e1d1-313af225ec2mr3693734a91.8.1749729345602; Thu, 12 Jun 2025
- 04:55:45 -0700 (PDT)
+	d=oldschoolsolutions.biz; s=s1-ionos; t=1749729771; x=1750334571;
+	i=jens.glathe@oldschoolsolutions.biz;
+	bh=9TF4TS7HJTGPNOkFIxQGNmmFmjlfd1e/5O/TAB6Zj10=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=hq88WZBS/UZk1CLqJ5Y4whdiepavhaheE0DTj4N4enSKSJdgOwD+GJYaadckRVAg
+	 tH7sdODyk/6WnQDGA4UQiRPA5SKO8Af1vUDluLzz6r9SB5aETlnfVYDtlTy7Qp7wA
+	 UfT050iwsWJQuo+DwgtWo5awDbUTcfyFjoL2JS7m49bcrbzMPzgrY9MRNPWO/SY0D
+	 0iiDSI7upSlLysms9LbaWXg4P7LXeJb284oldpPzGIUb53F/Cm9vE1wf4RVJHBh0V
+	 ZsJOGf5zSuo0r3KjnWwr2UNTfvI8aeMS684Pxd137VnC4yMI+DEII0DzZ2rDYk3dF
+	 PwHJ1i/8xmlqoszmgw==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from [192.168.0.192] ([91.64.235.193]) by mrelayeu.kundenserver.de
+ (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MY6TD-1uKSMI1X8H-00LaH9; Thu, 12 Jun 2025 14:02:51 +0200
+Message-ID: <0e6fd97d-9a56-426b-8b98-dc8aa50d02d2@oldschoolsolutions.biz>
+Date: Thu, 12 Jun 2025 14:02:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250612104127.10299-1-abhinav.ogl@gmail.com>
-In-Reply-To: <20250612104127.10299-1-abhinav.ogl@gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 12 Jun 2025 13:55:32 +0200
-X-Gm-Features: AX0GCFsJ9kBJogYuSgvtqrfjdhpbq3ylYegjcsDPR1Ya_6A-iLyk-dlUDxHTZLA
-Message-ID: <CANiq72=8rHB0bU0yUf_tkVG4LzGMUmLVrZHHn6VU584_JJ_obQ@mail.gmail.com>
-Subject: Re: [PATCH v2] rust : Update the bios_limit_callback to use the C FFI
- types #1170
-To: Abhinav Ananthu <abhinav.ogl@gmail.com>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, linux-pm@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/4] Support for Adreno X1-45 GPU
+To: Akhil P Oommen <akhilpo@oss.qualcomm.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Rob Clark <robin.clark@oss.qualcomm.com>, Sean Paul <sean@poorly.run>,
+ Konrad Dybcio <konradybcio@kernel.org>, Dmitry Baryshkov <lumag@kernel.org>,
+ Abhinav Kumar <abhinav.kumar@linux.dev>,
+ Jessica Zhang <jessica.zhang@oss.qualcomm.com>,
+ Marijn Suijten <marijn.suijten@somainline.org>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
+ Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+ linux-pm@vger.kernel.org, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+References: <20250611-x1p-adreno-v2-0-5074907bebbd@oss.qualcomm.com>
+Content-Language: en-US
+From: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+In-Reply-To: <20250611-x1p-adreno-v2-0-5074907bebbd@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:PA710ORLSCeaHxN8hFzgvAQEIwCwCDgAqOPxruFizn/AlMGjSUW
+ 85uyv+NKj8CJmTO0sQnvMTIrZKQ6go/mQ+6xlAatX56T7sbfoY9mrlGxuK9GqULgAmnaFnI
+ SRZ9HjMKSXySd+iYIlVnC8F/m6mNicG0sb5pyedZWjPtYWzcuTS7566I4WNuxQLOEyqK+x9
+ Bh/Uz2SCZsJOfkrhXHa1g==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:L1EqaybFqPc=;SH5yWekgKGHaAg1DHQsy+EzoiJq
+ Fl33glttMNku1XZ3PTQbtb1rmTcDXbw/vl6qSCG/34IBmm/DS8vKdIccBDVBP8bvI/DqmMJez
+ 6byvoL6GFFNM1CzDtjKWZABX9NJ4LnQbkIpGuj1Y/Z6MN9X3klsIW2zF8chmAuuQdzLNN0pqA
+ PoqPsBYemVKVNhE3XnbyZCuHtha/Q0gfKOyhl5icS1r70P47mUuNWR4cfk9LEjrRm//zd/8cY
+ WzQ5F792ABH62d95D1KWBO8AjRUshhpAHKvH4ThW7NJ60XhXuPnqMZeyRmeOusx+NBn2FpgxF
+ J0yLdMiIMLTAk41h1Dlhg7zy4o6gjT9jsegg9l9k5X9Bi0hTsjtQiRJFTnY6Id4dmxT5GlMEq
+ RenJBljZbzGPcA/rFtr0cukkKmtA8osWr+fsey1+lXU8LCSXGwi+dATMTpW7JnR0ingmsdM+Z
+ YKUjVso7pM+kd4zpmNR2Q3JPozM3VMR0ZDH+t/STUVNeiFgCDYUaPmHczxPJTpBRdpBKLehhR
+ SOySjY8o/cs8vTG0PQnUjCgO6NdHRt81X0Vq9/2gcoRAxjBfhQuV0cHJ+Kx0fTpsY8ubz1ul/
+ myEmfKl1BwJ0nnK636uqKlkh2pVOgN6i3lZv2UbRmtjtIAJ6IMiXQ969R+AGuuyIQ8UxH6sxt
+ FZigztwQCqqYwZGlABZzY7ZGb8sXiHw+CRSHq7Tf2ddwl8rz4H+ALxOBNFuYtWo6Q30NT0RTs
+ gfW8TXxhGDGay92JfTOmmaePFtXJXKmhHUytOWrvwfmJoA5/qvqFXkwfm9hsZCAyLMW6Rr5Nv
+ Dup8v0DVyMrM9CjYr4zCsEarLgGkTGOAF2BPED53kmP5iQBCPKoYLz72NlKRgyNfdUyWDNy2K
+ dTtdW7K8AYxt4ZhH6eSVWHQsBd5pfUy/svx8mJJtnNhTKhNsJLu2+Wfr+PASg7eIRHHtH6T/I
+ b5Qsn35pG1HRk11oxA8Rzvhwb4SgPmuJN4SRzV1JNj6roLIRwB55utfAiGpMdIZRTHr0aMd2q
+ tzMaB2gTpJt/8iT3lypRZuSrQPxIe7Bl/tGWiqwNJiwZ+IvsYb3DhRyx1PyWON/xc8OdnGgcj
+ K/9WeZoUvksWB2cXT2ppehye2Ng5A+QwmgTeKoHp4meAOiNN7ZSSndmchBFGVrYA503WOpm0f
+ LDurQ1mJ9EQVTQJOMtYM9kqpDTt0rhwRxzYGgkkOygitExSsr6C1TVGcAf3Vesk4tG+6Ctkvw
+ PPtbXm1kMH5pmSk86Ek+TqY9T93192Ci7WQ5rE/vF4qmA3DhitQJDGZn+Hyxtx4b4Qn0+aOUx
+ 4vBkLmiZxmrdt2llTj0c44+bd707cNzq/WJQNEfhJ5RhEeHG0fNTFv9106zHmCODAl2l44zqX
+ v/xI4aoMh/F4Yb/2uTgcBijj7AMpCZ+9s8g7pkk0Dn81sYe3pNcjsb+Ix/t+fed23Qp+bv82f
+ KOWpJFA==
 
-On Thu, Jun 12, 2025 at 12:42=E2=80=AFPM Abhinav Ananthu <abhinav.ogl@gmail=
-.com> wrote:
+On 6/11/25 13:15, Akhil P Oommen wrote:
+
+> Add support for X1-45 GPU found in X1P41200 chipset (8 cpu core
+> version). X1-45 is a smaller version of X1-85 with lower core count and
+> smaller memories. From UMD perspective, this is similar to "FD735"
+> present in Mesa.
 >
-> This change ensures the Rust function signature exactly matches its expec=
-ted
-> C counterpart, avoiding potential issues with type mismatches in the FFI
-> boundary.
+Hi Akhil,
 
-I think this is more of a cleanup, since the types will be the same
-anyway, which is why I suggested using "Suggested-by" and "Link"
-instead:
+when loading the driver (still without firmware files) I'm getting a=20
+speedbin warning:
 
-Suggested-by: Miguel Ojeda <ojeda@kernel.org>
-Link: https://github.com/Rust-for-Linux/linux/issues/1170
+[=C2=A0=C2=A0=C2=A0 3.318341] adreno 3d00000.gpu: [drm:a6xx_gpu_init [msm]=
+] *ERROR*=20
+missing support for speed-bin: 233. Some OPPs may not be supported by=20
+hardware
 
-The title is still not correct (misses "cpufreq: ") and it is very
-rare to have issue IDs in the title ("#1170").
+I've seen that there is a table for speed bins, this one is not there.=20
+Tested on a Lenovo ThinkBook 16 G7 QOY.
 
-But there is no need to send a new version just for this -- the
-maintainers may want to fix it on apply, so please wait to see what
-they say.
+with best regards
 
-Thanks!
+Jens
 
-Cheers,
-Miguel
 
