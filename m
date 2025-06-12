@@ -1,183 +1,134 @@
-Return-Path: <linux-pm+bounces-28534-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28535-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5655AD6DD6
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 12:33:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C53D7AD6E19
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 12:44:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D48418908A3
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 10:31:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A16A2189B996
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 10:43:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30EFA23371F;
-	Thu, 12 Jun 2025 10:31:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B746E23E235;
+	Thu, 12 Jun 2025 10:42:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OnYAvcr5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B1522DF95;
-	Thu, 12 Jun 2025 10:31:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EA3523C8D5;
+	Thu, 12 Jun 2025 10:42:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749724268; cv=none; b=BX7OGBK3xLNgKUCfPPXqWTCtweNhkLwVBH1S6OJyr4noIjX1M+/Hjf/bZdtwHfsTQT95JQXyfzzfVIqOAktU8xiat83YkbEo4FV0yqJBtHnqTfTfkGbtgrM2Weqv+XO8I8ZXuwQeAnGktJVwZxpo+6m5HR3WrH2mXOJoVcdCgrI=
+	t=1749724939; cv=none; b=GcXHvL6Pal9Z2qCaAUrlZZwY3nXFo0yPKyf9Hnyz8VI46ynkKHINShrBaTAY6XMxG2aCNpfbk7NBUfnNiajV6QLaaR2IjWfqMWOeFa9Hy/EMdax3KRXygCfzhyfYm54q2dVsmrYsYr9IFc7bf0Qz/nfwR5Bhh1O01qbKaPpGuDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749724268; c=relaxed/simple;
-	bh=TbqSp7G1dTO/lGn9z7FA7XGh/pw6w/fZljlWQsM6/2w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ioEzpiXv6AuS3T/0uYrxbtLUc/Mcp4wjI3Z7zDyyVxrzou9TecW8g4VrR4t7iSo0MLKIu2DgG1/WivjPQ7h4UDFOFdOl9OzBXCBKJHAvoN6xxsmhwVnD8yqoLHOsKZs9NRouJji37BhlZM7/HC8OUKgjrIU2MZacn6bCwdVh4YY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 912B11424;
-	Thu, 12 Jun 2025 03:30:45 -0700 (PDT)
-Received: from pluto (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 18DDD3F59E;
-	Thu, 12 Jun 2025 03:31:03 -0700 (PDT)
-Date: Thu, 12 Jun 2025 11:31:01 +0100
-From: Cristian Marussi <cristian.marussi@arm.com>
-To: Peng Fan <peng.fan@oss.nxp.com>
-Cc: Cristian Marussi <cristian.marussi@arm.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>, arm-scmi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 0/3] firmware: arm_scmi: perf/cpufreq: Enable
- notification only if supported by platform
-Message-ID: <aEqsZWSlq9wKv10a@pluto>
-References: <20250611-scmi-perf-v1-0-df2b548ba77c@nxp.com>
- <20250611-cherubic-solemn-toucanet-aac5af@sudeepholla>
- <aEmFnJVG8lXTDNmO@pluto>
- <20250612034351.GA7552@nxa18884-linux>
+	s=arc-20240116; t=1749724939; c=relaxed/simple;
+	bh=oFVhBP/YL0n9/tCf5ttdVuifzE71UiLOJVEiL84VSXw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=b3kS1nrrj2zz58MfT/QHmgbgfp1QwiuBLdHtm97JgsHLr19oV08bzW+g+0thEGkXETC4+qlcAR5uNAttK6GW0r02DQI8wFHDeaYQCs1YNnUfc0+KjGpYibcJPjh99ryrQWwNtfnU7cVGsZmR/Ys+ZBVnGDHa6ue/x1CZLKLLQUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OnYAvcr5; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-23649faf69fso7538135ad.0;
+        Thu, 12 Jun 2025 03:42:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749724936; x=1750329736; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GybQZWZoCD/mNp4Fv4oNQX2ZSbaSeKZ922lZ4/MEtpA=;
+        b=OnYAvcr5Xf5dXA3uUW0Vg9SVoa9cVGBZPQstWPBGyyF5863OlXakqSOrcFDQ3Dt+Sl
+         Atb7thj2KgHpg3TApuJ4A0U2RZuchIp06tgrd97ztMIZfm62/qRV+9zDA873Ua/7GGtX
+         LcZ8wm8+I84qH2fHHFUPT88BwFDgte31+4JO+a33iWOTjv6Eirsa+KCeYx9O7P5gxtkJ
+         57gE8DmD+hAXqhFr1OfLwPzRZYzvcVDAt4p5svwvOSyTkvMZv1D61eqM01jjRKGsYw6i
+         zcyZ3vTjZjY8ugNTe9+Jc7lxlPi7wzScJKMtfv2Gi3BbDtDbVh2DncWoj5XGPVwMv3MR
+         XQXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749724936; x=1750329736;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GybQZWZoCD/mNp4Fv4oNQX2ZSbaSeKZ922lZ4/MEtpA=;
+        b=WCAj8PcoMEGicr7UuxCx+4CyPGy34IkdFLBHnqYOo2jkeft+5eR3Su/ktnPJEtRAiD
+         n4etWJ9ORiZM1Z7KpMWSsupjALkcziRwbJwKG5yv4KLseUSlwY/2g4mgw+gqrdtBOJAW
+         7AiiFARIv+i5T928CvKORPpvSRq1LqJ4hWnbHvRT9JN1NsJXiUQ2OzqRkItOcY7qIzMf
+         UZQ7lpMFRAAfDmL0LjbFNl+N7/zyu39/TcDA7bzAU9u1nvd99eFzSryXoBTwN965Vz10
+         gEdYsCgNurj94za3MW81sBsJ6xFRp47pI/t7niSpKwiejQ2A2FdnVjExaEV9lAvI5qkj
+         A+jw==
+X-Forwarded-Encrypted: i=1; AJvYcCUShPqibipuIZ+tnnhevPS2Tyu/7Yx5iOi81pyVdcCOavB8w2UGiMxwb9X24mRTEBjXANO1GqNyoI841Ok=@vger.kernel.org, AJvYcCWjkI3ef0EK3CZ6uSEB2sDipQm+GhK3RpV4n2jm3Leva6U1QOkPzACMR9+0RBC9X1wOrG5XbtRQ6Xk=@vger.kernel.org, AJvYcCXXy/3YlOkstsaf8HkitB0XDf0oPqm12ivaPuldBU/BZafH2FIRoo5xVeBmXpkpGwvhS+vCyHrWNVLLNT7Jtrc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBrdq9C3cFCJu+QHylxwLsNITI1SlPSj0oI5mVfoewJvXxLe22
+	5RGUz/5J2kQhpzacuptrNtW5jTx2qwoYXOqqtnqpx2Nu8j3mR5YVusbc
+X-Gm-Gg: ASbGncu1efhdmNVZGb6vs99WoBPoIxrBE4chmqsSXdFa95zQW0Ik03j6D2M+w4NLsuv
+	vrhmZJQVJ/oygyz/ZzoqACrD1P7sza1kF5D6VR1U3PQimmbUE/8h8zl597JwAvFywhxEHGUDnVD
+	5WxsQ97knbDa78yDixQyQ59J+1DoFayL6eglb7XuVKeWjQ5aQMHjOfzNQWC56wVGU3hYnZertoy
+	/q1SRCfdieVnDlpQ/rxqvcgvXb5hxrU12T4TsI0z+5UoIEGmtUKdV14lYP8cPkzmzE/vg74O4xR
+	vSIAQ1/Y/z7VZwuzkhf+/uzMaz+vNoVC2Z4Nqacsy4v7VBcmNzEM9IkBK/iIXB2c
+X-Google-Smtp-Source: AGHT+IH8ZWbq3NcYdfeleEGz9gzoJI5uvC922HCmGxSqEdvple5ZXtJJUZjzVkBZ/Vxr7g8UM1sPMA==
+X-Received: by 2002:a17:903:1a0d:b0:22d:b243:2fee with SMTP id d9443c01a7336-2364d6603b7mr33758835ad.13.1749724936128;
+        Thu, 12 Jun 2025 03:42:16 -0700 (PDT)
+Received: from pop-os.. ([2401:4900:1c96:fdb4:2bbd:5e55:1c88:31fe])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2364e6d9bf4sm10781665ad.104.2025.06.12.03.42.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jun 2025 03:42:15 -0700 (PDT)
+From: Abhinav Ananthu <abhinav.ogl@gmail.com>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	linux-pm@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Abhinav Ananthu <abhinav.ogl@gmail.com>
+Subject: [PATCH v2] rust : Update the bios_limit_callback to use the C FFI types #1170
+Date: Thu, 12 Jun 2025 16:11:28 +0530
+Message-Id: <20250612104127.10299-1-abhinav.ogl@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250612034351.GA7552@nxa18884-linux>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 12, 2025 at 11:43:52AM +0800, Peng Fan wrote:
-> On Wed, Jun 11, 2025 at 02:33:37PM +0100, Cristian Marussi wrote:
-> >On Wed, Jun 11, 2025 at 01:17:11PM +0100, Sudeep Holla wrote:
-> >> On Wed, Jun 11, 2025 at 03:52:42PM +0800, Peng Fan (OSS) wrote:
-> >> > PERFORMANCE_NOTIFY_LIMITS and PERFORMANCE_NOTIFY_LEVEL are optional
-> >> > commands. If use these commands on platforms that not support the two,
-> >> > there is error log:
-> >> >   SCMI Notifications - Failed to ENABLE events for key:13000008 !
-> >> >   scmi-cpufreq scmi_dev.4: failed to register for limits change notifier for domain 8
-> >> > 
-> >> 
-> >
-> >Hi,
-> >
-> >I had a quick look/refresh to this stuff from years ago...
-> >
-> >...wont be so short to explain :P
-> >
-> >In general when you register a notifier_block for some SCMI events,
-> >the assumption was that a driver using proto_X_ops could want to register
-> >NOT only for proto_X events BUT also for other protos...in such a case you
-> >are NOT guaranteed that such other proto_Y was initialized when your
-> >driver probes and tries to register the notifier...indeed it could be
-> >that such proto_Y could be a module that has still to be loaded !
-> >
-> >...in this scenario you can end-up quickly in a hell of probe-dependency
-> >if you write a driver asking for SCMI events that can or cannot be still
-> >readily available when the driver probes...
-> >
-> >....so the decision was to simply place such notifier registration requests
-> >on hold on a pending list...whenever the needed missing protocol is
-> >loaded/inialized the notifier registration is completed...if the proto_Y
-> >never arrives nothing happens...and your driver caller can probe
-> >successfully anyway...
-> >
-> >This means in such a corner-case the notifier registration is sort of
-> >asynchonous and eventual errors detected later, when the protocol is
-> >finally initialized and notifiers finalized, cannot be easily reported
-> >(BUT I think we could improve on this ... thinking about this...)
-> >
-> >...BUT....
-> >
-> >....this is NOT our case NOR the most common case...the usual scenario,
-> >like cpufreq, is that a driver using proto_X_ops tries to register for
-> >that same proto_X events and in such a case we can detect that such
-> >domain is unsupported and fail while avoiding to send any message indeed....
-> >
-> >....so....:P...while I was going through this rabbit-hole....this issues
-> >started to feel familiar...O_o....
-> >
-> >... indeed I realized that the function that you (Peng) now invoke to
-> >set the per-domain perf_limit_notify flag was introduced just for these
-> >reasons to check and avoid such situation for all protocols in the core:
-> >
-> >
-> >commit 8733e86a80f5a7abb7b4b6ca3f417b32c3eb68e3
-> >Author: Cristian Marussi <cristian.marussi@arm.com>
-> >Date:   Mon Feb 12 12:32:23 2024 +0000
-> >
-> >    firmware: arm_scmi: Check for notification support
-> >    
-> >    When registering protocol events, use the optional .is_notify_supported
-> >    callback provided by the protocol to check if that specific notification
-> >    type is available for that particular resource on the running system,
-> >    marking it as unsupported otherwise.
-> >    
-> >    Then, when a notification enable request is received, return an error if
-> >    it was previously marked as unsuppported, so avoiding to send a needless
-> >    notification enable command and check the returned value for failure.
-> >    
-> >    Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> >    Link: https://lore.kernel.org/r/20240212123233.1230090-2-cristian.marussi@arm.com
-> >    Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> >
-> >
-> >...so my suspect is that we are ALREADY avoiding to send unneeded
-> >messages when a domain does NOT support notifications for ALL
-> >protocols...it is just that we are a bit too noisy...
-> >
-> >@Peng do you observe the message being sent instead ? (so maybe the
-> >above has a bug...) or it is just the message ?
-> 
-> Just the message.
-> 
-> arm-scmi arm-scmi.0.auto: SCMI Notifications - Notification NOT supported - proto_id:19  evt_id:0  src_id:8
-> SCMI Notifications - Failed to ENABLE events for key:13000008 !
-> scmi-cpufreq scmi_dev.4: failed to register for limits change notifier for domain 8
-> 
-> It just make user has a feeling that there must be something wrong, especially
-> those not know the internals.
+Update the `bios_limit_callback` function to use `c_int` and `c_uint` types,
+which match the C ABI for the corresponding callback function. These types are
+imported from the prelude.
 
-Yes indeed it is too much noisy...
+This change ensures the Rust function signature exactly matches its expected
+C counterpart, avoiding potential issues with type mismatches in the FFI
+boundary.
 
-> 
-> And from the error message, "Failed to ENABLE events for key..", we not
-> know which protocol, and whether notification supported.
-> 
-> I was thinking to propogate the error value, but __scmi_enable_evt
-> always use -EINVAL if not success.
-> 
+Reported-by: Miguel Ojeda <ojeda@kernel.org>
+Closes: https://lore.kernel.org/rust-for-linux/CANiq72=WpuGELzLbH-fxdOeJy9fiDFwatz6ynERDh=HP2z2MBw@mail.gmail.com/.
+Signed-off-by: Abhinav Ananthu <abhinav.ogl@gmail.com>
+---
 
-I suppose, if you want also to save cycles that you could mark internally a
-protocol, at init time, as NOT suporting notifs (if you can detect that no domain
-is supported OR the related notfs commands are NOT available) and then
-bailing out early with -ENOTOPSUPP when trying to register a new
-notifier (amd muting all the errs to dbgs....) so that the caller can
-warn if wanted or not...
+ rust/kernel/cpufreq.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> >
-> >> I wonder if it makes sense to quiesce the warnings from the core if the
-> >> platform doesn't support notifications.
-> 
-> If not quiesce, we might need to make it clear from the error message,
-> saying whether X events are supported for Y protocols or not, not just
-> a "Failed to ENABLE events for key.."
-> 
+diff --git a/rust/kernel/cpufreq.rs b/rust/kernel/cpufreq.rs
+index b0a9c6182aec..e97607ed86c2 100644
+--- a/rust/kernel/cpufreq.rs
++++ b/rust/kernel/cpufreq.rs
+@@ -1277,7 +1277,7 @@ extern "C" fn update_limits_callback(ptr: *mut bindings::cpufreq_policy) {
+     /// Driver's `bios_limit` callback.
+     ///
+     /// SAFETY: Called from C. Inputs must be valid pointers.
+-    extern "C" fn bios_limit_callback(cpu: i32, limit: *mut u32) -> kernel::ffi::c_int {
++    extern "C" fn bios_limit_callback(cpu: c_int, limit: *mut c_uint) -> c_int {
+         from_result(|| {
+             let mut policy = PolicyCpu::from_cpu(cpu as u32)?;
+ 
+-- 
+2.34.1
 
-Yes that was a very early and primitve errors message of mine...my bad :D
-
-Thanks,
-Cristian
 
