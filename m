@@ -1,130 +1,145 @@
-Return-Path: <linux-pm+bounces-28596-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28597-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB5A5AD7C57
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 22:28:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C463AD7CF7
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 23:12:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 62D837A3581
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 20:27:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BAD1188C2B9
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 21:12:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 789BA2D5421;
-	Thu, 12 Jun 2025 20:28:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 333882DCBE4;
+	Thu, 12 Jun 2025 21:12:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Faz8D18k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iiihbi9s"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02AA71D79A5;
-	Thu, 12 Jun 2025 20:28:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09112D8794;
+	Thu, 12 Jun 2025 21:12:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749760101; cv=none; b=S+iLvTAX8sfaEHpePQe6L5INjjw0zUgWffyqYYOMx45Mi0LMZLwpxd/Wt4PsmQB3pxjMZ6OIRRdCzqkSffEslX86NeBEqb0nq8L1Y9L3EVZri11p14q43Sy3JL/08Y5J8y36bhd4mXCSa4fs927TsJRtPROUKPF0c1+Hk1o0Vqo=
+	t=1749762722; cv=none; b=bpMR33PdQNw9cc4puy3I+g99EKKJc6hKnsmVGTIh+XCg6/YE64sLrEEQ4t0vzJAFTwfrbERJeaGORxvT8nioWrnjW+E9lBIkjNcQ0H6VguS6KRoLfpsRg8pmpd9h88qGOnquVxsr/9iO3nYbNi2pX7DTP4hE7hVQmJgPhw68ZT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749760101; c=relaxed/simple;
-	bh=oRSm7ZpB2dIF6nVqpuQz3Jd3BNn0/vdz7YkxnBDKJzc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KzQngG56flCoXkFzIU76O1hs3tHq8P6Dt9OMgZ7wmKs3oIj6VFhQO7HGCdrUc+5KienfOG2Rn4QbX1BG5cjlsxyVBUOZtM7WjVz6FWV9Bp0cBlAytH18H5mHXpN4mh/MJwQWO7yJYmjOLBF1/eJ7tFAYjEivxgsaYz14pEP4m7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Faz8D18k; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3138e64b42aso1539470a91.0;
-        Thu, 12 Jun 2025 13:28:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749760099; x=1750364899; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RbNc7HY8VMs8jQgNlP6re9PN2yZih6ZIaqzQM653mQQ=;
-        b=Faz8D18kb4AWoe6kcvsGP7Q7hk9U8M4yU+kc4uHht2eqV0TVuLSeU/abE7FCUI5jE8
-         eO8zxwo+h3k0GpkrnjzatIOBAeLz0NSRfk3g9TGbsG8blvARGRuAwQ01lqaEG5vDblbK
-         tXCdM90AtPwQgsmsRYl6O1ZODU0Qj6/5SWLBKJC2I1Ui/Uyh7fQkWT39ujBds+wrZstk
-         MWPqlo17hPKHKNpNeE7YsRjqYRSX3xzhAiidgnh+2czW6Wf4NP15Jx2nDKXG5tZLpOr2
-         eJYUAhktvfeVYNnqDJn1U2EQxsSMO+SRihWUCAqmpgiU0wifcwtoJeSKqfBWo2EZXzQE
-         op+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749760099; x=1750364899;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RbNc7HY8VMs8jQgNlP6re9PN2yZih6ZIaqzQM653mQQ=;
-        b=YYXQvUgtG8F+zDqY8RsdV36WqcSzZCZUTnGa6G111c0ixoV9GbzfczFg79uLA31Zin
-         uUPQr+nXv8tvNGT2GDwIdMWq7NBLTPPmWNSDnRT2dCssXzBfdy01wr1VRbRobDA2eaPV
-         Q/4CP1TxFub5pH+IHgRfrQP1YK8FUAa3sOuSMEfniVl8KAwE30AHdkUn07OxSnrkHdKL
-         nHv89UnB1DvqNaeyhOD67MVSvYjNWrLJ5Ce2rNrKnHrInH+5CaOWDVzQ+/LPm0T6x6Zo
-         oXNlRO2xhzRrcZIm9Iwy055vYWfLVV0u4kUeCJQ4xA4KulQcJRF9FhhBOo+V3SRrc2po
-         MpMw==
-X-Forwarded-Encrypted: i=1; AJvYcCVnLnm3r1e2/Ce91xIO+E7VyIjTRl3uYpc0xb0eGFfbD7Lz3QxorUt4d5wG+pckfCANf8pZyoW4dhCnsUJ/@vger.kernel.org, AJvYcCWAt8S4F4ktHWktW8qcWXIX3EBGO7zYxGKT99i2XQ2C8XRbxpK8hZpx9rLNcN2z+MQusvw=@vger.kernel.org, AJvYcCX81wLivfd13yTRfihBdUXaQRl3/QO54TvoP+0BWfo7V2OKi/d1yneXKsO7i9kQ0FzwrJX/MpRVXBg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfiwWWR5NRdF2563h/SHUWBOZNca7RGjjtjmXu1dHVLK9dDVd4
-	eylg58bn290O8iRHBGlke9rp6oLqMQWH1VWNevFaKDxOhIHTaYhdnkT6ITox0qqAdjP3ltX71Az
-	5hsH9E2RRJ9Bd2nozJzv5OwQJsc4RyV0=
-X-Gm-Gg: ASbGncv4QKzitpS/XgheL6ygzFH/PuBptT6CVEQLJ/DAbE8cg/L4L2/WBeIgjwj0qnN
-	eoiS8XC5pdtalHU1d+jy8LhblYqCKdFzfY4w6O12W2BATGeVe0GfAvQ2I+8eMnpUnBeLELu/nLY
-	5pkkuIq9tb+C85JUmiMPIiQuRDLvpxVnfG7wrRHysI2zPppIswUoj/TsJiHW0=
-X-Google-Smtp-Source: AGHT+IFzp9wE6ohGX9H5TUuxNuCopVHXZP+q6ExEdlcRvnybkr7qomkVzrU4YPeYA/75XCqu0VoEcg00BbvSowdup2Q=
-X-Received: by 2002:a17:90b:3d06:b0:311:c970:c9ce with SMTP id
- 98e67ed59e1d1-313d9ea2effmr736404a91.28.1749760099154; Thu, 12 Jun 2025
- 13:28:19 -0700 (PDT)
+	s=arc-20240116; t=1749762722; c=relaxed/simple;
+	bh=NJlC89e85kPwnIrRRCWxs5BdJsq3vAE6W0Ymwg3gpew=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=PvzzpjVZrOzwObPREVKQht5euquvJu3KqSuGWpD9aCD+DDxM83OSR6ATRMq10VClQDaxSkIwDakGFU3q5d2W4356f73dRCgNvVVVZ0i4OaXoL1akZ6Oz+rH4kRsJtm28Stpe+v9vHIWnUKoBv4krwyRw4Vxcrn/77aBX+Ohtteo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iiihbi9s; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 66850C4CEEA;
+	Thu, 12 Jun 2025 21:12:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749762721;
+	bh=NJlC89e85kPwnIrRRCWxs5BdJsq3vAE6W0Ymwg3gpew=;
+	h=From:Subject:Date:To:Cc:From;
+	b=Iiihbi9s+/pIYtVo3kda9DFbAQHj1W5wOvWbbRaeqNxsjpNokpWuj6L45S2eONyuJ
+	 z5ZjNdbX6l3tfFmftfHTp2/1teSRAWg/3EeiNYV+GJ4wmmedWnf5QH60wONxMU3lTy
+	 n/rRSvlzhpTklFRslxFI2jWl2fc1S88YMZTYYDX0/O7KMgVMucqRcyeOTKlzCOYcrp
+	 Dk80UcrIXXSOdPfmQmlfEosrkWM1jO1oLXrO60K6tLwQgjbUQW3Mx3aLF39efZBQWV
+	 giDzstIr1fU4T6X5SZIjlEt8qb9eLedQQAgFYRM9atModgeD+cb+g6RVGxbR4XjaGt
+	 kFfPnUccqezKQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DB4DC61CE8;
+	Thu, 12 Jun 2025 21:12:01 +0000 (UTC)
+From: Sven Peter <sven@kernel.org>
+Subject: [PATCH 00/11] Drop default ARCH_APPLE from Kconfig and use
+ defconfig instead
+Date: Thu, 12 Jun 2025 21:11:24 +0000
+Message-Id: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250606214840.3165754-1-andrii@kernel.org> <CANiq72kDA3MPpjMzX+LutOoLgKqm9uz8xAT_-iBzhR3pFC+L_Q@mail.gmail.com>
-In-Reply-To: <CANiq72kDA3MPpjMzX+LutOoLgKqm9uz8xAT_-iBzhR3pFC+L_Q@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 12 Jun 2025 13:28:06 -0700
-X-Gm-Features: AX0GCFv2_R1w9AinnKKibx6LjkaQ05xASRlncBw9977J0iGCLXb0a7tS5H8foEE
-Message-ID: <CAEf4BzZDkkjRxp4rL7mMvjEOiwb_jhQLP2Y2YgyUO=O-FksDiQ@mail.gmail.com>
-Subject: Re: [PATCH v2] .gitignore: ignore compile_commands.json globally
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, linux-kernel@vger.kernel.org, masahiroy@kernel.org, 
-	ojeda@kernel.org, nathan@kernel.org, bpf@vger.kernel.org, 
-	kernel-team@meta.com, linux-pm@vger.kernel.org, 
-	Eduard Zingerman <eddyz87@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHxCS2gC/y2MQQqAIBAAvxJ7biELw/pKdFBbaylMFCII/55Et
+ 5nDzAOJIlOCsXog0sWJT19E1BXYTfuVkJfi0DatbHohUIdwEO729I5XXMj9ZKRUqu+0smaAUod
+ Iju/vPM05vx3OGPppAAAA
+X-Change-ID: 20250611-apple-kconfig-defconfig-b558863a8cb9
+To: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
+ Neal Gompa <neal@gompa.dev>, Ulf Hansson <ulf.hansson@linaro.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Srinivas Kandagatla <srini@kernel.org>, 
+ Andi Shyti <andi.shyti@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, Joerg Roedel <joro@8bytes.org>, 
+ Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Vinod Koul <vkoul@kernel.org>, 
+ =?utf-8?q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+ Arnd Bergmann <arnd@arndb.de>
+Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, iommu@lists.linux.dev, 
+ linux-input@vger.kernel.org, dmaengine@vger.kernel.org, 
+ linux-sound@vger.kernel.org, Sven Peter <sven@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1992; i=sven@kernel.org;
+ h=from:subject:message-id;
+ bh=NJlC89e85kPwnIrRRCWxs5BdJsq3vAE6W0Ymwg3gpew=;
+ b=owGbwMvMwCHmIlirolUq95LxtFoSQ4a3U6dZ4Ztcjq5zQonza32t3J9YGMQ0PjDSnbD/jIi18
+ ITHgQc6SlkYxDgYZMUUWbbvtzd98vCN4NJNl97DzGFlAhnCwMUpABN5Zs/wP5kp4uxT2Zp2YWsl
+ +cmOLgVCpo7J3D+thMpvP3pTXrp6IcP/nIMz18Rev6yRM+OVyuwn8YGHl875+rOvr9AyS+ldk5g
+ 6BwA=
+X-Developer-Key: i=sven@kernel.org; a=openpgp;
+ fpr=A1E3E34A2B3C820DBC4955E5993B08092F131F93
+X-Endpoint-Received: by B4 Relay for sven@kernel.org/default with
+ auth_id=407
 
-On Sat, Jun 7, 2025 at 2:27=E2=80=AFAM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Fri, Jun 6, 2025 at 11:48=E2=80=AFPM Andrii Nakryiko <andrii@kernel.or=
-g> wrote:
-> >
-> > compile_commands.json can be used with clangd to enable language server
-> > protocol-based assistance. For kernel itself this can be built with
-> > scripts/gen_compile_commands.py, but other projects (e.g., libbpf, or
-> > BPF selftests) can benefit from their own compilation database file,
-> > which can be generated successfully using external tools, like bear [0]=
-.
-> >
-> > So, instead of adding compile_commands.json to .gitignore in respective
-> > individual projects, let's just ignore it globally anywhere in Linux re=
-po.
-> >
-> > While at it, remove exactly such a local .gitignore rule under
-> > tools/power/cpupower.
-> >
-> >   [0] https://github.com/rizsotto/Bear
-> >
-> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
->
-> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
->
+Hi,
 
-Masahiro,
+When support for Apple Silicon was originally upstreamed we somehow
+started using `default ARCH_APPLE` for most drivers. arm64 defconfig
+also contains ARCH_APPLE=y such that this will turn into `default y`
+there by default which is neither what we want nor how this is usually
+done.
+Let's fix all that by dropping the default everywhere and adding the
+drivers to defconfig as modules instead of built-ins.
+None of these patches depend on each other so we can just take them all
+independently through the respective subsystem trees.
 
-Would you be able to pick this up? Or where should we route this
-through, in your opinion? Thanks!
+Best,
 
-> Thanks!
->
-> Cheers,
-> Miguel
+Sven
+
+Signed-off-by: Sven Peter <sven@kernel.org>
+---
+Sven Peter (11):
+      pmdomain: apple: Drop default ARCH_APPLE in Kconfig
+      soc: apple: Drop default ARCH_APPLE in Kconfig
+      clk: apple-nco: Drop default ARCH_APPLE in Kconfig
+      nvmem: apple: drop default ARCH_APPLE in Kconfig
+      i2c: apple: Drop default ARCH_APPLE in Kconfig
+      cpufreq: apple: drop default ARCH_APPLE in Kconfig
+      iommu/apple-dart: Drop default ARCH_APPLE in Kconfig
+      Input: apple_z2: Drop default ARCH_APPLE in Kconfig
+      dmaengine: apple-admac: Drop default ARCH_APPLE in Kconfig
+      ASoC: apple: mca: Drop default ARCH_APPLE in Kconfig
+      arm64: defconfig: Enable Apple Silicon drivers
+
+ arch/arm64/configs/defconfig      | 19 +++++++++++++++++++
+ drivers/clk/Kconfig               |  1 -
+ drivers/cpufreq/Kconfig.arm       |  1 -
+ drivers/dma/Kconfig               |  1 -
+ drivers/i2c/busses/Kconfig        |  1 -
+ drivers/input/touchscreen/Kconfig |  1 -
+ drivers/iommu/Kconfig             |  1 -
+ drivers/nvmem/Kconfig             |  1 -
+ drivers/pmdomain/apple/Kconfig    |  1 -
+ drivers/soc/apple/Kconfig         |  3 ---
+ sound/soc/apple/Kconfig           |  1 -
+ 11 files changed, 19 insertions(+), 12 deletions(-)
+---
+base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+change-id: 20250611-apple-kconfig-defconfig-b558863a8cb9
+
+Best regards,
+-- 
+Sven Peter <sven@kernel.org>
+
+
 
