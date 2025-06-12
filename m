@@ -1,108 +1,54 @@
-Return-Path: <linux-pm+bounces-28533-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28534-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DE92AD6DB6
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 12:29:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5655AD6DD6
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 12:33:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0114B163DFB
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 10:29:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D48418908A3
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jun 2025 10:31:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DE22234971;
-	Thu, 12 Jun 2025 10:29:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZAZH+8yC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30EFA23371F;
+	Thu, 12 Jun 2025 10:31:08 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FEF322FF22
-	for <linux-pm@vger.kernel.org>; Thu, 12 Jun 2025 10:29:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B1522DF95;
+	Thu, 12 Jun 2025 10:31:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749724188; cv=none; b=tuGXx2iPojBR6NKLW8B8pWCFmHCRrN8z7x0VcCGXqbG5wdYcx78XchAYMvEoLvHjDJnMGkRJA9CeMcl6upDysiolIYlAAc7Zi9fZwxc3on1LTsopIABzzbY1DDzFqSsau3EYM4hvBKWyXdkveBUPUSGkJ4dHsZDs0opBGQ5EIHc=
+	t=1749724268; cv=none; b=BX7OGBK3xLNgKUCfPPXqWTCtweNhkLwVBH1S6OJyr4noIjX1M+/Hjf/bZdtwHfsTQT95JQXyfzzfVIqOAktU8xiat83YkbEo4FV0yqJBtHnqTfTfkGbtgrM2Weqv+XO8I8ZXuwQeAnGktJVwZxpo+6m5HR3WrH2mXOJoVcdCgrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749724188; c=relaxed/simple;
-	bh=LBiZjj1c04h2wKgu6SjWXxVcIMRnF5MvTTsJHW2Ksb8=;
+	s=arc-20240116; t=1749724268; c=relaxed/simple;
+	bh=TbqSp7G1dTO/lGn9z7FA7XGh/pw6w/fZljlWQsM6/2w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e59pRKYtUQUhElM1orzboSBhKyjjcyiLAnVCNrdPkQQ2ZjM5bsTcBDAbFggKO01lqJIFrCxJzX1Al5+xhMIi+WgCJ8BLlEqCqtyYDEhIMxUb/cMyhPyiT0+wqG650s9ypnEYPxmwRHVHEzMLPRjiGYrHVdCV61nBmGYUTFV17XI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZAZH+8yC; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-879d2e419b9so633953a12.2
-        for <linux-pm@vger.kernel.org>; Thu, 12 Jun 2025 03:29:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1749724186; x=1750328986; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=djUr5zaU07dnze6b12sZ98Cx0swbt49r2vx4mVIURNg=;
-        b=ZAZH+8yCPSa6m8A5OO5z0I+JsTAU0Y16O2nTUn0F+56+r4H3gZVnoAs43LeHeEbCeb
-         UU1ENxbcN8vJW7HEkqhS377VhZC/Km7dSCLKUTzgmqpQ0KG/5J7pLYpGferDpDhSFNaZ
-         cnDcxUrkg7pU8gF4FPVKPAtJpx0tWNY9mmXLaq1j+5gE6IHIBR84s5wB5IYhwBshbdr5
-         i0KHpk8mZS2oginkAgTPBGveVcfmeNxyAg01OzNEOfwIAwv6arYqDiFpyCW+FvCXBkEw
-         hFZRX+FKPwJpl1Ocp+Se7/g49JGvOL4Tf09aWrDf6rVJXIVu/pY0xVFJUa4CfQFZhq6/
-         sGJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749724186; x=1750328986;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=djUr5zaU07dnze6b12sZ98Cx0swbt49r2vx4mVIURNg=;
-        b=Oj+exjXqgkFOls8VBCVV4t3x3tioA8rdZAlDH4wuZKr3JeO0P7rUCQFtjTY36GQS7e
-         i+N6EGEyxBvE5D63ZfC6dN4yRU6epjgFNtRCmG0zegiWGUZYKlhkLADRCQE46f4d4gcR
-         gN7FN8iBuKybI67HEL6Cr2OuKncWtP8CwToCRLyf3D/7vS+LMGQ4kW//VU9ZqBWeXOGd
-         aZeJcSOgYKnegZXUHU8SUagSPlmDKACX+jXPcPzGtUdTrfy9jr+xbHE/SV08901odhuK
-         +LYVl4pvWUW6w7XkNqRpAQlsEWy6SbaSVmYAybq+rY0lYUwpMdecuL33f2umrnslL9nd
-         mQqg==
-X-Forwarded-Encrypted: i=1; AJvYcCUXd7jUjYjruf6sz+2LP7ewQcinfGjLcS9wvl0SoDj1DhwCB0n1Ywpvj05of0bkscEEpNpl3+FspQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1aFFd2KcZ5lPPlZbbvnJ+T3yaP5LKDx9DaeXOxpNajT1QstaG
-	SCo5MB5cATslcqackshhb+wTzs2qPlQIzAONDPXpDy+CE0m1n6W+VaM1t2HvwGx3v9Y=
-X-Gm-Gg: ASbGnctVTbY5xICyne+l5D0h/+Z1/4cHR0/vHM2EY8HyHHLJINKuKgav0ni08tbq/Os
-	Z4cqVEISc5CbmVVbn8kioXKfbbadkTuiQa/t+rrU/CxuYp6SVZ2ADKPQDIEu7CYwvnGIQGszEbm
-	QVpx1b/6JplTrOkV1For3TpLgTwryAexJQFO6lndeUKQ0IXQJtj6jQI7+yPNp3ok+uaV+dnF+hn
-	9+as3eJsBIv2mcfEY5Q1poz+bP50391J8PoQjSfdonbdzuTubtYCsIzWgKXYbKLTCuKsP2jwMMI
-	Uo6/+SanIVfCtAhn/RgoPBiCQidRlgRAsJYvIkFDJfLQkBNemJX5SnEVcLt0mqJIGcuqR6QBoA=
-	=
-X-Google-Smtp-Source: AGHT+IGj6zH2i6FSYnQuoWZbvieZJ82el41fbjoepfDccYSCZ6jY6ZrPdhwat+GRxvtW+AAp+Hs2QQ==
-X-Received: by 2002:a17:90b:4986:b0:312:e618:bd53 with SMTP id 98e67ed59e1d1-313af1e44a0mr8462248a91.26.1749724185738;
-        Thu, 12 Jun 2025 03:29:45 -0700 (PDT)
-Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2364e61b4besm10717505ad.27.2025.06.12.03.29.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jun 2025 03:29:45 -0700 (PDT)
-Date: Thu, 12 Jun 2025 15:59:42 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Andreas Hindborg <a.hindborg@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Breno Leitao <leitao@debian.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=ioEzpiXv6AuS3T/0uYrxbtLUc/Mcp4wjI3Z7zDyyVxrzou9TecW8g4VrR4t7iSo0MLKIu2DgG1/WivjPQ7h4UDFOFdOl9OzBXCBKJHAvoN6xxsmhwVnD8yqoLHOsKZs9NRouJji37BhlZM7/HC8OUKgjrIU2MZacn6bCwdVh4YY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 912B11424;
+	Thu, 12 Jun 2025 03:30:45 -0700 (PDT)
+Received: from pluto (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 18DDD3F59E;
+	Thu, 12 Jun 2025 03:31:03 -0700 (PDT)
+Date: Thu, 12 Jun 2025 11:31:01 +0100
+From: Cristian Marussi <cristian.marussi@arm.com>
+To: Peng Fan <peng.fan@oss.nxp.com>
+Cc: Cristian Marussi <cristian.marussi@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Yury Norov <yury.norov@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Russ Weight <russ.weight@linux.dev>, Nishanth Menon <nm@ti.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	linux-block@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
-	Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH V2] rust: Use consistent "# Examples" heading style in
- rustdoc
-Message-ID: <20250612102942.iqdqmu3dolmgtmio@vireshk-i7>
-References: <ddd5ce0ac20c99a72a4f1e4322d3de3911056922.1749545815.git.viresh.kumar@linaro.org>
- <20250612014210.bcp2p6ww5ofvy6zh@vireshk-i7>
- <CANiq72=m+O7p==Fte4HA7kmt0DKaKmkeAQ-J1kVtyTKDKibgcA@mail.gmail.com>
+	Viresh Kumar <viresh.kumar@linaro.org>, arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH 0/3] firmware: arm_scmi: perf/cpufreq: Enable
+ notification only if supported by platform
+Message-ID: <aEqsZWSlq9wKv10a@pluto>
+References: <20250611-scmi-perf-v1-0-df2b548ba77c@nxp.com>
+ <20250611-cherubic-solemn-toucanet-aac5af@sudeepholla>
+ <aEmFnJVG8lXTDNmO@pluto>
+ <20250612034351.GA7552@nxa18884-linux>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -111,26 +57,127 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANiq72=m+O7p==Fte4HA7kmt0DKaKmkeAQ-J1kVtyTKDKibgcA@mail.gmail.com>
+In-Reply-To: <20250612034351.GA7552@nxa18884-linux>
 
-On 12-06-25, 12:22, Miguel Ojeda wrote:
-> Do you need it there? It is trivial, so it probably does not matter,
-> but mistakes are still possible (like it happened in v1). Since it
-> touches files from a few maintainers, it would be best to put it
-> across the "global" Rust tree (ideally with their Acked-by), and Cc
-> everyone (e.g. Tejun added now).
+On Thu, Jun 12, 2025 at 11:43:52AM +0800, Peng Fan wrote:
+> On Wed, Jun 11, 2025 at 02:33:37PM +0100, Cristian Marussi wrote:
+> >On Wed, Jun 11, 2025 at 01:17:11PM +0100, Sudeep Holla wrote:
+> >> On Wed, Jun 11, 2025 at 03:52:42PM +0800, Peng Fan (OSS) wrote:
+> >> > PERFORMANCE_NOTIFY_LIMITS and PERFORMANCE_NOTIFY_LEVEL are optional
+> >> > commands. If use these commands on platforms that not support the two,
+> >> > there is error log:
+> >> >   SCMI Notifications - Failed to ENABLE events for key:13000008 !
+> >> >   scmi-cpufreq scmi_dev.4: failed to register for limits change notifier for domain 8
+> >> > 
+> >> 
+> >
+> >Hi,
+> >
+> >I had a quick look/refresh to this stuff from years ago...
+> >
+> >...wont be so short to explain :P
+> >
+> >In general when you register a notifier_block for some SCMI events,
+> >the assumption was that a driver using proto_X_ops could want to register
+> >NOT only for proto_X events BUT also for other protos...in such a case you
+> >are NOT guaranteed that such other proto_Y was initialized when your
+> >driver probes and tries to register the notifier...indeed it could be
+> >that such proto_Y could be a module that has still to be loaded !
+> >
+> >...in this scenario you can end-up quickly in a hell of probe-dependency
+> >if you write a driver asking for SCMI events that can or cannot be still
+> >readily available when the driver probes...
+> >
+> >....so the decision was to simply place such notifier registration requests
+> >on hold on a pending list...whenever the needed missing protocol is
+> >loaded/inialized the notifier registration is completed...if the proto_Y
+> >never arrives nothing happens...and your driver caller can probe
+> >successfully anyway...
+> >
+> >This means in such a corner-case the notifier registration is sort of
+> >asynchonous and eventual errors detected later, when the protocol is
+> >finally initialized and notifiers finalized, cannot be easily reported
+> >(BUT I think we could improve on this ... thinking about this...)
+> >
+> >...BUT....
+> >
+> >....this is NOT our case NOR the most common case...the usual scenario,
+> >like cpufreq, is that a driver using proto_X_ops tries to register for
+> >that same proto_X events and in such a case we can detect that such
+> >domain is unsupported and fail while avoiding to send any message indeed....
+> >
+> >....so....:P...while I was going through this rabbit-hole....this issues
+> >started to feel familiar...O_o....
+> >
+> >... indeed I realized that the function that you (Peng) now invoke to
+> >set the per-domain perf_limit_notify flag was introduced just for these
+> >reasons to check and avoid such situation for all protocols in the core:
+> >
+> >
+> >commit 8733e86a80f5a7abb7b4b6ca3f417b32c3eb68e3
+> >Author: Cristian Marussi <cristian.marussi@arm.com>
+> >Date:   Mon Feb 12 12:32:23 2024 +0000
+> >
+> >    firmware: arm_scmi: Check for notification support
+> >    
+> >    When registering protocol events, use the optional .is_notify_supported
+> >    callback provided by the protocol to check if that specific notification
+> >    type is available for that particular resource on the running system,
+> >    marking it as unsupported otherwise.
+> >    
+> >    Then, when a notification enable request is received, return an error if
+> >    it was previously marked as unsuppported, so avoiding to send a needless
+> >    notification enable command and check the returned value for failure.
+> >    
+> >    Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> >    Link: https://lore.kernel.org/r/20240212123233.1230090-2-cristian.marussi@arm.com
+> >    Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> >
+> >
+> >...so my suspect is that we are ALREADY avoiding to send unneeded
+> >messages when a domain does NOT support notifications for ALL
+> >protocols...it is just that we are a bit too noisy...
+> >
+> >@Peng do you observe the message being sent instead ? (so maybe the
+> >above has a bug...) or it is just the message ?
 > 
-> I also have a fixes PR to send, but I was not planning to take this as
-> a fix since it is not marked as such.
+> Just the message.
 > 
-> But I don't want to delay you. If you need the changes, then I would
-> suggest just applying the parts that modify your files, and we clean
-> up the rest later.
+> arm-scmi arm-scmi.0.auto: SCMI Notifications - Notification NOT supported - proto_id:19  evt_id:0  src_id:8
+> SCMI Notifications - Failed to ENABLE events for key:13000008 !
+> scmi-cpufreq scmi_dev.4: failed to register for limits change notifier for domain 8
+> 
+> It just make user has a feeling that there must be something wrong, especially
+> those not know the internals.
 
-I don't need this for my request. You can pick it at a later time.
+Yes indeed it is too much noisy...
 
-Thanks.
+> 
+> And from the error message, "Failed to ENABLE events for key..", we not
+> know which protocol, and whether notification supported.
+> 
+> I was thinking to propogate the error value, but __scmi_enable_evt
+> always use -EINVAL if not success.
+> 
 
--- 
-viresh
+I suppose, if you want also to save cycles that you could mark internally a
+protocol, at init time, as NOT suporting notifs (if you can detect that no domain
+is supported OR the related notfs commands are NOT available) and then
+bailing out early with -ENOTOPSUPP when trying to register a new
+notifier (amd muting all the errs to dbgs....) so that the caller can
+warn if wanted or not...
+
+> >
+> >> I wonder if it makes sense to quiesce the warnings from the core if the
+> >> platform doesn't support notifications.
+> 
+> If not quiesce, we might need to make it clear from the error message,
+> saying whether X events are supported for Y protocols or not, not just
+> a "Failed to ENABLE events for key.."
+> 
+
+Yes that was a very early and primitve errors message of mine...my bad :D
+
+Thanks,
+Cristian
 
