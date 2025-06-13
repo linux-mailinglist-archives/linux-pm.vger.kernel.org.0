@@ -1,61 +1,74 @@
-Return-Path: <linux-pm+bounces-28699-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28700-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E0FBAD9775
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 23:44:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75C8BAD979F
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 23:49:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 081BC189E026
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 21:44:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C4C097ACAF6
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 21:48:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FAB62356C0;
-	Fri, 13 Jun 2025 21:44:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49096265626;
+	Fri, 13 Jun 2025 21:49:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c1Pb5svE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q4z/nB58"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B7F92E11C1
-	for <linux-pm@vger.kernel.org>; Fri, 13 Jun 2025 21:44:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8104819D08F;
+	Fri, 13 Jun 2025 21:49:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749851062; cv=none; b=dcz/Kw0Z4cEFc1pR/9q2zt0LgCXqD7n431RJKKC3SDwXST0TRDlWLxM3l+QKGi3E63NJDQQ6UCGZJKrcd8t3PgtgdpilZaZlfrRrcn4v5Zb021lCI4AKs7Vyremmqe5Vp7ouND4Ej2tE07Gek5OqUHc5td0+nCLsmIpSajVLhpU=
+	t=1749851367; cv=none; b=uOc+xq9IOaNUPUWvLY+YYhX0ibT65uqhvJD7XjMzx+ekx7YeL0PNnVXvnYALkQugqtspszZtJokEDqC/2QTGh+rhCOEgZA2LIGasTNJv/RPavTINE1ThxiK0IYIOMonFKKnGP2otJ88Nf+wldt6l/ktklLXPCGX9W1IjpDKKMKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749851062; c=relaxed/simple;
-	bh=GJfPbPeu9q+2/ctADOJkntAal4bqSrgg30/06dFHPVs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jxVGfKiTeeZ7vDIDYO2h9SNcE91RSqWwXl6m3tvU/Ll+iSuzzcOskElB85DOQMJILcYQQBhe4c7d3+RLDtxCVwLLBPi+A4G+ngAn5qk/JM91uzvE8DgU9KXaRbOcBX6obGSlQ14X5DcHJRc58KFCdzbjOj1t3MXojBsg9pyyTBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c1Pb5svE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA943C4CEE3;
-	Fri, 13 Jun 2025 21:44:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749851061;
-	bh=GJfPbPeu9q+2/ctADOJkntAal4bqSrgg30/06dFHPVs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=c1Pb5svEJPW7BnMQIy4dzAlbioiM0wMC/G4nwO9W9mNyKXb2rT9TjkekI6YIaGTW0
-	 xnEbRTHR/WOtDFM4lDyHaltqg4Te/uz7fCSz+Z5h2/vWGqzpUizBOLJoLOgy80pfcu
-	 JANhKPQ+BU740VbNPauEHmGg5Prq7wenNqJgQLT8JICChYNHkR4TRuUmLp+nO8pfc9
-	 JMGsSo+Zc6A9s5vPlQ34Mb07KL72uUAFFQAzmkGKNQIAzvkYJmL9FUUW+gff79y2UB
-	 3cOBMjxtsB0d6LfvGMIhOEBs9ZucL2m/4hO1YJQYASiIutIrDVi/VLen6IfWDprq8S
-	 hXTtGoc5Z70Cg==
-From: Mario Limonciello <superm1@kernel.org>
-To: mario.limonciello@amd.com,
+	s=arc-20240116; t=1749851367; c=relaxed/simple;
+	bh=urs2hnsQJwCZzHIoPIJEarCIpXTJCaDwpM2e4xSJVyc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u/YI5d+Z9RnJzKJtXVTe/di+UmBJbwxUTRNX65MAiytOinmihEB00CTZIHlJlHTdLyjbYIcbD+b2NzMBJS0mRdeI4yGW9e3b1PfZTiDEAgLZnVGLxs4jhZgE1gOPJaf3iaar+z5PVC03cUm8KuKCxUVrf6TY4zis4j1sQqQPVcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q4z/nB58; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749851366; x=1781387366;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=urs2hnsQJwCZzHIoPIJEarCIpXTJCaDwpM2e4xSJVyc=;
+  b=Q4z/nB5850L7JfUcljvc7U9zje6GZwdAc5uNn4lQjFNZaFEOMBL3pLsE
+   VCqEj53vsDk1wQY3fS+qEqHuPeoqNYEsUjfYFQ7M3APM5IUOeFiBYvPlR
+   ix7du1flNgLx061K6XxnQ3BNUuRwf2+ZTkfCQKz//3kxvmGXJDMAd9F1E
+   f7O6ivXJW9Tyb/nUqkP6sCadnBsudo499D54oJcnbLTc+MW6mhT6DXSDG
+   BP/Cb33iSsOe9/VHlf8AJFNGHIHDd/jODdonRkHRGyZ2roMp4DtE2Hn/I
+   A1hBxHPDggKD0Dr+GJtf63ynkk0IGaOXP6ncYZYe2xhSYYzzcqA3g0N/8
+   w==;
+X-CSE-ConnectionGUID: BSKCO3aJTcKqNLp1E8BT8A==
+X-CSE-MsgGUID: wbr7WKfuRI26ofq73j1wMQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11463"; a="69656422"
+X-IronPort-AV: E=Sophos;i="6.16,234,1744095600"; 
+   d="scan'208";a="69656422"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2025 14:49:25 -0700
+X-CSE-ConnectionGUID: Zvo5RG4cQJKuN76Zzv4ItA==
+X-CSE-MsgGUID: +AG4nj0NRtSGdenQ6e++oA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,234,1744095600"; 
+   d="scan'208";a="178822019"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.16])
+  by orviesa002.jf.intel.com with ESMTP; 13 Jun 2025 14:49:24 -0700
+From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To: rui.zhang@intel.com,
+	daniel.lezcano@linaro.org,
 	rafael@kernel.org,
-	len.brown@intel.com,
-	pavel@kernel.org,
-	gregkh@linuxfoundation.org,
-	dakr@kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	bhe@redhat.com
-Cc: christian.koenig@amd.com,
+	lukasz.luba@arm.com
+Cc: linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org,
-	kexec@lists.infradead.org
-Subject: [PATCH] PM: Restrict swap use to later in the suspend sequence
-Date: Fri, 13 Jun 2025 16:43:44 -0500
-Message-ID: <20250613214413.4127087-1-superm1@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v2 1/2] thermal: intel: int340x: Add throttling control interface to PTC
+Date: Fri, 13 Jun 2025 14:49:22 -0700
+Message-ID: <20250613214923.2910397-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -64,159 +77,109 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+Firmware-based thermal temperature control loops may aggressively
+throttle performance to prevent temperature overshoots relative to the
+defined target temperature. This can negatively impact performance. User
+space may prefer to prioritize performance, even if it results in
+temperature overshoots with in acceptable range.
 
-Currently swap is restricted before drivers have had a chance to do their
-prepare() PM callbacks. Restricting swap this early means that if a driver
-needs to evict some content from memory into sawp in it's prepare callback
-it won't be able to.
+For example, user space might tolerate temperature overshoots when the
+device is placed on a desk, as opposed to when it's on a lap. To
+accommodate such scenarios, an optional attribute is provided to specify
+a tolerance level for temperature overshoots while maintaining acceptable
+performance.
 
-On AMD dGPUs this can lead to failed suspends under memory pressure
-situations as all VRAM must be evicted to system memory or swap.
+Attribute:
+thermal_tolerance: This attribute ranges from 0 to 7, where 0 represents
+the most aggressive control to avoid any temperature overshoots, and 7
+represents a more graceful approach, favoring performance even at the
+expense of temperature overshoots.
+Note: This level may not scale linearly. For example, a value of 3 does not
+necessarily imply a 50% improvement in performance compared to a value of
+0.
 
-Move the swap restriction to right after all devices have had a chance to
-do the prepare() callback.  If there is any problem with the sequence,
-restore swap in the appropriate dpm resume callbacks or error handling
-paths.
-
-Closes: https://github.com/ROCm/ROCK-Kernel-Driver/issues/174
-Closes: https://gitlab.freedesktop.org/drm/amd/-/issues/2362
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 ---
- drivers/base/power/main.c | 5 ++++-
- include/linux/suspend.h   | 5 +++++
- kernel/kexec_core.c       | 1 +
- kernel/power/hibernate.c  | 3 ---
- kernel/power/power.h      | 5 -----
- kernel/power/suspend.c    | 3 +--
- 6 files changed, 11 insertions(+), 11 deletions(-)
+v2:
+- Changed commit description
+- Change "gain" to "thermal_tolerance" analogous to latency_tolerance.
+- Dropped "min_performance" attribute for next patch set
 
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index 0215b20c5e2c8..4970a804afb6d 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -1241,6 +1241,7 @@ void dpm_complete(pm_message_t state)
-  */
- void dpm_resume_end(pm_message_t state)
- {
-+	pm_restore_gfp_mask();
- 	dpm_resume(state);
- 	dpm_complete(state);
- }
-@@ -2183,8 +2184,10 @@ int dpm_suspend_start(pm_message_t state)
- 	error = dpm_prepare(state);
- 	if (error)
- 		dpm_save_failed_step(SUSPEND_PREPARE);
--	else
-+	else {
-+		pm_restrict_gfp_mask();
- 		error = dpm_suspend(state);
-+	}
+ Documentation/driver-api/thermal/intel_dptf.rst          | 9 +++++++++
+ .../intel/int340x_thermal/platform_temperature_control.c | 8 +++++++-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
+index ec5769accae0..c51ac793dc06 100644
+--- a/Documentation/driver-api/thermal/intel_dptf.rst
++++ b/Documentation/driver-api/thermal/intel_dptf.rst
+@@ -206,6 +206,15 @@ All these controls needs admin privilege to update.
+ 	Update a new temperature target in milli degree celsius for hardware to
+ 	use for the temperature control.
  
- 	dpm_show_time(starttime, state, error, "start");
- 	return error;
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index b1c76c8f2c822..6a3f920988720 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -446,6 +446,8 @@ extern int unregister_pm_notifier(struct notifier_block *nb);
- extern void ksys_sync_helper(void);
- extern void pm_report_hw_sleep_time(u64 t);
- extern void pm_report_max_hw_sleep(u64 t);
-+void pm_restrict_gfp_mask(void);
-+void pm_restore_gfp_mask(void);
- 
- #define pm_notifier(fn, pri) {				\
- 	static struct notifier_block fn##_nb =			\
-@@ -492,6 +494,9 @@ static inline int unregister_pm_notifier(struct notifier_block *nb)
- static inline void pm_report_hw_sleep_time(u64 t) {};
- static inline void pm_report_max_hw_sleep(u64 t) {};
- 
-+static inline void pm_restrict_gfp_mask(void) {}
-+static inline void pm_restore_gfp_mask(void) {}
++``thermal_tolerance`` (RW)
++	This attribute ranges from 0 to 7, where 0 represents
++	the most aggressive control to avoid any temperature overshoots, and
++	7 represents a more graceful approach, favoring performance even at
++	the expense of temperature overshoots.
++	Note: This level may not scale linearly. For example, a value of 3 does
++	not necessarily imply a 50% improvement in performance compared to a
++	value of 0.
 +
- static inline void ksys_sync_helper(void) {}
+ Given that this is platform temperature control, it is expected that a
+ single user-level manager owns and manages the controls. If multiple
+ user-level software applications attempt to write different targets, it
+diff --git a/drivers/thermal/intel/int340x_thermal/platform_temperature_control.c b/drivers/thermal/intel/int340x_thermal/platform_temperature_control.c
+index 2d6504514893..7850e91a6e2c 100644
+--- a/drivers/thermal/intel/int340x_thermal/platform_temperature_control.c
++++ b/drivers/thermal/intel/int340x_thermal/platform_temperature_control.c
+@@ -49,7 +49,7 @@ struct mmio_reg {
+ };
  
- #define pm_notifier(fn, pri)	do { (void)(fn); } while (0)
-diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-index 9c59fa480b0b6..3a9a9f240dbc9 100644
---- a/kernel/kexec_core.c
-+++ b/kernel/kexec_core.c
-@@ -1136,6 +1136,7 @@ int kernel_kexec(void)
-  Resume_devices:
- 		dpm_resume_end(PMSG_RESTORE);
-  Resume_console:
-+		pm_restore_gfp_mask();
- 		console_resume_all();
- 		thaw_processes();
-  Restore_console:
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 519fb09de5e0c..9216e3b91d3b3 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -423,7 +423,6 @@ int hibernation_snapshot(int platform_mode)
- 	}
+ #define MAX_ATTR_GROUP_NAME_LEN	32
+-#define PTC_MAX_ATTRS		3
++#define PTC_MAX_ATTRS		4
  
- 	console_suspend_all();
--	pm_restrict_gfp_mask();
+ struct ptc_data {
+ 	u32 offset;
+@@ -57,6 +57,7 @@ struct ptc_data {
+ 	struct attribute *ptc_attrs[PTC_MAX_ATTRS];
+ 	struct device_attribute temperature_target_attr;
+ 	struct device_attribute enable_attr;
++	struct device_attribute thermal_tolerance_attr;
+ 	char group_name[MAX_ATTR_GROUP_NAME_LEN];
+ };
  
- 	error = dpm_suspend(PMSG_FREEZE);
+@@ -78,6 +79,7 @@ static u32 ptc_offsets[PTC_MAX_INSTANCES] = {0x5B20, 0x5B28, 0x5B30};
+ static const char * const ptc_strings[] = {
+ 	"temperature_target",
+ 	"enable",
++	"thermal_tolerance",
+ 	NULL
+ };
  
-@@ -559,7 +558,6 @@ int hibernation_restore(int platform_mode)
+@@ -177,6 +179,8 @@ PTC_SHOW(temperature_target);
+ PTC_STORE(temperature_target);
+ PTC_SHOW(enable);
+ PTC_STORE(enable);
++PTC_SHOW(thermal_tolerance);
++PTC_STORE(thermal_tolerance);
  
- 	pm_prepare_console();
- 	console_suspend_all();
--	pm_restrict_gfp_mask();
- 	error = dpm_suspend_start(PMSG_QUIESCE);
- 	if (!error) {
- 		error = resume_target_kernel(platform_mode);
-@@ -571,7 +569,6 @@ int hibernation_restore(int platform_mode)
- 		BUG_ON(!error);
- 	}
- 	dpm_resume_end(PMSG_RECOVER);
--	pm_restore_gfp_mask();
- 	console_resume_all();
- 	pm_restore_console();
- 	return error;
-diff --git a/kernel/power/power.h b/kernel/power/power.h
-index cb1d715620020..7ccd709af93f5 100644
---- a/kernel/power/power.h
-+++ b/kernel/power/power.h
-@@ -239,11 +239,6 @@ static inline void suspend_test_finish(const char *label) {}
- /* kernel/power/main.c */
- extern int pm_notifier_call_chain_robust(unsigned long val_up, unsigned long val_down);
- extern int pm_notifier_call_chain(unsigned long val);
--void pm_restrict_gfp_mask(void);
--void pm_restore_gfp_mask(void);
--#else
--static inline void pm_restrict_gfp_mask(void) {}
--static inline void pm_restore_gfp_mask(void) {}
- #endif
+ #define ptc_init_attribute(_name)\
+ 	do {\
+@@ -193,9 +197,11 @@ static int ptc_create_groups(struct pci_dev *pdev, int instance, struct ptc_data
  
- #ifdef CONFIG_HIGHMEM
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index 76b141b9aac01..bb608b68fb301 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -540,6 +540,7 @@ int suspend_devices_and_enter(suspend_state_t state)
- 	return error;
+ 	ptc_init_attribute(temperature_target);
+ 	ptc_init_attribute(enable);
++	ptc_init_attribute(thermal_tolerance);
  
-  Recover_platform:
-+	pm_restore_gfp_mask();
- 	platform_recover(state);
- 	goto Resume_devices;
- }
-@@ -606,9 +607,7 @@ static int enter_state(suspend_state_t state)
+ 	data->ptc_attrs[index++] = &data->temperature_target_attr.attr;
+ 	data->ptc_attrs[index++] = &data->enable_attr.attr;
++	data->ptc_attrs[index++] = &data->thermal_tolerance_attr.attr;
+ 	data->ptc_attrs[index] = NULL;
  
- 	trace_suspend_resume(TPS("suspend_enter"), state, false);
- 	pm_pr_dbg("Suspending system (%s)\n", mem_sleep_labels[state]);
--	pm_restrict_gfp_mask();
- 	error = suspend_devices_and_enter(state);
--	pm_restore_gfp_mask();
- 
-  Finish:
- 	events_check_enabled = false;
+ 	snprintf(data->group_name, MAX_ATTR_GROUP_NAME_LEN,
 -- 
-2.43.0
+2.49.0
 
 
