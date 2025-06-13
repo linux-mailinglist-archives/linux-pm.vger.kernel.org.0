@@ -1,209 +1,174 @@
-Return-Path: <linux-pm+bounces-28704-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28705-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97F58AD9854
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Jun 2025 00:40:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94443AD9857
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Jun 2025 00:43:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BD8C3BB355
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 22:39:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 694E3189B50B
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 22:43:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4152928F534;
-	Fri, 13 Jun 2025 22:39:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B780328E61E;
+	Fri, 13 Jun 2025 22:43:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="nILvlXas"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="3eMhKBcp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 519DD28E5F3
-	for <linux-pm@vger.kernel.org>; Fri, 13 Jun 2025 22:39:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 173CF28DF04
+	for <linux-pm@vger.kernel.org>; Fri, 13 Jun 2025 22:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749854397; cv=none; b=tP4iyMiLYccDcQTSBP5i4nJAmKFtZndNmW5VzuI9YRUFuFNzoO0RNcfCy+6jeSR6NykUHeZGSz3w3rXYxLz5JjF/Ss2T7RFDbQpHRwTwfwGJbw6fSpwwo2qyfcSNxdq3jJPeDf4otKz4098VsdUp8EEI5+K/LPfM7KAOhWIvl8M=
+	t=1749854600; cv=none; b=rAG/74ePjIua5LfUoRIYtlmY6sNHmQwocTs+NmyddPx/9RTLQK1NjMEXb91g3pJ4OROK/a2bAjr50ayE9K/B4BDxoUL133+KKYQmKOvwdavf2mnVGnudJxf72d7p46kfr06Ql1XxceXhzB5E+tLtXIhPl91mh6cyoNaMC5vMdJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749854397; c=relaxed/simple;
-	bh=B0FUAZiH6G0b7CriNqbZGM4nS2MMo/a1OdSAH0IiNj4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WoNM2eahtm3f0XeEuv9CRlrLfcWeSO46LiVJfiQpspEYAhNl9UoqPeh911UHuHBe2sIsVR2xq5MkArnYMksMfNjOXxnLEQ8egtk5GvZ8DjqXnEtAH+/icv6s2kIdLe4nEDdKHYqgOIIo2WG3v48HGl2+Py9O6BJVKv3ka7dvM5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=nILvlXas; arc=none smtp.client-ip=209.85.215.176
+	s=arc-20240116; t=1749854600; c=relaxed/simple;
+	bh=PZrzJBfxwUQlI1Uzz/TyzWB8qQ8Tus1wq/Wfnb0hzOY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Dud7DFcwPuNdWQv1bJdSnwsXbkWdjXK5nthBFTyeZJNuWOvd5BbMCIaxG3DBYFs4lc6MmwDjDOA8sGJk2eGdua8wvTkwfN+Tqh/94e1gryXzkmbPgVWdq0JCEc/EPzQpb06UhfvkHgZTIcyrHNumcEiPJIO5OoTyF4GV5bUVpp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=3eMhKBcp; arc=none smtp.client-ip=209.85.215.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-b2c41acd479so1699367a12.2
-        for <linux-pm@vger.kernel.org>; Fri, 13 Jun 2025 15:39:54 -0700 (PDT)
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-b2c3c689d20so1949669a12.3
+        for <linux-pm@vger.kernel.org>; Fri, 13 Jun 2025 15:43:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1749854393; x=1750459193; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DEP/GWMAy1HT6GH5o2vnLpMiMEEPruBz+MB11qZprHs=;
-        b=nILvlXasG//fUq/uHE72rGdcgh9dnsSdHhcQS/nTPG+w3qAUHBnrhbQbdpXaHcLwux
-         ibo2OrPQa/64dQ3l88z88aUhThwl/dzJlABKAn5WJCtmhc04yZ2JAYD/hKA7VBuSiYLN
-         pc6V+d8ASRU+jL5kYZ9hJef+zLaKBhs2O2/CCgFXoibLPoF46v+Wb9tgTwmYaVzqMpCg
-         i0aCfUsN2QyJi+jP82HBWLmyNtbDnosXUpeyR/QTdv1Fat4Fv0x1HFWh2J9EYK/+BWAP
-         hLgQczaIjARzm2gsjIZZA9MQVA3u4jXywFEDTeHLCbX9fNazuLslR/pIaZv938+3uD9B
-         bGyQ==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1749854597; x=1750459397; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=e1D2utH8U9KD76szVdYR9Vz0lt+nUusqTvhf81ggVEs=;
+        b=3eMhKBcpeyt57vQW3P+TX4IBVd4hT41m2UmlobjxvICCd/E1lzi83tDfmc+1OkGBW0
+         ZqbV4hXkf0eY7tYcbLnxDu8rxqU5zIy4/UDeaH5gw9m/5fJyvpGHQjcGhBjTNZ9Z7HQi
+         3xf2wyYU5vi/g/qOLWbrS71iZHE+XeFMQDQXytYQv8IaRp5FgbTK7RJCy50uTFPsvok5
+         wksalRAX3TrRRFi4QyvFWi4TjzWIoiErBYngAwe6EKvUSgytBeNE+IiM2AUFPzrjBVSO
+         RRY9IrBc1YMxdHMRpIoYVsIRZddDjxj4QuVNVwOFz0xpaM9MKSvQye9+jsc48WSMhW9P
+         Whow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749854393; x=1750459193;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DEP/GWMAy1HT6GH5o2vnLpMiMEEPruBz+MB11qZprHs=;
-        b=Gcw+gkdO3+QvXFACmXo9tLZgi9g2oZynBOQqLk6WJqwPjN0HCMA6AEkf0/qYLBHl6M
-         Abqw9kRF2S9uXZMH/E5dS0msb0JqHj9R8hMGnmh7Iuvqqac9AZllLPyIN8QQcusCX1dS
-         op7K397bvx1xhVmKpS40rSIwuBZm6ehVdW7HGs8OQ9NHoU8zMAmj4EISoGz0d5U+5+Ps
-         2jWd7bYieYWliZsdVBB//pB4CmHVpEL/rtSRIhTGimBE7SrcLUWU2yzEt44vF9+0GUx7
-         8yia5b+XRBvc9pHUa4a/DTeiT4F1ummWdBsN3O4+MLNuUrUqGa4LoVyi+xQzLUZRqRUY
-         vB2w==
-X-Forwarded-Encrypted: i=1; AJvYcCWO3fA4mhQO2l5+R+pwIPBxIcvibGtAnxiy6mXhU3al+pkYIdUko/fZzeIpoNwU/qLFZ41P4rPJOA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrPlkj/nCQ1GFbazoDUmoCyUcJ5EzablPg4TdebuYX333gxZjn
-	Tw/wKqGGZYVXu/ZDPt5itHjQuuEg/kI/ep+2bEeGZLtuZgyokdJh3bIE3OKNu4VBLTiAoHzHCIa
-	ulrZCy7Y=
-X-Gm-Gg: ASbGncsCUYT7S7jzOOB4PnJ2N+RJxIgCozYk9wiQ+PWlyoLXIIf5X/A6sMRlSj1A9G5
-	OFUS8p6EC0dcjfhIFoupAGgaD9wNrfUI/Xsm9UBxxCTFQEubmAVPyWde2P5/YyOpgCKJkS1tWsD
-	kCPwRTMuEmdZNoPRzZT2NQFQDQTmm2NcC8Z1JBgkPjkYYv2YaNJm3Jmsm2xMSW4vDzjUraVIMwb
-	AJScFW2X/o68cX0yzp8cXI8B0uVrpeVhNqm6WRCKpTVqreZ++ULpjEOxYaV7dUVvjqEP4SWPNqG
-	7Grk5s995Z84G9W/M6vdiFqFKcgGJZjTN8T1TQu/0cukI8pdfMOn2BSv4dF2
-X-Google-Smtp-Source: AGHT+IHM69myxixxhovi3BjNN6Y4awOReozcaBNGYOKlpKfUomG5cP6OPwQYHgEgzT97VOzosQBw9Q==
-X-Received: by 2002:a17:90b:3806:b0:313:f6fa:5bb5 with SMTP id 98e67ed59e1d1-313f6fa5d2bmr68296a91.18.1749854393521;
-        Fri, 13 Jun 2025 15:39:53 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1749854597; x=1750459397;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e1D2utH8U9KD76szVdYR9Vz0lt+nUusqTvhf81ggVEs=;
+        b=bnB+XnPShEwIOlqpfcZ5syLhTPW2QP4mpySkP/gh8qHUGk0ZqOBAcTmBJGexoLKae8
+         0wCNGFdbH98jhRHDxqqmpRO0pK3Kp3034nd55rGSHdA/cXXUO6c246sLpwyxEGvoc0jo
+         SFuwAUxz/AwUfo69nLZVvLtsSU70MkzdrvyRieFZjmtORQVTMoYns4qNKr5r9YoISpIH
+         83U4bqbzYloiGjzvg+rGJksdPKhrqNb5EFP1So41kIrqTYTxTXJrRhbkVHvjHGQaMWPx
+         g7j0kFpxpw+z3/wzjubfGPdZsCLv/WqtnQJLEygOO55l3fmkWRbbJ1lU/nPw1sHX5N0R
+         ulOg==
+X-Forwarded-Encrypted: i=1; AJvYcCVTBwnSlzXzeb0rD2zeloWulhbe3alx6+Yzs3Dy/9bQZeDUmBfLS4+zl+NhllXnyUxt5mKL0Npb6Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyV0YpFDb/BKthQkssitB4X9uqKBLuC7pMc4iCAVjT2JK4ZiGea
+	tEb7PvIkOUmkBgIKkgpWI+gUrdmOFBBn6dHXi8UG1r23bGgcwAceh4qIRRI3q9sw6mg=
+X-Gm-Gg: ASbGncv68dLkFpzjvGUZjAIrFip+z1RFYCWLk/cdAtpi3r1x6PcNKPIEEHAW5B/duqk
+	0Xz7KlEdIoPP13y+d2TcdQyjsQEUSr3s3b2Tzw1sG9WE1Do12KQMNG4io16RKI/VLgxk4avGVxS
+	oD6WZEInIFf7ySDm0qXny3/kGqDT9liAD9+8zOMdazou6tN+RuxSYrqq31v6iKXh/O1jANqyT96
+	Gy3DIvU8vFBq1CbAqEgGOh6onHbisE3G4Zh9ckcYxmzxFHRHhQMGvl98ufzXq2c3N1xcX2ThrH1
+	xusXvIDk7MetaAq1nIJiI9uOwMSOTveTF7Hn4YzBLJiH2k9G8Xn55kO2iB6Zu5KYVujHRHE=
+X-Google-Smtp-Source: AGHT+IFKzeJY5f16SJqI4Du+DmbC+0tBVm+HCX+tatOdiKu/4UYBoSQ1IXdPpifz/+y48zCjM8UQgg==
+X-Received: by 2002:a05:6a21:998a:b0:218:bbb:c13c with SMTP id adf61e73a8af0-21fbd5dc861mr1371682637.38.1749854597404;
+        Fri, 13 Jun 2025 15:43:17 -0700 (PDT)
 Received: from localhost ([97.126.182.119])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2365deca277sm19802395ad.198.2025.06.13.15.39.53
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2fe164406esm2321129a12.27.2025.06.13.15.43.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jun 2025 15:39:53 -0700 (PDT)
+        Fri, 13 Jun 2025 15:43:16 -0700 (PDT)
 From: Kevin Hilman <khilman@baylibre.com>
-Date: Fri, 13 Jun 2025 15:39:28 -0700
-Subject: [PATCH RFC v3 2/2] pmdomain: core: add support for subdomains
- using power-domain-map
+To: Rob Herring <robh@kernel.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, "Rafael J.
+ Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ arm-scmi@vger.kernel.org
+Subject: Re: [PATCH RFC v2 2/2] pmdomain: core: use DT map to support hierarchy
+In-Reply-To: <7hecvwld95.fsf@baylibre.com>
+References: <20250528-pmdomain-hierarchy-onecell-v2-0-7885ae45e59c@baylibre.com>
+ <20250528-pmdomain-hierarchy-onecell-v2-2-7885ae45e59c@baylibre.com>
+ <20250530135741.GA1598718-robh@kernel.org> <7hecvwld95.fsf@baylibre.com>
+Date: Fri, 13 Jun 2025 15:43:16 -0700
+Message-ID: <7h1prnqn3v.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250613-pmdomain-hierarchy-onecell-v3-2-5c770676fce7@baylibre.com>
-References: <20250613-pmdomain-hierarchy-onecell-v3-0-5c770676fce7@baylibre.com>
-In-Reply-To: <20250613-pmdomain-hierarchy-onecell-v3-0-5c770676fce7@baylibre.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-pm@vger.kernel.org, 
- arm-scmi@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Mailer: b4 0.14.3-dev-d7477
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2994; i=khilman@baylibre.com;
- h=from:subject:message-id; bh=B0FUAZiH6G0b7CriNqbZGM4nS2MMo/a1OdSAH0IiNj4=;
- b=owEBbQKS/ZANAwAIAVk3GJrT+8ZlAcsmYgBoTKi2z3hkHLDnnQqUsxMulvLva65h7u85EQGb1
- Ng68KklfiyJAjMEAAEIAB0WIQR7h0YOFpJ/qfW/8QxZNxia0/vGZQUCaEyotgAKCRBZNxia0/vG
- Za5BD/9QcVioMiNXIQJ+/wpNTcBj+X9G60C/7XhUWr9aJHGRvgbEPdiBCGrKQNph3l1R4GFuY7i
- 4gkL2iw9ipupDL4XI6ES1mZ5cAXD1HR+7VEr6pBKr02RuKjMb0qUgvg6VM4Rg8gBHJ9i1WPbW/k
- gSu3s1kP0aXZMfn4i1O1tdGaifWc9Qbcq3N16Hifxl9jhFmTVQGUuMciFIRlOs5onlO8xncbffB
- 0KTACjua41CDkNlna4qtcsMjaAxHpElyluFQC0lk/mwOHBsvjFOdvRs7GFgTkCjNK6TlotZDiqk
- RK6TcCYvaV3QPwHz391pGDieDdjn1HOzYklNFT3N95C6zcyMOxgSSa7jln6YtDeTCCIltPrplGB
- 8xBsopOqxh9nDrEiNPt3qOZXRWaAkPA9eC/UFzEK79e1st2raOdVfEaUhGO+yxU7OcYf7Riy8QH
- WRD8ZN0PorPyYlmbqOoPOdkKTLWbhUmPuTn+M+Q5j+mNhhA8luxd/RHZhWSMApj1+w2mnLZCozt
- Sn8U4QYMWrAS7mfWX/GZEjJ0YW6QAXYTYocOBwgqS7fkvuTk/lZqycHVEAP8XdFr4O00UCWtq+l
- aqqW+zA7SpVHA+/pRAUoj+monTqGsV7Au08KYfU4aHqOysrcJsew/DC+B/zigbgqfsCdvA9g8y5
- 5iAVbwikKU9NY8Q==
-X-Developer-Key: i=khilman@baylibre.com; a=openpgp;
- fpr=7B87460E16927FA9F5BFF10C5937189AD3FBC665
+Content-Type: text/plain
 
-Currently, PM domains can only support hierarchy for simple
-providers (e.g. ones with #power-domain-cells = 0).
+Kevin Hilman <khilman@baylibre.com> writes:
 
-Add more generic support for hierarchy by using nexus node
-maps (c.f. section 2.5.1 of the DT spec.)
+> Hi Rob,
+>
+> Rob Herring <robh@kernel.org> writes:
+>
+>> On Wed, May 28, 2025 at 02:58:52PM -0700, Kevin Hilman wrote:
+>>> Currently, PM domains can only support hierarchy for simple
+>>> providers (e.g. ones with #power-domain-cells = 0).
+>>> 
+>>> Add support for oncell providers as well by adding support for a nexus
+>>> node map, as described in section 2.5.1 of the DT spec.
+>>> 
+>>> For example, an SCMI PM domain provider might be a subdomain of
+>>> multiple parent domains. In this example, the parent domains are
+>>> MAIN_PD and WKUP_PD:
+>>> 
+>>>     scmi_pds: protocol@11 {
+>>>         reg = <0x11>;
+>>>         #power-domain-cells = <1>;
+>>>         power-domain-map = <15 &MAIN_PD>,
+>>>                            <19 &WKUP_PD>;
+>>>     };
+>>> 
+>>> With the new map, child domain 15 (scmi_pds 15) becomes a
+>>> subdomain of MAIN_PD, and child domain 19 (scmi_pds 19) becomes a
+>>> subdomain of WKUP_PD.
+>>> 
+>>> Signed-off-by: Kevin Hilman <khilman@baylibre.com>
+>
+> [...]
+>
+>>> +/**
+>>> + * of_genpd_parse_domains_map() - Parse power-domains-map property for Nexus mapping
+>>> + * @np: Device node pointer associated with the PM domain provider.
+>>> + * @data: Pointer to the onecell data associated with the PM domain provider.
+>>> + *
+>>> + * Parse the power-domains-map property to establish parent-child relationships
+>>> + * for PM domains using Nexus node mapping as defined in the device tree
+>>> + * specification section v2.5.1.
+>>> + *
+>>> + * The power-domains-map property format is:
+>>> + * power-domains-map = <child_specifier target_phandle [target_specifier]>, ...;
+>>> + *
+>>> + * Where:
+>>> + * - child_specifier: The child domain ID that should be mapped
+>>> + * - target_phandle: Phandle to the parent PM domain provider
+>>> + * - target_specifier: Optional arguments for the parent provider (if it has #power-domain-cells > 0)
+>>> + *
+>>> + * Returns 0 on success, -ENOENT if property doesn't exist, or negative error code.
+>>> + */
+>>> +static int of_genpd_parse_domains_map(struct device_node *np,
+>>> +				      struct genpd_onecell_data *data)
+>>> +{
+>>> +	struct of_phandle_args parent_args;
+>>> +	struct generic_pm_domain *parent_genpd, *child_genpd;
+>>> +	u32 *map_entries;
+>>> +	int map_len, child_cells, i, ret;
+>>> +	u32 child_id;
+>>> +
+>>> +	/* Check if power-domains-map property exists */
+>>> +	map_len = of_property_count_u32_elems(np, "power-domains-map");
+>>> +	if (map_len <= 0)
+>>> +		return -ENOENT;
+>>
+>> Don't implement your own map parsing. Use or extend 
+>> of_parse_phandle_with_args_map().
+>
+> So I've been wrestling with this for a bit, and I need some guidance.
+> TBH, these "nexus node maps" and of_parse_phandle_with_args_map() are
+> breaking my brain.
 
-For example, we could describe SCMI PM domains with multiple parents
-domains (MAIN_PD and WKUP_PD) like this:
+OK, nevermind.  I *think* I have a better grasp on how they should be used
+now.  I've submitted a v3 of the RFC[1], but could defintely still use
+some guidance.
 
-    scmi_pds: protocol@11 {
-        reg = <0x11>;
-        #power-domain-cells = <1>;
+Kevin
 
-        power-domain-map = <15 &MAIN_PD>,
-                           <19 &WKUP_PD>;
-    };
-
-which should mean that <&scmi_pds 15> is a subdomain of MAIN_PD and
-<&scmi_pds 19> is a subdomain of WKUP_PD.
-
-IOW, given an SCMI device which uses SCMI PM domains:
-
-   main_timer0: timer@2400000 {
-      power-domains = <&scmi_pds 15>;
-   };
-
-it already implies that main_timer0 is PM domain <&scmi_pds 15>
-
-With the new map, this *also* now implies <&scmi_pds 15> is a
-subdomain of MAIN_PD.
-
-Signed-off-by: Kevin Hilman <khilman@baylibre.com>
----
- drivers/pmdomain/core.c | 24 ++++++++++++++++++++++--
- 1 file changed, 22 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-index d6c1ddb807b2..adf022b45d95 100644
---- a/drivers/pmdomain/core.c
-+++ b/drivers/pmdomain/core.c
-@@ -2998,8 +2998,8 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
- 				 unsigned int index, unsigned int num_domains,
- 				 bool power_on)
- {
--	struct of_phandle_args pd_args;
--	struct generic_pm_domain *pd;
-+	struct of_phandle_args pd_args, parent_args;
-+	struct generic_pm_domain *pd, *parent_pd = NULL;
- 	int ret;
- 
- 	ret = of_parse_phandle_with_args(dev->of_node, "power-domains",
-@@ -3039,6 +3039,22 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
- 			goto err;
- 	}
- 
-+	/*
-+	 * Check for power-domain-map, which implies the primary
-+	 * power-doamin is a subdomain of the parent found in the map.
-+	 */
-+	ret = of_parse_phandle_with_args_map(dev->of_node, "power-domains",
-+					     "power-domain", index, &parent_args);
-+	if (!ret && (pd_args.np != parent_args.np)) {
-+		parent_pd = genpd_get_from_provider(&parent_args);
-+		of_node_put(parent_args.np);
-+
-+		ret = pm_genpd_add_subdomain(parent_pd, pd);
-+		if (!ret)
-+			dev_dbg(dev, "adding PM domain %s as subdomain of %s\n",
-+				pd->name, parent_pd->name);
-+	}
-+
- 	ret = genpd_set_required_opp(dev, index);
- 	if (ret)
- 		goto err;
-@@ -3056,6 +3072,8 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
- 			dev_gpd_data(dev)->default_pstate = 0;
- 		}
- 
-+		if (parent_pd)
-+			pm_genpd_remove_subdomain(parent_pd, pd);
- 		genpd_remove_device(pd, dev);
- 		return -EPROBE_DEFER;
- 	}
-@@ -3063,6 +3081,8 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
- 	return 1;
- 
- err:
-+	if (parent_pd)
-+		pm_genpd_remove_subdomain(parent_pd, pd);
- 	genpd_remove_device(pd, dev);
- 	return ret;
- }
-
--- 
-2.49.0
-
+[1] https://lore.kernel.org/linux-pm/20250613-pmdomain-hierarchy-onecell-v3-0-5c770676fce7@baylibre.com/
 
