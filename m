@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-28670-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28671-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B568EAD89B7
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 12:42:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E480FAD89BF
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 12:43:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6048189EAB0
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 10:42:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD8DE189E487
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 10:43:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20D8F2D5C77;
-	Fri, 13 Jun 2025 10:41:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 993C42D2382;
+	Fri, 13 Jun 2025 10:43:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uLoReckm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VwkZ/jIm"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D722D23A3;
-	Fri, 13 Jun 2025 10:41:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D7A257459;
+	Fri, 13 Jun 2025 10:43:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749811284; cv=none; b=cunCZidnTi+3o6O/JBtt+1WL+ec9Gc6261uUB6rrJT1EReXtHHAAsFQ6olKlhStnDUAwV/gKKE/GTG/cZAkhBViUg5JwuP6RwJK30qdVWlPp+AaBQpRGfXZ51to3Pm5hazRWdSj4PxwuMDBgnW5+p4Y81tmA/Nr4omx+MbSzRFg=
+	t=1749811390; cv=none; b=ds7itH6PmKpeFk9lv5LdL3PQExdKiwYtL4zA0fA6hc3OUfX8dVQ1M5ebX3yoPRhxP9UQ2wBVcAOAfDCcDyhj250fvmN4D1FIYAQ1eOk4HviWnOBQzLR+0I82n6tXsM4IK/mqRnBjZ3UnoY05U/+1iJRcT9zurqYQEkq5wu6zWJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749811284; c=relaxed/simple;
-	bh=YHHL4QbFiSRPbnZcmYApRf0H6dtBcxbktvlOiKHYobo=;
+	s=arc-20240116; t=1749811390; c=relaxed/simple;
+	bh=/zrNVWf19++HbCOvvQMGtxoTbY0fGBVHE21wqPK+M9U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ed7ta/IXAqZByxk5XE+bgj7WZgQMe/pGXRhlxJ/s3BBDdG+j85Py72371UuaGjdNmi+JBS4MySXarvPWkZ2wpsSVgwgZ4ipc6aUuwBcpl6fBnzM/lhMgyfMkFJnI0HT6/SmYzZMCUNtmbmGOArxrga8YVCVM0oQpZi3HWJS8ykc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uLoReckm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5037EC4CEE3;
-	Fri, 13 Jun 2025 10:41:16 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=qfs3+pXc0ys/ninCfI/M8daMzW08jkC/B+z227shHho0kEiAh0FTw5gwiLP0W7eFhGLPY1RRuZo+LZTQiMCtTehSyWTJt8UjQ3d+BQ8FQrjQHlHqkcRf0DcyEYiqE0qPlaF1DBQqjxguaZffKPMX6zKxGPTpjAEdKrGVv2jPPqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VwkZ/jIm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28A5EC4CEE3;
+	Fri, 13 Jun 2025 10:43:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749811283;
-	bh=YHHL4QbFiSRPbnZcmYApRf0H6dtBcxbktvlOiKHYobo=;
+	s=k20201202; t=1749811389;
+	bh=/zrNVWf19++HbCOvvQMGtxoTbY0fGBVHE21wqPK+M9U=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=uLoReckm7iHVOkCYxGKQOBZA8xRZoK/R6CQfw6wzZH4TaD9WRojsFnIo5qtZVj2mI
-	 Ameb1r6diffxkhAG+W1Kim+2MYzl3GPYVgWRotvwzt1EKrlrLO1Q0f/HxtjGyJaptX
-	 k+LyZOwE+S6oQjX+Lv7LaU88ohGCExAPRJ4a02wOuCVk/syuAKBkUot8iecak5dobj
-	 O0k9V8BFrd+Ln2vXSAmpUCsO0E+G368A0DXPcv9E3GvO595Y2lVQXgEgjVRv0tDEgO
-	 DjqdN9ft4iLh541ZOeffZtcZ/VeR79E86ak4xsn2TFWyFvITQNU1MnrOpVPohgyQIz
-	 73pBdBLwuUuHw==
-Message-ID: <05e936ee-cb24-4761-8827-e2d45ac0cd68@kernel.org>
-Date: Fri, 13 Jun 2025 12:41:14 +0200
+	b=VwkZ/jImyiCbXlhI5zVfS5NyLAB3WFxnWi1k2T9Gy/quOFc5HdAQ7Uycs4in5YnzZ
+	 rTdPV5c5AZCxitVr1WO8tUsiP3xf2zY/Moh9Mh7bw99DqGklOzfKY/R89/HnIReUT6
+	 Baue7SqdmtS9BNuQPjvSMI0aU62vSf8omtnNIT39aMolwGur4cQWGZMIgZ2Bdrwa1g
+	 l25xK0YiG+MNwHTyfrV8jVCxvIFduiS7IYpllsSh+ww9C9PgNNtFxvTUkyjgrPiTFU
+	 k5LptLX+uGruLrq/fP3OUs7T+oHcSpg7DfxBJYd1ITqWLPw81jFzU5EprYWe9DqIrJ
+	 oOga3A+EHjquQ==
+Message-ID: <4e8f2426-92a1-4c7e-b860-0e10e8dd886c@kernel.org>
+Date: Fri, 13 Jun 2025 12:43:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/9] dt-bindings: soc: imx-blk-ctrl: add i.MX91
- blk-ctrl compatible
+Subject: Re: [PATCH v5 3/9] arm64: dts: freescale: rename imx93.dtsi to
+ imx91_93_common.dtsi
 To: Joy Zou <joy.zou@nxp.com>, robh@kernel.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
  catalin.marinas@arm.com, will@kernel.org, andrew+netdev@lunn.ch,
@@ -65,7 +65,7 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-pm@vger.kernel.org, frank.li@nxp.com, ye.li@nxp.com, ping.bai@nxp.com,
  peng.fan@nxp.com, aisheng.dong@nxp.com, xiaoning.wang@nxp.com
 References: <20250613100255.2131800-1-joy.zou@nxp.com>
- <20250613100255.2131800-3-joy.zou@nxp.com>
+ <20250613100255.2131800-4-joy.zou@nxp.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,23 +111,104 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250613100255.2131800-3-joy.zou@nxp.com>
+In-Reply-To: <20250613100255.2131800-4-joy.zou@nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 13/06/2025 12:02, Joy Zou wrote:
-> Add new compatible string "fsl,imx91-media-blk-ctrl" for i.MX91,
-> which has different input clocks compared to i.MX93. Update the
-> clock-names list and handle it in the if-else branch accordingly.
+> Rename imx93.dtsi to imx91_93_common.dtsi for adding imx91.dtsi.
+
+Why?
+
+Your commit msg MUST explain that. That's the more important part.
+
+> There is no code change.
 > 
-> Keep the same restriction for the existed compatible strings.
+> Add imx93.dtsi, which include imx91_93_common.dtsi.
 > 
 > Signed-off-by: Joy Zou <joy.zou@nxp.com>
 > ---
->  .../soc/imx/fsl,imx93-media-blk-ctrl.yaml     | 55 +++++++++++++++----
->  1 file changed, 43 insertions(+), 12 deletions(-)
+>  .../boot/dts/freescale/imx91_93_common.dtsi   | 1351 +++++++++++++++++
+>  arch/arm64/boot/dts/freescale/imx93.dtsi      | 1349 +---------------
 
-This wasn't here in v4 and changelog is silent about it.
+Generate patches with proper -M/-B/-C flags so it will be possible to
+actually review this.
+
+
+>  2 files changed, 1353 insertions(+), 1347 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx91_93_common.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx91_93_common.dtsi b/arch/arm64/boot/dts/freescale/imx91_93_common.dtsi
+> new file mode 100644
+> index 000000000000..64cd0776b43d
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/imx91_93_common.dtsi
+> @@ -0,0 +1,1351 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright 2022 NXP
+> + */
+> +
+> +#include <dt-bindings/clock/imx93-clock.h>
+> +#include <dt-bindings/dma/fsl-edma.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/input/input.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/power/fsl,imx93-power.h>
+> +#include <dt-bindings/thermal/thermal.h>
+> +
+> +#include "imx93-pinfunc.h"
+> +
+> +/ {
+> +	interrupt-parent = <&gic>;
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
+> +
+> +	aliases {
+> +		gpio0 = &gpio1;
+> +		gpio1 = &gpio2;
+> +		gpio2 = &gpio3;
+> +		gpio3 = &gpio4;
+> +		i2c0 = &lpi2c1;
+> +		i2c1 = &lpi2c2;
+> +		i2c2 = &lpi2c3;
+> +		i2c3 = &lpi2c4;
+> +		i2c4 = &lpi2c5;
+> +		i2c5 = &lpi2c6;
+> +		i2c6 = &lpi2c7;
+> +		i2c7 = &lpi2c8;
+
+Not common aliases. Drop.
+
+
+> +		mmc0 = &usdhc1;
+> +		mmc1 = &usdhc2;
+> +		mmc2 = &usdhc3;
+
+Not common aliases. Drop.
+
+
+> +		serial0 = &lpuart1;
+> +		serial1 = &lpuart2;
+> +		serial2 = &lpuart3;
+> +		serial3 = &lpuart4;
+> +		serial4 = &lpuart5;
+> +		serial5 = &lpuart6;
+> +		serial6 = &lpuart7;
+> +		serial7 = &lpuart8;
+
+Not common aliases. Drop.
+
+> +		spi0 = &lpspi1;
+> +		spi1 = &lpspi2;
+> +		spi2 = &lpspi3;
+> +		spi3 = &lpspi4;
+> +		spi4 = &lpspi5;
+> +		spi5 = &lpspi6;
+> +		spi6 = &lpspi7;
+> +		spi7 = &lpspi8;
+
+Not common aliases. Drop.
 
 
 Best regards,
