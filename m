@@ -1,120 +1,100 @@
-Return-Path: <linux-pm+bounces-28690-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28691-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C967AD933F
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 18:54:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8195BAD9349
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 18:56:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6DF417A8248
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 16:53:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68535188530F
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 16:56:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C04C31FCCEB;
-	Fri, 13 Jun 2025 16:54:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wbinvd.org header.i=@wbinvd.org header.b="J/m6YGuw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1E5B21882B;
+	Fri, 13 Jun 2025 16:56:01 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B27C20F088
-	for <linux-pm@vger.kernel.org>; Fri, 13 Jun 2025 16:54:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69950211476;
+	Fri, 13 Jun 2025 16:55:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749833669; cv=none; b=ekOBACHxv1yr/257GXVc9BypMGPBi49vvasIrQmwk9+y1Z/6WKUjiLwrBmeznG7jqrr0jZ6dB6vnouSMfRJYGhI9vQO77m8ncmhp1XyDpndzR0DaFSciFOtqozfqM+lQm6ugCQ6Xa1QFSQjWtiFsQlFaGJZUjUV2o5SsBm254P8=
+	t=1749833761; cv=none; b=E9tyYpRiv6EH6yXOtdsphLasWy2wt+lpUZyB0dcD8IH1r5RXm2z/nEoTSaTFNg6x39l0XfW55Romsakc9pxFi2Sm5Gzpl8XSM6TBwZ5x5Ok0xfPO9eAywTKEZXY8xkTXf1ntYO7ma5vorrm9R3FjweHFJ4VMhbF6tb83CiMBQg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749833669; c=relaxed/simple;
-	bh=iZGzCmHYrSZzhnDo4cKANmeZWbqdpurZQTN3/p8RwpE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DoXZMqGQ8ZHtojOk6soOH1XjahaSFVvYEh2/tVYemlTaAb8aP9KmF6w7GmV8qg18brbezc4wj/FnWOzm/x6dQ1qxyJojKLrFHTHlOpuPuKTixUlyY6O3CrEvYzboAzlwTB86sInSRxytwWU5wbzB/Y3mLbSENrasWwQNAkDIDB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wbinvd.org; spf=pass smtp.mailfrom=wbinvd.org; dkim=pass (2048-bit key) header.d=wbinvd.org header.i=@wbinvd.org header.b=J/m6YGuw; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wbinvd.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wbinvd.org
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-234c5b57557so24086305ad.3
-        for <linux-pm@vger.kernel.org>; Fri, 13 Jun 2025 09:54:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wbinvd.org; s=wbinvd; t=1749833667; x=1750438467; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7WKF8glCmh5nzU1eT20mMxDjanpqM8jk1hyVO7UuIA8=;
-        b=J/m6YGuwdUEBqtUPf7vx0ucpY2OSvU/f3MuclUixJCtz7lyn1QF1NnQ+mOyaf50d4d
-         cxYGeSdnVEWAbC99b2M3Ye+TWLdNEsln3Zc3us5I3TRS+JusJ4a6D/fcGbvpSgoeUnro
-         qdcDvGpGh/I0wEf9+5v0spWosCXWsw/cyO61MjP3q2CjvBBLGauh4fdeZB2mFYMuV2pC
-         oey9fj9UtJjO4qRXl9WXbS7l11PwT/TTjxfpy0de8upyCif0AXvlqjPHOJELVcK8gNvx
-         6GGT4fMASDRUUikCTMDYXeZA+gB9dbDCnaRxIo1oKuVJioQd0fo+f9iXYKkj6kE/fb2M
-         tlZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749833667; x=1750438467;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7WKF8glCmh5nzU1eT20mMxDjanpqM8jk1hyVO7UuIA8=;
-        b=Vrdp1f49cWFc8tHMOiWLKB+D7pJVUaYwCJtCNpSsHfdlHA/UwVCSfnxLwr51pm/KMx
-         drjlHfsOPWsc4gTkUzRpsUfJWxxUqEYxVLXZAc/UJI+H+MBnO0wumCmRgYLIeV4Jhx/m
-         ANnEBgd/NV63HiSYpjQdHPY3Z2bT5LFMHvTX54UBaL/uhL3eKOOvnINNsWoNvzvVraLC
-         aEq816pn5neBrmZXFxxi0k5xbtcdfvsECOVzjMmAWJfgxQL32F0YKJCrWbCAiOKYYIkH
-         VfhmgV4AvvHLfV/qaRL0uuqJIvWBjaKUKx/YaVn8NevF9SjORGlN/MJZmWkMWPQh1IsI
-         xvQw==
-X-Gm-Message-State: AOJu0Yxa9J6APthoCjDRWnbpspZa7rxOekpFNSKZsV0rELQhIALXHgxo
-	ET9cJlGD40E9lM9VX8+aJm6/1FgAsXEp2lY3y5wsHWVJHe1V7xyQOWLi3lrVro43Er24hlq2z86
-	+JjUU
-X-Gm-Gg: ASbGnctPHiHMDVqQdQLLmVB1cyhciOhiCk2+4oEZo6t59AKhMhiIveIISCvyzki1pqq
-	Bxn9bT+XDZKuRb7gBiVFIzLxRx6DvXcf54/58i/o2flWTZCp5s2LaagUHbf0kc0+9TSelz45ms0
-	e+dHZlB+IvGQGHjEhUDr/5Z8sDXIyHnNTZNasNPGPBJTtKqAKRALrTjXWfQC/HTNDtVcYAHNDyE
-	bF76XWZ8bB/NSmRDDqHcI5hDEqqockTLxeyuyX5buuU1s9NzRKL7Y/+uZN2R3HK/yVTbWtgsMgd
-	zyZQu1g6p66Np6NT2YzbiXonmf4qBGP1EVHLq1AKAiX727WCgN/WGrvoxc2EtQy6Q65XBaIR9Ou
-	CeGvCsG3kM51ZPR1L5IkOdc8KZe6Bb1sP7ZdAYLytdQ==
-X-Google-Smtp-Source: AGHT+IFRM7HlvEUor2jbTS1VnT+o6aaNJW/BhmRTrRrnp52YltaanLYbOkxjDiCArSzSD2Li0Nby5Q==
-X-Received: by 2002:a17:902:e881:b0:234:bca7:2926 with SMTP id d9443c01a7336-2366b3c5a98mr2626835ad.27.1749833667526;
-        Fri, 13 Jun 2025 09:54:27 -0700 (PDT)
-Received: from mozart.vkv.me (192-184-162-253.fiber.dynamic.sonic.net. [192.184.162.253])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2fe163a498sm1684088a12.15.2025.06.13.09.54.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jun 2025 09:54:27 -0700 (PDT)
-From: Calvin Owens <calvin@wbinvd.org>
-To: linux-kernel@vger.kernel.org
-Cc: linux-pm@vger.kernel.org,
-	Len Brown <lenb@kernel.org>
-Subject: [PATCH] tools/power turbostat: Fix build with musl
-Date: Fri, 13 Jun 2025 09:54:23 -0700
-Message-ID: <7edd4c688111a697cfe913c73d074738b3d1dffb.1749833196.git.calvin@wbinvd.org>
-X-Mailer: git-send-email 2.47.2
+	s=arc-20240116; t=1749833761; c=relaxed/simple;
+	bh=FOdKOxiJZ2/SG1w79e7BZqr7n17OwPwEdtWDqq4NXw8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hPx6Ind9NU6ohdEqiBwBj5MhsxaweDsFodXWa0tpawdE3bm+oDI3bQJ0R2XUznL0UAjNwY4J01gNotcoAh9mBP4Hm1VJQZ8uap9XNinb0O1rKqT6xBGzY2EhiC74zQheFXnTJhOfIxDTVWkHCZoeW6WkpDRczhLUHgPrTmTX+iM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2B7C21C0A;
+	Fri, 13 Jun 2025 09:55:38 -0700 (PDT)
+Received: from [10.57.28.131] (unknown [10.57.28.131])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C1F523F66E;
+	Fri, 13 Jun 2025 09:55:53 -0700 (PDT)
+Message-ID: <7ffe2c8a-1433-4adf-9786-ee0a9d2f3867@arm.com>
+Date: Fri, 13 Jun 2025 17:55:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 07/11] iommu/apple-dart: Drop default ARCH_APPLE in
+ Kconfig
+To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>,
+ Ulf Hansson <ulf.hansson@linaro.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Srinivas Kandagatla <srini@kernel.org>,
+ Andi Shyti <andi.shyti@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Joerg Roedel <joro@8bytes.org>,
+ Will Deacon <will@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Vinod Koul <vkoul@kernel.org>, =?UTF-8?Q?Martin_Povi=C5=A1er?=
+ <povik+lin@cutebit.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+ Takashi Iwai <tiwai@suse.com>, Arnd Bergmann <arnd@arndb.de>
+Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, iommu@lists.linux.dev,
+ linux-input@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-sound@vger.kernel.org
+References: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org>
+ <20250612-apple-kconfig-defconfig-v1-7-0e6f9cb512c1@kernel.org>
+From: Robin Murphy <robin.murphy@arm.com>
+Content-Language: en-GB
+In-Reply-To: <20250612-apple-kconfig-defconfig-v1-7-0e6f9cb512c1@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-    turbostat.c: In function 'parse_int_file':
-    turbostat.c:5567:19: error: 'PATH_MAX' undeclared (first use in this function)
-     5567 |         char path[PATH_MAX];
-          |                   ^~~~~~~~
+On 2025-06-12 10:11 pm, Sven Peter wrote:
+> When the first driver for Apple Silicon was upstreamed we accidentally
+> included `default ARCH_APPLE` in its Kconfig which then spread to almost
+> every subsequent driver. As soon as ARCH_APPLE is set to y this will
+> pull in many drivers as built-ins which is not what we want.
+> Thus, drop `default ARCH_APPLE` from Kconfig.
 
-    turbostat.c: In function 'probe_graphics':
-    turbostat.c:6787:19: error: 'PATH_MAX' undeclared (first use in this function)
-     6787 |         char path[PATH_MAX];
-          |                   ^~~~~~~~
+Acked-by: Robin Murphy <robin.murphy@arm.com>
 
-Signed-off-by: Calvin Owens <calvin@wbinvd.org>
----
- tools/power/x86/turbostat/turbostat.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 0170d3cc6819..925556b90770 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -67,6 +67,7 @@
- #include <stdbool.h>
- #include <assert.h>
- #include <linux/kernel.h>
-+#include <limits.h>
- 
- #define UNUSED(x) (void)(x)
- 
--- 
-2.47.2
+> Signed-off-by: Sven Peter <sven@kernel.org>
+> ---
+>   drivers/iommu/Kconfig | 1 -
+>   1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
+> index 0a33d995d15dd759eb47705c00b411f1157b408a..91d0c871acc418ac5fede4f177ce3af97aef5560 100644
+> --- a/drivers/iommu/Kconfig
+> +++ b/drivers/iommu/Kconfig
+> @@ -305,7 +305,6 @@ config APPLE_DART
+>   	depends on !GENERIC_ATOMIC64	# for IOMMU_IO_PGTABLE_DART
+>   	select IOMMU_API
+>   	select IOMMU_IO_PGTABLE_DART
+> -	default ARCH_APPLE
+>   	help
+>   	  Support for Apple DART (Device Address Resolution Table) IOMMUs
+>   	  found in Apple ARM SoCs like the M1.
+> 
 
 
