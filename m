@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-28671-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28672-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E480FAD89BF
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 12:43:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A524EAD89C6
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 12:44:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD8DE189E487
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 10:43:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 202753A9DF6
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 10:43:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 993C42D2382;
-	Fri, 13 Jun 2025 10:43:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4021B2D29CA;
+	Fri, 13 Jun 2025 10:44:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VwkZ/jIm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gU0uRFkV"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D7A257459;
-	Fri, 13 Jun 2025 10:43:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0896D1E0DE8;
+	Fri, 13 Jun 2025 10:43:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749811390; cv=none; b=ds7itH6PmKpeFk9lv5LdL3PQExdKiwYtL4zA0fA6hc3OUfX8dVQ1M5ebX3yoPRhxP9UQ2wBVcAOAfDCcDyhj250fvmN4D1FIYAQ1eOk4HviWnOBQzLR+0I82n6tXsM4IK/mqRnBjZ3UnoY05U/+1iJRcT9zurqYQEkq5wu6zWJc=
+	t=1749811440; cv=none; b=FlUky1+ont/29Yeifr7E4iSeF5xr1FIM18zPLQSkPJ7o75kmuWFIVxT9D+3twJx6Per3gav/ElfT5ME575z2BH04r0XLve9Xb6iNSHQ6H7gSVcjbsXIxYFnoZ6udcoUPWEfNM7veEVu7vqSw22bS60oyzCUB9o7KTGS1QyI0k4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749811390; c=relaxed/simple;
-	bh=/zrNVWf19++HbCOvvQMGtxoTbY0fGBVHE21wqPK+M9U=;
+	s=arc-20240116; t=1749811440; c=relaxed/simple;
+	bh=mnbw6A0mNVYyInMDA9EbKUPtqVXfTwi9C7mfH7beIQQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qfs3+pXc0ys/ninCfI/M8daMzW08jkC/B+z227shHho0kEiAh0FTw5gwiLP0W7eFhGLPY1RRuZo+LZTQiMCtTehSyWTJt8UjQ3d+BQ8FQrjQHlHqkcRf0DcyEYiqE0qPlaF1DBQqjxguaZffKPMX6zKxGPTpjAEdKrGVv2jPPqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VwkZ/jIm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28A5EC4CEE3;
-	Fri, 13 Jun 2025 10:43:02 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=gZR+hRfpXdSzade/5K1hG0uIQaKfmgpBcXvOMbTxr0HitsG5n2fjeyWV9Fntmkj51oxnjJbkl3xtKmqyehsRV/zXy83jXM+wylCfqhp4P6DYwqQ2+VGUpEQg4URarBxEWYJcMrJ7XQrkjyEWVB8U/aiQ6n9sEklTzIwdB/9+WYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gU0uRFkV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD306C4CEE3;
+	Fri, 13 Jun 2025 10:43:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749811389;
-	bh=/zrNVWf19++HbCOvvQMGtxoTbY0fGBVHE21wqPK+M9U=;
+	s=k20201202; t=1749811439;
+	bh=mnbw6A0mNVYyInMDA9EbKUPtqVXfTwi9C7mfH7beIQQ=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VwkZ/jImyiCbXlhI5zVfS5NyLAB3WFxnWi1k2T9Gy/quOFc5HdAQ7Uycs4in5YnzZ
-	 rTdPV5c5AZCxitVr1WO8tUsiP3xf2zY/Moh9Mh7bw99DqGklOzfKY/R89/HnIReUT6
-	 Baue7SqdmtS9BNuQPjvSMI0aU62vSf8omtnNIT39aMolwGur4cQWGZMIgZ2Bdrwa1g
-	 l25xK0YiG+MNwHTyfrV8jVCxvIFduiS7IYpllsSh+ww9C9PgNNtFxvTUkyjgrPiTFU
-	 k5LptLX+uGruLrq/fP3OUs7T+oHcSpg7DfxBJYd1ITqWLPw81jFzU5EprYWe9DqIrJ
-	 oOga3A+EHjquQ==
-Message-ID: <4e8f2426-92a1-4c7e-b860-0e10e8dd886c@kernel.org>
-Date: Fri, 13 Jun 2025 12:43:01 +0200
+	b=gU0uRFkVCP3yxRwUtFbnMhRQdsKCOZoM/nzYLTQN7tkZlScexuLQ0L+q7JGcJeK2A
+	 3VAsyyRyInGzeylTmqtJGqIjxLJuv/ts3Afu7vNPiZxyvvOIasA/KAk2onqqtLPNjz
+	 0e6GuEIj2vcTxBqEYHokMug56dvF8YaRCEvSLY2BZBxpFAwnT4ckrG3Dc/Fsg4MJGQ
+	 KxDM+ttltbj3Y/X+EShpvMXDylbvNfZPow47cooj4pnKkoEjzJoOeCiyj0NckKtzEz
+	 RDBfKa4YSGSE6Vz5KyjwR2FDZ5unY3yXTXx5tOOm/7iERiXMlR8X7e1eq+vTooBai8
+	 ZJ8zd7ghroI9w==
+Message-ID: <27ca7dfa-9dee-43f5-9e97-78de5e964f6e@kernel.org>
+Date: Fri, 13 Jun 2025 12:43:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 3/9] arm64: dts: freescale: rename imx93.dtsi to
- imx91_93_common.dtsi
+Subject: Re: [PATCH v5 4/9] arm64: dts: imx93: move i.MX93 specific part from
+ imx91_93_common.dtsi to imx93.dtsi
 To: Joy Zou <joy.zou@nxp.com>, robh@kernel.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
  catalin.marinas@arm.com, will@kernel.org, andrew+netdev@lunn.ch,
@@ -65,7 +65,7 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-pm@vger.kernel.org, frank.li@nxp.com, ye.li@nxp.com, ping.bai@nxp.com,
  peng.fan@nxp.com, aisheng.dong@nxp.com, xiaoning.wang@nxp.com
 References: <20250613100255.2131800-1-joy.zou@nxp.com>
- <20250613100255.2131800-4-joy.zou@nxp.com>
+ <20250613100255.2131800-5-joy.zou@nxp.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,104 +111,33 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250613100255.2131800-4-joy.zou@nxp.com>
+In-Reply-To: <20250613100255.2131800-5-joy.zou@nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 13/06/2025 12:02, Joy Zou wrote:
-> Rename imx93.dtsi to imx91_93_common.dtsi for adding imx91.dtsi.
+> Move i.MX93 specific part from imx91_93_common.dtsi to imx93.dtsi.
 
-Why?
+You just moved them to the common file. Why are you moving the same line
+again?
 
-Your commit msg MUST explain that. That's the more important part.
-
-> There is no code change.
-> 
-> Add imx93.dtsi, which include imx91_93_common.dtsi.
 > 
 > Signed-off-by: Joy Zou <joy.zou@nxp.com>
 > ---
->  .../boot/dts/freescale/imx91_93_common.dtsi   | 1351 +++++++++++++++++
->  arch/arm64/boot/dts/freescale/imx93.dtsi      | 1349 +---------------
-
-Generate patches with proper -M/-B/-C flags so it will be possible to
-actually review this.
-
-
->  2 files changed, 1353 insertions(+), 1347 deletions(-)
->  create mode 100644 arch/arm64/boot/dts/freescale/imx91_93_common.dtsi
-> 
+>  .../boot/dts/freescale/imx91_93_common.dtsi   | 140 +---------------
+>  arch/arm64/boot/dts/freescale/imx93.dtsi      | 155 ++++++++++++++++++
+>  2 files changed, 157 insertions(+), 138 deletions(-)>
 > diff --git a/arch/arm64/boot/dts/freescale/imx91_93_common.dtsi b/arch/arm64/boot/dts/freescale/imx91_93_common.dtsi
-> new file mode 100644
-> index 000000000000..64cd0776b43d
-> --- /dev/null
+> index 64cd0776b43d..da4c1c0699b3 100644
+> --- a/arch/arm64/boot/dts/freescale/imx91_93_common.dtsi
 > +++ b/arch/arm64/boot/dts/freescale/imx91_93_common.dtsi
-> @@ -0,0 +1,1351 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright 2022 NXP
-> + */
-> +
-> +#include <dt-bindings/clock/imx93-clock.h>
-> +#include <dt-bindings/dma/fsl-edma.h>
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/power/fsl,imx93-power.h>
-> +#include <dt-bindings/thermal/thermal.h>
-> +
-> +#include "imx93-pinfunc.h"
-> +
-> +/ {
-> +	interrupt-parent = <&gic>;
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
-> +
-> +	aliases {
-> +		gpio0 = &gpio1;
-> +		gpio1 = &gpio2;
-> +		gpio2 = &gpio3;
-> +		gpio3 = &gpio4;
-> +		i2c0 = &lpi2c1;
-> +		i2c1 = &lpi2c2;
-> +		i2c2 = &lpi2c3;
-> +		i2c3 = &lpi2c4;
-> +		i2c4 = &lpi2c5;
-> +		i2c5 = &lpi2c6;
-> +		i2c6 = &lpi2c7;
-> +		i2c7 = &lpi2c8;
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+>  /*
+> - * Copyright 2022 NXP
+> + * Copyright 2025 NXP
 
-Not common aliases. Drop.
-
-
-> +		mmc0 = &usdhc1;
-> +		mmc1 = &usdhc2;
-> +		mmc2 = &usdhc3;
-
-Not common aliases. Drop.
-
-
-> +		serial0 = &lpuart1;
-> +		serial1 = &lpuart2;
-> +		serial2 = &lpuart3;
-> +		serial3 = &lpuart4;
-> +		serial4 = &lpuart5;
-> +		serial5 = &lpuart6;
-> +		serial6 = &lpuart7;
-> +		serial7 = &lpuart8;
-
-Not common aliases. Drop.
-
-> +		spi0 = &lpspi1;
-> +		spi1 = &lpspi2;
-> +		spi2 = &lpspi3;
-> +		spi3 = &lpspi4;
-> +		spi4 = &lpspi5;
-> +		spi5 = &lpspi6;
-> +		spi6 = &lpspi7;
-> +		spi7 = &lpspi8;
-
-Not common aliases. Drop.
+Why?
 
 
 Best regards,
