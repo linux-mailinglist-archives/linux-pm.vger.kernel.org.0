@@ -1,34 +1,34 @@
-Return-Path: <linux-pm+bounces-28641-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28642-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 367D2AD883D
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 11:45:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B1B2AD8840
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 11:45:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF04B1E1247
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 09:45:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98846189C711
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 09:46:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1883D2C15BF;
-	Fri, 13 Jun 2025 09:44:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 380BF2D23B2;
+	Fri, 13 Jun 2025 09:45:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="EWshjL9h"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="c6MIwqbN"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F16291C2D;
-	Fri, 13 Jun 2025 09:44:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D022D23A5;
+	Fri, 13 Jun 2025 09:45:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749807898; cv=none; b=G9n5ZtlSVvgzBXNhGgIhdH3+TKxya7AtMcFsCye+IJbeHp2RjmvzeYnI2SLUsJPNlbSnhjqUyqZhfgZ/IUh29HLqFeKgfTzJyN/HGyrY5aMWeU5LP/s9TRwRtCGcAeVDu3TQrIzE0RyrgwJSlxK/PPrditE+LcegdV9I60A1PQE=
+	t=1749807903; cv=none; b=Dfg2ixoRs2PwFhwNEirn4zJcwiFRTJiaHvPjidy028FOwxyC7PvkZYPsLOPH4bkVZnblV28kS893MzqRlNvwb9MDhSYAkUet7Eq62qdRjbp+Av2ohfBH/ARtjl2q+X7/IfPYjuXX/WTov4m894KZdJiR9PqPzHf05vTJ5guU0dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749807898; c=relaxed/simple;
-	bh=yyvuJjl3bah6u7+4R/1Hjwg4gmSNrhYGtDq81kBOtOM=;
+	s=arc-20240116; t=1749807903; c=relaxed/simple;
+	bh=cVIdpCkN+5cSS93w/j8KxW6U9tQ07XYroGnprrV0pmM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jEIxQYBJiz0KG0EiMxm52qXUX/b0n6FXDbnsa7fJ94yB8r9cxwNeBsSFYXrqL1s10GqTJxGX1zpD9BDAl3n1/cTZepOWZlrQT2eStMnxXMi8Wcd4pYTLLVquyMGzNItGAyCdXx4orBkMlY7uCtQ0j3iacs/+eQ+ZjwI1xxwyOc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=EWshjL9h; arc=none smtp.client-ip=213.97.179.56
+	 MIME-Version; b=GaOr4GzRlQJY1KxiT6gaWxcYCIRJzLLu3UUMKQ8DELCYy1uq5lGxAYYn77VkL2wIMXajQd7qlOBwY7tOtObfymjcxGYtr72wzKsjnB3+6yZcqH1mbxyzYqlbviKDwYq01NjS3iwNwxT9oF+OwFZoUQWBCtz8dIHCtmLXgh7wzwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=c6MIwqbN; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
@@ -37,16 +37,16 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=ryvldnhgKRwh0INBo32LSJYaJZcQhfLozchk2VI8IBQ=; b=EWshjL9higBMMFTcwYakjVQq2v
-	aJHMGf7cdoP/5cdlSPl95h88CeZJ5Hz8DLq+kJv+tkOxUO/DK/9YfmshyWIPsT5lnI+TmE9X1F0i9
-	cfhqt+TkVTZFrAQ0z5nyJlyNnvqttnBkWvK32U+NnCAJbUll54UE4k9UZBo+WD6A/dmuOAAz4tM5O
-	q11TmLfm9ujdaU9i3EH4PmNWIq56xGiXvXVf+yw1Dyk769ALh287nbUKV9kcRAKuBGcde2NrFv/ra
-	y8LguffCbFiYp2HiuNJ2qMXcYyLLbc/jWD+Eag2fAnNpsCTTJyYZMfvWkinDcHsozgOa0I2QzjVwF
-	Kv0BLYSw==;
+	bh=9HVOxydT4xaa8ZVXUFVmv2O4FdtHBrwpSOmNk8hpbKg=; b=c6MIwqbNeYuSOVYtB8v6A8/qL+
+	av9YHigVToZpx+mfd3QMthKHTbAAbzEiYzzDZQkRK30hZhbinWYhckd8ksQsTJYI3QcppBtuRnYyT
+	lERHOG1RymSdTh7i8SQDuPXrrHBbX2lP6kr9deJFBchggqwywDrX0ef18MyxmCHuwN8h1uquhyGdk
+	kfRtkOY7JLoBI9jM3r7zxEcDsRrjQHlZovu6KHk2KnEvk9iKTc/RqhXyrLaZfUwWtxbFctqxE8N53
+	WcLmIc1y+NJ9cxlZs+0ujZQa6Erfd8MSovwYb8YLS5jnhfxzGMSCiuubA2UuHu1ix0qfISGKUx37R
+	95x9eN3w==;
 Received: from [58.29.143.236] (helo=localhost)
 	by fanzine2.igalia.com with utf8esmtpsa 
 	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1uQ0xr-002xci-Pa; Fri, 13 Jun 2025 11:44:49 +0200
+	id 1uQ0xx-002xdA-E0; Fri, 13 Jun 2025 11:44:54 +0200
 From: Changwoo Min <changwoo@igalia.com>
 To: lukasz.luba@arm.com,
 	rafael@kernel.org,
@@ -59,9 +59,9 @@ Cc: christian.loehle@arm.com,
 	sched-ext@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	Changwoo Min <changwoo@igalia.com>
-Subject: [PATCH v2 02/10] PM: EM: Add a skeleton code for netlink notification.
-Date: Fri, 13 Jun 2025 18:44:20 +0900
-Message-ID: <20250613094428.267791-3-changwoo@igalia.com>
+Subject: [PATCH v2 03/10] PM: EM: Assign a unique ID when creating a performance domain.
+Date: Fri, 13 Jun 2025 18:44:21 +0900
+Message-ID: <20250613094428.267791-4-changwoo@igalia.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250613094428.267791-1-changwoo@igalia.com>
 References: <20250613094428.267791-1-changwoo@igalia.com>
@@ -73,112 +73,129 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a boilerplate code for netlink notification to register the new
-protocol family. Also, initialize and register the netlink during booting.
-The initialization is called at the postcore level, which is late enough
-after the generic netlink is initialized.
+It is necessary to refer to a specific performance domain from a
+userspace. For example, the energy model of a particular performance
+domain is updated.
 
-Finally, update MAINTAINERS to include new files.
+To this end, assign a unique ID to each performance domain to address it,
+and manage them in a global linked list to look up a specific one by
+matching ID. IDA is used for ID assignment, and the mutex is used to
+protect the global list from concurrent access.
+
+Note that the mutex (em_pd_list_mutex) is not supposed to hold while
+holding em_pd_mutex to avoid ABBA deadlock.
 
 Signed-off-by: Changwoo Min <changwoo@igalia.com>
 ---
- MAINTAINERS               |  2 +-
- kernel/power/Makefile     |  5 ++++-
- kernel/power/em_netlink.c | 35 +++++++++++++++++++++++++++++++++++
- kernel/power/em_netlink.h | 16 ++++++++++++++++
- 4 files changed, 56 insertions(+), 2 deletions(-)
- create mode 100644 kernel/power/em_netlink.c
- create mode 100644 kernel/power/em_netlink.h
+ include/linux/energy_model.h |  4 ++++
+ kernel/power/energy_model.c  | 30 +++++++++++++++++++++++++++++-
+ 2 files changed, 33 insertions(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6d6d156ce011..63f694ff1b8f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8867,7 +8867,7 @@ F:	include/linux/energy_model.h
- F:	Documentation/power/energy-model.rst
- F:	Documentation/netlink/specs/em.yaml
- F:	include/uapi/linux/energy_model.h
--F:	kernel/power/em_netlink_autogen.*
-+F:	kernel/power/em_netlink*.*
+diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+index 7fa1eb3cc823..2f5c73fcdfe5 100644
+--- a/include/linux/energy_model.h
++++ b/include/linux/energy_model.h
+@@ -54,6 +54,8 @@ struct em_perf_table {
+ /**
+  * struct em_perf_domain - Performance domain
+  * @em_table:		Pointer to the runtime modifiable em_perf_table
++ * @node:		node in	em_pd_list (in energy_model.c)
++ * @id:			A unique ID number for each performance domain
+  * @nr_perf_states:	Number of performance states
+  * @min_perf_state:	Minimum allowed Performance State index
+  * @max_perf_state:	Maximum allowed Performance State index
+@@ -71,6 +73,8 @@ struct em_perf_table {
+  */
+ struct em_perf_domain {
+ 	struct em_perf_table __rcu *em_table;
++	struct list_head node;
++	int id;
+ 	int nr_perf_states;
+ 	int min_perf_state;
+ 	int max_perf_state;
+diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+index ea7995a25780..58671ac142db 100644
+--- a/kernel/power/energy_model.c
++++ b/kernel/power/energy_model.c
+@@ -23,6 +23,16 @@
+  */
+ static DEFINE_MUTEX(em_pd_mutex);
  
- EPAPR HYPERVISOR BYTE CHANNEL DEVICE DRIVER
- M:	Laurentiu Tudor <laurentiu.tudor@nxp.com>
-diff --git a/kernel/power/Makefile b/kernel/power/Makefile
-index 874ad834dc8d..284a760aade7 100644
---- a/kernel/power/Makefile
-+++ b/kernel/power/Makefile
-@@ -21,4 +21,7 @@ obj-$(CONFIG_PM_WAKELOCKS)	+= wakelock.o
- 
- obj-$(CONFIG_MAGIC_SYSRQ)	+= poweroff.o
- 
--obj-$(CONFIG_ENERGY_MODEL)	+= energy_model.o
-+obj-$(CONFIG_ENERGY_MODEL)	+= em.o
-+em-y				:= energy_model.o
-+em-$(CONFIG_NET)		+= em_netlink_autogen.o em_netlink.o
-+
-diff --git a/kernel/power/em_netlink.c b/kernel/power/em_netlink.c
-new file mode 100644
-index 000000000000..f3fbfeff29a4
---- /dev/null
-+++ b/kernel/power/em_netlink.c
-@@ -0,0 +1,35 @@
-+// SPDX-License-Identifier: GPL-2.0
 +/*
-+ *
-+ * Generic netlink for energy model.
-+ *
-+ * Copyright (c) 2025 Valve Corporation.
-+ * Author: Changwoo Min <changwoo@igalia.com>
++ * Manage performance domains with IDs. One can iterate the performance domains
++ * through the list and pick one with their associated ID. The mutex serializes
++ * the list access. When holding em_pd_list_mutex, em_pd_mutex should not be
++ * taken to avoid potential deadlock.
 + */
++static DEFINE_IDA(em_pd_ida);
++static LIST_HEAD(em_pd_list);
++static DEFINE_MUTEX(em_pd_list_mutex);
 +
-+#define pr_fmt(fmt) "energy_model: " fmt
+ static void em_cpufreq_update_efficiencies(struct device *dev,
+ 					   struct em_perf_state *table);
+ static void em_check_capacity_update(void);
+@@ -396,7 +406,7 @@ static int em_create_pd(struct device *dev, int nr_states,
+ 	struct em_perf_table *em_table;
+ 	struct em_perf_domain *pd;
+ 	struct device *cpu_dev;
+-	int cpu, ret, num_cpus;
++	int cpu, ret, num_cpus, id;
+ 
+ 	if (_is_cpu_device(dev)) {
+ 		num_cpus = cpumask_weight(cpus);
+@@ -420,6 +430,13 @@ static int em_create_pd(struct device *dev, int nr_states,
+ 
+ 	pd->nr_perf_states = nr_states;
+ 
++	INIT_LIST_HEAD(&pd->node);
 +
-+#include <linux/energy_model.h>
-+#include <net/sock.h>
-+#include <net/genetlink.h>
-+#include <uapi/linux/energy_model.h>
++	id = ida_alloc(&em_pd_ida, GFP_KERNEL);
++	if (id < 0)
++		return -ENOMEM;
++	pd->id = id;
 +
-+#include "em_netlink.h"
-+#include "em_netlink_autogen.h"
+ 	em_table = em_table_alloc(pd);
+ 	if (!em_table)
+ 		goto free_pd;
+@@ -444,6 +461,7 @@ static int em_create_pd(struct device *dev, int nr_states,
+ 	kfree(em_table);
+ free_pd:
+ 	kfree(pd);
++	ida_free(&em_pd_ida, id);
+ 	return -EINVAL;
+ }
+ 
+@@ -639,6 +657,10 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
+ 	if (_is_cpu_device(dev))
+ 		em_check_capacity_update();
+ 
++	mutex_lock(&em_pd_list_mutex);
++	list_add_tail(&dev->em_pd->node, &em_pd_list);
++	mutex_unlock(&em_pd_list_mutex);
 +
-+int em_nl_get_pds_doit(struct sk_buff *skb, struct genl_info *info)
-+{
-+	return -EOPNOTSUPP;
-+}
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(em_dev_register_perf_domain);
+@@ -657,6 +679,10 @@ void em_dev_unregister_perf_domain(struct device *dev)
+ 	if (_is_cpu_device(dev))
+ 		return;
+ 
++	mutex_lock(&em_pd_list_mutex);
++	list_del_init(&dev->em_pd->node);
++	mutex_unlock(&em_pd_list_mutex);
 +
-+int em_nl_get_pd_table_doit(struct sk_buff *skb, struct genl_info *info)
-+{
-+	return -EOPNOTSUPP;
-+}
+ 	/*
+ 	 * The mutex separates all register/unregister requests and protects
+ 	 * from potential clean-up/setup issues in the debugfs directories.
+@@ -668,6 +694,8 @@ void em_dev_unregister_perf_domain(struct device *dev)
+ 	em_table_free(rcu_dereference_protected(dev->em_pd->em_table,
+ 						lockdep_is_held(&em_pd_mutex)));
+ 
++	ida_free(&em_pd_ida, dev->em_pd->id);
 +
-+static int __init em_netlink_init(void)
-+{
-+	return genl_register_family(&em_nl_family);
-+}
-+postcore_initcall(em_netlink_init);
-+
-diff --git a/kernel/power/em_netlink.h b/kernel/power/em_netlink.h
-new file mode 100644
-index 000000000000..acd186c92d6b
---- /dev/null
-+++ b/kernel/power/em_netlink.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ *
-+ * Generic netlink for energy model.
-+ *
-+ * Copyright (c) 2025 Valve Corporation.
-+ * Author: Changwoo Min <changwoo@igalia.com>
-+ */
-+#ifndef _EM_NETLINK_H
-+#define _EM_NETLINK_H
-+
-+#if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_NET)
-+#else
-+#endif
-+
-+#endif /* _EM_NETLINK_H */
+ 	kfree(dev->em_pd);
+ 	dev->em_pd = NULL;
+ 	mutex_unlock(&em_pd_mutex);
 -- 
 2.49.0
 
