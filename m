@@ -1,174 +1,159 @@
-Return-Path: <linux-pm+bounces-28694-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28695-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3E9CAD95DD
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 22:03:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67583AD9618
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 22:16:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 332703B9330
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 20:02:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33FA3188B27E
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 20:15:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C77F2343B6;
-	Fri, 13 Jun 2025 20:03:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBDB4242D67;
+	Fri, 13 Jun 2025 20:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RMJK21uk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ezk7zOS9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4DFA72608;
-	Fri, 13 Jun 2025 20:03:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CBE320E717;
+	Fri, 13 Jun 2025 20:15:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749844997; cv=none; b=P0kYqZ7JNU8LryTGPks/EsGLtIteEyvuvwZNGn9xtFEbrojw+qWL1TwIBJFWr8BUSUhZfAsdKdPVhfxqcr/KTxZArVQPmcnFw9c5jks2mLC89myZdYuYX+G3VJf8C/hr80L+CPwnoWJRL4pdMZrB+/s/u81AqcBVPMTYf3QOm3M=
+	t=1749845729; cv=none; b=dpDpcPyF4H5RBRwLwGkavuor0YoDAimT0A9o8LKrelzkgUN+/OQ0DHx663zfd2fcuOCd/tZCuQ8DorNx0A2AJ6AczjFN1UBAgK5NaNeZPOVB4964a0u0OU54yKigjk5O82wDD8NiFvDY5hldzdIh3EwjetpsfAYR5SP7mq2GTcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749844997; c=relaxed/simple;
-	bh=/4cO2oxwE2+MFIsqBcFcY3X9Z9y419YIquujHe9FTio=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RIvm/tjp3ow3Xi79vUOJ6on+N2FFEzjo7K3y7mwrwB/7BqzBKkYghUVTVs83olD/Ex1j3+cF0U4UQsRvx3iC4cbp4jJHUMgQu4hP1fHhoksAg6pPXM6Cd1CmdTOryl2+tyZA8DrOdUz/In3bq98HLGiIf38Wofus2HCVQT2f92I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RMJK21uk; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749844996; x=1781380996;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/4cO2oxwE2+MFIsqBcFcY3X9Z9y419YIquujHe9FTio=;
-  b=RMJK21ukGX6FxQzNSaoMFym1H3cMYf+MdIxJaDqK17cu6ooDPJZRAwFK
-   CLU4PKbcTyGPOQt9iaxclTNi2UAj2j9OCYWvzlxp/QEnUryltKzrJVoTx
-   45WOlF/apimHw8GbAeYgvgE/MHzzFRLC5JpQxoDW6qy8MXiwvBoMBnYhq
-   +/LMNQ/cAqyJW+vMhXxAXSo4iZ2sShdPoK3LX4DfS2Gb5IlPXpfOQGX+6
-   WWeL4piDwZzdZbf9lbHyMmd8oR6fjd5MsTo7lJwzitjkEvGw26AigLfGq
-   udem169OfzzM9dJfTW3EerJHbD5IjJOH0UWlfc/ANULjnDAa9eBeSg8yE
-   w==;
-X-CSE-ConnectionGUID: +AowgUV/ShCevISBJ/WP6w==
-X-CSE-MsgGUID: hh4olmh0Tg+T/+ztWkrbjQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11463"; a="51788476"
-X-IronPort-AV: E=Sophos;i="6.16,234,1744095600"; 
-   d="scan'208";a="51788476"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2025 13:03:15 -0700
-X-CSE-ConnectionGUID: NGjm4sX7RoCq04Iz9oE4xw==
-X-CSE-MsgGUID: DiqxwtpWSIaxHbuuah5MvA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,234,1744095600"; 
-   d="scan'208";a="178898439"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 13 Jun 2025 13:03:12 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uQAcI-000CyA-0K;
-	Fri, 13 Jun 2025 20:03:10 +0000
-Date: Sat, 14 Jun 2025 04:02:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Changwoo Min <changwoo@igalia.com>, lukasz.luba@arm.com,
-	rafael@kernel.org, len.brown@intel.com, pavel@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	christian.loehle@arm.com, tj@kernel.org, kernel-dev@igalia.com,
-	linux-pm@vger.kernel.org, sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Changwoo Min <changwoo@igalia.com>
-Subject: Re: [PATCH v2 09/10] PM: EM: Implement
- em_notify_pd_created/updated().
-Message-ID: <202506140306.tuIoz8rN-lkp@intel.com>
-References: <20250613094428.267791-10-changwoo@igalia.com>
+	s=arc-20240116; t=1749845729; c=relaxed/simple;
+	bh=7uLjyUvffaigqJ3AEqRaDo96HV0nyW1QomE1lz0AoMI=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=b2v3vG2vJaUUuPyklx1AcCWrkIngqMia8mtN0RO10lY83dA2mbS/vSZK0byV4olV5SsZwMTigaCaL6U2stft0KmnV0Zmbp19PSENg2bcAEhaAhelSmjpPzphGSjYqEcoJlgk2tXdjbKkQVWTzM22TsGAkBmyuexL5pDHKYnax0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ezk7zOS9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C252C4CEE3;
+	Fri, 13 Jun 2025 20:15:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749845729;
+	bh=7uLjyUvffaigqJ3AEqRaDo96HV0nyW1QomE1lz0AoMI=;
+	h=From:Date:Subject:To:Cc:From;
+	b=Ezk7zOS9xEEQtbzKYg3/aWutE4jpTFUJGppvkr1p96NxNtrcvijxvXeEYfBdSss7C
+	 c+8P/Ctv+MdyHEYERbTiEDDF9dQufgw7Ihoujf3FW1rs8S77goQgpb0lITZbOc9VGZ
+	 xqHvODfinAm1ds+UihQwys8gc4I5R74cejGMBawXGQxz2ukCUjgPRlNIhr/1M6lxtr
+	 clLJAwICoIizND3F17XuP39AC+46wapb0EhjYaRHpVsKuMnzBfEInxv/2FuxZCQx6J
+	 TWjCAwI8cyn5D/ONp5b7oLDVoir1eV/vzy3kB5wzUuZHGJOjmytz+5RbN5nqc1FEFu
+	 QRVLN3LCqNjMQ==
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-60d6303a11eso1336852eaf.0;
+        Fri, 13 Jun 2025 13:15:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUlj5tPDrDEO6fQ94TvkDCoC7SsfEWeAglXEgHZVnKkdEKN8VZFS2+USVchieBTEePhotmT9UbtEbpC@vger.kernel.org, AJvYcCUrRuzXH06ZrGs9YHpcTQ3lBDvWb8yUfSfzYNuzVC+8Fw8sh52ttyJmlo81NyPodcEWIaGnXAcSmY3DYdKJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YxECB3OozWV38b+ShXvw1ZExPRyDWh5hOEOKZFmYD/q859Pe20t
+	W0cdgg9E7nfSP5HguAkPrTSHbk3I7rzNzdg+sZNArb3bpKfURneWzPmaALYgeo9iIA2SzHb+SkK
+	+FRNChdm6u18GtcVuIjQq/R2zWUfAeuA=
+X-Google-Smtp-Source: AGHT+IEJdHo8wW2tLfkVDlyRj+JgNom6RzmP5SDPrTdXuVsU+IfMIry5EXqN3vRNUOI6gu2fwARjjV+wH7RT7KDvWbg=
+X-Received: by 2002:a05:6820:1518:b0:60f:16d3:df3 with SMTP id
+ 006d021491bc7-61110ea4fddmr609724eaf.1.1749845728462; Fri, 13 Jun 2025
+ 13:15:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250613094428.267791-10-changwoo@igalia.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 13 Jun 2025 22:15:17 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jYie5HkuPkRiWrvaG3szhVO2HyHbN5=D0KQsNjrwMzZQ@mail.gmail.com>
+X-Gm-Features: AX0GCFsLRu5FELmZsuLPlNqZSm1NDBi2NLQfAP5-ER8p-s206IYJkPfv3KnjmQo
+Message-ID: <CAJZ5v0jYie5HkuPkRiWrvaG3szhVO2HyHbN5=D0KQsNjrwMzZQ@mail.gmail.com>
+Subject: [GIT PULL] Power management updates for v6.16-rc2
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, 
+	ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Changwoo,
+Hi Linus,
 
-kernel test robot noticed the following build warnings:
+Please pull from the tag
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.16-rc1 next-20250613]
-[cannot apply to amd-pstate/linux-next amd-pstate/bleeding-edge]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.16-rc2
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Changwoo-Min/PM-EM-Add-em-yaml-and-autogen-files/20250613-174859
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250613094428.267791-10-changwoo%40igalia.com
-patch subject: [PATCH v2 09/10] PM: EM: Implement em_notify_pd_created/updated().
-config: i386-randconfig-001-20250614 (https://download.01.org/0day-ci/archive/20250614/202506140306.tuIoz8rN-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250614/202506140306.tuIoz8rN-lkp@intel.com/reproduce)
+with top-most commit dd3581853c5f190c3a7bd1de78f5ecb2905a77a7
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506140306.tuIoz8rN-lkp@intel.com/
+ Merge branch 'pm-cpuidle'
 
-All warnings (new ones prefixed by >>):
+on top of commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
 
->> kernel/power/em_netlink.c:234:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     234 |         if (!hdr)
-         |             ^~~~
-   kernel/power/em_netlink.c:249:9: note: uninitialized use occurs here
-     249 |         return ret;
-         |                ^~~
-   kernel/power/em_netlink.c:234:2: note: remove the 'if' if its condition is always false
-     234 |         if (!hdr)
-         |         ^~~~~~~~~
-     235 |                 goto out_free_msg;
-         |                 ~~~~~~~~~~~~~~~~~
-   kernel/power/em_netlink.c:221:17: note: initialize the variable 'ret' to silence this warning
-     221 |         int msg_sz, ret;
-         |                        ^
-         |                         = 0
-   1 warning generated.
+ Linux 6.16-rc1
+
+to receive power management updates for 6.16-rc2.
+
+These fix the cpupower utility installation, fix up the recently added
+Rust abstractions for cpufreq and OPP, restore the x86 update
+eliminating mwait_play_dead_cpuid_hint() that has been reverted during
+the 6.16 merge
+window along with preventing the failure caused by it from happening, and
+clean up mwait_idle_with_hints() usage in intel_idle:
+
+ - Implement CpuId Rust abstraction and use it to fix doctest failure
+   related to the recently introduced cpumask abstraction (Viresh Kumar).
+
+ - Do minor cleanups in the `# Safety` sections for cpufreq abstractions
+   added recently (Viresh Kumar).
+
+ - Unbreak cpupower systemd service units installation on some systems
+   by adding a unitdir variable for specifying the location to install
+   them (Francesco Poli).
+
+ - Eliminate mwait_play_dead_cpuid_hint() again after reverting its
+   elimination during the 6.16 merge window due to a problem with
+   handling "dead" SMT siblings, but this time prevent leaving them in
+   C1 after initialization by taking them online and back offline when
+   a proper cpuidle driver for the platform has been registered (Rafael
+   Wysocki).
+
+ - Update data types of variables passed as arguments to
+   mwait_idle_with_hints() to match the function definition
+   after recent changes (Uros Bizjak).
+
+Thanks!
 
 
-vim +234 kernel/power/em_netlink.c
+---------------
 
-   215	
-   216	
-   217	/**************************** Event encoding *********************************/
-   218	static int __em_notify_pd_table(const struct em_perf_domain *pd, int ntf_type)
-   219	{
-   220		struct sk_buff *msg;
-   221		int msg_sz, ret;
-   222		void *hdr;
-   223	
-   224		if (!genl_has_listeners(&em_nl_family, &init_net, EM_NLGRP_EVENT))
-   225			return 0;
-   226	
-   227		msg_sz = __em_nl_get_pd_table_size(pd);
-   228	
-   229		msg = genlmsg_new(msg_sz, GFP_KERNEL);
-   230		if (!msg)
-   231			return -ENOMEM;
-   232	
-   233		hdr = genlmsg_put(msg, 0, 0, &em_nl_family, 0, ntf_type);
- > 234		if (!hdr)
-   235			goto out_free_msg;
-   236	
-   237		ret = __em_nl_get_pd_table(msg, pd);
-   238		if (ret)
-   239			goto out_free_msg;
-   240	
-   241		genlmsg_end(msg, hdr);
-   242	
-   243		genlmsg_multicast(&em_nl_family, msg, 0, EM_NLGRP_EVENT, GFP_KERNEL);
-   244	
-   245		return 0;
-   246	
-   247	out_free_msg:
-   248		nlmsg_free(msg);
-   249		return ret;
-   250	}
-   251	
+Francesco Poli (wintermute) (1):
+      cpupower: split unitdir from libdir in Makefile
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Rafael J. Wysocki (5):
+      intel_idle: Use subsys_initcall_sync() for initialization
+      x86/smp: PM/hibernate: Split arch_resume_nosmt()
+      intel_idle: Rescan "dead" SMT siblings during initialization
+      ACPI: processor: Rescan "dead" SMT siblings during initialization
+      Reapply "x86/smp: Eliminate mwait_play_dead_cpuid_hint()"
+
+Uros Bizjak (1):
+      intel_idle: Update arguments of mwait_idle_with_hints()
+
+Viresh Kumar (4):
+      cpufreq: Convert `/// SAFETY` lines to `# Safety` sections
+      rust: cpu: Introduce CpuId abstraction
+      rust: Use CpuId in place of raw CPU numbers
+      rust: cpu: Add CpuId::current() to retrieve current CPU ID
+
+---------------
+
+ MAINTAINERS                     |   1 +
+ arch/x86/kernel/smp.c           |  24 ++++++
+ arch/x86/kernel/smpboot.c       |  54 ++-----------
+ arch/x86/power/hibernate.c      |  19 ++---
+ drivers/acpi/internal.h         |   6 ++
+ drivers/acpi/processor_driver.c |   3 +
+ drivers/acpi/processor_idle.c   |   8 ++
+ drivers/cpufreq/rcpufreq_dt.rs  |   4 +-
+ drivers/idle/intel_idle.c       |  12 +--
+ include/linux/cpu.h             |   3 +
+ rust/helpers/cpu.c              |   8 ++
+ rust/helpers/helpers.c          |   1 +
+ rust/kernel/cpu.rs              | 125 ++++++++++++++++++++++++++++-
+ rust/kernel/cpufreq.rs          | 173 +++++++++++++++++++++++++++++-----------
+ rust/kernel/cpumask.rs          |  51 ++++++++----
+ tools/power/cpupower/Makefile   |   9 ++-
+ 16 files changed, 368 insertions(+), 133 deletions(-)
 
