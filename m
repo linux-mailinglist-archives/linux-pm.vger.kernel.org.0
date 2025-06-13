@@ -1,232 +1,165 @@
-Return-Path: <linux-pm+bounces-28638-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28639-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 418B1AD860C
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 10:52:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C63E3AD883A
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 11:45:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4664D3B9BB7
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 08:51:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 868A71E1311
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 09:45:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A01C279DBF;
-	Fri, 13 Jun 2025 08:51:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69EAC2C1597;
+	Fri, 13 Jun 2025 09:44:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bAYWQDjD"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="csS790PZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46BCB279DA6;
-	Fri, 13 Jun 2025 08:51:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 116561F1538;
+	Fri, 13 Jun 2025 09:44:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749804701; cv=none; b=ptMl7qygjDzTXBFYMD2NeLYUcGyKxaOvB8T/wmjeZxDoGDGPBNVzjTmwenaA3+JdFqIRoZeKtMJAc3sWihLT5QCkWulq8ptieQI27Y9uTUQRdh4z7cOh0RupdFsktAgQ4Ip/IyGK6EX0SAoJsOX8+/BmG86t0ERx6JGnQnnb/90=
+	t=1749807897; cv=none; b=c+imMpyt+HCo+lNMhhSWfNFmN366Im5MM58H1rBMtGlvDfusanIx3h2jfDAF0FuOK0rrUzpxZktunmYNVmygZ4m8GojSpcZ16Bx+RuuF2jXyiGjGr0PV3yAj786QLwXUCw/vgjbBowEMza8UcYqw3oRtA5mvCcOvimYAzwFs9xI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749804701; c=relaxed/simple;
-	bh=4dvU2gjTBAobluxvnHDFcItktqR+5ChasN0aGjgKaKI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=TF+CL1X33sxw0VqtEuxr3jb9iDssc9X7A3EbESabllYS5bQypE7xtvrP24WRopbaODEJsnEitLuRSOADTb6xhjheuJ5PqfcRLTFF2NFwhhfBsRcfAtQhb6sU/Xl3UrBDR0Oi9rk601w22W+jpBT3WcnxDQYE78zs3mn4Qq2qOj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bAYWQDjD; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749804698; x=1781340698;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=4dvU2gjTBAobluxvnHDFcItktqR+5ChasN0aGjgKaKI=;
-  b=bAYWQDjDkqgi8W41nfXsD1GhZHc4vEcptHrcwRhlbYzs7p38uM/FRHY9
-   QI07SMAxI1j8YzAT+3A3xox4j6T5WDx5/kCRLw/4dvrB7gCYsUrcPGeUM
-   5Or/jMlTJwCF9tVnwbSHcrTt0AljSpxDJLPrZMoMV5Ca26pjAG/R/Fn/k
-   kVm5Zzh+lhEWkw/4s1/v1bmFadgHTs+qEplVvRsPzDVnphKTVWxulJOLY
-   CvwJSb1IjkEXK8Tlx3lXlNqBNVMtTilFT/z1CPBfL5uJlk5FjJUrlE1bo
-   7edJ/NKsfKL8WTu2ls85/a+WJfSnuVj9IHa/k2TntcNrGzpGMC1k43DNP
-   Q==;
-X-CSE-ConnectionGUID: o9pnfUYGRrqHAutgH0cHwA==
-X-CSE-MsgGUID: HMom63YgR4GFn4jvLO1IUg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11462"; a="74547609"
-X-IronPort-AV: E=Sophos;i="6.16,233,1744095600"; 
-   d="scan'208";a="74547609"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2025 01:51:37 -0700
-X-CSE-ConnectionGUID: agVmFPqcQfiQWHXPtV8Rmw==
-X-CSE-MsgGUID: gWFTP0HTRC2RODcDIuxKFQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,233,1744095600"; 
-   d="scan'208";a="147619241"
-Received: from fdefranc-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.246.26])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2025 01:51:19 -0700
-From: Jani Nikula <jani.nikula@linux.intel.com>
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, Yury Norov
- <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
- Jaehoon Chung <jh80.chung@samsung.com>, Ulf Hansson
- <ulf.hansson@linaro.org>, Heiko Stuebner <heiko@sntech.de>, Shreeya Patel
- <shreeya.patel@collabora.com>, Mauro Carvalho Chehab <mchehab@kernel.org>,
- Sandy Huang <hjc@rock-chips.com>, Andy Yan <andy.yan@rock-chips.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
- <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David
- Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Vinod Koul
- <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, Nicolas
- Frattaroli <frattaroli.nicolas@gmail.com>, Liam Girdwood
- <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, Jaroslav Kysela
- <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>, Shawn Lin
- <shawn.lin@rock-chips.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Manivannan
- Sadhasivam
- <mani@kernel.org>, Rob Herring <robh@kernel.org>, Bjorn Helgaas
- <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>, MyungJoo Ham
- <myungjoo.ham@samsung.com>, Kyungmin Park <kyungmin.park@samsung.com>, Qin
- Jian <qinjian@cqplus1.com>, Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
- linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
- linux-sound@vger.kernel.org, netdev@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev,
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, Tvrtko Ursulin
- <tursulin@igalia.com>
-Subject: Re: [PATCH 01/20] bitfield: introduce HWORD_UPDATE bitfield macros
-In-Reply-To: <20250612-byeword-update-v1-1-f4afb8f6313f@collabora.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20250612-byeword-update-v1-0-f4afb8f6313f@collabora.com>
- <20250612-byeword-update-v1-1-f4afb8f6313f@collabora.com>
-Date: Fri, 13 Jun 2025 11:51:15 +0300
-Message-ID: <5493fd6017de3f393f632125fad95945d1c4294c@intel.com>
+	s=arc-20240116; t=1749807897; c=relaxed/simple;
+	bh=lPi6p/p/RsgcfmLbsQb/vHhcma/ASwBkZaZtMVk+4n0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BgFy6NEBbFra5Whe9Xer1gx8MA4mBI5yOLQ6wX4jcTZXU4fcGNiUuELtgdbzxfBF41bNW/KTXKkuFKgQB7FJzdQjbCy5+qQzMmRGWgpOpuV/GAAPcEvGH7TP0vMXUNoNTcezm0MX96BdRyv62+Sf1qFopmYNtIwMZhBIIzs3mks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=csS790PZ; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+	Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=ISH3k62X5pv9uRJP+PEVvdd5kI4YkAzousbl8twVhzk=; b=csS790PZuqvjy/u9hFZmGAnG8M
+	+MuTMz0LOrm8hphsr+EzD6VkSrpgKwCFlWRdMpGfuoWPbl8/Mr8Wx3eACTEJQxL0yKaid8ALKy24F
+	bBG6pyyfs4t3MisFPYfWo4VRlJ55fYYECfCX6J2zJbke9tkyaqwRD3lhiNY2cbhyDzGakfxdWwyLi
+	WpzL3ApDSxXjqDdBqzWfzdaN/19Rme/g3nIaKLp7SXuK/x+OctIkqCs7vRT4bEi6vkpm7MT9GzSdG
+	spywbySuKZRLPhlfUvDOGOzAk4EmMwUZPgJyxL36LCYO0OG70p/VbR5/7TX6LNYePL7XIO9ohpBOm
+	avsO84Pg==;
+Received: from [58.29.143.236] (helo=localhost)
+	by fanzine2.igalia.com with utf8esmtpsa 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1uQ0xg-002xcD-UL; Fri, 13 Jun 2025 11:44:38 +0200
+From: Changwoo Min <changwoo@igalia.com>
+To: lukasz.luba@arm.com,
+	rafael@kernel.org,
+	len.brown@intel.com,
+	pavel@kernel.org
+Cc: christian.loehle@arm.com,
+	tj@kernel.org,
+	kernel-dev@igalia.com,
+	linux-pm@vger.kernel.org,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Changwoo Min <changwoo@igalia.com>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH v2 00/10] PM: EM: Add netlink support for the energy model.
+Date: Fri, 13 Jun 2025 18:44:18 +0900
+Message-ID: <20250613094428.267791-1-changwoo@igalia.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-On Thu, 12 Jun 2025, Nicolas Frattaroli <nicolas.frattaroli@collabora.com> wrote:
-> Hardware of various vendors, but very notably Rockchip, often uses
-> 32-bit registers where the upper 16-bit half of the register is a
-> write-enable mask for the lower half.
->
-> This type of hardware setup allows for more granular concurrent register
-> write access.
->
-> Over the years, many drivers have hand-rolled their own version of this
-> macro, usually without any checks, often called something like
-> HIWORD_UPDATE or FIELD_PREP_HIWORD, commonly with slightly different
-> semantics between them.
->
-> Clearly there is a demand for such a macro, and thus the demand should
-> be satisfied in a common header file.
->
-> Add two macros: HWORD_UPDATE, and HWORD_UPDATE_CONST. The latter is a
-> version that can be used in initializers, like FIELD_PREP_CONST. The
-> macro names are chosen to not clash with any potential other macros that
-> drivers may already have implemented themselves, while retaining a
-> familiar name.
->
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> ---
->  include/linux/bitfield.h | 47 +++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 47 insertions(+)
->
-> diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
-> index 6d9a53db54b66c0833973c880444bd289d9667b1..b90d88db7405f95b78cdd6f3426263086bab5aa6 100644
-> --- a/include/linux/bitfield.h
-> +++ b/include/linux/bitfield.h
-> @@ -8,6 +8,7 @@
->  #define _LINUX_BITFIELD_H
->  
->  #include <linux/build_bug.h>
-> +#include <linux/limits.h>
->  #include <linux/typecheck.h>
->  #include <asm/byteorder.h>
->  
-> @@ -142,6 +143,52 @@
->  		(((typeof(_mask))(_val) << __bf_shf(_mask)) & (_mask))	\
->  	)
->  
-> +/**
-> + * HWORD_UPDATE() - prepare a bitfield element with a mask in the upper half
-> + * @_mask: shifted mask defining the field's length and position
-> + * @_val:  value to put in the field
-> + *
-> + * HWORD_UPDATE() masks and shifts up the value, as well as bitwise ORs the
-> + * result with the mask shifted up by 16.
-> + *
-> + * This is useful for a common design of hardware registers where the upper
-> + * 16-bit half of a 32-bit register is used as a write-enable mask. In such a
-> + * register, a bit in the lower half is only updated if the corresponding bit
-> + * in the upper half is high.
-> + */
-> +#define HWORD_UPDATE(_mask, _val)					 \
-> +	({								 \
-> +		__BF_FIELD_CHECK(_mask, ((u16) 0U), _val,		 \
-> +				 "HWORD_UPDATE: ");			 \
-> +		(((typeof(_mask))(_val) << __bf_shf(_mask)) & (_mask)) | \
-> +		((_mask) << 16);					 \
-> +	})
+There is a need to access the energy model from the userspace. One such
+example is the sched_ext schedulers [1]. The userspace part of the
+sched_ext schedules could feed the (post-processed) energy-model
+information to the BPF part of the scheduler.
 
-i915 uses something like this for a few registers too, with the name
-_MASKED_FIELD(). I think we could use it.
+Currently, debugfs is the only way to read the energy model from userspace;
+however, it lacks proper notification mechanisms when a performance domain
+and its associated energy model change.
 
-I do think this is clearly an extension of FIELD_PREP(), though, and
-should be be named similarly, instead of the completely deviating
-HWORD_UPDATE().
+This patch set introduces a generic netlink for the energy model, as
+discussed in [2]. It allows a userspace program to read the performance
+domain and its energy model. It notifies the userspace program when a
+performance domain is created or deleted or its energy model is updated
+through a multicast interface.
 
-Also, we recently got GENMASK() versions with sizes, GENMASK_U16()
-etc. so I find it inconsistent to denote size here with HWORD.
+Specifically, it supports two commands:
+  - EM_CMD_GET_PDS: Get the list of information for all performance
+    domains.
+  - EM_CMD_GET_PD_TABLE: Get the energy model table of a performance
+    domain.
 
-FIELD_PREP_MASKED_U16? MASKED_FIELD_PREP_U16? Something along those
-lines?
+Also, it supports three notification events:
+  - EM_CMD_PD_CREATED: When a performance domain is created.
+  - EM_CMD_PD_DELETED: When a performance domain is deleted.
+  - EM_CMD_PD_UPDATED: When the energy model table of a performance domain
+    is updated.
 
-And perhaps that (and more potential users) could persuade Jakub that
-this is not that weird after all?
+This can be tested using the tool, tools/net/ynl/pyynl/cli.py, for example,
+with the following commands:
 
+  $> tools/net/ynl/pyynl/cli.py \
+     --spec Documentation/netlink/specs/em.yaml \
+     --do get-pds
+  $> tools/net/ynl/pyynl/cli.py \
+     --spec Documentation/netlink/specs/em.yaml \
+     --do get-pd-table --json '{"pd-id": 0}'
+  $> tools/net/ynl/pyynl/cli.py \
+     --spec Documentation/netlink/specs/em.yaml \
+     --subscribe event  --sleep 10
 
-BR,
-Jani.
+[1] https://lwn.net/Articles/922405/
+[2] https://lore.kernel.org/lkml/a82423bc-8c38-4d57-93da-c4f20011cc92@arm.com/
 
+ChangeLog v1 -> v2:
+  - Use YNL to generate boilerplate code. Overhaul the naming conventions
+    (command, event, notification, attribute) to follow the typical
+    conventions of other YNL-based netlink implementations.
+  - Calculate the exact message size instead of using NLMSG_GOODSIZE
+    when allocating a message (genlmsg_new). This avoids the reallocation
+    of a message.
+  - Remove an unnecessary function, em_netlink_exit(), and initialize the
+    netlink (em_netlink_init) at em_netlink.c without touching energy_model.c.
 
+CC: Lukasz Luba <lukasz.luba@arm.com>
+CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+CC: Tejun Heo <tj@kernel.org>
+Signed-off-by: Changwoo Min <changwoo@igalia.com>
 
+Changwoo Min (10):
+  PM: EM: Add em.yaml and autogen files.
+  PM: EM: Add a skeleton code for netlink notification.
+  PM: EM: Assign a unique ID when creating a performance domain.
+  PM: EM: Expose the ID of a performance domain via debugfs.
+  PM: EM: Add an iterator and accessor for the performance domain.
+  PM: EM: Implement em_nl_get_pds_doit().
+  PM: EM: Implement em_nl_get_pd_table_doit().
+  PM: EM: Implement em_notify_pd_deleted().
+  PM: EM: Implement em_notify_pd_created/updated().
+  PM: EM: Notify an event when the performance domain changes.
 
-> +
-> +/**
-> + * HWORD_UPDATE_CONST() - prepare a constant bitfield element with a mask in
-> + *                        the upper half
-> + * @_mask: shifted mask defining the field's length and position
-> + * @_val:  value to put in the field
-> + *
-> + * HWORD_UPDATE_CONST() masks and shifts up the value, as well as bitwise ORs
-> + * the result with the mask shifted up by 16.
-> + *
-> + * This is useful for a common design of hardware registers where the upper
-> + * 16-bit half of a 32-bit register is used as a write-enable mask. In such a
-> + * register, a bit in the lower half is only updated if the corresponding bit
-> + * in the upper half is high.
-> + *
-> + * Unlike HWORD_UPDATE(), this is a constant expression and can therefore
-> + * be used in initializers. Error checking is less comfortable for this
-> + * version.
-> + */
-> +#define HWORD_UPDATE_CONST(_mask, _val)					  \
-> +	(								  \
-> +		FIELD_PREP_CONST(_mask, _val) |				  \
-> +		(BUILD_BUG_ON_ZERO(const_true((u64) (_mask) > U16_MAX)) + \
-> +		 ((_mask) << 16))					  \
-> +	)
-> +
->  /**
->   * FIELD_GET() - extract a bitfield element
->   * @_mask: shifted mask defining the field's length and position
+ Documentation/netlink/specs/em.yaml | 113 ++++++++++
+ MAINTAINERS                         |   3 +
+ include/linux/energy_model.h        |  19 ++
+ include/uapi/linux/energy_model.h   |  62 ++++++
+ kernel/power/Makefile               |   5 +-
+ kernel/power/em_netlink.c           | 311 ++++++++++++++++++++++++++++
+ kernel/power/em_netlink.h           |  34 +++
+ kernel/power/em_netlink_autogen.c   |  48 +++++
+ kernel/power/em_netlink_autogen.h   |  23 ++
+ kernel/power/energy_model.c         |  83 +++++++-
+ 10 files changed, 699 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/netlink/specs/em.yaml
+ create mode 100644 include/uapi/linux/energy_model.h
+ create mode 100644 kernel/power/em_netlink.c
+ create mode 100644 kernel/power/em_netlink.h
+ create mode 100644 kernel/power/em_netlink_autogen.c
+ create mode 100644 kernel/power/em_netlink_autogen.h
 
 -- 
-Jani Nikula, Intel
+2.49.0
+
 
