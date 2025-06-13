@@ -1,55 +1,48 @@
-Return-Path: <linux-pm+bounces-28652-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28653-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65CC2AD8892
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 11:56:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65B3CAD88A3
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 12:01:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9AD33B0899
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 09:55:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5CF79189BCF3
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 10:01:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBB332C15AA;
-	Fri, 13 Jun 2025 09:56:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB8FC291C0D;
+	Fri, 13 Jun 2025 10:01:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Nczp9fFB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M+i+dFit"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F632C158B;
-	Fri, 13 Jun 2025 09:56:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A01102DA748;
+	Fri, 13 Jun 2025 10:01:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749808570; cv=none; b=tgslY6MMkmeOKd5RECzP5wkps7MBHhEjZN8ZdyF+AXWt9T+qB0n5bOoSfRCrh1WDlTTkZMIYw6cKzT2sJscBX2z8j8HxJ9TP4gjs+SWCMSIU0XBiEUjZctGFl+xG5cjshOVt5PH4pJ6EYDCogDr0BvA88yJ9mSOWe8MM8yEoktE=
+	t=1749808869; cv=none; b=MTsb4cuRfjGkEH3AxxGLgKd2HPknRK5CIi+2wR9ze4k6+DR4G0/ZsybPqq/AGxciNHRB2fp7YXFUKK5nqd7Hgz8QjT5Olj9OqUPW+iw2CzoCd3tes1mvadrnNdxYocYCxR1dpJeJ2iUucwUkpkUThZxaLmf/BC8SljE0HR7z0y0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749808570; c=relaxed/simple;
-	bh=pI16jTrezXMC5DsfOlc64Ygns89mip62edXF7MVZQ64=;
+	s=arc-20240116; t=1749808869; c=relaxed/simple;
+	bh=hzo5YZ2+59Ww2/Xt37jey9O/1XB9IVr5gQKh1UXWMqc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dn+priNNURDyj+2Ez7Ll3bx0QBr535G16WU3WENd6dEXbp7Y9CLF3XkfyG0zhvMBzdajfzYRJLBdRzpvRLwUXzOItEOzmSHUcI/RWc2mYZbk0amo3maOn5eU2zhzmGXjqWCRLcObBUvm0+prcErUWBTDNHQXyp8sMzYo2N9zLik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Nczp9fFB; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1749808566;
-	bh=pI16jTrezXMC5DsfOlc64Ygns89mip62edXF7MVZQ64=;
+	 In-Reply-To:Content-Type; b=IgOeYCkDaw7z4V/BtSQdlfxOcJZG3r2Yy/Vih/qBRrL96u3GDVRu8zTlw7jPIHTlFgBIMiqSoIpA/uW0+WltJm5kQiTgK6WTQ88LSKkhcyAS19JPnYYhSpwx9EUCHqEuZxJWYwkmJKcnp3dLuD1mUCdNTa3vK3LfvNOoEci463Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M+i+dFit; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BAECC4CEE3;
+	Fri, 13 Jun 2025 10:01:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749808869;
+	bh=hzo5YZ2+59Ww2/Xt37jey9O/1XB9IVr5gQKh1UXWMqc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Nczp9fFBALuW2yjQHoHHjf8rHOR18K9YS7zGeKXkc8HCMbmYMct7gIzMlS3bSBMIP
-	 VEenlQsjCaMLc60IuyRw8dIqewqii4OeKClmg8cPsLWQj+ZfT/ZkHcgcdTL19VBRhy
-	 X4XzUd8L8pp9M19Gtz84Iu+VGM6VtLL4DbF+46aplsLX2p0dqXI1JpQpbMypTkwH65
-	 jS3Alw/7WB4vpLUpDuqzgst99SmN0WtDK331u10vg8q7XdTV6J+t5/76pilokUxjK4
-	 TIN5YC78yJy5CCFVtMESd/4i2KWdaLXFEm7dx3TajvBHpjtniSN9Cf7WkREabKVavL
-	 BD8w5uoOCaqHw==
-Received: from [192.168.1.90] (unknown [212.93.144.165])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: cristicc)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id B12E317E0EC0;
-	Fri, 13 Jun 2025 11:56:04 +0200 (CEST)
-Message-ID: <740bde7c-c2e5-462f-91f5-5dc2a298aa85@collabora.com>
-Date: Fri, 13 Jun 2025 12:55:58 +0300
+	b=M+i+dFitZ4SLhojmIk98p1eQBooTkkZ4ORHVZUgdju+63U/4treIGbCB+w9b+gBr6
+	 KgPy/3SmcIarW62bG5KANSgtrxA04yCZnFj62lDRpE4sWfvxmVXDv4ISqOy31dlaGl
+	 xP0rjMSKP3spCwrfyfWyiQOdAFPOuPNNoW99lLR4SJhbOSU9WffmaT012Y6QzR7v4o
+	 b27FrepMbwZuSX6kwyeIm8PwOh4LLWzoSBfpPgEAQ6/fmsaKxgnVI1hzYH5TxzUkue
+	 ia4LhORcCZ61v8GHJFbHImjGzcuiNLkvYeHopa+Kkf4vx/b+SKDOgv0oNlASYR9WcM
+	 4/P6KjWS2kGWw==
+Message-ID: <44fdaa5c-0fa4-457e-b193-e83cd06c1aed@kernel.org>
+Date: Fri, 13 Jun 2025 12:01:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,68 +50,131 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 08/20] drm/rockchip: vop2: switch to HWORD_UPDATE macro
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
- Yury Norov <yury.norov@gmail.com>,
- Rasmus Villemoes <linux@rasmusvillemoes.dk>,
- Jaehoon Chung <jh80.chung@samsung.com>, Ulf Hansson
- <ulf.hansson@linaro.org>, Heiko Stuebner <heiko@sntech.de>,
- Shreeya Patel <shreeya.patel@collabora.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Sandy Huang
- <hjc@rock-chips.com>, Andy Yan <andy.yan@rock-chips.com>,
+Subject: Re: [PATCH v3 3/8] drm/imagination: Use pwrseq for TH1520 GPU power
+ management
+To: Michal Wilczynski <m.wilczynski@samsung.com>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Matt Coster <matt.coster@imgtec.com>,
+ "krzk+dt@kernel.org" <krzk+dt@kernel.org>
+Cc: Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>,
+ Fu Wei <wefu@redhat.com>, Rob Herring <robh@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+ Frank Binns <frank.binns@imgtec.com>,
  Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
  Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
  David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Shawn Lin <shawn.lin@rock-chips.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
- Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>,
- Bjorn Helgaas <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>, Qin Jian <qinjian@cqplus1.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
- linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
- linux-sound@vger.kernel.org, netdev@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev
-References: <20250612-byeword-update-v1-0-f4afb8f6313f@collabora.com>
- <20250612-byeword-update-v1-8-f4afb8f6313f@collabora.com>
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Alexandre Ghiti <alex@ghiti.fr>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Marek Szyprowski <m.szyprowski@samsung.com>,
+ linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ dri-devel@lists.freedesktop.org
+References: <20250530-apr_14_for_sending-v3-0-83d5744d997c@samsung.com>
+ <CGME20250529222405eucas1p18ed1254bf1b2d78468734656fec537e1@eucas1p1.samsung.com>
+ <20250530-apr_14_for_sending-v3-3-83d5744d997c@samsung.com>
+ <20250603-whispering-jaybird-of-thunder-f87867@kuoka>
+ <d42a8c49-7ad2-49ef-bd9c-1e3d9981b58e@samsung.com>
+ <e5a0bee2-ff74-47cf-ad2c-0c78b57ae6cf@kernel.org>
+ <a6a29e58-8613-47f0-9e5c-d125da7ddb49@samsung.com>
+ <cc4dbf7c-e023-403c-88be-4691f97a0ff0@kernel.org>
+ <c7774790-07c3-469d-a994-9e84108ad21d@samsung.com>
+ <CAMRc=Mexq9ThfG6jZUbs3wYDA9UZN-+pHnX_Y-7WO4ubXvEuCw@mail.gmail.com>
+ <ad6981eb-f53a-4a7b-90bd-2e2705bd0297@samsung.com>
+ <59cc6827-1602-402a-9279-96ad6285cff4@kernel.org>
+ <e5d3d3b3-7ada-476f-9558-328d3d316088@samsung.com>
+ <44090712-0635-47bf-b73d-d9b16ec446a4@samsung.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <20250612-byeword-update-v1-8-f4afb8f6313f@collabora.com>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <44090712-0635-47bf-b73d-d9b16ec446a4@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi Nicolas,
-
-On 6/12/25 9:56 PM, Nicolas Frattaroli wrote:
-> The era of hand-rolled HIWORD_UPDATE macros is over, at least for those
-> drivers that use constant masks.
+On 13/06/2025 11:49, Michal Wilczynski wrote:
 > 
-> Remove VOP2's HIWORD_UPDATE macro from the vop2 header file, and replace
-> all instances in rockchip_vop2_reg.c (the only user of this particular
-> HIWORD_UPDATE definition) with equivalent HWORD_UPDATE instances. This
-> gives us better error checking.
 > 
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-This LGTM and I also confirm it works as expected on my Radxa boards:
-ROCK 3A (RK3568) and ROCK 5B (RK3588).  Hence,
+> On 6/13/25 10:25, Michal Wilczynski wrote:
+>>
+>>
+>> On 6/13/25 08:44, Krzysztof Kozlowski wrote:
+>>> On 11/06/2025 14:01, Michal Wilczynski wrote:
+>>>>
+>>>> However, this leads me back to a fundamental issue with the
+>>>> consumer side implementation in the generic pvr_device.c driver. The
+>>>> current fallback code is:
+>>>>
+>>>> /*
+>>>>  * If the error is -EPROBE_DEFER, it's because the
+>>>>  * optional sequencer provider is not present
+>>>>  * and it's safe to fall back on manual power-up.
+>>>>  */
+>>>> if (pwrseq_err == -EPROBE_DEFER)
+>>>>         pvr_dev->pwrseq = NULL;
+>>>>
+>>>> As Krzysztof noted, simply ignoring -EPROBE_DEFER is not ideal. But if I
+>>>> change this to a standard deferred probe, the pvr_device.c driver will
+>>>
+>>> Why? You have specific compatible for executing such quirks only for
+>>> given platform.
+> 
+> I realized now that you may have meant the "thead,th1520-gpu" compatible,
+> not the "thead,th1520" SoC compatible.
+> 
+> In any case, the whole reason for using the pwrseq framework is to avoid
+> polluting the generic driver with SoC specific logic and instead offload
+> that responsibility to a pwrseq provider. Therefore, I can't simply add
+> a check like if (compatible == "thead,th1520-gpu") to the generic driver
+> to decide whether to get a power sequencer. This entire matching
+> responsibility was intended to be offloaded to the pwrseq framework.
 
-Reviewed-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Tested-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+No, just do how all drivers are doing - driver match data, describing
+that there is some component, e.g. quirks/flags, number of clocks and
+their names typically. In your case - name or presence of pwrseq.
+
+
+
+Best regards,
+Krzysztof
 
