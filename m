@@ -1,145 +1,107 @@
-Return-Path: <linux-pm+bounces-28630-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28631-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EAA5AD83A1
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 09:05:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CE86AD83A4
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 09:06:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D8A2D179982
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 07:05:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48F44189102F
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 07:06:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9840C23BD09;
-	Fri, 13 Jun 2025 07:05:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87980259CB0;
+	Fri, 13 Jun 2025 07:06:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="c8W+YGyX"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="XpRr+gSf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4CA1EE7C6
-	for <linux-pm@vger.kernel.org>; Fri, 13 Jun 2025 07:05:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA2671EE7C6;
+	Fri, 13 Jun 2025 07:06:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749798319; cv=none; b=AoWaIvJ5StDkyH3RIHPWb0rDuWGAh4Cqmgb9dmCtQQx0B01rW5Lo0L22YrnjarTid+IR1IQg/7o53DuxPmIQSMrCQfGMf1FWfHwWbzDh50+7mO4QXkWgJ5VEYzsQd6tDCXu8bPE4c7wHw9J5EGVVJjN32SHr6kujxSnj0UlwNZY=
+	t=1749798398; cv=none; b=g9IdsBEvnWDNOpfEZI1OraYDjB6MuIyQTe52MRrL+CFMCXL+2obR+JEmatf0dG+JuawlO3SPF8oMMKOjZ+5sVMF3SvXW9b0TjLX6cLinAArPtdQNuTk4mK2sKZEUVf4qt3vo6ylFiM9Hs/4F0wfCVGIYaqnjGRZwLKB+nkZaABc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749798319; c=relaxed/simple;
-	bh=1Ml41e/iRFBQdoQFJtk0Exdme5nWC3PBdmBfD9gfcA0=;
+	s=arc-20240116; t=1749798398; c=relaxed/simple;
+	bh=IHAV7nN6wCNIFQtTRtd4JrisWL7tQ9SP/C8Yiz9z6NE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JIWpQjtWfoIomvuP3OIniwMZQG8vobgqxwXPOSd6MUr2GX/ZEXSsArbzDwH7EsNZuydc5Nh6dyr2W7Q2spe4mfbpBr06NAKBwlNp9jgf3MuaP+nWm4gtpyu0tbMTyuyDPpD1qA4l6kIOhokkZuX222J0w7kDQBjGUVVqIbPvcdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=c8W+YGyX; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-6077d0b9bbeso3162643a12.3
-        for <linux-pm@vger.kernel.org>; Fri, 13 Jun 2025 00:05:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1749798315; x=1750403115; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Vts8efAArosuOokj2P4hje3a/RKrGpboAfdZMgKD5Zw=;
-        b=c8W+YGyXPaRhHiF9sG617lywwE4VbVEAiOP9HBb0gwTaKX4eg+X9fD9XvC7o3zwW53
-         fYIe+joe+ZXatmAjseewHNPoeFDBHBNuL4fIxBkA3wrAScaXKRy2RzggprQ24nLDD/4n
-         dmA0STSrgBRhaa/CZATOA0F/nuJB0a8voK3wg1PlwwyglNo839jGO9dbXzvNtJ6YVUgI
-         KpATMzyPbtTqjOXK+xEfXRgxgLwrUA7kkd6mPZ4dpqgKWDBkLNbd1K12kibuCq8ptHxn
-         e3XbVhWwLm+5AKo/2z0hsNIiudBbAXLgq+q0Fh1MpRCWCZNTq+dn01zc/xVm0fspnGz3
-         DwZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749798315; x=1750403115;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vts8efAArosuOokj2P4hje3a/RKrGpboAfdZMgKD5Zw=;
-        b=dIbvPpsig2ll06XdTZ6igVbKT4i9HU5DMCYiT0G+Up+CLGIAEzi2dEMuWEp3G6RbvK
-         BLfQZJoCnrAKTL8efdyxIEO1bpIiwYYMARK+FESlFyfCxzArBfM0/ZhQd63D29/STTic
-         VDNYFPRlANH+ueLpZcs7MWBGZHgEDCiKPLHLj2t9iXp3nxw4tSzQ0HEPSh6z0KZmJTlp
-         PUEZ2XmtkkikudYNy9Wm3zMS6iLJt9jILlXO4AuxWpo199kgtZnQtnFXh/AcqtVym1h7
-         ulo/njRYN/Mb6eaz95bAZoDQa5XKrccYwXHhkIA8dIQM2sVj51LaypZJDXyyEXzAF/HU
-         JuSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU0QDg1si/EsKlveuIZTROTEVEI3TvfnrjkCT6vByn3QwEq/g+QmImk/mp8uiRC0eMzRq2ewlm6EQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywc7Zegcm4W3+BgN6wPGkm0iOM01AZQ5tDDTHobd7NyQQhK3G5j
-	ufWH+4FwTqqo5ddEq6Z6LjaO7o8mmhEVqz/GSHAdJvcjzrqpYO1Tpa7pEGR/ojCBO1U=
-X-Gm-Gg: ASbGnct3EzR/dz8FelhmUfm9g/OZbRirl5QUhMXHTzIfMWcrhj/rAZgBk1/GdijUNJ4
-	i3pmEh/J91WkAWD2eipprSwZ05/GC2UmcrZPP8hQILBkWOKYU2C5hab4OnudmibfVPv4lgLkiB0
-	E5b+0B7nCtwD6iN4qc0FAWBtWg2RTagMyKC+Insw6vF1yZySkT791vfiFiS3p+zgGxXdWJC66F9
-	d/HrHf10W4WQedeyIpTFYoRFkZNWnFmtL6zoy7LBrlZ3qu6MVeIhRMVZSfYdpkdTd8L27tYyvbk
-	x4b0ZVYqOI9nRC4rcWDlieQhFRMUxSX7AUZqNTXJAHHdww90QfckQTTHjilf0QIUgsr15LZVJls
-	=
-X-Google-Smtp-Source: AGHT+IG8YEcfhRX4lkBSHSbJmFvftKfBrPCbvmRh2jp4NPPsHt14FnfRQE8a8YxmjsTAhMXqtAdJ2A==
-X-Received: by 2002:a17:906:d555:b0:ad2:417b:2ab5 with SMTP id a640c23a62f3a-adec5d97debmr151980466b.60.1749798314776;
-        Fri, 13 Jun 2025 00:05:14 -0700 (PDT)
-Received: from localhost (109-81-85-139.rct.o2.cz. [109.81.85.139])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-adec892b90csm81370566b.142.2025.06.13.00.05.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jun 2025 00:05:14 -0700 (PDT)
-Date: Fri, 13 Jun 2025 09:05:13 +0200
-From: Michal Hocko <mhocko@suse.com>
-To: Zihuan Zhang <zhangzihuan@kylinos.cn>
-Cc: David Hildenbrand <david@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>, rafael@kernel.org,
-	len.brown@intel.com, pavel@kernel.org, kees@kernel.org,
-	mingo@redhat.com, juri.lelli@redhat.com, vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, vschneid@redhat.com, akpm@linux-foundation.org,
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
-	rppt@kernel.org, surenb@google.com, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [RFC PATCH] PM: Optionally block user fork during freeze to
- improve performance
-Message-ID: <aEvNqY5piB02l20T@tiehlicka>
-References: <20250606062502.19607-1-zhangzihuan@kylinos.cn>
- <20250606082244.GL30486@noisy.programming.kicks-ass.net>
- <83513599-e007-4d07-ac28-386bc5c7552d@kylinos.cn>
- <cd548b13-620e-4df5-9901-1702f904d470@redhat.com>
- <a4370ebc-b1ce-46ba-b3a4-cb628125d7d0@kylinos.cn>
+	 Content-Type:Content-Disposition:In-Reply-To; b=q4CyhQMgyUQr776wjy6rB6kFoEtQAUG2Bd2HOCxpkUwtxsBxYErGGWEEaKI7WQ/4eaRylHnO8yJkeC7B2QsbAuiV76HZjWw2iQT86ESweclL/Rq5pMrTzMKwYNwGB4mPuk6uu5ElAnx6tBqsR83U6pYzaUuZbbOCElNIFD1DgZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=XpRr+gSf; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=UgEEh5fEgXDb+CnFS0SJsFPqsYxRiY/6CHzoXKuVSq0=; b=XpRr+gSf7eHZm/SvMSk2BRK55i
+	zvnTYKkkC7UhTM8baykOP0fG89XftqUEIJloIJ4aaUPnObzFpe+DTVSsj82sLbztMVoAFD5qBCgQF
+	Coeq/L+duldKcBhXbKAgQPbwU3W4mbxU0zzEA7iPmRuFo0eD53oqnXwF53Yr8hRVHfGIwVaef8NKy
+	dmh3P4kPB3j0WtLBnRvPaOgEt1jeA3hQkwcPQ93IMlD2GylVDpKMNKiSPc50+OyjGUGF/oMspCSBp
+	uwzdSgTgti/cYWtaAx352O5rqlxqRBzcKA5i/GLYcmTQbhLRj6KRpTkz6hv08xFllPEFop+1e8Tk0
+	4Ey7LRQA==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uPyUZ-00000002sn4-1cF9;
+	Fri, 13 Jun 2025 07:06:23 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 273C530BC56; Fri, 13 Jun 2025 09:06:19 +0200 (CEST)
+Date: Fri, 13 Jun 2025 09:06:19 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Sohil Mehta <sohil.mehta@intel.com>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, Xin Li <xin@zytor.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Tony Luck <tony.luck@intel.com>, Zhang Rui <rui.zhang@intel.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Andrew Cooper <andrew.cooper3@citrix.com>,
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>,
+	Sandipan Das <sandipan.das@amd.com>,
+	linux-perf-users@vger.kernel.org, linux-edac@vger.kernel.org,
+	kvm@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 00/10] x86: Add support for NMI-source reporting with
+ FRED
+Message-ID: <20250613070619.GF2273038@noisy.programming.kicks-ass.net>
+References: <20250612214849.3950094-1-sohil.mehta@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a4370ebc-b1ce-46ba-b3a4-cb628125d7d0@kylinos.cn>
+In-Reply-To: <20250612214849.3950094-1-sohil.mehta@intel.com>
 
-On Fri 13-06-25 10:37:42, Zihuan Zhang wrote:
-> Hi David,
-> Thanks for your advice!
+On Thu, Jun 12, 2025 at 02:48:39PM -0700, Sohil Mehta wrote:
+
+> Jacob Pan (1):
+>   perf/x86: Enable NMI-source reporting for perfmon
 > 
-> 在 2025/6/10 18:50, David Hildenbrand 写道:
-> > 　　　 　 　 　　 　 　 　 　 　 　 　 　 　 　　
-> > Can't this problem be mitigated by simply not scheduling the new fork'ed
-> > process while the system is frozen?
-> > 
-> > Or what exact scenario are you worried about?
+> Sean Christopherson (1):
+>   x86/fred: Provide separate IRQ vs. NMI wrappers for entry from KVM
 > 
-> Let me revisit the core issue for clarity. Under normal conditions, most
-> processes in the system are in a sleep state, and only a few are runnable.
-> So even with thousands of processes, the freezer generally works reliably
-> and completes within a reasonable time
+> Sohil Mehta (8):
+>   x86/fred: Pass event data to the NMI entry point from KVM
+>   x86/cpufeatures: Add the CPUID feature bit for NMI-source reporting
+>   x86/nmi: Extend the registration interface to include the NMI-source
+>     vector
+>   x86/nmi: Assign and register NMI-source vectors
+>   x86/nmi: Add support to handle NMIs with source information
+>   x86/nmi: Prepare for the new NMI-source vector encoding
+>   x86/nmi: Enable NMI-source for IPIs delivered as NMIs
+>   x86/nmi: Print source information with the unknown NMI console message
 
-How do you define reasonable time?
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-> However, in our fork-based test scenario, we observed repeated freeze
-> retries.
-
-Does this represent any real life scenario that happens on your system?
-In other words how often do you miss your "reasonable time" treshold
-while running a regular workload. Does the freezer ever fail?
-
-[...]
-
-> You’re right — blocking fork() is quite intrusive, so it’s worth exploring
-> alternatives. We’ll try implementing your idea of preventing the newly
-> forked process from being scheduled while the system is freezing, rather
-> than failing the fork() call outright.
-
-Just curious, are you interested in global freezer only or is the cgroup
-freezer involved as well?
-
--- 
-Michal Hocko
-SUSE Labs
 
