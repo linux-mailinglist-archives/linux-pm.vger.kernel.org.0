@@ -1,107 +1,135 @@
-Return-Path: <linux-pm+bounces-28631-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28632-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CE86AD83A4
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 09:06:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9339EAD83EE
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 09:16:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48F44189102F
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 07:06:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFB451899F75
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jun 2025 07:17:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87980259CB0;
-	Fri, 13 Jun 2025 07:06:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB53428ECF0;
+	Fri, 13 Jun 2025 07:16:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="XpRr+gSf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PWo3182/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA2671EE7C6;
-	Fri, 13 Jun 2025 07:06:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10BFF28EBF1
+	for <linux-pm@vger.kernel.org>; Fri, 13 Jun 2025 07:16:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749798398; cv=none; b=g9IdsBEvnWDNOpfEZI1OraYDjB6MuIyQTe52MRrL+CFMCXL+2obR+JEmatf0dG+JuawlO3SPF8oMMKOjZ+5sVMF3SvXW9b0TjLX6cLinAArPtdQNuTk4mK2sKZEUVf4qt3vo6ylFiM9Hs/4F0wfCVGIYaqnjGRZwLKB+nkZaABc=
+	t=1749799011; cv=none; b=qvWkQtXFcH7qIPA70DEPiyuXwB81lNhXecbmou+B6rEEVQgITe0yZl43F4A5NkvM3v8udGcdvMKrSF0kEvFUyu7N1khOJMQiTPLYj9P7lmskwh9yXp99cPd93Z2gSAoEKP8S7kj0xIOGOetZIboFlfBuBhY4k+lm5Fw+l8P/+mQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749798398; c=relaxed/simple;
-	bh=IHAV7nN6wCNIFQtTRtd4JrisWL7tQ9SP/C8Yiz9z6NE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q4CyhQMgyUQr776wjy6rB6kFoEtQAUG2Bd2HOCxpkUwtxsBxYErGGWEEaKI7WQ/4eaRylHnO8yJkeC7B2QsbAuiV76HZjWw2iQT86ESweclL/Rq5pMrTzMKwYNwGB4mPuk6uu5ElAnx6tBqsR83U6pYzaUuZbbOCElNIFD1DgZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=XpRr+gSf; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=UgEEh5fEgXDb+CnFS0SJsFPqsYxRiY/6CHzoXKuVSq0=; b=XpRr+gSf7eHZm/SvMSk2BRK55i
-	zvnTYKkkC7UhTM8baykOP0fG89XftqUEIJloIJ4aaUPnObzFpe+DTVSsj82sLbztMVoAFD5qBCgQF
-	Coeq/L+duldKcBhXbKAgQPbwU3W4mbxU0zzEA7iPmRuFo0eD53oqnXwF53Yr8hRVHfGIwVaef8NKy
-	dmh3P4kPB3j0WtLBnRvPaOgEt1jeA3hQkwcPQ93IMlD2GylVDpKMNKiSPc50+OyjGUGF/oMspCSBp
-	uwzdSgTgti/cYWtaAx352O5rqlxqRBzcKA5i/GLYcmTQbhLRj6KRpTkz6hv08xFllPEFop+1e8Tk0
-	4Ey7LRQA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uPyUZ-00000002sn4-1cF9;
-	Fri, 13 Jun 2025 07:06:23 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 273C530BC56; Fri, 13 Jun 2025 09:06:19 +0200 (CEST)
-Date: Fri, 13 Jun 2025 09:06:19 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Sohil Mehta <sohil.mehta@intel.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, Xin Li <xin@zytor.com>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Tony Luck <tony.luck@intel.com>, Zhang Rui <rui.zhang@intel.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Andrew Cooper <andrew.cooper3@citrix.com>,
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-	Jacob Pan <jacob.pan@linux.microsoft.com>,
-	Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>,
-	Sandipan Das <sandipan.das@amd.com>,
-	linux-perf-users@vger.kernel.org, linux-edac@vger.kernel.org,
-	kvm@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 00/10] x86: Add support for NMI-source reporting with
- FRED
-Message-ID: <20250613070619.GF2273038@noisy.programming.kicks-ass.net>
-References: <20250612214849.3950094-1-sohil.mehta@intel.com>
+	s=arc-20240116; t=1749799011; c=relaxed/simple;
+	bh=ikGB3PaPKDJ3MFxbiuFsbOiaKxZREXTcoX44pbpvZpM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E+SsfzLIpkSeR/6ld50q5qGAPS0BiroOTA+fbPHqHJbmc1l4Qelh/Sk4WxPq05DMue7mbzgCcYjRQs/IRVrNOrrmQZHelbilKSXfrYtzA+8ysPxMQvitlbN52z3uyoc/K3Q5hY4p6h5yAjynCca9gBy/EEZzBxfpELwzh79nZtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PWo3182/; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4531898b208so1914725e9.3
+        for <linux-pm@vger.kernel.org>; Fri, 13 Jun 2025 00:16:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1749799008; x=1750403808; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7fv69bovuvm+Pb08hvzVs40FNmn1nR1es7GqKP5snc4=;
+        b=PWo3182/UzV++eyAJBwPiOs6BRlQxx1DcMfg0/N1t2kccEkL/lKGob1b654vMDrPFz
+         UvByef1bfo6dKFy9Ib/UhIkE8KodMpCPph34Y7PxObepKmOY6e/3Ss9qJAAYXQeV/w2t
+         uZpi0o5HwyK87Kj9eIbiPe3kk5w65L2JmvN2VN5di+ZNTNTSj7inI4koDq2JMnbSoBZV
+         /AI/zrNdrdEr/o+/k4y68WqP1NPpNXH5OyK8WEX0xr53PmWHDMgxK24WY0JMNOHTSOX0
+         s/0QBd4G0xRSV2U/DEjmx0U2p796W6tbz/A0i8Gxn7ROrPq9Da94xxzTPqLKxzmczyhH
+         +mVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749799008; x=1750403808;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7fv69bovuvm+Pb08hvzVs40FNmn1nR1es7GqKP5snc4=;
+        b=i0ulZvRETtWZp7IsfLBlQrMWC5Xx/T1puAL+SFEHvAQ+JmnSKikmdw6aSYKlh+JFEx
+         77nhQzOW1ouSWrkDdRoo+GkTmZZvha4VwFtBIKa8+6CMiXtY2kAV73zzjlIUPbNt5//7
+         Gh3iF1aJJJKcNz42ee9ZvpgPLNv0OcdMhMrmeG8lS+RQ8OMnj2lV8+3LatgTKKgdyMOw
+         4tkIKPJ+j8P43WIwd1Oa2yHzs3yVU4lPiLFhrnEmypRaELZO9PQn8OSY/HAXVtNSBCUT
+         prFyisNiW2O1Y1/lZm4DIRwZPlsDT4NjhI6NoNLcMLtEbdMBvny793z3tyJ0l2VRd8tB
+         BGkg==
+X-Forwarded-Encrypted: i=1; AJvYcCVqCgELj5ViJ+38Iw+8NentUe9a+CDfcSTpgkF6zRPsd8sbgEv2K0sjbna+Lv4edKJt2PQBW+FgSg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxa9z3U8IaLjpoP7uBEaJLXJ4VoX4MM/RUIhso0SnprD0ZKEoEj
+	UVUM7FfAVYXA5blgOh82Q9/pfYRQnRYbROQGmQ4m/zzH8uWACX5+WGpq3QvGSmfqqes=
+X-Gm-Gg: ASbGncu409GnD7kjMw8v7FUTiiPtmI/XtCTQPlLLA44akvqNVvGeztCSb7c+obDmlwM
+	lJrOVuraIpPtQA9BpsxNwH8wct6XAjiFqNrDX2t32aQIkM5TJF+PIZ54Ch7x4mIP8wPWbwMmAS6
+	34elUDstu26yyBlvCxhpMh3nsvyj/tA0FLzEUHXNKGjGnWsDUEuLy5xciVefZ/Ow7AZMDB3+Mo/
+	kQBBTmbVhfYjLHpFGs4e4SOeE+Yg2R9IHcPE8hI5HqhO8n5KB0JqF2XD3g5bXMvYJn3J7iEK4lu
+	O0AEnLE2G2Dm2OcrUIRhyENwVdfFk7VqCwAM52qaVtEa6zqvpV6bv8tyrVnF+ifjzhZ5lP764A=
+	=
+X-Google-Smtp-Source: AGHT+IEouw2NsfDahsieU/ds8sAFUKZF8nkQYwWmiRsIPTzuT+5LOlyePYyXZlerd2b78gEPXxyFXA==
+X-Received: by 2002:a05:6000:310e:b0:3a4:f7ae:7801 with SMTP id ffacd0b85a97d-3a5686b97f1mr502671f8f.8.1749799008387;
+        Fri, 13 Jun 2025 00:16:48 -0700 (PDT)
+Received: from kuoka.. ([178.197.223.125])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e25e89fsm41966305e9.33.2025.06.13.00.16.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jun 2025 00:16:47 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Markus Mayer <mmayer@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] cpufreq: brcmstb-avs: Fully open-code compatible for grepping
+Date: Fri, 13 Jun 2025 09:16:44 +0200
+Message-ID: <20250613071643.46754-2-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250612214849.3950094-1-sohil.mehta@intel.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=913; i=krzysztof.kozlowski@linaro.org;
+ h=from:subject; bh=ikGB3PaPKDJ3MFxbiuFsbOiaKxZREXTcoX44pbpvZpM=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBoS9BbtykD5yvYSc3IHLEdjE6QZ5fdc7hdJcQrQ
+ XkjcMUBVBCJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaEvQWwAKCRDBN2bmhouD
+ 1wyTD/4tuGyG5NOtPnE74wIMfUoYOtAeELKZqjvXWwUylioml49Ac0Qh6ZwPIaOu6U7ixm1CaLX
+ cvHcPSpQYap42DayHLhB2urDzc+vx/ZVB5gOf9anqtvnNYoozDRjA8bCA2tXM345DT6pjpMNMpn
+ yUtCamRrvJftoe0NPeSghpF/Md58mdCQohDIjUwLwMPdFqMFk33KBSrExBgRauwS+RHh/ftdx7o
+ jJBk160pZbXfVhozDuUe4Lf6ldoDXrbIBKIYkHm6v5T2y5hrRn0QyerlUf7tQVPfTcjYpe5wV1w
+ PAj+YEWvQ2lA/8hSqsYkjddLpbv/AEVYCK7JhEn6rrbYpKKBs0eB+fyrTq2BSH1N0pjReG7zjEi
+ S8jap4jOZ07USJi1POvO9icL5K4I4VKfCaG5Ej4g4nl40AkOkdoZy7B/vP3YDv5wJd9HwB1V0cY
+ hajKRVpx4s6zPVO6wUHcbuuXXh9ZrkExPtQ7BrdQGCAeIemdgWO3jM6VQ0DD0Fhl0yYpjnY9I9E
+ 2wNuPMjx7pzqVMRaMD4KyaOFu9L1tjzgaJThhaFI2KdshNVZs06kT0ImV/2RTSi7KK3mZSvJJoI
+ jByr8SOdPhXJOwQKfCO23j8GkJ2o0cVlP6WPS+c3ji0LqqPcPTwUkgpEmk0OXDPLLLizpwUHRsy IcqefU8bvrtJjYQ==
+X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 12, 2025 at 02:48:39PM -0700, Sohil Mehta wrote:
+It is very useful to find driver implementing compatibles with `git grep
+compatible`, so driver should not use defines for that string, even if
+this means string will be effectively duplicated.
 
-> Jacob Pan (1):
->   perf/x86: Enable NMI-source reporting for perfmon
-> 
-> Sean Christopherson (1):
->   x86/fred: Provide separate IRQ vs. NMI wrappers for entry from KVM
-> 
-> Sohil Mehta (8):
->   x86/fred: Pass event data to the NMI entry point from KVM
->   x86/cpufeatures: Add the CPUID feature bit for NMI-source reporting
->   x86/nmi: Extend the registration interface to include the NMI-source
->     vector
->   x86/nmi: Assign and register NMI-source vectors
->   x86/nmi: Add support to handle NMIs with source information
->   x86/nmi: Prepare for the new NMI-source vector encoding
->   x86/nmi: Enable NMI-source for IPIs delivered as NMIs
->   x86/nmi: Print source information with the unknown NMI console message
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/cpufreq/brcmstb-avs-cpufreq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+diff --git a/drivers/cpufreq/brcmstb-avs-cpufreq.c b/drivers/cpufreq/brcmstb-avs-cpufreq.c
+index 7b841a086acc..5940d262374f 100644
+--- a/drivers/cpufreq/brcmstb-avs-cpufreq.c
++++ b/drivers/cpufreq/brcmstb-avs-cpufreq.c
+@@ -765,7 +765,7 @@ static void brcm_avs_cpufreq_remove(struct platform_device *pdev)
+ }
+ 
+ static const struct of_device_id brcm_avs_cpufreq_match[] = {
+-	{ .compatible = BRCM_AVS_CPU_DATA },
++	{ .compatible = "brcm,avs-cpu-data-mem" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, brcm_avs_cpufreq_match);
+-- 
+2.45.2
 
 
