@@ -1,121 +1,119 @@
-Return-Path: <linux-pm+bounces-28708-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28709-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5237AD99A2
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Jun 2025 04:20:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D8B4AD9C6B
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Jun 2025 13:13:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 508AD7AB6E7
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Jun 2025 02:19:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1C643BB216
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Jun 2025 11:13:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9298684D13;
-	Sat, 14 Jun 2025 02:20:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 817B725BF1E;
+	Sat, 14 Jun 2025 11:12:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wbinvd.org header.i=@wbinvd.org header.b="XUAPZz+f"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mwTsZuIC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81CE8BA42
-	for <linux-pm@vger.kernel.org>; Sat, 14 Jun 2025 02:20:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F0C5256C80;
+	Sat, 14 Jun 2025 11:12:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749867642; cv=none; b=O6+Ep5BaRUa1Javn39PjP+JmJ1BK5ZLMLGJyvdMhzJn5pWmR20dWInFOq6RaIT9eYtJBOfiEGNoh959YoC8KKigFQfbhDKN1J/CsOHq917Nv3REuzOceII5A9cmE6lOVxutRqO1tM9Ewpj+DPOVXs7DZNwgcsNWAA+P0g3OVKzY=
+	t=1749899577; cv=none; b=ott/Xal8dRLaHeYQeEB+cOi8kzlc9WwRs9ab0q4uySZ2MkuVZwy7jIPOKMHsVeJLBa9q17VQ60XoOX7CBlscxmLqHxjGg4zBC2HvIjxRwe9EUgEudhlAVpdaBDpB6tfDzjHe04HYeuSOjHHV9fjUFH/8GtsNr3PrvlfTiFMzWl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749867642; c=relaxed/simple;
-	bh=qnHnh/eh5pvaU9wU23V4kDzRq5bjKim08WvNI6Fua80=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XHqE1Xw4dTJAwdZaslK+Qd9vE4VmfnrpZA0SPL7JITaqUCiFkjoJMte/XoMvqW+WtUEshvQqr2ci2skVmzKEJwGzaE1FL/ZAqI7SjUubo3Psvxp39SUPS0lmt58TdyVnkFd1WZnhiyVVs4UmmE608wzxc7R0vfnZjylwEgw9FTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wbinvd.org; spf=pass smtp.mailfrom=wbinvd.org; dkim=pass (2048-bit key) header.d=wbinvd.org header.i=@wbinvd.org header.b=XUAPZz+f; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wbinvd.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wbinvd.org
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-b271f3ae786so2148391a12.3
-        for <linux-pm@vger.kernel.org>; Fri, 13 Jun 2025 19:20:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wbinvd.org; s=wbinvd; t=1749867638; x=1750472438; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0TCpdrHqvVyx+/z5RHafQUI6EpwCZP78GRIUPCgFN0w=;
-        b=XUAPZz+fCjAAYwbBxybGVle8xhbZ+qZnaYwujspfZSJoFOcd3rNK2KVRxXn7k79Sco
-         iHbo1mDNkqPKqbdPRgHvuWpQKSce3ZigMkAXApyjjrtYHySHlX4aauMLC5/ErKCDkTVC
-         oyzbgAjye/YNV4L34tZoJktnLtibvfRfVhVOiKcvda7eBjvxaMwK7+JmdmB3gYJsS7IO
-         I6zelS0R8Wk8JJViLUReXGVAdLVpab2zJPyIEkfkbI8u/KsYW4gnjGJO+ePUbLdrDRMi
-         OyPGe6jcbsOSo3PA1J/rOCfT98N+Hub+74UQgYn3aJ79KWqUHGCrzrPG7XOacpw28f+v
-         NACw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749867638; x=1750472438;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0TCpdrHqvVyx+/z5RHafQUI6EpwCZP78GRIUPCgFN0w=;
-        b=Jpb9Ms9KR2YEh+H3tx7cAq3/TKBCpI4ydasdxsgyVrcCbKcFBNcdEzQKjA47MZOOfI
-         xyZXlGOZF34s1bNrOO/em/OSKqTtndfNkC0sibcuB3/tQvtB9u5x9oA4mdt5fJwqhmzY
-         riQMAuHMeck6AU/reafQ1qj8o/kQbkavInP+sAihCQk1MDUrYy0CrxLvM1tLqaSuRzZx
-         bbY/R16arrAZlNhNAeLxgjMNNvVkQ8Kv/q56JB0StSlqpdHMgH7eHR8Us03NjzWOhTMx
-         HZ8mM+FfwFX4ium06BSxELTHWQxc58sXk9RQibQ6ouj4PxJmtUrRxRZ3M9H7uavfaRyy
-         lfiw==
-X-Gm-Message-State: AOJu0Yw6Rn/uBEIihg53qdS+Elbajw4s3KuES1Em+0ToGzFGpJsjRSDt
-	rSpc/4fOztgCO/nC8r8quIZ/dagrc+xHixtrgODlTokcTYnEICVQn2x1J1avBAOH67WDQTnLn4Z
-	yuZE4
-X-Gm-Gg: ASbGnctrWbi5h5HNUY0Kr+E43GlwP7M84FCS9fzpUc4JlfQed7/8Y6I3c2Ifj/jPI3u
-	QaqvZfPX9pcEBMVwzGrqUJx2DPOGr+FQoD6RRdOyeAQxPz+9PLrRBZTly8UTcXjvWIhOyaVgPH5
-	aLTNf8K11g9CtFYhVuEXfl24op2UJar9N1aeC6MlLsWpu4lwLn5/ZMM9TYOw18XMw1yjQ3OmlXB
-	gQRxmiA7mlo660XX6wWUejqaD6rTMfPfpEPPnS1DShEr2NAGoe7t7mPyyrCg2QECywlozCgeYbW
-	6/dwk52FsucFKizuZgBPcybL1t97zZ6bcYPms98N8Bcgxy7LWNTinGiynioTrV8Xg0/hCLIB7DT
-	kvqkbW2KrlP6EcFN4L+6mSFGfqczetPM=
-X-Google-Smtp-Source: AGHT+IGO/t+Jv/rmdF2kqCa8WUSlji+mz6WDWVoeL7ZLdOjABOPGoI//E1v0p8MAykSAF3XJd20QAw==
-X-Received: by 2002:a17:90b:586b:b0:2fc:3264:3666 with SMTP id 98e67ed59e1d1-313f1e129cdmr2206003a91.30.1749867638329;
-        Fri, 13 Jun 2025 19:20:38 -0700 (PDT)
-Received: from mozart.vkv.me (192-184-162-253.fiber.dynamic.sonic.net. [192.184.162.253])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-313c19cd3cbsm4132857a91.11.2025.06.13.19.20.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jun 2025 19:20:37 -0700 (PDT)
-From: Calvin Owens <calvin@wbinvd.org>
-To: linux-kernel@vger.kernel.org
-Cc: linux-pm@vger.kernel.org,
-	Len Brown <lenb@kernel.org>
-Subject: [PATCH] tools/power turbostat: Fix MSRs with CONFIG_MULTIUSER=n
-Date: Fri, 13 Jun 2025 19:20:28 -0700
-Message-ID: <81f4c402d1fda7c2419aac1148061a0789112e76.1749849645.git.calvin@wbinvd.org>
-X-Mailer: git-send-email 2.47.2
+	s=arc-20240116; t=1749899577; c=relaxed/simple;
+	bh=di0vudlUJl9ldcR9UsjTlgPrj2pTt9RZvG4yRZnfheA=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=o9Zo3LeOrM2ak7cXcK+jOuaGugYgbfKFpbM5HA6nedqgF72QJusSIBQpvRKpdEk7yafK0zSSig8Egv90hks3TZ3SN+PJDWanx9aiv/HF/ID0WFFWJIlh/xMRAGbSB/D357eh+zdgOAqfocKPUr2T2ZlbPTN8GsbCXY89mbqv3/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mwTsZuIC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 418A2C4CEEB;
+	Sat, 14 Jun 2025 11:12:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749899576;
+	bh=di0vudlUJl9ldcR9UsjTlgPrj2pTt9RZvG4yRZnfheA=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=mwTsZuIC6mohekKQprEBnkvZFbg92Z06uo552hFeIUoZyeB6wGwsTy8jD0fJX7msn
+	 2s6MZ0AItWNvctoyqvv0KmmLPg5V0W41DI3KPxQ9rkye+yWJkpGg8QgKoAw8NnFttS
+	 yP0l8dDZ4Y7KxtGgN+T+lraguvPIIqekJ8Ie065J7Ft8XcdGDHcnuw8SdnEWTMm7Uk
+	 E6u8wEjwCDP0TAh8AfPEOyjtB4erytWA6n17GqUUPseVF/dL+WuPhaMIGyQ41T6y4z
+	 2hxc0PadsQyJHQIComuYupkWskeCohqOujwB0O9ldMhQTiJbI+2UQkX+phnzaZ80RI
+	 3HWemMiHHJzaQ==
+From: Mark Brown <broonie@kernel.org>
+To: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
+ Neal Gompa <neal@gompa.dev>, Ulf Hansson <ulf.hansson@linaro.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Srinivas Kandagatla <srini@kernel.org>, 
+ Andi Shyti <andi.shyti@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, Joerg Roedel <joro@8bytes.org>, 
+ Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Vinod Koul <vkoul@kernel.org>, 
+ =?utf-8?q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
+ Takashi Iwai <tiwai@suse.com>, Arnd Bergmann <arnd@arndb.de>, 
+ Sven Peter <sven@kernel.org>
+Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, iommu@lists.linux.dev, 
+ linux-input@vger.kernel.org, dmaengine@vger.kernel.org, 
+ linux-sound@vger.kernel.org
+In-Reply-To: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org>
+References: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org>
+Subject: Re: (subset) [PATCH 00/11] Drop default ARCH_APPLE from Kconfig
+ and use defconfig instead
+Message-Id: <174989957100.19870.13761538351492320924.b4-ty@kernel.org>
+Date: Sat, 14 Jun 2025 12:12:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-c25d1
 
-Handle ENOSYS from cap_get_proc() in check_for_cap_sys_rawio(), so
-turbostat can display temperatures when running on kernels compiled
-without multiuser support.
+On Thu, 12 Jun 2025 21:11:24 +0000, Sven Peter wrote:
+> When support for Apple Silicon was originally upstreamed we somehow
+> started using `default ARCH_APPLE` for most drivers. arm64 defconfig
+> also contains ARCH_APPLE=y such that this will turn into `default y`
+> there by default which is neither what we want nor how this is usually
+> done.
+> Let's fix all that by dropping the default everywhere and adding the
+> drivers to defconfig as modules instead of built-ins.
+> None of these patches depend on each other so we can just take them all
+> independently through the respective subsystem trees.
+> 
+> [...]
 
-Signed-off-by: Calvin Owens <calvin@wbinvd.org>
----
- tools/power/x86/turbostat/turbostat.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Applied to
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 925556b90770..f7d665913a52 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -6496,8 +6496,13 @@ int check_for_cap_sys_rawio(void)
- 	int ret = 0;
- 
- 	caps = cap_get_proc();
--	if (caps == NULL)
-+	if (caps == NULL) {
-+		/* Support CONFIG_MULTIUSER=n */
-+		if (errno == ENOSYS)
-+			return 0;
-+
- 		return 1;
-+	}
- 
- 	if (cap_get_flag(caps, CAP_SYS_RAWIO, CAP_EFFECTIVE, &cap_flag_value)) {
- 		ret = 1;
--- 
-2.47.2
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[10/11] ASoC: apple: mca: Drop default ARCH_APPLE in Kconfig
+        commit: f59427932885f9b47b22b532b079478905b9ad08
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
