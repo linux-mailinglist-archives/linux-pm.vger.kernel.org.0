@@ -1,119 +1,87 @@
-Return-Path: <linux-pm+bounces-28709-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28710-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D8B4AD9C6B
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Jun 2025 13:13:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9931FAD9E6C
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Jun 2025 19:16:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1C643BB216
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Jun 2025 11:13:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA86C3A6A52
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Jun 2025 17:16:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 817B725BF1E;
-	Sat, 14 Jun 2025 11:12:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 538882C159C;
+	Sat, 14 Jun 2025 17:16:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mwTsZuIC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ju9KVuUt"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F0C5256C80;
-	Sat, 14 Jun 2025 11:12:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C2E1146D6A;
+	Sat, 14 Jun 2025 17:16:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749899577; cv=none; b=ott/Xal8dRLaHeYQeEB+cOi8kzlc9WwRs9ab0q4uySZ2MkuVZwy7jIPOKMHsVeJLBa9q17VQ60XoOX7CBlscxmLqHxjGg4zBC2HvIjxRwe9EUgEudhlAVpdaBDpB6tfDzjHe04HYeuSOjHHV9fjUFH/8GtsNr3PrvlfTiFMzWl4=
+	t=1749921411; cv=none; b=DaYWKX7T82eUCwkSyTYlAXFMfYPrzQquC2OllA1PMEKMfvW6AilK2QPX8nM0rABLwO7pGi8FEINaKz67spXw45koVeUGLKtpa0baY2Hr7yAEuS4LSgK83MeUCIt0fG/JzIWcHzv6X9e5j167QbyC6mbkMm9Kz2ZG4igTDVoKlvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749899577; c=relaxed/simple;
-	bh=di0vudlUJl9ldcR9UsjTlgPrj2pTt9RZvG4yRZnfheA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=o9Zo3LeOrM2ak7cXcK+jOuaGugYgbfKFpbM5HA6nedqgF72QJusSIBQpvRKpdEk7yafK0zSSig8Egv90hks3TZ3SN+PJDWanx9aiv/HF/ID0WFFWJIlh/xMRAGbSB/D357eh+zdgOAqfocKPUr2T2ZlbPTN8GsbCXY89mbqv3/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mwTsZuIC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 418A2C4CEEB;
-	Sat, 14 Jun 2025 11:12:51 +0000 (UTC)
+	s=arc-20240116; t=1749921411; c=relaxed/simple;
+	bh=SyhuSHTiP7kYh6dQdHpRWX3b0foHA/A5vUWOW9/wys4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T8KgcVy4LtNUL2BQYRVcmksfW25s51RwmKcHwK4yWSlvqCrMS/d8ncR3Xef+wEY0wxeKKvHupg5SXs1QI7ue8GzX2C7O2nMsbJ2H+AqqWgvl7NpfUNNbpa8w2LA9uob0L+qmG2thr44RxUU2fMmoAHLuYULBkrC4UVJmaKgY3ns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ju9KVuUt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCA60C4CEEB;
+	Sat, 14 Jun 2025 17:16:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749899576;
-	bh=di0vudlUJl9ldcR9UsjTlgPrj2pTt9RZvG4yRZnfheA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=mwTsZuIC6mohekKQprEBnkvZFbg92Z06uo552hFeIUoZyeB6wGwsTy8jD0fJX7msn
-	 2s6MZ0AItWNvctoyqvv0KmmLPg5V0W41DI3KPxQ9rkye+yWJkpGg8QgKoAw8NnFttS
-	 yP0l8dDZ4Y7KxtGgN+T+lraguvPIIqekJ8Ie065J7Ft8XcdGDHcnuw8SdnEWTMm7Uk
-	 E6u8wEjwCDP0TAh8AfPEOyjtB4erytWA6n17GqUUPseVF/dL+WuPhaMIGyQ41T6y4z
-	 2hxc0PadsQyJHQIComuYupkWskeCohqOujwB0O9ldMhQTiJbI+2UQkX+phnzaZ80RI
-	 3HWemMiHHJzaQ==
-From: Mark Brown <broonie@kernel.org>
-To: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
- Neal Gompa <neal@gompa.dev>, Ulf Hansson <ulf.hansson@linaro.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Srinivas Kandagatla <srini@kernel.org>, 
- Andi Shyti <andi.shyti@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, Joerg Roedel <joro@8bytes.org>, 
- Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Vinod Koul <vkoul@kernel.org>, 
- =?utf-8?q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>, 
- Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
- Takashi Iwai <tiwai@suse.com>, Arnd Bergmann <arnd@arndb.de>, 
- Sven Peter <sven@kernel.org>
-Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, iommu@lists.linux.dev, 
- linux-input@vger.kernel.org, dmaengine@vger.kernel.org, 
- linux-sound@vger.kernel.org
-In-Reply-To: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org>
-References: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org>
-Subject: Re: (subset) [PATCH 00/11] Drop default ARCH_APPLE from Kconfig
- and use defconfig instead
-Message-Id: <174989957100.19870.13761538351492320924.b4-ty@kernel.org>
-Date: Sat, 14 Jun 2025 12:12:51 +0100
+	s=k20201202; t=1749921410;
+	bh=SyhuSHTiP7kYh6dQdHpRWX3b0foHA/A5vUWOW9/wys4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ju9KVuUtGxQXCAjdaMZnZyfnQ7oL9HN0ghc7Crpm6kBXNpPwCv6vUHTg81o8eQtHn
+	 7N/vjHsfsXTGqG5TEg+tfGzsKAMV2QMQ5SOmAfhVkKxN2/xjOOQj3g5YCBIw3EDqp/
+	 /0ObAIAI2A2ImOL6KOHef1moBxj1Z28yzGSVTPURTkbHslRidL0NBQOsky9Pj2v0iX
+	 j45c5+u3wZCb9dgin1Ll+yTXMkq7gdr2ySd6x+V5gHLalOb65MnULoXDA3aCpMB+C1
+	 cNOkCekXOmUPb8vJ6ttwcI2vcj75E5ECH3sAUH3UHaTCiScHKRWN6OHUeZktGsaue2
+	 bC0pOIKwGCPog==
+Date: Sat, 14 Jun 2025 18:16:42 +0100
+From: Simon Horman <horms@kernel.org>
+To: Joy Zou <joy.zou@nxp.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	shawnguo@kernel.org, s.hauer@pengutronix.de,
+	catalin.marinas@arm.com, will@kernel.org, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, mcoquelin.stm32@gmail.com,
+	alexandre.torgue@foss.st.com, ulf.hansson@linaro.org,
+	richardcochran@gmail.com, kernel@pengutronix.de, festevam@gmail.com,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	linux-pm@vger.kernel.org, frank.li@nxp.com, ye.li@nxp.com,
+	ping.bai@nxp.com, peng.fan@nxp.com, aisheng.dong@nxp.com,
+	xiaoning.wang@nxp.com
+Subject: Re: [PATCH v5 1/9] dt-bindings: arm: fsl: add i.MX91 11x11 evk board
+Message-ID: <20250614171642.GU414686@horms.kernel.org>
+References: <20250613100255.2131800-1-joy.zou@nxp.com>
+ <20250613100255.2131800-2-joy.zou@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-c25d1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250613100255.2131800-2-joy.zou@nxp.com>
 
-On Thu, 12 Jun 2025 21:11:24 +0000, Sven Peter wrote:
-> When support for Apple Silicon was originally upstreamed we somehow
-> started using `default ARCH_APPLE` for most drivers. arm64 defconfig
-> also contains ARCH_APPLE=y such that this will turn into `default y`
-> there by default which is neither what we want nor how this is usually
-> done.
-> Let's fix all that by dropping the default everywhere and adding the
-> drivers to defconfig as modules instead of built-ins.
-> None of these patches depend on each other so we can just take them all
-> independently through the respective subsystem trees.
+On Fri, Jun 13, 2025 at 06:02:47PM +0800, Joy Zou wrote:
+> From: Pengfei Li <pengfei.li_1@nxp.com>
 > 
-> [...]
+> Add the board imx91-11x11-evk in the binding docuemnt.
 
-Applied to
+nit: document
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> 
+> Signed-off-by: Pengfei Li <pengfei.li_1@nxp.com>
+> Signed-off-by: Joy Zou <joy.zou@nxp.com>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Thanks!
-
-[10/11] ASoC: apple: mca: Drop default ARCH_APPLE in Kconfig
-        commit: f59427932885f9b47b22b532b079478905b9ad08
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+...
 
