@@ -1,454 +1,274 @@
-Return-Path: <linux-pm+bounces-28797-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28798-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A017BADAC01
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 11:35:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B72C3ADAC0A
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 11:37:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA610189103A
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 09:36:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54EF13AA43C
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 09:37:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BE5F26D4E9;
-	Mon, 16 Jun 2025 09:35:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02D69273D77;
+	Mon, 16 Jun 2025 09:37:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="W7+MozSm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46DFF1DB92A
-	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 09:35:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF4AF26E179
+	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 09:37:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750066547; cv=none; b=muNuqK/6y+UhYGJ0O1b4FsDD5PUfqq+3MPwsJJ4AZ5FdmH3u4ZkyDyopo4WmxI4jJwLHi27QmN+4EgeBedRH7/6llTEbijJ6WKshWBtGvMp73ZhoKbF1WzKn7pt/CN/HCUXGylysjA3HTZ0jrcRTj0lWFlz+/wRtAwOiWlJCbXQ=
+	t=1750066668; cv=none; b=FpLi3MjChUmjh77vCNaMIBm9AFNILR3KagvGzgmbQs60HJN9cUZxqOW+1pEo9ImFYG9B0ezklDwbteF0SFoP9Uwb/hffLUeBuCnX15brp1mUE3XuiQZb0OpThTwdvVZ74FM8mw8JFwrKIz0Gw/2plPBdZjW0sFpg38AEfByatpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750066547; c=relaxed/simple;
-	bh=/F6to937QCTaX2HBaj2QI5nWzbgJPtXb+RKFapCVG6c=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Jk3niL7o2zAmv6jceJhmdB9q1+IlyfZttCaNqTI2jq9IZNXLXSKcf8nz8QmHv8kKkwe8f8g8xR0EkrvJEK6RP9CU4BmqdgLzLCG2gVRHPP/OLE7vLEbfzdNSGBcMgDRVIR9aGG5Fn/QG8mLlnLSHu1zYP5cKDwNXLYpYoiTTiC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bLPvM1mTnz6L5LJ;
-	Mon, 16 Jun 2025 17:33:35 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 1D73614050C;
-	Mon, 16 Jun 2025 17:35:42 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 16 Jun
- 2025 11:35:41 +0200
-Date: Mon, 16 Jun 2025 10:35:40 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Jie Zhan <zhanjie9@hisilicon.com>, <linuxarm@huawei.com>
-CC: <cw00.choi@samsung.com>, <myungjoo.ham@samsung.com>,
-	<kyungmin.park@samsung.com>, <linux-pm@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <jonathan.cameron@huawei.com>,
-	<alireza.sanaee@huawei.com>, <zhenglifeng1@huawei.com>,
-	<lihuisong@huawei.com>, <yubowen8@huawei.com>, <liwei728@huawei.com>,
-	<prime.zeng@hisilicon.com>
-Subject: Re: [PATCH v4 2/2] PM / devfreq: Add HiSilicon uncore frequency
- scaling driver
-Message-ID: <20250616103447.000024dd@huawei.com>
-In-Reply-To: <20250530081722.280776-3-zhanjie9@hisilicon.com>
-References: <20250530081722.280776-1-zhanjie9@hisilicon.com>
-	<20250530081722.280776-3-zhanjie9@hisilicon.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1750066668; c=relaxed/simple;
+	bh=v7iwsXmtI/7HuEw8E5jMH8gjGCJ/PmdbDct0UukEscI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CRAu8vK3HMLkVs8H62G2N8ric3liLWmr/9D/5gZI5VOSODL4u+CvtHKS2ZIoL8Vb3QzTtJ1UB81Qya6kXRoJmbWMNgxD7fcDHdap0lrOm8mf28yJvGiKBOMSmXkVFI/ciYXGT+OyEio+SxIL5UMMkmwWT20UHohqUpqWudx22kU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=W7+MozSm; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-607b59b447bso7528468a12.1
+        for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 02:37:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1750066664; x=1750671464; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dfP8v62XGv6w7z/ZmGpzfijGDXvy28lSonmS90eMeCc=;
+        b=W7+MozSmJ0KttRNUxdO2NaTes8jsh6mtJkE40GPIZHfMhgoWxq2VW7+1KnpgkdA933
+         bY8dZsdRaZck6xWd/OnGzO+o2NR+cJ+Nx25Mz+OrDcekVJf6zgrAedgZRPV6Tf+FUtDZ
+         xrwLb+8K3BvFq5a0SAywDWXOT75BAc+vVTo7a2uHxTA09UixEhyQFRteBTYH6TmIWfaJ
+         St/CGkf8CZtkZLD5RvoVIz7Y3y0T5JYxd8AfKeK98PDDW6zL1kj+nZYicAa9qERwKJfV
+         UVTwTCUy1RT+Yy9XM32X9TmqVQrFxLb/ik9wd1YqDxyzuyEC242Y5ZJNTBlxp1HgbuZF
+         F/Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750066664; x=1750671464;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dfP8v62XGv6w7z/ZmGpzfijGDXvy28lSonmS90eMeCc=;
+        b=MN6kYyIEiTLp7K88LNmQ6hEPFODHwcJIhf4DRcRl5CZZ5wLTtd22ifZqwLwtBYnrt7
+         iIC2MQ1tS3KIH6QbHI9guSyzvSQtT8tVjvUd7LRtlp2H8R6EKpeoaCo+ETsmoFlhy1K9
+         +UtKPJ6DX18r64IamKd9Xkkeqg7IoJldtYXH/icGvKk/0pWwki0Y01mEA3MgVEQHBCYa
+         cS6aI+RhuJZ5fciKBWJ+O2+Jy9zFiUy6qwPtiD4/1b+HU7yaf2oGWpe8i5BEhOzMLkwY
+         ZDtxZs3yfCV+KHO58OXxPdYT4Moggxz2NS8PBvJZeEucEojXmdT7W5shUErEx6icU5XM
+         gOkg==
+X-Forwarded-Encrypted: i=1; AJvYcCXvwQo51TmuR00CxIqj8wONzcsPj4Tnx/Oxh2UWx9HV+W68gyRpwwE/7KzDGvEgblljfxEypJC2vw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqMa0RU7mGJYlwna1KWGR78KO0nFygZBHExCtYFVZti9pc6/7M
+	U+W+Q3sb2GubcCyd4IQMHqWdnRgG7TE5X8D4lWSqGyl54+pxn5waIbONiUKKCxkZ6MQ=
+X-Gm-Gg: ASbGncttsLlgF6k6t1hCbPV/FzThNDF7TUOoABxET+5HVALM39Q6R4xaIpIcUc2tB0s
+	9aD5huD8nMjUVohdxX20KkfS6BZf02O/aXpDPmk7I3sBESwFgSel8WnVTi4hqafoS9bOh96asQT
+	HjAHIFU3LoV8JrTzK4gQIgl8EhJI4U/J9Hmof6ic4ejR77VCjPVxAqxoJ5z+iC6Nma6reaNMQ6z
+	Chq1ApJNSnJ4CQDi0wJ+Gh6UbClC45qVBHWrMdCLlSn4yMvddRugNn3exVh67fstXF8xLK6iYTS
+	Ov4yCljDZh04UG6sJhIZRa0iQFXm4d+WXUqzGZk0S0tz/8Z58jjX9uqTFXjvkZ9/iMasxu3C6pL
+	JxXB5PQ==
+X-Google-Smtp-Source: AGHT+IGstgDvCZ7kkheENEgwtKA2GsdZiS2gQeWTudsZRkiraVvavy0/6m9lYQPhBNBoWFt98BlCYg==
+X-Received: by 2002:a17:906:9f88:b0:ad8:96d2:f3e with SMTP id a640c23a62f3a-adfad326d9cmr714122866b.22.1750066663863;
+        Mon, 16 Jun 2025 02:37:43 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.110])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adfddc96709sm126821866b.134.2025.06.16.02.37.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jun 2025 02:37:43 -0700 (PDT)
+Message-ID: <4360ee7a-d85a-4fa0-a1d6-d09a3b9d57c0@tuxon.dev>
+Date: Mon, 16 Jun 2025 12:37:41 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
- frapeml500008.china.huawei.com (7.182.85.71)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/2] PM: domains: Add devres variant for
+ dev_pm_domain_attach()
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Jonathan Cameron <jic23@kernel.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, gregkh@linuxfoundation.org,
+ dakr@kernel.org, len.brown@intel.com, pavel@kernel.org,
+ ulf.hansson@linaro.org, daniel.lezcano@linaro.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, bhelgaas@google.com,
+ geert@linux-m68k.org, linux-iio@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, fabrizio.castro.jz@renesas.com,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20250606111749.3142348-1-claudiu.beznea.uj@bp.renesas.com>
+ <20250606111749.3142348-2-claudiu.beznea.uj@bp.renesas.com>
+ <CAJZ5v0i_Ey+OVpSZHXru=tubMaZi=y-uOh_0M6zmWZ2DqqA7Vg@mail.gmail.com>
+ <zhjytvj35lknj7v3jhva3n3nbv6qctvqgykwyi5huj6omet7lz@wchd7f4p4dpv>
+ <CAJZ5v0hsT-Q2hz=qoBo409oungaCmexJwwGheN7KRLFqz=6_Dw@mail.gmail.com>
+ <20250607140600.76e87ea5@jic23-huawei>
+ <CAJZ5v0jqZ6gYKb85dpR-X5RwFeUBcbbcJ_b-AOe+JypBXod-MA@mail.gmail.com>
+ <486a1110-5336-42fd-82b8-a7b1452bad65@tuxon.dev>
+ <CAJZ5v0hqBm4L2V9aUjB0tmW67eRRCnM7FScgdJQ=ihnpAZuMfA@mail.gmail.com>
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Content-Language: en-US
+In-Reply-To: <CAJZ5v0hqBm4L2V9aUjB0tmW67eRRCnM7FScgdJQ=ihnpAZuMfA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, 30 May 2025 16:17:22 +0800
-Jie Zhan <zhanjie9@hisilicon.com> wrote:
+Hi, Rafael,
 
-> Add the HiSilicon uncore frequency scaling driver for Kunpeng SoCs based on
-> the devfreq framework.  The uncore domain contains shared computing
-> resources, including system interconnects and L3 cache.  The uncore
-> frequency significantly impacts the system-wide performance as well as
-> power consumption.  This driver adds support for runtime management of
-> uncore frequency from kernel and userspace.  The main function includes
-> setting and getting frequencies, changing frequency scaling policies, and
-> querying the list of CPUs whose performance is significantly related to
-> this uncore frequency domain, etc.  The driver communicates with a platform
-> controller through an ACPI PCC mailbox to take the actual actions of
-> frequency scaling.
+On 13.06.2025 13:02, Rafael J. Wysocki wrote:
+> On Fri, Jun 13, 2025 at 9:39 AM Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+>>
+>> Hi, Rafael,
+>>
+>> On 09.06.2025 22:59, Rafael J. Wysocki wrote:
+>>> On Sat, Jun 7, 2025 at 3:06 PM Jonathan Cameron <jic23@kernel.org> wrote:
+>>>>
+>>>> On Fri, 6 Jun 2025 22:01:52 +0200
+>>>> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+>>>>
+>>>> Hi Rafael,
+>>>>
+>>>>> On Fri, Jun 6, 2025 at 8:55 PM Dmitry Torokhov
+>>>>> <dmitry.torokhov@gmail.com> wrote:
+>>>>>>
+>>>>>> On Fri, Jun 06, 2025 at 06:00:34PM +0200, Rafael J. Wysocki wrote:
+>>>>>>> On Fri, Jun 6, 2025 at 1:18 PM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>>>>>>>>
+>>>>>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>>>>>>
+>>>>>>>> The dev_pm_domain_attach() function is typically used in bus code alongside
+>>>>>>>> dev_pm_domain_detach(), often following patterns like:
+>>>>>>>>
+>>>>>>>> static int bus_probe(struct device *_dev)
+>>>>>>>> {
+>>>>>>>>     struct bus_driver *drv = to_bus_driver(dev->driver);
+>>>>>>>>     struct bus_device *dev = to_bus_device(_dev);
+>>>>>>>>     int ret;
+>>>>>>>>
+>>>>>>>>     // ...
+>>>>>>>>
+>>>>>>>>     ret = dev_pm_domain_attach(_dev, true);
+>>>>>>>>     if (ret)
+>>>>>>>>         return ret;
+>>>>>>>>
+>>>>>>>>     if (drv->probe)
+>>>>>>>>         ret = drv->probe(dev);
+>>>>>>>>
+>>>>>>>>     // ...
+>>>>>>>> }
+>>>>>>>>
+>>>>>>>> static void bus_remove(struct device *_dev)
+>>>>>>>> {
+>>>>>>>>     struct bus_driver *drv = to_bus_driver(dev->driver);
+>>>>>>>>     struct bus_device *dev = to_bus_device(_dev);
+>>>>>>>>
+>>>>>>>>     if (drv->remove)
+>>>>>>>>         drv->remove(dev);
+>>>>>>>>     dev_pm_domain_detach(_dev);
+>>>>>>>> }
+>>>>>>>>
+>>>>>>>> When the driver's probe function uses devres-managed resources that depend
+>>>>>>>> on the power domain state, those resources are released later during
+>>>>>>>> device_unbind_cleanup().
+>>>>>>>>
+>>>>>>>> Releasing devres-managed resources that depend on the power domain state
+>>>>>>>> after detaching the device from its PM domain can cause failures.
+>>>>>>>>
+>>>>>>>> For example, if the driver uses devm_pm_runtime_enable() in its probe
+>>>>>>>> function, and the device's clocks are managed by the PM domain, then
+>>>>>>>> during removal the runtime PM is disabled in device_unbind_cleanup() after
+>>>>>>>> the clocks have been removed from the PM domain. It may happen that the
+>>>>>>>> devm_pm_runtime_enable() action causes the device to be runtime-resumed.
+>>>>>>>
+>>>>>>> Don't use devm_pm_runtime_enable() then.
+>>>>>>
+>>>>>> What about other devm_ APIs? Are you suggesting that platform drivers
+>>>>>> should not be using devm_clk*(), devm_regulator_*(),
+>>>>>> devm_request_*_irq() and devm_add_action_or_reset()? Because again,
+>>>>>> dev_pm_domain_detach() that is called by platform bus_remove() may shut
+>>>>>> off the device too early, before cleanup code has a chance to execute
+>>>>>> proper cleanup.
+>>>>>>
+>>>>>> The issue is not limited to runtime PM.
+>>>>>>
+>>>>>>>
+>>>>>>>> If the driver specific runtime PM APIs access registers directly, this
+>>>>>>>> will lead to accessing device registers without clocks being enabled.
+>>>>>>>> Similar issues may occur with other devres actions that access device
+>>>>>>>> registers.
+>>>>>>>>
+>>>>>>>> Add devm_pm_domain_attach(). When replacing the dev_pm_domain_attach() and
+>>>>>>>> dev_pm_domain_detach() in bus probe and bus remove, it ensures that the
+>>>>>>>> device is detached from its PM domain in device_unbind_cleanup(), only
+>>>>>>>> after all driver's devres-managed resources have been release.
+>>>>>>>>
+>>>>>>>> For flexibility, the implemented devm_pm_domain_attach() has 2 state
+>>>>>>>> arguments, one for the domain state on attach, one for the domain state on
+>>>>>>>> detach.
+>>>>>>>
+>>>>>>> dev_pm_domain_attach() is not part driver API and I'm not convinced at
+>>>>>>
+>>>>>> Is the concern that devm_pm_domain_attach() will be [ab]used by drivers?
+>>>>>
+>>>>> Yes, among other things.
+>>>>
+>>>> Maybe naming could make abuse at least obvious to spot? e.g.
+>>>> pm_domain_attach_with_devm_release()
+>>>
+>>> If I'm not mistaken, it is not even necessary to use devres for this.
+>>>
+>>> You might as well add a dev_pm_domain_detach() call to
+>>> device_unbind_cleanup() after devres_release_all().  There is a slight
+>>> complication related to the second argument of it, but I suppose that
+>>> this can be determined at the attach time and stored in a new device
+>>> PM flag, or similar.
+>>>
+>>
+>> I looked into this solution. I've tested it for all my failure cases and
+>> went good.
 > 
-> Co-developed-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
-Hi Zhanjie,
-
-A few comments inline.  In general nice and clean.
-
-I think only one that really needs a change it the one around the
-CPU association firmware handling.
-
-Jonathan
-
-
-> ---
->  Documentation/ABI/testing/sysfs-class-devfreq |   9 +
->  drivers/devfreq/Kconfig                       |  11 +
->  drivers/devfreq/Makefile                      |   1 +
->  drivers/devfreq/hisi_uncore_freq.c            | 656 ++++++++++++++++++
->  4 files changed, 677 insertions(+)
->  create mode 100644 drivers/devfreq/hisi_uncore_freq.c
+> OK
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-class-devfreq b/Documentation/ABI/testing/sysfs-class-devfreq
-> index 1e7e0bb4c14e..fed95bb0bb6d 100644
-> --- a/Documentation/ABI/testing/sysfs-class-devfreq
-> +++ b/Documentation/ABI/testing/sysfs-class-devfreq
-> @@ -132,3 +132,12 @@ Description:
->  
->  		A list of governors that support the node:
->  		- simple_ondemand
-> +
-> +What:		/sys/class/devfreq/.../related_cpus
-> +Date:		June 2025
-> +Contact:	Linux power management list <linux-pm@vger.kernel.org>
-> +Description:	The list of CPUs whose performance is closely related to the
-> +		frequency of this devfreq domain.
-> +
-> +		This file is only present if the hisi_uncore_freq driver is in
-> +		use.
+>>> Note that dev->pm_domain is expected to be cleared by ->detach(), so
+>>> this should not cause the domain to be detached twice in a row from
+>>> the same device, but that needs to be double-checked.
+>>
+>> The genpd_dev_pm_detach() calls genpd_remove_device() ->
+>> dev_pm_domain_set(dev, NULL) which sets the dev->pm_domain = NULL. I can't
+>> find any other detach function in the current code base.
+> 
+> There is also acpi_dev_pm_detach() which can be somewhat hard to find,
+> but it calls dev_pm_domain_set(dev, NULL) either.
+> 
+>> The code I've tested for this solution is this one:
+>>
+>> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+>> index b526e0e0f52d..5e9750d007b4 100644
+>> --- a/drivers/base/dd.c
+>> +++ b/drivers/base/dd.c
+>> @@ -25,6 +25,7 @@
+>>  #include <linux/kthread.h>
+>>  #include <linux/wait.h>
+>>  #include <linux/async.h>
+>> +#include <linux/pm_domain.h>
+>>  #include <linux/pm_runtime.h>
+>>  #include <linux/pinctrl/devinfo.h>
+>>  #include <linux/slab.h>
+>> @@ -552,8 +553,11 @@ static void device_unbind_cleanup(struct device *dev)
+>>         dev->dma_range_map = NULL;
+>>         device_set_driver(dev, NULL);
+>>         dev_set_drvdata(dev, NULL);
+>> -       if (dev->pm_domain && dev->pm_domain->dismiss)
+>> -               dev->pm_domain->dismiss(dev);
+>> +       if (dev->pm_domain) {
+>> +               if (dev->pm_domain->dismiss)
+>> +                       dev->pm_domain->dismiss(dev);
+>> +               dev_pm_domain_detach(dev, dev->pm_domain->detach_power_off);
+> 
+> I would do the "detach" before the "dismiss" to retain the current ordering.
 
-Unless this last statement was requested by another reviewer, I'd change it for
-something more generic to allow it to be used by other drivers.  Something like
+I applied on my local development branch all your suggestions except this
+one because genpd_dev_pm_detach() as well as acpi_dev_pm_detach() set
+dev->pm_domain = NULL.
 
-		This file is only present if a specific device has a close association
-		with a subset of the CPUs.
+Due to this I would call first ->dismiss() then ->detach(), as initially
+proposed. Please let me know if you consider it otherwise.
 
-
-> diff --git a/drivers/devfreq/hisi_uncore_freq.c b/drivers/devfreq/hisi_uncore_freq.c
-> new file mode 100644
-> index 000000000000..7e1b7f48d0f4
-> --- /dev/null
-> +++ b/drivers/devfreq/hisi_uncore_freq.c
-
-
-> +enum hisi_uncore_freq_mode {
-> +	HUCF_MODE_PLATFORM = 0,
-> +	HUCF_MODE_OS,
-> +	HUCF_MODE_MAX,
-
-I assume these max entries are terminators?  I.e. nothing should ever
-come after them?  If so you could drop the commas to make that explicit.
-
-> +};
-> +
-> +#define HUCF_CAP_PLATFORM_CTRL	BIT(0)
-
-> +static int hisi_uncore_cmd_send(struct hisi_uncore_freq *uncore,
-> +				u8 cmd, u32 *data)
-> +{
-> +	struct hisi_uncore_pcc_shmem __iomem *addr;
-> +	struct hisi_uncore_pcc_shmem shmem;
-> +	struct pcc_mbox_chan *pchan;
-> +	unsigned int mrtt;
-> +	s64 time_delta;
-> +	u16 status;
-> +	int rc;
-> +
-> +	guard(mutex)(&uncore->pcc_lock);
-> +
-> +	pchan = uncore->pchan;
-> +	if (!pchan)
-> +		return -ENODEV;
-> +
-> +	addr = (struct hisi_uncore_pcc_shmem __iomem *)pchan->shmem;
-> +	if (!addr)
-> +		return -EINVAL;
-> +
-> +	/* Handle the Minimum Request Turnaround Time (MRTT) */
-> +	mrtt = pchan->min_turnaround_time;
-> +	time_delta = ktime_us_delta(ktime_get(),
-> +				    uncore->last_cmd_cmpl_time);
-
-Fits on one line under 80 chars.
-
-> +	if (mrtt > time_delta)
-> +		udelay(mrtt - time_delta);
-
-
-> +
-> +static int hisi_uncore_init_opp(struct hisi_uncore_freq *uncore)
-> +{
-> +	struct device *dev = uncore->dev;
-> +	u32 data = 0, num, index;
-
-Trivial personal preference. Don't mix assignment and no
-assignment declarations.  It's every so slightly harder to read.
-
-> +	unsigned long freq_mhz;
-> +	int rc;
-> +
-> +	rc = hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_GET_PLAT_FREQ_NUM,
-> +				  &data);
-> +	if (rc)
-> +		return dev_err_probe(dev, rc, "Failed to get plat freq num\n");
-> +
-> +	num = data;
-> +
-> +	for (index = 0; index < num; index++) {
-> +		data = index;
-> +		rc = hisi_uncore_cmd_send(uncore,
-> +					  HUCF_PCC_CMD_GET_PLAT_FREQ_BY_IDX,
-> +					  &data);
-> +		if (rc) {
-> +			dev_pm_opp_remove_all_dynamic(dev);
-> +			return dev_err_probe(dev, rc,
-> +				"Failed to get plat freq at index %u\n", index);
-> +		}
-> +		freq_mhz = data;
-> +
-> +		/* Don't care OPP votlage, take 1V as default */
-voltage
-
-Spell check in case I missed others.  A W=1 build tends to catch the simple ones
-like this.
-
-> +		rc = dev_pm_opp_add(dev, freq_mhz * HZ_PER_MHZ, 1000000);
-> +		if (rc) {
-> +			dev_pm_opp_remove_all_dynamic(dev);
-> +			return dev_err_probe(dev, rc,
-> +				"Add OPP %lu failed\n", freq_mhz);
-> +		}
-> +	}
-> +
-> +	return devm_add_action_or_reset(dev, devm_hisi_uncore_remove_opp, uncore);
-Hmm. I'm normally a fan of registering these after the calls, but this is one
-of the rare cases where pushing it before (with a comment) cleans up the code.
-
-If you do that, then all the error cases in the loop just need to return and not
-call the cleanup manually.
-
-> +}
-
-> +
-> +static int hisi_platform_gov_handler(struct devfreq *df, unsigned int event,
-> +				     void *val)
-> +{
-> +	struct hisi_uncore_freq *uncore = dev_get_drvdata(df->dev.parent);
-> +	int rc = 0;
-> +	u32 data;
-> +
-> +	if (WARN_ON(!uncore || !uncore->pchan))
-> +		return -ENODEV;
-> +
-> +	switch (event) {
-> +	case DEVFREQ_GOV_START:
-> +		data = HUCF_MODE_PLATFORM;
-> +		rc = hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_SET_MODE, &data);
-> +		break;
-> +	case DEVFREQ_GOV_STOP:
-> +		data = HUCF_MODE_OS;
-> +		rc = hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_SET_MODE, &data);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	if (rc)
-> +		dev_err(uncore->dev, "Failed to set operate mode (%d)\n", rc);
-
-Trivial: I'd push this up into the two case statements (with early returns) as then
-you can also report what mode you were trying to set in the string.
-
-> +
-> +	return rc;
-> +}
-
-> +
-> +static int hisi_uncore_add_platform_gov(struct hisi_uncore_freq *uncore)
-> +{
-> +	int rc = 0;
-
-Initialized in only path where it's used.  Maybe push this
-declaration down to if (hisi_platform_gov_usage() block 
-
-> +
-> +	if (!(uncore->cap & HUCF_CAP_PLATFORM_CTRL))
-> +		return 0;
-> +
-> +	guard(mutex)(&hisi_platform_gov_usage_lock);
-> +
-> +	if (hisi_platform_gov_usage == 0) {
-> +		rc = devfreq_add_governor(&hisi_platform_governor);
-
-		int rc = devfreq....
-
-> +		if (rc)
-> +			return rc;
-> +	}
-> +	hisi_platform_gov_usage++;
-> +
-> +	return devm_add_action_or_reset(uncore->dev,
-> +					devm_hisi_uncore_remove_platform_gov,
-> +					uncore);
-> +}
-> +
-> +static int hisi_uncore_mark_related_cpus(struct hisi_uncore_freq *uncore,
-> +				 char *property, int (*get_topo_id)(int cpu),
-> +				 const struct cpumask *(*get_cpumask)(int cpu))
-> +{
-> +	unsigned int i, cpu;
-> +	size_t len;
-> +	int rc;
-> +
-> +	rc = device_property_count_u32(uncore->dev, property);
-> +	if (rc < 0)
-> +		return rc;
-Most of the errors here don't reflect it not being found and are things
-were we should probably fail the driver probe (so someone can fix whatever
-is wrong with the firmware.)  I think only -EINVAL means not here
-(technically arguments are not valid)
-
-> +	if (rc == 0)
-> +		return -EINVAL;
-> +
-> +	len = rc;
-> +	u32 *num __free(kfree) = kcalloc(len, sizeof(*num), GFP_KERNEL);
-> +	if (!num)
-> +		return -ENOMEM;
-
-On this failure path, falling over the other route below doesn't make much sense.
-
-> +
-> +	rc = device_property_read_u32_array(uncore->dev, property, num, len);
-> +	if (rc)
-> +		return rc;
-> +
-> +	for (i = 0; i < len; i++) {
-> +		for_each_possible_cpu(cpu) {
-> +			if (get_topo_id(cpu) == num[i]) {
-
-You could flip to reduce indent.  Marginal though so up to you and definitely
-not worth another spin.
-
-			if (get_topo_id(cpu) != num[i])
-				continue;
-
-			cpumask_or(&uncore->related_cpus, &uncore->related_cpus,
-				   get_cpumask(cpu));
-			break;
-
-> +				cpumask_or(&uncore->related_cpus,
-> +					   &uncore->related_cpus,
-> +					   get_cpumask(cpu));
-> +				break;
-> +			}
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int get_package_id(int cpu)
-> +{
-> +	return topology_physical_package_id(cpu);
-> +}
-> +
-> +static const struct cpumask *get_package_cpumask(int cpu)
-> +{
-> +	return topology_core_cpumask(cpu);
-> +}
-> +
-> +static int get_cluster_id(int cpu)
-> +{
-> +	return topology_cluster_id(cpu);
-> +}
-> +
-> +static const struct cpumask *get_cluster_cpumask(int cpu)
-> +{
-> +	return topology_cluster_cpumask(cpu);
-> +}
-> +
-> +static int hisi_uncore_mark_related_cpus_wrap(struct hisi_uncore_freq *uncore)
-> +{
-> +	int rc;
-> +
-> +	cpumask_clear(&uncore->related_cpus);
-> +
-> +	rc = hisi_uncore_mark_related_cpus(uncore, "related-package",
-> +					   get_package_id,
-> +					   get_package_cpumask);
-> +	if (rc == 0)
-> +		return rc;
-
-return 0;  might make it a tiny bit more explicit that this is a good path.
-Maybe a comment in here on why that is a good path.
-I think this is trying one then the other and only one is expected to be
-present?  Perhaps be a little more paranoid here and check what was seen was
--EINVAL.
-
-	if (rc != -EINVAL)
-		return rc; /* May be 0 or another error code */
-
-Perhaps with an ACPI snippet in the patch description to illustrate what
-is going on here.
-
-
-> +
-> +	return hisi_uncore_mark_related_cpus(uncore, "related-cluster",
-> +					     get_cluster_id,
-> +					     get_cluster_cpumask);
-> +}
-
-> +static int hisi_uncore_devfreq_register(struct hisi_uncore_freq *uncore)
-> +{
-> +	struct devfreq_dev_profile *profile;
-> +	struct device *dev = uncore->dev;
-> +	unsigned long freq;
-> +	u32 data;
-> +	int rc;
-> +
-> +	rc = hisi_uncore_get_cur_freq(dev, &freq);
-One for another day:
-Whilst we do indeed need to do this, it seems like a small optimization to
-devfreq would be to check for initial_freq == 0 and if it is try get_cur_freq()
-after registration. Mind you I checked and this only seems to apply to
-the imx drivers and this one.
-
-> +	if (rc)
-> +		return dev_err_probe(dev, rc, "Failed to get plat init freq\n");
-> +
-> +	profile = devm_kzalloc(dev, sizeof(*profile), GFP_KERNEL);
-> +	if (!profile)
-> +		return -ENOMEM;
-> +
-> +	*profile = (struct devfreq_dev_profile) {
-> +		.initial_freq = freq,
-> +		.polling_ms = HUCF_DEFAULT_POLLING_MS,
-> +		.timer = DEVFREQ_TIMER_DELAYED,
-> +		.target = hisi_uncore_target,
-> +		.get_dev_status = hisi_uncore_get_dev_status,
-> +		.get_cur_freq = hisi_uncore_get_cur_freq,
-> +		.dev_groups = hisi_uncore_freq_groups,
-> +	};
-> +
-> +	rc = hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_GET_MODE, &data);
-> +	if (rc)
-> +		return dev_err_probe(dev, rc, "Failed to get operate mode\n");
-> +
-> +	if (data == HUCF_MODE_PLATFORM)
-> +		uncore->devfreq = devm_devfreq_add_device(dev, profile,
-> +					  hisi_platform_governor.name, NULL);
-> +	else
-> +		uncore->devfreq = devm_devfreq_add_device(dev, profile,
-> +					  DEVFREQ_GOV_PERFORMANCE, NULL);
-> +	if (IS_ERR(uncore->devfreq))
-> +		return dev_err_probe(dev, PTR_ERR(uncore->devfreq),
-> +			"Failed to add devfreq device\n");
-> +
-> +	return 0;
-> +}
-
+Thank you,
+Claudiu
 
