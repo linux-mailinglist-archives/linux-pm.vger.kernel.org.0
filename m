@@ -1,139 +1,176 @@
-Return-Path: <linux-pm+bounces-28814-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28815-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CB29ADAD74
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 12:33:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D59DADAD77
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 12:33:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 613997AA40F
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 10:31:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8192188C1F2
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 10:33:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6F1327F72D;
-	Mon, 16 Jun 2025 10:33:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A3CA298CDC;
+	Mon, 16 Jun 2025 10:33:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=public-files.de header.i=frank-w@public-files.de header.b="hZEMnAZW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pBZvAe1J"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 678AD2741B9;
-	Mon, 16 Jun 2025 10:32:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D892229898A;
+	Mon, 16 Jun 2025 10:33:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750069981; cv=none; b=ASVCJ4lTSVnR7o+T5UyNkJq19VJgCAsPqZip7hKqJHSNdgW3zDxBcpUjDpy1ckCoXeBHBwEBdzEM91LY3PsEaf8dvrw82US5BsS/XqqpNTrJEZl0XoY3hYwcU197ejhQ62TsKEb3hsBNR1xpzVhfyMrmavjjSuroJLeApeYMt4A=
+	t=1750069984; cv=none; b=nhfRGF3QIrc+bMuGAucXcTGLzPf/th1FJi3WcESIccEmwyVAYAFbfKIdBPN0IIUUBxPy5S44qse8NhOQK4oSIyMNLNHh4iZmj3ClftO8UjMnUVV7mRZFxrGePld1np5xtIo7YeUFCfmylx1Pa2jasyq+Yfu+uKDzhRlT5tG3pOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750069981; c=relaxed/simple;
-	bh=zbYNG3njVAtH1dEsJCylZZ7mhn29KltrlG0PxCAQEX4=;
-	h=MIME-Version:Message-ID:From:To:Cc:Subject:Content-Type:Date:
-	 In-Reply-To:References; b=KfJrd2H/EtOHaXGaVfS8hoDCToOtvVUjF8fcD879RcogEd9SZTPjECYAmsc43Y29szJoJbtOhmgJNSBzmgrHX/BEnKCxgjoqHu2XrwKFN4RdEwi3FzbNYw08IMywJOERYDfDCF7K5HzDjP1yRpV4WWE+KnrnG/DY42KbDiTdOI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=public-files.de; spf=pass smtp.mailfrom=public-files.de; dkim=pass (2048-bit key) header.d=public-files.de header.i=frank-w@public-files.de header.b=hZEMnAZW; arc=none smtp.client-ip=212.227.17.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=public-files.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=public-files.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=public-files.de;
-	s=s31663417; t=1750069959; x=1750674759; i=frank-w@public-files.de;
-	bh=zbYNG3njVAtH1dEsJCylZZ7mhn29KltrlG0PxCAQEX4=;
-	h=X-UI-Sender-Class:MIME-Version:Message-ID:From:To:Cc:Subject:
-	 Content-Type:Date:In-Reply-To:References:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=hZEMnAZW/7mUOevdHKb5DW58hT1pv0jATDArPLJLr/bMpiQlhBtjWGcggVguBZIC
-	 8bKreWfebe4JKxHucnkEJoHb+Y+f6VZhokMOi9bBfdoqkArsxnUOBoepBMfhBMAIN
-	 EG0cAY68KIUipno2njp79/5AK70PJR5dirqfuaRVQ9sMMgiv1NMTtbjstL54iSyDE
-	 uxJZabGCkQFe/wgkELZRA/iN4TYTUskglFymhOXcifousmL3UUH1QPR0h0pnEd6EF
-	 jzcK7WaWDOv0syCGlM9sCAMY3moi4+LKX0SSA8rU/3TH4ie8gZO2NEMi1/juKlcLy
-	 KDbTwkE+LB4dExakkg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [100.67.37.206] ([100.67.37.206]) by
- trinity-msg-rest-gmx-gmx-live-b647dc579-4qvpp (via HTTP); Mon, 16 Jun 2025
- 10:32:39 +0000
+	s=arc-20240116; t=1750069984; c=relaxed/simple;
+	bh=evebD+70FLqdj7CqaCuFWQrCrqnpoUVPYITOothIMUo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TpW5eIoe2b9Zaf+U5NUlDGAfw9g4laj5kB1uQx686la89hkITCQpfmWfgripBN3IJU9PtUM6iO3oDt3OlBD6A9wRouy3AyPPUQVI8/zRggEYARFN2/Q47a6vy30hJnWkvy6lpoj0Qh4PfG58qeUpgGmSOvYfLv5V8pKCM/1gLes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pBZvAe1J; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65DF7C4CEF1;
+	Mon, 16 Jun 2025 10:32:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750069983;
+	bh=evebD+70FLqdj7CqaCuFWQrCrqnpoUVPYITOothIMUo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=pBZvAe1JwqIjZIXUCdnEdbNESOcXJYUVo2Dh+TNhazCeEjkhj7MFrAdVctShgprte
+	 COR7DxjuTGHlMU6e0PCqLAlBlCDn11H1Xzc2gIOxLn+BN+GciwEiwMFcR85T/4Zl4D
+	 rLN3a6gBFPEa+j4ShJ321w+jfUoifuabcAFvtZgS9lLIwZhmveSIBlN7+8A5LeGraM
+	 EGS3XA9KSkSlxBXANUQM+oEoehvRT+eM59R4d+Gf3A07IIIuhCWEAEC8z6kePziEe7
+	 s2ioqxbBGouAmk+DTSRGKjPbesuMwIGuPIq/kwakiks5PuLqINnE8EjtFS+rkJU6qG
+	 CUyeGEB9erfcA==
+Message-ID: <5a4a9d58-d0c1-40f4-b18b-8b1a3dee55c2@kernel.org>
+Date: Mon, 16 Jun 2025 12:32:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <trinity-137d83ca-9fe9-4bc3-8482-ddaac9077b0d-1750069959310@trinity-msg-rest-gmx-gmx-live-b647dc579-4qvpp>
-From: Frank Wunderlich <frank-w@public-files.de>
-To: robh@kernel.org, krzk+dt@kernel.org, lorenzo@kernel.org
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- angelogioacchino.delregno@collabora.com, linux@fw-web.de,
- frank-w@public-files.de
-Subject: Aw: [PATCH v4 01/13] dt-bindings: net: mediatek,net: update for
- mt7988
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/9] arm64: dts: imx93: move i.MX93 specific part from
+ imx91_93_common.dtsi to imx93.dtsi
+To: Joy Zou <joy.zou@nxp.com>, "robh@kernel.org" <robh@kernel.org>,
+ "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+ "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ "shawnguo@kernel.org" <shawnguo@kernel.org>,
+ "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+ "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+ "will@kernel.org" <will@kernel.org>,
+ "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+ "davem@davemloft.net" <davem@davemloft.net>,
+ "edumazet@google.com" <edumazet@google.com>,
+ "kuba@kernel.org" <kuba@kernel.org>, "pabeni@redhat.com"
+ <pabeni@redhat.com>, "mcoquelin.stm32@gmail.com"
+ <mcoquelin.stm32@gmail.com>,
+ "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+ "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+ "richardcochran@gmail.com" <richardcochran@gmail.com>,
+ "kernel@pengutronix.de" <kernel@pengutronix.de>,
+ "festevam@gmail.com" <festevam@gmail.com>
+Cc: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "imx@lists.linux.dev" <imx@lists.linux.dev>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ "linux-stm32@st-md-mailman.stormreply.com"
+ <linux-stm32@st-md-mailman.stormreply.com>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ Frank Li <frank.li@nxp.com>, Ye Li <ye.li@nxp.com>,
+ Jacky Bai <ping.bai@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+ Aisheng Dong <aisheng.dong@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>
+References: <20250613100255.2131800-1-joy.zou@nxp.com>
+ <20250613100255.2131800-5-joy.zou@nxp.com>
+ <27ca7dfa-9dee-43f5-9e97-78de5e964f6e@kernel.org>
+ <AS4PR04MB9386F7BB0586AD1ADEB35237E170A@AS4PR04MB9386.eurprd04.prod.outlook.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <AS4PR04MB9386F7BB0586AD1ADEB35237E170A@AS4PR04MB9386.eurprd04.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 16 Jun 2025 10:32:39 +0000
-In-Reply-To: <20250616095828.160900-2-linux@fw-web.de>
-References: <20250616095828.160900-1-linux@fw-web.de>
- <20250616095828.160900-2-linux@fw-web.de>
-X-UI-CLIENT-META-MAIL-DROP: W10=
-X-Provags-ID: V03:K1:+PsAnRdYyRCcfuZ2aEIpeS3SraFNWACiWUPVZYdvuwi0fRlgjDTUG7NvRhmFPpU/PlGQH
- dNyNcklHMTkuXYr8XJh8tnSgdBzJJxsP97ipbekVAmzMHwLit/DoXqHvswlgmM8vY68NDpsdRFnz
- JZ43nEv+mjbp9r8pzElylUKBIayKmn7DDvtZFUEkBUUiOpmGzVc+xz6i6dCatSZhG8ngMqhptyCv
- PwzVg8qBXpdER0VlWJGyLWCd32Mx5/UN0VZD7/oMg/Ds52L9LDgEzwQRPYYu/dQJ9Tdzl9qoZCl4
- JuDd5aCHCZjc8rdsPA5ReRt77vgnj1w9JUjnQG9WDxxyjrrEpLDoZvti9XhWeRPwHw=
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:tTrr5nZYwHw=;IXSYPgh53TyZcIkZciMzpWDlETX
- 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
- nlSOZp
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi Rob, Krzysztof and Lorenzo,
+On 16/06/2025 09:42, Joy Zou wrote:
+> 
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski <krzk@kernel.org>
+>> Sent: 2025年6月13日 18:44
+>> To: Joy Zou <joy.zou@nxp.com>; robh@kernel.org; krzk+dt@kernel.org;
+>> conor+dt@kernel.org; shawnguo@kernel.org; s.hauer@pengutronix.de;
+>> catalin.marinas@arm.com; will@kernel.org; andrew+netdev@lunn.ch;
+>> davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+>> pabeni@redhat.com; mcoquelin.stm32@gmail.com;
+>> alexandre.torgue@foss.st.com; ulf.hansson@linaro.org;
+>> richardcochran@gmail.com; kernel@pengutronix.de; festevam@gmail.com
+>> Cc: devicetree@vger.kernel.org; linux-kernel@vger.kernel.org;
+>> imx@lists.linux.dev; linux-arm-kernel@lists.infradead.org;
+>> netdev@vger.kernel.org; linux-stm32@st-md-mailman.stormreply.com;
+>> linux-pm@vger.kernel.org; Frank Li <frank.li@nxp.com>; Ye Li <ye.li@nxp.com>;
+>> Jacky Bai <ping.bai@nxp.com>; Peng Fan <peng.fan@nxp.com>; Aisheng Dong
+>> <aisheng.dong@nxp.com>; Clark Wang <xiaoning.wang@nxp.com>
+>> Subject: Re: [PATCH v5 4/9] arm64: dts: imx93: move i.MX93 specific
+>> part from imx91_93_common.dtsi to imx93.dtsi
+>>
+>> On 13/06/2025 12:02, Joy Zou wrote:
+>>> Move i.MX93 specific part from imx91_93_common.dtsi to imx93.dtsi.
+>>
+>> You just moved them to the common file. Why are you moving the same line
+>> again?
+> Thanks for your comments!
+> These are the differences for the convenience of review.
 
-I got message from your mailserver, that my patch-mails are detected as Sp=
-am and blocked (to=20
-other address than i used - seems like forwarding from kernel.org to gmail=
-.com). I want to make
-sure, you get it...
+So you just keep changing same lines for a review? No. It makes
+everything difficult to review.
 
-I see it in dt-bindings patchwork, so replacing the content with a link.
+Organize your patches in logical chunks, as requested by submitting patches.
 
-https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250616095=
-828.160900-2-linux@fw-web.de/
 
-only kept angelo, me and ML in this response to not spam people too much.
 
-regards Frank
+Best regards,
+Krzysztof
 
