@@ -1,230 +1,238 @@
-Return-Path: <linux-pm+bounces-28832-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28833-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E1D1ADB2BB
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 15:58:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01AACADB5E8
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 17:52:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F15553ABD74
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 13:56:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9832C188F809
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 15:52:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA70F2EBDF2;
-	Mon, 16 Jun 2025 13:54:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08EC927E073;
+	Mon, 16 Jun 2025 15:51:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="mJs5kc8D"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qP9peBEB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF292DF3F0
-	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 13:54:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67EE2701CB
+	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 15:51:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750082052; cv=none; b=dbKXl920wPS/1cDynMSvtIo8e8iN3nLbkbZylUYtogVP9JpR89tMjtE1Jkb4wiP+BDLYF1uje6+POxtDik+hPUmCqkXTB6qClQrPVaTV8lMP8v/+DkYc9Zy+f3m3nYZppcLmlQ4FXkZhhmXnyMKCuf2q+sjup7CF3gUP3dfC80E=
+	t=1750089117; cv=none; b=PVOJMcLdj4Jyi4u2Wh7jbFk7aPDe/mY/Jm1AICPziRzAkQTK1FmT0KXPiQzwnDIdytWNvmSSFYyN4Wr8AWeHldRpTbrNIO6B5xnkWNVJieyTg18rdL8pCdBqvOxMeTeXvKCoZwrZR7uV8mYpODnmBs58YXKupu4qRtV09VeOblA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750082052; c=relaxed/simple;
-	bh=KPy0qoeJ/cuWg3FcjfVl4wS9jR9Yuixd3J4F+C/TP+Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kNwAngikDL+yYPZ6EZ8w16hQYxgDnjnnYWshdSn/CKDZ2iaOGV8dTV96D3lFnVW7GUJ8Nfwuy0eWHo0xhd5o/L72MQKyKQpKEN2JMaO8PxxcerHa3ucXViJ54ckadzs7OjoEZyMLg3hjmosm5Pl0y6uECxkxl4J7yp+KKnvwTW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=mJs5kc8D; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-ade76b8356cso905240766b.2
-        for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 06:54:09 -0700 (PDT)
+	s=arc-20240116; t=1750089117; c=relaxed/simple;
+	bh=PV+hjbr1UcOA60DQPHguMD3wEZU4n+jwNG7/rCy7Fvw=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=EhhAfEtOkJXH18NjJXMMkPyPi23GVnsY3J11/NvDGZqYviP9NzE2av53tM1mUHBIYXal1WqFcOi2x31k0OL5RGN4vRW2644wdcosIZsHDxTJOJv7lPiUUc9p7XslwtpdpB96mn55a0+b3BjNANN2Q1PBgc8vIsiz+W7X4xq5F6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qP9peBEB; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3a57c8e247cso1371471f8f.1
+        for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 08:51:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1750082048; x=1750686848; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k+LFH2EJZ/euycVAsLwJhPX7xP3RrLri+PWxKx7UufA=;
-        b=mJs5kc8DGArf70tD7LKTbk2Ch48YO19BuG6jqGQLEKfPMUgBoELXMEnEu8Fa3syHrh
-         H/9ZVlHsa7iTsefFDIdNsb4vPKHD/HwM0pjuNoC/h5lj8sNKMwOgliOryxvY7/jNPyvp
-         ASflURqaqPVoGKw/rFQ17bue4hvqJGMundVBTFM+5+XN16fe8EZgDAtAh1/Bsn812eOD
-         CqtRKG/FlSInBHaGHRL2nBJjoahuvEmpkQRC2JESossWbJXfWyiZav/0NJ1kLe2rZ6sI
-         sH5VUbV2vdI7i4CSTko3v0p2ur78t/BHfsJ74QpTGcvXr/507HnnSlwLWByQ+NHYli03
-         xdRg==
+        d=linaro.org; s=google; t=1750089114; x=1750693914; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B3aIxTq8eP0LU6Js9V3eNq8kd450CZ0HrFoXlpXX77I=;
+        b=qP9peBEBMe1KGRcqA2zIdj2HsKSyRbSk1mQcq3XOsTitKUjwVzCxGmucxHdWzHgdTI
+         p7/dFsvy1ra2khZuSe7SJrEqxKDiU4/h7spvC3cZJKWqQir8XLr+/ywX+8INSPxvnkvy
+         rzg4ezYwFahht/d1la+m16dI8mUcKLZMXBOvKFuqPvXNltFNvZreUTY+8EKuFs38Yodw
+         /kKdddJWIUmhFEuiv0sfvIbivbKvUsTh/DnpjPUxquFpuGDKp7sl6OdQH0AiyPXw0v3V
+         HbQRhoQwUcZLbcsyP6FSFf/78d+bNxWAggB9XCUy96/lts+UGCKDEC9NwbtZh5RFxYYQ
+         zD/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750082048; x=1750686848;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k+LFH2EJZ/euycVAsLwJhPX7xP3RrLri+PWxKx7UufA=;
-        b=UlopTYPaUFftt28/+kiWY26FWZHseWQ8Cgrp1bEspOs1Sa9onDmH1oc80mfY2z23OB
-         7PpoIfIAAzKmAUexZ7LlvYwieJQmuDENvihbmt1UQfa4PhYz1QmIHLp9Q+5AYWPRfCrB
-         arpBy5o6kBd+WUq6FY5i9ndo0dX3w7ZDvXoKuK5BT/9N/BdpVjT8i/6XURM9Z/UKgID2
-         pckEnkfLr73C+PofugMg6fKBXH2nHEQQqmyp35uAA0OGhDJ9NJLgPxB2zkdYjxWnl4Af
-         4rWj0heiCVJjnQTzFoPdX3tWVSCJxeuXet8ySZmRJgnCRUvEi6MnzD6rEKTPoS2Ozj2G
-         UhPA==
-X-Forwarded-Encrypted: i=1; AJvYcCVlJjVBFnA2jbwbZ8DZGDbb9BCc98LxXaVJ1VEWJW1QRf4ExOXxivVq4zjEIZ5uME8EJXYl/oOOXA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2MfW6GY1fAN9l2OQI+x0vNxDSa8jrMkqCx/zO4UlFa6ZvPnPM
-	ghXtfj8YnyTTQmVgmQ1bBD1wWrvLWpNGpORB/KEtZ9jGSubCj5wD/V/yTTK6KM2Mkpc=
-X-Gm-Gg: ASbGncuTp/HhzKXpB5LhTjiT7I0HbbXly6M/knKz4+rcvKG2zE54W2tkg9sxYKcxaA+
-	JAwa4UtwQ8gWDs3mZhx4ASrsPaSlRmlHjej1mmBMOeXKMfVzYuV5Mu/NAFW8eYOnUh8IeSdpdJR
-	bsmYgtR+X7UoGTHSI320raG6obFhZJi7Q4Wj+9xZlbHvAX36mipZxUStxdi3EZd+sAocXBHixpG
-	zP98rHCKzcmYG8kl0fslHpkhVy8kgI5r24hPdfNv6C6IDe6Yq3WXgKmr4dceifXOLSipiSyyCYr
-	GvMMASdpR8rAFYIrCv25SCHS98cQLnBC8fwIpwl90tzq2TvMUhGUhXMDRSUDtW/Y/4BQBeQ5I3C
-	mncXGqm9vzraUb4RRtY5t83PzCk4=
-X-Google-Smtp-Source: AGHT+IGkfVytZQOP8rOyQhNTtUZWr9IH2eDQVY0gZwL9P8IewAvv89wj+c+jpi7sVu7bmVbj99zUhQ==
-X-Received: by 2002:a17:907:94cb:b0:ad4:d9b2:6ee4 with SMTP id a640c23a62f3a-adfad65f792mr840462566b.49.1750082048005;
-        Mon, 16 Jun 2025 06:54:08 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.110])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adec897a70bsm662748966b.154.2025.06.16.06.54.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jun 2025 06:54:07 -0700 (PDT)
-From: Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To: gregkh@linuxfoundation.org,
-	rafael@kernel.org,
-	dakr@kernel.org,
-	len.brown@intel.com,
-	pavel@kernel.org,
-	ulf.hansson@linaro.org,
-	jic23@kernel.org,
-	daniel.lezcano@linaro.org,
-	dmitry.torokhov@gmail.com
-Cc: claudiu.beznea@tuxon.dev,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	bhelgaas@google.com,
-	geert@linux-m68k.org,
-	linux-iio@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	fabrizio.castro.jz@renesas.com,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v4 2/2] driver core: platform: Drop dev_pm_domain_detach() call
-Date: Mon, 16 Jun 2025 16:53:57 +0300
-Message-ID: <20250616135357.3929441-3-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250616135357.3929441-1-claudiu.beznea.uj@bp.renesas.com>
-References: <20250616135357.3929441-1-claudiu.beznea.uj@bp.renesas.com>
+        d=1e100.net; s=20230601; t=1750089114; x=1750693914;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=B3aIxTq8eP0LU6Js9V3eNq8kd450CZ0HrFoXlpXX77I=;
+        b=Psng/+zh2um6JkGC03ZqrcUJQwyVpEVtvFhA7Nke61slBTLod4cAGC00Im6AmG7fPO
+         3VXPWGJBkLF1vIYznusQ1tObL19fDB8MV9sVim7cggDM+pHwDw3ihnxLt6cGdOiat/VC
+         dCScRkyGgl2bOtxeqt1ivN/5VWy9Nt87Cn3uHOhbwhWq4xPHZYFPA3xNaSHjq+65oT7y
+         5soYEHvMbUBQYRTpOadwev8BtDFQQo9R1FMXnYIqS59Yz1uaRX06hYMwT6nrmjeK4pqA
+         TnDwZ7Ff+9sr8gbhdqHBKPzmwARgtHBmmTrKFK01xvyk4kuKvqgbHfSNuKpPeLqAGovg
+         W3qQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVnjM+y7j72z49Mf/8kMvN2Jni347LD4Zp/yztnBdn0ZwyhduuJiFD6Fa2XUEaptJRGnGiVj6z+QA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywva7vfwx4Qg9w0h4Ee+t2+WoZtXWg5ebCzpo/KhWMpRbj/2zh3
+	e90TD5GMJ+D9OBGgX/haS87FWAxADHvnrrRELEqCelce6vtXBRhfzJatA1UqVtokNSBC6YJ8RYs
+	fEyHhUSM=
+X-Gm-Gg: ASbGnctgQ3SlnOMAYKYoDSIphSyyAXWnsfbBiRkUCN3vQPt6Azbyawbwtyn8VicZ2sw
+	F3hQYFiokiWhZmDJzJDOi3Gh6J5SVyFxQi3Slfdv0Z37xMArUiRbVK184hQCeUp3uBChq2oV1Ov
+	05AqIKu3cXYpwLoOFuk21LkZqV5zP2/zjtfg/2cU5HnnmG41/4EghHC5ixX+qqeVGGcMg7ouFkv
+	63FjjboPl4P9JXR7HOsEB/FYqEAk5gfLWBfs3l9okOHLmAiNNgctcGf/jwIlm1JcmZUzoytvmtE
+	zSEexVAe1V8894RNS/Nu5GZQ/eBK3hLcwambLUzq6SYGykZTl7HNsFiSo/AFrkbEoplcCSvp7Xa
+	GEWpNh/iVmekXWFmHGUKhSJ2eqhcDHN1eA2s2
+X-Google-Smtp-Source: AGHT+IEj5cUnxUUFo+d8zqbumS2ayHNMbIjK7THuy3PbiLsuMDqskV06eRRHi2zveWUbvuEPOUaqXQ==
+X-Received: by 2002:a05:6000:4818:b0:3a5:2e59:833a with SMTP id ffacd0b85a97d-3a57238b9fcmr8023602f8f.1.1750089114107;
+        Mon, 16 Jun 2025 08:51:54 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:3d9:2080:6c7:97de:65a8:488a? ([2a01:e0a:3d9:2080:6c7:97de:65a8:488a])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e224795sm150088105e9.7.2025.06.16.08.51.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jun 2025 08:51:53 -0700 (PDT)
+Message-ID: <786e3337-4c14-4281-932e-6a93aac53cf8@linaro.org>
+Date: Mon, 16 Jun 2025 17:51:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+From: neil.armstrong@linaro.org
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH 00/28] interconnect: qcom: icc-rpmh: use NULL-terminated
+ arrays and drop static IDs
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Georgi Djakov <djakov@kernel.org>, Bjorn Andersson <andersson@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250616-rework-icc-v1-0-bc1326294d71@oss.qualcomm.com>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <20250616-rework-icc-v1-0-bc1326294d71@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Hi,
 
-On the Renesas RZ/G3S (and other Renesas SoCs, e.g., RZ/G2{L, LC, UL}),
-clocks are managed through PM domains. These PM domains, registered on
-behalf of the clock controller driver, are configured with
-GENPD_FLAG_PM_CLK. In most of the Renesas drivers used by RZ SoCs, the
-clocks are enabled/disabled using runtime PM APIs. The power domains may
-also have power_on/power_off support implemented. After the device PM
-domain is powered off any CPU accesses to these domains leads to system
-aborts.
+On 16/06/2025 02:28, Dmitry Baryshkov wrote:
+> Qualcomm interconnect code has been using .num_foo fields together with
+> the arrays embedded in the structure, which results in hard-to-notice
+> mistakes if .num_foo gets omitted or incorrect.
+> 
+> Rework RPMh interconnect code to use NULL-terminated arrays for the
+> dynamic IDs case (as now all the arrays contain only pointers) and,
+> while we are at it, rework all the drivers to use dynamic IDs and drop
+> static IDs code.
+> 
+> This series touches only RPMh interconnect drivers. Corresponding series
+> for RPM drivers will follow up shortly.
 
-During probe, devices are attached to the PM domain controlling their
-clocks and power. Similarly, during removal, devices are detached from the
-PM domain.
+Can you specify on which base thie patchset applies ?
 
-The detachment call stack is as follows:
+I tried v6.15, v6.16-rc1, v6.16-rc2, next-20250613 & next-20250616 and they all fail to
+apply on patch 5.
 
-device_driver_detach() ->
-  device_release_driver_internal() ->
-    __device_release_driver() ->
-      device_remove() ->
-        platform_remove() ->
-	  dev_pm_domain_detach()
+Thanks,
+Neil
 
-During driver unbind, after the device is detached from its PM domain,
-the device_unbind_cleanup() function is called, which subsequently invokes
-devres_release_all(). This function handles devres resource cleanup.
-
-If runtime PM is enabled in driver probe via devm_pm_runtime_enable(), the
-cleanup process triggers the action or reset function for disabling runtime
-PM. This function is pm_runtime_disable_action(), which leads to the
-following call stack of interest when called:
-
-pm_runtime_disable_action() ->
-  pm_runtime_dont_use_autosuspend() ->
-    __pm_runtime_use_autosuspend() ->
-      update_autosuspend() ->
-        rpm_idle()
-
-The rpm_idle() function attempts to resume the device at runtime. However,
-at the point it is called, the device is no longer part of a PM domain
-(which manages clocks and power states). If the driver implements its own
-runtime PM APIs for specific functionalities - such as the rzg2l_adc
-driver - while also relying on the power domain subsystem for power
-management, rpm_idle() will invoke the driver's runtime PM API. However,
-since the device is no longer part of a PM domain at this point, the PM
-domain's runtime PM APIs will not be called. This leads to system aborts on
-Renesas SoCs.
-
-Another identified case is when a subsystem performs various cleanups
-using device_unbind_cleanup(), calling driver-specific APIs in the process.
-A known example is the thermal subsystem, which may call driver-specific
-APIs to disable the thermal device. The relevant call stack in this case
-is:
-
-device_driver_detach() ->
-  device_release_driver_internal() ->
-    device_unbind_cleanup() ->
-      devres_release_all() ->
-        devm_thermal_of_zone_release() ->
-	  thermal_zone_device_disable() ->
-	    thermal_zone_device_set_mode() ->
-	      struct thermal_zone_device_ops::change_mode()
-
-At the moment the driver-specific change_mode() API is called, the device
-is no longer part of its PM domain. Accessing its registers without proper
-power management leads to system aborts.
-
-Drop the call to dev_pm_domain_detach() from the platform bus remove
-function and rely on the newly introduced call in device_unbind_cleanup().
-This ensures the same effect, but the call now occurs after all
-driver-specific devres resources have been freed.
-
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
-
-Changes in v4:
-- dropped devm_pm_domain_attach() approach
-- adjusted patch description to reflect this
-
-Changes in v3:
-- adjusted the call to devm_pm_domain_attach() as it now gets
-  2 parameters
-
-Changes in v2:
-- dropped the devres group open/close approach and use
-  devm_pm_domain_attach()
-- adjusted patch description to reflect the new approach
-
- drivers/base/platform.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-index 075ec1d1b73a..2459be6aecf4 100644
---- a/drivers/base/platform.c
-+++ b/drivers/base/platform.c
-@@ -1400,11 +1400,8 @@ static int platform_probe(struct device *_dev)
- 	if (ret)
- 		goto out;
- 
--	if (drv->probe) {
-+	if (drv->probe)
- 		ret = drv->probe(dev);
--		if (ret)
--			dev_pm_domain_detach(_dev, true);
--	}
- 
- out:
- 	if (drv->prevent_deferred_probe && ret == -EPROBE_DEFER) {
-@@ -1422,7 +1419,6 @@ static void platform_remove(struct device *_dev)
- 
- 	if (drv->remove)
- 		drv->remove(dev);
--	dev_pm_domain_detach(_dev, true);
- }
- 
- static void platform_shutdown(struct device *_dev)
--- 
-2.43.0
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+> ---
+> Dmitry Baryshkov (28):
+>        interconnect: qcom: sc8280xp: specify num_links for qnm_a1noc_cfg
+>        interconnect: qcom: sc8180x: specify num_nodes
+>        interconnect: qcom: rpmh: make nodes a NULL_terminated array
+>        interconnect: qcom: rpmh: make link_nodes a NULL_terminated array
+>        interconnect: qcom: sc7280: convert to dynamic IDs
+>        interconnect: qcom: sc8180x: convert to dynamic IDs
+>        interconnect: qcom: sc8280xp: convert to dynamic IDs
+>        interconnect: qcom: sdm845: convert to dynamic IDs
+>        interconnect: qcom: sm8250: convert to dynamic IDs
+>        interconnect: qcom: x1e80100: convert to dynamic IDs
+>        interconnect: qcom: qcs615: convert to dynamic IDs
+>        interconnect: qcom: qcs8300: convert to dynamic IDs
+>        interconnect: qcom: qdu1000: convert to dynamic IDs
+>        interconnect: qcom: sar2130p: convert to dynamic IDs
+>        interconnect: qcom: sc7180: convert to dynamic IDs
+>        interconnect: qcom: sdm670: convert to dynamic IDs
+>        interconnect: qcom: sdx55: convert to dynamic IDs
+>        interconnect: qcom: sdx65: convert to dynamic IDs
+>        interconnect: qcom: sdx75: convert to dynamic IDs
+>        interconnect: qcom: sm6350: convert to dynamic IDs
+>        interconnect: qcom: sm7150: convert to dynamic IDs
+>        interconnect: qcom: sm8150: convert to dynamic IDs
+>        interconnect: qcom: sm8350: convert to dynamic IDs
+>        interconnect: qcom: sm8450: convert to dynamic IDs
+>        interconnect: qcom: sm8550: convert to dynamic IDs
+>        interconnect: qcom: sm8650: convert to dynamic IDs
+>        interconnect: qcom: sm8750: convert to dynamic IDs
+>        interconnect: qcom: icc-rpmh: drop support for non-dynamic IDS
+> 
+>   drivers/interconnect/qcom/bcm-voter.c |    4 +-
+>   drivers/interconnect/qcom/icc-rpmh.c  |   20 +-
+>   drivers/interconnect/qcom/icc-rpmh.h  |   13 +-
+>   drivers/interconnect/qcom/qcs615.c    |  713 ++++++++-----------
+>   drivers/interconnect/qcom/qcs615.h    |  128 ----
+>   drivers/interconnect/qcom/qcs8300.c   |  911 +++++++++++-------------
+>   drivers/interconnect/qcom/qcs8300.h   |  177 -----
+>   drivers/interconnect/qcom/qdu1000.c   |  470 ++++++------
+>   drivers/interconnect/qcom/qdu1000.h   |   95 ---
+>   drivers/interconnect/qcom/sa8775p.c   |  493 ++++++-------
+>   drivers/interconnect/qcom/sar2130p.c  |  795 ++++++++-------------
+>   drivers/interconnect/qcom/sc7180.c    |  892 +++++++++++------------
+>   drivers/interconnect/qcom/sc7180.h    |  149 ----
+>   drivers/interconnect/qcom/sc7280.c    |  840 ++++++++++------------
+>   drivers/interconnect/qcom/sc7280.h    |  154 ----
+>   drivers/interconnect/qcom/sc8180x.c   | 1013 +++++++++++++-------------
+>   drivers/interconnect/qcom/sc8180x.h   |  179 -----
+>   drivers/interconnect/qcom/sc8280xp.c  | 1257 ++++++++++++++++-----------------
+>   drivers/interconnect/qcom/sc8280xp.h  |  209 ------
+>   drivers/interconnect/qcom/sdm670.c    |  712 +++++++++----------
+>   drivers/interconnect/qcom/sdm670.h    |  128 ----
+>   drivers/interconnect/qcom/sdm845.c    |  986 ++++++++++++--------------
+>   drivers/interconnect/qcom/sdm845.h    |  140 ----
+>   drivers/interconnect/qcom/sdx55.c     |  611 ++++++++--------
+>   drivers/interconnect/qcom/sdx55.h     |   70 --
+>   drivers/interconnect/qcom/sdx65.c     |  577 +++++++--------
+>   drivers/interconnect/qcom/sdx65.h     |   65 --
+>   drivers/interconnect/qcom/sdx75.c     |  498 ++++++-------
+>   drivers/interconnect/qcom/sdx75.h     |   97 ---
+>   drivers/interconnect/qcom/sm6350.c    |  838 +++++++++++-----------
+>   drivers/interconnect/qcom/sm6350.h    |  139 ----
+>   drivers/interconnect/qcom/sm7150.c    |  860 +++++++++++-----------
+>   drivers/interconnect/qcom/sm7150.h    |  140 ----
+>   drivers/interconnect/qcom/sm8150.c    |  930 ++++++++++++------------
+>   drivers/interconnect/qcom/sm8150.h    |  152 ----
+>   drivers/interconnect/qcom/sm8250.c    |  977 ++++++++++++-------------
+>   drivers/interconnect/qcom/sm8250.h    |  168 -----
+>   drivers/interconnect/qcom/sm8350.c    |  901 ++++++++++++-----------
+>   drivers/interconnect/qcom/sm8350.h    |  158 -----
+>   drivers/interconnect/qcom/sm8450.c    |  823 ++++++++++-----------
+>   drivers/interconnect/qcom/sm8450.h    |  169 -----
+>   drivers/interconnect/qcom/sm8550.c    |  683 ++++++++----------
+>   drivers/interconnect/qcom/sm8550.h    |  138 ----
+>   drivers/interconnect/qcom/sm8650.c    |  713 ++++++++-----------
+>   drivers/interconnect/qcom/sm8650.h    |  144 ----
+>   drivers/interconnect/qcom/sm8750.c    |  779 ++++++++------------
+>   drivers/interconnect/qcom/x1e80100.c  |  819 ++++++++++-----------
+>   drivers/interconnect/qcom/x1e80100.h  |  192 -----
+>   48 files changed, 8655 insertions(+), 13464 deletions(-)
+> ---
+> base-commit: 410f15dcfe222c06f0d6379adec630061e88dc72
+> change-id: 20250613-rework-icc-0d3b7276a798
+> 
+> Best regards,
 
 
