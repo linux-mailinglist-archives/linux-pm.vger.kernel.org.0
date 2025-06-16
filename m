@@ -1,204 +1,187 @@
-Return-Path: <linux-pm+bounces-28799-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28801-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFA2AADAC28
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 11:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D047ADAC9A
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 11:59:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9958F1892057
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 09:41:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A7E3188715D
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 09:59:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF8E8273D91;
-	Mon, 16 Jun 2025 09:41:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 619A42749D1;
+	Mon, 16 Jun 2025 09:58:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="GWCt+dz+"
+	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="RwJKJIiQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mxout1.routing.net (mxout1.routing.net [134.0.28.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FEEF273D78
-	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 09:41:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E034274652;
+	Mon, 16 Jun 2025 09:58:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750066867; cv=none; b=P2/qSqDyJamlb3zuL/c/6qHCHHrmZWDnt1q5LOh9ZjtiMvA/JimQ0s5JGrpV9IZ67DRWkKQXim2k6dSQ1Gww/ruTe39H6zuIQRB5of3Y234AXgerpfqceGLUSLeNwC41dmLZX7rhAwV26U6hoe1wFEphJ7JuPtlwmP9MW5OCAH4=
+	t=1750067925; cv=none; b=b+QQzB8DPG8vOr+pcDul/Audsh0OPYzO2ds8NpPSmK2lfWgNE6IaXwwEwz46W6VJMmGA++RHoRjlX/U4HySazRnqGZusEyvfAxpUUtdetkYF3bcccSEzkMcykKEveUxusHhAChy+FcH5sgcnDvelM6b46HUjNFp173RO6T0UzD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750066867; c=relaxed/simple;
-	bh=7XgftMYlowI9omQsqIdx6iLF24jqn6RByllX2ehfs7M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DD5Wgq3LMOtL4X8Y/ZlJIztwqqbzH+/EKZYN/jNwUvCTV6losaV1Vs86L+pyhVcVb7RBz5TAFacBmivC/6Sf3S34qhElML5Ae8143GetnBPsel/1E4B/a/cv5qQK8U2/5RZ9ujNmmGURkhKKMkLg15i5CILTF9ZTdz8q0kKaBuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=GWCt+dz+; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-54b10594812so4258614e87.1
-        for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 02:41:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1750066864; x=1750671664; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZadNMdHIaOPYoMnd8DCHGg9pjL54W3auftd8ZPyuMno=;
-        b=GWCt+dz+xgX1+HTKkjCZXjMRV7n/QHqw+aBcgYC0SnsqkYJ+sgXMWHq+ZWPK7LTaBt
-         6nDaEIBRp2k6IiutyYuXPyVWtkdUzKQPC6JVb/yqLe9ohmZTwjpKmEyq/ObkmEFY+DSw
-         P5AOU/CSqlA9EgMx4/2Fny+uOGdJDHYL9lfina9VfUCXtt6I6gzwQT4aqL2J6it+sQhu
-         JBNCNsUKihsXQ+BTfpoiIPx92h7mKGqRxX8gfTPf0EPH28J66pVnfWvj6pVI4B4ooTLR
-         xRrzNBIf3i5H/JOOezwkR9FSkCispNTrhpbBVC6jnh5LxSNTPbWZg1tJXIOs69qSOnXM
-         PI1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750066864; x=1750671664;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZadNMdHIaOPYoMnd8DCHGg9pjL54W3auftd8ZPyuMno=;
-        b=JnR0UL1BMWBjLmKggt/+qGA91yiF7hR1Qh90QOz+HOeMnGBXSwrj9+EFXhKNm3C2+U
-         V2BGqc3ZIAo61XDpaBBAsg2IpW/rpgEysYVLQWqHjpkKGT2eSkERlloPtUvrhJUyHv8S
-         ZYFTopbhkRgYB2X/ATtLplCqDVQjHc91Hm0WdUMvUQgFMJj9I/n0aJX4WpoQxR69mIn+
-         g6t0LFe5uQxyBDukRWrG2rfGG0xdAjwzq35zWEK6iHbcPw6K73WO448ya8DEEv7i+xWX
-         EC4jO7CbEcQlqtoi4y8zX0k96eaqh1C2YQ5X5NylDNubJPmszrnRITRnxblAuY/SdFn4
-         sZcA==
-X-Forwarded-Encrypted: i=1; AJvYcCWy54/S7fCKPAWIO7ZQu/Qdok0A9n7AUYhG3Xhz8mzNyO92xAgEJ1jIkj9zRD8QuLo6Y8wwkY5Vtg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpY1L7tYWc+H0aGeLabwCcxGexkt1ecRos1GXeqD4zzBCQoBwy
-	lHHSUFaYu9EVE1RtP5d5LSSDoFgbK+LtH1dYHb3vSlI2SFm3R/9ZfZooIBiusWFm1+FU4PoZBYU
-	qJIp9skekiBvPRD5SYvCUjrm3HeKBoRqnPpif6MD5tg==
-X-Gm-Gg: ASbGnctR2yCYH6npQ1wo5VqnjM5W/iemf1kTJdyEwUQ0OT4S0qGmjnpC0tK/pVpDro0
-	VKfrFhQ8aIxAsfbl5HbOGltPjQL9s+hkDBXmwaeIzAj7wP1Fd9xMI11VuizR+82sq+VbBnGE2Ij
-	TJwVj+R+9fxjw3URC3DKUzdO69x0RMMQQa68EU/HblnasMS0wwK9LgFVJkXg/rETZifG/iLToUA
-	m0=
-X-Google-Smtp-Source: AGHT+IGQWWfUkusHDrOLuRcyzoECeHHGTF7H0pzgq8rg6Tj7LyO4hdSVch5xZMTnr/dQPwUpgGJMqB60ks8Us882nLo=
-X-Received: by 2002:a05:6512:12d1:b0:553:663d:7354 with SMTP id
- 2adb3069b0e04-553b6f31175mr1628391e87.48.1750066863507; Mon, 16 Jun 2025
- 02:41:03 -0700 (PDT)
+	s=arc-20240116; t=1750067925; c=relaxed/simple;
+	bh=tlgL48I7/TYG/q/B1zUn6HDvHEKOHNp6X1V2o3Sv0A0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P1xq7WxyoVdXrKbzEdDxnC2t1NpUi5fOTiRTHqUQZuo0P3DXSgfm0s8zEk9xJvZ/rcVtqyL+YeitoX7plwqwCDXhYFFRPEgmJGiE5B7IuJJdnVKDnA3aJFT9pKWhnUyFWj+7Gn5JH2WEISDHVcKgwZGfI+PtNAOAS5sSnP8BttY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=RwJKJIiQ; arc=none smtp.client-ip=134.0.28.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
+Received: from mxbulk.masterlogin.de (unknown [192.168.10.85])
+	by mxout1.routing.net (Postfix) with ESMTP id D0B2541ACB;
+	Mon, 16 Jun 2025 09:58:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+	s=20200217; t=1750067920;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=sKNrJpeGsrwkC38zDGJR08n+rDpEEs6AmLxRCw9vAYY=;
+	b=RwJKJIiQT88D3B/81u8TiLk/VLaBLC9uget+oeOk3fp/eAbo0Jvx79aZQKTtO/iENwYho2
+	D9KeDEET8ZamhXxKXMiOQZlHJh8qk8JXKLrsEn5E1dqNXiEmFfCuOtwGpa/ENF3AguuXlf
+	YNKzpfgOmnv9A0RZfREeRAfrHEbE224=
+Received: from frank-u24.. (fttx-pool-194.15.87.210.bambit.de [194.15.87.210])
+	by mxbulk.masterlogin.de (Postfix) with ESMTPSA id 6D17A122677;
+	Mon, 16 Jun 2025 09:58:39 +0000 (UTC)
+From: Frank Wunderlich <linux@fw-web.de>
+To: MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Georgi Djakov <djakov@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Frank Wunderlich <frank-w@public-files.de>,
+	Jia-Wei Chang <jia-wei.chang@mediatek.com>,
+	Johnson Wang <johnson.wang@mediatek.com>,
+	=?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+	Landen Chao <Landen.Chao@mediatek.com>,
+	DENG Qingfang <dqfext@gmail.com>,
+	Sean Wang <sean.wang@mediatek.com>,
+	Daniel Golle <daniel@makrotopia.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Felix Fietkau <nbd@nbd.name>,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: [PATCH v4 00/13] further mt7988 devicetree work
+Date: Mon, 16 Jun 2025 11:58:10 +0200
+Message-ID: <20250616095828.160900-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CGME20250614180911eucas1p16c9fb4a8160253c253f623bec2529f70@eucas1p1.samsung.com>
- <20250614-apr_14_for_sending-v4-0-8e3945c819cd@samsung.com> <20250614-apr_14_for_sending-v4-4-8e3945c819cd@samsung.com>
-In-Reply-To: <20250614-apr_14_for_sending-v4-4-8e3945c819cd@samsung.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 16 Jun 2025 11:40:50 +0200
-X-Gm-Features: AX0GCFt1wszk0eSWs2NPgAoE3A4kwN-NyBJ_b5il4mUmGBJkPe4uMiqiWgyvPn0
-Message-ID: <CAMRc=MfdBd6HBwM4F1TcjDvwbOJ03kxgRk4hJQ8HFK7Wz2XBAg@mail.gmail.com>
-Subject: Re: [PATCH v4 4/8] drm/imagination: Use pwrseq for TH1520 GPU power management
-To: Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Frank Binns <frank.binns@imgtec.com>, 
-	Matt Coster <matt.coster@imgtec.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sat, Jun 14, 2025 at 8:09=E2=80=AFPM Michal Wilczynski
-<m.wilczynski@samsung.com> wrote:
->
-> Update the Imagination PVR DRM driver to leverage the pwrseq framework
-> for managing the power sequence of the GPU on the T-HEAD TH1520 SoC.
->
-> To cleanly handle the TH1520's specific power requirements in the
-> generic driver, this patch implements the "driver match data" pattern. A
-> has_pwrseq flag in a new pvr_soc_data struct is now associated with
-> thead,th1520-gpu compatible string in the of_device_id table.
->
-> At probe time, the driver checks this flag. If true, it calls
-> devm_pwrseq_get("gpu-power"), requiring a valid sequencer and deferring
-> probe on failure. In this mode, all power and reset control is delegated
-> to the pwrseq provider. If the flag is false, the driver skips this
-> logic and falls back to its standard manual power management. Clock
-> handles are still acquired directly by this driver in both cases for
-> other purposes like devfreq.
->
-> The runtime PM callbacks, pvr_power_device_resume() and
-> pvr_power_device_suspend(), are modified to call pwrseq_power_on() and
-> pwrseq_power_off() respectively when the sequencer is present.  A helper
-> function, pvr_power_off_sequence_manual(), is introduced to encapsulate
-> the manual power-down logic.
->
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
-> ---
+From: Frank Wunderlich <frank-w@public-files.de>
 
-[snip]
+This series continues mt7988 devicetree work
 
->
-> +static int pvr_power_off_sequence_manual(struct pvr_device *pvr_dev)
-> +{
-> +       int err;
-> +
-> +       err =3D reset_control_assert(pvr_dev->reset);
-> +
-> +       clk_disable_unprepare(pvr_dev->mem_clk);
-> +       clk_disable_unprepare(pvr_dev->sys_clk);
-> +       clk_disable_unprepare(pvr_dev->core_clk);
-> +
-> +       return err;
-> +}
-> +
->  int
->  pvr_power_device_suspend(struct device *dev)
->  {
-> @@ -252,11 +266,10 @@ pvr_power_device_suspend(struct device *dev)
->                         goto err_drm_dev_exit;
->         }
->
-> -       clk_disable_unprepare(pvr_dev->mem_clk);
-> -       clk_disable_unprepare(pvr_dev->sys_clk);
-> -       clk_disable_unprepare(pvr_dev->core_clk);
-> -
-> -       err =3D reset_control_assert(pvr_dev->reset);
-> +       if (pvr_dev->pwrseq)
-> +               err =3D pwrseq_power_off(pvr_dev->pwrseq);
-> +       else
-> +               err =3D pvr_power_off_sequence_manual(pvr_dev);
->
->  err_drm_dev_exit:
->         drm_dev_exit(idx);
-> @@ -276,44 +289,55 @@ pvr_power_device_resume(struct device *dev)
->         if (!drm_dev_enter(drm_dev, &idx))
->                 return -EIO;
->
-> -       err =3D clk_prepare_enable(pvr_dev->core_clk);
-> -       if (err)
-> -               goto err_drm_dev_exit;
-> +       if (pvr_dev->pwrseq) {
-> +               err =3D pwrseq_power_on(pvr_dev->pwrseq);
-> +               if (err)
-> +                       goto err_drm_dev_exit;
-> +       } else {
-> +               err =3D clk_prepare_enable(pvr_dev->core_clk);
-> +               if (err)
-> +                       goto err_drm_dev_exit;
->
-> -       err =3D clk_prepare_enable(pvr_dev->sys_clk);
-> -       if (err)
-> -               goto err_core_clk_disable;
-> +               err =3D clk_prepare_enable(pvr_dev->sys_clk);
-> +               if (err)
-> +                       goto err_core_clk_disable;
->
-> -       err =3D clk_prepare_enable(pvr_dev->mem_clk);
-> -       if (err)
-> -               goto err_sys_clk_disable;
-> +               err =3D clk_prepare_enable(pvr_dev->mem_clk);
-> +               if (err)
-> +                       goto err_sys_clk_disable;
->
+- Extend cpu frequency scaling with CCI
+- GPIO leds
+- Basic network-support (ethernet controller + builtin switch + SFP Cages)
 
-In order to decrease the number of if-elses, would it make sense to
-put the "manual" and "pwrseq" operations into their own separate
-functions and then store addresses of these functions in the device
-match data struct as function pointers (instead of the has_pwrseq
-flag)? This way we'd just call them directly.
+depencies (i hope this list is complete and latest patches/series linked):
 
-Bart
+support interrupt-names because reserved IRQs are now dropped, so index based access is now wrong
+https://patchwork.kernel.org/project/netdevbpf/patch/20250616080738.117993-2-linux@fw-web.de/
+
+for SFP-Function (macs currently disabled):
+
+PCS clearance which is a 1.5 year discussion currently ongoing
+
+e.g. something like this (one of):
+* https://patchwork.kernel.org/project/netdevbpf/patch/20250610233134.3588011-4-sean.anderson@linux.dev/ (v6)
+* https://patchwork.kernel.org/project/netdevbpf/patch/20250511201250.3789083-4-ansuelsmth@gmail.com/ (v4)
+* https://patchwork.kernel.org/project/netdevbpf/patch/ba4e359584a6b3bc4b3470822c42186d5b0856f9.1721910728.git.daniel@makrotopia.org/
+
+full usxgmii driver:
+https://patchwork.kernel.org/project/netdevbpf/patch/07845ec900ba41ff992875dce12c622277592c32.1702352117.git.daniel@makrotopia.org/
+
+first PCS-discussion is here:
+https://patchwork.kernel.org/project/netdevbpf/patch/8aa905080bdb6760875d62cb3b2b41258837f80e.1702352117.git.daniel@makrotopia.org/
+
+and then dts nodes for sgmiisys+usxgmii+2g5 firmware
+
+when above depencies are solved the mac1/2 can be enabled and 2.5G phy/SFP slots will work.
+
+changes:
+v4:
+  net-binding:
+    - allow interrupt names and increase max interrupts to 6 because of RSS/LRO interrupts
+      (dropped Robs RB due to this change)
+
+  dts-patches:
+  - add interrupts for RSS/LRO and interrupt-names for ethernet node
+  - eth-reg and clock whitespace-fix
+  - comment for fixed-link on gmac0
+  - drop phy-mode properties as suggested by andrew
+  - drop phy-connection-type on 2g5 board
+  - reorder some properties
+  - update 2g5 phy node
+    - unit-name dec instead of hex to match reg property
+    - move compatible before reg
+    - drop phy-mode
+
+v3:
+  - dropped patches already applied (SPI+thermal)
+  - added soc specific cci compatible (new binding patch + changed dts)
+  - enable 2g5 phy because driver is now merged
+  - add patch for cleaning up unnecessary pins
+  - add patch for gpio-leds
+  - add patch for adding ethernet aliases
+
+v2:
+  - change reg to list of items in eth binding
+  - changed mt7530 binding:
+    - unevaluatedProperties=false
+    - mediatek,pio subproperty
+    - from patternProperty to property
+  - board specific properties like led function and labels moved to bpi-r4 dtsi
+
+
+Frank Wunderlich (13):
+  dt-bindings: net: mediatek,net: update for mt7988
+  dt-bindings: net: dsa: mediatek,mt7530: add dsa-port definition for
+    mt7988
+  dt-bindings: net: dsa: mediatek,mt7530: add internal mdio bus
+  dt-bindings: interconnect: add mt7988-cci compatible
+  arm64: dts: mediatek: mt7988: add cci node
+  arm64: dts: mediatek: mt7988: add basic ethernet-nodes
+  arm64: dts: mediatek: mt7988: add switch node
+  arm64: dts: mediatek: mt7988a-bpi-r4: add proc-supply for cci
+  arm64: dts: mediatek: mt7988a-bpi-r4: drop unused pins
+  arm64: dts: mediatek: mt7988a-bpi-r4: add gpio leds
+  arm64: dts: mediatek: mt7988a-bpi-r4: add aliases for ethernet
+  arm64: dts: mediatek: mt7988a-bpi-r4: add sfp cages and link to gmac
+  arm64: dts: mediatek: mt7988a-bpi-r4: configure switch phys and leds
+
+ .../bindings/interconnect/mediatek,cci.yaml   |  11 +-
+ .../bindings/net/dsa/mediatek,mt7530.yaml     |  24 +-
+ .../devicetree/bindings/net/mediatek,net.yaml |  28 +-
+ .../mediatek/mt7988a-bananapi-bpi-r4-2g5.dts  |  11 +
+ .../dts/mediatek/mt7988a-bananapi-bpi-r4.dts  |  19 ++
+ .../dts/mediatek/mt7988a-bananapi-bpi-r4.dtsi | 198 ++++++-----
+ arch/arm64/boot/dts/mediatek/mt7988a.dtsi     | 307 +++++++++++++++++-
+ 7 files changed, 498 insertions(+), 100 deletions(-)
+
+-- 
+2.43.0
+
 
