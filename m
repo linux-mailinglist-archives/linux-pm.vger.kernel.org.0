@@ -1,172 +1,202 @@
-Return-Path: <linux-pm+bounces-28828-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28829-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3878EADB1ED
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 15:30:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAE43ADB277
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 15:48:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F5181885B09
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 13:30:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C9A51652E3
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 13:48:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B35592BF015;
-	Mon, 16 Jun 2025 13:30:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE2EF2877DC;
+	Mon, 16 Jun 2025 13:48:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VOZXM28g"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HC9caf5t"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A81F827605A
-	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 13:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51EB1D63F8
+	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 13:48:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750080624; cv=none; b=NizLAsLYn9njWEdLYEe9UwcYRhz+0l7cRYEAPF7qqSwvjmFOwBFwmHYGspRHGIjitAahuM+C77ZOKcSCwPvzvtAXicNhcmsUFQqw9rcB9jO2Zyvi1NmPM3YsHfA3A7414o2LN7EC/Z7ovdAxUFftKdQhDbn+ECAf8gqA/42iJig=
+	t=1750081728; cv=none; b=KyswixDD3mmY7PPTDJ6JE2UFM/JI9rM1x7MXoQMHx1crfW8c10HMa5ps3n/+dgZM3TXILFggQJEDTB9R2Ah6q3e/Gmx1GKyZ3lboF1HSri7fzGKagMXcHKnSEMwNOgBFS4CabaUevJznia4+TO/woHRBZEOvmpou9boVBeP7UdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750080624; c=relaxed/simple;
-	bh=4Zfd7f0oSTyDjhyyLNFCOi5jeoQIXrDItP4SyLWb99s=;
+	s=arc-20240116; t=1750081728; c=relaxed/simple;
+	bh=hORHC5srxkLYSdtcercNBIJfYGZMJfr+bVXBwlntJR8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LsY0mviELU2LNqdVDrvSOpPfyvt3O9pWG2JDttV62A+q/66bDNu6g/IBA1dhSKWEk4HuLr7isAp5xMNbyKroaA7xq2PRHV4GnAK5aZHHNBoZikSE+tYNhRmQwcqEyHraAh2yv3VBnRaU0O+M2ZRrM39WbC+kR5gRZAkv0fSkFiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VOZXM28g; arc=none smtp.client-ip=209.85.219.175
+	 To:Cc:Content-Type; b=K/b0exasPGYgnIoo0I//raXfRrBuP9QCR2u24VfQsgwyWML2igDE9FFLhgevrf8T0md7DUnBgoEoGhPYqlZrbD4DfWQesZDewGXxgGsSpuqOpUgZVVvFRAg/FZ8+xb6/2kCynt/+mKWHACyEsirChzziiXuLVyn7HpbyVD8va7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HC9caf5t; arc=none smtp.client-ip=209.85.219.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e81ec95d944so4710802276.1
-        for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 06:30:22 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e733a6ff491so4103460276.2
+        for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 06:48:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750080621; x=1750685421; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1750081725; x=1750686525; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8dIM4ggq6nkqhLbVMKcT1ezBsK840f8IM9RKNGuYHjk=;
-        b=VOZXM28gJWu1vtHOVXPd4JllO/Nz4hljwAtGy/NTTFqx4sFZAoktaklYs3/0AO1zwr
-         s8Bs8c4S8RQAf/S6s8xkvhKLKBXz2LH7lOa9UCKs92RogaANj4nhH8yucEzHKhHccwlT
-         E6OhXRIhlrtu5aoUYs0XPZVqMddfNmbbuzj/54GmWWHAwTawvRgmOlrZL5bkAguDTt+g
-         48inRBhIuUixx887ZOITRZJfQJEBvQkauQXFmsmV1GCzMFYDb6owUm1GXTXkvoADFM3a
-         KKmEA4XPHzI0qDYfHSC4JNfjQEbQQb2EphKSOIq7QhZRGcveAh7/eCjJB+Dyw6bfOkp6
-         dc/A==
+        bh=uDEsIjpQxmad8FZLMr2zVoXrSneTIt+2z4fP3XcIK5Y=;
+        b=HC9caf5t7Z3YV34hMVfY2iOyc8ceDK41ddWnZGKqTuEfRCkaUY3raiG3FlkrCFIjfD
+         tPyRf2CTFWTmNqn1/fqrqeiU9uJtuN0/o6S2lRpPIvGheNVfGEWlXe0gKBMgT93uCWaV
+         howKJOdXYFL5VBUyk2ABJnWG4of5g8jT5EQF3lfnh7+BPQPGs47ip1FBWZ/yH45SY+nE
+         ITmfq9OEFvRdyraYRy2/XeNzHkPruJLRo4LNcIanLnMF1+j2wUFJAl4/IBSZ8nBmL7y3
+         hnmmFLXuSOCnEaOhKiBMjLbpfE4uyCGHw7eLjaR81qvd/V7H6hVfgYy2IZI1q74yo9eT
+         +LMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750080621; x=1750685421;
+        d=1e100.net; s=20230601; t=1750081725; x=1750686525;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8dIM4ggq6nkqhLbVMKcT1ezBsK840f8IM9RKNGuYHjk=;
-        b=NaSdyefcYXJHXGiHYDpYekRR5uxjZiDAqwiLNYcvrn2rhBKYtOly6Re50P2bayicwu
-         AWiCuQwshcESoUpYIpLDIgKXeIyq02qTxI6JcqoVmHWTwgKLEiO6nnZmKtI/zm+oi/u2
-         +fjTYVl9lVFIdP9KQrXWgEest4wldXneeF9oB+EvCbn03OxpRLn6wwEBfd6eccu5LTNG
-         rbErmNyomdvmtgz+oJ3YKo+K9qqhOQ9ENc3wR16rtPxzdZF/kaBQ03Uhlt8cvpABBCJo
-         DImPxHlfWIKaLYBqUjnRsprd4XZ6Dx8HsyaLUZ7rh+Isl3BqQ0iRltV19URf4mjC07zB
-         VYAg==
-X-Forwarded-Encrypted: i=1; AJvYcCW7Uxje0TjD4f7VxQ9pP2R9VEjHD2PvVP/3pkcSauwEthc5FI+5QVDt1Gbbn0fHGizIeeHlQycc5g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTM9/INs72hYpvxvOx/p42FDc0Ui4/gTkVT5Ohnn0oF5CgOWqm
-	Pr85huYRDVl0wtEzTxvNM73WiZpbrFdtrWJwAn0Al3HlrtA8S6U3c7Ts0pu4osKz4rmRCNZOlyB
-	3tCXGwgQXtSqU/0lNtsKo7UGkd2NlkcVdnfQYeFyAbw==
-X-Gm-Gg: ASbGncvOOtd/1ZaAbsRuAJOiZTJdOJ+3iNzMsFFx5xYpNwewxthaZkpkySvK9CMM5uP
-	CEXurBEpqBBQiaAErkeGXNI0k9zpeQIXOjHJI9H0XA+YfLfzUEVL9SajHk1COKGfDUrVjdsPAXB
-	P1h9LusAseOuUfuXr0cTdtlwKAZ8QR7ful4W8VQceOoouY
-X-Google-Smtp-Source: AGHT+IHvwFdTtrctzoiWIaPE71W/8FTAI+xhZY2HkhDJbIaDsGip4BNw9qrbXT3Tk9Kd8tGyhyS35T/gDOg+zFs+nYI=
-X-Received: by 2002:a05:6902:703:b0:e81:566c:3085 with SMTP id
- 3f1490d57ef6-e8227f0e61bmr12875927276.1.1750080620760; Mon, 16 Jun 2025
- 06:30:20 -0700 (PDT)
+        bh=uDEsIjpQxmad8FZLMr2zVoXrSneTIt+2z4fP3XcIK5Y=;
+        b=DafpVMa+l54jPO7Qt3PnE8Qufn7B62slhDEaa2bjTlAqwE9tjV6jUmGWXm35Cl9szM
+         4kGPxk0olP/AFztddJY/GfTgCcIHOngO/rKL9gtFu0MBVYC7napiv4bfQG+bjP9tyqmr
+         ylsU8J6bb9iJR33TLGbHD4koanakvqkkHpv1gJR3iYoAA9Fc9bmwGMaNW4QeP58W2VHi
+         WjpScEZg19rAjqQO6DO1a02IxPe8c+WeeEeMCPCT9cGVR1jhTrwV8i6Wqi4OI2vvXRHq
+         mxEcXZWR4aQMdovt4YKg6rrGQ65SoFo11YrNMFLoWrW1pt3JneTM08tNf4z7Q6mgICO4
+         BrCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV+U8snYAEzxSyhMamTno/WCAEGiS79G1Dh0sg9HqbzXohBvSLrInlqoK4P8TGyLS1hFAohoMbc2g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJqO0ALGmLkTMYn8A5uLriziphSKRZtOu35T46coq69kwYiR/n
+	UzmrJG95BKN3TFFcBVEmCohxSOu9hjWgZuewRZ6owQ2bktsHjkU9SPqfGjMhmrwyMICADEJIp9q
+	FdZFbQ59v5hUuQLKgeGefBAb1I1KKeLng876A9Hzl/A==
+X-Gm-Gg: ASbGncuMuRTWB446M3JQPk3ANTypANkD8so5AZrqrpHFEdysJpb3tgghTfnnVEstQ6h
+	WrcwI5Vu7IQxLk1yDb0fWJTSPJVGHwLIJSNhs+w49zYi2rGkCpsPzdpyvMDHzIPPeToyZ7a8NW2
+	HL6V5cf0bL0ZF6AFvevj4lFB98zUIJUvsX8RUDa1xrEVWR
+X-Google-Smtp-Source: AGHT+IHNxadKla4VrvH6YQyXKvJ7gWCdWq9mPlNx20rADiF787HEQItMLkqVHGwgE74xslQFsHpPtk0p6m7ForJ9ORA=
+X-Received: by 2002:a05:6902:220e:b0:e81:9581:4caa with SMTP id
+ 3f1490d57ef6-e822ad8bc0fmr12562057276.34.1750081724654; Mon, 16 Jun 2025
+ 06:48:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250612-byeword-update-v1-0-f4afb8f6313f@collabora.com> <20250612-byeword-update-v1-2-f4afb8f6313f@collabora.com>
-In-Reply-To: <20250612-byeword-update-v1-2-f4afb8f6313f@collabora.com>
+References: <20250613-pmdomain-hierarchy-onecell-v3-0-5c770676fce7@baylibre.com>
+ <20250613-pmdomain-hierarchy-onecell-v3-2-5c770676fce7@baylibre.com>
+In-Reply-To: <20250613-pmdomain-hierarchy-onecell-v3-2-5c770676fce7@baylibre.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 16 Jun 2025 15:29:44 +0200
-X-Gm-Features: AX0GCFucmmVjhuxKNu1-kopwQ1Ifcn7b36ykDZEf_SV72XMHIWGaSa8Aqxa6A60
-Message-ID: <CAPDyKFr_-aQ+YoRqYVUFhRR=94NWOredaSYQsVb-xvot83HJ3w@mail.gmail.com>
-Subject: Re: [PATCH 02/20] mmc: dw_mmc-rockchip: switch to HWORD_UPDATE macro
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
-	Jaehoon Chung <jh80.chung@samsung.com>, Heiko Stuebner <heiko@sntech.de>, 
-	Shreeya Patel <shreeya.patel@collabora.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Sandy Huang <hjc@rock-chips.com>, Andy Yan <andy.yan@rock-chips.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
-	Nicolas Frattaroli <frattaroli.nicolas@gmail.com>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Shawn Lin <shawn.lin@rock-chips.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Chanwoo Choi <cw00.choi@samsung.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
-	Kyungmin Park <kyungmin.park@samsung.com>, Qin Jian <qinjian@cqplus1.com>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, kernel@collabora.com, 
-	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-phy@lists.infradead.org, linux-sound@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-clk@vger.kernel.org, llvm@lists.linux.dev
+Date: Mon, 16 Jun 2025 15:48:08 +0200
+X-Gm-Features: AX0GCFvKDYfrBoGxWHbzdQisHdQSvIWu47gSqcVmiJT8KMDILVyrcsYNa9sTBzs
+Message-ID: <CAPDyKFrO9rb0eDb2qO+EGaVjOFG=7emgca8511XACDhWY=dt5g@mail.gmail.com>
+Subject: Re: [PATCH RFC v3 2/2] pmdomain: core: add support for subdomains
+ using power-domain-map
+To: Kevin Hilman <khilman@baylibre.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, devicetree@vger.kernel.org, 
+	linux-pm@vger.kernel.org, arm-scmi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 12 Jun 2025 at 20:57, Nicolas Frattaroli
-<nicolas.frattaroli@collabora.com> wrote:
+On Sat, 14 Jun 2025 at 00:39, Kevin Hilman <khilman@baylibre.com> wrote:
 >
-> The era of hand-rolled HIWORD_UPDATE macros is over, at least for those
-> drivers that use constant masks.
+> Currently, PM domains can only support hierarchy for simple
+> providers (e.g. ones with #power-domain-cells = 0).
 >
-> Switch to the new HWORD_UPDATE macro in bitfield.h, which has error
-> checking. Instead of redefining the driver's HIWORD_UPDATE macro in this
-> case, replace the two only instances of it with the new macro, as I
-> could test that they result in an equivalent value.
+> Add more generic support for hierarchy by using nexus node
+> maps (c.f. section 2.5.1 of the DT spec.)
 >
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Kind regards
-Uffe
-
+> For example, we could describe SCMI PM domains with multiple parents
+> domains (MAIN_PD and WKUP_PD) like this:
+>
+>     scmi_pds: protocol@11 {
+>         reg = <0x11>;
+>         #power-domain-cells = <1>;
+>
+>         power-domain-map = <15 &MAIN_PD>,
+>                            <19 &WKUP_PD>;
+>     };
+>
+> which should mean that <&scmi_pds 15> is a subdomain of MAIN_PD and
+> <&scmi_pds 19> is a subdomain of WKUP_PD.
+>
+> IOW, given an SCMI device which uses SCMI PM domains:
+>
+>    main_timer0: timer@2400000 {
+>       power-domains = <&scmi_pds 15>;
+>    };
+>
+> it already implies that main_timer0 is PM domain <&scmi_pds 15>
+>
+> With the new map, this *also* now implies <&scmi_pds 15> is a
+> subdomain of MAIN_PD.
+>
+> Signed-off-by: Kevin Hilman <khilman@baylibre.com>
 > ---
->  drivers/mmc/host/dw_mmc-rockchip.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
+>  drivers/pmdomain/core.c | 24 ++++++++++++++++++++++--
+>  1 file changed, 22 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/mmc/host/dw_mmc-rockchip.c b/drivers/mmc/host/dw_mmc-rockchip.c
-> index baa23b51773127b4137f472581259b61649273a5..9e3d17becf65ffb60fe3d32d2cdec341fbd30b1e 100644
-> --- a/drivers/mmc/host/dw_mmc-rockchip.c
-> +++ b/drivers/mmc/host/dw_mmc-rockchip.c
-> @@ -5,6 +5,7 @@
+> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> index d6c1ddb807b2..adf022b45d95 100644
+> --- a/drivers/pmdomain/core.c
+> +++ b/drivers/pmdomain/core.c
+> @@ -2998,8 +2998,8 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>                                  unsigned int index, unsigned int num_domains,
+>                                  bool power_on)
+>  {
+> -       struct of_phandle_args pd_args;
+> -       struct generic_pm_domain *pd;
+> +       struct of_phandle_args pd_args, parent_args;
+> +       struct generic_pm_domain *pd, *parent_pd = NULL;
+>         int ret;
 >
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
-> +#include <linux/bitfield.h>
->  #include <linux/clk.h>
->  #include <linux/mmc/host.h>
->  #include <linux/of_address.h>
-> @@ -24,8 +25,6 @@
->  #define ROCKCHIP_MMC_DELAYNUM_OFFSET   2
->  #define ROCKCHIP_MMC_DELAYNUM_MASK     (0xff << ROCKCHIP_MMC_DELAYNUM_OFFSET)
->  #define ROCKCHIP_MMC_DELAY_ELEMENT_PSEC        60
-> -#define HIWORD_UPDATE(val, mask, shift) \
-> -               ((val) << (shift) | (mask) << ((shift) + 16))
+>         ret = of_parse_phandle_with_args(dev->of_node, "power-domains",
+> @@ -3039,6 +3039,22 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>                         goto err;
+>         }
 >
->  static const unsigned int freqs[] = { 100000, 200000, 300000, 400000 };
+> +       /*
+> +        * Check for power-domain-map, which implies the primary
+> +        * power-doamin is a subdomain of the parent found in the map.
+> +        */
+> +       ret = of_parse_phandle_with_args_map(dev->of_node, "power-domains",
+> +                                            "power-domain", index, &parent_args);
+> +       if (!ret && (pd_args.np != parent_args.np)) {
+> +               parent_pd = genpd_get_from_provider(&parent_args);
+> +               of_node_put(parent_args.np);
+> +
+> +               ret = pm_genpd_add_subdomain(parent_pd, pd);
+> +               if (!ret)
+> +                       dev_dbg(dev, "adding PM domain %s as subdomain of %s\n",
+> +                               pd->name, parent_pd->name);
+> +       }
+
+Please move the above new code to a separate shared genpd helper
+function, that genpd providers can call build the topology. This, to
+be consistent with the current way for how we usually add
+parent/child-domains in genpd (see of_genpd_add_subdomain).
+
+Moreover, we also need a corresponding "cleanup" helper function to
+remove the child-domain (subdomain) correctly, similar to
+of_genpd_remove_subdomain().
+
+> +
+>         ret = genpd_set_required_opp(dev, index);
+>         if (ret)
+>                 goto err;
+> @@ -3056,6 +3072,8 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>                         dev_gpd_data(dev)->default_pstate = 0;
+>                 }
 >
-> @@ -148,9 +147,9 @@ static int rockchip_mmc_set_internal_phase(struct dw_mci *host, bool sample, int
->         raw_value |= nineties;
+> +               if (parent_pd)
+> +                       pm_genpd_remove_subdomain(parent_pd, pd);
+>                 genpd_remove_device(pd, dev);
+>                 return -EPROBE_DEFER;
+>         }
+> @@ -3063,6 +3081,8 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>         return 1;
 >
->         if (sample)
-> -               mci_writel(host, TIMING_CON1, HIWORD_UPDATE(raw_value, 0x07ff, 1));
-> +               mci_writel(host, TIMING_CON1, HWORD_UPDATE(GENMASK(11, 1), raw_value));
->         else
-> -               mci_writel(host, TIMING_CON0, HIWORD_UPDATE(raw_value, 0x07ff, 1));
-> +               mci_writel(host, TIMING_CON0, HWORD_UPDATE(GENMASK(11, 1), raw_value));
->
->         dev_dbg(host->dev, "set %s_phase(%d) delay_nums=%u actual_degrees=%d\n",
->                 sample ? "sample" : "drv", degrees, delay_num,
+>  err:
+> +       if (parent_pd)
+> +               pm_genpd_remove_subdomain(parent_pd, pd);
+>         genpd_remove_device(pd, dev);
+>         return ret;
+>  }
 >
 > --
 > 2.49.0
 >
+
+Kind regards
+Uffe
 
