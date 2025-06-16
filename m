@@ -1,57 +1,40 @@
-Return-Path: <linux-pm+bounces-28855-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28856-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90BFCADB91A
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 20:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 40C33ADB957
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 21:10:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92F5D3A5DF3
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 18:50:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47C403B6248
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 19:10:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F467289E0F;
-	Mon, 16 Jun 2025 18:50:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="HXgtuKYU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 798F7281513;
+	Mon, 16 Jun 2025 19:10:45 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E85CE288C9B
-	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 18:50:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69EA33208;
+	Mon, 16 Jun 2025 19:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750099850; cv=none; b=kdjjeO6+rkr2tCgsyrhfCkSgzzqEQ1/uJD7L8Twwg6RAJZ2F+2B2+27FGPF6yvMchqhluRMgXYvdH9s7sy+jCkXlG14riMEYyo/n4iZSKzXCsFneubPzpAq8bCVb+t7jcBN7ME4Fi3WmUy20PoPeIE3N/94wOBTLpMwcdc6wJeM=
+	t=1750101045; cv=none; b=kwRuYzFiZnEsnIQduhvd39sE1qvOpjthore/My5Lf28loP6Ma2bMPfnbOop87BXeN/RYb3/pK+IsaIAdqOWz3qGxHE0fnmMO2kHvI7ghY8Ocx71PdKC+EQ/svXZk94igyfk+nWOZ558e50U5xMDptfuXLWZFGDwbOFCAnVaX8wY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750099850; c=relaxed/simple;
-	bh=0j/zmiRTNVg7EOV9uK1BI3IIyRKsfZk1bKAGOLuyWQQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=ZlYtcI3GtEF86Ng/47VEbLXOfTHXXawBYy0MRXSTyn7JT0GikwxWf8olO5gQ0C7ObSeiiZI7K0AofYNurHF4Wqch1eduJ7VrEyCNjHDPkzGm6OxI7OW2f+iDeUwnAJfka37rDmkkLG01W5jsiH6D+lIVTCxruVTjts21DcSFFNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=HXgtuKYU; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250616185045euoutp01dbcae20d5026a7580ca6873aa0f80ff5~Jmolz88Fp0324303243euoutp018
-	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 18:50:45 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250616185045euoutp01dbcae20d5026a7580ca6873aa0f80ff5~Jmolz88Fp0324303243euoutp018
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1750099845;
-	bh=RpP2wDPoANn6hbq6/IU7H6R4ymwfkUd1lBtxRssgpxg=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=HXgtuKYUh8YOQyQo91vA+qT4El3cb+jVPyP21y2ZTw42FifSSk8p2Duc4xvwAuyE+
-	 K1bHEQ+MjXyRTuM+mUFJt5q7AUR5lq1rzfclPDjZlNux/bNkGGmkf0bBXIsOKd0Wnv
-	 pvUpmbMiiOYc9Khw/cK57CgCrGso0q81WWVlcCVE=
-Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250616185043eucas1p19d2115087823eac1a2fa36fdb6c7cfca~Jmokc0_PY2023320233eucas1p1A;
-	Mon, 16 Jun 2025 18:50:43 +0000 (GMT)
-Received: from [192.168.1.44] (unknown [106.210.136.40]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250616185042eusmtip251ec7824b4cba255d6ebe61eb60deb26~JmojYMGUT3160031600eusmtip2J;
-	Mon, 16 Jun 2025 18:50:42 +0000 (GMT)
-Message-ID: <6176cae6-012e-4dc7-9445-058478bfe758@samsung.com>
-Date: Mon, 16 Jun 2025 20:50:42 +0200
+	s=arc-20240116; t=1750101045; c=relaxed/simple;
+	bh=pky1JRhBtMQ+IyjWAw9BGfBuLo0Cz4zA51FLub5I7Ms=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=R2/4EAQ5Hl7gqr6z9tGfYdKH7lMWI4esKB/QIi8ohKxUr+zqN8tOB3WYAl2k0WPV/ZYDC7IXcewJycaZr/aop3LkiAmW9xxBqpzE10t9ojFaZcf18mhczg1pGvgXwIMc+7M6EmPu3BWQVkekqN0P5LAX4D+okXDtGubDAMWzIfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1F3AC1424;
+	Mon, 16 Jun 2025 12:10:19 -0700 (PDT)
+Received: from [10.57.26.223] (unknown [10.57.26.223])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 577003F58B;
+	Mon, 16 Jun 2025 12:10:39 -0700 (PDT)
+Message-ID: <34651625-08eb-46df-8075-4c5a08d15c18@arm.com>
+Date: Mon, 16 Jun 2025 20:10:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -59,155 +42,60 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 4/8] drm/imagination: Use pwrseq for TH1520 GPU power
- management
-To: Bartosz Golaszewski <brgl@bgdev.pl>, Matt Coster
-	<matt.coster@imgtec.com>, Frank Binns <frank.binns@imgtec.com>
-Cc: Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, Fu Wei
-	<wefu@redhat.com>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
-	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Philipp Zabel
-	<p.zabel@pengutronix.de>, Frank Binns <frank.binns@imgtec.com>, Matt Coster
-	<matt.coster@imgtec.com>, Maarten Lankhorst
-	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>, Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>, Ulf Hansson <ulf.hansson@linaro.org>, Marek
-	Szyprowski <m.szyprowski@samsung.com>, linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org
-Content-Language: en-US
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-In-Reply-To: <CAMRc=MfdBd6HBwM4F1TcjDvwbOJ03kxgRk4hJQ8HFK7Wz2XBAg@mail.gmail.com>
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20250616185043eucas1p19d2115087823eac1a2fa36fdb6c7cfca
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250614180911eucas1p16c9fb4a8160253c253f623bec2529f70
-X-EPHeader: CA
-X-CMS-RootMailID: 20250614180911eucas1p16c9fb4a8160253c253f623bec2529f70
-References: <CGME20250614180911eucas1p16c9fb4a8160253c253f623bec2529f70@eucas1p1.samsung.com>
-	<20250614-apr_14_for_sending-v4-0-8e3945c819cd@samsung.com>
-	<20250614-apr_14_for_sending-v4-4-8e3945c819cd@samsung.com>
-	<CAMRc=MfdBd6HBwM4F1TcjDvwbOJ03kxgRk4hJQ8HFK7Wz2XBAg@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Fix initialization with disabled boost
+To: Christian Loehle <christian.loehle@arm.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ linux-pm <linux-pm@vger.kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: zhenglifeng1@huawei.com
+References: <3cc5b83b-f81c-4bd7-b7ff-4d02db4e25d8@arm.com>
+From: Robin Murphy <robin.murphy@arm.com>
+Content-Language: en-GB
+In-Reply-To: <3cc5b83b-f81c-4bd7-b7ff-4d02db4e25d8@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-
-On 6/16/25 11:40, Bartosz Golaszewski wrote:
-> On Sat, Jun 14, 2025 at 8:09 PM Michal Wilczynski
-> <m.wilczynski@samsung.com> wrote:
->>
->> Update the Imagination PVR DRM driver to leverage the pwrseq framework
->> for managing the power sequence of the GPU on the T-HEAD TH1520 SoC.
->>
->> To cleanly handle the TH1520's specific power requirements in the
->> generic driver, this patch implements the "driver match data" pattern. A
->> has_pwrseq flag in a new pvr_soc_data struct is now associated with
->> thead,th1520-gpu compatible string in the of_device_id table.
->>
->> At probe time, the driver checks this flag. If true, it calls
->> devm_pwrseq_get("gpu-power"), requiring a valid sequencer and deferring
->> probe on failure. In this mode, all power and reset control is delegated
->> to the pwrseq provider. If the flag is false, the driver skips this
->> logic and falls back to its standard manual power management. Clock
->> handles are still acquired directly by this driver in both cases for
->> other purposes like devfreq.
->>
->> The runtime PM callbacks, pvr_power_device_resume() and
->> pvr_power_device_suspend(), are modified to call pwrseq_power_on() and
->> pwrseq_power_off() respectively when the sequencer is present.  A helper
->> function, pvr_power_off_sequence_manual(), is introduced to encapsulate
->> the manual power-down logic.
->>
->> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
->> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
->> ---
+On 2025-06-16 6:25 pm, Christian Loehle wrote:
+> The boost_enabled early return in policy_set_boost() caused
+> the boost disabled at initialization to not actually set the
+> initial policy->max, therefore effectively enabling boost while
+> it should have been enabled.
 > 
-> [snip]
+> Fixes: 27241c8b63bd ("cpufreq: Introduce policy_set_boost()")
+
+I think it's a bit older than that - I noticed this with 6.15 stable, 
+prior to that refactoring, and from a poke through the history the 
+underlying logic appears to date back to dd016f379ebc ("cpufreq: 
+Introduce a more generic way to set default per-policy boost flag"). 
+Hopefully someone can figure out the appropriate stable backport.
+
+I can at least confirm that equivalently hacking out the "&& 
+policy->boost_enabled != cpufreq_boost_enabled()" condition previously 
+here does have the desired effect for me of initialising 
+scaling_max_freq correctly at boot, but I'm not sure that's entirely 
+correct on its own...
+
+Thanks,
+Robin.
+
+> Reported-by: Robin Murphy <robin.murphy@arm.com>
+> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+> ---
+>   drivers/cpufreq/cpufreq.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->>
->> +static int pvr_power_off_sequence_manual(struct pvr_device *pvr_dev)
->> +{
->> +       int err;
->> +
->> +       err = reset_control_assert(pvr_dev->reset);
->> +
->> +       clk_disable_unprepare(pvr_dev->mem_clk);
->> +       clk_disable_unprepare(pvr_dev->sys_clk);
->> +       clk_disable_unprepare(pvr_dev->core_clk);
->> +
->> +       return err;
->> +}
->> +
->>  int
->>  pvr_power_device_suspend(struct device *dev)
->>  {
->> @@ -252,11 +266,10 @@ pvr_power_device_suspend(struct device *dev)
->>                         goto err_drm_dev_exit;
->>         }
->>
->> -       clk_disable_unprepare(pvr_dev->mem_clk);
->> -       clk_disable_unprepare(pvr_dev->sys_clk);
->> -       clk_disable_unprepare(pvr_dev->core_clk);
->> -
->> -       err = reset_control_assert(pvr_dev->reset);
->> +       if (pvr_dev->pwrseq)
->> +               err = pwrseq_power_off(pvr_dev->pwrseq);
->> +       else
->> +               err = pvr_power_off_sequence_manual(pvr_dev);
->>
->>  err_drm_dev_exit:
->>         drm_dev_exit(idx);
->> @@ -276,44 +289,55 @@ pvr_power_device_resume(struct device *dev)
->>         if (!drm_dev_enter(drm_dev, &idx))
->>                 return -EIO;
->>
->> -       err = clk_prepare_enable(pvr_dev->core_clk);
->> -       if (err)
->> -               goto err_drm_dev_exit;
->> +       if (pvr_dev->pwrseq) {
->> +               err = pwrseq_power_on(pvr_dev->pwrseq);
->> +               if (err)
->> +                       goto err_drm_dev_exit;
->> +       } else {
->> +               err = clk_prepare_enable(pvr_dev->core_clk);
->> +               if (err)
->> +                       goto err_drm_dev_exit;
->>
->> -       err = clk_prepare_enable(pvr_dev->sys_clk);
->> -       if (err)
->> -               goto err_core_clk_disable;
->> +               err = clk_prepare_enable(pvr_dev->sys_clk);
->> +               if (err)
->> +                       goto err_core_clk_disable;
->>
->> -       err = clk_prepare_enable(pvr_dev->mem_clk);
->> -       if (err)
->> -               goto err_sys_clk_disable;
->> +               err = clk_prepare_enable(pvr_dev->mem_clk);
->> +               if (err)
->> +                       goto err_sys_clk_disable;
->>
-> 
-> In order to decrease the number of if-elses, would it make sense to
-> put the "manual" and "pwrseq" operations into their own separate
-> functions and then store addresses of these functions in the device
-> match data struct as function pointers (instead of the has_pwrseq
-> flag)? This way we'd just call them directly.
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index d7426e1d8bdd..e85139bd0436 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1630,7 +1630,7 @@ static int cpufreq_online(unsigned int cpu)
+>   	 */
+>   	if (cpufreq_driver->set_boost && policy->boost_supported &&
+>   	    (new_policy || !cpufreq_boost_enabled())) {
+> -		ret = policy_set_boost(policy, cpufreq_boost_enabled());
+> +		ret = cpufreq_driver->set_boost(policy, cpufreq_boost_enabled());
+>   		if (ret) {
+>   			/* If the set_boost fails, the online operation is not affected */
+>   			pr_info("%s: CPU%d: Cannot %s BOOST\n", __func__, policy->cpu,
 
-Hi Bartosz,
-
-Thanks for the suggestion. That sounds good. I can rework the patch to
-use function pointers instead of the flag. 
-
-Matt, as the maintainer of this code, do you have a preference on this?
-Let me know what you think.
-
-> 
-> Bart
-> 
-
-Best regards,
--- 
-Michal Wilczynski <m.wilczynski@samsung.com>
 
