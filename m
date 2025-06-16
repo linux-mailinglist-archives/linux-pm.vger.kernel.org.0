@@ -1,153 +1,143 @@
-Return-Path: <linux-pm+bounces-28771-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28772-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F182ADA6F4
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 05:47:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD411ADA710
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 06:14:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85C49189091B
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 03:47:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BB01188A335
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 04:14:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2C0314F104;
-	Mon, 16 Jun 2025 03:47:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECA161A5BA0;
+	Mon, 16 Jun 2025 04:13:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wbinvd.org header.i=@wbinvd.org header.b="F8OPrjJ1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J3Fxlm0E"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8055D5103F
-	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 03:47:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D21872607;
+	Mon, 16 Jun 2025 04:13:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750045655; cv=none; b=Ii3/tdDKX2kLTA4xvPQBp4grM3hUlIHeuB5u1I09bly28Cf8OaecTnc/qzduUzEjW1UQ1AfZ13zEb8gwtVRSVAUOFNJZOHwxGT2viu4/pY8I8369Hy6Aj+60eEInfDiVID5Q3P/orTnBxU0JifmKrEEWyctM8PNUiKSqceaLqu4=
+	t=1750047237; cv=none; b=Ip8N8ScoezQTjNWHDzEVunvzrfPQykGJ37QZToBy8tpGzFDIzeywbJzh0PKDeeIi+baZAqvXtPCIQeuO4hMhWlgWgdrsXKVtis36CODv++23jr6x6TkyVvFp7h5maDCAUPZVKLfRzepu5wNhUU+yho/9/sVPtv7blofVvT1cXfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750045655; c=relaxed/simple;
-	bh=oAPyorFVGnQcUaYRbcaf+X+aO7UokUBQs9yAd751ZT0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OZl1kwL43EW0u+8cCP3hPNlmElB+C4HImbLOaRIqf0jtmYfdn5SEtI+66fGhpQHYdt/9LJZQrfBt7TKEjw+3oagFbtiqPmmINKkoaLE/93h+nkuh9PjKung0XXosXGIW0uSRHrIreCPn3t3e0Frmkm2MGVANb6EDGFTQxPOXFrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wbinvd.org; spf=pass smtp.mailfrom=wbinvd.org; dkim=pass (2048-bit key) header.d=wbinvd.org header.i=@wbinvd.org header.b=F8OPrjJ1; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wbinvd.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wbinvd.org
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2350b1b9129so27188535ad.0
-        for <linux-pm@vger.kernel.org>; Sun, 15 Jun 2025 20:47:32 -0700 (PDT)
+	s=arc-20240116; t=1750047237; c=relaxed/simple;
+	bh=+q0guN9PwSiS5EAbareskBIti2BmPJU9JVXqOz/iUbk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Vuyp6S2u3v3H5/PU2GDg6UFgZ5vZV/CfJxDIRodOq6tczErvWOj3MBOOZE+r/igLibwD4GuVZWcxMdRsLaYGJNMCQYT34P2rWa5fhxW4ChkS75RfSj5eDGLPtieeWul+pNzHut4cxna8a531wlmR+UyjJUSSWd79vvkZatDjqmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J3Fxlm0E; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-742c7a52e97so3316202b3a.3;
+        Sun, 15 Jun 2025 21:13:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wbinvd.org; s=wbinvd; t=1750045652; x=1750650452; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yvQ7KncdCkryYhQ6UYHiV8AcfEt99sLfw37M+fTpmcE=;
-        b=F8OPrjJ1S1whsTxc8AIpcvsQAkiuo/RBI80JpibZygVyJ4QQPV8gG2YzJI8wUce3CA
-         zQTCIoB2fE281IB6oFh8NQ5uTsLfowtGWGy3motGTDqkLWp/KEKhrP5D1KpxFf+BFVnE
-         pJpKdLF6ibivU33NTckd+61XeSsvyni7lFKtDJIa6JHd+3TjgjnnfLStaykPy9Spr9oO
-         OvW6DI56v5aCAkG1m10IbE/V/b58XbclToHnW5xFffarJrftLrSbKmlJOWu/WcMZh9Ca
-         kQmCJbkx0yVzSynOp0dMV5xVONGJcmRgAdp9Hp83++CqnWppRcpSclh8ew/PPOVE/Tvr
-         I0Aw==
+        d=gmail.com; s=20230601; t=1750047235; x=1750652035; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P80b7O3kBzCHZeyPaqEFw3rG2WMhfBLYf+jpLfD2cC0=;
+        b=J3Fxlm0EKALYEBLHNAI6MTCGq9uYYKTCI0hHyVU9MtknUDeOLc9FDj4qAirVKclS5V
+         yok0r5bw4tGiPRNnI/4w1B84m6lQ+SEnRN6VeoVrowHm0J5ALmD6LPeIf+STvkEwcqSs
+         Xw1lQAWoC8mKa/ci0KY6SLazGXBnRgYu5k4+3yX8SJPFmAi0L6CNs3G8ILl6lK6DYU4e
+         pE7O4lIBUCsX29whQqZJbp8jWtts6SihIRcrXATOHK75rKWSSMHYMrnbcTQepTVOvIGC
+         RrwlLUwu7UD8e/q2i0b8Wr/7BqCX/USrRnnMLF1dt4NDNK+pkRcObF9VI0doaS5BHByJ
+         VbXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750045652; x=1750650452;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1750047235; x=1750652035;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yvQ7KncdCkryYhQ6UYHiV8AcfEt99sLfw37M+fTpmcE=;
-        b=wI+qVsPKdXKCxjKfskmu3DKn3ZW0vRL2xFk8qcAwl4YJOjKvQAJUxy2FnJfzZuPScl
-         ELU0JL1bgyjfDWDP2fTQl6nH8B1cq62k7QBeFCu7iER1ZGoEq1AOyngoxV/2w5zLGrI+
-         iWur3fuZ4I5DR1M693tlDrJQyZUcmMG1E8CXnom3LkRMRGyDwaF/54WCA5hed2mK1Gf+
-         N0uMWG3VuoFBZvV1alZ/Uy57WbvYn8KZZqizZWZCsZA5vhjl/f8oLl8Hi3zuOFrZy822
-         wN7vsWVXicDwD7vnzUUkNUmjqpnCttwJ+M8UvTTl33H8S7aWmIPr9JPMOb/zanbjMqJz
-         +4gg==
-X-Forwarded-Encrypted: i=1; AJvYcCUXOIG1Y2NK2ZtMBXNQ2nMYSr5PaTQCfIQsPYyHZEONegjfV826+QhmMrPYCq5DNUBUb+6BNnRgUw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkKwog1e16tVOIFZGY8Wy8j3W89qDpszl34qf9W4dIzykleBeu
-	jQwuBFFzBQe/3YLeD5G6F3THHJPyIY3EcmyH/NOmno+Bt1KsWsKovRR40wfq9B8K1zg=
-X-Gm-Gg: ASbGncv8+e8n/ERjxB5Cwcks4yR3KFD+vWFfPQVyZeI+yA1+tOJfolMQ9CSCByy0PJf
-	t/DI4vgQjqz4z7krkSSy2HEn5IZVLYwIoX9lkfO3XF1SvAZOT+OxUqJQFfQOBWZh4INME0AlzuY
-	7tljSonoZ8JQCIo1PxJxbB5/TPKoPc3lDXJ+yi4M0eOAY+IsZvbNINM0aO0PuPVcP6wlVfvwJlf
-	j2xzIyPgqq5mkU1PFclR1+x8ZSW1wLMHjCqK1qkzwL/RFouY3z1dxvPTGWKUeSU0W0/v4ebaRpV
-	DaGrygR+EnkdMbLACro+WtpEnc17wWlyWfsAllX4TpxS5/lHTU0dzvAcA5710NjyJSdqmWFO1+e
-	tY32Rxa587AAfh4QSbsN5wAnFc9u/ZYc=
-X-Google-Smtp-Source: AGHT+IHYu/FwcX7YLaKOx5VReMxqHPp8iD/ta3wBGnoP/HCC6DuKvKSDmh33M+/gwPrD4abjPDdP9Q==
-X-Received: by 2002:a17:902:e747:b0:234:d292:be8f with SMTP id d9443c01a7336-2366b32e55bmr121483435ad.1.1750045652463;
-        Sun, 15 Jun 2025 20:47:32 -0700 (PDT)
-Received: from mozart.vkv.me (192-184-162-253.fiber.dynamic.sonic.net. [192.184.162.253])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2365dea8ff7sm51388655ad.171.2025.06.15.20.47.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Jun 2025 20:47:31 -0700 (PDT)
-Date: Sun, 15 Jun 2025 20:47:29 -0700
-From: Calvin Owens <calvin@wbinvd.org>
-To: "Zhang, Rui" <rui.zhang@intel.com>
-Cc: "dedekind1@gmail.com" <dedekind1@gmail.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"lenb@kernel.org" <lenb@kernel.org>
-Subject: Re: [PATCH] tools/power turbostat: Fix build with musl
-Message-ID: <aE-T0cZsdoCZOD_Y@mozart.vkv.me>
-References: <7edd4c688111a697cfe913c73d074738b3d1dffb.1749833196.git.calvin@wbinvd.org>
- <17f85f0bfa5446b86188616349b17d02fe207c22.camel@gmail.com>
- <7325c49d7d2c407f7391ed30e3a7e0c8898bf5cb.camel@intel.com>
+        bh=P80b7O3kBzCHZeyPaqEFw3rG2WMhfBLYf+jpLfD2cC0=;
+        b=dfSU6RyV8zlkJT7fzQz1OJR7p8AUF1Rqg++y/78PpB344wIf7gF5Nn/FOz2WAKEnWM
+         DCq9zhvWp1bUI6Zd1PR/h9ZvDOoXA2M97sZwVY1RnVXyEPWYQdHXCToiUu4Idj+/AJ/Z
+         Lvg7pnxFm8ChuizHtc6H+PAml61UDxUtKiA4Z6DJ4JckgeB2VXMLS0n5NqTkDHfuS+17
+         xs1tJauFnF/5C791EiL8Uw/6FFSrjlXpDu6ecOudLhvUfAf6BMMpIUfANDW7UKJBruFo
+         mjlrAOhRN8oruDmC+V992/IWLK4uv1Ikg0Y5vTkRQh/TWIa0p6WDI/sN/yCX1Ni/rmRA
+         lOWA==
+X-Forwarded-Encrypted: i=1; AJvYcCVK/jxl4Vc5dvzIStz2WZCrgg0iI1lWg/YTICMbn3F/QZuUWkMK0vs3GlOMeUgXReo6buvBWSIIjNAWeA==@vger.kernel.org, AJvYcCW9/vP5SQ1jfTnkLdTMwSqw3QMWlm1zFL6n+cvdWYmauKY/Fu960T+UBGKWNRtVmVZg6PqZkqyF2UM=@vger.kernel.org, AJvYcCXi/AhJLqfJQl8jiW/JACqP/AJdVX866wYq6JFjx4V6b3I5FRyzUn5s0dnPCoOAB2B7GItWeuKSOZI3oPWT@vger.kernel.org, AJvYcCXpTx0NlOuTCnDqHjZPMLUgVdttNVCZi3gnCNW3/+GWuYkq8dzOdVR4dR5d9GcxAicdsS3hJISR1wo4@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOLHY3i9JzxsL1MrhSbOvgFTo1RBh/3LiHiGSYN8bB6k3i2oVh
+	4V4bd7GcoWKDSYQAtqMdSiQmtqUz5Px8AA7FGPTCvMm07/+9gEJYklgU
+X-Gm-Gg: ASbGncvwhPeWVbT2+rcfspyb1s1K7kP0zKeUeM1uiAlm8cOJ//UxqCTjUMWlxcyaPPc
+	PLY6rhfHXgqFbjlY+MhceofbhpCX3N/Qdu4/mcIKBgUtSNa9NpzNI2v31GkrNTBkYJB14nXPKZx
+	zMf25JZ5twZ6j/SFMAQSpHyKydKHCR635aRP7ncLuqTtSYNftGO29IFQXbJm6iggszqb8WtBdIa
+	cV06nDx+gnXxnOU+9POmH6rvUIj3nZtVEB3IGhgp/tkXhQHqs2eIM7K6FHYgUeSpkoxnH0KVnEP
+	aqk+a7GEKvr4FVhZIUOelgnGwLFk2j93MaucFCMYyEoswaBPVQck/K0ixZWEhGjK+SXV+KUg0wj
+	R7rwu3rXb
+X-Google-Smtp-Source: AGHT+IGj8afwiQBWMnNFiO8CZX12Uzqm0farJp4iABQXPdiIhq7hSOMuLQDUrIeTYhq1s+E7XXHTwA==
+X-Received: by 2002:a05:6a00:21c1:b0:748:323f:ba21 with SMTP id d2e1a72fcca58-7489cf5c8c2mr11015493b3a.1.1750047235481;
+        Sun, 15 Jun 2025 21:13:55 -0700 (PDT)
+Received: from [10.89.152.134] (wf121-134.ust.hk. [175.159.121.134])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74890006059sm5937252b3a.55.2025.06.15.21.13.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 Jun 2025 21:13:55 -0700 (PDT)
+Message-ID: <7297d4b1-84a2-4bb1-8a33-29c827247df7@gmail.com>
+Date: Mon, 16 Jun 2025 12:13:50 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7325c49d7d2c407f7391ed30e3a7e0c8898bf5cb.camel@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 07/10] power: reset: macsmc-reboot: Add driver for
+ rebooting via Apple SMC
+To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>,
+ Hector Martin <marcan@marcan.st>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Lee Jones <lee@kernel.org>, Marc Zyngier <maz@kernel.org>,
+ "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ Sebastian Reichel <sebastian.reichel@collabora.com>
+References: <20250610-smc-6-15-v7-0-556cafd771d3@kernel.org>
+ <20250610-smc-6-15-v7-7-556cafd771d3@kernel.org>
+Content-Language: en-MW
+From: Nick Chan <towinchenmi@gmail.com>
+In-Reply-To: <20250610-smc-6-15-v7-7-556cafd771d3@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Monday 06/16 at 01:31 +0000, Zhang, Rui wrote:
-> On Fri, 2025-06-13 at 20:45 +0300, Artem Bityutskiy wrote:
-> > On Fri, 2025-06-13 at 09:54 -0700, Calvin Owens wrote:
-> > >     turbostat.c: In function 'parse_int_file':
-> > >     turbostat.c:5567:19: error: 'PATH_MAX' undeclared (first use in
-> > > this function)
-> > >      5567 |         char path[PATH_MAX];
-> > >           |                   ^~~~~~~~
-> > > 
-> > >     turbostat.c: In function 'probe_graphics':
-> > >     turbostat.c:6787:19: error: 'PATH_MAX' undeclared (first use in
-> > > this function)
-> > >      6787 |         char path[PATH_MAX];
-> > >           |                   ^~~~~~~~
-> > > 
-> > > Signed-off-by: Calvin Owens <calvin@wbinvd.org>
-> > Reviewed-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-> > 
-> May I know how to reproduce this?
 
-Hi Rui,
 
-Just build turbostat with musl as libc, here's a quick chroot repro that
-works on my Debian laptop:
+On 10/6/2025 23:29, Sven Peter wrote:
+> From: Hector Martin <marcan@marcan.st>
+> 
+> This driver implements the reboot/shutdown support exposed by the SMC
+> on Apple Silicon machines, such as Apple M1 Macs.
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> Reviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
+> Reviewed-by: Neal Gompa <neal@gompa.dev>
+> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> Signed-off-by: Sven Peter <sven@kernel.org>
+> ---
+>  MAINTAINERS                         |   1 +
+>  drivers/power/reset/Kconfig         |   9 ++
+>  drivers/power/reset/Makefile        |   1 +
+>  drivers/power/reset/macsmc-reboot.c | 290 ++++++++++++++++++++++++++++++++++++
+>  4 files changed, 301 insertions(+)
+[...]
 
-    wget https://gentoo.osuosl.org/releases/amd64/autobuilds/current-stage3-amd64-musl/stage3-amd64-musl-20250601T163943Z.tar.xz
-    mkdir tmp
-    sudo tar xf stage3-amd64-musl-20250601T163943Z.tar.xz -C ./tmp
-    wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.15.2.tar.xz
-    sudo mv linux-6.15.2.tar.xz tmp
-    sudo chroot tmp /bin/bash
-    gentoo / # tar xf linux-6.15.2.tar.xz
-    gentoo / # cd linux-6.15.2/tools/power/x86/turbostat/
-    gentoo /linux-6.15.2/tools/power/x86/turbostat # make
-    gcc -O2 -Wall -Wextra -I../../../include -DMSRHEADER='"../../../../arch/x86/include/asm/msr-index.h"' -DINTEL_FAMILY_HEADER='"../../../../arch/x86/include/asm/intel-family.h"' -DBUILD_BUG_HEADER='"../../../../include/linux/build_bug.h"' -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2 turbostat.c -o /root/linux-6.15.2/tools/power/x86/turbostat/turbostat  -lcap -lrt
-    turbostat.c: In function 'parse_int_file':
-    turbostat.c:5567:19: error: 'PATH_MAX' undeclared (first use in this function)
-     5567 |         char path[PATH_MAX];
-          |                   ^~~~~~~~
-    turbostat.c:5567:19: note: each undeclared identifier is reported only once for each function it appears in
-    turbostat.c:5567:14: warning: unused variable 'path' [-Wunused-variable]
-     5567 |         char path[PATH_MAX];
-          |              ^~~~
-    turbostat.c: In function 'probe_graphics':
-    turbostat.c:6787:19: error: 'PATH_MAX' undeclared (first use in this function)
-     6787 |         char path[PATH_MAX];
-          |                   ^~~~~~~~
-    turbostat.c:6787:14: warning: unused variable 'path' [-Wunused-variable]
-     6787 |         char path[PATH_MAX];
-          |              ^~~~
-    make: *** [Makefile:23: turbostat] Error 1
+It seems that the reboot driver still probes even without the smc_reboot node in the smc node:
 
-Thanks,
-Calvin
+[    0.994942] macsmc 236000100.smc: RTKit: Initializing (protocol version 12)
+[    1.002862] macsmc-gpio macsmc-gpio: First GPIO key: gP01 (0x67503031)
+[    1.013156] macsmc-reboot: Failed to locate of_node [id: -1]
+[    1.048188] macsmc-reboot macsmc-reboot: Missing NVMEM cell shutdown_flag (-2)
+[    1.055359] macsmc-reboot macsmc-reboot: Missing NVMEM cell boot_stage (-2)
+[    1.062332] macsmc-reboot macsmc-reboot: Missing NVMEM cell boot_error_count (-2)
+[    1.069799] macsmc-reboot macsmc-reboot: Missing NVMEM cell panic_count (-2)
+[    1.076902] macsmc-reboot macsmc-reboot: Handling reboot and poweroff requests via SMC
+
+Best regards,
+Nick Chan
+
+
 
