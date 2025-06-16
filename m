@@ -1,181 +1,195 @@
-Return-Path: <linux-pm+bounces-28824-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28825-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91314ADB032
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 14:29:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76C7CADB0C9
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 14:59:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6A0F3A1F17
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 12:29:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CFC0188892E
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 12:59:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81E5E285C84;
-	Mon, 16 Jun 2025 12:29:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADF3A29616A;
+	Mon, 16 Jun 2025 12:59:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="VTK5V0/V"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Kcw7brqQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 499792E426F;
-	Mon, 16 Jun 2025 12:29:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750076980; cv=pass; b=HEWHxZqVzGJKDzvuqji1IZzNljDrfN6mi/EfIKJjhRyye0EIEpCpXnf4PnWKJN2E9vMIhFxfstZrBd1IHlPD/iHDpIUljl/6YooTwWY7N43C5SxquB7pR3YUAQYbuF0k4FphPSiCdVheATBmYIZOelMscSbs1cYW6IE0OBYtUro=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750076980; c=relaxed/simple;
-	bh=D1nrTM3OWHNa73fOHQSyszn7QncKX5gjfoZAZmCJOV4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BnSDdjzZrs6Ime/JhO+xrLVzYrPNxjiqoR0QB0GSqEzfldVp9Z7MTfdKrvZf0lpK64jSk1lD30LjlbFTWg5e1j5yffov4muejJqeXl8CYR5vnuD6i1tEyjZe6yrEKvZ86zpXU1LvbFFy27Jflk1gGc2A7/fb69qFSv8lfTvc+/s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=VTK5V0/V; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1750076894; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Kn8MGUt3qBaOkBsleWMs/iI7evtX+3Ii+lWmXB8xOO8yonT/tDL4OfelfnPrGyP69Xa6GXt64PMxsM5vBn5YsaN0I5GeJUR7YvPCpzogaDpzyN7GW1fehBmHRRYpAHqyTyzXBh1S8/TsCf+p6V2AaB6zIxcJ7XJ+dTVZeTb4YRc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1750076894; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=lS5jmrsM1AStlE4Oaeas/EKugjJN944zsH8rQcQ3FAk=; 
-	b=gZpW6CMh7kONQtxIuB9S8BJSCJKsvjeGsHGDKmIuXDXZlzskn5bJwbdnpsUcmAghdjwm7D9LGAU4Rel8QeQKW1q+5kRysuw841yRbvXfifnWduhN2bYLxbuLNXEh2MTtxoVgPSUuojnwR8DpXHHIQwqbIosI/MoGhZqfAJbm5mE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1750076894;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-	bh=lS5jmrsM1AStlE4Oaeas/EKugjJN944zsH8rQcQ3FAk=;
-	b=VTK5V0/Vh8vG0ADUhZJqoWC8GNkp9+Edtt7f54cvlzORP0TBC3O3iXDcIRVP1bPg
-	diBzmzi3jUJX7MfK81EwTr1m9SPAyKZNsnywz/gVppbbf7/4KM7BIphS3UCg/GYBOZD
-	MzraVGJabGmAR/4cao207oI0XAYOJPvc3s7lJ85s=
-Received: by mx.zohomail.com with SMTPS id 1750076891122319.76650013837536;
-	Mon, 16 Jun 2025 05:28:11 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-To: Robin Murphy <robin.murphy@arm.com>, Yury Norov <yury.norov@gmail.com>,
- Jakub Kicinski <kuba@kernel.org>, Jani Nikula <jani.nikula@linux.intel.com>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
- Jaehoon Chung <jh80.chung@samsung.com>, Ulf Hansson <ulf.hansson@linaro.org>,
- Heiko Stuebner <heiko@sntech.de>,
- Shreeya Patel <shreeya.patel@collabora.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Shawn Lin <shawn.lin@rock-chips.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kwilczynski@kernel.org>,
- Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>,
- Bjorn Helgaas <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>, Qin Jian <qinjian@cqplus1.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-pm@vger.kernel.org, netdev@vger.kernel.org, llvm@lists.linux.dev,
- linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-clk@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-sound@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
- kernel@collabora.com, linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH 01/20] bitfield: introduce HWORD_UPDATE bitfield macros
-Date: Mon, 16 Jun 2025 14:27:55 +0200
-Message-ID: <3361713.44csPzL39Z@workhorse>
-In-Reply-To: <aEw7LBpmkfOqZgf1@yury>
-References:
- <20250612-byeword-update-v1-0-f4afb8f6313f@collabora.com>
- <1437fe89-341b-4b57-b1fa-a0395081e941@arm.com> <aEw7LBpmkfOqZgf1@yury>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A3A285C94;
+	Mon, 16 Jun 2025 12:59:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750078756; cv=none; b=s0NVr48yclGLnGIXY+8PtpMlsmPiOCDF49DgncLQwAAPA7Un+NHqNVdHMfVD4miBCexg9wCZDkfj+PNYc3Dxdkn7VZUBdRfpFz5acfEUk+/QOEkY1AX2KvgdVOeBStltqbFmp3iPETwJS0ufYphoLwQPjLfVajCq0yhmb1PLeG0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750078756; c=relaxed/simple;
+	bh=WcH0OWmlU4ZQV2HljG68tARoAJOidNdIodFF+fV67wE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=DtiyPTip6blxgkFbPvXEkOqmTsgWm8mkGePuS/o4WKPFMmlGvyH3ygPSWkpBTVV4QnTx59cZuGu99lFmIKAM67wf8V5TS/iqkqB3dEUy2jj3WpTvhq/kLv5w9AEuH/F0F3+8PNkGToaLI5v37jUVFsH6mB04CiUBDoAbtrJZ4zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Kcw7brqQ; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55G8fgK0025415;
+	Mon, 16 Jun 2025 12:58:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	9FOuy9xi6e8CVz3Z7cBJ1M6xKJrOzvKMVGlmvrYdEeU=; b=Kcw7brqQYLn2DjuK
+	O8Edny2PTUAkQRPKKNONA1AgQIwhkcqu00LDrEmd9pYrBY6eiT3MtisKtzgnY+R0
+	uo3SiYq2JEJUwZ3jek127PW6gIIoK+RCJq8PN4GBhJ3Yk73O+6Y8moyOFEqIuOKq
+	Ts/cCIC4to+2bF+UcMcrTGtuWQGCeAYdnY8BeTRgpZLMTgLrDeYIrI3fr6wUT8FZ
+	2cX8mS33X52domoS23ESqN9foZ1ZauF3s10EZn0viu1+rg9TXs5RVQRhs2XdyZyY
+	rY2z7VW72qJcToTjGDMoGM9RDQsm+Y3je0Vdkv/X4PYY6oqzGrmS87kJSZLmOARh
+	wf4axQ==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 479qp5k4kq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Jun 2025 12:58:48 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 55GCwlTp012312
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Jun 2025 12:58:47 GMT
+Received: from [10.206.104.82] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 16 Jun
+ 2025 05:58:39 -0700
+Message-ID: <a01c10b7-859e-4eab-be8c-e486a97e6ad5@quicinc.com>
+Date: Mon, 16 Jun 2025 18:28:36 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/4] Support for Adreno X1-45 GPU
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Akhil P Oommen
+	<akhilpo@oss.qualcomm.com>,
+        Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Rob Clark" <robin.clark@oss.qualcomm.com>,
+        Sean Paul <sean@poorly.run>, "Konrad Dybcio" <konradybcio@kernel.org>,
+        Dmitry Baryshkov
+	<lumag@kernel.org>,
+        "Abhinav Kumar" <abhinav.kumar@linux.dev>,
+        Jessica Zhang
+	<jessica.zhang@oss.qualcomm.com>,
+        Marijn Suijten
+	<marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>, "Simona
+ Vetter" <simona@ffwll.ch>,
+        Bjorn Andersson <andersson@kernel.org>, Rob
+ Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor
+ Dooley <conor+dt@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
+        Nishanth
+ Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
+CC: <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>,
+        Dmitry Baryshkov
+	<dmitry.baryshkov@oss.qualcomm.com>
+References: <20250611-x1p-adreno-v2-0-5074907bebbd@oss.qualcomm.com>
+ <0e6fd97d-9a56-426b-8b98-dc8aa50d02d2@oldschoolsolutions.biz>
+ <036e739c-54e4-4252-b6f0-c8eed5557d15@oss.qualcomm.com>
+ <29f1de05-0e55-42b2-9bf3-894bf4f07808@oss.qualcomm.com>
+From: Akhil P Oommen <quic_akhilpo@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <29f1de05-0e55-42b2-9bf3-894bf4f07808@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: d9KelrM7jgy1ewN4E7QXp4Oj9uuatklg
+X-Proofpoint-ORIG-GUID: d9KelrM7jgy1ewN4E7QXp4Oj9uuatklg
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE2MDA4MSBTYWx0ZWRfX5r2R4coKec99
+ /S6CLLkdBtDTkpNgGa94gtgjBI1VUHgQ/FSKgy9BeC79Yqmpny1xpuL9LS9Zw+m4YhKqCrgJYh6
+ pGe9JRioXp0JfbjI0WEtcCnvX/EXhCB4zUZHqUtfSYcoyQSiZKwj2DIIwo9od9m8rwWFgt5HKGo
+ p3BlJOsdFyxXfCskXdpTHmsy/8IbA/ronz1PUzmAEVcCtTka6f1Jqp3tqOHjcwWdjSfp9F9+Khf
+ 3Hy0/VTHvF03VL2yxbhCp23bNiXKYD4dp5aqrsHTVu44fmxCY5y/v4bMMZTyj3yhYjE11vevGc3
+ FOCUGmc2KkiMZPkbijd5OaFfb3uyk6GGA5NKNBpi7BNVPmd2x0uZZOjo55Qwjieyko+pcy6iiz2
+ kHjo/GDsqD2uswGp5FxEVhnKLrIpw7rQ+xZ5NM77SiU9M8GBjdY21Rwe0sOftkxen/8dWaCh
+X-Authority-Analysis: v=2.4 cv=fMc53Yae c=1 sm=1 tr=0 ts=68501508 cx=c_pps
+ a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10
+ a=8rcTDYuEkznLuHMLCrUA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-16_05,2025-06-13_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 adultscore=0 bulkscore=0 clxscore=1011 malwarescore=0
+ mlxlogscore=999 spamscore=0 lowpriorityscore=0 impostorscore=0 mlxscore=0
+ priorityscore=1501 suspectscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2506160081
 
-Hello,
-
-On Friday, 13 June 2025 16:52:28 Central European Summer Time Yury Norov wrote:
-> On Fri, Jun 13, 2025 at 02:54:50PM +0100, Robin Murphy wrote:
-> > On 2025-06-12 7:56 pm, Nicolas Frattaroli wrote:
-> > > Hardware of various vendors, but very notably Rockchip, often uses
-> > > 32-bit registers where the upper 16-bit half of the register is a
-> > > write-enable mask for the lower half.
-> > > 
-> > > This type of hardware setup allows for more granular concurrent register
-> > > write access.
-> > > 
-> > > Over the years, many drivers have hand-rolled their own version of this
-> > > macro, usually without any checks, often called something like
-> > > HIWORD_UPDATE or FIELD_PREP_HIWORD, commonly with slightly different
-> > > semantics between them.
-> > > 
-> > > Clearly there is a demand for such a macro, and thus the demand should
-> > > be satisfied in a common header file.
-> > > 
-> > > Add two macros: HWORD_UPDATE, and HWORD_UPDATE_CONST. The latter is a
-> > > version that can be used in initializers, like FIELD_PREP_CONST. The
-> > > macro names are chosen to not clash with any potential other macros that
-> > > drivers may already have implemented themselves, while retaining a
-> > > familiar name.
-> > 
-> > Nit: while from one angle it indeed looks similar, from another it's even
-> > more opaque and less meaningful than what we have already. Personally I
-> > cannot help but see "hword" as "halfword", so logically if we want 32+32-bit
-> > or 8+8-bit variants in future those would be WORD_UPDATE() and
-> > BYTE_UPDATE(), right? ;)
-> > 
-> > It's also confounded by "update" not actually having any obvious meaning at
-> > this level without all the implicit usage context. FWIW my suggestion would
-> > be FIELD_PREP_WM_U16, such that the reader instantly sees "FIELD_PREP with
-> > some additional semantics", even if they then need to glance at the
-> > kerneldoc for clarification that WM stands for writemask (or maybe WE for
-> > write-enable if people prefer). Plus it then leaves room to easily support
-> > different sizes (and potentially even bonkers upside-down Ux_WM variants?!)
-> > without any bother if we need to.
+On 6/15/2025 12:12 AM, Konrad Dybcio wrote:
+> On 6/12/25 11:19 PM, Akhil P Oommen wrote:
+>> On 6/12/2025 5:32 PM, Jens Glathe wrote:
+>>> On 6/11/25 13:15, Akhil P Oommen wrote:
+>>>
+>>>> Add support for X1-45 GPU found in X1P41200 chipset (8 cpu core
+>>>> version). X1-45 is a smaller version of X1-85 with lower core count and
+>>>> smaller memories. From UMD perspective, this is similar to "FD735"
+>>>> present in Mesa.
+>>>>
+>>> Hi Akhil,
+>>>
+>>> when loading the driver (still without firmware files) I'm getting a
+>>> speedbin warning:
+>>>
+>>> [    3.318341] adreno 3d00000.gpu: [drm:a6xx_gpu_init [msm]] *ERROR*
+>>> missing support for speed-bin: 233. Some OPPs may not be supported by
+>>> hardware
+>>>
+>>> I've seen that there is a table for speed bins, this one is not there.
+>>> Tested on a Lenovo ThinkBook 16 G7 QOY.
+>>
+>> Hi Jens,
+>>
+>> Could you please try the below patch?
+>>
+>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_catalog.c
+>> b/drivers/gpu/drm/msm/adreno/a6xx_catalog.c
+>> index 2db748ce7df5..7748f92919b8 100644
+>> --- a/drivers/gpu/drm/msm/adreno/a6xx_catalog.c
+>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_catalog.c
+>> @@ -1510,7 +1510,8 @@ static const struct adreno_info a7xx_gpus[] = {
+>>                         { 0,   0 },
+>>                         { 294, 1 },
+>>                         { 263, 2 },
+>> -                       { 141, 3 },
+>> +                       { 233, 3 },
+>> +                       { 141, 4 },
+>>                 ),
+>>         }
+>>  };
+>>
+>> With this, you should see 1107Mhz as the GPU Fmax.
 > 
-> I like the idea. Maybe even shorter: FIELD_PREP_WM16()?
+> I see your dt entry takes care of bins 0..=4.. this oversight worries
+> me a bit - are these values above (post change) all in sync with what
+> you entered into DT?
+
+Yes. DT is accurate. And with this additional change both the driver and
+DT will be consistent.
+
+-Akhil.
+
 > 
-
-I do think FIELD_PREP_WM16() is a good name. If everyone is okay with this
-as a name, I will use it in v2 of the series. And by "everyone" I really
-mean everyone should get their hot takes in before the end of the week,
-as I intend to send out a v2 on either Friday or the start of next week
-to keep the ball rolling, but I don't want to reroll a 20 patch series
-with a trillion recipients more than is absolutely necessary.
-
-To that end, I'd also like to get some other naming choices clarified.
-
-As I gathered, these two macros should best be placed in its own header.
-Is include/linux/hw_bitfield.h a cromulent choice, or should we go with
-include/linux/hw_bits.h?
-
-Furthermore, should it be FIELD_PREP_WM16_CONST or FIELD_PREP_CONST_WM16?
-I'm personally partial to the former.
-
-And finally, is it okay if I leave out refactoring Intel's
-_MASKED_FIELD() or should I see if I can at least replace its
-implementation while I'm at it?
-
-For less opinionated changes, I'll also change all the `U` literal
-suffixes to `UL` wherever I've added them. As I understand it, it doesn't
-really make a difference in these instances, but `UL` is more prevalent
-in the kernel.
-
-Kind regards,
-Nicolas Frattaroli
-
+> I'm not saying they necessarily aren't, but I want to avoid
+> inconsistencies
+> 
+> Konrad
+> 
 
 
