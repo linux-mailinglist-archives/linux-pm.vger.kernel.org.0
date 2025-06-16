@@ -1,143 +1,161 @@
-Return-Path: <linux-pm+bounces-28772-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28773-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD411ADA710
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 06:14:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCCE9ADA737
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 06:39:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BB01188A335
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 04:14:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 551D016CB60
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 04:39:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECA161A5BA0;
-	Mon, 16 Jun 2025 04:13:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9701B1A23A9;
+	Mon, 16 Jun 2025 04:39:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J3Fxlm0E"
+	dkim=pass (2048-bit key) header.d=wbinvd.org header.i=@wbinvd.org header.b="Gj8Zd8UD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D21872607;
-	Mon, 16 Jun 2025 04:13:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B583D193077
+	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 04:38:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750047237; cv=none; b=Ip8N8ScoezQTjNWHDzEVunvzrfPQykGJ37QZToBy8tpGzFDIzeywbJzh0PKDeeIi+baZAqvXtPCIQeuO4hMhWlgWgdrsXKVtis36CODv++23jr6x6TkyVvFp7h5maDCAUPZVKLfRzepu5wNhUU+yho/9/sVPtv7blofVvT1cXfc=
+	t=1750048740; cv=none; b=Xpg2YT6lh8TQQxXBeIhcJszTWc0Sb0L42SfuCvbdrAgd3TN3v+aI8XEGcZov236Rm+q/EZIX8j0tdgZUTZsiLt5Fv5Aff8RJ63QhWF0XthFA30u8ozJClcOX+NzC3ABLk99CdNBKatz3kqbttK10i2vOb8i864Lxn5A1uXaR3W0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750047237; c=relaxed/simple;
-	bh=+q0guN9PwSiS5EAbareskBIti2BmPJU9JVXqOz/iUbk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vuyp6S2u3v3H5/PU2GDg6UFgZ5vZV/CfJxDIRodOq6tczErvWOj3MBOOZE+r/igLibwD4GuVZWcxMdRsLaYGJNMCQYT34P2rWa5fhxW4ChkS75RfSj5eDGLPtieeWul+pNzHut4cxna8a531wlmR+UyjJUSSWd79vvkZatDjqmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J3Fxlm0E; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-742c7a52e97so3316202b3a.3;
-        Sun, 15 Jun 2025 21:13:56 -0700 (PDT)
+	s=arc-20240116; t=1750048740; c=relaxed/simple;
+	bh=ukMrFs54obPST5gEbpIZADkYDnuDNh1MUH1aN8jHv6A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ADpxPF7jFzNvRSWs5PzoNGYk5oEHGIr1RDgNgP/bNMb62ZUxP8ByIULG45K+1vgxQ/W1NmfB/2QYlkJS8rnZBH9frJ74wlpGclcsLfRjYZj4sfDkebTM8hco/ENxiRBlBPZbwUVGPAzfDIoyLYGqApETRWA/nGTW5lTs/AqC7Bc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wbinvd.org; spf=pass smtp.mailfrom=wbinvd.org; dkim=pass (2048-bit key) header.d=wbinvd.org header.i=@wbinvd.org header.b=Gj8Zd8UD; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wbinvd.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wbinvd.org
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-31223a4cddeso2915681a91.1
+        for <linux-pm@vger.kernel.org>; Sun, 15 Jun 2025 21:38:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750047235; x=1750652035; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P80b7O3kBzCHZeyPaqEFw3rG2WMhfBLYf+jpLfD2cC0=;
-        b=J3Fxlm0EKALYEBLHNAI6MTCGq9uYYKTCI0hHyVU9MtknUDeOLc9FDj4qAirVKclS5V
-         yok0r5bw4tGiPRNnI/4w1B84m6lQ+SEnRN6VeoVrowHm0J5ALmD6LPeIf+STvkEwcqSs
-         Xw1lQAWoC8mKa/ci0KY6SLazGXBnRgYu5k4+3yX8SJPFmAi0L6CNs3G8ILl6lK6DYU4e
-         pE7O4lIBUCsX29whQqZJbp8jWtts6SihIRcrXATOHK75rKWSSMHYMrnbcTQepTVOvIGC
-         RrwlLUwu7UD8e/q2i0b8Wr/7BqCX/USrRnnMLF1dt4NDNK+pkRcObF9VI0doaS5BHByJ
-         VbXQ==
+        d=wbinvd.org; s=wbinvd; t=1750048738; x=1750653538; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=QeDMCjmT243+ImCsN5aSe2LSuaW52Izp8hB4w8uj3WA=;
+        b=Gj8Zd8UDNWy+ayVNGHdEHfFsIh1c/Cr+fB4YW8wgkS3VcX79JAc1wDCdXZjZRB5KBr
+         Rld+oetOU4EV6HdJBvRbG9DKny19jXe9MoLqW87CfOxmXDMps589vq6U2CDYKCGY0W1a
+         lJooWQRvr1nvKcozznuMhXeMxDHJFAmiu6S98IMpzpJDn+uZs5FH+Ml78DDDi4uTh2LC
+         4vcrF/nJULyKIzEEDzWRTQP/FyzXlCmE0MWe/Oh2uIXFIwccldxWB1g4dbEnmVwc8zAT
+         icvnkHQM68ZmHdZhEDCAnnPLXrQGDbdW+sTvnVRviw84DKH1q6eI6vQaelbrdEjjG+Bo
+         lDyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750047235; x=1750652035;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1750048738; x=1750653538;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P80b7O3kBzCHZeyPaqEFw3rG2WMhfBLYf+jpLfD2cC0=;
-        b=dfSU6RyV8zlkJT7fzQz1OJR7p8AUF1Rqg++y/78PpB344wIf7gF5Nn/FOz2WAKEnWM
-         DCq9zhvWp1bUI6Zd1PR/h9ZvDOoXA2M97sZwVY1RnVXyEPWYQdHXCToiUu4Idj+/AJ/Z
-         Lvg7pnxFm8ChuizHtc6H+PAml61UDxUtKiA4Z6DJ4JckgeB2VXMLS0n5NqTkDHfuS+17
-         xs1tJauFnF/5C791EiL8Uw/6FFSrjlXpDu6ecOudLhvUfAf6BMMpIUfANDW7UKJBruFo
-         mjlrAOhRN8oruDmC+V992/IWLK4uv1Ikg0Y5vTkRQh/TWIa0p6WDI/sN/yCX1Ni/rmRA
-         lOWA==
-X-Forwarded-Encrypted: i=1; AJvYcCVK/jxl4Vc5dvzIStz2WZCrgg0iI1lWg/YTICMbn3F/QZuUWkMK0vs3GlOMeUgXReo6buvBWSIIjNAWeA==@vger.kernel.org, AJvYcCW9/vP5SQ1jfTnkLdTMwSqw3QMWlm1zFL6n+cvdWYmauKY/Fu960T+UBGKWNRtVmVZg6PqZkqyF2UM=@vger.kernel.org, AJvYcCXi/AhJLqfJQl8jiW/JACqP/AJdVX866wYq6JFjx4V6b3I5FRyzUn5s0dnPCoOAB2B7GItWeuKSOZI3oPWT@vger.kernel.org, AJvYcCXpTx0NlOuTCnDqHjZPMLUgVdttNVCZi3gnCNW3/+GWuYkq8dzOdVR4dR5d9GcxAicdsS3hJISR1wo4@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOLHY3i9JzxsL1MrhSbOvgFTo1RBh/3LiHiGSYN8bB6k3i2oVh
-	4V4bd7GcoWKDSYQAtqMdSiQmtqUz5Px8AA7FGPTCvMm07/+9gEJYklgU
-X-Gm-Gg: ASbGncvwhPeWVbT2+rcfspyb1s1K7kP0zKeUeM1uiAlm8cOJ//UxqCTjUMWlxcyaPPc
-	PLY6rhfHXgqFbjlY+MhceofbhpCX3N/Qdu4/mcIKBgUtSNa9NpzNI2v31GkrNTBkYJB14nXPKZx
-	zMf25JZ5twZ6j/SFMAQSpHyKydKHCR635aRP7ncLuqTtSYNftGO29IFQXbJm6iggszqb8WtBdIa
-	cV06nDx+gnXxnOU+9POmH6rvUIj3nZtVEB3IGhgp/tkXhQHqs2eIM7K6FHYgUeSpkoxnH0KVnEP
-	aqk+a7GEKvr4FVhZIUOelgnGwLFk2j93MaucFCMYyEoswaBPVQck/K0ixZWEhGjK+SXV+KUg0wj
-	R7rwu3rXb
-X-Google-Smtp-Source: AGHT+IGj8afwiQBWMnNFiO8CZX12Uzqm0farJp4iABQXPdiIhq7hSOMuLQDUrIeTYhq1s+E7XXHTwA==
-X-Received: by 2002:a05:6a00:21c1:b0:748:323f:ba21 with SMTP id d2e1a72fcca58-7489cf5c8c2mr11015493b3a.1.1750047235481;
-        Sun, 15 Jun 2025 21:13:55 -0700 (PDT)
-Received: from [10.89.152.134] (wf121-134.ust.hk. [175.159.121.134])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74890006059sm5937252b3a.55.2025.06.15.21.13.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 Jun 2025 21:13:55 -0700 (PDT)
-Message-ID: <7297d4b1-84a2-4bb1-8a33-29c827247df7@gmail.com>
-Date: Mon, 16 Jun 2025 12:13:50 +0800
+        bh=QeDMCjmT243+ImCsN5aSe2LSuaW52Izp8hB4w8uj3WA=;
+        b=WP6aWHvOGCOLDRHjIPrgmwEK9B6D/+IQd/kRWq19jz/5kqYM7sFwa6P5+g4lGaJBuw
+         gWDYvfgkkX4tr//sudOF6J4BRgmz4NDyb26TMZ9tleaULVcoPpERmNR+8rIn1h4GpKXt
+         zGrxBceEaSi/5v28N71bYpD2yN7Jh4DAaMs3c5IevA6FzxUWhApNZrx10aIrNopZsjFI
+         o5n803qL2F2J8iq+u28uhYb9veSxxjwObRlBqT8bmJghB0vi1hVOfe1uXCTrPD2VtV69
+         tjBnQukNjzi230BgCXU7jdLFni510XEl4iChYsyqS+O/MEUAI2FbegIq67dNFcXrVHTg
+         st4A==
+X-Forwarded-Encrypted: i=1; AJvYcCWYaWiC2fD9ECvbk3Xy4m7oMdxFBynsI7CiEe12ncKTP/lKLWoDfap4b46i7gBbCFn2HqDqJXFO1A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOL5RB6EoJm4EfEXs4zbHYMV/hFWXJNcwnQ98hDvfjT43kWchl
+	zDVEZWqsRAX6taV6Y9Iq0wMHkx24QskyIo/o0omgOR79j3waBr6qPT2AuCcOBQElLmQ=
+X-Gm-Gg: ASbGncs2mPmDw9LDiVKb/fCwuQ8spfQeQSPXxlxO0QbumsG10kPD0jl6dgJUHIMM7gu
+	5zLzG3hBzOsD/hYfjgZigydQ4DX3piNMunVPd5/wFwRDzuSm5WNlpxUw8y1kviaG+dbevMqQp8R
+	HrOky6bVVdr/Ch3SihHA5NvcaYkZpUEl1Y16RioeiUrNOx3g30qzhswEDgqssxyTYXxgfioV3L4
+	w+IqRefl+uASksLBihGVhhKFSDUKT4kE4VpFfD2W0bwXecaQeDawALLC9W/l9eD/ibXYvnLuLGd
+	EygjUjzM5NN3JfLes/apgivWhfeU5C0tfjlLa/4r0HBxtd/ZPzVQ80TcN54Aeq02uZ7/b4YOlxN
+	EAFpBCyvVo5HIlp8AP1WTqwn4ObudeVo=
+X-Google-Smtp-Source: AGHT+IFoxN4G3980gIVK0np5tw1fQkp1JKCmZrSoIiC5wwrCJivYrHj/DKmD4vFX3iCyAyCKzILJmA==
+X-Received: by 2002:a17:90b:2dd0:b0:313:287c:74bd with SMTP id 98e67ed59e1d1-313f1d10aaamr15121787a91.33.1750048737766;
+        Sun, 15 Jun 2025 21:38:57 -0700 (PDT)
+Received: from mozart.vkv.me (192-184-162-253.fiber.dynamic.sonic.net. [192.184.162.253])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-313c1bd9ae1sm8569187a91.18.2025.06.15.21.38.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Jun 2025 21:38:57 -0700 (PDT)
+Date: Sun, 15 Jun 2025 21:38:55 -0700
+From: Calvin Owens <calvin@wbinvd.org>
+To: "Zhang, Rui" <rui.zhang@intel.com>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"lenb@kernel.org" <lenb@kernel.org>
+Subject: Re: [PATCH] tools/power turbostat: Fix MSRs with CONFIG_MULTIUSER=n
+Message-ID: <aE-f35kOO0TywX5K@mozart.vkv.me>
+References: <81f4c402d1fda7c2419aac1148061a0789112e76.1749849645.git.calvin@wbinvd.org>
+ <99f09d35e30fa335508823e9848a3365936ac9b3.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 07/10] power: reset: macsmc-reboot: Add driver for
- rebooting via Apple SMC
-To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>,
- Hector Martin <marcan@marcan.st>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Lee Jones <lee@kernel.org>, Marc Zyngier <maz@kernel.org>,
- "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- Sebastian Reichel <sebastian.reichel@collabora.com>
-References: <20250610-smc-6-15-v7-0-556cafd771d3@kernel.org>
- <20250610-smc-6-15-v7-7-556cafd771d3@kernel.org>
-Content-Language: en-MW
-From: Nick Chan <towinchenmi@gmail.com>
-In-Reply-To: <20250610-smc-6-15-v7-7-556cafd771d3@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <99f09d35e30fa335508823e9848a3365936ac9b3.camel@intel.com>
 
-
-
-On 10/6/2025 23:29, Sven Peter wrote:
-> From: Hector Martin <marcan@marcan.st>
+On Monday 06/16 at 01:30 +0000, Zhang, Rui wrote:
+> On Fri, 2025-06-13 at 19:20 -0700, Calvin Owens wrote:
+> > Handle ENOSYS from cap_get_proc() in check_for_cap_sys_rawio(), so
+> > turbostat can display temperatures when running on kernels compiled
+> > without multiuser support.
+> > 
+> > Signed-off-by: Calvin Owens <calvin@wbinvd.org>
+> > ---
+> >  tools/power/x86/turbostat/turbostat.c | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/power/x86/turbostat/turbostat.c
+> > b/tools/power/x86/turbostat/turbostat.c
+> > index 925556b90770..f7d665913a52 100644
+> > --- a/tools/power/x86/turbostat/turbostat.c
+> > +++ b/tools/power/x86/turbostat/turbostat.c
+> > @@ -6496,8 +6496,13 @@ int check_for_cap_sys_rawio(void)
+> >  	int ret = 0;
+> >  
+> >  	caps = cap_get_proc();
+> > -	if (caps == NULL)
+> > +	if (caps == NULL) {
+> > +		/* Support CONFIG_MULTIUSER=n */
+> > +		if (errno == ENOSYS)
 > 
-> This driver implements the reboot/shutdown support exposed by the SMC
-> on Apple Silicon machines, such as Apple M1 Macs.
+> Can you point me where this knowledge comes from?
 > 
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> Reviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
-> Reviewed-by: Neal Gompa <neal@gompa.dev>
-> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> Signed-off-by: Sven Peter <sven@kernel.org>
-> ---
->  MAINTAINERS                         |   1 +
->  drivers/power/reset/Kconfig         |   9 ++
->  drivers/power/reset/Makefile        |   1 +
->  drivers/power/reset/macsmc-reboot.c | 290 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 301 insertions(+)
-[...]
+> I downloaded the libcap source and didn't see how ENOSYS is set.
 
-It seems that the reboot driver still probes even without the smc_reboot node in the smc node:
+Hi Rui,
 
-[    0.994942] macsmc 236000100.smc: RTKit: Initializing (protocol version 12)
-[    1.002862] macsmc-gpio macsmc-gpio: First GPIO key: gP01 (0x67503031)
-[    1.013156] macsmc-reboot: Failed to locate of_node [id: -1]
-[    1.048188] macsmc-reboot macsmc-reboot: Missing NVMEM cell shutdown_flag (-2)
-[    1.055359] macsmc-reboot macsmc-reboot: Missing NVMEM cell boot_stage (-2)
-[    1.062332] macsmc-reboot macsmc-reboot: Missing NVMEM cell boot_error_count (-2)
-[    1.069799] macsmc-reboot macsmc-reboot: Missing NVMEM cell panic_count (-2)
-[    1.076902] macsmc-reboot macsmc-reboot: Handling reboot and poweroff requests via SMC
+When the kernel is built without multiuser support, the capget() et al.
+syscalls are #ifdef'd out:
 
-Best regards,
-Nick Chan
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/capability.c#n32
 
+...so userspace will get -ENOSYS when it tries to call them, and that
+ends up being propagated to errno in userspace.
 
+Admittedly it is sort of implicit. Maybe a better way to "fix" this
+would be to warn the user if the capability check fails, but still
+attempt to access the MSR devices? I can do that if you prefer.
+
+That is my only problem here: when check_for_cap_sys_rawio() fails, the
+current code doesn't attempt to access the MSR devices at all, even
+though in my case it would actually work.
+
+I realize this is very weird: it came up when I was recently including
+turbostat as part of an extremely tiny bootable utility image.
+
+Thanks,
+Calvin
+
+> thanks,
+> rui
+> > +			return 0;
+> > +
+> >  		return 1;
+> > +	}
+> >  
+> >  	if (cap_get_flag(caps, CAP_SYS_RAWIO, CAP_EFFECTIVE,
+> > &cap_flag_value)) {
+> >  		ret = 1;
+> 
 
