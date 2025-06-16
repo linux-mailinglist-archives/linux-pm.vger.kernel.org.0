@@ -1,177 +1,226 @@
-Return-Path: <linux-pm+bounces-28844-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28845-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F5C0ADB75B
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 18:49:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E93BDADB7A8
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 19:14:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DDFE7AAED7
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 16:47:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FC97188B817
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 17:14:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEDE9288C24;
-	Mon, 16 Jun 2025 16:48:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71029288C13;
+	Mon, 16 Jun 2025 17:14:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="d5Xd7REY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UVB2KOSi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DCA92877D7
-	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 16:48:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D0B2BEFE1;
+	Mon, 16 Jun 2025 17:14:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750092515; cv=none; b=U17YMfkYiK1V8y1YZvnkhxHOXnch12fhVk9hZoic98Gh+WoJjmcELdzakgr10wt3z4bXoi89gGesGbNiJXp/YgngZgM0d7GL3jvzzzaQVQ8Luehr/ZJsWDM4T3NXryXqnxaEY2mXnoZ7TwpXlLAxGnCkQOkuxFyCFFqvwEdKRf8=
+	t=1750094052; cv=none; b=GRrYIye+WHa9dzVGJByIIatD2uvzNQFDK/gjiFKlxISJeX41or3SwyIUin2czbhAipaL25EGfyNcqq5BtvpXGgCQ/ucnbicK6BNUK8pzSqb0POKTbhO+oc9FsN51lZXzqb+7v3q9jOve3mGcwn7tPEXYjH+nTzXMH8Fvt8qVFeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750092515; c=relaxed/simple;
-	bh=/h+0C0+QWS3aA/QPz3SawkeyoNRtLolokTJ/FYPaC3o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MhuYfUfIua4wYGDGO5+rwOCSoCQaA4WA4jHn5uwq/2zlBmOawOUf8GkfQ3wgNbzM3dJv+T52uc0nHVZIGKeJL5v8+g7spZc6ahF9FIGaXWFgpVKQbU70PZJouGiV5z04jbSlIhTeCINfieFKqTjTC9HQ9qoqp42WDhXtQx4bglI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=d5Xd7REY; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55G8oE3L005767
-	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 16:48:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	lxyeOcoLjC3T2xwCWZvRjoeExdTH0SjUCC/Y0ERYeNQ=; b=d5Xd7REYM3S9gnS5
-	n7bYGFpFbiw+1+kJ2EqZbnWEMgfB2xuele5T5Pwm9aKsDRA78/EKtOy0F2QNTYzT
-	KJvLT7ey6fAz3mjnpAWR432o8QADvN+IEnRwpM9Yj6bc0Ge8sjvzz0ZWiAwbFZTq
-	nSepVk6eUNbh2ajDno4AWOc80XhTQlCWJcNa+Xm0CfPGPAoe58ojfQ9t2H2KbETZ
-	z7mYYqFgR+aN0ahVuhbD8tNmbaw4ythr6pL1F0kGDSq4MFutDxLYRwjZC/QWS+ot
-	Q/wBmVMGl0R5Qzntex2p8lKoFoNZds64/OuZsZjde6FVoaFAvIo75Ja0bP5wgTr2
-	Mlo+Yg==
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4791hcw9hy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 16:48:33 +0000 (GMT)
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-747d29e90b4so3652733b3a.0
-        for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 09:48:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750092512; x=1750697312;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lxyeOcoLjC3T2xwCWZvRjoeExdTH0SjUCC/Y0ERYeNQ=;
-        b=RNhVckrx7UxkPR90Xy/8Icm05jJH44qO3nH9SivJG4BVtTItKha6Ob1BK7x0nv7pZp
-         1ulGYRBwFJTdTGE8wgMJpy0Br3V/uk7K9E/DH0ZT50iec4GXdSQZaz/cM0OpwuXA2p4H
-         Iv6fXy67VtTxzo+Fvr2IuA3OuCb9v247bM8WLwWOBa4S23QPwOYqwbk7PQw9/Ko/dKs2
-         G+nTCWEBz85GHxouSGup161xIjAENP2asAAtz8vPs2+QjJJNlH9MlCDevRO2nibmiBHs
-         vkKAknBkWD9jv2nmfcbYCdXNeg4A2fvj6xqNdA7N3n1a4J1w9Hujv9v1RdTJ3TLvTUai
-         /MGA==
-X-Forwarded-Encrypted: i=1; AJvYcCUg2O+axmemeKr95qRaTWbC7o19UY8mMnAIgCElfgSC+CYOPEA4kpPX1Yo9WPf1v1qASvGjS1qP/A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3G0l6iOVlCI3jBnEoYJe0ovKlvtfrTCF+tSTQaoKRsUNTBltK
-	nN4CLh8eIyPByXMBNSsYUpAGK4rg8VG+Wwz0TXW/NFiZzIeU4IDo2flqD+jcRVH57n0D5+OKcEB
-	GLGP4k9Z3t1NSUdnFeCgOEWEoTRwtk7LKyDljA4QfNN9SG7v7NuMJ+k7JJjEh3Q==
-X-Gm-Gg: ASbGncsxjkpEk7PbsrKvedOFdC13nabYCBsZDwsikv+RoOBRBMd/E8WvP4yCzhGw84N
-	wdg3NS3ZNFgtJhr5rnTzbg+L3w5c1YLNrjsr918rSzstcUidq0I6QkZDCcOSepUGYA9mCxmK/vE
-	N2/zNYT6txfinbS13y+741Ntr6YUhv8JNqvdb0S3Z8dKmqaH9di2m5It81s0rBFPV/sDAW9rbmX
-	DSvcEbUu5QDkeuateEoHj4W4HlSR5xwB2aaRJS0Bw3Ty1WrhH/6xdh/QHudfjbFZvlF1S/W8Sni
-	Hy1agG0vlGZDCtOV8VIdIGqOf6a6d/D7yNp4gjIIsg==
-X-Received: by 2002:a05:6a21:318c:b0:215:d611:5d9b with SMTP id adf61e73a8af0-21fbd4bbd5fmr14908420637.12.1750092512624;
-        Mon, 16 Jun 2025 09:48:32 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFiRsfJISsTnkxLW8qZGNZNt7p0Rfn9bVYWR0l8aBesdxG90+o4bb4c6x4zbi0HdUx7zVZcJw==
-X-Received: by 2002:a05:6a21:318c:b0:215:d611:5d9b with SMTP id adf61e73a8af0-21fbd4bbd5fmr14908365637.12.1750092512245;
-        Mon, 16 Jun 2025 09:48:32 -0700 (PDT)
-Received: from [10.206.104.82] ([202.46.23.25])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2fe1680454sm6019135a12.37.2025.06.16.09.48.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jun 2025 09:48:31 -0700 (PDT)
-Message-ID: <31c50188-986a-44e8-8765-c1fce6ad3c2c@oss.qualcomm.com>
-Date: Mon, 16 Jun 2025 22:18:24 +0530
+	s=arc-20240116; t=1750094052; c=relaxed/simple;
+	bh=UwjggO9gJnjfl6+Ixw0I0bYEyFGok+qYdoeeLeS+z8M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BAQwlskrTwQuJPWZUi69WSkFH53mqvv4/CCP/2anw0ldL6jy5AWnr4BBbJrFLc7TogZhPZMT3oQ/IvU8OX1NQydFTpXYb2NmsxrkkNV68CpwT2kAYXJRsJz1fEqwuc0V+2b0YEoAsjFOCsgwKizMYtyRqRDR6lgFdqMxDENPY6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UVB2KOSi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A775FC4CEED;
+	Mon, 16 Jun 2025 17:14:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750094051;
+	bh=UwjggO9gJnjfl6+Ixw0I0bYEyFGok+qYdoeeLeS+z8M=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=UVB2KOSimzOXfYnK2DRr3Ybka3oheq7ROCKbXhmFgrLmwNKXVLA614nnhOtP6gCB+
+	 mFAtxrXm0otuAZ2m4j9NFVmQFDjAijl1VkmIK48MMw2jl2APkRgaONYEvlvIKwxtTE
+	 TXEJZzYvos9YuW/VF2u4xVRSYuO9GWrKAmb+DgTdVXdDWGFv4bPm5QGpMjqnAM8BpG
+	 uuVua5/nv57MzBWuwBeEktAOxxvWwj/JohPYLG8n7/bgOshDzstyCP8jVHVpa5RctG
+	 3RowQkKQIFEh/d6G0eU2eajlcbN8CwnMw+EoY5K1mcjqi7Uw5wJX/zvxoEzyzhHdZk
+	 /ITGJv5lNK6Wg==
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-408d7e2ad03so3135668b6e.1;
+        Mon, 16 Jun 2025 10:14:11 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU3t/fG+cvN/TcZvOqng4+Wv6QXrK6ks9sdEtaFOpasMF+lj5InryyZhIFHP8sFsR6b2mDgn9GOY+73FGJw1071Irg=@vger.kernel.org, AJvYcCVYbSG55lRNxkBmaAOo+ve0U7g0ETDEzS3g6l/MDQEXo/BvYjT/8TT16qmn7wJ+HmezbcbILdI4/d8=@vger.kernel.org, AJvYcCW18bkU9bhL9xGZeS01HS9DLRPmZE5lcpnhbc8yISPDkFztgLdCym+XYE1JtY9jfHEuJglskp73dRw=@vger.kernel.org, AJvYcCXgwzW1yRDpknj6hy1dgcMk1c+RGvb+mnGTO9jg+9wgPJ8fTlVLf1DY/LShXbySBr9nnSGwr8i3eavi+XhC@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9Rje4MyR6dt1JttrnEDVAnwaeTGXMTmAZbQ6UKI1sI6pdEeUW
+	ErF/0sbkPT2K4aBoDi3DqlHeWMVjTvn02+Fd8Cbm2wL31zKAioZziHh7GoSjcqJv3UNtI7JCV79
+	v1hP64PeQ78IZ3SYEnSmZsMhiis/D+pY=
+X-Google-Smtp-Source: AGHT+IENdHN3S0+/AJ48hd1G5VfOrsAlSi1xyptiND94+qyMdvtUbI3fcqFn659eFO6cyHDU4A3F9NLax2NQGrFUZdg=
+X-Received: by 2002:a05:6808:690b:b0:401:cae9:4dc3 with SMTP id
+ 5614622812f47-40a7c13a8b6mr6692272b6e.8.1750094050962; Mon, 16 Jun 2025
+ 10:14:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] dt-bindings: opp: adreno: Update regex of OPP
- entry
-To: Krzysztof Kozlowski <krzk@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Rob Clark <robin.clark@oss.qualcomm.com>, Sean Paul <sean@poorly.run>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Dmitry Baryshkov <lumag@kernel.org>,
-        Abhinav Kumar <abhinav.kumar@linux.dev>,
-        Jessica Zhang <jessica.zhang@oss.qualcomm.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20250611-x1p-adreno-v2-0-5074907bebbd@oss.qualcomm.com>
- <20250611-x1p-adreno-v2-1-5074907bebbd@oss.qualcomm.com>
- <492417fe-c086-4980-b108-0487bad08155@kernel.org>
- <d482653e-5c0e-4b03-98d6-2c898b445917@quicinc.com>
- <750da319-d25f-454d-b376-ebbc194e0e41@kernel.org>
-From: Akhil P Oommen <akhilpo@oss.qualcomm.com>
-Content-Language: en-US
-In-Reply-To: <750da319-d25f-454d-b376-ebbc194e0e41@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE2MDExMSBTYWx0ZWRfX3SUgiFtwxUU4
- WeZY5+UQ75FCy70RoezYY2Ml3kVgon8ZpLGs4cHqTRjJXXId5odLLUugjXxssXpEZ7ae5VBxRgN
- hs195yaUhOMk0v5uOsS+Kz1jSoEVJ7W4n+J/wA9zrXsQUm+idRuKGsMSONkU5T3EsEkjhGc9fRF
- iKQm5Log+42rQlN2U1wR7WNi8ZcQiTRMsEYKgS78pZQzapzHj6bOaWHbCZh6CJpk/e19YYso48m
- +P/+IptB0nWhQ7fOK0nN4On4pJwHvnKSDbpxCN/FFa3Jkdy4NC84EnA0CDczQQ4kq7kd0ai30hS
- Lx1bNTFbpm4IVIs1sButDz8scyYcd0Ayj9vhGnGSHrQJpaG32PIeBlR0C5vKfr0wKL0ArL77kjH
- XLgKQaNUeZJn5mpLZeE8m7rHHrGdpZgXcpBe8b5Zgos+l0jYrwzqb5MSuVDP1XPSJTYCL1Qp
-X-Authority-Analysis: v=2.4 cv=PtaTbxM3 c=1 sm=1 tr=0 ts=68504ae1 cx=c_pps
- a=WW5sKcV1LcKqjgzy2JUPuA==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
- a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=DDAlTcr3_WI9VELS8V8A:9
- a=QEXdDO2ut3YA:10 a=zZCYzV9kfG8A:10 a=OpyuDcXvxspvyRM73sMx:22
-X-Proofpoint-ORIG-GUID: D35v-gKl9byOofa_yWPjFfa2ID6oLHhe
-X-Proofpoint-GUID: D35v-gKl9byOofa_yWPjFfa2ID6oLHhe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-16_08,2025-06-13_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 clxscore=1015 mlxlogscore=999 suspectscore=0 malwarescore=0
- lowpriorityscore=0 impostorscore=0 adultscore=0 spamscore=0
- priorityscore=1501 phishscore=0 mlxscore=0 classifier=spam authscore=0
- authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2506160111
+References: <20250616135357.3929441-1-claudiu.beznea.uj@bp.renesas.com> <20250616135357.3929441-2-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20250616135357.3929441-2-claudiu.beznea.uj@bp.renesas.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 16 Jun 2025 19:14:00 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0j_nm_z4ma2AsRkjiZn-AJ2bK982+Mwa8+_PoUAveNATQ@mail.gmail.com>
+X-Gm-Features: AX0GCFs4MChoTlgVHYwMUsgHoWrzBXwH3xptS7eJ6TN2twbvPobpEJ4Vzj_inP8
+Message-ID: <CAJZ5v0j_nm_z4ma2AsRkjiZn-AJ2bK982+Mwa8+_PoUAveNATQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] PM: domains: Detach on device_unbind_cleanup()
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org, 
+	len.brown@intel.com, pavel@kernel.org, ulf.hansson@linaro.org, 
+	jic23@kernel.org, daniel.lezcano@linaro.org, dmitry.torokhov@gmail.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, bhelgaas@google.com, 
+	geert@linux-m68k.org, linux-iio@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, fabrizio.castro.jz@renesas.com, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 6/12/2025 4:59 PM, Krzysztof Kozlowski wrote:
-> On 11/06/2025 14:24, Akhil P Oommen wrote:
->>>>  
->>>>  patternProperties:
->>>> -  '^opp-[0-9]+$':
->>>> +  '^opp(-?[0-9]+)*$':
->>>
->>> Not correct regex. You allow "opp", "opp1" and all other unusual
->>> variants. Commit does not explain what problem you are solving, so I
->>> have no clue what you want here, but for sure opp1 is wrong.
->>
->> Just to confirm, would this be fine for the requirement I mentioned above?
->>
->> "'^opp(-[0-9]+)*$'"
-> 
-> No, You did not solve half of the problems - still allows "opp" and
-> commit msg does not explain why "opp" is now correct. Describe the
-> actual problem and then write the regex solving it in specific way, not
-> causing other effects.
+On Mon, Jun 16, 2025 at 3:54=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
+wrote:
+>
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> The dev_pm_domain_attach() function is typically used in bus code alongsi=
+de
+> dev_pm_domain_detach(), often following patterns like:
+>
+> static int bus_probe(struct device *_dev)
+> {
+>     struct bus_driver *drv =3D to_bus_driver(dev->driver);
+>     struct bus_device *dev =3D to_bus_device(_dev);
+>     int ret;
+>
+>     // ...
+>
+>     ret =3D dev_pm_domain_attach(_dev, true);
+>     if (ret)
+>         return ret;
+>
+>     if (drv->probe)
+>         ret =3D drv->probe(dev);
+>
+>     // ...
+> }
+>
+> static void bus_remove(struct device *_dev)
+> {
+>     struct bus_driver *drv =3D to_bus_driver(dev->driver);
+>     struct bus_device *dev =3D to_bus_device(_dev);
+>
+>     if (drv->remove)
+>         drv->remove(dev);
+>     dev_pm_domain_detach(_dev);
+> }
+>
+> When the driver's probe function uses devres-managed resources that depen=
+d
+> on the power domain state, those resources are released later during
+> device_unbind_cleanup().
+>
+> Releasing devres-managed resources that depend on the power domain state
+> after detaching the device from its PM domain can cause failures.
+>
+> For example, if the driver uses devm_pm_runtime_enable() in its probe
+> function, and the device's clocks are managed by the PM domain, then
+> during removal the runtime PM is disabled in device_unbind_cleanup() afte=
+r
+> the clocks have been removed from the PM domain. It may happen that the
+> devm_pm_runtime_enable() action causes the device to be runtime-resumed.
+> If the driver specific runtime PM APIs access registers directly, this
+> will lead to accessing device registers without clocks being enabled.
+> Similar issues may occur with other devres actions that access device
+> registers.
+>
+> Add detach_power_off member to struct dev_pm_info, to be used later in
+> device_unbind_cleanup() as the power_off argument for
+> dev_pm_domain_detach(). This is a preparatory step toward removing
+> dev_pm_domain_detach() calls from bus remove functions. Since the current
+> PM domain detach functions (genpd_dev_pm_detach() and acpi_dev_pm_detach(=
+))
+> already set dev->pm_domain =3D NULL, there should be no issues with bus
+> drivers that still call dev_pm_domain_detach() in their remove functions.
+>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> ---
+>
+> Changes in v4:
+> - save dev->power.detach_power_off in dev_pm_domain_attach() and use
+>   it in device_unbind_cleanup() when detaching
+> - adjusted patch description
+>
+> Changes in v3:
+> - dropped devm_pm_domain_detach_off(), devm_pm_domain_detach_on()
+>   and use a single function devm_pm_domain_detach()
+>
+> Changes in v2:
+> - none; this patch is new
+>
+>  drivers/base/dd.c           | 2 ++
+>  drivers/base/power/common.c | 3 +++
+>  include/linux/pm.h          | 1 +
+>  3 files changed, 6 insertions(+)
+>
+> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+> index b526e0e0f52d..13ab98e033ea 100644
+> --- a/drivers/base/dd.c
+> +++ b/drivers/base/dd.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/kthread.h>
+>  #include <linux/wait.h>
+>  #include <linux/async.h>
+> +#include <linux/pm_domain.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/pinctrl/devinfo.h>
+>  #include <linux/slab.h>
+> @@ -552,6 +553,7 @@ static void device_unbind_cleanup(struct device *dev)
+>         dev->dma_range_map =3D NULL;
+>         device_set_driver(dev, NULL);
+>         dev_set_drvdata(dev, NULL);
+> +       dev_pm_domain_detach(dev, dev->power.detach_power_off);
+>         if (dev->pm_domain && dev->pm_domain->dismiss)
+>                 dev->pm_domain->dismiss(dev);
+>         pm_runtime_reinit(dev);
+> diff --git a/drivers/base/power/common.c b/drivers/base/power/common.c
+> index 781968a128ff..a8f302ed27a5 100644
+> --- a/drivers/base/power/common.c
+> +++ b/drivers/base/power/common.c
+> @@ -111,6 +111,9 @@ int dev_pm_domain_attach(struct device *dev, bool pow=
+er_on)
+>         if (!ret)
+>                 ret =3D genpd_dev_pm_attach(dev);
+>
+> +       if (dev->pm_domain)
+> +               dev->power.detach_power_off =3D power_on;
 
-Gotcha. If we want to be super strict, the regex should be:
-^opp(-[0-9]+){1,2}$
+I'm assuming that you have checked all of the users of
+dev_pm_domain_attach() and verified that the "power off" value is the
+same as the "power on" one for all of them.
 
-I will send out a new patch.
+> +
+>         return ret < 0 ? ret : 0;
+>  }
+>  EXPORT_SYMBOL_GPL(dev_pm_domain_attach);
+> diff --git a/include/linux/pm.h b/include/linux/pm.h
+> index f0bd8fbae4f2..dcbe2c1ef59b 100644
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -720,6 +720,7 @@ struct dev_pm_info {
+>         struct pm_subsys_data   *subsys_data;  /* Owned by the subsystem.=
+ */
+>         void (*set_latency_tolerance)(struct device *, s32);
+>         struct dev_pm_qos       *qos;
+> +       bool                    detach_power_off:1;
 
--Akhil
+Please put the new flag under #ifdef CONFIG_PM after memalloc_noio and
+comment it as "Owned by the driver core".
 
-> 
-> Best regards,
-> Krzysztof
+Otherwise LGTM.
 
+>  };
+>
+>  extern int dev_pm_get_subsys_data(struct device *dev);
+> --
+> 2.43.0
+>
 
