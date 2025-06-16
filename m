@@ -1,51 +1,51 @@
-Return-Path: <linux-pm+bounces-28805-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28812-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FF3BADACBB
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 12:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 644EFADACD8
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 12:02:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 208AC17262A
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 09:59:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C1C2172FE7
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 10:02:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EA522580EE;
-	Mon, 16 Jun 2025 09:58:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 443D027FB0C;
+	Mon, 16 Jun 2025 09:59:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="C7SXOLfs"
+	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="AYtavwrT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxout1.routing.net (mxout1.routing.net [134.0.28.11])
+Received: from mxout4.routing.net (mxout4.routing.net [134.0.28.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C8A274FDA;
-	Mon, 16 Jun 2025 09:58:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856A5277C81;
+	Mon, 16 Jun 2025 09:58:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750067929; cv=none; b=t8ATQhkCVloqE5UmOsXGRQBhIk+wxKOULnhfouHPP9hmRnyATOXLz2nsiu8n2GvfUcp9yo/A0ySRW0azKsFbQARuHUOC3EP8vLTQQNoA0AuOGlPlCj2CPe8jM8cKz4E6uGca4BBQK9/k8xAAT6OdNG3GvtQvxoYIx9qzI/DBYZo=
+	t=1750067942; cv=none; b=iagUVOUbaV/nM3fHmL6HrmQJmGoy8naAo7HDB2WJLlM0ajYlN91TUIqS+WF2GrpW6rRwST/0WxN50UkLlBhHGYx3pII5Q4t+Qgh5I7myBalneHzeskMoszxoywPP9tgA9pZTOQxYpkfjigu4VtGft7SJnREnsTKfavyN+HDPEEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750067929; c=relaxed/simple;
-	bh=rIzQgXvIc1jagNXrbYabNFxX6IODxdkK9ASrLqltX4Q=;
+	s=arc-20240116; t=1750067942; c=relaxed/simple;
+	bh=CXJdMVM7yfnfOWdD19oSNPqLnLxqQfuOKdmhOWln+X4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aRZ9LBjawHyntgkbTPxkozqQDEGIivkM9INXXKf2Rq7LRF1kB2gCtdCeCMu1Xbl+4gNB8fvnqKlDa2mwIo7CXeu79bUEuGjIsolmGmfEFaDIS8C3TSHv0yaa/T9V1iPwxIHlVgwIJhzyzxxHBR+n53TilIi7c1B1//EaNQv/ycg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=C7SXOLfs; arc=none smtp.client-ip=134.0.28.11
+	 MIME-Version; b=XKgc8KlRT7BasuyJPIWYO/lYkGjm+18hjbLq6C/OiuYWwGkSQsIr/B8G8LziTsWmF7s8iICA/JL5D9PVYLl9nTV3wTyJSbC1BvGyHXXxxetmWXGrQHGWoGuyct7/kcavIz27HlZ8gH9Vu1wAAQzzoDMhBBHg5wF3pW/ARKfwhjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=AYtavwrT; arc=none smtp.client-ip=134.0.28.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
 Received: from mxbulk.masterlogin.de (unknown [192.168.10.85])
-	by mxout1.routing.net (Postfix) with ESMTP id 7417241ADE;
+	by mxout4.routing.net (Postfix) with ESMTP id D8DC810093E;
 	Mon, 16 Jun 2025 09:58:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-	s=20200217; t=1750067921;
+	s=20200217; t=1750067922;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=1f4fkmPwrhUDTuJaJTH9o5ndndBg0Bz3rlvov4MAAmY=;
-	b=C7SXOLfsYiy14t1lOxOAuAoeQYYv2yHWYJM2ayFf1Dm/4Oi87WWcLYA0CJAl3zZEkwcVgF
-	B5700V4q+8SZLrcaz/eduB2o9FZ2c5HiFYzDpn9pfKc5FaVgJxVtd85u0/fzuExawbcZKJ
-	IHUqsogfBRUR28VxJFwvGnDcPqcCZP4=
+	bh=SHQ5vPeo13GqSQMpnsgrtHpzp9AC7Cqs5ZLxrZU37Ag=;
+	b=AYtavwrTzhH3Jgi9vODa7fCqs16ThzVMTPwbbnrPN8Dd9WVq12XvC3ilaxkbU4xddMnFhP
+	xUlfN52Zoq5LjggC6OPkNJgR0b3ehD5IDyaV5k5jjoBMxdW3AKlyiZwJllfOUANq0h4yDQ
+	pnI4gMorcrun6dOSQFFdv7WIlpII1T8=
 Received: from frank-u24.. (fttx-pool-194.15.87.210.bambit.de [194.15.87.210])
-	by mxbulk.masterlogin.de (Postfix) with ESMTPSA id 1A5BB122677;
+	by mxbulk.masterlogin.de (Postfix) with ESMTPSA id 7AAB7122704;
 	Mon, 16 Jun 2025 09:58:41 +0000 (UTC)
 From: Frank Wunderlich <linux@fw-web.de>
 To: MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -79,9 +79,9 @@ Cc: Frank Wunderlich <frank-w@public-files.de>,
 	netdev@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org
-Subject: [PATCH v4 04/13] dt-bindings: interconnect: add mt7988-cci compatible
-Date: Mon, 16 Jun 2025 11:58:14 +0200
-Message-ID: <20250616095828.160900-5-linux@fw-web.de>
+Subject: [PATCH v4 05/13] arm64: dts: mediatek: mt7988: add cci node
+Date: Mon, 16 Jun 2025 11:58:15 +0200
+Message-ID: <20250616095828.160900-6-linux@fw-web.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250616095828.160900-1-linux@fw-web.de>
 References: <20250616095828.160900-1-linux@fw-web.de>
@@ -95,42 +95,90 @@ Content-Transfer-Encoding: 8bit
 
 From: Frank Wunderlich <frank-w@public-files.de>
 
-Add compatible for Mediatek MT7988 SoC with mediatek,mt8183-cci fallback
-which is taken by driver.
+Add cci devicetree node for cpu frequency scaling.
 
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
-v2:
-- no RFC
-- drop "items" as sugested by conor
+v3:
+- add mt7988-cci compatible as suggested by angelo
 ---
- .../bindings/interconnect/mediatek,cci.yaml           | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/mediatek/mt7988a.dtsi | 33 +++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-index 58611ba2a0f4..4d72525f407e 100644
---- a/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-@@ -17,9 +17,14 @@ description: |
+diff --git a/arch/arm64/boot/dts/mediatek/mt7988a.dtsi b/arch/arm64/boot/dts/mediatek/mt7988a.dtsi
+index c46b31f8d653..560ec86dbec0 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7988a.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt7988a.dtsi
+@@ -12,6 +12,35 @@ / {
+ 	#address-cells = <2>;
+ 	#size-cells = <2>;
  
- properties:
-   compatible:
--    enum:
--      - mediatek,mt8183-cci
--      - mediatek,mt8186-cci
-+    oneOf:
-+      - enum:
-+          - mediatek,mt8183-cci
-+          - mediatek,mt8186-cci
-+      - items:
-+          - enum:
-+              - mediatek,mt7988-cci
-+          - const: mediatek,mt8183-cci
++	cci: cci {
++		compatible = "mediatek,mt7988-cci", "mediatek,mt8183-cci";
++		clocks = <&mcusys CLK_MCU_BUS_DIV_SEL>,
++			 <&topckgen CLK_TOP_XTAL>;
++		clock-names = "cci", "intermediate";
++		operating-points-v2 = <&cci_opp>;
++	};
++
++	cci_opp: opp-table-cci {
++		compatible = "operating-points-v2";
++		opp-shared;
++		opp-480000000 {
++			opp-hz = /bits/ 64 <480000000>;
++			opp-microvolt = <850000>;
++		};
++		opp-660000000 {
++			opp-hz = /bits/ 64 <660000000>;
++			opp-microvolt = <850000>;
++		};
++		opp-900000000 {
++			opp-hz = /bits/ 64 <900000000>;
++			opp-microvolt = <850000>;
++		};
++		opp-1080000000 {
++			opp-hz = /bits/ 64 <1080000000>;
++			opp-microvolt = <900000>;
++		};
++	};
++
+ 	cpus {
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+@@ -25,6 +54,7 @@ cpu0: cpu@0 {
+ 				 <&topckgen CLK_TOP_XTAL>;
+ 			clock-names = "cpu", "intermediate";
+ 			operating-points-v2 = <&cluster0_opp>;
++			mediatek,cci = <&cci>;
+ 		};
  
-   clocks:
-     items:
+ 		cpu1: cpu@1 {
+@@ -36,6 +66,7 @@ cpu1: cpu@1 {
+ 				 <&topckgen CLK_TOP_XTAL>;
+ 			clock-names = "cpu", "intermediate";
+ 			operating-points-v2 = <&cluster0_opp>;
++			mediatek,cci = <&cci>;
+ 		};
+ 
+ 		cpu2: cpu@2 {
+@@ -47,6 +78,7 @@ cpu2: cpu@2 {
+ 				 <&topckgen CLK_TOP_XTAL>;
+ 			clock-names = "cpu", "intermediate";
+ 			operating-points-v2 = <&cluster0_opp>;
++			mediatek,cci = <&cci>;
+ 		};
+ 
+ 		cpu3: cpu@3 {
+@@ -58,6 +90,7 @@ cpu3: cpu@3 {
+ 				 <&topckgen CLK_TOP_XTAL>;
+ 			clock-names = "cpu", "intermediate";
+ 			operating-points-v2 = <&cluster0_opp>;
++			mediatek,cci = <&cci>;
+ 		};
+ 
+ 		cluster0_opp: opp-table-0 {
 -- 
 2.43.0
 
