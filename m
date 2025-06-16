@@ -1,69 +1,69 @@
-Return-Path: <linux-pm+bounces-28777-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28783-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94B9CADA7FF
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 08:12:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA965ADA805
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 08:12:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F0C63AEE65
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 06:12:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24E941890CFB
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 06:12:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CE931C2335;
-	Mon, 16 Jun 2025 06:12:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6289F1DE3BB;
+	Mon, 16 Jun 2025 06:12:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fG4GqCu9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LsJgRSlo"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF2D22594
-	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 06:12:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE351DE4D2
+	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 06:12:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750054341; cv=none; b=ImK+fDDGLzvOqsqmOYIQSMuf0NOiaz+GRGw852yzZMULsebvmK4U49rCml/tTUL+f6vWPqZAl4usPh32BCcQx3bfU9/CNUJN0+AY5ov5inDH+DDum/fOkTP/X9NlXry8BL70nM16MfM7JbKajh1X/lZaC73XXteI8NAY7SZEZtI=
+	t=1750054346; cv=none; b=Qlfxs0cPPz4leuzjB69SS29F9RC3Xo91WeNSSzDq792K6jzBzsXCAD8mWTI+sDav3+93IiKJBL9m3Exu7N4pe2oPYZkT7eoz0cYq9Uu6xRPije7ZqP78FYDioHcIN4EmQ9Lj18+rueycKDfLfY3BAp8T6nkwljMUnvjxxiP7PJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750054341; c=relaxed/simple;
-	bh=xLHSA7BUhwIwix+ZOV3mdVpnvWKLsgjUXxJbr7KMiq8=;
+	s=arc-20240116; t=1750054346; c=relaxed/simple;
+	bh=enGBXljCg6nj2CH00dAZGuG5YFavyKg+aWI9Vq7Qklo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Eku0UUXj733x7XKCgMOpI5a7+IUCsQSjYBs8+amjcCXmleftSUJZNjCGY6U9LHjoXAaQkRk8zLicC+oIwfHwosxcSViFnzTRBzbv1Wd7dtEVOAu7C4mzbXQADvloHkmHpLnTRNVIkyPtQkcCwBTI5r3y93sYjMYi7jFm9yttoPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fG4GqCu9; arc=none smtp.client-ip=192.198.163.14
+	 MIME-Version; b=WxZGNmKj9+k+M5Tm0CFr6ZwYxho+QagtHO6qgOKmPjzvKoB3ayYimh9E1zHGSvM4UsK3pmmRCAXxczsTbo5SGxR7uCFE8ZLi3TDnFD0VCnT8HxBibJ1mMP4PW3KR9e9KJSUO49oJ/bL4WWKrgiRTCDAEDPZ6Pwh2s1DPL0UNuKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LsJgRSlo; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750054338; x=1781590338;
+  t=1750054344; x=1781590344;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=xLHSA7BUhwIwix+ZOV3mdVpnvWKLsgjUXxJbr7KMiq8=;
-  b=fG4GqCu9z6kIQVAI9jAuJpf4Av+QJDduO0RGD7GqzeiDvv5s70MZgm+U
-   Y40vNwoTy1ydIPqI6MMnixBu34VAY5K1ZRaQ7aSUiGgTNvJYqEjTysoh4
-   bkmM/L6kaeblu5Smr5HIN5NEzbLxJh0qrE4z36hd8iPC+iQrRVy1MhHP3
-   K89yMk47Nqlxs/01yNTebAKHZfTUO2IvtbQOeHblH0YnfbLxOPJ43Bbbb
-   kbWehMrh4j/9+4E90W4viH5EtFCxUG2xTiozk/5pY+2yPJQxu3e5TWPof
-   DeVlRJz/xsMLHsWCy5vi4borQZZP2Z3Vtv+bnywBVQMXxuW078xf7px0r
-   Q==;
-X-CSE-ConnectionGUID: 5x+8W/mUSjSz07hJnpWoTw==
-X-CSE-MsgGUID: nkgP74KJThmQpx58OhFpfQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="52278226"
+  bh=enGBXljCg6nj2CH00dAZGuG5YFavyKg+aWI9Vq7Qklo=;
+  b=LsJgRSlolfyEtovNtSS+TNfRKY61BP6MGUqaRo3AnNVDABlSXONNUUIk
+   tpImyQYSEHtQ/SF62dMixB9JzGk2zLV1wVhI3QKv/kUa6gdpB1MDmzYUm
+   UJqgcV67AT9SdKA5pfhEvkEaOBB8Nrn4X4HGVqvGzvITPMx1RIQ2+Ofd6
+   TvVYBICgcQf1/9iZNjrIQWS4Szen9sDJmZdGkDWqu9177uaSQJqgjQOIk
+   W9UTda79HEv6yoeKAGIXrbJoKCZ+QeKU1VrnRQjyejb5WANZdm3KqP7qL
+   GNjaISi/4F1sM6iBFEV05lMsLLjV3ik7R8vS8sZRmvrZjkD+gSDwpfEkm
+   g==;
+X-CSE-ConnectionGUID: Hvq2f6VFScyHNYverXee9w==
+X-CSE-MsgGUID: Pi0tg2WUQAubZgU3H9adXA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="52278244"
 X-IronPort-AV: E=Sophos;i="6.16,240,1744095600"; 
-   d="scan'208";a="52278226"
+   d="scan'208";a="52278244"
 Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2025 23:12:18 -0700
-X-CSE-ConnectionGUID: HaaeR6cUQAWYYIZ/5cGFDw==
-X-CSE-MsgGUID: 6LUAZpckTl2iBHRhcLX/kA==
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2025 23:12:22 -0700
+X-CSE-ConnectionGUID: OrgX2o9DQMaAyTQYO71XWA==
+X-CSE-MsgGUID: hP0jUndhTdyMjNbOkHABHQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,240,1744095600"; 
-   d="scan'208";a="148928079"
+   d="scan'208";a="148928101"
 Received: from agladkov-desk.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.40])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2025 23:12:17 -0700
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2025 23:12:21 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 1BF5512214D;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 1EE61122159;
 	Mon, 16 Jun 2025 09:12:14 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uR34n-009atY-14;
+	id 1uR34n-009atc-17;
 	Mon, 16 Jun 2025 09:12:13 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -72,9 +72,9 @@ Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Len Brown <len.brown@intel.com>,
 	Pavel Machek <pavel@kernel.org>,
 	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCH v2 4/6] pm: runtime: Mark last busy stamp in pm_runtime_autosuspend()
-Date: Mon, 16 Jun 2025 09:12:10 +0300
-Message-Id: <20250616061212.2286741-5-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 5/6] pm: runtime: Mark last busy stamp in pm_request_autosuspend()
+Date: Mon, 16 Jun 2025 09:12:11 +0300
+Message-Id: <20250616061212.2286741-6-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250616061212.2286741-1-sakari.ailus@linux.intel.com>
 References: <20250616061212.2286741-1-sakari.ailus@linux.intel.com>
@@ -87,75 +87,58 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 Set device's last busy timestamp to current time in
-pm_runtime_autosuspend().
+pm_request_autosuspend().
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- Documentation/power/runtime_pm.rst | 15 ++++++---------
- include/linux/pm_runtime.h         |  9 ++++++---
- 2 files changed, 12 insertions(+), 12 deletions(-)
+ Documentation/power/runtime_pm.rst | 6 +++---
+ include/linux/pm_runtime.h         | 8 +++++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
 diff --git a/Documentation/power/runtime_pm.rst b/Documentation/power/runtime_pm.rst
-index 9c21c913f9cf..39a0b62f6648 100644
+index 39a0b62f6648..91bc93422262 100644
 --- a/Documentation/power/runtime_pm.rst
 +++ b/Documentation/power/runtime_pm.rst
-@@ -154,11 +154,9 @@ suspending the device are satisfied) and to queue up a suspend request for the
- device in that case.  If there is no idle callback, or if the callback returns
- 0, then the PM core will attempt to carry out a runtime suspend of the device,
- also respecting devices configured for autosuspend.  In essence this means a
--call to pm_runtime_autosuspend() (do note that drivers needs to update the
--device last busy mark, pm_runtime_mark_last_busy(), to control the delay under
--this circumstance).  To prevent this (for example, if the callback routine has
--started a delayed suspend), the routine must return a non-zero value.  Negative
--error return codes are ignored by the PM core.
-+call to pm_runtime_autosuspend(). To prevent this (for example, if the callback
-+routine has started a delayed suspend), the routine must return a non-zero
-+value.  Negative error return codes are ignored by the PM core.
+@@ -354,9 +354,9 @@ drivers/base/power/runtime.c and include/linux/pm_runtime.h:
+       success or error code if the request has not been queued up
  
- The helper functions provided by the PM core, described in Section 4, guarantee
- that the following constraints are met with respect to runtime PM callbacks for
-@@ -330,10 +328,9 @@ drivers/base/power/runtime.c and include/linux/pm_runtime.h:
-       'power.disable_depth' is different from 0
+   `int pm_request_autosuspend(struct device *dev);`
+-    - schedule the execution of the subsystem-level suspend callback for the
+-      device when the autosuspend delay has expired; if the delay has already
+-      expired then the work item is queued up immediately
++    - Call pm_runtime_mark_last_busy() and schedule the execution of the
++      subsystem-level suspend callback for the device when the autosuspend delay
++      expires
  
-   `int pm_runtime_autosuspend(struct device *dev);`
--    - same as pm_runtime_suspend() except that the autosuspend delay is taken
--      `into account;` if pm_runtime_autosuspend_expiration() says the delay has
--      not yet expired then an autosuspend is scheduled for the appropriate time
--      and 0 is returned
-+    - same as pm_runtime_suspend() except that a call to
-+      pm_runtime_mark_last_busy() is made and an autosuspend is scheduled for
-+      the appropriate time and 0 is returned
- 
-   `int pm_runtime_resume(struct device *dev);`
-     - execute the subsystem-level resume callback for the device; returns 0 on
+   `int pm_schedule_suspend(struct device *dev, unsigned int delay);`
+     - schedule the execution of the subsystem-level suspend callback for the
 diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-index 3a0d5f0ea471..566a07b60f63 100644
+index 566a07b60f63..778d5988f35e 100644
 --- a/include/linux/pm_runtime.h
 +++ b/include/linux/pm_runtime.h
-@@ -379,11 +379,13 @@ static inline int pm_runtime_suspend(struct device *dev)
+@@ -448,11 +448,12 @@ static inline int pm_request_resume(struct device *dev)
  }
  
  /**
-- * pm_runtime_autosuspend - Set up autosuspend of a device or suspend it.
-+ * pm_runtime_autosuspend - Update the last access time and set up autosuspend
+- * pm_request_autosuspend - Queue up autosuspend of a device.
++ * pm_request_autosuspend - Update the last access time and queue up autosuspend
 + * of a device.
   * @dev: Target device.
   *
-- * Set up autosuspend of @dev or suspend it (depending on whether or not
-- * autosuspend is enabled for it) without engaging its "idle check" callback.
-+ * First update the last access time, then set up autosuspend of @dev or suspend
-+ * it (depending on whether or not autosuspend is enabled for it) without
-+ * engaging its "idle check" callback.
+- * Queue up a work item to run an equivalent pm_runtime_autosuspend() for @dev
+- * asynchronously.
++ * Update the last access time of a device and queue up a work item to run an
++ * equivalent pm_runtime_autosuspend() for @dev asynchronously.
   *
   * Return:
   * * 0: Success.
-@@ -399,6 +401,7 @@ static inline int pm_runtime_suspend(struct device *dev)
+@@ -467,6 +468,7 @@ static inline int pm_request_resume(struct device *dev)
   */
- static inline int pm_runtime_autosuspend(struct device *dev)
+ static inline int pm_request_autosuspend(struct device *dev)
  {
 +	pm_runtime_mark_last_busy(dev);
- 	return __pm_runtime_suspend(dev, RPM_AUTO);
+ 	return __pm_runtime_suspend(dev, RPM_ASYNC | RPM_AUTO);
  }
  
 -- 
