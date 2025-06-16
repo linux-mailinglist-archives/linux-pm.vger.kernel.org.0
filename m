@@ -1,252 +1,127 @@
-Return-Path: <linux-pm+bounces-28838-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28839-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4722ADB66A
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 18:15:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E55CCADB71F
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 18:38:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6B633A3FA8
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 16:14:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93A3516A01F
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 16:39:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D403628643E;
-	Mon, 16 Jun 2025 16:14:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EA50286D70;
+	Mon, 16 Jun 2025 16:38:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JNCL0Pl7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IyoHsJ+c"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB0D61F8676
-	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 16:14:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3BD728751F;
+	Mon, 16 Jun 2025 16:38:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750090497; cv=none; b=lO439FSaDn1XRZtj46AWhdd3y2lGSs0+pa4CEoNW7gr+k1jyvJglF5BaG91KTmQiUPIT1yShGMQU2QgUeAAmbeDJySzVlPLO5bhOsBNCeCYlQPDJllBoMMcYkxaEltPw+A/Rme4P5QaBkAbxeSfnwfBiX3y7Dc3qpHoWG4uzKHY=
+	t=1750091935; cv=none; b=R2K65fzt9vRyqTmodaniBAyJroSeDQnHJnv9njLcW7UaFzclaeYS+d9JED6mrPwHSdXyevN1ldM2mqF07QBXJRnc3huz1KFZhmMqB7TRuZ3Jbj64duV6sYPcxytILiS+3uN+UxzvfNlJOmIHByo6jiQEoLa1nXl1GVBc3HAi41g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750090497; c=relaxed/simple;
-	bh=z439W5Ak0AIQ4ZXFqNztHbJlyRGwss0RRsUcYjTyWOk=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=jYiRQaPWRPD4vMC8MFCU56hH5rwatPVyIAwdFMla/CjYlgtgmcdHxJpUrBF9dkjjT3BBQnZZYydnk1NHsBbEtRYJjxTp4pBkZYObrbPYVzU3jx0LLEFzm67hd7G2lstTsBVfBL/hSqsID2wxjC9YR8rmhyNB6zA5Q3LOazrF+rs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JNCL0Pl7; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-451d54214adso36741895e9.3
-        for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 09:14:55 -0700 (PDT)
+	s=arc-20240116; t=1750091935; c=relaxed/simple;
+	bh=wOqPeUwPdUqdKZ7+K/uvr4WY5Mk/P3mjbO5/Bdwu+UI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kARh/IPDL7U3RMvGlZMdHMudXUaabcI6q3RqSCe/VzL0Pz7TEfxcn86ksmWP1h0Ad5tMJ+Y7yPLO9QAYjtsbHSll1GiBDLKrZjc2j9agOyMLsfxieWGfbCu4jreQSULGLhm1IWx2JkLVy5QwynZem1QJdTS1RYZcunWrk4siQJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IyoHsJ+c; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-b2f62bbb5d6so3764199a12.0;
+        Mon, 16 Jun 2025 09:38:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750090494; x=1750695294; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T6ibnzdhEbpwMjSrCwWztiKo4mjian3JWQr5b7BDJBQ=;
-        b=JNCL0Pl7wdkuKSQk9CBHiPDTjh+4d3b8wnIua7jG2CU4N+rLCSWGVFPRojdAMNynQX
-         d8CucZN80xB+Jls8HUNdgvzoxz/ufGm5ZV84adAb8oHwTpsIa+HLnC8nStiaYKdkw+hv
-         eWForqgLXeRPRG3B8brB0Mrlp39ndThlKyu4EhDVjEwftI7RXmvg5sfe697orWcZUFD8
-         vvRNiPYvKVdccZ4FvJrn8FmQKcDzCC+cVzBg43j9YnTujLaUbyBcg6hQtYpj+hXeTHZt
-         fHWv3ajTaQiVrTLtUKtBjtnrQc0izLfNveBHESgEA1RclJKSJjChxdA5ih5hWoZT0006
-         MthA==
+        d=gmail.com; s=20230601; t=1750091933; x=1750696733; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sWs8wQgAGPAM0o0VVdnXAORTFo9mCsk0jubxv6TpMv8=;
+        b=IyoHsJ+cBKsSPYqWD1uSQxoimjtUgAY2bX31ytL4TMad/IeyMmLUJbGnjiHd/22C6R
+         hBJ3MnWZwvNWp0UcIzOtzQp8v7U6BLTl7QmrrjUYnB8UXDgXsxL3DaDVuzMl1jfKAWkm
+         weBj4WrqGKwTLoHyh+sM5VQ4e0/sV2aa35u/F8RrJ2QPvOjKBbc/Hrl4Ely+aySSixUX
+         ziJtG+bZlih7AakwOoppNx0faejbRpWlLK7/1Yd7DValmrVyFDVNDkwNOOAGaO1xMTGf
+         MfdpHXINpwxyQ1sJC1UenizdrR247aJ/uKyaWMpWjlTQ08qJdXFzrTZoRjZRNbNZfoqD
+         pH8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750090494; x=1750695294;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=T6ibnzdhEbpwMjSrCwWztiKo4mjian3JWQr5b7BDJBQ=;
-        b=nmaiVshrW8ii6Cw4R17I1mCdNjs3WnRA5cEb2lKJ2AI0sLDgjWHtgpKCr8QejKUtaN
-         +8asXd+N1ASyDBOTxbk+ge1RRtTxKm0BbZi6X3vwP5atkPqEpI9dzW7Ua1yGWyX14TeL
-         P4rP/KzqnNuKoP1D+Yzrk703NfUgEdKbzJTohKzIBmVdiLRGu6nsGXKF+66m7RY8CH6P
-         8X6gppgWyC1ya8cbljxjQhQsNrmgqszVtqsKStgk2CgK7GrQs6Rk2lzfLj2uJlMDNId5
-         tNTjrhpLmsIJ5n0lUYy2gWY4KReoIoWqgGpBH60EqJ6xojJpPUCffGJZIklCphlAv1b0
-         FIsA==
-X-Forwarded-Encrypted: i=1; AJvYcCV1vdU9DlLcTrWnSPzq4QoFhHEtQnhC5VAsKlCmTXeCex+0Bk/uFy7kmcmCvVx8HbuDHrnKhW/nRQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDN6HSHzDYRpyvxu28C6PstZSOAHEyjm/yF0tGs8E+8qEncAlU
-	WVPhp6jx/TQipU8gymWce+GC2jXqNJ8WhEkM5iVb1Gfct44SZliEMeNsgtRc1wpFRjg=
-X-Gm-Gg: ASbGncva9NIw69y2mH5x2vwCQrjMfuyHHZ/0/btjk+aNxV4Rvyxnp3fCh7qI5JClgZQ
-	xtex1xoRJ9SdtjArs2x/a4inuXGyS1d808+ikZJN4ltqBGXVOLML9stImg0Qwt76+0FpJL0u8gq
-	XLXzTHXiLa1qeVhUaBaiQMPwpVT7JKnIBjhglLczV0jdp4wfeVWEdUDWRkkjWrZFElakaKzuqwY
-	EniEEIpPimP/vsoam34W6yNlq8y++zAWZweVg3JoNr7G3dgivUBgOhKkvTVBXVUOs93Rfsml2Zu
-	8VBuJnjtabGc+mhDipqP6I/IR/RjbIAFMubE8qNR7dW3rjlo3CjT8TZTF72LXKVSgZ5GmMLQX94
-	xx6S9QhXml17CIyxhqJpQAnW+xJjZ6EddS1As
-X-Google-Smtp-Source: AGHT+IEPIO5Rqt/93HylwQWU87OlnErReHGRzssV5WREAarN4Bu7nuprotM72PiFJu5jYscm3o2rqw==
-X-Received: by 2002:a05:600c:4e02:b0:453:c39:d0c2 with SMTP id 5b1f17b1804b1-4533cab541amr86940715e9.24.1750090494145;
-        Mon, 16 Jun 2025 09:14:54 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:3d9:2080:6c7:97de:65a8:488a? ([2a01:e0a:3d9:2080:6c7:97de:65a8:488a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532dea1cc5sm153416565e9.16.2025.06.16.09.14.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jun 2025 09:14:53 -0700 (PDT)
-Message-ID: <346f0fbe-5bf7-492e-9e00-0fafbf02899e@linaro.org>
-Date: Mon, 16 Jun 2025 18:14:53 +0200
+        d=1e100.net; s=20230601; t=1750091933; x=1750696733;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sWs8wQgAGPAM0o0VVdnXAORTFo9mCsk0jubxv6TpMv8=;
+        b=eDKRLavLnVWrS3x1iLe/hJssSJtWZQ8YyXtZ2SE32lJeNUJuVZFUsbY2Hl8WoKBwxj
+         /UeVO9YFzUtA4qwXLpGDrP2xV3U6rgovCL32cF/kCGgMCUbMRZX8J/PQnmmOIVKp8K9e
+         +tM+lMM1iVcaagnpOXTijsMDMAGkc3qjQZB0RcuHhu713UqjLoS00BBmehpXsavOAhDx
+         Rzq/B3iPITeth/4ji81YFekRrx9JflIabFoEuvwSb+YHD+B1vRoJiiyAsfhPJ7sNOem2
+         BcMXSLp7qQFLjFtiocswMCllq9sCDJ3QjxwG1WoobN8wOrJQyB+7TX1DP8uiueDIk50s
+         m+WA==
+X-Forwarded-Encrypted: i=1; AJvYcCUwJYIDurel2ukAsHsk0PXdOApPXGa8FQMPwqXNmFRLXdbvX6388vE7uJd6kgeeUsceHYTArUXci1s=@vger.kernel.org, AJvYcCX8k+iIRsg9cm8rPpyr580Ns1TMutwAAKfHRd97WGmUdJaz4wjWKvmndldB71RREW4rImNYhctV667WRrPX8uOoXIA=@vger.kernel.org, AJvYcCXstatljnVst2K0AUM1uOh5AT2Z2be6VITBGamn8///ZnOyMZLFApAAWR+E9Tvr9LfccdEJjGivBy1Yuns=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5qfZejD2M0G5tGQc1M7iBt/gEkuzbcTLT9kkuUY7s+Bj+aZM0
+	TgU9XYBxwj6fmHD+tGRezTOHbyCSTXrd66/4PulGoNYHX8g2eQdczync
+X-Gm-Gg: ASbGncuAhzNe2u8/KbgoySOrAYyeloungCukRyDhgA8s+ca404eeMg1rDGwm1mnmp6x
+	lOnYwisWv8cnz2zoV3nAwALgaiBaKATeomjrSzGr3jJjf+/D1gwU2tRivT4ltKxg40BSmNqMKfp
+	jVtue96GETzpP/8CBEnl46IQl37H9SLhoHjMjlQM+fqK77ujtY6DpU9SjaKZSQaEdpSdgTbkwnW
+	q7Tg3dOLR/zGBweQLy1r0F2gYMi0c8vEmRbW+wt2YJbopzwvQi4FFE79EQTqnflV0Hi0i4yJ/JQ
+	3dFIc0z3AfJJ9U/r73vO2bEkc5ikcLho8uYZAiUDaOGAVL0hFm4/jvjQxQY2p59U3wAC3KW2JJk
+	=
+X-Google-Smtp-Source: AGHT+IH4xd4I2Qt7PPA+9XeEa/AfXG3Kby6dSj3ue9eZ8UR+VJKo7fekmIJ/oBsPB6H67fFEhSIn5Q==
+X-Received: by 2002:a05:6a20:a115:b0:1ee:e20f:f14e with SMTP id adf61e73a8af0-21fbd668cacmr15317222637.38.1750091933163;
+        Mon, 16 Jun 2025 09:38:53 -0700 (PDT)
+Received: from localhost.localdomain ([45.112.0.181])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2fe1680c6asm6067882a12.42.2025.06.16.09.38.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jun 2025 09:38:52 -0700 (PDT)
+From: Anand Moon <linux.amoon@gmail.com>
+To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	linux-pm@vger.kernel.org (open list:SAMSUNG THERMAL DRIVER),
+	linux-samsung-soc@vger.kernel.org (open list:SAMSUNG THERMAL DRIVER),
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES),
+	linux-kernel@vger.kernel.org (open list)
+Cc: Anand Moon <linux.amoon@gmail.com>
+Subject: [RRC v1 0/3] Simplify Exynos TMU IRQ clean logic
+Date: Mon, 16 Jun 2025 22:08:21 +0530
+Message-ID: <20250616163831.8138-1-linux.amoon@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH 00/28] interconnect: qcom: icc-rpmh: use NULL-terminated
- arrays and drop static IDs
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Georgi Djakov <djakov@kernel.org>, Bjorn Andersson <andersson@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250616-rework-icc-v1-0-bc1326294d71@oss.qualcomm.com>
- <786e3337-4c14-4281-932e-6a93aac53cf8@linaro.org>
- <8af6ce19-7aa3-4fc7-a963-d8ab0cd22b02@oss.qualcomm.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <8af6ce19-7aa3-4fc7-a963-d8ab0cd22b02@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 16/06/2025 17:53, Dmitry Baryshkov wrote:
-> On 16/06/2025 18:51, neil.armstrong@linaro.org wrote:
->> Hi,
->>
->> On 16/06/2025 02:28, Dmitry Baryshkov wrote:
->>> Qualcomm interconnect code has been using .num_foo fields together with
->>> the arrays embedded in the structure, which results in hard-to-notice
->>> mistakes if .num_foo gets omitted or incorrect.
->>>
->>> Rework RPMh interconnect code to use NULL-terminated arrays for the
->>> dynamic IDs case (as now all the arrays contain only pointers) and,
->>> while we are at it, rework all the drivers to use dynamic IDs and drop
->>> static IDs code.
->>>
->>> This series touches only RPMh interconnect drivers. Corresponding series
->>> for RPM drivers will follow up shortly.
->>
->> Can you specify on which base thie patchset applies ?
->>
->> I tried v6.15, v6.16-rc1, v6.16-rc2, next-20250613 & next-20250616 and they all fail to
->> apply on patch 5.
-> 
-> I'm sorry, I forgot to mention https://lore.kernel.org/linux-arm-msm/20250613-sc7280-icc-pcie1-fix-v1-1-0b09813e3b09@radxa.com/
+As per Exynos TMU user manual the interrupt status register, maps the
+active rising and falling edges of interrupt to the appropriate clear bit,
+and writes it to the interrupt clear register to acknowledge and
+clear the interrupt.
 
-This does the trick, thx!
+Refactors the IRQ clear logic in the Exynos TMU driver to eliminate
+redundant code to use single unified exynos_tmu_clear_irqs()
+function.
 
-Neil
+Thanks
+-Anand
 
-> 
->>
->> Thanks,
->> Neil
->>
->>>
->>> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
->>> ---
->>> Dmitry Baryshkov (28):
->>>        interconnect: qcom: sc8280xp: specify num_links for qnm_a1noc_cfg
->>>        interconnect: qcom: sc8180x: specify num_nodes
->>>        interconnect: qcom: rpmh: make nodes a NULL_terminated array
->>>        interconnect: qcom: rpmh: make link_nodes a NULL_terminated array
->>>        interconnect: qcom: sc7280: convert to dynamic IDs
->>>        interconnect: qcom: sc8180x: convert to dynamic IDs
->>>        interconnect: qcom: sc8280xp: convert to dynamic IDs
->>>        interconnect: qcom: sdm845: convert to dynamic IDs
->>>        interconnect: qcom: sm8250: convert to dynamic IDs
->>>        interconnect: qcom: x1e80100: convert to dynamic IDs
->>>        interconnect: qcom: qcs615: convert to dynamic IDs
->>>        interconnect: qcom: qcs8300: convert to dynamic IDs
->>>        interconnect: qcom: qdu1000: convert to dynamic IDs
->>>        interconnect: qcom: sar2130p: convert to dynamic IDs
->>>        interconnect: qcom: sc7180: convert to dynamic IDs
->>>        interconnect: qcom: sdm670: convert to dynamic IDs
->>>        interconnect: qcom: sdx55: convert to dynamic IDs
->>>        interconnect: qcom: sdx65: convert to dynamic IDs
->>>        interconnect: qcom: sdx75: convert to dynamic IDs
->>>        interconnect: qcom: sm6350: convert to dynamic IDs
->>>        interconnect: qcom: sm7150: convert to dynamic IDs
->>>        interconnect: qcom: sm8150: convert to dynamic IDs
->>>        interconnect: qcom: sm8350: convert to dynamic IDs
->>>        interconnect: qcom: sm8450: convert to dynamic IDs
->>>        interconnect: qcom: sm8550: convert to dynamic IDs
->>>        interconnect: qcom: sm8650: convert to dynamic IDs
->>>        interconnect: qcom: sm8750: convert to dynamic IDs
->>>        interconnect: qcom: icc-rpmh: drop support for non-dynamic IDS
->>>
->>>   drivers/interconnect/qcom/bcm-voter.c |    4 +-
->>>   drivers/interconnect/qcom/icc-rpmh.c  |   20 +-
->>>   drivers/interconnect/qcom/icc-rpmh.h  |   13 +-
->>>   drivers/interconnect/qcom/qcs615.c    |  713 ++++++++-----------
->>>   drivers/interconnect/qcom/qcs615.h    |  128 ----
->>>   drivers/interconnect/qcom/qcs8300.c   |  911 +++++++++++-------------
->>>   drivers/interconnect/qcom/qcs8300.h   |  177 -----
->>>   drivers/interconnect/qcom/qdu1000.c   |  470 ++++++------
->>>   drivers/interconnect/qcom/qdu1000.h   |   95 ---
->>>   drivers/interconnect/qcom/sa8775p.c   |  493 ++++++-------
->>>   drivers/interconnect/qcom/sar2130p.c  |  795 ++++++++-------------
->>>   drivers/interconnect/qcom/sc7180.c    |  892 +++++++++++------------
->>>   drivers/interconnect/qcom/sc7180.h    |  149 ----
->>>   drivers/interconnect/qcom/sc7280.c    |  840 ++++++++++------------
->>>   drivers/interconnect/qcom/sc7280.h    |  154 ----
->>>   drivers/interconnect/qcom/sc8180x.c   | 1013 +++++++++++++-------------
->>>   drivers/interconnect/qcom/sc8180x.h   |  179 -----
->>>   drivers/interconnect/qcom/sc8280xp.c  | 1257 +++++++++++++++ +-----------------
->>>   drivers/interconnect/qcom/sc8280xp.h  |  209 ------
->>>   drivers/interconnect/qcom/sdm670.c    |  712 +++++++++----------
->>>   drivers/interconnect/qcom/sdm670.h    |  128 ----
->>>   drivers/interconnect/qcom/sdm845.c    |  986 ++++++++++++--------------
->>>   drivers/interconnect/qcom/sdm845.h    |  140 ----
->>>   drivers/interconnect/qcom/sdx55.c     |  611 ++++++++--------
->>>   drivers/interconnect/qcom/sdx55.h     |   70 --
->>>   drivers/interconnect/qcom/sdx65.c     |  577 +++++++--------
->>>   drivers/interconnect/qcom/sdx65.h     |   65 --
->>>   drivers/interconnect/qcom/sdx75.c     |  498 ++++++-------
->>>   drivers/interconnect/qcom/sdx75.h     |   97 ---
->>>   drivers/interconnect/qcom/sm6350.c    |  838 +++++++++++-----------
->>>   drivers/interconnect/qcom/sm6350.h    |  139 ----
->>>   drivers/interconnect/qcom/sm7150.c    |  860 +++++++++++-----------
->>>   drivers/interconnect/qcom/sm7150.h    |  140 ----
->>>   drivers/interconnect/qcom/sm8150.c    |  930 ++++++++++++------------
->>>   drivers/interconnect/qcom/sm8150.h    |  152 ----
->>>   drivers/interconnect/qcom/sm8250.c    |  977 ++++++++++++-------------
->>>   drivers/interconnect/qcom/sm8250.h    |  168 -----
->>>   drivers/interconnect/qcom/sm8350.c    |  901 ++++++++++++-----------
->>>   drivers/interconnect/qcom/sm8350.h    |  158 -----
->>>   drivers/interconnect/qcom/sm8450.c    |  823 ++++++++++-----------
->>>   drivers/interconnect/qcom/sm8450.h    |  169 -----
->>>   drivers/interconnect/qcom/sm8550.c    |  683 ++++++++----------
->>>   drivers/interconnect/qcom/sm8550.h    |  138 ----
->>>   drivers/interconnect/qcom/sm8650.c    |  713 ++++++++-----------
->>>   drivers/interconnect/qcom/sm8650.h    |  144 ----
->>>   drivers/interconnect/qcom/sm8750.c    |  779 ++++++++------------
->>>   drivers/interconnect/qcom/x1e80100.c  |  819 ++++++++++-----------
->>>   drivers/interconnect/qcom/x1e80100.h  |  192 -----
->>>   48 files changed, 8655 insertions(+), 13464 deletions(-)
->>> ---
->>> base-commit: 410f15dcfe222c06f0d6379adec630061e88dc72
->>> change-id: 20250613-rework-icc-0d3b7276a798
->>>
->>> Best regards,
->>
-> 
-> 
+Anand Moon (3):
+  thermal/drivers/exynos: Remove unused base_second mapping and
+    references
+  thermal/drivers/exynos: Handle temperature threshold interrupts and
+    clear corresponding IRQs
+  thermal/drivers/exynos: Refactor IRQ clear logic using SoC-specific
+    config
+
+ drivers/thermal/samsung/exynos_tmu.c | 118 +++++++++++++++++----------
+ 1 file changed, 73 insertions(+), 45 deletions(-)
+
+
+base-commit: e04c78d86a9699d136910cfc0bdcf01087e3267e
+-- 
+2.49.0
 
 
