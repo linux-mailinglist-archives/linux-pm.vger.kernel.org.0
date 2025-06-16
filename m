@@ -1,167 +1,454 @@
-Return-Path: <linux-pm+bounces-28796-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-28797-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BDECADABB3
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 11:22:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A017BADAC01
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 11:35:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A3861160BE4
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 09:22:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA610189103A
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jun 2025 09:36:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CC4D273804;
-	Mon, 16 Jun 2025 09:22:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="i6fPRhjn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BE5F26D4E9;
+	Mon, 16 Jun 2025 09:35:47 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47D251FF7B4
-	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 09:22:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46DFF1DB92A
+	for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 09:35:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750065767; cv=none; b=ry54qbGy6ftPMW01LS+E1zI3hP8F7rN484ec9ZOlYzb7MpJWkFsDORpP7J3wl02q4CV9mJ6Iw+eHbGUmnJm5wV12DGCG9A+QnCcNjEtE/Ha2bGZFU5HwiHjgWjqYkQ7FOYcAzG8kaTMFTSlgm+WT4iubT2QkqSfQuaGHeY7B1aM=
+	t=1750066547; cv=none; b=muNuqK/6y+UhYGJ0O1b4FsDD5PUfqq+3MPwsJJ4AZ5FdmH3u4ZkyDyopo4WmxI4jJwLHi27QmN+4EgeBedRH7/6llTEbijJ6WKshWBtGvMp73ZhoKbF1WzKn7pt/CN/HCUXGylysjA3HTZ0jrcRTj0lWFlz+/wRtAwOiWlJCbXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750065767; c=relaxed/simple;
-	bh=boaYqs6W2Ch9MV7MIDV7tFHWVXlXvSTuE+SZQidgsAU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rtro8roM/CAnm7SHlRvGlmsixPhkT4MuFkpXGFpXYXXC7hE8Ft32r5LHWs3/tWFOcUoL/iPw/ktmn76pm1GHX3yRGuwiUoEF1Lg7YkkVUtI794WSh9Q9LfxXBaHZJtc1e4f5Yz/Dv1aAy4Oq4HEydg2NtYhqWL+wLu2T46D+3sQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=i6fPRhjn; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-553b544e7b4so2798569e87.3
-        for <linux-pm@vger.kernel.org>; Mon, 16 Jun 2025 02:22:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1750065764; x=1750670564; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L4clW0hfNM59uFuEpnawSRjVBJDyxSvonnhwsOilymQ=;
-        b=i6fPRhjnQZjdK8HXqHfTZaEscbWr/UIPbqEg7J++f3Hq1vFi70kq0wIxLaECCi8xXp
-         itBZMq26Hs4HGhrOOJvdVaT/CQPAS07WrfQeD6LAYLF/qU0WSoaujeeYFW0j2tUCXcSt
-         4pMptEtGAzaHx0T7CVq7Iv552TK7/d04NcR/1YfUSqCJwnsSP/rtW7NftW5ROs/p8yFO
-         LTMgI+j+2FJf39hQpYgpR6GFIvw158JH20qFvMg0l93hgXNf+ZXU1BEvoitePGvkcdhJ
-         AsBzBYPQPLNr0OVbPeOHiS0+dIoW78P1Ot20qFvhG9tRGQ4eifcxQgcevJyXeH45C4pv
-         xidw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750065764; x=1750670564;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L4clW0hfNM59uFuEpnawSRjVBJDyxSvonnhwsOilymQ=;
-        b=A/nLhpv70+WJS1O/mPV+P75XzXrk92KuQlbTiVP2a81Xcoc3xDQc/suycQdkqMzcMl
-         1hyLRHvAMuRP4GLdCa9Zpitkg+OHFySsfBA+fx/XnT/LuYfyoE+A6tv2oOLvTqfDZ/zW
-         7S2SErdMPVVJwaVdBg63njD2goDIzHB/7aELvCdjvmHOftnwWnRQOrUCKIL8I47ZuHjA
-         7Df0woGfZxJ099WyqOiOeBaRc5/JBV8DROKjBiiM/NDbcd5cMUwm7rFLoc49tJYz9Zl5
-         yQr4HSppmkYXzPqJ1mUmFkDNOPFUY4AoxduBDTZgKlXFI3xkUBCG1OeXwHSq7UOY8s6d
-         Ao0w==
-X-Forwarded-Encrypted: i=1; AJvYcCW/Nq864z66hb/CfZNbDFC4P7q2B12t0dUcWWY5HkJKD18uti94dmy90phb3QjR2hXwCU5UWin3Jg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YznimvEdm6QZDTFAisNGpVvQVv/Xe/EAHEnTpVMD6ouumkwuaEt
-	bYo6eL89Rv1+OwciSq2Dx8aGwV4bH9s9D25mbfqj3c8NPQSi0menDQGhWhBvI1J4CZHgmDrrbKT
-	+YrmpTJxM2iPVHb3Ou32pACUMJZ/0dvwuZMIn/vj20A==
-X-Gm-Gg: ASbGnctfDoxWnDJr+b8jLmei9KSAQs7dxbEEIMYQTS1U39oD+7olhgNwBL9BhLnsjj8
-	CcQvf2l0NyzmFRZwybGQMbt/XiXN81/tedgSpR8jtIt2oaO7l48dC8wPSTfCfm4+c2GGpT4pntc
-	hqmOMgI2wSalWJzpE9Q5OaJsZs4b1sWHzRBYNeINmIDcNNSDQWtEMDDPIPH8DHVFWscCJpE+urm
-	MU=
-X-Google-Smtp-Source: AGHT+IEsBvyH0Zky97WuBrKbbjvEScgzySvzxn3rYYtDfdyw86suCq566xBi9HBUjAShIE2Mm9O+XZUWm2PEcQ1RjmQ=
-X-Received: by 2002:a05:6512:12ca:b0:553:2ed2:15b4 with SMTP id
- 2adb3069b0e04-553b6f4d916mr2068254e87.57.1750065764330; Mon, 16 Jun 2025
- 02:22:44 -0700 (PDT)
+	s=arc-20240116; t=1750066547; c=relaxed/simple;
+	bh=/F6to937QCTaX2HBaj2QI5nWzbgJPtXb+RKFapCVG6c=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Jk3niL7o2zAmv6jceJhmdB9q1+IlyfZttCaNqTI2jq9IZNXLXSKcf8nz8QmHv8kKkwe8f8g8xR0EkrvJEK6RP9CU4BmqdgLzLCG2gVRHPP/OLE7vLEbfzdNSGBcMgDRVIR9aGG5Fn/QG8mLlnLSHu1zYP5cKDwNXLYpYoiTTiC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bLPvM1mTnz6L5LJ;
+	Mon, 16 Jun 2025 17:33:35 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 1D73614050C;
+	Mon, 16 Jun 2025 17:35:42 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 16 Jun
+ 2025 11:35:41 +0200
+Date: Mon, 16 Jun 2025 10:35:40 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Jie Zhan <zhanjie9@hisilicon.com>, <linuxarm@huawei.com>
+CC: <cw00.choi@samsung.com>, <myungjoo.ham@samsung.com>,
+	<kyungmin.park@samsung.com>, <linux-pm@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <jonathan.cameron@huawei.com>,
+	<alireza.sanaee@huawei.com>, <zhenglifeng1@huawei.com>,
+	<lihuisong@huawei.com>, <yubowen8@huawei.com>, <liwei728@huawei.com>,
+	<prime.zeng@hisilicon.com>
+Subject: Re: [PATCH v4 2/2] PM / devfreq: Add HiSilicon uncore frequency
+ scaling driver
+Message-ID: <20250616103447.000024dd@huawei.com>
+In-Reply-To: <20250530081722.280776-3-zhanjie9@hisilicon.com>
+References: <20250530081722.280776-1-zhanjie9@hisilicon.com>
+	<20250530081722.280776-3-zhanjie9@hisilicon.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250614-apr_14_for_sending-v4-8-8e3945c819cd@samsung.com>
- <CGME20250615105256eucas1p21dba29a1450757d9201b2a9c7f0e34e8@eucas1p2.samsung.com>
- <202506151839.IKkZs0Z0-lkp@intel.com> <9765c970-55cc-4413-9fd0-5e0cdfa900fa@samsung.com>
-In-Reply-To: <9765c970-55cc-4413-9fd0-5e0cdfa900fa@samsung.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 16 Jun 2025 11:22:32 +0200
-X-Gm-Features: AX0GCFvGdfEg2CPyKVWjNTkacG-9vOyaV6LbrgzY6YJIQBzVINyrlmiwiBnsQKI
-Message-ID: <CAMRc=MeG40TxMj3ezeC0iUBBo8w99RXQWOQBsfG4ZAJdbA+dYg@mail.gmail.com>
-Subject: Re: [PATCH v4 8/8] drm/imagination: Enable PowerVR driver for RISC-V
-To: Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: kernel test robot <lkp@intel.com>, Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, 
-	Fu Wei <wefu@redhat.com>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Frank Binns <frank.binns@imgtec.com>, Matt Coster <matt.coster@imgtec.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Paul Gazzillo <paul@pgazz.com>, Necip Fazil Yildiran <fazilyildiran@gmail.com>, oe-kbuild-all@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-On Mon, Jun 16, 2025 at 11:09=E2=80=AFAM Michal Wilczynski
-<m.wilczynski@samsung.com> wrote:
->
->
->
-> On 6/15/25 12:51, kernel test robot wrote:
-> > Hi Michal,
-> >
-> > kernel test robot noticed the following build warnings:
-> >
-> > [auto build test WARNING on 4774cfe3543abb8ee98089f535e28ebfd45b975a]
-> >
-> > url:    https://protect2.fireeye.com/v1/url?k=3D6c3bc994-0cd954c9-6c3a4=
-2db-000babd9f1ba-30c2378fa012fc4a&q=3D1&e=3Dc39c960c-4d5f-44d7-aed7-0097394=
-dfc81&u=3Dhttps%3A%2F%2Fgithub.com%2Fintel-lab-lkp%2Flinux%2Fcommits%2FMich=
-al-Wilczynski%2Fpower-sequencing-Add-T-HEAD-TH1520-GPU-power-sequencer-driv=
-er%2F20250615-021142
-> > base:   4774cfe3543abb8ee98089f535e28ebfd45b975a
-> > patch link:    https://lore.kernel.org/r/20250614-apr_14_for_sending-v4=
--8-8e3945c819cd%40samsung.com
-> > patch subject: [PATCH v4 8/8] drm/imagination: Enable PowerVR driver fo=
-r RISC-V
-> > config: riscv-kismet-CONFIG_DRM_GEM_SHMEM_HELPER-CONFIG_DRM_POWERVR-0-0=
- (https://download.01.org/0day-ci/archive/20250615/202506151839.IKkZs0Z0-lk=
-p@intel.com/config)
-> > reproduce: (https://download.01.org/0day-ci/archive/20250615/2025061518=
-39.IKkZs0Z0-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202506151839.IKkZs0Z0-l=
-kp@intel.com/
-> >
-> > kismet warnings: (new ones prefixed by >>)
-> >>> kismet: WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM=
-_HELPER when selected by DRM_POWERVR
-> >    WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
-> >      Depends on [n]: HAS_IOMEM [=3Dy] && DRM [=3Dy] && MMU [=3Dn]
->
-> I believe this is triggered because RISC-V can be compiled without MMU
-> support, while MMU support is mandatory for ARM64.
->
-> Would an acceptable fix be to require an explicit dependency on the MMU,
-> like so?
->
-> depends on (ARM64 || RISCV) && MMU
->
+On Fri, 30 May 2025 16:17:22 +0800
+Jie Zhan <zhanjie9@hisilicon.com> wrote:
 
-I'd put them on separate lines. While at it: how about enabling build
-with COMPILE_TEST to extend build coverage too?
+> Add the HiSilicon uncore frequency scaling driver for Kunpeng SoCs based on
+> the devfreq framework.  The uncore domain contains shared computing
+> resources, including system interconnects and L3 cache.  The uncore
+> frequency significantly impacts the system-wide performance as well as
+> power consumption.  This driver adds support for runtime management of
+> uncore frequency from kernel and userspace.  The main function includes
+> setting and getting frequencies, changing frequency scaling policies, and
+> querying the list of CPUs whose performance is significantly related to
+> this uncore frequency domain, etc.  The driver communicates with a platform
+> controller through an ACPI PCC mailbox to take the actual actions of
+> frequency scaling.
+> 
+> Co-developed-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+Hi Zhanjie,
 
-Bart
+A few comments inline.  In general nice and clean.
 
-> >      Selected by [y]:
-> >      - DRM_POWERVR [=3Dy] && HAS_IOMEM [=3Dy] && (ARM64 || RISCV [=3Dy]=
-) && DRM [=3Dy] && PM [=3Dy]
-> >
->
-> Best regards,
-> --
-> Michal Wilczynski <m.wilczynski@samsung.com>
+I think only one that really needs a change it the one around the
+CPU association firmware handling.
+
+Jonathan
+
+
+> ---
+>  Documentation/ABI/testing/sysfs-class-devfreq |   9 +
+>  drivers/devfreq/Kconfig                       |  11 +
+>  drivers/devfreq/Makefile                      |   1 +
+>  drivers/devfreq/hisi_uncore_freq.c            | 656 ++++++++++++++++++
+>  4 files changed, 677 insertions(+)
+>  create mode 100644 drivers/devfreq/hisi_uncore_freq.c
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-devfreq b/Documentation/ABI/testing/sysfs-class-devfreq
+> index 1e7e0bb4c14e..fed95bb0bb6d 100644
+> --- a/Documentation/ABI/testing/sysfs-class-devfreq
+> +++ b/Documentation/ABI/testing/sysfs-class-devfreq
+> @@ -132,3 +132,12 @@ Description:
+>  
+>  		A list of governors that support the node:
+>  		- simple_ondemand
+> +
+> +What:		/sys/class/devfreq/.../related_cpus
+> +Date:		June 2025
+> +Contact:	Linux power management list <linux-pm@vger.kernel.org>
+> +Description:	The list of CPUs whose performance is closely related to the
+> +		frequency of this devfreq domain.
+> +
+> +		This file is only present if the hisi_uncore_freq driver is in
+> +		use.
+
+Unless this last statement was requested by another reviewer, I'd change it for
+something more generic to allow it to be used by other drivers.  Something like
+
+		This file is only present if a specific device has a close association
+		with a subset of the CPUs.
+
+
+> diff --git a/drivers/devfreq/hisi_uncore_freq.c b/drivers/devfreq/hisi_uncore_freq.c
+> new file mode 100644
+> index 000000000000..7e1b7f48d0f4
+> --- /dev/null
+> +++ b/drivers/devfreq/hisi_uncore_freq.c
+
+
+> +enum hisi_uncore_freq_mode {
+> +	HUCF_MODE_PLATFORM = 0,
+> +	HUCF_MODE_OS,
+> +	HUCF_MODE_MAX,
+
+I assume these max entries are terminators?  I.e. nothing should ever
+come after them?  If so you could drop the commas to make that explicit.
+
+> +};
+> +
+> +#define HUCF_CAP_PLATFORM_CTRL	BIT(0)
+
+> +static int hisi_uncore_cmd_send(struct hisi_uncore_freq *uncore,
+> +				u8 cmd, u32 *data)
+> +{
+> +	struct hisi_uncore_pcc_shmem __iomem *addr;
+> +	struct hisi_uncore_pcc_shmem shmem;
+> +	struct pcc_mbox_chan *pchan;
+> +	unsigned int mrtt;
+> +	s64 time_delta;
+> +	u16 status;
+> +	int rc;
+> +
+> +	guard(mutex)(&uncore->pcc_lock);
+> +
+> +	pchan = uncore->pchan;
+> +	if (!pchan)
+> +		return -ENODEV;
+> +
+> +	addr = (struct hisi_uncore_pcc_shmem __iomem *)pchan->shmem;
+> +	if (!addr)
+> +		return -EINVAL;
+> +
+> +	/* Handle the Minimum Request Turnaround Time (MRTT) */
+> +	mrtt = pchan->min_turnaround_time;
+> +	time_delta = ktime_us_delta(ktime_get(),
+> +				    uncore->last_cmd_cmpl_time);
+
+Fits on one line under 80 chars.
+
+> +	if (mrtt > time_delta)
+> +		udelay(mrtt - time_delta);
+
+
+> +
+> +static int hisi_uncore_init_opp(struct hisi_uncore_freq *uncore)
+> +{
+> +	struct device *dev = uncore->dev;
+> +	u32 data = 0, num, index;
+
+Trivial personal preference. Don't mix assignment and no
+assignment declarations.  It's every so slightly harder to read.
+
+> +	unsigned long freq_mhz;
+> +	int rc;
+> +
+> +	rc = hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_GET_PLAT_FREQ_NUM,
+> +				  &data);
+> +	if (rc)
+> +		return dev_err_probe(dev, rc, "Failed to get plat freq num\n");
+> +
+> +	num = data;
+> +
+> +	for (index = 0; index < num; index++) {
+> +		data = index;
+> +		rc = hisi_uncore_cmd_send(uncore,
+> +					  HUCF_PCC_CMD_GET_PLAT_FREQ_BY_IDX,
+> +					  &data);
+> +		if (rc) {
+> +			dev_pm_opp_remove_all_dynamic(dev);
+> +			return dev_err_probe(dev, rc,
+> +				"Failed to get plat freq at index %u\n", index);
+> +		}
+> +		freq_mhz = data;
+> +
+> +		/* Don't care OPP votlage, take 1V as default */
+voltage
+
+Spell check in case I missed others.  A W=1 build tends to catch the simple ones
+like this.
+
+> +		rc = dev_pm_opp_add(dev, freq_mhz * HZ_PER_MHZ, 1000000);
+> +		if (rc) {
+> +			dev_pm_opp_remove_all_dynamic(dev);
+> +			return dev_err_probe(dev, rc,
+> +				"Add OPP %lu failed\n", freq_mhz);
+> +		}
+> +	}
+> +
+> +	return devm_add_action_or_reset(dev, devm_hisi_uncore_remove_opp, uncore);
+Hmm. I'm normally a fan of registering these after the calls, but this is one
+of the rare cases where pushing it before (with a comment) cleans up the code.
+
+If you do that, then all the error cases in the loop just need to return and not
+call the cleanup manually.
+
+> +}
+
+> +
+> +static int hisi_platform_gov_handler(struct devfreq *df, unsigned int event,
+> +				     void *val)
+> +{
+> +	struct hisi_uncore_freq *uncore = dev_get_drvdata(df->dev.parent);
+> +	int rc = 0;
+> +	u32 data;
+> +
+> +	if (WARN_ON(!uncore || !uncore->pchan))
+> +		return -ENODEV;
+> +
+> +	switch (event) {
+> +	case DEVFREQ_GOV_START:
+> +		data = HUCF_MODE_PLATFORM;
+> +		rc = hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_SET_MODE, &data);
+> +		break;
+> +	case DEVFREQ_GOV_STOP:
+> +		data = HUCF_MODE_OS;
+> +		rc = hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_SET_MODE, &data);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	if (rc)
+> +		dev_err(uncore->dev, "Failed to set operate mode (%d)\n", rc);
+
+Trivial: I'd push this up into the two case statements (with early returns) as then
+you can also report what mode you were trying to set in the string.
+
+> +
+> +	return rc;
+> +}
+
+> +
+> +static int hisi_uncore_add_platform_gov(struct hisi_uncore_freq *uncore)
+> +{
+> +	int rc = 0;
+
+Initialized in only path where it's used.  Maybe push this
+declaration down to if (hisi_platform_gov_usage() block 
+
+> +
+> +	if (!(uncore->cap & HUCF_CAP_PLATFORM_CTRL))
+> +		return 0;
+> +
+> +	guard(mutex)(&hisi_platform_gov_usage_lock);
+> +
+> +	if (hisi_platform_gov_usage == 0) {
+> +		rc = devfreq_add_governor(&hisi_platform_governor);
+
+		int rc = devfreq....
+
+> +		if (rc)
+> +			return rc;
+> +	}
+> +	hisi_platform_gov_usage++;
+> +
+> +	return devm_add_action_or_reset(uncore->dev,
+> +					devm_hisi_uncore_remove_platform_gov,
+> +					uncore);
+> +}
+> +
+> +static int hisi_uncore_mark_related_cpus(struct hisi_uncore_freq *uncore,
+> +				 char *property, int (*get_topo_id)(int cpu),
+> +				 const struct cpumask *(*get_cpumask)(int cpu))
+> +{
+> +	unsigned int i, cpu;
+> +	size_t len;
+> +	int rc;
+> +
+> +	rc = device_property_count_u32(uncore->dev, property);
+> +	if (rc < 0)
+> +		return rc;
+Most of the errors here don't reflect it not being found and are things
+were we should probably fail the driver probe (so someone can fix whatever
+is wrong with the firmware.)  I think only -EINVAL means not here
+(technically arguments are not valid)
+
+> +	if (rc == 0)
+> +		return -EINVAL;
+> +
+> +	len = rc;
+> +	u32 *num __free(kfree) = kcalloc(len, sizeof(*num), GFP_KERNEL);
+> +	if (!num)
+> +		return -ENOMEM;
+
+On this failure path, falling over the other route below doesn't make much sense.
+
+> +
+> +	rc = device_property_read_u32_array(uncore->dev, property, num, len);
+> +	if (rc)
+> +		return rc;
+> +
+> +	for (i = 0; i < len; i++) {
+> +		for_each_possible_cpu(cpu) {
+> +			if (get_topo_id(cpu) == num[i]) {
+
+You could flip to reduce indent.  Marginal though so up to you and definitely
+not worth another spin.
+
+			if (get_topo_id(cpu) != num[i])
+				continue;
+
+			cpumask_or(&uncore->related_cpus, &uncore->related_cpus,
+				   get_cpumask(cpu));
+			break;
+
+> +				cpumask_or(&uncore->related_cpus,
+> +					   &uncore->related_cpus,
+> +					   get_cpumask(cpu));
+> +				break;
+> +			}
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int get_package_id(int cpu)
+> +{
+> +	return topology_physical_package_id(cpu);
+> +}
+> +
+> +static const struct cpumask *get_package_cpumask(int cpu)
+> +{
+> +	return topology_core_cpumask(cpu);
+> +}
+> +
+> +static int get_cluster_id(int cpu)
+> +{
+> +	return topology_cluster_id(cpu);
+> +}
+> +
+> +static const struct cpumask *get_cluster_cpumask(int cpu)
+> +{
+> +	return topology_cluster_cpumask(cpu);
+> +}
+> +
+> +static int hisi_uncore_mark_related_cpus_wrap(struct hisi_uncore_freq *uncore)
+> +{
+> +	int rc;
+> +
+> +	cpumask_clear(&uncore->related_cpus);
+> +
+> +	rc = hisi_uncore_mark_related_cpus(uncore, "related-package",
+> +					   get_package_id,
+> +					   get_package_cpumask);
+> +	if (rc == 0)
+> +		return rc;
+
+return 0;  might make it a tiny bit more explicit that this is a good path.
+Maybe a comment in here on why that is a good path.
+I think this is trying one then the other and only one is expected to be
+present?  Perhaps be a little more paranoid here and check what was seen was
+-EINVAL.
+
+	if (rc != -EINVAL)
+		return rc; /* May be 0 or another error code */
+
+Perhaps with an ACPI snippet in the patch description to illustrate what
+is going on here.
+
+
+> +
+> +	return hisi_uncore_mark_related_cpus(uncore, "related-cluster",
+> +					     get_cluster_id,
+> +					     get_cluster_cpumask);
+> +}
+
+> +static int hisi_uncore_devfreq_register(struct hisi_uncore_freq *uncore)
+> +{
+> +	struct devfreq_dev_profile *profile;
+> +	struct device *dev = uncore->dev;
+> +	unsigned long freq;
+> +	u32 data;
+> +	int rc;
+> +
+> +	rc = hisi_uncore_get_cur_freq(dev, &freq);
+One for another day:
+Whilst we do indeed need to do this, it seems like a small optimization to
+devfreq would be to check for initial_freq == 0 and if it is try get_cur_freq()
+after registration. Mind you I checked and this only seems to apply to
+the imx drivers and this one.
+
+> +	if (rc)
+> +		return dev_err_probe(dev, rc, "Failed to get plat init freq\n");
+> +
+> +	profile = devm_kzalloc(dev, sizeof(*profile), GFP_KERNEL);
+> +	if (!profile)
+> +		return -ENOMEM;
+> +
+> +	*profile = (struct devfreq_dev_profile) {
+> +		.initial_freq = freq,
+> +		.polling_ms = HUCF_DEFAULT_POLLING_MS,
+> +		.timer = DEVFREQ_TIMER_DELAYED,
+> +		.target = hisi_uncore_target,
+> +		.get_dev_status = hisi_uncore_get_dev_status,
+> +		.get_cur_freq = hisi_uncore_get_cur_freq,
+> +		.dev_groups = hisi_uncore_freq_groups,
+> +	};
+> +
+> +	rc = hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_GET_MODE, &data);
+> +	if (rc)
+> +		return dev_err_probe(dev, rc, "Failed to get operate mode\n");
+> +
+> +	if (data == HUCF_MODE_PLATFORM)
+> +		uncore->devfreq = devm_devfreq_add_device(dev, profile,
+> +					  hisi_platform_governor.name, NULL);
+> +	else
+> +		uncore->devfreq = devm_devfreq_add_device(dev, profile,
+> +					  DEVFREQ_GOV_PERFORMANCE, NULL);
+> +	if (IS_ERR(uncore->devfreq))
+> +		return dev_err_probe(dev, PTR_ERR(uncore->devfreq),
+> +			"Failed to add devfreq device\n");
+> +
+> +	return 0;
+> +}
+
 
